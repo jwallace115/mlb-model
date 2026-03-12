@@ -1,0 +1,14 @@
+# ── Dashboard (Streamlit Cloud only needs these) ──────────────────────────────
+streamlit>=1.35.0
+
+# ── Full model (local use) ────────────────────────────────────────────────────
+requests>=2.31.0
+pandas>=2.0.0
+numpy>=1.24.0
+pybaseball>=2.2.1
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+python-dateutil>=2.8.2
+tabulate>=0.9.0
+colorama>=0.4.6
+python-dotenv>=1.0.0
