@@ -26,6 +26,61 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+# ── password gate ─────────────────────────────────────────────────────────────
+
+def _check_password() -> bool:
+    if st.session_state.get("authenticated"):
+        return True
+
+    st.markdown("""
+    <style>
+    .block-container { padding-top: 0 !important; }
+    .gate-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        gap: 0;
+    }
+    .gate-title {
+        font-size: 1.25em;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #e2e8f0;
+        margin-bottom: 2.2rem;
+        text-align: center;
+    }
+    </style>
+    <div class="gate-wrap">
+        <div class="gate-title">I AM NOT UNCERTAIN</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col = st.columns([1, 1.4, 1])[1]
+    with col:
+        pw = st.text_input(
+            "Password",
+            type="password",
+            label_visibility="collapsed",
+            placeholder="Password",
+            key="pw_input",
+        )
+        if st.button("Enter", use_container_width=True):
+            if pw == "billions":
+                st.session_state["authenticated"] = True
+                st.rerun()
+            else:
+                st.error("Incorrect password.")
+
+    return False
+
+
+if not _check_password():
+    st.stop()
+
+
 # ── CSS ───────────────────────────────────────────────────────────────────────
 
 st.markdown("""
