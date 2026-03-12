@@ -1,8 +1,976 @@
 {
-  "generated_at": null,
-  "game_date": null,
-  "plays": [],
-  "no_plays": [],
-  "parlay": [],
-  "season_record": {}
+  "generated_at": "2026-03-12T19:18:14.584924Z",
+  "game_date": "2026-03-12",
+  "plays": [
+    {
+      "rating": "\u2b50\u2b50\u2b50",
+      "game": {
+        "game_pk": 831791,
+        "game_date": "2026-03-12",
+        "game_time": "06:05 PM MST",
+        "game_time_et": "09:05 PM ET",
+        "status": "Scheduled",
+        "home_team": "CLE",
+        "away_team": "MIL",
+        "home_team_id": 114,
+        "away_team_id": 158,
+        "home_probable_pitcher": "{'id': 677944, 'name': 'Slade Cecconi'}",
+        "away_probable_pitcher": "{'id': 669084, 'name': 'DL Hall'}",
+        "venue_name": "Goodyear Ballpark",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.74,
+        "proj_total_f5": 4.37,
+        "confidence": "HIGH",
+        "confidence_score": 0.867,
+        "factors": {
+          "sp_home_xfip": 4.99,
+          "sp_away_xfip": 3.56,
+          "sp_home_siera": 4.99,
+          "sp_away_siera": 3.56,
+          "home_wrc_plus": 91.7,
+          "away_wrc_plus": 98.4,
+          "park_factor": 0.98,
+          "wind_speed_mph": 4.9,
+          "wind_direction": 300,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 35.5,
+          "weather_desc": "Clear",
+          "wind_factor": 0.9921,
+          "temp_factor": 0.927,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.102,
+          "away_bp_fatigue": 0.089,
+          "home_bp_innings_used": 7.7,
+          "away_bp_innings_used": 6.7
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Cold conditions at first pitch (36\u00b0F) are the primary drag on scoring \u2014 the ball dies in cold air and pitchers typically maintain grip and command better. Both lineups grade below average in run production, and the park (PF 98) provides an under tilt. No line is posted yet, but the high-confidence model signal projects 7.7 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50\u2b50",
+      "game": {
+        "game_pk": 831839,
+        "game_date": "2026-03-12",
+        "game_time": "06:10 PM MST",
+        "game_time_et": "09:10 PM ET",
+        "status": "Scheduled",
+        "home_team": "SDP",
+        "away_team": "KCR",
+        "home_team_id": 135,
+        "away_team_id": 118,
+        "home_probable_pitcher": "{'id': None, 'name': 'TBD'}",
+        "away_probable_pitcher": "{'id': 663460, 'name': 'Kris Bubic'}",
+        "venue_name": "Peoria Stadium",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.93,
+        "proj_total_f5": 4.15,
+        "confidence": "HIGH",
+        "confidence_score": 0.84,
+        "factors": {
+          "sp_home_xfip": 4.25,
+          "sp_away_xfip": 3.16,
+          "sp_home_siera": 4.25,
+          "sp_away_siera": 3.16,
+          "home_wrc_plus": 101.6,
+          "away_wrc_plus": 99.5,
+          "park_factor": 0.95,
+          "wind_speed_mph": 7.9,
+          "wind_direction": 353,
+          "wind_desc": "Blowing In from CF",
+          "temperature_f": 74.4,
+          "weather_desc": "Clear",
+          "wind_factor": 0.9856,
+          "temp_factor": 1.0048,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.111,
+          "away_bp_fatigue": 0.326,
+          "home_bp_innings_used": 8.3,
+          "away_bp_innings_used": 24.4
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Kris Bubic (KCR, xFIP 3.16) is above-average \u2014 a strong under anchor keeping SDP's bats in check. The park (PF 95) provides an under tilt, and KCR's bullpen has logged 24 relief innings over two days. No line is posted yet, but the high-confidence model signal projects 7.9 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831622,
+        "game_date": "2026-03-12",
+        "game_time": "01:05 PM EDT",
+        "game_time_et": "01:05 PM ET",
+        "status": "In Progress",
+        "home_team": "MIN",
+        "away_team": "BOS",
+        "home_team_id": 142,
+        "away_team_id": 111,
+        "home_probable_pitcher": "{'id': 641927, 'name': 'Bailey Ober'}",
+        "away_probable_pitcher": "{'id': 813349, 'name': 'Connelly Early'}",
+        "venue_name": "Lee Health Sports Complex",
+        "home_umpire": "Derek Thomas"
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.28,
+        "proj_total_f5": 3.71,
+        "confidence": "HIGH",
+        "confidence_score": 0.733,
+        "factors": {
+          "sp_home_xfip": 4.36,
+          "sp_away_xfip": 2.35,
+          "sp_home_siera": 4.36,
+          "sp_away_siera": 2.35,
+          "home_wrc_plus": 96.2,
+          "away_wrc_plus": 98.6,
+          "park_factor": 0.99,
+          "wind_speed_mph": 12.9,
+          "wind_direction": 146,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 39.3,
+          "weather_desc": "Heavy Drizzle",
+          "wind_factor": 1.0305,
+          "temp_factor": 0.9346,
+          "umpire_name": "Derek Thomas",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.156,
+          "away_bp_fatigue": 0.058,
+          "home_bp_innings_used": 11.7,
+          "away_bp_innings_used": 4.3
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Connelly Early (BOS, xFIP 2.35) is elite \u2014 a strong under anchor keeping MIN's bats in check. 39\u00b0F temperatures further suppress scoring. Wind is blowing Out to CF (13mph) \u2014 but elite pitching and cold temperatures outweigh that factor, model still leans under. No line is posted yet, but the high-confidence model signal projects 7.3 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831894,
+        "game_date": "2026-03-12",
+        "game_time": "06:05 PM MST",
+        "game_time_et": "09:05 PM ET",
+        "status": "Scheduled",
+        "home_team": "LAD",
+        "away_team": "CIN",
+        "home_team_id": 119,
+        "away_team_id": 113,
+        "home_probable_pitcher": "{'id': None, 'name': 'TBD'}",
+        "away_probable_pitcher": "{'id': 666157, 'name': 'Nick Lodolo'}",
+        "venue_name": "Camelback Ranch",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.12,
+        "proj_total_f5": 4.36,
+        "confidence": "HIGH",
+        "confidence_score": 0.727,
+        "factors": {
+          "sp_home_xfip": 4.25,
+          "sp_away_xfip": 3.51,
+          "sp_home_siera": 4.25,
+          "sp_away_siera": 3.51,
+          "home_wrc_plus": 105.1,
+          "away_wrc_plus": 93.3,
+          "park_factor": 0.95,
+          "wind_speed_mph": 1.4,
+          "wind_direction": 189,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 78.0,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0,
+          "temp_factor": 1.012,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.056,
+          "away_bp_fatigue": 0.222,
+          "home_bp_innings_used": 4.2,
+          "away_bp_innings_used": 16.7
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Nick Lodolo (CIN, xFIP 3.51) is solid \u2014 a strong under anchor keeping LAD's bats in check. The park (PF 95) provides an under tilt, and CIN's bullpen has logged 17 relief innings over two days. No line is posted yet, but the high-confidence model signal projects 8.1 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831510,
+        "game_date": "2026-03-12",
+        "game_time": "06:05 PM EDT",
+        "game_time_et": "06:05 PM ET",
+        "status": "Pre-Game",
+        "home_team": "HOU",
+        "away_team": "WSN",
+        "home_team_id": 117,
+        "away_team_id": 120,
+        "home_probable_pitcher": "{'id': 681347, 'name': 'Mike Burrows'}",
+        "away_probable_pitcher": "{'id': 663623, 'name': 'Jake Irvin'}",
+        "venue_name": "CACTI Park of the Palm Beaches",
+        "home_umpire": "CB Bucknor"
+      },
+      "proj": {
+        "lean": "OVER",
+        "proj_total_full": 10.28,
+        "proj_total_f5": 6.03,
+        "confidence": "HIGH",
+        "confidence_score": 0.68,
+        "factors": {
+          "sp_home_xfip": 4.33,
+          "sp_away_xfip": 5.59,
+          "sp_home_siera": 4.33,
+          "sp_away_siera": 5.59,
+          "home_wrc_plus": 98.7,
+          "away_wrc_plus": 99.6,
+          "park_factor": 1.0,
+          "wind_speed_mph": 0.0,
+          "wind_direction": 0,
+          "wind_desc": "Dome",
+          "temperature_f": 72.0,
+          "weather_desc": "Dome \u2014 climate controlled",
+          "wind_factor": 1.0,
+          "temp_factor": 1.0,
+          "umpire_name": "CB Bucknor",
+          "umpire_runs_factor": 1.035,
+          "home_bp_fatigue": 0.222,
+          "away_bp_fatigue": 0.231,
+          "home_bp_innings_used": 16.7,
+          "away_bp_innings_used": 17.3
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Jake Irvin (WSN, xFIP 5.59) is a significant liability, leaving HOU's lineup a favorable matchup to score runs. WSN's bullpen has logged 17 relief innings over two days. No line is posted yet, but the high-confidence model signal projects 10.3 runs \u2014 watch for a over opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831869,
+        "game_date": "2026-03-12",
+        "game_time": "01:10 PM MST",
+        "game_time_et": "04:10 PM ET",
+        "status": "Pre-Game",
+        "home_team": "ARI",
+        "away_team": "COL",
+        "home_team_id": 109,
+        "away_team_id": 115,
+        "home_probable_pitcher": "{'id': 664199, 'name': 'Taylor Clarke'}",
+        "away_probable_pitcher": "{'id': 807743, 'name': 'Sean Sullivan'}",
+        "venue_name": "Salt River Fields at Talking Stick",
+        "home_umpire": "Jonathan Parra"
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.23,
+        "proj_total_f5": 4.44,
+        "confidence": "HIGH",
+        "confidence_score": 0.659,
+        "factors": {
+          "sp_home_xfip": 3.66,
+          "sp_away_xfip": 4.25,
+          "sp_home_siera": 3.66,
+          "sp_away_siera": 4.25,
+          "home_wrc_plus": 101.4,
+          "away_wrc_plus": 91.1,
+          "park_factor": 0.98,
+          "wind_speed_mph": 0.0,
+          "wind_direction": 0,
+          "wind_desc": "Dome",
+          "temperature_f": 72.0,
+          "weather_desc": "Dome \u2014 climate controlled",
+          "wind_factor": 1.0,
+          "temp_factor": 1.0,
+          "umpire_name": "Jonathan Parra",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.2,
+          "away_bp_fatigue": 0.222,
+          "home_bp_innings_used": 15.0,
+          "away_bp_innings_used": 16.7
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Taylor Clarke (ARI, xFIP 3.66) is solid \u2014 the dominant pitching factor suppressing COL's run-scoring potential. Both lineups grade below average in run production, and COL's bullpen has logged 17 relief innings over two days. No line is posted yet, but the high-confidence model signal projects 8.2 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831908,
+        "game_date": "2026-03-12",
+        "game_time": "06:05 PM MST",
+        "game_time_et": "09:05 PM ET",
+        "status": "Scheduled",
+        "home_team": "SFG",
+        "away_team": "CHW",
+        "home_team_id": 137,
+        "away_team_id": 145,
+        "home_probable_pitcher": "{'id': 686790, 'name': 'Trevor McDonald'}",
+        "away_probable_pitcher": "{'id': 621366, 'name': 'Ryan Borucki'}",
+        "venue_name": "Scottsdale Stadium",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.21,
+        "proj_total_f5": 4.52,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.605,
+        "factors": {
+          "sp_home_xfip": 3.23,
+          "sp_away_xfip": 4.93,
+          "sp_home_siera": 3.23,
+          "sp_away_siera": 4.93,
+          "home_wrc_plus": 98.9,
+          "away_wrc_plus": 95.1,
+          "park_factor": 0.96,
+          "wind_speed_mph": 10.1,
+          "wind_direction": 288,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 63.0,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0169,
+          "temp_factor": 0.982,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.178,
+          "away_bp_fatigue": 0.129,
+          "home_bp_innings_used": 13.3,
+          "away_bp_innings_used": 9.7
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Trevor McDonald (SFG, xFIP 3.23) is above-average \u2014 the dominant pitching factor suppressing CHW's run-scoring potential. The park (PF 96) provides an under tilt, and both lineups grade below average in run production. No line is posted yet, but the medium-confidence model signal projects 8.2 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831754,
+        "game_date": "2026-03-12",
+        "game_time": "01:05 PM MST",
+        "game_time_et": "04:05 PM ET",
+        "status": "Pre-Game",
+        "home_team": "CHC",
+        "away_team": "SEA",
+        "home_team_id": 112,
+        "away_team_id": 136,
+        "home_probable_pitcher": "{'id': 665795, 'name': 'Edward Cabrera'}",
+        "away_probable_pitcher": "{'id': 676106, 'name': 'Emerson Hancock'}",
+        "venue_name": "Sloan Park",
+        "home_umpire": "Charlie Welling"
+      },
+      "proj": {
+        "lean": "OVER",
+        "proj_total_full": 9.67,
+        "proj_total_f5": 5.62,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.535,
+        "factors": {
+          "sp_home_xfip": 4.04,
+          "sp_away_xfip": 5.51,
+          "sp_home_siera": 4.04,
+          "sp_away_siera": 5.51,
+          "home_wrc_plus": 104.8,
+          "away_wrc_plus": 102.6,
+          "park_factor": 1.03,
+          "wind_speed_mph": 6.7,
+          "wind_direction": 160,
+          "wind_desc": "Blowing L to R",
+          "temperature_f": 38.8,
+          "weather_desc": "Overcast",
+          "wind_factor": 0.9943,
+          "temp_factor": 0.9336,
+          "umpire_name": "Charlie Welling",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.164,
+          "away_bp_fatigue": 0.204,
+          "home_bp_innings_used": 12.3,
+          "away_bp_innings_used": 15.3
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Emerson Hancock (SEA, xFIP 5.51) is a significant liability, leaving CHC's lineup a favorable matchup to score runs. CHC's lineup (wRC+ 105) adds offensive upside. It's cold (39\u00b0F) \u2014 but the pitching matchup and strong lineups outweigh that factor, model still leans over. No line is posted yet, but the medium-confidence model signal projects 9.7 runs \u2014 watch for a over opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831466,
+        "game_date": "2026-03-12",
+        "game_time": "06:05 PM EDT",
+        "game_time_et": "06:05 PM ET",
+        "status": "Pre-Game",
+        "home_team": "PIT",
+        "away_team": "ATL",
+        "home_team_id": 134,
+        "away_team_id": 144,
+        "home_probable_pitcher": "{'id': 696149, 'name': 'Bubba Chandler'}",
+        "away_probable_pitcher": "{'id': 656550, 'name': 'Grant Holmes'}",
+        "venue_name": "LECOM Park",
+        "home_umpire": "Ryan Wills"
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.16,
+        "proj_total_f5": 4.53,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.503,
+        "factors": {
+          "sp_home_xfip": 3.66,
+          "sp_away_xfip": 4.55,
+          "sp_home_siera": 3.66,
+          "sp_away_siera": 4.55,
+          "home_wrc_plus": 98.4,
+          "away_wrc_plus": 101.1,
+          "park_factor": 1.01,
+          "wind_speed_mph": 6.9,
+          "wind_direction": 266,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 37.0,
+          "weather_desc": "Overcast",
+          "wind_factor": 0.9952,
+          "temp_factor": 0.93,
+          "umpire_name": "Ryan Wills",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.033,
+          "away_bp_fatigue": 0.111,
+          "home_bp_innings_used": 2.4,
+          "away_bp_innings_used": 8.3
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Cold conditions at first pitch (37\u00b0F) are the primary drag on scoring \u2014 the ball dies in cold air and pitchers typically maintain grip and command better. Grant Holmes (xFIP 4.55) is the more vulnerable arm, giving PIT the pitching advantage. No line is posted yet, but the medium-confidence model signal projects 8.2 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50",
+      "game": {
+        "game_pk": 831564,
+        "game_date": "2026-03-12",
+        "game_time": "01:05 PM EDT",
+        "game_time_et": "01:05 PM ET",
+        "status": "In Progress",
+        "home_team": "PHI",
+        "away_team": "TOR",
+        "home_team_id": 143,
+        "away_team_id": 141,
+        "home_probable_pitcher": "{'id': 666200, 'name': 'Jes\u00fas Luzardo'}",
+        "away_probable_pitcher": "{'id': 669310, 'name': 'CJ Van Eyk'}",
+        "venue_name": "BayCare Ballpark",
+        "home_umpire": "Jacob Metz"
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.41,
+        "proj_total_f5": 4.47,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.434,
+        "factors": {
+          "sp_home_xfip": 3.33,
+          "sp_away_xfip": 4.25,
+          "sp_home_siera": 3.33,
+          "sp_away_siera": 4.25,
+          "home_wrc_plus": 102.8,
+          "away_wrc_plus": 103.4,
+          "park_factor": 1.04,
+          "wind_speed_mph": 10.4,
+          "wind_direction": 295,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 40.5,
+          "weather_desc": "Light Drizzle",
+          "wind_factor": 0.9911,
+          "temp_factor": 0.937,
+          "umpire_name": "Jacob Metz",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.12,
+          "away_bp_fatigue": 0.209,
+          "home_bp_innings_used": 9.0,
+          "away_bp_innings_used": 15.7
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Jes\u00fas Luzardo (PHI, xFIP 3.33) is above-average \u2014 the dominant pitching factor suppressing TOR's run-scoring potential. 40\u00b0F temperatures further suppress scoring. The park tilts hitter-friendly (PF 104) \u2014 but quality pitching and cold temperatures outweigh that factor, model still leans under. No line is posted yet, but the medium-confidence model signal projects 8.4 runs \u2014 watch for a under opportunity when odds open."
+    }
+  ],
+  "no_plays": [
+    {
+      "rating": "NO PLAY",
+      "game": {
+        "game_pk": 831472,
+        "game_date": "2026-03-12",
+        "game_time": "01:05 PM EDT",
+        "game_time_et": "01:05 PM ET",
+        "status": "In Progress",
+        "home_team": "STL",
+        "away_team": "NYM",
+        "home_team_id": 138,
+        "away_team_id": 121,
+        "home_probable_pitcher": "{'id': 700241, 'name': 'Michael McGreevy'}",
+        "away_probable_pitcher": "{'id': 640455, 'name': 'Sean Manaea'}",
+        "venue_name": "Roger Dean Chevrolet Stadium",
+        "home_umpire": "Emil Jimenez"
+      },
+      "proj": {
+        "lean": "NEUTRAL",
+        "proj_total_full": 8.77,
+        "proj_total_f5": 4.95,
+        "confidence": "LOW",
+        "confidence_score": 0.14,
+        "factors": {
+          "sp_home_xfip": 4.67,
+          "sp_away_xfip": 4.02,
+          "sp_home_siera": 4.67,
+          "sp_away_siera": 4.02,
+          "home_wrc_plus": 97.0,
+          "away_wrc_plus": 105.5,
+          "park_factor": 0.97,
+          "wind_speed_mph": 9.6,
+          "wind_direction": 176,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 48.5,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0233,
+          "temp_factor": 0.953,
+          "umpire_name": "Emil Jimenez",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.196,
+          "away_bp_fatigue": 0.067,
+          "home_bp_innings_used": 14.7,
+          "away_bp_innings_used": 5.0
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "This game sends conflicting signals: some over factors pushes toward the over while the park factor counters with an under lean. The net projection of 8.8 runs sits close to neutral, and without a clear dominant factor we pass."
+    },
+    {
+      "rating": "NO PLAY",
+      "game": {
+        "game_pk": 831621,
+        "game_date": "2026-03-12",
+        "game_time": "01:05 PM EDT",
+        "game_time_et": "01:05 PM ET",
+        "status": "In Progress",
+        "home_team": "DET",
+        "away_team": "NYY",
+        "home_team_id": 116,
+        "away_team_id": 147,
+        "home_probable_pitcher": "{'id': 434378, 'name': 'Justin Verlander'}",
+        "away_probable_pitcher": "{'id': 701542, 'name': 'Will Warren'}",
+        "venue_name": "Publix Field at Joker Marchant Stadium",
+        "home_umpire": "Matt Blackborow"
+      },
+      "proj": {
+        "lean": "NEUTRAL",
+        "proj_total_full": 8.98,
+        "proj_total_f5": 5.05,
+        "confidence": "LOW",
+        "confidence_score": 0.012,
+        "factors": {
+          "sp_home_xfip": 4.24,
+          "sp_away_xfip": 4.58,
+          "sp_home_siera": 4.24,
+          "sp_away_siera": 4.58,
+          "home_wrc_plus": 100.8,
+          "away_wrc_plus": 108.2,
+          "park_factor": 0.99,
+          "wind_speed_mph": 9.7,
+          "wind_direction": 283,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 39.8,
+          "weather_desc": "Mainly Clear",
+          "wind_factor": 0.9987,
+          "temp_factor": 0.9356,
+          "umpire_name": "Matt Blackborow",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.201,
+          "away_bp_fatigue": 0.222,
+          "home_bp_innings_used": 15.1,
+          "away_bp_innings_used": 16.7
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "This game sends conflicting signals: the pitching matchup pushes toward the over while temperature counters with an under lean. The net projection of 9.0 runs sits close to neutral, and without a clear dominant factor we pass."
+    },
+    {
+      "rating": "NO PLAY",
+      "game": {
+        "game_pk": 831936,
+        "game_date": "2026-03-12",
+        "game_time": "01:05 PM MST",
+        "game_time_et": "04:05 PM ET",
+        "status": "Pre-Game",
+        "home_team": "TEX",
+        "away_team": "OAK",
+        "home_team_id": 140,
+        "away_team_id": 133,
+        "home_probable_pitcher": "{'id': 683004, 'name': 'Jack Leiter'}",
+        "away_probable_pitcher": "{'id': 669372, 'name': 'J.T. Ginn'}",
+        "venue_name": "Surprise Stadium",
+        "home_umpire": "Alan Porter"
+      },
+      "proj": {
+        "lean": "NEUTRAL",
+        "proj_total_full": 9.22,
+        "proj_total_f5": 5.08,
+        "confidence": "LOW",
+        "confidence_score": 0.211,
+        "factors": {
+          "sp_home_xfip": 4.45,
+          "sp_away_xfip": 3.74,
+          "sp_home_siera": 4.45,
+          "sp_away_siera": 3.74,
+          "home_wrc_plus": 97.4,
+          "away_wrc_plus": 98.0,
+          "park_factor": 1.07,
+          "wind_speed_mph": 0.0,
+          "wind_direction": 0,
+          "wind_desc": "Dome",
+          "temperature_f": 72.0,
+          "weather_desc": "Dome \u2014 climate controlled",
+          "wind_factor": 1.0,
+          "temp_factor": 1.0,
+          "umpire_name": "Alan Porter",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.12,
+          "away_bp_fatigue": 0.157,
+          "home_bp_innings_used": 9.0,
+          "away_bp_innings_used": 11.8
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "This game sends conflicting signals: the park factor pushes toward the over while the pitching matchup counters with an under lean. The net projection of 9.2 runs sits close to neutral, and without a clear dominant factor we pass."
+    }
+  ],
+  "parlay": [
+    {
+      "rating": "\u2b50\u2b50\u2b50",
+      "game": {
+        "game_pk": 831791,
+        "game_date": "2026-03-12",
+        "game_time": "06:05 PM MST",
+        "game_time_et": "09:05 PM ET",
+        "status": "Scheduled",
+        "home_team": "CLE",
+        "away_team": "MIL",
+        "home_team_id": 114,
+        "away_team_id": 158,
+        "home_probable_pitcher": "{'id': 677944, 'name': 'Slade Cecconi'}",
+        "away_probable_pitcher": "{'id': 669084, 'name': 'DL Hall'}",
+        "venue_name": "Goodyear Ballpark",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.74,
+        "proj_total_f5": 4.37,
+        "confidence": "HIGH",
+        "confidence_score": 0.867,
+        "factors": {
+          "sp_home_xfip": 4.99,
+          "sp_away_xfip": 3.56,
+          "sp_home_siera": 4.99,
+          "sp_away_siera": 3.56,
+          "home_wrc_plus": 91.7,
+          "away_wrc_plus": 98.4,
+          "park_factor": 0.98,
+          "wind_speed_mph": 4.9,
+          "wind_direction": 300,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 35.5,
+          "weather_desc": "Clear",
+          "wind_factor": 0.9921,
+          "temp_factor": 0.927,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.102,
+          "away_bp_fatigue": 0.089,
+          "home_bp_innings_used": 7.7,
+          "away_bp_innings_used": 6.7
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Cold conditions at first pitch (36\u00b0F) are the primary drag on scoring \u2014 the ball dies in cold air and pitchers typically maintain grip and command better. Both lineups grade below average in run production, and the park (PF 98) provides an under tilt. No line is posted yet, but the high-confidence model signal projects 7.7 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50\u2b50",
+      "game": {
+        "game_pk": 831839,
+        "game_date": "2026-03-12",
+        "game_time": "06:10 PM MST",
+        "game_time_et": "09:10 PM ET",
+        "status": "Scheduled",
+        "home_team": "SDP",
+        "away_team": "KCR",
+        "home_team_id": 135,
+        "away_team_id": 118,
+        "home_probable_pitcher": "{'id': None, 'name': 'TBD'}",
+        "away_probable_pitcher": "{'id': 663460, 'name': 'Kris Bubic'}",
+        "venue_name": "Peoria Stadium",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.93,
+        "proj_total_f5": 4.15,
+        "confidence": "HIGH",
+        "confidence_score": 0.84,
+        "factors": {
+          "sp_home_xfip": 4.25,
+          "sp_away_xfip": 3.16,
+          "sp_home_siera": 4.25,
+          "sp_away_siera": 3.16,
+          "home_wrc_plus": 101.6,
+          "away_wrc_plus": 99.5,
+          "park_factor": 0.95,
+          "wind_speed_mph": 7.9,
+          "wind_direction": 353,
+          "wind_desc": "Blowing In from CF",
+          "temperature_f": 74.4,
+          "weather_desc": "Clear",
+          "wind_factor": 0.9856,
+          "temp_factor": 1.0048,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.111,
+          "away_bp_fatigue": 0.326,
+          "home_bp_innings_used": 8.3,
+          "away_bp_innings_used": 24.4
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Kris Bubic (KCR, xFIP 3.16) is above-average \u2014 a strong under anchor keeping SDP's bats in check. The park (PF 95) provides an under tilt, and KCR's bullpen has logged 24 relief innings over two days. No line is posted yet, but the high-confidence model signal projects 7.9 runs \u2014 watch for a under opportunity when odds open."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 831622,
+        "game_date": "2026-03-12",
+        "game_time": "01:05 PM EDT",
+        "game_time_et": "01:05 PM ET",
+        "status": "In Progress",
+        "home_team": "MIN",
+        "away_team": "BOS",
+        "home_team_id": 142,
+        "away_team_id": 111,
+        "home_probable_pitcher": "{'id': 641927, 'name': 'Bailey Ober'}",
+        "away_probable_pitcher": "{'id': 813349, 'name': 'Connelly Early'}",
+        "venue_name": "Lee Health Sports Complex",
+        "home_umpire": "Derek Thomas"
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.28,
+        "proj_total_f5": 3.71,
+        "confidence": "HIGH",
+        "confidence_score": 0.733,
+        "factors": {
+          "sp_home_xfip": 4.36,
+          "sp_away_xfip": 2.35,
+          "sp_home_siera": 4.36,
+          "sp_away_siera": 2.35,
+          "home_wrc_plus": 96.2,
+          "away_wrc_plus": 98.6,
+          "park_factor": 0.99,
+          "wind_speed_mph": 12.9,
+          "wind_direction": 146,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 39.3,
+          "weather_desc": "Heavy Drizzle",
+          "wind_factor": 1.0305,
+          "temp_factor": 0.9346,
+          "umpire_name": "Derek Thomas",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.156,
+          "away_bp_fatigue": 0.058,
+          "home_bp_innings_used": 11.7,
+          "away_bp_innings_used": 4.3
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Connelly Early (BOS, xFIP 2.35) is elite \u2014 a strong under anchor keeping MIN's bats in check. 39\u00b0F temperatures further suppress scoring. Wind is blowing Out to CF (13mph) \u2014 but elite pitching and cold temperatures outweigh that factor, model still leans under. No line is posted yet, but the high-confidence model signal projects 7.3 runs \u2014 watch for a under opportunity when odds open."
+    }
+  ],
+  "season_record": {
+    "total": 0,
+    "correct_over": null,
+    "correct_under": null,
+    "pushes": null
+  }
 }
