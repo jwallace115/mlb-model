@@ -47,6 +47,8 @@ def init_db() -> None:
             confidence      TEXT,
             confidence_score REAL,
             factors_json    TEXT,
+            lean            TEXT,
+            star_rating     TEXT,
             created_at      TEXT DEFAULT (datetime('now'))
         );
 
@@ -66,16 +68,61 @@ def init_db() -> None:
             updated_at      TEXT DEFAULT (datetime('now'))
         );
 
+        CREATE TABLE IF NOT EXISTS graded_results (
+            id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+            game_date            TEXT NOT NULL,
+            game_pk              INTEGER NOT NULL,
+            home_team            TEXT,
+            away_team            TEXT,
+            projected_total      REAL,
+            recommendation       TEXT,
+            star_rating          TEXT,
+            star_count           INTEGER,
+            confidence           TEXT,
+            confidence_score     REAL,
+            was_a_play           INTEGER DEFAULT 0,
+            line                 REAL,
+            edge                 REAL,
+            actual_total         REAL,
+            projection_error     REAL,
+            result               TEXT,
+            sp_home              TEXT,
+            sp_away              TEXT,
+            sp_home_xfip         REAL,
+            sp_away_xfip         REAL,
+            home_wrc_plus        REAL,
+            away_wrc_plus        REAL,
+            park_factor          REAL,
+            temperature          REAL,
+            wind_speed           REAL,
+            wind_direction       REAL,
+            wind_desc            TEXT,
+            umpire               TEXT,
+            umpire_rating        REAL,
+            home_bullpen_innings REAL,
+            away_bullpen_innings REAL,
+            graded_at            TEXT DEFAULT (datetime('now')),
+            UNIQUE(game_pk, game_date)
+        );
+
         CREATE INDEX IF NOT EXISTS idx_proj_date    ON projections(game_date);
         CREATE INDEX IF NOT EXISTS idx_proj_game_pk ON projections(game_pk);
         CREATE INDEX IF NOT EXISTS idx_res_date     ON results(game_date);
+        CREATE INDEX IF NOT EXISTS idx_gr_date      ON graded_results(game_date);
+        CREATE INDEX IF NOT EXISTS idx_gr_result    ON graded_results(result);
         """)
+
+        # Migrate existing projections table — add lean/star_rating columns if missing
+        for col, coltype in [("lean", "TEXT"), ("star_rating", "TEXT")]:
+            try:
+                conn.execute(f"ALTER TABLE projections ADD COLUMN {col} {coltype}")
+            except Exception:
+                pass  # column already exists
 
 
 def upsert_projection(row: dict) -> int:
     """Insert or replace a projection row; return the row id."""
     with get_conn() as conn:
-        # Try to find existing row for this game_pk
         existing = conn.execute(
             "SELECT id FROM projections WHERE game_pk = ? AND game_date = ?",
             (row["game_pk"], row["game_date"])
@@ -103,13 +150,27 @@ def upsert_projection(row: dict) -> int:
             return cur.lastrowid
 
 
+def write_graded_result(row: dict) -> None:
+    """Upsert a fully graded result row."""
+    with get_conn() as conn:
+        columns = list(row.keys())
+        placeholders = ", ".join("?" * len(columns))
+        values = [row[c] for c in columns]
+        set_clause = ", ".join(f"{c} = excluded.{c}" for c in columns
+                               if c not in ("game_pk", "game_date"))
+        conn.execute(
+            f"INSERT INTO graded_results ({', '.join(columns)}) VALUES ({placeholders}) "
+            f"ON CONFLICT(game_pk, game_date) DO UPDATE SET {set_clause}",
+            values,
+        )
+
+
 def log_result(game_pk: int, game_date: str, actual_total: float = None,
                actual_f5_total: float = None, line_full: float = None,
                line_f5: float = None) -> None:
     """
     Record a game result and/or market lines.
     Can be called with actual_total=None to store lines before the game is final.
-    On subsequent calls (when actual scores arrive) it updates the existing row.
     """
     with get_conn() as conn:
         proj = conn.execute(
@@ -118,25 +179,19 @@ def log_result(game_pk: int, game_date: str, actual_total: float = None,
         ).fetchone()
 
         if not proj:
-            return  # projection not yet written; caller will retry
+            return
 
         result_full = None
         result_f5   = None
         if line_full is not None and actual_total is not None:
-            if actual_total > line_full:
-                result_full = "OVER"
-            elif actual_total < line_full:
-                result_full = "UNDER"
-            else:
-                result_full = "PUSH"
+            if actual_total > line_full:   result_full = "OVER"
+            elif actual_total < line_full: result_full = "UNDER"
+            else:                          result_full = "PUSH"
 
         if line_f5 is not None and actual_f5_total is not None:
-            if actual_f5_total > line_f5:
-                result_f5 = "OVER"
-            elif actual_f5_total < line_f5:
-                result_f5 = "UNDER"
-            else:
-                result_f5 = "PUSH"
+            if actual_f5_total > line_f5:   result_f5 = "OVER"
+            elif actual_f5_total < line_f5: result_f5 = "UNDER"
+            else:                           result_f5 = "PUSH"
 
         existing = conn.execute(
             "SELECT id FROM results WHERE game_pk = ? AND game_date = ?",
@@ -144,7 +199,6 @@ def log_result(game_pk: int, game_date: str, actual_total: float = None,
         ).fetchone()
 
         if existing:
-            # Update only non-None fields to avoid overwriting real scores with None
             updates, vals = [], []
             if actual_total    is not None: updates.append("actual_total = ?");    vals.append(actual_total)
             if actual_f5_total is not None: updates.append("actual_f5_total = ?"); vals.append(actual_f5_total)
@@ -173,6 +227,15 @@ def log_result(game_pk: int, game_date: str, actual_total: float = None,
             ))
 
 
+def get_all_graded_results() -> list[dict]:
+    """Return all rows from graded_results ordered by date desc."""
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM graded_results ORDER BY game_date DESC, home_team"
+        ).fetchall()
+        return [dict(r) for r in rows]
+
+
 def get_recent_projections(days: int = 7) -> list:
     with get_conn() as conn:
         rows = conn.execute("""
@@ -192,11 +255,12 @@ def get_season_record() -> dict:
         row = conn.execute("""
             SELECT
                 COUNT(*) AS total,
-                SUM(CASE WHEN result_full = 'OVER'  AND p.proj_total_full > line_full  THEN 1 ELSE 0 END) AS correct_over,
-                SUM(CASE WHEN result_full = 'UNDER' AND p.proj_total_full < line_full  THEN 1 ELSE 0 END) AS correct_under,
-                SUM(CASE WHEN result_full = 'PUSH'  THEN 1 ELSE 0 END)                                    AS pushes
-            FROM results r
-            JOIN projections p ON r.game_pk = p.game_pk AND r.game_date = p.game_date
-            WHERE line_full IS NOT NULL
+                SUM(CASE WHEN result = 'WIN'  THEN 1 ELSE 0 END) AS wins,
+                SUM(CASE WHEN result = 'LOSS' THEN 1 ELSE 0 END) AS losses,
+                SUM(CASE WHEN result = 'PUSH' THEN 1 ELSE 0 END) AS pushes,
+                SUM(CASE WHEN result = 'NO_LINE' THEN 1 ELSE 0 END) AS no_line,
+                SUM(CASE WHEN result = 'PENDING' THEN 1 ELSE 0 END) AS pending
+            FROM graded_results
+            WHERE was_a_play = 1
         """).fetchone()
         return dict(row) if row else {}

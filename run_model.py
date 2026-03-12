@@ -813,6 +813,7 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         f         = proj["factors"]
         full_cons = (odds.get("full") or {}).get("consensus")
         f5_cons   = (odds.get("f5")   or {}).get("consensus")
+        _fe       = edge_summary(proj["proj_total_full"], odds.get("full") or {})
 
         db.upsert_projection({
             "game_date":        game_date,
@@ -840,6 +841,8 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
             "confidence":       proj["confidence"],
             "confidence_score": proj["confidence_score"],
             "factors_json":     proj["factors"],
+            "lean":             proj["lean"],
+            "star_rating":      classify_game(proj, _fe),
         })
 
         if full_cons is not None:

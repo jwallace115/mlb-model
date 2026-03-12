@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/jw115/mlb-model/modules /Users/jw115/mlb-model/data /Users/jw115/mlb-model/logs && touch /Users/jw115/mlb-model/data/.gitkeep /Users/jw115/mlb-model/logs/.gitkeep /Users/jw115/mlb-model/modules/__init__.py)",
+      "Bash(pip install:*)",
+      "Bash(python3 -m pip install -r /Users/jw115/mlb-model/requirements.txt -q 2>&1 | tail -10)",
+      "Bash(python3 -c \"\nimport sys\nsys.path.insert\\(0, '.'\\)\nimport db\ndb.init_db\\(\\)\nprint\\('DB init: OK'\\)\nfrom config import STADIUMS, TEAM_ID_TO_ABB\nprint\\(f'Stadiums loaded: {len\\(STADIUMS\\)}'\\)\nprint\\(f'Team IDs loaded: {len\\(TEAM_ID_TO_ABB\\)}'\\)\nfrom modules.umpires import get_umpire_rating, list_all_umpires\nr = get_umpire_rating\\('CB Bucknor'\\)\nprint\\(f'Umpire lookup: CB Bucknor runs_factor={r[\\\\\"runs_factor\\\\\"]}'\\)\nfrom modules.weather import fetch_weather\nw = fetch_weather\\('CHC'\\)  # Wrigley\nprint\\(f'Weather \\(Wrigley\\): {w[\\\\\"temperature_f\\\\\"]}°F, {w[\\\\\"wind_speed_mph\\\\\"]}mph {w[\\\\\"wind_desc\\\\\"]}'\\)\nprint\\('Smoke test PASSED'\\)\n\")",
+      "Bash(python3 -c \"\nimport sys\nsys.path.insert\\(0, '.'\\)\nfrom modules.schedule import fetch_schedule\ngames = fetch_schedule\\(\\)\nprint\\(f'Games today: {len\\(games\\)}'\\)\nfor g in games[:3]:\n    print\\(f'  {g[\\\\\"away_team\\\\\"]} @ {g[\\\\\"home_team\\\\\"]} {g[\\\\\"game_time\\\\\"]} | HP: {g[\\\\\"home_umpire\\\\\"]} | SP: {g[\\\\\"away_probable_pitcher\\\\\"][\\\\\"name\\\\\"]} vs {g[\\\\\"home_probable_pitcher\\\\\"][\\\\\"name\\\\\"]}'\\)\n\")",
+      "Bash(python3 run_model.py 2>&1)",
+      "Bash(rm -f /Users/jw115/mlb-model/data/cache/*.json && python3 run_model.py 2>&1)",
+      "Bash(python3 -c \"\nfrom pybaseball import pitching_stats_bref\ndf = pitching_stats_bref\\(2025\\)\nprint\\(df.columns.tolist\\(\\)[:20]\\)\nprint\\(df.head\\(2\\)\\)\n\" 2>&1 | head -20)",
+      "Bash(rm -f /Users/jw115/mlb-model/data/cache/*.json 2>/dev/null; python3 run_model.py 2>&1)",
+      "Bash(python3 setup_launchd.py install 2>&1)",
+      "Bash(python3 setup_launchd.py status 2>&1 && python3 -c \"\nimport sys, sqlite3\nsys.path.insert\\(0, '.'\\)\nimport db\nrows = db.get_recent_projections\\(days=1\\)\nprint\\(f'Projections in DB: {len\\(rows\\)}'\\)\nfor r in rows[:3]:\n    print\\(f'  {r[\\\\\"away_team\\\\\"]} @ {r[\\\\\"home_team\\\\\"]}: full={r[\\\\\"proj_total_full\\\\\"]}, f5={r[\\\\\"proj_total_f5\\\\\"]}, conf={r[\\\\\"confidence\\\\\"]}'\\)\n\")",
+      "Bash(python3 run_model.py 2>/dev/null)",
+      "Bash(python3 run_model.py 2>/dev/null | cat)",
+      "Bash(python3 run_model.py 2>/dev/null > today_card.txt && cat today_card.txt)",
+      "Bash(python3 -c \"\nfrom config import STADIUMS\ns = STADIUMS['NYY']\nprint\\('Yankee Stadium config:'\\)\nfor k, v in s.items\\(\\):\n    print\\(f'  {k}: {v}'\\)\n\")",
+      "Bash(python3 -c \"\nimport requests\nfrom config import OPEN_METEO_API\n\nlat, lon = 40.8296, -73.9262\nresp = requests.get\\(\n    OPEN_METEO_API,\n    params={\n        'latitude':         lat,\n        'longitude':        lon,\n        'hourly':           'temperature_2m,windspeed_10m,winddirection_10m,weathercode',\n        'temperature_unit': 'fahrenheit',\n        'windspeed_unit':   'mph',\n        'timezone':         'auto',\n        'forecast_days':    2,\n    },\n    timeout=15,\n\\)\ndata = resp.json\\(\\)\nhourly = data['hourly']\ntimes  = hourly['time']\ntemps  = hourly['temperature_2m']\nwinds  = hourly['windspeed_10m']\nwdirs  = hourly['winddirection_10m']\nwcodes = hourly['weathercode']\n\nprint\\(f'Timezone: {data[\\\\\"timezone\\\\\"]}'\\)\nprint\\(\\)\nprint\\(f'{\\\\\"Hour\\\\\":<22} {\\\\\"Temp \\(°F\\)\\\\\":>10} {\\\\\"Wind \\(mph\\)\\\\\":>11} {\\\\\"Dir \\(°\\)\\\\\":>8} {\\\\\"WMO Code\\\\\":>9}'\\)\nprint\\('-' * 65\\)\nfor i, t in enumerate\\(times\\):\n    if '2026-03-11' in t:\n        print\\(f'{t:<22} {temps[i]:>10.1f} {winds[i]:>11.1f} {wdirs[i]:>8.0f} {wcodes[i]:>9}'\\)\n\")",
+      "Bash(python3 -c \"\nimport sys; sys.path.insert\\(0, '.'\\)\nfrom modules.weather import fetch_weather, _parse_game_hour_local\nfrom modules.schedule import fetch_schedule\n\ngames = fetch_schedule\\(\\)\nprint\\(f'{'Game':<28} {'ET Time':<16} {'Local Hr':>8} {'Temp°F':>8} {'Wind':>6} {'Desc':<20}'\\)\nprint\\('-' * 90\\)\nfor g in games:\n    home      = g['home_team']\n    game_time = g['game_time']\n    local_hr  = _parse_game_hour_local\\(game_time\\)\n    w = fetch_weather\\(home, game_time_et=game_time\\)\n    game_str = f\\\\\"{g['away_team']} @ {home}\\\\\"\n    print\\(f'{game_str:<28} {game_time:<16} {local_hr:>8} {w[\\\\\"temperature_f\\\\\"]:>8.1f} {w[\\\\\"wind_speed_mph\\\\\"]:>6.1f} {w[\\\\\"wind_desc\\\\\"]:<20}'\\)\n\" 2>/dev/null)",
+      "Bash(python3 -c \"\nimport sys; sys.path.insert\\(0, '.'\\)\nfrom run_model import run\nresults = run\\(quiet=True\\)\nif results:\n    p = results[0]\n    print\\('=== game keys ==='\\)\n    print\\(list\\(p['game'].keys\\(\\)\\)\\)\n    print\\(\\)\n    print\\('=== proj keys ==='\\)\n    print\\(list\\(p['projection'].keys\\(\\)\\)\\)\n    print\\(\\)\n    print\\('=== factors keys ==='\\)\n    print\\(list\\(p['projection']['factors'].keys\\(\\)\\)\\)\n    print\\(\\)\n    print\\('=== sample factors ==='\\)\n    for k,v in p['projection']['factors'].items\\(\\):\n        print\\(f'  {k}: {v}'\\)\n\" 2>/dev/null)",
+      "Bash(python3 -c \"\nfrom modules.schedule import fetch_schedule\ngames = fetch_schedule\\('2026-03-12'\\)\nfor g in games[:5]:\n    print\\(g['home_team'], 'vs', g['away_team'], '|', g.get\\('game_time'\\)\\)\n\" 2>/dev/null)",
+      "Bash(python3 -c \"\nfrom modules.schedule import fetch_schedule\ngames = fetch_schedule\\('2026-03-12'\\)\nfor g in games:\n    print\\(g['home_team'], 'vs', g['away_team'], '|', g.get\\('game_time'\\)\\)\n\" 2>/dev/null)",
+      "Bash(python3 -c \"\nfrom modules.schedule import fetch_schedule\ngames = fetch_schedule\\('2026-03-12'\\)\nfor g in games:\n    print\\(g['home_team'], 'vs', g['away_team'], '|', g.get\\('game_time'\\), '|', g.get\\('venue_name'\\)\\)\n\" 2>/dev/null)",
+      "Bash(python3 -c \"import sys; print\\(sys.version\\); from zoneinfo import ZoneInfo; z = ZoneInfo\\('America/New_York'\\); print\\('zoneinfo OK'\\)\")",
+      "Bash(python3 -c \"\nfrom modules.schedule import fetch_schedule\ngames = fetch_schedule\\('2026-03-12'\\)\nfor g in games:\n    print\\(f\\\\\"{g['away_team']} @ {g['home_team']}  |  {g['game_time']}  |  {g['venue_name']}\\\\\"\\)\n\" 2>/dev/null)",
+      "Bash(pip show:*)",
+      "Bash(python3 -c \"import streamlit; print\\(streamlit.__version__\\)\" 2>/dev/null || echo \"not installed\")",
+      "Bash(pip3 install:*)",
+      "Bash(python3 -c \"import streamlit; print\\(streamlit.__version__\\)\")",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(python -c \"\nimport db\ndb.init_db\\(\\)\nprint\\('DB init OK'\\)\n\" 2>&1)",
+      "Bash(python3 -c \"\nimport db\ndb.init_db\\(\\)\nprint\\('DB init OK'\\)\nimport analytics\nstats = analytics.build_season_stats\\(\\)\nprint\\('Analytics build OK'\\)\nprint\\('total_tracked:', stats['total_tracked']\\)\nprint\\('is_spring_training:', stats['is_spring_training']\\)\n\" 2>&1)",
+      "Bash(python3 -c \"\nimport analytics\nstats = analytics.build_season_stats\\(\\)\nprint\\('total_tracked:', stats['total_tracked']\\)\nprint\\('total_plays:', stats['total_plays']\\)\nprint\\('is_spring_training:', stats['is_spring_training']\\)\nacc = stats['projection_accuracy']\nprint\\('MAE:', acc.get\\('mae'\\)\\)\nprint\\('within_1_run:', acc.get\\('within_1_run'\\), '%'\\)\nprint\\('avg_bias:', acc.get\\('avg_bias'\\)\\)\nmisses = stats['biggest_misses']\nprint\\('biggest miss:', misses[0]['matchup'], misses[0]['projection_error'], 'runs'\\)\n\" 2>&1)"
+    ]
+  }
+}

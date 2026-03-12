@@ -1,32 +1,38 @@
 #!/usr/bin/env python3
 """
-Results tracker — log actual game totals and compare vs projections.
+Results tracker — grade yesterday's games against projections.
 
 Usage:
-  python results_tracker.py --date 2025-04-14           # auto-fetch all results for a date
-  python results_tracker.py --game 12345 --total 8.5    # log one game manually
-  python results_tracker.py --game 12345 --total 8.5 --f5 4.0 --line 8.0 --line-f5 4.5
-  python results_tracker.py --summary                    # print season record
-  python results_tracker.py --summary --days 30          # last 30 days
+  python results_tracker.py                  # grade yesterday (default)
+  python results_tracker.py --date 2025-04-14
+  python results_tracker.py --summary
+  python results_tracker.py --summary --days 30
 """
 
 import argparse
+import json
 import logging
 import sys
 from datetime import date, timedelta
 
 import requests
 from colorama import Fore, Style, init as colorama_init
-from tabulate import tabulate
 
 import db
-from config import MLB_STATS_API, TEAM_ID_TO_ABB
+from config import MLB_STATS_API
 
 colorama_init(autoreset=True)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",
-                    handlers=[logging.StreamHandler(sys.stderr)])
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler(sys.stderr)],
+)
 logger = logging.getLogger("results_tracker")
 
+_STAR_COUNT = {"⭐⭐⭐": 3, "⭐⭐": 2, "⭐": 1}
+
+
+# ── MLB Stats API helpers ──────────────────────────────────────────────────────
 
 def fetch_final_score(game_pk: int) -> dict | None:
     """Pull the final linescore from the MLB Stats API."""
@@ -38,20 +44,19 @@ def fetch_final_score(game_pk: int) -> dict | None:
 
         home_runs = data.get("teams", {}).get("home", {}).get("runs")
         away_runs = data.get("teams", {}).get("away", {}).get("runs")
-
         if home_runs is None or away_runs is None:
             return None
 
-        # F5 from innings
         innings = data.get("innings", [])
-        f5_total = 0.0
-        for inn in innings[:5]:
-            f5_total += (inn.get("home", {}).get("runs") or 0)
-            f5_total += (inn.get("away", {}).get("runs") or 0)
+        f5_total = sum(
+            (inn.get("home", {}).get("runs") or 0) +
+            (inn.get("away", {}).get("runs") or 0)
+            for inn in innings[:5]
+        )
 
         return {
-            "total":    float(home_runs + away_runs),
-            "f5_total": float(f5_total),
+            "total":     float(home_runs + away_runs),
+            "f5_total":  float(f5_total),
             "home_runs": home_runs,
             "away_runs": away_runs,
         }
@@ -60,203 +65,239 @@ def fetch_final_score(game_pk: int) -> dict | None:
         return None
 
 
-def auto_log_date(game_date: str, line_file: str = None) -> None:
+# ── classify_game (mirrors run_model.py logic) ─────────────────────────────────
+
+def _classify(lean: str, confidence: str, score: float,
+              line: float | None, proj_total: float | None) -> str:
+    """Re-derive star rating from stored projection data."""
+    if lean == "NEUTRAL":
+        return "NO PLAY"
+
+    edge = None
+    has_line = line is not None and proj_total is not None
+    if has_line:
+        edge = abs(proj_total - line)
+
+    if has_line and edge is not None:
+        if confidence == "HIGH"   and edge >= 1.0: return "⭐⭐⭐"
+        if confidence == "HIGH"   and edge >= 0.5: return "⭐⭐⭐"
+        if confidence == "MEDIUM" and edge >= 0.5: return "⭐⭐"
+        if confidence == "HIGH"   and edge >= 0.3: return "⭐⭐"
+        if edge >= 0.3 and confidence != "LOW":    return "⭐"
+        return "NO PLAY"
+    else:
+        if confidence == "HIGH"   and score >= 0.75: return "⭐⭐⭐"
+        if confidence == "HIGH"   and score >= 0.50: return "⭐⭐"
+        if confidence == "MEDIUM" and score >= 0.50: return "⭐⭐"
+        if confidence == "MEDIUM":                   return "⭐"
+        if confidence == "LOW"    and score >= 0.50: return "⭐"
+        return "NO PLAY"
+
+
+# ── result computation ─────────────────────────────────────────────────────────
+
+def _compute_result(lean: str, actual_total: float | None,
+                    line: float | None) -> str:
+    if actual_total is None:
+        return "PENDING"
+    if line is None:
+        return "NO_LINE"
+    if actual_total > line:
+        actual_dir = "OVER"
+    elif actual_total < line:
+        actual_dir = "UNDER"
+    else:
+        return "PUSH"
+
+    if lean in ("OVER", "UNDER"):
+        return "WIN" if lean == actual_dir else "LOSS"
+    # NEUTRAL lean — record direction for retrospective analysis only
+    return actual_dir
+
+
+# ── core grader ────────────────────────────────────────────────────────────────
+
+def grade_date(game_date: str) -> list[dict]:
     """
-    Automatically pull final scores for all projected games on *game_date*
-    and log them. Lines must be entered manually afterward (or from a file).
+    Grade all projections for game_date against actual scores.
+    Fetches scores from MLB Stats API if not yet stored.
+    Returns list of graded_result dicts written to DB.
     """
     db.init_db()
 
     with db.get_conn() as conn:
-        projections = conn.execute(
-            "SELECT game_pk, home_team, away_team FROM projections WHERE game_date = ?",
-            (game_date,)
-        ).fetchall()
+        projections = conn.execute("""
+            SELECT p.*, r.actual_total, r.actual_f5_total, r.line_full
+            FROM projections p
+            LEFT JOIN results r
+              ON p.game_pk = r.game_pk AND p.game_date = r.game_date
+            WHERE p.game_date = ?
+            ORDER BY p.home_team
+        """, (game_date,)).fetchall()
 
     if not projections:
         logger.warning(f"No projections found for {game_date}")
-        return
+        return []
 
-    logged = 0
-    for proj in projections:
-        gk   = proj["game_pk"]
-        home = proj["home_team"]
-        away = proj["away_team"]
+    graded = []
+    for row in projections:
+        gk   = row["game_pk"]
+        home = row["home_team"]
+        away = row["away_team"]
 
-        score = fetch_final_score(gk)
-        if not score:
-            logger.info(f"  {away} @ {home}: Game not final yet or score unavailable.")
-            continue
+        # ── actual score ──────────────────────────────────────────────────────
+        actual_total = row["actual_total"]
+        if actual_total is None:
+            score = fetch_final_score(gk)
+            if score:
+                actual_total = score["total"]
+                db.log_result(gk, game_date,
+                              actual_total=actual_total,
+                              actual_f5_total=score["f5_total"])
+                logger.info(f"  {away} @ {home}: {away} {score['away_runs']} — "
+                            f"{home} {score['home_runs']} (Total {actual_total})")
+            else:
+                logger.info(f"  {away} @ {home}: not final yet")
 
-        db.log_result(
-            game_pk=gk,
-            game_date=game_date,
-            actual_total=score["total"],
-            actual_f5_total=score["f5_total"],
+        # ── parse factors JSON ────────────────────────────────────────────────
+        factors = {}
+        if row["factors_json"]:
+            try:
+                factors = json.loads(row["factors_json"])
+            except Exception:
+                pass
+
+        # ── lean + star_rating ────────────────────────────────────────────────
+        lean       = row["lean"] or factors.get("lean") or "NEUTRAL"
+        line       = row["line_full"]
+        proj_total = row["proj_total_full"]
+        confidence = row["confidence"] or "LOW"
+        conf_score = row["confidence_score"] or 0.0
+
+        star_rating = row["star_rating"] or _classify(
+            lean, confidence, conf_score, line, proj_total
         )
-        logger.info(f"  {away} @ {home}: {away} {score['away_runs']} — "
-                    f"{home} {score['home_runs']} "
-                    f"(Total {score['total']}, F5 {score['f5_total']})")
-        logged += 1
+        star_count = _STAR_COUNT.get(star_rating, 0)
+        was_a_play = 1 if star_rating != "NO PLAY" else 0
 
-    print(f"\n{Fore.GREEN}Logged {logged}/{len(projections)} results for {game_date}.{Style.RESET_ALL}")
-    print(f"Run with --line to add betting lines for accuracy tracking.\n")
+        # ── edge + error ──────────────────────────────────────────────────────
+        edge             = (proj_total - line) if (proj_total and line) else None
+        projection_error = (actual_total - proj_total) if (actual_total and proj_total) else None
+        result           = _compute_result(lean, actual_total, line)
+
+        graded_row = {
+            "game_date":            game_date,
+            "game_pk":              gk,
+            "home_team":            home,
+            "away_team":            away,
+            "projected_total":      proj_total,
+            "recommendation":       lean,
+            "star_rating":          star_rating,
+            "star_count":           star_count,
+            "confidence":           confidence,
+            "confidence_score":     conf_score,
+            "was_a_play":           was_a_play,
+            "line":                 line,
+            "edge":                 edge,
+            "actual_total":         actual_total,
+            "projection_error":     projection_error,
+            "result":               result,
+            "sp_home":              row["home_sp"],
+            "sp_away":              row["away_sp"],
+            "sp_home_xfip":         row["home_sp_xfip"],
+            "sp_away_xfip":         row["away_sp_xfip"],
+            "home_wrc_plus":        row["home_wrc_plus"],
+            "away_wrc_plus":        row["away_wrc_plus"],
+            "park_factor":          row["park_factor"],
+            "temperature":          factors.get("temperature_f"),
+            "wind_speed":           factors.get("wind_speed_mph"),
+            "wind_direction":       factors.get("wind_direction"),
+            "wind_desc":            factors.get("wind_desc"),
+            "umpire":               row["umpire_name"],
+            "umpire_rating":        row["umpire_factor"],
+            "home_bullpen_innings": factors.get("home_bp_innings_used"),
+            "away_bullpen_innings": factors.get("away_bp_innings_used"),
+        }
+
+        db.write_graded_result(graded_row)
+        graded.append(graded_row)
+
+    wins   = sum(1 for g in graded if g["result"] == "WIN")
+    losses = sum(1 for g in graded if g["result"] == "LOSS")
+    plays  = sum(1 for g in graded if g["was_a_play"])
+    logger.info(f"Graded {len(graded)} games for {game_date}. "
+                f"Plays: {plays}  W/L: {wins}-{losses}")
+    return graded
 
 
-def manual_log(game_pk: int, game_date: str, actual_total: float,
-               f5_total: float = None, line_full: float = None,
-               line_f5: float = None) -> None:
-    db.init_db()
-    db.log_result(
-        game_pk=game_pk,
-        game_date=game_date,
-        actual_total=actual_total,
-        actual_f5_total=f5_total,
-        line_full=line_full,
-        line_f5=line_f5,
-    )
-    print(f"{Fore.GREEN}Logged result for game_pk={game_pk}.{Style.RESET_ALL}")
+def grade_yesterday() -> list[dict]:
+    yesterday = (date.today() - timedelta(days=1)).isoformat()
+    logger.info(f"Grading results for {yesterday} ...")
+    return grade_date(yesterday)
 
 
-def update_line(game_pk: int, game_date: str, line_full: float = None,
-                line_f5: float = None) -> None:
-    """Update just the betting line for an already-logged result."""
-    db.init_db()
-    with db.get_conn() as conn:
-        existing = conn.execute(
-            "SELECT id FROM results WHERE game_pk = ? AND game_date = ?",
-            (game_pk, game_date)
-        ).fetchone()
-        if not existing:
-            print(f"{Fore.RED}No result found for game_pk={game_pk} on {game_date}.{Style.RESET_ALL}")
-            return
-
-        if line_full is not None:
-            conn.execute("UPDATE results SET line_full = ?, result_full = CASE "
-                         "WHEN actual_total > ? THEN 'OVER' "
-                         "WHEN actual_total < ? THEN 'UNDER' ELSE 'PUSH' END "
-                         "WHERE game_pk = ? AND game_date = ?",
-                         (line_full, line_full, line_full, game_pk, game_date))
-        if line_f5 is not None:
-            conn.execute("UPDATE results SET line_f5 = ?, result_f5 = CASE "
-                         "WHEN actual_f5_total > ? THEN 'OVER' "
-                         "WHEN actual_f5_total < ? THEN 'UNDER' ELSE 'PUSH' END "
-                         "WHERE game_pk = ? AND game_date = ?",
-                         (line_f5, line_f5, line_f5, game_pk, game_date))
-    print(f"{Fore.GREEN}Line updated for game_pk={game_pk}.{Style.RESET_ALL}")
-
+# ── summary ────────────────────────────────────────────────────────────────────
 
 def print_summary(days: int = 30) -> None:
-    """Print a detailed performance summary."""
     db.init_db()
-    recent = db.get_recent_projections(days=days)
+    with db.get_conn() as conn:
+        rows = conn.execute("""
+            SELECT * FROM graded_results
+            WHERE game_date >= date('now', ? || ' days')
+            ORDER BY game_date DESC
+        """, (f"-{days}",)).fetchall()
+    rows = [dict(r) for r in rows]
 
-    tracked = [r for r in recent if r.get("actual_total") is not None]
-    with_lines = [r for r in tracked if r.get("line_full") is not None]
+    plays  = [r for r in rows if r["was_a_play"]]
+    graded = [r for r in plays if r["result"] in ("WIN", "LOSS", "PUSH")]
+
+    wins   = sum(1 for r in graded if r["result"] == "WIN")
+    losses = sum(1 for r in graded if r["result"] == "LOSS")
+    pushes = sum(1 for r in graded if r["result"] == "PUSH")
+    no_line = sum(1 for r in plays if r["result"] == "NO_LINE")
+    decided = wins + losses
 
     print(f"\n{Fore.CYAN}{'='*60}")
     print(f"  RESULTS SUMMARY — Last {days} days")
     print(f"{'='*60}{Style.RESET_ALL}\n")
+    print(f"  Total projected games: {len(rows)}")
+    print(f"  Total plays:  {len(plays)}")
+    print(f"  Graded (W/L): {decided}  |  No line: {no_line}\n")
 
-    print(f"  Total projections: {len(recent)}")
-    print(f"  Games with results: {len(tracked)}")
-    print(f"  Games with lines: {len(with_lines)}\n")
+    if decided > 0:
+        pct = wins / decided * 100
+        roi = (wins * 0.9091 - losses) / decided * 100
+        color = Fore.GREEN if pct >= 55 else Fore.YELLOW if pct >= 50 else Fore.RED
+        print(f"  Record: {color}{wins}-{losses}{Style.RESET_ALL} "
+              f"({pct:.1f}%)  |  ROI: {roi:+.1f}%  |  Pushes: {pushes}\n")
 
-    if with_lines:
-        correct = sum(1 for r in with_lines
-                      if (r["result_full"] == "OVER" and r["proj_total_full"] > r["line_full"])
-                      or (r["result_full"] == "UNDER" and r["proj_total_full"] < r["line_full"]))
-        pushes  = sum(1 for r in with_lines if r["result_full"] == "PUSH")
-        played  = len(with_lines) - pushes
-        if played > 0:
-            pct = correct / played * 100
-            color = Fore.GREEN if pct >= 55 else Fore.YELLOW if pct >= 50 else Fore.RED
-            print(f"  {color}Full-game record: {correct}-{played-correct} ({pct:.1f}%){Style.RESET_ALL}")
-
-    # Per-confidence breakdown
-    if with_lines:
-        print(f"\n  By confidence level:")
-        for conf in ("HIGH", "MEDIUM", "LOW"):
-            subset = [r for r in with_lines if r.get("confidence") == conf]
-            if not subset:
-                continue
-            c = sum(1 for r in subset
-                    if (r["result_full"] == "OVER" and r["proj_total_full"] > r["line_full"])
-                    or (r["result_full"] == "UNDER" and r["proj_total_full"] < r["line_full"]))
-            p = sum(1 for r in subset if r["result_full"] == "PUSH")
-            n = len(subset) - p
-            pct = c / n * 100 if n > 0 else 0
-            color = Fore.GREEN if pct >= 55 else Fore.YELLOW if pct >= 50 else Fore.RED
-            print(f"    {conf:<8}: {c}-{n-c} ({color}{pct:.1f}%{Style.RESET_ALL})")
-
-    # Recent results table
-    if tracked:
-        print(f"\n  Recent results (last 10 with results):\n")
-        last10 = sorted(tracked, key=lambda r: r["game_date"], reverse=True)[:10]
-        table_rows = []
-        for r in last10:
-            proj_str = f"{r['proj_total_full']:.1f}"
-            act_str  = f"{r['actual_total']:.1f}"
-            line_str = f"{r['line_full']:.1f}" if r.get("line_full") else "—"
-            res_str  = r.get("result_full", "—") or "—"
-            if res_str == "OVER":
-                res_disp = f"{Fore.RED}OVER{Style.RESET_ALL}"
-            elif res_str == "UNDER":
-                res_disp = f"{Fore.CYAN}UNDER{Style.RESET_ALL}"
-            else:
-                res_disp = res_str
-
-            table_rows.append([
-                r["game_date"],
-                f"{r['away_team']} @ {r['home_team']}",
-                proj_str,
-                line_str,
-                act_str,
-                res_disp,
-                r.get("confidence", "?"),
-            ])
-        print(tabulate(table_rows,
-                       headers=["Date", "Game", "Proj", "Line", "Actual", "Result", "Conf"],
-                       tablefmt="rounded_outline"))
-
+    for label, sc in [("⭐⭐⭐", 3), ("⭐⭐", 2), ("⭐", 1)]:
+        sub = [r for r in graded if r.get("star_count") == sc]
+        if not sub:
+            continue
+        w = sum(1 for r in sub if r["result"] == "WIN")
+        l = sum(1 for r in sub if r["result"] == "LOSS")
+        n = w + l
+        pct = w / n * 100 if n else 0
+        c = Fore.GREEN if pct >= 55 else Fore.YELLOW if pct >= 50 else Fore.RED
+        print(f"  {label}: {w}-{l} ({c}{pct:.1f}%{Style.RESET_ALL})")
     print()
 
+
+# ── main ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="MLB Results Tracker")
     parser.add_argument("--date", "-d", default=None,
-                        help="Auto-log all results for YYYY-MM-DD")
-    parser.add_argument("--game", "-g", type=int, default=None,
-                        help="game_pk for manual logging")
-    parser.add_argument("--total", type=float, default=None,
-                        help="Actual total runs for manual logging")
-    parser.add_argument("--f5", type=float, default=None,
-                        help="Actual F5 total for manual logging")
-    parser.add_argument("--line", type=float, default=None,
-                        help="Betting line (full game over/under)")
-    parser.add_argument("--line-f5", type=float, default=None,
-                        help="Betting line (F5 over/under)")
-    parser.add_argument("--update-line", action="store_true",
-                        help="Update an existing result's line only")
+                        help="Grade YYYY-MM-DD (default: yesterday)")
     parser.add_argument("--summary", "-s", action="store_true",
                         help="Print season summary")
     parser.add_argument("--days", type=int, default=30,
-                        help="Days to include in summary (default 30)")
+                        help="Days to include in summary")
     args = parser.parse_args()
-
-    today = date.today().isoformat()
 
     if args.summary:
         print_summary(days=args.days)
-    elif args.update_line and args.game:
-        update_line(args.game, args.date or today, args.line, args.line_f5)
-    elif args.game and args.total is not None:
-        manual_log(args.game, args.date or today, args.total,
-                   f5_total=args.f5, line_full=args.line, line_f5=args.line_f5)
-    elif args.date:
-        auto_log_date(args.date)
     else:
-        # Default: auto-log yesterday
-        yesterday = (date.today() - timedelta(days=1)).isoformat()
-        print(f"Auto-logging results for {yesterday}...")
-        auto_log_date(yesterday)
+        target = args.date or (date.today() - timedelta(days=1)).isoformat()
+        grade_date(target)

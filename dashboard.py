@@ -2,8 +2,7 @@
 """
 MLB Totals Model — Streamlit Dashboard
 =======================================
-Reads from results.json, which is pushed from the local machine each morning
-after run_model.py completes (via push_results.py).
+Reads from results.json and season_stats.json pushed from the local machine.
 
 Launch:  streamlit run dashboard.py
 """
@@ -14,13 +13,13 @@ from datetime import datetime
 
 import streamlit as st
 
-RESULTS_FILE  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.json")
-EDGE_MIN_RUNS = 0.5   # mirrors config.py
+RESULTS_FILE      = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.json")
+SEASON_STATS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "season_stats.json")
 
 # ── page config ───────────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="MLB Totals Model",
+    page_title="I AM NOT UNCERTAIN",
     page_icon="⚾",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -86,6 +85,65 @@ if not _check_password():
 st.markdown("""
 <style>
 .block-container { padding-top: 1.2rem; max-width: 860px; }
+
+/* ── Season header ── */
+.season-banner {
+    background: #0f1117;
+    border: 1px solid #1e2535;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+.season-banner .st-label { font-size: 0.72em; color: #4a5568; text-transform: uppercase; letter-spacing: 0.08em; }
+.stat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    align-items: flex-end;
+}
+.stat-block .num { font-size: 1.7em; font-weight: 700; color: #f1f5f9; line-height: 1.1; }
+.stat-block .num.green  { color: #22c55e; }
+.stat-block .num.yellow { color: #eab308; }
+.stat-block .num.red    { color: #f87171; }
+.stat-block .lbl { font-size: 0.72em; color: #4a5568; margin-top: 2px; }
+.spring-badge {
+    font-size: 0.72em;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: #1e3a5f;
+    color: #7dd3fc;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/* ── Star record table ── */
+.star-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82em;
+    margin-top: 8px;
+}
+.star-table th {
+    color: #4a5568;
+    font-weight: 600;
+    text-align: left;
+    padding: 3px 10px 3px 0;
+    border-bottom: 1px solid #1e2535;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.star-table td {
+    padding: 5px 10px 5px 0;
+    color: #cbd5e1;
+    border-bottom: 1px solid #0f1117;
+}
+.star-table td.green  { color: #22c55e; font-weight: 700; }
+.star-table td.yellow { color: #eab308; font-weight: 700; }
+.star-table td.red    { color: #f87171; font-weight: 700; }
 
 /* ── Game cards ── */
 .game-card {
@@ -224,25 +282,40 @@ st.markdown("""
 .parlay-leg:last-child { border-bottom: none; }
 .parlay-matchup { font-weight: 600; color: #f1f5f9; min-width: 120px; }
 
-/* ── Season record ── */
-.record-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px 32px;
-    background: #0f1117;
-    border-radius: 8px;
-    padding: 12px 18px;
-    margin-bottom: 18px;
-    border: 1px solid #1e2535;
+/* ── Analytics tables ── */
+.analytics-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82em;
+    margin-top: 4px;
 }
-.record-stat .num { font-size: 1.6em; font-weight: 700; color: #f1f5f9; line-height: 1.1; }
-.record-stat .lbl { font-size: 0.75em; color: #4a5568; }
+.analytics-table th {
+    color: #4a5568;
+    font-weight: 600;
+    text-align: left;
+    padding: 4px 12px 4px 0;
+    border-bottom: 1px solid #1e2535;
+    font-size: 0.88em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.analytics-table td {
+    padding: 6px 12px 6px 0;
+    color: #cbd5e1;
+    border-bottom: 1px solid #0f1117;
+    vertical-align: top;
+}
+.analytics-table td.dim   { color: #4a5568; }
+.analytics-table td.green { color: #22c55e; font-weight: 600; }
+.analytics-table td.yellow{ color: #eab308; font-weight: 600; }
+.analytics-table td.red   { color: #f87171; font-weight: 600; }
 
 /* ── Responsive ── */
 @media (max-width: 600px) {
     .matchup { font-size: 1.05em; }
     .proj-row { gap: 4px 12px; }
     .parlay-leg { font-size: 0.78em; }
+    .stat-grid { gap: 8px 18px; }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -258,18 +331,334 @@ def load_results() -> dict | None:
         return json.load(f)
 
 
+@st.cache_data(ttl=None, show_spinner=False)
+def load_season_stats() -> dict | None:
+    if not os.path.exists(SEASON_STATS_FILE):
+        return None
+    with open(SEASON_STATS_FILE) as f:
+        return json.load(f)
+
+
 def _last_run_label(data: dict) -> str:
     ts = data.get("generated_at")
     if not ts:
-        return "unknown"
+        return "never"
     try:
-        dt = datetime.fromisoformat(ts)
-        return dt.strftime("%b %-d at %I:%M %p")
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+        return dt.strftime("%b %-d at %-I:%M %p UTC")
     except Exception:
         return ts
 
 
-# ── rendering helpers ─────────────────────────────────────────────────────────
+# ── season header rendering ───────────────────────────────────────────────────
+
+def _pct_color(pct: float | None) -> str:
+    if pct is None:
+        return ""
+    if pct >= 55:
+        return "green"
+    if pct >= 50:
+        return "yellow"
+    return "red"
+
+
+def _render_season_header(stats: dict) -> None:
+    overall = stats.get("overall", {})
+    wins    = overall.get("wins", 0) or 0
+    losses  = overall.get("losses", 0) or 0
+    pushes  = overall.get("pushes", 0) or 0
+    no_line = overall.get("no_line", 0) or 0
+    decided = overall.get("decided", 0) or 0
+    win_pct = overall.get("win_pct")
+    roi     = overall.get("roi")
+    units   = overall.get("units")
+    total_plays = stats.get("total_plays", 0) or 0
+    accuracy = stats.get("projection_accuracy", {})
+    is_st   = stats.get("is_spring_training", True)
+
+    spring_badge = (
+        '<span class="spring-badge">Spring Training — Tracking Accuracy Only</span>'
+        if is_st else ""
+    )
+
+    if decided == 0 and no_line == 0:
+        # No tracked data at all yet
+        return
+
+    # W-L display
+    if decided > 0:
+        pct_cls = _pct_color(win_pct)
+        record_num  = f"{wins}–{losses}"
+        record_cls  = pct_cls
+        pct_display = f"{win_pct:.1f}%" if win_pct is not None else "—"
+        roi_display = f"{roi:+.1f}%" if roi is not None else "—"
+        units_display = f"{units:+.2f}" if units is not None else "—"
+        roi_cls = "green" if (roi or 0) >= 0 else "red"
+    else:
+        record_num = "—"
+        record_cls = ""
+        pct_display = "—"
+        roi_display = "—"
+        units_display = "—"
+        roi_cls = ""
+
+    mae = accuracy.get("mae")
+    within1 = accuracy.get("within_1_run")
+
+    # Star record table rows
+    by_stars = stats.get("by_stars", {})
+    star_rows = ""
+    for label in ["⭐⭐⭐", "⭐⭐", "⭐"]:
+        s = by_stars.get(label, {})
+        w, l = s.get("wins", 0) or 0, s.get("losses", 0) or 0
+        p, nl = s.get("pushes", 0) or 0, s.get("no_line", 0) or 0
+        n = w + l
+        if n == 0 and nl == 0 and p == 0:
+            continue
+        wp = s.get("win_pct")
+        cls = _pct_color(wp)
+        pct_str = f"{wp:.1f}%" if wp is not None else "—"
+        roi_s = s.get("roi")
+        roi_str = f"{roi_s:+.1f}%" if roi_s is not None else "—"
+        nl_str = f" + {nl} no-line" if nl else ""
+        star_rows += (
+            f'<tr><td>{label}</td>'
+            f'<td class="{cls}">{w}–{l}</td>'
+            f'<td class="{cls}">{pct_str}</td>'
+            f'<td>{roi_str}</td>'
+            f'<td class="dim">{p}{nl_str}</td></tr>'
+        )
+
+    star_table = ""
+    if star_rows:
+        star_table = f"""
+        <table class="star-table" style="margin-top:12px">
+          <thead><tr>
+            <th>Rating</th><th>Record</th><th>Win %</th>
+            <th>ROI</th><th>P / No Line</th>
+          </tr></thead>
+          <tbody>{star_rows}</tbody>
+        </table>"""
+
+    accuracy_html = ""
+    if mae is not None:
+        within1_str = f"{within1:.1f}%" if within1 is not None else "—"
+        accuracy_html = f"""
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid #1e2535">
+          <span style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
+                       letter-spacing:0.08em">Projection Accuracy</span>
+          <div class="stat-grid" style="margin-top:6px">
+            <div class="stat-block">
+              <div class="num">{mae:.2f}</div>
+              <div class="lbl">MAE (runs)</div>
+            </div>
+            <div class="stat-block">
+              <div class="num">{within1_str}</div>
+              <div class="lbl">Within 1 run</div>
+            </div>
+            <div class="stat-block">
+              <div class="num">{accuracy.get('within_2_runs', '—')}{'%' if accuracy.get('within_2_runs') else ''}</div>
+              <div class="lbl">Within 2 runs</div>
+            </div>
+          </div>
+        </div>"""
+
+    html = f"""
+    <div class="season-banner">
+      {spring_badge}
+      <div class="stat-grid">
+        <div class="stat-block">
+          <div class="num {record_cls}">{record_num}</div>
+          <div class="lbl">Season Record (vs line)</div>
+        </div>
+        <div class="stat-block">
+          <div class="num {record_cls}">{pct_display}</div>
+          <div class="lbl">Win %</div>
+        </div>
+        <div class="stat-block">
+          <div class="num {roi_cls}">{roi_display}</div>
+          <div class="lbl">ROI</div>
+        </div>
+        <div class="stat-block">
+          <div class="num {roi_cls}">{units_display}</div>
+          <div class="lbl">Units</div>
+        </div>
+        <div class="stat-block">
+          <div class="num">{total_plays}</div>
+          <div class="lbl">Total Plays</div>
+        </div>
+        <div class="stat-block">
+          <div class="num">{no_line}</div>
+          <div class="lbl">No Line</div>
+        </div>
+      </div>
+      {star_table}
+      {accuracy_html}
+    </div>"""
+
+    st.markdown(html, unsafe_allow_html=True)
+
+
+# ── analytics expander ────────────────────────────────────────────────────────
+
+def _analytics_table(rows: list[tuple], headers: list[str]) -> str:
+    head = "".join(f"<th>{h}</th>" for h in headers)
+    body = ""
+    for row in rows:
+        cells = ""
+        for cell in row:
+            cls = ""
+            val = cell
+            if isinstance(cell, tuple):
+                val, cls = cell
+            cells += f'<td class="{cls}">{val}</td>'
+        body += f"<tr>{cells}</tr>"
+    return (
+        f'<table class="analytics-table">'
+        f'<thead><tr>{head}</tr></thead>'
+        f'<tbody>{body}</tbody></table>'
+    )
+
+
+def _wl_row(d: dict) -> tuple:
+    w, l = d.get("wins", 0) or 0, d.get("losses", 0) or 0
+    wp   = d.get("win_pct")
+    roi  = d.get("roi")
+    nl   = d.get("no_line", 0) or 0
+    cls  = _pct_color(wp)
+    record_str = f"{w}–{l}" if (w + l) > 0 else "—"
+    pct_str    = f"{wp:.1f}%" if wp is not None else "—"
+    roi_str    = f"{roi:+.1f}%" if roi is not None else "—"
+    nl_str     = str(nl) if nl else "—"
+    return (record_str, cls), (pct_str, cls), (roi_str, ""), (nl_str, "dim")
+
+
+def _render_analytics(stats: dict) -> None:
+    with st.expander("📊 Analytics & Breakdowns", expanded=False):
+
+        # ── by temperature ────────────────────────────────────────────────────
+        st.markdown("**Temperature**")
+        by_temp = stats.get("by_temperature", {})
+        temp_rows = []
+        for key in ("cold", "mild", "warm", "dome"):
+            d = by_temp.get(key, {})
+            label = d.get("label", key)
+            if (d.get("wins", 0) or 0) + (d.get("losses", 0) or 0) + (d.get("no_line", 0) or 0) == 0:
+                continue
+            temp_rows.append(((label, ""),) + _wl_row(d))
+        if temp_rows:
+            st.markdown(
+                _analytics_table(temp_rows, ["Temperature", "Record", "Win %", "ROI", "No Line"]),
+                unsafe_allow_html=True
+            )
+        else:
+            st.caption("No data yet.")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── by wind ───────────────────────────────────────────────────────────
+        st.markdown("**Wind**")
+        by_wind = stats.get("by_wind", {})
+        wind_rows = []
+        for key in ("out", "in", "neutral", "dome"):
+            d = by_wind.get(key, {})
+            label = d.get("label", key)
+            if (d.get("wins", 0) or 0) + (d.get("losses", 0) or 0) + (d.get("no_line", 0) or 0) == 0:
+                continue
+            wind_rows.append(((label, ""),) + _wl_row(d))
+        if wind_rows:
+            st.markdown(
+                _analytics_table(wind_rows, ["Wind", "Record", "Win %", "ROI", "No Line"]),
+                unsafe_allow_html=True
+            )
+        else:
+            st.caption("No data yet.")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── by park factor ────────────────────────────────────────────────────
+        st.markdown("**Park Factor**")
+        by_park = stats.get("by_park", {})
+        park_rows = []
+        for key in ("pitcher", "neutral", "hitter"):
+            d = by_park.get(key, {})
+            label = d.get("label", key)
+            if (d.get("wins", 0) or 0) + (d.get("losses", 0) or 0) + (d.get("no_line", 0) or 0) == 0:
+                continue
+            park_rows.append(((label, ""),) + _wl_row(d))
+        if park_rows:
+            st.markdown(
+                _analytics_table(park_rows, ["Park", "Record", "Win %", "ROI", "No Line"]),
+                unsafe_allow_html=True
+            )
+        else:
+            st.caption("No data yet.")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── projection accuracy by stars ──────────────────────────────────────
+        acc = stats.get("projection_accuracy", {})
+        by_star_mae = acc.get("mae_by_stars", {})
+        if by_star_mae:
+            st.markdown("**Projection Accuracy by Star Rating (MAE)**")
+            mae_rows = [
+                ((label, ""), (f"{mae:.2f} runs", ""))
+                for label, mae in by_star_mae.items()
+            ]
+            st.markdown(
+                _analytics_table(mae_rows, ["Rating", "MAE"]),
+                unsafe_allow_html=True
+            )
+            st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── factor correlations ───────────────────────────────────────────────
+        correlations = stats.get("factor_correlations", [])
+        if correlations:
+            st.markdown("**Factor Performance** *(segments with 5+ decided plays)*")
+            corr_rows = []
+            for seg in correlations:
+                w, l = seg.get("wins", 0) or 0, seg.get("losses", 0) or 0
+                wp   = seg.get("win_pct")
+                cls  = _pct_color(wp)
+                pct_str = f"{wp:.1f}%" if wp is not None else "—"
+                corr_rows.append((
+                    (seg["factor"], ""),
+                    (f"{w}–{l}", cls),
+                    (pct_str, cls),
+                ))
+            st.markdown(
+                _analytics_table(corr_rows, ["Factor", "Record", "Win %"]),
+                unsafe_allow_html=True
+            )
+            st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── biggest misses ────────────────────────────────────────────────────
+        misses = stats.get("biggest_misses", [])
+        if misses:
+            st.markdown("**Biggest Model Misses**")
+            miss_rows = []
+            for m in misses[:8]:
+                err   = m.get("projection_error", 0) or 0
+                err_str = f"{err:+.1f}"
+                res   = m.get("result", "")
+                res_cls = "green" if res == "WIN" else "red" if res == "LOSS" else "dim"
+                miss_rows.append((
+                    (m.get("game_date", ""), "dim"),
+                    (m.get("matchup", ""), ""),
+                    (f"{m.get('projected_total', '?'):.1f}", ""),
+                    (f"{m.get('actual_total', '?'):.1f}", ""),
+                    (err_str, "red" if err > 0 else "green"),
+                    (res, res_cls),
+                    (m.get("star_rating", "—"), ""),
+                ))
+            st.markdown(
+                _analytics_table(miss_rows,
+                    ["Date", "Game", "Proj", "Actual", "Error", "Result", "Stars"]),
+                unsafe_allow_html=True
+            )
+
+
+# ── game card rendering ───────────────────────────────────────────────────────
 
 def _lean_badge(lean: str) -> str:
     cls = {"OVER": "lean-over", "UNDER": "lean-under"}.get(lean, "lean-neutral")
@@ -424,52 +813,18 @@ def _render_parlay(parlay: list) -> None:
     )
 
 
-def _render_record(record: dict) -> None:
-    total = record.get("total", 0)
-    if not total:
-        return
-
-    correct = (record.get("correct_over") or 0) + (record.get("correct_under") or 0)
-    pushes  = record.get("pushes") or 0
-    decided = total - pushes
-    losses  = decided - correct
-    pct     = (correct / decided * 100) if decided > 0 else 0.0
-
-    st.markdown(
-        f'<div class="record-bar">'
-        f'<div class="record-stat">'
-        f'  <div class="num">{correct}–{losses}</div>'
-        f'  <div class="lbl">Season Record (vs line)</div>'
-        f'</div>'
-        f'<div class="record-stat">'
-        f'  <div class="num">{pct:.1f}%</div>'
-        f'  <div class="lbl">Win Rate</div>'
-        f'</div>'
-        f'<div class="record-stat">'
-        f'  <div class="num">{total}</div>'
-        f'  <div class="lbl">Total Tracked</div>'
-        f'</div>'
-        f'<div class="record-stat">'
-        f'  <div class="num">{pushes}</div>'
-        f'  <div class="lbl">Pushes</div>'
-        f'</div>'
-        f'</div>',
-        unsafe_allow_html=True,
-    )
-
-
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
-    # Header
+    data  = load_results()
+    stats = load_season_stats()
+    last_run = _last_run_label(data) if data else _last_run_label(stats) if stats else "never"
+
+    # ── page header ───────────────────────────────────────────────────────────
     col_title, col_btn = st.columns([5, 1])
-
-    data = load_results()
-    last_run = _last_run_label(data) if data else "never"
-
     with col_title:
         st.markdown(
-            f"### ⚾ MLB Totals Model"
+            f"### ⚾ I Am Not Uncertain"
             f"<br><span style='font-size:0.78em;color:#4a5568'>"
             f"Last updated {last_run}"
             f"</span>",
@@ -481,27 +836,29 @@ def main() -> None:
             st.cache_data.clear()
             st.rerun()
 
-    # No data state
+    # ── season stats banner ───────────────────────────────────────────────────
+    if stats:
+        _render_season_header(stats)
+
+    # ── no data state ─────────────────────────────────────────────────────────
     if data is None:
         st.info(
             "No projections available yet. "
-            "Run `python3 push_results.py` on your local machine to publish today's card."
+            "Run `python push_results.py` on your local machine to publish today's card."
         )
+        if stats:
+            _render_analytics(stats)
         return
 
-    game_date = data.get("date", "")
+    game_date = data.get("game_date", "")
     plays     = data.get("plays", [])
     no_plays  = data.get("no_plays", [])
     parlay    = data.get("parlay", [])
-    record    = data.get("season_record", {})
 
     if game_date:
         st.caption(f"Projections for **{game_date}**")
 
-    # Season record
-    _render_record(record)
-
-    # Plays
+    # ── plays ─────────────────────────────────────────────────────────────────
     if plays:
         n = len(plays)
         st.markdown(
@@ -511,20 +868,21 @@ def main() -> None:
         for b in plays:
             _render_card(b)
     else:
-        st.markdown(
-            '<div class="section-hdr">🎯 Plays</div>',
-            unsafe_allow_html=True,
-        )
+        st.markdown('<div class="section-hdr">🎯 Plays</div>', unsafe_allow_html=True)
         st.caption("No plays meeting the confidence threshold today.")
 
-    # Parlay
+    # ── parlay ────────────────────────────────────────────────────────────────
     _render_parlay(parlay)
 
-    # No-plays
+    # ── no-plays ──────────────────────────────────────────────────────────────
     if no_plays:
         with st.expander(f"No Plays — {len(no_plays)} game{'s' if len(no_plays) != 1 else ''}"):
             for b in no_plays:
                 _render_card(b)
+
+    # ── analytics ─────────────────────────────────────────────────────────────
+    if stats:
+        _render_analytics(stats)
 
 
 main()
