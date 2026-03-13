@@ -28,7 +28,7 @@ from modules.schedule        import fetch_schedule
 from modules.pitchers        import build_pitcher_db, get_pitcher_metrics
 from modules.offense         import build_offense_db, get_team_offense
 from modules.weather         import fetch_weather
-from modules.bullpen         import calculate_bullpen_fatigue
+from modules.bullpen         import calculate_bullpen_fatigue, build_team_bullpen_db
 from modules.umpires         import get_umpire_rating
 from modules.projections     import project_game
 from modules.odds            import fetch_all_lines, get_game_lines, edge_summary
@@ -36,6 +36,7 @@ from modules.lineup_monitor  import (
     detect_sp_changes, detect_batter_scratches, downgrade_confidence,
 )
 from modules.props_data        import build_pitcher_k_db, build_batter_props_db, get_team_top_batters
+from modules.line_tracker      import update_closing_lines
 from modules.props_projections import get_game_props
 from modules.props_odds        import fetch_props_lines
 
@@ -254,6 +255,7 @@ def refresh_games(
             return
 
     pitcher_db      = build_pitcher_db()
+    team_bullpen_db = build_team_bullpen_db(pitcher_db)
     offense_db      = build_offense_db()
     pitcher_k_db    = build_pitcher_k_db()
     batter_props_db = build_batter_props_db()
@@ -292,8 +294,8 @@ def refresh_games(
         away_off = get_team_offense(away, offense_db)
         weather  = fetch_weather(home, game_time_et=game.get("game_time"))
         umpire   = get_umpire_rating(game.get("home_umpire"))
-        home_bp  = calculate_bullpen_fatigue(game["home_team_id"], is_home=True)
-        away_bp  = calculate_bullpen_fatigue(game["away_team_id"], is_home=False)
+        home_bp  = calculate_bullpen_fatigue(game["home_team_id"], is_home=True, team_abb=home, team_bullpen_db=team_bullpen_db)
+        away_bp  = calculate_bullpen_fatigue(game["away_team_id"], is_home=False, team_abb=away, team_bullpen_db=team_bullpen_db)
 
         proj = project_game(
             home_team=home, away_team=away,
@@ -485,6 +487,19 @@ def refresh_games(
     with open(results_path, "w") as fh:
         json.dump(payload, fh, indent=2, default=str)
     logger.info(f"Wrote {results_path}")
+
+    try:
+        # Build results list in same format as run() for line tracker
+        refresh_results = []
+        for block in payload.get("plays", []) + payload.get("no_plays", []):
+            refresh_results.append({
+                "game": block.get("game", {}),
+                "projection": block.get("proj", {}),
+                "odds": {"full": {"consensus": block.get("full_edge", {}).get("consensus")}},
+            })
+        update_closing_lines(game_date, refresh_results)
+    except Exception as e:
+        logger.warning(f"Line tracker closing update failed (non-fatal): {e}")
 
     if push and any_changes:
         _git_push(game_date, ["results.json"])

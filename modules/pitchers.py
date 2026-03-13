@@ -3,6 +3,8 @@ Pitcher metrics module — fetches xFIP and SIERA from FanGraphs API
 and xERA from Baseball Savant.
 
 Results are cached for the day to avoid redundant API calls.
+Stats are regressed toward league average using batters-faced as sample weight,
+then blended 70% current year / 30% prior year.
 """
 
 import logging
@@ -20,7 +22,7 @@ from config import CACHE_DIR, LEAGUE_AVG_ERA
 
 logger = logging.getLogger(__name__)
 
-_CACHE_FILE = os.path.join(CACHE_DIR, f"pitchers_{date.today().isoformat()}.json")
+_CACHE_FILE = os.path.join(CACHE_DIR, f"pitchers_v2_{date.today().isoformat()}.json")
 
 FANGRAPHS_PITCHING_URL = "https://www.fangraphs.com/api/leaders/major-league/data"
 SAVANT_PITCHER_URL     = (
@@ -30,17 +32,25 @@ SAVANT_PITCHER_URL     = (
 
 _HTML_NAME_RE = re.compile(r">([^<]+)</a>")
 
+# Regression prior strength: pitcher needs this many BF before stats are fully trusted
+_REGRESSION_BF = 300
+
 
 def _strip_html(name: str) -> str:
-    """Extract plain text from FanGraphs HTML-wrapped name."""
     m = _HTML_NAME_RE.search(name)
     return m.group(1).strip() if m else name.strip()
 
 
 def _load_cache() -> dict:
     if os.path.exists(_CACHE_FILE):
-        with open(_CACHE_FILE) as f:
-            return json.load(f)
+        try:
+            with open(_CACHE_FILE) as f:
+                data = json.load(f)
+            # Only accept v2 caches that have already been regressed
+            if data.get("_meta", {}).get("regressed"):
+                return data
+        except Exception:
+            pass
     return {}
 
 
@@ -49,10 +59,58 @@ def _save_cache(data: dict) -> None:
         json.dump(data, f)
 
 
+def _regress_stat(stat: float, bf: int) -> float:
+    """
+    Bayesian regression toward league average.
+    regressed = (stat * BF + LEAGUE_AVG * 300) / (BF + 300)
+    If BF < 30, return league average entirely.
+    """
+    if bf < 30:
+        return LEAGUE_AVG_ERA
+    return (stat * bf + LEAGUE_AVG_ERA * _REGRESSION_BF) / (bf + _REGRESSION_BF)
+
+
+def _blend_pitcher_entry(cur: dict, prior: Optional[dict]) -> dict:
+    """
+    Apply BF-based regression to current year stats, then blend
+    70% current / 30% prior year (if prior year data is available).
+    """
+    cur_bf   = cur.get("bf", 0) or 0
+    cur_xfip = _regress_stat(cur.get("xfip",  LEAGUE_AVG_ERA), cur_bf)
+    cur_siera= _regress_stat(cur.get("siera", LEAGUE_AVG_ERA), cur_bf)
+    cur_era  = _regress_stat(cur.get("era",   LEAGUE_AVG_ERA), cur_bf)
+
+    if prior:
+        pri_bf    = prior.get("bf", 0) or 0
+        pri_xfip  = _regress_stat(prior.get("xfip",  LEAGUE_AVG_ERA), pri_bf)
+        pri_siera = _regress_stat(prior.get("siera", LEAGUE_AVG_ERA), pri_bf)
+        pri_era   = _regress_stat(prior.get("era",   LEAGUE_AVG_ERA), pri_bf)
+        xfip  = 0.7 * cur_xfip  + 0.3 * pri_xfip
+        siera = 0.7 * cur_siera + 0.3 * pri_siera
+        era   = 0.7 * cur_era   + 0.3 * pri_era
+    else:
+        xfip, siera, era = cur_xfip, cur_siera, cur_era
+
+    # IP/start: prefer current year (if >= 3 GS), else prior year, else None (-> 5.5 default)
+    avg_ip = cur.get("avg_ip_per_start")
+    if avg_ip is None and prior:
+        avg_ip = prior.get("avg_ip_per_start")
+
+    result = dict(cur)
+    result.update({
+        "xfip":              round(max(2.0, min(xfip,  7.0)), 3),
+        "siera":             round(max(2.0, min(siera, 7.0)), 3),
+        "era":               round(max(2.0, min(era,   7.0)), 3),
+        "avg_ip_per_start":  avg_ip,
+        "regressed":         True,
+    })
+    return result
+
+
 def _fetch_fangraphs_pitching(year: int) -> dict:
     """
     Pull FanGraphs advanced pitching leaderboard (type=8).
-    Returns name → {xfip, siera, era, ip, mlbam_id}.
+    Returns name -> {xfip, siera, era, ip, bf, gs, team, mlbam_id, avg_ip_per_start}.
     """
     params = {
         "age": 0, "pos": "all", "stats": "pit", "lg": "all",
@@ -77,39 +135,56 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
 
     db: dict = {}
     for row in rows:
-        raw_name  = row.get("Name", "") or row.get("PlayerName", "")
-        name      = _strip_html(raw_name)
-        mlbam_id  = row.get("xMLBAMID") or row.get("mlbamid")
-        fg_id     = str(row.get("playerid", ""))
+        raw_name = row.get("Name", "") or row.get("PlayerName", "")
+        name     = _strip_html(raw_name)
+        mlbam_id = row.get("xMLBAMID") or row.get("mlbamid")
+        fg_id    = str(row.get("playerid", ""))
 
         xfip  = row.get("xFIP")
         siera = row.get("SIERA")
         era   = row.get("ERA")
         ip    = row.get("IP")
+        tbf   = row.get("TBF") or row.get("BF") or 0
+        gs    = int(float(row.get("GS") or 0))
+        team  = str(row.get("Team") or "").upper().strip()
+
+        ip_val = float(ip) if ip is not None else 0.0
+        bf_val = int(float(tbf)) if tbf else 0
+
+        # IP per start: only meaningful for pitchers with 3+ starts
+        avg_ip = round(ip_val / gs, 2) if gs >= 3 else None
+        if avg_ip is not None:
+            avg_ip = max(3.0, min(avg_ip, 7.5))  # clamp outliers
+
+        mid_str = str(int(mlbam_id)) if mlbam_id else None
 
         entry = {
-            "xfip":  float(xfip)  if xfip  is not None else LEAGUE_AVG_ERA,
-            "siera": float(siera) if siera is not None else LEAGUE_AVG_ERA,
-            "era":   float(era)   if era   is not None else LEAGUE_AVG_ERA,
-            "ip":    float(ip)    if ip    is not None else 0.0,
+            "xfip":              float(xfip)  if xfip  is not None else LEAGUE_AVG_ERA,
+            "siera":             float(siera) if siera is not None else LEAGUE_AVG_ERA,
+            "era":               float(era)   if era   is not None else LEAGUE_AVG_ERA,
+            "ip":                ip_val,
+            "bf":                bf_val,
+            "gs":                gs,
+            "team":              team,
+            "mlbam_id":          mid_str,
+            "avg_ip_per_start":  avg_ip,
         }
 
         if name:
             db[name.lower()] = entry
-        if mlbam_id:
-            db[str(int(mlbam_id))] = entry
+        if mid_str:
+            db[mid_str] = entry
         if fg_id:
             db[f"fg:{fg_id}"] = entry
 
-    logger.info(f"FanGraphs: loaded {len(rows)} pitchers")
+    logger.info(f"FanGraphs: loaded {len(rows)} pitchers for {year}")
     return db
 
 
 def _fetch_savant_pitching(year: int) -> dict:
     """
     Pull Baseball Savant xERA as a stand-alone pitcher quality metric.
-    Returns name (lowered) + mlbam_id → {xfip, siera, era, ip} compatible dict.
-    xERA is used as proxy for both xFIP and SIERA when FanGraphs is unavailable.
+    BF is sourced from Savant's 'pa' column.
     """
     try:
         url = SAVANT_PITCHER_URL.format(year=year)
@@ -120,8 +195,8 @@ def _fetch_savant_pitching(year: int) -> dict:
         logger.warning(f"Savant pitcher CSV failed: {e}")
         return {}
 
-    MIN_PA    = 30    # ignore pitchers with fewer than 30 plate appearances
-    MAX_METRIC = 7.0  # cap extreme outliers (e.g., 1-inning callups)
+    MIN_PA    = 30
+    MAX_METRIC = 7.0
 
     db: dict = {}
     for _, row in df.iterrows():
@@ -130,7 +205,6 @@ def _fetch_savant_pitching(year: int) -> dict:
             continue
 
         raw_name = str(row.get("last_name, first_name", "") or "")
-        # Savant format: "Last, First" → convert to "First Last"
         if "," in raw_name:
             parts = [p.strip() for p in raw_name.split(",", 1)]
             name = f"{parts[1]} {parts[0]}" if len(parts) == 2 else raw_name
@@ -145,10 +219,15 @@ def _fetch_savant_pitching(year: int) -> dict:
         era_val  = min(float(era),  MAX_METRIC) if pd.notna(era)  else LEAGUE_AVG_ERA
 
         entry = {
-            "xfip":  xera_val,   # xERA is our best free proxy for xFIP
-            "siera": xera_val,   # same for SIERA
-            "era":   era_val,
-            "ip":    0.0,
+            "xfip":             xera_val,
+            "siera":            xera_val,
+            "era":              era_val,
+            "ip":               0.0,
+            "bf":               int(float(pa)),
+            "gs":               None,   # not available from Savant leaderboard
+            "team":             "",
+            "mlbam_id":         pid if pid != "0" else None,
+            "avg_ip_per_start": None,
         }
 
         if name:
@@ -156,105 +235,131 @@ def _fetch_savant_pitching(year: int) -> dict:
         if pid and pid != "0":
             db[pid] = entry
 
-    logger.info(f"Savant: loaded {len(db)//2} pitchers (xERA)")
+    logger.info(f"Savant: loaded {len(db)//2} pitchers (xERA) for {year}")
     return db
 
 
 def build_pitcher_db(year: Optional[int] = None) -> dict:
     """
-    Build a lookup dict:
-      name (lowercase)   → {xfip, siera, era, ip}
-      mlbam_id (str)     → same
-    Falls back to prior year if current year has no data (pre-season).
+    Build pitcher lookup dict with regression + year blending applied.
+    Keys: name (lowercase), mlbam_id (str), fg:<id>
+    Falls back to prior year if current year has no data.
+    Blends 70% current / 30% prior year after BF-based regression.
     """
     if year is None:
         year = date.today().year
 
     cache = _load_cache()
     if cache:
-        return cache
+        return {k: v for k, v in cache.items() if k != "_meta"}
 
-    # Strategy: FanGraphs has xFIP+SIERA; Savant has xERA (good proxy).
-    # Try FanGraphs first; fall back to Savant if blocked/unavailable.
-    db: dict = {}
+    # --- Fetch current year ---
+    cur_db: dict = {}
+    cur_year = year
     for attempt_year in [year, year - 1]:
         logger.info(f"Fetching pitcher stats (FanGraphs) for {attempt_year}...")
-        db = _fetch_fangraphs_pitching(attempt_year)
-        if db:
+        cur_db = _fetch_fangraphs_pitching(attempt_year)
+        if cur_db:
+            cur_year = attempt_year
+            # Enrich with Savant xERA
             savant = _fetch_savant_pitching(attempt_year)
-            # Enrich FanGraphs entries with Savant xERA where available
             for k, v in savant.items():
-                if k in db:
-                    db[k]["xera"] = v.get("era")
+                if k in cur_db:
+                    cur_db[k]["xera"] = v.get("xfip")
             break
 
-    if not db:
-        # FanGraphs fully blocked — use Savant xERA as primary source
+    if not cur_db:
         for attempt_year in [year, year - 1]:
             logger.info(f"Falling back to Savant xERA for {attempt_year}...")
-            db = _fetch_savant_pitching(attempt_year)
-            if db:
+            cur_db = _fetch_savant_pitching(attempt_year)
+            if cur_db:
+                cur_year = attempt_year
                 break
 
-    if not db:
+    if not cur_db:
         logger.warning("Pitcher DB empty — league averages will be used as fallback")
-    else:
-        _save_cache(db)
-        logger.info(f"Cached {len(db)} pitcher entries")
+        return {}
 
-    return db
+    # --- Fetch prior year for blending ---
+    prior_db: dict = {}
+    prior_year = cur_year - 1
+    logger.info(f"Fetching prior year pitcher stats for {prior_year} (for 70/30 blend)...")
+    prior_db = _fetch_fangraphs_pitching(prior_year)
+    if not prior_db:
+        prior_db = _fetch_savant_pitching(prior_year)
+
+    # --- Build blended + regressed DB ---
+    all_keys = set(cur_db.keys()) | set(prior_db.keys())
+    blended: dict = {}
+    for key in all_keys:
+        if key == "_meta":
+            continue
+        cur   = cur_db.get(key)
+        prior = prior_db.get(key)
+        if cur:
+            blended[key] = _blend_pitcher_entry(cur, prior)
+        else:
+            # Pitcher only in prior year — regress heavily, no current data
+            blended[key] = _blend_pitcher_entry(prior, None)
+
+    blended["_meta"] = {"regressed": True, "year": cur_year}
+    _save_cache(blended)
+    logger.info(f"Pitcher DB built: {len(blended)-1} entries (year={cur_year}, prior={prior_year})")
+
+    return {k: v for k, v in blended.items() if k != "_meta"}
 
 
 def get_pitcher_metrics(pitcher_info: dict, pitcher_db: dict) -> dict:
     """
-    Resolve a pitcher's xFIP and SIERA from the DB.
+    Resolve a pitcher's metrics from the DB.
+    Returns regressed+blended xFIP, SIERA, and avg_ip_per_start.
     Falls back to league average if not found.
-
-    pitcher_info: {"id": mlbam_id, "name": "Full Name"}
     """
     name = pitcher_info.get("name", "TBD")
     pid  = str(pitcher_info.get("id") or "")
 
     default = {
-        "name":   name,
-        "xfip":   LEAGUE_AVG_ERA,
-        "siera":  LEAGUE_AVG_ERA,
-        "era":    LEAGUE_AVG_ERA,
-        "ip":     0.0,
-        "source": "default",
+        "name":              name,
+        "xfip":              LEAGUE_AVG_ERA,
+        "siera":             LEAGUE_AVG_ERA,
+        "era":               LEAGUE_AVG_ERA,
+        "ip":                0.0,
+        "bf":                0,
+        "gs":                0,
+        "avg_ip_per_start":  None,   # -> will use 5.5 default in projection
+        "source":            "default",
     }
 
     if not name or name == "TBD":
         return default
 
     def _clamp(entry: dict) -> dict:
-        """Cap extreme xFIP/SIERA values; return league avg if too small sample."""
         for k in ("xfip", "siera", "era"):
             v = entry.get(k, LEAGUE_AVG_ERA)
             entry[k] = max(2.0, min(float(v), 7.0)) if v else LEAGUE_AVG_ERA
         return entry
 
+    def _enrich(entry: dict, source: str) -> dict:
+        e = _clamp(dict(entry))
+        e.update({"name": name, "source": source})
+        e.setdefault("avg_ip_per_start", None)
+        return e
+
     # By MLBAM ID (most reliable)
     if pid and pid in pitcher_db:
-        entry = _clamp(dict(pitcher_db[pid]))
-        entry.update({"name": name, "source": "id-match"})
-        return entry
+        return _enrich(pitcher_db[pid], "id-match")
 
     # By exact lowercased name
     key = name.lower()
     if key in pitcher_db:
-        entry = _clamp(dict(pitcher_db[key]))
-        entry.update({"name": name, "source": "name-exact"})
-        return entry
+        return _enrich(pitcher_db[key], "name-exact")
 
-    # By last name (less reliable; skip if multiple matches)
+    # By last name (skip if multiple matches)
     last = key.split()[-1] if " " in key else key
     matches = [(k, v) for k, v in pitcher_db.items()
-               if not k.startswith(("fg:", "savant:")) and k.endswith(last)]
+               if not k.startswith(("fg:", "savant:")) and not k.isdigit() and k.endswith(last)]
     if len(matches) == 1:
-        entry = _clamp(dict(matches[0][1]))
-        entry.update({"name": name, "source": "name-partial"})
-        return entry
+        return _enrich(matches[0][1], "name-partial")
 
     logger.debug(f"Pitcher not found: '{name}' (id={pid}) — using league average")
     return default

@@ -20,10 +20,30 @@ import requests
 from config import (
     OPEN_METEO_API, STADIUMS,
     TEMP_BASELINE_F, TEMP_RUNS_PER_DEG,
-    WIND_RUNS_PER_MPH,
+    WIND_RUNS_PER_MPH, DATA_DIR,
 )
 
 logger = logging.getLogger(__name__)
+
+
+def get_roof_status(team_abb: str) -> str:
+    """
+    Return the roof status for today's game: 'open', 'closed', or 'unknown'.
+    Reads from data/roof_status.json (format: {date: {team_abb: status}}).
+    Returns 'unknown' if file doesn't exist or team not listed for today.
+    """
+    import os
+    path = os.path.join(DATA_DIR, "roof_status.json")
+    if not os.path.exists(path):
+        return "unknown"
+    try:
+        import json
+        with open(path) as f:
+            data = json.load(f)
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        return data.get(today, {}).get(team_abb.upper(), "unknown")
+    except Exception:
+        return "unknown"
 
 
 _WMO_CODES = {
@@ -51,7 +71,7 @@ def fetch_weather(team_abb: str, game_time_et: str = None) -> dict:
         logger.warning(f"No stadium data for {team_abb}")
         return _neutral_weather(team_abb)
 
-    # Dome stadiums — weather irrelevant
+    # Fixed dome — always climate controlled
     if stadium.get("dome"):
         return {
             "team":            team_abb,
@@ -65,6 +85,29 @@ def fetch_weather(team_abb: str, game_time_et: str = None) -> dict:
             "description":     "Dome — climate controlled",
             "is_dome":         True,
         }
+
+    # Retractable roof — check today's status
+    if stadium.get("retractable_roof"):
+        roof = get_roof_status(team_abb)
+        if roof == "closed":
+            logger.info(f"{team_abb}: retractable roof confirmed CLOSED — using dome weather")
+            return {
+                "team":            team_abb,
+                "stadium":         stadium["name"],
+                "temperature_f":   72.0,
+                "wind_speed_mph":  0.0,
+                "wind_direction":  0,
+                "wind_factor":     1.0,
+                "temp_factor":     1.0,
+                "wind_desc":       "Roof Closed",
+                "description":     "Retractable roof closed — climate controlled",
+                "is_dome":         True,
+            }
+        elif roof == "open":
+            logger.info(f"{team_abb}: retractable roof confirmed OPEN — using live weather")
+        else:
+            logger.info(f"{team_abb}: retractable roof status unknown — using live weather")
+        # Fall through to fetch live weather
 
     lat, lon = stadium["lat"], stadium["lon"]
 

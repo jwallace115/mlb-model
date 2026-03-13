@@ -90,7 +90,7 @@ STADIUMS = {
         "lat": 43.6414, "lon": -79.3894,
         "cf_bearing": 350,
         "park_factor": 105,
-        "dome": True,
+        "retractable_roof": True,
     },
     "BAL": {
         "name": "Camden Yards",
@@ -135,7 +135,7 @@ STADIUMS = {
         "lat": 29.7573, "lon": -95.3555,
         "cf_bearing": 0,
         "park_factor": 100,
-        "dome": True,
+        "retractable_roof": True,
     },
     "LAA": {
         "name": "Angel Stadium",
@@ -160,7 +160,7 @@ STADIUMS = {
         "lat": 32.7473, "lon": -97.0842,
         "cf_bearing": 355,
         "park_factor": 107,
-        "dome": True,
+        "retractable_roof": True,
     },
     # ---- National League East ----
     "ATL": {
@@ -174,7 +174,7 @@ STADIUMS = {
         "lat": 25.7781, "lon": -80.2197,
         "cf_bearing": 350,
         "park_factor": 98,
-        "dome": True,
+        "retractable_roof": True,
     },
     "NYM": {
         "name": "Citi Field",
@@ -212,7 +212,7 @@ STADIUMS = {
         "lat": 43.0280, "lon": -87.9712,
         "cf_bearing": 0,
         "park_factor": 102,
-        "dome": True,
+        "retractable_roof": True,
     },
     "PIT": {
         "name": "PNC Park",
@@ -232,7 +232,7 @@ STADIUMS = {
         "lat": 33.4453, "lon": -112.0667,
         "cf_bearing": 345,
         "park_factor": 98,
-        "dome": True,
+        "retractable_roof": True,
     },
     "COL": {
         "name": "Coors Field",

@@ -4,15 +4,18 @@ Core projection engine — combines all factors into a total runs projection.
 Projection formula (multiplicative):
   For each team's expected runs scored (batting against the opposing SP):
     runs_team = BASE_RUNS
-              × sp_factor          (SP xFIP/SIERA vs league avg)
-              × offense_factor     (team wRC+ vs 100)
-              × park_factor        (runs park factor / 100)
-              × weather_factor     (wind + temp combined)
-              × umpire_factor      (runs environment tendency)
-              × bullpen_factor     (full game only, from bullpen fatigue)
+              x sp_factor          (SP xFIP/SIERA vs league avg, regressed)
+              x offense_factor     (team wRC+ vs 100)
+              x park_factor        (runs park factor / 100)
+              x weather_factor     (wind + temp combined)
+              x umpire_factor      (runs environment tendency)
+              x bullpen_factor     (full game only, from bullpen fatigue)
+
+  SP innings per start are pulled from the pitcher's season average (dynamic).
+  Fallback: 5.5 innings if no data is available.
 
   proj_total_full = runs_away + runs_home
-  proj_total_f5   = runs_away_f5 + runs_home_f5  (SP only, ~56% of full-game total)
+  proj_total_f5   = runs_away_f5 + runs_home_f5  (SP only, capped at 5.0 inn)
 """
 
 import logging
@@ -27,44 +30,47 @@ from config import (
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_SP_IP = 5.5   # fallback when no season data is available
+
 
 def _sp_factor(sp_metrics: dict) -> float:
     """
     Convert pitcher xFIP/SIERA into a multiplicative factor on opponent runs.
-    Higher xFIP → higher factor → more runs allowed.
+    Higher xFIP -> higher factor -> more runs allowed.
+    Stats are already regressed+blended when they arrive from get_pitcher_metrics().
     """
     xfip  = sp_metrics.get("xfip",  LEAGUE_AVG_ERA)
     siera = sp_metrics.get("siera", LEAGUE_AVG_ERA)
-    # Blend xFIP and SIERA equally
     blended = (xfip + siera) / 2
     return blended / LEAGUE_AVG_ERA
 
 
+def _sp_ip(sp_metrics: dict) -> float:
+    """
+    Return the SP's season-average innings per start.
+    Clamped to [4.0, 7.0]; falls back to DEFAULT_SP_IP if unavailable.
+    """
+    avg = sp_metrics.get("avg_ip_per_start")
+    if avg is None or avg <= 0:
+        return DEFAULT_SP_IP
+    return max(4.0, min(float(avg), 7.0))
+
+
 def _offense_factor(offense_metrics: dict) -> float:
-    """wRC+ directly as a fraction of league average."""
     wrc = offense_metrics.get("wrc_plus", 100)
     return wrc / 100.0
 
 
 def _park_factor(home_team: str) -> float:
-    """Stadium runs park factor, normalised to 1.0."""
     pf = STADIUMS.get(home_team, {}).get("park_factor", 100)
     return pf / 100.0
 
 
 def _compute_confidence(factors_dict: dict, proj_total: float,
                         neutral_total: float) -> tuple[str, float]:
-    """
-    Score confidence based on how much the projection deviates from neutral
-    AND whether the key factors are aligned.
-
-    Returns (label, score_0_to_1)
-    """
     deviation = abs(proj_total - neutral_total)
-    # Score relative to a 1-run deviation being "high"
     score = min(deviation / 1.0, 1.0)
 
-    # Check alignment of key directional factors
     directional = []
     for key in ("sp_factor_home", "sp_factor_away", "offense_factor_home",
                 "offense_factor_away", "park_factor", "weather_wind_factor",
@@ -104,57 +110,66 @@ def project_game(
 ) -> dict:
     """
     Project the total runs for a game (full game + F5).
-
-    All factor dicts come from their respective modules.
-    Returns a dict with projected totals, factors breakdown, and confidence.
+    SP innings are pulled dynamically from pitcher metrics.
     """
     w  = weights   or MODEL_WEIGHTS
     wf = f5_weights or F5_WEIGHTS
 
-    base = LEAGUE_AVG_RUNS_PER_TEAM  # per-team base runs (~4.50)
+    base = LEAGUE_AVG_RUNS_PER_TEAM   # per-team base runs (~4.50)
 
     # --- Component factors ---
-    sp_h = _sp_factor(home_sp_metrics)  # effect on AWAY team's runs (home pitcher)
-    sp_a = _sp_factor(away_sp_metrics)  # effect on HOME team's runs (away pitcher)
+    sp_h = _sp_factor(home_sp_metrics)   # effect on AWAY team's runs (home pitcher)
+    sp_a = _sp_factor(away_sp_metrics)   # effect on HOME team's runs (away pitcher)
 
     off_h = _offense_factor(home_offense)
     off_a = _offense_factor(away_offense)
 
-    pf    = _park_factor(home_team)
-    wf_wnd = weather.get("wind_factor", 1.0)
-    wf_tmp = weather.get("temp_factor", 1.0)
+    pf         = _park_factor(home_team)
+    wf_wnd     = weather.get("wind_factor", 1.0)
+    wf_tmp     = weather.get("temp_factor", 1.0)
     weather_combined = wf_wnd * wf_tmp
 
-    ump   = umpire.get("runs_factor", 1.0)
+    ump        = umpire.get("runs_factor", 1.0)
 
-    # Bullpen: how the multiplier affects the back-end innings
-    bp_h_mult = home_bullpen.get("fatigue_multiplier", 1.0)
-    bp_a_mult = away_bullpen.get("fatigue_multiplier", 1.0)
+    bp_h_mult  = home_bullpen.get("fatigue_multiplier", 1.0)
+    bp_a_mult  = away_bullpen.get("fatigue_multiplier", 1.0)
+
+    # --- Dynamic SP innings ---
+    # home_sp_ip: innings the HOME pitcher is expected to throw (affects away team's runs)
+    # away_sp_ip: innings the AWAY pitcher is expected to throw (affects home team's runs)
+    home_sp_ip = _sp_ip(home_sp_metrics)
+    away_sp_ip = _sp_ip(away_sp_metrics)
+
+    home_sp_frac = home_sp_ip / 9.0
+    home_bp_frac = 1.0 - home_sp_frac
+    away_sp_frac = away_sp_ip / 9.0
+    away_bp_frac = 1.0 - away_sp_frac
 
     # --- Full game run estimates ---
-    # Away team scores:
-    #   SP innings (~5.5 inn): driven by home SP (sp_h) and away offense (off_a)
-    #   Bullpen innings (~3.5 inn): driven by home bullpen fatigue (bp_h_mult)
-    sp_frac   = 5.5 / 9.0
-    bp_frac   = 3.5 / 9.0
+    # Away team scores: home SP pitches home_sp_ip innings, home BP pitches home_bp_frac
+    runs_away_sp = base * home_sp_frac * sp_h  * off_a * pf * weather_combined * ump
+    runs_away_bp = base * home_bp_frac * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_h_mult * off_a * pf * weather_combined * ump
+    runs_away    = runs_away_sp + runs_away_bp
 
-    runs_away_sp  = base * sp_frac  * sp_h  * off_a * pf * weather_combined * ump
-    runs_away_bp  = base * bp_frac  * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_h_mult * off_a * pf * weather_combined * ump
-    runs_away     = runs_away_sp + runs_away_bp
-
-    runs_home_sp  = base * sp_frac  * sp_a  * off_h * pf * weather_combined * ump
-    runs_home_bp  = base * bp_frac  * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_a_mult * off_h * pf * weather_combined * ump
-    runs_home     = runs_home_sp + runs_home_bp
+    # Home team scores: away SP pitches away_sp_ip innings, away BP pitches away_bp_frac
+    runs_home_sp = base * away_sp_frac * sp_a  * off_h * pf * weather_combined * ump
+    runs_home_bp = base * away_bp_frac * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_a_mult * off_h * pf * weather_combined * ump
+    runs_home    = runs_home_sp + runs_home_bp
 
     proj_full = runs_away + runs_home
 
-    # --- F5 run estimates (SP only) ---
-    runs_away_f5 = base * F5_RUN_FRACTION * sp_h  * off_a * pf * weather_combined * ump
-    runs_home_f5 = base * F5_RUN_FRACTION * sp_a  * off_h * pf * weather_combined * ump
-    proj_f5  = runs_away_f5 + runs_home_f5
+    # --- F5 run estimates ---
+    # Each SP's contribution to F5 is capped at 5 innings.
+    # If SP averages < 5 IP, they may be pulled before F5 ends (conservative estimate).
+    home_f5_frac = min(home_sp_ip, 5.0) / 9.0
+    away_f5_frac = min(away_sp_ip, 5.0) / 9.0
 
-    # --- Neutral baseline (all factors = 1.0, no park/weather/ump adjustment) ---
-    neutral_full = base * 2  # 9 runs total
+    runs_away_f5 = base * home_f5_frac * sp_h  * off_a * pf * weather_combined * ump
+    runs_home_f5 = base * away_f5_frac * sp_a  * off_h * pf * weather_combined * ump
+    proj_f5      = runs_away_f5 + runs_home_f5
+
+    # --- Neutral baseline ---
+    neutral_full = base * 2   # 9 runs total, all factors = 1.0
 
     # --- Confidence ---
     factors_dict = {
@@ -190,17 +205,19 @@ def project_game(
         "lean":              lean,
         "confidence":        confidence_label,
         "confidence_score":  confidence_score,
-        # Per-team splits
         "runs_home":         round(runs_home, 2),
         "runs_away":         round(runs_away, 2),
         "runs_home_f5":      round(runs_home_f5, 2),
         "runs_away_f5":      round(runs_away_f5, 2),
-        # Factor breakdown (for transparency / debugging)
+        "home_sp_ip":        round(home_sp_ip, 2),
+        "away_sp_ip":        round(away_sp_ip, 2),
         "factors": {
             "sp_home_xfip":         home_sp_metrics.get("xfip"),
             "sp_away_xfip":         away_sp_metrics.get("xfip"),
             "sp_home_siera":        home_sp_metrics.get("siera"),
             "sp_away_siera":        away_sp_metrics.get("siera"),
+            "sp_home_ip_per_start": round(home_sp_ip, 2),
+            "sp_away_ip_per_start": round(away_sp_ip, 2),
             "home_wrc_plus":        home_offense.get("wrc_plus"),
             "away_wrc_plus":        away_offense.get("wrc_plus"),
             "park_factor":          round(pf, 3),
@@ -217,5 +234,9 @@ def project_game(
             "away_bp_fatigue":      away_bullpen.get("fatigue_score"),
             "home_bp_innings_used": home_bullpen.get("innings_used"),
             "away_bp_innings_used": away_bullpen.get("innings_used"),
+            "home_bp_xfip":         home_bullpen.get("team_xfip"),
+            "away_bp_xfip":         away_bullpen.get("team_xfip"),
+            "home_tier1_red":       home_bullpen.get("tier1_red_arms", 0),
+            "away_tier1_red":       away_bullpen.get("tier1_red_arms", 0),
         },
     }

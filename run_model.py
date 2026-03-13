@@ -24,11 +24,12 @@ from modules.schedule    import fetch_schedule
 from modules.pitchers    import build_pitcher_db, get_pitcher_metrics
 from modules.offense     import build_offense_db, get_team_offense
 from modules.weather     import fetch_weather
-from modules.bullpen     import calculate_bullpen_fatigue
+from modules.bullpen     import calculate_bullpen_fatigue, build_team_bullpen_db
 from modules.umpires     import get_umpire_rating
 from modules.projections import project_game
 from modules.odds        import fetch_all_lines, get_game_lines, edge_summary
 from modules.props_data        import build_pitcher_k_db, build_batter_props_db
+from modules.line_tracker      import log_opening_lines
 from modules.props_projections import get_game_props
 from modules.props_odds        import fetch_props_lines
 
@@ -773,6 +774,7 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     logger.info(f"Starting MLB Totals Model for {game_date}")
 
     pitcher_db = build_pitcher_db()
+    team_bullpen_db = build_team_bullpen_db(pitcher_db)
     offense_db = build_offense_db()
 
     # Props databases (loaded once, shared across all games)
@@ -810,8 +812,8 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         away_off = get_team_offense(away, offense_db)
         weather  = fetch_weather(home, game_time_et=game.get("game_time"))
         umpire   = get_umpire_rating(game.get("home_umpire"))
-        home_bp  = calculate_bullpen_fatigue(game["home_team_id"], is_home=True)
-        away_bp  = calculate_bullpen_fatigue(game["away_team_id"], is_home=False)
+        home_bp  = calculate_bullpen_fatigue(game["home_team_id"], is_home=True, team_abb=home, team_bullpen_db=team_bullpen_db)
+        away_bp  = calculate_bullpen_fatigue(game["away_team_id"], is_home=False, team_abb=away, team_bullpen_db=team_bullpen_db)
 
         proj = project_game(
             home_team=home, away_team=away,
@@ -900,6 +902,11 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
                 actual_total=None, actual_f5_total=None,
                 line_full=full_cons, line_f5=f5_cons,
             )
+
+    try:
+        log_opening_lines(game_date, results)
+    except Exception as e:
+        logger.warning(f"Line tracker failed (non-fatal): {e}")
 
     if not quiet:
         print_card(results)
