@@ -6,10 +6,10 @@ Formulas
 Pitcher Ks:
     base_k      = (k_per_9 / 9) * expected_ip
     opp_adj     = opp_k_rate / LEAGUE_AVG_K_RATE        # how strikeout-prone is the lineup?
-    swstr_adj   = swstr_pct  / LEAGUE_AVG_SWSTR          # pitcher whiff rate vs league
     ump_adj     = umpire_factor                          # 1.0 if unknown
     park_adj    = park_k_factor                          # 1.0 if unknown
-    proj_ks     = base_k * opp_adj * swstr_adj * ump_adj * park_adj
+    proj_ks     = base_k * opp_adj * ump_adj * park_adj
+    NOTE: swstr_adj removed — K/9 already embeds SwStr% effect; multiplying by swstr_adj double-counts
 
 Batter total bases:
     xslg_adj    = xslg (or slg fallback)
@@ -55,17 +55,16 @@ def project_pitcher_ks(
     k9    = profile.get("k_per_9") or 0
     swstr = profile.get("swstr_pct") or LEAGUE_AVG_SWSTR
     raw_ip = expected_ip if expected_ip is not None else profile.get("avg_ip_per_start") or DEFAULT_SP_IP
-    ip    = raw_ip if 3.0 <= raw_ip <= 7.5 else DEFAULT_SP_IP
+    ip    = raw_ip if 3.0 <= raw_ip <= 6.5 else DEFAULT_SP_IP
 
     base_k    = (k9 / 9) * ip
     opp_adj   = opp_k_rate / LEAGUE_AVG_K_RATE   if LEAGUE_AVG_K_RATE > 0 else 1.0
-    swstr_adj = swstr      / LEAGUE_AVG_SWSTR     if LEAGUE_AVG_SWSTR  > 0 else 1.0
 
-    # Cap individual adjustments so one extreme factor doesn't blow up the result
-    opp_adj   = max(0.70, min(opp_adj,   1.30))
-    swstr_adj = max(0.75, min(swstr_adj, 1.35))
+    # Cap opp_adj so one extreme lineup doesn't blow up the result
+    opp_adj   = max(0.70, min(opp_adj, 1.30))
 
-    proj = base_k * opp_adj * swstr_adj * umpire_factor * park_k_factor
+    # swstr_adj intentionally omitted: K/9 already embeds SwStr% effect
+    proj = base_k * opp_adj * umpire_factor * park_k_factor
     return round(proj, 2)
 
 
