@@ -310,6 +310,53 @@ st.markdown("""
 .analytics-table td.yellow{ color: #eab308; font-weight: 600; }
 .analytics-table td.red   { color: #f87171; font-weight: 600; }
 
+/* ── Alerts section ── */
+.alerts-section {
+    background: #0f1117;
+    border: 1px solid #1e2535;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+.alerts-title {
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.alert-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #1e2535;
+    font-size: 0.83em;
+    line-height: 1.5;
+}
+.alert-row:last-child { border-bottom: none; }
+.alert-icon { font-size: 1.1em; flex-shrink: 0; margin-top: 1px; }
+.alert-body { flex: 1; }
+.alert-matchup {
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-right: 6px;
+}
+.alert-detail { color: #94a3b8; }
+.alert-proj-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 3px;
+    font-size: 0.88em;
+}
+.alert-old  { color: #64748b; text-decoration: line-through; }
+.alert-new  { color: #f1f5f9; font-weight: 600; }
+.alert-conf { font-size: 0.78em; padding: 1px 5px; border-radius: 3px; }
+.alert-conf-down { background: #7f1d1d; color: #fca5a5; }
+.alert-txn-desc { color: #94a3b8; font-size: 0.88em; }
+
 /* ── Props rows ── */
 .props-section {
     margin-top: 8px;
@@ -798,6 +845,100 @@ def _meta_html(f: dict, game: dict) -> str:
     return '<div class="card-meta">' + "  ·  ".join(parts) + "</div>"
 
 
+def _render_alerts(data: dict) -> None:
+    """Render the top-of-page ⚡ ALERTS section. Shows nothing if no alerts."""
+    lineup_alerts = data.get("alerts") or []
+    transactions  = data.get("transactions") or []
+
+    # Only surface transactions that affect a game today
+    tx_relevant = [t for t in transactions if t.get("affects_game_pk")]
+
+    if not lineup_alerts and not tx_relevant:
+        return
+
+    rows = ""
+
+    for a in lineup_alerts:
+        change_type = a.get("change_type", "")
+        matchup     = a.get("matchup", "")
+        player_out  = a.get("player_out", "")
+        player_in   = a.get("player_in")
+        old_proj    = a.get("old_projection")
+        new_proj    = a.get("new_projection")
+        old_conf    = a.get("old_confidence", "")
+        new_conf    = a.get("new_confidence", "")
+
+        if "SP_SCRATCH" in change_type:
+            icon     = "🚨"
+            side     = "HOME" if "HOME" in change_type else "AWAY"
+            sub_desc = (
+                f"{side} SP: <span style='color:#f87171;font-weight:600'>"
+                f"{player_out}</span> → "
+                f"<span style='color:#86efac;font-weight:600'>"
+                f"{player_in or 'TBD'}</span>"
+            )
+            proj_html = ""
+            if old_proj is not None and new_proj is not None:
+                delta     = new_proj - old_proj
+                sign      = "+" if delta > 0 else ""
+                conf_html = (
+                    f'<span class="alert-conf alert-conf-down">'
+                    f'{old_conf} → {new_conf}</span>'
+                ) if old_conf and new_conf and old_conf != new_conf else ""
+                proj_html = (
+                    f'<div class="alert-proj-change">'
+                    f'<span class="alert-old">Proj {old_proj:.1f}</span>'
+                    f'<span style="color:#4a5568">→</span>'
+                    f'<span class="alert-new">{new_proj:.1f} ({sign}{delta:.1f})</span>'
+                    f'{conf_html}'
+                    f'</div>'
+                )
+        elif change_type == "BATTER_SCRATCH":
+            icon     = "⚠️"
+            sub_desc = (
+                f"<span style='color:#fde68a;font-weight:600'>{player_out}</span> "
+                f"scratched — TB prop invalidated"
+            )
+            proj_html = ""
+        else:
+            icon     = "📋"
+            sub_desc = change_type
+            proj_html = ""
+
+        rows += (
+            f'<div class="alert-row">'
+            f'<div class="alert-icon">{icon}</div>'
+            f'<div class="alert-body">'
+            f'<span class="alert-matchup">{matchup}</span>'
+            f'<span class="alert-detail">{sub_desc}</span>'
+            f'{proj_html}'
+            f'</div></div>'
+        )
+
+    for t in tx_relevant:
+        desc     = t.get("description", "")
+        matchup  = t.get("affects_matchup", "")
+        player   = t.get("player_name", "")
+        label    = t.get("type_label", "Transaction")
+        rows += (
+            f'<div class="alert-row">'
+            f'<div class="alert-icon">📋</div>'
+            f'<div class="alert-body">'
+            f'<span class="alert-matchup">{matchup}</span>'
+            f'<span class="alert-detail" style="color:#7dd3fc">[{label}]</span> '
+            f'<span class="alert-txn-desc">{desc}</span>'
+            f'</div></div>'
+        )
+
+    st.markdown(
+        f'<div class="alerts-section">'
+        f'<div class="alerts-title">⚡ Alerts</div>'
+        f'{rows}'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+
 def _render_game_props(props: list[dict]) -> str:
     """Build HTML for props below a game card. Returns empty string if no props."""
     if not props:
@@ -885,13 +1026,35 @@ def _render_card(b: dict) -> None:
         f'</div>'
     )
 
-    props_html = _render_game_props(props)
+    props_html  = _render_game_props(props)
+
+    # Inline alert badges on the card for any SP/batter changes
+    card_alerts = b.get("alerts") or []
+    alert_html  = ""
+    for a in card_alerts:
+        ct = a.get("type", "")
+        if "SP_SCRATCH" in ct:
+            side = "Home" if "HOME" in ct else "Away"
+            p_out = a.get("player_out", "")
+            p_in  = a.get("player_in") or "TBD"
+            alert_html += (
+                f'<div style="font-size:0.78em;color:#f87171;margin-top:4px">'
+                f'🚨 {side} SP scratch: {p_out} → {p_in}'
+                f'</div>'
+            )
+        elif ct == "BATTER_SCRATCH":
+            alert_html += (
+                f'<div style="font-size:0.78em;color:#fde68a;margin-top:4px">'
+                f'⚠️ {a.get("player_out","")} scratched — TB prop invalid'
+                f'</div>'
+            )
 
     st.markdown(
         f'<div class="{card_cls}">'
         f'{header}'
         f'{_meta_html(f, game)}'
         f'{proj_row}'
+        f'{alert_html}'
         f'<div class="card-summary">{summary}</div>'
         f'{props_html}'
         f'</div>',
@@ -966,6 +1129,10 @@ def main() -> None:
     # ── season stats banner ───────────────────────────────────────────────────
     if stats:
         _render_season_header(stats)
+
+    # ── alerts (lineup changes + transactions) ────────────────────────────────
+    if data:
+        _render_alerts(data)
 
     # ── no data state ─────────────────────────────────────────────────────────
     if data is None:

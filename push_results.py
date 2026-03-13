@@ -23,6 +23,8 @@ import subprocess
 import sys
 from datetime import date, datetime, timedelta
 
+import db
+
 
 # ── grade yesterday ────────────────────────────────────────────────────────────
 
@@ -182,6 +184,39 @@ def git_push(repo_dir: str, game_date: str, files: list[str]) -> bool:
 
 # ── main ───────────────────────────────────────────────────────────────────────
 
+# ── transaction wire ──────────────────────────────────────────────────────────
+
+def run_transaction_wire(game_date: str, games: list[dict]) -> list[dict]:
+    """Fetch today's transactions, store relevant ones, return filtered list."""
+    from modules.transactions import fetch_transactions, filter_to_model_relevant
+    print("[push_results] Fetching transaction wire ...")
+    try:
+        raw_txns = fetch_transactions(game_date)
+        relevant = filter_to_model_relevant(raw_txns, games)
+        db.init_db()
+        for txn in relevant:
+            db.write_transaction({
+                "game_date":      game_date,
+                "transaction_id": txn["transaction_id"],
+                "player_name":    txn["player_name"],
+                "player_id":      txn.get("player_id"),
+                "team_name":      txn.get("team_name"),
+                "team_id":        txn.get("team_id"),
+                "team_abb":       txn.get("team_abb"),
+                "type_code":      txn.get("type_code"),
+                "type_label":     txn.get("type_label"),
+                "description":    txn.get("description"),
+                "affects_game_pk": txn.get("affects_game_pk"),
+                "affects_team":   txn.get("affects_team"),
+                "affects_matchup": txn.get("affects_matchup"),
+            })
+        print(f"[push_results] Stored {len(relevant)} relevant transactions.")
+        return relevant
+    except Exception as e:
+        print(f"[push_results] Transaction wire failed (non-fatal): {e}", file=sys.stderr)
+        return []
+
+
 def main():
     parser = argparse.ArgumentParser(description="Grade yesterday + run model + push to GitHub")
     parser.add_argument("--date",          default=None,        help="Game date YYYY-MM-DD (default: today)")
@@ -209,13 +244,30 @@ def main():
         print("[push_results] No games found — results.json not updated.")
         sys.exit(1)
 
+    # Step 4: transaction wire (needs game list from the model run)
+    games_for_txn = [r["game"] for r in raw]
+    transactions  = run_transaction_wire(game_date, games_for_txn)
+
+    # Load any lineup changes already written today (from earlier refresh runs)
+    db.init_db()
+    lineup_alerts = db.get_lineup_changes_for_date(game_date)
+    game_lkp = {g["game_pk"]: g for g in games_for_txn}
+    for a in lineup_alerts:
+        if not a.get("matchup"):
+            g = game_lkp.get(a.get("game_pk"), {})
+            a["matchup"] = f"{g.get('away_team','')} @ {g.get('home_team','')}"
+
+    # Step 5: serialize results with alerts
     print(f"[push_results] Serializing {len(raw)} games ...")
     payload = serialize_results(raw, game_date)
+    payload["alerts"]       = lineup_alerts
+    payload["transactions"] = transactions
+
     with open(results_path, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_results] Wrote {results_path}")
 
-    # Step 4: push both files
+    # Step 6: push both files
     if not args.no_push:
         print("[push_results] Pushing to GitHub ...")
         ok = git_push(repo_dir, game_date, ["results.json", "season_stats.json"])
@@ -228,8 +280,9 @@ def main():
     plays_n  = len(payload["plays"])
     noplay_n = len(payload["no_plays"])
     parlay_n = len(payload["parlay"])
+    txn_n    = len(transactions)
     print(f"[push_results] Done. {plays_n} plays, {noplay_n} no-plays, "
-          f"{parlay_n} parlay legs.")
+          f"{parlay_n} parlay legs, {txn_n} transactions.")
 
 
 if __name__ == "__main__":

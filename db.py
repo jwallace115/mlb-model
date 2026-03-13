@@ -132,6 +132,46 @@ def init_db() -> None:
         CREATE INDEX IF NOT EXISTS idx_gr_result    ON graded_results(result);
         CREATE INDEX IF NOT EXISTS idx_props_date   ON props(game_date);
         CREATE INDEX IF NOT EXISTS idx_props_game   ON props(game_pk, game_date);
+
+        CREATE TABLE IF NOT EXISTS lineup_changes (
+            id               INTEGER PRIMARY KEY AUTOINCREMENT,
+            game_date        TEXT NOT NULL,
+            game_pk          INTEGER NOT NULL,
+            home_team        TEXT,
+            away_team        TEXT,
+            change_type      TEXT NOT NULL,  -- 'SP_SCRATCH' | 'BATTER_SCRATCH'
+            player_out       TEXT,
+            player_in        TEXT,
+            old_projection   REAL,
+            new_projection   REAL,
+            projection_delta REAL,
+            old_confidence   TEXT,
+            new_confidence   TEXT,
+            detected_at      TEXT DEFAULT (datetime('now')),
+            UNIQUE(game_pk, game_date, change_type, player_out)
+        );
+
+        CREATE TABLE IF NOT EXISTS transactions (
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            game_date      TEXT NOT NULL,
+            transaction_id INTEGER,
+            player_name    TEXT,
+            player_id      INTEGER,
+            team_name      TEXT,
+            team_id        INTEGER,
+            team_abb       TEXT,
+            type_code      TEXT,
+            type_label     TEXT,
+            description    TEXT,
+            affects_game_pk INTEGER,
+            affects_team   TEXT,
+            affects_matchup TEXT,
+            recorded_at    TEXT DEFAULT (datetime('now')),
+            UNIQUE(game_date, transaction_id)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_lc_date ON lineup_changes(game_date);
+        CREATE INDEX IF NOT EXISTS idx_tx_date ON transactions(game_date);
         """)
 
         # Migrate existing projections table — add lean/star_rating columns if missing
@@ -319,6 +359,59 @@ def get_recent_projections(days: int = 7) -> list:
             WHERE p.game_date >= date('now', ? || ' days')
             ORDER BY p.game_date DESC, p.home_team
         """, (f"-{days}",)).fetchall()
+        return [dict(r) for r in rows]
+
+
+def write_lineup_change(row: dict) -> None:
+    """Upsert a lineup change record."""
+    with get_conn() as conn:
+        columns      = list(row.keys())
+        placeholders = ", ".join("?" * len(columns))
+        values       = [row[c] for c in columns]
+        conflict_keys = {"game_pk", "game_date", "change_type", "player_out"}
+        set_clause = ", ".join(
+            f"{c} = excluded.{c}" for c in columns if c not in conflict_keys
+        )
+        conn.execute(
+            f"INSERT INTO lineup_changes ({', '.join(columns)}) VALUES ({placeholders}) "
+            f"ON CONFLICT(game_pk, game_date, change_type, player_out) "
+            f"DO UPDATE SET {set_clause}",
+            values,
+        )
+
+
+def get_lineup_changes_for_date(game_date: str) -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM lineup_changes WHERE game_date = ? ORDER BY detected_at",
+            (game_date,),
+        ).fetchall()
+        return [dict(r) for r in rows]
+
+
+def write_transaction(row: dict) -> None:
+    """Upsert a transaction record (idempotent on transaction_id)."""
+    with get_conn() as conn:
+        columns      = list(row.keys())
+        placeholders = ", ".join("?" * len(columns))
+        values       = [row[c] for c in columns]
+        conflict_keys = {"game_date", "transaction_id"}
+        set_clause = ", ".join(
+            f"{c} = excluded.{c}" for c in columns if c not in conflict_keys
+        )
+        conn.execute(
+            f"INSERT INTO transactions ({', '.join(columns)}) VALUES ({placeholders}) "
+            f"ON CONFLICT(game_date, transaction_id) DO UPDATE SET {set_clause}",
+            values,
+        )
+
+
+def get_transactions_for_date(game_date: str) -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM transactions WHERE game_date = ? ORDER BY recorded_at",
+            (game_date,),
+        ).fetchall()
         return [dict(r) for r in rows]
 
 
