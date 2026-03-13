@@ -105,11 +105,33 @@ def init_db() -> None:
             UNIQUE(game_pk, game_date)
         );
 
+        CREATE TABLE IF NOT EXISTS props (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            game_date     TEXT NOT NULL,
+            game_pk       INTEGER NOT NULL,
+            player_name   TEXT NOT NULL,
+            team          TEXT,
+            market        TEXT NOT NULL,   -- "K" | "TB"
+            projection    REAL,
+            line          REAL,
+            edge          REAL,
+            edge_pct      REAL,
+            lean          TEXT,
+            is_play       INTEGER DEFAULT 0,
+            actual        REAL,
+            result        TEXT,
+            confidence    TEXT,
+            created_at    TEXT DEFAULT (datetime('now')),
+            UNIQUE(game_pk, game_date, player_name, market)
+        );
+
         CREATE INDEX IF NOT EXISTS idx_proj_date    ON projections(game_date);
         CREATE INDEX IF NOT EXISTS idx_proj_game_pk ON projections(game_pk);
         CREATE INDEX IF NOT EXISTS idx_res_date     ON results(game_date);
         CREATE INDEX IF NOT EXISTS idx_gr_date      ON graded_results(game_date);
         CREATE INDEX IF NOT EXISTS idx_gr_result    ON graded_results(result);
+        CREATE INDEX IF NOT EXISTS idx_props_date   ON props(game_date);
+        CREATE INDEX IF NOT EXISTS idx_props_game   ON props(game_pk, game_date);
         """)
 
         # Migrate existing projections table — add lean/star_rating columns if missing
@@ -225,6 +247,57 @@ def log_result(game_pk: int, game_date: str, actual_total: float = None,
                 line_full, line_f5,
                 result_full, result_f5,
             ))
+
+
+def write_prop(row: dict) -> None:
+    """Upsert a player prop row (projection + optional actual/result)."""
+    with get_conn() as conn:
+        columns = list(row.keys())
+        placeholders = ", ".join("?" * len(columns))
+        values = [row[c] for c in columns]
+        conflict_keys = {"game_pk", "game_date", "player_name", "market"}
+        set_clause = ", ".join(
+            f"{c} = excluded.{c}" for c in columns if c not in conflict_keys
+        )
+        conn.execute(
+            f"INSERT INTO props ({', '.join(columns)}) VALUES ({placeholders}) "
+            f"ON CONFLICT(game_pk, game_date, player_name, market) DO UPDATE SET {set_clause}",
+            values,
+        )
+
+
+def get_prop_season_stats() -> dict:
+    """Return prop W/L summary grouped by market."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT
+                market,
+                COUNT(*) AS total,
+                SUM(CASE WHEN result = 'WIN'  THEN 1 ELSE 0 END) AS wins,
+                SUM(CASE WHEN result = 'LOSS' THEN 1 ELSE 0 END) AS losses,
+                SUM(CASE WHEN result = 'PUSH' THEN 1 ELSE 0 END) AS pushes
+            FROM props
+            WHERE is_play = 1 AND result IS NOT NULL
+            GROUP BY market
+        """).fetchall()
+        out = {}
+        for r in rows:
+            d    = dict(r)
+            net  = d["wins"] + d["losses"]
+            roi  = round((d["wins"] * 0.9091 - d["losses"]) / net * 100, 1) if net else None
+            wpct = round(d["wins"] / net * 100, 1) if net else None
+            out[d["market"]] = {**d, "decided": net, "win_pct": wpct, "roi": roi}
+        return out
+
+
+def get_props_for_date(game_date: str) -> list[dict]:
+    """Return all props rows for a given date."""
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM props WHERE game_date = ? ORDER BY game_pk, market, player_name",
+            (game_date,),
+        ).fetchall()
+        return [dict(r) for r in rows]
 
 
 def get_all_graded_results() -> list[dict]:

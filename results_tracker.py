@@ -34,6 +34,151 @@ _STAR_COUNT = {"⭐⭐⭐": 3, "⭐⭐": 2, "⭐": 1}
 
 # ── MLB Stats API helpers ──────────────────────────────────────────────────────
 
+def fetch_boxscore(game_pk: int) -> dict | None:
+    """Fetch MLB Stats API boxscore for pitcher Ks and batter stats."""
+    try:
+        url = f"{MLB_STATS_API}/game/{game_pk}/boxscore"
+        resp = requests.get(url, timeout=15)
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        logger.warning(f"Could not fetch boxscore for game_pk={game_pk}: {e}")
+        return None
+
+
+def _extract_stats_from_boxscore(boxscore: dict) -> dict:
+    """
+    Parse boxscore into {player_name.lower(): {"k": int, "tb": float}} lookups.
+    TB = 1B + 2*2B + 3*3B + 4*HR.
+    """
+    stats: dict[str, dict] = {}
+    if not boxscore:
+        return stats
+
+    for side in ("home", "away"):
+        team_data = boxscore.get("teams", {}).get(side, {})
+
+        # Pitchers — strikeouts
+        pitchers = team_data.get("pitchers", [])
+        players  = team_data.get("players", {})
+        for pid in pitchers:
+            pid_str = f"ID{pid}"
+            p = players.get(pid_str, {})
+            name = (
+                p.get("person", {}).get("fullName") or
+                p.get("person", {}).get("lastName") or ""
+            )
+            ks = (p.get("stats", {})
+                   .get("pitching", {})
+                   .get("strikeOuts", 0)) or 0
+            if name:
+                key = name.lower()
+                stats[key] = stats.get(key, {})
+                stats[key]["k"] = int(ks)
+
+        # Batters — total bases
+        batters = team_data.get("batters", [])
+        for pid in batters:
+            pid_str = f"ID{pid}"
+            p = players.get(pid_str, {})
+            name = (
+                p.get("person", {}).get("fullName") or
+                p.get("person", {}).get("lastName") or ""
+            )
+            batting = p.get("stats", {}).get("batting", {})
+            h   = int(batting.get("hits", 0) or 0)
+            d   = int(batting.get("doubles", 0) or 0)
+            t   = int(batting.get("triples", 0) or 0)
+            hr  = int(batting.get("homeRuns", 0) or 0)
+            singles = h - d - t - hr
+            tb = singles + 2*d + 3*t + 4*hr
+            if name and h >= 0:
+                key = name.lower()
+                stats[key] = stats.get(key, {})
+                stats[key]["tb"] = float(tb)
+
+    return stats
+
+
+def grade_props_for_date(game_date: str) -> int:
+    """
+    Grade all ungraded prop bets for game_date using MLB boxscore API.
+    Returns count of props graded.
+    """
+    props = db.get_props_for_date(game_date)
+    ungraded = [p for p in props if p.get("result") is None and p.get("is_play")]
+    if not ungraded:
+        return 0
+
+    # Group by game_pk to minimize API calls
+    by_game: dict[int, list] = {}
+    for p in ungraded:
+        by_game.setdefault(p["game_pk"], []).append(p)
+
+    graded_count = 0
+    for game_pk, game_props in by_game.items():
+        boxscore = fetch_boxscore(game_pk)
+        actuals  = _extract_stats_from_boxscore(boxscore)
+        if not actuals:
+            continue
+
+        for p in game_props:
+            player_key = (p["player_name"] or "").lower()
+            market     = p.get("market", "")
+            line       = p.get("line")
+            lean       = p.get("lean")
+
+            # Try exact match, then last-name fallback
+            actual_row = actuals.get(player_key)
+            if actual_row is None:
+                parts = player_key.split()
+                if parts:
+                    last = parts[-1]
+                    candidates = [(k, v) for k, v in actuals.items()
+                                  if k.endswith(last)]
+                    if len(candidates) == 1:
+                        actual_row = candidates[0][1]
+
+            if actual_row is None:
+                continue
+
+            actual_val = actual_row.get(market.lower())
+            if actual_val is None:
+                continue
+
+            # Compute result
+            if line is None:
+                result = "NO_LINE"
+            elif actual_val > line:
+                result = "WIN" if lean == "OVER" else "LOSS"
+            elif actual_val < line:
+                result = "WIN" if lean == "UNDER" else "LOSS"
+            else:
+                result = "PUSH"
+
+            db.write_prop({
+                "game_date":   game_date,
+                "game_pk":     game_pk,
+                "player_name": p["player_name"],
+                "team":        p.get("team", ""),
+                "market":      market,
+                "projection":  p.get("projection"),
+                "line":        line,
+                "edge":        p.get("edge"),
+                "edge_pct":    p.get("edge_pct"),
+                "lean":        lean,
+                "is_play":     p.get("is_play", 0),
+                "actual":      actual_val,
+                "result":      result,
+            })
+            graded_count += 1
+            logger.info(f"  Prop graded: {p['player_name']} {market} "
+                        f"proj={p.get('projection')} line={line} "
+                        f"actual={actual_val} → {result}")
+
+    return graded_count
+
+
 def fetch_final_score(game_pk: int) -> dict | None:
     """Pull the final linescore from the MLB Stats API."""
     try:
@@ -227,6 +372,12 @@ def grade_date(game_date: str) -> list[dict]:
     plays  = sum(1 for g in graded if g["was_a_play"])
     logger.info(f"Graded {len(graded)} games for {game_date}. "
                 f"Plays: {plays}  W/L: {wins}-{losses}")
+
+    # Grade any prop bets for this date
+    props_graded = grade_props_for_date(game_date)
+    if props_graded:
+        logger.info(f"Graded {props_graded} props for {game_date}")
+
     return graded
 
 

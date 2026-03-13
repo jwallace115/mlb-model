@@ -286,6 +286,7 @@ def build_season_stats() -> dict:
         "projection_accuracy": projection_accuracy(all_rows),
         "factor_correlations": factor_correlations(plays),
         "biggest_misses":   biggest_misses(all_rows),
+        "props_record":     db.get_prop_season_stats(),
     }
     return stats
 

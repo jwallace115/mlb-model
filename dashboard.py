@@ -310,6 +310,58 @@ st.markdown("""
 .analytics-table td.yellow{ color: #eab308; font-weight: 600; }
 .analytics-table td.red   { color: #f87171; font-weight: 600; }
 
+/* ── Props rows ── */
+.props-section {
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #1e2535;
+}
+.props-title {
+    font-size: 0.67em;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    color: #4a5568;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+.prop-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.78em;
+    padding: 3px 0;
+    color: #718096;
+    border-bottom: 1px solid #0f1117;
+}
+.prop-row:last-child { border-bottom: none; }
+.prop-market {
+    font-weight: 700;
+    font-size: 0.80em;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #1e2535;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    min-width: 24px;
+    text-align: center;
+}
+.prop-play-badge {
+    font-size: 0.72em;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: #14532d;
+    color: #86efac;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.prop-player { font-weight: 600; color: #cbd5e1; }
+.prop-proj   { color: #94a3b8; }
+.prop-edge-pos { color: #f87171; font-weight: 700; }
+.prop-edge-neg { color: #67e8f9; font-weight: 700; }
+
 /* ── Responsive ── */
 @media (max-width: 600px) {
     .matchup { font-size: 1.05em; }
@@ -632,6 +684,28 @@ def _render_analytics(stats: dict) -> None:
             )
             st.markdown("<br>", unsafe_allow_html=True)
 
+        # ── props record ──────────────────────────────────────────────────────
+        props_rec = stats.get("props_record", {})
+        if props_rec:
+            st.markdown("**Player Props Record**")
+            prop_rows = []
+            for market, d in props_rec.items():
+                w, l = d.get("wins", 0) or 0, d.get("losses", 0) or 0
+                wp   = d.get("win_pct")
+                roi  = d.get("roi")
+                cls  = _pct_color(wp)
+                prop_rows.append((
+                    (market, ""),
+                    (f"{w}–{l}", cls),
+                    (f"{wp:.1f}%" if wp is not None else "—", cls),
+                    (f"{roi:+.1f}%" if roi is not None else "—", ""),
+                ))
+            st.markdown(
+                _analytics_table(prop_rows, ["Market", "Record", "Win %", "ROI"]),
+                unsafe_allow_html=True
+            )
+            st.markdown("<br>", unsafe_allow_html=True)
+
         # ── biggest misses ────────────────────────────────────────────────────
         misses = stats.get("biggest_misses", [])
         if misses:
@@ -724,6 +798,55 @@ def _meta_html(f: dict, game: dict) -> str:
     return '<div class="card-meta">' + "  ·  ".join(parts) + "</div>"
 
 
+def _render_game_props(props: list[dict]) -> str:
+    """Build HTML for props below a game card. Returns empty string if no props."""
+    if not props:
+        return ""
+
+    rows = ""
+    for p in props:
+        market   = p.get("market", "")
+        player   = p.get("player_name", "")
+        proj     = p.get("projection")
+        line     = p.get("line")
+        edge_pct = p.get("edge_pct")
+        lean     = p.get("lean", "")
+        is_play  = p.get("is_play", False)
+
+        proj_str = f"{proj:.1f}" if proj is not None else "—"
+        line_str = f"{line:.1f}" if line is not None else "no line"
+
+        if edge_pct is not None:
+            sign = "+" if lean == "OVER" else "-" if lean == "UNDER" else ""
+            edge_cls = "prop-edge-pos" if lean == "OVER" else "prop-edge-neg"
+            edge_str = (
+                f'<span class="{edge_cls}">{sign}{edge_pct*100:.1f}% {lean}</span>'
+            )
+        else:
+            edge_str = '<span style="color:#4a5568">no line</span>'
+
+        play_badge = (
+            '<span class="prop-play-badge">PLAY</span>' if is_play else ""
+        )
+
+        rows += (
+            f'<div class="prop-row">'
+            f'<span class="prop-market">{market}</span>'
+            f'{play_badge}'
+            f'<span class="prop-player">{player}</span>'
+            f'<span class="prop-proj">Proj {proj_str} · Line {line_str}</span>'
+            f'· {edge_str}'
+            f'</div>'
+        )
+
+    return (
+        f'<div class="props-section">'
+        f'<div class="props-title">Player Props</div>'
+        f'{rows}'
+        f'</div>'
+    )
+
+
 def _render_card(b: dict) -> None:
     rating  = b["rating"]
     game    = b["game"]
@@ -731,6 +854,7 @@ def _render_card(b: dict) -> None:
     fe      = b.get("full_edge", {})
     f5e     = b.get("f5_edge", {})
     summary = b.get("summary", "")
+    props   = b.get("props", [])
     f       = proj.get("factors", {})
     lean    = proj.get("lean", "NEUTRAL")
     is_play = rating != "NO PLAY"
@@ -761,12 +885,15 @@ def _render_card(b: dict) -> None:
         f'</div>'
     )
 
+    props_html = _render_game_props(props)
+
     st.markdown(
         f'<div class="{card_cls}">'
         f'{header}'
         f'{_meta_html(f, game)}'
         f'{proj_row}'
         f'<div class="card-summary">{summary}</div>'
+        f'{props_html}'
         f'</div>',
         unsafe_allow_html=True,
     )

@@ -11,6 +11,7 @@ Usage:
 
 import argparse
 import logging
+import os
 import sys
 from datetime import date, datetime
 from typing import Optional
@@ -27,6 +28,9 @@ from modules.bullpen     import calculate_bullpen_fatigue
 from modules.umpires     import get_umpire_rating
 from modules.projections import project_game
 from modules.odds        import fetch_all_lines, get_game_lines, edge_summary
+from modules.props_data        import build_pitcher_k_db, build_batter_props_db
+from modules.props_projections import get_game_props
+from modules.props_odds        import fetch_props_lines
 
 colorama_init(autoreset=True)
 
@@ -771,6 +775,16 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     pitcher_db = build_pitcher_db()
     offense_db = build_offense_db()
 
+    # Props databases (loaded once, shared across all games)
+    try:
+        pitcher_k_db  = build_pitcher_k_db()
+        batter_props_db = build_batter_props_db()
+        logger.info(f"Props DBs loaded: {len(pitcher_k_db)} pitchers, {len(batter_props_db)} batters")
+    except Exception as e:
+        logger.warning(f"Props DB load failed (props will be skipped): {e}")
+        pitcher_k_db  = {}
+        batter_props_db = {}
+
     all_lines = {}
     if use_odds:
         logger.info("Fetching market lines from The Odds API...")
@@ -808,7 +822,42 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         )
 
         odds = get_game_lines(home, away, all_lines)
-        results.append({"game": game, "projection": proj, "odds": odds})
+
+        # ── Props ─────────────────────────────────────────────────────────────
+        props = []
+        try:
+            odds_key = os.environ.get("ODDS_API_KEY")
+            props_lines = fetch_props_lines(home, away, game_date, odds_api_key=odds_key)
+            home_sp_name = game["home_probable_pitcher"].get("name") or ""
+            away_sp_name = game["away_probable_pitcher"].get("name") or ""
+            props = get_game_props(
+                game         = game,
+                home_sp_name = home_sp_name,
+                away_sp_name = away_sp_name,
+                factors      = proj["factors"],
+                umpire       = umpire,
+                pitcher_k_db = pitcher_k_db,
+                batter_db    = batter_props_db,
+                props_lines  = props_lines,
+            )
+            for p in props:
+                db.write_prop({
+                    "game_date":   game_date,
+                    "game_pk":     gk,
+                    "player_name": p["player_name"],
+                    "team":        p.get("team", ""),
+                    "market":      p["market"],
+                    "projection":  p["projection"],
+                    "line":        p.get("line"),
+                    "edge":        p.get("edge"),
+                    "edge_pct":    p.get("edge_pct"),
+                    "lean":        p.get("lean"),
+                    "is_play":     1 if p.get("is_play") else 0,
+                })
+        except Exception as e:
+            logger.warning(f"Props fetch/store failed for {away}@{home}: {e}")
+
+        results.append({"game": game, "projection": proj, "odds": odds, "props": props})
 
         f         = proj["factors"]
         full_cons = (odds.get("full") or {}).get("consensus")
