@@ -70,7 +70,7 @@ def _park_factor(home_team: str) -> float:
 def _compute_confidence(factors_dict: dict, proj_total: float,
                         neutral_total: float) -> tuple[str, float]:
     deviation = abs(proj_total - neutral_total)
-    score = min(deviation / 1.0, 1.0)
+    score = min(deviation / 2.5, 1.0)
 
     directional = []
     for key in ("sp_factor_home", "sp_factor_away", "offense_factor_home",
@@ -85,12 +85,16 @@ def _compute_confidence(factors_dict: dict, proj_total: float,
     alignment = abs(sum(directional)) / max(len(directional), 1)
     combined_score = 0.6 * score + 0.4 * alignment
 
-    if combined_score >= 0.65:
+    if combined_score >= 0.72:
         label = "HIGH"
-    elif combined_score >= 0.35:
+    elif combined_score >= 0.45:
         label = "MEDIUM"
     else:
         label = "LOW"
+
+    # Require at least 1.5 run deviation from neutral for HIGH confidence
+    if label == "HIGH" and deviation < 1.5:
+        label = "MEDIUM"
 
     return label, round(combined_score, 3)
 
