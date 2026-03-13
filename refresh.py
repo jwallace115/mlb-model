@@ -290,8 +290,10 @@ def refresh_games(
         # Re-run full projection (new schedule already has updated SPs)
         home_sp  = get_pitcher_metrics(game["home_probable_pitcher"], pitcher_db)
         away_sp  = get_pitcher_metrics(game["away_probable_pitcher"], pitcher_db)
-        home_off = get_team_offense(home, offense_db)
-        away_off = get_team_offense(away, offense_db)
+        home_off = get_team_offense(home, offense_db,
+                                    opp_throws=game["away_probable_pitcher"].get("throws"))
+        away_off = get_team_offense(away, offense_db,
+                                    opp_throws=game["home_probable_pitcher"].get("throws"))
         weather  = fetch_weather(home, game_time_et=game.get("game_time"))
         umpire   = get_umpire_rating(game.get("home_umpire"))
         home_bp  = calculate_bullpen_fatigue(game["home_team_id"], is_home=True, team_abb=home, team_bullpen_db=team_bullpen_db)

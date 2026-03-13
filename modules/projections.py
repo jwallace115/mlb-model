@@ -30,7 +30,8 @@ from config import (
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_SP_IP = 5.5   # fallback when no season data is available
+DEFAULT_SP_IP    = 5.5   # fallback when no season data is available
+LEAGUE_AVG_FB_PCT = 0.35  # league-average fly ball rate for pitchers
 
 
 def _sp_factor(sp_metrics: dict) -> float:
@@ -124,10 +125,22 @@ def project_game(
     off_h = _offense_factor(home_offense)
     off_a = _offense_factor(away_offense)
 
-    pf         = _park_factor(home_team)
-    wf_wnd     = weather.get("wind_factor", 1.0)
-    wf_tmp     = weather.get("temp_factor", 1.0)
-    weather_combined = wf_wnd * wf_tmp
+    pf     = _park_factor(home_team)
+    wf_wnd = weather.get("wind_factor", 1.0)
+    wf_tmp = weather.get("temp_factor", 1.0)
+
+    # Wind × flyball interaction: pitchers who allow more flyballs are more wind-sensitive.
+    # away team scores against HOME SP → use home SP's fb_pct to scale wind for away runs.
+    # home team scores against AWAY SP → use away SP's fb_pct to scale wind for home runs.
+    home_fb_pct = home_sp_metrics.get("fb_pct") or LEAGUE_AVG_FB_PCT
+    away_fb_pct = away_sp_metrics.get("fb_pct") or LEAGUE_AVG_FB_PCT
+    away_wind_adj = 1.0 + (wf_wnd - 1.0) * (home_fb_pct / LEAGUE_AVG_FB_PCT)
+    home_wind_adj = 1.0 + (wf_wnd - 1.0) * (away_fb_pct / LEAGUE_AVG_FB_PCT)
+    # Cap: ±15% max from wind×flyball to avoid runaway adjustments
+    away_wind_adj = max(0.85, min(away_wind_adj, 1.15))
+    home_wind_adj = max(0.85, min(home_wind_adj, 1.15))
+    away_weather_combined = away_wind_adj * wf_tmp   # for away runs (vs home SP)
+    home_weather_combined = home_wind_adj * wf_tmp   # for home runs (vs away SP)
 
     ump        = umpire.get("runs_factor", 1.0)
 
@@ -147,13 +160,13 @@ def project_game(
 
     # --- Full game run estimates ---
     # Away team scores: home SP pitches home_sp_ip innings, home BP pitches home_bp_frac
-    runs_away_sp = base * home_sp_frac * sp_h  * off_a * pf * weather_combined * ump
-    runs_away_bp = base * home_bp_frac * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_h_mult * off_a * pf * weather_combined * ump
+    runs_away_sp = base * home_sp_frac * sp_h  * off_a * pf * away_weather_combined * ump
+    runs_away_bp = base * home_bp_frac * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_h_mult * off_a * pf * away_weather_combined * ump
     runs_away    = runs_away_sp + runs_away_bp
 
     # Home team scores: away SP pitches away_sp_ip innings, away BP pitches away_bp_frac
-    runs_home_sp = base * away_sp_frac * sp_a  * off_h * pf * weather_combined * ump
-    runs_home_bp = base * away_bp_frac * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_a_mult * off_h * pf * weather_combined * ump
+    runs_home_sp = base * away_sp_frac * sp_a  * off_h * pf * home_weather_combined * ump
+    runs_home_bp = base * away_bp_frac * (LEAGUE_AVG_BULLPEN_ERA / LEAGUE_AVG_ERA) * bp_a_mult * off_h * pf * home_weather_combined * ump
     runs_home    = runs_home_sp + runs_home_bp
 
     proj_full = runs_away + runs_home
@@ -164,8 +177,8 @@ def project_game(
     home_f5_frac = min(home_sp_ip, 5.0) / 9.0
     away_f5_frac = min(away_sp_ip, 5.0) / 9.0
 
-    runs_away_f5 = base * home_f5_frac * sp_h  * off_a * pf * weather_combined * ump
-    runs_home_f5 = base * away_f5_frac * sp_a  * off_h * pf * weather_combined * ump
+    runs_away_f5 = base * home_f5_frac * sp_h  * off_a * pf * away_weather_combined * ump
+    runs_home_f5 = base * away_f5_frac * sp_a  * off_h * pf * home_weather_combined * ump
     proj_f5      = runs_away_f5 + runs_home_f5
 
     # --- Neutral baseline ---
@@ -183,6 +196,8 @@ def project_game(
         "umpire_factor":        ump,
         "bullpen_fatigue_home": bp_h_mult,
         "bullpen_fatigue_away": bp_a_mult,
+        "home_wind_adj":        home_wind_adj,
+        "away_wind_adj":        away_wind_adj,
     }
     confidence_label, confidence_score = _compute_confidence(
         factors_dict, proj_full, neutral_full
@@ -228,6 +243,10 @@ def project_game(
             "weather_desc":         weather.get("description"),
             "wind_factor":          round(wf_wnd, 4),
             "temp_factor":          round(wf_tmp, 4),
+            "home_wind_adj":        round(home_wind_adj, 4),
+            "away_wind_adj":        round(away_wind_adj, 4),
+            "home_sp_fb_pct":       home_fb_pct,
+            "away_sp_fb_pct":       away_fb_pct,
             "umpire_name":          umpire.get("name"),
             "umpire_runs_factor":   round(ump, 4),
             "home_bp_fatigue":      home_bullpen.get("fatigue_score"),

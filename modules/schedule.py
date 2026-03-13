@@ -111,8 +111,9 @@ def fetch_schedule(game_date: Optional[str] = None) -> list[dict]:
             def _pitcher(team_data: dict) -> dict:
                 pp = team_data.get("probablePitcher", {})
                 return {
-                    "id":       pp.get("id"),
-                    "name":     pp.get("fullName", "TBD"),
+                    "id":     pp.get("id"),
+                    "name":   pp.get("fullName", "TBD"),
+                    "throws": pp.get("pitchHand", {}).get("code", ""),  # "L", "R", or ""
                 }
 
             # Home plate umpire

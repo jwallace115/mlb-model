@@ -3,6 +3,10 @@ Offense module — fetches team wRC+ from FanGraphs API.
 
 Aggregates individual batter data (PA-weighted wRC+) per team.
 wRC+: 100 = league average, >100 = above average offense.
+
+Platoon splits (vs LHP / vs RHP) are fetched from Baseball Savant.
+get_team_offense() accepts an optional opp_throws parameter to select
+the correct platoon split wRC+ when the opposing starter's handedness is known.
 """
 
 import logging
@@ -20,7 +24,7 @@ from config import CACHE_DIR, LEAGUE_AVG_WRC_PLUS
 
 logger = logging.getLogger(__name__)
 
-_CACHE_FILE = os.path.join(CACHE_DIR, f"offense_{date.today().isoformat()}.json")
+_CACHE_FILE = os.path.join(CACHE_DIR, f"offense_v2_{date.today().isoformat()}.json")
 
 FANGRAPHS_BATTING_URL = "https://www.fangraphs.com/api/leaders/major-league/data"
 
@@ -125,6 +129,71 @@ def _fetch_fangraphs_batting(year: int) -> dict:
     return db
 
 
+def _fetch_savant_platoon_splits(year: int) -> dict:
+    """
+    Fetch team-level batting splits vs LHP and vs RHP from Savant.
+    Returns team_abb → {wrc_plus_vs_lhp: float, wrc_plus_vs_rhp: float}.
+    Uses xwOBA proxy: (team_xwOBA / LEAGUE_AVG_XWOBA) * 100.
+    """
+    LEAGUE_AVG_XWOBA = 0.318
+
+    # Build player → team map once, reused for both hands
+    player_team: dict = {}
+    try:
+        resp = requests.get(
+            "https://statsapi.mlb.com/api/v1/sports/1/players",
+            params={"season": year}, timeout=20
+        )
+        resp.raise_for_status()
+        from config import TEAM_ID_TO_ABB
+        for p in resp.json().get("people", []):
+            pid = str(p.get("id", ""))
+            tid = p.get("currentTeam", {}).get("id")
+            if pid and tid:
+                abb = TEAM_ID_TO_ABB.get(tid, "")
+                if abb:
+                    player_team[pid] = abb
+    except Exception as e:
+        logger.warning(f"Player-team mapping failed in platoon splits: {e}")
+        return {}
+
+    splits: dict = {}
+    for hand, key in [("L", "wrc_plus_vs_lhp"), ("R", "wrc_plus_vs_rhp")]:
+        try:
+            from io import StringIO
+            url = (
+                f"https://baseballsavant.mlb.com/leaderboard/expected_statistics"
+                f"?type=batter&year={year}&position=&team=&min=20"
+                f"&pitcherHand={hand}&csv=true"
+            )
+            r = requests.get(url, timeout=20)
+            r.raise_for_status()
+            df = pd.read_csv(StringIO(r.text))
+        except Exception as e:
+            logger.warning(f"Savant platoon split ({hand}) failed: {e}")
+            continue
+
+        team_agg: dict = defaultdict(lambda: {"xwoba_sum": 0.0, "pa_sum": 0.0})
+        for _, row in df.iterrows():
+            pid   = str(int(row.get("player_id", 0) or 0))
+            xwoba = row.get("est_woba")
+            pa    = row.get("pa")
+            team  = player_team.get(pid)
+            if not team or pd.isna(xwoba) or pd.isna(pa) or float(pa) <= 0:
+                continue
+            team_agg[team]["xwoba_sum"] += float(xwoba) * float(pa)
+            team_agg[team]["pa_sum"]    += float(pa)
+
+        for abb, agg in team_agg.items():
+            if agg["pa_sum"] > 0:
+                team_xwoba = agg["xwoba_sum"] / agg["pa_sum"]
+                wrc_proxy  = (team_xwoba / LEAGUE_AVG_XWOBA) * 100
+                splits.setdefault(abb, {})[key] = round(wrc_proxy, 1)
+
+    logger.info(f"Savant platoon splits: {len(splits)} teams")
+    return splits
+
+
 def _fetch_savant_team_offense(year: int) -> dict:
     """
     Fallback: pull individual batter xwOBA from Savant and aggregate by team.
@@ -219,20 +288,51 @@ def build_offense_db(year: Optional[int] = None) -> dict:
                 break
 
     if db:
+        # Enrich with platoon splits (best-effort — fall back silently if unavailable)
+        platoon = {}
+        for attempt_year in [year, year - 1]:
+            logger.info(f"Fetching platoon splits from Savant for {attempt_year}...")
+            platoon = _fetch_savant_platoon_splits(attempt_year)
+            if platoon:
+                break
+        for abb, sp in platoon.items():
+            if abb in db:
+                db[abb].update(sp)
+
         _save_cache(db)
-        logger.info(f"Cached offense data for {len(db)} teams")
+        logger.info(f"Cached offense data for {len(db)} teams (platoon splits: {len(platoon)} teams)")
     else:
         logger.warning("Offense DB empty — league average will be used")
 
     return db
 
 
-def get_team_offense(team_abb: str, offense_db: dict) -> dict:
-    """Return offensive metrics for *team_abb*, falling back to league average."""
+def get_team_offense(team_abb: str, offense_db: dict,
+                     opp_throws: Optional[str] = None) -> dict:
+    """
+    Return offensive metrics for *team_abb*, falling back to league average.
+
+    opp_throws: "L" or "R" — when provided, uses the platoon-split wRC+ for the
+    appropriate handedness instead of the overall wRC+.  Falls back to overall
+    wRC+ if the split is not available.
+    """
     default = {"wrc_plus": LEAGUE_AVG_WRC_PLUS, "ops": 0.750}
+    entry   = offense_db.get(team_abb)
 
-    if team_abb in offense_db:
-        return offense_db[team_abb]
+    if entry is None:
+        logger.debug(f"Team offense not found: {team_abb} — using league average")
+        return default
 
-    logger.debug(f"Team offense not found: {team_abb} — using league average")
-    return default
+    if opp_throws:
+        hand = opp_throws.upper()
+        if hand == "L":
+            split_wrc = entry.get("wrc_plus_vs_lhp")
+        elif hand == "R":
+            split_wrc = entry.get("wrc_plus_vs_rhp")
+        else:
+            split_wrc = None
+
+        if split_wrc is not None:
+            return {**entry, "wrc_plus": split_wrc}
+
+    return entry

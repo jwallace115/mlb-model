@@ -96,12 +96,22 @@ def _blend_pitcher_entry(cur: dict, prior: Optional[dict]) -> dict:
     if avg_ip is None and prior:
         avg_ip = prior.get("avg_ip_per_start")
 
+    # Batted ball rates: prefer current year; fall back to prior year
+    gb_pct = cur.get("gb_pct")
+    if gb_pct is None and prior:
+        gb_pct = prior.get("gb_pct")
+    fb_pct = cur.get("fb_pct")
+    if fb_pct is None and prior:
+        fb_pct = prior.get("fb_pct")
+
     result = dict(cur)
     result.update({
         "xfip":              round(max(2.0, min(xfip,  7.0)), 3),
         "siera":             round(max(2.0, min(siera, 7.0)), 3),
         "era":               round(max(2.0, min(era,   7.0)), 3),
         "avg_ip_per_start":  avg_ip,
+        "gb_pct":            gb_pct,
+        "fb_pct":            fb_pct,
         "regressed":         True,
     })
     return result
@@ -156,6 +166,22 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
         if avg_ip is not None:
             avg_ip = max(3.0, min(avg_ip, 7.5))  # clamp outliers
 
+        # Batted ball rates (GB%, FB%) — present in FanGraphs type=8
+        gb_raw = row.get("GB%") or row.get("GB_pct")
+        fb_raw = row.get("FB%") or row.get("FB_pct")
+
+        def _pct(v) -> Optional[float]:
+            if v is None:
+                return None
+            try:
+                f = float(v)
+                return f / 100.0 if f > 1.0 else f
+            except (TypeError, ValueError):
+                return None
+
+        gb_pct = _pct(gb_raw)
+        fb_pct = _pct(fb_raw)
+
         mid_str = str(int(mlbam_id)) if mlbam_id else None
 
         entry = {
@@ -168,6 +194,8 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
             "team":              team,
             "mlbam_id":          mid_str,
             "avg_ip_per_start":  avg_ip,
+            "gb_pct":            gb_pct,
+            "fb_pct":            fb_pct,
         }
 
         if name:
@@ -327,6 +355,8 @@ def get_pitcher_metrics(pitcher_info: dict, pitcher_db: dict) -> dict:
         "bf":                0,
         "gs":                0,
         "avg_ip_per_start":  None,   # -> will use 5.5 default in projection
+        "gb_pct":            None,
+        "fb_pct":            None,
         "source":            "default",
     }
 
@@ -343,6 +373,8 @@ def get_pitcher_metrics(pitcher_info: dict, pitcher_db: dict) -> dict:
         e = _clamp(dict(entry))
         e.update({"name": name, "source": source})
         e.setdefault("avg_ip_per_start", None)
+        e.setdefault("gb_pct", None)
+        e.setdefault("fb_pct", None)
         return e
 
     # By MLBAM ID (most reliable)

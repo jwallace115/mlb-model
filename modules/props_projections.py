@@ -132,6 +132,11 @@ def project_batter_tb(
     park_adj = max(0.85, min(pf, 1.20))
 
     proj = xslg * expected_ab * gb_factor * wind_adj * park_adj
+
+    # Scale to market: raw formula produces ~2x DraftKings lines.
+    # 0.75x factor + 2.5 cap brings elite hitters (Judge, Seager) to 1.5–1.8 range.
+    proj = proj * 0.75
+    proj = min(proj, 2.5)
     return round(proj, 2)
 
 
