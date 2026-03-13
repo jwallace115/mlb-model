@@ -57,11 +57,18 @@ def project_pitcher_ks(
     raw_ip = expected_ip if expected_ip is not None else profile.get("avg_ip_per_start") or DEFAULT_SP_IP
     ip    = raw_ip if 3.0 <= raw_ip <= 6.5 else DEFAULT_SP_IP
 
+    # Regression to the mean: small samples inflate K/9 volatility.
+    # Blend toward LEAGUE_AVG_K9 scaled by total season IP (full trust at 150+ IP).
+    from modules.props_data import LEAGUE_AVG_K9
+    total_ip   = profile.get("ip") or 0
+    reliability = min(total_ip / 150.0, 1.0)
+    k9 = reliability * k9 + (1.0 - reliability) * LEAGUE_AVG_K9
+
     base_k    = (k9 / 9) * ip
     opp_adj   = opp_k_rate / LEAGUE_AVG_K_RATE   if LEAGUE_AVG_K_RATE > 0 else 1.0
 
     # Cap opp_adj so one extreme lineup doesn't blow up the result
-    opp_adj   = max(0.70, min(opp_adj, 1.30))
+    opp_adj   = max(0.70, min(opp_adj, 1.20))
 
     # swstr_adj intentionally omitted: K/9 already embeds SwStr% effect
     proj = base_k * opp_adj * umpire_factor * park_k_factor
