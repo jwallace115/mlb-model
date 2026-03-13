@@ -433,13 +433,6 @@ st.markdown("""
 .prop-edge-pos { color: #f87171; font-weight: 700; }
 .prop-edge-neg { color: #67e8f9; font-weight: 700; }
 
-/* ── Responsive ── */
-@media (max-width: 600px) {
-    .matchup { font-size: 1.05em; }
-    .proj-row { gap: 4px 12px; }
-    .parlay-leg { font-size: 0.78em; }
-    .stat-grid { gap: 8px 18px; }
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -1015,7 +1008,7 @@ def _render_game_props(props: list[dict]) -> str:
             sign = "+" if lean == "OVER" else "-" if lean == "UNDER" else ""
             edge_cls = "prop-edge-pos" if lean == "OVER" else "prop-edge-neg"
             edge_str = (
-                f'<span class="{edge_cls}">{sign}{edge_pct*100:.1f}% {lean}</span>'
+                f'<span class="{edge_cls}">{sign}{float(edge_pct)*100:.1f}% {lean}</span>'
             )
         else:
             edge_str = '<span style="color:#4a5568">no line</span>'
