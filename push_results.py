@@ -282,10 +282,14 @@ def main():
 
     plays_n  = len(payload["plays"])
     noplay_n = len(payload["no_plays"])
-    parlay_n = len(payload["parlay"])
+    p3_n     = len(payload["parlay_3"])
+    p5_n     = len(payload["parlay_5"])
+    p7_n     = len(payload["parlay_7"])
     txn_n    = len(transactions)
-    print(f"[push_results] Done. {plays_n} plays, {noplay_n} no-plays, "
-          f"{parlay_n} parlay legs, {txn_n} transactions.")
+    print(f"[push_results] parlay_3={p3_n} legs, parlay_5={p5_n} legs, parlay_7={p7_n} legs")
+    print(f"[push_results] Done. {plays_n} plays, {noplay_n} no-plays | "
+          f"Parlays: 3-leg ({p3_n} legs), 5-leg ({p5_n} legs), 7-leg ({p7_n} legs) | "
+          f"{txn_n} transactions.")
 
 
 if __name__ == "__main__":
