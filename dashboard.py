@@ -260,6 +260,27 @@ st.markdown("""
     padding: 14px 18px;
     margin-top: 6px;
 }
+.parlay-card-sharp {
+    background: #1a1500;
+    border: 1px solid #92400e;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 10px;
+}
+.parlay-card-value {
+    background: #0f172a;
+    border: 1px solid #312e81;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 10px;
+}
+.parlay-card-risk {
+    background: #1a0a0a;
+    border: 1px solid #7f1d1d;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 10px;
+}
 .parlay-title {
     font-size: 0.72em;
     font-weight: 700;
@@ -268,6 +289,9 @@ st.markdown("""
     color: #818cf8;
     margin-bottom: 10px;
 }
+.parlay-title-sharp { color: #f59e0b; }
+.parlay-title-value { color: #818cf8; }
+.parlay-title-risk  { color: #f87171; }
 .parlay-leg {
     display: flex;
     justify-content: space-between;
@@ -753,6 +777,36 @@ def _render_analytics(stats: dict) -> None:
             )
             st.markdown("<br>", unsafe_allow_html=True)
 
+        # ── parlay stats ──────────────────────────────────────────────────────
+        parlay_stats = stats.get("parlay_stats", {})
+        if parlay_stats:
+            st.markdown("**Parlay Hit Rates**")
+            _PARLAY_LABELS = {
+                "parlay_3": "Sharp Card (3-leg, ⭐⭐⭐)",
+                "parlay_5": "Value Card (5-leg, ⭐⭐+)",
+                "parlay_7": "Fun Card (7-leg, ⭐+)",
+            }
+            p_rows = []
+            for ptype in ("parlay_3", "parlay_5", "parlay_7"):
+                d = parlay_stats.get(ptype)
+                if not d:
+                    continue
+                hits    = d.get("hits", 0) or 0
+                misses_ = d.get("misses", 0) or 0
+                hp      = d.get("hit_pct")
+                cls     = _pct_color(hp)
+                p_rows.append((
+                    (_PARLAY_LABELS.get(ptype, ptype), ""),
+                    (f"{hits}–{misses_}", cls),
+                    (f"{hp:.1f}%" if hp is not None else "—", cls),
+                ))
+            if p_rows:
+                st.markdown(
+                    _analytics_table(p_rows, ["Parlay", "Hit–Miss", "Hit %"]),
+                    unsafe_allow_html=True
+                )
+                st.markdown("<br>", unsafe_allow_html=True)
+
         # ── biggest misses ────────────────────────────────────────────────────
         misses = stats.get("biggest_misses", [])
         if misses:
@@ -1062,44 +1116,91 @@ def _render_card(b: dict) -> None:
     )
 
 
-def _render_parlay(parlay: list) -> None:
-    if len(parlay) < 2:
+def _render_parlay_card(
+    legs: list,
+    card_class: str,
+    title_class: str,
+    icon: str,
+    title: str,
+    subtitle: str,
+) -> None:
+    """Render a single parlay card (one of the three tiers)."""
+    if len(legs) < 2:
         return
 
-    st.markdown(
-        f'<div class="section-hdr">⚡ {len(parlay)}-Leg Parlay Card</div>',
-        unsafe_allow_html=True,
-    )
-    legs = ""
-    for i, b in enumerate(parlay, 1):
-        g    = b["game"]
-        proj = b["proj"]
-        fe   = b.get("full_edge", {})
-        lean = proj.get("lean", "NEUTRAL")
+    legs_html = ""
+    for i, leg in enumerate(legs, 1):
+        matchup      = leg.get("matchup", "")
+        market_label = leg.get("market_label", "")
+        rating       = leg.get("rating", "")
+        proj         = leg.get("projection")
+        line         = leg.get("line")
+        lean         = leg.get("lean", "")
 
-        matchup  = f"{g['away_team']} @ {g['home_team']}"
-        proj_str = f"{proj['proj_total_full']:.1f}"
-        line_str = f"{fe['consensus']:.1f}" if fe.get("consensus") else "—"
-        edge_str = f"{fe['edge']:+.1f}" if fe.get("edge") is not None else "—"
-        lean_cls = "lean-over" if lean == "OVER" else "lean-under"
+        proj_str = f"{float(proj):.1f}" if proj is not None else "—"
+        line_str = f"{float(line):.1f}" if line is not None else "—"
+        lean_cls = "lean-over" if lean == "OVER" else "lean-under" if lean == "UNDER" else ""
 
-        legs += (
+        legs_html += (
             f'<div class="parlay-leg">'
             f'<span class="parlay-matchup">{i}. {matchup}</span>'
-            f'<span class="lean-badge {lean_cls}" style="font-size:0.78em">'
-            f'{lean} {proj_str}</span>'
-            f'<span><span style="color:#4a5568">Line</span> {line_str}</span>'
-            f'<span><span style="color:#4a5568">Edge</span> {edge_str}</span>'
-            f'<span>{b["rating"]}</span>'
+            f'<span class="lean-badge {lean_cls}" style="font-size:0.78em">{market_label}</span>'
+            f'<span style="color:#94a3b8;font-size:0.82em">Proj {proj_str}</span>'
+            f'<span style="color:#94a3b8;font-size:0.82em">Line {line_str}</span>'
+            f'<span>{rating}</span>'
             f'</div>'
         )
 
     st.markdown(
-        f'<div class="parlay-card">'
-        f'<div class="parlay-title">⚡ Parlay</div>'
-        f'{legs}'
+        f'<div class="{card_class}">'
+        f'<div class="parlay-title {title_class}">'
+        f'{icon} {title} <span style="font-weight:400;text-transform:none;'
+        f'letter-spacing:0;font-size:0.9em;opacity:0.7"> — {subtitle}</span>'
+        f'</div>'
+        f'{legs_html}'
         f'</div>',
         unsafe_allow_html=True,
+    )
+
+
+def _render_parlays(data: dict) -> None:
+    """Render all three parlay cards if legs are available."""
+    p3 = data.get("parlay_3") or data.get("parlay", [])
+    p5 = data.get("parlay_5", [])
+    p7 = data.get("parlay_7", [])
+
+    has_any = any(len(p) >= 2 for p in (p3, p5, p7))
+    if not has_any:
+        return
+
+    st.markdown(
+        '<div class="section-hdr">⚡ Parlay Cards</div>',
+        unsafe_allow_html=True,
+    )
+
+    _render_parlay_card(
+        p3,
+        card_class="parlay-card-sharp",
+        title_class="parlay-title-sharp",
+        icon="🔥",
+        title="SHARP CARD",
+        subtitle="3-leg · ⭐⭐⭐ only",
+    )
+    _render_parlay_card(
+        p5,
+        card_class="parlay-card-value",
+        title_class="parlay-title-value",
+        icon="⚡",
+        title="VALUE CARD",
+        subtitle="5-leg · ⭐⭐ and higher",
+    )
+    _render_parlay_card(
+        p7,
+        card_class="parlay-card-risk",
+        title_class="parlay-title-risk",
+        icon="🎲",
+        title="HIGH RISK / HIGH REWARD",
+        subtitle="7-leg · ⭐ and higher — Fun money only",
     )
 
 
@@ -1147,7 +1248,6 @@ def main() -> None:
     game_date = data.get("game_date", "")
     plays     = data.get("plays", [])
     no_plays  = data.get("no_plays", [])
-    parlay    = data.get("parlay", [])
 
     if game_date:
         st.caption(f"Projections for **{game_date}**")
@@ -1165,8 +1265,8 @@ def main() -> None:
         st.markdown('<div class="section-hdr">🎯 Plays</div>', unsafe_allow_html=True)
         st.caption("No plays meeting the confidence threshold today.")
 
-    # ── parlay ────────────────────────────────────────────────────────────────
-    _render_parlay(parlay)
+    # ── parlay cards ──────────────────────────────────────────────────────────
+    _render_parlays(data)
 
     # ── no-plays ──────────────────────────────────────────────────────────────
     if no_plays:

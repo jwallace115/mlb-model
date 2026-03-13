@@ -179,6 +179,82 @@ def grade_props_for_date(game_date: str) -> int:
     return graded_count
 
 
+def grade_parlays_for_date(game_date: str) -> int:
+    """
+    Grade all pending parlays for game_date.
+    A parlay hits only if every leg wins. Returns count of parlays graded.
+    """
+    parlays = db.get_parlays_for_date(game_date)
+    pending = [p for p in parlays if p.get("hit") is None and p.get("legs")]
+    if not pending:
+        return 0
+
+    # Pre-load result lookups for this date
+    graded_by_pk = {
+        r["game_pk"]: r
+        for r in db.get_all_graded_results()
+        if r["game_date"] == game_date
+    }
+    props_by_key = {
+        (p["game_pk"], p["player_name"], p["market"]): p
+        for p in db.get_props_for_date(game_date)
+    }
+    with db.get_conn() as conn:
+        f5_by_pk = {
+            r["game_pk"]: dict(r)
+            for r in conn.execute(
+                "SELECT * FROM results WHERE game_date = ?", (game_date,)
+            ).fetchall()
+        }
+
+    graded_count = 0
+    for parlay in pending:
+        legs       = parlay["legs"]
+        legs_won   = 0
+        all_done   = True
+
+        for leg in legs:
+            market  = leg.get("market", "")
+            lean    = leg.get("lean", "OVER")
+            game_pk = leg.get("game_pk")
+
+            if market == "full":
+                gr = graded_by_pk.get(game_pk)
+                if gr and gr.get("result") in ("WIN", "LOSS", "PUSH"):
+                    if gr["result"] == "WIN":
+                        legs_won += 1
+                else:
+                    all_done = False
+
+            elif market == "f5":
+                f5r = f5_by_pk.get(game_pk)
+                if f5r and f5r.get("result_f5") in ("OVER", "UNDER", "PUSH"):
+                    if f5r["result_f5"] == lean:
+                        legs_won += 1
+                else:
+                    all_done = False
+
+            elif market in ("K", "TB"):
+                pname = leg.get("player_name")
+                pr = props_by_key.get((game_pk, pname, market))
+                if pr and pr.get("result") in ("WIN", "LOSS", "PUSH"):
+                    if pr["result"] == "WIN":
+                        legs_won += 1
+                else:
+                    all_done = False
+
+        if all_done:
+            hit = 1 if legs_won == len(legs) else 0
+            db.update_parlay_result(game_date, parlay["parlay_type"], hit, legs_won)
+            graded_count += 1
+            logger.info(
+                f"  Parlay {parlay['parlay_type']}: "
+                f"{legs_won}/{len(legs)} legs — {'HIT' if hit else 'MISS'}"
+            )
+
+    return graded_count
+
+
 def fetch_final_score(game_pk: int) -> dict | None:
     """Pull the final linescore from the MLB Stats API."""
     try:
@@ -377,6 +453,11 @@ def grade_date(game_date: str) -> list[dict]:
     props_graded = grade_props_for_date(game_date)
     if props_graded:
         logger.info(f"Graded {props_graded} props for {game_date}")
+
+    # Grade parlays for this date
+    parlays_graded = grade_parlays_for_date(game_date)
+    if parlays_graded:
+        logger.info(f"Graded {parlays_graded} parlays for {game_date}")
 
     return graded
 

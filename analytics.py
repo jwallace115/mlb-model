@@ -287,6 +287,7 @@ def build_season_stats() -> dict:
         "factor_correlations": factor_correlations(plays),
         "biggest_misses":   biggest_misses(all_rows),
         "props_record":     db.get_prop_season_stats(),
+        "parlay_stats":     db.get_parlay_season_stats(),
     }
     return stats
 

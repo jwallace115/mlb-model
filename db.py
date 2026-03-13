@@ -170,8 +170,21 @@ def init_db() -> None:
             UNIQUE(game_date, transaction_id)
         );
 
-        CREATE INDEX IF NOT EXISTS idx_lc_date ON lineup_changes(game_date);
-        CREATE INDEX IF NOT EXISTS idx_tx_date ON transactions(game_date);
+        CREATE TABLE IF NOT EXISTS parlays (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            game_date    TEXT NOT NULL,
+            parlay_type  TEXT NOT NULL,  -- 'parlay_3' | 'parlay_5' | 'parlay_7'
+            legs_json    TEXT,           -- JSON array of leg dicts
+            hit          INTEGER,        -- 1=HIT, 0=MISS, NULL=pending
+            legs_won     INTEGER,
+            legs_total   INTEGER,
+            recorded_at  TEXT DEFAULT (datetime('now')),
+            UNIQUE(game_date, parlay_type)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_lc_date      ON lineup_changes(game_date);
+        CREATE INDEX IF NOT EXISTS idx_tx_date      ON transactions(game_date);
+        CREATE INDEX IF NOT EXISTS idx_parlays_date ON parlays(game_date);
         """)
 
         # Migrate existing projections table — add lean/star_rating columns if missing
@@ -430,3 +443,64 @@ def get_season_record() -> dict:
             WHERE was_a_play = 1
         """).fetchone()
         return dict(row) if row else {}
+
+
+def write_parlay(game_date: str, parlay_type: str, legs: list[dict]) -> None:
+    """Upsert a parlay record (legs stored as JSON)."""
+    with get_conn() as conn:
+        conn.execute(
+            "INSERT INTO parlays (game_date, parlay_type, legs_json, legs_total) "
+            "VALUES (?, ?, ?, ?) "
+            "ON CONFLICT(game_date, parlay_type) DO UPDATE SET "
+            "legs_json=excluded.legs_json, legs_total=excluded.legs_total",
+            (game_date, parlay_type, json.dumps(legs), len(legs)),
+        )
+
+
+def get_parlays_for_date(game_date: str) -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM parlays WHERE game_date = ? ORDER BY parlay_type",
+            (game_date,),
+        ).fetchall()
+    result = []
+    for r in rows:
+        d = dict(r)
+        try:
+            d["legs"] = json.loads(d["legs_json"] or "[]")
+        except Exception:
+            d["legs"] = []
+        result.append(d)
+    return result
+
+
+def update_parlay_result(game_date: str, parlay_type: str,
+                         hit: int, legs_won: int) -> None:
+    with get_conn() as conn:
+        conn.execute(
+            "UPDATE parlays SET hit=?, legs_won=? "
+            "WHERE game_date=? AND parlay_type=?",
+            (hit, legs_won, game_date, parlay_type),
+        )
+
+
+def get_parlay_season_stats() -> dict:
+    """Return parlay hit/miss stats grouped by type."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT
+                parlay_type,
+                COUNT(*) AS total,
+                SUM(CASE WHEN hit = 1 THEN 1 ELSE 0 END) AS hits,
+                SUM(CASE WHEN hit = 0 THEN 1 ELSE 0 END) AS misses
+            FROM parlays
+            WHERE hit IS NOT NULL
+            GROUP BY parlay_type
+        """).fetchall()
+    out = {}
+    for r in rows:
+        d = dict(r)
+        decided = d["hits"] + d["misses"]
+        hit_pct = round(d["hits"] / decided * 100, 1) if decided else None
+        out[d["parlay_type"]] = {**d, "decided": decided, "hit_pct": hit_pct}
+    return out

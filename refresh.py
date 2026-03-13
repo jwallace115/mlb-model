@@ -204,13 +204,13 @@ def _rebuild_results_json(
         -(b["proj"]["confidence_score"] or 0),
     ))
 
-    parlay_legs = [b for b in plays if b["rating"] in ("⭐⭐⭐", "⭐⭐")]
-    parlay_legs.sort(key=lambda b: (
-        star_order.get(b["rating"], 3),
-        -abs(b["full_edge"].get("edge") or 0),
-        -(b["proj"]["confidence_score"] or 0),
-    ))
-    parlay_legs = parlay_legs[:3]
+    from modules.parlays import build_all_parlays
+    parlays = build_all_parlays(plays)
+
+    # Persist updated parlays to DB
+    for ptype, legs in parlays.items():
+        if legs:
+            db.write_parlay(game_date, ptype, legs)
 
     record = db.get_season_record()
 
@@ -219,7 +219,10 @@ def _rebuild_results_json(
         "game_date":     game_date,
         "plays":         plays,
         "no_plays":      no_plays,
-        "parlay":        parlay_legs if len(parlay_legs) >= 2 else [],
+        "parlay":        parlays["parlay_3"],   # legacy key
+        "parlay_3":      parlays["parlay_3"],
+        "parlay_5":      parlays["parlay_5"],
+        "parlay_7":      parlays["parlay_7"],
         "season_record": {k: _safe(v) for k, v in record.items()} if record else {},
         "alerts":        lineup_change_alerts,
         "transactions":  transaction_alerts,
