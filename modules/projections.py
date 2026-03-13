@@ -92,7 +92,10 @@ def _compute_confidence(factors_dict: dict, proj_total: float,
     else:
         label = "LOW"
 
-    # Require at least 1.5 run deviation from neutral for HIGH confidence
+    # Hard floor: HIGH requires >= 1.5 run deviation from neutral.
+    # This is also the mathematical minimum — with deviation/2.5 scoring,
+    # combined_score can only reach 0.72 at deviation >= ~1.5 anyway.
+    # (Below 1.5, score < 0.60; even perfect alignment gives combined < 0.72.)
     if label == "HIGH" and deviation < 1.5:
         label = "MEDIUM"
 
