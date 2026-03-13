@@ -460,8 +460,10 @@ def _last_run_label(data: dict) -> str:
     if not ts:
         return "never"
     try:
+        from zoneinfo import ZoneInfo
         dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-        return dt.strftime("%b %-d at %-I:%M %p UTC")
+        dt_et = dt.astimezone(ZoneInfo("America/New_York"))
+        return dt_et.strftime("%b %-d at %-I:%M %p ET")
     except Exception:
         return ts
 
