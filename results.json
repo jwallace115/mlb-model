@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-13T10:55:44.555408Z",
+  "generated_at": "2026-03-13T11:00:50.545505Z",
   "game_date": "2026-03-13",
   "plays": [
     {
@@ -444,6 +444,145 @@
     {
       "rating": "\u2b50\u2b50\u2b50",
       "game": {
+        "game_pk": 831565,
+        "game_date": "2026-03-13",
+        "game_time": "01:05 PM EDT",
+        "game_time_et": "01:05 PM ET",
+        "status": "Scheduled",
+        "home_team": "PHI",
+        "away_team": "BAL",
+        "home_team_id": 143,
+        "away_team_id": 110,
+        "home_probable_pitcher": "{'id': 691725, 'name': 'Andrew Painter'}",
+        "away_probable_pitcher": "{'id': 700249, 'name': 'Cade Povich'}",
+        "venue_name": "BayCare Ballpark",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "OVER",
+        "proj_total_full": 10.11,
+        "proj_total_f5": 5.98,
+        "confidence": "HIGH",
+        "confidence_score": 0.8,
+        "factors": {
+          "sp_home_xfip": 4.25,
+          "sp_away_xfip": 5.44,
+          "sp_home_siera": 4.25,
+          "sp_away_siera": 5.44,
+          "home_wrc_plus": 102.8,
+          "away_wrc_plus": 96.7,
+          "park_factor": 1.04,
+          "wind_speed_mph": 0.0,
+          "wind_direction": 0,
+          "wind_desc": "Unknown",
+          "temperature_f": 72.0,
+          "weather_desc": "Data unavailable",
+          "wind_factor": 1.0,
+          "temp_factor": 1.0,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.098,
+          "away_bp_fatigue": 0.053,
+          "home_bp_innings_used": 7.3,
+          "away_bp_innings_used": 4.0
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Cade Povich (BAL, xFIP 5.44) is below-average, leaving PHI's lineup a favorable matchup to score runs. The park (PF 104) tilts hitter-friendly. No line is posted yet, but the high-confidence model signal projects 10.1 runs \u2014 watch for a over opportunity when odds open.",
+      "props": [
+        {
+          "player_name": "Cade Povich",
+          "team": "BAL",
+          "market": "K",
+          "projection": 5.07,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Kyle Schwarber",
+          "team": "PHI",
+          "market": "TB",
+          "projection": 2.34,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Bryce Harper",
+          "team": "PHI",
+          "market": "TB",
+          "projection": 1.97,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Max Kepler",
+          "team": "PHI",
+          "market": "TB",
+          "projection": 1.77,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Tyler O'Neill",
+          "team": "BAL",
+          "market": "TB",
+          "projection": 2.07,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Colton Cowser",
+          "team": "BAL",
+          "market": "TB",
+          "projection": 1.6,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Gary Sanchez",
+          "team": "BAL",
+          "market": "TB",
+          "projection": 1.66,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ]
+    },
+    {
+      "rating": "\u2b50\u2b50\u2b50",
+      "game": {
         "game_pk": 831623,
         "game_date": "2026-03-13",
         "game_time": "01:07 PM EDT",
@@ -722,145 +861,6 @@
           "team": "HOU",
           "market": "TB",
           "projection": 1.57,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        }
-      ]
-    },
-    {
-      "rating": "\u2b50\u2b50",
-      "game": {
-        "game_pk": 831565,
-        "game_date": "2026-03-13",
-        "game_time": "01:05 PM EDT",
-        "game_time_et": "01:05 PM ET",
-        "status": "Scheduled",
-        "home_team": "PHI",
-        "away_team": "BAL",
-        "home_team_id": 143,
-        "away_team_id": 110,
-        "home_probable_pitcher": "{'id': 691725, 'name': 'Andrew Painter'}",
-        "away_probable_pitcher": "{'id': 700249, 'name': 'Cade Povich'}",
-        "venue_name": "BayCare Ballpark",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "OVER",
-        "proj_total_full": 9.83,
-        "proj_total_f5": 5.82,
-        "confidence": "HIGH",
-        "confidence_score": 0.74,
-        "factors": {
-          "sp_home_xfip": 4.25,
-          "sp_away_xfip": 5.44,
-          "sp_home_siera": 4.25,
-          "sp_away_siera": 5.44,
-          "home_wrc_plus": 102.8,
-          "away_wrc_plus": 96.7,
-          "park_factor": 1.04,
-          "wind_speed_mph": 12.9,
-          "wind_direction": 166,
-          "wind_desc": "Blowing Out to CF",
-          "temperature_f": 43.9,
-          "weather_desc": "Clear",
-          "wind_factor": 1.0305,
-          "temp_factor": 0.9438,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.098,
-          "away_bp_fatigue": 0.053,
-          "home_bp_innings_used": 7.3,
-          "away_bp_innings_used": 4.0
-        }
-      },
-      "full_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "Cade Povich (BAL, xFIP 5.44) is below-average, leaving PHI's lineup a favorable matchup to score runs. The park (PF 104) tilts hitter-friendly. It's cold (44\u00b0F) \u2014 but the pitching matchup and the hitter-friendly park outweigh that factor, model still leans over. No line is posted yet, but the high-confidence model signal projects 9.8 runs \u2014 watch for a over opportunity when odds open.",
-      "props": [
-        {
-          "player_name": "Cade Povich",
-          "team": "BAL",
-          "market": "K",
-          "projection": 5.07,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Kyle Schwarber",
-          "team": "PHI",
-          "market": "TB",
-          "projection": 2.34,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Bryce Harper",
-          "team": "PHI",
-          "market": "TB",
-          "projection": 1.97,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Max Kepler",
-          "team": "PHI",
-          "market": "TB",
-          "projection": 1.77,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Tyler O'Neill",
-          "team": "BAL",
-          "market": "TB",
-          "projection": 2.07,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Colton Cowser",
-          "team": "BAL",
-          "market": "TB",
-          "projection": 1.6,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Gary Sanchez",
-          "team": "BAL",
-          "market": "TB",
-          "projection": 1.66,
           "line": null,
           "lean": null,
           "edge": null,
@@ -1172,156 +1172,6 @@
     {
       "rating": "\u2b50\u2b50",
       "game": {
-        "game_pk": 831616,
-        "game_date": "2026-03-13",
-        "game_time": "01:05 PM EDT",
-        "game_time_et": "01:05 PM ET",
-        "status": "Scheduled",
-        "home_team": "BOS",
-        "away_team": "TBR",
-        "home_team_id": 111,
-        "away_team_id": 139,
-        "home_probable_pitcher": "{'id': 670912, 'name': 'Johan Oviedo'}",
-        "away_probable_pitcher": "{'id': 656876, 'name': 'Drew Rasmussen'}",
-        "venue_name": "JetBlue Park",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 8.12,
-        "proj_total_f5": 4.37,
-        "confidence": "HIGH",
-        "confidence_score": 0.661,
-        "factors": {
-          "sp_home_xfip": 4.16,
-          "sp_away_xfip": 3.48,
-          "sp_home_siera": 4.16,
-          "sp_away_siera": 3.48,
-          "home_wrc_plus": 98.6,
-          "away_wrc_plus": 97.5,
-          "park_factor": 1.04,
-          "wind_speed_mph": 11.0,
-          "wind_direction": 178,
-          "wind_desc": "Blowing L to R",
-          "temperature_f": 38.3,
-          "weather_desc": "Overcast",
-          "wind_factor": 1.015,
-          "temp_factor": 0.9326,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.089,
-          "away_bp_fatigue": 0.098,
-          "home_bp_innings_used": 6.7,
-          "away_bp_innings_used": 7.3
-        }
-      },
-      "full_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "Drew Rasmussen (TBR, xFIP 3.48) is above-average \u2014 a strong under anchor keeping BOS's bats in check. 38\u00b0F temperatures further suppress scoring. The park tilts hitter-friendly (PF 104) \u2014 but quality pitching and cold temperatures outweigh that factor, model still leans under. No line is posted yet, but the high-confidence model signal projects 8.1 runs \u2014 watch for a under opportunity when odds open.",
-      "props": [
-        {
-          "player_name": "Drew Rasmussen",
-          "team": "TBR",
-          "market": "K",
-          "projection": 3.54,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Johan Oviedo",
-          "team": "PIT",
-          "market": "K",
-          "projection": 5.5,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Roman Anthony",
-          "team": "BOS",
-          "market": "TB",
-          "projection": 1.87,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Romy Gonzalez",
-          "team": "BOS",
-          "market": "TB",
-          "projection": 1.86,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Rob Refsnyder",
-          "team": "BOS",
-          "market": "TB",
-          "projection": 1.77,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Junior Caminero",
-          "team": "TBR",
-          "market": "TB",
-          "projection": 2.09,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Jonathan Aranda",
-          "team": "TBR",
-          "market": "TB",
-          "projection": 2.15,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Christopher Morel",
-          "team": "TBR",
-          "market": "TB",
-          "projection": 1.75,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        }
-      ]
-    },
-    {
-      "rating": "\u2b50\u2b50",
-      "game": {
         "game_pk": 831778,
         "game_date": "2026-03-13",
         "game_time": "01:05 PM MST",
@@ -1600,6 +1450,156 @@
           "team": "NYM",
           "market": "TB",
           "projection": 1.78,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ]
+    },
+    {
+      "rating": "\u2b50",
+      "game": {
+        "game_pk": 831616,
+        "game_date": "2026-03-13",
+        "game_time": "01:05 PM EDT",
+        "game_time_et": "01:05 PM ET",
+        "status": "Scheduled",
+        "home_team": "BOS",
+        "away_team": "TBR",
+        "home_team_id": 111,
+        "away_team_id": 139,
+        "home_probable_pitcher": "{'id': 670912, 'name': 'Johan Oviedo'}",
+        "away_probable_pitcher": "{'id': 656876, 'name': 'Drew Rasmussen'}",
+        "venue_name": "JetBlue Park",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.58,
+        "proj_total_f5": 4.62,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.493,
+        "factors": {
+          "sp_home_xfip": 4.16,
+          "sp_away_xfip": 3.48,
+          "sp_home_siera": 4.16,
+          "sp_away_siera": 3.48,
+          "home_wrc_plus": 98.6,
+          "away_wrc_plus": 97.5,
+          "park_factor": 1.04,
+          "wind_speed_mph": 0.0,
+          "wind_direction": 0,
+          "wind_desc": "Unknown",
+          "temperature_f": 72.0,
+          "weather_desc": "Data unavailable",
+          "wind_factor": 1.0,
+          "temp_factor": 1.0,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.089,
+          "away_bp_fatigue": 0.098,
+          "home_bp_innings_used": 6.7,
+          "away_bp_innings_used": 7.3
+        }
+      },
+      "full_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Drew Rasmussen (TBR, xFIP 3.48) is above-average \u2014 a strong under anchor keeping BOS's bats in check. The park tilts hitter-friendly (PF 104) \u2014 but quality pitching outweigh that factor, model still leans under. No line is posted yet, but the medium-confidence model signal projects 8.6 runs \u2014 watch for a under opportunity when odds open.",
+      "props": [
+        {
+          "player_name": "Drew Rasmussen",
+          "team": "TBR",
+          "market": "K",
+          "projection": 3.54,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Johan Oviedo",
+          "team": "PIT",
+          "market": "K",
+          "projection": 5.5,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Roman Anthony",
+          "team": "BOS",
+          "market": "TB",
+          "projection": 1.87,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Romy Gonzalez",
+          "team": "BOS",
+          "market": "TB",
+          "projection": 1.86,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Rob Refsnyder",
+          "team": "BOS",
+          "market": "TB",
+          "projection": 1.77,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Junior Caminero",
+          "team": "TBR",
+          "market": "TB",
+          "projection": 2.09,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Jonathan Aranda",
+          "team": "TBR",
+          "market": "TB",
+          "projection": 2.15,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Christopher Morel",
+          "team": "TBR",
+          "market": "TB",
+          "projection": 1.75,
           "line": null,
           "lean": null,
           "edge": null,
@@ -2590,6 +2590,19 @@
       "confidence_score": 0.812
     },
     {
+      "game_pk": 831565,
+      "player_name": null,
+      "matchup": "BAL @ PHI",
+      "market": "full",
+      "market_label": "OVER 10.1",
+      "rating": "\u2b50\u2b50\u2b50",
+      "projection": 10.11,
+      "line": null,
+      "lean": "OVER",
+      "edge": null,
+      "confidence_score": 0.8
+    },
+    {
       "game_pk": 831623,
       "player_name": null,
       "matchup": "MIN @ TOR",
@@ -2601,19 +2614,6 @@
       "lean": "OVER",
       "edge": null,
       "confidence_score": 0.8
-    },
-    {
-      "game_pk": 831567,
-      "player_name": null,
-      "matchup": "HOU @ STL",
-      "market": "full",
-      "market_label": "UNDER 8.2",
-      "rating": "\u2b50\u2b50",
-      "projection": 8.2,
-      "line": null,
-      "lean": "UNDER",
-      "edge": null,
-      "confidence_score": 0.745
     }
   ],
   "parlay_7": [
@@ -2657,6 +2657,19 @@
       "confidence_score": 0.812
     },
     {
+      "game_pk": 831565,
+      "player_name": null,
+      "matchup": "BAL @ PHI",
+      "market": "full",
+      "market_label": "OVER 10.1",
+      "rating": "\u2b50\u2b50\u2b50",
+      "projection": 10.11,
+      "line": null,
+      "lean": "OVER",
+      "edge": null,
+      "confidence_score": 0.8
+    },
+    {
       "game_pk": 831623,
       "player_name": null,
       "matchup": "MIN @ TOR",
@@ -2681,19 +2694,6 @@
       "lean": "UNDER",
       "edge": null,
       "confidence_score": 0.745
-    },
-    {
-      "game_pk": 831565,
-      "player_name": null,
-      "matchup": "BAL @ PHI",
-      "market": "full",
-      "market_label": "OVER 9.8",
-      "rating": "\u2b50\u2b50",
-      "projection": 9.83,
-      "line": null,
-      "lean": "OVER",
-      "edge": null,
-      "confidence_score": 0.74
     },
     {
       "game_pk": 831731,
