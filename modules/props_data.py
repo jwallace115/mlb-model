@@ -24,6 +24,7 @@ LEAGUE_AVG_K_RATE  = 0.224   # team K rate (batters striking out)
 LEAGUE_AVG_SWSTR   = 0.112   # pitcher swing-and-miss rate
 LEAGUE_AVG_GB_PCT  = 0.440   # pitcher ground ball rate
 LEAGUE_AVG_K9      = 8.9     # pitcher K/9 league average
+LEAGUE_AVG_XSLG    = 0.380   # batter xSLG league average
 
 # FanGraphs team abbreviation normalisation (pybaseball uses same FG abbrevs)
 _FG_TEAM_MAP = {
@@ -260,9 +261,13 @@ def get_team_top_batters(team_abb: str, batter_db: dict, n: int = 3) -> list[dic
     ]
 
     def _score(b: dict) -> float:
-        xslg   = b.get("xslg") or b.get("slg") or 0
-        barrel = (b.get("barrel_pct") or 0) * 3
-        hard   = (b.get("hard_pct") or 0) * 0.5
+        # Regress all metrics toward league avg for small samples
+        # so backup catchers with 50 PA and lucky xSLG don't outscore regulars
+        pa          = b.get("pa") or 0
+        reliability = min(pa / 400.0, 1.0)
+        xslg   = reliability * (b.get("xslg") or b.get("slg") or 0) + (1 - reliability) * LEAGUE_AVG_XSLG
+        barrel = reliability * (b.get("barrel_pct") or 0) * 3
+        hard   = reliability * (b.get("hard_pct") or 0) * 0.5
         return xslg + barrel + hard
 
     batters.sort(key=_score, reverse=True)

@@ -28,6 +28,7 @@ from modules.props_data import (
     LEAGUE_AVG_GB_PCT,
     LEAGUE_AVG_K_RATE,
     LEAGUE_AVG_SWSTR,
+    LEAGUE_AVG_XSLG,
     get_pitcher_k_profile,
     get_team_k_rate,
     get_team_top_batters,
@@ -105,7 +106,19 @@ def project_batter_tb(
     expected_ab: float = DEFAULT_AB,
 ) -> float:
     """Return projected total bases for a single batter."""
-    xslg = batter.get("xslg") or batter.get("slg") or 0.400
+    pa          = batter.get("pa") or 0
+    # Regression to the mean: small samples (< 400 PA) inflate xSLG dramatically.
+    # A backup with 60 PA of lucky xSLG=0.63 should not project like Juan Soto.
+    reliability = min(pa / 400.0, 1.0)
+    raw_xslg    = batter.get("xslg") or batter.get("slg") or LEAGUE_AVG_XSLG
+    xslg        = reliability * raw_xslg + (1.0 - reliability) * LEAGUE_AVG_XSLG
+
+    # Scale expected AB by PA as a proxy for lineup position.
+    # Regular starters accumulate 400+ PA and bat high in the order (more ABs);
+    # backups and part-timers bat lower and get fewer plate appearances per game.
+    # Range: 2.8 AB (spot starts / < 50 PA) to 4.2 AB (full-time regular 400+ PA).
+    if expected_ab == DEFAULT_AB:
+        expected_ab = 2.8 + reliability * 1.4
 
     # High GB pitcher → more grounders → fewer XBH
     gb_pct  = pitcher_gb_pct if pitcher_gb_pct is not None else LEAGUE_AVG_GB_PCT
