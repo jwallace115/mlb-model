@@ -270,15 +270,23 @@ def main():
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_results] Wrote {results_path}")
 
-    # Step 6: push both files
+    # Step 6: push MLB files
     if not args.no_push:
-        print("[push_results] Pushing to GitHub ...")
+        print("[push_results] Pushing MLB files to GitHub ...")
         ok = git_push(repo_dir, game_date, ["results.json", "season_stats.json"])
         if not ok:
             print("[push_results] Push failed — check git output above.", file=sys.stderr)
             sys.exit(1)
     else:
         print("[push_results] --no-push: skipping git push.")
+
+    # Step 7: push NBA card (non-fatal if NBA hasn't run yet)
+    print("[push_results] Publishing NBA card ...")
+    try:
+        from push_nba import push_nba
+        push_nba(game_date=game_date, push=not args.no_push)
+    except Exception as e:
+        print(f"[push_results] NBA push failed (non-fatal): {e}", file=sys.stderr)
 
     plays_n  = len(payload["plays"])
     noplay_n = len(payload["no_plays"])
