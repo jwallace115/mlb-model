@@ -175,19 +175,23 @@ def git_push(game_date: str) -> bool:
     return True
 
 
-def push_nba(game_date: str = None, push: bool = True) -> None:
+def write_nba_json(game_date: str = None) -> str:
+    """Write nba_results.json and return the path. Does NOT git push."""
     game_date = game_date or date.today().isoformat()
-
     games    = load_today_projections(game_date)
     accuracy = build_season_accuracy()
     payload  = serialize(game_date, games, accuracy)
-
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_nba] Wrote {OUT_PATH} ({len(games)} games)")
+    return OUT_PATH
 
+
+def push_nba(game_date: str = None, push: bool = True) -> None:
+    """Write nba_results.json and optionally git push it standalone."""
+    write_nba_json(game_date)
     if push:
-        git_push(game_date)
+        git_push(game_date or date.today().isoformat())
 
 
 def main():

@@ -270,23 +270,24 @@ def main():
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_results] Wrote {results_path}")
 
-    # Step 6: push MLB files
+    # Step 6: write NBA JSON (no push yet — batched with MLB below)
+    dashboard_files = ["results.json", "season_stats.json"]
+    try:
+        from push_nba import write_nba_json
+        write_nba_json(game_date)
+        dashboard_files.append("nba_results.json")
+    except Exception as e:
+        print(f"[push_results] NBA JSON write failed (non-fatal): {e}", file=sys.stderr)
+
+    # Step 7: single combined push for all dashboard artifacts
     if not args.no_push:
-        print("[push_results] Pushing MLB files to GitHub ...")
-        ok = git_push(repo_dir, game_date, ["results.json", "season_stats.json"])
+        print(f"[push_results] Pushing {', '.join(dashboard_files)} to GitHub ...")
+        ok = git_push(repo_dir, game_date, dashboard_files)
         if not ok:
             print("[push_results] Push failed — check git output above.", file=sys.stderr)
             sys.exit(1)
     else:
         print("[push_results] --no-push: skipping git push.")
-
-    # Step 7: push NBA card (non-fatal if NBA hasn't run yet)
-    print("[push_results] Publishing NBA card ...")
-    try:
-        from push_nba import push_nba
-        push_nba(game_date=game_date, push=not args.no_push)
-    except Exception as e:
-        print(f"[push_results] NBA push failed (non-fatal): {e}", file=sys.stderr)
 
     plays_n  = len(payload["plays"])
     noplay_n = len(payload["no_plays"])
