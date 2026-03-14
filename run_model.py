@@ -231,12 +231,21 @@ def _no_play_reason(f: dict, proj: dict, odds: dict) -> str:
 # ── natural-language summary ──────────────────────────────────────────────────
 
 def _sp_label(xfip: float) -> str:
-    if xfip <= 3.00: return "elite"
-    if xfip <= 3.50: return "above-average"
-    if xfip <= 4.10: return "solid"
-    if xfip <= 4.60: return "league-average"
-    if xfip <= 5.50: return "below-average"
-    return "a significant liability"
+    """Conversational label with context phrasing."""
+    if xfip <= 3.20: return "elite"
+    if xfip <= 3.70: return "above average"
+    if xfip <= 4.20: return "solid, mid-rotation"
+    if xfip <= 4.70: return "slightly above average"
+    if xfip <= 5.30: return "below average"
+    return "hittable"
+
+
+def _wrc_context(wrc: float) -> str:
+    if wrc >= 115: return "well above average"
+    if wrc >= 108: return "above average"
+    if wrc >= 95:  return "near league average"
+    if wrc >= 85:  return "below average"
+    return "well below average"
 
 
 def generate_summary(game: dict, proj: dict, odds: dict, rating: str) -> str:
@@ -256,9 +265,7 @@ def generate_summary(game: dict, proj: dict, odds: dict, rating: str) -> str:
     pf       = round(pf_raw * 100)
     wind_mph = f.get("wind_speed_mph") or 0.0
     wind_desc= f.get("wind_desc") or ""
-    wind_fac = f.get("wind_factor") or 1.0
     temp_f   = f.get("temperature_f") or 72.0
-    temp_fac = f.get("temp_factor") or 1.0
     ump      = f.get("umpire_name") or "Unknown"
     ump_fac  = f.get("umpire_runs_factor") or 1.0
     bp_h     = f.get("home_bp_fatigue") or 0.0
@@ -282,195 +289,150 @@ def generate_summary(game: dict, proj: dict, odds: dict, rating: str) -> str:
 
         if reason == "weather_uncertainty":
             return (
-                f"{weather} is in the forecast for this game, introducing uncertainty "
-                f"that makes projecting run totals unreliable. "
-                f"Even with a model lean of {proj_full:.1f}, weather-affected games "
-                f"carry too much variance to play."
+                f"{weather} in the forecast makes run totals unreliable here — "
+                f"weather games carry too much variance to project confidently. "
+                f"Skip this one."
             )
 
         if reason == "edge_too_thin":
             return (
-                f"The model projects {proj_full:.1f} runs against the market's "
-                f"{line:.1f} — a gap of only {edge_val:+.1f} runs, short of the "
-                f"{EDGE_MIN_RUNS:.1f}-run minimum edge required. "
-                f"The lean is there but the value is not."
+                f"Model has {proj_full:.1f} runs, market has {line:.1f} — "
+                f"only {abs(edge_val):.1f} runs of separation, below the "
+                f"{EDGE_MIN_RUNS:.1f}-run threshold. The {lean.lower()} lean "
+                f"is there but the margin isn't wide enough to play."
             )
 
         if reason == "dome_neutral":
-            sp_desc = (f"neither starter separates from average "
-                       f"({asp_name} {sp_a:.2f} / {hsp_name} {sp_h:.2f} xFIP)")
             return (
-                f"The retractable roof eliminates weather entirely, and {sp_desc}. "
-                f"With both lineups within 5%% of league-average offense "
-                f"({away} {wrc_a:.0f} / {home} {wrc_h:.0f} wRC+), "
-                f"there are no exploitable factors in this environment."
+                f"Both starters are mid-range ({asp_name} {sp_a:.2f} / "
+                f"{hsp_name} {sp_h:.2f} xFIP), both lineups are near league "
+                f"average ({away} {wrc_a:.0f} / {home} {wrc_h:.0f} wRC+), "
+                f"and the roof is closed. Nothing to exploit here — pass."
             )
 
         if reason == "mixed_signals":
-            # Identify the two opposing forces
-            over_factors  = [(k, v) for k, v in devs.items() if v > 0.03 and k not in ("sp_home","sp_away","off_home","off_away","off_avg")]
-            under_factors = [(k, v) for k, v in devs.items() if v < -0.03 and k not in ("sp_home","sp_away","off_home","off_away","off_avg")]
-
-            def _fname(k):
-                return {"sp_avg":"the pitching matchup","park":"the park factor",
-                        "wind":"wind","temp":"temperature","ump":"the umpire",
-                        "bp":"bullpen fatigue","offense":"the offenses"}.get(k, k)
-
-            over_str  = _fname(over_factors[0][0])  if over_factors  else "some over factors"
-            under_str = _fname(under_factors[0][0]) if under_factors else "some under factors"
-
+            over_factors  = [(k, v) for k, v in devs.items()
+                             if v > 0.03 and k not in ("sp_home","sp_away","off_home","off_away","off_avg")]
+            under_factors = [(k, v) for k, v in devs.items()
+                             if v < -0.03 and k not in ("sp_home","sp_away","off_home","off_away","off_avg")]
+            def _fname_num(k):
+                return {"wind": f"wind ({wind_mph:.0f}mph {wind_desc.lower().replace('blowing ','')})",
+                        "temp": f"temperature ({temp_f:.0f}°F)",
+                        "park": f"the park (PF {pf})",
+                        "ump":  f"{ump} behind the plate",
+                        "bp":   "bullpen fatigue"}.get(k, k)
+            over_str  = _fname_num(over_factors[0][0])  if over_factors  else "some over factors"
+            under_str = _fname_num(under_factors[0][0]) if under_factors else "some under factors"
             return (
-                f"This game sends conflicting signals: {over_str} pushes toward the over "
-                f"while {under_str} counters with an under lean. "
-                f"The net projection of {proj_full:.1f} runs sits close to neutral, "
-                f"and without a clear dominant factor we pass."
+                f"{_cap1(over_str)} pushes toward the over while {under_str} "
+                f"counters in the other direction — the model nets out at "
+                f"{proj_full:.1f} runs with no clear dominant force. Pass."
             )
 
         if reason == "factors_canceling":
-            sp_line = (f"The pitching is near league average on both sides "
-                       f"({asp_name} {sp_a:.2f} / {hsp_name} {sp_h:.2f} xFIP), "
-                       if abs(devs["sp_avg"]) < 0.10 else
-                       f"The pitching differential ({asp_name} {sp_a:.2f} vs "
-                       f"{hsp_name} {sp_h:.2f} xFIP) is partially offset by other factors, ")
-            off_line = (f"and the offenses are similarly matched "
-                        f"({away} {wrc_a:.0f} / {home} {wrc_h:.0f} wRC+)."
-                        if abs(devs["off_avg"]) < 0.05 else
-                        f"and the offenses add little differentiation.")
             return (
-                f"{sp_line}{off_line} "
-                f"The model's projection of {proj_full:.1f} runs lands too close "
-                f"to the 9.0 neutral baseline to identify a clear edge."
+                f"Starters are well-matched ({asp_name} {sp_a:.2f} / "
+                f"{hsp_name} {sp_h:.2f} xFIP) and lineups are similarly average "
+                f"({away} {wrc_a:.0f} / {home} {wrc_h:.0f} wRC+). "
+                f"Model projects {proj_full:.1f} runs but there's no exploitable "
+                f"edge — pass."
             )
 
         # low_conviction fallback
         return (
-            f"The model sees a {lean.lower()} lean at {proj_full:.1f} runs but "
-            f"confidence is insufficient (score {score:.2f}) to act without a "
-            f"market line to confirm value. "
-            f"Revisit after lines post closer to first pitch."
+            f"Model leans {lean.lower()} at {proj_full:.1f} runs but confidence "
+            f"is low without a market line to validate the value. "
+            f"Revisit when odds post."
         )
 
     # ── PLAY summaries ────────────────────────────────────────────────────────
     sentences = []
-
-    # Sentence 1 — strongest factor
     top_factor = ranked[0][0]
 
+    # Sentence 1 — lead with the single strongest factor + real numbers
     if top_factor == "sp":
-        if abs(devs["sp_home"]) > abs(devs["sp_away"]):
-            dominant_name  = hsp_name
-            dominant_xfip  = sp_h
-            dominant_team  = home
-            other_name     = asp_name
-            other_xfip     = sp_a
-            other_team     = away
-            dominant_label = _sp_label(sp_h)
-            other_label    = _sp_label(sp_a)
-            if sp_h > LA:
-                # Bad home starter → AWAY scores → over push
-                s = (f"{dominant_name} ({dominant_team}, xFIP {dominant_xfip:.2f}) "
-                     f"is {dominant_label} on the mound, creating a clear "
-                     f"vulnerability for {away}'s offense to exploit.")
-            else:
-                # Good home starter → fewer runs
-                s = (f"{dominant_name} ({dominant_team}, xFIP {dominant_xfip:.2f}) "
-                     f"is {dominant_label} — the dominant pitching factor "
-                     f"suppressing {away}'s run-scoring potential.")
+        if abs(devs["sp_home"]) >= abs(devs["sp_away"]):
+            dom_name, dom_xfip = hsp_name, sp_h
+            opp_wrc, opp_team  = wrc_a, away
         else:
-            dominant_name  = asp_name
-            dominant_xfip  = sp_a
-            dominant_team  = away
-            dominant_label = _sp_label(sp_a)
-            if sp_a > LA:
-                s = (f"{dominant_name} ({dominant_team}, xFIP {dominant_xfip:.2f}) "
-                     f"is {dominant_label}, leaving {home}'s lineup a "
-                     f"favorable matchup to score runs.")
-            else:
-                s = (f"{dominant_name} ({dominant_team}, xFIP {dominant_xfip:.2f}) "
-                     f"is {dominant_label} — a strong under anchor keeping "
-                     f"{home}'s bats in check.")
+            dom_name, dom_xfip = asp_name, sp_a
+            opp_wrc, opp_team  = wrc_h, home
+        label     = _sp_label(dom_xfip)
+        opp_ctx   = _wrc_context(opp_wrc)
+        if dom_xfip > LA:
+            s = (f"{dom_name} is at a {dom_xfip:.2f} xFIP this season — {label} — "
+                 f"and {opp_team}'s lineup is {opp_ctx} at {opp_wrc:.0f} wRC+. "
+                 f"That's a favorable matchup for the offense.")
+        else:
+            s = (f"{dom_name} is at {dom_xfip:.2f} xFIP — {label} — "
+                 f"going up against a {opp_ctx} {opp_team} lineup ({opp_wrc:.0f} wRC+). "
+                 f"Tough spot for {opp_team}'s bats.")
         sentences.append(s)
 
     elif top_factor == "wind":
         wd = wind_desc.lower().replace("blowing ", "")
         if devs["wind"] > 0:
-            s = (f"Wind is the dominant factor today: {wind_mph:.0f}mph blowing "
-                 f"{wd} at first pitch will carry fly balls and meaningfully "
-                 f"inflate run totals.")
+            s = (f"Wind is blowing {wd} at {wind_mph:.0f}mph — "
+                 f"that's the biggest factor today, and fly balls are going to carry.")
         else:
-            s = (f"A stiff {wind_mph:.0f}mph wind blowing {wd} is the biggest "
-                 f"factor here, knocking down fly balls and suppressing "
-                 f"extra-base production throughout the game.")
+            s = (f"Wind is blowing {wd} at {wind_mph:.0f}mph — "
+                 f"a stiff headwind that will knock fly balls down and help pitchers.")
         sentences.append(s)
 
     elif top_factor == "temp":
         if devs["temp"] < 0:
-            s = (f"Cold conditions at first pitch ({temp_f:.0f}°F) are the "
-                 f"primary drag on scoring — the ball dies in cold air and "
-                 f"pitchers typically maintain grip and command better.")
+            s = (f"It's {temp_f:.0f}°F at first pitch — cold air kills the ball "
+                 f"and generally helps pitchers maintain grip and command. "
+                 f"Suppressed run environment.")
         else:
-            s = (f"Scorching {temp_f:.0f}°F temperatures will juice the ball "
-                 f"and sap pitchers' stuff, creating a run-friendly environment "
-                 f"that supports the over.")
+            s = (f"Scorching {temp_f:.0f}°F temperatures juice fly balls and "
+                 f"sap pitchers' stuff early. Run-friendly conditions.")
         sentences.append(s)
 
     elif top_factor == "park":
-        stadium = game.get("venue_name") or f"{home} stadium"
+        stadium = game.get("venue_name") or f"{home} park"
         if pf >= 115:
-            s = (f"Coors Field (PF {pf}) overwhelms most other factors — "
-                 f"the altitude inflates run scoring regardless of pitching "
-                 f"quality, and that remains the defining feature here.")
+            s = (f"Coors Field (PF {pf}) is in a category of its own — "
+                 f"the altitude inflates scoring regardless of pitching quality.")
         elif devs["park"] > 0:
-            s = (f"{stadium} is a legitimate hitter's park (PF {pf}), "
-                 f"adding run-scoring value that compounds the other "
-                 f"over-leaning factors in this game.")
+            s = (f"{stadium} plays at PF {pf} — a genuine hitter's environment "
+                 f"that adds run-scoring value on top of everything else.")
         else:
-            s = (f"{stadium}'s pitcher-friendly dimensions (PF {pf}) are the "
-                 f"strongest under factor, suppressing run totals beyond what "
-                 f"the pitching matchup alone would suggest.")
+            s = (f"{stadium} plays at PF {pf} — pitcher-friendly dimensions "
+                 f"that suppress run totals beyond what the pitching matchup alone would suggest.")
         sentences.append(s)
 
     elif top_factor == "offense":
         if devs["off_avg"] > 0:
-            better = (away, wrc_a) if wrc_a > wrc_h else (home, wrc_h)
-            s = (f"{better[0]}'s lineup grades above average "
-                 f"(wRC+ {better[1]:.0f}) and is the strongest offensive "
-                 f"factor pushing this total higher.")
+            s = (f"{away} ({wrc_a:.0f} wRC+) and {home} ({wrc_h:.0f} wRC+) — "
+                 f"both lineups grade as above-average run producers.")
         else:
-            weaker = (away, wrc_a) if wrc_a < wrc_h else (home, wrc_h)
-            s = (f"Both lineups grade below league average in run production "
-                 f"— {away} ({wrc_a:.0f}) and {home} ({wrc_h:.0f}) wRC+ "
-                 f"— making quality at-bats scarce.")
+            s = (f"Both lineups grade below average — {away} at {wrc_a:.0f} wRC+ "
+                 f"and {home} at {wrc_h:.0f}. Weak bats on both sides suppress the total.")
         sentences.append(s)
 
     elif top_factor == "bp":
-        if bp_h > bp_a:
-            s = (f"{home}'s bullpen is the key vulnerability here — "
-                 f"{bp_h_inn:.1f} relief innings over the past two days "
-                 f"means degraded late-inning options and a greater risk of "
-                 f"runs in the middle and back of the order.")
+        if bp_h_inn >= bp_a_inn:
+            s = (f"{home}'s bullpen logged {bp_h_inn:.1f} innings the last two days — "
+                 f"taxed pen, and thin late-inning coverage is where runs get scored.")
         else:
-            s = (f"{away}'s bullpen has been heavily taxed recently "
-                 f"({bp_a_inn:.1f} relief innings in 2 days), creating a "
-                 f"meaningful late-inning liability that supports the over.")
+            s = (f"{away}'s bullpen has {bp_a_inn:.1f} innings of heavy work "
+                 f"in the last two days — degraded options when it counts.")
         sentences.append(s)
 
     else:  # umpire or catch-all
-        if ump_fac > 1.01:
-            s = (f"{ump} behind the plate tends to generate above-average "
-                 f"run environments — a wider zone means more walks and "
-                 f"more baserunners.")
+        if ump_fac > 1.02:
+            s = (f"{ump} behind the plate historically runs a wide zone — "
+                 f"more walks, more baserunners, and an above-average run environment.")
         else:
-            s = (f"The pitching matchup ({asp_name} {sp_a:.2f} / "
-                 f"{hsp_name} {sp_h:.2f} xFIP) drives the projection to "
-                 f"{proj_full:.1f} runs.")
+            s = (f"{asp_name} ({sp_a:.2f} xFIP) vs {hsp_name} ({sp_h:.2f} xFIP) "
+                 f"is the primary driver of the {proj_full:.1f}-run projection.")
         sentences.append(s)
 
-    # Sentence 2 — supporting factors, split into aligned vs counter-lean
-    # Only wind/temp/park/offense are eligible for counter treatment (clear unambiguous direction)
+    # Sentence 2 — supporting factor(s) with real numbers
     _COUNTER_ELIGIBLE = {"wind", "temp", "park", "offense"}
-    aligned_list = []   # (factor_name, phrase) supporting the lean
-    counter_list = []   # (factor_name, phrase) opposing the lean
+    aligned_list = []
+    counter_list = []
 
     for factor_name, magnitude in ranked[1:]:
         if magnitude < 0.015:
@@ -478,93 +440,76 @@ def generate_summary(game: dict, proj: dict, odds: dict, rating: str) -> str:
         phrase = None
 
         if factor_name == "sp" and top_factor != "sp":
-            mismatch = abs(devs["sp_home"] - devs["sp_away"]) > 0.10
-            if mismatch:
+            if abs(devs["sp_home"] - devs["sp_away"]) > 0.10:
                 if devs["sp_home"] > devs["sp_away"]:
-                    phrase = (f"{hsp_name} (xFIP {sp_h:.2f}) is the weaker of the two "
-                              f"starters, favouring {away}'s bats")
+                    phrase = (f"{hsp_name} ({sp_h:.2f} xFIP) is the more hittable "
+                              f"of the two starters")
                 else:
-                    phrase = (f"{asp_name} (xFIP {sp_a:.2f}) is the more vulnerable arm, "
-                              f"giving {home} the pitching advantage")
+                    phrase = (f"{asp_name} ({sp_a:.2f} xFIP) is the weaker arm")
             else:
-                phrase = (f"starters are similarly matched ({asp_name} {sp_a:.2f} / "
-                          f"{hsp_name} {sp_h:.2f} xFIP)")
+                phrase = (f"starters are evenly matched "
+                          f"({asp_name} {sp_a:.2f} / {hsp_name} {sp_h:.2f} xFIP)")
 
         elif factor_name == "wind" and top_factor != "wind" and wind_mph >= 8:
             wd = wind_desc.replace("Blowing ", "").replace("blowing ", "")
-            if devs["wind"] > 0:
-                phrase = f"{wind_mph:.0f}mph winds blowing {wd} add an over boost"
-            else:
-                phrase = f"{wind_mph:.0f}mph winds blowing {wd} provide a modest under tilt"
+            phrase = (f"{wind_mph:.0f}mph wind blowing {wd} adds an over tilt"
+                      if devs["wind"] > 0 else
+                      f"{wind_mph:.0f}mph wind blowing {wd} tilts under")
 
         elif factor_name == "temp" and top_factor != "temp" and abs(temp_f - 72) > 10:
-            if devs["temp"] < 0:
-                phrase = f"{temp_f:.0f}°F temperatures further suppress scoring"
-            else:
-                phrase = f"{temp_f:.0f}°F heat compounds the over lean"
+            phrase = (f"{temp_f:.0f}°F further suppresses scoring"
+                      if devs["temp"] < 0 else
+                      f"{temp_f:.0f}°F heat adds to the over lean")
 
         elif factor_name == "park" and top_factor != "park" and abs(devs["park"]) > 0.02:
-            if devs["park"] > 0:
-                phrase = f"the park (PF {pf}) tilts hitter-friendly"
-            else:
-                phrase = f"the park (PF {pf}) provides an under tilt"
+            phrase = (f"the park (PF {pf}) is hitter-friendly"
+                      if devs["park"] > 0 else
+                      f"the park (PF {pf}) gives pitchers an extra edge")
 
         elif factor_name == "offense" and top_factor != "offense" and abs(devs["off_avg"]) > 0.03:
-            better = max((wrc_h, home), (wrc_a, away))
-            if devs["off_avg"] > 0:
-                phrase = f"{better[1]}'s lineup (wRC+ {better[0]:.0f}) adds offensive upside"
-            else:
-                phrase = f"both lineups grade below average in run production"
+            phrase = (f"{away} ({wrc_a:.0f}) and {home} ({wrc_h:.0f} wRC+) both grade above average"
+                      if devs["off_avg"] > 0 else
+                      f"both lineups grade below average "
+                      f"({away} {wrc_a:.0f} / {home} {wrc_h:.0f} wRC+)")
 
-        elif factor_name == "bp" and top_factor != "bp":
-            if devs["bp"] > 0.015:
-                heavier_team = home if bp_h > bp_a else away
-                heavier_inn  = bp_h_inn if bp_h > bp_a else bp_a_inn
-                phrase = (f"{heavier_team}'s bullpen has logged {heavier_inn:.0f} relief "
-                          f"innings over two days")
+        elif factor_name == "bp" and top_factor != "bp" and devs["bp"] > 0.015:
+            heavier_team = home if bp_h_inn >= bp_a_inn else away
+            heavier_inn  = bp_h_inn if bp_h_inn >= bp_a_inn else bp_a_inn
+            phrase = f"{heavier_team}'s pen is taxed ({heavier_inn:.0f} innings last 2 days)"
 
         if phrase:
             is_ctr = _is_counter(factor_name, devs, lean) and factor_name in _COUNTER_ELIGIBLE
-            if is_ctr:
-                counter_list.append((factor_name, phrase))
-            else:
-                aligned_list.append((factor_name, phrase))
+            (counter_list if is_ctr else aligned_list).append((factor_name, phrase))
 
         if len(aligned_list) + len(counter_list) >= 2:
             break
 
-    if aligned_list:
-        ap = [p for _, p in aligned_list]
-        if len(ap) == 1:
-            sentences.append(f"{_cap1(ap[0])}.")
-        else:
-            sentences.append(f"{_cap1(ap[0])}, and {ap[1]}.")
-
-    if counter_list:
-        ctr_name, _ = counter_list[0]
-        intro = _counter_intro(ctr_name, devs, wind_mph, wind_desc, temp_f, pf)
-        what_wins = [_factor_short_desc(top_factor, devs, sp_h, sp_a, temp_f, pf)]
-        if aligned_list:
-            what_wins.append(_factor_short_desc(aligned_list[0][0], devs, sp_h, sp_a, temp_f, pf))
-        outweigh_str = " and ".join(what_wins)
+    if aligned_list and counter_list:
+        sentences.append(f"{_cap1(aligned_list[0][1])}.")
         sentences.append(
-            f"{intro} — but {outweigh_str} outweigh that factor, "
-            f"model still leans {lean.lower()}."
+            f"{_cap1(counter_list[0][1])} pulls the other way, "
+            f"but not enough to flip the lean."
+        )
+    elif aligned_list:
+        ap = [p for _, p in aligned_list]
+        sentences.append(f"{_cap1(ap[0])}" + (f", and {ap[1]}." if len(ap) > 1 else "."))
+    elif counter_list:
+        sentences.append(
+            f"{_cap1(counter_list[0][1])} pushes back, "
+            f"but the {top_factor} signal dominates."
         )
 
-    # Sentence 3 — closing with recommendation / line
+    # Sentence 3 — closing with explicit numbers and lean
     if line is not None:
         sign = "+" if edge_val > 0 else ""
         sentences.append(
-            f"Our {proj_full:.1f}-run projection sits {sign}{edge_val:.1f} against "
-            f"the market's {line:.1f} — a {lean.lower()} play."
+            f"Model has {proj_full:.1f}, market is at {line:.1f} — "
+            f"{lean.lower()} by {sign}{edge_val:.1f} runs."
         )
     else:
-        lean_lc = lean.lower()
         sentences.append(
-            f"No line is posted yet, but the {proj['confidence'].lower()}-confidence "
-            f"model signal projects {proj_full:.1f} runs — watch for a {lean_lc} "
-            f"opportunity when odds open."
+            f"No line yet — model is at {proj_full:.1f} runs. "
+            f"Watch for a {lean.lower()} when odds open."
         )
 
     return " ".join(sentences)

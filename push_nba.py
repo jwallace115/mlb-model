@@ -152,44 +152,87 @@ _NBA_DRTG_WEAK  = 114.0   # above → weak defense
 _NBA_3PA_HEAVY  = 0.39    # above → heavy 3-point volume
 
 
-def _nba_summary_driver(lean: str, home: str, away: str,
-                        avg_pace, home_drtg, away_drtg, avg_ortg,
-                        b2b: bool, away_team: str) -> str:
-    """Build the first sentence describing the primary reason for the lean."""
+def _strongest_factor(lean: str, avg_pace, home_drtg, away_drtg,
+                       avg_ortg, avg_3pa, b2b: bool, home: str, away: str) -> tuple[str, str]:
+    """
+    Return (driver_sentence, driver_tag) for the single strongest factor.
+    driver_tag is used to avoid repeating the same factor in sentence 2.
+    """
     if lean == "OVER":
+        # Weakest defense → most points on the board
+        if home_drtg and away_drtg:
+            weaker_drtg = max(home_drtg, away_drtg)
+            weaker = home if home_drtg >= away_drtg else away
+            if weaker_drtg >= _NBA_DRTG_WEAK:
+                return (
+                    f"{weaker} is giving up {weaker_drtg:.1f} points per 100 possessions "
+                    f"— one of the worst defensive marks in the league.",
+                    "drtg",
+                )
+        # Fast pace → more possessions
         if avg_pace and avg_pace >= _NBA_PACE_FAST:
-            return (f"{home} and {away} both run at an above-average pace, "
-                    f"generating high possession counts.")
+            return (
+                f"Both teams are averaging {avg_pace:.1f} possessions per 48 minutes "
+                f"— above the league's {_NBA_PACE_AVG:.1f} average, meaning more shots and more points.",
+                "pace",
+            )
+        # Efficient offenses
         if avg_ortg and avg_ortg >= _NBA_ORTG_GOOD:
-            return (f"Both {home} and {away} rank among the league's more "
-                    f"efficient offenses this season.")
-        if home_drtg and away_drtg and max(home_drtg, away_drtg) >= _NBA_DRTG_WEAK:
-            weaker = home if (home_drtg or 0) > (away_drtg or 0) else away
-            return (f"{weaker}'s defense has struggled to contain opponents, "
-                    f"leaving points on the table.")
+            return (
+                f"{home} and {away} are both scoring at {avg_ortg:.1f} points per 100 possessions "
+                f"combined — well above the league average.",
+                "ortg",
+            )
+        # High 3PA volume → variance plays into OVER
+        if avg_3pa and avg_3pa >= _NBA_3PA_HEAVY:
+            return (
+                f"Both teams attempt 3-pointers at a high rate ({avg_3pa * 100:.0f}% of FGA), "
+                f"which inflates totals on hot nights.",
+                "3pa",
+            )
+
     elif lean == "UNDER":
-        if home_drtg and away_drtg and max(home_drtg, away_drtg) <= _NBA_DRTG_GOOD:
-            return (f"Both {home} and {away} feature above-average defenses, "
-                    f"keeping this total in check.")
-        if home_drtg and home_drtg <= _NBA_DRTG_GOOD:
-            return (f"{home}'s defense has been among the stingiest in the league, "
-                    f"limiting opponent scoring.")
-        if away_drtg and away_drtg <= _NBA_DRTG_GOOD:
-            return (f"{away}'s defense has been elite at suppressing totals "
-                    f"this season.")
-        if avg_pace and avg_pace <= _NBA_PACE_SLOW:
-            return (f"Both {home} and {away} play at a below-average pace, "
-                    f"naturally suppressing the total scoring output.")
+        # B2B fatigue → biggest suppressor
         if b2b:
-            return (f"{away_team} is on the second night of a back-to-back, "
-                    f"limiting offensive output.")
-    return ""
+            return (
+                f"{away} is on the second night of a back-to-back — fatigue typically "
+                f"costs 3-5 points of offensive output.",
+                "b2b",
+            )
+        # Strong defense on both sides
+        if home_drtg and away_drtg:
+            better_drtg = min(home_drtg, away_drtg)
+            avg_drtg = (home_drtg + away_drtg) / 2
+            if avg_drtg <= _NBA_DRTG_GOOD:
+                return (
+                    f"{home} ({home_drtg:.1f} DRtg) and {away} ({away_drtg:.1f} DRtg) "
+                    f"are both elite defensively — combined, they're suppressing {avg_drtg:.1f} "
+                    f"points per 100 possessions.",
+                    "drtg",
+                )
+            if better_drtg <= _NBA_DRTG_GOOD:
+                elite = home if home_drtg <= away_drtg else away
+                elite_drtg = home_drtg if home_drtg <= away_drtg else away_drtg
+                return (
+                    f"{elite} is holding opponents to {elite_drtg:.1f} points per 100 possessions "
+                    f"— a top-tier defensive rating.",
+                    "drtg",
+                )
+        # Slow pace
+        if avg_pace and avg_pace <= _NBA_PACE_SLOW:
+            return (
+                f"Both teams play at a deliberate pace — combined {avg_pace:.1f} possessions "
+                f"per 48 minutes, well below the league's {_NBA_PACE_AVG:.1f} average.",
+                "pace",
+            )
+
+    return ("", "")
 
 
 def generate_nba_summary(g: dict) -> str:
     """
     Build a 1-4 sentence natural-language summary from model features.
-    Template-based — no external API calls.
+    Every claim references a real data field. Template-based, no API calls.
     """
     home     = g.get("home_team", "")
     away     = g.get("away_team", "")
@@ -219,65 +262,67 @@ def generate_nba_summary(g: dict) -> str:
     pred_s = f"{pred:.1f}"
     line_s = f"{line:.1f}" if line is not None else None
 
-    # ── NO PLAY ──────────────────────────────────────────────────────────────
-    if conf == "LOW":
-        if line_s is None:
-            return (f"Model projects {pred_s} with no market reference available. "
-                    f"No clear edge — pass.")
-        abs_edge = abs(edge or 0)
-        if abs_edge < 3:
-            return (f"Model projects {pred_s}, close to the market line of {line_s}. "
-                    f"No meaningful edge — pass.")
-        return (f"Model projects {pred_s} vs market line of {line_s} "
-                f"(edge {edge:+.1f} pts). Confidence too low — pass.")
-
-    # ── PLAY (HIGH or MEDIUM) ────────────────────────────────────────────────
     avg_pace = (home_pace + away_pace) / 2 if (home_pace and away_pace) else None
     avg_ortg = (home_ortg + away_ortg) / 2 if (home_ortg and away_ortg) else None
     avg_3pa  = (home_3pa + away_3pa) / 2   if (home_3pa  and away_3pa)  else None
+    abs_edge = abs(edge or 0)
 
+    # ── NO PLAY ──────────────────────────────────────────────────────────────
+    if conf == "LOW":
+        if line_s is None:
+            return (f"Model projects {pred_s} total with no market line to compare. "
+                    f"No edge to work with — pass.")
+        if abs_edge < 3:
+            return (f"Model has {pred_s}, market is at {line_s} — only {abs_edge:.1f} pts "
+                    f"of separation. Not enough edge to act on.")
+        return (f"Model projects {pred_s} vs the {line_s} line (edge {edge:+.1f} pts), "
+                f"but the signal isn't strong enough to play. Pass.")
+
+    # ── PLAY (HIGH or MEDIUM) ────────────────────────────────────────────────
     parts = []
 
-    # Sentence 1 — primary driver
-    s1 = _nba_summary_driver(lean, home, away, avg_pace,
-                              home_drtg, away_drtg, avg_ortg, b2b, away)
+    # Sentence 1 — strongest factor with actual numbers
+    s1, s1_tag = _strongest_factor(lean, avg_pace, home_drtg, away_drtg,
+                                    avg_ortg, avg_3pa, b2b, home, away)
     if s1:
         parts.append(s1)
 
-    # Sentence 2 — projection vs line
+    # Sentence 2 — secondary context or projection vs line
     if line_s and edge is not None:
-        direction = "above" if edge > 0 else "below"
-        drivers = []
-        if avg_pace and avg_pace >= _NBA_PACE_FAST and lean == "OVER":
-            drivers.append("fast pace")
-        if avg_3pa and avg_3pa >= _NBA_3PA_HEAVY and lean == "OVER":
-            drivers.append("high 3-point volume")
-        driver_str = (f", driven by {' and '.join(drivers)}" if drivers else "")
+        side = "over" if lean == "OVER" else "under"
+        # Add secondary factor if different from s1_tag and data exists
+        s2_extra = ""
+        if lean == "OVER" and s1_tag != "pace" and avg_pace and avg_pace >= _NBA_PACE_FAST:
+            s2_extra = f" at {avg_pace:.1f} possessions per game"
+        elif lean == "OVER" and s1_tag != "3pa" and avg_3pa and avg_3pa >= _NBA_3PA_HEAVY:
+            s2_extra = f", with both teams hoisting {avg_3pa * 100:.0f}% of their attempts from three"
+        elif lean == "UNDER" and s1_tag != "b2b" and b2b:
+            s2_extra = f" with {away} also on a back-to-back"
         parts.append(
-            f"The model projects {pred_s} points, {abs(edge):.1f} pts "
-            f"{direction} the market line of {line_s}{driver_str}."
+            f"Model has {pred_s}{s2_extra}, {abs_edge:.1f} pts {('above' if edge > 0 else 'below')} "
+            f"the {line_s} line — {side}."
         )
     else:
-        parts.append(f"Model projects {pred_s} with no market line available.")
+        parts.append(f"Model projects {pred_s} with no market line posted yet.")
 
-    # Sentence 3 — edge + probability
+    # Sentence 3 — lean + probability
     if line and edge is not None and p_over is not None:
-        p_dir = p_over if lean == "OVER" else 1 - p_over
         side  = "over" if lean == "OVER" else "under"
-        parts.append(f"Edge: {edge:+.1f} pts, P({side}) {p_dir * 100:.0f}%.")
+        p_dir = p_over if lean == "OVER" else 1 - p_over
+        parts.append(f"P({side}) {p_dir * 100:.0f}%, edge {edge:+.1f} pts.")
 
-    # Sentence 4 — caution (B2B / injuries / gap)
+    # Sentence 4 — caution flags (B2B / injuries / market gap)
     warnings = []
-    if b2b and lean != "UNDER":   # UNDER already mentioned B2B in s1
-        warnings.append(f"{away} on B2B (second night)")
+    if b2b and lean != "UNDER":
+        warnings.append(f"{away} on B2B tonight")
     if away_inj:
         names = ", ".join(away_inj[:2])
-        warnings.append(f"{away} depleted ({names} out/doubtful)")
+        warnings.append(f"{away} missing {names}")
     if home_inj:
         names = ", ".join(home_inj[:2])
-        warnings.append(f"{home} depleted ({names} out/doubtful)")
+        warnings.append(f"{home} missing {names}")
     if gap:
-        warnings.append("large model/market gap — review before acting")
+        warnings.append("model/market gap exceeds threshold — double-check the line")
     if warnings:
         parts.append("Note: " + "; ".join(warnings) + ".")
 
