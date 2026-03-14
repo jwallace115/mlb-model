@@ -9,7 +9,9 @@ import os
 NBA_DIR   = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR  = os.path.join(NBA_DIR, "data")
 CACHE_DIR = os.path.join(DATA_DIR, "cache")
-GAMES_PATH = os.path.join(DATA_DIR, "games.parquet")
+GAMES_PATH      = os.path.join(DATA_DIR, "games.parquet")
+BOX_STATS_PATH  = os.path.join(DATA_DIR, "box_stats.parquet")
+FEATURES_PATH   = os.path.join(DATA_DIR, "features.parquet")
 
 os.makedirs(CACHE_DIR, exist_ok=True)
 
