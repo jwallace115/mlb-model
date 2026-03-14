@@ -3,10 +3,12 @@
 push_results.py — Grade yesterday, run today's model, push JSON files to GitHub.
 
 Workflow:
-  1. Grade yesterday's games → graded_results table
+  1. Grade yesterday's MLB games → graded_results table
   2. Build season_stats.json from all historical graded data
-  3. Run today's model → results.json
-  4. git push both JSON files
+  3. Run MLB model → results.json
+  4. Run NBA model → grades yesterday's NBA games, saves fresh parquet
+  5. Serialize nba_results.json from the fresh parquet
+  6. Single git push covering results.json, season_stats.json, nba_results.json
 
 Usage:
     python push_results.py                  # full run (grade + model + push)
@@ -14,6 +16,7 @@ Usage:
     python push_results.py --no-push        # save JSON locally, skip git push
     python push_results.py --no-odds        # skip Odds API
     python push_results.py --skip-grading   # skip yesterday's grading step
+    python push_results.py --skip-nba       # skip NBA model run
 """
 
 import argparse
@@ -226,6 +229,7 @@ def main():
     parser.add_argument("--no-push",       action="store_true", help="Save JSON locally, skip git push")
     parser.add_argument("--no-odds",       action="store_true", help="Skip Odds API")
     parser.add_argument("--skip-grading",  action="store_true", help="Skip grading yesterday's games")
+    parser.add_argument("--skip-nba",      action="store_true", help="Skip NBA model run")
     args = parser.parse_args()
 
     game_date  = args.date or date.today().isoformat()
@@ -270,14 +274,24 @@ def main():
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_results] Wrote {results_path}")
 
-    # Step 6: write NBA JSON (no push yet — batched with MLB below)
+    # Step 6: run NBA model → fresh parquet + NBA grading, then serialize JSON
     dashboard_files = ["results.json", "season_stats.json"]
-    try:
-        from push_nba import write_nba_json
-        write_nba_json(game_date)
-        dashboard_files.append("nba_results.json")
-    except Exception as e:
-        print(f"[push_results] NBA JSON write failed (non-fatal): {e}", file=sys.stderr)
+    if not args.skip_nba:
+        try:
+            print(f"[push_results] Running NBA model for {game_date} ...")
+            from nba.run_nba import run as nba_run
+            nba_run(game_date=game_date, use_odds=not args.no_odds, skip_results=False)
+            print(f"[push_results] NBA model complete.")
+        except Exception as e:
+            print(f"[push_results] NBA model failed (non-fatal): {e}", file=sys.stderr)
+        try:
+            from push_nba import write_nba_json
+            write_nba_json(game_date)
+            dashboard_files.append("nba_results.json")
+        except Exception as e:
+            print(f"[push_results] NBA JSON write failed (non-fatal): {e}", file=sys.stderr)
+    else:
+        print("[push_results] --skip-nba: skipping NBA model run.")
 
     # Step 7: single combined push for all dashboard artifacts
     if not args.no_push:
