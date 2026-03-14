@@ -623,7 +623,7 @@ def _render_season_header(stats: dict) -> None:
       {accuracy_html}
     </div>"""
 
-    st.markdown(html, unsafe_allow_html=True)
+    st.html(html)
 
 
 # ── analytics expander ────────────────────────────────────────────────────────
@@ -674,14 +674,11 @@ def _render_analytics(stats: dict) -> None:
                 continue
             temp_rows.append(((label, ""),) + _wl_row(d))
         if temp_rows:
-            st.markdown(
-                _analytics_table(temp_rows, ["Temperature", "Record", "Win %", "ROI", "No Line"]),
-                unsafe_allow_html=True
-            )
+            st.html(_analytics_table(temp_rows, ["Temperature", "Record", "Win %", "ROI", "No Line"]))
         else:
             st.caption("No data yet.")
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.html("<br>")
 
         # ── by wind ───────────────────────────────────────────────────────────
         st.markdown("**Wind**")
@@ -694,14 +691,11 @@ def _render_analytics(stats: dict) -> None:
                 continue
             wind_rows.append(((label, ""),) + _wl_row(d))
         if wind_rows:
-            st.markdown(
-                _analytics_table(wind_rows, ["Wind", "Record", "Win %", "ROI", "No Line"]),
-                unsafe_allow_html=True
-            )
+            st.html(_analytics_table(wind_rows, ["Wind", "Record", "Win %", "ROI", "No Line"]))
         else:
             st.caption("No data yet.")
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.html("<br>")
 
         # ── by park factor ────────────────────────────────────────────────────
         st.markdown("**Park Factor**")
@@ -714,14 +708,11 @@ def _render_analytics(stats: dict) -> None:
                 continue
             park_rows.append(((label, ""),) + _wl_row(d))
         if park_rows:
-            st.markdown(
-                _analytics_table(park_rows, ["Park", "Record", "Win %", "ROI", "No Line"]),
-                unsafe_allow_html=True
-            )
+            st.html(_analytics_table(park_rows, ["Park", "Record", "Win %", "ROI", "No Line"]))
         else:
             st.caption("No data yet.")
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.html("<br>")
 
         # ── projection accuracy by stars ──────────────────────────────────────
         acc = stats.get("projection_accuracy", {})
@@ -732,11 +723,8 @@ def _render_analytics(stats: dict) -> None:
                 ((label, ""), (f"{mae:.2f} runs", ""))
                 for label, mae in by_star_mae.items()
             ]
-            st.markdown(
-                _analytics_table(mae_rows, ["Rating", "MAE"]),
-                unsafe_allow_html=True
-            )
-            st.markdown("<br>", unsafe_allow_html=True)
+            st.html(_analytics_table(mae_rows, ["Rating", "MAE"]))
+            st.html("<br>")
 
         # ── factor correlations ───────────────────────────────────────────────
         correlations = stats.get("factor_correlations", [])
@@ -753,11 +741,8 @@ def _render_analytics(stats: dict) -> None:
                     (f"{w}–{l}", cls),
                     (pct_str, cls),
                 ))
-            st.markdown(
-                _analytics_table(corr_rows, ["Factor", "Record", "Win %"]),
-                unsafe_allow_html=True
-            )
-            st.markdown("<br>", unsafe_allow_html=True)
+            st.html(_analytics_table(corr_rows, ["Factor", "Record", "Win %"]))
+            st.html("<br>")
 
         # ── props record ──────────────────────────────────────────────────────
         props_rec = stats.get("props_record", {})
@@ -775,11 +760,8 @@ def _render_analytics(stats: dict) -> None:
                     (f"{wp:.1f}%" if wp is not None else "—", cls),
                     (f"{roi:+.1f}%" if roi is not None else "—", ""),
                 ))
-            st.markdown(
-                _analytics_table(prop_rows, ["Market", "Record", "Win %", "ROI"]),
-                unsafe_allow_html=True
-            )
-            st.markdown("<br>", unsafe_allow_html=True)
+            st.html(_analytics_table(prop_rows, ["Market", "Record", "Win %", "ROI"]))
+            st.html("<br>")
 
         # ── parlay stats ──────────────────────────────────────────────────────
         parlay_stats = stats.get("parlay_stats", {})
@@ -805,11 +787,8 @@ def _render_analytics(stats: dict) -> None:
                     (f"{hp:.1f}%" if hp is not None else "—", cls),
                 ))
             if p_rows:
-                st.markdown(
-                    _analytics_table(p_rows, ["Parlay", "Hit–Miss", "Hit %"]),
-                    unsafe_allow_html=True
-                )
-                st.markdown("<br>", unsafe_allow_html=True)
+                st.html(_analytics_table(p_rows, ["Parlay", "Hit–Miss", "Hit %"]))
+                st.html("<br>")
 
         # ── biggest misses ────────────────────────────────────────────────────
         misses = stats.get("biggest_misses", [])
@@ -830,11 +809,8 @@ def _render_analytics(stats: dict) -> None:
                     (res, res_cls),
                     (m.get("star_rating", "—"), ""),
                 ))
-            st.markdown(
-                _analytics_table(miss_rows,
-                    ["Date", "Game", "Proj", "Actual", "Error", "Result", "Stars"]),
-                unsafe_allow_html=True
-            )
+            st.html(_analytics_table(miss_rows,
+                    ["Date", "Game", "Proj", "Actual", "Error", "Result", "Stars"]))
 
 
 # ── game card rendering ───────────────────────────────────────────────────────
@@ -988,12 +964,11 @@ def _render_alerts(data: dict) -> None:
             f'</div></div>'
         )
 
-    st.markdown(
+    st.html(
         f'<div class="alerts-section">'
         f'<div class="alerts-title">⚡ Alerts</div>'
         f'{rows}'
-        f'</div>',
-        unsafe_allow_html=True,
+        f'</div>'
     )
 
 
@@ -1107,7 +1082,7 @@ def _render_card(b: dict) -> None:
                 f'</div>'
             )
 
-    st.markdown(
+    st.html(
         f'<div class="{card_cls}">'
         f'{header}'
         f'{_meta_html(f, game)}'
@@ -1115,8 +1090,7 @@ def _render_card(b: dict) -> None:
         f'{alert_html}'
         f'<div class="card-summary">{summary}</div>'
         f'{props_html}'
-        f'</div>',
-        unsafe_allow_html=True,
+        f'</div>'
     )
 
 
@@ -1155,15 +1129,14 @@ def _render_parlay_card(
             f'</div>'
         )
 
-    st.markdown(
+    st.html(
         f'<div class="{card_class}">'
         f'<div class="parlay-title {title_class}">'
         f'{icon} {title} <span style="font-weight:400;text-transform:none;'
         f'letter-spacing:0;font-size:0.9em;opacity:0.7"> — {subtitle}</span>'
         f'</div>'
         f'{legs_html}'
-        f'</div>',
-        unsafe_allow_html=True,
+        f'</div>'
     )
 
 
@@ -1177,10 +1150,7 @@ def _render_parlays(data: dict) -> None:
     if not has_any:
         return
 
-    st.markdown(
-        '<div class="section-hdr">⚡ Parlay Cards</div>',
-        unsafe_allow_html=True,
-    )
+    st.html('<div class="section-hdr">⚡ Parlay Cards</div>')
 
     _render_parlay_card(
         p3,
@@ -1289,15 +1259,14 @@ def _render_nba_tab() -> None:
         if nba:
             last_run = _last_run_label(nba)
             game_date = nba.get("game_date", "")
-            st.markdown(
-                f"### 🏀 NBA Totals"
-                f"<br><span style='font-size:0.78em;color:#4a5568'>"
+            st.html(
+                f"<h3 style='margin:0 0 4px 0'>🏀 NBA Totals</h3>"
+                f"<span style='font-size:0.78em;color:#4a5568'>"
                 f"Model run {last_run} · Projections for <strong>{game_date}</strong>"
-                f"</span>",
-                unsafe_allow_html=True,
+                f"</span>"
             )
         else:
-            st.markdown("### 🏀 NBA Totals", unsafe_allow_html=True)
+            st.markdown("### 🏀 NBA Totals")
     with col_btn:
         st.write("")
         if st.button("🔄 Refresh", key="nba_refresh", use_container_width=True):
@@ -1343,7 +1312,7 @@ def _render_nba_tab() -> None:
                 f'</tr>'
             )
 
-        st.markdown(f"""
+        st.html(f"""
         <div class="season-banner">
           <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
                       letter-spacing:0.08em;margin-bottom:10px">
@@ -1370,9 +1339,9 @@ def _render_nba_tab() -> None:
             <tbody>{conf_rows}</tbody>
           </table>''' if conf_rows else ""}
         </div>
-        """, unsafe_allow_html=True)
+        """)
     else:
-        st.markdown("""
+        st.html("""
         <div class="season-banner">
           <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
                       letter-spacing:0.08em;margin-bottom:6px">Season Accuracy</div>
@@ -1381,10 +1350,10 @@ def _render_nba_tab() -> None:
             results run (day after first game day).
           </div>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     # ── H1 coverage note ──────────────────────────────────────────────────────
-    st.markdown("""
+    st.html("""
     <div style="background:#0f1117;border:1px solid #1e2535;border-radius:6px;
                 padding:10px 14px;margin-bottom:14px;font-size:0.78em;color:#4a5568">
       ⚠ <strong style="color:#64748b">H1 data coverage is partial for 2025-26</strong>
@@ -1392,19 +1361,15 @@ def _render_nba_tab() -> None:
       H1 confidence ratings are provisional and treated conservatively;
       no H1 play is rated HIGH regardless of model edge.
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # ── full-game picks ───────────────────────────────────────────────────────
     if plays:
         n = len(plays)
-        st.markdown(
-            f'<div class="section-hdr">🎯 Full Game — {n} play{"s" if n != 1 else ""}</div>',
-            unsafe_allow_html=True,
-        )
-        table_html = _nba_picks_table(plays, h1=False)
-        st.markdown(table_html, unsafe_allow_html=True)
+        st.html(f'<div class="section-hdr">🎯 Full Game — {n} play{"s" if n != 1 else ""}</div>')
+        st.html(_nba_picks_table(plays, h1=False))
     else:
-        st.markdown('<div class="section-hdr">🎯 Full Game</div>', unsafe_allow_html=True)
+        st.html('<div class="section-hdr">🎯 Full Game</div>')
         st.caption("No full-game plays above threshold today.")
 
     # ── market gap review block ───────────────────────────────────────────────
@@ -1429,12 +1394,12 @@ def _render_nba_tab() -> None:
                 f'</span>'
                 f'</div></div>'
             )
-        st.markdown(f"""
+        st.html(f"""
         <div class="alerts-section" style="margin-top:14px">
           <div class="alerts-title">⚠ Market Gap Review — model/market &gt; 12 pts</div>
           {rows_html}
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
     # ── H1 picks ──────────────────────────────────────────────────────────────
     h1_plays = [g for g in plays if g.get("pred_h1") is not None]
@@ -1442,13 +1407,11 @@ def _render_nba_tab() -> None:
     all_h1 = h1_plays + h1_no_plays
 
     if all_h1:
-        st.markdown(
+        st.html(
             f'<div class="section-hdr">⏱ First Half — {len(h1_plays)} play{"s" if len(h1_plays) != 1 else ""} '
-            f'({len(all_h1)} games with H1 projection)</div>',
-            unsafe_allow_html=True,
+            f'({len(all_h1)} games with H1 projection)</div>'
         )
-        h1_table = _nba_picks_table(all_h1, h1=True)
-        st.markdown(h1_table, unsafe_allow_html=True)
+        st.html(_nba_picks_table(all_h1, h1=True))
 
     # ── no-plays ──────────────────────────────────────────────────────────────
     if no_plays:
@@ -1456,7 +1419,7 @@ def _render_nba_tab() -> None:
             f"No Plays — {len(no_plays)} game{'s' if len(no_plays) != 1 else ''}",
             expanded=False
         ):
-            st.markdown(_nba_picks_table(no_plays, h1=False), unsafe_allow_html=True)
+            st.html(_nba_picks_table(no_plays, h1=False))
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
@@ -1469,12 +1432,11 @@ def main() -> None:
     # ── page header ───────────────────────────────────────────────────────────
     col_title, col_btn = st.columns([5, 1])
     with col_title:
-        st.markdown(
-            f"### ⚾ I Am Not Uncertain"
-            f"<br><span style='font-size:0.78em;color:#4a5568'>"
+        st.html(
+            f"<h3 style='margin:0 0 4px 0'>⚾ I Am Not Uncertain</h3>"
+            f"<span style='font-size:0.78em;color:#4a5568'>"
             f"Last updated {last_run}"
-            f"</span>",
-            unsafe_allow_html=True,
+            f"</span>"
         )
     with col_btn:
         st.write("")
@@ -1512,14 +1474,11 @@ def main() -> None:
 
             if plays:
                 n = len(plays)
-                st.markdown(
-                    f'<div class="section-hdr">🎯 Plays — {n} game{"s" if n != 1 else ""}</div>',
-                    unsafe_allow_html=True,
-                )
+                st.html(f'<div class="section-hdr">🎯 Plays — {n} game{"s" if n != 1 else ""}</div>')
                 for b in plays:
                     _render_card(b)
             else:
-                st.markdown('<div class="section-hdr">🎯 Plays</div>', unsafe_allow_html=True)
+                st.html('<div class="section-hdr">🎯 Plays</div>')
                 st.caption("No plays meeting the confidence threshold today.")
 
             _render_parlays(data)
