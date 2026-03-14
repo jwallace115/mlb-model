@@ -1193,61 +1193,132 @@ def _nba_conf_badge(conf: str) -> str:
     return f'<span class="conf-badge conf-{c}">{c.lower()}</span>'
 
 
-def _nba_picks_table(games: list[dict], h1: bool = False) -> str:
-    """Build an HTML table for full-game or H1 picks."""
-    if not games:
-        return ""
+def _render_nba_card(g: dict) -> None:
+    """Render a single NBA game card matching the MLB card visual style."""
+    home    = g.get("home_team", "")
+    away    = g.get("away_team", "")
+    conf    = g.get("confidence", "LOW")
+    lean    = g.get("lean", "")
+    pred    = g.get("pred_total")
+    line    = g.get("line")
+    edge    = g.get("edge")
+    p_over  = g.get("p_over")
+    tip     = g.get("game_time_et") or "—"
+    summary = g.get("summary", "")
+    gap     = bool(g.get("market_gap_flag"))
+    home_inj = g.get("home_injuries") or []
+    away_inj = g.get("away_injuries") or []
 
-    proj_col  = "pred_h1"  if h1 else "pred_total"
-    line_col  = "h1_line"  if h1 else "line"
-    edge_col  = "h1_edge"  if h1 else "edge"
-    lean_col  = "h1_lean"  if h1 else "lean"
-    p_col     = "h1_p_over" if h1 else "p_over"
-    conf_col  = "h1_confidence" if h1 else "confidence"
+    pred_h1 = g.get("pred_h1")
+    h1_lean = g.get("h1_lean")
+    h1_line = g.get("h1_line")
+    h1_edge = g.get("h1_edge")
+    h1_conf = g.get("h1_confidence")
 
-    rows_html = ""
-    for g in games:
-        matchup   = f"{g['away_team']} @ {g['home_team']}"
-        tip       = g.get("game_time_et") or "—"
-        lean      = g.get(lean_col) or "—"
-        proj      = g.get(proj_col)
-        line      = g.get(line_col)
-        edge      = g.get(edge_col)
-        p_over    = g.get(p_col)
-        conf      = g.get(conf_col) or "LOW"
-        gap_flag  = bool(g.get("market_gap_flag"))
+    is_play = conf in ("HIGH", "MEDIUM")
+    conf_star = {"HIGH": "star3", "MEDIUM": "star2"}.get(conf, "noplay")
+    card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
 
-        proj_s    = f"{float(proj):.1f}" if proj is not None else "—"
-        line_s    = f"{float(line):.1f}" if line is not None else "—"
-        edge_s    = f"{float(edge):+.1f}" if edge is not None else "—"
-        p_s       = f"{float(p_over)*100:.1f}%" if p_over is not None else "—"
+    matchup   = f"{away} @ {home}"
+    lean_html = _nba_lean_badge(lean) if lean and lean not in ("—", "") else ""
 
-        edge_cls  = "edge-pos" if (edge or 0) > 0 else "edge-neg"
-        lean_html = _nba_lean_badge(lean)
-        conf_html = _nba_conf_badge(conf)
-        gap_html  = ' <span style="color:#f59e0b;font-size:0.78em" title="Model/market gap > 12 pts — review manually">⚠ gap</span>' if gap_flag and not h1 else ""
+    header = (
+        f'<div class="card-header">'
+        f'{_nba_conf_badge(conf)}'
+        f'<span class="matchup">{matchup}</span>'
+        f'{lean_html}'
+        f'</div>'
+    )
 
-        rows_html += f"""
-        <tr>
-          <td style="font-weight:600;color:#f1f5f9">{matchup}{gap_html}</td>
-          <td style="color:#94a3b8">{tip}</td>
-          <td>{lean_html}</td>
-          <td style="font-weight:600;color:#e2e8f0">{proj_s}</td>
-          <td style="color:#94a3b8">{line_s}</td>
-          <td><span class="{edge_cls}">{edge_s}</span></td>
-          <td style="color:#94a3b8">{p_s}</td>
-          <td>{conf_html}</td>
-        </tr>"""
+    meta = f'<div class="card-meta">{tip}</div>'
 
-    return f"""
-    <table class="analytics-table" style="width:100%">
-      <thead><tr>
-        <th>Matchup</th><th>Tip</th><th>Lean</th>
-        <th>Proj</th><th>Line</th><th>Edge</th>
-        <th>P(over)</th><th>Conf</th>
-      </tr></thead>
-      <tbody>{rows_html}</tbody>
-    </table>"""
+    # Projection row
+    sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
+    proj_parts = []
+    if pred is not None:
+        proj_parts.append(
+            f'<span class="proj-label">Proj</span> '
+            f'<span class="proj-val">{pred:.1f}</span>'
+        )
+    if line is not None:
+        proj_parts.append(
+            f'<span class="proj-label">Line</span> '
+            f'<span class="proj-val">{line:.1f}</span>'
+        )
+    else:
+        proj_parts.append('<span class="proj-label">No line yet</span>')
+    if edge is not None:
+        sign = "+" if edge > 0 else ""
+        ecls = "edge-pos" if edge > 0 else "edge-neg"
+        proj_parts.append(
+            f'<span class="proj-label">Edge</span> '
+            f'<span class="{ecls}">{sign}{edge:.1f}</span>'
+        )
+    if p_over is not None:
+        p_dir  = p_over if lean == "OVER" else 1 - p_over
+        p_side = "over" if lean == "OVER" else "under"
+        proj_parts.append(
+            f'<span class="proj-label">P({p_side})</span> '
+            f'<span class="proj-val">{p_dir*100:.0f}%</span>'
+        )
+    proj_row = f'<div class="proj-row">{sep.join(proj_parts)}</div>'
+
+    # H1 secondary row
+    h1_row = ""
+    if pred_h1 is not None:
+        h1_parts = []
+        if h1_lean:
+            h1_parts.append(_nba_lean_badge(h1_lean))
+        h1_parts.append(f'<span class="proj-label">H1</span> <span class="proj-val">{pred_h1:.1f}</span>')
+        if h1_line is not None:
+            h1_parts.append(f'<span class="proj-label">vs {h1_line:.1f}</span>')
+        if h1_edge is not None:
+            h1_sign = "+" if h1_edge > 0 else ""
+            h1_ecls = "edge-pos" if h1_edge > 0 else "edge-neg"
+            h1_parts.append(f'<span class="{h1_ecls}">{h1_sign}{h1_edge:.1f}</span>')
+        if h1_conf:
+            h1_parts.append(_nba_conf_badge(h1_conf))
+        h1_row = (
+            f'<div class="proj-row" style="font-size:0.82em;opacity:0.70;'
+            f'border-top:1px solid #1e2535;padding-top:5px;margin-top:2px">'
+            f'{sep.join(h1_parts)}</div>'
+        )
+
+    # Inline warnings
+    warn_html = ""
+    if gap:
+        warn_html += (
+            f'<div style="font-size:0.78em;color:#f59e0b;margin-top:4px">'
+            f'⚠ Large model/market gap — review before acting'
+            f'</div>'
+        )
+    if away_inj:
+        names = ", ".join(away_inj[:3])
+        warn_html += (
+            f'<div style="font-size:0.78em;color:#fde68a;margin-top:4px">'
+            f'⚠ {away}: {names} out/doubtful'
+            f'</div>'
+        )
+    if home_inj:
+        names = ", ".join(home_inj[:3])
+        warn_html += (
+            f'<div style="font-size:0.78em;color:#fde68a;margin-top:4px">'
+            f'⚠ {home}: {names} out/doubtful'
+            f'</div>'
+        )
+
+    summary_html = f'<div class="card-summary">{summary}</div>' if summary else ""
+
+    st.html(
+        f'<div class="{card_cls}">'
+        f'{header}'
+        f'{meta}'
+        f'{proj_row}'
+        f'{h1_row}'
+        f'{warn_html}'
+        f'{summary_html}'
+        f'</div>'
+    )
 
 
 def _render_nba_tab() -> None:
@@ -1363,55 +1434,15 @@ def _render_nba_tab() -> None:
     </div>
     """)
 
-    # ── full-game picks ───────────────────────────────────────────────────────
+    # ── plays ─────────────────────────────────────────────────────────────────
     if plays:
         n = len(plays)
-        st.html(f'<div class="section-hdr">🎯 Full Game — {n} play{"s" if n != 1 else ""}</div>')
-        st.html(_nba_picks_table(plays, h1=False))
+        st.html(f'<div class="section-hdr">🎯 Plays — {n} game{"s" if n != 1 else ""}</div>')
+        for g in plays:
+            _render_nba_card(g)
     else:
-        st.html('<div class="section-hdr">🎯 Full Game</div>')
-        st.caption("No full-game plays above threshold today.")
-
-    # ── market gap review block ───────────────────────────────────────────────
-    gap_games = [g for g in plays + no_plays if g.get("market_gap_flag")]
-    if gap_games:
-        rows_html = ""
-        for g in gap_games:
-            matchup = f"{g['away_team']} @ {g['home_team']}"
-            proj    = g.get("pred_total")
-            line    = g.get("line")
-            edge    = g.get("edge")
-            proj_s  = f"{float(proj):.1f}" if proj is not None else "—"
-            line_s  = f"{float(line):.1f}" if line is not None else "—"
-            edge_s  = f"{float(edge):+.1f}" if edge is not None else "—"
-            rows_html += (
-                f'<div class="alert-row">'
-                f'<div class="alert-icon">⚠</div>'
-                f'<div class="alert-body">'
-                f'<span class="alert-matchup">{matchup}</span>'
-                f'<span class="alert-detail">'
-                f'Model {proj_s} vs line {line_s} · gap {edge_s} pts — review before acting'
-                f'</span>'
-                f'</div></div>'
-            )
-        st.html(f"""
-        <div class="alerts-section" style="margin-top:14px">
-          <div class="alerts-title">⚠ Market Gap Review — model/market &gt; 12 pts</div>
-          {rows_html}
-        </div>
-        """)
-
-    # ── H1 picks ──────────────────────────────────────────────────────────────
-    h1_plays = [g for g in plays if g.get("pred_h1") is not None]
-    h1_no_plays = [g for g in no_plays if g.get("pred_h1") is not None]
-    all_h1 = h1_plays + h1_no_plays
-
-    if all_h1:
-        st.html(
-            f'<div class="section-hdr">⏱ First Half — {len(h1_plays)} play{"s" if len(h1_plays) != 1 else ""} '
-            f'({len(all_h1)} games with H1 projection)</div>'
-        )
-        st.html(_nba_picks_table(all_h1, h1=True))
+        st.html('<div class="section-hdr">🎯 Plays</div>')
+        st.caption("No plays above threshold today.")
 
     # ── no-plays ──────────────────────────────────────────────────────────────
     if no_plays:
@@ -1419,7 +1450,8 @@ def _render_nba_tab() -> None:
             f"No Plays — {len(no_plays)} game{'s' if len(no_plays) != 1 else ''}",
             expanded=False
         ):
-            st.html(_nba_picks_table(no_plays, h1=False))
+            for g in no_plays:
+                _render_nba_card(g)
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
