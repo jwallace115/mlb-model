@@ -15,6 +15,7 @@ import streamlit as st
 
 RESULTS_FILE      = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.json")
 SEASON_STATS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "season_stats.json")
+NBA_RESULTS_FILE  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "nba_results.json")
 
 # ── page config ───────────────────────────────────────────────────────────────
 
@@ -452,6 +453,14 @@ def load_season_stats() -> dict | None:
     if not os.path.exists(SEASON_STATS_FILE):
         return None
     with open(SEASON_STATS_FILE) as f:
+        return json.load(f)
+
+
+@st.cache_data(ttl=None, show_spinner=False)
+def load_nba_results() -> dict | None:
+    if not os.path.exists(NBA_RESULTS_FILE):
+        return None
+    with open(NBA_RESULTS_FILE) as f:
         return json.load(f)
 
 
@@ -1199,6 +1208,257 @@ def _render_parlays(data: dict) -> None:
     )
 
 
+# ── NBA tab rendering ─────────────────────────────────────────────────────────
+
+def _nba_lean_badge(lean: str) -> str:
+    if lean in ("OVER", "over"):
+        return '<span class="lean-badge lean-over">OVER</span>'
+    if lean in ("UNDER", "under"):
+        return '<span class="lean-badge lean-under">UNDER</span>'
+    return '<span class="lean-badge lean-neutral">—</span>'
+
+
+def _nba_conf_badge(conf: str) -> str:
+    c = (conf or "LOW").upper()
+    return f'<span class="conf-badge conf-{c}">{c.lower()}</span>'
+
+
+def _nba_picks_table(games: list[dict], h1: bool = False) -> str:
+    """Build an HTML table for full-game or H1 picks."""
+    if not games:
+        return ""
+
+    proj_col  = "pred_h1"  if h1 else "pred_total"
+    line_col  = "h1_line"  if h1 else "line"
+    edge_col  = "h1_edge"  if h1 else "edge"
+    lean_col  = "h1_lean"  if h1 else "lean"
+    p_col     = "h1_p_over" if h1 else "p_over"
+    conf_col  = "h1_confidence" if h1 else "confidence"
+
+    rows_html = ""
+    for g in games:
+        matchup   = f"{g['away_team']} @ {g['home_team']}"
+        tip       = g.get("game_time_et") or "—"
+        lean      = g.get(lean_col) or "—"
+        proj      = g.get(proj_col)
+        line      = g.get(line_col)
+        edge      = g.get(edge_col)
+        p_over    = g.get(p_col)
+        conf      = g.get(conf_col) or "LOW"
+        gap_flag  = bool(g.get("market_gap_flag"))
+
+        proj_s    = f"{float(proj):.1f}" if proj is not None else "—"
+        line_s    = f"{float(line):.1f}" if line is not None else "—"
+        edge_s    = f"{float(edge):+.1f}" if edge is not None else "—"
+        p_s       = f"{float(p_over)*100:.1f}%" if p_over is not None else "—"
+
+        edge_cls  = "edge-pos" if (edge or 0) > 0 else "edge-neg"
+        lean_html = _nba_lean_badge(lean)
+        conf_html = _nba_conf_badge(conf)
+        gap_html  = ' <span style="color:#f59e0b;font-size:0.78em" title="Model/market gap > 12 pts — review manually">⚠ gap</span>' if gap_flag and not h1 else ""
+
+        rows_html += f"""
+        <tr>
+          <td style="font-weight:600;color:#f1f5f9">{matchup}{gap_html}</td>
+          <td style="color:#94a3b8">{tip}</td>
+          <td>{lean_html}</td>
+          <td style="font-weight:600;color:#e2e8f0">{proj_s}</td>
+          <td style="color:#94a3b8">{line_s}</td>
+          <td><span class="{edge_cls}">{edge_s}</span></td>
+          <td style="color:#94a3b8">{p_s}</td>
+          <td>{conf_html}</td>
+        </tr>"""
+
+    return f"""
+    <table class="analytics-table" style="width:100%">
+      <thead><tr>
+        <th>Matchup</th><th>Tip</th><th>Lean</th>
+        <th>Proj</th><th>Line</th><th>Edge</th>
+        <th>P(over)</th><th>Conf</th>
+      </tr></thead>
+      <tbody>{rows_html}</tbody>
+    </table>"""
+
+
+def _render_nba_tab() -> None:
+    nba = load_nba_results()
+
+    # ── header row ────────────────────────────────────────────────────────────
+    col_title, col_btn = st.columns([5, 1])
+    with col_title:
+        if nba:
+            last_run = _last_run_label(nba)
+            game_date = nba.get("game_date", "")
+            st.markdown(
+                f"### 🏀 NBA Totals"
+                f"<br><span style='font-size:0.78em;color:#4a5568'>"
+                f"Model run {last_run} · Projections for <strong>{game_date}</strong>"
+                f"</span>",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown("### 🏀 NBA Totals", unsafe_allow_html=True)
+    with col_btn:
+        st.write("")
+        if st.button("🔄 Refresh", key="nba_refresh", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
+
+    if nba is None:
+        st.info(
+            "No NBA projections available yet. "
+            "Run `python push_nba.py` on your local machine to publish today's card."
+        )
+        return
+
+    plays    = nba.get("plays", [])
+    no_plays = nba.get("no_plays", [])
+    accuracy = nba.get("season_accuracy", {})
+
+    # ── season accuracy panel ─────────────────────────────────────────────────
+    if accuracy and accuracy.get("total_games", 0) > 0:
+        overall   = accuracy.get("overall", {})
+        by_conf   = accuracy.get("by_confidence", {})
+        n_total   = accuracy.get("total_games", 0)
+        mae_all   = overall.get("mae")
+        hr_all    = overall.get("hr")
+        bias_all  = overall.get("bias")
+
+        hr_cls = "green" if (hr_all or 0) >= 55 else "yellow" if (hr_all or 0) >= 50 else "red"
+
+        conf_rows = ""
+        for conf in ["HIGH", "MEDIUM", "LOW"]:
+            d = by_conf.get(conf, {})
+            if not d:
+                continue
+            hr_c = d.get("hr", 0)
+            hr_cls_c = "green" if hr_c >= 55 else "yellow" if hr_c >= 50 else "red"
+            conf_rows += (
+                f'<tr>'
+                f'<td>{_nba_conf_badge(conf)}</td>'
+                f'<td class="dim">{d["n"]}</td>'
+                f'<td>{d["mae"]:.2f}</td>'
+                f'<td class="{hr_cls_c}">{d["hr"]:.1f}%</td>'
+                f'<td class="dim">{d["bias"]:+.2f}</td>'
+                f'</tr>'
+            )
+
+        st.markdown(f"""
+        <div class="season-banner">
+          <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
+                      letter-spacing:0.08em;margin-bottom:10px">
+            Season Accuracy — {n_total} game{"s" if n_total != 1 else ""} graded
+          </div>
+          <div class="stat-grid">
+            <div class="stat-block">
+              <div class="num">{mae_all:.2f}</div>
+              <div class="lbl">MAE (pts)</div>
+            </div>
+            <div class="stat-block">
+              <div class="num {hr_cls}">{hr_all:.1f}%</div>
+              <div class="lbl">Directional HR</div>
+            </div>
+            <div class="stat-block">
+              <div class="num">{bias_all:+.2f}</div>
+              <div class="lbl">Bias (pts)</div>
+            </div>
+          </div>
+          {f'''<table class="star-table" style="margin-top:12px">
+            <thead><tr>
+              <th>Conf</th><th>Games</th><th>MAE</th><th>Dir HR</th><th>Bias</th>
+            </tr></thead>
+            <tbody>{conf_rows}</tbody>
+          </table>''' if conf_rows else ""}
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div class="season-banner">
+          <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
+                      letter-spacing:0.08em;margin-bottom:6px">Season Accuracy</div>
+          <div style="color:#4a5568;font-size:0.88em">
+            No results graded yet — accuracy panel populates after the first morning
+            results run (day after first game day).
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── H1 coverage note ──────────────────────────────────────────────────────
+    st.markdown("""
+    <div style="background:#0f1117;border:1px solid #1e2535;border-radius:6px;
+                padding:10px 14px;margin-bottom:14px;font-size:0.78em;color:#4a5568">
+      ⚠ <strong style="color:#64748b">H1 data coverage is partial for 2025-26</strong>
+      — 536 of 994 games have first-half scores available (ScoreboardV2 API limitation).
+      H1 confidence ratings are provisional and treated conservatively;
+      no H1 play is rated HIGH regardless of model edge.
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── full-game picks ───────────────────────────────────────────────────────
+    if plays:
+        n = len(plays)
+        st.markdown(
+            f'<div class="section-hdr">🎯 Full Game — {n} play{"s" if n != 1 else ""}</div>',
+            unsafe_allow_html=True,
+        )
+        table_html = _nba_picks_table(plays, h1=False)
+        st.markdown(table_html, unsafe_allow_html=True)
+    else:
+        st.markdown('<div class="section-hdr">🎯 Full Game</div>', unsafe_allow_html=True)
+        st.caption("No full-game plays above threshold today.")
+
+    # ── market gap review block ───────────────────────────────────────────────
+    gap_games = [g for g in plays + no_plays if g.get("market_gap_flag")]
+    if gap_games:
+        rows_html = ""
+        for g in gap_games:
+            matchup = f"{g['away_team']} @ {g['home_team']}"
+            proj    = g.get("pred_total")
+            line    = g.get("line")
+            edge    = g.get("edge")
+            proj_s  = f"{float(proj):.1f}" if proj is not None else "—"
+            line_s  = f"{float(line):.1f}" if line is not None else "—"
+            edge_s  = f"{float(edge):+.1f}" if edge is not None else "—"
+            rows_html += (
+                f'<div class="alert-row">'
+                f'<div class="alert-icon">⚠</div>'
+                f'<div class="alert-body">'
+                f'<span class="alert-matchup">{matchup}</span>'
+                f'<span class="alert-detail">'
+                f'Model {proj_s} vs line {line_s} · gap {edge_s} pts — review before acting'
+                f'</span>'
+                f'</div></div>'
+            )
+        st.markdown(f"""
+        <div class="alerts-section" style="margin-top:14px">
+          <div class="alerts-title">⚠ Market Gap Review — model/market &gt; 12 pts</div>
+          {rows_html}
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── H1 picks ──────────────────────────────────────────────────────────────
+    h1_plays = [g for g in plays if g.get("pred_h1") is not None]
+    h1_no_plays = [g for g in no_plays if g.get("pred_h1") is not None]
+    all_h1 = h1_plays + h1_no_plays
+
+    if all_h1:
+        st.markdown(
+            f'<div class="section-hdr">⏱ First Half — {len(h1_plays)} play{"s" if len(h1_plays) != 1 else ""} '
+            f'({len(all_h1)} games with H1 projection)</div>',
+            unsafe_allow_html=True,
+        )
+        h1_table = _nba_picks_table(all_h1, h1=True)
+        st.markdown(h1_table, unsafe_allow_html=True)
+
+    # ── no-plays ──────────────────────────────────────────────────────────────
+    if no_plays:
+        with st.expander(
+            f"No Plays — {len(no_plays)} game{'s' if len(no_plays) != 1 else ''}",
+            expanded=False
+        ):
+            st.markdown(_nba_picks_table(no_plays, h1=False), unsafe_allow_html=True)
+
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -1222,56 +1482,58 @@ def main() -> None:
             st.cache_data.clear()
             st.rerun()
 
-    # ── season stats banner ───────────────────────────────────────────────────
-    if stats:
-        _render_season_header(stats)
+    # ── sport tabs ────────────────────────────────────────────────────────────
+    tab_mlb, tab_nba = st.tabs(["⚾ MLB", "🏀 NBA"])
 
-    # ── alerts (lineup changes + transactions) ────────────────────────────────
-    if data:
-        _render_alerts(data)
-
-    # ── no data state ─────────────────────────────────────────────────────────
-    if data is None:
-        st.info(
-            "No projections available yet. "
-            "Run `python push_results.py` on your local machine to publish today's card."
-        )
+    with tab_mlb:
+        # ── season stats banner ───────────────────────────────────────────────
         if stats:
-            _render_analytics(stats)
-        return
+            _render_season_header(stats)
 
-    game_date = data.get("game_date", "")
-    plays     = data.get("plays", [])
-    no_plays  = data.get("no_plays", [])
+        # ── alerts (lineup changes + transactions) ────────────────────────────
+        if data:
+            _render_alerts(data)
 
-    if game_date:
-        st.caption(f"Projections for **{game_date}**")
+        # ── no data state ─────────────────────────────────────────────────────
+        if data is None:
+            st.info(
+                "No projections available yet. "
+                "Run `python push_results.py` on your local machine to publish today's card."
+            )
+            if stats:
+                _render_analytics(stats)
+        else:
+            game_date = data.get("game_date", "")
+            plays     = data.get("plays", [])
+            no_plays  = data.get("no_plays", [])
 
-    # ── plays ─────────────────────────────────────────────────────────────────
-    if plays:
-        n = len(plays)
-        st.markdown(
-            f'<div class="section-hdr">🎯 Plays — {n} game{"s" if n != 1 else ""}</div>',
-            unsafe_allow_html=True,
-        )
-        for b in plays:
-            _render_card(b)
-    else:
-        st.markdown('<div class="section-hdr">🎯 Plays</div>', unsafe_allow_html=True)
-        st.caption("No plays meeting the confidence threshold today.")
+            if game_date:
+                st.caption(f"Projections for **{game_date}**")
 
-    # ── parlay cards ──────────────────────────────────────────────────────────
-    _render_parlays(data)
+            if plays:
+                n = len(plays)
+                st.markdown(
+                    f'<div class="section-hdr">🎯 Plays — {n} game{"s" if n != 1 else ""}</div>',
+                    unsafe_allow_html=True,
+                )
+                for b in plays:
+                    _render_card(b)
+            else:
+                st.markdown('<div class="section-hdr">🎯 Plays</div>', unsafe_allow_html=True)
+                st.caption("No plays meeting the confidence threshold today.")
 
-    # ── no-plays ──────────────────────────────────────────────────────────────
-    if no_plays:
-        with st.expander(f"No Plays — {len(no_plays)} game{'s' if len(no_plays) != 1 else ''}"):
-            for b in no_plays:
-                _render_card(b)
+            _render_parlays(data)
 
-    # ── analytics ─────────────────────────────────────────────────────────────
-    if stats:
-        _render_analytics(stats)
+            if no_plays:
+                with st.expander(f"No Plays — {len(no_plays)} game{'s' if len(no_plays) != 1 else ''}"):
+                    for b in no_plays:
+                        _render_card(b)
+
+            if stats:
+                _render_analytics(stats)
+
+    with tab_nba:
+        _render_nba_tab()
 
 
 main()
