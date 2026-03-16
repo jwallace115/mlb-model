@@ -81,10 +81,23 @@ def _cache_path(season: str, season_type: str) -> str:
     return os.path.join(CACHE_DIR, f"games_{season}_{slug}.json")
 
 
+_CACHE_TTL_CURRENT = 6 * 3600   # 6 hours for the active season
+_CACHE_TTL_PRIOR   = None        # prior seasons never expire
+
 def _load_cache(season: str, season_type: str) -> Optional[list]:
     path = _cache_path(season, season_type)
     if not os.path.exists(path):
         return None
+    # Invalidate stale cache for the current season
+    from nba.config import CURRENT_SEASON
+    if season == CURRENT_SEASON:
+        age = time.time() - os.path.getmtime(path)
+        if age > _CACHE_TTL_CURRENT:
+            logger.info(
+                f"Cache for {season} is {age/3600:.1f}h old (> 6h) — refreshing"
+            )
+            os.remove(path)
+            return None
     try:
         with open(path) as f:
             return json.load(f)

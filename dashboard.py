@@ -1714,9 +1714,10 @@ def _render_nba_tab() -> None:
         )
         return
 
-    plays    = nba.get("plays", [])
-    no_plays = nba.get("no_plays", [])
-    accuracy = nba.get("season_accuracy", {})
+    plays          = nba.get("plays", [])
+    no_plays       = nba.get("no_plays", [])
+    accuracy       = nba.get("season_accuracy", {})
+    recent_results = nba.get("recent_results", [])
 
     # ── season accuracy panel ─────────────────────────────────────────────────
     if accuracy and accuracy.get("total_games", 0) > 0:
@@ -1815,6 +1816,83 @@ def _render_nba_tab() -> None:
         ):
             for g in no_plays:
                 _render_nba_card(g)
+
+    # ── recent results ────────────────────────────────────────────────────────
+    st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
+    if recent_results:
+        W = sum(1 for r in recent_results if r.get("result") == "WIN")
+        L = sum(1 for r in recent_results if r.get("result") == "LOSS")
+        P = sum(1 for r in recent_results if r.get("result") == "PUSH")
+        n = W + L + P
+        hit = W / (W + L) if (W + L) > 0 else None
+        roi = (W * (100.0 / 110.0) - L) / n * 100 if n > 0 else None
+
+        hit_cls = "green" if (hit or 0) >= 0.525 else "yellow" if (hit or 0) >= 0.50 else "red"
+        hit_str = f"{hit * 100:.1f}%" if hit is not None else "—"
+        roi_str = f"{roi:+.1f}%" if roi is not None else "—"
+
+        st.html(f"""
+        <div class="season-banner" style="padding:10px 16px;margin-bottom:10px">
+          <div class="stat-grid">
+            <div class="stat-block">
+              <div class="num">{W}-{L}-{P}</div>
+              <div class="lbl">W-L-P (14d)</div>
+            </div>
+            <div class="stat-block">
+              <div class="num {hit_cls}">{hit_str}</div>
+              <div class="lbl">Hit Rate</div>
+            </div>
+            <div class="stat-block">
+              <div class="num">{roi_str}</div>
+              <div class="lbl">ROI @ -110</div>
+            </div>
+          </div>
+        </div>
+        """)
+
+        rows_html = ""
+        for r in recent_results:
+            matchup  = f"{r.get('away_team','')} @ {r.get('home_team','')}"
+            side     = r.get("signal_side", "")
+            line     = r.get("line")
+            edge     = r.get("edge")
+            actual   = r.get("actual_total")
+            result   = r.get("result", "")
+            tier     = r.get("tier", "LOW")
+            gd       = r.get("game_date", "")
+
+            line_s   = str(line) if line is not None else "—"
+            try:
+                edge_s = f"{float(edge):+.2f}" if edge is not None else "—"
+            except (TypeError, ValueError):
+                edge_s = str(edge) if edge is not None else "—"
+            try:
+                actual_s = f"{float(actual):.0f}" if actual is not None else "—"
+            except (TypeError, ValueError):
+                actual_s = str(actual) if actual is not None else "—"
+
+            rows_html += (
+                f'<tr>'
+                f'<td class="dim">{gd}</td>'
+                f'<td>{matchup}</td>'
+                f'<td>{_nhl_conf_badge(tier)} {_nhl_side_badge(side)}</td>'
+                f'<td>{line_s}</td>'
+                f'<td class="dim">{edge_s}</td>'
+                f'<td class="dim">{actual_s}</td>'
+                f'<td>{_nhl_result_badge(result)}</td>'
+                f'</tr>'
+            )
+        st.html(f"""
+        <table class="star-table">
+          <thead><tr>
+            <th>Date</th><th>Matchup</th><th>Signal</th>
+            <th>Line</th><th>Edge</th><th>Actual</th><th>Result</th>
+          </tr></thead>
+          <tbody>{rows_html}</tbody>
+        </table>
+        """)
+    else:
+        st.caption("No graded results in the last 14 days.")
 
 
 # ── main ──────────────────────────────────────────────────────────────────────

@@ -94,6 +94,55 @@ def load_today_projections(game_date: str) -> list[dict]:
         return []
 
 
+def load_recent_results(days: int = 14) -> list[dict]:
+    """Last `days` days of graded rows from nba_results_log.parquet."""
+    if not os.path.exists(NBA_RESULTS_PATH):
+        return []
+    try:
+        import pandas as pd
+        from datetime import timedelta
+        log = pd.read_parquet(NBA_RESULTS_PATH)
+        if log.empty:
+            return []
+        cutoff = (date.today() - timedelta(days=days)).isoformat()
+        recent = log[log["game_date"] >= cutoff].sort_values("game_date", ascending=False)
+
+        rows = []
+        for _, r in recent.iterrows():
+            lean   = r.get("lean", "")
+            line   = r.get("line")
+            actual = r.get("actual_total")
+            # Compute WIN/LOSS/PUSH vs the posted line (not rolling avg)
+            if line is not None and actual is not None:
+                actual = float(actual)
+                line   = float(line)
+                if actual == line:
+                    result = "PUSH"
+                elif lean == "OVER":
+                    result = "WIN" if actual > line else "LOSS"
+                else:  # UNDER
+                    result = "WIN" if actual < line else "LOSS"
+            else:
+                result = None
+            rows.append({
+                "game_date":   r.get("game_date"),
+                "away_team":   r.get("away_team"),
+                "home_team":   r.get("home_team"),
+                "signal_side": lean,
+                "line":        _safe(line),
+                "edge":        _safe(r.get("edge")),
+                "result":      result,
+                "tier":        r.get("confidence"),
+                "pred_total":  _safe(r.get("pred_total")),
+                "actual_total": _safe(actual),
+            })
+        print(f"[push_nba] Recent results ({days}d): {len(rows)}")
+        return rows
+    except Exception as e:
+        print(f"[push_nba] Failed to load recent results: {e}", file=sys.stderr)
+        return []
+
+
 def build_season_accuracy() -> dict:
     """Compute running MAE + directional HR from nba_results_log.parquet."""
     if not os.path.exists(NBA_RESULTS_PATH):
@@ -334,7 +383,8 @@ def generate_nba_summary(g: dict) -> str:
     return " ".join(parts[:4])
 
 
-def serialize(game_date: str, games: list[dict], accuracy: dict) -> dict:
+def serialize(game_date: str, games: list[dict], accuracy: dict,
+              recent_results: list[dict] | None = None) -> dict:
     # Generate natural-language summaries from model features
     for g in games:
         g["summary"] = generate_nba_summary(g)
@@ -356,6 +406,7 @@ def serialize(game_date: str, games: list[dict], accuracy: dict) -> dict:
         "plays":           plays,
         "no_plays":        no_plays,
         "season_accuracy": accuracy,
+        "recent_results":  recent_results or [],
     }
 
 
@@ -391,9 +442,10 @@ def git_push(game_date: str) -> bool:
 def write_nba_json(game_date: str = None) -> str:
     """Write nba_results.json and return the path. Does NOT git push."""
     game_date = game_date or date.today().isoformat()
-    games    = load_today_projections(game_date)
-    accuracy = build_season_accuracy()
-    payload  = serialize(game_date, games, accuracy)
+    games          = load_today_projections(game_date)
+    accuracy       = build_season_accuracy()
+    recent_results = load_recent_results(days=14)
+    payload        = serialize(game_date, games, accuracy, recent_results)
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_nba] Wrote {OUT_PATH} ({len(games)} games)")
