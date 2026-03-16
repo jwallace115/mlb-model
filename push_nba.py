@@ -44,6 +44,11 @@ def load_today_projections(game_date: str) -> list[dict]:
         if today.empty:
             print(f"[push_nba] No NBA projections found for {game_date}")
             return []
+        # Deduplicate on game_id (keep first); pipeline can write duplicate rows
+        dupes = len(today) - today["game_id"].nunique()
+        if dupes > 0:
+            print(f"[push_nba] Deduplicating {dupes} duplicate game_id row(s) from parquet")
+            today = today.drop_duplicates(subset=["game_id"], keep="first")
         rows = []
         for _, r in today.iterrows():
             rows.append({
