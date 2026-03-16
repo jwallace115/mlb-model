@@ -15,7 +15,7 @@ import json
 import os
 import subprocess
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 REPO_DIR     = os.path.dirname(os.path.abspath(__file__))
 OUT_PATH     = os.path.join(REPO_DIR, "nba_results.json")
@@ -351,7 +351,7 @@ def serialize(game_date: str, games: list[dict], accuracy: dict) -> dict:
     plays.sort(key=_sort_key)
 
     return {
-        "generated_at":    datetime.utcnow().isoformat() + "Z",
+        "generated_at":    datetime.now(timezone.utc).isoformat(),
         "game_date":       game_date,
         "plays":           plays,
         "no_plays":        no_plays,
