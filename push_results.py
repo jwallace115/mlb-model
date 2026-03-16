@@ -294,14 +294,19 @@ def main():
     else:
         print("[push_results] --skip-nba: skipping NBA model run.")
 
-    # Step 6b: NHL — grade yesterday + run today's pipeline + serialize JSON
+    # Step 6b: NHL — canonical refresh first, then grade + pipeline + serialize
     try:
-        import sys as _sys
-        import subprocess as _sp
-        _python = _sys.executable
+        print(f"[push_results] Refreshing NHL canonical table ...")
+        subprocess.run(
+            [sys.executable, "nhl/nhl_refresh_canonical.py"],
+            cwd=repo_dir, check=False,
+        )
+    except Exception as e:
+        print(f"[push_results] NHL canonical refresh failed (non-fatal): {e}", file=sys.stderr)
+    try:
         print(f"[push_results] Running NHL pipeline (--grade-yesterday) for {game_date} ...")
-        _sp.run(
-            [_python, "nhl/nhl_daily_pipeline.py", "--grade-yesterday", "--date", game_date],
+        subprocess.run(
+            [sys.executable, "nhl/nhl_daily_pipeline.py", "--grade-yesterday", "--date", game_date],
             cwd=repo_dir, check=False,
         )
     except Exception as e:
