@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-16T19:57:13.672753+00:00",
-  "last_updated": "2026-03-16 19:57 UTC",
+  "generated_at": "2026-03-16T19:58:54.418653+00:00",
+  "last_updated": "2026-03-16 19:58 UTC",
   "pipeline_run_date": "2026-03-16",
   "signals_source": "live",
   "game_date": "2026-03-16",
@@ -100,6 +100,15 @@
       }
     }
   },
-  "ot_diagnostics": {},
+  "ot_diagnostics": {
+    "total_graded": 709,
+    "ot_games": 161,
+    "so_games": 56,
+    "ot_rate": 0.2271,
+    "ot_flips": 38,
+    "ot_flip_rate": 0.236,
+    "under_ot_losses": 58,
+    "over_ot_losses": 18
+  },
   "data_quality_warning": false
 }
