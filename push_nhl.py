@@ -77,6 +77,27 @@ def load_today_signals(game_date: str) -> list[dict]:
                 "book":             r.get("book"),
                 "result":           r.get("result"),
                 "graded":           int(r.get("graded") or 0),
+                # Scoring-form features for summary (present in signals after Phase 6.1)
+                "home_goals_scored_rolling_10":  _safe(r.get("home_goals_scored_rolling_10")),
+                "away_goals_scored_rolling_10":  _safe(r.get("away_goals_scored_rolling_10")),
+                "home_goals_allowed_rolling_10": _safe(r.get("home_goals_allowed_rolling_10")),
+                "away_goals_allowed_rolling_10": _safe(r.get("away_goals_allowed_rolling_10")),
+                "home_xgf_rolling_20":           _safe(r.get("home_xgf_rolling_20")),
+                "away_xgf_rolling_20":           _safe(r.get("away_xgf_rolling_20")),
+                "home_xga_rolling_20":           _safe(r.get("home_xga_rolling_20")),
+                "away_xga_rolling_20":           _safe(r.get("away_xga_rolling_20")),
+                "home_pp_pct_rolling_20":        _safe(r.get("home_pp_pct_rolling_20")),
+                "away_pp_pct_rolling_20":        _safe(r.get("away_pp_pct_rolling_20")),
+                "home_goalie_vs_team_baseline":  _safe(r.get("home_goalie_vs_team_baseline")),
+                "away_goalie_vs_team_baseline":  _safe(r.get("away_goalie_vs_team_baseline")),
+                "home_goalie_b2b":               int(r.get("home_goalie_b2b") or 0),
+                "away_goalie_b2b":               int(r.get("away_goalie_b2b") or 0),
+                "home_b2b":                      int(r.get("home_b2b") or 0),
+                "away_b2b":                      int(r.get("away_b2b") or 0),
+                "goalie_confirmed_home":         bool(r.get("goalie_confirmed_home", True)),
+                "goalie_confirmed_away":         bool(r.get("goalie_confirmed_away", True)),
+                "backup_flag_home":              int(r.get("backup_flag_home") or 0),
+                "backup_flag_away":              int(r.get("backup_flag_away") or 0),
             })
         print(f"[push_nhl] Today's signals: {len(rows)}")
         return rows
@@ -181,11 +202,32 @@ def _pipeline_freshness(game_date: str) -> tuple[str, str]:
 
 def write_nhl_json(game_date: str = None) -> str:
     """Write nhl_results.json and return path. Does NOT git push."""
+    import sys as _sys
+    sys.path.insert(0, str(REPO_DIR / "nhl"))
+    try:
+        from nhl_summaries import generate_nhl_summary
+    except ImportError as e:
+        print(f"[push_nhl] WARNING: could not import nhl_summaries: {e}", file=sys.stderr)
+        generate_nhl_summary = None  # type: ignore
+
     game_date = game_date or date.today().isoformat()
 
     today_signals   = load_today_signals(game_date)
     recent_results  = load_recent_results(days=14)
     season_perf     = build_season_performance()
+
+    # Generate plain-English summaries for today's signals
+    if generate_nhl_summary is not None:
+        for s in today_signals:
+            try:
+                s["summary"] = generate_nhl_summary(s)
+            except Exception as e:
+                s["summary"] = ""
+                print(f"[push_nhl] Summary generation failed for {s.get('away_team')} @ "
+                      f"{s.get('home_team')}: {e}", file=sys.stderr)
+    else:
+        for s in today_signals:
+            s["summary"] = ""
 
     # Sort today's signals: HIGH first, then by edge desc
     tier_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}

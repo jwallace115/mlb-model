@@ -727,6 +727,25 @@ def run_pipeline(target_date: date) -> None:
                 "actual_total_goals_final": np.nan,
                 "result":                   "UNGRADED",
                 "graded":                   0,
+                # ── Scoring-form features for summary generation ──────────────
+                # Goals rolling 10: actual current-season data from live cache
+                # xGF/xGA/PP: league-average priors (MoneyPuck not in live feed)
+                "home_goals_scored_rolling_10":  feat.get("home_goals_scored_rolling_10"),
+                "away_goals_scored_rolling_10":  feat.get("away_goals_scored_rolling_10"),
+                "home_goals_allowed_rolling_10": feat.get("home_goals_allowed_rolling_10"),
+                "away_goals_allowed_rolling_10": feat.get("away_goals_allowed_rolling_10"),
+                "home_xgf_rolling_20":           feat.get("home_xgf_rolling_20"),
+                "away_xgf_rolling_20":           feat.get("away_xgf_rolling_20"),
+                "home_xga_rolling_20":           feat.get("home_xga_rolling_20"),
+                "away_xga_rolling_20":           feat.get("away_xga_rolling_20"),
+                "home_pp_pct_rolling_20":        feat.get("home_pp_pct_rolling_20"),
+                "away_pp_pct_rolling_20":        feat.get("away_pp_pct_rolling_20"),
+                "home_goalie_vs_team_baseline":  feat.get("home_goalie_vs_team_baseline", 0.0),
+                "away_goalie_vs_team_baseline":  feat.get("away_goalie_vs_team_baseline", 0.0),
+                "home_goalie_b2b":               feat.get("home_goalie_b2b", 0),
+                "away_goalie_b2b":               feat.get("away_goalie_b2b", 0),
+                "home_b2b":                      feat.get("home_b2b", 0),
+                "away_b2b":                      feat.get("away_b2b", 0),
             }
             signals.append(signal)
             print(f"    *** SIGNAL: {side}  edge={edge_val:.4f}  tier={tier}  "

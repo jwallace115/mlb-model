@@ -1218,66 +1218,105 @@ def _nhl_result_badge(result: str) -> str:
     return f'<span style="color:#4a5568">{r}</span>'
 
 
-def _render_nhl_signal_card(s: dict) -> None:
-    """Render a single NHL today-signal card."""
-    home = s.get("home_team", "")
-    away = s.get("away_team", "")
-    side = s.get("signal_side", "")
-    edge = s.get("edge")
-    sim  = s.get("sim_prob")
-    line = s.get("closing_total")
-    lam  = s.get("lambda_total_calibrated")
-    tier = s.get("confidence_tier", "LOW")
-    caut = s.get("caution_flag", 0)
+def _nhl_goalie_status(confirmed: bool, backup: bool, b2b: bool) -> str:
+    """Return an inline goalie status string with icon."""
+    if backup:
+        return '<span style="color:#f59e0b;font-weight:600">⚠ backup</span>'
+    if b2b:
+        return '<span style="color:#f59e0b;font-weight:600">⚠ B2B fatigue</span>'
+    if confirmed:
+        return '<span style="color:#22c55e">✓ confirmed</span>'
+    return '<span style="color:#4a5568">TBD</span>'
 
-    is_play  = tier in ("HIGH", "MEDIUM")
+
+def _render_nhl_signal_card(s: dict) -> None:
+    """Render a single NHL signal card matching the MLB card visual style."""
+    home    = s.get("home_team", "")
+    away    = s.get("away_team", "")
+    side    = s.get("signal_side", "")
+    edge    = s.get("edge")
+    sim     = s.get("sim_prob")
+    line    = s.get("closing_total")
+    lam     = s.get("lambda_total_calibrated")
+    tier    = s.get("confidence_tier", "LOW")
+    vol     = s.get("volatility_bucket", "low") or "low"
+    caut    = int(s.get("caution_flag") or 0)
+    summary = s.get("summary", "")
+
+    conf_h  = bool(s.get("goalie_confirmed_home", True))
+    conf_a  = bool(s.get("goalie_confirmed_away", True))
+    back_h  = int(s.get("backup_flag_home") or 0)
+    back_a  = int(s.get("backup_flag_away") or 0)
+    b2b_gh  = int(s.get("home_goalie_b2b") or 0)
+    b2b_ga  = int(s.get("away_goalie_b2b") or 0)
+
+    is_play   = tier in ("HIGH", "MEDIUM")
     conf_star = {"HIGH": "star3", "MEDIUM": "star2"}.get(tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
 
-    matchup  = f"{away} @ {home}"
+    matchup   = f"{away} @ {home}"
     sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
 
-    proj_parts = []
-    if lam is not None:
-        proj_parts.append(
-            f'<span class="proj-label">λ</span> '
-            f'<span class="proj-val">{lam:.2f}</span>'
-        )
-    if line is not None:
-        proj_parts.append(
-            f'<span class="proj-label">Line</span> '
-            f'<span class="proj-val">{line}</span>'
-        )
-    if edge is not None:
-        ecls = "edge-pos" if edge > 0 else "edge-neg"
-        proj_parts.append(
-            f'<span class="proj-label">Edge</span> '
-            f'<span class="{ecls}">{edge:+.4f}</span>'
-        )
+    # Header: side badge | matchup | tier badge
+    header = (
+        f'<div class="card-header">'
+        f'{_nhl_side_badge(side)}'
+        f'<span class="matchup">{matchup}</span>'
+        f'{_nhl_conf_badge(tier)}'
+        f'</div>'
+    )
+
+    # Stats row: Line | Edge (pp) | Model total | Vol
+    edge_pp   = f"{edge * 100:+.1f}pp" if edge is not None else "—"
+    ecls      = "edge-pos" if (edge or 0) > 0 else "edge-neg"
+    lam_str   = f"{lam:.1f}" if lam is not None else "—"
+    line_str  = str(line) if line is not None else "—"
+    stats_parts = [
+        f'<span class="proj-label">Line</span> <span class="proj-val">{line_str}</span>',
+        f'<span class="proj-label">Edge</span> <span class="{ecls}">{edge_pp}</span>',
+        f'<span class="proj-label">Model</span> <span class="proj-val">{lam_str}</span>',
+        f'<span class="proj-label">Vol</span> <span class="proj-val">{vol}</span>',
+    ]
     if sim is not None:
-        proj_parts.append(
+        stats_parts.append(
             f'<span class="proj-label">P({side.lower()})</span> '
             f'<span class="proj-val">{sim * 100:.0f}%</span>'
         )
+    stats_row = f'<div class="proj-row">{sep.join(stats_parts)}</div>'
 
-    proj_row = f'<div class="proj-row">{sep.join(proj_parts)}</div>'
+    # Goalie status row
+    gh_status = _nhl_goalie_status(conf_h, bool(back_h), bool(b2b_gh))
+    ga_status = _nhl_goalie_status(conf_a, bool(back_a), bool(b2b_ga))
+    goalie_row = (
+        f'<div style="font-size:0.80em;color:#4a5568;margin-bottom:7px">'
+        f'<strong style="color:#64748b">{home}</strong> {gh_status}'
+        f'&nbsp;&nbsp;|&nbsp;&nbsp;'
+        f'<strong style="color:#64748b">{away}</strong> {ga_status}'
+        f'</div>'
+    )
 
+    # Summary text
+    summary_html = (
+        f'<div class="card-summary">{summary}</div>'
+        if summary else ""
+    )
+
+    # Caution banner
     caution_html = ""
     if caut:
         caution_html = (
-            '<div style="font-size:0.78em;color:#f59e0b;margin-top:4px">'
-            '⚠ 6.5 OVER — historically underpriced ~4pp, use caution'
+            '<div style="background:#1c1400;border:1px solid #92400e;border-radius:4px;'
+            'padding:5px 10px;margin-top:6px;font-size:0.78em;color:#fde68a">'
+            '⚠ 6.5-line over — caution bucket: historically underpriced ~4pp for this model'
             '</div>'
         )
 
     st.html(
         f'<div class="{card_cls}">'
-        f'<div class="card-header">'
-        f'{_nhl_conf_badge(tier)}'
-        f'<span class="matchup">{matchup}</span>'
-        f'{_nhl_side_badge(side)}'
-        f'</div>'
-        f'{proj_row}'
+        f'{header}'
+        f'{stats_row}'
+        f'{goalie_row}'
+        f'{summary_html}'
         f'{caution_html}'
         f'</div>'
     )
