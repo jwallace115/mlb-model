@@ -143,6 +143,62 @@ def load_recent_results(days: int = 14) -> list[dict]:
         return []
 
 
+def build_ot_diagnostics() -> dict:
+    """
+    Shadow OT diagnostic stats from nba_results_log.parquet.
+    Reference only — does not affect official W/L/P grading.
+    """
+    if not os.path.exists(NBA_RESULTS_PATH):
+        return {}
+    try:
+        import pandas as pd
+        log = pd.read_parquet(NBA_RESULTS_PATH)
+        if log.empty or "went_to_ot" not in log.columns:
+            return {}
+
+        total    = len(log)
+        ot_games = int(log["went_to_ot"].fillna(0).sum())
+        ot_rate  = round(ot_games / total, 4) if total > 0 else None
+
+        ot_flips = int(log["ot_flip"].fillna(0).sum()) if "ot_flip" in log.columns else 0
+        ot_flip_rate = round(ot_flips / ot_games, 4) if ot_games > 0 else None
+
+        under_ot_losses = 0
+        over_ot_losses  = 0
+        for _, r in log.iterrows():
+            if r.get("went_to_ot") != 1:
+                continue
+            side   = r.get("lean", "")
+            line   = r.get("line")
+            actual = r.get("actual_total")
+            if line is None or actual is None:
+                continue
+            if side == "UNDER":
+                result = "WIN" if float(actual) < float(line) else "LOSS"
+                if result == "LOSS":
+                    under_ot_losses += 1
+            elif side == "OVER":
+                result = "WIN" if float(actual) > float(line) else "LOSS"
+                if result == "LOSS":
+                    over_ot_losses += 1
+
+        out = {
+            "total_graded":     total,
+            "ot_games":         ot_games,
+            "ot_rate":          ot_rate,
+            "ot_flips":         ot_flips,
+            "ot_flip_rate":     ot_flip_rate,
+            "under_ot_losses":  under_ot_losses,
+            "over_ot_losses":   over_ot_losses,
+        }
+        print(f"[push_nba] OT diagnostics: {ot_games} OT games, {ot_flips} flips, "
+              f"{under_ot_losses} under OT losses, {over_ot_losses} over OT losses")
+        return out
+    except Exception as e:
+        print(f"[push_nba] OT diagnostics failed: {e}", file=sys.stderr)
+        return {}
+
+
 def build_season_accuracy() -> dict:
     """Compute running MAE + directional HR from nba_results_log.parquet."""
     if not os.path.exists(NBA_RESULTS_PATH):
@@ -384,7 +440,8 @@ def generate_nba_summary(g: dict) -> str:
 
 
 def serialize(game_date: str, games: list[dict], accuracy: dict,
-              recent_results: list[dict] | None = None) -> dict:
+              recent_results: list[dict] | None = None,
+              ot_diagnostics: dict | None = None) -> dict:
     # Generate natural-language summaries from model features
     for g in games:
         g["summary"] = generate_nba_summary(g)
@@ -407,6 +464,7 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
         "no_plays":        no_plays,
         "season_accuracy": accuracy,
         "recent_results":  recent_results or [],
+        "ot_diagnostics":  ot_diagnostics or {},
     }
 
 
@@ -445,7 +503,8 @@ def write_nba_json(game_date: str = None) -> str:
     games          = load_today_projections(game_date)
     accuracy       = build_season_accuracy()
     recent_results = load_recent_results(days=14)
-    payload        = serialize(game_date, games, accuracy, recent_results)
+    ot_diagnostics = build_ot_diagnostics()
+    payload        = serialize(game_date, games, accuracy, recent_results, ot_diagnostics)
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_nba] Wrote {OUT_PATH} ({len(games)} games)")

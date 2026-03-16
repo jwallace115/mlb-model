@@ -1371,6 +1371,7 @@ def _render_nhl_tab() -> None:
     today_signals  = nhl.get("today_signals", [])
     recent_results = nhl.get("recent_results", [])
     season_perf    = nhl.get("season_performance", {})
+    ot_diag_nhl    = nhl.get("ot_diagnostics", {})
 
     # ── SECTION 1: Today's Signals ─────────────────────────────────────────────
     st.html('<div class="section-hdr">🎯 Today\'s Signals</div>')
@@ -1550,6 +1551,36 @@ def _render_nhl_tab() -> None:
     else:
         st.caption("Season performance data unavailable.")
 
+    # ── SECTION 4: OT Diagnostics ─────────────────────────────────────────────
+    if ot_diag_nhl and ot_diag_nhl.get("total_graded", 0) > 0:
+        ot_g    = ot_diag_nhl.get("ot_games", 0)
+        so_g    = ot_diag_nhl.get("so_games", 0)
+        total_g = ot_diag_nhl.get("total_graded", 1)
+        ot_rt   = ot_diag_nhl.get("ot_rate")
+        flips   = ot_diag_nhl.get("ot_flips", 0)
+        frate   = ot_diag_nhl.get("ot_flip_rate")
+        ul      = ot_diag_nhl.get("under_ot_losses", 0)
+        ol      = ot_diag_nhl.get("over_ot_losses", 0)
+        ot_rt_s = f"{ot_rt * 100:.1f}%" if ot_rt is not None else "—"
+        frate_s = f"{frate * 100:.1f}%" if frate is not None else "—"
+        st.html(f"""
+        <div style="background:#0f1117;border:1px solid #1e2535;border-radius:6px;
+                    padding:10px 14px;margin-bottom:10px;font-size:0.82em">
+          <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
+                      letter-spacing:0.08em;margin-bottom:8px">OT Diagnostics (Live Signals)</div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:6px">
+            <span>OT game rate: <strong>{ot_rt_s}</strong></span>
+            <span>OT flips (changed outcome): <strong>{flips}</strong> of {ot_g} OT games ({frate_s})</span>
+            <span>Shootout games: <strong>{so_g}</strong></span>
+            <span>Under losses from OT: <strong>{ul}</strong></span>
+            <span>Over losses from OT: <strong>{ol}</strong></span>
+          </div>
+          <div style="color:#4a5568;font-size:0.78em">
+            Official grading includes OT/SO per sportsbook rules. OT diagnostics are for analysis only.
+          </div>
+        </div>
+        """)
+
 
 def _nba_conf_badge(conf: str) -> str:
     c = (conf or "LOW").upper()
@@ -1718,6 +1749,7 @@ def _render_nba_tab() -> None:
     no_plays       = nba.get("no_plays", [])
     accuracy       = nba.get("season_accuracy", {})
     recent_results = nba.get("recent_results", [])
+    ot_diag_nba    = nba.get("ot_diagnostics", {})
 
     # ── season accuracy panel ─────────────────────────────────────────────────
     if accuracy and accuracy.get("total_games", 0) > 0:
@@ -1783,6 +1815,34 @@ def _render_nba_tab() -> None:
           <div style="color:#4a5568;font-size:0.88em">
             No results graded yet — accuracy panel populates after the first morning
             results run (day after first game day).
+          </div>
+        </div>
+        """)
+
+    # ── OT diagnostics ────────────────────────────────────────────────────────
+    if ot_diag_nba and ot_diag_nba.get("total_graded", 0) > 0:
+        ot_g   = ot_diag_nba.get("ot_games", 0)
+        total_g = ot_diag_nba.get("total_graded", 1)
+        ot_rt  = ot_diag_nba.get("ot_rate")
+        flips  = ot_diag_nba.get("ot_flips", 0)
+        frate  = ot_diag_nba.get("ot_flip_rate")
+        ul     = ot_diag_nba.get("under_ot_losses", 0)
+        ol     = ot_diag_nba.get("over_ot_losses", 0)
+        ot_rt_s  = f"{ot_rt * 100:.1f}%" if ot_rt is not None else "—"
+        frate_s  = f"{frate * 100:.1f}%" if frate is not None else "—"
+        st.html(f"""
+        <div style="background:#0f1117;border:1px solid #1e2535;border-radius:6px;
+                    padding:10px 14px;margin-bottom:10px;font-size:0.82em">
+          <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
+                      letter-spacing:0.08em;margin-bottom:8px">OT Diagnostics</div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:6px">
+            <span>OT game rate: <strong>{ot_rt_s}</strong></span>
+            <span>OT flips (changed outcome): <strong>{flips}</strong> of {ot_g} OT games ({frate_s})</span>
+            <span>Under losses from OT: <strong>{ul}</strong></span>
+            <span>Over losses from OT: <strong>{ol}</strong></span>
+          </div>
+          <div style="color:#4a5568;font-size:0.78em">
+            Official grading includes OT per sportsbook rules. OT diagnostics are for analysis only.
           </div>
         </div>
         """)

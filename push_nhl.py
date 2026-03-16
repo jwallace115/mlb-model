@@ -141,6 +141,101 @@ def load_recent_results(days: int = 14) -> list[dict]:
         return []
 
 
+def build_ot_diagnostics() -> dict:
+    """
+    Shadow OT diagnostic stats for all graded NHL signals.
+    Uses nhl_results.parquet (historical) + any graded live rows from nhl_decisions.parquet.
+    Joins went_to_ot/went_to_so/reg_total_goals from nhl_games_canonical.csv.
+    Reference only — does not affect official W/L/P grading.
+    """
+    try:
+        import numpy as np
+        import pandas as pd
+
+        frames = []
+        # Historical graded data (Phase 5)
+        if RESULTS_P.exists():
+            res = pd.read_parquet(RESULTS_P)
+            graded_hist = res[res["graded"] == 1].copy()
+            if not graded_hist.empty:
+                frames.append(graded_hist)
+        # Live graded signals
+        if DECISIONS.exists():
+            dec = pd.read_parquet(DECISIONS)
+            graded_live = dec[(dec["split"] == "live") & (dec["graded"] == 1)].copy()
+            if not graded_live.empty:
+                # Align columns: results has actual_total_goals_final, decisions may not
+                frames.append(graded_live)
+
+        if not frames:
+            return {}
+        merged_all = pd.concat(frames, ignore_index=True)
+
+        # Join OT fields from canonical by game_id
+        can_path = NHL_DIR / "nhl_games_canonical.csv"
+        if not can_path.exists():
+            return {}
+        canonical = pd.read_csv(can_path, usecols=[
+            "game_id", "went_to_ot", "went_to_so", "reg_total_goals"
+        ])
+        canonical["game_id"] = canonical["game_id"].astype(int)
+        merged_all["game_id"] = merged_all["game_id"].astype(int)
+        merged = merged_all.merge(canonical, on="game_id", how="left")
+
+        total    = len(merged)
+        ot_games = int(merged["went_to_ot"].fillna(0).sum())
+        so_games = int(merged["went_to_so"].fillna(0).sum())
+        ot_rate  = round(ot_games / total, 4) if total > 0 else None
+
+        # Compute regulation_result and ot_flip
+        ot_flips        = 0
+        under_ot_losses = 0
+        over_ot_losses  = 0
+        for _, r in merged.iterrows():
+            went_ot = r.get("went_to_ot")
+            if pd.isna(went_ot) or went_ot == 0:
+                continue
+            reg_total = r.get("reg_total_goals")
+            line      = r.get("closing_total")
+            side      = r.get("signal_side", "")
+            result    = r.get("result", "")
+            if pd.isna(reg_total) or pd.isna(line):
+                continue
+            reg_t = float(reg_total)
+            lin   = float(line)
+            if reg_t == lin:
+                reg_result = "PUSH"
+            elif side == "OVER":
+                reg_result = "WIN" if reg_t > lin else "LOSS"
+            else:
+                reg_result = "WIN" if reg_t < lin else "LOSS"
+            if result != reg_result:
+                ot_flips += 1
+            if side == "UNDER" and result == "LOSS":
+                under_ot_losses += 1
+            if side == "OVER" and result == "LOSS":
+                over_ot_losses += 1
+
+        ot_flip_rate = round(ot_flips / ot_games, 4) if ot_games > 0 else None
+
+        out = {
+            "total_graded":     total,
+            "ot_games":         ot_games,
+            "so_games":         so_games,
+            "ot_rate":          ot_rate,
+            "ot_flips":         ot_flips,
+            "ot_flip_rate":     ot_flip_rate,
+            "under_ot_losses":  under_ot_losses,
+            "over_ot_losses":   over_ot_losses,
+        }
+        print(f"[push_nhl] OT diagnostics: {ot_games} OT games ({so_games} SO), "
+              f"{ot_flips} flips, {under_ot_losses} under OT losses")
+        return out
+    except Exception as e:
+        print(f"[push_nhl] OT diagnostics failed: {e}", file=sys.stderr)
+        return {}
+
+
 def build_season_performance() -> dict:
     """Aggregate WIN/LOSS/PUSH from nhl_results.parquet (Phase 5 historical data)."""
     if not RESULTS_P.exists():
@@ -215,6 +310,7 @@ def write_nhl_json(game_date: str = None) -> str:
     today_signals   = load_today_signals(game_date)
     recent_results  = load_recent_results(days=14)
     season_perf     = build_season_performance()
+    ot_diag         = build_ot_diagnostics()
 
     # Generate plain-English summaries for today's signals
     if generate_nhl_summary is not None:
@@ -292,6 +388,7 @@ def write_nhl_json(game_date: str = None) -> str:
         "today_signals":       today_signals,
         "recent_results":      recent_results,
         "season_performance":  season_perf,
+        "ot_diagnostics":      ot_diag,
         "data_quality_warning": quality_warning,
     }
 

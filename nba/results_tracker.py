@@ -19,9 +19,11 @@ H1 coverage note:
   as the season progresses or a better H1 source is added.
 """
 
+import json
 import logging
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -36,8 +38,10 @@ import pandas as pd
 from datetime import date, timedelta
 
 from nba.config import (
+    CACHE_DIR,
     CURRENT_SEASON,
     MARKET_FLAG_THRESHOLD,
+    NBA_API_TIMEOUT,
     NBA_PROJECTIONS_PATH,
     NBA_RESULTS_LOG_PATH,
 )
@@ -46,6 +50,81 @@ logger = logging.getLogger(__name__)
 
 SEP  = "═" * 68
 SEP2 = "─" * 68
+
+
+# ── OT diagnostic data (ScoreboardV2 line scores) ────────────────────────────
+
+def _ot_cache_path(game_date: str) -> str:
+    return os.path.join(CACHE_DIR, f"ot_data_{game_date}.json")
+
+
+def fetch_ot_data(game_date: str) -> dict:
+    """
+    Fetch quarter-by-quarter scores for game_date from ScoreboardV2.
+    Returns {game_id: {"went_to_ot": 0/1, "regulation_total": float or None}}.
+    Caches to disk. Gracefully returns {} on any API failure.
+    Shadow diagnostic only — does not affect official grading.
+    """
+    cache_path = _ot_cache_path(game_date)
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path) as f:
+                data = json.load(f)
+            logger.info(f"OT data loaded from cache for {game_date}: {len(data)} games")
+            return data
+        except Exception:
+            pass
+
+    try:
+        from nba_api.stats.endpoints import scoreboardv2
+        from nba.modules.fetch_games import _call_with_retry
+        date_str = pd.Timestamp(game_date).strftime("%m/%d/%Y")
+        board = _call_with_retry(
+            scoreboardv2.ScoreboardV2,
+            game_date=date_str,
+            day_offset=0,
+            league_id="00",
+            timeout=NBA_API_TIMEOUT,
+        )
+        time.sleep(0.6)
+        ls = board.get_data_frames()[1]   # LineScore (index 1)
+    except Exception as e:
+        logger.warning(f"OT data fetch failed for {game_date}: {e}")
+        return {}
+
+    if ls.empty:
+        return {}
+
+    qt_cols = ["PTS_QTR1", "PTS_QTR2", "PTS_QTR3", "PTS_QTR4"]
+    ot_cols = [f"PTS_OT{i}" for i in range(1, 11)]
+
+    result = {}
+    for gid, grp in ls.groupby("GAME_ID"):
+        gid_str = str(gid)
+        # OT detection: any OT column with score > 0
+        ot_pts = sum(
+            int(grp[c].fillna(0).sum())
+            for c in ot_cols if c in grp.columns
+        )
+        went_to_ot = 1 if ot_pts > 0 else 0
+
+        # Regulation total: sum of all 4 quarters for both teams
+        reg_total = None
+        if all(c in grp.columns for c in qt_cols):
+            vals = grp[qt_cols].fillna(0).values
+            if not (vals == 0).all():     # data present (not all zeroes)
+                reg_total = float(vals.sum())
+
+        result[gid_str] = {"went_to_ot": went_to_ot, "regulation_total": reg_total}
+
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(result, f)
+    except Exception:
+        pass
+
+    logger.info(f"OT data fetched for {game_date}: {len(result)} games")
+    return result
 
 
 # ── Load previous projections ─────────────────────────────────────────────────
@@ -102,6 +181,9 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
     rows = []
     yesterday = (pd.Timestamp(game_date) - timedelta(days=1)).date().isoformat()
 
+    # Shadow OT diagnostic layer — fetch quarter scores for yesterday
+    ot_data = fetch_ot_data(yesterday)
+
     for _, proj in projs.iterrows():
         gid  = proj.get("game_id")
         home = proj.get("home_team")
@@ -153,25 +235,65 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
         h1_err        = None
         h1_correct    = None
 
+        # ── Official W/L/P vs posted line (for OT diagnostic reference) ────────
+        official_result = None
+        if line is not None:
+            lin = float(line)
+            if actual_total == lin:
+                official_result = "PUSH"
+            elif lean == "OVER":
+                official_result = "WIN" if actual_total > lin else "LOSS"
+            else:
+                official_result = "WIN" if actual_total < lin else "LOSS"
+
+        # ── Shadow OT diagnostic fields (do not affect official grading) ───────
+        ot_info          = ot_data.get(str(gid), {})
+        went_to_ot       = ot_info.get("went_to_ot")          # 0/1 or None
+        regulation_total = ot_info.get("regulation_total")     # float or None
+        regulation_result = None
+        ot_flip           = None
+
+        if went_to_ot is not None:
+            if went_to_ot == 0:
+                # Regulation game: reg total == actual total, no flip possible
+                regulation_total  = actual_total
+                regulation_result = official_result
+                ot_flip           = 0
+            elif regulation_total is not None and official_result is not None and line is not None:
+                reg_t = float(regulation_total)
+                lin   = float(line)
+                if reg_t == lin:
+                    regulation_result = "PUSH"
+                elif lean == "OVER":
+                    regulation_result = "WIN" if reg_t > lin else "LOSS"
+                else:
+                    regulation_result = "WIN" if reg_t < lin else "LOSS"
+                ot_flip = 1 if official_result != regulation_result else 0
+
         rows.append({
-            "game_date":        yesterday,
-            "game_id":          gid,
-            "home_team":        home,
-            "away_team":        away,
-            "pred_total":       round(pred_total, 2),
-            "actual_total":     round(actual_total, 2),
-            "full_err":         round(full_err, 2),
-            "full_correct":     full_correct,
-            "confidence":       confidence,
-            "lean":             lean,
-            "line":             line,
-            "edge":             edge,
-            "pred_h1":          pred_h1,
-            "actual_h1":        actual_h1,
-            "h1_err":           h1_err,
-            "h1_correct":       h1_correct,
-            "h1_line":          h1_line,
-            "market_gap_flag":  market_gap_flag,
+            "game_date":          yesterday,
+            "game_id":            gid,
+            "home_team":          home,
+            "away_team":          away,
+            "pred_total":         round(pred_total, 2),
+            "actual_total":       round(actual_total, 2),
+            "full_err":           round(full_err, 2),
+            "full_correct":       full_correct,
+            "confidence":         confidence,
+            "lean":               lean,
+            "line":               line,
+            "edge":               edge,
+            "pred_h1":            pred_h1,
+            "actual_h1":          actual_h1,
+            "h1_err":             h1_err,
+            "h1_correct":         h1_correct,
+            "h1_line":            h1_line,
+            "market_gap_flag":    market_gap_flag,
+            # Shadow OT diagnostics (reference only — official grading unchanged)
+            "went_to_ot":         went_to_ot,
+            "regulation_total":   regulation_total,
+            "regulation_result":  regulation_result,
+            "ot_flip":            ot_flip,
         })
 
     if not rows:
