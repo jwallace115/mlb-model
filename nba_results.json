@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-16T19:38:38.422959+00:00",
+  "generated_at": "2026-03-16T19:57:09.602173+00:00",
   "game_date": "2026-03-16",
   "plays": [
     {
@@ -432,5 +432,14 @@
       "pred_total": 232.49,
       "actual_total": 227.0
     }
-  ]
+  ],
+  "ot_diagnostics": {
+    "total_graded": 9,
+    "ot_games": 1,
+    "ot_rate": 0.1111,
+    "ot_flips": 1,
+    "ot_flip_rate": 1.0,
+    "under_ot_losses": 1,
+    "over_ot_losses": 0
+  }
 }
