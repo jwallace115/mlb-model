@@ -276,7 +276,8 @@ def main():
 
     # Step 6: run NBA model → fresh parquet + NBA grading, then serialize JSON
     dashboard_files = ["results.json", "season_stats.json"]
-    if not args.skip_nba:
+    skip_nba = args.skip_nba
+    if not skip_nba:
         try:
             print(f"[push_results] Running NBA model for {game_date} ...")
             from nba.run_nba import run as nba_run
@@ -292,6 +293,25 @@ def main():
             print(f"[push_results] NBA JSON write failed (non-fatal): {e}", file=sys.stderr)
     else:
         print("[push_results] --skip-nba: skipping NBA model run.")
+
+    # Step 6b: NHL — grade yesterday + run today's pipeline + serialize JSON
+    try:
+        import sys as _sys
+        import subprocess as _sp
+        _python = _sys.executable
+        print(f"[push_results] Running NHL pipeline (--grade-yesterday) for {game_date} ...")
+        _sp.run(
+            [_python, "nhl/nhl_daily_pipeline.py", "--grade-yesterday", "--date", game_date],
+            cwd=repo_dir, check=False,
+        )
+    except Exception as e:
+        print(f"[push_results] NHL pipeline failed (non-fatal): {e}", file=sys.stderr)
+    try:
+        from push_nhl import write_nhl_json
+        write_nhl_json(game_date)
+        dashboard_files.append("nhl_results.json")
+    except Exception as e:
+        print(f"[push_results] NHL JSON write failed (non-fatal): {e}", file=sys.stderr)
 
     # Step 7: single combined push for all dashboard artifacts
     if not args.no_push:

@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-03-16T17:21:52.955807Z",
+  "game_date": "2026-03-16",
+  "today_signals": [
+    {
+      "game_id": 2025021064,
+      "game_date": "2026-03-16",
+      "home_team": "NJD",
+      "away_team": "BOS",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.11995646123260428,
+      "edge_bucket": "0.10-0.12",
+      "sim_prob": 0.6627,
+      "confidence_tier": "LOW",
+      "caution_flag": 0,
+      "volatility_bucket": "low",
+      "lambda_total_calibrated": 5.594829436536603,
+      "over_price": 110.0,
+      "under_price": -130.0,
+      "book": "draftkings",
+      "result": "UNGRADED",
+      "graded": 0
+    }
+  ],
+  "recent_results": [],
+  "season_performance": {
+    "validate": {
+      "W": 136,
+      "L": 117,
+      "P": 2,
+      "n": 255,
+      "hit": 0.5375,
+      "roi": 2.6
+    },
+    "oos": {
+      "W": 82,
+      "L": 72,
+      "P": 0,
+      "n": 154,
+      "hit": 0.5325,
+      "roi": 1.65
+    },
+    "combined": {
+      "W": 389,
+      "L": 314,
+      "P": 6,
+      "n": 709,
+      "hit": 0.5533,
+      "roi": 5.59
+    },
+    "by_confidence_tier": {
+      "HIGH": {
+        "W": 90,
+        "L": 81,
+        "P": 0,
+        "n": 171,
+        "hit": 0.5263,
+        "roi": 0.48
+      },
+      "MEDIUM": {
+        "W": 144,
+        "L": 114,
+        "P": 1,
+        "n": 259,
+        "hit": 0.5581,
+        "roi": 6.53
+      },
+      "LOW": {
+        "W": 155,
+        "L": 119,
+        "P": 5,
+        "n": 279,
+        "hit": 0.5657,
+        "roi": 7.85
+      }
+    }
+  }
+}

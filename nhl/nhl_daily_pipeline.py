@@ -1,0 +1,868 @@
+#!/usr/bin/env python3
+"""
+NHL Daily Prediction Pipeline
+==============================
+Fetches today's NHL schedule, computes features, runs ridge models,
+applies dynamic calibration + Poisson simulation, computes edges
+against Odds API lines, outputs qualified signals (edge >= 0.10).
+
+Usage:
+  python3 nhl/nhl_daily_pipeline.py                   # today
+  python3 nhl/nhl_daily_pipeline.py --date 2026-03-15 # specific date
+
+Outputs: appends qualified signals to nhl/nhl_decisions.parquet
+"""
+
+import argparse
+import json
+import os
+import pickle
+import sys
+from datetime import date, datetime, timedelta
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import requests
+
+# ---------------------------------------------------------------------------
+NHL_DIR   = Path(__file__).parent
+BASE_DIR  = NHL_DIR.parent
+CACHE_DIR = NHL_DIR / "cache"
+CACHE_DIR.mkdir(exist_ok=True)
+
+FT_FILE      = NHL_DIR / "nhl_feature_table.parquet"
+HOME_PKL     = NHL_DIR / "ridge_home_model.pkl"
+AWAY_PKL     = NHL_DIR / "ridge_away_model.pkl"
+DECISIONS    = NHL_DIR / "nhl_decisions.parquet"
+LIVE_CACHE   = CACHE_DIR / "nhl_live_season.parquet"  # current-season games
+
+NHL_API      = "https://api-web.nhle.com/v1"
+ODDS_API_BASE = "https://api.the-odds-api.com/v4"
+
+N_SIM     = 10_000
+SEED      = 42
+THRESHOLD = 0.10
+
+# Validate-season fallback drift (from Phase 4.5)
+VALIDATE_DRIFT = 0.4458
+
+# Min current-season games before using rolling (vs fallback prior)
+MIN_SEASON_GAMES = 10
+
+WIN_PER_UNIT = 100.0 / 110.0
+
+# ---------------------------------------------------------------------------
+# NHL team name → canonical abbreviation  (for Odds API full names)
+# ---------------------------------------------------------------------------
+ODDS_TEAM_MAP = {
+    "Anaheim Ducks":            "ANA",
+    "Arizona Coyotes":          "ARI",
+    "Boston Bruins":            "BOS",
+    "Buffalo Sabres":           "BUF",
+    "Calgary Flames":           "CGY",
+    "Carolina Hurricanes":      "CAR",
+    "Chicago Blackhawks":       "CHI",
+    "Colorado Avalanche":       "COL",
+    "Columbus Blue Jackets":    "CBJ",
+    "Dallas Stars":             "DAL",
+    "Detroit Red Wings":        "DET",
+    "Edmonton Oilers":          "EDM",
+    "Florida Panthers":         "FLA",
+    "Los Angeles Kings":        "LAK",
+    "Minnesota Wild":           "MIN",
+    "Montreal Canadiens":       "MTL",
+    "Nashville Predators":      "NSH",
+    "New Jersey Devils":        "NJD",
+    "New York Islanders":       "NYI",
+    "New York Rangers":         "NYR",
+    "Ottawa Senators":          "OTT",
+    "Philadelphia Flyers":      "PHI",
+    "Pittsburgh Penguins":      "PIT",
+    "San Jose Sharks":          "SJS",
+    "Seattle Kraken":           "SEA",
+    "St. Louis Blues":          "STL",
+    "Tampa Bay Lightning":      "TBL",
+    "Toronto Maple Leafs":      "TOR",
+    "Utah Mammoth":             "UTA",   # formerly Arizona
+    "Vancouver Canucks":        "VAN",
+    "Vegas Golden Knights":     "VGK",
+    "Washington Capitals":      "WSH",
+    "Winnipeg Jets":            "WPG",
+}
+
+# Priority for Odds API bookmakers
+BOOK_PRIORITY = ["draftkings", "fanduel", "betmgm", "williamhill_us"]
+
+# ---------------------------------------------------------------------------
+# Load models and feature table
+# ---------------------------------------------------------------------------
+def load_models():
+    with open(HOME_PKL, "rb") as f:
+        hpkg = pickle.load(f)
+    with open(AWAY_PKL, "rb") as f:
+        apkg = pickle.load(f)
+    return hpkg, apkg
+
+def load_feature_table() -> pd.DataFrame:
+    return pd.read_parquet(FT_FILE)
+
+# ---------------------------------------------------------------------------
+# Compute 2024-25 end-of-season league averages (shrinkage priors)
+# ---------------------------------------------------------------------------
+def compute_league_priors(ft: pd.DataFrame) -> dict:
+    """Extract 2024-25 league-average feature values for use as shrinkage priors."""
+    oos = ft[ft["season_year"] == 2024]
+
+    priors = {}
+    for side in ("home", "away"):
+        priors[f"{side}_xgf_rolling_20"]              = oos[f"{side}_xgf_rolling_20"].mean()
+        priors[f"{side}_shots_for_rolling_20"]         = oos[f"{side}_shots_for_rolling_20"].mean()
+        priors[f"{side}_hd_shots_for_rolling_20"]      = oos[f"{side}_hd_shots_for_rolling_20"].mean()
+        priors[f"{side}_xga_rolling_20"]               = oos[f"{side}_xga_rolling_20"].mean()
+        priors[f"{side}_shots_against_rolling_20"]     = oos[f"{side}_shots_against_rolling_20"].mean()
+        priors[f"{side}_hd_shots_against_rolling_20"]  = oos[f"{side}_hd_shots_against_rolling_20"].mean()
+        priors[f"{side}_pp_pct_rolling_20"]            = oos[f"{side}_pp_pct_rolling_20"].mean()
+        priors[f"{side}_pk_pct_rolling_20"]            = oos[f"{side}_pk_pct_rolling_20"].mean()
+        priors[f"{side}_pp_opp_per_game_rolling_20"]   = oos[f"{side}_pp_opp_per_game_rolling_20"].mean()
+        priors[f"{side}_goals_scored_rolling_10"]      = oos[f"{side}_goals_scored_rolling_10"].mean()
+        priors[f"{side}_goals_allowed_rolling_10"]     = oos[f"{side}_goals_allowed_rolling_10"].mean()
+        priors[f"{side}_penalties_taken_rolling_20"]   = oos[f"{side}_penalties_taken_rolling_20"].mean()
+        priors[f"{side}_goalie_sv_pct_rolling_10"]     = oos[f"{side}_goalie_sv_pct_rolling_10"].mean()
+        priors[f"{side}_goalie_vs_team_baseline"]      = 0.0
+        priors[f"{side}_goalie_fatigue"]               = 0
+        priors[f"{side}_goalie_b2b"]                   = 0
+        priors[f"{side}_backup_flag"]                  = 0
+
+    # Derived: shot pressure (= 0 when both at league avg)
+    priors["home_shot_pressure"] = 0.0
+    priors["away_shot_pressure"] = 0.0
+    priors["home_hd_pressure"]   = 0.0
+    priors["away_hd_pressure"]   = 0.0
+
+    # Schedule defaults
+    priors["home_days_rest"]    = 3.0
+    priors["away_days_rest"]    = 3.0
+    priors["home_b2b"]          = 0
+    priors["away_b2b"]          = 0
+    priors["home_games_last_7"] = 2.5
+    priors["away_games_last_7"] = 2.5
+
+    return priors
+
+# ---------------------------------------------------------------------------
+# Fetch NHL schedule for a date
+# ---------------------------------------------------------------------------
+def fetch_schedule(target_date: date) -> list[dict]:
+    """Return list of game dicts for target_date."""
+    url = f"{NHL_API}/schedule/{target_date.isoformat()}"
+    try:
+        r = requests.get(url, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        for day in data.get("gameWeek", []):
+            if day.get("date") == target_date.isoformat():
+                return day.get("games", [])
+    except Exception as e:
+        print(f"  WARNING: Could not fetch schedule: {e}")
+    return []
+
+# ---------------------------------------------------------------------------
+# Fetch goalie info from NHL boxscore
+# ---------------------------------------------------------------------------
+def fetch_goalies(game_id: int) -> dict:
+    """
+    Returns {'home': {'name': str, 'starter': bool, 'sa': int, 'ga': int},
+             'away': ...}
+    Falls back to empty dicts on error.
+    """
+    url = f"{NHL_API}/gamecenter/{game_id}/boxscore"
+    try:
+        r = requests.get(url, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        pg = data.get("playerByGameStats", {})
+        result = {}
+        for side in ("homeTeam", "awayTeam"):
+            key = "home" if side == "homeTeam" else "away"
+            goalies = pg.get(side, {}).get("goalies", [])
+            starter = next((g for g in goalies if g.get("starter")), None)
+            if starter:
+                result[key] = {
+                    "name":    starter.get("name", {}).get("default", "Unknown"),
+                    "starter": True,
+                    "sa":      starter.get("shotsAgainst", 0) or 0,
+                    "ga":      (starter.get("shotsAgainst", 0) or 0) -
+                               (starter.get("saves", 0) or 0),
+                }
+            else:
+                result[key] = {"name": "Unknown", "starter": False, "sa": 0, "ga": 0}
+        return result
+    except Exception:
+        return {"home": {}, "away": {}}
+
+# ---------------------------------------------------------------------------
+# Fetch current-season live game data and cache it
+# ---------------------------------------------------------------------------
+def load_or_refresh_live_season(target_date: date) -> pd.DataFrame:
+    """
+    Returns DataFrame of completed games in current season up to target_date.
+    Uses cache if fresh (< 6 hours old); otherwise fetches from NHL API.
+
+    NOTE: This is a simplified fetch using NHL schedule + boxscore.
+    MoneyPuck features (xGF, xGA, HD shots) are not available here;
+    those features will fall back to league-average priors.
+    """
+    refresh = True
+    if LIVE_CACHE.exists():
+        mtime = datetime.fromtimestamp(LIVE_CACHE.stat().st_mtime)
+        if (datetime.now() - mtime).total_seconds() < 6 * 3600:
+            refresh = False
+
+    if not refresh:
+        df = pd.read_parquet(LIVE_CACHE)
+        # Filter to games before target_date
+        df["game_date"] = pd.to_datetime(df["game_date"]).dt.date
+        return df[df["game_date"] < target_date]
+
+    # Determine current season start (Oct 1 of the current season)
+    year = target_date.year if target_date.month >= 10 else target_date.year - 1
+    season_start = date(year, 10, 1)
+    print(f"  Fetching 2025-26 season game data ({season_start} → {target_date})...")
+
+    rows = []
+    current = season_start
+    while current < target_date:
+        url = f"{NHL_API}/schedule/{current.isoformat()}"
+        try:
+            r = requests.get(url, timeout=15)
+            r.raise_for_status()
+            data = r.json()
+            for day in data.get("gameWeek", []):
+                if day.get("date") == current.isoformat():
+                    for g in day.get("games", []):
+                        if g.get("gameState") == "OFF" and g.get("gameType") == 2:
+                            rows.append({
+                                "game_id":    g["id"],
+                                "game_date":  current,
+                                "home_team":  g["homeTeam"]["abbrev"],
+                                "away_team":  g["awayTeam"]["abbrev"],
+                                "home_score": g["homeTeam"].get("score", np.nan),
+                                "away_score": g["awayTeam"].get("score", np.nan),
+                            })
+        except Exception:
+            pass
+        current += timedelta(days=1)
+
+    df = pd.DataFrame(rows) if rows else pd.DataFrame(
+        columns=["game_id", "game_date", "home_team", "away_team",
+                 "home_score", "away_score"])
+
+    if len(df):
+        df.to_parquet(LIVE_CACHE, index=False)
+        print(f"  Live season cache: {len(df)} games saved")
+    else:
+        print("  No current-season games found (early season or API issue)")
+
+    return df[df["game_date"] < target_date] if len(df) else df
+
+# ---------------------------------------------------------------------------
+# Build rolling features for a team from live season data
+# ---------------------------------------------------------------------------
+def build_live_team_features(team: str, game_date: date,
+                              live: pd.DataFrame, priors: dict,
+                              side: str) -> dict:
+    """
+    Compute rolling features for a team entering game_date.
+    Uses live season data where available; falls back to priors.
+    Since xGF/xGA/HD shots aren't in live data, those use priors.
+    'side' = 'home' or 'away' — used for feature naming.
+    """
+    # All prior games this season for this team (as home or away)
+    if len(live) > 0:
+        live["game_date"] = pd.to_datetime(live["game_date"]).dt.date
+        team_games = live[
+            ((live["home_team"] == team) | (live["away_team"] == team)) &
+            (live["game_date"] < game_date)
+        ].sort_values("game_date")
+    else:
+        team_games = pd.DataFrame()
+
+    n = len(team_games)
+
+    # Shrinkage weight
+    def shrink(raw, n_obs, prior_val, window=20):
+        w = min(n_obs, window) / window
+        return w * raw + (1 - w) * prior_val
+
+    feat = {}
+
+    # --- Goals scored / allowed (available from live data) ---
+    if n > 0:
+        goals_scored  = []
+        goals_allowed = []
+        for _, r in team_games.iterrows():
+            if r["home_team"] == team:
+                goals_scored.append(r["home_score"])
+                goals_allowed.append(r["away_score"])
+            else:
+                goals_scored.append(r["away_score"])
+                goals_allowed.append(r["home_score"])
+
+        gs_arr = [g for g in goals_scored[-10:] if not pd.isna(g)]
+        ga_arr = [g for g in goals_allowed[-10:] if not pd.isna(g)]
+        gs_raw = float(np.mean(gs_arr)) if gs_arr else np.nan
+        ga_raw = float(np.mean(ga_arr)) if ga_arr else np.nan
+    else:
+        gs_raw, ga_raw = np.nan, np.nan
+
+    feat[f"{side}_goals_scored_rolling_10"]  = shrink(gs_raw or priors[f"{side}_goals_scored_rolling_10"],
+                                                       n, priors[f"{side}_goals_scored_rolling_10"], 10)
+    feat[f"{side}_goals_allowed_rolling_10"] = shrink(ga_raw or priors[f"{side}_goals_allowed_rolling_10"],
+                                                      n, priors[f"{side}_goals_allowed_rolling_10"], 10)
+
+    # --- MoneyPuck-dependent features: full shrinkage to prior ---
+    for col in [f"{side}_xgf_rolling_20", f"{side}_shots_for_rolling_20",
+                f"{side}_hd_shots_for_rolling_20", f"{side}_xga_rolling_20",
+                f"{side}_shots_against_rolling_20", f"{side}_hd_shots_against_rolling_20",
+                f"{side}_pp_pct_rolling_20", f"{side}_pk_pct_rolling_20",
+                f"{side}_pp_opp_per_game_rolling_20", f"{side}_penalties_taken_rolling_20",
+                f"{side}_goalie_sv_pct_rolling_10", f"{side}_goalie_vs_team_baseline"]:
+        feat[col] = priors[col]  # shrinkage weight = 0/n = 0 → 100% prior
+
+    return feat
+
+# ---------------------------------------------------------------------------
+# Compute full feature row for a game
+# ---------------------------------------------------------------------------
+def compute_game_features(home: str, away: str, game_date: date,
+                           live: pd.DataFrame, priors: dict,
+                           home_goalie_info: dict, away_goalie_info: dict,
+                           home_b2b: bool = False, away_b2b: bool = False,
+                           home_rest: float = 3.0, away_rest: float = 3.0) -> dict:
+    h_feat = build_live_team_features(home, game_date, live, priors, "home")
+    a_feat = build_live_team_features(away, game_date, live, priors, "away")
+
+    # Shot pressure (derived — both at league avg → pressure = 0)
+    feat = {**h_feat, **a_feat}
+    feat["home_shot_pressure"] = feat["home_shots_for_rolling_20"] - feat["away_shots_against_rolling_20"]
+    feat["away_shot_pressure"] = feat["away_shots_for_rolling_20"] - feat["home_shots_against_rolling_20"]
+    feat["home_hd_pressure"]   = feat["home_hd_shots_for_rolling_20"] - feat["away_hd_shots_against_rolling_20"]
+    feat["away_hd_pressure"]   = feat["away_hd_shots_for_rolling_20"] - feat["home_hd_shots_against_rolling_20"]
+
+    # Goalie adjustments from live info
+    feat["home_goalie_fatigue"] = 0   # not computed from live data
+    feat["home_goalie_b2b"]     = int(home_b2b)
+    feat["home_backup_flag"]    = 0 if home_goalie_info.get("starter", True) else 1
+    feat["away_goalie_fatigue"] = 0
+    feat["away_goalie_b2b"]     = int(away_b2b)
+    feat["away_backup_flag"]    = 0 if away_goalie_info.get("starter", True) else 1
+
+    # Schedule features
+    feat["home_days_rest"]    = home_rest
+    feat["away_days_rest"]    = away_rest
+    feat["home_b2b"]          = int(home_b2b)
+    feat["away_b2b"]          = int(away_b2b)
+    feat["home_games_last_7"] = priors["home_games_last_7"]
+    feat["away_games_last_7"] = priors["away_games_last_7"]
+
+    return feat
+
+# ---------------------------------------------------------------------------
+# Apply models + dynamic calibration
+# ---------------------------------------------------------------------------
+def predict_and_calibrate(feat: dict, hpkg: dict, apkg: dict,
+                          live: pd.DataFrame, game_date: date,
+                          train_col_means: pd.Series) -> tuple[float, float, float]:
+    """
+    Returns (lambda_home_cal, lambda_away_cal, seasonal_drift).
+    """
+    # Build DataFrames for model input
+    feat_df = pd.DataFrame([feat])
+    # Fill any missing columns with train means
+    for col in hpkg["features"] + apkg["features"]:
+        if col not in feat_df.columns:
+            feat_df[col] = train_col_means.get(col, 0.0)
+    feat_df = feat_df.fillna(train_col_means)
+
+    lh_raw = hpkg["model"].predict(hpkg["scaler"].transform(feat_df[hpkg["features"]].to_numpy()))[0]
+    la_raw = apkg["model"].predict(apkg["scaler"].transform(feat_df[apkg["features"]].to_numpy()))[0]
+    lt_raw = lh_raw + la_raw
+
+    # Dynamic seasonal drift
+    # Determine current season year (Oct start)
+    season_year = game_date.year if game_date.month >= 10 else game_date.year - 1
+
+    # For 2025-26 season, check if we have live game data
+    if len(live) > 0:
+        live_copy = live.copy()
+        live_copy["game_date"] = pd.to_datetime(live_copy["game_date"]).dt.date
+        prior_games = live_copy[live_copy["game_date"] < game_date]
+        n_prior = len(prior_games)
+    else:
+        prior_games = pd.DataFrame()
+        n_prior = 0
+
+    if n_prior >= MIN_SEASON_GAMES and "total_goals" in prior_games.columns:
+        # We'd need model predictions for those games too — complex for stub
+        # Fall back to validate drift
+        seasonal_drift = VALIDATE_DRIFT
+    else:
+        seasonal_drift = VALIDATE_DRIFT
+
+    lh_cal = lh_raw + seasonal_drift / 2.0
+    la_cal = la_raw + seasonal_drift / 2.0
+    return float(lh_cal), float(la_cal), float(seasonal_drift)
+
+# ---------------------------------------------------------------------------
+# Poisson simulation
+# ---------------------------------------------------------------------------
+def simulate(lh_cal: float, la_cal: float, line: float,
+             n_sim: int = N_SIM, seed: int = SEED) -> dict:
+    rng  = np.random.default_rng(seed)
+    lh   = max(0.5, min(8.0, lh_cal))
+    la   = max(0.5, min(8.0, la_cal))
+    sims = rng.poisson(lh, n_sim) + rng.poisson(la, n_sim)
+
+    over_p  = float((sims > line).mean())
+    under_p = float((sims < line).mean())
+    push_p  = float((sims == line).mean())
+
+    # Push correction for integer lines (from Phase 4.5)
+    # Correction for 6.0: actual_push ≈ 0.1115, sim_push ≈ 0.1586
+    # adj = (actual_push - sim_push) / 2 * (-1) = +0.0236 redistributed each way
+    INT_LINE_CORRECTIONS = {6.0: -0.0471, 7.0: -0.0422}
+    if line in INT_LINE_CORRECTIONS:
+        corr  = INT_LINE_CORRECTIONS[line]
+        adj   = -corr * 0.5   # positive → add to over/under, reduce push
+        over_p  = max(0.0, min(1.0, over_p  + adj))
+        under_p = max(0.0, min(1.0, under_p + adj))
+        push_p  = max(0.0, min(1.0, push_p  - 2 * adj))
+
+    return {"over": over_p, "under": under_p, "push": push_p,
+            "lambda_home": lh_cal, "lambda_away": la_cal,
+            "lambda_total": lh_cal + la_cal}
+
+# ---------------------------------------------------------------------------
+# Fetch NHL odds from Odds API
+# ---------------------------------------------------------------------------
+def fetch_nhl_odds(target_date: date) -> dict[tuple, dict]:
+    """
+    Returns {(home_abbrev, away_abbrev): {line, over_price, under_price, book}}
+    for today's NHL games.
+    """
+    try:
+        sys.path.insert(0, str(BASE_DIR))
+        from config import ODDS_API_KEY
+    except Exception:
+        ODDS_API_KEY = os.environ.get("ODDS_API_KEY", "")
+
+    if not ODDS_API_KEY:
+        print("  WARNING: ODDS_API_KEY not set — skipping odds fetch")
+        return {}
+
+    url = f"{ODDS_API_BASE}/sports/icehockey_nhl/odds"
+    params = {
+        "apiKey":      ODDS_API_KEY,
+        "regions":     "us",
+        "markets":     "totals",
+        "dateFormat":  "iso",
+        "oddsFormat":  "american",
+        "bookmakers":  ",".join(BOOK_PRIORITY),
+    }
+    try:
+        r = requests.get(url, params=params, timeout=20)
+        r.raise_for_status()
+    except Exception as e:
+        print(f"  WARNING: Odds API error: {e}")
+        return {}
+
+    remaining = r.headers.get("x-requests-remaining", "?")
+    print(f"  Odds API credits remaining: {remaining}")
+
+    result: dict[tuple, dict] = {}
+    for game in r.json():
+        home_name = game.get("home_team", "")
+        away_name = game.get("away_team", "")
+        home_abbrev = ODDS_TEAM_MAP.get(home_name)
+        away_abbrev = ODDS_TEAM_MAP.get(away_name)
+        if not home_abbrev or not away_abbrev:
+            continue
+
+        # Date filter: only include today's games
+        commence = game.get("commence_time", "")[:10]
+        if commence != target_date.isoformat():
+            continue
+
+        # Pick best book by priority
+        best = None
+        for book_key in BOOK_PRIORITY:
+            book = next((b for b in game.get("bookmakers", []) if b["key"] == book_key), None)
+            if book:
+                mkt = next((m for m in book.get("markets", []) if m["key"] == "totals"), None)
+                if mkt:
+                    outs = {o["name"]: o for o in mkt.get("outcomes", [])}
+                    over  = outs.get("Over", {})
+                    under = outs.get("Under", {})
+                    if over and under:
+                        best = {
+                            "line":        float(over.get("point", 6.0)),
+                            "over_price":  int(over.get("price", -110)),
+                            "under_price": int(under.get("price", -110)),
+                            "book":        book_key,
+                        }
+                        break
+
+        if best:
+            result[(home_abbrev, away_abbrev)] = best
+
+    return result
+
+# ---------------------------------------------------------------------------
+# Edge calculation
+# ---------------------------------------------------------------------------
+def american_to_implied(price: float) -> float:
+    if pd.isna(price):
+        return np.nan
+    return abs(price) / (abs(price) + 100.0) if price < 0 else 100.0 / (100.0 + price)
+
+def compute_edges(sim_probs: dict, over_price: float, under_price: float) -> dict:
+    imp_o = american_to_implied(over_price)
+    imp_u = american_to_implied(under_price)
+    vig   = imp_o + imp_u
+    fair_o = imp_o / vig
+    fair_u = imp_u / vig
+    return {
+        "edge_over":   sim_probs["over"]  - fair_o,
+        "edge_under":  sim_probs["under"] - fair_u,
+        "fair_over":   fair_o,
+        "fair_under":  fair_u,
+    }
+
+# ---------------------------------------------------------------------------
+# Confidence tier
+# ---------------------------------------------------------------------------
+def confidence_tier(edge: float, home_confirmed: bool, away_confirmed: bool,
+                    backup_h: int, backup_a: int) -> str:
+    vol_bucket = "high" if (backup_h + backup_a) >= 2 else "normal"
+    if edge >= 0.15 and home_confirmed and away_confirmed and vol_bucket != "high":
+        return "HIGH"
+    if edge >= 0.12:
+        return "MEDIUM"
+    return "LOW"
+
+def edge_bucket_label(edge: float) -> str:
+    if edge < 0.12:
+        return "0.10-0.12"
+    if edge < 0.15:
+        return "0.12-0.15"
+    return "0.15+"
+
+def bucket_label(line: float) -> str:
+    return {5.5: "5.5", 6.0: "6.0", 6.5: "6.5"}.get(line, "other")
+
+# ---------------------------------------------------------------------------
+# Append signals to decisions parquet
+# ---------------------------------------------------------------------------
+def append_to_decisions(new_signals: list[dict]) -> None:
+    if not new_signals:
+        return
+    new_df = pd.DataFrame(new_signals)
+    new_df["game_date"] = pd.to_datetime(new_df["game_date"]).dt.date
+
+    if DECISIONS.exists():
+        existing = pd.read_parquet(DECISIONS)
+        existing["game_date"] = pd.to_datetime(existing["game_date"]).dt.date
+        combined = pd.concat([existing, new_df], ignore_index=True)
+        combined = combined.drop_duplicates(subset=["game_id", "signal_side"], keep="last")
+    else:
+        combined = new_df
+
+    combined.to_parquet(DECISIONS, index=False)
+    print(f"  Decisions file updated: {len(combined):,} total rows")
+
+# ---------------------------------------------------------------------------
+# Main pipeline
+# ---------------------------------------------------------------------------
+def run_pipeline(target_date: date) -> None:
+    print("=" * 66)
+    print(f"NHL Daily Pipeline  —  {target_date.isoformat()}")
+    print("=" * 66)
+
+    # Load models
+    hpkg, apkg = load_models()
+    ft = load_feature_table()
+
+    # Train means for null fill (same as Phase 3)
+    all_feats = sorted(set(hpkg["features"] + apkg["features"]))
+    train = ft[ft["season_year"].isin({2021, 2022})]
+    train_means = train[all_feats].mean()
+
+    # League-average priors for current season
+    priors = compute_league_priors(ft)
+
+    # Load live season data
+    print("\nLoading current-season game data...")
+    live = load_or_refresh_live_season(target_date)
+    if len(live) > 0:
+        print(f"  Current-season games loaded: {len(live)}")
+    else:
+        print(f"  No current-season data — using 2024-25 league averages as priors")
+
+    # Fetch today's schedule
+    print(f"\nFetching NHL schedule for {target_date.isoformat()}...")
+    games = fetch_schedule(target_date)
+    if not games:
+        print(f"  No games found for {target_date.isoformat()}")
+        return
+    print(f"  {len(games)} games scheduled")
+
+    # Fetch odds
+    print("\nFetching NHL totals from Odds API...")
+    odds_map = fetch_nhl_odds(target_date)
+    print(f"  {len(odds_map)} games with odds")
+
+    # Process each game
+    print(f"\nProcessing {len(games)} games...")
+    signals = []
+    processed = 0
+
+    for g in games:
+        home = g.get("homeTeam", {}).get("abbrev", "")
+        away = g.get("awayTeam", {}).get("abbrev", "")
+        game_id = g.get("id")
+        state   = g.get("gameState", "")
+
+        if not home or not away:
+            continue
+
+        # Get odds for this matchup
+        odds = odds_map.get((home, away))
+        if not odds:
+            # Try reversed (Odds API may list differently)
+            odds = odds_map.get((away, home))
+            if not odds:
+                print(f"  [{away} @ {home}] No odds — skipping")
+                continue
+
+        line       = odds["line"]
+        over_price = odds["over_price"]
+        under_price = odds["under_price"]
+
+        # Fetch goalie info (game may be in pregame state)
+        home_goalie_info = {}
+        away_goalie_info = {}
+        if state in ("PRE", "LIVE", "CRIT", "OFF") and game_id:
+            goalies = fetch_goalies(game_id)
+            home_goalie_info = goalies.get("home", {})
+            away_goalie_info = goalies.get("away", {})
+
+        home_confirmed = bool(home_goalie_info.get("starter") is not None)
+        away_confirmed = bool(away_goalie_info.get("starter") is not None)
+        home_backup = int(not home_goalie_info.get("starter", True))
+        away_backup = int(not away_goalie_info.get("starter", True))
+
+        # Compute features
+        feat = compute_game_features(
+            home, away, target_date, live, priors,
+            home_goalie_info, away_goalie_info,
+        )
+
+        # Predict + calibrate
+        lh_cal, la_cal, drift = predict_and_calibrate(
+            feat, hpkg, apkg, live, target_date, train_means
+        )
+
+        # Simulate
+        sim_probs = simulate(lh_cal, la_cal, line)
+
+        # Edges
+        edges = compute_edges(sim_probs, over_price, under_price)
+
+        processed += 1
+        print(f"  [{away} @ {home}]  line={line}  λ_total={sim_probs['lambda_total']:.2f}  "
+              f"edge_over={edges['edge_over']:+.3f}  edge_under={edges['edge_under']:+.3f}")
+
+        # Qualify signals
+        for side, edge_val, sim_p, fair_p in [
+            ("OVER",  edges["edge_over"],  sim_probs["over"],  edges["fair_over"]),
+            ("UNDER", edges["edge_under"], sim_probs["under"], edges["fair_under"]),
+        ]:
+            if edge_val < THRESHOLD:
+                continue
+
+            caution  = 1 if side == "OVER" and bucket_label(line) == "6.5" else 0
+            tier     = confidence_tier(edge_val, home_confirmed, away_confirmed,
+                                       home_backup, away_backup)
+            ebkt     = edge_bucket_label(edge_val)
+            bkt      = bucket_label(line)
+
+            signal = {
+                "game_id":                  game_id,
+                "game_date":                target_date.isoformat(),
+                "home_team":                home,
+                "away_team":                away,
+                "season_year":              target_date.year if target_date.month >= 10
+                                            else target_date.year - 1,
+                "split":                    "live",
+                "signal_side":              side,
+                "closing_total":            line,
+                "closing_total_bucket":     bkt,
+                "edge":                     edge_val,
+                "edge_bucket":              ebkt,
+                "sim_prob":                 sim_p,
+                "fair_prob":                fair_p,
+                "lambda_total_calibrated":  sim_probs["lambda_total"],
+                "lambda_vs_line":           sim_probs["lambda_total"] - line,
+                "volatility_bucket":        "low",
+                "confidence_tier":          tier,
+                "caution_flag":             caution,
+                "backup_flag_home":         home_backup,
+                "backup_flag_away":         away_backup,
+                "goalie_confirmed_home":    home_confirmed,
+                "goalie_confirmed_away":    away_confirmed,
+                "over_price":               over_price,
+                "under_price":              under_price,
+                "book":                     odds.get("book", ""),
+                "actual_total_goals_final": np.nan,
+                "result":                   "UNGRADED",
+                "graded":                   0,
+            }
+            signals.append(signal)
+            print(f"    *** SIGNAL: {side}  edge={edge_val:.4f}  tier={tier}  "
+                  f"{'CAUTION' if caution else ''}")
+
+    # Summary
+    print()
+    print("=" * 66)
+    print(f"SUMMARY  —  {target_date.isoformat()}")
+    print("=" * 66)
+    print(f"  Games processed: {processed}")
+    print(f"  Signals generated: {len(signals)}")
+    if signals:
+        for s in signals:
+            print(f"    {s['away_team']} @ {s['home_team']}  {s['signal_side']}  "
+                  f"line={s['closing_total']}  edge={s['edge']:.4f}  "
+                  f"tier={s['confidence_tier']}")
+
+    # Write to decisions
+    if signals:
+        print()
+        append_to_decisions(signals)
+    else:
+        print("  No qualified signals — nhl_decisions.parquet unchanged")
+
+# ---------------------------------------------------------------------------
+# Grade yesterday's live signals
+# ---------------------------------------------------------------------------
+def grade_yesterday(yesterday: date) -> None:
+    """
+    Fetch yesterday's final scores from NHLe API and grade any live signals
+    in nhl_decisions.parquet that are still UNGRADED.
+    """
+    print(f"\nGrading yesterday ({yesterday.isoformat()}) ...")
+
+    if not DECISIONS.exists():
+        print("  No decisions file — nothing to grade.")
+        return
+
+    dec = pd.read_parquet(DECISIONS)
+    dec["game_date"] = pd.to_datetime(dec["game_date"]).dt.date
+
+    # Only yesterday's live ungraded signals
+    mask = (
+        (dec["game_date"] == yesterday) &
+        (dec["split"] == "live") &
+        (dec["graded"] == 0)
+    )
+    pending = dec[mask]
+    if pending.empty:
+        print("  No pending signals for yesterday.")
+        return
+    print(f"  {len(pending)} pending signal(s) to grade.")
+
+    # Fetch yesterday's schedule + final scores
+    url = f"{NHL_API}/schedule/{yesterday.isoformat()}"
+    try:
+        r = requests.get(url, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+    except Exception as e:
+        print(f"  WARNING: Could not fetch schedule: {e}")
+        return
+
+    game_dates = data.get("gameWeek", [])
+    # Find the entry for yesterday
+    yest_str = yesterday.isoformat()
+    day_entry = next((d for d in game_dates if d.get("date") == yest_str), None)
+    if not day_entry:
+        print(f"  No games found for {yest_str} in API response.")
+        return
+
+    # Build game_id → total_goals map from final scores
+    score_map: dict[int, int] = {}
+    for g in day_entry.get("games", []):
+        game_id  = g.get("id")
+        state    = g.get("gameState", "")
+        home_s   = g.get("homeTeam", {}).get("score")
+        away_s   = g.get("awayTeam", {}).get("score")
+        if game_id and state in ("OFF", "FINAL") and home_s is not None and away_s is not None:
+            score_map[int(game_id)] = int(home_s) + int(away_s)
+
+    if not score_map:
+        print("  No final scores available yet — try again later.")
+        return
+
+    print(f"  Final scores fetched for {len(score_map)} game(s).")
+
+    # Grade each pending signal
+    graded_count = 0
+    for idx in pending.index:
+        gid  = int(dec.at[idx, "game_id"])
+        if gid not in score_map:
+            continue
+        total      = score_map[gid]
+        line       = dec.at[idx, "closing_total"]
+        side       = dec.at[idx, "signal_side"]
+
+        if total == line:
+            result = "PUSH"
+        elif side == "OVER":
+            result = "WIN" if total > line else "LOSS"
+        else:
+            result = "WIN" if total < line else "LOSS"
+
+        dec.at[idx, "actual_total_goals_final"] = total
+        dec.at[idx, "result"]  = result
+        dec.at[idx, "graded"]  = 1
+        graded_count += 1
+
+        home = dec.at[idx, "home_team"]
+        away = dec.at[idx, "away_team"]
+        print(f"    {away} @ {home}  {side}  line={line}  actual={total}  → {result}")
+
+    if graded_count:
+        dec.to_parquet(DECISIONS, index=False)
+        print(f"  Graded {graded_count} signal(s) — decisions file updated.")
+    else:
+        print("  No game_ids matched — scores may not be final yet.")
+
+
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="NHL Daily Prediction Pipeline")
+    parser.add_argument("--date", type=str, default=None,
+                        help="Target date YYYY-MM-DD (default: today)")
+    parser.add_argument("--grade-yesterday", action="store_true",
+                        help="Grade yesterday's live signals before running today's pipeline")
+    args = parser.parse_args()
+
+    if args.date:
+        target = date.fromisoformat(args.date)
+    else:
+        target = date.today()
+
+    if args.grade_yesterday:
+        grade_yesterday(target - timedelta(days=1))
+
+    run_pipeline(target)
