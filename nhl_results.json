@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-16T18:55:51.602838+00:00",
-  "last_updated": "2026-03-16 18:55 UTC",
+  "generated_at": "2026-03-16T19:57:13.672753+00:00",
+  "last_updated": "2026-03-16 19:57 UTC",
   "pipeline_run_date": "2026-03-16",
   "signals_source": "live",
   "game_date": "2026-03-16",
@@ -100,5 +100,6 @@
       }
     }
   },
+  "ot_diagnostics": {},
   "data_quality_warning": false
 }
