@@ -759,8 +759,16 @@ def grade_yesterday(yesterday: date) -> None:
     """
     Fetch yesterday's final scores from NHLe API and grade any live signals
     in nhl_decisions.parquet that are still UNGRADED.
+
+    Match key: canonical NHL API game_id (integer).  This is the primary and
+    only join key.  No date+team fallback exists — if a game_id is absent from
+    the score_map the signal is left ungraded and a warning is printed.
+
+    Idempotent: rows with graded=1 are skipped unconditionally; running twice
+    produces zero additional writes.
     """
     print(f"\nGrading yesterday ({yesterday.isoformat()}) ...")
+    print(f"  Match key: canonical NHL API game_id (integer primary key)")
 
     if not DECISIONS.exists():
         print("  No decisions file — nothing to grade.")
@@ -769,16 +777,19 @@ def grade_yesterday(yesterday: date) -> None:
     dec = pd.read_parquet(DECISIONS)
     dec["game_date"] = pd.to_datetime(dec["game_date"]).dt.date
 
-    # Only yesterday's live ungraded signals
-    mask = (
-        (dec["game_date"] == yesterday) &
-        (dec["split"] == "live") &
-        (dec["graded"] == 0)
-    )
-    pending = dec[mask]
+    # Separate yesterday's live signals into already-graded and pending
+    yest_live = dec[(dec["game_date"] == yesterday) & (dec["split"] == "live")]
+    already_graded = yest_live[yest_live["graded"] == 1]
+    pending        = yest_live[yest_live["graded"] == 0]
+
+    skipped_count = len(already_graded)
+    if skipped_count:
+        print(f"  Skipping {skipped_count} already-graded row(s) (idempotency).")
+
     if pending.empty:
-        print("  No pending signals for yesterday.")
+        print(f"  Graded 0 new rows, skipped {skipped_count} already-graded rows.")
         return
+
     print(f"  {len(pending)} pending signal(s) to grade.")
 
     # Fetch yesterday's schedule + final scores
@@ -792,38 +803,51 @@ def grade_yesterday(yesterday: date) -> None:
         return
 
     game_dates = data.get("gameWeek", [])
-    # Find the entry for yesterday
-    yest_str = yesterday.isoformat()
-    day_entry = next((d for d in game_dates if d.get("date") == yest_str), None)
+    yest_str   = yesterday.isoformat()
+    day_entry  = next((d for d in game_dates if d.get("date") == yest_str), None)
     if not day_entry:
         print(f"  No games found for {yest_str} in API response.")
         return
 
-    # Build game_id → total_goals map from final scores
+    # Build game_id → total_goals map from final scores.
+    # Match key is the integer game_id returned by the NHLe API — same value
+    # stored in nhl_decisions.parquet at signal-creation time.
     score_map: dict[int, int] = {}
     for g in day_entry.get("games", []):
-        game_id  = g.get("id")
-        state    = g.get("gameState", "")
-        home_s   = g.get("homeTeam", {}).get("score")
-        away_s   = g.get("awayTeam", {}).get("score")
-        if game_id and state in ("OFF", "FINAL") and home_s is not None and away_s is not None:
-            score_map[int(game_id)] = int(home_s) + int(away_s)
+        gid    = g.get("id")
+        state  = g.get("gameState", "")
+        home_s = g.get("homeTeam", {}).get("score")
+        away_s = g.get("awayTeam", {}).get("score")
+        if gid and state in ("OFF", "FINAL") and home_s is not None and away_s is not None:
+            score_map[int(gid)] = int(home_s) + int(away_s)
 
     if not score_map:
         print("  No final scores available yet — try again later.")
         return
 
-    print(f"  Final scores fetched for {len(score_map)} game(s).")
+    print(f"  Final scores fetched for {len(score_map)} game(s) via game_id match.")
 
-    # Grade each pending signal
+    # Grade each pending signal — skip any already graded (idempotency guard)
     graded_count = 0
     for idx in pending.index:
-        gid  = int(dec.at[idx, "game_id"])
-        if gid not in score_map:
+        # FIX 1: explicit idempotency — never touch a row with graded=1
+        if dec.at[idx, "graded"] == 1:
+            skipped_count += 1
             continue
-        total      = score_map[gid]
-        line       = dec.at[idx, "closing_total"]
-        side       = dec.at[idx, "signal_side"]
+
+        gid = int(dec.at[idx, "game_id"])
+
+        # FIX 2: game_id is the sole match key; no fallback
+        if gid not in score_map:
+            home = dec.at[idx, "home_team"]
+            away = dec.at[idx, "away_team"]
+            print(f"  WARNING: game_id {gid} ({away} @ {home}) not in score_map "
+                  f"— score may not be final; leaving ungraded.")
+            continue
+
+        total = score_map[gid]
+        line  = dec.at[idx, "closing_total"]
+        side  = dec.at[idx, "signal_side"]
 
         if total == line:
             result = "PUSH"
@@ -833,19 +857,22 @@ def grade_yesterday(yesterday: date) -> None:
             result = "WIN" if total < line else "LOSS"
 
         dec.at[idx, "actual_total_goals_final"] = total
-        dec.at[idx, "result"]  = result
-        dec.at[idx, "graded"]  = 1
+        dec.at[idx, "result"] = result
+        dec.at[idx, "graded"] = 1
         graded_count += 1
 
         home = dec.at[idx, "home_team"]
         away = dec.at[idx, "away_team"]
-        print(f"    {away} @ {home}  {side}  line={line}  actual={total}  → {result}")
+        print(f"    game_id={gid}  {away} @ {home}  {side}  "
+              f"line={line}  actual={total}  → {result}")
+
+    print(f"  Graded {graded_count} new rows, skipped {skipped_count} already-graded rows.")
 
     if graded_count:
         dec.to_parquet(DECISIONS, index=False)
-        print(f"  Graded {graded_count} signal(s) — decisions file updated.")
+        print(f"  Decisions file updated.")
     else:
-        print("  No game_ids matched — scores may not be final yet.")
+        print("  No new rows written — file unchanged.")
 
 
 # ---------------------------------------------------------------------------

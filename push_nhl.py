@@ -15,7 +15,7 @@ import json
 import os
 import subprocess
 import sys
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 REPO_DIR     = Path(__file__).parent
@@ -38,7 +38,13 @@ def _safe(v):
 
 
 def load_today_signals(game_date: str) -> list[dict]:
-    """Ungraded live signals from nhl_decisions.parquet for today."""
+    """
+    Live signals from nhl_decisions.parquet for today (all tiers, all sides).
+
+    FIX 4: caution_flag suppresses display warning only — does NOT filter signals.
+    Rows with caution_flag=1 are included in the output exactly like any other row.
+    The dashboard renders a ⚠ badge; no signal is suppressed here.
+    """
     if not DECISIONS.exists():
         return []
     try:
@@ -62,6 +68,7 @@ def load_today_signals(game_date: str) -> list[dict]:
                 "edge_bucket":      r.get("edge_bucket"),
                 "sim_prob":         _safe(r.get("sim_prob")),
                 "confidence_tier":  r.get("confidence_tier"),
+                # caution_flag: display warning only — does not suppress signal
                 "caution_flag":     int(r.get("caution_flag") or 0),
                 "volatility_bucket": r.get("volatility_bucket"),
                 "lambda_total_calibrated": _safe(r.get("lambda_total_calibrated")),
@@ -150,6 +157,28 @@ def build_season_performance() -> dict:
         return {}
 
 
+def _pipeline_freshness(game_date: str) -> tuple[str, str]:
+    """
+    Return (pipeline_run_date, signals_source).
+    pipeline_run_date: most recent game_date in the live split of decisions parquet.
+    signals_source: "live" if pipeline ran today, "stale" if yesterday or earlier.
+    """
+    if not DECISIONS.exists():
+        return game_date, "stale"
+    try:
+        import pandas as pd
+        dec = pd.read_parquet(DECISIONS, columns=["game_date", "split"])
+        dec["game_date"] = pd.to_datetime(dec["game_date"]).dt.date.astype(str)
+        live = dec[dec["split"] == "live"]
+        if live.empty:
+            return game_date, "stale"
+        most_recent = live["game_date"].max()
+        source = "live" if most_recent == game_date else "stale"
+        return most_recent, source
+    except Exception:
+        return game_date, "stale"
+
+
 def write_nhl_json(game_date: str = None) -> str:
     """Write nhl_results.json and return path. Does NOT git push."""
     game_date = game_date or date.today().isoformat()
@@ -165,16 +194,75 @@ def write_nhl_json(game_date: str = None) -> str:
         -(s.get("edge") or 0),
     ))
 
+    # FIX 5: data freshness fields
+    now_utc = datetime.now(timezone.utc)
+    pipeline_run_date, signals_source = _pipeline_freshness(game_date)
+
+    # ── FIX 6: pre-serialization consistency audit ────────────────────────────
+    quality_warning = False
+    warnings_found  = []
+
+    # Top-level type assertions
+    if not isinstance(today_signals, list):
+        warnings_found.append(f"today_signals is not a list: {type(today_signals)}")
+        today_signals = []
+        quality_warning = True
+
+    if not isinstance(recent_results, list):
+        warnings_found.append(f"recent_results is not a list: {type(recent_results)}")
+        recent_results = []
+        quality_warning = True
+
+    if not season_perf:
+        warnings_found.append("season_performance is empty or missing")
+        quality_warning = True
+
+    # Per-signal field assertions
+    valid_sides = {"OVER", "UNDER"}
+    valid_tiers = {"HIGH", "MEDIUM", "LOW"}
+    for i, s in enumerate(today_signals):
+        if s.get("game_id") is None:
+            warnings_found.append(f"signal[{i}]: game_id is null")
+            quality_warning = True
+        if s.get("closing_total") is None:
+            warnings_found.append(f"signal[{i}]: closing_total is null")
+            quality_warning = True
+        edge = s.get("edge")
+        if edge is None or not isinstance(edge, (int, float)) or not (0.0 <= edge <= 1.0):
+            warnings_found.append(f"signal[{i}]: edge={edge!r} not in [0,1]")
+            quality_warning = True
+        if s.get("signal_side") not in valid_sides:
+            warnings_found.append(f"signal[{i}]: signal_side={s.get('signal_side')!r} invalid")
+            quality_warning = True
+        if s.get("confidence_tier") not in valid_tiers:
+            warnings_found.append(f"signal[{i}]: confidence_tier={s.get('confidence_tier')!r} invalid")
+            quality_warning = True
+
+    for w in warnings_found:
+        print(f"[push_nhl] DATA QUALITY WARNING: {w}", file=sys.stderr)
+
     payload = {
-        "generated_at":      datetime.utcnow().isoformat() + "Z",
-        "game_date":         game_date,
-        "today_signals":     today_signals,
-        "recent_results":    recent_results,
-        "season_performance": season_perf,
+        "generated_at":        now_utc.isoformat(),
+        "last_updated":        now_utc.strftime("%Y-%m-%d %H:%M UTC"),
+        "pipeline_run_date":   pipeline_run_date,
+        "signals_source":      signals_source,
+        "game_date":           game_date,
+        "today_signals":       today_signals,
+        "recent_results":      recent_results,
+        "season_performance":  season_perf,
+        "data_quality_warning": quality_warning,
     }
 
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
+
+    perf_rows = len(season_perf) if season_perf else 0
+    print(
+        f"[push_nhl] complete: {len(today_signals)} signals, "
+        f"{len(recent_results)} recent results, "
+        f"{perf_rows} performance rows, "
+        f"quality_warning={str(quality_warning).lower()}"
+    )
     print(f"[push_nhl] Wrote {OUT_PATH}")
     return str(OUT_PATH)
 

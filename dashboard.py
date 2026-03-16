@@ -1313,6 +1313,22 @@ def _render_nhl_tab() -> None:
         )
         return
 
+    # FIX 5: freshness stamp
+    last_updated    = nhl.get("last_updated", "")
+    signals_source  = nhl.get("signals_source", "")
+    src_color       = "#22c55e" if signals_source == "live" else "#f59e0b"
+    if last_updated or signals_source:
+        src_html = (
+            f"&nbsp;&nbsp;|&nbsp;&nbsp;Source: "
+            f"<strong style='color:{src_color}'>{signals_source}</strong>"
+        ) if signals_source else ""
+        st.html(
+            f"<div style='font-size:0.75em;color:#4a5568;margin-bottom:8px'>"
+            f"Last updated: <strong style='color:#94a3b8'>{last_updated}</strong>"
+            f"{src_html}"
+            f"</div>"
+        )
+
     today_signals  = nhl.get("today_signals", [])
     recent_results = nhl.get("recent_results", [])
     season_perf    = nhl.get("season_performance", {})
@@ -1335,7 +1351,7 @@ def _render_nhl_tab() -> None:
                 for s in no_plays:
                     _render_nhl_signal_card(s)
     else:
-        st.caption("No qualified signals for today (edge < 0.10 or no lines posted).")
+        st.caption("No qualified signals today (threshold: +10pp edge).")
 
     # ── SECTION 2: Recent Results (last 14 days) ───────────────────────────────
     st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
@@ -1454,16 +1470,18 @@ def _render_nhl_tab() -> None:
                     td = by_tier.get(tier, {})
                     if not td or td.get("n", 0) == 0:
                         continue
-                    th = td.get("hit")
-                    tr = td.get("roi")
-                    th_cls = "green" if (th or 0) >= 0.525 else "yellow" if (th or 0) >= 0.50 else "red"
+                    th = td.get("hit")    # None when W+L=0
+                    tr = td.get("roi")    # None when n=0
+                    th_cls  = "green" if (th or 0) >= 0.525 else "yellow" if (th or 0) >= 0.50 else "red"
+                    th_disp = f"{th * 100:.1f}%" if th is not None else "—"
+                    tr_disp = f"{tr:+.2f}%" if tr is not None else "—"
                     tier_rows += (
                         f'<tr>'
                         f'<td>{_nhl_conf_badge(tier)}</td>'
                         f'<td class="dim">{td["n"]}</td>'
                         f'<td>{td["W"]}-{td["L"]}-{td["P"]}</td>'
-                        f'<td class="{th_cls}">{th * 100:.1f}%</td>'
-                        f'<td class="dim">{tr:+.2f}%</td>'
+                        f'<td class="{th_cls}">{th_disp}</td>'
+                        f'<td class="dim">{tr_disp}</td>'
                         f'</tr>'
                     )
                 if tier_rows:

@@ -1,5 +1,8 @@
 {
-  "generated_at": "2026-03-16T17:21:52.955807Z",
+  "generated_at": "2026-03-16T17:38:03.180887+00:00",
+  "last_updated": "2026-03-16 17:38 UTC",
+  "pipeline_run_date": "2026-03-16",
+  "signals_source": "live",
   "game_date": "2026-03-16",
   "today_signals": [
     {
@@ -75,5 +78,6 @@
         "roi": 7.85
       }
     }
-  }
+  },
+  "data_quality_warning": false
 }
