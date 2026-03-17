@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-17T21:23:45.884308+00:00",
-  "last_updated": "2026-03-17 21:23 UTC",
+  "generated_at": "2026-03-17T21:38:29.520995+00:00",
+  "last_updated": "2026-03-17 21:38 UTC",
   "pipeline_run_date": "2026-03-17",
   "signals_source": "stale",
   "game_date": "2026-03-17",
@@ -33,5 +33,12 @@
     }
   },
   "data_quality_warning": false,
-  "parlay_candidates": []
+  "parlay_candidates": [],
+  "suggested_parlay": {
+    "available": false,
+    "legs": [],
+    "combined_prob": null,
+    "leg_count": 0,
+    "correlation_note": false
+  }
 }

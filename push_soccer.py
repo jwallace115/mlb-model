@@ -461,6 +461,93 @@ def load_parlay_candidates(game_date: str) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# Suggested 3-leg parlay builder (entertainment/parlay-support only)
+# ---------------------------------------------------------------------------
+def build_suggested_parlay(candidates: list[dict]) -> dict:
+    """
+    Select up to 3 legs from the ranked parlay_candidates list.
+    Correlation guardrail: max 2 legs from the same league.
+    Returns suggested_parlay dict for serialization.
+    """
+    _EMPTY = {
+        "available": False, "legs": [],
+        "combined_prob": None, "leg_count": 0, "correlation_note": False,
+    }
+    if not candidates:
+        return _EMPTY
+
+    # Step 1 — rank: P DESC, then projected_total DESC, then edge_1_5 DESC (nulls last)
+    ranked = sorted(
+        candidates,
+        key=lambda c: (
+            -(c.get("model_p_over_1_5") or 0),
+            -(c.get("projected_total") or 0),
+            -(c.get("edge_1_5") or -999),
+        ),
+    )
+
+    # Step 2 — pick legs with correlation guardrail
+    selected: list[dict] = []
+    league_counts: dict[str, int] = {}
+
+    for c in ranked:
+        if len(selected) == 3:
+            break
+        game_id = c.get("game_id")
+        league  = c.get("league", "")
+
+        # Skip same matchup (shouldn't happen but be defensive)
+        if any(s.get("game_id") == game_id for s in selected):
+            continue
+        # Cap same-league legs at 2
+        if league_counts.get(league, 0) >= 2:
+            continue
+
+        selected.append(c)
+        league_counts[league] = league_counts.get(league, 0) + 1
+
+    if not selected:
+        return _EMPTY
+
+    # Step 3 — combined probability (assumes independence)
+    combined = 1.0
+    for leg in selected:
+        combined *= (leg.get("model_p_over_1_5") or 0)
+
+    correlation_note = any(v >= 2 for v in league_counts.values())
+
+    # Build leg dicts (subset of candidate fields needed for display)
+    legs = [
+        {
+            "game_id":           c.get("game_id"),
+            "home_team":         c.get("home_team"),
+            "away_team":         c.get("away_team"),
+            "league":            c.get("league"),
+            "game_time_et":      c.get("game_time_et"),
+            "projected_total":   c.get("projected_total"),
+            "model_p_over_1_5":  c.get("model_p_over_1_5"),
+            "confidence_tier":   c.get("confidence_tier"),
+            "market_line_1_5":   c.get("market_line_1_5"),
+            "edge_1_5":          c.get("edge_1_5"),
+        }
+        for c in selected
+    ]
+
+    leg_count = len(legs)
+    print(
+        f"[push_soccer] Suggested parlay: {leg_count} legs, "
+        f"combined_p={combined:.3f}, corr_note={correlation_note}"
+    )
+    return {
+        "available":        True,
+        "legs":             legs,
+        "combined_prob":    round(combined, 4),
+        "leg_count":        leg_count,
+        "correlation_note": correlation_note,
+    }
+
+
+# ---------------------------------------------------------------------------
 # JSON writer
 # ---------------------------------------------------------------------------
 def write_soccer_json(game_date: str | None = None) -> str:
@@ -470,6 +557,7 @@ def write_soccer_json(game_date: str | None = None) -> str:
     recent_results    = load_recent_results(days=14)
     season_perf       = build_season_performance()
     parlay_candidates = load_parlay_candidates(game_date)
+    suggested_parlay  = build_suggested_parlay(parlay_candidates)
 
     # Generate plain-English summaries
     for s in today_signals:
@@ -523,6 +611,7 @@ def write_soccer_json(game_date: str | None = None) -> str:
         "data_quality_warning": quality_warning,
         # Entertainment/parlay-support only — not a validated standalone product
         "parlay_candidates":  parlay_candidates,
+        "suggested_parlay":   suggested_parlay,
     }
 
     with open(OUT_PATH, "w") as f:
@@ -532,6 +621,7 @@ def write_soccer_json(game_date: str | None = None) -> str:
         f"[push_soccer] complete: {len(today_signals)} signals, "
         f"{len(recent_results)} recent results, "
         f"{len(parlay_candidates)} parlay candidates, "
+        f"parlay_legs={suggested_parlay['leg_count']}, "
         f"quality_warning={str(quality_warning).lower()}"
     )
     print(f"[push_soccer] Wrote {OUT_PATH}")

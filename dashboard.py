@@ -1759,9 +1759,80 @@ def _render_soccer_signal_card(s: dict) -> None:
     )
 
 
-def _render_soccer_parlay_candidates(parlay_candidates: list) -> None:
+def _parlay_candidate_card_html(c: dict) -> str:
+    """Build HTML for a single Over 1.5 candidate card."""
+    home     = c.get("home_team", "")
+    away     = c.get("away_team", "")
+    league   = c.get("league", "")
+    tier     = c.get("confidence_tier", "HIGH")
+    proj     = c.get("projected_total")
+    p_over   = c.get("model_p_over_1_5")
+    mkt_p    = c.get("market_implied_p_1_5")
+    mkt_line = c.get("market_line_1_5")
+    lineup   = bool(c.get("lineup_confirmed", False))
+    gt       = c.get("game_time_et", "")
+
+    league_tag = (
+        '<span style="font-size:0.72em;color:#4a5568;margin-right:6px">'
+        f'{"🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL" if league == "EPL" else "🇩🇪 Bundesliga"}'
+        '</span>'
+    )
+    over15_badge = (
+        '<span style="background:#1e1b4b;color:#a5b4fc;border:1px solid #6366f1;'
+        'border-radius:4px;padding:1px 7px;font-size:0.72em;font-weight:700;'
+        'letter-spacing:0.06em;margin-right:6px">OVER 1.5</span>'
+    )
+    tier_color  = "#22c55e" if tier == "VERY HIGH" else "#f59e0b"
+    tier_bg     = "#052e16" if tier == "VERY HIGH" else "#431407"
+    tier_border = "#166534" if tier == "VERY HIGH" else "#9a3412"
+    tier_badge  = (
+        f'<span style="background:{tier_bg};color:{tier_color};'
+        f'border:1px solid {tier_border};border-radius:4px;padding:1px 7px;'
+        f'font-size:0.72em;font-weight:700;margin-left:6px">{tier}</span>'
+    )
+    header = (
+        f'<div class="card-header">'
+        f'{over15_badge}{league_tag}'
+        f'<span class="matchup">{away} @ {home}</span>'
+        f'{tier_badge}'
+        f'</div>'
+    )
+
+    sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
+    proj_s = f"{proj:.1f}" if proj is not None else "—"
+    p_s    = f"{p_over * 100:.1f}%" if p_over is not None else "—"
+    stats_parts = [
+        f'<span class="proj-label">Projected Goals</span> <span class="proj-val">{proj_s}</span>',
+        f'<span class="proj-label">P(Over 1.5)</span> <span class="proj-val" style="color:#a5b4fc">{p_s}</span>',
+    ]
+    if mkt_line is not None and mkt_p is not None:
+        stats_parts.append(
+            f'<span class="proj-label">Market 1.5</span>'
+            f' <span class="proj-val">{mkt_p * 100:.1f}%</span>'
+        )
+    if gt:
+        stats_parts.append(
+            f'<span class="proj-label">Kickoff</span> <span class="proj-val">{gt}</span>'
+        )
+    stats_row = f'<div class="proj-row">{sep.join(stats_parts)}</div>'
+
+    lineup_icon  = "✓ Lineup confirmed" if lineup else "? Lineup estimated"
+    lineup_color = "#22c55e" if lineup else "#4a5568"
+    lineup_html  = (
+        f'<div style="font-size:0.80em;color:{lineup_color};margin-bottom:4px">'
+        f'{lineup_icon}</div>'
+    )
+    return (
+        f'<div class="game-card" style="border-color:#334155">'
+        f'{header}{stats_row}{lineup_html}'
+        f'</div>'
+    )
+
+
+def _render_soccer_parlay_candidates(parlay_candidates: list,
+                                     suggested_parlay: dict) -> None:
     """
-    Render Over 1.5 parlay candidates section.
+    Render Over 1.5 parlay section: suggested parlay + additional candidates.
     Entertainment / parlay-support only — not a validated standalone product.
     """
     st.html('<div class="section-hdr">⚽ Over 1.5 Parlay Candidates</div>')
@@ -1777,83 +1848,106 @@ def _render_soccer_parlay_candidates(parlay_candidates: list) -> None:
         '</div>'
     )
 
-    if not parlay_candidates:
+    # ── Suggested parlay block ────────────────────────────────────────────────
+    sp = suggested_parlay or {}
+    leg_count   = sp.get("leg_count", 0)
+    combined_p  = sp.get("combined_prob")
+    corr_note   = sp.get("correlation_note", False)
+    legs        = sp.get("legs", [])
+
+    if leg_count == 0:
+        # No candidates at all
         st.caption(
-            "No Over 1.5 parlay candidates today "
-            "(threshold: 80% model probability, 3.2 projected goals)."
+            "No parlay candidates today — check back on the next match day."
         )
         return
 
-    for c in parlay_candidates:
-        home      = c.get("home_team", "")
-        away      = c.get("away_team", "")
-        league    = c.get("league", "")
-        tier      = c.get("confidence_tier", "HIGH")
-        proj      = c.get("projected_total")
-        p_over    = c.get("model_p_over_1_5")
-        mkt_p     = c.get("market_implied_p_1_5")
-        mkt_line  = c.get("market_line_1_5")
-        lineup    = bool(c.get("lineup_confirmed", False))
-        gt        = c.get("game_time_et", "")
+    if leg_count == 1:
+        header_label = "1 Parlay Candidate Today (insufficient for multi-leg)"
+    elif leg_count == 2:
+        header_label = f"Suggested 2-Leg Parlay (only {len(parlay_candidates)} candidates today)"
+    else:
+        header_label = "🎯 Suggested 3-Leg Parlay"
 
-        league_tag = (
-            '<span style="font-size:0.72em;color:#4a5568;margin-right:6px">'
-            f'{"🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL" if league == "EPL" else "🇩🇪 Bundesliga"}'
-            '</span>'
-        )
-        over15_badge = (
-            '<span style="background:#1e1b4b;color:#a5b4fc;border:1px solid #6366f1;'
-            'border-radius:4px;padding:1px 7px;font-size:0.72em;font-weight:700;'
-            'letter-spacing:0.06em;margin-right:6px">OVER 1.5</span>'
-        )
-        tier_color  = "#22c55e" if tier == "VERY HIGH" else "#f59e0b"
-        tier_bg     = "#052e16" if tier == "VERY HIGH" else "#431407"
-        tier_border = "#166534" if tier == "VERY HIGH" else "#9a3412"
-        tier_badge  = (
-            f'<span style="background:{tier_bg};color:{tier_color};'
-            f'border:1px solid {tier_border};border-radius:4px;padding:1px 7px;'
-            f'font-size:0.72em;font-weight:700;margin-left:6px">{tier}</span>'
+    # Build leg rows HTML
+    sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
+    legs_html = ""
+    for i, leg in enumerate(legs):
+        lg       = leg.get("league", "")
+        home     = leg.get("home_team", "")
+        away     = leg.get("away_team", "")
+        gt       = leg.get("game_time_et", "")
+        proj     = leg.get("projected_total")
+        p_over   = leg.get("model_p_over_1_5")
+        tier     = leg.get("confidence_tier", "HIGH")
+        edge_1_5 = leg.get("edge_1_5")
+
+        league_ico = "🏴󠁧󠁢󠁥󠁮󠁧󠁿" if lg == "EPL" else "🇩🇪"
+        tier_color = "#22c55e" if tier == "VERY HIGH" else "#f59e0b"
+        tier_badge = (
+            f'<span style="background:#1a1a2e;color:{tier_color};'
+            f'border:1px solid {tier_color};border-radius:3px;padding:0 5px;'
+            f'font-size:0.70em;font-weight:700;margin-left:5px">{tier}</span>'
         )
 
-        header = (
-            f'<div class="card-header">'
-            f'{over15_badge}{league_tag}'
-            f'<span class="matchup">{away} @ {home}</span>'
-            f'{tier_badge}'
-            f'</div>'
-        )
+        p_s    = f"{p_over * 100:.1f}%" if p_over is not None else "—"
+        proj_s = f"{proj:.1f}" if proj is not None else "—"
 
-        sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
-        proj_s  = f"{proj:.1f}" if proj is not None else "—"
-        p_s     = f"{p_over * 100:.1f}%" if p_over is not None else "—"
-
-        stats_parts = [
-            f'<span class="proj-label">Projected Goals</span> <span class="proj-val">{proj_s}</span>',
-            f'<span class="proj-label">P(Over 1.5)</span> <span class="proj-val" style="color:#a5b4fc">{p_s}</span>',
+        parts = [
+            f'<span style="color:#e2e8f0;font-weight:600">{away} @ {home}</span>',
+            f'<span style="color:#94a3b8">P(1.5): <strong style="color:#a5b4fc">{p_s}</strong></span>',
+            f'<span style="color:#94a3b8">Proj: {proj_s} goals</span>',
         ]
-        if mkt_line is not None and mkt_p is not None:
-            mkt_s = f"{mkt_p * 100:.1f}%"
-            stats_parts.append(
-                f'<span class="proj-label">Market 1.5</span> <span class="proj-val">{mkt_s}</span>'
-            )
         if gt:
-            stats_parts.append(
-                f'<span class="proj-label">Kickoff</span> <span class="proj-val">{gt}</span>'
-            )
-        stats_row = f'<div class="proj-row">{sep.join(stats_parts)}</div>'
+            parts.append(f'<span style="color:#64748b">{gt} ET</span>')
 
-        lineup_icon  = "✓ Lineup confirmed" if lineup else "? Lineup estimated"
-        lineup_color = "#22c55e" if lineup else "#4a5568"
-        lineup_html  = (
-            f'<div style="font-size:0.80em;color:{lineup_color};margin-bottom:4px">'
-            f'{lineup_icon}</div>'
-        )
-
-        st.html(
-            f'<div class="game-card" style="border-color:#334155">'
-            f'{header}{stats_row}{lineup_html}'
+        legs_html += (
+            f'<div style="padding:6px 0;border-bottom:1px solid #1e293b;'
+            f'font-size:0.83em">'
+            f'{league_ico} {sep.join(parts)}{tier_badge}'
             f'</div>'
         )
+
+    # Combined probability row
+    comb_s = f"{combined_p * 100:.1f}%" if combined_p is not None else "—"
+    corr_html = (
+        '<div style="font-size:0.76em;color:#f59e0b;margin-top:6px">'
+        '⚠️ Multiple legs from same league — may be correlated'
+        '</div>'
+        if corr_note else ""
+    )
+    footer_html = (
+        f'<div style="margin-top:8px;font-size:0.82em;color:#94a3b8">'
+        f'Estimated combined probability: '
+        f'<strong style="color:#e2e8f0">{comb_s}</strong>'
+        f'</div>'
+        f'<div style="font-size:0.72em;color:#4a5568;margin-top:3px">'
+        f'Assumes independence — actual probability may be lower if legs are correlated.'
+        f'</div>'
+        f'{corr_html}'
+    )
+
+    st.html(
+        f'<div class="game-card" style="border-color:#4338ca;background:#0f0f2e">'
+        f'<div class="card-header" style="margin-bottom:4px">'
+        f'<span style="font-weight:700;color:#c7d2fe;font-size:0.95em">{header_label}</span>'
+        f'<span style="font-size:0.72em;color:#64748b;margin-left:8px">'
+        f'High-confidence goal environments — parlay use only</span>'
+        f'</div>'
+        f'{legs_html}'
+        f'{footer_html}'
+        f'</div>'
+    )
+
+    # ── Additional candidates list (capped at 6, sorted P DESC) ──────────────
+    if parlay_candidates:
+        st.html(
+            '<div style="font-size:0.78em;font-weight:600;color:#64748b;'
+            'margin:14px 0 6px 0;text-transform:uppercase;letter-spacing:0.05em">'
+            'All Candidates Today</div>'
+        )
+        for c in parlay_candidates[:6]:
+            st.html(_parlay_candidate_card_html(c))
 
 
 def _render_soccer_tab() -> None:
@@ -1933,7 +2027,10 @@ def _render_soccer_tab() -> None:
         )
 
     # ── SECTION 1b: Over 1.5 Parlay Candidates ────────────────────────────────
-    _render_soccer_parlay_candidates(soccer.get("parlay_candidates", []))
+    _render_soccer_parlay_candidates(
+        soccer.get("parlay_candidates", []),
+        soccer.get("suggested_parlay", {}),
+    )
 
     # ── SECTION 2: Recent Results ──────────────────────────────────────────────
     st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
