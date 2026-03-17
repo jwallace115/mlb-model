@@ -2621,6 +2621,39 @@ def main() -> None:
             if stats:
                 _render_analytics(stats)
 
+            # ── CLV section ───────────────────────────────────────────────────
+            clv = (data or {}).get("mlb_clv_summary", {})
+            if clv and clv.get("clv_available"):
+                with st.expander("📈 MLB Closing Line Value (CLV)", expanded=False):
+                    n_clv = clv.get("total_with_clv", 0)
+                    cov   = clv.get("clv_coverage_pct", 0.0)
+                    if clv.get("coverage_warning"):
+                        st.warning(f"CLV coverage low ({cov:.0f}%) — data may be incomplete.")
+                    c1, c2, c3, c4 = st.columns(4)
+                    avg = clv.get("avg_clv")
+                    med = clv.get("median_clv")
+                    pct = clv.get("pct_positive_clv")
+                    c1.metric("Avg CLV", f"{avg:+.3f}" if avg is not None else "—")
+                    c2.metric("Median CLV", f"{med:+.3f}" if med is not None else "—")
+                    c3.metric("% Positive CLV", f"{pct:.1f}%" if pct is not None else "—")
+                    c4.metric("Games w/ CLV", f"{n_clv} ({cov:.0f}% cov)")
+                    by_tier = clv.get("avg_clv_by_tier", {})
+                    if any(v is not None for v in by_tier.values()):
+                        st.caption("Avg CLV by confidence tier")
+                        tc = st.columns(3)
+                        for i, t in enumerate(("HIGH", "MEDIUM", "LOW")):
+                            v = by_tier.get(t)
+                            tc[i].metric(t, f"{v:+.3f}" if v is not None else "—")
+                    st.caption(
+                        "CLV measures whether decision lines beat closing lines. "
+                        "Positive = sharp (line moved in model's favor)."
+                    )
+            elif clv and not clv.get("clv_available"):
+                reason = clv.get("reason", "")
+                if "insufficient" in reason:
+                    st.caption(f"CLV: insufficient sample ({clv.get('total_with_clv', 0)} games). "
+                               "Builds up once refresh.py has captured closing lines.")
+
     with tab_nba:
         _render_nba_tab()
 

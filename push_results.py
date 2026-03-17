@@ -223,6 +223,59 @@ def run_transaction_wire(game_date: str, games: list[dict]) -> list[dict]:
         return []
 
 
+def build_mlb_clv_summary() -> dict:
+    """
+    Compute CLV summary from graded_results table.
+    Only includes rows where clv_directional IS NOT NULL (live-season, has closing line).
+    Guards: n < 20 → empty summary; coverage < 50% → coverage_warning flag.
+    """
+    try:
+        rows = db.get_all_graded_results()
+        plays = [r for r in rows if r.get("was_a_play")]
+        n_total = len(plays)
+        has_clv = [r for r in plays if r.get("clv_directional") is not None]
+        n_clv = len(has_clv)
+        coverage = round(n_clv / n_total * 100, 1) if n_total > 0 else 0.0
+
+        if n_clv < 20:
+            return {"clv_available": False, "reason": f"insufficient_sample (n={n_clv})",
+                    "clv_coverage_pct": coverage}
+
+        vals = [r["clv_directional"] for r in has_clv]
+        avg_clv    = round(sum(vals) / len(vals), 3)
+        sorted_v   = sorted(vals)
+        mid        = len(sorted_v) // 2
+        median_clv = round(
+            sorted_v[mid] if len(sorted_v) % 2 else (sorted_v[mid-1] + sorted_v[mid]) / 2, 3
+        )
+        pct_pos = round(sum(1 for v in vals if v > 0) / len(vals) * 100, 1)
+
+        by_tier: dict = {}
+        for tier in ("HIGH", "MEDIUM", "LOW"):
+            sub = [r["clv_directional"] for r in has_clv if r.get("confidence") == tier]
+            by_tier[tier] = round(sum(sub)/len(sub), 3) if sub else None
+
+        by_side: dict = {}
+        for side in ("OVER", "UNDER"):
+            sub = [r["clv_directional"] for r in has_clv
+                   if r.get("recommendation") == side]
+            by_side[side] = round(sum(sub)/len(sub), 3) if sub else None
+
+        return {
+            "clv_available":    True,
+            "total_with_clv":   n_clv,
+            "avg_clv":          avg_clv,
+            "median_clv":       median_clv,
+            "pct_positive_clv": pct_pos,
+            "avg_clv_by_tier":  by_tier,
+            "avg_clv_by_side":  by_side,
+            "clv_coverage_pct": coverage,
+            "coverage_warning": coverage < 50.0,
+        }
+    except Exception as e:
+        return {"clv_available": False, "reason": str(e)}
+
+
 def main():
     parser = argparse.ArgumentParser(description="Grade yesterday + run model + push to GitHub")
     parser.add_argument("--date",          default=None,        help="Game date YYYY-MM-DD (default: today)")
@@ -269,6 +322,7 @@ def main():
     payload = serialize_results(raw, game_date)
     payload["alerts"]       = lineup_alerts
     payload["transactions"] = transactions
+    payload["mlb_clv_summary"] = build_mlb_clv_summary()
 
     with open(results_path, "w") as f:
         json.dump(payload, f, indent=2, default=str)

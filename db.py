@@ -194,6 +194,30 @@ def init_db() -> None:
             except Exception:
                 pass  # column already exists
 
+        # Migrate graded_results — add CLV columns if missing
+        # closing_line: final market line before game starts (from line_movement.csv)
+        # clv_raw:      closing_line − line (positive = line moved away from model projection)
+        # clv_directional: signed by lean — OVER: clv_raw; UNDER: −clv_raw
+        #                  positive = we beat the closing line (sharp)
+        # snapshot_source: where closing_line came from
+        for col, coltype in [
+            ("closing_line",    "REAL"),
+            ("clv_raw",         "REAL"),
+            ("clv_directional", "REAL"),
+            ("snapshot_source", "TEXT"),
+        ]:
+            try:
+                conn.execute(f"ALTER TABLE graded_results ADD COLUMN {col} {coltype}")
+            except Exception:
+                pass  # column already exists
+
+        # Migrate results table — add decision_line_captured flag
+        # Allows future auditing of when line was first stored
+        try:
+            conn.execute("ALTER TABLE results ADD COLUMN line_captured_at TEXT")
+        except Exception:
+            pass
+
 
 def upsert_projection(row: dict) -> int:
     """Insert or replace a projection row; return the row id."""
@@ -291,8 +315,8 @@ def log_result(game_pk: int, game_date: str, actual_total: float = None,
                 INSERT INTO results
                   (projection_id, game_date, game_pk, home_team, away_team,
                    actual_total, actual_f5_total, line_full, line_f5,
-                   result_full, result_f5)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                   result_full, result_f5, line_captured_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,datetime('now'))
             """, (
                 proj["id"], game_date, game_pk,
                 proj["home_team"], proj["away_team"],

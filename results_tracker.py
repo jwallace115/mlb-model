@@ -10,8 +10,10 @@ Usage:
 """
 
 import argparse
+import csv
 import json
 import logging
+import os
 import sys
 from datetime import date, timedelta
 
@@ -19,7 +21,7 @@ import requests
 from colorama import Fore, Style, init as colorama_init
 
 import db
-from config import MLB_STATS_API
+from config import MLB_STATS_API, DATA_DIR
 
 colorama_init(autoreset=True)
 logging.basicConfig(
@@ -336,6 +338,59 @@ def _compute_result(lean: str, actual_total: float | None,
     return actual_dir
 
 
+# ── CLV helpers ────────────────────────────────────────────────────────────────
+
+def _load_closing_lines(game_date: str) -> dict[str, float | None]:
+    """
+    Read line_movement.csv and return {game_id_str: close_total} for game_date.
+    Returns empty dict if file absent or no rows for this date.
+    """
+    csv_path = os.path.join(DATA_DIR, "line_movement.csv")
+    if not os.path.exists(csv_path):
+        return {}
+    try:
+        with open(csv_path, newline="") as f:
+            rows = list(csv.DictReader(f))
+    except Exception as e:
+        logger.warning(f"line_movement.csv read error: {e}")
+        return {}
+
+    result: dict[str, float | None] = {}
+    for r in rows:
+        if r.get("date") != game_date:
+            continue
+        gid = str(r.get("game_id", "")).strip()
+        if not gid:
+            continue
+        raw = r.get("close_total", "")
+        try:
+            result[gid] = float(raw) if raw not in ("", None) else None
+        except (ValueError, TypeError):
+            result[gid] = None
+    return result
+
+
+def _compute_clv(lean: str, line_taken: float | None, closing_line: float | None
+                 ) -> tuple[float | None, float | None, str]:
+    """
+    Returns (clv_raw, clv_directional, snapshot_source).
+    clv_raw:         closing_line − line_taken  (signed: positive = line moved up)
+    clv_directional: OVER → clv_raw; UNDER → −clv_raw
+                     positive = we beat the close (sharp signal)
+    """
+    if closing_line is None or line_taken is None:
+        src = "missing" if closing_line is None else "line_movement_csv"
+        return None, None, src
+    clv_raw = round(closing_line - line_taken, 2)
+    if lean == "OVER":
+        clv_dir = clv_raw
+    elif lean == "UNDER":
+        clv_dir = -clv_raw
+    else:
+        clv_dir = None   # NEUTRAL lean — no directional CLV
+    return clv_raw, clv_dir, "line_movement_csv"
+
+
 # ── core grader ────────────────────────────────────────────────────────────────
 
 def grade_date(game_date: str) -> list[dict]:
@@ -359,6 +414,11 @@ def grade_date(game_date: str) -> list[dict]:
     if not projections:
         logger.warning(f"No projections found for {game_date}")
         return []
+
+    # Load closing lines from line_movement.csv for CLV computation
+    closing_lines = _load_closing_lines(game_date)
+    logger.info(f"Closing lines loaded: {sum(1 for v in closing_lines.values() if v is not None)}"
+                f"/{len(closing_lines)} games have close_total")
 
     graded = []
     for row in projections:
@@ -406,6 +466,10 @@ def grade_date(game_date: str) -> list[dict]:
         projection_error = (actual_total - proj_total) if (actual_total and proj_total) else None
         result           = _compute_result(lean, actual_total, line)
 
+        # ── CLV computation ───────────────────────────────────────────────
+        closing_line = closing_lines.get(str(gk))
+        clv_raw, clv_dir, snap_src = _compute_clv(lean, line, closing_line)
+
         graded_row = {
             "game_date":            game_date,
             "game_pk":              gk,
@@ -438,6 +502,11 @@ def grade_date(game_date: str) -> list[dict]:
             "umpire_rating":        row["umpire_factor"],
             "home_bullpen_innings": factors.get("home_bp_innings_used"),
             "away_bullpen_innings": factors.get("away_bp_innings_used"),
+            # CLV fields
+            "closing_line":         closing_line,
+            "clv_raw":              clv_raw,
+            "clv_directional":      clv_dir,
+            "snapshot_source":      snap_src,
         }
 
         db.write_graded_result(graded_row)
