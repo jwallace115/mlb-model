@@ -2,12 +2,17 @@
 """
 Mac launchd scheduler setup.
 
-Creates and loads a plist that runs run_model.py at 7:00 AM daily.
-Also creates a second job that auto-logs yesterday's results at 11:30 PM.
+Manages all scheduled model jobs:
+  7:00 AM  — push_results.py  (MLB grade+model, NBA, NHL, Soccer initial run)
+  10:00 AM — soccer lineup refresh (catches 12:30pm+ kickoffs)
+  11:00 AM — refresh.py       (MLB lineup/weather/umpire update)
+  12:00 PM — soccer lineup refresh (catches afternoon kickoffs)
+  5:00 PM  — refresh_5pm.py  (MLB + NBA + NHL + Soccer late refresh)
+  11:30 PM — results_tracker.py (auto-log MLB final scores)
 
 Usage:
-  python setup_launchd.py install    # install and start both jobs
-  python setup_launchd.py uninstall  # unload and remove both jobs
+  python setup_launchd.py install    # install and load all jobs
+  python setup_launchd.py uninstall  # unload and remove all jobs
   python setup_launchd.py status     # check if jobs are loaded
 """
 
@@ -21,22 +26,43 @@ SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
 PYTHON_BIN   = sys.executable
 LAUNCH_AGENTS_DIR = Path.home() / "Library" / "LaunchAgents"
 
+_soccer_refresh_cmd = (
+    f"{PYTHON_BIN} soccer/soccer_daily_pipeline.py --refresh-lineups"
+    f" && {PYTHON_BIN} push_soccer.py"
+)
+
 JOBS = {
     "com.mlbmodel.daily": {
         "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.daily.plist",
         "label": "com.mlbmodel.daily",
-        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "run_model.py")],
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "push_results.py")],
         "hour": 7,
         "minute": 0,
-        "description": "MLB Totals Model — 7 AM daily run",
+        "description": "7 AM — grade yesterday + MLB/NBA/NHL/Soccer model run",
+    },
+    "com.mlbmodel.soccer.10am": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.soccer.10am.plist",
+        "label": "com.mlbmodel.soccer.10am",
+        "program": ["/bin/sh", "-c", _soccer_refresh_cmd],
+        "hour": 10,
+        "minute": 0,
+        "description": "10 AM — Soccer lineup refresh (catches 12:30pm+ kickoffs)",
     },
     "com.mlbmodel.refresh": {
         "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.refresh.plist",
         "label": "com.mlbmodel.refresh",
         "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "refresh.py")],
-        "hour": 11,   # 11 AM — catches confirmed lineups
+        "hour": 11,
         "minute": 0,
-        "description": "MLB Totals Model — 11 AM lineup refresh",
+        "description": "11 AM — MLB lineup/weather/umpire refresh",
+    },
+    "com.mlbmodel.soccer.noon": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.soccer.noon.plist",
+        "label": "com.mlbmodel.soccer.noon",
+        "program": ["/bin/sh", "-c", _soccer_refresh_cmd],
+        "hour": 12,
+        "minute": 0,
+        "description": "12 PM — Soccer lineup refresh (catches afternoon kickoffs)",
     },
     "com.mlbmodel.results": {
         "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.results.plist",
@@ -44,7 +70,7 @@ JOBS = {
         "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "results_tracker.py")],
         "hour": 23,
         "minute": 30,
-        "description": "MLB Totals Model — 11:30 PM auto-log results",
+        "description": "11:30 PM — auto-log MLB final scores",
     },
 }
 
@@ -135,8 +161,10 @@ def install() -> None:
 
     print("Installation complete.")
     print(f"\nLog files will be written to: {SCRIPT_DIR}/logs/")
-    print("\nTo test immediately:")
+    print("\nTo test a job immediately:")
     print(f"  launchctl start com.mlbmodel.daily")
+    print(f"  launchctl start com.mlbmodel.soccer.10am")
+    print(f"  launchctl start com.mlbmodel.soccer.noon")
 
 
 def uninstall() -> None:
