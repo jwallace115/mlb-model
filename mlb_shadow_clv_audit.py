@@ -212,8 +212,10 @@ def run_audit(days: int = 14, target_date: str | None = None) -> bool:
                 WHERE game_date >= ? AND snapshot_source IS NOT NULL
             """, (cutoff,)).fetchall()
         found_sources = {r[0] for r in src_rows}
-        valid_sources = {"line_movement_csv", "missing"}
-        unexpected = found_sources - valid_sources
+        # Valid: "missing", "line_movement_csv", "line_movement_csv@<ISO-timestamp>"
+        unexpected = {s for s in found_sources
+                      if s not in ("missing", "line_movement_csv")
+                      and not s.startswith("line_movement_csv@")}
         if not found_sources:
             results.append(_check("snapshot_source values", SKIP,
                                   "no rows with snapshot_source yet"))
@@ -221,8 +223,10 @@ def run_audit(days: int = 14, target_date: str | None = None) -> bool:
             results.append(_check("snapshot_source values", WARN,
                                   f"unexpected values: {unexpected}"))
         else:
+            ts_count = sum(1 for s in found_sources if "@" in s)
             results.append(_check("snapshot_source values", PASS,
-                                  f"found: {found_sources}"))
+                                  f"{len(found_sources)} distinct value(s); "
+                                  f"{ts_count} with timestamp"))
     except Exception as e:
         results.append(_check("snapshot_source values", FAIL, str(e)))
 

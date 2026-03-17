@@ -340,10 +340,11 @@ def _compute_result(lean: str, actual_total: float | None,
 
 # ── CLV helpers ────────────────────────────────────────────────────────────────
 
-def _load_closing_lines(game_date: str) -> dict[str, float | None]:
+def _load_closing_lines(game_date: str) -> dict[str, dict]:
     """
-    Read line_movement.csv and return {game_id_str: close_total} for game_date.
-    Returns empty dict if file absent or no rows for this date.
+    Read line_movement.csv and return
+      {game_id_str: {"close_total": float|None, "close_timestamp": str|None}}
+    for game_date.  Returns empty dict if file absent.
     """
     csv_path = os.path.join(DATA_DIR, "line_movement.csv")
     if not os.path.exists(csv_path):
@@ -355,7 +356,7 @@ def _load_closing_lines(game_date: str) -> dict[str, float | None]:
         logger.warning(f"line_movement.csv read error: {e}")
         return {}
 
-    result: dict[str, float | None] = {}
+    result: dict[str, dict] = {}
     for r in rows:
         if r.get("date") != game_date:
             continue
@@ -363,20 +364,25 @@ def _load_closing_lines(game_date: str) -> dict[str, float | None]:
         if not gid:
             continue
         raw = r.get("close_total", "")
+        ts  = r.get("close_timestamp", "") or None
         try:
-            result[gid] = float(raw) if raw not in ("", None) else None
+            close_val = float(raw) if raw not in ("", None) else None
         except (ValueError, TypeError):
-            result[gid] = None
+            close_val = None
+        result[gid] = {"close_total": close_val, "close_timestamp": ts}
     return result
 
 
-def _compute_clv(lean: str, line_taken: float | None, closing_line: float | None
+def _compute_clv(lean: str, line_taken: float | None, closing_line: float | None,
+                 close_timestamp: str | None = None
                  ) -> tuple[float | None, float | None, str]:
     """
     Returns (clv_raw, clv_directional, snapshot_source).
     clv_raw:         closing_line − line_taken  (signed: positive = line moved up)
     clv_directional: OVER → clv_raw; UNDER → −clv_raw
                      positive = we beat the close (sharp signal)
+    snapshot_source: "line_movement_csv@<timestamp>" when close_timestamp known,
+                     "line_movement_csv" when timestamp absent, "missing" when no line.
     """
     if closing_line is None or line_taken is None:
         src = "missing" if closing_line is None else "line_movement_csv"
@@ -388,7 +394,8 @@ def _compute_clv(lean: str, line_taken: float | None, closing_line: float | None
         clv_dir = -clv_raw
     else:
         clv_dir = None   # NEUTRAL lean — no directional CLV
-    return clv_raw, clv_dir, "line_movement_csv"
+    src = f"line_movement_csv@{close_timestamp}" if close_timestamp else "line_movement_csv"
+    return clv_raw, clv_dir, src
 
 
 # ── core grader ────────────────────────────────────────────────────────────────
@@ -467,8 +474,10 @@ def grade_date(game_date: str) -> list[dict]:
         result           = _compute_result(lean, actual_total, line)
 
         # ── CLV computation ───────────────────────────────────────────────
-        closing_line = closing_lines.get(str(gk))
-        clv_raw, clv_dir, snap_src = _compute_clv(lean, line, closing_line)
+        _clv_entry   = closing_lines.get(str(gk)) or {}
+        closing_line = _clv_entry.get("close_total")
+        _close_ts    = _clv_entry.get("close_timestamp")
+        clv_raw, clv_dir, snap_src = _compute_clv(lean, line, closing_line, _close_ts)
 
         graded_row = {
             "game_date":            game_date,

@@ -13,7 +13,7 @@ CSV columns:
 import csv
 import logging
 import os
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from config import DATA_DIR
@@ -24,7 +24,7 @@ LINE_CSV = os.path.join(DATA_DIR, "line_movement.csv")
 COLUMNS  = [
     "date", "game_id", "home_team", "away_team",
     "open_total", "model_projection", "model_edge",
-    "close_total", "line_move", "final_model_edge",
+    "close_total", "close_timestamp", "line_move", "final_model_edge",
 ]
 
 
@@ -87,6 +87,7 @@ def log_opening_lines(game_date: str, results: list[dict]) -> None:
             "model_projection": model_proj if model_proj is not None else "",
             "model_edge":       model_edge if model_edge is not None else "",
             "close_total":      "",
+            "close_timestamp":  "",
             "line_move":        "",
             "final_model_edge": "",
         })
@@ -143,9 +144,18 @@ def update_closing_lines(game_date: str, results: list[dict]) -> None:
             else None
         )
 
-        row["close_total"]      = close_total if close_total is not None else ""
-        row["line_move"]        = line_move   if line_move   is not None else ""
-        row["final_model_edge"] = final_edge  if final_edge  is not None else ""
+        # Only overwrite close_total if a non-null value is available.
+        # This preserves an earlier refresh's value as fallback (e.g., 11am → 5pm
+        # where 5pm Odds API returns nothing for a late-added game).
+        if close_total is not None:
+            row["close_total"]      = close_total
+            row["close_timestamp"]  = datetime.now().isoformat(timespec="seconds")
+        elif not row.get("close_total"):
+            # Field not previously set — leave as empty (first-write guard)
+            row.setdefault("close_total",     "")
+            row.setdefault("close_timestamp", "")
+        if line_move  is not None: row["line_move"]        = line_move
+        if final_edge is not None: row["final_model_edge"] = final_edge
         updated += 1
 
     _write_csv(existing)
