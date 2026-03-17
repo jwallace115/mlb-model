@@ -1858,9 +1858,15 @@ def _render_soccer_tab() -> None:
     # ── SECTION 3: Season Performance ─────────────────────────────────────────
     st.html('<div class="section-hdr">📊 Season Performance</div>')
 
-    overall = season_perf.get("overall", {})
-    oos_ref = season_perf.get("oos_reference", {})
+    overall  = season_perf.get("overall", {})
+    oos_ref  = season_perf.get("oos_reference", {})
+    deploy_d = soccer.get("deployment_start_date", "2026-03-17")
 
+    # ── Live Results (since deployment) ────────────────────────────────────────
+    st.html(
+        f"<div style='font-size:0.82em;font-weight:600;color:#94a3b8;"
+        f"margin-bottom:6px'>Live Results (since {deploy_d})</div>"
+    )
     if overall and overall.get("n", 0) > 0:
         W, L, P = overall["W"], overall["L"], overall["P"]
         n    = overall["n"]
@@ -1872,7 +1878,7 @@ def _render_soccer_tab() -> None:
         st.html(f"""
         <div class="season-banner">
           <div class="stat-grid">
-            <div class="stat-block"><div class="num">{W}-{L}-{P}</div><div class="lbl">W-L-P (live, n={n})</div></div>
+            <div class="stat-block"><div class="num">{W}-{L}-{P}</div><div class="lbl">W-L-P (n={n})</div></div>
             <div class="stat-block"><div class="num {hit_cls}">{hit_s}</div><div class="lbl">Hit Rate</div></div>
             <div class="stat-block"><div class="num">{roi_s}</div><div class="lbl">ROI @ -110</div></div>
           </div>
@@ -1929,14 +1935,14 @@ def _render_soccer_tab() -> None:
                   <tbody>{lg_rows}</tbody>
                 </table>""")
     else:
-        st.caption("No live graded signals yet — OOS reference shown below.")
+        st.caption("No graded live signals yet.")
 
-    # OOS reference (always shown)
+    # ── OOS Backtest Reference (always shown) ──────────────────────────────────
+    st.html(
+        "<div style='font-size:0.82em;font-weight:600;color:#94a3b8;"
+        "margin-top:16px;margin-bottom:6px'>OOS Backtest Reference (2024-25 holdout)</div>"
+    )
     if oos_ref:
-        st.html("""
-        <div style="font-size:0.75em;color:#4a5568;margin-top:8px;margin-bottom:4px">
-        OOS backtest reference (2024-25 season, blind forward test):
-        </div>""")
         ref_rows = ""
         for tier, d in [("Overall", oos_ref.get("overall", {})),
                         ("HIGH (edge≥10pp)", oos_ref.get("HIGH", {})),

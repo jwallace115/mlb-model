@@ -364,6 +364,7 @@ def write_soccer_json(game_date: str | None = None) -> str:
         "pipeline_run_date":  pipeline_run_date,
         "signals_source":     signals_source,
         "game_date":          game_date,
+        "deployment_start_date": "2026-03-17",
         "model_description":  "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
         "today_signals":      today_signals,
         "recent_results":     recent_results,
