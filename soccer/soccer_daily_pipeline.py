@@ -859,6 +859,95 @@ def grade_yesterday(api_client: APIFootballClient, game_date_str: str) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Live stop rules
+# ---------------------------------------------------------------------------
+STOP_TIER_MIN_N   = 25      # min graded signals before tier stop applies
+STOP_TIER_ROI     = -0.08   # tier suspended if live ROI < -8%
+STOP_OVERALL_MIN_N = 50     # min graded signals before overall stop applies
+STOP_OVERALL_ROI  = -0.10   # model suspended if overall live ROI < -10%
+
+
+def check_stop_rules() -> dict:
+    """
+    Read live graded decisions and evaluate hard stop rules.
+
+    Returns:
+        {
+            "overall_suspended": bool,
+            "suspended_tiers":   set[str],   # {"HIGH", "MEDIUM", "LOW"}
+            "overall_n":         int,
+            "overall_roi":       float | None,
+            "tier_stats":        {"HIGH": {"n": int, "roi": float}, ...},
+        }
+    """
+    result = {
+        "overall_suspended": False,
+        "suspended_tiers":   set(),
+        "overall_n":         0,
+        "overall_roi":       None,
+        "tier_stats":        {},
+    }
+
+    if not DECISIONS_PATH.exists():
+        return result
+
+    try:
+        dec = pd.read_parquet(DECISIONS_PATH)
+    except Exception:
+        return result
+
+    if "split" not in dec.columns or "graded" not in dec.columns:
+        return result
+
+    graded = dec[(dec["split"] == "live") & (dec["graded"] == 1)].copy()
+    if graded.empty:
+        return result
+
+    def _roi(df: pd.DataFrame) -> tuple[int, float | None]:
+        n = len(df)
+        if n == 0:
+            return 0, None
+        W = (df["result"] == "WIN").sum()
+        L = (df["result"] == "LOSS").sum()
+        wl = W + L
+        if wl == 0:
+            return n, None
+        roi = (W * WIN_PER_UNIT - L) / wl
+        return n, float(roi)
+
+    # Overall
+    overall_n, overall_roi = _roi(graded)
+    result["overall_n"]   = overall_n
+    result["overall_roi"] = overall_roi
+
+    if overall_n >= STOP_OVERALL_MIN_N and overall_roi is not None and overall_roi < STOP_OVERALL_ROI:
+        result["overall_suspended"] = True
+        msg = (
+            f"Soccer model suspended pending review — "
+            f"overall live ROI {overall_roi:+.1%} below "
+            f"{STOP_OVERALL_ROI:+.0%} threshold (n={overall_n})"
+        )
+        logger.warning(msg)
+        print(f"  ⛔  {msg}")
+
+    # Per tier
+    for tier in ("HIGH", "MEDIUM", "LOW"):
+        sub = graded[graded["confidence_tier"] == tier]
+        tn, troi = _roi(sub)
+        result["tier_stats"][tier] = {"n": tn, "roi": troi}
+        if tn >= STOP_TIER_MIN_N and troi is not None and troi < STOP_TIER_ROI:
+            result["suspended_tiers"].add(tier)
+            msg = (
+                f"[{tier}] suspended: live ROI {troi:+.1%} below "
+                f"{STOP_TIER_ROI:+.0%} threshold (n={tn})"
+            )
+            logger.warning(msg)
+            print(f"  ⛔  {msg}")
+
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Main pipeline
 # ---------------------------------------------------------------------------
 def run_pipeline(game_date: str, use_odds: bool = True,
@@ -884,6 +973,12 @@ def run_pipeline(game_date: str, use_odds: bool = True,
         for f in CACHE_DIR.glob(f"lineups_*_{game_date}*.json"):
             f.unlink()
         logger.info("[lineup] Cleared lineup caches — will re-fetch")
+
+    # Check live stop rules (after grading so data is fresh)
+    stop_status = check_stop_rules()
+    if stop_status["overall_suspended"]:
+        logger.warning("[stop] Overall suspension active — no signals generated.")
+        return []
 
     # Load canonical and ref data
     if not CANONICAL_PATH.exists():
@@ -1123,6 +1218,12 @@ def run_pipeline(game_date: str, use_odds: bool = True,
 
             tier = get_confidence_tier(edge) if signal_qualifies else None
 
+            # Hard stop: suppress if this tier is suspended
+            if signal_qualifies and tier and tier in stop_status["suspended_tiers"]:
+                logger.info(f"    No signal: [{tier}] tier suspended (live ROI below threshold)")
+                signal_qualifies = False
+                tier = None
+
             sig = {
                 "game_id":          game_id,
                 "game_date":        game_date,
@@ -1227,6 +1328,21 @@ def main():
             )
     else:
         print("  No qualified OVER signals today.")
+
+    # Stop rule status summary
+    stop_status = check_stop_rules()
+    roi_str = f"{stop_status['overall_roi']:+.1%}" if stop_status["overall_roi"] is not None else "N/A"
+    print(f"{'─'*60}")
+    print(f"  Stop Rules — live_n={stop_status['overall_n']}  overall_ROI={roi_str}")
+    for tier in ("HIGH", "MEDIUM", "LOW"):
+        ts = stop_status["tier_stats"].get(tier, {})
+        t_roi = f"{ts['roi']:+.1%}" if ts.get("roi") is not None else "N/A"
+        susp = " ⛔ SUSPENDED" if tier in stop_status["suspended_tiers"] else ""
+        print(f"    {tier}: n={ts.get('n', 0)}  ROI={t_roi}{susp}")
+    if stop_status["overall_suspended"]:
+        print("  ⛔ OVERALL MODEL SUSPENDED (live ROI below -10%)")
+    elif not stop_status["suspended_tiers"]:
+        print("  ✓ All tiers active — no suspensions")
     print()
 
 
