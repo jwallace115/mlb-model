@@ -15,8 +15,9 @@ import streamlit as st
 
 RESULTS_FILE      = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.json")
 SEASON_STATS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "season_stats.json")
-NBA_RESULTS_FILE  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "nba_results.json")
-NHL_RESULTS_FILE  = os.path.join(os.path.dirname(os.path.abspath(__file__)), "nhl_results.json")
+NBA_RESULTS_FILE    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "nba_results.json")
+NHL_RESULTS_FILE    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "nhl_results.json")
+SOCCER_RESULTS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "soccer_results.json")
 
 # ── page config ───────────────────────────────────────────────────────────────
 
@@ -469,6 +470,13 @@ def load_nhl_results() -> dict | None:
     if not os.path.exists(NHL_RESULTS_FILE):
         return None
     with open(NHL_RESULTS_FILE) as f:
+        return json.load(f)
+
+
+def load_soccer_results() -> dict | None:
+    if not os.path.exists(SOCCER_RESULTS_FILE):
+        return None
+    with open(SOCCER_RESULTS_FILE) as f:
         return json.load(f)
 
 
@@ -1582,6 +1590,381 @@ def _render_nhl_tab() -> None:
         """)
 
 
+# ── Soccer tab rendering ───────────────────────────────────────────────────────
+
+def _soccer_tier_badge(tier: str) -> str:
+    colors = {
+        "HIGH":   ("#22c55e", "#052e16"),
+        "MEDIUM": ("#eab308", "#1c1400"),
+        "LOW":    ("#64748b", "#0f172a"),
+    }
+    fg, bg = colors.get(tier, ("#64748b", "#0f172a"))
+    return (
+        f'<span style="background:{bg};color:{fg};border:1px solid {fg};'
+        f'border-radius:4px;padding:1px 7px;font-size:0.72em;font-weight:700;'
+        f'letter-spacing:0.06em;margin-left:6px">{tier}</span>'
+    )
+
+
+def _soccer_move_badge(move: float | None) -> str:
+    if move is None:
+        return ""
+    if move > 0.03:
+        return '<span style="color:#22c55e;font-size:0.80em">→ Late $$$ on OVER</span>'
+    if move < -0.03:
+        return '<span style="color:#f87171;font-size:0.80em">← Late $$$ on UNDER</span>'
+    return '<span style="color:#4a5568;font-size:0.80em">→ No significant move</span>'
+
+
+def _soccer_result_badge(result: str) -> str:
+    if result == "WIN":
+        return '<td class="green">WIN</td>'
+    if result == "LOSS":
+        return '<td class="red">LOSS</td>'
+    if result == "PUSH":
+        return '<td class="yellow">PUSH</td>'
+    return '<td class="dim">—</td>'
+
+
+def _render_soccer_signal_card(s: dict) -> None:
+    home    = s.get("home_team", "")
+    away    = s.get("away_team", "")
+    edge    = s.get("edge")
+    tier    = s.get("confidence_tier", "LOW")
+    model_t = s.get("model_total")
+    move    = s.get("market_move_to_over_2_5")
+    lineup  = bool(s.get("lineup_confirmed", False))
+    summary = s.get("summary", "")
+    gt      = s.get("game_time_et", "")
+    league  = s.get("league_id", "")
+    over_p  = s.get("over_price")
+
+    is_play   = tier in ("HIGH", "MEDIUM")
+    conf_star = {"HIGH": "star3", "MEDIUM": "star2"}.get(tier, "noplay")
+    card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
+
+    sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
+
+    league_tag = (
+        '<span style="font-size:0.72em;color:#4a5568;margin-right:6px">'
+        f'{"🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL" if league == "EPL" else "🇩🇪 Bundesliga"}'
+        f'</span>'
+    )
+    over_badge = (
+        '<span style="background:#052e16;color:#22c55e;border:1px solid #22c55e;'
+        'border-radius:4px;padding:1px 7px;font-size:0.72em;font-weight:700;'
+        'letter-spacing:0.06em;margin-right:6px">OVER 2.5</span>'
+    )
+
+    header = (
+        f'<div class="card-header">'
+        f'{over_badge}{league_tag}'
+        f'<span class="matchup">{away} @ {home}</span>'
+        f'{_soccer_tier_badge(tier)}'
+        f'</div>'
+    )
+
+    edge_pp  = f"{edge * 100:+.1f}pp" if edge is not None else "—"
+    ecls     = "edge-pos" if (edge or 0) > 0 else "edge-neg"
+    model_s  = f"{model_t:.1f}" if model_t is not None else "—"
+    over_s   = f"{over_p:.2f}" if over_p is not None else "—"
+
+    stats_parts = [
+        f'<span class="proj-label">Line</span> <span class="proj-val">2.5</span>',
+        f'<span class="proj-label">Edge</span> <span class="{ecls}">{edge_pp}</span>',
+        f'<span class="proj-label">Model Goals</span> <span class="proj-val">{model_s}</span>',
+    ]
+    if over_p is not None:
+        stats_parts.append(
+            f'<span class="proj-label">Over Price</span> <span class="proj-val">{over_s}</span>'
+        )
+    if gt:
+        stats_parts.append(
+            f'<span class="proj-label">Kickoff</span> <span class="proj-val">{gt}</span>'
+        )
+    stats_row = f'<div class="proj-row">{sep.join(stats_parts)}</div>'
+
+    move_html = ""
+    move_badge = _soccer_move_badge(move)
+    lineup_icon = "✓ Lineup confirmed" if lineup else "? Lineup estimated"
+    lineup_color = "#22c55e" if lineup else "#4a5568"
+    move_html = (
+        f'<div style="font-size:0.80em;color:#4a5568;margin-bottom:7px">'
+        f'{move_badge}'
+        f'&nbsp;&nbsp;|&nbsp;&nbsp;'
+        f'<span style="color:{lineup_color}">{lineup_icon}</span>'
+        f'</div>'
+    )
+
+    summary_html = (
+        f'<div class="card-summary">{summary}</div>' if summary else ""
+    )
+
+    st.html(
+        f'<div class="{card_cls}">'
+        f'{header}{stats_row}{move_html}{summary_html}'
+        f'</div>'
+    )
+
+
+def _render_soccer_tab() -> None:
+    soccer = load_soccer_results()
+
+    # ── header ────────────────────────────────────────────────────────────────
+    col_title, col_btn = st.columns([5, 1])
+    with col_title:
+        if soccer:
+            last_run  = _last_run_label(soccer)
+            game_date = soccer.get("game_date", "")
+            st.html(
+                f"<h3 style='margin:0 0 4px 0'>⚽ Soccer Over 2.5 Specialist</h3>"
+                f"<span style='font-size:0.78em;color:#4a5568'>"
+                f"Model run {last_run} · Projections for <strong>{game_date}</strong>"
+                f"</span>"
+            )
+        else:
+            st.markdown("### ⚽ Soccer Over 2.5 Specialist")
+    with col_btn:
+        st.write("")
+        if st.button("🔄 Refresh", key="soccer_refresh", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
+
+    if soccer is None:
+        st.info(
+            "No Soccer projections available yet. "
+            "Run `python push_soccer.py --no-push` to publish today's signals."
+        )
+        return
+
+    st.html(
+        '<div style="background:#051f14;border:1px solid #166534;border-radius:6px;'
+        'padding:8px 14px;margin-bottom:12px;font-size:0.82em;color:#86efac">'
+        '⚽ Soccer model signals <strong>Over 2.5 goals</strong> only. '
+        'Under signals are not generated by design.'
+        '</div>'
+    )
+
+    last_updated   = soccer.get("last_updated", "")
+    signals_source = soccer.get("signals_source", "")
+    src_color = "#22c55e" if signals_source == "live" else "#f59e0b"
+    if last_updated or signals_source:
+        src_html = (
+            f"&nbsp;&nbsp;|&nbsp;&nbsp;Source: "
+            f"<strong style='color:{src_color}'>{signals_source}</strong>"
+        ) if signals_source else ""
+        st.html(
+            f"<div style='font-size:0.75em;color:#4a5568;margin-bottom:8px'>"
+            f"Last updated: <strong style='color:#94a3b8'>{last_updated}</strong>"
+            f"{src_html}</div>"
+        )
+
+    today_signals  = soccer.get("today_signals", [])
+    recent_results = soccer.get("recent_results", [])
+    season_perf    = soccer.get("season_performance", {})
+
+    # ── SECTION 1: Today's Signals ─────────────────────────────────────────────
+    st.html('<div class="section-hdr">🎯 Today\'s Signals — OVER 2.5</div>')
+    if today_signals:
+        plays    = [s for s in today_signals if s.get("confidence_tier") in ("HIGH", "MEDIUM")]
+        low_sigs = [s for s in today_signals if s not in plays]
+        if plays:
+            for s in plays:
+                _render_soccer_signal_card(s)
+        else:
+            st.caption("No HIGH/MEDIUM signals today.")
+        if low_sigs:
+            with st.expander(f"LOW confidence signals — {len(low_sigs)}", expanded=False):
+                for s in low_sigs:
+                    _render_soccer_signal_card(s)
+    else:
+        st.caption(
+            "No qualified Over 2.5 signals today "
+            "(threshold: +6pp edge, market move ≥ −3pp, Over only)."
+        )
+
+    # ── SECTION 2: Recent Results ──────────────────────────────────────────────
+    st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
+    if recent_results:
+        W = sum(1 for r in recent_results if r.get("result") == "WIN")
+        L = sum(1 for r in recent_results if r.get("result") == "LOSS")
+        P = sum(1 for r in recent_results if r.get("result") == "PUSH")
+        n = W + L + P
+        hit = W / (W + L) if (W + L) > 0 else None
+        roi = (W * (100.0 / 110.0) - L) / n * 100 if n > 0 else None
+
+        hit_cls = "green" if (hit or 0) >= 0.54 else "yellow" if (hit or 0) >= 0.525 else "red"
+        hit_str = f"{hit * 100:.1f}%" if hit is not None else "—"
+        roi_str = f"{roi:+.1f}%" if roi is not None else "—"
+
+        st.html(f"""
+        <div class="season-banner" style="padding:10px 16px;margin-bottom:10px">
+          <div class="stat-grid">
+            <div class="stat-block">
+              <div class="num">{W}-{L}-{P}</div>
+              <div class="lbl">W-L-P (14d)</div>
+            </div>
+            <div class="stat-block">
+              <div class="num {hit_cls}">{hit_str}</div>
+              <div class="lbl">Hit Rate</div>
+            </div>
+            <div class="stat-block">
+              <div class="num">{roi_str}</div>
+              <div class="lbl">ROI @ -110</div>
+            </div>
+          </div>
+        </div>
+        """)
+
+        rows_html = ""
+        for r in recent_results:
+            gd     = r.get("game_date", "")
+            lg     = r.get("league_id", "")
+            home   = r.get("home_team", "")
+            away   = r.get("away_team", "")
+            edge   = r.get("edge")
+            actual = r.get("actual_total_goals")
+            result = r.get("result", "")
+            tier   = r.get("confidence_tier", "LOW")
+
+            matchup  = f"{away} @ {home}"
+            edge_s   = f"{edge:+.3f}" if edge is not None else "—"
+            actual_s = str(int(actual)) if actual is not None else "—"
+            lg_s     = "EPL" if lg == "EPL" else "BUN"
+
+            rows_html += (
+                f'<tr>'
+                f'<td class="dim">{gd}</td>'
+                f'<td class="dim">{lg_s}</td>'
+                f'<td>{matchup}</td>'
+                f'<td>{_soccer_tier_badge(tier)}</td>'
+                f'<td class="dim">{edge_s}</td>'
+                f'<td class="dim">{actual_s}</td>'
+                f'{_soccer_result_badge(result)}'
+                f'</tr>'
+            )
+        st.html(f"""
+        <table class="star-table">
+          <thead><tr>
+            <th>Date</th><th>League</th><th>Matchup</th>
+            <th>Tier</th><th>Edge</th><th>Goals</th><th>Result</th>
+          </tr></thead>
+          <tbody>{rows_html}</tbody>
+        </table>
+        """)
+    else:
+        st.caption("No graded live signals in the past 14 days.")
+
+    # ── SECTION 3: Season Performance ─────────────────────────────────────────
+    st.html('<div class="section-hdr">📊 Season Performance</div>')
+
+    overall = season_perf.get("overall", {})
+    oos_ref = season_perf.get("oos_reference", {})
+
+    if overall and overall.get("n", 0) > 0:
+        W, L, P = overall["W"], overall["L"], overall["P"]
+        n    = overall["n"]
+        hit  = overall.get("hit")
+        roi  = overall.get("roi")
+        hit_cls = "green" if (hit or 0) >= 0.54 else "yellow" if (hit or 0) >= 0.525 else "red"
+        hit_s = f"{hit * 100:.1f}%" if hit is not None else "—"
+        roi_s = f"{roi:+.2f}%" if roi is not None else "—"
+        st.html(f"""
+        <div class="season-banner">
+          <div class="stat-grid">
+            <div class="stat-block"><div class="num">{W}-{L}-{P}</div><div class="lbl">W-L-P (live, n={n})</div></div>
+            <div class="stat-block"><div class="num {hit_cls}">{hit_s}</div><div class="lbl">Hit Rate</div></div>
+            <div class="stat-block"><div class="num">{roi_s}</div><div class="lbl">ROI @ -110</div></div>
+          </div>
+        </div>
+        """)
+
+        # By tier
+        by_tier = season_perf.get("by_tier", {})
+        if by_tier:
+            st.caption("By confidence tier")
+            tier_rows = ""
+            for tier in ("HIGH", "MEDIUM", "LOW"):
+                d = by_tier.get(tier, {})
+                if not d or d.get("n", 0) == 0:
+                    continue
+                h = d.get("hit"); r = d.get("roi"); tn = d.get("n", 0)
+                h_s = f"{h*100:.1f}%" if h is not None else "—"
+                r_s = f"{r:+.2f}%" if r is not None else "—"
+                r_cls = "green" if (r or 0) > 0 else "red"
+                tier_rows += (
+                    f'<tr><td>{tier}</td><td>{tn}</td>'
+                    f'<td class="{"green" if (h or 0)>=0.54 else "red"}">{h_s}</td>'
+                    f'<td class="{r_cls}">{r_s}</td></tr>'
+                )
+            if tier_rows:
+                st.html(f"""
+                <table class="star-table">
+                  <thead><tr><th>Tier</th><th>N</th><th>Hit%</th><th>ROI</th></tr></thead>
+                  <tbody>{tier_rows}</tbody>
+                </table>""")
+
+        # By league
+        by_league = season_perf.get("by_league", {})
+        if by_league:
+            st.caption("By league")
+            lg_rows = ""
+            for lg, name in [("EPL", "English Premier League"), ("BUN", "Bundesliga")]:
+                d = by_league.get(lg, {})
+                if not d or d.get("n", 0) == 0:
+                    continue
+                h = d.get("hit"); r = d.get("roi"); tn = d.get("n", 0)
+                h_s = f"{h*100:.1f}%" if h is not None else "—"
+                r_s = f"{r:+.2f}%" if r is not None else "—"
+                r_cls = "green" if (r or 0) > 0 else "red"
+                lg_rows += (
+                    f'<tr><td>{name}</td><td>{tn}</td>'
+                    f'<td class="{"green" if (h or 0)>=0.54 else "red"}">{h_s}</td>'
+                    f'<td class="{r_cls}">{r_s}</td></tr>'
+                )
+            if lg_rows:
+                st.html(f"""
+                <table class="star-table">
+                  <thead><tr><th>League</th><th>N</th><th>Hit%</th><th>ROI</th></tr></thead>
+                  <tbody>{lg_rows}</tbody>
+                </table>""")
+    else:
+        st.caption("No live graded signals yet — OOS reference shown below.")
+
+    # OOS reference (always shown)
+    if oos_ref:
+        st.html("""
+        <div style="font-size:0.75em;color:#4a5568;margin-top:8px;margin-bottom:4px">
+        OOS backtest reference (2024-25 season, blind forward test):
+        </div>""")
+        ref_rows = ""
+        for tier, d in [("Overall", oos_ref.get("overall", {})),
+                        ("HIGH (edge≥10pp)", oos_ref.get("HIGH", {})),
+                        ("MEDIUM (8-10pp)", oos_ref.get("MEDIUM", {})),
+                        ("LOW (6-8pp)", oos_ref.get("LOW", {}))]:
+            if not d:
+                continue
+            h = d.get("hit"); r = d.get("roi"); tn = d.get("n", 0)
+            h_s = f"{h*100:.1f}%" if h is not None else "—"
+            r_s = f"{r*100:+.1f}%" if r is not None else "—"
+            r_cls = "green" if (r or 0) > 0 else "red"
+            ref_rows += (
+                f'<tr><td class="dim">{tier}</td><td class="dim">{tn}</td>'
+                f'<td class="{"green" if (h or 0)>=0.54 else "yellow"}">{h_s}</td>'
+                f'<td class="{r_cls}">{r_s}</td></tr>'
+            )
+        st.html(f"""
+        <table class="star-table">
+          <thead><tr><th>Segment</th><th>N</th><th>Hit%</th><th>ROI</th></tr></thead>
+          <tbody>{ref_rows}</tbody>
+        </table>
+        <div style="font-size:0.72em;color:#4a5568;margin-top:6px">
+        Over 2.5 specialist · Min edge 6pp · Market move filter −3pp ·
+        Juice −110 · Break-even 52.38% · UNDER signals excluded by design.
+        </div>
+        """)
+
+
 def _nba_conf_badge(conf: str) -> str:
     c = (conf or "LOW").upper()
     return f'<span class="conf-badge conf-{c}">{c.lower()}</span>'
@@ -1978,7 +2361,7 @@ def main() -> None:
             st.rerun()
 
     # ── sport tabs ────────────────────────────────────────────────────────────
-    tab_mlb, tab_nba, tab_nhl = st.tabs(["⚾ MLB", "🏀 NBA", "🏒 NHL"])
+    tab_mlb, tab_nba, tab_nhl, tab_soccer = st.tabs(["⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer"])
 
     with tab_mlb:
         # ── season stats banner ───────────────────────────────────────────────
@@ -2029,6 +2412,9 @@ def main() -> None:
 
     with tab_nhl:
         _render_nhl_tab()
+
+    with tab_soccer:
+        _render_soccer_tab()
 
 
 main()

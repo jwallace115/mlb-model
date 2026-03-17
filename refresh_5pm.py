@@ -106,6 +106,23 @@ def main():
     except Exception as e:
         print(f"[refresh_5pm] NHL JSON write failed (non-fatal): {e}", file=sys.stderr)
 
+    # Step 2c: Soccer lineup refresh — re-fetch lineups (often announced by 5pm)
+    print(f"[refresh_5pm] Running Soccer lineup refresh for {game_date} ...")
+    try:
+        import subprocess as _sp2
+        _sp2.run(
+            [sys.executable, "soccer/soccer_daily_pipeline.py", "--refresh-lineups", "--date", game_date],
+            cwd=REPO_DIR, check=False,
+        )
+    except Exception as e:
+        print(f"[refresh_5pm] Soccer refresh failed (non-fatal): {e}", file=sys.stderr)
+    try:
+        from push_soccer import write_soccer_json
+        write_soccer_json(game_date)
+        push_files.append("soccer_results.json")
+    except Exception as e:
+        print(f"[refresh_5pm] Soccer JSON write failed (non-fatal): {e}", file=sys.stderr)
+
     # Step 3: single combined push for all updated files
     if push:
         print(f"[refresh_5pm] Pushing {', '.join(push_files)} to GitHub ...")

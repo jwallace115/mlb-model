@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-03-17T03:32:40.226137+00:00",
+  "last_updated": "2026-03-17 03:32 UTC",
+  "pipeline_run_date": "2026-03-16",
+  "signals_source": "stale",
+  "game_date": "2026-03-16",
+  "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
+  "today_signals": [],
+  "recent_results": [],
+  "season_performance": {
+    "oos_reference": {
+      "overall": {
+        "hit": 0.567,
+        "roi": 0.083,
+        "n": 356
+      },
+      "HIGH": {
+        "hit": 0.617,
+        "roi": 0.178,
+        "n": 154
+      },
+      "MEDIUM": {
+        "hit": 0.544,
+        "roi": 0.039,
+        "n": 68
+      },
+      "LOW": {
+        "hit": 0.536,
+        "roi": 0.023,
+        "n": 56
+      }
+    }
+  },
+  "data_quality_warning": false
+}

@@ -318,6 +318,30 @@ def main():
     except Exception as e:
         print(f"[push_results] NHL JSON write failed (non-fatal): {e}", file=sys.stderr)
 
+    # Step 6c: Soccer — canonical refresh, then grade + pipeline + serialize
+    try:
+        print(f"[push_results] Refreshing Soccer canonical table ...")
+        subprocess.run(
+            [sys.executable, "soccer/soccer_refresh_canonical.py"],
+            cwd=repo_dir, check=False,
+        )
+    except Exception as e:
+        print(f"[push_results] Soccer canonical refresh failed (non-fatal): {e}", file=sys.stderr)
+    try:
+        print(f"[push_results] Running Soccer pipeline (--grade-yesterday) for {game_date} ...")
+        subprocess.run(
+            [sys.executable, "soccer/soccer_daily_pipeline.py", "--grade-yesterday", "--date", game_date],
+            cwd=repo_dir, check=False,
+        )
+    except Exception as e:
+        print(f"[push_results] Soccer pipeline failed (non-fatal): {e}", file=sys.stderr)
+    try:
+        from push_soccer import write_soccer_json
+        write_soccer_json(game_date)
+        dashboard_files.append("soccer_results.json")
+    except Exception as e:
+        print(f"[push_results] Soccer JSON write failed (non-fatal): {e}", file=sys.stderr)
+
     # Step 7: single combined push for all dashboard artifacts
     if not args.no_push:
         print(f"[push_results] Pushing {', '.join(dashboard_files)} to GitHub ...")
