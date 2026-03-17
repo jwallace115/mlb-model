@@ -26,7 +26,10 @@ import pandas as pd
 REPO_DIR      = Path(__file__).parent
 SOCCER_DIR    = REPO_DIR / "soccer"
 DECISIONS     = SOCCER_DIR / "data" / "soccer_decisions.parquet"
+ODDS_CACHE    = SOCCER_DIR / "data" / "cache" / "daily"
 OUT_PATH      = REPO_DIR / "soccer_results.json"
+
+_SPORT_KEYS   = {"EPL": "soccer_epl", "BUN": "soccer_germany_bundesliga"}
 
 WIN_PER_UNIT  = 100.0 / 110.0
 
@@ -311,14 +314,162 @@ def _pipeline_freshness(game_date: str) -> tuple[str, str]:
 
 
 # ---------------------------------------------------------------------------
+# Over 1.5 parlay candidates (entertainment/parlay-support only)
+# ---------------------------------------------------------------------------
+_BOOK_PRIORITY = ["bet365", "pinnacle", "betfair", "unibet", "williamhill"]
+
+
+def _name_matches(a: str, b: str) -> bool:
+    a, b = a.lower(), b.lower()
+    return a in b or b in a or any(w in b for w in a.split() if len(w) > 4)
+
+
+def _parse_1_5_odds_for_game(home_team: str, away_team: str,
+                              game_date: str, league_id: str) -> dict:
+    """
+    Read today's cached odds JSON and find the 1.5 over/under line.
+    Returns dict with {point, over_price, under_price, fair_over} or {}.
+    Uses same bookmaker priority as the main pipeline.
+    """
+    sport = _SPORT_KEYS.get(league_id)
+    if not sport:
+        return {}
+    cache_file = ODDS_CACHE / f"odds_{sport}_{game_date}.json"
+    if not cache_file.exists():
+        return {}
+    try:
+        odds_data = json.loads(cache_file.read_text())
+    except Exception:
+        return {}
+
+    for game in odds_data:
+        ht = game.get("home_team", "")
+        at = game.get("away_team", "")
+        if not (_name_matches(home_team, ht) and _name_matches(away_team, at)):
+            continue
+        bookmakers = sorted(
+            game.get("bookmakers", []),
+            key=lambda b: next(
+                (i for i, bk in enumerate(_BOOK_PRIORITY) if bk in b.get("key", "")),
+                len(_BOOK_PRIORITY),
+            ),
+        )
+        for bm in bookmakers:
+            for mkt in bm.get("markets", []):
+                if mkt.get("key") != "totals":
+                    continue
+                over_price = under_price = None
+                for o in mkt.get("outcomes", []):
+                    if abs(o.get("point", 0) - 1.5) > 0.01:
+                        continue
+                    name = o.get("name", "").lower()
+                    price = o.get("price")
+                    if price and "over" in name:
+                        over_price = price
+                    elif price and "under" in name:
+                        under_price = price
+                if over_price and under_price and over_price > 1.0 and under_price > 1.0:
+                    imp_o = 1.0 / over_price
+                    imp_u = 1.0 / under_price
+                    total = imp_o + imp_u
+                    return {
+                        "point": 1.5,
+                        "over_price":  round(over_price, 3),
+                        "under_price": round(under_price, 3),
+                        "fair_over":   round(imp_o / total, 4),
+                    }
+    return {}
+
+
+def load_parlay_candidates(game_date: str) -> list[dict]:
+    """
+    Over 1.5 parlay candidates — ENTERTAINMENT / PARLAY-SUPPORT ONLY.
+    Not validated for standalone betting. Completely isolated from main signals.
+
+    Threshold: model_p_over_1_5 >= 0.80 AND projected_total >= 3.2
+    market_edge suppression: hide candidate if edge_1_5 < -0.05
+    """
+    from scipy.stats import poisson as _poisson
+
+    if not DECISIONS.exists():
+        return []
+    try:
+        dec = pd.read_parquet(DECISIONS)
+        if "split" not in dec.columns:
+            return []
+        dec["game_date"] = pd.to_datetime(dec["game_date"]).dt.date.astype(str)
+        today_games = dec[
+            (dec["game_date"] == game_date) & (dec["split"] == "live")
+        ].copy()
+        if today_games.empty:
+            return []
+
+        candidates = []
+        for _, r in today_games.iterrows():
+            model_total = _safe(r.get("model_total"))
+            if model_total is None or (isinstance(model_total, float) and model_total != model_total):
+                continue  # NaN or missing
+
+            # P(X >= 2) using Poisson CDF — exact equivalent of simulation sum
+            model_p_over_1_5 = float(1.0 - _poisson.cdf(1, model_total))
+
+            if model_p_over_1_5 < 0.80 or model_total < 3.2:
+                continue
+
+            tier = (
+                "VERY HIGH"
+                if model_p_over_1_5 >= 0.85 and model_total >= 3.5
+                else "HIGH"
+            )
+
+            home_team = r.get("home_team", "")
+            away_team = r.get("away_team", "")
+            league_id = r.get("league_id", "")
+
+            odds_1_5 = _parse_1_5_odds_for_game(home_team, away_team, game_date, league_id)
+            market_line_1_5     = odds_1_5.get("point")
+            market_implied_p_1_5 = odds_1_5.get("fair_over")
+            edge_1_5 = None
+            if market_implied_p_1_5 is not None:
+                edge_1_5 = round(model_p_over_1_5 - market_implied_p_1_5, 4)
+                if edge_1_5 < -0.05:
+                    continue  # Market strongly disagrees — suppress
+
+            candidates.append({
+                "game_id":              _safe(r.get("game_id")),
+                "game_date":            game_date,
+                "league":               league_id,
+                "home_team":            home_team,
+                "away_team":            away_team,
+                "game_time_et":         r.get("game_time_et", ""),
+                "projected_total":      round(float(model_total), 2),
+                "model_p_over_1_5":     round(model_p_over_1_5, 4),
+                "confidence_tier":      tier,
+                "market_line_1_5":      market_line_1_5,
+                "market_implied_p_1_5": round(market_implied_p_1_5, 4) if market_implied_p_1_5 is not None else None,
+                "edge_1_5":             edge_1_5,
+                "lineup_confirmed":     bool(r.get("lineup_confirmed", False)),
+            })
+
+        candidates.sort(key=lambda c: -(c.get("model_p_over_1_5") or 0))
+        print(f"[push_soccer] Parlay candidates (Over 1.5): {len(candidates)}")
+        return candidates
+
+    except Exception as e:
+        print(f"[push_soccer] Parlay candidates failed: {e}", file=sys.stderr)
+        return []
+
+
+# ---------------------------------------------------------------------------
 # JSON writer
 # ---------------------------------------------------------------------------
 def write_soccer_json(game_date: str | None = None) -> str:
     game_date = game_date or date.today().isoformat()
 
-    today_signals  = load_today_signals(game_date)
-    recent_results = load_recent_results(days=14)
-    season_perf    = build_season_performance()
+    today_signals     = load_today_signals(game_date)
+    recent_results    = load_recent_results(days=14)
+    season_perf       = build_season_performance()
+    parlay_candidates = load_parlay_candidates(game_date)
 
     # Generate plain-English summaries
     for s in today_signals:
@@ -370,6 +521,8 @@ def write_soccer_json(game_date: str | None = None) -> str:
         "recent_results":     recent_results,
         "season_performance": season_perf,
         "data_quality_warning": quality_warning,
+        # Entertainment/parlay-support only — not a validated standalone product
+        "parlay_candidates":  parlay_candidates,
     }
 
     with open(OUT_PATH, "w") as f:
@@ -378,6 +531,7 @@ def write_soccer_json(game_date: str | None = None) -> str:
     print(
         f"[push_soccer] complete: {len(today_signals)} signals, "
         f"{len(recent_results)} recent results, "
+        f"{len(parlay_candidates)} parlay candidates, "
         f"quality_warning={str(quality_warning).lower()}"
     )
     print(f"[push_soccer] Wrote {OUT_PATH}")

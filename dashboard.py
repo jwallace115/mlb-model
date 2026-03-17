@@ -1759,6 +1759,103 @@ def _render_soccer_signal_card(s: dict) -> None:
     )
 
 
+def _render_soccer_parlay_candidates(parlay_candidates: list) -> None:
+    """
+    Render Over 1.5 parlay candidates section.
+    Entertainment / parlay-support only — not a validated standalone product.
+    """
+    st.html('<div class="section-hdr">⚽ Over 1.5 Parlay Candidates</div>')
+
+    # Disclaimer — neutral info style
+    st.html(
+        '<div style="background:#0f172a;border:1px solid #334155;border-radius:6px;'
+        'padding:8px 14px;margin-bottom:12px;font-size:0.80em;color:#94a3b8">'
+        '⚠️ <strong>Entertainment / parlay-support only.</strong> '
+        'Not validated for standalone betting. Model probability only — '
+        'not a proven edge product. Parlay legs are correlated when from the '
+        'same league or match day.'
+        '</div>'
+    )
+
+    if not parlay_candidates:
+        st.caption(
+            "No Over 1.5 parlay candidates today "
+            "(threshold: 80% model probability, 3.2 projected goals)."
+        )
+        return
+
+    for c in parlay_candidates:
+        home      = c.get("home_team", "")
+        away      = c.get("away_team", "")
+        league    = c.get("league", "")
+        tier      = c.get("confidence_tier", "HIGH")
+        proj      = c.get("projected_total")
+        p_over    = c.get("model_p_over_1_5")
+        mkt_p     = c.get("market_implied_p_1_5")
+        mkt_line  = c.get("market_line_1_5")
+        lineup    = bool(c.get("lineup_confirmed", False))
+        gt        = c.get("game_time_et", "")
+
+        league_tag = (
+            '<span style="font-size:0.72em;color:#4a5568;margin-right:6px">'
+            f'{"🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL" if league == "EPL" else "🇩🇪 Bundesliga"}'
+            '</span>'
+        )
+        over15_badge = (
+            '<span style="background:#1e1b4b;color:#a5b4fc;border:1px solid #6366f1;'
+            'border-radius:4px;padding:1px 7px;font-size:0.72em;font-weight:700;'
+            'letter-spacing:0.06em;margin-right:6px">OVER 1.5</span>'
+        )
+        tier_color  = "#22c55e" if tier == "VERY HIGH" else "#f59e0b"
+        tier_bg     = "#052e16" if tier == "VERY HIGH" else "#431407"
+        tier_border = "#166534" if tier == "VERY HIGH" else "#9a3412"
+        tier_badge  = (
+            f'<span style="background:{tier_bg};color:{tier_color};'
+            f'border:1px solid {tier_border};border-radius:4px;padding:1px 7px;'
+            f'font-size:0.72em;font-weight:700;margin-left:6px">{tier}</span>'
+        )
+
+        header = (
+            f'<div class="card-header">'
+            f'{over15_badge}{league_tag}'
+            f'<span class="matchup">{away} @ {home}</span>'
+            f'{tier_badge}'
+            f'</div>'
+        )
+
+        sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
+        proj_s  = f"{proj:.1f}" if proj is not None else "—"
+        p_s     = f"{p_over * 100:.1f}%" if p_over is not None else "—"
+
+        stats_parts = [
+            f'<span class="proj-label">Projected Goals</span> <span class="proj-val">{proj_s}</span>',
+            f'<span class="proj-label">P(Over 1.5)</span> <span class="proj-val" style="color:#a5b4fc">{p_s}</span>',
+        ]
+        if mkt_line is not None and mkt_p is not None:
+            mkt_s = f"{mkt_p * 100:.1f}%"
+            stats_parts.append(
+                f'<span class="proj-label">Market 1.5</span> <span class="proj-val">{mkt_s}</span>'
+            )
+        if gt:
+            stats_parts.append(
+                f'<span class="proj-label">Kickoff</span> <span class="proj-val">{gt}</span>'
+            )
+        stats_row = f'<div class="proj-row">{sep.join(stats_parts)}</div>'
+
+        lineup_icon  = "✓ Lineup confirmed" if lineup else "? Lineup estimated"
+        lineup_color = "#22c55e" if lineup else "#4a5568"
+        lineup_html  = (
+            f'<div style="font-size:0.80em;color:{lineup_color};margin-bottom:4px">'
+            f'{lineup_icon}</div>'
+        )
+
+        st.html(
+            f'<div class="game-card" style="border-color:#334155">'
+            f'{header}{stats_row}{lineup_html}'
+            f'</div>'
+        )
+
+
 def _render_soccer_tab() -> None:
     soccer = load_soccer_results()
 
@@ -1834,6 +1931,9 @@ def _render_soccer_tab() -> None:
             "No qualified Over 2.5 signals today "
             "(threshold: +6pp edge, market move ≥ −3pp, Over only)."
         )
+
+    # ── SECTION 1b: Over 1.5 Parlay Candidates ────────────────────────────────
+    _render_soccer_parlay_candidates(soccer.get("parlay_candidates", []))
 
     # ── SECTION 2: Recent Results ──────────────────────────────────────────────
     st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
