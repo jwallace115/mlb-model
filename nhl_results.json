@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-17T13:09:00.945369+00:00",
-  "last_updated": "2026-03-17 13:09 UTC",
+  "generated_at": "2026-03-17T21:02:17.252742+00:00",
+  "last_updated": "2026-03-17 21:02 UTC",
   "pipeline_run_date": "2026-03-17",
   "signals_source": "live",
   "game_date": "2026-03-17",
@@ -123,6 +123,14 @@
     "under_ot_losses": 59,
     "over_ot_losses": 18
   },
-  "clv_summary": {},
+  "clv_summary": {
+    "total_with_clv": 0,
+    "avg_clv": null,
+    "median_clv": null,
+    "pct_positive_clv": null,
+    "avg_clv_by_tier": {},
+    "avg_clv_by_side": {},
+    "clv_coverage": 0.0
+  },
   "data_quality_warning": false
 }
