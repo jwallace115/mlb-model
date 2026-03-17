@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-03-16T21:00:55.868650+00:00",
-  "last_updated": "2026-03-16 21:00 UTC",
-  "pipeline_run_date": "2026-03-16",
+  "generated_at": "2026-03-17T11:02:26.132141+00:00",
+  "last_updated": "2026-03-17 11:02 UTC",
+  "pipeline_run_date": "2026-03-17",
   "signals_source": "live",
-  "game_date": "2026-03-16",
+  "game_date": "2026-03-17",
   "today_signals": [
     {
-      "game_id": 2025021064,
-      "game_date": "2026-03-16",
-      "home_team": "NJD",
-      "away_team": "BOS",
+      "game_id": 2025021070,
+      "game_date": "2026-03-17",
+      "home_team": "CBJ",
+      "away_team": "CAR",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.11995646123260428,
-      "edge_bucket": "0.10-0.12",
-      "sim_prob": 0.6627,
-      "confidence_tier": "LOW",
+      "edge": 0.12676576381365112,
+      "edge_bucket": "0.12-0.15",
+      "sim_prob": 0.6376,
+      "confidence_tier": "MEDIUM",
       "caution_flag": 0,
       "volatility_bucket": "low",
-      "lambda_total_calibrated": 5.594829436536603,
-      "over_price": 110.0,
-      "under_price": -130.0,
+      "lambda_total_calibrated": 5.759116318545955,
+      "over_price": -105.0,
+      "under_price": -115.0,
       "book": "draftkings",
       "result": "UNGRADED",
       "graded": 0,
-      "home_goals_scored_rolling_10": 3.1,
-      "away_goals_scored_rolling_10": 2.8,
-      "home_goals_allowed_rolling_10": 2.9,
-      "away_goals_allowed_rolling_10": 3.0,
+      "home_goals_scored_rolling_10": 3.3,
+      "away_goals_scored_rolling_10": 3.9,
+      "home_goals_allowed_rolling_10": 3.1,
+      "away_goals_allowed_rolling_10": 2.9,
       "home_xgf_rolling_20": 3.0971151144105997,
       "away_xgf_rolling_20": 3.0944998924677467,
       "home_xga_rolling_20": 3.0946449543496244,
@@ -44,10 +44,23 @@
       "goalie_confirmed_away": false,
       "backup_flag_home": 0,
       "backup_flag_away": 0,
-      "summary": "We're projecting 5.6 combined goals here \u2014 that's 0.9 below the 6.5 line, a gap the market hasn't priced in. Both starting goalies are confirmed. Recent form has these teams combining for 5.9 goals per game \u2014 reinforcing the under. Model has 5.6, market is at 6.5 \u2014 under by 0.9 goals (0.10-0.12 edge)."
+      "summary": "We're projecting 5.8 combined goals here \u2014 that's 0.7 below the 6.5 line, a gap the market hasn't priced in. CAR has been averaging 3.9 goals per game over their last 10 \u2014 one of the hotter offenses in the league. That pulls the other way, but not enough to flip the lean. Model has 5.8, market is at 6.5 \u2014 under by 0.7 goals (0.12-0.15 edge)."
     }
   ],
-  "recent_results": [],
+  "recent_results": [
+    {
+      "game_id": 2025021064,
+      "game_date": "2026-03-16",
+      "home_team": "NJD",
+      "away_team": "BOS",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.11995646123260428,
+      "confidence_tier": "LOW",
+      "result": "LOSS",
+      "actual_total_goals_final": 7.0
+    }
+  ],
   "season_performance": {
     "validate": {
       "W": 136,
@@ -101,13 +114,13 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 709,
-    "ot_games": 161,
+    "total_graded": 710,
+    "ot_games": 162,
     "so_games": 56,
-    "ot_rate": 0.2271,
-    "ot_flips": 38,
-    "ot_flip_rate": 0.236,
-    "under_ot_losses": 58,
+    "ot_rate": 0.2282,
+    "ot_flips": 39,
+    "ot_flip_rate": 0.2407,
+    "under_ot_losses": 59,
     "over_ot_losses": 18
   },
   "data_quality_warning": false
