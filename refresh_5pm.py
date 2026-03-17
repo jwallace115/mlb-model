@@ -133,7 +133,7 @@ def main():
     try:
         import pandas as _pd
         _nhl_dec_path  = os.path.join(REPO_DIR, "nhl", "nhl_decisions.parquet")
-        _nhl_snap_path = os.path.join(REPO_DIR, "nhl", "nhl_market_snapshots.parquet")
+        _nhl_snap_path = os.path.join(REPO_DIR, "nhl", "nhl_clv_snapshots.parquet")
         if os.path.exists(_nhl_dec_path):
             _nhl_dec = _pd.read_parquet(_nhl_dec_path)
             _nhl_live = _nhl_dec[
@@ -186,7 +186,7 @@ def main():
     try:
         import pandas as _pd2
         _nhl_dec_path2  = os.path.join(REPO_DIR, "nhl", "nhl_decisions.parquet")
-        _nhl_snap_path2 = os.path.join(REPO_DIR, "nhl", "nhl_market_snapshots.parquet")
+        _nhl_snap_path2 = os.path.join(REPO_DIR, "nhl", "nhl_clv_snapshots.parquet")
         if os.path.exists(_nhl_dec_path2):
             _nhl_dec2 = _pd2.read_parquet(_nhl_dec_path2)
             _nhl_live2 = _nhl_dec2[

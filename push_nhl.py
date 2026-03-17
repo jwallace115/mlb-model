@@ -297,7 +297,7 @@ def _pipeline_freshness(game_date: str) -> tuple[str, str]:
 
 def build_clv_summary() -> dict:
     """Compute CLV summary from nhl_decisions.parquet joined with nhl_market_snapshots.parquet."""
-    NHL_SNAP = Path(__file__).parent / "nhl" / "nhl_market_snapshots.parquet"
+    NHL_SNAP = Path(__file__).parent / "nhl" / "nhl_clv_snapshots.parquet"
     if not DECISIONS.exists() or not NHL_SNAP.exists():
         return {}
     try:

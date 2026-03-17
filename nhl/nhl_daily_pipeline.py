@@ -846,6 +846,24 @@ def grade_yesterday(yesterday: date) -> None:
 
     print(f"  Final scores fetched for {len(score_map)} game(s) via game_id match.")
 
+    # Load market snapshots for CLV computation
+    _snap_path = NHL_DIR / "nhl_clv_snapshots.parquet"
+    _morning_lines: dict[int, float] = {}
+    _pregame_lines: dict[int, float] = {}
+    if _snap_path.exists():
+        _snaps = pd.read_parquet(_snap_path)
+        for _, _sr in _snaps.iterrows():
+            _gid = int(_sr["game_id"])
+            if _sr.get("snapshot_type") == "morning":
+                _morning_lines[_gid] = float(_sr["line"])
+            elif _sr.get("snapshot_type") == "pregame":
+                _pregame_lines[_gid] = float(_sr["line"])
+
+    # Ensure CLV columns exist in dec before writing
+    for _col in ("closing_line", "clv_raw", "clv_directional", "snapshot_source"):
+        if _col not in dec.columns:
+            dec[_col] = None
+
     # Grade each pending signal — skip any already graded (idempotency guard)
     graded_count = 0
     for idx in pending.index:
@@ -878,6 +896,23 @@ def grade_yesterday(yesterday: date) -> None:
         dec.at[idx, "actual_total_goals_final"] = total
         dec.at[idx, "result"] = result
         dec.at[idx, "graded"] = 1
+
+        # ── CLV persistence ───────────────────────────────────────────────
+        _line_taken  = _morning_lines.get(gid)   # 7am decision-time line
+        _closing     = _pregame_lines.get(gid)   # 5pm closing line
+        if _closing is not None:
+            dec.at[idx, "closing_line"] = _closing
+            if _line_taken is not None:
+                _clv_raw = _closing - _line_taken
+                _clv_dir = _clv_raw if side == "OVER" else -_clv_raw
+                dec.at[idx, "clv_raw"]         = round(_clv_raw, 2)
+                dec.at[idx, "clv_directional"] = round(_clv_dir, 2)
+                dec.at[idx, "snapshot_source"] = "morning+pregame"
+            else:
+                dec.at[idx, "snapshot_source"] = "pregame_only"
+        else:
+            dec.at[idx, "snapshot_source"] = "missing"
+
         graded_count += 1
 
         home = dec.at[idx, "home_team"]
