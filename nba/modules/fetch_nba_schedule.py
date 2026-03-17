@@ -22,11 +22,18 @@ from nba.modules.fetch_games import _call_with_retry, _norm_team
 def _season_type_from_game_id(gid: str) -> str:
     """
     Derive season_type from NBA game_id format.
-    Game IDs are 10 digits: 00 + 2-digit-year + 2-digit-type + 5-digit-seq.
-    Type codes: 01=Preseason, 02=Regular Season, 03=All-Star, 04=Playoffs, 05=Play-In.
+    Game IDs are 10 digits: 00 + 1-digit-type + 2-digit-year + 5-digit-seq.
+    Position [2] holds the type code (single digit):
+      1 = Preseason
+      2 = Regular Season
+      3 = All-Star
+      4 = Playoffs  ← detection target
+      5 = Play-In Tournament
+    Example: 0042401001 → [2]='4' → Playoffs (2024-25, seq 01001)
+             0022401188 → [2]='2' → Regular Season
     """
     try:
-        if len(gid) >= 6 and gid[4:6] == "04":
+        if len(gid) >= 3 and gid[2] == "4":
             return SEASON_TYPE_PLAYOFF
     except Exception:
         pass
