@@ -246,7 +246,10 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
             else:
                 official_result = "WIN" if actual_total < lin else "LOSS"
 
-        # ── Shadow OT diagnostic fields (do not affect official grading) ───────
+        # ── OT diagnostic fields ──────────────────────────────────────────────
+        # For regular season: shadow diagnostic only (does not affect grading).
+        # For playoff games: promoted to official reporting fields.
+        # Official grading basis remains OT-inclusive per sportsbook rules — unchanged.
         ot_info          = ot_data.get(str(gid), {})
         went_to_ot       = ot_info.get("went_to_ot")          # 0/1 or None
         regulation_total = ot_info.get("regulation_total")     # float or None
@@ -270,6 +273,9 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
                     regulation_result = "WIN" if reg_t < lin else "LOSS"
                 ot_flip = 1 if official_result != regulation_result else 0
 
+        # Read is_playoff from projection record (added in run_nba.py Change 1)
+        is_playoff = bool(proj.get("is_playoff", False))
+
         rows.append({
             "game_date":          yesterday,
             "game_id":            gid,
@@ -289,11 +295,23 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
             "h1_correct":         h1_correct,
             "h1_line":            h1_line,
             "market_gap_flag":    market_gap_flag,
-            # Shadow OT diagnostics (reference only — official grading unchanged)
+            # Playoff flag (from projection)
+            "is_playoff":         is_playoff,
+            "season_type":        proj.get("season_type", "Regular Season"),
+            "playoff_round":      proj.get("playoff_round"),
+            "series_game_number": proj.get("series_game_number"),
+            "playoff_blend_weight": proj.get("playoff_blend_weight"),
+            # OT diagnostics — shadow for regular season; official for playoffs
+            # Field names unchanged so existing code reading these columns still works.
+            # Change 7: for playoff games these are reported as official in push_nba.py.
             "went_to_ot":         went_to_ot,
             "regulation_total":   regulation_total,
             "regulation_result":  regulation_result,
             "ot_flip":            ot_flip,
+            # Explicit "official" aliases for playoff reporting
+            "went_to_ot_official":          went_to_ot if is_playoff else None,
+            "regulation_total_official":    regulation_total if is_playoff else None,
+            "ot_flip_official":             ot_flip if is_playoff else None,
         })
 
     if not rows:

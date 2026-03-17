@@ -70,11 +70,16 @@ from nba.config import (
     MARKET_FLAG_THRESHOLD,
     NBA_PROJECTIONS_PATH,
     OVER_UNDER_MIN_PROB,
+    PLAYOFF_MODE_VERSION,
+    PLAYOFF_SERIES_BLEND_CAP,
     PRIOR_SEASON_WEIGHT,
     RESIDUAL_SIGMA,
+    RESIDUAL_SIGMA_PLAYOFF,
     ROLLING_WINDOW,
     SEASON_BLEND_END,
     SEASON_BLEND_START,
+    SEASON_TYPE_PLAYOFF,
+    SEASON_TYPE_REGULAR,
     VALIDATION_SEASON,
     H1_FEATURES_PATH,
 )
@@ -273,6 +278,245 @@ def _current_rolling_h1_avg(game_date: str) -> float:
         return LEAGUE_AVG_H1_TOTAL
 
 
+# ── Playoff helper functions ──────────────────────────────────────────────────
+# All functions here are conditional on is_playoff — regular season code never
+# calls into this block. No changes to any existing function above this line.
+
+def _all_team_games(team: str, game_date: str, reg_games: pd.DataFrame,
+                    playoff_games: pd.DataFrame) -> pd.DataFrame:
+    """Return all completed games for a team across regular season + playoffs before game_date."""
+    cutoff = pd.Timestamp(game_date)
+    frames = []
+    for df in [reg_games, playoff_games]:
+        if df.empty:
+            continue
+        df = df.copy()
+        df["date"] = pd.to_datetime(df["date"])
+        mask = (
+            ((df["home_team"] == team) | (df["away_team"] == team)) &
+            (df["date"] < cutoff)
+        )
+        frames.append(df[mask])
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True).sort_values("date")
+
+
+def _compute_days_rest_playoff(game_date: str, team: str,
+                                reg_games: pd.DataFrame,
+                                playoff_games: pd.DataFrame) -> int:
+    """Days rest for a team in a playoff game (searches all prior games, capped at 7)."""
+    all_games = _all_team_games(team, game_date, reg_games, playoff_games)
+    if all_games.empty:
+        return 7
+    last_game_date = all_games["date"].max()
+    days = (pd.Timestamp(game_date) - last_game_date).days - 1
+    return min(max(days, 0), 7)
+
+
+def _infer_playoff_round(home: str, away: str, season: str,
+                          all_playoff_games: pd.DataFrame) -> str:
+    """
+    Infer the playoff round for a given matchup.
+    Assigns rounds by the order in which unique matchups first appear.
+    NBA standard: 8 first-round series → 4 semis → 2 conf finals → 1 finals.
+    """
+    if all_playoff_games.empty:
+        return "Playoffs"
+
+    # Canonical team-pair key (alphabetical) → first game date
+    matchup_first: dict[str, pd.Timestamp] = {}
+    for _, g in all_playoff_games.iterrows():
+        key = "_vs_".join(sorted([g["home_team"], g["away_team"]]))
+        d   = pd.Timestamp(g["date"])
+        if key not in matchup_first or d < matchup_first[key]:
+            matchup_first[key] = d
+
+    # Sort series by first game date
+    ordered = sorted(matchup_first.items(), key=lambda x: x[1])
+    current_key = "_vs_".join(sorted([home, away]))
+
+    idx = next((i for i, (k, _) in enumerate(ordered) if k == current_key), None)
+    if idx is None:
+        return "Playoffs"
+
+    # Round assignment by series position
+    if idx < 8:
+        return "First Round"
+    elif idx < 12:
+        return "Conference Semifinals"
+    elif idx < 14:
+        return "Conference Finals"
+    else:
+        return "NBA Finals"
+
+
+def _get_series_metadata(home: str, away: str, game_date: str,
+                          season: str) -> dict:
+    """
+    Derive series metadata from playoff game history.
+    Returns all series fields; at Game 1 all win/avg/elim fields are null/0.
+    """
+    null_meta = {
+        "series_game_number":   1,
+        "home_series_wins":     None,
+        "away_series_wins":     None,
+        "series_avg_total":     None,
+        "playoff_round":        "First Round",
+        "elimination_game_home": 0,
+        "elimination_game_away": 0,
+        "elimination_game_any":  0,
+        "series_sample_size":   0,
+        "playoff_blend_weight": 0.0,
+    }
+
+    try:
+        from nba.modules.fetch_games import fetch_season
+        playoff_games = fetch_season(season, SEASON_TYPE_PLAYOFF)
+    except Exception as e:
+        logger.warning(f"Series metadata fetch failed: {e}")
+        return null_meta
+
+    if playoff_games.empty:
+        return null_meta
+
+    playoff_games = playoff_games.copy()
+    playoff_games["date"] = pd.to_datetime(playoff_games["date"])
+    cutoff = pd.Timestamp(game_date)
+
+    # Prior games in this series (either home/away order), strictly before today
+    prior = playoff_games[
+        (
+            ((playoff_games["home_team"] == home) & (playoff_games["away_team"] == away)) |
+            ((playoff_games["home_team"] == away) & (playoff_games["away_team"] == home))
+        ) &
+        (playoff_games["date"] < cutoff)
+    ].sort_values("date").reset_index(drop=True)
+
+    n_prior = len(prior)
+    series_game_number = n_prior + 1  # 1-indexed
+
+    playoff_round = _infer_playoff_round(home, away, season, playoff_games)
+
+    if n_prior == 0:
+        # Game 1 — all series-dependent fields are null
+        result = dict(null_meta)
+        result["playoff_round"] = playoff_round
+        return result
+
+    # Count series wins (from home team's perspective today)
+    home_wins = 0
+    away_wins = 0
+    for _, pg in prior.iterrows():
+        if pg["home_score"] > pg["away_score"]:
+            winner = pg["home_team"]
+        else:
+            winner = pg["away_team"]
+        if winner == home:
+            home_wins += 1
+        else:
+            away_wins += 1
+
+    home_losses = away_wins   # losses for home = wins by away
+    away_losses = home_wins
+
+    series_avg_total = float(prior["actual_total"].mean())
+
+    elim_home = 1 if home_losses == 3 else 0
+    elim_away = 1 if away_losses == 3 else 0
+
+    # Calibration fix (2025-03-17): faster blend ramp based on 2025 shadow run.
+    # Shadow data showed G1-2 bias = +10 pts (pure baseline) and rapid improvement
+    # through G3-4. New schedule reaches full weight by G4 instead of G5.
+    # Regular season is unaffected — w_playoff is only used inside is_playoff blocks.
+    _W_MAP = {0: 0.00, 1: 0.35, 2: 0.60, 3: 0.80}
+    w_playoff = _W_MAP.get(n_prior, 1.00)   # n_prior >= 4 → 1.00
+
+    return {
+        "series_game_number":    series_game_number,
+        "home_series_wins":      home_wins,
+        "away_series_wins":      away_wins,
+        "series_avg_total":      round(series_avg_total, 2),
+        "playoff_round":         playoff_round,
+        "elimination_game_home": elim_home,
+        "elimination_game_away": elim_away,
+        "elimination_game_any":  max(elim_home, elim_away),
+        "series_sample_size":    n_prior,
+        "playoff_blend_weight":  round(w_playoff, 3),
+    }
+
+
+def _build_series_rolling(home: str, away: str, game_date: str,
+                           season: str) -> dict:
+    """
+    Compute team efficiency from ONLY prior games in current series.
+    Returns per-team rolling: ortg, drtg, pace, pts (mean of prior series games).
+    Returns empty dict if no prior series games (Game 1 case).
+    Shift rule: only games strictly before game_date are used.
+    """
+    try:
+        from nba.modules.fetch_box_stats import fetch_box_stats
+        box = fetch_box_stats(season, SEASON_TYPE_PLAYOFF)
+    except Exception as e:
+        logger.warning(f"Series rolling fetch failed: {e}")
+        return {}
+
+    if box.empty:
+        return {}
+
+    box = box.copy()
+    box["date"] = pd.to_datetime(box["date"])
+    cutoff = pd.Timestamp(game_date)
+
+    result = {}
+    for role, team, opp in [("home", home, away), ("away", away, home)]:
+        # Box stat rows for this team in this series, before today
+        team_rows = box[
+            (box["team"] == team) &
+            (box["opponent"] == opp) &
+            (box["date"] < cutoff)
+        ].sort_values("date")
+
+        if team_rows.empty:
+            # No prior series data — caller checks series_sample_size
+            continue
+
+        result[f"{role}_ortg_rolling_series"] = float(team_rows["ortg"].mean())
+        result[f"{role}_drtg_rolling_series"] = float(team_rows["drtg"].mean()) if "drtg" in team_rows else None
+        result[f"{role}_pace_rolling_series"] = float(team_rows["pace"].mean())
+        result[f"{role}_pts_rolling_series"]  = float(team_rows["pts"].mean())
+
+    return result
+
+
+def _blend_playoff_features(reg_state: dict, series_roll: dict,
+                              role: str, w_playoff: float) -> dict:
+    """
+    Blend regular-season rolling features with series rolling features.
+    Returns a modified copy of reg_state with blended values.
+    w_playoff = 0 → pure regular season; w_playoff = 1 → pure series.
+    Only blends when series data exists for the feature; otherwise returns reg_state unchanged.
+    """
+    if w_playoff <= 0 or not series_roll:
+        return reg_state
+
+    state = dict(reg_state)
+    w_reg = 1.0 - w_playoff
+
+    blends = [
+        ("ortg", f"{role}_ortg_rolling_series"),
+        ("pace", f"{role}_pace_rolling_series"),
+    ]
+    for state_key, series_key in blends:
+        series_val = series_roll.get(series_key)
+        if series_val is not None and not np.isnan(series_val):
+            state[state_key] = round(
+                w_playoff * series_val + w_reg * state[state_key], 2
+            )
+
+    return state
+
+
 # ── Confidence classification ─────────────────────────────────────────────────
 
 def _classify(
@@ -421,6 +665,30 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             "b2b_flag_away":       g.get("b2b_flag_away", 0),
             "home_injuries_str":   ",".join(g.get("home_injuries") or []),
             "away_injuries_str":   ",".join(g.get("away_injuries") or []),
+            # Playoff fields (None for regular season games)
+            "is_playoff":                g.get("is_playoff", False),
+            "playoff_mode_version":      g.get("playoff_mode_version"),
+            "season_type":               g.get("season_type", SEASON_TYPE_REGULAR),
+            "sigma_used":                g.get("sigma_used"),
+            "series_game_number":        g.get("series_game_number"),
+            "home_series_wins":          g.get("home_series_wins"),
+            "away_series_wins":          g.get("away_series_wins"),
+            "series_avg_total":          g.get("series_avg_total"),
+            "playoff_round":             g.get("playoff_round"),
+            "elimination_game_home":     g.get("elimination_game_home"),
+            "elimination_game_away":     g.get("elimination_game_away"),
+            "elimination_game_any":      g.get("elimination_game_any"),
+            "series_sample_size":        g.get("series_sample_size"),
+            "early_series_adjustment":   g.get("early_series_adjustment", 0.0),
+            "playoff_blend_weight":      g.get("playoff_blend_weight"),
+            "home_ortg_rolling_series":  g.get("home_ortg_rolling_series"),
+            "away_ortg_rolling_series":  g.get("away_ortg_rolling_series"),
+            "home_pace_rolling_series":  g.get("home_pace_rolling_series"),
+            "away_pace_rolling_series":  g.get("away_pace_rolling_series"),
+            "home_pts_rolling_series":   g.get("home_pts_rolling_series"),
+            "away_pts_rolling_series":   g.get("away_pts_rolling_series"),
+            "playoff_days_rest_home":    g.get("playoff_days_rest_home"),
+            "playoff_days_rest_away":    g.get("playoff_days_rest_away"),
         })
 
     new_df = pd.DataFrame(rows)
@@ -491,12 +759,19 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
     # ── Step 5: Team rolling states ───────────────────────────────────────────
     team_states = _build_current_team_states(game_date)
 
-    # Fetch completed games for B2B calculation
+    # Fetch completed games for B2B calculation (regular season)
     from nba.modules.fetch_games import fetch_season
     try:
         completed_games = fetch_season(CURRENT_SEASON)
     except Exception:
         completed_games = pd.DataFrame()
+
+    # Fetch completed playoff games (for series metadata + rest calculation).
+    # Only fetched once per run; cached per-day. Empty if not playoff season.
+    try:
+        completed_playoff_games = fetch_season(CURRENT_SEASON, SEASON_TYPE_PLAYOFF)
+    except Exception:
+        completed_playoff_games = pd.DataFrame()
 
     # ── Step 6: Rolling league averages ──────────────────────────────────────
     rolling_avg    = _current_rolling_league_avg(game_date)
@@ -536,6 +811,9 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
             "ortg_trend": 0.0, "pace_trend": 0.0, "games_in_season": 0,
         })
 
+        # ── Playoff detection (Change 1) ──────────────────────────────────────
+        is_playoff = (sched.get("season_type", SEASON_TYPE_REGULAR) == SEASON_TYPE_PLAYOFF)
+
         home_injuries = [i for i in injuries if i.get("team") == home]
         away_injuries = [i for i in injuries if i.get("team") == away]
         home_state = _apply_injury_adj(home_state_raw, injuries, home)
@@ -543,7 +821,42 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
 
         b2b_away = _compute_b2b(game_date, away, "away", completed_games)
 
-        # Build feature vector
+        # ── Playoff modifications — all conditional on is_playoff ─────────────
+        # Change 2: series metadata
+        series_meta = {}
+        series_roll  = {}
+        playoff_days_rest_home = None
+        playoff_days_rest_away = None
+
+        if is_playoff:
+            # Change 5: zero B2B flags in playoffs; compute actual rest days instead
+            b2b_away = 0
+
+            playoff_days_rest_home = _compute_days_rest_playoff(
+                game_date, home, completed_games, completed_playoff_games
+            )
+            playoff_days_rest_away = _compute_days_rest_playoff(
+                game_date, away, completed_games, completed_playoff_games
+            )
+
+            # Change 2: series metadata (game number, wins, round, elimination flags)
+            series_meta = _get_series_metadata(home, away, game_date, CURRENT_SEASON)
+            series_sample = series_meta.get("series_sample_size", 0)
+
+            # Change 4: series rolling features (only if Game 2+)
+            if series_sample > 0:
+                series_roll = _build_series_rolling(home, away, game_date, CURRENT_SEASON)
+                w_p = series_meta.get("playoff_blend_weight", 0.0)
+                # Blend regular-season rolling with series rolling
+                home_state = _blend_playoff_features(home_state, series_roll, "home", w_p)
+                away_state = _blend_playoff_features(away_state, series_roll, "away", w_p)
+            else:
+                # Game 1: pure regular season rolling (w_playoff = 0)
+                pass
+
+        playoff_blend_weight = series_meta.get("playoff_blend_weight", 0.0) if is_playoff else None
+
+        # Build feature vector (unchanged — playoff blending modified the state values above)
         feat_row = {
             "home_ortg":       home_state["ortg"],
             "away_ortg":       away_state["ortg"],
@@ -564,14 +877,33 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
         X = np.array([[feat_row[c] for c in FEATURE_COLS]])
 
         # ── Full-game prediction ──────────────────────────────────────────────
-        X_sc      = fg_scaler.transform(X)
+        X_sc       = fg_scaler.transform(X)
         pred_total = float(fg_model.predict(X_sc)[0])
-        lean       = "OVER" if pred_total > rolling_avg else "UNDER"
+
+        # Playoff early-series bias correction (Change 11 — calibration fix 2025-03-17).
+        # Shadow run showed G1-2 bias = +10.1 pts, overall bias = +4.96 pts.
+        # Reg-season baseline (227.7) over-projects playoff totals (actual avg 217.5).
+        # Partial correction of 6 pts applied only at G1-2; series blend handles G3+.
+        # Regular season: early_series_adjustment is always 0.0 (is_playoff guard).
+        if is_playoff:
+            sgn = series_meta.get("series_game_number", 1)
+            if sgn <= 2:
+                pred_total -= 6.0
+                early_series_adjustment = -6.0
+            else:
+                early_series_adjustment = 0.0
+        else:
+            early_series_adjustment = 0.0
+
+        lean = "OVER" if pred_total > rolling_avg else "UNDER"
+
+        # Change 3: use playoff sigma when is_playoff — regular season sigma unchanged
+        sigma_game = RESIDUAL_SIGMA_PLAYOFF if is_playoff else RESIDUAL_SIGMA
 
         sim = simulate_game(
             pred_total=pred_total,
             line=rolling_avg,
-            sigma=RESIDUAL_SIGMA,
+            sigma=sigma_game,
         )
         p_over = sim["p_over"]
 
@@ -587,7 +919,7 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
 
         # If we have a market line, re-run simulation vs actual market line
         if line:
-            sim = simulate_game(pred_total=pred_total, line=line, sigma=RESIDUAL_SIGMA)
+            sim = simulate_game(pred_total=pred_total, line=line, sigma=sigma_game)
             p_over = sim["p_over"]
             lean   = "OVER" if edge > 0 else "UNDER"
 
@@ -671,6 +1003,34 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
             # Injuries
             "home_injuries":      [i["player"] for i in home_injuries],
             "away_injuries":      [i["player"] for i in away_injuries],
+            # ── Playoff fields (Changes 1–5) — None for regular season ─────────
+            "is_playoff":                    is_playoff,
+            "playoff_mode_version":          PLAYOFF_MODE_VERSION if is_playoff else None,
+            "season_type":                   sched.get("season_type", SEASON_TYPE_REGULAR),
+            "sigma_used":                    sigma_game,
+            # Series metadata (Change 2)
+            "series_game_number":            series_meta.get("series_game_number"),
+            "home_series_wins":              series_meta.get("home_series_wins"),
+            "away_series_wins":              series_meta.get("away_series_wins"),
+            "series_avg_total":              series_meta.get("series_avg_total"),
+            "playoff_round":                 series_meta.get("playoff_round"),
+            "elimination_game_home":         series_meta.get("elimination_game_home"),
+            "elimination_game_away":         series_meta.get("elimination_game_away"),
+            "elimination_game_any":          series_meta.get("elimination_game_any"),
+            "series_sample_size":            series_meta.get("series_sample_size"),
+            # Calibration fix (2025-03-17): early-series bias correction
+            "early_series_adjustment":       early_series_adjustment,
+            # Series features (Change 4)
+            "playoff_blend_weight":          playoff_blend_weight,
+            "home_ortg_rolling_series":      series_roll.get("home_ortg_rolling_series"),
+            "away_ortg_rolling_series":      series_roll.get("away_ortg_rolling_series"),
+            "home_pace_rolling_series":      series_roll.get("home_pace_rolling_series"),
+            "away_pace_rolling_series":      series_roll.get("away_pace_rolling_series"),
+            "home_pts_rolling_series":       series_roll.get("home_pts_rolling_series"),
+            "away_pts_rolling_series":       series_roll.get("away_pts_rolling_series"),
+            # Rest (Change 5)
+            "playoff_days_rest_home":        playoff_days_rest_home,
+            "playoff_days_rest_away":        playoff_days_rest_away,
         })
 
     # ── Step 9: Print card ────────────────────────────────────────────────────

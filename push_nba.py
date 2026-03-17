@@ -199,6 +199,107 @@ def build_ot_diagnostics() -> dict:
         return {}
 
 
+def build_playoff_performance() -> dict:
+    """
+    Compute playoff-specific performance stats from nba_results_log.parquet.
+    Change 8: playoff record by round, by series game group, by confidence, OT rate.
+    Returns {} if no playoff games graded yet.
+    """
+    if not os.path.exists(NBA_RESULTS_PATH):
+        return {}
+    try:
+        import pandas as pd
+        log = pd.read_parquet(NBA_RESULTS_PATH)
+        if log.empty or "is_playoff" not in log.columns:
+            return {}
+
+        playoff = log[log["is_playoff"] == True].copy()
+        if playoff.empty:
+            return {}
+
+        def _wlp(sub):
+            if sub.empty:
+                return {"n": 0, "w": 0, "l": 0, "p": 0, "hit_rate": None, "roi": None}
+            W = int((sub["regulation_result"] == "WIN").sum()) if "regulation_result" in sub.columns else 0
+            L = int((sub["regulation_result"] == "LOSS").sum()) if "regulation_result" in sub.columns else 0
+            P = int((sub["regulation_result"] == "PUSH").sum()) if "regulation_result" in sub.columns else 0
+            n = W + L + P
+            hit = round(W / (W + L), 4) if (W + L) > 0 else None
+            roi = round((W * (100.0 / 110.0) - L) / n * 100, 2) if n > 0 else None
+            return {"n": n, "w": W, "l": L, "p": P, "hit_rate": hit, "roi": roi}
+
+        # Overall playoff record
+        overall = _wlp(playoff)
+
+        # By round
+        by_round = {}
+        for rnd in ["First Round", "Conference Semifinals", "Conference Finals", "NBA Finals"]:
+            sub = playoff[playoff["playoff_round"] == rnd]
+            by_round[rnd] = _wlp(sub)
+
+        # By series game group (blend weight buckets)
+        by_series_game = {}
+        if "series_game_number" in playoff.columns:
+            g12 = playoff[playoff["series_game_number"].isin([1, 2])]
+            g34 = playoff[playoff["series_game_number"].isin([3, 4])]
+            g5p = playoff[playoff["series_game_number"] >= 5]
+            by_series_game["G1-2 (series_weight=0-0.4)"] = _wlp(g12)
+            by_series_game["G3-4 (series_weight=0.4-0.8)"] = _wlp(g34)
+            by_series_game["G5+ (series_weight=0.8-1.0)"]  = _wlp(g5p)
+
+        # By confidence
+        by_conf = {}
+        for conf in ["HIGH", "MEDIUM", "LOW"]:
+            sub = playoff[playoff["confidence"] == conf]
+            by_conf[conf] = _wlp(sub)
+
+        # OT in playoffs (official reporting per Change 7)
+        ot_total   = int(playoff["went_to_ot"].fillna(0).sum()) if "went_to_ot" in playoff.columns else 0
+        ot_rate    = round(ot_total / len(playoff), 4) if len(playoff) > 0 else None
+        ot_flips   = int(playoff["ot_flip_official"].fillna(0).sum()) if "ot_flip_official" in playoff.columns else 0
+        under_ot_l = 0
+        over_ot_l  = 0
+        for _, r in playoff.iterrows():
+            if r.get("went_to_ot") != 1:
+                continue
+            side   = r.get("lean", "")
+            actual = r.get("actual_total")
+            line   = r.get("line")
+            if line is None or actual is None:
+                continue
+            if side == "UNDER":
+                if float(actual) >= float(line):
+                    under_ot_l += 1
+            elif side == "OVER":
+                if float(actual) <= float(line):
+                    over_ot_l += 1
+
+        result = {
+            "total_playoff_games": len(playoff),
+            "overall":             overall,
+            "by_round":            by_round,
+            "by_series_game":      by_series_game,
+            "by_confidence":       by_conf,
+            "ot_stats": {
+                "ot_games":        ot_total,
+                "ot_rate":         ot_rate,
+                "ot_flips":        ot_flips,
+                "under_ot_losses": under_ot_l,
+                "over_ot_losses":  over_ot_l,
+            },
+            "model_note": (
+                "Playoff mode active — series context features engage from "
+                "Game 2 onward (v1_2026_04)"
+            ),
+        }
+        print(f"[push_nba] Playoff performance: {len(playoff)} games, "
+              f"overall {overall['w']}-{overall['l']}-{overall['p']}")
+        return result
+    except Exception as e:
+        print(f"[push_nba] Playoff performance failed: {e}", file=sys.stderr)
+        return {}
+
+
 def build_season_accuracy() -> dict:
     """Compute running MAE + directional HR from nba_results_log.parquet."""
     if not os.path.exists(NBA_RESULTS_PATH):
@@ -441,7 +542,8 @@ def generate_nba_summary(g: dict) -> str:
 
 def serialize(game_date: str, games: list[dict], accuracy: dict,
               recent_results: list[dict] | None = None,
-              ot_diagnostics: dict | None = None) -> dict:
+              ot_diagnostics: dict | None = None,
+              playoff_performance: dict | None = None) -> dict:
     # Generate natural-language summaries from model features
     for g in games:
         g["summary"] = generate_nba_summary(g)
@@ -457,14 +559,19 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
 
     plays.sort(key=_sort_key)
 
+    # Detect if any game today is a playoff game
+    is_playoff_day = any(g.get("is_playoff") for g in games)
+
     return {
-        "generated_at":    datetime.now(timezone.utc).isoformat(),
-        "game_date":       game_date,
-        "plays":           plays,
-        "no_plays":        no_plays,
-        "season_accuracy": accuracy,
-        "recent_results":  recent_results or [],
-        "ot_diagnostics":  ot_diagnostics or {},
+        "generated_at":       datetime.now(timezone.utc).isoformat(),
+        "game_date":          game_date,
+        "is_playoff_day":     is_playoff_day,
+        "plays":              plays,
+        "no_plays":           no_plays,
+        "season_accuracy":    accuracy,
+        "recent_results":     recent_results or [],
+        "ot_diagnostics":     ot_diagnostics or {},
+        "playoff_performance": playoff_performance or {},
     }
 
 
@@ -500,11 +607,13 @@ def git_push(game_date: str) -> bool:
 def write_nba_json(game_date: str = None) -> str:
     """Write nba_results.json and return the path. Does NOT git push."""
     game_date = game_date or date.today().isoformat()
-    games          = load_today_projections(game_date)
-    accuracy       = build_season_accuracy()
-    recent_results = load_recent_results(days=14)
-    ot_diagnostics = build_ot_diagnostics()
-    payload        = serialize(game_date, games, accuracy, recent_results, ot_diagnostics)
+    games              = load_today_projections(game_date)
+    accuracy           = build_season_accuracy()
+    recent_results     = load_recent_results(days=14)
+    ot_diagnostics     = build_ot_diagnostics()
+    playoff_performance = build_playoff_performance()
+    payload = serialize(game_date, games, accuracy, recent_results,
+                        ot_diagnostics, playoff_performance)
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_nba] Wrote {OUT_PATH} ({len(games)} games)")

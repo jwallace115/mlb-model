@@ -25,6 +25,7 @@ from nba.config import (
     NBA_API_BACKOFF,
     NBA_API_RETRIES,
     NBA_API_TIMEOUT,
+    SEASON_TYPE_PLAYOFF,
     SEASON_TYPE_REGULAR,
 )
 
@@ -318,9 +319,15 @@ def audit_game_table(df: pd.DataFrame) -> dict:
     counts = df.groupby("season").size().to_dict()
     findings["rows_by_season"] = counts
     print("\n📊 Row counts by season:")
+    # Detect season_type from data if available; fall back to "Regular Season"
+    _stype = df["season_type"].iloc[0] if "season_type" in df.columns and not df.empty else SEASON_TYPE_REGULAR
     for s, n in sorted(counts.items()):
-        expected = 1230  # 30 teams × 82 games / 2
-        flag = "  ✓" if abs(n - expected) <= 30 else f"  ⚠ (expected ~{expected})"
+        if _stype == SEASON_TYPE_REGULAR:
+            expected = 1230  # 30 teams × 82 games / 2
+            flag = "  ✓" if abs(n - expected) <= 30 else f"  ⚠ (expected ~{expected})"
+        else:
+            expected = None   # playoffs: no fixed count
+            flag = ""
         print(f"   {s}: {n:>5} games{flag}")
 
     # 2. Missing values

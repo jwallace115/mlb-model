@@ -2015,6 +2015,42 @@ def _render_nba_card(g: dict) -> None:
 
     meta = f'<div class="card-meta">{tip}</div>'
 
+    # Playoff context block
+    playoff_context_html = ""
+    if g.get("is_playoff"):
+        po_parts = []
+        # Round label
+        rnd = g.get("playoff_round") or ""
+        if rnd:
+            po_parts.append(f'<span style="color:#93c5fd;font-weight:600">{rnd}</span>')
+        # Series game number
+        sgn = g.get("series_game_number")
+        if sgn:
+            po_parts.append(f'<span>Game {sgn}</span>')
+        # Series standing
+        home_wins = g.get("home_series_wins")
+        away_wins = g.get("away_series_wins")
+        if home_wins is not None and away_wins is not None:
+            if home_wins == away_wins:
+                standing = f"Series tied {home_wins}–{away_wins}"
+            elif home_wins > away_wins:
+                standing = f"{home} leads {home_wins}–{away_wins}"
+            else:
+                standing = f"{away} leads {away_wins}–{home_wins}"
+            po_parts.append(f'<span>{standing}</span>')
+        # Series blend weight
+        bw = g.get("playoff_blend_weight")
+        if bw is not None:
+            bw_pct = int(round(bw * 100))
+            po_parts.append(f'<span style="color:#6b7280">Series weight: {bw_pct}%</span>')
+        if po_parts:
+            sep2 = ' <span style="color:#2d3748;margin:0 2px">·</span> '
+            playoff_context_html = (
+                f'<div style="font-size:0.80em;padding:4px 0 2px 0;'
+                f'border-top:1px solid #1e3a5f;margin-top:4px;color:#cbd5e1">'
+                f'{sep2.join(po_parts)}</div>'
+            )
+
     # Projection row
     sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
     proj_parts = []
@@ -2096,6 +2132,7 @@ def _render_nba_card(g: dict) -> None:
         f'<div class="{card_cls}">'
         f'{header}'
         f'{meta}'
+        f'{playoff_context_html}'
         f'{proj_row}'
         f'{h1_row}'
         f'{warn_html}'
@@ -2134,11 +2171,25 @@ def _render_nba_tab() -> None:
         )
         return
 
-    plays          = nba.get("plays", [])
-    no_plays       = nba.get("no_plays", [])
-    accuracy       = nba.get("season_accuracy", {})
-    recent_results = nba.get("recent_results", [])
-    ot_diag_nba    = nba.get("ot_diagnostics", {})
+    plays               = nba.get("plays", [])
+    no_plays            = nba.get("no_plays", [])
+    accuracy            = nba.get("season_accuracy", {})
+    recent_results      = nba.get("recent_results", [])
+    ot_diag_nba         = nba.get("ot_diagnostics", {})
+    playoff_performance = nba.get("playoff_performance", {})
+    is_playoff_day      = nba.get("is_playoff_day", False)
+
+    # ── Playoff mode banner ────────────────────────────────────────────────────
+    if is_playoff_day:
+        st.html("""
+        <div style="background:#1a2433;border:1px solid #3b5280;border-radius:6px;
+                    padding:10px 14px;margin-bottom:12px;font-size:0.82em">
+          <span style="color:#60a5fa;font-weight:700">🏆 Playoff Mode Active</span>
+          <span style="color:#94a3b8;margin-left:8px">
+            Series context features engage from Game 2 onward · σ = 15.5 pts (playoff) · v1_2026_04
+          </span>
+        </div>
+        """)
 
     # ── season accuracy panel ─────────────────────────────────────────────────
     if accuracy and accuracy.get("total_games", 0) > 0:
@@ -2233,6 +2284,65 @@ def _render_nba_tab() -> None:
           <div style="color:#4a5568;font-size:0.78em">
             Official grading includes OT per sportsbook rules. OT diagnostics are for analysis only.
           </div>
+        </div>
+        """)
+
+    # ── Playoff performance panel ─────────────────────────────────────────────
+    if playoff_performance and playoff_performance.get("total_playoff_games", 0) > 0:
+        po = playoff_performance
+        ov = po.get("overall", {})
+        w, l, p = ov.get("w", 0), ov.get("l", 0), ov.get("p", 0)
+        hit_str = f"{ov['hit_rate'] * 100:.1f}%" if ov.get("hit_rate") is not None else "—"
+        roi_str = f"{ov['roi']:+.1f}%" if ov.get("roi") is not None else "—"
+        hit_cls = "green" if (ov.get("hit_rate") or 0) >= 0.525 else "yellow" if (ov.get("hit_rate") or 0) >= 0.50 else "red"
+
+        round_rows = ""
+        for rnd in ["First Round", "Conference Semifinals", "Conference Finals", "NBA Finals"]:
+            rd = po.get("by_round", {}).get(rnd, {})
+            if not rd or rd.get("n", 0) == 0:
+                continue
+            rd_hit = f"{rd['hit_rate'] * 100:.1f}%" if rd.get("hit_rate") is not None else "—"
+            rd_roi = f"{rd['roi']:+.1f}%" if rd.get("roi") is not None else "—"
+            round_rows += (
+                f'<tr><td class="dim">{rnd}</td>'
+                f'<td>{rd["w"]}-{rd["l"]}-{rd["p"]}</td>'
+                f'<td>{rd_hit}</td><td class="dim">{rd_roi}</td></tr>'
+            )
+
+        sg_rows = ""
+        for ggrp, sg in po.get("by_series_game", {}).items():
+            if not sg or sg.get("n", 0) == 0:
+                continue
+            sg_hit = f"{sg['hit_rate'] * 100:.1f}%" if sg.get("hit_rate") is not None else "—"
+            sg_rows += (
+                f'<tr><td class="dim">{ggrp}</td>'
+                f'<td>{sg["w"]}-{sg["l"]}-{sg["p"]}</td>'
+                f'<td>{sg_hit}</td></tr>'
+            )
+
+        po_ot = po.get("ot_stats", {})
+        ot_rt_s = f"{po_ot.get('ot_rate', 0) * 100:.1f}%" if po_ot.get("ot_rate") is not None else "—"
+
+        st.html(f"""
+        <div class="season-banner" style="margin-bottom:10px">
+          <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
+                      letter-spacing:0.08em;margin-bottom:10px">
+            🏆 Playoff Performance — {po['total_playoff_games']} games graded
+          </div>
+          <div class="stat-grid">
+            <div class="stat-block"><div class="num">{w}-{l}-{p}</div><div class="lbl">W-L-P</div></div>
+            <div class="stat-block"><div class="num {hit_cls}">{hit_str}</div><div class="lbl">Hit Rate</div></div>
+            <div class="stat-block"><div class="num">{roi_str}</div><div class="lbl">ROI @ -110</div></div>
+            <div class="stat-block"><div class="num">{ot_rt_s}</div><div class="lbl">OT Rate</div></div>
+          </div>
+          {f'''<table class="star-table" style="margin-top:10px">
+            <thead><tr><th>Round</th><th>W-L-P</th><th>Hit Rate</th><th>ROI</th></tr></thead>
+            <tbody>{round_rows}</tbody>
+          </table>''' if round_rows else ""}
+          {f'''<table class="star-table" style="margin-top:6px">
+            <thead><tr><th>Series Games</th><th>W-L-P</th><th>Hit Rate</th></tr></thead>
+            <tbody>{sg_rows}</tbody>
+          </table>''' if sg_rows else ""}
         </div>
         """)
 

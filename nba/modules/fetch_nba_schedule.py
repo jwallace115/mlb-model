@@ -15,8 +15,22 @@ from typing import Optional
 
 import pandas as pd
 
-from nba.config import NBA_API_TIMEOUT
+from nba.config import NBA_API_TIMEOUT, SEASON_TYPE_REGULAR, SEASON_TYPE_PLAYOFF
 from nba.modules.fetch_games import _call_with_retry, _norm_team
+
+
+def _season_type_from_game_id(gid: str) -> str:
+    """
+    Derive season_type from NBA game_id format.
+    Game IDs are 10 digits: 00 + 2-digit-year + 2-digit-type + 5-digit-seq.
+    Type codes: 01=Preseason, 02=Regular Season, 03=All-Star, 04=Playoffs, 05=Play-In.
+    """
+    try:
+        if len(gid) >= 6 and gid[4:6] == "04":
+            return SEASON_TYPE_PLAYOFF
+    except Exception:
+        pass
+    return SEASON_TYPE_REGULAR
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +121,7 @@ def fetch_today_schedule(game_date: Optional[str] = None) -> list[dict]:
             "game_time_et": game_time_et,
             "game_time_utc": game_time_utc,
             "game_date":    game_date,
+            "season_type":  _season_type_from_game_id(gid),
         })
 
     logger.info(f"Schedule for {game_date}: {len(games)} upcoming games")
