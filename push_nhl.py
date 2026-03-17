@@ -295,6 +295,65 @@ def _pipeline_freshness(game_date: str) -> tuple[str, str]:
         return game_date, "stale"
 
 
+def build_clv_summary() -> dict:
+    """Compute CLV summary from nhl_decisions.parquet joined with nhl_market_snapshots.parquet."""
+    NHL_SNAP = Path(__file__).parent / "nhl" / "nhl_market_snapshots.parquet"
+    if not DECISIONS.exists() or not NHL_SNAP.exists():
+        return {}
+    try:
+        import pandas as pd
+        dec  = pd.read_parquet(DECISIONS)
+        snaps = pd.read_parquet(NHL_SNAP)
+        graded = dec[(dec["split"] == "live") & (dec["graded"] == 1)].copy()
+        if graded.empty:
+            return {}
+        # morning lines
+        morning = snaps[snaps["snapshot_type"] == "morning"][["game_id", "line"]].rename(columns={"line": "line_taken"})
+        pregame = snaps[snaps["snapshot_type"] == "pregame"][["game_id", "line"]].rename(columns={"line": "closing_line"})
+        graded["game_id"] = graded["game_id"].astype(str)
+        morning["game_id"] = morning["game_id"].astype(str)
+        pregame["game_id"] = pregame["game_id"].astype(str)
+        graded = graded.merge(morning, on="game_id", how="left")
+        graded = graded.merge(pregame, on="game_id", how="left")
+        # compute clv_directional
+        def _clv_dir(row):
+            lt = row.get("line_taken")
+            cl = row.get("closing_line")
+            if pd.isna(lt) or pd.isna(cl):
+                return None
+            if row.get("signal_side") == "OVER":
+                return round(float(cl) - float(lt), 2)
+            else:
+                return round(float(lt) - float(cl), 2)
+        graded["clv_directional"] = graded.apply(_clv_dir, axis=1)
+        has_clv = graded.dropna(subset=["clv_directional"])
+        n_clv   = len(has_clv)
+        n_total = len(graded)
+        coverage = round(n_clv / n_total * 100, 1) if n_total > 0 else 0.0
+        if n_clv == 0:
+            return {"total_with_clv": 0, "avg_clv": None, "median_clv": None,
+                    "pct_positive_clv": None, "avg_clv_by_tier": {}, "avg_clv_by_side": {},
+                    "clv_coverage": coverage}
+        avg_clv    = round(float(has_clv["clv_directional"].mean()), 3)
+        median_clv = round(float(has_clv["clv_directional"].median()), 3)
+        pct_pos    = round(float((has_clv["clv_directional"] > 0).mean() * 100), 1)
+        by_tier = {}
+        for tier in ["HIGH", "MEDIUM", "LOW"]:
+            sub = has_clv[has_clv["confidence_tier"] == tier]
+            by_tier[tier] = round(float(sub["clv_directional"].mean()), 3) if len(sub) > 0 else None
+        by_side = {}
+        for side in ["OVER", "UNDER"]:
+            sub = has_clv[has_clv["signal_side"] == side]
+            by_side[side] = round(float(sub["clv_directional"].mean()), 3) if len(sub) > 0 else None
+        print(f"[push_nhl] CLV summary: n={n_clv}, avg={avg_clv:+.3f}, coverage={coverage:.0f}%")
+        return {"total_with_clv": n_clv, "avg_clv": avg_clv, "median_clv": median_clv,
+                "pct_positive_clv": pct_pos, "avg_clv_by_tier": by_tier,
+                "avg_clv_by_side": by_side, "clv_coverage": coverage}
+    except Exception as e:
+        print(f"[push_nhl] CLV summary failed: {e}", file=sys.stderr)
+        return {}
+
+
 def write_nhl_json(game_date: str = None) -> str:
     """Write nhl_results.json and return path. Does NOT git push."""
     import sys as _sys
@@ -311,6 +370,7 @@ def write_nhl_json(game_date: str = None) -> str:
     recent_results  = load_recent_results(days=14)
     season_perf     = build_season_performance()
     ot_diag         = build_ot_diagnostics()
+    clv_summary     = build_clv_summary()
 
     # Generate plain-English summaries for today's signals
     if generate_nhl_summary is not None:
@@ -389,6 +449,7 @@ def write_nhl_json(game_date: str = None) -> str:
         "recent_results":      recent_results,
         "season_performance":  season_perf,
         "ot_diagnostics":      ot_diag,
+        "clv_summary":         clv_summary,
         "data_quality_warning": quality_warning,
     }
 

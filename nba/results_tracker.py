@@ -44,6 +44,7 @@ from nba.config import (
     NBA_API_TIMEOUT,
     NBA_PROJECTIONS_PATH,
     NBA_RESULTS_LOG_PATH,
+    NBA_MARKET_SNAPSHOTS_PATH,
 )
 
 logger = logging.getLogger(__name__)
@@ -181,6 +182,19 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
     rows = []
     yesterday = (pd.Timestamp(game_date) - timedelta(days=1)).date().isoformat()
 
+    # ── Load market snapshots for CLV computation ──────────────────────────────
+    morning_lines = {}   # game_id_str -> line
+    pregame_lines = {}   # game_id_str -> line
+    if os.path.exists(NBA_MARKET_SNAPSHOTS_PATH):
+        snaps = pd.read_parquet(NBA_MARKET_SNAPSHOTS_PATH)
+        yday_snaps = snaps[snaps["game_date"] == yesterday]
+        for _, s in yday_snaps.iterrows():
+            gid_s = str(s["game_id"])
+            if s["snapshot_type"] == "morning":
+                morning_lines[gid_s] = s.get("line")
+            elif s["snapshot_type"] == "pregame":
+                pregame_lines[gid_s] = s.get("line")
+
     # Shadow OT diagnostic layer — fetch quarter scores for yesterday
     ot_data = fetch_ot_data(yesterday)
 
@@ -276,6 +290,25 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
         # Read is_playoff from projection record (added in run_nba.py Change 1)
         is_playoff = bool(proj.get("is_playoff", False))
 
+        # ── CLV computation ───────────────────────────────────────────────────
+        gid_str       = str(gid)
+        line_taken    = morning_lines.get(gid_str)
+        closing_line  = pregame_lines.get(gid_str)
+        price_taken   = -110.0 if line_taken is not None else None
+        edge_at_dec   = proj.get("edge")
+        if line_taken is not None and closing_line is not None:
+            clv_raw = round(closing_line - line_taken, 2)
+            if lean == "OVER":
+                clv_directional = round(closing_line - line_taken, 2)
+            else:
+                clv_directional = round(line_taken - closing_line, 2)
+            snapshot_source   = "odds_api"
+            line_taken_source = "odds_api_snapshot"
+        else:
+            clv_raw = clv_directional = None
+            snapshot_source   = "missing" if closing_line is None else "odds_api"
+            line_taken_source = "proxy" if line_taken is None else "odds_api_snapshot"
+
         rows.append({
             "game_date":          yesterday,
             "game_id":            gid,
@@ -312,6 +345,17 @@ def grade_and_log(projs: pd.DataFrame, actuals: pd.DataFrame, game_date: str) ->
             "went_to_ot_official":          went_to_ot if is_playoff else None,
             "regulation_total_official":    regulation_total if is_playoff else None,
             "ot_flip_official":             ot_flip if is_playoff else None,
+            # CLV fields
+            "timestamp_decision":  proj.get("timestamp_decision"),
+            "line_taken":          line_taken,
+            "price_taken":         price_taken,
+            "edge_at_decision":    edge_at_dec,
+            "closing_line":        closing_line,
+            "closing_price":       None,
+            "clv_raw":             clv_raw,
+            "clv_directional":     clv_directional,
+            "snapshot_source":     snapshot_source,
+            "line_taken_source":   line_taken_source,
         })
 
     if not rows:

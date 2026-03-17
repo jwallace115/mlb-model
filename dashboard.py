@@ -1589,6 +1589,58 @@ def _render_nhl_tab() -> None:
         </div>
         """)
 
+    # ── CLV Summary ────────────────────────────────────────────────────────────
+    clv_nhl = nhl.get("clv_summary", {})
+    if clv_nhl:
+        n_clv    = clv_nhl.get("total_with_clv", 0)
+        avg_clv  = clv_nhl.get("avg_clv")
+        pct_pos  = clv_nhl.get("pct_positive_clv")
+        coverage = clv_nhl.get("clv_coverage", 0.0)
+
+        st.html('<div class="section-hdr">📈 CLV Summary (Closing Line Value)</div>')
+
+        if n_clv < 20:
+            st.caption(f"Insufficient sample for CLV conclusions (n={n_clv})")
+        elif coverage < 50:
+            st.caption(f"CLV coverage low — closing line capture not yet fully populated ({coverage:.0f}%)")
+        else:
+            avg_clv_s = f"{avg_clv:+.2f}" if avg_clv is not None else "—"
+            pct_pos_s = f"{pct_pos:.0f}%" if pct_pos is not None else "—"
+            avg_color = "#22c55e" if (avg_clv or 0) > 0 else "#ef4444"
+            pct_color = "#22c55e" if (pct_pos or 0) > 50 else "#ef4444"
+            by_side   = clv_nhl.get("avg_clv_by_side", {})
+            over_clv  = by_side.get("OVER")
+            under_clv = by_side.get("UNDER")
+            over_s    = f"{over_clv:+.2f}" if over_clv is not None else "—"
+            under_s   = f"{under_clv:+.2f}" if under_clv is not None else "—"
+            st.html(f"""
+            <div class="season-banner" style="padding:10px 16px;margin-bottom:6px">
+              <div class="stat-grid">
+                <div class="stat-block">
+                  <div class="num" style="color:{avg_color}">{avg_clv_s}</div>
+                  <div class="lbl">Avg CLV (pts)</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num" style="color:{pct_color}">{pct_pos_s}</div>
+                  <div class="lbl">% Positive CLV</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num">{over_s}</div>
+                  <div class="lbl">OVER CLV</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num">{under_s}</div>
+                  <div class="lbl">UNDER CLV</div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.73em;color:#4a5568;margin-top:4px;line-height:1.5">
+              CLV measures whether decision lines beat closing lines.
+              Positive = sharp. Target: &gt;0 on average.
+              NHL skews UNDER — per-side split matters.
+            </div>
+            """)
+
 
 # ── Soccer tab rendering ───────────────────────────────────────────────────────
 
@@ -2452,6 +2504,52 @@ def _render_nba_tab() -> None:
         """)
     else:
         st.caption("No graded results in the last 14 days.")
+
+    # ── CLV Summary ────────────────────────────────────────────────────────────
+    clv = nba.get("clv_summary", {})
+    if clv:
+        n_clv      = clv.get("total_with_clv", 0)
+        avg_clv    = clv.get("avg_clv")
+        pct_pos    = clv.get("pct_positive_clv")
+        coverage   = clv.get("clv_coverage", 0.0)
+
+        st.html('<div class="section-hdr">📈 CLV Summary (Closing Line Value)</div>')
+
+        if n_clv < 20:
+            st.caption(f"Insufficient sample for CLV conclusions (n={n_clv})")
+        elif coverage < 50:
+            st.caption(f"CLV coverage low — closing line capture not yet fully populated ({coverage:.0f}%)")
+        else:
+            avg_clv_s  = f"{avg_clv:+.2f}" if avg_clv is not None else "—"
+            pct_pos_s  = f"{pct_pos:.0f}%" if pct_pos is not None else "—"
+            avg_color  = "#22c55e" if (avg_clv or 0) > 0 else "#ef4444"
+            pct_color  = "#22c55e" if (pct_pos or 0) > 50 else "#ef4444"
+            st.html(f"""
+            <div class="season-banner" style="padding:10px 16px;margin-bottom:6px">
+              <div class="stat-grid">
+                <div class="stat-block">
+                  <div class="num" style="color:{avg_color}">{avg_clv_s}</div>
+                  <div class="lbl">Avg CLV (pts)</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num" style="color:{pct_color}">{pct_pos_s}</div>
+                  <div class="lbl">% Positive CLV</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num">{n_clv}</div>
+                  <div class="lbl">Games w/ CLV</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num">{coverage:.0f}%</div>
+                  <div class="lbl">Coverage</div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.73em;color:#4a5568;margin-top:4px;line-height:1.5">
+              CLV measures whether decision lines beat closing lines.
+              Positive = sharp. Target: &gt;0 on average.
+            </div>
+            """)
 
 
 # ── main ──────────────────────────────────────────────────────────────────────

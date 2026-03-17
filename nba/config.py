@@ -103,8 +103,9 @@ ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 ODDS_BOOKMAKERS = ["draftkings", "fanduel"]
 
 # ── NBA Results tracker paths ──────────────────────────────────────────────────
-NBA_PROJECTIONS_PATH = _os.path.join(DATA_DIR, "nba_daily_projections.parquet")
-NBA_RESULTS_LOG_PATH = _os.path.join(DATA_DIR, "nba_results_log.parquet")
+NBA_PROJECTIONS_PATH      = _os.path.join(DATA_DIR, "nba_daily_projections.parquet")
+NBA_RESULTS_LOG_PATH      = _os.path.join(DATA_DIR, "nba_results_log.parquet")
+NBA_MARKET_SNAPSHOTS_PATH = os.path.join(DATA_DIR, "nba_market_snapshots.parquet")
 
 # ── The Odds API: NBA team name → abbreviation ────────────────────────────────
 NBA_ODDS_TEAM_MAP = {

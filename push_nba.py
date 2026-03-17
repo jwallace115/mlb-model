@@ -540,10 +540,48 @@ def generate_nba_summary(g: dict) -> str:
     return " ".join(parts[:4])
 
 
+def build_clv_summary() -> dict:
+    """Compute CLV summary from nba_results_log.parquet."""
+    if not os.path.exists(NBA_RESULTS_PATH):
+        return {}
+    try:
+        import pandas as pd
+        log = pd.read_parquet(NBA_RESULTS_PATH)
+        if log.empty or "clv_directional" not in log.columns:
+            return {}
+        has_clv = log.dropna(subset=["clv_directional"])
+        n_clv   = len(has_clv)
+        n_total = int(log["line"].notna().sum())
+        coverage = round(n_clv / n_total * 100, 1) if n_total > 0 else 0.0
+        if n_clv == 0:
+            return {"total_with_clv": 0, "avg_clv": None, "median_clv": None,
+                    "pct_positive_clv": None, "avg_clv_by_tier": {}, "avg_clv_by_side": {},
+                    "clv_coverage": coverage}
+        avg_clv    = round(float(has_clv["clv_directional"].mean()), 3)
+        median_clv = round(float(has_clv["clv_directional"].median()), 3)
+        pct_pos    = round(float((has_clv["clv_directional"] > 0).mean() * 100), 1)
+        by_tier = {}
+        for tier in ["HIGH", "MEDIUM", "LOW"]:
+            sub = has_clv[has_clv["confidence"] == tier]
+            by_tier[tier] = round(float(sub["clv_directional"].mean()), 3) if len(sub) > 0 else None
+        by_side = {}
+        for side in ["OVER", "UNDER"]:
+            sub = has_clv[has_clv["lean"] == side]
+            by_side[side] = round(float(sub["clv_directional"].mean()), 3) if len(sub) > 0 else None
+        print(f"[push_nba] CLV summary: n={n_clv}, avg={avg_clv:+.3f}, coverage={coverage:.0f}%")
+        return {"total_with_clv": n_clv, "avg_clv": avg_clv, "median_clv": median_clv,
+                "pct_positive_clv": pct_pos, "avg_clv_by_tier": by_tier,
+                "avg_clv_by_side": by_side, "clv_coverage": coverage}
+    except Exception as e:
+        print(f"[push_nba] CLV summary failed: {e}", file=sys.stderr)
+        return {}
+
+
 def serialize(game_date: str, games: list[dict], accuracy: dict,
               recent_results: list[dict] | None = None,
               ot_diagnostics: dict | None = None,
-              playoff_performance: dict | None = None) -> dict:
+              playoff_performance: dict | None = None,
+              clv_summary: dict | None = None) -> dict:
     # Generate natural-language summaries from model features
     for g in games:
         g["summary"] = generate_nba_summary(g)
@@ -572,6 +610,7 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
         "recent_results":     recent_results or [],
         "ot_diagnostics":     ot_diagnostics or {},
         "playoff_performance": playoff_performance or {},
+        "clv_summary":        clv_summary or {},
     }
 
 
@@ -612,8 +651,9 @@ def write_nba_json(game_date: str = None) -> str:
     recent_results     = load_recent_results(days=14)
     ot_diagnostics     = build_ot_diagnostics()
     playoff_performance = build_playoff_performance()
+    clv_summary        = build_clv_summary()
     payload = serialize(game_date, games, accuracy, recent_results,
-                        ot_diagnostics, playoff_performance)
+                        ot_diagnostics, playoff_performance, clv_summary)
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_nba] Wrote {OUT_PATH} ({len(games)} games)")

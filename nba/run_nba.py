@@ -37,7 +37,7 @@ import logging
 import os
 import pickle
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -69,6 +69,7 @@ from nba.config import (
     LEAGUE_AVG_TOTAL,
     MARKET_FLAG_THRESHOLD,
     NBA_PROJECTIONS_PATH,
+    NBA_MARKET_SNAPSHOTS_PATH,
     OVER_UNDER_MIN_PROB,
     PLAYOFF_MODE_VERSION,
     PLAYOFF_SERIES_BLEND_CAP,
@@ -628,9 +629,12 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
     if not game_results:
         return
 
+    _ts_decision = datetime.now(timezone.utc).isoformat()
+
     rows = []
     for g in game_results:
         rows.append({
+            "timestamp_decision":  _ts_decision,
             "game_date":           game_date,
             "game_id":             g.get("game_id"),
             "home_team":           g.get("home_team"),
@@ -704,6 +708,43 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
 
     combined.to_parquet(NBA_PROJECTIONS_PATH, index=False)
     logger.info(f"Projections saved → {NBA_PROJECTIONS_PATH} ({len(new_df)} games for {game_date})")
+
+    # ── Morning snapshot — write once per game_date (prevent re-run overwrite) ─
+    try:
+        snap_rows = []
+        for g in game_results:
+            gid  = g.get("game_id")
+            line = g.get("line")
+            src  = "odds_api" if line is not None else "no_line"
+            snap_rows.append({
+                "game_id":          gid,
+                "game_date":        game_date,
+                "snapshot_type":    "morning",
+                "snapshot_time_utc": _ts_decision,
+                "line":             line,
+                "price":            -110.0,
+                "source":           src,
+            })
+        snap_df = pd.DataFrame(snap_rows)
+
+        if os.path.exists(NBA_MARKET_SNAPSHOTS_PATH):
+            existing_snaps = pd.read_parquet(NBA_MARKET_SNAPSHOTS_PATH)
+            # Only write if no morning snapshot exists for this game_date yet
+            already_have = (
+                (existing_snaps["game_date"] == game_date) &
+                (existing_snaps["snapshot_type"] == "morning")
+            ).any()
+            if not already_have:
+                combined_snaps = pd.concat([existing_snaps, snap_df], ignore_index=True)
+                combined_snaps.to_parquet(NBA_MARKET_SNAPSHOTS_PATH, index=False)
+                logger.info(f"Morning snapshot saved ({len(snap_df)} games for {game_date})")
+            else:
+                logger.info(f"Morning snapshot already exists for {game_date} — skipping overwrite")
+        else:
+            snap_df.to_parquet(NBA_MARKET_SNAPSHOTS_PATH, index=False)
+            logger.info(f"Morning snapshot saved ({len(snap_df)} games for {game_date})")
+    except Exception as _e:
+        logger.warning(f"Morning snapshot write failed (non-fatal): {_e}")
 
 
 # ── Main pipeline ─────────────────────────────────────────────────────────────

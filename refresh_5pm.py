@@ -17,7 +17,7 @@ import argparse
 import os
 import subprocess
 import sys
-from datetime import date
+from datetime import date, datetime, timezone
 
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -89,8 +89,90 @@ def main():
     except Exception as e:
         print(f"[refresh_5pm] NBA JSON write failed (non-fatal): {e}", file=sys.stderr)
 
+    # Step 2 (CLV): Write pregame snapshot for NBA — overwrite any prior pregame entry
+    try:
+        import pandas as pd
+        _nba_proj_path = os.path.join(REPO_DIR, "nba", "data", "nba_daily_projections.parquet")
+        _nba_snap_path = os.path.join(REPO_DIR, "nba", "data", "nba_market_snapshots.parquet")
+        if os.path.exists(_nba_proj_path):
+            _projs = pd.read_parquet(_nba_proj_path)
+            _today_projs = _projs[_projs["game_date"] == game_date]
+            if not _today_projs.empty:
+                _snap_time = datetime.now(timezone.utc).isoformat()
+                _pregame_rows = []
+                for _, _pg in _today_projs.iterrows():
+                    _pregame_rows.append({
+                        "game_id":           _pg.get("game_id"),
+                        "game_date":         game_date,
+                        "snapshot_type":     "pregame",
+                        "snapshot_time_utc": _snap_time,
+                        "line":              _pg.get("line"),
+                        "price":             -110.0,
+                        "source":            "odds_api" if _pg.get("line") is not None else "no_line",
+                    })
+                _pregame_df = pd.DataFrame(_pregame_rows)
+                if os.path.exists(_nba_snap_path):
+                    _existing_snaps = pd.read_parquet(_nba_snap_path)
+                    # Drop any prior pregame entries for this game_date (overwrite)
+                    _existing_snaps = _existing_snaps[
+                        ~((_existing_snaps["game_date"] == game_date) &
+                          (_existing_snaps["snapshot_type"] == "pregame"))
+                    ]
+                    _combined_snaps = pd.concat([_existing_snaps, _pregame_df], ignore_index=True)
+                else:
+                    _combined_snaps = _pregame_df
+                _combined_snaps.to_parquet(_nba_snap_path, index=False)
+                print(f"[refresh_5pm] NBA pregame snapshot written ({len(_pregame_df)} games)")
+    except Exception as e:
+        print(f"[refresh_5pm] NBA pregame snapshot failed (non-fatal): {e}", file=sys.stderr)
+
     # Step 2b: NHL pipeline refresh + serialize JSON
     print(f"[refresh_5pm] Running NHL pipeline for {game_date} ...")
+
+    # NHL CLV: capture morning lines BEFORE the subprocess overwrites closing_total
+    try:
+        import pandas as _pd
+        _nhl_dec_path  = os.path.join(REPO_DIR, "nhl", "nhl_decisions.parquet")
+        _nhl_snap_path = os.path.join(REPO_DIR, "nhl", "nhl_market_snapshots.parquet")
+        if os.path.exists(_nhl_dec_path):
+            _nhl_dec = _pd.read_parquet(_nhl_dec_path)
+            _nhl_live = _nhl_dec[
+                (_nhl_dec["split"] == "live") &
+                (_nhl_dec["game_date"].astype(str) == game_date)
+            ]
+            if not _nhl_live.empty:
+                _nhl_snap_time = datetime.now(timezone.utc).isoformat()
+                _nhl_morning_rows = []
+                for _, _nr in _nhl_live.iterrows():
+                    _nhl_morning_rows.append({
+                        "game_id":           _nr.get("game_id"),
+                        "game_date":         game_date,
+                        "snapshot_type":     "morning",
+                        "snapshot_time_utc": _nhl_snap_time,
+                        "line":              _nr.get("closing_total"),
+                        "price":             None,
+                        "source":            "nhl_decisions",
+                    })
+                _nhl_morning_df = _pd.DataFrame(_nhl_morning_rows)
+                if os.path.exists(_nhl_snap_path):
+                    _nhl_existing = _pd.read_parquet(_nhl_snap_path)
+                    # Only write if no morning snapshot for this game_date yet
+                    _already = (
+                        (_nhl_existing["game_date"].astype(str) == game_date) &
+                        (_nhl_existing["snapshot_type"] == "morning")
+                    ).any()
+                    if not _already:
+                        _nhl_combined = _pd.concat([_nhl_existing, _nhl_morning_df], ignore_index=True)
+                        _nhl_combined.to_parquet(_nhl_snap_path, index=False)
+                        print(f"[refresh_5pm] NHL morning snapshot written ({len(_nhl_morning_df)} rows)")
+                    else:
+                        print(f"[refresh_5pm] NHL morning snapshot already exists for {game_date} — skipping")
+                else:
+                    _nhl_morning_df.to_parquet(_nhl_snap_path, index=False)
+                    print(f"[refresh_5pm] NHL morning snapshot written ({len(_nhl_morning_df)} rows)")
+    except Exception as e:
+        print(f"[refresh_5pm] NHL morning snapshot failed (non-fatal): {e}", file=sys.stderr)
+
     try:
         import subprocess as _sp
         _sp.run(
@@ -99,6 +181,47 @@ def main():
         )
     except Exception as e:
         print(f"[refresh_5pm] NHL pipeline failed (non-fatal): {e}", file=sys.stderr)
+
+    # NHL CLV: capture pregame (post-pipeline) lines — overwrite any prior pregame entry
+    try:
+        import pandas as _pd2
+        _nhl_dec_path2  = os.path.join(REPO_DIR, "nhl", "nhl_decisions.parquet")
+        _nhl_snap_path2 = os.path.join(REPO_DIR, "nhl", "nhl_market_snapshots.parquet")
+        if os.path.exists(_nhl_dec_path2):
+            _nhl_dec2 = _pd2.read_parquet(_nhl_dec_path2)
+            _nhl_live2 = _nhl_dec2[
+                (_nhl_dec2["split"] == "live") &
+                (_nhl_dec2["game_date"].astype(str) == game_date)
+            ]
+            if not _nhl_live2.empty:
+                _nhl_snap_time2 = datetime.now(timezone.utc).isoformat()
+                _nhl_pregame_rows = []
+                for _, _nr2 in _nhl_live2.iterrows():
+                    _nhl_pregame_rows.append({
+                        "game_id":           _nr2.get("game_id"),
+                        "game_date":         game_date,
+                        "snapshot_type":     "pregame",
+                        "snapshot_time_utc": _nhl_snap_time2,
+                        "line":              _nr2.get("closing_total"),
+                        "price":             None,
+                        "source":            "nhl_decisions",
+                    })
+                _nhl_pregame_df = _pd2.DataFrame(_nhl_pregame_rows)
+                if os.path.exists(_nhl_snap_path2):
+                    _nhl_existing2 = _pd2.read_parquet(_nhl_snap_path2)
+                    # Drop any prior pregame entries for this game_date (overwrite)
+                    _nhl_existing2 = _nhl_existing2[
+                        ~((_nhl_existing2["game_date"].astype(str) == game_date) &
+                          (_nhl_existing2["snapshot_type"] == "pregame"))
+                    ]
+                    _nhl_combined2 = _pd2.concat([_nhl_existing2, _nhl_pregame_df], ignore_index=True)
+                else:
+                    _nhl_combined2 = _nhl_pregame_df
+                _nhl_combined2.to_parquet(_nhl_snap_path2, index=False)
+                print(f"[refresh_5pm] NHL pregame snapshot written ({len(_nhl_pregame_df)} rows)")
+    except Exception as e:
+        print(f"[refresh_5pm] NHL pregame snapshot failed (non-fatal): {e}", file=sys.stderr)
+
     try:
         from push_nhl import write_nhl_json
         write_nhl_json(game_date)
