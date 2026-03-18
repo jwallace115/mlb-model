@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-18T16:00:06.151219+00:00",
-  "last_updated": "2026-03-18 16:00 UTC",
+  "generated_at": "2026-03-18T21:01:40.761176+00:00",
+  "last_updated": "2026-03-18 21:01 UTC",
   "pipeline_run_date": "2026-03-18",
   "signals_source": "stale",
   "game_date": "2026-03-18",
@@ -33,6 +33,33 @@
     }
   },
   "data_quality_warning": false,
+  "league_deployment": {
+    "EPL": {
+      "status": "active",
+      "display_name": "EPL",
+      "deployment_start_date": "2026-03-17"
+    },
+    "BUN": {
+      "status": "active",
+      "display_name": "Bundesliga",
+      "deployment_start_date": "2026-03-17"
+    },
+    "LGA": {
+      "status": "excluded_oos_gate",
+      "display_name": "La Liga",
+      "deployment_start_date": null
+    },
+    "SEA": {
+      "status": "active",
+      "display_name": "Serie A",
+      "deployment_start_date": "2026-03-18"
+    },
+    "LG1": {
+      "status": "excluded_oos_gate",
+      "display_name": "Ligue 1",
+      "deployment_start_date": null
+    }
+  },
   "parlay_candidates": [],
   "suggested_parlay": {
     "available": false,
@@ -40,5 +67,12 @@
     "combined_prob": null,
     "leg_count": 0,
     "correlation_note": false
+  },
+  "daily_review": {
+    "generated_at": "2026-03-18T21:01:40.763901+00:00",
+    "date_reviewed": "2026-03-17",
+    "record_summary": {},
+    "narrative": null,
+    "generation_status": "no_games"
   }
 }
