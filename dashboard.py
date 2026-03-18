@@ -2442,29 +2442,53 @@ def _render_nba_tab() -> None:
 
     # ── NBA stop rule suspension banner ───────────────────────────────────────
     _nba_stop = (nba or {}).get("stop_rule_status", {})
-    if _nba_stop.get("suspended"):
-        _trigger_label = {
-            "tier_HIGH": "HIGH-confidence tier ROI",
-            "tier_MEDIUM": "MEDIUM-confidence tier ROI",
-            "full_model": "Full model ROI",
-        }.get(_nba_stop.get("trigger", ""), "ROI")
+    _nba_model_susp  = _nba_stop.get("model_suspended", False)
+    _nba_tier_susps  = _nba_stop.get("suspended_tiers", [])
+    _nba_full_detail = _nba_stop.get("full_model_details", {})
+    _nba_tier_detail = _nba_stop.get("tier_details", {})
+
+    if _nba_model_susp:
+        _fn = _nba_full_detail.get("n", "?")
+        _fr = _nba_full_detail.get("roi")
+        _fr_str = f"{_fr:.1f}%" if _fr is not None else "?"
         st.html(f"""
         <div style="background:#2d1515;border:2px solid #dc2626;border-radius:8px;
                     padding:12px 16px;margin-bottom:14px">
           <span style="color:#f87171;font-weight:700;font-size:1.05em">
-            🚨 NBA MODEL SUSPENDED
+            🚨 NBA MODEL FULLY SUSPENDED
           </span>
           <span style="color:#fca5a5;margin-left:10px;font-size:0.88em">
-            {_trigger_label} breached threshold &nbsp;·&nbsp;
-            n={_nba_stop.get('n')} plays &nbsp;·&nbsp;
-            ROI={_nba_stop.get('roi', 0):.1f}%
+            Full-model ROI hit {_fr_str} on {_fn} live plays (threshold: −12%).
+            All signals are paused.
           </span>
           <div style="color:#fca5a5;font-size:0.80em;margin-top:6px">
-            No new plays issued until manually reset.
-            Run <code>python nba_reset_stop_rules.py --reason "..."</code> to clear.
+            Manual reset required:
+            <code>python nba_reset_stop_rules.py --reason "..."</code>
           </div>
         </div>
         """)
+    elif _nba_tier_susps:
+        for _t in _nba_tier_susps:
+            _td = _nba_tier_detail.get(_t, {})
+            _tn = _td.get("n", "?")
+            _tr = _td.get("roi")
+            _tr_str = f"{_tr:.1f}%" if _tr is not None else "?"
+            st.html(f"""
+            <div style="background:#2d1b0e;border:2px solid #d97706;border-radius:8px;
+                        padding:12px 16px;margin-bottom:8px">
+              <span style="color:#fbbf24;font-weight:700;font-size:1.05em">
+                ⛔ NBA {_t} tier suspended
+              </span>
+              <span style="color:#fde68a;margin-left:10px;font-size:0.88em">
+                {_t}-confidence tier ROI hit {_tr_str} on {_tn} live plays
+                (threshold: −10%). {_t} signals paused. Other tiers continue.
+              </span>
+              <div style="color:#fde68a;font-size:0.80em;margin-top:6px">
+                Manual reset required:
+                <code>python nba_reset_stop_rules.py --reason "..."</code>
+              </div>
+            </div>
+            """)
 
     # ── season accuracy panel ─────────────────────────────────────────────────
     if accuracy and accuracy.get("total_games", 0) > 0:
@@ -2811,29 +2835,55 @@ def main() -> None:
 
         # ── stop rule suspension banner ────────────────────────────────────────
         _mlb_stop = (data or {}).get("stop_rule_status", {})
-        if _mlb_stop.get("suspended"):
-            _trigger_label = {
-                "tier_HIGH": "HIGH-confidence tier ROI",
-                "tier_MEDIUM": "MEDIUM-confidence tier ROI",
-                "full_model": "Full model ROI",
-            }.get(_mlb_stop.get("trigger", ""), "ROI")
+        _mlb_model_susp  = _mlb_stop.get("model_suspended", False)
+        _mlb_tier_susps  = _mlb_stop.get("suspended_tiers", [])
+        _mlb_full_detail = _mlb_stop.get("full_model_details", {})
+        _mlb_tier_detail = _mlb_stop.get("tier_details", {})
+
+        if _mlb_model_susp:
+            # Case B: full model suspended
+            _fn = _mlb_full_detail.get("n", "?")
+            _fr = _mlb_full_detail.get("roi")
+            _fr_str = f"{_fr:.1f}%" if _fr is not None else "?"
             st.html(f"""
             <div style="background:#2d1515;border:2px solid #dc2626;border-radius:8px;
                         padding:12px 16px;margin-bottom:14px">
               <span style="color:#f87171;font-weight:700;font-size:1.05em">
-                🚨 MLB MODEL SUSPENDED
+                🚨 MLB MODEL FULLY SUSPENDED
               </span>
               <span style="color:#fca5a5;margin-left:10px;font-size:0.88em">
-                {_trigger_label} breached threshold &nbsp;·&nbsp;
-                n={_mlb_stop.get('n')} plays &nbsp;·&nbsp;
-                ROI={_mlb_stop.get('roi', 0):.1f}%
+                Full-model ROI hit {_fr_str} on {_fn} live plays (threshold: −12%).
+                All signals are paused.
               </span>
               <div style="color:#fca5a5;font-size:0.80em;margin-top:6px">
-                No new plays issued until manually reset.
-                Run <code>python mlb_reset_stop_rules.py --reason "..."</code> to clear.
+                Manual reset required:
+                <code>python mlb_reset_stop_rules.py --reason "..."</code>
               </div>
             </div>
             """)
+        elif _mlb_tier_susps:
+            # Case A: one or more tiers suspended, model still running
+            for _t in _mlb_tier_susps:
+                _td = _mlb_tier_detail.get(_t, {})
+                _tn = _td.get("n", "?")
+                _tr = _td.get("roi")
+                _tr_str = f"{_tr:.1f}%" if _tr is not None else "?"
+                st.html(f"""
+                <div style="background:#2d1b0e;border:2px solid #d97706;border-radius:8px;
+                            padding:12px 16px;margin-bottom:8px">
+                  <span style="color:#fbbf24;font-weight:700;font-size:1.05em">
+                    ⛔ MLB {_t} tier suspended
+                  </span>
+                  <span style="color:#fde68a;margin-left:10px;font-size:0.88em">
+                    {_t}-confidence tier ROI hit {_tr_str} on {_tn} live plays
+                    (threshold: −10%). {_t} signals paused. Other tiers continue.
+                  </span>
+                  <div style="color:#fde68a;font-size:0.80em;margin-top:6px">
+                    Manual reset required:
+                    <code>python mlb_reset_stop_rules.py --reason "..."</code>
+                  </div>
+                </div>
+                """)
 
         # ── no data state ─────────────────────────────────────────────────────
         if data is None:

@@ -4,6 +4,10 @@ data/*.db
 *.db
 today_card.txt
 
+# ── Stop rule state files (local runtime state, never commit) ─────────────────
+data/mlb_stop_rule_state.json
+nba/data/nba_stop_rule_state.json
+
 # ── Logs ──────────────────────────────────────────────────────────────────────
 logs/
 

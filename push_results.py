@@ -326,13 +326,21 @@ def main():
 
     # Stop rules — evaluated after grading so today's results are reflected
     try:
-        from mlb_stop_rules import evaluate_mlb_stop_rules
-        payload["stop_rule_status"] = evaluate_mlb_stop_rules()
-        if payload["stop_rule_status"].get("suspended"):
-            print(f"[push_results] MLB STOP RULE ACTIVE: {payload['stop_rule_status']}")
+        from mlb_stop_rules import evaluate_mlb_stop_rules, apply_mlb_stop_rule_filter
+        stop_status = evaluate_mlb_stop_rules()
+        payload["stop_rule_status"] = stop_status
+        if stop_status.get("model_suspended") or stop_status.get("suspended_tiers"):
+            print(f"[push_results] MLB STOP RULE ACTIVE: "
+                  f"model_suspended={stop_status['model_suspended']}, "
+                  f"tiers={stop_status['suspended_tiers']}")
+            active_plays, updated_no_plays = apply_mlb_stop_rule_filter(
+                payload["plays"], payload["no_plays"], stop_status
+            )
+            payload["plays"]    = active_plays
+            payload["no_plays"] = updated_no_plays
     except Exception as e:
         print(f"[push_results] MLB stop rule evaluation failed (non-fatal): {e}", file=sys.stderr)
-        payload["stop_rule_status"] = {"suspended": False}
+        payload["stop_rule_status"] = {"model_suspended": False, "suspended_tiers": []}
 
     with open(results_path, "w") as f:
         json.dump(payload, f, indent=2, default=str)

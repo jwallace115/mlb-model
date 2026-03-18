@@ -2,11 +2,12 @@
 """
 Manual reset for NBA stop rules.
 
-Appends a RESET event to the suspension_log and clears the suspension.
-Does NOT delete history — the log is append-only.
+Appends a RESET event to suspension_log and clears all suspensions.
+Does NOT delete history — log is append-only.
 
 Usage:
-    python nba_reset_stop_rules.py [--reason "line quality improved"]
+    python nba_reset_stop_rules.py --reason "line quality improved"
+    python nba_reset_stop_rules.py --status        # print current state, no change
 """
 
 import argparse
@@ -17,56 +18,63 @@ from datetime import datetime, timezone
 _REPO_DIR   = os.path.dirname(os.path.abspath(__file__))
 _STATE_PATH = os.path.join(_REPO_DIR, "nba", "data", "nba_stop_rule_state.json")
 
+_TIERS = ("HIGH", "MEDIUM", "LOW")
 
-def reset(reason: str = "") -> None:
+
+def _load() -> dict:
     if os.path.exists(_STATE_PATH):
         with open(_STATE_PATH) as f:
-            state = json.load(f)
-    else:
-        state = {
-            "suspended": False,
-            "trigger": None,
-            "triggered_at": None,
-            "roi": None,
-            "n": None,
-            "suspension_log": [],
-        }
+            return json.load(f)
+    return {}
 
+
+def status() -> None:
+    s = _load()
+    print(f"[nba_stop_rules] model_suspended: {s.get('model_suspended', False)}")
+    print(f"[nba_stop_rules] suspended_tiers: {s.get('suspended_tiers', [])}")
+    print(f"[nba_stop_rules] suspension_log entries: {len(s.get('suspension_log', []))}")
+
+
+def reset(reason: str = "") -> None:
+    s = _load()
     now = datetime.now(timezone.utc).isoformat()
 
-    if not state.get("suspended"):
-        print("[nba_reset_stop_rules] Model is not currently suspended — nothing to reset.")
-        print(f"  State: {state}")
+    currently_suspended = s.get("model_suspended", False) or bool(s.get("suspended_tiers", []))
+    if not currently_suspended:
+        print("[nba_reset_stop_rules] Nothing is currently suspended — nothing to reset.")
         return
 
-    state["suspension_log"].append({
-        "event":     "RESET",
-        "timestamp": now,
-        "reason":    reason or "manual reset",
-        "was_trigger": state.get("trigger"),
-        "was_roi":     state.get("roi"),
-        "was_n":       state.get("n"),
+    log = s.get("suspension_log", [])
+    log.append({
+        "event":               "RESET",
+        "timestamp":           now,
+        "reason":              reason or "manual reset",
+        "was_model_suspended": s.get("model_suspended", False),
+        "was_suspended_tiers": s.get("suspended_tiers", []),
     })
 
-    state["suspended"]    = False
-    state["trigger"]      = None
-    state["triggered_at"] = None
-    state["roi"]          = None
-    state["n"]            = None
+    from nba_stop_rules import _empty_state
+    fresh = _empty_state()
+    fresh["suspension_log"] = log
 
+    os.makedirs(os.path.dirname(_STATE_PATH), exist_ok=True)
     with open(_STATE_PATH, "w") as f:
-        json.dump(state, f, indent=2)
+        json.dump(fresh, f, indent=2)
 
-    print(f"[nba_reset_stop_rules] Suspension cleared at {now}")
+    print(f"[nba_reset_stop_rules] All suspensions cleared at {now}")
     print(f"  Reason: {reason or 'manual reset'}")
-    print(f"  Suspension log now has {len(state['suspension_log'])} entries.")
+    print(f"  Suspension log now has {len(log)} entries.")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Reset NBA stop-rule suspension")
+    parser = argparse.ArgumentParser()
     parser.add_argument("--reason", default="", help="Reason for reset (logged)")
+    parser.add_argument("--status", action="store_true", help="Print current state only")
     args = parser.parse_args()
-    reset(reason=args.reason)
+    if args.status:
+        status()
+    else:
+        reset(reason=args.reason)
 
 
 if __name__ == "__main__":
