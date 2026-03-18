@@ -479,6 +479,10 @@ def grade_date(game_date: str) -> list[dict]:
         _close_ts    = _clv_entry.get("close_timestamp")
         clv_raw, clv_dir, snap_src = _compute_clv(lean, line, closing_line, _close_ts)
 
+        # decision_line_source: 'real' when line was captured from a live Odds API snapshot.
+        # Used by stop rules to filter to live-season graded plays only.
+        decision_line_source = "real" if line is not None else None
+
         graded_row = {
             "game_date":            game_date,
             "game_pk":              gk,
@@ -516,6 +520,8 @@ def grade_date(game_date: str) -> list[dict]:
             "clv_raw":              clv_raw,
             "clv_directional":      clv_dir,
             "snapshot_source":      snap_src,
+            # Stop rule filter field
+            "decision_line_source": decision_line_source,
         }
 
         db.write_graded_result(graded_row)

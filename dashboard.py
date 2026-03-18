@@ -2440,6 +2440,32 @@ def _render_nba_tab() -> None:
         </div>
         """)
 
+    # ── NBA stop rule suspension banner ───────────────────────────────────────
+    _nba_stop = (nba or {}).get("stop_rule_status", {})
+    if _nba_stop.get("suspended"):
+        _trigger_label = {
+            "tier_HIGH": "HIGH-confidence tier ROI",
+            "tier_MEDIUM": "MEDIUM-confidence tier ROI",
+            "full_model": "Full model ROI",
+        }.get(_nba_stop.get("trigger", ""), "ROI")
+        st.html(f"""
+        <div style="background:#2d1515;border:2px solid #dc2626;border-radius:8px;
+                    padding:12px 16px;margin-bottom:14px">
+          <span style="color:#f87171;font-weight:700;font-size:1.05em">
+            🚨 NBA MODEL SUSPENDED
+          </span>
+          <span style="color:#fca5a5;margin-left:10px;font-size:0.88em">
+            {_trigger_label} breached threshold &nbsp;·&nbsp;
+            n={_nba_stop.get('n')} plays &nbsp;·&nbsp;
+            ROI={_nba_stop.get('roi', 0):.1f}%
+          </span>
+          <div style="color:#fca5a5;font-size:0.80em;margin-top:6px">
+            No new plays issued until manually reset.
+            Run <code>python nba_reset_stop_rules.py --reason "..."</code> to clear.
+          </div>
+        </div>
+        """)
+
     # ── season accuracy panel ─────────────────────────────────────────────────
     if accuracy and accuracy.get("total_games", 0) > 0:
         overall   = accuracy.get("overall", {})
@@ -2782,6 +2808,32 @@ def main() -> None:
         # ── alerts (lineup changes + transactions) ────────────────────────────
         if data:
             _render_alerts(data)
+
+        # ── stop rule suspension banner ────────────────────────────────────────
+        _mlb_stop = (data or {}).get("stop_rule_status", {})
+        if _mlb_stop.get("suspended"):
+            _trigger_label = {
+                "tier_HIGH": "HIGH-confidence tier ROI",
+                "tier_MEDIUM": "MEDIUM-confidence tier ROI",
+                "full_model": "Full model ROI",
+            }.get(_mlb_stop.get("trigger", ""), "ROI")
+            st.html(f"""
+            <div style="background:#2d1515;border:2px solid #dc2626;border-radius:8px;
+                        padding:12px 16px;margin-bottom:14px">
+              <span style="color:#f87171;font-weight:700;font-size:1.05em">
+                🚨 MLB MODEL SUSPENDED
+              </span>
+              <span style="color:#fca5a5;margin-left:10px;font-size:0.88em">
+                {_trigger_label} breached threshold &nbsp;·&nbsp;
+                n={_mlb_stop.get('n')} plays &nbsp;·&nbsp;
+                ROI={_mlb_stop.get('roi', 0):.1f}%
+              </span>
+              <div style="color:#fca5a5;font-size:0.80em;margin-top:6px">
+                No new plays issued until manually reset.
+                Run <code>python mlb_reset_stop_rules.py --reason "..."</code> to clear.
+              </div>
+            </div>
+            """)
 
         # ── no data state ─────────────────────────────────────────────────────
         if data is None:

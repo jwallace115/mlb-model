@@ -201,10 +201,11 @@ def init_db() -> None:
         #                  positive = we beat the closing line (sharp)
         # snapshot_source: where closing_line came from
         for col, coltype in [
-            ("closing_line",    "REAL"),
-            ("clv_raw",         "REAL"),
-            ("clv_directional", "REAL"),
-            ("snapshot_source", "TEXT"),
+            ("closing_line",         "REAL"),
+            ("clv_raw",              "REAL"),
+            ("clv_directional",      "REAL"),
+            ("snapshot_source",      "TEXT"),
+            ("decision_line_source", "TEXT"),  # 'real' when line came from live Odds API snapshot
         ]:
             try:
                 conn.execute(f"ALTER TABLE graded_results ADD COLUMN {col} {coltype}")

@@ -324,6 +324,16 @@ def main():
     payload["transactions"] = transactions
     payload["mlb_clv_summary"] = build_mlb_clv_summary()
 
+    # Stop rules — evaluated after grading so today's results are reflected
+    try:
+        from mlb_stop_rules import evaluate_mlb_stop_rules
+        payload["stop_rule_status"] = evaluate_mlb_stop_rules()
+        if payload["stop_rule_status"].get("suspended"):
+            print(f"[push_results] MLB STOP RULE ACTIVE: {payload['stop_rule_status']}")
+    except Exception as e:
+        print(f"[push_results] MLB stop rule evaluation failed (non-fatal): {e}", file=sys.stderr)
+        payload["stop_rule_status"] = {"suspended": False}
+
     with open(results_path, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_results] Wrote {results_path}")

@@ -654,6 +654,17 @@ def write_nba_json(game_date: str = None) -> str:
     clv_summary        = build_clv_summary()
     payload = serialize(game_date, games, accuracy, recent_results,
                         ot_diagnostics, playoff_performance, clv_summary)
+
+    # Stop rules
+    try:
+        from nba_stop_rules import evaluate_nba_stop_rules
+        payload["stop_rule_status"] = evaluate_nba_stop_rules()
+        if payload["stop_rule_status"].get("suspended"):
+            print(f"[push_nba] NBA STOP RULE ACTIVE: {payload['stop_rule_status']}")
+    except Exception as e:
+        print(f"[push_nba] NBA stop rule evaluation failed (non-fatal): {e}", file=sys.stderr)
+        payload["stop_rule_status"] = {"suspended": False}
+
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_nba] Wrote {OUT_PATH} ({len(games)} games)")
