@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-03-19T11:02:37.107491+00:00",
+  "game_date": "2026-03-19",
+  "model_description": "NFL Phase 8 \u2014 Conditional segment signals (dome+low, late season, no-move+low). Phase 1 totals model excluded.",
+  "model_status": "conditional_active",
+  "today_signals": [],
+  "recent_results": [],
+  "season_performance": {
+    "total_games": 0
+  },
+  "stop_rule_status": {
+    "model_suspended": false,
+    "suspended_tiers": [],
+    "overall_n": 0,
+    "overall_roi": null,
+    "tier_stats": {}
+  },
+  "oos_reference": {
+    "note": "Phase 1 baseline \u2014 OOS gate FAILED (51.1% hit rate, need 52.5%)",
+    "overall_hit": 0.511,
+    "overall_roi": -2.5,
+    "n_signals": 185,
+    "model_status": "not_deployed"
+  },
+  "conditional_signals": {
+    "today": [],
+    "recent_results": [],
+    "segment_performance": {},
+    "stop_rule_status": {
+      "model_suspended": false,
+      "suspended_segments": [],
+      "live_signals_total": 0
+    }
+  },
+  "daily_review": {
+    "generated_at": "2026-03-19T11:02:37.116918+00:00",
+    "date_reviewed": "2026-03-18",
+    "record_summary": {},
+    "narrative": null,
+    "generation_status": "no_games"
+  }
+}

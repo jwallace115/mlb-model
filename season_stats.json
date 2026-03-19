@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-18T11:00:04.055794Z",
+  "generated_at": "2026-03-19T11:00:08.372860Z",
   "is_spring_training": true,
-  "total_tracked": 100,
+  "total_tracked": 113,
   "total_plays": 12,
   "overall": {
     "wins": 0,
@@ -259,12 +259,12 @@
     }
   },
   "projection_accuracy": {
-    "tracked": 98,
-    "mae": 4.59,
-    "avg_bias": 1.63,
-    "within_1_run": 15.3,
-    "within_2_runs": 30.6,
-    "within_3_runs": 37.8,
+    "tracked": 110,
+    "mae": 4.6,
+    "avg_bias": 1.45,
+    "within_1_run": 13.6,
+    "within_2_runs": 29.1,
+    "within_3_runs": 37.3,
     "mae_by_stars": {
       "\u2b50\u2b50": 1.09,
       "\u2b50": 5.22,
@@ -286,6 +286,20 @@
       "temperature": 72.5,
       "wind_desc": "Blowing R to L",
       "park_factor": 0.95
+    },
+    {
+      "game_date": "2026-03-18",
+      "matchup": "CHC @ ARI",
+      "projected_total": 9.37,
+      "actual_total": 24.0,
+      "projection_error": 14.6,
+      "recommendation": "OVER",
+      "result": "NO_LINE",
+      "star_rating": "NO PLAY",
+      "confidence": "LOW",
+      "temperature": 88.8,
+      "wind_desc": "Blowing R to L",
+      "park_factor": 0.98
     },
     {
       "game_date": "2026-03-14",
@@ -398,20 +412,6 @@
       "temperature": 72.0,
       "wind_desc": "Blowing L to R",
       "park_factor": 1.04
-    },
-    {
-      "game_date": "2026-03-16",
-      "matchup": "WSN @ NYM",
-      "projected_total": 9.02,
-      "actual_total": 18.0,
-      "projection_error": 9.0,
-      "recommendation": "NEUTRAL",
-      "result": "NO_LINE",
-      "star_rating": "NO PLAY",
-      "confidence": "LOW",
-      "temperature": 54.7,
-      "wind_desc": "Blowing Out to CF",
-      "park_factor": 0.94
     }
   ],
   "props_record": {},
