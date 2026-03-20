@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-20T11:01:01.637499+00:00",
+  "generated_at": "2026-03-20T21:01:13.001040+00:00",
   "game_date": "2026-03-20",
   "is_playoff_day": false,
   "plays": [
@@ -11,14 +11,14 @@
       "game_time_et": "8:00 pm et",
       "pred_total": 199.51,
       "lean": "UNDER",
-      "p_over": 0.0461,
+      "p_over": 0.0444,
       "confidence": "HIGH",
       "line": 231.0,
       "edge": -31.49,
       "market_gap_flag": true,
       "pred_h1": 103.62,
       "h1_lean": "UNDER",
-      "h1_p_over": 0.2038,
+      "h1_p_over": 0.2067,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -37,7 +37,7 @@
       "b2b_flag_away": false,
       "home_injuries": [],
       "away_injuries": [],
-      "summary": "Both teams play at a deliberate pace \u2014 combined 96.8 possessions per 48 minutes, well below the league's 101.4 average. Model has 199.5, 31.5 pts below the 231.0 line \u2014 under. P(under) 95%, edge -31.5 pts. Note: model/market gap exceeds threshold \u2014 double-check the line."
+      "summary": "Both teams play at a deliberate pace \u2014 combined 96.8 possessions per 48 minutes, well below the league's 101.4 average. Model has 199.5, 31.5 pts below the 231.0 line \u2014 under. P(under) 96%, edge -31.5 pts. Note: model/market gap exceeds threshold \u2014 double-check the line."
     },
     {
       "game_date": "2026-03-20",
@@ -47,14 +47,14 @@
       "game_time_et": "7:30 pm et",
       "pred_total": 224.41,
       "lean": "OVER",
-      "p_over": 0.6919,
+      "p_over": 0.6879,
       "confidence": "HIGH",
       "line": 215.5,
       "edge": 8.91,
       "market_gap_flag": false,
       "pred_h1": 112.69,
       "h1_lean": "UNDER",
-      "h1_p_over": 0.4598,
+      "h1_p_over": 0.4721,
       "h1_confidence": "LOW",
       "h1_line": null,
       "h1_edge": null,
@@ -83,14 +83,14 @@
       "game_time_et": "7:30 pm et",
       "pred_total": 212.93,
       "lean": "UNDER",
-      "p_over": 0.4019,
+      "p_over": 0.405,
       "confidence": "MEDIUM",
       "line": 217.5,
       "edge": -4.57,
       "market_gap_flag": false,
       "pred_h1": 104.88,
       "h1_lean": "UNDER",
-      "h1_p_over": 0.2361,
+      "h1_p_over": 0.2369,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -119,14 +119,14 @@
       "game_time_et": "9:00 pm et",
       "pred_total": 231.97,
       "lean": "UNDER",
-      "p_over": 0.4133,
+      "p_over": 0.4043,
       "confidence": "MEDIUM",
       "line": 236.5,
       "edge": -4.53,
       "market_gap_flag": false,
       "pred_h1": 116.8,
       "h1_lean": "OVER",
-      "h1_p_over": 0.604,
+      "h1_p_over": 0.5905,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -145,7 +145,7 @@
       "b2b_flag_away": false,
       "home_injuries": [],
       "away_injuries": [],
-      "summary": "TOR is holding opponents to 109.3 points per 100 possessions \u2014 a top-tier defensive rating. Model has 232.0, 4.5 pts below the 236.5 line \u2014 under. P(under) 59%, edge -4.5 pts."
+      "summary": "TOR is holding opponents to 109.3 points per 100 possessions \u2014 a top-tier defensive rating. Model has 232.0, 4.5 pts below the 236.5 line \u2014 under. P(under) 60%, edge -4.5 pts."
     },
     {
       "game_date": "2026-03-20",
@@ -155,14 +155,14 @@
       "game_time_et": "8:00 pm et",
       "pred_total": 223.34,
       "lean": "UNDER",
-      "p_over": 0.4129,
+      "p_over": 0.4095,
       "confidence": "MEDIUM",
       "line": 227.5,
       "edge": -4.16,
       "market_gap_flag": false,
       "pred_h1": 112.62,
       "h1_lean": "UNDER",
-      "h1_p_over": 0.4593,
+      "h1_p_over": 0.4743,
       "h1_confidence": "LOW",
       "h1_line": null,
       "h1_edge": null,
@@ -182,9 +182,7 @@
       "home_injuries": [],
       "away_injuries": [],
       "summary": "HOU (111.8 DRtg) and ATL (108.4 DRtg) are both elite defensively \u2014 combined, they're suppressing 110.1 points per 100 possessions. Model has 223.3, 4.2 pts below the 227.5 line \u2014 under. P(under) 59%, edge -4.2 pts."
-    }
-  ],
-  "no_plays": [
+    },
     {
       "game_date": "2026-03-20",
       "game_id": "0022501019",
@@ -193,14 +191,14 @@
       "game_time_et": "8:00 pm et",
       "pred_total": 226.05,
       "lean": "UNDER",
-      "p_over": 0.4532,
-      "confidence": "LOW",
+      "p_over": 0.4472,
+      "confidence": "MEDIUM",
       "line": 228.5,
       "edge": -2.45,
       "market_gap_flag": false,
       "pred_h1": 114.91,
       "h1_lean": "OVER",
-      "h1_p_over": 0.5459,
+      "h1_p_over": 0.5407,
       "h1_confidence": "LOW",
       "h1_line": null,
       "h1_edge": null,
@@ -219,9 +217,10 @@
       "b2b_flag_away": false,
       "home_injuries": [],
       "away_injuries": [],
-      "summary": "Model has 226.1, market is at 228.5 \u2014 only 2.5 pts of separation. Not enough edge to act on."
+      "summary": "BOS is holding opponents to 107.7 points per 100 possessions \u2014 a top-tier defensive rating. Model has 226.1, 2.5 pts below the 228.5 line \u2014 under. P(under) 55%, edge -2.5 pts."
     }
   ],
+  "no_plays": [],
   "season_accuracy": {
     "total_games": 42,
     "overall": {
@@ -809,33 +808,5 @@
       "roi": null,
       "triggered_at": null
     }
-  },
-  "daily_review": {
-    "generated_at": "2026-03-20T11:01:20.351217+00:00",
-    "date_reviewed": "2026-03-19",
-    "record_summary": {
-      "HIGH": {
-        "w": 3,
-        "l": 1,
-        "p": 0
-      },
-      "MEDIUM": {
-        "w": 0,
-        "l": 2,
-        "p": 0
-      },
-      "LOW": {
-        "w": 0,
-        "l": 2,
-        "p": 0
-      },
-      "overall": {
-        "w": 3,
-        "l": 5,
-        "p": 0
-      }
-    },
-    "narrative": "## Rough Night: 3-5 Record with Three Brutal Misses\n\nThe model salvaged a 3-1 high confidence record, but three massive projection errors\u2014all 20+ points off\u2014turned what could've been a solid night into a -28.4% ROI disaster.\n\n## HIGH CONFIDENCE: 3-1, Saved by Two Sharp Unders\n\nThe tier went 3-1, but that one loss was ugly. **Detroit-Washington** projected 236.8 and landed at 212\u2014a 24.8-point miss on the over. Washington came in with a defense allowing 122 points per 100 possessions, but the game crawled to a pace well below the projected 103+ possessions, and Detroit's offense (114.6 efficiency) never got rolling. When the worst defense in the sample holds serve, something went sideways in-game.\n\nThe wins were clean: **Cleveland-Chicago under** hit comfortably at 225, and **Milwaukee-Utah under** came through at 224 despite projecting 217.5. **Sacramento-Philadelphia over** was the gem\u2014projected 235.6, sailed to 257. Both teams were leaking points defensively (Philadelphia at 116.5, Sacramento at 117.8), and the game delivered exactly what the data suggested.\n\n## MEDIUM CONFIDENCE: 0-2, Two Disasters\n\nBoth plays lost, and both were catastrophic misses. **Miami-Lakers** projected 237.1 and exploded to 260\u2014a 22.9-point gap. The pregame setup showed both teams with elite offensive efficiency (117+) and shaky defense, but even accounting for that, something broke. Did the pace spike beyond the projected 102 possessions? Did both teams shoot lights-out? The data supported an over lean, but the model still undershot by nearly a full quarter's worth of scoring.\n\n**Phoenix-San Antonio** was worse: projected 230.8, finished at 201\u2014a staggering 29.8-point miss. San Antonio came in scoring at an elite rate (120.2 efficiency), but the game died. Phoenix's slow pace (96.8) apparently dominated, or this turned into a grind-it-out defensive slog that the simulation never saw coming.\n\n## LOW CONFIDENCE: 0-2\n\nBoth plays lost. No edge here.\n\n## WHAT TO WATCH\n\nThree 20+ point misses in one night suggests the pace projections may be off when extreme pace differentials collide. The Phoenix-San Antonio crater (fast team meets slow team) is the clearest red flag.",
-    "generation_status": "success"
   }
 }
