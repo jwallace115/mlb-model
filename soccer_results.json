@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-21T16:00:17.626773+00:00",
-  "last_updated": "2026-03-21 16:00 UTC",
+  "generated_at": "2026-03-21T21:02:29.052660+00:00",
+  "last_updated": "2026-03-21 21:02 UTC",
   "pipeline_run_date": "2026-03-21",
   "signals_source": "live",
   "game_date": "2026-03-21",
@@ -20,7 +20,7 @@
       "confidence_tier": "HIGH",
       "model_total": 6.3,
       "market_move_to_over_2_5": 0.0,
-      "lineup_confirmed": false,
+      "lineup_confirmed": true,
       "market_fair_p_over_2_5": 0.5089514066496164,
       "over_price": 1.92,
       "under_price": 1.99,
@@ -181,7 +181,7 @@
       "market_line_1_5": null,
       "market_implied_p_1_5": null,
       "edge_1_5": null,
-      "lineup_confirmed": false
+      "lineup_confirmed": true
     }
   ],
   "suggested_parlay": {
@@ -205,7 +205,7 @@
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-03-21T16:00:17.634053+00:00",
+    "generated_at": "2026-03-21T21:02:29.057610+00:00",
     "date_reviewed": "2026-03-20",
     "record_summary": {},
     "narrative": null,
