@@ -677,6 +677,53 @@ def _flag_shot_profile(game_results: list[dict], game_date: str) -> None:
                     f"({g['shot_signal']}) [{g.get('signal_class', '')}]")
 
 
+# ── Venue interaction detection (Board 4) ────────────────────────────────────
+
+# ROAD_WARRIOR @ STRONG_HOME → OVER (+4.8 pts, p<0.0001, N=427)
+# Confirmed 2024-25: +5.9 pts (p=0.001, N=114)
+# Market gap: 3.6 pts unexplained
+
+_ROAD_WARRIOR = {"BKN", "CHI", "DAL", "DET", "GSW", "HOU", "NYK", "PHI", "PHX", "UTA"}
+_STRONG_HOME = {"DEN", "IND", "LAL", "MIL", "NOP", "OKC", "POR", "SAS"}
+
+
+def _flag_venue_signal(game_results: list[dict], game_date: str) -> None:
+    """Flag ROAD_WARRIOR @ STRONG_HOME → OVER signal (Board 4)."""
+    for g in game_results:
+        away = g.get("away_team", "")
+        home = g.get("home_team", "")
+        g["venue_signal"] = None
+        g["venue_direction"] = None
+        g["venue_note"] = None
+
+        if away in _ROAD_WARRIOR and home in _STRONG_HOME:
+            g["venue_signal"] = "ROAD_WARRIOR_at_STRONG_HOME"
+            g["venue_direction"] = "OVER"
+            g["venue_note"] = "road warrior maintains output + home boost (+4.8 pts hist)"
+            logger.info(f"  🏟️ VENUE: {away} @ {home} → OVER (road warrior @ strong home)")
+
+        # Recompute combined classification with all three boards
+        pace_dir = g.get("archetype_direction")
+        shot_dir = g.get("shot_direction") if g.get("shot_direction") != "CONFLICT" else None
+        venue_dir = g.get("venue_direction")
+
+        directions = [d for d in [pace_dir, shot_dir, venue_dir] if d]
+        unique_dirs = set(directions)
+
+        if len(directions) >= 3 and len(unique_dirs) == 1:
+            g["signal_class"] = "TRIPLE_SIGNAL"
+        elif len(directions) >= 2 and len(unique_dirs) == 1:
+            g["signal_class"] = "DOUBLE_SIGNAL"
+        elif len(directions) >= 2 and len(unique_dirs) > 1:
+            g["signal_class"] = "CONFLICT"
+        elif len(directions) == 1:
+            if pace_dir: g["signal_class"] = "PACE_ONLY"
+            elif shot_dir: g["signal_class"] = "SHOT_ONLY"
+            elif venue_dir: g["signal_class"] = "VENUE_ONLY"
+        elif not g.get("signal_class"):
+            g["signal_class"] = "NO_SIGNAL"
+
+
 # ── Print NBA card ────────────────────────────────────────────────────────────
 
 def print_nba_card(game_results: list[dict], game_date: str) -> None:
@@ -1262,6 +1309,9 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
 
     # ── Step 8c: Shot profile matchup flags ──────────────────────────────────
     _flag_shot_profile(game_results, game_date)
+
+    # ── Step 8d: Venue interaction flags (Board 4) ───────────────────────────
+    _flag_venue_signal(game_results, game_date)
 
     # ── Step 9: Print card ────────────────────────────────────────────────────
     print_nba_card(game_results, game_date)

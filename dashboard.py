@@ -2527,6 +2527,17 @@ def _render_nba_card(g: dict) -> None:
             f'</div>'
         )
 
+    # Venue signal badge
+    venue_html = ""
+    if g.get("venue_signal"):
+        venue_note = g.get("venue_note", "")
+        venue_html = (
+            f'<div style="font-size:0.82em;color:#fb923c;margin-top:4px;'
+            f'padding:4px 8px;background:#431407;border-radius:4px;border:1px solid #ea580c">'
+            f'🏟️ VENUE: OVER — {venue_note}'
+            f'</div>'
+        )
+
     summary_html = f'<div class="card-summary">{summary}</div>' if summary else ""
 
     st.html(
@@ -2539,6 +2550,7 @@ def _render_nba_card(g: dict) -> None:
         f'{warn_html}'
         f'{arch_html}'
         f'{shot_html}'
+        f'{venue_html}'
         f'{summary_html}'
         f'</div>'
     )
@@ -2995,25 +3007,60 @@ def _render_nba_tab() -> None:
         all_games = plays + no_plays
         shot_games = [g for g in all_games if g.get("shot_signal")]
         pace_games = [g for g in all_games if g.get("archetype_signal")]
+        venue_games = [g for g in all_games if g.get("venue_signal")]
+        triple_games = [g for g in all_games if g.get("signal_class") == "TRIPLE_SIGNAL"]
         double_games = [g for g in all_games if g.get("signal_class") == "DOUBLE_SIGNAL"]
         conflict_games = [g for g in all_games if g.get("signal_class") == "CONFLICT"]
 
-        if shot_games or pace_games:
+        if shot_games or pace_games or venue_games:
             st.html('<div class="section-hdr" style="margin-top:16px">Matchup Signal Boards</div>')
+
+            if triple_games:
+                st.html('<div style="font-size:0.85em;color:#fbbf24;padding:4px 0;font-weight:600">'
+                        'TRIPLE SIGNAL (maximum confidence)</div>')
+                for g in triple_games:
+                    matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
+                    d = g.get("venue_direction", g.get("shot_direction", g.get("archetype_direction","")))
+                    line = g.get("line")
+                    line_str = "Total: %.1f" % line if line else ""
+                    st.html(
+                        f'<div style="padding:4px 8px;margin:2px 0;background:#451a03;border-radius:4px;'
+                        f'border:1px solid #d97706;font-size:0.82em;color:#fef3c7">'
+                        f'<strong>{matchup}</strong> — {d} {line_str} '
+                        f'(pace + shot + venue all agree)</div>')
 
             if double_games:
                 st.html('<div style="font-size:0.85em;color:#34d399;padding:4px 0;font-weight:600">'
-                        'STACKED SIGNALS (highest confidence)</div>')
+                        'STACKED SIGNALS (high confidence)</div>')
                 for g in double_games:
                     matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
-                    d = g.get("shot_direction", g.get("archetype_direction",""))
+                    d = g.get("shot_direction", g.get("archetype_direction", g.get("venue_direction","")))
                     line = g.get("line")
                     line_str = "Total: %.1f" % line if line else ""
+                    boards = []
+                    if g.get("archetype_direction"): boards.append("pace")
+                    if g.get("shot_direction") and g.get("shot_direction") != "CONFLICT": boards.append("shot")
+                    if g.get("venue_direction"): boards.append("venue")
                     st.html(
                         f'<div style="padding:4px 8px;margin:2px 0;background:#064e3b;border-radius:4px;'
                         f'border:1px solid #059669;font-size:0.82em;color:#d1fae5">'
                         f'<strong>{matchup}</strong> — {d} {line_str} '
-                        f'(pace + shot agree)</div>')
+                        f'({" + ".join(boards)} agree)</div>')
+
+            if venue_games:
+                st.html('<div style="font-size:0.85em;color:#fb923c;padding:4px 0;font-weight:600;margin-top:8px">'
+                        'Board 4 — Venue Interaction</div>')
+                for g in venue_games:
+                    matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
+                    note = g.get("venue_note","")
+                    cls = g.get("signal_class","VENUE_ONLY")
+                    line = g.get("line")
+                    line_str = " · Total: %.1f" % line if line else ""
+                    cls_tag = {"TRIPLE_SIGNAL":"🥇","DOUBLE_SIGNAL":"🟢","CONFLICT":"🟡","VENUE_ONLY":"🏟️"}.get(cls,"🏟️")
+                    st.html(
+                        f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#fed7aa;'
+                        f'border-left:3px solid #ea580c">'
+                        f'{cls_tag} {matchup} — <strong>OVER</strong>{line_str} · {note}</div>')
 
             if shot_games:
                 st.html('<div style="font-size:0.85em;color:#a5b4fc;padding:4px 0;font-weight:600;margin-top:8px">'
@@ -3025,7 +3072,7 @@ def _render_nba_tab() -> None:
                     cls = g.get("signal_class","SHOT_ONLY")
                     line = g.get("line")
                     line_str = " · Total: %.1f" % line if line else ""
-                    cls_tag = {"DOUBLE_SIGNAL":"🟢 DOUBLE","CONFLICT":"🟡 CONFLICT","SHOT_ONLY":"🔵 SHOT"}.get(cls, "")
+                    cls_tag = {"TRIPLE_SIGNAL":"🥇","DOUBLE_SIGNAL":"🟢","CONFLICT":"🟡","SHOT_ONLY":"🔵"}.get(cls,"")
                     st.html(
                         f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#c7d2fe;'
                         f'border-left:3px solid #6366f1">'
