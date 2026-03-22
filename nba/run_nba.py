@@ -747,6 +747,139 @@ def _flag_venue_signal(game_results: list[dict], game_date: str) -> None:
                 g["bet_tier"] = None
 
 
+# ── Playoff signal boards ─────────────────────────────────────────────────────
+# Stable across 3 seasons (2022-23 through 2024-25).
+# These are structural playoff dynamics independent of team archetypes.
+
+_PLAYOFF_BOARD_DEFS = {
+    "P1": {
+        "name": "R1 Early UNDER",
+        "direction": "UNDER",
+        "sizing": 1.0,
+        "edge_hist": -6.82,
+        "seasons": "-3.94 / -10.41 / -6.12",
+        "mechanism": "Books anchor on RS output; both teams play conservative defense to start series",
+    },
+    "P2": {
+        "name": "R1 Late OVER",
+        "direction": "OVER",
+        "sizing": 0.75,
+        "edge_hist": 8.19,
+        "seasons": "+6.40 / +4.85 / +12.86",
+        "mechanism": "Survival desperation + pace opens up; both teams fully adjusted and attacking",
+    },
+    "P4": {
+        "name": "CF Non-Elim OVER",
+        "direction": "OVER",
+        "sizing": 0.75,
+        "edge_hist": 9.85,
+        "seasons": "+11.33 / +13.75 / +14.06",
+        "mechanism": "Best offensive teams in conference before full defensive adjustments lock in",
+    },
+}
+
+
+def _flag_playoff_boards(game_results: list[dict], game_date: str) -> None:
+    """
+    Flag playoff games matching structural signal boards.
+    Also pauses regular-season signals that reverse in playoffs.
+    """
+    for g in game_results:
+        g["playoff_board"] = None
+        g["playoff_board_direction"] = None
+        g["playoff_board_sizing"] = None
+        g["playoff_board_note"] = None
+        g["finals_modifier"] = False
+        g["playoff_venue_paused"] = False
+        g["playoff_shot_under_paused"] = False
+
+        if not g.get("is_playoff"):
+            continue
+
+        rnd = g.get("playoff_round", "")
+        sgn = g.get("series_game_number")
+        elim_any = g.get("elimination_game_any", 0)
+
+        # ── P1: Round 1, Games 1-2 → UNDER ──────────────────────────
+        if rnd == "First Round" and sgn is not None and sgn <= 2:
+            g["playoff_board"] = "P1"
+            g["playoff_board_direction"] = "UNDER"
+            g["playoff_board_sizing"] = 1.0
+            g["playoff_board_note"] = (
+                "R1 G1-2 UNDER — market anchors on RS totals; "
+                "playoff defensive intensity not yet priced (−6.82 avg, 3/3 seasons)"
+            )
+            logger.info(f"  🏆 PLAYOFF P1: {g['away_team']} @ {g['home_team']} → UNDER 1.0u (R1 G{sgn})")
+
+        # ── P2: Round 1, Games 5-7 → OVER ───────────────────────────
+        elif rnd == "First Round" and sgn is not None and sgn >= 5:
+            g["playoff_board"] = "P2"
+            g["playoff_board_direction"] = "OVER"
+            g["playoff_board_sizing"] = 0.75
+            g["playoff_board_note"] = (
+                "R1 G5-7 OVER — desperation scoring opens pace; "
+                "books overcorrect toward defensive totals (+8.19 avg, 3/3 seasons)"
+            )
+            logger.info(f"  🏆 PLAYOFF P2: {g['away_team']} @ {g['home_team']} → OVER 0.75u (R1 G{sgn})")
+
+        # ── P4: CF Non-Elim G1-4 → OVER ─────────────────────────────
+        elif rnd == "Conference Finals" and sgn is not None and sgn <= 4 and elim_any == 0:
+            g["playoff_board"] = "P4"
+            g["playoff_board_direction"] = "OVER"
+            g["playoff_board_sizing"] = 0.75
+            g["playoff_board_note"] = (
+                "CF Non-Elim OVER — elite offenses before defensive adjustments lock in "
+                "(+9.85 avg, 3/3 seasons, 80% hit rate)"
+            )
+            logger.info(f"  🏆 PLAYOFF P4: {g['away_team']} @ {g['home_team']} → OVER 0.75u (CF G{sgn})")
+
+        # ── Finals modifier: reduce OVER sizing by 0.25u ─────────────
+        if rnd == "NBA Finals":
+            g["finals_modifier"] = True
+            if g["playoff_board"] and g.get("playoff_board_direction") == "OVER":
+                g["playoff_board_sizing"] = max(0, g["playoff_board_sizing"] - 0.25)
+            # Note for display even if no board triggered
+            if not g["playoff_board"]:
+                g["playoff_board_note"] = (
+                    "Finals UNDER modifier — 82.4% of Finals games go UNDER "
+                    "(−11.29 avg, N=17). Reduce any OVER sizing by 0.25u."
+                )
+            logger.info(f"  🏆 FINALS MODIFIER: {g['away_team']} @ {g['home_team']} — reduce OVER by 0.25u")
+
+        # ── Pause RS signals that reverse in playoffs ─────────────────
+        # Venue OVER reverses (ME flips from +6.28 RS to -5.04 PO)
+        if g.get("venue_direction") == "OVER":
+            g["playoff_venue_paused"] = True
+            g["venue_direction"] = None
+            g["venue_signal"] = None
+            g["venue_note"] = "Venue OVER PAUSED in playoffs (reverses to UNDER)"
+            logger.info(f"  ⚠️ Venue OVER paused for {g['away_team']} @ {g['home_team']} (playoff)")
+
+        # Shot UNDER reverses (ME flips from +1.35 RS to -0.47 PO)
+        if g.get("shot_direction") == "UNDER":
+            g["playoff_shot_under_paused"] = True
+            g["shot_direction"] = None
+            g["shot_signal"] = None
+            g["shot_note"] = "Shot UNDER PAUSED in playoffs (reverses)"
+
+        # Recalculate bet_tier and confidence for playoff games
+        # Playoff boards take priority over RS signal tiers
+        if g["playoff_board"]:
+            g["bet_tier"] = g["playoff_board"]
+            g["confidence"] = CONF_HIGH
+        elif g.get("is_playoff"):
+            # RS signals that HOLD in playoffs: Shot OVER, Pace UNDER
+            # These keep their existing tier from _flag_venue_signal
+            # But venue OVER and shot UNDER were already cleared above
+            bt = g.get("bet_tier")
+            if bt in ("TIER_1", "TIER_2"):
+                # Check if this was venue-driven (now paused)
+                if g.get("playoff_venue_paused"):
+                    g["bet_tier"] = None
+                    g["confidence"] = CONF_LOW
+            # Keep other tiers as-is (Shot OVER still valid)
+
+
 # ── Print NBA card ────────────────────────────────────────────────────────────
 
 def print_nba_card(game_results: list[dict], game_date: str) -> None:
@@ -908,6 +1041,11 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             "away_pts_rolling_series":   g.get("away_pts_rolling_series"),
             "playoff_days_rest_home":    g.get("playoff_days_rest_home"),
             "playoff_days_rest_away":    g.get("playoff_days_rest_away"),
+            # Playoff signal boards (Step 8f)
+            "playoff_board":             g.get("playoff_board"),
+            "playoff_board_direction":   g.get("playoff_board_direction"),
+            "playoff_board_sizing":      g.get("playoff_board_sizing"),
+            "finals_modifier":           g.get("finals_modifier", False),
         })
 
     new_df = pd.DataFrame(rows)
@@ -1348,6 +1486,15 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
         else:
             # No signal tier → demote to LOW (no play)
             g["confidence"] = CONF_LOW
+
+    # ── Step 8f: Playoff signal boards ───────────────────────────────────────
+    # Three stable playoff boards (3/3 seasons consistent):
+    #   P1: R1 Games 1-2 → UNDER (1.0u)   ME=-6.82, p=0.007
+    #   P2: R1 Games 5-7 → OVER (0.75u)   ME=+8.19, p=0.012
+    #   P4: CF Non-Elim G1-4 → OVER (0.75u) ME=+9.85, p=0.020
+    # Modifier: Finals → reduce OVER sizing by 0.25u
+    # Paused in playoffs: Venue OVER, Shot UNDER
+    _flag_playoff_boards(game_results, game_date)
 
     # ── Step 9: Print card ────────────────────────────────────────────────────
     print_nba_card(game_results, game_date)

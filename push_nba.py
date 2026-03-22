@@ -99,6 +99,20 @@ def load_today_projections(game_date: str) -> list[dict]:
                 "oreb_confirms": bool(r.get("oreb_confirms", False)),
                 "bet_tier": r.get("bet_tier"),
                 "signal_class": r.get("signal_class"),
+                # Playoff signal boards
+                "is_playoff": bool(r.get("is_playoff", False)),
+                "playoff_round": r.get("playoff_round"),
+                "series_game_number": _safe(r.get("series_game_number")),
+                "playoff_board": r.get("playoff_board"),
+                "playoff_board_direction": r.get("playoff_board_direction"),
+                "playoff_board_sizing": _safe(r.get("playoff_board_sizing")),
+                "playoff_board_note": r.get("playoff_board_note"),
+                "finals_modifier": bool(r.get("finals_modifier", False)),
+                "playoff_venue_paused": bool(r.get("playoff_venue_paused", False)),
+                "playoff_shot_under_paused": bool(r.get("playoff_shot_under_paused", False)),
+                "home_series_wins": _safe(r.get("home_series_wins")),
+                "away_series_wins": _safe(r.get("away_series_wins")),
+                "elimination_game_any": _safe(r.get("elimination_game_any")),
             })
         print(f"[push_nba] Loaded {len(rows)} projections for {game_date}")
         return rows
@@ -638,12 +652,12 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
     for g in games:
         g["summary"] = generate_nba_summary(g)
 
-    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1", "TIER_2", "TIER_3")]
+    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1", "TIER_2", "TIER_3", "P1", "P2", "P4")]
     no_plays = [g for g in games if g not in plays]
 
-    # Sort plays: Tier 1 first, then 2, then 3
+    # Sort plays: Playoff boards first, then RS tiers
     def _sort_key(g):
-        tier_order = {"TIER_1": 0, "TIER_2": 1, "TIER_3": 2}
+        tier_order = {"P1": 0, "P2": 0, "P4": 0, "TIER_1": 1, "TIER_2": 2, "TIER_3": 3}
         return tier_order.get(g.get("bet_tier", ""), 9)
 
     plays.sort(key=_sort_key)

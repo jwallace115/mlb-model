@@ -2348,6 +2348,10 @@ def _nba_tier_badge(tier: str) -> str:
         "TIER_3": ("background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f6", "TIER 3 · 0.75u"),
         "CONTEXT": ("background:#1f2937;color:#9ca3af;border:1px solid #4b5563", "CONTEXT · 0u"),
         "PASS": ("background:#451a03;color:#fbbf24;border:1px solid #d97706", "CONFLICT"),
+        # Playoff signal boards
+        "P1": ("background:#1a2433;color:#60a5fa;border:1px solid #3b82f6", "🏆 P1 · 1.0u"),
+        "P2": ("background:#422006;color:#fbbf24;border:1px solid #d97706", "🏆 P2 · 0.75u"),
+        "P4": ("background:#422006;color:#fbbf24;border:1px solid #d97706", "🏆 P4 · 0.75u"),
     }
     style, label = styles.get(tier, ("background:#1f2937;color:#6b7280", tier or "—"))
     return f'<span style="padding:2px 8px;border-radius:4px;font-size:0.75em;font-weight:600;{style}">{label}</span>'
@@ -2383,14 +2387,16 @@ def _render_nba_card(g: dict) -> None:
     h1_conf = g.get("h1_confidence")
 
     # Use tier system instead of HIGH/MEDIUM/LOW
-    is_play = bet_tier in ("TIER_1", "TIER_2", "TIER_3")
-    conf_star = {"TIER_1": "star3", "TIER_2": "star2", "TIER_3": "star2"}.get(bet_tier, "noplay")
+    is_play = bet_tier in ("TIER_1", "TIER_2", "TIER_3", "P1", "P2", "P4")
+    conf_star = {"TIER_1": "star3", "TIER_2": "star2", "TIER_3": "star2",
+                 "P1": "star3", "P2": "star2", "P4": "star2"}.get(bet_tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
 
     matchup   = f"{away} @ {home}"
 
     # Determine lean from signal direction, not base model
-    signal_dir = g.get("venue_direction") or g.get("shot_direction") or lean
+    # Playoff boards take priority
+    signal_dir = g.get("playoff_board_direction") or g.get("venue_direction") or g.get("shot_direction") or lean
     lean_html = _nba_lean_badge(signal_dir) if signal_dir and signal_dir not in ("—", "", "CONFLICT") else ""
 
     header = (
@@ -2444,7 +2450,24 @@ def _render_nba_card(g: dict) -> None:
     proj_parts = []
     bet_tier = g.get("bet_tier")
 
-    if bet_tier in ("TIER_1", "TIER_2", "TIER_3"):
+    if bet_tier in ("P1", "P2", "P4"):
+        # Playoff board play
+        po_labels = {
+            "P1": ("R1 Early UNDER · 1.0u", "#60a5fa"),
+            "P2": ("R1 Late OVER · 0.75u", "#fbbf24"),
+            "P4": ("CF Early OVER · 0.75u", "#fbbf24"),
+        }
+        po_label, po_color = po_labels.get(bet_tier, (bet_tier, "#a3a3a3"))
+        po_sizing = g.get("playoff_board_sizing", 0)
+        if g.get("finals_modifier") and po_sizing != po_labels.get(bet_tier, (None, None))[0]:
+            po_label = f"{po_label} (Finals −0.25u)"
+        proj_parts.append(f'<span style="color:{po_color};font-weight:600">🏆 {po_label}</span>')
+        if line is not None:
+            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}</span>')
+        sgn = g.get("series_game_number")
+        if sgn:
+            proj_parts.append(f'<span class="proj-label">Game</span> <span class="proj-val">{sgn}</span>')
+    elif bet_tier in ("TIER_1", "TIER_2", "TIER_3"):
         # Signal-driven play — show tier, direction, and line
         tier_labels = {"TIER_1": "Tier 1 · 1.5u", "TIER_2": "Tier 2 · 1.0u", "TIER_3": "Tier 3 · 0.75u"}
         tier_colors = {"TIER_1": "#fbbf24", "TIER_2": "#fb923c", "TIER_3": "#93c5fd"}
@@ -2539,6 +2562,46 @@ def _render_nba_card(g: dict) -> None:
             f'</div>'
         )
 
+    # Playoff signal board badge
+    playoff_board_html = ""
+    po_board = g.get("playoff_board")
+    if po_board:
+        po_dir = g.get("playoff_board_direction", "")
+        po_sizing = g.get("playoff_board_sizing", 0)
+        po_note = g.get("playoff_board_note", "")
+        po_color = "#60a5fa" if po_dir == "UNDER" else "#fbbf24"
+        po_bg = "#1a2433" if po_dir == "UNDER" else "#422006"
+        po_border = "#3b82f6" if po_dir == "UNDER" else "#d97706"
+        playoff_board_html = (
+            f'<div style="font-size:0.82em;color:{po_color};margin-top:4px;'
+            f'padding:6px 10px;background:{po_bg};border-radius:4px;border:1px solid {po_border}">'
+            f'🏆 <strong>PLAYOFF {po_board}: {po_dir} {po_sizing}u</strong>'
+            f'<div style="font-size:0.90em;color:#94a3b8;margin-top:2px">{po_note}</div>'
+            f'</div>'
+        )
+    elif g.get("finals_modifier"):
+        playoff_board_html = (
+            f'<div style="font-size:0.82em;color:#60a5fa;margin-top:4px;'
+            f'padding:4px 8px;background:#1a2433;border-radius:4px;border:1px solid #3b82f6">'
+            f'🏆 Finals UNDER modifier — reduce any OVER by 0.25u'
+            f'</div>'
+        )
+
+    # Paused RS signals in playoffs
+    paused_html = ""
+    if g.get("playoff_venue_paused"):
+        paused_html += (
+            f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px;font-style:italic">'
+            f'Venue OVER PAUSED in playoffs (reverses to UNDER historically)'
+            f'</div>'
+        )
+    if g.get("playoff_shot_under_paused"):
+        paused_html += (
+            f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px;font-style:italic">'
+            f'Shot UNDER PAUSED in playoffs (reverses historically)'
+            f'</div>'
+        )
+
     summary_html = f'<div class="card-summary">{summary}</div>' if summary else ""
 
     st.html(
@@ -2552,6 +2615,8 @@ def _render_nba_card(g: dict) -> None:
         f'{arch_html}'
         f'{shot_html}'
         f'{venue_html}'
+        f'{playoff_board_html}'
+        f'{paused_html}'
         f'{summary_html}'
         f'</div>'
     )
@@ -2634,6 +2699,13 @@ def _render_nba_tab() -> None:
               <span style="color:#94a3b8;margin-left:8px">
                 Series context features engage from Game 2 onward · σ = 15.5 pts (playoff) · v1_2026_04
               </span>
+              <div style="margin-top:6px;font-size:0.92em;color:#cbd5e1">
+                <strong>Active Playoff Boards:</strong>
+                <span style="color:#60a5fa">P1 R1 G1-2 UNDER 1.0u</span> ·
+                <span style="color:#fbbf24">P2 R1 G5-7 OVER 0.75u</span> ·
+                <span style="color:#fbbf24">P4 CF G1-4 OVER 0.75u</span>
+                <span style="color:#6b7280;margin-left:6px">| Venue OVER + Shot UNDER paused</span>
+              </div>
             </div>
             """)
 
