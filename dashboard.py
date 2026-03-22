@@ -2340,16 +2340,31 @@ def _render_soccer_tab() -> None:
         _render_review_tab("soccer", {"daily_review": soccer.get("daily_review"), "weekly_review": soccer.get("weekly_review")})
 
 
+def _nba_tier_badge(tier: str) -> str:
+    """Render tier badge for NBA signal system."""
+    styles = {
+        "TIER_1": ("background:#451a03;color:#fbbf24;border:1px solid #d97706", "TIER 1 · 1.5u"),
+        "TIER_2": ("background:#431407;color:#fb923c;border:1px solid #ea580c", "TIER 2 · 1.0u"),
+        "TIER_3": ("background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f6", "TIER 3 · 0.75u"),
+        "CONTEXT": ("background:#1f2937;color:#9ca3af;border:1px solid #4b5563", "CONTEXT · 0u"),
+        "PASS": ("background:#451a03;color:#fbbf24;border:1px solid #d97706", "CONFLICT"),
+    }
+    style, label = styles.get(tier, ("background:#1f2937;color:#6b7280", tier or "—"))
+    return f'<span style="padding:2px 8px;border-radius:4px;font-size:0.75em;font-weight:600;{style}">{label}</span>'
+
+
 def _nba_conf_badge(conf: str) -> str:
+    """Legacy conf badge — still used by other code paths."""
     c = (conf or "LOW").upper()
     return f'<span class="conf-badge conf-{c}">{c.lower()}</span>'
 
 
 def _render_nba_card(g: dict) -> None:
-    """Render a single NBA game card matching the MLB card visual style."""
+    """Render a single NBA game card."""
     home    = g.get("home_team", "")
     away    = g.get("away_team", "")
     conf    = g.get("confidence", "LOW")
+    bet_tier = g.get("bet_tier")
     lean    = g.get("lean", "")
     pred    = g.get("pred_total")
     line    = g.get("line")
@@ -2367,16 +2382,20 @@ def _render_nba_card(g: dict) -> None:
     h1_edge = g.get("h1_edge")
     h1_conf = g.get("h1_confidence")
 
-    is_play = conf in ("HIGH", "MEDIUM")
-    conf_star = {"HIGH": "star3", "MEDIUM": "star2"}.get(conf, "noplay")
+    # Use tier system instead of HIGH/MEDIUM/LOW
+    is_play = bet_tier in ("TIER_1", "TIER_2", "TIER_3")
+    conf_star = {"TIER_1": "star3", "TIER_2": "star2", "TIER_3": "star2"}.get(bet_tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
 
     matchup   = f"{away} @ {home}"
-    lean_html = _nba_lean_badge(lean) if lean and lean not in ("—", "") else ""
+
+    # Determine lean from signal direction, not base model
+    signal_dir = g.get("venue_direction") or g.get("shot_direction") or lean
+    lean_html = _nba_lean_badge(signal_dir) if signal_dir and signal_dir not in ("—", "", "CONFLICT") else ""
 
     header = (
         f'<div class="card-header">'
-        f'{_nba_conf_badge(conf)}'
+        f'{_nba_tier_badge(bet_tier) if bet_tier else ""}'
         f'<span class="matchup">{matchup}</span>'
         f'{lean_html}'
         f'</div>'
@@ -2451,26 +2470,8 @@ def _render_nba_card(g: dict) -> None:
 
     proj_row = f'<div class="proj-row">{sep.join(proj_parts)}</div>'
 
-    # H1 secondary row
+    # H1 row suppressed — base model H1 predictions not deployed
     h1_row = ""
-    if pred_h1 is not None:
-        h1_parts = []
-        if h1_lean:
-            h1_parts.append(_nba_lean_badge(h1_lean))
-        h1_parts.append(f'<span class="proj-label">H1</span> <span class="proj-val">{pred_h1:.1f}</span>')
-        if h1_line is not None:
-            h1_parts.append(f'<span class="proj-label">vs {h1_line:.1f}</span>')
-        if h1_edge is not None:
-            h1_sign = "+" if h1_edge > 0 else ""
-            h1_ecls = "edge-pos" if h1_edge > 0 else "edge-neg"
-            h1_parts.append(f'<span class="{h1_ecls}">{h1_sign}{h1_edge:.1f}</span>')
-        if h1_conf:
-            h1_parts.append(_nba_conf_badge(h1_conf))
-        h1_row = (
-            f'<div class="proj-row" style="font-size:0.82em;opacity:0.70;'
-            f'border-top:1px solid #1e2535;padding-top:5px;margin-top:2px">'
-            f'{sep.join(h1_parts)}</div>'
-        )
 
     # Inline warnings
     warn_html = ""

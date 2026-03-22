@@ -638,14 +638,13 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
     for g in games:
         g["summary"] = generate_nba_summary(g)
 
-    plays    = [g for g in games if g.get("confidence") in ("HIGH", "MEDIUM")]
+    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1", "TIER_2", "TIER_3")]
     no_plays = [g for g in games if g not in plays]
 
-    # Sort plays: HIGH first, then MEDIUM; within tier by |edge| desc
+    # Sort plays: Tier 1 first, then 2, then 3
     def _sort_key(g):
-        tier = {"HIGH": 0, "MEDIUM": 1}.get(g.get("confidence", "LOW"), 2)
-        edge = abs(g.get("edge") or 0)
-        return (tier, -edge)
+        tier_order = {"TIER_1": 0, "TIER_2": 1, "TIER_3": 2}
+        return tier_order.get(g.get("bet_tier", ""), 9)
 
     plays.sort(key=_sort_key)
 
