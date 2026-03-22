@@ -550,6 +550,133 @@ def _classify(
     return CONF_LOW
 
 
+# ── Archetype matchup detection ───────────────────────────────────────────────
+
+# ELITE_DEF2 @ ELITE_DEF → UNDER signal
+# Historical: -3.0 pts (p=0.022, N=203)
+# 2024-25: -4.2 pts (p=0.064, N=60)
+_ARCHETYPE_GAMES_2026 = {
+    # (away_abb, home_abb): date
+    ("ORL", "CLE"): "2026-03-24",
+    ("MIA", "CLE"): "2026-03-25",
+    ("HOU", "MIN"): "2026-03-25",
+    ("NYK", "OKC"): "2026-03-29",
+    ("LAL", "OKC"): "2026-04-02",
+    ("HOU", "GSW"): "2026-04-05",
+    ("SAC", "GSW"): "2026-04-07",
+    ("LAL", "GSW"): "2026-04-09",
+    ("ORL", "BOS"): "2026-04-12",
+}
+
+_ELITE_DEF = {"BOS", "CLE", "GSW", "MIL", "MIN", "OKC"}
+_ELITE_DEF2 = {"HOU", "LAC", "LAL", "MIA", "NYK", "ORL", "SAC"}
+
+
+def _flag_archetype_matchups(game_results: list[dict], game_date: str) -> None:
+    """Flag games matching ELITE_DEF2 @ ELITE_DEF archetype for UNDER signal."""
+    n_flagged = 0
+    for g in game_results:
+        away = g.get("away_team", "")
+        home = g.get("home_team", "")
+        g["archetype_signal"] = None
+        g["archetype_direction"] = None
+        g["archetype_note"] = None
+
+        if away in _ELITE_DEF2 and home in _ELITE_DEF:
+            g["archetype_signal"] = "ELITE_DEF2_at_ELITE_DEF"
+            g["archetype_direction"] = "UNDER"
+            g["archetype_note"] = "UNDER — hist edge -3.0pts (p=0.022)"
+
+            # Find best UNDER number across books if odds available
+            best_total = g.get("close_total") or g.get("line")
+            best_book = g.get("close_book", "")
+            # Check for multi-book data
+            for key in ["dk_total", "fd_total", "mgm_total", "pb_total"]:
+                val = g.get(key)
+                if val and (best_total is None or val > best_total):
+                    best_total = val
+                    best_book = key.replace("_total", "")
+
+            g["archetype_best_total"] = best_total
+            g["archetype_best_book"] = best_book
+            n_flagged += 1
+            logger.info(f"  ⚡ ARCHETYPE: {away} @ {home} → UNDER"
+                        f" (best line: {best_total} at {best_book})")
+
+    if n_flagged > 0:
+        logger.info(f"Archetype matchups flagged: {n_flagged}")
+
+
+# ── Shot profile matchup detection ───────────────────────────────────────────
+
+# Signal 1: BALANCED OFF vs PASSIVE DEF → OVER (+2.2 pts, p=0.013, confirmed 2025-26)
+# Signal 2: THREE_HEAVY OFF vs FOUL_PRONE DEF → UNDER (-2.1 pts, p=0.083, confirmed -3.6 2025-26)
+
+_BALANCED_OFF = {"DEN", "HOU", "IND", "NYK", "OKC"}
+_PASSIVE_DEF = {"BOS", "CHI", "CLE", "DEN", "LAL", "MIA", "MIL", "NYK", "PHX", "SAS", "UTA", "WAS"}
+_THREE_HEAVY_OFF = {"BOS", "CHI", "CLE", "GSW", "MIA", "MIL", "SAC"}
+_FOUL_PRONE_DEF = {"HOU", "IND", "ORL"}
+
+
+def _flag_shot_profile(game_results: list[dict], game_date: str) -> None:
+    """Flag games matching shot-profile archetype signals."""
+    for g in game_results:
+        away = g.get("away_team", "")
+        home = g.get("home_team", "")
+        g["shot_signal"] = None
+        g["shot_direction"] = None
+        g["shot_note"] = None
+
+        signals = []
+
+        # Check both interactions: away OFF vs home DEF, home OFF vs away DEF
+        # Signal 1: BALANCED @ PASSIVE → OVER
+        if away in _BALANCED_OFF and home in _PASSIVE_DEF:
+            signals.append(("BALANCED_vs_PASSIVE", "OVER", "clean looks / low disruption"))
+        if home in _BALANCED_OFF and away in _PASSIVE_DEF:
+            signals.append(("BALANCED_vs_PASSIVE", "OVER", "clean looks / low disruption"))
+
+        # Signal 2: THREE_HEAVY @ FOUL_PRONE → UNDER
+        if away in _THREE_HEAVY_OFF and home in _FOUL_PRONE_DEF:
+            signals.append(("THREE_HEAVY_vs_FOUL_PRONE", "UNDER", "expected FTA not materializing"))
+        if home in _THREE_HEAVY_OFF and away in _FOUL_PRONE_DEF:
+            signals.append(("THREE_HEAVY_vs_FOUL_PRONE", "UNDER", "expected FTA not materializing"))
+
+        if not signals:
+            continue
+
+        # If multiple signals fire, check agreement
+        directions = set(s[1] for s in signals)
+        if len(directions) == 1:
+            g["shot_signal"] = signals[0][0]
+            g["shot_direction"] = signals[0][1]
+            g["shot_note"] = signals[0][2]
+        else:
+            # Conflicting shot signals — rare, flag both
+            g["shot_signal"] = "+".join(s[0] for s in signals)
+            g["shot_direction"] = "CONFLICT"
+            g["shot_note"] = "conflicting shot signals"
+
+        # Compute combined classification with pace archetype
+        pace_dir = g.get("archetype_direction")
+        shot_dir = g["shot_direction"]
+
+        if pace_dir and shot_dir and shot_dir != "CONFLICT":
+            if pace_dir == shot_dir:
+                g["signal_class"] = "DOUBLE_SIGNAL"
+            else:
+                g["signal_class"] = "CONFLICT"
+        elif shot_dir and shot_dir != "CONFLICT":
+            g["signal_class"] = "SHOT_ONLY"
+        elif pace_dir:
+            g["signal_class"] = "PACE_ONLY"
+        else:
+            g["signal_class"] = "NO_SIGNAL"
+
+        logger.info(f"  🎯 SHOT: {away} @ {home} → {g['shot_direction']} "
+                    f"({g['shot_signal']}) [{g.get('signal_class', '')}]")
+
+
 # ── Print NBA card ────────────────────────────────────────────────────────────
 
 def print_nba_card(game_results: list[dict], game_date: str) -> None:
@@ -611,6 +738,24 @@ def print_nba_card(game_results: list[dict], game_date: str) -> None:
         if g.get("away_injuries"):
             print(f"  ⚠ {g['away_team']} Out/Doubtful: {', '.join(g['away_injuries'])}")
 
+        # Archetype signal
+        if g.get("archetype_signal"):
+            best = g.get("archetype_best_total") or g.get("line")
+            book = g.get("archetype_best_book", "")
+            print(f"  \033[95m⚡ ARCHETYPE: {g['archetype_note']}"
+                  f"  (best UNDER: {best} at {book})\033[0m")
+
+        print()
+
+    # Print archetype games that are NO PLAY — still flagged
+    arch_no_play = [g for g in no_plays if g.get("archetype_signal")]
+    if arch_no_play:
+        print(f"\033[95m{'─' * 18}  ARCHETYPE CANDIDATES  {'─' * 18}\033[0m\n")
+        for g in arch_no_play:
+            matchup = f"{g['away_team']} @ {g['home_team']}"
+            best = g.get("archetype_best_total") or g.get("line")
+            print(f"  \033[95m⚡ {matchup}  ·  {g['archetype_note']}"
+                  f"  (best UNDER: {best})\033[0m")
         print()
 
     if no_plays:
@@ -1073,6 +1218,50 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
             "playoff_days_rest_home":        playoff_days_rest_home,
             "playoff_days_rest_away":        playoff_days_rest_away,
         })
+
+        # ── Segment overlay (Phase 3) ────────────────────────────────────────
+        try:
+            from nba.segment_overlay import classify_segments, apply_overlay
+            seg_ctx = {
+                "home_pace": home_state["pace"],
+                "away_pace": away_state["pace"],
+                "b2b_flag_home": b2b_away,  # b2b_away in the code refers to away_b2b flag
+                "b2b_home": sched.get("home_b2b", 0),
+                "home_ortg": home_state["ortg"],
+                "away_ortg": away_state["ortg"],
+                "edge": edge,
+            }
+            # Check if home team is actually on b2b
+            # The variable names in this pipeline: b2b_away is the away team's b2b flag
+            # Need to check home team b2b
+            seg_ctx["b2b_flag_home"] = sched.get("home_b2b", 0)
+            seg_result = classify_segments(seg_ctx)
+            original_conf = game_results[-1]["confidence"]
+            final_conf, overlay_applied = apply_overlay(
+                original_conf, lean, seg_result,
+                tier_names=(CONF_LOW, CONF_MEDIUM, CONF_HIGH),
+            )
+            game_results[-1]["confidence"] = final_conf
+            game_results[-1]["overlay_applied"] = overlay_applied
+            game_results[-1]["overlay_segment"] = seg_result.get("overlay_segment")
+            game_results[-1]["original_confidence"] = original_conf
+            if overlay_applied:
+                logger.info(f"  🎯 Overlay: {original_conf}→{final_conf} ({seg_result['overlay_segment']})")
+        except ImportError:
+            game_results[-1]["overlay_applied"] = False
+            game_results[-1]["overlay_segment"] = None
+            game_results[-1]["original_confidence"] = game_results[-1]["confidence"]
+        except Exception as e:
+            logger.debug(f"  Overlay error (non-fatal): {e}")
+            game_results[-1]["overlay_applied"] = False
+            game_results[-1]["overlay_segment"] = None
+            game_results[-1]["original_confidence"] = game_results[-1]["confidence"]
+
+    # ── Step 8b: Archetype matchup flags ────────────────────────────────────
+    _flag_archetype_matchups(game_results, game_date)
+
+    # ── Step 8c: Shot profile matchup flags ──────────────────────────────────
+    _flag_shot_profile(game_results, game_date)
 
     # ── Step 9: Print card ────────────────────────────────────────────────────
     print_nba_card(game_results, game_date)

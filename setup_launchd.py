@@ -4,9 +4,12 @@ Mac launchd scheduler setup.
 
 Manages all scheduled model jobs:
   7:00 AM  — push_results.py  (MLB grade+model, NBA, NHL, Soccer initial run)
+  7:00 AM  — nba/model_c_shadow.py --grade  (NBA props: grade yesterday)
+  9:00 AM  — nba/model_c_shadow.py --collect (NBA props: collect + project)
   10:00 AM — soccer lineup refresh (catches 12:30pm+ kickoffs)
   11:00 AM — refresh.py       (MLB lineup/weather/umpire update)
   12:00 PM — soccer lineup refresh (catches afternoon kickoffs)
+  5:00 PM  — nba/model_c_shadow.py --refresh (NBA props: pre-tip refresh)
   5:00 PM  — refresh_5pm.py  (MLB + NBA + NHL + Soccer late refresh)
   11:30 PM — results_tracker.py (auto-log MLB final scores)
 
@@ -72,6 +75,127 @@ JOBS = {
         "minute": 30,
         "description": "11:30 PM — auto-log MLB final scores",
     },
+    "com.mlbmodel.nba.props.grade": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.nba.props.grade.plist",
+        "label": "com.mlbmodel.nba.props.grade",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "nba", "model_c_shadow.py"), "--grade"],
+        "hour": 7,
+        "minute": 0,
+        "description": "7 AM — NBA player props: grade yesterday's shadow plays",
+    },
+    "com.mlbmodel.nba.props.collect": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.nba.props.collect.plist",
+        "label": "com.mlbmodel.nba.props.collect",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "nba", "model_c_shadow.py"), "--collect"],
+        "hour": 9,
+        "minute": 0,
+        "description": "9 AM — NBA player props: collect lines + project + shadow card",
+    },
+    "com.mlbmodel.nba.props.refresh": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.nba.props.refresh.plist",
+        "label": "com.mlbmodel.nba.props.refresh",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "nba", "model_c_shadow.py"), "--refresh"],
+        "hour": 17,
+        "minute": 0,
+        "description": "5 PM — NBA player props: pre-tip line refresh",
+    },
+    "com.mlbmodel.mlb.hits.grade": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.mlb.hits.grade.plist",
+        "label": "com.mlbmodel.mlb.hits.grade",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "mlb", "props_shadow.py"), "--grade"],
+        "hour": 7,
+        "minute": 5,
+        "description": "7:05 AM — MLB HITS props: grade yesterday",
+    },
+    "com.mlbmodel.mlb.hits.collect": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.mlb.hits.collect.plist",
+        "label": "com.mlbmodel.mlb.hits.collect",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "mlb", "props_shadow.py"), "--collect"],
+        "hour": 9,
+        "minute": 0,
+        "description": "9 AM — MLB HITS props: collect + project + shadow card",
+    },
+    "com.mlbmodel.clv.capture": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.clv.capture.plist",
+        "label": "com.mlbmodel.clv.capture",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "shared", "closing_line_runner.py")],
+        "hour": 18,
+        "minute": 30,
+        "description": "6:30 PM — Capture closing lines for all sports (CLV tracking)",
+    },
+    "com.mlbmodel.mlb.hits.refresh": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.mlb.hits.refresh.plist",
+        "label": "com.mlbmodel.mlb.hits.refresh",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "mlb", "props_shadow.py"), "--refresh"],
+        "hour": 17,
+        "minute": 5,
+        "description": "5:05 PM — MLB HITS props: pre-game line refresh",
+    },
+    "com.mlbmodel.wnba.updater": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.wnba.updater.plist",
+        "label": "com.mlbmodel.wnba.updater",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "wnba", "shadow", "season_updater.py")],
+        "hour": 10,
+        "minute": 0,
+        "description": "10 AM — WNBA season updater (rolling features)",
+    },
+    "com.mlbmodel.wnba.daily": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.wnba.daily.plist",
+        "label": "com.mlbmodel.wnba.daily",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "wnba", "shadow", "daily_runner.py")],
+        "hour": 11,
+        "minute": 0,
+        "description": "11 AM — WNBA daily projections + shadow board",
+    },
+    "com.mlbmodel.wnba.clv": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.wnba.clv.plist",
+        "label": "com.mlbmodel.wnba.clv",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "wnba", "shadow", "clv_runner.py")],
+        "hour": 22,
+        "minute": 30,
+        "description": "10:30 PM — WNBA CLV capture (closing lines)",
+    },
+    "com.mlbmodel.wnba.grader": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.wnba.grader.plist",
+        "label": "com.mlbmodel.wnba.grader",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "wnba", "shadow", "grader.py")],
+        "hour": 8,
+        "minute": 0,
+        "description": "8 AM — WNBA results grader (grade yesterday)",
+    },
+    "com.mlbmodel.golf.open": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.golf.open.plist",
+        "label": "com.mlbmodel.golf.open",
+        "program": ["/bin/sh", "-c",
+                     f"RUN_MODE=live {PYTHON_BIN} {os.path.join(SCRIPT_DIR, 'golf', 'shadow', 'golf_daily_runner.py')} --capture open --include-matchups"
+                     f" && {PYTHON_BIN} {os.path.join(SCRIPT_DIR, 'push_golf.py')}"],
+        "hour": 9,
+        "minute": 0,
+        "weekday": 2,
+        "description": "Tue 9 AM — Golf opening odds + matchups capture",
+    },
+    "com.mlbmodel.golf.close": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.golf.close.plist",
+        "label": "com.mlbmodel.golf.close",
+        "program": ["/bin/sh", "-c",
+                     f"RUN_MODE=live {PYTHON_BIN} {os.path.join(SCRIPT_DIR, 'golf', 'shadow', 'golf_daily_runner.py')} --capture close --include-matchups"
+                     f" && {PYTHON_BIN} {os.path.join(SCRIPT_DIR, 'push_golf.py')}"],
+        "hour": 8,
+        "minute": 0,
+        "weekday": 4,
+        "description": "Thu 8 AM — Golf pre-R1 closing odds + candidates",
+    },
+    "com.mlbmodel.golf.grader": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.golf.grader.plist",
+        "label": "com.mlbmodel.golf.grader",
+        "program": ["/bin/sh", "-c",
+                     f"RUN_MODE=live {PYTHON_BIN} {os.path.join(SCRIPT_DIR, 'golf', 'shadow', 'golf_grader.py')} --include-matchups"
+                     f" && {PYTHON_BIN} {os.path.join(SCRIPT_DIR, 'push_golf.py')}"],
+        "hour": 8,
+        "minute": 0,
+        "weekday": 1,
+        "description": "Mon 8 AM — Golf grader (grade completed tournament)",
+    },
 }
 
 
@@ -99,7 +223,9 @@ def _write_plist(job: dict) -> None:
     </array>
 
     <key>StartCalendarInterval</key>
-    <dict>
+    <dict>{"" if "weekday" not in job else f"""
+        <key>Weekday</key>
+        <integer>{job.get('weekday', 0)}</integer>"""}
         <key>Hour</key>
         <integer>{job['hour']}</integer>
         <key>Minute</key>

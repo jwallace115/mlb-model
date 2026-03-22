@@ -15,7 +15,7 @@ import json
 import os
 import subprocess
 import sys
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 REPO_DIR     = os.path.dirname(os.path.abspath(__file__))
 OUT_PATH     = os.path.join(REPO_DIR, "nba_results.json")
@@ -86,6 +86,14 @@ def load_today_projections(game_date: str) -> list[dict]:
                 "b2b_flag_away":bool(r.get("b2b_flag_away")),
                 "home_injuries":[x for x in str(r.get("home_injuries_str") or "").split(",") if x],
                 "away_injuries":[x for x in str(r.get("away_injuries_str") or "").split(",") if x],
+                "archetype_signal": r.get("archetype_signal"),
+                "archetype_direction": r.get("archetype_direction"),
+                "archetype_note": r.get("archetype_note"),
+                "archetype_best_total": _safe(r.get("archetype_best_total")),
+                "shot_signal": r.get("shot_signal"),
+                "shot_direction": r.get("shot_direction"),
+                "shot_note": r.get("shot_note"),
+                "signal_class": r.get("signal_class"),
             })
         print(f"[push_nba] Loaded {len(rows)} projections for {game_date}")
         return rows
@@ -655,6 +663,28 @@ def write_nba_json(game_date: str = None) -> str:
     payload = serialize(game_date, games, accuracy, recent_results,
                         ot_diagnostics, playoff_performance, clv_summary)
 
+    # Archive today's projections for future backfill capability
+    try:
+        archive_path = os.path.join(REPO_DIR, "nba", "data", "nba_projections_archive.parquet")
+        if games:
+            archive_df = pd.DataFrame(games)
+            archive_df["game_date"] = game_date
+            if os.path.exists(archive_path):
+                existing = pd.read_parquet(archive_path)
+                archive_df = pd.concat([existing, archive_df], ignore_index=True)
+                archive_df = archive_df.drop_duplicates(subset=["game_id"], keep="last")
+            archive_df.to_parquet(archive_path, index=False)
+    except Exception as e:
+        print(f"[push_nba] Projection archive failed (non-fatal): {e}", file=sys.stderr)
+
+    # Phase 6: Small edge shadow tracking
+    try:
+        from nba.phase6_shadow import process_games, grade_games
+        grade_games((date.fromisoformat(game_date) - timedelta(days=1)).isoformat())
+        process_games(game_date)
+    except Exception as e:
+        print(f"[push_nba] Phase 6 shadow failed (non-fatal): {e}", file=sys.stderr)
+
     # Stop rules
     try:
         from nba_stop_rules import evaluate_nba_stop_rules, apply_nba_stop_rule_filter
@@ -672,6 +702,24 @@ def write_nba_json(game_date: str = None) -> str:
     except Exception as e:
         print(f"[push_nba] NBA stop rule evaluation failed (non-fatal): {e}", file=sys.stderr)
         payload["stop_rule_status"] = {"model_suspended": False, "suspended_tiers": []}
+
+    # AI daily (and optional weekly) review
+    try:
+        from modules.ai_review import (build_graded_games, generate_daily_review,
+                                        maybe_weekly, build_week_games,
+                                        generate_weekly_review, is_idempotent)
+        _review_date = (date.fromisoformat(game_date) - timedelta(days=1)).isoformat()
+        if not is_idempotent(OUT_PATH, _review_date):
+            _graded = build_graded_games("nba", _review_date)
+            payload["daily_review"] = generate_daily_review(_graded, "nba", _review_date)
+        else:
+            print(f"[push_nba] NBA daily review already exists for {_review_date} — skipping")
+        _wr = maybe_weekly("nba")
+        if _wr:
+            _wg = build_week_games("nba", *_wr)
+            payload["weekly_review"] = generate_weekly_review(_wg, "nba", *_wr)
+    except Exception as e:
+        print(f"[push_nba] NBA AI review failed (non-fatal): {e}", file=sys.stderr)
 
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)
