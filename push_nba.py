@@ -313,6 +313,45 @@ def build_playoff_performance() -> dict:
         return {}
 
 
+def build_signal_tracking() -> dict:
+    """Compute signal system performance from nba_signal_log.parquet."""
+    signal_path = os.path.join(REPO_DIR, "nba", "data", "nba_signal_log.parquet")
+    if not os.path.exists(signal_path):
+        return {}
+    try:
+        import pandas as pd
+        slog = pd.read_parquet(signal_path)
+        graded = slog[slog["result"].notna()]
+        if len(graded) == 0:
+            return {"total_plays": 0, "start_date": "2026-03-22",
+                    "note": "Live since March 22, 2026. No graded plays yet."}
+        out = {"total_plays": int(len(graded)), "start_date": "2026-03-22"}
+        # By tier
+        by_tier = {}
+        for tier in ["TIER1", "TIER2", "TIER3"]:
+            sub = graded[graded["tier"] == tier]
+            if len(sub) == 0: continue
+            wins = (sub["result"] == "WIN").sum()
+            pnl = sub["units_won_lost"].sum()
+            by_tier[tier] = {
+                "n": int(len(sub)),
+                "wins": int(wins),
+                "hit_pct": round(wins / len(sub) * 100, 1),
+                "units_pnl": round(float(pnl), 2),
+            }
+        out["by_tier"] = by_tier
+        # Overall (exclude context)
+        bettable = graded[graded["tier"].isin(["TIER1","TIER2","TIER3"])]
+        if len(bettable) > 0:
+            wins = (bettable["result"] == "WIN").sum()
+            out["overall_hit_pct"] = round(wins / len(bettable) * 100, 1)
+            out["overall_units_pnl"] = round(float(bettable["units_won_lost"].sum()), 2)
+        return out
+    except Exception as e:
+        print(f"[push_nba] Signal tracking failed: {e}", file=sys.stderr)
+        return {}
+
+
 def build_season_accuracy() -> dict:
     """Compute running MAE + directional HR from nba_results_log.parquet."""
     if not os.path.exists(NBA_RESULTS_PATH):
@@ -661,12 +700,14 @@ def write_nba_json(game_date: str = None) -> str:
     game_date = game_date or date.today().isoformat()
     games              = load_today_projections(game_date)
     accuracy           = build_season_accuracy()
+    signal_tracking    = build_signal_tracking()
     recent_results     = load_recent_results(days=14)
     ot_diagnostics     = build_ot_diagnostics()
     playoff_performance = build_playoff_performance()
     clv_summary        = build_clv_summary()
     payload = serialize(game_date, games, accuracy, recent_results,
                         ot_diagnostics, playoff_performance, clv_summary)
+    payload["signal_tracking"] = signal_tracking
 
     # Archive today's projections for future backfill capability
     try:

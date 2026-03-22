@@ -2686,82 +2686,67 @@ def _render_nba_tab() -> None:
                 </div>
                 """)
 
-        # ── season accuracy panel ─────────────────────────────────────────────────
-        if accuracy and accuracy.get("total_games", 0) > 0:
-            overall   = accuracy.get("overall", {})
-            by_conf   = accuracy.get("by_confidence", {})
-            n_total   = accuracy.get("total_games", 0)
-            mae_all   = overall.get("mae")
-            hr_all    = overall.get("hr")
-            bias_all  = overall.get("bias")
+        # ── Signal System Tracking Panel ──────────────────────────────────────────
+        sig_track = nba.get("signal_tracking", {})
+        n_plays = sig_track.get("total_plays", 0)
 
-            hr_cls = "green" if (hr_all or 0) >= 55 else "yellow" if (hr_all or 0) >= 50 else "red"
+        if n_plays > 0:
+            by_tier = sig_track.get("by_tier", {})
+            overall_hit = sig_track.get("overall_hit_pct", 0)
+            overall_pnl = sig_track.get("overall_units_pnl", 0)
+            pnl_cls = "green" if overall_pnl > 0 else "red"
 
-            conf_rows = ""
-            for conf in ["HIGH", "MEDIUM", "LOW"]:
-                d = by_conf.get(conf, {})
-                if not d:
-                    continue
-                hr_c = d.get("hr", 0)
-                hr_cls_c = "green" if hr_c >= 55 else "yellow" if hr_c >= 50 else "red"
-                conf_rows += (
-                    f'<tr>'
-                    f'<td>{_nba_conf_badge(conf)}</td>'
-                    f'<td class="dim">{d["n"]}</td>'
-                    f'<td>{d["mae"]:.2f}</td>'
-                    f'<td class="{hr_cls_c}">{d["hr"]:.1f}%</td>'
-                    f'<td class="dim">{d["bias"]:+.2f}</td>'
-                    f'</tr>'
+            tier_rows = ""
+            for tier, label, hist_roi in [("TIER1","Tier 1 (Venue+OREB)","+19.3%"),
+                                           ("TIER2","Tier 2 (Venue)","+13.5%"),
+                                           ("TIER3","Tier 3 (Shot+Venue)","+9.4%")]:
+                d = by_tier.get(tier, {})
+                if not d: continue
+                hr_c = d.get("hit_pct", 0)
+                hr_cls = "green" if hr_c >= 55 else "yellow" if hr_c >= 50 else "red"
+                pnl_c = d.get("units_pnl", 0)
+                tier_rows += (
+                    f'<tr><td>{label}</td><td>{d["n"]}</td>'
+                    f'<td class="{hr_cls}">{hr_c:.1f}%</td>'
+                    f'<td class="{"green" if pnl_c>0 else "red"}">{pnl_c:+.1f}u</td>'
+                    f'<td class="dim">{hist_roi}</td></tr>'
                 )
 
             st.html(f"""
             <div class="season-banner">
               <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
                           letter-spacing:0.08em;margin-bottom:10px">
-                Season Accuracy — {n_total} game{"s" if n_total != 1 else ""} graded
+                Signal System — {n_plays} play{"s" if n_plays != 1 else ""} tracked
               </div>
               <div class="stat-grid">
                 <div class="stat-block">
-                  <div class="num">{mae_all:.2f}</div>
-                  <div class="lbl">MAE (pts)</div>
+                  <div class="num {"green" if overall_hit>=55 else "yellow" if overall_hit>=50 else "red"}">{overall_hit:.1f}%</div>
+                  <div class="lbl">Hit Rate</div>
                 </div>
                 <div class="stat-block">
-                  <div class="num {hr_cls}">{hr_all:.1f}%</div>
-                  <div class="lbl">Dir HR vs Line</div>
-                </div>
-                <div class="stat-block">
-                  <div class="num">{bias_all:+.2f}</div>
-                  <div class="lbl">Bias (pts)</div>
+                  <div class="num {pnl_cls}">{overall_pnl:+.1f}u</div>
+                  <div class="lbl">Units P&L</div>
                 </div>
               </div>
-              {f'''<table class="star-table" style="margin-top:12px">
+              {f"""<table class="star-table" style="margin-top:12px">
                 <thead><tr>
-                  <th>Conf</th><th>Games</th><th>MAE</th><th>Dir HR vs Line</th><th>Bias</th>
+                  <th>Tier</th><th>Plays</th><th>Hit%</th><th>P&L</th><th>Hist ROI</th>
                 </tr></thead>
-                <tbody>{conf_rows}</tbody>
-              </table>''' if conf_rows else ""}
+                <tbody>{tier_rows}</tbody>
+              </table>""" if tier_rows else ""}
             </div>
             """)
         else:
             st.html("""
             <div class="season-banner">
               <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
-                          letter-spacing:0.08em;margin-bottom:6px">Season Accuracy</div>
+                          letter-spacing:0.08em;margin-bottom:6px">Signal System Tracking</div>
               <div style="color:#4a5568;font-size:0.88em">
-                No results graded yet — accuracy panel populates after the first morning
-                results run (day after first game day).
+                Live since March 22, 2026. No graded plays yet.<br>
+                Historical backtested ROI: Tier 1 +19.3%, Tier 2 +13.5%, Tier 3 +9.4%
               </div>
             </div>
             """)
-
-        # ── Accuracy context note ────────────────────────────────────────────────
-        if accuracy and accuracy.get("graded", 0) > 0:
-            dhr = accuracy.get("dir_hr", 0)
-            st.caption(
-                f"Dir HR vs Line measures: when model says over vs closing line, did game go over? "
-                f"Market efficiency threshold: ~52.4%. "
-                f"Archetype and shot profile signals provide directional edge on qualifying games."
-            )
 
         # ── OT diagnostics ────────────────────────────────────────────────────────
         if ot_diag_nba and ot_diag_nba.get("total_graded", 0) > 0:
