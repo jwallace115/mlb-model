@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-22T11:02:43.919384+00:00",
-  "last_updated": "2026-03-22 11:02 UTC",
+  "generated_at": "2026-03-22T14:00:10.677435+00:00",
+  "last_updated": "2026-03-22 14:00 UTC",
   "pipeline_run_date": "2026-03-21",
   "signals_source": "stale",
   "game_date": "2026-03-22",
@@ -169,19 +169,6 @@
     "combined_prob": null,
     "leg_count": 0,
     "correlation_note": false
-  },
-  "daily_review": {
-    "generated_at": "2026-03-22T11:02:52.281680+00:00",
-    "date_reviewed": "2026-03-21",
-    "record_summary": {
-      "overall": {
-        "w": 0,
-        "l": 0,
-        "p": 0
-      }
-    },
-    "narrative": "## HEADLINE\nClean slate \u2014 one high-confidence play still pending from Saturday's Premier League slate.\n\n## HIGH TIER REVIEW\n**Record: 0-0-0** \u2014 The Brentford at Leeds over is the lone high-confidence call, still awaiting kickoff. No results to dissect yet, but worth noting the model found enough edge in the English Premier League matchup to warrant top-tier confidence. We'll see if the projection holds when the final whistle blows.\n\n## WHAT TO WATCH\nWith just one play on the board and results still pending, there's not much pattern data to extract yet. The model's willingness to go high-confidence on a Premier League total suggests it's finding exploitable lines in English football \u2014 we'll know soon whether that edge is real or if the books have these totals dialed in tighter than expected. Check back once we have actual scores to compare against projections.",
-    "generation_status": "success"
   },
   "weekly_review": null
 }
