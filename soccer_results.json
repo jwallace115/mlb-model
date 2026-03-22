@@ -1,58 +1,44 @@
 {
-  "generated_at": "2026-03-21T21:02:29.052660+00:00",
-  "last_updated": "2026-03-21 21:02 UTC",
+  "generated_at": "2026-03-22T11:02:43.919384+00:00",
+  "last_updated": "2026-03-22 11:02 UTC",
   "pipeline_run_date": "2026-03-21",
-  "signals_source": "live",
-  "game_date": "2026-03-21",
+  "signals_source": "stale",
+  "game_date": "2026-03-22",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
-  "today_signals": [
+  "today_signals": [],
+  "recent_results": [
     {
       "game_id": "EPL_2025-26_2026-03-21_Leeds_Brentford",
       "game_date": "2026-03-21",
       "league_id": "EPL",
       "home_team": "Leeds",
       "away_team": "Brentford",
-      "game_time_et": "4:00 PM ET",
       "signal_side": "OVER",
       "closing_total": 2.5,
       "edge": 0.4410485933503836,
       "confidence_tier": "HIGH",
-      "model_total": 6.3,
-      "market_move_to_over_2_5": 0.0,
-      "lineup_confirmed": true,
-      "market_fair_p_over_2_5": 0.5089514066496164,
-      "over_price": 1.92,
-      "under_price": 1.99,
-      "result": null,
-      "graded": 0,
-      "home_xg_for_rolling_10": 1.3122821999999998,
-      "away_xg_for_rolling_10": 1.918674777777778,
-      "home_goals_scored_rolling_5": 1.2,
-      "away_goals_scored_rolling_5": 2.0,
-      "weather_wind_kph": 6.1,
-      "weather_temp_c": 10.8,
-      "summary": "Brentford has been producing 1.9 xg per game on the road. Brentford is averaging 2.0 goals per game over their last 5. Model projects 6.3 goals, market is at 2.5 \u2014 over by 3.8 goals (high confidence, +44pp edge)."
+      "result": "LOSS",
+      "actual_total_goals": 0.0
     }
   ],
-  "recent_results": [],
   "season_performance": {
     "overall": {
       "W": 0,
-      "L": 0,
+      "L": 1,
       "P": 0,
-      "n": 0,
-      "hit": null,
-      "roi": null
+      "n": 1,
+      "hit": 0.0,
+      "roi": -100.0
     },
     "by_tier": {
       "HIGH": {
         "W": 0,
-        "L": 0,
+        "L": 1,
         "P": 0,
-        "n": 0,
-        "hit": null,
-        "roi": null
+        "n": 1,
+        "hit": 0.0,
+        "roi": -100.0
       },
       "MEDIUM": {
         "W": 0,
@@ -71,7 +57,16 @@
         "roi": null
       }
     },
-    "by_league": {},
+    "by_league": {
+      "EPL": {
+        "W": 0,
+        "L": 1,
+        "P": 0,
+        "n": 1,
+        "hit": 0.0,
+        "roi": -100.0
+      }
+    },
     "by_edge_bucket": {
       "0.06-0.08": {
         "W": 0,
@@ -91,11 +86,11 @@
       },
       "0.10+": {
         "W": 0,
-        "L": 0,
+        "L": 1,
         "P": 0,
-        "n": 0,
-        "hit": null,
-        "roi": null
+        "n": 1,
+        "hit": 0.0,
+        "roi": -100.0
       }
     },
     "market_movement": {
@@ -109,11 +104,11 @@
       },
       "no_significant_movement": {
         "W": 0,
-        "L": 0,
+        "L": 1,
         "P": 0,
-        "n": 0,
-        "hit": null,
-        "roi": null
+        "n": 1,
+        "hit": 0.0,
+        "roi": -100.0
       }
     },
     "oos_reference": {
@@ -167,48 +162,26 @@
       "deployment_start_date": "2026-03-18"
     }
   },
-  "parlay_candidates": [
-    {
-      "game_id": "EPL_2025-26_2026-03-21_Leeds_Brentford",
-      "game_date": "2026-03-21",
-      "league": "EPL",
-      "home_team": "Leeds",
-      "away_team": "Brentford",
-      "game_time_et": "4:00 PM ET",
-      "projected_total": 6.3,
-      "model_p_over_1_5": 0.9866,
-      "confidence_tier": "VERY HIGH",
-      "market_line_1_5": null,
-      "market_implied_p_1_5": null,
-      "edge_1_5": null,
-      "lineup_confirmed": true
-    }
-  ],
+  "parlay_candidates": [],
   "suggested_parlay": {
-    "available": true,
-    "legs": [
-      {
-        "game_id": "EPL_2025-26_2026-03-21_Leeds_Brentford",
-        "home_team": "Leeds",
-        "away_team": "Brentford",
-        "league": "EPL",
-        "game_time_et": "4:00 PM ET",
-        "projected_total": 6.3,
-        "model_p_over_1_5": 0.9866,
-        "confidence_tier": "VERY HIGH",
-        "market_line_1_5": null,
-        "edge_1_5": null
-      }
-    ],
-    "combined_prob": 0.9866,
-    "leg_count": 1,
+    "available": false,
+    "legs": [],
+    "combined_prob": null,
+    "leg_count": 0,
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-03-21T21:02:29.057610+00:00",
-    "date_reviewed": "2026-03-20",
-    "record_summary": {},
-    "narrative": null,
-    "generation_status": "no_games"
-  }
+    "generated_at": "2026-03-22T11:02:52.281680+00:00",
+    "date_reviewed": "2026-03-21",
+    "record_summary": {
+      "overall": {
+        "w": 0,
+        "l": 0,
+        "p": 0
+      }
+    },
+    "narrative": "## HEADLINE\nClean slate \u2014 one high-confidence play still pending from Saturday's Premier League slate.\n\n## HIGH TIER REVIEW\n**Record: 0-0-0** \u2014 The Brentford at Leeds over is the lone high-confidence call, still awaiting kickoff. No results to dissect yet, but worth noting the model found enough edge in the English Premier League matchup to warrant top-tier confidence. We'll see if the projection holds when the final whistle blows.\n\n## WHAT TO WATCH\nWith just one play on the board and results still pending, there's not much pattern data to extract yet. The model's willingness to go high-confidence on a Premier League total suggests it's finding exploitable lines in English football \u2014 we'll know soon whether that edge is real or if the books have these totals dialed in tighter than expected. Check back once we have actual scores to compare against projections.",
+    "generation_status": "success"
+  },
+  "weekly_review": null
 }
