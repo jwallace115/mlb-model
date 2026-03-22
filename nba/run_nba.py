@@ -679,12 +679,17 @@ def _flag_shot_profile(game_results: list[dict], game_date: str) -> None:
 
 # ── Venue interaction detection (Board 4) ────────────────────────────────────
 
-# ROAD_WARRIOR @ STRONG_HOME → OVER (+4.8 pts, p<0.0001, N=427)
-# Confirmed 2024-25: +5.9 pts (p=0.001, N=114)
-# Market gap: 3.6 pts unexplained
+# ROAD_WARRIOR @ STRONG_HOME → OVER
+# Pruned list (2026-03-22): removed BKN (away), LAL/NOP (home) — dead weight
+# Pruned: N=236, ME=+6.65, 64.3% hit, p<0.0001, 3/3 seasons consistent
+# CORE subset (DAL/UTA/PHI @ IND/OKC/SAS): N=40, ME=+10.93, 77.5% hit
 
-_ROAD_WARRIOR = {"BKN", "CHI", "DAL", "DET", "GSW", "HOU", "NYK", "PHI", "PHX", "UTA"}
-_STRONG_HOME = {"DEN", "IND", "LAL", "MIL", "NOP", "OKC", "POR", "SAS"}
+_ROAD_WARRIOR = {"CHI", "DAL", "DET", "GSW", "HOU", "NYK", "PHI", "PHX", "UTA"}
+_STRONG_HOME = {"DEN", "IND", "MIL", "OKC", "POR", "SAS"}
+
+# CORE: top 3 away × top 3 home teams by signal strength
+_CORE_AWAY = {"DAL", "UTA", "PHI"}
+_CORE_HOME = {"IND", "OKC", "SAS"}
 
 
 def _flag_venue_signal(game_results: list[dict], game_date: str) -> None:
@@ -714,7 +719,7 @@ def _flag_venue_signal(game_results: list[dict], game_date: str) -> None:
             (home in _ELITE_OREB_TEAMS and away in _WEAK_BOXOUT_TEAMS)):
             g["oreb_confirms"] = True
 
-        # Compute deployment tier based on synergy test results
+        # Compute deployment tier based on pruned venue analysis (2026-03-22)
         pace_dir = g.get("archetype_direction")
         shot_dir = g.get("shot_direction") if g.get("shot_direction") != "CONFLICT" else None
         venue_dir = g.get("venue_direction")
@@ -722,24 +727,24 @@ def _flag_venue_signal(game_results: list[dict], game_date: str) -> None:
         over_signals = sum(1 for d in [shot_dir, venue_dir] if d == "OVER")
         under_signals = sum(1 for d in [pace_dir, shot_dir] if d == "UNDER")
 
-        # Tier assignment (synergy-driven)
-        if venue_dir == "OVER" and g["oreb_confirms"]:
-            g["signal_class"] = "TIER_1"  # Venue + OREB: 62.5% hit, +19.3% ROI
-            g["bet_tier"] = "TIER_1"
-        elif venue_dir == "OVER" and shot_dir == "OVER":
-            g["signal_class"] = "TIER_1"  # Shot+Venue OVER: 57.3%, +9.4%
-            g["bet_tier"] = "TIER_1"
+        # Tier assignment — CORE check first, then pruned venue tiers
+        # CORE: DAL/UTA/PHI @ IND/OKC/SAS → TIER_1A (1.5u, 77.5% hit, N=40)
+        # CORE is standalone — does not stack with OREB or other modifiers
+        if venue_dir == "OVER" and away in _CORE_AWAY and home in _CORE_HOME:
+            g["signal_class"] = "TIER_1A"  # CORE: 77.5% hit, +10.93 ME
+            g["bet_tier"] = "TIER_1A"
+            logger.info(f"  ⭐ CORE: {away} @ {home} → TIER 1A (1.5u)")
+        elif venue_dir == "OVER" and g["oreb_confirms"]:
+            g["signal_class"] = "TIER_1B"  # Venue + OREB: ~64%+ hit
+            g["bet_tier"] = "TIER_1B"
         elif venue_dir == "OVER":
-            g["signal_class"] = "TIER_2"  # Venue standalone: 59.5%, +13.5%
+            g["signal_class"] = "TIER_2"  # Pruned Venue standalone: 64.3% hit, N=236
             g["bet_tier"] = "TIER_2"
-        elif shot_dir == "OVER":
-            g["signal_class"] = "TIER_3"  # Shot OVER standalone: 52.8%, +0.7%
-            g["bet_tier"] = "TIER_3"
         elif over_signals > 0 and under_signals > 0:
             g["signal_class"] = "CONFLICT"
             g["bet_tier"] = "PASS"
         elif pace_dir == "UNDER" or (shot_dir and shot_dir == "UNDER"):
-            g["signal_class"] = "CONTEXT_ONLY"  # UNDER signals: negative ROI
+            g["signal_class"] = "CONTEXT_ONLY"  # UNDER signals: negative ROI — DO NOT BET
             g["bet_tier"] = "CONTEXT"
         else:
             if not g.get("signal_class") or g.get("signal_class") == "NO_SIGNAL":
@@ -872,7 +877,7 @@ def _flag_playoff_boards(game_results: list[dict], game_date: str) -> None:
             # These keep their existing tier from _flag_venue_signal
             # But venue OVER and shot UNDER were already cleared above
             bt = g.get("bet_tier")
-            if bt in ("TIER_1", "TIER_2"):
+            if bt in ("TIER_1A", "TIER_1B", "TIER_2"):
                 # Check if this was venue-driven (now paused)
                 if g.get("playoff_venue_paused"):
                     g["bet_tier"] = None
@@ -1479,12 +1484,11 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
     # Only interaction signals (venue, shot, pace) generate actionable plays.
     for g in game_results:
         bt = g.get("bet_tier")
-        if bt in ("TIER_1", "TIER_2"):
+        if bt in ("TIER_1A", "TIER_1B", "TIER_2"):
             g["confidence"] = CONF_HIGH
-        elif bt == "TIER_3":
-            g["confidence"] = CONF_MEDIUM
         else:
             # No signal tier → demote to LOW (no play)
+            # Shot OVER (former TIER_3), Pace UNDER, Shot UNDER = DO NOT BET
             g["confidence"] = CONF_LOW
 
     # ── Step 8f: Playoff signal boards ───────────────────────────────────────

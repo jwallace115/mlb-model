@@ -2343,9 +2343,9 @@ def _render_soccer_tab() -> None:
 def _nba_tier_badge(tier: str) -> str:
     """Render tier badge for NBA signal system."""
     styles = {
-        "TIER_1": ("background:#451a03;color:#fbbf24;border:1px solid #d97706", "TIER 1 · 1.5u"),
+        "TIER_1A": ("background:#451a03;color:#fbbf24;border:1px solid #d97706", "CORE · 1.5u"),
+        "TIER_1B": ("background:#451a03;color:#fbbf24;border:1px solid #d97706", "TIER 1B · 1.5u"),
         "TIER_2": ("background:#431407;color:#fb923c;border:1px solid #ea580c", "TIER 2 · 1.0u"),
-        "TIER_3": ("background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f6", "TIER 3 · 0.75u"),
         "CONTEXT": ("background:#1f2937;color:#9ca3af;border:1px solid #4b5563", "CONTEXT · 0u"),
         "PASS": ("background:#451a03;color:#fbbf24;border:1px solid #d97706", "CONFLICT"),
         # Playoff signal boards
@@ -2387,8 +2387,8 @@ def _render_nba_card(g: dict) -> None:
     h1_conf = g.get("h1_confidence")
 
     # Use tier system instead of HIGH/MEDIUM/LOW
-    is_play = bet_tier in ("TIER_1", "TIER_2", "TIER_3", "P1", "P2", "P4")
-    conf_star = {"TIER_1": "star3", "TIER_2": "star2", "TIER_3": "star2",
+    is_play = bet_tier in ("TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4")
+    conf_star = {"TIER_1A": "star3", "TIER_1B": "star3", "TIER_2": "star2",
                  "P1": "star3", "P2": "star2", "P4": "star2"}.get(bet_tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
 
@@ -2467,10 +2467,10 @@ def _render_nba_card(g: dict) -> None:
         sgn = g.get("series_game_number")
         if sgn:
             proj_parts.append(f'<span class="proj-label">Game</span> <span class="proj-val">{sgn}</span>')
-    elif bet_tier in ("TIER_1", "TIER_2", "TIER_3"):
+    elif bet_tier in ("TIER_1A", "TIER_1B", "TIER_2"):
         # Signal-driven play — show tier, direction, and line
-        tier_labels = {"TIER_1": "Tier 1 · 1.5u", "TIER_2": "Tier 2 · 1.0u", "TIER_3": "Tier 3 · 0.75u"}
-        tier_colors = {"TIER_1": "#fbbf24", "TIER_2": "#fb923c", "TIER_3": "#93c5fd"}
+        tier_labels = {"TIER_1A": "CORE · 1.5u", "TIER_1B": "Tier 1B · 1.5u", "TIER_2": "Tier 2 · 1.0u"}
+        tier_colors = {"TIER_1A": "#fbbf24", "TIER_1B": "#fbbf24", "TIER_2": "#fb923c"}
         tl = tier_labels.get(bet_tier, bet_tier)
         tc = tier_colors.get(bet_tier, "#a3a3a3")
         proj_parts.append(f'<span style="color:{tc};font-weight:600">{tl}</span>')
@@ -3063,12 +3063,12 @@ def _render_nba_tab() -> None:
 
         # ── Matchup Signal Boards (synergy-tested deployment tiers) ────────────
         all_games = plays + no_plays
-        tier1 = [g for g in all_games if g.get("bet_tier") == "TIER_1"]
+        tier1a = [g for g in all_games if g.get("bet_tier") == "TIER_1A"]
+        tier1b = [g for g in all_games if g.get("bet_tier") == "TIER_1B"]
         tier2 = [g for g in all_games if g.get("bet_tier") == "TIER_2"]
-        tier3 = [g for g in all_games if g.get("bet_tier") == "TIER_3"]
         context = [g for g in all_games if g.get("bet_tier") == "CONTEXT"]
         conflicts = [g for g in all_games if g.get("bet_tier") == "PASS"]
-        has_signals = tier1 or tier2 or tier3 or context or conflicts
+        has_signals = tier1a or tier1b or tier2 or context or conflicts
 
         if has_signals:
             st.html('<div class="section-hdr" style="margin-top:16px">Matchup Signal Board</div>')
@@ -3089,30 +3089,23 @@ def _render_nba_tab() -> None:
                     f'<strong>{tier_label}</strong> {matchup} — OVER{line_str}'
                     f' · {sig_str}{oreb_tag}</div>')
 
-            if tier1:
+            if tier1a:
                 st.html('<div style="font-size:0.85em;color:#fbbf24;padding:4px 0;font-weight:600">'
-                        'TIER 1 — BET OVER (1.5 units) · Venue + OREB or Venue + Shot</div>')
-                for g in tier1:
-                    st.html(_render_signal_row(g, "#451a03;border:1px solid #d97706;color:#fef3c7", "T1"))
+                        'CORE — BET OVER (1.5 units) · DAL/UTA/PHI @ IND/OKC/SAS (77.5% hit, N=40)</div>')
+                for g in tier1a:
+                    st.html(_render_signal_row(g, "#451a03;border:1px solid #d97706;color:#fef3c7", "CORE"))
+
+            if tier1b:
+                st.html('<div style="font-size:0.85em;color:#fbbf24;padding:4px 0;font-weight:600;margin-top:6px">'
+                        'TIER 1B — BET OVER (1.5 units) · Pruned Venue + OREB confirmation</div>')
+                for g in tier1b:
+                    st.html(_render_signal_row(g, "#451a03;border:1px solid #d97706;color:#fef3c7", "T1B"))
 
             if tier2:
                 st.html('<div style="font-size:0.85em;color:#fb923c;padding:4px 0;font-weight:600;margin-top:6px">'
-                        'TIER 2 — BET OVER (1.0 unit) · Venue standalone</div>')
+                        'TIER 2 — BET OVER (1.0 unit) · Pruned Venue standalone (64.3% hit, N=236)</div>')
                 for g in tier2:
                     st.html(_render_signal_row(g, "#431407;border:1px solid #ea580c;color:#fed7aa", "T2"))
-
-            if tier3:
-                st.html('<div style="font-size:0.85em;color:#93c5fd;padding:4px 0;font-weight:600;margin-top:6px">'
-                        'TIER 3 — LEAN OVER (0.75 units) · Shot OVER standalone</div>')
-                for g in tier3:
-                    matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
-                    line = g.get("line")
-                    line_str = " · Total: %.1f" % line if line else ""
-                    note = g.get("shot_note", "")
-                    st.html(
-                        f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#bfdbfe;'
-                        f'border-left:3px solid #3b82f6">'
-                        f'T3 {matchup} — OVER{line_str} · {note}</div>')
 
             if context:
                 st.html('<div style="font-size:0.85em;color:#9ca3af;padding:4px 0;font-weight:600;margin-top:6px">'
@@ -3137,9 +3130,9 @@ def _render_nba_tab() -> None:
                         f'🟡 {matchup} — signals disagree — PASS</div>')
 
             st.caption(
-                "System bets OVER signals only. Tier 1 = Venue+OREB or Venue+Shot (62% hit, +19% ROI). "
-                "Tier 2 = Venue alone (60% hit, +14% ROI). Tier 3 = Shot OVER alone (53% hit). "
-                "UNDER signals (pace, shot under) are context-only — negative ROI standalone."
+                "System bets OVER signals only. CORE = DAL/UTA/PHI @ IND/OKC/SAS (77.5% hit). "
+                "Tier 1B = Pruned Venue + OREB (~64%+). Tier 2 = Pruned Venue standalone (64.3%). "
+                "UNDER signals (pace, shot under) are DO NOT BET — negative ROI standalone."
             )
 
     with review_tab:

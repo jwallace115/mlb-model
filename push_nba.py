@@ -342,7 +342,7 @@ def build_signal_tracking() -> dict:
         out = {"total_plays": int(len(graded)), "start_date": "2026-03-22"}
         # By tier
         by_tier = {}
-        for tier in ["TIER1", "TIER2", "TIER3"]:
+        for tier in ["TIER_1A", "TIER_1B", "TIER_2", "TIER1", "TIER2", "TIER3"]:
             sub = graded[graded["tier"] == tier]
             if len(sub) == 0: continue
             wins = (sub["result"] == "WIN").sum()
@@ -355,7 +355,7 @@ def build_signal_tracking() -> dict:
             }
         out["by_tier"] = by_tier
         # Overall (exclude context)
-        bettable = graded[graded["tier"].isin(["TIER1","TIER2","TIER3"])]
+        bettable = graded[graded["tier"].isin(["TIER_1A","TIER_1B","TIER_2","TIER1","TIER2","TIER3"])]
         if len(bettable) > 0:
             wins = (bettable["result"] == "WIN").sum()
             out["overall_hit_pct"] = round(wins / len(bettable) * 100, 1)
@@ -652,12 +652,12 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
     for g in games:
         g["summary"] = generate_nba_summary(g)
 
-    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1", "TIER_2", "TIER_3", "P1", "P2", "P4")]
+    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4")]
     no_plays = [g for g in games if g not in plays]
 
-    # Sort plays: Playoff boards first, then RS tiers
+    # Sort plays: Playoff boards first, then CORE, then other tiers
     def _sort_key(g):
-        tier_order = {"P1": 0, "P2": 0, "P4": 0, "TIER_1": 1, "TIER_2": 2, "TIER_3": 3}
+        tier_order = {"P1": 0, "P2": 0, "P4": 0, "TIER_1A": 1, "TIER_1B": 2, "TIER_2": 3}
         return tier_order.get(g.get("bet_tier", ""), 9)
 
     plays.sort(key=_sort_key)
