@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-22T11:01:00.413060+00:00",
+  "generated_at": "2026-03-22T11:29:28.431042+00:00",
   "game_date": "2026-03-22",
   "is_playoff_day": false,
   "plays": [
@@ -1031,36 +1031,8 @@
       "triggered_at": null
     }
   },
-  "daily_review": {
-    "generated_at": "2026-03-22T11:01:17.572980+00:00",
-    "date_reviewed": "2026-03-21",
-    "record_summary": {
-      "HIGH": {
-        "w": 1,
-        "l": 2,
-        "p": 0
-      },
-      "MEDIUM": {
-        "w": 4,
-        "l": 1,
-        "p": 0
-      },
-      "LOW": {
-        "w": 1,
-        "l": 1,
-        "p": 0
-      },
-      "overall": {
-        "w": 6,
-        "l": 4,
-        "p": 0
-      }
-    },
-    "narrative": "## Solid Night Despite Three Ugly Misses\n\n**6-4 overall with a +14.5% ROI** \u2014 profitable, but three brutal unders got torched by 19, 19, and 39 points respectively.\n\n## High Confidence: 1-2, -36.4% ROI\n\nThe tier that's supposed to carry us went sideways. **Atlanta at Golden State under 229.5** missed by 19.4 points (final 236). Atlanta was on a back-to-back, but the Warriors' pace (93.5) suggested a grind-it-out game. Instead both teams shot the lights out \u2014 the simulation underestimated how much Atlanta's elite offense (115.0 offensive efficiency) would overcome the fatigue factor. **Philadelphia at Utah under 230.5** also missed by 19.3 points (final 242). Utah's moderate pace (97.1) pointed to a controlled game, but Philadelphia's offense (108.5 efficiency) and Utah's leaky defense (112.8 defensive efficiency) combined for a shootout the model didn't see coming. The one winner was **San Antonio at Indiana over 233.5**, which cruised home at 253 \u2014 both teams' elite pace (104.6 and 103.6) and San Antonio's scorching offense (120.2 efficiency) against Indiana's porous defense (118.1) played out exactly as projected.\n\n## Medium Confidence: 4-1, +52.7% ROI\n\nThis tier saved the night. Four unders cashed comfortably: **Charlotte at Memphis** (225 vs 235 line), **Orlando at LA Lakers** (209 vs 233 line \u2014 a 24-point cushion), **New Orleans at Cleveland** (217 vs 235.5), and **Washington at Oklahoma City over** (243 vs 230). The lone loss was **Dallas at LA Clippers under 233.5**, which went to overtime and finished at 269 \u2014 a 39-point miss. Regulation ended at 244, already 14 points over projection. The model saw Dallas' struggling offense (105.4 efficiency) against the Clippers' strong defense (109.2), but completely missed how Dallas' own defense (118.2 defensive efficiency) would collapse and turn this into a track meet before overtime added the final insult.\n\n## Low Confidence: 1-1, -4.5% ROI\n\nSplit as expected \u2014 nothing to read into here.\n\n## What to Watch\n\nThree unders all missed low on the same night, each by double digits. When the model systematically underestimates scoring across multiple games, it suggests the recent",
-    "generation_status": "success"
-  },
   "weekly_review": {
-    "generated_at": "2026-03-22T11:01:40.091196+00:00",
+    "generated_at": "2026-03-22T11:29:29.092437+00:00",
     "week_start": "2026-03-16",
     "week_end": "2026-03-21",
     "record_summary": {
@@ -1085,7 +1057,7 @@
         "p": 0
       }
     },
-    "narrative": "# Week of March 16-21: Treading Water\n\nA frustrating week that felt closer than the numbers suggest. We went 25-24 overall but gave back 2.6% in ROI, which means we're losing the close ones and not capitalizing when we're right. The confidence tiers all performed similarly mediocre \u2014 our HIGH picks went 9-9 with -4.5% ROI, which stings since those are supposed to be our best reads.\n\n## WHAT WORKED\n\nThe Clippers-Spurs over was our cleanest win, and it shows what the model does well when the setup is obvious. San Antonio was playing at a blistering pace (103.6) with both teams scoring efficiently \u2014 the Spurs at 120.2 offensive efficiency and the Clippers at 118.2. Both defenses were leaky (San Antonio allowing 108.0 defensive efficiency, LA allowing 109.2). We projected 237.2, the game landed at 234, and it never felt in doubt. These high-pace, weak-defense matchups are our bread and butter.\n\nThe MEDIUM tier broke even at 11-10, which suggests the model is reading middle-confidence spots reasonably well. When we're not forcing edges, we're competitive.\n\n## WHAT DIDN'T\n\nThe Utah-Minnesota under was an absolute disaster \u2014 our worst miss of the season by a mile. We projected 199.7 and the game exploded to 258, a 58-point gap. Looking at the features, this wasn't some crazy outlier setup. Both teams were playing moderate pace (Utah 97.1, Minnesota 96.1), both scoring efficiently (Utah 113.5, Minnesota 115.2), and both defenses were mediocre (Utah allowing 112.8, Minnesota allowing 114.3). Nothing in the data screamed \"258-point shootout.\" This feels like we either missed a major contextual factor (injuries, lineup changes, back-to-back fatigue affecting defense) or the model is systematically underweighting variance in certain matchups. A 58-point miss isn't noise \u2014 it's a blind spot.\n\nThe LOW tier going 5-5 with -4.5% ROI suggests we're not finding value in our lower-confidence spots either. We're essentially coin-flipping when we're uncertain.\n\n## MODEL HEALTH\n\nThe CLV data is completely unavailable this week (all NaN values), so we can't assess whether we're getting good closing line value or if our timing is off. That's a problem for evaluation \u2014 we're flying blind on whether the market agrees with our reads.\n\nThe bigger concern is the lack of directional edge. We're not consistently too high or too low; we're just... scattered. The Utah-Minnesota under being 58 points too low is alarming, but without more systematic misses in that direction, it's hard to diagnose a consistent bias. We need to watch whether we're underestimating total variance in up-tempo games.\n\n## HEADING INTO NEXT WEEK\n\nKeep an eye on how the model handles games with moderate pace but efficient offenses paired with weak defenses. The Utah-Minnesota game suggests we might be underweighting the ceiling outcomes when both teams can score but neither can stop anyone. If we see another massive miss in a similar setup, we've got a real problem with our variance assumptions.",
-    "generation_status": "success"
+    "narrative": null,
+    "generation_status": "failed"
   }
 }

@@ -1336,6 +1336,19 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
     # ── Step 8d: Venue interaction flags (Board 4) ───────────────────────────
     _flag_venue_signal(game_results, game_date)
 
+    # ── Step 8e: Override confidence — only signal-tier games are plays ──────
+    # The base Ridge model has no deployable edge (51.1% after leakage fix).
+    # Only interaction signals (venue, shot, pace) generate actionable plays.
+    for g in game_results:
+        bt = g.get("bet_tier")
+        if bt in ("TIER_1", "TIER_2"):
+            g["confidence"] = CONF_HIGH
+        elif bt == "TIER_3":
+            g["confidence"] = CONF_MEDIUM
+        else:
+            # No signal tier → demote to LOW (no play)
+            g["confidence"] = CONF_LOW
+
     # ── Step 9: Print card ────────────────────────────────────────────────────
     print_nba_card(game_results, game_date)
 

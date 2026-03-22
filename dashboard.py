@@ -2420,35 +2420,35 @@ def _render_nba_card(g: dict) -> None:
                 f'{sep2.join(po_parts)}</div>'
             )
 
-    # Projection row
+    # Projection row — show signal tier info instead of base model predictions
     sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
     proj_parts = []
-    if pred is not None:
-        proj_parts.append(
-            f'<span class="proj-label">Proj</span> '
-            f'<span class="proj-val">{pred:.1f}</span>'
-        )
-    if line is not None:
-        proj_parts.append(
-            f'<span class="proj-label">Line</span> '
-            f'<span class="proj-val">{line:.1f}</span>'
-        )
+    bet_tier = g.get("bet_tier")
+
+    if bet_tier in ("TIER_1", "TIER_2", "TIER_3"):
+        # Signal-driven play — show tier, direction, and line
+        tier_labels = {"TIER_1": "Tier 1 · 1.5u", "TIER_2": "Tier 2 · 1.0u", "TIER_3": "Tier 3 · 0.75u"}
+        tier_colors = {"TIER_1": "#fbbf24", "TIER_2": "#fb923c", "TIER_3": "#93c5fd"}
+        tl = tier_labels.get(bet_tier, bet_tier)
+        tc = tier_colors.get(bet_tier, "#a3a3a3")
+        proj_parts.append(f'<span style="color:{tc};font-weight:600">{tl}</span>')
+        if line is not None:
+            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}</span>')
+        # Show which signals fire
+        signals = []
+        if g.get("venue_direction"): signals.append("Venue")
+        if g.get("shot_direction") and g.get("shot_direction") not in ("CONFLICT",): signals.append("Shot")
+        if g.get("oreb_confirms"): signals.append("OREB")
+        if g.get("archetype_direction"): signals.append("Pace")
+        if signals:
+            proj_parts.append(f'<span class="proj-label">Signals</span> <span class="proj-val">{" + ".join(signals)}</span>')
     else:
-        proj_parts.append('<span class="proj-label">No line yet</span>')
-    if edge is not None:
-        sign = "+" if edge > 0 else ""
-        ecls = "edge-pos" if edge > 0 else "edge-neg"
-        proj_parts.append(
-            f'<span class="proj-label">Edge</span> '
-            f'<span class="{ecls}">{sign}{edge:.1f}</span>'
-        )
-    if p_over is not None:
-        p_dir  = p_over if lean == "OVER" else 1 - p_over
-        p_side = "over" if lean == "OVER" else "under"
-        proj_parts.append(
-            f'<span class="proj-label">P({p_side})</span> '
-            f'<span class="proj-val">{p_dir*100:.0f}%</span>'
-        )
+        # Non-play — show line only for reference, no model predictions
+        if line is not None:
+            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}</span>')
+        else:
+            proj_parts.append('<span class="proj-label">No line yet</span>')
+
     proj_row = f'<div class="proj-row">{sep.join(proj_parts)}</div>'
 
     # H1 secondary row
