@@ -96,6 +96,8 @@ def load_today_projections(game_date: str) -> list[dict]:
                 "venue_signal": r.get("venue_signal"),
                 "venue_direction": r.get("venue_direction"),
                 "venue_note": r.get("venue_note"),
+                "oreb_confirms": bool(r.get("oreb_confirms", False)),
+                "bet_tier": r.get("bet_tier"),
                 "signal_class": r.get("signal_class"),
             })
         print(f"[push_nba] Loaded {len(rows)} projections for {game_date}")

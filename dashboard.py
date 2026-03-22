@@ -3003,105 +3003,86 @@ def _render_nba_tab() -> None:
                 </div>
                 """)
 
-        # ── Signal Boards ─────────────────────────────────────────────────────
+        # ── Matchup Signal Boards (synergy-tested deployment tiers) ────────────
         all_games = plays + no_plays
-        shot_games = [g for g in all_games if g.get("shot_signal")]
-        pace_games = [g for g in all_games if g.get("archetype_signal")]
-        venue_games = [g for g in all_games if g.get("venue_signal")]
-        triple_games = [g for g in all_games if g.get("signal_class") == "TRIPLE_SIGNAL"]
-        double_games = [g for g in all_games if g.get("signal_class") == "DOUBLE_SIGNAL"]
-        conflict_games = [g for g in all_games if g.get("signal_class") == "CONFLICT"]
+        tier1 = [g for g in all_games if g.get("bet_tier") == "TIER_1"]
+        tier2 = [g for g in all_games if g.get("bet_tier") == "TIER_2"]
+        tier3 = [g for g in all_games if g.get("bet_tier") == "TIER_3"]
+        context = [g for g in all_games if g.get("bet_tier") == "CONTEXT"]
+        conflicts = [g for g in all_games if g.get("bet_tier") == "PASS"]
+        has_signals = tier1 or tier2 or tier3 or context or conflicts
 
-        if shot_games or pace_games or venue_games:
-            st.html('<div class="section-hdr" style="margin-top:16px">Matchup Signal Boards</div>')
+        if has_signals:
+            st.html('<div class="section-hdr" style="margin-top:16px">Matchup Signal Board</div>')
 
-            if triple_games:
+            def _render_signal_row(g, tier_color, tier_label):
+                matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
+                line = g.get("line")
+                line_str = " · Total: %.1f" % line if line else ""
+                oreb_tag = " · OREB confirms" if g.get("oreb_confirms") else ""
+                signals = []
+                if g.get("venue_direction"): signals.append("venue")
+                if g.get("shot_direction") and g.get("shot_direction") not in ("CONFLICT",): signals.append("shot")
+                if g.get("archetype_direction"): signals.append("pace")
+                sig_str = " + ".join(signals) if signals else ""
+                return (
+                    f'<div style="padding:5px 8px;margin:2px 0;background:{tier_color};'
+                    f'border-radius:4px;font-size:0.82em">'
+                    f'<strong>{tier_label}</strong> {matchup} — OVER{line_str}'
+                    f' · {sig_str}{oreb_tag}</div>')
+
+            if tier1:
                 st.html('<div style="font-size:0.85em;color:#fbbf24;padding:4px 0;font-weight:600">'
-                        'TRIPLE SIGNAL (maximum confidence)</div>')
-                for g in triple_games:
-                    matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
-                    d = g.get("venue_direction", g.get("shot_direction", g.get("archetype_direction","")))
-                    line = g.get("line")
-                    line_str = "Total: %.1f" % line if line else ""
-                    st.html(
-                        f'<div style="padding:4px 8px;margin:2px 0;background:#451a03;border-radius:4px;'
-                        f'border:1px solid #d97706;font-size:0.82em;color:#fef3c7">'
-                        f'<strong>{matchup}</strong> — {d} {line_str} '
-                        f'(pace + shot + venue all agree)</div>')
+                        'TIER 1 — BET OVER (1.5 units) · Venue + OREB or Venue + Shot</div>')
+                for g in tier1:
+                    st.html(_render_signal_row(g, "#451a03;border:1px solid #d97706;color:#fef3c7", "T1"))
 
-            if double_games:
-                st.html('<div style="font-size:0.85em;color:#34d399;padding:4px 0;font-weight:600">'
-                        'STACKED SIGNALS (high confidence)</div>')
-                for g in double_games:
-                    matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
-                    d = g.get("shot_direction", g.get("archetype_direction", g.get("venue_direction","")))
-                    line = g.get("line")
-                    line_str = "Total: %.1f" % line if line else ""
-                    boards = []
-                    if g.get("archetype_direction"): boards.append("pace")
-                    if g.get("shot_direction") and g.get("shot_direction") != "CONFLICT": boards.append("shot")
-                    if g.get("venue_direction"): boards.append("venue")
-                    st.html(
-                        f'<div style="padding:4px 8px;margin:2px 0;background:#064e3b;border-radius:4px;'
-                        f'border:1px solid #059669;font-size:0.82em;color:#d1fae5">'
-                        f'<strong>{matchup}</strong> — {d} {line_str} '
-                        f'({" + ".join(boards)} agree)</div>')
+            if tier2:
+                st.html('<div style="font-size:0.85em;color:#fb923c;padding:4px 0;font-weight:600;margin-top:6px">'
+                        'TIER 2 — BET OVER (1.0 unit) · Venue standalone</div>')
+                for g in tier2:
+                    st.html(_render_signal_row(g, "#431407;border:1px solid #ea580c;color:#fed7aa", "T2"))
 
-            if venue_games:
-                st.html('<div style="font-size:0.85em;color:#fb923c;padding:4px 0;font-weight:600;margin-top:8px">'
-                        'Board 4 — Venue Interaction</div>')
-                for g in venue_games:
+            if tier3:
+                st.html('<div style="font-size:0.85em;color:#93c5fd;padding:4px 0;font-weight:600;margin-top:6px">'
+                        'TIER 3 — LEAN OVER (0.75 units) · Shot OVER standalone</div>')
+                for g in tier3:
                     matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
-                    note = g.get("venue_note","")
-                    cls = g.get("signal_class","VENUE_ONLY")
                     line = g.get("line")
                     line_str = " · Total: %.1f" % line if line else ""
-                    cls_tag = {"TRIPLE_SIGNAL":"🥇","DOUBLE_SIGNAL":"🟢","CONFLICT":"🟡","VENUE_ONLY":"🏟️"}.get(cls,"🏟️")
+                    note = g.get("shot_note", "")
                     st.html(
-                        f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#fed7aa;'
-                        f'border-left:3px solid #ea580c">'
-                        f'{cls_tag} {matchup} — <strong>OVER</strong>{line_str} · {note}</div>')
+                        f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#bfdbfe;'
+                        f'border-left:3px solid #3b82f6">'
+                        f'T3 {matchup} — OVER{line_str} · {note}</div>')
 
-            if shot_games:
-                st.html('<div style="font-size:0.85em;color:#a5b4fc;padding:4px 0;font-weight:600;margin-top:8px">'
-                        'Shot Profile Signals</div>')
-                for g in shot_games:
+            if context:
+                st.html('<div style="font-size:0.85em;color:#9ca3af;padding:4px 0;font-weight:600;margin-top:6px">'
+                        'CONTEXT ONLY — DO NOT BET (negative ROI standalone)</div>')
+                for g in context:
                     matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
-                    d = g.get("shot_direction","")
-                    note = g.get("shot_note","")
-                    cls = g.get("signal_class","SHOT_ONLY")
-                    line = g.get("line")
-                    line_str = " · Total: %.1f" % line if line else ""
-                    cls_tag = {"TRIPLE_SIGNAL":"🥇","DOUBLE_SIGNAL":"🟢","CONFLICT":"🟡","SHOT_ONLY":"🔵"}.get(cls,"")
+                    d = g.get("archetype_direction") or g.get("shot_direction", "")
+                    note = g.get("archetype_note") or g.get("shot_note", "")
                     st.html(
-                        f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#c7d2fe;'
-                        f'border-left:3px solid #6366f1">'
-                        f'{cls_tag} {matchup} — <strong>{d}</strong>{line_str} · {note}</div>')
+                        f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#6b7280;'
+                        f'border-left:3px solid #4b5563">'
+                        f'{matchup} — {d} · {note} · ⚠ context only</div>')
 
-            if pace_games:
-                st.html('<div style="font-size:0.85em;color:#c084fc;padding:4px 0;font-weight:600;margin-top:8px">'
-                        'Pace Archetype Signals</div>')
-                for g in pace_games:
-                    matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
-                    note = g.get("archetype_note","")
-                    line = g.get("line")
-                    line_str = " · Total: %.1f" % line if line else ""
-                    st.html(
-                        f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#e9d5ff;'
-                        f'border-left:3px solid #7c3aed">'
-                        f'⚡ {matchup} — {note}{line_str}</div>')
-
-            if conflict_games:
-                st.html('<div style="font-size:0.85em;color:#fbbf24;padding:4px 0;font-weight:600;margin-top:8px">'
-                        'Conflicts (PASS)</div>')
-                for g in conflict_games:
+            if conflicts:
+                st.html('<div style="font-size:0.85em;color:#fbbf24;padding:4px 0;font-weight:600;margin-top:6px">'
+                        'CONFLICT — PASS</div>')
+                for g in conflicts:
                     matchup = "%s @ %s" % (g.get("away_team",""), g.get("home_team",""))
                     st.html(
                         f'<div style="padding:3px 8px;margin:2px 0;font-size:0.82em;color:#fde68a;'
                         f'border-left:3px solid #d97706">'
-                        f'🟡 {matchup} — pace={g.get("archetype_direction","?")} vs shot={g.get("shot_direction","?")} — PASS</div>')
+                        f'🟡 {matchup} — signals disagree — PASS</div>')
 
-            st.caption("Pace and shot boards are independent. DOUBLE SIGNAL = highest confidence. CONFLICT = pass.")
+            st.caption(
+                "System bets OVER signals only. Tier 1 = Venue+OREB or Venue+Shot (62% hit, +19% ROI). "
+                "Tier 2 = Venue alone (60% hit, +14% ROI). Tier 3 = Shot OVER alone (53% hit). "
+                "UNDER signals (pace, shot under) are context-only — negative ROI standalone."
+            )
 
     with review_tab:
         _render_review_tab("nba", {"daily_review": nba.get("daily_review"), "weekly_review": nba.get("weekly_review")})

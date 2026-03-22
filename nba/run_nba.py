@@ -702,26 +702,49 @@ def _flag_venue_signal(game_results: list[dict], game_date: str) -> None:
             g["venue_note"] = "road warrior maintains output + home boost (+4.8 pts hist)"
             logger.info(f"  🏟️ VENUE: {away} @ {home} → OVER (road warrior @ strong home)")
 
-        # Recompute combined classification with all three boards
+        # OREB modifier check (sub-threshold but amplifies venue)
+        g["oreb_confirms"] = False
+        # ELITE_OREB teams visiting WEAK_BOXOUT (or hosting)
+        # Use simplified check: known elite OREB teams
+        _ELITE_OREB_TEAMS = {"ATL", "BOS", "CLE", "DEN", "DET", "GSW", "HOU",
+                             "MEM", "NOP", "NYK", "ORL", "POR", "SAC", "TOR", "UTA"}
+        _WEAK_BOXOUT_TEAMS = {"CHA", "DAL", "DEN", "MEM", "MIN", "NOP", "NYK",
+                              "OKC", "PHI", "PHX", "POR", "SAS", "TOR", "UTA", "WAS"}
+        if ((away in _ELITE_OREB_TEAMS and home in _WEAK_BOXOUT_TEAMS) or
+            (home in _ELITE_OREB_TEAMS and away in _WEAK_BOXOUT_TEAMS)):
+            g["oreb_confirms"] = True
+
+        # Compute deployment tier based on synergy test results
         pace_dir = g.get("archetype_direction")
         shot_dir = g.get("shot_direction") if g.get("shot_direction") != "CONFLICT" else None
         venue_dir = g.get("venue_direction")
 
-        directions = [d for d in [pace_dir, shot_dir, venue_dir] if d]
-        unique_dirs = set(directions)
+        over_signals = sum(1 for d in [shot_dir, venue_dir] if d == "OVER")
+        under_signals = sum(1 for d in [pace_dir, shot_dir] if d == "UNDER")
 
-        if len(directions) >= 3 and len(unique_dirs) == 1:
-            g["signal_class"] = "TRIPLE_SIGNAL"
-        elif len(directions) >= 2 and len(unique_dirs) == 1:
-            g["signal_class"] = "DOUBLE_SIGNAL"
-        elif len(directions) >= 2 and len(unique_dirs) > 1:
+        # Tier assignment (synergy-driven)
+        if venue_dir == "OVER" and g["oreb_confirms"]:
+            g["signal_class"] = "TIER_1"  # Venue + OREB: 62.5% hit, +19.3% ROI
+            g["bet_tier"] = "TIER_1"
+        elif venue_dir == "OVER" and shot_dir == "OVER":
+            g["signal_class"] = "TIER_1"  # Shot+Venue OVER: 57.3%, +9.4%
+            g["bet_tier"] = "TIER_1"
+        elif venue_dir == "OVER":
+            g["signal_class"] = "TIER_2"  # Venue standalone: 59.5%, +13.5%
+            g["bet_tier"] = "TIER_2"
+        elif shot_dir == "OVER":
+            g["signal_class"] = "TIER_3"  # Shot OVER standalone: 52.8%, +0.7%
+            g["bet_tier"] = "TIER_3"
+        elif over_signals > 0 and under_signals > 0:
             g["signal_class"] = "CONFLICT"
-        elif len(directions) == 1:
-            if pace_dir: g["signal_class"] = "PACE_ONLY"
-            elif shot_dir: g["signal_class"] = "SHOT_ONLY"
-            elif venue_dir: g["signal_class"] = "VENUE_ONLY"
-        elif not g.get("signal_class"):
-            g["signal_class"] = "NO_SIGNAL"
+            g["bet_tier"] = "PASS"
+        elif pace_dir == "UNDER" or (shot_dir and shot_dir == "UNDER"):
+            g["signal_class"] = "CONTEXT_ONLY"  # UNDER signals: negative ROI
+            g["bet_tier"] = "CONTEXT"
+        else:
+            if not g.get("signal_class") or g.get("signal_class") == "NO_SIGNAL":
+                g["signal_class"] = "NO_SIGNAL"
+                g["bet_tier"] = None
 
 
 # ── Print NBA card ────────────────────────────────────────────────────────────
