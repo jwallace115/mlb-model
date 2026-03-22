@@ -2715,7 +2715,7 @@ def _render_nba_tab() -> None:
                 </div>
                 <div class="stat-block">
                   <div class="num {hr_cls}">{hr_all:.1f}%</div>
-                  <div class="lbl">Directional HR</div>
+                  <div class="lbl">Dir HR vs Line</div>
                 </div>
                 <div class="stat-block">
                   <div class="num">{bias_all:+.2f}</div>
@@ -2724,7 +2724,7 @@ def _render_nba_tab() -> None:
               </div>
               {f'''<table class="star-table" style="margin-top:12px">
                 <thead><tr>
-                  <th>Conf</th><th>Games</th><th>MAE</th><th>Dir HR</th><th>Bias</th>
+                  <th>Conf</th><th>Games</th><th>MAE</th><th>Dir HR vs Line</th><th>Bias</th>
                 </tr></thead>
                 <tbody>{conf_rows}</tbody>
               </table>''' if conf_rows else ""}
@@ -2741,6 +2741,15 @@ def _render_nba_tab() -> None:
               </div>
             </div>
             """)
+
+        # ── Accuracy context note ────────────────────────────────────────────────
+        if accuracy and accuracy.get("graded", 0) > 0:
+            dhr = accuracy.get("dir_hr", 0)
+            st.caption(
+                f"Dir HR vs Line measures: when model says over vs closing line, did game go over? "
+                f"Market efficiency threshold: ~52.4%. "
+                f"Archetype and shot profile signals provide directional edge on qualifying games."
+            )
 
         # ── OT diagnostics ────────────────────────────────────────────────────────
         if ot_diag_nba and ot_diag_nba.get("total_graded", 0) > 0:
