@@ -680,14 +680,15 @@ def _flag_shot_profile(game_results: list[dict], game_date: str) -> None:
 # ── Venue interaction detection (Board 4) ────────────────────────────────────
 
 # ROAD_WARRIOR @ STRONG_HOME → OVER
-# Pruned list (2026-03-22): removed BKN (away), LAL/NOP (home) — dead weight
-# Pruned: N=236, ME=+6.65, 64.3% hit, p<0.0001, 3/3 seasons consistent
-# CORE subset (DAL/UTA/PHI @ IND/OKC/SAS): N=40, ME=+10.93, 77.5% hit
+# Pruned (2026-03-22): removed BKN (away), LAL/NOP (home) — dead weight
+# Expanded (2026-03-22): added ATL (away, ME=+6.61 p=0.059 3/3 seasons broad),
+#   ATL (home, ME=+8.03 p=0.013 3/3 seasons), BOS (home, ME=+4.92 p=0.066 3/3 seasons)
+# CORE subset (DAL/UTA/PHI @ IND/OKC/SAS): N=40, ME=+10.93, 77.5% hit — unchanged
 
-_ROAD_WARRIOR = {"CHI", "DAL", "DET", "GSW", "HOU", "NYK", "PHI", "PHX", "UTA"}
-_STRONG_HOME = {"DEN", "IND", "MIL", "OKC", "POR", "SAS"}
+_ROAD_WARRIOR = {"ATL", "CHI", "DAL", "DET", "GSW", "HOU", "NYK", "PHI", "PHX", "UTA"}
+_STRONG_HOME = {"ATL", "BOS", "DEN", "IND", "MIL", "OKC", "POR", "SAS"}
 
-# CORE: top 3 away × top 3 home teams by signal strength
+# CORE: top 3 away × top 3 home teams by signal strength (unchanged)
 _CORE_AWAY = {"DAL", "UTA", "PHI"}
 _CORE_HOME = {"IND", "OKC", "SAS"}
 
