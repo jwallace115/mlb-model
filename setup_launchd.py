@@ -196,6 +196,14 @@ JOBS = {
         "weekday": 1,
         "description": "Mon 8 AM — Golf grader (grade completed tournament)",
     },
+    "com.mlbmodel.nba.refs": {
+        "plist": LAUNCH_AGENTS_DIR / "com.mlbmodel.nba.refs.plist",
+        "label": "com.mlbmodel.nba.refs",
+        "program": [PYTHON_BIN, os.path.join(SCRIPT_DIR, "nba", "ref_scrape.py")],
+        "hour": 18,
+        "minute": 30,
+        "description": "6:30 PM — NBA referee crew scrape (Board 5)",
+    },
 }
 
 

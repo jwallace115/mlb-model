@@ -113,6 +113,15 @@ def load_today_projections(game_date: str) -> list[dict]:
                 "home_series_wins": _safe(r.get("home_series_wins")),
                 "away_series_wins": _safe(r.get("away_series_wins")),
                 "elimination_game_any": _safe(r.get("elimination_game_any")),
+                # Referee signal (Board 5)
+                "ref_1": r.get("ref_1"),
+                "ref_2": r.get("ref_2"),
+                "ref_3": r.get("ref_3"),
+                "crew_high_count": _safe(r.get("crew_high_count")),
+                "crew_high_exact": _safe(r.get("crew_high_exact")),
+                "ref_signal": r.get("ref_signal"),
+                "ref_sizing_adj": _safe(r.get("ref_sizing_adj", 0.0)),
+                "final_sizing": _safe(r.get("final_sizing")),
             })
         print(f"[push_nba] Loaded {len(rows)} projections for {game_date}")
         return rows
@@ -652,12 +661,12 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
     for g in games:
         g["summary"] = generate_nba_summary(g)
 
-    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4")]
+    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4", "REF_UNDER")]
     no_plays = [g for g in games if g not in plays]
 
     # Sort plays: Playoff boards first, then CORE, then other tiers
     def _sort_key(g):
-        tier_order = {"P1": 0, "P2": 0, "P4": 0, "TIER_1A": 1, "TIER_1B": 2, "TIER_2": 3}
+        tier_order = {"P1": 0, "P2": 0, "P4": 0, "TIER_1A": 1, "TIER_1B": 2, "TIER_2": 3, "REF_UNDER": 4}
         return tier_order.get(g.get("bet_tier", ""), 9)
 
     plays.sort(key=_sort_key)

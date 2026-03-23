@@ -1052,6 +1052,14 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             "playoff_board_direction":   g.get("playoff_board_direction"),
             "playoff_board_sizing":      g.get("playoff_board_sizing"),
             "finals_modifier":           g.get("finals_modifier", False),
+            # Referee signal (Board 5)
+            "ref_1":                     g.get("ref_1"),
+            "ref_2":                     g.get("ref_2"),
+            "ref_3":                     g.get("ref_3"),
+            "crew_high_count":           g.get("crew_high_count"),
+            "crew_high_exact":           g.get("crew_high_exact"),
+            "ref_signal":                g.get("ref_signal"),
+            "ref_sizing_adj":            g.get("ref_sizing_adj", 0.0),
         })
 
     new_df = pd.DataFrame(rows)
@@ -1500,6 +1508,88 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
     # Modifier: Finals → reduce OVER sizing by 0.25u
     # Paused in playoffs: Venue OVER, Shot UNDER
     _flag_playoff_boards(game_results, game_date)
+
+    # ── Step 8g: Referee crew signal (Board 5) ──────────────────────────────
+    # Load ref assignments if available (written by nba/ref_scrape.py at 6:30pm)
+    _REF_PATH = os.path.join(NBA_DIR, "data", "nba_ref_assignments.csv")
+    try:
+        if os.path.exists(_REF_PATH):
+            import csv as _csv
+            _ref_lookup = {}
+            with open(_REF_PATH) as _rf:
+                for _rr in _csv.DictReader(_rf):
+                    if _rr.get("game_date") == game_date:
+                        _ref_lookup[_rr["game_id"]] = _rr
+
+            for g in game_results:
+                gid = g.get("game_id", "")
+                ref_row = _ref_lookup.get(gid)
+                if ref_row:
+                    g["ref_1"] = ref_row.get("ref_1") or None
+                    g["ref_2"] = ref_row.get("ref_2") or None
+                    g["ref_3"] = ref_row.get("ref_3") or None
+                    ch = ref_row.get("crew_high_count")
+                    g["crew_high_count"] = int(ch) if ch and ch != "" else None
+                    g["crew_high_exact"] = g["crew_high_count"]
+                    g["ref_signal"] = ref_row.get("ref_signal", "UNKNOWN")
+                else:
+                    g["ref_1"] = g["ref_2"] = g["ref_3"] = None
+                    g["crew_high_count"] = None
+                    g["crew_high_exact"] = None
+                    g["ref_signal"] = "UNKNOWN"
+
+                # Sizing adjustments based on ref signal
+                rs = g.get("ref_signal", "UNKNOWN")
+                bt = g.get("bet_tier")
+                current_dir = g.get("playoff_board_direction") or g.get("venue_direction") or g.get("lean")
+                sizing = g.get("playoff_board_sizing") or {"TIER_1A": 1.5, "TIER_1B": 1.5, "TIER_2": 1.0}.get(bt, 0)
+
+                g["ref_sizing_adj"] = 0.0
+                if rs == "REF_OVER" and current_dir == "OVER" and bt:
+                    g["ref_sizing_adj"] = 0.5
+                    g["final_sizing"] = min(sizing + 0.5, 2.0)
+                elif rs == "REF_OVER" and current_dir == "UNDER" and bt:
+                    g["ref_sizing_adj"] = 0.0
+                    g["ref_signal"] = "CONFLICT"
+                    logger.info(f"  ⚠️ REF CONFLICT: {g.get('away_team')}@{g.get('home_team')} — REF_OVER vs UNDER signal")
+                elif rs == "REF_UNDER" and bt and current_dir == "UNDER":
+                    g["ref_sizing_adj"] = 0.25
+                    g["final_sizing"] = sizing + 0.25
+                elif rs == "REF_UNDER" and bt and current_dir == "OVER":
+                    g["ref_sizing_adj"] = 0.0
+                    g["ref_signal"] = "CONFLICT"
+                    logger.info(f"  ⚠️ REF CONFLICT: {g.get('away_team')}@{g.get('home_team')} — REF_UNDER vs OVER signal")
+                elif rs == "REF_UNDER" and not bt:
+                    # Standalone REF_UNDER — 0.75u UNDER bet
+                    g["bet_tier"] = "REF_UNDER"
+                    g["confidence"] = CONF_MEDIUM
+                    g["ref_sizing_adj"] = 0.75
+                    g["final_sizing"] = 0.75
+                    logger.info(f"  📋 REF_UNDER standalone: {g.get('away_team')}@{g.get('home_team')} → UNDER 0.75u")
+                else:
+                    g["final_sizing"] = sizing
+
+            if _ref_lookup:
+                _n_over = sum(1 for g in game_results if g.get("ref_signal") == "REF_OVER")
+                _n_under = sum(1 for g in game_results if g.get("ref_signal") == "REF_UNDER")
+                logger.info(f"Ref data loaded: {len(_ref_lookup)} games, {_n_over} REF_OVER, {_n_under} REF_UNDER")
+        else:
+            # No ref file yet — initialize fields to UNKNOWN
+            for g in game_results:
+                g["ref_1"] = g["ref_2"] = g["ref_3"] = None
+                g["crew_high_count"] = None
+                g["crew_high_exact"] = None
+                g["ref_signal"] = "UNKNOWN"
+                g["ref_sizing_adj"] = 0.0
+                g["final_sizing"] = None
+    except Exception as _e:
+        logger.warning(f"Ref signal load failed (non-fatal): {_e}")
+        for g in game_results:
+            g.setdefault("ref_signal", "UNKNOWN")
+            g.setdefault("crew_high_count", None)
+            g.setdefault("crew_high_exact", None)
+            g.setdefault("ref_sizing_adj", 0.0)
+            g.setdefault("final_sizing", None)
 
     # ── Step 9: Print card ────────────────────────────────────────────────────
     print_nba_card(game_results, game_date)

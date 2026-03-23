@@ -2352,6 +2352,8 @@ def _nba_tier_badge(tier: str) -> str:
         "P1": ("background:#1a2433;color:#60a5fa;border:1px solid #3b82f6", "🏆 P1 · 1.0u"),
         "P2": ("background:#422006;color:#fbbf24;border:1px solid #d97706", "🏆 P2 · 0.75u"),
         "P4": ("background:#422006;color:#fbbf24;border:1px solid #d97706", "🏆 P4 · 0.75u"),
+        # Referee standalone
+        "REF_UNDER": ("background:#1a2433;color:#60a5fa;border:1px solid #3b82f6", "📋 REF UNDER · 0.75u"),
     }
     style, label = styles.get(tier, ("background:#1f2937;color:#6b7280", tier or "—"))
     return f'<span style="padding:2px 8px;border-radius:4px;font-size:0.75em;font-weight:600;{style}">{label}</span>'
@@ -2387,9 +2389,10 @@ def _render_nba_card(g: dict) -> None:
     h1_conf = g.get("h1_confidence")
 
     # Use tier system instead of HIGH/MEDIUM/LOW
-    is_play = bet_tier in ("TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4")
+    is_play = bet_tier in ("TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4", "REF_UNDER")
     conf_star = {"TIER_1A": "star3", "TIER_1B": "star3", "TIER_2": "star2",
-                 "P1": "star3", "P2": "star2", "P4": "star2"}.get(bet_tier, "noplay")
+                 "P1": "star3", "P2": "star2", "P4": "star2",
+                 "REF_UNDER": "star2"}.get(bet_tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
 
     matchup   = f"{away} @ {home}"
@@ -2587,6 +2590,42 @@ def _render_nba_card(g: dict) -> None:
             f'</div>'
         )
 
+    # Referee signal badge
+    ref_html = ""
+    ref_sig = g.get("ref_signal", "UNKNOWN")
+    if ref_sig == "REF_OVER":
+        adj = g.get("ref_sizing_adj", 0)
+        ref_html = (
+            f'<div style="font-size:0.82em;color:#4ade80;margin-top:4px;'
+            f'padding:4px 8px;background:#052e16;border-radius:4px;border:1px solid #16a34a">'
+            f'📋 REF_OVER — {int(g.get("crew_high_count",0))} high-scoring refs'
+            f'{f" (+{adj:.1f}u)" if adj > 0 else ""}'
+            f'</div>'
+        )
+    elif ref_sig == "REF_UNDER" and bet_tier != "REF_UNDER":
+        ref_html = (
+            f'<div style="font-size:0.82em;color:#93c5fd;margin-top:4px;'
+            f'padding:4px 8px;background:#1a2433;border-radius:4px;border:1px solid #3b82f6">'
+            f'📋 REF_UNDER — 0 high-scoring refs (UNDER lean)'
+            f'</div>'
+        )
+    elif ref_sig == "CONFLICT":
+        ref_html = (
+            f'<div style="font-size:0.82em;color:#fbbf24;margin-top:4px;'
+            f'padding:4px 8px;background:#451a03;border-radius:4px;border:1px solid #d97706">'
+            f'📋 REF CONFLICT — ref signal opposes existing direction'
+            f'</div>'
+        )
+    elif ref_sig != "UNKNOWN" and ref_sig != "NONE":
+        pass  # NONE = no badge
+    # UNKNOWN = pending (show if refs not yet available)
+    elif ref_sig == "UNKNOWN" and is_play:
+        ref_html = (
+            f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px;font-style:italic">'
+            f'REF: pending (run ref_scrape.py after 6:30pm)'
+            f'</div>'
+        )
+
     # Paused RS signals in playoffs
     paused_html = ""
     if g.get("playoff_venue_paused"):
@@ -2616,6 +2655,7 @@ def _render_nba_card(g: dict) -> None:
         f'{shot_html}'
         f'{venue_html}'
         f'{playoff_board_html}'
+        f'{ref_html}'
         f'{paused_html}'
         f'{summary_html}'
         f'</div>'
