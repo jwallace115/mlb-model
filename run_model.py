@@ -1197,6 +1197,15 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
                 print(f"{C['cyan']}Season Record (vs line): "
                       f"{correct}-{total-correct} ({pct:.1f}%){Style.RESET_ALL}\n")
 
+    # ── MLB Sim Engine — UNDER signals (frozen S2/S3 engine) ────────────────
+    try:
+        from mlb_sim.pipeline.daily_signal_generator import run_daily as sim_daily
+        sim_signals = sim_daily(game_date_str=game_date, schedule=games, pitcher_db=pitcher_db)
+        if sim_signals:
+            logger.info(f"MLB Sim Engine: {len(sim_signals)} UNDER signals generated")
+    except Exception as e:
+        logger.warning(f"MLB Sim Engine failed (non-fatal): {e}")
+
     logger.info(f"Complete. {len(results)} games projected.")
     return results
 

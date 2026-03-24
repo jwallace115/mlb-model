@@ -3384,6 +3384,102 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         except Exception:
             pass
 
+        # ── MLB Sim Engine — UNDER signals (2026 live) ───────────────────────
+        try:
+            _sim_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
+            _sim_status_path = os.path.join(_sim_base, "pipeline", "engine_status.json")
+            _sim_signals_path = os.path.join(_sim_base, "logs", "signals_2026.parquet")
+            _sim_perf_path = os.path.join(_sim_base, "logs", "rolling_performance_2026.json")
+
+            # Engine status indicator
+            if os.path.exists(_sim_status_path):
+                import json as _json2
+                with open(_sim_status_path) as _sf:
+                    _sim_status = _json2.load(_sf)
+                if _sim_status.get("status") == "PAUSED":
+                    st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
+                            'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
+                            '⚠️ MLB Under Engine paused — manual review required before resuming.</div>')
+                else:
+                    st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">● Sim engine active</div>')
+
+            # Today's signals
+            if os.path.exists(_sim_signals_path):
+                _sim_sigs = pd.read_parquet(_sim_signals_path)
+                _today_str = (data or {}).get("game_date", "")
+                _today_sigs = _sim_sigs[_sim_sigs["date"] == _today_str]
+                if len(_today_sigs) > 0:
+                    for _, _ss in _today_sigs.iterrows():
+                        _dcf = " · dual_high_csw" if _ss.get("dual_high_csw") == 1 else ""
+                        _line_str = f"{float(_ss['line_at_signal_time']):.1f}" if pd.notna(_ss.get("line_at_signal_time")) else "TBD"
+                        st.html(f'<div style="font-size:0.82em;color:#60a5fa;margin-bottom:4px;'
+                                f'padding:6px 10px;background:#1a2433;border-radius:4px;border:1px solid #3b82f6">'
+                                f'⚾ {_ss["away_team"]} @ {_ss["home_team"]} — '
+                                f'UNDER {_line_str} · {_ss["stake_units"]}u · '
+                                f'p_under={float(_ss["raw_p_under"])*100:.1f}%{_dcf}</div>')
+                else:
+                    st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">No MLB under signals today.</div>')
+
+            # Season performance
+            if os.path.exists(_sim_perf_path):
+                import json as _json3
+                with open(_sim_perf_path) as _pf:
+                    _perf = _json3.load(_pf)
+                if not _perf.get("insufficient_data"):
+                    _std = _perf.get("season_to_date", {})
+                    _l25 = _perf.get("last_25", {})
+                    _l50 = _perf.get("last_50", {})
+                    _parts = []
+                    for _lbl, _w in [("STD", _std), ("L25", _l25), ("L50", _l50)]:
+                        if _w.get("n", 0) >= 10:
+                            _parts.append(f"{_lbl}: {_w['n']}sig {_w['win_rate']:.0f}% {_w['roi']:+.1f}%")
+                        else:
+                            _parts.append(f"{_lbl}: insufficient")
+                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:2px">'
+                            f'📊 Sim Engine: {" | ".join(_parts)}</div>')
+
+                    # Hard stop monitor
+                    _n = _std.get("n", 0); _roi = _std.get("roi", 0)
+                    _roi_color = "#4ade80" if (_roi or 0) > 0 else "#fbbf24" if (_roi or 0) > -4 else "#f87171"
+                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                            f'Hard stop: <span style="color:{_roi_color}">{_roi or 0:+.1f}%</span> / −8.0% threshold | '
+                            f'{_n}/50 signals</div>')
+
+                    # Bucket breakdown
+                    _bkts = _perf.get("by_bucket", {})
+                    _b057 = _bkts.get("0.57-0.60", {}); _b060 = _bkts.get(">0.60", {})
+                    if (_b057.get("n", 0) + _b060.get("n", 0)) >= 5:
+                        st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                                f'0.57-0.60: {_b057.get("n",0)}sig {_b057.get("roi",0):+.1f}% | '
+                                f'>0.60: {_b060.get("n",0)}sig {_b060.get("roi",0):+.1f}%</div>')
+
+            # Recent results table
+            if os.path.exists(_sim_signals_path):
+                _resolved = _sim_sigs[_sim_sigs["resolved"].isin([1, 2])].sort_values("date", ascending=False).head(20)
+                _pending = _sim_sigs[_sim_sigs["resolved"] == 0].sort_values("date", ascending=False).head(5)
+                _show = pd.concat([_pending, _resolved]).head(20)
+                if len(_show) > 0:
+                    with st.expander("📋 Recent Sim Signals", expanded=False):
+                        _rows_html = ""
+                        for _, _r in _show.iterrows():
+                            _res = _r.get("result", "Pending") or "Pending"
+                            _net = f"{float(_r['net_units']):+.2f}u" if pd.notna(_r.get("net_units")) else "—"
+                            _clr = "#4ade80" if _res == "WIN" else "#f87171" if _res == "LOSS" else "#6b7280" if _res == "PUSH" else "#4b5563"
+                            _pu = f"{float(_r['raw_p_under'])*100:.0f}%" if pd.notna(_r.get("raw_p_under")) else "—"
+                            _ln = f"{float(_r['line_at_signal_time']):.1f}" if pd.notna(_r.get("line_at_signal_time")) else "—"
+                            _act = f"{float(_r['actual_total']):.0f}" if pd.notna(_r.get("actual_total")) else "—"
+                            _rows_html += (f'<tr style="color:{_clr}">'
+                                           f'<td>{_r.get("date","")}</td>'
+                                           f'<td>{_r.get("away_team","")}@{_r.get("home_team","")}</td>'
+                                           f'<td>{_ln}</td><td>{_pu}</td><td>{_r.get("stake_units","")}u</td>'
+                                           f'<td>{_act}</td><td>{_res}</td><td>{_net}</td></tr>')
+                        st.html(f'<table style="font-size:0.75em;width:100%;border-collapse:collapse">'
+                                f'<tr style="color:#94a3b8"><th>Date</th><th>Matchup</th><th>Line</th>'
+                                f'<th>p_under</th><th>Stake</th><th>Actual</th><th>Result</th><th>Net</th></tr>'
+                                f'{_rows_html}</table>')
+        except Exception:
+            pass
+
         # ── no data state ─────────────────────────────────────────────────────
         if data is None:
             st.info(
