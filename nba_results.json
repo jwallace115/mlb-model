@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-24T11:00:49.594096+00:00",
+  "generated_at": "2026-03-24T15:14:03.336723+00:00",
   "game_date": "2026-03-24",
   "is_playoff_day": false,
   "plays": [],
@@ -1253,33 +1253,5 @@
       "roi": null,
       "triggered_at": null
     }
-  },
-  "daily_review": {
-    "generated_at": "2026-03-24T11:01:07.889278+00:00",
-    "date_reviewed": "2026-03-23",
-    "record_summary": {
-      "HIGH": {
-        "w": 1,
-        "l": 0,
-        "p": 0
-      },
-      "MEDIUM": {
-        "w": 0,
-        "l": 2,
-        "p": 0
-      },
-      "LOW": {
-        "w": 3,
-        "l": 4,
-        "p": 0
-      },
-      "overall": {
-        "w": 4,
-        "l": 6,
-        "p": 0
-      }
-    },
-    "narrative": "## Rough Night: 4-6 Record with Two Brutal Misses\n\nThe model finished 4-6 with a -23.6% ROI, dragged down by a pair of catastrophic unders that weren't even close.\n\n**HIGH CONFIDENCE**\n\nThe lone high-confidence play cashed comfortably. PHI-OKC over 222.5 landed at 226, right in the wheelhouse of our 228.4 projection. Both teams were playing at elite pace (100+ possessions) with Philadelphia's defense leaking badly (116.5 points allowed per 100 possessions). Clean win.\n\n**MEDIUM CONFIDENCE**\n\nThis tier went 0-2 and cost us the night. \n\nHOU-CHI was projected at 227.1 against a 229.0 total, but the game exploded to 256. The model saw Chicago's defense struggling (114.6 points allowed per 100) but clearly underestimated just how porous both sides would be. Houston was playing at a crawl (98.1 pace) in their recent games, but something changed on the floor \u2014 the actual tempo or shooting efficiency blew past what the rolling data suggested.\n\nGSW-DAL was even worse \u2014 a 207.0 projection against a 230.5 total that finished at 268 after overtime. The regulation total was 252, so we were already off by 45 points before the extra period. Golden State's glacial pace (93.5) suggested a grind, and both defenses were terrible in recent games (Dallas allowing 118.2, Golden State 117.0), but the model completely missed how fast and loose this game would play. The pregame data supported caution here, but the miss is too large to chalk up to normal variance \u2014 something about this matchup broke the simulation's logic.\n\n**LOW CONFIDENCE**\n\nThe low tier went 3-4, basically a coin flip. One loss was within normal variance; the others just didn't connect.\n\n**WHAT TO WATCH**\n\nTwo massive unders missing low on the same night suggests the model may be underweighting recent defensive breakdowns when both teams are struggling. Worth monitoring whether defensive efficiency metrics are lagging what's actually happening on the floor.",
-    "generation_status": "success"
   }
 }
