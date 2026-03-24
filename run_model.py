@@ -160,6 +160,159 @@ def grade_csw_shadow(game_date: str):
             logger.info("LOW_TOTAL_CSW: Consider deployment review at 0.5u")
 
 
+# ── High-CSW UNDER signal — LIVE ────────────────────────────────────────────
+# both_high_csw UNDER — 8/8 gates, holdout ROI +12.5%, break-even -158
+# z-score threshold: 0.95 (fixed, do not update dynamically)
+# Sizing by line band: 1.0u (>=8.5), 0.75u (7.5-8.5), 0.5u (<=7.5)
+# Sweet spot: lines 8.5-9.5 (62.9% UNDER, +20.1% ROI)
+# Sanity checks passed: CSW retains 99% effect after controlling xFIP/K%/BB%
+# Closing lines confirmed: true sharp closes from Odds API
+
+_HIGH_CSW_SHADOW_PATH = os.path.join("mlb", "data", "high_csw_under_shadow.csv")
+_HIGH_CSW_ZSCORE_THRESHOLD = 0.95  # P75 of train non-extra 2022-2023
+_HIGH_CSW_HOME_MEAN = 27.4167
+_HIGH_CSW_HOME_STD  = 5.3825
+_HIGH_CSW_AWAY_MEAN = 26.6073
+_HIGH_CSW_AWAY_STD  = 5.1220
+_HIGH_CSW_MAX_JUICE = -150  # do not bet worse than this
+
+_HIGH_CSW_COLS = [
+    "game_id", "game_date", "home_team", "away_team", "closing_line",
+    "home_csw_pct", "away_csw_pct", "combined_zscore",
+    "home_starter", "away_starter",
+    "predicted_side", "line_band", "recommended_units",
+    "actual_total", "market_error", "result",
+    "juice_available", "went_extra_innings",
+]
+
+
+def _high_csw_zscore(home_csw, away_csw):
+    """Compute combined z-score using fixed 2022-2023 parameters."""
+    return ((home_csw - _HIGH_CSW_HOME_MEAN) / _HIGH_CSW_HOME_STD +
+            (away_csw - _HIGH_CSW_AWAY_MEAN) / _HIGH_CSW_AWAY_STD)
+
+
+def _high_csw_sizing(line):
+    """Return recommended units by line band."""
+    if line is None:
+        return 0
+    if line >= 8.5:
+        return 1.0
+    elif line >= 7.5:
+        return 0.75
+    else:
+        return 0.5
+
+
+def _high_csw_band(line):
+    """Return line band label."""
+    if line is None:
+        return "unknown"
+    if line <= 7.5:
+        return "<=7.5"
+    elif line <= 8.5:
+        return "7.5-8.5"
+    elif line <= 9.5:
+        return "8.5-9.5"
+    else:
+        return ">9.5"
+
+
+def _log_high_csw_shadow(game_date, game_pk, home, away, line,
+                          home_csw, away_csw, zscore, home_starter, away_starter):
+    """Append a pre-game row for the High-CSW UNDER signal."""
+    band = _high_csw_band(line)
+    units = _high_csw_sizing(line)
+    row = pd.DataFrame([{
+        "game_id": game_pk, "game_date": game_date,
+        "home_team": home, "away_team": away,
+        "closing_line": line,
+        "home_csw_pct": round(home_csw, 2), "away_csw_pct": round(away_csw, 2),
+        "combined_zscore": round(zscore, 3),
+        "home_starter": home_starter, "away_starter": away_starter,
+        "predicted_side": "UNDER", "line_band": band,
+        "recommended_units": units,
+        "actual_total": None, "market_error": None, "result": None,
+        "juice_available": None, "went_extra_innings": None,
+    }], columns=_HIGH_CSW_COLS)
+
+    if os.path.exists(_HIGH_CSW_SHADOW_PATH):
+        existing = pd.read_csv(_HIGH_CSW_SHADOW_PATH, dtype=str)
+        existing = existing[existing["game_date"] != game_date]
+        combined = pd.concat([existing, row.astype(str)], ignore_index=True)
+    else:
+        os.makedirs(os.path.dirname(_HIGH_CSW_SHADOW_PATH), exist_ok=True)
+        combined = row.astype(str)
+    combined.to_csv(_HIGH_CSW_SHADOW_PATH, index=False)
+
+
+def grade_high_csw_shadow(game_date: str):
+    """Backfill results for High-CSW UNDER shadow games from yesterday."""
+    if not os.path.exists(_HIGH_CSW_SHADOW_PATH):
+        return
+    shadow = pd.read_csv(_HIGH_CSW_SHADOW_PATH, dtype=str)
+    from datetime import timedelta
+    yesterday = (datetime.strptime(game_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+    pending = shadow[(shadow["game_date"] == yesterday) &
+                     (shadow["result"].isin(["None", "", "nan"]) | shadow["result"].isna())]
+    if pending.empty:
+        return
+
+    import sqlite3
+    db_path = os.path.join("data", "mlb_model.db")
+    if not os.path.exists(db_path):
+        return
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT game_pk, actual_total, line_full FROM results WHERE game_date = ?",
+        (yesterday,)
+    ).fetchall()
+    conn.close()
+    if not rows:
+        return
+    result_map = {str(r["game_pk"]): dict(r) for r in rows if r["actual_total"] is not None}
+
+    updated = False
+    for idx, row in shadow.iterrows():
+        if row["game_date"] != yesterday or row.get("result") not in (None, "None", "", "nan"):
+            continue
+        gk = str(row["game_id"])
+        actual = result_map.get(gk)
+        if not actual:
+            continue
+        total = actual.get("actual_total")
+        if total is None:
+            continue
+        total = float(total)
+        line = float(row["closing_line"])
+        me = total - line
+
+        if total < line:
+            result = "CORRECT"
+        elif total > line:
+            result = "INCORRECT"
+        else:
+            result = "PUSH"
+
+        shadow.at[idx, "actual_total"] = str(total)
+        shadow.at[idx, "market_error"] = str(round(me, 1))
+        shadow.at[idx, "result"] = result
+        shadow.at[idx, "went_extra_innings"] = ""
+        updated = True
+
+    if updated:
+        shadow.to_csv(_HIGH_CSW_SHADOW_PATH, index=False)
+        graded = shadow[shadow["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
+        n = len(graded)
+        w = (graded["result"] == "CORRECT").sum()
+        l = (graded["result"] == "INCORRECT").sum()
+        hr = w / (w + l) * 100 if (w + l) > 0 else 0
+        roi = (w * (100/110) - l) / (w + l) * 100 if (w + l) > 0 else 0
+        me_avg = graded["market_error"].astype(float).mean()
+        logger.info(f"High-CSW UNDER graded: N={n}, HR={hr:.0f}%, ROI={roi:+.1f}%, ME={me_avg:+.2f}")
+
+
 def _cap1(s: str) -> str:
     """Capitalize first character only — preserves case of abbreviations/names."""
     return s[:1].upper() + s[1:] if s else s
@@ -829,11 +982,15 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     db.init_db()
     logger.info(f"Starting MLB Totals Model for {game_date}")
 
-    # Grade CSW shadow from yesterday
+    # Grade CSW shadow signals from yesterday
     try:
         grade_csw_shadow(game_date)
     except Exception as e:
-        logger.warning(f"CSW shadow grading failed (non-fatal): {e}")
+        logger.warning(f"CSW OVER shadow grading failed (non-fatal): {e}")
+    try:
+        grade_high_csw_shadow(game_date)
+    except Exception as e:
+        logger.warning(f"High-CSW UNDER grading failed (non-fatal): {e}")
 
     pitcher_db = build_pitcher_db()
     team_bullpen_db = build_team_bullpen_db(pitcher_db)
@@ -963,8 +1120,28 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
                             _home_csw, _away_csw,
                             home_sp.get("name"), away_sp.get("name"))
 
+        # ── High-CSW UNDER signal (LIVE) ─────────────────────────────────────
+        _high_csw_signal = False
+        _high_csw_units = 0
+        if (_home_csw is not None and _away_csw is not None
+            and not _home_csw_insuf and not _away_csw_insuf
+            and full_cons is not None):
+            _combined_z = _high_csw_zscore(_home_csw, _away_csw)
+            if _combined_z >= _HIGH_CSW_ZSCORE_THRESHOLD:
+                _high_csw_signal = True
+                _high_csw_units = _high_csw_sizing(full_cons)
+                _band = _high_csw_band(full_cons)
+                _sweet = " ⭐ SWEET SPOT" if 8.5 <= full_cons <= 9.5 else ""
+                logger.info(f"  🔵 HIGH_CSW_UNDER: {away} @ {home} — line {full_cons} — "
+                            f"UNDER {_high_csw_units}u ({_band}){_sweet} — "
+                            f"z={_combined_z:.2f} (home {_home_csw:.1f}% away {_away_csw:.1f}%)")
+                _log_high_csw_shadow(game_date, gk, home, away, full_cons,
+                                     _home_csw, _away_csw, _combined_z,
+                                     home_sp.get("name"), away_sp.get("name"))
+
         results.append({"game": game, "projection": proj, "odds": odds, "props": props,
-                         "csw_signal": _csw_signal, "home_csw_pct": _home_csw, "away_csw_pct": _away_csw})
+                         "csw_signal": _csw_signal, "home_csw_pct": _home_csw, "away_csw_pct": _away_csw,
+                         "high_csw_signal": _high_csw_signal, "high_csw_units": _high_csw_units})
 
         db.upsert_projection({
             "game_date":        game_date,

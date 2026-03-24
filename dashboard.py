@@ -3312,6 +3312,32 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         except Exception:
             pass
 
+        # ── High-CSW UNDER signal (LIVE) ─────────────────────────────────────
+        try:
+            _hcsw_path = os.path.join(os.path.dirname(__file__), "mlb", "data", "high_csw_under_shadow.csv")
+            if os.path.exists(_hcsw_path):
+                _hcsw_df = pd.read_csv(_hcsw_path, dtype=str)
+                _today_hcsw = _hcsw_df[_hcsw_df["game_date"] == (data or {}).get("game_date", "")]
+                for _, _hr in _today_hcsw.iterrows():
+                    _sweet = " ⭐ sweet spot — 8.5-9.5 line" if _hr.get("line_band") == "8.5-9.5" else ""
+                    st.html(f'<div style="font-size:0.78em;color:#60a5fa;margin-bottom:3px">'
+                            f'⚾ MLB: {_hr["away_team"]} @ {_hr["home_team"]} — '
+                            f'line {_hr["closing_line"]} — UNDER {_hr["recommended_units"]}u'
+                            f' (home CSW: {_hr["home_csw_pct"]}%, away CSW: {_hr["away_csw_pct"]}%, '
+                            f'z-score: {_hr["combined_zscore"]}){_sweet}</div>')
+                _hcsw_graded = _hcsw_df[_hcsw_df["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
+                if len(_hcsw_graded) > 0:
+                    _hw = (_hcsw_graded["result"] == "CORRECT").sum()
+                    _hl = (_hcsw_graded["result"] == "INCORRECT").sum()
+                    _hn = _hw + _hl
+                    _hhr = _hw / _hn * 100 if _hn > 0 else 0
+                    _hroi = (_hw * (100/110) - _hl) / _hn * 100 if _hn > 0 else 0
+                    _hme = _hcsw_graded["market_error"].astype(float).mean()
+                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:6px">'
+                            f'⚾ High CSW UNDER: N={_hn} | HR={_hhr:.0f}% | ROI={_hroi:+.1f}% | ME={_hme:+.1f} (2026 season)</div>')
+        except Exception:
+            pass
+
         # ── no data state ─────────────────────────────────────────────────────
         if data is None:
             st.info(
