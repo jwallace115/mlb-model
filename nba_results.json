@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-23T21:00:55.982303+00:00",
+  "generated_at": "2026-03-24T01:15:08.791684+00:00",
   "game_date": "2026-03-23",
   "is_playoff_day": false,
   "plays": [],
@@ -72,6 +72,7 @@
       "ref_signal": "NONE",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model has 228.5, market is at 226.5 \u2014 only 2.0 pts of separation. Not enough edge to act on."
     },
     {
@@ -142,6 +143,7 @@
       "ref_signal": "NONE",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model has 232.5, market is at 233.0 \u2014 only 0.5 pts of separation. Not enough edge to act on."
     },
     {
@@ -212,6 +214,7 @@
       "ref_signal": "NONE",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "PHI is giving up 116.5 points per 100 possessions \u2014 one of the worst defensive marks in the league. Model has 228.4, with both teams hoisting 43% of their attempts from three, 5.9 pts above the 222.5 line \u2014 over. P(over) 62%, edge +5.9 pts."
     },
     {
@@ -282,6 +285,7 @@
       "ref_signal": "NONE",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model has 243.2, market is at 240.5 \u2014 only 2.7 pts of separation. Not enough edge to act on."
     },
     {
@@ -352,6 +356,7 @@
       "ref_signal": "NONE",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model has 239.8, market is at 239.5 \u2014 only 0.3 pts of separation. Not enough edge to act on."
     },
     {
@@ -422,6 +427,7 @@
       "ref_signal": "REF_UNDER",
       "ref_sizing_adj": 0.75,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model has 227.1, 1.9 pts below the 229.0 line \u2014 under. P(under) 54%, edge -1.9 pts."
     },
     {
@@ -492,6 +498,7 @@
       "ref_signal": "NONE",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model projects 217.2 vs the 230.5 line (edge -13.3 pts), but the signal isn't strong enough to play. Pass."
     },
     {
@@ -562,6 +569,7 @@
       "ref_signal": "REF_UNDER",
       "ref_sizing_adj": 0.75,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Both teams play at a deliberate pace \u2014 combined 98.0 possessions per 48 minutes, well below the league's 101.4 average. Model has 207.0, 23.5 pts below the 230.5 line \u2014 under. P(under) 90%, edge -23.5 pts. Note: model/market gap exceeds threshold \u2014 double-check the line."
     },
     {
@@ -632,6 +640,7 @@
       "ref_signal": "REF_OVER",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model projects 210.3 vs the 219.5 line (edge -9.2 pts), but the signal isn't strong enough to play. Pass."
     },
     {
@@ -702,6 +711,7 @@
       "ref_signal": "CONFLICT",
       "ref_sizing_adj": 0.0,
       "final_sizing": null,
+      "high_line_under_shadow": false,
       "summary": "Model projects 227.3 vs the 224.0 line (edge +3.3 pts), but the signal isn't strong enough to play. Pass."
     }
   ],
@@ -1549,23 +1559,5 @@
       "roi": null,
       "triggered_at": null
     }
-  },
-  "daily_review": {
-    "generated_at": "2026-03-23T21:01:06.479600+00:00",
-    "date_reviewed": "2026-03-22",
-    "record_summary": {
-      "LOW": {
-        "w": 5,
-        "l": 0,
-        "p": 0
-      },
-      "overall": {
-        "w": 5,
-        "l": 0,
-        "p": 0
-      }
-    },
-    "narrative": "## Perfect Sunday: Model Goes 5-for-5\n\n**LOW TIER REVIEW**\n\nThe low-confidence plays delivered a clean sweep at 5-0, banking a +90.9% ROI on what were supposed to be the shakier edges. That's the kind of day that makes you wonder if the tier labels need recalibrating.\n\nThe model found value in spots the market underpriced, and every game cooperated. No dramatic narratives here \u2014 just five plays that cleared their numbers without much stress. When your \"low confidence\" bucket hits 100%, you take the win and don't overthink it.\n\n**WHAT TO WATCH**\n\nDays like this are fun but rare. The 5-0 record suggests either the market had a blind spot yesterday or we caught a favorable variance run. The real test is whether these low-tier edges continue to show profitability over the next week \u2014 one perfect day doesn't validate a tier, but it's a nice reminder that even smaller edges can cluster when conditions align. Keep tracking whether the low-confidence plays are consistently outperforming their expected win rate.",
-    "generation_status": "success"
   }
 }
