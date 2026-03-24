@@ -1001,9 +1001,17 @@ def _render_game_props(props: list[dict]) -> str:
     if not props:
         return ""
 
+    # Expand market abbreviations
+    _MARKET_LABELS = {"K": "K (Strikeouts)", "TB": "TB (Total Bases)",
+                      "H": "H (Hits)", "R": "R (Runs)", "HR": "HR (Home Runs)"}
+
+    # Check if any prop has a real line
+    any_line = any(p.get("line") is not None for p in props)
+
     rows = ""
     for p in props:
         market   = p.get("market", "")
+        market_display = _MARKET_LABELS.get(market, market)
         player   = p.get("player_name", "")
         proj     = p.get("projection")
         line     = p.get("line")
@@ -1012,7 +1020,7 @@ def _render_game_props(props: list[dict]) -> str:
         is_play  = p.get("is_play", False)
 
         proj_str = f"{proj:.1f}" if proj is not None else "—"
-        line_str = f"{line:.1f}" if line is not None else "no line"
+        line_str = f"{line:.1f}" if line is not None else "TBD"
 
         if edge_pct is not None:
             sign = "+" if lean == "OVER" else "-" if lean == "UNDER" else ""
@@ -1021,7 +1029,7 @@ def _render_game_props(props: list[dict]) -> str:
                 f'<span class="{edge_cls}">{sign}{float(edge_pct)*100:.1f}% {lean}</span>'
             )
         else:
-            edge_str = '<span style="color:#4a5568">no line</span>'
+            edge_str = '<span style="color:#4a5568">—</span>'
 
         play_badge = (
             '<span class="prop-play-badge">PLAY</span>' if is_play else ""
@@ -1029,7 +1037,7 @@ def _render_game_props(props: list[dict]) -> str:
 
         rows += (
             f'<div class="prop-row">'
-            f'<span class="prop-market">{market}</span>'
+            f'<span class="prop-market">{market_display}</span>'
             f'{play_badge}'
             f'<span class="prop-player">{player}</span>'
             f'<span class="prop-proj">Proj {proj_str} · Line {line_str}</span>'
@@ -1037,9 +1045,11 @@ def _render_game_props(props: list[dict]) -> str:
             f'</div>'
         )
 
+    # If no lines posted, collapse by default
+    title = "Player Props" if any_line else "Player Props (lines not yet posted)"
     return (
         f'<div class="props-section">'
-        f'<div class="props-title">Player Props</div>'
+        f'<div class="props-title">{title}</div>'
         f'{rows}'
         f'</div>'
     )
@@ -1096,7 +1106,7 @@ def _render_card(b: dict) -> None:
             p_in  = a.get("player_in") or "TBD"
             alert_html += (
                 f'<div style="font-size:0.78em;color:#f87171;margin-top:4px">'
-                f'🚨 {side} SP scratch: {p_out} → {p_in}'
+                f'⚠️ {side} SP scratch: {p_out} → {p_in}'
                 f'</div>'
             )
         elif ct == "BATTER_SCRATCH":
@@ -1404,6 +1414,15 @@ def _render_nhl_signal_card(s: dict) -> None:
 
 
 def _render_nhl_tab() -> None:
+    st.html("""
+    <div style="text-align:center;padding:60px 20px;color:#94a3b8">
+      <div style="font-size:2em;margin-bottom:12px">🚧</div>
+      <div style="font-size:1.1em;font-weight:600;margin-bottom:8px">Under Construction</div>
+      <div style="font-size:0.85em">This section is coming soon. Back-end tracking is active.</div>
+    </div>
+    """)
+    return
+
     nhl = load_nhl_results()
 
     # ── header ────────────────────────────────────────────────────────────────
@@ -2043,6 +2062,15 @@ def _render_soccer_parlay_candidates(parlay_candidates: list,
 
 
 def _render_soccer_tab() -> None:
+    st.html("""
+    <div style="text-align:center;padding:60px 20px;color:#94a3b8">
+      <div style="font-size:2em;margin-bottom:12px">🚧</div>
+      <div style="font-size:1.1em;font-weight:600;margin-bottom:8px">Under Construction</div>
+      <div style="font-size:0.85em">This section is coming soon. Back-end tracking is active.</div>
+    </div>
+    """)
+    return
+
     soccer = load_soccer_results()
 
     # ── header ────────────────────────────────────────────────────────────────
@@ -2522,53 +2550,71 @@ def _render_nba_card(g: dict) -> None:
             f'</div>'
         )
 
-    # Archetype signal badge
+    # Archetype signal badge — only show if signal has content
     arch_html = ""
-    if g.get("archetype_signal"):
-        arch_note = g.get("archetype_note", "")
+    _arch_sig = g.get("archetype_signal")
+    _arch_note = g.get("archetype_note") or ""
+    if _arch_sig and _arch_sig not in (None, "None", "", "<NA>") and _arch_note:
         arch_total = g.get("archetype_best_total")
-        arch_total_str = f" (best UNDER: {arch_total})" if arch_total else ""
+        arch_total_str = f" (best UNDER: {arch_total})" if arch_total and str(arch_total) not in ("None", "<NA>", "") else ""
         arch_html = (
             f'<div style="font-size:0.82em;color:#c084fc;margin-top:4px;'
             f'padding:4px 8px;background:#1a0a2e;border-radius:4px;border:1px solid #7c3aed">'
-            f'⚡ ARCHETYPE: {arch_note}{arch_total_str}'
+            f'⚡ ARCHETYPE: {_arch_note}{arch_total_str}'
             f'</div>'
         )
 
-    # Shot profile signal badge
+    # Shot profile signal badge — only show if signal has content
+    # When another tier is the active bet, show shot as context only
     shot_html = ""
-    if g.get("shot_signal"):
-        shot_dir = g.get("shot_direction", "")
-        shot_note = g.get("shot_note", "")
-        sig_class = g.get("signal_class", "")
+    _shot_sig = g.get("shot_signal")
+    if _shot_sig and _shot_sig not in (None, "None", "", "<NA>"):
+        shot_dir = g.get("shot_direction", "") or ""
+        shot_note = g.get("shot_note", "") or ""
+        sig_class = g.get("signal_class", "") or ""
+        _is_context = bet_tier and bet_tier not in ("PASS", "CONTEXT") and sig_class not in ("TIER_1A", "TIER_1B", "TIER_2", "DOUBLE_SIGNAL")
         if sig_class == "DOUBLE_SIGNAL":
             badge_bg = "#064e3b"; badge_border = "#059669"; badge_label = "DOUBLE SIGNAL"
         elif sig_class == "CONFLICT":
             badge_bg = "#451a03"; badge_border = "#d97706"; badge_label = "CONFLICT — PASS"
+        elif _is_context:
+            badge_bg = "#1a1a2e"; badge_border = "#4b5563"; badge_label = "📊 CONTEXT: Shot Profile"
         else:
             badge_bg = "#1e1b4b"; badge_border = "#6366f1"; badge_label = "SHOT PROFILE"
         shot_html = (
             f'<div style="font-size:0.82em;color:#a5b4fc;margin-top:4px;'
             f'padding:4px 8px;background:{badge_bg};border-radius:4px;border:1px solid {badge_border}">'
-            f'🎯 {badge_label}: {shot_dir} — {g.get("shot_signal","")} ({shot_note})'
+            f'🎯 {badge_label}: {shot_dir} — {_shot_sig} ({shot_note})'
             f'</div>'
         )
 
-    # Venue signal badge
+    # Venue signal badge — only show if signal has content
+    # When REF_UNDER is the active bet, show venue as context only
     venue_html = ""
-    if g.get("venue_signal"):
-        venue_note = g.get("venue_note", "")
-        venue_html = (
-            f'<div style="font-size:0.82em;color:#fb923c;margin-top:4px;'
-            f'padding:4px 8px;background:#431407;border-radius:4px;border:1px solid #ea580c">'
-            f'🏟️ VENUE: OVER — {venue_note}'
-            f'</div>'
-        )
+    _venue_sig = g.get("venue_signal")
+    if _venue_sig and _venue_sig not in (None, "None", "", "<NA>"):
+        venue_note = g.get("venue_note") or ""
+        _venue_is_context = bet_tier and bet_tier in ("REF_UNDER",) and g.get("ref_signal") == "CONFLICT"
+        if _venue_is_context:
+            venue_html = (
+                f'<div style="font-size:0.82em;color:#9ca3af;margin-top:4px;'
+                f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #4b5563">'
+                f'📊 CONTEXT: Venue OVER — {venue_note}'
+                f'</div>'
+            )
+        else:
+            venue_html = (
+                f'<div style="font-size:0.82em;color:#fb923c;margin-top:4px;'
+                f'padding:4px 8px;background:#431407;border-radius:4px;border:1px solid #ea580c">'
+                f'🏟️ VENUE: OVER — {venue_note}'
+                f'</div>'
+            )
 
-    # Playoff signal board badge
+    # Playoff signal board badge — only show in actual playoff games with a board signal
     playoff_board_html = ""
     po_board = g.get("playoff_board")
-    if po_board:
+    _is_playoff = g.get("is_playoff", False)
+    if po_board and _is_playoff and str(po_board) not in (None, "None", "", "<NA>"):
         po_dir = g.get("playoff_board_direction", "")
         po_sizing = g.get("playoff_board_sizing", 0)
         po_note = g.get("playoff_board_note", "")
@@ -2582,7 +2628,7 @@ def _render_nba_card(g: dict) -> None:
             f'<div style="font-size:0.90em;color:#94a3b8;margin-top:2px">{po_note}</div>'
             f'</div>'
         )
-    elif g.get("finals_modifier"):
+    elif g.get("finals_modifier") and _is_playoff:
         playoff_board_html = (
             f'<div style="font-size:0.82em;color:#60a5fa;margin-top:4px;'
             f'padding:4px 8px;background:#1a2433;border-radius:4px;border:1px solid #3b82f6">'
