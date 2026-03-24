@@ -1047,11 +1047,27 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             "away_pts_rolling_series":   g.get("away_pts_rolling_series"),
             "playoff_days_rest_home":    g.get("playoff_days_rest_home"),
             "playoff_days_rest_away":    g.get("playoff_days_rest_away"),
+            # Signal boards (Steps 8b-8d) — archetype, shot, venue
+            "archetype_signal":          g.get("archetype_signal"),
+            "archetype_direction":       g.get("archetype_direction"),
+            "archetype_note":            g.get("archetype_note"),
+            "archetype_best_total":      g.get("archetype_best_total"),
+            "shot_signal":               g.get("shot_signal"),
+            "shot_direction":            g.get("shot_direction"),
+            "shot_note":                 g.get("shot_note"),
+            "venue_signal":              g.get("venue_signal"),
+            "venue_direction":           g.get("venue_direction"),
+            "venue_note":                g.get("venue_note"),
+            "oreb_confirms":             g.get("oreb_confirms", False),
+            "signal_class":              g.get("signal_class"),
+            "bet_tier":                  g.get("bet_tier"),
             # Playoff signal boards (Step 8f)
             "playoff_board":             g.get("playoff_board"),
             "playoff_board_direction":   g.get("playoff_board_direction"),
             "playoff_board_sizing":      g.get("playoff_board_sizing"),
             "finals_modifier":           g.get("finals_modifier", False),
+            "playoff_venue_paused":      g.get("playoff_venue_paused", False),
+            "playoff_shot_under_paused": g.get("playoff_shot_under_paused", False),
             # Referee signal (Board 5)
             "ref_1":                     g.get("ref_1"),
             "ref_2":                     g.get("ref_2"),
@@ -1060,6 +1076,11 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             "crew_high_exact":           g.get("crew_high_exact"),
             "ref_signal":                g.get("ref_signal"),
             "ref_sizing_adj":            g.get("ref_sizing_adj", 0.0),
+            "final_sizing":              g.get("final_sizing"),
+            # Confidence override tracking
+            "original_confidence":       g.get("original_confidence"),
+            "overlay_applied":           g.get("overlay_applied", False),
+            "overlay_segment":           g.get("overlay_segment"),
             # High-line UNDER shadow (observation only)
             "high_line_under_shadow":    g.get("high_line_under_shadow", False),
         })
