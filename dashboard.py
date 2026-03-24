@@ -3289,6 +3289,29 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         except Exception:
             pass
 
+        # ── Low-Total CSW OVER shadow tracking ──────────────────────────────
+        try:
+            _csw_path = os.path.join(os.path.dirname(__file__), "mlb", "data", "low_total_csw_shadow.csv")
+            if os.path.exists(_csw_path):
+                _csw_df = pd.read_csv(_csw_path, dtype=str)
+                _today_csw = _csw_df[_csw_df["game_date"] == (data or {}).get("game_date", "")]
+                for _, _cr in _today_csw.iterrows():
+                    st.html(f'<div style="font-size:0.72em;color:#a78bfa;margin-bottom:3px">'
+                            f'📊 MLB SHADOW: {_cr["away_team"]} @ {_cr["home_team"]} — line {_cr["closing_line"]} — tracking OVER'
+                            f' (home CSW: {_cr["home_csw_pct"]}%, away CSW: {_cr["away_csw_pct"]}%)</div>')
+                _csw_graded = _csw_df[_csw_df["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
+                if len(_csw_graded) > 0:
+                    _cw = (_csw_graded["result"] == "CORRECT").sum()
+                    _cl = (_csw_graded["result"] == "INCORRECT").sum()
+                    _cn = _cw + _cl
+                    _chr = _cw / _cn * 100 if _cn > 0 else 0
+                    _croi = (_cw * (100/110) - _cl) / _cn * 100 if _cn > 0 else 0
+                    _cme = _csw_graded["market_error"].astype(float).mean()
+                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:6px">'
+                            f'📊 Low Total CSW Shadow: N={_cn} | HR={_chr:.0f}% | ROI={_croi:+.1f}% | ME={_cme:+.1f} (tracking)</div>')
+        except Exception:
+            pass
+
         # ── no data state ─────────────────────────────────────────────────────
         if data is None:
             st.info(

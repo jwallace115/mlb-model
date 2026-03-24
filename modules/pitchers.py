@@ -96,13 +96,19 @@ def _blend_pitcher_entry(cur: dict, prior: Optional[dict]) -> dict:
     if avg_ip is None and prior:
         avg_ip = prior.get("avg_ip_per_start")
 
-    # Batted ball rates: prefer current year; fall back to prior year
+    # Batted ball rates and plate-discipline rates: prefer current year; fall back to prior year
     gb_pct = cur.get("gb_pct")
     if gb_pct is None and prior:
         gb_pct = prior.get("gb_pct")
     fb_pct = cur.get("fb_pct")
     if fb_pct is None and prior:
         fb_pct = prior.get("fb_pct")
+    k_pct = cur.get("k_pct")
+    if k_pct is None and prior:
+        k_pct = prior.get("k_pct")
+    bb_pct = cur.get("bb_pct")
+    if bb_pct is None and prior:
+        bb_pct = prior.get("bb_pct")
 
     result = dict(cur)
     result.update({
@@ -112,6 +118,8 @@ def _blend_pitcher_entry(cur: dict, prior: Optional[dict]) -> dict:
         "avg_ip_per_start":  avg_ip,
         "gb_pct":            gb_pct,
         "fb_pct":            fb_pct,
+        "k_pct":             k_pct,
+        "bb_pct":            bb_pct,
         "regressed":         True,
     })
     return result
@@ -166,9 +174,12 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
         if avg_ip is not None:
             avg_ip = max(3.0, min(avg_ip, 7.5))  # clamp outliers
 
-        # Batted ball rates (GB%, FB%) — present in FanGraphs type=8
+        # Batted ball rates (GB%, FB%) and plate-discipline rates (K%, BB%)
+        # — all present in FanGraphs type=8 response
         gb_raw = row.get("GB%") or row.get("GB_pct")
         fb_raw = row.get("FB%") or row.get("FB_pct")
+        k_raw  = row.get("K%")  or row.get("K_pct")
+        bb_raw = row.get("BB%") or row.get("BB_pct")
 
         def _pct(v) -> Optional[float]:
             if v is None:
@@ -181,6 +192,8 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
 
         gb_pct = _pct(gb_raw)
         fb_pct = _pct(fb_raw)
+        k_pct  = _pct(k_raw)
+        bb_pct = _pct(bb_raw)
 
         mid_str = str(int(mlbam_id)) if mlbam_id else None
 
@@ -196,6 +209,8 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
             "avg_ip_per_start":  avg_ip,
             "gb_pct":            gb_pct,
             "fb_pct":            fb_pct,
+            "k_pct":             k_pct,
+            "bb_pct":            bb_pct,
         }
 
         if name:
@@ -206,6 +221,63 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
             db[f"fg:{fg_id}"] = entry
 
     logger.info(f"FanGraphs: loaded {len(rows)} pitchers for {year}")
+    return db
+
+
+def _fetch_savant_csw(year: int) -> dict:
+    """
+    Pull CSW%, Whiff%, and F-Strike% from Savant custom leaderboard.
+    Returns {mlbam_id_str: {"csw_pct": float, "whiff_pct": float, "f_strike_pct": float}, ...}
+    Also keyed by lowercase "last, first" name for fallback matching.
+    """
+    url = (
+        "https://baseballsavant.mlb.com/leaderboard/custom"
+        f"?year={year}&type=pitcher&filter=&sort=4&sortDir=desc"
+        "&min=1&selections=csw_rate,whiff_percent,f_strike_percent"
+        "&chart=false&csv=true"
+    )
+    headers = {
+        "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                       "AppleWebKit/537.36 (KHTML, like Gecko) "
+                       "Chrome/120.0.0.0 Safari/537.36"),
+    }
+    try:
+        resp = requests.get(url, headers=headers, timeout=30)
+        resp.raise_for_status()
+        df = pd.read_csv(StringIO(resp.text))
+    except Exception as e:
+        logger.warning(f"Savant CSW fetch failed (non-fatal): {e}")
+        return {}
+
+    CSW_MIN_PA = 30
+    db: dict = {}
+    for _, row in df.iterrows():
+        pa = row.get("pa") or row.get("p_total_pa") or 0
+        pid = str(int(row.get("player_id", 0) or 0))
+        raw_name = str(row.get("last_name, first_name", "") or "")
+        csw = row.get("csw_rate") or row.get("csw_percent")
+        whiff = row.get("whiff_percent")
+        fstrike = row.get("f_strike_percent")
+
+        entry = {
+            "csw_pct": float(csw) if pd.notna(csw) else None,
+            "whiff_pct": float(whiff) if pd.notna(whiff) else None,
+            "f_strike_pct": float(fstrike) if pd.notna(fstrike) else None,
+            "csw_insufficient_sample": int(float(pa)) < CSW_MIN_PA,
+        }
+
+        if pid and pid != "0":
+            db[pid] = entry
+        if raw_name:
+            # Store as "first last" lowercase for name matching
+            if "," in raw_name:
+                parts = [p.strip() for p in raw_name.split(",", 1)]
+                name_key = f"{parts[1]} {parts[0]}".lower()
+            else:
+                name_key = raw_name.lower()
+            db[name_key] = entry
+
+    logger.info(f"Savant CSW: loaded {len(df)} pitchers for {year}")
     return db
 
 
@@ -330,6 +402,24 @@ def build_pitcher_db(year: Optional[int] = None) -> dict:
             # Pitcher only in prior year — regress heavily, no current data
             blended[key] = _blend_pitcher_entry(prior, None)
 
+    # --- Enrich with CSW/Whiff/F-Strike from Savant custom leaderboard ---
+    try:
+        csw_db = _fetch_savant_csw(cur_year)
+        csw_matched = 0
+        for key, entry in blended.items():
+            if key == "_meta":
+                continue
+            csw_entry = csw_db.get(str(entry.get("mlbam_id", ""))) or csw_db.get(key)
+            if csw_entry:
+                entry["csw_pct"] = csw_entry.get("csw_pct")
+                entry["whiff_pct"] = csw_entry.get("whiff_pct")
+                entry["f_strike_pct"] = csw_entry.get("f_strike_pct")
+                entry["csw_insufficient_sample"] = csw_entry.get("csw_insufficient_sample", False)
+                csw_matched += 1
+        logger.info(f"CSW enrichment: {csw_matched} pitchers matched")
+    except Exception as e:
+        logger.warning(f"CSW enrichment failed (non-fatal): {e}")
+
     blended["_meta"] = {"regressed": True, "year": cur_year}
     _save_cache(blended)
     logger.info(f"Pitcher DB built: {len(blended)-1} entries (year={cur_year}, prior={prior_year})")
@@ -357,6 +447,8 @@ def get_pitcher_metrics(pitcher_info: dict, pitcher_db: dict) -> dict:
         "avg_ip_per_start":  None,   # -> will use 5.5 default in projection
         "gb_pct":            None,
         "fb_pct":            None,
+        "k_pct":             None,   # -> sim model uses LEAGUE_AVG_K_RATE if None
+        "bb_pct":            None,   # -> sim model uses LEAGUE_AVG_BB_RATE if None
         "source":            "default",
     }
 
@@ -375,6 +467,12 @@ def get_pitcher_metrics(pitcher_info: dict, pitcher_db: dict) -> dict:
         e.setdefault("avg_ip_per_start", None)
         e.setdefault("gb_pct", None)
         e.setdefault("fb_pct", None)
+        e.setdefault("k_pct",  None)
+        e.setdefault("bb_pct", None)
+        e.setdefault("csw_pct", None)
+        e.setdefault("whiff_pct", None)
+        e.setdefault("f_strike_pct", None)
+        e.setdefault("csw_insufficient_sample", True)
         return e
 
     # By MLBAM ID (most reliable)

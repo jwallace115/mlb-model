@@ -19,7 +19,7 @@ from typing import Optional
 from colorama import Fore, Style, init as colorama_init
 
 import db
-from config import LOGS_DIR, EDGE_MIN_RUNS
+from config import LOGS_DIR, EDGE_MIN_RUNS, MODEL_MODE
 from modules.schedule    import fetch_schedule
 from modules.pitchers    import build_pitcher_db, get_pitcher_metrics
 from modules.offense     import build_offense_db, get_team_offense
@@ -28,6 +28,11 @@ from modules.bullpen     import calculate_bullpen_fatigue, build_team_bullpen_db
 from modules.umpires     import get_umpire_rating
 from modules.projections import project_game
 from modules.odds        import fetch_all_lines, get_game_lines, edge_summary
+
+if MODEL_MODE == "simulation":
+    from modules.sim_projections import sim_project_game
+    logger_init = logging.getLogger("run_model")
+    logger_init.info("MODEL_MODE=simulation — Phase 9 Ridge + heteroskedastic σ active")
 from modules.props_data        import build_pitcher_k_db, build_batter_props_db
 from modules.line_tracker      import log_opening_lines
 from modules.props_projections import get_game_props
@@ -47,6 +52,112 @@ logging.basicConfig(
 logger = logging.getLogger("run_model")
 
 LA = 4.25   # league-average ERA / xFIP baseline
+
+# ── Low-Total CSW OVER shadow tracking ──────────────────────────────────────
+import pandas as pd
+
+_CSW_SHADOW_PATH = os.path.join("mlb", "data", "low_total_csw_shadow.csv")
+_CSW_SHADOW_COLS = [
+    "game_id", "game_date", "home_team", "away_team", "closing_line",
+    "home_csw_pct", "away_csw_pct", "home_starter", "away_starter",
+    "predicted_side", "actual_total", "market_error", "result",
+    "juice_available", "went_extra_innings",
+]
+
+
+def _log_csw_shadow(game_date, game_pk, home, away, line,
+                     home_csw, away_csw, home_starter, away_starter):
+    """Append a pre-game shadow row for the Low-Total CSW OVER signal."""
+    row = pd.DataFrame([{
+        "game_id": game_pk, "game_date": game_date,
+        "home_team": home, "away_team": away,
+        "closing_line": line,
+        "home_csw_pct": round(home_csw, 2), "away_csw_pct": round(away_csw, 2),
+        "home_starter": home_starter, "away_starter": away_starter,
+        "predicted_side": "OVER",
+        "actual_total": None, "market_error": None, "result": None,
+        "juice_available": None, "went_extra_innings": None,
+    }], columns=_CSW_SHADOW_COLS)
+
+    if os.path.exists(_CSW_SHADOW_PATH):
+        existing = pd.read_csv(_CSW_SHADOW_PATH, dtype=str)
+        existing = existing[existing["game_date"] != game_date]
+        combined = pd.concat([existing, row.astype(str)], ignore_index=True)
+    else:
+        os.makedirs(os.path.dirname(_CSW_SHADOW_PATH), exist_ok=True)
+        combined = row.astype(str)
+
+    combined.to_csv(_CSW_SHADOW_PATH, index=False)
+
+
+def grade_csw_shadow(game_date: str):
+    """Backfill results for CSW shadow games from yesterday."""
+    if not os.path.exists(_CSW_SHADOW_PATH):
+        return
+    shadow = pd.read_csv(_CSW_SHADOW_PATH, dtype=str)
+    from datetime import timedelta
+    yesterday = (datetime.strptime(game_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+    pending = shadow[(shadow["game_date"] == yesterday) &
+                     (shadow["result"].isin(["None", "", "nan"]) | shadow["result"].isna())]
+    if pending.empty:
+        return
+
+    import sqlite3
+    db_path = os.path.join("data", "mlb_model.db")
+    if not os.path.exists(db_path):
+        return
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT game_pk, actual_total, line_full FROM results WHERE game_date = ?",
+        (yesterday,)
+    ).fetchall()
+    conn.close()
+    if not rows:
+        return
+    result_map = {str(r["game_pk"]): dict(r) for r in rows if r["actual_total"] is not None}
+
+    updated = False
+    for idx, row in shadow.iterrows():
+        if row["game_date"] != yesterday or row.get("result") not in (None, "None", "", "nan"):
+            continue
+        gk = str(row["game_id"])
+        actual = result_map.get(gk)
+        if not actual:
+            continue
+        total = actual.get("actual_total")
+        if total is None:
+            continue
+        total = float(total)
+        line = float(row["closing_line"])
+        me = total - line
+        innings = 9  # default; extras detection via total comparison
+
+        if total > line:
+            result = "CORRECT"
+        elif total < line:
+            result = "INCORRECT"
+        else:
+            result = "PUSH"
+
+        shadow.at[idx, "actual_total"] = str(total)
+        shadow.at[idx, "market_error"] = str(round(me, 1))
+        shadow.at[idx, "result"] = result
+        shadow.at[idx, "went_extra_innings"] = str(1 if int(innings) > 9 else 0)
+        updated = True
+
+    if updated:
+        shadow.to_csv(_CSW_SHADOW_PATH, index=False)
+        graded = shadow[shadow["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
+        n = len(graded)
+        w = (graded["result"] == "CORRECT").sum()
+        l = (graded["result"] == "INCORRECT").sum()
+        hr = w / (w + l) * 100 if (w + l) > 0 else 0
+        roi = (w * (100/110) - l) / (w + l) * 100 if (w + l) > 0 else 0
+        me_avg = graded["market_error"].astype(float).mean()
+        logger.info(f"CSW shadow graded: N={n}, HR={hr:.0f}%, ROI={roi:+.1f}%, ME={me_avg:+.2f}")
+        if n >= 50 and hr >= 54 and roi > 0:
+            logger.info("LOW_TOTAL_CSW: Consider deployment review at 0.5u")
 
 
 def _cap1(s: str) -> str:
@@ -718,6 +829,12 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     db.init_db()
     logger.info(f"Starting MLB Totals Model for {game_date}")
 
+    # Grade CSW shadow from yesterday
+    try:
+        grade_csw_shadow(game_date)
+    except Exception as e:
+        logger.warning(f"CSW shadow grading failed (non-fatal): {e}")
+
     pitcher_db = build_pitcher_db()
     team_bullpen_db = build_team_bullpen_db(pitcher_db)
     offense_db = build_offense_db()
@@ -762,13 +879,24 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         home_bp  = calculate_bullpen_fatigue(game["home_team_id"], is_home=True, team_abb=home, team_bullpen_db=team_bullpen_db)
         away_bp  = calculate_bullpen_fatigue(game["away_team_id"], is_home=False, team_abb=away, team_bullpen_db=team_bullpen_db)
 
-        proj = project_game(
-            home_team=home, away_team=away,
-            home_sp_metrics=home_sp, away_sp_metrics=away_sp,
-            home_offense=home_off, away_offense=away_off,
-            weather=weather, umpire=umpire,
-            home_bullpen=home_bp, away_bullpen=away_bp,
-        )
+        if MODEL_MODE == "simulation":
+            proj = sim_project_game(
+                home_team=home, away_team=away,
+                home_sp_metrics=home_sp, away_sp_metrics=away_sp,
+                home_offense=home_off, away_offense=away_off,
+                weather=weather, umpire=umpire,
+                home_bullpen=home_bp, away_bullpen=away_bp,
+                game=game,
+                market_line=None,   # odds not yet fetched; P(over) uses proj as reference
+            )
+        else:
+            proj = project_game(
+                home_team=home, away_team=away,
+                home_sp_metrics=home_sp, away_sp_metrics=away_sp,
+                home_offense=home_off, away_offense=away_off,
+                weather=weather, umpire=umpire,
+                home_bullpen=home_bp, away_bullpen=away_bp,
+            )
 
         odds = get_game_lines(home, away, all_lines)
 
@@ -806,12 +934,37 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         except Exception as e:
             logger.warning(f"Props fetch/store failed for {away}@{home}: {e}")
 
-        results.append({"game": game, "projection": proj, "odds": odds, "props": props})
-
         f         = proj["factors"]
         full_cons = (odds.get("full") or {}).get("consensus")
         f5_cons   = (odds.get("f5")   or {}).get("consensus")
         _fe       = edge_summary(proj["proj_total_full"], odds.get("full") or {})
+
+        # ── Low-Total CSW OVER shadow signal ─────────────────────────────────
+        # Signal is profitable at -110 to -115
+        # Do not bet at -120 or worse
+        # P55 threshold: 0.2826 (fixed, do not update dynamically)
+        # Line must be exactly 7.5 — not <=7.5
+        _CSW_THRESHOLD = 28.26  # P55 from 2022-2023 research
+        _csw_signal = False
+        _home_csw = home_sp.get("csw_pct")
+        _away_csw = away_sp.get("csw_pct")
+        _home_csw_insuf = home_sp.get("csw_insufficient_sample", True)
+        _away_csw_insuf = away_sp.get("csw_insufficient_sample", True)
+
+        if (full_cons is not None
+            and full_cons == 7.5
+            and _home_csw is not None and _away_csw is not None
+            and _home_csw < _CSW_THRESHOLD and _away_csw < _CSW_THRESHOLD
+            and not _home_csw_insuf and not _away_csw_insuf):
+            _csw_signal = True
+            logger.info(f"  📊 LOW_TOTAL_CSW: {away} @ {home} — line 7.5 — "
+                        f"home CSW {_home_csw:.1f}% away CSW {_away_csw:.1f}% — tracking OVER")
+            _log_csw_shadow(game_date, gk, home, away, full_cons,
+                            _home_csw, _away_csw,
+                            home_sp.get("name"), away_sp.get("name"))
+
+        results.append({"game": game, "projection": proj, "odds": odds, "props": props,
+                         "csw_signal": _csw_signal, "home_csw_pct": _home_csw, "away_csw_pct": _away_csw})
 
         db.upsert_projection({
             "game_date":        game_date,
