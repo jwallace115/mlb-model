@@ -1,0 +1,352 @@
+#!/usr/bin/env python3
+"""
+F5 Data Collection Pipeline — 2026
+===================================
+Captures F5 (first 5 innings) market data for every MLB game.
+Pure data collection infrastructure — no modeling, no signals.
+
+Pull schedule (maps to existing launchd times):
+  7:00 AM  → pull_type = "open"
+  11:00 AM → pull_type = "midday"
+  5:00 PM  → pull_type = "close"
+             NOTE: "close" is the latest scheduled pregame pull,
+             not a guaranteed official market close. Late games
+             (9PM+) may still have lines moving after this pull.
+
+  signal_time → written only when V1 under engine fires a signal
+
+Uniqueness: one row per game_id + date + pull_type.
+Update in place, never append duplicates.
+"""
+
+import json
+import logging
+import os
+import sys
+from datetime import date, datetime, timezone
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+logger = logging.getLogger("f5_collect")
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+F5_DATA = Path(__file__).resolve().parent
+F5_LINES_PATH = F5_DATA / "f5_lines_2026.parquet"
+F5_COVERAGE_PATH = F5_DATA / "f5_coverage_2026.json"
+SIGNALS_PATH = PROJECT_ROOT / "mlb_sim" / "logs" / "signals_2026.parquet"
+
+F5_COLS = [
+    "date", "game_id", "home_team", "away_team", "game_time",
+    "pull_timestamp", "pull_type", "book_key",
+    "f5_total", "f5_over_price", "f5_under_price",
+    "f5_moneyline_home", "f5_moneyline_away",
+    "actual_f5_total",
+]
+
+
+def _load_f5_lines():
+    """Load existing F5 lines or create empty DataFrame."""
+    if F5_LINES_PATH.exists():
+        return pd.read_parquet(F5_LINES_PATH)
+    logger.info("First run — initializing F5 data files")
+    return pd.DataFrame(columns=F5_COLS)
+
+
+def _save_f5_lines(df):
+    F5_DATA.mkdir(parents=True, exist_ok=True)
+    df.to_parquet(F5_LINES_PATH, index=False)
+
+
+def _ensure_signals_f5_column():
+    """Add f5_line_at_signal_time column to signals_2026.parquet if missing."""
+    if not SIGNALS_PATH.exists():
+        return
+    sigs = pd.read_parquet(SIGNALS_PATH)
+    if "f5_line_at_signal_time" not in sigs.columns:
+        sigs["f5_line_at_signal_time"] = None
+        sigs.to_parquet(SIGNALS_PATH, index=False)
+        logger.info("Added f5_line_at_signal_time column to signals_2026.parquet")
+
+
+def pull_f5_lines(game_date_str, pull_type, schedule=None):
+    """
+    Pull F5 lines for all games on game_date.
+
+    Args:
+        game_date_str: "YYYY-MM-DD"
+        pull_type: "open" | "midday" | "close" | "signal_time"
+        schedule: list of game dicts from modules/schedule.py
+            Each needs: game_pk, home_team, away_team, game_time (optional)
+    """
+    if schedule is None:
+        logger.info("No schedule provided — skipping F5 pull")
+        return
+
+    # Fetch F5 odds via existing infrastructure
+    try:
+        sys.path.insert(0, str(PROJECT_ROOT))
+        from modules.odds import fetch_all_lines, get_game_lines
+    except ImportError as e:
+        logger.warning(f"Cannot import odds module: {e}")
+        return
+
+    try:
+        all_lines = fetch_all_lines(game_date_str)
+    except Exception as e:
+        logger.warning(f"F5 odds fetch failed (non-fatal): {e}")
+        return
+
+    df = _load_f5_lines()
+    now_utc = datetime.now(timezone.utc).isoformat()
+    updated_count = 0
+    inserted_count = 0
+
+    for game in schedule:
+        gid = str(game.get("game_pk", ""))
+        home = game.get("home_team", "")
+        away = game.get("away_team", "")
+        gtime = game.get("game_time_et") or game.get("game_time") or None
+
+        # Get F5 line from odds payload
+        game_lines = get_game_lines(home, away, all_lines)
+        f5_data = game_lines.get("f5") or {}
+
+        f5_total = f5_data.get("consensus")
+        f5_over_price = f5_data.get("over_price")
+        f5_under_price = f5_data.get("under_price")
+        book_key = f5_data.get("book") or f5_data.get("source") or None
+
+        # F5 moneylines (capture if available)
+        f5_ml_home = f5_data.get("home_ml")
+        f5_ml_away = f5_data.get("away_ml")
+
+        # Check for existing row (uniqueness: game_id + date + pull_type)
+        mask = ((df["game_id"].astype(str) == gid) &
+                (df["date"] == game_date_str) &
+                (df["pull_type"] == pull_type))
+        existing = df[mask]
+
+        row_data = {
+            "date": game_date_str,
+            "game_id": gid,
+            "home_team": home,
+            "away_team": away,
+            "game_time": gtime,
+            "pull_timestamp": now_utc,
+            "pull_type": pull_type,
+            "book_key": book_key,
+            "f5_total": f5_total,
+            "f5_over_price": f5_over_price,
+            "f5_under_price": f5_under_price,
+            "f5_moneyline_home": f5_ml_home,
+            "f5_moneyline_away": f5_ml_away,
+            "actual_f5_total": None,
+        }
+
+        if len(existing) > 0:
+            # Update in place
+            idx = existing.index[0]
+            for col, val in row_data.items():
+                if col != "actual_f5_total":  # don't overwrite actual if already filled
+                    if col == "actual_f5_total" and pd.notna(df.at[idx, col]):
+                        continue
+                    df.at[idx, col] = val
+            updated_count += 1
+            logger.debug(f"  F5 updated: {away}@{home} ({pull_type}) line={f5_total}")
+        else:
+            # Insert new row
+            new_row = pd.DataFrame([row_data], columns=F5_COLS)
+            df = pd.concat([df, new_row], ignore_index=True)
+            inserted_count += 1
+
+    _save_f5_lines(df)
+    total_with_line = df[(df["date"] == game_date_str) & (df["pull_type"] == pull_type) & df["f5_total"].notna()]
+    logger.info(f"F5 {pull_type}: {inserted_count} new, {updated_count} updated, "
+                f"{len(total_with_line)} with lines for {game_date_str}")
+
+
+def pull_f5_for_signal(game_date_str, game_id, home_team, away_team):
+    """
+    Pull F5 line at signal time for a specific game.
+    Called by V1 under engine when a signal fires.
+
+    Updates:
+      1. f5_lines_2026.parquet with pull_type="signal_time" row
+      2. signals_2026.parquet f5_line_at_signal_time column
+    """
+    try:
+        sys.path.insert(0, str(PROJECT_ROOT))
+        from modules.odds import fetch_all_lines, get_game_lines
+    except ImportError:
+        return None
+
+    try:
+        all_lines = fetch_all_lines(game_date_str)
+        game_lines = get_game_lines(home_team, away_team, all_lines)
+        f5_data = game_lines.get("f5") or {}
+        f5_total = f5_data.get("consensus")
+    except Exception as e:
+        logger.warning(f"F5 signal-time pull failed: {e}")
+        f5_total = None
+
+    # Write to f5_lines_2026.parquet
+    df = _load_f5_lines()
+    now_utc = datetime.now(timezone.utc).isoformat()
+    gid = str(game_id)
+
+    mask = ((df["game_id"].astype(str) == gid) &
+            (df["date"] == game_date_str) &
+            (df["pull_type"] == "signal_time"))
+
+    row_data = {
+        "date": game_date_str,
+        "game_id": gid,
+        "home_team": home_team,
+        "away_team": away_team,
+        "game_time": None,
+        "pull_timestamp": now_utc,
+        "pull_type": "signal_time",
+        "book_key": f5_data.get("book"),
+        "f5_total": f5_total,
+        "f5_over_price": f5_data.get("over_price"),
+        "f5_under_price": f5_data.get("under_price"),
+        "f5_moneyline_home": None,
+        "f5_moneyline_away": None,
+        "actual_f5_total": None,
+    }
+
+    if len(df[mask]) > 0:
+        idx = df[mask].index[0]
+        for col, val in row_data.items():
+            if col != "actual_f5_total" or pd.isna(df.at[idx, col]):
+                df.at[idx, col] = val
+    else:
+        df = pd.concat([df, pd.DataFrame([row_data], columns=F5_COLS)], ignore_index=True)
+
+    _save_f5_lines(df)
+
+    # Update signals_2026.parquet — f5_line_at_signal_time column only
+    if SIGNALS_PATH.exists():
+        sigs = pd.read_parquet(SIGNALS_PATH)
+        if "f5_line_at_signal_time" not in sigs.columns:
+            sigs["f5_line_at_signal_time"] = None
+        sig_mask = ((sigs["game_id"].astype(str) == gid) & (sigs["date"] == game_date_str))
+        if sig_mask.any():
+            sigs.loc[sig_mask, "f5_line_at_signal_time"] = f5_total
+            sigs.to_parquet(SIGNALS_PATH, index=False)
+            logger.info(f"  F5 signal-time: {away_team}@{home_team} f5_line={f5_total}")
+
+    return f5_total
+
+
+def fill_actual_f5_scores(game_date_str):
+    """
+    Fill actual_f5_total for completed games.
+    Uses feature_table.parquet as the source of truth.
+    Idempotent: does not overwrite already-populated values.
+    """
+    if not F5_LINES_PATH.exists():
+        return
+
+    df = _load_f5_lines()
+    pending = df[df["actual_f5_total"].isna()]
+    if pending.empty:
+        return
+
+    # Load actual F5 scores from feature_table
+    ft_path = PROJECT_ROOT / "sim" / "data" / "feature_table.parquet"
+    if not ft_path.exists():
+        return
+    ft = pd.read_parquet(ft_path)
+    ft["game_pk"] = ft["game_pk"].astype(str)
+
+    scores = ft[ft["actual_f5_total"].notna()][["game_pk", "actual_f5_total"]].copy()
+    score_map = dict(zip(scores["game_pk"], scores["actual_f5_total"]))
+
+    updated = 0
+    for idx, row in df.iterrows():
+        if pd.notna(row["actual_f5_total"]):
+            continue  # idempotent — don't overwrite
+        gid = str(row["game_id"])
+        if gid in score_map:
+            df.at[idx, "actual_f5_total"] = score_map[gid]
+            updated += 1
+
+    if updated > 0:
+        _save_f5_lines(df)
+        logger.info(f"F5 actuals filled: {updated} rows")
+
+
+def update_coverage():
+    """Update f5_coverage_2026.json."""
+    if not F5_LINES_PATH.exists():
+        cov = {
+            "last_updated": date.today().isoformat(),
+            "total_games_played": 0, "total_games_with_f5_close": 0,
+            "games_missing_f5_close": 0, "coverage_pct": 0,
+            "total_v1_signals": 0, "total_v1_signals_no_f5": 0,
+        }
+        with open(F5_COVERAGE_PATH, "w") as f:
+            json.dump(cov, f, indent=2)
+        return cov
+
+    df = _load_f5_lines()
+
+    # Games with actual results (denominator)
+    games_played = df[df["actual_f5_total"].notna()]["game_id"].nunique()
+
+    # Games with close pull and F5 line
+    close_rows = df[(df["pull_type"] == "close") & df["f5_total"].notna()]
+    close_with_actual = close_rows[close_rows["actual_f5_total"].notna()]
+    games_with_f5_close = close_with_actual["game_id"].nunique()
+
+    missing = max(0, games_played - games_with_f5_close)
+    coverage = games_with_f5_close / games_played * 100 if games_played > 0 else 0
+
+    # V1 signal alignment
+    v1_signals = 0
+    v1_no_f5 = 0
+    if SIGNALS_PATH.exists():
+        sigs = pd.read_parquet(SIGNALS_PATH)
+        if "f5_line_at_signal_time" in sigs.columns:
+            resolved = sigs[sigs["resolved"] == 1]
+            v1_signals = resolved["f5_line_at_signal_time"].notna().sum()
+            v1_no_f5 = resolved["f5_line_at_signal_time"].isna().sum()
+
+    cov = {
+        "last_updated": date.today().isoformat(),
+        "total_games_played": int(games_played),
+        "total_games_with_f5_close": int(games_with_f5_close),
+        "games_missing_f5_close": int(missing),
+        "coverage_pct": round(coverage, 1),
+        "total_v1_signals": int(v1_signals),
+        "total_v1_signals_no_f5": int(v1_no_f5),
+    }
+
+    F5_DATA.mkdir(parents=True, exist_ok=True)
+    with open(F5_COVERAGE_PATH, "w") as f:
+        json.dump(cov, f, indent=2)
+    logger.info(f"F5 coverage: {games_with_f5_close}/{games_played} ({coverage:.0f}%)")
+    return cov
+
+
+def run_daily(game_date_str, pull_type, schedule=None):
+    """
+    Full daily F5 collection run.
+    Call from the main pipeline at each launchd trigger time.
+    """
+    logger.info(f"F5 collection: {pull_type} pull for {game_date_str}")
+
+    # Ensure signals file has f5 column
+    _ensure_signals_f5_column()
+
+    # Fill actual scores for completed games
+    fill_actual_f5_scores(game_date_str)
+
+    # Pull F5 lines for today's games
+    pull_f5_lines(game_date_str, pull_type, schedule)
+
+    # Update coverage tracking
+    update_coverage()

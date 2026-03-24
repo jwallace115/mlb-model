@@ -1203,8 +1203,23 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         sim_signals = sim_daily(game_date_str=game_date, schedule=games, pitcher_db=pitcher_db)
         if sim_signals:
             logger.info(f"MLB Sim Engine: {len(sim_signals)} UNDER signals generated")
+            # F5 signal-time capture for each V1 signal
+            try:
+                from mlb_sim_f5.data.collect_f5_lines import pull_f5_for_signal
+                for sig in sim_signals:
+                    pull_f5_for_signal(game_date, sig["game_id"],
+                                       sig["home_team"], sig["away_team"])
+            except Exception as e:
+                logger.warning(f"F5 signal-time capture failed (non-fatal): {e}")
     except Exception as e:
         logger.warning(f"MLB Sim Engine failed (non-fatal): {e}")
+
+    # ── F5 data collection (7 AM "open" pull) ────────────────────────────────
+    try:
+        from mlb_sim_f5.data.collect_f5_lines import run_daily as f5_daily
+        f5_daily(game_date, "open", games)
+    except Exception as e:
+        logger.warning(f"F5 collection failed (non-fatal): {e}")
 
     logger.info(f"Complete. {len(results)} games projected.")
     return results

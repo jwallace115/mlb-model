@@ -71,6 +71,16 @@ def main():
         print(f"[refresh_5pm] MLB refresh failed: {e}", file=sys.stderr)
         sys.exit(1)
 
+    # Step 1b: F5 data collection — "close" pull (5 PM trigger)
+    try:
+        from modules.schedule import fetch_schedule
+        from mlb_sim_f5.data.collect_f5_lines import run_daily as f5_daily
+        mlb_games = fetch_schedule(game_date)
+        f5_daily(game_date, "close", mlb_games)
+        print("[refresh_5pm] F5 close pull complete.")
+    except Exception as e:
+        print(f"[refresh_5pm] F5 collection failed (non-fatal): {e}", file=sys.stderr)
+
     # Step 2: NBA model rerun — fresh projections + updated odds (skip_results=True
     # because grading already ran at 7am; we only want fresh projections here)
     push_files = ["results.json"]

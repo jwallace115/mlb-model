@@ -523,6 +523,13 @@ def refresh_games(
     else:
         print(f"\n{Fore.GREEN}No significant changes for {game_date}.{Style.RESET_ALL}")
 
+    # F5 data collection — midday pull (11 AM trigger)
+    try:
+        from mlb_sim_f5.data.collect_f5_lines import run_daily as f5_daily
+        f5_daily(game_date, "midday", games)
+    except Exception as e:
+        logger.warning(f"F5 midday collection failed (non-fatal): {e}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pre-game refresh")
