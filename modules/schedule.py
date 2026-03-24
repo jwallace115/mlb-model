@@ -58,6 +58,14 @@ _FL_VENUE_KEYWORDS = (
 )
 
 
+# 30-team MLB abbreviation whitelist — filter out MiLB / exhibition games
+_MLB_TEAMS = {
+    "ARI", "ATL", "BAL", "BOS", "CHC", "CHW", "CIN", "CLE", "COL", "DET",
+    "HOU", "KCR", "LAA", "LAD", "MIA", "MIL", "MIN", "NYM", "NYY", "OAK",
+    "PHI", "PIT", "SDP", "SEA", "SFG", "STL", "TBR", "TEX", "TOR", "WSN",
+}
+
+
 def _venue_tz(venue_name: str, home_abb: str) -> str:
     """Return IANA timezone string for the given venue / home team."""
     if any(kw in venue_name for kw in _AZ_VENUE_KEYWORDS):
@@ -106,6 +114,12 @@ def fetch_schedule(game_date: Optional[str] = None) -> list[dict]:
 
             home_abb = TEAM_ID_TO_ABB.get(home_id, home["team"].get("abbreviation", "UNK"))
             away_abb = TEAM_ID_TO_ABB.get(away_id, away["team"].get("abbreviation", "UNK"))
+
+            # Filter: only regular-season games between MLB teams
+            game_type = game.get("gameType", "")
+            if game_type != "R" or home_abb not in _MLB_TEAMS or away_abb not in _MLB_TEAMS:
+                logger.info(f"  Skipped: {away_abb} @ {home_abb} (gameType={game_type}, pk={game['gamePk']})")
+                continue
 
             # Probable pitchers
             def _pitcher(team_data: dict) -> dict:
