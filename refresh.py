@@ -530,6 +530,13 @@ def refresh_games(
     except Exception as e:
         logger.warning(f"F5 midday collection failed (non-fatal): {e}")
 
+    # Timing line capture — midday pull (11 AM trigger)
+    try:
+        from mlb_sim.pipeline.timing_line_updater import update_timing_lines
+        update_timing_lines(game_date, "midday")
+    except Exception as e:
+        logger.warning(f"Timing midday capture failed (non-fatal): {e}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pre-game refresh")

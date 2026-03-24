@@ -81,6 +81,14 @@ def main():
     except Exception as e:
         print(f"[refresh_5pm] F5 collection failed (non-fatal): {e}", file=sys.stderr)
 
+    # Step 1c: Timing line capture — "close" pull (5 PM trigger)
+    try:
+        from mlb_sim.pipeline.timing_line_updater import update_timing_lines
+        update_timing_lines(game_date, "close")
+        print("[refresh_5pm] Timing close pull complete.")
+    except Exception as e:
+        print(f"[refresh_5pm] Timing capture failed (non-fatal): {e}", file=sys.stderr)
+
     # Step 2: NBA model rerun — fresh projections + updated odds (skip_results=True
     # because grading already ran at 7am; we only want fresh projections here)
     push_files = ["results.json"]

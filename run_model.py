@@ -1221,6 +1221,13 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     except Exception as e:
         logger.warning(f"F5 collection failed (non-fatal): {e}")
 
+    # ── Timing line capture (7 AM "open" pull) ───────────────────────────────
+    try:
+        from mlb_sim.pipeline.timing_line_updater import update_timing_lines
+        update_timing_lines(game_date, "open", all_lines)
+    except Exception as e:
+        logger.warning(f"Timing line capture failed (non-fatal): {e}")
+
     logger.info(f"Complete. {len(results)} games projected.")
     return results
 

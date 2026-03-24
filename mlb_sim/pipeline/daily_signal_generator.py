@@ -282,6 +282,15 @@ def generate_signals(game_date_str, schedule, pitcher_db):
         _save_signals(combined)
         logger.info(f"  Logged {len(new_signals)} new signals")
 
+        # Backfill timing lines from daily snapshots at signal creation
+        try:
+            from mlb_sim.pipeline.timing_line_updater import backfill_from_snapshots
+            for sig in new_signals:
+                backfill_from_snapshots(game_date_str, sig["game_id"],
+                                        sig["home_team"], sig["away_team"])
+        except Exception as e:
+            logger.debug(f"Timing backfill failed (non-fatal): {e}")
+
     return display_signals
 
 
@@ -376,14 +385,24 @@ def run_daily(game_date_str=None, schedule=None, pitcher_db=None):
 
     logger.info(f"MLB Sim Engine — daily run for {game_date_str}")
 
-    # Step 1: Resolve prior signals
+    # Step 1: Resolve prior signals + compute timing CLV
     logger.info("Step 1: Resolving prior signals...")
     resolve_signals(game_date_str)
+    try:
+        from mlb_sim.pipeline.timing_line_updater import compute_clv_timing
+        compute_clv_timing()
+    except Exception as e:
+        logger.debug(f"Timing CLV compute failed (non-fatal): {e}")
 
-    # Step 2: Recompute rolling performance
+    # Step 2: Recompute rolling performance + timing analysis
     logger.info("Step 2: Recomputing performance...")
     from mlb_sim.pipeline.performance_tracker import compute_performance, check_hard_stop
     perf = compute_performance()
+    try:
+        from mlb_sim.pipeline.timing_tracker import compute_timing_analysis
+        compute_timing_analysis()
+    except Exception as e:
+        logger.debug(f"Timing analysis failed (non-fatal): {e}")
 
     # Step 3: Hard stop check
     logger.info("Step 3: Hard stop check...")
