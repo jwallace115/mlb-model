@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-24T15:15:20.910498+00:00",
+  "generated_at": "2026-03-24T21:00:11.959601+00:00",
   "game_date": "2026-03-24",
   "is_playoff_day": false,
   "plays": [
@@ -11,14 +11,14 @@
       "game_time_et": "11:00 pm et",
       "pred_total": 228.02,
       "lean": "UNDER",
-      "p_over": 0.3926,
+      "p_over": 0.3765,
       "confidence": "MEDIUM",
       "line": 233.5,
       "edge": -5.48,
       "market_gap_flag": false,
       "pred_h1": 113.59,
       "h1_lean": "UNDER",
-      "h1_p_over": 0.5008,
+      "h1_p_over": 0.4984,
       "h1_confidence": "LOW",
       "h1_line": null,
       "h1_edge": null,
@@ -72,7 +72,7 @@
       "ref_sizing_adj": 0.75,
       "final_sizing": 0.75,
       "high_line_under_shadow": false,
-      "summary": "Both teams play at a deliberate pace \u2014 combined 99.9 possessions per 48 minutes, well below the league's 101.4 average. Model has 228.0, 5.5 pts below the 233.5 line \u2014 under. P(under) 61%, edge -5.5 pts."
+      "summary": "Both teams play at a deliberate pace \u2014 combined 99.9 possessions per 48 minutes, well below the league's 101.4 average. Model has 228.0, 5.5 pts below the 233.5 line \u2014 under. P(under) 62%, edge -5.5 pts."
     }
   ],
   "no_plays": [
@@ -84,14 +84,14 @@
       "game_time_et": "7:00 pm et",
       "pred_total": 227.34,
       "lean": "UNDER",
-      "p_over": 0.4356,
+      "p_over": 0.4332,
       "confidence": "LOW",
       "line": 230.5,
       "edge": -3.16,
       "market_gap_flag": false,
       "pred_h1": 115.91,
       "h1_lean": "OVER",
-      "h1_p_over": 0.5731,
+      "h1_p_over": 0.5701,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -155,14 +155,14 @@
       "game_time_et": "7:30 pm et",
       "pred_total": 230.92,
       "lean": "UNDER",
-      "p_over": 0.4787,
+      "p_over": 0.4627,
       "confidence": "LOW",
       "line": 232.0,
       "edge": -1.08,
       "market_gap_flag": false,
       "pred_h1": 116.29,
       "h1_lean": "OVER",
-      "h1_p_over": 0.5923,
+      "h1_p_over": 0.5761,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -226,14 +226,14 @@
       "game_time_et": "8:00 pm et",
       "pred_total": 228.24,
       "lean": "UNDER",
-      "p_over": 0.4663,
+      "p_over": 0.4662,
       "confidence": "LOW",
       "line": 230.0,
       "edge": -1.76,
       "market_gap_flag": false,
       "pred_h1": 114.47,
       "h1_lean": "OVER",
-      "h1_p_over": 0.5303,
+      "h1_p_over": 0.5312,
       "h1_confidence": "LOW",
       "h1_line": null,
       "h1_edge": null,
@@ -1256,7 +1256,7 @@
     }
   },
   "daily_review": {
-    "generated_at": "2026-03-24T15:15:21.501153+00:00",
+    "generated_at": "2026-03-24T21:00:27.288913+00:00",
     "date_reviewed": "2026-03-23",
     "record_summary": {
       "HIGH": {
@@ -1280,7 +1280,7 @@
         "p": 0
       }
     },
-    "narrative": null,
-    "generation_status": "failed"
+    "narrative": "## Rough Night: 4-6 Record with Two Brutal Misses\n\nThe model posted a 4-6 record with -23.6% ROI, dragged down by a pair of catastrophic unders that went sideways in spectacular fashion.\n\n**High Confidence (1-0, +90.9% ROI)**\n\nThe lone high-confidence play cashed comfortably. Philadelphia at Oklahoma City sailed over 222.5, landing at 226. The model projected 228.4 based on both teams playing at elevated pace (100.3 and 103.5 possessions per game) against defenses that had been leaking points. Clean win with solid process.\n\n**Medium Confidence (0-2, -100.0% ROI)**\n\nThis tier got demolished. Houston at Chicago went under 229.0 but exploded to 256 \u2014 a 28.9-point miss. The pregame data showed Chicago's defense allowing 114.6 points per 100 possessions and Houston's at 111.8, but both teams clearly shot far better than their rolling averages suggested. The pace projection (around 101 combined) couldn't account for the offensive eruption that actually occurred.\n\nThe Golden State at Dallas under was even worse \u2014 a 61-point miss. The model projected 207.0 based on Golden State's glacial pace (93.5) and both defenses struggling badly. The game went to overtime with a regulation total of 252, but even the regulation score was 22 points above projection. Dallas and Golden State both torched the nets at rates well beyond what their recent offensive efficiency numbers (105.4 and 111.1) indicated they would.\n\n**Low Confidence (3-4, -18.2% ROI)**\n\nThis tier went 3-4 with modest losses \u2014 nothing alarming in the individual results.\n\n**What to Watch**\n\nTwo massive unders missing by 29 and 61 points suggests the model may be underweighting offensive variance in certain pace/efficiency combinations. When both teams have defensive issues, the simulation might not be accounting for the ceiling outcomes where both offenses get hot simultaneously.",
+    "generation_status": "success"
   }
 }
