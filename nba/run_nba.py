@@ -1060,6 +1060,8 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             "crew_high_exact":           g.get("crew_high_exact"),
             "ref_signal":                g.get("ref_signal"),
             "ref_sizing_adj":            g.get("ref_sizing_adj", 0.0),
+            # High-line UNDER shadow (observation only)
+            "high_line_under_shadow":    g.get("high_line_under_shadow", False),
         })
 
     new_df = pd.DataFrame(rows)
@@ -1114,6 +1116,182 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
         logger.warning(f"Morning snapshot write failed (non-fatal): {_e}")
 
 
+# ── High-line UNDER shadow tracking ──────────────────────────────────────────
+# Regulation-only line bias: closing >= 235, non-Venue, RS only.
+# Shadow observation for 2025-26 — NOT a live betting signal.
+
+_HIGH_LINE_SHADOW_PATH = os.path.join(NBA_DIR, "data", "high_line_under_shadow.csv")
+_HIGH_LINE_THRESHOLD = 235.0
+
+_HIGH_LINE_COLS = [
+    "game_id", "game_date", "home_team", "away_team", "closing_line",
+    "model_projection", "venue_signal", "ref_signal", "game_spread",
+    "away_b2b", "home_b2b", "days_rest_away", "days_rest_home",
+    "predicted_side", "actual_total", "market_error", "went_ot", "result",
+]
+
+
+def _tag_high_line_under_shadow(game_results: list[dict], game_date: str) -> None:
+    """Tag qualifying games and append pre-game rows to shadow CSV."""
+    shadow_rows = []
+    for g in game_results:
+        line = g.get("line")
+        away = g.get("away_team", "")
+        home = g.get("home_team", "")
+        is_venue = away in _ROAD_WARRIOR and home in _STRONG_HOME
+        is_playoff = g.get("is_playoff", False)
+
+        qualifies = (
+            line is not None
+            and float(line) >= _HIGH_LINE_THRESHOLD
+            and not is_venue
+            and not is_playoff
+        )
+        g["high_line_under_shadow"] = qualifies
+
+        if qualifies:
+            shadow_rows.append({
+                "game_id":          g.get("game_id"),
+                "game_date":        game_date,
+                "home_team":        home,
+                "away_team":        away,
+                "closing_line":     float(line),
+                "model_projection": g.get("pred_total"),
+                "venue_signal":     is_venue,
+                "ref_signal":       g.get("ref_signal"),
+                "game_spread":      g.get("game_spread"),
+                "away_b2b":         g.get("b2b_flag_away", 0),
+                "home_b2b":         g.get("home_b2b", 0),
+                "days_rest_away":   g.get("playoff_days_rest_away"),
+                "days_rest_home":   g.get("playoff_days_rest_home"),
+                "predicted_side":   "UNDER",
+                "actual_total":     None,
+                "market_error":     None,
+                "went_ot":          None,
+                "result":           None,
+            })
+            logger.info(
+                f"  📊 HIGH_LINE_SHADOW: {away} @ {home} — line {line} — tracking UNDER"
+            )
+
+    if not shadow_rows:
+        return
+
+    new_df = pd.DataFrame(shadow_rows, columns=_HIGH_LINE_COLS)
+
+    if os.path.exists(_HIGH_LINE_SHADOW_PATH):
+        existing = pd.read_csv(_HIGH_LINE_SHADOW_PATH, dtype=str)
+        # Drop any existing rows for today (allow re-run)
+        existing = existing[existing["game_date"] != game_date]
+        combined = pd.concat([existing, new_df.astype(str)], ignore_index=True)
+    else:
+        combined = new_df.astype(str)
+
+    combined.to_csv(_HIGH_LINE_SHADOW_PATH, index=False)
+    logger.info(f"High-line shadow: {len(shadow_rows)} games logged for {game_date}")
+
+
+def grade_high_line_shadow(game_date: str) -> None:
+    """Backfill actual results for shadow-tracked games from yesterday."""
+    if not os.path.exists(_HIGH_LINE_SHADOW_PATH):
+        return
+
+    df = pd.read_csv(_HIGH_LINE_SHADOW_PATH, dtype=str)
+    yesterday = (pd.Timestamp(game_date) - pd.Timedelta(days=1)).date().isoformat()
+    pending = df[(df["game_date"] == yesterday) & (df["result"].isin(["None", "", "nan"]) | df["result"].isna())]
+    if pending.empty:
+        return
+
+    # Load actual scores from results log
+    results_path = os.path.join(NBA_DIR, "data", "nba_results_log.parquet")
+    if not os.path.exists(results_path):
+        return
+    results = pd.read_parquet(results_path)
+    yday_results = results[results["game_date"] == yesterday]
+    if yday_results.empty:
+        return
+
+    updated = False
+    for idx, row in df.iterrows():
+        if row["game_date"] != yesterday:
+            continue
+        if row.get("result") not in (None, "None", "", "nan"):
+            continue
+
+        gid = str(row["game_id"])
+        match = yday_results[yday_results["game_id"].astype(str) == gid]
+        if match.empty:
+            continue
+
+        actual = match.iloc[0]
+        actual_total = actual.get("actual_total")
+        if pd.isna(actual_total):
+            continue
+
+        closing = float(row["closing_line"])
+        actual_total = float(actual_total)
+        me = actual_total - closing
+        went_ot = actual.get("went_to_ot")
+
+        if actual_total < closing:
+            result = "CORRECT"
+        elif actual_total > closing:
+            result = "INCORRECT"
+        else:
+            result = "PUSH"
+
+        df.at[idx, "actual_total"] = str(actual_total)
+        df.at[idx, "market_error"] = str(round(me, 1))
+        df.at[idx, "went_ot"] = str(int(went_ot)) if went_ot is not None else ""
+        df.at[idx, "result"] = result
+        updated = True
+
+    if updated:
+        df.to_csv(_HIGH_LINE_SHADOW_PATH, index=False)
+        graded = df[df["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
+        n = len(graded)
+        n_correct = (graded["result"] == "CORRECT").sum()
+        n_incorrect = (graded["result"] == "INCORRECT").sum()
+        hr = n_correct / (n_correct + n_incorrect) * 100 if (n_correct + n_incorrect) > 0 else 0
+        me_vals = graded["market_error"].astype(float)
+        me_avg = me_vals.mean()
+        logger.info(f"High-line shadow graded: {n} total, {hr:.0f}% HR, ME={me_avg:+.1f}")
+
+        # Deployment review trigger
+        if n >= 40 and hr >= 54 and me_avg <= -1.0:
+            logger.info("HIGH_LINE_UNDER: Consider deployment review")
+
+
+def get_high_line_shadow_summary() -> dict | None:
+    """Compute season summary from shadow log for dashboard display."""
+    if not os.path.exists(_HIGH_LINE_SHADOW_PATH):
+        return None
+    df = pd.read_csv(_HIGH_LINE_SHADOW_PATH, dtype=str)
+    graded = df[df["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
+    if graded.empty:
+        return None
+
+    n = len(graded)
+    n_correct = (graded["result"] == "CORRECT").sum()
+    n_incorrect = (graded["result"] == "INCORRECT").sum()
+    n_push = (graded["result"] == "PUSH").sum()
+    hr = n_correct / (n_correct + n_incorrect) * 100 if (n_correct + n_incorrect) > 0 else 0
+    me_vals = graded["market_error"].astype(float)
+    me_avg = me_vals.mean()
+
+    # ME excluding OT
+    non_ot = graded[graded["went_ot"].isin(["0", "0.0"])]
+    me_reg = non_ot["market_error"].astype(float).mean() if len(non_ot) > 0 else None
+    ot_rate = (graded["went_ot"].isin(["1", "1.0"]).sum() / n * 100) if n > 0 else 0
+
+    return {
+        "n": n, "n_correct": int(n_correct), "n_incorrect": int(n_incorrect),
+        "n_push": int(n_push), "hit_rate": round(hr, 1),
+        "me_full": round(me_avg, 2), "me_reg": round(me_reg, 2) if me_reg is not None else None,
+        "ot_rate": round(ot_rate, 1),
+    }
+
+
 # ── Main pipeline ─────────────────────────────────────────────────────────────
 
 def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False) -> list[dict]:
@@ -1129,6 +1307,10 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
             grade_yesterday(game_date)
         except Exception as e:
             logger.warning(f"Results grading failed (non-fatal): {e}")
+        try:
+            grade_high_line_shadow(game_date)
+        except Exception as e:
+            logger.warning(f"High-line shadow grading failed (non-fatal): {e}")
 
     # ── Step 2: Today's schedule ──────────────────────────────────────────────
     from nba.modules.fetch_nba_schedule import fetch_today_schedule
@@ -1590,6 +1772,12 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
             g.setdefault("crew_high_exact", None)
             g.setdefault("ref_sizing_adj", 0.0)
             g.setdefault("final_sizing", None)
+
+    # ── Step 8h: High-line UNDER shadow tag ──────────────────────────────────
+    # Discovered in backwards discovery V3 (2026-03-23): closing lines >= 235
+    # show ME_reg = -2.09 (p=0.005) on non-OT, non-Venue games.
+    # Shadow tracking only — NOT a live betting signal.
+    _tag_high_line_under_shadow(game_results, game_date)
 
     # ── Step 9: Print card ────────────────────────────────────────────────────
     print_nba_card(game_results, game_date)

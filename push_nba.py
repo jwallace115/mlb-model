@@ -122,6 +122,8 @@ def load_today_projections(game_date: str) -> list[dict]:
                 "ref_signal": r.get("ref_signal"),
                 "ref_sizing_adj": _safe(r.get("ref_sizing_adj", 0.0)),
                 "final_sizing": _safe(r.get("final_sizing")),
+                # High-line UNDER shadow (observation only)
+                "high_line_under_shadow": bool(r.get("high_line_under_shadow", False)),
             })
         print(f"[push_nba] Loaded {len(rows)} projections for {game_date}")
         return rows
@@ -661,7 +663,8 @@ def serialize(game_date: str, games: list[dict], accuracy: dict,
     for g in games:
         g["summary"] = generate_nba_summary(g)
 
-    plays    = [g for g in games if g.get("bet_tier") in ("TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4", "REF_UNDER")]
+    _PLAY_TIERS = {"TIER_1A", "TIER_1B", "TIER_2", "P1", "P2", "P4", "REF_UNDER"}
+    plays    = [g for g in games if str(g.get("bet_tier", "")) in _PLAY_TIERS]
     no_plays = [g for g in games if g not in plays]
 
     # Sort plays: Playoff boards first, then CORE, then other tiers

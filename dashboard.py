@@ -2727,6 +2727,28 @@ def _render_nba_tab() -> None:
                                 _p6_parts.append(f"{_p6l}: {_n6} bets, {_w6/_n6*100:.0f}% hit, {_r6:+.0f}% ROI")
                     if _p6_parts:
                         st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:6px">📊 Small-edge shadow: {" | ".join(_p6_parts)}</div>')
+
+                # High-line UNDER shadow tracking
+                _hl_path = os.path.join(os.path.dirname(__file__), "nba", "data", "high_line_under_shadow.csv")
+                if os.path.exists(_hl_path):
+                    _hld = pd.read_csv(_hl_path, dtype=str)
+                    # Today's tagged games
+                    _today_str = _nba.get("game_date", "")
+                    _hl_today = _hld[_hld["game_date"] == _today_str]
+                    for _, _hlr in _hl_today.iterrows():
+                        st.html(f'<div style="font-size:0.72em;color:#a78bfa;margin-bottom:3px">'
+                                f'📊 SHADOW: {_hlr["away_team"]} @ {_hlr["home_team"]} — '
+                                f'line {_hlr["closing_line"]} — tracking UNDER</div>')
+                    # Season summary
+                    _hl_graded = _hld[_hld["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
+                    if len(_hl_graded) > 0:
+                        _hl_n = len(_hl_graded)
+                        _hl_w = (_hl_graded["result"] == "CORRECT").sum()
+                        _hl_l = (_hl_graded["result"] == "INCORRECT").sum()
+                        _hl_hr = _hl_w / (_hl_w + _hl_l) * 100 if (_hl_w + _hl_l) > 0 else 0
+                        _hl_me = _hl_graded["market_error"].astype(float).mean()
+                        st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:6px">'
+                                f'📊 High Line Shadow: N={_hl_n} | HR={_hl_hr:.0f}% | ME={_hl_me:+.1f} (2025-26 tracking)</div>')
         except Exception:
             pass
 
