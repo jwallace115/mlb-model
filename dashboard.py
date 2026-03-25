@@ -3250,24 +3250,17 @@ def _render_nba_tab() -> None:
 # ── mlb tab renderer ──────────────────────────────────────────────────────────
 
 def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
-    # ── Opening Day game cards — March 27, 2026 ──────────────────────────
-    _od_date = "2026-03-27"
+    # ── Opening Night game card — March 25, 2026 ─────────────────────────
+    _od_date = "2026-03-25"
     _od_games = [
-        {"away": "NYY", "home": "SFG", "time": "1:35 PM ET", "pk": "823243"},
-        {"away": "OAK", "home": "TOR", "time": "3:07 PM ET", "pk": "822839"},
-        {"away": "COL", "home": "MIA", "time": "3:10 PM ET", "pk": "823893"},
-        {"away": "KCR", "home": "ATL", "time": "3:15 PM ET", "pk": "824946"},
-        {"away": "LAA", "home": "HOU", "time": "4:10 PM ET", "pk": "824216"},
-        {"away": "DET", "home": "SDP", "time": "6:40 PM ET", "pk": "823324"},
-        {"away": "CLE", "home": "SEA", "time": "9:10 PM ET", "pk": "823162"},
-        {"away": "ARI", "home": "LAD", "time": "10:10 PM ET", "pk": "823971"},
+        {"away": "NYY", "home": "SFG", "time": "8:05 PM ET", "pk": "823243"},
     ]
 
-    # Check if Opening Day is today or in the future
+    # Check if Opening Night is today or in the future
     from datetime import date as _dt_date
     _today_str = (data or {}).get("game_date", _dt_date.today().isoformat())
     if _today_str <= _od_date:
-        st.html('<div class="section-hdr">Opening Day \u2014 March 27, 2026</div>')
+        st.html('<div class="section-hdr">Opening Night \u2014 March 25, 2026</div>')
 
         # Load V1 and F5 signals for March 27
         _od_v1_sigs = {}
@@ -3888,7 +3881,7 @@ def main() -> None:
     </div>
     <script>
     (function(){
-      var target = new Date("2026-03-27T22:10:00-04:00").getTime();
+      var target = new Date("2026-03-25T20:05:00-05:00").getTime();
       var wrap = document.getElementById("countdown-wrap");
       var disp = document.getElementById("countdown-display");
       function tick(){
