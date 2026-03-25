@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-25T11:00:15.638718Z",
+  "generated_at": "2026-03-25T15:00:14.560776Z",
   "game_date": "2026-03-25",
   "plays": [],
   "no_plays": [
@@ -22,10 +22,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.45,
-        "proj_total_f5": 4.47,
+        "proj_total_full": 8.4,
+        "proj_total_f5": 4.44,
         "confidence": "LOW",
-        "confidence_score": 0.371,
+        "confidence_score": 0.276,
         "factors": {
           "sp_home_xfip": 3.929,
           "sp_away_xfip": 3.701,
@@ -36,15 +36,15 @@
           "home_wrc_plus": 98.9,
           "away_wrc_plus": 108.2,
           "park_factor": 0.96,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 13.3,
+          "wind_direction": 299,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 60.8,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0171,
+          "temp_factor": 0.9776,
+          "home_wind_adj": 1.0171,
+          "away_wind_adj": 1.0171,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -60,7 +60,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.45,
+        "edge": 1.4,
         "lean": "OVER",
         "consensus": 7.0,
         "value": true
@@ -74,17 +74,6 @@
       "summary": "Model leans under at 8.4 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
       "props": [
         {
-          "player_name": "Max Fried",
-          "team": "NYY",
-          "market": "K",
-          "projection": 6.43,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
           "player_name": "Logan Webb",
           "team": "SFG",
           "market": "K",
@@ -96,32 +85,10 @@
           "is_play": false
         },
         {
-          "player_name": "Willy Adames",
-          "team": "SFG",
-          "market": "TB",
-          "projection": 1.27,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Matt Chapman",
-          "team": "SFG",
-          "market": "TB",
-          "projection": 1.22,
-          "line": null,
-          "lean": null,
-          "edge": null,
-          "edge_pct": null,
-          "is_play": false
-        },
-        {
-          "player_name": "Heliot Ramos",
-          "team": "SFG",
-          "market": "TB",
-          "projection": 1.22,
+          "player_name": "Max Fried",
+          "team": "NYY",
+          "market": "K",
+          "projection": 6.43,
           "line": null,
           "lean": null,
           "edge": null,
@@ -151,6 +118,28 @@
           "is_play": false
         },
         {
+          "player_name": "Heliot Ramos",
+          "team": "SFG",
+          "market": "TB",
+          "projection": 1.22,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Matt Chapman",
+          "team": "SFG",
+          "market": "TB",
+          "projection": 1.22,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
           "player_name": "Trent Grisham",
           "team": "NYY",
           "market": "TB",
@@ -160,8 +149,20 @@
           "edge": null,
           "edge_pct": null,
           "is_play": false
+        },
+        {
+          "player_name": "Willy Adames",
+          "team": "SFG",
+          "market": "TB",
+          "projection": 1.27,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         }
-      ]
+      ],
+      "alerts": []
     }
   ],
   "parlay": [],
@@ -179,6 +180,8 @@
   "alerts": [],
   "transactions": [
     {
+      "id": 26,
+      "game_date": "2026-03-25",
       "transaction_id": 893395,
       "player_name": "Jeimer Candelario",
       "player_id": 600869,
@@ -190,9 +193,12 @@
       "description": "Los Angeles Angels selected the contract of 3B Jeimer Candelario from Salt Lake Bees.",
       "affects_game_pk": null,
       "affects_team": null,
-      "affects_matchup": null
+      "affects_matchup": null,
+      "recorded_at": "2026-03-25 11:00:15"
     },
     {
+      "id": 27,
+      "game_date": "2026-03-25",
       "transaction_id": 893396,
       "player_name": "Adam Frazier",
       "player_id": 624428,
@@ -204,45 +210,8 @@
       "description": "Los Angeles Angels selected the contract of 2B Adam Frazier from Salt Lake Bees.",
       "affects_game_pk": null,
       "affects_team": null,
-      "affects_matchup": null
+      "affects_matchup": null,
+      "recorded_at": "2026-03-25 11:00:15"
     }
-  ],
-  "mlb_clv_summary": {
-    "clv_available": false,
-    "reason": "insufficient_sample (n=0)",
-    "clv_coverage_pct": 0.0
-  },
-  "stop_rule_status": {
-    "model_suspended": false,
-    "suspended_tiers": [],
-    "tier_details": {
-      "HIGH": {
-        "n": null,
-        "roi": null,
-        "triggered_at": null
-      },
-      "MEDIUM": {
-        "n": null,
-        "roi": null,
-        "triggered_at": null
-      },
-      "LOW": {
-        "n": null,
-        "roi": null,
-        "triggered_at": null
-      }
-    },
-    "full_model_details": {
-      "n": null,
-      "roi": null,
-      "triggered_at": null
-    }
-  },
-  "daily_review": {
-    "generated_at": "2026-03-25T11:00:15.658812+00:00",
-    "date_reviewed": "2026-03-24",
-    "record_summary": {},
-    "narrative": null,
-    "generation_status": "no_games"
-  }
+  ]
 }
