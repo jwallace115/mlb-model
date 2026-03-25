@@ -3250,6 +3250,101 @@ def _render_nba_tab() -> None:
 # ── mlb tab renderer ──────────────────────────────────────────────────────────
 
 def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
+    # ── Opening Day game cards — March 27, 2026 ──────────────────────────
+    _od_date = "2026-03-27"
+    _od_games = [
+        {"away": "NYY", "home": "SFG", "time": "1:35 PM ET", "pk": "823243"},
+        {"away": "OAK", "home": "TOR", "time": "3:07 PM ET", "pk": "822839"},
+        {"away": "COL", "home": "MIA", "time": "3:10 PM ET", "pk": "823893"},
+        {"away": "KCR", "home": "ATL", "time": "3:15 PM ET", "pk": "824946"},
+        {"away": "LAA", "home": "HOU", "time": "4:10 PM ET", "pk": "824216"},
+        {"away": "DET", "home": "SDP", "time": "6:40 PM ET", "pk": "823324"},
+        {"away": "CLE", "home": "SEA", "time": "9:10 PM ET", "pk": "823162"},
+        {"away": "ARI", "home": "LAD", "time": "10:10 PM ET", "pk": "823971"},
+    ]
+
+    # Check if Opening Day is today or in the future
+    from datetime import date as _dt_date
+    _today_str = (data or {}).get("game_date", _dt_date.today().isoformat())
+    if _today_str <= _od_date:
+        st.html('<div class="section-hdr">Opening Day \u2014 March 27, 2026</div>')
+
+        # Load V1 and F5 signals for March 27
+        _od_v1_sigs = {}
+        _od_f5_sigs = {}
+        try:
+            _od_v1_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.parquet")
+            if os.path.exists(_od_v1_path):
+                _od_v1_df = pd.read_parquet(_od_v1_path)
+                for _, _r in _od_v1_df[_od_v1_df["date"] == _od_date].iterrows():
+                    _od_v1_sigs[str(_r["game_id"])] = _r
+        except Exception:
+            pass
+        try:
+            _od_f5_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "f5_signals_2026.parquet")
+            if os.path.exists(_od_f5_path):
+                _od_f5_df = pd.read_parquet(_od_f5_path)
+                for _, _r in _od_f5_df[_od_f5_df["date"] == _od_date].iterrows():
+                    _od_f5_sigs[str(_r["game_id"])] = _r
+        except Exception:
+            pass
+
+        # Load current lines from results.json plays/no_plays
+        _od_lines = {}
+        if data and data.get("game_date") == _od_date:
+            for _g in (data.get("plays", []) + data.get("no_plays", [])):
+                _gpk = str(_g.get("game_pk", ""))
+                _ln = _g.get("line") or _g.get("consensus_line")
+                if _gpk and _ln is not None:
+                    _od_lines[_gpk] = _ln
+
+        for _og in _od_games:
+            _pk = _og["pk"]
+            _v1 = _od_v1_sigs.get(_pk)
+            _f5 = _od_f5_sigs.get(_pk)
+            _line = _od_lines.get(_pk)
+            _has_signal = _v1 is not None or _f5 is not None
+
+            # Card styling
+            _bg = "#1a2433" if _has_signal else "#1a1a2e"
+            _border = "#3b82f6" if _has_signal else "#374151"
+            _text_clr = "#e2e8f0" if _has_signal else "#6b7280"
+
+            _card = (f'<div style="background:{_bg};border:1px solid {_border};'
+                     f'border-radius:6px;padding:10px 14px;margin-bottom:6px">')
+            # Header: matchup + time + line
+            _line_str = f"{float(_line):.1f}" if _line else "Lines pending"
+            _card += (f'<div style="color:{_text_clr};font-size:0.88em;font-weight:600">'
+                      f'{_og["away"]} @ {_og["home"]} \u00b7 {_og["time"]} \u00b7 '
+                      f'O/U {_line_str}</div>')
+
+            # V1 signal
+            if _v1 is not None:
+                _v1_ln = f"{float(_v1['line_at_signal_time']):.1f}" if pd.notna(_v1.get("line_at_signal_time")) else "TBD"
+                _v1_pu = f"{float(_v1['raw_p_under'])*100:.1f}%" if pd.notna(_v1.get("raw_p_under")) else ""
+                _card += (f'<div style="color:#60a5fa;font-size:0.80em;margin-top:4px">'
+                          f'\u25b6 V1 UNDER {_v1_ln} \u00b7 {_v1["stake_units"]}u \u00b7 '
+                          f'p_under={_v1_pu}</div>')
+
+            # F5 signal
+            if _f5 is not None:
+                _f5_side = _f5.get("f5_signal_side", "")
+                _f5_ln = f"{float(_f5['f5_line']):.1f}" if pd.notna(_f5.get("f5_line")) else "TBD"
+                _f5_p = _f5.get("p_under_full") if _f5_side == "UNDER" else _f5.get("p_over_full")
+                _f5_p_str = f"{float(_f5_p)*100:.1f}%" if pd.notna(_f5_p) else ""
+                _f5_clr = "#60a5fa" if _f5_side == "UNDER" else "#fbbf24"
+                _card += (f'<div style="color:{_f5_clr};font-size:0.80em;margin-top:2px">'
+                          f'\u25b6 F5 {_f5_side} {_f5_ln} \u00b7 {_f5["stake_units"]}u \u00b7 '
+                          f'p={_f5_p_str}</div>')
+
+            # No signal
+            if not _has_signal:
+                _card += ('<div style="color:#6b7280;font-size:0.78em;margin-top:4px">'
+                          'No signal</div>')
+
+            _card += '</div>'
+            st.html(_card)
+
     # ── season stats banner ───────────────────────────────────────────────
     if stats:
         _render_season_header(stats)
@@ -3780,6 +3875,41 @@ def main() -> None:
         if st.button("🔄 Refresh", use_container_width=True):
             st.cache_data.clear()
             st.rerun()
+
+    # ── Opening Day countdown ────────────────────────────────────────────────
+    st.html("""
+    <div id="countdown-wrap" style="text-align:center;padding:18px 0 14px 0;margin-bottom:10px">
+      <div style="font-size:1.1em;color:#e2e8f0;font-weight:600;margin-bottom:6px">
+        Scott the countdown begins
+      </div>
+      <div id="countdown-display" style="font-size:1.8em;font-weight:700;
+           color:#60a5fa;font-family:monospace;letter-spacing:2px">
+      </div>
+    </div>
+    <script>
+    (function(){
+      var target = new Date("2026-03-27T22:10:00-04:00").getTime();
+      var wrap = document.getElementById("countdown-wrap");
+      var disp = document.getElementById("countdown-display");
+      function tick(){
+        var now = Date.now();
+        var diff = target - now;
+        if(diff <= 0){
+          wrap.innerHTML = '<div style="font-size:1.05em;color:#4ade80;font-weight:600;padding:18px 0 14px 0">' +
+            '\u26be The 2026 MLB Season is underway.</div>';
+          return;
+        }
+        var d = Math.floor(diff/86400000);
+        var h = Math.floor((diff%86400000)/3600000);
+        var m = Math.floor((diff%3600000)/60000);
+        var s = Math.floor((diff%60000)/1000);
+        disp.textContent = d+"d "+("0"+h).slice(-2)+"h "+("0"+m).slice(-2)+"m "+("0"+s).slice(-2)+"s";
+        setTimeout(tick, 1000);
+      }
+      tick();
+    })();
+    </script>
+    """)
 
     # ── sport tabs ────────────────────────────────────────────────────────────
     tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_reviews = st.tabs(["⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "📋 Reviews"])
