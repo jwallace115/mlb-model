@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-24T11:00:07.812884Z",
+  "generated_at": "2026-03-25T11:00:02.795120Z",
   "is_spring_training": true,
-  "total_tracked": 188,
+  "total_tracked": 198,
   "total_plays": 21,
   "overall": {
     "wins": 0,
@@ -259,16 +259,16 @@
     }
   },
   "projection_accuracy": {
-    "tracked": 185,
-    "mae": 4.32,
+    "tracked": 195,
+    "mae": 4.36,
     "avg_bias": 1.41,
-    "within_1_run": 13.0,
-    "within_2_runs": 33.0,
-    "within_3_runs": 44.9,
+    "within_1_run": 12.3,
+    "within_2_runs": 32.3,
+    "within_3_runs": 44.1,
     "mae_by_stars": {
       "\u2b50\u2b50": 2.72,
       "\u2b50": 6.3,
-      "NO PLAY": 4.29
+      "NO PLAY": 4.34
     }
   },
   "factor_correlations": [],
@@ -358,6 +358,20 @@
       "park_factor": 0.95
     },
     {
+      "game_date": "2026-03-24",
+      "matchup": "BOS @ MIN",
+      "projected_total": 8.01,
+      "actual_total": 21.0,
+      "projection_error": 13.0,
+      "recommendation": "UNDER",
+      "result": "NO_LINE",
+      "star_rating": "NO PLAY",
+      "confidence": "LOW",
+      "temperature": 52.1,
+      "wind_desc": "Blowing Out to CF",
+      "park_factor": 0.99
+    },
+    {
       "game_date": "2026-03-15",
       "matchup": "LAD @ CHC",
       "projected_total": 9.37,
@@ -398,20 +412,6 @@
       "temperature": 66.9,
       "wind_desc": "Blowing In from CF",
       "park_factor": 0.95
-    },
-    {
-      "game_date": "2026-03-16",
-      "matchup": "PHI @ DET",
-      "projected_total": 8.22,
-      "actual_total": 19.0,
-      "projection_error": 10.8,
-      "recommendation": "UNDER",
-      "result": "NO_LINE",
-      "star_rating": "NO PLAY",
-      "confidence": "LOW",
-      "temperature": 29.2,
-      "wind_desc": "Blowing R to L",
-      "park_factor": 0.99
     }
   ],
   "props_record": {},
