@@ -212,7 +212,7 @@ def generate_signals(game_date_str, schedule, pitcher_db):
 
         # Get market line (evaluation only — never a model input)
         from modules.odds import fetch_all_lines, get_game_lines
-        all_lines = fetch_all_lines(game_date_str) if not hasattr(generate_signals, "_lines_cache") else generate_signals._lines_cache
+        all_lines = fetch_all_lines() if not hasattr(generate_signals, "_lines_cache") else generate_signals._lines_cache
         generate_signals._lines_cache = all_lines
         game_lines = get_game_lines(home, away, all_lines)
         line = (game_lines.get("full") or {}).get("consensus")
