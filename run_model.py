@@ -1197,6 +1197,15 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
                 print(f"{C['cyan']}Season Record (vs line): "
                       f"{correct}-{total-correct} ({pct:.1f}%){Style.RESET_ALL}\n")
 
+    # ── Daily CSW refresh (pull yesterday's pitch-level data) ────────────────
+    try:
+        from datetime import timedelta
+        from modules.pitchers import refresh_daily_csw
+        yesterday = (datetime.strptime(game_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+        refresh_daily_csw(yesterday)
+    except Exception as e:
+        logger.warning(f"CSW daily refresh failed (non-fatal): {e}")
+
     # ── MLB Sim Engine — UNDER signals (frozen S2/S3 engine) ────────────────
     try:
         from mlb_sim.pipeline.daily_signal_generator import run_daily as sim_daily
@@ -1220,6 +1229,20 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         f5_daily(game_date, "open", games)
     except Exception as e:
         logger.warning(f"F5 collection failed (non-fatal): {e}")
+
+    # ── F5 Signal Engine — Under + Over signals on F5 totals ──────────────
+    f5_display_signals = []
+    try:
+        from mlb_sim.pipeline.f5_signal_generator import (
+            compute_all_game_probs, run_daily as f5_sig_daily
+        )
+        all_game_probs = compute_all_game_probs(game_date, games, pitcher_db)
+        if all_game_probs:
+            f5_display_signals = f5_sig_daily(game_date, all_game_probs)
+            if f5_display_signals:
+                logger.info(f"F5 Engine: {len(f5_display_signals)} signals generated")
+    except Exception as e:
+        logger.warning(f"F5 Signal Engine failed (non-fatal): {e}")
 
     # ── Timing line capture (7 AM "open" pull) ───────────────────────────────
     try:

@@ -89,6 +89,14 @@ def main():
     except Exception as e:
         print(f"[refresh_5pm] Timing capture failed (non-fatal): {e}", file=sys.stderr)
 
+    # Step 1d: F5 signal resolution (resolve with latest actuals + fill closing lines)
+    try:
+        from mlb_sim.pipeline.f5_signal_generator import run_daily as f5_sig_daily
+        f5_sig_daily(game_date, all_game_probs=None)  # resolve-only
+        print("[refresh_5pm] F5 signal resolve complete.")
+    except Exception as e:
+        print(f"[refresh_5pm] F5 signal resolve failed (non-fatal): {e}", file=sys.stderr)
+
     # Step 2: NBA model rerun — fresh projections + updated odds (skip_results=True
     # because grading already ran at 7am; we only want fresh projections here)
     push_files = ["results.json"]

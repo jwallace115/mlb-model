@@ -537,6 +537,13 @@ def refresh_games(
     except Exception as e:
         logger.warning(f"Timing midday capture failed (non-fatal): {e}")
 
+    # F5 signal resolution (resolve any prior F5 signals with new actuals)
+    try:
+        from mlb_sim.pipeline.f5_signal_generator import run_daily as f5_sig_daily
+        f5_sig_daily(game_date, all_game_probs=None)  # resolve-only
+    except Exception as e:
+        logger.warning(f"F5 signal resolve failed (non-fatal): {e}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pre-game refresh")

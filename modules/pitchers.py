@@ -224,52 +224,92 @@ def _fetch_fangraphs_pitching(year: int) -> dict:
     return db
 
 
-def _fetch_savant_csw(year: int) -> dict:
+def _fetch_savant_csw(year: int = None) -> dict:
     """
-    Pull CSW%, Whiff%, and F-Strike% from Savant custom leaderboard.
-    Returns {mlbam_id_str: {"csw_pct": float, "whiff_pct": float, "f_strike_pct": float}, ...}
-    Also keyed by lowercase "last, first" name for fallback matching.
+    Load CSW%, Whiff%, and F-Strike% from pitcher_start_metrics_per_start.csv.
+
+    Uses rolling 5-start average (csw_r5, whiff_r5, f_strike_r5) from the
+    most recent start per pitcher — the same data source and feature definition
+    used to train S2.
+
+    Fallback chain per pitcher:
+      1. Latest available row overall (2026 if it exists, else 2025)
+      2. Latest 2024 row
+      3. League median (CSW=27.0, whiff=22.2, fstrike=61.7)
+
+    Returns {mlbam_id_str: {"csw_pct": float, "whiff_pct": float,
+             "f_strike_pct": float, "csw_source": str}, ...}
+    Also keyed by lowercase "first last" name for fallback matching.
     """
-    url = (
-        "https://baseballsavant.mlb.com/leaderboard/custom"
-        f"?year={year}&type=pitcher&filter=&sort=4&sortDir=desc"
-        "&min=1&selections=csw_rate,whiff_percent,f_strike_percent"
-        "&chart=false&csv=true"
-    )
-    headers = {
-        "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                       "AppleWebKit/537.36 (KHTML, like Gecko) "
-                       "Chrome/120.0.0.0 Safari/537.36"),
-    }
-    try:
-        resp = requests.get(url, headers=headers, timeout=30)
-        resp.raise_for_status()
-        df = pd.read_csv(StringIO(resp.text))
-    except Exception as e:
-        logger.warning(f"Savant CSW fetch failed (non-fatal): {e}")
+    csv_path = os.path.join(os.path.dirname(__file__), "..",
+                            "research", "mlb_phase_a",
+                            "pitcher_start_metrics_per_start.csv")
+    if not os.path.exists(csv_path):
+        logger.warning(f"Per-start CSW file not found: {csv_path}")
         return {}
 
-    CSW_MIN_PA = 30
+    try:
+        df = pd.read_csv(csv_path)
+    except Exception as e:
+        logger.warning(f"Per-start CSW load failed: {e}")
+        return {}
+
+    # Sort by date to get most recent start per pitcher
+    df = df.sort_values("game_date")
+    latest = df.groupby("pitcher_id").last().reset_index()
+
+    CSW_MEDIAN = 27.0
+    WHIFF_MEDIAN = 22.2
+    FSTRIKE_MEDIAN = 61.7
+
     db: dict = {}
-    for _, row in df.iterrows():
-        pa = row.get("pa") or row.get("p_total_pa") or 0
-        pid = str(int(row.get("player_id", 0) or 0))
-        raw_name = str(row.get("last_name, first_name", "") or "")
-        csw = row.get("csw_rate") or row.get("csw_percent")
-        whiff = row.get("whiff_percent")
-        fstrike = row.get("f_strike_percent")
+    for _, row in latest.iterrows():
+        pid = str(int(row["pitcher_id"]))
+        season = int(row.get("season", 0))
+        raw_name = str(row.get("pitcher_name", "") or "")
+
+        # Use rolling-5 if available, fall back to single-start pct
+        csw = row.get("csw_r5")
+        whiff = row.get("whiff_r5")
+        fstrike = row.get("f_strike_r5")
+
+        if pd.isna(csw):
+            csw = row.get("csw_pct")
+        if pd.isna(whiff):
+            whiff = row.get("whiff_pct")
+        if pd.isna(fstrike):
+            fstrike = row.get("f_strike_pct")
+
+        # Determine source label
+        if season >= 2026:
+            source = "rolling_2026"
+        elif season >= 2025:
+            source = "rolling_2025"
+        elif season >= 2024:
+            source = "rolling_2024"
+        else:
+            source = "rolling_prior"
+
+        # Apply league median fallback for any remaining nulls
+        if pd.isna(csw):
+            csw = CSW_MEDIAN
+            source = "league_median"
+        if pd.isna(whiff):
+            whiff = WHIFF_MEDIAN
+        if pd.isna(fstrike):
+            fstrike = FSTRIKE_MEDIAN
 
         entry = {
-            "csw_pct": float(csw) if pd.notna(csw) else None,
-            "whiff_pct": float(whiff) if pd.notna(whiff) else None,
-            "f_strike_pct": float(fstrike) if pd.notna(fstrike) else None,
-            "csw_insufficient_sample": int(float(pa)) < CSW_MIN_PA,
+            "csw_pct": round(float(csw), 2),
+            "whiff_pct": round(float(whiff), 2),
+            "f_strike_pct": round(float(fstrike), 2),
+            "csw_source": source,
+            "csw_insufficient_sample": False,
         }
 
-        if pid and pid != "0":
-            db[pid] = entry
+        db[pid] = entry
         if raw_name:
-            # Store as "first last" lowercase for name matching
+            # "Last, First" -> "first last" lowercase for name matching
             if "," in raw_name:
                 parts = [p.strip() for p in raw_name.split(",", 1)]
                 name_key = f"{parts[1]} {parts[0]}".lower()
@@ -277,7 +317,8 @@ def _fetch_savant_csw(year: int) -> dict:
                 name_key = raw_name.lower()
             db[name_key] = entry
 
-    logger.info(f"Savant CSW: loaded {len(df)} pitchers for {year}")
+    logger.info(f"CSW from per-start CSV: {len(latest)} pitchers "
+                f"(latest seasons: {latest['season'].value_counts().to_dict()})")
     return db
 
 
@@ -402,9 +443,9 @@ def build_pitcher_db(year: Optional[int] = None) -> dict:
             # Pitcher only in prior year — regress heavily, no current data
             blended[key] = _blend_pitcher_entry(prior, None)
 
-    # --- Enrich with CSW/Whiff/F-Strike from Savant custom leaderboard ---
+    # --- Enrich with CSW/Whiff/F-Strike from per-start Statcast CSV ---
     try:
-        csw_db = _fetch_savant_csw(cur_year)
+        csw_db = _fetch_savant_csw()
         csw_matched = 0
         for key, entry in blended.items():
             if key == "_meta":
@@ -414,6 +455,7 @@ def build_pitcher_db(year: Optional[int] = None) -> dict:
                 entry["csw_pct"] = csw_entry.get("csw_pct")
                 entry["whiff_pct"] = csw_entry.get("whiff_pct")
                 entry["f_strike_pct"] = csw_entry.get("f_strike_pct")
+                entry["csw_source"] = csw_entry.get("csw_source", "unknown")
                 entry["csw_insufficient_sample"] = csw_entry.get("csw_insufficient_sample", False)
                 csw_matched += 1
         logger.info(f"CSW enrichment: {csw_matched} pitchers matched")
@@ -472,6 +514,7 @@ def get_pitcher_metrics(pitcher_info: dict, pitcher_db: dict) -> dict:
         e.setdefault("csw_pct", None)
         e.setdefault("whiff_pct", None)
         e.setdefault("f_strike_pct", None)
+        e.setdefault("csw_source", "default")
         e.setdefault("csw_insufficient_sample", True)
         return e
 
@@ -493,3 +536,162 @@ def get_pitcher_metrics(pitcher_info: dict, pitcher_db: dict) -> dict:
 
     logger.debug(f"Pitcher not found: '{name}' (id={pid}) — using league average")
     return default
+
+
+# ── Daily CSW refresh: append yesterday's starts to per-start CSV ────────────
+
+def refresh_daily_csw(game_date_str: str):
+    """
+    Pull pitch-level Statcast for yesterday's completed starts and append
+    to pitcher_start_metrics_per_start.csv with updated rolling metrics.
+
+    Idempotent: skips pitcher+date combos already in the CSV.
+    Only processes the given date — never repulls full history.
+    """
+    csv_path = os.path.join(os.path.dirname(__file__), "..",
+                            "research", "mlb_phase_a",
+                            "pitcher_start_metrics_per_start.csv")
+    if not os.path.exists(csv_path):
+        logger.warning("Per-start CSV not found — skipping CSW refresh")
+        return 0
+
+    try:
+        from pybaseball import statcast
+    except ImportError:
+        logger.warning("pybaseball not installed — skipping CSW refresh")
+        return 0
+
+    df_csv = pd.read_csv(csv_path)
+    df_csv["game_date"] = df_csv["game_date"].astype(str)
+
+    # Pull all pitches for this date
+    try:
+        pitches = statcast(start_dt=game_date_str, end_dt=game_date_str)
+    except Exception as e:
+        logger.warning(f"Statcast pull failed for {game_date_str}: {e}")
+        return 0
+
+    if pitches is None or len(pitches) == 0:
+        logger.info(f"CSW refresh: no pitches found for {game_date_str}")
+        return 0
+
+    # Identify starters: pitcher with pitch_number=1 in inning 1
+    starters = pitches[
+        (pitches["inning"] == 1) & (pitches["inning_topbot"].isin(["Top", "Bot"]))
+    ].groupby("game_pk")["pitcher"].first().reset_index()
+    # Also get starters from the other half-inning
+    starters2 = pitches[
+        (pitches["inning"] == 1)
+    ].groupby(["game_pk", "inning_topbot"])["pitcher"].first().reset_index()
+    starter_ids = set(starters2["pitcher"].unique())
+
+    # Filter to starter pitches only
+    starter_pitches = pitches[pitches["pitcher"].isin(starter_ids)].copy()
+
+    new_rows = []
+    year = int(game_date_str[:4])
+
+    for (game_pk, pitcher_id), grp in starter_pitches.groupby(["game_pk", "pitcher"]):
+        pitcher_id = int(pitcher_id)
+        game_pk = int(game_pk)
+
+        # Idempotency: skip if already in CSV
+        existing = df_csv[
+            (df_csv["pitcher_id"] == pitcher_id) &
+            (df_csv["game_date"] == game_date_str)
+        ]
+        if len(existing) > 0:
+            continue
+
+        total = len(grp)
+        if total < 10:
+            continue  # not a real start
+
+        # Derive per-start metrics from pitch descriptions
+        called = (grp["description"] == "called_strike").sum()
+        swinging = grp["description"].str.contains("swinging_strike", na=False).sum()
+        csw_pct = round((called + swinging) / total * 100, 2)
+
+        # Whiff: swinging strikes / swings
+        swing_events = ["swinging_strike", "swinging_strike_blocked",
+                        "foul", "foul_tip", "foul_bunt", "missed_bunt",
+                        "hit_into_play", "hit_into_play_no_out",
+                        "hit_into_play_score"]
+        swings = grp["description"].isin(swing_events).sum()
+        whiff_pct = round(swinging / swings * 100, 2) if swings > 0 else 0.0
+
+        # F-Strike: first-pitch strikes
+        if "pitch_number" in grp.columns:
+            fp = grp[grp["pitch_number"] == 1]
+            fp_strikes = fp[fp["type"].isin(["S", "X"])].shape[0]
+            fstrike_pct = round(fp_strikes / len(fp) * 100, 2) if len(fp) > 0 else 0.0
+        else:
+            fstrike_pct = 0.0
+
+        # Pitcher name
+        name_col = grp["player_name"].iloc[0] if "player_name" in grp.columns else ""
+
+        # K and BB counts
+        k_count = 0
+        bb_count = 0
+        if "events" in grp.columns:
+            events = grp["events"].dropna()
+            k_count = int(events.str.contains("strikeout", case=False).sum())
+            bb_count = int(events.str.contains("walk", case=False).sum())
+
+        # Compute rolling 5-start averages from CSV history + this new start
+        prior = df_csv[df_csv["pitcher_id"] == pitcher_id].sort_values("game_date").tail(4)
+        prior_csw = prior["csw_pct"].tolist()
+        prior_whiff = prior["whiff_pct"].tolist()
+        prior_fstrike = prior["f_strike_pct"].tolist()
+
+        all_csw = prior_csw + [csw_pct]
+        all_whiff = prior_whiff + [whiff_pct]
+        all_fstrike = prior_fstrike + [fstrike_pct]
+
+        csw_r5 = round(sum(all_csw) / len(all_csw), 2)
+        whiff_r5 = round(sum(all_whiff) / len(all_whiff), 2)
+        fstrike_r5 = round(sum(all_fstrike) / len(all_fstrike), 2)
+
+        starts_to_date = len(prior) + 1
+        rolling_complete = 1 if starts_to_date >= 5 else 0
+
+        new_rows.append({
+            "pitcher_id": pitcher_id,
+            "pitcher_name": name_col,
+            "game_date": game_date_str,
+            "game_pk": game_pk,
+            "f_strike_pct": fstrike_pct,
+            "whiff_pct": whiff_pct,
+            "csw_pct": csw_pct,
+            "fb_velo": None,
+            "fb_velo_max": None,
+            "total_pitches": total,
+            "strikes_pct": round((grp["type"] == "S").sum() / total * 100, 2),
+            "k_count": k_count,
+            "bb_count": bb_count,
+            "season": year,
+            "starts_to_date": starts_to_date,
+            "f_strike_r5": fstrike_r5,
+            "whiff_r5": whiff_r5,
+            "csw_r5": csw_r5,
+            "fb_velo_r5": None,
+            "fb_velo_r3": None,
+            "f_strike_season": None,
+            "whiff_season": None,
+            "fb_velo_season": None,
+            "f_strike_trend": None,
+            "whiff_trend": None,
+            "velo_trend": None,
+            "rolling_complete": rolling_complete,
+        })
+
+    if new_rows:
+        new_df = pd.DataFrame(new_rows)
+        combined = pd.concat([df_csv, new_df], ignore_index=True)
+        combined.to_csv(csv_path, index=False)
+        logger.info(f"CSW refresh: appended {len(new_rows)} starts for {game_date_str}")
+    else:
+        logger.info(f"CSW refresh: no new starts to add for {game_date_str}")
+
+    return len(new_rows)

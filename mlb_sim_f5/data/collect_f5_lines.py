@@ -42,14 +42,68 @@ F5_COLS = [
     "pull_timestamp", "pull_type", "book_key",
     "f5_total", "f5_over_price", "f5_under_price",
     "f5_moneyline_home", "f5_moneyline_away",
-    "actual_f5_total",
+    "actual_f5_total", "is_canonical",
 ]
+
+
+def _select_canonical_line(f5_data):
+    """
+    Select the canonical F5 total line from multi-book data.
+
+    Canonical = the line where abs(over_price - under_price) is minimized
+    (most balanced prices). Tiebreaker: prefer the lower line.
+
+    Args:
+        f5_data: dict from _build_game_lines, containing per-book entries
+                 like {"draftkings": {"line": 4.5, "over": -115, "under": -115}, ...}
+                 plus "consensus", "best_over", "best_under" keys.
+
+    Returns:
+        (f5_total, over_price, under_price, book_key) or (None, None, None, None)
+    """
+    if not f5_data:
+        return None, None, None, None
+
+    # Collect all book lines with prices
+    candidates = []
+    skip_keys = {"consensus", "best_over", "best_under", "home_team", "away_team",
+                 "book", "source", "over_price", "under_price"}
+    for key, val in f5_data.items():
+        if key in skip_keys or not isinstance(val, dict):
+            continue
+        line = val.get("line")
+        over = val.get("over")
+        under = val.get("under")
+        if line is not None and over is not None and under is not None:
+            candidates.append({
+                "book": key,
+                "line": float(line),
+                "over": int(over),
+                "under": int(under),
+                "balance": abs(int(over) - int(under)),
+            })
+
+    if not candidates:
+        # No book-level data with prices — fall back to consensus
+        total = f5_data.get("consensus")
+        if total is not None:
+            return total, None, None, None
+        return None, None, None, None
+
+    # Sort: most balanced first (lowest abs diff), then lowest line as tiebreaker
+    candidates.sort(key=lambda c: (c["balance"], c["line"]))
+    best = candidates[0]
+    return best["line"], best["over"], best["under"], best["book"]
 
 
 def _load_f5_lines():
     """Load existing F5 lines or create empty DataFrame."""
     if F5_LINES_PATH.exists():
-        return pd.read_parquet(F5_LINES_PATH)
+        df = pd.read_parquet(F5_LINES_PATH)
+        # Add is_canonical column if missing (backward compat)
+        if "is_canonical" not in df.columns:
+            df["is_canonical"] = True  # treat legacy rows as canonical
+        return df
     logger.info("First run — initializing F5 data files")
     return pd.DataFrame(columns=F5_COLS)
 
@@ -109,14 +163,11 @@ def pull_f5_lines(game_date_str, pull_type, schedule=None):
         away = game.get("away_team", "")
         gtime = game.get("game_time_et") or game.get("game_time") or None
 
-        # Get F5 line from odds payload
+        # Get F5 line from odds payload — use canonical selection
         game_lines = get_game_lines(home, away, all_lines)
         f5_data = game_lines.get("f5") or {}
 
-        f5_total = f5_data.get("consensus")
-        f5_over_price = f5_data.get("over_price")
-        f5_under_price = f5_data.get("under_price")
-        book_key = f5_data.get("book") or f5_data.get("source") or None
+        f5_total, f5_over_price, f5_under_price, book_key = _select_canonical_line(f5_data)
 
         # F5 moneylines (capture if available)
         f5_ml_home = f5_data.get("home_ml")
@@ -143,6 +194,7 @@ def pull_f5_lines(game_date_str, pull_type, schedule=None):
             "f5_moneyline_home": f5_ml_home,
             "f5_moneyline_away": f5_ml_away,
             "actual_f5_total": None,
+            "is_canonical": True if f5_total is not None else False,
         }
 
         if len(existing) > 0:
@@ -182,14 +234,15 @@ def pull_f5_for_signal(game_date_str, game_id, home_team, away_team):
     except ImportError:
         return None
 
+    f5_data = {}
     try:
         all_lines = fetch_all_lines(game_date_str)
         game_lines = get_game_lines(home_team, away_team, all_lines)
         f5_data = game_lines.get("f5") or {}
-        f5_total = f5_data.get("consensus")
+        f5_total, f5_over_price, f5_under_price, book_key = _select_canonical_line(f5_data)
     except Exception as e:
         logger.warning(f"F5 signal-time pull failed: {e}")
-        f5_total = None
+        f5_total = f5_over_price = f5_under_price = book_key = None
 
     # Write to f5_lines_2026.parquet
     df = _load_f5_lines()
@@ -208,13 +261,14 @@ def pull_f5_for_signal(game_date_str, game_id, home_team, away_team):
         "game_time": None,
         "pull_timestamp": now_utc,
         "pull_type": "signal_time",
-        "book_key": f5_data.get("book"),
+        "book_key": book_key,
         "f5_total": f5_total,
-        "f5_over_price": f5_data.get("over_price"),
-        "f5_under_price": f5_data.get("under_price"),
+        "f5_over_price": f5_over_price,
+        "f5_under_price": f5_under_price,
         "f5_moneyline_home": None,
         "f5_moneyline_away": None,
         "actual_f5_total": None,
+        "is_canonical": True if f5_total is not None else False,
     }
 
     if len(df[mask]) > 0:

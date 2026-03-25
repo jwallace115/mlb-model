@@ -3480,6 +3480,157 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         except Exception:
             pass
 
+        # ── F5 Signal Engine — Under + Over on first-5-innings totals ────────
+        try:
+            _f5_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
+            _f5_status_path = os.path.join(_f5_base, "pipeline", "f5_engine_status.json")
+            _f5_signals_path = os.path.join(_f5_base, "logs", "f5_signals_2026.parquet")
+            _f5_perf_path = os.path.join(_f5_base, "logs", "f5_rolling_performance_2026.json")
+
+            # F5 engine status
+            if os.path.exists(_f5_status_path):
+                import json as _json_f5s
+                with open(_f5_status_path) as _f5sf:
+                    _f5_status = _json_f5s.load(_f5sf)
+                if _f5_status.get("status") == "PAUSED":
+                    st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
+                            'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
+                            '\u26a0\ufe0f F5 Engine paused \u2014 manual review required.</div>')
+                else:
+                    st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">'
+                            '\u25cf F5 engine active</div>')
+
+            # Today's F5 signals
+            if os.path.exists(_f5_signals_path):
+                _f5_sigs = pd.read_parquet(_f5_signals_path)
+                _f5_today_str = (data or {}).get("game_date", "")
+                _f5_today = _f5_sigs[_f5_sigs["date"] == _f5_today_str]
+                if len(_f5_today) > 0:
+                    for _, _fs in _f5_today.iterrows():
+                        _f5_side = _fs.get("f5_signal_side", "")
+                        _f5_ln = f"{float(_fs['f5_line']):.1f}" if pd.notna(_fs.get("f5_line")) else "TBD"
+                        _f5_stake = _fs.get("stake_units", "")
+                        _f5_p = _fs.get("p_under_full") if _f5_side == "UNDER" else _fs.get("p_over_full")
+                        _f5_p_str = f"{float(_f5_p)*100:.1f}%" if pd.notna(_f5_p) else "\u2014"
+                        _f5_side_color = "#60a5fa" if _f5_side == "UNDER" else "#fbbf24"
+                        _f5_border = "#3b82f6" if _f5_side == "UNDER" else "#d97706"
+                        st.html(f'<div style="font-size:0.82em;color:{_f5_side_color};margin-bottom:4px;'
+                                f'padding:6px 10px;background:#1a2433;border-radius:4px;border:1px solid {_f5_border}">'
+                                f'\u26be {_fs.get("away_team","")} @ {_fs.get("home_team","")} \u2014 '
+                                f'F5 {_f5_side} {_f5_ln} \u00b7 {_f5_stake}u \u00b7 '
+                                f'p={_f5_p_str}</div>')
+                else:
+                    st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
+                            'No F5 signals today.</div>')
+            else:
+                st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
+                        'No F5 signals today.</div>')
+
+            # F5 season performance
+            if os.path.exists(_f5_perf_path):
+                import json as _json_f5p
+                with open(_f5_perf_path) as _f5pf:
+                    _f5_perf = _json_f5p.load(_f5pf)
+                if not _f5_perf.get("insufficient_data"):
+                    _f5_std = _f5_perf.get("season_to_date", {})
+                    _f5_l25 = _f5_perf.get("last_25", {})
+                    _f5_l50 = _f5_perf.get("last_50", {})
+                    _f5_parts = []
+                    for _f5_lbl, _f5_w in [("STD", _f5_std), ("L25", _f5_l25), ("L50", _f5_l50)]:
+                        if _f5_w.get("n", 0) >= 10:
+                            _f5_parts.append(f"{_f5_lbl}: {_f5_w['n']}sig "
+                                             f"{_f5_w['win_rate']:.0f}% {_f5_w['roi']:+.1f}%")
+                        else:
+                            _f5_parts.append(f"{_f5_lbl}: insufficient")
+                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:2px">'
+                            f'\U0001f4ca F5 Engine: {" | ".join(_f5_parts)}</div>')
+
+                    # F5 hard stop monitor
+                    _f5_n = _f5_std.get("n", 0)
+                    _f5_roi = _f5_std.get("roi", 0)
+                    _f5_roi_clr = ("#4ade80" if (_f5_roi or 0) > 0
+                                   else "#fbbf24" if (_f5_roi or 0) > -4
+                                   else "#f87171")
+                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:2px">'
+                            f'F5 hard stop: <span style="color:{_f5_roi_clr}">'
+                            f'{_f5_roi or 0:+.1f}%</span> / \u22128.0% threshold | '
+                            f'{_f5_n}/50 signals</div>')
+
+                    # Side breakdown
+                    _f5_sides = _f5_perf.get("by_side", {}).get("season_to_date", {})
+                    _f5_u = _f5_sides.get("under", {})
+                    _f5_o = _f5_sides.get("over", {})
+                    _f5_side_parts = []
+                    if _f5_u.get("insufficient"):
+                        _f5_side_parts.append(f"Under: {_f5_u.get('n', 0)}sig (insuf)")
+                    elif _f5_u.get("n", 0) >= 5:
+                        _f5_side_parts.append(f"Under: {_f5_u['n']}sig "
+                                              f"{_f5_u['win_rate']:.0f}% {_f5_u['roi']:+.1f}%")
+                    if _f5_o.get("insufficient"):
+                        _f5_side_parts.append(f"Over: {_f5_o.get('n', 0)}sig (insuf)")
+                    elif _f5_o.get("n", 0) >= 5:
+                        _f5_side_parts.append(f"Over: {_f5_o['n']}sig "
+                                              f"{_f5_o['win_rate']:.0f}% {_f5_o['roi']:+.1f}%")
+                    if _f5_side_parts:
+                        st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:2px">'
+                                f'{" | ".join(_f5_side_parts)}</div>')
+
+                    # CLV summary
+                    _f5_clv = _f5_perf.get("clv", {})
+                    if _f5_clv.get("n_clv", 0) >= 10:
+                        st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                                f'F5 CLV: {_f5_clv["avg_f5_clv_signed"]:+.3f} avg | '
+                                f'{_f5_clv["pct_positive_f5_clv_signed"]:.0f}% positive</div>')
+                    else:
+                        st.html('<div style="font-size:0.68em;color:#4b5563;margin-bottom:6px">'
+                                'F5 CLV pending</div>')
+
+            # F5 recent results
+            if os.path.exists(_f5_signals_path):
+                _f5_all = pd.read_parquet(_f5_signals_path)
+                _f5_resolved = _f5_all[_f5_all["resolved"].isin([1, 2])].sort_values(
+                    "date", ascending=False).head(15)
+                _f5_pending = _f5_all[_f5_all["resolved"] == 0].sort_values(
+                    "date", ascending=False).head(5)
+                _f5_show = pd.concat([_f5_pending, _f5_resolved]).head(15)
+                if len(_f5_show) > 0:
+                    with st.expander("\U0001f4cb Recent F5 Signals", expanded=False):
+                        _f5_rows_html = ""
+                        for _, _fr in _f5_show.iterrows():
+                            _f5_res = _fr.get("result", "Pending") or "Pending"
+                            _f5_net = (f"{float(_fr['net_units']):+.2f}u"
+                                       if pd.notna(_fr.get("net_units")) else "\u2014")
+                            _f5_clr = ("#4ade80" if _f5_res == "WIN"
+                                       else "#f87171" if _f5_res == "LOSS"
+                                       else "#9ca3af" if _f5_res == "PUSH"
+                                       else "#d1d5db" if _f5_res == "POSTPONED"
+                                       else "#4b5563")
+                            _f5_ln_d = (f"{float(_fr['f5_line']):.1f}"
+                                        if pd.notna(_fr.get("f5_line")) else "\u2014")
+                            _f5_side_d = _fr.get("f5_signal_side", "")
+                            _f5_stake_d = _fr.get("stake_units", "")
+                            _f5_act_d = (f"{float(_fr['actual_f5_total']):.0f}"
+                                         if pd.notna(_fr.get("actual_f5_total")) else "\u2014")
+                            _f5_rows_html += (
+                                f'<tr style="color:{_f5_clr}">'
+                                f'<td>{_fr.get("date","")}</td>'
+                                f'<td>{_fr.get("away_team","")}@{_fr.get("home_team","")}</td>'
+                                f'<td>{_f5_ln_d}</td><td>{_f5_side_d}</td>'
+                                f'<td>{_f5_stake_d}u</td><td>{_f5_act_d}</td>'
+                                f'<td>{_f5_res}</td><td>{_f5_net}</td></tr>')
+                        st.html(
+                            f'<table style="font-size:0.75em;width:100%;border-collapse:collapse">'
+                            f'<tr style="color:#94a3b8"><th>Date</th><th>Matchup</th>'
+                            f'<th>F5 Line</th><th>Side</th><th>Stake</th>'
+                            f'<th>Actual</th><th>Result</th><th>Net</th></tr>'
+                            f'{_f5_rows_html}</table>')
+                else:
+                    st.html('<div style="font-size:0.78em;color:#6b7280">'
+                            'No resolved F5 signals yet.</div>')
+
+        except Exception:
+            pass
+
         # ── Market Timing section (research display) ─────────────────────────
         try:
             _timing_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "timing_analysis_2026.json")
