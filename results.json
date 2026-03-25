@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-25T15:00:14.560776Z",
+  "generated_at": "2026-03-25T21:00:18.397295Z",
   "game_date": "2026-03-25",
   "plays": [],
   "no_plays": [
@@ -10,7 +10,7 @@
         "game_date": "2026-03-25",
         "game_time": "05:05 PM PDT",
         "game_time_et": "08:05 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "SFG",
         "away_team": "NYY",
         "home_team_id": 137,
@@ -18,14 +18,14 @@
         "home_probable_pitcher": "{'id': 657277, 'name': 'Logan Webb', 'throws': ''}",
         "away_probable_pitcher": "{'id': 608331, 'name': 'Max Fried', 'throws': ''}",
         "venue_name": "Oracle Park",
-        "home_umpire": null
+        "home_umpire": "Bill Miller"
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.4,
-        "proj_total_f5": 4.44,
+        "proj_total_full": 8.7,
+        "proj_total_f5": 4.6,
         "confidence": "LOW",
-        "confidence_score": 0.276,
+        "confidence_score": 0.13,
         "factors": {
           "sp_home_xfip": 3.929,
           "sp_away_xfip": 3.701,
@@ -36,19 +36,19 @@
           "home_wrc_plus": 98.9,
           "away_wrc_plus": 108.2,
           "park_factor": 0.96,
-          "wind_speed_mph": 13.3,
+          "wind_speed_mph": 14.1,
           "wind_direction": 299,
           "wind_desc": "Blowing R to L",
-          "temperature_f": 60.8,
+          "temperature_f": 60.7,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0171,
-          "temp_factor": 0.9776,
-          "home_wind_adj": 1.0171,
-          "away_wind_adj": 1.0171,
+          "wind_factor": 1.0182,
+          "temp_factor": 0.9774,
+          "home_wind_adj": 1.0182,
+          "away_wind_adj": 1.0182,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Bill Miller",
+          "umpire_runs_factor": 1.034,
           "home_bp_fatigue": 0.163,
           "away_bp_fatigue": 0.2,
           "home_bp_innings_used": 12.2,
@@ -60,7 +60,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.4,
+        "edge": 1.7,
         "lean": "OVER",
         "consensus": 7.0,
         "value": true
@@ -71,7 +71,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.4 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Model leans under at 8.7 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
       "props": [
         {
           "player_name": "Logan Webb",
