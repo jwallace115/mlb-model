@@ -3933,47 +3933,74 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 for b, sigs in play_cards:
                     _render_card(b, signals=sigs)
 
-            # Just For Fun parlays
+            # Just For Fun parlays — build from all signal sources
             if len(play_cards) >= 3:
-                # Build ranked list by p_under from JSON signal data
                 _parlay_legs = []
+                # Collect V1 signals with p_under for ranking
+                _v1_teams = set()
                 for _try_p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                "mlb_sim", "logs", "signals_2026.json"),
                                "mlb_sim/logs/signals_2026.json"]:
                     if os.path.exists(_try_p):
                         try:
                             with open(_try_p) as _pf:
-                                _p_rows = _json_sig.load(_pf)
-                            for _pr in _p_rows:
-                                if str(_pr.get("date", "")) == str(game_date):
-                                    _parlay_legs.append({
-                                        "matchup": f'{_pr["away_team"]} @ {_pr["home_team"]}',
-                                        "line": _pr.get("line_at_signal_time", "?"),
-                                        "p_under": float(_pr.get("raw_p_under", 0)),
-                                    })
+                                for _pr in _json_sig.load(_pf):
+                                    if str(_pr.get("date", "")) == str(game_date):
+                                        _tk = f'{_pr["away_team"]} @ {_pr["home_team"]}'
+                                        _v1_teams.add(_tk)
+                                        _parlay_legs.append({
+                                            "matchup": _tk,
+                                            "bet": "FULL GAME UNDER",
+                                            "p": float(_pr.get("raw_p_under", 0)),
+                                        })
                         except Exception:
                             pass
                         break
-                _parlay_legs.sort(key=lambda x: x["p_under"], reverse=True)
+
+                # Add F5-only games (not already in V1)
+                for _try_p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "mlb_sim", "logs", "f5_signals_2026.json"),
+                               "mlb_sim/logs/f5_signals_2026.json"]:
+                    if os.path.exists(_try_p):
+                        try:
+                            with open(_try_p) as _pf:
+                                for _pr in _json_sig.load(_pf):
+                                    if str(_pr.get("date", "")) == str(game_date):
+                                        _tk = f'{_pr.get("away_team","")} @ {_pr.get("home_team","")}'
+                                        if _tk not in _v1_teams:
+                                            _side = _pr.get("f5_signal_side", "UNDER")
+                                            _parlay_legs.append({
+                                                "matchup": _tk,
+                                                "bet": f"F5 {_side}",
+                                                "p": float(_pr.get("p_under_full", 0) if _side == "UNDER" else _pr.get("p_over_full", 0)),
+                                            })
+                        except Exception:
+                            pass
+                        break
+
+                _parlay_legs.sort(key=lambda x: x["p"], reverse=True)
 
                 if len(_parlay_legs) >= 3:
-                    _parlay_html = '<div style="margin:12px 0;padding:10px 14px;background:#1a1a2e;border-radius:6px;border:1px solid #374151">'
-                    _parlay_html += '<div style="font-size:0.88em;font-weight:700;color:#fbbf24;margin-bottom:6px">\u26a1 Just For Fun</div>'
+                    def _render_parlay_card(title, legs):
+                        html = (f'<div style="margin:8px 0;padding:10px 14px;background:#0f1729;'
+                                f'border-radius:6px;border:1px solid #1e2d4a">')
+                        html += (f'<div style="font-size:0.82em;font-weight:700;color:#94a3b8;'
+                                 f'margin-bottom:6px;letter-spacing:0.05em">'
+                                 f'\u2500\u2500 {title} \u2500\u2500</div>')
+                        for leg in legs:
+                            html += (f'<div style="font-size:0.82em;color:#e2e8f0;margin-bottom:3px;'
+                                     f'padding:3px 0">'
+                                     f'\U0001f535 {leg["matchup"]} \u2014 {leg["bet"]}</div>')
+                        html += ('<div style="font-size:0.65em;color:#4b5563;margin-top:6px;font-style:italic">'
+                                 'Fun only \u00b7 Not a recommended wager</div>')
+                        html += '</div>'
+                        return html
 
-                    # Best 3-leg
-                    _p3 = _parlay_legs[:3]
-                    _p3_legs = " + ".join(f'{l["matchup"]} U{l["line"]}' for l in _p3)
-                    _parlay_html += f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px">Best 3-leg: {_p3_legs}</div>'
-
-                    # Best 5-leg
+                    st.html('<div style="font-size:0.92em;font-weight:700;color:#fbbf24;'
+                            'margin-top:14px;margin-bottom:4px">\u26a1 JUST FOR FUN PARLAYS</div>')
+                    st.html(_render_parlay_card("3-LEG PARLAY", _parlay_legs[:3]))
                     if len(_parlay_legs) >= 5:
-                        _p5 = _parlay_legs[:5]
-                        _p5_legs = " + ".join(f'{l["matchup"]} U{l["line"]}' for l in _p5)
-                        _parlay_html += f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px">Best 5-leg: {_p5_legs}</div>'
-
-                    _parlay_html += '<div style="font-size:0.68em;color:#6b7280;margin-top:4px;font-style:italic">Fun only \u2014 not a recommended wager</div>'
-                    _parlay_html += '</div>'
-                    st.html(_parlay_html)
+                        st.html(_render_parlay_card("5-LEG PARLAY", _parlay_legs[:5]))
 
             # No-play cards — collapsed
             if noplay_cards:
