@@ -1044,7 +1044,11 @@ def _render_card(b: dict, sig_info: dict = None) -> None:
         # ── PLAY CARD (signal fired) ──
         stake = sig_info.get("stake", "?")
         s12 = sig_info.get("s12_active", False)
-        line_val = f"{line:.1f}" if line is not None else "TBD"
+
+        # FIX 2: Use signal-time line if available
+        sig_line = sig_info.get("line_at_signal_time")
+        display_line = sig_line if sig_line is not None else line
+        line_val = f"{display_line:.1f}" if display_line is not None else "TBD"
 
         # Line 1: matchup + time
         l1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
@@ -1066,13 +1070,14 @@ def _render_card(b: dict, sig_info: dict = None) -> None:
         # Line 4: weather
         l4 = f'<div style="font-size:0.78em;color:#6b7280;margin-top:2px">{wx_line}</div>' if wx_line else ""
 
-        # Line 5: narrative
-        l5 = f'<div class="card-summary">{summary}</div>'
+        # FIX 1: Clean one-liner narrative for signal games (no legacy contradictions)
+        line_display = f"{display_line:.1f}" if display_line is not None else "TBD"
+        l5 = (f'<div style="font-size:0.80em;color:#94a3b8;margin-top:4px">'
+              f'Signal fired at open. Proj: {full_proj:.1f} | Market: {line_display}</div>')
 
-        # Line 6: proj + line
-        line_ctx = f" | Line: {line:.1f}" if line is not None else ""
-        l6 = (f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
-              f'Proj: {full_proj:.1f}{line_ctx}</div>')
+        # FIX 3: Disclaimer
+        l6 = ('<div style="font-size:0.68em;color:#4b5563;margin-top:4px;font-style:italic">'
+              'Line shown is market consensus at signal time. Verify your book before placing.</div>')
 
         st.html(
             f'<div class="game-card" style="border-left:3px solid #67e8f9">'
@@ -3923,9 +3928,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         for _r in _rows:
                             if str(_r.get("date", "")) != str(game_date):
                                 continue
+                            _sig_line = _r.get("line_at_signal_time")
                             _info = {
                                 "stake": float(_r.get("stake_units", 0)),
                                 "s12_active": bool(_r.get("s12_overlay_active", 0)),
+                                "line_at_signal_time": float(_sig_line) if _sig_line is not None else None,
                             }
                             _sig_map_id[str(_r.get("game_id", ""))] = _info
                             _sig_map_team[f'{_r.get("away_team","")}@{_r.get("home_team","")}'] = _info
@@ -3933,9 +3940,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         _sd = pd.read_parquet(_try_path)
                         _sd_today = _sd[_sd["date"].astype(str) == str(game_date)]
                         for _, _sr in _sd_today.iterrows():
+                            _sig_line = _sr.get("line_at_signal_time")
                             _info = {
                                 "stake": float(_sr["stake_units"]),
                                 "s12_active": bool(_sr.get("s12_overlay_active", 0)),
+                                "line_at_signal_time": float(_sig_line) if pd.notna(_sig_line) else None,
                             }
                             _sig_map_id[str(_sr["game_id"])] = _info
                             _sig_map_team[f'{_sr["away_team"]}@{_sr["home_team"]}'] = _info
