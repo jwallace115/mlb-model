@@ -3887,17 +3887,25 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 st.caption(f"Projections for **{game_date}**")
 
             # Load signal data for play/no-play split
-            _sig_map = {}
+            _sig_map_id = {}   # game_id → info
+            _sig_map_team = {} # "away@home" → info
             try:
-                _sp = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.parquet")
-                if os.path.exists(_sp):
-                    _sd = pd.read_parquet(_sp)
-                    _sd_today = _sd[_sd["date"] == game_date]
-                    for _, _sr in _sd_today.iterrows():
-                        _sig_map[str(_sr["game_id"])] = {
-                            "stake": float(_sr["stake_units"]),
-                            "s12_active": _sr.get("s12_overlay_active") == 1,
-                        }
+                for _try_path in [
+                    os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.parquet"),
+                    os.path.join("mlb_sim", "logs", "signals_2026.parquet"),
+                ]:
+                    if os.path.exists(_try_path):
+                        _sd = pd.read_parquet(_try_path)
+                        _sd_today = _sd[_sd["date"] == game_date]
+                        for _, _sr in _sd_today.iterrows():
+                            _info = {
+                                "stake": float(_sr["stake_units"]),
+                                "s12_active": bool(_sr.get("s12_overlay_active", 0)),
+                            }
+                            _sig_map_id[str(_sr["game_id"])] = _info
+                            _team_key = f'{_sr["away_team"]}@{_sr["home_team"]}'
+                            _sig_map_team[_team_key] = _info
+                        break
             except Exception:
                 pass
 
@@ -3906,8 +3914,10 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             noplay_cards = []
             for b in all_games:
                 gid = str(b["game"].get("game_pk", ""))
-                if gid in _sig_map:
-                    play_cards.append((b, _sig_map[gid]))
+                _team_key = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
+                _si = _sig_map_id.get(gid) or _sig_map_team.get(_team_key)
+                if _si:
+                    play_cards.append((b, _si))
                 else:
                     noplay_cards.append(b)
 
