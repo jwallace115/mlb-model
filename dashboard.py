@@ -3719,6 +3719,114 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         except Exception:
             pass
 
+        # ── F5 Run Line Signal Engine (Live) ─────────────────────────────────
+        try:
+            _rl_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
+            _rl_status_path = os.path.join(_rl_base, "pipeline", "f5_runline_status.json")
+            _rl_signals_path = os.path.join(_rl_base, "logs", "f5_runline_2026.parquet")
+            _rl_perf_path = os.path.join(_rl_base, "logs", "f5_runline_performance_2026.json")
+
+            # Status
+            if os.path.exists(_rl_status_path):
+                import json as _json_rl
+                with open(_rl_status_path) as _rlf:
+                    _rl_status = _json_rl.load(_rlf)
+                if _rl_status.get("status") == "PAUSED":
+                    st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
+                            'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
+                            '\u26a0\ufe0f F5 Run Line paused \u2014 manual review required.</div>')
+                else:
+                    st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">'
+                            '\u25cf F5 Run Line active</div>')
+
+            # Today's signals
+            if os.path.exists(_rl_signals_path):
+                _rl_sigs = pd.read_parquet(_rl_signals_path)
+                _rl_today_str = (data or {}).get("game_date", "")
+                _rl_today = _rl_sigs[_rl_sigs["date"] == _rl_today_str]
+                if len(_rl_today) > 0:
+                    for _, _rs in _rl_today.iterrows():
+                        _rl_gap = f"{float(_rs.get('xfip_gap', 0)):.2f}" if pd.notna(_rs.get("xfip_gap")) else ""
+                        _rl_price = f"{int(_rs['bet_price'])}" if pd.notna(_rs.get("bet_price")) else "TBD"
+                        _rl_line = f"{float(_rs['bet_line']):.1f}" if pd.notna(_rs.get("bet_line")) else ""
+                        st.html(f'<div style="font-size:0.82em;color:#a78bfa;margin-bottom:4px;'
+                                f'padding:6px 10px;background:#1a2433;border-radius:4px;border:1px solid #7c3aed">'
+                                f'\u26be {_rs.get("away_team","")} @ {_rs.get("home_team","")} \u2014 '
+                                f'F5 RL HOME {_rl_line} @ {_rl_price} \u00b7 0.5u \u00b7 '
+                                f'xFIP gap={_rl_gap} '
+                                f'({_rs.get("home_sp_name","?")} vs {_rs.get("away_sp_name","?")})'
+                                f' <span style="color:#7c3aed;font-size:0.8em">LIVE</span></div>')
+                else:
+                    st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
+                            'No F5 Run Line signals today.</div>')
+
+            # Performance
+            if os.path.exists(_rl_perf_path):
+                import json as _json_rlp
+                with open(_rl_perf_path) as _rlpf:
+                    _rl_perf = _json_rlp.load(_rlpf)
+                if not _rl_perf.get("insufficient_data"):
+                    _rl_std = _rl_perf.get("season_to_date", {})
+                    _rl_l25 = _rl_perf.get("last_25", {})
+                    _rl_parts = []
+                    for _rl_lbl, _rl_w in [("STD", _rl_std), ("L25", _rl_l25)]:
+                        if _rl_w.get("n", 0) >= 5:
+                            _rl_parts.append(f"{_rl_lbl}: {_rl_w['n']}sig "
+                                             f"{_rl_w['win_rate']:.0f}% {_rl_w['roi']:+.1f}%")
+                        else:
+                            _rl_parts.append(f"{_rl_lbl}: insufficient")
+                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:2px">'
+                            f'\U0001f4ca F5 RL: {" | ".join(_rl_parts)}</div>')
+
+                    # Hard stop monitor
+                    _rl_n = _rl_std.get("n", 0)
+                    _rl_roi = _rl_std.get("roi", 0)
+                    _rl_clr = ("#4ade80" if (_rl_roi or 0) > 0
+                               else "#fbbf24" if (_rl_roi or 0) > -5
+                               else "#f87171")
+                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                            f'F5 RL hard stop: <span style="color:{_rl_clr}">'
+                            f'{_rl_roi or 0:+.1f}%</span> / \u221210.0% threshold | '
+                            f'{_rl_n}/40 signals</div>')
+
+            # Recent results
+            if os.path.exists(_rl_signals_path):
+                _rl_all = pd.read_parquet(_rl_signals_path)
+                _rl_resolved = _rl_all[_rl_all["resolved"].isin([1, 2])].sort_values(
+                    "date", ascending=False).head(10)
+                _rl_pending = _rl_all[_rl_all["resolved"] == 0].sort_values(
+                    "date", ascending=False).head(5)
+                _rl_show = pd.concat([_rl_pending, _rl_resolved]).head(10)
+                if len(_rl_show) > 0:
+                    with st.expander("\U0001f4cb Recent F5 Run Line Signals", expanded=False):
+                        _rl_rows = ""
+                        for _, _rr in _rl_show.iterrows():
+                            _rl_res = _rr.get("result", "Pending") or "Pending"
+                            _rl_net = (f"{float(_rr['net_units']):+.2f}u"
+                                       if pd.notna(_rr.get("net_units")) else "\u2014")
+                            _rl_c = ("#4ade80" if _rl_res == "WIN"
+                                     else "#f87171" if _rl_res == "LOSS"
+                                     else "#9ca3af" if _rl_res == "PUSH"
+                                     else "#4b5563")
+                            _rl_gap_d = f"{float(_rr.get('xfip_gap', 0)):.1f}" if pd.notna(_rr.get("xfip_gap")) else ""
+                            _rl_pr_d = f"{int(_rr.get('bet_price', 0))}" if pd.notna(_rr.get("bet_price")) else ""
+                            _rl_mg = f"{int(_rr.get('f5_margin', 0))}" if pd.notna(_rr.get("f5_margin")) else "\u2014"
+                            _rl_rows += (
+                                f'<tr style="color:{_rl_c}">'
+                                f'<td>{_rr.get("date","")}</td>'
+                                f'<td>{_rr.get("away_team","")}@{_rr.get("home_team","")}</td>'
+                                f'<td>{_rl_gap_d}</td><td>HOME {_rl_pr_d}</td>'
+                                f'<td>{_rl_mg}</td><td>{_rl_res}</td><td>{_rl_net}</td></tr>')
+                        st.html(
+                            f'<table style="font-size:0.75em;width:100%;border-collapse:collapse">'
+                            f'<tr style="color:#94a3b8"><th>Date</th><th>Matchup</th>'
+                            f'<th>Gap</th><th>Bet</th><th>Margin</th>'
+                            f'<th>Result</th><th>Net</th></tr>'
+                            f'{_rl_rows}</table>')
+
+        except Exception:
+            pass
+
         # ── Market Timing section (research display) ─────────────────────────
         try:
             _timing_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "timing_analysis_2026.json")

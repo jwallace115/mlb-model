@@ -1244,6 +1244,15 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     except Exception as e:
         logger.warning(f"F5 Signal Engine failed (non-fatal): {e}")
 
+    # ── F5 Run Line Signal Engine — xFIP mismatch (Signal B) ────────────────
+    try:
+        from mlb_sim.pipeline.f5_runline_signal_generator import run_daily as f5rl_daily
+        f5rl_signals = f5rl_daily(game_date, schedule=games, pitcher_db=pitcher_db)
+        if f5rl_signals:
+            logger.info(f"F5 Run Line: {len(f5rl_signals)} signals generated")
+    except Exception as e:
+        logger.warning(f"F5 Run Line Engine failed (non-fatal): {e}")
+
     # ── Timing line capture (7 AM "open" pull) ───────────────────────────────
     try:
         from mlb_sim.pipeline.timing_line_updater import update_timing_lines
