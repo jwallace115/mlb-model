@@ -409,6 +409,11 @@ def run_daily(game_date_str=None, schedule=None, pitcher_db=None):
     from mlb_sim.pipeline.performance_tracker import compute_performance, check_hard_stop
     perf = compute_performance()
     try:
+        from mlb_sim.pipeline.s12_overlay_tracker import compute_s12_performance
+        compute_s12_performance()
+    except Exception as e:
+        logger.debug(f"S12 overlay tracker failed (non-fatal): {e}")
+    try:
         from mlb_sim.pipeline.timing_tracker import compute_timing_analysis
         compute_timing_analysis()
     except Exception as e:
