@@ -1260,6 +1260,13 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     except Exception as e:
         logger.warning(f"Timing line capture failed (non-fatal): {e}")
 
+    # ── Parlay tracker (just for fun) ────────────────────────────────────────
+    try:
+        from mlb_sim.pipeline.parlay_tracker import run_daily as parlay_daily
+        parlay_daily(game_date)
+    except Exception as e:
+        logger.warning(f"Parlay tracker failed (non-fatal): {e}")
+
     logger.info(f"Complete. {len(results)} games projected.")
     return results
 

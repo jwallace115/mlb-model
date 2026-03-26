@@ -4002,6 +4002,58 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     if len(_parlay_legs) >= 5:
                         st.html(_render_parlay_card("5-LEG PARLAY", _parlay_legs[:5]))
 
+                    # Parlay record display
+                    _pt_data = None
+                    for _pt_path in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "mlb_sim", "logs", "parlay_tracker_2026.json"),
+                                     "mlb_sim/logs/parlay_tracker_2026.json"]:
+                        if os.path.exists(_pt_path):
+                            try:
+                                with open(_pt_path) as _ptf:
+                                    _pt_data = _json_sig.load(_ptf)
+                            except Exception:
+                                pass
+                            break
+
+                    if _pt_data:
+                        _s3 = _pt_data.get("three_leg", {}).get("summary", {})
+                        _s5 = _pt_data.get("five_leg", {}).get("summary", {})
+                        _t3 = _s3.get("total", 0)
+                        _t5 = _s5.get("total", 0)
+                        _combined = _t3 + _t5
+
+                        if _combined > 0:
+                            _w3 = _s3.get("wins", 0); _l3 = _s3.get("losses", 0)
+                            _w5 = _s5.get("wins", 0); _l5 = _s5.get("losses", 0)
+                            _wr = (_w3 + _w5) / _combined * 100 if _combined > 0 else 0
+                            _net3 = _s3.get("net_units", 0); _net5 = _s5.get("net_units", 0)
+
+                            if _wr > 40:
+                                _flavor = "Running hot \u2014 enjoy it while it lasts"
+                            elif _wr < 20:
+                                _flavor = "This is why we don\u2019t bet parlays"
+                            else:
+                                _flavor = "Parlays are entertainment, not strategy"
+
+                            st.html(
+                                f'<div style="margin:8px 0;padding:8px 14px;background:#0f1729;'
+                                f'border-radius:6px;border:1px solid #1e2d4a;font-size:0.78em">'
+                                f'<div style="display:flex;gap:30px;color:#94a3b8">'
+                                f'<div><span style="font-weight:700">3-LEG</span> '
+                                f'{_w3}-{_l3} | Net: {_net3:+.1f}u</div>'
+                                f'<div><span style="font-weight:700">5-LEG</span> '
+                                f'{_w5}-{_l5} | Net: {_net5:+.1f}u</div>'
+                                f'</div>'
+                                f'<div style="font-size:0.85em;color:#6b7280;margin-top:4px;'
+                                f'font-style:italic">{_flavor}</div>'
+                                f'</div>')
+                        else:
+                            _p3 = _s3.get("pending", 0); _p5 = _s5.get("pending", 0)
+                            st.html(
+                                f'<div style="font-size:0.72em;color:#6b7280;margin-top:6px;font-style:italic">'
+                                f'Tracking started March 26, 2026 '
+                                f'({_p3 + _p5} pending)</div>')
+
             # No-play cards — collapsed
             if noplay_cards:
                 with st.expander(f"All Other Games Today ({len(noplay_cards)})"):

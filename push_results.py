@@ -464,6 +464,7 @@ def main():
         "mlb_sim/logs/signals_2026.json",
         "mlb_sim/logs/f5_signals_2026.json",
         "mlb_sim/logs/f5_runline_2026.json",
+        "mlb_sim/logs/parlay_tracker_2026.json",
     ]:
         if os.path.exists(os.path.join(repo_dir, _sig_json)):
             dashboard_files.append(_sig_json)

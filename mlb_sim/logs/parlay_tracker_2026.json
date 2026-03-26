@@ -1,0 +1,93 @@
+{
+  "three_leg": {
+    "parlays": [
+      {
+        "date": "2026-03-26",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "ARI@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "BOS@CIN",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "LAA@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
+      }
+    ],
+    "summary": {
+      "total": 0,
+      "wins": 0,
+      "losses": 0,
+      "pending": 0,
+      "win_rate": 0,
+      "net_units": 0,
+      "payout_per_win": 6.0
+    }
+  },
+  "five_leg": {
+    "parlays": [
+      {
+        "date": "2026-03-26",
+        "type": "5-leg",
+        "legs": [
+          {
+            "game": "ARI@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "BOS@CIN",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "LAA@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "MIN@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.2,
+            "result": null
+          },
+          {
+            "game": "PIT@NYM",
+            "bet": "FULL GAME UNDER",
+            "line": 7.0,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
+      }
+    ],
+    "summary": {
+      "total": 0,
+      "wins": 0,
+      "losses": 0,
+      "pending": 0,
+      "win_rate": 0,
+      "net_units": 0,
+      "payout_per_win": 24.0
+    }
+  },
+  "note": "Just for fun \u2014 not a recommended betting strategy"
+}
