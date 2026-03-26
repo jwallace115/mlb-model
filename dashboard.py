@@ -1010,9 +1010,10 @@ def _render_game_props(props: list[dict]) -> str:
     )
 
 
-def _render_card(b: dict, signals: list = None) -> None:
+def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> None:
     """Render a unified game card with all signals consolidated.
-    signals: list of dicts, each with type/stake/s12_active/side etc."""
+    signals: list of dicts, each with type/stake/s12_active/side etc.
+    has_partial: True if F5/RL signal exists but no V1 (borderline game)."""
     game    = b["game"]
     proj    = b["proj"]
     fe      = b.get("full_edge", {})
@@ -1081,12 +1082,53 @@ def _render_card(b: dict, signals: list = None) -> None:
             boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
                      'Boosted \u2014 elite pitching environment</div>')
 
+        # FIX 1: Conversational explanation from signal composition
+        _types = [s.get("type", "") for s in signals]
+        _has_v1 = "v1" in _types
+        _has_f5u = "f5_under" in _types
+        _has_f5o = "f5_over" in _types
+        _has_rl = "f5_rl" in _types
+        _n_sigs = len(signals)
+
+        # Weather context snippet
+        _wx_note = ""
+        if temp is not None and temp < 55:
+            _wx_note = " Cold weather helps suppress scoring."
+        elif not is_dome and wind_mph >= 10 and "in" in wind_raw.lower():
+            _wx_note = " Wind blowing in adds to the suppressed run environment."
+        elif not is_dome and wind_mph >= 10 and "out" in wind_raw.lower():
+            _wx_note = " Wind blowing out is a factor, but pitching quality overrides."
+
+        if _n_sigs >= 3:
+            _explain = ("Three signals all pointing the same way \u2014 full game under, "
+                        "first five under, and the home starter has a significant edge on the mound. "
+                        "Strongest conviction play of the day.")
+        elif _has_v1 and (_has_f5u or _has_f5o):
+            _explain = ("Full game and first five innings both pointing the same direction. "
+                        "Two independent signals lining up adds weight to this one." + _wx_note)
+        elif _has_v1 and has_s12:
+            _explain = ("Elite pitching environment on both sides \u2014 both starters are in peak "
+                        "command form. The extra bump in unit size reflects that added conviction." + _wx_note)
+        elif _has_v1:
+            _explain = ("Strong pitching matchup with conditions favoring the under." + _wx_note
+                        if _wx_note else
+                        "Pitching quality on both sides favors a lower-scoring game than the market expects.")
+        elif _has_f5u or _has_f5o:
+            _explain = "First five innings signal only \u2014 starter-driven edge before bullpens enter."
+        elif _has_rl:
+            _explain = "Home starter has a significant quality edge \u2014 run line value on the first five innings."
+        else:
+            _explain = "Signal fired based on pitching matchup analysis."
+
+        explain_html = (f'<div style="font-size:0.80em;color:#94a3b8;margin-top:6px;line-height:1.4">'
+                        f'{_explain}</div>')
+
         disclaimer = ('<div style="font-size:0.68em;color:#4b5563;margin-top:6px;font-style:italic">'
                       'Check your book for current line before placing.</div>')
 
         st.html(
             f'<div class="game-card" style="border-left:3px solid #67e8f9">'
-            f'{l1}{badges}{boost}{disclaimer}'
+            f'{l1}{badges}{boost}{explain_html}{disclaimer}'
             f'</div>'
         )
     else:
@@ -1100,6 +1142,14 @@ def _render_card(b: dict, signals: list = None) -> None:
         line_str = f" | Line: {line:.1f}" if line is not None else ""
         proj_line = f'Proj: {full_proj:.1f}{line_str}'
 
+        # FIX 2: Explain why no signal
+        if has_partial:
+            _reason = ('<div style="font-size:0.75em;color:#6b7280;margin-top:4px;font-style:italic">'
+                       'Secondary signal only \u2014 not enough conviction for a full play.</div>')
+        else:
+            _reason = ('<div style="font-size:0.75em;color:#6b7280;margin-top:4px;font-style:italic">'
+                       'No signals \u2014 outside threshold on all models.</div>')
+
         st.html(
             f'<div class="game-card" style="border-left:3px solid #374151">'
             f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
@@ -1107,6 +1157,7 @@ def _render_card(b: dict, signals: list = None) -> None:
             f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
             f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
             f'<div class="card-summary">{summary}</div>'
+            f'{_reason}'
             f'</div>'
     )
 
@@ -3866,9 +3917,15 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _tk = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
                 _sigs = _game_signals.get(_tk, [])
                 if _sigs:
-                    play_cards.append((b, _sigs))
+                    # Check if V1 is among the signals
+                    _has_v1 = any(s.get("type") == "v1" for s in _sigs)
+                    if _has_v1:
+                        play_cards.append((b, _sigs))
+                    else:
+                        # F5/RL only — borderline, show as no-play with partial flag
+                        noplay_cards.append((b, True))
                 else:
-                    noplay_cards.append(b)
+                    noplay_cards.append((b, False))
 
             # Play cards — prominent, unified
             if play_cards:
@@ -3921,8 +3978,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             # No-play cards — collapsed
             if noplay_cards:
                 with st.expander(f"All Other Games Today ({len(noplay_cards)})"):
-                    for b in noplay_cards:
-                        _render_card(b)
+                    for b, _partial in noplay_cards:
+                        _render_card(b, has_partial=_partial)
 
             # ── CLV section ───────────────────────────────────────────────────
             clv = (data or {}).get("mlb_clv_summary", {})
