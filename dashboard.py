@@ -1050,8 +1050,11 @@ def _render_card(b: dict, sig_info: dict = None) -> None:
         l1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
               f'{matchup} \u2014 {time_str}</div>')
 
-        # Line 2: recommendation
-        l2 = (f'<div style="font-size:1.05em;font-weight:700;color:#67e8f9;margin-top:4px">'
+        # Line 2: recommendation — color by stake tier
+        _stake_colors = {0.5: "#f59e0b", 0.62: "#f97316", 0.625: "#f97316",
+                         1.0: "#06b6d4", 1.25: "#22c55e"}
+        _sc = _stake_colors.get(round(float(stake), 2) if stake != "?" else 0, "#67e8f9")
+        l2 = (f'<div style="font-size:1.05em;font-weight:700;color:{_sc};margin-top:4px">'
               f'UNDER {line_val} \u2014 {stake} units</div>')
 
         # Line 3: boost explanation (plain English)
@@ -3959,6 +3962,48 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 for b, si in play_cards:
                     _render_card(b, sig_info=si)
 
+            # Just For Fun parlays
+            if len(play_cards) >= 3:
+                # Build ranked list by p_under from JSON signal data
+                _parlay_legs = []
+                for _try_p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "mlb_sim", "logs", "signals_2026.json"),
+                               "mlb_sim/logs/signals_2026.json"]:
+                    if os.path.exists(_try_p):
+                        try:
+                            with open(_try_p) as _pf:
+                                _p_rows = _json_sig.load(_pf)
+                            for _pr in _p_rows:
+                                if str(_pr.get("date", "")) == str(game_date):
+                                    _parlay_legs.append({
+                                        "matchup": f'{_pr["away_team"]} @ {_pr["home_team"]}',
+                                        "line": _pr.get("line_at_signal_time", "?"),
+                                        "p_under": float(_pr.get("raw_p_under", 0)),
+                                    })
+                        except Exception:
+                            pass
+                        break
+                _parlay_legs.sort(key=lambda x: x["p_under"], reverse=True)
+
+                if len(_parlay_legs) >= 3:
+                    _parlay_html = '<div style="margin:12px 0;padding:10px 14px;background:#1a1a2e;border-radius:6px;border:1px solid #374151">'
+                    _parlay_html += '<div style="font-size:0.88em;font-weight:700;color:#fbbf24;margin-bottom:6px">\u26a1 Just For Fun</div>'
+
+                    # Best 3-leg
+                    _p3 = _parlay_legs[:3]
+                    _p3_legs = " + ".join(f'{l["matchup"]} U{l["line"]}' for l in _p3)
+                    _parlay_html += f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px">Best 3-leg: {_p3_legs}</div>'
+
+                    # Best 5-leg
+                    if len(_parlay_legs) >= 5:
+                        _p5 = _parlay_legs[:5]
+                        _p5_legs = " + ".join(f'{l["matchup"]} U{l["line"]}' for l in _p5)
+                        _parlay_html += f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px">Best 5-leg: {_p5_legs}</div>'
+
+                    _parlay_html += '<div style="font-size:0.68em;color:#6b7280;margin-top:4px;font-style:italic">Fun only \u2014 not a recommended wager</div>'
+                    _parlay_html += '</div>'
+                    st.html(_parlay_html)
+
             # No-play cards — collapsed
             if noplay_cards:
                 with st.expander(f"All Other Games Today ({len(noplay_cards)})"):
@@ -4023,41 +4068,6 @@ def main() -> None:
         if st.button("🔄 Refresh", use_container_width=True):
             st.cache_data.clear()
             st.rerun()
-
-    # ── Opening Day countdown ────────────────────────────────────────────────
-    st.html("""
-    <div id="countdown-wrap" style="text-align:center;padding:18px 0 14px 0;margin-bottom:10px">
-      <div style="font-size:1.1em;color:#e2e8f0;font-weight:600;margin-bottom:6px">
-        Scott the countdown begins
-      </div>
-      <div id="countdown-display" style="font-size:1.8em;font-weight:700;
-           color:#60a5fa;font-family:monospace;letter-spacing:2px">
-      </div>
-    </div>
-    <script>
-    (function(){
-      var target = new Date("2026-03-25T20:05:00-05:00").getTime();
-      var wrap = document.getElementById("countdown-wrap");
-      var disp = document.getElementById("countdown-display");
-      function tick(){
-        var now = Date.now();
-        var diff = target - now;
-        if(diff <= 0){
-          wrap.innerHTML = '<div style="font-size:1.05em;color:#4ade80;font-weight:600;padding:18px 0 14px 0">' +
-            '\u26be The 2026 MLB Season is underway.</div>';
-          return;
-        }
-        var d = Math.floor(diff/86400000);
-        var h = Math.floor((diff%86400000)/3600000);
-        var m = Math.floor((diff%3600000)/60000);
-        var s = Math.floor((diff%60000)/1000);
-        disp.textContent = d+"d "+("0"+h).slice(-2)+"h "+("0"+m).slice(-2)+"m "+("0"+s).slice(-2)+"s";
-        setTimeout(tick, 1000);
-      }
-      tick();
-    })();
-    </script>
-    """)
 
     # ── sport tabs ────────────────────────────────────────────────────────────
     tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_reviews = st.tabs(["⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "📋 Reviews"])
