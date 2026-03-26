@@ -69,6 +69,20 @@ def _load_signals():
 def _save_signals(df):
     SIGNALS_PATH.parent.mkdir(parents=True, exist_ok=True)
     df.to_parquet(SIGNALS_PATH, index=False)
+    # Also write JSON for Streamlit Cloud (parquet not committed to git)
+    try:
+        json_path = SIGNALS_PATH.with_suffix(".json")
+        export_cols = ["date", "game_id", "home_team", "away_team", "signal_side",
+                       "stake_units", "raw_p_under", "raw_p_over",
+                       "line_at_signal_time", "result", "net_units", "resolved"]
+        # Include overlay fields if present
+        for c in ["s12_overlay_active", "s12_value", "base_stake"]:
+            if c in df.columns:
+                export_cols.append(c)
+        avail = [c for c in export_cols if c in df.columns]
+        df[avail].to_json(json_path, orient="records", indent=2)
+    except Exception:
+        pass
 
 
 def _load_status():

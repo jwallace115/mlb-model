@@ -517,19 +517,32 @@ def _render_season_header(stats: dict) -> None:
     """Render 2026 season tracking from live signal logs only."""
     import json as _json_sh
 
-    # Read from the three live signal logs
-    _base = os.path.dirname(__file__)
+    # Read from the three live signal logs (parquet or JSON fallback)
+    _base = os.path.dirname(os.path.abspath(__file__))
     total_n = 0; total_wins = 0; total_losses = 0; total_pushes = 0; total_net = 0.0
 
-    for log_path in [
-        os.path.join(_base, "mlb_sim", "logs", "signals_2026.parquet"),
-        os.path.join(_base, "mlb_sim", "logs", "f5_signals_2026.parquet"),
-        os.path.join(_base, "mlb_sim", "logs", "f5_runline_2026.parquet"),
-    ]:
-        if not os.path.exists(log_path):
+    for log_name in ["signals_2026", "f5_signals_2026", "f5_runline_2026"]:
+        df = None
+        for ext in [".parquet", ".json"]:
+            for prefix in [os.path.join(_base, "mlb_sim", "logs"), "mlb_sim/logs"]:
+                p = os.path.join(prefix, log_name + ext)
+                if os.path.exists(p):
+                    try:
+                        if ext == ".json":
+                            import json as _json_hdr
+                            with open(p) as _jf:
+                                df = pd.DataFrame(_json_hdr.load(_jf))
+                        else:
+                            df = pd.read_parquet(p)
+                    except Exception:
+                        pass
+                    if df is not None and len(df) > 0:
+                        break
+            if df is not None and len(df) > 0:
+                break
+        if df is None or len(df) == 0:
             continue
         try:
-            df = pd.read_parquet(log_path)
             resolved = df[df["resolved"] == 1]
             total_n += len(resolved)
             total_wins += int((resolved["result"] == "WIN").sum())
@@ -3889,24 +3902,27 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             # Load signal data for play/no-play split
             _sig_map_id = {}   # game_id → info
             _sig_map_team = {} # "away@home" → info
-            _sig_debug = []
-            _sig_found_path = None
-            _sig_error = None
             try:
                 _base_dir = os.path.dirname(os.path.abspath(__file__))
+                # Try parquet first (local), then JSON (Streamlit Cloud)
                 _try_paths = [
                     os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.parquet"),
-                    os.path.join("mlb_sim", "logs", "signals_2026.parquet"),
                     "mlb_sim/logs/signals_2026.parquet",
+                    os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.json"),
+                    "mlb_sim/logs/signals_2026.json",
                 ]
                 for _try_path in _try_paths:
                     if os.path.exists(_try_path):
-                        _sig_found_path = _try_path
-                        _sd = pd.read_parquet(_try_path)
-                        _sd_today = _sd[_sd["date"] == game_date]
-                        _sig_debug.append(f"path={_try_path}, total={len(_sd)}, today={len(_sd_today)}, game_date='{game_date}'")
-                        if len(_sd_today) == 0 and len(_sd) > 0:
-                            _sig_debug.append(f"dates in file: {_sd['date'].unique().tolist()[:5]}")
+                        if _try_path.endswith(".json"):
+                            import json as _json_sig
+                            with open(_try_path) as _jf:
+                                _sd_rows = _json_sig.load(_jf)
+                            _sd = pd.DataFrame(_sd_rows)
+                        else:
+                            _sd = pd.read_parquet(_try_path)
+                        if len(_sd) == 0:
+                            continue
+                        _sd_today = _sd[_sd["date"].astype(str) == str(game_date)]
                         for _, _sr in _sd_today.iterrows():
                             _info = {
                                 "stake": float(_sr["stake_units"]),
@@ -3915,18 +3931,10 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             _sig_map_id[str(_sr["game_id"])] = _info
                             _team_key = f'{_sr["away_team"]}@{_sr["home_team"]}'
                             _sig_map_team[_team_key] = _info
-                        break
-            except Exception as _e:
-                _sig_error = str(_e)
-
-            # Debug output — temporary
-            if len(_sig_map_id) == 0:
-                _dbg = f"Signal join debug: found_path={_sig_found_path}, maps={len(_sig_map_id)}/{len(_sig_map_team)}"
-                if _sig_error:
-                    _dbg += f", error={_sig_error}"
-                if _sig_debug:
-                    _dbg += f", {'; '.join(_sig_debug)}"
-                st.caption(_dbg)
+                        if _sig_map_id:
+                            break
+            except Exception:
+                pass
 
             all_games = (plays or []) + (no_plays or [])
             play_cards = []

@@ -59,6 +59,10 @@ def _load_signals():
 def _save_signals(df):
     LOGS.mkdir(parents=True, exist_ok=True)
     df.to_parquet(SIGNALS_PATH, index=False)
+    try:
+        df.to_json(SIGNALS_PATH.with_suffix(".json"), orient="records", indent=2)
+    except Exception:
+        pass
 
 
 def _load_status():

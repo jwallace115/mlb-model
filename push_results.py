@@ -342,6 +342,24 @@ def main():
         print(f"[push_results] MLB stop rule evaluation failed (non-fatal): {e}", file=sys.stderr)
         payload["stop_rule_status"] = {"model_suspended": False, "suspended_tiers": []}
 
+    # AI daily (and optional weekly) review
+    try:
+        from modules.ai_review import (build_graded_games, generate_daily_review,
+                                        maybe_weekly, build_week_games,
+                                        generate_weekly_review, is_idempotent)
+        _review_date = (datetime.fromisoformat(game_date) - timedelta(days=1)).date().isoformat()
+        if not is_idempotent(results_path, _review_date):
+            _graded = build_graded_games("mlb", _review_date)
+            payload["daily_review"] = generate_daily_review(_graded, "mlb", _review_date)
+        else:
+            print(f"[push_results] MLB daily review already exists for {_review_date} — skipping")
+        _wr = maybe_weekly("mlb")
+        if _wr:
+            _wg = build_week_games("mlb", *_wr)
+            payload["weekly_review"] = generate_weekly_review(_wg, "mlb", *_wr)
+    except Exception as e:
+        print(f"[push_results] MLB AI review failed (non-fatal): {e}", file=sys.stderr)
+
     with open(results_path, "w") as f:
         json.dump(payload, f, indent=2, default=str)
     print(f"[push_results] Wrote {results_path}")
@@ -413,6 +431,42 @@ def main():
         dashboard_files.append("soccer_results.json")
     except Exception as e:
         print(f"[push_results] Soccer JSON write failed (non-fatal): {e}", file=sys.stderr)
+
+    # Step 6d: NFL — pipeline + serialize
+    try:
+        print(f"[push_results] Running NFL pipeline for {game_date} ...")
+        subprocess.run(
+            [sys.executable, "nfl/nfl_daily_pipeline.py", "--date", game_date],
+            cwd=repo_dir, check=False,
+        )
+    except Exception as e:
+        print(f"[push_results] NFL pipeline failed (non-fatal): {e}", file=sys.stderr)
+    try:
+        from push_nfl import write_nfl_json
+        write_nfl_json(game_date)
+        dashboard_files.append("nfl_results.json")
+    except Exception as e:
+        print(f"[push_nfl] NFL JSON write failed (non-fatal): {e}", file=sys.stderr)
+
+    # Step 6e: Review Engine — daily scan
+    try:
+        sys.path.insert(0, os.path.join(repo_dir, "review_engine"))
+        from engine import daily_scan
+        alerts = daily_scan(game_date)
+        if alerts:
+            for a in alerts:
+                print(f"[review_engine] [{a['level']}] {a['message']}")
+    except Exception as e:
+        print(f"[review_engine] Review engine failed (non-fatal): {e}", file=sys.stderr)
+
+    # Step 6f: Add signal log JSON files for Streamlit Cloud
+    for _sig_json in [
+        "mlb_sim/logs/signals_2026.json",
+        "mlb_sim/logs/f5_signals_2026.json",
+        "mlb_sim/logs/f5_runline_2026.json",
+    ]:
+        if os.path.exists(os.path.join(repo_dir, _sig_json)):
+            dashboard_files.append(_sig_json)
 
     # Step 7: single combined push for all dashboard artifacts
     if not args.no_push:

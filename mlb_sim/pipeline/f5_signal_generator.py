@@ -66,6 +66,10 @@ def _load_f5_signals():
 def _save_f5_signals(df):
     LOGS.mkdir(parents=True, exist_ok=True)
     df.to_parquet(F5_SIGNALS_PATH, index=False)
+    try:
+        df.to_json(F5_SIGNALS_PATH.with_suffix(".json"), orient="records", indent=2)
+    except Exception:
+        pass
 
 
 def _load_f5_status():
