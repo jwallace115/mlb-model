@@ -3927,6 +3927,124 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 else:
                     noplay_cards.append((b, False))
 
+            # ── Results tracker (yesterday + season) ────────────────────────
+            try:
+                from datetime import datetime as _dt_rt, timedelta as _td_rt
+                _yesterday = (_dt_rt.strptime(game_date, "%Y-%m-%d") - _td_rt(days=1)).strftime("%Y-%m-%d")
+
+                def _load_signal_json(name):
+                    for _p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "mlb_sim", "logs", name), f"mlb_sim/logs/{name}"]:
+                        if os.path.exists(_p):
+                            try:
+                                with open(_p) as _f:
+                                    return _json_sig.load(_f)
+                            except Exception:
+                                pass
+                    return []
+
+                def _engine_stats(rows, date_filter=None):
+                    resolved = [r for r in rows if r.get("resolved") == 1 and r.get("result") in ("WIN", "LOSS", "PUSH")]
+                    if date_filter:
+                        resolved = [r for r in resolved if r.get("date") == date_filter]
+                    w = sum(1 for r in resolved if r["result"] == "WIN")
+                    l = sum(1 for r in resolved if r["result"] == "LOSS")
+                    net = sum(float(r.get("net_units", 0) or 0) for r in resolved)
+                    n = w + l
+                    return {"w": w, "l": l, "n": n, "net": net,
+                            "wr": round(w / n * 100, 1) if n > 0 else None,
+                            "roi": round(net / max(n, 1) * 100, 1) if n > 0 else None}
+
+                _v1_rows = _load_signal_json("signals_2026.json")
+                _f5_rows = _load_signal_json("f5_signals_2026.json")
+                _rl_rows = _load_signal_json("f5_runline_2026.json")
+
+                # Yesterday
+                _v1_y = _engine_stats(_v1_rows, _yesterday)
+                _f5_y = _engine_stats(_f5_rows, _yesterday)
+                _rl_y = _engine_stats(_rl_rows, _yesterday)
+
+                # Season
+                _v1_s = _engine_stats(_v1_rows)
+                _f5_s = _engine_stats(_f5_rows)
+                _rl_s = _engine_stats(_rl_rows)
+
+                # Parlay yesterday
+                _pt_data = None
+                for _pp in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "mlb_sim", "logs", "parlay_tracker_2026.json"),
+                            "mlb_sim/logs/parlay_tracker_2026.json"]:
+                    if os.path.exists(_pp):
+                        try:
+                            with open(_pp) as _pf:
+                                _pt_data = _json_sig.load(_pf)
+                        except Exception:
+                            pass
+                        break
+
+                def _fmt_record(s, show_roi=False):
+                    if s["n"] == 0:
+                        return '<span style="color:#6b7280">\u2014</span>'
+                    clr = "#4ade80" if s["net"] >= 0 else "#f87171"
+                    parts = f'<span style="color:{clr}">{s["w"]}-{s["l"]}</span>'
+                    parts += f' <span style="color:{clr}">({s["net"]:+.1f}u)</span>'
+                    if show_roi and s["wr"] is not None:
+                        parts += f' <span style="color:#6b7280">{s["wr"]:.0f}%</span>'
+                    return parts
+
+                def _parlay_result(pt_data, tier, date_str):
+                    if not pt_data:
+                        return '<span style="color:#6b7280">\u2014</span>'
+                    parlays = pt_data.get(tier, {}).get("parlays", [])
+                    for p in parlays:
+                        if p.get("date") == date_str:
+                            r = p.get("result", "pending")
+                            if r == "WIN": return '<span style="color:#4ade80">W</span>'
+                            elif r == "LOSS": return '<span style="color:#f87171">L</span>'
+                            else: return '<span style="color:#6b7280">pending</span>'
+                    return '<span style="color:#6b7280">\u2014</span>'
+
+                def _parlay_season(pt_data, tier):
+                    if not pt_data:
+                        return '<span style="color:#6b7280">\u2014</span>'
+                    s = pt_data.get(tier, {}).get("summary", {})
+                    w, l = s.get("wins", 0), s.get("losses", 0)
+                    if w + l == 0:
+                        return '<span style="color:#6b7280">\u2014</span>'
+                    net = s.get("net_units", 0)
+                    clr = "#4ade80" if net >= 0 else "#f87171"
+                    return f'<span style="color:{clr}">{w}-{l} ({net:+.1f}u)</span>'
+
+                _has_yesterday = _v1_y["n"] + _f5_y["n"] + _rl_y["n"] > 0
+
+                _left = f'<div style="flex:1"><div style="font-weight:700;color:#94a3b8;margin-bottom:4px">YESTERDAY \u2014 {_yesterday}</div>'
+                if _has_yesterday:
+                    if _v1_y["n"] > 0: _left += f'<div>Full Game: {_fmt_record(_v1_y)}</div>'
+                    if _f5_y["n"] > 0: _left += f'<div>F5 Total: {_fmt_record(_f5_y)}</div>'
+                    if _rl_y["n"] > 0: _left += f'<div>F5 Run Line: {_fmt_record(_rl_y)}</div>'
+                    _left += f'<div>3-Leg: {_parlay_result(_pt_data, "three_leg", _yesterday)}</div>'
+                    _left += f'<div>5-Leg: {_parlay_result(_pt_data, "five_leg", _yesterday)}</div>'
+                else:
+                    _left += '<div style="color:#6b7280">No results yet</div>'
+                _left += '</div>'
+
+                _right = '<div style="flex:1"><div style="font-weight:700;color:#94a3b8;margin-bottom:4px">SEASON (from Mar 25)</div>'
+                _right += f'<div>Full Game: {_fmt_record(_v1_s, show_roi=True)}</div>'
+                _right += f'<div>F5 Total: {_fmt_record(_f5_s, show_roi=True)}</div>'
+                _right += f'<div>F5 Run Line: {_fmt_record(_rl_s, show_roi=True)}</div>'
+                _right += f'<div>3-Leg: {_parlay_season(_pt_data, "three_leg")}</div>'
+                _right += f'<div>5-Leg: {_parlay_season(_pt_data, "five_leg")}</div>'
+                _right += '</div>'
+
+                st.html(
+                    f'<div style="display:flex;gap:20px;font-size:0.78em;color:#e2e8f0;'
+                    f'padding:10px 14px;background:#0f1729;border-radius:6px;border:1px solid #1e2d4a;'
+                    f'margin-bottom:12px">'
+                    f'{_left}{_right}'
+                    f'</div>')
+            except Exception:
+                pass
+
             # Play cards — prominent, unified
             if play_cards:
                 st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 {len(play_cards)}</div>')
