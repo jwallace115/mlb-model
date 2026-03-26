@@ -1,0 +1,12 @@
+{
+  "p09_cutoff_bottom20": 31.7305,
+  "overlay_status": "ACTIVE",
+  "overlay_version": "1.0",
+  "stake_rules": {
+    "p09_only": 1.25,
+    "s12_only": 1.25,
+    "both": 1.5,
+    "cap": 1.5
+  },
+  "deployment_note": "P09 under amplifier — contact suppression in pitcher parks. 2024-derived cutoff."
+}

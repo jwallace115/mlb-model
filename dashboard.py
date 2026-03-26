@@ -1077,8 +1077,19 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
                 badges += (f'<div style="font-size:0.95em;font-weight:700;color:#a78bfa;margin-top:3px">'
                            f'F5 RL HOME {stake}u</div>')
 
+        # Check for P09 overlay from V1 signal data
+        _has_p09 = any(s.get("p09_active") for s in signals if s.get("type") == "v1")
+
         boost = ""
-        if has_s12:
+        if has_s12 and _has_p09:
+            boost = ('<div style="font-size:0.82em;color:#22c55e;margin-top:2px">'
+                     'Elite command and contact suppression stacking up. '
+                     'Highest conviction play of the day.</div>')
+        elif _has_p09:
+            boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
+                     'Strong pitching in a run-suppressing park \u2014 '
+                     'hard contact limited on both sides.</div>')
+        elif has_s12:
             boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
                      'Boosted \u2014 elite pitching environment</div>')
 
@@ -3897,6 +3908,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             _info = {"type": sig_type, "stake": float(_r.get("stake_units", 0))}
                             if sig_type == "v1":
                                 _info["s12_active"] = bool(_r.get("s12_overlay_active", 0))
+                                _info["p09_active"] = bool(_r.get("p09_overlay_active", 0))
                                 _info["p_under"] = float(_r.get("raw_p_under", 0))
                             elif sig_type in ("f5_under", "f5_over"):
                                 side = _r.get("f5_signal_side", "")

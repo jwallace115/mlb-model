@@ -76,7 +76,9 @@ def _save_signals(df):
                        "stake_units", "raw_p_under", "raw_p_over",
                        "line_at_signal_time", "result", "net_units", "resolved"]
         # Include overlay fields if present
-        for c in ["s12_overlay_active", "s12_value", "base_stake"]:
+        for c in ["s12_overlay_active", "s12_value", "base_stake",
+                   "p09_overlay_active", "p09_value", "p09_data_available",
+                   "combined_overlay_tier", "final_stake"]:
             if c in df.columns:
                 export_cols.append(c)
         avail = [c for c in export_cols if c in df.columns]
@@ -279,13 +281,64 @@ def generate_signals(game_date_str, schedule, pitcher_db):
             "resolved": 0,
         }
 
-        # S12 overlay: amplify stake for elite pitching environments
+        # S12 overlay: compute score
+        s12_active = False
         try:
-            from mlb_sim.pipeline.s12_overlay import apply_overlay_to_signal
-            apply_overlay_to_signal(sig, home_sp, away_sp)
+            from mlb_sim.pipeline.s12_overlay import compute_s12, evaluate_overlay
+            s12_val = compute_s12(home_sp, away_sp)
+            s12_result = evaluate_overlay(s12_val, sig["stake_units"])
+            sig.update(s12_result)
+            s12_active = s12_result.get("s12_overlay_active") == 1
         except Exception as e:
             logger.debug(f"S12 overlay failed (non-fatal): {e}")
             sig.setdefault("s12_overlay_active", 0)
+
+        # P09 overlay: contact suppression × pitcher park
+        p09_active = False
+        try:
+            from mlb_sim.pipeline.p09_overlay import compute_p09, evaluate_p09_overlay, apply_combined_overlay
+            # Look up hard-hit rates from Statcast rolling data
+            if not hasattr(generate_signals, "_hh_cache"):
+                _sc_path = BASE.parent / "research" / "statcast_enrichment" / "pitcher_statcast_per_start_starters_only.parquet"
+                if _sc_path.exists():
+                    import pandas as _pd_sc
+                    _sc = _pd_sc.read_parquet(_sc_path).sort_values(["pitcher_id", "game_date"])
+                    _sc["hh_r5"] = _sc.groupby("pitcher_id")["hard_hit_rate"].transform(
+                        lambda x: x.shift(1).rolling(5, min_periods=3).mean())
+                    # Latest per pitcher
+                    _latest = _sc.dropna(subset=["hh_r5"]).groupby("pitcher_id").last()[["hh_r5"]]
+                    generate_signals._hh_cache = _latest["hh_r5"].to_dict()
+                else:
+                    generate_signals._hh_cache = {}
+
+            _hh = generate_signals._hh_cache
+            h_hh = _hh.get(int(home_sp_info.get("id", 0)))
+            a_hh = _hh.get(int(away_sp_info.get("id", 0)))
+
+            from config import STADIUMS
+            park_rf = STADIUMS.get(home, {}).get("park_factor", 100)
+
+            p09_val = compute_p09(h_hh, a_hh, park_rf)
+            p09_result = evaluate_p09_overlay(p09_val)
+            sig.update(p09_result)
+            p09_active = p09_result.get("p09_overlay_active") == 1
+        except Exception as e:
+            logger.debug(f"P09 overlay failed (non-fatal): {e}")
+            sig.setdefault("p09_overlay_active", 0)
+            sig.setdefault("p09_data_available", 0)
+
+        # Combined stake: apply both overlays
+        try:
+            from mlb_sim.pipeline.p09_overlay import apply_combined_overlay
+            base_stake = stake  # original V1 stake before any overlay
+            final_stake, tier = apply_combined_overlay(base_stake, s12_active, p09_active)
+            sig["base_stake"] = base_stake
+            sig["stake_units"] = final_stake
+            sig["combined_overlay_tier"] = tier
+            sig["final_stake"] = final_stake
+        except Exception:
+            sig.setdefault("combined_overlay_tier", "NONE")
+            sig.setdefault("final_stake", sig["stake_units"])
 
         new_signals.append(sig)
         display_signals.append({
@@ -295,9 +348,12 @@ def generate_signals(game_date_str, schedule, pitcher_db):
             "away_sp_name": away_sp_info.get("name", "TBD"),
         })
 
-        s12_tag = " [S12 overlay]" if sig.get("s12_overlay_active") == 1 else ""
+        tags = []
+        if s12_active: tags.append("S12")
+        if p09_active: tags.append("P09")
+        tag_str = f" [{'+'.join(tags)}]" if tags else ""
         logger.info(f"  🔵 UNDER {sig['stake_units']}u: {away}@{home} line={line} p_under={p_under:.1%} "
-                     f"{'[dual_high_csw]' if dual_csw else ''}{s12_tag}")
+                     f"{'[dual_high_csw]' if dual_csw else ''}{tag_str}")
 
     # Append new signals
     if new_signals:
