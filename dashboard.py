@@ -1085,82 +1085,110 @@ def _render_card(b: dict) -> None:
     except Exception:
         pass
 
-    star_cls = {"⭐⭐⭐": "star3", "⭐⭐": "star2", "⭐": "star1"}.get(rating, "noplay")
-    card_cls = f"game-card {star_cls}" if is_play else "game-card noplay"
-
-    rating_html = (
-        f'<span class="stars">{rating}</span>'
-        if is_play else
-        '<span class="noplay-badge">No Play</span>'
-    )
     matchup = f'{game["away_team"]} @ {game["home_team"]}'
+    line = fe.get("consensus")
+    full_proj = proj["proj_total_full"]
 
-    header = (
-        f'<div class="card-header">'
-        f'{rating_html}'
-        f'<span class="matchup">{matchup}</span>'
-        f'{"" if lean == "NEUTRAL" else _lean_badge(lean)}'
-        f'</div>'
-    )
+    # Weather one-liner
+    temp = f.get("temperature_f")
+    wind_mph = f.get("wind_speed_mph") or 0.0
+    wind_raw = f.get("wind_desc") or ""
+    is_dome = "dome" in wind_raw.lower()
+    wx_parts = []
+    if temp is not None:
+        wx_parts.append(f"{temp:.0f}\u00b0F")
+    if not is_dome and wind_mph >= 5:
+        wd = wind_raw.replace("Blowing ", "").replace("blowing ", "")
+        wx_parts.append(f"{wind_mph:.0f}mph wind {wd}")
+    wx_line = ", ".join(wx_parts) if wx_parts else ""
 
-    proj_row = (
-        _proj_row_html(proj, fe, f5e, sim_info=sim_info) if is_play else
-        f'<div class="proj-row">'
-        f'<span class="proj-label">Proj</span> '
-        f'<span class="proj-val">{proj["proj_total_full"]:.1f}</span>'
-        f'</div>'
-    )
+    gtime = game.get("game_time", "")
+    gtime_et = game.get("game_time_et", "")
+    time_str = gtime_et if gtime_et else gtime
 
-    props_html  = ""  # Props display disabled — no props engine deployed
-
-    # Add signal trigger context to summary
-    if sim_info and sim_info.get("p_under"):
+    if sim_info and sim_info.get("p_under") and is_play:
+        # ── V1 SIGNAL CARD (new format) ──
         pu = sim_info["p_under"]
         stake = sim_info.get("stake", "?")
-        base_stake = sim_info.get("base_stake")
-        trigger_text = f'Signal: p_under={pu*100:.1f}%'
+        base_stake = sim_info.get("base_stake", stake)
+        s12_active = sim_info.get("s12_active", False)
+        s12_val = sim_info.get("s12_value")
+
+        # Line 1: matchup + time
+        line1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
+                 f'{matchup} \u2014 {time_str}</div>')
+
+        # Line 2: UNDER [line] — [stake]u
+        line_str = f"{line:.1f}" if line is not None else "TBD"
+        s12_badge = ' \u26a1S12' if s12_active else ''
+        line2 = (f'<div style="font-size:1.05em;font-weight:700;color:#67e8f9;margin-top:4px">'
+                 f'UNDER {line_str} \u2014 {stake}u{s12_badge}</div>')
+
+        # Line 3: signal trigger
         if pu > 0.60:
-            trigger_text += f' \u2192 {stake}u UNDER (strong conviction)'
+            thresh_text = "threshold crossed: 0.60 \u2192 1.0u"
         else:
-            trigger_text += f' \u2192 {stake}u UNDER'
-        if sim_info.get("s12_active"):
-            s12v = sim_info.get("s12_value")
-            s12_str = f" (pitcher_score={s12v:.1f})" if s12v else ""
-            trigger_text += f' | S12 overlay ACTIVE \u2192 boosted from {base_stake}u to {stake}u{s12_str}'
-        summary = (f'<div style="color:#60a5fa;font-size:0.88em;margin-bottom:4px;font-weight:600">'
-                   f'{trigger_text}</div>' + summary)
+            thresh_text = "threshold crossed: 0.57 \u2192 0.5u"
 
-    # Inline alert badges on the card for any SP/batter changes
-    card_alerts = b.get("alerts") or []
-    alert_html  = ""
-    for a in card_alerts:
-        ct = a.get("type", "")
-        if "SP_SCRATCH" in ct:
-            side = "Home" if "HOME" in ct else "Away"
-            p_out = a.get("player_out", "")
-            p_in  = a.get("player_in") or "TBD"
-            alert_html += (
-                f'<div style="font-size:0.78em;color:#f87171;margin-top:4px">'
-                f'⚠️ {side} SP scratch: {p_out} → {p_in}'
-                f'</div>'
-            )
-        elif ct == "BATTER_SCRATCH":
-            alert_html += (
-                f'<div style="font-size:0.78em;color:#fde68a;margin-top:4px">'
-                f'⚠️ {a.get("player_out","")} scratched — TB prop invalid'
-                f'</div>'
-            )
+        if s12_active and s12_val:
+            trigger = (f'p_under = {pu:.2f} | {thresh_text} | '
+                       f'S12 score = {s12_val:.1f} (top 20%) \u2192 stake boosted')
+        elif s12_active:
+            trigger = f'p_under = {pu:.2f} | {thresh_text} | S12 overlay \u2192 stake boosted'
+        else:
+            trigger = f'p_under = {pu:.2f} | {thresh_text}'
+        line3 = f'<div style="font-size:0.82em;color:#94a3b8;margin-top:2px">{trigger}</div>'
 
-    st.html(
-        f'<div class="{card_cls}">'
-        f'{header}'
-        f'{_meta_html(f, game)}'
-        f'{proj_row}'
-        f'{alert_html}'
-        f'<div class="card-summary">{summary}</div>'
-        f'{props_html}'
-        f'</div>'
-    )
+        # Line 4: weather
+        line4 = f'<div style="font-size:0.78em;color:#6b7280;margin-top:2px">{wx_line}</div>' if wx_line else ""
+
+        # Line 5: model vs line
+        line_ctx = f"Line: {line:.1f}" if line is not None else "No line"
+        line5 = (f'<div style="font-size:0.78em;color:#6b7280;margin-top:2px">'
+                 f'Model: {full_proj:.1f} | {line_ctx}</div>')
+
+        card_cls = "game-card star2"  # consistent styling for signal cards
+        st.html(
+            f'<div class="{card_cls}" style="border-left:3px solid #67e8f9">'
+            f'{line1}{line2}{line3}{line4}{line5}'
+            f'</div>'
+        )
+    elif is_play:
+        # ── RULES-BASED PLAY CARD (legacy format, no V1 sim signal) ──
+        card_cls = "game-card star1"
+        header = (f'<div class="card-header">'
+                  f'<span class="matchup">{matchup}</span>'
+                  f'{"" if lean == "NEUTRAL" else _lean_badge(lean)}'
+                  f'</div>')
+        proj_row = (f'<div class="proj-row">'
+                    f'<span class="proj-label">Proj</span> <span class="proj-val">{full_proj:.1f}</span>'
+                    f'</div>')
+        st.html(
+            f'<div class="{card_cls}">'
+            f'{header}'
+            f'{_meta_html(f, game)}'
+            f'{proj_row}'
+            f'<div class="card-summary">{summary}</div>'
+            f'</div>'
+        )
+    else:
+        # ── NO PLAY CARD ──
+        card_cls = "game-card noplay"
+        header = (f'<div class="card-header">'
+                  f'<span class="noplay-badge">No Play</span>'
+                  f'<span class="matchup">{matchup}</span>'
+                  f'</div>')
+        proj_row = (f'<div class="proj-row">'
+                    f'<span class="proj-label">Proj</span> <span class="proj-val">{full_proj:.1f}</span>'
+                    f'</div>')
+        st.html(
+            f'<div class="{card_cls}">'
+            f'{header}'
+            f'{_meta_html(f, game)}'
+            f'{proj_row}'
+            f'<div class="card-summary">{summary}</div>'
+            f'</div>'
+        )
 
 
 def _render_parlay_card(
@@ -3533,19 +3561,33 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _today_sigs = _sim_sigs[_sim_sigs["date"] == _today_str]
                 if len(_today_sigs) > 0:
                     for _, _ss in _today_sigs.iterrows():
-                        _dcf = " \u00b7 dual_high_csw" if _ss.get("dual_high_csw") == 1 else ""
-                        _s12_tag = ""
-                        if _ss.get("s12_overlay_active") == 1:
-                            _s12_base = _ss.get("base_stake", "?")
-                            _s12_tag = (f' <span style="color:#a78bfa;font-size:0.85em">'
-                                        f'\u00b7 S12 overlay \u00b7 elite pitching env '
-                                        f'({_s12_base}u\u2192{_ss["stake_units"]}u)</span>')
                         _line_str = f"{float(_ss['line_at_signal_time']):.1f}" if pd.notna(_ss.get("line_at_signal_time")) else "TBD"
-                        st.html(f'<div style="font-size:0.82em;color:#60a5fa;margin-bottom:4px;'
-                                f'padding:6px 10px;background:#1a2433;border-radius:4px;border:1px solid #3b82f6">'
-                                f'\u26be {_ss["away_team"]} @ {_ss["home_team"]} \u2014 '
-                                f'UNDER {_line_str} \u00b7 {_ss["stake_units"]}u \u00b7 '
-                                f'p_under={float(_ss["raw_p_under"])*100:.1f}%{_dcf}{_s12_tag}</div>')
+                        _pu = float(_ss["raw_p_under"]) if pd.notna(_ss.get("raw_p_under")) else 0
+                        _stake = _ss["stake_units"]
+                        _s12_badge = ""
+                        if _ss.get("s12_overlay_active") == 1:
+                            _s12_badge = " \u26a1S12"
+
+                        # Line 1: signal
+                        _sig_line = f'UNDER {_line_str} \u2014 {_stake}u{_s12_badge}'
+                        # Line 2: trigger
+                        _thresh = "0.60 \u2192 1.0u" if _pu > 0.60 else "0.57 \u2192 0.5u"
+                        _trigger = f'p_under = {_pu:.2f} | threshold: {_thresh}'
+                        if _ss.get("s12_overlay_active") == 1:
+                            _s12v = _ss.get("s12_value")
+                            _s12_str = f" | S12={_s12v:.1f} \u2192 stake boosted" if pd.notna(_s12v) else " | S12 \u2192 boosted"
+                            _trigger += _s12_str
+
+                        st.html(
+                            f'<div style="font-size:0.82em;margin-bottom:6px;'
+                            f'padding:8px 12px;background:#1a2433;border-radius:4px;border-left:3px solid #67e8f9">'
+                            f'<div style="color:#e2e8f0;font-weight:600">'
+                            f'{_ss["away_team"]} @ {_ss["home_team"]}</div>'
+                            f'<div style="color:#67e8f9;font-weight:700;font-size:1.05em;margin-top:2px">'
+                            f'{_sig_line}</div>'
+                            f'<div style="color:#94a3b8;font-size:0.85em;margin-top:2px">'
+                            f'{_trigger}</div>'
+                            f'</div>')
                 else:
                     st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">No MLB under signals today.</div>')
 
@@ -3640,14 +3682,20 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         _f5_ln = f"{float(_fs['f5_line']):.1f}" if pd.notna(_fs.get("f5_line")) else "TBD"
                         _f5_stake = _fs.get("stake_units", "")
                         _f5_p = _fs.get("p_under_full") if _f5_side == "UNDER" else _fs.get("p_over_full")
-                        _f5_p_str = f"{float(_f5_p)*100:.1f}%" if pd.notna(_f5_p) else "\u2014"
-                        _f5_side_color = "#60a5fa" if _f5_side == "UNDER" else "#fbbf24"
-                        _f5_border = "#3b82f6" if _f5_side == "UNDER" else "#d97706"
-                        st.html(f'<div style="font-size:0.82em;color:{_f5_side_color};margin-bottom:4px;'
-                                f'padding:6px 10px;background:#1a2433;border-radius:4px;border:1px solid {_f5_border}">'
-                                f'\u26be {_fs.get("away_team","")} @ {_fs.get("home_team","")} \u2014 '
-                                f'F5 {_f5_side} {_f5_ln} \u00b7 {_f5_stake}u \u00b7 '
-                                f'p={_f5_p_str}</div>')
+                        _f5_p_val = f"{float(_f5_p):.2f}" if pd.notna(_f5_p) else "\u2014"
+                        _f5_side_color = "#67e8f9" if _f5_side == "UNDER" else "#fbbf24"
+                        _f5_border = "#67e8f9" if _f5_side == "UNDER" else "#d97706"
+                        _f5_p_label = "p_under" if _f5_side == "UNDER" else "p_over"
+                        st.html(
+                            f'<div style="font-size:0.82em;margin-bottom:6px;'
+                            f'padding:8px 12px;background:#1a2433;border-radius:4px;border-left:3px solid {_f5_border}">'
+                            f'<div style="color:#e2e8f0;font-weight:600">'
+                            f'{_fs.get("away_team","")} @ {_fs.get("home_team","")}</div>'
+                            f'<div style="color:{_f5_side_color};font-weight:700;font-size:1.05em;margin-top:2px">'
+                            f'F5 {_f5_side} {_f5_ln} \u2014 {_f5_stake}u</div>'
+                            f'<div style="color:#94a3b8;font-size:0.85em;margin-top:2px">'
+                            f'{_f5_p_label} = {_f5_p_val} | threshold: 0.57</div>'
+                            f'</div>')
                 else:
                     st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
                             'No F5 signals today.</div>')
@@ -3787,16 +3835,20 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _rl_today = _rl_sigs[_rl_sigs["date"] == _rl_today_str]
                 if len(_rl_today) > 0:
                     for _, _rs in _rl_today.iterrows():
-                        _rl_gap = f"{float(_rs.get('xfip_gap', 0)):.2f}" if pd.notna(_rs.get("xfip_gap")) else ""
+                        _rl_gap = f"{float(_rs.get('xfip_gap', 0)):.2f}" if pd.notna(_rs.get("xfip_gap")) else "?"
                         _rl_price = f"{int(_rs['bet_price'])}" if pd.notna(_rs.get("bet_price")) else "TBD"
-                        _rl_line = f"{float(_rs['bet_line']):.1f}" if pd.notna(_rs.get("bet_line")) else ""
-                        st.html(f'<div style="font-size:0.82em;color:#a78bfa;margin-bottom:4px;'
-                                f'padding:6px 10px;background:#1a2433;border-radius:4px;border:1px solid #7c3aed">'
-                                f'\u26be {_rs.get("away_team","")} @ {_rs.get("home_team","")} \u2014 '
-                                f'F5 RL HOME {_rl_line} @ {_rl_price} \u00b7 0.5u \u00b7 '
-                                f'xFIP gap={_rl_gap} '
-                                f'({_rs.get("home_sp_name","?")} vs {_rs.get("away_sp_name","?")})'
-                                f' <span style="color:#7c3aed;font-size:0.8em">LIVE</span></div>')
+                        _rl_line = f"{float(_rs['bet_line']):.1f}" if pd.notna(_rs.get("bet_line")) else "-0.5"
+                        st.html(
+                            f'<div style="font-size:0.82em;margin-bottom:6px;'
+                            f'padding:8px 12px;background:#1a2433;border-radius:4px;border-left:3px solid #a78bfa">'
+                            f'<div style="color:#e2e8f0;font-weight:600">'
+                            f'{_rs.get("away_team","")} @ {_rs.get("home_team","")}</div>'
+                            f'<div style="color:#a78bfa;font-weight:700;font-size:1.05em;margin-top:2px">'
+                            f'F5 RL HOME {_rl_line} @ {_rl_price} \u2014 0.5u</div>'
+                            f'<div style="color:#94a3b8;font-size:0.85em;margin-top:2px">'
+                            f'xFIP gap = {_rl_gap} (threshold: 1.0) | '
+                            f'{_rs.get("home_sp_name","?")} vs {_rs.get("away_sp_name","?")}</div>'
+                            f'</div>')
                 else:
                     st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
                             'No F5 Run Line signals today.</div>')
