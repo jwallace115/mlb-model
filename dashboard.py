@@ -3900,28 +3900,34 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 st.caption(f"Projections for **{game_date}**")
 
             # Load signal data for play/no-play split
+            # Uses plain dict parsing (no pandas) to avoid version issues on Cloud
             _sig_map_id = {}   # game_id → info
             _sig_map_team = {} # "away@home" → info
-            try:
-                _base_dir = os.path.dirname(os.path.abspath(__file__))
-                # Try parquet first (local), then JSON (Streamlit Cloud)
-                _try_paths = [
-                    os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.parquet"),
-                    "mlb_sim/logs/signals_2026.parquet",
-                    os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.json"),
-                    "mlb_sim/logs/signals_2026.json",
-                ]
-                for _try_path in _try_paths:
-                    if os.path.exists(_try_path):
-                        if _try_path.endswith(".json"):
-                            import json as _json_sig
-                            with open(_try_path) as _jf:
-                                _sd_rows = _json_sig.load(_jf)
-                            _sd = pd.DataFrame(_sd_rows)
-                        else:
-                            _sd = pd.read_parquet(_try_path)
-                        if len(_sd) == 0:
-                            continue
+            import json as _json_sig
+            _base_dir = os.path.dirname(os.path.abspath(__file__))
+            for _try_path in [
+                os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.json"),
+                "mlb_sim/logs/signals_2026.json",
+                os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.parquet"),
+                "mlb_sim/logs/signals_2026.parquet",
+            ]:
+                if not os.path.exists(_try_path):
+                    continue
+                try:
+                    if _try_path.endswith(".json"):
+                        with open(_try_path) as _jf:
+                            _rows = _json_sig.load(_jf)
+                        for _r in _rows:
+                            if str(_r.get("date", "")) != str(game_date):
+                                continue
+                            _info = {
+                                "stake": float(_r.get("stake_units", 0)),
+                                "s12_active": bool(_r.get("s12_overlay_active", 0)),
+                            }
+                            _sig_map_id[str(_r.get("game_id", ""))] = _info
+                            _sig_map_team[f'{_r.get("away_team","")}@{_r.get("home_team","")}'] = _info
+                    else:
+                        _sd = pd.read_parquet(_try_path)
                         _sd_today = _sd[_sd["date"].astype(str) == str(game_date)]
                         for _, _sr in _sd_today.iterrows():
                             _info = {
@@ -3929,32 +3935,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                 "s12_active": bool(_sr.get("s12_overlay_active", 0)),
                             }
                             _sig_map_id[str(_sr["game_id"])] = _info
-                            _team_key = f'{_sr["away_team"]}@{_sr["home_team"]}'
-                            _sig_map_team[_team_key] = _info
-                        if _sig_map_id:
-                            break
-            except Exception:
-                pass
-
-            # DEBUG — temporary: show what the join sees
-            _dbg_parts = []
-            _dbg_parts.append(f"sig_map: {len(_sig_map_id)} by id, {len(_sig_map_team)} by team")
-            _sig_team_sample = list(_sig_map_team.keys())[:2]
-            _dbg_parts.append(f"sig teams: {_sig_team_sample}")
-            _card_sample = []
-            for _bc in (plays or []) + (no_plays or []):
-                _card_sample.append(f'{_bc["game"]["away_team"]}@{_bc["game"]["home_team"]}(pk={_bc["game"].get("game_pk")})')
-                if len(_card_sample) >= 2:
+                            _sig_map_team[f'{_sr["away_team"]}@{_sr["home_team"]}'] = _info
+                except Exception:
+                    continue
+                if _sig_map_id:
                     break
-            _dbg_parts.append(f"card teams: {_card_sample}")
-            # Show which paths were tried
-            _paths_exist = []
-            _base_dir2 = os.path.dirname(os.path.abspath(__file__))
-            for _p in [os.path.join(_base_dir2, "mlb_sim", "logs", "signals_2026.json"),
-                       "mlb_sim/logs/signals_2026.json"]:
-                _paths_exist.append(f"{_p}={'Y' if os.path.exists(_p) else 'N'}")
-            _dbg_parts.append(f"paths: {_paths_exist}")
-            st.caption(" | ".join(_dbg_parts))
 
             all_games = (plays or []) + (no_plays or [])
             play_cards = []
