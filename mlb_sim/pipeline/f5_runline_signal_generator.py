@@ -116,7 +116,7 @@ def _bootstrap():
 # ── Part 6: F5 Spread Collection ─────────────────────────────────────────────
 
 def pull_f5_spreads(game_date_str, schedule=None):
-    """Pull F5 run line (spreads_1st_5_innings) for today's games."""
+    """Pull F5 run line (spreads_1st_5_innings) via per-event endpoint."""
     if schedule is None:
         return
 
@@ -131,49 +131,52 @@ def pull_f5_spreads(game_date_str, schedule=None):
     now_utc = datetime.now(timezone.utc).isoformat()
     pulled = 0
 
-    # Use standard odds endpoint for spreads (not event-level)
-    url = f"{ODDS_API_BASE}/sports/baseball_mlb/odds/"
-    params = {
-        "apiKey": ODDS_API_KEY,
-        "regions": "us",
-        "markets": "spreads_1st_5_innings",
-        "oddsFormat": "american",
-    }
-
+    # Get event IDs from bulk endpoint
     try:
-        r = requests.get(url, params=params, timeout=30)
-        if r.status_code != 200:
-            logger.warning(f"F5 spread fetch: HTTP {r.status_code}")
-            return
-        api_games = r.json()
-    except Exception as e:
-        logger.warning(f"F5 spread fetch failed: {e}")
-        return
+        r_bulk = requests.get(f"{ODDS_API_BASE}/sports/baseball_mlb/odds/",
+                              params={"apiKey": ODDS_API_KEY, "regions": "us",
+                                      "markets": "totals", "oddsFormat": "american"},
+                              timeout=30)
+        bulk_games = r_bulk.json() if r_bulk.status_code == 200 else []
+    except Exception:
+        bulk_games = []
 
-    ABB_MAP = {v: k for k, v in ODDS_API_TEAM_MAP.items()}  # full name → abb
+    # Build event ID lookup by team names
+    ABB_MAP = {v: k for k, v in ODDS_API_TEAM_MAP.items()}
+    event_map = {}  # (home_abb, away_abb) → event_id
+    for bg in bulk_games:
+        h_abb = ODDS_API_TEAM_MAP.get(bg.get("home_team", ""))
+        a_abb = ODDS_API_TEAM_MAP.get(bg.get("away_team", ""))
+        if h_abb and a_abb:
+            event_map[(h_abb, a_abb)] = bg["id"]
 
     for game in schedule:
         gid = str(game.get("game_pk", ""))
         home = game.get("home_team", "")
         away = game.get("away_team", "")
 
-        # Find this game in API response
+        # Get event ID for this game
         home_full = next((k for k, v in ODDS_API_TEAM_MAP.items() if v == home), None)
-        away_full = next((k for k, v in ODDS_API_TEAM_MAP.items() if v == away), None)
+        eid = event_map.get((home, away))
+        if not eid:
+            continue
 
-        matched_game = None
-        for ag in api_games:
-            if ag.get("home_team") == home_full and ag.get("away_team") == away_full:
-                matched_game = ag
-                break
-
-        if not matched_game:
+        # Per-event F5 spread call
+        try:
+            r_evt = requests.get(f"{ODDS_API_BASE}/sports/baseball_mlb/events/{eid}/odds",
+                                 params={"apiKey": ODDS_API_KEY, "regions": "us",
+                                         "markets": "spreads_1st_5_innings",
+                                         "oddsFormat": "american"}, timeout=15)
+            if r_evt.status_code != 200:
+                continue
+            evt_bks = r_evt.json().get("bookmakers", [])
+        except Exception:
             continue
 
         # Extract valid -0.5/+0.5 spread
         best = None
         n_books = 0
-        for bk in matched_game.get("bookmakers", []):
+        for bk in evt_bks:
             for mkt in bk.get("markets", []):
                 if mkt["key"] != "spreads_1st_5_innings":
                     continue

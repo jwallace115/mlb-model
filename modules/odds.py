@@ -40,7 +40,7 @@ _CACHE_F5   = os.path.join(CACHE_DIR, f"odds_f5_{date.today().isoformat()}.json"
 MLB_SPORT    = "baseball_mlb"
 F5_SPORT     = "baseball_mlb"          # same sport key
 FULL_MARKET  = "totals"
-F5_MARKET    = "totals_1st5_innings"   # Odds API additional market key
+F5_MARKET    = "totals_1st_5_innings"  # Odds API additional market key (per-event only)
 
 
 def _load_cache(path: str) -> Optional[list]:

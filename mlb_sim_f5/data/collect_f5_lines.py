@@ -138,19 +138,32 @@ def pull_f5_lines(game_date_str, pull_type, schedule=None):
         logger.info("No schedule provided — skipping F5 pull")
         return
 
-    # Fetch F5 odds via existing infrastructure
+    # Fetch F5 odds via per-event endpoint (bulk endpoint doesn't carry F5)
     try:
         sys.path.insert(0, str(PROJECT_ROOT))
-        from modules.odds import fetch_all_lines, get_game_lines
+        from modules.odds import ODDS_API_TEAM_MAP
+        from config import ODDS_API_KEY, ODDS_API_BASE
     except ImportError as e:
-        logger.warning(f"Cannot import odds module: {e}")
+        logger.warning(f"Cannot import odds config: {e}")
         return
 
+    import requests as _req
+
+    # Get event IDs from bulk endpoint
     try:
-        all_lines = fetch_all_lines(game_date_str)
-    except Exception as e:
-        logger.warning(f"F5 odds fetch failed (non-fatal): {e}")
-        return
+        _r = _req.get(f"{ODDS_API_BASE}/sports/baseball_mlb/odds/",
+                      params={"apiKey": ODDS_API_KEY, "regions": "us",
+                              "markets": "totals", "oddsFormat": "american"}, timeout=30)
+        _bulk = _r.json() if _r.status_code == 200 else []
+    except Exception:
+        _bulk = []
+
+    _eid_map = {}
+    for _bg in _bulk:
+        _h = ODDS_API_TEAM_MAP.get(_bg.get("home_team", ""))
+        _a = ODDS_API_TEAM_MAP.get(_bg.get("away_team", ""))
+        if _h and _a:
+            _eid_map[(_h, _a)] = _bg["id"]
 
     df = _load_f5_lines()
     now_utc = datetime.now(timezone.utc).isoformat()
@@ -163,9 +176,30 @@ def pull_f5_lines(game_date_str, pull_type, schedule=None):
         away = game.get("away_team", "")
         gtime = game.get("game_time_et") or game.get("game_time") or None
 
-        # Get F5 line from odds payload — use canonical selection
-        game_lines = get_game_lines(home, away, all_lines)
-        f5_data = game_lines.get("f5") or {}
+        # Per-event F5 totals call
+        _eid = _eid_map.get((home, away))
+        f5_data = {}
+        if _eid:
+            try:
+                _r2 = _req.get(f"{ODDS_API_BASE}/sports/baseball_mlb/events/{_eid}/odds",
+                               params={"apiKey": ODDS_API_KEY, "regions": "us",
+                                       "markets": "totals_1st_5_innings",
+                                       "oddsFormat": "american"}, timeout=15)
+                if _r2.status_code == 200:
+                    _bks = _r2.json().get("bookmakers", [])
+                    # Build f5_data in same format as _build_game_lines output
+                    for _bk in _bks:
+                        f5_data[_bk["key"]] = {"line": None, "over": None, "under": None}
+                        for _m in _bk.get("markets", []):
+                            if _m["key"] == "totals_1st_5_innings":
+                                for _oc in _m.get("outcomes", []):
+                                    if _oc["name"] == "Over":
+                                        f5_data[_bk["key"]]["line"] = _oc.get("point")
+                                        f5_data[_bk["key"]]["over"] = _oc.get("price")
+                                    elif _oc["name"] == "Under":
+                                        f5_data[_bk["key"]]["under"] = _oc.get("price")
+            except Exception:
+                pass
 
         f5_total, f5_over_price, f5_under_price, book_key = _select_canonical_line(f5_data)
 
