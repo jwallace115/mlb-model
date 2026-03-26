@@ -527,10 +527,7 @@ def _render_season_header(stats: dict) -> None:
     accuracy = stats.get("projection_accuracy", {})
     is_st   = stats.get("is_spring_training", True)
 
-    spring_badge = (
-        '<span class="spring-badge">Spring Training — Tracking Accuracy Only</span>'
-        if is_st else ""
-    )
+    spring_badge = ""  # Regular season underway
 
     if decided == 0 and no_line == 0:
         # No tracked data at all yet
@@ -848,12 +845,9 @@ def _conf_badge(conf: str) -> str:
     return f'<span class="conf-badge conf-{conf}">{conf.lower()}</span>'
 
 
-def _proj_row_html(proj: dict, fe: dict, f5e: dict) -> str:
+def _proj_row_html(proj: dict, fe: dict, f5e: dict, sim_info: dict = None) -> str:
     full    = proj["proj_total_full"]
-    f5      = proj["proj_total_f5"]
     line    = fe.get("consensus")
-    edge    = fe.get("edge")
-    f5_line = f5e.get("consensus")
     conf    = proj["confidence"]
 
     parts = [
@@ -863,20 +857,24 @@ def _proj_row_html(proj: dict, fe: dict, f5e: dict) -> str:
         parts.append(
             f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}</span>'
         )
-        if edge is not None:
-            sign = "+" if edge > 0 else ""
-            cls  = "edge-pos" if edge > 0 else "edge-neg"
+
+    # Show V1 sim signal info instead of raw edge
+    if sim_info and sim_info.get("p_under"):
+        pu = sim_info["p_under"]
+        stake = sim_info.get("stake", "?")
+        cls = "edge-neg"  # blue for under
+        parts.append(
+            f'<span class="proj-label">p_under</span> '
+            f'<span class="{cls}">{pu*100:.1f}%</span> '
+            f'<span class="proj-label">{stake}u UNDER</span>'
+        )
+        if sim_info.get("s12_active"):
             parts.append(
-                f'<span class="proj-label">Edge</span> '
-                f'<span class="{cls}">{sign}{edge:.1f}</span>'
+                f'<span style="color:#a78bfa;font-size:0.85em">S12 overlay</span>'
             )
-    else:
+    elif line is None:
         parts.append('<span class="proj-label">No line yet</span>')
 
-    f5_str = f'<span class="proj-label">F5</span> <span class="proj-val">{f5:.1f}</span>'
-    if f5_line:
-        f5_str += f' <span class="proj-label">vs {f5_line:.1f}</span>'
-    parts.append(f5_str)
     parts.append(_conf_badge(conf))
 
     sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
@@ -1067,6 +1065,26 @@ def _render_card(b: dict) -> None:
     lean    = proj.get("lean", "NEUTRAL")
     is_play = rating != "NO PLAY"
 
+    # Look up V1 sim signal for this game
+    sim_info = None
+    try:
+        _sig_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.parquet")
+        if os.path.exists(_sig_path):
+            _sigs = pd.read_parquet(_sig_path)
+            gid = str(game.get("game_pk", ""))
+            _match = _sigs[_sigs["game_id"].astype(str) == gid]
+            if len(_match) > 0:
+                _s = _match.iloc[0]
+                sim_info = {
+                    "p_under": float(_s["raw_p_under"]) if pd.notna(_s.get("raw_p_under")) else None,
+                    "stake": float(_s["stake_units"]) if pd.notna(_s.get("stake_units")) else None,
+                    "s12_active": _s.get("s12_overlay_active") == 1,
+                    "s12_value": float(_s.get("s12_value", 0)) if pd.notna(_s.get("s12_value")) else None,
+                    "base_stake": float(_s.get("base_stake", _s["stake_units"])) if pd.notna(_s.get("base_stake")) else None,
+                }
+    except Exception:
+        pass
+
     star_cls = {"⭐⭐⭐": "star3", "⭐⭐": "star2", "⭐": "star1"}.get(rating, "noplay")
     card_cls = f"game-card {star_cls}" if is_play else "game-card noplay"
 
@@ -1086,14 +1104,31 @@ def _render_card(b: dict) -> None:
     )
 
     proj_row = (
-        _proj_row_html(proj, fe, f5e) if is_play else
+        _proj_row_html(proj, fe, f5e, sim_info=sim_info) if is_play else
         f'<div class="proj-row">'
         f'<span class="proj-label">Proj</span> '
         f'<span class="proj-val">{proj["proj_total_full"]:.1f}</span>'
         f'</div>'
     )
 
-    props_html  = _render_game_props(props)
+    props_html  = ""  # Props display disabled — no props engine deployed
+
+    # Add signal trigger context to summary
+    if sim_info and sim_info.get("p_under"):
+        pu = sim_info["p_under"]
+        stake = sim_info.get("stake", "?")
+        base_stake = sim_info.get("base_stake")
+        trigger_text = f'Signal: p_under={pu*100:.1f}%'
+        if pu > 0.60:
+            trigger_text += f' \u2192 {stake}u UNDER (strong conviction)'
+        else:
+            trigger_text += f' \u2192 {stake}u UNDER'
+        if sim_info.get("s12_active"):
+            s12v = sim_info.get("s12_value")
+            s12_str = f" (pitcher_score={s12v:.1f})" if s12v else ""
+            trigger_text += f' | S12 overlay ACTIVE \u2192 boosted from {base_stake}u to {stake}u{s12_str}'
+        summary = (f'<div style="color:#60a5fa;font-size:0.88em;margin-bottom:4px;font-weight:600">'
+                   f'{trigger_text}</div>' + summary)
 
     # Inline alert badges on the card for any SP/batter changes
     card_alerts = b.get("alerts") or []
