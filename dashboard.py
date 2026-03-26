@@ -514,113 +514,61 @@ def _pct_color(pct: float | None) -> str:
 
 
 def _render_season_header(stats: dict) -> None:
-    overall = stats.get("overall", {})
-    wins    = overall.get("wins", 0) or 0
-    losses  = overall.get("losses", 0) or 0
-    pushes  = overall.get("pushes", 0) or 0
-    no_line = overall.get("no_line", 0) or 0
-    decided = overall.get("decided", 0) or 0
-    win_pct = overall.get("win_pct")
-    roi     = overall.get("roi")
-    units   = overall.get("units")
-    total_plays = stats.get("total_plays", 0) or 0
-    accuracy = stats.get("projection_accuracy", {})
-    is_st   = stats.get("is_spring_training", True)
+    """Render 2026 season tracking from live signal logs only."""
+    import json as _json_sh
 
-    spring_badge = ""  # Regular season underway
+    # Read from the three live signal logs
+    _base = os.path.dirname(__file__)
+    total_n = 0; total_wins = 0; total_losses = 0; total_pushes = 0; total_net = 0.0
 
-    if decided == 0 and no_line == 0:
-        # No tracked data at all yet
+    for log_path in [
+        os.path.join(_base, "mlb_sim", "logs", "signals_2026.parquet"),
+        os.path.join(_base, "mlb_sim", "logs", "f5_signals_2026.parquet"),
+        os.path.join(_base, "mlb_sim", "logs", "f5_runline_2026.parquet"),
+    ]:
+        if not os.path.exists(log_path):
+            continue
+        try:
+            df = pd.read_parquet(log_path)
+            resolved = df[df["resolved"] == 1]
+            total_n += len(resolved)
+            total_wins += int((resolved["result"] == "WIN").sum())
+            total_losses += int((resolved["result"] == "LOSS").sum())
+            total_pushes += int((resolved["result"] == "PUSH").sum())
+            total_net += float(resolved["net_units"].sum()) if "net_units" in resolved.columns else 0
+        except Exception:
+            pass
+
+    decided = total_wins + total_losses
+    win_pct = total_wins / decided * 100 if decided > 0 else None
+    wagered = total_n  # approximate — each signal is ~1 unit equivalent
+    roi = total_net / wagered * 100 if wagered > 0 else None
+
+    if total_n == 0:
+        st.html(
+            '<div class="season-banner">'
+            '<div style="color:#94a3b8;font-size:0.88em;padding:8px 0">'
+            'Season underway \u2014 tracking from March 25, 2026</div>'
+            '</div>'
+        )
         return
 
-    # W-L display
-    if decided > 0:
-        pct_cls = _pct_color(win_pct)
-        record_num  = f"{wins}–{losses}"
-        record_cls  = pct_cls
-        pct_display = f"{win_pct:.1f}%" if win_pct is not None else "—"
-        roi_display = f"{roi:+.1f}%" if roi is not None else "—"
-        units_display = f"{units:+.2f}" if units is not None else "—"
-        roi_cls = "green" if (roi or 0) >= 0 else "red"
-    else:
-        record_num = "—"
-        record_cls = ""
-        pct_display = "—"
-        roi_display = "—"
-        units_display = "—"
-        roi_cls = ""
+    record_num = f"{total_wins}\u2013{total_losses}"
+    pct_cls = _pct_color(win_pct)
+    pct_display = f"{win_pct:.1f}%" if win_pct is not None else "\u2014"
+    roi_display = f"{roi:+.1f}%" if roi is not None else "\u2014"
+    units_display = f"{total_net:+.2f}"
+    roi_cls = "green" if (roi or 0) >= 0 else "red"
 
-    mae = accuracy.get("mae")
-    within1 = accuracy.get("within_1_run")
-
-    # Star record table rows
-    by_stars = stats.get("by_stars", {})
-    star_rows = ""
-    for label in ["⭐⭐⭐", "⭐⭐", "⭐"]:
-        s = by_stars.get(label, {})
-        w, l = s.get("wins", 0) or 0, s.get("losses", 0) or 0
-        p, nl = s.get("pushes", 0) or 0, s.get("no_line", 0) or 0
-        n = w + l
-        if n == 0 and nl == 0 and p == 0:
-            continue
-        wp = s.get("win_pct")
-        cls = _pct_color(wp)
-        pct_str = f"{wp:.1f}%" if wp is not None else "—"
-        roi_s = s.get("roi")
-        roi_str = f"{roi_s:+.1f}%" if roi_s is not None else "—"
-        nl_str = f" + {nl} no-line" if nl else ""
-        star_rows += (
-            f'<tr><td>{label}</td>'
-            f'<td class="{cls}">{w}–{l}</td>'
-            f'<td class="{cls}">{pct_str}</td>'
-            f'<td>{roi_str}</td>'
-            f'<td class="dim">{p}{nl_str}</td></tr>'
-        )
-
-    star_table = ""
-    if star_rows:
-        star_table = f"""
-        <table class="star-table" style="margin-top:12px">
-          <thead><tr>
-            <th>Rating</th><th>Record</th><th>Win %</th>
-            <th>ROI</th><th>P / No Line</th>
-          </tr></thead>
-          <tbody>{star_rows}</tbody>
-        </table>"""
-
-    accuracy_html = ""
-    if mae is not None:
-        within1_str = f"{within1:.1f}%" if within1 is not None else "—"
-        accuracy_html = f"""
-        <div style="margin-top:12px;padding-top:10px;border-top:1px solid #1e2535">
-          <span style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
-                       letter-spacing:0.08em">Projection Accuracy</span>
-          <div class="stat-grid" style="margin-top:6px">
-            <div class="stat-block">
-              <div class="num">{mae:.2f}</div>
-              <div class="lbl">MAE (runs)</div>
-            </div>
-            <div class="stat-block">
-              <div class="num">{within1_str}</div>
-              <div class="lbl">Within 1 run</div>
-            </div>
-            <div class="stat-block">
-              <div class="num">{accuracy.get('within_2_runs', '—')}{'%' if accuracy.get('within_2_runs') else ''}</div>
-              <div class="lbl">Within 2 runs</div>
-            </div>
-          </div>
-        </div>"""
-
-    html = f"""
+    st.html(f"""
     <div class="season-banner">
-      {spring_badge}
       <div class="stat-grid">
         <div class="stat-block">
-          <div class="num {record_cls}">{record_num}</div>
-          <div class="lbl">Season Record (vs line)</div>
+          <div class="num {pct_cls}">{record_num}</div>
+          <div class="lbl">Record (all signals)</div>
         </div>
         <div class="stat-block">
-          <div class="num {record_cls}">{pct_display}</div>
+          <div class="num {pct_cls}">{pct_display}</div>
           <div class="lbl">Win %</div>
         </div>
         <div class="stat-block">
@@ -629,22 +577,18 @@ def _render_season_header(stats: dict) -> None:
         </div>
         <div class="stat-block">
           <div class="num {roi_cls}">{units_display}</div>
-          <div class="lbl">Units</div>
+          <div class="lbl">Net Units</div>
         </div>
         <div class="stat-block">
-          <div class="num">{total_plays}</div>
-          <div class="lbl">Total Plays</div>
+          <div class="num">{total_n}</div>
+          <div class="lbl">Signals</div>
         </div>
         <div class="stat-block">
-          <div class="num">{no_line}</div>
-          <div class="lbl">No Line</div>
+          <div class="num">{total_pushes}</div>
+          <div class="lbl">Pushes</div>
         </div>
       </div>
-      {star_table}
-      {accuracy_html}
-    </div>"""
-
-    st.html(html)
+    </div>""")
 
 
 # ── analytics expander ────────────────────────────────────────────────────────
@@ -1054,42 +998,24 @@ def _render_game_props(props: list[dict]) -> str:
 
 
 def _render_card(b: dict) -> None:
-    rating  = b["rating"]
+    """Render a game context card — matchup, weather, narrative, projection.
+    No signal details (those live in the V1/F5/F5RL sections above)."""
     game    = b["game"]
     proj    = b["proj"]
     fe      = b.get("full_edge", {})
-    f5e     = b.get("f5_edge", {})
     summary = b.get("summary", "")
-    props   = b.get("props", [])
     f       = proj.get("factors", {})
     lean    = proj.get("lean", "NEUTRAL")
-    is_play = rating != "NO PLAY"
-
-    # Look up V1 sim signal for this game
-    sim_info = None
-    try:
-        _sig_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.parquet")
-        if os.path.exists(_sig_path):
-            _sigs = pd.read_parquet(_sig_path)
-            gid = str(game.get("game_pk", ""))
-            _match = _sigs[_sigs["game_id"].astype(str) == gid]
-            if len(_match) > 0:
-                _s = _match.iloc[0]
-                sim_info = {
-                    "p_under": float(_s["raw_p_under"]) if pd.notna(_s.get("raw_p_under")) else None,
-                    "stake": float(_s["stake_units"]) if pd.notna(_s.get("stake_units")) else None,
-                    "s12_active": _s.get("s12_overlay_active") == 1,
-                    "s12_value": float(_s.get("s12_value", 0)) if pd.notna(_s.get("s12_value")) else None,
-                    "base_stake": float(_s.get("base_stake", _s["stake_units"])) if pd.notna(_s.get("base_stake")) else None,
-                }
-    except Exception:
-        pass
 
     matchup = f'{game["away_team"]} @ {game["home_team"]}'
     line = fe.get("consensus")
     full_proj = proj["proj_total_full"]
 
-    # Weather one-liner
+    gtime = game.get("game_time", "")
+    gtime_et = game.get("game_time_et", "")
+    time_str = gtime_et if gtime_et else gtime
+
+    # Weather
     temp = f.get("temperature_f")
     wind_mph = f.get("wind_speed_mph") or 0.0
     wind_raw = f.get("wind_desc") or ""
@@ -1100,95 +1026,28 @@ def _render_card(b: dict) -> None:
     if not is_dome and wind_mph >= 5:
         wd = wind_raw.replace("Blowing ", "").replace("blowing ", "")
         wx_parts.append(f"{wind_mph:.0f}mph wind {wd}")
-    wx_line = ", ".join(wx_parts) if wx_parts else ""
+    wx_line = " \u00b7 ".join(wx_parts) if wx_parts else ""
 
-    gtime = game.get("game_time", "")
-    gtime_et = game.get("game_time_et", "")
-    time_str = gtime_et if gtime_et else gtime
+    # Lean badge
+    lean_html = ""
+    if lean == "UNDER":
+        lean_html = ' <span style="color:#67e8f9;font-size:0.82em;font-weight:600">UNDER</span>'
+    elif lean == "OVER":
+        lean_html = ' <span style="color:#f87171;font-size:0.82em;font-weight:600">OVER</span>'
 
-    if sim_info and sim_info.get("p_under") and is_play:
-        # ── V1 SIGNAL CARD (new format) ──
-        pu = sim_info["p_under"]
-        stake = sim_info.get("stake", "?")
-        base_stake = sim_info.get("base_stake", stake)
-        s12_active = sim_info.get("s12_active", False)
-        s12_val = sim_info.get("s12_value")
+    # Projection + line
+    line_str = f" | Line: {line:.1f}" if line is not None else ""
+    proj_line = f'Proj: {full_proj:.1f}{line_str}'
 
-        # Line 1: matchup + time
-        line1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
-                 f'{matchup} \u2014 {time_str}</div>')
-
-        # Line 2: UNDER [line] — [stake]u
-        line_str = f"{line:.1f}" if line is not None else "TBD"
-        s12_badge = ' \u26a1S12' if s12_active else ''
-        line2 = (f'<div style="font-size:1.05em;font-weight:700;color:#67e8f9;margin-top:4px">'
-                 f'UNDER {line_str} \u2014 {stake}u{s12_badge}</div>')
-
-        # Line 3: signal trigger
-        if pu > 0.60:
-            thresh_text = "threshold crossed: 0.60 \u2192 1.0u"
-        else:
-            thresh_text = "threshold crossed: 0.57 \u2192 0.5u"
-
-        if s12_active and s12_val:
-            trigger = (f'p_under = {pu:.2f} | {thresh_text} | '
-                       f'S12 score = {s12_val:.1f} (top 20%) \u2192 stake boosted')
-        elif s12_active:
-            trigger = f'p_under = {pu:.2f} | {thresh_text} | S12 overlay \u2192 stake boosted'
-        else:
-            trigger = f'p_under = {pu:.2f} | {thresh_text}'
-        line3 = f'<div style="font-size:0.82em;color:#94a3b8;margin-top:2px">{trigger}</div>'
-
-        # Line 4: weather
-        line4 = f'<div style="font-size:0.78em;color:#6b7280;margin-top:2px">{wx_line}</div>' if wx_line else ""
-
-        # Line 5: model vs line
-        line_ctx = f"Line: {line:.1f}" if line is not None else "No line"
-        line5 = (f'<div style="font-size:0.78em;color:#6b7280;margin-top:2px">'
-                 f'Model: {full_proj:.1f} | {line_ctx}</div>')
-
-        card_cls = "game-card star2"  # consistent styling for signal cards
-        st.html(
-            f'<div class="{card_cls}" style="border-left:3px solid #67e8f9">'
-            f'{line1}{line2}{line3}{line4}{line5}'
-            f'</div>'
-        )
-    elif is_play:
-        # ── RULES-BASED PLAY CARD (legacy format, no V1 sim signal) ──
-        card_cls = "game-card star1"
-        header = (f'<div class="card-header">'
-                  f'<span class="matchup">{matchup}</span>'
-                  f'{"" if lean == "NEUTRAL" else _lean_badge(lean)}'
-                  f'</div>')
-        proj_row = (f'<div class="proj-row">'
-                    f'<span class="proj-label">Proj</span> <span class="proj-val">{full_proj:.1f}</span>'
-                    f'</div>')
-        st.html(
-            f'<div class="{card_cls}">'
-            f'{header}'
-            f'{_meta_html(f, game)}'
-            f'{proj_row}'
-            f'<div class="card-summary">{summary}</div>'
-            f'</div>'
-        )
-    else:
-        # ── NO PLAY CARD ──
-        card_cls = "game-card noplay"
-        header = (f'<div class="card-header">'
-                  f'<span class="noplay-badge">No Play</span>'
-                  f'<span class="matchup">{matchup}</span>'
-                  f'</div>')
-        proj_row = (f'<div class="proj-row">'
-                    f'<span class="proj-label">Proj</span> <span class="proj-val">{full_proj:.1f}</span>'
-                    f'</div>')
-        st.html(
-            f'<div class="{card_cls}">'
-            f'{header}'
-            f'{_meta_html(f, game)}'
-            f'{proj_row}'
-            f'<div class="card-summary">{summary}</div>'
-            f'</div>'
-        )
+    st.html(
+        f'<div class="game-card" style="border-left:3px solid #374151">'
+        f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+        f'{matchup} \u2014 {time_str}{lean_html}</div>'
+        f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
+        f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
+        f'<div class="card-summary">{summary}</div>'
+        f'</div>'
+    )
 
 
 def _render_parlay_card(
@@ -3992,24 +3851,12 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             if game_date:
                 st.caption(f"Projections for **{game_date}**")
 
-            if plays:
-                n = len(plays)
-                st.html(f'<div class="section-hdr">🎯 Plays — {n} game{"s" if n != 1 else ""}</div>')
-                for b in plays:
+            # Game context cards (no signal details — those are in V1/F5 sections above)
+            all_games = (plays or []) + (no_plays or [])
+            if all_games:
+                st.html(f'<div class="section-hdr">Today\u2019s Games \u2014 {len(all_games)}</div>')
+                for b in all_games:
                     _render_card(b)
-            else:
-                st.html('<div class="section-hdr">🎯 Plays</div>')
-                st.caption("No plays meeting the confidence threshold today.")
-
-            _render_parlays(data)
-
-            if no_plays:
-                with st.expander(f"No Plays — {len(no_plays)} game{'s' if len(no_plays) != 1 else ''}"):
-                    for b in no_plays:
-                        _render_card(b)
-
-            if stats:
-                _render_analytics(stats)
 
             # ── CLV section ───────────────────────────────────────────────────
             clv = (data or {}).get("mlb_clv_summary", {})
