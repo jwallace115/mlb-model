@@ -997,9 +997,8 @@ def _render_game_props(props: list[dict]) -> str:
     )
 
 
-def _render_card(b: dict) -> None:
-    """Render a game context card — matchup, weather, narrative, projection.
-    No signal details (those live in the V1/F5/F5RL sections above)."""
+def _render_card(b: dict, sig_info: dict = None) -> None:
+    """Render a game card. If sig_info provided, show as a play card with units."""
     game    = b["game"]
     proj    = b["proj"]
     fe      = b.get("full_edge", {})
@@ -1028,25 +1027,61 @@ def _render_card(b: dict) -> None:
         wx_parts.append(f"{wind_mph:.0f}mph wind {wd}")
     wx_line = " \u00b7 ".join(wx_parts) if wx_parts else ""
 
-    # Lean badge
-    lean_html = ""
-    if lean == "UNDER":
-        lean_html = ' <span style="color:#67e8f9;font-size:0.82em;font-weight:600">UNDER</span>'
-    elif lean == "OVER":
-        lean_html = ' <span style="color:#f87171;font-size:0.82em;font-weight:600">OVER</span>'
+    if sig_info:
+        # ── PLAY CARD (signal fired) ──
+        stake = sig_info.get("stake", "?")
+        s12 = sig_info.get("s12_active", False)
+        line_val = f"{line:.1f}" if line is not None else "TBD"
 
-    # Projection + line
-    line_str = f" | Line: {line:.1f}" if line is not None else ""
-    proj_line = f'Proj: {full_proj:.1f}{line_str}'
+        # Line 1: matchup + time
+        l1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
+              f'{matchup} \u2014 {time_str}</div>')
 
-    st.html(
-        f'<div class="game-card" style="border-left:3px solid #374151">'
-        f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
-        f'{matchup} \u2014 {time_str}{lean_html}</div>'
-        f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
-        f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
-        f'<div class="card-summary">{summary}</div>'
-        f'</div>'
+        # Line 2: recommendation
+        l2 = (f'<div style="font-size:1.05em;font-weight:700;color:#67e8f9;margin-top:4px">'
+              f'UNDER {line_val} \u2014 {stake} units</div>')
+
+        # Line 3: boost explanation (plain English)
+        l3 = ""
+        if s12:
+            l3 = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
+                  'Boosted \u2014 elite pitching environment</div>')
+
+        # Line 4: weather
+        l4 = f'<div style="font-size:0.78em;color:#6b7280;margin-top:2px">{wx_line}</div>' if wx_line else ""
+
+        # Line 5: narrative
+        l5 = f'<div class="card-summary">{summary}</div>'
+
+        # Line 6: proj + line
+        line_ctx = f" | Line: {line:.1f}" if line is not None else ""
+        l6 = (f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
+              f'Proj: {full_proj:.1f}{line_ctx}</div>')
+
+        st.html(
+            f'<div class="game-card" style="border-left:3px solid #67e8f9">'
+            f'{l1}{l2}{l3}{l4}{l5}{l6}'
+            f'</div>'
+        )
+    else:
+        # ── NO-PLAY CARD (context only) ──
+        lean_html = ""
+        if lean == "UNDER":
+            lean_html = ' <span style="color:#67e8f9;font-size:0.82em;font-weight:600">UNDER</span>'
+        elif lean == "OVER":
+            lean_html = ' <span style="color:#f87171;font-size:0.82em;font-weight:600">OVER</span>'
+
+        line_str = f" | Line: {line:.1f}" if line is not None else ""
+        proj_line = f'Proj: {full_proj:.1f}{line_str}'
+
+        st.html(
+            f'<div class="game-card" style="border-left:3px solid #374151">'
+            f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+            f'{matchup} \u2014 {time_str}{lean_html}</div>'
+            f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
+            f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
+            f'<div class="card-summary">{summary}</div>'
+            f'</div>'
     )
 
 
@@ -3851,12 +3886,42 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             if game_date:
                 st.caption(f"Projections for **{game_date}**")
 
-            # Game context cards (no signal details — those are in V1/F5 sections above)
+            # Load signal data for play/no-play split
+            _sig_map = {}
+            try:
+                _sp = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.parquet")
+                if os.path.exists(_sp):
+                    _sd = pd.read_parquet(_sp)
+                    _sd_today = _sd[_sd["date"] == game_date]
+                    for _, _sr in _sd_today.iterrows():
+                        _sig_map[str(_sr["game_id"])] = {
+                            "stake": float(_sr["stake_units"]),
+                            "s12_active": _sr.get("s12_overlay_active") == 1,
+                        }
+            except Exception:
+                pass
+
             all_games = (plays or []) + (no_plays or [])
-            if all_games:
-                st.html(f'<div class="section-hdr">Today\u2019s Games \u2014 {len(all_games)}</div>')
-                for b in all_games:
-                    _render_card(b)
+            play_cards = []
+            noplay_cards = []
+            for b in all_games:
+                gid = str(b["game"].get("game_pk", ""))
+                if gid in _sig_map:
+                    play_cards.append((b, _sig_map[gid]))
+                else:
+                    noplay_cards.append(b)
+
+            # Play cards — prominent
+            if play_cards:
+                st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 {len(play_cards)}</div>')
+                for b, si in play_cards:
+                    _render_card(b, sig_info=si)
+
+            # No-play cards — collapsed
+            if noplay_cards:
+                with st.expander(f"All Other Games Today ({len(noplay_cards)})"):
+                    for b in noplay_cards:
+                        _render_card(b)
 
             # ── CLV section ───────────────────────────────────────────────────
             clv = (data or {}).get("mlb_clv_summary", {})
