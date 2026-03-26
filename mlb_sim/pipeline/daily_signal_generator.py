@@ -264,6 +264,15 @@ def generate_signals(game_date_str, schedule, pitcher_db):
             "net_units": None,
             "resolved": 0,
         }
+
+        # S12 overlay: amplify stake for elite pitching environments
+        try:
+            from mlb_sim.pipeline.s12_overlay import apply_overlay_to_signal
+            apply_overlay_to_signal(sig, home_sp, away_sp)
+        except Exception as e:
+            logger.debug(f"S12 overlay failed (non-fatal): {e}")
+            sig.setdefault("s12_overlay_active", 0)
+
         new_signals.append(sig)
         display_signals.append({
             **sig,
@@ -272,8 +281,9 @@ def generate_signals(game_date_str, schedule, pitcher_db):
             "away_sp_name": away_sp_info.get("name", "TBD"),
         })
 
-        logger.info(f"  🔵 UNDER {stake}u: {away}@{home} line={line} p_under={p_under:.1%} "
-                     f"{'[dual_high_csw]' if dual_csw else ''}")
+        s12_tag = " [S12 overlay]" if sig.get("s12_overlay_active") == 1 else ""
+        logger.info(f"  🔵 UNDER {sig['stake_units']}u: {away}@{home} line={line} p_under={p_under:.1%} "
+                     f"{'[dual_high_csw]' if dual_csw else ''}{s12_tag}")
 
     # Append new signals
     if new_signals:

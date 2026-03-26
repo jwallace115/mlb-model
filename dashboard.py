@@ -3498,13 +3498,19 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _today_sigs = _sim_sigs[_sim_sigs["date"] == _today_str]
                 if len(_today_sigs) > 0:
                     for _, _ss in _today_sigs.iterrows():
-                        _dcf = " · dual_high_csw" if _ss.get("dual_high_csw") == 1 else ""
+                        _dcf = " \u00b7 dual_high_csw" if _ss.get("dual_high_csw") == 1 else ""
+                        _s12_tag = ""
+                        if _ss.get("s12_overlay_active") == 1:
+                            _s12_base = _ss.get("base_stake", "?")
+                            _s12_tag = (f' <span style="color:#a78bfa;font-size:0.85em">'
+                                        f'\u00b7 S12 overlay \u00b7 elite pitching env '
+                                        f'({_s12_base}u\u2192{_ss["stake_units"]}u)</span>')
                         _line_str = f"{float(_ss['line_at_signal_time']):.1f}" if pd.notna(_ss.get("line_at_signal_time")) else "TBD"
                         st.html(f'<div style="font-size:0.82em;color:#60a5fa;margin-bottom:4px;'
                                 f'padding:6px 10px;background:#1a2433;border-radius:4px;border:1px solid #3b82f6">'
-                                f'⚾ {_ss["away_team"]} @ {_ss["home_team"]} — '
-                                f'UNDER {_line_str} · {_ss["stake_units"]}u · '
-                                f'p_under={float(_ss["raw_p_under"])*100:.1f}%{_dcf}</div>')
+                                f'\u26be {_ss["away_team"]} @ {_ss["home_team"]} \u2014 '
+                                f'UNDER {_line_str} \u00b7 {_ss["stake_units"]}u \u00b7 '
+                                f'p_under={float(_ss["raw_p_under"])*100:.1f}%{_dcf}{_s12_tag}</div>')
                 else:
                     st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">No MLB under signals today.</div>')
 
