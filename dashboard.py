@@ -3889,14 +3889,24 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             # Load signal data for play/no-play split
             _sig_map_id = {}   # game_id → info
             _sig_map_team = {} # "away@home" → info
+            _sig_debug = []
+            _sig_found_path = None
+            _sig_error = None
             try:
-                for _try_path in [
-                    os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.parquet"),
+                _base_dir = os.path.dirname(os.path.abspath(__file__))
+                _try_paths = [
+                    os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.parquet"),
                     os.path.join("mlb_sim", "logs", "signals_2026.parquet"),
-                ]:
+                    "mlb_sim/logs/signals_2026.parquet",
+                ]
+                for _try_path in _try_paths:
                     if os.path.exists(_try_path):
+                        _sig_found_path = _try_path
                         _sd = pd.read_parquet(_try_path)
                         _sd_today = _sd[_sd["date"] == game_date]
+                        _sig_debug.append(f"path={_try_path}, total={len(_sd)}, today={len(_sd_today)}, game_date='{game_date}'")
+                        if len(_sd_today) == 0 and len(_sd) > 0:
+                            _sig_debug.append(f"dates in file: {_sd['date'].unique().tolist()[:5]}")
                         for _, _sr in _sd_today.iterrows():
                             _info = {
                                 "stake": float(_sr["stake_units"]),
@@ -3906,8 +3916,17 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             _team_key = f'{_sr["away_team"]}@{_sr["home_team"]}'
                             _sig_map_team[_team_key] = _info
                         break
-            except Exception:
-                pass
+            except Exception as _e:
+                _sig_error = str(_e)
+
+            # Debug output — temporary
+            if len(_sig_map_id) == 0:
+                _dbg = f"Signal join debug: found_path={_sig_found_path}, maps={len(_sig_map_id)}/{len(_sig_map_team)}"
+                if _sig_error:
+                    _dbg += f", error={_sig_error}"
+                if _sig_debug:
+                    _dbg += f", {'; '.join(_sig_debug)}"
+                st.caption(_dbg)
 
             all_games = (plays or []) + (no_plays or [])
             play_cards = []
