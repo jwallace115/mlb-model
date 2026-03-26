@@ -1010,8 +1010,9 @@ def _render_game_props(props: list[dict]) -> str:
     )
 
 
-def _render_card(b: dict, sig_info: dict = None) -> None:
-    """Render a game card. If sig_info provided, show as a play card with units."""
+def _render_card(b: dict, signals: list = None) -> None:
+    """Render a unified game card with all signals consolidated.
+    signals: list of dicts, each with type/stake/s12_active/side etc."""
     game    = b["game"]
     proj    = b["proj"]
     fe      = b.get("full_edge", {})
@@ -1020,8 +1021,8 @@ def _render_card(b: dict, sig_info: dict = None) -> None:
     lean    = proj.get("lean", "NEUTRAL")
 
     matchup = f'{game["away_team"]} @ {game["home_team"]}'
-    line = fe.get("consensus")
     full_proj = proj["proj_total_full"]
+    line = fe.get("consensus")
 
     gtime = game.get("game_time", "")
     gtime_et = game.get("game_time_et", "")
@@ -1040,48 +1041,52 @@ def _render_card(b: dict, sig_info: dict = None) -> None:
         wx_parts.append(f"{wind_mph:.0f}mph wind {wd}")
     wx_line = " \u00b7 ".join(wx_parts) if wx_parts else ""
 
-    if sig_info:
-        # ── PLAY CARD (signal fired) ──
-        stake = sig_info.get("stake", "?")
-        s12 = sig_info.get("s12_active", False)
-
-        # FIX 2: Use signal-time line if available
-        sig_line = sig_info.get("line_at_signal_time")
-        display_line = sig_line if sig_line is not None else line
-        line_val = f"{display_line:.1f}" if display_line is not None else "TBD"
-
-        # Line 1: matchup + time
-        l1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
-              f'{matchup} \u2014 {time_str}</div>')
-
-        # Line 2: recommendation — color by stake tier
+    if signals:
+        # ── PLAY CARD: unified with all signal badges ──
         _stake_colors = {0.5: "#f59e0b", 0.62: "#f97316", 0.625: "#f97316",
                          1.0: "#06b6d4", 1.25: "#22c55e"}
-        _sc = _stake_colors.get(round(float(stake), 2) if stake != "?" else 0, "#67e8f9")
-        l2 = (f'<div style="font-size:1.05em;font-weight:700;color:{_sc};margin-top:4px">'
-              f'UNDER {line_val} \u2014 {stake} units</div>')
 
-        # Line 3: boost explanation (plain English)
-        l3 = ""
-        if s12:
-            l3 = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
-                  'Boosted \u2014 elite pitching environment</div>')
+        # Header: matchup + time + weather
+        header_parts = [f'{matchup} \u2014 {time_str}']
+        if wx_line:
+            header_parts.append(wx_line)
+        l1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
+              f'{" \u00b7 ".join(header_parts)}</div>')
 
-        # Line 4: weather
-        l4 = f'<div style="font-size:0.78em;color:#6b7280;margin-top:2px">{wx_line}</div>' if wx_line else ""
+        # Signal badges
+        badges = ""
+        has_s12 = False
+        for sig in signals:
+            stype = sig.get("type", "v1")
+            stake = sig.get("stake", "?")
+            sc = _stake_colors.get(round(float(stake), 2) if stake != "?" else 0, "#67e8f9")
 
-        # FIX 1: Clean one-liner narrative for signal games (no legacy contradictions)
-        line_display = f"{display_line:.1f}" if display_line is not None else "TBD"
-        l5 = (f'<div style="font-size:0.80em;color:#94a3b8;margin-top:4px">'
-              f'Signal fired at open. Proj: {full_proj:.1f} | Market: {line_display}</div>')
+            if stype == "v1":
+                badges += (f'<div style="font-size:1.05em;font-weight:700;color:{sc};margin-top:4px">'
+                           f'UNDER {stake}u</div>')
+                if sig.get("s12_active"):
+                    has_s12 = True
+            elif stype == "f5_under":
+                badges += (f'<div style="font-size:0.95em;font-weight:700;color:#67e8f9;margin-top:3px">'
+                           f'F5 UNDER {stake}u</div>')
+            elif stype == "f5_over":
+                badges += (f'<div style="font-size:0.95em;font-weight:700;color:#fbbf24;margin-top:3px">'
+                           f'F5 OVER {stake}u</div>')
+            elif stype == "f5_rl":
+                badges += (f'<div style="font-size:0.95em;font-weight:700;color:#a78bfa;margin-top:3px">'
+                           f'F5 RL HOME {stake}u</div>')
 
-        # FIX 3: Disclaimer
-        l6 = ('<div style="font-size:0.68em;color:#4b5563;margin-top:4px;font-style:italic">'
-              'Line shown is market consensus at signal time. Verify your book before placing.</div>')
+        boost = ""
+        if has_s12:
+            boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
+                     'Boosted \u2014 elite pitching environment</div>')
+
+        disclaimer = ('<div style="font-size:0.68em;color:#4b5563;margin-top:6px;font-style:italic">'
+                      'Check your book for current line before placing.</div>')
 
         st.html(
             f'<div class="game-card" style="border-left:3px solid #67e8f9">'
-            f'{l1}{l2}{l3}{l4}{l5}{l6}'
+            f'{l1}{badges}{boost}{disclaimer}'
             f'</div>'
         )
     else:
@@ -3469,42 +3474,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 else:
                     st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">● Sim engine active</div>')
 
-            # Today's signals
-            if os.path.exists(_sim_signals_path):
-                _sim_sigs = pd.read_parquet(_sim_signals_path)
-                _today_str = (data or {}).get("game_date", "")
-                _today_sigs = _sim_sigs[_sim_sigs["date"] == _today_str]
-                if len(_today_sigs) > 0:
-                    for _, _ss in _today_sigs.iterrows():
-                        _line_str = f"{float(_ss['line_at_signal_time']):.1f}" if pd.notna(_ss.get("line_at_signal_time")) else "TBD"
-                        _pu = float(_ss["raw_p_under"]) if pd.notna(_ss.get("raw_p_under")) else 0
-                        _stake = _ss["stake_units"]
-                        _s12_badge = ""
-                        if _ss.get("s12_overlay_active") == 1:
-                            _s12_badge = " \u26a1S12"
-
-                        # Line 1: signal
-                        _sig_line = f'UNDER {_line_str} \u2014 {_stake}u{_s12_badge}'
-                        # Line 2: trigger
-                        _thresh = "0.60 \u2192 1.0u" if _pu > 0.60 else "0.57 \u2192 0.5u"
-                        _trigger = f'p_under = {_pu:.2f} | threshold: {_thresh}'
-                        if _ss.get("s12_overlay_active") == 1:
-                            _s12v = _ss.get("s12_value")
-                            _s12_str = f" | S12={_s12v:.1f} \u2192 stake boosted" if pd.notna(_s12v) else " | S12 \u2192 boosted"
-                            _trigger += _s12_str
-
-                        st.html(
-                            f'<div style="font-size:0.82em;margin-bottom:6px;'
-                            f'padding:8px 12px;background:#1a2433;border-radius:4px;border-left:3px solid #67e8f9">'
-                            f'<div style="color:#e2e8f0;font-weight:600">'
-                            f'{_ss["away_team"]} @ {_ss["home_team"]}</div>'
-                            f'<div style="color:#67e8f9;font-weight:700;font-size:1.05em;margin-top:2px">'
-                            f'{_sig_line}</div>'
-                            f'<div style="color:#94a3b8;font-size:0.85em;margin-top:2px">'
-                            f'{_trigger}</div>'
-                            f'</div>')
-                else:
-                    st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">No MLB under signals today.</div>')
+            # Today's V1 signals now shown on unified game cards above
 
             # Season performance
             if os.path.exists(_sim_perf_path):
@@ -3586,37 +3556,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">'
                             '\u25cf F5 engine active</div>')
 
-            # Today's F5 signals
-            if os.path.exists(_f5_signals_path):
-                _f5_sigs = pd.read_parquet(_f5_signals_path)
-                _f5_today_str = (data or {}).get("game_date", "")
-                _f5_today = _f5_sigs[_f5_sigs["date"] == _f5_today_str]
-                if len(_f5_today) > 0:
-                    for _, _fs in _f5_today.iterrows():
-                        _f5_side = _fs.get("f5_signal_side", "")
-                        _f5_ln = f"{float(_fs['f5_line']):.1f}" if pd.notna(_fs.get("f5_line")) else "TBD"
-                        _f5_stake = _fs.get("stake_units", "")
-                        _f5_p = _fs.get("p_under_full") if _f5_side == "UNDER" else _fs.get("p_over_full")
-                        _f5_p_val = f"{float(_f5_p):.2f}" if pd.notna(_f5_p) else "\u2014"
-                        _f5_side_color = "#67e8f9" if _f5_side == "UNDER" else "#fbbf24"
-                        _f5_border = "#67e8f9" if _f5_side == "UNDER" else "#d97706"
-                        _f5_p_label = "p_under" if _f5_side == "UNDER" else "p_over"
-                        st.html(
-                            f'<div style="font-size:0.82em;margin-bottom:6px;'
-                            f'padding:8px 12px;background:#1a2433;border-radius:4px;border-left:3px solid {_f5_border}">'
-                            f'<div style="color:#e2e8f0;font-weight:600">'
-                            f'{_fs.get("away_team","")} @ {_fs.get("home_team","")}</div>'
-                            f'<div style="color:{_f5_side_color};font-weight:700;font-size:1.05em;margin-top:2px">'
-                            f'F5 {_f5_side} {_f5_ln} \u2014 {_f5_stake}u</div>'
-                            f'<div style="color:#94a3b8;font-size:0.85em;margin-top:2px">'
-                            f'{_f5_p_label} = {_f5_p_val} | threshold: 0.57</div>'
-                            f'</div>')
-                else:
-                    st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
-                            'No F5 signals today.</div>')
-            else:
-                st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
-                        'No F5 signals today.</div>')
+            # Today's F5 signals now shown on unified game cards above
 
             # F5 season performance
             if os.path.exists(_f5_perf_path):
@@ -3743,30 +3683,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">'
                             '\u25cf F5 Run Line active</div>')
 
-            # Today's signals
-            if os.path.exists(_rl_signals_path):
-                _rl_sigs = pd.read_parquet(_rl_signals_path)
-                _rl_today_str = (data or {}).get("game_date", "")
-                _rl_today = _rl_sigs[_rl_sigs["date"] == _rl_today_str]
-                if len(_rl_today) > 0:
-                    for _, _rs in _rl_today.iterrows():
-                        _rl_gap = f"{float(_rs.get('xfip_gap', 0)):.2f}" if pd.notna(_rs.get("xfip_gap")) else "?"
-                        _rl_price = f"{int(_rs['bet_price'])}" if pd.notna(_rs.get("bet_price")) else "TBD"
-                        _rl_line = f"{float(_rs['bet_line']):.1f}" if pd.notna(_rs.get("bet_line")) else "-0.5"
-                        st.html(
-                            f'<div style="font-size:0.82em;margin-bottom:6px;'
-                            f'padding:8px 12px;background:#1a2433;border-radius:4px;border-left:3px solid #a78bfa">'
-                            f'<div style="color:#e2e8f0;font-weight:600">'
-                            f'{_rs.get("away_team","")} @ {_rs.get("home_team","")}</div>'
-                            f'<div style="color:#a78bfa;font-weight:700;font-size:1.05em;margin-top:2px">'
-                            f'F5 RL HOME {_rl_line} @ {_rl_price} \u2014 0.5u</div>'
-                            f'<div style="color:#94a3b8;font-size:0.85em;margin-top:2px">'
-                            f'xFIP gap = {_rl_gap} (threshold: 1.0) | '
-                            f'{_rs.get("home_sp_name","?")} vs {_rs.get("away_sp_name","?")}</div>'
-                            f'</div>')
-                else:
-                    st.html('<div style="font-size:0.78em;color:#6b7280;margin-bottom:4px">'
-                            'No F5 Run Line signals today.</div>')
+            # Today's F5 RL signals now shown on unified game cards above
 
             # Performance
             if os.path.exists(_rl_perf_path):
@@ -3907,69 +3824,57 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             if game_date:
                 st.caption(f"Projections for **{game_date}**")
 
-            # Load signal data for play/no-play split
-            # Uses plain dict parsing (no pandas) to avoid version issues on Cloud
-            _sig_map_id = {}   # game_id → info
-            _sig_map_team = {} # "away@home" → info
+            # Load ALL signals into unified per-game map: team_key → [signal_list]
             import json as _json_sig
+            _game_signals = {}  # "away@home" → list of signal dicts
             _base_dir = os.path.dirname(os.path.abspath(__file__))
-            for _try_path in [
-                os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.json"),
-                "mlb_sim/logs/signals_2026.json",
-                os.path.join(_base_dir, "mlb_sim", "logs", "signals_2026.parquet"),
-                "mlb_sim/logs/signals_2026.parquet",
-            ]:
-                if not os.path.exists(_try_path):
-                    continue
-                try:
-                    if _try_path.endswith(".json"):
-                        with open(_try_path) as _jf:
-                            _rows = _json_sig.load(_jf)
+
+            def _load_json_signals(name, sig_type, date_field="date"):
+                for _p in [os.path.join(_base_dir, "mlb_sim", "logs", name),
+                           f"mlb_sim/logs/{name}"]:
+                    if not os.path.exists(_p):
+                        continue
+                    try:
+                        with open(_p) as _f:
+                            _rows = _json_sig.load(_f)
                         for _r in _rows:
-                            if str(_r.get("date", "")) != str(game_date):
+                            if str(_r.get(date_field, "")) != str(game_date):
                                 continue
-                            _sig_line = _r.get("line_at_signal_time")
-                            _info = {
-                                "stake": float(_r.get("stake_units", 0)),
-                                "s12_active": bool(_r.get("s12_overlay_active", 0)),
-                                "line_at_signal_time": float(_sig_line) if _sig_line is not None else None,
-                            }
-                            _sig_map_id[str(_r.get("game_id", ""))] = _info
-                            _sig_map_team[f'{_r.get("away_team","")}@{_r.get("home_team","")}'] = _info
-                    else:
-                        _sd = pd.read_parquet(_try_path)
-                        _sd_today = _sd[_sd["date"].astype(str) == str(game_date)]
-                        for _, _sr in _sd_today.iterrows():
-                            _sig_line = _sr.get("line_at_signal_time")
-                            _info = {
-                                "stake": float(_sr["stake_units"]),
-                                "s12_active": bool(_sr.get("s12_overlay_active", 0)),
-                                "line_at_signal_time": float(_sig_line) if pd.notna(_sig_line) else None,
-                            }
-                            _sig_map_id[str(_sr["game_id"])] = _info
-                            _sig_map_team[f'{_sr["away_team"]}@{_sr["home_team"]}'] = _info
-                except Exception:
-                    continue
-                if _sig_map_id:
+                            _tk = f'{_r.get("away_team","")}@{_r.get("home_team","")}'
+                            if _tk not in _game_signals:
+                                _game_signals[_tk] = []
+                            _info = {"type": sig_type, "stake": float(_r.get("stake_units", 0))}
+                            if sig_type == "v1":
+                                _info["s12_active"] = bool(_r.get("s12_overlay_active", 0))
+                                _info["p_under"] = float(_r.get("raw_p_under", 0))
+                            elif sig_type in ("f5_under", "f5_over"):
+                                side = _r.get("f5_signal_side", "")
+                                _info["type"] = "f5_under" if side == "UNDER" else "f5_over"
+                            _game_signals[_tk].append(_info)
+                    except Exception:
+                        pass
                     break
+
+            _load_json_signals("signals_2026.json", "v1")
+            _load_json_signals("f5_signals_2026.json", "f5_under")  # type corrected inside
+            _load_json_signals("f5_runline_2026.json", "f5_rl")
 
             all_games = (plays or []) + (no_plays or [])
             play_cards = []
             noplay_cards = []
             for b in all_games:
-                gid = str(b["game"].get("game_pk", ""))
-                _team_key = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
-                _si = _sig_map_id.get(gid) or _sig_map_team.get(_team_key)
-                if _si:
-                    play_cards.append((b, _si))
+                _tk = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
+                _sigs = _game_signals.get(_tk, [])
+                if _sigs:
+                    play_cards.append((b, _sigs))
                 else:
                     noplay_cards.append(b)
 
-            # Play cards — prominent
+            # Play cards — prominent, unified
             if play_cards:
                 st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 {len(play_cards)}</div>')
-                for b, si in play_cards:
-                    _render_card(b, sig_info=si)
+                for b, sigs in play_cards:
+                    _render_card(b, signals=sigs)
 
             # Just For Fun parlays
             if len(play_cards) >= 3:
