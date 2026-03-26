@@ -3936,6 +3936,26 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             except Exception:
                 pass
 
+            # DEBUG — temporary: show what the join sees
+            _dbg_parts = []
+            _dbg_parts.append(f"sig_map: {len(_sig_map_id)} by id, {len(_sig_map_team)} by team")
+            _sig_team_sample = list(_sig_map_team.keys())[:2]
+            _dbg_parts.append(f"sig teams: {_sig_team_sample}")
+            _card_sample = []
+            for _bc in (plays or []) + (no_plays or []):
+                _card_sample.append(f'{_bc["game"]["away_team"]}@{_bc["game"]["home_team"]}(pk={_bc["game"].get("game_pk")})')
+                if len(_card_sample) >= 2:
+                    break
+            _dbg_parts.append(f"card teams: {_card_sample}")
+            # Show which paths were tried
+            _paths_exist = []
+            _base_dir2 = os.path.dirname(os.path.abspath(__file__))
+            for _p in [os.path.join(_base_dir2, "mlb_sim", "logs", "signals_2026.json"),
+                       "mlb_sim/logs/signals_2026.json"]:
+                _paths_exist.append(f"{_p}={'Y' if os.path.exists(_p) else 'N'}")
+            _dbg_parts.append(f"paths: {_paths_exist}")
+            st.caption(" | ".join(_dbg_parts))
+
             all_games = (plays or []) + (no_plays or [])
             play_cards = []
             noplay_cards = []
