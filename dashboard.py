@@ -993,6 +993,79 @@ def _render_game_props(props: list[dict]) -> str:
     )
 
 
+# ── Shadow signal badge helpers ──────────────────────────────────────────
+
+_shadow_cache = {}
+
+def _load_shadow_flags(game_date):
+    """Load CS004 and ST02 shadow flags for a date. Returns dict: game_id → flags."""
+    cache_key = game_date
+    if cache_key in _shadow_cache:
+        return _shadow_cache[cache_key]
+
+    flags = {}  # game_id → {"st02": bool, "cs004": bool}
+    season = game_date[:4]
+
+    try:
+        import json as _json_sh
+        # ST02 from shadow_signals
+        for _p in [f"mlb_sim/logs/shadow_signals_{season}.json",
+                    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "mlb_sim", "logs", f"shadow_signals_{season}.json")]:
+            if os.path.exists(_p):
+                with open(_p) as _f:
+                    for r in _json_sh.load(_f):
+                        if r.get("date") == game_date and r.get("signal_name", "").startswith("ST02"):
+                            gid = r.get("game_id")
+                            flags.setdefault(gid, {"st02": False, "cs004": False})
+                            flags[gid]["st02"] = bool(r.get("favorable_zone_flag"))
+                break
+
+        # CS004 from cs004_shadow
+        for _p in [f"mlb_sim/logs/cs004_shadow_{season}.json",
+                    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "mlb_sim", "logs", f"cs004_shadow_{season}.json")]:
+            if os.path.exists(_p):
+                with open(_p) as _f:
+                    for r in _json_sh.load(_f):
+                        if r.get("date") == game_date:
+                            gid = r.get("game_id")
+                            flags.setdefault(gid, {"st02": False, "cs004": False})
+                            flags[gid]["cs004"] = bool(r.get("cs004_favorable_zone"))
+                break
+    except Exception:
+        pass
+
+    _shadow_cache[cache_key] = flags
+    return flags
+
+
+def _shadow_badge_html(game_pk, game_date):
+    """Return shadow badge HTML for a game. Empty string if no flags fire."""
+    flags = _load_shadow_flags(game_date)
+    f = flags.get(game_pk, {})
+    st02 = f.get("st02", False)
+    cs004 = f.get("cs004", False)
+
+    if st02 and cs004:
+        return ('<div style="font-size:0.70em;color:#f59e0b;margin-top:4px;'
+                'padding:3px 6px;background:#292524;border-radius:4px;display:inline-block">'
+                '\u26a0\ufe0f ST02 + CS004 \u2014 Conflicting signals: road fatigue (UNDER) '
+                'vs bullpen tail risk (OVER). Monitor closely.'
+                '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
+    elif st02:
+        return ('<div style="font-size:0.70em;color:#60a5fa;margin-top:4px;'
+                'padding:2px 6px;background:#1e293b;border-radius:4px;display:inline-block">'
+                '\U0001f535 ST02 Shadow \u2014 Road fatigue signal active'
+                '<span style="color:#475569;font-size:0.9em"> SHADOW</span></div>')
+    elif cs004:
+        return ('<div style="font-size:0.70em;color:#fbbf24;margin-top:4px;'
+                'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
+                '\U0001f7e1 CS004 Shadow \u2014 Bullpen tail risk active'
+                '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
+    return ""
+
+
 def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> None:
     """Render a unified game card with all signals consolidated.
     signals: list of dicts, each with type/stake/s12_active/side etc.
@@ -1085,8 +1158,9 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
                            f'F5 Run Line HOME -0.5 \u00b7 {_stake_display}u</span>'
                            f'{_right_line}</div>')
 
-        # Check for P09 overlay from V1 signal data
+        # Check for P09 and ST02 overlays from V1 signal data
         _has_p09 = any(s.get("p09_active") for s in signals if s.get("type") == "v1")
+        _has_st02 = any(s.get("st02_active") for s in signals if s.get("type") == "v1")
 
         boost = ""
         if has_s12 and _has_p09:
@@ -1097,9 +1171,15 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
                      'Strong pitching in a run-suppressing park \u2014 '
                      'hard contact limited on both sides.</div>')
+        elif has_s12 and _has_st02:
+            boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
+                     'Boosted \u2014 elite pitching environment + road fatigue</div>')
         elif has_s12:
             boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
                      'Boosted \u2014 elite pitching environment</div>')
+        elif _has_st02:
+            boost = ('<div style="font-size:0.82em;color:#60a5fa;margin-top:2px">'
+                     'Road fatigue \u2014 away team on extended road trip</div>')
 
         # FIX 1: Conversational explanation from signal composition
         _types = [s.get("type", "") for s in signals]
@@ -1163,9 +1243,11 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         disclaimer = ('<div style="font-size:0.68em;color:#4b5563;margin-top:6px;font-style:italic">'
                       'Check your book for current line before placing.</div>')
 
+        _shadow_html = _shadow_badge_html(game.get("game_pk"), game.get("game_date", ""))
+
         st.html(
             f'<div class="game-card" style="border-left:3px solid #67e8f9">'
-            f'{l1}{badges}{boost}{explain_html}{_move_html}{disclaimer}'
+            f'{l1}{badges}{boost}{explain_html}{_move_html}{_shadow_html}{disclaimer}'
             f'</div>'
         )
     else:
@@ -1183,6 +1265,8 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             _reason = ('<div style="font-size:0.75em;color:#6b7280;margin-top:4px;font-style:italic">'
                        'No signals \u2014 outside threshold on all models.</div>')
 
+        _shadow_html_np = _shadow_badge_html(game.get("game_pk"), game.get("game_date", ""))
+
         st.html(
             f'<div class="game-card" style="border-left:3px solid #374151">'
             f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
@@ -1190,7 +1274,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
             f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
             f'<div class="card-summary">{summary}</div>'
-            f'{_reason}'
+            f'{_reason}{_shadow_html_np}'
             f'</div>'
     )
 
@@ -3863,6 +3947,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             if sig_type == "v1":
                                 _info["s12_active"] = bool(_r.get("s12_overlay_active", 0))
                                 _info["p09_active"] = bool(_r.get("p09_overlay_active", 0))
+                                _info["st02_active"] = bool(_r.get("st02_overlay_active", 0))
                                 _info["p_under"] = float(_r.get("raw_p_under", 0))
                                 _info["line"] = _r.get("line_at_signal_time")
                             elif sig_type in ("f5_under", "f5_over"):
@@ -4092,6 +4177,31 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     f'margin-bottom:12px">'
                     f'{_left}{_right}'
                     f'</div>')
+            except Exception:
+                pass
+
+            # ── Shadow signals summary ────────────────────────────────────
+            try:
+                _sf = _load_shadow_flags(game_date)
+                _n_games = len(plays or []) + len(no_plays or [])
+                _n_st02 = sum(1 for f in _sf.values() if f.get("st02"))
+                _n_cs004 = sum(1 for f in _sf.values() if f.get("cs004"))
+                _n_conflict = sum(1 for f in _sf.values() if f.get("st02") and f.get("cs004"))
+                if _n_st02 > 0 or _n_cs004 > 0:
+                    _sh_parts = []
+                    if _n_cs004 > 0:
+                        _sh_parts.append(f'CS004 fires on {_n_cs004} of {_n_games} games')
+                    if _n_st02 > 0:
+                        _sh_parts.append(f'ST02 fires on {_n_st02} of {_n_games} games')
+                    if _n_conflict > 0:
+                        _sh_parts.append(f'Both fire (conflict) on {_n_conflict}')
+                    _sh_text = ' &middot; '.join(_sh_parts)
+                    st.html(
+                        f'<div style="font-size:0.72em;color:#6b7280;padding:6px 14px;'
+                        f'background:#0d1117;border-radius:4px;border:1px solid #1e293b;'
+                        f'margin-bottom:10px">'
+                        f'<span style="color:#78716c">SHADOW SIGNALS TODAY</span> &mdash; '
+                        f'{_sh_text}</div>')
             except Exception:
                 pass
 
