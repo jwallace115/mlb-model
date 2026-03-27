@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-03-27T08:25:36.843605Z",
+  "generated_at": "2026-03-27T09:12:40.227316Z",
   "game_date": "2026-03-27",
   "plays": [
     {
-      "rating": "\u2b50\u2b50",
+      "rating": "\u2b50",
       "game": {
         "game_pk": 823162,
         "game_date": "2026-03-27",
@@ -21,10 +21,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 7.69,
-        "proj_total_f5": 4.24,
+        "proj_total_full": 7.48,
+        "proj_total_f5": 4.13,
         "confidence": "MEDIUM",
-        "confidence_score": 0.514,
+        "confidence_score": 0.497,
         "factors": {
           "sp_home_xfip": 3.899,
           "sp_away_xfip": 4.257,
@@ -32,8 +32,8 @@
           "sp_away_siera": 4.257,
           "sp_home_ip_per_start": 5.5,
           "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 100,
-          "away_wrc_plus": 100,
+          "home_wrc_plus": 102.6,
+          "away_wrc_plus": 91.7,
           "park_factor": 0.94,
           "wind_speed_mph": 4.4,
           "wind_direction": 15,
@@ -59,151 +59,9 @@
         }
       },
       "full_edge": {
-        "edge": 0.69,
+        "edge": 0.48,
         "lean": "OVER",
         "consensus": 7.0,
-        "value": true
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "T-Mobile Park plays at PF 94 \u2014 pitcher-friendly dimensions that suppress run totals beyond what the pitching matchup alone would suggest. 47\u00b0F further suppresses scoring, and starters are evenly matched (Gavin Williams 4.26 / George Kirby 3.90 xFIP). Model has 7.7, market is at 7.0 \u2014 under by +0.7 runs.",
-      "props": []
-    },
-    {
-      "rating": "\u2b50\u2b50",
-      "game": {
-        "game_pk": 823971,
-        "game_date": "2026-03-27",
-        "game_time": "07:10 PM PDT",
-        "game_time_et": "10:10 PM ET",
-        "status": "Scheduled",
-        "home_team": "LAD",
-        "away_team": "ARI",
-        "home_team_id": 119,
-        "away_team_id": 109,
-        "home_probable_pitcher": "{'id': 686218, 'name': 'Emmet Sheehan', 'throws': ''}",
-        "away_probable_pitcher": "{'id': 669194, 'name': 'Ryne Nelson', 'throws': ''}",
-        "venue_name": "UNIQLO FIELD AT DODGER STADIUM",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 7.95,
-        "proj_total_f5": 4.28,
-        "confidence": "MEDIUM",
-        "confidence_score": 0.453,
-        "factors": {
-          "sp_home_xfip": 3.635,
-          "sp_away_xfip": 4.065,
-          "sp_home_siera": 3.635,
-          "sp_away_siera": 4.065,
-          "sp_home_ip_per_start": 5.5,
-          "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 100,
-          "away_wrc_plus": 100,
-          "park_factor": 0.95,
-          "wind_speed_mph": 6.6,
-          "wind_direction": 252,
-          "wind_desc": "Blowing R to L",
-          "temperature_f": 64.3,
-          "weather_desc": "Overcast",
-          "wind_factor": 1.0113,
-          "temp_factor": 0.9846,
-          "home_wind_adj": 1.0113,
-          "away_wind_adj": 1.0113,
-          "home_sp_fb_pct": 0.35,
-          "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.04,
-          "away_bp_fatigue": 0.044,
-          "home_bp_innings_used": 3.0,
-          "away_bp_innings_used": 3.3,
-          "home_bp_xfip": 4.25,
-          "away_bp_xfip": 4.25,
-          "home_tier1_red": 0,
-          "away_tier1_red": 0
-        }
-      },
-      "full_edge": {
-        "edge": -0.55,
-        "lean": "UNDER",
-        "consensus": 8.5,
-        "value": true
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "Emmet Sheehan is at 3.63 xFIP \u2014 above average \u2014 going up against a near league average ARI lineup (100 wRC+). Tough spot for ARI's bats. The park (PF 95) gives pitchers an extra edge. Model has 8.0, market is at 8.5 \u2014 under by -0.5 runs.",
-      "props": []
-    },
-    {
-      "rating": "\u2b50",
-      "game": {
-        "game_pk": 823324,
-        "game_date": "2026-03-27",
-        "game_time": "06:40 PM PDT",
-        "game_time_et": "09:40 PM ET",
-        "status": "Scheduled",
-        "home_team": "SDP",
-        "away_team": "DET",
-        "home_team_id": 135,
-        "away_team_id": 116,
-        "home_probable_pitcher": "{'id': 650633, 'name': 'Michael King', 'throws': ''}",
-        "away_probable_pitcher": "{'id': 664285, 'name': 'Framber Valdez', 'throws': ''}",
-        "venue_name": "Petco Park",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 7.96,
-        "proj_total_f5": 4.33,
-        "confidence": "MEDIUM",
-        "confidence_score": 0.65,
-        "factors": {
-          "sp_home_xfip": 4.102,
-          "sp_away_xfip": 3.845,
-          "sp_home_siera": 4.102,
-          "sp_away_siera": 3.845,
-          "sp_home_ip_per_start": 5.5,
-          "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 100,
-          "away_wrc_plus": 100,
-          "park_factor": 0.95,
-          "wind_speed_mph": 4.6,
-          "wind_direction": 299,
-          "wind_desc": "Blowing In from CF",
-          "temperature_f": 65.0,
-          "weather_desc": "Overcast",
-          "wind_factor": 0.9887,
-          "temp_factor": 0.986,
-          "home_wind_adj": 0.9887,
-          "away_wind_adj": 0.9887,
-          "home_sp_fb_pct": 0.35,
-          "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.12,
-          "away_bp_fatigue": 0.031,
-          "home_bp_innings_used": 9.0,
-          "away_bp_innings_used": 2.3,
-          "home_bp_xfip": 4.25,
-          "away_bp_xfip": 4.25,
-          "home_tier1_red": 0,
-          "away_tier1_red": 0
-        }
-      },
-      "full_edge": {
-        "edge": 0.46,
-        "lean": "OVER",
-        "consensus": 7.5,
         "value": false
       },
       "f5_edge": {
@@ -212,78 +70,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Framber Valdez is at 3.85 xFIP \u2014 solid, mid-rotation \u2014 going up against a near league average SDP lineup (100 wRC+). Tough spot for SDP's bats. The park (PF 95) gives pitchers an extra edge. Model has 8.0, market is at 7.5 \u2014 under by +0.5 runs.",
-      "props": []
-    },
-    {
-      "rating": "\u2b50",
-      "game": {
-        "game_pk": 824946,
-        "game_date": "2026-03-27",
-        "game_time": "07:15 PM EDT",
-        "game_time_et": "07:15 PM ET",
-        "status": "Scheduled",
-        "home_team": "ATL",
-        "away_team": "KCR",
-        "home_team_id": 144,
-        "away_team_id": 118,
-        "home_probable_pitcher": "{'id': 519242, 'name': 'Chris Sale', 'throws': ''}",
-        "away_probable_pitcher": "{'id': 666142, 'name': 'Cole Ragans', 'throws': ''}",
-        "venue_name": "Truist Park",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 7.93,
-        "proj_total_f5": 4.1,
-        "confidence": "MEDIUM",
-        "confidence_score": 0.456,
-        "factors": {
-          "sp_home_xfip": 3.331,
-          "sp_away_xfip": 3.524,
-          "sp_home_siera": 3.331,
-          "sp_away_siera": 3.524,
-          "sp_home_ip_per_start": 5.5,
-          "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 100,
-          "away_wrc_plus": 100,
-          "park_factor": 1.02,
-          "wind_speed_mph": 13.4,
-          "wind_direction": 296,
-          "wind_desc": "Blowing R to L",
-          "temperature_f": 75.9,
-          "weather_desc": "Mainly Clear",
-          "wind_factor": 0.988,
-          "temp_factor": 1.0078,
-          "home_wind_adj": 0.988,
-          "away_wind_adj": 0.988,
-          "home_sp_fb_pct": 0.35,
-          "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.0,
-          "away_bp_fatigue": 0.0,
-          "home_bp_innings_used": 0.0,
-          "away_bp_innings_used": 0.0,
-          "home_bp_xfip": 4.25,
-          "away_bp_xfip": 4.25,
-          "home_tier1_red": 0,
-          "away_tier1_red": 0
-        }
-      },
-      "full_edge": {
-        "edge": 0.43,
-        "lean": "OVER",
-        "consensus": 7.5,
-        "value": false
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "Chris Sale is at 3.33 xFIP \u2014 above average \u2014 going up against a near league average KCR lineup (100 wRC+). Tough spot for KCR's bats. The park (PF 102) is hitter-friendly pushes back, but the sp signal dominates. Model has 7.9, market is at 7.5 \u2014 under by +0.4 runs.",
+      "summary": "T-Mobile Park plays at PF 94 \u2014 pitcher-friendly dimensions that suppress run totals beyond what the pitching matchup alone would suggest. 47\u00b0F further suppresses scoring, and starters are evenly matched (Gavin Williams 4.26 / George Kirby 3.90 xFIP). Model has 7.5, market is at 7.0 \u2014 under by +0.5 runs.",
       "props": []
     }
   ],
@@ -306,11 +93,11 @@
         "home_umpire": null
       },
       "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 8.29,
-        "proj_total_f5": 4.56,
+        "lean": "NEUTRAL",
+        "proj_total_full": 8.75,
+        "proj_total_f5": 4.81,
         "confidence": "LOW",
-        "confidence_score": 0.303,
+        "confidence_score": 0.194,
         "factors": {
           "sp_home_xfip": 3.934,
           "sp_away_xfip": 4.19,
@@ -318,8 +105,8 @@
           "sp_away_siera": 4.19,
           "sp_home_ip_per_start": 5.5,
           "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 92.2,
-          "away_wrc_plus": 104.2,
+          "home_wrc_plus": 98.9,
+          "away_wrc_plus": 108.2,
           "park_factor": 0.96,
           "wind_speed_mph": 13.7,
           "wind_direction": 285,
@@ -345,7 +132,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.79,
+        "edge": 1.25,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -356,7 +143,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.3 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Some over factors pushes toward the over while sp_avg counters in the other direction \u2014 the model nets out at 8.8 runs with no clear dominant force. Pass.",
       "props": []
     },
     {
@@ -378,10 +165,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.24,
-        "proj_total_f5": 4.63,
+        "proj_total_full": 8.3,
+        "proj_total_f5": 4.66,
         "confidence": "LOW",
-        "confidence_score": 0.182,
+        "confidence_score": 0.168,
         "factors": {
           "sp_home_xfip": 4.091,
           "sp_away_xfip": 4.336,
@@ -389,18 +176,18 @@
           "sp_away_siera": 4.336,
           "sp_home_ip_per_start": 5.5,
           "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 100,
-          "away_wrc_plus": 100,
+          "home_wrc_plus": 103.4,
+          "away_wrc_plus": 98.0,
           "park_factor": 1.05,
-          "wind_speed_mph": 11.5,
-          "wind_direction": 321,
+          "wind_speed_mph": 11.4,
+          "wind_direction": 324,
           "wind_desc": "Blowing In from CF",
-          "temperature_f": 27.9,
+          "temperature_f": 28.1,
           "weather_desc": "Clear",
-          "wind_factor": 0.9749,
-          "temp_factor": 0.9118,
-          "home_wind_adj": 0.9749,
-          "away_wind_adj": 0.9749,
+          "wind_factor": 0.9744,
+          "temp_factor": 0.9122,
+          "home_wind_adj": 0.9744,
+          "away_wind_adj": 0.9744,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -416,7 +203,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.26,
+        "edge": -0.2,
         "lean": "UNDER",
         "consensus": 8.5,
         "value": false
@@ -427,7 +214,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model has 8.2 runs, market has 8.5 \u2014 only 0.3 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
+      "summary": "Model has 8.3 runs, market has 8.5 \u2014 only 0.2 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
       "props": []
     },
     {
@@ -448,11 +235,11 @@
         "home_umpire": null
       },
       "proj": {
-        "lean": "OVER",
-        "proj_total_full": 9.32,
-        "proj_total_f5": 5.42,
+        "lean": "NEUTRAL",
+        "proj_total_full": 8.9,
+        "proj_total_f5": 5.18,
         "confidence": "LOW",
-        "confidence_score": 0.277,
+        "confidence_score": 0.104,
         "factors": {
           "sp_home_xfip": 4.528,
           "sp_away_xfip": 4.733,
@@ -460,18 +247,18 @@
           "sp_away_siera": 4.733,
           "sp_home_ip_per_start": 5.5,
           "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 100,
-          "away_wrc_plus": 100,
+          "home_wrc_plus": 100.0,
+          "away_wrc_plus": 91.1,
           "park_factor": 0.98,
-          "wind_speed_mph": 7.5,
-          "wind_direction": 99,
+          "wind_speed_mph": 7.2,
+          "wind_direction": 95,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 76.4,
+          "temperature_f": 76.5,
           "weather_desc": "Clear",
-          "wind_factor": 1.0061,
-          "temp_factor": 1.0088,
-          "home_wind_adj": 1.0061,
-          "away_wind_adj": 1.0061,
+          "wind_factor": 1.0047,
+          "temp_factor": 1.009,
+          "home_wind_adj": 1.0047,
+          "away_wind_adj": 1.0047,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -487,7 +274,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.82,
+        "edge": 1.4,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -498,7 +285,78 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans over at 9.3 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Sp_avg pushes toward the over while some under factors counters in the other direction \u2014 the model nets out at 8.9 runs with no clear dominant force. Pass.",
+      "props": []
+    },
+    {
+      "rating": "NO PLAY",
+      "game": {
+        "game_pk": 824946,
+        "game_date": "2026-03-27",
+        "game_time": "07:15 PM EDT",
+        "game_time_et": "07:15 PM ET",
+        "status": "Scheduled",
+        "home_team": "ATL",
+        "away_team": "KCR",
+        "home_team_id": 144,
+        "away_team_id": 118,
+        "home_probable_pitcher": "{'id': 519242, 'name': 'Chris Sale', 'throws': ''}",
+        "away_probable_pitcher": "{'id': 666142, 'name': 'Cole Ragans', 'throws': ''}",
+        "venue_name": "Truist Park",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.98,
+        "proj_total_f5": 4.12,
+        "confidence": "LOW",
+        "confidence_score": 0.378,
+        "factors": {
+          "sp_home_xfip": 3.331,
+          "sp_away_xfip": 3.524,
+          "sp_home_siera": 3.331,
+          "sp_away_siera": 3.524,
+          "sp_home_ip_per_start": 5.5,
+          "sp_away_ip_per_start": 5.5,
+          "home_wrc_plus": 101.1,
+          "away_wrc_plus": 99.5,
+          "park_factor": 1.02,
+          "wind_speed_mph": 13.6,
+          "wind_direction": 293,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 76.4,
+          "weather_desc": "Clear",
+          "wind_factor": 0.9895,
+          "temp_factor": 1.0088,
+          "home_wind_adj": 0.9895,
+          "away_wind_adj": 0.9895,
+          "home_sp_fb_pct": 0.35,
+          "away_sp_fb_pct": 0.35,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.0,
+          "away_bp_fatigue": 0.0,
+          "home_bp_innings_used": 0.0,
+          "away_bp_innings_used": 0.0,
+          "home_bp_xfip": 4.25,
+          "away_bp_xfip": 4.25,
+          "home_tier1_red": 0,
+          "away_tier1_red": 0
+        }
+      },
+      "full_edge": {
+        "edge": 0.48,
+        "lean": "OVER",
+        "consensus": 7.5,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Model has 8.0 runs, market has 7.5 \u2014 only 0.5 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
       "props": []
     },
     {
@@ -520,10 +378,10 @@
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 9.11,
-        "proj_total_f5": 5.11,
+        "proj_total_full": 8.93,
+        "proj_total_f5": 5.01,
         "confidence": "LOW",
-        "confidence_score": 0.159,
+        "confidence_score": 0.097,
         "factors": {
           "sp_home_xfip": 4.296,
           "sp_away_xfip": 4.242,
@@ -531,18 +389,18 @@
           "sp_away_siera": 4.242,
           "sp_home_ip_per_start": 5.5,
           "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 100,
-          "away_wrc_plus": 100,
+          "home_wrc_plus": 98.7,
+          "away_wrc_plus": 96.7,
           "park_factor": 1.0,
-          "wind_speed_mph": 5.9,
-          "wind_direction": 115,
+          "wind_speed_mph": 6.8,
+          "wind_direction": 124,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 78.0,
+          "temperature_f": 78.1,
           "weather_desc": "Clear",
-          "wind_factor": 1.0062,
-          "temp_factor": 1.012,
-          "home_wind_adj": 1.0062,
-          "away_wind_adj": 1.0062,
+          "wind_factor": 1.0095,
+          "temp_factor": 1.0122,
+          "home_wind_adj": 1.0095,
+          "away_wind_adj": 1.0095,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -558,9 +416,80 @@
         }
       },
       "full_edge": {
-        "edge": 0.61,
+        "edge": 0.43,
         "lean": "OVER",
         "consensus": 8.5,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Starters are well-matched (Yusei Kikuchi 4.24 / Mike Burrows 4.30 xFIP) and lineups are similarly average (LAA 97 / HOU 99 wRC+). Model projects 8.9 runs but there's no exploitable edge \u2014 pass.",
+      "props": []
+    },
+    {
+      "rating": "NO PLAY",
+      "game": {
+        "game_pk": 823324,
+        "game_date": "2026-03-27",
+        "game_time": "06:40 PM PDT",
+        "game_time_et": "09:40 PM ET",
+        "status": "Scheduled",
+        "home_team": "SDP",
+        "away_team": "DET",
+        "home_team_id": 135,
+        "away_team_id": 116,
+        "home_probable_pitcher": "{'id': 650633, 'name': 'Michael King', 'throws': ''}",
+        "away_probable_pitcher": "{'id': 664285, 'name': 'Framber Valdez', 'throws': ''}",
+        "venue_name": "Petco Park",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.05,
+        "proj_total_f5": 4.38,
+        "confidence": "LOW",
+        "confidence_score": 0.36,
+        "factors": {
+          "sp_home_xfip": 4.102,
+          "sp_away_xfip": 3.845,
+          "sp_home_siera": 4.102,
+          "sp_away_siera": 3.845,
+          "sp_home_ip_per_start": 5.5,
+          "sp_away_ip_per_start": 5.5,
+          "home_wrc_plus": 101.6,
+          "away_wrc_plus": 100.8,
+          "park_factor": 0.95,
+          "wind_speed_mph": 4.6,
+          "wind_direction": 299,
+          "wind_desc": "Blowing In from CF",
+          "temperature_f": 65.0,
+          "weather_desc": "Overcast",
+          "wind_factor": 0.9887,
+          "temp_factor": 0.986,
+          "home_wind_adj": 0.9887,
+          "away_wind_adj": 0.9887,
+          "home_sp_fb_pct": 0.35,
+          "away_sp_fb_pct": 0.35,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.12,
+          "away_bp_fatigue": 0.031,
+          "home_bp_innings_used": 9.0,
+          "away_bp_innings_used": 2.3,
+          "home_bp_xfip": 4.25,
+          "away_bp_xfip": 4.25,
+          "home_tier1_red": 0,
+          "away_tier1_red": 0
+        }
+      },
+      "full_edge": {
+        "edge": 0.55,
+        "lean": "OVER",
+        "consensus": 7.5,
         "value": true
       },
       "f5_edge": {
@@ -569,94 +498,85 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Starters are well-matched (Yusei Kikuchi 4.24 / Mike Burrows 4.30 xFIP) and lineups are similarly average (LAA 100 / HOU 100 wRC+). Model projects 9.1 runs but there's no exploitable edge \u2014 pass.",
+      "summary": "Model leans under at 8.1 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "props": []
+    },
+    {
+      "rating": "NO PLAY",
+      "game": {
+        "game_pk": 823971,
+        "game_date": "2026-03-27",
+        "game_time": "07:10 PM PDT",
+        "game_time_et": "10:10 PM ET",
+        "status": "Scheduled",
+        "home_team": "LAD",
+        "away_team": "ARI",
+        "home_team_id": 119,
+        "away_team_id": 109,
+        "home_probable_pitcher": "{'id': 686218, 'name': 'Emmet Sheehan', 'throws': ''}",
+        "away_probable_pitcher": "{'id': 669194, 'name': 'Ryne Nelson', 'throws': ''}",
+        "venue_name": "UNIQLO FIELD AT DODGER STADIUM",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 8.21,
+        "proj_total_f5": 4.43,
+        "confidence": "LOW",
+        "confidence_score": 0.19,
+        "factors": {
+          "sp_home_xfip": 3.635,
+          "sp_away_xfip": 4.065,
+          "sp_home_siera": 3.635,
+          "sp_away_siera": 4.065,
+          "sp_home_ip_per_start": 5.5,
+          "sp_away_ip_per_start": 5.5,
+          "home_wrc_plus": 105.1,
+          "away_wrc_plus": 101.4,
+          "park_factor": 0.95,
+          "wind_speed_mph": 6.6,
+          "wind_direction": 252,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 64.3,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0113,
+          "temp_factor": 0.9846,
+          "home_wind_adj": 1.0113,
+          "away_wind_adj": 1.0113,
+          "home_sp_fb_pct": 0.35,
+          "away_sp_fb_pct": 0.35,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.04,
+          "away_bp_fatigue": 0.044,
+          "home_bp_innings_used": 3.0,
+          "away_bp_innings_used": 3.3,
+          "home_bp_xfip": 4.25,
+          "away_bp_xfip": 4.25,
+          "home_tier1_red": 0,
+          "away_tier1_red": 0
+        }
+      },
+      "full_edge": {
+        "edge": -0.29,
+        "lean": "UNDER",
+        "consensus": 8.5,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Model has 8.2 runs, market has 8.5 \u2014 only 0.3 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
       "props": []
     }
   ],
   "parlay": [],
   "parlay_3": [],
-  "parlay_5": [
-    {
-      "game_pk": 823162,
-      "player_name": null,
-      "matchup": "CLE @ SEA",
-      "market": "full",
-      "market_label": "UNDER 7.0",
-      "rating": "\u2b50\u2b50",
-      "projection": 7.69,
-      "line": 7.0,
-      "lean": "UNDER",
-      "edge": 0.69,
-      "confidence_score": 0.514
-    },
-    {
-      "game_pk": 823971,
-      "player_name": null,
-      "matchup": "ARI @ LAD",
-      "market": "full",
-      "market_label": "UNDER 8.5",
-      "rating": "\u2b50\u2b50",
-      "projection": 7.95,
-      "line": 8.5,
-      "lean": "UNDER",
-      "edge": -0.55,
-      "confidence_score": 0.453
-    }
-  ],
-  "parlay_7": [
-    {
-      "game_pk": 823162,
-      "player_name": null,
-      "matchup": "CLE @ SEA",
-      "market": "full",
-      "market_label": "UNDER 7.0",
-      "rating": "\u2b50\u2b50",
-      "projection": 7.69,
-      "line": 7.0,
-      "lean": "UNDER",
-      "edge": 0.69,
-      "confidence_score": 0.514
-    },
-    {
-      "game_pk": 823971,
-      "player_name": null,
-      "matchup": "ARI @ LAD",
-      "market": "full",
-      "market_label": "UNDER 8.5",
-      "rating": "\u2b50\u2b50",
-      "projection": 7.95,
-      "line": 8.5,
-      "lean": "UNDER",
-      "edge": -0.55,
-      "confidence_score": 0.453
-    },
-    {
-      "game_pk": 823324,
-      "player_name": null,
-      "matchup": "DET @ SDP",
-      "market": "full",
-      "market_label": "UNDER 7.5",
-      "rating": "\u2b50",
-      "projection": 7.96,
-      "line": 7.5,
-      "lean": "UNDER",
-      "edge": 0.46,
-      "confidence_score": 0.65
-    },
-    {
-      "game_pk": 824946,
-      "player_name": null,
-      "matchup": "KCR @ ATL",
-      "market": "full",
-      "market_label": "UNDER 7.5",
-      "rating": "\u2b50",
-      "projection": 7.93,
-      "line": 7.5,
-      "lean": "UNDER",
-      "edge": 0.43,
-      "confidence_score": 0.456
-    }
-  ],
+  "parlay_5": [],
+  "parlay_7": [],
   "season_record": {
     "total": 24,
     "wins": 0,
@@ -697,5 +617,23 @@
       "roi": null,
       "triggered_at": null
     }
+  },
+  "daily_review": {
+    "generated_at": "2026-03-27T09:12:56.557742+00:00",
+    "date_reviewed": "2026-03-26",
+    "record_summary": {
+      "MEDIUM": {
+        "w": 0,
+        "l": 3,
+        "p": 0
+      },
+      "overall": {
+        "w": 0,
+        "l": 3,
+        "p": 0
+      }
+    },
+    "narrative": "## Rough Night: 0-3 with Two Brutal Misses\n\n**MEDIUM TIER REVIEW**\n\nAll three medium confidence plays went under and all three lost (0-3, -100% ROI). Two of these were catastrophic misses that need unpacking.\n\n**Chicago at Milwaukee** projected 7.5 runs but finished at 16. The model saw strong starting pitching indicators (3.85 and 4.08 expected FIP) and 18 mph winds blowing in from center field in 37-degree weather \u2014 classic under conditions. What it missed: the bullpens completely imploded. When you project 7.5 and get 16, the starters either got shelled early or the relievers turned it into a batting practice session. The pregame weather and pitching metrics supported the call, but something broke down in execution.\n\n**Pittsburgh at New York** was even worse \u2014 projected 7.7, finished at 18. Again, the model liked what it saw: elite starting pitching metrics (3.75 and 3.12 expected FIP) in a dome with a slightly pitcher-friendly umpire (1.02 factor). This is a 10.3-run miss, which suggests either the starters got knocked out immediately or we caught both offenses on an absolute heater. The pregame data gave no warning signs here \u2014 this looks like one of those nights where everything that could go wrong did.\n\n**Detroit at San Diego** (projected 7.5, actual 10.0) falls within normal variance at 2.5 runs off. Decent pitching matchup, light winds blowing in \u2014 just didn't hold.\n\n**WHAT TO WATCH**\n\nThe model went 0-for-3 on unders with strong pitching indicators and favorable weather conditions. When you miss by 8-10 runs with that setup, it's either bullpen chaos or the starting pitchers never made it through the order twice. Worth monitoring whether early-season bullpen volatility is higher than the model accounts for \u2014 spring rosters are still settling and relief corps can be unpredictable in late March.",
+    "generation_status": "success"
   }
 }

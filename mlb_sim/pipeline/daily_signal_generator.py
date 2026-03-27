@@ -57,6 +57,10 @@ SIGNAL_COLS = [
     "threshold_bucket", "stake_units", "raw_p_under", "raw_p_over",
     "dual_high_csw", "line_at_signal_time", "closing_line", "clv",
     "actual_total", "result", "net_units", "resolved",
+    # Overlay fields (S12 + P09)
+    "s12_overlay_active", "s12_value",
+    "p09_overlay_active", "p09_value", "p09_data_available",
+    "combined_overlay_tier", "base_stake",
 ]
 
 

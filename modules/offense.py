@@ -42,14 +42,30 @@ _FG_ABB_MAP = {
 _SKIP_ABBS = {"2 Tms", "3 Tms", "4 Tms", "- - -"}
 
 
+_MIN_TEAMS = 25  # refuse to cache partial-season data with fewer teams
+
+
 def _load_cache() -> dict:
     if os.path.exists(_CACHE_FILE):
         with open(_CACHE_FILE) as f:
-            return json.load(f)
+            cached = json.load(f)
+        if len(cached) >= _MIN_TEAMS:
+            return cached
+        logger.warning(f"Offense cache has only {len(cached)} teams (need {_MIN_TEAMS}) — ignoring stale cache")
     return {}
 
 
 def _save_cache(data: dict) -> None:
+    if len(data) < _MIN_TEAMS:
+        logger.warning(f"Refusing to cache offense data with only {len(data)} teams (need {_MIN_TEAMS})")
+        return
+    # Never overwrite a larger cache with a smaller one
+    if os.path.exists(_CACHE_FILE):
+        with open(_CACHE_FILE) as f:
+            existing = json.load(f)
+        if len(existing) > len(data):
+            logger.warning(f"Existing cache has {len(existing)} teams, new data has {len(data)} — not overwriting")
+            return
     with open(_CACHE_FILE, "w") as f:
         json.dump(data, f)
 
@@ -273,19 +289,26 @@ def build_offense_db(year: Optional[int] = None) -> dict:
         return cache
 
     # Try FanGraphs first; fall back to Savant xwOBA if blocked/unavailable.
+    # Require at least _MIN_TEAMS teams for data to be considered complete.
     db: dict = {}
     for attempt_year in [year, year - 1]:
         logger.info(f"Fetching team offense (FanGraphs) for {attempt_year}...")
-        db = _fetch_fangraphs_batting(attempt_year)
-        if db:
+        result = _fetch_fangraphs_batting(attempt_year)
+        if result and len(result) >= _MIN_TEAMS:
+            db = result
             break
+        elif result:
+            logger.info(f"FanGraphs {attempt_year}: only {len(result)} teams (need {_MIN_TEAMS}), trying next")
 
     if not db:
         for attempt_year in [year, year - 1]:
             logger.info(f"Falling back to Savant xwOBA for {attempt_year}...")
-            db = _fetch_savant_team_offense(attempt_year)
-            if db:
+            result = _fetch_savant_team_offense(attempt_year)
+            if result and len(result) >= _MIN_TEAMS:
+                db = result
                 break
+            elif result:
+                logger.info(f"Savant {attempt_year}: only {len(result)} teams (need {_MIN_TEAMS}), trying next")
 
     if db:
         # Enrich with platoon splits (best-effort — fall back silently if unavailable)

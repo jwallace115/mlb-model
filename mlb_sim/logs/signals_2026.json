@@ -11,7 +11,14 @@
     "line_at_signal_time":7.0,
     "result":"LOSS",
     "net_units":-0.62,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-26",
@@ -25,7 +32,14 @@
     "line_at_signal_time":8.0,
     "result":"LOSS",
     "net_units":-0.5,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-26",
@@ -39,7 +53,14 @@
     "line_at_signal_time":8.2,
     "result":"WIN",
     "net_units":0.9091,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-26",
@@ -53,7 +74,14 @@
     "line_at_signal_time":8.0,
     "result":"WIN",
     "net_units":1.1364,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-26",
@@ -67,7 +95,14 @@
     "line_at_signal_time":8.0,
     "result":"WIN",
     "net_units":1.1364,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-26",
@@ -81,7 +116,14 @@
     "line_at_signal_time":7.0,
     "result":"LOSS",
     "net_units":-0.62,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-26",
@@ -95,7 +137,14 @@
     "line_at_signal_time":7.8,
     "result":"LOSS",
     "net_units":-0.62,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-26",
@@ -109,7 +158,14 @@
     "line_at_signal_time":9.0,
     "result":"LOSS",
     "net_units":-1.25,
-    "resolved":1
+    "resolved":1,
+    "s12_overlay_active":null,
+    "s12_value":null,
+    "base_stake":null,
+    "p09_overlay_active":null,
+    "p09_value":null,
+    "p09_data_available":null,
+    "combined_overlay_tier":null
   },
   {
     "date":"2026-03-27",
@@ -123,7 +179,14 @@
     "line_at_signal_time":7.5,
     "result":null,
     "net_units":null,
-    "resolved":0
+    "resolved":0,
+    "s12_overlay_active":1.0,
+    "s12_value":14.932,
+    "base_stake":0.5,
+    "p09_overlay_active":0.0,
+    "p09_value":44.063,
+    "p09_data_available":1.0,
+    "combined_overlay_tier":"S12_ONLY"
   },
   {
     "date":"2026-03-27",
@@ -137,6 +200,13 @@
     "line_at_signal_time":8.5,
     "result":null,
     "net_units":null,
-    "resolved":0
+    "resolved":0,
+    "s12_overlay_active":1.0,
+    "s12_value":9.285,
+    "base_stake":1.0,
+    "p09_overlay_active":0.0,
+    "p09_value":47.106,
+    "p09_data_available":1.0,
+    "combined_overlay_tier":"S12_ONLY"
   }
 ]
