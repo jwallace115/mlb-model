@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-03-26T21:01:45.547721+00:00",
-  "last_updated": "2026-03-26 21:01 UTC",
+  "generated_at": "2026-03-27T08:09:59.379570+00:00",
+  "last_updated": "2026-03-27 08:09 UTC",
   "pipeline_run_date": "2026-03-21",
   "signals_source": "stale",
-  "game_date": "2026-03-26",
+  "game_date": "2026-03-27",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
   "today_signals": [],
@@ -171,8 +171,8 @@
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-03-26T21:01:45.554219+00:00",
-    "date_reviewed": "2026-03-25",
+    "generated_at": "2026-03-27T08:09:59.385353+00:00",
+    "date_reviewed": "2026-03-26",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
