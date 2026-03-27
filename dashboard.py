@@ -722,24 +722,7 @@ def _render_analytics(stats: dict) -> None:
             st.html(_analytics_table(corr_rows, ["Factor", "Record", "Win %"]))
             st.html("<br>")
 
-        # ── props record ──────────────────────────────────────────────────────
-        props_rec = stats.get("props_record", {})
-        if props_rec:
-            st.markdown("**Player Props Record**")
-            prop_rows = []
-            for market, d in props_rec.items():
-                w, l = d.get("wins", 0) or 0, d.get("losses", 0) or 0
-                wp   = d.get("win_pct")
-                roi  = d.get("roi")
-                cls  = _pct_color(wp)
-                prop_rows.append((
-                    (market, ""),
-                    (f"{w}–{l}", cls),
-                    (f"{wp:.1f}%" if wp is not None else "—", cls),
-                    (f"{roi:+.1f}%" if roi is not None else "—", ""),
-                ))
-            st.html(_analytics_table(prop_rows, ["Market", "Record", "Win %", "ROI"]))
-            st.html("<br>")
+        # ── props record (removed from MLB display) ────────────────────────
 
         # ── parlay stats ──────────────────────────────────────────────────────
         parlay_stats = stats.get("parlay_stats", {})
@@ -910,7 +893,7 @@ def _render_alerts(data: dict) -> None:
             icon     = "⚠️"
             sub_desc = (
                 f"<span style='color:#fde68a;font-weight:600'>{player_out}</span> "
-                f"scratched — TB prop invalidated"
+                f"scratched from lineup"
             )
             proj_html = ""
         else:
@@ -1047,10 +1030,12 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         _stake_colors = {0.5: "#f59e0b", 0.62: "#f97316", 0.625: "#f97316",
                          1.0: "#06b6d4", 1.25: "#22c55e"}
 
-        # Header: matchup + time + weather
+        # Header: matchup + time + weather + consensus line
         header_parts = [f'{matchup} \u2014 {time_str}']
         if wx_line:
             header_parts.append(wx_line)
+        if line is not None:
+            header_parts.append(f'O/U {float(line):.1f}')
         l1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
               f'{" \u00b7 ".join(header_parts)}</div>')
 
@@ -1061,21 +1046,44 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             stype = sig.get("type", "v1")
             stake = sig.get("stake", "?")
             sc = _stake_colors.get(round(float(stake), 2) if stake != "?" else 0, "#67e8f9")
+            _stake_display = f"{float(stake):.2f}".rstrip('0').rstrip('.') if stake != "?" else "?"
+
+            # Right-aligned line reference per bet type
+            _right_line = ""
+            if stype == "v1" and line is not None:
+                _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(line):.1f}</span>'
+            elif stype in ("f5_under", "f5_over"):
+                # F5 line from signal data if available
+                _f5_ln = sig.get("f5_line")
+                if _f5_ln is not None:
+                    _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(_f5_ln):.1f}</span>'
+            elif stype == "f5_rl":
+                _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">-0.5</span>'
+
+            _row_style = 'display:flex;justify-content:space-between;align-items:baseline;margin-top:4px'
 
             if stype == "v1":
-                badges += (f'<div style="font-size:1.05em;font-weight:700;color:{sc};margin-top:4px">'
-                           f'UNDER {stake}u</div>')
+                badges += (f'<div style="{_row_style}">'
+                           f'<span style="font-size:1.05em;font-weight:700;color:{sc}">'
+                           f'Full Game Total UNDER \u00b7 {_stake_display}u</span>'
+                           f'{_right_line}</div>')
                 if sig.get("s12_active"):
                     has_s12 = True
             elif stype == "f5_under":
-                badges += (f'<div style="font-size:0.95em;font-weight:700;color:#67e8f9;margin-top:3px">'
-                           f'F5 UNDER {stake}u</div>')
+                badges += (f'<div style="{_row_style}">'
+                           f'<span style="font-size:0.95em;font-weight:700;color:#67e8f9">'
+                           f'F5 Total UNDER \u00b7 {_stake_display}u</span>'
+                           f'{_right_line}</div>')
             elif stype == "f5_over":
-                badges += (f'<div style="font-size:0.95em;font-weight:700;color:#fbbf24;margin-top:3px">'
-                           f'F5 OVER {stake}u</div>')
+                badges += (f'<div style="{_row_style}">'
+                           f'<span style="font-size:0.95em;font-weight:700;color:#fbbf24">'
+                           f'F5 Total OVER \u00b7 {_stake_display}u</span>'
+                           f'{_right_line}</div>')
             elif stype == "f5_rl":
-                badges += (f'<div style="font-size:0.95em;font-weight:700;color:#a78bfa;margin-top:3px">'
-                           f'F5 RL HOME {stake}u</div>')
+                badges += (f'<div style="{_row_style}">'
+                           f'<span style="font-size:0.95em;font-weight:700;color:#a78bfa">'
+                           f'F5 Run Line HOME -0.5 \u00b7 {_stake_display}u</span>'
+                           f'{_right_line}</div>')
 
         # Check for P09 overlay from V1 signal data
         _has_p09 = any(s.get("p09_active") for s in signals if s.get("type") == "v1")
@@ -1134,12 +1142,30 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         explain_html = (f'<div style="font-size:0.80em;color:#94a3b8;margin-top:6px;line-height:1.4">'
                         f'{_explain}</div>')
 
+        # Line movement narrative (appended to explanation if available)
+        _move_html = ""
+        try:
+            from mlb_sim.pipeline.line_snapshot_store import compute_movement
+            _gk_str = str(game.get("game_pk", ""))
+            # Try Odds API game_id from signal data
+            _odds_gid = None
+            for _sig in signals:
+                if _sig.get("odds_game_id"):
+                    _odds_gid = _sig["odds_game_id"]
+                    break
+            _move_data = compute_movement(_odds_gid or _gk_str)
+            if _move_data and _move_data.get("movement_summary"):
+                _move_html = (f'<div style="font-size:0.78em;color:#64748b;margin-top:3px;font-style:italic">'
+                              f'{_move_data["movement_summary"]}</div>')
+        except Exception:
+            pass
+
         disclaimer = ('<div style="font-size:0.68em;color:#4b5563;margin-top:6px;font-style:italic">'
                       'Check your book for current line before placing.</div>')
 
         st.html(
             f'<div class="game-card" style="border-left:3px solid #67e8f9">'
-            f'{l1}{badges}{boost}{explain_html}{disclaimer}'
+            f'{l1}{badges}{boost}{explain_html}{_move_html}{disclaimer}'
             f'</div>'
         )
     else:
@@ -3446,76 +3472,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 </div>
                 """)
 
-        # ── segment overlay status ─────────────────────────────────────────────
-        try:
-            import json as _json
-            _ovl_path = os.path.join(os.path.dirname(__file__), "mlb", "config_segment_overlay.json")
-            if os.path.exists(_ovl_path):
-                with open(_ovl_path) as _f:
-                    _ovl_cfg = _json.load(_f)
-                if _ovl_cfg.get("overlay_active"):
-                    _ovl_stop_path = os.path.join(os.path.dirname(__file__), "mlb", "data", "mlb_overlay_stop_rules.json")
-                    _ovl_stop = {}
-                    if os.path.exists(_ovl_stop_path):
-                        with open(_ovl_stop_path) as _f:
-                            _ovl_stop = _json.load(_f)
-                    _suspended = _ovl_stop.get("overlay_suspended", False)
-                    _seg_stats = _ovl_stop.get("segment_stats", {})
-                    if _suspended:
-                        st.html('<div style="background:#2d1515;border:1px solid #dc2626;border-radius:6px;padding:8px;margin-bottom:8px;font-size:0.82em;color:#f87171">⛔ Segment overlay suspended</div>')
-                    else:
-                        st.html('<div style="font-size:0.78em;color:#4ade80;margin-bottom:6px">🎯 Segment overlay active (calm+pitcher_ump, low_total+warm → OVER boost)</div>')
-        except Exception:
-            pass
-
-        # ── Low-Total CSW OVER shadow tracking ──────────────────────────────
-        try:
-            _csw_path = os.path.join(os.path.dirname(__file__), "mlb", "data", "low_total_csw_shadow.csv")
-            if os.path.exists(_csw_path):
-                _csw_df = pd.read_csv(_csw_path, dtype=str)
-                _today_csw = _csw_df[_csw_df["game_date"] == (data or {}).get("game_date", "")]
-                for _, _cr in _today_csw.iterrows():
-                    st.html(f'<div style="font-size:0.72em;color:#a78bfa;margin-bottom:3px">'
-                            f'📊 MLB SHADOW: {_cr["away_team"]} @ {_cr["home_team"]} — line {_cr["closing_line"]} — tracking OVER'
-                            f' (home CSW: {_cr["home_csw_pct"]}%, away CSW: {_cr["away_csw_pct"]}%)</div>')
-                _csw_graded = _csw_df[_csw_df["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
-                if len(_csw_graded) > 0:
-                    _cw = (_csw_graded["result"] == "CORRECT").sum()
-                    _cl = (_csw_graded["result"] == "INCORRECT").sum()
-                    _cn = _cw + _cl
-                    _chr = _cw / _cn * 100 if _cn > 0 else 0
-                    _croi = (_cw * (100/110) - _cl) / _cn * 100 if _cn > 0 else 0
-                    _cme = _csw_graded["market_error"].astype(float).mean()
-                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:6px">'
-                            f'📊 Low Total CSW Shadow: N={_cn} | HR={_chr:.0f}% | ROI={_croi:+.1f}% | ME={_cme:+.1f} (tracking)</div>')
-        except Exception:
-            pass
-
-        # ── High-CSW UNDER signal (LIVE) ─────────────────────────────────────
-        try:
-            _hcsw_path = os.path.join(os.path.dirname(__file__), "mlb", "data", "high_csw_under_shadow.csv")
-            if os.path.exists(_hcsw_path):
-                _hcsw_df = pd.read_csv(_hcsw_path, dtype=str)
-                _today_hcsw = _hcsw_df[_hcsw_df["game_date"] == (data or {}).get("game_date", "")]
-                for _, _hr in _today_hcsw.iterrows():
-                    _sweet = " ⭐ sweet spot — 8.5-9.5 line" if _hr.get("line_band") == "8.5-9.5" else ""
-                    st.html(f'<div style="font-size:0.78em;color:#60a5fa;margin-bottom:3px">'
-                            f'⚾ MLB: {_hr["away_team"]} @ {_hr["home_team"]} — '
-                            f'line {_hr["closing_line"]} — UNDER {_hr["recommended_units"]}u'
-                            f' (home CSW: {_hr["home_csw_pct"]}%, away CSW: {_hr["away_csw_pct"]}%, '
-                            f'z-score: {_hr["combined_zscore"]}){_sweet}</div>')
-                _hcsw_graded = _hcsw_df[_hcsw_df["result"].isin(["CORRECT", "INCORRECT", "PUSH"])]
-                if len(_hcsw_graded) > 0:
-                    _hw = (_hcsw_graded["result"] == "CORRECT").sum()
-                    _hl = (_hcsw_graded["result"] == "INCORRECT").sum()
-                    _hn = _hw + _hl
-                    _hhr = _hw / _hn * 100 if _hn > 0 else 0
-                    _hroi = (_hw * (100/110) - _hl) / _hn * 100 if _hn > 0 else 0
-                    _hme = _hcsw_graded["market_error"].astype(float).mean()
-                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:6px">'
-                            f'⚾ High CSW UNDER: N={_hn} | HR={_hhr:.0f}% | ROI={_hroi:+.1f}% | ME={_hme:+.1f} (2026 season)</div>')
-        except Exception:
-            pass
+        # Legacy segment overlay, CSW shadow, and High-CSW displays — DISABLED
+        # (replaced by V1 sim engine signals shown on unified game cards)
 
         # ── MLB Sim Engine — UNDER signals (2026 live) ───────────────────────
         try:
@@ -3910,9 +3868,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                 _info["s12_active"] = bool(_r.get("s12_overlay_active", 0))
                                 _info["p09_active"] = bool(_r.get("p09_overlay_active", 0))
                                 _info["p_under"] = float(_r.get("raw_p_under", 0))
+                                _info["line"] = _r.get("line_at_signal_time")
                             elif sig_type in ("f5_under", "f5_over"):
                                 side = _r.get("f5_signal_side", "")
                                 _info["type"] = "f5_under" if side == "UNDER" else "f5_over"
+                                _info["f5_line"] = _r.get("f5_line")
                             _game_signals[_tk].append(_info)
                     except Exception:
                         pass
@@ -4029,6 +3989,70 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
 
                 _has_yesterday = _v1_y["n"] + _f5_y["n"] + _rl_y["n"] > 0
 
+                # Unit-size breakdown helper
+                def _by_unit_size(rows, date_filter=None):
+                    resolved = [r for r in rows if r.get("resolved") == 1 and r.get("result") in ("WIN", "LOSS", "PUSH")]
+                    if date_filter:
+                        resolved = [r for r in resolved if r.get("date") == date_filter]
+                    buckets = {}
+                    for r in resolved:
+                        stake = round(float(r.get("stake_units", 0) or 0), 3)
+                        if stake not in buckets:
+                            buckets[stake] = {"w": 0, "l": 0, "net": 0}
+                        if r["result"] == "WIN":
+                            buckets[stake]["w"] += 1
+                        elif r["result"] == "LOSS":
+                            buckets[stake]["l"] += 1
+                        buckets[stake]["net"] += float(r.get("net_units", 0) or 0)
+                    return buckets
+
+                def _fmt_unit_row(stake, d):
+                    n = d["w"] + d["l"]
+                    if n == 0:
+                        return ""
+                    roi = d["net"] / n * 100 if n > 0 else 0
+                    clr = "#4ade80" if d["net"] >= 0 else "#f87171"
+                    label = f"{stake:.2f}".rstrip("0").rstrip(".") + "u"
+                    if stake == 0.625:
+                        label = "0.63u"
+                    return (f'<div style="display:flex;justify-content:space-between">'
+                            f'<span>{label}</span>'
+                            f'<span style="color:{clr}">{d["w"]}-{d["l"]} ({roi:+.1f}%)</span></div>')
+
+                def _tier_breakdown(rows, date_filter=None):
+                    resolved = [r for r in rows if r.get("resolved") == 1 and r.get("result") in ("WIN", "LOSS", "PUSH")]
+                    if date_filter:
+                        resolved = [r for r in resolved if r.get("date") == date_filter]
+                    tiers = {"Low": {"w": 0, "l": 0, "net": 0},
+                             "Medium": {"w": 0, "l": 0, "net": 0},
+                             "High": {"w": 0, "l": 0, "net": 0}}
+                    for r in resolved:
+                        stake = round(float(r.get("stake_units", 0) or 0), 3)
+                        if stake <= 0.625:
+                            tier = "Low"
+                        elif stake <= 1.0:
+                            tier = "Medium"
+                        else:
+                            tier = "High"
+                        if r["result"] == "WIN":
+                            tiers[tier]["w"] += 1
+                        elif r["result"] == "LOSS":
+                            tiers[tier]["l"] += 1
+                        tiers[tier]["net"] += float(r.get("net_units", 0) or 0)
+                    return tiers
+
+                def _fmt_tier_row(tier_name, d):
+                    n = d["w"] + d["l"]
+                    if n == 0:
+                        return ""
+                    roi = d["net"] / n * 100 if n > 0 else 0
+                    clr = "#4ade80" if d["net"] >= 0 else "#f87171"
+                    return (f'<div style="display:flex;justify-content:space-between">'
+                            f'<span>{tier_name}</span>'
+                            f'<span style="color:{clr}">{d["w"]}-{d["l"]} ({roi:+.1f}%)</span></div>')
+
+                _all_rows = _v1_rows + _f5_rows + _rl_rows
+
                 _left = f'<div style="flex:1"><div style="font-weight:700;color:#94a3b8;margin-bottom:4px">YESTERDAY \u2014 {_yesterday}</div>'
                 if _has_yesterday:
                     if _v1_y["n"] > 0: _left += f'<div>Full Game: {_fmt_record(_v1_y)}</div>'
@@ -4036,6 +4060,12 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     if _rl_y["n"] > 0: _left += f'<div>F5 Run Line: {_fmt_record(_rl_y)}</div>'
                     _left += f'<div>3-Leg: {_parlay_result(_pt_data, "three_leg", _yesterday)}</div>'
                     _left += f'<div>5-Leg: {_parlay_result(_pt_data, "five_leg", _yesterday)}</div>'
+                    # Unit breakdown yesterday
+                    _y_units = _by_unit_size(_all_rows, _yesterday)
+                    if _y_units:
+                        _left += '<div style="margin-top:6px;border-top:1px solid #1e2d4a;padding-top:4px;font-size:0.92em;color:#6b7280">By Unit Size</div>'
+                        for _s in sorted(_y_units.keys()):
+                            _left += _fmt_unit_row(_s, _y_units[_s])
                 else:
                     _left += '<div style="color:#6b7280">No results yet</div>'
                 _left += '</div>'
@@ -4046,6 +4076,18 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _right += f'<div>F5 Run Line: {_fmt_record(_rl_s, show_roi=True)}</div>'
                 _right += f'<div>3-Leg: {_parlay_season(_pt_data, "three_leg")}</div>'
                 _right += f'<div>5-Leg: {_parlay_season(_pt_data, "five_leg")}</div>'
+                # Unit breakdown season
+                _s_units = _by_unit_size(_all_rows)
+                if _s_units:
+                    _right += '<div style="margin-top:6px;border-top:1px solid #1e2d4a;padding-top:4px;font-size:0.92em;color:#6b7280">By Unit Size</div>'
+                    for _s in sorted(_s_units.keys()):
+                        _right += _fmt_unit_row(_s, _s_units[_s])
+                # Tier breakdown season
+                _s_tiers = _tier_breakdown(_all_rows)
+                if any(d["w"] + d["l"] > 0 for d in _s_tiers.values()):
+                    _right += '<div style="margin-top:6px;border-top:1px solid #1e2d4a;padding-top:4px;font-size:0.92em;color:#6b7280">By Confidence Tier</div>'
+                    for _tn in ["Low", "Medium", "High"]:
+                        _right += _fmt_tier_row(_tn, _s_tiers[_tn])
                 _right += '</div>'
 
                 st.html(
@@ -4057,7 +4099,15 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             except Exception:
                 pass
 
-            # Play cards — prominent, unified
+            # Play cards — sort by max stake descending, then game time
+            def _card_sort_key(item):
+                b, sigs = item
+                max_stake = max((float(s.get("stake", 0)) for s in sigs), default=0)
+                gtime = b.get("game", {}).get("game_time_et", "") or b.get("game", {}).get("game_time", "") or "99:99"
+                return (-max_stake, gtime)
+
+            play_cards.sort(key=_card_sort_key)
+
             if play_cards:
                 st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 {len(play_cards)}</div>')
                 for b, sigs in play_cards:

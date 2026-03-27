@@ -13,10 +13,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":13.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-03-26",
@@ -32,10 +32,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":9.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-03-26",
@@ -51,10 +51,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":0.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-03-26",
@@ -67,13 +67,13 @@
     "p_under_full":0.6659,
     "p_over_full":0.3341,
     "f5_line":4.0,
-    "f5_line_closing":null,
-    "f5_clv_raw":null,
-    "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "f5_line_closing":1.5,
+    "f5_clv_raw":-2.5,
+    "f5_clv_signed":-2.5,
+    "actual_f5_total":0.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-03-26",
@@ -89,10 +89,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":0.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-03-26",
@@ -108,10 +108,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":8.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-03-26",
@@ -124,13 +124,13 @@
     "p_under_full":0.5749,
     "p_over_full":0.4251,
     "f5_line":4.0,
-    "f5_line_closing":null,
-    "f5_clv_raw":null,
-    "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "f5_line_closing":3.5,
+    "f5_clv_raw":-0.5,
+    "f5_clv_signed":-0.5,
+    "actual_f5_total":5.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-03-26",
@@ -146,10 +146,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":6.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-03-27",

@@ -982,34 +982,35 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
     db.init_db()
     logger.info(f"Starting MLB Totals Model for {game_date}")
 
-    # Grade CSW shadow signals from yesterday
-    try:
-        grade_csw_shadow(game_date)
-    except Exception as e:
-        logger.warning(f"CSW OVER shadow grading failed (non-fatal): {e}")
-    try:
-        grade_high_csw_shadow(game_date)
-    except Exception as e:
-        logger.warning(f"High-CSW UNDER grading failed (non-fatal): {e}")
+    # Legacy CSW shadow grading — DISABLED (replaced by V1 sim engine)
+    # grade_csw_shadow(game_date)
+    # grade_high_csw_shadow(game_date)
 
     pitcher_db = build_pitcher_db()
     team_bullpen_db = build_team_bullpen_db(pitcher_db)
     offense_db = build_offense_db()
 
-    # Props databases (loaded once, shared across all games)
-    try:
-        pitcher_k_db  = build_pitcher_k_db()
-        batter_props_db = build_batter_props_db()
-        logger.info(f"Props DBs loaded: {len(pitcher_k_db)} pitchers, {len(batter_props_db)} batters")
-    except Exception as e:
-        logger.warning(f"Props DB load failed (props will be skipped): {e}")
-        pitcher_k_db  = {}
-        batter_props_db = {}
+    # Legacy props DBs — DISABLED (props removed from MLB display)
+    pitcher_k_db  = {}
+    batter_props_db = {}
 
     all_lines = {}
     if use_odds:
         logger.info("Fetching market lines from The Odds API...")
         all_lines = fetch_all_lines()
+
+    # ── Line snapshot storage (observational — never breaks pipeline) ───
+    try:
+        from mlb_sim.pipeline.line_snapshot_store import store_snapshots_from_odds_response
+        import json as _snap_json
+        _snap_label = "7AM"  # default for morning run
+        _cache_path = os.path.join(CACHE_DIR, f"odds_full_{game_date}.json")
+        if os.path.exists(_cache_path):
+            with open(_cache_path) as _sf:
+                _snap_games = _snap_json.load(_sf)
+            store_snapshots_from_odds_response(_snap_games, _snap_label, game_date)
+    except Exception as e:
+        logger.warning(f"Line snapshot storage failed (non-fatal): {e}")
 
     games = fetch_schedule(game_date)
     if not games:
@@ -1096,52 +1097,41 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         f5_cons   = (odds.get("f5")   or {}).get("consensus")
         _fe       = edge_summary(proj["proj_total_full"], odds.get("full") or {})
 
-        # ── Low-Total CSW OVER shadow signal ─────────────────────────────────
-        # Signal is profitable at -110 to -115
-        # Do not bet at -120 or worse
-        # P55 threshold: 0.2826 (fixed, do not update dynamically)
-        # Line must be exactly 7.5 — not <=7.5
-        _CSW_THRESHOLD = 28.26  # P55 from 2022-2023 research
+        # Legacy CSW shadow + High-CSW signals — DISABLED (replaced by V1 sim engine)
         _csw_signal = False
-        _home_csw = home_sp.get("csw_pct")
-        _away_csw = away_sp.get("csw_pct")
-        _home_csw_insuf = home_sp.get("csw_insufficient_sample", True)
-        _away_csw_insuf = away_sp.get("csw_insufficient_sample", True)
-
-        if (full_cons is not None
-            and full_cons == 7.5
-            and _home_csw is not None and _away_csw is not None
-            and _home_csw < _CSW_THRESHOLD and _away_csw < _CSW_THRESHOLD
-            and not _home_csw_insuf and not _away_csw_insuf):
-            _csw_signal = True
-            logger.info(f"  📊 LOW_TOTAL_CSW: {away} @ {home} — line 7.5 — "
-                        f"home CSW {_home_csw:.1f}% away CSW {_away_csw:.1f}% — tracking OVER")
-            _log_csw_shadow(game_date, gk, home, away, full_cons,
-                            _home_csw, _away_csw,
-                            home_sp.get("name"), away_sp.get("name"))
-
-        # ── High-CSW UNDER signal (LIVE) ─────────────────────────────────────
         _high_csw_signal = False
         _high_csw_units = 0
-        if (_home_csw is not None and _away_csw is not None
-            and not _home_csw_insuf and not _away_csw_insuf
-            and full_cons is not None):
-            _combined_z = _high_csw_zscore(_home_csw, _away_csw)
-            if _combined_z >= _HIGH_CSW_ZSCORE_THRESHOLD:
-                _high_csw_signal = True
-                _high_csw_units = _high_csw_sizing(full_cons)
-                _band = _high_csw_band(full_cons)
-                _sweet = " ⭐ SWEET SPOT" if 8.5 <= full_cons <= 9.5 else ""
-                logger.info(f"  🔵 HIGH_CSW_UNDER: {away} @ {home} — line {full_cons} — "
-                            f"UNDER {_high_csw_units}u ({_band}){_sweet} — "
-                            f"z={_combined_z:.2f} (home {_home_csw:.1f}% away {_away_csw:.1f}%)")
-                _log_high_csw_shadow(game_date, gk, home, away, full_cons,
-                                     _home_csw, _away_csw, _combined_z,
-                                     home_sp.get("name"), away_sp.get("name"))
+        _home_csw = home_sp.get("csw_pct")
+        _away_csw = away_sp.get("csw_pct")
 
-        results.append({"game": game, "projection": proj, "odds": odds, "props": props,
-                         "csw_signal": _csw_signal, "home_csw_pct": _home_csw, "away_csw_pct": _away_csw,
-                         "high_csw_signal": _high_csw_signal, "high_csw_units": _high_csw_units})
+        results.append({"game": game, "projection": proj, "odds": odds, "props": [],
+                         "csw_signal": False, "home_csw_pct": _home_csw, "away_csw_pct": _away_csw,
+                         "high_csw_signal": False, "high_csw_units": 0})
+
+        # ── combined_short_exit SHADOW tracking (observational only) ────────
+        try:
+            from mlb_sim.pipeline.combined_short_exit_shadow import (
+                get_pitcher_short_exit, compute_combined_short_exit,
+                evaluate_shadow, log_shadow_record,
+            )
+            _home_pid = home_sp.get("mlbam_id")
+            _away_pid = away_sp.get("mlbam_id")
+            _home_se = get_pitcher_short_exit(_home_pid)
+            _away_se = get_pitcher_short_exit(_away_pid)
+            _cse_val = compute_combined_short_exit(_home_se, _away_se)
+            _v1_p_under = 1.0 - proj.get("sim_p_over", 0.5) if proj.get("model_mode") == "simulation" else None
+            _shadow = evaluate_shadow(_cse_val, _v1_p_under)
+            log_shadow_record(
+                game_id=gk, date=game_date,
+                season=int(game_date[:4]),
+                home_team=home, away_team=away,
+                combined_short_exit_value=_shadow["combined_short_exit_value"],
+                favorable_zone=_shadow["combined_short_exit_favorable_zone"],
+                v1_direction_context=_shadow["v1_direction_context"],
+                closing_total=full_cons,
+            )
+        except Exception as e:
+            logger.warning(f"Short-exit shadow tracking failed (non-fatal): {e}")
 
         db.upsert_projection({
             "game_date":        game_date,

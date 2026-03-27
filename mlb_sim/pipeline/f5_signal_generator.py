@@ -109,21 +109,29 @@ def _bootstrap():
 # ─── Step 1: Resolve prior F5 signals ────────────────────────────────────────
 
 def resolve_signals(game_date_str):
-    """Grade pending F5 signals using actual F5 scores from feature_table."""
+    """Grade pending F5 signals using actual F5 scores from MLB database."""
     sigs = _load_f5_signals()
     pending = sigs[sigs["resolved"] == 0]
     if len(pending) == 0:
         return 0
 
-    # Load actual F5 scores
-    if not FEATURE_TABLE_PATH.exists():
+    # Load actual F5 scores from SQLite DB (same source as V1 grader)
+    import sqlite3
+    db_path = BASE.parent / "data" / "mlb_model.db"
+    if not db_path.exists():
+        logger.warning("MLB database not found — cannot resolve F5 signals")
         return 0
-    ft = pd.read_parquet(FEATURE_TABLE_PATH)
-    ft["game_pk"] = ft["game_pk"].astype(str)
-    score_map = dict(zip(
-        ft[ft["actual_f5_total"].notna()]["game_pk"],
-        ft[ft["actual_f5_total"].notna()]["actual_f5_total"]
-    ))
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    pending_dates = pending["date"].unique().tolist()
+    placeholders = ",".join(["?"] * len(pending_dates))
+    rows = conn.execute(
+        f"SELECT game_pk, actual_f5_total FROM results "
+        f"WHERE game_date IN ({placeholders}) AND actual_f5_total IS NOT NULL",
+        pending_dates
+    ).fetchall()
+    conn.close()
+    score_map = {str(r["game_pk"]): float(r["actual_f5_total"]) for r in rows}
 
     resolved_count = 0
     for idx in pending.index:
