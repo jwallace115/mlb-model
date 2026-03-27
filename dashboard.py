@@ -998,12 +998,12 @@ def _render_game_props(props: list[dict]) -> str:
 _shadow_cache = {}
 
 def _load_shadow_flags(game_date):
-    """Load CS004 and ST02 shadow flags for a date. Returns dict: game_id → flags."""
+    """Load CS013 and ST02 shadow flags for a date. Returns dict: game_id → flags."""
     cache_key = game_date
     if cache_key in _shadow_cache:
         return _shadow_cache[cache_key]
 
-    flags = {}  # game_id → {"st02": bool, "cs004": bool}
+    flags = {}  # game_id → {"st02": bool, "cs013": bool}
     season = game_date[:4]
 
     try:
@@ -1017,21 +1017,26 @@ def _load_shadow_flags(game_date):
                     for r in _json_sh.load(_f):
                         if r.get("date") == game_date and r.get("signal_name", "").startswith("ST02"):
                             gid = r.get("game_id")
-                            flags.setdefault(gid, {"st02": False, "cs004": False})
+                            flags.setdefault(gid, {"st02": False, "cs013": False})
                             flags[gid]["st02"] = bool(r.get("favorable_zone_flag"))
                 break
 
-        # CS004 from cs004_shadow
-        for _p in [f"mlb_sim/logs/cs004_shadow_{season}.json",
+        # CS013 from cs013_shadow
+        for _p in [f"mlb_sim/logs/cs013_shadow_{season}.json",
                     os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 "mlb_sim", "logs", f"cs004_shadow_{season}.json")]:
+                                 "mlb_sim", "logs", f"cs013_shadow_{season}.json")]:
             if os.path.exists(_p):
                 with open(_p) as _f:
                     for r in _json_sh.load(_f):
                         if r.get("date") == game_date:
                             gid = r.get("game_id")
-                            flags.setdefault(gid, {"st02": False, "cs004": False})
-                            flags[gid]["cs004"] = bool(r.get("cs004_favorable_zone"))
+                            # Skip if insufficient history (null flag)
+                            if r.get("cs013_status") == "INSUFFICIENT_2026_HISTORY":
+                                continue
+                            if r.get("cs013_flag") is None:
+                                continue
+                            flags.setdefault(gid, {"st02": False, "cs013": False})
+                            flags[gid]["cs013"] = bool(r.get("cs013_flag"))
                 break
     except Exception:
         pass
@@ -1045,23 +1050,23 @@ def _shadow_badge_html(game_pk, game_date):
     flags = _load_shadow_flags(game_date)
     f = flags.get(game_pk, {})
     st02 = f.get("st02", False)
-    cs004 = f.get("cs004", False)
+    cs013 = f.get("cs013", False)
 
-    if st02 and cs004:
+    if st02 and cs013:
         return ('<div style="font-size:0.70em;color:#f59e0b;margin-top:4px;'
                 'padding:3px 6px;background:#292524;border-radius:4px;display:inline-block">'
-                '\u26a0\ufe0f ST02 + CS004 \u2014 Conflicting signals: road fatigue (UNDER) '
-                'vs bullpen tail risk (OVER). Monitor closely.'
+                '\u26a0\ufe0f ST02 + CS013 \u2014 Conflicting signals: road fatigue (UNDER) '
+                'vs bullpen deterioration (OVER). Monitor closely.'
                 '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
     elif st02:
         return ('<div style="font-size:0.70em;color:#60a5fa;margin-top:4px;'
                 'padding:2px 6px;background:#1e293b;border-radius:4px;display:inline-block">'
                 '\U0001f535 ST02 Shadow \u2014 Road fatigue signal active'
                 '<span style="color:#475569;font-size:0.9em"> SHADOW</span></div>')
-    elif cs004:
+    elif cs013:
         return ('<div style="font-size:0.70em;color:#fbbf24;margin-top:4px;'
                 'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
-                '\U0001f7e1 CS004 Shadow \u2014 Bullpen tail risk active'
+                '\U0001f7e1 CS013 Shadow \u2014 Bullpen state deterioration active'
                 '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
     return ""
 
@@ -4185,12 +4190,12 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _sf = _load_shadow_flags(game_date)
                 _n_games = len(plays or []) + len(no_plays or [])
                 _n_st02 = sum(1 for f in _sf.values() if f.get("st02"))
-                _n_cs004 = sum(1 for f in _sf.values() if f.get("cs004"))
-                _n_conflict = sum(1 for f in _sf.values() if f.get("st02") and f.get("cs004"))
-                if _n_st02 > 0 or _n_cs004 > 0:
+                _n_cs013 = sum(1 for f in _sf.values() if f.get("cs013"))
+                _n_conflict = sum(1 for f in _sf.values() if f.get("st02") and f.get("cs013"))
+                if _n_st02 > 0 or _n_cs013 > 0:
                     _sh_parts = []
-                    if _n_cs004 > 0:
-                        _sh_parts.append(f'CS004 fires on {_n_cs004} of {_n_games} games')
+                    if _n_cs013 > 0:
+                        _sh_parts.append(f'CS013 fires on {_n_cs013} of {_n_games} games')
                     if _n_st02 > 0:
                         _sh_parts.append(f'ST02 fires on {_n_st02} of {_n_games} games')
                     if _n_conflict > 0:
