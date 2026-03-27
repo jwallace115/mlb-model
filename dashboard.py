@@ -1170,11 +1170,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         )
     else:
         # ── NO-PLAY CARD (context only) ──
-        lean_html = ""
-        if lean == "UNDER":
-            lean_html = ' <span style="color:#67e8f9;font-size:0.82em;font-weight:600">UNDER</span>'
-        elif lean == "OVER":
-            lean_html = ' <span style="color:#f87171;font-size:0.82em;font-weight:600">OVER</span>'
+        # No directional label on non-play cards (removed legacy OVER/UNDER lean)
 
         line_str = f" | Line: {line:.1f}" if line is not None else ""
         proj_line = f'Proj: {full_proj:.1f}{line_str}'
@@ -1190,7 +1186,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         st.html(
             f'<div class="game-card" style="border-left:3px solid #374151">'
             f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
-            f'{matchup} \u2014 {time_str}{lean_html}</div>'
+            f'{matchup} \u2014 {time_str}</div>'
             f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
             f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
             f'<div class="card-summary">{summary}</div>'
