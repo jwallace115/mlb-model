@@ -33,14 +33,16 @@ def _load_resolved():
 
 
 def _window_stats(df):
-    """Compute stats for a window of resolved signals."""
+    """Compute stats for a window of resolved signals. Pushes count as losses."""
     if len(df) == 0:
         return {"n": 0, "win_rate": None, "roi": None, "net_units": None}
     n = len(df)
-    wins = (df["result"] == "WIN").sum()
-    losses = (df["result"] == "LOSS").sum()
-    wr = wins / (wins + losses) * 100 if (wins + losses) > 0 else 0
-    net = df["net_units"].sum()
+    wins = int((df["result"] == "WIN").sum())
+    decided = n  # all resolved signals count (pushes are losses)
+    wr = wins / decided * 100 if decided > 0 else 0
+    # Pushes: treat as -stake instead of net_units=0
+    net = sum(-float(r["stake_units"]) if r.get("result") == "PUSH" else float(r.get("net_units", 0))
+              for _, r in df.iterrows())
     wagered = df["stake_units"].sum()
     roi = net / wagered * 100 if wagered > 0 else 0
     return {"n": int(n), "win_rate": round(wr, 1), "roi": round(roi, 1),

@@ -29,22 +29,22 @@ def _load_resolved():
 
 
 def _window_stats(df):
+    """Compute stats. Pushes count as losses."""
     if len(df) == 0:
-        return {"n": 0, "win_rate": None, "push_rate": None,
+        return {"n": 0, "win_rate": None,
                 "roi": None, "net_units": None, "avg_price": None}
     n = len(df)
-    wins = (df["result"] == "WIN").sum()
-    losses = (df["result"] == "LOSS").sum()
-    pushes = (df["result"] == "PUSH").sum()
-    n_nonpush = wins + losses
-    wr = wins / n_nonpush * 100 if n_nonpush > 0 else 0
-    push_rate = pushes / n * 100
-    net = df["net_units"].sum()
+    wins = int((df["result"] == "WIN").sum())
+    decided = n  # all resolved signals count (pushes are losses)
+    wr = wins / decided * 100 if decided > 0 else 0
+    # Pushes: treat as -stake instead of net_units=0
+    net = sum(-float(r["stake_units"]) if r.get("result") == "PUSH" else float(r.get("net_units", 0))
+              for _, r in df.iterrows())
     wagered = df["stake_units"].sum()
     roi = net / wagered * 100 if wagered > 0 else 0
     avg_price = df["bet_price"].mean() if "bet_price" in df.columns else None
 
-    return {"n": int(n), "win_rate": round(wr, 1), "push_rate": round(push_rate, 1),
+    return {"n": int(n), "win_rate": round(wr, 1),
             "roi": round(roi, 1), "net_units": round(float(net), 2),
             "avg_price": round(float(avg_price), 0) if avg_price is not None else None}
 
