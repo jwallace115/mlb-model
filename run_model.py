@@ -1133,6 +1133,83 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         except Exception as e:
             logger.warning(f"Short-exit shadow tracking failed (non-fatal): {e}")
 
+        # ── Shadow signals: ST02, ADJ_CONTACT, ADJ_HH, adj_k_rate_last3 ──
+        try:
+            from mlb_sim.pipeline.shadow_signals import (
+                compute_st02, compute_adj_signals,
+                log_shadow_signals, _v1_direction,
+            )
+            _st02 = compute_st02(gk)
+            _home_pid = home_sp.get("mlbam_id")
+            _away_pid = away_sp.get("mlbam_id")
+            _adj = compute_adj_signals(_home_pid, _away_pid)
+            _v1dir = _v1_direction(proj)
+            log_shadow_signals(
+                game_id=gk, date=game_date,
+                season=int(game_date[:4]),
+                home_team=home, away_team=away,
+                st02_result=_st02, adj_results=_adj,
+                v1_direction_context=_v1dir,
+                closing_total=full_cons,
+                market_line=full_cons,
+                model_projection=proj.get("proj_total_full"),
+            )
+        except Exception as e:
+            logger.warning(f"Shadow signals tracking failed (non-fatal): {e}")
+
+        # ── CS004 SHADOW: Bullpen collapse tail risk (observational only) ──
+        try:
+            from mlb_sim.pipeline.cs004_shadow import compute_cs004, log_cs004_record
+            from mlb_sim.pipeline.shadow_signals import _v1_direction as _v1d_cs004
+            _cs004 = compute_cs004(home, away)
+            log_cs004_record(
+                game_id=gk, date=game_date,
+                home_team=home, away_team=away,
+                cs004_result=_cs004,
+                v1_direction_context=_v1d_cs004(proj),
+                closing_total=full_cons,
+            )
+        except Exception as e:
+            logger.warning(f"CS004 shadow tracking failed (non-fatal): {e}")
+
+        # ── CS013 SHADOW: Bullpen blowup state model (observational only) ──
+        # CS020 acceleration layer computed alongside for tier assignment
+        try:
+            from mlb_sim.pipeline.cs013_shadow import compute_cs013, compute_cs020, log_cs013_record
+            from mlb_sim.pipeline.shadow_signals import _v1_direction as _v1d_cs013
+            _cs013 = compute_cs013(home, away)
+            try:
+                _cs020 = compute_cs020(home, away)
+            except Exception:
+                _cs020 = None
+            log_cs013_record(
+                game_id=gk, date=game_date,
+                home_team=home, away_team=away,
+                cs013_result=_cs013,
+                v1_direction_context=_v1d_cs013(proj),
+                closing_total=full_cons,
+                cs020_result=_cs020,
+            )
+        except Exception as e:
+            logger.warning(f"CS013 shadow tracking failed (non-fatal): {e}")
+
+        # ── KP04 SHADOW: Breaking-ball pitcher x high-K lineup (observational only) ──
+        try:
+            from mlb_sim.pipeline.kp04_shadow import compute_kp04, log_kp04_records
+            _home_pid = home_sp.get("mlbam_id")
+            _away_pid = away_sp.get("mlbam_id")
+            # Lineup K% not available at 7am run — log as PENDING_LINEUP
+            _kp04_records = compute_kp04(
+                game_id=gk, date_str=game_date,
+                home_team=home, away_team=away,
+                home_pitcher_id=_home_pid, away_pitcher_id=_away_pid,
+                home_pitcher_name=home_sp.get("name"), away_pitcher_name=away_sp.get("name"),
+                k_lines=None, lineup_data=None,
+            )
+            log_kp04_records(_kp04_records)
+        except Exception as e:
+            logger.warning(f"KP04 shadow tracking failed (non-fatal): {e}")
+
         db.upsert_projection({
             "game_date":        game_date,
             "game_pk":          gk,
