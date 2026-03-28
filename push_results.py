@@ -90,22 +90,6 @@ def serialize_results(raw: list[dict], game_date: str) -> dict:
         rating     = classify_game(proj, fe)
         summary    = generate_summary(r["game"], proj, odds, rating)
 
-        raw_props = r.get("props") or []
-        props_out = [
-            {
-                "player_name": p.get("player_name"),
-                "team":        p.get("team"),
-                "market":      p.get("market"),
-                "projection":  _safe(p.get("projection")),
-                "line":        _safe(p.get("line")),
-                "lean":        p.get("lean"),
-                "edge":        _safe(p.get("edge")),
-                "edge_pct":    _safe(p.get("edge_pct")),
-                "is_play":     bool(p.get("is_play")),
-            }
-            for p in raw_props
-        ]
-
         block = {
             "rating":    rating,
             "game":      {k: _safe(v) for k, v in r["game"].items()},
@@ -120,7 +104,6 @@ def serialize_results(raw: list[dict], game_date: str) -> dict:
             "full_edge": {k: _safe(v) for k, v in fe.items()},
             "f5_edge":   {k: _safe(v) for k, v in f5e.items()},
             "summary":   summary,
-            "props":     props_out,
         }
         (plays if rating != "NO PLAY" else no_plays).append(block)
 
@@ -165,7 +148,7 @@ def git_push(repo_dir: str, game_date: str, files: list[str]) -> bool:
 
     for f in files:
         print(f"  git add {f} ...")
-        if not run(["git", "add", f]):
+        if not run(["git", "add", "-f", f]):
             return False
 
     status = subprocess.run(
@@ -465,6 +448,7 @@ def main():
         "mlb_sim/logs/f5_signals_2026.json",
         "mlb_sim/logs/f5_runline_2026.json",
         "mlb_sim/logs/parlay_tracker_2026.json",
+        "mlb_sim/data/line_snapshots_2026.json",
     ]:
         if os.path.exists(os.path.join(repo_dir, _sig_json)):
             dashboard_files.append(_sig_json)
