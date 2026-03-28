@@ -271,5 +271,26 @@
     "p09_value":39.821,
     "p09_data_available":1.0,
     "combined_overlay_tier":"NONE"
+  },
+  {
+    "date":"2026-03-28",
+    "game_id":"823973",
+    "home_team":"LAD",
+    "away_team":"ARI",
+    "signal_side":"UNDER",
+    "stake_units":1.25,
+    "raw_p_under":0.6607,
+    "raw_p_over":0.3393,
+    "line_at_signal_time":9.0,
+    "result":null,
+    "net_units":null,
+    "resolved":0,
+    "s12_overlay_active":0.0,
+    "s12_value":6.567,
+    "base_stake":1.0,
+    "p09_overlay_active":1.0,
+    "p09_value":30.989,
+    "p09_data_available":1.0,
+    "combined_overlay_tier":"P09_ONLY"
   }
 ]
