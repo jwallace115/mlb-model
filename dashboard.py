@@ -2626,9 +2626,9 @@ def _render_nba_card(g: dict) -> None:
     if bet_tier in ("P1", "P2", "P4"):
         # Playoff board play
         po_labels = {
-            "P1": ("R1 Early UNDER · 1.0u", "#60a5fa"),
-            "P2": ("R1 Late OVER · 0.75u", "#fbbf24"),
-            "P4": ("CF Early OVER · 0.75u", "#fbbf24"),
+            "P1": ("Round 1 Early \u2014 Series suppression · 1.0u", "#60a5fa"),
+            "P2": ("Round 1 Late \u2014 Survival desperation · 0.75u", "#fbbf24"),
+            "P4": ("Conference Finals \u2014 Elite offense · 0.75u", "#fbbf24"),
         }
         po_label, po_color = po_labels.get(bet_tier, (bet_tier, "#a3a3a3"))
         po_sizing = g.get("playoff_board_sizing", 0)
@@ -2879,6 +2879,17 @@ def _render_nba_tab() -> None:
             "Run `python push_nba.py` on your local machine to publish today's card."
         )
         return
+
+    # ── Playoff mode banner ──────────────────────────────────────────────────
+    _nba_plays = nba.get("plays", []) + nba.get("no_plays", [])
+    _any_playoff = any(g.get("is_playoff") for g in _nba_plays)
+    if _any_playoff:
+        st.html(
+            '<div style="background:#1a1a2e;border:2px solid #f59e0b;border-radius:8px;'
+            'padding:10px 16px;margin-bottom:12px;text-align:center">'
+            '<span style="font-size:1.1em;font-weight:700;color:#fbbf24">'
+            '\U0001f3c6 PLAYOFF MODE ACTIVE</span></div>'
+        )
 
     picks_tab, review_tab = st.tabs(["Today's Picks", "Results Review"])
 

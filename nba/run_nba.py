@@ -868,6 +868,17 @@ def _flag_playoff_boards(game_results: list[dict], game_date: str) -> None:
             g["shot_signal"] = None
             g["shot_note"] = "Shot UNDER PAUSED in playoffs (reverses)"
 
+        # Both Slow Pace UNDER (DOUBLE_SIGNAL where pace + shot both UNDER)
+        # reversed in 2024-25 — suppress combined UNDER in playoffs
+        if (g.get("signal_class") == "DOUBLE_SIGNAL" and
+                g.get("archetype_direction") == "UNDER" and
+                g.get("playoff_shot_under_paused")):
+            # Shot was already cleared above; pace UNDER still holds standalone
+            # but the combined DOUBLE_SIGNAL classification is invalid
+            g["signal_class"] = "PACE_ONLY"
+            logger.info(f"  ⚠️ Both Slow Pace UNDER paused for "
+                        f"{g['away_team']} @ {g['home_team']} (playoff — PACE_ONLY kept)")
+
         # Recalculate bet_tier and confidence for playoff games
         # Playoff boards take priority over RS signal tiers
         if g["playoff_board"]:
@@ -1135,6 +1146,80 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             logger.info(f"Morning snapshot saved ({len(snap_df)} games for {game_date})")
     except Exception as _e:
         logger.warning(f"Morning snapshot write failed (non-fatal): {_e}")
+
+
+# ── Playoff series tracker (live 2026) ────────────────────────────────────────
+
+_SERIES_TRACKER_PATH = os.path.join(os.path.dirname(__file__), "data", "playoff_series_2026.json")
+
+
+def _update_series_tracker(game_results: list[dict]) -> None:
+    """Update playoff_series_2026.json with today's playoff games."""
+    playoff_games = [g for g in game_results if g.get("is_playoff")]
+    if not playoff_games:
+        return
+
+    tracker = []
+    if os.path.exists(_SERIES_TRACKER_PATH):
+        try:
+            with open(_SERIES_TRACKER_PATH) as f:
+                tracker = json.load(f)
+        except Exception:
+            tracker = []
+
+    for g in playoff_games:
+        home = g.get("home_team", "")
+        away = g.get("away_team", "")
+        gid = g.get("game_id")
+        rnd_str = g.get("playoff_round", "")
+
+        # Map round string to number
+        rnd_map = {"First Round": 1, "Conference Semifinals": 2,
+                   "Conference Finals": 3, "NBA Finals": 4}
+        rnd = rnd_map.get(rnd_str, 0)
+
+        # Canonical team pair (alphabetical)
+        team_a, team_b = sorted([home, away])
+
+        # Find existing series entry
+        entry = None
+        for s in tracker:
+            if (s["team_a"] == team_a and s["team_b"] == team_b and s["round"] == rnd):
+                entry = s
+                break
+
+        if entry is None:
+            entry = {
+                "team_a": team_a,
+                "team_b": team_b,
+                "round": rnd,
+                "games": [],
+                "game_count": 0,
+                "team_a_wins": 0,
+                "team_b_wins": 0,
+            }
+            tracker.append(entry)
+
+        # Dedup by game_id
+        if gid not in entry["games"]:
+            entry["games"].append(gid)
+            entry["game_count"] = len(entry["games"])
+
+            # Update wins if game has a result
+            home_score = g.get("actual_total_home")
+            away_score = g.get("actual_total_away")
+            if home_score is not None and away_score is not None:
+                winner = home if home_score > away_score else away
+                if winner == team_a:
+                    entry["team_a_wins"] += 1
+                else:
+                    entry["team_b_wins"] += 1
+
+    with open(_SERIES_TRACKER_PATH, "w") as f:
+        json.dump(tracker, f, indent=2)
+
+    logger.info(f"Playoff series tracker: {len(tracker)} series, "
+                f"{sum(s['game_count'] for s in tracker)} total games")
 
 
 # ── High-line UNDER shadow tracking ──────────────────────────────────────────
@@ -1812,6 +1897,12 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
 
     # ── Step 11: Save projections ─────────────────────────────────────────────
     save_projections(game_results, game_date)
+
+    # ── Step 12: Update playoff series tracker ────────────────────────────────
+    try:
+        _update_series_tracker(game_results)
+    except Exception as _e:
+        logger.warning(f"Playoff series tracker update failed (non-fatal): {_e}")
 
     logger.info(f"NBA run complete: {len(game_results)} games projected")
     return game_results
