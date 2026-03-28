@@ -4231,51 +4231,20 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 for b, sigs in play_cards:
                     _render_card(b, signals=sigs)
 
-            # Just For Fun parlays — build from all signal sources
+            # Just For Fun parlays — built from play_cards only (same pool as Today's Plays)
             if len(play_cards) >= 3:
                 _parlay_legs = []
-                # Collect V1 signals with p_under for ranking
-                _v1_teams = set()
-                for _try_p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               "mlb_sim", "logs", "signals_2026.json"),
-                               "mlb_sim/logs/signals_2026.json"]:
-                    if os.path.exists(_try_p):
-                        try:
-                            with open(_try_p) as _pf:
-                                for _pr in _json_sig.load(_pf):
-                                    if str(_pr.get("date", "")) == str(game_date):
-                                        _tk = f'{_pr["away_team"]} @ {_pr["home_team"]}'
-                                        _v1_teams.add(_tk)
-                                        _parlay_legs.append({
-                                            "matchup": _tk,
-                                            "bet": "FULL GAME UNDER",
-                                            "p": float(_pr.get("raw_p_under", 0)),
-                                        })
-                        except Exception:
-                            pass
-                        break
-
-                # Add F5-only games (not already in V1)
-                for _try_p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               "mlb_sim", "logs", "f5_signals_2026.json"),
-                               "mlb_sim/logs/f5_signals_2026.json"]:
-                    if os.path.exists(_try_p):
-                        try:
-                            with open(_try_p) as _pf:
-                                for _pr in _json_sig.load(_pf):
-                                    if str(_pr.get("date", "")) == str(game_date):
-                                        _tk = f'{_pr.get("away_team","")} @ {_pr.get("home_team","")}'
-                                        if _tk not in _v1_teams:
-                                            _side = _pr.get("f5_signal_side", "UNDER")
-                                            _parlay_legs.append({
-                                                "matchup": _tk,
-                                                "bet": f"F5 {_side}",
-                                                "p": float(_pr.get("p_under_full", 0) if _side == "UNDER" else _pr.get("p_over_full", 0)),
-                                            })
-                        except Exception:
-                            pass
-                        break
-
+                for _b, _sigs in play_cards:
+                    _g = _b.get("game", {})
+                    _tk = f'{_g.get("away_team", "")} @ {_g.get("home_team", "")}'
+                    # Use highest-conviction signal for bet label and probability
+                    _v1_sig = next((s for s in _sigs if s.get("type") == "v1"), None)
+                    if _v1_sig:
+                        _parlay_legs.append({
+                            "matchup": _tk,
+                            "bet": "FULL GAME UNDER",
+                            "p": float(_v1_sig.get("p_under", 0)),
+                        })
                 _parlay_legs.sort(key=lambda x: x["p"], reverse=True)
 
                 if len(_parlay_legs) >= 3:
