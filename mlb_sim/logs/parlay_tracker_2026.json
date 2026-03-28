@@ -26,6 +26,32 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-03-28",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "OAK@TOR",
+            "bet": "FULL GAME UNDER",
+            "line": 8.2,
+            "result": null
+          },
+          {
+            "game": "WSN@CHC",
+            "bet": "FULL GAME UNDER",
+            "line": 9.2,
+            "result": null
+          },
+          {
+            "game": "LAA@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {

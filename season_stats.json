@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-27T11:00:03.062742Z",
+  "generated_at": "2026-03-28T09:40:04.538053Z",
   "is_spring_training": false,
-  "total_tracked": 210,
+  "total_tracked": 218,
   "total_plays": 24,
   "overall": {
     "wins": 0,
@@ -259,16 +259,16 @@
     }
   },
   "projection_accuracy": {
-    "tracked": 207,
-    "mae": 4.39,
-    "avg_bias": 1.42,
-    "within_1_run": 12.1,
-    "within_2_runs": 31.9,
-    "within_3_runs": 44.0,
+    "tracked": 215,
+    "mae": 4.33,
+    "avg_bias": 1.27,
+    "within_1_run": 13.0,
+    "within_2_runs": 32.6,
+    "within_3_runs": 44.7,
     "mae_by_stars": {
       "\u2b50\u2b50": 3.73,
       "\u2b50": 6.3,
-      "NO PLAY": 4.33
+      "NO PLAY": 4.27
     }
   },
   "factor_correlations": [],
@@ -417,40 +417,40 @@
   "props_record": {
     "K": {
       "market": "K",
-      "total": 2,
+      "total": 3,
       "wins": 1,
-      "losses": 1,
+      "losses": 2,
       "pushes": 0,
-      "decided": 2,
-      "win_pct": 50.0,
-      "roi": -4.5
+      "decided": 3,
+      "win_pct": 33.3,
+      "roi": -36.4
     },
     "TB": {
       "market": "TB",
-      "total": 12,
+      "total": 13,
       "wins": 4,
-      "losses": 8,
+      "losses": 9,
       "pushes": 0,
-      "decided": 12,
-      "win_pct": 33.3,
-      "roi": -36.4
+      "decided": 13,
+      "win_pct": 30.8,
+      "roi": -41.3
     }
   },
   "parlay_stats": {
     "parlay_5": {
       "parlay_type": "parlay_5",
-      "total": 1,
+      "total": 2,
       "hits": 0,
-      "misses": 1,
-      "decided": 1,
+      "misses": 2,
+      "decided": 2,
       "hit_pct": 0.0
     },
     "parlay_7": {
       "parlay_type": "parlay_7",
-      "total": 1,
+      "total": 2,
       "hits": 0,
-      "misses": 1,
-      "decided": 1,
+      "misses": 2,
+      "decided": 2,
       "hit_pct": 0.0
     }
   }
