@@ -385,58 +385,6 @@ st.markdown("""
 .alert-conf-down { background: #7f1d1d; color: #fca5a5; }
 .alert-txn-desc { color: #94a3b8; font-size: 0.88em; }
 
-/* ── Props rows ── */
-.props-section {
-    margin-top: 8px;
-    padding-top: 7px;
-    border-top: 1px solid #1e2535;
-}
-.props-title {
-    font-size: 0.67em;
-    font-weight: 700;
-    letter-spacing: 0.10em;
-    color: #4a5568;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-}
-.prop-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    font-size: 0.78em;
-    padding: 3px 0;
-    color: #718096;
-    border-bottom: 1px solid #0f1117;
-}
-.prop-row:last-child { border-bottom: none; }
-.prop-market {
-    font-weight: 700;
-    font-size: 0.80em;
-    padding: 1px 5px;
-    border-radius: 3px;
-    background: #1e2535;
-    color: #64748b;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    min-width: 24px;
-    text-align: center;
-}
-.prop-play-badge {
-    font-size: 0.72em;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 3px;
-    background: #14532d;
-    color: #86efac;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-.prop-player { font-weight: 600; color: #cbd5e1; }
-.prop-proj   { color: #94a3b8; }
-.prop-edge-pos { color: #f87171; font-weight: 700; }
-.prop-edge-neg { color: #67e8f9; font-weight: 700; }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -722,8 +670,6 @@ def _render_analytics(stats: dict) -> None:
             st.html(_analytics_table(corr_rows, ["Factor", "Record", "Win %"]))
             st.html("<br>")
 
-        # ── props record (removed from MLB display) ────────────────────────
-
         # ── parlay stats ──────────────────────────────────────────────────────
         parlay_stats = stats.get("parlay_stats", {})
         if parlay_stats:
@@ -934,65 +880,6 @@ def _render_alerts(data: dict) -> None:
     )
 
 
-def _render_game_props(props: list[dict]) -> str:
-    """Build HTML for props below a game card. Returns empty string if no props."""
-    if not props:
-        return ""
-
-    # Expand market abbreviations
-    _MARKET_LABELS = {"K": "K (Strikeouts)", "TB": "TB (Total Bases)",
-                      "H": "H (Hits)", "R": "R (Runs)", "HR": "HR (Home Runs)"}
-
-    # Check if any prop has a real line
-    any_line = any(p.get("line") is not None for p in props)
-
-    rows = ""
-    for p in props:
-        market   = p.get("market", "")
-        market_display = _MARKET_LABELS.get(market, market)
-        player   = p.get("player_name", "")
-        proj     = p.get("projection")
-        line     = p.get("line")
-        edge_pct = p.get("edge_pct")
-        lean     = p.get("lean", "")
-        is_play  = p.get("is_play", False)
-
-        proj_str = f"{proj:.1f}" if proj is not None else "—"
-        line_str = f"{line:.1f}" if line is not None else "TBD"
-
-        if edge_pct is not None:
-            sign = "+" if lean == "OVER" else "-" if lean == "UNDER" else ""
-            edge_cls = "prop-edge-pos" if lean == "OVER" else "prop-edge-neg"
-            edge_str = (
-                f'<span class="{edge_cls}">{sign}{float(edge_pct)*100:.1f}% {lean}</span>'
-            )
-        else:
-            edge_str = '<span style="color:#4a5568">—</span>'
-
-        play_badge = (
-            '<span class="prop-play-badge">PLAY</span>' if is_play else ""
-        )
-
-        rows += (
-            f'<div class="prop-row">'
-            f'<span class="prop-market">{market_display}</span>'
-            f'{play_badge}'
-            f'<span class="prop-player">{player}</span>'
-            f'<span class="prop-proj">Proj {proj_str} · Line {line_str}</span>'
-            f'· {edge_str}'
-            f'</div>'
-        )
-
-    # If no lines posted, collapse by default
-    title = "Player Props" if any_line else "Player Props (lines not yet posted)"
-    return (
-        f'<div class="props-section">'
-        f'<div class="props-title">{title}</div>'
-        f'{rows}'
-        f'</div>'
-    )
-
-
 # ── Shadow signal badge helpers ──────────────────────────────────────────
 
 _shadow_cache = {}
@@ -1003,7 +890,7 @@ def _load_shadow_flags(game_date):
     if cache_key in _shadow_cache:
         return _shadow_cache[cache_key]
 
-    flags = {}  # game_id → {"st02": bool, "cs013": bool}
+    flags = {}  # game_id → {"st02": bool, "cs013": bool, "signal_tier": str|None}
     season = game_date[:4]
 
     try:
@@ -1017,7 +904,7 @@ def _load_shadow_flags(game_date):
                     for r in _json_sh.load(_f):
                         if r.get("date") == game_date and r.get("signal_name", "").startswith("ST02"):
                             gid = r.get("game_id")
-                            flags.setdefault(gid, {"st02": False, "cs013": False})
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
                             flags[gid]["st02"] = bool(r.get("favorable_zone_flag"))
                 break
 
@@ -1035,8 +922,9 @@ def _load_shadow_flags(game_date):
                                 continue
                             if r.get("cs013_flag") is None:
                                 continue
-                            flags.setdefault(gid, {"st02": False, "cs013": False})
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
                             flags[gid]["cs013"] = bool(r.get("cs013_flag"))
+                            flags[gid]["signal_tier"] = r.get("signal_tier")
                 break
     except Exception:
         pass
@@ -1046,11 +934,19 @@ def _load_shadow_flags(game_date):
 
 
 def _shadow_badge_html(game_pk, game_date):
-    """Return shadow badge HTML for a game. Empty string if no flags fire."""
+    """Return shadow badge HTML for a game. Empty string if no flags fire.
+
+    Badge priority (strictly enforced — only highest applies):
+      1. ST02 + CS013 conflict badge (regardless of tier)
+      2. CS013 Tier 1 (HIGH) — red badge
+      3. CS013 Tier 2 (LOW) — yellow badge
+      4. No badge (CS013=FALSE or signal_tier=null)
+    """
     flags = _load_shadow_flags(game_date)
     f = flags.get(game_pk, {})
     st02 = f.get("st02", False)
     cs013 = f.get("cs013", False)
+    tier = f.get("signal_tier")
 
     if st02 and cs013:
         return ('<div style="font-size:0.70em;color:#f59e0b;margin-top:4px;'
@@ -1063,7 +959,18 @@ def _shadow_badge_html(game_pk, game_date):
                 'padding:2px 6px;background:#1e293b;border-radius:4px;display:inline-block">'
                 '\U0001f535 ST02 Shadow \u2014 Road fatigue signal active'
                 '<span style="color:#475569;font-size:0.9em"> SHADOW</span></div>')
+    elif cs013 and tier == "HIGH":
+        return ('<div style="font-size:0.70em;color:#f87171;margin-top:4px;'
+                'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
+                '\U0001f534 CS013 Tier 1 \u2014 Bullpen deterioration + acceleration active'
+                '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
+    elif cs013 and tier == "LOW":
+        return ('<div style="font-size:0.70em;color:#fbbf24;margin-top:4px;'
+                'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
+                '\U0001f7e1 CS013 Tier 2 \u2014 Bullpen state deterioration active'
+                '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
     elif cs013:
+        # CS013 fires but tier is null (insufficient CS020 data) — no tier badge
         return ('<div style="font-size:0.70em;color:#fbbf24;margin-top:4px;'
                 'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
                 '\U0001f7e1 CS013 Shadow \u2014 Bullpen state deterioration active'
