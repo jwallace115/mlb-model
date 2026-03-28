@@ -3966,6 +3966,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                 side = _r.get("f5_signal_side", "")
                                 _info["type"] = "f5_under" if side == "UNDER" else "f5_over"
                                 _info["f5_line"] = _r.get("f5_line")
+                                _info["p_under"] = float(_r.get("p_under_full", 0))
+                                _info["p_over"] = float(_r.get("p_over_full", 0))
                             _game_signals[_tk].append(_info)
                     except Exception:
                         pass
@@ -3982,13 +3984,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _tk = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
                 _sigs = _game_signals.get(_tk, [])
                 if _sigs:
-                    # Check if V1 is among the signals
-                    _has_v1 = any(s.get("type") == "v1" for s in _sigs)
-                    if _has_v1:
-                        play_cards.append((b, _sigs))
-                    else:
-                        # F5/RL only — borderline, show as no-play with partial flag
-                        noplay_cards.append((b, True))
+                    # Any signal (V1, F5, or RL) produces a play card
+                    play_cards.append((b, _sigs))
                 else:
                     noplay_cards.append((b, False))
 
@@ -4237,13 +4234,22 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 for _b, _sigs in play_cards:
                     _g = _b.get("game", {})
                     _tk = f'{_g.get("away_team", "")} @ {_g.get("home_team", "")}'
-                    # Use highest-conviction signal for bet label and probability
+                    # V1 takes priority, then F5, then RL
                     _v1_sig = next((s for s in _sigs if s.get("type") == "v1"), None)
+                    _f5_sig = next((s for s in _sigs if s.get("type") in ("f5_under", "f5_over")), None)
                     if _v1_sig:
                         _parlay_legs.append({
                             "matchup": _tk,
                             "bet": "FULL GAME UNDER",
                             "p": float(_v1_sig.get("p_under", 0)),
+                        })
+                    elif _f5_sig:
+                        _f5_side = "OVER" if _f5_sig.get("type") == "f5_over" else "UNDER"
+                        _f5_p = float(_f5_sig.get("p_under", 0) if _f5_side == "UNDER" else _f5_sig.get("p_over", 0))
+                        _parlay_legs.append({
+                            "matchup": _tk,
+                            "bet": f"F5 {_f5_side}",
+                            "p": _f5_p if _f5_p > 0 else 0.5,
                         })
                 _parlay_legs.sort(key=lambda x: x["p"], reverse=True)
 
