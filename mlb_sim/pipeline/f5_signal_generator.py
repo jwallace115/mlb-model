@@ -147,20 +147,25 @@ def resolve_signals(game_date_str):
         if pd.isna(line) or pd.isna(actual):
             continue
 
+        # Check for Hard Rock line override
+        from mlb_sim.pipeline.line_overrides import get_override
+        hr_line = get_override(gid, "f5_total")
+        grade_line = hr_line if hr_line is not None else float(line)
+
         sigs.at[idx, "actual_f5_total"] = actual
 
-        # Grade
+        # Grade using override if present
         if side == "UNDER":
-            if actual < line:
+            if actual < grade_line:
                 result, net = "WIN", stake * WIN_UNIT
-            elif actual > line:
+            elif actual > grade_line:
                 result, net = "LOSS", -stake
             else:
                 result, net = "PUSH", 0.0
         else:  # OVER
-            if actual > line:
+            if actual > grade_line:
                 result, net = "WIN", stake * WIN_UNIT
-            elif actual < line:
+            elif actual < grade_line:
                 result, net = "LOSS", -stake
             else:
                 result, net = "PUSH", 0.0

@@ -57,9 +57,10 @@ SIGNAL_COLS = [
     "threshold_bucket", "stake_units", "raw_p_under", "raw_p_over",
     "dual_high_csw", "line_at_signal_time", "closing_line", "clv",
     "actual_total", "result", "net_units", "resolved",
-    # Overlay fields (S12 + P09)
+    # Overlay fields (S12 + P09 + ST02)
     "s12_overlay_active", "s12_value",
     "p09_overlay_active", "p09_value", "p09_data_available",
+    "st02_overlay_active", "st02_value", "st02_favorable_zone", "st02_blocked_by_p09",
     "combined_overlay_tier", "base_stake",
 ]
 
@@ -152,8 +153,14 @@ def resolve_signals(game_date_str):
         line_sig = float(sig["line_at_signal_time"]) if pd.notna(sig["line_at_signal_time"]) else None
         stake = float(sig["stake_units"])
 
-        # Grade using closing_line
-        grade_line = closing if closing is not None else (line_sig if line_sig is not None else None)
+        # Check for Hard Rock line override
+        from mlb_sim.pipeline.line_overrides import get_override
+        hr_line = get_override(gid, "full_game")
+
+        # Grade using override if present, else closing_line
+        grade_line = hr_line if hr_line is not None else (
+            closing if closing is not None else (line_sig if line_sig is not None else None)
+        )
         if grade_line is None:
             continue
 
@@ -331,7 +338,19 @@ def generate_signals(game_date_str, schedule, pitcher_db):
             sig.setdefault("p09_overlay_active", 0)
             sig.setdefault("p09_data_available", 0)
 
-        # Combined stake: apply both overlays
+        # ST02 overlay: road-trip fatigue (blocked by P09)
+        st02_active = False
+        try:
+            from mlb_sim.pipeline.st02_overlay import compute_st02, evaluate_st02_overlay
+            st02_val = compute_st02(game.get("game_pk"))
+            st02_result = evaluate_st02_overlay(st02_val, p09_active)
+            sig.update(st02_result)
+            st02_active = st02_result.get("st02_overlay_active") == 1
+        except Exception as e:
+            logger.debug(f"ST02 overlay failed (non-fatal): {e}")
+            sig.setdefault("st02_overlay_active", 0)
+
+        # Combined stake: apply S12 + P09 overlays (ST02 is tag-only, no sizing)
         try:
             from mlb_sim.pipeline.p09_overlay import apply_combined_overlay
             base_stake = stake  # original V1 stake before any overlay
@@ -355,6 +374,7 @@ def generate_signals(game_date_str, schedule, pitcher_db):
         tags = []
         if s12_active: tags.append("S12")
         if p09_active: tags.append("P09")
+        if st02_active: tags.append("ST02")
         tag_str = f" [{'+'.join(tags)}]" if tags else ""
         logger.info(f"  🔵 UNDER {sig['stake_units']}u: {away}@{home} line={line} p_under={p_under:.1%} "
                      f"{'[dual_high_csw]' if dual_csw else ''}{tag_str}")

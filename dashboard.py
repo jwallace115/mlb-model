@@ -882,6 +882,21 @@ def _render_alerts(data: dict) -> None:
 
 # ── Shadow signal badge helpers ──────────────────────────────────────────
 
+_hr_override_cache = {}
+
+def _load_hr_overrides(game_date):
+    """Load HR line overrides for a date. Returns dict: (game_id, market) → hr_line."""
+    if game_date in _hr_override_cache:
+        return _hr_override_cache[game_date]
+    try:
+        from mlb_sim.pipeline.line_overrides import get_all_overrides_for_date
+        result = get_all_overrides_for_date(game_date)
+    except Exception:
+        result = {}
+    _hr_override_cache[game_date] = result
+    return result
+
+
 _shadow_cache = {}
 
 def _load_shadow_flags(game_date):
@@ -1162,6 +1177,51 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             f'{l1}{badges}{boost}{explain_html}{_move_html}{_shadow_html}{disclaimer}'
             f'</div>'
         )
+
+        # ── Hard Rock line override (play cards only) ──
+        _gpk = str(game.get("game_pk", ""))
+        _gdate = game.get("game_date", "")
+        _hr_overrides = _load_hr_overrides(_gdate)
+        _hr_markets = []
+        if line is not None:
+            _hr_markets.append(("full_game", "Full Game", line))
+        for _sig in (signals or []):
+            if _sig.get("type") in ("f5_under", "f5_over") and _sig.get("f5_line") is not None:
+                _hr_markets.append(("f5_total", "F5 Total", float(_sig["f5_line"])))
+                break
+        if _hr_markets:
+            _existing = {m: _hr_overrides.get((_gpk, m)) for m, _, _ in _hr_markets}
+            _any_set = any(v is not None for v in _existing.values())
+            # Show badges for existing overrides
+            if _any_set:
+                _hr_badge_parts = []
+                for mkt, label, api_ln in _hr_markets:
+                    hr_val = _existing.get(mkt)
+                    if hr_val is not None:
+                        _hr_badge_parts.append(f'{label}: HR {hr_val:.1f} (API {api_ln:.1f})')
+                st.html(f'<div style="font-size:0.68em;color:#a78bfa;margin-top:-4px;margin-bottom:4px">'
+                        f'\U0001f7e3 {" | ".join(_hr_badge_parts)}</div>')
+            # Expander for editing
+            with st.expander(f"\u270f\ufe0f HR line override — {matchup}", expanded=False):
+                _cols = st.columns(len(_hr_markets) + 1)
+                for i, (mkt, label, api_ln) in enumerate(_hr_markets):
+                    _key = f"hr_{_gpk}_{mkt}"
+                    _default = _existing.get(mkt)
+                    _cols[i].number_input(
+                        f"{label} (API: {api_ln:.1f})",
+                        min_value=0.0, max_value=30.0, step=0.5,
+                        value=_default if _default else api_ln,
+                        key=_key,
+                    )
+                if _cols[-1].button("Save", key=f"hr_save_{_gpk}"):
+                    from mlb_sim.pipeline.line_overrides import save_override
+                    for mkt, label, api_ln in _hr_markets:
+                        _key = f"hr_{_gpk}_{mkt}"
+                        _val = st.session_state.get(_key)
+                        if _val is not None and abs(_val - api_ln) > 0.01:
+                            save_override(_gpk, _gdate, mkt, api_ln, _val)
+                    st.rerun()
+
     else:
         # ── NO-PLAY CARD (context only) ──
         # No directional label on non-play cards (removed legacy OVER/UNDER lean)
@@ -3536,6 +3596,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             _pu = f"{float(_r['raw_p_under'])*100:.0f}%" if pd.notna(_r.get("raw_p_under")) else "—"
                             _ln = f"{float(_r['line_at_signal_time']):.1f}" if pd.notna(_r.get("line_at_signal_time")) else "—"
                             _act = f"{float(_r['actual_total']):.0f}" if pd.notna(_r.get("actual_total")) else "—"
+                            # Check for HR override
+                            _gid = str(_r.get("game_id", ""))
+                            _hr = _load_hr_overrides(str(_r.get("date", ""))).get((_gid, "full_game"))
+                            if _hr is not None:
+                                _ln = f'<span style="color:#a78bfa">HR {_hr:.1f}</span> <span style="color:#4b5563">(API {_ln})</span>'
                             _rows_html += (f'<tr style="color:{_clr}">'
                                            f'<td>{_r.get("date","")}</td>'
                                            f'<td>{_r.get("away_team","")}@{_r.get("home_team","")}</td>'
@@ -3651,6 +3716,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                        else "#4b5563")
                             _f5_ln_d = (f"{float(_fr['f5_line']):.1f}"
                                         if pd.notna(_fr.get("f5_line")) else "\u2014")
+                            # Check for HR override
+                            _f5_gid = str(_fr.get("game_id", ""))
+                            _f5_hr = _load_hr_overrides(str(_fr.get("date", ""))).get((_f5_gid, "f5_total"))
+                            if _f5_hr is not None:
+                                _f5_ln_d = f'<span style="color:#a78bfa">HR {_f5_hr:.1f}</span> <span style="color:#4b5563">(API {_f5_ln_d})</span>'
                             _f5_side_d = _fr.get("f5_signal_side", "")
                             _f5_stake_d = _fr.get("stake_units", "")
                             _f5_act_d = (f"{float(_fr['actual_f5_total']):.0f}"
