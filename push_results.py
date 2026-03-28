@@ -291,19 +291,9 @@ def main():
     games_for_txn = [r["game"] for r in raw]
     transactions  = run_transaction_wire(game_date, games_for_txn)
 
-    # Load any lineup changes already written today (from earlier refresh runs)
-    db.init_db()
-    lineup_alerts = db.get_lineup_changes_for_date(game_date)
-    game_lkp = {g["game_pk"]: g for g in games_for_txn}
-    for a in lineup_alerts:
-        if not a.get("matchup"):
-            g = game_lkp.get(a.get("game_pk"), {})
-            a["matchup"] = f"{g.get('away_team','')} @ {g.get('home_team','')}"
-
-    # Step 5: serialize results with alerts
+    # Step 5: serialize results
     print(f"[push_results] Serializing {len(raw)} games ...")
     payload = serialize_results(raw, game_date)
-    payload["alerts"]       = lineup_alerts
     payload["transactions"] = transactions
     payload["mlb_clv_summary"] = build_mlb_clv_summary()
 

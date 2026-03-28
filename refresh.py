@@ -225,7 +225,6 @@ def _rebuild_results_json(
         "parlay_5":      parlays["parlay_5"],
         "parlay_7":      parlays["parlay_7"],
         "season_record": {k: _safe(v) for k, v in record.items()} if record else {},
-        "alerts":        lineup_change_alerts,
         "transactions":  transaction_alerts,
     }
 
@@ -265,6 +264,19 @@ def refresh_games(
         all_lines = fetch_all_lines()
     except Exception as e:
         logger.warning(f"Odds fetch failed (continuing without lines): {e}")
+
+    # ── Line snapshot storage (observational) ───────────────────────────
+    try:
+        from mlb_sim.pipeline.line_snapshot_store import store_snapshots_from_odds_response
+        import json as _snap_json
+        _snap_label = "11AM"  # refresh.py runs at 11AM
+        _cache_path = os.path.join(CACHE_DIR, f"odds_full_{game_date}.json")
+        if os.path.exists(_cache_path):
+            with open(_cache_path) as _sf:
+                _snap_games = _snap_json.load(_sf)
+            store_snapshots_from_odds_response(_snap_games, _snap_label, game_date)
+    except Exception as e:
+        logger.warning(f"Line snapshot storage failed (non-fatal): {e}")
 
     odds_key    = os.environ.get("ODDS_API_KEY", "")
     any_changes = False
