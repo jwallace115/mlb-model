@@ -6,6 +6,17 @@ All park factors and stadium metadata live here for easy maintenance.
 """
 
 # ---------------------------------------------------------------------------
+# Model mode — controls which engine the 7am job uses
+#   "rules"      : multiplicative rules-based model (default through Opening Day)
+#   "simulation" : Phase 9 Ridge + heteroskedastic σ (flip after shadow validation)
+#
+# Cutover plan:
+#   March 27-29  : MODEL_MODE = "rules"  (shadow_run.py logs both daily)
+#   March 30+    : flip to "simulation" after confirming sensible OOS output
+# ---------------------------------------------------------------------------
+MODEL_MODE = "rules"
+
+# ---------------------------------------------------------------------------
 # Model weights — must sum to 1.0 within each group
 # ---------------------------------------------------------------------------
 MODEL_WEIGHTS = {
@@ -295,17 +306,34 @@ FANGRAPHS_TEAM_MAP = {
 import os as _os
 try:
     from dotenv import load_dotenv as _load_dotenv
-    _load_dotenv(_os.path.join(_os.path.dirname(__file__), ".env"))
+    _load_dotenv(_os.path.join(_os.path.dirname(__file__), ".env"), override=True)
 except ImportError:
     pass
 ODDS_API_KEY  = _os.environ.get("ODDS_API_KEY", "")
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 
 # Bookmakers to pull from (must be valid Odds API keys)
-ODDS_BOOKMAKERS = ["draftkings", "fanduel"]
+# Priority order for consensus line: pinnacle (sharpest), then DK, then FD
+ODDS_BOOKMAKERS = ["pinnacle", "draftkings", "fanduel"]
 
 # Minimum edge (proj - line, in runs) to flag as a value play
 EDGE_MIN_RUNS = 0.5
+
+# ---------------------------------------------------------------------------
+# Phase 7 — Market integration thresholds
+# ---------------------------------------------------------------------------
+PROXY_LINE        = 8.86   # league season mean used as proxy when no real line
+
+WATCHLIST_EDGE    = 0.5    # model edge (runs) to appear on watchlist
+BET_EDGE          = 1.0    # model edge to qualify as a bet candidate
+STRONG_EDGE       = 1.5    # model edge for strong conviction
+
+WATCHLIST_PROB    = 0.53   # P(bet side) threshold for watchlist
+BET_PROB          = 0.55   # P(bet side) threshold for bet candidate
+STRONG_PROB       = 0.58   # P(bet side) threshold for strong conviction
+
+JUICE             = -110   # standard vig used in ROI simulation
+WIN_UNIT          = 100 / 110  # units won per 1-unit bet at -110 (~0.9091)
 
 # Team name as returned by The Odds API → our abbreviation
 ODDS_API_TEAM_MAP = {

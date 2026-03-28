@@ -146,8 +146,19 @@ def _build_game_lines(raw_games: list, market_key: str) -> dict:
         if not book_lines:
             continue
 
-        lines = [v["line"] for v in book_lines.values() if v]
-        consensus = round(sum(lines) / len(lines), 1) if lines else None
+        # Priority-order single-book line: pinnacle > draftkings > fanduel > any
+        _BOOK_PRIORITY = ["pinnacle", "draftkings", "fanduel"]
+        consensus = None
+        for bk in _BOOK_PRIORITY:
+            if bk in book_lines and book_lines[bk]:
+                consensus = book_lines[bk]["line"]
+                break
+        if consensus is None:
+            # Fallback: first available book
+            for bk, data in book_lines.items():
+                if data:
+                    consensus = data["line"]
+                    break
 
         result[(home_abb, away_abb)] = {
             **book_lines,

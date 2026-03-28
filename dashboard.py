@@ -494,15 +494,26 @@ def _render_season_header(stats: dict) -> None:
             resolved = df[df["resolved"] == 1]
             total_n += len(resolved)
             total_wins += int((resolved["result"] == "WIN").sum())
+            # Pushes count as losses for display purposes
             total_losses += int((resolved["result"] == "LOSS").sum())
-            total_pushes += int((resolved["result"] == "PUSH").sum())
-            total_net += float(resolved["net_units"].sum()) if "net_units" in resolved.columns else 0
+            total_losses += int((resolved["result"] == "PUSH").sum())
+            # Net units: pushes already have net_units=0 in data, but display treats as -stake
+            if "net_units" in resolved.columns and "stake_units" in resolved.columns:
+                _net = 0.0
+                for _, _row in resolved.iterrows():
+                    if _row.get("result") == "PUSH":
+                        _net -= float(_row.get("stake_units", 0))
+                    else:
+                        _net += float(_row.get("net_units", 0))
+                total_net += _net
+            elif "net_units" in resolved.columns:
+                total_net += float(resolved["net_units"].sum())
         except Exception:
             pass
 
     decided = total_wins + total_losses
     win_pct = total_wins / decided * 100 if decided > 0 else None
-    wagered = total_n  # approximate — each signal is ~1 unit equivalent
+    wagered = total_n
     roi = total_net / wagered * 100 if wagered > 0 else None
 
     if total_n == 0:
@@ -1030,12 +1041,10 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         _stake_colors = {0.5: "#f59e0b", 0.62: "#f97316", 0.625: "#f97316",
                          1.0: "#06b6d4", 1.25: "#22c55e"}
 
-        # Header: matchup + time + weather + consensus line
+        # Header: matchup + time + weather (line shown in bet rows, not header)
         header_parts = [f'{matchup} \u2014 {time_str}']
         if wx_line:
             header_parts.append(wx_line)
-        if line is not None:
-            header_parts.append(f'O/U {float(line):.1f}')
         l1 = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
               f'{" \u00b7 ".join(header_parts)}</div>')
 
@@ -1048,15 +1057,25 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             sc = _stake_colors.get(round(float(stake), 2) if stake != "?" else 0, "#67e8f9")
             _stake_display = f"{float(stake):.2f}".rstrip('0').rstrip('.') if stake != "?" else "?"
 
-            # Right-aligned line reference per bet type
+            # Right-aligned line reference per bet type (HR override in green if present)
             _right_line = ""
+            _gpk_sig = str(game.get("game_pk", ""))
+            _gdate_sig = game.get("game_date", "")
+            _hr_ov = _load_hr_overrides(_gdate_sig)
             if stype == "v1" and line is not None:
-                _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(line):.1f}</span>'
+                _hr_fg = _hr_ov.get((_gpk_sig, "full_game"))
+                if _hr_fg is not None:
+                    _right_line = f'<span style="font-size:0.82em;color:#4ade80;font-weight:400">O/U {float(_hr_fg):.1f}</span>'
+                else:
+                    _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(line):.1f}</span>'
             elif stype in ("f5_under", "f5_over"):
-                # F5 line from signal data if available
                 _f5_ln = sig.get("f5_line")
                 if _f5_ln is not None:
-                    _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(_f5_ln):.1f}</span>'
+                    _hr_f5 = _hr_ov.get((_gpk_sig, "f5_total"))
+                    if _hr_f5 is not None:
+                        _right_line = f'<span style="font-size:0.82em;color:#4ade80;font-weight:400">O/U {float(_hr_f5):.1f}</span>'
+                    else:
+                        _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(_f5_ln):.1f}</span>'
             elif stype == "f5_rl":
                 _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">-0.5</span>'
 
