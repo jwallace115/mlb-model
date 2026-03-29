@@ -4201,7 +4201,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             play_cards.sort(key=_card_sort_key)
 
             if play_cards:
-                st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 {len(play_cards)}</div>')
+                _n_games = len(play_cards)
+                _n_wagers = sum(len(sigs) for _, sigs in play_cards)
+                st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 '
+                        f'{_n_games} game{"s" if _n_games != 1 else ""} \u00b7 '
+                        f'{_n_wagers} wager{"s" if _n_wagers != 1 else ""}</div>')
                 for b, sigs in play_cards:
                     _render_card(b, signals=sigs)
 
