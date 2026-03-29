@@ -4063,6 +4063,9 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     buckets = {}
                     for r in resolved:
                         stake = round(float(r.get("stake_units", 0) or 0), 3)
+                        # Merge 0.625/0.63 into 0.62 bucket
+                        if 0.62 <= stake <= 0.63:
+                            stake = 0.62
                         if stake not in buckets:
                             buckets[stake] = {"w": 0, "l": 0, "net": 0}
                         if r["result"] == "WIN":
@@ -4079,8 +4082,6 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     roi = d["net"] / n * 100 if n > 0 else 0
                     clr = "#4ade80" if d["net"] >= 0 else "#f87171"
                     label = f"{stake:.2f}".rstrip("0").rstrip(".") + "u"
-                    if stake == 0.625:
-                        label = "0.63u"
                     return (f'<div style="display:flex;justify-content:space-between">'
                             f'<span>{label}</span>'
                             f'<span style="color:{clr}">{d["w"]}-{d["l"]} ({roi:+.1f}%)</span></div>')
