@@ -29,7 +29,13 @@ DECISIONS     = SOCCER_DIR / "data" / "soccer_decisions.parquet"
 ODDS_CACHE    = SOCCER_DIR / "data" / "cache" / "daily"
 OUT_PATH      = REPO_DIR / "soccer_results.json"
 
-_SPORT_KEYS   = {"EPL": "soccer_epl", "BUN": "soccer_germany_bundesliga"}
+_SPORT_KEYS   = {
+    "EPL": "soccer_epl",
+    "BUN": "soccer_germany_bundesliga",
+    "LGA": "soccer_spain_la_liga",
+    "SEA": "soccer_italy_serie_a",
+    "LG1": "soccer_france_ligue_one",
+}
 
 WIN_PER_UNIT  = 100.0 / 110.0
 
@@ -160,6 +166,9 @@ def load_today_signals(game_date: str) -> list[dict]:
             (dec["game_date"] == game_date) &
             (dec["split"] == "live")
         ]
+        # Only display active signals (BUN MEDIUM); shadow signals are logged but not shown
+        if "signal_status" in today.columns:
+            today = today[today["signal_status"] == "active"]
         rows = []
         for _, r in today.iterrows():
             rows.append({
@@ -264,7 +273,7 @@ def build_season_performance() -> dict:
 
         # By league
         by_league = {}
-        for lg in ("EPL", "BUN"):
+        for lg in sorted(graded["league_id"].unique()):
             by_league[lg] = agg(graded[graded["league_id"] == lg])
         out["by_league"] = by_league
 
@@ -597,6 +606,19 @@ def write_soccer_json(game_date: str | None = None) -> str:
     for w in warnings_found:
         print(f"[push_soccer] DATA QUALITY WARNING: {w}", file=sys.stderr)
 
+    # League deployment status
+    from soccer.config import LEAGUE_DEPLOYMENT, LEAGUE_META
+    league_status = {}
+    for lid, status in LEAGUE_DEPLOYMENT.items():
+        meta = LEAGUE_META.get(lid, ("", lid))
+        league_status[lid] = {
+            "status": status,
+            "display_name": meta[1],
+            "deployment_start_date": "2026-03-17" if lid in ("EPL", "BUN") else (
+                "2026-03-18" if status == "active" else None
+            ),
+        }
+
     payload = {
         "generated_at":       now_utc.isoformat(),
         "last_updated":       now_utc.strftime("%Y-%m-%d %H:%M UTC"),
@@ -605,14 +627,34 @@ def write_soccer_json(game_date: str | None = None) -> str:
         "game_date":          game_date,
         "deployment_start_date": "2026-03-17",
         "model_description":  "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
+        "active_scope_note":  "Active: Bundesliga MEDIUM tier only. All other leagues/tiers computed and logged to shadow.",
         "today_signals":      today_signals,
         "recent_results":     recent_results,
         "season_performance": season_perf,
         "data_quality_warning": quality_warning,
+        "league_deployment":  league_status,
         # Entertainment/parlay-support only — not a validated standalone product
         "parlay_candidates":  parlay_candidates,
         "suggested_parlay":   suggested_parlay,
     }
+
+    # AI daily (and optional weekly) review
+    try:
+        from modules.ai_review import (build_graded_games, generate_daily_review,
+                                        maybe_weekly, build_week_games,
+                                        generate_weekly_review, is_idempotent)
+        _review_date = (date.fromisoformat(game_date) - timedelta(days=1)).isoformat()
+        if not is_idempotent(str(OUT_PATH), _review_date):
+            _graded = build_graded_games("soccer", _review_date)
+            payload["daily_review"] = generate_daily_review(_graded, "soccer", _review_date)
+        else:
+            print(f"[push_soccer] Soccer daily review already exists for {_review_date} — skipping")
+        _wr = maybe_weekly("soccer")
+        if _wr:
+            _wg = build_week_games("soccer", *_wr)
+            payload["weekly_review"] = generate_weekly_review(_wg, "soccer", *_wr)
+    except Exception as e:
+        print(f"[push_soccer] Soccer AI review failed (non-fatal): {e}", file=sys.stderr)
 
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)

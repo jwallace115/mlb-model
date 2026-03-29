@@ -80,10 +80,19 @@ MIN_EDGE               = 0.06
 LATE_MONEY_SUPPRESS    = -0.03   # suppress if market_move_to_over < this
 MIN_PRIOR_MATCHES      = 5       # skip game if team has < this many matches
 
+# Live signal restriction — only BUN MEDIUM fires as active bet.
+# All other qualified signals still logged but marked shadow/observational.
+LIVE_ACTIVE_LEAGUES    = {"BUN"}
+LIVE_ACTIVE_TIERS      = {"MEDIUM"}   # edge 0.08–0.10
+
+# V2.2c shadow challenger — shrinkage formula on top of V2.2 output
+V2_2C_ALPHA            = 0.66
+V2_2C_SHADOW_LOG       = SOCCER_DIR / "logs" / "v2_2c_shadow_2026.json"
+
 # ---------------------------------------------------------------------------
 # Leagues
 # ---------------------------------------------------------------------------
-LEAGUES = {
+ALL_LEAGUES = {
     "EPL": {
         "api_football_id": 39,
         "odds_sport":      "soccer_epl",
@@ -94,7 +103,39 @@ LEAGUES = {
         "odds_sport":      "soccer_germany_bundesliga",
         "season":          2025,
     },
+    "LGA": {
+        "api_football_id": 140,
+        "odds_sport":      "soccer_spain_la_liga",
+        "season":          2024,
+    },
+    "SEA": {
+        "api_football_id": 135,
+        "odds_sport":      "soccer_italy_serie_a",
+        "season":          2024,
+    },
+    "LG1": {
+        "api_football_id": 61,
+        "odds_sport":      "soccer_france_ligue_one",
+        "season":          2024,
+    },
 }
+
+# Only active leagues generate live signals
+try:
+    from soccer.config import LEAGUE_DEPLOYMENT
+except ImportError:
+    sys.path.insert(0, str(BASE_DIR))
+    from soccer.config import LEAGUE_DEPLOYMENT
+LEAGUES = {k: v for k, v in ALL_LEAGUES.items() if LEAGUE_DEPLOYMENT.get(k) == "active"}
+
+# Per-league post-model calibration (loaded from JSON)
+_LEAGUE_CAL_PATH = MODELS_DIR / "league_calibration.json"
+_LEAGUE_CALIBRATION: dict = {}
+if _LEAGUE_CAL_PATH.exists():
+    try:
+        _LEAGUE_CALIBRATION = json.loads(_LEAGUE_CAL_PATH.read_text())
+    except Exception:
+        pass
 
 # ---------------------------------------------------------------------------
 # Stadium coordinates for weather lookup
@@ -157,8 +198,76 @@ STADIUM_COORDS: dict[str, tuple[float, float]] = {
     "Darmstadt":        (49.8673,  8.6534),
     "Holstein Kiel":    (54.3350, 10.1390),
     "St. Pauli":        (53.5543,  9.9674),
+    # Serie A
+    "Atalanta":         (45.7092,  9.6811),
+    "Bologna":          (44.4924, 11.3098),
+    "Cagliari":         (39.1999,  9.1371),
+    "Como":             (45.8069,  9.0966),
+    "Empoli":           (43.7266, 10.9560),
+    "Fiorentina":       (43.7808, 11.2822),
+    "Genoa":            (44.4165,  8.9524),
+    "Inter":            (45.4781,  9.1240),
+    "Juventus":         (45.1097,  7.6413),
+    "Lazio":            (41.9340, 12.4544),
+    "Lecce":            (40.3544, 18.1714),
+    "Milan":            (45.4781,  9.1240),
+    "Monza":            (45.5847,  9.3010),
+    "Napoli":           (40.8280, 14.1930),
+    "Parma":            (44.7951, 10.3389),
+    "Roma":             (41.9340, 12.4544),
+    "Salernitana":      (40.6842, 14.7766),
+    "Sassuolo":         (44.7148, 10.6472),
+    "Torino":           (45.0421,  7.6499),
+    "Udinese":          (46.0812, 13.2000),
+    "Venezia":          (45.4386, 12.3464),
+    "Verona":           (45.4353, 10.9685),
+    # La Liga
+    "Ath Madrid":       (40.4362, -3.5995),
+    "Ath Bilbao":       (43.2643, -2.9493),
+    "Barcelona":        (41.3809,  2.1228),
+    "Betis":            (37.3564, -5.9819),
+    "Celta":            (42.2117, -8.7389),
+    "Espanol":          (41.3479,  2.0754),
+    "Getafe":           (40.3256, -3.7144),
+    "Girona":           (41.9616,  2.8285),
+    "Las Palmas":       (28.1003,-15.4567),
+    "Leganes":          (40.3569, -3.7567),
+    "Mallorca":         (39.5906,  2.6307),
+    "Osasuna":          (42.7966, -1.6361),
+    "Real Madrid":      (40.4530, -3.6883),
+    "Sevilla":          (37.3841, -5.9705),
+    "Sociedad":         (43.3013, -1.9737),
+    "Valencia":         (39.4745, -0.3583),
+    "Vallecano":        (40.3917, -3.6589),
+    "Valladolid":       (41.6444, -4.7614),
+    "Villarreal":       (39.9438, -0.1035),
+    # Ligue 1
+    "Angers":           (47.4606, -0.5335),
+    "Auxerre":          (47.7997,  3.5801),
+    "Brest":            (48.4028, -4.4617),
+    "Le Havre":         (49.4985,  0.1589),
+    "Lens":             (50.4327,  2.8155),
+    "Lille":            (50.6119,  3.1302),
+    "Lyon":             (45.7653,  4.9822),
+    "Marseille":        (43.2700,  5.3959),
+    "Monaco":           (43.7277,  7.4156),
+    "Montpellier":      (43.6221,  3.8119),
+    "Nantes":           (47.2569, -1.5250),
+    "Nice":             (43.7051,  7.1925),
+    "Paris SG":         (48.8414,  2.2530),
+    "Reims":            (49.2469,  3.9303),
+    "Rennes":           (48.1075, -1.7128),
+    "St Etienne":       (45.4608,  4.3903),
+    "Strasbourg":       (48.5601,  7.7529),
+    "Toulouse":         (43.5833,  1.4340),
 }
-FALLBACK_COORDS = {"EPL": (51.5, -0.1), "BUN": (51.5, 7.5)}
+FALLBACK_COORDS = {
+    "EPL": (51.5, -0.1),
+    "BUN": (51.5, 7.5),
+    "LGA": (40.5, -3.7),
+    "SEA": (42.5, 12.5),
+    "LG1": (48.9, 2.4),
+}
 
 
 def get_coords(team: str, league: str) -> tuple[float, float]:
@@ -176,7 +285,8 @@ def get_coords(team: str, league: str) -> tuple[float, float]:
 # ---------------------------------------------------------------------------
 FEATURE_COLS = [
     "league_avg_goals_rolling_season", "league_avg_xg_rolling_season",
-    "league_home_adv", "is_bundesliga",
+    "league_home_adv",
+    "is_bun", "is_lga", "is_sea", "is_lg1",
     "league_goals_rolling_10", "league_xg_rolling_10",
     "home_xg_for_rolling_10", "home_xg_against_rolling_10",
     "away_xg_for_rolling_10", "away_xg_against_rolling_10",
@@ -732,6 +842,51 @@ def load_model() -> tuple:
 
 
 # ---------------------------------------------------------------------------
+# V2.2c shadow challenger logging
+# ---------------------------------------------------------------------------
+def _log_v2_2c_shadow(sig: dict) -> None:
+    """Compute V2.2c shrinkage probability and append to shadow log. Non-fatal."""
+    try:
+        mkt_p = sig.get("market_fair_p_over_2_5")
+        cal_p = sig.get("ridge_cal_p")
+        if mkt_p is None or cal_p is None:
+            return
+        v2_2c_p = float(np.clip(mkt_p + V2_2C_ALPHA * (cal_p - mkt_p), 0.01, 0.99))
+        v2_2c_edge = v2_2c_p - mkt_p
+        record = {
+            "game_id":       sig.get("game_id"),
+            "date":          sig.get("game_date"),
+            "league":        sig.get("league_id"),
+            "home_team":     sig.get("home_team"),
+            "away_team":     sig.get("away_team"),
+            "v2_2_edge":     round(sig.get("edge", 0), 6),
+            "v2_2_p_over":   round(cal_p, 6),
+            "v2_2c_edge":    round(v2_2c_edge, 6),
+            "v2_2c_p_over":  round(v2_2c_p, 6),
+            "market_p_over": round(mkt_p, 6),
+            "closing_line":  sig.get("closing_total"),
+            "actual_goals":  None,
+            "result":        None,
+            "logged_at":     datetime.now(timezone.utc).isoformat(),
+        }
+        V2_2C_SHADOW_LOG.parent.mkdir(parents=True, exist_ok=True)
+        existing = []
+        if V2_2C_SHADOW_LOG.exists():
+            try:
+                existing = json.loads(V2_2C_SHADOW_LOG.read_text())
+            except Exception:
+                existing = []
+        # Avoid duplicate game_id entries
+        existing_ids = {r.get("game_id") for r in existing}
+        if record["game_id"] not in existing_ids:
+            existing.append(record)
+            V2_2C_SHADOW_LOG.write_text(json.dumps(existing, indent=2, default=str))
+            logger.info(f"    [v2.2c shadow] logged: edge={v2_2c_edge:+.4f}")
+    except Exception as e:
+        logger.warning(f"    [v2.2c shadow] non-fatal error: {e}")
+
+
+# ---------------------------------------------------------------------------
 # Signal generation
 # ---------------------------------------------------------------------------
 def get_confidence_tier(edge: float) -> str:
@@ -1103,7 +1258,8 @@ def run_pipeline(game_date: str, use_odds: bool = True,
             # ── Mismatch interactions ───────────────────────────────────────────
             features: dict = {}
             features.update(league_rolling)
-            features["is_bundesliga"] = 1.0 if league_id == "BUN" else 0.0
+            for lid in ["BUN", "LGA", "SEA", "LG1"]:
+                features[f"is_{lid.lower()}"] = 1.0 if league_id == lid else 0.0
             features.update(home_rolling)
             features.update(away_rolling)
 
@@ -1186,10 +1342,26 @@ def run_pipeline(game_date: str, use_odds: bool = True,
                 scaler=scaler, impute_vals=impute_vals,
             )
 
-            edge    = pred["edge"]
             mkt_p   = pred["market_fair_p_over_2_5"]
-            cal_p   = pred["ridge_cal_p"]
+            cal_p_raw = pred["ridge_cal_p"]
             mkt_move = pred["market_move_to_over_2_5"]
+
+            # ── League calibration (post-model, pre-simulation) ────────────
+            cal_params = _LEAGUE_CALIBRATION.get(league_id)
+            if cal_params is not None:
+                method = cal_params.get("method", "intercept")
+                if method == "intercept":
+                    cal_p = float(np.clip(cal_p_raw + cal_params["delta"], 0.05, 0.95))
+                elif method == "linear":
+                    cal_p = float(np.clip(
+                        cal_params["a"] * cal_p_raw + cal_params["b"], 0.05, 0.95))
+                else:
+                    cal_p = cal_p_raw
+            else:
+                cal_p = cal_p_raw
+
+            edge = cal_p - mkt_p
+
             model_total = mkt_p * 5.0 + 0.5   # rough implied total goals from fair_p
             try:
                 mu = fair_p_to_mu(cal_p)
@@ -1224,6 +1396,17 @@ def run_pipeline(game_date: str, use_odds: bool = True,
                 signal_qualifies = False
                 tier = None
 
+            # ── Live signal restriction ─────────────────────────────────────
+            # Active = BUN MEDIUM only; everything else is shadow/observational
+            is_active_bet = (
+                signal_qualifies
+                and league_id in LIVE_ACTIVE_LEAGUES
+                and tier in LIVE_ACTIVE_TIERS
+            )
+            signal_status = "active" if is_active_bet else (
+                "shadow" if signal_qualifies else "no_signal"
+            )
+
             sig = {
                 "game_id":          game_id,
                 "game_date":        game_date,
@@ -1237,13 +1420,16 @@ def run_pipeline(game_date: str, use_odds: bool = True,
                 # Signal
                 "signal_side":      "OVER" if signal_qualifies else None,
                 "qualifies":        signal_qualifies,
+                "signal_status":    signal_status,
                 "closing_total":    closing_total,
                 "edge":             edge,
                 "confidence_tier":  tier,
                 "model_total":      round(model_total, 2),
                 # Market
                 "market_fair_p_over_2_5": mkt_p,
+                "ridge_cal_p_raw":  cal_p_raw,
                 "ridge_cal_p":      cal_p,
+                "calibration_applied": cal_params is not None,
                 "market_move_to_over_2_5": mkt_move,
                 "market_odds_available": float(features.get("market_odds_available", 0)),
                 "over_price":       over_dec,
@@ -1266,6 +1452,10 @@ def run_pipeline(game_date: str, use_odds: bool = True,
                 "graded":             0,
             }
             all_signals.append(sig)
+
+            # ── V2.2c shadow logging (non-fatal) ──────────────────────────
+            if signal_qualifies:
+                _log_v2_2c_shadow(sig)
 
     # ── Write decisions ──────────────────────────────────────────────────────
     if all_signals:
