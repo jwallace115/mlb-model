@@ -827,6 +827,20 @@ def _load_shadow_flags(game_date):
                             flags[gid]["cs028"] = True
                             flags[gid]["cs028_cs013_both"] = bool(r.get("cs013_also_active"))
                 break
+
+        # KP04 from kp04_shadow
+        for _p in [f"mlb_sim/logs/kp04_shadow_{season}.json",
+                    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "mlb_sim", "logs", f"kp04_shadow_{season}.json")]:
+            if os.path.exists(_p):
+                with open(_p) as _f:
+                    for r in _json_sh.load(_f):
+                        if r.get("date") == game_date and r.get("kp04_flag"):
+                            gid = str(r.get("game_id"))
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None,
+                                                    "cs028": False, "cs028_cs013_both": False, "kp04": False})
+                            flags[gid]["kp04"] = True
+                break
     except Exception:
         pass
 
@@ -1007,11 +1021,6 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             _green_mods.append(_mpill("S12", "#22c55e", "#052e16"))
         if _has_p09:
             _green_mods.append(_mpill("P09", "#22c55e", "#052e16"))
-        if temp is not None and temp < 55:
-            _green_mods.append(_mpill("Cold", "#22c55e", "#052e16"))
-        if (not is_dome and wind_mph >= 10
-                and isinstance(wind_raw, str) and "out" in wind_raw.lower()):
-            _green_mods.append(_mpill("Wind Out", "#22c55e", "#052e16"))
 
         # Shadow signals from per-game log data
         _gpk_sh = str(game.get("game_pk", ""))
@@ -1021,7 +1030,8 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             _yellow_mods.append(_mpill("CS013", "#eab308", "#1c1400"))
         if _sh_flags.get("cs028"):
             _yellow_mods.append(_mpill("CS028", "#eab308", "#1c1400"))
-        # KP04 and ST02 from signal data
+        if _sh_flags.get("kp04"):
+            _yellow_mods.append(_mpill("KP04", "#eab308", "#1c1400"))
         if _has_st02:
             _yellow_mods.append(_mpill("ST02", "#eab308", "#1c1400"))
 
