@@ -3938,6 +3938,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                 _info["st02_active"] = bool(_r.get("st02_overlay_active", 0))
                                 _info["p_under"] = float(_r.get("raw_p_under", 0))
                                 _info["line"] = _r.get("line_at_signal_time")
+                                _info["shadow_only"] = bool(_r.get("shadow_only", False))
+                                _info["signal_class"] = _r.get("signal_class", "")
                             elif sig_type in ("f5_under", "f5_over"):
                                 side = _r.get("f5_signal_side", "")
                                 _info["type"] = "f5_under" if side == "UNDER" else "f5_over"
@@ -3955,13 +3957,22 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
 
             all_games = (plays or []) + (no_plays or [])
             play_cards = []
+            shadow_cards = []
             noplay_cards = []
             for b in all_games:
                 _tk = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
                 _sigs = _game_signals.get(_tk, [])
                 if _sigs:
-                    # Any signal (V1, F5, or RL) produces a play card
-                    play_cards.append((b, _sigs))
+                    # Split: if ALL V1 signals for this game are shadow_only (and no F5/RL),
+                    # route to shadow. Otherwise route to live plays.
+                    _live_sigs = [s for s in _sigs if not s.get("shadow_only")]
+                    _shadow_sigs = [s for s in _sigs if s.get("shadow_only")]
+                    if _live_sigs:
+                        play_cards.append((b, _live_sigs))
+                    if _shadow_sigs:
+                        shadow_cards.append((b, _shadow_sigs))
+                    if not _live_sigs and not _shadow_sigs:
+                        play_cards.append((b, _sigs))  # fallback: treat as live
                 else:
                     noplay_cards.append((b, False))
 
@@ -4208,6 +4219,15 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         f'{_n_wagers} wager{"s" if _n_wagers != 1 else ""}</div>')
                 for b, sigs in play_cards:
                     _render_card(b, signals=sigs)
+
+            # Shadow monitoring section (BASE_HIGH and S12_HIGH — non-P09 high conviction)
+            if shadow_cards:
+                st.html(
+                    '<div style="margin-top:16px;padding:8px 14px;background:#1a1a2e;'
+                    'border:1px solid #333;border-radius:6px;font-size:0.82em;color:#6b7280">'
+                    'Shadow Monitoring \u2014 Not For Betting</div>')
+                for b, sigs in shadow_cards:
+                    _render_card(b, signals=sigs, has_partial=True)
 
             # Just For Fun parlays — built from play_cards only (same pool as Today's Plays)
             if len(play_cards) >= 3:

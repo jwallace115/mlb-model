@@ -62,6 +62,7 @@ SIGNAL_COLS = [
     "p09_overlay_active", "p09_value", "p09_data_available",
     "st02_overlay_active", "st02_value", "st02_favorable_zone", "st02_blocked_by_p09",
     "combined_overlay_tier", "base_stake",
+    "signal_class", "shadow_only", "pre_overlay_tracking",
 ]
 
 
@@ -83,7 +84,8 @@ def _save_signals(df):
         # Include overlay fields if present
         for c in ["s12_overlay_active", "s12_value", "base_stake",
                    "p09_overlay_active", "p09_value", "p09_data_available",
-                   "combined_overlay_tier", "final_stake"]:
+                   "combined_overlay_tier", "final_stake",
+                   "signal_class", "shadow_only", "pre_overlay_tracking"]:
             if c in df.columns:
                 export_cols.append(c)
         avail = [c for c in export_cols if c in df.columns]
@@ -362,6 +364,21 @@ def generate_signals(game_date_str, schedule, pitcher_db):
         except Exception:
             sig.setdefault("combined_overlay_tier", "NONE")
             sig.setdefault("final_stake", sig["stake_units"])
+
+        # Signal class and shadow routing
+        is_high = p_under > UNDER_THRESHOLD_HIGH
+        if s12_active and p09_active:
+            sig["signal_class"] = "BOTH_HIGH" if is_high else "BOTH_LOW"
+        elif s12_active:
+            sig["signal_class"] = "S12_HIGH" if is_high else "S12_LOW"
+        elif p09_active:
+            sig["signal_class"] = "P09_HIGH" if is_high else "P09_LOW"
+        else:
+            sig["signal_class"] = "BASE_HIGH" if is_high else "BASE_LOW"
+
+        # Shadow routing: BASE_HIGH and S12_HIGH are shadow-only (no P09 confirmation)
+        sig["shadow_only"] = sig["signal_class"] in ("BASE_HIGH", "S12_HIGH")
+        sig["pre_overlay_tracking"] = False
 
         new_signals.append(sig)
         display_signals.append({
