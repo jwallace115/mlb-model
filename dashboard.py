@@ -776,7 +776,7 @@ def _load_shadow_flags(game_date):
     if cache_key in _shadow_cache:
         return _shadow_cache[cache_key]
 
-    flags = {}  # game_id → {"st02": bool, "cs013": bool, "signal_tier": str|None}
+    flags = {}  # game_id → {"st02": bool, "cs013": bool, "signal_tier": str|None, "cs028": bool, "cs028_cs013_both": bool}
     season = game_date[:4]
 
     try:
@@ -811,6 +811,21 @@ def _load_shadow_flags(game_date):
                             flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
                             flags[gid]["cs013"] = bool(r.get("cs013_flag"))
                             flags[gid]["signal_tier"] = r.get("signal_tier")
+                break
+
+        # CS028 from cs028_shadow
+        for _p in [f"mlb_sim/logs/cs028_shadow_{season}.json",
+                    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "mlb_sim", "logs", f"cs028_shadow_{season}.json")]:
+            if os.path.exists(_p):
+                with open(_p) as _f:
+                    for r in _json_sh.load(_f):
+                        if r.get("game_date") == game_date and r.get("signal_fires"):
+                            gid = r.get("game_id")
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None,
+                                                    "cs028": False, "cs028_cs013_both": False})
+                            flags[gid]["cs028"] = True
+                            flags[gid]["cs028_cs013_both"] = bool(r.get("cs013_also_active"))
                 break
     except Exception:
         pass
@@ -860,6 +875,18 @@ def _shadow_badge_html(game_pk, game_date):
         return ('<div style="font-size:0.70em;color:#fbbf24;margin-top:4px;'
                 'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
                 '\U0001f7e1 CS013 Shadow \u2014 Bullpen state deterioration active'
+                '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
+
+    # CS028: Bayesian bullpen blowup (independent of CS013 tier logic)
+    cs028 = f.get("cs028", False)
+    if cs028:
+        cs028_cs013 = f.get("cs028_cs013_both", False)
+        overlap_note = (' <span style="color:#fbbf24;font-size:0.9em">'
+                        'CS028+CS013 both active</span>') if cs028_cs013 else ''
+        return ('<div style="font-size:0.70em;color:#f87171;margin-top:4px;'
+                'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
+                '\U0001f534 CS028 bullpen blowup shadow'
+                + overlap_note +
                 '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
     return ""
 
@@ -3364,9 +3391,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     if stats:
         _render_season_header(stats)
 
-    picks_tab, review_tab = st.tabs(["Today's Picks", "Results Review"])
-
-    with picks_tab:
+    # (single-content tab — Results Review removed, content lives in Tracker tab)
+    if True:
         # ── stop rule suspension banner ────────────────────────────────────────
         _mlb_stop = (data or {}).get("stop_rule_status", {})
         _mlb_model_susp  = _mlb_stop.get("model_suspended", False)
@@ -3419,8 +3445,78 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 </div>
                 """)
 
-        # Legacy segment overlay, CSW shadow, and High-CSW displays — DISABLED
-        # (replaced by V1 sim engine signals shown on unified game cards)
+        # ── Consolidated engine & shadow status panel ─────────────────────
+        try:
+            _status_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
+            _pill = lambda label, color, bg: (
+                f'<span style="background:{bg};color:{color};border:1px solid {color};'
+                f'border-radius:10px;padding:2px 8px;font-size:0.68em;font-weight:600;'
+                f'margin-right:4px;white-space:nowrap">{label}</span>')
+
+            # GREEN — active engines
+            _green_pills = []
+            # Sim engine
+            _es = os.path.join(_status_base, "pipeline", "engine_status.json")
+            if os.path.exists(_es):
+                import json as _json_st
+                with open(_es) as _esf:
+                    if _json_st.load(_esf).get("status") != "PAUSED":
+                        _green_pills.append(_pill("Sim engine", "#22c55e", "#052e16"))
+            # F5 engine
+            _f5s = os.path.join(_status_base, "pipeline", "f5_engine_status.json")
+            if os.path.exists(_f5s):
+                with open(_f5s) as _f5sf:
+                    if _json_st.load(_f5sf).get("status") != "PAUSED":
+                        _green_pills.append(_pill("F5 engine", "#22c55e", "#052e16"))
+            # F5 Run Line
+            _rls = os.path.join(_status_base, "pipeline", "f5_runline_status.json")
+            if os.path.exists(_rls):
+                with open(_rls) as _rlsf:
+                    if _json_st.load(_rlsf).get("status") != "PAUSED":
+                        _green_pills.append(_pill("F5 Run Line", "#22c55e", "#052e16"))
+            # S12 overlay
+            _s12c = os.path.join(_status_base, "pipeline", "s12_overlay_config.json")
+            if os.path.exists(_s12c):
+                with open(_s12c) as _s12f:
+                    if _json_st.load(_s12f).get("s12_cutoff_top20"):
+                        _green_pills.append(_pill("S12 overlay", "#22c55e", "#052e16"))
+            # P09 overlay
+            _p09c = os.path.join(_status_base, "pipeline", "p09_overlay_config.json")
+            if os.path.exists(_p09c):
+                with open(_p09c) as _p09f:
+                    if _json_st.load(_p09f).get("p09_cutoff_bottom20"):
+                        _green_pills.append(_pill("P09 overlay", "#22c55e", "#052e16"))
+            # Hard Rock override
+            _hrc = os.path.join(_status_base, "data", "line_overrides_2026.json")
+            if os.path.exists(_hrc):
+                _green_pills.append(_pill("HR override", "#22c55e", "#052e16"))
+
+            # YELLOW — shadow monitors
+            _yellow_pills = []
+            _shadow_checks = [
+                ("cs013_shadow_2026.json", "CS013 bullpen"),
+                ("cs028_shadow_2026.json", "CS028 blowup"),
+                ("kp04_shadow_2026.json", "KP04 K-prop"),
+                ("shadow_signals_2026.json", "ST02 road"),
+                ("combined_short_exit_shadow_2026.json", "Short exit"),
+            ]
+            for _sf, _sl in _shadow_checks:
+                if os.path.exists(os.path.join(_status_base, "logs", _sf)):
+                    _yellow_pills.append(_pill(_sl, "#eab308", "#1c1400"))
+
+            _html_parts = []
+            if _green_pills:
+                _html_parts.append(
+                    f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px">'
+                    f'\u25cf Active</span>' + "".join(_green_pills))
+            if _yellow_pills:
+                _html_parts.append(
+                    f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px;'
+                    f'margin-left:8px">\u25d0 Shadow</span>' + "".join(_yellow_pills))
+            if _html_parts:
+                st.html(f'<div style="margin-bottom:8px;line-height:2">{"".join(_html_parts)}</div>')
+        except Exception:
+            pass
 
         # ── MLB Sim Engine — UNDER signals (2026 live) ───────────────────────
         try:
@@ -3439,7 +3535,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
                             '⚠️ MLB Under Engine paused — manual review required before resuming.</div>')
                 else:
-                    st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">● Sim engine active</div>')
+                    pass  # Status shown in consolidated panel above
 
             # Today's V1 signals now shown on unified game cards above
 
@@ -3525,8 +3621,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
                             '\u26a0\ufe0f F5 Engine paused \u2014 manual review required.</div>')
                 else:
-                    st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">'
-                            '\u25cf F5 engine active</div>')
+                    pass  # Status shown in consolidated panel above
 
             # Today's F5 signals now shown on unified game cards above
 
@@ -3657,8 +3752,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
                             '\u26a0\ufe0f F5 Run Line paused \u2014 manual review required.</div>')
                 else:
-                    st.html('<div style="font-size:0.72em;color:#4ade80;margin-bottom:4px">'
-                            '\u25cf F5 Run Line active</div>')
+                    pass  # Status shown in consolidated panel above
 
             # Today's F5 RL signals now shown on unified game cards above
 
@@ -4231,8 +4325,6 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     st.caption(f"CLV: insufficient sample ({clv.get('total_with_clv', 0)} games). "
                                "Builds up once refresh.py has captured closing lines.")
 
-    with review_tab:
-        _render_review_tab("mlb", data)
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
@@ -4258,7 +4350,7 @@ def main() -> None:
             st.rerun()
 
     # ── sport tabs ────────────────────────────────────────────────────────────
-    tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_reviews = st.tabs(["⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "📋 Reviews"])
+    tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_reviews, tab_tracker = st.tabs(["⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "📋 Reviews", "📊 Tracker"])
 
     with tab_mlb:
         _render_mlb_tab(data, stats)
@@ -4280,6 +4372,9 @@ def main() -> None:
 
     with tab_reviews:
         _render_reviews_tab()
+
+    with tab_tracker:
+        _render_tracker_tab()
 
 
 # ── Reviews tab rendering ─────────────────────────────────────────────────────
@@ -4583,6 +4678,253 @@ def _render_golf_tab() -> None:
             "- **Markets**: make_cut (primary), top_20 (secondary), win/top_5/top_10 (passive)"
             % (mi.get("model", "DG-only"), mi.get("oos_auc", 0), mi.get("oos_brier", 0),
                mi.get("confidence_tier", "LOW"), mi.get("note", "")))
+
+
+# ── Performance Tracker tab ───────────────────────────────────────────────────
+
+def _render_tracker_tab() -> None:
+    """Cross-sport performance tracker. Read-only — no signal logic."""
+    import json as _tj
+    from datetime import date as _tdate, timedelta as _ttd
+
+    st.html("<h4 style='margin:0 0 8px 0'>📊 Performance Tracker</h4>")
+
+    today = _tdate.today()
+    window = st.radio(
+        "Time window", ["Last 7 Days", "Last 30 Days", "Season to Date"],
+        index=2, horizontal=True, key="tracker_window",
+    )
+    if window == "Last 7 Days":
+        cutoff = (today - _ttd(days=7)).isoformat()
+    elif window == "Last 30 Days":
+        cutoff = (today - _ttd(days=30)).isoformat()
+    else:
+        cutoff = "2026-01-01"
+
+    def _wlp(records, result_key="result", win_val="WIN", loss_val="LOSS", push_val="PUSH"):
+        w = sum(1 for r in records if r.get(result_key) == win_val)
+        l = sum(1 for r in records if r.get(result_key) == loss_val)
+        p = sum(1 for r in records if r.get(result_key) == push_val)
+        return w, l, p
+
+    def _roi_from_units(records, net_key="net_units", stake_key="stake_units"):
+        net = sum(float(r.get(net_key, 0) or 0) for r in records if r.get(net_key) is not None)
+        risked = sum(abs(float(r.get(stake_key, 1) or 1)) for r in records)
+        return round(net / risked * 100, 1) if risked > 0 else 0.0, round(net, 2)
+
+    def _roi_flat(w, l, p):
+        n = w + l + p
+        if n == 0:
+            return 0.0, 0.0
+        net = w * 0.909 - l * 1.0
+        return round(net / n * 100, 1), round(net, 2)
+
+    def _render_sport_panel(emoji, name, ow, ol, op, roi_pct, units_net, signal_rows):
+        n = ow + ol + op
+        rec_str = f"{ow}-{ol}-{op}"
+        roi_color = "#22c55e" if roi_pct > 0 else ("#f87171" if roi_pct < 0 else "#94a3b8")
+        units_color = "#22c55e" if units_net > 0 else ("#f87171" if units_net < 0 else "#94a3b8")
+
+        if n == 0:
+            st.html(
+                f'<div style="background:#1e1e2e;border:1px solid #333;border-radius:8px;'
+                f'padding:12px 16px;margin-bottom:10px">'
+                f'<span style="font-size:1.1em;font-weight:700">{emoji} {name}</span>'
+                f'<span style="color:#64748b;margin-left:12px;font-size:0.85em">No data yet</span>'
+                f'</div>')
+            return
+
+        st.html(
+            f'<div style="background:#1e1e2e;border:1px solid #333;border-radius:8px;'
+            f'padding:12px 16px;margin-bottom:2px">'
+            f'<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">'
+            f'<span style="font-size:1.1em;font-weight:700">{emoji} {name}</span>'
+            f'<span style="font-size:0.9em;color:#e2e8f0;font-weight:600">{rec_str}</span>'
+            f'<span style="font-size:0.85em;color:{roi_color};font-weight:600">ROI: {roi_pct:+.1f}%</span>'
+            f'<span style="font-size:0.85em;color:{units_color}">Units: {units_net:+.2f}</span>'
+            f'</div></div>')
+
+        if signal_rows:
+            header = (
+                '<div style="display:grid;grid-template-columns:1fr 40px 40px 40px 80px 70px;'
+                'padding:4px 16px;font-size:0.72em;color:#64748b;font-weight:600;'
+                'border-bottom:1px solid #333">'
+                '<span>Signal</span><span>W</span><span>L</span><span>P</span>'
+                '<span>Record</span><span>ROI</span></div>')
+            rows_html = ""
+            for sr in signal_rows:
+                sw, sl, sp, s_roi = sr["w"], sr["l"], sr["p"], sr["roi"]
+                sn = sw + sl + sp
+                srec = f"{sw}-{sl}-{sp}" if sn > 0 else "0-0-0"
+                sr_color = "#22c55e" if s_roi > 0 else ("#f87171" if s_roi < 0 else "#64748b")
+                roi_str = f"{s_roi:+.1f}%" if sn > 0 else "\u2014"
+                rows_html += (
+                    f'<div style="display:grid;grid-template-columns:1fr 40px 40px 40px 80px 70px;'
+                    f'padding:3px 16px;font-size:0.78em;color:#cbd5e1;'
+                    f'border-bottom:1px solid #1a1a2e">'
+                    f'<span>{sr["name"]}</span><span>{sw}</span><span>{sl}</span><span>{sp}</span>'
+                    f'<span>{srec}</span><span style="color:{sr_color}">{roi_str}</span></div>')
+            st.html(
+                f'<div style="background:#16162a;border:1px solid #333;border-radius:0 0 8px 8px;'
+                f'margin-bottom:10px;overflow:hidden">{header}{rows_html}</div>')
+
+    # ── MLB ──
+    mlb_v1 = []
+    try:
+        with open("mlb_sim/logs/signals_2026.json") as _f:
+            mlb_v1 = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
+    except Exception:
+        pass
+    mlb_f5 = []
+    try:
+        with open("mlb_sim/logs/f5_signals_2026.json") as _f:
+            mlb_f5 = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
+    except Exception:
+        pass
+    mlb_rl = []
+    try:
+        with open("mlb_sim/logs/f5_runline_2026.json") as _f:
+            mlb_rl = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
+    except Exception:
+        pass
+
+    mlb_signals = []
+    v1_w, v1_l, v1_p = _wlp(mlb_v1)
+    v1_roi, v1_net = _roi_from_units(mlb_v1)
+    mlb_signals.append({"name": "V1 UNDER", "w": v1_w, "l": v1_l, "p": v1_p, "roi": v1_roi})
+
+    f5u = [r for r in mlb_f5 if r.get("f5_signal_side") == "UNDER"]
+    f5o = [r for r in mlb_f5 if r.get("f5_signal_side") == "OVER"]
+    f5u_w, f5u_l, f5u_p = _wlp(f5u)
+    f5u_roi, _ = _roi_from_units(f5u)
+    f5o_w, f5o_l, f5o_p = _wlp(f5o)
+    f5o_roi, _ = _roi_from_units(f5o)
+    mlb_signals.append({"name": "F5 UNDER", "w": f5u_w, "l": f5u_l, "p": f5u_p, "roi": f5u_roi})
+    mlb_signals.append({"name": "F5 OVER", "w": f5o_w, "l": f5o_l, "p": f5o_p, "roi": f5o_roi})
+
+    rl_w, rl_l, rl_p = _wlp(mlb_rl)
+    rl_roi, _ = _roi_from_units(mlb_rl)
+    mlb_signals.append({"name": "Signal B", "w": rl_w, "l": rl_l, "p": rl_p, "roi": rl_roi})
+
+    s12 = [r for r in mlb_v1 if r.get("s12_overlay_active")]
+    s12_w, s12_l, s12_p = _wlp(s12)
+    s12_roi, _ = _roi_from_units(s12)
+    mlb_signals.append({"name": "S12 overlay", "w": s12_w, "l": s12_l, "p": s12_p, "roi": s12_roi})
+
+    p09 = [r for r in mlb_v1 if r.get("p09_overlay_active")]
+    p09_w, p09_l, p09_p = _wlp(p09)
+    p09_roi, _ = _roi_from_units(p09)
+    mlb_signals.append({"name": "P09 overlay", "w": p09_w, "l": p09_l, "p": p09_p, "roi": p09_roi})
+
+    all_mlb = mlb_v1 + mlb_f5 + mlb_rl
+    mw, ml, mp = _wlp(all_mlb)
+    m_roi, m_net = _roi_from_units(all_mlb)
+    _render_sport_panel("\u26be", "MLB", mw, ml, mp, m_roi, m_net, mlb_signals)
+
+    # ── NBA ──
+    nba_records = []
+    try:
+        _nba = pd.read_parquet("nba/data/nba_signal_log.parquet")
+        _nba = _nba[_nba["game_date"] >= cutoff]
+        _nba = _nba[_nba["result"].notna()]
+        nba_records = _nba.to_dict("records")
+    except Exception:
+        pass
+
+    nw, nl, np_ = _wlp(nba_records)
+    nba_signals = []
+    venue_only = [r for r in nba_records if r.get("venue_signal") and not r.get("oreb_confirms")]
+    venue_oreb = [r for r in nba_records if r.get("venue_signal") and r.get("oreb_confirms")]
+    ref_under = [r for r in nba_records if r.get("tier") == "REF_UNDER"]
+    for label, sub in [("Venue OVER", venue_only), ("Venue+OREB", venue_oreb), ("REF UNDER", ref_under)]:
+        tw, tl, tp = _wlp(sub)
+        tr, _ = _roi_flat(tw, tl, tp)
+        nba_signals.append({"name": label, "w": tw, "l": tl, "p": tp, "roi": tr})
+
+    if nba_records and nba_records[0].get("units_won_lost") is not None:
+        n_net = sum(float(r.get("units_won_lost", 0) or 0) for r in nba_records)
+        n_risked = sum(float(r.get("units", 1) or 1) for r in nba_records)
+        n_roi = round(n_net / n_risked * 100, 1) if n_risked > 0 else 0.0
+    else:
+        n_roi, n_net = _roi_flat(nw, nl, np_)
+    _render_sport_panel("\U0001f3c0", "NBA", nw, nl, np_, n_roi, round(n_net, 2), nba_signals)
+
+    # ── NHL ──
+    nhl_records = []
+    try:
+        _nhl = pd.read_parquet("nhl/nhl_decisions.parquet")
+        _nhl = _nhl[(_nhl["split"] == "live") & (_nhl["game_date"] >= cutoff)]
+        _nhl = _nhl[_nhl["result"].isin(["WIN", "LOSS", "PUSH"])]
+        nhl_records = _nhl.to_dict("records")
+    except Exception:
+        pass
+
+    hw, hl_, hp = _wlp(nhl_records)
+    nhl_signals = []
+    for label, filt in [("OVER", lambda r: r.get("signal_side") == "OVER"),
+                         ("UNDER", lambda r: r.get("signal_side") == "UNDER")]:
+        sub = [r for r in nhl_records if filt(r)]
+        tw, tl, tp = _wlp(sub)
+        tr, _ = _roi_flat(tw, tl, tp)
+        nhl_signals.append({"name": label, "w": tw, "l": tl, "p": tp, "roi": tr})
+    for tier in ["HIGH", "MEDIUM", "LOW"]:
+        sub = [r for r in nhl_records if r.get("confidence_tier") == tier]
+        tw, tl, tp = _wlp(sub)
+        tr, _ = _roi_flat(tw, tl, tp)
+        nhl_signals.append({"name": f"{tier} tier", "w": tw, "l": tl, "p": tp, "roi": tr})
+
+    h_roi, h_net = _roi_flat(hw, hl_, hp)
+    _render_sport_panel("\U0001f3d2", "NHL", hw, hl_, hp, h_roi, h_net, nhl_signals)
+
+    # ── Soccer ──
+    soc_records = []
+    try:
+        _soc = pd.read_parquet("soccer/data/soccer_decisions.parquet")
+        _soc["game_date"] = pd.to_datetime(_soc["game_date"]).dt.strftime("%Y-%m-%d")
+        _soc = _soc[(_soc["split"] == "live") & (_soc["game_date"] >= cutoff) & (_soc["graded"] == 1)]
+        soc_records = _soc.to_dict("records")
+    except Exception:
+        pass
+
+    sw_, sl__, sp_ = _wlp(soc_records)
+    soc_signals = []
+    for lg in ["EPL", "BUN", "LG1", "SEA"]:
+        sub = [r for r in soc_records if r.get("league_id") == lg]
+        tw, tl, tp = _wlp(sub)
+        tr, _ = _roi_flat(tw, tl, tp)
+        soc_signals.append({"name": lg, "w": tw, "l": tl, "p": tp, "roi": tr})
+    for tier in ["HIGH", "MEDIUM", "LOW"]:
+        sub = [r for r in soc_records if r.get("confidence_tier") == tier]
+        tw, tl, tp = _wlp(sub)
+        tr, _ = _roi_flat(tw, tl, tp)
+        soc_signals.append({"name": f"{tier} tier", "w": tw, "l": tl, "p": tp, "roi": tr})
+
+    s_roi, s_net = _roi_flat(sw_, sl__, sp_)
+    _render_sport_panel("\u26bd", "Soccer", sw_, sl__, sp_, s_roi, s_net, soc_signals)
+
+    # ── Golf ──
+    golf_records = []
+    try:
+        _golf = pd.read_parquet("golf/shadow/golf_shadow_log.parquet")
+        _golf = _golf[(_golf["calendar_year"] == 2026) & (_golf["actual_result"].notna())]
+        for _, r in _golf.iterrows():
+            golf_records.append({
+                "result": "WIN" if r["actual_result"] == 1 else "LOSS",
+                "market": r.get("market", ""),
+            })
+    except Exception:
+        pass
+
+    gw, gl, gp = _wlp(golf_records)
+    golf_signals = []
+    for mkt in ["make_cut", "top_20", "top_10", "top_5", "win"]:
+        sub = [r for r in golf_records if r.get("market") == mkt]
+        mw_, ml_, mp_ = _wlp(sub)
+        mr, _ = _roi_flat(mw_, ml_, mp_)
+        golf_signals.append({"name": mkt.replace("_", " ").title(), "w": mw_, "l": ml_, "p": mp_, "roi": mr})
+
+    g_roi, g_net = _roi_flat(gw, gl, gp)
+    _render_sport_panel("\u26f3", "Golf", gw, gl, gp, g_roi, g_net, golf_signals)
 
 
 main()
