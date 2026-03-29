@@ -995,24 +995,40 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         _has_p09 = any(s.get("p09_active") for s in signals if s.get("type") == "v1")
         _has_st02 = any(s.get("st02_active") for s in signals if s.get("type") == "v1")
 
-        boost = ""
-        if has_s12 and _has_p09:
-            boost = ('<div style="font-size:0.82em;color:#22c55e;margin-top:2px">'
-                     'Elite command and contact suppression stacking up. '
-                     'Highest conviction play of the day.</div>')
-        elif _has_p09:
-            boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
-                     'Strong pitching in a run-suppressing park \u2014 '
-                     'hard contact limited on both sides.</div>')
-        elif has_s12 and _has_st02:
-            boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
-                     'Boosted \u2014 elite pitching environment + road fatigue</div>')
-        elif has_s12:
-            boost = ('<div style="font-size:0.82em;color:#a78bfa;margin-top:2px">'
-                     'Boosted \u2014 elite pitching environment</div>')
-        elif _has_st02:
-            boost = ('<div style="font-size:0.82em;color:#60a5fa;margin-top:2px">'
-                     'Road fatigue \u2014 away team on extended road trip</div>')
+        # Per-game modifier pills (green = active overlay, yellow = shadow signal)
+        _mpill = lambda label, color, bg: (
+            f'<span style="background:{bg};color:{color};border:1px solid {color};'
+            f'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600;'
+            f'margin-right:3px">{label}</span>')
+        _mod_pills = ""
+        _green_mods = []
+        _yellow_mods = []
+        if has_s12:
+            _green_mods.append(_mpill("S12", "#22c55e", "#052e16"))
+        if _has_p09:
+            _green_mods.append(_mpill("P09", "#22c55e", "#052e16"))
+        if temp is not None and temp < 55:
+            _green_mods.append(_mpill("Cold", "#22c55e", "#052e16"))
+        if (not is_dome and wind_mph >= 10
+                and isinstance(wind_raw, str) and "out" in wind_raw.lower()):
+            _green_mods.append(_mpill("Wind Out", "#22c55e", "#052e16"))
+
+        # Shadow signals from per-game log data
+        _gpk_sh = str(game.get("game_pk", ""))
+        _gdate_sh = game.get("game_date", "")
+        _sh_flags = _load_shadow_flags(_gdate_sh).get(_gpk_sh, {})
+        if _sh_flags.get("cs013"):
+            _yellow_mods.append(_mpill("CS013", "#eab308", "#1c1400"))
+        if _sh_flags.get("cs028"):
+            _yellow_mods.append(_mpill("CS028", "#eab308", "#1c1400"))
+        # KP04 and ST02 from signal data
+        if _has_st02:
+            _yellow_mods.append(_mpill("ST02", "#eab308", "#1c1400"))
+
+        if _green_mods or _yellow_mods:
+            _mod_pills = ('<div style="margin-top:4px;margin-bottom:2px;line-height:1.8">'
+                          + "".join(_green_mods) + "".join(_yellow_mods) + '</div>')
+        boost = _mod_pills
 
         # FIX 1: Conversational explanation from signal composition
         _types = [s.get("type", "") for s in signals]
@@ -3486,23 +3502,14 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 with open(_p09c) as _p09f:
                     if _json_st.load(_p09f).get("p09_cutoff_bottom20"):
                         _green_pills.append(_pill("P09 overlay", "#22c55e", "#052e16"))
-            # Hard Rock override
-            _hrc = os.path.join(_status_base, "data", "line_overrides_2026.json")
-            if os.path.exists(_hrc):
-                _green_pills.append(_pill("HR override", "#22c55e", "#052e16"))
-
-            # YELLOW — shadow monitors
-            _yellow_pills = []
-            _shadow_checks = [
-                ("cs013_shadow_2026.json", "CS013 bullpen"),
-                ("cs028_shadow_2026.json", "CS028 blowup"),
-                ("kp04_shadow_2026.json", "KP04 K-prop"),
-                ("shadow_signals_2026.json", "ST02 road"),
-                ("combined_short_exit_shadow_2026.json", "Short exit"),
+            # YELLOW — shadow monitors (always shown; these are wired in run_model.py)
+            _yellow_pills = [
+                _pill("CS013 bullpen", "#eab308", "#1c1400"),
+                _pill("CS028 blowup", "#eab308", "#1c1400"),
+                _pill("KP04 K-prop", "#eab308", "#1c1400"),
+                _pill("ST02 road", "#eab308", "#1c1400"),
+                _pill("Short exit", "#eab308", "#1c1400"),
             ]
-            for _sf, _sl in _shadow_checks:
-                if os.path.exists(os.path.join(_status_base, "logs", _sf)):
-                    _yellow_pills.append(_pill(_sl, "#eab308", "#1c1400"))
 
             _html_parts = []
             if _green_pills:
