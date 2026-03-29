@@ -1148,6 +1148,195 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
         logger.warning(f"Morning snapshot write failed (non-fatal): {_e}")
 
 
+# ── Signal log writer ────────────────────────────────────────────────────────
+
+_SIGNAL_LOG_PATH = os.path.join(os.path.dirname(__file__), "data", "nba_signal_log.parquet")
+_ACTIONABLE_TIERS = {"TIER_1A", "TIER_1B", "TIER_2", "REF_UNDER", "P1", "P2", "P4"}
+
+
+def _log_signals_to_signal_log(game_date: str) -> None:
+    """
+    Append today's actionable signals to nba_signal_log.parquet.
+    Idempotent — skips games already present for this date.
+    Non-fatal — wrapped in try/except by caller.
+    """
+    if not os.path.exists(NBA_PROJECTIONS_PATH):
+        return
+
+    proj = pd.read_parquet(NBA_PROJECTIONS_PATH)
+    today = proj[proj["game_date"] == game_date].copy()
+    if today.empty:
+        return
+
+    actionable = today[today["bet_tier"].isin(_ACTIONABLE_TIERS)].copy()
+    if actionable.empty:
+        logger.info("Signal log: no actionable signals today")
+        return
+
+    # Load existing log to check for duplicates
+    if os.path.exists(_SIGNAL_LOG_PATH):
+        existing = pd.read_parquet(_SIGNAL_LOG_PATH)
+        already_logged = set(
+            existing[existing["game_date"] == game_date]["home_team"].astype(str)
+            + "_" + existing[existing["game_date"] == game_date]["away_team"].astype(str)
+        )
+    else:
+        existing = pd.DataFrame()
+        already_logged = set()
+
+    rows = []
+    for _, g in actionable.iterrows():
+        key = f"{g['home_team']}_{g['away_team']}"
+        if key in already_logged:
+            continue
+
+        # Derive primary signal_type
+        if str(g.get("bet_tier", "")) == "REF_UNDER":
+            sig_type = "REF_UNDER"
+        elif g.get("venue_signal") and str(g["venue_signal"]) != "<NA>":
+            sig_type = str(g["venue_signal"])
+        elif g.get("oreb_confirms"):
+            sig_type = "OREB_CONFIRMS"
+        elif g.get("shot_signal") and str(g["shot_signal"]) != "<NA>":
+            sig_type = str(g["shot_signal"])
+        elif g.get("ref_signal") and str(g["ref_signal"]) not in ("<NA>", "NONE", "UNKNOWN"):
+            sig_type = str(g["ref_signal"])
+        elif g.get("pace_signal") and str(g["pace_signal"]) != "<NA>":
+            sig_type = str(g["pace_signal"])
+        else:
+            sig_type = str(g.get("signal_class", "UNKNOWN"))
+
+        # Derive direction from tier/lean
+        bt = str(g.get("bet_tier", ""))
+        if bt == "REF_UNDER":
+            direction = "UNDER"
+        elif g.get("venue_direction") and str(g["venue_direction"]) != "<NA>":
+            direction = str(g["venue_direction"])
+        elif g.get("shot_direction") and str(g["shot_direction"]) != "<NA>":
+            direction = str(g["shot_direction"])
+        else:
+            direction = str(g.get("lean", "UNKNOWN"))
+
+        # Sizing
+        sizing_map = {"TIER_1A": 1.5, "TIER_1B": 1.5, "TIER_2": 1.0,
+                       "REF_UNDER": 0.75, "P1": 1.5, "P2": 1.0, "P4": 1.0}
+        units = sizing_map.get(bt, 1.0)
+
+        rows.append({
+            "game_date":          game_date,
+            "home_team":          g.get("home_team"),
+            "away_team":          g.get("away_team"),
+            "signal_type":        sig_type,
+            "tier":               bt,
+            "direction":          direction,
+            "closing_line":       g.get("line"),
+            "book_used":          "Hard Rock" if g.get("line") is not None else None,
+            "units":              units,
+            "venue_signal":       bool(g.get("venue_signal") and str(g["venue_signal"]) != "<NA>"),
+            "oreb_confirms":      bool(g.get("oreb_confirms")),
+            "shot_over_signal":   bool(g.get("shot_direction") == "OVER"),
+            "pace_signal":        bool(g.get("pace_signal") and str(g["pace_signal"]) != "<NA>"),
+            "shot_under_signal":  bool(g.get("shot_direction") == "UNDER"),
+            "actual_total":       None,
+            "result":             None,
+            "units_won_lost":     None,
+            "notes":              "",
+        })
+
+    if not rows:
+        logger.info("Signal log: all today's signals already logged")
+        return
+
+    new_df = pd.DataFrame(rows)
+    if not existing.empty:
+        combined = pd.concat([existing, new_df], ignore_index=True)
+    else:
+        combined = new_df
+
+    combined.to_parquet(_SIGNAL_LOG_PATH, index=False)
+    logger.info(f"Signal log: {len(rows)} new signals logged for {game_date}")
+
+
+def _grade_signal_log(game_date: str) -> None:
+    """
+    Backfill actual_total, result, units_won_lost for graded games in signal log.
+    Called during grading pass (same time as grade_yesterday).
+    Non-fatal — wrapped in try/except by caller.
+    """
+    if not os.path.exists(_SIGNAL_LOG_PATH):
+        return
+
+    results_path = os.path.join(NBA_DIR, "data", "nba_results_log.parquet")
+    if not os.path.exists(results_path):
+        return
+
+    slog = pd.read_parquet(_SIGNAL_LOG_PATH)
+    results = pd.read_parquet(results_path)
+
+    # Find ungraded rows that match graded results
+    from datetime import timedelta
+    yesterday = (pd.Timestamp(game_date) - timedelta(days=1)).strftime("%Y-%m-%d")
+
+    ungraded = slog[slog["actual_total"].isna() & (slog["game_date"] == yesterday)]
+    if ungraded.empty:
+        return
+
+    graded_results = results[results["game_date"] == yesterday]
+    if graded_results.empty:
+        return
+
+    updated = 0
+    for idx, row in ungraded.iterrows():
+        match = graded_results[
+            (graded_results["home_team"] == row["home_team"]) &
+            (graded_results["away_team"] == row["away_team"])
+        ]
+        if match.empty:
+            continue
+
+        m = match.iloc[0]
+        actual = m.get("actual_total")
+        line = row.get("closing_line")
+        direction = row.get("direction")
+        units = row.get("units", 1.0)
+
+        if actual is None or line is None or pd.isna(actual) or pd.isna(line):
+            continue
+
+        actual = float(actual)
+        line = float(line)
+        units = float(units) if units is not None and not pd.isna(units) else 1.0
+
+        if direction == "OVER":
+            if actual > line:
+                result = "WIN"
+            elif actual < line:
+                result = "LOSS"
+            else:
+                result = "PUSH"
+        elif direction == "UNDER":
+            if actual < line:
+                result = "WIN"
+            elif actual > line:
+                result = "LOSS"
+            else:
+                result = "PUSH"
+        else:
+            continue
+
+        won_lost = units * (100.0 / 110.0) if result == "WIN" else (
+            -units if result == "LOSS" else 0.0)
+
+        slog.at[idx, "actual_total"] = actual
+        slog.at[idx, "result"] = result
+        slog.at[idx, "units_won_lost"] = round(won_lost, 3)
+        updated += 1
+
+    if updated > 0:
+        slog.to_parquet(_SIGNAL_LOG_PATH, index=False)
+        logger.info(f"Signal log: {updated} games graded for {yesterday}")
+
+
 # ── Playoff series tracker (live 2026) ────────────────────────────────────────
 
 _SERIES_TRACKER_PATH = os.path.join(os.path.dirname(__file__), "data", "playoff_series_2026.json")
@@ -1417,6 +1606,10 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
             grade_high_line_shadow(game_date)
         except Exception as e:
             logger.warning(f"High-line shadow grading failed (non-fatal): {e}")
+        try:
+            _grade_signal_log(game_date)
+        except Exception as e:
+            logger.warning(f"Signal log grading failed (non-fatal): {e}")
 
     # ── Step 2: Today's schedule ──────────────────────────────────────────────
     from nba.modules.fetch_nba_schedule import fetch_today_schedule
@@ -1897,6 +2090,12 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
 
     # ── Step 11: Save projections ─────────────────────────────────────────────
     save_projections(game_results, game_date)
+
+    # ── Step 11b: Log actionable signals to nba_signal_log.parquet ────────────
+    try:
+        _log_signals_to_signal_log(game_date)
+    except Exception as _e:
+        logger.warning(f"Signal log write failed (non-fatal): {_e}")
 
     # ── Step 12: Update playoff series tracker ────────────────────────────────
     try:
