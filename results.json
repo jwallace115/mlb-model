@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-29T16:00:38.045311Z",
+  "generated_at": "2026-03-29T21:10:31.760647Z",
   "game_date": "2026-03-29",
   "plays": [
     {
@@ -9,7 +9,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:20 PM CDT",
         "game_time_et": "02:20 PM ET",
-        "status": "Pre-Game",
+        "status": "Final",
         "home_team": "CHC",
         "away_team": "WSN",
         "home_team_id": 112,
@@ -24,7 +24,7 @@
         "proj_total_full": 10.99,
         "proj_total_f5": 6.26,
         "confidence": "HIGH",
-        "confidence_score": 0.743,
+        "confidence_score": 0.744,
         "factors": {
           "sp_home_xfip": 3.983,
           "sp_away_xfip": 4.936,
@@ -35,15 +35,15 @@
           "home_wrc_plus": 110.1,
           "away_wrc_plus": 127.2,
           "park_factor": 1.03,
-          "wind_speed_mph": 7.2,
-          "wind_direction": 196,
+          "wind_speed_mph": 6.2,
+          "wind_direction": 201,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 61.7,
+          "temperature_f": 61.5,
           "weather_desc": "Overcast",
-          "wind_factor": 1.005,
-          "temp_factor": 0.9794,
-          "home_wind_adj": 1.005,
-          "away_wind_adj": 1.005,
+          "wind_factor": 1.0056,
+          "temp_factor": 0.979,
+          "home_wind_adj": 1.0056,
+          "away_wind_adj": 1.0056,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Roberto Ortiz",
@@ -195,13 +195,13 @@
       ]
     },
     {
-      "rating": "\u2b50\u2b50\u2b50",
+      "rating": "\u2b50\u2b50",
       "game": {
         "game_pk": 824864,
         "game_date": "2026-03-29",
         "game_time": "01:35 PM EDT",
         "game_time_et": "01:35 PM ET",
-        "status": "Pre-Game",
+        "status": "Game Over",
         "home_team": "BAL",
         "away_team": "MIN",
         "home_team_id": 110,
@@ -213,10 +213,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 7.06,
-        "proj_total_f5": 3.87,
-        "confidence": "HIGH",
-        "confidence_score": 0.733,
+        "proj_total_full": 6.99,
+        "proj_total_f5": 3.83,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.655,
         "factors": {
           "sp_home_xfip": 3.974,
           "sp_away_xfip": 4.091,
@@ -227,15 +227,15 @@
           "home_wrc_plus": 73.0,
           "away_wrc_plus": 83.0,
           "park_factor": 1.06,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 9.9,
+          "wind_direction": 185,
+          "wind_desc": "Blowing L to R",
+          "temperature_f": 58.6,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0175,
+          "temp_factor": 0.9732,
+          "home_wind_adj": 1.0175,
+          "away_wind_adj": 1.0175,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Chris Segal",
@@ -251,7 +251,7 @@
         }
       },
       "full_edge": {
-        "edge": -1.44,
+        "edge": -1.51,
         "lean": "UNDER",
         "consensus": 8.5,
         "value": true
@@ -262,40 +262,40 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Both lineups grade below average \u2014 MIN at 83 wRC+ and BAL at 73. Weak bats on both sides suppress the total. Starters are evenly matched (Bailey Ober 4.09 / Shane Baz 3.97 xFIP). The park (PF 106) is hitter-friendly pulls the other way, but not enough to flip the lean. Model has 7.1, market is at 8.5 \u2014 under by -1.4 runs.",
+      "summary": "Both lineups grade below average \u2014 MIN at 83 wRC+ and BAL at 73. Weak bats on both sides suppress the total. Starters are evenly matched (Bailey Ober 4.09 / Shane Baz 3.97 xFIP). The park (PF 106) is hitter-friendly pulls the other way, but not enough to flip the lean. Model has 7.0, market is at 8.5 \u2014 under by -1.5 runs.",
       "props": [
         {
           "player_name": "Bailey Ober",
           "team": "MIN",
           "market": "K",
           "projection": 5.33,
-          "line": 4.5,
-          "lean": "OVER",
-          "edge": 0.83,
-          "edge_pct": 0.1844,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Shane Baz",
           "team": "TBR",
           "market": "K",
           "projection": 6.28,
-          "line": 5.5,
-          "lean": "OVER",
-          "edge": 0.78,
-          "edge_pct": 0.1418,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Byron Buxton",
           "team": "MIN",
           "market": "TB",
           "projection": 1.7,
-          "line": 1.5,
-          "lean": "OVER",
-          "edge": 0.2,
-          "edge_pct": 0.1333,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Colton Cowser",
@@ -324,32 +324,32 @@
           "team": "MIN",
           "market": "TB",
           "projection": 1.43,
-          "line": 0.5,
-          "lean": "OVER",
-          "edge": 0.93,
-          "edge_pct": 1.86,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Royce Lewis",
           "team": "MIN",
           "market": "TB",
           "projection": 1.32,
-          "line": 0.5,
-          "lean": "OVER",
-          "edge": 0.82,
-          "edge_pct": 1.64,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Ryan Mountcastle",
           "team": "BAL",
           "market": "TB",
           "projection": 1.44,
-          "line": 1.5,
-          "lean": "UNDER",
-          "edge": -0.06,
-          "edge_pct": 0.04,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
           "is_play": false
         }
       ],
@@ -373,6 +373,16 @@
           "projection_delta": null,
           "old_confidence": null,
           "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Ryan Mountcastle",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
         }
       ]
     },
@@ -383,7 +393,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:35 PM EDT",
         "game_time_et": "01:35 PM ET",
-        "status": "Pre-Game",
+        "status": "Final",
         "home_team": "PHI",
         "away_team": "TEX",
         "home_team_id": 143,
@@ -395,10 +405,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 6.84,
-        "proj_total_f5": 3.75,
+        "proj_total_full": 6.79,
+        "proj_total_f5": 3.73,
         "confidence": "MEDIUM",
-        "confidence_score": 0.599,
+        "confidence_score": 0.53,
         "factors": {
           "sp_home_xfip": 3.827,
           "sp_away_xfip": 4.259,
@@ -409,15 +419,15 @@
           "home_wrc_plus": 81.1,
           "away_wrc_plus": 70.1,
           "park_factor": 1.04,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 11.7,
+          "wind_direction": 193,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 54.6,
+          "weather_desc": "Clear",
+          "wind_factor": 1.029,
+          "temp_factor": 0.9652,
+          "home_wind_adj": 1.029,
+          "away_wind_adj": 1.029,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Sean Barber",
@@ -433,7 +443,7 @@
         }
       },
       "full_edge": {
-        "edge": -1.16,
+        "edge": -1.21,
         "lean": "UNDER",
         "consensus": 8.0,
         "value": true
@@ -462,10 +472,10 @@
           "team": "WSN",
           "market": "K",
           "projection": 6.01,
-          "line": 5.5,
-          "lean": "OVER",
-          "edge": 0.51,
-          "edge_pct": 0.0927,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
           "is_play": false
         },
         {
@@ -473,44 +483,44 @@
           "team": "PHI",
           "market": "TB",
           "projection": 1.66,
-          "line": 1.5,
-          "lean": "OVER",
-          "edge": 0.16,
-          "edge_pct": 0.1067,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Corey Seager",
           "team": "TEX",
           "market": "TB",
           "projection": 1.87,
-          "line": 1.5,
-          "lean": "OVER",
-          "edge": 0.37,
-          "edge_pct": 0.2467,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Jake Burger",
           "team": "TEX",
           "market": "TB",
           "projection": 1.52,
-          "line": 0.5,
-          "lean": "OVER",
-          "edge": 1.02,
-          "edge_pct": 2.04,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Kyle Schwarber",
           "team": "PHI",
           "market": "TB",
           "projection": 1.97,
-          "line": 1.5,
-          "lean": "OVER",
-          "edge": 0.47,
-          "edge_pct": 0.3133,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Max Kepler",
@@ -528,11 +538,11 @@
           "team": "TEX",
           "market": "TB",
           "projection": 1.47,
-          "line": 0.5,
-          "lean": "OVER",
-          "edge": 0.97,
-          "edge_pct": 1.94,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         }
       ],
       "alerts": [
@@ -555,7 +565,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:40 PM EDT",
         "game_time_et": "01:40 PM ET",
-        "status": "Pre-Game",
+        "status": "Final",
         "home_team": "MIA",
         "away_team": "COL",
         "home_team_id": 146,
@@ -567,10 +577,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 7.63,
-        "proj_total_f5": 4.41,
+        "proj_total_full": 7.62,
+        "proj_total_f5": 4.4,
         "confidence": "MEDIUM",
-        "confidence_score": 0.463,
+        "confidence_score": 0.465,
         "factors": {
           "sp_home_xfip": 4.491,
           "sp_away_xfip": 4.733,
@@ -581,15 +591,15 @@
           "home_wrc_plus": 96.6,
           "away_wrc_plus": 68.5,
           "park_factor": 0.98,
-          "wind_speed_mph": 7.7,
-          "wind_direction": 75,
+          "wind_speed_mph": 9.8,
+          "wind_direction": 73,
           "wind_desc": "Blowing L to R",
           "temperature_f": 72.5,
-          "weather_desc": "Overcast",
-          "wind_factor": 0.9983,
+          "weather_desc": "Partly Cloudy",
+          "wind_factor": 0.997,
           "temp_factor": 1.001,
-          "home_wind_adj": 0.9983,
-          "away_wind_adj": 0.9983,
+          "home_wind_adj": 0.997,
+          "away_wind_adj": 0.997,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Stu Scheurwater",
@@ -605,7 +615,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.37,
+        "edge": -0.38,
         "lean": "UNDER",
         "consensus": 8.0,
         "value": false
@@ -623,22 +633,22 @@
           "team": "MIL",
           "market": "K",
           "projection": 3.91,
-          "line": 3.5,
-          "lean": "OVER",
-          "edge": 0.41,
-          "edge_pct": 0.1171,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Max Meyer",
           "team": "MIA",
           "market": "K",
           "projection": 6.33,
-          "line": 5.5,
-          "lean": "OVER",
-          "edge": 0.83,
-          "edge_pct": 0.1509,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Agustin Ramirez",
@@ -656,11 +666,11 @@
           "team": "COL",
           "market": "TB",
           "projection": 1.25,
-          "line": 0.5,
-          "lean": "OVER",
-          "edge": 0.75,
-          "edge_pct": 1.5,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Eric Wagaman",
@@ -678,10 +688,10 @@
           "team": "COL",
           "market": "TB",
           "projection": 1.41,
-          "line": 1.5,
-          "lean": "UNDER",
-          "edge": -0.09,
-          "edge_pct": 0.06,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
           "is_play": false
         },
         {
@@ -759,7 +769,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:35 PM EDT",
         "game_time_et": "01:35 PM ET",
-        "status": "Pre-Game",
+        "status": "Final",
         "home_team": "ATL",
         "away_team": "KCR",
         "home_team_id": 144,
@@ -771,10 +781,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.31,
-        "proj_total_f5": 5.28,
+        "proj_total_full": 9.32,
+        "proj_total_f5": 5.29,
         "confidence": "LOW",
-        "confidence_score": 0.361,
+        "confidence_score": 0.363,
         "factors": {
           "sp_home_xfip": 4.274,
           "sp_away_xfip": 4.586,
@@ -785,15 +795,15 @@
           "home_wrc_plus": 100.6,
           "away_wrc_plus": 101.5,
           "park_factor": 1.02,
-          "wind_speed_mph": 8.8,
-          "wind_direction": 148,
+          "wind_speed_mph": 7.9,
+          "wind_direction": 151,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 63.2,
-          "weather_desc": "Overcast",
-          "wind_factor": 1.0176,
-          "temp_factor": 0.9824,
-          "home_wind_adj": 1.0176,
-          "away_wind_adj": 1.0176,
+          "temperature_f": 64.2,
+          "weather_desc": "Partly Cloudy",
+          "wind_factor": 1.0164,
+          "temp_factor": 0.9844,
+          "home_wind_adj": 1.0164,
+          "away_wind_adj": 1.0164,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Gabe Morales",
@@ -809,7 +819,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.31,
+        "edge": 1.32,
         "lean": "OVER",
         "consensus": 8.0,
         "value": true
@@ -931,7 +941,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:40 PM EDT",
         "game_time_et": "01:40 PM ET",
-        "status": "Pre-Game",
+        "status": "Final",
         "home_team": "CIN",
         "away_team": "BOS",
         "home_team_id": 113,
@@ -943,10 +953,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.23,
+        "proj_total_full": 8.22,
         "proj_total_f5": 4.52,
         "confidence": "LOW",
-        "confidence_score": 0.243,
+        "confidence_score": 0.244,
         "factors": {
           "sp_home_xfip": 4.286,
           "sp_away_xfip": 3.854,
@@ -957,15 +967,15 @@
           "home_wrc_plus": 79.4,
           "away_wrc_plus": 98.1,
           "park_factor": 1.07,
-          "wind_speed_mph": 12.0,
-          "wind_direction": 201,
+          "wind_speed_mph": 11.6,
+          "wind_direction": 208,
           "wind_desc": "Blowing Out to CF",
           "temperature_f": 65.9,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0296,
+          "wind_factor": 1.029,
           "temp_factor": 0.9878,
-          "home_wind_adj": 1.0296,
-          "away_wind_adj": 1.0296,
+          "home_wind_adj": 1.029,
+          "away_wind_adj": 1.029,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Adam Beck",
@@ -981,7 +991,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.23,
+        "edge": 0.22,
         "lean": "OVER",
         "consensus": 8.0,
         "value": false
@@ -999,10 +1009,10 @@
           "team": "BOS",
           "market": "K",
           "projection": 6.69,
-          "line": 6.5,
-          "lean": "OVER",
-          "edge": 0.19,
-          "edge_pct": 0.0292,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
           "is_play": false
         },
         {
@@ -1010,10 +1020,10 @@
           "team": "CIN",
           "market": "TB",
           "projection": 1.41,
-          "line": 1.5,
-          "lean": "UNDER",
-          "edge": -0.09,
-          "edge_pct": 0.06,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
           "is_play": false
         },
         {
@@ -1021,10 +1031,10 @@
           "team": "BOS",
           "market": "TB",
           "projection": 1.42,
-          "line": 1.5,
-          "lean": "UNDER",
-          "edge": -0.08,
-          "edge_pct": 0.0533,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
           "is_play": false
         },
         {
@@ -1043,11 +1053,11 @@
           "team": "CIN",
           "market": "TB",
           "projection": 1.3,
-          "line": 0.5,
-          "lean": "OVER",
-          "edge": 0.8,
-          "edge_pct": 1.6,
-          "is_play": true
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         },
         {
           "player_name": "Will Benson",
@@ -1065,10 +1075,10 @@
           "team": "BOS",
           "market": "TB",
           "projection": 1.6,
-          "line": 1.5,
-          "lean": "OVER",
-          "edge": 0.1,
-          "edge_pct": 0.0667,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
           "is_play": false
         }
       ],
@@ -1102,7 +1112,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:10 PM CDT",
         "game_time_et": "02:10 PM ET",
-        "status": "Pre-Game",
+        "status": "In Progress",
         "home_team": "HOU",
         "away_team": "LAA",
         "home_team_id": 117,
@@ -1114,10 +1124,10 @@
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 8.91,
-        "proj_total_f5": 5.14,
+        "proj_total_full": 8.88,
+        "proj_total_f5": 5.12,
         "confidence": "LOW",
-        "confidence_score": 0.102,
+        "confidence_score": 0.108,
         "factors": {
           "sp_home_xfip": 4.25,
           "sp_away_xfip": 5.085,
@@ -1128,15 +1138,15 @@
           "home_wrc_plus": 89.4,
           "away_wrc_plus": 98.6,
           "park_factor": 1.0,
-          "wind_speed_mph": 10.5,
-          "wind_direction": 151,
+          "wind_speed_mph": 9.1,
+          "wind_direction": 149,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 74.0,
+          "temperature_f": 74.3,
           "weather_desc": "Clear",
-          "wind_factor": 1.023,
-          "temp_factor": 1.004,
-          "home_wind_adj": 1.023,
-          "away_wind_adj": 1.023,
+          "wind_factor": 1.0195,
+          "temp_factor": 1.0046,
+          "home_wind_adj": 1.0195,
+          "away_wind_adj": 1.0195,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Brennan Miller",
@@ -1152,7 +1162,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.09,
+        "edge": -0.12,
         "lean": "UNDER",
         "consensus": 9.0,
         "value": false
@@ -1273,7 +1283,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:10 PM CDT",
         "game_time_et": "02:10 PM ET",
-        "status": "Pre-Game",
+        "status": "In Progress",
         "home_team": "MIL",
         "away_team": "CHW",
         "home_team_id": 158,
@@ -1285,10 +1295,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.91,
-        "proj_total_f5": 5.54,
+        "proj_total_full": 9.96,
+        "proj_total_f5": 5.57,
         "confidence": "LOW",
-        "confidence_score": 0.298,
+        "confidence_score": 0.309,
         "factors": {
           "sp_home_xfip": 4.217,
           "sp_away_xfip": 4.25,
@@ -1299,15 +1309,15 @@
           "home_wrc_plus": 137.0,
           "away_wrc_plus": 83.5,
           "park_factor": 1.02,
-          "wind_speed_mph": 6.4,
-          "wind_direction": 190,
+          "wind_speed_mph": 8.2,
+          "wind_direction": 193,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 58.7,
-          "weather_desc": "Mainly Clear",
-          "wind_factor": 1.0158,
-          "temp_factor": 0.9734,
-          "home_wind_adj": 1.0158,
-          "away_wind_adj": 1.0158,
+          "temperature_f": 59.1,
+          "weather_desc": "Clear",
+          "wind_factor": 1.02,
+          "temp_factor": 0.9742,
+          "home_wind_adj": 1.02,
+          "away_wind_adj": 1.02,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Carlos Torres",
@@ -1323,7 +1333,7 @@
         }
       },
       "full_edge": {
-        "edge": 2.41,
+        "edge": 2.46,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -1334,7 +1344,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans over at 9.9 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Model leans over at 10.0 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
       "props": [
         {
           "player_name": "Brandon Sproat",
@@ -1464,7 +1474,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:40 PM EDT",
         "game_time_et": "01:40 PM ET",
-        "status": "Pre-Game",
+        "status": "Final",
         "home_team": "NYM",
         "away_team": "PIT",
         "home_team_id": 121,
@@ -1476,10 +1486,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 7.68,
-        "proj_total_f5": 4.21,
+        "proj_total_full": 7.71,
+        "proj_total_f5": 4.23,
         "confidence": "LOW",
-        "confidence_score": 0.374,
+        "confidence_score": 0.366,
         "factors": {
           "sp_home_xfip": 3.973,
           "sp_away_xfip": 4.064,
@@ -1490,15 +1500,15 @@
           "home_wrc_plus": 117.9,
           "away_wrc_plus": 72.9,
           "park_factor": 0.94,
-          "wind_speed_mph": 11.6,
-          "wind_direction": 170,
+          "wind_speed_mph": 13.6,
+          "wind_direction": 171,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 47.9,
+          "temperature_f": 47.8,
           "weather_desc": "Clear",
-          "wind_factor": 1.0263,
-          "temp_factor": 0.9518,
-          "home_wind_adj": 1.0263,
-          "away_wind_adj": 1.0263,
+          "wind_factor": 1.0311,
+          "temp_factor": 0.9516,
+          "home_wind_adj": 1.0311,
+          "away_wind_adj": 1.0311,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Ramon De Jesus",
@@ -1514,7 +1524,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.18,
+        "edge": 0.21,
         "lean": "OVER",
         "consensus": 7.5,
         "value": false
@@ -1646,7 +1656,7 @@
         "game_date": "2026-03-29",
         "game_time": "04:20 PM PDT",
         "game_time_et": "07:20 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "SEA",
         "away_team": "CLE",
         "home_team_id": 136,
@@ -1654,14 +1664,14 @@
         "home_probable_pitcher": "{'id': 676106, 'name': 'Emerson Hancock', 'throws': ''}",
         "away_probable_pitcher": "{'id': 677944, 'name': 'Slade Cecconi', 'throws': ''}",
         "venue_name": "T-Mobile Park",
-        "home_umpire": null
+        "home_umpire": "Ryan Wills"
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 8.9,
-        "proj_total_f5": 5.18,
+        "proj_total_full": 8.84,
+        "proj_total_f5": 5.14,
         "confidence": "LOW",
-        "confidence_score": 0.157,
+        "confidence_score": 0.173,
         "factors": {
           "sp_home_xfip": 4.981,
           "sp_away_xfip": 4.622,
@@ -1672,18 +1682,18 @@
           "home_wrc_plus": 111.7,
           "away_wrc_plus": 100.6,
           "park_factor": 0.94,
-          "wind_speed_mph": 7.7,
-          "wind_direction": 352,
+          "wind_speed_mph": 10.7,
+          "wind_direction": 358,
           "wind_desc": "Blowing In from CF",
-          "temperature_f": 39.1,
-          "weather_desc": "Light Drizzle",
-          "wind_factor": 0.9848,
-          "temp_factor": 0.9342,
-          "home_wind_adj": 0.9848,
-          "away_wind_adj": 0.9848,
+          "temperature_f": 39.2,
+          "weather_desc": "Drizzle",
+          "wind_factor": 0.9773,
+          "temp_factor": 0.9344,
+          "home_wind_adj": 0.9773,
+          "away_wind_adj": 0.9773,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
+          "umpire_name": "Ryan Wills",
           "umpire_runs_factor": 1.0,
           "home_bp_fatigue": 0.084,
           "away_bp_fatigue": 0.147,
@@ -1696,7 +1706,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.4,
+        "edge": 1.34,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -1707,9 +1717,109 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Light Drizzle in the forecast makes run totals unreliable here \u2014 weather games carry too much variance to project confidently. Skip this one.",
-      "props": [],
-      "alerts": []
+      "summary": "Drizzle in the forecast makes run totals unreliable here \u2014 weather games carry too much variance to project confidently. Skip this one.",
+      "props": [
+        {
+          "player_name": "Emerson Hancock",
+          "team": "SEA",
+          "market": "K",
+          "projection": 5.44,
+          "line": 3.5,
+          "lean": "OVER",
+          "edge": 1.94,
+          "edge_pct": 0.5543,
+          "is_play": true
+        },
+        {
+          "player_name": "Slade Cecconi",
+          "team": "CLE",
+          "market": "K",
+          "projection": 4.91,
+          "line": 4.5,
+          "lean": "OVER",
+          "edge": 0.41,
+          "edge_pct": 0.0911,
+          "is_play": false
+        },
+        {
+          "player_name": "Cal Raleigh",
+          "team": "SEA",
+          "market": "TB",
+          "projection": 1.64,
+          "line": 1.5,
+          "lean": "OVER",
+          "edge": 0.14,
+          "edge_pct": 0.0933,
+          "is_play": false
+        },
+        {
+          "player_name": "Daniel Schneemann",
+          "team": "CLE",
+          "market": "TB",
+          "projection": 1.15,
+          "line": 1.5,
+          "lean": "UNDER",
+          "edge": -0.35,
+          "edge_pct": 0.2333,
+          "is_play": true
+        },
+        {
+          "player_name": "Gabriel Arias",
+          "team": "CLE",
+          "market": "TB",
+          "projection": 1.14,
+          "line": 0.5,
+          "lean": "OVER",
+          "edge": 0.64,
+          "edge_pct": 1.28,
+          "is_play": true
+        },
+        {
+          "player_name": "Julio Rodriguez",
+          "team": "SEA",
+          "market": "TB",
+          "projection": 1.45,
+          "line": 1.5,
+          "lean": "UNDER",
+          "edge": -0.05,
+          "edge_pct": 0.0333,
+          "is_play": false
+        },
+        {
+          "player_name": "Kyle Manzardo",
+          "team": "CLE",
+          "market": "TB",
+          "projection": 1.32,
+          "line": 1.5,
+          "lean": "UNDER",
+          "edge": -0.18,
+          "edge_pct": 0.12,
+          "is_play": true
+        },
+        {
+          "player_name": "Randy Arozarena",
+          "team": "SEA",
+          "market": "TB",
+          "projection": 1.25,
+          "line": 1.5,
+          "lean": "UNDER",
+          "edge": -0.25,
+          "edge_pct": 0.1667,
+          "is_play": true
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Julio Rodriguez",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -1718,7 +1828,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:15 PM CDT",
         "game_time_et": "02:15 PM ET",
-        "status": "Pre-Game",
+        "status": "In Progress",
         "home_team": "STL",
         "away_team": "TBR",
         "home_team_id": 138,
@@ -1730,10 +1840,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.76,
-        "proj_total_f5": 5.53,
+        "proj_total_full": 9.77,
+        "proj_total_f5": 5.54,
         "confidence": "LOW",
-        "confidence_score": 0.182,
+        "confidence_score": 0.184,
         "factors": {
           "sp_home_xfip": 4.878,
           "sp_away_xfip": 3.979,
@@ -1744,15 +1854,15 @@
           "home_wrc_plus": 120.6,
           "away_wrc_plus": 98.5,
           "park_factor": 0.97,
-          "wind_speed_mph": 7.6,
-          "wind_direction": 175,
+          "wind_speed_mph": 8.2,
+          "wind_direction": 169,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 67.9,
+          "temperature_f": 68.0,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0184,
-          "temp_factor": 0.9918,
-          "home_wind_adj": 1.0184,
-          "away_wind_adj": 1.0184,
+          "wind_factor": 1.0191,
+          "temp_factor": 0.992,
+          "home_wind_adj": 1.0191,
+          "away_wind_adj": 1.0191,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Nestor Ceja",
@@ -1768,7 +1878,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.76,
+        "edge": 1.77,
         "lean": "OVER",
         "consensus": 8.0,
         "value": true
@@ -1910,7 +2020,7 @@
         "game_date": "2026-03-29",
         "game_time": "01:37 PM EDT",
         "game_time_et": "01:37 PM ET",
-        "status": "Pre-Game",
+        "status": "Final",
         "home_team": "TOR",
         "away_team": "OAK",
         "home_team_id": 141,
@@ -1922,10 +2032,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.06,
-        "proj_total_f5": 4.46,
+        "proj_total_full": 8.03,
+        "proj_total_f5": 4.45,
         "confidence": "LOW",
-        "confidence_score": 0.282,
+        "confidence_score": 0.29,
         "factors": {
           "sp_home_xfip": 4.033,
           "sp_away_xfip": 4.318,
@@ -1936,15 +2046,15 @@
           "home_wrc_plus": 87.0,
           "away_wrc_plus": 89.7,
           "park_factor": 1.05,
-          "wind_speed_mph": 10.6,
+          "wind_speed_mph": 8.1,
           "wind_direction": 201,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 48.7,
+          "temperature_f": 49.3,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0227,
-          "temp_factor": 0.9534,
-          "home_wind_adj": 1.0227,
-          "away_wind_adj": 1.0227,
+          "wind_factor": 1.0174,
+          "temp_factor": 0.9546,
+          "home_wind_adj": 1.0174,
+          "away_wind_adj": 1.0174,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Ryan Blakney",
@@ -1960,7 +2070,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.44,
+        "edge": -0.47,
         "lean": "UNDER",
         "consensus": 8.5,
         "value": false
@@ -1971,67 +2081,13 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model has 8.1 runs, market has 8.5 \u2014 only 0.4 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
+      "summary": "Model has 8.0 runs, market has 8.5 \u2014 only 0.5 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
       "props": [],
       "alerts": []
     }
   ],
-  "parlay": [
-    {
-      "game_pk": 824700,
-      "player_name": null,
-      "matchup": "WSN @ CHC",
-      "market": "full",
-      "market_label": "OVER 9.5",
-      "rating": "\u2b50\u2b50\u2b50",
-      "projection": 10.99,
-      "line": 9.5,
-      "lean": "OVER",
-      "edge": 1.49,
-      "confidence_score": 0.743
-    },
-    {
-      "game_pk": 824864,
-      "player_name": null,
-      "matchup": "MIN @ BAL",
-      "market": "full",
-      "market_label": "UNDER 8.5",
-      "rating": "\u2b50\u2b50\u2b50",
-      "projection": 7.06,
-      "line": 8.5,
-      "lean": "UNDER",
-      "edge": -1.44,
-      "confidence_score": 0.733
-    }
-  ],
-  "parlay_3": [
-    {
-      "game_pk": 824700,
-      "player_name": null,
-      "matchup": "WSN @ CHC",
-      "market": "full",
-      "market_label": "OVER 9.5",
-      "rating": "\u2b50\u2b50\u2b50",
-      "projection": 10.99,
-      "line": 9.5,
-      "lean": "OVER",
-      "edge": 1.49,
-      "confidence_score": 0.743
-    },
-    {
-      "game_pk": 824864,
-      "player_name": null,
-      "matchup": "MIN @ BAL",
-      "market": "full",
-      "market_label": "UNDER 8.5",
-      "rating": "\u2b50\u2b50\u2b50",
-      "projection": 7.06,
-      "line": 8.5,
-      "lean": "UNDER",
-      "edge": -1.44,
-      "confidence_score": 0.733
-    }
-  ],
+  "parlay": [],
+  "parlay_3": [],
   "parlay_5": [
     {
       "game_pk": 824700,
@@ -2044,7 +2100,7 @@
       "line": 9.5,
       "lean": "OVER",
       "edge": 1.49,
-      "confidence_score": 0.743
+      "confidence_score": 0.744
     },
     {
       "game_pk": 824864,
@@ -2052,12 +2108,12 @@
       "matchup": "MIN @ BAL",
       "market": "full",
       "market_label": "UNDER 8.5",
-      "rating": "\u2b50\u2b50\u2b50",
-      "projection": 7.06,
+      "rating": "\u2b50\u2b50",
+      "projection": 6.99,
       "line": 8.5,
       "lean": "UNDER",
-      "edge": -1.44,
-      "confidence_score": 0.733
+      "edge": -1.51,
+      "confidence_score": 0.655
     },
     {
       "game_pk": 823487,
@@ -2066,11 +2122,11 @@
       "market": "full",
       "market_label": "UNDER 8.0",
       "rating": "\u2b50\u2b50",
-      "projection": 6.84,
+      "projection": 6.79,
       "line": 8.0,
       "lean": "UNDER",
-      "edge": -1.16,
-      "confidence_score": 0.599
+      "edge": -1.21,
+      "confidence_score": 0.53
     }
   ],
   "parlay_7": [
@@ -2085,7 +2141,7 @@
       "line": 9.5,
       "lean": "OVER",
       "edge": 1.49,
-      "confidence_score": 0.743
+      "confidence_score": 0.744
     },
     {
       "game_pk": 824864,
@@ -2093,12 +2149,12 @@
       "matchup": "MIN @ BAL",
       "market": "full",
       "market_label": "UNDER 8.5",
-      "rating": "\u2b50\u2b50\u2b50",
-      "projection": 7.06,
+      "rating": "\u2b50\u2b50",
+      "projection": 6.99,
       "line": 8.5,
       "lean": "UNDER",
-      "edge": -1.44,
-      "confidence_score": 0.733
+      "edge": -1.51,
+      "confidence_score": 0.655
     },
     {
       "game_pk": 823487,
@@ -2107,24 +2163,24 @@
       "market": "full",
       "market_label": "UNDER 8.0",
       "rating": "\u2b50\u2b50",
-      "projection": 6.84,
+      "projection": 6.79,
       "line": 8.0,
       "lean": "UNDER",
-      "edge": -1.16,
-      "confidence_score": 0.599
+      "edge": -1.21,
+      "confidence_score": 0.53
     },
     {
       "game_pk": 823891,
-      "player_name": "Max Meyer",
+      "player_name": null,
       "matchup": "COL @ MIA",
-      "market": "K",
-      "market_label": "OVER 5.5 Ks",
+      "market": "full",
+      "market_label": "UNDER 8.0",
       "rating": "\u2b50",
-      "projection": 6.33,
-      "line": 5.5,
-      "lean": "OVER",
-      "edge": 0.83,
-      "confidence_score": 0.463
+      "projection": 7.62,
+      "line": 8.0,
+      "lean": "UNDER",
+      "edge": -0.38,
+      "confidence_score": 0.465
     }
   ],
   "season_record": {
