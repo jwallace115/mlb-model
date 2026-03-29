@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-28T17:10:54.578877Z",
+  "generated_at": "2026-03-29T11:00:05.885410Z",
   "is_spring_training": false,
-  "total_tracked": 218,
+  "total_tracked": 233,
   "total_plays": 24,
   "overall": {
     "wins": 0,
@@ -259,16 +259,16 @@
     }
   },
   "projection_accuracy": {
-    "tracked": 215,
-    "mae": 4.33,
-    "avg_bias": 1.27,
+    "tracked": 230,
+    "mae": 4.28,
+    "avg_bias": 1.22,
     "within_1_run": 13.0,
-    "within_2_runs": 32.6,
-    "within_3_runs": 44.7,
+    "within_2_runs": 32.2,
+    "within_3_runs": 45.2,
     "mae_by_stars": {
       "\u2b50\u2b50": 3.73,
       "\u2b50": 6.3,
-      "NO PLAY": 4.27
+      "NO PLAY": 4.21
     }
   },
   "factor_correlations": [],
@@ -400,40 +400,40 @@
       "park_factor": 1.03
     },
     {
-      "game_date": "2026-03-23",
-      "matchup": "CHW @ OAK",
-      "projected_total": 8.15,
-      "actual_total": 19.0,
-      "projection_error": 10.8,
+      "game_date": "2026-03-28",
+      "matchup": "LAA @ HOU",
+      "projected_total": 8.68,
+      "actual_total": 20.0,
+      "projection_error": 11.3,
       "recommendation": "UNDER",
-      "result": "NO_LINE",
+      "result": "LOSS",
       "star_rating": "NO PLAY",
       "confidence": "LOW",
-      "temperature": 66.9,
+      "temperature": 71.5,
       "wind_desc": "Blowing In from CF",
-      "park_factor": 0.95
+      "park_factor": 1.0
     }
   ],
   "props_record": {
     "K": {
       "market": "K",
-      "total": 3,
-      "wins": 1,
-      "losses": 2,
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
       "pushes": 0,
-      "decided": 3,
-      "win_pct": 33.3,
-      "roi": -36.4
+      "decided": 5,
+      "win_pct": 40.0,
+      "roi": -23.6
     },
     "TB": {
       "market": "TB",
-      "total": 13,
-      "wins": 4,
-      "losses": 9,
+      "total": 28,
+      "wins": 14,
+      "losses": 14,
       "pushes": 0,
-      "decided": 13,
-      "win_pct": 30.8,
-      "roi": -41.3
+      "decided": 28,
+      "win_pct": 50.0,
+      "roi": -4.5
     }
   },
   "parlay_stats": {

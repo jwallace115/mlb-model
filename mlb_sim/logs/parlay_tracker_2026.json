@@ -35,18 +35,44 @@
             "game": "OAK@TOR",
             "bet": "FULL GAME UNDER",
             "line": 8.2,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "WSN@CHC",
             "bet": "FULL GAME UNDER",
             "line": 9.2,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "LAA@HOU",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-03-29",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "WSN@CHC",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "MIN@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": null
+          },
+          {
+            "game": "TEX@PHI",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
             "result": null
           }
         ],
@@ -55,12 +81,12 @@
       }
     ],
     "summary": {
-      "total": 1,
+      "total": 2,
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -1.0,
+      "net_units": -2.0,
       "payout_per_win": 6.0
     }
   },
