@@ -490,9 +490,12 @@ def fetch_nhl_odds(target_date: date) -> dict[tuple, dict]:
         if not home_abbrev or not away_abbrev:
             continue
 
-        # Date filter: only include today's games
+        # Date filter: include today's games. Late-night ET starts (10 PM ET)
+        # have UTC commence dates of tomorrow, so accept both today and tomorrow.
+        # Extra games won't match schedule team names, so this is safe.
         commence = game.get("commence_time", "")[:10]
-        if commence != target_date.isoformat():
+        _tomorrow = (target_date + timedelta(days=1)).isoformat()
+        if commence not in (target_date.isoformat(), _tomorrow):
             continue
 
         # Pick best book by priority
