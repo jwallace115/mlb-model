@@ -1104,8 +1104,9 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
 
         _shadow_html = _shadow_badge_html(game.get("game_pk"), game.get("game_date", ""))
 
+        _border_color = "#ef4444" if has_partial else "#67e8f9"
         st.html(
-            f'<div class="game-card" style="border-left:3px solid #67e8f9">'
+            f'<div class="game-card" style="border-left:3px solid {_border_color}">'
             f'{l1}{badges}{boost}{explain_html}{_move_html}{_shadow_html}{disclaimer}'
             f'</div>'
         )
@@ -1172,8 +1173,9 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
 
         _shadow_html_np = _shadow_badge_html(game.get("game_pk"), game.get("game_date", ""))
 
+        _np_border = "#ef4444" if has_partial else "#374151"
         st.html(
-            f'<div class="game-card" style="border-left:3px solid #374151">'
+            f'<div class="game-card" style="border-left:3px solid {_np_border}">'
             f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
             f'{matchup} \u2014 {time_str}</div>'
             f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
@@ -4225,8 +4227,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             if shadow_cards:
                 st.html(
                     '<div style="margin-top:16px;padding:8px 14px;background:#1a1a2e;'
-                    'border:1px solid #333;border-radius:6px;font-size:0.82em;color:#6b7280">'
-                    'Shadow Monitoring \u2014 Not For Betting</div>')
+                    'border:1px solid #333;border-radius:6px;font-size:0.82em;color:#ef4444;font-weight:700">'
+                    'SHADOW MONITORING \u2014 NOT FOR BETTING</div>')
                 for b, sigs in shadow_cards:
                     _render_card(b, signals=sigs, has_partial=True)
 
