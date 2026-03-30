@@ -2755,7 +2755,23 @@ def _render_nba_card(g: dict) -> None:
             f'</div>'
         )
 
-    summary_html = f'<div class="card-summary">{summary}</div>' if summary else ""
+    # When signal direction differs from base model lean, demote summary to context
+    import re as _re
+    _base_lean = lean.upper() if lean else ""
+    _sig_dir = signal_dir.upper() if signal_dir else ""
+    _summary_conflict = (is_play and _sig_dir and _base_lean
+                         and _sig_dir != _base_lean
+                         and _sig_dir not in ("", "CONFLICT", "—"))
+    if _summary_conflict and summary:
+        # Strip "P(under) XX%" or "P(over) XX%" phrases that contradict signal direction
+        _clean = _re.sub(r'P\((under|over)\)\s*\d+%[,.\s]*', '', summary).strip()
+        _clean = _re.sub(r'\s*—\s*$', '', _clean)  # trailing dash cleanup
+        summary_html = (
+            f'<div style="font-size:0.75em;color:#6b7280;margin-top:4px;font-style:italic">'
+            f'Model context: {_clean}</div>'
+        ) if _clean else ""
+    else:
+        summary_html = f'<div class="card-summary">{summary}</div>' if summary else ""
 
     st.html(
         f'<div class="{card_cls}">'
@@ -2765,9 +2781,9 @@ def _render_nba_card(g: dict) -> None:
         f'{proj_row}'
         f'{h1_row}'
         f'{warn_html}'
-        f'{arch_html}'
-        f'{shot_html}'
         f'{venue_html}'
+        f'{shot_html}'
+        f'{arch_html}'
         f'{playoff_board_html}'
         f'{ref_html}'
         f'{paused_html}'
