@@ -42,7 +42,7 @@ ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 
 N_SIM     = 10_000
 SEED      = 42
-THRESHOLD = 0.10
+THRESHOLD = 0.12
 
 # Validate-season fallback drift (from Phase 4.5)
 VALIDATE_DRIFT = 0.4458
@@ -321,6 +321,7 @@ def build_live_team_features(team: str, game_date: date,
     feat[f"{side}_goals_allowed_rolling_10"] = shrink(ga_raw or priors[f"{side}_goals_allowed_rolling_10"],
                                                       n, priors[f"{side}_goals_allowed_rolling_10"], 10)
 
+    # MoneyPuck 2025-26 not yet available — using 2024-25 priors. Known degradation. Revisit end of season.
     # --- MoneyPuck-dependent features: full shrinkage to prior ---
     for col in [f"{side}_xgf_rolling_20", f"{side}_shots_for_rolling_20",
                 f"{side}_hd_shots_for_rolling_20", f"{side}_xga_rolling_20",
@@ -652,7 +653,7 @@ def run_pipeline(target_date: date) -> None:
         # Fetch goalie info (game may be in pregame state)
         home_goalie_info = {}
         away_goalie_info = {}
-        if state in ("PRE", "LIVE", "CRIT", "OFF") and game_id:
+        if state in ("FUT", "PRE", "LIVE", "CRIT", "OFF") and game_id:
             goalies = fetch_goalies(game_id)
             home_goalie_info = goalies.get("home", {})
             away_goalie_info = goalies.get("away", {})
