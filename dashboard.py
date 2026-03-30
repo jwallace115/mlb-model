@@ -1537,15 +1537,6 @@ def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
 
 
 def _render_nhl_tab() -> None:
-    st.html("""
-    <div style="text-align:center;padding:60px 20px;color:#94a3b8">
-      <div style="font-size:2em;margin-bottom:12px">🚧</div>
-      <div style="font-size:1.1em;font-weight:600;margin-bottom:8px">Under Construction</div>
-      <div style="font-size:0.85em">This section is coming soon. Back-end tracking is active.</div>
-    </div>
-    """)
-    return
-
     nhl = load_nhl_results()
 
     # ── header ────────────────────────────────────────────────────────────────
