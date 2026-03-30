@@ -4432,7 +4432,7 @@ def _render_sgp_section():
                 ref_book = row["reference_book"]
                 tb_price = int(row["leg2_price"])
                 fair_prob = row["fair_combined_prob"]
-                key = f"sgp_{player}_{pair}"
+                key = f"sgp_{player}_{pair}_{row['game_id']}"
 
                 # Check if already logged (in file or session)
                 already_logged = pd.notna(row.get("book_sgp_price")) or key in st.session_state["sgp_logged"]
@@ -4462,10 +4462,10 @@ def _render_sgp_section():
                             st.caption(f"EV: {ev:+.3f} units")
                     else:
                         sgp_input = c4.number_input("HR SGP", value=None, step=5,
-                                                     key=f"input_{key}",
+                                                     key=f"sgp_input_{key}",
                                                      placeholder="-145",
                                                      label_visibility="collapsed")
-                        if c4.button("Log", key=f"btn_{key}"):
+                        if c4.button("Log", key=f"sgp_btn_{key}"):
                             if sgp_input is not None and sgp_input != 0:
                                 bp = int(sgp_input)
                                 bp_impl = round(_american_to_implied(bp), 4)
