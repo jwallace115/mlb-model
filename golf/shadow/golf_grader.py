@@ -62,6 +62,14 @@ def run():
     for _, ev in events.iterrows():
         eid, yr = ev["event_id"], ev["calendar_year"]
 
+        # Skip rows with no valid event_id
+        if pd.isna(eid) or int(eid) == 0:
+            ev_name = ungraded[
+                (ungraded["event_id"] == eid) & (ungraded["calendar_year"] == yr)
+            ]["event_name"].iloc[0] if "event_name" in ungraded.columns else "?"
+            print("  Skipping event_id=%s (yr=%s, name=%s) — resolve event_id first" % (eid, yr, ev_name), flush=True)
+            continue
+
         # Fetch results
         if RUN_MODE == "live":
             d = dg_get("/historical-raw-data/rounds", {"tour": "pga", "event_id": int(eid), "year": int(yr)})

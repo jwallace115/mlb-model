@@ -30,6 +30,17 @@ N_OUTCOMES = {"win": 1, "top_5": 5, "top_10": 10, "top_20": 20, "make_cut": None
 MARKETS_ACTIVE = ["make_cut", "top_20"]
 MARKETS_PASSIVE = ["win", "top_5", "top_10"]
 
+# Load cut model (logistic regression on dg_make_cut_prob)
+_CUT_MODEL = None
+_CUT_MODEL_PATH = MODELS / "cut_model.pkl"
+if _CUT_MODEL_PATH.exists():
+    try:
+        _bundle = pickle.load(open(_CUT_MODEL_PATH, "rb"))
+        _CUT_MODEL = _bundle.get("model")
+        print("Cut model loaded: %s" % _bundle.get("label", "?"), flush=True)
+    except Exception as e:
+        print("WARNING: Could not load cut model: %s" % e, flush=True)
+
 import requests
 
 
@@ -56,6 +67,17 @@ def american_to_implied(o):
     return 100 / (o + 100) if o > 0 else abs(o) / (abs(o) + 100)
 
 
+def _cut_model_prob(market, dg_prob):
+    """Apply cut model for make_cut market; pass through DG prob for others."""
+    if market == "make_cut" and _CUT_MODEL is not None:
+        try:
+            X = pd.DataFrame({"dg_make_cut_prob": [dg_prob]})
+            return float(_CUT_MODEL.predict_proba(X)[0][1])
+        except Exception:
+            pass
+    return dg_prob
+
+
 def run(capture_type="close"):
     """Run daily projection. capture_type: 'open' (Tuesday) or 'close' (Thursday)."""
     ts = datetime.now().isoformat()
@@ -70,8 +92,23 @@ def run(capture_type="close"):
             print("No active tournament or API error.", flush=True)
             return
         event_name = d.get("event_name", "Unknown")
-        event_id = d.get("event_id", 0)
-        season = d.get("season", datetime.now().year)
+        season = d.get("season") or datetime.now().year
+
+        # Resolve event_id from schedule (pre-tournament endpoint doesn't return it)
+        event_id = d.get("event_id") or 0
+        if not event_id:
+            sched_resp = dg_get("/get-schedule", {"tour": "pga"})
+            sched_list = sched_resp.get("schedule", sched_resp) if isinstance(sched_resp, dict) else sched_resp
+            if isinstance(sched_list, list):
+                match = next((e for e in sched_list
+                              if isinstance(e, dict) and e.get("event_name", "").lower() == event_name.lower()), None)
+                if match:
+                    event_id = int(match["event_id"])
+                    season = int(match.get("start_date", str(season))[:4])
+                    print("  Resolved event_id=%d from schedule" % event_id, flush=True)
+            if not event_id:
+                print("  WARNING: Could not resolve event_id for '%s'" % event_name, flush=True)
+
         is_major = event_id in MAJOR_IDS
         baseline = d.get("baseline_history_fit", d.get("baseline", []))
         if not baseline:
@@ -213,7 +250,7 @@ def run(capture_type="close"):
                 "dg_rank": np.nan,
                 "market": market, "market_tier": market_tier,
                 "dg_prob": round(dg_prob, 4),
-                "model_prob": round(dg_prob, 4),  # DG-only model
+                "model_prob": round(_cut_model_prob(market, dg_prob), 4),
                 "market_prob_open": round(mkt_prob, 4) if capture_type == "open" and pd.notna(mkt_prob) else np.nan,
                 "market_prob_close": round(mkt_prob, 4) if capture_type == "close" and pd.notna(mkt_prob) else np.nan,
                 "close_odds": mkt_odds,
@@ -276,6 +313,18 @@ def run_matchups(capture_type="close", preds_df=None):
 
         event_name = d.get("event_name", "")
         round_num = d.get("round", 1)
+        season = datetime.now().year
+        event_id = 0
+        # Resolve event_id from schedule
+        sched_resp = dg_get("/get-schedule", {"tour": "pga"})
+        sched_list = sched_resp.get("schedule", sched_resp) if isinstance(sched_resp, dict) else sched_resp
+        if isinstance(sched_list, list):
+            match = next((e for e in sched_list
+                          if isinstance(e, dict) and e.get("event_name", "").lower() == event_name.lower()), None)
+            if match:
+                event_id = int(match["event_id"])
+                season = int(match.get("start_date", str(season))[:4])
+
         pairings = d.get("pairings", [])
         print("DG pairings: %s R%d, %d groups" % (event_name, round_num, len(pairings)), flush=True)
 
@@ -388,6 +437,95 @@ def run_matchups(capture_type="close", preds_df=None):
             "shadow_pnl": np.nan,
         })
 
+    # Process book matchup data (real book odds vs DG model probability)
+    # Structure: match_list[].odds.{book_key}.{p1, p2, p3}
+    if RUN_MODE == "live" and book_matchups:
+        book_count = 0
+        for mkt_type, matches in book_matchups.items():
+            for m in matches:
+                odds_by_book = m.get("odds", {})
+                p1_id = m.get("p1_dg_id", -1)
+                p2_id = m.get("p2_dg_id", -1)
+                p3_id = m.get("p3_dg_id", -1) if "p3_dg_id" in m else -1
+
+                for book_key, book_odds in odds_by_book.items():
+                    if book_key == "datagolf":
+                        continue  # skip DG model odds — already in DG pairings
+                    if not isinstance(book_odds, dict):
+                        continue
+
+                    bo1 = parse_odds(book_odds.get("p1"))
+                    bo2 = parse_odds(book_odds.get("p2"))
+                    bo3 = parse_odds(book_odds.get("p3")) if p3_id != -1 else np.nan
+
+                    if pd.isna(bo1) or pd.isna(bo2):
+                        continue
+
+                    # De-vig
+                    imps = [american_to_implied(bo1), american_to_implied(bo2)]
+                    if pd.notna(bo3):
+                        imps.append(american_to_implied(bo3))
+                    imps = [i for i in imps if pd.notna(i)]
+                    total = sum(imps)
+                    if total <= 0:
+                        continue
+
+                    bfp1 = american_to_implied(bo1) / total
+                    bfp2 = american_to_implied(bo2) / total
+
+                    # DG proxy edge vs real book odds
+                    dp1 = proxy_lookup.get(p1_id, 0)
+                    dp2 = proxy_lookup.get(p2_id, 0)
+                    ptot = dp1 + dp2
+                    if p3_id != -1:
+                        ptot += proxy_lookup.get(p3_id, 0)
+                    if ptot > 0:
+                        dp1_n = dp1 / ptot
+                        dp2_n = dp2 / ptot
+                    else:
+                        dp1_n = dp2_n = 0
+
+                    e1 = dp1_n - bfp1
+                    e2 = dp2_n - bfp2
+                    best_player = 1 if e1 >= e2 else 2
+                    best_edge = max(e1, e2)
+                    cls = "candidate" if best_edge >= 0.08 else ("lean" if best_edge >= 0.05 else "no_bet")
+
+                    matchup_rows.append({
+                        "event_name": event_name, "round_num": round_num,
+                        "match_type": mkt_type,
+                        "player_1_id": p1_id,
+                        "player_1_name": m.get("p1_player_name", ""),
+                        "player_2_id": p2_id,
+                        "player_2_name": m.get("p2_player_name", ""),
+                        "player_3_id": p3_id if p3_id != -1 else np.nan,
+                        "player_3_name": m.get("p3_player_name", "") if p3_id != -1 else "",
+                        "book_name": book_key,
+                        "player_1_odds": bo1, "player_2_odds": bo2,
+                        "player_3_odds": bo3 if pd.notna(bo3) else np.nan,
+                        "player_1_fair_prob": round(bfp1, 4),
+                        "player_2_fair_prob": round(bfp2, 4),
+                        "overround": round(total - 1.0, 4),
+                        "player_1_dg_proxy": round(dp1_n, 4),
+                        "player_2_dg_proxy": round(dp2_n, 4),
+                        "player_1_edge": round(e1, 4),
+                        "player_2_edge": round(e2, 4),
+                        "bet_player": best_player,
+                        "bet_edge": round(best_edge, 4),
+                        "classification": cls,
+                        "capture_type": capture_type,
+                        "capture_timestamp": ts,
+                        "actual_result": np.nan,
+                        "shadow_pnl": np.nan,
+                    })
+                    book_count += 1
+        print("Book matchup rows added: %d" % book_count, flush=True)
+
+    # Add event_id + calendar_year to matchup rows
+    for r in matchup_rows:
+        r["event_id"] = event_id if RUN_MODE == "live" else 0
+        r["calendar_year"] = season if RUN_MODE == "live" else 0
+
     mdf = pd.DataFrame(matchup_rows)
     if len(mdf) > 0:
         mlog = SHADOW / "golf_matchup_log.parquet"
@@ -396,22 +534,23 @@ def run_matchups(capture_type="close", preds_df=None):
             mdf = pd.concat([existing, mdf], ignore_index=True)
         mdf.to_parquet(mlog, index=False)
 
-        n_cand = (mdf[mdf["capture_timestamp"] == ts]["classification"] == "candidate").sum()
-        n_lean = (mdf[mdf["capture_timestamp"] == ts]["classification"] == "lean").sum()
-        print("Matchups logged: %d | Candidates: %d | Leans: %d" % (
-            len(mdf[mdf["capture_timestamp"] == ts]), n_cand, n_lean), flush=True)
+        today_m = mdf[mdf["capture_timestamp"] == ts]
+        n_cand = (today_m["classification"] == "candidate").sum()
+        n_lean = (today_m["classification"] == "lean").sum()
+        n_book = len(today_m[today_m["book_name"] != "datagolf_model"])
+        n_dg = len(today_m[today_m["book_name"] == "datagolf_model"])
+        print("Matchups logged: %d (DG model: %d, Book: %d) | Candidates: %d | Leans: %d" % (
+            len(today_m), n_dg, n_book, n_cand, n_lean), flush=True)
 
         # Print top candidates
-        today_m = mdf[mdf["capture_timestamp"] == ts]
         cands = today_m[today_m["classification"].isin(["candidate", "lean"])].sort_values("bet_edge", ascending=False)
         if len(cands) > 0:
-            print("\n%-20s vs %-20s | %5s | %+6s | %s" % ("Player 1", "Player 2", "Book", "Edge", "Cls"))
-            print("-" * 75)
+            print("\n%-20s vs %-20s | %-12s | %+6s | %s" % ("Player 1", "Player 2", "Book", "Edge", "Cls"))
+            print("-" * 80)
             for _, r in cands.head(10).iterrows():
-                bp = r["player_1_name"] if r["bet_player"] == 1 else r["player_2_name"]
-                print("%-20s vs %-20s | %5s | %+5.1f%% | %s" % (
+                print("%-20s vs %-20s | %-12s | %+5.1f%% | %s" % (
                     str(r["player_1_name"])[:20], str(r["player_2_name"])[:20],
-                    r["book_name"][:5], r["bet_edge"] * 100, r["classification"]))
+                    str(r["book_name"])[:12], r["bet_edge"] * 100, r["classification"]))
     else:
         print("No matchup data captured.", flush=True)
 
