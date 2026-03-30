@@ -4391,7 +4391,7 @@ def _render_sgp_section():
                              f"fair_sgp_{today.replace('-','_')}.parquet")
 
     if not os.path.exists(fair_path):
-        st.info("SGP data not yet available \u2014 automation runs at 11:30 AM.")
+        st.info("SGP data not yet available \u2014 automation runs at 7:00 AM.")
         return
 
     try:
