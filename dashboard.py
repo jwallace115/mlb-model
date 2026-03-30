@@ -4937,7 +4937,7 @@ def _render_golf_tab() -> None:
         st.info("No Golf data available yet. Run `python push_golf.py` to generate.")
         return
 
-    picks_tab, matchup_tab, info_tab = st.tabs(["Outright Board", "Matchups", "Model Info"])
+    picks_tab, matchup_tab, g13_tab, info_tab = st.tabs(["Outright Board", "Matchups", "G13 Wave", "Model Info"])
 
     with picks_tab:
         ev_name = golf.get("event_name", "No active event")
@@ -4994,6 +4994,60 @@ def _render_golf_tab() -> None:
                     f'<span style="width:80px;display:inline-block">{r.get("hit_rate",0):.0f}% hit</span>'
                     f'<span style="width:80px;display:inline-block;color:{roi_color}">'
                     f'{r.get("roi",0):+.1f}%</span></div>')
+
+    with g13_tab:
+        g13_status = golf.get("g13_status", "")
+        g13_plays = golf.get("g13_signals", [])
+        g13_avoids = golf.get("g13_avoids", [])
+
+        _status_color = "#22c55e" if g13_status == "LIVE_SHADOW" else "#f59e0b"
+        st.html(f'<div class="section-hdr">G13 Wave Weather \u2014 Make Cut '
+                f'<span style="color:{_status_color};font-size:0.8em">[{g13_status or "INACTIVE"}]</span></div>')
+
+        if g13_plays:
+            st.html('<div style="font-size:0.78em;color:#94a3b8;margin-bottom:8px">'
+                    'Rule: adj_make_cut_edge \u2265 4% AND draw_quintile \u2208 {Q4, Q5}'
+                    '</div>')
+            for gp in g13_plays:
+                _edge = gp.get("adj_edge", 0)
+                _q = gp.get("draw_quintile", "?")
+                _odds_str = ""
+                if gp.get("close_odds"):
+                    o = gp["close_odds"]
+                    _odds_str = "%+d" % int(o) if o >= 0 else "%d" % int(o)
+                st.html(
+                    f'<div style="display:flex;align-items:center;padding:6px 0;border-bottom:1px solid #1e2d4a">'
+                    f'<span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:4px;'
+                    f'font-size:0.75rem;margin-right:10px">G13 WAVE</span>'
+                    f'<span style="width:180px;font-weight:600;color:#e2e8f0">{gp.get("player_name","")}</span>'
+                    f'<span style="width:40px;color:#60a5fa">Q{_q}</span>'
+                    f'<span style="width:80px;color:#94a3b8">DG {gp.get("dg_cut_prob",0):.1f}%</span>'
+                    f'<span style="width:80px;color:#e2e8f0">Adj {gp.get("adj_cut_prob",0):.1f}%</span>'
+                    f'<span style="width:80px;color:#94a3b8">{gp.get("book","")}</span>'
+                    f'<span style="width:60px;color:#94a3b8">{_odds_str}</span>'
+                    f'<span style="width:80px;color:#22c55e;font-weight:600">{_edge:+.1f}%</span>'
+                    f'</div>')
+        else:
+            st.caption("No G13 signals this week. Tee times and weather forecast needed.")
+
+        if g13_avoids:
+            st.html('<div style="margin-top:16px;padding:8px 14px;background:#1a1a2e;'
+                    'border:1px solid #333;border-radius:6px;font-size:0.82em;color:#ef4444;font-weight:700">'
+                    'Q1 DRAW AVOID \u2014 Informational Only</div>')
+            for ga in g13_avoids:
+                _odds_str = ""
+                if ga.get("close_odds"):
+                    o = ga["close_odds"]
+                    _odds_str = "%+d" % int(o) if o >= 0 else "%d" % int(o)
+                st.html(
+                    f'<div style="display:flex;align-items:center;padding:4px 0;border-bottom:1px solid #1e1e2e">'
+                    f'<span style="background:#ef4444;color:#fff;padding:2px 8px;border-radius:4px;'
+                    f'font-size:0.72rem;margin-right:10px">Q1 AVOID</span>'
+                    f'<span style="width:180px;color:#94a3b8">{ga.get("player_name","")}</span>'
+                    f'<span style="width:80px;color:#94a3b8">DG {ga.get("dg_cut_prob",0):.1f}%</span>'
+                    f'<span style="width:60px;color:#94a3b8">{_odds_str}</span>'
+                    f'<span style="width:80px;color:#f87171">edge {ga.get("dg_edge",0):+.1f}%</span>'
+                    f'</div>')
 
     with matchup_tab:
         matchup_plays = golf.get("matchup_candidates", [])

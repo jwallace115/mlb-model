@@ -102,12 +102,48 @@ def run():
             results["matchup_n_candidates"] = int((latest_m["classification"] == "candidate").sum())
             results["matchup_n_leans"] = int((latest_m["classification"] == "lean").sum())
 
+    # G13 Wave Weather signals
+    if log_file.exists():
+        log = pd.read_parquet(log_file)
+        latest_ts = log["run_timestamp"].max()
+        g13_mask = (log["run_timestamp"] == latest_ts) & (log["market"] == "make_cut")
+
+        g13_plays = []
+        g13_avoids = []
+        if "g13_signal_flag" in log.columns:
+            for _, r in log[g13_mask & (log["g13_signal_flag"] == True)].iterrows():
+                g13_plays.append({
+                    "player_name": r.get("player_name", ""),
+                    "draw_quintile": int(r["draw_quintile"]) if pd.notna(r.get("draw_quintile")) else None,
+                    "dg_cut_prob": round(float(r["dg_prob"]) * 100, 1) if pd.notna(r.get("dg_prob")) else 0,
+                    "adj_cut_prob": round(float(r["adj_make_cut_prob"]) * 100, 1) if pd.notna(r.get("adj_make_cut_prob")) else 0,
+                    "book": r.get("g13_reference_book", ""),
+                    "close_odds": float(r.get("close_odds", 0)) if pd.notna(r.get("close_odds")) else None,
+                    "fair_prob": round(float(r.get("market_prob_close", 0) or 0) * 100, 1),
+                    "adj_edge": round(float(r.get("adj_make_cut_edge", 0) or 0) * 100, 1),
+                })
+            for _, r in log[g13_mask & (log.get("g13_avoid_flag", False) == True)].iterrows():
+                dg_edge = (r["dg_prob"] - (r.get("market_prob_close") or 0)) if pd.notna(r.get("market_prob_close")) else 0
+                g13_avoids.append({
+                    "player_name": r.get("player_name", ""),
+                    "draw_quintile": 1,
+                    "dg_cut_prob": round(float(r["dg_prob"]) * 100, 1) if pd.notna(r.get("dg_prob")) else 0,
+                    "close_odds": float(r.get("close_odds", 0)) if pd.notna(r.get("close_odds")) else None,
+                    "dg_edge": round(float(dg_edge) * 100, 1),
+                })
+        results["g13_signals"] = g13_plays
+        results["g13_avoids"] = g13_avoids
+        results["g13_status"] = "LIVE_SHADOW"
+
     # Model info
     results["model_info"] = {
-        "model": "DG-only logistic regression",
+        "model": "DG-only logistic regression + G13 wave overlay",
         "oos_auc": 0.702, "oos_brier": 0.211,
         "confidence_tier": "LOW",
-        "note": "Shadow tracking only. Reference book: DraftKings.",
+        "g13_oos_roi": "+9.2%",
+        "g13_market": "make_cut",
+        "g13_rule": "adj_edge >= 4% AND draw_quintile in {Q4, Q5}",
+        "note": "Shadow tracking. G13 wave weather overlay in LIVE_SHADOW.",
     }
 
     with open(OUT, "w") as f:

@@ -43,6 +43,42 @@ if _CUT_MODEL_PATH.exists():
 
 import requests
 
+# ── G13 Wave Weather Overlay — frozen parameters ──
+_G13_PATH = Path("golf/research/dynamics/g13_frozen_wave_uplifts.json")
+_G13_UPLIFTS = None
+_G13_CUTPOINTS = None
+if _G13_PATH.exists():
+    try:
+        _g13_raw = json.load(open(_G13_PATH))
+        _G13_CUTPOINTS = _g13_raw.get("quintile_cutpoints")
+        if _G13_CUTPOINTS and len(_G13_CUTPOINTS) == 4:
+            _G13_UPLIFTS = {int(k): v for k, v in _g13_raw.items() if k.isdigit()}
+            print("G13 loaded: cutpoints=%s, uplifts for Q1-Q5" % [round(c, 3) for c in _G13_CUTPOINTS], flush=True)
+        else:
+            print("WARNING: G13 JSON missing quintile_cutpoints — G13 disabled", flush=True)
+    except Exception as e:
+        print("WARNING: G13 load failed: %s" % e, flush=True)
+
+
+def _g13_assign_quintile(draw_edge):
+    """Assign draw_edge to frozen quintile (1-5)."""
+    if pd.isna(draw_edge) or _G13_CUTPOINTS is None:
+        return np.nan
+    for i, c in enumerate(_G13_CUTPOINTS):
+        if draw_edge < c:
+            return i + 1
+    return 5
+
+
+def _g13_get_uplift(quintile, market="make_cut"):
+    """Get frozen uplift for a quintile and market."""
+    if _G13_UPLIFTS is None or pd.isna(quintile):
+        return 0.0
+    q = int(quintile)
+    entry = _G13_UPLIFTS.get(q, {})
+    key = "make_cut_uplift" if market == "make_cut" else "top20_uplift"
+    return entry.get(key, 0.0)
+
 
 def dg_get(path, params=None):
     if params is None: params = {}
@@ -354,6 +390,251 @@ def run(capture_type="close"):
     return log_df
 
 
+def run_g13(log_df=None):
+    """G13 Wave Weather Overlay — compute draw edges and make-cut adjustments.
+
+    Requires:
+    - Pairings with tee times from /betting-tools/matchups-all-pairings
+    - Venue weather forecast from Open-Meteo
+    - Frozen G13 parameters (cutpoints + uplifts)
+    """
+    print("\n--- G13 WAVE WEATHER OVERLAY ---", flush=True)
+
+    if _G13_UPLIFTS is None or _G13_CUTPOINTS is None:
+        print("  G13 DISABLED: frozen parameters not loaded.", flush=True)
+        return
+
+    if RUN_MODE != "live":
+        print("  G13 skipped in test mode.", flush=True)
+        return
+
+    # Pull pairings with tee times
+    d = dg_get("/betting-tools/matchups-all-pairings", {"tour": "pga", "odds_format": "american"})
+    if not d or not isinstance(d, dict):
+        print("  G13: no pairings available — skipping.", flush=True)
+        return
+
+    pairings = d.get("pairings", [])
+    event_name = d.get("event_name", "")
+    round_num = d.get("round", 1)
+
+    if not pairings:
+        print("  G13: empty pairings — skipping.", flush=True)
+        return
+
+    # Extract player tee times and wave assignments
+    player_waves = {}
+    for pairing in pairings:
+        tee_time_str = pairing.get("teetime", "")
+        wave = pairing.get("wave", "")
+        # Determine AM/PM from tee time or wave field
+        hour = None
+        if tee_time_str:
+            try:
+                # Format: "2026-03-19 09:19" or similar
+                import re as _re
+                m = _re.search(r'(\d{1,2}):(\d{2})', tee_time_str)
+                if m:
+                    h = int(m.group(1))
+                    # Check for PM indicator
+                    if 'pm' in tee_time_str.lower() and h < 12:
+                        h += 12
+                    elif h < 6:  # likely 24h format afternoon
+                        pass
+                    hour = h
+            except Exception:
+                pass
+
+        if hour is not None:
+            player_wave = "AM" if hour < 12 else "PM"
+        elif wave:
+            player_wave = "AM" if wave.lower() in ("early", "am") else "PM"
+        else:
+            continue
+
+        for pk in ["p1", "p2", "p3"]:
+            p = pairing.get(pk, {})
+            dgid = p.get("dg_id", -1)
+            if dgid != -1:
+                player_waves[dgid] = player_wave
+
+    if not player_waves:
+        print("  G13: could not extract wave assignments — skipping.", flush=True)
+        return
+
+    n_am = sum(1 for w in player_waves.values() if w == "AM")
+    n_pm = sum(1 for w in player_waves.values() if w == "PM")
+    print(f"  Waves: {n_am} AM, {n_pm} PM players (R{round_num})", flush=True)
+
+    # Get venue weather forecast from Open-Meteo
+    # Look up venue coordinates from schedule
+    sched_resp = dg_get("/get-schedule", {"tour": "pga"})
+    sched_list = sched_resp.get("schedule", sched_resp) if isinstance(sched_resp, dict) else sched_resp
+    venue_lat, venue_lon = None, None
+    if isinstance(sched_list, list):
+        match = next((e for e in sched_list if isinstance(e, dict)
+                      and e.get("event_name", "").lower() == event_name.lower()), None)
+        if match:
+            venue_lat = match.get("latitude")
+            venue_lon = match.get("longitude")
+
+    if venue_lat is None or venue_lon is None:
+        print("  G13: could not resolve venue coordinates — using draw_edge=0.", flush=True)
+        # Fall back to equal draw edges (no weather differential)
+        for dgid in player_waves:
+            player_waves[dgid] = (player_waves[dgid], 0.0)
+    else:
+        print(f"  Venue: {event_name} ({venue_lat}, {venue_lon})", flush=True)
+
+        # Pull hourly weather forecast
+        try:
+            wx_url = "https://api.open-meteo.com/v1/forecast"
+            wx_params = {
+                "latitude": venue_lat, "longitude": venue_lon,
+                "hourly": "windspeed_10m",
+                "forecast_days": 4, "timezone": "America/New_York",
+            }
+            wx_resp = requests.get(wx_url, params=wx_params, timeout=15)
+            wx_data = wx_resp.json()
+            hourly = wx_data.get("hourly", {})
+            times = hourly.get("time", [])
+            winds = hourly.get("windspeed_10m", [])
+
+            # Compute AM vs PM wind for each forecast day
+            from collections import defaultdict
+            daily_wind = defaultdict(lambda: {"am": [], "pm": []})
+            for t, w in zip(times, winds):
+                if w is None:
+                    continue
+                date_part = t[:10]
+                hour = int(t[11:13])
+                if 7 <= hour < 12:
+                    daily_wind[date_part]["am"].append(w)
+                elif 12 <= hour < 17:
+                    daily_wind[date_part]["pm"].append(w)
+
+            # Average across forecast days (proxy for tournament conditions)
+            am_winds = []
+            pm_winds = []
+            for day_data in daily_wind.values():
+                if day_data["am"]:
+                    am_winds.extend(day_data["am"])
+                if day_data["pm"]:
+                    pm_winds.extend(day_data["pm"])
+
+            avg_am_wind = np.mean(am_winds) if am_winds else 10.0
+            avg_pm_wind = np.mean(pm_winds) if pm_winds else 10.0
+            wind_diff = avg_pm_wind - avg_am_wind  # positive = PM windier
+
+            print(f"  Weather: AM wind={avg_am_wind:.1f} km/h, PM wind={avg_pm_wind:.1f} km/h, diff={wind_diff:+.1f}", flush=True)
+
+            # Convert wind differential to draw_edge
+            # Scale: 1 km/h wind diff ≈ 0.15 strokes diff (empirical from research)
+            WIND_TO_STROKES = 0.15
+            for dgid, wave in list(player_waves.items()):
+                if wave == "AM":
+                    draw_edge = wind_diff * WIND_TO_STROKES  # PM windier = AM advantage
+                else:
+                    draw_edge = -wind_diff * WIND_TO_STROKES  # PM windier = PM disadvantage
+                player_waves[dgid] = (wave, draw_edge)
+
+        except Exception as e:
+            print(f"  G13: weather fetch failed ({e}) — using draw_edge=0.", flush=True)
+            for dgid in list(player_waves.keys()):
+                player_waves[dgid] = (player_waves[dgid], 0.0)
+
+    # Apply G13 overlay to shadow log
+    log_file = SHADOW / "golf_shadow_log.parquet"
+    if not log_file.exists():
+        print("  G13: no shadow log to update.", flush=True)
+        return
+
+    log = pd.read_parquet(log_file)
+
+    # Find rows for the current run (most recent timestamp, make_cut market)
+    latest_ts = log["run_timestamp"].max()
+    mask = (log["run_timestamp"] == latest_ts) & (log["market"] == "make_cut")
+
+    g13_count = 0
+    g13_signals = []
+    g13_avoids = []
+
+    for idx in log[mask].index:
+        row = log.loc[idx]
+        dgid = row["player_id"]
+        wave_info = player_waves.get(dgid)
+
+        if wave_info is None or isinstance(wave_info, str):
+            # No wave data for this player
+            log.loc[idx, "draw_edge_total"] = np.nan
+            log.loc[idx, "draw_quintile"] = np.nan
+            log.loc[idx, "adj_make_cut_prob"] = np.nan
+            log.loc[idx, "adj_make_cut_edge"] = np.nan
+            log.loc[idx, "g13_signal_flag"] = False
+            log.loc[idx, "g13_avoid_flag"] = False
+            continue
+
+        wave, draw_edge = wave_info
+        quintile = _g13_assign_quintile(draw_edge)
+        uplift = _g13_get_uplift(quintile, "make_cut")
+        adj_prob = np.clip(row["dg_prob"] + uplift, 0.02, 0.98)
+
+        # Fair close prob for make_cut: use the market_prob_close if available
+        fair_close = row.get("market_prob_close") or row.get("market_prob_open")
+        if pd.isna(fair_close):
+            adj_edge = np.nan
+        else:
+            adj_edge = adj_prob - fair_close
+
+        # G13 reference book
+        ref_book = row.get("best_book", "")
+        for bk_col, bk_name in [("pinnacle_odds", "pinnacle"), ("dk_odds", "draftkings"), ("fanduel_odds", "fanduel")]:
+            if pd.notna(row.get(bk_col)):
+                ref_book = bk_name
+                break
+
+        # Signal/avoid flags
+        signal = pd.notna(adj_edge) and adj_edge >= 0.04 and quintile in (4, 5)
+        dg_edge = row["dg_prob"] - fair_close if pd.notna(fair_close) else np.nan
+        avoid = quintile == 1 and pd.notna(dg_edge) and dg_edge >= 0.04
+
+        log.loc[idx, "draw_edge_total"] = round(draw_edge, 4)
+        log.loc[idx, "draw_quintile"] = quintile
+        log.loc[idx, "adj_make_cut_prob"] = round(adj_prob, 4)
+        log.loc[idx, "adj_make_cut_edge"] = round(adj_edge, 4) if pd.notna(adj_edge) else np.nan
+        log.loc[idx, "g13_signal_flag"] = signal
+        log.loc[idx, "g13_avoid_flag"] = avoid
+        log.loc[idx, "g13_reference_book"] = ref_book
+
+        if signal:
+            g13_signals.append(row["player_name"])
+            g13_count += 1
+        if avoid:
+            g13_avoids.append(row["player_name"])
+
+    log.to_parquet(log_file, index=False)
+
+    # Update daily best board with G13 columns
+    board_file = SHADOW / "golf_daily_best_board.parquet"
+    if board_file.exists():
+        board = pd.read_parquet(board_file)
+        # Merge G13 columns from updated log
+        g13_cols = ['player_id', 'market', 'draw_edge_total', 'draw_quintile',
+                    'adj_make_cut_prob', 'adj_make_cut_edge', 'g13_signal_flag',
+                    'g13_avoid_flag', 'g13_reference_book']
+        g13_data = log[mask & log['g13_signal_flag'].notna()][g13_cols].copy()
+        if len(g13_data) > 0:
+            board = board.merge(g13_data.drop(columns=['market'], errors='ignore'),
+                               on='player_id', how='left', suffixes=('', '_g13'))
+            board.to_parquet(board_file, index=False)
+
+    print(f"\n  G13 Results: {g13_count} signals, {len(g13_avoids)} avoids", flush=True)
+    if g13_signals:
+        print(f"  Signals: {', '.join(g13_signals[:10])}", flush=True)
+    if g13_avoids:
+        print(f"  Avoids: {', '.join(g13_avoids[:10])}", flush=True)
+
+
 def run_matchups(capture_type="close", preds_df=None):
     """Capture matchup/3-ball odds from DG all-pairings + book matchups."""
     ts = datetime.now().isoformat()
@@ -615,7 +896,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--capture", default="close", choices=["open", "close"])
     parser.add_argument("--include-matchups", action="store_true")
+    parser.add_argument("--skip-g13", action="store_true", help="Skip G13 wave overlay")
     args = parser.parse_args()
     result = run(capture_type=args.capture)
+    if not args.skip_g13:
+        run_g13(result)
     if args.include_matchups:
         run_matchups(capture_type=args.capture)

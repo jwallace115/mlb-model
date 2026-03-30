@@ -1,0 +1,12 @@
+{
+  "G13": {
+    "signal_id": "G13",
+    "status": "LIVE_SHADOW",
+    "market": "make_cut",
+    "rule": "adj_make_cut_edge >= 0.04 AND draw_quintile in {4, 5}",
+    "expected_roi": 0.092,
+    "expected_volume_per_season": 300,
+    "deployment_date": "2026-03-30",
+    "note": "Q1 draw tracked as avoid only; no fade deployed"
+  }
+}
