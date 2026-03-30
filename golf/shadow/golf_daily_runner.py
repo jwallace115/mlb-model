@@ -152,24 +152,53 @@ def run(capture_type="close"):
         print("No predictions available.", flush=True)
         return
 
-    # ── Pull odds ──
+    # ── Pull odds (all available books) ──
+    BOOK_PRIORITY = ["pinnacle", "bet365", "bovada", "betonline", "draftkings", "fanduel"]
+    BOOK_META = {"dg_id", "player_name", "datagolf"}  # non-book keys
+
     odds_rows = []
     if RUN_MODE == "live":
-        # DataGolf betting tools for all non-major events
         for market in ["make_cut", "win", "top_20", "top_5", "top_10"]:
             d = dg_get("/betting-tools/outrights", {"tour": "pga", "market": market, "odds_format": "american"})
             if not d or not isinstance(d, dict):
                 continue
             odds_list = d.get("odds", [])
+            if not isinstance(odds_list, list):
+                continue
             for o in odds_list:
                 if not isinstance(o, dict): continue
-                # DraftKings column
-                dk_odds = o.get("draftkings")
-                if dk_odds is None: continue
+                dgid = o.get("dg_id")
+                pname = o.get("player_name", "")
+
+                # Extract odds from all available books
+                book_odds = {}
+                for bk in o:
+                    if bk in BOOK_META: continue
+                    val = o[bk]
+                    if isinstance(val, dict): continue  # skip datagolf model dict
+                    parsed = parse_odds(val)
+                    if pd.notna(parsed):
+                        book_odds[bk] = parsed
+
+                if not book_odds:
+                    continue
+
+                # Find best odds (highest American odds = best price for bettor)
+                best_book = max(book_odds, key=book_odds.get)
+                best_odds = book_odds[best_book]
+
                 odds_rows.append({
-                    "dg_id": o.get("dg_id"), "player_name": o.get("player_name", ""),
-                    "market": market, "book": "draftkings",
-                    "close_odds": parse_odds(dk_odds),
+                    "dg_id": dgid, "player_name": pname,
+                    "market": market, "book": best_book,
+                    "close_odds": best_odds,
+                    "best_book": best_book,
+                    "best_odds": best_odds,
+                    "pinnacle_odds": book_odds.get("pinnacle", np.nan),
+                    "dk_odds": book_odds.get("draftkings", np.nan),
+                    "bet365_odds": book_odds.get("bet365", np.nan),
+                    "bovada_odds": book_odds.get("bovada", np.nan),
+                    "betonline_odds": book_odds.get("betonline", np.nan),
+                    "fanduel_odds": book_odds.get("fanduel", np.nan),
                 })
     else:
         # Test mode: use canonical odds
@@ -189,12 +218,19 @@ def run(capture_type="close"):
         # Still log predictions without edges
     else:
         print("Odds: %d rows across %s" % (len(odds_df), sorted(odds_df["market"].unique())), flush=True)
+        # Book coverage summary
+        for bk_col in ["pinnacle_odds", "dk_odds", "bet365_odds", "bovada_odds", "betonline_odds", "fanduel_odds"]:
+            if bk_col in odds_df.columns:
+                n = odds_df[bk_col].notna().sum()
+                print("  %s: %d players" % (bk_col.replace("_odds", ""), n), flush=True)
+        if "best_book" in odds_df.columns:
+            print("  Best book dist: %s" % dict(odds_df["best_book"].value_counts()), flush=True)
 
-    # ── De-vig odds ──
+    # ── De-vig odds (use best_odds per player, de-vig across full field) ──
     if len(odds_df) > 0:
-        odds_df["raw_implied"] = odds_df["close_odds"].apply(american_to_implied)
+        odds_df["raw_implied"] = odds_df["best_odds"].apply(american_to_implied)
         devigged = []
-        for (mkt, bk), grp in odds_df.groupby(["market", "book"]):
+        for mkt, grp in odds_df.groupby("market"):
             grp = grp.copy()
             sum_imp = grp["raw_implied"].sum()
             n_out = N_OUTCOMES.get(mkt)
@@ -222,14 +258,25 @@ def run(capture_type="close"):
             if pd.isna(dg_prob) or dg_prob <= 0:
                 continue
 
-            # Match odds
+            # Match odds (best book)
             player_odds = odds_df[(odds_df["dg_id"] == dgid) & (odds_df["market"] == market)]
             if len(player_odds) > 0:
-                mkt_prob = player_odds.iloc[0]["fair_prob"]
-                mkt_odds = player_odds.iloc[0]["close_odds"]
+                po = player_odds.iloc[0]
+                mkt_prob = po["fair_prob"]
+                mkt_odds = po["close_odds"]
+                _best_book = po.get("best_book", "")
+                _best_odds = po.get("best_odds", np.nan)
+                _pin_odds = po.get("pinnacle_odds", np.nan)
+                _dk_odds = po.get("dk_odds", np.nan)
+                _b365_odds = po.get("bet365_odds", np.nan)
+                _bov_odds = po.get("bovada_odds", np.nan)
+                _bol_odds = po.get("betonline_odds", np.nan)
+                _fd_odds = po.get("fanduel_odds", np.nan)
             else:
-                mkt_prob = np.nan
-                mkt_odds = np.nan
+                mkt_prob = mkt_odds = np.nan
+                _best_book = ""
+                _best_odds = _pin_odds = _dk_odds = _b365_odds = np.nan
+                _bov_odds = _bol_odds = _fd_odds = np.nan
 
             edge = dg_prob - mkt_prob if pd.notna(mkt_prob) else np.nan
             direction = "over" if pd.notna(edge) and edge > 0 else ("under" if pd.notna(edge) else None)
@@ -254,6 +301,14 @@ def run(capture_type="close"):
                 "market_prob_open": round(mkt_prob, 4) if capture_type == "open" and pd.notna(mkt_prob) else np.nan,
                 "market_prob_close": round(mkt_prob, 4) if capture_type == "close" and pd.notna(mkt_prob) else np.nan,
                 "close_odds": mkt_odds,
+                "best_book": _best_book,
+                "best_odds": _best_odds,
+                "pinnacle_odds": _pin_odds,
+                "dk_odds": _dk_odds,
+                "bet365_odds": _b365_odds,
+                "bovada_odds": _bov_odds,
+                "betonline_odds": _bol_odds,
+                "fanduel_odds": _fd_odds,
                 "edge": round(edge, 4) if pd.notna(edge) else np.nan,
                 "direction": direction,
                 "classification": cls,
