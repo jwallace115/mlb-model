@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-30T16:00:39.790161Z",
+  "generated_at": "2026-03-30T21:00:44.083207Z",
   "game_date": "2026-03-30",
   "plays": [
     {
@@ -21,10 +21,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 7.39,
-        "proj_total_f5": 4.08,
+        "proj_total_full": 7.36,
+        "proj_total_f5": 4.07,
         "confidence": "HIGH",
-        "confidence_score": 0.787,
+        "confidence_score": 0.793,
         "factors": {
           "sp_home_xfip": 4.017,
           "sp_away_xfip": 4.16,
@@ -35,15 +35,15 @@
           "home_wrc_plus": 76.5,
           "away_wrc_plus": 92.1,
           "park_factor": 0.98,
-          "wind_speed_mph": 4.9,
-          "wind_direction": 270,
+          "wind_speed_mph": 4.3,
+          "wind_direction": 282,
           "wind_desc": "Blowing R to L",
-          "temperature_f": 87.7,
+          "temperature_f": 87.1,
           "weather_desc": "Mainly Clear",
-          "wind_factor": 0.9968,
-          "temp_factor": 1.0314,
-          "home_wind_adj": 0.9968,
-          "away_wind_adj": 0.9968,
+          "wind_factor": 0.9951,
+          "temp_factor": 1.0302,
+          "home_wind_adj": 0.9951,
+          "away_wind_adj": 0.9951,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -59,7 +59,7 @@
         }
       },
       "full_edge": {
-        "edge": -1.61,
+        "edge": -1.64,
         "lean": "UNDER",
         "consensus": 9.0,
         "value": true
@@ -70,7 +70,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Both lineups grade below average \u2014 DET at 92 wRC+ and ARI at 76. Weak bats on both sides suppress the total. Starters are evenly matched (Justin Verlander 4.16 / Michael Soroka 4.02 xFIP). 88\u00b0F heat adds to the over lean pulls the other way, but not enough to flip the lean. Model has 7.4, market is at 9.0 \u2014 under by -1.6 runs.",
+      "summary": "Both lineups grade below average \u2014 DET at 92 wRC+ and ARI at 76. Weak bats on both sides suppress the total. Starters are evenly matched (Justin Verlander 4.16 / Michael Soroka 4.02 xFIP). 87\u00b0F heat adds to the over lean pulls the other way, but not enough to flip the lean. Model has 7.4, market is at 9.0 \u2014 under by -1.6 runs.",
       "props": [],
       "alerts": []
     },
@@ -81,7 +81,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:40 PM CDT",
         "game_time_et": "07:40 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "MIL",
         "away_team": "TBR",
         "home_team_id": 158,
@@ -89,14 +89,14 @@
         "home_probable_pitcher": "{'id': 690986, 'name': 'Kyle Harrison', 'throws': ''}",
         "away_probable_pitcher": "{'id': 607259, 'name': 'Nick Martinez', 'throws': ''}",
         "venue_name": "American Family Field",
-        "home_umpire": null
+        "home_umpire": "Jeremie Rehak"
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.96,
-        "proj_total_f5": 5.47,
+        "proj_total_full": 9.99,
+        "proj_total_f5": 5.48,
         "confidence": "MEDIUM",
-        "confidence_score": 0.498,
+        "confidence_score": 0.523,
         "factors": {
           "sp_home_xfip": 4.342,
           "sp_away_xfip": 3.945,
@@ -107,19 +107,19 @@
           "home_wrc_plus": 116.8,
           "away_wrc_plus": 103.9,
           "park_factor": 1.02,
-          "wind_speed_mph": 4.6,
-          "wind_direction": 119,
+          "wind_speed_mph": 5.3,
+          "wind_direction": 123,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 68.9,
+          "temperature_f": 65.4,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0056,
-          "temp_factor": 0.9938,
-          "home_wind_adj": 1.0056,
-          "away_wind_adj": 1.0056,
+          "wind_factor": 1.0072,
+          "temp_factor": 0.9868,
+          "home_wind_adj": 1.0072,
+          "away_wind_adj": 1.0072,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Jeremie Rehak",
+          "umpire_runs_factor": 1.008,
           "home_bp_fatigue": 0.176,
           "away_bp_fatigue": 0.095,
           "home_bp_innings_used": 13.2,
@@ -131,7 +131,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.96,
+        "edge": 1.99,
         "lean": "OVER",
         "consensus": 8.0,
         "value": true
@@ -143,80 +143,118 @@
         "value": false
       },
       "summary": "TBR (104 wRC+) and MIL (117 wRC+) \u2014 both lineups grade as above-average run producers. Starters are evenly matched (Nick Martinez 3.94 / Kyle Harrison 4.34 xFIP), and MIL's pen is taxed (13 innings last 2 days). Model has 10.0, market is at 8.0 \u2014 over by +2.0 runs.",
-      "props": [],
-      "alerts": []
-    },
-    {
-      "rating": "\u2b50",
-      "game": {
-        "game_pk": 823320,
-        "game_date": "2026-03-30",
-        "game_time": "06:40 PM PDT",
-        "game_time_et": "09:40 PM ET",
-        "status": "Scheduled",
-        "home_team": "SDP",
-        "away_team": "SFG",
-        "home_team_id": 135,
-        "away_team_id": 137,
-        "home_probable_pitcher": "{'id': 621111, 'name': 'Walker Buehler', 'throws': ''}",
-        "away_probable_pitcher": "{'id': 694738, 'name': 'Landen Roupp', 'throws': ''}",
-        "venue_name": "Petco Park",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 7.62,
-        "proj_total_f5": 4.36,
-        "confidence": "MEDIUM",
-        "confidence_score": 0.464,
-        "factors": {
-          "sp_home_xfip": 4.849,
-          "sp_away_xfip": 4.213,
-          "sp_home_siera": 4.849,
-          "sp_away_siera": 4.213,
-          "sp_home_ip_per_start": 5.5,
-          "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 99.1,
-          "away_wrc_plus": 77.1,
-          "park_factor": 0.95,
-          "wind_speed_mph": 3.8,
-          "wind_direction": 208,
-          "wind_desc": "Blowing R to L",
-          "temperature_f": 64.0,
-          "weather_desc": "Overcast",
-          "wind_factor": 1.002,
-          "temp_factor": 0.984,
-          "home_wind_adj": 1.002,
-          "away_wind_adj": 1.002,
-          "home_sp_fb_pct": 0.35,
-          "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.04,
-          "away_bp_fatigue": 0.058,
-          "home_bp_innings_used": 3.0,
-          "away_bp_innings_used": 4.3,
-          "home_bp_xfip": 4.25,
-          "away_bp_xfip": 4.25,
-          "home_tier1_red": 0,
-          "away_tier1_red": 0
+      "props": [
+        {
+          "player_name": "Kyle Harrison",
+          "team": "- - -",
+          "market": "K",
+          "projection": 6.7,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Nick Martinez",
+          "team": "CIN",
+          "market": "K",
+          "projection": 4.72,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Brandon Lowe",
+          "team": "TBR",
+          "market": "TB",
+          "projection": 1.57,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Brice Turang",
+          "team": "MIL",
+          "market": "TB",
+          "projection": 1.41,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Christian Yelich",
+          "team": "MIL",
+          "market": "TB",
+          "projection": 1.44,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Jackson Chourio",
+          "team": "MIL",
+          "market": "TB",
+          "projection": 1.4,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Jonathan Aranda",
+          "team": "TBR",
+          "market": "TB",
+          "projection": 1.69,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Junior Caminero",
+          "team": "TBR",
+          "market": "TB",
+          "projection": 1.64,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
         }
-      },
-      "full_edge": {
-        "edge": -0.38,
-        "lean": "UNDER",
-        "consensus": 8.0,
-        "value": false
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "Both lineups grade below average \u2014 SFG at 77 wRC+ and SDP at 99. Weak bats on both sides suppress the total. Walker Buehler (4.85 xFIP) is the more hittable of the two starters, and the park (PF 95) gives pitchers an extra edge. Model has 7.6, market is at 8.0 \u2014 under by -0.4 runs.",
-      "props": [],
-      "alerts": []
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Jackson Chourio",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Brandon Lowe",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     }
   ],
   "no_plays": [
@@ -227,7 +265,7 @@
         "game_date": "2026-03-30",
         "game_time": "07:15 PM EDT",
         "game_time_et": "07:15 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "ATL",
         "away_team": "OAK",
         "home_team_id": 144,
@@ -235,14 +273,14 @@
         "home_probable_pitcher": "{'id': 693821, 'name': 'Bryce Elder', 'throws': ''}",
         "away_probable_pitcher": "{'id': 682052, 'name': 'Jacob Lopez', 'throws': ''}",
         "venue_name": "Truist Park",
-        "home_umpire": null
+        "home_umpire": "Dan Bellino"
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.39,
-        "proj_total_f5": 4.68,
+        "proj_total_full": 8.05,
+        "proj_total_f5": 4.49,
         "confidence": "LOW",
-        "confidence_score": 0.147,
+        "confidence_score": 0.286,
         "factors": {
           "sp_home_xfip": 4.567,
           "sp_away_xfip": 3.985,
@@ -253,19 +291,19 @@
           "home_wrc_plus": 94.1,
           "away_wrc_plus": 85.2,
           "park_factor": 1.02,
-          "wind_speed_mph": 8.2,
-          "wind_direction": 167,
+          "wind_speed_mph": 7.4,
+          "wind_direction": 175,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 72.9,
+          "temperature_f": 70.6,
           "weather_desc": "Clear",
-          "wind_factor": 1.0195,
-          "temp_factor": 1.0018,
-          "home_wind_adj": 1.0195,
-          "away_wind_adj": 1.0195,
+          "wind_factor": 1.0182,
+          "temp_factor": 0.9972,
+          "home_wind_adj": 1.0182,
+          "away_wind_adj": 1.0182,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Dan Bellino",
+          "umpire_runs_factor": 0.965,
           "home_bp_fatigue": 0.084,
           "away_bp_fatigue": 0.092,
           "home_bp_innings_used": 6.3,
@@ -277,7 +315,7 @@
         }
       },
       "full_edge": {
-        "edge": -1.11,
+        "edge": -1.45,
         "lean": "UNDER",
         "consensus": 9.5,
         "value": true
@@ -288,9 +326,109 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.4 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
-      "props": [],
-      "alerts": []
+      "summary": "Model leans under at 8.1 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "props": [
+        {
+          "player_name": "Bryce Elder",
+          "team": "ATL",
+          "market": "K",
+          "projection": 5.18,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Jacob Lopez",
+          "team": "OAK",
+          "market": "K",
+          "projection": 6.62,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Austin Riley",
+          "team": "ATL",
+          "market": "TB",
+          "projection": 1.62,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Brent Rooker",
+          "team": "OAK",
+          "market": "TB",
+          "projection": 1.55,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Matt Olson",
+          "team": "ATL",
+          "market": "TB",
+          "projection": 1.69,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Nick Kurtz",
+          "team": "OAK",
+          "market": "TB",
+          "projection": 1.7,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Ronald Acuna Jr.",
+          "team": "ATL",
+          "market": "TB",
+          "projection": 1.83,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Tyler Soderstrom",
+          "team": "OAK",
+          "market": "TB",
+          "projection": 1.44,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Ronald Acuna Jr.",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -299,7 +437,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:35 PM EDT",
         "game_time_et": "06:35 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "BAL",
         "away_team": "TEX",
         "home_team_id": 110,
@@ -307,14 +445,14 @@
         "home_probable_pitcher": "{'id': 605135, 'name': 'Chris Bassitt', 'throws': ''}",
         "away_probable_pitcher": "{'id': 683004, 'name': 'Jack Leiter', 'throws': ''}",
         "venue_name": "Oriole Park at Camden Yards",
-        "home_umpire": null
+        "home_umpire": "Ron Kulpa"
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.25,
-        "proj_total_f5": 4.66,
+        "proj_total_full": 8.04,
+        "proj_total_f5": 4.54,
         "confidence": "LOW",
-        "confidence_score": 0.261,
+        "confidence_score": 0.23,
         "factors": {
           "sp_home_xfip": 4.257,
           "sp_away_xfip": 4.55,
@@ -336,8 +474,8 @@
           "away_wind_adj": 1.0,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Ron Kulpa",
+          "umpire_runs_factor": 0.975,
           "home_bp_fatigue": 0.08,
           "away_bp_fatigue": 0.105,
           "home_bp_innings_used": 6.0,
@@ -349,7 +487,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.75,
+        "edge": -0.96,
         "lean": "UNDER",
         "consensus": 9.0,
         "value": true
@@ -360,9 +498,119 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.2 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
-      "props": [],
-      "alerts": []
+      "summary": "Model leans under at 8.0 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "props": [
+        {
+          "player_name": "Chris Bassitt",
+          "team": "TOR",
+          "market": "K",
+          "projection": 4.91,
+          "line": 4.5,
+          "lean": "OVER",
+          "edge": 0.41,
+          "edge_pct": 0.0911,
+          "is_play": false
+        },
+        {
+          "player_name": "Jack Leiter",
+          "team": "TEX",
+          "market": "K",
+          "projection": 6.08,
+          "line": 4.5,
+          "lean": "OVER",
+          "edge": 1.58,
+          "edge_pct": 0.3511,
+          "is_play": true
+        },
+        {
+          "player_name": "Colton Cowser",
+          "team": "BAL",
+          "market": "TB",
+          "projection": 1.33,
+          "line": 0.5,
+          "lean": "OVER",
+          "edge": 0.83,
+          "edge_pct": 1.66,
+          "is_play": true
+        },
+        {
+          "player_name": "Corey Seager",
+          "team": "TEX",
+          "market": "TB",
+          "projection": 1.88,
+          "line": 1.5,
+          "lean": "OVER",
+          "edge": 0.38,
+          "edge_pct": 0.2533,
+          "is_play": true
+        },
+        {
+          "player_name": "Jake Burger",
+          "team": "TEX",
+          "market": "TB",
+          "projection": 1.53,
+          "line": 1.5,
+          "lean": "OVER",
+          "edge": 0.03,
+          "edge_pct": 0.02,
+          "is_play": false
+        },
+        {
+          "player_name": "Jordan Westburg",
+          "team": "BAL",
+          "market": "TB",
+          "projection": 1.48,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Ryan Mountcastle",
+          "team": "BAL",
+          "market": "TB",
+          "projection": 1.4,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Wyatt Langford",
+          "team": "TEX",
+          "market": "TB",
+          "projection": 1.48,
+          "line": 1.5,
+          "lean": "UNDER",
+          "edge": -0.02,
+          "edge_pct": 0.0133,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Ryan Mountcastle",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Jordan Westburg",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -371,7 +619,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:40 PM CDT",
         "game_time_et": "07:40 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "CHC",
         "away_team": "LAA",
         "home_team_id": 112,
@@ -379,14 +627,14 @@
         "home_probable_pitcher": "{'id': 665795, 'name': 'Edward Cabrera', 'throws': ''}",
         "away_probable_pitcher": "{'id': 696270, 'name': 'Ryan Johnson', 'throws': ''}",
         "venue_name": "Wrigley Field",
-        "home_umpire": null
+        "home_umpire": "Charlie Ramos"
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.62,
-        "proj_total_f5": 5.33,
+        "proj_total_full": 9.6,
+        "proj_total_f5": 5.31,
         "confidence": "LOW",
-        "confidence_score": 0.149,
+        "confidence_score": 0.143,
         "factors": {
           "sp_home_xfip": 4.233,
           "sp_away_xfip": 4.111,
@@ -397,18 +645,18 @@
           "home_wrc_plus": 107.6,
           "away_wrc_plus": 98.9,
           "park_factor": 1.03,
-          "wind_speed_mph": 10.8,
-          "wind_direction": 207,
+          "wind_speed_mph": 9.2,
+          "wind_direction": 206,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 76.2,
-          "weather_desc": "Overcast",
-          "wind_factor": 1.0123,
-          "temp_factor": 1.0084,
-          "home_wind_adj": 1.0123,
-          "away_wind_adj": 1.0123,
+          "temperature_f": 76.1,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0101,
+          "temp_factor": 1.0082,
+          "home_wind_adj": 1.0101,
+          "away_wind_adj": 1.0101,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
+          "umpire_name": "Charlie Ramos",
           "umpire_runs_factor": 1.0,
           "home_bp_fatigue": 0.083,
           "away_bp_fatigue": 0.095,
@@ -421,7 +669,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.12,
+        "edge": 0.1,
         "lean": "OVER",
         "consensus": 9.5,
         "value": false
@@ -433,8 +681,108 @@
         "value": false
       },
       "summary": "Model has 9.6 runs, market has 9.5 \u2014 only 0.1 runs of separation, below the 0.5-run threshold. The over lean is there but the margin isn't wide enough to play.",
-      "props": [],
-      "alerts": []
+      "props": [
+        {
+          "player_name": "Edward Cabrera",
+          "team": "MIA",
+          "market": "K",
+          "projection": 6.85,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Ryan Johnson",
+          "team": "LAA",
+          "market": "K",
+          "projection": 5.29,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Jo Adell",
+          "team": "LAA",
+          "market": "TB",
+          "projection": 1.76,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Michael Busch",
+          "team": "CHC",
+          "market": "TB",
+          "projection": 1.74,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Mike Trout",
+          "team": "LAA",
+          "market": "TB",
+          "projection": 1.52,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Pete Crow-Armstrong",
+          "team": "CHC",
+          "market": "TB",
+          "projection": 1.51,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Seiya Suzuki",
+          "team": "CHC",
+          "market": "TB",
+          "projection": 1.57,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Zach Neto",
+          "team": "LAA",
+          "market": "TB",
+          "projection": 1.59,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Seiya Suzuki",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -443,7 +791,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:40 PM EDT",
         "game_time_et": "06:40 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "CIN",
         "away_team": "PIT",
         "home_team_id": 113,
@@ -451,14 +799,14 @@
         "home_probable_pitcher": "{'id': 695505, 'name': 'Chase Burns', 'throws': ''}",
         "away_probable_pitcher": "{'id': 677952, 'name': 'Braxton Ashcraft', 'throws': ''}",
         "venue_name": "Great American Ball Park",
-        "home_umpire": null
+        "home_umpire": "Junior Valentine"
       },
       "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 8.61,
-        "proj_total_f5": 4.62,
+        "lean": "NEUTRAL",
+        "proj_total_full": 8.94,
+        "proj_total_f5": 4.8,
         "confidence": "LOW",
-        "confidence_score": 0.174,
+        "confidence_score": 0.013,
         "factors": {
           "sp_home_xfip": 3.953,
           "sp_away_xfip": 3.846,
@@ -469,18 +817,18 @@
           "home_wrc_plus": 109.0,
           "away_wrc_plus": 79.5,
           "park_factor": 1.07,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 14.1,
+          "wind_direction": 203,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 74.1,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.035,
+          "temp_factor": 1.0042,
+          "home_wind_adj": 1.035,
+          "away_wind_adj": 1.035,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
+          "umpire_name": "Junior Valentine",
           "umpire_runs_factor": 1.0,
           "home_bp_fatigue": 0.129,
           "away_bp_fatigue": 0.114,
@@ -493,7 +841,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.61,
+        "edge": 0.94,
         "lean": "OVER",
         "consensus": 8.0,
         "value": true
@@ -504,9 +852,109 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.6 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
-      "props": [],
-      "alerts": []
+      "summary": "The park (PF 107) pushes toward the over while sp_avg counters in the other direction \u2014 the model nets out at 8.9 runs with no clear dominant force. Pass.",
+      "props": [
+        {
+          "player_name": "Braxton Ashcraft",
+          "team": "PIT",
+          "market": "K",
+          "projection": 6.36,
+          "line": 4.5,
+          "lean": "OVER",
+          "edge": 1.86,
+          "edge_pct": 0.4133,
+          "is_play": true
+        },
+        {
+          "player_name": "Chase Burns",
+          "team": "CIN",
+          "market": "K",
+          "projection": 7.43,
+          "line": 7.5,
+          "lean": "UNDER",
+          "edge": -0.07,
+          "edge_pct": 0.0093,
+          "is_play": false
+        },
+        {
+          "player_name": "Andrew McCutchen",
+          "team": "PIT",
+          "market": "TB",
+          "projection": 1.44,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Bryan Reynolds",
+          "team": "PIT",
+          "market": "TB",
+          "projection": 1.56,
+          "line": 0.5,
+          "lean": "OVER",
+          "edge": 1.06,
+          "edge_pct": 2.12,
+          "is_play": true
+        },
+        {
+          "player_name": "Elly De La Cruz",
+          "team": "CIN",
+          "market": "TB",
+          "projection": 1.39,
+          "line": 1.5,
+          "lean": "UNDER",
+          "edge": -0.11,
+          "edge_pct": 0.0733,
+          "is_play": false
+        },
+        {
+          "player_name": "Oneil Cruz",
+          "team": "PIT",
+          "market": "TB",
+          "projection": 1.48,
+          "line": 0.5,
+          "lean": "OVER",
+          "edge": 0.98,
+          "edge_pct": 1.96,
+          "is_play": true
+        },
+        {
+          "player_name": "Tyler Stephenson",
+          "team": "CIN",
+          "market": "TB",
+          "projection": 1.28,
+          "line": 0.5,
+          "lean": "OVER",
+          "edge": 0.78,
+          "edge_pct": 1.56,
+          "is_play": true
+        },
+        {
+          "player_name": "Will Benson",
+          "team": "CIN",
+          "market": "TB",
+          "projection": 1.31,
+          "line": 0.5,
+          "lean": "OVER",
+          "edge": 0.81,
+          "edge_pct": 1.62,
+          "is_play": true
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Andrew McCutchen",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -515,7 +963,7 @@
         "game_date": "2026-03-30",
         "game_time": "07:10 PM CDT",
         "game_time_et": "08:10 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "HOU",
         "away_team": "BOS",
         "home_team_id": 117,
@@ -523,14 +971,14 @@
         "home_probable_pitcher": "{'id': 621121, 'name': 'Lance McCullers Jr.', 'throws': ''}",
         "away_probable_pitcher": "{'id': 624133, 'name': 'Ranger Suarez', 'throws': ''}",
         "venue_name": "Daikin Park",
-        "home_umpire": null
+        "home_umpire": "Nate Tomlinson"
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 8.89,
-        "proj_total_f5": 4.92,
+        "proj_total_full": 8.91,
+        "proj_total_f5": 4.93,
         "confidence": "LOW",
-        "confidence_score": 0.107,
+        "confidence_score": 0.102,
         "factors": {
           "sp_home_xfip": 4.77,
           "sp_away_xfip": 3.604,
@@ -541,18 +989,18 @@
           "home_wrc_plus": 89.6,
           "away_wrc_plus": 102.5,
           "park_factor": 1.0,
-          "wind_speed_mph": 10.1,
-          "wind_direction": 152,
+          "wind_speed_mph": 10.8,
+          "wind_direction": 153,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 75.9,
+          "temperature_f": 76.3,
           "weather_desc": "Clear",
-          "wind_factor": 1.0223,
-          "temp_factor": 1.0078,
-          "home_wind_adj": 1.0223,
-          "away_wind_adj": 1.0223,
+          "wind_factor": 1.0241,
+          "temp_factor": 1.0086,
+          "home_wind_adj": 1.0241,
+          "away_wind_adj": 1.0241,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
+          "umpire_name": "Nate Tomlinson",
           "umpire_runs_factor": 1.0,
           "home_bp_fatigue": 0.157,
           "away_bp_fatigue": 0.102,
@@ -565,7 +1013,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.39,
+        "edge": 0.41,
         "lean": "OVER",
         "consensus": 8.5,
         "value": false
@@ -577,8 +1025,118 @@
         "value": false
       },
       "summary": "Starters are well-matched (Ranger Suarez 3.60 / Lance McCullers Jr. 4.77 xFIP) and lineups are similarly average (BOS 102 / HOU 90 wRC+). Model projects 8.9 runs but there's no exploitable edge \u2014 pass.",
-      "props": [],
-      "alerts": []
+      "props": [
+        {
+          "player_name": "Lance McCullers Jr.",
+          "team": "HOU",
+          "market": "K",
+          "projection": 4.45,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Ranger Suarez",
+          "team": "PHI",
+          "market": "K",
+          "projection": 6.88,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Christian Walker",
+          "team": "HOU",
+          "market": "TB",
+          "projection": 1.35,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Jeremy Pena",
+          "team": "HOU",
+          "market": "TB",
+          "projection": 1.35,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Roman Anthony",
+          "team": "BOS",
+          "market": "TB",
+          "projection": 1.32,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Romy Gonzalez",
+          "team": "BOS",
+          "market": "TB",
+          "projection": 1.38,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Wilyer Abreu",
+          "team": "BOS",
+          "market": "TB",
+          "projection": 1.48,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Yainer Diaz",
+          "team": "HOU",
+          "market": "TB",
+          "projection": 1.45,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Jeremy Pena",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Romy Gonzalez",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -587,7 +1145,7 @@
         "game_date": "2026-03-30",
         "game_time": "03:10 PM CDT",
         "game_time_et": "04:10 PM ET",
-        "status": "Pre-Game",
+        "status": "In Progress",
         "home_team": "KCR",
         "away_team": "MIN",
         "home_team_id": 118,
@@ -671,10 +1229,10 @@
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 9.2,
-        "proj_total_f5": 5.11,
+        "proj_total_full": 9.25,
+        "proj_total_f5": 5.14,
         "confidence": "LOW",
-        "confidence_score": 0.048,
+        "confidence_score": 0.059,
         "factors": {
           "sp_home_xfip": 4.756,
           "sp_away_xfip": 3.831,
@@ -685,15 +1243,15 @@
           "home_wrc_plus": 123.4,
           "away_wrc_plus": 94.2,
           "park_factor": 0.95,
-          "wind_speed_mph": 4.2,
-          "wind_direction": 245,
-          "wind_desc": "Blowing Out to CF",
-          "temperature_f": 64.9,
+          "wind_speed_mph": 6.0,
+          "wind_direction": 255,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 66.6,
           "weather_desc": "Overcast",
-          "wind_factor": 1.008,
-          "temp_factor": 0.9858,
-          "home_wind_adj": 1.008,
-          "away_wind_adj": 1.008,
+          "wind_factor": 1.0096,
+          "temp_factor": 0.9892,
+          "home_wind_adj": 1.0096,
+          "away_wind_adj": 1.0096,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -709,7 +1267,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.7,
+        "edge": 0.75,
         "lean": "OVER",
         "consensus": 8.5,
         "value": true
@@ -731,7 +1289,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:40 PM EDT",
         "game_time_et": "06:40 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "MIA",
         "away_team": "CHW",
         "home_team_id": 146,
@@ -739,14 +1297,14 @@
         "home_probable_pitcher": "{'id': 663978, 'name': 'Chris Paddack', 'throws': ''}",
         "away_probable_pitcher": "{'id': 663436, 'name': 'Davis Martin', 'throws': ''}",
         "venue_name": "loanDepot park",
-        "home_umpire": null
+        "home_umpire": "Emil Jimenez"
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 8.89,
-        "proj_total_f5": 5.14,
+        "proj_total_full": 8.95,
+        "proj_total_f5": 5.18,
         "confidence": "LOW",
-        "confidence_score": 0.107,
+        "confidence_score": 0.091,
         "factors": {
           "sp_home_xfip": 4.732,
           "sp_away_xfip": 4.639,
@@ -757,18 +1315,18 @@
           "home_wrc_plus": 102.4,
           "away_wrc_plus": 88.2,
           "park_factor": 0.98,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
+          "wind_speed_mph": 11.4,
+          "wind_direction": 80,
+          "wind_desc": "Blowing L to R",
+          "temperature_f": 75.8,
+          "weather_desc": "Overcast",
           "wind_factor": 1.0,
-          "temp_factor": 1.0,
+          "temp_factor": 1.0076,
           "home_wind_adj": 1.0,
           "away_wind_adj": 1.0,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
+          "umpire_name": "Emil Jimenez",
           "umpire_runs_factor": 1.0,
           "home_bp_fatigue": 0.08,
           "away_bp_fatigue": 0.077,
@@ -781,7 +1339,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.89,
+        "edge": 0.95,
         "lean": "OVER",
         "consensus": 8.0,
         "value": true
@@ -793,8 +1351,148 @@
         "value": false
       },
       "summary": "Sp_avg pushes toward the over while some under factors counters in the other direction \u2014 the model nets out at 8.9 runs with no clear dominant force. Pass.",
-      "props": [],
-      "alerts": []
+      "props": [
+        {
+          "player_name": "Chris Paddack",
+          "team": "- - -",
+          "market": "K",
+          "projection": 4.2,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Davis Martin",
+          "team": "CHW",
+          "market": "K",
+          "projection": 4.23,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Agustin Ramirez",
+          "team": "MIA",
+          "market": "TB",
+          "projection": 1.4,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Andrew Benintendi",
+          "team": "CHW",
+          "market": "TB",
+          "projection": 1.37,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Eric Wagaman",
+          "team": "MIA",
+          "market": "TB",
+          "projection": 1.29,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Kyle Stowers",
+          "team": "MIA",
+          "market": "TB",
+          "projection": 1.65,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Lenyn Sosa",
+          "team": "CHW",
+          "market": "TB",
+          "projection": 1.48,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Luis Robert Jr.",
+          "team": "CHW",
+          "market": "TB",
+          "projection": 1.35,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Kyle Stowers",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Agustin Ramirez",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Eric Wagaman",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Andrew Benintendi",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Luis Robert Jr.",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -803,7 +1501,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:40 PM EDT",
         "game_time_et": "06:40 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "PHI",
         "away_team": "WSN",
         "home_team_id": 143,
@@ -811,14 +1509,14 @@
         "home_probable_pitcher": "{'id': 592836, 'name': 'Taijuan Walker', 'throws': ''}",
         "away_probable_pitcher": "{'id': 656492, 'name': 'Foster Griffin', 'throws': ''}",
         "venue_name": "Citizens Bank Park",
-        "home_umpire": null
+        "home_umpire": "Nick Mahrley"
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.7,
-        "proj_total_f5": 5.57,
+        "proj_total_full": 9.35,
+        "proj_total_f5": 5.37,
         "confidence": "LOW",
-        "confidence_score": 0.408,
+        "confidence_score": 0.217,
         "factors": {
           "sp_home_xfip": 4.857,
           "sp_away_xfip": 4.25,
@@ -829,19 +1527,19 @@
           "home_wrc_plus": 82.4,
           "away_wrc_plus": 111.3,
           "park_factor": 1.04,
-          "wind_speed_mph": 12.2,
-          "wind_direction": 211,
+          "wind_speed_mph": 11.6,
+          "wind_direction": 218,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 69.3,
-          "weather_desc": "Overcast",
-          "wind_factor": 1.0274,
-          "temp_factor": 0.9946,
-          "home_wind_adj": 1.0274,
-          "away_wind_adj": 1.0274,
+          "temperature_f": 67.1,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0243,
+          "temp_factor": 0.9902,
+          "home_wind_adj": 1.0243,
+          "away_wind_adj": 1.0243,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Nick Mahrley",
+          "umpire_runs_factor": 0.971,
           "home_bp_fatigue": 0.107,
           "away_bp_fatigue": 0.076,
           "home_bp_innings_used": 8.0,
@@ -853,10 +1551,10 @@
         }
       },
       "full_edge": {
-        "edge": 0.7,
+        "edge": 0.35,
         "lean": "OVER",
         "consensus": 9.0,
-        "value": true
+        "value": false
       },
       "f5_edge": {
         "edge": null,
@@ -864,7 +1562,188 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans over at 9.7 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Model has 9.3 runs, market has 9.0 \u2014 only 0.3 runs of separation, below the 0.5-run threshold. The over lean is there but the margin isn't wide enough to play.",
+      "props": [
+        {
+          "player_name": "Taijuan Walker",
+          "team": "PHI",
+          "market": "K",
+          "projection": 4.66,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Bryce Harper",
+          "team": "PHI",
+          "market": "TB",
+          "projection": 1.61,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "James Wood",
+          "team": "WSN",
+          "market": "TB",
+          "projection": 1.61,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Josh Bell",
+          "team": "WSN",
+          "market": "TB",
+          "projection": 1.58,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Kyle Schwarber",
+          "team": "PHI",
+          "market": "TB",
+          "projection": 1.91,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Luis Garcia Jr.",
+          "team": "WSN",
+          "market": "TB",
+          "projection": 1.53,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Max Kepler",
+          "team": "PHI",
+          "market": "TB",
+          "projection": 1.45,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Max Kepler",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Josh Bell",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Luis Garcia Jr.",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
+    },
+    {
+      "rating": "NO PLAY",
+      "game": {
+        "game_pk": 823320,
+        "game_date": "2026-03-30",
+        "game_time": "06:40 PM PDT",
+        "game_time_et": "09:40 PM ET",
+        "status": "Pre-Game",
+        "home_team": "SDP",
+        "away_team": "SFG",
+        "home_team_id": 135,
+        "away_team_id": 137,
+        "home_probable_pitcher": "{'id': 621111, 'name': 'Walker Buehler', 'throws': ''}",
+        "away_probable_pitcher": "{'id': 694738, 'name': 'Landen Roupp', 'throws': ''}",
+        "venue_name": "Petco Park",
+        "home_umpire": "Lance Barksdale"
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.73,
+        "proj_total_f5": 4.42,
+        "confidence": "LOW",
+        "confidence_score": 0.361,
+        "factors": {
+          "sp_home_xfip": 4.849,
+          "sp_away_xfip": 4.213,
+          "sp_home_siera": 4.849,
+          "sp_away_siera": 4.213,
+          "sp_home_ip_per_start": 5.5,
+          "sp_away_ip_per_start": 5.5,
+          "home_wrc_plus": 99.1,
+          "away_wrc_plus": 77.1,
+          "park_factor": 0.95,
+          "wind_speed_mph": 6.1,
+          "wind_direction": 204,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 63.5,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0042,
+          "temp_factor": 0.983,
+          "home_wind_adj": 1.0042,
+          "away_wind_adj": 1.0042,
+          "home_sp_fb_pct": 0.35,
+          "away_sp_fb_pct": 0.35,
+          "umpire_name": "Lance Barksdale",
+          "umpire_runs_factor": 1.013,
+          "home_bp_fatigue": 0.04,
+          "away_bp_fatigue": 0.058,
+          "home_bp_innings_used": 3.0,
+          "away_bp_innings_used": 4.3,
+          "home_bp_xfip": 4.25,
+          "away_bp_xfip": 4.25,
+          "home_tier1_red": 0,
+          "away_tier1_red": 0
+        }
+      },
+      "full_edge": {
+        "edge": -0.27,
+        "lean": "UNDER",
+        "consensus": 8.0,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Model has 7.7 runs, market has 8.0 \u2014 only 0.3 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
       "props": [],
       "alerts": []
     },
@@ -875,7 +1754,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:40 PM PDT",
         "game_time_et": "09:40 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "SEA",
         "away_team": "NYY",
         "home_team_id": 136,
@@ -883,14 +1762,14 @@
         "home_probable_pitcher": "{'id': 622491, 'name': 'Luis Castillo', 'throws': ''}",
         "away_probable_pitcher": "{'id': 677960, 'name': 'Ryan Weathers', 'throws': ''}",
         "venue_name": "T-Mobile Park",
-        "home_umpire": null
+        "home_umpire": "Mike Estabrook"
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.11,
-        "proj_total_f5": 4.48,
+        "proj_total_full": 7.97,
+        "proj_total_f5": 4.41,
         "confidence": "LOW",
-        "confidence_score": 0.347,
+        "confidence_score": 0.419,
         "factors": {
           "sp_home_xfip": 4.09,
           "sp_away_xfip": 4.16,
@@ -901,19 +1780,19 @@
           "home_wrc_plus": 108.7,
           "away_wrc_plus": 103.9,
           "park_factor": 0.94,
-          "wind_speed_mph": 7.8,
-          "wind_direction": 12,
+          "wind_speed_mph": 6.2,
+          "wind_direction": 19,
           "wind_desc": "Blowing In from CF",
-          "temperature_f": 42.9,
+          "temperature_f": 43.1,
           "weather_desc": "Clear",
-          "wind_factor": 0.9815,
-          "temp_factor": 0.9418,
-          "home_wind_adj": 0.9815,
-          "away_wind_adj": 0.9815,
+          "wind_factor": 0.9848,
+          "temp_factor": 0.9422,
+          "home_wind_adj": 0.9848,
+          "away_wind_adj": 0.9848,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Mike Estabrook",
+          "umpire_runs_factor": 0.979,
           "home_bp_fatigue": 0.084,
           "away_bp_fatigue": 0.047,
           "home_bp_innings_used": 6.3,
@@ -925,10 +1804,10 @@
         }
       },
       "full_edge": {
-        "edge": 0.61,
+        "edge": 0.47,
         "lean": "OVER",
         "consensus": 7.5,
-        "value": true
+        "value": false
       },
       "f5_edge": {
         "edge": null,
@@ -936,9 +1815,119 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.1 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
-      "props": [],
-      "alerts": []
+      "summary": "Model has 8.0 runs, market has 7.5 \u2014 only 0.5 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play.",
+      "props": [
+        {
+          "player_name": "Luis Castillo",
+          "team": "SEA",
+          "market": "K",
+          "projection": 5.22,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Ryan Weathers",
+          "team": "MIA",
+          "market": "K",
+          "projection": 4.73,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Aaron Judge",
+          "team": "NYY",
+          "market": "TB",
+          "projection": 2.12,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Ben Rice",
+          "team": "NYY",
+          "market": "TB",
+          "projection": 1.67,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Cal Raleigh",
+          "team": "SEA",
+          "market": "TB",
+          "projection": 1.62,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Julio Rodriguez",
+          "team": "SEA",
+          "market": "TB",
+          "projection": 1.43,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Randy Arozarena",
+          "team": "SEA",
+          "market": "TB",
+          "projection": 1.24,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Trent Grisham",
+          "team": "NYY",
+          "market": "TB",
+          "projection": 1.49,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Cal Raleigh",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Julio Rodriguez",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -947,7 +1936,7 @@
         "game_date": "2026-03-30",
         "game_time": "06:45 PM CDT",
         "game_time_et": "07:45 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "STL",
         "away_team": "NYM",
         "home_team_id": 138,
@@ -955,14 +1944,14 @@
         "home_probable_pitcher": "{'id': 681517, 'name': 'Kyle Leahy', 'throws': ''}",
         "away_probable_pitcher": "{'id': 605280, 'name': 'Clay Holmes', 'throws': ''}",
         "venue_name": "Busch Stadium",
-        "home_umpire": null
+        "home_umpire": "Vic Carapazza"
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.63,
-        "proj_total_f5": 5.35,
+        "proj_total_full": 9.79,
+        "proj_total_f5": 5.44,
         "confidence": "LOW",
-        "confidence_score": 0.285,
+        "confidence_score": 0.361,
         "factors": {
           "sp_home_xfip": 4.344,
           "sp_away_xfip": 4.147,
@@ -973,19 +1962,19 @@
           "home_wrc_plus": 107.9,
           "away_wrc_plus": 102.9,
           "park_factor": 0.97,
-          "wind_speed_mph": 14.1,
-          "wind_direction": 195,
+          "wind_speed_mph": 13.7,
+          "wind_direction": 192,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 78.4,
-          "weather_desc": "Overcast",
-          "wind_factor": 1.0351,
-          "temp_factor": 1.0128,
-          "home_wind_adj": 1.0351,
-          "away_wind_adj": 1.0351,
+          "temperature_f": 78.0,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0342,
+          "temp_factor": 1.012,
+          "home_wind_adj": 1.0342,
+          "away_wind_adj": 1.0342,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Vic Carapazza",
+          "umpire_runs_factor": 1.018,
           "home_bp_fatigue": 0.111,
           "away_bp_fatigue": 0.127,
           "home_bp_innings_used": 8.3,
@@ -997,7 +1986,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.63,
+        "edge": 0.79,
         "lean": "OVER",
         "consensus": 9.0,
         "value": true
@@ -1008,9 +1997,129 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans over at 9.6 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
-      "props": [],
-      "alerts": []
+      "summary": "Model leans over at 9.8 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "props": [
+        {
+          "player_name": "Clay Holmes",
+          "team": "NYM",
+          "market": "K",
+          "projection": 4.25,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Kyle Leahy",
+          "team": "STL",
+          "market": "K",
+          "projection": 5.66,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Alec Burleson",
+          "team": "STL",
+          "market": "TB",
+          "projection": 1.37,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Brett Baty",
+          "team": "NYM",
+          "market": "TB",
+          "projection": 1.4,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Ivan Herrera",
+          "team": "STL",
+          "market": "TB",
+          "projection": 1.43,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Juan Soto",
+          "team": "NYM",
+          "market": "TB",
+          "projection": 1.86,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Pete Alonso",
+          "team": "NYM",
+          "market": "TB",
+          "projection": 1.75,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Willson Contreras",
+          "team": "STL",
+          "market": "TB",
+          "projection": 1.42,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Willson Contreras",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Ivan Herrera",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Pete Alonso",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -1019,7 +2128,7 @@
         "game_date": "2026-03-30",
         "game_time": "07:07 PM EDT",
         "game_time_et": "07:07 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "TOR",
         "away_team": "COL",
         "home_team_id": 141,
@@ -1027,14 +2136,14 @@
         "home_probable_pitcher": "{'id': 664074, 'name': 'Cody Ponce', 'throws': ''}",
         "away_probable_pitcher": "{'id': 608372, 'name': 'Tomoyuki Sugano', 'throws': ''}",
         "venue_name": "Rogers Centre",
-        "home_umpire": null
+        "home_umpire": "Erich Bacchus"
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.35,
+        "proj_total_full": 9.34,
         "proj_total_f5": 5.47,
         "confidence": "LOW",
-        "confidence_score": 0.163,
+        "confidence_score": 0.323,
         "factors": {
           "sp_home_xfip": 4.25,
           "sp_away_xfip": 5.33,
@@ -1045,18 +2154,18 @@
           "home_wrc_plus": 102.7,
           "away_wrc_plus": 82.7,
           "park_factor": 1.05,
-          "wind_speed_mph": 5.4,
-          "wind_direction": 272,
-          "wind_desc": "Blowing R to L",
-          "temperature_f": 66.4,
-          "weather_desc": "Overcast",
-          "wind_factor": 0.9972,
-          "temp_factor": 0.9888,
-          "home_wind_adj": 0.9972,
-          "away_wind_adj": 0.9972,
+          "wind_speed_mph": 7.8,
+          "wind_direction": 211,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 57.8,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0147,
+          "temp_factor": 0.9716,
+          "home_wind_adj": 1.0147,
+          "away_wind_adj": 1.0147,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
+          "umpire_name": "Erich Bacchus",
           "umpire_runs_factor": 1.0,
           "home_bp_fatigue": 0.095,
           "away_bp_fatigue": 0.08,
@@ -1069,7 +2178,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.85,
+        "edge": 0.84,
         "lean": "OVER",
         "consensus": 8.5,
         "value": true
@@ -1081,8 +2190,107 @@
         "value": false
       },
       "summary": "Model leans over at 9.3 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
-      "props": [],
-      "alerts": []
+      "props": [
+        {
+          "player_name": "Tomoyuki Sugano",
+          "team": "BAL",
+          "market": "K",
+          "projection": 3.06,
+          "line": 2.5,
+          "lean": "OVER",
+          "edge": 0.56,
+          "edge_pct": 0.224,
+          "is_play": true
+        },
+        {
+          "player_name": "Addison Barger",
+          "team": "TOR",
+          "market": "TB",
+          "projection": 1.55,
+          "line": 1.5,
+          "lean": "OVER",
+          "edge": 0.05,
+          "edge_pct": 0.0333,
+          "is_play": false
+        },
+        {
+          "player_name": "Brenton Doyle",
+          "team": "COL",
+          "market": "TB",
+          "projection": 1.37,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "George Springer",
+          "team": "TOR",
+          "market": "TB",
+          "projection": 1.92,
+          "line": 1.5,
+          "lean": "OVER",
+          "edge": 0.42,
+          "edge_pct": 0.28,
+          "is_play": true
+        },
+        {
+          "player_name": "Hunter Goodman",
+          "team": "COL",
+          "market": "TB",
+          "projection": 1.54,
+          "line": 1.5,
+          "lean": "OVER",
+          "edge": 0.04,
+          "edge_pct": 0.0267,
+          "is_play": false
+        },
+        {
+          "player_name": "Mickey Moniak",
+          "team": "COL",
+          "market": "TB",
+          "projection": 1.64,
+          "line": null,
+          "lean": null,
+          "edge": null,
+          "edge_pct": null,
+          "is_play": false
+        },
+        {
+          "player_name": "Vladimir Guerrero Jr.",
+          "team": "TOR",
+          "market": "TB",
+          "projection": 1.7,
+          "line": 1.5,
+          "lean": "OVER",
+          "edge": 0.2,
+          "edge_pct": 0.1333,
+          "is_play": true
+        }
+      ],
+      "alerts": [
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Mickey Moniak",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        },
+        {
+          "type": "BATTER_SCRATCH",
+          "player_out": "Brenton Doyle",
+          "player_in": null,
+          "old_projection": null,
+          "new_projection": null,
+          "projection_delta": null,
+          "old_confidence": null,
+          "new_confidence": null
+        }
+      ]
     }
   ],
   "parlay": [],
@@ -1095,11 +2303,11 @@
       "market": "full",
       "market_label": "UNDER 9.0",
       "rating": "\u2b50\u2b50\u2b50",
-      "projection": 7.39,
+      "projection": 7.36,
       "line": 9.0,
       "lean": "UNDER",
-      "edge": -1.61,
-      "confidence_score": 0.787
+      "edge": -1.64,
+      "confidence_score": 0.793
     },
     {
       "game_pk": 823809,
@@ -1108,11 +2316,11 @@
       "market": "full",
       "market_label": "OVER 8.0",
       "rating": "\u2b50\u2b50",
-      "projection": 9.96,
+      "projection": 9.99,
       "line": 8.0,
       "lean": "OVER",
-      "edge": 1.96,
-      "confidence_score": 0.498
+      "edge": 1.99,
+      "confidence_score": 0.523
     }
   ],
   "parlay_7": [
@@ -1123,11 +2331,11 @@
       "market": "full",
       "market_label": "UNDER 9.0",
       "rating": "\u2b50\u2b50\u2b50",
-      "projection": 7.39,
+      "projection": 7.36,
       "line": 9.0,
       "lean": "UNDER",
-      "edge": -1.61,
-      "confidence_score": 0.787
+      "edge": -1.64,
+      "confidence_score": 0.793
     },
     {
       "game_pk": 823809,
@@ -1136,24 +2344,11 @@
       "market": "full",
       "market_label": "OVER 8.0",
       "rating": "\u2b50\u2b50",
-      "projection": 9.96,
+      "projection": 9.99,
       "line": 8.0,
       "lean": "OVER",
-      "edge": 1.96,
-      "confidence_score": 0.498
-    },
-    {
-      "game_pk": 823320,
-      "player_name": null,
-      "matchup": "SFG @ SDP",
-      "market": "full",
-      "market_label": "UNDER 8.0",
-      "rating": "\u2b50",
-      "projection": 7.62,
-      "line": 8.0,
-      "lean": "UNDER",
-      "edge": -0.38,
-      "confidence_score": 0.464
+      "edge": 1.99,
+      "confidence_score": 0.523
     }
   ],
   "season_record": {
