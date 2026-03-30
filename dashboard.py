@@ -11,6 +11,7 @@ import json
 import os
 from datetime import datetime
 
+import pandas as pd
 import streamlit as st
 
 RESULTS_FILE      = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.json")
