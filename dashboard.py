@@ -4398,8 +4398,8 @@ def _render_sgp_section():
 
     try:
         sgp_df = pd.read_parquet(fair_path)
-    except Exception:
-        st.warning("Failed to load SGP data.")
+    except Exception as e:
+        st.error(f"Failed to load SGP data: {e}")
         return
 
     n_a = len(sgp_df[sgp_df["pair_type"] == "A"])
