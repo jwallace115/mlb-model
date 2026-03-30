@@ -1112,6 +1112,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
 
         # ── Hard Rock line override (play cards only) ──
         _gpk = str(game.get("game_pk", ""))
+        _card_suffix = "_shadow" if has_partial else ""
         _gdate = game.get("game_date", "")
         _hr_overrides = _load_hr_overrides(_gdate)
         _hr_markets = []
@@ -1137,7 +1138,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             with st.expander(f"\u270f\ufe0f HR line override — {matchup}", expanded=False):
                 _cols = st.columns(len(_hr_markets) + 1)
                 for i, (mkt, label, api_ln) in enumerate(_hr_markets):
-                    _key = f"hr_{_gpk}_{mkt}"
+                    _key = f"hr_{_gpk}_{mkt}{_card_suffix}"
                     _default = _existing.get(mkt)
                     _cols[i].number_input(
                         f"{label} (API: {api_ln:.1f})",
@@ -1145,10 +1146,10 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
                         value=_default if _default else api_ln,
                         key=_key,
                     )
-                if _cols[-1].button("Save", key=f"hr_save_{_gpk}"):
+                if _cols[-1].button("Save", key=f"hr_save_{_gpk}{_card_suffix}"):
                     from mlb_sim.pipeline.line_overrides import save_override
                     for mkt, label, api_ln in _hr_markets:
-                        _key = f"hr_{_gpk}_{mkt}"
+                        _key = f"hr_{_gpk}_{mkt}{_card_suffix}"
                         _val = st.session_state.get(_key)
                         if _val is not None and abs(_val - api_ln) > 0.01:
                             save_override(_gpk, _gdate, mkt, api_ln, _val)
