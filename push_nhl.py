@@ -68,6 +68,7 @@ def load_today_signals(game_date: str) -> list[dict]:
                 "edge_bucket":      r.get("edge_bucket"),
                 "sim_prob":         _safe(r.get("sim_prob")),
                 "confidence_tier":  r.get("confidence_tier"),
+                "stake_units":      float(r.get("stake_units") or {"HIGH": 1.0, "MEDIUM": 0.75}.get(r.get("confidence_tier"), 0.75)),
                 # caution_flag: display warning only — does not suppress signal
                 "caution_flag":     int(r.get("caution_flag") or 0),
                 "volatility_bucket": r.get("volatility_bucket"),
@@ -452,6 +453,24 @@ def write_nhl_json(game_date: str = None) -> str:
         "clv_summary":         clv_summary,
         "data_quality_warning": quality_warning,
     }
+
+    # AI daily (and optional weekly) review
+    try:
+        from modules.ai_review import (build_graded_games, generate_daily_review,
+                                        maybe_weekly, build_week_games,
+                                        generate_weekly_review, is_idempotent)
+        _review_date = (date.fromisoformat(game_date) - timedelta(days=1)).isoformat()
+        if not is_idempotent(str(OUT_PATH), _review_date):
+            _graded = build_graded_games("nhl", _review_date)
+            payload["daily_review"] = generate_daily_review(_graded, "nhl", _review_date)
+        else:
+            print(f"[push_nhl] NHL daily review already exists for {_review_date} — skipping")
+        _wr = maybe_weekly("nhl")
+        if _wr:
+            _wg = build_week_games("nhl", *_wr)
+            payload["weekly_review"] = generate_weekly_review(_wg, "nhl", *_wr)
+    except Exception as e:
+        print(f"[push_nhl] NHL AI review failed (non-fatal): {e}", file=sys.stderr)
 
     with open(OUT_PATH, "w") as f:
         json.dump(payload, f, indent=2, default=str)

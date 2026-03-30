@@ -552,6 +552,8 @@ def confidence_tier(edge: float, home_confirmed: bool, away_confirmed: bool,
         return "MEDIUM"
     return "LOW"
 
+STAKE_UNITS = {"HIGH": 1.0, "MEDIUM": 0.75, "LOW": 0.5}
+
 def edge_bucket_label(edge: float) -> str:
     if edge < 0.12:
         return "0.10-0.12"
@@ -695,6 +697,7 @@ def run_pipeline(target_date: date) -> None:
             caution  = 1 if side == "OVER" and bucket_label(line) == "6.5" else 0
             tier     = confidence_tier(edge_val, home_confirmed, away_confirmed,
                                        home_backup, away_backup)
+            stake    = STAKE_UNITS.get(tier, 0.75)
             ebkt     = edge_bucket_label(edge_val)
             bkt      = bucket_label(line)
 
@@ -717,6 +720,7 @@ def run_pipeline(target_date: date) -> None:
                 "lambda_vs_line":           sim_probs["lambda_total"] - line,
                 "volatility_bucket":        "low",
                 "confidence_tier":          tier,
+                "stake_units":              stake,
                 "caution_flag":             caution,
                 "backup_flag_home":         home_backup,
                 "backup_flag_away":         away_backup,

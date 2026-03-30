@@ -1281,9 +1281,9 @@ def _nba_lean_badge(lean: str) -> str:
     return '<span class="lean-badge lean-neutral">—</span>'
 
 
-def _nhl_conf_badge(conf: str) -> str:
-    c = (conf or "LOW").upper()
-    return f'<span class="conf-badge conf-{c}">{c.lower()}</span>'
+def _nhl_conf_badge(conf: str, stake: float = 0.75) -> str:
+    c = (conf or "MEDIUM").upper()
+    return f'<span class="conf-badge conf-{c}">{c.lower()} \u00b7 {stake}u</span>'
 
 
 def _nhl_side_badge(side: str) -> str:
@@ -1379,7 +1379,49 @@ def _render_review_tab(sport: str, review_data: dict | None) -> None:
         st.markdown(weekly["narrative"])
 
 
-def _render_nhl_signal_card(s: dict) -> None:
+_nhl_hr_cache = {}
+
+def _load_nhl_hr_overrides(game_date):
+    """Load NHL HR line overrides for a date. Returns dict: game_id → hr_line."""
+    if game_date in _nhl_hr_cache:
+        return _nhl_hr_cache[game_date]
+    result = {}
+    try:
+        import json as _j
+        _p = os.path.join(os.path.dirname(__file__), "nhl", "data", "nhl_line_overrides_2026.json")
+        if os.path.exists(_p):
+            for o in _j.load(open(_p)):
+                if o.get("date") == game_date:
+                    result[str(o["game_id"])] = float(o["hard_rock_line"])
+    except Exception:
+        pass
+    _nhl_hr_cache[game_date] = result
+    return result
+
+def _save_nhl_hr_override(game_id, date_str, api_line, hr_line):
+    """Save an NHL HR line override."""
+    import json as _j
+    from datetime import datetime as _dt
+    _p = os.path.join(os.path.dirname(__file__), "nhl", "data", "nhl_line_overrides_2026.json")
+    os.makedirs(os.path.dirname(_p), exist_ok=True)
+    overrides = []
+    if os.path.exists(_p):
+        try:
+            overrides = _j.load(open(_p))
+        except Exception:
+            overrides = []
+    overrides = [o for o in overrides if str(o.get("game_id")) != str(game_id)]
+    overrides.append({
+        "game_id": str(game_id), "date": date_str, "market": "full_game",
+        "odds_api_line": api_line, "hard_rock_line": hr_line,
+        "entered_at": _dt.now().isoformat(),
+    })
+    with open(_p, "w") as f:
+        _j.dump(overrides, f, indent=2)
+    _nhl_hr_cache.pop(date_str, None)
+
+
+def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
     """Render a single NHL signal card matching the MLB card visual style."""
     home    = s.get("home_team", "")
     away    = s.get("away_team", "")
@@ -1388,7 +1430,8 @@ def _render_nhl_signal_card(s: dict) -> None:
     sim     = s.get("sim_prob")
     line    = s.get("closing_total")
     lam     = s.get("lambda_total_calibrated")
-    tier    = s.get("confidence_tier", "LOW")
+    tier    = s.get("confidence_tier", "MEDIUM")
+    stake   = float(s.get("stake_units") or {"HIGH": 1.0, "MEDIUM": 0.75}.get(tier, 0.75))
     vol     = s.get("volatility_bucket", "low") or "low"
     caut    = int(s.get("caution_flag") or 0)
     summary = s.get("summary", "")
@@ -1403,24 +1446,25 @@ def _render_nhl_signal_card(s: dict) -> None:
     is_play   = tier in ("HIGH", "MEDIUM")
     conf_star = {"HIGH": "star3", "MEDIUM": "star2"}.get(tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
+    _border   = "#22c55e" if is_play else "#374151"
 
     matchup   = f"{away} @ {home}"
     sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
 
-    # Header: side badge | matchup | tier badge
+    # Header: side badge | matchup | tier badge (with units)
     header = (
         f'<div class="card-header">'
         f'{_nhl_side_badge(side)}'
         f'<span class="matchup">{matchup}</span>'
-        f'{_nhl_conf_badge(tier)}'
+        f'{_nhl_conf_badge(tier, stake)}'
         f'</div>'
     )
 
     # Stats row: Line | Edge (pp) | Model total | Vol
-    edge_pp   = f"{edge * 100:+.1f}pp" if edge is not None else "—"
+    edge_pp   = f"{edge * 100:+.1f}pp" if edge is not None else "\u2014"
     ecls      = "edge-pos" if (edge or 0) > 0 else "edge-neg"
-    lam_str   = f"{lam:.1f}" if lam is not None else "—"
-    line_str  = str(line) if line is not None else "—"
+    lam_str   = f"{lam:.1f}" if lam is not None else "\u2014"
+    line_str  = str(line) if line is not None else "\u2014"
     stats_parts = [
         f'<span class="proj-label">Line</span> <span class="proj-val">{line_str}</span>',
         f'<span class="proj-label">Edge</span> <span class="{ecls}">{edge_pp}</span>',
@@ -1457,12 +1501,12 @@ def _render_nhl_signal_card(s: dict) -> None:
         caution_html = (
             '<div style="background:#1c1400;border:1px solid #92400e;border-radius:4px;'
             'padding:5px 10px;margin-top:6px;font-size:0.78em;color:#fde68a">'
-            '⚠ 6.5-line over — caution bucket: historically underpriced ~4pp for this model'
+            '\u26a0 6.5-line over \u2014 caution bucket: historically underpriced ~4pp for this model'
             '</div>'
         )
 
     st.html(
-        f'<div class="{card_cls}">'
+        f'<div class="{card_cls}" style="border-left:4px solid {_border}">'
         f'{header}'
         f'{stats_row}'
         f'{goalie_row}'
@@ -1470,6 +1514,26 @@ def _render_nhl_signal_card(s: dict) -> None:
         f'{caution_html}'
         f'</div>'
     )
+
+    # ── Hard Rock line override ──
+    if is_play and line is not None:
+        _gid = str(s.get("game_id", ""))
+        _nhl_hr = _load_nhl_hr_overrides(game_date)
+        _hr_val = _nhl_hr.get(_gid)
+        if _hr_val is not None:
+            st.html(f'<div style="font-size:0.68em;color:#a78bfa;margin-top:-4px;margin-bottom:4px">'
+                    f'\U0001f7e3 HR {_hr_val:.1f} (API {line})</div>')
+        with st.expander(f"\u270f\ufe0f HR line override \u2014 {matchup}", expanded=False):
+            _col1, _col2 = st.columns(2)
+            _col1.number_input("Total (API: {:.1f})".format(line),
+                               min_value=0.0, max_value=15.0, step=0.5,
+                               value=_hr_val if _hr_val else line,
+                               key=f"nhl_hr_{_gid}")
+            if _col2.button("Save", key=f"nhl_hr_save_{_gid}"):
+                _val = st.session_state.get(f"nhl_hr_{_gid}")
+                if _val is not None and abs(_val - line) > 0.01:
+                    _save_nhl_hr_override(_gid, game_date, line, _val)
+                st.rerun()
 
 
 def _render_nhl_tab() -> None:
@@ -1536,24 +1600,30 @@ def _render_nhl_tab() -> None:
         ot_diag_nhl    = nhl.get("ot_diagnostics", {})
 
         # ── SECTION 1: Today's Signals ─────────────────────────────────────────────
-        st.html('<div class="section-hdr">🎯 Today\'s Signals</div>')
+        _nhl_game_date = nhl.get("game_date", "")
         if today_signals:
             plays    = [s for s in today_signals if s.get("confidence_tier") in ("HIGH", "MEDIUM")]
             no_plays = [s for s in today_signals if s not in plays]
+            _n_games = len(set((s.get("home_team","") + s.get("away_team","")) for s in plays))
+            _n_sigs  = len(plays)
+            st.html(f'<div class="section-hdr">\U0001f3af Today\'s Signals \u2014 '
+                    f'{_n_games} game{"s" if _n_games != 1 else ""} \u00b7 '
+                    f'{_n_sigs} signal{"s" if _n_sigs != 1 else ""}</div>')
             if plays:
                 for s in plays:
-                    _render_nhl_signal_card(s)
+                    _render_nhl_signal_card(s, game_date=_nhl_game_date)
             else:
                 st.caption("No HIGH/MEDIUM signals today.")
             if no_plays:
                 with st.expander(
-                    f"Low-confidence signals — {len(no_plays)}",
+                    f"Low-confidence signals \u2014 {len(no_plays)}",
                     expanded=False
                 ):
                     for s in no_plays:
-                        _render_nhl_signal_card(s)
+                        _render_nhl_signal_card(s, game_date=_nhl_game_date)
         else:
-            st.caption("No qualified signals today (threshold: +10pp edge).")
+            st.html('<div class="section-hdr">\U0001f3af Today\'s Signals</div>')
+            st.caption("No qualified signals today (threshold: +12pp edge).")
 
         # ── SECTION 2: Recent Results (last 14 days) ───────────────────────────────
         st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
@@ -2461,6 +2531,48 @@ def _nba_conf_badge(conf: str) -> str:
     return f'<span class="conf-badge conf-{c}">{c.lower()}</span>'
 
 
+_nba_hr_cache = {}
+
+def _load_nba_hr_overrides(game_date):
+    """Load NBA HR line overrides for a date. Returns dict: game_id → hr_line."""
+    if game_date in _nba_hr_cache:
+        return _nba_hr_cache[game_date]
+    result = {}
+    try:
+        import json as _j
+        _p = os.path.join(os.path.dirname(__file__), "nba", "data", "nba_line_overrides_2026.json")
+        if os.path.exists(_p):
+            for o in _j.load(open(_p)):
+                if o.get("date") == game_date:
+                    result[str(o["game_id"])] = float(o["hard_rock_line"])
+    except Exception:
+        pass
+    _nba_hr_cache[game_date] = result
+    return result
+
+def _save_nba_hr_override(game_id, date_str, api_line, hr_line):
+    """Save an NBA HR line override."""
+    import json as _j
+    from datetime import datetime as _dt
+    _p = os.path.join(os.path.dirname(__file__), "nba", "data", "nba_line_overrides_2026.json")
+    os.makedirs(os.path.dirname(_p), exist_ok=True)
+    overrides = []
+    if os.path.exists(_p):
+        try:
+            overrides = _j.load(open(_p))
+        except Exception:
+            overrides = []
+    overrides = [o for o in overrides if str(o.get("game_id")) != str(game_id)]
+    overrides.append({
+        "game_id": str(game_id), "date": date_str, "market": "full_game",
+        "odds_api_line": api_line, "hard_rock_line": hr_line,
+        "entered_at": _dt.now().isoformat(),
+    })
+    with open(_p, "w") as f:
+        _j.dump(overrides, f, indent=2)
+    _nba_hr_cache.pop(date_str, None)
+
+
 def _render_nba_card(g: dict) -> None:
     """Render a single NBA game card."""
     home    = g.get("home_team", "")
@@ -2773,8 +2885,9 @@ def _render_nba_card(g: dict) -> None:
     else:
         summary_html = f'<div class="card-summary">{summary}</div>' if summary else ""
 
+    _nba_border = "#22c55e" if is_play else "#374151"
     st.html(
-        f'<div class="{card_cls}">'
+        f'<div class="{card_cls}" style="border-left:4px solid {_nba_border}">'
         f'{header}'
         f'{meta}'
         f'{playoff_context_html}'
@@ -2790,6 +2903,27 @@ def _render_nba_card(g: dict) -> None:
         f'{summary_html}'
         f'</div>'
     )
+
+    # ── Hard Rock line override (play cards only) ──
+    if is_play and line is not None:
+        _nba_gdate = g.get("game_date", "")
+        _nba_gid = str(g.get("game_id", f"{away}_{home}"))
+        _nba_hr = _load_nba_hr_overrides(_nba_gdate)
+        _hr_val = _nba_hr.get(_nba_gid)
+        if _hr_val is not None:
+            st.html(f'<div style="font-size:0.68em;color:#a78bfa;margin-top:-4px;margin-bottom:4px">'
+                    f'\U0001f7e3 HR {_hr_val:.1f} (API {line:.1f})</div>')
+        with st.expander(f"\u270f\ufe0f HR line override \u2014 {matchup}", expanded=False):
+            _c1, _c2 = st.columns(2)
+            _c1.number_input("Total (API: {:.1f})".format(line),
+                             min_value=100.0, max_value=300.0, step=0.5,
+                             value=_hr_val if _hr_val else line,
+                             key=f"nba_hr_{_nba_gid}")
+            if _c2.button("Save", key=f"nba_hr_save_{_nba_gid}"):
+                _val = st.session_state.get(f"nba_hr_{_nba_gid}")
+                if _val is not None and abs(_val - line) > 0.01:
+                    _save_nba_hr_override(_nba_gid, _nba_gdate, line, _val)
+                st.rerun()
 
 
 def _render_nba_tab() -> None:
@@ -3125,7 +3259,9 @@ def _render_nba_tab() -> None:
         # ── plays ─────────────────────────────────────────────────────────────────
         if plays:
             n = len(plays)
-            st.html(f'<div class="section-hdr">🎯 Plays — {n} game{"s" if n != 1 else ""}</div>')
+            _nba_wagers = n  # 1 wager per game in NBA
+            st.html(f'<div class="section-hdr">\U0001f3af Plays \u2014 {n} game{"s" if n != 1 else ""}'
+                    f' \u00b7 {_nba_wagers} wager{"s" if _nba_wagers != 1 else ""}</div>')
             for g in plays:
                 _render_nba_card(g)
         else:
@@ -4950,6 +5086,22 @@ def _render_tracker_tab() -> None:
         net = w * 0.909 - l * 1.0
         return round(net / n * 100, 1), round(net, 2)
 
+    _NHL_STAKE_DEFAULT = {"HIGH": 1.0, "MEDIUM": 0.75, "LOW": 0.5}
+
+    def _nhl_roi_units(records):
+        """Unit-weighted ROI for NHL signals. Falls back to tier-based default if stake_units missing."""
+        net = 0.0
+        risked = 0.0
+        for r in records:
+            s = float(r.get("stake_units") or _NHL_STAKE_DEFAULT.get(r.get("confidence_tier", "MEDIUM"), 0.75))
+            res = r.get("result", "")
+            risked += s
+            if res == "WIN":
+                net += s * (100 / 110)
+            elif res == "LOSS":
+                net -= s
+        return (round(net / risked * 100, 1), round(net, 2)) if risked > 0 else (0.0, 0.0)
+
     def _render_sport_panel(emoji, name, ow, ol, op, roi_pct, units_net, signal_rows):
         n = ow + ol + op
         rec_str = f"{ow}-{ol}-{op}"
@@ -5067,9 +5219,19 @@ def _render_tracker_tab() -> None:
     venue_only = [r for r in nba_records if r.get("venue_signal") and not r.get("oreb_confirms")]
     venue_oreb = [r for r in nba_records if r.get("venue_signal") and r.get("oreb_confirms")]
     ref_under = [r for r in nba_records if r.get("tier") == "REF_UNDER"]
+    def _nba_sub_roi(sub):
+        """Unit-weighted ROI for NBA signal subsets."""
+        if sub and sub[0].get("units_won_lost") is not None:
+            net = sum(float(r.get("units_won_lost", 0) or 0) for r in sub)
+            risked = sum(float(r.get("units", 1) or 1) for r in sub)
+            return round(net / risked * 100, 1) if risked > 0 else 0.0
+        tw, tl, tp = _wlp(sub)
+        r, _ = _roi_flat(tw, tl, tp)
+        return r
+
     for label, sub in [("Venue OVER", venue_only), ("Venue+OREB", venue_oreb), ("REF UNDER", ref_under)]:
         tw, tl, tp = _wlp(sub)
-        tr, _ = _roi_flat(tw, tl, tp)
+        tr = _nba_sub_roi(sub)
         nba_signals.append({"name": label, "w": tw, "l": tl, "p": tp, "roi": tr})
 
     if nba_records and nba_records[0].get("units_won_lost") is not None:
@@ -5096,15 +5258,15 @@ def _render_tracker_tab() -> None:
                          ("UNDER", lambda r: r.get("signal_side") == "UNDER")]:
         sub = [r for r in nhl_records if filt(r)]
         tw, tl, tp = _wlp(sub)
-        tr, _ = _roi_flat(tw, tl, tp)
+        tr, _ = _nhl_roi_units(sub)
         nhl_signals.append({"name": label, "w": tw, "l": tl, "p": tp, "roi": tr})
-    for tier in ["HIGH", "MEDIUM", "LOW"]:
+    for tier in ["HIGH", "MEDIUM"]:
         sub = [r for r in nhl_records if r.get("confidence_tier") == tier]
         tw, tl, tp = _wlp(sub)
-        tr, _ = _roi_flat(tw, tl, tp)
+        tr, _ = _nhl_roi_units(sub)
         nhl_signals.append({"name": f"{tier} tier", "w": tw, "l": tl, "p": tp, "roi": tr})
 
-    h_roi, h_net = _roi_flat(hw, hl_, hp)
+    h_roi, h_net = _nhl_roi_units(nhl_records)
     _render_sport_panel("\U0001f3d2", "NHL", hw, hl_, hp, h_roi, h_net, nhl_signals)
 
     # ── Soccer ──
