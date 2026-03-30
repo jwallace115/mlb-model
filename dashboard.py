@@ -4367,6 +4367,175 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     st.caption(f"CLV: insufficient sample ({clv.get('total_with_clv', 0)} games). "
                                "Builds up once refresh.py has captured closing lines.")
 
+    # ── SGP Monitor — Phase 0 ─────────────────────────────────────────────
+    _render_sgp_section()
+
+
+def _render_sgp_section():
+    """SGP Phase 0 monitor — structural containment pricing."""
+    import json as _sgp_json
+    from datetime import date as _sgp_date
+
+    st.divider()
+    st.html('<div class="section-hdr">\U0001f3af SGP Monitor \u2014 Phase 0</div>')
+    st.html(
+        '<div style="font-size:0.80em;color:#94a3b8;margin-bottom:8px">'
+        'Same Game Parlay Monitor \u2014 Hits O0.5 \u00d7 TB (structural containment)<br>'
+        '<span style="font-size:0.90em;color:#64748b">'
+        'Fair price = TB leg standalone. Log Hard Rock SGP price to measure excess hold.</span>'
+        '</div>')
+
+    today = _sgp_date.today().isoformat()
+    fair_path = os.path.join(os.path.dirname(__file__), "mlb", "sgp_phase0", "fair_prices",
+                             f"fair_sgp_{today.replace('-','_')}.parquet")
+
+    if not os.path.exists(fair_path):
+        st.info("SGP data not yet available \u2014 automation runs at 11:30 AM.")
+        return
+
+    try:
+        sgp_df = pd.read_parquet(fair_path)
+    except Exception:
+        st.warning("Failed to load SGP data.")
+        return
+
+    n_a = len(sgp_df[sgp_df["pair_type"] == "A"])
+    n_b = len(sgp_df[sgp_df["pair_type"] == "B"])
+    st.caption(f"{today} \u2014 Pair A: {n_a} | Pair B: {n_b}")
+
+    # Session state for logged prices
+    if "sgp_logged" not in st.session_state:
+        st.session_state["sgp_logged"] = {}
+
+    def _american_to_implied(price):
+        if price > 0: return 100 / (price + 100)
+        if price < 0: return abs(price) / (abs(price) + 100)
+        return 0.5
+
+    def _american_to_decimal(price):
+        if price > 0: return (price / 100) + 1
+        if price < 0: return (100 / abs(price)) + 1
+        return 2.0
+
+    sgp_tab_a, sgp_tab_b = st.tabs(["Pair A \u2014 TB O1.5", "Pair B \u2014 TB O2.5"])
+
+    for sgp_tab, pair, pair_label in [(sgp_tab_a, "A", "TB O1.5"), (sgp_tab_b, "B", "TB O2.5")]:
+        with sgp_tab:
+            sub = sgp_df[sgp_df["pair_type"] == pair].sort_values("fair_combined_prob", ascending=False)
+            if sub.empty:
+                st.caption("No candidates for this pair type.")
+                continue
+
+            for _, row in sub.iterrows():
+                player = row["player_name"]
+                game_str = f"{row['away_team']} @ {row['home_team']}"
+                ref_book = row["reference_book"]
+                tb_price = int(row["leg2_price"])
+                fair_prob = row["fair_combined_prob"]
+                key = f"sgp_{player}_{pair}"
+
+                # Check if already logged (in file or session)
+                already_logged = pd.notna(row.get("book_sgp_price")) or key in st.session_state["sgp_logged"]
+
+                with st.container():
+                    c1, c2, c3, c4 = st.columns([3, 2, 2, 2])
+                    c1.markdown(f"**{player}**")
+                    c1.caption(f"{game_str} \u00b7 {ref_book}")
+                    c2.metric(f"{pair_label} ref", f"{tb_price:+d}")
+                    c3.metric("Fair prob", f"{fair_prob*100:.1f}%")
+
+                    if already_logged:
+                        logged = st.session_state["sgp_logged"].get(key, {})
+                        bp = logged.get("book_sgp_price") or (int(row["book_sgp_price"]) if pd.notna(row.get("book_sgp_price")) else None)
+                        if bp:
+                            bp_impl = _american_to_implied(bp)
+                            eh = bp_impl - fair_prob
+                            c4.metric("Book SGP", f"{bp:+d}")
+                            if eh > 0.05:
+                                st.error(f"Excess hold: {eh:.1%} \u2014 book charging significant premium")
+                            elif eh > 0.02:
+                                st.warning(f"Excess hold: {eh:.1%} \u2014 moderate")
+                            else:
+                                st.success(f"Excess hold: {eh:.1%} \u2014 fair or better")
+                            dec = _american_to_decimal(bp)
+                            ev = fair_prob * (dec - 1) - (1 - fair_prob)
+                            st.caption(f"EV: {ev:+.3f} units")
+                    else:
+                        sgp_input = c4.number_input("HR SGP", value=None, step=5,
+                                                     key=f"input_{key}",
+                                                     placeholder="-145",
+                                                     label_visibility="collapsed")
+                        if c4.button("Log", key=f"btn_{key}"):
+                            if sgp_input is not None and sgp_input != 0:
+                                bp = int(sgp_input)
+                                bp_impl = round(_american_to_implied(bp), 4)
+                                eh = round(bp_impl - fair_prob, 4)
+                                dec = round(_american_to_decimal(bp), 4)
+                                ev = round(fair_prob * (dec - 1) - (1 - fair_prob), 4)
+
+                                st.session_state["sgp_logged"][key] = {
+                                    "book_sgp_price": bp, "excess_hold": eh, "ev": ev}
+
+                                # Append to manual log
+                                log_path = os.path.join(os.path.dirname(__file__),
+                                                         "mlb", "sgp_phase0", "sgp_manual_log.json")
+                                entry = {
+                                    "date": today, "player": player, "pair": pair,
+                                    "book": "hardrock", "book_sgp_price": bp,
+                                    "book_sgp_implied_prob": bp_impl,
+                                    "same_book_tb_price": None,
+                                    "same_book_tb_implied_prob": None,
+                                    "same_book_comparison": False,
+                                    "reference_book_mismatch": True,
+                                    "fair_combined_prob": round(fair_prob, 4),
+                                    "fair_american_odds": tb_price,
+                                    "edge": round(fair_prob - bp_impl, 4),
+                                    "excess_hold": eh, "ev_per_unit": ev,
+                                    "result": None,
+                                }
+                                log = []
+                                if os.path.exists(log_path):
+                                    try:
+                                        with open(log_path) as _f:
+                                            log = _sgp_json.load(_f)
+                                    except: pass
+                                log.append(entry)
+                                with open(log_path, "w") as _f:
+                                    _sgp_json.dump(log, _f, indent=2)
+
+                                # Update fair_sgp parquet
+                                try:
+                                    fdf = pd.read_parquet(fair_path)
+                                    mask = (fdf["player_name"] == player) & (fdf["pair_type"] == pair)
+                                    fdf.loc[mask, "book_sgp_price"] = bp
+                                    fdf.loc[mask, "book_sgp_implied_prob"] = bp_impl
+                                    fdf.loc[mask, "excess_hold"] = eh
+                                    fdf.loc[mask, "ev_per_unit"] = ev
+                                    fdf.to_parquet(fair_path, index=False)
+                                except: pass
+
+                                # Rebuild tracker
+                                try:
+                                    from mlb.sgp_phase0.update_summary_tracker import rebuild
+                                    rebuild()
+                                except: pass
+
+                                st.rerun()
+
+    # Summary row
+    tracker_path = os.path.join(os.path.dirname(__file__), "mlb", "sgp_phase0", "summary_tracker.parquet")
+    if os.path.exists(tracker_path):
+        try:
+            tracker = pd.read_parquet(tracker_path)
+            today_logged = tracker[tracker["date"] == today] if "date" in tracker.columns else pd.DataFrame()
+            n_today = len(today_logged)
+            n_total = len(tracker)
+            avg_eh = tracker["excess_hold"].mean() * 100 if tracker["excess_hold"].notna().any() else 0
+            st.caption(f"Logged today: {n_today} | Avg excess hold: {avg_eh:+.1f}% | Season total: {n_total}")
+        except:
+            st.caption("No prices logged yet today.")
+    else:
+        st.caption("No prices logged yet today.")
 
 
 # ── main ──────────────────────────────────────────────────────────────────────

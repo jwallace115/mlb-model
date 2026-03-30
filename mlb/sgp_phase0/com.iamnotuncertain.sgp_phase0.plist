@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.iamnotuncertain.sgp_phase0</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/sh</string>
+        <string>-c</string>
+        <string>/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 mlb/sgp_phase0/collect_leg_prices.py &amp;&amp; /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 mlb/sgp_phase0/fair_sgp_calculator.py &amp;&amp; /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 mlb/sgp_phase0/generate_edge_report.py</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>7</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/jw115/mlb-model</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/jw115/mlb-model/logs/com.iamnotuncertain.sgp_phase0.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/jw115/mlb-model/logs/com.iamnotuncertain.sgp_phase0.stderr.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Library/Frameworks/Python.framework/Versions/3.13/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>
