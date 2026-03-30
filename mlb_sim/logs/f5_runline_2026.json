@@ -1,3 +1,30 @@
 [
-
+  {
+    "date":"2026-03-30",
+    "game_id":"822834",
+    "home_team":"TOR",
+    "away_team":"COL",
+    "home_sp_name":"Cody Ponce",
+    "away_sp_name":"Tomoyuki Sugano",
+    "home_sp_xfip":4.25,
+    "away_sp_xfip":5.33,
+    "xfip_gap":1.08,
+    "home_f5_line":-0.5,
+    "away_f5_line":0.5,
+    "home_f5_price":-140,
+    "away_f5_price":108,
+    "bet_side":"HOME",
+    "bet_line":-0.5,
+    "bet_price":-140,
+    "stake_units":0.5,
+    "line_at_signal_time":-0.5,
+    "f5_line_closing":null,
+    "f5_clv":null,
+    "home_f5_score":null,
+    "away_f5_score":null,
+    "f5_margin":null,
+    "result":null,
+    "net_units":null,
+    "resolved":0
+  }
 ]
