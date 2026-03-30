@@ -80,6 +80,52 @@ def _g13_get_uplift(quintile, market="make_cut"):
     return entry.get(key, 0.0)
 
 
+# ── G14 Tail Balance Overlay — frozen parameters ──
+_G14_PATH = Path("golf/research/dynamics/g14_frozen_tail_uplifts.json")
+_G14 = None
+if _G14_PATH.exists():
+    try:
+        _g14_raw = json.load(open(_G14_PATH))
+        _g14_sb = _g14_raw.get("skill_band_cutpoints")
+        _g14_tb = _g14_raw.get("tb_thresholds_by_band")
+        _g14_up = _g14_raw.get("uplifts")
+        _g14_fs = _g14_raw.get("field_strength_threshold")
+        if _g14_sb and _g14_tb and _g14_up and _g14_fs is not None:
+            _G14 = {"sb": _g14_sb, "tb": _g14_tb, "up": _g14_up, "fs": _g14_fs}
+            print("G14 loaded: field_strength_threshold=%.4f" % _g14_fs, flush=True)
+        else:
+            missing = [k for k, v in [("skill_band_cutpoints", _g14_sb), ("tb_thresholds_by_band", _g14_tb),
+                                       ("uplifts", _g14_up), ("field_strength_threshold", _g14_fs)] if not v]
+            print("WARNING: G14 JSON missing %s — G14 disabled" % missing, flush=True)
+    except Exception as e:
+        print("WARNING: G14 load failed: %s" % e, flush=True)
+
+
+def _g14_skill_band(sg):
+    if _G14 is None: return None
+    sb = _G14["sb"]
+    if sg >= sb["q75"]: return "Elite"
+    if sg >= sb["q50"]: return "Good"
+    if sg >= sb["q25"]: return "Average"
+    return "Below"
+
+
+def _g14_tb_bucket(tail_balance, band):
+    if _G14 is None or band is None or pd.isna(tail_balance): return None
+    thresholds = _G14["tb"].get(band)
+    if not thresholds: return None
+    t33, t67 = thresholds
+    if tail_balance >= t67: return "HIGH"
+    if tail_balance >= t33: return "MEDIUM"
+    return "LOW"
+
+
+def _g14_uplift(band, bucket, market):
+    if _G14 is None or band is None or bucket is None: return 0.0
+    key = {"top_10": "top_10_uplift", "top_5": "top_5_uplift", "win": "win_uplift"}.get(market, "")
+    return _G14["up"].get(band, {}).get(bucket, {}).get(key, 0.0)
+
+
 def dg_get(path, params=None):
     if params is None: params = {}
     params["file_format"] = "json"
@@ -635,6 +681,238 @@ def run_g13(log_df=None):
         print(f"  Avoids: {', '.join(g13_avoids[:10])}", flush=True)
 
 
+def run_g14(log_df=None):
+    """G14 Tail Balance Overlay — top_10/top_5 signals from scoring shape."""
+    print("\n--- G14 TAIL BALANCE OVERLAY ---", flush=True)
+
+    if _G14 is None:
+        print("  G14 DISABLED: frozen parameters not loaded.", flush=True)
+        return
+    if RUN_MODE != "live":
+        print("  G14 skipped in test mode.", flush=True)
+        return
+
+    log_file = SHADOW / "golf_shadow_log.parquet"
+    if not log_file.exists():
+        print("  G14: no shadow log.", flush=True)
+        return
+
+    log = pd.read_parquet(log_file)
+    latest_ts = log["run_timestamp"].max()
+    latest = log[log["run_timestamp"] == latest_ts]
+
+    # Compute field strength for this event
+    event_dg_probs = latest["dg_prob"]
+    if "dg_win_prob" not in latest.columns:
+        # Use win market rows to compute field strength
+        win_rows = latest[latest["market"] == "win"]
+        if len(win_rows) >= 10:
+            top30 = win_rows.nlargest(30, "dg_prob")["dg_prob"].mean()
+        else:
+            top30 = 0
+    else:
+        top30 = 0
+
+    # Alternative: use predictions directly
+    try:
+        pred_live = pd.read_parquet("golf/data/canonical/predictions.parquet")
+        pred_live = pred_live.rename(columns={"win_prob": "dg_win_prob"})
+        # Get current event from log
+        eid = latest["event_id"].iloc[0] if "event_id" in latest.columns else 0
+        yr = latest["calendar_year"].iloc[0] if "calendar_year" in latest.columns else 2026
+        ev_pred = pred_live[(pred_live["event_id"] == eid) & (pred_live["calendar_year"] == yr)]
+        if len(ev_pred) >= 10:
+            top30 = ev_pred.nlargest(30, "dg_win_prob")["dg_win_prob"].mean()
+    except Exception:
+        pass
+
+    field_type = "STRONG" if top30 >= _G14["fs"] else "WEAK"
+    print(f"  Field strength: {top30:.4f} (threshold: {_G14['fs']:.4f}) → {field_type}", flush=True)
+
+    if field_type == "WEAK":
+        print("  G14: weak field — signals suppressed, shadow data logged.", flush=True)
+
+    # Load prior rounds for tail_balance computation
+    try:
+        rounds_all = pd.read_parquet("golf/data/canonical/player_rounds.parquet")
+        events_all = pd.read_parquet("golf/data/canonical/events.parquet")
+        event_order_local = events_all[["event_id", "calendar_year"]].drop_duplicates()
+        if "start_date" in events_all.columns:
+            event_order_local = events_all[["event_id", "calendar_year", "start_date"]].drop_duplicates()
+            event_order_local["start_date"] = pd.to_datetime(event_order_local["start_date"])
+            event_order_local = event_order_local.sort_values("start_date")
+        else:
+            event_order_local = event_order_local.sort_values(["calendar_year", "event_id"])
+        event_order_local["event_seq"] = range(len(event_order_local))
+
+        rounds_with_seq = rounds_all.merge(
+            event_order_local[["event_id", "calendar_year", "event_seq"]],
+            on=["event_id", "calendar_year"], how="left")
+
+        # Current event seq
+        this_ev = event_order_local[(event_order_local["event_id"] == eid) &
+                                     (event_order_local["calendar_year"] == yr)]
+        this_seq = this_ev["event_seq"].iloc[0] if len(this_ev) > 0 else 9999
+
+        # Pre-compute field percentiles for prior rounds
+        round_pctiles = {}
+        for (reid, ryr, rrnd), grp in rounds_with_seq.groupby(["event_id", "calendar_year", "round_num"]):
+            sg_v = grp["sg_total"].dropna()
+            if len(sg_v) >= 20:
+                round_pctiles[(reid, ryr, rrnd)] = {"p10": sg_v.quantile(0.10), "p90": sg_v.quantile(0.90)}
+    except Exception as e:
+        print(f"  G14: cannot load rounds data ({e})", flush=True)
+        return
+
+    # Process each player in top_10 and top_5 markets
+    g14_signals = {"top_10": [], "top_5": []}
+    g14_win_watch = []
+    kill_counts = {"top_10": 0, "top_5": 0}
+    kill_triggered = False
+
+    for market in ["top_10", "top_5", "win"]:
+        mask = (log["run_timestamp"] == latest_ts) & (log["market"] == market)
+        for idx in log[mask].index:
+            row = log.loc[idx]
+            dgid = row["player_id"]
+
+            # Get prior rounds
+            p_rounds = rounds_with_seq[rounds_with_seq["dg_id"] == dgid]
+            prior = p_rounds[p_rounds["event_seq"] < this_seq]
+            sg_vals = prior["sg_total"].dropna().values
+
+            if len(sg_vals) < 20:
+                log.loc[idx, "g14_rule_fail_reason"] = "insufficient_round_history"
+                log.loc[idx, "g14_rule_pass"] = False
+                continue
+
+            last50 = sg_vals[-50:]
+            rolling_mean = np.mean(last50)
+
+            # Tail balance
+            top_c = bottom_c = checked = 0
+            for _, rr in prior.tail(50).iterrows():
+                sg = rr.get("sg_total")
+                if pd.isna(sg): continue
+                key = (rr["event_id"], rr["calendar_year"], rr.get("round_num"))
+                pcts = round_pctiles.get(key)
+                if pcts is None: continue
+                checked += 1
+                if sg >= pcts["p90"]: top_c += 1
+                if sg <= pcts["p10"]: bottom_c += 1
+
+            if checked < 10:
+                log.loc[idx, "g14_rule_fail_reason"] = "insufficient_round_history"
+                log.loc[idx, "g14_rule_pass"] = False
+                continue
+
+            tail_balance = (top_c - bottom_c) / checked
+            band = _g14_skill_band(rolling_mean)
+            bucket = _g14_tb_bucket(tail_balance, band)
+
+            # Uplift
+            uplift = _g14_uplift(band, bucket, market)
+            adj_prob = np.clip(row["dg_prob"] + uplift, 0.01, 0.99)
+
+            # Sanity check
+            sanity_fail = False
+            if market == "top_5" and adj_prob > 0.30:
+                sanity_fail = True
+            if market == "top_10" and adj_prob > 0.50:
+                sanity_fail = True
+            if sanity_fail:
+                adj_prob = row["dg_prob"]
+                log.loc[idx, "g14_rule_fail_reason"] = "probability_sanity_violation"
+                log.loc[idx, "g14_rule_pass"] = False
+
+            # Fair close prob
+            fair_close = row.get("market_prob_close") or row.get("market_prob_open")
+            if pd.isna(fair_close):
+                edge = np.nan
+                log.loc[idx, "g14_rule_fail_reason"] = "missing_odds"
+                log.loc[idx, "g14_rule_pass"] = False
+            else:
+                edge = adj_prob - fair_close
+
+            # Reference book
+            ref_book = ""
+            for bk_col, bk_name in [("pinnacle_odds", "pinnacle"), ("dk_odds", "draftkings"), ("fanduel_odds", "fanduel")]:
+                if pd.notna(row.get(bk_col)):
+                    ref_book = bk_name
+                    break
+
+            # Store
+            log.loc[idx, "rolling_mean_sg_50"] = round(rolling_mean, 4)
+            log.loc[idx, "tail_balance_50"] = round(tail_balance, 4)
+            log.loc[idx, "skill_band"] = band
+            log.loc[idx, "tb_bucket"] = bucket
+            log.loc[idx, "field_type"] = field_type
+
+            adj_col = f"adj_{market}_prob"
+            edge_col = f"{market}_edge"
+            log.loc[idx, adj_col] = round(adj_prob, 4)
+            log.loc[idx, edge_col] = round(edge, 4) if pd.notna(edge) else np.nan
+            log.loc[idx, "g14_signal_version"] = "1.0"
+            log.loc[idx, "g14_shadow_mode"] = True
+
+            # Signal flags
+            if market in ("top_10", "top_5"):
+                signal = (pd.notna(edge) and edge >= 0.02 and bucket == "HIGH"
+                          and field_type == "STRONG" and not sanity_fail)
+                flag_col = f"g14_{market}_signal"
+                log.loc[idx, flag_col] = signal
+                log.loc[idx, f"g14_reference_book_{market}"] = ref_book
+
+                if signal:
+                    kill_counts[market] += 1
+                    g14_signals[market].append(row["player_name"])
+
+                if not signal and not log.loc[idx].get("g14_rule_fail_reason"):
+                    if field_type == "WEAK":
+                        log.loc[idx, "g14_rule_fail_reason"] = "weak_field"
+                    elif bucket != "HIGH":
+                        log.loc[idx, "g14_rule_fail_reason"] = "tb_bucket_not_high"
+                    elif pd.notna(edge) and edge < 0.02:
+                        log.loc[idx, "g14_rule_fail_reason"] = "edge_below_threshold"
+                    log.loc[idx, "g14_rule_pass"] = False
+                elif signal:
+                    log.loc[idx, "g14_rule_pass"] = True
+
+            elif market == "win":
+                watch = pd.notna(edge) and edge >= 0.02 and not sanity_fail
+                log.loc[idx, "g14_win_watchlist"] = watch
+                if watch:
+                    g14_win_watch.append(row["player_name"])
+
+    # Kill switch
+    for mkt in ["top_10", "top_5"]:
+        if kill_counts[mkt] > 25:
+            kill_triggered = True
+            print(f"  G14 KILL SWITCH TRIGGERED — {mkt}: {kill_counts[mkt]} signals exceeded 25", flush=True)
+            flag_col = f"g14_{mkt}_signal"
+            mask = (log["run_timestamp"] == latest_ts) & (log["market"] == mkt) & (log.get(flag_col, False) == True)
+            log.loc[mask, flag_col] = False
+            log.loc[mask, "g14_rule_fail_reason"] = "kill_switch_triggered"
+            log.loc[mask, "g14_rule_pass"] = False
+            g14_signals[mkt] = []
+
+    log.to_parquet(log_file, index=False)
+
+    # Summary
+    print(f"\n  G14 Results:", flush=True)
+    print(f"    Field: {field_type} ({top30:.4f})", flush=True)
+    print(f"    Top 10 signals: {len(g14_signals['top_10'])}", flush=True)
+    print(f"    Top 5 signals: {len(g14_signals['top_5'])}", flush=True)
+    print(f"    Win watchlist: {len(g14_win_watch)}", flush=True)
+    print(f"    Kill switch: {'TRIGGERED' if kill_triggered else 'OK'}", flush=True)
+    if g14_signals["top_10"]:
+        print(f"    T10: {', '.join(g14_signals['top_10'][:10])}", flush=True)
+    if g14_signals["top_5"]:
+        print(f"    T5: {', '.join(g14_signals['top_5'][:10])}", flush=True)
+    if g14_win_watch:
+        print(f"    Win watch: {', '.join(g14_win_watch[:10])}", flush=True)
+
+
 def run_matchups(capture_type="close", preds_df=None):
     """Capture matchup/3-ball odds from DG all-pairings + book matchups."""
     ts = datetime.now().isoformat()
@@ -901,5 +1179,6 @@ if __name__ == "__main__":
     result = run(capture_type=args.capture)
     if not args.skip_g13:
         run_g13(result)
+    run_g14(result)
     if args.include_matchups:
         run_matchups(capture_type=args.capture)

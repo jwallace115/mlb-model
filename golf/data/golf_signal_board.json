@@ -8,5 +8,22 @@
     "expected_volume_per_season": 300,
     "deployment_date": "2026-03-30",
     "note": "Q1 draw tracked as avoid only; no fade deployed"
+  },
+  "G14": {
+    "signal_id": "G14",
+    "status": "LIVE_SHADOW",
+    "markets": [
+      "top_10",
+      "top_5"
+    ],
+    "watchlist_markets": [
+      "win"
+    ],
+    "rule": "overlay_edge >= 0.02 AND tb_bucket == HIGH AND field_type == STRONG",
+    "expected_roi_top10": 0.116,
+    "expected_roi_top5": 0.125,
+    "expected_volume_per_season": "500-600 per market",
+    "deployment_date": "2026-03-30",
+    "note": "Weak fields excluded. Win market watchlist only."
   }
 }

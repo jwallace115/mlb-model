@@ -4937,7 +4937,7 @@ def _render_golf_tab() -> None:
         st.info("No Golf data available yet. Run `python push_golf.py` to generate.")
         return
 
-    picks_tab, matchup_tab, g13_tab, info_tab = st.tabs(["Outright Board", "Matchups", "G13 Wave", "Model Info"])
+    picks_tab, matchup_tab, g13_tab, g14_tab, info_tab = st.tabs(["Outright Board", "Matchups", "G13 Wave", "G14 Tail", "Model Info"])
 
     with picks_tab:
         ev_name = golf.get("event_name", "No active event")
@@ -5047,6 +5047,66 @@ def _render_golf_tab() -> None:
                     f'<span style="width:80px;color:#94a3b8">DG {ga.get("dg_cut_prob",0):.1f}%</span>'
                     f'<span style="width:60px;color:#94a3b8">{_odds_str}</span>'
                     f'<span style="width:80px;color:#f87171">edge {ga.get("dg_edge",0):+.1f}%</span>'
+                    f'</div>')
+
+    with g14_tab:
+        g14_status = golf.get("g14_status", "")
+        g14_plays = golf.get("g14_signals", [])
+        g14_win_watch = golf.get("g14_win_watchlist", [])
+        g14_field = golf.get("g14_field_type", "")
+        g14_kill = golf.get("g14_kill_switch", False)
+
+        _g14_color = "#60a5fa" if g14_status == "LIVE_SHADOW" else "#f59e0b"
+        st.html(f'<div class="section-hdr">G14 Tail Balance \u2014 Top 10 / Top 5 '
+                f'<span style="color:{_g14_color};font-size:0.8em">[{g14_status or "INACTIVE"}]</span></div>')
+
+        if g14_kill:
+            st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
+                    'padding:10px;margin-bottom:8px;color:#f87171;font-weight:700">'
+                    'G14 signals suppressed this week \u2014 anomaly detected</div>')
+        elif g14_field == "WEAK":
+            st.html('<div style="background:#1a1a2e;border:1px solid #4b5563;border-radius:6px;'
+                    'padding:10px;margin-bottom:8px;color:#94a3b8">'
+                    'G14 inactive this week \u2014 weak field</div>')
+
+        if g14_plays and not g14_kill:
+            st.html('<div style="font-size:0.78em;color:#94a3b8;margin-bottom:8px">'
+                    'Rule: overlay_edge \u2265 2% AND tb_bucket=HIGH AND field=STRONG</div>')
+            for gp in g14_plays:
+                _edge = gp.get("adj_edge", 0)
+                _odds_str = ""
+                if gp.get("close_odds"):
+                    o = gp["close_odds"]
+                    _odds_str = "%+d" % int(o) if o >= 0 else "%d" % int(o)
+                st.html(
+                    f'<div style="display:flex;align-items:center;padding:6px 0;border-bottom:1px solid #1e2d4a">'
+                    f'<span style="background:#3b82f6;color:#fff;padding:2px 8px;border-radius:4px;'
+                    f'font-size:0.75rem;margin-right:10px">G14 TAIL</span>'
+                    f'<span style="width:160px;font-weight:600;color:#e2e8f0">{gp.get("player_name","")}</span>'
+                    f'<span style="width:50px;color:#94a3b8;font-size:0.8em">{gp.get("skill_band","")}</span>'
+                    f'<span style="width:70px;color:#e2e8f0">{gp.get("market","")}</span>'
+                    f'<span style="width:70px;color:#94a3b8">DG {gp.get("dg_prob",0):.1f}%</span>'
+                    f'<span style="width:70px;color:#e2e8f0">Adj {gp.get("adj_prob",0):.1f}%</span>'
+                    f'<span style="width:70px;color:#94a3b8">{gp.get("book","")}</span>'
+                    f'<span style="width:55px;color:#94a3b8">{_odds_str}</span>'
+                    f'<span style="width:70px;color:#60a5fa;font-weight:600">{_edge:+.1f}%</span>'
+                    f'</div>')
+        elif not g14_kill and g14_field != "WEAK":
+            st.caption("No G14 signals this week.")
+
+        if g14_win_watch:
+            st.html('<div style="margin-top:12px;padding:6px 14px;background:#1a1a2e;'
+                    'border:1px solid #4b5563;border-radius:6px;font-size:0.82em;color:#94a3b8">'
+                    'WIN WATCHLIST \u2014 Tracking Only</div>')
+            for gw in g14_win_watch:
+                st.html(
+                    f'<div style="display:flex;align-items:center;padding:4px 0;border-bottom:1px solid #1e1e2e">'
+                    f'<span style="background:#4b5563;color:#d1d5db;padding:2px 8px;border-radius:4px;'
+                    f'font-size:0.72rem;margin-right:10px">WIN WATCH</span>'
+                    f'<span style="width:160px;color:#94a3b8">{gw.get("player_name","")}</span>'
+                    f'<span style="width:90px;color:#94a3b8">DG {gw.get("dg_win_prob",0):.1f}%</span>'
+                    f'<span style="width:90px;color:#94a3b8">Adj {gw.get("adj_win_prob",0):.1f}%</span>'
+                    f'<span style="width:80px;color:#6b7280">edge {gw.get("win_edge",0):+.1f}%</span>'
                     f'</div>')
 
     with matchup_tab:

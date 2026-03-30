@@ -1,0 +1,113 @@
+{
+  "skill_band_cutpoints": {
+    "q25": -0.327075,
+    "q50": 0.11934,
+    "q75": 0.567985
+  },
+  "tb_thresholds_by_band": {
+    "Elite": [
+      0.12,
+      0.18
+    ],
+    "Good": [
+      0.039999999999999994,
+      0.07999999999999999
+    ],
+    "Average": [
+      -0.03999999999999998,
+      0.0
+    ],
+    "Below": [
+      -0.14,
+      -0.08
+    ]
+  },
+  "tb_thresholds_pooled": {
+    "t33": -0.020000000000000018,
+    "t67": 0.06000000000000001
+  },
+  "uplifts": {
+    "Elite": {
+      "LOW": {
+        "top_10_uplift": 0.02157,
+        "top_5_uplift": 0.00822,
+        "win_uplift": -0.00208,
+        "n_train": 931
+      },
+      "MEDIUM": {
+        "top_10_uplift": 0.01981,
+        "top_5_uplift": 0.01658,
+        "win_uplift": 0.00441,
+        "n_train": 1215
+      },
+      "HIGH": {
+        "top_10_uplift": 0.04036,
+        "top_5_uplift": 0.03551,
+        "win_uplift": 0.00675,
+        "n_train": 1312
+      }
+    },
+    "Good": {
+      "LOW": {
+        "top_10_uplift": 0.0032,
+        "top_5_uplift": -0.0018,
+        "win_uplift": -0.00563,
+        "n_train": 1074
+      },
+      "MEDIUM": {
+        "top_10_uplift": 0.02356,
+        "top_5_uplift": 0.01452,
+        "win_uplift": -0.00059,
+        "n_train": 1087
+      },
+      "HIGH": {
+        "top_10_uplift": 0.0148,
+        "top_5_uplift": 0.01469,
+        "win_uplift": -0.00279,
+        "n_train": 1296
+      }
+    },
+    "Average": {
+      "LOW": {
+        "top_10_uplift": 0.0158,
+        "top_5_uplift": 0.00772,
+        "win_uplift": -0.00013,
+        "n_train": 1126
+      },
+      "MEDIUM": {
+        "top_10_uplift": 0.0192,
+        "top_5_uplift": 0.01505,
+        "win_uplift": 0.00016,
+        "n_train": 659
+      },
+      "HIGH": {
+        "top_10_uplift": 0.00015,
+        "top_5_uplift": -0.00012,
+        "win_uplift": -0.00156,
+        "n_train": 1672
+      }
+    },
+    "Below": {
+      "LOW": {
+        "top_10_uplift": 0.00986,
+        "top_5_uplift": 0.00824,
+        "win_uplift": 0.00103,
+        "n_train": 1049
+      },
+      "MEDIUM": {
+        "top_10_uplift": 0.0083,
+        "top_5_uplift": 0.00255,
+        "win_uplift": 0.00268,
+        "n_train": 1184
+      },
+      "HIGH": {
+        "top_10_uplift": 0.00462,
+        "top_5_uplift": 0.00227,
+        "win_uplift": -0.0003,
+        "n_train": 1225
+      }
+    }
+  },
+  "field_strength_threshold": 0.023134166666666667,
+  "field_strength_source": "median of mean(top-30 dg_win_prob) per event, 2020-2022"
+}

@@ -135,15 +135,71 @@ def run():
         results["g13_avoids"] = g13_avoids
         results["g13_status"] = "LIVE_SHADOW"
 
+    # G14 Tail Balance signals
+    if log_file.exists():
+        log = pd.read_parquet(log_file)
+        latest_ts = log["run_timestamp"].max()
+
+        g14_plays = []
+        g14_win_watch = []
+        g14_field_type = ""
+        g14_kill = False
+
+        for market, flag_col in [("top_10", "g14_top10_signal"), ("top_5", "g14_top5_signal")]:
+            if flag_col not in log.columns:
+                continue
+            m = (log["run_timestamp"] == latest_ts) & (log["market"] == market) & (log[flag_col] == True)
+            for _, r in log[m].iterrows():
+                adj_col = f"adj_{market}_prob"
+                edge_col = f"{market}_edge"
+                g14_plays.append({
+                    "player_name": r.get("player_name", ""),
+                    "skill_band": r.get("skill_band", ""),
+                    "tb_bucket": r.get("tb_bucket", ""),
+                    "market": market.replace("_", " ").title(),
+                    "dg_prob": round(float(r["dg_prob"]) * 100, 1) if pd.notna(r.get("dg_prob")) else 0,
+                    "adj_prob": round(float(r.get(adj_col, 0) or 0) * 100, 1),
+                    "book": r.get(f"g14_reference_book_{market}", ""),
+                    "close_odds": float(r.get("close_odds", 0)) if pd.notna(r.get("close_odds")) else None,
+                    "fair_prob": round(float(r.get("market_prob_close", 0) or 0) * 100, 1),
+                    "adj_edge": round(float(r.get(edge_col, 0) or 0) * 100, 1),
+                })
+
+        if "g14_win_watchlist" in log.columns:
+            wm = (log["run_timestamp"] == latest_ts) & (log["market"] == "win") & (log["g14_win_watchlist"] == True)
+            for _, r in log[wm].iterrows():
+                g14_win_watch.append({
+                    "player_name": r.get("player_name", ""),
+                    "dg_win_prob": round(float(r["dg_prob"]) * 100, 1) if pd.notna(r.get("dg_prob")) else 0,
+                    "adj_win_prob": round(float(r.get("adj_win_prob", 0) or 0) * 100, 1),
+                    "win_edge": round(float(r.get("win_edge", 0) or 0) * 100, 1),
+                })
+
+        if "field_type" in log.columns:
+            ft_vals = log[(log["run_timestamp"] == latest_ts) & log["field_type"].notna()]["field_type"]
+            g14_field_type = ft_vals.iloc[0] if len(ft_vals) > 0 else ""
+
+        if "g14_rule_fail_reason" in log.columns:
+            g14_kill = (log[(log["run_timestamp"] == latest_ts)]["g14_rule_fail_reason"] == "kill_switch_triggered").any()
+
+        results["g14_signals"] = g14_plays
+        results["g14_win_watchlist"] = g14_win_watch
+        results["g14_field_type"] = g14_field_type
+        results["g14_kill_switch"] = bool(g14_kill)
+        results["g14_status"] = "LIVE_SHADOW"
+
     # Model info
     results["model_info"] = {
-        "model": "DG-only logistic regression + G13 wave overlay",
+        "model": "DG-only logistic + G13 wave + G14 tail balance",
         "oos_auc": 0.702, "oos_brier": 0.211,
         "confidence_tier": "LOW",
         "g13_oos_roi": "+9.2%",
         "g13_market": "make_cut",
         "g13_rule": "adj_edge >= 4% AND draw_quintile in {Q4, Q5}",
-        "note": "Shadow tracking. G13 wave weather overlay in LIVE_SHADOW.",
+        "g14_oos_roi_top10": "+11.6%",
+        "g14_oos_roi_top5": "+12.5%",
+        "g14_markets": "top_10, top_5 (strong fields only)",
+        "note": "Shadow tracking. G13 wave + G14 tail balance overlays in LIVE_SHADOW.",
     }
 
     with open(OUT, "w") as f:
