@@ -1105,7 +1105,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
 
         _shadow_html = _shadow_badge_html(game.get("game_pk"), game.get("game_date", ""))
 
-        _border_color = "#ef4444" if has_partial else "#67e8f9"
+        _border_color = "#ef4444" if has_partial else "#22c55e"
         st.html(
             f'<div class="game-card" style="border-left:3px solid {_border_color}">'
             f'{l1}{badges}{boost}{explain_html}{_move_html}{_shadow_html}{disclaimer}'
