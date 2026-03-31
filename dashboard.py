@@ -5155,6 +5155,20 @@ def _render_golf_tab() -> None:
         except Exception:
             pass
 
+        # CL03 Inside-Cut shadow count
+        try:
+            _cl03_log_path = os.path.join(os.path.dirname(__file__), "golf", "shadow", "golf_shadow_log.parquet")
+            if os.path.exists(_cl03_log_path):
+                _cl03_log = pd.read_parquet(_cl03_log_path)
+                _cl03_n = _cl03_log["cl03_flag"].sum() if "cl03_flag" in _cl03_log.columns else 0
+                if _cl03_n > 0:
+                    st.html(
+                        f'<div style="font-size:0.72em;color:#6b7280;margin-top:8px;'
+                        f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #333">'
+                        f'CL03 Inside-Cut [SHADOW] \u2014 N: {int(_cl03_n)} signals logged this season</div>')
+        except Exception:
+            pass
+
     with g14_tab:
         g14_status = golf.get("g14_status", "")
         g14_plays = golf.get("g14_signals", [])

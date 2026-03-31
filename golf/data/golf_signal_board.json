@@ -7,9 +7,10 @@
     "expected_roi": 0.092,
     "expected_volume_per_season": 300,
     "deployment_date": "2026-03-30",
-    "note": "Q1 draw tracked as avoid only; no fade deployed",
-    "composite_shadow": "G13_S6_REGULAR_HARD — make_cut +11.8% / top_20 +25.3% ROI, N=141, MULTIPLICATIVE. Shadow tracking active.",
-    "watchlist": "G13_x_S3_HIGH_APP — top_20, +19.4% ROI, N=291, regression not confirmed, S3 coverage 55% — do not activate until G13xS6 reaches N=50 live shadow"
+    "note": "LIVE_SHADOW — weather revalidation complete. Score-based ROI was leakage artifact. Weather-based ROI ~0-2%. Monitor live shadow vs this baseline. Do not promote based on historical backtest.",
+    "composite_shadow": "G13_S6_REGULAR_HARD — RETIRED. Leakage artifact — score-based wave contamination. Invalidated 2026-03-31.",
+    "composite_shadow_status": "RETIRED",
+    "watchlist": "G13_x_S3_HIGH_APP — SUSPENDED pending G13 revalidation. Score-based wave contamination affects S3 interaction test. Do not activate."
   },
   "G14": {
     "signal_id": "G14",
@@ -43,5 +44,42 @@
     "expected_volume_per_season": "400-500 bets",
     "deployment_date": "2026-03-30",
     "note": "Top-5 stratified and Win stratified logged as watchlist only. Kill switch at 12 signals per event."
+  },
+  "CL01": {
+    "signal_id": "CL01",
+    "name": "Cut-Line Density Effect",
+    "type": "STRUCTURAL_TEST",
+    "status": "PASS",
+    "registered": "2026-03-31",
+    "tested": "2026-03-31",
+    "mechanism": "When score distribution clusters densely around the cut-line threshold, boundary player probabilities become unstable and potentially mispriced",
+    "markets": ["make_cut"],
+    "result": "95% of events have 8+ players within 1 stroke. Mean 37 players in boundary zone."
+  },
+  "CL02": {
+    "signal_id": "CL02",
+    "name": "Cut-Line Boundary Player Mispricing",
+    "type": "STRUCTURAL_TEST",
+    "status": "FAIL",
+    "registered": "2026-03-31",
+    "tested": "2026-03-31",
+    "mechanism": "Players just outside cut after R1 are systematically underpriced because books do not model R2 score compression at the boundary",
+    "markets": ["make_cut"],
+    "result": "Hypothesis inverted. OUTSIDE_1 overpriced (-18.9pp), not underpriced. Inverted signal found in INSIDE_1 — registered as CL03."
+  },
+  "CL03": {
+    "signal_id": "CL03",
+    "name": "Inside-Cut R1 Undervaluation",
+    "type": "STRUCTURAL_TEST",
+    "status": "SHADOW_ACTIVE",
+    "registered": "2026-03-31",
+    "wired": "2026-03-31",
+    "capture_window": "Thursday post-R1 (10 PM)",
+    "data_source": "post_r1 mode via /historical-raw-data/rounds",
+    "mechanism": "Players just inside the projected R1 cut line are systematically underpriced in make-cut markets. Market overstates Friday reversal risk and understates the value of already being on the correct side of the cut boundary after Round 1.",
+    "markets": ["make_cut"],
+    "prerequisite": "CL01 PASS (confirmed)",
+    "backtest_roi": "+24.5% (N=2073, 2021-2025, pre-R1 odds)",
+    "note": "Backtest ROI invalid for trading — pre-R1 odds used vs post-R1 signal. Live shadow begins on next standard cut event. Promotion gate: N >= 50 live post-R1 shadow bets, ROI >= +5%, positive CLV."
   }
 }

@@ -1447,18 +1447,293 @@ def run_composite():
         print(f"  Players: {', '.join(names[:10])}", flush=True)
 
 
+# ── CL03 Inside-Cut R1 Undervaluation — post-R1 shadow capture ──
+# Known no-cut event IDs (playoff events, invitational small fields, etc.)
+_NO_CUT_EVENT_IDS = {5, 11, 12, 16, 27, 28, 34, 60, 473, 476, 478, 480, 519, 521, 527, 550}
+_CL03_MIN_R1_COMPLETION = 0.80  # 80% of field must have R1 scores
+_CL03_CUT_POSITION = 65  # PGA standard: top 65 + ties make the cut
+
+
+def _fetch_r1_scores_live(event_id, season):
+    """Fetch current-event R1 scores via /historical-raw-data/rounds.
+
+    This is a dedicated fetch for CL03 post-R1 capture only.
+    Does NOT check event_completed — that gate stays in golf_grader.py.
+    """
+    d = dg_get("/historical-raw-data/rounds", {"tour": "pga", "event_id": int(event_id), "year": int(season)})
+    if not d or not isinstance(d, dict):
+        return None, None
+    scores = d.get("scores", [])
+    if not scores:
+        return None, None
+
+    rows = []
+    for player in scores:
+        dgid = player.get("dg_id")
+        pname = player.get("player_name", "")
+        r1 = player.get("round_1")
+        if not r1 or not isinstance(r1, dict):
+            continue
+        r1_score = r1.get("score")
+        course_par = r1.get("course_par")
+        if r1_score is None:
+            continue
+        rows.append({
+            "dg_id": dgid, "player_name": pname,
+            "r1_score": int(r1_score), "course_par": int(course_par) if course_par else 72,
+        })
+    return rows, d.get("event_name", "Unknown")
+
+
+def _fetch_r1_scores_test(event_id, season):
+    """Load R1 scores from canonical player_rounds for test mode."""
+    pr = pd.read_parquet(DATA / "player_rounds.parquet")
+    r1 = pr[(pr["event_id"] == event_id) & (pr["calendar_year"] == season) & (pr["round_num"] == 1)]
+    if len(r1) == 0:
+        return None, None
+    rows = []
+    for _, row in r1.iterrows():
+        rows.append({
+            "dg_id": row["dg_id"], "player_name": row["player_name"],
+            "r1_score": int(row["round_score"]), "course_par": int(row["course_par"]),
+        })
+    events = pd.read_parquet(DATA / "events.parquet")
+    ev = events[(events["event_id"] == event_id) & (events["calendar_year"] == season)]
+    ev_name = ev.iloc[0]["event_name"] if len(ev) > 0 else "Test Event"
+    return rows, ev_name
+
+
+def run_cl03():
+    """CL03 Inside-Cut R1 Undervaluation — post-R1 shadow capture.
+
+    Runs ONLY in --capture post_r1 mode.
+    Fetches current-event R1 scores, computes projected cut line,
+    flags INSIDE_1 players, and appends CL03 fields to shadow log.
+
+    Does NOT modify any pre-tournament or live betting logic.
+    """
+    ts = datetime.now().isoformat()
+    print("\n" + "=" * 60, flush=True)
+    print("CL03 Post-R1 Capture | %s | mode=%s" % (ts[:19], RUN_MODE), flush=True)
+    print("=" * 60, flush=True)
+
+    # ── Resolve active event ──
+    if RUN_MODE == "live":
+        d = dg_get("/preds/pre-tournament", {"tour": "pga", "odds_format": "percent"})
+        if not d:
+            print("CL03: No active tournament or API error.", flush=True)
+            return
+        event_name = d.get("event_name", "Unknown")
+        season = d.get("season") or datetime.now().year
+        event_id = d.get("event_id") or 0
+        if not event_id:
+            sched_resp = dg_get("/get-schedule", {"tour": "pga"})
+            sched_list = sched_resp.get("schedule", sched_resp) if isinstance(sched_resp, dict) else sched_resp
+            if isinstance(sched_list, list):
+                match = next((e for e in sched_list
+                              if isinstance(e, dict) and e.get("event_name", "").lower() == event_name.lower()), None)
+                if match:
+                    event_id = int(match["event_id"])
+                    season = int(match.get("start_date", str(season))[:4])
+            if not event_id:
+                print("CL03: Could not resolve event_id — aborting.", flush=True)
+                return
+    else:
+        # Test mode: use most recent event from canonical
+        preds_all = pd.read_parquet(DATA / "predictions.parquet")
+        latest = preds_all.sort_values(["calendar_year", "event_id"]).groupby(
+            ["event_id", "calendar_year"]).first().reset_index().iloc[-1]
+        event_id = latest["event_id"]
+        season = latest["calendar_year"]
+        event_name = "Test Event"
+
+    is_major = event_id in MAJOR_IDS
+
+    # ── Check: standard cut event ──
+    is_standard_cut = event_id not in _NO_CUT_EVENT_IDS
+    if not is_standard_cut:
+        print("CL03: SKIP — event_id=%d is a no-cut format event." % event_id, flush=True)
+        return
+
+    # ── Fetch R1 scores ──
+    if RUN_MODE == "live":
+        r1_rows, ev_name_r1 = _fetch_r1_scores_live(event_id, season)
+    else:
+        r1_rows, ev_name_r1 = _fetch_r1_scores_test(event_id, season)
+
+    if not r1_rows:
+        print("CL03: SKIP — no R1 scores available for event_id=%d." % event_id, flush=True)
+        return
+
+    # ── Check: R1 completion >= 80% ──
+    # Estimate field size from predictions (pre-tournament) or R1 data
+    if RUN_MODE == "live":
+        pred_d = dg_get("/preds/pre-tournament", {"tour": "pga", "odds_format": "percent"})
+        field_size = len(pred_d.get("baseline_history_fit", pred_d.get("baseline", []))) if pred_d else len(r1_rows)
+    else:
+        preds_all = pd.read_parquet(DATA / "predictions.parquet")
+        field_size = len(preds_all[(preds_all["event_id"] == event_id) & (preds_all["calendar_year"] == season)])
+
+    if field_size == 0:
+        field_size = len(r1_rows)
+
+    r1_completion = len(r1_rows) / field_size if field_size > 0 else 0
+    print("CL03: R1 scores: %d / %d field (%.1f%% complete)" % (len(r1_rows), field_size, r1_completion * 100), flush=True)
+
+    if r1_completion < _CL03_MIN_R1_COMPLETION:
+        print("CL03: WARNING — R1 completion %.1f%% < 80%% threshold. Skipping." % (r1_completion * 100), flush=True)
+        return
+
+    # ── Compute projected cut line (65th position by R1 score) ──
+    r1_df = pd.DataFrame(r1_rows)
+    r1_df = r1_df.sort_values("r1_score").reset_index(drop=True)
+
+    if len(r1_df) < _CL03_CUT_POSITION:
+        print("CL03: SKIP — fewer than %d R1 scores (%d). Cannot compute cut line." % (_CL03_CUT_POSITION, len(r1_df)), flush=True)
+        return
+
+    projected_cut_line_r1 = int(r1_df.iloc[_CL03_CUT_POSITION - 1]["r1_score"])
+    r1_df["distance_from_cut_r1"] = projected_cut_line_r1 - r1_df["r1_score"]
+
+    print("CL03: Projected R1 cut line = %d (65th position)" % projected_cut_line_r1, flush=True)
+
+    # ── Flag INSIDE_1 players (exactly 1 stroke better than cut) ──
+    inside_1 = r1_df[r1_df["distance_from_cut_r1"] == 1].copy()
+    print("CL03: INSIDE_1 players (1 stroke better than cut): %d" % len(inside_1), flush=True)
+
+    if len(inside_1) > 0:
+        for _, p in inside_1.iterrows():
+            print("  %s: R1=%d (cut=%d, dist=%+d)" % (
+                p["player_name"], p["r1_score"], projected_cut_line_r1, p["distance_from_cut_r1"]), flush=True)
+
+    # ── Pull current make_cut odds for CL03 players ──
+    mc_odds = {}
+    if RUN_MODE == "live":
+        d = dg_get("/betting-tools/outrights", {"tour": "pga", "market": "make_cut", "odds_format": "american"})
+        if d and isinstance(d, dict):
+            for o in d.get("odds", []):
+                if not isinstance(o, dict):
+                    continue
+                dgid = o.get("dg_id")
+                # Find best book odds
+                book_odds = {}
+                for bk in o:
+                    if bk in {"dg_id", "player_name", "datagolf"}:
+                        continue
+                    val = o[bk]
+                    if isinstance(val, dict):
+                        continue
+                    parsed = parse_odds(val)
+                    if pd.notna(parsed):
+                        book_odds[bk] = parsed
+                if book_odds:
+                    best_odds = max(book_odds.values())
+                    mc_odds[dgid] = american_to_implied(best_odds)
+            print("CL03: Make-cut odds loaded for %d players" % len(mc_odds), flush=True)
+        else:
+            print("CL03: WARNING — make-cut odds unavailable. Logging nulls.", flush=True)
+    else:
+        odds_all = pd.read_parquet(DATA / "odds_outrights.parquet")
+        ev_mc = odds_all[(odds_all["event_id"] == event_id) & (odds_all["calendar_year"] == season) &
+                         (odds_all["market"] == "make_cut") & (odds_all["book"] == "draftkings")]
+        for _, o in ev_mc.iterrows():
+            mc_odds[o["dg_id"]] = american_to_implied(o["close_odds"])
+
+    # ── Pull DG make_cut predictions ──
+    dg_mc = {}
+    if RUN_MODE == "live":
+        pred_d = dg_get("/preds/pre-tournament", {"tour": "pga", "odds_format": "percent"})
+        if pred_d:
+            for p in pred_d.get("baseline_history_fit", pred_d.get("baseline", [])):
+                dg_mc[p.get("dg_id")] = p.get("make_cut", 0)
+    else:
+        preds_all = pd.read_parquet(DATA / "predictions.parquet")
+        ev_preds = preds_all[(preds_all["event_id"] == event_id) & (preds_all["calendar_year"] == season)]
+        col = "make_cut_prob" if "make_cut_prob" in ev_preds.columns else "dg_make_cut_prob"
+        for _, p in ev_preds.iterrows():
+            dg_mc[p["dg_id"]] = p.get(col, 0)
+
+    # ── Update shadow log with CL03 fields ──
+    log_file = SHADOW / "golf_shadow_log.parquet"
+    if not log_file.exists():
+        print("CL03: No shadow log exists. Cannot append CL03 fields.", flush=True)
+        return
+
+    log = pd.read_parquet(log_file)
+
+    # Ensure CL03 columns exist (append only, never rename existing)
+    for col in ["cl03_flag", "distance_from_cut_r1", "projected_cut_line_r1",
+                "r1_score", "cl03_market_prob", "cl03_capture_time", "is_standard_cut_event"]:
+        if col not in log.columns:
+            log[col] = np.nan if col != "cl03_flag" else False
+
+    # Find rows for this event in the latest run (make_cut market only)
+    latest_ts = log["run_timestamp"].max()
+    mask = ((log["run_timestamp"] == latest_ts) &
+            (log["event_id"] == event_id) &
+            (log["market"] == "make_cut"))
+
+    cl03_count = 0
+    # Build INSIDE_1 lookup by dg_id
+    inside_1_ids = set(inside_1["dg_id"].tolist()) if len(inside_1) > 0 else set()
+    r1_lookup = {row["dg_id"]: row for _, row in r1_df.iterrows()}
+
+    for idx in log[mask].index:
+        row = log.loc[idx]
+        dgid = row["player_id"]
+
+        r1_info = r1_lookup.get(dgid)
+        if r1_info is None:
+            # Player not in R1 scores (WD, DNS, etc.)
+            log.loc[idx, "cl03_flag"] = False
+            log.loc[idx, "is_standard_cut_event"] = True
+            log.loc[idx, "cl03_capture_time"] = ts
+            continue
+
+        is_inside_1 = dgid in inside_1_ids
+        log.loc[idx, "cl03_flag"] = is_inside_1
+        log.loc[idx, "distance_from_cut_r1"] = int(r1_info["distance_from_cut_r1"])
+        log.loc[idx, "projected_cut_line_r1"] = projected_cut_line_r1
+        log.loc[idx, "r1_score"] = int(r1_info["r1_score"])
+        log.loc[idx, "cl03_market_prob"] = mc_odds.get(dgid, np.nan)
+        log.loc[idx, "cl03_capture_time"] = ts
+        log.loc[idx, "is_standard_cut_event"] = True
+
+        if is_inside_1:
+            cl03_count += 1
+
+    log.to_parquet(log_file, index=False)
+
+    # ── Summary ──
+    print("\nCL03 SUMMARY:", flush=True)
+    print("  Event: %s (%d, %d)" % (event_name, event_id, season), flush=True)
+    print("  R1 cut line: %d" % projected_cut_line_r1, flush=True)
+    print("  INSIDE_1 signals: %d" % cl03_count, flush=True)
+    print("  DG make_cut probs loaded: %d" % len(dg_mc), flush=True)
+    print("  Market make_cut probs loaded: %d" % len(mc_odds), flush=True)
+
+    total_cl03 = log["cl03_flag"].sum() if "cl03_flag" in log.columns else 0
+    print("  Season CL03 total: %d" % total_cl03, flush=True)
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--capture", default="close", choices=["open", "close"])
+    parser.add_argument("--capture", default="close", choices=["open", "close", "post_r1"])
     parser.add_argument("--include-matchups", action="store_true")
     parser.add_argument("--skip-g13", action="store_true", help="Skip G13 wave overlay")
     args = parser.parse_args()
-    result = run(capture_type=args.capture)
-    if not args.skip_g13:
-        run_g13(result)
-    run_g14(result)
-    run_g15(result)
-    run_composite()
-    if args.include_matchups:
-        run_matchups(capture_type=args.capture)
+
+    if args.capture == "post_r1":
+        # Post-R1 mode: only run CL03 shadow capture
+        run_cl03()
+    else:
+        # Standard pre-tournament flow (unchanged)
+        result = run(capture_type=args.capture)
+        if not args.skip_g13:
+            run_g13(result)
+        run_g14(result)
+        run_g15(result)
+        run_composite()
+        if args.include_matchups:
+            run_matchups(capture_type=args.capture)
