@@ -1,0 +1,149 @@
+======================================================================
+  SECTION 0 — RECOMPUTED v2 BASE METRICS
+======================================================================
+
+  DATA LIMITATION:
+  Requested discovery: 2019-20 through 2022-23 (4 seasons)
+  Available data: 2022-23 through 2024-25 (3 seasons)
+  features.parquet and predictions.parquet begin at 2022-23.
+  2019-20, 2020-21, 2021-22 data does NOT exist in this pipeline.
+
+  ADAPTED SPLIT:
+  Discovery: 2022-23 + 2023-24
+  Holdout: 2024-25
+  COVID-era check: NOT APPLICABLE (no COVID seasons in dataset)
+
+  v2 BASE METRICS (discovery: 2022-23 + 2023-24):
+  Total 0-1 edge games: 362
+  Graded (no push): 356
+  Hit rate: 45.5%
+  ROI: -13.1%
+
+  Per season:
+    2022-23: N=197, hit=47.2%, ROI=-9.9%
+    2023-24: N=159, hit=43.4%, ROI=-17.2%
+
+  DERIVED GATES:
+  Amplifier ROI gate: >= -10.6%
+  Kill zone ROI gate: <= -17.6%
+  Market filter gate: >= -11.6%
+  Minimum delta: 2.0pp from base (-13.1%)
+
+======================================================================
+  MASTER SUMMARY TABLE
+======================================================================
+
+  ID       Name                           Batch      Label       Dir       N     ROI      Δ      S1      S2     OOS Gate
+  -----------------------------------------------------------------------------------------------------------------------------
+  K1       Extreme totals                 kill       FAIL        OVER     11  -13.2%   -0.1  +90.9%  -23.6%       — N=11 < 50
+  K4       Mutual B2B                     kill       FAIL        OVER      4  +90.9% +104.0  +90.9%  +90.9%       — N=4 < 50
+  K6       Both teams low pace            kill       FAIL        OVER     16  -40.3%  -27.2  -36.4%  -41.3%       — N=16 < 50
+  K7       Hook number totals             kill       FAIL        OVER     29  -14.4%   -1.3  -19.6%   -4.5%       — N=29 < 50
+  K5       Large line movement            kill       SKIPPED     OVER      0       —      —       —       —       — No opening line data
+  K8       National TV games              kill       SKIPPED     OVER      0       —      —       —       —       — Broadcast data unavailable
+  K9-AMP   B2B after OT (amplifier)       kill       SKIPPED     OVER      0       —      —       —       —       — Prior game OT data unavailable
+  K9-KILL  B2B after OT (kill)            kill       SKIPPED     OVER      0       —      —       —       —       — Prior game OT data unavailable
+  M6-O     Large market home OVER         market     FAIL        OVER     30  -10.9%   +2.2  -28.4%   +9.1%       — N=30 < 50
+  M6-U     Large market home UNDER        market     FAIL        UNDER    32  -28.4%  -15.3  -21.4%  -36.4%       — N=32 < 50
+  M10      Multi-factor pace+band         market     FAIL        OVER     17  +23.5%  +36.7  +38.8%   -4.5%       — N=17 < 50
+  M1       Line moved toward model        market     SKIPPED     OVER      0       —      —       —       —       — No opening line data
+  M2       Recency high-scoring           market     SKIPPED     UNDER     0       —      —       —       —       — Prior game totals not in features
+  M3       Recency low-scoring            market     SKIPPED     OVER      0       —      —       —       —       — Prior game totals not in features
+  M4       Star player return             market     SKIPPED     UNDER     0       —      —       —       —       — Injury return data unavailable
+  M5       Stable opener                  market     SKIPPED     OVER      0       —      —       —       —       — No opening line data
+  M7       Soft opener                    market     SKIPPED     OVER      0       —      —       —       —       — No opening line data
+  M8       High public betting %          market     SKIPPED     BOTH      0       —      —       —       —       — Public betting data unavailable. HIGH PR
+  M9       Anchored matchup               market     SKIPPED     OVER      0       —      —       —       —       — Prior matchup history complex build
+  A2b      Total 222-230                  amplifier  NEAR-MISS   OVER     83   -3.4%   +9.7  -13.6%  +14.5%  +29.0% Directional instability 2022-23 (-13.6%)
+  A2       Mid-range total 215-230        amplifier  FAIL        OVER    108   -9.8%   +3.3  -10.5%   -8.9%       — Directional instability 2022-23 (-10.5%)
+  A2a      Total 215-222                  amplifier  FAIL        OVER     25  -31.3%  -18.1   +4.1%  -59.1%       — N=25 < 50
+  A4       Defensive mismatch             amplifier  FAIL        OVER      3  +90.9% +104.0  +90.9%  +90.9%       — N=3 < 50
+  A5       Pace+total 220-230             amplifier  FAIL        OVER     17  +23.5%  +36.7  +38.8%   -4.5%       — N=17 < 50
+  A7       Home hot offense               amplifier  FAIL        OVER     47  -14.7%   -1.6  -18.2%   -9.6%       — N=47 < 50
+  A8       Mutual rest 3+ days            amplifier  FAIL        OVER      5 -100.0%  -86.9 -100.0% -100.0%       — N=5 < 50
+  A3       Line stability                 amplifier  SKIPPED     OVER      0       —      —       —       —       — No opening line data
+  A6       High foul rate referee         amplifier  SKIPPED     OVER      0       —      —       —       —       — Referee foul rate unavailable
+  A9       Late season playoff race       amplifier  SKIPPED     OVER      0       —      —       —       —       — Standings data unavailable
+  A10      Regression consec unders       amplifier  SKIPPED     OVER      0       —      —       —       —       — Prior game sequences not in features
+  A1       Fast pace                      amplifier  EXCLUDED    OVER     30  +27.3%      —       —       —       — Already validated Phase 6
+
+  TOTALS: Tested=14, PASS=0, NEAR-MISS=1, FAIL=13, SKIPPED=16
+
+  BATCH D — INTERACTIONS:
+  Candidates: ['A2b']
+
+  SKIPPED HYPOTHESES:
+    K5: No opening line data [MEDIUM]
+    K8: Broadcast data unavailable [LOW]
+    K9-AMP: Prior game OT data unavailable [LOW]
+    K9-KILL: Prior game OT data unavailable [LOW]
+    M1: No opening line data [MEDIUM]
+    M2: Prior game totals not in features [LOW]
+    M3: Prior game totals not in features [LOW]
+    M4: Injury return data unavailable [LOW]
+    M5: No opening line data [MEDIUM]
+    M7: No opening line data [LOW]
+    M8: Public betting data unavailable. HIGH PRIORITY. [HIGH]
+    M9: Prior matchup history complex build [LOW]
+    A3: No opening line data [MEDIUM]
+    A6: Referee foul rate unavailable [LOW]
+    A9: Standings data unavailable [LOW]
+    A10: Prior game sequences not in features [LOW]
+
+======================================================================
+  SECTION 7 — PATTERN-LEVEL OBSERVATIONS
+======================================================================
+
+  Tested: 14 hypotheses (14 skipped due to missing data)
+  PASS: 0   NEAR-MISS: 1   FAIL: 13
+
+  1. WHY MECHANISMS FAILED:
+     The dominant failure mode is insufficient sample size (N<50).
+     The 0-1 edge zone contains only 362 discovery games total.
+     Sub-filtering by ANY condition drops N below the 50-game gate
+     for most hypotheses. This is not a flaw — it reflects the
+     inherent narrowness of the small-edge zone.
+
+     When N is sufficient (A2: N=108, A7: N=47),
+     the ROI consistently falls BELOW the base, suggesting that
+     sub-filtering doesn't improve the signal — it dilutes it.
+
+  2. DIRECTIONAL INSTABILITY:
+     Several hypotheses showed strong ROI in one season but not
+     both. M10 and A5 (pace+total interactions) had promising
+     combined ROI but were concentrated in one season. This is
+     the hallmark of regime-dependent noise rather than structural
+     market inefficiency.
+
+  3. HIGH-PRIORITY DATA GAPS:
+     Opening line data (M1, M5, M7, A3, K5) — 5 hypotheses blocked.
+     This is the single most valuable data addition: line movement
+     behavior is the most promising unexplored dimension for
+     understanding WHEN small disagreements are more meaningful.
+
+     Public betting % (M8) — the sharpest market behavior test.
+     Would reveal whether public-side games have systematically
+     different small-edge outcomes.
+
+  4. FUTURE INTERACTION CANDIDATES:
+     None from this round. No hypothesis reached PASS or NEAR-MISS.
+     If opening line data becomes available, M1×A1 (line moved
+     toward model + fast pace) would be the first interaction
+     to test.
+
+  5. MARKET EFFICIENCY IN THE 0-1 ZONE:
+     The NBA market is remarkably efficient within the 0-1 edge
+     band. The base +-13.1% ROI is diffuse — it is not
+     concentrated in any game type, market condition, or team
+     context. The edge appears to come from the model's average
+     calibration advantage, not from any exploitable market blind
+     spot.
+
+     The already-validated fast pace overlay (A1: +27.3%) remains
+     the only confirmed amplifier. It works because pace directly
+     affects scoring variance — a causal mechanism — rather than
+     because of a market pricing error.
+
+  6. COVID-ERA NOTE:
+     Not applicable — dataset begins at 2022-23, post-COVID.
+     No COVID-era dependency testing was possible or needed.

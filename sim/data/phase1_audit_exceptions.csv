@@ -1,0 +1,23 @@
+category,game_pk,season,date,away_team,home_team,matchup,reason,note
+excluded_game,747139,2024,2024-09-30,NYM,ATL,NYM @ ATL,Postponed — never made up,
+excluded_game,747064,2024,2024-09-30,NYM,ATL,NYM @ ATL,Postponed — never made up,
+excluded_game,746577,2024,2024-09-29,HOU,CLE,HOU @ CLE,Cancelled — never made up,
+null_f5_total,746402,2024,2024-05-03,SEA,HOU,SEA @ HOU,innings_played=0 — linescore API returned no inning data,actual_f5_total left null; actual_total retained as valid target
+null_f5_total,745873,2024,2024-08-10,CLE,MIN,CLE @ MIN,innings_played=0 — linescore API returned no inning data,actual_f5_total left null; actual_total retained as valid target
+completed_early,663146,2022,2022-04-20,TBR,CHC,TBR @ CHC,"Game ended before completion — total=10, innings_played=6",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,662741,2022,2022-04-29,NYY,KCR,NYY @ KCR,"Game ended before completion — total=14, innings_played=8",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,663065,2022,2022-06-06,ARI,CIN,ARI @ CIN,"Game ended before completion — total=7, innings_played=7",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,661246,2022,2022-06-22,WSN,BAL,WSN @ BAL,"Game ended before completion — total=7, innings_played=6",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,662636,2022,2022-09-10,DET,KCR,DET @ KCR,"Game ended before completion — total=12, innings_played=8",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,661220,2022,2022-09-25,BOS,NYY,BOS @ NYY,"Game ended before completion — total=2, innings_played=6",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,661096,2022,2022-10-02,PHI,WSN,PHI @ WSN,"Game ended before completion — total=9, innings_played=6",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,663273,2022,2022-10-03,TOR,BAL,TOR @ BAL,"Game ended before completion — total=6, innings_played=8",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,663452,2022,2022-10-04,TBR,BOS,TBR @ BOS,"Game ended before completion — total=6, innings_played=5",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,718394,2023,2023-04-28,ATL,NYM,ATL @ NYM,"Game ended before completion — total=4, innings_played=5",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,716453,2023,2023-09-24,CHW,BOS,CHW @ BOS,"Game ended before completion — total=5, innings_played=6",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,716404,2023,2023-09-28,MIA,NYM,MIA @ NYM,"Game ended before completion — total=1, innings_played=8",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,746817,2024,2024-04-01,ATL,CHW,ATL @ CHW,"Game ended before completion — total=9, innings_played=8",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,746320,2024,2024-04-25,TOR,KCR,TOR @ KCR,"Game ended before completion — total=3, innings_played=5",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,745751,2024,2024-05-05,DET,NYY,DET @ NYY,"Game ended before completion — total=7, innings_played=8",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+completed_early,745890,2024,2024-07-04,DET,MIN,DET @ MIN,"Game ended before completion — total=15, innings_played=7",actual_total retained if >=5 innings; actual_f5_total retained if >=5 innings played
+weather_policy_summary,,ALL,,,,,dome: 243 games neutralized (TBR only); retractable: 1458 games neutralized (ARI/HOU/MIA/MIL/TEX/TOR) — RETRACTABLE_WEATHER_NEUTRAL=True; open: 5586 games use fetched historical weather,Outdoor weather cache preserved in sim/data/cache/wx_*.json for future per-game roof enrichment

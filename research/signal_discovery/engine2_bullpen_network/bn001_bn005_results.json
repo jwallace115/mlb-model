@@ -1,0 +1,87 @@
+[
+  {
+    "signal_id": "BN001",
+    "train": {
+      "N": 1388,
+      "rate": 0.5036,
+      "roi": -3.86
+    },
+    "val": {
+      "N": 534,
+      "rate": 0.4738,
+      "roi": -9.55
+    },
+    "perm_pctile": 75.4,
+    "year_stable": true,
+    "verdict": "FAIL (perm=75.4; val=0.4738)",
+    "cs013": "DEFERRED"
+  },
+  {
+    "signal_id": "BN002",
+    "train": {
+      "N": 158,
+      "rate": 0.5063,
+      "roi": -3.34
+    },
+    "val": {
+      "N": 62,
+      "rate": 0.4355,
+      "roi": -16.86
+    },
+    "perm_pctile": 60.8,
+    "year_stable": true,
+    "verdict": "FAIL (perm=60.8; val=0.4355)",
+    "cs013": "DEFERRED"
+  },
+  {
+    "signal_id": "BN003",
+    "train": {
+      "N": 563,
+      "rate": 0.5044,
+      "roi": -3.7
+    },
+    "val": {
+      "N": 227,
+      "rate": 0.3877,
+      "roi": -25.99
+    },
+    "perm_pctile": 65.0,
+    "year_stable": true,
+    "verdict": "FAIL (perm=65.0; val=0.3877)",
+    "cs013": "DEFERRED"
+  },
+  {
+    "signal_id": "BN004",
+    "train": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "val": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "perm_pctile": 0,
+    "year_stable": false,
+    "verdict": "FAIL (THIN_SAMPLE)",
+    "cs013": "DEFERRED"
+  },
+  {
+    "signal_id": "BN005",
+    "train": {
+      "N": 1725,
+      "rate": 0.5084,
+      "roi": -2.94
+    },
+    "val": {
+      "N": 636,
+      "rate": 0.4796,
+      "roi": -8.45
+    },
+    "perm_pctile": 89.0,
+    "year_stable": true,
+    "verdict": "FAIL (val=0.4796)",
+    "cs013": "DEFERRED"
+  }
+]

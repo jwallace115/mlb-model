@@ -1,0 +1,128 @@
+=================================================================
+MLB PROPS — K HYPOTHESIS LAB (H1-H4)
+=================================================================
+Files: mlb/props/model_k_v2/backtest_results.parquet, mlb/props/processed/props_market_view.parquet
+
+Valid: 5,767 plays, splits: {'VALIDATION': 2351, 'OOS': 2277, 'TRAIN': 1139}
+
+=================================================================
+SECTION 1 — DISAGREEMENT MAGNITUDE
+=================================================================
+
+VALIDATION:
+Bucket         Dir        N   Hit%   BE%     ROI vs BE
+-------------------------------------------------------
+SMALL          OVER     431  48.7% 57.3%  -14.0% ✗
+SMALL          UNDER    409  54.5% 66.7%  -17.7% ✗
+MODERATE       OVER     387  47.5% 57.9%  -15.9% ✗
+MODERATE       UNDER    281  52.3% 65.5%  -19.0% ✗
+LARGE          OVER     252  50.4% 59.5%  -13.5% ✗
+LARGE          UNDER    146  58.9% 65.6%   -7.3% ✗
+VERY_LARGE     OVER     330  50.9% 59.0%  -11.2% ✗
+VERY_LARGE     UNDER    115  48.7% 63.3%  -20.6% ✗
+
+OOS:
+Bucket         Dir        N   Hit%   BE%     ROI vs BE
+-------------------------------------------------------
+SMALL          OVER     485  47.8% 60.5%  -18.9% ✗
+SMALL          UNDER    414  51.0% 62.6%  -17.2% ✗
+MODERATE       OVER     377  53.1% 60.2%  -10.3% ✗
+MODERATE       UNDER    239  51.5% 64.3%  -17.6% ✗
+LARGE          OVER     254  50.0% 60.7%  -15.5% ✗
+LARGE          UNDER    133  52.6% 65.1%  -17.1% ✗
+VERY_LARGE     OVER     278  50.7% 60.5%  -14.5% ✗
+VERY_LARGE     UNDER     97  51.5% 61.4%  -13.9% ✗
+
+=================================================================
+SECTION 2 — LINE BAND ANALYSIS
+=================================================================
+
+VALIDATION:
+Band             Dir        N   Hit%   BE%     ROI vs BE
+-------------------------------------------------------
+Low(<=4.5)       OVER     769  48.4% 58.9%  -16.9% ✗
+Low(<=4.5)       UNDER    445  52.8% 65.8%  -17.9% ✗
+Mid(5-6)         OVER     401  48.1% 58.6%  -15.2% ✗
+Mid(5-6)         UNDER    285  51.2% 65.4%  -20.6% ✗
+High(6.5-7.5)    OVER     223  54.3% 55.5%   -0.5% ✗
+High(6.5-7.5)    UNDER    208  58.7% 66.3%  -10.9% ✗
+Elite(8+)        UNDER     13  69.2% 64.1%   +6.9% ✓
+
+OOS:
+Band             Dir        N   Hit%   BE%     ROI vs BE
+-------------------------------------------------------
+Low(<=4.5)       OVER     897  49.2% 60.6%  -16.8% ✗
+Low(<=4.5)       UNDER    464  51.7% 63.3%  -16.3% ✗
+Mid(5-6)         OVER     318  54.4% 59.8%   -7.6% ✗
+Mid(5-6)         UNDER    243  51.9% 63.3%  -16.5% ✗
+High(6.5-7.5)    OVER     175  47.4% 60.6%  -20.5% ✗
+High(6.5-7.5)    UNDER    165  49.1% 63.5%  -20.0% ✗
+Elite(8+)        UNDER     11  63.6% 63.5%   -6.8% ✓
+
+=================================================================
+SECTION 3 — PITCHER MARKET BIAS
+=================================================================
+
+Meaningful (25+, 2-season persistent): 16
+
+OVER-biased (overs hit >50% every season):
+Pitcher                   N  Over% Rates
+Blake Snell              25   64% ['62%', '64%', '67%']
+Brayan Bello             41   63% ['62%', '75%', '53%']
+Javier Assad             28   61% ['83%', '53%', '67%']
+Ranger Suarez            28   61% ['60%', '62%', '57%']
+Reese Olson              27   59% ['67%', '54%', '62%']
+Yoshinobu Yamamoto       29   59% ['67%', '53%']
+Nathan Eovaldi           30   57% ['67%', '57%', '54%']
+Michael Wacha            38   55% ['75%', '54%', '52%']
+
+UNDER-biased (overs hit <50% every season):
+Ryan Pepiot              34   47% ['47%', '47%']
+Bryce Miller             35   46% ['40%', '47%', '45%']
+Nick Lodolo              27   44% ['42%', '47%']
+Dean Kremer              32   41% ['43%', '42%', '38%']
+Miles Mikolas            47   40% ['38%', '45%', '37%']
+Erick Fedde              26   38% ['40%', '36%']
+Corbin Burnes            32   34% ['43%', '30%', '40%']
+Marcus Stroman           27   33% ['43%', '29%', '33%']
+
+Exploratory (15-24 apps): 58 pitchers (NOT actionable)
+
+=================================================================
+SECTION 4 — EARLY REMOVAL RISK
+=================================================================
+
+Pitch count data: AVAILABLE
+
+VALIDATION — OVER plays by removal risk:
+  LOW: N=906, hit=74.9%, BE=58.2%, ROI=+31.2%
+  HIGH: N=494, hit=2.0%, BE=58.4%, ROI=-96.3%
+
+OOS — OVER plays by removal risk:
+  LOW: N=950, hit=72.5%, BE=60.7%, ROI=+22.6%
+  HIGH: N=444, hit=2.5%, BE=60.0%, ROI=-95.7%
+
+=================================================================
+SECTION 5 — COMBINED FILTER
+=================================================================
+
+No independently positive conditions found
+COMBINED FILTER: NOT APPLICABLE
+
+=================================================================
+SECTION 6 — HONEST ASSESSMENT
+=================================================================
+
+1. Hit rate > break-even in any bucket: NO
+
+2. No conditions to test OOS persistence
+3. Persistent pitcher bias: 16 pitchers across 2+ seasons
+4. Early removal risk: Tested — see Section 4
+5. Next hypothesis: pitcher-batter handedness matchup K rates
+
+VERDICT: K IS DEAD.
+No bucket, line band, or pitcher bias produces hit rate above
+the actual break-even threshold (57-67% for juiced K lines).
+The vig absorbs all potential edge from the 0.315 projection correlation.
+
+MLB HITS OVER remains the only validated MLB prop signal.

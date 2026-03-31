@@ -1,0 +1,39 @@
+BATCH KILL RESULTS (v2)
+==================================================
+
+K1 — Extreme totals
+  Label: FAIL, Dir: OVER, N: 11
+  ROI: -13.2%, Delta: -0.1pp
+  Gate: N=11 < 50
+
+K4 — Mutual B2B
+  Label: FAIL, Dir: OVER, N: 4
+  ROI: +90.9%, Delta: +104.0pp
+  Gate: N=4 < 50
+
+K5 — Large line movement
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: No opening line data
+
+K6 — Both teams low pace
+  Label: FAIL, Dir: OVER, N: 16
+  ROI: -40.3%, Delta: -27.2pp
+  Gate: N=16 < 50
+
+K7 — Hook number totals
+  Label: FAIL, Dir: OVER, N: 29
+  ROI: -14.4%, Delta: -1.3pp
+  Gate: N=29 < 50
+
+K8 — National TV games
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Broadcast data unavailable
+
+K9-AMP — B2B after OT (amplifier)
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Prior game OT data unavailable
+
+K9-KILL — B2B after OT (kill)
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Prior game OT data unavailable
+

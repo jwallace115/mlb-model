@@ -1,0 +1,81 @@
+[
+  {
+    "signal_id": "E3_01",
+    "condition": "pitcher_fb_pct>=Q75 AND opp_lineup_flyball",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_02",
+    "condition": "pitcher_fb_pct>=Q75 AND opp_pull_pct>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_03",
+    "condition": "pitcher_fb_pct>=Q75 AND opp_barrel>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_04",
+    "condition": "pitcher_hh_against>=Q75 AND opp_hh>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_05",
+    "condition": "pitcher_hh_against>=Q75 AND opp_iso>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_06",
+    "condition": "pitcher_k_pct<=Q25 AND opp_contact>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_07",
+    "condition": "pitcher_k_pct<=Q25 AND opp_hh>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_08",
+    "condition": "pitcher_fb_velo>=Q75 AND opp_contact>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_09a",
+    "condition": "pitcher_gb_pct>=Q75 AND opp_flyball",
+    "direction": "OVER",
+    "prior": "LOW"
+  },
+  {
+    "signal_id": "E3_09b",
+    "condition": "pitcher_gb_pct>=Q75 AND opp_flyball",
+    "direction": "UNDER",
+    "prior": "LOW"
+  },
+  {
+    "signal_id": "E3_10",
+    "condition": "pitcher_fb_pct>=Q75 AND opp_barrel>=Q75 AND park>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_11",
+    "condition": "home_iso>=Q75 AND away_iso>=Q75",
+    "direction": "OVER",
+    "prior": "LOW"
+  },
+  {
+    "signal_id": "E3_12",
+    "condition": "both_contact>=Q75 AND either_k<=Q25",
+    "direction": "OVER",
+    "prior": "LOW"
+  },
+  {
+    "signal_id": "E3_13",
+    "condition": "opp_pull>=Q75 AND pitcher_hh>=Q75",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "E3_14",
+    "condition": "opp_barrel>=Q75 AND pitcher_hh>=Q75 AND temp>=75",
+    "direction": "OVER"
+  }
+]

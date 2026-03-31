@@ -19,13 +19,23 @@ Season stabilisation blending (games 0–19 of a new season):
 Rest / schedule:
   days_rest, back-to-back flag, games played in last 7 days
 
+Trend features (5-game vs 15-game delta, no-leakage):
+  home_ortg_trend  = ortg_roll5 − ortg_roll15  (positive = team trending up offensively)
+  away_ortg_trend  = same for away team
+  home_pace_trend  = pace_roll5 − pace_roll15
+  away_pace_trend  = same for away team
+
+Matchup interaction terms (explicit non-linear):
+  home_ortg_x_away_drtg = home_ortg × away_drtg  (elite offense vs elite defense)
+  away_ortg_x_home_drtg = away_ortg × home_drtg
+
 Injury adjustments:
   Disabled for all historical data (no reliable pre-tip timestamps available).
   injury_adj_home = injury_adj_away = 0.0 throughout.
 
 Naive projection (for Phase 3 calibration):
-  proj_total_naive = home_exp_pts + away_exp_pts
-  where exp_pts uses matchup-adjusted ORtg × pace × opponent DRtg ratio.
+  proj_total_naive = avg_pace × (home_ortg + away_ortg) / 100
+  Simple form — no opponent DRtg multiplier (Ridge handles that interaction).
 """
 
 import logging
@@ -102,18 +112,37 @@ def _build_rolling(box: pd.DataFrame, window: int = ROLLING_WINDOW) -> pd.DataFr
     Compute rolling mean ORtg/DRtg/pace per team, shift(1) for no-leakage.
 
     Returns box DataFrame with added columns:
-      ortg_roll, drtg_roll, pace_roll         (overall rolling)
+      ortg_roll, drtg_roll, pace_roll         (15-game overall rolling)
+      ortg_roll5, pace_roll5                  (5-game overall rolling — for trend features)
       ortg_loc_roll, drtg_loc_roll, pace_loc_roll  (location-specific rolling)
       loc_game_count                            (# prior same-location games)
       season_game_count                         (# prior games in current season)
     """
     box = box.sort_values(["team", "date"]).copy()
 
-    # ── Overall rolling ────────────────────────────────────────────────────────
+    # ── Overall rolling (15-game primary + 5-game for trend) ──────────────────
     for col in ["ortg", "drtg", "pace"]:
         box[f"{col}_roll"] = (
             box.groupby("team")[col]
             .transform(lambda s: s.rolling(window, min_periods=1).mean().shift(1))
+        )
+    # Style / possession features (15-game rolling, no location split needed)
+    for col in ["fg3a_rate", "ft_rate", "tov_rate", "dreb_rate"]:
+        if col in box.columns:
+            box[f"{col}_roll"] = (
+                box.groupby("team")[col]
+                .transform(lambda s: s.rolling(window, min_periods=1).mean().shift(1))
+            )
+    # Pace volatility (rolling std over 10 games — variance driver)
+    box["pace_vol_roll"] = (
+        box.groupby("team")["pace"]
+        .transform(lambda s: s.rolling(10, min_periods=3).std().shift(1))
+    )
+    # 5-game trend window (require ≥ 3 games so early-season trends are meaningful)
+    for col in ["ortg", "pace"]:
+        box[f"{col}_roll5"] = (
+            box.groupby("team")[col]
+            .transform(lambda s: s.rolling(5, min_periods=3).mean().shift(1))
         )
 
     # ── Season game count (# prior games this season for this team) ───────────
@@ -217,10 +246,36 @@ def _resolve_team_features(
     drtg, drtg_fb = _resolve_one("drtg", bl_drtg)
     pace, pace_fb = _resolve_one("pace", bl_pace)
 
+    # 5-game rolling values for trend computation (raw, no fallback)
+    ortg_roll5  = box_row.get("ortg_roll5", np.nan)
+    pace_roll5  = box_row.get("pace_roll5", np.nan)
+    ortg_roll15 = box_row.get("ortg_roll",  np.nan)
+    pace_roll15 = box_row.get("pace_roll",  np.nan)
+
+    def _trend(r5, r15):
+        if np.isnan(r5) or np.isnan(r15):
+            return 0.0
+        return round(float(r5) - float(r15), 3)
+
+    def _raw(col, default=0.0):
+        """Return raw rolling value, falling back to default when unavailable."""
+        v = box_row.get(f"{col}_roll", np.nan)
+        return default if (v is None or (isinstance(v, float) and np.isnan(v))) else float(v)
+
     return {
         "ortg": ortg, "drtg": drtg, "pace": pace,
         "ortg_fb": ortg_fb, "drtg_fb": drtg_fb, "pace_fb": pace_fb,
         "games_in_season": games_in_season,
+        "ortg_trend":  _trend(ortg_roll5, ortg_roll15),
+        "pace_trend":  _trend(pace_roll5, pace_roll15),
+        # Style features (Pass 1)
+        "fg3a_rate": _raw("fg3a_rate", default=0.36),   # NBA avg ~36%
+        "ft_rate":   _raw("ft_rate",   default=0.28),   # NBA avg ~28%
+        # Volatility (Pass 2)
+        "pace_vol":  _raw("pace_vol_roll", default=3.0),
+        # Possession efficiency (Pass 3)
+        "tov_rate":  _raw("tov_rate",  default=0.14),   # NBA avg ~14%
+        "dreb_rate": _raw("dreb_rate", default=0.74),   # NBA avg ~74%
     }
 
 
@@ -362,11 +417,12 @@ def build_features(force_refresh: bool = False) -> pd.DataFrame:
         for fb_key in (hf["ortg_fb"], af["ortg_fb"]):
             fallback_counts[fb_key] = fallback_counts.get(fb_key, 0) + 1
 
-        # Naive projection: matchup-adjusted expected points
+        # Naive projection: pace × combined ORtg (no opponent DRtg multiplier).
+        # The multiplicative DRtg form caused a -7 pt structural bias when both
+        # teams had good defense; Ridge (Phase 3) handles DRtg interaction via
+        # regression coefficients rather than hardcoded ratios.
         avg_pace   = (hf["pace"] + af["pace"]) / 2.0
-        home_exp   = (hf["ortg"] / 100.0) * avg_pace * (af["drtg"] / LEAGUE_AVG_DRTG)
-        away_exp   = (af["ortg"] / 100.0) * avg_pace * (hf["drtg"] / LEAGUE_AVG_DRTG)
-        proj_naive = round(home_exp + away_exp, 2)
+        proj_naive = round(avg_pace * (hf["ortg"] + af["ortg"]) / 100.0, 2)
 
         rows.append({
             "game_id":     gid,
@@ -382,6 +438,32 @@ def build_features(force_refresh: bool = False) -> pd.DataFrame:
             "away_ortg":   round(af["ortg"], 2),
             "away_drtg":   round(af["drtg"], 2),
             "away_pace":   round(af["pace"], 2),
+
+            # Matchup interaction terms (stored but not in current Ridge FEATURE_COLS)
+            "home_ortg_x_away_drtg": round(hf["ortg"] * af["drtg"], 2),
+            "away_ortg_x_home_drtg": round(af["ortg"] * hf["drtg"], 2),
+
+            # Trend features (5-game vs 15-game delta)
+            "home_ortg_trend": hf["ortg_trend"],
+            "away_ortg_trend": af["ortg_trend"],
+            "home_pace_trend": hf["pace_trend"],
+            "away_pace_trend": af["pace_trend"],
+
+            # Pass 1 — Style features (rolling 15-game)
+            "home_3pa_rate": round(hf["fg3a_rate"], 4),
+            "away_3pa_rate": round(af["fg3a_rate"], 4),
+            "home_ft_rate":  round(hf["ft_rate"],   4),
+            "away_ft_rate":  round(af["ft_rate"],   4),
+
+            # Pass 2 — Volatility (rolling 10-game pace std)
+            "home_pace_vol": round(hf["pace_vol"], 3),
+            "away_pace_vol": round(af["pace_vol"], 3),
+
+            # Pass 3 — Possession efficiency
+            "home_tov_rate":  round(hf["tov_rate"],  4),
+            "away_tov_rate":  round(af["tov_rate"],  4),
+            "home_dreb_rate": round(hf["dreb_rate"], 4),
+            "away_dreb_rate": round(af["dreb_rate"], 4),
 
             # Fallback levels
             "home_ortg_fb": hf["ortg_fb"],
@@ -412,6 +494,54 @@ def build_features(force_refresh: bool = False) -> pd.DataFrame:
 
     # ── Merge rest features ───────────────────────────────────────────────────
     feat = feat.merge(rest, on="game_id", how="left")
+
+    # ── Rolling league average total (pre-pass calibration baseline) ──────────
+    # For each game on date D in season S, compute the mean of all actual_total
+    # values in season S from games played BEFORE D (no leakage).
+    # Blend with prior-season mean using the same 70/30 stabilisation logic
+    # for the first 20 season-games (counted across all teams in the season).
+    feat = feat.sort_values(["season", "date"]).reset_index(drop=True)
+    prior_season_totals: dict = {}
+    for s in sorted(feat["season"].unique()):
+        idx = feat["season"] == s
+        prior_season_totals[s] = feat.loc[idx, "actual_total"].mean()
+
+    def _rolling_league_avg(group: pd.DataFrame) -> pd.Series:
+        season = group["season"].iloc[0]
+        prior_mean = prior_season_totals.get(
+            # season string like "2023-24" → look up "2022-23"
+            _prior_season_key(season, sorted(feat["season"].unique())),
+            228.5,
+        )
+        result = []
+        for i, (_, row) in enumerate(group.iterrows()):
+            # Games before current game in this season
+            past = group.iloc[:i]["actual_total"]
+            n_past = len(past)
+            if n_past == 0:
+                cur_mean = prior_mean   # no data yet: use prior season
+            else:
+                cur_mean = past.mean()
+            # Blend using same stabilisation as team features
+            if n_past >= SEASON_BLEND_END:
+                blended = cur_mean
+            elif n_past <= SEASON_BLEND_START:
+                blended = PRIOR_SEASON_WEIGHT * prior_mean + (1 - PRIOR_SEASON_WEIGHT) * cur_mean
+            else:
+                t = (n_past - SEASON_BLEND_START) / (SEASON_BLEND_END - SEASON_BLEND_START)
+                w = PRIOR_SEASON_WEIGHT * (1 - t)
+                blended = w * prior_mean + (1 - w) * cur_mean
+            result.append(round(blended, 2))
+        return pd.Series(result, index=group.index)
+
+    def _prior_season_key(season: str, all_seasons: list) -> str:
+        idx = all_seasons.index(season) if season in all_seasons else -1
+        return all_seasons[idx - 1] if idx > 0 else ""
+
+    feat["rolling_league_avg"] = (
+        feat.groupby("season", group_keys=False)[feat.columns.tolist()]
+        .apply(_rolling_league_avg)
+    )
 
     # ── Save ──────────────────────────────────────────────────────────────────
     feat.to_parquet(FEATURES_PATH, index=False)

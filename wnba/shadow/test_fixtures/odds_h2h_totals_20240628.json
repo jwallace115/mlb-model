@@ -1,0 +1,1487 @@
+{
+  "timestamp": "2024-06-28T17:55:38Z",
+  "previous_timestamp": "2024-06-28T17:50:38Z",
+  "next_timestamp": "2024-06-28T18:00:38Z",
+  "data": [
+    {
+      "id": "f8536254f225737e90fb2f92e42eec30",
+      "sport_key": "basketball_wnba",
+      "sport_title": "WNBA",
+      "commence_time": "2024-06-28T23:30:00Z",
+      "home_team": "Connecticut Sun",
+      "away_team": "Atlanta Dream",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-06-28T17:55:32Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 370
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -485
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-06-28T17:55:09Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 384
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -526
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-06-28T17:55:24Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 410
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -590
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-06-28T17:55:14Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 360
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -500
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-06-28T17:55:23Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:23Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 410
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -560
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 150.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 150.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-06-28T17:54:25Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 325
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -410
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-06-28T17:55:04Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 370
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -510
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-06-28T17:55:18Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 400
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -550
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-06-28T17:54:52Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:52Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 375
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -465
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-06-28T17:54:55Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:55Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 375
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -465
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-06-28T17:54:51Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:51Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 400
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -500
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-06-28T17:54:56Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 385
+                },
+                {
+                  "name": "Connecticut Sun",
+                  "price": -500
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "032799672485cf13f43b34c356d0097e",
+      "sport_key": "basketball_wnba",
+      "sport_title": "WNBA",
+      "commence_time": "2024-06-29T02:00:00Z",
+      "home_team": "Phoenix Mercury",
+      "away_team": "Los Angeles Sparks",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-06-28T17:55:32Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 455
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -625
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-06-28T17:55:24Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 420
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -620
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-06-28T17:54:52Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:52Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 460
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -599
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 170.0
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 170.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-06-28T17:54:55Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:55Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 460
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -600
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 170.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 170.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-06-28T17:55:18Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 430
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -600
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-06-28T17:54:56Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 450
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -600
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-06-28T17:55:14Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 450
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -650
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-06-28T17:54:51Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:51Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 450
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -600
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-06-28T17:55:04Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 450
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -650
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-06-28T17:54:25Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 480
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -649
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 168.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 168.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-06-28T17:55:23Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:23Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 430
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -625
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:23Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-06-28T17:55:09Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Los Angeles Sparks",
+                  "price": 423
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -667
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:09Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d2266e69ca3af8ab32b322c2e4c63ca5",
+      "sport_key": "basketball_wnba",
+      "sport_title": "WNBA",
+      "commence_time": "2024-06-29T18:00:00Z",
+      "home_team": "Washington Mystics",
+      "away_team": "Las Vegas Aces",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-06-28T17:55:32Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Las Vegas Aces",
+                  "price": -900
+                },
+                {
+                  "name": "Washington Mystics",
+                  "price": 600
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 170.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 170.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-06-28T17:55:24Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Las Vegas Aces",
+                  "price": -850
+                },
+                {
+                  "name": "Washington Mystics",
+                  "price": 540
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 171.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 171.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-06-28T17:55:04Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Las Vegas Aces",
+                  "price": -900
+                },
+                {
+                  "name": "Washington Mystics",
+                  "price": 575
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 171.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 171.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-06-28T17:55:18Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Las Vegas Aces",
+                  "price": -900
+                },
+                {
+                  "name": "Washington Mystics",
+                  "price": 600
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 171.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 171.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-06-28T17:54:55Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 171.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 171.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-06-28T17:54:56Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 171.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 171.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b0432455704aca8f8494d48a40f94627",
+      "sport_key": "basketball_wnba",
+      "sport_title": "WNBA",
+      "commence_time": "2024-06-30T01:00:00Z",
+      "home_team": "Seattle Storm",
+      "away_team": "Dallas Wings",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-06-28T17:55:32Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Dallas Wings",
+                  "price": 320
+                },
+                {
+                  "name": "Seattle Storm",
+                  "price": -410
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 164.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 164.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-06-28T17:55:24Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Dallas Wings",
+                  "price": 360
+                },
+                {
+                  "name": "Seattle Storm",
+                  "price": -500
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 164.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 164.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-06-28T17:54:55Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 165.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 165.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-06-28T17:54:52Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 165.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 165.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-06-28T17:55:18Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Dallas Wings",
+                  "price": 320
+                },
+                {
+                  "name": "Seattle Storm",
+                  "price": -420
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 164.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 164.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-06-28T17:55:04Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Dallas Wings",
+                  "price": 320
+                },
+                {
+                  "name": "Seattle Storm",
+                  "price": -430
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 165.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 165.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-06-28T17:54:56Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:54:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 164.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 164.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "51126f7970ffd6b4c977434355cf1eb4",
+      "sport_key": "basketball_wnba",
+      "sport_title": "WNBA",
+      "commence_time": "2024-06-30T17:00:00Z",
+      "home_team": "New York Liberty",
+      "away_team": "Atlanta Dream",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-06-28T17:55:32Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Atlanta Dream",
+                  "price": 700
+                },
+                {
+                  "name": "New York Liberty",
+                  "price": -1100
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 164.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 164.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9e4fbad62a64fc4f7e82619a1deefbee",
+      "sport_key": "basketball_wnba",
+      "sport_title": "WNBA",
+      "commence_time": "2024-06-30T19:00:00Z",
+      "home_team": "Chicago Sky",
+      "away_team": "Minnesota Lynx",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-06-28T17:55:32Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Chicago Sky",
+                  "price": 140
+                },
+                {
+                  "name": "Minnesota Lynx",
+                  "price": -166
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 162.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 162.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bacaf101487af99a23689dcd57258510",
+      "sport_key": "basketball_wnba",
+      "sport_title": "WNBA",
+      "commence_time": "2024-06-30T19:00:00Z",
+      "home_team": "Phoenix Mercury",
+      "away_team": "Indiana Fever",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-06-28T17:55:32Z",
+          "markets": [
+            {
+              "key": "h2h",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Fever",
+                  "price": 260
+                },
+                {
+                  "name": "Phoenix Mercury",
+                  "price": -325
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-06-28T17:55:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

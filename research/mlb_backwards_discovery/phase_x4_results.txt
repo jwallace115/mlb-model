@@ -1,0 +1,136 @@
+MLB BACKWARDS DISCOVERY — PHASE X4 DERIVED FEATURES
+Run date: 2026-03-24
+Derived features built: 120 | Pruned duplicates: 24
+Derived features after pruning: 96
+  Seeded: 12
+  Auto-generated: 84
+Matched home/away pairs: 38
+Train non-extras: 3563
+
+========================================================================================================================
+MODE 1 — DIRECTIONAL CANDIDATES (top 25 by |effect_size|)
+========================================================================================================================
+Rank  Feature                                 eff_size        p        q   BO_over      near   BO_under mono  Type  Additive  Stable   Known  
+------------------------------------------------------------------------------------------------------------------------
+1     both_high_csw                            -0.4674   0.0000   0.0000   -0.3188   -0.0355     0.3422 DOWN  DIR   ADDITIVE  STABLE   NEW     ***
+2     combined_whiff_pct                       -0.3097   0.0000   0.0000   42.6911   44.2467    46.4148 DOWN  DIR   ADDITIVE  STABLE   NEW     ***
+3     combined_f_strike_pct                    -0.2693   0.0000   0.0000  120.9189  123.3562   125.1621 DOWN  DIR   ADDITIVE  STABLE   NEW     ***
+4     combined_lineup_delta                    -0.2484   0.0000   0.0000   -0.0034    0.0012     0.0050 DOWN  DIR   ADDITIVE  STABLE   NEW     ***
+5     combined_high_leverage_available          0.2130   0.0007   0.0015    0.7883    0.7067     0.6425 NO    DIR   NO        STABLE   NEW     ***
+6     offense_vs_defense_gap                   -0.1901   0.0028   0.0043   -0.1314   -0.0371     0.1293 NO    DIR   ADDITIVE  STABLE   NEW     ***
+7     combined_bp_mismatch                     -0.1878   0.0036   0.0048   -0.1936   -0.1235    -0.0573 DOWN  DIR   NO        STABLE   NEW     ***
+8     combined_lineup_woba                     -0.1673   0.0039   0.0048    0.6318    0.6333     0.6382 NO    DIR   NO        STABLE   NEW     ***
+9     combined_lineup_iso                      -0.1560   0.0181   0.0199    0.3101    0.3104     0.3168 DOWN  DIR   NO        STABLE   NEW     ***
+10    combined_fb_velo                         -0.1516   0.0244   0.0244  185.1778  185.3522   185.7127 DOWN  DIR   NO        STABLE   NEW     ***
+11    combined_bp_interaction                   0.1502   0.0008   0.0015    6.7168    6.7296     6.5660 NO    VAR   NO        STABLE   NEW     ***
+12    combined_lineup_k_pct                     0.1438   0.0309        -    0.4545    0.4507     0.4501 NO    DIR   NO        -        NEW    
+13    combined_sp_tto_flag                     -0.1436   0.0225        -    1.0776    1.0809     1.1773 NO    DIR   NO        -        NEW    
+14    bp_starter_mismatch_home                 -0.1405   0.0322        -   -0.0956   -0.0560    -0.0248 NO    DIR   NO        -        NEW    
+15    bp_starter_mismatch_away                 -0.1303   0.1272        -   -0.0980   -0.0675    -0.0325 NO    DIR   NO        -        NEW    
+16    combined_fb_velo_r3                      -0.1155   0.1229        -  185.2659  185.4398   185.6592 NO    DIR   NO        -        NEW    
+17    mismatch_sp_k_pct                        -0.1128   0.2473        -    0.0315    0.0330     0.0344 NO    DIR   NO        -        NEW    
+18    combined_sp_bb_pct                        0.1098   0.0734        -    0.1607    0.1597     0.1585 NO    DIR   NO        -        NEW    
+19    mismatch_fb_velo_r3                      -0.1036   0.0896        -    2.5953    2.6255     2.8137 NO    DIR   NO        -        NEW    
+20    mismatch_pitch_count_last                 0.1004   0.7062        -   15.7973   15.5599    14.4953 NO    DIR   NO        -        NEW    
+21    diff_days_rest                            0.0985   0.4487        -    0.9493   -0.2395    -0.3462 NO    DIR   NO        -        NEW    
+22    mismatch_sp_fip_L5                       -0.0942   0.7479        -    1.7435    1.9194     2.0717 NO    DIR   NO        -        NEW    
+23    mismatch_f_strike_pct                     0.0918   0.5041        -   12.8249   12.5010    11.9453 NO    DIR   NO        -        NEW    
+24    mismatch_whiff_season                    -0.0899   0.1530        -    5.1019    5.2918     5.5065 NO    DIR   ADDITIVE  -        NEW    
+25    combined_relievers_used_last_3_games     -0.0897   0.6465        -   19.4829   19.5440    19.7723 NO    DIR   NO        -        NEW    
+
+Total Mode 1 flagged: 11
+
+========================================================================================================================
+MODE 2 — VARIANCE CANDIDATES (top 15 by |r|)
+========================================================================================================================
+Rank  Feature                                 r_abs_err   AE_Q4   AE_Q1  P(AE4) ratio Stable  
+------------------------------------------------------------------------------------------------------------------------
+1     combined_bp_xfip                           0.0465   3.432   3.161         1.081 STABLE   ***
+2     diff_sp_ra_std                             0.0442   3.614   3.286         1.169 UNSTABLE ***
+3     both_high_csw                             -0.0439   3.261   3.595         0.918 STABLE   ***
+4     combined_wrc_plus                          0.0435   3.552   3.199         1.157 STABLE   ***
+5     mismatch_lineup_k_pct                     -0.0406   3.271   3.426         0.960 UNSTABLE ***
+6     combined_csw_r5                           -0.0353   3.180   3.470         0.915 STABLE   ***
+7     mismatch_sp_ra_std                         0.0349   3.596   3.390         1.085 UNSTABLE ***
+8     combined_lineup_k_pct                      0.0346   3.503   3.288         1.120 STABLE   ***
+9     mismatch_sp_k9_L5                         -0.0327   3.242   3.508         0.860 UNSTABLE ***
+10    mismatch_csw_r5                           -0.0314   3.267   3.546         0.870 UNSTABLE ***
+11    combined_f_strike_pct                     -0.0298   3.253   3.419         0.955 -       
+12    mismatch_velo_trend                       -0.0297   3.304   3.481         0.956 -       
+13    diff_sp_fip_L5                             0.0296   3.529   3.269         1.077 -       
+14    combined_whiff_pct                        -0.0283   3.288   3.442         0.954 -       
+15    mismatch_whiff_r5                         -0.0278   3.253   3.487         0.878 -       
+
+Total Mode 2 flagged: 10
+
+========================================================================================================================
+MODE 3 — TAIL AMPLIFIER CANDIDATES (top 10)
+========================================================================================================================
+Rank  Feature                                 R_ratio  L_ratio Class       Stable  
+------------------------------------------------------------------------------------------------------------------------
+1     both_high_csw                             0.582    1.893 LEFT_TAIL   STABLE  
+2     combined_whiff_pct                        0.738    1.577 LEFT_TAIL   STABLE  
+3     combined_f_strike_pct                     0.746    1.393 LEFT_TAIL   STABLE  
+4     combined_lineup_iso                       0.908    1.333 LEFT_TAIL   STABLE  
+5     offense_vs_defense_gap                    0.765    1.319 LEFT_TAIL   STABLE  
+6     combined_lineup_woba                      0.834    1.309 LEFT_TAIL   STABLE  
+7     combined_lineup_delta                     0.754    1.303 LEFT_TAIL   STABLE  
+8     combined_bp_mismatch                      0.858    1.303 LEFT_TAIL   STABLE  
+
+========================================================================================================================
+INTERACTION CANDIDATES (Step 6)
+========================================================================================================================
+Interaction pool: 14 features
+
+No pairs met criteria (N>=25, |ME|>=1.0, p<0.15)
+
+========================================================================================================================
+LINE BAND BREAKDOWN (Step 7)
+========================================================================================================================
+Line bands: ['high', 'low', 'mid', 'very_high']
+Features to test: 11
+
+Feature                                    r_high      r_low      r_mid r_very_high concentrated   
+-------------------------------------------------------------------------------------------------
+both_high_csw                             -0.1767    -0.1751    -0.1588    -0.1457 NO             
+combined_bp_mismatch                      -0.1260    -0.0508    -0.0816     0.0034 NO             
+offense_vs_defense_gap                    -0.0641    -0.0409    -0.0765    -0.0901 NO             
+combined_lineup_delta                     -0.0370    -0.0696    -0.1066    -0.1004 NO             
+combined_bp_interaction                    0.0571     0.0023     0.0489     0.0435 NO             
+combined_f_strike_pct                     -0.0823    -0.1274    -0.0835    -0.1153 NO             
+combined_fb_velo                          -0.0600    -0.0027    -0.0784    -0.0663 NO             
+combined_high_leverage_available           0.0382     0.0260     0.1143     0.0560 YES            
+combined_lineup_iso                       -0.0337    -0.0313    -0.0609    -0.0775 NO             
+combined_lineup_woba                      -0.0068    -0.0643    -0.0584    -0.1000 NO             
+combined_whiff_pct                        -0.1451    -0.0867    -0.1196    -0.0994 NO             
+
+========================================================================================================================
+HYPOTHESIS SUMMARY
+========================================================================================================================
+
+Feature                                Type  Mechanism                                  Status    Additive  Stable  
+------------------------------------------------------------------------------------------------------------------------
+both_high_csw                          DIR   Pitch quality → suppression signal         NEW       ADDITIVE  STABLE  
+combined_whiff_pct                     DIR   Pitch quality → suppression signal         NEW       ADDITIVE  STABLE  
+combined_f_strike_pct                  DIR   Pitch quality → suppression signal         NEW       ADDITIVE  STABLE  
+combined_lineup_delta                  DIR   Lineup quality → platoon/matchup           NEW       ADDITIVE  STABLE  
+combined_high_leverage_available       DIR   Derived combination signal                 VARIANT   NO        STABLE  
+offense_vs_defense_gap                 DIR   Offense-defense asymmetry → scoring        NEW       ADDITIVE  STABLE  
+combined_bp_mismatch                   DIR   BP quality gap → late-game vulnerability   NEW       NO        STABLE  
+combined_lineup_woba                   DIR   Lineup quality → platoon/matchup           NEW       NO        STABLE  
+combined_lineup_iso                    DIR   Offense quality → run production           NEW       NO        STABLE  
+combined_fb_velo                       DIR   Velocity → stuff quality proxy             NEW       NO        STABLE  
+combined_bp_interaction                DIR   BP quality gap → late-game vulnerability   VARIANT   NO        STABLE  
+combined_bp_xfip                       VAR   SP depth → bullpen exposure variance       VARIANT   ?         STABLE  
+diff_sp_ra_std                         VAR   SP volatility → outcome variance           NEW       ?         UNSTABLE
+combined_wrc_plus                      VAR   Unknown variance mechanism                 VARIANT   ?         STABLE  
+mismatch_lineup_k_pct                  VAR   BP quality spread → variance signal        NEW       ?         UNSTABLE
+combined_csw_r5                        VAR   Unknown variance mechanism                 NEW       ?         STABLE  
+mismatch_sp_ra_std                     VAR   SP volatility → outcome variance           NEW       ?         UNSTABLE
+combined_lineup_k_pct                  VAR   Unknown variance mechanism                 NEW       ?         STABLE  
+mismatch_sp_k9_L5                      VAR   BP quality spread → variance signal        NEW       ?         UNSTABLE
+mismatch_csw_r5                        VAR   BP quality spread → variance signal        NEW       ?         UNSTABLE
+
+========================================================================================================================
+IMPORTANT: Discovery only. All candidates require independent validation.
+========================================================================================================================

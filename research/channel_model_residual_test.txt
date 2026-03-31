@@ -1,0 +1,133 @@
+SCORING CHANNEL MODEL — RESIDUAL TEST
+Run date: 2026-03-23
+Games analyzed: 2457
+Features successfully joined: away_3par_season, away_ch_ft_FTA, away_ch_ft_PFD,
+  away_ch_sb_OPP_PTS_2ND_CHANCE, away_ch_sb_OPP_PTS_FB, away_ch_sb_OPP_PTS_OFF_TOV,
+  away_ch_sb_OPP_PTS_PAINT, away_ch_sb_PTS_2ND_CHANCE, away_ch_sb_PTS_FB,
+  away_ch_sb_PTS_OFF_TOV, away_ch_sb_PTS_PAINT, away_ch_sc_DRIVE_FGA,
+  away_ch_sc_DRIVE_PTS, away_ch_sc_ELBOW_TOUCH_PTS, away_ch_sc_PAINT_TOUCH_PTS,
+  away_ch_tpq_CATCH_SHOOT_FG3A, away_ch_zone_Corner_3_FGA,
+  away_ch_zone_Restricted_Area_FGA, away_ch_zone_Restricted_Area_FG_PCT,
+  home_3par_season, home_ch_ft_FTA, home_ch_ft_PFD, home_ch_sb_OPP_PTS_2ND_CHANCE,
+  home_ch_sb_OPP_PTS_FB, home_ch_sb_OPP_PTS_OFF_TOV, home_ch_sb_OPP_PTS_PAINT,
+  home_ch_sb_PTS_2ND_CHANCE, home_ch_sb_PTS_FB, home_ch_sb_PTS_OFF_TOV,
+  home_ch_sb_PTS_PAINT, home_ch_sc_DRIVE_FGA, home_ch_sc_DRIVE_PTS,
+  home_ch_sc_ELBOW_TOUCH_PTS, home_ch_sc_PAINT_TOUCH_PTS,
+  home_ch_tpq_CATCH_SHOOT_FG3A, home_ch_zone_Corner_3_FGA,
+  home_ch_zone_Restricted_Area_FGA, home_ch_zone_Restricted_Area_FG_PCT,
+  home_FTr_season, away_FTr_season, home_opp_FTr_season, away_opp_FTr_season
+Features unavailable: none
+
+========================================
+MODEL COMPARISON (Step 2)
+========================================
+Model                 |       R² |    CV-R² |      MAE
+----------------------|----------|----------|----------
+A: Pace-family        |  0.00135 | -0.01226 |   14.177
+B: Channel-only       |  0.02475 | -0.03041 |   14.012
+C: Combined           |  0.03053 | -0.04220 |   13.947
+
+Model A top features:
+  away_drtg (-0.397), home_pace_proxy_last10 (+0.330),
+  away_ortg (-0.198), home_ortg (+0.174), combined_pace_proxy (+0.172)
+
+Model B top features:
+  home_FTr_season (-6.008), home_ch_ft_FTA (+5.490),
+  away_ch_sb_PTS_PAINT (+3.272), home_ch_sc_DRIVE_FGA (-2.523),
+  home_ch_sc_DRIVE_PTS (+2.322)
+
+Model C top features:
+  home_FTr_season (-6.602), home_ch_ft_FTA (+6.073),
+  away_ch_sb_PTS_PAINT (+3.274), home_ch_sc_DRIVE_FGA (-2.961),
+  home_ch_sc_DRIVE_PTS (+2.734)
+
+========================================
+CLOSING LINE CORRELATION (Step 3)
+========================================
+Pace model predictions vs close_total: r=0.2762
+Channel model predictions vs close_total: r=0.4170
+Combined model predictions vs close_total: r=0.2218
+Independence confirmed: yes (all < 0.85)
+
+========================================
+CHANNEL VARIABLE CORRELATIONS WITH MARKET ERROR (Step 4)
+========================================
+Rank | Variable                              | Pearson r | Spearman r | Flagged
+-----|---------------------------------------|-----------|-----------|---------
+  1  | home_ch_sc_PAINT_TOUCH_PTS            |    0.0638 |    0.0493 | YES
+  2  | away_ch_sb_OPP_PTS_2ND_CHANCE         |    0.0571 |    0.0657 | YES
+  3  | home_ch_sb_PTS_PAINT                  |    0.0532 |    0.0414 | YES
+  4  | home_ch_sc_ELBOW_TOUCH_PTS            |    0.0511 |    0.0423 | YES
+  5  | away_ch_ft_FTA                        |    0.0505 |    0.0532 | YES
+  6  | away_ch_sb_PTS_PAINT                  |    0.0487 |    0.0480 |
+  7  | home_ch_sb_PTS_FB                     |    0.0454 |    0.0414 |
+  8  | away_ch_sb_PTS_FB                     |    0.0434 |    0.0445 |
+  9  | away_ch_sb_OPP_PTS_FB                 |    0.0401 |    0.0390 |
+ 10  | home_ch_sb_OPP_PTS_2ND_CHANCE         |    0.0385 |    0.0392 |
+ 11  | away_FTr_season                       |    0.0361 |    0.0446 |
+ 12  | away_ch_sb_OPP_PTS_PAINT              |    0.0358 |    0.0393 |
+ 13  | away_ch_sc_DRIVE_PTS                  |    0.0356 |    0.0461 |
+ 14  | away_3par_season                      |   -0.0348 |   -0.0335 |
+ 15  | home_ch_zone_Restricted_Area_FG_PCT   |    0.0347 |    0.0354 |
+ 16  | home_ch_sc_DRIVE_FGA                  |   -0.0328 |   -0.0306 |
+ 17  | home_opp_FTr_season                   |   -0.0306 |   -0.0262 |
+ 18  | away_ch_sc_DRIVE_FGA                  |    0.0303 |    0.0321 |
+ 19  | home_ch_sb_OPP_PTS_PAINT              |    0.0298 |    0.0372 |
+ 20  | away_ch_ft_PFD                        |    0.0263 |    0.0339 |
+ 21  | away_ch_tpq_CATCH_SHOOT_FG3A          |   -0.0249 |   -0.0246 |
+ 22  | home_ch_zone_Restricted_Area_FGA      |    0.0240 |    0.0223 |
+ 23  | away_ch_sb_OPP_PTS_OFF_TOV            |    0.0237 |    0.0167 |
+ 24  | home_ch_sc_DRIVE_PTS                  |   -0.0210 |   -0.0282 |
+ 25  | home_FTr_season                       |   -0.0195 |   -0.0217 |
+ 26  | home_ch_ft_PFD                        |   -0.0185 |   -0.0139 |
+ 27  | away_ch_sb_PTS_2ND_CHANCE             |    0.0179 |    0.0069 |
+ 28  | away_ch_zone_Restricted_Area_FGA      |    0.0168 |    0.0305 |
+ 29  | home_ch_sb_OPP_PTS_FB                 |    0.0157 |    0.0138 |
+ 30  | home_ch_zone_Corner_3_FGA             |   -0.0134 |   -0.0127 |
+ 31  | away_ch_zone_Corner_3_FGA             |    0.0132 |    0.0121 |
+ 32  | home_ch_tpq_CATCH_SHOOT_FG3A          |    0.0090 |    0.0167 |
+ 33  | home_ch_sb_PTS_2ND_CHANCE             |   -0.0083 |   -0.0004 |
+ 34  | away_ch_zone_Restricted_Area_FG_PCT   |    0.0070 |    0.0081 |
+ 35  | away_ch_sc_ELBOW_TOUCH_PTS            |   -0.0049 |   -0.0042 |
+ 36  | away_opp_FTr_season                   |   -0.0046 |   -0.0146 |
+ 37  | away_ch_sc_PAINT_TOUCH_PTS            |    0.0037 |    0.0039 |
+ 38  | home_ch_ft_FTA                        |    0.0033 |   -0.0036 |
+ 39  | home_3par_season                      |   -0.0018 |    0.0092 |
+ 40  | away_ch_sb_PTS_OFF_TOV                |   -0.0018 |    0.0083 |
+ 41  | home_ch_sb_OPP_PTS_OFF_TOV            |   -0.0016 |    0.0020 |
+ 42  | home_ch_sb_PTS_OFF_TOV                |   -0.0007 |   -0.0063 |
+
+========================================
+CHANNEL INTERACTION TEST (Step 5)
+========================================
+Pair                                                 | r with ME | Flagged
+-----------------------------------------------------|-----------|--------
+PAINT_TOUCH_PTS x OPP_PTS_2ND_CHANCE                |    0.0839 | YES
+OPP_PTS_2ND_CHANCE x PTS_PAINT                      |    0.0793 |
+PAINT_TOUCH_PTS x PTS_PAINT                          |    0.0667 |
+PAINT_TOUCH_PTS^2                                    |    0.0660 |
+OPP_PTS_2ND_CHANCE^2                                 |    0.0552 |
+PTS_PAINT^2                                          |    0.0540 |
+
+========================================
+VERDICT
+========================================
+Channel foundation: WEAK
+Model B R² vs Model A R²: 0.025 vs 0.001 (in-sample B wins, CV A wins)
+Model C R² improvement over A: +0.029
+Recommended first channel to build: Paint/interior scoring
+Reasoning: Both pace and channel models have negative CV-R², meaning
+  neither reliably predicts market error out-of-sample at single-feature
+  level. However, 5 individual channel variables exceed |r| > 0.05 and
+  1 interaction exceeds |r| > 0.08, all concentrated in the paint/interior
+  cluster (PAINT_TOUCH_PTS, PTS_PAINT, OPP_PTS_2ND_CHANCE, ELBOW_TOUCH_PTS).
+  The channel model is independent of the closing line (r=0.42). The
+  foundation exists but is weak — channel features explain ~2.5% of
+  market error variance in-sample and overfit on cross-validation with
+  42 features. A focused paint-channel submodel with 4-6 features is
+  the logical next step, not a full multi-channel build.
+
+NOTE: The top interaction (PAINT_TOUCH_PTS x OPP_PTS_2ND_CHANCE, r=0.084)
+was subsequently tested as an independent archetype and CLOSED — the
+correlation was a spurious artifact of Venue OVER game overlap in the
+signal bucket. See: research/nba_validation_paint_interaction.txt

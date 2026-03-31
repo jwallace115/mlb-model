@@ -1,0 +1,205 @@
+NBA INDEPENDENT VALIDATION — AWAY_ORTG_X_HOME_DRTG
+Run date: 2026-03-23
+ORtg/DRtg source: rolling (league-average prior for early-season games)
+
+========================================
+DISTRIBUTION (Step 1)
+========================================
+Total RS games: 3685
+away_ortg_x_home_drtg:
+  min=9244.4 p25=11856.1 p50=12346.8 p75=12816.2 max=14612.6
+  mean=12341.1 std=697.2
+market_error computable: YES (missing: 0)
+
+========================================
+PRIMARY QUARTILE RESULTS (Step 2)
+========================================
+Quartile |   N  |    ME  | HR_over |      p  | mean_AE | std_ME | P(AE>=12)
+---------|------|--------|---------|---------|---------|--------|----------
+Q1       |  922 | +0.76  |   0.518 |  0.1893 |  13.89  | 17.57  |    0.501
+Q2       |  921 | +0.46  |   0.518 |  0.4207 |  13.91  | 17.40  |    0.488
+Q3       |  921 | +0.38  |   0.502 |  0.5342 |  14.36  | 18.32  |    0.503
+Q4       |  921 | +1.19  |   0.504 |  0.0495 |  14.66  | 18.33  |    0.517
+
+Q4 vs Q1 two-sample test: gap=+0.43 pts p=0.6095
+
+By season (Q4):
+Season  |   N | ME    | HR_over
+--------|-----|-------|--------
+2022-23 | 187 | +1.77 |  0.505
+2023-24 | 446 | +1.15 |  0.499
+2024-25 | 288 | +0.87 |  0.512
+
+Seasons opposite Q4 direction: none
+
+Signal gate proximity:
+  ME vs +2.0 threshold: +1.19 (below by 0.81)
+  p vs 0.05 threshold: 0.0495 (passes by 0.0005)
+  Season consistency: 3/3
+
+========================================
+TOP/BOTTOM DECILE AND 5% (Step 3)
+========================================
+Group          |   N  |    ME  | HR_over |      p  | mean_AE
+---------------|------|--------|---------|---------|--------
+Top 10%        |  369 | +0.42  |   0.471 |  0.6592 |  14.75
+Bottom 10%     |  369 | +0.47  |   0.530 |  0.5895 |  13.33
+Top 5%         |  185 | +1.00  |   0.478 |  0.4874 |  15.13
+Bottom 5%      |  185 | +1.39  |   0.533 |  0.2819 |  14.37
+
+Top decile by season:
+Season  |   N | ME    | HR_over
+--------|-----|-------|--------
+2022-23 |  71 | +3.04 |  0.451
+2023-24 | 192 | -0.82 |  0.441
+2024-25 | 106 | +0.92 |  0.538
+
+Bottom decile by season:
+Season  |   N | ME    | HR_over
+--------|-----|-------|--------
+2022-23 | 170 | +0.83 |  0.521
+2023-24 |  65 | +1.82 |  0.587
+2024-25 | 134 | -0.66 |  0.515
+
+========================================
+DUAL-CONDITION FILTER (Step 4)
+========================================
+N: 251
+ME: +2.60
+HR_over: 0.531
+p-value: 0.0328
+mean_AE: 15.33
+
+By season:
+Season  |  N | ME    | HR_over
+--------|----| ------|--------
+2022-23 | 91 | +5.10 |  0.571
+2023-24 | 74 | -0.04 |  0.435
+2024-25 | 86 | +2.23 |  0.565
+
+========================================
+FOUR-WAY DIRECTIONAL COMPARISON (Step 5)
+========================================
+Condition                              |   N  |    ME  | HR_over |      p
+---------------------------------------|------|--------|---------|--------
+Strong away O + Weak home D            |  251 | +2.60  |   0.531 |  0.0328
+Strong away O + Strong home D          |  228 | -0.22  |   0.511 |  0.8522
+Weak away O + Weak home D              |  227 | +0.16  |   0.520 |  0.8964
+Weak away O + Strong home D            |  258 | +1.44  |   0.531 |  0.1806
+
+========================================
+LINE BAND CHECK — Q4 (Step 6)
+========================================
+Band       |   N |    ME  | HR_over
+-----------|-----|--------|--------
+< 220      |  98 | +1.64  |  0.536
+220-230    | 311 | +0.37  |  0.507
+230-240    | 372 | +1.81  |  0.497
+240-250    | 129 | +1.55  |  0.504
+>= 250     |  11 | -4.95  |  0.400
+Concentration flag: no
+
+========================================
+OT EXCLUSION CHECK (Step 7)
+========================================
+Subset          |   N  |    ME  | HR_over |      p
+----------------|------|--------|---------|--------
+Q4 all          |  921 | +1.19  |   0.504 |  0.0495
+Q4 no OT        |  874 | -0.13  |   0.478 |  0.8205
+
+OT rate: Q4=5.1% Q1=4.9%
+
+========================================
+TEAM CONCENTRATION (Step 8)
+========================================
+Top 5 home teams in Q4:
+Team |  N  |    %
+-----|-----|------
+POR  |  66 |  7.2%
+WAS  |  62 |  6.7%
+SAS  |  59 |  6.4%
+DET  |  56 |  6.1%
+SAC  |  53 |  5.8%
+
+Top 5 away teams in Q4:
+Team |  N  |    %
+-----|-----|------
+BOS  |  75 |  8.1%
+CLE  |  53 |  5.8%
+NYK  |  52 |  5.6%
+GSW  |  48 |  5.2%
+OKC  |  47 |  5.1%
+
+Single-team flag (>15%): no
+Top-3 concentration flag (>50%): home 20.3% away 19.5% — no
+
+========================================
+VENUE INDEPENDENCE (Step 9A)
+========================================
+Overlap: 11.0% of Q4 games are Venue signal games
+Non-Venue Q4: N=820 ME=+0.34 HR=0.485 p=0.5961
+Venue Q4:     N=101 ME=+8.10 HR=0.667 p=0.0000
+
+========================================
+REFEREE INDEPENDENCE (Step 9B, ref-covered only)
+========================================
+Q4 ref-covered N: 568
+
+crew_high distribution:
+crew_high | Q4 %  | Q1 %
+----------|-------|------
+0         | 44.7% | 43.1%
+1         | 42.3% | 41.2%
+2         | 12.0% | 13.0%
+3         |  1.1% |  2.7%
+
+Q4 after removing crew_high>=2: N=494 ME=+1.50 HR=0.531 p=0.0713
+
+========================================
+SEASON STABILITY (Step 10)
+========================================
+Q4:
+Season  |   N |    ME  | HR_over |      p
+--------|-----|--------|---------|--------
+2022-23 | 187 | +1.77  |   0.505 |  0.2235
+2023-24 | 446 | +1.15  |   0.499 |  0.1712
+2024-25 | 288 | +0.87  |   0.512 |  0.4213
+Consistency: 3/3
+
+Dual-condition:
+Season  |  N |    ME  | HR_over |      p
+--------|----| ------|---------|--------
+2022-23 | 91 | +5.10 |   0.571 |  0.0231
+2023-24 | 74 | -0.04 |   0.435 |  0.9834
+2024-25 | 86 | +2.23 |   0.565 |  0.2807
+Consistency: 2/3
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+Gate                       | Threshold      | Result          | Pass/Fail
+---------------------------|----------------|-----------------|----------
+Mean error                 | >= +2.0 pts    | +1.19           | Fail
+Significance               | p < 0.05       | 0.0495          | Pass
+N per season               | >= 20          | 187             | Pass
+Season consistency (min)   | >= 2/3         | 3/3             | Pass
+Season consistency (ideal) | 3/3            | 3/3             | Pass
+Venue independence         | ME survives    | +0.34 (p=0.60)  | Fail
+Referee independence       | ME survives    | +1.50 (p=0.07)  | Pass
+Team concentration         | No team > 15%  | clean           | Pass
+Mechanism plausible        | judgment       | yes             | Pass
+Overall: FAIL
+
+========================================
+FINAL CLASSIFICATION
+========================================
+Classification: CLOSED
+Reasoning: The Q4 ME of +1.19 barely reaches p=0.05 but fails the +2.0
+ME threshold. Critically, removing OT games collapses the signal entirely
+(ME=-0.13, p=0.82) — the entire +1.19 is OT-driven, not matchup-driven.
+Furthermore, removing Venue overlap games drops Non-Venue Q4 to ME=+0.34
+(p=0.60), meaning the apparent Q4 signal is almost entirely explained by
+the Venue OVER signal already in the pipeline. The top decile is incoherent
+(ME=+0.42, HR=0.471, 2023-24 negative). The dual-condition filter shows
+a more interesting ME=+2.60 but flips negative in 2023-24. No independent
+exploitable content exists beyond what Venue already captures.

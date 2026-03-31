@@ -1,0 +1,129 @@
+
+PHASE 7 — PROXY vs REAL MARKET RESULTS
+============================================================================
+  Generated : 2026-03-15 10:45 UTC
+
+  *** PROXY results: decision_line = 8.86 (league mean) — APPROXIMATE UPPER BOUND ***
+  *** REAL results:  decision_line = closing market line — HONEST MARKET BACKTEST  ***
+
+  NOTE: REAL results use closing-only lines (decision = close).
+        CLV = 0 for all historical rows (no opening line available).
+        True CLV requires real opening lines — available from 2026 forward.
+
+1. RECORD BY PROBABILITY THRESHOLD — 2024 Validation
+============================================================================
+  Proxy n=2,427 (all games)   Real n=2,427 (games with real closing line)
+    P Thresh   Prxy N  Prxy Win%  Prxy ROI   Real N  Real Win%  Real ROI
+  ────────────────────────────────────────────────────────────────
+        0.50    2,387      56.2%     +7.3%    2,388      52.2%     +3.3%
+        0.52    1,931      58.2%    +11.1%    1,990      52.0%     +3.2%
+        0.53    1,720      58.1%    +11.0%    1,753      52.4%     +4.1%
+        0.55    1,289      59.9%    +14.3%    1,319      52.3%     +3.9%
+        0.58      741      63.8%    +21.9%      765      53.1%     +5.0%
+        0.60      503      65.4%    +24.9%      496      55.0%     +8.8%
+
+2. EDGE BUCKET PERFORMANCE — 2024 Validation
+============================================================================
+  CLV = 0 for all real rows (closing-only backtest — no opening line)
+      Edge   Prxy N  Prxy Win%  Prxy ROI   Real N  Real Win%  Real ROI    Avg CLV
+  ───────────────────────────────────────────────────────────────────────
+   0.0–0.5    1,039      51.6%     -1.5%    1,007      50.7%     +0.3%     +0.000
+   0.5–1.0      785      55.9%     +6.8%      810      51.7%     +2.9%     +0.000
+   1.0–1.5      368      63.6%    +21.4%      418      52.6%     +3.4%     +0.000
+   1.5–2.0      125      64.8%    +23.7%      154      58.4%    +18.5%     +0.000
+      2.0+      110      66.4%    +26.7%       38      47.4%     -7.1%     +0.000
+
+3. ROI SIMULATION @ -110 (edge ≥ 1.0, P ≥ 0.55) — 2024 Validation
+============================================================================
+
+  PROXY (approx upper bound)
+────────────────────────────────────────────────────────────────────────────
+  Bets    : 603
+  Win%    : 64.3%  (388W / 215L / 0P)
+  Units   : +137.73
+  ROI     : +22.84%
+
+  REAL  (market-honest)
+────────────────────────────────────────────────────────────────────────────
+  Bets    : 610
+  Win%    : 53.8%  (328W / 260L / 22P)
+  Units   : +38.18
+  ROI     : +6.49%
+
+4. CONFIDENCE TIER SUMMARY — 2024 Validation
+============================================================================
+          Tier   Prxy N  Prxy Win%  Prxy ROI   Real N  Real Win%  Real ROI
+  ────────────────────────────────────────────────────────────────
+        STRONG      235      65.5%    +25.1%      192      56.2%    +13.3%
+           BET      368      63.6%    +21.4%      418      52.6%     +3.4%
+     WATCHLIST      784      55.9%     +6.7%      809      51.8%     +3.1%
+       NO_PLAY    1,040      51.6%     -1.4%    1,008      50.7%     +0.2%
+
+5. COMPRESSION RATIO — 2024 Validation
+============================================================================
+  Proxy win% (all games, vs 8.86)   : 56.16%
+  Real  win% (matched, vs close line): 51.83%
+  Delta                              : -4.33 pp
+
+  Edge ≥ 1.0 & P ≥ 0.55 subset:
+    Proxy  : 64.34% win, ROI +22.84%
+    Real   : 53.77% win, ROI +2.65%
+
+1. RECORD BY PROBABILITY THRESHOLD — 2025 OOS
+============================================================================
+  Proxy n=2,428 (all games)   Real n=2,428 (games with real closing line)
+    P Thresh   Prxy N  Prxy Win%  Prxy ROI   Real N  Real Win%  Real ROI
+  ────────────────────────────────────────────────────────────────
+        0.50    2,379      54.2%     +3.5%    2,397      47.9%     -4.5%
+        0.52    1,958      55.4%     +5.8%    2,034      49.2%     -2.0%
+        0.53    1,735      56.3%     +7.5%    1,792      49.4%     -1.4%
+        0.55    1,316      58.5%    +11.7%    1,363      50.6%     +1.3%
+        0.58      772      60.9%    +16.2%      817      50.6%     +0.3%
+        0.60      507      62.1%    +18.6%      544      48.7%     -4.4%
+
+2. EDGE BUCKET PERFORMANCE — 2025 OOS
+============================================================================
+  CLV = 0 for all real rows (closing-only backtest — no opening line)
+      Edge   Prxy N  Prxy Win%  Prxy ROI   Real N  Real Win%  Real ROI    Avg CLV
+  ───────────────────────────────────────────────────────────────────────
+   0.0–0.5    1,038      49.6%     -5.3%      977      44.5%    -11.8%     +0.000
+   0.5–1.0      763      53.2%     +1.6%      788      49.6%     +0.5%     +0.000
+   1.0–1.5      398      60.8%    +16.1%      412      51.5%     +1.4%     +0.000
+   1.5–2.0      141      63.1%    +20.5%      186      46.2%     -9.3%     +0.000
+      2.0+       88      73.9%    +41.0%       65      56.9%    +12.1%     +0.000
+
+3. ROI SIMULATION @ -110 (edge ≥ 1.0, P ≥ 0.55) — 2025 OOS
+============================================================================
+
+  PROXY (approx upper bound)
+────────────────────────────────────────────────────────────────────────────
+  Bets    : 627
+  Win%    : 63.2%  (396W / 231L / 0P)
+  Units   : +129.00
+  ROI     : +20.57%
+
+  REAL  (market-honest)
+────────────────────────────────────────────────────────────────────────────
+  Bets    : 663
+  Win%    : 50.5%  (335W / 308L / 20P)
+  Units   : -3.45
+  ROI     : -0.54%
+
+4. CONFIDENCE TIER SUMMARY — 2025 OOS
+============================================================================
+          Tier   Prxy N  Prxy Win%  Prxy ROI   Real N  Real Win%  Real ROI
+  ────────────────────────────────────────────────────────────────
+        STRONG      229      67.2%    +28.4%      251      49.0%     -3.8%
+           BET      398      60.8%    +16.1%      412      51.5%     +1.4%
+     WATCHLIST      763      53.2%     +1.6%      788      49.6%     +0.5%
+       NO_PLAY    1,038      49.6%     -5.3%      977      44.5%    -11.8%
+
+5. COMPRESSION RATIO — 2025 OOS
+============================================================================
+  Proxy win% (all games, vs 8.86)   : 54.24%
+  Real  win% (matched, vs close line): 47.82%
+  Delta                              : -6.43 pp
+
+  Edge ≥ 1.0 & P ≥ 0.55 subset:
+    Proxy  : 63.16% win, ROI +20.57%
+    Real   : 50.53% win, ROI -3.54%

@@ -1,0 +1,79 @@
+[
+  {
+    "signal_id": "FA01A",
+    "registered_date": "2026-03-28",
+    "condition": "away_games_last_5 >= 3 AND home_games_last_4 <= 1",
+    "fatigued_side": "away",
+    "direction": "UNDER",
+    "threshold_frozen": true,
+    "train_seasons": ["2022-23", "2023-24"],
+    "validation_season": "2024-25",
+    "holdout_season": "2025-26"
+  },
+  {
+    "signal_id": "FA01H",
+    "registered_date": "2026-03-28",
+    "condition": "home_games_last_5 >= 3 AND away_games_last_4 <= 1",
+    "fatigued_side": "home",
+    "direction": "UNDER",
+    "threshold_frozen": true,
+    "train_seasons": ["2022-23", "2023-24"],
+    "validation_season": "2024-25",
+    "holdout_season": "2025-26"
+  },
+  {
+    "signal_id": "FA02",
+    "registered_date": "2026-03-28",
+    "condition": "away_road_trip_length >= 5",
+    "fatigued_side": "away",
+    "direction": "UNDER",
+    "threshold_frozen": true,
+    "train_seasons": ["2022-23", "2023-24"],
+    "validation_season": "2024-25",
+    "holdout_season": "2025-26"
+  },
+  {
+    "signal_id": "FA03A",
+    "registered_date": "2026-03-28",
+    "condition": "away_prev_altitude_game == True AND away_hours_since_prev <= 48",
+    "fatigued_side": "away",
+    "direction": "UNDER",
+    "threshold_frozen": true,
+    "train_seasons": ["2022-23", "2023-24"],
+    "validation_season": "2024-25",
+    "holdout_season": "2025-26"
+  },
+  {
+    "signal_id": "FA03H",
+    "registered_date": "2026-03-28",
+    "condition": "home_prev_altitude_game == True AND home_hours_since_prev <= 48",
+    "fatigued_side": "home",
+    "direction": "UNDER",
+    "threshold_frozen": true,
+    "train_seasons": ["2022-23", "2023-24"],
+    "validation_season": "2024-25",
+    "holdout_season": "2025-26"
+  },
+  {
+    "signal_id": "FA04A",
+    "registered_date": "2026-03-28",
+    "condition": "away_cross_country == True AND away_hours_since_prev <= 48",
+    "fatigued_side": "away",
+    "direction": "UNDER",
+    "threshold_frozen": true,
+    "train_seasons": ["2022-23", "2023-24"],
+    "validation_season": "2024-25",
+    "holdout_season": "2025-26"
+  },
+  {
+    "signal_id": "FA04H",
+    "registered_date": "2026-03-28",
+    "condition": "home_cross_country == True AND home_hours_since_prev <= 48",
+    "fatigued_side": "home",
+    "direction": "UNDER",
+    "threshold_frozen": true,
+    "train_seasons": ["2022-23", "2023-24"],
+    "validation_season": "2024-25",
+    "holdout_season": "2025-26"
+  }
+]

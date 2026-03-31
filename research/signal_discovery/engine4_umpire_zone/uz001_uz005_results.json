@@ -1,0 +1,212 @@
+[
+  {
+    "signal_id": "UZ001",
+    "direction": "OVER",
+    "train": {
+      "N": 1527,
+      "rate": 0.5435,
+      "roi": 3.77
+    },
+    "val": {
+      "N": 593,
+      "rate": 0.5481,
+      "roi": 4.63
+    },
+    "perm_pctile": 100.0,
+    "perm_gate": 85,
+    "year_stable": true,
+    "verdict": "PASS",
+    "stability": [
+      {
+        "N": 502,
+        "rate": 0.5797,
+        "roi": 10.67
+      },
+      {
+        "N": 581,
+        "rate": 0.5146,
+        "roi": -1.75
+      },
+      {
+        "N": 593,
+        "rate": 0.5481,
+        "roi": 4.63
+      }
+    ]
+  },
+  {
+    "signal_id": "UZ002",
+    "direction": "UNDER",
+    "train": {
+      "N": 1544,
+      "rate": 0.5926,
+      "roi": 13.14
+    },
+    "val": {
+      "N": 521,
+      "rate": 0.572,
+      "roi": 9.2
+    },
+    "perm_pctile": 100.0,
+    "perm_gate": 85,
+    "year_stable": true,
+    "verdict": "PASS",
+    "stability": [
+      {
+        "N": 475,
+        "rate": 0.6042,
+        "roi": 15.35
+      },
+      {
+        "N": 589,
+        "rate": 0.5535,
+        "roi": 5.66
+      },
+      {
+        "N": 521,
+        "rate": 0.572,
+        "roi": 9.2
+      }
+    ]
+  },
+  {
+    "signal_id": "UZ003A",
+    "direction": "OVER",
+    "train": {
+      "N": 545,
+      "rate": 0.4954,
+      "roi": -5.42
+    },
+    "val": {
+      "N": 203,
+      "rate": 0.4483,
+      "roi": -14.42
+    },
+    "perm_pctile": 45.8,
+    "perm_gate": 85,
+    "year_stable": false,
+    "verdict": "FAIL (perm=45.8<85; val=0.4483; yr=1/3)",
+    "stability": [
+      {
+        "N": 178,
+        "rate": 0.5112,
+        "roi": -2.4
+      },
+      {
+        "N": 222,
+        "rate": 0.473,
+        "roi": -9.71
+      },
+      {
+        "N": 203,
+        "rate": 0.4483,
+        "roi": -14.42
+      }
+    ]
+  },
+  {
+    "signal_id": "UZ003B",
+    "direction": "UNDER",
+    "train": {
+      "N": 533,
+      "rate": 0.5235,
+      "roi": -0.07
+    },
+    "val": {
+      "N": 217,
+      "rate": 0.4424,
+      "roi": -15.54
+    },
+    "perm_pctile": 80.0,
+    "perm_gate": 85,
+    "year_stable": false,
+    "verdict": "FAIL (perm=80.0<85; val=0.4424; yr=1/3)",
+    "stability": [
+      {
+        "N": 158,
+        "rate": 0.4747,
+        "roi": -9.38
+      },
+      {
+        "N": 201,
+        "rate": 0.5423,
+        "roi": 3.53
+      },
+      {
+        "N": 217,
+        "rate": 0.4424,
+        "roi": -15.54
+      }
+    ]
+  },
+  {
+    "signal_id": "UZ004",
+    "direction": "OVER",
+    "train": {
+      "N": 981,
+      "rate": 0.5708,
+      "roi": 8.98
+    },
+    "val": {
+      "N": 378,
+      "rate": 0.582,
+      "roi": 11.11
+    },
+    "perm_pctile": 100.0,
+    "perm_gate": 95,
+    "year_stable": true,
+    "verdict": "PASS",
+    "stability": [
+      {
+        "N": 305,
+        "rate": 0.6262,
+        "roi": 19.55
+      },
+      {
+        "N": 378,
+        "rate": 0.5476,
+        "roi": 4.55
+      },
+      {
+        "N": 378,
+        "rate": 0.582,
+        "roi": 11.11
+      }
+    ]
+  },
+  {
+    "signal_id": "UZ005",
+    "direction": "UNDER",
+    "train": {
+      "N": 1002,
+      "rate": 0.6108,
+      "roi": 16.6
+    },
+    "val": {
+      "N": 311,
+      "rate": 0.6077,
+      "roi": 16.02
+    },
+    "perm_pctile": 100.0,
+    "perm_gate": 95,
+    "year_stable": true,
+    "verdict": "PASS",
+    "stability": [
+      {
+        "N": 303,
+        "rate": 0.6139,
+        "roi": 17.19
+      },
+      {
+        "N": 380,
+        "rate": 0.5789,
+        "roi": 10.53
+      },
+      {
+        "N": 311,
+        "rate": 0.6077,
+        "roi": 16.02
+      }
+    ]
+  }
+]

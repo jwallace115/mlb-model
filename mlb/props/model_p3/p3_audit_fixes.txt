@@ -1,0 +1,143 @@
+======================================================================
+MLB PROPS P3 — FIXES + RERUN
+======================================================================
+
+
+
+FIX 2 — Devig verification...
+  Plays with valid consensus odds (both sides): 507,422/599,357 (84.7%)
+
+  Sample devigged probabilities:
+  player                ov_odds  un_odds  imp_ov  imp_un
+  Christian Walker         -175      131  59.5%  40.5%
+  Christian Walker          440     -670  17.5%  82.5%
+  Christian Walker          159     -221  35.9%  64.1%
+  Christian Walker          142     -201  38.2%  61.8%
+  Manny Machado             190     -262  32.3%  67.7%
+  Manny Machado             400     -625  18.8%  81.2%
+  Manny Machado             120     -159  42.5%  57.5%
+  Manny Machado             100     -135  46.5%  53.5%
+  Joc Pederson             -170      130  59.1%  40.9%
+  Joc Pederson              370     -550  20.1%  79.9%
+
+Building projections...
+  K projections: 19,430
+  Hitter projections: 174,870
+
+FIX 3 VALIDATION — PA accuracy:
+  Projected PA avg: 3.73
+  Actual PA avg:    3.72
+  Delta:            +0.012
+  Correlation:      0.2592
+
+Joining projections to market...
+  K: 6,747, Hits: 88,367, TB: 88,651
+
+Computing distributions and edges...
+  Computing TB distributions...
+
+  Total plays: 183,765
+  With valid odds: 164,638 (89.6%)
+  With outcomes: 183,765
+
+======================================================================
+SECTION 1 — CORRECTED P3 RESULTS
+======================================================================
+
+VALIDATION (2024):
+  Total plays (valid odds): 59,368
+
+  BY PROP TYPE:
+  Type          N    Hit%      ROI  AvgEdge
+  ----------------------------------------
+  K          2720   49.2%    -6.0%  +14.1%
+  HITS      28277   54.5%    +4.0%   +9.7%
+  TB        28371   51.8%    -1.2%  +11.9%
+
+  BY DIRECTION:
+  OVER: N=34,396, hit=53.4%, ROI=+1.9%
+  UNDER: N=24,972, hit=52.4%, ROI=-0.0%
+
+  BY PROP TYPE × DIRECTION:
+  HITS OVER: N=17,716, hit=57.9%, ROI=+10.5%
+  HITS UNDER: N=10,561, hit=48.7%, ROI=-7.0%
+  TB OVER: N=15,242, hit=48.6%, ROI=-7.1%
+  TB UNDER: N=13,129, hit=55.4%, ROI=+5.8%
+  K OVER: N=1,438, hit=47.7%, ROI=-8.9%
+  K UNDER: N=1,282, hit=50.9%, ROI=-2.8%
+
+  BY EDGE BUCKET:
+  Bucket        N    Hit%      ROI
+  0-2%       7818   51.1%    -2.4%
+  2-5%      11370   51.8%    -1.1%
+  5%+       40165   53.6%    +2.4%
+
+  PROBABILITY COMPARISON:
+  Type      model_p   impl_p     edge
+  HITS       62.7%   53.0%   +9.7%
+  TB         62.0%   50.1%  +11.9%
+  K          63.1%   49.0%  +14.1%
+
+OOS (2025):
+  Total plays (valid odds): 59,064
+
+  BY PROP TYPE:
+  Type          N    Hit%      ROI  AvgEdge
+  ----------------------------------------
+  K          2589   48.9%    -6.6%  +14.0%
+  HITS      28083   54.7%    +4.4%   +9.7%
+  TB        28392   51.4%    -1.8%  +11.9%
+
+  BY DIRECTION:
+  OVER: N=35,962, hit=53.9%, ROI=+2.8%
+  UNDER: N=23,102, hit=51.3%, ROI=-2.1%
+
+  BY PROP TYPE × DIRECTION:
+  HITS OVER: N=18,686, hit=57.7%, ROI=+10.1%
+  HITS UNDER: N=9,397, hit=48.7%, ROI=-7.1%
+  TB OVER: N=15,869, hit=49.8%, ROI=-5.0%
+  TB UNDER: N=12,523, hit=53.5%, ROI=+2.2%
+  K OVER: N=1,407, hit=49.3%, ROI=-6.0%
+  K UNDER: N=1,182, hit=48.5%, ROI=-7.5%
+
+  BY EDGE BUCKET:
+  Bucket        N    Hit%      ROI
+  0-2%       7739   50.8%    -3.1%
+  2-5%      11221   51.7%    -1.4%
+  5%+       40090   53.6%    +2.3%
+
+  PROBABILITY COMPARISON:
+  Type      model_p   impl_p     edge
+  HITS       63.5%   53.8%   +9.7%
+  TB         62.1%   50.3%  +11.9%
+  K          62.6%   48.6%  +14.0%
+
+======================================================================
+SECTION 2 — PRODUCTION RECOMMENDATION
+======================================================================
+
+  K: NOT READY (N=2720, ROI=-6.0%)
+  HITS: READY FOR SHADOW (N=28277, ROI=+4.0%)
+  TB: NOT READY (N=28371, ROI=-1.2%)
+
+======================================================================
+SECTION 3 — PATTERN OBSERVATIONS
+======================================================================
+
+1. Edge monotonicity with corrected devig:
+   HITS: 0-2%=-1.3%, 2-5%=+0.9%, 5%+=+6.1%
+   TB: 0-2%=-3.5%, 2-5%=-3.4%, 5%+=-0.1%
+   K: 0-2%=-5.3%, 2-5%=-0.2%, 5%+=-7.1%
+
+2. UNDER asymmetry persistence:
+   OVER: N=34,396, ROI=+1.9%
+   UNDER: N=24,972, ROI=-0.0%
+
+3. True edge magnitude (corrected):
+   HITS: avg edge = +9.7%
+   TB: avg edge = +11.9%
+
+4. Highest-value P4 refinement:
+   - Opponent K% adjustment for pitcher Ks (currently not competitive)
+   - Park factor adjustment for TB (outdoor vs dome, altitude)
+   - Game total context (high-total games → more PA, more opportunities)

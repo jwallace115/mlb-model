@@ -1,0 +1,121 @@
+=================================================================
+NBA PROPS PHASE P3 — BASELINE MODEL BUILD
+=================================================================
+
+
+Odds coverage: 98.1%
+
+
+Joining projections to market...
+  Joined: 114,522 rows (from 152,998 with odds)
+
+Computing distributions and edges...
+  Total plays: 112,965
+  With outcomes: 77,235
+
+=================================================================
+SECTION — VALIDATION (2024-25)
+=================================================================
+
+BY PROP TYPE:
+  Type            N    Hit%      ROI  AvgEdge
+  ------------------------------------------
+  POINTS       8572   50.4%    -3.7%  +13.0%
+  REBOUNDS     5726   51.4%    -1.8%  +12.8%
+  ASSISTS      4177   51.7%    -1.3%  +12.2%
+  THREES       9000   51.1%    -2.4%  +10.6%
+  TOTAL       27475   51.1%    -2.5%  +12.1%
+
+BY DIRECTION:
+  OVER: N=13,866, hit=49.7%, ROI=-5.2%
+  UNDER: N=13,609, hit=52.4%, ROI=+0.1%
+
+BY PROP × DIRECTION:
+  POINTS OVER: N=4,267, hit=49.9%, ROI=-4.7%
+  POINTS UNDER: N=4,305, hit=50.9%, ROI=-2.8%
+  REBOUNDS OVER: N=3,044, hit=49.9%, ROI=-4.8%
+  REBOUNDS UNDER: N=2,682, hit=53.2%, ROI=+1.6%
+  ASSISTS OVER: N=2,472, hit=50.6%, ROI=-3.5%
+  ASSISTS UNDER: N=1,705, hit=53.3%, ROI=+1.8%
+  THREES OVER: N=4,083, hit=48.7%, ROI=-7.0%
+  THREES UNDER: N=4,917, hit=53.1%, ROI=+1.3%
+
+BY EDGE BUCKET:
+  Bucket        N    Hit%      ROI
+  ------------------------------
+  0-2%       3830   50.7%    -3.1%
+  2-5%       5187   50.6%    -3.3%
+  5%+       18458   51.2%    -2.2%
+
+CALIBRATION (model P(over) vs actual over rate):
+  Bucket          N   Model  Actual  Implied   Delta
+  ------------------------------------------------
+  <45%        12906  28.2%  46.2%   47.1% +18.0% ⚠
+  45-50%       2314  47.7%  45.8%   47.4%  -1.9%
+  50-55%       3525  52.5%  49.5%   49.6%  -3.0%
+  55-60%       3391  57.4%  50.6%   51.1%  -6.8%
+  60-65%       2454  62.3%  52.1%   52.5% -10.2% ⚠
+  65%+         2885  71.0%  55.5%   54.3% -15.5% ⚠
+
+SUMMARY METRICS:
+  Avg model_prob (lean dir): 60.5%
+  Avg implied_prob:          48.4%
+  Avg edge:                  +12.1%
+
+=================================================================
+SECTION — OOS (2025-26)
+=================================================================
+
+BY PROP TYPE:
+  Type            N    Hit%      ROI  AvgEdge
+  ------------------------------------------
+  POINTS       8800   50.1%    -4.4%  +13.0%
+  REBOUNDS     5639   49.8%    -4.8%  +12.5%
+  ASSISTS      3688   50.0%    -4.5%  +12.8%
+  THREES       8713   51.1%    -2.5%  +11.0%
+  TOTAL       26840   50.3%    -3.9%  +12.2%
+
+BY DIRECTION:
+  OVER: N=13,357, hit=47.7%, ROI=-9.0%
+  UNDER: N=13,483, hit=53.0%, ROI=+1.2%
+
+BY PROP × DIRECTION:
+  POINTS OVER: N=4,419, hit=49.2%, ROI=-6.1%
+  POINTS UNDER: N=4,381, hit=51.0%, ROI=-2.6%
+  REBOUNDS OVER: N=3,042, hit=47.4%, ROI=-9.5%
+  REBOUNDS UNDER: N=2,597, hit=52.7%, ROI=+0.6%
+  ASSISTS OVER: N=2,056, hit=47.8%, ROI=-8.8%
+  ASSISTS UNDER: N=1,632, hit=52.8%, ROI=+0.8%
+  THREES OVER: N=3,840, hit=46.1%, ROI=-12.0%
+  THREES UNDER: N=4,873, hit=55.0%, ROI=+4.9%
+
+BY EDGE BUCKET:
+  Bucket        N    Hit%      ROI
+  ------------------------------
+  0-2%       3681   48.4%    -7.6%
+  2-5%       5020   49.7%    -5.2%
+  5%+       18139   50.9%    -2.8%
+
+CALIBRATION (model P(over) vs actual over rate):
+  Bucket          N   Model  Actual  Implied   Delta
+  ------------------------------------------------
+  <45%        13066  27.9%  45.7%   47.1% +17.8% ⚠
+  45-50%       2286  47.7%  44.8%   46.8%  -2.9%
+  50-55%       3332  52.6%  47.5%   48.8%  -5.1%
+  55-60%       3172  57.4%  49.5%   50.5%  -8.0%
+  60-65%       2334  62.3%  50.1%   51.7% -12.2% ⚠
+  65%+         2650  71.1%  52.5%   53.0% -18.5% ⚠
+
+SUMMARY METRICS:
+  Avg model_prob (lean dir): 61.0%
+  Avg implied_prob:          48.8%
+  Avg edge:                  +12.2%
+
+=================================================================
+PRODUCTION RECOMMENDATION
+=================================================================
+
+  POINTS: NOT READY (N=8572, ROI=-3.7%)
+  REBOUNDS: NOT READY (N=5726, ROI=-1.8%)
+  ASSISTS: NOT READY (N=4177, ROI=-1.3%)
+  THREES: NOT READY (N=9000, ROI=-2.4%)

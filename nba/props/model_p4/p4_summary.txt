@@ -1,0 +1,165 @@
+=================================================================
+NBA PROPS PHASE P4 — DISTRIBUTION FIX + MINUTES SIMULATION
+=================================================================
+
+Player games: 100,713
+Regime split: {'NORMAL': 82850, 'BLOWOUT': 17863}
+
+Odds coverage: 98.1%
+
+Building rolling features + minutes distributions...
+  Rolling features computed for 867 players
+Building minutes distributions by regime...
+Joining to market view...
+  Joined: 114,522 rows
+  Minutes history: 867 players
+
+Running simulations (10K per play)...
+  10,000 plays processed...
+  20,000 plays processed...
+  30,000 plays processed...
+  40,000 plays processed...
+  50,000 plays processed...
+  60,000 plays processed...
+  70,000 plays processed...
+  80,000 plays processed...
+  90,000 plays processed...
+  100,000 plays processed...
+
+  Total plays: 108,369
+  With outcomes: 105,996
+
+=================================================================
+SECTION 0 — CALIBRATION RESULTS
+=================================================================
+
+  POINTS:
+  Bucket            N   Model  Actual  Implied   Delta
+  --------------------------------------------------
+  <35%           2603  27.1%  48.3%   48.8% +21.2% ⚠
+  35-45%         2825  40.2%  48.5%   49.9%  +8.3%
+  45-55%         2612  49.8%  49.3%   50.0%  -0.4%
+  55-65%         1501  59.3%  51.7%   50.7%  -7.6%
+  65-75%          389  68.8%  54.5%   51.3% -14.3% ⚠
+  75%+             82  80.6%  56.1%   53.1% -24.5% ⚠
+
+  REBOUNDS:
+  Bucket            N   Model  Actual  Implied   Delta
+  --------------------------------------------------
+  <35%           2193  28.1%  43.6%   47.0% +15.6% ⚠
+  35-45%         3314  40.2%  47.0%   48.6%  +6.7%
+  45-55%         2905  49.5%  49.8%   50.5%  +0.4%
+  55-65%         1221  59.1%  51.9%   52.1%  -7.2%
+  65-75%          314  68.6%  51.6%   53.6% -17.0% ⚠
+  75%+             22  77.7%  59.1%   56.9% -18.6% ⚠
+
+  ASSISTS:
+  Bucket            N   Model  Actual  Implied   Delta
+  --------------------------------------------------
+  <35%           1710  27.9%  46.3%   45.8% +18.3% ⚠
+  35-45%         3083  40.2%  49.8%   47.9%  +9.6%
+  45-55%         2365  49.4%  48.8%   51.0%  -0.7%
+  55-65%          966  59.1%  55.2%   53.3%  -3.9%
+  65-75%          276  68.5%  57.2%   56.2% -11.3% ⚠
+  75%+             32  79.7%  75.0%   56.4%  -4.7%
+
+  THREES:
+  Bucket            N   Model  Actual  Implied   Delta
+  --------------------------------------------------
+  <35%           2403  23.8%  40.5%   42.3% +16.8% ⚠
+  35-45%         1717  40.2%  45.1%   46.5%  +4.9%
+  45-55%         1769  50.0%  48.4%   49.5%  -1.6%
+  55-65%         1582  59.9%  52.8%   52.1%  -7.0%
+  65-75%         1073  69.4%  55.4%   55.2% -14.0% ⚠
+  75%+            436  80.3%  58.7%   58.4% -21.5% ⚠
+
+  Brier score P4: 0.2620
+  Brier score P3: 0.2692
+  Improvement: +0.0072 (better)
+
+  Calibration verdict: FAIL
+
+=================================================================
+SECTION — VALIDATION (2024-25)
+=================================================================
+
+BY PROP TYPE:
+  Type            N    Hit%      ROI  AvgEdge
+  ------------------------------------------
+  POINTS      10011   51.0%    -2.6%  +12.7%
+  REBOUNDS     9969   51.4%    -1.8%  +11.0%
+  ASSISTS      8432   49.3%    -5.9%  +10.3%
+  THREES       8980   52.8%    +0.8%  +12.5%
+  TOTAL       37392   51.2%    -2.3%  +11.7%
+
+BY DIRECTION:
+  OVER: N=12,675, hit=49.8%, ROI=-5.0%
+  UNDER: N=24,717, hit=51.9%, ROI=-1.0%
+
+BY PROP × DIRECTION:
+  POINTS OVER: N=3,280, hit=50.7%, ROI=-3.3%
+  POINTS UNDER: N=6,731, hit=51.2%, ROI=-2.3%
+  REBOUNDS OVER: N=2,918, hit=48.7%, ROI=-7.0%
+  REBOUNDS UNDER: N=7,051, hit=52.5%, ROI=+0.3%
+  ASSISTS OVER: N=2,334, hit=48.2%, ROI=-7.9%
+  ASSISTS UNDER: N=6,098, hit=49.7%, ROI=-5.1%
+  THREES OVER: N=4,143, hit=50.6%, ROI=-3.4%
+  THREES UNDER: N=4,837, hit=54.7%, ROI=+4.4%
+
+BY EDGE BUCKET:
+  0-2%: N=4,305, hit=50.7%, ROI=-3.1%
+  2-5%: N=6,141, hit=50.1%, ROI=-4.4%
+  5%+: N=26,946, hit=51.5%, ROI=-1.7%
+
+MINUTES ACCURACY:
+  Sim mean: 29.8
+  Actual:   30.1
+  Delta:    -0.3
+  Corr:     0.585
+
+=================================================================
+SECTION — OOS (2025-26)
+=================================================================
+
+BY PROP TYPE:
+  Type            N    Hit%      ROI  AvgEdge
+  ------------------------------------------
+  POINTS      10299   51.1%    -2.5%  +12.6%
+  REBOUNDS    10024   51.0%    -2.7%  +10.6%
+  ASSISTS      7433   51.2%    -2.3%  +10.5%
+  THREES       8691   53.1%    +1.3%  +13.0%
+  TOTAL       36447   51.5%    -1.6%  +11.7%
+
+BY DIRECTION:
+  OVER: N=11,893, hit=48.4%, ROI=-7.6%
+  UNDER: N=24,554, hit=53.1%, ROI=+1.3%
+
+BY PROP × DIRECTION:
+  POINTS OVER: N=3,292, hit=49.8%, ROI=-5.0%
+  POINTS UNDER: N=7,007, hit=51.7%, ROI=-1.3%
+  REBOUNDS OVER: N=2,902, hit=47.4%, ROI=-9.5%
+  REBOUNDS UNDER: N=7,122, hit=52.4%, ROI=+0.1%
+  ASSISTS OVER: N=1,920, hit=47.7%, ROI=-9.0%
+  ASSISTS UNDER: N=5,513, hit=52.4%, ROI=+0.0%
+  THREES OVER: N=3,779, hit=48.3%, ROI=-7.7%
+  THREES UNDER: N=4,912, hit=56.7%, ROI=+8.2%
+
+BY EDGE BUCKET:
+  0-2%: N=3,977, hit=49.5%, ROI=-5.5%
+  2-5%: N=6,003, hit=51.2%, ROI=-2.2%
+  5%+: N=26,467, hit=51.9%, ROI=-0.9%
+
+MINUTES ACCURACY:
+  Sim mean: 28.5
+  Actual:   28.7
+  Delta:    -0.2
+  Corr:     0.580
+
+=================================================================
+SECTION 6 — PRODUCTION RECOMMENDATION
+=================================================================
+
+  POINTS: NOT READY (N=10011, ROI=-2.6%)
+  REBOUNDS: NOT READY (N=9969, ROI=-1.8%)
+  ASSISTS: NOT READY (N=8432, ROI=-5.9%)
+  THREES: NEAR-MISS (ROI=+0.8%<2%, calibration failed)

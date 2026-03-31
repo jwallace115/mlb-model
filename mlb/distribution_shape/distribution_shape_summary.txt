@@ -1,0 +1,309 @@
+=================================================================
+MLB DISTRIBUTION SHAPE ENGINE — PHASE 1
+=================================================================
+
+Shape features: 174,870 starter-games
+
+STEP 4 — Player shape archetypes...
+Archetype distribution:
+  AVERAGE               : 11,900 (6.8%)
+  CONTACT_STABLE        : 10,813 (6.2%)
+  CONTACT_VOLATILE      : 23,158 (13.2%)
+  POWER_STABLE          : 18,634 (10.7%)
+  POWER_VOLATILE        : 40,927 (23.4%)
+  THREE_TRUE_OUTCOMES   :  8,753 (5.0%)
+  UNKNOWN               : 13,086 (7.5%)
+  VOLATILE              : 47,599 (27.2%)
+
+Stability by season:
+  2022: CS=7%, PS=10%, PV=23%, TTO=4%
+  2023: CS=5%, PS=12%, PV=26%, TTO=6%
+  2024: CS=6%, PS=11%, PV=21%, TTO=5%
+  2025: CS=6%, PS=10%, PV=24%, TTO=4%
+
+Joining shape features to props...
+  HITS props with shape: 84,185
+  TB props with shape: 84,251
+
+=================================================================
+SECTION 2 — SAME-MEAN / DIFFERENT-SHAPE TEST
+=================================================================
+
+HITS:
+
+  Line = 0.5 (N=47,265):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE          2532  57.7%   0.91 0.86 Δ=+3.4pp 
+  POWER_STABLE            5109  59.5%   0.94 0.88 Δ=+5.2pp ✓
+  POWER_VOLATILE         11633  55.9%   0.88 0.88 Δ=+1.7pp 
+  THREE_TRUE_OUTCOMES     2745  52.3%   0.79 0.86 Δ=-1.9pp 
+  AVERAGE                 3433  54.9%   0.86 0.85 Δ=+0.7pp 
+  VOLATILE               12887  50.6%   0.79 0.84 Δ=-3.6pp 
+
+  Line = 1.0 (N=1,052):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE            93  44.1%   0.81 0.86 Δ=+6.7pp ✓
+  POWER_STABLE             121  31.4%   0.93 0.82 Δ=-6.0pp ✓
+  POWER_VOLATILE           263  34.2%   0.91 0.84 Δ=-3.1pp 
+  THREE_TRUE_OUTCOMES       58  27.6%   0.97 0.79 Δ=-9.8pp ✓
+  AVERAGE                   74  33.8%   0.91 0.78 Δ=-3.6pp 
+  VOLATILE                 233  40.8%   0.84 0.88 Δ=+3.4pp 
+
+  Line = 1.5 (N=9,728):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE          1102  54.9%   1.16 0.94 Δ=-6.9pp ✓
+  POWER_STABLE            1828  52.5%   1.15 0.93 Δ=-9.3pp ✓
+  POWER_VOLATILE          2426  60.8%   1.08 0.94 Δ=-1.0pp 
+  THREE_TRUE_OUTCOMES      229  70.3%   0.94 0.91 Δ=+8.5pp ✓
+  AVERAGE                  685  65.1%   1.09 0.89 Δ=+3.3pp 
+  VOLATILE                1651  73.2%   0.94 0.92 Δ=+11.4pp ✓
+
+  Line = 2.0 (N=563):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE            26  76.9%   0.92 1.06 Δ=-2.3pp 
+  POWER_STABLE              53  73.6%   0.91 0.88 Δ=-5.6pp ✓
+  POWER_VOLATILE           117  70.9%   0.91 0.90 Δ=-8.3pp ✓
+  THREE_TRUE_OUTCOMES       35  85.7%   0.60 0.74 Δ=+6.5pp ✓
+  AVERAGE                   45  86.7%   0.64 0.86 Δ=+7.4pp ✓
+  VOLATILE                 155  82.6%   0.68 0.84 Δ=+3.4pp 
+
+  Line = 2.5 (N=1,293):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE            81  96.3%   0.90 0.97 Δ=+2.1pp 
+  POWER_STABLE             110  87.3%   1.15 1.09 Δ=-6.9pp ✓
+  POWER_VOLATILE           255  93.3%   0.85 0.94 Δ=-0.9pp 
+  THREE_TRUE_OUTCOMES       66  97.0%   0.62 0.84 Δ=+2.8pp 
+  AVERAGE                   81  92.6%   0.90 0.97 Δ=-1.6pp 
+  VOLATILE                 393  96.2%   0.72 0.89 Δ=+2.0pp 
+
+TB:
+
+  Line = 0.5 (N=26,159):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE          1209  57.8%   1.21 1.43 Δ=+5.8pp ✓
+  POWER_STABLE            1905  56.5%   1.48 1.85 Δ=+4.5pp 
+  POWER_VOLATILE          5236  52.5%   1.43 1.84 Δ=+0.5pp 
+  THREE_TRUE_OUTCOMES     1660  50.8%   1.28 1.77 Δ=-1.2pp 
+  AVERAGE                 1912  53.4%   1.21 1.49 Δ=+1.4pp 
+  VOLATILE                8687  49.4%   1.16 1.56 Δ=-2.6pp 
+
+  Line = 1.0 (N=1,675):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE           100  48.0%   1.20 1.47 Δ=+4.8pp 
+  POWER_STABLE             143  42.7%   1.44 1.78 Δ=-0.5pp 
+  POWER_VOLATILE           468  40.6%   1.46 1.82 Δ=-2.6pp 
+  THREE_TRUE_OUTCOMES      146  41.1%   1.66 2.58 Δ=-2.1pp 
+  AVERAGE                  133  42.1%   1.10 1.55 Δ=-1.1pp 
+  VOLATILE                 438  44.7%   1.21 1.58 Δ=+1.6pp 
+
+  Line = 1.5 (N=28,688):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE          2334  50.6%   1.56 1.63 Δ=-0.5pp 
+  POWER_STABLE            4800  45.3%   1.82 1.93 Δ=-5.8pp ✓
+  POWER_VOLATILE          8209  49.7%   1.76 2.02 Δ=-1.4pp 
+  THREE_TRUE_OUTCOMES     1140  53.9%   1.67 2.06 Δ=+2.8pp 
+  AVERAGE                 2029  49.3%   1.62 1.73 Δ=-1.8pp 
+  VOLATILE                5275  58.6%   1.52 1.80 Δ=+7.5pp ✓
+
+  Line = 2.0 (N=385):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE            25  64.0%   1.20 0.82 Δ=+6.9pp ✓
+  POWER_STABLE              37  62.2%   1.73 1.91 Δ=+5.0pp ✓
+  POWER_VOLATILE           115  53.9%   1.83 2.01 Δ=-3.2pp 
+  AVERAGE                   27  48.1%   2.00 1.88 Δ=-9.0pp ✓
+  VOLATILE                  93  60.2%   1.39 1.55 Δ=+3.1pp 
+
+  Line = 2.5 (N=1,184):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE            71  74.6%   1.63 1.43 Δ=+2.7pp 
+  POWER_STABLE             155  56.1%   2.56 2.23 Δ=-15.8pp ✓
+  POWER_VOLATILE           282  69.9%   1.84 1.85 Δ=-2.1pp 
+  THREE_TRUE_OUTCOMES       59  76.3%   1.59 2.05 Δ=+4.3pp 
+  AVERAGE                   68  85.3%   1.06 1.24 Δ=+13.3pp ✓
+  VOLATILE                 309  80.9%   1.44 1.75 Δ=+8.9pp ✓
+
+  Line = 3.0 (N=282):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  POWER_STABLE              25  60.0%   2.08 2.04 Δ=-23.3pp ✓
+  POWER_VOLATILE            50  80.0%   1.28 1.63 Δ=-3.3pp 
+  AVERAGE                   27  96.3%   0.85 0.91 Δ=+13.0pp ✓
+  VOLATILE                  86  94.2%   0.79 1.33 Δ=+10.9pp ✓
+
+  Line = 3.5 (N=612):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE            35  94.3%   1.06 1.35 Δ=+13.6pp ✓
+  POWER_STABLE              52  75.0%   2.10 1.89 Δ=-5.7pp ✓
+  POWER_VOLATILE           102  78.4%   1.59 1.92 Δ=-2.3pp 
+  THREE_TRUE_OUTCOMES       34  79.4%   1.44 2.06 Δ=-1.3pp 
+  AVERAGE                   44  84.1%   1.18 1.56 Δ=+3.4pp 
+  VOLATILE                 198  88.4%   1.10 1.58 Δ=+7.7pp ✓
+
+  Line = 4.0 (N=176):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  POWER_VOLATILE            32  90.6%   1.12 1.31 Δ=+0.3pp 
+  VOLATILE                  65  96.9%   0.35 0.82 Δ=+6.6pp ✓
+
+  Line = 4.5 (N=859):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  CONTACT_STABLE            45  93.3%   1.47 1.73 Δ=+10.8pp ✓
+  POWER_STABLE              71  80.3%   2.82 2.24 Δ=-2.3pp 
+  POWER_VOLATILE           182  74.7%   2.52 2.46 Δ=-7.8pp ✓
+  THREE_TRUE_OUTCOMES       49  81.6%   2.16 2.33 Δ=-0.9pp 
+  AVERAGE                   61  91.8%   1.57 2.27 Δ=+9.3pp ✓
+  VOLATILE                 266  92.1%   1.30 1.91 Δ=+9.6pp ✓
+
+  Line = 5.5 (N=169):
+  Archetype                  N   Hit%  Actual   Std
+  ------------------------------------------------
+  POWER_STABLE              26  96.2%   1.69 2.45 Δ=+2.1pp 
+  POWER_VOLATILE            52  96.2%   1.85 2.08 Δ=+2.1pp 
+  VOLATILE                  39  97.4%   1.79 2.08 Δ=+3.4pp 
+
+=================================================================
+SECTION 3 — MARKET PRICING TEST
+=================================================================
+
+HITS — Does market price shape differently?
+  Line=0.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE          1220     61.6%     57.5% NO
+  POWER_STABLE            2616     61.5%     59.4% YES
+  POWER_VOLATILE          5466     60.2%     55.9% NO
+  AVERAGE                 1728     59.8%     54.7% NO
+  Line=1.0:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE            36     50.0%     44.4% NO
+  POWER_STABLE              59     50.0%     30.5% NO
+  POWER_VOLATILE           105     50.0%     40.0% NO
+  AVERAGE                   38     50.0%     36.8% NO
+  Line=1.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE           540     37.4%     58.7% NO
+  POWER_STABLE            1074     37.2%     51.2% NO
+  POWER_VOLATILE          1233     39.2%     61.5% NO
+  AVERAGE                  420     38.9%     68.1% NO
+  Line=2.0:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  POWER_STABLE              41     50.0%     73.2% NO
+  POWER_VOLATILE            91     50.0%     74.7% NO
+  AVERAGE                   40     50.0%     90.0% NO
+  Line=2.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE            66     49.6%     98.5% NO
+  POWER_STABLE              89     49.8%     85.4% NO
+  POWER_VOLATILE           211     49.1%     95.7% NO
+  AVERAGE                   66     49.6%     93.9% NO
+
+TB — Does market price shape differently?
+  Line=0.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE           516     57.2%     57.8% YES
+  POWER_STABLE             929     56.4%     55.7% YES
+  POWER_VOLATILE          2405     56.0%     52.9% NO
+  AVERAGE                  880     56.0%     56.8% YES
+  Line=1.0:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE            58     50.0%     44.8% NO
+  POWER_STABLE              99     50.0%     43.4% NO
+  POWER_VOLATILE           298     50.0%     42.3% NO
+  AVERAGE                   85     50.0%     47.1% YES
+  Line=1.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE          1169     41.8%     52.5% NO
+  POWER_STABLE            2613     43.8%     45.0% YES
+  POWER_VOLATILE          3884     42.8%     49.1% NO
+  AVERAGE                 1139     41.5%     49.8% NO
+  Line=2.0:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  POWER_VOLATILE            57     50.0%     59.6% NO
+  Line=2.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE            40     48.5%     67.5% NO
+  POWER_STABLE              76     47.2%     57.9% NO
+  POWER_VOLATILE           171     49.2%     67.8% NO
+  AVERAGE                   41     49.1%     85.4% NO
+  Line=3.0:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  POWER_STABLE              22     50.0%     54.5% NO
+  POWER_VOLATILE            43     50.0%     86.0% NO
+  AVERAGE                   22     50.0%     95.5% NO
+  Line=3.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE            28     49.7%     96.4% NO
+  POWER_STABLE              33     49.2%     81.8% NO
+  POWER_VOLATILE            90     48.4%     80.0% NO
+  AVERAGE                   36     49.9%     83.3% NO
+  Line=4.0:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  POWER_VOLATILE            32     50.0%     90.6% NO
+  Line=4.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  CONTACT_STABLE            38     50.5%     94.7% NO
+  POWER_STABLE              48     48.4%     81.2% NO
+  POWER_VOLATILE           116     48.3%     75.9% NO
+  AVERAGE                   51     49.7%     92.2% NO
+  Line=5.5:
+  Archetype                  N AvgImpProb ActHitRate Flattened?
+  POWER_STABLE              21     50.2%     95.2% NO
+  POWER_VOLATILE            39     48.3%    100.0% NO
+
+=================================================================
+SECTION 4 — PREDEFINED SHAPE SIGNAL TESTS
+=================================================================
+
+HITS OVER — VALIDATION (baseline: hit=58.0%, ROI=+10.8%):
+  STABLE (contact+power)             : N= 3774, hit=58.9%, ROI=+12.5% (Δ=+0.9pp) 
+  VOLATILE (power_vol+vol+TTO)       : N= 9524, hit=57.2%, ROI=+9.1% (Δ=-0.9pp) 
+  CONTACT_STABLE only                : N= 1068, hit=61.0%, ROI=+16.5% (Δ=+3.0pp) 
+  POWER_STABLE only                  : N= 2706, hit=58.1%, ROI=+10.9% (Δ=+0.1pp) 
+  POWER_VOLATILE only                : N= 4579, hit=58.8%, ROI=+12.2% (Δ=+0.8pp) 
+
+HITS OVER — OOS (baseline: hit=57.7%, ROI=+10.2%):
+  STABLE (contact+power)             : N= 3698, hit=59.3%, ROI=+13.2% (Δ=+1.6pp) 
+  VOLATILE (power_vol+vol+TTO)       : N= 9913, hit=57.2%, ROI=+9.2% (Δ=-0.5pp) 
+  CONTACT_STABLE only                : N= 1265, hit=57.9%, ROI=+10.5% (Δ=+0.2pp) 
+  POWER_STABLE only                  : N= 2433, hit=60.0%, ROI=+14.6% (Δ=+2.3pp) 
+  POWER_VOLATILE only                : N= 5117, hit=58.7%, ROI=+12.0% (Δ=+1.0pp) 
+
+TB OVER — VALIDATION (baseline: hit=48.3%, ROI=-7.8%):
+  STABLE (contact+power)             : N= 3878, hit=48.3%, ROI=-7.8% (Δ=-0.0pp) 
+  VOLATILE (power_vol+vol+TTO)       : N= 7301, hit=48.0%, ROI=-8.3% (Δ=-0.3pp) 
+  CONTACT_STABLE only                : N=  906, hit=51.1%, ROI=-2.4% (Δ=+2.8pp) 
+  POWER_STABLE only                  : N= 2972, hit=47.4%, ROI=-9.5% (Δ=-0.9pp) 
+  POWER_VOLATILE only                : N= 3805, hit=46.9%, ROI=-10.4% (Δ=-1.4pp) 
+
+TB OVER — OOS (baseline: hit=49.6%, ROI=-5.4%):
+  STABLE (contact+power)             : N= 3651, hit=49.3%, ROI=-5.8% (Δ=-0.2pp) 
+  VOLATILE (power_vol+vol+TTO)       : N= 7623, hit=49.8%, ROI=-4.9% (Δ=+0.2pp) 
+  CONTACT_STABLE only                : N= 1147, hit=50.9%, ROI=-2.8% (Δ=+1.3pp) 
+  POWER_STABLE only                  : N= 2504, hit=48.6%, ROI=-7.2% (Δ=-1.0pp) 
+  POWER_VOLATILE only                : N= 4077, hit=49.1%, ROI=-6.3% (Δ=-0.5pp) 
+
+=================================================================
+SECTION 5 — SHAPE × PA SUPPRESSION
+=================================================================
+  PA interaction: [Errno 2] No such file or directory: '/Users/jw115/mlb-model/mlb/opportunity_engine/pa_predictions.parquet'
+
+=================================================================
+SECTION 6 — HONEST ASSESSMENT
+=================================================================
+
+1. Same-mean divergence >= 5pp: NO
+2. Market pricing: check Section 3
+3. Flattening: check if implied probs are same but outcomes differ
+4. Viable edge framework: NOT YET
+5. Next: Statcast batted ball quality (exit velo, launch angle)

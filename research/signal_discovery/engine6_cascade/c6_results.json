@@ -1,0 +1,296 @@
+[
+  {
+    "signal_id": "C6_01",
+    "train": {
+      "N": 1039,
+      "rate": 0.4764,
+      "roi": -9.05,
+      "me": 0.362,
+      "cl": 8.57
+    },
+    "val": {
+      "N": 491,
+      "rate": 0.499,
+      "roi": -4.74,
+      "me": 0.589,
+      "cl": 8.78
+    },
+    "perm_pctile": 8.4,
+    "perm_gate": 90,
+    "year_stable": false,
+    "verdict": "FAIL (MEAN_PROXY)",
+    "stability": [
+      {
+        "N": 328,
+        "rate": 0.4817,
+        "roi": -8.04,
+        "me": 0.39,
+        "cl": 8.87
+      },
+      {
+        "N": 401,
+        "rate": 0.4514,
+        "roi": -13.83,
+        "me": 0.136,
+        "cl": 8.43
+      },
+      {
+        "N": 491,
+        "rate": 0.499,
+        "roi": -4.74,
+        "me": 0.589,
+        "cl": 8.78
+      }
+    ],
+    "regression": {
+      "coef": -0.1115,
+      "pval": 0.4588,
+      "mean_proxy": "True"
+    }
+  },
+  {
+    "signal_id": "C6_02",
+    "train": {
+      "N": 1505,
+      "rate": 0.4897,
+      "roi": -6.51,
+      "me": 0.4,
+      "cl": 8.49
+    },
+    "val": {
+      "N": 662,
+      "rate": 0.5106,
+      "roi": -2.53,
+      "me": 0.767,
+      "cl": 8.54
+    },
+    "perm_pctile": 30.8,
+    "perm_gate": 90,
+    "year_stable": true,
+    "verdict": "FAIL (MEAN_PROXY)",
+    "stability": [
+      {
+        "N": 362,
+        "rate": 0.4558,
+        "roi": -12.98,
+        "me": 0.17,
+        "cl": 8.81
+      },
+      {
+        "N": 736,
+        "rate": 0.5068,
+        "roi": -3.25,
+        "me": 0.465,
+        "cl": 8.46
+      },
+      {
+        "N": 662,
+        "rate": 0.5106,
+        "roi": -2.53,
+        "me": 0.767,
+        "cl": 8.54
+      }
+    ],
+    "regression": {
+      "coef": -0.0868,
+      "pval": 0.5077,
+      "mean_proxy": "True"
+    }
+  },
+  {
+    "signal_id": "C6_03",
+    "train": {
+      "N": 181,
+      "rate": 0.4696,
+      "roi": -10.35,
+      "me": 0.152,
+      "cl": 8.6
+    },
+    "val": {
+      "N": 93,
+      "rate": 0.4946,
+      "roi": -5.57,
+      "me": 0.919,
+      "cl": 8.62
+    },
+    "perm_pctile": 20.8,
+    "perm_gate": 95,
+    "year_stable": false,
+    "verdict": "FAIL (MEAN_PROXY)",
+    "stability": [
+      {
+        "N": 53,
+        "rate": 0.5283,
+        "roi": 0.86,
+        "me": 0.509,
+        "cl": 8.72
+      },
+      {
+        "N": 82,
+        "rate": 0.4756,
+        "roi": -9.2,
+        "me": -0.28,
+        "cl": 8.57
+      },
+      {
+        "N": 93,
+        "rate": 0.4946,
+        "roi": -5.57,
+        "me": 0.919,
+        "cl": 8.62
+      }
+    ],
+    "regression": {
+      "coef": -0.3083,
+      "pval": 0.354,
+      "mean_proxy": "True"
+    }
+  },
+  {
+    "signal_id": "C6_04",
+    "train": {
+      "N": 306,
+      "rate": 0.4771,
+      "roi": -8.91,
+      "me": 0.493,
+      "cl": 8.72
+    },
+    "val": {
+      "N": 171,
+      "rate": 0.538,
+      "roi": 2.71,
+      "me": 0.854,
+      "cl": 8.59
+    },
+    "perm_pctile": 25.0,
+    "perm_gate": 95,
+    "year_stable": false,
+    "verdict": "FAIL (perm=25.0<95; yr=1/3; coef=0.0623(p=0.81))",
+    "stability": [
+      {
+        "N": 108,
+        "rate": 0.5,
+        "roi": -4.55,
+        "me": 0.606,
+        "cl": 9.08
+      },
+      {
+        "N": 120,
+        "rate": 0.4083,
+        "roi": -22.05,
+        "me": 0.067,
+        "cl": 8.38
+      },
+      {
+        "N": 171,
+        "rate": 0.538,
+        "roi": 2.71,
+        "me": 0.854,
+        "cl": 8.59
+      }
+    ],
+    "regression": {
+      "coef": 0.0623,
+      "pval": 0.81,
+      "mean_proxy": "False"
+    }
+  },
+  {
+    "signal_id": "C6_05",
+    "train": {
+      "N": 1408,
+      "rate": 0.4801,
+      "roi": -8.34,
+      "me": 0.287,
+      "cl": 8.6
+    },
+    "val": {
+      "N": 715,
+      "rate": 0.4881,
+      "roi": -6.82,
+      "me": 0.484,
+      "cl": 8.63
+    },
+    "perm_pctile": 9.2,
+    "perm_gate": 90,
+    "year_stable": false,
+    "verdict": "FAIL (MEAN_PROXY)",
+    "stability": [
+      {
+        "N": 421,
+        "rate": 0.4703,
+        "roi": -10.21,
+        "me": 0.097,
+        "cl": 8.9
+      },
+      {
+        "N": 631,
+        "rate": 0.4834,
+        "roi": -7.72,
+        "me": 0.315,
+        "cl": 8.5
+      },
+      {
+        "N": 715,
+        "rate": 0.4881,
+        "roi": -6.82,
+        "me": 0.484,
+        "cl": 8.63
+      }
+    ],
+    "regression": {
+      "coef": -0.2146,
+      "pval": 0.1113,
+      "mean_proxy": "True"
+    }
+  },
+  {
+    "signal_id": "C6_06",
+    "train": {
+      "N": 577,
+      "rate": 0.4922,
+      "roi": -6.03,
+      "me": 0.391,
+      "cl": 8.62
+    },
+    "val": {
+      "N": 306,
+      "rate": 0.4935,
+      "roi": -5.79,
+      "me": 0.642,
+      "cl": 8.63
+    },
+    "perm_pctile": 44.0,
+    "perm_gate": 90,
+    "year_stable": false,
+    "verdict": "FAIL (MEAN_PROXY)",
+    "stability": [
+      {
+        "N": 178,
+        "rate": 0.4551,
+        "roi": -13.13,
+        "me": -0.02,
+        "cl": 8.89
+      },
+      {
+        "N": 266,
+        "rate": 0.5038,
+        "roi": -3.83,
+        "me": 0.508,
+        "cl": 8.52
+      },
+      {
+        "N": 306,
+        "rate": 0.4935,
+        "roi": -5.79,
+        "me": 0.642,
+        "cl": 8.63
+      }
+    ],
+    "regression": {
+      "coef": -0.0634,
+      "pval": 0.743,
+      "mean_proxy": "True"
+    }
+  }
+]

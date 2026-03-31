@@ -1,0 +1,85 @@
+======================================================================
+PHASE 3 RIDGE REGRESSION — BACKTEST REPORT
+======================================================================
+
+Leave-one-year-out cross-validation (2022–2024)
+  Games evaluated:  7,287
+
+Overall metrics:
+  MAE:              3.4212 runs
+  RMSE:             4.3360 runs
+  Pearson r:        0.2139
+  Bias (mean err):  -0.0216 runs
+
+──────────────────────────────────────────────────────────────────────
+Per-season metrics:
+  Season        N      MAE     RMSE        r     Bias
+  ────────  ─────  ───────  ───────  ───────  ───────
+  2022      2,430   3.3420   4.2872   0.2174  +0.0143
+  2023      2,430   3.5790   4.4871   0.2040  -0.0723
+  2024      2,427   3.3427   4.2293   0.1952  -0.0068
+
+──────────────────────────────────────────────────────────────────────
+Prediction distribution:
+                            Pred    Actual
+  Mean                     8.883     8.862
+  Std                      1.006     4.438
+  Min                      5.398     1.000
+  Max                     12.879    33.000
+  <7 runs                    195     2,354
+  7–9 runs                 5,240     2,105
+  >9 runs                  1,852     2,828
+
+──────────────────────────────────────────────────────────────────────
+Feature coefficients (final model, standardized scale):
+  Feature                           Coef (std)    Coef (raw)
+  ──────────────────────────────  ────────────  ────────────
+  away_sp_xfip                         +0.4684       +0.9201
+  home_sp_xfip                         +0.4574       +0.8858
+  temperature                          +0.3506       +0.0363
+  away_wrc_plus                        +0.2964       +0.0703
+  park_factor_hr                       +0.1885       +0.0389
+  park_factor_runs                     +0.1885       +0.0389
+  home_wrc_plus                        +0.1780       +0.0422
+  away_rest_days                       +0.1639       +0.2871
+  wind_factor_effective                +0.1303       +0.0211
+  home_sp_avg_ip                       -0.1018       -0.1488
+  home_sp_bb_pct                       +0.0966       +7.1064
+  home_rest_days                       -0.0756       -0.1309
+  home_sp_k_pct                        -0.0347       -1.1992
+  away_sp_bb_pct                       +0.0272       +1.9984
+  away_sp_avg_ip                       +0.0137       +0.0199
+  umpire_over_rate                     -0.0105       -0.9788
+  away_sp_k_pct                        +0.0090       +0.3154
+  doubleheader_flag                    -0.0067       -0.0356
+
+──────────────────────────────────────────────────────────────────────
+Residual analysis (actual − predicted):
+  Mean:    -0.0216
+  Std:     4.3359
+  P25:     -3.159
+  P75:     +2.587
+  P5:      -6.165
+  P95:     +7.875
+
+──────────────────────────────────────────────────────────────────────
+10 largest prediction errors (|actual − predicted|):
+  Date          Home   Away    Actual     Pred    Error
+  2022-07-22    BOS    TOR       33.0    9.548  +23.452
+  2023-08-01    CHC    CIN       29.0    8.883  +20.117
+  2022-09-20    PHI    TOR       29.0    9.520  +19.480
+  2023-04-29    SDP    SFG       27.0    7.572  +19.428
+  2024-03-21    LAD    SDP       26.0    7.549  +18.451
+  2023-07-18    ATL    ARI       29.0   11.260  +17.740
+  2024-07-06    OAK    BAL       27.0    9.272  +17.728
+  2023-09-04    CLE    MIN       26.0    8.405  +17.595
+  2024-06-12    MIN    COL       26.0    8.521  +17.479
+  2024-08-26    PIT    CHC       26.0    8.784  +17.216
+
+======================================================================
+
+Known limitations (Phase 2 data quality):
+  • Pitcher xERA from Savant (FanGraphs blocked) → xFIP = SIERA identical
+  • Full-season pitcher/offense stats used for all games (mild data leakage)
+  • Bullpen quality = league average (GS-based reliever ID requires FanGraphs)
+  • wRC+ from Savant xwOBA proxy, not FanGraphs PA-weighted (bias possible)

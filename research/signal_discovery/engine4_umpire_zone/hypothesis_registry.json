@@ -1,0 +1,38 @@
+[
+  {
+    "signal_id": "UZ001",
+    "condition": "zone_tight (zone_score <= 0.2917)",
+    "direction": "OVER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "UZ002",
+    "condition": "zone_wide (zone_score >= 0.3407)",
+    "direction": "UNDER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "UZ003A",
+    "condition": "zone_extreme_tight (deviation <= -0.6512)",
+    "direction": "OVER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "UZ003B",
+    "condition": "zone_extreme_wide (deviation >= 0.6359)",
+    "direction": "UNDER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "UZ004",
+    "condition": "zone_tight AND low_csw_pitcher",
+    "direction": "OVER",
+    "perm_gate": 95
+  },
+  {
+    "signal_id": "UZ005",
+    "condition": "zone_wide AND high_csw_pitcher",
+    "direction": "UNDER",
+    "perm_gate": 95
+  }
+]

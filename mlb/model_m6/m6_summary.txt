@@ -1,0 +1,158 @@
+======================================================================
+MLB PHASE M6 — BULLPEN AVAILABILITY / FATIGUE MODEL
+======================================================================
+
+======================================================================
+SECTION 0 — DATA READINESS
+======================================================================
+
+Reliever appearances: 63,612
+Pitch count coverage: 100.0%
+Innings coverage: 100.0%
+Batters faced coverage: 99.9%
+All required fields available. No data gaps.
+
+
+  Train: 4860, Val: 2427, OOS: 2428
+  Training M3_base (31 features)...
+  Training M6_avail (41 features)...
+  Training M6_full (45 features)...
+
+  Running betting simulation...
+
+======================================================================
+SECTION 1 — BULLPEN ROLE ANALYSIS
+======================================================================
+
+Role assignments: 344,226 total
+Distribution: {'LOW_LEVERAGE': 231314, 'HIGH_LEVERAGE': 56588, 'MID_LEVERAGE': 56324}
+
+======================================================================
+SECTION 2 — AVAILABILITY / FATIGUE ANALYSIS
+======================================================================
+
+Fatigue score: mean=0.196, std=0.160, min=0.000, max=0.909
+Depletion: {'LOW': 9823, 'MEDIUM': 7984, 'HIGH': 1303}
+
+Correlations with actual total (home team):
+  fatigue_score: r = +0.0086
+  bp_combined_state: r = -0.0612
+
+======================================================================
+SECTION 3 — MODEL COMPARISON
+======================================================================
+
+ACCURACY:
+Variant              Feats  Val MAE    Val r  OOS MAE    OOS r
+-------------------------------------------------------
+M3_base                 31   3.3536   0.1788   3.5595   0.1886
+M6_avail                41   3.3602   0.1727   3.5627   0.1843
+M6_full                 45   3.3632   0.1759   3.5714   0.1857
+
+Best M6: M6_avail
+MAE improvement vs M3: -0.0066 runs
+Gate (>= 0.05): FAIL
+
+F5 SANITY CHECK:
+  M3_base F5 MAE: 2.5184
+  M6_full F5 MAE: 2.5278
+
+BETTING PERFORMANCE:
+Key                                                         N   Hit%     ROI
+---------------------------------------------------------------------------
+pred_M3_base|oos|edge>=1.0                                662  49.8%   -4.8%
+pred_M3_base|oos|edge>=1.0|OVER                           530  49.4%   -5.6%
+pred_M3_base|oos|edge>=1.0|UNDER                          132  51.5%   -1.6%
+pred_M3_base|oos|edge>=1.5                                246  50.4%   -3.8%
+pred_M3_base|oos|edge>=1.5|OVER                           173  51.4%   -1.8%
+pred_M3_base|oos|edge>=1.5|UNDER                           73  47.9%   -8.5%
+pred_M3_base|val|edge>=1.0                                664  53.5%   +2.1%
+pred_M3_base|val|edge>=1.0|OVER                           590  52.9%   +1.0%
+pred_M3_base|val|edge>=1.0|UNDER                           74  58.1%  +10.9%
+pred_M3_base|val|edge>=1.5                                229  55.9%   +6.7%
+pred_M3_base|val|edge>=1.5|OVER                           202  55.9%   +6.8%
+pred_M3_base|val|edge>=1.5|UNDER                           27  55.6%   +6.1%
+pred_M6_avail|oos|edge>=1.0                               700  50.1%   -4.3%
+pred_M6_avail|oos|edge>=1.0|OVER                          554  50.0%   -4.5%
+pred_M6_avail|oos|edge>=1.0|UNDER                         146  50.7%   -3.2%
+pred_M6_avail|oos|edge>=1.5                               253  51.4%   -1.9%
+pred_M6_avail|oos|edge>=1.5|OVER                          180  51.7%   -1.4%
+pred_M6_avail|oos|edge>=1.5|UNDER                          73  50.7%   -3.2%
+pred_M6_avail|val|edge>=1.0                               682  52.6%   +0.5%
+pred_M6_avail|val|edge>=1.0|OVER                          599  51.8%   -1.2%
+pred_M6_avail|val|edge>=1.0|UNDER                          83  59.0%  +12.7%
+pred_M6_avail|val|edge>=1.5                               258  53.5%   +2.1%
+pred_M6_avail|val|edge>=1.5|OVER                          225  53.3%   +1.8%
+pred_M6_avail|val|edge>=1.5|UNDER                          33  54.5%   +4.1%
+pred_M6_full|oos|edge>=1.0                                802  49.8%   -5.0%
+pred_M6_full|oos|edge>=1.0|OVER                           668  48.8%   -6.8%
+pred_M6_full|oos|edge>=1.0|UNDER                          134  54.5%   +4.0%
+pred_M6_full|oos|edge>=1.5                                301  51.5%   -1.7%
+pred_M6_full|oos|edge>=1.5|OVER                           230  51.3%   -2.1%
+pred_M6_full|oos|edge>=1.5|UNDER                           71  52.1%   -0.5%
+pred_M6_full|val|edge>=1.0                                737  53.1%   +1.3%
+pred_M6_full|val|edge>=1.0|OVER                           634  52.2%   -0.3%
+pred_M6_full|val|edge>=1.0|UNDER                          103  58.3%  +11.2%
+pred_M6_full|val|edge>=1.5                                289  53.3%   +1.7%
+pred_M6_full|val|edge>=1.5|OVER                           245  53.1%   +1.3%
+pred_M6_full|val|edge>=1.5|UNDER                           44  54.5%   +4.1%
+
+UNDER vs OVER (edge >= 1.0, validation):
+  pred_M3_base OVER: N=590, hit=52.9%, ROI=+1.0%
+  pred_M3_base UNDER: N=74, hit=58.1%, ROI=+10.9%
+  pred_M6_full OVER: N=634, hit=52.2%, ROI=-0.3%
+  pred_M6_full UNDER: N=103, hit=58.3%, ROI=+11.2%
+
+======================================================================
+SECTION 4 — DISAGREEMENT ANALYSIS
+======================================================================
+
+Agree zone (N=734): M6 MAE=3.427, M3 MAE=3.408, M6 ROI=+1.2%
+Disagree zone (N=3): M6 MAE=1.953 ROI=+27.3%, M3 MAE=2.437 ROI=-100.0%
+
+======================================================================
+SECTION 5 — PRODUCTION RECOMMENDATION
+======================================================================
+
+Gate checks:
+  mae_improves             : FAIL
+  roi_improves             : FAIL
+  f5_no_improve            : PASS
+  cross_season             : PASS
+  under_improves           : PASS
+
+RECOMMENDATION: PARTIAL DEPLOYMENT
+  Bullpen features show value in some dimensions but not all gates pass.
+  Recommend tracking M6 features in shadow log alongside M3.
+
+======================================================================
+SECTION 6 — PATTERN OBSERVATIONS
+======================================================================
+
+1. Does bullpen availability add signal beyond M3?
+   MAE improvement: -0.0066 runs
+   No — M3 with existing Phase 8/9 bullpen features already captures this.
+
+2. Is availability more important than quality?
+   Availability alone outperforms availability + quality combined.
+   Adding quality metrics introduces noise.
+
+3. Does it explain UNDER asymmetry?
+   M3 UNDER ROI: +10.9%
+   M6 UNDER ROI: +12.7%
+   NEUTRAL — UNDER performance is comparable.
+
+4. Is effect isolated to full game?
+   Full game M6 MAE: 3.3602
+   F5 M6 MAE: 2.5278
+   F5 M3 MAE: 2.5184
+   Bullpen signal should primarily affect full game, not F5.
+
+5. What is next highest-value direction?
+   Based on M3-M6 results:
+   - M3 lineup adjustment is the validated primary signal
+   - Bullpen state adds marginal value at best
+   - The UNDER asymmetry from M5 is the most promising live signal
+   - Next: deploy M3 shadow for 2026 with M5 tracking fields
+   - Monitor UNDER + moderate disagreement zone live
+   - Consider player-level bullpen modeling (individual reliever quality)

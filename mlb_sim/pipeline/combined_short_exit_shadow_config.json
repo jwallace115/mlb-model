@@ -1,0 +1,27 @@
+{
+  "signal_name": "combined_short_exit",
+  "status": "SHADOW",
+  "direction": "OVER_AMPLIFIER",
+  "favorable_tail": "BOTTOM_20",
+  "frozen_cutoff_2024": 0.133333,
+  "cutoff_note": "20th percentile of 2024 combined_short_exit distribution",
+  "formula": "avg(home_sp_short_exit_r15, away_sp_short_exit_r15) where short_exit = IP < 5.0 rolling 15 starts",
+  "version": "1.0",
+  "deployed_date": "2026-03-26",
+  "notes": "V1 OVER-lean amplifier candidate. Durable starters (low short-exit rate) facing lineups third time through create late-inning scoring. Walk-forward 2024 ROI +8.4%, 2025 +1.8%. Permutation 88th pctile. Robust after 7 controls (p=0.004). SHADOW ONLY — do not activate live.",
+  "promotion_gates": {
+    "min_N": 100,
+    "min_over_rate": 0.57,
+    "min_roi_pct": 3.0,
+    "min_permutation_pctile": 85,
+    "require_positive_lift_vs_v1": true,
+    "review_type": "MANUAL",
+    "auto_promote": false
+  },
+  "archive_signals": {
+    "combined_lineup_iso": {
+      "status": "ARCHIVE",
+      "note": "Standalone OVER predictor (p=0.0001) but harmful inside the V1 OVER-lean stack. Market appears to pre-adjust high-ISO environments when V1 already leans OVER. Revisit only as a standalone OVER-environment concept outside the V1 framework."
+    }
+  }
+}

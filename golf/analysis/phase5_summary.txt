@@ -1,0 +1,13 @@
+GOLF PHASE 5 — MATCHUP/3-BALL SUMMARY
+============================================================
+
+Proxy: 0.8×top20 + 0.2×win (NOT DG's native matchup simulator)
+Reference book: DraftKings
+Dataset: 99100 clean rows
+  3_ball: ΔR²=+0.00116, p=0.000000 → NULL (base_rate=0.311)
+  tourney_h2h: ΔR²=+0.00002, p=0.419394 → NULL (base_rate=0.487)
+  round_h2h: ΔR²=+0.00051, p=0.000000 → NULL (base_rate=0.479)
+
+GATE DECISION:
+NOTE: Economic test results above determine the gate.
+Round matchup results excluded from gate decision (exploratory only).

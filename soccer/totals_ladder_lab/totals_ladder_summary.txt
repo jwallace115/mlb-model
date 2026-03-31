@@ -1,0 +1,62 @@
+SOCCER TOTALS LADDER — CORE RESULTS
+=======================================================
+
+BASELINE CALIBRATION:
+  O1.5: mkt=76.0%, act=77.4%, Δ=+1.4pp
+  O2.5: mkt=52.5%, act=53.2%, Δ=+0.7pp
+  O3.5: mkt=30.9%, act=31.5%, Δ=+0.6pp
+  Tail ratio P(O3.5)/P(O2.5): mkt=0.590, act=0.592
+
+SAME-O1.5 / DIFFERENT-TAIL (VAL+OOS combined):
+
+  O1.5=70-75% (N=736):
+    xG LOW: N=243 O2.5Δ=-0.4pp O3.5Δ=-1.8pp 
+    xG HIGH: N=203 O2.5Δ=-4.8pp O3.5Δ=-4.3pp ✓
+    BTTS LOW: N=300 O2.5Δ=+2.6pp O3.5Δ=+2.6pp 
+    BTTS HIGH: N=176 O2.5Δ=-4.8pp O3.5Δ=-4.2pp ✓
+    Shots LOW: N=296 O2.5Δ=+1.0pp O3.5Δ=-0.7pp 
+    Shots HIGH: N=219 O2.5Δ=-3.8pp O3.5Δ=-0.9pp 
+
+  O1.5=75-80% (N=952):
+    xG LOW: N=200 O2.5Δ=+3.7pp O3.5Δ=-1.1pp 
+    xG HIGH: N=409 O2.5Δ=+3.9pp O3.5Δ=+4.9pp ✓
+    BTTS LOW: N=311 O2.5Δ=-1.5pp O3.5Δ=-3.0pp 
+    BTTS HIGH: N=310 O2.5Δ=+3.4pp O3.5Δ=+2.5pp 
+    Shots LOW: N=305 O2.5Δ=+1.6pp O3.5Δ=+1.0pp 
+    Shots HIGH: N=325 O2.5Δ=-1.4pp O3.5Δ=-0.4pp 
+
+  O1.5=80-85% (N=626):
+    xG LOW: N= 60 O2.5Δ=+4.4pp O3.5Δ=+10.1pp ✓
+    xG HIGH: N=408 O2.5Δ=+6.5pp O3.5Δ=+5.0pp ✓
+    BTTS LOW: N=144 O2.5Δ=+3.1pp O3.5Δ=+7.3pp ✓
+    BTTS HIGH: N=288 O2.5Δ=+5.2pp O3.5Δ=+3.9pp ✓
+    Shots LOW: N=128 O2.5Δ=+0.2pp O3.5Δ=+2.2pp 
+    Shots HIGH: N=318 O2.5Δ=+4.6pp O3.5Δ=+3.6pp ✓
+
+PRE-REGISTERED HYPOTHESES:
+
+  VAL:
+    H1 xG→O2.5: HIGH=+3.4pp LOW=-0.9pp diff=+4.3pp
+    H3 BTTS→O2.5: HIGH=+3.6 LOW=+1.7 | O3.5: HIGH=+3.0 LOW=+0.8
+    H4 BUN: O2.5Δ=+2.5pp O3.5Δ=+3.0pp
+    H4 EPL: O2.5Δ=+6.1pp O3.5Δ=+6.9pp
+    H4 LG1: O2.5Δ=+1.6pp O3.5Δ=-0.9pp
+    H4 LGA: O2.5Δ=-1.6pp O3.5Δ=+0.5pp
+    H4 SEA: O2.5Δ=+1.0pp O3.5Δ=-0.6pp
+    H5 Shots→O3.5: HIGH=+2.9pp LOW=-0.5pp
+
+  OOS:
+    H1 xG→O2.5: HIGH=+1.7pp LOW=+0.9pp diff=+0.9pp
+    H3 BTTS→O2.5: HIGH=-0.1 LOW=-2.5 | O3.5: HIGH=-0.2 LOW=-0.7
+    H4 BUN: O2.5Δ=+0.4pp O3.5Δ=+5.3pp
+    H4 EPL: O2.5Δ=-2.0pp O3.5Δ=-2.4pp
+    H4 LG1: O2.5Δ=+0.9pp O3.5Δ=+2.4pp
+    H4 LGA: O2.5Δ=+1.8pp O3.5Δ=-2.3pp
+    H4 SEA: O2.5Δ=+0.2pp O3.5Δ=-0.6pp
+    H5 Shots→O3.5: HIGH=+0.9pp LOW=-0.1pp
+
+HONEST ASSESSMENT:
+1. Ladder calibration: all lines slightly underpriced (+0.6 to +1.4pp)
+2. Tail ratio: actual O3.5/O2.5 slightly higher than market prices (0.592 vs 0.577)
+3. Context differences within same O1.5: mostly <4pp — weak
+4. Phase gate: likely FAIL — no context achieves consistent >=4pp gap

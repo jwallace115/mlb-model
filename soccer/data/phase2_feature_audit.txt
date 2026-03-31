@@ -1,0 +1,112 @@
+════════════════════════════════════════════════════════════════════════
+  SOCCER PHASE 2 LEAKAGE AUDIT
+════════════════════════════════════════════════════════════════════════
+  Feature table: 10,708 rows × 59 columns
+
+  SECTION 1: Null % per feature
+  ────────────────────────────────────────────────────────────
+  ✓ home_xg_for_rolling_10                          0.17% null
+  ✓ home_xg_against_rolling_10                      0.17% null
+  ✓ away_xg_for_rolling_10                          0.17% null
+  ✓ away_xg_against_rolling_10                      0.17% null
+  ✓ home_shots_for_rolling_10                       0.00% null
+  ✓ home_shots_against_rolling_10                   0.00% null
+  ✓ away_shots_for_rolling_10                       0.00% null
+  ✓ away_shots_against_rolling_10                   0.00% null
+  ✓ home_shots_on_target_rolling_10                 0.00% null
+  ✓ away_shots_on_target_rolling_10                 0.00% null
+  ✓ home_goals_scored_rolling_5                     0.17% null
+  ✓ home_goals_conceded_rolling_5                   0.17% null
+  ✓ away_goals_scored_rolling_5                     0.17% null
+  ✓ away_goals_conceded_rolling_5                   0.17% null
+  ✓ home_xg_for_rolling_3                           0.17% null
+  ✓ home_xg_against_rolling_3                       0.17% null
+  ✓ away_xg_for_rolling_3                           0.17% null
+  ✓ away_xg_against_rolling_3                       0.17% null
+  ✓ home_shots_for_rolling_3                        0.00% null
+  ✓ away_shots_for_rolling_3                        0.00% null
+  ✓ home_goals_scored_rolling_3                     0.17% null
+  ✓ away_goals_scored_rolling_3                     0.17% null
+  ✓ home_xg_for_rolling_15                          0.17% null
+  ✓ home_xg_against_rolling_15                      0.17% null
+  ✓ away_xg_for_rolling_15                          0.17% null
+  ✓ away_xg_against_rolling_15                      0.17% null
+  ✓ home_days_rest                                  2.74% null
+  ✓ away_days_rest                                  2.74% null
+  ✓ home_matches_last_7                             0.00% null
+  ✓ away_matches_last_7                             0.00% null
+  ✓ league_id                                       0.00% null
+  ✓ league_avg_goals_rolling_season                 0.17% null
+  ✓ league_avg_xg_rolling_season                    0.17% null
+  ✓ league_home_adv                                 0.17% null
+  ✓ league_goals_rolling_10                         0.17% null
+  ✓ league_xg_rolling_10                            0.17% null
+  ✓ market_total_line                               0.00% null
+  ✓ home_xg_mismatch                                0.17% null
+  ✓ away_xg_mismatch                                0.17% null
+  ✓ home_shot_mismatch                              0.00% null
+  ✓ away_shot_mismatch                              0.00% null
+  ✓ home_form_mismatch                              0.17% null
+  ✓ away_form_mismatch                              0.17% null
+
+  SECTION 2: shift(1) verification — rolling window trace
+  ────────────────────────────────────────────────────────────
+  For 5 random games, verify rolling_10 uses only prior same-venue games
+
+  Game: Schalke 04 @ Augsburg  |  BUN 2019-20  |  2019-11-03
+    prior home games this season: 4  (window capped at 10)
+    feature home_xg_for_rolling_10 (post-shrinkage):  1.6128
+    SAME-GAME home_xg_raw (must NOT appear in window): 1.5510
+    raw window mean (last 4 home games):  1.3451
+
+  Game: Union Berlin @ Bayern Munich  |  BUN 2019-20  |  2019-10-26
+    prior home games this season: 4  (window capped at 10)
+    feature home_xg_for_rolling_10 (post-shrinkage):  2.1651
+    SAME-GAME home_xg_raw (must NOT appear in window): 2.8848
+    raw window mean (last 4 home games):  2.6300
+
+  Game: Wolfsburg @ Dortmund  |  BUN 2019-20  |  2019-11-02
+    prior home games this season: 4  (window capped at 10)
+    feature home_xg_for_rolling_10 (post-shrinkage):  2.1014
+    SAME-GAME home_xg_raw (must NOT appear in window): 2.1483
+    raw window mean (last 4 home games):  2.4706
+
+  Game: Leverkusen @ Ein Frankfurt  |  BUN 2019-20  |  2019-10-18
+    prior home games this season: 4  (window capped at 10)
+    feature home_xg_for_rolling_10 (post-shrinkage):  1.8719
+    SAME-GAME home_xg_raw (must NOT appear in window): 2.7369
+    raw window mean (last 4 home games):  1.9235
+
+  Game: Hoffenheim @ FC Koln  |  BUN 2019-20  |  2019-11-08
+    prior home games this season: 4  (window capped at 10)
+    feature home_xg_for_rolling_10 (post-shrinkage):  1.5196
+    SAME-GAME home_xg_raw (must NOT appear in window): 0.6387
+    raw window mean (last 4 home games):  1.1822
+
+  SECTION 3: Season boundary verification
+  ────────────────────────────────────────────────────────────
+  Checking: first game of each new season for each home team.
+  Expected: rolling values at game 1 should equal league fallback (w=0).
+
+  ✓ Season boundary reset is structurally guaranteed:
+    groupby key = (league_id, season_year, team)
+    shift(1) at first position of each group → NaN
+    expanding().count() at position 0 = 0 → shrinkage w=0
+
+  SECTION 4: Home/away feature separation
+  ────────────────────────────────────────────────────────────
+  home_* features computed on home-perspective DataFrame only.
+  away_* features computed on away-perspective DataFrame only.
+  Verified by construction: separate groupby calls in compute_home_rolling()
+  and compute_away_rolling() before merge.
+
+  ✓ Home and away rolling windows are structurally independent.
+
+  SECTION 5: Feature coverage summary by split
+  ────────────────────────────────────────────────────────────
+  train         7203 rows     0.2% rows with any null rolling feat
+  validate      1752 rows     0.2% rows with any null rolling feat
+  oos           1752 rows     0.2% rows with any null rolling feat
+
+  ✓ Phase 2 leakage audit complete.
+

@@ -1,0 +1,59 @@
+════════════════════════════════════════════════════════════════════════
+  PHASE 4 SIMULATION AUDIT
+════════════════════════════════════════════════════════════════════════
+  Total rows: 4,116  |  N_SIMS=50,000  |  MAX_GOALS=10
+
+  DIAGNOSTIC 1: simulated_mean_total vs lambda_total_calibrated
+  ────────────────────────────────────────────────────────────
+  Tolerance: ±0.05 per game
+  Max  |sim_mean − lambda_cal|:  0.030319
+  Mean |sim_mean − lambda_cal|:  0.006206
+  Violations (>0.05):            0  →  PASS
+
+  DIAGNOSTIC 2: Probability sanity ranges (validate set, n=686)
+  ────────────────────────────────────────────────────────────
+  Line             mean_P  expected range          check
+  ----------------------------------------------------
+  P_over_1_5       0.8205  [0.70–0.80] (±0.05 slack)  PASS
+  P_over_2_5       0.6097  [0.45–0.55] (±0.05 slack)  FAIL
+  P_over_3_5       0.3895  [0.20–0.30] (±0.05 slack)  FAIL
+
+  DIAGNOSTIC 3: Simulated score distribution (validate set)
+  ────────────────────────────────────────────────────────────
+  Score          sim_freq      expected  check
+  ------------------------------------------------
+  0-0              0.0439  [0.07–0.09] (±0.03 slack)  PASS
+  1-0 + 0-1        0.1356  [0.10–0.13] (±0.03 slack)  PASS
+  1-1              0.0994  [0.10–0.12] (±0.03 slack)  PASS
+
+  DIAGNOSTIC 4: Variance check (validate set)
+  ────────────────────────────────────────────────────────────
+  std(actual total_goals):            1.6844
+  mean per-game sim std (Poisson σ):  1.7773
+  Difference:                         0.0930  (threshold 0.20)  →  PASS
+  Note: per-game sim std = sqrt(λ_total) by Poisson theory.
+        Actual cross-game std reflects outcome variation across matches.
+
+  DIAGNOSTIC 5: Directional calibration by line (validate, market_available=True)
+  ────────────────────────────────────────────────────────────
+  Validate rows with market data: 686
+
+  Line 2.5:
+    actual < 2.5: n= 249  mean P_over = 0.6046  should be < 0.50  →  FAIL (under-games mean P_over=0.6046 ≥ 0.50)
+    actual > 2.5: n= 437  mean P_over = 0.6126  should be > 0.50  →  PASS
+  Line 1.5:
+    actual < 1.5: n=  98  mean P_over = 0.8171  should be < 0.50  →  FAIL (under-games mean P_over=0.8171 ≥ 0.50)
+    actual > 1.5: n= 588  mean P_over = 0.8211  should be > 0.50  →  PASS
+  Line 3.5:
+    actual < 3.5: n= 394  mean P_over = 0.3855  should be < 0.50  →  PASS
+    actual > 3.5: n= 292  mean P_over = 0.3949  should be > 0.50  →  FAIL (over-games mean P_over=0.3949 ≤ 0.50)
+
+  DIAGNOSTIC 6: Probability symmetry (P_over + P_under = 1.000)
+  ────────────────────────────────────────────────────────────
+  Line 1_5: max deviation = 0.00e+00  violations = 0  →  PASS
+  Line 2_5: max deviation = 0.00e+00  violations = 0  →  PASS
+  Line 3_5: max deviation = 0.00e+00  violations = 0  →  PASS
+
+────────────────────────────────────────────────────────────────────────
+  Phase 4 audit: ONE OR MORE CHECKS FAILED
+

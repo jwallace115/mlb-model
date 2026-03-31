@@ -1,0 +1,82 @@
+[
+  {
+    "signal_id": "PS001",
+    "train": {
+      "N": 1496,
+      "rate": 0.488,
+      "roi": -6.84
+    },
+    "val": {
+      "N": 653,
+      "rate": 0.4839,
+      "roi": -7.62
+    },
+    "perm_pctile": 24.2,
+    "year_stable": false,
+    "verdict": "FAIL (perm=24.2; val=0.4839; yr=1/3)"
+  },
+  {
+    "signal_id": "PS002",
+    "train": {
+      "N": 121,
+      "rate": 0.5372,
+      "roi": 2.55
+    },
+    "val": {
+      "N": 70,
+      "rate": 0.4714,
+      "roi": -10.0
+    },
+    "perm_pctile": 82.4,
+    "year_stable": true,
+    "verdict": "FAIL (perm=82.4; val=0.4714)"
+  },
+  {
+    "signal_id": "PS003",
+    "train": {
+      "N": 661,
+      "rate": 0.5053,
+      "roi": -3.53
+    },
+    "val": {
+      "N": 286,
+      "rate": 0.5,
+      "roi": -4.55
+    },
+    "perm_pctile": 70.6,
+    "year_stable": true,
+    "verdict": "FAIL (perm=70.6; val=0.5)"
+  },
+  {
+    "signal_id": "PS004",
+    "train": {
+      "N": 9,
+      "rate": 0.3333,
+      "roi": -36.36
+    },
+    "val": {
+      "N": 4,
+      "rate": 0.5,
+      "roi": -4.55
+    },
+    "perm_pctile": 10.6,
+    "year_stable": false,
+    "verdict": "FAIL (THIN_SAMPLE)"
+  },
+  {
+    "signal_id": "PS005",
+    "train": {
+      "N": 312,
+      "rate": 0.5128,
+      "roi": -2.1
+    },
+    "val": {
+      "N": 166,
+      "rate": 0.4518,
+      "roi": -13.75
+    },
+    "perm_pctile": 70.6,
+    "year_stable": false,
+    "verdict": "FAIL (perm=70.6; val=0.4518; yr=1/3)"
+  }
+]

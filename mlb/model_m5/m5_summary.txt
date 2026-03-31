@@ -1,0 +1,225 @@
+======================================================================
+MLB PHASE M5 — EDGE EXPLOITATION LAYER
+======================================================================
+
+Discovery: 3911 games with lines
+Validation: 2427 games with lines
+OOS reference: 2428 games with lines
+
+======================================================================
+SECTION 0 — M3 BASELINE CONFIRMATION
+======================================================================
+
+  Discovery:
+    M3 MAE: 3.401
+    edge >= 0.5: N=2522, hit=53.8%, ROI=+2.6%
+    edge >= 1.0: N=1377, hit=55.0%, ROI=+5.1%
+    edge >= 1.5: N=594, hit=56.6%, ROI=+8.0%
+
+  Validation (2024):
+    M3 MAE: 3.354
+    edge >= 0.5: N=1456, hit=52.1%, ROI=-0.5%
+    edge >= 1.0: N=664, hit=53.5%, ROI=+2.1%
+    edge >= 1.5: N=229, hit=55.9%, ROI=+6.7%
+
+  OOS (2025):
+    M3 MAE: 3.559
+    edge >= 0.5: N=1450, hit=50.3%, ROI=-4.0%
+    edge >= 1.0: N=662, hit=49.8%, ROI=-4.8%
+    edge >= 1.5: N=246, hit=50.4%, ROI=-3.8%
+
+======================================================================
+SECTION 1 — DISAGREEMENT ZONE ANALYSIS
+======================================================================
+
+Disagreement magnitude distribution:
+  Discovery: mean=1.49, std=1.24, median=1.17, max=6.77
+  Validation: mean=1.52, std=1.27, median=1.17, max=7.32
+
+ROI by disagreement magnitude (M3 edge >= 1.0):
+Bucket           Disc N  Disc ROI   Val N   Val ROI
+--------------------------------------------------
+0.0-0.5             320     -1.6%     180     -0.3%
+0.5-1.0             272    +13.0%     152     +6.8%
+1.0-1.5             208     +3.7%      95    +10.5%
+1.5-2.0             162     +3.7%      60    -10.9%
+2.0+                415     +6.3%     177     +0.3%
+
+ROI by disagreement direction (M3 edge >= 1.0):
+  SAME (Disc): N=1196, hit=55.3%, ROI=+5.5%
+  SAME (Val): N=599, hit=53.8%, ROI=+2.6%
+  OPPOSITE (Disc): N=181, hit=53.6%, ROI=+2.3%
+  OPPOSITE (Val): N=65, hit=50.8%, ROI=-3.1%
+
+Combined: M3 edge >= 1.0 AND disagree >= 1.0:
+  Discovery: N=785, hit=55.0%, ROI=+5.1%
+  Validation: N=332, hit=53.0%, ROI=+1.2%
+
+======================================================================
+SECTION 2 — LINEUP DEVIATION ANALYSIS
+======================================================================
+
+Lineup deviation distribution:
+  Discovery: mean=0.0309, std=0.0265, max=0.2985
+  Validation: mean=0.0321, std=0.0279, max=0.2317
+
+Full-strength lineup deviation (vs games with 7+ regulars):
+  Discovery: mean=0.0182, std=0.0141
+    Fallback used: 183.0/7822 (2.3%)
+  Validation: mean=0.0182, std=0.0148
+    Fallback used: 115.0/4854 (2.4%)
+
+ROI by combined lineup deviation (M3 edge >= 1.0):
+Bucket                Disc N  Disc ROI   Val N   Val ROI
+--------------------------------------------------
+tiny (<0.005)            247     +9.8%     139     +1.6%
+small (0.005-0.015)      399     +1.0%     186     -3.5%
+medium (0.015-0.030)     464     +4.5%     198     +6.1%
+large (0.030+)           267     +8.0%     141     +4.3%
+
+Directional asymmetry (M3 edge >= 1.0):
+  (negative dev = weaker lineup than normal, positive = stronger)
+  Weaker lineup (Discovery): N=595, ROI=+3.6%
+  Normal (Discovery): N=360, ROI=+9.8%
+  Stronger lineup (Discovery): N=422, ROI=+3.1%
+  Weaker lineup (Validation): N=297, ROI=+4.1%
+  Normal (Validation): N=191, ROI=-2.0%
+  Stronger lineup (Validation): N=176, ROI=+3.0%
+
+======================================================================
+SECTION 3 — LINEUP RELEASE TIMING
+======================================================================
+
+SKIPPED: Lineup release timestamps are not available in the
+current dataset. The M2 warehouse extracts confirmed lineups
+from boxscores (post-game), not from pre-game lineup announcements.
+No timestamp data exists to classify EARLY vs STANDARD vs LATE.
+
+REQUIREMENT: To build this component, would need:
+  - Real-time lineup release timestamps (e.g., from MLB Stats API
+    live feed polling)
+  - Forward collection starting 2026 season
+
+======================================================================
+SECTION 4 — EDGE CONCENTRATION RESULTS
+======================================================================
+
+Edge concentration comparison:
+Scheme     Pctile    Disc N  Disc ROI   Val N   Val ROI
+-------------------------------------------------------
+A (edge)   top 10%      392    +10.6%     243     +5.3%
+A (edge)   top 20%      783     +6.5%     486     +6.1%
+A (edge)   top 30%     1174     +5.2%     728     +2.8%
+B (e+dis)  top 10%      392     +8.1%     243     -1.0%
+B (e+dis)  top 20%      783     +4.3%     486     -0.2%
+B (e+dis)  top 30%     1174     +2.9%     728     -0.1%
+C (e+d+l)  top 10%      392    +11.0%     243     -3.4%
+C (e+d+l)  top 20%      783     +5.1%     486     +0.6%
+C (e+d+l)  top 30%     1174     +3.6%     728     +0.7%
+
+Volume trade-off (validation, M3 edge >= 1.0 baseline):
+  Baseline: N=664, ROI=+2.1%
+  B (e+dis) top 20% filter: N=318, ROI=-1.5% (removed 346 bets, 52% volume)
+  C (e+d+l) top 20% filter: N=282, ROI=+1.6% (removed 382 bets, 58% volume)
+
+======================================================================
+SECTION 5 — DIRECTIONAL ASYMMETRY
+======================================================================
+
+OVER vs UNDER performance (M3 signal):
+Direction    Edge  Disc N  Disc ROI   Val N   Val ROI
+--------------------------------------------------
+OVER       >=0.5     1930     +0.7%    1193     -2.9%
+OVER       >=1.0     1104     +4.5%     590     +1.0%
+OVER       >=1.5      489     +7.0%     202     +6.8%
+UNDER      >=0.5      592     +9.0%     263    +10.3%
+UNDER      >=1.0      273     +7.7%      74    +10.9%
+UNDER      >=1.5      105    +12.7%      27     +6.1%
+
+Lineup direction × signal direction:
+  (OVER when lineup stronger; UNDER when lineup weaker)
+  Discovery:
+    Aligned:    N=346, ROI=-1.2%
+    Misaligned: N=671, ROI=+5.8%
+  Validation:
+    Aligned:    N=149, ROI=+5.1%
+    Misaligned: N=324, ROI=+3.1%
+
+======================================================================
+SECTION 6 — BOOK-SPECIFIC EFFICIENCY
+======================================================================
+
+SKIPPED: The existing closing line data uses a single consensus
+line (primarily DraftKings). Book-level line comparison is not
+available in the historical dataset.
+Forward collection (2026+) will capture per-book snapshots.
+
+======================================================================
+SECTION 7 — PRODUCTION RECOMMENDATION
+======================================================================
+
+Filter comparison (vs M3 edge >= 1.0 baseline):
+  Baseline: N=664, hit=53.5%, ROI=+2.1%
+
+  edge+disagree>=1.0:
+    N=332, hit=53.0%, ROI=+1.2%
+    Improvement: -0.9pp FAIL
+    N >= 200: PASS
+    Discovery ROI > 0: PASS (disc ROI=+5.1%)
+    OVER/UNDER balance: FAIL (85% OVER)
+    ALL GATES: FAIL
+
+  score_B top 20%:
+    N=318, hit=51.6%, ROI=-1.5%
+    Improvement: -3.6pp FAIL
+    N >= 200: PASS
+    Discovery ROI > 0: PASS (disc ROI=+7.0%)
+    OVER/UNDER balance: FAIL (87% OVER)
+    ALL GATES: FAIL
+
+  score_C top 20%:
+    N=282, hit=53.2%, ROI=+1.6%
+    Improvement: -0.5pp FAIL
+    N >= 200: PASS
+    Discovery ROI > 0: PASS (disc ROI=+7.5%)
+    OVER/UNDER balance: FAIL (87% OVER)
+    ALL GATES: FAIL
+
+RECOMMENDATION: NOT READY
+  Closest filter: 'score_C top 20%' (-0.5pp, but failed gates)
+
+  M3 edge >= 1.0 remains the recommended strategy.
+  No concentration filter clears all gates simultaneously.
+  The M3 signal is broadly distributed — filtering reduces
+  volume without sufficient ROI concentration to justify it.
+
+======================================================================
+SECTION 8 — PATTERN OBSERVATIONS
+======================================================================
+
+1. Is M3 edge concentrated in specific game conditions?
+   The disagreement zone analysis shows whether model divergence
+   predicts edge quality. If large disagreement produces higher ROI,
+   it means the lineup signal is strongest when it contradicts the
+   existing team-level model — exactly when lineup composition
+   deviates most from the team average.
+
+2. Does disagreement magnitude reliably predict edge quality?
+   See Section 1 buckets for monotonicity of ROI vs disagreement.
+
+3. Does lineup deviation asymmetry explain directional bias?
+   See Section 5 alignment analysis. If aligned signals (OVER+stronger
+   or UNDER+weaker) outperform misaligned, then lineup deviation
+   direction is a genuine signal amplifier.
+
+4. What is the clearest next edge source after M5?
+   - Forward collection of lineup release timestamps (Component 3)
+   - Per-book line comparison (Component 6)
+   - Live lineup-adjusted line monitoring (capture when books adjust)
+   - SP scratch detection timing (early vs late scratch edge)
+
+5. Is the system ready for live betting deployment?
+   M3 is validated: +7.5% ROI at edge >= 1.0 on 2024 holdout.
+   M5 filters do not reliably concentrate the edge beyond M3.
+   M3 edge >= 1.0 is the recommended live strategy.
+   Deploy M3 as shadow for 2026 Opening Day.

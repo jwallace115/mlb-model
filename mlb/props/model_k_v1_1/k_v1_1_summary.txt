@@ -1,0 +1,147 @@
+=================================================================
+MLB PROPS — PITCHER K v1.1: PROBABILITY REPAIR
+=================================================================
+
+FIX 4 — K/TBF caps by season:
+  2023: mean=0.2223, std=0.1124, cap (mean+2σ)=0.4471
+  2024: mean=0.2195, std=0.1088, cap (mean+2σ)=0.4372
+  2025: mean=0.2193, std=0.1091, cap (mean+2σ)=0.4375
+
+Joined: 11,592 rows
+
+=================================================================
+FIX 3 — DEVIG DIAGNOSTIC
+=================================================================
+
+Plays with implied <5% or >95%: 16 out of 500 sampled
+  These are likely odds data errors or extreme juice:
+    Jordan Lyles: over_odds=-2.5, under_odds=-134.0
+      raw_over=0.0244, raw_under=0.5726, total=0.5970
+      imp_over=0.0409, imp_under=0.9591
+    Freddy Peralta: over_odds=-128.5, under_odds=-1.0
+      raw_over=0.5624, raw_under=0.0099, total=0.5723
+      imp_over=0.9827, imp_under=0.0173
+    Cal Quantrill: over_odds=-1.5, under_odds=-131.0
+      raw_over=0.0148, raw_under=0.5671, total=0.5819
+      imp_over=0.0254, imp_under=0.9746
+    Jack Flaherty: over_odds=-130.0, under_odds=-1.0
+      raw_over=0.5652, raw_under=0.0099, total=0.5751
+      imp_over=0.9828, imp_under=0.0172
+    Framber Valdez: over_odds=-1.0, under_odds=-132.0
+      raw_over=0.0099, raw_under=0.5690, total=0.5789
+      imp_over=0.0171, imp_under=0.9829
+
+Computing projections with all 4 fixes...
+  2,000...
+  4,000...
+  6,000...
+  8,000...
+  10,000...
+
+  Total: 10,460, flagged odds: 239, K/TBF capped: 7
+
+=================================================================
+SECTION 0 — FIX VERIFICATION
+=================================================================
+
+Fix 1: Velocity modifier REMOVED (confirmed — not in code)
+
+Fix 2: Statcast modifier distribution (v1.1):
+  CSW: min=0.9700, max=1.0300, mean=0.9997, std=0.0243
+    near 1.0 (0.99-1.01): 21%
+  Whiff: min=0.9700, max=1.0300, mean=0.9986, std=0.0266
+    near 1.0 (0.99-1.01): 14%
+  Combined: min=0.9500, max=1.0500, mean=0.9984, std=0.0402
+    near 1.0 (0.99-1.01): 17%
+
+Fix 3: Odds flag (implied <10% or >90%):
+  Flagged: 239 (2.3%)
+  Example flagged:
+    Jordan Lyles: imp_over=0.0409, imp_under=0.9591
+    Freddy Peralta: imp_over=0.9827, imp_under=0.0173
+    Cal Quantrill: imp_over=0.0254, imp_under=0.9746
+    Jack Flaherty: imp_over=0.9828, imp_under=0.0172
+    Framber Valdez: imp_over=0.0171, imp_under=0.9829
+
+Fix 4: K/TBF after shrinkage + cap:
+  min=0.0333, max=0.4471, mean=0.2240, std=0.0580
+  Hard-capped: 7 (0.1%)
+  Avg shrinkage: 0.0082
+
+Implied probability distribution (after fix 3):
+  <10%: 116 (1.1%)
+  10-20%: 7 (0.1%)
+  20-40%: 197 (1.9%)
+  40-60%: 9879 (94.4%)
+  60-80%: 128 (1.2%)
+  80-90%: 10 (0.1%)
+  90%+: 123 (1.2%)
+
+=================================================================
+SECTION 1 — CALIBRATION
+=================================================================
+
+Validation plays (after odds exclusion): 2,298
+
+Bucket         N  Model  Actual  Delta
+-----------------------------------
+<35%         465 26.3%  46.7% +20.4% ⚠
+35-45        486 40.0%  45.5% +5.5%
+45-55        552 50.0%  50.4% +0.4%
+55-65        441 59.8%  48.1% -11.8% ⚠
+65-70        281 69.4%  49.8% -19.5% ⚠
+
+Brier v1.1: 0.2705 (v1: 0.2827, Δ=+0.0122)
+corr(model_prob, outcome): v1.1=0.0201 (v1=0.0127)
+% plays model_prob > 75%: v1.1=3.1% (v1=7.7%)
+Calibration: FAIL
+
+=================================================================
+VALIDATION
+=================================================================
+  Overall: N=2,298, hit=49.5%, ROI=-17.4%
+  OVER: N=1,111, hit=47.4%, ROI=-15.3%
+  UNDER: N=1,187, hit=51.4%, ROI=-19.3%
+  Edge buckets:
+    0-2%: N=251, hit=48.2%, ROI=-20.1%
+    2-5%: N=341, hit=52.8%, ROI=-13.4%
+    5%+: N=1,706, hit=49.0%, ROI=-17.7%
+  Segments:
+    A:High CSW: N=313, hit=51.8%, ROI=-10.3%
+    D:High K opp: N=626, hit=47.8%, ROI=-19.7%
+    E:Aligned: N=70, hit=50.0%, ROI=-13.3% THIN
+
+=================================================================
+OOS
+=================================================================
+  Overall: N=2,222, hit=49.5%, ROI=-16.9%
+  OVER: N=1,076, hit=49.2%, ROI=-15.7%
+  UNDER: N=1,146, hit=49.9%, ROI=-18.1%
+  Edge buckets:
+    0-2%: N=245, hit=53.5%, ROI=-9.8%
+    2-5%: N=325, hit=52.0%, ROI=-12.1%
+    5%+: N=1,652, hit=48.5%, ROI=-18.9%
+  Segments:
+    A:High CSW: N=282, hit=50.0%, ROI=-16.4%
+    D:High K opp: N=316, hit=51.9%, ROI=-11.0%
+    E:Aligned: N=45, hit=66.7%, ROI=+11.9% THIN
+
+=================================================================
+SECTION 4 — RECOMMENDATION
+=================================================================
+  calibration: FAIL
+  corr>0.05: FAIL
+  N>=200: PASS
+  val ROI>=2%: FAIL
+  OOS>=0%: FAIL
+
+  NOT READY
+
+=================================================================
+SECTION 5 — HONEST ASSESSMENT
+=================================================================
+1. Calibration: Still failing
+2. Devig: flagged 239 extreme plays (2.3%)
+3. corr(model_prob, outcome): 0.0201 (was 0.0127)
+4. K/TBF distribution: max=0.4471 (was 0.5566 in v1)
+5. model_prob >75%: 3.1% (was 7.7% in v1)

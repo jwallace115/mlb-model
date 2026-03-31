@@ -1193,6 +1193,19 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
         except Exception as e:
             logger.warning(f"CS013 shadow tracking failed (non-fatal): {e}")
 
+        # ── CS028 SHADOW: Bayesian bullpen blowup probability (observational only) ──
+        try:
+            from mlb_sim.pipeline.cs028_shadow import compute_cs028, log_cs028_record
+            _cs028 = compute_cs028(home, away)
+            log_cs028_record(
+                game_id=gk, date=game_date,
+                home_team=home, away_team=away,
+                cs028_result=_cs028,
+                closing_total=full_cons,
+            )
+        except Exception as e:
+            logger.warning(f"CS028 shadow tracking failed (non-fatal): {e}")
+
         # ── KP04 SHADOW: Breaking-ball pitcher x high-K lineup (observational only) ──
         try:
             from mlb_sim.pipeline.kp04_shadow import compute_kp04, log_kp04_records

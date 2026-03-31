@@ -1,0 +1,80 @@
+{
+  "signal_id": "LT02",
+  "name": "lineup_contact_x_pitcher_whiff_interaction",
+  "lineup_source": "reconstructed_actual_lineups",
+  "baseline": {
+    "N_train": 6083,
+    "N_val": 2328,
+    "AUC": 0.54333,
+    "Brier": 0.24864,
+    "UR_57": 0.6009,
+    "UR_60": 0.5738,
+    "N_57": 213,
+    "N_60": 61,
+    "coverage": 1.0
+  },
+  "augmented": {
+    "N_train": 5987,
+    "N_val": 2328,
+    "AUC": 0.56381,
+    "Brier": 0.24683,
+    "UR_57": 0.5796,
+    "UR_60": 0.5612,
+    "N_57": 333,
+    "N_60": 139,
+    "coverage": 1.0
+  },
+  "deltas": {
+    "AUC": 0.02048,
+    "Brier": -0.00181,
+    "UR_57": -0.0213,
+    "UR_60": -0.0126
+  },
+  "year_stability": [
+    {
+      "window": "2022\u21922023",
+      "d_AUC": 0.01266,
+      "d_UR_57": 0.114,
+      "base_AUC": 0.54873,
+      "aug_AUC": 0.56139,
+      "base_UR57": 0.549,
+      "aug_UR57": 0.663
+    },
+    {
+      "window": "2022-23\u21922024",
+      "d_AUC": 0.01374,
+      "d_UR_57": 0.0199,
+      "base_AUC": 0.55908,
+      "aug_AUC": 0.57282,
+      "base_UR57": 0.5589,
+      "aug_UR57": 0.5788
+    },
+    {
+      "window": "2022-24\u21922025",
+      "d_AUC": 0.02048,
+      "d_UR_57": -0.0213,
+      "base_AUC": 0.54333,
+      "aug_AUC": 0.56381,
+      "base_UR57": 0.6009,
+      "aug_UR57": 0.5796
+    }
+  ],
+  "year_stable": true,
+  "gates": {
+    "coverage_70": true,
+    "d_auc_positive": true,
+    "d_ur57_positive": false,
+    "year_stable": true,
+    "coef_direction": false
+  },
+  "verdict": "SHELVE",
+  "features_added": [
+    "home_sp_kpct_x_away_contact",
+    "away_sp_kpct_x_home_contact"
+  ],
+  "coefs": {
+    "home_sp_kpct_x_away_contact": 0.054184,
+    "away_sp_kpct_x_home_contact": 0.049056
+  },
+  "coef_direction_correct": false
+}

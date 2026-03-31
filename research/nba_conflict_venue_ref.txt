@@ -1,0 +1,103 @@
+NBA SIGNAL CONFLICT ANALYSIS — VENUE OVER vs REF_UNDER
+Run date: 2026-03-23
+Analysis base: ref-covered regular-season games only
+Top-quartile threshold: 230.36 avg points (refs with >=30 games)
+Qualified refs: 76
+
+========================================
+BASE POPULATIONS (ref-covered only)
+========================================
+Total ref-covered RS games:    2486
+Venue OVER games:              242
+crew_high=0 games:             1082
+CONFLICT (Venue + crew_high=0):103
+Pure Venue (crew_high != 0):   139
+Pure REF_UNDER (no Venue):     979
+Missing closing lines:         5
+
+========================================
+CONFLICT GAME RESULTS
+========================================
+N:          103
+ME:         +2.36
+median_ME:  +4.00
+std_ME:     14.53
+std_score:  16.81
+HR_over:    60.2% (62/103 non-push)
+HR_under:   39.8% (41/103 non-push)
+Push:       0
+p-value:    0.1025 (two-sided t-test vs 0)
+
+Season-by-season:
+Season     |   N |     ME | HR_over
+-----------|-----|--------|--------
+2022-23    |  38 |  +1.39 | 57.9%
+2023-24    |  30 |  +1.58 | 56.7%
+2024-25    |  35 |  +4.07 | 65.7%
+
+Seasons opposite overall direction: none
+
+========================================
+SIGNAL STRENGTH COMPARISON
+========================================
+Group              |    N |     ME | med_ME | HR_over | HR_under |      p | std_ME
+-------------------|------|--------|--------|---------|----------|--------|--------
+Pure Venue         |  137 |  +9.15 |  +8.50 |   67.7% |    32.3% | 0.0000 |  17.46
+CONFLICT           |  103 |  +2.36 |  +4.00 |   60.2% |    39.8% | 0.1025 |  14.53
+Pure REF_UNDER     |  977 |  -1.96 |  -2.00 |   46.0% |    54.0% | 0.0004 |  17.35
+
+Expected ME if independent: (+9.15 + -1.96) / 2 = +3.59
+Actual conflict ME:         +2.36
+Delta:                      -1.23
+Interaction effect:         dampened
+
+========================================
+CORE CONFLICT TEST
+========================================
+N:          10  *** TOO THIN (< 20)
+ME:         +9.55
+median_ME:  +9.00
+HR_over:    80.0%
+p-value:    0.0290
+std_ME:     11.64
+Assessment: too thin to conclude
+
+========================================
+SEASON STABILITY
+========================================
+Season     |   N |     ME | HR_over
+-----------|-----|--------|--------
+2022-23    |  38 |  +1.39 | 57.9%
+2023-24    |  30 |  +1.58 | 56.7%
+2024-25    |  35 |  +4.07 | 65.7%
+Consistent direction: 3/3
+
+========================================
+LINE BAND CHECK
+========================================
+Band       |   N |     ME | HR_over
+-----------|-----|--------|--------
+< 220      |   4 |  +5.25 | 50.0%
+220-230    |  47 |  +1.30 | 59.6%
+230-240    |  42 |  +2.35 | 61.9%
+240-250    |  10 |  +6.25 | 60.0%
+>= 250     |   0 |    n/a |    n/a
+Concentration flag: no
+
+========================================
+OT EXCLUSION CHECK
+========================================
+OT games in conflict: 4
+Excluding OT — N: 99, ME: +1.67, HR_over: 59.6%
+Including OT — N: 103, ME: +2.36, HR_over: 60.2%
+
+========================================
+DECISION
+========================================
+Rule supported:       C
+Confidence:           low
+Recommended policy:   No bet — current CONFLICT rule confirmed
+Reasoning:            ME=+2.36 misses the +3.0 OVER threshold, p=0.1025 fails
+                      significance at 0.10; REF_UNDER dampens Venue OVER by ~7
+                      points but does not flip it — the residual lean is real
+                      but too weak and noisy to bet.

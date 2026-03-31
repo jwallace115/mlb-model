@@ -1,0 +1,128 @@
+MLB PHASE B2 — bp_delta_exposure RESIDUAL TEST
+Run date: 2026-03-24
+Train: 2022-2023 | Validate: 2024 | Holdout: 2025
+Games analyzed: 9715
+
+========================================
+FEATURE CONSTRUCTION
+========================================
+bullpen_delta = bp_xfip - sp_xfip (quality drop when SP exits)
+bp_delta_exposure = bullpen_delta × bp_proj_inn (quality drop × innings)
+combined_bp_delta_exposure = home + away
+
+NOTE: M3 has received these features as ZERO since deployment.
+This test checks whether they explain M3 residual variance.
+
+========================================
+DISTRIBUTIONS (Step 1)
+========================================
+Feature                            |   mean  |    std  |    p25  |    p75
+------------------------------------|---------|---------|---------|---------
+home_bullpen_delta                 |  -0.035 |   0.493 |  -0.335 |  +0.277
+away_bullpen_delta                 |  -0.036 |   0.489 |  -0.335 |  +0.276
+home_bp_delta_exposure             |  -0.194 |   1.716 |  -1.117 |  +0.910
+away_bp_delta_exposure             |  -0.200 |   1.706 |  -1.117 |  +0.883
+combined_bp_delta_exposure         |  -0.394 |   2.451 |  -1.843 |  +1.268
+
+CORRELATIONS WITH m3_residual:
+  home_bp_delta_exposure:     r=+0.007  p=0.471
+  away_bp_delta_exposure:     r=-0.013  p=0.186
+  combined_bp_delta_exposure: r=-0.004  p=0.678
+  away_bullpen_delta:         r=-0.019  p=0.069 (borderline)
+
+All correlations effectively zero (|r| < 0.02).
+
+========================================
+QUARTILE RESIDUAL TEST (Step 2)
+========================================
+Thresholds (train): Q25=-2.042  Q50=-0.356  Q75=+1.175
+
+Train (2022-2023):
+  Q1 | N=1215 | ME=-0.036 | median=-0.683 | p=0.7803
+  Q2 | N=1215 | ME=+0.114 | median=-0.356 | p=0.3560
+  Q3 | N=1215 | ME=-0.136 | median=-0.628 | p=0.2787
+  Q4 | N=1215 | ME=+0.058 | median=-0.592 | p=0.6358
+
+Validate (2024):
+  Q1 | N= 439 | ME=+0.083 | Q2 | ME=+0.229 | Q3 | ME=-0.246 | Q4 | ME=-0.091
+
+Holdout (2025):
+  Q1 | N= 588 | ME=-0.024 | Q2 | ME=+0.063 | Q3 | ME=-0.046 | Q4 | ME=+0.093
+
+NONE FLAGGED — no quartile meets |ME| > 0.35 AND p < 0.10.
+Q4 train ME = +0.058 (p=0.636) — essentially zero.
+
+========================================
+EXTREME BUCKET TEST (Step 3)
+========================================
+Thresholds (train): D10=-3.855  D90=+2.460
+
+Top decile (worst quality gap × most exposure):
+  Train:    N=486  ME=-0.058  p=0.747  HR=43.4%
+  Validate: N=284  ME=-0.023  p=0.919  HR=44.4%
+  Holdout:  N=289  ME=-0.363  p=0.134  HR=39.1%
+
+Bottom decile (best gap / minimal exposure):
+  Train:    N=486  ME=+0.041  p=0.849  HR=54.9%
+  Validate: N=145  ME=-0.231  p=0.503  HR=57.9%
+  Holdout:  N=203  ME=-0.225  p=0.508  HR=56.2%
+
+No extreme bucket reaches significance in any split.
+Direction is INCONSISTENT across splits (top decile flips sign).
+
+========================================
+INCREMENTAL VALUE TEST — OLS (Step 4)
+========================================
+m3_residual ~ combined_bp_delta_exposure + home_bp_xfip + away_bp_xfip
+            + home_high_leverage_avail + away_high_leverage_avail
+
+Train (N=4792, R²=0.003):
+  combined_bp_delta_exposure:  coeff=+0.028  t=+0.44  p=0.662
+  home_bp_xfip:               coeff=+0.124  t=+1.93  p=0.053
+  home_high_leverage_avail:    coeff=+0.181  t=+2.88  p=0.004
+
+Validate (N=2400, R²=0.003):
+  combined_bp_delta_exposure:  coeff=-0.075  t=-0.86  p=0.388
+
+Holdout (N=2400, R²=0.007):
+  combined_bp_delta_exposure:  coeff=+0.063  t=+0.69  p=0.493
+
+bp_delta_exposure is NOT significant in any split (p > 0.38).
+Only home_bp_xfip and home_high_leverage_avail — both already in M3 —
+show significance.
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+Gate                        | Threshold  | Result        | Pass/Fail
+----------------------------|------------|---------------|----------
+|ME| > 0.35 runs            | Q4 train   | +0.058        | FAIL
+Significance                | p < 0.10   | p=0.636       | FAIL
+N >= 50                     | Q4 train   | 1215          | PASS
+Direction consistent        | 3 splits   | +/-/+         | FAIL
+Median confirms             | Q4 train   | +0.058/-0.592 | FAIL
+OLS coefficient             | p < 0.10   | p=0.662       | FAIL
+
+Overall: FAIL (5 of 6 gates failed)
+
+========================================
+VERDICT
+========================================
+Signals passing all gates: NONE
+Best candidate: NONE — bp_delta_exposure has zero signal
+Adds value over M3 existing features: NO
+Recommended next step: CLOSE Phase B2
+
+Reasoning: bp_delta_exposure (quality gap × bullpen innings) has
+  effectively zero correlation with M3 residuals (r=-0.004, p=0.68).
+  Quartile Q4 train ME is +0.058 — noise level. The OLS coefficient
+  is t=0.44, p=0.66 after controlling for existing M3 inputs.
+  Despite being defaulted to zero in M3, correctly computing this
+  feature would not improve projections. The market already prices
+  the SP-to-bullpen quality transition through the line.
+
+PHASE B CONCLUSION (B1 + B2):
+  B1 — Continuous workload (pitches, relievers): NO signal
+  B2 — Quality gap × exposure: NO signal
+  The binary high_leverage_avail flag + season bp_xfip in M3 are
+  sufficient. No further bullpen feature work recommended.

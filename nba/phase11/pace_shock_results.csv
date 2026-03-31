@@ -1,0 +1,17 @@
+id,name,cls,label,direction,N_disc,roi_disc,roi_oos,avg_clv_disc,pct_pos_clv_disc,delta_vs_baseline,gates_failed,N_2022-23,roi_2022-23,N_2023-24,roi_2023-24
+PS1,Fast Games → OVER,RETROSPECTIVE,RETRO,OVER,619,13.5,22.46,-0.7,33.3,16.24,,305,9.54,314,17.34
+PS2,Slow Games → UNDER,RETROSPECTIVE,RETRO,UNDER,781,12.2,13.6,-0.56,34.8,14.94,,362,15.49,419,9.35
+PS3a,Large Fast → OVER (>7),RETROSPECTIVE,RETRO,OVER,85,34.76,60.47,-1.2,24.7,37.5,,40,33.64,45,35.76
+PS3b,Large Slow → UNDER (<-7),RETROSPECTIVE,RETRO,UNDER,100,31.73,33.28,-1.0,26.0,34.47,,51,31.02,49,32.47
+PS4_over,High Pace Mismatch → OVER,PREDICTIVE,FAIL,OVER,572,-3.21,-4.86,-0.18,42.5,-0.47,ROI_2023-24=-8.3%<=0|disc_ROI=-3.2%<3%|delta=-0.5pp<2pp|OOS_ROI=-4.9%<0,293,1.64,279,-8.31
+PS4_under,High Pace Mismatch → UNDER,PREDICTIVE,FAIL,UNDER,572,-8.22,-4.86,0.18,45.5,-5.48,ROI_2022-23=-12.0%<=0|ROI_2023-24=-4.2%<=0|disc_ROI=-8.2%<3%|delta=-5.5pp<2pp|OOS_ROI=-4.9%<0,293,-12.04,279,-4.2
+PS5_over,Fast vs Slow → OVER,PREDICTIVE,FAIL,OVER (fast dictates),281,1.23,-8.17,-0.41,40.9,3.97,ROI_2023-24=-5.9%<=0|disc_ROI=1.2%<3%|OOS_ROI=-8.2%<0|CLV=-0.41_neg_with_pos_ROI,139,8.5,142,-5.89
+PS5_under,Fast vs Slow → UNDER,PREDICTIVE,FAIL,UNDER (slow dictates),281,-11.68,-2.13,0.41,49.5,-8.94,ROI_2022-23=-19.0%<=0|ROI_2023-24=-4.5%<=0|disc_ROI=-11.7%<3%|delta=-8.9pp<2pp|OOS_ROI=-2.1%<0,139,-18.97,142,-4.55
+PS6_fast,Both Trending Faster → OVER,PREDICTIVE,FAIL,OVER,695,-3.03,-3.69,-0.09,44.6,-0.29,ROI_2022-23=-2.8%<=0|ROI_2023-24=-3.2%<=0|disc_ROI=-3.0%<3%|delta=-0.3pp<2pp|OOS_ROI=-3.7%<0,281,-2.85,414,-3.16
+PS6_slow,Both Trending Slower → UNDER,PREDICTIVE,FAIL,UNDER,823,-4.66,-8.59,0.2,49.3,-1.92,ROI_2022-23=-6.2%<=0|ROI_2023-24=-3.5%<=0|disc_ROI=-4.7%<3%|delta=-1.9pp<2pp|OOS_ROI=-8.6%<0,356,-6.15,467,-3.52
+PS7,Pace Expect + Model Agree,PREDICTIVE,FAIL,model,802,-2.88,-5.84,-0.57,36.8,-0.14,ROI_2022-23=-3.4%<=0|ROI_2023-24=-2.4%<=0|disc_ROI=-2.9%<3%|delta=-0.1pp<2pp|OOS_ROI=-5.8%<0,348,-3.45,454,-2.44
+PS8_pace,Pace Contradicts Model → Follow Pace,PREDICTIVE,FAIL,follow pace,716,-5.08,-6.21,-0.77,30.0,-2.34,ROI_2022-23=-6.2%<=0|ROI_2023-24=-4.3%<=0|disc_ROI=-5.1%<3%|delta=-2.3pp<2pp|OOS_ROI=-6.2%<0,289,-6.2,427,-4.32
+PS8_model,Pace Contradicts Model → Follow Model,PREDICTIVE,FAIL,model,716,-6.95,-4.31,-0.77,30.0,-4.21,ROI_2022-23=-4.2%<=0|ROI_2023-24=-8.8%<=0|disc_ROI=-6.9%<3%|delta=-4.2pp<2pp|OOS_ROI=-4.3%<0,289,-4.22,427,-8.79
+PS9_fast,Mid-Band + Fast Expect → OVER,PREDICTIVE,FAIL,OVER,340,3.32,-3.46,-0.48,39.1,6.06,ROI_2023-24=-2.2%<=0|OOS_ROI=-3.5%<0|CLV=-0.48_neg_with_pos_ROI,139,11.25,201,-2.17
+PS9_slow,Mid-Band + Slow Expect → UNDER,PREDICTIVE,FAIL,UNDER,466,-2.09,-13.07,0.58,54.9,0.65,ROI_2022-23=-7.8%<=0|disc_ROI=-2.1%<3%|delta=0.7pp<2pp|OOS_ROI=-13.1%<0,205,-7.8,261,2.4
+PS10,Neutral Pace Expect (control),PREDICTIVE,FAIL,model,761,1.35,-1.82,-0.64,33.9,4.09,ROI_2023-24=-2.9%<=0|disc_ROI=1.3%<3%|OOS_ROI=-1.8%<0|CLV=-0.64_neg_with_pos_ROI,415,4.88,346,-2.89

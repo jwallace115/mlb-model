@@ -1,0 +1,111 @@
+======================================================================
+  NBA PHASE 9 — LARGE EDGE SYSTEM TEST
+======================================================================
+
+  Data: features.parquet + predictions.parquet + nba_historical_closing_lines.parquet
+  Discovery: 2022-23 + 2023-24 (2 seasons available of 4 requested)
+  Holdout: 2024-25
+  Reference: 2025-26 pre-live replay (131 bets, partial coverage)
+  
+  NOTE: 2019-20 through 2021-22 not available — pipeline starts at 2022-23.
+  COVID-era consistency check not applicable.
+
+  SECTION 0 — BASELINE CONTEXT
+  ------------------------------------------------------------
+
+  FULL MODEL (all edges):
+  Season         N     Hit      ROI  Avg|Edge|  Push
+  ---------------------------------------------
+  2022-23     1219   52.9%    +1.0%       4.1     9
+  2023-24     1205   50.8%    -3.0%       4.7    22
+  2024-25     1220   50.7%    -3.3%       4.5    10
+  Combined    2424   51.9%    -1.0%       4.4    31
+
+  SMALL EDGE (0-1):
+  Season         N     Hit      ROI
+  -----------------------------------
+  2022-23      197   47.2%    -9.9%
+  2023-24      159   43.4%   -17.2%
+  2024-25      179   55.3%    +5.6%
+  Combined     356   45.5%   -13.1%
+
+  SECTION 1 — DISCRETE EDGE BANDS
+  ------------------------------------------------------------
+
+  Band             N     Hit      ROI   ΔFull   ΔSmall    22-23    23-24      OOS Label       Gate
+  --------------------------------------------------------------------------------------------------------------
+  0.00-1.00      356   45.5%   -13.1%  -12.1    +0.0    -9.9%   -17.2%    +5.6% FAIL        ROI -13.1% < +2.0%
+  1.00-1.50      161   52.8%    +0.8%   +1.8   +13.9    +5.3%    -4.5%   -11.4% FAIL        ROI 0.8% < +2.0%
+  1.50-2.50      324   54.3%    +3.7%   +4.7   +16.8   +10.7%    -5.2%    -7.4% NEAR-MISS   2023-24 ROI=-5.2% not positive
+  2.50-4.00      482   48.8%    -6.9%   -5.9    +6.2    -2.6%   -11.6%    -3.2% FAIL        ROI -6.9% < +2.0%
+  4.00+         1101   54.4%    +3.9%   +4.9   +17.0    +2.9%    +4.7%    -3.7% NEAR-MISS   OOS ROI=-3.7%
+
+  SECTION 2 — CUMULATIVE THRESHOLDS
+  ------------------------------------------------------------
+
+  Band             N     Hit      ROI   ΔFull    22-23    23-24      OOS Label
+  -------------------------------------------------------------------------------------
+  1.50+         1907   53.0%    +1.1%   +2.1    +2.9%    -0.6%    -4.2% FAIL
+  2.50+         1583   52.7%    +0.6%   +1.6    +1.0%    +0.2%    -3.6% FAIL
+  4.00+         1101   54.4%    +3.9%   +4.9    +2.9%    +4.7%    -3.7% NEAR-MISS
+
+  SECTION 3 — OVER VS UNDER SPLIT
+  ------------------------------------------------------------
+
+  Band          OVER N   OVER ROI   UNDER N   UNDER ROI
+  -------------------------------------------------------
+  0.00-1.00        183     -13.4%       173      -12.8%
+  1.00-1.50         83      -3.4%        78       +5.2%
+  1.50-2.50        170      +6.7%       154       +0.4%
+  2.50-4.00        253      -4.2%       229      -10.0%
+  4.00+            649      +2.4%       452       +6.0%
+  1.50+           1072      +1.5%       835       +0.6%
+  2.50+            902      +0.5%       681       +0.6%
+  4.00+            649      +2.4%       452       +6.0%
+
+  SECTION 4 — OOS VALIDATION
+  ------------------------------------------------------------
+  1.50-2.50: N=165, ROI=-7.4% — NEAR-MISS: 2023-24 ROI=-5.2% not positive
+  4.00+: N=573, ROI=-3.7% — NEAR-MISS: OOS ROI=-3.7%
+  4.00+: N=573, ROI=-3.7% — NEAR-MISS: OOS ROI=-3.7%
+
+  SECTION 5 — REFERENCE CONTEXT (2024-25 + 2025-26)
+  ------------------------------------------------------------
+  2024-25 0.00-1.00: N=179, hit=55.3%, ROI=+5.6%
+  2024-25 1.00-1.50: N=84, hit=46.4%, ROI=-11.4%
+  2024-25 1.50-2.50: N=165, hit=48.5%, ROI=-7.4%
+  2024-25 2.50-4.00: N=219, hit=50.7%, ROI=-3.2%
+  2024-25 4.00+: N=573, hit=50.4%, ROI=-3.7%
+  2024-25 1.50+: N=957, hit=50.2%, ROI=-4.2%
+  2024-25 2.50+: N=792, hit=50.5%, ROI=-3.6%
+  2024-25 4.00+: N=573, hit=50.4%, ROI=-3.7%
+
+  2025-26 pre-live replay (131 total bets, partial coverage):
+  2025-26 0.00-1.00: N=131, ROI=-3.8%
+
+  SECTION 6 — PATTERN-LEVEL OBSERVATIONS
+  ============================================================
+
+  1. DOES LARGER DISAGREEMENT IMPROVE RESULTS?
+     Edge band ROIs: [('0.00-1.00', '-13.1%'), ('1.00-1.50', '+0.8%'), ('1.50-2.50', '+3.7%'), ('2.50-4.00', '-6.9%'), ('4.00+', '+3.9%'), ('4.00+', '+3.9%')]
+     Monotonic improving: NO
+     Monotonic declining: NO
+     Pattern: NON-MONOTONIC — no clear relationship
+
+  2. IS THE SMALL-EDGE THESIS WRONG?
+     Small-edge (0-1) discovery ROI: -13.1%
+     Full model discovery ROI: -1.0%
+     The small-edge zone performs WORSE than the full model
+     The original thesis that small edges are most reliable is NOT supported by discovery data.
+
+  3. OVER VS UNDER AT LARGER EDGES:
+     OVER outperforms UNDER in 3 of 8 bands
+     UNDER consistently stronger
+
+  4. MODEL OVERCONFIDENCE:
+     No clear overconfidence pattern — performance varies non-monotonically
+
+  5. IMPLICATIONS:
+     Passes: 0
+     Near-misses: 3
+     Some large-edge bands show promise — further testing warranted

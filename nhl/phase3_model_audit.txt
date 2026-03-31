@@ -1,0 +1,59 @@
+====================================================================
+PHASE 3 MODEL DIAGNOSTIC REPORT
+====================================================================
+
+[5A] Leakage Check — Season boundaries and split integrity
+------------------------------------------------------------
+  Feature table: 5,248 rows, 44 model features
+  Inf values in features:  0
+  NaN values in features:  128  (before null-fill step)
+  PASS  Train: seasons=[2021, 2022]  expected=[2021, 2022]
+  PASS  Validate: seasons=[2023]  expected=[2023]
+  PASS  OOS: seasons=[2024]  expected=[2024]
+
+[5B] Feature Coverage (after null-fill)
+------------------------------------------------------------
+  PASS  Train: min=100.0%  max=100.0%  mean=100.0%
+  PASS  Validate: min=100.0%  max=100.0%  mean=100.0%
+  PASS  OOS: min=100.0%  max=100.0%  mean=100.0%
+
+[5C] Train and Validate Performance
+------------------------------------------------------------
+    Model H Train         MAE=1.4027  RMSE=1.7253  bias=-0.0000
+    Model A Train         MAE=1.3440  RMSE=1.6595  bias=+0.0000
+    Total  Train         MAE=1.8287
+    Model H Validate      MAE=1.3742  RMSE=1.7345  bias=-0.2168
+    Model A Validate      MAE=1.4107  RMSE=1.7663  bias=-0.2289
+    Total  Validate      MAE=1.8676
+
+[5D] OOS (2024-25) Performance
+------------------------------------------------------------
+    Model H OOS           MAE=1.4365  RMSE=1.8038  bias=-0.4209
+    Model A OOS           MAE=1.3954  RMSE=1.7458  bias=-0.3655
+    Total  OOS           MAE=1.9159  RMSE=2.4622
+
+  Projected total quintile calibration (OOS):
+    Q1: proj=4.69  actual=5.79  n=263
+    Q2: proj=5.07  actual=6.13  n=262
+    Q3: proj=5.30  actual=6.20  n=262
+    Q4: proj=5.52  actual=6.16  n=262
+    Q5: proj=5.90  actual=6.13  n=263
+
+[5E] Market Line Comparison (OOS, market_available=True)
+------------------------------------------------------------
+  Games with market line: 1,312
+  Model  MAE=1.9159  bias=-0.7864
+  Market MAE=1.8956  bias=-0.1410
+  PASS  Model MAE is +1.1% vs market MAE
+
+  Raw edge (proj − market) distribution:
+    p10: -1.225
+    p25: -0.972
+    p50: -0.666
+    p75: -0.350
+    p90: -0.048
+    mean=-0.645  std=0.472
+
+====================================================================
+END OF DIAGNOSTIC REPORT
+====================================================================

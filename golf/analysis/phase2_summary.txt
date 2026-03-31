@@ -1,0 +1,8 @@
+GOLF PHASE 2 — CORRECTED RESULTS
+Reference book: DraftKings (Pinnacle unavailable for most events)
+Dataset: 7563 player-events, 188 events
+win: ΔR²=-0.00455, p=1.000000, signal=NULL
+top_5: ΔR²=+0.00227, p=0.001153, signal=NULL
+top_10: ΔR²=+0.00339, p=0.000002, signal=NULL
+top_20: ΔR²=+0.00619, p=0.000000, signal=SIGNAL
+make_cut: ΔR²=+0.03626, p=0.000000, signal=STRONG

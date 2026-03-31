@@ -1,0 +1,130 @@
+MLB BOTH HIGH CSW — UNDER SIGNAL VALIDATION
+Run date: 2026-03-24
+Z-score params: home_csw mean=27.4167 std=5.3825, away_csw mean=26.6073 std=5.1220
+Threshold (P75 train non-extra): 0.9548
+
+========================================
+STEP 1 — CONDITION COUNTS
+========================================
+Season   |  N_all |  N_nox |  N_cond_all |  N_cond_nox
+2022     |   1908 |   1729 |         476 |         423
+2023     |   2003 |   1834 |         500 |         455
+2024     |   2427 |   2211 |         561 |         517
+2025     |   2428 |   2219 |         521 |         474
+Thin flag: no
+
+========================================
+STEP 2 — PRIMARY ME AND HIT RATE
+========================================
+NON-EXTRA (PRIMARY):
+Split      |     N |      ME |  med_ME |  UNDER% |        p
+-----------|-------|---------|---------|---------|----------
+Train      |   878 |  -0.537 |   -1.00 |   61.2% |   0.0001
+Validate   |   517 |  -0.523 |   -1.00 |   57.8% |   0.0011
+Holdout    |   474 |  -0.432 |   -1.00 |   58.9% |   0.0253
+
+ALL-GAMES (secondary):
+Split      |     N |      ME |  med_ME |  UNDER% |        p
+-----------|-------|---------|---------|---------|----------
+Train      |   976 |  -0.477 |   -1.00 |   60.7% |   0.0003
+Validate   |   561 |  -0.439 |   -0.50 |   56.9% |   0.0044
+Holdout    |   521 |  -0.415 |   -1.00 |   58.3% |   0.0236
+
+========================================
+STEP 3 — TAIL PROBABILITY
+========================================
+NON-EXTRA:
+Split      |  Signal P(<=-3) |  Baseline P(<=-3) |  Left-tail ratio
+-----------|-----------------|-------------------|------------------
+Train      |           32.5% |             20.9% |            1.554
+Validate   |           28.6% |             23.0% |            1.247
+Holdout    |           33.5% |             24.1% |            1.390
+
+ALL-GAMES:
+Split      |  Signal P(<=-3) |  Baseline P(<=-3) |  Left-tail ratio
+-----------|-----------------|-------------------|------------------
+Train      |           31.8% |             20.7% |            1.536
+Validate   |           27.6% |             22.7% |            1.219
+Holdout    |           32.8% |             23.6% |            1.388
+
+========================================
+STEP 4 — WIN/LOSS ASYMMETRY
+========================================
+NON-EXTRA:
+Split      |  UNDER avg margin |  OVER avg margin |  Ratio
+-----------|-------------------|------------------|--------
+Train      |             3.246 |            3.670 |  0.884
+Validate   |             3.163 |            3.033 |  1.043
+Holdout    |             3.421 |            3.809 |  0.898
+
+========================================
+STEP 5 — ROI AT REALISTIC JUICE
+========================================
+NON-EXTRA:
+Juice  |    BE% |  Train HR |  Train ROI |  Val HR |  Val ROI |  Hold HR |  Hold ROI
+-------|--------|-----------|------------|---------|----------|----------|-----------
+-110   |  52.4% |     61.2% |     16.82% |   57.8% |   10.30% |    58.9% |    12.52%
+-115   |  53.5% |     61.2% |     14.40% |   57.8% |    8.02% |    58.9% |    10.19%
+-120   |  54.5% |     61.2% |     12.18% |   57.8% |    5.93% |    58.9% |     8.06%
+
+Avg win size (train): 3.246 | Avg loss size (train): 3.670
+Break-even juice (train): 157.7
+
+========================================
+STEP 6 — THRESHOLD ROBUSTNESS
+========================================
+NON-EXTRA:
+Threshold  |  Train N |  Train ROI |  Val N |  Val ROI |  Hold N |  Hold ROI | Stable
+-----------|----------|------------|--------|----------|---------|-----------|--------
+P60        |     1405 |      9.52% |    845 |    4.47% |     822 |    12.31% |    YES
+P65        |     1229 |     11.59% |    738 |    5.70% |     690 |    12.25% |    YES
+P70        |     1054 |     13.71% |    617 |    6.60% |     566 |    13.07% |    YES
+P75        |      878 |     16.82% |    517 |   10.30% |     474 |    12.52% |    YES
+
+Best threshold: P75 = 0.9548
+
+========================================
+STEP 7 — LINE BAND SPLIT
+========================================
+NON-EXTRA (best threshold = P75):
+Band       |     N |      ME |  UNDER% |  ROI_110
+-----------|-------|---------|---------|----------
+<=7.5      |   614 |  -0.191 |   57.2% |    9.14%
+7.5-8.5    |   785 |  -0.591 |   60.0% |   14.50%
+8.5-9.5    |   382 |  -0.779 |   62.9% |   20.06%
+>9.5       |    88 |  -0.781 |   61.2% |   16.79%
+
+========================================
+STEP 8 — SEASON STABILITY
+========================================
+NON-EXTRA (best threshold = P75):
+Season   |     N |      ME |  UNDER% | Stable
+---------|-------|---------|---------|--------
+2022     |   423 |  -0.606 |   63.6% |    YES
+2023     |   455 |  -0.474 |   58.9% |    YES
+2024     |   517 |  -0.523 |   57.8% |    YES
+2025     |   474 |  -0.432 |   58.9% |    YES
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+Gate                       | Threshold      | Result         | Pass/Fail 
+---------------------------|----------------|----------------|------------
+Mean ME (val)              | <= -0.35       | -0.523         | PASS      
+Median ME (val)            | < 0            | -1.00          | PASS      
+UNDER hit rate (val)       | >= 54%         | 57.8%          | PASS      
+N (train)                  | >= 50          | 878            | PASS      
+Season consistency         | >= 3/4         | 4/4            | PASS      
+Survives no-extras (hold)  | ME <= -0.25    | -0.432         | PASS      
+Left-tail ratio (val)      | > 1.20         | 1.258          | PASS      
+ROI at -110 (val)          | > 0            | 10.30%         | PASS      
+
+Overall: PASS (8/8 gates passed)
+
+========================================
+VERDICT
+========================================
+Signal type: flat-bet
+Deployable: yes
+Best condition: both_csw_score >= 0.9548 (P75 of train non-extra)
+Reasoning: both_high_csw at P75 threshold shows consistent negative ME across train/val/hold with 8/8 gates passed. Validation UNDER% of 57.8% and ROI of 10.30% at -110 support deployment as an UNDER lean signal.

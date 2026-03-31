@@ -1,0 +1,77 @@
+{
+  "schedule": [
+    {
+      "country": "KSA",
+      "course": "Riyadh Golf Club",
+      "course_key": "1",
+      "event_id": "39",
+      "event_name": "Riyadh",
+      "latitude": 24.959,
+      "location": "Riyadh, Saudi Arabia",
+      "longitude": 46.576,
+      "start_date": "2025-02-06",
+      "status": "completed",
+      "tour": "liv",
+      "winner": "Meronk, Adrian (14196)"
+    },
+    {
+      "country": "AUS",
+      "course": "The Grange Golf Club",
+      "course_key": "1",
+      "event_id": "40",
+      "event_name": "Adelaide",
+      "latitude": -34.888,
+      "location": "Grange, Australia",
+      "longitude": 138.5,
+      "start_date": "2025-02-14",
+      "status": "completed",
+      "tour": "liv",
+      "winner": "Niemann, Joaquin (18079)"
+    },
+    {
+      "country": "CHN",
+      "course": "Hong Kong Golf Club",
+      "course_key": "1",
+      "event_id": "41",
+      "event_name": "Hong Kong",
+      "latitude": 22.496,
+      "location": "Sheung Shui, Hong Kong",
+      "longitude": 114.121,
+      "start_date": "2025-03-07",
+      "status": "completed",
+      "tour": "liv",
+      "winner": "Garcia, Sergio (5689)"
+    },
+    {
+      "country": "SIN",
+      "course": "Sentosa Golf Club",
+      "course_key": "1",
+      "event_id": "42",
+      "event_name": "Singapore",
+      "latitude": 1.244,
+      "location": "Singapore",
+      "longitude": 103.829,
+      "start_date": "2025-03-14",
+      "status": "completed",
+      "tour": "liv",
+      "winner": "Niemann, Joaquin (18079)"
+    },
+    {
+      "country": "USA",
+      "course": "Trump National Doral",
+      "course_key": "1",
+      "event_id": "43",
+      "event_name": "Miami",
+      "latitude": 25.813,
+      "location": "Miami, FL",
+      "longitude": -80.339,
+      "start_date": "2025-04-04",
+      "status": "completed",
+      "tour": "liv",
+      "winner": "Leishman, Marc (7649)"
+    }
+  ],
+  "season": 2025,
+  "tour": "liv",
+  "upcoming_only": "no"
+}

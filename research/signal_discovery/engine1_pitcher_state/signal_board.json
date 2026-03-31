@@ -1,0 +1,47 @@
+[
+  {
+    "signal_id": "PS001",
+    "verdict": "FAIL (perm=24.2; val=0.4839; yr=1/3)",
+    "train_N": 1496,
+    "val_N": 653,
+    "train_rate": 0.488,
+    "val_rate": 0.4839,
+    "perm": 24.2
+  },
+  {
+    "signal_id": "PS002",
+    "verdict": "FAIL (perm=82.4; val=0.4714)",
+    "train_N": 121,
+    "val_N": 70,
+    "train_rate": 0.5372,
+    "val_rate": 0.4714,
+    "perm": 82.4
+  },
+  {
+    "signal_id": "PS003",
+    "verdict": "FAIL (perm=70.6; val=0.5)",
+    "train_N": 661,
+    "val_N": 286,
+    "train_rate": 0.5053,
+    "val_rate": 0.5,
+    "perm": 70.6
+  },
+  {
+    "signal_id": "PS004",
+    "verdict": "FAIL (THIN_SAMPLE)",
+    "train_N": 9,
+    "val_N": 4,
+    "train_rate": 0.3333,
+    "val_rate": 0.5,
+    "perm": 10.6
+  },
+  {
+    "signal_id": "PS005",
+    "verdict": "FAIL (perm=70.6; val=0.4518; yr=1/3)",
+    "train_N": 312,
+    "val_N": 166,
+    "train_rate": 0.5128,
+    "val_rate": 0.4518,
+    "perm": 70.6
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "signal_id": "BN001",
+    "condition": "either_fragile >= 0.3384",
+    "direction": "OVER",
+    "threshold": 0.3384
+  },
+  {
+    "signal_id": "BN002",
+    "condition": "both_fragile >= 0.3384",
+    "direction": "OVER",
+    "threshold": 0.3384
+  },
+  {
+    "signal_id": "BN003",
+    "condition": "max_fragility >= 0.6579",
+    "direction": "OVER",
+    "threshold": 0.6579
+  },
+  {
+    "signal_id": "BN004",
+    "condition": "either_bridge_missing",
+    "direction": "OVER"
+  },
+  {
+    "signal_id": "BN005",
+    "condition": "either_leverage_overloaded AND either_depth_collapsed",
+    "direction": "OVER"
+  }
+]

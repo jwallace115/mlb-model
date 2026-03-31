@@ -1,0 +1,1321 @@
+[
+  {
+    "canonical_signal_id": "C016",
+    "canonical_name": "Cross-market / prop-to-total arbitrage",
+    "domain": "MARKET_BEHAVIOR",
+    "mechanism_summary": "Inconsistencies between player props, team totals, and full-game totals create identifiable mispricing windows",
+    "framework_variants": [
+      "HEURISTIC",
+      "MARKET_MICROSTRUCTURE"
+    ],
+    "idea_count": 10,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.6,
+    "source_signal_ids": [
+      "B1_S065",
+      "B1_S066",
+      "B1_S070",
+      "B2_S064",
+      "B2_S070",
+      "B2_S082",
+      "B3_S073",
+      "B3_S074",
+      "B3_S075",
+      "B3_S078"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 33.2
+  },
+  {
+    "canonical_signal_id": "C041",
+    "canonical_name": "Umpire strike zone regime",
+    "domain": "UMPIRE",
+    "mechanism_summary": "Individual umpires have zone tendencies (wide/tight, high/low) that interact with pitcher arsenals and batter types in ways that single over_rate captures poorly",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "MARKET_MICROSTRUCTURE",
+      "STATE_MODEL"
+    ],
+    "idea_count": 16,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 4.2,
+    "source_signal_ids": [
+      "B1_S009",
+      "B1_S037",
+      "B1_S051",
+      "B2_S004",
+      "B2_S016",
+      "B2_S031",
+      "B2_S065",
+      "B2_S079",
+      "B2_S100",
+      "B3_S004",
+      "B3_S016",
+      "B3_S023",
+      "B3_S049",
+      "B3_S067",
+      "B3_S090",
+      "B3_S095"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 32.0
+  },
+  {
+    "canonical_signal_id": "C003",
+    "canonical_name": "Bullpen collapse / blowup tail risk",
+    "domain": "BULLPEN",
+    "mechanism_summary": "Reliever performance has fat-tailed failure modes (blowup innings) that standard variance models underestimate; creates unpriced OVER tail risk",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 8,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 3.6,
+    "source_signal_ids": [
+      "B1_S050",
+      "B2_S006",
+      "B2_S023",
+      "B2_S030",
+      "B2_S056",
+      "B3_S013",
+      "B3_S044",
+      "B3_S065"
+    ],
+    "cross_reference": "combined_short_exit",
+    "similarity_score": 0.28,
+    "cross_ref_type": "SHADOW",
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 31.4
+  },
+  {
+    "canonical_signal_id": "C042",
+    "canonical_name": "Extreme weather scoring impact",
+    "domain": "WEATHER",
+    "mechanism_summary": "Extreme heat, cold, humidity, or wind create nonlinear scoring effects that linear weather adjustments miss; tail weather events are underpriced",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "MARKET_MICROSTRUCTURE",
+      "STATE_MODEL"
+    ],
+    "idea_count": 9,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 3.3,
+    "source_signal_ids": [
+      "B1_S044",
+      "B1_S052",
+      "B1_S084",
+      "B2_S005",
+      "B2_S048",
+      "B2_S053",
+      "B2_S068",
+      "B3_S045",
+      "B3_S057"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.6
+  },
+  {
+    "canonical_signal_id": "C005",
+    "canonical_name": "Bullpen latent fatigue state",
+    "domain": "BULLPEN",
+    "mechanism_summary": "Bullpen fatigue is a hidden state (not just recent IP) that builds nonlinearly and causes scoring spikes; markets price talent but not fatigue state",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 11,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 4.1,
+    "source_signal_ids": [
+      "B1_S025",
+      "B1_S034",
+      "B2_S038",
+      "B2_S046",
+      "B2_S071",
+      "B2_S096",
+      "B3_S005",
+      "B3_S033",
+      "B3_S034",
+      "B3_S054",
+      "B3_S081"
+    ],
+    "cross_reference": "combined_short_exit",
+    "similarity_score": 0.28,
+    "cross_ref_type": "SHADOW",
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.4
+  },
+  {
+    "canonical_signal_id": "C040",
+    "canonical_name": "Umpire behavioral drift / game-state response",
+    "domain": "UMPIRE",
+    "mechanism_summary": "Umpires shift zone and tendencies based on game state, score differential, or fatigue; static umpire ratings miss dynamic within-game behavior",
+    "framework_variants": [
+      "EVT_TAIL_MODEL"
+    ],
+    "idea_count": 1,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B3_S035"
+    ],
+    "cross_reference": "ST02",
+    "similarity_score": 0.17,
+    "cross_ref_type": "LIVE",
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.3
+  },
+  {
+    "canonical_signal_id": "C044",
+    "canonical_name": "Weather \u00d7 pitcher/park interaction",
+    "domain": "WEATHER",
+    "mechanism_summary": "Weather interacts with pitcher type (flyball/groundball) and park geometry in ways that simple additive models miss",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL"
+    ],
+    "idea_count": 1,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B2_S098"
+    ],
+    "cross_reference": "P09",
+    "similarity_score": 0.17,
+    "cross_ref_type": "LIVE",
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.3
+  },
+  {
+    "canonical_signal_id": "C004",
+    "canonical_name": "Bullpen deployment optimization",
+    "domain": "BULLPEN",
+    "mechanism_summary": "Manager bullpen strategy (matchup selection, usage patterns) creates predictable scoring patterns; suboptimal deployment is exploitable",
+    "framework_variants": [
+      "HEURISTIC",
+      "MARKET_MICROSTRUCTURE",
+      "STATE_MODEL"
+    ],
+    "idea_count": 6,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 3.3,
+    "source_signal_ids": [
+      "B1_S099",
+      "B2_S013",
+      "B2_S067",
+      "B2_S076",
+      "B2_S085",
+      "B3_S089"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.2
+  },
+  {
+    "canonical_signal_id": "C032",
+    "canonical_name": "Run distribution tail shape mispricing",
+    "domain": "RUN_DISTRIBUTION",
+    "mechanism_summary": "Totals markets assume roughly normal scoring distributions; actual run distributions have fat tails and zero-inflation that create systematic over/under bias",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 9,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.6,
+    "source_signal_ids": [
+      "B1_S016",
+      "B1_S041",
+      "B2_S052",
+      "B3_S041",
+      "B3_S050",
+      "B3_S061",
+      "B3_S062",
+      "B3_S093",
+      "B3_S098"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.2
+  },
+  {
+    "canonical_signal_id": "C001",
+    "canonical_name": "Dynamic park environment effect",
+    "domain": "BALLPARK",
+    "mechanism_summary": "Park factors vary with weather, time of year, and game time in ways that static seasonal park factors miss; altitude + temperature creates explosive scoring conditions",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 8,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 3.4,
+    "source_signal_ids": [
+      "B1_S003",
+      "B1_S033",
+      "B2_S015",
+      "B2_S032",
+      "B2_S039",
+      "B2_S055",
+      "B2_S075",
+      "B3_S053"
+    ],
+    "cross_reference": "P09",
+    "similarity_score": 0.17,
+    "cross_ref_type": "LIVE",
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.1
+  },
+  {
+    "canonical_signal_id": "C035",
+    "canonical_name": "SEQUENCING \u2014 unclustered signals",
+    "domain": "SEQUENCING",
+    "mechanism_summary": "Mixed sequencing signals without a shared core mechanism",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 11,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B1_S022",
+      "B1_S036",
+      "B1_S071",
+      "B1_S072",
+      "B1_S078",
+      "B2_S022",
+      "B2_S029",
+      "B2_S058",
+      "B2_S084",
+      "B2_S087",
+      "B3_S066"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 30.0
+  },
+  {
+    "canonical_signal_id": "C030",
+    "canonical_name": "PLAYER_FORM \u2014 unclustered signals",
+    "domain": "PLAYER_FORM",
+    "mechanism_summary": "Mixed player_form signals without a shared core mechanism",
+    "framework_variants": [
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 12,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.9,
+    "source_signal_ids": [
+      "B1_S035",
+      "B1_S046",
+      "B2_S028",
+      "B2_S044",
+      "B2_S057",
+      "B2_S072",
+      "B2_S095",
+      "B2_S097",
+      "B3_S047",
+      "B3_S052",
+      "B3_S092",
+      "B3_S097"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 29.8
+  },
+  {
+    "canonical_signal_id": "C022",
+    "canonical_name": "Pitcher latent fatigue state",
+    "domain": "PITCHER",
+    "mechanism_summary": "Starter fatigue accumulates as a hidden state variable that markets price with lag; pitch count and velocity decline are symptoms, not the state itself",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 12,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.7,
+    "source_signal_ids": [
+      "B1_S026",
+      "B1_S042",
+      "B1_S048",
+      "B1_S079",
+      "B2_S017",
+      "B2_S024",
+      "B2_S025",
+      "B2_S054",
+      "B3_S011",
+      "B3_S039",
+      "B3_S046",
+      "B3_S064"
+    ],
+    "cross_reference": "F5_totals",
+    "similarity_score": 0.47,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade F5_totals (First-5-inning total projection) using DISTRIBUTION_MODEL/EVT_TAIL_MODEL/STATE_MODEL framework: Starter fatigue accumulates as a hidden state variable that markets price with lag; pitch count and velocity decline are",
+    "rank_score": 29.7
+  },
+  {
+    "canonical_signal_id": "C002",
+    "canonical_name": "BALLPARK \u2014 unclustered signals",
+    "domain": "BALLPARK",
+    "mechanism_summary": "Mixed ballpark signals without a shared core mechanism",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "EVT_TAIL_MODEL"
+    ],
+    "idea_count": 2,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B3_S003",
+      "B3_S043"
+    ],
+    "cross_reference": "P09",
+    "similarity_score": 0.17,
+    "cross_ref_type": "LIVE",
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 29.3
+  },
+  {
+    "canonical_signal_id": "C036",
+    "canonical_name": "Pitch sequencing / approach predictability",
+    "domain": "SEQUENCING",
+    "mechanism_summary": "Predictable pitch sequencing patterns make pitchers more hittable; markets price aggregate stuff metrics but not sequence-level exploitation",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "HEURISTIC"
+    ],
+    "idea_count": 6,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.2,
+    "source_signal_ids": [
+      "B2_S043",
+      "B2_S049",
+      "B2_S090",
+      "B2_S093",
+      "B3_S022",
+      "B3_S088"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 29.0
+  },
+  {
+    "canonical_signal_id": "C006",
+    "canonical_name": "Bullpen roster/quality transition",
+    "domain": "BULLPEN",
+    "mechanism_summary": "Bullpen quality changes (callups, trades, September expansion) create lag in market pricing of team relief quality",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV"
+    ],
+    "idea_count": 2,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 3.5,
+    "source_signal_ids": [
+      "B1_S060",
+      "B3_S008"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 28.6
+  },
+  {
+    "canonical_signal_id": "C012",
+    "canonical_name": "LINEUP \u2014 unclustered signals",
+    "domain": "LINEUP",
+    "mechanism_summary": "Mixed lineup signals without a shared core mechanism",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 17,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B1_S032",
+      "B1_S057",
+      "B1_S081",
+      "B1_S087",
+      "B1_S088",
+      "B1_S093",
+      "B2_S019",
+      "B2_S034",
+      "B2_S047",
+      "B2_S050",
+      "B2_S089",
+      "B3_S002",
+      "B3_S017",
+      "B3_S032",
+      "B3_S048",
+      "B3_S084",
+      "B3_S085"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 28.0
+  },
+  {
+    "canonical_signal_id": "C033",
+    "canonical_name": "RUN_DISTRIBUTION \u2014 unclustered signals",
+    "domain": "RUN_DISTRIBUTION",
+    "mechanism_summary": "Mixed run_distribution signals without a shared core mechanism",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "STATE_MODEL"
+    ],
+    "idea_count": 4,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B1_S090",
+      "B2_S018",
+      "B3_S010",
+      "B3_S020"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 28.0
+  },
+  {
+    "canonical_signal_id": "C043",
+    "canonical_name": "WEATHER \u2014 unclustered signals",
+    "domain": "WEATHER",
+    "mechanism_summary": "Mixed weather signals without a shared core mechanism",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "DISTRIBUTION_MODEL"
+    ],
+    "idea_count": 2,
+    "prior_research_closed_flag": true,
+    "framework_revisit_flag": true,
+    "avg_novelty_score": 2.5,
+    "source_signal_ids": [
+      "B3_S009",
+      "B3_S024"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 28.0
+  },
+  {
+    "canonical_signal_id": "C015",
+    "canonical_name": "MARKET_BEHAVIOR \u2014 unclustered signals",
+    "domain": "MARKET_BEHAVIOR",
+    "mechanism_summary": "Mixed market_behavior signals without a shared core mechanism",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 4,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.8,
+    "source_signal_ids": [
+      "B1_S012",
+      "B2_S074",
+      "B3_S025",
+      "B3_S040"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 27.6
+  },
+  {
+    "canonical_signal_id": "C031",
+    "canonical_name": "Inning-level run clustering",
+    "domain": "RUN_DISTRIBUTION",
+    "mechanism_summary": "Runs cluster within innings due to baserunner chaining and pitcher unraveling; this clustering means per-inning scoring is not independent, creating tail risk",
+    "framework_variants": [
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 3,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 5.0,
+    "source_signal_ids": [
+      "B1_S083",
+      "B3_S038",
+      "B3_S069"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 27.6
+  },
+  {
+    "canonical_signal_id": "C008",
+    "canonical_name": "GAME_STATE \u2014 unclustered signals",
+    "domain": "GAME_STATE",
+    "mechanism_summary": "Mixed game_state signals without a shared core mechanism",
+    "framework_variants": [
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 2,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.5,
+    "source_signal_ids": [
+      "B1_S094",
+      "B2_S080"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 27.0
+  },
+  {
+    "canonical_signal_id": "C027",
+    "canonical_name": "Pitcher repertoire mix change",
+    "domain": "PITCHER",
+    "mechanism_summary": "Changes in pitch mix (adding/dropping pitches, usage shifts) alter effectiveness before season stats reflect it; markets anchor to historical pitch type distributions",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 12,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.2,
+    "source_signal_ids": [
+      "B1_S011",
+      "B1_S029",
+      "B1_S039",
+      "B1_S097",
+      "B2_S009",
+      "B2_S042",
+      "B2_S088",
+      "B2_S091",
+      "B3_S056",
+      "B3_S083",
+      "B3_S091",
+      "B3_S096"
+    ],
+    "cross_reference": "V1",
+    "similarity_score": 0.44,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade V1 (Pitcher xFIP/CSW quality \u2192 full-game total projection) using BAYESIAN_UPDATE/CAUSAL_IV/DISTRIBUTION_MODEL/EVT_TAIL_MODEL/STATE_MODEL framework: Changes in pitch mix (adding/dropping pitches, usage shifts) alter effectiveness before season stats reflect it; markets",
+    "rank_score": 27.0
+  },
+  {
+    "canonical_signal_id": "C034",
+    "canonical_name": "Lineup sequencing / batting order optimization",
+    "domain": "SEQUENCING",
+    "mechanism_summary": "Suboptimal batting order decisions leave scoring value on the table; the gap between actual and optimal lineup orders is exploitable",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL"
+    ],
+    "idea_count": 1,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B1_S075"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 27.0
+  },
+  {
+    "canonical_signal_id": "C021",
+    "canonical_name": "Pitcher deception / entropy",
+    "domain": "PITCHER",
+    "mechanism_summary": "Pitchers with high entropy (unpredictable sequences) suppress scoring more than metrics suggest; low-entropy pitchers are more exploitable",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "HEURISTIC"
+    ],
+    "idea_count": 5,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.8,
+    "source_signal_ids": [
+      "B1_S014",
+      "B1_S073",
+      "B2_S081",
+      "B3_S027",
+      "B3_S030"
+    ],
+    "cross_reference": "ADJ_CONTACT",
+    "similarity_score": 0.47,
+    "cross_ref_type": "SHADOW",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade ADJ_CONTACT (Opponent-adjusted contact rate suppression) using DISTRIBUTION_MODEL framework: Pitchers with high entropy (unpredictable sequences) suppress scoring more than metrics suggest; low-entropy pitchers ar",
+    "rank_score": 26.9
+  },
+  {
+    "canonical_signal_id": "C029",
+    "canonical_name": "Player hot/cold streak detection",
+    "domain": "PLAYER_FORM",
+    "mechanism_summary": "Real performance streaks (not just noise) exist at the individual level; detecting true form changes before markets adjust creates edge",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 7,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.9,
+    "source_signal_ids": [
+      "B1_S024",
+      "B2_S011",
+      "B2_S077",
+      "B3_S006",
+      "B3_S019",
+      "B3_S029",
+      "B3_S068"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 26.8
+  },
+  {
+    "canonical_signal_id": "C009",
+    "canonical_name": "Scoring regime / run environment shift",
+    "domain": "GAME_STATE",
+    "mechanism_summary": "Run environments shift in multi-week regimes (league-wide scoring trends) that markets adjust to with lag; early-season and post-ASB transitions are most exploitable",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 12,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B1_S020",
+      "B1_S028",
+      "B2_S010",
+      "B2_S026",
+      "B2_S059",
+      "B2_S092",
+      "B2_S094",
+      "B3_S028",
+      "B3_S060",
+      "B3_S063",
+      "B3_S070",
+      "B3_S082"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 26.6
+  },
+  {
+    "canonical_signal_id": "C007",
+    "canonical_name": "Game-state leverage / pressure dynamics",
+    "domain": "GAME_STATE",
+    "mechanism_summary": "High-leverage situations (close late, playoff implications) alter player performance and manager decisions in ways that regular-season models miss",
+    "framework_variants": [
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "HEURISTIC"
+    ],
+    "idea_count": 4,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.2,
+    "source_signal_ids": [
+      "B1_S092",
+      "B2_S040",
+      "B2_S099",
+      "B3_S086"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 26.4
+  },
+  {
+    "canonical_signal_id": "C020",
+    "canonical_name": "Pitcher command regime shift",
+    "domain": "PITCHER",
+    "mechanism_summary": "Pitchers alternate between command regimes (sharp/wild) that persist over multi-start windows; markets anchor to season averages and miss regime transitions",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 7,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.4,
+    "source_signal_ids": [
+      "B1_S002",
+      "B1_S017",
+      "B1_S059",
+      "B1_S077",
+      "B1_S086",
+      "B2_S012",
+      "B3_S015"
+    ],
+    "cross_reference": "V1",
+    "similarity_score": 0.44,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade V1 (Pitcher xFIP/CSW quality \u2192 full-game total projection) using BAYESIAN_UPDATE/CAUSAL_IV/DISTRIBUTION_MODEL/STATE_MODEL framework: Pitchers alternate between command regimes (sharp/wild) that persist over multi-start windows; markets anchor to season ",
+    "rank_score": 26.4
+  },
+  {
+    "canonical_signal_id": "C010",
+    "canonical_name": "Lineup composition scoring profile",
+    "domain": "LINEUP",
+    "mechanism_summary": "Team lineup contact quality and power distribution predict scoring shape better than aggregate batting stats; specific lineup archetypes create exploitable run environments",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 21,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B1_S006",
+      "B1_S013",
+      "B1_S018",
+      "B1_S053",
+      "B1_S076",
+      "B1_S080",
+      "B1_S098",
+      "B1_S100",
+      "B2_S003",
+      "B2_S014",
+      "B2_S041",
+      "B2_S060",
+      "B2_S083",
+      "B3_S007",
+      "B3_S012",
+      "B3_S018",
+      "B3_S021",
+      "B3_S026",
+      "B3_S058",
+      "B3_S087",
+      "B3_S094"
+    ],
+    "cross_reference": "P09",
+    "similarity_score": 0.17,
+    "cross_ref_type": "LIVE",
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 26.3
+  },
+  {
+    "canonical_signal_id": "C011",
+    "canonical_name": "Key batter absence / lineup degradation",
+    "domain": "LINEUP",
+    "mechanism_summary": "Loss of key batters degrades lineup quality in ways that market adjustments underestimate, especially for deep-lineup impacts",
+    "framework_variants": [
+      "CAUSAL_IV"
+    ],
+    "idea_count": 1,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B2_S035"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 25.6
+  },
+  {
+    "canonical_signal_id": "C019",
+    "canonical_name": "Public betting bias / sentiment",
+    "domain": "MARKET_BEHAVIOR",
+    "mechanism_summary": "Public money systematically pushes lines in biased directions (favoring overs, star pitchers, big-market teams); creates exploitable counter-positions",
+    "framework_variants": [
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "MARKET_MICROSTRUCTURE",
+      "STATE_MODEL"
+    ],
+    "idea_count": 17,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.5,
+    "source_signal_ids": [
+      "B1_S043",
+      "B1_S064",
+      "B1_S068",
+      "B1_S069",
+      "B2_S020",
+      "B2_S036",
+      "B2_S062",
+      "B2_S063",
+      "B2_S066",
+      "B2_S069",
+      "B2_S078",
+      "B2_S086",
+      "B3_S072",
+      "B3_S076",
+      "B3_S077",
+      "B3_S080",
+      "B3_S099"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 25.6
+  },
+  {
+    "canonical_signal_id": "C018",
+    "canonical_name": "Line movement information extraction",
+    "domain": "MARKET_BEHAVIOR",
+    "mechanism_summary": "Line movement patterns contain information about sharp money and injury news that can be extracted to predict closing line value",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "MARKET_MICROSTRUCTURE",
+      "STATE_MODEL"
+    ],
+    "idea_count": 5,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.2,
+    "source_signal_ids": [
+      "B1_S061",
+      "B1_S085",
+      "B2_S045",
+      "B3_S071",
+      "B3_S100"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 25.4
+  },
+  {
+    "canonical_signal_id": "C037",
+    "canonical_name": "TRAVEL \u2014 unclustered signals",
+    "domain": "TRAVEL",
+    "mechanism_summary": "Mixed travel signals without a shared core mechanism",
+    "framework_variants": [
+      "CAUSAL_IV"
+    ],
+    "idea_count": 1,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B2_S037"
+    ],
+    "cross_reference": "ST02",
+    "similarity_score": 0.47,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade ST02 (Road trip game 6+ fatigue UNDER) using CAUSAL_IV framework: Mixed travel signals without a shared core mechanism",
+    "rank_score": 25.3
+  },
+  {
+    "canonical_signal_id": "C013",
+    "canonical_name": "Lineup platoon advantage stacking",
+    "domain": "LINEUP",
+    "mechanism_summary": "Multiple batters with platoon advantage in the same lineup create multiplicative scoring effects that markets treat as additive",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL"
+    ],
+    "idea_count": 1,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.0,
+    "source_signal_ids": [
+      "B1_S015"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 25.0
+  },
+  {
+    "canonical_signal_id": "C014",
+    "canonical_name": "Market anchoring / stale pricing",
+    "domain": "MARKET_BEHAVIOR",
+    "mechanism_summary": "Lines anchor to opening numbers and adjust insufficiently to new information; closing lines retain residual opening bias",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "EVT_TAIL_MODEL",
+      "MARKET_MICROSTRUCTURE",
+      "STATE_MODEL"
+    ],
+    "idea_count": 7,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 2.9,
+    "source_signal_ids": [
+      "B1_S004",
+      "B1_S010",
+      "B1_S038",
+      "B1_S049",
+      "B1_S063",
+      "B2_S061",
+      "B3_S079"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.0,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 24.8
+  },
+  {
+    "canonical_signal_id": "C024",
+    "canonical_name": "PITCHER \u2014 unclustered signals",
+    "domain": "PITCHER",
+    "mechanism_summary": "Mixed pitcher signals without a shared core mechanism",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "EVT_TAIL_MODEL"
+    ],
+    "idea_count": 5,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.6,
+    "source_signal_ids": [
+      "B1_S007",
+      "B1_S047",
+      "B1_S055",
+      "B2_S027",
+      "B3_S042"
+    ],
+    "cross_reference": "V1",
+    "similarity_score": 0.44,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade V1 (Pitcher xFIP/CSW quality \u2192 full-game total projection) using BAYESIAN_UPDATE/CAUSAL_IV/EVT_TAIL_MODEL framework: Mixed pitcher signals without a shared core mechanism",
+    "rank_score": 24.8
+  },
+  {
+    "canonical_signal_id": "C023",
+    "canonical_name": "Pitcher injury/IL return adjustment lag",
+    "domain": "PITCHER",
+    "mechanism_summary": "Post-IL return pitchers have altered effectiveness that markets are slow to update; stale priors from pre-injury performance persist for multiple starts",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 6,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.0,
+    "source_signal_ids": [
+      "B1_S001",
+      "B1_S008",
+      "B1_S082",
+      "B2_S051",
+      "B3_S001",
+      "B3_S036"
+    ],
+    "cross_reference": "V1",
+    "similarity_score": 0.44,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade V1 (Pitcher xFIP/CSW quality \u2192 full-game total projection) using BAYESIAN_UPDATE/EVT_TAIL_MODEL/STATE_MODEL framework: Post-IL return pitchers have altered effectiveness that markets are slow to update; stale priors from pre-injury perform",
+    "rank_score": 24.6
+  },
+  {
+    "canonical_signal_id": "C028",
+    "canonical_name": "Starter short-leash / early exit",
+    "domain": "PITCHER",
+    "mechanism_summary": "Short starters expose more bullpen innings; when combined with bullpen state, creates predictable scoring environments that markets underweight",
+    "framework_variants": [
+      "EVT_TAIL_MODEL"
+    ],
+    "idea_count": 4,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 4.0,
+    "source_signal_ids": [
+      "B1_S021",
+      "B1_S030",
+      "B2_S021",
+      "B3_S031"
+    ],
+    "cross_reference": "combined_short_exit",
+    "similarity_score": 0.86,
+    "cross_ref_type": "SHADOW",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade combined_short_exit (Both starters likely to exit early \u2192 bullpen exposure) using EVT_TAIL_MODEL framework: Short starters expose more bullpen innings; when combined with bullpen state, creates predictable scoring environments t",
+    "rank_score": 24.4
+  },
+  {
+    "canonical_signal_id": "C017",
+    "canonical_name": "Information timing asymmetry",
+    "domain": "MARKET_BEHAVIOR",
+    "mechanism_summary": "Lineups, injuries, and weather information reaches the market at different speeds; early access to confirmed information creates windows",
+    "framework_variants": [
+      "DISTRIBUTION_MODEL",
+      "MARKET_MICROSTRUCTURE"
+    ],
+    "idea_count": 3,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.3,
+    "source_signal_ids": [
+      "B1_S019",
+      "B1_S062",
+      "B1_S067"
+    ],
+    "cross_reference": null,
+    "similarity_score": 0.14,
+    "cross_ref_type": null,
+    "classification": "NEW_SIGNAL",
+    "upgrade_path": null,
+    "rank_score": 24.2
+  },
+  {
+    "canonical_signal_id": "C039",
+    "canonical_name": "Timezone / jet lag effect",
+    "domain": "TRAVEL",
+    "mechanism_summary": "Cross-timezone travel disrupts circadian rhythm and reaction time, affecting both pitching and hitting performance for 1-2 games",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV"
+    ],
+    "idea_count": 2,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.5,
+    "source_signal_ids": [
+      "B2_S008",
+      "B3_S055"
+    ],
+    "cross_reference": "ST02",
+    "similarity_score": 0.47,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade ST02 (Road trip game 6+ fatigue UNDER) using BAYESIAN_UPDATE/CAUSAL_IV framework: Cross-timezone travel disrupts circadian rhythm and reaction time, affecting both pitching and hitting performance for 1",
+    "rank_score": 23.3
+  },
+  {
+    "canonical_signal_id": "C038",
+    "canonical_name": "Road trip fatigue accumulation",
+    "domain": "TRAVEL",
+    "mechanism_summary": "Extended road trips accumulate fatigue that depresses scoring; markets price talent but not cumulative travel load",
+    "framework_variants": [
+      "CAUSAL_IV",
+      "EVT_TAIL_MODEL",
+      "STATE_MODEL"
+    ],
+    "idea_count": 6,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.8,
+    "source_signal_ids": [
+      "B1_S058",
+      "B2_S033",
+      "B3_S014",
+      "B3_S037",
+      "B3_S051",
+      "B3_S059"
+    ],
+    "cross_reference": "ST02",
+    "similarity_score": 0.82,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade ST02 (Road trip game 6+ fatigue UNDER) using CAUSAL_IV/EVT_TAIL_MODEL/STATE_MODEL framework: Extended road trips accumulate fatigue that depresses scoring; markets price talent but not cumulative travel load",
+    "rank_score": 22.4
+  },
+  {
+    "canonical_signal_id": "C025",
+    "canonical_name": "Pitcher-lineup platoon mismatch",
+    "domain": "PITCHER",
+    "mechanism_summary": "Extreme platoon advantages (LHP vs RHH-heavy lineup or vice versa) create scoring tails that generic pitcher quality metrics miss",
+    "framework_variants": [
+      "BAYESIAN_UPDATE"
+    ],
+    "idea_count": 1,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.0,
+    "source_signal_ids": [
+      "B2_S007"
+    ],
+    "cross_reference": "V1",
+    "similarity_score": 0.58,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade V1 (Pitcher xFIP/CSW quality \u2192 full-game total projection) using BAYESIAN_UPDATE framework: Extreme platoon advantages (LHP vs RHH-heavy lineup or vice versa) create scoring tails that generic pitcher quality met",
+    "rank_score": 22.2
+  },
+  {
+    "canonical_signal_id": "C026",
+    "canonical_name": "Pitcher quality metric lag",
+    "domain": "PITCHER",
+    "mechanism_summary": "Advanced pitcher metrics (xFIP, SIERA, Statcast) update faster than market lines; transient quality changes create windows of mispricing",
+    "framework_variants": [
+      "BAYESIAN_UPDATE",
+      "CAUSAL_IV",
+      "DISTRIBUTION_MODEL",
+      "EVT_TAIL_MODEL",
+      "HEURISTIC",
+      "STATE_MODEL"
+    ],
+    "idea_count": 16,
+    "prior_research_closed_flag": false,
+    "framework_revisit_flag": false,
+    "avg_novelty_score": 3.7,
+    "source_signal_ids": [
+      "B1_S005",
+      "B1_S023",
+      "B1_S027",
+      "B1_S031",
+      "B1_S040",
+      "B1_S045",
+      "B1_S054",
+      "B1_S056",
+      "B1_S074",
+      "B1_S089",
+      "B1_S091",
+      "B1_S095",
+      "B1_S096",
+      "B2_S001",
+      "B2_S002",
+      "B2_S073"
+    ],
+    "cross_reference": "V1",
+    "similarity_score": 0.86,
+    "cross_ref_type": "LIVE",
+    "classification": "UPGRADE_CANDIDATE",
+    "upgrade_path": "Upgrade V1 (Pitcher xFIP/CSW quality \u2192 full-game total projection) using BAYESIAN_UPDATE/CAUSAL_IV/DISTRIBUTION_MODEL/EVT_TAIL_MODEL/STATE_MODEL framework: Advanced pitcher metrics (xFIP, SIERA, Statcast) update faster than market lines; transient quality changes create windo",
+    "rank_score": 21.8
+  }
+]

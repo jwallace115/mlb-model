@@ -1,0 +1,35 @@
+[
+  {
+    "signal_id": "PS001",
+    "condition": "either_degraded >= 0.2725",
+    "direction": "OVER",
+    "threshold": 0.2725
+  },
+  {
+    "signal_id": "PS002",
+    "condition": "both_degraded >= 0.2725",
+    "direction": "OVER",
+    "threshold": 0.2725
+  },
+  {
+    "signal_id": "PS003",
+    "condition": "max_degradation >= 0.5270",
+    "direction": "OVER",
+    "threshold": 0.527
+  },
+  {
+    "signal_id": "PS004",
+    "condition": "velo_drift<=-1.5 AND csw_drift<=-2.0",
+    "direction": "OVER",
+    "threshold": {
+      "velo": -1.5,
+      "csw": -2.0
+    }
+  },
+  {
+    "signal_id": "PS005",
+    "condition": "entropy_drift<=-0.10",
+    "direction": "OVER",
+    "threshold": -0.1
+  }
+]

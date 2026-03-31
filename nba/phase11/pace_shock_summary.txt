@@ -1,0 +1,327 @@
+======================================================================
+SECTION 0 — DATA QUALITY
+======================================================================
+
+FILES USED:
+  nba/data/predictions.parquet  — model predictions (pred_total)
+  nba/data/features.parquet     — pregame pace (home_pace, away_pace, trends)
+  nba/data/box_stats.parquet    — actual game pace + possessions
+  nba/data/nba_historical_closing_lines.parquet — closing + opening lines
+
+PACE CALCULATION METHOD:
+  Expected pace: average of home_pace and away_pace from features.parquet
+  These are rolling location-split averages from games BEFORE each date
+  (confirmed by fallback indicators: 96% location_rolling, 4% overall_rolling/league_avg)
+  Actual pace: average of home and away actual pace from box_stats.parquet
+  NO LEAKAGE: pregame features use only prior-game data
+
+COVERAGE:
+  Total games in predictions+lines merge: 3685
+  With actual pace data: 3685 (100.0%)
+  With opening line: 3509 (95.2%)
+  Working dataset (both): 3509 (95.2%)
+
+  2022-23: 1052 games
+  2023-24: 1227 games
+  2024-25: 1230 games
+
+======================================================================
+SECTION 1 — BASELINE ANALYSIS
+======================================================================
+
+PACE SHOCK DISTRIBUTION (all games):
+  Mean:   -0.15
+  Median: -0.28
+  Std:    4.15
+  Min:    -13.8
+  Max:    +17.3
+  IQR:    [-2.9, +2.5]
+
+PACE SHOCK DIRECTION:
+  FAST    :  1029 ( 29.3%)
+  NEUTRAL :  1294 ( 36.9%)
+  SLOW    :  1186 ( 33.8%)
+
+PACE SHOCK MAGNITUDE (among non-neutral):
+  SMALL   :  1049 (47.4%)
+  MEDIUM  :   859 (38.8%)
+  LARGE   :   307 (13.9%)
+
+PACE MISMATCH (pregame):
+  Mean: 2.48, Std: 1.90
+  Q25 cutoff: 0.99, Q75 cutoff: 3.58
+  LOW  :   893 (25.4%)
+  MID  :  1743 (49.7%)
+  HIGH :   873 (24.9%)
+
+PACE TREND (pregame, combined):
+  FASTER  :  1139 (32.5%)
+  NEUTRAL :  1146 (32.7%)
+  SLOWER  :  1224 (34.9%)
+
+CORRELATIONS:
+  pace_shock vs total_error:    r = 0.2464
+  expected_pace vs total_error: r = 0.0048
+
+BASELINES (discovery, model direction):
+  Full: N=2279, hit=50.9%, ROI=-2.74%
+
+  2022-23: N=1052, hit=52.2%, ROI=-0.37%
+  2023-24: N=1227, hit=49.9%, ROI=-4.78%
+  OOS 2024-25: N=1230, hit=50.2%, ROI=-4.08%
+
+BY PACE SHOCK DIRECTION (discovery, model dir — retrospective):
+  FAST    : N=619, hit=52.5%, ROI=0.23%
+  NEUTRAL : N=879, hit=51.1%, ROI=-2.48%
+  SLOW    : N=781, hit=49.6%, ROI=-5.40%
+
+======================================================================
+SECTION 2 — RETROSPECTIVE RESULTS (Class A — non-deployable)
+======================================================================
+
+PS1 — FAST GAMES → OVER (pace_shock > +2)
+  Label: RETRO (retrospective — uses actual pace)
+  N_disc=619, ROI=13.5%, CLV=-0.7
+  2022-23: N=305, ROI=9.54%
+  2023-24: N=314, ROI=17.34%
+  OOS: N=410, ROI=22.46%
+
+PS2 — SLOW GAMES → UNDER (pace_shock < -2)
+  Label: RETRO (retrospective — uses actual pace)
+  N_disc=781, ROI=12.2%, CLV=-0.56
+  2022-23: N=362, ROI=15.49%
+  2023-24: N=419, ROI=9.35%
+  OOS: N=405, ROI=13.6%
+
+PS3a — LARGE FAST SHOCK → OVER (pace_shock > +7)
+  Label: RETRO
+  N_disc=85, ROI=34.76%
+  2022-23: N=40, ROI=33.64%
+  2023-24: N=45, ROI=35.76%
+  OOS: N=69, ROI=60.47%
+
+PS3b — LARGE SLOW SHOCK → UNDER (pace_shock < -7)
+  Label: RETRO
+  N_disc=100, ROI=31.73%
+  2022-23: N=51, ROI=31.02%
+  2023-24: N=49, ROI=32.47%
+  OOS: N=53, ROI=33.28%
+
+======================================================================
+SECTION 3 — PREDICTIVE HYPOTHESIS RESULTS (Class B)
+======================================================================
+
+PS4a — HIGH PACE MISMATCH → OVER
+  Label: FAIL
+  N_disc=572, ROI=-3.21%
+  2022-23: N=293, ROI=1.64%
+  2023-24: N=279, ROI=-8.31%
+  OOS: N=301, ROI=-4.86%
+  Delta: -0.47pp
+  Gates failed: ROI_2023-24=-8.3%<=0, disc_ROI=-3.2%<3%, delta=-0.5pp<2pp, OOS_ROI=-4.9%<0
+
+PS4b — HIGH PACE MISMATCH → UNDER
+  Label: FAIL
+  N_disc=572, ROI=-8.22%
+  2022-23: N=293, ROI=-12.04%
+  2023-24: N=279, ROI=-4.2%
+  OOS: N=301, ROI=-4.86%
+  Delta: -5.48pp
+  Gates failed: ROI_2022-23=-12.0%<=0, ROI_2023-24=-4.2%<=0, disc_ROI=-8.2%<3%, delta=-5.5pp<2pp, OOS_ROI=-4.9%<0
+
+PS5a — FAST vs SLOW TEAM → OVER (fast dictates)
+  Label: FAIL
+  N_disc=281, ROI=1.23%
+  2022-23: N=139, ROI=8.5%
+  2023-24: N=142, ROI=-5.89%
+  OOS: N=158, ROI=-8.17%
+  Delta: 3.97pp
+  Gates failed: ROI_2023-24=-5.9%<=0, disc_ROI=1.2%<3%, OOS_ROI=-8.2%<0, CLV=-0.41_neg_with_pos_ROI
+
+PS5b — FAST vs SLOW TEAM → UNDER (slow dictates)
+  Label: FAIL
+  N_disc=281, ROI=-11.68%
+  2022-23: N=139, ROI=-18.97%
+  2023-24: N=142, ROI=-4.55%
+  OOS: N=158, ROI=-2.13%
+  Delta: -8.94pp
+  Gates failed: ROI_2022-23=-19.0%<=0, ROI_2023-24=-4.5%<=0, disc_ROI=-11.7%<3%, delta=-8.9pp<2pp, OOS_ROI=-2.1%<0
+
+PS6a — BOTH TEAMS TRENDING FASTER → OVER
+  Label: FAIL
+  N_disc=695, ROI=-3.03%
+  2022-23: N=281, ROI=-2.85%
+  2023-24: N=414, ROI=-3.16%
+  OOS: N=444, ROI=-3.69%
+  Delta: -0.29pp
+  Gates failed: ROI_2022-23=-2.8%<=0, ROI_2023-24=-3.2%<=0, disc_ROI=-3.0%<3%, delta=-0.3pp<2pp, OOS_ROI=-3.7%<0
+
+PS6b — BOTH TEAMS TRENDING SLOWER → UNDER
+  Label: FAIL
+  N_disc=823, ROI=-4.66%
+  2022-23: N=356, ROI=-6.15%
+  2023-24: N=467, ROI=-3.52%
+  OOS: N=401, ROI=-8.59%
+  Delta: -1.92pp
+  Gates failed: ROI_2022-23=-6.2%<=0, ROI_2023-24=-3.5%<=0, disc_ROI=-4.7%<3%, delta=-1.9pp<2pp, OOS_ROI=-8.6%<0
+
+PS7 — PACE EXPECTATION CONFIRMS MODEL DIRECTION
+  Label: FAIL
+  N_disc=802, ROI=-2.88%, CLV=-0.57
+  2022-23: N=348, ROI=-3.45%
+  2023-24: N=454, ROI=-2.44%
+  OOS: N=444, ROI=-5.84%
+  Delta: -0.14pp
+  OVER: N=404, ROI=0.18%  |  UNDER: N=398, ROI=-5.98%
+  Gates failed: ROI_2022-23=-3.4%<=0, ROI_2023-24=-2.4%<=0, disc_ROI=-2.9%<3%, delta=-0.1pp<2pp, OOS_ROI=-5.8%<0
+
+PS8a — PACE CONTRADICTS MODEL → FOLLOW PACE
+  Label: FAIL
+  N_disc=716, ROI=-5.08%
+  2022-23: N=289, ROI=-6.2%
+  2023-24: N=427, ROI=-4.32%
+  OOS: N=401, ROI=-6.21%
+  Delta: -2.34pp
+  Gates failed: ROI_2022-23=-6.2%<=0, ROI_2023-24=-4.3%<=0, disc_ROI=-5.1%<3%, delta=-2.3pp<2pp, OOS_ROI=-6.2%<0
+
+PS8b — PACE CONTRADICTS MODEL → FOLLOW MODEL
+  Label: FAIL
+  N_disc=716, ROI=-6.95%
+  2022-23: N=289, ROI=-4.22%
+  2023-24: N=427, ROI=-8.79%
+  OOS: N=401, ROI=-4.31%
+  Delta: -4.21pp
+  Gates failed: ROI_2022-23=-4.2%<=0, ROI_2023-24=-8.8%<=0, disc_ROI=-6.9%<3%, delta=-4.2pp<2pp, OOS_ROI=-4.3%<0
+
+PS9a — MID-BAND (215-230) + FAST PACE EXPECT → OVER
+  Label: FAIL
+  N_disc=340, ROI=3.32%
+  2022-23: N=139, ROI=11.25%
+  2023-24: N=201, ROI=-2.17%
+  OOS: N=263, ROI=-3.46%
+  Delta: 6.06pp
+  Gates failed: ROI_2023-24=-2.2%<=0, OOS_ROI=-3.5%<0, CLV=-0.48_neg_with_pos_ROI
+
+PS9b — MID-BAND (215-230) + SLOW PACE EXPECT → UNDER
+  Label: FAIL
+  N_disc=466, ROI=-2.09%
+  2022-23: N=205, ROI=-7.8%
+  2023-24: N=261, ROI=2.4%
+  OOS: N=224, ROI=-13.07%
+  Delta: 0.65pp
+  Gates failed: ROI_2022-23=-7.8%<=0, disc_ROI=-2.1%<3%, delta=0.7pp<2pp, OOS_ROI=-13.1%<0
+
+PS10 — NEUTRAL PACE EXPECTATION (control, model direction)
+  Label: FAIL
+  N_disc=761, ROI=1.35%, CLV=-0.64
+  2022-23: N=415, ROI=4.88%
+  2023-24: N=346, ROI=-2.89%
+  OOS: N=385, ROI=-1.82%
+  Delta: 4.09pp
+  OVER: N=428, ROI=1.25%  |  UNDER: N=333, ROI=1.47%
+  Gates failed: ROI_2023-24=-2.9%<=0, disc_ROI=1.3%<3%, OOS_ROI=-1.8%<0, CLV=-0.64_neg_with_pos_ROI
+
+======================================================================
+SECTION 4 — INTERACTION TESTS
+======================================================================
+
+Predictive survivors: 0
+No predictive hypotheses passed or near-missed.
+Insufficient survivors for interaction testing.
+
+======================================================================
+SECTION 5 — MASTER SUMMARY TABLE
+======================================================================
+
+ID             Name                                 Cls    Label      Dir                      N   ROI_D   ROI_O    CLV  Delta Failed
+-------------------------------------------------------------------------------------------------------------------------------------
+PS1            Fast Games → OVER                    RETROSPECTIVE RETRO      OVER                   619   13.5%   22.5%  -0.70   16.2 —
+PS2            Slow Games → UNDER                   RETROSPECTIVE RETRO      UNDER                  781   12.2%   13.6%  -0.56   14.9 —
+PS3a           Large Fast → OVER (>7)               RETROSPECTIVE RETRO      OVER                    85   34.8%   60.5%  -1.20   37.5 —
+PS3b           Large Slow → UNDER (<-7)             RETROSPECTIVE RETRO      UNDER                  100   31.7%   33.3%  -1.00   34.5 —
+PS4_over       High Pace Mismatch → OVER            PREDICTIVE FAIL       OVER                   572   -3.2%   -4.9%  -0.18   -0.5 4 gates
+PS4_under      High Pace Mismatch → UNDER           PREDICTIVE FAIL       UNDER                  572   -8.2%   -4.9%   0.18   -5.5 5 gates
+PS5_over       Fast vs Slow → OVER                  PREDICTIVE FAIL       OVER (fast dictates)   281    1.2%   -8.2%  -0.41    4.0 4 gates
+PS5_under      Fast vs Slow → UNDER                 PREDICTIVE FAIL       UNDER (slow dictates)   281  -11.7%   -2.1%   0.41   -8.9 5 gates
+PS6_fast       Both Trending Faster → OVER          PREDICTIVE FAIL       OVER                   695   -3.0%   -3.7%  -0.09   -0.3 5 gates
+PS6_slow       Both Trending Slower → UNDER         PREDICTIVE FAIL       UNDER                  823   -4.7%   -8.6%   0.20   -1.9 5 gates
+PS7            Pace Expect + Model Agree            PREDICTIVE FAIL       model                  802   -2.9%   -5.8%  -0.57   -0.1 5 gates
+PS8_pace       Pace Contradicts Model → Follow Pace PREDICTIVE FAIL       follow pace            716   -5.1%   -6.2%  -0.77   -2.3 5 gates
+PS8_model      Pace Contradicts Model → Follow Model PREDICTIVE FAIL       model                  716   -7.0%   -4.3%  -0.77   -4.2 5 gates
+PS9_fast       Mid-Band + Fast Expect → OVER        PREDICTIVE FAIL       OVER                   340    3.3%   -3.5%  -0.48    6.1 3 gates
+PS9_slow       Mid-Band + Slow Expect → UNDER       PREDICTIVE FAIL       UNDER                  466   -2.1%  -13.1%   0.58    0.7 4 gates
+PS10           Neutral Pace Expect (control)        PREDICTIVE FAIL       model                  761    1.4%   -1.8%  -0.64    4.1 4 gates
+
+======================================================================
+SECTION 6 — PATTERN ANALYSIS
+======================================================================
+
+1. Does pace shock predict totals retrospectively?
+
+   Correlation (pace_shock vs total_error): r = 0.2464
+   Fast games (shock>+2): over rate = 59.5% (N=619)
+   Slow games (shock<-2): under rate = 58.8% (N=781)
+
+   MODERATE — Pace shock has a meaningful but not dominant relationship
+   with total error. Pace is one of several factors driving deviation.
+
+2. Do any pregame pace-expectation frameworks create actionable signal?
+
+   Predictive hypotheses passing: 0
+   Near-misses: 0
+
+   NO. None of the pregame pace frameworks produce actionable signal.
+   The market correctly prices pace expectations. Pregame pace data
+   (team averages, trends) does not identify systematic mispricing.
+
+3. Is the market systematically mispricing pace, or only explaining after the fact?
+
+   The retrospective results (PS1-PS3) test whether pace shock EXPLAINS outcomes.
+   The predictive results (PS4-PS10) test whether we can PREDICT pace shock.
+
+   Average discovery ROI — retrospective: +23.0%
+   Average discovery ROI — predictive:    -3.5%
+
+   AFTER THE FACT ONLY. Pace shock has explanatory power but zero
+   predictive power. Knowing the actual pace outcome helps, but
+   pregame pace signals don't predict it well enough to bet on.
+
+4. Are fast or slow environments more predictive?
+
+   Fast shock (PS1) → OVER: ROI = 13.5%
+   Slow shock (PS2) → UNDER: ROI = 12.2%
+
+   Fast-game overs are more predictive than slow-game unders.
+
+5. Does model + pace interaction create signal?
+
+   PS7 (pace confirms model): ROI = -2.88%, delta = -0.14pp
+   PS8b (pace contradicts, follow model): ROI = -6.95%, delta = -4.21pp
+
+   Model performs better when pace expectation confirms it.
+   This suggests pace adds marginal directional confirmation.
+
+6. What does this say about NBA totals efficiency?
+
+   NBA totals markets are efficient across three now-tested dimensions:
+     - Edge size (Phase 9): no stable signal
+     - Market movement (Phase 10): no stable signal
+     - Pace expectations (Phase 11): no stable signal
+
+   The market correctly incorporates:
+     - Team pace profiles
+     - Recent pace trends
+     - Pace mismatch dynamics
+
+   Pace shock exists (games deviate from expected tempo) but is
+   not predictable from available pregame data. The unpredictable
+   nature of pace deviation is exactly what makes markets efficient —
+   if pace shock were predictable, the market would already price it.
+
+   Three phases of null results converge on the same conclusion:
+   NBA pregame totals are among the most efficient markets in
+   North American sports betting. The remaining avenues for edge are:
+     1. Live/in-game markets (different pricing dynamics)
+     2. Sharp money flow data (public vs sharp, MV6)
+     3. Player-level pace impact (lineup-driven pace changes)
+     4. Referee pace tendencies (rarely studied)

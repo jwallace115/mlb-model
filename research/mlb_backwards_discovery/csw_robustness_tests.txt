@@ -1,0 +1,142 @@
+MLB LOW TOTAL CSW SIGNAL — ROBUSTNESS TESTS
+Run date: 2026-03-24
+
+CSW percentile thresholds (2022-2023 low-total pitcher population):
+  P40: 26.36 | P45: 26.92 | P50: 27.55 | P55: 28.26
+
+========================================
+TEST 1 — THRESHOLD STABILITY
+========================================
+
+ALL GAMES:
+Thresh | Split |     N |    W |    L |   HR% |     ME |  med_ME |     ROI
+-------------------------------------------------------------------------
+P40    |  Trn  |   150 |   78 |   71 | 52.3% | +1.21  |  +0.50  |  -0.06%
+P40    |  Val  |   106 |   54 |   50 | 51.9% | +0.80  |  +0.50  |  -0.87%
+P40    |  Hld  |    79 |   44 |   33 | 57.1% | +1.09  |  +0.50  |  +9.09%
+P45    |  Trn  |   191 |  100 |   90 | 52.6% | +1.19  |  +0.50  |  +0.48%
+P45    |  Val  |   123 |   64 |   57 | 52.9% | +1.15  |  +0.50  |  +0.98%
+P45    |  Hld  |   108 |   59 |   46 | 56.2% | +1.18  |  +0.75  |  +7.27%
+P50*   |  Trn  |   237 |  132 |  104 | 55.9% | +1.37  |  +0.50  |  +6.78%
+P50*   |  Val  |   151 |   76 |   72 | 51.4% | +1.20  |  +0.50  |  -1.97%
+P50*   |  Hld  |   133 |   73 |   56 | 56.6% | +1.20  |  +0.50  |  +8.03%
+P55    |  Trn  |   281 |  151 |  126 | 54.5% | +1.19  |  +0.50  |  +4.07%
+P55    |  Val  |   207 |  108 |   94 | 53.5% | +1.09  |  +0.50  |  +2.07%
+P55    |  Hld  |   155 |   86 |   65 | 57.0% | +1.34  |  +1.00  |  +8.73%
+
+NON-EXTRAS ONLY:
+Thresh | Split |     N |    W |    L |   HR% |     ME |  med_ME |     ROI
+-------------------------------------------------------------------------
+P40    |  Trn  |   142 |   73 |   68 | 51.8% | +1.14  |  +0.50  |  -1.16%
+P40    |  Val  |    96 |   48 |   46 | 51.1% | +0.65  |  +0.25  |  -2.51%
+P40    |  Hld  |    68 |   37 |   30 | 55.2% | +0.93  |  +0.50  |  +5.43%
+P45    |  Trn  |   180 |   93 |   86 | 52.0% | +1.14  |  +0.50  |  -0.81%
+P45    |  Val  |   113 |   58 |   53 | 52.3% | +1.06  |  +0.50  |  -0.25%
+P45    |  Hld  |    95 |   50 |   43 | 53.8% | +1.08  |  +0.50  |  +2.64%
+P50*   |  Trn  |   222 |  122 |   99 | 55.2% | +1.27  |  +0.50  |  +5.39%
+P50*   |  Val  |   133 |   66 |   64 | 50.8% | +1.15  |  +0.00  |  -3.08%
+P50*   |  Hld  |   118 |   63 |   52 | 54.8% | +1.11  |  +0.50  |  +4.58%
+P55    |  Trn  |   262 |  140 |  118 | 54.3% | +1.14  |  +0.50  |  +3.59%
+P55    |  Val  |   184 |   94 |   85 | 52.5% | +1.03  |  +0.50  |  +0.25%
+P55    |  Hld  |   135 |   74 |   58 | 56.1% | +1.34  |  +1.00  |  +7.02%
+
+STABILITY SUMMARY:
+  P40: Trn=-0.1% Val=-0.9% Hld=+9.1% → BORDERLINE
+  P45: Trn=+0.5% Val=+1.0% Hld=+7.3% → YES (all positive)
+  P50: Trn=+6.8% Val=-2.0% Hld=+8.0% → BORDERLINE (Val dip)
+  P55: Trn=+4.1% Val=+2.1% Hld=+8.7% → YES (all positive)
+
+Best threshold: P55 (28.26%) — most stable across all 3 splits.
+  Trn +4.1%, Val +2.1%, Hld +8.7% — no negative period.
+  N=155 holdout games (adequate sample).
+  Tradeoff: wider net (155 vs 133 games) with lower train ROI.
+
+P50 (27.55%) has highest train ROI (+6.8%) and holdout ROI (+8.0%)
+  but Val is -2.0%. Acceptable if viewed as variance not signal failure.
+
+========================================
+TEST 2 — LINE SPECIFIC SPLIT (P50 condition)
+========================================
+
+ALL GAMES:
+Line Band | Split |   N |   HR% |     ME |     ROI
+---------------------------------------------------
+<=6.5     |  Trn  |  33 | 60.6% | +1.38  | +15.70%
+<=6.5     |  Val  |   5 | 40.0% | -1.10  | -23.64%  *** thin
+<=6.5     |  Hld  |   6 | 66.7% | +0.83  | +27.27%  *** thin
+7.0       |  Trn  |  46 | 60.0% | +1.63  | +14.55%
+7.0       |  Val  |  23 | 40.0% | +0.78  | -23.64%
+7.0       |  Hld  |  26 | 45.5% | -0.19  | -13.22%
+7.5       |  Trn  | 158 | 53.8% | +1.29  |  +2.70%
+7.5       |  Val  | 123 | 53.7% | +1.37  |  +2.44%
+7.5       |  Hld  | 101 | 58.4% | +1.58  | +11.52%
+
+NON-EXTRAS:
+7.5       |  Trn  | 146 | 53.4% | +1.25  |  +1.99%
+7.5       |  Val  | 108 | 52.8% | +1.28  |  +0.76%
+7.5       |  Hld  |  91 | 56.0% | +1.40  |  +6.99%
+
+Signal concentrated at: LINE 7.5
+  <=6.5 and 7.0 bands too thin for reliable inference (N=5-46)
+  7.5 band has 80%+ of the signal volume AND the most stable ROI
+  across all 3 splits (+2.7%, +2.4%, +11.5% for all-games)
+  The 7.0 band flips negative in Val and Holdout — unreliable.
+
+========================================
+TEST 3 — JUICE SENSITIVITY
+========================================
+
+ALL GAMES (W=281, L=232, HR=54.78%):
+Juice  |    BE% |    HR% |      ROI
+------------------------------------
+-105   |  51.2% |  54.8% |   +6.94%
+-110   |  52.4% |  54.8% |   +4.57%
+-115   |  53.5% |  54.8% |   +2.41%
+-120   |  54.5% |  54.8% |   +0.42%
+-130   |  56.5% |  54.8% |   -3.09%
+
+NON-EXTRAS (W=251, L=215, HR=53.86%):
+Juice  |    BE% |    HR% |      ROI
+------------------------------------
+-105   |  51.2% |  53.9% |   +5.16%
+-110   |  52.4% |  53.9% |   +2.83%
+-115   |  53.5% |  53.9% |   +0.70%
+-120   |  54.5% |  53.9% |   -1.25%
+-130   |  56.5% |  53.9% |   -4.70%
+
+Break-even juice (all games): -121
+Break-even juice (non-extras): -117
+
+Signal profitable at standard -110 juice.
+Comfortable margin at -115 (still +2.4% all-games, +0.7% non-extras).
+Breaks even around -120 (all-games) or -117 (non-extras).
+At -130 or worse: not profitable.
+
+========================================
+COMBINED RECOMMENDATION
+========================================
+
+DEPLOYMENT OPTIONS (ordered by stability):
+
+Option 1 — P55 threshold, all low totals:
+  Condition: line <= 7.5, both starters CSW% < 28.26
+  N ~155/season holdout, ROI +8.7% holdout, all 3 splits positive
+  Most stable but slightly lower train ROI
+
+Option 2 — P50 threshold, line 7.5 only:
+  Condition: line = 7.5, both starters CSW% < 27.55
+  N ~100/season holdout, ROI +11.5% holdout, all 3 splits positive
+  Highest holdout ROI but narrower volume
+
+Option 3 — P50 threshold, all low totals (current):
+  Condition: line <= 7.5, both starters CSW% < 27.55
+  N ~133/season holdout, ROI +8.0% holdout, Val dip -2.0%
+  Highest train ROI but borderline stability
+
+Minimum required juice: -115 (comfortable), -120 (marginal)
+Line shopping: helpful but not required at standard -110
+
+Shadow track recommendation:
+  Track BOTH P50 and P55 conditions during 2026 season
+  Tag all low-total games where both starters CSW% available
+  Grade after each month and compare cumulative ROI

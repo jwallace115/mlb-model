@@ -1,0 +1,144 @@
+════════════════════════════════════════════════════════════════════════
+  PHASE 5: Market Integration and Signal Generation
+════════════════════════════════════════════════════════════════════════
+
+  Loaded 4,116 rows
+  Columns: ['game_id', 'game_date', 'league_id', 'home_team', 'away_team', 'split', 'sample_weight', 'lambda_home_calibrated', 'lambda_away_calibrated', 'lambda_total_calibrated', 'actual_home_goals', 'actual_away_goals', 'actual_total_goals', 'market_available', 'simulated_mean_home', 'simulated_mean_away', 'simulated_mean_total', 'P_over_1_5', 'P_under_1_5', 'P_over_2_5', 'P_under_2_5', 'P_over_3_5', 'P_under_3_5', 'regulation_total_90', 'official_bet_total', 'over_price', 'under_price', 'season_year']
+
+  Vig check (market rows): mean=0.051  min=0.018  max=0.083
+  Fair P_over_2_5 (market rows): mean=0.569
+  Model P_over_2_5 (all rows):   mean=0.586
+  Edge_over_2_5 (market rows):   mean=+0.0168  std=0.0722
+
+  Signals @ threshold=0.04:  OVER=1595  UNDER=883  TOTAL=2478
+
+════════════════════════════════════════════════════════════════════════
+  EDGE BUCKET CALIBRATION
+════════════════════════════════════════════════════════════════════════
+
+  Edge Bucket Calibration — VALIDATE (2023-24)
+  ────────────────────────────────────────────────────────────
+  Bucket            N   Wins   Hit Rate      ROI  Meets Threshold
+  ────────────────────────────────────────────────────────────
+  0.02–0.04         —
+  0.04–0.06       117     54     46.2%   -0.119  ✗
+  0.06–0.08        87     37     42.5%   -0.188  ✗
+  0.08–0.10        75     39     52.0%   -0.007  ✗
+  0.10+           132     57     43.2%   -0.176  ✗
+
+  Provisional threshold used: 0.04
+
+
+  Edge Bucket Calibration — OOS (2024-25)
+  ────────────────────────────────────────────────────────────
+  Bucket            N   Wins   Hit Rate      ROI  Meets Threshold
+  ────────────────────────────────────────────────────────────
+  0.02–0.04         —
+  0.04–0.06       108     55     50.9%   -0.028  ✗
+  0.06–0.08       109     58     53.2%    0.016  ✓
+  0.08–0.10        77     35     45.5%   -0.132  ✗
+  0.10+           123     45     36.6%   -0.302  ✗
+
+  Provisional threshold used: 0.04
+
+
+════════════════════════════════════════════════════════════════════════
+  PROBABILITY BUCKET CALIBRATION
+════════════════════════════════════════════════════════════════════════
+
+  Probability Bucket Calibration — VALIDATE (2023-24)
+  ────────────────────────────────────────────────────────────
+  P_over bucket       N  Actual Over%  Model P_over    Delta
+  ────────────────────────────────────────────────────────────
+  0.45–0.50          24        79.2%        48.0%   +0.311
+  0.50–0.55          77        54.5%        53.0%   +0.015
+  0.55–0.60         199        57.3%        57.7%   -0.004
+  0.60–0.65         210        66.2%        62.5%   +0.037
+  0.65–0.70         121        71.1%        67.0%   +0.041
+  0.70+              51        66.7%        72.5%   -0.058
+
+
+  Probability Bucket Calibration — OOS (2024-25)
+  ────────────────────────────────────────────────────────────
+  P_over bucket       N  Actual Over%  Model P_over    Delta
+  ────────────────────────────────────────────────────────────
+  0.45–0.50          36        55.6%        48.1%   +0.075
+  0.50–0.55         130        55.4%        52.7%   +0.026
+  0.55–0.60         198        51.5%        57.5%   -0.059
+  0.60–0.65         200        58.5%        62.3%   -0.038
+  0.65–0.70          84        72.6%        67.1%   +0.055
+  0.70+              29        72.4%        73.4%   -0.010
+
+
+════════════════════════════════════════════════════════════════════════
+  PERFORMANCE REPORT — Phase 5 Market Signals
+════════════════════════════════════════════════════════════════════════
+
+  ── TRAIN (2,744 games, 2,743 with market, 1650 signals [60.2%]) ──
+  ALL SIGNALS                     N=1650  771W-879L  hit=46.7%  ROI=-0.108  Σ=-178.09u
+      OVER                          N=1119  580W-539L  hit=51.8%  ROI=-0.010  Σ=-11.73u
+      UNDER                         N= 531  191W-340L  hit=36.0%  ROI=-0.313  Σ=-166.36u
+    By league:
+            BUN                       N= 761  355W-406L  hit=46.6%  ROI=-0.109  Σ=-83.27u
+            EPL                       N= 889  416W-473L  hit=46.8%  ROI=-0.107  Σ=-94.82u
+    By edge bucket:
+            0.04–0.06                 N= 487  212W-275L  hit=43.5%  ROI=-0.169  Σ=-82.27u
+            0.06–0.08                 N= 398  196W-202L  hit=49.2%  ROI=-0.060  Σ=-23.82u
+            0.08–0.10                 N= 285  140W-145L  hit=49.1%  ROI=-0.062  Σ=-17.73u
+            0.10+                     N= 480  223W-257L  hit=46.5%  ROI=-0.113  Σ=-54.27u
+
+  ── VALIDATE (686 games, 686 with market, 411 signals [59.9%]) ──
+  ALL SIGNALS                     N= 411  187W-224L  hit=45.5%  ROI=-0.131  Σ=-54.00u
+      OVER                          N= 256  145W-111L  hit=56.6%  ROI=+0.081  Σ=+20.82u
+      UNDER                         N= 155  42W-113L  hit=27.1%  ROI=-0.483  Σ=-74.82u
+    By league:
+            BUN                       N= 195  90W-105L  hit=46.2%  ROI=-0.119  Σ=-23.18u
+            EPL                       N= 216  97W-119L  hit=44.9%  ROI=-0.143  Σ=-30.82u
+    By edge bucket:
+            0.04–0.06                 N= 117  54W-63L  hit=46.2%  ROI=-0.119  Σ=-13.91u
+            0.06–0.08                 N=  87  37W-50L  hit=42.5%  ROI=-0.188  Σ=-16.36u
+            0.08–0.10                 N=  75  39W-36L  hit=52.0%  ROI=-0.007  Σ=-0.55u
+            0.10+                     N= 132  57W-75L  hit=43.2%  ROI=-0.176  Σ=-23.18u
+
+  ── OOS (686 games, 686 with market, 417 signals [60.8%]) ──
+  ALL SIGNALS                     N= 417  193W-224L  hit=46.3%  ROI=-0.116  Σ=-48.55u
+      OVER                          N= 220  115W-105L  hit=52.3%  ROI=-0.002  Σ=-0.45u
+      UNDER                         N= 197  78W-119L  hit=39.6%  ROI=-0.244  Σ=-48.09u
+    By league:
+            BUN                       N= 181  84W-97L  hit=46.4%  ROI=-0.114  Σ=-20.64u
+            EPL                       N= 236  109W-127L  hit=46.2%  ROI=-0.118  Σ=-27.91u
+    By edge bucket:
+            0.04–0.06                 N= 108  55W-53L  hit=50.9%  ROI=-0.028  Σ=-3.00u
+            0.06–0.08                 N= 109  58W-51L  hit=53.2%  ROI=+0.016  Σ=+1.73u
+            0.08–0.10                 N=  77  35W-42L  hit=45.5%  ROI=-0.132  Σ=-10.18u
+            0.10+                     N= 123  45W-78L  hit=36.6%  ROI=-0.302  Σ=-37.09u
+
+  ── ALL (4,116 games, 4,115 with market, 2478 signals [60.2%]) ──
+  ALL SIGNALS                     N=2478  1151W-1327L  hit=46.4%  ROI=-0.113  Σ=-280.64u
+      OVER                          N=1595  840W-755L  hit=52.7%  ROI=+0.005  Σ=+8.64u
+      UNDER                         N= 883  311W-572L  hit=35.2%  ROI=-0.328  Σ=-289.27u
+    By league:
+            BUN                       N=1137  529W-608L  hit=46.5%  ROI=-0.112  Σ=-127.09u
+            EPL                       N=1341  622W-719L  hit=46.4%  ROI=-0.115  Σ=-153.55u
+    By edge bucket:
+            0.04–0.06                 N= 712  321W-391L  hit=45.1%  ROI=-0.139  Σ=-99.18u
+            0.06–0.08                 N= 594  291W-303L  hit=49.0%  ROI=-0.065  Σ=-38.45u
+            0.08–0.10                 N= 437  214W-223L  hit=49.0%  ROI=-0.065  Σ=-28.45u
+            0.10+                     N= 735  325W-410L  hit=44.2%  ROI=-0.156  Σ=-114.55u
+
+════════════════════════════════════════════════════════════════════════
+
+════════════════════════════════════════════════════════════════════════
+  SUMMARY TABLE
+  ────────────────────────────────────────────────────────────────────────
+  Split         Games  Signals   Sig%     W     L    Hit%      ROI    Units
+  ────────────────────────────────────────────────────────────────────────
+  TRAIN          2744     1650 60.2%   771   879   46.7%   -0.108  -178.09
+  VALIDATE        686      411 59.9%   187   224   45.5%   -0.131   -54.00
+  OOS             686      417 60.8%   193   224   46.3%   -0.116   -48.55
+  ALL            4116     2478 60.2%  1151  1327   46.4%   -0.113  -280.64
+  ────────────────────────────────────────────────────────────────────────
+
+
+  Saved: /Users/jw115/mlb-model/soccer/data/soccer_market_outputs.parquet  (4,116 rows)
+  Saved: /Users/jw115/mlb-model/soccer/data/soccer_decisions.parquet  (2,478 signals)

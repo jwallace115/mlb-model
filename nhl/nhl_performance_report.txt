@@ -1,0 +1,131 @@
+NHL TOTALS MODEL — PHASE 5 PERFORMANCE REPORT
+======================================================================
+Signal threshold: edge >= 0.10
+Juice: -110 (break-even hit rate: 52.38%)
+Push correction: active for integer lines (6.0 / 7.0)
+Known caveat: 6.5-line OVERs underpriced ~4pp in validate
+Graded signals: 709 of 709 total
+
+======================================================================
+SPLIT: 2023-24 (Validate)
+======================================================================
+
+  OVERALL
+  --------------------------------------------------
+  All signals                    n= 255  W=136 L=117 P=2  hit=0.5375  ROI=+2.60% ← potentially actionable — monitor
+
+  BY SIGNAL SIDE
+  --------------------------------------------------
+  OVER                           n=  15  W=8 L=7 P=0  hit=0.5333  ROI=+1.82%
+                                   mean(λ_total − line): +0.9864
+  UNDER                          n= 240  W=128 L=110 P=2  hit=0.5378  ROI=+2.65% ← potentially actionable — monitor
+                                   mean(λ_total − line): -0.6707
+
+  BY CLOSING_TOTAL_BUCKET
+  --------------------------------------------------
+  Bucket 5.5                     n=  14  W=6 L=8 P=0  hit=0.4286  ROI=-18.18%
+  Bucket 6.0                     n=   8  W=6 L=2 P=0  hit=0.7500  ROI=+43.18%
+  Bucket 6.5                     n= 226  W=122 L=104 P=0  hit=0.5398  ROI=+3.06% ← potentially actionable — monitor
+  Bucket other                   n=   7  W=2 L=3 P=2  hit=0.4000  ROI=-16.88%
+
+  BY EDGE BUCKET
+  --------------------------------------------------
+  Edge 0.10-0.12                 n=  92  W=49 L=41 P=2  hit=0.5444  ROI=+3.85% ← potentially actionable — monitor
+  Edge 0.12-0.15                 n=  88  W=49 L=39 P=0  hit=0.5568  ROI=+6.30% ← potentially actionable — monitor
+  Edge 0.15+                     n=  75  W=38 L=37 P=0  hit=0.5067  ROI=-3.27%
+
+  BY CONFIDENCE TIER
+  --------------------------------------------------
+  Tier HIGH                      n=  74  W=37 L=37 P=0  hit=0.5000  ROI=-4.55%
+  Tier MEDIUM                    n=  89  W=50 L=39 P=0  hit=0.5618  ROI=+7.25% ← potentially actionable — monitor
+  Tier LOW                       n=  92  W=49 L=41 P=2  hit=0.5444  ROI=+3.85% ← potentially actionable — monitor
+
+  BY CAUTION FLAG (6.5 OVER)
+  --------------------------------------------------
+  caution_flag=1 (6.5 OVER)      n=   8  W=6 L=2 P=0  hit=0.7500  ROI=+43.18%
+  caution_flag=0                 n= 247  W=130 L=115 P=2  hit=0.5306  ROI=+1.29% ← potentially actionable — monitor
+
+  BY VOLATILITY BUCKET
+  --------------------------------------------------
+  Volatility low                 n= 163  W=88 L=73 P=2  hit=0.5466  ROI=+4.29% ← potentially actionable — monitor
+  Volatility medium              n=  90  W=46 L=44 P=0  hit=0.5111  ROI=-2.42%
+  Volatility high                n=   2  W=2 L=0 P=0  hit=1.0000  ROI=+90.91%
+
+  SIGNAL DISTRIBUTION
+  --------------------------------------------------
+  Total signals:   255
+  OVER / UNDER:    15 / 240
+  HIGH / MED / LOW:74 / 89 / 92
+  6.5 OVER caution:8
+
+======================================================================
+SPLIT: 2024-25 (OOS)
+======================================================================
+
+  OVERALL
+  --------------------------------------------------
+  All signals                    n= 154  W=82 L=72 P=0  hit=0.5325  ROI=+1.65% ← potentially actionable — monitor
+
+  BY SIGNAL SIDE
+  --------------------------------------------------
+  OVER                           n=  50  W=27 L=23 P=0  hit=0.5400  ROI=+3.09% ← potentially actionable — monitor
+                                   mean(λ_total − line): +1.2009
+  UNDER                          n= 104  W=55 L=49 P=0  hit=0.5288  ROI=+0.96%
+                                   mean(λ_total − line): -0.6299
+
+  BY CLOSING_TOTAL_BUCKET
+  --------------------------------------------------
+  Bucket 5.5                     n=  81  W=44 L=37 P=0  hit=0.5432  ROI=+3.70% ← potentially actionable — monitor
+  Bucket 6.0                     n=   1  W=1 L=0 P=0  hit=1.0000  ROI=+90.91%
+  Bucket 6.5                     n=  72  W=37 L=35 P=0  hit=0.5139  ROI=-1.89%
+  Bucket other                   — no signals
+
+  BY EDGE BUCKET
+  --------------------------------------------------
+  Edge 0.10-0.12                 n=  71  W=37 L=34 P=0  hit=0.5211  ROI=-0.51%
+  Edge 0.12-0.15                 n=  56  W=30 L=26 P=0  hit=0.5357  ROI=+2.27% ← potentially actionable — monitor
+  Edge 0.15+                     n=  27  W=15 L=12 P=0  hit=0.5556  ROI=+6.06%
+
+  BY CONFIDENCE TIER
+  --------------------------------------------------
+  Tier HIGH                      n=  27  W=15 L=12 P=0  hit=0.5556  ROI=+6.06%
+  Tier MEDIUM                    n=  56  W=30 L=26 P=0  hit=0.5357  ROI=+2.27% ← potentially actionable — monitor
+  Tier LOW                       n=  71  W=37 L=34 P=0  hit=0.5211  ROI=-0.51%
+
+  BY CAUTION FLAG (6.5 OVER)
+  --------------------------------------------------
+  caution_flag=1 (6.5 OVER)      n=   4  W=2 L=2 P=0  hit=0.5000  ROI=-4.55%
+  caution_flag=0                 n= 150  W=80 L=70 P=0  hit=0.5333  ROI=+1.82% ← potentially actionable — monitor
+
+  BY VOLATILITY BUCKET
+  --------------------------------------------------
+  Volatility low                 n= 120  W=62 L=58 P=0  hit=0.5167  ROI=-1.36%
+  Volatility medium              n=  34  W=20 L=14 P=0  hit=0.5882  ROI=+12.30% ← potentially actionable — monitor
+  Volatility high                — no signals
+
+  SIGNAL DISTRIBUTION
+  --------------------------------------------------
+  Total signals:   154
+  OVER / UNDER:    50 / 104
+  HIGH / MED / LOW:27 / 56 / 71
+  6.5 OVER caution:4
+
+======================================================================
+COMBINED (Validate + OOS)
+======================================================================
+  All signals                    n= 709  W=389 L=314 P=6  hit=0.5533  ROI=+5.59% ← potentially actionable — monitor
+
+  BY SIGNAL SIDE (combined)
+  --------------------------------------------------
+  OVER                           n= 186  W=110 L=75 P=1  hit=0.5946  ROI=+13.44% ← potentially actionable — monitor
+  UNDER                          n= 523  W=279 L=239 P=5  hit=0.5386  ROI=+2.80% ← potentially actionable — monitor
+
+======================================================================
+NOTES
+======================================================================
+  - OOS hit rates are forward-looking (blind to 2024-25 season during training)
+  - Validate hit rates are in-sample relative to calibration layer
+  - 6.5-line overs underpriced by ~4pp per Phase 4.5 diagnostic 3D
+  - UNDER signals dominate on validate; more balanced on OOS
+  - Minimum 30 signals required to flag a segment as actionable
+  - ROI = (W * (100/110) − L) / (W+L+P) * 100  [pushes included in denominator]

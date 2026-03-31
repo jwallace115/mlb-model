@@ -1,0 +1,284 @@
+======================================================================
+SECTION 0 — DATA QUALITY
+======================================================================
+
+FILES USED:
+  nba/data/predictions.parquet
+  nba/data/features.parquet
+  nba/data/box_stats.parquet       — rolling volatility computation
+  nba/data/nba_historical_closing_lines.parquet
+
+COVERAGE:
+  Total merged games: 3685
+  With opening line:  3509 (95.2%)
+  With scoring vol:   3614 (98.1%)
+  Working dataset:    3438 (93.3%)
+
+  2022-23: 981 games
+  2023-24: 1227 games
+  2024-25: 1230 games
+
+VOLATILITY PROXY COVERAGE:
+  3PT Variance          : 3438/3438 (100.0%)
+  Turnover Chaos        : 3438/3438 (100.0%)
+  Foul/FT Profile       : 3438/3438 (100.0%)
+  Blowout Risk          : 3438/3438 (100.0%)
+  Scoring Volatility    : 3438/3438 (100.0%)
+  Recent Chaos          : 3410/3438 (99.2%)
+  Composite Index       : 3438/3438 (100.0%)
+
+PROXY STATISTICS (working dataset):
+  3PT Variance          : mean=0.802 std=0.064 Q25=0.756 Q75=0.843
+  Turnover Chaos        : mean=0.275 std=0.021 Q25=0.260 Q75=0.289
+  Foul/FT Profile       : mean=0.509 std=0.048 Q25=0.475 Q75=0.539
+  Blowout Risk          : mean=7.532 std=5.636 Q25=3.010 Q75=10.937
+  Scoring Volatility    : mean=11.402 std=1.453 Q25=10.403 Q75=12.361
+  Recent Chaos          : mean=8.887 std=2.154 Q25=7.403 Q75=10.300
+  Composite Index       : mean=-0.002 std=0.461 Q25=-0.317 Q75=0.297
+
+NO LEAKAGE VERIFICATION:
+  - 3PA rate, FT rate, TOV rate: from features.parquet (pregame rolling)
+  - Efficiency gap: from features.parquet (pregame ORTG/DRTG)
+  - Scoring vol: rolling std of last 10 games, SHIFTED by 1 game
+  - Recent chaos: rolling avg of |deviation|, SHIFTED by 1 game
+  All proxies use only data from BEFORE the game date.
+
+======================================================================
+SECTION 1 — BASELINE
+======================================================================
+
+1. Full Population (discovery, model direction):
+   N=2208, hit=51.1%, ROI=-2.47%, CLV=-0.68
+
+   2022-23: N=981, hit=52.6%, ROI=0.42%
+   2023-24: N=1227, hit=49.9%, ROI=-4.78%
+   OOS 2024-25: N=1230, hit=50.2%, ROI=-4.08%
+
+2. Error Distribution (|actual - close|):
+   <=5  : N=477 (21.6%), hit=47.2%, ROI=-9.95%
+   5-10 : N=484 (21.9%), hit=49.8%, ROI=-4.94%
+   >10  : N=1247 (56.5%), hit=53.1%, ROI=1.35%
+
+3. Large Misses (|error|>10) by Volatility Quartile:
+   Composite:
+     LOW: 387/673 = 57.5% large-miss rate
+     MID: 596/1058 = 56.3% large-miss rate
+     HIGH: 264/477 = 55.3% large-miss rate
+   Scoring Vol:
+     LOW: 346/607 = 57.0% large-miss rate
+     MID: 607/1072 = 56.6% large-miss rate
+     HIGH: 294/529 = 55.6% large-miss rate
+   3PA Rate:
+     LOW: 424/745 = 56.9% large-miss rate
+     MID: 639/1123 = 56.9% large-miss rate
+     HIGH: 184/340 = 54.1% large-miss rate
+
+======================================================================
+SECTION 2 — HYPOTHESIS RESULTS
+======================================================================
+
+V1 — HIGH 3PT VARIANCE → OVER
+  Label: FAIL
+  N_disc=340, ROI=1.07%, CLV=-0.01
+  2022-23: N=160, ROI=2.61%
+  2023-24: N=180, ROI=-0.3%
+  OOS: N=536, ROI=-3.48%
+  Delta: 3.54pp
+  Gates: ROI_2023-24=-0.3%<=0, disc_ROI=1.1%<3%, OOS=-3.5%<0, CLV=-0.01_neg
+
+V2 — TURNOVER CHAOS → OVER
+  Label: FAIL
+  N_disc=448, ROI=-4.12%, CLV=-0.0
+  2022-23: N=290, ROI=-1.91%
+  2023-24: N=158, ROI=-8.17%
+  OOS: N=424, ROI=-6.35%
+  Delta: -1.65pp
+  Gates: ROI_2022-23=-1.9%<=0, ROI_2023-24=-8.2%<=0, disc_ROI=-4.1%<3%, delta=-1.6pp<2pp, OOS=-6.3%<0
+
+V3 — FOUL/FT VARIANCE → OVER
+  Label: FAIL
+  N_disc=688, ROI=-3.44%, CLV=-0.08
+  2022-23: N=469, ROI=-4.75%
+  2023-24: N=219, ROI=-0.62%
+  OOS: N=102, ROI=-10.16%
+  Delta: -0.97pp
+  Gates: ROI_2022-23=-4.7%<=0, ROI_2023-24=-0.6%<=0, disc_ROI=-3.4%<3%, delta=-1.0pp<2pp, OOS=-10.2%<0
+
+V4 — BLOWOUT RISK → UNDER
+  Label: FAIL
+  N_disc=530, ROI=-12.83%, CLV=0.0
+  2022-23: N=245, ROI=-11.17%
+  2023-24: N=285, ROI=-14.26%
+  OOS: N=329, ROI=-11.22%
+  Delta: -10.36pp
+  Gates: ROI_2022-23=-11.2%<=0, ROI_2023-24=-14.3%<=0, disc_ROI=-12.8%<3%, delta=-10.4pp<2pp, OOS=-11.2%<0
+
+V5 — HIGH VOLATILITY → FADE MODEL
+  Label: FAIL
+  N_disc=477, ROI=-5.15%, CLV=-0.67
+  2022-23: N=269, ROI=-11.29%
+  2023-24: N=208, ROI=2.8%
+  OOS: N=373, ROI=-1.73%
+  Delta: -2.68pp
+  Gates: ROI_2022-23=-11.3%<=0, disc_ROI=-5.1%<3%, delta=-2.7pp<2pp, OOS=-1.7%<0
+
+V6 — LOW VOLATILITY → FOLLOW MODEL
+  Label: FAIL
+  N_disc=673, ROI=0.99%, CLV=-0.7
+  2022-23: N=266, ROI=2.63%
+  2023-24: N=407, ROI=-0.09%
+  OOS: N=190, ROI=-7.56%
+  Delta: 3.46pp
+  OVER: N=314, ROI=-1.51%  |  UNDER: N=359, ROI=3.17%
+  Gates: ROI_2023-24=-0.1%<=0, disc_ROI=1.0%<3%, OOS=-7.6%<0, CLV=-0.70_neg
+
+V7a — HIGH VOL + MID BAND (215-230) → OVER
+  Label: FAIL
+  N_disc=247, ROI=-8.8%
+  2022-23: N=153, ROI=2.32%
+  2023-24: N=94, ROI=-26.89%
+  OOS: N=215, ROI=0.34%
+  Delta: -6.33pp
+  Gates: ROI_2023-24=-26.9%<=0, disc_ROI=-8.8%<3%, delta=-6.3pp<2pp
+
+V7b — HIGH VOL + MID BAND (215-230) → UNDER
+  Label: FAIL
+  N_disc=247, ROI=-1.07%
+  2022-23: N=153, ROI=-11.41%
+  2023-24: N=94, ROI=15.76%
+  OOS: N=215, ROI=-12.09%
+  Delta: 1.4pp
+  Gates: ROI_2022-23=-11.4%<=0, disc_ROI=-1.1%<3%, delta=1.4pp<2pp, OOS=-12.1%<0
+
+V8a — HIGH VOL + LARGE EDGE (>=2.5) → MODEL DIRECTION
+  Label: FAIL
+  N_disc=325, ROI=-6.6%
+  2022-23: N=169, ROI=1.67%
+  2023-24: N=156, ROI=-15.56%
+  OOS: N=256, ROI=-12.75%
+  Delta: -4.13pp
+  Gates: ROI_2023-24=-15.6%<=0, disc_ROI=-6.6%<3%, delta=-4.1pp<2pp, OOS=-12.7%<0
+
+V8b — HIGH VOL + LARGE EDGE (>=2.5) → FADE MODEL
+  Label: FAIL
+  N_disc=325, ROI=-4.84%
+  2022-23: N=169, ROI=-10.76%
+  2023-24: N=156, ROI=1.57%
+  OOS: N=256, ROI=0.67%
+  Delta: -2.37pp
+  Gates: ROI_2022-23=-10.8%<=0, disc_ROI=-4.8%<3%, delta=-2.4pp<2pp
+
+V9 — LOW VOLATILITY + ANY EDGE → MODEL DIRECTION
+  Label: FAIL
+  N_disc=673, ROI=0.99%, CLV=-0.7
+  2022-23: N=266, ROI=2.63%
+  2023-24: N=407, ROI=-0.09%
+  OOS: N=190, ROI=-7.56%
+  Delta: 3.46pp
+  OVER: N=314, ROI=-1.51%  |  UNDER: N=359, ROI=3.17%
+  Gates: ROI_2023-24=-0.1%<=0, disc_ROI=1.0%<3%, OOS=-7.6%<0, CLV=-0.70_neg
+
+V10a — RECENT CHAOS → OVER
+  Label: FAIL
+  N_disc=571, ROI=-9.06%
+  2022-23: N=217, ROI=-9.38%
+  2023-24: N=354, ROI=-8.86%
+  OOS: N=284, ROI=6.88%
+  Delta: -6.59pp
+  Gates: ROI_2022-23=-9.4%<=0, ROI_2023-24=-8.9%<=0, disc_ROI=-9.1%<3%, delta=-6.6pp<2pp
+
+V10b — RECENT CHAOS → UNDER
+  Label: FAIL
+  N_disc=571, ROI=-3.71%
+  2022-23: N=217, ROI=-2.35%
+  2023-24: N=354, ROI=-4.55%
+  OOS: N=284, ROI=-16.65%
+  Delta: -1.24pp
+  Gates: ROI_2022-23=-2.3%<=0, ROI_2023-24=-4.5%<=0, disc_ROI=-3.7%<3%, delta=-1.2pp<2pp, OOS=-16.6%<0
+
+======================================================================
+SECTION 3 — INTERACTION TESTS
+======================================================================
+
+Survivors (PASS/NEAR-MISS): 0
+No hypotheses passed or near-missed.
+Insufficient survivors for interaction testing.
+
+======================================================================
+SECTION 4 — MASTER SUMMARY TABLE
+======================================================================
+
+ID           Name                               Label      Dir                N   ROI_D   ROI_O    CLV  Delta Failed
+--------------------------------------------------------------------------------------------------------------------
+V1           High 3PT Variance → OVER           FAIL       OVER             340    1.1%   -3.5%  -0.01    3.5 4 gates
+V2           Turnover Chaos → OVER              FAIL       OVER             448   -4.1%   -6.3%  -0.00   -1.6 5 gates
+V3           Foul/FT Variance → OVER            FAIL       OVER             688   -3.4%  -10.2%  -0.08   -1.0 5 gates
+V4           Blowout Risk → UNDER               FAIL       UNDER            530  -12.8%  -11.2%   0.00  -10.4 5 gates
+V5           High Vol → Fade Model              FAIL       fade model       477   -5.2%   -1.7%  -0.67   -2.7 4 gates
+V6           Low Vol → Follow Model             FAIL       model            673    1.0%   -7.6%  -0.70    3.5 4 gates
+V7_over      High Vol + Mid Band → OVER         FAIL       OVER             247   -8.8%    0.3%  -0.54   -6.3 3 gates
+V7_under     High Vol + Mid Band → UNDER        FAIL       UNDER            247   -1.1%  -12.1%   0.54    1.4 4 gates
+V8_model     High Vol + Large Edge → Model      FAIL       model            325   -6.6%  -12.8%  -0.72   -4.1 4 gates
+V8_fade      High Vol + Large Edge → Fade       FAIL       fade model       325   -4.8%    0.7%  -0.72   -2.4 3 gates
+V9           Low Vol + Any Edge → Model         FAIL       model            673    1.0%   -7.6%  -0.70    3.5 4 gates
+V10_over     Recent Chaos → OVER                FAIL       OVER             571   -9.1%    6.9%  -0.09   -6.6 4 gates
+V10_under    Recent Chaos → UNDER               FAIL       UNDER            571   -3.7%  -16.6%   0.09   -1.2 5 gates
+
+======================================================================
+SECTION 5 — PATTERN ANALYSIS
+======================================================================
+
+1. Are specific volatility environments mispriced directionally?
+
+   Hypotheses passing: 0
+   Near-misses: 0
+
+   Best discovery ROI:  V1 (High 3PT Variance → OVER): 1.07%
+   Worst discovery ROI: V4 (Blowout Risk → UNDER): -12.83%
+
+   No volatility environment produces consistently exploitable mispricing.
+   The market prices variance environments correctly on average.
+
+2. Is variance underpriced or overpriced?
+
+   High-vol OVER bets avg ROI:  -3.9%
+   High-vol UNDER bets avg ROI: -1.1%
+
+   No consistent directional bias. Market prices variance symmetrically.
+
+3. Does volatility explain failures in prior phases?
+
+   Fade model in high vol (V5): ROI = -5.15%
+   Follow model in low vol (V6): ROI = 0.99%
+
+   Model performs better in stable environments, supporting the thesis
+   that volatility degrades signal. However, the effect is not large
+   enough to be independently exploitable.
+
+4. Which proxy is most promising?
+
+   V1: High 3PT Variance → OVER             ROI=1.07%  label=FAIL
+   V6: Low Vol → Follow Model               ROI=0.99%  label=FAIL
+   V9: Low Vol + Any Edge → Model           ROI=0.99%  label=FAIL
+   V7: High Vol + Mid Band → UNDER          ROI=-1.07%  label=FAIL
+   V3: Foul/FT Variance → OVER              ROI=-3.44%  label=FAIL
+
+5. Are NBA totals efficient on mean but weak on distribution?
+
+   Phases 9-12 have now tested four independent dimensions:
+     - Edge size (Phase 9): no signal
+     - Market movement (Phase 10): no signal
+     - Pace expectations (Phase 11): no predictive signal
+     - Variance environments (Phase 12): no signal
+
+   The market is efficient on BOTH mean and distribution.
+   Volatility-based mispricing does not exist in a systematically
+   exploitable form. The market correctly prices expected totals
+   across different variance regimes.
+
+   Four phases of null results create a very high bar for any
+   future framework to clear. The remaining untested dimensions are:
+     1. Sharp money flow / public betting % (market microstructure)
+     2. Lineup-driven pace/efficiency shocks (late-breaking info)
+     3. Live/in-game markets (different efficiency regime)
+     4. Cross-sport timing effects (same-day NBA + other sport events)

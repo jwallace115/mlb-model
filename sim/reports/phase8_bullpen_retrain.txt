@@ -1,0 +1,415 @@
+==============================================================================
+PHASE 8 STEP 3 — BULLPEN FEATURE RETRAIN & ABLATION
+==============================================================================
+
+  Baseline: Phase 6 retained (19 features, Ridge α=CV, train=2022+2023)
+  Bullpen candidate features: depth depletion (A), closer avail (B), quality Δ (C)
+  Keep rule: 2025 OOS ROI vs real closing lines must improve
+  Real closing lines available for 2024+2025 (4,855 games, all closing_only)
+
+  Bullpen feature null rates (first game of each team-season = NaN, expected ~0.5%):
+    home_relievers_last1            1.28% null
+    away_relievers_last1            1.28% null
+    home_relievers_last3            1.28% null
+    away_relievers_last3            1.28% null
+    home_high_leverage_avail        0.67% null
+    away_high_leverage_avail        0.65% null
+    home_bullpen_delta              0.00% null
+    away_bullpen_delta              0.00% null
+    home_bp_delta_exposure          0.00% null
+    away_bp_delta_exposure          0.00% null
+
+==============================================================================
+PHASE 6 BASELINE (19 features)
+==============================================================================
+  α=500.0  σ=4.3741
+
+  ── Phase 6 Baseline ──
+  Metric                            2024 Validate         2025 OOS
+  ──────────────────────────────  ───────────────  ───────────────
+  MAE (vs proxy)                           3.3461           3.5735
+  RMSE (vs proxy)                          4.2315           4.5162
+  Pearson r                                0.1916           0.1851
+  Spearman ρ                               0.1832           0.1513
+  DHR proxy                                 0.559            0.544
+  DHR vs real closing line                  0.525            0.495
+  corr(model, market)                      0.6878           0.6406
+  corr(edge, mkt_error)                    0.1048           0.0689
+  R²(actual ~ market)                      0.0304           0.0402
+  R²(actual ~ mkt+model)                   0.0402           0.0457
+  ΔR² over market                          0.0097           0.0054
+
+  ROI vs real closing lines
+  ──────────────────────────────────────────────────────────────
+  N bets                                      605              649
+  Win %                                      53.2             51.3
+  ROI %                                       1.6             -2.0
+    2024 ROI %                                1.6              nan
+    2025 ROI %                                nan             -2.0
+
+  Confidence tiers (Phase 6 Baseline):
+  Tier           2024 N  2024 Win%  2024 ROI%   2025 N  2025 Win%  2025 ROI%
+  ────────────  ───────  ─────────  ─────────  ───────  ─────────  ─────────
+  STRONG            191       56.0        6.9      246       48.4       -7.6
+  BET               414       51.9       -0.9      403       53.1        1.4
+  WATCHLIST         813       52.6        0.5      790       51.0       -2.6
+
+  Edge bucket monotonicity (Phase 6 Baseline) — vs real closing line:
+      Bucket   2024 N  2024 Hit%   2025 N  2025 Hit%
+  ──────────  ───────  ─────────  ───────  ─────────
+     0.0–0.5     1009      51.9%      989      47.0%
+     0.5–1.0      813      52.6%      790      51.0%
+     1.0–1.5      414      51.9%      403      53.1%
+     1.5–2.0      153      58.2%      182      45.6%
+     2.0–2.5       34      47.1%       48      54.2%
+     2.5–3.0        1       0.0%       15      60.0%
+     3.0–4.0        1       0.0%        1     100.0%
+        4.0+        2     100.0%        0       nan%
+
+  Coefficients — Phase 6 Baseline (sorted by |std coef|):
+  Feature                             Std coef    Raw coef
+  ────────────────────────────────  ──────────  ──────────
+  home_sp_xfip                         +0.4391     +0.8243
+  away_sp_xfip                         +0.3663     +0.6946
+  temperature                          +0.3280     +0.0340
+  away_wrc_plus                        +0.2477     +0.0564
+  park_factor_hr                       +0.2333     +0.0481
+  park_factor_runs                     +0.2333     +0.0481
+  home_wrc_plus                        +0.1478     +0.0337
+  home_sp_bb_pct                       +0.1155     +8.3505
+  flyball_wind_interaction             +0.0974     +0.2808
+  home_sp_avg_ip                       -0.0824     -0.1190
+  away_rest_days                       +0.0801     +0.1399
+  wind_factor_effective                +0.0787     +0.0126
+  away_sp_bb_pct                       +0.0676     +4.8757
+  home_sp_k_pct                        -0.0564     -1.8908
+  away_sp_avg_ip                       -0.0425     -0.0606
+  doubleheader_flag                    -0.0368     -0.1816
+  home_rest_days                       +0.0251     +0.0435
+  umpire_over_rate                     +0.0168     +1.5359
+  away_sp_k_pct                        -0.0109     -0.3691
+
+==============================================================================
+PHASE 8 — FULL BULLPEN BLOCK (19 + 10 = 29 features)
+==============================================================================
+  α=50.0  σ=4.3588
+
+  ── Phase 8 Full Bullpen ──
+  Metric                            2024 Validate         2025 OOS
+  ──────────────────────────────  ───────────────  ───────────────
+  MAE (vs proxy)                           3.3428           3.5648
+  RMSE (vs proxy)                          4.2315           4.5063
+  Pearson r                                0.1953           0.1973
+  Spearman ρ                               0.1862           0.1703
+  DHR proxy                                 0.552            0.555
+  DHR vs real closing line                  0.529            0.504
+  corr(model, market)                      0.6540           0.6182
+  corr(edge, mkt_error)                    0.1132           0.0897
+  R²(actual ~ market)                      0.0304           0.0402
+  R²(actual ~ mkt+model)                   0.0420           0.0489
+  ΔR² over market                          0.0115           0.0087
+
+  ROI vs real closing lines
+  ──────────────────────────────────────────────────────────────
+  N bets                                      734              763
+  Win %                                      54.0             52.2
+  ROI %                                       3.0             -0.4
+    2024 ROI %                                3.0              nan
+    2025 ROI %                                nan             -0.4
+
+  Confidence tiers (Phase 8 Full Bullpen):
+  Tier           2024 N  2024 Win%  2024 ROI%   2025 N  2025 Win%  2025 ROI%
+  ────────────  ───────  ─────────  ─────────  ───────  ─────────  ─────────
+  STRONG            249       57.0        8.9      289       55.0        5.0
+  BET               485       52.4       -0.0      474       50.4       -3.7
+  WATCHLIST         744       52.8        0.8      754       49.9       -4.8
+
+  Edge bucket monotonicity (Phase 8 Full Bullpen) — vs real closing line:
+      Bucket   2024 N  2024 Hit%   2025 N  2025 Hit%
+  ──────────  ───────  ─────────  ───────  ─────────
+     0.0–0.5      949      52.2%      911      49.4%
+     0.5–1.0      744      52.8%      754      49.9%
+     1.0–1.5      485      52.4%      474      50.4%
+     1.5–2.0      176      58.5%      208      56.2%
+     2.0–2.5       60      51.7%       52      50.0%
+     2.5–3.0        9      66.7%       22      59.1%
+     3.0–4.0        2       0.0%        7      42.9%
+        4.0+        2     100.0%        0       nan%
+
+  Coefficients — Phase 8 Full Bullpen (sorted by |std coef|):
+  Feature                             Std coef    Raw coef
+  ────────────────────────────────  ──────────  ──────────
+  home_sp_xfip                         +0.9433     +1.7706
+  home_bp_delta_exposure               +0.5123     +0.2931
+  away_bullpen_delta                   -0.5038     -1.0105
+  away_bp_delta_exposure               +0.4256     +0.2464
+  temperature                          +0.3542     +0.0368
+  away_sp_xfip                         +0.3426     +0.6498
+  away_wrc_plus                        +0.2647     +0.0603
+  home_high_leverage_avail             +0.2377     +0.5099
+  park_factor_hr                       +0.2376     +0.0490
+  park_factor_runs                     +0.2376     +0.0490
+  home_wrc_plus                        +0.1854     +0.0422
+  home_relievers_last3                 +0.1576     +0.0758
+  home_relievers_last1                 -0.1426     -0.1181
+  home_sp_avg_ip                       -0.1180     -0.1705
+  flyball_wind_interaction             +0.1045     +0.3013
+  away_rest_days                       +0.0997     +0.1742
+  home_sp_bb_pct                       +0.0935     +6.7657
+  wind_factor_effective                +0.0921     +0.0148
+  away_sp_avg_ip                       -0.0752     -0.1073
+  away_high_leverage_avail             +0.0587     +0.1223
+  away_sp_bb_pct                       +0.0539     +3.8868
+  away_relievers_last3                 -0.0492     -0.0235
+  home_bullpen_delta                   -0.0469     -0.0930
+  doubleheader_flag                    -0.0420     -0.2071
+  away_sp_k_pct                        +0.0358     +1.2082
+  umpire_over_rate                     +0.0264     +2.4127
+  home_sp_k_pct                        -0.0185     -0.6182
+  away_relievers_last1                 +0.0176     +0.0143
+  home_rest_days                       -0.0047     -0.0081
+
+==============================================================================
+ABLATION TABLE (remove one feature group at a time)
+==============================================================================
+
+  Ablation: no_depth_depletion
+    Kept bullpen cols (6): ['home_high_leverage_avail', 'away_high_leverage_avail', 'home_bullpen_delta', 'away_bullpen_delta', 'home_bp_delta_exposure', 'away_bp_delta_exposure']
+    Removed: ['away_relievers_last1', 'away_relievers_last3', 'home_relievers_last1', 'home_relievers_last3']
+    α=50.0  σ=4.3613
+
+  ── Ablation: no_depth_depletion ──
+  Metric                            2024 Validate         2025 OOS
+  ──────────────────────────────  ───────────────  ───────────────
+  MAE (vs proxy)                           3.3429           3.5636
+  RMSE (vs proxy)                          4.2304           4.5052
+  Pearson r                                0.1959           0.1978
+  Spearman ρ                               0.1883           0.1687
+  DHR proxy                                 0.552            0.556
+  DHR vs real closing line                  0.528            0.505
+  corr(model, market)                      0.6644           0.6249
+  corr(edge, mkt_error)                    0.1129           0.0891
+  R²(actual ~ market)                      0.0304           0.0402
+  R²(actual ~ mkt+model)                   0.0419           0.0489
+  ΔR² over market                          0.0115           0.0086
+
+  ROI vs real closing lines
+  ──────────────────────────────────────────────────────────────
+  N bets                                      689              737
+  Win %                                      53.4             52.2
+  ROI %                                       2.0             -0.3
+    2024 ROI %                                2.0              nan
+    2025 ROI %                                nan             -0.3
+
+  Confidence tiers (Ablation: no_depth_depletion):
+  Tier           2024 N  2024 Win%  2024 ROI%   2025 N  2025 Win%  2025 ROI%
+  ────────────  ───────  ─────────  ─────────  ───────  ─────────  ─────────
+  STRONG            230       53.0        1.3      291       53.6        2.3
+  BET               459       53.6        2.3      446       51.3       -2.0
+  WATCHLIST         764       53.9        3.0      777       51.0       -2.7
+
+  Coefficients — Ablation: no_depth_depletion (sorted by |std coef|):
+  Feature                             Std coef    Raw coef
+  ────────────────────────────────  ──────────  ──────────
+  home_sp_xfip                         +0.9449     +1.7736
+  home_bp_delta_exposure               +0.5130     +0.2935
+  away_bullpen_delta                   -0.5014     -1.0058
+  away_bp_delta_exposure               +0.4333     +0.2509
+  temperature                          +0.3568     +0.0370
+  away_sp_xfip                         +0.3470     +0.6581
+  away_wrc_plus                        +0.2658     +0.0605
+  park_factor_hr                       +0.2372     +0.0489
+  park_factor_runs                     +0.2372     +0.0489
+  home_high_leverage_avail             +0.2352     +0.5047
+  home_wrc_plus                        +0.1765     +0.0402
+  home_sp_avg_ip                       -0.1193     -0.1723
+  flyball_wind_interaction             +0.1028     +0.2965
+  wind_factor_effective                +0.0930     +0.0150
+  away_rest_days                       +0.0920     +0.1608
+  home_sp_bb_pct                       +0.0866     +6.2615
+  away_sp_avg_ip                       -0.0743     -0.1060
+  away_sp_bb_pct                       +0.0537     +3.8754
+  away_high_leverage_avail             +0.0536     +0.1118
+  home_bullpen_delta                   -0.0465     -0.0923
+  doubleheader_flag                    -0.0427     -0.2106
+  away_sp_k_pct                        +0.0300     +1.0148
+  umpire_over_rate                     +0.0251     +2.2959
+  home_sp_k_pct                        -0.0161     -0.5395
+  home_rest_days                       -0.0016     -0.0029
+
+  Ablation: no_closer_avail
+    Kept bullpen cols (8): ['home_relievers_last1', 'away_relievers_last1', 'home_relievers_last3', 'away_relievers_last3', 'home_bullpen_delta', 'away_bullpen_delta', 'home_bp_delta_exposure', 'away_bp_delta_exposure']
+    Removed: ['away_high_leverage_avail', 'home_high_leverage_avail']
+    α=50.0  σ=4.3657
+
+  ── Ablation: no_closer_avail ──
+  Metric                            2024 Validate         2025 OOS
+  ──────────────────────────────  ───────────────  ───────────────
+  MAE (vs proxy)                           3.3478           3.5732
+  RMSE (vs proxy)                          4.2372           4.5105
+  Pearson r                                0.1888           0.1925
+  Spearman ρ                               0.1813           0.1630
+  DHR proxy                                 0.557            0.551
+  DHR vs real closing line                  0.531            0.495
+  corr(model, market)                      0.6755           0.6365
+  corr(edge, mkt_error)                    0.1023           0.0805
+  R²(actual ~ market)                      0.0304           0.0402
+  R²(actual ~ mkt+model)                   0.0397           0.0473
+  ΔR² over market                          0.0093           0.0071
+
+  ROI vs real closing lines
+  ──────────────────────────────────────────────────────────────
+  N bets                                      672              727
+  Win %                                      53.4             51.7
+  ROI %                                       2.0             -1.3
+    2024 ROI %                                2.0              nan
+    2025 ROI %                                nan             -1.3
+
+  Confidence tiers (Ablation: no_closer_avail):
+  Tier           2024 N  2024 Win%  2024 ROI%   2025 N  2025 Win%  2025 ROI%
+  ────────────  ───────  ─────────  ─────────  ───────  ─────────  ─────────
+  STRONG            213       55.4        5.8      273       49.8       -4.9
+  BET               459       52.5        0.2      454       52.9        0.9
+  WATCHLIST         801       52.1       -0.6      767       50.2       -4.2
+
+  Coefficients — Ablation: no_closer_avail (sorted by |std coef|):
+  Feature                             Std coef    Raw coef
+  ────────────────────────────────  ──────────  ──────────
+  home_sp_xfip                         +0.9960     +1.8695
+  home_bp_delta_exposure               +0.5222     +0.2988
+  away_bullpen_delta                   -0.4925     -0.9879
+  away_bp_delta_exposure               +0.3951     +0.2287
+  temperature                          +0.3528     +0.0366
+  away_sp_xfip                         +0.3197     +0.6063
+  away_wrc_plus                        +0.2530     +0.0576
+  park_factor_hr                       +0.2372     +0.0489
+  park_factor_runs                     +0.2372     +0.0489
+  home_wrc_plus                        +0.1910     +0.0435
+  home_relievers_last3                 +0.1530     +0.0736
+  home_relievers_last1                 -0.1326     -0.1097
+  home_sp_avg_ip                       -0.1182     -0.1707
+  away_rest_days                       +0.1141     +0.1993
+  flyball_wind_interaction             +0.1054     +0.3039
+  home_sp_bb_pct                       +0.0959     +6.9362
+  wind_factor_effective                +0.0895     +0.0144
+  away_sp_avg_ip                       -0.0709     -0.1011
+  away_relievers_last3                 -0.0593     -0.0283
+  away_sp_bb_pct                       +0.0532     +3.8377
+  doubleheader_flag                    -0.0352     -0.1733
+  away_sp_k_pct                        +0.0320     +1.0801
+  away_relievers_last1                 +0.0276     +0.0224
+  home_sp_k_pct                        -0.0215     -0.7199
+  umpire_over_rate                     +0.0189     +1.7263
+  home_bullpen_delta                   -0.0115     -0.0228
+  home_rest_days                       -0.0001     -0.0002
+
+  Ablation: no_quality_delta
+    Kept bullpen cols (6): ['home_relievers_last1', 'away_relievers_last1', 'home_relievers_last3', 'away_relievers_last3', 'home_high_leverage_avail', 'away_high_leverage_avail']
+    Removed: ['away_bp_delta_exposure', 'away_bullpen_delta', 'home_bp_delta_exposure', 'home_bullpen_delta']
+    α=1000.0  σ=4.3671
+
+  ── Ablation: no_quality_delta ──
+  Metric                            2024 Validate         2025 OOS
+  ──────────────────────────────  ───────────────  ───────────────
+  MAE (vs proxy)                           3.3442           3.5671
+  RMSE (vs proxy)                          4.2261           4.5128
+  Pearson r                                0.1969           0.1884
+  Spearman ρ                               0.1872           0.1580
+  DHR proxy                                 0.551            0.547
+  DHR vs real closing line                  0.522            0.504
+  corr(model, market)                      0.6683           0.6242
+  corr(edge, mkt_error)                    0.1132           0.0743
+  R²(actual ~ market)                      0.0304           0.0402
+  R²(actual ~ mkt+model)                   0.0421           0.0468
+  ΔR² over market                          0.0116           0.0065
+
+  ROI vs real closing lines
+  ──────────────────────────────────────────────────────────────
+  N bets                                      653              683
+  Win %                                      54.2             50.8
+  ROI %                                       3.5             -3.0
+    2024 ROI %                                3.5              nan
+    2025 ROI %                                nan             -3.0
+
+  Confidence tiers (Ablation: no_quality_delta):
+  Tier           2024 N  2024 Win%  2024 ROI%   2025 N  2025 Win%  2025 ROI%
+  ────────────  ───────  ─────────  ─────────  ───────  ─────────  ─────────
+  STRONG            189       54.5        4.0      239       53.1        1.4
+  BET               464       54.1        3.3      444       49.5       -5.4
+  WATCHLIST         783       51.9       -1.0      772       50.4       -3.8
+
+  Coefficients — Ablation: no_quality_delta (sorted by |std coef|):
+  Feature                             Std coef    Raw coef
+  ────────────────────────────────  ──────────  ──────────
+  home_sp_xfip                         +0.3873     +0.7269
+  away_sp_xfip                         +0.3237     +0.6139
+  temperature                          +0.3022     +0.0314
+  away_wrc_plus                        +0.2325     +0.0529
+  park_factor_hr                       +0.2251     +0.0464
+  park_factor_runs                     +0.2251     +0.0464
+  home_high_leverage_avail             +0.1992     +0.4274
+  home_wrc_plus                        +0.1406     +0.0320
+  home_sp_bb_pct                       +0.1203     +8.7044
+  home_relievers_last3                 +0.1047     +0.0503
+  home_relievers_last1                 -0.0970     -0.0803
+  flyball_wind_interaction             +0.0897     +0.2588
+  home_sp_avg_ip                       -0.0803     -0.1160
+  home_sp_k_pct                        -0.0771     -2.5826
+  wind_factor_effective                +0.0768     +0.0123
+  away_sp_bb_pct                       +0.0723     +5.2160
+  away_rest_days                       +0.0622     +0.1088
+  away_high_leverage_avail             +0.0505     +0.1052
+  away_sp_avg_ip                       -0.0447     -0.0638
+  doubleheader_flag                    -0.0399     -0.1969
+  away_relievers_last3                 -0.0348     -0.0166
+  away_sp_k_pct                        -0.0280     -0.9461
+  home_rest_days                       +0.0257     +0.0445
+  umpire_over_rate                     +0.0211     +1.9273
+  away_relievers_last1                 +0.0073     +0.0060
+
+==============================================================================
+SUMMARY: 2025 OOS ROI vs REAL CLOSING LINES
+==============================================================================
+  (Key question: does any bullpen configuration improve -0.5% baseline ROI?)
+
+  Model                                Base 2025 ROI   New 2025 ROI     Delta  Verdict
+  ───────────────────────────────────  ─────────────  ─────────────  ────────  ────────
+  Phase 8 Full (all bullpen)                    -2.0%           -0.4%      +1.6%  IMPROVED ✓  (n=763)
+  Ablation: no_depth_depletion                  -2.0%           -0.3%      +1.8%  IMPROVED ✓  (n=737)
+  Ablation: no_closer_avail                     -2.0%           -1.3%      +0.8%  IMPROVED ✓  (n=727)
+  Ablation: no_quality_delta                    -2.0%           -3.0%      -1.0%  NO GAIN ✗  (n=683)
+
+==============================================================================
+FULL METRIC COMPARISON — Phase 6 Baseline vs Phase 8 Full Bullpen
+==============================================================================
+
+  Metric                             P6 2024     P8 2024     Δ2024     P6 2025     P8 2025     Δ2025
+  ──────────────────────────────  ──────────  ──────────  ────────  ──────────  ──────────  ────────
+  MAE (proxy)                         3.3461      3.3428   -0.0033 ✓      3.5735      3.5648   -0.0087 ✓
+  RMSE (proxy)                        4.2315      4.2315    0.0000 ✗      4.5162      4.5063   -0.0099 ✓
+  Pearson r                           0.1916      0.1953    0.0037 ✓      0.1851      0.1973    0.0121 ✓
+  Spearman ρ                          0.1832      0.1862    0.0030 ✓      0.1513      0.1703    0.0190 ✓
+  DHR proxy                           0.5591      0.5521   -0.0070 ✗      0.5441      0.5552    0.0111 ✓
+  DHR vs real line                    0.5249      0.5290    0.0041 ✓      0.4946      0.5041    0.0095 ✓
+  corr(model,market)                  0.6878      0.6540   -0.0338 ✗      0.6406      0.6182   -0.0224 ✗
+  corr(edge,mkt_err)                  0.1048      0.1132    0.0084 ✓      0.0689      0.0897    0.0208 ✓
+  R²(market alone)                    0.0304      0.0304    0.0000 ✗      0.0402      0.0402    0.0000 ✗
+  R²(mkt+model)                       0.0402      0.0420    0.0018 ✓      0.0457      0.0489    0.0032 ✓
+  ΔR²                                 0.0097      0.0115    0.0018 ✓      0.0054      0.0087    0.0032 ✓
+  ROI % (2024 games)                     1.6         3.0      +1.4% ✓         nan         nan      +nan% ✗
+  ROI % (2025 games)                     nan         nan      +nan% ✗        -2.0        -0.4      +1.6% ✓
+  Win % (bets)                          53.2        54.0                    51.3        52.2
+
+==============================================================================
+FINAL VERDICT
+==============================================================================
+
+  VERDICT: KEEP full bullpen block
+  2025 OOS ROI improved by +1.6pp vs real closing lines
+
+  Ablation guidance:
+    no_depth_depletion                 : ROI Δ=+1.8pp → removed group is contributes ✓
+    no_closer_avail                    : ROI Δ=+0.8pp → removed group is contributes ✓
+    no_quality_delta                   : ROI Δ=-1.0pp → removed group is redundant/harmful ✗
+
+  Proceed to Phase 9 only if 2025 OOS ROI vs real closing lines is positive.

@@ -1,0 +1,215 @@
+NBA PLAYOFF ARCHETYPE BACKTEST — SUMMARY
+Generated: 2026-03-22
+Data: 250 playoff games (232 with closing lines), 3 seasons (2022-23 to 2024-25)
+================================================================================================================
+
+1. PLAYOFF GAME COUNTS BY SEASON AND ROUND
+-------------------------------------------
+Season    Total   R1    Semis  ConfF  Finals  | RS baseline
+2022-23     84    43      25    11      5     | 1,228
+2023-24     82    43      25     9      5     | 1,227
+2024-25     84    43      23    11      7     | 1,230
+TOTAL      250   129      73    31     17     | 3,685
+
+Scoring: PO mean=216.0 vs RS mean=228.4 (−12.4 pts)
+Lines:   PO mean=216.3 vs RS mean=227.7 (−11.4 pts)
+Books correctly adjust lines downward; residual ME = +0.09 (near zero)
+
+
+2. ARCHETYPE ASSIGNMENTS PER SEASON
+------------------------------------
+Key differences across seasons:
+
+ROAD_WARRIOR (small home/road split):
+  22-23: BKN CHA HOU LAC LAL MIN PHI PHX
+  23-24: CHI LAC MEM MIN NYK PHX TOR WAS
+  24-25: ATL BKN CHI DET GSW HOU PHI UTA
+  → Only LAC appears in 2 of 3 seasons; highly unstable year to year
+
+STRONG_HOME (large home scoring boost):
+  22-23: BOS DEN IND MEM OKC ORL POR SAC
+  23-24: ATL BOS DEN IND MIL OKC SAS UTA
+  24-25: DEN LAC LAL MIL NYK OKC POR SAS
+  → DEN and OKC most stable (3/3 and 3/3)
+
+ELITE_DEF (home):
+  22-23: BKN CLE DEN MEM MIA NOP PHI PHX TOR
+  23-24: BOS CLE DEN MIA MIN NYK OKC ORL PHI
+  24-25: BOS GSW HOU LAC LAL MIA MIN OKC ORL
+  → CLE appears 2/3, MIA 3/3, OKC 2/3
+
+ELITE_DEF2 (away):
+  22-23: BOS CHI CLE MIA NYK ORL PHI PHX TOR
+  23-24: BOS CLE DEN LAC MIA MIN NOP NYK ORL
+  24-25: BKN BOS GSW HOU LAC MIA MIN OKC ORL
+  → BOS 3/3, MIA 3/3, ORL 3/3 most stable
+
+THREE_HEAVY:
+  22-23: BOS DAL GSW IND MIA MIL POR SAC UTA
+  23-24: ATL BKN BOS CLE DAL GSW MEM MIL SAC
+  24-25: BKN BOS CHI CLE GSW MIN PHX SAS UTA
+  → BOS 3/3, GSW 3/3 most stable
+
+
+3. EXISTING SIGNALS: PLAYOFF vs REGULAR SEASON
+-----------------------------------------------
+Signal                  | RS_N  RS_ME   RS_Hit | PO_N  PO_ME   PO_Hit | 90% CI            | CLASS
+-------------------------------------------------------------------------------------------------
+A. Venue OVER (RW@SH)  |  276  +6.28   62.3%  |   23  -5.04   43.5%  | [-11.2, +1.0]     | REVERSE
+B. Shot OVER (BAL×PAS)  |  251  +2.33   52.6%  |   26  +2.13   53.8%  | [ -3.1, +7.6]     | HOLD
+C. Pace UNDER (ED2@ED)  |  318  -2.83   44.3%  |   69  -2.61   44.9%  | [ -6.1, +0.9]     | HOLD
+D. Shot UNDER (3H×FP)   |  669  +1.35   52.2%  |   36  -0.47   50.0%  | [ -5.2, +4.2]     | REVERSE
+
+VENUE OVER REVERSES IN PLAYOFFS:
+  RS: road warriors exploit weak home court advantage → OVER
+  PO: home court is amplified (+3.4pp win%), road warriors suppressed → ME flips negative
+  The venue signal is a regular season phenomenon only
+
+PACE UNDER HOLDS:
+  Largest playoff sample (N=69), same direction, similar magnitude
+  Elite defense suppresses scoring equally in RS and PO
+
+SHOT OVER HOLDS (with caveats):
+  N=26 is marginal, but direction and magnitude match RS exactly
+  CI spans zero — need more data to confirm
+
+SHOT UNDER REVERSES:
+  THREE_HEAVY × FOUL_PRONE goes flat to slightly negative in playoffs
+  Playoff defensive adjustments may neutralize this
+
+
+4. ROUND EFFECTS TABLE
+-----------------------
+Round          N   Mean Total  Mean Line  Mkt Error  % Over
+------------------------------------------------------------
+Round 1      117      215.9      215.9      -0.09    50.4%
+Conf Semis    67      215.9      215.8      +0.10    53.7%
+Conf Finals   31      224.7      217.7      +7.00    58.1%  ← OVER bias
+Finals        17      207.1      218.4     -11.29    17.6%  ← severe UNDER
+
+CONFERENCE FINALS go OVER (+7.00, 58.1% hit)
+  Books set lines too low in Conf Finals — actual scoring jumps to 224.7
+
+FINALS go massively UNDER (-11.29, only 17.6% hit)
+  Books set lines too high — actual scoring drops to 207.1
+  Only N=17, but 82.4% going UNDER is striking
+
+Hypothesis: Conference Finals = high-powered offense matchups that books
+underprice. Finals = elite defense + maximum preparation → scoring tanks.
+
+
+5. SERIES POSITION FINDINGS
+-----------------------------
+Position        N   Mean Total  Mkt Error  % Over   p
+------------------------------------------------------
+Games 1-2      90      216.0      -2.47    48.9%   0.206
+Games 3-4      77      217.5      +1.55    49.4%   0.392
+Games 5-7      65      215.7      +1.90    52.3%   0.366
+
+ELIMINATION GAMES (one team facing elimination):
+  N=52, ME=+5.81, Hit=61.5%, p=0.028  ← SIGNIFICANT
+
+NON-ELIMINATION:
+  N=180, ME=-1.56, Hit=46.7%, p=0.205
+
+ELIMINATION GAMES GO OVER by +5.81 pts (p=0.028)
+  This is a genuine playoff-specific signal
+  Desperation scoring creates over-performance vs closing line
+  Books don't fully price elimination pressure
+
+POST-BLOWOUT:
+  N=58, ME=-2.22, Hit=46.6%, p=0.302
+  Games after blowouts trend UNDER but not significant
+
+
+6. REST DIFFERENTIAL
+--------------------
+Category                    N   Mkt Error  % Over   p
+------------------------------------------------------
+Large home adv (3+d)       10    -10.40    30.0%   0.039
+Small home adv (1-2d)       6    +16.50    83.3%   0.094
+Even rest (≤1d)           207     +0.51    50.7%   0.661
+Small away adv (1-2d)       4     -3.88    25.0%   1.000
+Large away adv (3+d)       12     -2.00    41.7%   0.754
+
+Large home rest advantage (3+ days from sweep) → UNDER (-10.40)
+  Counterintuitive: rested home team → lower scoring
+  Possible: rust effect, or simply facing better opponent (who was swept)
+  N=10 is too small for deployment, but direction is notable
+
+The vast majority of playoff games have even rest (207/232 = 89%)
+  Rest differential is rarely actionable in playoffs
+
+
+7. HOME COURT AMPLIFICATION
+-----------------------------
+                    RS       PO      Delta
+Home win%          55.6%    59.1%    +3.4pp
+Home scoring      115.3    110.5     -4.7
+Away scoring      113.2    105.8     -7.3
+
+Away team scoring drops MORE than home team scoring in playoffs
+  → Net effect is stronger home court advantage
+  → But total scoring drops for both sides (−12 pts combined)
+
+Venue signal (RW@SH):
+  RS: ME=+6.28 (road warriors score freely → OVER)
+  PO: ME=-5.04 (road warriors suppressed → totals go UNDER)
+
+The venue OVER signal is DEAD in playoffs.
+Road warriors are no longer "warriors" — playoff intensity
+shuts down teams that relied on regular season travel resilience.
+
+
+8. TOTALS BAND STRATIFICATION
+-------------------------------
+                     PO                         RS
+Band        N   Total  Line   ME   |  N    Total  Line   ME
+------------------------------------------------------------
+Under 215  104  207.4  207.6 -0.13 | 240   210.9  211.0 -0.15
+215-225     76  220.5  219.2 +1.24 |1117   221.4  220.5 +0.90
+Over 225    52  228.3  229.4 -1.13 |2328   233.6  232.9 +0.68
+
+No band-specific signal found.
+Market error is near zero across all bands in both RS and PO.
+The elimination game signal exists across all bands (checked but not
+stratified further due to small N per band).
+
+
+9. PLAYOFF DEPLOYMENT RULES — April 19, 2026
+================================================
+
+EXISTING SIGNALS:
+  A. Venue OVER (RW@SH)  →  PAUSE  (REVERSE in playoffs, -5.04 ME)
+  B. Shot OVER (BAL×PAS)  →  TRACK ONLY (HOLD but N=26, need 20+ PO games)
+  C. Pace UNDER (ED2@ED)  →  HOLD — same tier sizing as regular season
+  D. Shot UNDER (3H×FP)  →  PAUSE  (REVERSE in playoffs)
+
+NEW PLAYOFF-SPECIFIC SIGNALS:
+  E. Elimination OVER     →  PLAYOFF_ONLY board, 0.75u
+     Trigger: one team facing elimination (down 3-x)
+     ME=+5.81, hit=61.5%, p=0.028, N=52
+     Activate: April 19 (Round 1 starts)
+
+  F. Conf Finals OVER     →  TRACK ONLY (N=31, p not tested)
+     ME=+7.00, hit=58.1%
+     Track in 2026 playoffs, reassess after 10 games
+
+  G. Finals UNDER         →  TRACK ONLY (N=17, directional only)
+     ME=-11.29, hit=82.4%
+     Track in 2026 Finals if reached
+
+DEPLOYMENT SUMMARY — April 19, 2026:
+  ✓ Pace UNDER (ED2@ED): ACTIVE — same sizing as regular season
+  ✓ Elimination OVER:    ACTIVE — 0.75u, playoff-only
+  ○ Shot OVER (BAL×PAS): TRACK — log but don't bet until N≥20
+  ○ Conf Finals OVER:    TRACK — observe
+  ○ Finals UNDER:        TRACK — observe
+  ✗ Venue OVER (RW@SH):  PAUSED — do not apply in playoffs
+  ✗ Shot UNDER (3H×FP):  PAUSED — do not apply in playoffs
+
+NOTE: 250 total playoff games across 3 seasons provides
+moderate statistical power. Elimination OVER (p=0.028, N=52)
+is the strongest finding. All other signals should be treated
+as directional guides. Continue tracking through 2026 playoffs
+to build sample size for next year's gates.

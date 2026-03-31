@@ -1,0 +1,50 @@
+BATCH MARKET RESULTS (v2)
+==================================================
+
+M1 — Line moved toward model
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: No opening line data
+
+M2 — Recency high-scoring
+  Label: SKIPPED, Dir: UNDER, N: 0
+  Gate: Prior game totals not in features
+
+M3 — Recency low-scoring
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Prior game totals not in features
+
+M4 — Star player return
+  Label: SKIPPED, Dir: UNDER, N: 0
+  Gate: Injury return data unavailable
+
+M5 — Stable opener
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: No opening line data
+
+M6-O — Large market home OVER
+  Label: FAIL, Dir: OVER, N: 30
+  ROI: -10.9%, Delta: +2.2pp
+  Gate: N=30 < 50
+
+M6-U — Large market home UNDER
+  Label: FAIL, Dir: UNDER, N: 32
+  ROI: -28.4%, Delta: -15.3pp
+  Gate: N=32 < 50
+
+M7 — Soft opener
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: No opening line data
+
+M8 — High public betting %
+  Label: SKIPPED, Dir: BOTH, N: 0
+  Gate: Public betting data unavailable. HIGH PRIORITY.
+
+M9 — Anchored matchup
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Prior matchup history complex build
+
+M10 — Multi-factor pace+band
+  Label: FAIL, Dir: OVER, N: 17
+  ROI: +23.5%, Delta: +36.7pp
+  Gate: N=17 < 50
+

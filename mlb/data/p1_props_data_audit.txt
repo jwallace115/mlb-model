@@ -1,0 +1,301 @@
+MLB PLAYER PROPS — PHASE P1 DATA AUDIT
+========================================
+Date: 2026-03-19
+Status: READ-ONLY audit — no files modified
+
+======================================================================
+SECTION 0 — DATA SUMMARY
+======================================================================
+
+DATASETS AVAILABLE:
+
+  mlb/data/hitter_game_logs.parquet
+    201,605 rows × 28 columns
+    4 seasons: 2022-2025 (~50K/season)
+    174,870 starters + 26,735 substitutes
+    0% nulls on all core stat fields
+    100% batter hand + opp pitcher hand coverage
+
+  mlb/data/pitcher_game_logs.parquet
+    83,042 rows × 22 columns
+    19,430 starts + 63,612 reliever appearances
+    0% nulls on all fields
+    100% pitch count coverage
+    100% pitcher hand coverage
+
+  mlb/data/lineups.parquet
+    174,870 rows × 10 columns
+    100% lineup → hitter join success
+
+  mlb/data/team_game_index.parquet
+    19,430 rows × 9 columns
+    75.8% starting pitcher ID coverage (TBD pitchers in early season)
+
+JOIN CAPABILITY:
+  Player → Game → Lineup:     100%
+  Hitter → Opponent SP:        75.8% (via TGI SP_id)
+  Hitter → Opponent SP hand:   100% (via opp_pitcher_hand in hitter logs)
+  Pitcher → Opponent lineup:   100% (via game_pk join)
+
+======================================================================
+SECTION 1 — HITTER PROP READINESS
+======================================================================
+
+HITS
+  Required fields: PA, AB, H
+  Available: YES — all at 0% null
+  Derivable rolling: L5, L10, season avg hits per game
+  Opposing pitcher context: SP hand (100%), SP quality (via pitcher logs)
+  VERDICT: FULLY BUILDABLE NOW
+
+TOTAL BASES
+  Required fields: 1B, 2B, 3B, HR
+  Available: YES — all at 0% null
+  Derived: TB = 1B + 2×2B + 3×3B + 4×HR (verified: mean=1.31/game)
+  SLG available (4.4% null on 0-AB rows — expected)
+  ISO available (same coverage)
+  VERDICT: FULLY BUILDABLE NOW
+
+HOME RUNS
+  Required fields: HR
+  Available: YES — 0% null
+  Note: HR is rare event (mean ~0.10/game for starters)
+  Rolling model will need large windows (30+ games)
+  Park factor available (via existing model)
+  VERDICT: BUILDABLE — but low base rate makes projection noisy
+
+RBIs
+  Required fields: RBI
+  Available: YES — 0% null
+  Context needed: batting order position (available), runners on base (NOT available)
+  Note: RBI is heavily context-dependent — lineup position matters enormously
+  VERDICT: BUILDABLE WITH LIMITATION (no runners-on-base data)
+
+RUNS SCORED
+  Required fields: R
+  Available: YES — 0% null
+  Context needed: batting order position (available), team scoring (available)
+  VERDICT: BUILDABLE — similar context dependency as RBI
+
+======================================================================
+SECTION 2 — PITCHER PROP READINESS
+======================================================================
+
+STRIKEOUTS
+  Required fields: K, IP, BF, pitches
+  Available: YES — all at 0% null
+  K rate derivable: K/BF, K/9
+  Opponent K% derivable from hitter logs
+  Existing infrastructure: modules/props_data.py + props_projections.py
+    already project pitcher Ks using K/9 × innings × opponent K rate adj
+  VERDICT: FULLY BUILDABLE NOW — existing system already does this
+
+OUTS RECORDED
+  Required fields: IP
+  Available: YES — 0% null
+  Derivable: outs = floor(IP)*3 + round((IP-floor(IP))*10)
+  Mean: 15.6 outs per start (5.2 IP)
+  VERDICT: FULLY BUILDABLE NOW
+
+EARNED RUNS ALLOWED
+  Required fields: ER, IP
+  Available: YES — 0% null
+  Rolling ERA derivable
+  Park factors available
+  VERDICT: FULLY BUILDABLE NOW
+
+HITS ALLOWED
+  Required fields: H (as pitcher)
+  Available: YES — 0% null
+  Context: opposing lineup quality (available via M3 lineup wOBA)
+  VERDICT: FULLY BUILDABLE NOW
+
+======================================================================
+SECTION 3 — ODDS DATA STATUS
+======================================================================
+
+The Odds API — MLB Player Props:
+  Tested: 2026-03-19 (Spring Training)
+  Standard markets (h2h, totals): AVAILABLE (5 bookmakers)
+  Player prop markets (batter_hits, batter_total_bases,
+    batter_home_runs, pitcher_strikeouts, etc.): 0 BOOKMAKERS
+
+  Interpretation: Props are NOT posted for Spring Training games.
+  Regular season props should be available starting Opening Day
+  (March 27, 2026). The API accepts the market parameters without
+  error — it simply returns no data pre-season.
+
+  Historical player props: NOT available via The Odds API historical
+  endpoint (confirmed 422 for NBA; same limitation expected for MLB).
+
+DraftKings Public API:
+  Existing integration: modules/props_odds.py
+  Markets: pitcher_strikeouts, batter_total_bases
+  Method: DK public sportsbook API (event group 84240)
+  Status: BUILT — fetches K and TB lines per game
+  Limitation: Only K and TB; does not cover hits, HR, RBI, runs
+
+The Odds API Credit Status:
+  Remaining: 43,272 credits
+  Cost per event-level props call: ~4 credits
+  Estimated daily cost: 15 games × 4 = 60 credits
+  Monthly: ~1,800 credits (easily within budget)
+
+EXISTING NBA PROPS INFRASTRUCTURE (nba/model_c_shadow.py):
+  Design: event-based collection → projection → shadow card → grading
+  Adaptable for MLB: YES — same architecture works
+  Required changes:
+    - Sport endpoint: basketball_nba → baseball_mlb
+    - Market names: player_points → batter_hits, pitcher_strikeouts, etc.
+    - Projection engine: swap NBA L10 rolling for MLB rolling stats
+    - Grading: swap NBA box scores for MLB box scores
+  Estimated effort: 1-2 sessions to adapt
+
+PER-BOOK COVERAGE (expected regular season):
+  DraftKings:   YES (via DK public API + Odds API)
+  FanDuel:      YES (via Odds API)
+  BetMGM:       LIKELY (via Odds API)
+  Caesars:      LIKELY (via Odds API)
+
+======================================================================
+SECTION 4 — DATA GAPS
+======================================================================
+
+MISSING — BLOCKING:
+  ✗ Historical player prop lines (2022-2025)
+    Cannot backtest without market lines to compare against
+    The Odds API does not support historical player props
+    DraftKings does not provide historical data
+    RECOMMENDED: Forward collection starting Opening Day 2026
+
+MISSING — NON-BLOCKING (enhancement):
+  ✗ Runners on base context (for RBI props)
+    Source: MLB Stats API play-by-play data
+    Impact: RBI projections less accurate without it
+  ✗ Pitch-level data (velocity, spin, pitch mix)
+    Source: Statcast via pybaseball
+    Impact: Strikeout projections could be more precise
+  ✗ Batting order position history (systematic)
+    Available: YES (in lineup data) — just not systematically used yet
+  ✗ Stolen base data (for runs scored)
+    Partially available: not in current M2 schema
+
+AVAILABLE BUT UNUSED:
+  ✓ modules/props_data.py — already fetches pitcher K stats
+  ✓ modules/props_odds.py — already fetches DK K + TB lines
+  ✓ modules/props_projections.py — already projects pitcher Ks
+  These modules are built for the live daily card but not
+  connected to a systematic backtest framework.
+
+======================================================================
+SECTION 5 — SAMPLE SIZE ANALYSIS
+======================================================================
+
+Per season estimates:
+  Games per season:          ~2,430 (162 per team × 30 teams / 2)
+  Starters per game:         18 (9 per team)
+  Hitter props per game:     ~90-120 (6-8 per starter × 18 starters × ~60-70% available)
+  Pitcher props per game:    ~8-12 (4 prop types × 2 starters × availability)
+  Total props per game:      ~100-130
+
+  Per season:                ~250K-315K player-prop opportunities
+  4 seasons:                 ~1M+ historical player-game rows for backtesting
+  Forward collection:        ~100-130 props × 162 game days ≈ 16K-21K props/season
+
+Player-game rows in M2 warehouse:
+  Hitter starters:           174,870 (43,700/season)
+  Pitcher starts:            19,430 (4,860/season)
+  Unique hitters per season: ~700-800
+  Unique starters per season: ~150-180
+
+======================================================================
+SECTION 6 — BUILD ROADMAP
+======================================================================
+
+TIER 1 — BUILD FIRST (highest data quality + existing infrastructure):
+
+  1. PITCHER STRIKEOUTS
+     Why first:
+     - Existing projection engine (modules/props_projections.py)
+     - Existing odds pipeline (modules/props_odds.py for DK lines)
+     - 100% data coverage (K, IP, BF, pitches all at 0% null)
+     - Opponent K% derivable from hitter logs
+     - Most liquid prop market — posted early, available on all books
+     - Starter-specific (1 projection per game per team = clean)
+
+  2. BATTER TOTAL BASES
+     Why second:
+     - Existing DK odds pipeline
+     - TB derivable (1B + 2×2B + 3×3B + 4×HR)
+     - ISO available for power profiling
+     - Park factors available
+     - Second-most liquid hitter prop market
+
+TIER 2 — BUILD NEXT (good data, needs projection model):
+
+  3. BATTER HITS
+     - Clean data (0% null)
+     - Simpler outcome than TB (binary per AB)
+     - Needs: rolling contact rate model
+
+  4. PITCHER OUTS RECORDED
+     - Directly derivable from IP
+     - Needs: innings projection model
+
+TIER 3 — BUILD LATER (context-dependent):
+
+  5. BATTER HOME RUNS
+     - Low base rate (~10% of games have 1+ HR)
+     - Needs large rolling windows
+     - Park + weather interaction important
+
+  6. EARNED RUNS ALLOWED
+     - Available but volatile per-game metric
+     - Park-dependent
+
+  7. RBIs / RUNS SCORED
+     - Highly context-dependent (lineup position, runners on base)
+     - Build only after Tier 1-2 validated
+
+======================================================================
+IMPLEMENTATION PLAN
+======================================================================
+
+PHASE P2 — MLB Props Shadow System (adapt from NBA Model C):
+  1. Copy nba/model_c_shadow.py architecture → mlb/model_p/
+  2. Swap sport endpoint: basketball_nba → baseball_mlb
+  3. Swap markets: player_points → pitcher_strikeouts, batter_total_bases, batter_hits
+  4. Build MLB-specific projection engine using M2 warehouse
+  5. Start forward collection Opening Day (March 27, 2026)
+  6. Grade daily using MLB Stats API boxscores
+
+PHASE P3 — Backtest Framework:
+  - Once 50+ graded props collected: first performance read
+  - At 200+ graded: meaningful ROI analysis
+  - Compare simple L10 rolling vs projected model
+
+NO HISTORICAL BACKTEST POSSIBLE until forward collection produces
+sufficient data. This is the same approach used for NBA Model C.
+
+======================================================================
+SUMMARY
+======================================================================
+
+STATUS: READY TO BUILD — data exists, infrastructure exists,
+        only prop lines require forward collection.
+
+  Pitcher Ks:     FULLY BUILDABLE (existing code + data)
+  Batter TB:      FULLY BUILDABLE (existing code + data)
+  Batter Hits:    BUILDABLE (data complete, needs projection model)
+  Pitcher Outs:   BUILDABLE (IP data complete)
+  Batter HR:      BUILDABLE (low base rate challenge)
+  Batter RBI:     BUILDABLE WITH LIMITATION (no runners context)
+  Batter Runs:    BUILDABLE WITH LIMITATION (context-dependent)
+  Pitcher ER:     BUILDABLE (data complete)
+  Pitcher H:      BUILDABLE (data complete)
+
+BLOCKING REQUIREMENT: Forward collection of prop lines from
+Opening Day. No historical player prop lines available for backtest.
+
+RECOMMENDED FIRST BUILD: Pitcher Ks + Batter TB shadow system,
+starting Opening Day 2026, using adapted NBA Model C architecture.

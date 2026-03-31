@@ -1,0 +1,24 @@
+[
+  {
+    "signal_id": "LT01",
+    "name": "lineup_adjusted_k_rate_feature_upgrade",
+    "mechanism": "Replace team-level K rate in V1 feature set with lineup-weighted K rate. Lineup-level strikeout composition better represents true offensive suppression than team averages.",
+    "test_type": "feature_replacement",
+    "direction": "improvement in validation AUC and UNDER hit rate",
+    "train_seasons": [2022, 2023, 2024],
+    "validation_season": 2025,
+    "registered_date": "2026-03-29",
+    "lineup_source": "reconstructed_actual_lineups"
+  },
+  {
+    "signal_id": "LT02",
+    "name": "lineup_contact_x_pitcher_whiff_interaction",
+    "mechanism": "Pitcher whiff rate (sp_k_pct proxy) multiplied by opposing lineup contact rate (1 minus whiff%). Low-contact lineup facing high-whiff pitcher produces amplified suppression signal.",
+    "test_type": "feature_addition",
+    "direction": "improvement in validation AUC and UNDER hit rate",
+    "train_seasons": [2022, 2023, 2024],
+    "validation_season": 2025,
+    "registered_date": "2026-03-29",
+    "lineup_source": "reconstructed_actual_lineups"
+  }
+]

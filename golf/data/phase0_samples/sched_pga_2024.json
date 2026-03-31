@@ -1,0 +1,77 @@
+{
+  "schedule": [
+    {
+      "country": "USA",
+      "course": "Plantation Course at Kapalua",
+      "course_key": "656",
+      "event_id": "16",
+      "event_name": "The Sentry",
+      "latitude": 21.001,
+      "location": "Kapalua, HI",
+      "longitude": -156.654,
+      "start_date": "2024-01-04",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Kirk, Chris (12423)"
+    },
+    {
+      "country": "USA",
+      "course": "Waialae Country Club",
+      "course_key": "6",
+      "event_id": "6",
+      "event_name": "Sony Open in Hawaii",
+      "latitude": 21.272,
+      "location": "Honolulu, HI",
+      "longitude": -157.775,
+      "start_date": "2024-01-11",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Murray, Grayson (14655)"
+    },
+    {
+      "country": "USA",
+      "course": "Pete Dye Stadium Course;La Quinta Country Club;Nicklaus Tournament Course",
+      "course_key": "704;202;233",
+      "event_id": "2",
+      "event_name": "The American Express",
+      "latitude": 33.643,
+      "location": "La Quinta, CA",
+      "longitude": -116.267,
+      "start_date": "2024-01-18",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Dunlap, Nick (28270)"
+    },
+    {
+      "country": "USA",
+      "course": "Torrey Pines Golf Course (South Course);Torrey Pines Golf Course (North Course)",
+      "course_key": "4;104",
+      "event_id": "4",
+      "event_name": "Farmers Insurance Open",
+      "latitude": 32.905,
+      "location": "San Diego, CA",
+      "longitude": -117.245,
+      "start_date": "2024-01-24",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Pavon, Matthieu (19960)"
+    },
+    {
+      "country": "USA",
+      "course": "Pebble Beach Golf Links;Spyglass Hill Golf Course",
+      "course_key": "5;205",
+      "event_id": "5",
+      "event_name": "AT&T Pebble Beach Pro-Am",
+      "latitude": 36.569,
+      "location": "Pebble Beach, CA",
+      "longitude": -121.951,
+      "start_date": "2024-02-01",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Clark, Wyndham (23604)"
+    }
+  ],
+  "season": 2024,
+  "tour": "pga",
+  "upcoming_only": "no"
+}

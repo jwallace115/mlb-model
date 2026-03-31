@@ -1,0 +1,6 @@
+variant,features,alpha,val_mae,val_corr,oos_mae,oos_corr
+M3_reproduction,31,500,3.3536,0.1788,3.5595,0.1886
+M4_matchup_only,37,500,3.3504,0.1802,3.5652,0.1854
+M4_repl_only,33,500,3.3602,0.1781,3.5568,0.1949
+M4_full,39,500,3.3566,0.1791,3.5625,0.1912
+existing_p9,25,locked,3.7187,0.1257,3.8302,0.1486

@@ -1,0 +1,225 @@
+event_id,calendar_year,event_name,is_major,course_name,start_date,end_date,city,state_or_country,latitude,longitude,timezone,confidence,date_confidence_note
+2,2019,Desert Classic,False,Nicklaus Tournament Course,2019-01-18,2019-01-21,La Quinta,CA,33.643,-116.267,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+2,2020,The American Express,False,Stadium Course,2020-01-18,2020-01-21,La Quinta,CA,33.643,-116.267,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+2,2021,The American Express,False,Stadium Course,2021-01-18,2021-01-21,La Quinta,CA,33.643,-116.267,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+2,2022,The American Express,False,La Quinta Country Club,2022-01-18,2022-01-21,La Quinta,CA,33.643,-116.267,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+2,2023,The American Express,False,La Quinta Country Club,2023-01-18,2023-01-21,La Quinta,CA,33.643,-116.267,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+3,2019,Waste Management Phoenix Open,False,TPC Scottsdale,2019-02-08,2019-02-11,Scottsdale,AZ,33.64,-111.91,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+3,2020,Waste Management Phoenix Open,False,TPC Scottsdale,2020-02-08,2020-02-11,Scottsdale,AZ,33.64,-111.91,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+3,2021,Waste Management Phoenix Open,False,TPC Scottsdale,2021-02-08,2021-02-11,Scottsdale,AZ,33.64,-111.91,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+3,2022,WM Phoenix Open,False,TPC Scottsdale,2022-02-08,2022-02-11,Scottsdale,AZ,33.643,-111.924,America/Phoenix,MEDIUM,±7 days — acceptable for weather archive pull
+3,2023,WM Phoenix Open,False,TPC Scottsdale (Stadium Course),2023-02-08,2023-02-11,Scottsdale,AZ,33.643,-111.924,America/Phoenix,MEDIUM,±7 days — acceptable for weather archive pull
+4,2019,Farmers Insurance Open,False,Torrey Pines GC (North),2019-01-24,2019-01-27,San Diego,CA,32.905,-117.245,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+4,2020,Farmers Insurance Open,False,Torrey Pines GC (North),2020-01-24,2020-01-27,San Diego,CA,32.905,-117.245,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+4,2021,Farmers Insurance Open,False,Torrey Pines GC (North),2021-01-24,2021-01-27,San Diego,CA,32.905,-117.245,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+4,2022,Farmers Insurance Open,False,Torrey Pines (South),2022-01-24,2022-01-27,San Diego,CA,32.905,-117.245,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+4,2023,Farmers Insurance Open,False,Torrey Pines Golf Course (North Course),2023-01-24,2023-01-27,San Diego,CA,32.905,-117.245,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+5,2019,AT&T Pebble Beach Pro-Am,False,Monterey Peninsula CC,2019-02-01,2019-02-04,Pebble Beach,CA,36.569,-121.949,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+5,2020,AT&T Pebble Beach Pro-Am,False,Monterey Peninsula CC,2020-02-01,2020-02-04,Pebble Beach,CA,36.569,-121.949,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+5,2021,AT&T Pebble Beach Pro-Am,False,Spyglass Hill Golf Course,2021-02-01,2021-02-04,Pebble Beach,CA,36.569,-121.949,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+5,2022,AT&T Pebble Beach Pro-Am,False,Pebble Beach Golf Links,2022-02-01,2022-02-04,Pebble Beach,CA,36.569,-121.949,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+5,2023,AT&T Pebble Beach Pro-Am,False,Pebble Beach Golf Links,2023-02-01,2023-02-04,Pebble Beach,CA,36.569,-121.949,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+6,2019,Sony Open in Hawaii,False,Waialae Country Club,2019-01-11,2019-01-14,Honolulu,HI,21.272,-157.775,Pacific/Honolulu,MEDIUM,±7 days — acceptable for weather archive pull
+6,2020,Sony Open in Hawaii,False,Waialae Country Club,2020-01-11,2020-01-14,Honolulu,HI,21.272,-157.775,Pacific/Honolulu,MEDIUM,±7 days — acceptable for weather archive pull
+6,2021,Sony Open in Hawaii,False,Waialae Country Club,2021-01-11,2021-01-14,Honolulu,HI,21.272,-157.775,Pacific/Honolulu,MEDIUM,±7 days — acceptable for weather archive pull
+6,2022,Sony Open in Hawaii,False,Waialae Country Club,2022-01-11,2022-01-14,Honolulu,HI,21.272,-157.775,Pacific/Honolulu,MEDIUM,±7 days — acceptable for weather archive pull
+6,2023,Sony Open in Hawaii,False,Waialae Country Club,2023-01-11,2023-01-14,Honolulu,HI,21.272,-157.775,Pacific/Honolulu,MEDIUM,±7 days — acceptable for weather archive pull
+7,2019,Genesis Open,False,Riviera Country Club,2019-02-14,2019-02-17,Pacific Palisades,CA,34.025,-118.555,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+7,2020,The Genesis Invitational,False,Riviera Country Club,2020-02-15,2020-02-18,Pacific Palisades,CA,34.025,-118.555,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+7,2021,The Genesis Invitational,False,The Riviera Country Club,2021-02-15,2021-02-18,Pacific Palisades,CA,34.025,-118.555,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+7,2022,The Genesis Invitational,False,The Riviera Country Club,2022-02-15,2022-02-18,Pacific Palisades,CA,34.025,-118.555,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+7,2023,The Genesis Invitational,False,The Riviera Country Club,2023-02-15,2023-02-18,Pacific Palisades,CA,34.025,-118.555,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+9,2019,Arnold Palmer Invitational presented by Mastercard,False,Bay Hill Club & Lodge,2019-03-05,2019-03-08,Orlando,FL,28.458,-81.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+9,2020,Arnold Palmer Invitational presented by Mastercard,False,Bay Hill Club & Lodge,2020-03-05,2020-03-08,Orlando,FL,28.458,-81.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+9,2021,Arnold Palmer Invitational presented by Mastercard,False,Bay Hill Club & Lodge,2021-03-05,2021-03-08,Orlando,FL,28.458,-81.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+9,2022,Arnold Palmer Invitational presented by Mastercard,False,Bay Hill Club & Lodge,2022-03-05,2022-03-08,Orlando,FL,28.458,-81.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+9,2023,Arnold Palmer Invitational presented by Mastercard,False,Arnold Palmer's Bay Hill Club & Lodge,2023-03-05,2023-03-08,Orlando,FL,28.458,-81.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+10,2019,The Honda Classic,False,PGA National (Champion),2019-02-27,2019-03-02,Palm Beach Gardens,FL,26.844,-80.067,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+10,2020,The Honda Classic,False,PGA National (Champion),2020-02-27,2020-03-01,Palm Beach Gardens,FL,26.844,-80.067,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+10,2021,The Honda Classic,False,PGA National (Champion),2021-02-27,2021-03-02,Palm Beach Gardens,FL,26.844,-80.067,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+10,2022,The Honda Classic,False,PGA National (Champion),2022-02-27,2022-03-02,Palm Beach Gardens,FL,26.844,-80.067,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+10,2023,The Honda Classic,False,PGA National Resort (The Champion),2023-02-27,2023-03-02,Palm Beach Gardens,FL,26.844,-80.067,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+11,2019,THE PLAYERS Championship,False,TPC Sawgrass,2019-03-14,2019-03-17,Ponte Vedra Beach,FL,30.195,-81.394,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+11,2020,THE PLAYERS Championship,False,TPC Sawgrass,2020-03-14,2020-03-17,Ponte Vedra Beach,FL,30.195,-81.394,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+11,2021,THE PLAYERS Championship,False,TPC Sawgrass,2021-03-14,2021-03-17,Ponte Vedra Beach,FL,30.195,-81.394,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+11,2022,THE PLAYERS Championship,False,TPC Sawgrass,2022-03-14,2022-03-17,Ponte Vedra Beach,FL,30.195,-81.394,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+11,2023,THE PLAYERS Championship,False,TPC Sawgrass (THE PLAYERS Stadium Course),2023-03-14,2023-03-17,Ponte Vedra Beach,FL,30.195,-81.394,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+12,2019,RBC Heritage,False,Harbour Town Golf Links,2019-04-18,2019-04-21,Hilton Head,SC,32.13,-80.802,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+12,2020,RBC Heritage,False,Harbour Town Golf Links,2020-04-18,2020-04-21,Hilton Head,SC,32.13,-80.802,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+12,2021,RBC Heritage,False,Harbour Town Golf Links,2021-04-18,2021-04-21,Hilton Head,SC,32.13,-80.802,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+12,2022,RBC Heritage,False,Harbour Town Golf Links,2022-04-18,2022-04-21,Hilton Head,SC,32.13,-80.802,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+12,2023,RBC Heritage,False,Harbour Town Golf Links,2023-04-18,2023-04-21,Hilton Head,SC,32.13,-80.802,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+13,2019,Wyndham Championship,False,Sedgefield Country Club,2019-08-08,2019-08-11,Greensboro,NC,36.014,-79.887,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+13,2020,Wyndham Championship,False,Sedgefield Country Club,2020-08-08,2020-08-11,Greensboro,NC,36.014,-79.887,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+13,2021,Wyndham Championship,False,Sedgefield Country Club,2021-08-08,2021-08-11,Greensboro,NC,36.014,-79.887,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+13,2022,Wyndham Championship,False,Sedgefield Country Club,2022-08-08,2022-08-11,Greensboro,NC,36.014,-79.887,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+13,2023,Wyndham Championship,False,Sedgefield Country Club,2023-08-08,2023-08-11,Greensboro,NC,36.014,-79.887,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+14,2019,The Masters,True,Augusta National,2019-04-11,2019-04-14,Augusta,GA,33.503,-82.02,America/New_York,HIGH,exact date confirmed
+14,2020,The Masters,True,Augusta National,2020-11-12,2020-11-15,Augusta,GA,33.503,-82.02,America/New_York,HIGH,exact date confirmed
+14,2022,The Masters,True,Augusta National,2022-04-07,2022-04-10,Augusta,GA,33.503,-82.02,America/New_York,HIGH,exact date confirmed
+14,2023,Masters Tournament,True,Augusta National,2023-04-06,2023-04-09,Augusta,GA,33.503,-82.0199,America/New_York,HIGH,exact date confirmed
+16,2019,Sentry Tournament of Champions,False,Plantation Course at Kapalua,2019-01-04,2019-01-07,Kapalua,HI,21.001,-156.654,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+16,2020,Sentry Tournament of Champions,False,Plantation Course at Kapalua,2020-01-04,2020-01-07,Kapalua,HI,21.001,-156.654,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+16,2021,Sentry Tournament of Champions,False,Plantation Course at Kapalua,2021-01-04,2021-01-07,Kapalua,HI,21.001,-156.654,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+16,2022,Sentry Tournament of Champions,False,Plantation Course at Kapalua,2022-01-04,2022-01-07,Kapalua,HI,21.001,-156.654,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+16,2023,Sentry Tournament of Champions,False,Plantation Course at Kapalua,2023-01-04,2023-01-07,Kapalua,HI,21.001,-156.654,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+19,2019,AT&T Byron Nelson,False,Trinity Forest Golf Club,2019-05-09,2019-05-12,McKinney,TX,33.084,-96.821,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+19,2021,AT&T Byron Nelson,False,TPC Craig Ranch,2021-05-09,2021-05-12,McKinney,TX,33.084,-96.821,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+19,2022,AT&T Byron Nelson,False,TPC Craig Ranch,2022-05-09,2022-05-12,McKinney,TX,33.084,-96.821,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+19,2023,AT&T Byron Nelson,False,TPC Craig Ranch,2023-05-09,2023-05-12,McKinney,TX,33.084,-96.821,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+20,2019,Houston Open,False,Golf Club of Houston,,,Houston,TX,29.924,-95.261,America/Chicago,LOW,date missing — exclude from weather revalidation
+20,2020,Vivint Houston Open,False,Memorial Park Golf Course,,,Houston,TX,29.924,-95.261,America/Chicago,LOW,date missing — exclude from weather revalidation
+20,2021,Hewlett Packard Enterprise Houston Open,False,Memorial Park Golf Course,,,Houston,TX,29.924,-95.261,America/Chicago,LOW,date missing — exclude from weather revalidation
+20,2022,Cadence Bank Houston Open,False,Memorial Park Golf Course,,,Houston,TX,29.924,-95.261,America/Chicago,LOW,date missing — exclude from weather revalidation
+21,2019,Charles Schwab Challenge,False,Colonial Country Club,2019-05-23,2019-05-26,Fort Worth,TX,32.727,-97.366,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+21,2020,Charles Schwab Challenge,False,Colonial Country Club,2020-05-23,2020-05-26,Fort Worth,TX,32.727,-97.366,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+21,2021,Charles Schwab Challenge,False,Colonial Country Club,2021-05-23,2021-05-26,Fort Worth,TX,32.727,-97.366,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+21,2022,Charles Schwab Challenge,False,Colonial Country Club,2022-05-23,2022-05-26,Fort Worth,TX,32.727,-97.366,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+21,2023,Charles Schwab Challenge,False,Colonial Country Club,2023-05-23,2023-05-26,Fort Worth,TX,32.727,-97.366,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+23,2019,the Memorial Tournament presented by Nationwide,False,Muirfield Village Golf Club,,,Dublin,OH,40.077,-83.115,America/New_York,LOW,date missing — exclude from weather revalidation
+23,2020,the Memorial Tournament presented by Nationwide,False,Muirfield Village Golf Club,,,Dublin,OH,40.077,-83.115,America/New_York,LOW,date missing — exclude from weather revalidation
+23,2021,the Memorial Tournament presented by Nationwide,False,Muirfield Village Golf Club,,,Dublin,OH,40.077,-83.115,America/New_York,LOW,date missing — exclude from weather revalidation
+23,2022,the Memorial Tournament presented by Workday,False,Muirfield Village Golf Club,2022-06-04,2022-06-07,Dublin,OH,40.077,-83.115,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+23,2023,the Memorial Tournament presented by Workday,False,Muirfield Village Golf Club,2023-06-04,2023-06-07,Dublin,OH,40.077,-83.115,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+26,2019,U.S. Open,True,Pebble Beach GL,2019-06-13,2019-06-16,Pebble Beach,CA,36.5683,-121.9497,America/Los_Angeles,HIGH,exact date confirmed
+26,2020,U.S. Open,True,Winged Foot,2020-09-17,2020-09-20,Mamaroneck,NY,40.9801,-73.784,America/New_York,HIGH,exact date confirmed
+26,2022,U.S. Open,True,The Country Club,2022-06-16,2022-06-19,Brookline,MA,42.3143,-71.1432,America/New_York,HIGH,exact date confirmed
+26,2023,U.S. Open,True,Los Angeles CC,2023-06-15,2023-06-18,Los Angeles,CA,34.0665,-118.4201,America/Los_Angeles,HIGH,exact date confirmed
+27,2019,THE NORTHERN TRUST,False,Liberty National,2019-08-19,2019-08-22,Jersey City,NJ,40.77,-74.025,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+27,2020,THE NORTHERN TRUST,False,Liberty National,2020-08-19,2020-08-22,Jersey City,NJ,40.77,-74.025,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+27,2021,THE NORTHERN TRUST,False,Liberty National,2021-08-19,2021-08-22,Jersey City,NJ,40.77,-74.025,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+27,2022,FedEx St. Jude Championship,False,TPC Southwind,2022-08-15,2022-08-18,Memphis,TN,35.057,-89.779,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+27,2023,FedEx St. Jude Championship,False,TPC Southwind,2023-08-15,2023-08-18,Memphis,TN,35.057,-89.779,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+28,2019,BMW Championship,False,Medinah Country Club (No. 3),2019-08-22,2019-08-25,St. Louis,MO,38.66,-90.483,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+28,2020,BMW Championship,False,Olympia Fields CC (North),2020-08-22,2020-08-25,St. Louis,MO,38.66,-90.483,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+28,2021,BMW Championship,False,Caves Valley Golf Club,2021-08-22,2021-08-25,St. Louis,MO,38.66,-90.483,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+28,2022,BMW Championship,False,Wilmington Country Club,2022-08-22,2022-08-25,St. Louis,MO,38.66,-90.483,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+28,2023,BMW Championship,False,Olympia Fields Country Club (North Course),2023-08-22,2023-08-25,St. Louis,MO,38.66,-90.483,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+30,2019,John Deere Classic,False,TPC Deere Run,2019-07-04,2019-07-07,Silvis,IL,41.467,-90.408,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+30,2021,John Deere Classic,False,TPC Deere Run,2021-07-04,2021-07-07,Silvis,IL,41.467,-90.408,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+30,2022,John Deere Classic,False,TPC Deere Run,2022-07-04,2022-07-07,Silvis,IL,41.467,-90.408,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+30,2023,John Deere Classic,False,TPC Deere Run,2023-07-04,2023-07-07,Silvis,IL,41.467,-90.408,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+32,2019,RBC Canadian Open,False,Hamilton Golf & Country Club,2019-05-30,2019-06-02,Alton,ON,43.849,-80.043,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+32,2022,RBC Canadian Open,False,St. George's G&CC,2022-05-30,2022-06-02,Alton,ON,43.849,-80.043,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+32,2023,RBC Canadian Open,False,Oakdale Golf & Country Club,2023-05-30,2023-06-02,Alton,ON,43.849,-80.043,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+33,2019,PGA Championship,True,Bethpage Black,2019-05-16,2019-05-19,Farmingdale,NY,40.7282,-73.4499,America/New_York,HIGH,exact date confirmed
+33,2020,PGA Championship,True,TPC Harding Park,2020-08-06,2020-08-09,San Francisco,CA,37.7195,-122.5064,America/Los_Angeles,HIGH,exact date confirmed
+33,2021,PGA Championship,True,Kiawah Island Ocean,2021-05-20,2021-05-23,Kiawah Island,SC,32.6074,-80.0851,America/New_York,HIGH,exact date confirmed
+33,2022,PGA Championship,True,Southern Hills,2022-05-19,2022-05-22,Tulsa,OK,36.0922,-95.9644,America/Chicago,HIGH,exact date confirmed
+33,2023,PGA Championship,True,Oak Hill,2023-05-18,2023-05-21,Rochester,NY,43.1009,-77.5353,America/New_York,HIGH,exact date confirmed
+34,2019,Travelers Championship,False,TPC River Highlands,2019-06-20,2019-06-23,Cromwell,CT,41.667,-72.681,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+34,2020,Travelers Championship,False,TPC River Highlands,2020-06-20,2020-06-23,Cromwell,CT,41.667,-72.681,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+34,2021,Travelers Championship,False,TPC River Highlands,2021-06-20,2021-06-23,Cromwell,CT,41.667,-72.681,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+34,2022,Travelers Championship,False,TPC River Highlands,2022-06-20,2022-06-23,Cromwell,CT,41.667,-72.681,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+34,2023,Travelers Championship,False,TPC River Highlands,2023-06-20,2023-06-23,Cromwell,CT,41.667,-72.681,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+41,2019,Valero Texas Open,False,TPC San Antonio (Oaks Course),2019-04-04,2019-04-07,San Antonio,TX,29.665,-98.4,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+41,2021,Valero Texas Open,False,TPC San Antonio (Oaks Course),2021-04-04,2021-04-07,San Antonio,TX,29.665,-98.4,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+41,2022,Valero Texas Open,False,TPC San Antonio (Oaks Course),2022-04-04,2022-04-07,San Antonio,TX,29.665,-98.4,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+41,2023,Valero Texas Open,False,TPC San Antonio (Oaks Course),2023-04-04,2023-04-07,San Antonio,TX,29.665,-98.4,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+47,2019,Shriners Hospitals for Children Open,False,TPC Summerlin,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+47,2020,Shriners Hospitals for Children Open,False,TPC Summerlin,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+47,2021,Shriners Children's Open,False,TPC Summerlin,2021-10-17,2021-10-20,Las Vegas,NV,36.149,-115.162,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+47,2022,Shriners Children's Open,False,TPC Summerlin,2022-10-17,2022-10-20,Las Vegas,NV,36.149,-115.162,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+54,2019,Sanderson Farms Championship,False,Country Club of Jackson,2019-10-03,2019-10-06,Jackson,MS,32.397,-90.098,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+54,2020,Sanderson Farms Championship,False,Country Club of Jackson,2020-10-03,2020-10-06,Jackson,MS,32.397,-90.098,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+54,2021,Sanderson Farms Championship,False,Country Club of Jackson,2021-10-03,2021-10-06,Jackson,MS,32.397,-90.098,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+54,2022,Sanderson Farms Championship,False,The Country Club of Jackson,2022-10-03,2022-10-06,Jackson,MS,32.397,-90.098,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+60,2019,TOUR Championship,False,East Lake Golf Club,2019-08-29,2019-09-01,Atlanta,GA,33.794,-84.36,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+60,2020,TOUR Championship,False,East Lake Golf Club,2020-08-29,2020-09-01,Atlanta,GA,33.794,-84.36,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+60,2021,TOUR Championship,False,East Lake Golf Club,2021-08-29,2021-09-01,Atlanta,GA,33.794,-84.36,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+60,2022,TOUR Championship,False,East Lake Golf Club,2022-08-29,2022-09-01,Atlanta,GA,33.794,-84.36,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+60,2023,TOUR Championship,False,East Lake Golf Club,2023-08-29,2023-09-01,Atlanta,GA,33.794,-84.36,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+88,2023,PGA TOUR Q-School presented by Korn Ferry,False,Dye's Valley Course,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+100,2019,The Open Championship,True,Royal Portrush,2019-07-18,2019-07-21,Portrush,NI,55.2053,-6.6596,Europe/London,HIGH,exact date confirmed
+100,2021,The Open Championship,True,Royal St George's,2021-07-15,2021-07-18,Sandwich,England,51.1347,1.3766,Europe/London,HIGH,exact date confirmed
+100,2022,The Open Championship,True,St Andrews,2022-07-14,2022-07-17,St Andrews,Scotland,56.3432,-2.8024,Europe/London,HIGH,exact date confirmed
+100,2023,The Open Championship,True,Royal Liverpool,2023-07-20,2023-07-23,Hoylake,England,53.3981,-3.1864,Europe/London,HIGH,exact date confirmed
+457,2019,Mayakoba Golf Classic,False,El Camaleon,2019-11-03,2019-11-06,Playa del Carmen,MX,20.63,-87.078,America/Cancun,MEDIUM,±7 days — acceptable for weather archive pull
+457,2020,Mayakoba Golf Classic presented by UNIFIN,False,El Camaleon,2020-11-03,2020-11-06,Playa del Carmen,MX,20.63,-87.078,America/Cancun,MEDIUM,±7 days — acceptable for weather archive pull
+457,2021,World Wide Technology Championship at Mayakoba,False,El Camaleon Golf Club,2021-11-07,2021-11-10,Cabo San Lucas,Mexico,22.901,-109.985,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+457,2022,World Wide Technology Championship at Mayakoba,False,El Camaleón Golf Course at Mayakoba,2022-11-07,2022-11-10,Cabo San Lucas,Mexico,22.901,-109.985,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+464,2019,Safeway Open,False,Silverado Resort & Spa (North),,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+464,2020,Safeway Open,False,Silverado Resort and Spa North,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+464,2021,Fortinet Championship,False,Silverado Resort & Spa (North),,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+464,2022,Fortinet Championship,False,Silverado Resort and Spa (North Course),,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+472,2019,Barracuda Championship,False,Montreux Golf & Country Club,2019-07-18,2019-07-21,Truckee,CA,39.25,-119.944,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+472,2020,Barracuda Championship,False,Old Greenwood Golf Course at Tahoe Mountain Club,2020-07-18,2020-07-21,Truckee,CA,39.25,-119.944,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+472,2021,Barracuda Championship,False,Tahoe Mt. Club (Old Greenwood),2021-07-18,2021-07-21,Truckee,CA,39.25,-119.944,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+472,2022,Barracuda Championship,False,Tahoe Mt. Club (Old Greenwood),2022-07-18,2022-07-21,Truckee,CA,39.25,-119.944,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+472,2023,Barracuda Championship,False,Tahoe Mountain Club (Old Greenwood),2023-07-18,2023-07-21,Truckee,CA,39.25,-119.944,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+473,2019,World Golf Championships-Mexico Championship,False,Club de Golf Chapultepec,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+473,2020,World Golf Championships-Mexico Championship,False,Club de Golf Chapultepec,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+473,2021,World Golf Championships-Workday Championship at The Concession,False,The Concession Golf Club,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+475,2019,Valspar Championship,False,Innisbrook Resort (Copperhead),2019-03-21,2019-03-24,Palm Harbor,FL,28.11,-82.76,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+475,2021,Valspar Championship,False,Innisbrook Resort (Copperhead),2021-03-21,2021-03-24,Palm Harbor,FL,28.11,-82.76,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+475,2022,Valspar Championship,False,Innisbrook Resort (Copperhead),2022-03-21,2022-03-24,Palm Harbor,FL,28.11,-82.76,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+475,2023,Valspar Championship,False,Innisbrook Resort (Copperhead Course),2023-03-21,2023-03-24,Palm Harbor,FL,28.11,-82.76,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+476,2019,World Golf Championships-FedEx St. Jude Invitational,False,TPC Southwind,2019-08-08,2019-08-11,Memphis,TN,35.072,-89.793,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+476,2020,World Golf Championships-FedEx St. Jude Invitational,False,TPC Southwind,2020-08-08,2020-08-11,Memphis,TN,35.072,-89.793,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+476,2021,World Golf Championships-FedEx St. Jude Invitational,False,TPC Southwind,2021-08-08,2021-08-11,Memphis,TN,35.072,-89.793,America/Chicago,MEDIUM,±7 days — acceptable for weather archive pull
+478,2019,Hero World Challenge,False,Albany,2019-12-05,2019-12-08,Albany,The Bahamas,25.004,-77.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+478,2021,Hero World Challenge,False,Albany,2021-12-05,2021-12-08,Albany,The Bahamas,25.004,-77.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+478,2022,Hero World Challenge,False,"Albany, Bahamas",2022-12-05,2022-12-08,Albany,The Bahamas,25.004,-77.509,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+480,2019,Wells Fargo Championship,False,Quail Hollow Club,,,Charlotte,NC,35.108,-80.849,America/New_York,LOW,date missing — exclude from weather revalidation
+480,2021,Wells Fargo Championship,False,Quail Hollow Club,,,Charlotte,NC,35.108,-80.849,America/New_York,LOW,date missing — exclude from weather revalidation
+480,2022,Wells Fargo Championship,False,TPC Potomac at Avenel Farm,,,Charlotte,NC,35.108,-80.849,America/New_York,LOW,date missing — exclude from weather revalidation
+480,2023,Wells Fargo Championship,False,Quail Hollow Club,,,Charlotte,NC,35.108,-80.849,America/New_York,LOW,date missing — exclude from weather revalidation
+483,2019,Puerto Rico Open,False,Coco Beach Golf & CC,2019-03-07,2019-03-10,Rio Grande,PR,18.401,-66.163,America/Puerto_Rico,MEDIUM,±7 days — acceptable for weather archive pull
+483,2020,Puerto Rico Open,False,Grand Reserve Country Club,2020-03-07,2020-03-10,Rio Grande,PR,18.401,-66.163,America/Puerto_Rico,MEDIUM,±7 days — acceptable for weather archive pull
+483,2021,Puerto Rico Open,False,Grand Reserve Country Club,2021-03-07,2021-03-10,Rio Grande,PR,18.401,-66.163,America/Puerto_Rico,MEDIUM,±7 days — acceptable for weather archive pull
+483,2022,Puerto Rico Open,False,Grand Reserve Golf Club,2022-03-07,2022-03-10,Rio Grande,PR,18.401,-66.163,America/Puerto_Rico,MEDIUM,±7 days — acceptable for weather archive pull
+483,2023,Puerto Rico Open,False,Grand Reserve Golf Club,2023-03-07,2023-03-10,Rio Grande,PR,18.401,-66.163,America/Puerto_Rico,MEDIUM,±7 days — acceptable for weather archive pull
+489,2019,World Golf Championships-HSBC Champions,False,Sheshan International GC,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+490,2019,A Military Tribute at The Greenbrier,False,The Greenbrier,2019-07-04,2019-07-07,White Sulphur Springs,WV,37.779,-80.302,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+493,2019,The RSM Classic,False,Sea Island GC (Plantation),2019-11-21,2019-11-24,Sea Island,GA,31.202,-81.332,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+493,2020,The RSM Classic,False,Sea Island GC (Seaside),2020-11-21,2020-11-24,Sea Island,GA,31.202,-81.332,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+493,2021,The RSM Classic,False,Sea Island GC (Plantation),2021-11-21,2021-11-24,Sea Island,GA,31.202,-81.332,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+493,2022,The RSM Classic,False,Sea Island Golf Club (Plantation),2022-11-21,2022-11-24,Sea Island,GA,31.202,-81.332,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+518,2019,Barbasol Championship,False,Keene Trace Golf Club,,,Nicholasville,KY,38.255,-85.768,America/New_York,LOW,date missing — exclude from weather revalidation
+518,2021,Barbasol Championship,False,Keene Trace Golf Club,,,Nicholasville,KY,38.255,-85.768,America/New_York,LOW,date missing — exclude from weather revalidation
+518,2022,Barbasol Championship,False,Keene Trace Golf Club,,,Nicholasville,KY,38.255,-85.768,America/New_York,LOW,date missing — exclude from weather revalidation
+518,2023,Barbasol Championship,False,Keene Trace Golf Club (Champions Course),,,Nicholasville,KY,38.255,-85.768,America/New_York,LOW,date missing — exclude from weather revalidation
+519,2021,Olympic Men's Golf Competition,False,Kasumigaseki Country Club,2021-08-01,2021-08-04,Guyancourt,France,48.753,2.076,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+521,2019,THE CJ CUP @ NINE BRIDGES,False,Nine Bridges,2019-10-14,2019-10-17,Las Vegas,NV,36.013,-115.028,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+521,2020,THE CJ CUP @ SHADOW CREEK,False,Shadow Creek Golf Course,2020-10-14,2020-10-17,Las Vegas,NV,36.013,-115.028,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+521,2021,THE CJ CUP @ SUMMIT,False,The Summit Club,2021-10-14,2021-10-17,Las Vegas,NV,36.013,-115.028,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+521,2022,THE CJ CUP in South Carolina,False,Congaree Golf Club,2022-10-14,2022-10-17,Las Vegas,NV,36.013,-115.028,America/Los_Angeles,MEDIUM,±7 days — acceptable for weather archive pull
+522,2019,Corales Puntacana Resort & Club Championship,False,Corales Golf Club,2019-04-18,2019-04-21,Punta Cana,La Altagracia,18.565,-68.34,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+522,2020,Corales Puntacana Resort & Club Championship,False,Corales Golf Club,2020-04-18,2020-04-21,Punta Cana,La Altagracia,18.565,-68.34,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+522,2022,Corales Puntacana Championship,False,Corales Golf Club,2022-04-18,2022-04-21,Punta Cana,DR,18.51,-68.367,America/Santo_Domingo,MEDIUM,±7 days — acceptable for weather archive pull
+522,2023,Corales Puntacana Championship,False,Puntacana Resort & Club (Corales Golf Course),2023-04-18,2023-04-21,Punta Cana,DR,18.51,-68.367,America/Santo_Domingo,MEDIUM,±7 days — acceptable for weather archive pull
+524,2019,Rocket Mortgage Classic,False,Detroit Golf Club,,,Detroit,MI,42.327,-83.231,America/New_York,LOW,date missing — exclude from weather revalidation
+524,2020,Rocket Mortgage Classic,False,Detroit Golf Club,,,Detroit,MI,42.327,-83.231,America/New_York,LOW,date missing — exclude from weather revalidation
+524,2021,Rocket Mortgage Classic,False,Detroit Golf Club,,,Detroit,MI,42.327,-83.231,America/New_York,LOW,date missing — exclude from weather revalidation
+524,2022,Rocket Mortgage Classic,False,Detroit Golf Club,,,Detroit,MI,42.327,-83.231,America/New_York,LOW,date missing — exclude from weather revalidation
+524,2023,Rocket Mortgage Classic,False,Detroit Golf Club,,,Detroit,MI,42.327,-83.231,America/New_York,LOW,date missing — exclude from weather revalidation
+525,2019,3M Open,False,TPC Twin Cities,2019-07-25,2019-07-28,Blaine,MN,45.177,-93.213,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+525,2020,3M Open,False,TPC Twin Cities,2020-07-25,2020-07-28,Blaine,MN,45.177,-93.213,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+525,2021,3M Open,False,TPC Twin Cities,2021-07-25,2021-07-28,Blaine,MN,45.177,-93.213,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+525,2022,3M Open,False,TPC Twin Cities,2022-07-25,2022-07-28,Blaine,MN,45.177,-93.213,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+525,2023,3M Open,False,TPC Twin Cities,2023-07-25,2023-07-28,Blaine,MN,45.177,-93.213,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+527,2019,ZOZO CHAMPIONSHIP,False,Accordia Golf,2019-10-21,2019-10-24,Chiba,Japan,34.764,139.329,Asia/Tokyo,MEDIUM,±7 days — acceptable for weather archive pull
+527,2020,ZOZO CHAMPIONSHIP @ SHERWOOD,False,Accordia Golf,2020-10-21,2020-10-24,Chiba,Japan,34.764,139.329,Asia/Tokyo,MEDIUM,±7 days — acceptable for weather archive pull
+527,2021,ZOZO CHAMPIONSHIP,False,Accordia Golf,2021-10-21,2021-10-24,Chiba,Japan,34.764,139.329,Asia/Tokyo,MEDIUM,±7 days — acceptable for weather archive pull
+527,2022,ZOZO CHAMPIONSHIP,False,Accordia Golf,2022-10-21,2022-10-24,Chiba,Japan,34.764,139.329,Asia/Tokyo,MEDIUM,±7 days — acceptable for weather archive pull
+528,2019,Bermuda Championship,False,Port Royal Golf Course,2019-11-14,2019-11-17,Southampton,Bermuda,32.261,-64.874,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+528,2020,Bermuda Championship,False,Port Royal Golf Course,2020-11-14,2020-11-17,Southampton,Bermuda,32.261,-64.874,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+528,2021,Butterfield Bermuda Championship,False,Port Royal Golf Course,2021-11-14,2021-11-17,Southampton,BM,32.32,-64.727,Atlantic/Bermuda,MEDIUM,±7 days — acceptable for weather archive pull
+528,2022,Butterfield Bermuda Championship,False,Port Royal Golf Course,2022-11-14,2022-11-17,Southampton,BM,32.32,-64.727,Atlantic/Bermuda,MEDIUM,±7 days — acceptable for weather archive pull
+533,2020,Workday Charity Open,False,Muirfield Village Golf Club,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+534,2021,Corales Puntacana Resort & Club Championship #2,False,Corales Golf Club,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+535,2021,U.S. Open #2,False,Torrey Pines (South),,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+536,2021,The Masters #2,False,Augusta National,2021-04-08,2021-04-11,Augusta,GA,33.503,-82.02,America/New_York,HIGH,exact date confirmed
+538,2021,Palmetto Championship at Congaree,False,Congaree Golf Club,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+540,2022,Mexico Open at Vidanta,False,Vidanta Vallarta,,,Playa del Carmen,MX,20.63,-87.078,America/Cancun,LOW,date missing — exclude from weather revalidation
+540,2023,Mexico Open at Vidanta,False,Vidanta Vallarta,,,Playa del Carmen,MX,20.63,-87.078,America/Cancun,LOW,date missing — exclude from weather revalidation
+541,2022,Genesis Scottish Open,False,The Renaissance Club,2022-07-11,2022-07-14,North Berwick,Scotland,56.051,-2.809,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+541,2023,Genesis Scottish Open,False,The Renaissance Club,2023-07-11,2023-07-14,North Berwick,Scotland,56.051,-2.809,America/New_York,MEDIUM,±7 days — acceptable for weather archive pull
+543,2023,Fortinet Championship #2,False,Silverado Resort (North Course),,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+544,2023,Sanderson Farms Championship #2,False,The Country Club of Jackson,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+545,2023,Shriners Children's Open #2,False,TPC Summerlin,,,Las Vegas,NV,36.149,-115.162,America/Los_Angeles,LOW,date missing — exclude from weather revalidation
+546,2023,ZOZO CHAMPIONSHIP #2,False,Accordia Golf,2023-10-21,2023-10-24,Chiba,Japan,34.764,139.329,Asia/Tokyo,MEDIUM,±7 days — acceptable for weather archive pull
+547,2023,World Wide Technology Championship #2,False,El Cardonal at Diamante,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+548,2023,Butterfield Bermuda Championship #2,False,Port Royal Golf Course,,,Southampton,BM,32.32,-64.727,Atlantic/Bermuda,LOW,date missing — exclude from weather revalidation
+549,2023,The RSM Classic #2,False,Sea Island Golf Club (Plantation Course),,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation
+550,2023,Hero World Challenge #2,False,Albany GC,,,,,,,America/New_York,LOW,date missing — exclude from weather revalidation

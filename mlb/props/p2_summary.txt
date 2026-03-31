@@ -1,0 +1,94 @@
+======================================================================
+MLB PLAYER PROPS — PHASE P2 BACKFILL + DATA SYSTEM
+======================================================================
+
+
+SECTION 0 — COLLECTION SUMMARY
+  Events: 10,548
+  By season: {2023: 3988, 2024: 3226, 2025: 3334}
+
+  Raw odds rows: 3,341,335
+  Markets: {'batter_hits': 865876, 'batter_total_bases': 860302, 'batter_home_runs': 780325, 'batter_rbis': 588693, 'pitcher_strikeouts': 95638, 'pitcher_hits_allowed': 51721, 'pitcher_earned_runs': 51099, 'pitcher_outs': 47681}
+  Books: 13
+
+
+
+
+
+======================================================================
+SECTION 1 — DATA QUALITY
+======================================================================
+
+Player mapping: 97.6% matched
+
+Outcome join: 2,392,977/3,341,335 (71.6%)
+
+Duplicate rows: 31808
+
+Line ranges by prop type:
+  ER          : min=0.5, max=7.5, median=2.5
+  HITS        : min=0.5, max=5.5, median=0.5
+  HR          : min=0.5, max=2.5, median=0.5
+  H_ALLOWED   : min=0.5, max=12.5, median=5.5
+  K           : min=0.5, max=11.5, median=4.5
+  OUTS        : min=2.5, max=23.5, median=16.5
+  RBI         : min=0.5, max=6.5, median=0.5
+  TB          : min=0.5, max=9.5, median=1.5
+
+======================================================================
+SECTION 2 — MARKET STRUCTURE
+======================================================================
+
+Unique player-prop-games: 529,659
+
+Props per game (median):
+  Median: 86
+  Mean: 86.9
+  Max: 236
+
+Books per prop (median):
+  Median: 6
+  Mean: 5.4
+
+Props by type:
+  ER          :   9,728
+  HITS        : 125,388
+  HR          : 125,088
+  H_ALLOWED   :  10,426
+  K           :  11,476
+  OUTS        :   9,017
+  RBI         : 112,230
+  TB          : 126,306
+
+Line variance by type:
+  ER          : mean line_std=0.50
+  HITS        : mean line_std=0.46
+  HR          : mean line_std=0.30
+  H_ALLOWED   : mean line_std=0.70
+  K           : mean line_std=0.36
+  OUTS        : mean line_std=0.10
+  RBI         : mean line_std=0.29
+  TB          : mean line_std=0.62
+
+======================================================================
+SECTION 3 — FINAL DATASET SHAPE
+======================================================================
+
+Total market view rows: 529,659
+  TRAIN: 163,786
+  VALIDATION: 191,192
+  OOS: 174,681
+
+With outcomes: 421,846/529,659 (79.6%)
+
+======================================================================
+SECTION 4 — READINESS CHECK
+======================================================================
+
+STATUS: READY FOR MODELING (Phase P3)
+
+Available for P3:
+  - 529,659 player-prop-games with market lines
+  - 421,846 with graded outcomes
+  - 8 prop types across 9 bookmakers
+  - Train/Validation split tagged

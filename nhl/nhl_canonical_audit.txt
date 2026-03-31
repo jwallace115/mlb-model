@@ -1,0 +1,20 @@
+NHL Canonical Game Table — Audit Report
+Generated: 2026-03-16 03:31:38 UTC
+Total rows: 5248
+
+  [PASS] Gate 1: Row count ≥ 4500: actual=5248
+  [PASS] Gate 2: No duplicate game_ids: dupes=0
+  [PASS] Gate 3: All required columns present
+  [PASS] Gate 4: total_goals ≥ 1 for all scored games: bad_rows=0
+  [PASS] Gate 5: OT/SO flags consistent: bad_so=0 bad_ot_goals=0
+  [PASS] Gate 6: reg_total_goals == home_goals_reg + away_goals_reg: bad_rows=0
+  [PASS] Gate 7: MoneyPuck coverage ≥ 80%: 5248/5248 = 100.0%
+  [PASS] Gate 8: Market coverage ≥ 70% for 2022-23+: 3934/3936 = 99.9%
+
+OVERALL: PASS — all audit gates satisfied
+
+Per-season row counts:
+  2021-22: 1312 games
+  2022-23: 1312 games
+  2023-24: 1312 games
+  2024-25: 1312 games

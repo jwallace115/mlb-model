@@ -1,0 +1,62 @@
+======================================================================
+NBA PLAYER PROPS — HISTORICAL BACKFILL
+======================================================================
+Player game logs: /Users/jw115/mlb-model/nba/model_c/player_game_logs.parquet
+
+
+SECTION 0 — COLLECTION SUMMARY
+  Events: 5,940
+  By season: {'2023-24': 2094, '2024-25': 2330, '2025-26': 1516}
+
+  Raw odds: 846,343
+  Markets: {'player_points': 249573, 'player_rebounds': 227190, 'player_threes': 197286, 'player_assists': 172294}
+  Books: 13
+
+
+======================================================================
+SECTION 1 — DATA QUALITY
+======================================================================
+
+Player mapping: 93.0%
+Outcome join: 609,171/846,343 (72.0%)
+Duplicates: 109608
+
+Line ranges:
+  ASSISTS     : min=0.5, max=14.5, median=4.5
+  POINTS      : min=1.5, max=126.5, median=14.5
+  REBOUNDS    : min=0.5, max=17.5, median=5.5
+  THREES      : min=0.5, max=6.5, median=1.5
+
+======================================================================
+SECTION 2 — MARKET STRUCTURE
+======================================================================
+
+Unique player-prop-games: 155,909
+Props per game: median=38, mean=42.6
+Books per prop: median=5, mean=5.0
+
+Props by type:
+  ASSISTS     :  35,463
+  POINTS      :  42,452
+  REBOUNDS    :  41,438
+  THREES      :  36,556
+
+======================================================================
+SECTION 3 — FINAL DATASET SHAPE
+======================================================================
+
+Total market view: 155,909
+  TRAIN: 49,752
+  VALIDATION: 58,992
+  OOS: 47,165
+With outcomes: 121,517/155,909 (77.9%)
+
+======================================================================
+SECTION 4 — READINESS CHECK
+======================================================================
+
+STATUS: READY FOR MODELING
+  155,909 player-prop-games with market lines
+  121,517 with graded outcomes
+  4 prop types, 5 median books per prop
+  Train/Validation/OOS split tagged

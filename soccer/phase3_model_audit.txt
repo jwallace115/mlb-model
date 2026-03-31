@@ -1,0 +1,143 @@
+════════════════════════════════════════════════════════════════════════
+  PHASE 3 MODEL AUDIT
+════════════════════════════════════════════════════════════════════════
+
+  MODEL CONFIGURATION
+  ────────────────────────────────────────────────────────────
+  Features:          67
+  Train rows:        2,744
+  Validate rows:     686
+  OOS rows:          686
+
+  Alpha grid search results — Model A (home_goals):
+    alpha=0.1      validate MAE = 1.0735
+    alpha=1.0      validate MAE = 1.0735
+    alpha=10.0     validate MAE = 1.0728
+    alpha=100.0    validate MAE = 1.0696
+    alpha=300.0    validate MAE = 1.0677
+    alpha=1000.0   validate MAE = 1.0675 ← selected
+    alpha=3000.0   validate MAE = 1.0679
+    alpha=10000.0  validate MAE = 1.0732
+
+  Alpha grid search results — Model B (away_goals):
+    alpha=0.1      validate MAE = 0.9341
+    alpha=1.0      validate MAE = 0.9341
+    alpha=10.0     validate MAE = 0.9334
+    alpha=100.0    validate MAE = 0.9293
+    alpha=300.0    validate MAE = 0.9260
+    alpha=1000.0   validate MAE = 0.9239 ← selected
+    alpha=3000.0   validate MAE = 0.9245
+    alpha=10000.0  validate MAE = 0.9336
+
+  Selected: Model A alpha = 1000.0  |  Model B alpha = 1000.0
+
+  FIX 2 — CALIBRATION OFFSETS (halved, computed from validate set)
+  ────────────────────────────────────────────────────────────
+  calibration_factor       = 0.5
+  validate_offset_home_raw = +0.1041  (full validate gap)
+  validate_offset_away_raw = +0.0675  (full validate gap)
+  offset_home applied      = +0.0520  (factor × raw)
+  offset_away applied      = +0.0337  (factor × raw)
+  Applied additively to all predictions. Models not refitted.
+  Saved: soccer/models/calibration_offsets.pkl  (includes calibration_factor)
+
+  DIAGNOSTIC 1: MAE by split
+  ────────────────────────────────────────────────────────────
+  Split          MAE home   MAE away  MAE total
+  ----------------------------------------------
+  train            1.0140     0.9424     1.3342
+  validate         1.0701     0.9286     1.3591
+  oos              1.0253     0.9400     1.3716
+
+  Overfit check MAE_home: val−train = +0.0561  →  PASS
+  Overfit check MAE_away: val−train = -0.0138  →  PASS
+  Overfit check MAE_total: val−train = +0.0249  →  PASS
+
+  DIAGNOSTIC 2: Mean calibration by split
+  ────────────────────────────────────────────────────────────
+  Split          pred_h   act_h  drift_h    pred_a   act_a  drift_a    pred_t   act_t  drift_t
+  ----------------------------------------------------------------------------------
+  train          1.6661  1.6086  +0.0575    1.3598  1.3243  +0.0354    3.0258  2.9329  +0.0929
+  validate       1.7512  1.8032  -0.0520    1.4152  1.4490  -0.0337    3.1664  3.2522  -0.0858
+  oos            1.6623  1.5656  +0.0967    1.4193  1.4577  -0.0384    3.0816  3.0233  +0.0583
+
+  Mean drift home on validate: 0.0520  (threshold ±0.12)  →  PASS
+  Mean drift away on validate: 0.0337  (threshold ±0.12)  →  PASS
+  Mean drift total on validate: 0.0858  (threshold ±0.12)  →  PASS
+
+  DIAGNOSTIC 3: League-specific calibration (validate set)
+  ────────────────────────────────────────────────────────────
+  League     pred_h   act_h    d_h    pred_a   act_a    d_a    pred_t   act_t  drift_t  check
+  ----------------------------------------------------------------------------
+  EPL        1.6668  1.8000 -0.1332    1.4154  1.4789 -0.0635    3.0822  3.2789  +0.1967  FAIL (>0.15)
+  BUN        1.8560  1.8072 +0.0488    1.4150  1.4118 +0.0032    3.2710  3.2190  +0.0520  PASS
+
+  DIAGNOSTIC 4: Prediction range distribution (validate set)
+  ────────────────────────────────────────────────────────────
+  Pct      pred_total   actual_total
+  ------------------------------------
+  0             2.402          0.000
+  10            2.815          1.000
+  25            2.966          2.000
+  50            3.159          3.000
+  75            3.339          4.000
+  90            3.558          6.000
+  100           4.192          9.000
+
+  10–90 pred range:   0.743
+  10–90 actual range: 5.000
+  Compression:        85.1%  →  FAIL (>30% compression)
+
+  DIAGNOSTIC 5: Residuals (pred − actual)
+  ────────────────────────────────────────────────────────────
+  Split          mean_res_h    std_h   mean_res_a    std_a   mean_res_t    std_t
+  ----------------------------------------------------------------------------
+  train             +0.0575   1.2903      +0.0354   1.1859      +0.0929   1.6620
+  validate          -0.0520   1.3305      -0.0337   1.1896      -0.0858   1.6887
+  oos               +0.0967   1.2734      -0.0384   1.1762      +0.0583   1.7055
+
+  Mean |total residual| on validate: 0.0858  (threshold ±0.12)  →  PASS
+  Mean |total residual| on oos: 0.0583  (threshold ±0.12)  →  PASS
+
+  DIAGNOSTIC 6: Top 15 features by scaled coefficient magnitude
+  ────────────────────────────────────────────────────────────
+  Model A (home_goals)  [alpha=1000.0]:
+    Feature                                           Coef
+    -------------------------------------------------------
+    home_xg_for_rolling_15                         +0.0693
+    home_shots_for_rolling_3                       +0.0580
+    home_shots_against_rolling_10                  -0.0506
+    away_num_attackers                             -0.0505
+    home_shots_on_target_rolling_10                +0.0486
+    league_avg_goals_rolling_season                -0.0464
+    home_goals_scored_rolling_3                    +0.0437
+    is_bundesliga                                  +0.0433
+    away_shot_mismatch                             +0.0427
+    away_first_choice_gk_missing                   +0.0420
+    away_xg_for_rolling_15                         -0.0418
+    away_shots_against_rolling_10                  +0.0415
+    home_back_five                                 -0.0373
+    home_xg_for_rolling_10                         +0.0345
+    away_goals_scored_rolling_5                    -0.0338
+    *** Lineup features in top 15: ['away_num_attackers', 'away_first_choice_gk_missing', 'home_back_five']
+
+  Model B (away_goals)  [alpha=1000.0]:
+    Feature                                           Coef
+    -------------------------------------------------------
+    home_xg_for_rolling_15                         -0.0470
+    away_shots_for_rolling_10                      +0.0462
+    away_xg_for_rolling_10                         +0.0437
+    home_xg_against_rolling_15                     +0.0397
+    away_shots_for_rolling_3                       +0.0380
+    away_xg_for_rolling_15                         +0.0379
+    home_xg_against_rolling_3                      +0.0377
+    home_xg_for_rolling_10                         -0.0368
+    home_shots_against_rolling_10                  +0.0366
+    league_goals_rolling_10                        +0.0348
+    away_shots_on_target_rolling_10                +0.0337
+    away_goals_scored_rolling_3                    +0.0328
+    away_shots_against_rolling_10                  -0.0293
+    away_xg_against_rolling_15                     -0.0271
+    home_primary_attacker_missing                  -0.0246
+    *** Lineup features in top 15: ['home_primary_attacker_missing']
+

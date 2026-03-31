@@ -47,6 +47,9 @@ API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
 LEAGUES = {
     "EPL": {"id": 39, "season": 2025},
     "BUN": {"id": 78, "season": 2025},
+    "LGA": {"id": 140, "season": 2024},
+    "SEA": {"id": 135, "season": 2024},
+    "LG1": {"id": 61, "season": 2024},
 }
 SEASON_STR = "2025-26"
 

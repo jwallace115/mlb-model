@@ -1,0 +1,162 @@
+==========================================================================
+PHASE 9 — HETEROSKEDASTIC VARIANCE MODEL
+==========================================================================
+
+  Replace constant σ=4.361 with per-game σ from variance drivers.
+  σ_game = max(3.0, Ridge(|residuals|) / sqrt(2/π))
+
+  Loaded Phase 9 baseline: 25 features, α=50, σ_const=4.3613
+
+  Training |residual| stats: mean=3.435  std=2.686  median=2.927  p90=6.867
+  E[|residual|]/σ_const = 3.435/4.361 = 0.788  (theory: 0.798)
+
+==========================================================================
+1. VARIANCE MODEL FIT (train 2022+2023)
+==========================================================================
+  α_variance = 1000.0
+  Variance model fit (in-sample):  r=0.080  R²=0.0064
+  (R² measures how much of |residual| variance is explained by predictors)
+
+  Variance driver coefficients (sorted by |std coef|):
+  Feature                           Std coef    Raw coef  Interpretation
+  ──────────────────────────────  ──────────  ──────────  ──────────────────────────────
+  park_factor_hr                     +0.1036     +0.0214  +coef → HR park → more variance
+  home_bp_delta_exposure             -0.0824     -0.0471  +coef → more bullpen chaos → wider
+  away_bp_delta_exposure             -0.0536     -0.0310  +coef → more bullpen chaos → wider
+  temperature                        +0.0506     +0.0052  +coef → hot → higher-scoring, wider
+  wind_speed                         +0.0391     +0.0075  +coef → faster wind → wider outcome
+  home_sp_bb_pct                     +0.0360     +2.6026  +coef → wild SP → walk inflation
+  dome_flag                          -0.0229     -0.1273  −coef → dome → controlled environment
+  away_sp_bb_pct                     +0.0171     +1.2323  +coef → wild SP → walk inflation
+  home_sp_fb_pct                     +0.0169     +0.2481  +coef → flyball SP → wind-sensitive
+  wind_out_flag                      +0.0084     +0.0184  +coef → wind blowing out → wider
+  away_sp_fb_pct                     +0.0056     +0.0828  +coef → flyball SP → wind-sensitive
+  expected_bullpen_innings           +0.0047     +0.0048  +coef → more bullpen → more variance
+
+==========================================================================
+2. PER-GAME σ DISTRIBUTION
+==========================================================================
+
+  Train 2022+2023: mean=4.306  std=0.232  min=3.614  p10=4.025  p50=4.296  p90=4.593  max=5.207  at_floor=0
+  Val   2024: mean=4.292  std=0.220  min=3.709  p10=4.024  p50=4.280  p90=4.553  max=5.318  at_floor=0
+  OOS   2025: mean=4.293  std=0.227  min=3.669  p10=4.027  p50=4.275  p90=4.563  max=5.274  at_floor=0
+
+  σ_const (Phase 8) = 4.3613 for all games
+  σ_game floor      = 3.0
+
+==========================================================================
+3. HIGH- VS LOW-VOLATILITY GAME SEGMENTS
+==========================================================================
+
+  Top-10 highest σ_game (2025 OOS):
+  Date          Home   Away    σ_game  WindSpd  WndOut  Dome   Temp  HmFB%  AwFB%  ExpBP   PkHR
+  ──────────────────────────────────────────────────────────────────────────────────────────
+  2025-06-22    COL    ARI      5.274      6.7       1     0     93  0.332  0.345    7.0    117
+  2025-08-14    COL    ARI      5.243      7.6       0     0     88  0.367  0.411    7.8    117
+  2025-06-12    COL    SFG      5.217      4.7       1     0     87  0.332  0.460    5.8    117
+  2025-09-19    COL    LAA      5.214      6.8       0     0     77  0.367  0.486    8.3    117
+  2025-07-22    COL    STL      5.206      1.6       0     0     78  0.367  0.395    7.3    117
+  2025-06-21    COL    ARI      5.204     10.4       1     0     98  0.487  0.380    7.4    117
+  2025-09-06    COL    SDP      5.197      3.8       0     0     83  0.457  0.398    9.3    117
+  2025-08-01    COL    PIT      5.195      2.7       0     0     81  0.332  0.403    7.0    117
+  2025-06-20    COL    ARI      5.189     13.7       1     0     99  0.479  0.378    7.4    117
+  2025-08-03    COL    PIT      5.172      5.6       0     0     86  0.367  0.363    7.7    117
+
+  Top-10 lowest σ_game (2025 OOS) — tightest distributions:
+  ──────────────────────────────────────────────────────────────────────────────────────────
+  2025-05-06    TBR    PHI      3.669      0.0       0     1     72  0.340  0.385    6.9     97
+  2025-04-01    SEA    DET      3.685      2.2       0     0     53  0.421  0.417    7.4     94
+  2025-04-13    SEA    TEX      3.693      8.1       0     0     54  0.421  0.313    6.8     94
+  2025-09-19    TBR    BOS      3.693      0.0       0     1     72  0.340  0.338    6.8     97
+  2025-09-02    TBR    SEA      3.695      0.0       0     1     72  0.340  0.416    7.0     97
+  2025-04-25    LAD    PIT      3.707      6.6       1     0     58  0.312  0.373    6.4     95
+  2025-04-02    SEA    DET      3.713      3.3       0     0     48  0.415  0.384    6.1     94
+  2025-09-07    TBR    CLE      3.750      0.0       0     1     72  0.340  0.314    7.6     97
+  2025-04-08    PIT    STL      3.757     11.0       0     0     36  0.373  0.342    6.5    101
+  2025-05-28    TBR    MIN      3.766      0.0       0     1     72  0.340  0.398    7.8     97
+
+  σ_game by venue type (2025 OOS):
+  Segment                        N   Mean σ    P50 σ    P90 σ
+  ─────────────────────────  ─────  ───────  ───────  ───────
+  Dome                          81    3.931    3.927    4.054
+  Retractable roof             486    4.270    4.249    4.491
+  Open air, no wind           1202    4.310    4.284    4.598
+  Open air, wind-out           659    4.324    4.307    4.581
+
+==========================================================================
+4. CI COVERAGE — CONSTANT σ vs σ_GAME
+==========================================================================
+
+  80% CI = [pred − 1.282σ, pred + 1.282σ]  (target coverage = 80%)
+
+  2024 Validate:
+    Constant σ = 4.361:  coverage=83.1%  CI width=11.182
+    σ_game:              coverage=81.6%  CI width=11.004  (mean σ=4.292)
+    Δ coverage = -1.525%  ✗ no improvement
+  2025 OOS:
+    Constant σ = 4.361:  coverage=80.8%  CI width=11.182
+    σ_game:              coverage=80.0%  CI width=11.008  (mean σ=4.293)
+    Δ coverage = -0.865%  ✗ no improvement
+
+==========================================================================
+5. CALIBRATION COMPARISON — CONSTANT σ vs σ_GAME
+==========================================================================
+
+
+  Calibration — 2024 Validate (proxy line):
+             Bin      N   Pred P  Act% const  Err const   Act% game   Err game
+  ──────────────  ─────  ───────  ──────────  ─────────  ──────────  ─────────
+       0.10–0.20      1    0.191       0.000     +0.191       0.000     +0.153
+       0.20–0.30     37    0.276       0.378     -0.102       0.379     -0.112
+       0.30–0.40    307    0.365       0.332     +0.033       0.340     +0.024
+       0.40–0.50    942    0.456       0.476     -0.020       0.477     -0.021
+       0.50–0.60    867    0.543       0.512     +0.031       0.512     +0.032
+       0.60–0.70    214    0.631       0.603     +0.029       0.612     +0.021
+       0.70–0.80     54    0.743       0.722     +0.021       0.683     +0.055
+       0.80–0.90      5    0.819       0.200     +0.619         nan       +nan
+
+  Calibration — 2025 OOS (proxy line):
+             Bin      N   Pred P  Act% const  Err const   Act% game   Err game
+  ──────────────  ─────  ───────  ──────────  ─────────  ──────────  ─────────
+       0.20–0.30     15    0.274       0.267     +0.008       0.261     +0.002
+       0.30–0.40    229    0.366       0.371     -0.005       0.377     -0.014
+       0.40–0.50    941    0.455       0.450     +0.005       0.451     +0.003
+       0.50–0.60    882    0.545       0.509     +0.036       0.511     +0.034
+       0.60–0.70    303    0.636       0.601     +0.036       0.597     +0.038
+       0.70–0.80     51    0.739       0.686     +0.053       0.789     -0.058
+       0.80–0.90      7    0.823       0.857     -0.035       0.500     +0.303
+
+  Brier score summary (lower = better calibrated):
+                                  2024 const   2024 game  2025 const   2025 game
+  Brier score (proxy line)           0.24401     0.24386     0.24480     0.24460
+
+==========================================================================
+6. ROI AND CONFIDENCE TIER — CONSTANT σ vs σ_GAME (vs real closing lines)
+==========================================================================
+
+  Metric                           σ_const 2024   σ_game 2024   σ_const 2025   σ_game 2025
+  ──────────────────────────────  ─────────────  ────────────  ─────────────  ────────────
+  N bets                                    689           689            737           737
+  Win %                                   53.4%         53.4%          52.2%         52.2%
+  ROI %                                   +2.0%         +2.0%          -0.3%         -0.3%
+
+  Confidence tiers — 2025 OOS:
+  Tier          σ_const n  σ_const win%  σ_const ROI  σ_game n  σ_game win%  σ_game ROI    Δ ROI
+  ────────────  ─────────  ────────────  ───────────  ────────  ───────────  ──────────  ───────
+  STRONG              291          53.6         +2.3       291         53.6        +2.3     +0.0pp
+  BET                 446          51.3         -2.0       446         51.3        -2.0     +0.0pp
+  WATCHLIST           777          51.0         -2.7       777         51.0        -2.7     +0.0pp
+
+==========================================================================
+7. VERDICT
+==========================================================================
+
+  CI coverage (2025):  constant=80.848%  game=79.984%  Δ=-0.865%  NO CHANGE ✗
+  Brier score (2025):  constant=0.24480  game=0.24460  IMPROVED ✓
+  ROI 2025 OOS:        constant=-0.3%  game=-0.3%  Δ=+0.0pp  NO GAIN ✗
+
+  VERDICT: KEEP σ_game
+  CI coverage held, Brier improved. ROI Δ=+0.0pp.
+
+  Saved variance model → /Users/jw115/mlb-model/sim/data/phase9_variance_model.pkl
+  Variance drivers: ['wind_speed', 'wind_out_flag', 'home_sp_fb_pct', 'away_sp_fb_pct', 'home_bp_delta_exposure', 'away_bp_delta_exposure', 'temperature', 'park_factor_hr', 'home_sp_bb_pct', 'away_sp_bb_pct', 'expected_bullpen_innings', 'dome_flag']

@@ -1,0 +1,208 @@
+VENUE SIGNAL — ROAD_WARRIOR AND STRONG_HOME EXPANSION CANDIDATES
+Run date: 2026-03-22
+Data: nba/data/features.parquet + nba/data/nba_historical_closing_lines.parquet
+Seasons: 2022-23, 2023-24, 2024-25 (regular season only)
+
+Candidate pool (15): ATL, BKN, BOS, CHA, CLE, LAC, LAL, MEM, MIA, MIN, NOP, ORL, SAC, TOR, WAS
+
+Current deployed lists:
+  ROAD_WARRIOR (9): CHI, DAL, DET, GSW, HOU, NYK, PHI, PHX, UTA
+  STRONG_HOME (6):  DEN, IND, MIL, OKC, POR, SAS
+
+
+================================================================
+ROAD_WARRIOR CANDIDATES (away @ STRONG_HOME)
+================================================================
+
+Team    N     ME      Hit%    p       22-23          23-24          24-25          Flag
+---------------------------------------------------------------------------------------
+ATL    22   +6.61    66.7%   0.059    8g +6.2        6g +7.4        8g +6.4       TIER A
+BOS    22   +4.50    63.6%   0.324    7g +18.0       9g -4.6        6g +2.4       TIER A
+TOR    22   +4.45    68.2%   0.271    8g +7.8        7g +14.6       7g -9.5       TIER A
+LAC    29   +3.81    51.7%   0.253   10g +3.6        9g +3.6       10g +4.2       TIER A
+CHA    22   +3.77    59.1%   0.400    7g +6.4        8g -9.8        7g +16.6      TIER A
+MIN    30   +2.87    56.7%   0.407   10g +4.0       10g +2.5       10g +2.0       TIER B
+CLE    24   +2.33    54.2%   0.527    8g +5.8        8g -1.6        8g +2.8       TIER B
+BKN    23   +2.13    47.8%   0.543    8g +0.4        7g +1.4        8g +4.6       TIER B
+WAS    23   +0.07    47.8%   0.988    8g +2.1        7g +1.1        8g -2.9       NULL
+NOP    30   -0.28    46.7%   0.934   10g -4.0        9g +0.8       11g +2.2       NULL
+LAL    27   -0.33    51.9%   0.936    9g +1.1        8g -1.1       10g -1.0       NULL
+ORL    24   -0.69    58.3%   0.831    7g +5.7        8g -7.4        9g +0.3       NULL
+SAC    26   -1.79    52.0%   0.622    9g -7.4        8g +0.7        9g +1.6       NULL
+MIA    23   -2.70    39.1%   0.489    8g -7.9        7g -2.6        8g +2.5       NULL
+MEM    28   -3.07    42.9%   0.285    9g -5.3       10g -0.2        9g -3.9       NULL
+
+Tier A candidates (5): ATL, BOS, TOR, LAC, CHA
+Tier B candidates (3): MIN, CLE, BKN
+NULL (7): WAS, NOP, LAL, ORL, SAC, MIA, MEM
+
+STANDOUT: ATL — only candidate with p<0.10, 3/3 seasons positive, 66.7% hit.
+  ATL is the clear top expansion candidate for ROAD_WARRIOR.
+
+NOTE: LAC is the most stable (3/3 seasons positive, tightest range +3.6/+3.6/+4.2)
+  but lower hit rate (51.7%) limits confidence.
+
+CAUTION: BOS and TOR have one strongly negative season each (-4.6 and -9.5),
+  indicating instability despite high ME. CHA also has one -9.8 season.
+
+
+================================================================
+STRONG_HOME CANDIDATES (host to ROAD_WARRIOR)
+================================================================
+
+Team    N     ME      Hit%    p       22-23          23-24          24-25          Flag
+---------------------------------------------------------------------------------------
+ATL    38   +8.03    67.6%   0.013   13g +3.0       12g +12.3      13g +9.1       TIER A
+BOS    39   +4.92    60.5%   0.066   13g +5.4       13g +6.5       13g +2.9       TIER A
+MIA    35   +3.66    60.0%   0.142   11g +5.4       12g +5.0       12g +0.8       TIER A
+MIN    39   +2.86    57.9%   0.300   14g +4.4       12g -6.4       13g +9.8       TIER B
+CLE    38   +2.47    55.3%   0.507   13g -4.4       13g +4.9       12g +7.3       TIER B
+WAS    36   +2.38    55.6%   0.404   13g -1.5       12g +0.1       11g +9.4       TIER B
+TOR    38   +2.03    55.3%   0.451   13g +0.7       12g +10.6      13g -4.5       TIER B
+SAC    40   +1.44    56.4%   0.567   14g +7.0       13g -7.9       13g +4.8       NULL
+NOP    39   +1.38    53.8%   0.663   13g -0.6       13g +2.6       13g +2.2       NULL
+MEM    41   +1.12    55.0%   0.680   14g +2.5       13g -3.5       14g +4.0       NULL
+LAC    42   -0.24    50.0%   0.935   14g -3.7       13g +0.2       15g +2.7       NULL
+LAL    40   -0.30    45.0%   0.918   13g +4.0       14g -7.1       13g +2.7       NULL
+BKN    37   -1.68    48.6%   0.562   12g +3.0       13g +1.1       12g -9.3       NULL
+ORL    38   -1.83    44.7%   0.581   12g +2.1       13g -7.9       13g +0.6       NULL
+CHA    37   -3.57    32.4%   0.204   12g -6.6       12g -2.5       13g -1.7       NULL
+
+Tier A candidates (3): ATL, BOS, MIA
+Tier B candidates (4): MIN, CLE, WAS, TOR
+NULL (8): SAC, NOP, MEM, LAC, LAL, BKN, ORL, CHA
+
+STANDOUT: ATL — the only candidate with p<0.05. 3/3 seasons positive,
+  67.6% hit, ME=+8.03. Strongest STRONG_HOME candidate by a wide margin.
+
+NOTE: BOS at p=0.066, 3/3 seasons positive, consistent (5.4/6.5/2.9).
+  MIA at p=0.142, 3/3 seasons positive but weakening (5.4/5.0/0.8).
+
+
+================================================================
+PAIR-LEVEL DETAIL — TIER A CANDIDATES ONLY
+================================================================
+
+ATL as AWAY @ STRONG_HOME venues:
+  Opponent   N    ME       Hit%
+  ----------------------------------
+  DEN        3   +14.67   100.0%
+  IND        3    +2.17    66.7%
+  MIL        7    +1.86    50.0%
+  OKC        3   +11.83   100.0%
+  POR        3    -0.17    33.3%
+  SAS        3   +15.67    66.7%
+  → Broad signal: 5/6 opponents positive. Only POR slightly negative.
+
+BOS as AWAY @ STRONG_HOME venues:
+  Opponent   N    ME       Hit%
+  ----------------------------------
+  DEN        3    -3.17    66.7%
+  IND        5   +13.40    60.0%
+  MIL        5    -2.90    40.0%
+  OKC        3    +5.83    66.7%
+  POR        3   +12.50   100.0%
+  SAS        3    +0.33    66.7%
+  → Mixed: 4/6 positive but DEN and MIL negative. Concentrated in IND/POR.
+
+TOR as AWAY @ STRONG_HOME venues:
+  Opponent   N    ME       Hit%
+  ----------------------------------
+  DEN        3    +7.67   100.0%
+  IND        5    -1.00    60.0%
+  MIL        5    -2.60    40.0%
+  OKC        3   +16.67   100.0%
+  POR        3    -1.67    33.3%
+  SAS        3   +16.00   100.0%
+  → Concentrated: OKC/SAS drive the signal. IND/MIL/POR negative.
+
+LAC as AWAY @ STRONG_HOME venues:
+  Opponent   N    ME       Hit%
+  ----------------------------------
+  DEN        6    -1.50    33.3%
+  IND        3   +23.50   100.0%
+  MIL        3    -9.50    33.3%
+  OKC        6    +8.92    66.7%
+  POR        5    +3.50    60.0%
+  SAS        6    +1.08    33.3%
+  → Concentrated: IND (+23.50, N=3) and OKC (+8.92, N=6) dominate.
+    DEN and MIL negative.
+
+CHA as AWAY @ STRONG_HOME venues:
+  Opponent   N    ME       Hit%
+  ----------------------------------
+  DEN        3    -2.17    33.3%
+  IND        5    +2.00    80.0%
+  MIL        5    -1.90    40.0%
+  OKC        3   +25.50   100.0%
+  POR        3   -12.83    33.3%
+  SAS        3   +17.00    66.7%
+  → Heavily concentrated: OKC (+25.50, N=3) and SAS (+17.00, N=3) dominate.
+    DEN/MIL/POR all negative.
+
+ATL as HOME hosting ROAD_WARRIOR teams:
+  Visitor   N    ME       Hit%
+  ----------------------------------
+  CHI        5    +9.50    80.0%
+  DAL        3   +24.67   100.0%
+  DET        6    +8.42    66.7%
+  GSW        3   +11.33    66.7%
+  HOU        3   -15.33     0.0%
+  NYK        6    +6.92    66.7%
+  PHI        6   +11.75    83.3%
+  PHX        3    -0.67    50.0%
+  UTA        3   +11.67    66.7%
+  → Broad: 7/9 visitors positive. Only HOU (-15.33, N=3) is a drag.
+    Strongest signal is ATL at home.
+
+BOS as HOME hosting ROAD_WARRIOR teams:
+  Visitor   N    ME       Hit%
+  ----------------------------------
+  CHI        5    -7.20    40.0%
+  DAL        3   +15.50   100.0%
+  DET        6    +9.17    66.7%
+  GSW        3    -1.00    33.3%
+  HOU        3   +10.17    66.7%
+  NYK        7   +13.64    71.4%
+  PHI        6    +4.58    66.7%
+  PHX        3    -2.33    50.0%
+  UTA        3    -5.67    33.3%
+  → Mixed: 5/9 positive. CHI and UTA negative as visitors.
+
+MIA as HOME hosting ROAD_WARRIOR teams:
+  Visitor   N    ME       Hit%
+  ----------------------------------
+  CHI        5    +7.40    60.0%
+  DAL        3   +11.17    66.7%
+  DET        5    -3.30    40.0%
+  GSW        3   -10.50     0.0%
+  HOU        3    -9.67    33.3%
+  NYK        5   +14.00   100.0%
+  PHI        5    +1.80    60.0%
+  PHX        3    +4.17    66.7%
+  UTA        3   +14.33   100.0%
+  → Mixed: 6/9 positive but GSW/HOU/DET strongly negative.
+
+
+================================================================
+SUMMARY
+================================================================
+
+ROAD_WARRIOR expansion:
+  STRONGEST: ATL (ME=+6.61, 66.7%, p=0.059, 3/3 seasons, broad across opponents)
+  STABLE:    LAC (ME=+3.81, 3/3 seasons, but 51.7% hit rate limits confidence)
+  UNSTABLE:  BOS, TOR, CHA (each has a negative season and concentrated pairs)
+
+STRONG_HOME expansion:
+  STRONGEST: ATL (ME=+8.03, 67.6%, p=0.013, 3/3 seasons, broad across 7/9 visitors)
+  SOLID:     BOS (ME=+4.92, 60.5%, p=0.066, 3/3 seasons, mixed pair-level)
+  FADING:    MIA (ME=+3.66, 60.0%, 3/3 seasons but weakening: 5.4 → 5.0 → 0.8)
+
+ATL appears in BOTH directions:
+  As away (RW candidate): ME=+6.61, 66.7%
+  As home (SH candidate): ME=+8.03, 67.6%
+  ATL is the only team that qualifies as Tier A in both roles.
+  This suggests ATL's signal is about the team, not the role —
+  ATL games at venues with strong home effects go OVER regardless
+  of which side ATL is on. This may reflect ATL's pace/style
+  rather than a true road warrior or home court effect.

@@ -1,0 +1,150 @@
+======================================================================
+  NBA PHASE 7B — BASE AUDIT
+======================================================================
+
+  TASK 1 — RECONCILIATION
+
+  PHASE 5 REPLICATION:
+    Season: 2024-25 ONLY
+    Games in 0-1 edge: 179 (no push: 179)
+    Wins: 99, Losses: 80, Pushes: 0
+    Hit rate: 55.3%
+    ROI: +5.6%
+    ← This matches the Phase 5 reported +5.6% ✅
+
+  PHASE 7B v2 REPLICATION:
+    Seasons: 2022-23 + 2023-24
+    Games in 0-1 edge: 362 (no push: 356)
+    Wins: 162, Losses: 194, Pushes: 6
+    Hit rate: 45.5%
+    ROI: -13.1%
+
+  ANSWER TO DISCREPANCY:
+  Phase 5 (+5.6%) and Phase 7B v2 (-13.1%) used DIFFERENT SEASONS.
+  
+  Phase 5 computed +5.6% on 2024-25 (the OOS holdout).
+  Phase 7B v2 computed -13.1% on 2022-23 + 2023-24 (discovery).
+  
+  These are not contradictory — they are measuring different things:
+  - Discovery (2022-23 + 2023-24): -13.1% ROI
+  - Holdout (2024-25): +5.6% ROI
+  
+  The +5.6% is a genuine OOS result, not a backtest artifact.
+  But the discovery data shows the model's 0-1 edge zone was
+  NOT profitable in 2022-23 or 2023-24. The 2024-25 season was
+  either:
+  a) A regime shift where the model improved, OR
+  b) Favorable variance on a thin sample (179 bets)
+  
+  Phase 6 forward shadow will resolve this.
+
+  Q1: Seasons — answered above
+  Q2: Same files (features + predictions + hist_lines) ✅
+  Q3: Same bet direction logic (OVER/UNDER from model_edge sign) ✅
+  Q4: Pushes excluded from denominator in both ✅
+  Q5: Duplicates — checked below
+  Q6: Same close_total field from nba_historical_closing_lines ✅
+  Q7: Same game_id join ✅
+  Q8: Counts — Phase 5: 179, 7B v2: 356
+  Q10: ROI = (W × 100/110 − L) / (W + L) × 100, pushes excluded ✅
+
+  Q9: Game_id overlap: 0 (different seasons, no overlap by design)
+
+======================================================================
+  TASK 2 — SEASON-BY-SEASON BREAKDOWN
+======================================================================
+
+  Season         N     Hit      ROI  Avg Line  Avg Edge  Push
+  -------------------------------------------------------
+  2022-23      197   47.2%    -9.9%    228.2     0.50     3
+  2023-24      159   43.4%   -17.2%    228.9     0.48     3
+  2024-25      179   55.3%    +5.6%    229.1     0.48     0
+
+  Seasons 2019-20 through 2021-22: NO DATA
+  features.parquet begins at 2022-23.
+
+======================================================================
+  TASK 3 — DATA INTEGRITY
+======================================================================
+
+  1. Row counts:
+    2022-23: 1230 rows (100% of expected ~1230)
+    2023-24: 1230 rows (100% of expected ~1230)
+    2024-25: 1230 rows (100% of expected ~1230)
+
+  2. Duplicate game_ids: 0 ✅
+  3. Null actual_total: 0 ✅
+
+  4. Model edge distribution:
+    Total games with pred + line: 3685
+    0-1 edge band: 541 (14.7%)
+    1-2 edge: 490
+    2-3 edge: 486
+    3+ edge: 2168
+
+  5. Result field:
+    Computed from: actual_total vs close_total
+    Over hit when actual > close, Under hit when actual < close
+    Push when actual == close
+    Total pushes: 41
+
+======================================================================
+  TASK 4 — PHASE 5 EXACT REPLICATION
+======================================================================
+
+  Phase 5 calculation:
+    File 1: nba/data/features.parquet (game context + scores)
+    File 2: nba/data/predictions.parquet (model pred_total)
+    File 3: nba/data/nba_historical_closing_lines.parquet (close_total)
+    
+    Join: features LEFT JOIN predictions ON game_id
+          LEFT JOIN historical_lines ON game_id
+    Filter: close_total NOT NULL AND pred_total NOT NULL
+    
+    model_edge = pred_total - close_total
+    abs_edge = |model_edge|
+    Filter: abs_edge <= 1.0
+    Season: 2024-25 ONLY
+    
+    lean = OVER if model_edge > 0 else UNDER
+    over_hit = 1 if actual_total > close_total
+    under_hit = 1 if actual_total < close_total
+    push = 1 if actual_total == close_total
+    
+    win = (lean==OVER AND over_hit==1) OR (lean==UNDER AND under_hit==1)
+    
+    Exclude pushes from denominator.
+    ROI = (wins × 100/110 − losses) / (wins + losses) × 100
+    
+  RESULT:
+    N = 179 bets (no push)
+    Wins = 99
+    Losses = 80
+    Hit rate = 55.3%
+    ROI = +5.6%
+    
+    MATCHES Phase 5 reported +5.6% ✅
+    
+  CONCLUSION:
+    Phase 5 +5.6% is the 2024-25 OOS result.
+    Phase 7B v2 -13.1% is the 2022-23 + 2023-24 discovery result.
+    Both numbers are correct. They measure different seasons.
+    
+    The discrepancy is a GENUINE REGIME DIFFERENCE, not a data issue.
+    The model's 0-1 edge zone was unprofitable in 2022-23 and 2023-24
+    but profitable in 2024-25. This could be:
+    
+    a) Model improvement (Ridge was retrained — predictions may be
+       better calibrated for recent data)
+    b) Market regime shift (2024-25 market may have been less efficient)
+    c) Favorable variance (179 bets is a thin sample)
+    
+    Phase 6 forward shadow (150-bet target) is the correct mechanism
+    to resolve whether +5.6% is repeatable or was a one-season outlier.
+
+  POPULATION RECONCILIATION:
+    Phase 5: 2024-25 only, 179 games, 179 no-push
+    Phase 7B v2: 2022-23 + 2023-24, 362 games, 356 no-push
+    Overlap: 0 game_ids (different seasons)
+    ROI convention: identical in both (pushes excluded, -110 odds)
+    Files: identical in both (features + predictions + hist_lines)

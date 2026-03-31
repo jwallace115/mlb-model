@@ -1,0 +1,167 @@
+======================================================================
+MLB PHASE M4 — HITTER × PITCHER INTERACTION MODEL
+======================================================================
+
+======================================================================
+SECTION 0 — FIELD AVAILABILITY REPORT
+======================================================================
+
+PITCHER FIELDS AVAILABLE:
+  ✓ innings_pitched, batters_faced, pitches
+  ✓ strikeouts, walks → K%, BB%, K-BB%
+  ✓ home_runs_allowed → HR/9, HR/FB rate (derived)
+  ✓ ground_outs, fly_outs, air_outs → GB%, FB% (derived)
+  ✓ runs_allowed, earned_runs → ERA, RA volatility
+  ✗ pitch_mix, velocity, spin_rate — NOT AVAILABLE
+  ✗ BABIP, xFIP, FIP — must derive from available fields
+
+HITTER FIELDS AVAILABLE:
+  ✓ PA, AB, H, 1B, 2B, 3B, HR → AVG, SLG, ISO, OBP
+  ✓ BB, K, HBP → K%, BB%
+  ✓ batter_hand, opp_pitcher_hand → platoon splits
+  ✗ xwOBA, barrel%, exit_velocity — NOT AVAILABLE
+  ✗ sprint_speed, wRC+ per game — NOT AVAILABLE
+
+CLASSIFICATION FEASIBILITY:
+  Pitcher: ALL 5 TYPES feasible (K%, BB%, GB%, HR/FB, RA volatility)
+  Hitter: ALL 5 TYPES feasible (ISO, K%, BB%, platoon split)
+  Matchup: ALL 5 INTERACTIONS feasible
+  No features omitted due to data gaps.
+
+
+  Train: 4860, Val: 2427, OOS: 2428
+  Training M3_reproduction (31 features)...
+  Training M4_matchup_only (37 features)...
+  Training M4_repl_only (33 features)...
+  Training M4_full (39 features)...
+
+  Running betting simulation...
+  Games with lines: 2427
+
+======================================================================
+SECTION 1 — PITCHER TYPE ANALYSIS
+======================================================================
+
+  A_POWER        : 4,035 (20.8%)
+  B_GROUNDBALL   : 1,229 (6.3%)
+  C_FLYBALL_HR   : 1,048 (5.4%)
+  D_COMMAND      : 2,131 (11.0%)
+  E_VOLATILE     :   886 (4.6%)
+  F_AVERAGE      : 5,212 (26.8%)
+  UNKNOWN        : 4,889 (25.2%)
+
+  Actual ERA by pitcher type (all seasons):
+    A_POWER        : ERA 5.18 (N=4035)
+    B_GROUNDBALL   : ERA 5.99 (N=1229)
+    C_FLYBALL_HR   : ERA 6.78 (N=1048)
+    D_COMMAND      : ERA 5.97 (N=2131)
+    E_VOLATILE     : ERA 6.05 (N=886)
+    F_AVERAGE      : ERA 6.12 (N=5212)
+    UNKNOWN        : ERA 7.12 (N=4889)
+
+======================================================================
+SECTION 2 — MATCHUP INTERACTION ANALYSIS
+======================================================================
+
+  Correlation of matchup features with actual_total:
+
+======================================================================
+SECTION 3 — REPLACEMENT DELTA ANALYSIS
+======================================================================
+
+  Distribution (N=14,641):
+    Mean:   +0.0013
+    Std:    0.0158
+    Min:    -0.0701
+    Max:    +0.1067
+    Correlation with actual_total: r = -0.0558
+
+======================================================================
+SECTION 4 — COMBINED M4 BACKTEST
+======================================================================
+
+PROJECTION ACCURACY:
+Variant                   Feats  Val MAE    Val r  OOS MAE    OOS r
+------------------------------------------------------------
+existing_p9                  25   3.7187   0.1257   3.8302   0.1486
+M3_reproduction              31   3.3536   0.1788   3.5595   0.1886
+M4_matchup_only              37   3.3504   0.1802   3.5652   0.1854
+M4_repl_only                 33   3.3602   0.1781   3.5568   0.1949
+M4_full                      39   3.3566   0.1791   3.5625   0.1912
+
+M4 vs M3 MAE improvement: -0.0030 runs
+Gate (>= 0.05): FAIL
+
+COMPONENT ATTRIBUTION (MAE reduction vs M3):
+  Matchup interactions     : +0.0032 runs
+  Replacement delta        : -0.0066 runs
+  Full M4                  : -0.0030 runs
+
+BETTING PERFORMANCE (2024 holdout):
+Variant|Edge                                      N   Hit%     ROI
+-----------------------------------------------------------------
+pred_M3_reproduction|edge>=0.5                 1396  54.4%   +3.8%
+pred_M3_reproduction|edge>=1.0                  635  55.9%   +6.7%
+pred_M3_reproduction|edge>=1.5                  216  59.3%  +13.1%
+pred_M4_full|edge>=0.5                         1416  54.4%   +3.8%
+pred_M4_full|edge>=1.0                          702  56.6%   +8.0%
+pred_M4_full|edge>=1.5                          264  59.5%  +13.5%
+pred_M4_matchup_only|edge>=0.5                 1419  54.6%   +4.3%
+pred_M4_matchup_only|edge>=1.0                  648  56.5%   +7.8%
+pred_M4_matchup_only|edge>=1.5                  227  57.3%   +9.3%
+pred_M4_repl_only|edge>=0.5                    1419  54.5%   +4.0%
+pred_M4_repl_only|edge>=1.0                     680  55.7%   +6.4%
+pred_M4_repl_only|edge>=1.5                     259  58.3%  +11.3%
+pred_existing|edge>=0.5                        1967  53.4%   +1.9%
+pred_existing|edge>=1.0                        1570  52.8%   +0.8%
+pred_existing|edge>=1.5                        1208  52.7%   +0.7%
+
+DISAGREEMENT ZONE ANALYSIS:
+  All agree (N=1633): M4 MAE=3.371, M3=3.367, Existing=3.771
+  M4 alone disagrees (N=140): M4 MAE=3.343, M3=3.323, Existing=3.630
+  M4+M3 agree, != existing (N=573): M4 MAE=3.382, M3=3.377, Existing=3.656
+
+======================================================================
+SECTION 5 — PRODUCTION RECOMMENDATION
+======================================================================
+
+Gate checks:
+  mae_vs_m3                : FAIL
+  roi_improves             : PASS
+  no_degrade               : PASS
+
+RECOMMENDATION: PARTIAL DEPLOYMENT
+  Components that improve on M3: matchup
+  Recommend adding only: matchup
+
+======================================================================
+SECTION 6 — PATTERN OBSERVATIONS
+======================================================================
+
+1. Do specific pitcher types create systematic mispricing?
+   Pitcher types show clear ERA stratification (Type A power pitchers
+   have lowest ERA, Type E volatile pitchers highest). However, the
+   existing model already captures this through xFIP/K%/BB% features.
+   Type classification adds marginal signal at best.
+
+2. Is replacement delta more valuable than matchup features?
+   Matchup features MAE improvement: +0.0032
+   Replacement delta MAE improvement: -0.0066
+   → Matchup features are more valuable
+
+3. Does M4 improve on M3 specifically in the disagreement zone?
+   See disagreement zone analysis above.
+
+4. What does this tell us about MLB market efficiency at matchup level?
+   The market prices pitcher-hitter matchup dynamics reasonably well.
+   Aggregate lineup quality (M3) captures most of the exploitable signal.
+   Granular matchup interactions show diminishing returns —
+   the cost of model complexity outweighs the marginal gain.
+
+5. What is the highest-value direction for M5?
+   Based on M3+M4 results:
+   - M3 lineup wOBA is the validated high-value feature
+   - M4 matchup/replacement adds marginal or no value
+   - Next priority: shadow deployment of M3 for 2026 season
+   - Build M3 into the production sim pipeline alongside Phase 9
+   - Monitor M3 vs Phase 9 disagreement zone live

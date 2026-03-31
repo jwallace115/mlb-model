@@ -1,0 +1,55 @@
+PROP LINE DATA AUDIT
+==================================================
+
+Searched patterns:
+  nba/data/*prop*
+  nba/data/*player*line*
+  nba/data/*player*odds*
+  nba/data/cache/*prop*
+  nba/data/cache/*player*
+  nba/model_c/*prop*line*
+  data/*prop*
+  data/*player*line*
+
+FOUND: NONE
+
+Historical player prop lines are NOT available in the project.
+
+ASSESSMENT:
+  Historical NBA player prop lines are MISSING.
+  Cannot proceed to backtest without market lines to compare against.
+
+RECOMMENDED SOURCES (priority order):
+
+  1. The Odds API — Player Props Market
+     Endpoint: /v4/sports/basketball_nba/odds
+     Markets: player_points, player_rebounds, player_assists,
+              player_points_rebounds_assists
+     Historical: /v4/historical/sports/basketball_nba/odds
+     Cost: 10 credits per historical snapshot
+     Already integrated for totals — same API key works
+     LIMITATION: Historical player props may not be available
+     for all seasons. Check API coverage before committing credits.
+
+  2. Prop data aggregators
+     - actionnetwork.com (limited free access)
+     - covers.com (limited historical)
+     - prizepicks historical (not public)
+
+  3. Sportsbook scraping (complex, TOS concerns)
+     - DraftKings / FanDuel historical props
+     - Requires dedicated scraping infrastructure
+
+MINIMUM DATA NEEDED FOR BACKTEST:
+  - Player prop line (e.g., 'LeBron James Points O/U 27.5')
+  - Bookmaker source
+  - Game date
+  - Player ID or name
+  - At minimum 2 seasons of coverage (2022-23, 2023-24)
+
+ESTIMATED COST (The Odds API):
+  ~500 game dates × 10 credits = 5,000 credits per season
+  4 seasons × 5,000 = 20,000 credits
+  Current balance: check via API
+  NOTE: Player props have many more markets per game than totals.
+  Actual credit cost may be higher if props require separate calls.

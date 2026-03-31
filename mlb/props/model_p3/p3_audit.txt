@@ -1,0 +1,176 @@
+MLB PROPS P3 — MANDATORY AUDIT RESULTS
+========================================
+Date: 2026-03-19
+
+======================================================================
+AUDIT 1 — OVER vs UNDER SPLIT
+======================================================================
+
+VALIDATION (2024):
+  HITS OVER:  N=22,724  hit=59.7%  ROI=+14.1%
+  HITS UNDER: N= 9,251  hit=69.3%  ROI=+32.4%  ← UNDER dominates
+  TB OVER:    N=15,358  hit=52.0%  ROI= -0.8%  ← OVER is FLAT
+  TB UNDER:   N=16,992  hit=63.1%  ROI=+20.5%  ← UNDER dominates
+
+OOS (2025):
+  HITS OVER:  N=23,079  hit=59.1%  ROI=+12.9%
+  HITS UNDER: N= 6,794  hit=60.7%  ROI=+15.9%
+  TB OVER:    N=15,799  hit=52.9%  ROI= +1.1%  ← marginal
+  TB UNDER:   N=14,150  hit=58.2%  ROI=+11.1%
+
+FINDING:
+  UNDER drives the majority of ROI for both prop types.
+  TB OVER is essentially break-even (-0.8% val, +1.1% OOS).
+  The combined +10.4% TB ROI is almost entirely UNDER.
+  HITS OVER is legitimately positive (+14.1% val, +12.9% OOS),
+  but UNDER is dramatically stronger (+32.4% val).
+
+VERDICT: WARNING
+  UNDER asymmetry is extreme (not necessarily wrong — but the
+  headline +19.4% HITS / +10.4% TB numbers mask that TB OVER
+  has no edge at all).
+
+======================================================================
+AUDIT 2 — MODEL PROBABILITY vs IMPLIED PROBABILITY
+======================================================================
+
+CRITICAL FINDING:
+
+  HITS implied_prob_over average:  0.5000
+  HITS implied_prob_under average: 0.5000
+  TB implied_prob_over average:    0.5000
+  TB implied_prob_under average:   0.5000
+
+  ALL IMPLIED PROBABILITIES ARE EXACTLY 50.0%.
+
+  This means the devig function is outputting 0.5/0.5 for
+  every single play — the best_over_odds and best_under_odds
+  fields are NULL or not being passed to the devig function.
+
+  The model's "edge" is therefore:
+    edge = model_prob - 0.50
+
+  This is NOT a market comparison. This is the model's
+  own probability minus a fixed 50% baseline.
+
+  At 5%+ edge bucket:
+    HITS model_prob = 70.7% vs "implied" 50.0% → "edge" = +20.7%
+    TB model_prob = 69.5% vs "implied" 50.0% → "edge" = +19.5%
+    Actual hit rate: HITS 63.1%, TB 59.3%
+
+  The actual hit rate IS above 50% (genuinely winning), but the
+  "edge" calculation is meaningless — it compares model prob to
+  a flat 50%, not to the actual market-implied probability.
+
+VERDICT: CRITICAL
+  The edge calculation is broken. Implied probabilities default
+  to 0.50 because best_over_odds / best_under_odds are missing
+  or null in the market_view. The ROI is still genuinely positive
+  (actual > 50% hit rate at -110), but the edge buckets are
+  based on model_prob distance from 50%, not from market odds.
+  The +19.4% ROI headline may still hold, but the edge framework
+  is not measuring what it claims to measure.
+
+======================================================================
+AUDIT 3 — BEST LINE LOGIC
+======================================================================
+
+CONFIRMED:
+  - P3 uses consensus_line (median across books) for both OVER
+    and UNDER evaluation — same line for both directions. CORRECT.
+  - No line shopping between OVER and UNDER.
+
+FINDING:
+  best_over_line and best_under_line differ significantly:
+  - HITS: mean difference = 1.107 points
+  - 66.8% of plays have different best_over vs best_under lines
+
+  Example: Manny Machado best_over=0.5, best_under=2.5, consensus=1.5
+  This is a wide market — books disagree significantly on hitter hit lines.
+
+  The ODDS fields (best_over_odds, best_under_odds) appear to be
+  NULL in the market_view because the P2 market_view aggregation
+  grouped by player and computed consensus/best lines but did NOT
+  carry forward per-book odds.
+
+VERDICT: WARNING
+  Line logic is correct (consensus used for both directions).
+  BUT: odds are missing → devig produces 50/50 → edge calculation
+  is broken (see Audit 2). The structural line evaluation is sound
+  but the market probability layer is non-functional.
+
+======================================================================
+AUDIT 4 — PA PROJECTION ACCURACY
+======================================================================
+
+  HITS projected PA: 4.12 vs actual PA: 3.93 (delta: +0.18)
+  TB projected PA:   4.11 vs actual PA: 3.92 (delta: +0.20)
+
+  Systematic overestimate: PA is 4.5-5.0% higher than actual.
+  Overestimation grows by batting order slot:
+    Slot 1: +0.10 PA
+    Slot 5: +0.16 PA
+    Slot 9: +0.38 PA
+
+  Correlation: 0.31 — weak. PA projection is crude.
+
+  The PA overestimate inflates:
+  - Binomial distribution for hits (more trials = higher expected)
+  - MC simulation for TB (more PAs = higher expected TB)
+
+  Impact quantification:
+  - 0.18 extra PA × 0.245 hit rate = ~0.044 extra projected hits
+  - On a 0.5 line, this shifts P(over 0.5) by ~3-5%
+  - This directionally explains part of the OVER bias
+
+VERDICT: WARNING
+  PA overestimate is systematic (+0.18 PA, ~5%) and worsens
+  down the lineup. This inflates model_prob_over and should
+  be corrected in P4. However, it does NOT explain the strong
+  UNDER signal (UNDER works DESPITE this OVER bias).
+
+======================================================================
+FINAL VERDICTS
+======================================================================
+
+AUDIT 1 (OVER/UNDER split):   WARNING
+  UNDER dominance is extreme. TB OVER has no edge.
+  Headline ROI numbers mask directional asymmetry.
+
+AUDIT 2 (Probability comparison): CRITICAL
+  Implied probabilities are all 50.0% — odds data not flowing
+  to the devig function. Edge calculation measures distance
+  from 50%, not from actual market probabilities. The edge
+  framework is broken and must be fixed before any deployment.
+
+AUDIT 3 (Line logic):         WARNING
+  Consensus line logic is correct. But odds are missing from
+  market_view, causing the Audit 2 failure.
+
+AUDIT 4 (PA accuracy):        WARNING
+  Systematic +5% PA overestimate. Inflates OVER probability.
+  Should be corrected but does not invalidate the core signal.
+
+======================================================================
+NET ASSESSMENT
+======================================================================
+
+The positive ROI is REAL — actual hit rates are genuinely above
+50% for HITS and TB bets at -110. The model IS finding signal.
+
+However:
+1. The "edge %" numbers are meaningless (comparing to 50%, not market)
+2. The volume at "5%+ edge" is inflated (93% of plays qualify)
+3. PA overestimation inflates OVER predictions
+4. The true edge magnitude is unknown until market odds are properly
+   integrated
+
+CORRECTIVE ACTIONS REQUIRED BEFORE SHADOW DEPLOYMENT:
+1. Fix odds propagation in P2 market_view → carry best_over_odds
+   and best_under_odds through to the market view
+2. Fix devig to use actual book odds, not default to 50/50
+3. Recompute edges against true market-implied probabilities
+4. Fix PA projection (use actual historical PA by lineup slot,
+   not static lookup table)
+5. Re-run P3 backtest with corrected edge framework
+6. Only then evaluate whether ROI holds at meaningful edge thresholds

@@ -1,0 +1,50 @@
+[
+  {
+    "signal_id": "EZ001",
+    "condition": "expected_tight_zone",
+    "direction": "OVER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ002",
+    "condition": "expected_wide_zone",
+    "direction": "UNDER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ003",
+    "condition": "expected_tight AND either_low_k",
+    "direction": "OVER",
+    "perm_gate": 95
+  },
+  {
+    "signal_id": "EZ004",
+    "condition": "expected_wide AND either_high_k",
+    "direction": "UNDER",
+    "perm_gate": 95
+  },
+  {
+    "signal_id": "EZ005",
+    "condition": "recently_tightening",
+    "direction": "OVER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ006",
+    "condition": "recently_widening",
+    "direction": "UNDER",
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ007",
+    "condition": "expected_tight AND weak_framing",
+    "direction": "OVER",
+    "perm_gate": 95
+  },
+  {
+    "signal_id": "EZ008",
+    "condition": "expected_wide AND strong_framing",
+    "direction": "UNDER",
+    "perm_gate": 95
+  }
+]

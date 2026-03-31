@@ -1,0 +1,1326 @@
+[
+  {
+    "canonical_signal_id": "CS001",
+    "canonical_name": "Pitcher command regime shift",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Pitchers in latent bad-command state produce higher walk rates and worse contact suppression; market uses static ERA and misses state transitions",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS002",
+    "canonical_name": "Starter short-leash / early exit",
+    "domain": "PITCHER",
+    "framework_type": "EVT_TAIL_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Early starter exit creates nonlinear bullpen exposure; market prices expected IP not conditional exit probability",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "medium (3-6pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS003",
+    "canonical_name": "Pitcher latent fatigue state",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Pitcher fatigue follows latent state transitions not linear pitch count decay; state detection leads market by 1-2 starts",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS004",
+    "canonical_name": "Bullpen collapse tail risk",
+    "domain": "BULLPEN",
+    "framework_type": "EVT_TAIL_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Bullpen run distributions are fat-tailed; EVT tail index identifies bullpens with elevated catastrophic inning probability that market prices as average",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "medium (3-6pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS005",
+    "canonical_name": "Bullpen latent fatigue state",
+    "domain": "BULLPEN",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Bullpen fatigue is a hidden state driven by leverage-weighted recent usage; markets price raw innings not latent fatigue accumulation",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS006",
+    "canonical_name": "Cross-market prop-to-total arbitrage",
+    "domain": "MARKET_BEHAVIOR",
+    "framework_type": "MARKET_MICROSTRUCTURE",
+    "market_target": "DERIVATIVE",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "BIDIRECTIONAL",
+      "mechanism": "Books price SP K props and game totals semi-independently; low K line + high total implies contact-heavy environment that creates total mispricing",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "medium (3-6pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 3.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS007A",
+    "canonical_name": "Run distribution tail shape: OVER tail",
+    "domain": "RUN_DISTRIBUTION",
+    "framework_type": "DISTRIBUTION_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Real scoring distributions are right-skewed; games with high predicted scoring variance are underpriced on the OVER by books using near-normal assumptions",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS007B",
+    "canonical_name": "Run distribution tail shape: UNDER tail",
+    "domain": "RUN_DISTRIBUTION",
+    "framework_type": "DISTRIBUTION_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Low-variance scoring environments are overpriced on the OVER; games with compressed predicted scoring distribution create UNDER value",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS008A",
+    "canonical_name": "Extreme weather: OVER tail",
+    "domain": "WEATHER",
+    "framework_type": "EVT_TAIL_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Extreme out-wind and high heat create nonlinear ball-carry effects underpriced by linear weather adjustments",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "medium (3-6pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS008B",
+    "canonical_name": "Extreme weather: UNDER tail",
+    "domain": "WEATHER",
+    "framework_type": "EVT_TAIL_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Extreme cold suppresses scoring nonlinearly beyond what linear temperature adjustments capture",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "medium (3-6pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS009A",
+    "canonical_name": "Umpire tight zone regime: UNDER",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Umpires in recent tight zone regime suppress scoring below market expectation based on season average",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS009B",
+    "canonical_name": "Umpire loose zone regime: OVER",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Umpires in recent loose zone regime inflate scoring above market expectation based on season average",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS010A",
+    "canonical_name": "Dynamic park environment: OVER",
+    "domain": "BALLPARK",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Game-specific park environment (weather + park factor interaction) creates hitter conditions beyond what static park factor captures",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS010B",
+    "canonical_name": "Dynamic park environment: UNDER",
+    "domain": "BALLPARK",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Game-specific pitcher-friendly park environment creates run suppression beyond static park factor",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS011",
+    "canonical_name": "Bullpen deployment optimization",
+    "domain": "BULLPEN",
+    "framework_type": "HEURISTIC",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Managers misusing high-leverage relievers in non-optimal situations creates run exposure the market does not price",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS012",
+    "canonical_name": "Travel unclustered signals",
+    "domain": "TRAVEL",
+    "framework_type": "CAUSAL_IV",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Cross-timezone travel compression outside typical rest clusters creates systemic fatigue on offense; markets price rest days but not travel compression patterns",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS013",
+    "canonical_name": "Bullpen blowup tail risk state model",
+    "domain": "BULLPEN",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Reliever performance has fat-tailed failure modes detectable via state deterioration; bullpens transitioning into degraded state have elevated catastrophic inning probability",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS014A",
+    "canonical_name": "Umpire tight zone regime: UNDER",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Umpires in recent tight-zone regime suppress scoring below market expectation; static umpire ratings miss temporal variation",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS014B",
+    "canonical_name": "Umpire loose zone regime: OVER",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Umpires in recent loose-zone regime inflate scoring above market expectation; static umpire ratings miss temporal variation",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS015",
+    "canonical_name": "Cross-market prop/total arbitrage",
+    "domain": "MARKET_BEHAVIOR",
+    "framework_type": "MARKET_MICROSTRUCTURE",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "SP K prop lines imply contact suppression; when K lines imply strong strikeout environment but total remains elevated, the total is overpriced",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "medium (3-6pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 3.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS016A",
+    "canonical_name": "Pitcher repertoire mix change: UNDER",
+    "domain": "PITCHER",
+    "framework_type": "DISTRIBUTION_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Pitchers adding a new dominant pitch or significantly shifting mix create improved effectiveness that markets are slow to price",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS016B",
+    "canonical_name": "Pitcher repertoire mix change: OVER",
+    "domain": "PITCHER",
+    "framework_type": "DISTRIBUTION_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Pitchers dropping a previously effective pitch or showing mix instability are more hittable; markets anchor to prior season mix",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS017",
+    "canonical_name": "Pitcher deception / pitch-mix entropy",
+    "domain": "PITCHER",
+    "framework_type": "DISTRIBUTION_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "High pitch-mix entropy pitchers suppress contact quality beyond what aggregate metrics capture; low-entropy pitchers are exploitable",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.54,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS018",
+    "canonical_name": "Inning-level run clustering",
+    "domain": "RUN_DISTRIBUTION",
+    "framework_type": "EVT_TAIL_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Runs cluster within innings via baserunner chaining; per-inning scoring is not independent, creating tail risk totals markets underprice",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_under_rate": 0.0,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS019A",
+    "canonical_name": "Umpire tight zone regime shift",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL + REGIME_DETECTION",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Temporary tight-zone behavior relative to the umpire's own baseline suppresses offense through called strike expansion and shorter run creation, and the market may not fully adjust to short-term regime shifts. Data source: research/signal_discovery/c041_umpire_zone_metrics.parquet (rolling z-score regime fields only; season-average umpire stats domain is exhausted and must not be used).",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS019B",
+    "canonical_name": "Umpire loose zone regime shift",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL + REGIME_DETECTION",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Temporary loose-zone behavior relative to the umpire's own baseline increases baserunners and run environment variability, and the market may not fully adjust to short-term regime shifts. Data source: research/signal_discovery/c041_umpire_zone_metrics.parquet (rolling z-score regime fields only; season-average umpire stats domain is exhausted and must not be used).",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS020",
+    "canonical_name": "Bullpen collapse Bayesian/acceleration variant",
+    "domain": "BULLPEN",
+    "framework_type": "STATE_MODEL + BAYESIAN_UPDATE",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Rapid worsening in bullpen damage state relative to prior baseline creates hidden late-inning scoring volatility before the market fully reprices it. Data source: mlb/data/pitcher_game_logs.parquet. Pre-registered relationship rule vs CS013: if CS020 passes, run explicit overlap study with CS013; if overlap with CS013-flagged games >= 70%, classify CS020 as a potential CS013 upgrade candidate rather than additive signal by default; if overlap < 70%, treat as potentially distinct bullpen-family signal subject to incremental-value diagnostics.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS021",
+    "canonical_name": "Bullpen usage compression asymmetry",
+    "domain": "BULLPEN",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "When one team relies too heavily on a narrow trusted reliever tree relative to its opponent, asymmetric late-inning collapse risk rises and may be underpriced by the market. Data source: mlb/data/pitcher_game_logs.parquet. Pre-registered relationship rule vs CS013: CS021 tests a different bullpen dimension (deployment structure vs deterioration state), but if CS021 passes, explicit incremental-value diagnostics against CS013 are required before any shadow decision.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS022A",
+    "canonical_name": "Pitcher repertoire mix \u2014 command concentration",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL + BAYESIAN_UPDATE",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Recent concentration toward a pitcher's most command-stable / effective mix reflects a favorable temporary regime shift that suppresses run scoring more than the market prices. Data source: statcast_chunk_*.parquet (pitch-level). Data status: pipeline check needed before testing.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS022B",
+    "canonical_name": "Pitcher repertoire mix \u2014 chaotic instability",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL + BAYESIAN_UPDATE",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Recent unstable or emergency pitch-mix changes reflect temporary pitcher instability that increases contact volatility and run-scoring risk before the market fully adjusts. Data source: statcast_chunk_*.parquet (pitch-level). Data status: pipeline check needed before testing.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS023",
+    "canonical_name": "Pitcher entropy regime shift",
+    "domain": "PITCHER",
+    "framework_type": "DISTRIBUTION_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "A pitcher entering a lower-entropy / more deception-stable regime may suppress batter adaptation and improve run prevention in a way the market does not fully price in the short term. Data source: statcast_chunk_*.parquet (pitch-level). Data status: pipeline check needed before testing.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS024",
+    "canonical_name": "Extension rate composite regime",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Temporary improvement in extension-related delivery characteristics may create a short-term deception or command benefit that reduces scoring more than the market accounts for. Data source: statcast_chunk_*.parquet (pitch-level). Data status: availability TBD \u2014 confirm release_extension field exists in statcast_chunk_*.parquet before testing.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": null,
+    "status": "PRE_REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS025",
+    "canonical_name": "F5 run line command overlay (confidence filter)",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FIRST5_RUNLINE",
+    "parent_signal": "Signal_B_F5_runline",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "HOME_F5_RUNLINE",
+      "mechanism": "When Signal B fires (xfip_gap >= 1.0) AND home starter is in good-command state (CSW above own season baseline AND BB rate below own season baseline, rolling last 3 starts), the F5 run line edge is more reliable than Signal B alone; command state identifies a higher-confidence subset of Signal B plays. Prior start requirement: minimum 3 prior starts for rolling command window.",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "small (1-3pp hit rate improvement)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_roi": 5.0,
+      "minimum_hit_rate": 0.6,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS026",
+    "canonical_name": "First-inning pitch count weakening filter",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FIRST5_TOTAL",
+    "parent_signal": "Signal_B_F5_runline",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Starters who required 20+ pitches in inning 1 of their most recent prior start face elevated early exit hazard; when F5 UNDER fires on a game with this profile, the signal is weakened because early bullpen exposure increases scoring variance in innings 1-5. This is a weakening filter, not an amplifier. Prior start requirement: minimum 1 prior start. Threshold note: high-stress cutoff frozen on 2022-2023 pitch count distribution only \u2014 no post-hoc adjustment.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp hit rate degradation vs baseline)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS027",
+    "canonical_name": "CS013 bullpen state x F5 OVER interaction",
+    "domain": "BULLPEN",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FIRST5_TOTAL",
+    "parent_signal": "Signal_B_F5_runline",
+    "registered_date": "2026-03-27",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Among CS013-flagged games (degraded bullpen state), F5 market residual is positive \u2014 bullpen deterioration is detectable in innings 1-5 scoring, not only late-game blowups. CS013 definition and thresholds are frozen \u2014 do not redefine CS013 for this test.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp over rate lift vs F5 baseline in CS013-flagged games)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_roi": 2.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "CS028",
+    "canonical_name": "Bullpen positive state as V1 UNDER amplifier",
+    "domain": "BULLPEN",
+    "framework_type": "STATE_MODEL",
+    "market_target": "FULL_GAME_TOTAL",
+    "parent_signal": "V1_UNDER",
+    "registered_date": "2026-03-28",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "When V1 fires an UNDER signal AND both bullpens are in a positive state regime (no team-level CS013 deterioration flag active, recent bullpen RA below season baseline, key relievers available), late-game run suppression is more reliable; the market prices generic bullpen quality but may not fully price the positive state regime. Prior appearance requirement: minimum 5 prior bullpen appearances per reliever for baseline calculation. Permutation must use parent_mask scoped to V1 UNDER games only \u2014 not full population.",
+      "primary_outcome": "market_residual",
+      "expected_effect_size": "small (1-3pp hit rate improvement vs V1 baseline)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2022",
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_roi": 2.0,
+      "minimum_hit_rate_lift": 0.02,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "KP01",
+    "canonical_name": "Opponent-adjusted K upshift as K prop filter",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "PLAYER_PROP_K",
+    "registered_date": "2026-03-28",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Pitchers showing adj_k_rate_last3 materially above their own season baseline are in a positive K state the market has not fully priced into the K prop line; opponent-adjusted form captures current true strikeout ability better than season averages.",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "small (2-4pp ROI improvement)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026",
+      "note": "2022 excluded \u2014 K prop data starts May 2023"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 70,
+      "minimum_roi": 3.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "KP02",
+    "canonical_name": "Opponent-adjusted K upshift + stable leash",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "PLAYER_PROP_K",
+    "registered_date": "2026-03-28",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "K prop OVER edge requires both elevated K form AND innings security; pitchers with adj_k upshift who also have predictable leash (avg IP >= 5.0 in last 5 starts, fixed cutoff) have K lines that lag their current true production potential; market misses the conjunction of form and workload stability.",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "small (2-4pp ROI improvement)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026",
+      "note": "2022 excluded \u2014 K prop data starts May 2023. Leash cutoff 5.0 IP \u2014 pre-registered fixed cutoff, do not optimize."
+    },
+    "frozen_thresholds": {
+      "minimum_n": 70,
+      "minimum_roi": 3.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "KP03A",
+    "canonical_name": "Loose umpire zone regime x K prop OVER",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL",
+    "market_target": "PLAYER_PROP_K",
+    "registered_date": "2026-03-28",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Umpires in recent loose-zone regime (calling fewer strikes than own baseline, z-score < -1.0) inflate K probability above what season-average umpire tendencies predict; market uses static umpire ratings not rolling regime state; loose zone increases walk risk which paradoxically creates more strikeout opportunities in hitter counts.",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "small (2-4pp ROI improvement)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026",
+      "note": "2022 excluded \u2014 K prop data starts May 2023"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_roi": 3.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "KP03B",
+    "canonical_name": "Tight umpire zone regime x K prop UNDER",
+    "domain": "UMPIRE",
+    "framework_type": "STATE_MODEL",
+    "market_target": "PLAYER_PROP_K",
+    "registered_date": "2026-03-28",
+    "pre_registered_hypothesis": {
+      "direction": "UNDER",
+      "mechanism": "Umpires in recent tight-zone regime (calling more strikes than own baseline, z-score > +1.0) reduce K probability because pitchers get early called strikes and finish batters faster; market uses static umpire ratings not rolling regime state.",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "small (2-4pp ROI improvement)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026",
+      "note": "2022 excluded \u2014 K prop data starts May 2023"
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_roi": 3.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "KP04",
+    "canonical_name": "Breaking-ball pitcher x high-K lineup (K OVER)",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "PLAYER_PROP_K",
+    "registered_date": "2026-03-28",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Breaking-ball-heavy pitchers (top 25% BB usage: slider + sweeper + curveball combined) facing lineups with top 25% K rate create compounding strikeout conditions; market uses pitcher season averages and team K% \u2014 lineup-level interaction is underweighted; effect is broad across 138+ pitchers and year-stable 2023-2025.",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "medium (8-12pp ROI improvement vs -7.4% baseline)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026",
+      "note": "2022 excluded \u2014 K prop data starts May 2023. Signal fires only after lineups confirmed (announced lineup K%, not projected). Lineup leakage check returned CONDITIONAL \u2014 live deployment must use confirmed lineups only."
+    },
+    "frozen_thresholds": {
+      "minimum_n": 80,
+      "minimum_roi": 5.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1,
+      "price_floor": -150
+    },
+    "status": "REGISTERED"
+  },
+  {
+    "canonical_signal_id": "KP04b",
+    "canonical_name": "Breaking-ball pitcher x high-K lineup, tightened",
+    "domain": "PITCHER",
+    "framework_type": "STATE_MODEL",
+    "market_target": "PLAYER_PROP_K",
+    "parent_signal": "KP04",
+    "derived_from": "KP04_diagnostics_2026-03-28",
+    "activation_condition": "KP04_shadow_N >= 200",
+    "registered_date": "2026-03-28",
+    "pre_registered_hypothesis": {
+      "direction": "OVER",
+      "mechanism": "Same interaction as KP04 but restricted to strongest zone from KP04 diagnostics: BB usage at 85th percentile and above captures elite breaking-ball pitchers where edge concentrates; k_line <= 6.5 avoids lines where market has already priced the environment; LHP subgroup shows strongest effect (64.1% HR, N=39).",
+      "primary_outcome": "ROI",
+      "expected_effect_size": "medium-large (+15-20pp ROI vs baseline, based on KP04 diagnostics)",
+      "primary_gate": "2025 walk-forward positive AND permutation >= 85th percentile",
+      "train_seasons": [
+        "2023",
+        "2024"
+      ],
+      "validation_season": "2025",
+      "holdout_season": "2026",
+      "note": "Do not test until KP04 shadow reaches N=200. Thresholds derived from KP04 diagnostics \u2014 must validate on 2026 live data before promoting. Changing KP04 live definition based on these diagnostics would invalidate forward test."
+    },
+    "frozen_thresholds": {
+      "minimum_n": 60,
+      "minimum_roi": 8.0,
+      "permutation_percentile": 85,
+      "max_p_value": 0.1,
+      "price_floor": -150,
+      "k_line_ceiling": 6.5,
+      "bb_usage_floor_p85": 0.4375
+    },
+    "status": "REGISTERED_PENDING"
+  },
+  {
+    "canonical_signal_id": "CS029",
+    "name": "Pitcher entropy high \u2014 UNDER",
+    "mechanism": "Pitcher pitch-type entropy >= 80th percentile of league distribution (frozen on 2022-2023). High entropy = unpredictable mix = harder contact = UNDER.",
+    "direction": "UNDER",
+    "domain": "pitcher_distribution",
+    "status": "REGISTERED",
+    "registered_date": "2026-03-28",
+    "train_seasons": [
+      2022,
+      2023
+    ],
+    "validation_seasons": [
+      2024,
+      2025
+    ],
+    "threshold_frozen": true
+  },
+  {
+    "canonical_signal_id": "CS030",
+    "name": "Pitcher entropy low \u2014 OVER",
+    "mechanism": "Pitcher pitch-type entropy <= 20th percentile of league distribution (frozen on 2022-2023). Low entropy = predictable mix = easier to time = OVER.",
+    "direction": "OVER",
+    "domain": "pitcher_distribution",
+    "status": "REGISTERED",
+    "registered_date": "2026-03-28",
+    "train_seasons": [
+      2022,
+      2023
+    ],
+    "validation_seasons": [
+      2024,
+      2025
+    ],
+    "threshold_frozen": true
+  },
+  {
+    "canonical_signal_id": "CS031",
+    "name": "Repertoire mix shift large \u2014 UNDER",
+    "mechanism": "Any pitch type shifts >= 10pp from season baseline in last 5 starts. Pitcher changing approach may suppress contact.",
+    "direction": "UNDER",
+    "domain": "pitcher_state",
+    "status": "REGISTERED",
+    "registered_date": "2026-03-28",
+    "train_seasons": [
+      2022,
+      2023
+    ],
+    "validation_seasons": [
+      2024,
+      2025
+    ],
+    "threshold_frozen": true
+  },
+  {
+    "canonical_signal_id": "CS032",
+    "name": "Repertoire mix shift large \u2014 OVER",
+    "mechanism": "Same condition as CS031. Pitcher abandoning a pitch may signal mechanical issue or vulnerability.",
+    "direction": "OVER",
+    "domain": "pitcher_state",
+    "status": "REGISTERED",
+    "registered_date": "2026-03-28",
+    "train_seasons": [
+      2022,
+      2023
+    ],
+    "validation_seasons": [
+      2024,
+      2025
+    ],
+    "threshold_frozen": true
+  },
+  {
+    "canonical_signal_id": "CS033",
+    "name": "K prop vs game total divergence",
+    "mechanism": "Combined K line (home SP + away SP) materially higher than expected given game total, based on regression residual. K market leads totals market.",
+    "direction": "UNDER",
+    "domain": "cross_market",
+    "status": "REGISTERED",
+    "registered_date": "2026-03-28",
+    "train_seasons": [
+      2022,
+      2023
+    ],
+    "validation_seasons": [
+      2024,
+      2025
+    ],
+    "threshold_frozen": true
+  },
+  {
+    "canonical_signal_id": "CS034",
+    "name": "Bullpen inheritance pressure",
+    "mechanism": "Rolling 14-day inherited runner conversion rate aggregated at team level. High game-level IRP = elevated run scoring risk market underprices.",
+    "direction": "OVER",
+    "domain": "bullpen_state",
+    "status": "DATA_GAP",
+    "registered_date": "2026-03-28",
+    "train_seasons": [
+      2022,
+      2023
+    ],
+    "validation_seasons": [
+      2024,
+      2025
+    ],
+    "threshold_frozen": true,
+    "data_gap_reason": "inherited_runners and inherited_scored columns missing from pitcher_game_logs.parquet"
+  }
+]

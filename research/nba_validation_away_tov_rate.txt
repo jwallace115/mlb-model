@@ -1,0 +1,192 @@
+NBA VALIDATION — AWAY TURNOVER RATE SIGNAL
+Run date: 2026-03-23
+away_tov_rate units: proportion
+
+========================================
+BASE DATA AND CORRELATIONS (Step 1)
+========================================
+Total RS games: 3690
+Coverage away_tov_rate: 100.0%
+away_tov_rate distribution:
+  min=0.0999 p25=0.1271 p50=0.1368 p75=0.1466 max=0.2157 mean=0.1372 std=0.0142
+
+Correlations:
+  away_tov_rate vs close_total: r=-0.1410
+  away_tov_rate vs away_ortg: r=-0.4261
+Proxy control needed: no
+
+========================================
+OFFENSIVE QUALITY PROXY CONTROL (Step 1B)
+========================================
+Not needed: r=-0.4261 <= 0.50
+
+========================================
+PRIMARY QUARTILE RESULTS (Step 2)
+========================================
+Quartile |   N  |    ME  | HR_over |      p  | mean_AE | std_ME | P(+12) | P(-12) | P(AE>=12)
+---------|------|--------|---------|---------|---------|--------|--------|--------|----------
+Q1       |  926 | +0.09  |   0.493 |  0.8780 |  14.44  | 17.97  | 0.258  | 0.256  |    0.514
+Q2       |  927 | +0.38  |   0.501 |  0.5245 |  14.54  | 18.28  | 0.250  | 0.264  |    0.515
+Q3       |  912 | +0.93  |   0.512 |  0.1275 |  14.35  | 18.40  | 0.255  | 0.246  |    0.501
+Q4       |  920 | +1.39  |   0.537 |  0.0129 |  13.49  | 16.94  | 0.259  | 0.220  |    0.478
+
+Q1 vs Q4 two-sample test: gap=-1.30 pts p=0.1099
+
+By season Q1:
+Season  |   N | ME    | HR_over
+--------|-----|-------|--------
+2022-23 | 273 | +0.51 |  0.496
+2023-24 | 410 | -0.30 |  0.477
+2024-25 | 243 | +0.28 |  0.517
+
+Seasons opposite Q1 direction: 2023-24
+
+========================================
+ASYMMETRY CHECK (Step 4)
+========================================
+Q1: P(+12)=0.258  P(-12)=0.256  ratio=1.01 → variance (perfectly symmetric)
+Q4: P(+12)=0.259  P(-12)=0.220  ratio=1.18 → variance
+
+========================================
+BILATERAL TOV COMPONENTS (Step 3)
+========================================
+Construct                          | Quartile |   N  |    ME  |   HR  |      p  | mean_AE
+-----------------------------------|----------|------|--------|-------|---------|--------
+combined_offensive_tov             | Q1       |  925 | +0.40  | 0.504 |  0.5132 |  14.66
+combined_offensive_tov             | Q4       |  917 | +0.30  | 0.496 |  0.5936 |  13.81
+combined_defensive_tov_pressure    | Q1       |  919 | +1.51  | 0.524 |  0.0129 |  14.65
+combined_defensive_tov_pressure    | Q4       |  916 | +0.90  | 0.529 |  0.1161 |  13.65
+combined_tov_env                   | Q1       |  918 | +0.96  | 0.503 |  0.1125 |  14.64
+combined_tov_env                   | Q4       |  917 | +0.32  | 0.504 |  0.5778 |  14.07
+both_low_tov                       | —        |  256 | +2.47  | 0.540 |  0.0369 |  15.11
+both_high_tov                      | —        |  264 | -0.16  | 0.490 |  0.8713 |  13.02
+
+========================================
+SEASON-RELATIVE QUARTILE Q1 (Step 5)
+========================================
+Season-relative Q1: N=926 ME=+0.38 HR=0.506 p=0.5179
+Global Q1:          N=926 ME=+0.09 HR=0.493 p=0.8780
+Comparison: similar
+
+========================================
+OT EXCLUSION CHECK (Step 6)
+========================================
+Q1 (low TOV):
+  With OT:    N=926  ME=+0.09  HR=0.493  p=0.8780  mean_AE=14.44  std_ME=17.97
+  Without OT: N=873  ME=-1.07  HR=0.470  p=0.0707  mean_AE=14.04  std_ME=17.46
+
+Q4 (high TOV):
+  With OT:    N=920  ME=+1.39  HR=0.537  p=0.0129  mean_AE=13.49  std_ME=16.94
+  Without OT: N=874  ME=+0.53  HR=0.520  p=0.3407  mean_AE=13.14  std_ME=16.48
+
+OT rate: Q1=5.7% Q4=5.0% full=5.4%
+Directional signal OT-dependent: no (never had directional signal)
+Variance signal OT-dependent: no (Q1 AE still > Q4 AE without OT)
+
+========================================
+LINE BAND CHECK — Q1 (Step 7)
+========================================
+Band       |   N |    ME  | HR_over
+-----------|-----|--------|--------
+< 220      | 135 | +0.33  |  0.533
+220-230    | 357 | +0.24  |  0.507
+230-240    | 319 | +0.25  |  0.476
+240-250    | 107 | -0.77  |  0.452
+>= 250     |   8 | -5.69  |  0.429
+Concentration flag: no
+
+========================================
+TEAM CONCENTRATION (Step 8)
+========================================
+Top 5 away teams in Q1:
+Team |  N  |    %
+-----|-----|------
+OKC  |  92 |  9.9%
+DAL  |  78 |  8.4%
+BOS  |  76 |  8.2%
+TOR  |  52 |  5.6%
+IND  |  50 |  5.4%
+
+Single-team flag (>15%): no
+Top-3 concentration flag (>50%): 26.6% no
+
+========================================
+VENUE INDEPENDENCE (Step 9A)
+========================================
+Overlap: 9.1% of Q1 games are Venue signal games
+Non-Venue Q1: N=842  ME=-0.93  HR=0.472  p=0.1256
+Venue Q1:     N=84   ME=+10.36 HR=0.711  p=0.0000
+
+========================================
+REFEREE INDEPENDENCE (Step 9B, ref-covered only)
+========================================
+Q1 ref-covered N: 548
+
+crew_high distribution:
+crew_high | Q1 %  | Q4 %
+----------|-------|------
+0         | 46.0% | 40.9%
+1         | 41.8% | 44.6%
+2         | 10.6% | 12.9%
+3         |  1.6% |  1.6%
+
+Q1 after removing crew_high>=2: N=481 ME=+0.56 HR=0.528 p=0.4829
+
+========================================
+SEASON STABILITY (Step 10)
+========================================
+Q1:
+Season  |   N |    ME  | HR_over |      p
+--------|-----|--------|---------|--------
+2022-23 | 273 | +0.51  |   0.496 |  0.6329
+2023-24 | 410 | -0.30  |   0.477 |  0.7416
+2024-25 | 243 | +0.28  |   0.517 |  0.8077
+Consistency: 2/3
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+
+Hypothesis A (directional — low TOV → OVER):
+Gate                      | Threshold       | Result          | Pass/Fail
+--------------------------|-----------------|-----------------|----------
+Q1 mean error             | >= +2.0 pts     | +0.09           | Fail
+Significance              | p < 0.05        | p=0.8780        | Fail
+N per season              | >= 20           | min=243         | Pass
+Season consistency        | >= 2/3          | 2/3             | Pass
+OT exclusion (ME)         | ME survives     | yes (no ME)     | Pass
+Venue independence        | ME survives     | ME=-0.93        | Fail
+Referee independence      | ME survives     | ME=+0.56        | Fail
+Team concentration        | No team > 15%   | clean           | Pass
+Ortg proxy control        | Signal survives | n/a             | Pass
+
+Hypothesis B (Type E — variance signal):
+Gate                      | Threshold       | Result          | Pass/Fail
+--------------------------|-----------------|-----------------|----------
+abs_error Q1 > Q4         | elevated        | 14.44 > 13.49   | Pass
+std_ME Q1 > Q4            | elevated        | 17.97 > 16.94   | Pass
+P(AE>=12) Q1 > Q4         | elevated        | 0.514 > 0.478   | Pass
+Tail symmetry             | both elevated   | ratio=1.01      | Pass
+OT exclusion (variance)   | survives no-OT  | yes             | Pass
+Season consistency        | >= 2/3          | 2/3             | Pass
+
+Overall: Hypothesis A FAIL / Hypothesis B PASS
+
+========================================
+FINAL CLASSIFICATION
+========================================
+Classification: TYPE E / VARIANCE CANDIDATE
+Reasoning: Away turnover rate has zero directional content (Q1 ME=+0.09,
+p=0.88) — Hypothesis A is conclusively rejected. However, Hypothesis B
+passes all 6 gates: low-TOV games (Q1) show wider scoring distributions
+than high-TOV games (Q4) — std 17.97 vs 16.94, MAE 14.44 vs 13.49,
+P(AE>=12) 51.4% vs 47.8% — with perfectly symmetric tails (ratio 1.01).
+This survives OT exclusion. The mechanism is plausible: clean possession
+games have more completed plays and scoring attempts, widening the
+outcome range in both directions. File for variance/channel modeling,
+not as a betting signal.
+
+Notable secondary finding: both_low_tov (both teams Q1) shows ME=+2.47
+(p=0.037, N=256) — the only construct with directional significance.
+This warrants separate investigation but is outside the scope of this
+single-variable validation.

@@ -1,0 +1,53 @@
+{
+  "home_away_factors": {
+    "EPL": {
+      "home_factor": 1.0878876406952644,
+      "away_factor": 0.9121123593047356,
+      "avg_home_xg": 1.5487480790131578,
+      "avg_away_xg": 1.2985093418421052,
+      "base_rate": 1.4236287104276315
+    },
+    "BUN": {
+      "home_factor": 1.0910257767223805,
+      "away_factor": 0.9089742232776193,
+      "avg_home_xg": 1.654957443627451,
+      "avg_away_xg": 1.3788067055555557,
+      "base_rate": 1.5168820745915035
+    },
+    "SEA": {
+      "home_factor": 1.0728084448361548,
+      "away_factor": 0.9271915551638453,
+      "avg_home_xg": 1.544202370592105,
+      "avg_away_xg": 1.334601162368421,
+      "base_rate": 1.439401766480263
+    },
+    "LG1": {
+      "home_factor": 1.0926626878543406,
+      "away_factor": 0.9073373121456593,
+      "avg_home_xg": 1.4838836723044395,
+      "avg_away_xg": 1.2322037145877378,
+      "base_rate": 1.3580436934460887
+    }
+  },
+  "league_base_rates": {
+    "EPL": 1.4236287104276315,
+    "BUN": 1.5168820745915035,
+    "SEA": 1.439401766480263,
+    "LG1": 1.3580436934460887
+  },
+  "rest_adjustments": {
+    "short_rest_lte_3d": 0.97,
+    "normal_rest_4_7d": 1.0,
+    "long_rest_gt_7d": 0.99
+  },
+  "rolling_window": 10,
+  "max_goals_grid": 10,
+  "threshold_a": 0.06,
+  "threshold_b": 0.02,
+  "active_leagues": [
+    "EPL",
+    "BUN",
+    "SEA",
+    "LG1"
+  ]
+}

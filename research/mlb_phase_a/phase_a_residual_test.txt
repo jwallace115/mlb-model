@@ -1,0 +1,158 @@
+MLB PHASE A — M3 RESIDUAL TEST
+Run date: 2026-03-24
+Games analyzed: 1791 (2024 only — m3_residual null for 2022, 2023, 2025)
+
+========================================
+BASE DATA (Step 1)
+========================================
+m3_residual: mean=-0.196 median=-0.701 std=4.177 p25=-3.278 p75=2.435
+
+By season:
+Season |     N | mean_ME | Flag
+-------|-------|---------|------
+2024   |  1791 |  -0.196 |
+
+NOTE: m3_residual only populated for 2024. The multi-year train/OOS
+design could not execute. All results below are single-season 2024.
+Every 2025 bucket has N=0. Re-run required after M3 backfill.
+
+========================================
+SINGLE METRIC RESULTS — FLAGGED (Step 2)
+========================================
+(|ME|>0.35, p<0.10, N>=50 in 2024)
+
+Metric                | Quartile | N_train | ME_train | p_train | N_2025 | ME_2025 | Confirmed
+----------------------|----------|---------|----------|---------|--------|---------|----------
+home_f_strike_r5      | Q3       |     447 |   -0.554 |  0.0035 |      0 |     n/a | NO
+home_csw_r5           | Q3       |     447 |   -0.438 |  0.0258 |      0 |     n/a | NO
+home_fb_velo_r5       | Q2       |     450 |   -0.403 |  0.0317 |      0 |     n/a | NO
+home_f_strike_trend   | Q3       |     412 |   -0.480 |  0.0133 |      0 |     n/a | NO
+home_velo_trend       | Q3       |     448 |   -0.576 |  0.0015 |      0 |     n/a | NO
+away_f_strike_r5      | Q1       |     448 |   -0.456 |  0.0197 |      0 |     n/a | NO
+away_csw_r5           | Q3       |     448 |   -0.569 |  0.0023 |      0 |     n/a | NO
+away_fb_velo_r5       | Q3       |     448 |   -0.457 |  0.0172 |      0 |     n/a | NO
+away_f_strike_trend   | Q4       |     448 |   -0.362 |  0.0736 |      0 |     n/a | NO
+away_whiff_trend      | Q2       |     481 |   -0.422 |  0.0202 |      0 |     n/a | NO
+away_velo_trend       | Q1       |     448 |   -0.383 |  0.0651 |      0 |     n/a | NO
+away_velo_trend       | Q2       |     448 |   -0.580 |  0.0017 |      0 |     n/a | NO
+avg_f_strike_r5       | Q1       |     448 |   -0.403 |  0.0408 |      0 |     n/a | NO
+diff_f_strike_r5      | Q2       |     448 |   -0.479 |  0.0126 |      0 |     n/a | NO
+diff_velo_trend       | Q3       |     447 |   -0.559 |  0.0034 |      0 |     n/a | NO
+
+Unflagged metrics: 61 of 76 (none met |ME|>0.35 AND p<0.10 AND N>=50)
+
+========================================
+EXTREME BUCKET RESULTS (Step 3)
+========================================
+Metric                  | Direction     | N_train | ME_train | med_train | p_train | HR_train | N_2025 | ME_2025 | Confirmed
+------------------------|---------------|---------|----------|-----------|---------|----------|--------|---------|----------
+home_f_strike_trend     | top_decile    |     180 |   +0.429 |    +0.052 |  0.2236 |    48.9% |      0 |     n/a |
+home_f_strike_trend     | bottom_decile |     180 |   +0.644 |    +0.270 |  0.0390 |    54.4% |      0 |     n/a |
+home_whiff_trend        | top_decile    |     181 |   -0.384 |    -0.723 |  0.2191 |    57.5% |      0 |     n/a |
+home_whiff_trend        | bottom_decile |     180 |   +0.145 |    +0.460 |  0.6602 |    56.1% |      0 |     n/a |
+home_velo_trend         | top_decile    |     180 |   -0.179 |    -0.628 |  0.5588 |    57.2% |      0 |     n/a |
+home_velo_trend         | bottom_decile |     181 |   -0.189 |    -0.873 |  0.5285 |    41.4% |      0 |     n/a |
+away_f_strike_trend     | top_decile    |     180 |   -0.352 |    -0.907 |  0.2877 |    59.4% |      0 |     n/a |
+away_f_strike_trend     | bottom_decile |     180 |   -0.004 |    -0.450 |  0.9903 |    46.1% |      0 |     n/a |
+away_whiff_trend        | top_decile    |     180 |   -0.197 |    -0.395 |  0.4972 |    51.7% |      0 |     n/a |
+away_whiff_trend        | bottom_decile |     180 |   -0.367 |    -0.620 |  0.2119 |    42.8% |      0 |     n/a |
+away_velo_trend         | top_decile    |     180 |   +0.336 |    -0.134 |  0.2815 |    52.2% |      0 |     n/a |
+away_velo_trend         | bottom_decile |     180 |   -0.185 |    -0.928 |  0.5569 |    42.8% |      0 |     n/a |
+diff_f_strike_trend     | top_decile    |     181 |   +0.204 |    +0.052 |  0.5377 |    49.2% |      0 |     n/a |
+diff_whiff_trend        | top_decile    |     180 |   -0.798 |    -1.114 |  0.0102 |    65.0% |      0 |     n/a |
+
+Flagged extremes (|ME|>0.35, p<0.10):
+  home_f_strike_trend bottom_decile: ME=+0.644, p=0.039
+  diff_whiff_trend top_decile: ME=-0.798, p=0.010
+
+========================================
+COMBINED PITCHER ENVIRONMENT (Step 4)
+========================================
+Condition               | N_train | ME_train | p_train | N_2025 | ME_2025 | Thin
+------------------------|---------|----------|---------|--------|---------|------
+both_command_up         |     143 |   -0.365 |  0.3606 |      0 |     n/a | YES
+both_command_down       |     129 |   +0.104 |  0.7784 |      0 |     n/a | YES
+both_whiff_up           |      70 |   +0.332 |  0.4702 |      0 |     n/a | YES
+both_velo_down          |      18 |   -1.405 |  0.0928 |      0 |     n/a | YES
+one_up_one_down_fs      |     278 |   +0.114 |  0.6519 |      0 |     n/a | YES
+
+All combined conditions flagged as THIN (N_2025=0).
+
+========================================
+PITCHER CONCENTRATION (Step 5)
+========================================
+No single pitcher exceeds 15% in any flagged bucket.
+All signals survive top-3 pitcher removal:
+
+Signal                             | ME_raw | ME_after_removal | Survives
+------------------------------------|--------|-----------------|----------
+home_f_strike_r5 Q3                | -0.554 |           -0.534 | YES
+home_velo_trend Q3                 | -0.576 |           -0.550 | YES
+away_csw_r5 Q3                    | -0.569 |           -0.573 | YES
+away_velo_trend Q2                 | -0.580 |           -0.659 | YES
+diff_f_strike_r5 Q2               | -0.479 |           -0.607 | YES
+diff_velo_trend Q3                 | -0.559 |           -0.502 | YES
+home_f_strike_trend bottom_decile  | +0.644 |           +0.524 | YES
+diff_whiff_trend top_decile        | -0.798 |           -0.888 | YES
+
+========================================
+REST/WORKLOAD CONTROL (Step 6)
+========================================
+Signal                             | Raw coeff | p_raw  | Ctrl coeff | p_ctrl | Survives
+------------------------------------|-----------|--------|------------|--------|----------
+home_f_strike_r5 Q3                |    -0.477 | 0.0363 |     -0.484 | 0.0337 | YES
+home_csw_r5 Q3                    |    -0.324 | 0.1560 |     -0.307 | 0.1817 | NO
+home_fb_velo_r5 Q2                 |    -0.277 | 0.2230 |     -0.267 | 0.2396 | NO
+home_f_strike_trend Q3             |    -0.369 | 0.1158 |     -0.378 | 0.1062 | NO
+home_velo_trend Q3                 |    -0.508 | 0.0258 |     -0.523 | 0.0218 | YES
+away_f_strike_r5 Q1                |    -0.348 | 0.1268 |     -0.335 | 0.1401 | NO
+away_csw_r5 Q3                    |    -0.498 | 0.0287 |     -0.534 | 0.0199 | YES
+away_fb_velo_r5 Q3                 |    -0.349 | 0.1254 |     -0.340 | 0.1364 | NO
+away_f_strike_trend Q4             |    -0.222 | 0.3312 |     -0.239 | 0.2964 | NO
+away_whiff_trend Q2                |    -0.310 | 0.1639 |     -0.291 | 0.1908 | NO
+away_velo_trend Q1                 |    -0.250 | 0.2735 |     -0.220 | 0.3365 | NO
+away_velo_trend Q2                 |    -0.512 | 0.0246 |     -0.534 | 0.0191 | YES
+avg_f_strike_r5 Q1                 |    -0.276 | 0.2258 |     -0.259 | 0.2567 | NO
+diff_f_strike_r5 Q2               |    -0.377 | 0.0977 |     -0.383 | 0.0926 | YES
+diff_velo_trend Q3                 |    -0.485 | 0.0335 |     -0.480 | 0.0345 | YES
+home_f_strike_trend bottom_decile  |    +0.933 | 0.0044 |     +0.936 | 0.0044 | YES
+diff_whiff_trend top_decile        |    -0.670 | 0.0413 |     -0.670 | 0.0417 | YES
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+Candidate                          | ME_train | p_train | Concentration | Controls | OOS | Gates
+------------------------------------|----------|---------|---------------|----------|-----|------
+home_f_strike_r5 Q3                |   -0.554 |  0.0035 |          PASS |   0.0337 | n/a | 4/5
+home_velo_trend Q3                 |   -0.576 |  0.0015 |          PASS |   0.0218 | n/a | 4/5
+away_csw_r5 Q3                    |   -0.569 |  0.0023 |          PASS |   0.0199 | n/a | 4/5
+away_velo_trend Q2                 |   -0.580 |  0.0017 |          PASS |   0.0191 | n/a | 4/5
+diff_f_strike_r5 Q2               |   -0.479 |  0.0126 |          PASS |   0.0926 | n/a | 4/5
+diff_velo_trend Q3                 |   -0.559 |  0.0034 |          PASS |   0.0345 | n/a | 4/5
+home_f_strike_trend bottom_decile  |   +0.644 |  0.0390 |          PASS |   0.0044 | n/a | 4/5
+diff_whiff_trend top_decile        |   -0.798 |  0.0102 |          PASS |   0.0417 | n/a | 4/5
+
+All candidates scored 4/5 gates — failed only OOS confirmation (2025 N=0).
+
+========================================
+VERDICT
+========================================
+Signals passing all gates: NONE (OOS holdout not available)
+Best candidate: diff_whiff_trend top_decile (ME=-0.798, p=0.010)
+2025 confirmed: not testable — m3_residual not populated for 2025
+Recommended next step: backfill M3 residuals for 2022-2023 and 2025
+Reasoning: Seven candidates survived concentration and rest/workload
+  controls in 2024 with |ME| of 0.55-0.80 runs — meaningful effect
+  sizes for MLB totals. The diff_whiff_trend top decile at -0.798
+  runs (p=0.010) is the strongest: when the home pitcher's whiff rate
+  is trending up vs the away pitcher's, M3 over-predicts by nearly a
+  full run. This makes mechanistic sense — M3 uses xFIP which does not
+  capture within-season whiff trends. However, this is single-season
+  (2024) evidence only. The data foundation needs M3 projection
+  backfill across all 4 seasons before any deployment decision.
+
+NEXT STEPS (priority order):
+1. Backfill M3 projections for 2022, 2023, 2025 seasons
+   (run M3 Ridge model on historical feature_table rows)
+2. Re-run Phase A test with proper 2022-2023 train / 2024-2025 holdout
+3. If OOS confirmed: build M3 modifier for Opening Day 2026

@@ -1,0 +1,747 @@
+MLB PHASE M1 — FULL SYSTEM AUDIT & ARCHITECTURE MAP
+=====================================================
+Date: 2026-03-19
+Status: READ-ONLY audit — no files modified
+
+======================================================================
+SECTION 0 — FILE DISCOVERY
+======================================================================
+
+ALL MLB-related files, grouped by function:
+
+CORE MODEL SCRIPTS (project root)
+----------------------------------------------------------------------
+  run_model.py              — Main daily runner (7am launchd)
+  config.py                 — Weights, park factors, constants, API keys
+  refresh.py                — 11am lineup/weather/umpire refresh
+  results_tracker.py        — 11:30pm grading + season record
+  push_results.py           — Morning push (grade + model + all sports)
+  shadow_run.py             — A/B shadow runner (rules vs sim)
+  dashboard.py              — Streamlit browser dashboard
+  db.py                     — SQLite operations (data/mlb_model.db)
+  setup_launchd.py          — Mac launchd scheduler
+
+DATA-FETCHING MODULES (modules/)
+----------------------------------------------------------------------
+  modules/schedule.py       — MLB Stats API game schedule + probables
+  modules/pitchers.py       — FanGraphs/Savant pitcher xFIP/SIERA/K%/BB%
+  modules/offense.py        — FanGraphs/Savant team wRC+ + platoon splits
+  modules/weather.py        — Open-Meteo temperature/wind/precipitation
+  modules/bullpen.py        — MLB Stats API boxscores → fatigue tracking
+  modules/umpires.py        — Static umpire ratings table (~50 umps)
+  modules/odds.py           — The Odds API totals + F5 lines
+  modules/projections.py    — Rules-mode multiplicative projection engine
+  modules/sim_projections.py— Phase 9 Ridge drop-in projection engine
+  modules/ai_review.py      — AI-assisted review (if exists)
+
+PROPS MODULES (modules/)
+----------------------------------------------------------------------
+  modules/props_data.py     — pybaseball pitcher K + batter TB stats
+  modules/props_odds.py     — DraftKings/Odds API player prop lines
+
+SIMULATION PIPELINE (sim/)
+----------------------------------------------------------------------
+  sim/phase1_build_game_table.py    — Build game_table from MLB Stats API
+  sim/phase2_build_features.py      — Build feature_table with all inputs
+  sim/phase3_ridge_baseline.py      — Initial Ridge training
+  sim/phase3_ridge_baseline_v2.py   — Refined Ridge with K%/BB%
+  sim/phase4_backtest.py            — Diagnostic backtest (proxy + real lines)
+  sim/phase5_simulation.py          — Monte Carlo sim wrapper (10k draws)
+  sim/phase6_interactions.py        — Interaction feature testing
+  sim/phase7_market.py              — Four-layer market architecture
+  sim/phase7_pull_lines.py          — Historical line backfill (Odds API)
+  sim/phase8_bullpen_features.py    — Boxscore fetch + bullpen rolling features
+  sim/phase8_step3_retrain.py       — Ablation + evaluation vs Phase 6
+  sim/phase8_lock_diagnostic.py     — Collinearity diagnostic + Phase 9 lock
+  sim/phase9_variance.py            — Heteroskedastic variance model
+  sim/test_forward_collection.py    — End-to-end forward collection test
+
+SEGMENT OVERLAY (mlb/)
+----------------------------------------------------------------------
+  mlb/segment_overlay.py            — Segment-based edge filter overlay
+  mlb/config_segment_overlay.json   — Segment config
+  mlb/data/mlb_segment_tiers.parquet    — 6 approved segments
+  mlb/data/mlb_rejected_segments.parquet— 520 rejected segments
+
+DATA FILES (data/)
+----------------------------------------------------------------------
+  data/mlb_model.db                 — SQLite (7 tables, ~500KB)
+  data/line_movement.csv            — Opening/closing line tracking
+  data/cache/                       — Daily JSON caches (pitchers, offense, odds)
+
+SIM DATA (sim/data/)
+----------------------------------------------------------------------
+  sim/data/feature_table.parquet    — 9,715 games × 65 columns (2022-2025)
+  sim/data/game_table.parquet       — 9,715 games × 30 columns
+  sim/data/bullpen_features.parquet — 19,302 team-game rows
+  sim/data/bullpen_usage.parquet    — 83,042 pitcher-game rows
+  sim/data/model_outputs.parquet    — 4,855 games with sim outputs
+  sim/data/bet_decisions.parquet    — 4,855 games with bet recommendations
+  sim/data/bet_results.parquet      — 4,855 games with graded results
+  sim/data/market_snapshots.parquet — 4,855 games with line snapshots
+  sim/data/mlb_historical_closing_lines.parquet — 3,911 closing lines
+  sim/data/phase9_baseline_model.pkl— PRODUCTION Ridge model (25 features)
+  sim/data/phase9_variance_model.pkl— Variance model (12 features)
+  sim/data/cache/boxscores/         — 9,715 cached boxscore JSONs
+
+======================================================================
+SECTION 1 — DATA INVENTORY
+======================================================================
+
+GAME-LEVEL DATA
+----------------------------------------------------------------------
+
+  feature_table.parquet
+    Path: sim/data/
+    Format: parquet
+    Rows: 9,715 | Columns: 65
+    Date range: 2022-04-07 to 2025-09-28
+    Update: STATIC (historical archive)
+    Content: ALL model features per game — SP metrics, offense, park,
+             weather, umpire, bullpen, interactions
+
+  game_table.parquet
+    Path: sim/data/
+    Format: parquet
+    Rows: 9,715 | Columns: 30
+    Date range: 2022-04-07 to 2025-09-28
+    Update: STATIC
+    Content: Base game info (subset of feature_table)
+
+  mlb_model.db → graded_results table
+    Path: data/
+    Format: SQLite
+    Rows: 113 | Columns: 40
+    Date range: 2026-03-13 to 2026-03-19 (Spring Training)
+    Update: DAILY (nightly grading)
+    Content: Master audit table — projection + actual + CLV
+
+PLAYER-LEVEL DATA
+----------------------------------------------------------------------
+
+  bullpen_usage.parquet
+    Path: sim/data/
+    Format: parquet
+    Rows: 83,042 | Columns: 11
+    Date range: 2022-2025
+    Update: STATIC
+    Content: Pitcher-level per-game (starters + relievers):
+             pitcher_id, pitches_thrown, innings_pitched, games_finished
+
+  mlb_model.db → props table
+    Path: data/
+    Format: SQLite
+    Rows: 812 | Columns: 14
+    Date range: 2026 Spring Training
+    Update: DAILY
+    Content: Pitcher K + batter TB prop bets
+
+  data/cache/pitchers_v2_*.json
+    Path: data/cache/
+    Format: JSON
+    Rows: ~500 pitchers per file
+    Update: DAILY
+    Content: FanGraphs pitcher stats (xFIP, SIERA, K%, BB%, GB%, IP)
+
+TEAM-LEVEL DATA
+----------------------------------------------------------------------
+
+  data/cache/offense_v2_*.json
+    Path: data/cache/
+    Format: JSON
+    Rows: 30 teams per file
+    Update: DAILY
+    Content: Team wRC+ (PA-weighted) + platoon splits
+
+  bullpen_features.parquet
+    Path: sim/data/
+    Format: parquet
+    Rows: 19,302 | Columns: 10
+    Date range: 2022-2025
+    Update: STATIC
+    Content: Rolling bullpen fatigue aggregates per team-game
+
+ENVIRONMENTAL DATA
+----------------------------------------------------------------------
+
+  config.py → STADIUMS dict
+    Format: Python dict (hardcoded)
+    Rows: 30 stadiums
+    Update: MANUAL (yearly)
+    Content: lat/lon, park_factor, cf_bearing, dome/retractable flags
+
+  modules/umpires.py → UMPIRE_RATINGS dict
+    Format: Python dict (hardcoded)
+    Rows: ~50 umpires
+    Update: MANUAL (yearly)
+    Content: runs_factor, k_tendency, sigma_mult
+
+  market_snapshots.parquet
+    Path: sim/data/
+    Format: parquet
+    Rows: 4,855 | Columns: 13
+    Date range: 2024-2025
+    Update: STATIC
+    Content: DK/FD line snapshots (open/noon/5pm/close)
+
+MISSING / PARTIAL COVERAGE
+----------------------------------------------------------------------
+
+  - No player game logs for hitters (only team-level wRC+)
+  - No lineup history (only confirmed lineups via live feed day-of)
+  - No historical opening lines for 2022-2023 (only closing)
+  - Bullpen_usage covers 2022-2025 but no real-time forward collection yet
+  - Umpire table is static — no auto-update mechanism
+  - Park factors are 2024 vintage — not auto-updated for 2026
+
+======================================================================
+SECTION 2 — FEATURE INVENTORY
+======================================================================
+
+PHASE 9 BASELINE MODEL: 25 features
+Ridge(alpha=50), trained 2022-2023, σ=4.36
+
+STARTING PITCHER (8 features)
+----------------------------------------------------------------------
+  home_sp_xfip          FanGraphs/Savant    Regressed xFIP        STATIC (season avg)
+  away_sp_xfip          FanGraphs/Savant    Regressed xFIP        STATIC
+  home_sp_k_pct         FanGraphs           Strikeout rate         STATIC
+  away_sp_k_pct         FanGraphs           Strikeout rate         STATIC
+  home_sp_bb_pct        FanGraphs           Walk rate              STATIC
+  away_sp_bb_pct        FanGraphs           Walk rate              STATIC
+  home_sp_avg_ip        FanGraphs           Avg innings/start      STATIC
+  away_sp_avg_ip        FanGraphs           Avg innings/start      STATIC
+
+TEAM OFFENSE (2 features)
+----------------------------------------------------------------------
+  home_wrc_plus         FanGraphs/Savant    PA-weighted team wRC+  STATIC (season avg)
+  away_wrc_plus         FanGraphs/Savant    PA-weighted team wRC+  STATIC
+
+ENVIRONMENT (5 features)
+----------------------------------------------------------------------
+  park_factor_runs      Statcast 2024       Park runs factor       STATIC (yearly)
+  park_factor_hr        Statcast 2024       Park HR factor         STATIC (yearly)
+  temperature           Open-Meteo          Game-time °F           DAILY
+  wind_factor_effective Open-Meteo+config   Signed wind impact     DAILY
+  umpire_over_rate      Static table        Umpire runs tendency   STATIC
+
+SCHEDULE / REST (3 features)
+----------------------------------------------------------------------
+  home_rest_days        MLB Stats API       Days since last game   DAILY
+  away_rest_days        MLB Stats API       Days since last game   DAILY
+  doubleheader_flag     MLB Stats API       1 if 2nd game of DH   DAILY
+
+INTERACTION (1 feature)
+----------------------------------------------------------------------
+  flyball_wind_interaction  Derived         wind_effective × avg FB%  DAILY
+
+BULLPEN (6 features, added Phase 8)
+----------------------------------------------------------------------
+  home_high_leverage_avail  Boxscore API    Top-3 closers rested   DAILY
+  away_high_leverage_avail  Boxscore API    Top-3 closers rested   DAILY
+  home_bullpen_delta        Derived         BP xFIP − SP xFIP      STATIC
+  away_bullpen_delta        Derived         BP xFIP − SP xFIP      STATIC
+  home_bp_delta_exposure    Derived         delta × BP innings     STATIC
+  away_bp_delta_exposure    Derived         delta × BP innings     STATIC
+
+VARIANCE MODEL: 12 features (separate model)
+----------------------------------------------------------------------
+  wind_speed, wind_out_flag, home/away_sp_fb_pct,
+  expected_bullpen_innings, dome_flag, plus subset of mean features
+
+FEATURES NOT IN MODEL (available but unused)
+----------------------------------------------------------------------
+  home/away_sp_siera    — In data but dropped from Ridge (collinear with xFIP)
+  home/away_sp_gb_pct   — In feature_table but not in Phase 9
+  home/away_sp_tto_flag — Times-through-order flag (in data, not used)
+  home/away_wrc_vs_lhp/rhp — Platoon splits (fetched, not in Ridge)
+  home/away_bp_xfip     — Raw BP quality (used only via delta)
+
+======================================================================
+SECTION 3 — MODEL LOGIC BREAKDOWN
+======================================================================
+
+TWO ENGINES — RULES (current) vs SIMULATION (Phase 9)
+
+RULES ENGINE (modules/projections.py) — Currently active
+----------------------------------------------------------------------
+
+  Type: MULTIPLICATIVE
+  Base: 4.50 runs per team × 2 teams = 9.0 neutral total
+
+  Per-team formula:
+    runs = base × (SP_IP/9 × SP_factor × OFF_factor × PF × weather × ump)
+         + base × (BP_IP/9 × BP_factor × OFF_factor × PF × weather × ump)
+
+  Where:
+    SP_factor = blended(xFIP, SIERA) / 4.25
+    OFF_factor = wRC+ / 100
+    PF = park_factor / 100
+    weather = wind_adj × temp_factor (capped [0.85, 1.15])
+    ump = umpire_runs_factor (~0.97–1.03)
+    BP_factor = fatigue_multiplier (~0.95–1.30)
+
+  Total = runs_away + runs_home
+
+  Properties:
+    - Multiplicative: factors compound (strong offense + weak pitcher = big effect)
+    - No explicit variance modeling
+    - No distribution output (single point estimate)
+    - F5: caps SP innings at 5, zero bullpen
+    - Treats lineups as team-level wRC+ (no individual hitter)
+
+SIMULATION ENGINE (modules/sim_projections.py) — Phase 9 ready
+----------------------------------------------------------------------
+
+  Type: RIDGE REGRESSION + MONTE CARLO
+  Input: 25 features → Ridge(α=50) → predicted total
+  Variance: separate 12-feature Ridge → per-game σ
+  Simulation: 50,000 draws from N(predicted_total, σ)
+
+  Output:
+    - Point estimate (Ridge prediction, clamped [4.0, 22.0])
+    - P(over) and P(under) vs market line
+    - 80% confidence interval [10th, 90th percentile]
+    - Per-game σ (from variance model)
+
+  Properties:
+    - Produces full distribution (not just mean)
+    - Models variance explicitly (wind, flyball → wider σ)
+    - Umpire σ multiplier (tight zone → lower variance)
+    - Still team-level (no individual hitter modeling)
+    - F5 = full × 0.56 (static fraction, not modeled separately)
+
+KEY ANSWERS:
+
+  Is the model additive, multiplicative, or simulation-based?
+    Rules: MULTIPLICATIVE
+    Sim: LINEAR REGRESSION + SIMULATION
+
+  Does it produce a distribution or just a mean?
+    Rules: MEAN ONLY
+    Sim: FULL DISTRIBUTION (N(μ, σ))
+
+  Does it model variance?
+    Rules: NO
+    Sim: YES (12-feature variance model)
+
+  Does it distinguish first 5 vs full game?
+    Rules: YES (separate F5 calc, zero bullpen)
+    Sim: PARTIAL (F5 = full × 0.56 constant, not independent model)
+
+  Does it treat lineups dynamically or statically?
+    STATICALLY — team-level wRC+ only. No hitter-level adjustment.
+
+======================================================================
+SECTION 4 — CURRENT OUTPUTS
+======================================================================
+
+DAILY PROJECTION CARD (run_model.py)
+----------------------------------------------------------------------
+  Per game:
+    - proj_total_full, proj_total_f5
+    - lean (OVER/UNDER/NEUTRAL)
+    - confidence (HIGH/MEDIUM/LOW), confidence_score
+    - star rating (⭐⭐⭐ / ⭐⭐ / ⭐ / NO PLAY)
+    - edge vs market line (if available)
+    - natural language summary (factors + reasoning)
+    - 3-leg parlay suggestion
+
+  Stored in:
+    - data/mlb_model.db → projections table
+    - Terminal output (formatted card)
+    - Streamlit dashboard (dashboard.py)
+
+NIGHTLY GRADING (results_tracker.py)
+----------------------------------------------------------------------
+  Per game:
+    - actual_total, actual_f5_total
+    - result_full (WIN/LOSS/PUSH)
+    - projection_error
+    - closing_line, clv_raw, clv_directional
+    - season record (W-L-P, ROI, hit rate)
+
+  Stored in:
+    - data/mlb_model.db → results, graded_results tables
+
+SHADOW LOG (shadow_run.py)
+----------------------------------------------------------------------
+  Per game:
+    - Rules projection vs Sim projection
+    - Agreement flag
+    - Actuals + correct flags
+    - Stored in sim/data/shadow_log.parquet
+
+CLV TRACKING:
+  YES — graded_results table tracks clv_raw and clv_directional.
+  Only computed when closing_line is available (not Spring Training).
+
+======================================================================
+SECTION 5 — STRENGTHS
+======================================================================
+
+1. CLEAN MULTI-SOURCE DATA PIPELINE
+   - FanGraphs → Savant fallback for pitcher/offense data
+   - 3 layers of fallback (current year → prior year → league avg)
+   - Daily caching prevents redundant API calls
+   - Rate limiting and error handling throughout
+
+2. MATURE WEATHER INTEGRATION
+   - Open-Meteo provides free, reliable forecasts
+   - Stadium lat/lon + CF bearing enables directional wind modeling
+   - Wind × flyball interaction is a validated feature (Phase 6)
+   - Dome/retractable roof handling with manual override
+
+3. RIGOROUS SIMULATION PIPELINE
+   - 9 phases of systematic development
+   - Strict train/validate/OOS splits (2022-23 / 2024 / 2025)
+   - Ablation testing for every feature group
+   - Collinearity diagnostics before model lock
+   - Proxy vs real line comparison framework
+
+4. PRODUCTION-READY INFRASTRUCTURE
+   - Dual-mode engine (rules/sim) with identical output schema
+   - Shadow runner for A/B validation before cutover
+   - Forward line collection tested end-to-end
+   - Four-layer market architecture (outputs → snapshots → decisions → results)
+   - Automated scheduling (7am model, 11am refresh, 11:30pm grading)
+
+5. BULLPEN MODELING (PHASE 8)
+   - 9,715 boxscores cached and processed
+   - Tier-1 closer availability tracked
+   - Quality delta × exposure interaction captures real signal
+   - +10pp ROI improvement at STRONG tier (Phase 8 vs Phase 6)
+
+6. VARIANCE MODELING (PHASE 9)
+   - Per-game σ from 12-feature model
+   - Umpire variance multiplier
+   - 50K Monte Carlo draws → P(over), confidence intervals
+   - Enables probability-calibrated decisions
+
+7. GOOD LOGGING AND AUDITABILITY
+   - graded_results captures 40 columns per game
+   - CLV tracked when closing lines available
+   - Lineup changes logged (SP scratches, batter injuries)
+   - Full text reports for every pipeline phase
+
+======================================================================
+SECTION 6 — WEAKNESSES / GAPS
+======================================================================
+
+PLAYER-LEVEL GAPS
+----------------------------------------------------------------------
+  ✗ No hitter-level modeling
+    - Offense is team wRC+ only (PA-weighted season average)
+    - No individual batter contributions
+    - No awareness of WHO is in the lineup beyond SP
+
+  ✗ No lineup-based adjustments
+    - Confirmed lineups are detected (lineup_monitor.py) but not
+      used to adjust wRC+ or run projections
+    - A team's wRC+ is the same regardless of which 9 hitters start
+
+  ✗ No platoon splits in model
+    - Platoon wRC+ (vs LHP/RHP) is FETCHED by offense.py
+    - But NOT used in the Ridge model or rules engine
+    - Available data is wasted
+
+  ✗ No per-player contribution modeling
+    - Cannot estimate "how much does Player X add to the total?"
+    - Cannot model usage redistribution when a player is out
+
+PITCHER GAPS
+----------------------------------------------------------------------
+  ✗ No pitch mix data
+    - No fastball %, breaking ball %, or pitch type distribution
+    - Cannot model pitcher-specific platoon exposure
+
+  ✗ No times-through-order (TTO) effects
+    - TTO flag exists in feature_table but is NOT used in model
+    - Pitchers degrade 3rd time through order — not captured
+
+  ✗ No HR susceptibility modeling
+    - Park HR factor exists but no pitcher-level HR/FB rate
+    - Cannot model flyball pitcher + HR park interaction properly
+
+  ✗ No recent form / streakiness
+    - Pitcher stats are season-level (static)
+    - No rolling last-5-starts xFIP or last-10-days ERA
+    - Cannot detect in-season deterioration or improvement
+
+  ✗ No velocity tracking
+    - Velocity decline is a strong fatigue signal — not modeled
+
+BULLPEN GAPS
+----------------------------------------------------------------------
+  ✓ Bullpen fatigue IS tracked (Phase 8)
+  ✓ Closer availability IS tracked
+  ✗ No individual reliever modeling
+    - Team-level BP xFIP only; no per-reliever quality
+  ✗ No leverage-aware usage prediction
+    - Cannot model "will the closer pitch tonight?"
+  ✗ No bullpen usage sequence prediction
+    - Cannot estimate which relievers will face which hitters
+
+ENVIRONMENT GAPS
+----------------------------------------------------------------------
+  ✓ Weather well-modeled (wind direction + speed + temperature)
+  ✓ Park factors included (runs + HR)
+  ✓ Umpire modeled (runs_factor + variance multiplier)
+  ✗ No humidity / barometric pressure (affects ball carry)
+  ✗ No altitude effect beyond Colorado
+  ✗ No park-specific pitcher interaction
+    - e.g., flyball pitcher in Coors vs groundball pitcher in Coors
+    - wind×flyball exists but park×pitcher type does not
+
+STRUCTURAL GAPS
+----------------------------------------------------------------------
+  ✗ F5 model is not independent
+    - F5 = full_game × 0.56 (constant fraction)
+    - Should be a separate model with F5-specific features
+    - SP dominance is higher in F5 — different weight structure
+
+  ✗ No run distribution modeling
+    - Model produces expected total only
+    - Sim adds N(μ,σ) but no skew, kurtosis, or bimodality
+    - Real baseball scores are discrete and slightly right-skewed
+
+  ✗ No team total modeling
+    - Only game total (home + away combined)
+    - Cannot bet team totals (e.g., NYY over 4.5)
+
+  ✗ No home/away run split prediction
+    - runs_home and runs_away are produced by rules engine
+    - But Ridge model predicts combined total only
+    - Cannot derive moneyline or run line edges
+
+  ✗ No matchup interaction layer
+    - Hitter vs pitcher matchup not modeled
+    - Platoon advantage not incorporated
+    - Team offensive style vs pitcher style not considered
+
+DATA GAPS
+----------------------------------------------------------------------
+  ✗ No historical player game logs (hitter-level)
+    - Only team wRC+ exists; no individual game-by-game stats
+    - Cannot build hitter projections without this
+
+  ✗ No lineup history
+    - Cannot train on "who actually batted" in historical games
+    - Only game-day confirmed lineups (not archived systematically)
+
+  ✗ No historical opening lines (2022-2023)
+    - Opening lines exist only for NBA (just backfilled)
+    - MLB opening lines would enable movement analysis
+
+  ✗ Closing lines incomplete for 2022-2023
+    - mlb_historical_closing_lines has 3,911 rows (partial)
+    - 2024-2025 complete via Phase 7 backfill
+
+  ✗ No pitcher game logs
+    - pitch-count history, velocity trends, rest patterns
+    - Only season aggregates from FanGraphs
+
+======================================================================
+SECTION 7 — DATA READINESS
+======================================================================
+
+READINESS FOR "COMPLETE MLB SYSTEM"
+
+What exists (estimated % of ideal):
+
+  Starting pitcher quality:     85%
+    ✓ xFIP, SIERA, K%, BB%, avg IP (season level)
+    ✗ Missing: recent form, velocity, pitch mix, TTO
+
+  Team offense:                 40%
+    ✓ Team wRC+ (season average)
+    ✗ Missing: lineup-level, platoon usage, individual hitters
+
+  Bullpen:                      60%
+    ✓ Team BP xFIP, closer availability, delta exposure
+    ✗ Missing: individual reliever quality, usage prediction
+
+  Environment:                  80%
+    ✓ Weather (wind + temp), park factors, umpire
+    ✗ Missing: humidity, altitude, park×pitcher interactions
+
+  Market data:                  70%
+    ✓ Closing lines (2024-2025 complete)
+    ✗ Missing: opening lines, 2022-2023 closing, line movement
+
+  Historical base:              75%
+    ✓ 9,715 games with features (2022-2025)
+    ✗ Missing: hitter game logs, lineup data, pitcher game logs
+
+OVERALL READINESS: ~65%
+
+CRITICAL MISSING DATASETS:
+  1. Hitter game logs (required for lineup modeling)
+  2. Lineup history (who actually played in each game)
+  3. Pitcher game logs (for recent form / velocity trends)
+  4. Platoon integration (data exists, not wired into model)
+
+CAN BE DERIVED (no new sourcing):
+  - Platoon adjustments (already fetched, just unused)
+  - SP recent form (derivable from FanGraphs monthly splits)
+  - TTO effects (flag exists in feature_table)
+  - Better F5 model (features exist, need separate training)
+
+MUST BE SOURCED:
+  - Individual hitter game logs (MLB Stats API or pybaseball)
+  - Confirmed lineup history (MLB Stats API live feed, retrospective)
+  - Pitch-level data (Statcast or pybaseball)
+  - Historical opening lines (Odds API, ~5K credits per season)
+
+======================================================================
+SECTION 8 — RECOMMENDED BUILD ROADMAP
+======================================================================
+
+PHASE M2 — DATA WAREHOUSE BUILD
+----------------------------------------------------------------------
+Priority: HIGH (unblocks all downstream phases)
+Estimated effort: 1-2 sessions
+
+  1. Hitter game logs (2022-2025)
+     - Source: MLB Stats API or pybaseball batting_stats_bref
+     - ~500 players × 162 games × 4 seasons = ~250K rows
+     - Fields: player_id, game_date, team, PA, AB, H, 2B, 3B,
+       HR, RBI, BB, K, SB, batting_order_position
+
+  2. Confirmed lineup history (2022-2025)
+     - Source: retrosheet or MLB Stats API boxscores (batting_order)
+     - Already have 9,715 boxscores cached — extract lineup from those
+     - Fields: game_pk, team, batting_order[1-9], player_id, position
+
+  3. Pitcher game logs (2022-2025)
+     - Source: MLB Stats API or pybaseball
+     - ~300 starters × 30 starts × 4 years = ~36K rows
+     - Fields: player_id, game_date, IP, H, R, ER, BB, K, HR,
+       pitches_thrown, avg_velocity (if available)
+
+  4. Historical opening lines (2022-2023)
+     - Source: Odds API historical endpoint
+     - ~500 dates × 10 credits = 5,000 credits per season
+     - Same approach as NBA opening line backfill
+
+PHASE M3 — CORE FEATURE UPGRADES
+----------------------------------------------------------------------
+Priority: HIGH
+Depends on: M2
+
+  1. Lineup-adjusted wRC+
+     - Replace team wRC+ with actual-lineup wRC+ for each game
+     - Weight by batting order position (leadoff > 9th)
+     - Compare to season-average lineup → detect upgrades/downgrades
+
+  2. Platoon integration
+     - Use already-fetched wRC+ vs LHP / vs RHP
+     - Adjust team offense by opposing SP handedness
+     - Feature: lineup_wrc_vs_throws
+
+  3. SP recent form (rolling 5 starts)
+     - Build rolling xFIP/ERA from pitcher game logs
+     - Feature: sp_xfip_L5 alongside season sp_xfip
+     - Trend: sp_xfip_L5 - sp_xfip_season
+
+  4. Independent F5 model
+     - Train separate Ridge on F5-specific features
+     - Higher SP weight, zero bullpen, F5-specific actuals
+     - F5_actual already in feature_table
+
+PHASE M4 — ADVANCED FEATURE TESTING
+----------------------------------------------------------------------
+Priority: MEDIUM
+Depends on: M3
+
+  1. Hitter × pitcher matchup layer
+     - Compute lineup wRC+ vs specific SP handedness + type
+     - Platoon advantage quantification per game
+
+  2. TTO (times-through-order) effect
+     - SP quality degrades ~5-10% 3rd time through
+     - Feature: sp_tto_adj (combine avg_ip with K%/BB% decay)
+
+  3. Park × pitcher type interaction
+     - Flyball pitcher in HR park → amplified effect
+     - Groundball pitcher in pitcher park → suppressed total
+
+  4. Bullpen usage prediction
+     - Given SP avg_ip, predict bullpen innings + quality
+     - Improve bp_delta_exposure precision
+
+  5. Weather interaction refinements
+     - Humidity × temperature interaction
+     - Night game temperature drop modeling
+
+PHASE M5 — PLAYER RANKING SYSTEM
+----------------------------------------------------------------------
+Priority: MEDIUM
+Depends on: M2, M3
+
+  1. Hitter power rankings
+     - Per-player rolling xSLG, barrel%, hard-hit%
+     - Positional adjustments
+     - Injury-adjusted availability
+
+  2. Pitcher quality tiers
+     - SP: elite / good / average / below / replacement
+     - Based on rolling xFIP + K-BB% + recent velocity
+     - Updated daily
+
+  3. Bullpen depth chart
+     - Per-team closer / setup / middle rankings
+     - Availability tracking (fatigue + recent usage)
+     - Quality-weighted innings remaining
+
+  4. Lineup strength index
+     - Weighted sum of hitter rankings for confirmed lineup
+     - vs SP-specific (handedness adjusted)
+     - Compared to team season baseline
+
+PHASE M6 — PARALLEL MODEL ARCHITECTURE
+----------------------------------------------------------------------
+Priority: LOW (until M2-M5 validated)
+Depends on: M5
+
+  Model A — Current Production (Ridge, 25 features)
+    - Continue as baseline comparison
+    - No modifications
+
+  Model B — Lineup-Driven Ridge
+    - Replace team wRC+ with lineup-adjusted wRC+
+    - Add platoon, SP recent form, TTO features
+    - Same Ridge architecture, expanded feature set (~35 features)
+    - Backtest: does lineup info improve over team average?
+
+  Model C — Distribution-Based
+    - Model run distribution (not just mean)
+    - Poisson or negative binomial per team
+    - Enables team total, runline, and F5 bets
+    - Requires per-team run estimation (not just game total)
+
+  Model D — Ensemble
+    - Blend A/B/C with learned weights
+    - Only if B and/or C show improvement over A
+
+PRIORITY MATRIX:
+  M2 (data warehouse)     → START IMMEDIATELY (unblocks everything)
+  M3 (lineup + platoon)   → START AFTER M2 (highest expected value)
+  M4 (advanced features)  → AFTER M3 validation
+  M5 (player rankings)    → PARALLEL with M4
+  M6 (parallel models)    → ONLY if M3/M4 show improvement
+
+======================================================================
+END OF AUDIT
+======================================================================
+
+Files produced (read-only audit, no model changes):
+  mlb/docs/phase_m1_system_audit.txt (this file)
+
+Key finding:
+  The MLB system has strong infrastructure and a validated pipeline.
+  The primary weakness is operating at team-level granularity when
+  the biggest remaining gains likely come from player-level modeling.
+  Phase M2 (data warehouse) is the critical next step — it unblocks
+  lineup adjustment, platoon integration, and player ranking systems
+  that cannot be built with current data.

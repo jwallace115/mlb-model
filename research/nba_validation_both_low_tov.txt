@@ -1,0 +1,195 @@
+NBA VALIDATION — BOTH TEAMS LOW TURNOVER RATE
+Run date: 2026-03-23
+
+========================================
+BASE DATA (Step 1)
+========================================
+Total RS games: 3690
+Coverage away_tov_rate: 100.0% | home_tov_rate: 100.0%
+away_tov_rate vs home_tov_rate: r=0.0751
+market_error computable: YES (missing: 5)
+
+========================================
+GROUP DEFINITIONS — SEASON-RELATIVE (Step 2)
+========================================
+both_low_tov N: 224
+both_high_tov N: 237
+mixed_tov N: 3229
+Low-confidence flag: no
+
+========================================
+PRIMARY RESULTS (Step 3)
+========================================
+Group          |   N  |    ME  | HR_over |      p  | mean_AE | std_ME | P(+12) | P(-12) | P(AE>=12)
+---------------|------|--------|---------|---------|---------|--------|--------|--------|----------
+both_low_tov   |  224 | +2.22  |   0.555 |  0.0747 |  14.95  | 18.53  | 0.308  | 0.219  |    0.527
+both_high_tov  |  237 | +1.28  |   0.508 |  0.2456 |  13.41  | 16.88  | 0.253  | 0.215  |    0.468
+mixed_tov      | 3224 | +0.55  |   0.508 |  0.0828 |  14.21  | 17.94  | 0.252  | 0.251  |    0.503
+
+both_low vs both_high: gap=+0.94 pts p=0.5689
+
+By season both_low:
+Season  |  N | ME    | HR_over
+--------|----| ------|--------
+2022-23 | 83 | +3.87 |  0.585
+2023-24 | 67 | -1.09 |  0.422
+2024-25 | 74 | +3.36 |  0.635
+
+Seasons opposite direction: 2023-24
+
+========================================
+BILATERAL GRADIENT TEST (Step 4)
+========================================
+Combination                        |   N  |    ME  | HR_over |      p
+-----------------------------------|------|--------|---------|--------
+A) Both bottom quartile TOV        |  224 | +2.22  |   0.555 |  0.0747
+B) Away bottom only                |  702 | -0.21  |   0.491 |  0.7567
+C) Home bottom only                |  702 | +1.64  |   0.521 |  0.0170
+D) Both top quartile TOV           |  237 | +1.28  |   0.508 |  0.2456
+
+Bilateral required: yes — A >> B and C
+
+========================================
+CONTINUOUS INTERACTION (Step 5)
+========================================
+combined_tov vs close_total: r=-0.1719
+
+Quartile |   N  |    ME  | HR_over |      p  | mean_AE | std_ME
+---------|------|--------|---------|---------|---------|-------
+Q1       |  925 | +0.72  |   0.510 |  0.2315 |  14.46  | 18.34
+Q2       |  916 | +0.54  |   0.512 |  0.3680 |  14.62  | 18.26
+Q3       |  921 | +1.06  |   0.524 |  0.0701 |  13.95  | 17.77
+Q4       |  923 | +0.46  |   0.498 |  0.4205 |  13.81  | 17.26
+
+Q1 vs Q4: gap=+0.26 p=0.7497
+Q1 continuous vs both_low binary: weaker
+
+========================================
+OT EXCLUSION CHECK (Step 6)
+========================================
+both_low_tov:
+  With OT:    N=224  ME=+2.22  HR=0.555  p=0.0747  mean_AE=14.95  std_ME=18.53
+  Without OT: N=205  ME=+0.36  HR=0.520  p=0.7730  mean_AE=14.17  std_ME=17.65
+
+both_high_tov:
+  With OT:    N=237  ME=+1.28  HR=0.508  p=0.2456  mean_AE=13.41  std_ME=16.88
+  Without OT: N=224  ME=+0.21  HR=0.489  p=0.8454  mean_AE=12.99  std_ME=16.25
+
+OT rate: both_low=8.5% both_high=5.5% full=5.4%
+OT-dependent: yes (ME drops from +2.22 to +0.36 without OT)
+
+========================================
+LINE BAND CHECK (Step 7)
+========================================
+Band       |   N |    ME  | HR_over
+-----------|-----|--------|--------
+< 220      |  25 | +4.94  |  0.640
+220-230    |  77 | +2.08  |  0.562
+230-240    |  99 | +2.81  |  0.556
+240-250    |  22 | -1.82  |  0.455
+>= 250     |   1 | -25.00 |  0.000
+Concentration flag: no
+
+========================================
+TEAM CONCENTRATION (Step 8)
+========================================
+Top 5 home teams in both_low:
+Team |  N  |    %
+-----|-----|------
+OKC  |  22 |  9.8%
+BOS  |  16 |  7.1%
+CHI  |  15 |  6.7%
+DAL  |  15 |  6.7%
+PHI  |  15 |  6.7%
+
+Top 5 away teams in both_low:
+Team |  N  |    %
+-----|-----|------
+BOS  |  24 | 10.7%
+OKC  |  21 |  9.4%
+DAL  |  19 |  8.5%
+PHI  |  14 |  6.2%
+CHI  |  13 |  5.8%
+
+Single-team flag (>15%): no
+Top-3 concentration flag (>50%): home 23.7% away 28.6% no
+
+========================================
+VENUE INDEPENDENCE (Step 9A)
+========================================
+Overlap: 13.8% of both_low games are Venue signal games
+Non-Venue both_low: N=193  ME=+0.38  HR=0.516  p=0.7730
+Venue both_low:     N=31   ME=+13.63 HR=0.800  p=0.0000
+
+========================================
+REFEREE INDEPENDENCE (Step 9B, ref-covered only)
+========================================
+both_low ref-covered N: 121
+
+crew_high distribution:
+crew_high | both_low % | both_high %
+----------|-----------|----------
+0         |     41.3% |     41.7%
+1         |     44.6% |     47.6%
+2         |     11.6% |      9.1%
+3         |      2.5% |      1.6%
+
+both_low after removing crew_high>=2: N=104 ME=+1.28 HR=0.539 p=0.4634
+
+========================================
+SEASON STABILITY (Step 10)
+========================================
+both_low:
+Season  |  N |    ME  | HR_over |      p
+--------|----| ------|---------|--------
+2022-23 | 83 | +3.87 |   0.585 |  0.0571
+2023-24 | 67 | -1.09 |   0.422 |  0.6159
+2024-25 | 74 | +3.36 |   0.635 |  0.1408
+Consistency: 2/3
+
+========================================
+OFFENSIVE QUALITY PROXY CONTROL (Step 11)
+========================================
+both_low excluding elite-ORtg teams: N=63 ME=+3.97 HR=0.633 p=0.0900
+Signal survives: yes
+
+========================================
+LINE ENVIRONMENT CONTROL (Step 12)
+========================================
+SKIPPED: r=-0.1719 <= 0.25
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+Gate                       | Threshold          | Result             | Pass/Fail
+---------------------------|--------------------|--------------------|----------
+Mean error                 | >= +2.0 pts        | +2.22              | Pass
+Significance               | p < 0.05           | p=0.0747           | Fail
+N per season               | >= 20              | min=67             | Pass
+Season consistency (min)   | >= 2/3             | 2/3                | Pass
+Season consistency (ideal) | 3/3                | 2/3 (2023-24 neg)  | Fail
+OT exclusion               | ME > +1.0 no-OT   | +0.36              | Fail
+Venue independence         | ME survives        | +0.38 (p=0.77)     | Fail
+Referee independence       | ME survives        | +1.28 (p=0.46)     | Pass
+Team concentration         | No team > 15%      | clean              | Pass
+Bilateral required         | A >> B and C       | yes                | Pass
+ORtg proxy control         | Survives           | yes (ME=+3.97)     | Pass
+Line environment           | Not high-line only | r=-0.17, skipped   | Pass
+Overall: FAIL (8/12 passed, 4 failed)
+
+========================================
+FINAL CLASSIFICATION
+========================================
+Classification: CLOSED
+Reasoning: both_low_tov (N=224) shows headline ME=+2.22 but fails on
+substance. Two findings are fatal: (1) OT exclusion collapses ME from
++2.22 to +0.36 — the both_low group has an inflated 8.5% OT rate vs
+5.4% baseline, and OT variance drives the entire over-lean; (2) Venue
+independence fails — Non-Venue both_low ME=+0.38 (p=0.77) while the
+31 embedded Venue games (13.8% overlap) at ME=+13.63 account for
+virtually all signal. The bilateral gradient is genuinely interesting
+(A >> B and C) and the ORtg proxy control survives, but these structural
+findings are rendered moot by OT and Venue dependence. This is the
+third consecutive backwards discovery candidate (after away_ortg_x_home_drtg
+and home_total_last10) to collapse under the same two confounders.
+No independent exploitable content exists.

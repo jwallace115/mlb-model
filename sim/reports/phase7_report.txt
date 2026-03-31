@@ -1,0 +1,182 @@
+
+PHASE 7 — MARKET INTEGRATION REPORT
+============================================================================
+  Generated : 2026-03-15 09:33 UTC
+  Source    : phase5_sim_results.parquet
+  Seasons   : 2024 (validation) | 2025 (OOS)
+
+  *** IMPORTANT — PROXY-BASED BACKTEST ***
+  All 2024–2025 results use proxy line = 8.86 (league season mean).
+  decision_line_source = 'proxy' for all historical rows.
+  close_total = null. CLV = null (unavailable for proxy rows).
+  Results are APPROXIMATE and NOT market-validated.
+  Real market validation begins with the 2026 season.
+
+  Thresholds used:
+    WATCHLIST_EDGE=0.5  BET_EDGE=1.0  STRONG_EDGE=1.5
+    WATCHLIST_PROB=0.53  BET_PROB=0.55  STRONG_PROB=0.58
+    JUICE=-110  WIN_UNIT=0.9091
+
+1. RECORD BY PROBABILITY THRESHOLD (P ≥ threshold on bet side)
+============================================================================
+   [PROXY-BASED — line = 8.86 league mean, NOT real market totals]
+
+  2024 Validation  (n=2,427)
+────────────────────────────────────────────────────────────────────────────
+    P Thresh   N Bets     Win%   Units Won     ROI%
+  ──────────────────────────────────────────────────────
+        0.50    2,387    56.2%     +175.00   +7.33%
+        0.52    1,931    58.2%     +214.82  +11.12%
+        0.53    1,720    58.1%     +189.09  +10.99%
+        0.55    1,289    59.9%     +184.82  +14.34%
+        0.58      741    63.8%     +162.00  +21.86%
+        0.60      503    65.4%     +125.09  +24.87%
+
+  2025 OOS  (n=2,428)
+────────────────────────────────────────────────────────────────────────────
+    P Thresh   N Bets     Win%   Units Won     ROI%
+  ──────────────────────────────────────────────────────
+        0.50    2,379    54.2%      +83.73   +3.52%
+        0.52    1,958    55.4%     +113.36   +5.79%
+        0.53    1,735    56.3%     +130.18   +7.50%
+        0.55    1,316    58.5%     +154.00  +11.70%
+        0.58      772    60.9%     +125.27  +16.23%
+        0.60      507    62.1%      +94.36  +18.61%
+
+  Quick-compare: Win% at key thresholds (2024 validation | 2025 OOS)
+────────────────────────────────────────────────────────────────────────────
+    P Thresh    2024 N   2024 Win%    2025 N   2025 Win%
+  ──────────────────────────────────────────────────────
+        0.50     2,387       56.2%     2,379       54.2%
+        0.52     1,931       58.2%     1,958       55.4%
+        0.53     1,720       58.1%     1,735       56.3%
+        0.55     1,289       59.9%     1,316       58.5%
+        0.58       741       63.8%       772       60.9%
+        0.60       503       65.4%       507       62.1%
+
+2. EDGE BUCKET PERFORMANCE  (edge = |ridge_pred − proxy_line|)
+============================================================================
+   [PROXY-BASED — CLV column will be 'N/A (proxy)' until real lines collected]
+
+  2024 Validation
+────────────────────────────────────────────────────────────────────────────
+   Edge Bucket       N     Win%     Units     ROI%    Avg CLV
+  ──────────────────────────────────────────────────────────────
+       0.0–0.5   1,039    51.6%    -15.73   -1.51%  N/A (proxy)
+       0.5–1.0     785    55.9%    +53.09   +6.76%  N/A (proxy)
+       1.0–1.5     368    63.6%    +78.73  +21.39%  N/A (proxy)
+       1.5–2.0     125    64.8%    +29.64  +23.71%  N/A (proxy)
+          2.0+     110    66.4%    +29.36  +26.69%  N/A (proxy)
+
+  2025 OOS
+────────────────────────────────────────────────────────────────────────────
+   Edge Bucket       N     Win%     Units     ROI%    Avg CLV
+  ──────────────────────────────────────────────────────────────
+       0.0–0.5   1,038    49.6%    -54.82   -5.28%  N/A (proxy)
+       0.5–1.0     763    53.2%    +12.09   +1.58%  N/A (proxy)
+       1.0–1.5     398    60.8%    +64.00  +16.08%  N/A (proxy)
+       1.5–2.0     141    63.1%    +28.91  +20.50%  N/A (proxy)
+          2.0+      88    73.9%    +36.09  +41.01%  N/A (proxy)
+
+3. ROI SIMULATION @ -110  (filter: edge ≥ 1.0 AND P ≥ 0.55)
+============================================================================
+   [PROXY-BASED — approximate ROI estimate only]
+
+  2024 Validation
+────────────────────────────────────────────────────────────────────────────
+  Filter: abs_edge ≥ 1.0  AND  P(bet side) ≥ 0.55
+  Pricing: -110 (Win unit: 0.9091)
+
+  Total bets : 603
+  Wins       : 388  (64.3%)
+  Losses     : 215  (35.7%)
+  Pushes     : 0
+  Units W/L  : +137.73
+  ROI        : +22.84%
+  Avg CLV    : N/A (proxy)
+
+  2025 OOS
+────────────────────────────────────────────────────────────────────────────
+  Filter: abs_edge ≥ 1.0  AND  P(bet side) ≥ 0.55
+  Pricing: -110 (Win unit: 0.9091)
+
+  Total bets : 627
+  Wins       : 396  (63.2%)
+  Losses     : 231  (36.8%)
+  Pushes     : 0
+  Units W/L  : +129.00
+  ROI        : +20.57%
+  Avg CLV    : N/A (proxy)
+
+4. PROBABILITY CALIBRATION vs PROXY LINE
+============================================================================
+   [Replaces Phase 5 proxy calibration — same proxy, richer edge/tier view]
+   [Real calibration test vs actual market lines begins 2026 season]
+
+  2024 Validation — P(bet side) decile calibration
+────────────────────────────────────────────────────────────────────────────
+       P(bet side) bin       N   Model P (mid)   Actual Win%      Diff
+  ────────────────────────────────────────────────────────────────────
+          (0.48, 0.51]     243           0.495         51.0%   +0.015
+          (0.51, 0.52]     246           0.515         45.1%   -0.064
+          (0.52, 0.53]     239           0.525         58.6%   +0.061
+          (0.53, 0.54]     243           0.535         51.4%   -0.021
+          (0.54, 0.55]     244           0.545         54.1%   -0.004
+          (0.55, 0.57]     244           0.560         55.3%   -0.007
+          (0.57, 0.58]     241           0.575         55.2%   -0.023
+           (0.58, 0.6]     241           0.590         59.8%   +0.008
+           (0.6, 0.63]     243           0.615         65.8%   +0.043
+           (0.63, 0.8]     243           0.715         65.4%   -0.061
+
+  2025 OOS — P(bet side) decile calibration
+────────────────────────────────────────────────────────────────────────────
+       P(bet side) bin       N   Model P (mid)   Actual Win%      Diff
+  ────────────────────────────────────────────────────────────────────
+          (0.48, 0.51]     245           0.495         49.8%   +0.003
+          (0.51, 0.52]     241           0.515         48.1%   -0.034
+          (0.52, 0.53]     246           0.525         51.6%   -0.009
+          (0.53, 0.54]     242           0.535         46.7%   -0.068
+          (0.54, 0.56]     240           0.550         51.7%   -0.033
+          (0.56, 0.57]     246           0.565         55.3%   -0.012
+          (0.57, 0.58]     240           0.575         54.2%   -0.033
+           (0.58, 0.6]     243           0.590         60.1%   +0.011
+           (0.6, 0.63]     242           0.615         58.7%   -0.028
+          (0.63, 0.83]     243           0.730         66.3%   -0.067
+
+5. CONFIDENCE TIER SUMMARY
+============================================================================
+   STRONG: edge ≥ 1.5 AND P ≥ 0.58
+   BET:    edge ≥ 1.0 AND P ≥ 0.55
+   WATCHLIST: edge ≥ 0.5 AND P ≥ 0.53
+   NO_PLAY: all others
+
+  2024 Validation
+────────────────────────────────────────────────────────────────────────────
+          Tier       N     Win%     Units     ROI%
+  ────────────────────────────────────────────────────
+        STRONG     235    65.5%    +59.00  +25.11%
+           BET     368    63.6%    +78.73  +21.39%
+     WATCHLIST     784    55.9%    +52.18   +6.66%
+       NO_PLAY   1,040    51.6%    -14.82   -1.42%
+
+  2025 OOS
+────────────────────────────────────────────────────────────────────────────
+          Tier       N     Win%     Units     ROI%
+  ────────────────────────────────────────────────────
+        STRONG     229    67.2%    +65.00  +28.38%
+           BET     398    60.8%    +64.00  +16.08%
+     WATCHLIST     763    53.2%    +12.09   +1.58%
+       NO_PLAY   1,038    49.6%    -54.82   -5.28%
+
+6. DATA LAYER INVENTORY
+============================================================================
+  Layer 1 — model_outputs.parquet              4,855 rows  16 cols  0% avg null
+  Layer 2 — market_snapshots.parquet           4,855 rows  13 cols  62% avg null
+  Layer 3 — bet_decisions.parquet              4,855 rows  16 cols  6% avg null
+  Layer 4 — bet_results.parquet                4,855 rows  16 cols  12% avg null
+
+  Forward-collection hooks ready in append_real_snapshot().
+  When real 2026 lines are collected:
+    - Populate close_total, over_price, under_price in Layer 2
+    - Rerun Layer 3/4 for those game_ids with decision_line_source='real'
+    - CLV and validated ROI will auto-populate in Layer 4

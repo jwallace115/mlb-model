@@ -1,0 +1,9 @@
+GOLF PHASE 7A SUMMARY
+============================================================
+
+Model: DG only | Tier: LOW
+OOS: Brier=0.21109, AUC=0.7018
+Beats DG: False | Beats Mkt: True
+
+Phase 7A complete. Shadow infrastructure prepared.
+Phase 7B needed for: live API, Streamlit, launchd, round updates.

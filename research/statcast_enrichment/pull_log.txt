@@ -1,0 +1,648 @@
+2026-03-26 00:21:01,575 ============================================================
+2026-03-26 00:21:01,576 PHASE 0 — PRECHECKS
+2026-03-26 00:21:01,576 ============================================================
+2026-03-26 00:21:01,576   Python: 3.13.1 (v3.13.1:06714517797, Dec  3 2024, 14:00:22) [Clang 15.0.0 (clang-1500.3.9.4)]
+2026-03-26 00:21:01,576   Output: /Users/jw115/mlb-model/research/statcast_enrichment
+2026-03-26 00:21:01,576   Timestamp: 2026-03-26T00:21:01.576216
+2026-03-26 00:21:02,175   pybaseball: 2.2.7
+2026-03-26 00:21:02,176   Disk write: OK
+2026-03-26 00:21:02,176   Prechecks: PASS
+2026-03-26 00:21:02,176 
+============================================================
+2026-03-26 00:21:02,176 PHASE 1 — STATCAST PITCH-LEVEL ENRICHMENT
+2026-03-26 00:21:02,176 ============================================================
+2026-03-26 00:21:02,176   Total chunks: 32
+2026-03-26 00:21:02,176   Already complete: 0
+2026-03-26 00:21:02,176   Remaining: 32
+2026-03-26 00:21:02,176 
+  Pulling chunk 2022_03 (2022-03-20 to 2022-03-31)...
+2026-03-26 00:21:04,012     Attempt 1 failed for 2022_03: cannot convert NA to integer
+2026-03-26 00:21:04,012     Retrying in 30s...
+2026-03-26 00:21:36,056     Attempt 2 failed for 2022_03: cannot convert NA to integer
+2026-03-26 00:21:36,057     Retrying in 90s...
+2026-03-26 00:23:07,754     Attempt 3 failed for 2022_03: cannot convert NA to integer
+2026-03-26 00:23:07,756     FAILED after 3 attempts: 2022_03
+2026-03-26 00:23:12,760 
+  Pulling chunk 2022_04 (2022-04-01 to 2022-04-30)...
+2026-03-26 00:23:17,268     Attempt 1 failed for 2022_04: cannot convert NA to integer
+2026-03-26 00:23:17,269     Retrying in 30s...
+2026-03-26 00:23:51,858     Attempt 2 failed for 2022_04: cannot convert NA to integer
+2026-03-26 00:23:51,858     Retrying in 90s...
+2026-03-26 00:25:25,947     Attempt 3 failed for 2022_04: cannot convert NA to integer
+2026-03-26 00:25:25,950     FAILED after 3 attempts: 2022_04
+2026-03-26 00:25:30,956 
+  Pulling chunk 2022_05 (2022-05-01 to 2022-05-31)...
+2026-03-26 00:25:35,941     Attempt 1 failed for 2022_05: cannot convert NA to integer
+2026-03-26 00:25:35,942     Retrying in 30s...
+2026-03-26 00:26:11,022     Attempt 2 failed for 2022_05: cannot convert NA to integer
+2026-03-26 00:26:11,023     Retrying in 90s...
+2026-03-26 00:27:46,435     Attempt 3 failed for 2022_05: cannot convert NA to integer
+2026-03-26 00:27:46,439     FAILED after 3 attempts: 2022_05
+2026-03-26 00:27:51,445 
+  Pulling chunk 2022_06 (2022-06-01 to 2022-06-30)...
+2026-03-26 00:27:56,472     Attempt 1 failed for 2022_06: cannot convert NA to integer
+2026-03-26 00:27:56,472     Retrying in 30s...
+2026-03-26 00:28:31,731     Attempt 2 failed for 2022_06: cannot convert NA to integer
+2026-03-26 00:28:31,732     Retrying in 90s...
+2026-03-26 00:30:07,561     Attempt 3 failed for 2022_06: cannot convert NA to integer
+2026-03-26 00:30:07,565     FAILED after 3 attempts: 2022_06
+2026-03-26 00:30:12,570 
+  Pulling chunk 2022_07 (2022-07-01 to 2022-07-31)...
+2026-03-26 00:30:18,301     Attempt 1 failed for 2022_07: cannot convert NA to integer
+2026-03-26 00:30:18,301     Retrying in 30s...
+2026-03-26 00:30:53,630     Attempt 2 failed for 2022_07: cannot convert NA to integer
+2026-03-26 00:30:53,631     Retrying in 90s...
+2026-03-26 00:32:28,840     Attempt 3 failed for 2022_07: cannot convert NA to integer
+2026-03-26 00:32:28,843     FAILED after 3 attempts: 2022_07
+2026-03-26 00:32:33,848 
+  Pulling chunk 2022_08 (2022-08-01 to 2022-08-31)...
+2026-03-26 00:32:39,012     Attempt 1 failed for 2022_08: cannot convert NA to integer
+2026-03-26 00:32:39,013     Retrying in 30s...
+2026-03-26 00:33:14,312     Attempt 2 failed for 2022_08: cannot convert NA to integer
+2026-03-26 00:33:14,313     Retrying in 90s...
+2026-03-26 00:34:49,626     Attempt 3 failed for 2022_08: cannot convert NA to integer
+2026-03-26 00:34:49,630     FAILED after 3 attempts: 2022_08
+2026-03-26 00:34:54,635 
+  Pulling chunk 2022_09 (2022-09-01 to 2022-09-30)...
+2026-03-26 00:35:00,045     Attempt 1 failed for 2022_09: cannot convert NA to integer
+2026-03-26 00:35:00,045     Retrying in 30s...
+2026-03-26 00:35:35,228     Attempt 2 failed for 2022_09: cannot convert NA to integer
+2026-03-26 00:35:35,229     Retrying in 90s...
+2026-03-26 00:37:10,310     Attempt 3 failed for 2022_09: cannot convert NA to integer
+2026-03-26 00:37:10,314     FAILED after 3 attempts: 2022_09
+2026-03-26 00:37:15,320 
+  Pulling chunk 2022_10 (2022-10-01 to 2022-10-05)...
+2026-03-26 00:37:16,617     Attempt 1 failed for 2022_10: cannot convert NA to integer
+2026-03-26 00:37:16,617     Retrying in 30s...
+2026-03-26 00:37:47,971     Attempt 2 failed for 2022_10: cannot convert NA to integer
+2026-03-26 00:37:47,972     Retrying in 90s...
+2026-03-26 00:39:19,752     Attempt 3 failed for 2022_10: cannot convert NA to integer
+2026-03-26 00:39:19,753     FAILED after 3 attempts: 2022_10
+2026-03-26 00:39:19,754     Season boundary — sleeping 20s
+2026-03-26 00:39:39,759 
+  Pulling chunk 2023_03 (2023-03-20 to 2023-03-31)...
+2026-03-26 00:39:41,573     Attempt 1 failed for 2023_03: cannot convert NA to integer
+2026-03-26 00:39:41,573     Retrying in 30s...
+2026-03-26 00:40:13,355     Attempt 2 failed for 2023_03: cannot convert NA to integer
+2026-03-26 00:40:13,355     Retrying in 90s...
+2026-03-26 00:41:45,269     Attempt 3 failed for 2023_03: cannot convert NA to integer
+2026-03-26 00:41:45,270     FAILED after 3 attempts: 2023_03
+2026-03-26 00:41:50,276 
+  Pulling chunk 2023_04 (2023-04-01 to 2023-04-30)...
+2026-03-26 00:41:57,635     Attempt 1 failed for 2023_04: cannot convert NA to integer
+2026-03-26 00:41:57,636     Retrying in 30s...
+2026-03-26 00:42:33,041     Attempt 2 failed for 2023_04: cannot convert NA to integer
+2026-03-26 00:42:33,042     Retrying in 90s...
+2026-03-26 00:44:08,339     Attempt 3 failed for 2023_04: cannot convert NA to integer
+2026-03-26 00:44:08,343     FAILED after 3 attempts: 2023_04
+2026-03-26 00:44:13,348 
+  Pulling chunk 2023_05 (2023-05-01 to 2023-05-31)...
+2026-03-26 00:44:18,668     Attempt 1 failed for 2023_05: cannot convert NA to integer
+2026-03-26 00:44:18,668     Retrying in 30s...
+2026-03-26 00:44:54,257     Attempt 2 failed for 2023_05: cannot convert NA to integer
+2026-03-26 00:44:54,257     Retrying in 90s...
+2026-03-26 00:46:29,475     Attempt 3 failed for 2023_05: cannot convert NA to integer
+2026-03-26 00:46:29,479     FAILED after 3 attempts: 2023_05
+2026-03-26 00:46:34,484 
+  Pulling chunk 2023_06 (2023-06-01 to 2023-06-30)...
+2026-03-26 00:46:39,580     Attempt 1 failed for 2023_06: cannot convert NA to integer
+2026-03-26 00:46:39,581     Retrying in 30s...
+2026-03-26 00:47:14,703     Attempt 2 failed for 2023_06: cannot convert NA to integer
+2026-03-26 00:47:14,703     Retrying in 90s...
+2026-03-26 00:48:49,739     Attempt 3 failed for 2023_06: cannot convert NA to integer
+2026-03-26 00:48:49,743     FAILED after 3 attempts: 2023_06
+2026-03-26 00:48:54,748 
+  Pulling chunk 2023_07 (2023-07-01 to 2023-07-31)...
+2026-03-26 00:48:59,578     Attempt 1 failed for 2023_07: cannot convert NA to integer
+2026-03-26 00:48:59,579     Retrying in 30s...
+2026-03-26 00:49:35,009     Attempt 2 failed for 2023_07: cannot convert NA to integer
+2026-03-26 00:49:35,010     Retrying in 90s...
+2026-03-26 00:51:10,144     Attempt 3 failed for 2023_07: cannot convert NA to integer
+2026-03-26 00:51:10,147     FAILED after 3 attempts: 2023_07
+2026-03-26 00:51:15,152 
+  Pulling chunk 2023_08 (2023-08-01 to 2023-08-31)...
+2026-03-26 00:51:20,241     Attempt 1 failed for 2023_08: cannot convert NA to integer
+2026-03-26 00:51:20,241     Retrying in 30s...
+2026-03-26 00:51:55,406     Attempt 2 failed for 2023_08: cannot convert NA to integer
+2026-03-26 00:51:55,407     Retrying in 90s...
+2026-03-26 00:53:30,776     Attempt 3 failed for 2023_08: cannot convert NA to integer
+2026-03-26 00:53:30,780     FAILED after 3 attempts: 2023_08
+2026-03-26 00:53:35,786 
+  Pulling chunk 2023_09 (2023-09-01 to 2023-09-30)...
+2026-03-26 00:53:41,467     Attempt 1 failed for 2023_09: cannot convert NA to integer
+2026-03-26 00:53:41,467     Retrying in 30s...
+2026-03-26 00:54:16,808     Attempt 2 failed for 2023_09: cannot convert NA to integer
+2026-03-26 00:54:16,808     Retrying in 90s...
+2026-03-26 00:55:52,327     Attempt 3 failed for 2023_09: cannot convert NA to integer
+2026-03-26 00:55:52,331     FAILED after 3 attempts: 2023_09
+2026-03-26 00:55:57,333 
+  Pulling chunk 2023_10 (2023-10-01 to 2023-10-05)...
+2026-03-26 00:55:58,093     Attempt 1 failed for 2023_10: cannot convert NA to integer
+2026-03-26 00:55:58,093     Retrying in 30s...
+2026-03-26 00:56:28,874     Attempt 2 failed for 2023_10: cannot convert NA to integer
+2026-03-26 00:56:28,875     Retrying in 90s...
+2026-03-26 00:57:59,552     Attempt 3 failed for 2023_10: cannot convert NA to integer
+2026-03-26 00:57:59,553     FAILED after 3 attempts: 2023_10
+2026-03-26 00:57:59,553     Season boundary — sleeping 20s
+2026-03-26 00:58:19,559 
+  Pulling chunk 2024_03 (2024-03-20 to 2024-03-31)...
+2026-03-26 00:58:21,539     Attempt 1 failed for 2024_03: cannot convert NA to integer
+2026-03-26 00:58:21,539     Retrying in 30s...
+2026-03-26 00:58:53,503     Attempt 2 failed for 2024_03: cannot convert NA to integer
+2026-03-26 00:58:53,503     Retrying in 90s...
+2026-03-26 01:00:25,475     Attempt 3 failed for 2024_03: cannot convert NA to integer
+2026-03-26 01:00:25,477     FAILED after 3 attempts: 2024_03
+2026-03-26 01:00:30,480 
+  Pulling chunk 2024_04 (2024-04-01 to 2024-04-30)...
+2026-03-26 01:00:35,483     Attempt 1 failed for 2024_04: cannot convert NA to integer
+2026-03-26 01:00:35,484     Retrying in 30s...
+2026-03-26 01:01:14,646     Attempt 2 failed for 2024_04: cannot convert NA to integer
+2026-03-26 01:01:14,647     Retrying in 90s...
+2026-03-26 01:02:49,863     Attempt 3 failed for 2024_04: cannot convert NA to integer
+2026-03-26 01:02:49,867     FAILED after 3 attempts: 2024_04
+2026-03-26 01:02:54,873 
+  Pulling chunk 2024_05 (2024-05-01 to 2024-05-31)...
+2026-03-26 01:03:00,193     Attempt 1 failed for 2024_05: cannot convert NA to integer
+2026-03-26 01:03:00,194     Retrying in 30s...
+2026-03-26 01:03:35,274     Attempt 2 failed for 2024_05: cannot convert NA to integer
+2026-03-26 01:03:35,275     Retrying in 90s...
+2026-03-26 01:05:10,556     Attempt 3 failed for 2024_05: cannot convert NA to integer
+2026-03-26 01:05:10,560     FAILED after 3 attempts: 2024_05
+2026-03-26 01:05:15,566 
+  Pulling chunk 2024_06 (2024-06-01 to 2024-06-30)...
+2026-03-26 01:05:20,432     Attempt 1 failed for 2024_06: cannot convert NA to integer
+2026-03-26 01:05:20,433     Retrying in 30s...
+2026-03-26 01:05:55,381     Attempt 2 failed for 2024_06: cannot convert NA to integer
+2026-03-26 01:05:55,382     Retrying in 90s...
+2026-03-26 01:07:31,210     Attempt 3 failed for 2024_06: cannot convert NA to integer
+2026-03-26 01:07:31,214     FAILED after 3 attempts: 2024_06
+2026-03-26 01:07:36,219 
+  Pulling chunk 2024_07 (2024-07-01 to 2024-07-31)...
+2026-03-26 01:07:41,861     Attempt 1 failed for 2024_07: cannot convert NA to integer
+2026-03-26 01:07:41,862     Retrying in 30s...
+2026-03-26 01:08:16,780     Attempt 2 failed for 2024_07: cannot convert NA to integer
+2026-03-26 01:08:16,780     Retrying in 90s...
+2026-03-26 01:09:52,216     Attempt 3 failed for 2024_07: cannot convert NA to integer
+2026-03-26 01:09:52,220     FAILED after 3 attempts: 2024_07
+2026-03-26 01:09:57,225 
+  Pulling chunk 2024_08 (2024-08-01 to 2024-08-31)...
+2026-03-26 01:10:02,689     Attempt 1 failed for 2024_08: cannot convert NA to integer
+2026-03-26 01:10:02,691     Retrying in 30s...
+2026-03-26 01:10:38,721     Attempt 2 failed for 2024_08: cannot convert NA to integer
+2026-03-26 01:10:38,722     Retrying in 90s...
+2026-03-26 01:12:13,738     Attempt 3 failed for 2024_08: cannot convert NA to integer
+2026-03-26 01:12:13,741     FAILED after 3 attempts: 2024_08
+2026-03-26 01:12:18,747 
+  Pulling chunk 2024_09 (2024-09-01 to 2024-09-30)...
+2026-03-26 01:12:23,564     Attempt 1 failed for 2024_09: cannot convert NA to integer
+2026-03-26 01:12:23,565     Retrying in 30s...
+2026-03-26 01:12:58,997     Attempt 2 failed for 2024_09: cannot convert NA to integer
+2026-03-26 01:12:58,998     Retrying in 90s...
+2026-03-26 01:14:33,833     Attempt 3 failed for 2024_09: cannot convert NA to integer
+2026-03-26 01:14:33,836     FAILED after 3 attempts: 2024_09
+2026-03-26 01:14:38,841 
+  Pulling chunk 2024_10 (2024-10-01 to 2024-10-05)...
+2026-03-26 01:14:39,322     Attempt 1 failed for 2024_10: cannot convert NA to integer
+2026-03-26 01:14:39,322     Retrying in 30s...
+2026-03-26 01:15:09,796     Attempt 2 failed for 2024_10: cannot convert NA to integer
+2026-03-26 01:15:09,796     Retrying in 90s...
+2026-03-26 01:16:40,294     Attempt 3 failed for 2024_10: cannot convert NA to integer
+2026-03-26 01:16:40,294     FAILED after 3 attempts: 2024_10
+2026-03-26 01:16:40,294     Season boundary — sleeping 20s
+2026-03-26 01:17:00,301 
+  Pulling chunk 2025_03 (2025-03-20 to 2025-03-31)...
+2026-03-26 01:17:09,055     Attempt 1 failed for 2025_03: cannot convert NA to integer
+2026-03-26 01:17:09,055     Retrying in 30s...
+2026-03-26 01:17:42,343     Attempt 2 failed for 2025_03: cannot convert NA to integer
+2026-03-26 01:17:42,344     Retrying in 90s...
+2026-03-26 01:19:14,585     Attempt 3 failed for 2025_03: cannot convert NA to integer
+2026-03-26 01:19:14,587     FAILED after 3 attempts: 2025_03
+2026-03-26 01:19:19,595 
+  Pulling chunk 2025_04 (2025-04-01 to 2025-04-30)...
+2026-03-26 01:19:24,805     Attempt 1 failed for 2025_04: cannot convert NA to integer
+2026-03-26 01:19:24,806     Retrying in 30s...
+2026-03-26 01:20:00,126     Attempt 2 failed for 2025_04: cannot convert NA to integer
+2026-03-26 01:20:00,127     Retrying in 90s...
+2026-03-26 01:21:35,014     Attempt 3 failed for 2025_04: cannot convert NA to integer
+2026-03-26 01:21:35,017     FAILED after 3 attempts: 2025_04
+2026-03-26 01:21:40,022 
+  Pulling chunk 2025_05 (2025-05-01 to 2025-05-31)...
+2026-03-26 01:21:45,218     Attempt 1 failed for 2025_05: cannot convert NA to integer
+2026-03-26 01:21:45,218     Retrying in 30s...
+2026-03-26 01:22:21,438     Attempt 2 failed for 2025_05: cannot convert NA to integer
+2026-03-26 01:22:21,438     Retrying in 90s...
+2026-03-26 01:23:56,731     Attempt 3 failed for 2025_05: cannot convert NA to integer
+2026-03-26 01:23:56,735     FAILED after 3 attempts: 2025_05
+2026-03-26 01:24:01,740 
+  Pulling chunk 2025_06 (2025-06-01 to 2025-06-30)...
+2026-03-26 01:24:06,816     Attempt 1 failed for 2025_06: cannot convert NA to integer
+2026-03-26 01:24:06,817     Retrying in 30s...
+2026-03-26 01:24:41,968     Attempt 2 failed for 2025_06: cannot convert NA to integer
+2026-03-26 01:24:41,968     Retrying in 90s...
+2026-03-26 01:26:16,937     Attempt 3 failed for 2025_06: cannot convert NA to integer
+2026-03-26 01:26:16,941     FAILED after 3 attempts: 2025_06
+2026-03-26 01:26:21,947 
+  Pulling chunk 2025_07 (2025-07-01 to 2025-07-31)...
+2026-03-26 01:26:26,845     Attempt 1 failed for 2025_07: cannot convert NA to integer
+2026-03-26 01:26:26,845     Retrying in 30s...
+2026-03-26 01:27:01,697     Attempt 2 failed for 2025_07: cannot convert NA to integer
+2026-03-26 01:27:01,698     Retrying in 90s...
+2026-03-26 01:28:37,134     Attempt 3 failed for 2025_07: cannot convert NA to integer
+2026-03-26 01:28:37,137     FAILED after 3 attempts: 2025_07
+2026-03-26 01:28:42,139 
+  Pulling chunk 2025_08 (2025-08-01 to 2025-08-31)...
+2026-03-26 01:28:53,911     Attempt 1 failed for 2025_08: cannot convert NA to integer
+2026-03-26 01:28:53,912     Retrying in 30s...
+2026-03-26 01:29:29,089     Attempt 2 failed for 2025_08: cannot convert NA to integer
+2026-03-26 01:29:29,090     Retrying in 90s...
+2026-03-26 01:31:05,695     Attempt 3 failed for 2025_08: cannot convert NA to integer
+2026-03-26 01:31:05,699     FAILED after 3 attempts: 2025_08
+2026-03-26 01:31:10,704 
+  Pulling chunk 2025_09 (2025-09-01 to 2025-09-30)...
+2026-03-26 01:31:15,766     Attempt 1 failed for 2025_09: cannot convert NA to integer
+2026-03-26 01:31:15,766     Retrying in 30s...
+2026-03-26 01:31:51,165     Attempt 2 failed for 2025_09: cannot convert NA to integer
+2026-03-26 01:31:51,166     Retrying in 90s...
+2026-03-26 01:33:26,262     Attempt 3 failed for 2025_09: cannot convert NA to integer
+2026-03-26 01:33:26,265     FAILED after 3 attempts: 2025_09
+2026-03-26 01:33:31,270 
+  Pulling chunk 2025_10 (2025-10-01 to 2025-10-05)...
+2026-03-26 01:33:31,815     Attempt 1 failed for 2025_10: cannot convert NA to integer
+2026-03-26 01:33:31,815     Retrying in 30s...
+2026-03-26 01:34:02,298     Attempt 2 failed for 2025_10: cannot convert NA to integer
+2026-03-26 01:34:02,298     Retrying in 90s...
+2026-03-26 01:35:32,821     Attempt 3 failed for 2025_10: cannot convert NA to integer
+2026-03-26 01:35:32,822     FAILED after 3 attempts: 2025_10
+2026-03-26 01:35:32,822 
+  Merging chunks...
+2026-03-26 01:35:32,822   No chunks to merge!
+2026-03-26 01:35:32,823 
+============================================================
+2026-03-26 01:35:32,823 PHASE 2 — LINEUP COMPOSITION
+2026-03-26 01:35:32,823 ============================================================
+2026-03-26 01:35:32,960   Saved: 9710 rows (FALLBACK_USED — team wRC+ only)
+2026-03-26 01:35:32,961 
+============================================================
+2026-03-26 01:35:32,961 PHASE 3 — TEAM DEFENSE
+2026-03-26 01:35:32,961 ============================================================
+2026-03-26 01:35:33,173     2022: 30 teams from FanGraphs
+2026-03-26 01:35:35,386     2023: 30 teams from FanGraphs
+2026-03-26 01:35:37,520     2024: 30 teams from FanGraphs
+2026-03-26 01:35:39,661     2025: 30 teams from FanGraphs
+2026-03-26 01:35:41,670   Saved: 120 rows
+2026-03-26 01:35:41,673 
+============================================================
+2026-03-26 01:35:41,673 PHASE 4 — TEAM BASERUNNING
+2026-03-26 01:35:41,673 ============================================================
+2026-03-26 01:35:41,957     2022: 30 teams from FanGraphs
+2026-03-26 01:35:44,213     2023: 30 teams from FanGraphs
+2026-03-26 01:35:46,470     2024: 30 teams from FanGraphs
+2026-03-26 01:35:48,906     2025: 30 teams from FanGraphs
+2026-03-26 01:35:50,922   Saved: 120 rows
+2026-03-26 01:35:50,925 
+============================================================
+2026-03-26 01:35:50,925 PHASE 5 — CATCHER FRAMING
+2026-03-26 01:35:50,925 ============================================================
+2026-03-26 01:35:52,568     2022: 57 catchers from Savant
+2026-03-26 01:35:56,480     2023: 57 catchers from Savant
+2026-03-26 01:36:00,478     2024: 57 catchers from Savant
+2026-03-26 01:36:04,469     2025: 57 catchers from Savant
+2026-03-26 01:36:07,486   Saved: 228 rows
+2026-03-26 01:36:07,487 
+============================================================
+2026-03-26 01:36:07,487 FINAL VALIDATION REPORT
+2026-03-26 01:36:07,487 ============================================================
+2026-03-26 01:36:07,488 
+     Phase |                                     File |   Rows |      Seasons |     Status
+2026-03-26 01:36:07,488   -------- | ---------------------------------------- | ------ | ------------ | ----------
+2026-03-26 01:36:07,488    Phase 1 |       pitcher_statcast_per_start.parquet |      0 |              |   complete
+2026-03-26 01:36:07,495    Phase 2 |               lineup_composition.parquet |   9710 |            ? |         OK
+2026-03-26 01:36:07,498    Phase 3 |                     team_defense.parquet |    120 | 2022,2023,2024,2025 |         OK
+2026-03-26 01:36:07,501    Phase 4 |                 team_baserunning.parquet |    120 | 2022,2023,2024,2025 |         OK
+2026-03-26 01:36:07,505    Phase 5 |                  catcher_framing.parquet |    228 | 2022,2023,2024,2025 |         OK
+2026-03-26 01:36:07,505 
+  Failed chunks: ['2022_03', '2022_04', '2022_05', '2022_06', '2022_07', '2022_08', '2022_09', '2022_10', '2023_03', '2023_04', '2023_05', '2023_06', '2023_07', '2023_08', '2023_09', '2023_10', '2024_03', '2024_04', '2024_05', '2024_06', '2024_07', '2024_08', '2024_09', '2024_10', '2025_03', '2025_04', '2025_05', '2025_06', '2025_07', '2025_08', '2025_09', '2025_10']
+2026-03-26 01:36:07,505 
+  Enrichment run complete: 2026-03-26T01:36:07.505524
+2026-03-26 07:00:02,234 ============================================================
+2026-03-26 07:00:02,234 PHASE 1 REPAIR — Direct Savant CSV pull
+2026-03-26 07:00:02,234 ============================================================
+2026-03-26 07:00:02,234   Total chunks: 32
+2026-03-26 07:00:02,234   Complete: 0
+2026-03-26 07:00:02,235   Remaining: 32
+2026-03-26 07:00:02,235 
+  Chunk 2022_03 (2022-03-20 to 2022-03-31)...
+2026-03-26 07:00:02,235     URL: ...game_date_gt=2022-03-20&game_date_lt=2022-03-31
+2026-03-26 07:00:03,393     2022_03: no data (empty response)
+2026-03-26 07:00:06,398 
+  Chunk 2022_04 (2022-04-01 to 2022-04-30)...
+2026-03-26 07:00:06,399     URL: ...game_date_gt=2022-04-01&game_date_lt=2022-04-30
+2026-03-26 07:00:43,438     2022_04: 25000 pitches pulled
+2026-03-26 07:00:43,483     2022_04: 202 pitcher-starts saved
+2026-03-26 07:00:46,488 
+  Chunk 2022_05 (2022-05-01 to 2022-05-31)...
+2026-03-26 07:00:46,488     URL: ...game_date_gt=2022-05-01&game_date_lt=2022-05-31
+2026-03-26 07:01:38,548     2022_05: 25000 pitches pulled
+2026-03-26 07:01:38,566     2022_05: 189 pitcher-starts saved
+2026-03-26 07:01:41,567 
+  Chunk 2022_06 (2022-06-01 to 2022-06-30)...
+2026-03-26 07:01:41,567     URL: ...game_date_gt=2022-06-01&game_date_lt=2022-06-30
+2026-03-26 07:02:34,794     2022_06: 25000 pitches pulled
+2026-03-26 07:02:34,811     2022_06: 202 pitcher-starts saved
+2026-03-26 07:02:37,816 
+  Chunk 2022_07 (2022-07-01 to 2022-07-31)...
+2026-03-26 07:02:37,817     URL: ...game_date_gt=2022-07-01&game_date_lt=2022-07-31
+2026-03-26 07:03:24,370     2022_07: 25000 pitches pulled
+2026-03-26 07:03:24,384     2022_07: 196 pitcher-starts saved
+2026-03-26 07:03:27,389 
+  Chunk 2022_08 (2022-08-01 to 2022-08-31)...
+2026-03-26 07:03:27,390     URL: ...game_date_gt=2022-08-01&game_date_lt=2022-08-31
+2026-03-26 07:04:06,418     2022_08: 25000 pitches pulled
+2026-03-26 07:04:06,431     2022_08: 187 pitcher-starts saved
+2026-03-26 07:04:09,436 
+  Chunk 2022_09 (2022-09-01 to 2022-09-30)...
+2026-03-26 07:04:09,437     URL: ...game_date_gt=2022-09-01&game_date_lt=2022-09-30
+2026-03-26 07:04:55,422     2022_09: 25000 pitches pulled
+2026-03-26 07:04:55,435     2022_09: 189 pitcher-starts saved
+2026-03-26 07:04:58,441 
+  Chunk 2022_10 (2022-10-01 to 2022-10-05)...
+2026-03-26 07:04:58,441     URL: ...game_date_gt=2022-10-01&game_date_lt=2022-10-05
+2026-03-26 07:05:35,995     2022_10: 22327 pitches pulled
+2026-03-26 07:05:36,009     2022_10: 176 pitcher-starts saved
+2026-03-26 07:05:36,009     Season boundary — sleeping 15s
+2026-03-26 07:05:51,014 
+  Chunk 2023_03 (2023-03-20 to 2023-03-31)...
+2026-03-26 07:05:51,014     URL: ...game_date_gt=2023-03-20&game_date_lt=2023-03-31
+2026-03-26 07:06:02,768     2023_03: 5981 pitches pulled
+2026-03-26 07:06:02,780     2023_03: 44 pitcher-starts saved
+2026-03-26 07:06:05,783 
+  Chunk 2023_04 (2023-04-01 to 2023-04-30)...
+2026-03-26 07:06:05,784     URL: ...game_date_gt=2023-04-01&game_date_lt=2023-04-30
+2026-03-26 07:06:53,901     2023_04: 25000 pitches pulled
+2026-03-26 07:06:53,920     2023_04: 186 pitcher-starts saved
+2026-03-26 07:06:56,925 
+  Chunk 2023_05 (2023-05-01 to 2023-05-31)...
+2026-03-26 07:06:56,926     URL: ...game_date_gt=2023-05-01&game_date_lt=2023-05-31
+2026-03-26 07:07:41,355     2023_05: 25000 pitches pulled
+2026-03-26 07:07:41,370     2023_05: 193 pitcher-starts saved
+2026-03-26 07:07:44,372 
+  Chunk 2023_06 (2023-06-01 to 2023-06-30)...
+2026-03-26 07:07:44,373     URL: ...game_date_gt=2023-06-01&game_date_lt=2023-06-30
+2026-03-26 07:08:27,799     2023_06: 25000 pitches pulled
+2026-03-26 07:08:27,813     2023_06: 212 pitcher-starts saved
+2026-03-26 07:08:30,819 
+  Chunk 2023_07 (2023-07-01 to 2023-07-31)...
+2026-03-26 07:08:30,820     URL: ...game_date_gt=2023-07-01&game_date_lt=2023-07-31
+2026-03-26 07:09:28,730     2023_07: 25000 pitches pulled
+2026-03-26 07:09:28,745     2023_07: 195 pitcher-starts saved
+2026-03-26 07:09:31,748 
+  Chunk 2023_08 (2023-08-01 to 2023-08-31)...
+2026-03-26 07:09:31,750     URL: ...game_date_gt=2023-08-01&game_date_lt=2023-08-31
+2026-03-26 07:10:14,206     2023_08: 25000 pitches pulled
+2026-03-26 07:10:14,222     2023_08: 214 pitcher-starts saved
+2026-03-26 07:10:17,228 
+  Chunk 2023_09 (2023-09-01 to 2023-09-30)...
+2026-03-26 07:10:17,228     URL: ...game_date_gt=2023-09-01&game_date_lt=2023-09-30
+2026-03-26 07:11:01,704     2023_09: 25000 pitches pulled
+2026-03-26 07:11:01,718     2023_09: 208 pitcher-starts saved
+2026-03-26 07:11:04,724 
+  Chunk 2023_10 (2023-10-01 to 2023-10-05)...
+2026-03-26 07:11:04,724     URL: ...game_date_gt=2023-10-01&game_date_lt=2023-10-05
+2026-03-26 07:11:13,684     2023_10: 4402 pitches pulled
+2026-03-26 07:11:13,694     2023_10: 34 pitcher-starts saved
+2026-03-26 07:11:13,694     Season boundary — sleeping 15s
+2026-03-26 07:11:28,698 
+  Chunk 2024_03 (2024-03-20 to 2024-03-31)...
+2026-03-26 07:11:28,700     URL: ...game_date_gt=2024-03-20&game_date_lt=2024-03-31
+2026-03-26 07:12:03,568     2024_03: 16634 pitches pulled
+2026-03-26 07:12:03,582     2024_03: 132 pitcher-starts saved
+2026-03-26 07:12:06,588 
+  Chunk 2024_04 (2024-04-01 to 2024-04-30)...
+2026-03-26 07:12:06,588     URL: ...game_date_gt=2024-04-01&game_date_lt=2024-04-30
+2026-03-26 07:12:48,078     2024_04: 25000 pitches pulled
+2026-03-26 07:12:48,093     2024_04: 200 pitcher-starts saved
+2026-03-26 07:12:51,098 
+  Chunk 2024_05 (2024-05-01 to 2024-05-31)...
+2026-03-26 07:12:51,098     URL: ...game_date_gt=2024-05-01&game_date_lt=2024-05-31
+2026-03-26 07:13:34,484     2024_05: 25000 pitches pulled
+2026-03-26 07:13:34,499     2024_05: 200 pitcher-starts saved
+2026-03-26 07:13:37,504 
+  Chunk 2024_06 (2024-06-01 to 2024-06-30)...
+2026-03-26 07:13:37,504     URL: ...game_date_gt=2024-06-01&game_date_lt=2024-06-30
+2026-03-26 07:14:20,496     2024_06: 25000 pitches pulled
+2026-03-26 07:14:20,511     2024_06: 187 pitcher-starts saved
+2026-03-26 07:14:23,516 
+  Chunk 2024_07 (2024-07-01 to 2024-07-31)...
+2026-03-26 07:14:23,516     URL: ...game_date_gt=2024-07-01&game_date_lt=2024-07-31
+2026-03-26 07:15:04,610     2024_07: 25000 pitches pulled
+2026-03-26 07:15:04,624     2024_07: 194 pitcher-starts saved
+2026-03-26 07:15:07,630 
+  Chunk 2024_08 (2024-08-01 to 2024-08-31)...
+2026-03-26 07:15:07,630     URL: ...game_date_gt=2024-08-01&game_date_lt=2024-08-31
+2026-03-26 07:15:54,959     2024_08: 25000 pitches pulled
+2026-03-26 07:15:54,974     2024_08: 187 pitcher-starts saved
+2026-03-26 07:15:57,975 
+  Chunk 2024_09 (2024-09-01 to 2024-09-30)...
+2026-03-26 07:15:57,976     URL: ...game_date_gt=2024-09-01&game_date_lt=2024-09-30
+2026-03-26 07:16:37,704     2024_09: 25000 pitches pulled
+2026-03-26 07:16:37,718     2024_09: 191 pitcher-starts saved
+2026-03-26 07:16:40,728 
+  Chunk 2024_10 (2024-10-01 to 2024-10-05)...
+2026-03-26 07:16:40,729     URL: ...game_date_gt=2024-10-01&game_date_lt=2024-10-05
+2026-03-26 07:16:41,595     2024_10: no data (empty response)
+2026-03-26 07:16:41,596     Season boundary — sleeping 15s
+2026-03-26 07:16:56,597 
+  Chunk 2025_03 (2025-03-20 to 2025-03-31)...
+2026-03-26 07:16:56,597     URL: ...game_date_gt=2025-03-20&game_date_lt=2025-03-31
+2026-03-26 07:17:33,306     2025_03: 19155 pitches pulled
+2026-03-26 07:17:33,319     2025_03: 148 pitcher-starts saved
+2026-03-26 07:17:36,330 
+  Chunk 2025_04 (2025-04-01 to 2025-04-30)...
+2026-03-26 07:17:36,330     URL: ...game_date_gt=2025-04-01&game_date_lt=2025-04-30
+2026-03-26 07:18:17,503     2025_04: 25000 pitches pulled
+2026-03-26 07:18:17,517     2025_04: 198 pitcher-starts saved
+2026-03-26 07:18:20,527 
+  Chunk 2025_05 (2025-05-01 to 2025-05-31)...
+2026-03-26 07:18:20,527     URL: ...game_date_gt=2025-05-01&game_date_lt=2025-05-31
+2026-03-26 07:18:58,887     2025_05: 25000 pitches pulled
+2026-03-26 07:18:58,901     2025_05: 199 pitcher-starts saved
+2026-03-26 07:19:01,911 
+  Chunk 2025_06 (2025-06-01 to 2025-06-30)...
+2026-03-26 07:19:01,912     URL: ...game_date_gt=2025-06-01&game_date_lt=2025-06-30
+2026-03-26 07:19:42,175     2025_06: 25000 pitches pulled
+2026-03-26 07:19:42,190     2025_06: 202 pitcher-starts saved
+2026-03-26 07:19:45,193 
+  Chunk 2025_07 (2025-07-01 to 2025-07-31)...
+2026-03-26 07:19:45,194     URL: ...game_date_gt=2025-07-01&game_date_lt=2025-07-31
+2026-03-26 07:20:26,212     2025_07: 25000 pitches pulled
+2026-03-26 07:20:26,226     2025_07: 201 pitcher-starts saved
+2026-03-26 07:20:29,237 
+  Chunk 2025_08 (2025-08-01 to 2025-08-31)...
+2026-03-26 07:20:29,237     URL: ...game_date_gt=2025-08-01&game_date_lt=2025-08-31
+2026-03-26 07:21:11,583     2025_08: 25000 pitches pulled
+2026-03-26 07:21:11,598     2025_08: 187 pitcher-starts saved
+2026-03-26 07:21:14,609 
+  Chunk 2025_09 (2025-09-01 to 2025-09-30)...
+2026-03-26 07:21:14,609     URL: ...game_date_gt=2025-09-01&game_date_lt=2025-09-30
+2026-03-26 07:21:54,912     2025_09: 25000 pitches pulled
+2026-03-26 07:21:54,926     2025_09: 190 pitcher-starts saved
+2026-03-26 07:21:57,936 
+  Chunk 2025_10 (2025-10-01 to 2025-10-05)...
+2026-03-26 07:21:57,937     URL: ...game_date_gt=2025-10-01&game_date_lt=2025-10-05
+2026-03-26 07:21:58,863     2025_10: no data (empty response)
+2026-03-26 07:21:58,863 
+  Merging chunks...
+2026-03-26 07:21:58,948   Merged: 5243 pitcher-starts
+2026-03-26 07:21:58,948 
+  VALIDATION REPORT
+2026-03-26 07:21:58,948 ============================================================
+2026-03-26 07:21:58,950   2022: 1341 starts, 347 pitchers
+2026-03-26 07:21:58,951   2023: 1286 starts, 364 pitchers
+2026-03-26 07:21:58,951     avg_exit_velo: 0.1% null
+2026-03-26 07:21:58,951     spin_rate_ff: 0.8% null
+2026-03-26 07:21:58,951     extension: 0.4% null
+2026-03-26 07:21:58,952   2024: 1291 starts, 359 pitchers
+2026-03-26 07:21:58,952     spin_rate_ff: 0.6% null
+2026-03-26 07:21:58,952     extension: 0.1% null
+2026-03-26 07:21:58,953   2025: 1325 starts, 356 pitchers
+2026-03-26 07:21:58,953     spin_rate_ff: 0.1% null
+2026-03-26 07:21:58,953 
+  Chunks: 32 complete, 0 failed out of 32
+2026-03-26 07:21:58,953   Phase 1 repair complete: 2026-03-26T07:21:58.953632
+2026-03-26 08:28:40,265 ============================================================
+2026-03-26 08:28:40,266 STATCAST WEEKLY RECOVERY
+2026-03-26 08:28:40,266 ============================================================
+2026-03-26 08:28:40,331   Existing starts: 5243
+2026-03-26 08:28:40,391   Existing dedup keys: 5243
+2026-03-26 08:28:40,393   Total weekly chunks: 116
+2026-03-26 08:28:40,393   Already complete: 0
+2026-03-26 08:28:40,393   Remaining: 116
+2026-03-26 08:29:05,647   w_2022_0403: 9668 pitches → 76 starts, 76 NEW
+2026-03-26 08:29:47,943   w_2022_0410: 25000 pitches → 212 starts, 212 NEW
+2026-03-26 08:30:28,875   w_2022_0417: 25000 pitches → 205 starts, 205 NEW
+2026-03-26 08:31:57,026   w_2022_0501: 25000 pitches → 188 starts, 188 NEW
+2026-03-26 08:32:42,258   w_2022_0508: 25000 pitches → 192 starts, 192 NEW
+2026-03-26 08:33:23,312   w_2022_0515: 25000 pitches → 199 starts, 199 NEW
+2026-03-26 08:34:06,620   w_2022_0522: 25000 pitches → 201 starts, 109 NEW
+2026-03-26 08:34:47,564   w_2022_0529: 25000 pitches → 192 starts, 130 NEW
+2026-03-26 08:35:28,751   w_2022_0605: 25000 pitches → 202 starts, 202 NEW
+2026-03-26 08:36:10,615   w_2022_0612: 25000 pitches → 193 starts, 193 NEW
+2026-03-26 08:36:53,647   w_2022_0619: 25000 pitches → 200 starts, 140 NEW
+2026-03-26 08:37:37,298   w_2022_0626: 25000 pitches → 204 starts, 72 NEW
+2026-03-26 08:38:26,505   w_2022_0703: 25000 pitches → 189 starts, 189 NEW
+2026-03-26 08:39:09,232   w_2022_0710: 25000 pitches → 186 starts, 186 NEW
+2026-03-26 08:39:33,033   w_2022_0717: 14252 pitches → 102 starts, 102 NEW
+2026-03-26 08:40:16,063   w_2022_0724: 25000 pitches → 203 starts, 40 NEW
+2026-03-26 08:41:00,164   w_2022_0731: 25000 pitches → 188 starts, 185 NEW
+2026-03-26 08:41:03,212   Checkpoint save: 7863 total starts, +2620 new
+2026-03-26 08:41:44,896   w_2022_0807: 25000 pitches → 194 starts, 194 NEW
+2026-03-26 08:42:27,312   w_2022_0814: 25000 pitches → 184 starts, 184 NEW
+2026-03-26 08:43:11,022   w_2022_0821: 25000 pitches → 207 starts, 137 NEW
+2026-03-26 08:43:57,392   w_2022_0828: 25000 pitches → 196 starts, 83 NEW
+2026-03-26 08:44:44,925   w_2022_0904: 25000 pitches → 201 starts, 201 NEW
+2026-03-26 08:45:30,100   w_2022_0911: 25000 pitches → 206 starts, 206 NEW
+2026-03-26 08:46:19,639   w_2022_0918: 25000 pitches → 199 starts, 168 NEW
+2026-03-26 08:48:18,570   w_2023_0327: 14707 pitches → 113 starts, 69 NEW
+2026-03-26 08:48:59,664   w_2023_0403: 25000 pitches → 202 starts, 202 NEW
+2026-03-26 08:49:39,695   w_2023_0410: 25000 pitches → 188 starts, 188 NEW
+2026-03-26 08:50:22,811   w_2023_0417: 25000 pitches → 199 starts, 199 NEW
+2026-03-26 08:51:49,911   w_2023_0501: 25000 pitches → 181 starts, 181 NEW
+2026-03-26 08:52:33,699   w_2023_0508: 25000 pitches → 201 starts, 201 NEW
+2026-03-26 08:53:15,139   w_2023_0515: 25000 pitches → 192 starts, 192 NEW
+2026-03-26 08:53:59,221   w_2023_0522: 25000 pitches → 190 starts, 89 NEW
+2026-03-26 08:54:44,452   w_2023_0529: 25000 pitches → 199 starts, 111 NEW
+2026-03-26 08:54:47,514   Checkpoint save: 10468 total starts, +5225 new
+2026-03-26 08:55:27,051   w_2023_0605: 25000 pitches → 184 starts, 184 NEW
+2026-03-26 08:56:09,267   w_2023_0612: 25000 pitches → 185 starts, 185 NEW
+2026-03-26 08:56:54,049   w_2023_0619: 25000 pitches → 195 starts, 136 NEW
+2026-03-26 08:57:37,650   w_2023_0626: 25000 pitches → 204 starts, 74 NEW
+2026-03-26 08:58:19,338   w_2023_0703: 25000 pitches → 191 starts, 191 NEW
+2026-03-26 08:58:45,415   w_2023_0710: 13877 pitches → 101 starts, 101 NEW
+2026-03-26 08:59:28,901   w_2023_0717: 25000 pitches → 182 starts, 182 NEW
+2026-03-26 09:00:15,827   w_2023_0724: 25000 pitches → 193 starts, 21 NEW
+2026-03-26 09:00:58,774   w_2023_0731: 25000 pitches → 186 starts, 186 NEW
+2026-03-26 09:01:44,185   w_2023_0807: 25000 pitches → 198 starts, 198 NEW
+2026-03-26 09:02:29,235   w_2023_0814: 25000 pitches → 206 starts, 206 NEW
+2026-03-26 09:03:12,020   w_2023_0821: 25000 pitches → 188 starts, 88 NEW
+2026-03-26 09:04:00,144   w_2023_0828: 25000 pitches → 197 starts, 105 NEW
+2026-03-26 09:04:47,385   w_2023_0904: 25000 pitches → 188 starts, 188 NEW
+2026-03-26 09:05:30,775   w_2023_0911: 25000 pitches → 191 starts, 191 NEW
+2026-03-26 09:06:16,493   w_2023_0918: 25000 pitches → 193 starts, 160 NEW
+2026-03-26 09:08:16,659   w_2024_0327: 23780 pitches → 192 starts, 66 NEW
+2026-03-26 09:08:19,705   Checkpoint save: 12930 total starts, +7687 new
+2026-03-26 09:09:06,396   w_2024_0403: 25000 pitches → 205 starts, 205 NEW
+2026-03-26 09:09:51,727   w_2024_0410: 25000 pitches → 196 starts, 196 NEW
+2026-03-26 09:10:37,028   w_2024_0417: 25000 pitches → 197 starts, 197 NEW
+2026-03-26 09:12:05,750   w_2024_0501: 25000 pitches → 203 starts, 203 NEW
+2026-03-26 09:12:50,681   w_2024_0508: 25000 pitches → 202 starts, 202 NEW
+2026-03-26 09:13:34,940   w_2024_0515: 25000 pitches → 202 starts, 202 NEW
+2026-03-26 09:14:18,326   w_2024_0522: 25000 pitches → 200 starts, 84 NEW
+2026-03-26 09:15:14,275   w_2024_0529: 25000 pitches → 198 starts, 119 NEW
+2026-03-26 09:15:57,609   w_2024_0605: 25000 pitches → 199 starts, 199 NEW
+2026-03-26 09:16:38,773   w_2024_0612: 25000 pitches → 201 starts, 201 NEW
+2026-03-26 09:17:22,344   w_2024_0619: 25000 pitches → 210 starts, 180 NEW
+2026-03-26 09:18:07,856   w_2024_0626: 25000 pitches → 192 starts, 36 NEW
+2026-03-26 09:19:00,862   w_2024_0703: 25000 pitches → 203 starts, 203 NEW
+2026-03-26 09:19:41,392   w_2024_0710: 21587 pitches → 159 starts, 159 NEW
+2026-03-26 09:20:19,690   w_2024_0717: 20752 pitches → 154 starts, 154 NEW
+2026-03-26 09:21:05,484   w_2024_0724: 25000 pitches → 190 starts, 26 NEW
+2026-03-26 09:21:47,434   w_2024_0731: 25000 pitches → 192 starts, 162 NEW
+2026-03-26 09:22:36,656   w_2024_0807: 25000 pitches → 192 starts, 192 NEW
+2026-03-26 09:23:22,359   w_2024_0814: 25000 pitches → 193 starts, 193 NEW
+2026-03-26 09:23:25,415   Checkpoint save: 16043 total starts, +10800 new
+2026-03-26 09:24:06,066   w_2024_0821: 25000 pitches → 196 starts, 137 NEW
+2026-03-26 09:24:49,904   w_2024_0828: 25000 pitches → 197 starts, 91 NEW
+2026-03-26 09:25:39,393   w_2024_0904: 25000 pitches → 201 starts, 201 NEW
+2026-03-26 09:26:23,054   w_2024_0911: 25000 pitches → 210 starts, 210 NEW
+2026-03-26 09:27:09,758   w_2024_0918: 25000 pitches → 197 starts, 159 NEW
+2026-03-26 09:28:50,066   w_2025_0327: 25000 pitches → 205 starts, 58 NEW
+2026-03-26 09:29:34,543   w_2025_0403: 25000 pitches → 190 starts, 190 NEW
+2026-03-26 09:30:19,282   w_2025_0410: 25000 pitches → 199 starts, 199 NEW
+2026-03-26 09:31:04,558   w_2025_0417: 25000 pitches → 190 starts, 190 NEW
+2026-03-26 09:32:37,696   w_2025_0501: 25000 pitches → 183 starts, 183 NEW
+2026-03-26 09:33:15,366   w_2025_0508 attempt 1 failed: HTTP 502
+2026-03-26 09:34:25,498   w_2025_0508: 25000 pitches → 192 starts, 192 NEW
+2026-03-26 09:35:09,043   w_2025_0515: 25000 pitches → 182 starts, 182 NEW
+2026-03-26 09:35:51,889   w_2025_0522: 25000 pitches → 191 starts, 70 NEW
+2026-03-26 09:36:36,572   w_2025_0529: 25000 pitches → 188 starts, 110 NEW
+2026-03-26 09:37:21,155   w_2025_0605: 25000 pitches → 194 starts, 194 NEW
+2026-03-26 09:38:07,410   w_2025_0612: 25000 pitches → 188 starts, 188 NEW
+2026-03-26 09:38:10,468   Checkpoint save: 18597 total starts, +13354 new
+2026-03-26 09:38:49,259   w_2025_0619: 25000 pitches → 184 starts, 123 NEW
+2026-03-26 09:39:37,901   w_2025_0626: 25000 pitches → 192 starts, 69 NEW
+2026-03-26 09:40:25,849   w_2025_0703: 25000 pitches → 198 starts, 198 NEW
+2026-03-26 09:40:55,541   w_2025_0710: 16461 pitches → 130 starts, 130 NEW
+2026-03-26 09:41:37,416   w_2025_0717: 25000 pitches → 198 starts, 198 NEW
+2026-03-26 09:42:20,063   w_2025_0724: 25000 pitches → 197 starts, 3 NEW
+2026-03-26 09:43:03,362   w_2025_0731: 25000 pitches → 198 starts, 198 NEW
+2026-03-26 09:43:48,914   w_2025_0807: 25000 pitches → 205 starts, 205 NEW
+2026-03-26 09:44:33,409   w_2025_0814: 25000 pitches → 202 starts, 202 NEW
+2026-03-26 09:45:16,567   w_2025_0821: 25000 pitches → 196 starts, 131 NEW
+2026-03-26 09:46:01,901   w_2025_0828: 25000 pitches → 194 starts, 94 NEW
+2026-03-26 09:46:46,719   w_2025_0904: 25000 pitches → 192 starts, 192 NEW
+2026-03-26 09:47:28,178   w_2025_0911: 25000 pitches → 189 starts, 189 NEW
+2026-03-26 09:48:13,749   w_2025_0918: 25000 pitches → 196 starts, 133 NEW
+2026-03-26 09:48:52,225 
+============================================================
+2026-03-26 09:48:52,225 COVERAGE REPORT
+2026-03-26 09:48:52,225 ============================================================
+2026-03-26 09:48:52,231   Starts before recovery: 5243
+2026-03-26 09:48:52,231   Starts after recovery:  20662
+2026-03-26 09:48:52,231   New starts added:       15419
+2026-03-26 09:48:52,248   2022: 5134/4860 (105.6%)
+2026-03-26 09:48:52,251   2023: 5114/4860 (105.2%)
+2026-03-26 09:48:52,253   2024: 5268/4854 (108.5%)
+2026-03-26 09:48:52,256   2025: 5146/4856 (106.0%)
+2026-03-26 09:48:52,256 
+  Field null rates:
+2026-03-26 09:48:52,256     hard_hit_rate: 0.0%
+2026-03-26 09:48:52,257     barrel_rate: 0.0%
+2026-03-26 09:48:52,257     chase_rate: 0.0%
+2026-03-26 09:48:52,257     zone_rate: 0.0%
+2026-03-26 09:48:52,257     whiff_rate: 0.0%
+2026-03-26 09:48:52,257     avg_exit_velo: 0.0%
+2026-03-26 09:48:52,257     spin_rate_ff: 0.3%
+2026-03-26 09:48:52,257     extension: 0.1%
+2026-03-26 09:48:52,257 
+  Chunks: 116 complete, 0 failed
+2026-03-26 09:48:52,257   Recovery complete: 2026-03-26T09:48:52.257407

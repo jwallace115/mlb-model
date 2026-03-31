@@ -1,0 +1,145 @@
+MLB BACKWARDS DISCOVERY — PHASE X3 BLIND FEATURE SCAN
+Run date: 2026-03-24
+Total rows: 9715  |  With closing_line: 8766
+Train: 3911  |  Val: 2427  |  Holdout: 2428
+Pregame features scanned: 94
+  Continuous: 85  |  Binary: 9
+Train non-extras: 3563
+
+====================================================================================================
+MODE 1 — DIRECTIONAL CANDIDATES (top 30 by |effect_size|)
+====================================================================================================
+Rank  Feature                                   eff_size        p        q   BO_over      near   BO_under mono  Type  Stable   Known     
+----------------------------------------------------------------------------------------------------
+1     home_high_leverage_available                1.1384   0.0019        -    0.3783    0.3323     0.2982 -     BIN   -        KNOWN     
+2     away_high_leverage_available                1.0952   0.1039        -    0.4109    0.3752     0.3457 -     BIN   -        KNOWN     
+3     away_sp_tto_flag                            1.0117   0.4484        -    0.5430    0.5368     0.5792 -     BIN   -        NEW       
+4     same_handed_starters                        1.0070   0.7747        -    0.6145    0.6103     0.5863 -     BIN   -        NEW       
+5     home_rolling_complete                       1.0006   0.9025        -    0.7194    0.7189     0.7114 -     BIN   -        NEW       
+6     home_sp_tto_flag                            0.9824   0.0721        -    0.5345    0.5441     0.5981 -     BIN   -        NEW       
+7     away_rolling_complete                       0.9818   0.5929        -    0.7171    0.7304     0.7049 -     BIN   -        NEW       
+8     both_complete                               0.9784   0.9101        -    0.6000    0.6132     0.5910 -     BIN   -        NEW       
+9     doubleheader_flag                           0.7327   0.7236        -    0.0388    0.0529     0.0437 -     BIN   -        KNOWN     
+10    home_csw_pct                               -0.3468   0.0000   0.0000   26.5616   27.3410    28.4280 DOWN  DIR   STABLE   NEW        ***
+11    away_csw_pct                               -0.3132   0.0000   0.0000   25.8848   26.5819    27.4888 DOWN  DIR   STABLE   NEW        ***
+12    away_whiff_pct                             -0.2367   0.0001   0.0002   20.7414   22.0434    22.6973 NO    DIR   STABLE   NEW        ***
+13    away_f_strike_pct                          -0.2148   0.0023   0.0037   59.7615   61.3423    62.1575 NO    DIR   STABLE   NEW        ***
+14    home_whiff_pct                             -0.2107   0.0013   0.0027   21.9388   22.2270    23.7358 NO    DIR   STABLE   NEW        ***
+15    home_lineup_delta                          -0.1892   0.0069   0.0092   -0.0012    0.0005     0.0034 NO    DIR   STABLE   NEW        ***
+16    home_f_strike_pct                          -0.1660   0.0163   0.0186   61.2013   62.0562    63.0283 DOWN  DIR   STABLE   NEW        ***
+17    away_lineup_delta                          -0.1603   0.0193   0.0193   -0.0022    0.0007     0.0016 DOWN  DIR   STABLE   NEW        ***
+18    home_bp_interaction                         0.1440   0.0123        -    3.3803    3.3760     3.2789 NO    DIR   -        KNOWN     
+19    k_environment                               0.1438   0.0309        -    0.4545    0.4507     0.4501 NO    DIR   -        NEW       
+20    home_sp_siera                               0.1430   0.0338        -    4.3099    4.2644     4.2340 NO    DIR   -        KNOWN     
+21    home_sp_xfip                                0.1430   0.0338        -    4.3099    4.2644     4.2340 NO    DIR   -        KNOWN     
+22    home_sp_avg_ip                             -0.1399   0.0113        -    5.5917    5.5907     5.6899 NO    VAR   -        KNOWN     
+23    home_bp_proj_inn                            0.1399   0.0113        -    3.4083    3.4093     3.3101 NO    VAR   -        KNOWN     
+24    away_lineup_k_pct                           0.1371   0.1206        -    0.2279    0.2259     0.2250 UP    DIR   -        NEW       
+25    temperature                                 0.1337   0.1762        -   72.8735   72.1162    71.5704 UP    DIR   -        KNOWN     
+26    home_lineup_woba                           -0.1313   0.0584        -    0.3163    0.3169     0.3197 NO    DIR   -        NEW       
+27    away_sp_siera                               0.1295   0.1527        -    4.3110    4.2737     4.2421 NO    DIR   -        KNOWN     
+28    away_sp_xfip                                0.1295   0.1527        -    4.3110    4.2737     4.2421 NO    DIR   -        KNOWN     
+29    home_fb_velo                               -0.1174   0.0156        -   92.5789   92.5223    92.8694 NO    VAR   -        NEW       
+30    away_lineup_iso                            -0.1146   0.1463        -    0.1547    0.1553     0.1580 NO    DIR   -        NEW       
+
+Total Mode 1 flagged: 8
+
+====================================================================================================
+MODE 2 — VARIANCE CANDIDATES (top 20 by |r|)
+====================================================================================================
+Rank  Feature                                   r_abs_err   AE_Q4   AE_Q1   P(AE4)Q4   P(AE4)Q1   ratio Stable  
+----------------------------------------------------------------------------------------------------
+1     home_bp_xfip                                 0.0495   3.618   3.081     0.3785     0.3223   1.174 STABLE   ***
+2     home_sp_ra_std                               0.0479   3.682   3.295     0.3996     0.3575   1.118 STABLE   ***
+3     away_wrc_plus                                0.0458   3.453   3.131     0.3672     0.3262   1.126 STABLE   ***
+4     away_whiff_pct                              -0.0397   3.254   3.527     0.3393     0.3798   0.893 STABLE   ***
+5     wind_direction                               0.0380   3.556   3.266     0.3855     0.3430   1.124 UNSTABLE ***
+6     park_factor_hr                               0.0379   3.517   3.356     0.3692     0.3630   1.017 STABLE   ***
+7     park_factor_runs                             0.0379   3.517   3.356     0.3692     0.3630   1.017 STABLE   ***
+8     temperature                                  0.0356   3.516   3.262     0.3757     0.3579   1.050 STABLE   ***
+9     k_environment                                0.0346   3.503   3.288     0.3782     0.3378   1.120 STABLE   ***
+10    home_lineup_k_pct                            0.0342   3.419   3.353     0.3636     0.3547   1.025 STABLE   ***
+11    home_csw_r5                                 -0.0339   3.292   3.479     0.3373     0.3613   0.934 STABLE   ***
+12    home_sp_siera                                0.0334   3.476   3.260     0.3651     0.3544   1.030 STABLE   ***
+13    home_sp_xfip                                 0.0334   3.476   3.260     0.3651     0.3544   1.030 STABLE   ***
+14    away_csw_pct                                -0.0299   3.275   3.526     0.3537     0.3679   0.961 -       
+15    home_csw_pct                                -0.0293   3.296   3.530     0.3497     0.3668   0.953 -       
+16    away_f_strike_pct                           -0.0281   3.300   3.479     0.3508     0.3720   0.943 -       
+17    wind_factor_effective                        0.0269   3.517   3.366     0.3760     0.3648   1.031 -       
+18    home_sp_fip_L5                               0.0265   3.649   3.332     0.3838     0.3457   1.110 -       
+19    home_whiff_season                           -0.0231   3.413   3.471     0.3637     0.3589   1.013 -       
+20    home_whiff_r5                               -0.0229   3.351   3.475     0.3469     0.3577   0.970 -       
+
+Total Mode 2 flagged: 14
+
+====================================================================================================
+MODE 3 — TAIL AMPLIFIER CANDIDATES (top 15)
+====================================================================================================
+Rank  Feature                                    P(+3)Q4   P(+3)Q1  R_ratio   P(-3)Q4   P(-3)Q1  L_ratio Class       Stable  
+----------------------------------------------------------------------------------------------------
+1     home_csw_pct                                0.2171    0.3205    0.677    0.2884    0.1693    1.704 LEFT_TAIL   STABLE  
+2     away_csw_pct                                0.2169    0.3188    0.680    0.2892    0.1784    1.621 LEFT_TAIL   STABLE  
+3     away_whiff_pct                              0.2206    0.2990    0.738    0.2688    0.2004    1.341 LEFT_TAIL   STABLE  
+4     home_f_strike_pct                           0.2508    0.2848    0.881    0.2688    0.2052    1.310 LEFT_TAIL   STABLE  
+
+====================================================================================================
+INTERACTION CANDIDATES (Step 4)
+====================================================================================================
+Interaction pool: 12 features
+  Directional: ['home_csw_pct', 'away_csw_pct', 'away_whiff_pct', 'away_f_strike_pct', 'home_whiff_pct', 'home_lineup_delta', 'home_f_strike_pct', 'away_lineup_delta']
+  Variance: ['home_bp_xfip', 'home_sp_ra_std', 'away_wrc_plus', 'away_whiff_pct', 'park_factor_hr']
+
+No pairs met criteria (N>=25, |ME|>=1.0, p<0.15)
+
+====================================================================================================
+LINE BAND BREAKDOWN (Step 5)
+====================================================================================================
+Line bands found: ['high', 'low', 'mid', 'very_high']
+Features to test: 8
+
+Feature                                      r_high      r_low      r_mid r_very_high concentrated   
+---------------------------------------------------------------------------------------------------
+away_csw_pct                                -0.1218    -0.0893    -0.0974    -0.1690 NO             
+away_f_strike_pct                           -0.0556    -0.0927    -0.0783    -0.1345 NO             
+away_lineup_delta                           -0.0103    -0.0705    -0.0622    -0.0143 NO             
+away_whiff_pct                              -0.1280    -0.0604    -0.0774    -0.1015 NO             
+home_csw_pct                                -0.1237    -0.1566    -0.1235    -0.0341 NO             
+home_f_strike_pct                           -0.0660    -0.0861    -0.0371    -0.0181 NO             
+home_lineup_delta                           -0.0417    -0.0268    -0.0852    -0.1061 NO             
+home_whiff_pct                              -0.0795    -0.0681    -0.0936    -0.0369 NO             
+
+====================================================================================================
+HYPOTHESIS SUMMARY
+====================================================================================================
+
+Top 10 Directional Candidates:
+Rank  Feature                                   eff_size Mechanism                                Status      
+----------------------------------------------------------------------------------------------------
+1     home_csw_pct                               -0.3468 Pitch quality → suppression signal       NEW         
+2     away_csw_pct                               -0.3132 Pitch quality → suppression signal       NEW         
+3     away_whiff_pct                             -0.2367 Pitch quality → suppression signal       NEW         
+4     away_f_strike_pct                          -0.2148 Pitch quality → suppression signal       NEW         
+5     home_whiff_pct                             -0.2107 Pitch quality → suppression signal       NEW         
+6     home_lineup_delta                          -0.1892 Lineup quality → platoon/matchup         NEW         
+7     home_f_strike_pct                          -0.1660 Pitch quality → suppression signal       NEW         
+8     away_lineup_delta                          -0.1603 Lineup quality → platoon/matchup         NEW         
+
+Top 5 Variance Candidates:
+Rank  Feature                                   r_abs_err Mechanism                                         
+----------------------------------------------------------------------------------------------------
+1     home_bp_xfip                                 0.0495 SP innings depth → bullpen exposure variance      
+2     home_sp_ra_std                               0.0479 SP run-allowed volatility → outcome variance      
+3     away_wrc_plus                                0.0458 Unknown variance mechanism                        
+4     away_whiff_pct                              -0.0397 Unknown variance mechanism                        
+5     wind_direction                               0.0380 Weather extremes → unpredictable conditions       
+
+Top 3 Tail Amplifier Candidates:
+Rank  Feature                                  Class         max_ratio Mechanism                               
+----------------------------------------------------------------------------------------------------
+1     home_csw_pct                             LEFT_TAIL         1.704 Unknown tail mechanism                  
+2     away_csw_pct                             LEFT_TAIL         1.621 Unknown tail mechanism                  
+3     away_whiff_pct                           LEFT_TAIL         1.341 Unknown tail mechanism                  
+
+====================================================================================================
+IMPORTANT: Discovery only. All candidates require independent validation.
+====================================================================================================

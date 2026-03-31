@@ -1,0 +1,254 @@
+MASTER SUMMARY
+===========================================================================
+
+A1 — Fast pace
+  Label: EXCLUDED
+  Direction: OVER
+  N discovery: 30
+  ROI combined: +27.3%
+  Gate: Already validated Phase 6
+
+K1 — Extreme totals
+  Label: FAIL
+  Direction: OVER
+  N discovery: 11
+  N per season: 22-23=1, 23-24=10
+  ROI 22-23: +90.9%
+  ROI 23-24: -23.6%
+  ROI combined: -13.2%
+  Delta vs base: -18.8pp
+  Gate: N=11 < 50
+
+K4 — Mutual B2B
+  Label: FAIL
+  Direction: OVER
+  N discovery: 4
+  N per season: 22-23=1, 23-24=3
+  ROI 22-23: +90.9%
+  ROI 23-24: +90.9%
+  ROI combined: +90.9%
+  Delta vs base: +85.3pp
+  Gate: N=4 < 50
+
+K5 — Large line movement
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+K6 — Both teams low pace
+  Label: FAIL
+  Direction: OVER
+  N discovery: 16
+  N per season: 22-23=3, 23-24=13
+  ROI 22-23: -36.4%
+  ROI 23-24: -41.3%
+  ROI combined: -40.3%
+  Delta vs base: -45.9pp
+  Gate: N=16 < 50
+
+K7 — Hook number totals
+  Label: FAIL
+  Direction: OVER
+  N discovery: 29
+  N per season: 22-23=19, 23-24=10
+  ROI 22-23: -19.6%
+  ROI 23-24: -4.5%
+  ROI combined: -14.4%
+  Delta vs base: -20.0pp
+  Gate: N=29 < 50
+
+K8 — National TV games
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Broadcast data not in features.parquet
+
+K9 — B2B after OT
+  Label: SKIPPED
+  Direction: BOTH
+  N discovery: 0
+  Gate: Previous game OT data not in features.parquet
+
+M1 — Line moved toward model
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+M5 — Stable opener
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+M7 — Soft opener
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+M2 — Recency over-reaction (high)
+  Label: SKIPPED
+  Direction: UNDER
+  N discovery: 0
+  Gate: Prior game actual total not in features.parquet
+
+M3 — Recency over-reaction (low)
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Prior game actual total not in features.parquet
+
+M4 — Star player first game back
+  Label: SKIPPED
+  Direction: UNDER
+  N discovery: 0
+  Gate: Injury return data not available
+
+M6 — Large market home (OVER)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 30
+  N per season: 22-23=16, 23-24=14
+  ROI 22-23: -28.4%
+  ROI 23-24: +9.1%
+  ROI combined: -10.9%
+  Delta vs base: -16.5pp
+  Gate: N=30 < 50
+
+M6u — Large market home (UNDER)
+  Label: FAIL
+  Direction: UNDER
+  N discovery: 32
+  N per season: 22-23=17, 23-24=15
+  ROI 22-23: -21.4%
+  ROI 23-24: -36.4%
+  ROI combined: -28.4%
+  Delta vs base: -34.0pp
+  Gate: N=32 < 50
+
+M8 — High public betting %
+  Label: SKIPPED
+  Direction: BOTH
+  N discovery: 0
+  Gate: Public betting % data not available. HIGH PRIORITY.
+
+M9 — Anchored matchup total
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Prior matchup history requires complex build
+
+M10 — Multi-factor (pace+total band)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 17
+  N per season: 22-23=11, 23-24=6
+  ROI 22-23: +38.8%
+  ROI 23-24: -4.5%
+  ROI combined: +23.5%
+  Delta vs base: +17.9pp
+  Gate: N=17 < 50
+
+A2 — Mid-range total (215-230)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 108
+  N per season: 22-23=64, 23-24=44
+  ROI 22-23: -10.5%
+  ROI 23-24: -8.9%
+  ROI combined: -9.8%
+  Delta vs base: -15.4pp
+  Gate: ROI -9.8% < 8.0%
+
+A2a — Total 215-222
+  Label: FAIL
+  Direction: OVER
+  N discovery: 25
+  N per season: 22-23=11, 23-24=14
+  ROI 22-23: +4.1%
+  ROI 23-24: -59.1%
+  ROI combined: -31.3%
+  Delta vs base: -36.9pp
+  Gate: N=25 < 50
+
+A2b — Total 222-230
+  Label: FAIL
+  Direction: OVER
+  N discovery: 83
+  N per season: 22-23=53, 23-24=30
+  ROI 22-23: -13.6%
+  ROI 23-24: +14.5%
+  ROI combined: -3.4%
+  Delta vs base: -9.0pp
+  Gate: ROI -3.4% < 8.0%
+
+A3 — Line stability amplifier
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+A4 — Defensive mismatch
+  Label: FAIL
+  Direction: OVER
+  N discovery: 3
+  N per season: 22-23=1, 23-24=2
+  ROI 22-23: +90.9%
+  ROI 23-24: +90.9%
+  ROI combined: +90.9%
+  Delta vs base: +85.3pp
+  Gate: N=3 < 50
+
+A5 — Pace + total 220-230
+  Label: FAIL
+  Direction: OVER
+  N discovery: 17
+  N per season: 22-23=11, 23-24=6
+  ROI 22-23: +38.8%
+  ROI 23-24: -4.5%
+  ROI combined: +23.5%
+  Delta vs base: +17.9pp
+  Gate: N=17 < 50
+
+A6 — High foul rate referee
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Referee assignment + foul rate data not available
+
+A7 — Home hot offensive form
+  Label: FAIL
+  Direction: OVER
+  N discovery: 47
+  N per season: 22-23=28, 23-24=19
+  ROI 22-23: -18.2%
+  ROI 23-24: -9.6%
+  ROI combined: -14.7%
+  Delta vs base: -20.3pp
+  Gate: N=47 < 50
+
+A8 — Mutual rest (3+ days)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 5
+  N per season: 22-23=4, 23-24=1
+  ROI 22-23: -100.0%
+  ROI 23-24: -100.0%
+  ROI combined: -100.0%
+  Delta vs base: -105.6pp
+  Gate: N=5 < 50
+
+A9 — Late season playoff race
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Standings snapshot data not available
+
+A10 — Regression lean (consec unders)
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Prior game over/under sequence not in features
+

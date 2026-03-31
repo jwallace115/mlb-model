@@ -1,0 +1,62 @@
+=================================================================
+  NBA PHASE 6B — 2025-26 RS BACKFILL SUMMARY
+=================================================================
+
+  DATA LIMITATION:
+  The 2025-26 NBA model runs LIVE each morning via run_nba.py.
+  Model predictions are NOT stored historically in predictions.parquet.
+  Only the last ~5 days of projections exist in daily_projections.parquet.
+  
+  A full-season backfill (Oct 2025 → present) would require re-running
+  the model for ~170 game dates with live API calls (box stats, odds,
+  injuries) — not feasible in a single analysis session.
+  
+  This backfill covers ONLY the dates with stored projections:
+  2026-03-14 to 2026-03-19
+  (4 game dates, 7 qualifying games)
+
+  1. OVERALL BACKFILL RESULTS:
+
+    N: 6
+    Wins: 3, Losses: 3, Pushes: 0
+    Hit rate: 50.0%
+    ROI: -4.5%
+    Avg |model_edge|: 0.38
+    Date range: 2026-03-14 to 2026-03-18
+
+  2. OVERLAY SPLIT:
+    Fast pace overlay: N=1, hit=100.0%, ROI=+90.9%
+    Non-overlay: N=5, hit=40.0%, ROI=-23.6%
+
+  3. EDGE SUB-BUCKETS:
+    0.00-0.25: N=4, hit=75.0%, ROI=+43.2%
+    0.25-0.50: N=0
+    0.50-0.75: N=1, hit=0.0%, ROI=-100.0%
+    0.75-1.00: N=1, hit=0.0%, ROI=-100.0%
+
+  4. MONTHLY BREAKDOWN:
+    2026-03: N=6, hit=50.0%, ROI=-4.5%
+
+  5. COMPARISON CONTEXT:
+    2022-23: -9.9% ROI (197 bets)
+    2023-24: -17.2% ROI (159 bets)
+    2024-25: +5.6% ROI (179 bets)
+    2025-26 (partial, 6 bets): -4.5%
+    
+    2025-26 sample too small to classify regime
+    
+    IMPORTANT: This covers only 4 game dates (6 bets).
+    A full-season backfill requires stored model predictions for
+    every game date from October 2025, which do not currently exist.
+    
+    RECOMMENDATION: To enable full-season replay, the daily pipeline
+    should persist each day's projections to a cumulative file:
+      nba/data/nba_projections_archive_2025_26.parquet
+    This would allow retroactive backfill analysis at any time.
+
+  INTEGRITY CHECKS:
+    Duplicate game_ids: 0 ✅
+    Null results (completed games): 0 ✅
+    Same filter as Phase 6 live: 0-1 edge, pace overlay ✅
+    Live RS/PO files modified: NO ✅
+    Playoff games included: NO ✅

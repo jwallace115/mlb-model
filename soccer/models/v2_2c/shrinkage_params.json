@@ -1,0 +1,6 @@
+{
+  "alpha": 0.66,
+  "method": "market_shrinkage",
+  "formula": "P_final = P_market + alpha * (P_model - P_market)",
+  "fit_on": "validation_grid_search"
+}

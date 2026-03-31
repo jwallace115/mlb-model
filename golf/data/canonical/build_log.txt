@@ -1,0 +1,49 @@
+GOLF PHASE 1 — CANONICAL BUILD LOG
+============================================================
+
+1. DATASET SIZES
+  events: 320 rows
+  player_rounds: 125346 rows
+  tournament_results: 40369 rows
+  odds_outrights: 339944 rows
+  odds_matchups: 124276 rows
+  predictions: 32000 rows
+
+2. COVERAGE MATRIX
+  Year | Events | +Rounds | +Odds | +Preds | Rnds+Odds
+  2019 |     48 |      48 |    42 |      0 |        42
+  2020 |     38 |      38 |    38 |     33 |        38
+  2021 |     47 |      47 |    47 |     41 |        47
+  2022 |     46 |      46 |    46 |     45 |        46
+  2023 |     45 |      45 |    45 |     43 |        45
+  2024 |     49 |      49 |    49 |     46 |        49
+  2025 |     47 |      47 |    47 |     43 |        47
+
+3. SG COMPLETENESS
+  2019: 77.4% of rounds with complete SG
+  2020: 77.9% of rounds with complete SG
+  2021: 80.8% of rounds with complete SG
+  2022: 82.1% of rounds with complete SG
+  2023: 78.7% of rounds with complete SG
+  2024: 84.0% of rounds with complete SG
+  2025: 79.9% of rounds with complete SG
+
+4. AVG OVERROUND BY BOOK (top_20)
+  draftkings: 2463.0%
+  fanduel: 2380.5%
+  pinnacle: 2317.6%
+
+5. DEAD HEAT RATE BY MARKET
+  top_5: 1.6% dead heat
+  top_10: 2.5% dead heat
+  top_20: 3.7% dead heat
+
+6. MATCHUP VOID RATE: 5.9%
+
+7. PHASE READINESS
+  Phase 2 (ΔR²): 249 events with preds+odds
+  Phase 3 (rank bucket): 307 events with rounds+odds
+  Phase 5 (matchups): 300 events with matchup odds
+  Phase 8 (weather): 320 events with tee times
+
+  Player lookup: 1786 unique dg_ids

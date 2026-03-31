@@ -1,0 +1,228 @@
+MLB Backwards Discovery Dataset — Column Inventory
+======================================================================
+Total: 9715 rows x 224 columns
+
+   1. game_pk                                            int64          9715/9715 (100.0%)  mean=725775.9739, std=42355.7694
+   2. date                                               object         9715/9715 (100.0%)  nunique=727
+   3. season                                             int64          9715/9715 (100.0%)  mean=2023.4995, std=1.1181
+   4. home_team                                          object         9715/9715 (100.0%)  nunique=30
+   5. away_team                                          object         9715/9715 (100.0%)  nunique=30
+   6. home_score                                         int64          9715/9715 (100.0%)  mean=4.4446, std=3.0835
+   7. away_score                                         int64          9715/9715 (100.0%)  mean=4.4256, std=3.2512
+   8. actual_total                                       int64          9715/9715 (100.0%)  mean=8.8702, std=4.4781
+   9. actual_f5_total                                    float64        9713/9715 (100.0%)  mean=4.9974, std=3.3447
+  10. venue_id                                           int64          9715/9715 (100.0%)  mean=1590.7024, std=1701.7322
+  11. venue_name                                         object         9715/9715 (100.0%)  nunique=42
+  12. park_id                                            int64          9715/9715 (100.0%)  mean=1590.7024, std=1701.7322
+  13. home_rest_days                                     int64          9715/9715 (100.0%)  mean=1.1699, std=0.5763
+  14. away_rest_days                                     int64          9715/9715 (100.0%)  mean=1.1620, std=0.5683
+  15. doubleheader_flag                                  int64          9715/9715 (100.0%)  mean=0.0334, std=0.1796
+  16. game_number                                        int64          9715/9715 (100.0%)  mean=1.0165, std=0.1273
+  17. temperature                                        float64        9715/9715 (100.0%)  mean=72.0462, std=9.7537
+  18. wind_speed                                         float64        9715/9715 (100.0%)  mean=6.2966, std=4.9524
+  19. wind_direction                                     float64        9715/9715 (100.0%)  mean=150.9504, std=117.5467
+  20. roof_status                                        object         9715/9715 (100.0%)  nunique=3
+  21. park_factor_runs                                   int64          9715/9715 (100.0%)  mean=100.4661, std=4.8505
+  22. park_factor_hr                                     int64          9715/9715 (100.0%)  mean=100.4661, std=4.8505
+  23. umpire_name                                        object         9715/9715 (100.0%)  nunique=111
+  24. umpire_id                                          int64          9715/9715 (100.0%)  mean=516064.9162, std=77901.0184
+  25. umpire_over_rate                                   float64        9715/9715 (100.0%)  mean=0.9993, std=0.0105
+  26. umpire_k_rate                                      float64        9715/9715 (100.0%)  mean=0.0003, std=0.0058
+  27. game_hour_utc                                      int64          9715/9715 (100.0%)  mean=15.4196, std=8.8730
+  28. local_start_hour                                   float64        7447/9715 ( 76.7%)  mean=16.4776, std=2.6196
+  29. innings_played                                     int64          9715/9715 (100.0%)  mean=9.1152, std=0.4855
+  30. completed_early                                    bool           9715/9715 (100.0%)  nunique=2
+  31. closing_line                                       float64        8766/9715 ( 90.2%)  mean=8.4229, std=0.9519
+  32. market_error                                       float64        8766/9715 ( 90.2%)  mean=0.4488, std=4.3693
+  33. abs_error                                          float64        8766/9715 ( 90.2%)  mean=3.4108, std=2.7673
+  34. extra_innings                                      int64          9715/9715 (100.0%)  mean=0.0867, std=0.2814
+  35. outcome_bucket                                     object         8766/9715 ( 90.2%)  nunique=5
+  36. home_sp_id                                         int64          9715/9715 (100.0%)  mean=629896.7534, std=62179.4172
+  37. home_sp_name                                       object         9715/9715 (100.0%)  nunique=639
+  38. home_sp_throws                                     object         9715/9715 (100.0%)  nunique=2
+  39. home_sp_xfip                                       float64        9715/9715 (100.0%)  mean=4.2495, std=0.5156
+  40. home_sp_siera                                      float64        9715/9715 (100.0%)  mean=4.2495, std=0.5156
+  41. home_sp_k_pct                                      float64        9715/9715 (100.0%)  mean=0.2225, std=0.0289
+  42. home_sp_bb_pct                                     float64        9715/9715 (100.0%)  mean=0.0796, std=0.0133
+  43. home_sp_gb_pct                                     object            0/9715 (  0.0%)  nunique=0
+  44. home_sp_avg_ip                                     float64        9715/9715 (100.0%)  mean=5.6146, std=0.6760
+  45. home_sp_tto_flag                                   int64          9715/9715 (100.0%)  mean=0.5513, std=0.4974
+  46. home_sp_fallback                                   int64          9715/9715 (100.0%)  mean=0.0000, std=0.0000
+  47. away_sp_id                                         int64          9715/9715 (100.0%)  mean=630616.2871, std=61841.9040
+  48. away_sp_name                                       object         9715/9715 (100.0%)  nunique=661
+  49. away_sp_throws                                     object         9715/9715 (100.0%)  nunique=2
+  50. away_sp_xfip                                       float64        9715/9715 (100.0%)  mean=4.2501, std=0.5116
+  51. away_sp_siera                                      float64        9715/9715 (100.0%)  mean=4.2501, std=0.5116
+  52. away_sp_k_pct                                      float64        9715/9715 (100.0%)  mean=0.2222, std=0.0287
+  53. away_sp_bb_pct                                     float64        9715/9715 (100.0%)  mean=0.0796, std=0.0133
+  54. away_sp_gb_pct                                     object            0/9715 (  0.0%)  nunique=0
+  55. away_sp_avg_ip                                     float64        9715/9715 (100.0%)  mean=5.6175, std=0.6831
+  56. away_sp_tto_flag                                   int64          9715/9715 (100.0%)  mean=0.5519, std=0.4973
+  57. away_sp_fallback                                   int64          9715/9715 (100.0%)  mean=0.0003, std=0.0304
+  58. home_wrc_plus                                      float64        9715/9715 (100.0%)  mean=99.2488, std=4.1153
+  59. home_wrc_fallback                                  int64          9715/9715 (100.0%)  mean=0.0000, std=0.0000
+  60. away_wrc_plus                                      float64        9715/9715 (100.0%)  mean=99.2477, std=4.1149
+  61. away_wrc_fallback                                  int64          9715/9715 (100.0%)  mean=0.0000, std=0.0000
+  62. home_bp_xfip                                       float64        9715/9715 (100.0%)  mean=4.2141, std=0.0885
+  63. home_bp_proj_inn                                   float64        9715/9715 (100.0%)  mean=3.3854, std=0.6760
+  64. home_bp_interaction                                float64        9715/9715 (100.0%)  mean=3.3576, std=0.6790
+  65. home_bp_fallback                                   int64          9715/9715 (100.0%)  mean=0.0000, std=0.0000
+  66. away_bp_xfip                                       float64        9715/9715 (100.0%)  mean=4.2141, std=0.0886
+  67. away_bp_proj_inn                                   float64        9715/9715 (100.0%)  mean=3.3825, std=0.6831
+  68. away_bp_interaction                                float64        9715/9715 (100.0%)  mean=3.3550, std=0.6874
+  69. away_bp_fallback                                   int64          9715/9715 (100.0%)  mean=0.0000, std=0.0000
+  70. wind_factor_effective                              float64        9715/9715 (100.0%)  mean=0.7495, std=5.8816
+  71. home_lineup_woba                                   float64        9715/9715 (100.0%)  mean=0.3164, std=0.0263
+  72. away_lineup_woba                                   float64        9715/9715 (100.0%)  mean=0.3161, std=0.0272
+  73. home_lineup_iso                                    float64        9715/9715 (100.0%)  mean=0.1560, std=0.0296
+  74. away_lineup_iso                                    float64        9715/9715 (100.0%)  mean=0.1554, std=0.0293
+  75. home_lineup_k_pct                                  float64        9715/9715 (100.0%)  mean=0.2247, std=0.0215
+  76. away_lineup_k_pct                                  float64        9715/9715 (100.0%)  mean=0.2248, std=0.0216
+  77. home_lineup_delta                                  float64        9715/9715 (100.0%)  mean=0.0015, std=0.0240
+  78. away_lineup_delta                                  float64        9715/9715 (100.0%)  mean=0.0011, std=0.0242
+  79. home_sp_fip_L5                                     float64        9715/9715 (100.0%)  mean=4.4940, std=2.8557
+  80. away_sp_fip_L5                                     float64        9715/9715 (100.0%)  mean=4.4342, std=2.4070
+  81. home_sp_k9_L5                                      float64        9715/9715 (100.0%)  mean=8.7149, std=2.1443
+  82. away_sp_k9_L5                                      float64        9715/9715 (100.0%)  mean=8.7248, std=2.1691
+  83. home_sp_era_trend                                  float64        9715/9715 (100.0%)  mean=0.0669, std=3.8784
+  84. away_sp_era_trend                                  float64        9715/9715 (100.0%)  mean=-0.0102, std=4.0024
+  85. home_sp_ra_std                                     float64        9715/9715 (100.0%)  mean=1.4913, std=0.9888
+  86. away_sp_ra_std                                     float64        9715/9715 (100.0%)  mean=1.4792, std=0.9890
+  87. home_player_name                                   object         7048/9715 ( 72.5%)  nunique=438
+  88. away_player_name                                   object         9303/9715 ( 95.8%)  nunique=519
+  89. home_pitcher_hand                                  object         7048/9715 ( 72.5%)  nunique=2
+  90. away_pitcher_hand                                  object         9303/9715 ( 95.8%)  nunique=2
+  91. home_k_pct_r5                                      float64        5019/9715 ( 51.7%)  mean=0.2216, std=0.0592
+  92. home_bb_pct_r5                                     float64        5019/9715 ( 51.7%)  mean=0.0760, std=0.0304
+  93. home_kbb_pct_r5                                    float64        5019/9715 ( 51.7%)  mean=0.1456, std=0.0697
+  94. home_k_per_9_r5                                    float64        5019/9715 ( 51.7%)  mean=8.6042, std=2.1306
+  95. home_ip_r5                                         float64        5019/9715 ( 51.7%)  mean=5.4063, std=0.6756
+  96. away_k_pct_r5                                      float64        6854/9715 ( 70.6%)  mean=0.2219, std=0.0605
+  97. away_bb_pct_r5                                     float64        6854/9715 ( 70.6%)  mean=0.0755, std=0.0304
+  98. away_kbb_pct_r5                                    float64        6854/9715 ( 70.6%)  mean=0.1464, std=0.0705
+  99. away_k_per_9_r5                                    float64        6854/9715 ( 70.6%)  mean=8.6070, std=2.1697
+ 100. away_ip_r5                                         float64        6854/9715 ( 70.6%)  mean=5.4122, std=0.6665
+ 101. diff_kbb_r5                                        float64        4017/9715 ( 41.3%)  mean=-0.0027, std=0.0965
+ 102. diff_k_pct_r5                                      float64        4017/9715 ( 41.3%)  mean=-0.0018, std=0.0829
+ 103. diff_bb_pct_r5                                     float64        4017/9715 ( 41.3%)  mean=0.0008, std=0.0420
+ 104. diff_k_per_9_r5                                    float64        4017/9715 ( 41.3%)  mean=-0.0577, std=2.9768
+ 105. home_f_strike_r5                                   float64        9098/9715 ( 93.6%)  mean=61.8458, std=6.5320
+ 106. home_whiff_r5                                      float64        9098/9715 ( 93.6%)  mean=22.1988, std=5.4058
+ 107. home_csw_r5                                        float64        9098/9715 ( 93.6%)  mean=27.0144, std=3.1853
+ 108. home_fb_velo_r5                                    float64        9098/9715 ( 93.6%)  mean=92.9039, std=2.3822
+ 109. home_fb_velo_r3                                    float64        9098/9715 ( 93.6%)  mean=92.9049, std=2.3910
+ 110. home_velo_trend                                    float64        9098/9715 ( 93.6%)  mean=0.0353, std=0.4271
+ 111. home_f_strike_trend                                float64        9098/9715 ( 93.6%)  mean=0.1531, std=3.1669
+ 112. home_whiff_trend                                   float64        9098/9715 ( 93.6%)  mean=-0.0675, std=2.1908
+ 113. home_f_strike_season                               float64        9098/9715 ( 93.6%)  mean=61.6927, std=5.7783
+ 114. home_whiff_season                                  float64        9098/9715 ( 93.6%)  mean=22.2663, std=4.9280
+ 115. home_fb_velo_season                                float64        9098/9715 ( 93.6%)  mean=92.8696, std=2.3635
+ 116. home_rolling_complete                              float64        9661/9715 ( 99.4%)  mean=0.7239, std=0.4471
+ 117. home_f_strike_pct                                  float64        9661/9715 ( 99.4%)  mean=62.3419, std=11.0150
+ 118. home_whiff_pct                                     float64        9661/9715 ( 99.4%)  mean=22.5306, std=8.4453
+ 119. home_csw_pct                                       float64        9661/9715 ( 99.4%)  mean=27.3476, std=5.2440
+ 120. home_fb_velo                                       float64        9660/9715 ( 99.4%)  mean=92.8661, std=2.4377
+ 121. home_pitcher_id                                    float64        9661/9715 ( 99.4%)  mean=630611.0189, std=61583.4444
+ 122. away_f_strike_r5                                   float64        9047/9715 ( 93.1%)  mean=61.9282, std=6.6373
+ 123. away_whiff_r5                                      float64        9047/9715 ( 93.1%)  mean=22.2473, std=5.4084
+ 124. away_csw_r5                                        float64        9047/9715 ( 93.1%)  mean=27.0619, std=3.2058
+ 125. away_fb_velo_r5                                    float64        9047/9715 ( 93.1%)  mean=92.9061, std=2.3692
+ 126. away_fb_velo_r3                                    float64        9047/9715 ( 93.1%)  mean=92.9071, std=2.3833
+ 127. away_velo_trend                                    float64        9047/9715 ( 93.1%)  mean=0.0292, std=0.4260
+ 128. away_f_strike_trend                                float64        9047/9715 ( 93.1%)  mean=0.1464, std=3.1751
+ 129. away_whiff_trend                                   float64        9047/9715 ( 93.1%)  mean=-0.0340, std=2.2289
+ 130. away_f_strike_season                               float64        9047/9715 ( 93.1%)  mean=61.7819, std=5.8336
+ 131. away_whiff_season                                  float64        9047/9715 ( 93.1%)  mean=22.2812, std=4.8669
+ 132. away_fb_velo_season                                float64        9047/9715 ( 93.1%)  mean=92.8779, std=2.3527
+ 133. away_rolling_complete                              float64        9649/9715 ( 99.3%)  mean=0.7216, std=0.4482
+ 134. away_f_strike_pct                                  float64        9649/9715 ( 99.3%)  mean=61.6422, std=10.9964
+ 135. away_whiff_pct                                     float64        9649/9715 ( 99.3%)  mean=21.7310, std=8.2567
+ 136. away_csw_pct                                       float64        9649/9715 ( 99.3%)  mean=26.5873, std=5.0624
+ 137. away_fb_velo                                       float64        9647/9715 ( 99.3%)  mean=92.8925, std=2.4486
+ 138. away_pitcher_id                                    float64        9649/9715 ( 99.3%)  mean=631330.4282, std=61486.5108
+ 139. diff_f_strike_r5                                   float64        8736/9715 ( 89.9%)  mean=-0.0726, std=9.2397
+ 140. diff_whiff_r5                                      float64        8736/9715 ( 89.9%)  mean=-0.0650, std=7.6189
+ 141. diff_csw_r5                                        float64        8736/9715 ( 89.9%)  mean=-0.0576, std=4.5071
+ 142. diff_velo_trend                                    float64        8736/9715 ( 89.9%)  mean=0.0055, std=0.6059
+ 143. diff_f_strike_trend                                float64        8736/9715 ( 89.9%)  mean=0.0072, std=4.5238
+ 144. diff_whiff_trend                                   float64        8736/9715 ( 89.9%)  mean=-0.0365, std=3.1556
+ 145. both_complete                                      int64          9715/9715 (100.0%)  mean=0.6117, std=0.4874
+ 146. home_days_rest                                     float64        9098/9715 ( 93.6%)  mean=7.4772, std=8.7783
+ 147. home_pitch_count_last                              float64        9098/9715 ( 93.6%)  mean=86.6150, std=13.8788
+ 148. away_days_rest                                     float64        9047/9715 ( 93.1%)  mean=7.5302, std=9.2518
+ 149. away_pitch_count_last                              float64        9047/9715 ( 93.1%)  mean=87.0124, std=13.7798
+ 150. home_relievers_used_last_game                      float64        9591/9715 ( 98.7%)  mean=3.3722, std=1.2009
+ 151. home_relievers_used_last_3_games                   float64        9591/9715 ( 98.7%)  mean=9.9563, std=2.0568
+ 152. home_bullpen_pitches_last_game                     float64        9591/9715 ( 98.7%)  mean=63.4302, std=27.3764
+ 153. home_bullpen_pitches_last_3_games                  float64        9591/9715 ( 98.7%)  mean=186.7749, std=48.6171
+ 154. home_high_leverage_available                       float64        9650/9715 ( 99.3%)  mean=0.3274, std=0.4693
+ 155. away_relievers_used_last_game                      float64        9591/9715 ( 98.7%)  mean=3.2154, std=1.2253
+ 156. away_relievers_used_last_3_games                   float64        9591/9715 ( 98.7%)  mean=9.6748, std=2.0791
+ 157. away_bullpen_pitches_last_game                     float64        9591/9715 ( 98.7%)  mean=59.8009, std=26.4890
+ 158. away_bullpen_pitches_last_3_games                  float64        9591/9715 ( 98.7%)  mean=180.2173, std=47.1173
+ 159. away_high_leverage_available                       float64        9652/9715 ( 99.4%)  mean=0.3666, std=0.4819
+ 160. k_environment                                      float64        9715/9715 (100.0%)  mean=0.4496, std=0.0304
+ 161. same_handed_starters                               int64          9715/9715 (100.0%)  mean=0.6000, std=0.4899
+ 162. stuff_trend_composite                              float64        5943/9715 ( 61.2%)  mean=-0.0010, std=0.4220
+ 163. home_starter_ip                                    float64        7366/9715 ( 75.8%)  mean=5.1611, std=1.4429
+ 164. home_starter_pitches                               float64        7366/9715 ( 75.8%)  mean=85.8875, std=16.6642
+ 165. home_starter_k                                     float64        7366/9715 ( 75.8%)  mean=4.9995, std=2.5620
+ 166. home_starter_bb                                    float64        7366/9715 ( 75.8%)  mean=1.6454, std=1.2741
+ 167. home_starter_hr_allowed                            float64        7366/9715 ( 75.8%)  mean=0.7080, std=0.8474
+ 168. home_starter_hits_allowed                          float64        7366/9715 ( 75.8%)  mean=4.9146, std=2.2674
+ 169. home_starter_batters_faced                         float64        7366/9715 ( 75.8%)  mean=22.1651, std=4.5365
+ 170. home_starter_ground_outs                           float64        7366/9715 ( 75.8%)  mean=4.9211, std=2.5440
+ 171. home_starter_fly_outs                              float64        7366/9715 ( 75.8%)  mean=3.0065, std=1.8449
+ 172. away_starter_ip                                    float64        7366/9715 ( 75.8%)  mean=5.0269, std=1.4740
+ 173. away_starter_pitches                               float64        7366/9715 ( 75.8%)  mean=84.7939, std=16.8351
+ 174. away_starter_k                                     float64        7366/9715 ( 75.8%)  mean=4.6417, std=2.4333
+ 175. away_starter_bb                                    float64        7366/9715 ( 75.8%)  mean=1.7172, std=1.2883
+ 176. away_starter_hr_allowed                            float64        7366/9715 ( 75.8%)  mean=0.7255, std=0.8711
+ 177. away_starter_hits_allowed                          float64        7366/9715 ( 75.8%)  mean=4.9743, std=2.2229
+ 178. away_starter_batters_faced                         float64        7366/9715 ( 75.8%)  mean=21.8746, std=4.6239
+ 179. away_starter_ground_outs                           float64        7366/9715 ( 75.8%)  mean=4.9251, std=2.5608
+ 180. away_starter_fly_outs                              float64        7366/9715 ( 75.8%)  mean=2.9799, std=1.8519
+ 181. home_bullpen_ip                                    float64        7311/9715 ( 75.3%)  mean=3.4754, std=1.3919
+ 182. home_bullpen_pitches                               float64        7311/9715 ( 75.3%)  mean=63.7100, std=27.1033
+ 183. home_bullpen_k                                     float64        7311/9715 ( 75.3%)  mean=3.8993, std=2.1369
+ 184. home_bullpen_bb                                    float64        7311/9715 ( 75.3%)  mean=1.4659, std=1.4114
+ 185. home_bullpen_hr                                    float64        7311/9715 ( 75.3%)  mean=0.4475, std=0.7426
+ 186. home_bullpen_hits                                  float64        7311/9715 ( 75.3%)  mean=3.4336, std=2.6381
+ 187. home_n_relievers_used                              float64        7311/9715 ( 75.3%)  mean=3.3787, std=1.1906
+ 188. home_bullpen_batters_faced                         float64        7311/9715 ( 75.3%)  mean=16.3659, std=6.8034
+ 189. away_bullpen_ip                                    float64        7317/9715 ( 75.3%)  mean=3.1034, std=1.3814
+ 190. away_bullpen_pitches                               float64        7317/9715 ( 75.3%)  mean=58.8203, std=26.1525
+ 191. away_bullpen_k                                     float64        7317/9715 ( 75.3%)  mean=3.5187, std=2.1233
+ 192. away_bullpen_bb                                    float64        7317/9715 ( 75.3%)  mean=1.4397, std=1.4047
+ 193. away_bullpen_hr                                    float64        7317/9715 ( 75.3%)  mean=0.4070, std=0.6757
+ 194. away_bullpen_hits                                  float64        7317/9715 ( 75.3%)  mean=3.1486, std=2.4153
+ 195. away_n_relievers_used                              float64        7317/9715 ( 75.3%)  mean=3.1834, std=1.2364
+ 196. away_bullpen_batters_faced                         float64        7317/9715 ( 75.3%)  mean=15.0275, std=6.5120
+ 197. home_team_hits                                     float64        7366/9715 ( 75.8%)  mean=8.1470, std=3.2510
+ 198. home_team_walks                                    float64        7366/9715 ( 75.8%)  mean=3.2046, std=1.9841
+ 199. home_team_hr                                       float64        7366/9715 ( 75.8%)  mean=1.1799, std=1.1559
+ 200. home_team_k                                        float64        7366/9715 ( 75.8%)  mean=8.2421, std=2.9080
+ 201. home_team_pa                                       float64        7366/9715 ( 75.8%)  mean=36.8619, std=4.2962
+ 202. home_team_ab                                       float64        7366/9715 ( 75.8%)  mean=32.8775, std=3.4867
+ 203. home_team_doubles                                  float64        7366/9715 ( 75.8%)  mean=1.6153, std=1.3387
+ 204. home_team_triples                                  float64        7366/9715 ( 75.8%)  mean=0.1374, std=0.3741
+ 205. home_team_hbp                                      float64        7366/9715 ( 75.8%)  mean=0.4165, std=0.6706
+ 206. home_team_singles                                  float64        7366/9715 ( 75.8%)  mean=5.2145, std=2.4948
+ 207. away_team_hits                                     float64        7366/9715 ( 75.8%)  mean=8.3891, std=3.5673
+ 208. away_team_walks                                    float64        7366/9715 ( 75.8%)  mean=3.1439, std=1.9986
+ 209. away_team_hr                                       float64        7366/9715 ( 75.8%)  mean=1.1629, std=1.1642
+ 210. away_team_k                                        float64        7366/9715 ( 75.8%)  mean=8.8816, std=2.9478
+ 211. away_team_pa                                       float64        7366/9715 ( 75.8%)  mean=38.5247, std=4.8104
+ 212. away_team_ab                                       float64        7366/9715 ( 75.8%)  mean=34.5972, std=3.8027
+ 213. away_team_doubles                                  float64        7366/9715 ( 75.8%)  mean=1.6465, std=1.3724
+ 214. away_team_triples                                  float64        7366/9715 ( 75.8%)  mean=0.1359, std=0.3817
+ 215. away_team_hbp                                      float64        7366/9715 ( 75.8%)  mean=0.4313, std=0.6809
+ 216. away_team_singles                                  float64        7366/9715 ( 75.8%)  mean=5.4438, std=2.6619
+ 217. total_k_game                                       float64        9715/9715 (100.0%)  mean=12.8946, std=6.4008
+ 218. total_bb_game                                      float64        9715/9715 (100.0%)  mean=4.7370, std=3.1417
+ 219. total_hr_game                                      float64        9715/9715 (100.0%)  mean=1.7302, std=1.6240
+ 220. total_hits_game                                    float64        9715/9715 (100.0%)  mean=12.5378, std=6.4630
+ 221. total_relievers_used                               float64        9715/9715 (100.0%)  mean=4.9403, std=2.5966
+ 222. home_starter_kbb_rate                              float64        7365/9715 ( 75.8%)  mean=0.1496, std=0.1380
+ 223. away_starter_kbb_rate                              float64        7362/9715 ( 75.8%)  mean=0.1305, std=0.1349
+ 224. line_band                                          category       8766/9715 ( 90.2%)  nunique=4

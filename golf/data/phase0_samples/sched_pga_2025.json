@@ -1,0 +1,77 @@
+{
+  "schedule": [
+    {
+      "country": "USA",
+      "course": "Plantation Course at Kapalua",
+      "course_key": "656",
+      "event_id": "16",
+      "event_name": "The Sentry",
+      "latitude": 21.001,
+      "location": "Kapalua, HI",
+      "longitude": -156.654,
+      "start_date": "2025-01-02",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Matsuyama, Hideki (13562)"
+    },
+    {
+      "country": "USA",
+      "course": "Waialae Country Club",
+      "course_key": "6",
+      "event_id": "6",
+      "event_name": "Sony Open in Hawaii",
+      "latitude": 21.272,
+      "location": "Honolulu, HI",
+      "longitude": -157.775,
+      "start_date": "2025-01-09",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Taylor, Nick (13126)"
+    },
+    {
+      "country": "USA",
+      "course": "Pete Dye Stadium Course;Nicklaus Tournament Course;La Quinta Country Club",
+      "course_key": "704;233;202",
+      "event_id": "2",
+      "event_name": "The American Express",
+      "latitude": 33.643,
+      "location": "La Quinta, CA",
+      "longitude": -116.267,
+      "start_date": "2025-01-16",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "Straka, Sepp (17511)"
+    },
+    {
+      "country": "USA",
+      "course": "Torrey Pines Golf Course (South Course);Torrey Pines Golf Course (North Course)",
+      "course_key": "4;104",
+      "event_id": "4",
+      "event_name": "Farmers Insurance Open",
+      "latitude": 32.905,
+      "location": "San Diego, CA",
+      "longitude": -117.245,
+      "start_date": "2025-01-22",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "English, Harris (14577)"
+    },
+    {
+      "country": "USA",
+      "course": "Pebble Beach Golf Links;Spyglass Hill Golf Course",
+      "course_key": "5;205",
+      "event_id": "5",
+      "event_name": "AT&T Pebble Beach Pro-Am",
+      "latitude": 36.569,
+      "location": "Pebble Beach, CA",
+      "longitude": -121.951,
+      "start_date": "2025-01-30",
+      "status": "completed",
+      "tour": "pga",
+      "winner": "McIlroy, Rory (10091)"
+    }
+  ],
+  "season": 2025,
+  "tour": "pga",
+  "upcoming_only": "no"
+}

@@ -1,0 +1,180 @@
+NBA BACKWARDS DISCOVERY ENGINE
+Run date: 2026-03-23
+Total games: 3685
+
+========================================
+BUCKET DISTRIBUTION (all thresholds)
+========================================
+Threshold A (±6):
+  strong_over:  N=1419 (38.5%)  mean_ME=+18.46
+  neutral:      N=920 (25.0%)   mean_ME=-0.05
+  strong_under: N=1346 (36.5%)  mean_ME=-17.52
+
+Threshold B (±8):
+  strong_over:  N=1260 (34.2%)  mean_ME=+19.93
+  neutral:      N=1240 (33.6%)  mean_ME=-0.04
+  strong_under: N=1185 (32.2%)  mean_ME=-18.99
+
+Threshold C (±10):
+  strong_over:  N=1091 (29.6%)  mean_ME=+21.66
+  neutral:      N=1557 (42.3%)  mean_ME=+0.09
+  strong_under: N=1037 (28.1%)  mean_ME=-20.45
+
+Relative (±3.5%):
+  relative_over:  N=1244
+  relative_under: N=1162
+
+========================================
+SINGLE DIMENSION SCAN — FLAGGED COLUMNS (Threshold B primary)
+========================================
+Column                         Type       Over-val   Neut-val   Under-val  Over-idx  Under-idx  p-value   Thresholds  Depri
+---------------------------------------------------------------------------------------------------------------------------
+crew_avg_pts                   continuous 228.865    228.485    228.272    0.380     0.214      0.0000    A,B,C
+home_ortg_fb_league_average    binary     0.001      0.010      0.001      0.082     0.087      0.0002    A,B,C
+home_drtg_fb_league_average    binary     0.001      0.010      0.001      0.082     0.087      0.0002    A,B,C
+home_pace_fb_league_average    binary     0.001      0.010      0.001      0.082     0.087      0.0002    A,B,C
+away_ortg_fb_league_average    binary     0.001      0.010      0.003      0.082     0.262      0.0017    A,B,C
+away_drtg_fb_league_average    binary     0.001      0.010      0.003      0.082     0.262      0.0017    A,B,C
+away_pace_fb_league_average    binary     0.001      0.010      0.003      0.082     0.262      0.0017    A,B,C
+crew_avg_ft_rate                continuous 0.257      0.257      0.256      0.001     0.000      0.0032    A,B,C
+days_rest_away                 continuous 1.087      1.244      1.113      0.157     0.131      0.0069    A,B,C       *
+game_month                     continuous 6.079      6.043      5.727      0.037     0.316      0.0131    A,B,C
+games_l7_away                  continuous 3.109      3.019      3.028      0.089     0.009      0.0220    A,B,C
+home_3par_season               continuous 0.403      0.402      0.400      0.002     0.002      0.0620    A,B
+rolling_league_avg             continuous 227.741    227.759    227.921    0.018     0.162      0.0660    A,B,C
+home_ortg_x_away_drtg          continuous 12770.336  12714.695  12748.172  55.641    33.477     0.0725    B
+away_pace_proxy_last10         continuous 114.087    114.284    114.473    0.198     0.189      0.0935    B
+
+========================================
+TEAM CONCENTRATION CHECK (Threshold B)
+========================================
+OVER-MISS teams > 15%:
+  None
+
+UNDER-MISS teams > 15%:
+  None
+
+========================================
+OVER-MISS TOP 15
+========================================
+Rank | Column                         | Type       | Over-idx | p-value  | Thresholds | Notes
+----|--------------------------------|-----------|----------|----------|------------|------
+1   | home_ortg_x_away_drtg          | continuous | 55.641   | 0.0725   | B          |
+2   | b2b_flag_away                  | binary     | 1.181    | 0.0674   |            |
+3   | is_late_season                 | binary     | 1.031    | 0.1416   |            |
+4   | crew_avg_pts                   | continuous | 0.380    | 0.0000   | A,B,C      |
+5   | home_ortg                      | continuous | 0.378    | 0.1460   |            | DEPRIORITIZED
+6   | away_pace_proxy_last10         | continuous | 0.198    | 0.0935   | B          |
+7   | days_rest_away                 | continuous | 0.157    | 0.0069   | A,B,C      | DEPRIORITIZED
+8   | games_l7_away                  | continuous | 0.089    | 0.0220   | A,B,C      |
+9   | home_ortg_fb_league_average    | binary     | 0.082    | 0.0002   | A,B,C      |
+10  | away_drtg_fb_league_average    | binary     | 0.082    | 0.0017   | A,B,C      |
+11  | away_ortg_fb_league_average    | binary     | 0.082    | 0.0017   | A,B,C      |
+12  | home_pace_fb_league_average    | binary     | 0.082    | 0.0002   | A,B,C      |
+13  | home_drtg_fb_league_average    | binary     | 0.082    | 0.0002   | A,B,C      |
+14  | away_pace_fb_league_average    | binary     | 0.082    | 0.0017   | A,B,C      |
+15  | game_month                     | continuous | 0.037    | 0.0131   | A,B,C      |
+
+========================================
+UNDER-MISS TOP 15
+========================================
+Rank | Column                         | Type       | Under-idx | p-value  | Thresholds | Notes
+----|--------------------------------|-----------|-----------|----------|------------|------
+1   | home_ortg_x_away_drtg          | continuous | 33.477    | 0.0725   | B          |
+2   | b2b_flag_away                  | binary     | 1.200     | 0.0674   |            |
+3   | is_late_season                 | binary     | 0.888     | 0.1416   |            |
+4   | game_month                     | continuous | 0.316     | 0.0131   | A,B,C      |
+5   | away_pace_fb_league_average    | binary     | 0.262     | 0.0017   | A,B,C      |
+6   | away_drtg_fb_league_average    | binary     | 0.262     | 0.0017   | A,B,C      |
+7   | away_ortg_fb_league_average    | binary     | 0.262     | 0.0017   | A,B,C      |
+8   | crew_avg_pts                   | continuous | 0.214     | 0.0000   | A,B,C      |
+9   | away_pace_proxy_last10         | continuous | 0.189     | 0.0935   | B          |
+10  | rolling_league_avg             | continuous | 0.162     | 0.0660   | A,B,C      |
+11  | days_rest_away                 | continuous | 0.131     | 0.0069   | A,B,C      | DEPRIORITIZED
+12  | home_ortg                      | continuous | 0.124     | 0.1460   |            | DEPRIORITIZED
+13  | home_ortg_fb_league_average    | binary     | 0.087     | 0.0002   | A,B,C      |
+14  | home_drtg_fb_league_average    | binary     | 0.087     | 0.0002   | A,B,C      |
+15  | home_pace_fb_league_average    | binary     | 0.087     | 0.0002   | A,B,C      |
+
+========================================
+LINE BIAS TEST
+========================================
+Band    |    N |     ME |  HR_over |      p | Flagged
+--------|------|--------|----------|--------|--------
+<215    |  240 |  -0.15 |    0.508 | 0.8888 |
+215-225 | 1117 |  +0.90 |    0.525 | 0.0857 |
+225-235 | 1539 |  +0.96 |    0.516 | 0.0346 |
+235-245 |  702 |  +0.10 |    0.478 | 0.8912 |
+>245    |   87 |  +0.61 |    0.500 | 0.7580 |
+
+========================================
+TWO-DIMENSION INTERACTIONS — FLAGGED PAIRS
+========================================
+No pairs met all criteria
+
+========================================
+DISTRIBUTION SHAPE (Threshold B)
+========================================
+
+OVER-MISS (ME >= +8):
+  N: 1260
+  Median ME: +17.5 | p75: +25.0 | p90: +34.0 | p95: +40.0
+  % ME > +15: 59.3% | % ME > +20: 38.9%
+  went_ot rate: 12.1%
+  Top 5 home: SAS(53), ATL(52), BOS(51), OKC(51), SAC(51)
+  Top 5 away: UTA(57), LAC(51), HOU(50), LAL(50), TOR(49)
+  Closing line: mean=227.6 median=227.5 std=8.4
+
+UNDER-MISS (ME <= -8):
+  N: 1185
+  Median ME: -17.0 | p75: -12.0 | p90: -9.2 | p95: -8.5
+  % ME < -15: 57.9% | % ME < -20: 38.1%
+  went_ot rate: 1.0%
+  Top 5 home: BKN(53), CHA(48), HOU(48), NOP(48), LAL(46)
+  Top 5 away: SAC(54), MIA(48), WAS(46), BOS(46), POR(46)
+  Closing line: mean=228.0 median=228.5 std=8.6
+
+========================================
+HYPOTHESIS SUMMARY
+========================================
+
+OVER-MISS hypotheses:
+1. home_ortg_x_away_drtg: Over-miss games have higher home offense x away defense
+   interaction (12770 vs 12715) — market prices teams independently, may miss
+   multiplicative matchup effects — NEW
+2. b2b_flag_away: Away B2B games over-index 1.18x in over-misses — fatigued road
+   defense may break down more than market expects — NEW
+3. is_late_season: Late-season games slightly over-index (1.03x) in overs — rest
+   and motivation dynamics shift scoring late — NEW
+4. crew_avg_pts: Higher crew scoring averages in over-miss games — referee
+   tendencies not fully priced — KNOWN
+5. home_ortg: Higher home offensive rating in over-miss games — DEPRIORITIZED
+   per instructions (raw ORtg)
+6. away_pace_proxy_last10: Lower recent pace proxy for away team in over-misses —
+   market may overshoot pace adjustment — VARIANT
+7. days_rest_away: Shorter away rest in over-misses — DEPRIORITIZED per
+   instructions (rest days)
+8. games_l7_away: Denser away schedule (3.11 vs 3.02 games/7d) in over-misses —
+   fatigue density beyond simple rest — NEW
+9. _fb_league_average columns: Anti-signals — early-season league-average fallback
+   games almost never appear in miss buckets — VARIANT (mechanical artifact)
+10. game_month: Over-misses skew slightly later in season (6.08 vs 6.04) — very
+    weak effect — NEW
+
+UNDER-MISS hypotheses:
+1. home_ortg_x_away_drtg: Under-miss games also have elevated matchup product
+   (12748 vs 12715) — both tails show higher matchup intensity — NEW
+2. b2b_flag_away: Away B2B over-indexes 1.20x in under-misses too — fatigue
+   creates variance in both directions — NEW
+3. game_month: Under-misses concentrate earlier (month 5.7 vs 6.0) — early-season
+   scoring patterns differ — NEW
+4. crew_avg_pts: Lower crew averages in under-misses — KNOWN
+5. away_pace_proxy_last10: Higher recent away pace in under-misses — slow-paced
+   visiting teams going under their own pace — VARIANT
+6. rolling_league_avg: Under-misses occur when league avg is slightly higher
+   (227.92 vs 227.76) — lines may lag league trends — NEW
+7. is_late_season: Under-indexes 0.89x in under-misses — late-season games less
+   likely to go far under — NEW
+
+IMPORTANT: Discovery only. All candidates require independent
+retesting on the full dataset before any deployment consideration.

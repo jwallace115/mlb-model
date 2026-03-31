@@ -1,0 +1,70 @@
+=================================================================
+MLB GAME ENVIRONMENT CLASSIFIER
+=================================================================
+
+Classes:
+  LOW_EVENT: 2089 (21.5%)
+  NORMAL: 2806 (28.9%)
+  HIGH_EVENT: 2261 (23.3%)
+  CHAOTIC: 2559 (26.3%)
+
+Features: 11, games: 9715
+Baseline (always NORMAL): 29.7%
+LogReg val: 30.1%, RF val: 29.6%
+Selected: LR (30.1%)
+
+=================================================================
+CLASSIFIER PERFORMANCE
+=================================================================
+Accuracy: 30.1% vs 29.7% baseline (+0.4pp)
+Gate 1 (+5pp): FAIL
+
+Class          Prec Recall     F1     N
+CHAOTIC       0.29  0.45  0.35   618
+HIGH_EVENT    0.25  0.08  0.12   566
+LOW_EVENT     0.31  0.02  0.03   522
+NORMAL        0.32  0.55  0.40   721
+Gate 2 (2+ prec>=0.55): FAIL (0)
+
+=================================================================
+MARKET COMPARISON
+=================================================================
+Pred             N  Avg Runs
+CHAOTIC        965     8.87
+HIGH_EVENT     191     9.54
+LOW_EVENT       26     7.88
+NORMAL        1245     8.60
+      ACTUAL
+CHAOTIC        618    10.72
+HIGH_EVENT     566    12.76
+LOW_EVENT      522     3.82
+NORMAL         721     7.56
+
+=================================================================
+PROP BEHAVIOR BY CLASS
+=================================================================
+
+HITS OVER (baseline hit: 57.8%):
+  CHAOTIC     : N=14410, hit=57.5% (Δ=-0.3pp)
+  HIGH_EVENT  : N= 2088, hit=57.8% (Δ=-0.0pp)
+  LOW_EVENT   : N=  386, hit=58.0% (Δ=+0.2pp)
+  NORMAL      : N=19943, hit=58.0% (Δ=+0.2pp)
+
+TB OVER (baseline hit: 48.9%):
+  CHAOTIC     : N=12077, hit=48.6% (Δ=-0.2pp)
+  HIGH_EVENT  : N= 1729, hit=46.8% (Δ=-2.0pp)
+  LOW_EVENT   : N=  327, hit=49.8% (Δ=+1.0pp)
+  NORMAL      : N=17481, hit=49.2% (Δ=+0.3pp)
+
+=================================================================
+RECOMMENDATION
+=================================================================
+NOT READY: classifier does not beat baseline sufficiently.
+Game environment is not predictable enough pregame with current features.
+
+=================================================================
+HONEST ASSESSMENT
+=================================================================
+1. Accuracy: 30.1% vs 29.7% (+0.4pp)
+2. No signal — insufficient
+3. Next: Statcast batted ball data or live in-game

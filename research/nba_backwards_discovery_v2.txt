@@ -1,0 +1,254 @@
+NBA BACKWARDS DISCOVERY ENGINE V2
+Run date: 2026-03-23
+
+========================================
+ANALYSIS 1 — DIRECTIONAL (TIGHTER THRESHOLDS)
+========================================
+
+Threshold D (±12):
+  strong_over:  N=942 (25.6%)
+  neutral:      N=1835 (49.8%)
+  strong_under: N=908 (24.6%)
+
+Threshold E (±15):
+  strong_over:  N=768 (20.8%)
+  neutral:      N=2202 (59.8%)
+  strong_under: N=715 (19.4%)
+
+Low-confidence flags: none
+
+FLAGGED COLUMNS AT THRESHOLD D (±12):
+Column                         | Type       | Over-val  | Neut-val  | Under-val | Over-idx | p-value  | Also ±15 | Status
+---------------------------------------------------------------------------------------------------------------------------
+crew_avg_pts                   | continuous | 228.930   | 228.508   | 228.229   | 0.0018   | 0.000000 | Yes      | KNOWN
+crew_avg_ft_rate               | continuous | 0.2571    | 0.2566    | 0.2561    | 0.0019   | 0.002863 | Yes      | KNOWN
+game_month                     | continuous | 6.074     | 6.032     | 5.671     | 0.0071   | 0.017025 | Yes      | KNOWN
+days_rest_away                 | continuous | 1.082     | 1.206     | 1.099     | 0.1030   | 0.036190 | No       | KNOWN [DEPRI]
+games_l7_away                  | continuous | 3.116     | 3.031     | 3.031     | 0.0279   | 0.047546 | No       | KNOWN
+away_pace_trend                | continuous | 0.061     | 0.016     | -0.094    | 2.8420   | 0.050734 | No       | NEW EXTREME
+rolling_league_avg             | continuous | 227.741   | 227.770   | 227.941   | 0.0001   | 0.057051 | No       | KNOWN
+home_total_last10              | continuous | 228.940   | 228.054   | 228.334   | 0.0039   | 0.063555 | Yes      | NEW EXTREME
+home_pace_proxy_last10         | continuous | 114.435   | 114.006   | 114.143   | 0.0038   | 0.068607 | Yes      | NEW EXTREME
+
+TOP 10 OVER-MISS AT ±12:
+Rank | Column                    | Over-idx/delta | p-value  | Also ±15 | Status
+-----|---------------------------|----------------|----------|----------|------------
+1    | home_total_last10         | +0.885         | 0.0636   | Yes      | NEW EXTREME
+2    | home_pace_proxy_last10    | +0.429         | 0.0686   | Yes      | NEW EXTREME
+3    | crew_avg_pts              | +0.422         | 0.0000   | Yes      | KNOWN
+4    | days_rest_away            | -0.124         | 0.0362   | No       | KNOWN [DEPRI]
+5    | games_l7_away             | +0.085         | 0.0475   | No       | KNOWN
+6    | away_pace_trend           | +0.045         | 0.0507   | No       | NEW EXTREME
+7    | game_month                | +0.043         | 0.0170   | Yes      | KNOWN
+8    | rolling_league_avg        | -0.029         | 0.0571   | No       | KNOWN
+9    | crew_avg_ft_rate          | +0.001         | 0.0029   | Yes      | KNOWN
+
+TOP 10 UNDER-MISS AT ±12:
+Rank | Column                    | Over-idx/delta | p-value  | Also ±15 | Status
+-----|---------------------------|----------------|----------|----------|------------
+1    | game_month                | -0.361         | 0.0170   | Yes      | KNOWN
+2    | home_total_last10         | +0.280         | 0.0636   | Yes      | NEW EXTREME
+3    | crew_avg_pts              | -0.279         | 0.0000   | Yes      | KNOWN
+4    | rolling_league_avg        | +0.170         | 0.0571   | No       | KNOWN
+5    | home_pace_proxy_last10    | +0.137         | 0.0686   | Yes      | NEW EXTREME
+6    | away_pace_trend           | -0.110         | 0.0507   | No       | NEW EXTREME
+7    | days_rest_away            | -0.107         | 0.0362   | No       | KNOWN [DEPRI]
+8    | crew_avg_ft_rate          | -0.001         | 0.0029   | Yes      | KNOWN
+9    | games_l7_away             | -0.000         | 0.0475   | No       | KNOWN
+
+TOP 10 OVER-MISS AT ±15:
+Rank | Column                    | Over-idx/delta | p-value  | Also ±12 | Status
+-----|---------------------------|----------------|----------|----------|------------
+1    | home_total_last10         | +0.956         | 0.0527   | Yes      | NEW EXTREME
+2    | home_pace_proxy_last10    | +0.471         | 0.0566   | Yes      | NEW EXTREME
+3    | crew_avg_pts              | +0.399         | 0.0000   | Yes      | KNOWN
+4    | proj_total_naive          | +0.398         | 0.0781   | Yes      | NEW EXTREME
+5    | game_month                | +0.040         | 0.0961   | Yes      | KNOWN
+6    | away_tov_rate             | -0.001         | 0.0172   | Yes      | NEW EXTREME
+7    | crew_avg_ft_rate          | +0.001         | 0.0006   | Yes      | KNOWN
+
+TOP 10 UNDER-MISS AT ±15:
+Rank | Column                    | Over-idx/delta | p-value  | Also ±12 | Status
+-----|---------------------------|----------------|----------|----------|------------
+1    | proj_total_naive          | +0.526         | 0.0781   | Yes      | NEW EXTREME
+2    | crew_avg_pts              | -0.365         | 0.0000   | Yes      | KNOWN
+3    | game_month                | -0.312         | 0.0961   | Yes      | KNOWN
+4    | home_total_last10         | +0.245         | 0.0527   | Yes      | NEW EXTREME
+5    | home_pace_proxy_last10    | +0.103         | 0.0566   | Yes      | NEW EXTREME
+6    | away_tov_rate             | -0.002         | 0.0172   | Yes      | NEW EXTREME
+7    | crew_avg_ft_rate          | -0.001         | 0.0006   | Yes      | KNOWN
+
+NEW EXTREME candidates (not flagged at ±8):
+  1. home_total_last10 — recent home totals ~0.9 pts higher in ±12 over-misses,
+     persists at ±15; market may anchor on season-level totals not recent home
+     environment
+  2. home_pace_proxy_last10 — home team's recent scoring environment elevated in
+     over-misses; correlated with home_total_last10
+  3. away_pace_trend — away team with rising pace trend over-indexes in over-misses;
+     market may lag pace trajectory changes
+  4. proj_total_naive — emerges at ±15 only; both tails show elevated naive
+     projection, suggesting extreme misses cluster in high-projection games
+  5. away_tov_rate — emerges at ±15; lower away turnover rate in over-misses;
+     cleaner possession games may produce more scoring than expected
+
+========================================
+ANALYSIS 2 — VARIANCE MODE
+========================================
+
+Quartile abs_error thresholds: p25=6.0 | p50=12.0 | p75=20.5
+High variance: abs_error >= 20.5 (N=942)
+Low variance: abs_error <= 6.0 (N=1009)
+
+Secondary: extreme_high (abs>=12) N=1850 | extreme_low (abs<=4) N=683
+
+TOP 15 VARIANCE CANDIDATES:
+Rank | Column                    | Type       | High-val | Neut-val | Low-val  | Over-idx | p-value  | abs_pres | abs_abs  | P(+12)  | P(-12)  | Symmetry
+-----|---------------------------|------------|----------|----------|----------|----------|----------|----------|----------|---------|---------|----------
+1    | closing_line_percentile   | continuous | 51.931   | 49.284   | 49.577   | 0.054    | 0.0643   | 14.67    | 13.73    | 0.258   | 0.257   | symm
+2    | days_rest_away            | continuous | 1.081    | 1.136    | 1.231    | 0.049    | 0.0257   | 14.02    | 15.02    | 0.254   | 0.242   | symm [DEPRI]
+3    | away_tov_rate             | continuous | 0.136    | 0.138    | 0.137    | 0.011    | 0.0475   | 13.93    | 14.48    | 0.258   | 0.233   | symm
+4    | home_pts_allowed_last10   | continuous | 114.541  | 114.065  | 114.113  | 0.004    | 0.0890   | 14.79    | 13.66    | 0.270   | 0.254   | symm
+5    | away_ortg                 | continuous | 111.299  | 110.918  | 111.182  | 0.003    | 0.0417   | 14.57    | 13.84    | 0.258   | 0.251   | symm [DEPRI]
+6    | home_pace_proxy_last10    | continuous | 114.453  | 114.065  | 114.011  | 0.003    | 0.0365   | 14.54    | 13.93    | 0.267   | 0.248   | symm
+7    | proj_total_naive          | continuous | 227.648  | 226.966  | 227.051  | 0.003    | 0.0222   | 14.57    | 13.84    | 0.253   | 0.258   | symm
+8    | home_pace                 | continuous | 101.593  | 101.310  | 101.485  | 0.003    | 0.0100   | 14.50    | 13.91    | 0.265   | 0.241   | symm [DEPRI]
+9    | combined_pace_proxy       | continuous | 114.446  | 114.129  | 114.137  | 0.003    | 0.0551   | 14.67    | 13.77    | 0.265   | 0.253   | symm
+10   | crew_avg_pts              | continuous | 228.638  | 228.527  | 228.516  | 0.001    | 0.0507   | 15.10    | 13.34    | 0.333   | 0.194   | DIRECT
+
+Symmetry flags (directional lean within variance):
+  crew_avg_pts: P(+12)=0.333, P(-12)=0.194, diff=0.139 — strong OVER lean
+
+========================================
+ANALYSIS 3 — MATCHUP INTERACTION VOLATILITY
+========================================
+
+--- home_ortg_x_away_drtg ---
+Quartile boundaries: Q1<12290, Q2<12753, Q3<13201, Q4>=13201
+
+Metric                | Q1       | Q2       | Q3       | Q4
+----------------------|----------|----------|----------|----------
+N                     | 921      | 921      | 921      | 922
+mean_error            | +1.026   | +0.697   | +0.144   | +0.918
+mean_abs_error        | 13.746   | 14.309   | 14.050   | 14.719
+std_market_error      | 17.481   | 17.816   | 17.945   | 18.389
+std_total_score       | 19.409   | 19.398   | 19.740   | 19.970
+P(abs_error >= 12)    | 0.482    | 0.514    | 0.493    | 0.520
+P(abs_error >= 15)    | 0.378    | 0.418    | 0.382    | 0.432
+P(ME >= +12)          | 0.250    | 0.262    | 0.233    | 0.278
+P(ME <= -12)          | 0.232    | 0.252    | 0.260    | 0.242
+HR_over               | 0.514    | 0.506    | 0.503    | 0.520
+
+Season stability Q4:
+Season  | N   | mean_error | std_error
+--------|-----|------------|----------
+2022-23 | 304 | +0.099     | 18.088
+2023-24 | 397 | +1.367     | 18.445
+2024-25 | 221 | +1.238     | 18.740
+
+Directional test (ME Q4 vs 0): t=1.515, p=0.1301
+Variance test (Levene Q4 vs Q1): stat=3.597, p=0.0580
+Abs error test (Q4 vs Q1): t=1.909, p=0.0565
+Verdict: NULL
+
+--- away_ortg_x_home_drtg ---
+Quartile boundaries: Q1<11856, Q2<12347, Q3<12816, Q4>=12816
+
+Metric                | Q1       | Q2       | Q3       | Q4
+----------------------|----------|----------|----------|----------
+N                     | 921      | 921      | 921      | 922
+mean_error            | +0.742   | +0.434   | +0.437   | +1.172
+mean_abs_error        | 13.887   | 13.882   | 14.393   | 14.662
+std_market_error      | 17.574   | 17.355   | 18.372   | 18.322
+std_total_score       | 19.775   | 18.856   | 19.623   | 20.416
+P(abs_error >= 12)    | 0.501    | 0.488    | 0.503    | 0.517
+P(abs_error >= 15)    | 0.392    | 0.380    | 0.409    | 0.428
+P(ME >= +12)          | 0.254    | 0.244    | 0.254    | 0.270
+P(ME <= -12)          | 0.247    | 0.243    | 0.249    | 0.247
+HR_over               | 0.518    | 0.518    | 0.503    | 0.504
+
+Season stability Q4:
+Season  | N   | mean_error | std_error
+--------|-----|------------|----------
+2022-23 | 187 | +1.766     | 19.775
+2023-24 | 446 | +1.151     | 17.742
+2024-25 | 289 | +0.818     | 18.281
+
+Directional test (ME Q4 vs 0): t=1.942, p=0.0525
+Variance test (Levene Q4 vs Q1): stat=2.400, p=0.1216
+Abs error test (Q4 vs Q1): t=1.526, p=0.1272
+Verdict: Directional candidate
+
+--- combined_matchup ---
+Quartile boundaries: Q1<24464, Q2<25107, Q3<25731, Q4>=25731
+
+Metric                | Q1       | Q2       | Q3       | Q4
+----------------------|----------|----------|----------|----------
+N                     | 921      | 921      | 921      | 922
+mean_error            | +0.550   | +0.946   | +0.444   | +0.845
+mean_abs_error        | 13.366   | 14.052   | 14.636   | 14.770
+std_market_error      | 16.961   | 17.626   | 18.485   | 18.531
+std_total_score       | 18.805   | 18.974   | 19.933   | 20.274
+P(abs_error >= 12)    | 0.492    | 0.479    | 0.514    | 0.524
+P(abs_error >= 15)    | 0.377    | 0.378    | 0.419    | 0.436
+P(ME >= +12)          | 0.244    | 0.252    | 0.254    | 0.272
+P(ME <= -12)          | 0.248    | 0.227    | 0.260    | 0.252
+HR_over               | 0.512    | 0.526    | 0.510    | 0.495
+
+Season stability Q4:
+Season  | N   | mean_error | std_error
+--------|-----|------------|----------
+2022-23 | 251 | +1.127     | 19.476
+2023-24 | 453 | +0.059     | 18.173
+2024-25 | 218 | +2.156     | 18.150
+
+Directional test (ME Q4 vs 0): t=1.385, p=0.1664
+Variance test (Levene Q4 vs Q1): stat=7.787, p=0.0053
+Abs error test (Q4 vs Q1): t=2.780, p=0.0055
+Verdict: NULL
+
+========================================
+HYPOTHESIS SUMMARY
+========================================
+
+Analysis 1 — New extreme candidates:
+  1. home_total_last10 — recent home totals ~0.9 pts higher in ±12 over-misses,
+     persists at ±15; market may anchor on season-level totals not recent home
+     environment — NEW EXTREME
+  2. home_pace_proxy_last10 — home team's recent scoring environment elevated in
+     over-misses; correlated with home_total_last10 — NEW EXTREME
+  3. away_pace_trend — away team with rising pace trend over-indexes in over-misses;
+     market may lag pace trajectory changes — NEW EXTREME
+  4. proj_total_naive — emerges at ±15 only; both tails show elevated naive
+     projection, suggesting extreme misses cluster in high-projection games
+     — NEW EXTREME
+  5. away_tov_rate — emerges at ±15; lower away turnover rate in over-misses;
+     cleaner possession games may produce more scoring than expected
+     — NEW EXTREME
+
+Analysis 2 — Top variance candidates:
+  1. closing_line_percentile — higher-percentile lines have more extreme errors;
+     market less precise at extremes — NEW EXTREME
+  2. away_tov_rate — lower away TOV rate increases variance; efficient possessions
+     widen outcome distribution — NEW EXTREME
+  3. home_pts_allowed_last10 — higher recent points allowed = more variance;
+     leaky defense creates unpredictable scoring — NEW EXTREME
+  4. home_pace_proxy_last10 — higher home scoring env = more variance — VARIANT
+  5. proj_total_naive — higher naive projection = more variance; high-total
+     games are inherently less predictable — NEW EXTREME
+  6. combined_pace_proxy — similar to pace_proxy, pace environments drive
+     variance — VARIANT
+  7. crew_avg_pts — KNOWN, but uniquely directional in variance mode:
+     P(+12)=33.3% vs P(-12)=19.4% — strong OVER lean, not symmetric variance
+
+Analysis 3 — Matchup interaction verdict:
+  home_ortg_x_away_drtg: NULL — borderline variance signal (Levene p=0.058,
+     abs_error p=0.057) but no directional stability
+  away_ortg_x_home_drtg: Directional candidate — Q4 positive all 3 seasons
+     (+1.77, +1.15, +0.82), p=0.052; when away offense faces weak home defense,
+     games lean OVER by ~1.2 pts
+  combined_matchup: NULL — strong variance signal (Levene p=0.005, abs_error
+     p=0.005) but no directional stability; high-interaction games are harder
+     to price but not systematically biased
+
+IMPORTANT: Discovery only. All candidates require independent
+retesting on the full dataset before any deployment consideration.

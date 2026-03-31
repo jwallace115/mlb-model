@@ -1,0 +1,318 @@
+======================================================================
+SECTION 0 — DATA QUALITY REPORT
+======================================================================
+
+FILES USED:
+  nba/data/predictions.parquet        — 3685 rows after merge
+  nba/data/nba_historical_closing_lines.parquet
+  nba/data/features.parquet           — (columns via predictions.parquet)
+
+Opening line coverage: 3509/3685 = 95.2%
+
+OPENING LINE TIMESTAMP QUALITY:
+  The 'opening_total' column was populated by querying The Odds API
+  historical endpoint at game_date T10:00:00Z (6:00 AM ET).
+  This is the FIRST RECORDED SNAPSHOT of the day, NOT the true market open.
+  True opening lines are posted ~12-24 hours before tipoff;
+  our snapshot captures lines ~13-16 hours before evening tipoffs.
+  LIMITATION: Some early-morning sharp action may already be reflected.
+  No intraday timestamps available — cannot compute exact open-to-close gap.
+  Average time gap: approximately 13-16 hours (estimated, not measured).
+
+Coverage by season:
+  2022-23: 1052/1228 = 85.7%
+  2023-24: 1227/1227 = 100.0%
+  2024-25: 1230/1230 = 100.0%
+
+DISTRIBUTION OF MOVEMENT VARIABLES (all games with opening lines):
+
+movement_direction:
+  UP      :  1202 ( 34.3%)
+  STABLE  :  1043 ( 29.7%)
+  DOWN    :  1264 ( 36.0%)
+
+movement_magnitude:
+  SMALL   :  1648 ( 47.0%)
+  MEDIUM  :   883 ( 25.2%)
+  LARGE   :   978 ( 27.9%)
+
+movement_vs_model:
+  CONFIRMS    :   850 ( 24.2%)
+  NEUTRAL     :  1043 ( 29.7%)
+  CONTRADICTS :  1616 ( 46.1%)
+
+line_movement statistics:
+  Mean:   -0.06
+  Median: +0.00
+  Std:    2.59
+  Min:    -19.5
+  Max:    +25.0
+
+----------------------------------------------------------------------
+BASELINES
+----------------------------------------------------------------------
+
+1. Full Population Baseline (discovery, model direction):
+   N=2279, hit=50.9%, ROI=-2.74%, avg_CLV=-0.66, %pos_CLV=33.7%
+
+   2022-23: N=1052, hit=52.2%, ROI=-0.37%
+   2023-24: N=1227, hit=49.9%, ROI=-4.78%
+   OOS 2024-25: N=1230, hit=50.2%, ROI=-4.08%
+
+2. Stable Line Baseline (discovery, movement_direction==STABLE, model direction):
+   N=690, hit=52.8%, ROI=0.71%, avg_CLV=-0.02, %pos_CLV=29.1%
+
+3. Model Direction Baseline (discovery, all games, model direction):
+   N=2279, hit=50.9%, ROI=-2.74%, avg_CLV=-0.66, %pos_CLV=33.7%
+
+Full population by movement_direction (discovery):
+  UP      : N=780, hit=49.4%, ROI=-5.77%, CLV=-0.62
+  STABLE  : N=690, hit=52.8%, ROI=0.71%, CLV=-0.02
+  DOWN    : N=809, hit=50.9%, ROI=-2.78%, CLV=-1.24
+
+Full population by movement_magnitude (discovery):
+  SMALL   : N=1070, hit=51.2%, ROI=-2.23%, CLV=-0.07
+  MEDIUM  : N=581, hit=52.8%, ROI=0.88%, CLV=-0.29
+  LARGE   : N=628, hit=48.7%, ROI=-6.98%, CLV=-2.00
+
+======================================================================
+SECTION 1 — HYPOTHESIS RESULTS
+======================================================================
+
+MV1 — STABLE LINE + MODEL LEAN
+  Label: FAIL
+  N_disc=690, ROI_disc=0.71%, CLV=-0.02
+  2022-23: N=287, ROI=2.44%
+  2023-24: N=403, ROI=-0.52%
+  OOS: N=353, ROI=4.92%, CLV=-0.05
+  Delta vs baseline: 0.0pp
+  OVER: N=367, ROI=5.08%  |  UNDER: N=323, ROI=-4.25%
+  Gates failed: disc_ROI=0.7%<3.0%, ROI_2023-24=-0.5%<=0, delta=0.0pp<2.0pp, CLV_negative=-0.02_with_pos_ROI
+
+MV2 — SMALL CONFIRMATION
+  Label: FAIL
+  N_disc=159, ROI_disc=-1.54%, CLV=1.0
+  2022-23: N=74, ROI=8.35%
+  2023-24: N=85, ROI=-10.16%
+  OOS: N=88, ROI=-2.38%, CLV=1.0
+  Delta vs baseline: -2.25pp
+  OVER: N=94, ROI=-10.64%  |  UNDER: N=65, ROI=11.61%
+  Gates failed: disc_ROI=-1.5%<3.0%, ROI_2023-24=-10.2%<=0, delta=-2.3pp<2.0pp, OOS_ROI=-2.4%<0%
+
+MV2 — MEDIUM CONFIRMATION
+  Label: FAIL
+  N_disc=240, ROI_disc=-9.32%, CLV=1.71
+  2022-23: N=106, ROI=-8.15%
+  2023-24: N=134, ROI=-10.24%
+  OOS: N=108, ROI=-9.85%, CLV=1.73
+  Delta vs baseline: -10.03pp
+  OVER: N=125, ROI=-3.78%  |  UNDER: N=115, ROI=-15.34%
+  Gates failed: disc_ROI=-9.3%<3.0%, ROI_2022-23=-8.1%<=0, ROI_2023-24=-10.2%<=0, delta=-10.0pp<2.0pp, OOS_ROI=-9.8%<0%
+
+MV3 — SMALL CONTRADICTION (fade movement)
+  Label: FAIL
+  N_disc=221, ROI_disc=-11.89%, CLV=-1.0
+  2022-23: N=89, ROI=-7.76%
+  2023-24: N=132, ROI=-14.67%
+  OOS: N=137, ROI=-12.21%, CLV=-1.0
+  Delta vs baseline: -12.6pp
+  OVER: N=119, ROI=-6.95%  |  UNDER: N=102, ROI=-17.65%
+  Gates failed: disc_ROI=-11.9%<3.0%, ROI_2022-23=-7.8%<=0, ROI_2023-24=-14.7%<=0, delta=-12.6pp<2.0pp, OOS_ROI=-12.2%<0%
+
+MV3 — MEDIUM CONTRADICTION (fade movement)
+  Label: FAIL
+  N_disc=341, ROI_disc=8.05%, CLV=-1.7
+  2022-23: N=145, ROI=10.6%
+  2023-24: N=196, ROI=6.17%
+  OOS: N=194, ROI=-0.61%, CLV=-1.73
+  Delta vs baseline: 7.34pp
+  OVER: N=185, ROI=5.26%  |  UNDER: N=156, ROI=11.36%
+  Gates failed: OOS_ROI=-0.6%<0%, CLV_negative=-1.70_with_pos_ROI
+
+MV4a — LARGE CONFIRM → MODEL DIRECTION
+  Label: FAIL
+  N_disc=168, ROI_disc=-10.23%, CLV=3.48
+  2022-23: N=92, ROI=-10.77%
+  2023-24: N=76, ROI=-9.57%
+  OOS: N=87, ROI=-1.25%
+  Gates failed: disc_ROI=-10.2%<3.0%, ROI_2022-23=-10.8%<=0, ROI_2023-24=-9.6%<=0, delta=-10.9pp<2.0pp, OOS_ROI=-1.3%<0%
+
+MV4b — LARGE CONFIRM → FADE DIRECTION
+  Label: FAIL
+  N_disc=168, ROI_disc=-1.14%, CLV=3.48
+  2022-23: N=92, ROI=-0.4%
+  2023-24: N=76, ROI=-2.03%
+  OOS: N=87, ROI=-10.03%
+  Gates failed: disc_ROI=-1.1%<3.0%, ROI_2022-23=-0.4%<=0, ROI_2023-24=-2.0%<=0, delta=-1.8pp<2.0pp, OOS_ROI=-10.0%<0%
+
+MV5a — LARGE CONTRADICT → MODEL DIRECTION (fade large move)
+  Label: FAIL
+  N_disc=460, ROI_disc=-5.79%, CLV=-4.0
+  2022-23: N=259, ROI=-2.7%
+  2023-24: N=201, ROI=-9.77%
+  OOS: N=263, ROI=-13.62%
+  Gates failed: disc_ROI=-5.8%<3.0%, ROI_2022-23=-2.7%<=0, ROI_2023-24=-9.8%<=0, delta=-6.5pp<2.0pp, OOS_ROI=-13.6%<0%
+
+MV5b — LARGE CONTRADICT → FOLLOW MOVEMENT
+  Label: FAIL
+  N_disc=460, ROI_disc=-7.04%, CLV=-4.0
+  2022-23: N=259, ROI=-7.13%
+  2023-24: N=201, ROI=-6.92%
+  OOS: N=263, ROI=3.08%
+  Gates failed: disc_ROI=-7.0%<3.0%, ROI_2022-23=-7.1%<=0, ROI_2023-24=-6.9%<=0, delta=-7.7pp<2.0pp
+
+MV6 — REVERSE LINE MOVEMENT
+  Label: SKIPPED — requires public betting % data (not available)
+  HIGH PRIORITY for future sourcing
+
+MV7 — NO MOVEMENT + HIGH MODEL EDGE (|edge|>2.0)
+  Label: FAIL
+  N_disc=488, ROI_disc=2.11%, CLV=-0.01
+  2022-23: N=182, ROI=6.99%
+  2023-24: N=306, ROI=-0.8%
+  OOS: N=231, ROI=1.65%, CLV=-0.08
+  Delta vs baseline: 1.4pp
+  OVER: N=270, ROI=7.47%  |  UNDER: N=218, ROI=-4.55%
+  Gates failed: disc_ROI=2.1%<3.0%, ROI_2023-24=-0.8%<=0, delta=1.4pp<2.0pp, CLV_negative=-0.01_with_pos_ROI
+
+MV8 — MOVEMENT THEN REVERSAL
+  Label: SKIPPED — requires intraday snapshot data (only open/close available)
+
+MV9 — TOTAL BAND (215-230) + STABLE MOVEMENT
+  Label: FAIL
+  N_disc=385, ROI_disc=2.64%, CLV=-0.03
+  2022-23: N=170, ROI=2.19%
+  2023-24: N=215, ROI=3.0%
+  OOS: N=215, ROI=4.78%, CLV=-0.02
+  Delta vs baseline: 1.93pp
+  OVER: N=251, ROI=7.24%  |  UNDER: N=134, ROI=-5.97%
+  Gates failed: disc_ROI=2.6%<3.0%, delta=1.9pp<2.0pp, CLV_negative=-0.03_with_pos_ROI
+
+MV10a — PURE FOLLOW MOVEMENT (>1.5pt move)
+  N_disc=862
+  ROI_disc=-11.41%, CLV=3.36
+  2022-23: N=452, ROI=-11.30%
+  2023-24: N=410, ROI=-11.53%
+  OOS: N=489, ROI=-0.45%
+  Label: FAIL
+
+MV10b — PURE FADE MOVEMENT (>1.5pt move)
+  N_disc=862
+  ROI_disc=-0.56%, CLV=-3.36
+  2022-23: N=452, ROI=0.95%
+  2023-24: N=410, ROI=-2.22%
+  OOS: N=489, ROI=-10.21%
+  Label: FAIL
+
+======================================================================
+SECTION 2 — INTERACTION TESTS
+======================================================================
+
+Survivors (PASS or NEAR-MISS): 0
+Insufficient survivors for interaction testing.
+
+======================================================================
+SECTION 3 — MASTER SUMMARY TABLE
+======================================================================
+
+ID           Name                             Label      Dir                   N   ROI_D   ROI_O    CLV  Delta Failed Gate
+--------------------------------------------------------------------------------------------------------------------------
+MV1          Stable Line + Model Lean         FAIL       model direction     690    0.7%    4.9%  -0.02    0.0 4 gates
+MV2_SMALL    Confirms SMALL                   FAIL       model direction     159   -1.5%   -2.4%   1.00   -2.2 4 gates
+MV2_MEDIUM   Confirms MEDIUM                  FAIL       model direction     240   -9.3%   -9.8%   1.71  -10.0 5 gates
+MV3_SMALL    Contradicts SMALL (fade movement) FAIL       model direction (fade)  221  -11.9%  -12.2%  -1.00  -12.6 5 gates
+MV3_MEDIUM   Contradicts MEDIUM (fade movement) FAIL       model direction (fade)  341    8.1%   -0.6%  -1.70    7.3 2 gates
+MV4_model    Large Confirm (model dir)        FAIL       model direction     168  -10.2%   -1.2%   3.48  -10.9 5 gates
+MV4_fade     Large Confirm (fade)             FAIL       fade model (against movement)  168   -1.1%  -10.0%   3.48   -1.9 5 gates
+MV5_model    Large Contradict (model dir)     FAIL       model direction (fade large move)  460   -5.8%  -13.6%  -4.00   -6.5 5 gates
+MV5_follow   Large Contradict (follow move)   FAIL       follow movement (against model)  460   -7.0%    3.1%  -4.00   -7.8 4 gates
+MV6          Reverse Line Movement            SKIPPED    N/A                   0     N/A     N/A    N/A    N/A no_public_betting_data
+MV7          Stable + High Edge (>2.0)        FAIL       model direction     488    2.1%    1.6%  -0.01    1.4 4 gates
+MV8          Movement Then Reversal           SKIPPED    N/A                   0     N/A     N/A    N/A    N/A no_intraday_snapshot_data
+MV9          Mid-Range Band + Stable          FAIL       model direction     385    2.6%    4.8%  -0.03    1.9 3 gates
+MV10a        Pure Follow Movement             FAIL       follow movement     862  -11.4%   -0.5%   3.36  -12.1 standalone_test
+MV10b        Pure Fade Movement               FAIL       fade movement       862   -0.6%  -10.2%  -3.36   -1.3 standalone_test
+
+======================================================================
+SECTION 4 — PATTERN-LEVEL OBSERVATIONS
+======================================================================
+
+1. Does line movement behavior predict outcomes better than edge size alone?
+
+   Full population (model direction) discovery ROI: -2.74%
+   Movement-direction ROIs (discovery): UP=-5.77%, STABLE=0.71%, DOWN=-2.78%
+
+   Hypotheses passing all gates: 0
+   Near-misses: 0
+   Line movement behavior does NOT produce a consistently exploitable signal
+   beyond what the model already captures. Movement direction segments show
+   ROI variation but none clears the +3% discovery gate with cross-season
+   stability. This is consistent with the Phase 9 finding that edge size
+   alone also fails to predict profitability.
+
+2. Is following movement or fading movement more reliable?
+
+   Pure follow (MV10a) discovery ROI: -11.41
+   Pure fade (MV10b) discovery ROI:   -0.56
+   Neither strategy produces consistent edge. NBA totals markets
+   efficiently incorporate information through line movement.
+
+3. Do STABLE lines produce better or worse model performance?
+
+   Stable line ROI (discovery): 0.71%
+   Full population ROI (discovery): -2.74%
+   Delta: +3.45pp
+   Stable lines show modestly better model performance,
+   but the delta is not large enough to be actionable.
+
+4. Does the OVER vs UNDER asymmetry from Phase 9 persist in movement-based analysis?
+
+   Full population (discovery): OVER ROI=-2.04%, UNDER ROI=-3.61%
+   The asymmetry does not persist in this dataset split.
+
+5. What does the CLV data reveal about which hypotheses reflect real edge vs variance?
+
+   Hypotheses with positive CLV: 5
+     MV2_SMALL: CLV=1.00, ROI=-1.54
+     MV2_MEDIUM: CLV=1.71, ROI=-9.32
+     MV4_model: CLV=3.48, ROI=-10.23
+     MV4_fade: CLV=3.48, ROI=-1.14
+     MV10a: CLV=3.36, ROI=-11.41
+   Hypotheses with negative CLV: 8
+     MV1: CLV=-0.02, ROI=0.71
+     MV3_SMALL: CLV=-1.00, ROI=-11.89
+     MV3_MEDIUM: CLV=-1.70, ROI=8.05
+     MV5_model: CLV=-4.00, ROI=-5.79
+     MV5_follow: CLV=-4.00, ROI=-7.04
+     MV7: CLV=-0.01, ROI=2.11
+     MV9: CLV=-0.03, ROI=2.64
+     MV10b: CLV=-3.36, ROI=-0.56
+
+   CLV is mechanically tied to movement direction in this framework
+   (CONFIRMS bets have positive CLV by construction, CONTRADICTS have negative).
+   This means CLV acts as a consistency check rather than independent validation.
+   No hypothesis shows positive ROI with negative CLV that would suggest variance.
+
+6. What does this tell us about NBA market efficiency?
+
+   NBA totals markets are highly efficient in how lines move.
+   Opening-to-closing movement reflects genuine information incorporation.
+   Neither following nor fading movement produces edge.
+   The model does not gain systematic advantage from movement patterns.
+   This is consistent with the finding from Phase 9 that edge size also
+   does not predict profitability — the market is well-calibrated both
+   in where lines land and how they move to get there.
+
+7. What is the highest-priority next data source to source?
+
+   1. PUBLIC BETTING % (MV6 — Reverse Line Movement)
+      This is the highest-value missing signal. If the line moves opposite
+      to public money, it implies sharp/syndicate action moved it. This is
+      the only movement-based framework that could plausibly produce edge,
+      because it separates informed from uninformed money flow.
+   2. INTRADAY SNAPSHOTS (MV8 — Movement Then Reversal)
+      Lines that move and then reverse may indicate uncertainty or
+      overcorrection. Requires multiple snapshots per game per day.
+   3. STEAM MOVES / SHARP ACTION FLAGS
+      Identifying sharp vs recreational line moves would add the most
+      predictive value to any movement framework.

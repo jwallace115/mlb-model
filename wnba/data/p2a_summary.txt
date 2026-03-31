@@ -1,0 +1,219 @@
+WNBA P2a — ROLE CLASSIFICATION + ROLE CHANGE DETECTION
+============================================================
+
+1. SEASON-LEVEL ROLE DISTRIBUTION
+--------------------------------------------------
+Season   S-Heavy   Starter  Rotation     Bench   D.Bench   Total
+  2020    29 (18.8%)    25 (16.2%)    38 (24.7%)    39 (25.3%)    23 (14.9%)     154
+  2021    33 (19.4%)    26 (15.3%)    44 (25.9%)    35 (20.6%)    32 (18.8%)     170
+  2022    30 (16.4%)    29 (15.8%)    37 (20.2%)    45 (24.6%)    42 (23.0%)     183
+  2023    36 (21.7%)    25 (15.1%)    29 (17.5%)    48 (28.9%)    28 (16.9%)     166
+  2024    37 (21.6%)    24 (14.0%)    36 (21.1%)    44 (25.7%)    30 (17.5%)     171
+  2025    36 (17.2%)    39 (18.7%)    41 (19.6%)    56 (26.8%)    37 (17.7%)     209
+
+Overall bucket sizes:
+  Starter-Heavy  :  201
+  Starter        :  168
+  Rotation       :  225
+  Bench          :  267
+  Deep Bench     :  192
+
+2. ROLE TRANSITION MATRIX
+--------------------------------------------------
+      From \ To  Deep Ben     Bench  Rotation   Starter  Starter-
+     Deep Bench         0       100        11         2         1
+          Bench       114         0       256        89         8
+       Rotation         5       245         0        97        58
+        Starter         0        93        72         0       225
+  Starter-Heavy         0        19        33       180         0
+
+3. ROLE CHANGE STATS
+--------------------------------------------------
+  Total role change events: 1608
+  Total player-seasons: 1053
+  Change rate: 152.7% of player-seasons
+  Upgrades: 847
+  Downgrades: 761
+  Avg game number at change: 15.0
+
+  Top 10 by role change count:
+    Michaela Onyenwere         18 changes  seasons: [np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+    Rachel Banham              18 changes  seasons: [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+    Myisha Hines-Allen         18 changes  seasons: [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+    Teaira McCowan             18 changes  seasons: [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+    Kiah Stokes                18 changes  seasons: [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+    Natisha Hiedeman           17 changes  seasons: [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024)]
+    Stephanie Talbot           17 changes  seasons: [np.int64(2021), np.int64(2022), np.int64(2024), np.int64(2025)]
+    Kayla Thornton             16 changes  seasons: [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024)]
+    Veronica Burton            16 changes  seasons: [np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+    Azurá Stevens              16 changes  seasons: [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+
+4. SPOT CHECK — EXAMPLE ROLE CHANGES
+--------------------------------------------------
+  Candace Parker            | 2023 | 2023-06-04 | Bench -> Starter | min: 22.7 -> 22.4 (-0.2)
+  Epiphanny Prince          | 2023 | 2023-07-27 | Bench -> Deep Bench | min: 13.1 -> 2.9 (-10.2)
+  Monique Billings          | 2024 | 2024-06-02 | Starter -> Starter-Heavy | min: 26.0 -> 34.0 (+8.0)
+  Ivana Dojkić              | 2023 | 2023-07-20 | Starter -> Bench | min: 24.9 -> 17.2 (-7.7)
+  Shey Peddy                | 2025 | 2025-09-05 | Rotation -> Bench | min: 21.9 -> 11.4 (-10.4)
+
+5. ROLLING ROLE COVERAGE
+--------------------------------------------------
+  Played game rows with valid rolling_role_L5: 24023/26860 (89.4%)
+
+6. ANOMALY FLAGS
+--------------------------------------------------
+  Players with >3 changes in single season: 139
+    Sue Bird (2021): 4 changes
+    Candace Parker (2021): 5 changes
+    Kia Vaughn (2021): 4 changes
+    Kia Vaughn (2022): 4 changes
+    Tina Charles (2024): 4 changes
+    Tina Charles (2025): 4 changes
+    Alysha Clark (2025): 4 changes
+    Epiphanny Prince (2022): 4 changes
+    Jantel Lavender (2021): 4 changes
+    Danielle Robinson (2023): 4 changes
+    Courtney Vandersloot (2024): 4 changes
+    Damiris Dantas (2021): 4 changes
+    Tiffany Hayes (2023): 4 changes
+    Tiffany Hayes (2025): 4 changes
+    Riquna Williams (2021): 4 changes
+    Shey Peddy (2021): 4 changes
+    Shey Peddy (2025): 4 changes
+    Tianna Hawkins (2023): 5 changes
+    Emma Meesseman (2022): 6 changes
+    Odyssey Sims (2021): 5 changes
+    Stefanie Dolson (2022): 4 changes
+    Bria Hartley (2025): 4 changes
+    Stephanie Talbot (2021): 4 changes
+    Stephanie Talbot (2022): 4 changes
+    Stephanie Talbot (2024): 6 changes
+    Kayla Thornton (2021): 5 changes
+    Kayla Thornton (2024): 4 changes
+    Rebecca Allen (2022): 4 changes
+    Rebecca Allen (2023): 4 changes
+    Rebecca Allen (2025): 4 changes
+    Jewell Loyd (2020): 4 changes
+    Elizabeth Williams (2021): 4 changes
+    Cheyenne Parker-Tyus (2023): 5 changes
+    Dearica Hamby (2022): 4 changes
+    Crystal Bradford (2021): 4 changes
+    Kiah Stokes (2021): 4 changes
+    Isabelle Harrison (2022): 4 changes
+    Erica Wheeler (2025): 5 changes
+    Rachel Banham (2023): 4 changes
+    Rachel Banham (2025): 5 changes
+    Jonquel Jones (2023): 4 changes
+    Jonquel Jones (2024): 4 changes
+    Jonquel Jones (2025): 4 changes
+    Kahleah Copper (2022): 4 changes
+    Kahleah Copper (2025): 4 changes
+    Courtney Williams (2022): 6 changes
+    Courtney Williams (2025): 4 changes
+    Tiffany Mitchell (2023): 5 changes
+    Tiffany Mitchell (2025): 4 changes
+    Lindsay Allen (2021): 4 changes
+    Nia Coffey (2021): 4 changes
+    Allisha Gray (2021): 4 changes
+    Shatori Walker-Kimbrough (2025): 6 changes
+    Brittney Sykes (2022): 4 changes
+    Brionna Jones (2024): 6 changes
+    Cecilia Zandalasini (2024): 5 changes
+    Monique Billings (2024): 4 changes
+    Lexie Brown (2022): 5 changes
+    Jordin Canada (2022): 5 changes
+    Diamond DeShields (2022): 4 changes
+    Myisha Hines-Allen (2022): 4 changes
+    Myisha Hines-Allen (2024): 4 changes
+    Kia Nurse (2025): 5 changes
+    Mercedes Russell (2020): 4 changes
+    Mercedes Russell (2024): 4 changes
+    Azurá Stevens (2023): 4 changes
+    Azurá Stevens (2025): 5 changes
+    Victoria Vivians (2023): 4 changes
+    Gabby Williams (2022): 5 changes
+    A'ja Wilson (2022): 4 changes
+    Kathryn Westbeld (2025): 5 changes
+    Katie Lou Samuelson (2024): 4 changes
+    Teaira McCowan (2022): 4 changes
+    Teaira McCowan (2023): 4 changes
+    Kalani Brown (2023): 5 changes
+    Megan Gustafson (2023): 4 changes
+    Brianna Turner (2023): 4 changes
+    Brianna Turner (2025): 4 changes
+    Ezi Magbegor (2025): 5 changes
+    Marina Mabrey (2022): 4 changes
+    Alanna Smith (2023): 4 changes
+    Alanna Smith (2025): 5 changes
+    Bridget Carleton (2021): 4 changes
+    Natisha Hiedeman (2023): 5 changes
+    Natisha Hiedeman (2024): 4 changes
+    Li Yueru (2024): 4 changes
+    Li Yueru (2025): 6 changes
+    Kaila Charles (2021): 4 changes
+    Kaila Charles (2025): 4 changes
+    Te'a Cooper (2021): 5 changes
+    Tyasha Harris (2022): 4 changes
+    Tyasha Harris (2024): 4 changes
+    Joyner Holmes (2023): 6 changes
+    Joyner Holmes (2024): 4 changes
+    Sug Sutton (2025): 5 changes
+    Megan Walker (2021): 5 changes
+    Leonie Fiebich (2024): 7 changes
+    Chennedy Carter (2022): 4 changes
+    Awak Kuier (2022): 6 changes
+    Dana Evans (2024): 4 changes
+    Natasha Mack (2024): 5 changes
+    Michaela Onyenwere (2021): 4 changes
+    Michaela Onyenwere (2023): 4 changes
+    Michaela Onyenwere (2025): 4 changes
+    Aari McDonald (2021): 4 changes
+    Rae Burrell (2023): 4 changes
+    Veronica Burton (2023): 5 changes
+    Veronica Burton (2024): 5 changes
+    NaLyssa Smith (2023): 4 changes
+    NaLyssa Smith (2024): 4 changes
+    Shakira Austin (2022): 4 changes
+    Emily Engstler (2024): 4 changes
+    Lexie Hull (2025): 5 changes
+    Evina Westbrook (2022): 4 changes
+    Olivia Nelson-Ododa (2023): 4 changes
+    Nikolina Milić (2022): 4 changes
+    Nikolina Milić (2023): 4 changes
+    Ivana Dojkić (2023): 4 changes
+    Li Meng (2023): 4 changes
+    Haley Jones (2023): 4 changes
+    Jordan Horston (2023): 4 changes
+    Maddy Siegrist (2023): 4 changes
+    Dorka Juhász (2023): 5 changes
+    Dorka Juhász (2024): 6 changes
+    Sevgi Uzun (2024): 4 changes
+    Cameron Brink (2025): 4 changes
+    Kamilla Cardoso (2025): 4 changes
+    Aaliyah Edwards (2025): 4 changes
+    Jacy Sheldon (2024): 4 changes
+    Jacy Sheldon (2025): 4 changes
+    Janelle Salaün (2025): 4 changes
+    Sarah Ashlee Barker (2025): 5 changes
+    Kiki Iriafen (2025): 4 changes
+    Aziaha James (2025): 5 changes
+    Aneesah Morrow (2025): 5 changes
+    Lucy Olsen (2025): 5 changes
+    Te-Hina Paopao (2025): 6 changes
+    JJ Quinerly (2025): 4 changes
+    Hailey Van Lith (2025): 4 changes
+  Season role vs modal rolling disagree by >1 bucket: 34
+    Kristi Toliver (2022): season=Bench, modal_rolling_numeric=4.0
+    Jasmine Thomas (2022): season=Bench, modal_rolling_numeric=4.0
+    Shekinna Stricklen (2020): season=Bench, modal_rolling_numeric=4.0
+    Damiris Dantas (2021): season=Starter, modal_rolling_numeric=2.0
+    Shey Peddy (2025): season=Starter, modal_rolling_numeric=2.0
+  Minutes > 40 rows: 160
+  Duplicate player_id + game_id: 0
+
+============================================================
+COMPLETION CRITERIA FLAGS
+============================================================
+  *** Role change events exceed 15% of player-seasons (152.7%)
+
+  ACTION REQUIRED: Review flagged items before proceeding to P2b.

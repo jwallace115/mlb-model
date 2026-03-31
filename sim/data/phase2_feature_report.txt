@@ -1,0 +1,80 @@
+======================================================================
+PHASE 2 FEATURE TABLE — AUDIT REPORT
+======================================================================
+  Rows: 9,715
+  Columns: 65
+  Seasons: [np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025)]
+    2022: 2,430 games
+    2023: 2,430 games
+    2024: 2,427 games
+    2025: 2,428 games
+
+  Target: actual_total
+    mean=8.87, std=4.48, min=1, max=33
+
+──────────────────────────────────────────────────────────────────────
+FEATURE DISTRIBUTIONS
+──────────────────────────────────────────────────────────────────────
+Feature                            Mean      Std      Min      Max   Null%
+──────────────────────────────  ───────  ───────  ───────  ───────  ──────
+home_sp_xfip                      4.250    0.516    3.058    6.108    0.0%
+away_sp_xfip                      4.250    0.512    3.058    6.108    0.0%
+home_sp_siera                     4.250    0.516    3.058    6.108    0.0%
+away_sp_siera                     4.250    0.512    3.058    6.108    0.0%
+home_sp_k_pct                     0.222    0.029    0.153    0.328    0.0%
+away_sp_k_pct                     0.222    0.029    0.153    0.328    0.0%
+home_sp_bb_pct                    0.080    0.013    0.042    0.138    0.0%
+away_sp_bb_pct                    0.080    0.013    0.042    0.138    0.0%
+home_sp_avg_ip                    5.615    0.676    3.030    7.500    0.0%
+away_sp_avg_ip                    5.617    0.683    3.030    7.500    0.0%
+home_wrc_plus                    99.249    4.115   90.100  113.500    0.0%
+away_wrc_plus                    99.248    4.115   90.100  113.500    0.0%
+home_bp_interaction               3.358    0.679    1.410    6.155    0.0%
+away_bp_interaction               3.355    0.687    1.410    6.155    0.0%
+wind_factor_effective             0.749    5.882  -23.690   23.300    0.0%
+
+──────────────────────────────────────────────────────────────────────
+FALLBACK USAGE COUNTS
+──────────────────────────────────────────────────────────────────────
+  home_sp_fallback:
+    Level 0 (FG ID): 9,715 (100.0%)
+    Level 1 (FG name): 0 (0.0%)
+    Level 2 (last-name): 0 (0.0%)
+    Level 3 (team avg): 0 (0.0%)
+    Level 4 (league avg): 0 (0.0%)
+  away_sp_fallback:
+    Level 0 (FG ID): 9,714 (100.0%)
+    Level 1 (FG name): 0 (0.0%)
+    Level 2 (last-name): 0 (0.0%)
+    Level 3 (team avg): 1 (0.0%)
+    Level 4 (league avg): 0 (0.0%)
+  home_wrc_fallback:
+    Level 0 (platoon split): 9,715 (100.0%)
+    Level 1 (overall wRC+): 0 (0.0%)
+    Level 2 (league avg): 0 (0.0%)
+  away_wrc_fallback:
+    Level 0 (platoon split): 9,715 (100.0%)
+    Level 1 (overall wRC+): 0 (0.0%)
+    Level 2 (league avg): 0 (0.0%)
+  home_bp_fallback:
+    Level 0 (FG bullpen): 9,715 (100.0%)
+    Level 1 (league avg): 0 (0.0%)
+  away_bp_fallback:
+    Level 0 (FG bullpen): 9,715 (100.0%)
+    Level 1 (league avg): 0 (0.0%)
+
+──────────────────────────────────────────────────────────────────────
+HIGH COLLINEARITY PAIRS  (|r| > 0.70)
+──────────────────────────────────────────────────────────────────────
+  |r| = 1.000  home_sp_xfip  ↔  home_sp_siera
+  |r| = 0.730  home_sp_xfip  ↔  home_sp_k_pct
+  |r| = 0.730  home_sp_siera  ↔  home_sp_k_pct
+  |r| = 0.994  home_sp_avg_ip  ↔  home_bp_interaction
+  |r| = 1.000  away_sp_xfip  ↔  away_sp_siera
+  |r| = 0.724  away_sp_xfip  ↔  away_sp_k_pct
+  |r| = 0.724  away_sp_siera  ↔  away_sp_k_pct
+  |r| = 0.994  away_sp_avg_ip  ↔  away_bp_interaction
+
+Moderate collinearity pairs  (0.50 < |r| ≤ 0.70)
+
+======================================================================

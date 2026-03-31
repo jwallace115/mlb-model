@@ -1,0 +1,143 @@
+CHANNEL MODEL V1.5 — PACE AS INTERACTION MODIFIER
+Run date: 2026-03-24
+Train: 2022-23 + 2023-24 | Test: 2024-25
+
+========================================
+TOP INTERACTION CORRELATIONS WITH game_total (train set)
+========================================
+Interaction                  | r_total | r_line  | Selected P2
+-----------------------------|---------|---------|------------
+pace_x_intensity             |  +0.249 |  +0.636 | YES
+pace_x_home_2nd              |  -0.058 |  -0.057 | YES
+pace_x_away_paint            |  -0.044 |  -0.028 | YES
+gap_x_paint                  |  +0.043 |  +0.043 | YES
+gap_x_intensity              |  +0.039 |  -0.019 | YES
+pace_x_away_tov              |  -0.039 |  -0.056 |
+pace_x_home_fb               |  +0.037 |  +0.101 |
+pace_x_away_2nd              |  -0.037 |  -0.106 |
+pace_x_away_fb               |  +0.036 |  +0.122 |
+pace_x_home_tov              |  -0.030 |  -0.057 |
+gap_x_fb                     |  -0.021 |  -0.062 |
+pace_x_away_ft               |  +0.006 |  -0.046 |
+pace_x_home_paint            |  +0.005 |  -0.043 |
+pace_x_home_ft               |  +0.001 |  -0.063 |
+
+========================================
+MODEL COMPARISON (OOS 2024-25)
+========================================
+Model          |     R²  |    MAE  |   RMSE | corr_act | corr_line | corr_base | std_pred
+---------------|---------| -------|--------|----------|-----------|-----------|--------
+Base           |  0.1311 | 14.881 | 18.563 |    0.368 |     0.722 |       —   |   6.04
+P1 (all 14)    |  0.1293 | 14.919 | 18.582 |    0.361 |     0.752 |     0.940 |   6.74
+P2 (top 5)     |  0.1288 | 14.913 | 18.588 |    0.360 |     0.751 |     0.942 |   6.74
+Closing line   |     —   | 14.120 | 17.690 |      —   |       —   |       —   |   8.87
+
+Best model: Base (no pace interactions needed)
+MAE improvement over Base: 0.000 pts (P1/P2 slightly worse)
+MAE vs closing line: 0.76 pts worse
+Variance expansion: no
+Divergence from Base: corr=0.94 (negligible divergence)
+
+========================================
+INTERACTION IMPORTANCE — BASE MODEL
+========================================
+ElasticNet alpha=0.059, l1_ratio=0.90
+
+Top 10 by |coefficient|:
+Rank | Feature                    | Coef    | Mechanism
+-----|----------------------------|---------|------------------------------
+  1  | off_paint_sum              |  +6.167 | Combined paint scoring volume
+  2  | home_paint_share           |  -5.267 | Home paint composition
+  3  | away_paint_share           |  -4.811 | Away paint composition
+  4  | def_paint_sum              |  +2.717 | Combined paint defense allowed
+  5  | channel_total_intensity    |  +2.070 | Sum of all channels
+  6  | home_paint_mismatch        |  +1.591 | Home paint advantage
+  7  | home_2nd_mismatch          |  -1.240 | Home 2nd chance advantage
+  8  | def_2nd_sum                |  +0.940 | 2nd chance defense allowed
+  9  | off_tov_sum                |  -0.792 | Points off turnovers
+ 10  | home_fb_share              |  -0.710 | Home fastbreak composition
+
+Non-zero pace interactions: 0 of 14
+ElasticNet zeroed ALL pace interaction terms.
+
+========================================
+EDGE DETECTION — ALL GAMES
+========================================
+|edge|>=4: 52.1% | |edge|>=6: 34.0%
+
+Bucket          |   N | mean_ME | abs_ME | hit_rate | mean_edge
+----------------|-----|---------|--------|----------|----------
+<= -6.0         | 162 |   -0.61 |  13.24 |    0.488 |     -8.96
+-6.0 to -4.0    |  84 |   +0.42 |  14.55 |    0.429 |     -4.83
+-4.0 to -2.0    | 120 |   -0.42 |  14.95 |    0.500 |     -2.98
+-2.0 to +2.0    | 263 |   +2.23 |  14.69 |    0.532 |     +0.09
++2.0 to +4.0    | 132 |   +0.11 |  13.69 |    0.485 |     +2.98
++4.0 to +6.0    | 110 |   +0.66 |  13.20 |    0.527 |     +5.00
+>= +6.0         | 204 |   +0.91 |  14.20 |    0.525 |     +9.38
+
+========================================
+EDGE DETECTION — NON-OT (diagnostic)
+========================================
+Bucket          |   N | mean_ME | abs_ME | hit_rate | mean_edge
+----------------|-----|---------|--------|----------|----------
+<= -6.0         | 157 |   -1.68 |  12.59 |    0.497 |     -8.96
+-6.0 to -4.0    |  81 |   +0.27 |  14.64 |    0.420 |     -4.83
+-4.0 to -2.0    | 111 |   -1.88 |  14.29 |    0.514 |     -3.00
+-2.0 to +2.0    | 252 |   +1.31 |  14.32 |    0.532 |     +0.09
++2.0 to +4.0    | 125 |   -1.03 |  13.31 |    0.456 |     +2.96
++4.0 to +6.0    | 104 |   -0.66 |  12.60 |    0.500 |     +4.97
+>= +6.0         | 196 |   +0.23 |  13.88 |    0.510 |     +9.39
+
+========================================
+PACE SEGMENT ANALYSIS
+========================================
+By combined_pace_proxy quartile:
+Quartile     |   N | MAE_base | MAE_hybrid | Improvement
+-------------|-----|----------|------------|------------
+Q1 (slowest) | 271 |   13.910 |     13.910 |     +0.000
+Q2           | 268 |   15.169 |     15.169 |     +0.000
+Q3           | 267 |   15.192 |     15.192 |     +0.000
+Q4 (fastest) | 269 |   15.264 |     15.264 |     +0.000
+
+By pace_extreme:
+Extreme      | 184 |   15.386 |     15.386 |     +0.000
+Normal       | 891 |   14.777 |     14.777 |     +0.000
+
+========================================
+VERDICT
+========================================
+Pace interaction value: none
+Best interactions: none (all 14 zeroed by ElasticNet)
+MAE improvement: 0.000 pts over Base
+Variance expansion: no
+Independence maintained: yes (corr_line=0.72)
+Diverges meaningfully from Base: no (corr_base=0.94)
+Recommended next step: close channel model branch
+Reasoning: ElasticNet regularization zeroed out all 14 pace interaction
+  terms, confirming pace provides zero incremental signal when channel
+  features are present. This is mechanistically sound: fast-paced teams
+  score more fastbreak/transition points by definition, so pace effects
+  are already captured in the channel rolling features. The channel model
+  (ElasticNet, MAE=14.88) captures 13% of total variance independently
+  from the closing line (r=0.72) but cannot beat the market (MAE 14.12).
+  The channel model branch should be closed as a standalone projection
+  system and preserved as a divergence-detection overlay only.
+
+========================================
+CHANNEL MODEL BRANCH SUMMARY (V1 → V1.5 → V2)
+========================================
+Version              | Approach              | OOS MAE | vs Line  | Edge
+---------------------|----------------------|---------|----------|------
+V1A Ridge minimal    | 17 features          |  15.25  | +1.13    | none
+V1B Ridge full       | 27 features          |  14.88  | +0.76    | none
+V1.5 ElasticNet Base | 27 features          |  14.88  | +0.76    | none
+V1.5 P1 +pace inter | 41 features          |  14.92  | +0.80    | none
+V2 Random Forest     | 27 features          |  15.37  | +1.25    | none
+V2 GBM               | 27 features          |  15.40  | +1.28    | none
+Closing line         | —                    |  14.12  | —        | —
+
+CONCLUSION: The NBA totals closing line is well-calibrated against
+scoring channel composition. Channel features capture real structural
+content (R²=0.13, independent at r=0.72 from the line) but do not
+contain exploitable edge beyond what the market already prices.
+The channel model branch is closed as a standalone projection system.

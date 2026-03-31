@@ -1,0 +1,6 @@
+{
+  "road_trip_threshold": 6,
+  "overlay_status": "ACTIVE",
+  "overlay_version": "1.0",
+  "notes": "ST02 = road_trip_game_num >= 6 for away team. UNDER direction. Blocked when P09 active. Tag-only — no sizing effect."
+}

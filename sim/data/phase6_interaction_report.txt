@@ -1,0 +1,429 @@
+============================================================================
+PHASE 6 — INTERACTION FEATURE TESTING
+============================================================================
+
+  Baseline: Ridge α=500, train=2022+2023 (Phase 3 v2)
+  Protocol: one interaction added at a time, OOS test on 2025
+  Keep rule: OOS MAE must improve, or calibration must improve
+             without OOS MAE degrading more than 0.02 runs
+
+  ⚠ Model status: strong directional baseline, NOT finished sharp model
+  ⚠ Proxy line 8.86 used for edge/review calcs — not actual posted totals
+
+============================================================================
+INTERACTION 1: flyball_pitcher_pct × wind_out_flag
+============================================================================
+
+  Feature: (home_sp_fb_pct + away_sp_fb_pct) × wind_out_flag
+  wind_out_flag = 1 when roof_status=='open' AND wind_factor_effective > 3
+  fb_pct from FanGraphs via pybaseball (FB%, excludes LD and GB)
+  Fallback: league-average FB% for pitchers not in FanGraphs data
+
+  2022: home_sp_fb_pct mean=0.373 std=0.068  wind_out games=784  interaction mean=0.239 std=0.351
+  2023: home_sp_fb_pct mean=0.380 std=0.068  wind_out games=660  interaction mean=0.206 std=0.342
+  2024: home_sp_fb_pct mean=0.389 std=0.062  wind_out games=766  interaction mean=0.243 std=0.361
+  2025: home_sp_fb_pct mean=0.391 std=0.062  wind_out games=659  interaction mean=0.211 std=0.349
+
+  Note: flyball_wind_interaction = 0 for all dome/retractable games
+  (wind_factor_effective already neutralized to 0 in Phase 1)
+
+Fitting baseline Ridge (18 features, train=2022+2023)...
+Fitting interaction Ridge (19 features, train=2022+2023)...
+  Baseline alpha=500.00  Interaction alpha=500.00
+  Baseline sigma=4.3747  Interaction sigma=4.3741
+
+────────────────────────────────────────────────────────────────────────────
+  2024 Validate  (n=2,427)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.3447          3.3461        ++0.0014 ✗
+  RMSE                        4.2294          4.2315        ++0.0021 ✗
+  Pearson r                   0.1937          0.1916         -0.0020 ✗
+  Bias                       -0.0191         -0.0217         -0.0026 ✓
+  DHR (P≥0.50)                0.5616          0.5591         -0.0025 ✗
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,427      56.2%    2,427      56.2%    +0.000
+        0.52    1,931      58.2%    1,951      57.4%    -0.009
+        0.55    1,289      59.9%    1,280      60.1%    +0.002
+        0.58      741      63.8%      751      63.4%    -0.005
+        0.60      503      65.4%      507      65.1%    -0.003
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,040   51.6%   1,049   50.9%
+     0.5–1.0      784   55.9%     766   55.9%
+     1.0–1.5      368   63.6%     373   64.3%
+     1.5–2.0      125   64.8%     125   61.6%
+     2.0–2.5       65   64.6%      69   68.1%
+     2.5–3.0       28   75.0%      27   70.4%
+     3.0–4.0       17   58.8%      18   66.7%
+────────────────────────────────────────────────────────────────────────────
+  2025 OOS  (n=2,428)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.5739          3.5735         -0.0004 ✓
+  RMSE                        4.5178          4.5162         -0.0016 ✓
+  Pearson r                   0.1833          0.1851        ++0.0018 ✓
+  Bias                       -0.0365         -0.0338        ++0.0027 ✗
+  DHR (P≥0.50)                0.5424          0.5441        ++0.0016 ✓
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,428      54.1%    2,428      54.1%    +0.000
+        0.52    1,950      55.3%    1,966      55.4%    +0.002
+        0.55    1,301      58.3%    1,314      57.7%    -0.006
+        0.58      762      61.5%      779      61.4%    -0.002
+        0.60      505      63.0%      505      63.4%    +0.004
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,038   49.6%   1,032   50.2%
+     0.5–1.0      763   53.2%     762   52.6%
+     1.0–1.5      398   60.8%     399   61.2%
+     1.5–2.0      141   63.1%     146   63.7%
+     2.0–2.5       47   68.1%      47   66.0%
+     2.5–3.0       23   78.3%      24   83.3%
+     3.0–4.0       17   88.2%      17   82.4%
+        4.0+        1    0.0%       1    0.0%
+
+  flyball_wind_interaction coefficient:
+    Standardized: +0.0974
+    Raw (per unit): +0.2808
+    Interpretation: when wind_out AND flyball pitchers facing each other,
+    each unit of (home_fb + away_fb) × 1 adds +0.2808 projected runs
+
+
+  VERDICT — flyball × wind_out
+  ────────────────────────────────────────────────────────────
+  2024 MAE delta:  +0.0014  DEGRADED/FLAT ✗
+  2025 MAE delta:  -0.0004  IMPROVED ✓
+  2025 DHR delta:  +0.0016  IMPROVED ✓
+  DECISION: KEEP — OOS (2025) MAE improved by 0.0004 runs
+
+============================================================================
+INTERACTION 2: weak_bullpen × high_temperature
+============================================================================
+
+  weak_bullpen flag: bp_interaction > 3.74
+    (P75 of home+away bp_interaction in 2022+2023 training set)
+    bp_interaction encodes bullpen workload proxy: (bp_xfip/4.25) × proj_inn
+    Higher value → team starter goes fewer innings, bullpen carries more load
+  high_temp flag:    temperature > 80°F (open-roof games only)
+  Interaction: (home_bp_high + away_bp_high) × hot_temp_flag
+  Hypothesis: bullpens tire faster and allow more runs in summer heat
+
+  2022: bp_thresh=3.74  hot_games=501  bp_heat_interaction>0: 239  interaction mean=0.115
+  2023: bp_thresh=3.74  hot_games=397  bp_heat_interaction>0: 184  interaction mean=0.082
+  2024: bp_thresh=3.74  hot_games=511  bp_heat_interaction>0: 247  interaction mean=0.118
+  2025: bp_thresh=3.74  hot_games=476  bp_heat_interaction>0: 234  interaction mean=0.115
+
+Fitting baseline Ridge...
+Fitting interaction Ridge...
+  Baseline alpha=500.00  Interaction alpha=500.00
+  Baseline sigma=4.3741  Interaction sigma=4.3741
+
+────────────────────────────────────────────────────────────────────────────
+  2024 Validate  (n=2,427)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.3461          3.3461         -0.0000 ✓
+  RMSE                        4.2315          4.2315         -0.0000 ✓
+  Pearson r                   0.1916          0.1916        ++0.0000 ✓
+  Bias                       -0.0217         -0.0217         -0.0000 ✓
+  DHR (P≥0.50)                0.5591          0.5591         +0.0000 ✗
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,427      56.2%    2,427      56.2%    +0.000
+        0.52    1,951      57.4%    1,951      57.4%    +0.000
+        0.55    1,280      60.1%    1,280      60.1%    +0.000
+        0.58      751      63.4%      751      63.4%    +0.000
+        0.60      507      65.1%      507      65.1%    +0.000
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,049   50.9%   1,050   51.0%
+     0.5–1.0      766   55.9%     765   55.8%
+     1.0–1.5      373   64.3%     373   64.3%
+     1.5–2.0      125   61.6%     125   61.6%
+     2.0–2.5       69   68.1%      69   68.1%
+     2.5–3.0       27   70.4%      27   70.4%
+     3.0–4.0       18   66.7%      18   66.7%
+────────────────────────────────────────────────────────────────────────────
+  2025 OOS  (n=2,428)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.5735          3.5735         -0.0000 ✓
+  RMSE                        4.5162          4.5162         -0.0000 ✓
+  Pearson r                   0.1851          0.1851        ++0.0000 ✓
+  Bias                       -0.0338         -0.0338         -0.0000 ✓
+  DHR (P≥0.50)                0.5441          0.5441         +0.0000 ✗
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,428      54.1%    2,428      54.1%    +0.000
+        0.52    1,966      55.4%    1,966      55.4%    +0.000
+        0.55    1,314      57.7%    1,315      57.6%    -0.000
+        0.58      779      61.4%      779      61.4%    +0.000
+        0.60      505      63.4%      505      63.4%    +0.000
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,032   50.2%   1,033   50.1%
+     0.5–1.0      762   52.6%     761   52.7%
+     1.0–1.5      399   61.2%     398   61.1%
+     1.5–2.0      146   63.7%     147   63.9%
+     2.0–2.5       47   66.0%      47   66.0%
+     2.5–3.0       24   83.3%      24   83.3%
+     3.0–4.0       17   82.4%      17   82.4%
+        4.0+        1    0.0%       1    0.0%
+
+  bp_heat_interaction coefficient:  std=+0.0003  raw=+0.0010
+
+
+  VERDICT — weak_bullpen × high_temp
+  ────────────────────────────────────────────────────────────
+  2024 MAE delta:  -0.0000  DEGRADED/FLAT ✗
+  2025 MAE delta:  -0.0000  DEGRADED/FLAT ✗
+  2025 DHR delta:  +0.0000  DEGRADED/FLAT ✗
+  DECISION: DROP — coefficient shrunk to ~0 by Ridge (no effective signal)
+  Likely cause: high collinearity with existing features or too sparse
+
+============================================================================
+INTERACTION 3: power_offense (team ISO) × park_hr_factor
+============================================================================
+
+  Power proxy chosen: team ISO (Isolated Power = SLG − BA)
+  Source: FanGraphs via pybaseball, PA-weighted aggregation by team
+  Why ISO over barrel rate:
+    ISO has 100% team coverage via pybaseball with no extra API calls
+    Barrel rate requires Savant batter leaderboard → team aggregation
+    ISO is interpretable: directly measures extra-base power production
+    Barrel rate is physically purer but adds pipeline complexity with
+    marginal precision gain given the Ridge regularization context
+
+  Formula: (home_iso + away_iso) × (park_factor_hr/100 − 1)
+  Centering: park_factor_hr/100 − 1 = 0 for neutral parks (factor=100)
+    > 0 for HR-friendly parks (factor>100), < 0 for HR-suppressing
+  Hypothesis: high-ISO lineups score more runs specifically in HR parks
+
+  2022: home_iso mean=0.154  park_hr_effect mean=0.0047  interaction mean=0.0015 std=0.0148
+  2023: home_iso mean=0.167  park_hr_effect mean=0.0047  interaction mean=0.0016 std=0.0162
+  2024: home_iso mean=0.158  park_hr_effect mean=0.0047  interaction mean=0.0015 std=0.0157
+  2025: home_iso mean=0.161  park_hr_effect mean=0.0046  interaction mean=0.0014 std=0.0155
+
+Fitting baseline Ridge...
+Fitting interaction Ridge...
+  alpha: base=500.00  int=500.00
+  sigma: base=4.3741  int=4.3743
+
+────────────────────────────────────────────────────────────────────────────
+  2024 Validate  (n=2,427)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.3461          3.3465        ++0.0004 ✗
+  RMSE                        4.2315          4.2321        ++0.0005 ✗
+  Pearson r                   0.1916          0.1912         -0.0004 ✗
+  Bias                       -0.0217         -0.0218         -0.0001 ✓
+  DHR (P≥0.50)                0.5591          0.5604        ++0.0012 ✓
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,427      56.2%    2,427      56.1%    -0.001
+        0.52    1,951      57.4%    1,947      57.2%    -0.001
+        0.55    1,280      60.1%    1,283      59.9%    -0.001
+        0.58      751      63.4%      749      63.6%    +0.002
+        0.60      507      65.1%      513      64.7%    -0.004
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,049   50.9%   1,049   51.2%
+     0.5–1.0      766   55.9%     764   55.9%
+     1.0–1.5      373   64.3%     373   64.1%
+     1.5–2.0      125   61.6%     125   62.4%
+     2.0–2.5       69   68.1%      71   67.6%
+     2.5–3.0       27   70.4%      27   70.4%
+     3.0–4.0       18   66.7%      18   66.7%
+────────────────────────────────────────────────────────────────────────────
+  2025 OOS  (n=2,428)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.5735          3.5743        ++0.0007 ✗
+  RMSE                        4.5162          4.5171        ++0.0009 ✗
+  Pearson r                   0.1851          0.1842         -0.0009 ✗
+  Bias                       -0.0338         -0.0325        ++0.0013 ✗
+  DHR (P≥0.50)                0.5441          0.5432         -0.0008 ✗
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,428      54.1%    2,428      54.0%    -0.001
+        0.52    1,966      55.4%    1,965      55.4%    -0.001
+        0.55    1,314      57.7%    1,310      57.7%    +0.000
+        0.58      779      61.4%      785      61.3%    -0.001
+        0.60      505      63.4%      504      62.9%    -0.005
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,032   50.2%   1,032   50.2%
+     0.5–1.0      762   52.6%     758   52.6%
+     1.0–1.5      399   61.2%     403   60.5%
+     1.5–2.0      146   63.7%     146   63.7%
+     2.0–2.5       47   66.0%      47   66.0%
+     2.5–3.0       24   83.3%      25   84.0%
+     3.0–4.0       17   82.4%      16   81.2%
+        4.0+        1    0.0%       1    0.0%
+
+  power_park_interaction (ISO × park_hr_effect) coefficient:
+    Standardized: +0.1149
+    Raw: +7.4045
+    Interpretation: each unit increase in (home_iso + away_iso) × park_hr_effect
+    adds +7.4045 runs projected — sign ✓ positive (baseball sense)
+
+
+  VERDICT — power_offense_ISO × park_hr_factor
+  ────────────────────────────────────────────────────────────
+  2024 MAE delta:  +0.0004  DEGRADED/FLAT ✗
+  2025 MAE delta:  +0.0007  DEGRADED/FLAT ✗
+  2025 DHR delta:  -0.0008  DEGRADED/FLAT ✗
+  DECISION: DROP — OOS MAE degraded (+0.0007); interaction does not generalize
+
+============================================================================
+INTERACTION 4: elite_offense × poor_command
+============================================================================
+
+  elite_offense: wRC+ proxy > 102.9 (P80 training)
+  poor_command:  SP BB% > 0.0911 (P80 training)
+  Interaction: (home_elite × away_poor_cmd) + (away_elite × home_poor_cmd)
+
+  2022: elite_wrc>102.9, bb_poor>0.0911  interaction mean=0.072 std=0.259
+  2023: elite_wrc>102.9, bb_poor>0.0911  interaction mean=0.097 std=0.296
+  2024: elite_wrc>102.9, bb_poor>0.0911  interaction mean=0.071 std=0.259
+  2025: elite_wrc>102.9, bb_poor>0.0911  interaction mean=0.066 std=0.252
+
+Fitting baseline Ridge...
+Fitting interaction Ridge...
+  alpha: base=500.00  int=500.00
+  sigma: base=4.3741  int=4.3741
+
+────────────────────────────────────────────────────────────────────────────
+  2024 Validate  (n=2,427)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.3461          3.3461        ++0.0000 ✗
+  RMSE                        4.2315          4.2315         -0.0000 ✓
+  Pearson r                   0.1916          0.1916        ++0.0000 ✓
+  Bias                       -0.0217         -0.0217         -0.0000 ✓
+  DHR (P≥0.50)                0.5591          0.5591         +0.0000 ✗
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,427      56.2%    2,427      56.2%    +0.000
+        0.52    1,951      57.4%    1,951      57.4%    +0.000
+        0.55    1,280      60.1%    1,280      60.1%    +0.000
+        0.58      751      63.4%      751      63.5%    +0.001
+        0.60      507      65.1%      507      65.1%    +0.000
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,049   50.9%   1,049   50.9%
+     0.5–1.0      766   55.9%     766   55.9%
+     1.0–1.5      373   64.3%     373   64.3%
+     1.5–2.0      125   61.6%     125   61.6%
+     2.0–2.5       69   68.1%      69   68.1%
+     2.5–3.0       27   70.4%      27   70.4%
+     3.0–4.0       18   66.7%      18   66.7%
+────────────────────────────────────────────────────────────────────────────
+  2025 OOS  (n=2,428)
+
+  Metric                    Baseline   + Interaction             Delta
+  ────────────────────  ────────────  ──────────────  ────────────────
+  MAE                         3.5735          3.5735        ++0.0000 ✗
+  RMSE                        4.5162          4.5162         -0.0000 ✓
+  Pearson r                   0.1851          0.1851        ++0.0000 ✓
+  Bias                       -0.0338         -0.0339         -0.0001 ✓
+  DHR (P≥0.50)                0.5441          0.5441         +0.0000 ✗
+
+  P-threshold hit rates:
+    P thresh   Base N  Base Hit%    New N   New Hit%     Delta
+  ──────────  ───────  ─────────  ───────  ─────────  ────────
+        0.50    2,428      54.1%    2,428      54.1%    +0.000
+        0.52    1,966      55.4%    1,967      55.4%    -0.000
+        0.55    1,314      57.7%    1,314      57.7%    +0.000
+        0.58      779      61.4%      779      61.4%    +0.000
+        0.60      505      63.4%      504      63.3%    -0.001
+
+  Edge bucket (baseline vs interaction):
+      Bucket   Base N   Base%   New N    New%
+  ──────────  ───────  ──────  ──────  ──────
+     0.0–0.5    1,032   50.2%   1,032   50.2%
+     0.5–1.0      762   52.6%     762   52.6%
+     1.0–1.5      399   61.2%     399   61.2%
+     1.5–2.0      146   63.7%     146   63.7%
+     2.0–2.5       47   66.0%      47   66.0%
+     2.5–3.0       24   83.3%      24   83.3%
+     3.0–4.0       17   82.4%      17   82.4%
+        4.0+        1    0.0%       1    0.0%
+
+  elite_cmd_interaction coefficient:  std=-0.0006  raw=-0.0020
+
+
+  VERDICT — elite_offense × poor_command
+  ────────────────────────────────────────────────────────────
+  2024 MAE delta:  +0.0000  DEGRADED/FLAT ✗
+  2025 MAE delta:  +0.0000  DEGRADED/FLAT ✗
+  2025 DHR delta:  +0.0000  DEGRADED/FLAT ✗
+  DECISION: DROP — coefficient shrunk to ~0 by Ridge (no effective signal)
+  Likely cause: high collinearity with existing features or too sparse
+
+============================================================================
+PHASE 6 SUMMARY
+============================================================================
+
+  Interaction 1: KEEP
+  Interaction 2: DROP
+  Interaction 3: DROP
+  Interaction 4: DROP
+
+  Final feature set (19 features):
+    home_sp_xfip
+    away_sp_xfip
+    home_sp_k_pct
+    away_sp_k_pct
+    home_sp_bb_pct
+    away_sp_bb_pct
+    home_sp_avg_ip
+    away_sp_avg_ip
+    home_wrc_plus
+    away_wrc_plus
+    park_factor_runs
+    park_factor_hr
+    temperature
+    wind_factor_effective
+    umpire_over_rate
+    home_rest_days
+    away_rest_days
+    doubleheader_flag
+    flyball_wind_interaction

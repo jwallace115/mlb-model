@@ -1,0 +1,84 @@
+BATCH MARKET RESULTS
+==================================================
+
+M1 — Line moved toward model
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+M5 — Stable opener
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+M7 — Soft opener
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+M2 — Recency over-reaction (high)
+  Label: SKIPPED
+  Direction: UNDER
+  N discovery: 0
+  Gate: Prior game actual total not in features.parquet
+
+M3 — Recency over-reaction (low)
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Prior game actual total not in features.parquet
+
+M4 — Star player first game back
+  Label: SKIPPED
+  Direction: UNDER
+  N discovery: 0
+  Gate: Injury return data not available
+
+M6 — Large market home (OVER)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 30
+  N per season: 22-23=16, 23-24=14
+  ROI 22-23: -28.4%
+  ROI 23-24: +9.1%
+  ROI combined: -10.9%
+  Delta vs base: -16.5pp
+  Gate: N=30 < 50
+
+M6u — Large market home (UNDER)
+  Label: FAIL
+  Direction: UNDER
+  N discovery: 32
+  N per season: 22-23=17, 23-24=15
+  ROI 22-23: -21.4%
+  ROI 23-24: -36.4%
+  ROI combined: -28.4%
+  Delta vs base: -34.0pp
+  Gate: N=32 < 50
+
+M8 — High public betting %
+  Label: SKIPPED
+  Direction: BOTH
+  N discovery: 0
+  Gate: Public betting % data not available. HIGH PRIORITY.
+
+M9 — Anchored matchup total
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Prior matchup history requires complex build
+
+M10 — Multi-factor (pace+total band)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 17
+  N per season: 22-23=11, 23-24=6
+  ROI 22-23: +38.8%
+  ROI 23-24: -4.5%
+  ROI combined: +23.5%
+  Delta vs base: +17.9pp
+  Gate: N=17 < 50
+

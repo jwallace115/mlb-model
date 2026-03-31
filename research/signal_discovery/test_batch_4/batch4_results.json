@@ -1,0 +1,127 @@
+[
+  {
+    "signal_id": "CS028",
+    "variant": "home",
+    "threshold_frozen": 0.2563,
+    "train": {
+      "N": 131,
+      "rate": 0.5954,
+      "roi": 17.49
+    },
+    "val_2024": {
+      "N": 59,
+      "rate": 0.5763,
+      "roi": 15.1
+    },
+    "val_2025": {
+      "N": 58,
+      "rate": 0.6034,
+      "roi": 16.93
+    },
+    "perm_pctile": 95.4,
+    "direction_2025": "True",
+    "final_verdict": "PASS"
+  },
+  {
+    "signal_id": "CS029",
+    "final_verdict": "DATA_GAP",
+    "reason": "2022 pitch-type data unavailable. Training coverage = 50% < 70%.",
+    "train": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "val_2025": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "perm_pctile": null,
+    "direction_2025": false
+  },
+  {
+    "signal_id": "CS030",
+    "final_verdict": "DATA_GAP",
+    "reason": "2022 pitch-type data unavailable. Training coverage = 50% < 70%.",
+    "train": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "val_2025": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "perm_pctile": null,
+    "direction_2025": false
+  },
+  {
+    "signal_id": "CS031",
+    "final_verdict": "DATA_GAP",
+    "reason": "2022 pitch-type data unavailable. Training coverage = 50% < 70%.",
+    "train": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "val_2025": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "perm_pctile": null,
+    "direction_2025": false
+  },
+  {
+    "signal_id": "CS032",
+    "final_verdict": "DATA_GAP",
+    "reason": "2022 pitch-type data unavailable. Training coverage = 50% < 70%.",
+    "train": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "val_2025": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "perm_pctile": null,
+    "direction_2025": false
+  },
+  {
+    "signal_id": "CS033",
+    "final_verdict": "DATA_GAP",
+    "reason": "2022 K-prop data unavailable. Training coverage = 50% < 70%.",
+    "train": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "val_2025": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "perm_pctile": null,
+    "direction_2025": false
+  },
+  {
+    "signal_id": "CS034",
+    "final_verdict": "DATA_GAP",
+    "reason": "inherited_runners/inherited_scored columns missing from pitcher_game_logs.parquet.",
+    "train": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "val_2025": {
+      "N": 0,
+      "rate": null,
+      "roi": null
+    },
+    "perm_pctile": null,
+    "direction_2025": false
+  }
+]

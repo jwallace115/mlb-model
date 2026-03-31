@@ -1,0 +1,100 @@
+=================================================================
+MLB CONTACT EDGE — LC×WEAK UNDER AUDIT
+=================================================================
+
+STEP 1 — Identifying LC×Weak plays...
+  All HITS 0.5 with profiles: 62,850
+  LC×Weak HITS 0.5: 7,066
+  By split: {'VALIDATION': 2735, 'OOS': 2542, 'TRAIN': 1789}
+
+STEP 2 — Market availability...
+  With UNDER odds: 6,854/7,066 (97.0%)
+  With OVER odds: 7,066/7,066 (100.0%)
+
+=================================================================
+STEP 3 — LC×WEAK UNDER PERFORMANCE
+=================================================================
+
+VALIDATION:
+  N=2,678
+  UNDER hit rate (0 hits): 46.8%
+  Average under odds: -124
+  Break-even rate: 58.0%
+  ROI at actual odds: -13.1%
+  ROI at -110: -10.7%
+  Hit rate vs break-even: -11.2pp ✗
+
+OOS:
+  N=2,504
+  UNDER hit rate (0 hits): 45.3%
+  Average under odds: +65
+  Break-even rate: 46.7%
+  ROI at actual odds: -2.7%
+  ROI at -110: -13.5%
+  Hit rate vs break-even: -1.4pp ✗
+
+=================================================================
+STEP 4 — ODDS BAND ANALYSIS
+=================================================================
+
+Band                   N   Hit%   BE%  AvgOdds     ROI Pass
+-------------------------------------------------------
+-110 to -130         632  50.3% 54.4%    -120   -7.7% ✗
+-130 to -150         208  52.9% 58.3%    -140   -9.3% ✗
+-150 to -180         104  62.5% 62.1%    -164   +0.8% ✓
+-180+               1367  45.6% 82.4%    -517  -44.7% ✗
+Plus money          3876  44.2%   N/A    +129   +0.5%
+
+VALIDATION odds bands:
+  -110 to -130: N=300, hit=53.0%, BE=54.4%, ROI=-2.6% ✗
+  -130 to -150: N=96, hit=47.9%, BE=58.1%, ROI=-17.6% ✗
+  -150 to -180: N=47, hit=61.7%, BE=62.0%, ROI=-0.6% ✗
+  -180+: N=740, hit=43.1%, BE=83.2%, ROI=-47.9% ✗
+
+OOS odds bands:
+  -110 to -130: N=238, hit=47.9%, BE=54.4%, ROI=-12.1% ✗
+  -130 to -150: N=62, hit=54.8%, BE=58.4%, ROI=-5.9% ✗
+  -150 to -180: N=29, hit=75.9%, BE=62.1%, ROI=+22.2% ✓
+  -180+: N=45, hit=46.7%, BE=74.0%, ROI=-37.0% ✗
+
+=================================================================
+STEP 5 — COMPARISON BASELINE
+=================================================================
+
+All HITS 0.5:
+  N=47,583, UNDER hit rate=40.1%, ROI@-110=-23.5%
+LC×Weak:
+  N=5,277, UNDER hit rate=46.2%, ROI@-110=-11.8%
+HC×Elite:
+  N=3,880, UNDER hit rate=35.9%, ROI@-110=-31.5%
+
+=================================================================
+STEP 6 — LC×WEAK OVER SIDE CHECK
+=================================================================
+
+VALIDATION OVER: N=2735, hit=53.0%, avg_odds=-141, BE=59.9%, ROI=-11.3%
+OOS OVER: N=2542, hit=54.6%, avg_odds=-147, BE=60.4%, ROI=-8.8%
+
+=================================================================
+STEP 7 — HONEST ASSESSMENT
+=================================================================
+
+1. LC×Weak UNDER profitable at actual odds?
+   Val: hit=46.8%, BE=58.0%, gap=-11.2pp → NO
+   OOS: hit=45.3%, BE=46.7%, gap=-1.4pp → NO
+
+2. Signal vs vig:
+   The 0-hit rate for LC×Weak is ~46%
+   UNDER odds average: ~-61
+   Break-even at those odds: ~54%
+   → Signal does NOT exceed vig at average pricing
+   → May be viable in specific price bands
+
+3. Availability: 100% of LC×Weak plays have UNDER odds
+   Scalability depends on book coverage for HITS UNDER props
+
+4. Best odds band: check Step 4 for profitable bands
+
+5. Commercial actionability:
+   NOT ACTIONABLE — vig absorbs the 0-hit rate signal
+   The ~46% 0-hit rate is real but pricing is too tight

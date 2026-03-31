@@ -1,0 +1,152 @@
+[
+  {
+    "signal_id": "E3_01",
+    "verdict": "FAIL (perm=66.4; val=0.472; yr=1/3)",
+    "train_N": 581,
+    "val_N": 322,
+    "train_rate": 0.5043,
+    "val_rate": 0.472,
+    "perm": 66.4,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_02",
+    "verdict": "FAIL (perm=42.6; val=0.5; yr=1/3)",
+    "train_N": 410,
+    "val_N": 100,
+    "train_rate": 0.4902,
+    "val_rate": 0.5,
+    "perm": 42.6,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_03",
+    "verdict": "FAIL (perm=20.6; val=0.4937; yr=1/3)",
+    "train_N": 429,
+    "val_N": 237,
+    "train_rate": 0.4779,
+    "val_rate": 0.4937,
+    "perm": 20.6,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_04",
+    "verdict": "FAIL (perm=29.8; val=0.5051; yr=1/3)",
+    "train_N": 434,
+    "val_N": 392,
+    "train_rate": 0.4839,
+    "val_rate": 0.5051,
+    "perm": 29.8,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_05",
+    "verdict": "FAIL (perm=44.4; val=0.5229)",
+    "train_N": 493,
+    "val_N": 262,
+    "train_rate": 0.4949,
+    "val_rate": 0.5229,
+    "perm": 44.4,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_06",
+    "verdict": "FAIL (perm=94.2; val=0.485)",
+    "train_N": 453,
+    "val_N": 167,
+    "train_rate": 0.532,
+    "val_rate": 0.485,
+    "perm": 94.2,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_07",
+    "verdict": "FAIL (perm=67.8; val=0.5157)",
+    "train_N": 416,
+    "val_N": 318,
+    "train_rate": 0.5048,
+    "val_rate": 0.5157,
+    "perm": 67.8,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_08",
+    "verdict": "FAIL (perm=66.4; val=0.4429)",
+    "train_N": 494,
+    "val_N": 210,
+    "train_rate": 0.5061,
+    "val_rate": 0.4429,
+    "perm": 66.4,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_09a",
+    "verdict": "FAIL (perm=51.8; val=0.4811; yr=1/3)",
+    "train_N": 520,
+    "val_N": 212,
+    "train_rate": 0.4981,
+    "val_rate": 0.4811,
+    "perm": 51.8,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_09b",
+    "verdict": "FAIL (perm=41.0; val=0.5189)",
+    "train_N": 520,
+    "val_N": 212,
+    "train_rate": 0.5019,
+    "val_rate": 0.5189,
+    "perm": 41.0,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_10",
+    "verdict": "FAIL (perm=3.6; val=0.4268; yr=0/3)",
+    "train_N": 147,
+    "val_N": 82,
+    "train_rate": 0.4354,
+    "val_rate": 0.4268,
+    "perm": 3.6,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_11",
+    "verdict": "FAIL (perm=62.8; val=0.5235)",
+    "train_N": 382,
+    "val_N": 170,
+    "train_rate": 0.5052,
+    "val_rate": 0.5235,
+    "perm": 62.8,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_12",
+    "verdict": "FAIL (THIN_SAMPLE)",
+    "train_N": 97,
+    "val_N": 32,
+    "train_rate": 0.5979,
+    "val_rate": 0.5,
+    "perm": 97.4,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_13",
+    "verdict": "FAIL (perm=54.4; val=0.453; yr=0/3)",
+    "train_N": 418,
+    "val_N": 117,
+    "train_rate": 0.4976,
+    "val_rate": 0.453,
+    "perm": 54.4,
+    "class": "NO_EDGE"
+  },
+  {
+    "signal_id": "E3_14",
+    "verdict": "FAIL (perm=93.0; val=0.4672)",
+    "train_N": 189,
+    "val_N": 122,
+    "train_rate": 0.5556,
+    "val_rate": 0.4672,
+    "perm": 93.0,
+    "class": "NO_EDGE"
+  }
+]

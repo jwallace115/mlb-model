@@ -2,8 +2,8 @@
 
 | Pair | Market | N(A+B) | ROI(A+B) | ROI(A) | ROI(B) | Ratio | Classification |
 |------|--------|--------|----------|--------|--------|-------|----------------|
-| G13xS6(REGULAR_HARD) | make_cut | 141 | +11.8% | +8.5% | -12.0% | 1.62 | MULTIPLICATIVE |
-| G13xS6(REGULAR_HARD) | top_20 | 141 | +25.3% | +9.6% | -22.5% | 2.48 | MULTIPLICATIVE |
+| G13xS6(REGULAR_HARD) | make_cut | 141 | +11.8% | +8.5% | -12.0% | 1.62 | INVALIDATED — LEAKAGE_ARTIFACT (weather: +1.8%) |
+| G13xS6(REGULAR_HARD) | top_20 | 141 | +25.3% | +9.6% | -22.5% | 2.48 | INVALIDATED — LEAKAGE_ARTIFACT (weather: +0.7%) |
 | G13xS6(REGULAR_HARD) | top_10 | 141 | +19.8% | +28.9% | -26.5% | 0.87 | INTERFERENCE |
 | G13xS6(ELEVATED) | make_cut | 257 | +9.3% | +9.2% | -10.3% | 0.92 | INTERFERENCE |
 | G13xS6(ELEVATED) | top_20 | 257 | +14.8% | +12.1% | -19.0% | 0.85 | INTERFERENCE |
@@ -22,7 +22,7 @@
 | G15xS6(REGULAR_EASY) | top_10 | 164 | +23.2% | -4.0% | -20.6% | -8.30 | INTERFERENCE |
 | G15xS6(REGULAR_EASY) | make_cut | 119 | -2.0% | -4.4% | -8.0% | 0.64 | INTERFERENCE |
 | G13xS3 | make_cut | 291 | +8.0% | +9.8% | -11.7% | 0.99 | WEAK |
-| G13xS3 | top_20 | 291 | +19.4% | +18.3% | -26.4% | 1.22 | MULTIPLICATIVE |
+| G13xS3 | top_20 | 291 | +19.4% | +18.3% | -26.4% | 1.22 | SUSPENDED — DEPENDS_ON_G13 (wave leakage) |
 | G13xS3 | top_10 | 291 | +37.2% | +50.3% | -24.6% | 0.74 | INTERFERENCE |
 | G15xS3 | top_20 | 190 | -18.3% | -8.4% | -21.3% | 0.00 | INTERFERENCE |
 | G15xS3 | top_10 | 190 | -1.2% | +0.4% | -18.8% | -0.25 | INTERFERENCE |

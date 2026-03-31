@@ -1,0 +1,136 @@
+NBA ARCHETYPE — NATIONAL TV GAME SCORING
+Run date: 2026-03-23
+analysis_base N: 3685 | analysis_base_ref N: 2481
+
+========================================
+BASE DATA (Step 1)
+========================================
+Total rows in analysis_base: 3685
+national_tv_flag = 1: 230
+national_tv_flag = 0: 3455
+holiday_flag = 1: 43
+holiday=1 AND national_tv=1: 3
+holiday=1 AND national_tv=0: 40
+Missing closing_line in base: 0
+market_error computable: YES (N=3685)
+
+========================================
+PRIMARY RESULTS (Step 2)
+========================================
+Group          |    N |     ME |  HR_over |  std_ME | std_score | P(+10) | P(+15)
+---------------|------|--------|----------|---------|-----------|--------|-------
+National TV    |  230 |  -0.93 |    0.469 |   17.42 |     18.18 |  0.278 |  0.178
+Non-TV         | 3455 |  +0.80 |    0.513 |   17.94 |     19.92 |  0.297 |  0.210
+
+One-sample p (TV): 0.4198
+One-sample p (non-TV): 0.0084
+Two-sample p (TV vs non-TV): 0.1460
+
+BY SEASON
+Season  | N_tv | ME_tv  | HR_tv  | N_notv | ME_notv | HR_notv
+--------|------|--------|--------|--------|---------|--------
+2022-23 |   94 |  -2.89 |  0.452 |   1134 |  +1.10  |  0.505
+2023-24 |   79 |  +0.53 |  0.468 |   1148 |  +0.51  |  0.507
+2024-25 |   57 |  +0.30 |  0.500 |   1173 |  +0.81  |  0.527
+
+Seasons opposite TV direction: 2023-24, 2024-25
+
+========================================
+NETWORK BREAKDOWN (Step 3)
+========================================
+Network        |    N |     ME |  HR_over |      p
+---------------|------|--------|----------|-------
+ABC            |    8 |  -8.56 |    0.125 | 0.0405  *** N<30
+ESPN           |  156 |  -0.51 |    0.480 | 0.7068
+TNT            |   66 |  -0.99 |    0.485 | 0.6770
+
+========================================
+HOLIDAY GROUPS (Step 4)
+========================================
+Group                    |    N |     ME |  HR_over |      p
+-------------------------|------|--------|----------|-------
+Holiday + TV             |    3 | +18.83 |    1.000 | 0.0409  *** N<30
+Holiday + no TV          |   40 |  -0.79 |    0.550 | 0.7962
+No holiday + TV          |  227 |  -1.19 |    0.462 | 0.3034
+No holiday + no TV       | 3415 |  +0.82 |    0.513 | 0.0073
+
+========================================
+LINE BAND CHECK (Step 5)
+========================================
+Band       |   N |     ME | HR_over
+-----------|-----|--------|--------
+< 220      |  29 |  +4.48 |  0.667
+220-230    | 108 |  -0.44 |  0.495
+230-240    |  80 |  -2.21 |  0.412
+240-250    |  11 |  -7.59 |  0.200
+>= 250     |   2 | -18.00 |  0.000
+Concentration flag: NO
+
+========================================
+MARKET PREMIUM CHECK (Step 6)
+========================================
+Mean line TV vs non-TV: 228.4 vs 227.7
+Median line TV vs non-TV: 228.0 vs 228.0
+
+Top 5 teams by TV frequency:
+Team | TV appearances | % of TV games
+-----|----------------|-------------
+LAL  |             42 |        18.3%
+GSW  |             41 |        17.8%
+PHX  |             37 |        16.1%
+BOS  |             32 |        13.9%
+MIL  |             31 |        13.5%
+
+Top 3 teams concentration: 45.2% — OK (< 50%)
+
+========================================
+OT EXCLUSION CHECK (Step 7)
+========================================
+OT rate: TV 7.4% vs non-TV 5.2%
+
+WITH OT:
+  TV:     N=230  ME=-0.93  HR=0.469  p=0.4198
+  Non-TV: N=3455 ME=+0.80  HR=0.513  p=0.0084
+  Two-sample p: 0.1460
+
+WITHOUT OT:
+  TV:     N=213  ME=-2.58  HR=0.431  p=0.0232
+  Non-TV: N=3274 ME=-0.32  HR=0.494  p=0.2847
+  Two-sample p: 0.0544
+
+========================================
+REFEREE INDEPENDENCE (Step 8, ref-covered only)
+========================================
+crew_high distribution:
+crew_high | TV %  | non-TV %
+----------|-------|--------
+        0 |  44.7 |   43.4
+        1 |  41.7 |   42.7
+        2 |  12.3 |   12.5
+        3 |   1.3 |    1.3
+
+% crew_high>=2: TV 13.6% vs non-TV 13.8%
+TV after removing crew_high>=2: N=197  ME=-1.90  HR=0.435  p=0.1087
+
+========================================
+VENUE INDEPENDENCE (Step 9)
+========================================
+Overlap: 9.6% of TV games are Venue signal games
+Non-Venue TV: N=208  ME=-1.80  HR=0.446  p=0.1220
+Venue TV:     N=22   ME=+7.30  HR=0.682  p=0.1338
+
+========================================
+KEY FINDINGS
+========================================
+- Signal direction: NULL
+- Season stability: 1/3
+- Right-tail elevated vs non-TV: no
+- Market already pricing TV premium: no
+- Team concentration concern: no
+- OT inflation concern: yes — TV OT rate 7.4% vs 5.2% non-TV
+- Referee independent: yes — crew distributions nearly identical
+- Venue independent: yes — signal persists after removing venue overlap
+- Mechanism supported: no
+- If NULL: recommended follow-up tests:
+    marquee window subset (post-ASB), high-pace team interaction,
+    primetime vs daytime split, network-specific deep dive (ESPN N=156)

@@ -1,0 +1,212 @@
+======================================================================
+SECTION 0 — DATA SOURCING REPORT
+======================================================================
+
+PLAYER GAME LOGS:
+  Total rows: 101,083
+  Unique players: 867
+  Unique games: 4726
+  Seasons: {'2022-23': 25895, '2023-24': 26401, '2024-25': 26306, '2025-26': 22481}
+
+PLAYER PACE DELTAS:
+  Total player-game-delta rows: 629,514
+  Rows with valid pace delta: 98,409
+  Players with valid delta: 710
+  Players flagged insufficient absence: 449
+  Total insufficient absence flags: 23,510
+
+PACE DELTA DISTRIBUTION:
+  Mean:   +0.13
+  Median: +0.14
+  Std:    2.29
+  Min:    -12.2
+  Max:    +11.6
+
+TOP 10 PLAYERS — SPEED UP GAMES (highest pace delta):
+  Landry Shamet          (NYK) delta=+8.55 (played=27, missed=3)
+  Quinten Post           (GSW) delta=+6.24 (played=27, missed=3)
+  Jaylen Wells           (MEM) delta=+5.62 (played=27, missed=3)
+  Scotty Pippen Jr.      (MEM) delta=+5.62 (played=27, missed=3)
+  Matas Buzelis          (CHI) delta=+5.00 (played=27, missed=3)
+  Mikal Bridges          (NYK) delta=+4.96 (played=27, missed=3)
+  Nick Smith Jr.         (CHA) delta=+4.91 (played=27, missed=3)
+  Stephen Curry          (GSW) delta=+4.84 (played=27, missed=3)
+  Precious Achiuwa       (NYK) delta=+4.61 (played=26, missed=4)
+  Jamison Battle         (TOR) delta=+4.56 (played=23, missed=7)
+
+BOTTOM 10 PLAYERS — SLOW DOWN GAMES (lowest pace delta):
+  Collin Gillespie       (PHX) delta=-7.17 (played=26, missed=4)
+  Isaiah Collier         (UTA) delta=-5.63 (played=27, missed=3)
+  Karlo Matković         (NOP) delta=-5.36 (played=27, missed=3)
+  Chris Paul             (SAS) delta=-5.28 (played=27, missed=3)
+  Harrison Barnes        (SAS) delta=-5.28 (played=27, missed=3)
+  Julian Champagnie      (SAS) delta=-5.28 (played=27, missed=3)
+  Tari Eason             (HOU) delta=-5.15 (played=22, missed=8)
+  Duop Reath             (POR) delta=-5.06 (played=21, missed=9)
+  Kyle Filipowski        (UTA) delta=-4.94 (played=27, missed=3)
+  Luke Kornet            (BOS) delta=-4.78 (played=27, missed=3)
+
+======================================================================
+SECTION 1 — FEATURE VALIDATION
+======================================================================
+
+COVERAGE:
+  Total games: 3685
+  Games with injury data: 1227
+  Games without injury data: 2458
+  Games with non-zero pace adjustment: 1218 (33.1%)
+
+PACE ADJUSTMENT DELTA DISTRIBUTION:
+  Mean:   -0.404
+  Median: +0.000
+  Std:    1.909
+  Min:    -18.39
+  Max:    +9.58
+  % zero: 66.9%
+  % |adj| > 0.5: 1051 (28.5%)
+  % |adj| > 1.0: 897 (24.3%)
+  % |adj| > 1.5: 762 (20.7%)
+
+CORRELATION CHECKS:
+  Baseline pace vs pace_shock:     r = 0.1324
+  Adjusted pace vs pace_shock:     r = 0.0953
+  Improvement (adjusted - baseline): Δr = -0.0372
+  pace_adjustment_delta vs pace_shock: r = 0.0178
+
+  Baseline pace vs total_error:      r = 0.0089
+  Adjusted pace vs total_error:       r = -0.0017
+  pace_adj_delta vs total_error:      r = -0.0096
+
+*** STOP GATE TRIGGERED ***
+  pace_adjustment_delta correlation with pace_shock: 0.0178 (threshold: |r| >= 0.10)
+  Improvement over baseline: -0.0372 (threshold: >= 0.03)
+
+  The player pace delta adjustment does NOT meaningfully improve
+  pace prediction over team-level averages.
+
+
+  Per protocol: STOP HERE for correlation gate.
+  Running backtest below for completeness only — results are informational.
+
+======================================================================
+SECTION 2 — BACKTEST RESULTS (INFORMATIONAL — correlation gate failed)
+======================================================================
+
+Baseline ROI (full population, model dir, discovery): -2.74%
+
+B1 — PACE ADJUSTED UP → OVER
+  Label: FAIL
+  N_disc=417, ROI=-8.89%, CLV=-0.01
+  2022-23: N=0, ROI=nan%
+  2023-24: N=417, ROI=-8.89%
+  OOS: N=0, ROI=nan%
+  Delta: -6.15pp
+  Gates: N_2022-23=0<30, ROI_2023-24=-8.9%<=0, disc_ROI=-8.9%<3%, delta=-6.2pp<2pp, no_OOS
+
+B2 — PACE ADJUSTED DOWN → UNDER
+  Label: FAIL
+  N_disc=801, ROI=-10.15%, CLV=0.09
+  2022-23: N=0, ROI=nan%
+  2023-24: N=801, ROI=-10.15%
+  OOS: N=0, ROI=nan%
+  Delta: -7.41pp
+  Gates: N_2022-23=0<30, ROI_2023-24=-10.1%<=0, disc_ROI=-10.1%<3%, delta=-7.4pp<2pp, no_OOS
+
+B3 — LARGE ADJUSTMENT (>=1.5) → IMPLIED DIRECTION
+  Label: FAIL
+  N_disc=762, ROI=-10.31%
+  2022-23: N=0, ROI=nan%
+  2023-24: N=762, ROI=-10.31%
+  OOS: N=0, ROI=nan%
+  Delta: -7.57pp
+  Gates: N_2022-23=0<30, ROI_2023-24=-10.3%<=0, disc_ROI=-10.3%<3%, delta=-7.6pp<2pp, no_OOS
+
+B4 — ADJUSTMENT CONFIRMS MODEL DIRECTION
+  Label: FAIL
+  N_disc=587, ROI=-8.29%, CLV=-0.52
+  2022-23: N=0, ROI=nan%
+  2023-24: N=587, ROI=-8.29%
+  OOS: N=0, ROI=nan%
+  Delta: -5.55pp
+  Gates: N_2022-23=0<30, ROI_2023-24=-8.3%<=0, disc_ROI=-8.3%<3%, delta=-5.5pp<2pp, no_OOS
+
+B5a — CONTRADICTION → FOLLOW MODEL
+  Label: FAIL
+  N_disc=631, ROI=-1.07%
+  2022-23: N=0, ROI=nan%
+  2023-24: N=631, ROI=-1.07%
+  OOS: N=0, ROI=nan%
+  Gates: N_2022-23=0<30, ROI_2023-24=-1.1%<=0, disc_ROI=-1.1%<3%, delta=1.7pp<2pp, no_OOS
+
+B5b — CONTRADICTION → FOLLOW PACE ADJUSTMENT
+  Label: FAIL
+  N_disc=631, ROI=-11.05%
+  2022-23: N=0, ROI=nan%
+  2023-24: N=631, ROI=-11.05%
+  OOS: N=0, ROI=nan%
+  Gates: N_2022-23=0<30, ROI_2023-24=-11.1%<=0, disc_ROI=-11.1%<3%, delta=-8.3pp<2pp, no_OOS
+
+======================================================================
+MASTER SUMMARY TABLE
+======================================================================
+
+ID           Name                                 Label          N   ROI_D   ROI_O    CLV  Delta Failed
+-------------------------------------------------------------------------------------------------------
+B1           Pace Adjusted UP → OVER              FAIL         417   -8.9%     N/A  -0.01   -6.2 5 gates
+B2           Pace Adjusted DOWN → UNDER           FAIL         801  -10.2%     N/A   0.09   -7.4 5 gates
+B3           Large Adjustment (>=1.5) → Implied   FAIL         762  -10.3%     N/A   0.08   -7.6 5 gates
+B4           Adjustment Confirms Model            FAIL         587   -8.3%     N/A  -0.52   -5.5 5 gates
+B5_model     Contradiction → Follow Model         FAIL         631   -1.1%     N/A  -0.59    1.7 5 gates
+B5_pace      Contradiction → Follow Pace          FAIL         631  -11.1%     N/A   0.59   -8.3 5 gates
+
+======================================================================
+SECTION 3 — PATTERN OBSERVATIONS
+======================================================================
+
+1. Does player-level adjustment improve pace prediction over team average?
+
+   Baseline (team avg) correlation with pace_shock: 0.1324
+   Adjusted (lineup) correlation with pace_shock:   0.0953
+   Improvement: -0.0372
+
+   NO. The player-level lineup adjustment does not meaningfully
+   improve pace prediction over simple team rolling averages.
+   The improvement is negligible or negative.
+
+2. Does the improvement translate to betting signal?
+
+   Hypotheses passing: 0
+   Near-misses: 0
+   NO. Even where the adjustment has marginal predictive value,
+   it does not translate to exploitable betting signal.
+
+3. If null again: what does this definitively tell us about NBA pregame totals?
+
+   Five research phases (9, 10, 11, 12, Model B) have now tested:
+     - Edge size: no signal
+     - Market movement: no signal
+     - Team-level pace expectation: no predictive signal
+     - Variance environments: no signal
+     - Player-level pace adjustment: no signal
+
+   DEFINITIVE CONCLUSION:
+   NBA pregame totals are efficiently priced across every tested
+   dimension — price, movement, pace, variance, and lineup composition.
+
+   The market correctly prices player availability into the total.
+   This is expected: bookmakers have access to the same injury reports
+   and likely use far more granular lineup and pace data than what is
+   available through public APIs.
+
+   RECOMMENDATION:
+   Close the NBA pregame totals research program.
+   Redirect research resources to:
+     1. NBA first-half (H1) totals (different market, less liquid)
+     2. NBA player props (less efficient, higher vig)
+     3. Sports where validated edges exist (MLB, soccer)
+     4. Live/in-game NBA markets (different efficiency regime)
+
+4. If signal found: what is the next refinement?
+
+   No signal found. No refinement path exists for this framework.
+   The concept is exhausted at the pregame level.

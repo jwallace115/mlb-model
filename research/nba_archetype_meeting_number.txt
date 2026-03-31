@@ -1,0 +1,146 @@
+NBA ARCHETYPE — SAME-SEASON MEETING NUMBER
+Run date: 2026-03-23
+Data: research/nba_games_enriched.csv
+Base N: 3,685 (5 excluded for missing closing lines)
+
+================================================================
+MEETING NUMBER RESULTS (individual)
+================================================================
+Meeting    N      ME      Hit%    p
+------------------------------------
+#1       1304   +1.23    53.2%   0.012
+#2       1304   +0.30    49.5%   0.537
+#3        634   -0.35    49.2%   0.637
+#4        432   +1.66    51.7%   0.071
+
+Meeting #1 has a significant positive bias (+1.23, p=0.012).
+Meeting #4 has a marginal positive bias (+1.66, p=0.071).
+Meetings #2 and #3 are flat.
+
+No monotonic pattern across meeting numbers.
+The familiarity → suppression hypothesis is NOT supported.
+
+
+================================================================
+BY SEASON PER MEETING NUMBER
+================================================================
+Meeting   Season     N      ME      Hit%   Flag
+--------------------------------------------------
+#1        22-23    434    +1.51    52.9%
+#1        23-24    435    +1.86    53.5%
+#1        24-25    435    +0.31    53.3%
+#2        22-23    435    -0.19    47.4%   OPPOSITE
+#2        23-24    434    -0.01    47.4%   OPPOSITE
+#2        24-25    435    +1.08    53.6%
+#3        22-23    210    +1.12    51.2%   OPPOSITE
+#3        23-24    212    -1.15    51.2%
+#3        24-25    212    -1.01    45.2%
+#4        22-23    149    +1.14    48.3%
+#4        23-24    139    -0.09    48.2%   OPPOSITE
+#4        24-25    144    +3.90    58.7%
+
+Meeting #4's overall ME is driven almost entirely by 2024-25 (+3.90).
+The other two seasons are flat (+1.14 and -0.09).
+Not stable across seasons.
+
+
+================================================================
+DIRECTION CHECK
+================================================================
+Early (1+2) ME:  +0.762  (N=2608)
+Late  (3+4) ME:  +0.464  (N=1066)
+Gap (late - early): -0.298 pts
+Two-sample t-test: t=-0.458, p=0.647
+
+NO statistically meaningful difference between early and late
+same-season meetings. The gap is 0.3 pts — noise.
+
+
+================================================================
+LINE BAND CHECK (meetings 3+4)
+================================================================
+Band          N      ME      Hit%
+------------------------------------
+<220        208    +1.62    57.2%
+220-229     396    +0.04    50.3%
+230-239     379    +0.60    47.5%
+240-249      77    -0.05    46.1%
+250+          6   -13.67    33.3%  (LOW N)
+
+No exploitable line-band pattern.
+<220 band shows +1.62 but this is consistent with the overall
+slight OVER bias across all games, not meeting-specific.
+
+
+================================================================
+TEAM CONCENTRATION CHECK (unordered pairs, meetings 3+4)
+================================================================
+Total pairs: 214
+Total error pool: +495.0
+Group average ME: +0.41
+
+Top 5 pairs by total_error:
+  Pair              N    Total ME   Mean ME
+  -----------------------------------------
+  DET_vs_MIL        6     +118.0    +19.67
+  GSW_vs_OKC        5      +99.5    +19.90
+  DAL_vs_POR        6      +93.5    +15.58
+  LAL_vs_UTA        5      +90.0    +18.00
+  ATL_vs_NYK        5      +85.5    +17.10
+
+Top 5 % of total error: +98.3%
+
+Concentration risk: EXTREME
+The entire +495 total error is explained by 5 pairs out of 214.
+The remaining 209 pairs net to approximately zero.
+This is not a meeting-number effect — it's individual pair noise.
+
+97 pairs flagged as outliers (|ME - avg| > 4.0, N>=5).
+Nearly half of all pairs with sufficient N are "outliers" —
+confirming this is random variation, not a systematic pattern.
+
+
+================================================================
+CALENDAR / DIVISION CHECK (meetings 3+4)
+================================================================
+Period                     N      ME      Hit%    p
+-----------------------------------------------------
+Pre-All-Star break       441    +0.18    49.9%   0.843
+Post-All-Star break      625    +0.67    50.5%   0.382
+
+No calendar effect. Pre and post ASB are both flat.
+
+Division                      N      ME      Hit%    p
+--------------------------------------------------------
+Same division               359    +1.25    51.4%   0.231
+Same conf, diff division    703    +0.04    49.6%   0.960
+Cross-conference              4    +5.12    50.0%   1.000
+
+Divisional matchups show +1.25 (p=0.231) — not significant.
+Cross-conference meetings 3+ are too rare (N=4) to test.
+
+
+================================================================
+KEY FINDINGS
+================================================================
+
+- Signal direction: NULL
+- Two-sample p-value: 0.647
+- Strongest meeting number: #4 (ME=+1.66, p=0.071) but unstable
+  across seasons (driven by 2024-25 alone)
+- Late-meeting season stability: 2/3
+- Concentration risk: EXTREME (top 5 pairs = 98.3% of total error)
+- Mechanism supported: NO
+
+VERDICT: NULL
+
+Same-season meeting number does not independently predict market
+error. The familiarity → scoring suppression hypothesis is not
+supported by the data. Meeting #4 shows a marginal effect
+(p=0.071) but it is:
+  1. Driven by one season (2024-25: +3.90)
+  2. The total error is 98% concentrated in 5 pairs
+  3. No monotonic pattern across meetings 1→2→3→4
+  4. No calendar or division effect
+
+Do not deploy as a signal or modifier.

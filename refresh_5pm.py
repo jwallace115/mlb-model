@@ -89,6 +89,22 @@ def main():
     except Exception as e:
         print(f"[refresh_5pm] Timing capture failed (non-fatal): {e}", file=sys.stderr)
 
+    # Step 1c2: Line snapshot — 5PM + CLOSING for games starting within 3 hours
+    try:
+        import json as _sj
+        from config import CACHE_DIR
+        _cache_path = os.path.join(CACHE_DIR, f"odds_full_{game_date}.json")
+        if os.path.exists(_cache_path):
+            with open(_cache_path) as _sf:
+                _snap_games = _sj.load(_sf)
+            from mlb_sim.pipeline.line_snapshot_store import store_snapshots_from_odds_response
+            store_snapshots_from_odds_response(_snap_games, "5PM", game_date)
+            # CLOSING for games starting within 3 hours (~5PM-8PM ET window)
+            store_snapshots_from_odds_response(_snap_games, "CLOSING", game_date)
+            print("[refresh_5pm] Line snapshots (5PM + CLOSING) stored.")
+    except Exception as e:
+        print(f"[refresh_5pm] Line snapshot failed (non-fatal): {e}", file=sys.stderr)
+
     # Step 1d: F5 signal resolution (resolve with latest actuals + fill closing lines)
     try:
         from mlb_sim.pipeline.f5_signal_generator import run_daily as f5_sig_daily

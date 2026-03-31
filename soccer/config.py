@@ -1,9 +1,10 @@
 """
-Soccer model configuration — Phase 1.
+Soccer model configuration.
 
-Launch leagues: EPL (E0) + Bundesliga (D1).
+Leagues: EPL (E0), Bundesliga (D1), La Liga (SP1), Serie A (I1), Ligue 1 (F1).
 One shared Ridge model with league fixed effects.
 Two separate Ridge models: Model A → home_goals, Model B → away_goals.
+New leagues deployed only if they pass OOS gates independently.
 """
 
 import os
@@ -33,6 +34,40 @@ LEAGUES = {
         "display_name": "Bundesliga",
         "country":      "Germany",
     },
+    "LGA": {
+        "fd_code":      "SP1",
+        "display_name": "La Liga",
+        "country":      "Spain",
+    },
+    "SEA": {
+        "fd_code":      "I1",
+        "display_name": "Serie A",
+        "country":      "Italy",
+    },
+    "LG1": {
+        "fd_code":      "F1",
+        "display_name": "Ligue 1",
+        "country":      "France",
+    },
+}
+
+# Deployment status per league — only "active" leagues generate live signals.
+# Set by OOS gate evaluation; "active" means the league passed all gates.
+LEAGUE_DEPLOYMENT = {
+    "EPL": "active",
+    "BUN": "active",
+    "LGA": "excluded_oos_gate",   # non-monotonic edge curve; hit=72.4% but edge buckets inverted
+    "SEA": "active",              # passes OOS gates; small sample (N=9) — monitor closely
+    "LG1": "active",              # passes OOS gates after intercept calibration (delta=+0.003)
+}
+
+# League metadata for display (emoji, short name)
+LEAGUE_META = {
+    "EPL": ("\U0001F3F4\U000E0067\U000E0062\U000E0065\U000E006E\U000E0067\U000E007F", "EPL"),
+    "BUN": ("\U0001F1E9\U0001F1EA", "Bundesliga"),
+    "LGA": ("\U0001F1EA\U0001F1F8", "La Liga"),
+    "SEA": ("\U0001F1EE\U0001F1F9", "Serie A"),
+    "LG1": ("\U0001F1EB\U0001F1F7", "Ligue 1"),
 }
 
 # ── Season range ──────────────────────────────────────────────────────────────
@@ -121,8 +156,15 @@ CANONICAL_COLUMNS = [
 # ── Audit gate thresholds ────────────────────────────────────────────────────
 
 # These are checked in phase1_build_canonical.py
-AUDIT_MIN_EPL_ROWS_PER_SEASON    = 300    # 380 expected
-AUDIT_MIN_BUN_ROWS_PER_SEASON    = 250    # 306 expected
+AUDIT_MIN_ROWS_PER_SEASON = {
+    "EPL": 300,   # 380 expected
+    "BUN": 250,   # 306 expected
+    "LGA": 300,   # 380 expected
+    "SEA": 300,   # 380 expected
+    "LG1": 250,   # 306-380 expected (18 teams some years)
+}
+AUDIT_MIN_EPL_ROWS_PER_SEASON    = 300    # kept for backward compat
+AUDIT_MIN_BUN_ROWS_PER_SEASON    = 250
 AUDIT_MAX_NULL_SCORE_RATE        = 0.01   # <1% null scores acceptable
 AUDIT_MIN_MARKET_COVERAGE        = 0.80   # >80% rows should have closing_total_line
 AUDIT_MIN_SHOTS_COVERAGE         = 0.90   # >90% rows should have HS/AS/HST/AST

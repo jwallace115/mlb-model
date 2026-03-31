@@ -1,0 +1,66 @@
+{
+  "book": "draftkings",
+  "event_completed": "2024-04-14",
+  "event_id": "14",
+  "event_name": "Masters Tournament",
+  "market": "make_cut",
+  "odds": [
+    {
+      "bet_outcome_numeric": 1,
+      "bet_outcome_text": "paid in full",
+      "close_odds": "-2500",
+      "close_time": "2024-04-11 08:26",
+      "dg_id": 18417,
+      "open_odds": "-2500",
+      "open_time": "2024-04-08 17:13",
+      "outcome": "1",
+      "player_name": "Scheffler, Scottie"
+    },
+    {
+      "bet_outcome_numeric": 1,
+      "bet_outcome_text": "paid in full",
+      "close_odds": "-1200",
+      "close_time": "2024-04-11 08:26",
+      "dg_id": 19195,
+      "open_odds": "-1200",
+      "open_time": "2024-04-08 17:13",
+      "outcome": "T45",
+      "player_name": "Rahm, Jon"
+    },
+    {
+      "bet_outcome_numeric": 1,
+      "bet_outcome_text": "paid in full",
+      "close_odds": "-1200",
+      "close_time": "2024-04-11 08:26",
+      "dg_id": 10091,
+      "open_odds": "-1200",
+      "open_time": "2024-04-08 17:13",
+      "outcome": "T22",
+      "player_name": "McIlroy, Rory"
+    },
+    {
+      "bet_outcome_numeric": 1,
+      "bet_outcome_text": "paid in full",
+      "close_odds": "-1100",
+      "close_time": "2024-04-11 08:26",
+      "dg_id": 19895,
+      "open_odds": "-1100",
+      "open_time": "2024-04-08 17:13",
+      "outcome": "8",
+      "player_name": "Schauffele, Xander"
+    },
+    {
+      "bet_outcome_numeric": 1,
+      "bet_outcome_text": "paid in full",
+      "close_odds": "-700",
+      "close_time": "2024-04-11 08:26",
+      "dg_id": 13562,
+      "open_odds": "-700",
+      "open_time": "2024-04-08 17:13",
+      "outcome": "T38",
+      "player_name": "Matsuyama, Hideki"
+    }
+  ],
+  "season": 2024,
+  "year": 2024
+}

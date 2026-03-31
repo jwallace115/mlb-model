@@ -1,0 +1,114 @@
+=================================================================
+MLB PROPS — PITCHER STRIKEOUTS K v1
+=================================================================
+
+STEP 0 — Statcast aggregation...
+  Statcast coverage: 71.0%
+  Pitchers with Statcast: 615
+
+Building rolling features...
+  League avg CSW: 0.270, Whiff: 0.222, K/TBF: 0.219
+Computing opponent K%...
+  League K%: 0.224
+  Opp K modifier range: 0.820 - 1.180
+
+Joining to K market view...
+  K props with odds: 12,538/13,056 (96.0%)
+  Joined: 11,592 rows
+
+Computing projections and simulating...
+  2,000...
+  4,000...
+  6,000...
+  8,000...
+  10,000...
+
+  Total: 10,460, outcomes: 5,767
+
+=================================================================
+SECTION 0 — DATA COVERAGE
+=================================================================
+  Statcast coverage: 92.3%
+  Umpire data: NOT AVAILABLE (skipped)
+
+=================================================================
+SECTION 1 — INNINGS PROJECTION ACCURACY
+=================================================================
+  IP: MAE=1.01, corr=0.277
+  TBF: MAE=3.19
+  K projection: MAE=2.09
+
+=================================================================
+SECTION 2 — CALIBRATION
+=================================================================
+Bucket         N  Model  Actual  Delta
+<35%         645 24.4%  48.2% +23.8% ⚠
+35-45        386 39.9%  44.8% +5.0%
+45-55        413 49.8%  47.0% -2.8%
+55-65        406 60.2%  48.0% -12.1% ⚠
+65-75        319 69.8%  51.1% -18.7% ⚠
+
+Brier (sim): 0.2827, Brier (analytical): 0.2937
+→ Simulation is better calibrated
+Calibration: FAIL
+
+=================================================================
+VALIDATION
+=================================================================
+  Overall: N=2,351, hit=49.5%, ROI=-17.5%
+  OVER: N=1,124, hit=47.3%, ROI=-15.5%
+  UNDER: N=1,227, hit=51.4%, ROI=-19.2%
+  Edge buckets:
+    0-2%: N=153, hit=49.0%, ROI=-18.0%
+    2-5%: N=241, hit=48.5%, ROI=-19.4%
+    5%+: N=1,957, hit=49.6%, ROI=-17.2%
+
+  Statcast impact:
+    With SC: N=2160, hit=49.2%, ROI=-17.7%
+    W/o SC:  N=191, hit=52.4%, ROI=-14.4%
+
+  SEGMENTS:
+    A:High CSW: N=327, hit=49.5%, BE=57.9%, ROI=-12.4%
+    B:Velo stable: N=1,693, hit=48.9%, BE=61.2%, ROI=-18.0%
+    D:High K opp: N=644, hit=47.5%, BE=61.0%, ROI=-20.6%
+    E:All aligned: N=62, hit=50.0%, BE=57.0%, ROI=-12.9% THIN
+
+=================================================================
+OOS
+=================================================================
+  Overall: N=2,277, hit=49.3%, ROI=-17.4%
+  OVER: N=1,082, hit=48.8%, ROI=-16.5%
+  UNDER: N=1,195, hit=49.7%, ROI=-18.2%
+  Edge buckets:
+    0-2%: N=184, hit=47.3%, ROI=-22.9%
+    2-5%: N=250, hit=50.0%, ROI=-15.2%
+    5%+: N=1,843, hit=49.4%, ROI=-17.2%
+
+  Statcast impact:
+    With SC: N=2122, hit=49.4%, ROI=-17.1%
+    W/o SC:  N=155, hit=47.1%, ROI=-22.1%
+
+  SEGMENTS:
+    A:High CSW: N=289, hit=48.8%, BE=60.1%, ROI=-17.1%
+    B:Velo stable: N=1,707, hit=50.2%, BE=61.0%, ROI=-15.1%
+    D:High K opp: N=463, hit=48.4%, BE=60.9%, ROI=-18.7%
+    E:All aligned: N=48, hit=47.9%, BE=61.6%, ROI=-22.3% THIN
+
+=================================================================
+RECOMMENDATION
+=================================================================
+  Overall: val ROI=-17.5%, oos ROI=-17.4%
+  calibration: FAIL
+  N>=200: PASS
+  val_roi>=2%: FAIL
+  oos>=0%: FAIL
+
+  NOT READY
+
+=================================================================
+OBSERVATIONS
+=================================================================
+1. IP MAE: 1.01 — acceptable
+2. Statcast coverage: 92%
+3. K projection MAE: 2.09
+4. Calibration: FAIL

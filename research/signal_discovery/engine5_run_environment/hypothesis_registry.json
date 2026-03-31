@@ -1,0 +1,68 @@
+[
+  {
+    "signal_id": "RE001",
+    "branch": "A",
+    "direction": "OVER",
+    "gate": 85
+  },
+  {
+    "signal_id": "RE002",
+    "branch": "A",
+    "direction": "OVER",
+    "gate": 85
+  },
+  {
+    "signal_id": "RE003",
+    "branch": "A",
+    "direction": "OVER",
+    "gate": 95
+  },
+  {
+    "signal_id": "RE004",
+    "branch": "A",
+    "direction": "OVER",
+    "gate": 95
+  },
+  {
+    "signal_id": "RE005",
+    "branch": "A",
+    "direction": "OVER",
+    "gate": 95
+  },
+  {
+    "signal_id": "RE006",
+    "branch": "A",
+    "direction": "OVER",
+    "gate": 95
+  },
+  {
+    "signal_id": "RE010",
+    "branch": "A",
+    "direction": "OVER",
+    "gate": 85
+  },
+  {
+    "signal_id": "RE007",
+    "branch": "B",
+    "direction": "UNDER",
+    "gate": 95
+  },
+  {
+    "signal_id": "RE008",
+    "branch": "B",
+    "direction": "UNDER",
+    "gate": 95
+  },
+  {
+    "signal_id": "RE009",
+    "branch": "B",
+    "direction": "UNDER",
+    "gate": 95
+  },
+  {
+    "signal_id": "RE011",
+    "branch": "B",
+    "direction": "UNDER",
+    "gate": 95
+  }
+]

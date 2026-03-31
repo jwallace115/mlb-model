@@ -1,0 +1,375 @@
+{
+  "CS007A": {
+    "canonical_signal_id": "CS007A",
+    "test_date": "2026-03-27T16:54:42.300580",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 1155,
+      "under_rate": 0.49523809523809526,
+      "roi": -3.64,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 405,
+      "under_rate": 0.4839506172839506,
+      "roi": -1.48,
+      "direction_positive": true,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 617,
+      "under_rate": 0.5186385737439222,
+      "roi": -8.1,
+      "direction_positive": false,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 69.0,
+    "permutation_detail": {
+      "observed_metric": 0.496614,
+      "permutation_mean": 0.491288,
+      "permutation_std": 0.010449,
+      "permutation_p5": 0.473476,
+      "permutation_p95": 0.509029,
+      "percentile": 69.0,
+      "n_permutations": 500
+    },
+    "season_support_pass": false,
+    "season_support_note": "FAIL: 2024 positive but 2025 negative \u2014 does not validate OOS",
+    "suspect_flags": [],
+    "verdict": "FAIL",
+    "failure_reason": "Permutation percentile 69.0 < 85 required",
+    "_direction": "OVER",
+    "_rate_train": 0.5047619047619047,
+    "_rate_v25": 0.4813614262560778
+  },
+  "CS007B": {
+    "canonical_signal_id": "CS007B",
+    "test_date": "2026-03-27T16:54:42.378465",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 1166,
+      "under_rate": 0.5111492281303602,
+      "roi": -2.42,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 412,
+      "under_rate": 0.5024271844660194,
+      "roi": -4.08,
+      "direction_positive": true,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 293,
+      "under_rate": 0.5392491467576792,
+      "roi": 2.95,
+      "direction_positive": true,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 72.6,
+    "permutation_detail": {
+      "observed_metric": 0.516792,
+      "permutation_mean": 0.509216,
+      "permutation_std": 0.012269,
+      "permutation_p5": 0.488005,
+      "permutation_p95": 0.52913,
+      "percentile": 72.6,
+      "n_permutations": 500
+    },
+    "season_support_pass": true,
+    "season_support_note": "Both 2024 and 2025 directionally positive",
+    "suspect_flags": [],
+    "verdict": "FAIL",
+    "failure_reason": "Permutation percentile 72.6 < 85 required",
+    "_direction": "UNDER",
+    "_rate_train": 0.5111492281303602,
+    "_rate_v25": 0.5392491467576792
+  },
+  "CS008A": {
+    "canonical_signal_id": "CS008A",
+    "test_date": "2026-03-27T16:54:42.438425",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 522,
+      "under_rate": 0.49808429118773945,
+      "roi": -4.18,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 205,
+      "under_rate": 0.5073170731707317,
+      "roi": -5.94,
+      "direction_positive": false,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 98,
+      "under_rate": 0.5612244897959184,
+      "roi": -16.23,
+      "direction_positive": false,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 58.8,
+    "permutation_detail": {
+      "observed_metric": 0.491935,
+      "permutation_mean": 0.486513,
+      "permutation_std": 0.01953,
+      "permutation_p5": 0.454839,
+      "permutation_p95": 0.519355,
+      "percentile": 58.8,
+      "n_permutations": 500
+    },
+    "season_support_pass": false,
+    "season_support_note": "FAIL: Neither 2024 nor 2025 directionally positive",
+    "suspect_flags": [],
+    "verdict": "FAIL",
+    "failure_reason": "Permutation percentile 58.8 < 85 required",
+    "_direction": "OVER",
+    "_rate_train": 0.5019157088122606,
+    "_rate_v25": 0.4387755102040816
+  },
+  "CS008B": {
+    "canonical_signal_id": "CS008B",
+    "test_date": "2026-03-27T16:54:42.493414",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 61,
+      "under_rate": 0.5409836065573771,
+      "roi": 3.28,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 23,
+      "under_rate": 0.5217391304347826,
+      "roi": -0.4,
+      "direction_positive": true,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 31,
+      "under_rate": 0.5161290322580645,
+      "roi": -1.47,
+      "direction_positive": true,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 61.2,
+    "permutation_detail": {
+      "observed_metric": 0.532609,
+      "permutation_mean": 0.512304,
+      "permutation_std": 0.050384,
+      "permutation_p5": 0.423913,
+      "permutation_p95": 0.586957,
+      "percentile": 61.2,
+      "n_permutations": 500
+    },
+    "season_support_pass": true,
+    "season_support_note": "Both 2024 and 2025 directionally positive",
+    "suspect_flags": [
+      "THIN_SAMPLE: N < 50 \u2014 insufficient for reliable inference"
+    ],
+    "verdict": "FAIL",
+    "failure_reason": "Permutation percentile 61.2 < 85 required",
+    "_direction": "UNDER",
+    "_rate_train": 0.5409836065573771,
+    "_rate_v25": 0.5161290322580645
+  },
+  "CS009A": {
+    "canonical_signal_id": "CS009A",
+    "verdict": "DATA_GAP",
+    "suspect_flags": [
+      "DATA_GAP: per-game umpire zone metrics not available"
+    ]
+  },
+  "CS009B": {
+    "canonical_signal_id": "CS009B",
+    "verdict": "DATA_GAP",
+    "suspect_flags": [
+      "DATA_GAP: per-game umpire zone metrics not available"
+    ]
+  },
+  "CS010A": {
+    "canonical_signal_id": "CS010A",
+    "test_date": "2026-03-27T16:54:42.601012",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 963,
+      "under_rate": 0.47352024922118385,
+      "roi": 0.51,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 384,
+      "under_rate": 0.484375,
+      "roi": -1.56,
+      "direction_positive": true,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 233,
+      "under_rate": 0.5150214592274678,
+      "roi": -7.41,
+      "direction_positive": false,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 98.8,
+    "permutation_detail": {
+      "observed_metric": 0.518395,
+      "permutation_mean": 0.486677,
+      "permutation_std": 0.012644,
+      "permutation_p5": 0.465719,
+      "permutation_p95": 0.507567,
+      "percentile": 98.8,
+      "n_permutations": 500
+    },
+    "season_support_pass": false,
+    "season_support_note": "FAIL: 2024 positive but 2025 negative \u2014 does not validate OOS",
+    "suspect_flags": [],
+    "verdict": "FAIL",
+    "failure_reason": "FAIL: 2024 positive but 2025 negative \u2014 does not validate OOS",
+    "_direction": "OVER",
+    "_rate_train": 0.5264797507788161,
+    "_rate_v25": 0.48497854077253216
+  },
+  "CS010B": {
+    "canonical_signal_id": "CS010B",
+    "test_date": "2026-03-27T16:54:42.664054",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 995,
+      "under_rate": 0.542713567839196,
+      "roi": 3.61,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 416,
+      "under_rate": 0.5745192307692307,
+      "roi": 9.68,
+      "direction_positive": true,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 515,
+      "under_rate": 0.5067961165048543,
+      "roi": -3.25,
+      "direction_positive": true,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 91.6,
+    "permutation_detail": {
+      "observed_metric": 0.530464,
+      "permutation_mean": 0.514474,
+      "permutation_std": 0.011787,
+      "permutation_p5": 0.495331,
+      "permutation_p95": 0.533146,
+      "percentile": 91.6,
+      "n_permutations": 500
+    },
+    "season_support_pass": true,
+    "season_support_note": "Both 2024 and 2025 directionally positive",
+    "suspect_flags": [],
+    "verdict": "PASS",
+    "failure_reason": null,
+    "_direction": "UNDER",
+    "_rate_train": 0.542713567839196,
+    "_rate_v25": 0.5067961165048543
+  },
+  "CS011": {
+    "canonical_signal_id": "CS011",
+    "test_date": "2026-03-27T16:54:42.750657",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 3006,
+      "under_rate": 0.49035262807717894,
+      "roi": -2.7,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 1130,
+      "under_rate": 0.49823008849557526,
+      "roi": -4.21,
+      "direction_positive": true,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 1182,
+      "under_rate": 0.5219966159052454,
+      "roi": -8.74,
+      "direction_positive": false,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 95.2,
+    "permutation_detail": {
+      "observed_metric": 0.500716,
+      "permutation_mean": 0.491518,
+      "permutation_std": 0.00538,
+      "permutation_p5": 0.482557,
+      "permutation_p95": 0.500251,
+      "percentile": 95.2,
+      "n_permutations": 500
+    },
+    "season_support_pass": false,
+    "season_support_note": "FAIL: 2024 positive but 2025 negative \u2014 does not validate OOS",
+    "suspect_flags": [],
+    "verdict": "FAIL",
+    "failure_reason": "FAIL: 2024 positive but 2025 negative \u2014 does not validate OOS",
+    "_direction": "OVER",
+    "_rate_train": 0.5096473719228211,
+    "_rate_v25": 0.4780033840947547
+  },
+  "CS012": {
+    "canonical_signal_id": "CS012",
+    "test_date": "2026-03-27T16:54:42.790830",
+    "registered_hypothesis_used": true,
+    "thresholds_match_registered": true,
+    "train_result": {
+      "n": 20,
+      "under_rate": 0.6,
+      "roi": 14.55,
+      "p_value": null
+    },
+    "validation_2024": {
+      "n": 20,
+      "under_rate": 0.6,
+      "roi": 14.55,
+      "direction_positive": true,
+      "note": "in-sample stability check only"
+    },
+    "validation_2025": {
+      "n": 15,
+      "under_rate": 0.4666666666666667,
+      "roi": -10.91,
+      "direction_positive": false,
+      "note": "binding out-of-sample validation"
+    },
+    "permutation_percentile": 57.2,
+    "permutation_detail": {
+      "observed_metric": 0.542857,
+      "permutation_mean": 0.514229,
+      "permutation_std": 0.079066,
+      "permutation_p5": 0.398571,
+      "permutation_p95": 0.657143,
+      "percentile": 57.2,
+      "n_permutations": 500
+    },
+    "season_support_pass": false,
+    "season_support_note": "FAIL: 2024 positive but 2025 negative \u2014 does not validate OOS",
+    "suspect_flags": [
+      "THIN_SAMPLE: N < 50 \u2014 insufficient for reliable inference",
+      "CRITICALLY_THIN: N < 30 \u2014 results are noise",
+      "THIN_SAMPLE: N < 50 \u2014 insufficient for reliable inference",
+      "CRITICALLY_THIN: N < 30 \u2014 results are noise"
+    ],
+    "verdict": "FAIL",
+    "failure_reason": "Permutation percentile 57.2 < 85 required",
+    "_direction": "UNDER",
+    "_rate_train": 0.6,
+    "_rate_v25": 0.4666666666666667
+  }
+}

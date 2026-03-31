@@ -1,0 +1,123 @@
+NBA MODEL C SHADOW SYSTEM — SETUP REPORT
+==========================================
+Created: 2026-03-19
+Status: OPERATIONAL
+
+SYSTEM OVERVIEW
+===============
+
+Fully automated NBA player props shadow loop covering:
+- Points, Rebounds, Assists, PRA props
+- 8 sportsbooks (DK, FD, BetMGM, Caesars, BetRivers, etc.)
+- Automatic RS/PO split detection
+- Daily collection, projection, grading, and archiving
+
+COMMANDS
+========
+
+  python3 nba/model_c_shadow.py --collect          # Morning: pull lines + project + card
+  python3 nba/model_c_shadow.py --refresh           # Midday: re-pull lines (preserves first seen)
+  python3 nba/model_c_shadow.py --grade             # Next morning: grade yesterday's plays
+  python3 nba/model_c_shadow.py --summary           # Print RS and PO summaries
+  python3 nba/model_c_shadow.py --collect --date 2026-03-20
+
+DAILY WORKFLOW
+==============
+
+  7:00 AM  →  --grade (grades yesterday's plays from box scores)
+  9:00 AM  →  --collect (pull today's lines + project + shadow card)
+  5:00 PM  →  --refresh (re-pull pre-tip lines, track movement)
+
+LAUNCHD INTEGRATION
+===================
+
+The collect run can be added to the morning 7am job alongside other sports.
+The grade step should run before collect to update yesterday's results first.
+The refresh can be added to the 5pm refresh job.
+
+Suggested integration in push_results.py or a dedicated script:
+  1. Grade yesterday: python3 nba/model_c_shadow.py --grade
+  2. Collect today:   python3 nba/model_c_shadow.py --collect
+
+FILE STRUCTURE
+==============
+
+  nba/model_c_shadow.py                          — main script
+  nba/model_c/shadow/
+    raw/
+      prop_lines_raw.parquet                     — all raw API snapshots appended
+      props_YYYY-MM-DD_HHMM.parquet              — individual raw snapshots
+    cards/
+      card_YYYY-MM-DD.txt                        — daily shadow card reports
+    reports/
+      system_report.txt                          — this file
+    model_c_rs_shadow.parquet                    — RS shadow tracker (graded plays)
+    model_c_po_shadow.parquet                    — PO shadow tracker (auto-created)
+    model_c_rs_summary.txt                       — RS performance summary
+    model_c_po_summary.txt                       — PO performance summary
+    prop_lines_archive.parquet                   — normalized best-line archive
+
+RS / PLAYOFF SPLIT
+==================
+
+Detection method:
+  1. Check NBA Stats API for playoff game data
+  2. Fallback: date >= 2026-04-19 → PO
+  3. RS and PO write to separate parquet files
+  4. Summaries are independent
+
+When playoffs begin, the system automatically:
+  - Detects PO phase
+  - Writes to model_c_po_shadow.parquet
+  - Keeps RS data untouched
+  - Reports PO separately in --summary
+
+PROJECTION ENGINE
+=================
+
+Model C v1 uses L10 rolling averages as baseline projection:
+  - Points:   pts_L10 (last 10 games average)
+  - Rebounds:  reb_L10
+  - Assists:   ast_L10
+  - PRA:       pra_L10
+
+Confidence tiers by absolute edge:
+  - HIGH:   |edge| >= 3.0
+  - MEDIUM: |edge| >= 1.5
+  - LOW:    |edge| >= 0.5
+  - NO_PLAY: |edge| < 0.5 (excluded from shadow card)
+
+Future v2 improvements:
+  - Ridge regression on rate × minutes
+  - Opponent defensive adjustment
+  - Usage redistribution when teammates are OUT
+  - Starter vs bench weighting
+
+API CREDIT USAGE
+================
+
+Each collection run costs ~4 credits per game (1 event odds call).
+Typical day: 8 games × 4 credits = 32 credits per collect
+With refresh: 64 credits per day
+Monthly estimate: ~2,000 credits
+
+Current balance: ~43,300 credits (sufficient for full season)
+
+DATA QUALITY
+============
+
+First collection (2026-03-19):
+  - 8 games, 2,110 raw prop lines
+  - 8 sportsbooks providing data
+  - 383 unique player-prop combinations
+  - 267 actionable shadow plays
+  - 47 HIGH, 80 MEDIUM, 140 LOW confidence
+
+IMPORTANT NOTES
+===============
+
+- SHADOW ONLY — no real bets are placed
+- Raw snapshots are never overwritten
+- All data is append-only
+- Game logs are cached and reused
+- No live NBA totals files are modified

@@ -1,0 +1,267 @@
+======================================================================
+SECTION 0 — DATA SOURCING REPORT
+======================================================================
+
+PLAYER GAME LOGS:
+  Total rows: 101,083
+  Unique players: 867
+  Unique games: 4726
+  Seasons: {'2022-23': 25895, '2023-24': 26401, '2024-25': 26306, '2025-26': 22481}
+  Date range: 2022-10-18 to 2026-03-18
+
+  Columns available:
+    SEASON_ID, PLAYER_ID, PLAYER_NAME, TEAM_ID, TEAM_ABBREVIATION, TEAM_NAME, GAME_ID, GAME_DATE, MATCHUP, WL, MIN, FGM, FGA, FG_PCT, FG3M, FG3A
+    FG3_PCT, FTM, FTA, FT_PCT, OREB, DREB, REB, AST, STL, BLK, TOV, PF, PTS, PLUS_MINUS, FANTASY_PTS, VIDEO_AVAILABLE, season
+
+  2022-23: 25,895 rows, 539 players, 1230 games
+  2023-24: 26,401 rows, 572 players, 1230 games
+  2024-25: 26,306 rows, 569 players, 1230 games
+  2025-26: 22,481 rows, 564 players, 1036 games
+
+======================================================================
+SECTION 1 — FEATURE BUILD REPORT
+======================================================================
+
+Feature table: 100,713 rows × 70 columns
+
+FEATURE COVERAGE:
+  minutes_L10                 : 96,526/100,713 (95.8%)
+  pts_L10                     : 96,526/100,713 (95.8%)
+  reb_L10                     : 96,526/100,713 (95.8%)
+  ast_L10                     : 96,526/100,713 (95.8%)
+  pra_L10                     : 96,526/100,713 (95.8%)
+  pts_per_min_L10             : 96,526/100,713 (95.8%)
+  reb_per_min_L10             : 96,526/100,713 (95.8%)
+  ast_per_min_L10             : 96,526/100,713 (95.8%)
+  minutes_szn                 : 98,159/100,713 (97.5%)
+  pts_szn                     : 98,159/100,713 (97.5%)
+  reb_szn                     : 98,159/100,713 (97.5%)
+  pts_std10                   : 96,526/100,713 (95.8%)
+  minutes_std10               : 96,526/100,713 (95.8%)
+  fga_per_min_L10             : 96,526/100,713 (95.8%)
+  fta_per_min_L10             : 96,526/100,713 (95.8%)
+  expected_game_pace          : 78,307/100,713 (77.8%)
+  opp_drtg                    : 78,307/100,713 (77.8%)
+  close_total                 : 78,196/100,713 (77.6%)
+  rest_days                   : 78,307/100,713 (77.8%)
+  b2b_flag                    : 78,307/100,713 (77.8%)
+  team_injuries_out           : 100,713/100,713 (100.0%)
+
+INJURY CONTEXT:
+  Games with injury data (team_injuries_out > 0): 25,517 (25.3%)
+
+FEATURE TABLE BY SEASON:
+  2022-23: 25,818 total, 23,200 with L10 features (89.9%)
+  2023-24: 26,283 total, 25,699 with L10 features (97.8%)
+  2024-25: 26,206 total, 25,673 with L10 features (98.0%)
+  2025-26: 22,406 total, 21,954 with L10 features (98.0%)
+
+SAMPLE: TOP SCORERS FEATURE CHECK (2024-25, pts_L10 > 25):
+  Shai Gilgeous-Alexander:  70g, 33.2ppg, L10=32.8, min=34.3, minL10=34.1
+  Giannis Antetokounmpo :  67g, 30.4ppg, L10=30.1, min=34.2, minL10=34.2
+  Ja Morant             :   9g, 30.1ppg, L10=28.7, min=32.7, minL10=33.5
+  Nikola Jokić          :  64g, 29.5ppg, L10=29.8, min=36.6, minL10=36.7
+  Deni Avdija           :   2g, 29.0ppg, L10=25.2, min=35.5, minL10=36.9
+  Luka Dončić           :  42g, 28.1ppg, L10=29.3, min=35.2, minL10=36.5
+  LaMelo Ball           :  26g, 27.8ppg, L10=28.9, min=33.3, minL10=33.7
+  Anthony Edwards       :  60g, 27.8ppg, L10=28.4, min=36.3, minL10=36.5
+  Paolo Banchero        :  27g, 27.1ppg, L10=28.3, min=34.7, minL10=35.1
+  Anthony Davis         :  25g, 26.9ppg, L10=28.1, min=34.2, minL10=34.7
+
+======================================================================
+SECTION 2 — PROP LINE DATA AUDIT
+======================================================================
+
+PROP LINE DATA AUDIT
+==================================================
+
+Searched patterns:
+  nba/data/*prop*
+  nba/data/*player*line*
+  nba/data/*player*odds*
+  nba/data/cache/*prop*
+  nba/data/cache/*player*
+  nba/model_c/*prop*line*
+  data/*prop*
+  data/*player*line*
+
+FOUND: NONE
+
+Historical player prop lines are NOT available in the project.
+
+ASSESSMENT:
+  Historical NBA player prop lines are MISSING.
+  Cannot proceed to backtest without market lines to compare against.
+
+RECOMMENDED SOURCES (priority order):
+
+  1. The Odds API — Player Props Market
+     Endpoint: /v4/sports/basketball_nba/odds
+     Markets: player_points, player_rebounds, player_assists,
+              player_points_rebounds_assists
+     Historical: /v4/historical/sports/basketball_nba/odds
+     Cost: 10 credits per historical snapshot
+     Already integrated for totals — same API key works
+     LIMITATION: Historical player props may not be available
+     for all seasons. Check API coverage before committing credits.
+
+  2. Prop data aggregators
+     - actionnetwork.com (limited free access)
+     - covers.com (limited historical)
+     - prizepicks historical (not public)
+
+  3. Sportsbook scraping (complex, TOS concerns)
+     - DraftKings / FanDuel historical props
+     - Requires dedicated scraping infrastructure
+
+MINIMUM DATA NEEDED FOR BACKTEST:
+  - Player prop line (e.g., 'LeBron James Points O/U 27.5')
+  - Bookmaker source
+  - Game date
+  - Player ID or name
+  - At minimum 2 seasons of coverage (2022-23, 2023-24)
+
+ESTIMATED COST (The Odds API):
+  ~500 game dates × 10 credits = 5,000 credits per season
+  4 seasons × 5,000 = 20,000 credits
+  Current balance: check via API
+  NOTE: Player props have many more markets per game than totals.
+  Actual credit cost may be higher if props require separate calls.
+
+CHECKING: The Odds API player props availability...
+  API key found. Credits remaining: 43342
+  Test call (player_points, 2024-03-01): status=422
+  RESULT: 422 — player props market not supported for historical data.
+  Credits after test: 43342
+
+======================================================================
+SECTION 3 — FEATURE QUALITY ANALYSIS (substitute for backtest)
+======================================================================
+
+Since prop lines are not available for backtesting,
+we assess feature quality by testing predictive power
+of rolling features against actual outcomes.
+
+Valid rows (L10 features, 10+ games, played): 93,419
+
+PROJECTION ACCURACY (correlation with actual):
+Prop       Rate×Min    L10 Avg     L5 Avg    Szn Avg
+--------------------------------------------------
+Points       0.7181     0.7200     0.7051     0.6967
+Rebounds     0.6596     0.6631     0.6460     0.6473
+Assists      0.7065     0.7087     0.6935     0.6874
+PRA          0.7571     0.7586     0.7491     0.7258
+
+MEAN ABSOLUTE ERROR:
+Prop       Rate×Min    L10 Avg    Szn Avg
+----------------------------------------
+Points         4.74       4.74       4.91
+Rebounds       1.97       1.96       1.99
+Assists        1.38       1.37       1.40
+PRA            6.25       6.24       6.62
+
+MINUTES PREDICTION:
+  L10 avg correlation: 0.7694
+  L5 avg correlation:  0.7755
+  Season avg corr:     0.6959
+  L10 avg MAE:         5.15 minutes
+
+GAME ENVIRONMENT CORRELATIONS (with actual points):
+  expected_game_pace          : r = +0.0234
+  opp_drtg                    : r = +0.0199
+  close_total                 : r = +0.0302
+  b2b_flag                    : r = -0.0032
+  rest_days                   : r = -0.0001
+  is_home                     : r = +0.0069
+  team_injuries_out           : r = +0.0020
+
+ENVIRONMENT vs POINTS RESIDUAL (after removing L10 baseline):
+  expected_game_pace          : r = +0.0245
+  opp_drtg                    : r = +0.0377
+  close_total                 : r = +0.0042
+  b2b_flag                    : r = +0.0211
+  rest_days                   : r = -0.0305
+  is_home                     : r = +0.0097
+  team_injuries_out           : r = +0.0132
+
+======================================================================
+SECTION 4 — READINESS ASSESSMENT
+======================================================================
+
+STATUS: READY WITH ADDITIONAL DATA SOURCING
+
+What is built and validated:
+  ✓ Player game logs: 101K rows, 4 seasons, complete
+  ✓ Rolling features: L5/L10/season for all stat categories
+  ✓ Per-minute rate features: all categories
+  ✓ Usage proxies: FGA/FTA/3PA per minute
+  ✓ Game environment: pace, opp DRTG, closing total, rest, B2B
+  ✓ Injury context: team-level OUT count (2023-24 coverage)
+  ✓ Feature table saved: player_prop_features.parquet
+
+What is MISSING (blocking backtest):
+  ✗ Historical player prop lines (points, rebounds, assists, PRA)
+  ✗ Cannot compute edge, ROI, or CLV without market lines
+
+RECOMMENDED NEXT STEP:
+  Source player prop lines from The Odds API historical endpoint.
+  Priority: player_points market first (highest liquidity).
+  Estimated cost: ~5,000-20,000 API credits depending on coverage.
+
+======================================================================
+SECTION 5 — PATTERN-LEVEL OBSERVATIONS
+======================================================================
+
+1. Which prop family looks most promising?
+
+   Points has the highest baseline predictability (L10 correlation
+   with actual: Points=0.720, PRA=0.759, Reb=0.663, Ast=0.709).
+   PRA is close behind points and has the advantage of smoothing
+   variance across three stat lines. These two are the best v1 targets.
+
+2. Are minutes and usage strong enough to support signal?
+
+   Minutes L10 correlation with actual minutes: 0.769
+   Minutes L10 MAE: 5.2 minutes
+   Minutes prediction is the foundation of any player prop model.
+   At r=0.769, minutes are reasonably predictable but
+   imperfect — this is where lineup/injury data adds the most value.
+   Usage (FGA/min, FTA/min) provides the multiplier on minutes.
+
+3. Does injury/lineup context appear valuable?
+
+   team_injuries_out correlation with points residual: +0.0132
+   Current injury feature is team-level count only (2023-24 coverage).
+   The signal is near-zero at this level of granularity.
+   HOWEVER: the high-value injury signal is not 'how many players are out'
+   but 'WHO is out and what usage/minutes redistribute to THIS player.'
+   Player-specific usage redistribution is the v2 feature.
+
+4. Is player props research more promising than totals?
+
+   YES, structurally. Key differences:
+   - Totals aggregate 10 players → washes out individual signal
+   - Props are player-specific → injury/lineup changes directly affect output
+   - Prop lines have wider vig (typically -115 to -120) → higher bar
+   - But prop markets are less liquid → potentially less efficient
+   - Minutes allocation is the primary edge vector — bookmakers must
+     estimate minutes for every player, creating more surface area for error
+
+   The pregame totals market proved efficient across 5 research phases.
+   Player props have not been tested yet. The structural argument is
+   that individual-player prediction has more exploitable variance than
+   game-level aggregation. This must be confirmed with market line data.
+
+5. What is the cleanest next refinement for Model C v2?
+
+   IMMEDIATE (Model C v1.5 — unblocks backtest):
+     1. Source player prop lines from The Odds API (player_points first)
+     2. Build edge calculation: projection - market line
+     3. Run standard backtest with same gates as Phases 9-12
+
+   NEXT (Model C v2 — feature improvement):
+     1. Player-specific usage redistribution when teammate is OUT
+     2. Opponent positional defense (e.g., how does OPP defend guards?)
+     3. Starter vs bench indicator
+     4. Minutes model (Ridge on game environment → projected minutes)
+     5. Separate models for starters vs role players

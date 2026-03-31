@@ -1,0 +1,90 @@
+[
+  {
+    "signal_id": "EZ001",
+    "direction": "OVER",
+    "verdict": "FAIL (val=0.4844)",
+    "train_N": 1311,
+    "val_N": 609,
+    "train_rate": 0.5233,
+    "val_rate": 0.4844,
+    "perm": 98.6,
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ002",
+    "direction": "UNDER",
+    "verdict": "FAIL (val=0.5096)",
+    "train_N": 1537,
+    "val_N": 416,
+    "train_rate": 0.5192,
+    "val_rate": 0.5096,
+    "perm": 88.2,
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ003",
+    "direction": "OVER",
+    "verdict": "FAIL (perm=91.8<95; val=0.4964; yr=1/3)",
+    "train_N": 547,
+    "val_N": 274,
+    "train_rate": 0.5247,
+    "val_rate": 0.4964,
+    "perm": 91.8,
+    "perm_gate": 95
+  },
+  {
+    "signal_id": "EZ004",
+    "direction": "UNDER",
+    "verdict": "FAIL (perm=93.0<95; val=0.4521)",
+    "train_N": 656,
+    "val_N": 146,
+    "train_rate": 0.532,
+    "val_rate": 0.4521,
+    "perm": 93.0,
+    "perm_gate": 95
+  },
+  {
+    "signal_id": "EZ005",
+    "direction": "OVER",
+    "verdict": "FAIL (perm=44.8<85; val=0.4524; yr=1/3)",
+    "train_N": 561,
+    "val_N": 210,
+    "train_rate": 0.4955,
+    "val_rate": 0.4524,
+    "perm": 44.8,
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ006",
+    "direction": "UNDER",
+    "verdict": "FAIL (perm=77.2<85; val=0.4424; yr=1/3)",
+    "train_N": 533,
+    "val_N": 217,
+    "train_rate": 0.5235,
+    "val_rate": 0.4424,
+    "perm": 77.2,
+    "perm_gate": 85
+  },
+  {
+    "signal_id": "EZ007",
+    "direction": "OVER",
+    "verdict": "FAIL (perm=91.6<95; val=0.4968; yr=1/3)",
+    "train_N": 336,
+    "val_N": 155,
+    "train_rate": 0.5327,
+    "val_rate": 0.4968,
+    "perm": 91.6,
+    "perm_gate": 95
+  },
+  {
+    "signal_id": "EZ008",
+    "direction": "UNDER",
+    "verdict": "FAIL (perm=74.2<95; val=0.4694)",
+    "train_N": 366,
+    "val_N": 147,
+    "train_rate": 0.5246,
+    "val_rate": 0.4694,
+    "perm": 74.2,
+    "perm_gate": 95
+  }
+]

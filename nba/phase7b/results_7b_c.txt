@@ -1,0 +1,111 @@
+BATCH AMPLIFIER RESULTS
+==================================================
+
+A1 — Fast pace
+  Label: EXCLUDED
+  Direction: OVER
+  N discovery: 30
+  ROI combined: +27.3%
+  Gate: Already validated Phase 6
+
+A2 — Mid-range total (215-230)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 108
+  N per season: 22-23=64, 23-24=44
+  ROI 22-23: -10.5%
+  ROI 23-24: -8.9%
+  ROI combined: -9.8%
+  Delta vs base: -15.4pp
+  Gate: ROI -9.8% < 8.0%
+
+A2a — Total 215-222
+  Label: FAIL
+  Direction: OVER
+  N discovery: 25
+  N per season: 22-23=11, 23-24=14
+  ROI 22-23: +4.1%
+  ROI 23-24: -59.1%
+  ROI combined: -31.3%
+  Delta vs base: -36.9pp
+  Gate: N=25 < 50
+
+A2b — Total 222-230
+  Label: FAIL
+  Direction: OVER
+  N discovery: 83
+  N per season: 22-23=53, 23-24=30
+  ROI 22-23: -13.6%
+  ROI 23-24: +14.5%
+  ROI combined: -3.4%
+  Delta vs base: -9.0pp
+  Gate: ROI -3.4% < 8.0%
+
+A3 — Line stability amplifier
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+A4 — Defensive mismatch
+  Label: FAIL
+  Direction: OVER
+  N discovery: 3
+  N per season: 22-23=1, 23-24=2
+  ROI 22-23: +90.9%
+  ROI 23-24: +90.9%
+  ROI combined: +90.9%
+  Delta vs base: +85.3pp
+  Gate: N=3 < 50
+
+A5 — Pace + total 220-230
+  Label: FAIL
+  Direction: OVER
+  N discovery: 17
+  N per season: 22-23=11, 23-24=6
+  ROI 22-23: +38.8%
+  ROI 23-24: -4.5%
+  ROI combined: +23.5%
+  Delta vs base: +17.9pp
+  Gate: N=17 < 50
+
+A6 — High foul rate referee
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Referee assignment + foul rate data not available
+
+A7 — Home hot offensive form
+  Label: FAIL
+  Direction: OVER
+  N discovery: 47
+  N per season: 22-23=28, 23-24=19
+  ROI 22-23: -18.2%
+  ROI 23-24: -9.6%
+  ROI combined: -14.7%
+  Delta vs base: -20.3pp
+  Gate: N=47 < 50
+
+A8 — Mutual rest (3+ days)
+  Label: FAIL
+  Direction: OVER
+  N discovery: 5
+  N per season: 22-23=4, 23-24=1
+  ROI 22-23: -100.0%
+  ROI 23-24: -100.0%
+  ROI combined: -100.0%
+  Delta vs base: -105.6pp
+  Gate: N=5 < 50
+
+A9 — Late season playoff race
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Standings snapshot data not available
+
+A10 — Regression lean (consec unders)
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Prior game over/under sequence not in features
+

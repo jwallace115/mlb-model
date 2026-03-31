@@ -1,0 +1,77 @@
+{
+  "schedule": [
+    {
+      "country": "AUS",
+      "course": "Royal Queensland GC",
+      "course_key": "royal queensland gc",
+      "event_id": "2025100",
+      "event_name": "BMW Australian PGA Championship",
+      "latitude": -27.439,
+      "location": "Brisbane, Australia",
+      "longitude": 153.092,
+      "start_date": "2024-11-21",
+      "status": "completed",
+      "tour": "euro",
+      "winner": "Smylie, Elvis (24200)"
+    },
+    {
+      "country": "AUS",
+      "course": "Kingston Heath GC;Victoria GC",
+      "course_key": "kingston heath gc;victoria gc",
+      "event_id": "2025101",
+      "event_name": "ISPS Handa Australian Open (now Crown Australian Open)",
+      "latitude": -37.955,
+      "location": "Melbourne, Victoria, Australia",
+      "longitude": 145.086,
+      "start_date": "2024-11-28",
+      "status": "completed",
+      "tour": "euro",
+      "winner": "Johnston, Ryggs (32449)"
+    },
+    {
+      "country": "RSA",
+      "course": "Gary Player CC",
+      "course_key": "gary player cc",
+      "event_id": "2025102",
+      "event_name": "Nedbank Golf Challenge (now Nedbank Golf Challenge in honour of Gary Player)",
+      "latitude": -25.339,
+      "location": "Sun City, South Africa",
+      "longitude": 27.106,
+      "start_date": "2024-12-05",
+      "status": "completed",
+      "tour": "euro",
+      "winner": "Veerman, Johannes (20522)"
+    },
+    {
+      "country": "RSA",
+      "course": "Leopard Creek CC",
+      "course_key": "leopard creek cc",
+      "event_id": "2025103",
+      "event_name": "Alfred Dunhill Championship",
+      "latitude": -25.442,
+      "location": "Malalane, South Africa",
+      "longitude": 31.535,
+      "start_date": "2024-12-12",
+      "status": "completed",
+      "tour": "euro",
+      "winner": "Norris, Shaun (7677)"
+    },
+    {
+      "country": "MRI",
+      "course": "Mont Choisy Le Golf",
+      "course_key": "mont choisy le golf",
+      "event_id": "2025104",
+      "event_name": "AfrAsia Bank Mauritius Open",
+      "latitude": -20.024,
+      "location": "Grand-Baie, Mauritius",
+      "longitude": 57.565,
+      "start_date": "2024-12-19",
+      "status": "completed",
+      "tour": "euro",
+      "winner": "Parry, John (13764)"
+    }
+  ],
+  "season": 2025,
+  "tour": "euro",
+  "upcoming_only": "no"
+}

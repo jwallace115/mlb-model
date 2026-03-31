@@ -1,0 +1,134 @@
+====================================================================
+NHL Phase 4: Poisson Simulation + Probability Engine
+====================================================================
+====================================================================
+STEP 1 — INTERCEPT RECALIBRATION
+====================================================================
+
+  Validate set bias (actual − predicted):
+    home_bias = +0.2168 goals
+    away_bias = +0.2289 goals
+
+  Post-calibration mean comparison:
+  Split          mean(λ_home)  mean(actual_home)   mean(λ_away)  mean(actual_away)
+  --------------------------------------------------------------------------------
+  validate             3.2294             3.2294         2.9962             2.9962
+  oos                  2.9964             3.2005         2.7437             2.8803
+
+  Post-calibration validate bias (should be ≈ 0):
+    home: -0.000000
+    away: +0.000000
+  PASS  home bias within 0.05 on validate
+  PASS  away bias within 0.05 on validate
+
+====================================================================
+STEP 2 — INDEPENDENT POISSON SIMULATION (N=10,000)
+====================================================================
+
+  Simulating train: 2624 games × 10,000 iterations...
+  Probability sum check (max |error|): 2.22e-16  PASS
+
+  Simulating validate: 1312 games × 10,000 iterations...
+  Probability sum check (max |error|): 2.22e-16  PASS
+
+  Simulating oos: 1312 games × 10,000 iterations...
+  Probability sum check (max |error|): 1.11e-16  PASS
+
+====================================================================
+STEP 3 — SIMULATION DIAGNOSTICS
+====================================================================
+====================================================================
+PHASE 4 SIMULATION DIAGNOSTIC REPORT
+====================================================================
+
+[3A] Mean Calibration — VALIDATE
+--------------------------------------------------
+  mean(simulated total): 6.2247
+  mean(actual total):    6.2256
+  difference:            -0.0009
+  PASS  (threshold: ≤ 0.1 goals)
+
+[3B] Variance Calibration — VALIDATE
+--------------------------------------------------
+  mean per-game std(simulated): 2.4940
+  std(actual total_goals):      2.3109
+  difference:                   +0.1831
+  FAIL  (threshold: ≤ 0.15)
+
+[3C] Tail Calibration — VALIDATE
+--------------------------------------------------
+  Simulated P(total ≤ 3): 13.59%   Actual: 12.88%  diff=+0.71pp  PASS
+  Simulated P(total ≥ 7): 42.93%   Actual: 45.66%  diff=-2.72pp  FAIL
+
+[3D] Market-Number Calibration — VALIDATE
+--------------------------------------------------
+  Bucket 5.5 (n=99):
+    sim_over_prob=0.5277  actual_over=0.5253  diff=+0.0024  PASS
+  Bucket 6.0 (n=520):
+    sim_over_prob=0.4171  actual_over=0.4538  diff=-0.0368  FAIL
+    sim_push=0.1585  actual_push=0.1115  diff=+0.0469  FAIL
+  Bucket 6.5 (n=644):
+    sim_over_prob=0.4446  actual_over=0.4736  diff=-0.0290  PASS
+
+[3E] Bias by Volatility Bucket — VALIDATE
+--------------------------------------------------
+  low      (n= 778): mean_sim=6.143  mean_act=6.162  std_sim=2.477  std_act=2.328  std_diff=+0.149
+  medium   (n= 513): mean_sim=6.333  mean_act=6.341  std_sim=2.517  std_act=2.278  std_diff=+0.239
+  high     (n=  21): mean_sim=6.597  mean_act=5.762  std_sim=2.569  std_act=2.448  std_diff=+0.121
+  PASS  No systematic tail under-pricing in high-vol bucket
+
+[3A] Mean Calibration — OOS
+--------------------------------------------------
+  mean(simulated total): 5.7409
+  mean(actual total):    6.0808
+  difference:            -0.3399
+  FAIL  (threshold: ≤ 0.1 goals)
+
+[3B] Variance Calibration — OOS
+--------------------------------------------------
+  mean per-game std(simulated): 2.3949
+  std(actual total_goals):      2.3212
+  difference:                   +0.0738
+  PASS  (threshold: ≤ 0.15)
+
+[3C] Tail Calibration — OOS
+--------------------------------------------------
+  Simulated P(total ≤ 3): 18.05%   Actual: 14.33%  diff=+3.72pp  FAIL
+  Simulated P(total ≥ 7): 35.27%   Actual: 42.30%  diff=-7.03pp  FAIL
+
+[3E] Bias by Volatility Bucket — OOS
+--------------------------------------------------
+  low      (n= 974): mean_sim=5.692  mean_act=6.047  std_sim=2.384  std_act=2.273  std_diff=+0.111
+  medium   (n= 336): mean_sim=5.883  mean_act=6.196  std_sim=2.426  std_act=2.445  std_diff=-0.020
+  high     (n=   2): mean_sim=5.589  mean_act=3.000  std_sim=2.370  std_act=2.828  std_diff=-0.458  ← FAIL (under-prices tails)
+
+====================================================================
+STEP 5 — EDGE CALCULATION (Validate Set)
+====================================================================
+
+  Total validate games with market line: 1,312
+  Qualified signals (|edge| ≥ 0.04):    1,069  (81.5%)
+
+  OVER bets:  n=93  mean_edge=+0.0786  actual_over_hit=0.5161
+  UNDER bets: n=454  mean_edge=+0.0951  actual_under_hit=0.5242
+
+  Edge distribution on qualified signals:
+    over: mean=+0.0786  p25=+0.0581  p75=+0.0907  max=+0.1533
+    under: mean=+0.0951  p25=+0.0634  p75=+0.1183  max=+0.2274
+
+  OOS Qualified Signal Summary:
+  Total OOS games with market line: 1,312
+  Qualified signals: 1,011  (77.1%)
+  OVER  OOS: n=73  mean_edge=+0.0768  hit=0.5342
+  UNDER OOS: n=659  mean_edge=+0.1024  hit=0.5250
+
+====================================================================
+STEP 4 — VARIANCE ADJUSTMENT DECISION
+====================================================================
+  See 3B and 3E results above.
+  If both PASS → plain Poisson is sufficient; NegBinomial not applied.
+
+====================================================================
+STEP 6 — SAVING OUTPUTS
+====================================================================
+  Saved: /Users/jw115/mlb-model/nhl/nhl_sim_results.parquet  (5,248 rows)

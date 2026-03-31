@@ -1,0 +1,238 @@
+NBA VALIDATION — HOME SCORING ENVIRONMENT (MARKET ANCHORING)
+Run date: 2026-03-23
+home_total_last10 definition: A game totals
+
+========================================
+VARIABLE DEFINITIONS AND CORRELATIONS (Step 1)
+========================================
+home_total_last10 mean: 228.37 → definition: A game totals
+Total RS games: 3690
+Coverage home_total_last10: 99.2%
+Coverage home_pace_proxy_last10: 99.6%
+
+home_total_last10 distribution:
+  min=178.0 p25=222.2 p50=228.2 p75=234.5 max=261.2 mean=228.35 std=9.44
+
+Correlations:
+  home_total_last10 vs home_pace_proxy_last10: r=0.757 → independent
+  home_total_last10 vs close_total: r=0.524
+market_error computable: YES (missing: 5)
+
+========================================
+ANCHORING GAP DISTRIBUTION (Step 2)
+========================================
+home_env_gap = home_total_last10 - close_total
+  min=-46.5 p25=-5.5 p50=0.4 p75=6.5 max=34.1 mean=0.58 std=8.86
+
+========================================
+PRIMARY RESULTS — home_env_gap QUARTILES (Step 3)
+========================================
+Quartile  |     N |      ME | HR_over |        p | mean_AE | std_ME
+----------|-------|---------|---------|----------|---------|-------
+Q1        |   915 |   -0.65 |   0.475 |   0.2784 |   14.08 |  18.09
+Q2        |   927 |   +1.21 |   0.537 |   0.0417 |   14.33 |  18.01
+Q3        |   910 |   +0.97 |   0.512 |   0.1071 |   14.48 |  18.11
+Q4        |   903 |   +1.22 |   0.514 |   0.0357 |   14.05 |  17.45
+
+Q4 vs Q1 two-sample test: gap=+1.87 pts p=0.0250
+
+SYMMETRY CHECK:
+  Q4 ME: +1.22 (positive)
+  Q1 ME: -0.65 (negative)
+  Verdict: symmetric anchoring (directionally correct but magnitudes weak)
+
+By season Q4:
+Season   |    N |      ME | HR_over
+---------|------|---------|--------
+2022-23  |  254 |   +1.80 |   0.528
+2023-24  |  370 |   +1.52 |   0.512
+2024-25  |  279 |   +0.30 |   0.505
+
+By season Q1:
+Season   |    N |      ME | HR_over
+---------|------|---------|--------
+2022-23  |  315 |   -0.27 |   0.482
+2023-24  |  285 |   -0.61 |   0.462
+2024-25  |  315 |   -1.06 |   0.479
+
+========================================
+SECONDARY RESULTS — raw home_total_last10 QUARTILES (Step 4)
+========================================
+Quartile  |     N |      ME | HR_over |        p | mean_AE | std_ME
+----------|-------|---------|---------|----------|---------|-------
+Q1        |   924 |   +0.65 |   0.530 |   0.2571 |   13.83 |  17.51
+Q2        |   907 |   -0.30 |   0.492 |   0.6170 |   14.26 |  17.94
+Q3        |   923 |   +0.83 |   0.507 |   0.1517 |   14.03 |  17.63
+Q4        |   901 |   +1.56 |   0.510 |   0.0120 |   14.82 |  18.63
+
+Stronger predictor: gap
+
+========================================
+SEASON AVERAGE COMPARISON (Step 5)
+========================================
+season_home_gap Q4: N=891 ME=+1.14 HR=0.518 p=0.0524
+season_home_gap Q1: N=893 ME=+0.02 HR=0.487 p=0.9693
+Rolling vs season-avg: similar
+Anchoring hypothesis: weakened
+
+========================================
+HOME_PACE_PROXY RESULTS (Step 6)
+========================================
+Correlation with home_total_last10: r=0.757
+Treatment: independent
+pace_env_gap Q4: N=913 ME=+1.62 HR=0.524 p=0.0052
+pace_env_gap Q1: N=928 ME=-0.01 HR=0.497 p=0.9916
+
+========================================
+LINE PERCENTILE CONTROL (Step 7)
+========================================
+Line decile  |  N_Q4 |   ME_Q4 |  N_Q1 |   ME_Q1 |    Gap
+-------------|-------|---------|-------|---------|-------
+           0 |   198 |   +1.36 |    20 |   -0.78 |  +2.13
+           1 |   158 |   -0.68 |    41 |   +0.50 |  -1.18
+           2 |   119 |   +1.48 |    53 |   -3.37 |  +4.85
+           3 |   113 |   +4.96 |    73 |   -1.60 |  +6.55
+           4 |    88 |   +1.60 |    82 |   +2.91 |  -1.31
+           5 |    63 |   +0.72 |    91 |   +2.10 |  -1.38
+           6 |    59 |   -3.67 |   105 |   +0.07 |  -3.74
+           7 |    43 |   +3.83 |   150 |   -1.07 |  +4.89
+           8 |    40 |   +0.70 |   133 |   -2.73 |  +3.43
+           9 |    22 |   +2.00 |   167 |   -1.30 |  +3.30
+
+Gap signal within line deciles: survives (6/10 deciles show Q4 > Q1)
+
+========================================
+EXTREME ENVIRONMENTS (Step 8)
+========================================
+Group              |     N |      ME | HR_over |        p | mean_AE
+-------------------|-------|---------|---------|----------|--------
+Top 10% gap        |   371 |   +1.12 |   0.503 |   0.2146 |   13.98
+Bottom 10% gap     |   368 |   -0.40 |   0.486 |   0.6634 |   13.49
+Top 10% raw        |   368 |   +1.22 |   0.511 |   0.2149 |   15.01
+
+Top decile gap by season:
+Season   |    N |      ME | HR_over
+---------|------|---------|--------
+2022-23  |   92 |   +0.23 |   0.478
+2023-24  |  153 |   +1.95 |   0.539
+2024-25  |  126 |   +0.77 |   0.476
+
+Bottom decile gap by season:
+Season   |    N |      ME | HR_over
+---------|------|---------|--------
+2022-23  |  112 |   +0.10 |   0.473
+2023-24  |  122 |   -2.49 |   0.444
+2024-25  |  134 |   +1.07 |   0.534
+
+========================================
+OT EXCLUSION CHECK (Step 9)
+========================================
+home_env_gap Q4:
+  With OT:    N=903 ME=+1.22 HR=0.514 p=0.0357
+  Without OT: N=851 ME=-0.07 HR=0.491 p=0.9072
+
+home_env_gap Q1:
+  With OT:    N=915 ME=-0.65 HR=0.475 p=0.2784
+  Without OT: N=876 ME=-1.58 HR=0.463 p=0.0066
+
+OT rate: Q4=5.8% Q1=4.3% full=5.3%
+
+========================================
+LINE BAND CHECK — Q4 (Step 10)
+========================================
+Band        |    N |      ME | HR_over
+------------|------|---------|--------
+<220        |  309 |   +0.94 |   0.529
+220-230     |  416 |   +1.72 |   0.516
+230-240     |  160 |   +0.67 |   0.491
+240-250     |   17 |   +0.35 |   0.471
+>= 250      |    1 |  -18.00 |   0.000
+Concentration flag: no
+
+========================================
+TEAM CONCENTRATION (Step 11)
+========================================
+Top 5 home teams in Q4:
+Team  |    N |      %
+------|------|-------
+SAS   |   46 |   5.1%
+BOS   |   45 |   5.0%
+IND   |   43 |   4.8%
+ATL   |   42 |   4.7%
+SAC   |   42 |   4.7%
+
+Single-team flag (>15%): no
+Top-3 concentration flag (>50%): 14.8% no
+
+========================================
+VENUE INDEPENDENCE (Step 12A)
+========================================
+Overlap: 10.4% of Q4 games are Venue signal games
+Non-Venue Q4: N=809 ME=+0.16 HR=0.490 p=0.7943
+Venue Q4:     N=94 ME=+10.38 HR=0.723 p=0.0000
+
+========================================
+REFEREE INDEPENDENCE (Step 12B, ref-covered only)
+========================================
+Q4 ref-covered N: 600
+
+crew_high distribution:
+crew_high  |   Q4 % |   Q1 %
+-----------|--------|-------
+         0 |  42.0% |  44.2%
+         1 |  45.8% |  40.8%
+         2 |  10.8% |  13.7%
+         3 |   1.3% |   1.3%
+
+Q4 after removing crew_high>=2: N=527 ME=+0.95 HR=0.527 p=0.2091
+
+========================================
+SEASON STABILITY (Step 13)
+========================================
+Q4:
+Season   |    N |      ME | HR_over |        p
+---------|------|---------|---------|---------
+2022-23  |  254 |   +1.80 |   0.528 |   0.1162
+2023-24  |  370 |   +1.52 |   0.512 |   0.0948
+2024-25  |  279 |   +0.30 |   0.505 |   0.7659
+Consistency: 3/3
+
+Q1:
+Season   |    N |      ME | HR_over |        p
+---------|------|---------|---------|---------
+2022-23  |  315 |   -0.27 |   0.482 |   0.7818
+2023-24  |  285 |   -0.61 |   0.462 |   0.5965
+2024-25  |  315 |   -1.06 |   0.479 |   0.2850
+Consistency: 3/3
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+Gate                       | Threshold        | Q4 Result        | Q1 Result        | Pass/Fail
+---------------------------|------------------|------------------|------------------|----------
+Q4 mean error              | >= +2.0 pts      | +1.22            | —                | FAIL
+Q1 mean error              | <= -1.0 pts      | —                | -0.65            | FAIL
+Symmetry                   | Q4 pos + Q1 neg  | +1.22            | -0.65            | PASS
+Significance               | p < 0.05         | p=0.0357         | p=0.2784         | FAIL
+N per season               | >= 20            | min=254          | —                | PASS
+Season consistency         | >= 2/3           | 3/3              | —                | PASS
+OT exclusion               | ME survives      | ME=-0.07 (p=0.91)| —                | FAIL
+Venue independence         | ME survives      | ME=+0.16 (p=0.79)| —                | FAIL
+Referee independence       | ME survives      | ME=+0.95 (p=0.21)| —                | PASS
+Team concentration         | No team > 15%    | clean            | —                | PASS
+Rolling > season-avg       | anchoring conf   | similar          | —                | FAIL
+Overall: FAIL (5/11 gates passed, 6 failed)
+
+========================================
+FINAL CLASSIFICATION
+========================================
+Classification: CLOSED
+Reasoning: The home scoring environment gap shows the correct symmetric
+anchoring direction (Q4 positive, Q1 negative) but fails on substance.
+Three findings are fatal: (1) OT exclusion collapses Q4 entirely from
+ME=+1.22 to ME=-0.07 — the over-lean is pure OT variance; (2) Venue
+independence fails — Non-Venue Q4 ME=+0.16 means the 94 embedded Venue
+games (ME=+10.38) account for virtually all signal; (3) rolling gap
+performs similarly to season-average gap, undermining the anchoring
+mechanism. The home_env_gap is a proxy for Venue OVER + OT variance,
+not an independent market inefficiency. No deployable content exists.

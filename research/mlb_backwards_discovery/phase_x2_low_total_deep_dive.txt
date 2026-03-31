@@ -1,0 +1,145 @@
+MLB LOW TOTAL BAND DEEP DIVE (<=7.5)
+Run date: 2026-03-24
+N low-total games (all): 2199 | N non-extras: 1975
+Train: 962 | Validate: 681 | Holdout: 556
+
+========================================
+TAIL ASYMMETRY (Step 1)
+========================================
+Overall (all games):
+  P(ME >= +3): 25.4% | P(ME <= -3): 18.7% | Ratio: 1.36
+Overall (non-extras):
+  P(ME >= +3): 24.8% | P(ME <= -3): 18.8% | Ratio: 1.31
+
+By season:
+Season |     N | P(>=+3) all | P(<=-3) all | Ratio_all | P(>=+3) noX | P(<=-3) noX | Ratio_noX
+  2022 |   697 |       23.2% |       18.9% |      1.23 |       23.1% |       18.7% |      1.24
+  2023 |   265 |       28.3% |       15.5% |      1.83 |       28.7% |       15.4% |      1.87
+  2024 |   681 |       25.0% |       18.5% |      1.35 |       23.4% |       18.8% |      1.25
+  2025 |   556 |       27.3% |       20.1% |      1.36 |       26.6% |       20.9% |      1.27
+
+ME all: 0.629 | ME non-extras: 0.593
+Median ME all: 0.000 | Median ME non-extras: 0.000
+
+Conclusion: right-tail heavy (OVER blowouts more common)
+
+========================================
+TOP DIRECTIONAL FEATURES — NON-EXTRAS PRIMARY (Step 2)
+========================================
+Rank | Feature                             |  BO_over | near_line |  BO_under | eff_size |       p | Type | All-games eff
+   1 | home_csw_pct                       *|   26.919 |    28.332 |    29.943 |   -0.527 |  0.0002 |  DIR |        -0.511
+   2 | home_f_strike_pct                  *|   61.643 |    62.763 |    65.113 |   -0.316 |  0.0465 |  DIR |        -0.300
+   3 | home_f_strike_trend                *|   -0.331 |     0.419 |     0.584 |   -0.284 |  0.0310 |  DIR |        -0.301
+   4 | away_csw_pct                       *|   25.982 |    27.217 |    27.424 |   -0.283 |  0.0295 |  DIR |        -0.336
+   5 | home_fb_velo                        |   92.651 |    92.821 |    93.321 |   -0.257 |  0.1395 |  DIR |        -0.311
+   6 | away_f_strike_pct                   |   60.138 |    61.269 |    62.760 |   -0.243 |  0.1375 |  DIR |        -0.245
+   7 | home_fb_velo_r5                     |   92.628 |    92.849 |    93.230 |   -0.233 |  0.3188 |  DIR |        -0.290
+   8 | home_fb_velo_r3                     |   92.646 |    92.868 |    93.226 |   -0.224 |  0.3539 |  DIR |        -0.282
+   9 | away_kbb_pct_r5                     |    0.171 |     0.165 |     0.155 |   +0.222 |  0.2812 |  DIR |        +0.108
+  10 | home_whiff_pct                     *|   23.178 |    23.444 |    25.140 |   -0.221 |  0.0995 |  DIR |        -0.199
+  11 | k_environment                       |    0.455 |     0.447 |     0.448 |   +0.219 |  0.1610 |  VAR |        +0.223
+  12 | home_fb_velo_season                 |   92.570 |    92.767 |    93.132 |   -0.219 |  0.3371 |  DIR |        -0.277
+  13 | home_sp_xfip                        |    4.091 |     4.065 |     3.991 |   +0.208 |  0.1620 |  DIR |        +0.217
+  14 | home_sp_siera                       |    4.091 |     4.065 |     3.991 |   +0.208 |  0.1620 |  DIR |        +0.217
+  15 | home_lineup_k_pct                   |    0.226 |     0.223 |     0.222 |   +0.205 |  0.2200 |  DIR |        +0.170
+  16 | away_lineup_woba                    |    0.307 |     0.316 |     0.313 |   -0.198 |  0.0745 |  VAR |        -0.199
+  17 | away_sp_fip_L5                      |    3.930 |     4.303 |     4.376 |   -0.197 |  0.7147 |  DIR |        -0.168
+  18 | away_days_rest                      |    7.933 |     9.075 |     6.258 |   +0.185 |  0.2943 |  VAR |        +0.172
+  19 | away_lineup_delta                   |   -0.005 |     0.001 |    -0.000 |   -0.175 |  0.6340 |  VAR |        -0.163
+  20 | away_k_pct_r5                       |    0.237 |     0.238 |     0.226 |   +0.175 |  0.2225 |  VAR |        +0.060
+  21 | away_bb_pct_r5                      |    0.066 |     0.073 |     0.071 |   -0.171 |  0.2166 |  VAR |        -0.137
+  22 | away_sp_bb_pct                      |    0.079 |     0.078 |     0.077 |   +0.170 |  0.5037 |  DIR |        +0.143
+  23 | local_start_hour                    |   15.722 |    15.697 |    16.158 |   -0.160 |  0.3390 |  VAR |        -0.191
+  24 | away_sp_xfip                        |    4.157 |     4.113 |     4.077 |   +0.158 |  0.3804 |  DIR |        +0.188
+  25 | away_sp_siera                       |    4.157 |     4.113 |     4.077 |   +0.158 |  0.3804 |  DIR |        +0.188
+
+Flagged (p<0.10, |eff|>0.20): 5
+
+========================================
+WHY LOW TOTALS LEAN OVER (Step 3)
+========================================
+Feature                             |  mean_low | mean_other |  diff_SD | Interpretation
+home_sp_siera                       |     4.028 |      4.323 |   -0.575 | better pitching (lower = fewer runs)
+home_sp_xfip                        |     4.028 |      4.323 |   -0.575 | better pitching (lower = fewer runs)
+park_factor_runs                    |    98.554 |    101.144 |   -0.546 | pitcher-friendly parks
+park_factor_hr                      |    98.554 |    101.144 |   -0.546 | pitcher-friendly parks
+temperature                         |    68.193 |     73.502 |   -0.542 | cooler weather → less carry
+home_sp_k_pct                       |     0.233 |      0.219 |   +0.486 | more strikeouts → suppresses scoring
+away_sp_siera                       |     4.066 |      4.308 |   -0.474 | better pitching (lower = fewer runs)
+away_sp_xfip                        |     4.066 |      4.308 |   -0.474 | better pitching (lower = fewer runs)
+home_bp_xfip                        |     4.187 |      4.224 |   -0.431 | better pitching (lower = fewer runs)
+away_sp_k_pct                       |     0.231 |      0.219 |   +0.395 | more strikeouts → suppresses scoring
+home_whiff_season                   |    23.677 |     21.818 |   +0.376 | more strikeouts → suppresses scoring
+home_csw_r5                         |    27.886 |     26.754 |   +0.357 | more strikeouts → suppresses scoring
+home_whiff_r5                       |    23.586 |     21.765 |   +0.337 | more strikeouts → suppresses scoring
+home_sp_bb_pct                      |     0.077 |      0.081 |   -0.307 | fewer walks in low-total games
+away_whiff_season                   |    23.375 |     21.904 |   +0.304 | more strikeouts → suppresses scoring
+
+========================================
+POSTGAME GAME-PATH — LOW TOTALS (Step 4)
+========================================
+Rank | Feature                             | r_ME_noX |  BO_over |  BO_under | Mechanism
+   1 | home_team_pa                        |   +0.661 |    39.80 |     32.51 | plate appearances
+   2 | home_team_ab                        |   +0.603 |    34.99 |     29.62 | plate appearances
+   3 | away_team_pa                        |   +0.558 |    41.06 |     34.15 | plate appearances
+   4 | home_team_hits                      |   +0.558 |    10.56 |      5.47 | hit volume
+   5 | away_team_hits                      |   +0.541 |    10.70 |      5.40 | hit volume
+   6 | away_team_ab                        |   +0.541 |    36.69 |     31.40 | plate appearances
+   7 | away_bullpen_hits                   |   +0.501 |     4.75 |      1.60 | hit volume
+   8 | home_bullpen_hits                   |   +0.460 |     4.77 |      1.64 | hit volume
+   9 | total_hits_game                     |   +0.458 |    16.19 |      8.21 | hit volume
+  10 | away_bullpen_batters_faced          |   +0.458 |    18.65 |     10.77 | plate appearances
+  11 | away_bullpen_pitches                |   +0.425 |    72.80 |     42.62 | pitch count
+  12 | total_hr_game                       |   +0.419 |     2.49 |      0.72 | home run volume
+  13 | home_team_hr                        |   +0.413 |     1.76 |      0.49 | home run volume
+  14 | home_bullpen_batters_faced          |   +0.406 |    18.94 |     11.33 | plate appearances
+  15 | home_bullpen_pitches                |   +0.387 |    73.58 |     44.61 | pitch count
+
+Most common path to big over in low-total game:
+  Top postgame drivers: home_team_pa, home_team_ab, away_team_pa
+  Mechanisms: plate appearances — when low-total games go over, it is typically
+  driven by elevated plate appearances (r=+0.661 with ME).
+  Also elevated plate appearances (home_team_ab, r=+0.603).
+  Also elevated plate appearances (away_team_pa, r=+0.558).
+
+========================================
+SEASON STABILITY (Step 5)
+========================================
+Feature                             |   2022 |   2023 |   2024 |   2025 | Stable
+home_csw_pct                        | -0.181 | -0.108 | -0.095 | -0.146 | YES
+home_f_strike_pct                   | -0.088 | -0.082 | -0.019 | -0.063 | YES
+home_f_strike_trend                 | -0.073 | -0.025 | -0.059 | -0.054 | YES
+away_csw_pct                        | -0.094 | -0.082 | -0.115 | -0.100 | YES
+home_fb_velo                        | -0.098 | +0.008 | +0.011 | -0.062 | NO
+away_f_strike_pct                   | -0.074 | -0.138 | -0.058 | -0.065 | YES
+home_fb_velo_r5                     | -0.095 | +0.029 | -0.017 | -0.052 | MOSTLY
+home_fb_velo_r3                     | -0.090 | +0.025 | -0.018 | -0.051 | MOSTLY
+away_kbb_pct_r5                     | +0.056 | +0.126 | -0.002 | -0.043 | NO
+home_whiff_pct                      | -0.093 | -0.019 | -0.100 | -0.132 | YES
+k_environment                       | +0.042 | +0.074 | -0.002 | +0.101 | MOSTLY
+home_fb_velo_season                 | -0.096 | +0.033 | -0.005 | -0.049 | MOSTLY
+home_sp_xfip                        | +0.085 | -0.064 | +0.045 | +0.040 | MOSTLY
+home_sp_siera                       | +0.085 | -0.064 | +0.045 | +0.040 | MOSTLY
+home_lineup_k_pct                   | +0.030 | +0.063 | -0.006 | +0.068 | MOSTLY
+
+========================================
+HYPOTHESIS SUMMARY
+========================================
+1. Tail asymmetry: CONFIRMED — right-tail ratio 1.36x. Low-total games blow over more often than under.
+2. OVER lean mechanism: Mean ME=+0.629 confirms systematic OVER lean.
+   Primary population difference: home_sp_siera (-0.575 SD from other games).
+   Low-total games feature elite pitching matchups, but the market slightly underestimates offensive breakouts when pitchers underperform.
+3. Top directional signals:
+   home_csw_pct (eff=-0.527, higher → UNDER)
+   home_f_strike_pct (eff=-0.316, higher → UNDER)
+   home_f_strike_trend (eff=-0.284, higher → UNDER)
+   away_csw_pct (eff=-0.283, higher → UNDER)
+   home_whiff_pct (eff=-0.221, higher → UNDER)
+4. NEW vs already-priced: 5/5 of top features are less-obvious signals.
+   Several features in the top-5 are NOT standard market inputs — potential edge territory.
+
+--- Supplemental: ME distribution in low-total band ---
+Percentiles: P10=-4.50 | P25=-2.50 | P50=+0.00 | P75=+3.00 | P90=+6.00
+Std(ME): 4.074
+Skew(ME): 0.826
+Kurtosis(ME): 0.897

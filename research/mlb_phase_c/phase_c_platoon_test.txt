@@ -1,0 +1,116 @@
+MLB PHASE C — LINEUP PLATOON ADVANTAGE RESIDUAL TEST
+Run date: 2026-03-24
+Train: 2022-2023 | Validate: 2024 | Holdout: 2025
+Games analyzed: 7,366
+
+========================================
+BASE DATA (Step 1)
+========================================
+Split     |     N | mean_resid
+----------|-------|-----------
+Train     |  3726 |    +0.031
+Validate  |  1860 |    -0.177
+Holdout   |  1780 |    +0.069
+
+Feature distributions:
+  home_platoon_rate:  mean=0.411  std=0.181  p25=0.333  p75=0.556
+  away_platoon_rate:  mean=0.412  std=0.178  p25=0.333  p75=0.556
+  platoon_gap:        mean=-0.001 std=0.254  p25=-0.222 p75=+0.222
+  both_high_platoon:  N=135 (1.8% of games)
+  both_low_platoon:   N=359 (4.9% of games)
+
+Correlations with m3_residual:
+  home_platoon_rate:  r=+0.018  p=0.123
+  away_platoon_rate:  r=+0.007  p=0.540
+  platoon_gap:        r=+0.008  p=0.505
+
+All correlations effectively zero (|r| < 0.02).
+
+========================================
+QUARTILE RESIDUAL TEST (Step 2)
+========================================
+NOTE: Quartile construction limited by discrete nature of platoon rate
+(9 hitters → values cluster at 2/9, 3/9, 4/9, 5/9, 6/9).
+Some quartiles have zero rows due to threshold ties.
+
+home_platoon_rate:
+  Q1: Train ME=-0.206 (p=0.038) → Val +0.001 → Hold -0.125 — inconsistent
+  Q3: Train ME=+0.165 (p=0.196) → Val -0.250 → Hold +0.012 — inconsistent
+  Q4: Train ME=+0.028 (p=0.873) — flat
+
+platoon_gap:
+  Q1: Train ME=-0.037 (p=0.800) — flat
+  Q2: Train ME=-0.261 (p=0.040) → Val -0.209 → Hold +0.133 — flips in holdout
+  Q4: Train ME=+0.198 (p=0.222) — not significant
+
+NONE FLAGGED — no quartile meets |ME| > 0.35 AND p < 0.10 AND N >= 50.
+
+========================================
+EXTREME BUCKET TEST (Step 3)
+========================================
+Bottom decile home_platoon_rate (low platoon advantage):
+  Train: N=918  ME=-0.343  p=0.016  HR=56.9% (UNDER)
+  Val:   N=390  ME=+0.368  p=0.099 — FLIPS DIRECTION
+  Hold:  N=439  ME=-0.056  p=0.804
+
+both_low_platoon (both teams <= 33% platoon advantage):
+  Train: N=199  ME=-0.819  p=0.006  HR=60.3% (UNDER)
+  Val:   N= 72  ME=+0.694  p=0.131 — FLIPS DIRECTION
+  Hold:  N= 88  ME=+0.062  p=0.911
+
+both_high_platoon (both teams >= 60% platoon advantage):
+  Train: N= 78  ME=-0.847  p=0.054
+  Val:   N= 35  ME=+0.194  p=0.738 — FLIPS DIRECTION
+  Hold:  N= 22  ME=+0.612  p=0.547
+
+Top decile platoon_gap: all splits p > 0.30.
+Bottom decile platoon_gap: all splits p > 0.40.
+
+KEY FINDING: both_low_platoon shows ME=-0.819 (p=0.006) in train but
+FLIPS to +0.694 in validation. This is a textbook false positive —
+strong in-sample, opposite direction OOS.
+
+========================================
+INCREMENTAL VALUE — OLS (Step 4)
+========================================
+m3_residual ~ platoon features + lineup woba + lineup k_pct
+
+Train (N=3726, R²=0.001):
+  home_platoon_rate:   coeff=+0.560  t=+1.95  p=0.051 (borderline)
+  away_platoon_rate:   coeff=+0.322  t=+1.12  p=0.264
+  platoon_gap:         coeff=+0.239  t=+1.33  p=0.185
+
+Validate: home_platoon_rate coeff=-0.057 (p=0.898) — collapses OOS
+Holdout:  home_platoon_rate coeff=+0.118 (p=0.795) — near zero
+
+The borderline train significance (p=0.051) does not replicate.
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+Candidate                | ME_trn | p_trn  | Dir consistent | Overall
+-------------------------|--------|--------|----------------|--------
+home_platoon_rate Q1     | -0.206 | 0.038  | NO (flips)     | FAIL
+both_low_platoon         | -0.819 | 0.006  | NO (flips)     | FAIL
+both_high_platoon        | -0.847 | 0.054  | NO (flips)     | FAIL
+platoon_gap Q4           | +0.198 | 0.222  | NO             | FAIL
+
+All candidates fail direction consistency gate.
+
+========================================
+VERDICT
+========================================
+Signals passing all gates: NONE
+Best candidate: NONE — all platoon features flip direction OOS
+Recommended next step: CLOSE Phase C
+
+Reasoning: Aggregate lineup platoon advantage rate has near-zero
+correlation with M3 residuals (r=0.018, p=0.12). The both_low_platoon
+condition shows a strong train effect (ME=-0.82, p=0.006) but flips
+to +0.69 in validation — a clear false positive. M3 already captures
+platoon effects through its per-hitter vsL/vsR wOBA adjustments in
+the lineup aggregation step. The aggregate platoon rate adds no
+incremental information beyond what the lineup-level platoon splits
+already provide.
+
+PHASE C CLOSED.

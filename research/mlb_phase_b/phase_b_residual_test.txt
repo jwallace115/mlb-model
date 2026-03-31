@@ -1,0 +1,125 @@
+MLB PHASE B — BULLPEN AVAILABILITY RESIDUAL TEST
+Run date: 2026-03-24
+Train: 2022-2023 | Validate: 2024 | Holdout: 2025
+Games analyzed: 9592
+
+========================================
+BASE DATA (Step 1)
+========================================
+Split     |     N |  mean_resid |  median_resid
+----------|-------|-------------|--------------
+Train     |  4792 |      +0.052 |       -0.519
+Validate  |  2400 |      +0.014 |       -0.463
+Holdout   |  2400 |      +0.059 |       -0.483
+
+Coverage:
+  home_relievers_used_last_game:      99.4%
+  home_relievers_used_last_3_games:   99.4%
+  home_bullpen_pitches_last_game:     99.4%
+  home_bullpen_pitches_last_3_games:  99.4%
+  home_high_leverage_available:      100.0%
+  away_ versions:                     99.4-100.0%
+  home/away_bp_xfip:                 100.0%
+
+========================================
+FEATURE DISTRIBUTIONS (Step 2)
+========================================
+Feature                  |    mean |     std |     p25 |     p75
+-------------------------|---------|---------|---------|--------
+home_fatigue_idx         |  281.91 |   79.75 |  226.50 |  328.50
+away_fatigue_idx         |  269.90 |   76.79 |  216.50 |  315.00
+home_depth_used          |    9.96 |    2.06 |    9.00 |   11.00
+away_depth_used          |    9.67 |    2.08 |    8.00 |   11.00
+home_bp_stress           | 1189.03 |  341.10 |  949.73 | 1385.94
+away_bp_stress           | 1137.84 |  326.37 |  909.42 | 1327.07
+fatigue_asymmetry        |   11.98 |  105.52 |  -55.00 |   78.50
+both_fatigued            |    0.05 |    0.23 |    0.00 |    0.00
+
+fatigue_p75 threshold (train): 331.50
+both_fatigued rate: 5.4%
+
+========================================
+SINGLE FEATURE QUARTILE RESULTS — FLAGGED (Step 3)
+========================================
+NONE FLAGGED — 0 of 28 feature-quartile combinations met
+|ME| > 0.35 AND p < 0.10 AND N >= 50 in training data.
+
+========================================
+EXTREME BUCKET RESULTS (Step 4)
+========================================
+Condition                       | N_trn | ME_trn | med_trn | p_trn  | HR_trn | N_val | ME_val | p_val  | N_hld | ME_hld | p_hld
+--------------------------------|-------|--------|---------|--------|--------|-------|--------|--------|-------|--------|-------
+D1 home_fatigue_idx             |   481 | -0.199 |  -0.735 | 0.3104 |  0.509 |   244 | -0.153 | 0.5955 |   232 | -0.632 | 0.0276
+D10 home_fatigue_idx            |   473 | +0.094 |  -0.492 | 0.6505 |  0.478 |   229 | +0.248 | 0.3937 |   187 | +0.210 | 0.5565
+D1 fatigue_asymmetry            |   477 | +0.037 |  -0.296 | 0.8467 |  0.505 |   202 | -0.046 | 0.8805 |   218 | +0.255 | 0.3552
+D10 fatigue_asymmetry           |   475 | -0.201 |  -0.813 | 0.3293 |  0.484 |   260 | +0.190 | 0.4823 |   219 | +0.172 | 0.5682
+D1 home_bp_stress               |   477 | -0.232 |  -0.742 | 0.2417 |  0.512 |   229 | -0.096 | 0.7485 |   216 | -0.575 | 0.0560
+D10 home_bp_stress              |   477 | +0.134 |  -0.512 | 0.5127 |  0.470 |   233 | +0.258 | 0.3754 |   199 | +0.155 | 0.6473
+both_fatigued=1                 |   301 | +0.094 |  -0.632 | 0.7180 |  0.502 |    96 | +0.312 | 0.4503 |   124 | +0.291 | 0.5606
+
+All training p-values > 0.24 — no signal in any extreme bucket.
+
+========================================
+INCREMENTAL VALUE OVER BINARY FLAG (Step 5)
+========================================
+Within home_high_leverage_available = 1 (closers available):
+  Train Q1: N=438  ME=+0.073  p=0.703
+  Train Q4: N=376  ME=+0.368  p=0.107
+  Q4-Q1 spread: 0.295
+
+Within home_high_leverage_available = 0 (closers unavailable):
+  Train Q1: N=757  ME=-0.135  p=0.399
+  Train Q4: N=813  ME=-0.173  p=0.273
+  Q4-Q1 spread: -0.038
+
+Adds independent signal: NO
+The continuous fatigue index does not differentiate within
+either binary flag state at significant levels.
+
+========================================
+CONCENTRATION AND CONTROLS (Step 6)
+========================================
+No features flagged — concentration check applied to top features
+for completeness:
+
+home_fatigue_idx Q4: ME=-0.002 (all) → -0.023 (excl top 3 teams)
+fatigue_asymmetry Q4: ME=+0.021 (all) → +0.045 (excl top 3 teams)
+Top team concentration: < 3.4% per team — no concentration issue.
+
+OLS Regression: m3_residual ~ features + controls
+N=4762 (train, complete cases) | R²=0.003
+
+Feature                        |   Coeff | t-stat |  p-value
+-------------------------------|---------|--------|----------
+home_fatigue_idx               |  -0.000 |  -0.35 |   0.7239
+fatigue_asymmetry              |  -0.000 |  -0.00 |   0.9981
+home_rest_days                 |  +0.003 |  +0.01 |   0.9912
+away_rest_days                 |  +0.055 |  +0.24 |   0.8087
+home_bp_xfip                   |  +1.508 |  +2.88 |   0.0040
+away_bp_xfip                   |  -0.108 |  -0.21 |   0.8354
+home_high_leverage_available   |  +0.402 |  +2.96 |   0.0031
+away_high_leverage_available   |  +0.050 |  +0.38 |   0.7024
+
+Only home_bp_xfip (p=0.004) and home_high_leverage_available (p=0.003)
+are significant — both already in M3.
+
+========================================
+SIGNAL GATE EVALUATION
+========================================
+No candidates passed initial screen. Gate evaluation not applicable.
+
+========================================
+VERDICT
+========================================
+Signals passing all gates: NONE
+Best candidate: NONE (no features flagged in any test)
+Adds value over M3 binary flag: NO
+Recommended next step: CLOSE Phase B
+Reasoning: Continuous bullpen workload metrics (pitches last game,
+  pitches last 3 games, relievers used, fatigue × quality interaction,
+  bilateral depletion) do not explain M3 residual variance beyond what
+  the binary high_leverage_avail flag already captures. The OLS
+  regression confirms: fatigue features have t-stats near zero while
+  the existing M3 inputs (bp_xfip and high_leverage_avail) are the
+  only significant predictors. The market prices bullpen state
+  efficiently at the binary level.

@@ -1,0 +1,48 @@
+{
+  "version": "phase7_2026-03-18",
+  "frozen": true,
+  "optimization_locked_until": "2027-01-01",
+  "segments": [
+    {
+      "segment_name": "dome_low_total",
+      "display_name": "Dome + Low Total",
+      "conditions": {
+        "is_dome": true,
+        "closing_total_line_lt": 42
+      },
+      "bet_side": "OVER",
+      "historical_n": 74,
+      "historical_bias": 3.36,
+      "oos_2024_hit_rate": 0.700,
+      "oos_2024_roi": 0.336,
+      "risk_note": "standard"
+    },
+    {
+      "segment_name": "late_season",
+      "display_name": "Late Season (Wk 15-18)",
+      "conditions": {
+        "week_gte": 15
+      },
+      "bet_side": "OVER",
+      "historical_n": 303,
+      "historical_bias": 1.78,
+      "oos_2024_hit_rate": 0.594,
+      "oos_2024_roi": 0.134,
+      "risk_note": "standard"
+    },
+    {
+      "segment_name": "no_move_low_total",
+      "display_name": "No Move + Low Total",
+      "conditions": {
+        "abs_line_move_lt": 0.5,
+        "closing_total_line_lt": 42
+      },
+      "bet_side": "OVER",
+      "historical_n": 184,
+      "historical_bias": 1.13,
+      "oos_2024_hit_rate": 0.826,
+      "oos_2024_roi": 0.577,
+      "risk_note": "HIGH — monitor first 30 live bets closely"
+    }
+  ]
+}

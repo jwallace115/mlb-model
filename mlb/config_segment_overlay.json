@@ -1,0 +1,43 @@
+{
+  "overlay_active": true,
+  "version": "v1_frozen_2026",
+  "frozen": true,
+  "optimization_locked_until": "2027-01-01",
+  "segments": {
+    "segment_A": {
+      "name": "calm_pitcher",
+      "display_name": "Calm Wind + Pitcher Ump",
+      "conditions": {
+        "wind_bucket": "calm",
+        "umpire_bucket": "pitcher_ump"
+      },
+      "oos_roi": 0.162,
+      "oos_hit": 0.61,
+      "stop_min_n": 30,
+      "stop_roi_threshold": -0.10
+    },
+    "segment_B": {
+      "name": "low_warm",
+      "display_name": "Low Total + Warm",
+      "conditions": {
+        "close_total_lt": 8.0,
+        "temp_bucket_in": ["warm", "hot"]
+      },
+      "oos_roi": 0.096,
+      "oos_hit": 0.57,
+      "stop_min_n": 50,
+      "stop_roi_threshold": -0.10
+    }
+  },
+  "rules": {
+    "apply_to": "OVER_only",
+    "action": "promote_watchlist_to_bet",
+    "suppress_under": false
+  },
+  "umpire_classification": {
+    "source": "2022-2023 discovery data",
+    "threshold_high": "league_avg + 0.5*std",
+    "threshold_low": "league_avg - 0.5*std",
+    "min_games": 30
+  }
+}

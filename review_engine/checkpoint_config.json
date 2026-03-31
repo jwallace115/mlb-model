@@ -1,0 +1,220 @@
+{
+  "version": "1.0",
+  "models": {
+    "nba_phase6_rs": {
+      "sport": "NBA",
+      "phase": "Phase 6 RS",
+      "mode": "validation",
+      "source_file": "nba/data/nba_phase6_rs_shadow.parquet",
+      "graded_field": "result",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [40, 50, 150],
+      "review_type": "decision-grade",
+      "review_questions": [
+        "Is signal directionally intact?",
+        "Is fast pace overlay adding lift?",
+        "Any structural anomalies?"
+      ]
+    },
+    "nba_phase6_po": {
+      "sport": "NBA",
+      "phase": "Phase 6 PO",
+      "mode": "exploratory",
+      "source_file": "nba/data/nba_phase6_po_shadow.parquet",
+      "graded_field": "result",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [25, 50],
+      "review_type": "exploratory",
+      "review_questions": [
+        "Is playoff signal directionally intact?",
+        "Any structural anomalies vs regular season?"
+      ]
+    },
+    "mlb_live": {
+      "sport": "MLB",
+      "phase": "Live model",
+      "mode": "live",
+      "source_file": "sim/data/shadow_log.parquet",
+      "graded_field": "actual_total",
+      "checkpoints": [30, 75, 150],
+      "review_type": "decision-grade",
+      "review_questions": [
+        "Is live edge holding?",
+        "Is overlay improving promoted bets?",
+        "Any stop-rule risk building?"
+      ]
+    },
+    "nhl_live": {
+      "sport": "NHL",
+      "phase": "Live model",
+      "mode": "live",
+      "source_file": "nhl/nhl_decisions.parquet",
+      "graded_field": "result",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [],
+      "monthly_review": true,
+      "stop_rule_proximity_alert": true,
+      "minimum_live_bets": 1,
+      "review_type": "decision-grade",
+      "review_questions": [
+        "Is monthly ROI on track?",
+        "Any stop-rule proximity risk?"
+      ]
+    },
+    "soccer_live": {
+      "sport": "Soccer",
+      "phase": "Live model",
+      "mode": "live",
+      "source_file": "soccer/data/soccer_decisions.parquet",
+      "graded_field": "result",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [],
+      "stop_rule_proximity_alert": true,
+      "minimum_live_bets": 1,
+      "review_type": "decision-grade",
+      "review_questions": [
+        "Is per-league performance stable?",
+        "Any stop-rule proximity risk?"
+      ]
+    },
+    "nfl_conditional": {
+      "sport": "NFL",
+      "phase": "Conditional edges",
+      "mode": "dormant",
+      "source_file": "nfl/data/nfl_conditional_signals.parquet",
+      "checkpoints": [],
+      "review_type": "exploratory",
+      "dormant_until": "2026-09-01"
+    },
+    "mlb_m3_shadow": {
+      "sport": "MLB",
+      "phase": "M3 Lineup-Adjusted Shadow",
+      "mode": "shadow",
+      "source_file": "sim/data/shadow_log.parquet",
+      "graded_field": "actual_total",
+      "checkpoints": [50, 100, 200],
+      "review_type": "decision-grade",
+      "review_questions": [
+        "Does M3 lineup-adjusted projection outperform existing model?",
+        "Is UNDER asymmetry holding live (M5 finding)?",
+        "Is moderate disagreement zone (0.5-1.5) the strongest signal?",
+        "Are M3-exclusive signals (disagree zone) positive?",
+        "Any structural anomalies in OVER vs UNDER split?"
+      ],
+      "alerts": [
+        {
+          "type": "under_asymmetry_monitor",
+          "description": "Flag if UNDER ROI drops below 0% after 30 graded UNDER plays",
+          "minimum_graded": 30,
+          "threshold_roi_pct": 0.0,
+          "field": "m3_signal_direction",
+          "value": "UNDER"
+        }
+      ],
+      "include_in_weekly_digest": true,
+      "m5_tracking_fields": [
+        "m3_signal_direction",
+        "disagree_magnitude",
+        "disagree_bucket",
+        "models_direction_relation",
+        "m3_edge_bucket"
+      ]
+    },
+    "nba_model_c_rs": {
+      "sport": "NBA",
+      "phase": "Model C Player Props RS",
+      "mode": "shadow",
+      "source_file": "nba/model_c/shadow/model_c_rs_shadow.parquet",
+      "graded_field": "result_outcome",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [100, 250],
+      "review_type": "decision-grade",
+      "review_questions": [
+        "Which prop family (points, rebounds, assists, PRA) is performing best?",
+        "Is L10-based projection competitive vs market lines?",
+        "Does edge size correlate with hit rate?",
+        "Are OVER and UNDER signals balanced or asymmetric?",
+        "Is any individual book consistently softer?"
+      ],
+      "alerts": [
+        {
+          "type": "prop_family_roi_floor",
+          "description": "Alert if any prop family ROI drops below -15% after 50 graded plays",
+          "condition": "per-family ROI < -15%",
+          "minimum_graded": 50,
+          "threshold_roi_pct": -15.0,
+          "families": ["points", "rebounds", "assists", "pra"]
+        }
+      ],
+      "include_in_weekly_digest": true
+    },
+    "nba_model_c_po": {
+      "sport": "NBA",
+      "phase": "Model C Player Props PO",
+      "mode": "exploratory",
+      "source_file": "nba/model_c/shadow/model_c_po_shadow.parquet",
+      "graded_field": "result_outcome",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [50],
+      "review_type": "exploratory",
+      "review_questions": [
+        "Does playoff props signal differ from regular season?",
+        "Are line movements larger in playoffs?",
+        "Any structural anomalies vs RS?"
+      ],
+      "active_after": "2026-04-19",
+      "include_in_weekly_digest": false
+    },
+    "mlb_hits_rs": {
+      "sport": "MLB",
+      "phase": "HITS OVER Props RS",
+      "mode": "shadow",
+      "source_file": "mlb/props/shadow/mlb_props_hits_rs_shadow.parquet",
+      "graded_field": "result_outcome",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [50, 200],
+      "review_type": "decision-grade",
+      "review_questions": [
+        "Is HITS OVER signal holding at corrected +4% ROI target?",
+        "Is edge monotonic (higher edge = better ROI)?",
+        "Which books are softest for HITS lines?",
+        "Is PA projection accurate (projected vs actual)?",
+        "Is model probability well-calibrated vs implied?"
+      ],
+      "alerts": [
+        {
+          "type": "roi_floor",
+          "description": "Alert if HITS OVER ROI drops below -5% after 50 graded plays",
+          "minimum_graded": 50,
+          "threshold_roi_pct": -5.0
+        }
+      ],
+      "include_in_weekly_digest": true
+    },
+    "mlb_hits_po": {
+      "sport": "MLB",
+      "phase": "HITS OVER Props PO",
+      "mode": "exploratory",
+      "source_file": "mlb/props/shadow/mlb_props_hits_po_shadow.parquet",
+      "graded_field": "result_outcome",
+      "graded_values": ["WIN", "LOSS"],
+      "checkpoints": [25],
+      "review_type": "exploratory",
+      "active_after": "2026-04-19",
+      "include_in_weekly_digest": false
+    }
+  },
+  "weekly_digest": {
+    "day_of_week": 6,
+    "description": "Sunday weekly digest",
+    "include_models": [
+      "nba_phase6_rs",
+      "mlb_live",
+      "mlb_m3_shadow",
+      "mlb_hits_rs",
+      "nhl_live",
+      "soccer_live",
+      "nba_model_c_rs"
+    ]
+  }
+}

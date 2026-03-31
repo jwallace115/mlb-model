@@ -1,0 +1,66 @@
+WNBA DATA INFRASTRUCTURE — COVERAGE REPORT
+============================================================
+Generated: 2026-03-20
+API calls consumed: ~1,900 (BoxScoreTraditionalV3 + CommonAllPlayers + LeagueGameLog)
+
+SECTION A — Volume
+----------------------------------------
+  Total player-game records: 32075
+  Played rows (minutes > 0): 26860
+  DNP rows (minutes == 0): 5215
+  DNP reconstructed: 0 (skipped — roster data insufficient)
+  Unique players: 339
+  Unique teams: 13
+  Seasons: 6 (2020-2025)
+  Games per season:
+    2020: 147/147 games, 3542 player-game rows
+    2021: 209/209 games, 4575 player-game rows
+    2022: 239/239 games, 5261 player-game rows
+    2023: 260/260 games, 5749 player-game rows
+    2024: 262/262 games, 5877 player-game rows
+    2025: 310/310 games, 7071 player-game rows
+
+SECTION B — Field Coverage (% non-null)
+----------------------------------------
+  minutes                       : 100.0%
+  points                        : 100.0%
+  rebounds_total                : 100.0%
+  assists                       : 100.0%
+  steals                        : 100.0%
+  blocks                        : 100.0%
+  fgm                           : 100.0%
+  fga                           : 100.0%
+  fg_pct                        : 100.0%
+  fg3m                          : 100.0%
+  fg3a                          : 100.0%
+  fg3_pct                       : 100.0%
+  ftm                           : 100.0%
+  fta                           : 100.0%
+  ft_pct                        : 100.0%
+  plus_minus                    : 100.0%
+  started                       : 100.0%
+
+SECTION C — Player Depth (games played per player per season)
+----------------------------------------
+  p10: 8
+  p25: 18
+  p50: 30
+  p75: 39
+  p90: 44
+  Players with 20+ games: 698 (72.6%)
+  Players with 30+ games: 485 (50.5%)
+
+SECTION D — Rolling Form Coverage
+----------------------------------------
+  Total rows: 26860
+  L5 complete: 22204 (82.7%)
+  L5 partial: 3695 (13.8%)
+  L10 complete: 17857 (66.5%)
+  L10 partial: 8042 (29.9%)
+  No window (first game): 961 (3.6%)
+
+SECTION E — Known Gaps
+----------------------------------------
+  - Usage proxy: SKIPPED in v1 (team possessions not available)
+  - DNP reconstruction: SKIPPED (roster data insufficient for reliable reconstruction)
+  - Started flag coverage: 100.0%

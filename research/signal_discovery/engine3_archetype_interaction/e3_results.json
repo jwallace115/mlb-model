@@ -1,0 +1,527 @@
+[
+  {
+    "signal_id": "E3_01",
+    "direction": "OVER",
+    "train": {
+      "N": 581,
+      "rate": 0.5043,
+      "roi": -3.72
+    },
+    "val": {
+      "N": 322,
+      "rate": 0.472,
+      "roi": -9.88
+    },
+    "perm_pctile": 66.4,
+    "year_stable": false,
+    "verdict": "FAIL (perm=66.4; val=0.472; yr=1/3)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 134,
+        "rate": 0.4925,
+        "roi": -5.97
+      },
+      {
+        "N": 301,
+        "rate": 0.5216,
+        "roi": -0.42
+      },
+      {
+        "N": 322,
+        "rate": 0.472,
+        "roi": -9.88
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_02",
+    "direction": "OVER",
+    "train": {
+      "N": 410,
+      "rate": 0.4902,
+      "roi": -6.41
+    },
+    "val": {
+      "N": 100,
+      "rate": 0.5,
+      "roi": -4.55
+    },
+    "perm_pctile": 42.6,
+    "year_stable": false,
+    "verdict": "FAIL (perm=42.6; val=0.5; yr=1/3)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 124,
+        "rate": 0.5242,
+        "roi": 0.07
+      },
+      {
+        "N": 132,
+        "rate": 0.5,
+        "roi": -4.55
+      },
+      {
+        "N": 100,
+        "rate": 0.5,
+        "roi": -4.55
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_03",
+    "direction": "OVER",
+    "train": {
+      "N": 429,
+      "rate": 0.4779,
+      "roi": -8.77
+    },
+    "val": {
+      "N": 237,
+      "rate": 0.4937,
+      "roi": -5.75
+    },
+    "perm_pctile": 20.6,
+    "year_stable": false,
+    "verdict": "FAIL (perm=20.6; val=0.4937; yr=1/3)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 147,
+        "rate": 0.5442,
+        "roi": 3.9
+      },
+      {
+        "N": 163,
+        "rate": 0.4601,
+        "roi": -12.16
+      },
+      {
+        "N": 237,
+        "rate": 0.4937,
+        "roi": -5.75
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_04",
+    "direction": "OVER",
+    "train": {
+      "N": 434,
+      "rate": 0.4839,
+      "roi": -7.62
+    },
+    "val": {
+      "N": 392,
+      "rate": 0.5051,
+      "roi": -3.57
+    },
+    "perm_pctile": 29.8,
+    "year_stable": false,
+    "verdict": "FAIL (perm=29.8; val=0.5051; yr=1/3)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 199,
+        "rate": 0.4824,
+        "roi": -7.9
+      },
+      {
+        "N": 124,
+        "rate": 0.4839,
+        "roi": -7.62
+      },
+      {
+        "N": 392,
+        "rate": 0.5051,
+        "roi": -3.57
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_05",
+    "direction": "OVER",
+    "train": {
+      "N": 493,
+      "rate": 0.4949,
+      "roi": -5.51
+    },
+    "val": {
+      "N": 262,
+      "rate": 0.5229,
+      "roi": -0.17
+    },
+    "perm_pctile": 44.4,
+    "year_stable": true,
+    "verdict": "FAIL (perm=44.4; val=0.5229)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 216,
+        "rate": 0.4861,
+        "roi": -7.2
+      },
+      {
+        "N": 168,
+        "rate": 0.5119,
+        "roi": -2.27
+      },
+      {
+        "N": 262,
+        "rate": 0.5229,
+        "roi": -0.17
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_06",
+    "direction": "OVER",
+    "train": {
+      "N": 453,
+      "rate": 0.532,
+      "roi": 1.57
+    },
+    "val": {
+      "N": 167,
+      "rate": 0.485,
+      "roi": -7.4
+    },
+    "perm_pctile": 94.2,
+    "year_stable": true,
+    "verdict": "FAIL (perm=94.2; val=0.485)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 156,
+        "rate": 0.5385,
+        "roi": 2.8
+      },
+      {
+        "N": 150,
+        "rate": 0.58,
+        "roi": 10.73
+      },
+      {
+        "N": 167,
+        "rate": 0.485,
+        "roi": -7.4
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_07",
+    "direction": "OVER",
+    "train": {
+      "N": 416,
+      "rate": 0.5048,
+      "roi": -3.63
+    },
+    "val": {
+      "N": 318,
+      "rate": 0.5157,
+      "roi": -1.54
+    },
+    "perm_pctile": 67.8,
+    "year_stable": true,
+    "verdict": "FAIL (perm=67.8; val=0.5157)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 147,
+        "rate": 0.483,
+        "roi": -7.79
+      },
+      {
+        "N": 129,
+        "rate": 0.5426,
+        "roi": 3.59
+      },
+      {
+        "N": 318,
+        "rate": 0.5157,
+        "roi": -1.54
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_08",
+    "direction": "OVER",
+    "train": {
+      "N": 494,
+      "rate": 0.5061,
+      "roi": -3.39
+    },
+    "val": {
+      "N": 210,
+      "rate": 0.4429,
+      "roi": -15.45
+    },
+    "perm_pctile": 66.4,
+    "year_stable": true,
+    "verdict": "FAIL (perm=66.4; val=0.4429)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 197,
+        "rate": 0.5076,
+        "roi": -3.09
+      },
+      {
+        "N": 174,
+        "rate": 0.5345,
+        "roi": 2.04
+      },
+      {
+        "N": 210,
+        "rate": 0.4429,
+        "roi": -15.45
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_09a",
+    "direction": "OVER",
+    "train": {
+      "N": 520,
+      "rate": 0.4981,
+      "roi": -4.91
+    },
+    "val": {
+      "N": 212,
+      "rate": 0.4811,
+      "roi": -8.15
+    },
+    "perm_pctile": 51.8,
+    "year_stable": false,
+    "verdict": "FAIL (perm=51.8; val=0.4811; yr=1/3)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 153,
+        "rate": 0.4575,
+        "roi": -12.66
+      },
+      {
+        "N": 233,
+        "rate": 0.5107,
+        "roi": -2.5
+      },
+      {
+        "N": 212,
+        "rate": 0.4811,
+        "roi": -8.15
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_09b",
+    "direction": "UNDER",
+    "train": {
+      "N": 520,
+      "rate": 0.5019,
+      "roi": -4.18
+    },
+    "val": {
+      "N": 212,
+      "rate": 0.5189,
+      "roi": -0.94
+    },
+    "perm_pctile": 41.0,
+    "year_stable": true,
+    "verdict": "FAIL (perm=41.0; val=0.5189)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 153,
+        "rate": 0.5425,
+        "roi": 3.57
+      },
+      {
+        "N": 233,
+        "rate": 0.4893,
+        "roi": -6.59
+      },
+      {
+        "N": 212,
+        "rate": 0.5189,
+        "roi": -0.94
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_10",
+    "direction": "OVER",
+    "train": {
+      "N": 147,
+      "rate": 0.4354,
+      "roi": -16.88
+    },
+    "val": {
+      "N": 82,
+      "rate": 0.4268,
+      "roi": -18.51
+    },
+    "perm_pctile": 3.6,
+    "year_stable": false,
+    "verdict": "FAIL (perm=3.6; val=0.4268; yr=0/3)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 37,
+        "rate": 0.4595,
+        "roi": -12.29
+      },
+      {
+        "N": 71,
+        "rate": 0.4648,
+        "roi": -11.27
+      },
+      {
+        "N": 82,
+        "rate": 0.4268,
+        "roi": -18.51
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_11",
+    "direction": "OVER",
+    "train": {
+      "N": 382,
+      "rate": 0.5052,
+      "roi": -3.55
+    },
+    "val": {
+      "N": 170,
+      "rate": 0.5235,
+      "roi": -0.05
+    },
+    "perm_pctile": 62.8,
+    "year_stable": true,
+    "verdict": "FAIL (perm=62.8; val=0.5235)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 173,
+        "rate": 0.5202,
+        "roi": -0.68
+      },
+      {
+        "N": 139,
+        "rate": 0.5108,
+        "roi": -2.49
+      },
+      {
+        "N": 170,
+        "rate": 0.5235,
+        "roi": -0.05
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_12",
+    "direction": "OVER",
+    "train": {
+      "N": 97,
+      "rate": 0.5979,
+      "roi": 14.15
+    },
+    "val": {
+      "N": 32,
+      "rate": 0.5,
+      "roi": -4.55
+    },
+    "perm_pctile": 97.4,
+    "year_stable": true,
+    "verdict": "FAIL (THIN_SAMPLE)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 43,
+        "rate": 0.6512,
+        "roi": 24.31
+      },
+      {
+        "N": 22,
+        "rate": 0.6364,
+        "roi": 21.49
+      },
+      {
+        "N": 32,
+        "rate": 0.5,
+        "roi": -4.55
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_13",
+    "direction": "OVER",
+    "train": {
+      "N": 418,
+      "rate": 0.4976,
+      "roi": -5.0
+    },
+    "val": {
+      "N": 117,
+      "rate": 0.453,
+      "roi": -13.52
+    },
+    "perm_pctile": 54.4,
+    "year_stable": false,
+    "verdict": "FAIL (perm=54.4; val=0.453; yr=0/3)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 147,
+        "rate": 0.483,
+        "roi": -7.79
+      },
+      {
+        "N": 130,
+        "rate": 0.4846,
+        "roi": -7.48
+      },
+      {
+        "N": 117,
+        "rate": 0.453,
+        "roi": -13.52
+      }
+    ]
+  },
+  {
+    "signal_id": "E3_14",
+    "direction": "OVER",
+    "train": {
+      "N": 189,
+      "rate": 0.5556,
+      "roi": 6.06
+    },
+    "val": {
+      "N": 122,
+      "rate": 0.4672,
+      "roi": -10.8
+    },
+    "perm_pctile": 93.0,
+    "year_stable": true,
+    "verdict": "FAIL (perm=93.0; val=0.4672)",
+    "interaction_class": "NO_EDGE",
+    "stability": [
+      {
+        "N": 65,
+        "rate": 0.5692,
+        "roi": 8.67
+      },
+      {
+        "N": 69,
+        "rate": 0.5362,
+        "roi": 2.37
+      },
+      {
+        "N": 122,
+        "rate": 0.4672,
+        "roi": -10.8
+      }
+    ]
+  }
+]

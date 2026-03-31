@@ -1,0 +1,77 @@
+WNBA P3 — MINUTES PROJECTION ENGINE SUMMARY
+============================================================
+
+1. COVERAGE
+--------------------------------------------------
+  Total rows: 26860
+  Low history: 2837 (10.6%)
+  Absorber boost: 3149 (11.7%)
+  Role change flag: 3216 (12.0%)
+
+2. TABLE 1 — OVERALL ACCURACY (no-news)
+---------------------------------------------------------------------------
+Segment         |     N | Min MAE | PRA MAE | Pts MAE | Reb MAE | Ast MAE
+---------------------------------------------------------------------------
+normal          | 23711 |    4.98 |    5.36 |    4.05 |    1.77 |    1.18
+absence         |  3149 |    4.97 |    6.15 |     4.8 |    1.97 |    1.46
+role_change     |  3216 |    4.85 |     5.1 |    3.84 |    1.74 |    1.13
+
+3. TABLE 2 — ROLE-STRATIFIED (no-news, normal games)
+------------------------------------------------------------
+Role            |     N | Min MAE | PRA MAE | Reb MAE | Ast MAE
+------------------------------------------------------------
+Starter-Heavy   |  5680 |     4.0 |    6.36 |    2.06 |    1.57
+Starter         |  3291 |    5.19 |     6.1 |    2.04 |    1.37
+Rotation        |  4897 |    5.31 |    5.25 |    1.66 |    1.12
+Bench           |  5395 |    5.38 |    4.59 |    1.59 |    0.89
+
+4. TABLE 3 — OVERRIDE VALUE (absence games)
+--------------------------------------------------
+Metric     |       NN MAE |       WN MAE |    Improve
+--------------------------------------------------
+Minutes    |         4.97 |         8.59 |      -3.62
+PRA        |         6.15 |         7.68 |      -1.53
+Rebounds   |         1.97 |         2.39 |      -0.42
+Points     |          4.8 |         5.66 |      -0.86
+
+5. TOP 20 LARGEST MINUTES ERRORS (no-news)
+--------------------------------------------------------------------------------
+Player                 |       Date |   Proj | Actual |  Error |            Role
+Skylar Diggins-Smith   | 2021-08-17 |   34.5 |    1.4 |   33.1 |   Starter-Heavy
+Kelsey Mitchell        | 2024-09-19 |   36.3 |    4.6 |   31.7 |   Starter-Heavy
+Lucy Olsen             | 2025-06-26 |    6.2 |   37.5 |   31.3 |      Deep Bench
+DeWanna Bonner         | 2023-08-10 |   33.0 |    1.8 |   31.1 |   Starter-Heavy
+Moriah Jefferson       | 2022-05-14 |    4.2 |   34.8 |   30.7 |            None
+Breanna Stewart        | 2025-07-26 |   34.0 |    3.5 |   30.6 |   Starter-Heavy
+Grace Berger           | 2023-07-12 |    6.3 |   36.2 |   29.9 |      Deep Bench
+DeWanna Bonner         | 2021-09-19 |   31.5 |    1.8 |   29.7 |   Starter-Heavy
+Shatori Walker-Kimbrou | 2022-05-06 |    4.2 |   33.7 |   29.5 |            None
+Nia Clouden            | 2023-05-27 |    6.2 |   35.5 |   29.3 |            None
+Karlie Samuelson       | 2024-08-17 |   30.1 |    1.2 |   28.8 |   Starter-Heavy
+Maddy Siegrist         | 2024-08-22 |   35.3 |    6.7 |   28.6 |   Starter-Heavy
+Sarah Ashlee Barker    | 2025-09-11 |    9.7 |   38.2 |   28.5 |           Bench
+Alyssa Thomas          | 2020-09-22 |   33.1 |    4.9 |   28.2 |   Starter-Heavy
+Dorka Juhász           | 2023-06-01 |    9.0 |   37.0 |   28.0 |           Bench
+Shatori Walker-Kimbrou | 2021-07-10 |    9.4 |   37.4 |   28.0 |            None
+Courtney Vandersloot   | 2025-06-07 |   31.9 |    4.5 |   27.4 |   Starter-Heavy
+Arike Ogunbowale       | 2022-08-24 |   33.4 |    6.3 |   27.1 |   Starter-Heavy
+Dana Evans             | 2022-05-06 |    8.2 |   35.2 |   27.1 |            None
+Alyssa Thomas          | 2024-08-31 |   33.9 |    6.9 |   27.0 |   Starter-Heavy
+
+6. INTERPRETATION
+--------------------------------------------------
+  Override improves minutes MAE by -3.62 on absence games
+  Worth building live news? MARGINAL
+
+============================================================
+COMPLETION FLAGS
+============================================================
+  Normal Min MAE: 4.98 (threshold: <= 6.0)
+  Normal PRA MAE: 5.36 (threshold: <= 8.0)
+  Low history: 10.6% (threshold: <= 20%)
+  Projected minutes > 42 (pre-cap): 0
+  Role change Min MAE: 4.85 vs normal: 4.98
+  *** Role change MAE not higher than normal (flag detection may be off)
+  *** Override makes absence PRA accuracy WORSE
+
+  ACTION REQUIRED: Review flagged items.

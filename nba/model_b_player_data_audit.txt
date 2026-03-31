@@ -1,0 +1,204 @@
+NBA MODEL B — PLAYER DATA AVAILABILITY AUDIT
+==============================================
+Date: 2026-03-19
+Status: Read-only audit — no files modified
+
+======================================================================
+1. CURRENT DATA INVENTORY
+======================================================================
+
+A. PLAYER-LEVEL DATA (exists)
+----------------------------------------------------------------------
+
+  nba/data/player_stats_2324.parquet
+    - 572 players, 67 columns
+    - Season-level aggregates (one row per player)
+    - Has: PLAYER_ID, PLAYER_NAME, TEAM_ABBREVIATION, MIN, PTS, AST,
+      TOV, REB, PLUS_MINUS, FGA, FTA, and ranking columns
+    - Coverage: 2023-24 season ONLY
+    - Use: injury calibration (key player = MIN >= 15 MPG)
+
+  nba/data/injury_reports/*.parquet
+    - 172 daily snapshot files
+    - Per-player injury status: Player Name, Team, Status, Reason
+    - Coverage: 2023-10-24 to 2026-03-16
+    - No player IDs — name-only matching
+    - No minutes or usage data
+
+B. TEAM-LEVEL DATA (no player granularity)
+----------------------------------------------------------------------
+
+  nba/data/box_stats.parquet
+    - 7,380 rows (2 per game), 17 columns
+    - Team-game aggregated: pts, opp_pts, poss, ortg, drtg, pace,
+      fg3a_rate, ft_rate, tov_rate, dreb_rate
+    - Coverage: 2022-10-18 to 2025-04-13
+    - Source: nba_api LeagueGameLog (team-level endpoint)
+    - NO individual player boxscores
+
+  nba/data/features.parquet
+    - Game-level features (pregame rolling averages)
+    - injury_adj_home/away = scalar adjustment (player count × 1.5 PPP)
+    - Player names NOT preserved in features
+
+  nba/data/nba_daily_projections.parquet
+    - Contains home_injuries_str, away_injuries_str (comma-delimited names)
+    - Coverage: 2026-03-14 onward only
+
+C. PYTHON MODULES
+----------------------------------------------------------------------
+
+  nba/modules/fetch_injuries.py
+    - ESPN API: returns team, player name, status, description
+    - Filters to Out/Doubtful only
+
+  nba/modules/fetch_box_stats.py
+    - Uses nba_api LeagueGameLog — team-level only
+    - Does NOT fetch player boxscores
+
+  nba/scripts/injury_calibration.py
+    - Merges player_stats with injury reports
+    - Defines key players (MIN >= 15 MPG)
+    - Validates injury impact on totals
+
+  nba/scripts/pull_injury_reports.py
+    - Batch downloads NBA official injury PDFs
+    - Parses via nbainjuries library
+
+D. NBA API ENDPOINTS CURRENTLY USED
+----------------------------------------------------------------------
+
+  - LeagueGameLog (team aggregate)         ← USED
+  - ScoreboardV2 (quarterly scores)        ← USED
+  - PlayerGameLog (individual game logs)   ← NOT USED
+  - BoxScoreTraditionalV2 (player box)     ← NOT USED
+  - LeagueDashPlayerStats (player season)  ← USED (one-time, 2023-24 only)
+  - CommonTeamRoster                       ← NOT USED
+  - CommonAllPlayers                       ← NOT USED
+
+======================================================================
+2. MODEL B READINESS ASSESSMENT
+======================================================================
+
+VERDICT: NEEDS NEW DATA SOURCING
+
+What exists:
+  ✓ Team-level pace per game (box_stats.parquet)
+  ✓ Player season stats for one season (player_stats_2324)
+  ✓ Daily injury reports with player names
+  ✓ nba_api library already installed and working
+  ✓ Pipeline infrastructure for caching and rolling features
+
+What is MISSING for Model B v1:
+  ✗ Player-level game logs (minutes, pace impact per game)
+  ✗ Player game logs for ANY season except one-time 2023-24 aggregate
+  ✗ On/off court pace splits
+  ✗ Starter vs bench indicator per game
+  ✗ Active roster / lineup by game date (beyond injury reports)
+  ✗ Player IDs linked to game-level data
+
+The gap is fundamental: the pipeline has NO per-player per-game data.
+box_stats.parquet is team-level. player_stats_2324 is season-level.
+Neither provides the game-by-game player minutes and pace impact
+needed to estimate player pace deltas.
+
+======================================================================
+3. DATA SOURCING REQUIREMENTS
+======================================================================
+
+REQUIRED FOR MODEL B v1 (must have)
+----------------------------------------------------------------------
+
+  1. Player game logs: minutes played per game per player
+     - Source: nba_api → PlayerGameLog or LeagueGameLog(player_or_team="P")
+     - Seasons needed: 2022-23, 2023-24, 2024-25, 2025-26
+     - ~500 players × ~82 games × 4 seasons ≈ 160K rows
+     - Includes: PLAYER_ID, GAME_ID, MIN, team
+
+  2. Team pace per game (ALREADY HAVE in box_stats.parquet)
+
+  3. Starter indicator per game
+     - Source: nba_api → BoxScoreTraditionalV2 (START_POSITION field)
+     - Or: nba_api → LeagueDashLineups
+     - One call per game: ~3,700 games × 4 seasons
+
+NICE TO HAVE (Model B v2+)
+----------------------------------------------------------------------
+
+  4. On/off court pace splits
+     - Source: pbpstats.com or nba_api → PlayerDashboardByGameSplits
+     - Directly gives team pace with player on vs off
+     - Most valuable single feature but hardest to source at scale
+
+  5. Lineup combination data
+     - Source: nba_api → LeagueDashLineups
+     - 5-man unit pace and efficiency
+
+  6. Player tracking / speed data
+     - Source: NBA Stats player tracking endpoints
+     - Speed, distance, touches — very granular
+
+  7. Real-time pregame lineup confirmation
+     - Source: rotowire, fantasylabs, or NBA API
+     - For live deployment (late scratches, rest decisions)
+
+======================================================================
+4. RECOMMENDED MODEL B v1 SCOPE
+======================================================================
+
+RECOMMENDATION: Player Pace Delta (simplest viable build)
+
+Architecture:
+  - Fetch player game logs (minutes) for 2022-25
+  - Compute player_pace_delta per player:
+      For each game a player plays, compare team pace in that game
+      vs team's season average pace without that player
+  - Build rolling player pace impact estimate (last 10-20 games)
+  - For each upcoming game, sum expected pace impact of active lineup
+  - Use this as a feature in the Ridge model or as a standalone overlay
+
+Why this scope:
+  - Requires only 2 data pulls: player game logs + team pace (already have)
+  - No on/off splits needed — estimate from team pace variance
+  - Starter indicator is nice-to-have, not blocking
+  - Can be built and backtested in one session
+  - Clean test of whether player-level pace adds predictive signal
+    beyond team-level pace (which Phase 11 showed has zero signal)
+
+Data sourcing estimate:
+  - Player game logs: ~15 API calls (one per season × player/team mode)
+  - BoxScore for starters: ~3,700 calls (one per game) — defer to v2
+  - Total: feasible in one session with caching
+
+Build order:
+  1. Fetch player game logs → cache as parquet
+  2. Merge with box_stats team pace
+  3. Compute rolling player pace delta
+  4. Build pregame expected pace from projected lineup (injury-adjusted)
+  5. Backtest as feature: does pregame player-pace estimate predict
+     actual pace better than team-level average?
+  6. If yes → test as totals betting signal (same gates as Phase 9-12)
+  7. If no → player pace is also priced in; close NBA research
+
+Key risk:
+  Phase 11 showed team-level pace expectation has zero predictive signal.
+  Player-level pace is a refinement of the same concept. If the market
+  already prices player availability into the total (which it likely does
+  for star players), Model B may also produce null results. This is a
+  legitimate research outcome and would definitively close the NBA
+  pregame totals research program.
+
+======================================================================
+FILES REFERENCED
+======================================================================
+
+  nba/data/player_stats_2324.parquet
+  nba/data/box_stats.parquet
+  nba/data/features.parquet
+  nba/data/injury_reports/*.parquet
+  nba/data/nba_daily_projections.parquet
+  nba/modules/fetch_injuries.py
+  nba/modules/fetch_box_stats.py
+  nba/scripts/pull_injury_reports.py
+  nba/scripts/injury_calibration.py
+  nba/run_nba.py

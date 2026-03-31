@@ -1,0 +1,74 @@
+[
+  {
+    "signal_id": "UZ001",
+    "direction": "OVER",
+    "verdict": "VOID",
+    "train_N": 1527,
+    "val_N": 593,
+    "train_rate": 0.5435,
+    "val_rate": 0.5481,
+    "perm": 100.0,
+    "perm_gate": 85,
+    "status": "LEAKED_TEST"
+  },
+  {
+    "signal_id": "UZ002",
+    "direction": "UNDER",
+    "verdict": "VOID",
+    "train_N": 1544,
+    "val_N": 521,
+    "train_rate": 0.5926,
+    "val_rate": 0.572,
+    "perm": 100.0,
+    "perm_gate": 85,
+    "status": "LEAKED_TEST"
+  },
+  {
+    "signal_id": "UZ003A",
+    "direction": "OVER",
+    "verdict": "VOID",
+    "train_N": 545,
+    "val_N": 203,
+    "train_rate": 0.4954,
+    "val_rate": 0.4483,
+    "perm": 45.8,
+    "perm_gate": 85,
+    "status": "LEAKED_TEST"
+  },
+  {
+    "signal_id": "UZ003B",
+    "direction": "UNDER",
+    "verdict": "VOID",
+    "train_N": 533,
+    "val_N": 217,
+    "train_rate": 0.5235,
+    "val_rate": 0.4424,
+    "perm": 80.0,
+    "perm_gate": 85,
+    "status": "LEAKED_TEST"
+  },
+  {
+    "signal_id": "UZ004",
+    "direction": "OVER",
+    "verdict": "VOID",
+    "train_N": 981,
+    "val_N": 378,
+    "train_rate": 0.5708,
+    "val_rate": 0.582,
+    "perm": 100.0,
+    "perm_gate": 95,
+    "status": "LEAKED_TEST"
+  },
+  {
+    "signal_id": "UZ005",
+    "direction": "UNDER",
+    "verdict": "VOID",
+    "train_N": 1002,
+    "val_N": 311,
+    "train_rate": 0.6108,
+    "val_rate": 0.6077,
+    "perm": 100.0,
+    "perm_gate": 95,
+    "status": "LEAKED_TEST"
+  }
+]

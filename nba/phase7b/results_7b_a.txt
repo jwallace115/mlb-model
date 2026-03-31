@@ -1,0 +1,65 @@
+BATCH KILL RESULTS
+==================================================
+
+K1 — Extreme totals
+  Label: FAIL
+  Direction: OVER
+  N discovery: 11
+  N per season: 22-23=1, 23-24=10
+  ROI 22-23: +90.9%
+  ROI 23-24: -23.6%
+  ROI combined: -13.2%
+  Delta vs base: -18.8pp
+  Gate: N=11 < 50
+
+K4 — Mutual B2B
+  Label: FAIL
+  Direction: OVER
+  N discovery: 4
+  N per season: 22-23=1, 23-24=3
+  ROI 22-23: +90.9%
+  ROI 23-24: +90.9%
+  ROI combined: +90.9%
+  Delta vs base: +85.3pp
+  Gate: N=4 < 50
+
+K5 — Large line movement
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Opening line data not in features.parquet
+
+K6 — Both teams low pace
+  Label: FAIL
+  Direction: OVER
+  N discovery: 16
+  N per season: 22-23=3, 23-24=13
+  ROI 22-23: -36.4%
+  ROI 23-24: -41.3%
+  ROI combined: -40.3%
+  Delta vs base: -45.9pp
+  Gate: N=16 < 50
+
+K7 — Hook number totals
+  Label: FAIL
+  Direction: OVER
+  N discovery: 29
+  N per season: 22-23=19, 23-24=10
+  ROI 22-23: -19.6%
+  ROI 23-24: -4.5%
+  ROI combined: -14.4%
+  Delta vs base: -20.0pp
+  Gate: N=29 < 50
+
+K8 — National TV games
+  Label: SKIPPED
+  Direction: OVER
+  N discovery: 0
+  Gate: Broadcast data not in features.parquet
+
+K9 — B2B after OT
+  Label: SKIPPED
+  Direction: BOTH
+  N discovery: 0
+  Gate: Previous game OT data not in features.parquet
+

@@ -180,30 +180,52 @@ def _build_team_game_records(raw: list[dict], season: str) -> list[dict]:
         # pace = possessions per 48 minutes
         pace = round(game_poss * 48.0 / gm, 2)
 
+        # Pre-compute opponent possession for drtg (used in both loops)
+        opp_poss_map = {
+            "H": _poss(away_row.get("FGA"), away_row.get("OREB"),
+                       away_row.get("TOV"), away_row.get("FTA")),
+            "A": _poss(home_row.get("FGA"), home_row.get("OREB"),
+                       home_row.get("TOV"), home_row.get("FTA")),
+        }
+
         for team_row, opp_row, loc, t_poss in [
             (home_row, away_row, "H", home_poss),
             (away_row, home_row, "A", away_poss),
         ]:
             t_pts   = float(team_row.get("PTS", 0))
             opp_pts = float(opp_row.get("PTS", 0))
+            opp_poss = opp_poss_map[loc]
+
+            t_fga  = float(team_row.get("FGA") or 1)   # avoid div/0
+            t_fg3a = float(team_row.get("FG3A") or 0)
+            t_fta  = float(team_row.get("FTA") or 0)
+            t_tov  = float(team_row.get("TOV") or 0)
+            t_dreb = float(team_row.get("DREB") or 0)
+            opp_oreb = float(opp_row.get("OREB") or 0)
+
+            # dreb_rate = defensive rebounds / (def reb + opp offensive reb)
+            dreb_denom = t_dreb + opp_oreb
+            dreb_rate = round(t_dreb / dreb_denom, 4) if dreb_denom > 0 else 0.75
 
             records.append({
-                "game_id":  gid,
-                "date":     team_row.get("GAME_DATE"),
-                "season":   season,
-                "team":     _norm_team(team_row.get("TEAM_ABBREVIATION", "")),
-                "opponent": _norm_team(opp_row.get("TEAM_ABBREVIATION", "")),
-                "location": loc,          # "H" = home, "A" = away
-                "pts":      t_pts,
-                "opp_pts":  opp_pts,
-                "poss":     round(t_poss, 2),
-                "ortg":     round(t_pts / t_poss * 100, 2),
-                "drtg":     round(opp_pts / opp_poss * 100, 2)
-                            if (opp_poss := _poss(opp_row.get("FGA"), opp_row.get("OREB"),
-                                                  opp_row.get("TOV"), opp_row.get("FTA"))) > 0
-                            else None,
-                "pace":     pace,
-                "went_ot":  went_ot,
+                "game_id":    gid,
+                "date":       team_row.get("GAME_DATE"),
+                "season":     season,
+                "team":       _norm_team(team_row.get("TEAM_ABBREVIATION", "")),
+                "opponent":   _norm_team(opp_row.get("TEAM_ABBREVIATION", "")),
+                "location":   loc,
+                "pts":        t_pts,
+                "opp_pts":    opp_pts,
+                "poss":       round(t_poss, 2),
+                "ortg":       round(t_pts / t_poss * 100, 2),
+                "drtg":       round(opp_pts / opp_poss * 100, 2) if opp_poss > 0 else None,
+                "pace":       pace,
+                "went_ot":    went_ot,
+                # Style / variance features (for Passes 1–3)
+                "fg3a_rate":  round(t_fg3a / t_fga, 4),
+                "ft_rate":    round(t_fta  / t_fga, 4),
+                "tov_rate":   round(t_tov  / t_poss, 4),
+                "dreb_rate":  dreb_rate,
             })
 
     if skipped:

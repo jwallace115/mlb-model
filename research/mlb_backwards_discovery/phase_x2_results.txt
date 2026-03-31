@@ -1,0 +1,263 @@
+Raw rows: 9715, columns: 224
+With closing_line: 8766
+Pregame features: 118
+Postgame features: 65
+M3 cols excluded: 0
+Train: 3911, Val: 2427, Holdout: 2428
+
+======================================================================
+MLB BACKWARDS DISCOVERY — PHASE X2
+Run date: 2026-03-24
+======================================================================
+
+============================================================
+COVERAGE SANITY (Step 0.5)
+============================================================
+
+Games with closing_line by season:
+  2022:  1908 /  2430 (78.5%)
+  2023:  2003 /  2430 (82.4%)
+  2024:  2427 /  2427 (100.0%)
+  2025:  2428 /  2428 (100.0%)
+
+Extras rate by season:
+  2022: 9.4% (179 games)
+  2023: 8.4% (169 games)
+  2024: 8.9% (216 games)
+  2025: 8.6% (209 games)
+
+Missing rate (train, key feature groups):
+  SP xFIP             : 0.0% missing
+  SP SIERA            : 0.0% missing
+  SP K%/BB%           : 0.0% missing
+  wRC+                : 0.0% missing
+  Lineup wOBA         : 0.0% missing
+  Lineup ISO          : 0.0% missing
+  BP xFIP             : 0.0% missing
+  Weather             : 0.0% missing
+  Umpire              : 0.0% missing
+  SP rolling (r5)     : 38.5% missing
+  Savant pitch        : 6.6% missing
+  Bullpen usage       : 1.3% missing
+  High lev avail      : 0.7% missing
+
+============================================================
+BASELINE DECOMPOSITION (Step 1)
+============================================================
+
+ME all games:    +0.4570
+ME non-extras:   +0.4162
+ME extras only:  +0.8750
+Extras contrib:  +0.0408
+
+Line band (with extras):
+Band         |     N |      ME | abs_err | extras%
+--------------------------------------------------
+<=7.5        |   962 | +0.6674 | 3.1383 | 9.1%
+8-8.5        |  1609 | +0.3578 | 3.4386 | 10.1%
+9-9.5        |  1039 | +0.5132 | 3.4921 | 7.9%
+>9.5         |   301 | +0.1204 | 3.5606 | 5.3%
+
+Line band (without extras):
+Band         |     N |      ME | abs_err
+------------------------------------------
+<=7.5        |   874 | +0.7037 | 3.1430
+8-8.5        |  1447 | +0.2901 | 3.4532
+9-9.5        |   957 | +0.4428 | 3.4595
+>9.5         |   285 | +0.0851 | 3.5535
+
+OVER lean: both (structural + extras)
+
+============================================================
+DIRECTIONAL CANDIDATES — TOP 30 (Step 2)
+============================================================
+
+Rank | Feature                                  | eff_size |        p |  BO_over |  CL_over |     near | CL_under | BO_under | Type | X-robust
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+   1 | home_csw_pct                             |  -0.3270 |   0.0000 |   26.679 |   26.990 |   27.417 |   27.534 |   28.430 | DIR  | Yes     
+   2 | away_csw_pct                             |  -0.3051 |   0.0000 |   25.960 |   26.340 |   26.630 |   26.774 |   27.528 | DIR  | Yes     
+   3 | away_whiff_pct                           |  -0.2268 |   0.0001 |   20.834 |   21.588 |   22.088 |   22.000 |   22.714 | DIR  | Yes     
+   4 | away_f_strike_pct                        |  -0.2168 |   0.0007 |   59.816 |   61.081 |   61.308 |   61.549 |   62.228 | DIR  | Yes     
+   5 | home_lineup_delta                        |  -0.1924 |   0.0011 |   -0.001 |    0.001 |    0.000 |    0.002 |    0.004 | DIR  | Yes     
+   6 | home_whiff_pct                           |  -0.1910 |   0.0020 |   22.074 |   22.264 |   22.403 |   23.066 |   23.707 | DIR  | Yes     
+   7 | home_f_strike_pct                        |  -0.1670 |   0.0112 |   61.214 |   61.741 |   62.045 |   62.253 |   63.041 | DIR  | Yes     
+   8 | home_bp_interaction                      |  +0.1573 |   0.0024 |    3.385 |    3.286 |    3.377 |    3.342 |    3.275 | DIR  | Yes     
+   9 | home_high_leverage_available             |  +0.1558 |   0.0024 |    0.353 |    0.367 |    0.315 |    0.333 |    0.280 | DIR  | Yes     
+  10 | home_sp_xfip                             |  +0.1540 |   0.0057 |    4.308 |    4.312 |    4.267 |    4.248 |    4.226 | DIR  | Yes     
+  11 | home_sp_siera                            |  +0.1540 |   0.0057 |    4.308 |    4.312 |    4.267 |    4.248 |    4.226 | DIR  | Yes     
+  12 | home_sp_avg_ip                           |  -0.1526 |   0.0019 |    5.587 |    5.684 |    5.590 |    5.625 |    5.694 | DIR  | Yes     
+  13 | home_bp_proj_inn                         |  +0.1526 |   0.0019 |    3.413 |    3.316 |    3.410 |    3.375 |    3.306 | DIR  | Yes     
+  14 | away_lineup_delta                        |  -0.1478 |   0.0277 |   -0.002 |   -0.000 |    0.001 |    0.001 |    0.002 | DIR  | Yes     
+  15 | away_sp_xfip                             |  +0.1476 |   0.0519 |    4.309 |    4.264 |    4.267 |    4.272 |    4.231 | DIR  | Yes     
+  16 | away_sp_siera                            |  +0.1476 |   0.0519 |    4.309 |    4.264 |    4.267 |    4.272 |    4.231 | DIR  | Yes     
+  17 | home_fb_velo                             |  -0.1469 |   0.0069 |   92.551 |   92.663 |   92.587 |   92.771 |   92.915 | DIR  | Yes     
+  18 | away_lineup_k_pct                        |  +0.1427 |   0.0379 |    0.228 |    0.226 |    0.226 |    0.225 |    0.225 | DIR  | Yes     
+  19 | home_lineup_woba                         |  -0.1405 |   0.0346 |    0.316 |    0.317 |    0.317 |    0.318 |    0.320 | DIR  | Yes     
+  20 | home_fb_velo_season                      |  -0.1366 |   0.0081 |   92.538 |   92.730 |   92.606 |   92.809 |   92.868 | DIR  | Yes     
+  21 | home_fb_velo_r3                          |  -0.1350 |   0.0137 |   92.578 |   92.775 |   92.629 |   92.820 |   92.907 | DIR  | Yes     
+  22 | home_fb_velo_r5                          |  -0.1337 |   0.0115 |   92.580 |   92.764 |   92.629 |   92.835 |   92.904 | DIR  | Yes     
+  23 | k_environment                            |  +0.1325 |   0.0340 |    0.454 |    0.452 |    0.451 |    0.450 |    0.450 | DIR  | Yes     
+  24 | home_sp_tto_flag                         |  -0.1278 |   0.0369 |    0.536 |    0.569 |    0.537 |    0.547 |    0.600 | DIR  | Yes     
+  25 | temperature                              |  +0.1269 |   0.1294 |   72.751 |   72.399 |   72.185 |   71.816 |   71.519 | DIR  | Yes     
+  26 | away_high_leverage_available             |  +0.1216 |   0.1157 |    0.384 |    0.357 |    0.353 |    0.370 |    0.325 | DIR  | Yes     
+  27 | away_lineup_woba                         |  -0.1195 |   0.0963 |    0.316 |    0.317 |    0.317 |    0.317 |    0.319 | DIR  | Yes     
+  28 | away_lineup_iso                          |  -0.1157 |   0.1330 |    0.155 |    0.154 |    0.155 |    0.155 |    0.158 | DIR  | Yes     
+  29 | away_fb_velo                             |  -0.1149 |   0.0312 |   92.592 |   92.562 |   92.854 |   92.767 |   92.874 | DIR  | Yes     
+  30 | diff_k_per_9_r5                          |  +0.0944 |   0.3828 |    0.124 |    0.049 |   -0.230 |   -0.133 |   -0.163 | VAR  | No      
+
+Total flagged (p<0.10, |eff|>0.10): 26
+
+============================================================
+VARIANCE CANDIDATES — TOP 20 (Step 3)
+============================================================
+
+Rank | Feature                                  | r_abs_err |          p
+---------------------------------------------------------------------------
+   1 | home_bp_xfip                             |   +0.0514 |   0.001290
+   2 | away_wrc_plus                            |   +0.0450 |   0.004906
+   3 | away_whiff_pct                           |   -0.0447 |   0.005361
+   4 | park_factor_runs                         |   +0.0398 |   0.012834
+   5 | park_factor_hr                           |   +0.0398 |   0.012834
+   6 | home_sp_ra_std                           |   +0.0397 |   0.013059
+   7 | wind_direction                           |   +0.0370 |   0.020718
+   8 | away_f_strike_pct                        |   -0.0365 |   0.023193
+   9 | home_k_per_9_r5                          |   +0.0362 |   0.098341
+  10 | away_csw_pct                             |   -0.0351 |   0.028623
+  11 | home_sp_xfip                             |   +0.0335 |   0.036197
+  12 | home_sp_siera                            |   +0.0335 |   0.036197
+  13 | diff_k_per_9_r5                          |   +0.0314 |   0.199755
+  14 | k_environment                            |   +0.0309 |   0.053067
+  15 | home_csw_r5                              |   -0.0308 |   0.062605
+  16 | temperature                              |   +0.0278 |   0.082294
+  17 | both_complete                            |   -0.0268 |   0.093189
+  18 | home_csw_pct                             |   -0.0265 |   0.098630
+  19 | home_lineup_k_pct                        |   +0.0252 |   0.114701
+  20 | home_sp_fip_L5                           |   +0.0251 |   0.116112
+
+============================================================
+POSTGAME GAME-PATH — TOP 20 (Step 4)
+============================================================
+
+Rank | Feature                                  | r_ME_noX |  BO_over |     near | BO_under | mono 
+-----------------------------------------------------------------------------------------------------------------------------
+   1 | home_team_pa                             |  +0.6399 |   40.164 |   36.275 |   33.497 | Yes  
+   2 | home_team_ab                             |  +0.5996 |   35.224 |   32.418 |   30.344 | Yes  
+   3 | away_team_pa                             |  +0.5592 |   41.626 |   37.893 |   34.983 | Yes  
+   4 | away_team_ab                             |  +0.5565 |   36.921 |   34.222 |   31.891 | Yes  
+   5 | away_team_hits                           |  +0.5517 |   11.019 |    8.375 |    6.041 | Yes  
+   6 | home_team_hits                           |  +0.5487 |   10.845 |    8.092 |    6.102 | Yes  
+   7 | away_bullpen_hits                        |  +0.4738 |    4.852 |    2.937 |    1.800 | Yes  
+   8 | home_bullpen_hits                        |  +0.4678 |    5.125 |    3.237 |    2.082 | Yes  
+   9 | total_hits_game                          |  +0.4513 |   16.802 |   12.749 |    9.481 | Yes  
+  10 | total_hr_game                            |  +0.4407 |    2.726 |    1.710 |    0.920 | Yes  
+  11 | away_bullpen_batters_faced               |  +0.4361 |   18.899 |   14.669 |   11.360 | Yes  
+  12 | home_team_hr                             |  +0.4233 |    1.885 |    1.203 |    0.615 | Yes  
+  13 | home_bullpen_batters_faced               |  +0.4222 |   20.256 |   15.765 |   12.724 | Yes  
+  14 | away_team_hr                             |  +0.4201 |    1.828 |    1.169 |    0.609 | Yes  
+  15 | away_bullpen_pitches                     |  +0.4043 |   73.640 |   57.781 |   45.278 | Yes  
+  16 | home_bullpen_pitches                     |  +0.3835 |   78.138 |   61.206 |   50.529 | Yes  
+  17 | away_team_singles                        |  +0.3672 |    6.713 |    5.352 |    4.239 | Yes  
+  18 | home_bullpen_hr                          |  +0.3569 |    0.815 |    0.354 |    0.190 | Yes  
+  19 | home_team_singles                        |  +0.3545 |    6.536 |    5.100 |    4.196 | Yes  
+  20 | away_bullpen_hr                          |  +0.3342 |    0.727 |    0.375 |    0.146 | Yes  
+
+============================================================
+LOW TOTAL BAND — <=7.5 (Step 5)
+============================================================
+
+N: 962 (with extras), 874 (no extras)
+ME with extras: +0.6674 | ME no extras: +0.7037
+
+Top pregame features (r with ME, no extras, <=7.5 band):
+Rank | Feature                                  |     r_ME |          p
+----------------------------------------------------------------------
+   1 | home_csw_pct                             |  -0.1566 |   0.000003
+   2 | away_f_strike_pct                        |  -0.0927 |   0.006415
+   3 | away_csw_pct                             |  -0.0893 |   0.008612
+   4 | home_f_strike_pct                        |  -0.0861 |   0.011042
+   5 | away_kbb_pct_r5                          |  +0.0749 |   0.063764
+   6 | away_lineup_delta                        |  -0.0705 |   0.037196
+   7 | home_ip_r5                               |  -0.0699 |   0.137631
+   8 | home_whiff_pct                           |  -0.0681 |   0.044501
+   9 | away_lineup_woba                         |  -0.0632 |   0.061730
+  10 | away_k_pct_r5                            |  +0.0632 |   0.117982
+
+============================================================
+VERY HIGH TOTAL — >9.5 (Step 5)
+============================================================
+
+N: 301 (with extras), 285 (no extras)
+ME with extras: +0.1204 | ME no extras: +0.0851
+
+Top variance features (r with abs_error, no extras, >9.5 band):
+Rank | Feature                                  | r_abs_err |          p
+---------------------------------------------------------------------------
+   1 | away_f_strike_r5                         |   -0.2170 |   0.000394
+   2 | local_start_hour                         |   +0.1764 |   0.003827
+   3 | away_f_strike_season                     |   -0.1721 |   0.005120
+   4 | diff_f_strike_r5                         |   +0.1601 |   0.011059
+   5 | home_rest_days                           |   +0.1511 |   0.010625
+   6 | home_whiff_r5                            |   -0.1460 |   0.017426
+   7 | stuff_trend_composite                    |   +0.1448 |   0.074114
+   8 | away_f_strike_trend                      |   -0.1387 |   0.024455
+   9 | away_rest_days                           |   +0.1268 |   0.032388
+  10 | away_bb_pct_r5                           |   +0.1252 |   0.093054
+
+============================================================
+INTERACTIONS — NON-EXTRAS (Step 6)
+============================================================
+
+No pairs met criteria (N>=30, |delta_ME|>=1.5, p<0.15)
+
+============================================================
+SEASON STABILITY (Step 7)
+============================================================
+
+Feature                                  |     2022 |     2023 |     2024 |     2025 | Stable
+----------------------------------------------------------------------------------------------------
+home_csw_pct                             |  -0.1255 |  -0.1128 |  -0.0894 |  -0.1123 | Yes   
+away_csw_pct                             |  -0.0877 |  -0.1244 |  -0.0965 |  -0.0884 | Yes   
+away_whiff_pct                           |  -0.0661 |  -0.1083 |  -0.0937 |  -0.0574 | Yes   
+away_f_strike_pct                        |  -0.0550 |  -0.0977 |  -0.0805 |  -0.0172 | Yes   
+home_lineup_delta                        |  -0.0557 |  -0.0714 |  -0.0346 |  -0.0535 | Yes   
+home_whiff_pct                           |  -0.0680 |  -0.0807 |  -0.0788 |  -0.0910 | Yes   
+home_f_strike_pct                        |  -0.0689 |  -0.0381 |  -0.0437 |  -0.0362 | Yes   
+home_bp_interaction                      |  +0.0459 |  +0.0323 |  +0.0323 |  +0.0002 | Yes   
+home_high_leverage_available             |  +0.0235 |  +0.1025 |  +0.0648 |  +0.0563 | Yes   
+home_sp_xfip                             |  +0.0693 |  +0.0399 |  +0.0254 |  +0.0426 | Yes   
+home_sp_siera                            |  +0.0693 |  +0.0399 |  +0.0254 |  +0.0426 | Yes   
+home_sp_avg_ip                           |  -0.0423 |  -0.0312 |  -0.0350 |  +0.0030 | No    
+home_bp_proj_inn                         |  +0.0423 |  +0.0312 |  +0.0350 |  -0.0030 | No    
+away_lineup_delta                        |  -0.0568 |  -0.0378 |  -0.0220 |  -0.0524 | Yes   
+away_sp_xfip                             |  +0.0336 |  +0.0445 |  +0.0707 |  +0.0435 | Yes   
+
+============================================================
+HYPOTHESIS SUMMARY
+============================================================
+
+Top 10 directional candidates:
+Rank | Feature                                  | eff_size | Direction  | Mechanism                     
+---------------------------------------------------------------------------------------------------------
+   1 | home_csw_pct                             |  -0.3270 | UNDER      | Pitch command / execution     
+   2 | away_csw_pct                             |  -0.3051 | UNDER      | Pitch command / execution     
+   3 | away_whiff_pct                           |  -0.2268 | UNDER      | Strikeout tendency            
+   4 | away_f_strike_pct                        |  -0.2168 | UNDER      | Pitch command / execution     
+   5 | home_lineup_delta                        |  -0.1924 | UNDER      | Lineup construction           
+   6 | home_whiff_pct                           |  -0.1910 | UNDER      | Strikeout tendency            
+   7 | home_f_strike_pct                        |  -0.1670 | UNDER      | Pitch command / execution     
+   8 | home_bp_interaction                      |  +0.1573 | OVER       | TBD — needs investigation     
+   9 | home_high_leverage_available             |  +0.1558 | OVER       | Bullpen availability          
+  10 | home_sp_xfip                             |  +0.1540 | OVER       | Pitcher quality -> runs       
+
+Top 5 variance candidates:
+Rank | Feature                                  | r_abs_err | Mechanism                     
+-----------------------------------------------------------------------------------------------
+   1 | home_bp_xfip                             |   +0.0514 | Pitcher quality uncertainty   
+   2 | away_wrc_plus                            |   +0.0450 | Lineup variance               
+   3 | away_whiff_pct                           |   -0.0447 | K rate -> outcome spread      
+   4 | park_factor_runs                         |   +0.0398 | Park factor -> variance       
+   5 | park_factor_hr                           |   +0.0398 | Park factor -> variance       
+
+IMPORTANT: Discovery only. All candidates require independent validation.
+
+[END OF REPORT]

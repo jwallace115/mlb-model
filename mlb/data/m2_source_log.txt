@@ -1,0 +1,32 @@
+MLB PHASE M2 — SOURCE LOG
+========================================
+
+HITTER GAME LOGS:
+  Source: MLB Stats API boxscores (cached)
+  Path: sim/data/cache/boxscores/*.json
+  Endpoint: /api/v1/game/{game_pk}/boxscore
+  Fields: battingOrder + players.stats.batting
+  Games processed: 9715
+  Missing: 0
+
+PITCHER GAME LOGS:
+  Source: MLB Stats API boxscores (same cache)
+  Fields: pitchers list + players.stats.pitching
+
+LINEUPS:
+  Source: MLB Stats API boxscores → battingOrder array
+  Note: These are ACTUAL starting lineups (confirmed, not projected)
+
+PLAYER HANDEDNESS:
+  Source: MLB Stats API /sports/1/players?season={year}
+  Seasons fetched: 2022, 2023, 2024, 2025, 2026
+  Total players: 2406
+
+TEAM-GAME INDEX:
+  Source: sim/data/game_table.parquet + pitcher starter join
+
+LIMITATIONS:
+  - Boxscores do not include bat/pitch hand (fetched separately)
+  - Some 2022 early-season boxscores may have minor formatting differences
+  - Substitutes (pinch hitters) have batting_order_position = 0
+  - wOBA and xwOBA not directly available from boxscore — must be derived

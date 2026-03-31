@@ -1,0 +1,59 @@
+BATCH AMPLIFIER RESULTS (v2)
+==================================================
+
+A1 — Fast pace
+  Label: EXCLUDED, Dir: OVER, N: 30
+  ROI: +27.3%, Delta: +0.0pp
+  Gate: Already validated Phase 6
+
+A2 — Mid-range total 215-230
+  Label: FAIL, Dir: OVER, N: 108
+  ROI: -9.8%, Delta: +3.3pp
+  Gate: Directional instability 2022-23 (-10.5%)
+
+A2a — Total 215-222
+  Label: FAIL, Dir: OVER, N: 25
+  ROI: -31.3%, Delta: -18.1pp
+  Gate: N=25 < 50
+
+A2b — Total 222-230
+  Label: NEAR-MISS, Dir: OVER, N: 83
+  ROI: -3.4%, Delta: +9.7pp
+  Gate: Directional instability 2022-23 (-13.6%)
+
+A3 — Line stability
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: No opening line data
+
+A4 — Defensive mismatch
+  Label: FAIL, Dir: OVER, N: 3
+  ROI: +90.9%, Delta: +104.0pp
+  Gate: N=3 < 50
+
+A5 — Pace+total 220-230
+  Label: FAIL, Dir: OVER, N: 17
+  ROI: +23.5%, Delta: +36.7pp
+  Gate: N=17 < 50
+
+A6 — High foul rate referee
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Referee foul rate unavailable
+
+A7 — Home hot offense
+  Label: FAIL, Dir: OVER, N: 47
+  ROI: -14.7%, Delta: -1.6pp
+  Gate: N=47 < 50
+
+A8 — Mutual rest 3+ days
+  Label: FAIL, Dir: OVER, N: 5
+  ROI: -100.0%, Delta: -86.9pp
+  Gate: N=5 < 50
+
+A9 — Late season playoff race
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Standings data unavailable
+
+A10 — Regression consec unders
+  Label: SKIPPED, Dir: OVER, N: 0
+  Gate: Prior game sequences not in features
+

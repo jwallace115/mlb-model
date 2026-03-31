@@ -1,0 +1,144 @@
+====================================================================
+NHL Phase 4.5: Calibration Repair
+====================================================================
+====================================================================
+STEP 1 — DYNAMIC SEASONAL DRIFT CALIBRATION
+====================================================================
+
+  Validate-season mean drift (fallback prior): +0.4458
+  Validate mean actual total: 6.2256
+  Validate mean raw lambda:   5.7798
+
+  Post-dynamic-calibration mean comparison:
+  Split           λ_h_cal      act_h    λ_a_cal      act_a    λ_total  act_total    drift
+  ------------------------------------------------------------------------------------
+  train            3.2275     3.2679     3.0160     3.0564     6.2435     6.3243  -0.0808
+  validate         3.1982     3.2294     2.9529     2.9962     6.1511     6.2256   0.3713
+  oos              3.1649     3.2005     2.9001     2.8803     6.0650     6.0808   0.7706
+
+  OOS mean drift after calibration: +0.0158
+  PASS  OOS mean drift < 0.10 target (proceeding)
+
+====================================================================
+STEP 2 — POISSON SIMULATION WITH CALIBRATED LAMBDAS (N=10,000)
+====================================================================
+
+  train: 2624 games
+  Probability sum check (max |err|): 1.11e-16  PASS
+
+  validate: 1312 games
+  Probability sum check (max |err|): 2.22e-16  PASS
+
+  oos: 1312 games
+  Probability sum check (max |err|): 2.22e-16  PASS
+====================================================================
+STEP 3 — DIAGNOSTICS (Phase 4.5)
+====================================================================
+
+[3A] Mean Calibration — VALIDATE
+--------------------------------------------------
+  mean(simulated total): 6.1506
+  mean(actual total):    6.2256
+  difference:            -0.0750
+  PASS  (threshold: ≤ 0.10 goals)
+
+[3B] Variance Calibration — VALIDATE
+--------------------------------------------------
+  mean per-game sim std: 2.4787
+  actual total std:      2.3109  (reference: 2.31)
+  difference:            +0.1677
+  FAIL  (threshold: ≤ 0.15)
+
+[3C] Tail Calibration — VALIDATE
+--------------------------------------------------
+  P(total ≤ 3): sim=14.21%  actual=12.88%  diff=+1.33pp  PASS
+  P(total ≥ 7): sim=41.75%  actual=45.66%  diff=-3.90pp  FAIL
+
+[3D] Market-Number Calibration — VALIDATE
+--------------------------------------------------
+  Bucket 5.5 (n=99):
+    sim_over=0.5187  act_over=0.5253  diff=-0.0066  PASS
+  Bucket 6.0 (n=520):
+    sim_over=0.4060  act_over=0.4538  diff=-0.0478  FAIL
+    sim_push=0.1586  act_push=0.1115  diff=+0.0471  FAIL
+  Bucket 6.5 (n=644):
+    sim_over=0.4326  act_over=0.4736  diff=-0.0410  FAIL
+
+[3E] Volatility Bucket Diagnostics — VALIDATE
+--------------------------------------------------
+  low      (n= 778): mean_sim=6.072  mean_act=6.162  std_sim=2.464  std_act=2.328  std_diff=+0.136
+  medium   (n= 513): mean_sim=6.255  mean_act=6.341  std_sim=2.499  std_act=2.278  std_diff=+0.221
+  high     (n=  21): mean_sim=6.523  mean_act=5.762  std_sim=2.544  std_act=2.448  std_diff=+0.097
+  PASS  No tail under-pricing in high-vol bucket
+
+[3A] Mean Calibration — OOS
+--------------------------------------------------
+  mean(simulated total): 6.0649
+  mean(actual total):    6.0808
+  difference:            -0.0159
+  PASS  (threshold: ≤ 0.10 goals)
+
+[3B] Variance Calibration — OOS
+--------------------------------------------------
+  mean per-game sim std: 2.4618
+  actual total std:      2.3212  (reference: 2.31)
+  difference:            +0.1407
+  PASS  (threshold: ≤ 0.15)
+
+[3C] Tail Calibration — OOS
+--------------------------------------------------
+  P(total ≤ 3): sim=15.00%  actual=14.33%  diff=+0.67pp  PASS
+  P(total ≥ 7): sim=40.40%  actual=42.30%  diff=-1.90pp  PASS
+
+[3F] Signal Balance Diagnostics
+--------------------------------------------------
+
+  VALIDATE (1,312 market games):
+  mean(λ_total − closing_total): -0.0939
+  OVER: n=82  mean_edge=+0.0750  hit_rate=0.5244
+  UNDER: n=521  mean_edge=+0.1008  hit_rate=0.5125
+
+  OOS (1,312 market games):
+  mean(λ_total − closing_total): +0.1252
+  OVER: n=216  mean_edge=+0.0817  hit_rate=0.5602
+  UNDER: n=343  mean_edge=+0.0842  hit_rate=0.5481
+
+====================================================================
+STEP 4 — EMPIRICAL EDGE THRESHOLD (validate set)
+====================================================================
+
+  Break-even hit rate at -110: 0.5238 (52.38%)
+
+  Edge band           n    hit_rate    >=52.5%?    n>=30?
+  --------------------------------------------------------
+  0.00–0.02         162      0.4877          NO       YES
+  0.02–0.04         118      0.5000          NO       YES
+  0.04–0.06         121      0.5041          NO       YES
+  0.06–0.08         128      0.5000          NO       YES
+  0.08–0.10         107      0.4860          NO       YES
+  0.10+             247      0.5385         YES       YES
+
+  PROVISIONAL THRESHOLD: 0.10
+  (lowest band with hit ≥ 52.5% AND n ≥ 30)
+
+====================================================================
+STEP 5 — 6.0 PUSH INFLATION ASSESSMENT
+====================================================================
+
+  Validate bucket 6.0: sim_push=0.1586  act_push=0.1115  diff=+0.0471
+  FAIL  6.0 push diff = +0.0471 > 3pp — applying push correction
+  Line 6.0: sim_push=0.1586  act_push=0.1115  correction=-0.0471
+  Line 7.0: sim_push=0.1442  act_push=0.1020  correction=-0.0422
+
+  Post-correction probability sum check (max |err|): 2.22e-16  PASS
+
+  Updated 3D after push correction (validate):
+  Bucket 5.5 (n=99):  sim_over=0.5187  act_over=0.5253  diff=-0.0066  PASS
+  Bucket 6.0 (n=520):  sim_over=0.4296  act_over=0.4538  diff=-0.0243  PASS
+    sim_push=0.1115  act_push=0.1115  diff=-0.0000  PASS
+  Bucket 6.5 (n=644):  sim_over=0.4326  act_over=0.4736  diff=-0.0410  FAIL
+
+====================================================================
+STEP 6 — SAVING OUTPUTS
+====================================================================
+  Saved: /Users/jw115/mlb-model/nhl/nhl_sim_results_calibrated.parquet  (5,248 rows)

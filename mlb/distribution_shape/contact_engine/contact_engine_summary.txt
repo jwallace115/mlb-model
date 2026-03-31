@@ -1,0 +1,217 @@
+=================================================================
+MLB STATCAST CONTACT ENGINE — PHASE 1
+=================================================================
+
+SECTION 0 — DATA COVERAGE
+==================================================
+
+0A — Raw coverage by season:
+  2023: 669,003 pitches, 117,962 BIP (18%), 175,518 terminal events
+  2024: 776,941 pitches, 137,109 BIP (18%), 202,295 terminal events
+  2025: 781,822 pitches, 136,753 BIP (17%), 201,032 terminal events
+  launch_speed: 721,046 (32.4%)
+  launch_angle: 722,105 (32.4%)
+  estimated_woba_using_speedangle: 535,612 (24.0%)
+  estimated_ba_using_speedangle: 378,241 (17.0%)
+  bat_speed: 768,947 (34.5%)
+  swing_length: 768,947 (34.5%)
+
+0B — Player coverage:
+  2023: 1372 batters, BIP p50=8, >=100: 394, 50-99: 93, <50: 885
+  2024: 1283 batters, BIP p50=9, >=100: 419, 50-99: 85, <50: 779
+  2025: 1286 batters, BIP p50=11, >=100: 406, 50-99: 101, <50: 779
+
+STEP 1A — Per-game aggregation...
+  Per-game rows: 154,185
+STEP 1B — Rolling pregame profiles (30-game window)...
+  Rows with rolling: 120,131
+  2023: full=26%, sparse=59%, fallback=14%
+  2024: full=23%, sparse=64%, fallback=14%
+  2025: full=25%, sparse=62%, fallback=14%
+
+STEP 2 — LAYER 1: Contact Rate...
+  K rate thresholds (TRAIN): p33=0.194, p67=0.261
+  2023: {'MID_CONTACT': 13092, 'HIGH_CONTACT': 12696, 'LOW_CONTACT': 12641, 'UNKNOWN': 8570}
+  2024: {'HIGH_CONTACT': 15784, 'MID_CONTACT': 15665, 'LOW_CONTACT': 14493, 'UNKNOWN': 8010}
+  2025: {'HIGH_CONTACT': 16360, 'MID_CONTACT': 15338, 'LOW_CONTACT': 13531, 'UNKNOWN': 8005}
+  Swing features used: 55%
+
+STEP 3 — LAYER 2: Contact Quality...
+  xwOBA thresholds (TRAIN): p25=0.286, p50=0.318, p75=0.350
+
+  Layer 1 × Layer 2 independence (row-normalized):
+quality_class  AVERAGE_CONTACT  ELITE_CONTACT  SOLID_CONTACT  WEAK_CONTACT
+contact_class                                                             
+HIGH_CONTACT              0.26           0.29           0.25          0.19
+LOW_CONTACT               0.25           0.13           0.18          0.43
+MID_CONTACT               0.26           0.24           0.23          0.27
+
+STEP 4 — Combined profiles...
+  Cell counts (TRAIN):
+    UNKNOWN_UNKNOWN: 8570
+    LOW_CONTACT_WEAK_CONTACT: 4350
+    HIGH_CONTACT_ELITE_CONTACT: 3818
+    HIGH_CONTACT_SOLID_CONTACT: 3266
+    MID_CONTACT_WEAK_CONTACT: 3247
+    MID_CONTACT_AVERAGE_CONTACT: 2990
+    MID_CONTACT_ELITE_CONTACT: 2927
+    LOW_CONTACT_AVERAGE_CONTACT: 2900
+    MID_CONTACT_SOLID_CONTACT: 2870
+    HIGH_CONTACT_AVERAGE_CONTACT: 2639
+    LOW_CONTACT_SOLID_CONTACT: 2315
+    LOW_CONTACT_ELITE_CONTACT: 1813
+    HIGH_CONTACT_WEAK_CONTACT: 1799
+    LOW_CONTACT_UNKNOWN: 1263
+    HIGH_CONTACT_UNKNOWN: 1174
+    MID_CONTACT_UNKNOWN: 1058
+
+Joining to props...
+  HITS joined: 79,875
+  TB joined: 79,979
+
+=================================================================
+SECTION 2 — SAME-LINE / DIFFERENT-CONTACT TEST
+=================================================================
+
+HITS:
+
+  Line=0.5, VALIDATION — BASELINE: N=16358, hit=60.3%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                        3737  63.9%  +3.6 0.386 0.214 
+  SOLID_CONTACT                        3482  61.5%  +1.1 0.333 0.223 
+  AVERAGE_CONTACT                      3989  59.0%  -1.4 0.303 0.226 
+  WEAK_CONTACT                         3340  56.0%  -4.4 0.261 0.258 
+
+  Line=0.5, OOS — BASELINE: N=17443, hit=59.8%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                        4165  63.2%  +3.4 0.383 0.204 
+  SOLID_CONTACT                        3642  61.3%  +1.5 0.333 0.216 
+  AVERAGE_CONTACT                      4081  59.8%  -0.0 0.302 0.222 
+  WEAK_CONTACT                         3519  55.6%  -4.2 0.262 0.250 
+
+  Line=1.5, VALIDATION — BASELINE: N=1240, hit=32.9%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                         559  31.8%  -1.1 0.401 0.170 
+  SOLID_CONTACT                         343  35.3%  +2.4 0.334 0.166 
+  AVERAGE_CONTACT                       180  35.6%  +2.7 0.303 0.178 
+  WEAK_CONTACT                           95  31.6%  -1.3 0.269 0.210 
+
+  Line=1.5, OOS — BASELINE: N=1020, hit=30.6%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                         410  24.1%  -6.4 0.390 0.177 ✓
+  SOLID_CONTACT                         219  31.1%  +0.5 0.333 0.166 
+  AVERAGE_CONTACT                       240  35.4%  +4.8 0.303 0.152 
+  WEAK_CONTACT                          116  37.1%  +6.5 0.272 0.134 ✓
+
+TB:
+
+  Line=0.5, VALIDATION — BASELINE: N=8148, hit=56.4%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                        1427  57.1%  +0.7 0.379 0.227 
+  SOLID_CONTACT                        1628  56.6%  +0.1 0.333 0.229 
+  AVERAGE_CONTACT                      1965  56.4%  -0.0 0.303 0.234 
+  WEAK_CONTACT                         1758  52.8%  -3.6 0.261 0.264 
+
+  Line=0.5, OOS — BASELINE: N=9367, hit=56.5%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                        1741  60.3%  +3.8 0.381 0.206 
+  SOLID_CONTACT                        1759  57.8%  +1.3 0.332 0.220 
+  AVERAGE_CONTACT                      2254  55.6%  -0.9 0.302 0.225 
+  WEAK_CONTACT                         1993  54.4%  -2.1 0.261 0.252 
+
+  Line=1.0, VALIDATION — BASELINE: N=177, hit=35.0%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                          84  40.5%  +5.4 0.394 0.212 ✓
+  SOLID_CONTACT                          39  28.2%  -6.8 0.335 0.215 ✓
+
+  Line=1.5, VALIDATION — BASELINE: N=6808, hit=40.5%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                        2787  43.6%  +3.2 0.393 0.196 
+  SOLID_CONTACT                        1633  39.9%  -0.6 0.334 0.208 
+  AVERAGE_CONTACT                      1059  37.4%  -3.1 0.304 0.207 
+  WEAK_CONTACT                          475  35.4%  -5.1 0.267 0.233 ✓
+
+  Line=1.5, OOS — BASELINE: N=6183, hit=40.8%
+  Profile                                 N   Hit%      Δ  xwOBA    K%
+  -----------------------------------------------------------------
+  ELITE_CONTACT                        2557  43.0%  +2.2 0.388 0.194 
+  SOLID_CONTACT                        1489  41.7%  +0.9 0.334 0.205 
+  AVERAGE_CONTACT                      1057  38.5%  -2.3 0.304 0.199 
+  WEAK_CONTACT                          389  32.1%  -8.7 0.269 0.218 ✓
+
+=================================================================
+SECTION 3 — MARKET PRICING TEST
+=================================================================
+
+HITS:
+  Line=0.5: base_implied=63.3%, base_actual=60.3%
+    ELITE_CONTACT       : N=3737, implied=65.3%, actual=63.9%, gap=-1.4pp
+    SOLID_CONTACT       : N=3482, implied=64.4%, actual=61.5%, gap=-2.9pp
+    AVERAGE_CONTACT     : N=3989, implied=63.5%, actual=59.0%, gap=-4.5pp
+    WEAK_CONTACT        : N=3340, implied=60.8%, actual=56.0%, gap=-4.9pp
+  Line=1.5: base_implied=35.5%, base_actual=32.9%
+    ELITE_CONTACT       : N= 559, implied=35.7%, actual=31.8%, gap=-3.9pp
+    SOLID_CONTACT       : N= 343, implied=35.8%, actual=35.3%, gap=-0.5pp
+    AVERAGE_CONTACT     : N= 180, implied=35.2%, actual=35.6%, gap=+0.4pp
+    WEAK_CONTACT        : N=  95, implied=34.6%, actual=31.6%, gap=-3.0pp
+
+TB:
+  Line=0.5: base_implied=59.1%, base_actual=56.4%
+    ELITE_CONTACT       : N=1427, implied=60.0%, actual=57.1%, gap=-2.9pp
+    SOLID_CONTACT       : N=1628, implied=60.0%, actual=56.6%, gap=-3.4pp
+    AVERAGE_CONTACT     : N=1965, implied=59.8%, actual=56.4%, gap=-3.4pp
+    WEAK_CONTACT        : N=1758, implied=57.4%, actual=52.8%, gap=-4.6pp
+  Line=1.5: base_implied=43.9%, base_actual=40.5%
+    ELITE_CONTACT       : N=2787, implied=45.3%, actual=43.6%, gap=-1.6pp
+    SOLID_CONTACT       : N=1633, implied=43.5%, actual=39.9%, gap=-3.6pp
+    AVERAGE_CONTACT     : N=1059, implied=42.2%, actual=37.4%, gap=-4.8pp
+    WEAK_CONTACT        : N= 475, implied=40.6%, actual=35.4%, gap=-5.2pp
+
+=================================================================
+SECTION 4 — PRE-REGISTERED SIGNAL TESTS
+=================================================================
+
+H1 — HITS 0.5, ELITE_CONTACT vs WEAK_CONTACT:
+  VALIDATION: ELITE_CONTACT N=3737,hit=63.9%,ROI=+22.0% | WEAK_CONTACT N=3340,hit=56.0%,ROI=+6.8% | gap=+8.0pp vs base=60.3%
+  OOS: ELITE_CONTACT N=4165,hit=63.2%,ROI=+20.7% | WEAK_CONTACT N=3519,hit=55.6%,ROI=+6.2% | gap=+7.6pp vs base=59.8%
+
+H2 — HITS 0.5, HIGH_CONTACT vs LOW_CONTACT:
+  VALIDATION: HIGH_CONTACT N=5136,hit=61.8%,ROI=+17.9% | LOW_CONTACT N=4866,hit=57.0%,ROI=+8.8% | gap=+4.8pp vs base=60.3%
+  OOS: HIGH_CONTACT N=5890,hit=61.4%,ROI=+17.3% | LOW_CONTACT N=4719,hit=57.3%,ROI=+9.3% | gap=+4.2pp vs base=59.8%
+
+H3 — HITS 0.5, HIGH_CONTACT_ELITE_CONTACT vs LOW_CONTACT_WEAK_CONTACT:
+  VALIDATION: HIGH_CONTACT_ELITE_C N=1433,hit=63.9%,ROI=+22.0% | LOW_CONTACT_WEAK_CON N=1541,hit=52.6%,ROI=+0.3% | gap=+11.4pp vs base=60.3%
+  OOS: HIGH_CONTACT_ELITE_C N=1838,hit=63.8%,ROI=+21.8% | LOW_CONTACT_WEAK_CON N=1534,hit=54.3%,ROI=+3.7% | gap=+9.5pp vs base=59.8%
+
+H4 — TB 1.5, LOW_CONTACT_ELITE_CONTACT vs HIGH_CONTACT_WEAK_CONTACT:
+  VALIDATION: LOW_CONTACT_ELITE_CO N=340,hit=42.4%,ROI=-19.1% | HIGH_CONTACT_WEAK_CO N=173,hit=38.2%,ROI=-27.2% | gap=+4.2pp vs base=40.5%
+  OOS: LOW_CONTACT_ELITE_CO N=363,hit=40.8%,ROI=-22.2% | HIGH_CONTACT_WEAK_CO N=142,hit=28.9%,ROI=-44.9% | gap=+11.9pp vs base=40.8%
+
+H5 — HITS 0.5, LOW_VARIANCE vs HIGH_VARIANCE:
+  VALIDATION: LOW_VARIANCE N=11424,hit=60.8%,ROI=+16.1% | HIGH_VARIANCE N=4934,hit=59.2%,ROI=+13.1% | gap=+1.6pp vs base=60.3%
+  OOS: LOW_VARIANCE N=12810,hit=59.5%,ROI=+13.6% | HIGH_VARIANCE N=4633,hit=60.7%,ROI=+15.8% | gap=-1.1pp vs base=59.8%
+
+=================================================================
+SECTION 5 — OPPORTUNITY × CONTACT
+=================================================================
+  PA predictions not available — skipping interaction test
+  (would need pa_predictions.parquet with matching player_id + game_date)
+
+=================================================================
+SECTION 6 — HONEST ASSESSMENT
+=================================================================
+
+1. Same-line different contact profiles: YES — players differ in contact quality
+2. Market pricing: check Section 3
+3. >= 5pp hit rate divergence vs baseline: NO
+4. More promising market: HITS (0.5 line has largest N and most stable contact signal)
+5. PA × Contact: not tested (data unavailable)
+6. Phase 2 justified: NO — signal too small to exploit
