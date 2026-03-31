@@ -7,7 +7,9 @@
     "expected_roi": 0.092,
     "expected_volume_per_season": 300,
     "deployment_date": "2026-03-30",
-    "note": "Q1 draw tracked as avoid only; no fade deployed"
+    "note": "Q1 draw tracked as avoid only; no fade deployed",
+    "composite_shadow": "G13_S6_REGULAR_HARD — make_cut +11.8% / top_20 +25.3% ROI, N=141, MULTIPLICATIVE. Shadow tracking active.",
+    "watchlist": "G13_x_S3_HIGH_APP — top_20, +19.4% ROI, N=291, regression not confirmed, S3 coverage 55% — do not activate until G13xS6 reaches N=50 live shadow"
   },
   "G14": {
     "signal_id": "G14",

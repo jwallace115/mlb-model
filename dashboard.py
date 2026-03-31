@@ -4967,31 +4967,94 @@ def _render_golf_tab() -> None:
         ev_name = golf.get("event_name", "No active event")
         n_cand = golf.get("n_candidates", 0)
         n_lean = golf.get("n_leans", 0)
-        st.html(f'<div class="section-hdr">{ev_name} &mdash; '
+        st.html(f'<div class="section-hdr">{ev_name} \u2014 '
                 f'{n_cand} candidates, {n_lean} leans</div>')
 
         plays = golf.get("plays", [])
+
+        # Filter unactionable: under + odds < -200
+        plays = [p for p in plays if not (
+            p.get("direction") == "under" and p.get("close_odds") is not None and p["close_odds"] < -200)]
+
         if plays:
+            # Split by market
+            _mkt_map = {}
             for p in plays:
-                cls = p.get("classification", "")
-                badge_color = "#2ecc71" if cls == "candidate" else "#f1c40f" if cls == "lean" else "#888"
-                edge = p.get("edge", 0)
-                direction = p.get("direction", "")
-                odds_str = ""
-                if p.get("close_odds"):
-                    o = p["close_odds"]
-                    odds_str = "%+d" % int(o) if o >= 0 else "%d" % int(o)
-                st.html(
-                    f'<div style="display:flex;align-items:center;padding:6px 0;border-bottom:1px solid #eee">'
-                    f'<span style="background:{badge_color};color:#fff;padding:2px 8px;border-radius:4px;'
-                    f'font-size:0.75rem;margin-right:10px">{cls.upper()}</span>'
-                    f'<span style="width:180px;font-weight:600">{p.get("player_name","")}</span>'
-                    f'<span style="width:90px;color:#666">{p.get("market","").replace("_"," ")}</span>'
-                    f'<span style="width:70px">{p.get("model_prob",0):.1f}%</span>'
-                    f'<span style="width:70px;color:#888">{p.get("market_prob",0):.1f}%</span>'
-                    f'<span style="width:70px;color:{"#2ecc71" if edge>0 else "#e74c3c"}">{edge:+.1f}%</span>'
-                    f'<span style="width:60px">{direction}</span>'
-                    f'<span style="width:60px;color:#888">{odds_str}</span></div>')
+                m = p.get("market", "make_cut")
+                _mkt_map.setdefault(m, []).append(p)
+
+            _board_tabs = ["Make Cut", "Top 20", "Top 10", "Top 5", "Winner"]
+            _board_keys = ["make_cut", "top_20", "top_10", "top_5", "win"]
+            _active_tabs = [t for t, k in zip(_board_tabs, _board_keys) if _mkt_map.get(k)]
+            _active_keys = [k for k in _board_keys if _mkt_map.get(k)]
+
+            # Add empty tabs for markets with no data
+            if not _active_tabs:
+                st.caption("No candidates this week.")
+            else:
+                _sub_tabs = st.tabs(_active_tabs if _active_tabs else ["Make Cut"])
+
+                for _st, _mk in zip(_sub_tabs, _active_keys):
+                    with _st:
+                        _mkt_plays = _mkt_map.get(_mk, [])
+
+                        # Sort: over first, then under; leans before candidates within each
+                        def _sort_key(p):
+                            d = 0 if p.get("direction") == "over" else 1
+                            c = 0 if p.get("classification") == "lean" else 1
+                            e = -(p.get("edge", 0) or 0)
+                            return (d, c, e)
+
+                        _mkt_plays.sort(key=_sort_key)
+
+                        # Split leans and candidates
+                        _leans = [p for p in _mkt_plays if p.get("classification") == "lean"]
+                        _cands = [p for p in _mkt_plays if p.get("classification") == "candidate"]
+
+                        # Header row
+                        st.html(
+                            '<div style="display:flex;padding:4px 0;border-bottom:2px solid #333;'
+                            'font-size:0.72em;color:#64748b;font-weight:600">'
+                            '<span style="width:180px">Player</span>'
+                            '<span style="width:70px">Model %</span>'
+                            '<span style="width:70px">Book %</span>'
+                            '<span style="width:70px">Edge</span>'
+                            '<span style="width:60px">Dir</span>'
+                            '<span style="width:60px">Odds</span></div>')
+
+                        def _render_play_row(p):
+                            cls = p.get("classification", "")
+                            badge_color = "#f1c40f" if cls == "lean" else "#2ecc71"
+                            edge = p.get("edge", 0) or 0
+                            direction = p.get("direction", "")
+                            odds_str = ""
+                            if p.get("close_odds"):
+                                o = p["close_odds"]
+                                odds_str = "%+d" % int(o) if o >= 0 else "%d" % int(o)
+                            mp = p.get("market_prob", 0)
+                            mp_str = f"{mp:.1f}%" if mp and not (isinstance(mp, float) and mp != mp) else "\u2014"
+                            dir_color = "#4ade80" if direction == "over" else "#60a5fa"
+                            st.html(
+                                f'<div style="display:flex;align-items:center;padding:5px 0;border-bottom:1px solid #1e2d4a">'
+                                f'<span style="width:180px;font-weight:600;color:#e2e8f0">{p.get("player_name","")}</span>'
+                                f'<span style="width:70px;color:#e2e8f0">{p.get("model_prob",0):.1f}%</span>'
+                                f'<span style="width:70px;color:#94a3b8">{mp_str}</span>'
+                                f'<span style="width:70px;color:{"#4ade80" if edge>0 else "#f87171"}">{edge:+.1f}%</span>'
+                                f'<span style="width:60px;color:{dir_color}">{direction}</span>'
+                                f'<span style="width:60px;color:#94a3b8">{odds_str}</span></div>')
+
+                        # Show leans always
+                        if _leans:
+                            for p in _leans:
+                                _render_play_row(p)
+                        elif not _cands:
+                            st.caption("No signals this tournament.")
+
+                        # Candidates in expander
+                        if _cands:
+                            with st.expander(f"Show all candidates ({len(_cands)})", expanded=False):
+                                for p in _cands:
+                                    _render_play_row(p)
         else:
             st.caption("No candidates this week.")
 
@@ -5072,6 +5135,20 @@ def _render_golf_tab() -> None:
                     f'<span style="width:60px;color:#94a3b8">{_odds_str}</span>'
                     f'<span style="width:80px;color:#f87171">edge {ga.get("dg_edge",0):+.1f}%</span>'
                     f'</div>')
+
+        # G13×S6 composite shadow count
+        try:
+            _comp_log_path = os.path.join(os.path.dirname(__file__), "golf", "shadow", "golf_shadow_log.parquet")
+            if os.path.exists(_comp_log_path):
+                _comp_log = pd.read_parquet(_comp_log_path)
+                _comp_n = (_comp_log.get("composite_flag") == "G13_S6_REGULAR_HARD").sum() if "composite_flag" in _comp_log.columns else 0
+                if _comp_n > 0:
+                    st.html(
+                        f'<div style="font-size:0.72em;color:#6b7280;margin-top:8px;'
+                        f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #333">'
+                        f'G13\u00d7S6 Composite [SHADOW] \u2014 N: {_comp_n} signals this season</div>')
+        except Exception:
+            pass
 
     with g14_tab:
         g14_status = golf.get("g14_status", "")

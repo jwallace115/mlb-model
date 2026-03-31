@@ -1,0 +1,42 @@
+{
+  "compression_index_terciles": {
+    "t33": -0.10170979108087189,
+    "t67": 0.21928788583090073
+  },
+  "elite_density_median": 0.125,
+  "gap_best_to_20th_median": 0.245945,
+  "z_params": {
+    "field_skill_std": {
+      "mean": 0.09425562184873951,
+      "std": 0.02525876328312766,
+      "direction": -1
+    },
+    "field_entropy": {
+      "mean": 4.525389915966386,
+      "std": 0.4008806211826949,
+      "direction": 1
+    },
+    "elite_density": {
+      "mean": 0.1787714285714286,
+      "std": 0.17857282526330306,
+      "direction": 1
+    },
+    "gap_best_to_20th": {
+      "mean": 0.2495723781512605,
+      "std": 0.08042646686817818,
+      "direction": -1
+    },
+    "gap_20th_to_60th": {
+      "mean": 0.11060411764705882,
+      "std": 0.05403577878578268,
+      "direction": -1
+    },
+    "top_heaviness": {
+      "mean": 0.21345535294117648,
+      "std": 0.0789129455174958,
+      "direction": -1
+    }
+  },
+  "skill_proxy": "0.8 * top_20_prob + 0.2 * win_prob",
+  "elite_threshold_definition": "50% of best skill_proxy in field"
+}

@@ -1375,6 +1375,78 @@ def run_matchups(capture_type="close", preds_df=None):
         print("No matchup data captured.", flush=True)
 
 
+def run_composite():
+    """Composite signal detection — G13 × S6(REGULAR_HARD) shadow amplifier."""
+    print("\n--- COMPOSITE DETECTION ---", flush=True)
+
+    log_file = SHADOW / "golf_shadow_log.parquet"
+    if not log_file.exists():
+        print("  No shadow log.", flush=True)
+        return
+
+    log = pd.read_parquet(log_file)
+    latest_ts = log["run_timestamp"].max()
+
+    # Load S6 tournament classes
+    s6_path = Path("golf/research/engine_program/s6_tournament_segmentation/tournament_classes.parquet")
+    if not s6_path.exists():
+        print("  S6 classes not found — composite skipped.", flush=True)
+        return
+
+    s6 = pd.read_parquet(s6_path)
+    if "tourn_class" not in s6.columns:
+        print("  S6 missing tourn_class — composite skipped.", flush=True)
+        return
+
+    # Get current event
+    latest = log[log["run_timestamp"] == latest_ts]
+    if len(latest) == 0:
+        return
+
+    eid = latest["event_id"].iloc[0]
+    yr = latest["calendar_year"].iloc[0]
+
+    # Look up tournament class
+    ev_class = s6[(s6["event_id"] == eid) & (s6["calendar_year"] == yr)]
+    if len(ev_class) > 0:
+        tourn_class = ev_class.iloc[0]["tourn_class"]
+    else:
+        # Try matching by event_id only (current year may not be in S6 historical data)
+        # Use most recent classification for this event_id
+        ev_hist = s6[s6["event_id"] == eid].sort_values("calendar_year", ascending=False)
+        tourn_class = ev_hist.iloc[0]["tourn_class"] if len(ev_hist) > 0 else None
+
+    if tourn_class is None:
+        print(f"  Event {eid} not in S6 classifications — composite skipped.", flush=True)
+        return
+
+    print(f"  Tournament class: {tourn_class}", flush=True)
+
+    # Set tourn_class and composite_flag on all current-run rows
+    mask = log["run_timestamp"] == latest_ts
+    log.loc[mask, "tourn_class"] = tourn_class
+
+    composite_count = 0
+    for idx in log[mask].index:
+        row = log.loc[idx]
+        g13_active = row.get("g13_signal_flag") is True
+        is_regular_hard = tourn_class == "REGULAR_HARD"
+
+        if g13_active and is_regular_hard:
+            log.loc[idx, "composite_flag"] = "G13_S6_REGULAR_HARD"
+            composite_count += 1
+        else:
+            log.loc[idx, "composite_flag"] = None
+
+    log.to_parquet(log_file, index=False)
+
+    print(f"  G13×S6(REGULAR_HARD) composite: {composite_count} signals", flush=True)
+    if composite_count > 0:
+        comp_rows = log[mask & (log["composite_flag"] == "G13_S6_REGULAR_HARD")]
+        names = comp_rows["player_name"].tolist()
+        print(f"  Players: {', '.join(names[:10])}", flush=True)
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
@@ -1387,5 +1459,6 @@ if __name__ == "__main__":
         run_g13(result)
     run_g14(result)
     run_g15(result)
+    run_composite()
     if args.include_matchups:
         run_matchups(capture_type=args.capture)
