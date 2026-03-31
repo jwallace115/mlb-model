@@ -36,7 +36,8 @@ def run():
                     "dg_id": int(r["player_id"]) if pd.notna(r.get("player_id")) else 0,
                     "market": r.get("market", ""),
                     "model_prob": round(float(r["model_prob"]) * 100, 1) if pd.notna(r.get("model_prob")) else 0,
-                    "market_prob": round(float(r.get("market_prob_close", r.get("market_prob_open", 0)) or 0) * 100, 1),
+                    "market_prob": round(float(_mp) * 100, 1) if pd.notna(_mp := r.get("market_prob_close")) else (
+                        round(float(_mpo) * 100, 1) if pd.notna(_mpo := r.get("market_prob_open")) else None),
                     "edge": round(float(r.get("edge", 0) or 0) * 100, 1),
                     "direction": r.get("direction", ""),
                     "classification": r.get("classification", ""),
@@ -119,11 +120,12 @@ def run():
                     "adj_cut_prob": round(float(r["adj_make_cut_prob"]) * 100, 1) if pd.notna(r.get("adj_make_cut_prob")) else 0,
                     "book": r.get("g13_reference_book", ""),
                     "close_odds": float(r.get("close_odds", 0)) if pd.notna(r.get("close_odds")) else None,
-                    "fair_prob": round(float(r.get("market_prob_close", 0) or 0) * 100, 1),
+                    "fair_prob": round(float(_fp) * 100, 1) if pd.notna(_fp := r.get("market_prob_close", r.get("market_prob_open"))) else 0,
                     "adj_edge": round(float(r.get("adj_make_cut_edge", 0) or 0) * 100, 1),
                 })
             for _, r in log[g13_mask & (log.get("g13_avoid_flag", False) == True)].iterrows():
-                dg_edge = (r["dg_prob"] - (r.get("market_prob_close") or 0)) if pd.notna(r.get("market_prob_close")) else 0
+                _mpc = r.get("market_prob_close") if pd.notna(r.get("market_prob_close")) else r.get("market_prob_open")
+                dg_edge = (r["dg_prob"] - _mpc) if pd.notna(_mpc) else 0
                 g13_avoids.append({
                     "player_name": r.get("player_name", ""),
                     "draw_quintile": 1,
@@ -161,7 +163,7 @@ def run():
                     "adj_prob": round(float(r.get(adj_col, 0) or 0) * 100, 1),
                     "book": r.get(f"g14_reference_book_{market}", ""),
                     "close_odds": float(r.get("close_odds", 0)) if pd.notna(r.get("close_odds")) else None,
-                    "fair_prob": round(float(r.get("market_prob_close", 0) or 0) * 100, 1),
+                    "fair_prob": round(float(_fp14) * 100, 1) if pd.notna(_fp14 := r.get("market_prob_close", r.get("market_prob_open"))) else 0,
                     "adj_edge": round(float(r.get(edge_col, 0) or 0) * 100, 1),
                 })
 
@@ -207,7 +209,7 @@ def run():
                     "adj_top20_prob": round(float(r.get("adj_top_20_prob_g15", 0) or 0) * 100, 1),
                     "book": r.get("g15_reference_book", ""),
                     "close_odds": float(r.get("close_odds", 0)) if pd.notna(r.get("close_odds")) else None,
-                    "fair_prob": round(float(r.get("market_prob_close", 0) or 0) * 100, 1),
+                    "fair_prob": round(float(_fp15) * 100, 1) if pd.notna(_fp15 := r.get("market_prob_close", r.get("market_prob_open"))) else 0,
                     "adj_edge": round(float(r.get("top_20_edge_g15", 0) or 0) * 100, 1),
                 })
 
