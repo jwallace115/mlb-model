@@ -25,5 +25,21 @@
     "expected_volume_per_season": "500-600 per market",
     "deployment_date": "2026-03-30",
     "note": "Weak fields excluded. Win market watchlist only."
+  },
+  "G15": {
+    "signal_id": "G15",
+    "status": "LIVE_SHADOW",
+    "market": "top_20",
+    "watchlist_markets": [
+      "top_5",
+      "win"
+    ],
+    "rule": "top_20_edge >= 0.04 AND elite_density_bucket == HIGH",
+    "primary_execution_book": "hard_rock",
+    "clv_reference_book": "draftkings",
+    "expected_roi": 0.073,
+    "expected_volume_per_season": "400-500 bets",
+    "deployment_date": "2026-03-30",
+    "note": "Top-5 stratified and Win stratified logged as watchlist only. Kill switch at 12 signals per event."
   }
 }

@@ -188,9 +188,44 @@ def run():
         results["g14_kill_switch"] = bool(g14_kill)
         results["g14_status"] = "LIVE_SHADOW"
 
+    # G15 Elite Density signals
+    if log_file.exists():
+        log = pd.read_parquet(log_file)
+        latest_ts = log["run_timestamp"].max()
+
+        g15_plays = []
+        g15_ed_bucket = ""
+        g15_kill = False
+
+        if "g15_signal_flag" in log.columns:
+            m = (log["run_timestamp"] == latest_ts) & (log["market"] == "top_20") & (log["g15_signal_flag"] == True)
+            for _, r in log[m].iterrows():
+                g15_plays.append({
+                    "player_name": r.get("player_name", ""),
+                    "dg_rank": int(r.get("dg_rank", 0)) if pd.notna(r.get("dg_rank")) else None,
+                    "dg_top20_prob": round(float(r["dg_prob"]) * 100, 1) if pd.notna(r.get("dg_prob")) else 0,
+                    "adj_top20_prob": round(float(r.get("adj_top_20_prob_g15", 0) or 0) * 100, 1),
+                    "book": r.get("g15_reference_book", ""),
+                    "close_odds": float(r.get("close_odds", 0)) if pd.notna(r.get("close_odds")) else None,
+                    "fair_prob": round(float(r.get("market_prob_close", 0) or 0) * 100, 1),
+                    "adj_edge": round(float(r.get("top_20_edge_g15", 0) or 0) * 100, 1),
+                })
+
+        if "elite_density_bucket" in log.columns:
+            edb = log[(log["run_timestamp"] == latest_ts) & log["elite_density_bucket"].notna()]["elite_density_bucket"]
+            g15_ed_bucket = edb.iloc[0] if len(edb) > 0 else ""
+
+        if "g15_rule_fail_reason" in log.columns:
+            g15_kill = (log[(log["run_timestamp"] == latest_ts)]["g15_rule_fail_reason"] == "kill_switch_triggered").any()
+
+        results["g15_signals"] = g15_plays
+        results["g15_elite_density_bucket"] = g15_ed_bucket
+        results["g15_kill_switch"] = bool(g15_kill)
+        results["g15_status"] = "LIVE_SHADOW"
+
     # Model info
     results["model_info"] = {
-        "model": "DG-only logistic + G13 wave + G14 tail balance",
+        "model": "DG logistic + G13 wave + G14 tail + G15 elite density",
         "oos_auc": 0.702, "oos_brier": 0.211,
         "confidence_tier": "LOW",
         "g13_oos_roi": "+9.2%",
@@ -199,7 +234,9 @@ def run():
         "g14_oos_roi_top10": "+11.6%",
         "g14_oos_roi_top5": "+12.5%",
         "g14_markets": "top_10, top_5 (strong fields only)",
-        "note": "Shadow tracking. G13 wave + G14 tail balance overlays in LIVE_SHADOW.",
+        "g15_oos_roi_top20": "+7.3%",
+        "g15_market": "top_20 (HIGH elite density)",
+        "note": "Shadow tracking. G13 wave + G14 tail + G15 elite density in LIVE_SHADOW.",
     }
 
     with open(OUT, "w") as f:

@@ -4937,7 +4937,7 @@ def _render_golf_tab() -> None:
         st.info("No Golf data available yet. Run `python push_golf.py` to generate.")
         return
 
-    picks_tab, matchup_tab, g13_tab, g14_tab, info_tab = st.tabs(["Outright Board", "Matchups", "G13 Wave", "G14 Tail", "Model Info"])
+    picks_tab, matchup_tab, g13_tab, g14_tab, g15_tab, info_tab = st.tabs(["Outright Board", "Matchups", "G13 Wave", "G14 Tail", "G15 Field", "Model Info"])
 
     with picks_tab:
         ev_name = golf.get("event_name", "No active event")
@@ -5108,6 +5108,52 @@ def _render_golf_tab() -> None:
                     f'<span style="width:90px;color:#94a3b8">Adj {gw.get("adj_win_prob",0):.1f}%</span>'
                     f'<span style="width:80px;color:#6b7280">edge {gw.get("win_edge",0):+.1f}%</span>'
                     f'</div>')
+
+    with g15_tab:
+        g15_status = golf.get("g15_status", "")
+        g15_plays = golf.get("g15_signals", [])
+        g15_ed = golf.get("g15_elite_density_bucket", "")
+        g15_kill = golf.get("g15_kill_switch", False)
+
+        _g15_color = "#f97316" if g15_status == "LIVE_SHADOW" else "#6b7280"
+        st.html(f'<div class="section-hdr">G15 Elite Density \u2014 Top 20 '
+                f'<span style="color:{_g15_color};font-size:0.8em">[{g15_status or "INACTIVE"}]</span></div>')
+
+        if g15_kill:
+            st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
+                    'padding:10px;margin-bottom:8px;color:#f87171;font-weight:700">'
+                    'G15 signals suppressed this week \u2014 anomaly detected</div>')
+        elif g15_ed == "HIGH":
+            st.html('<div style="background:#052e16;border:1px solid #22c55e;border-radius:6px;'
+                    'padding:8px 14px;margin-bottom:8px;color:#4ade80;font-weight:600">'
+                    'G15 ACTIVE \u2014 High Elite Density Field</div>')
+        elif g15_ed:
+            st.html(f'<div style="background:#1a1a2e;border:1px solid #4b5563;border-radius:6px;'
+                    f'padding:8px 14px;margin-bottom:8px;color:#94a3b8">'
+                    f'G15 inactive this week \u2014 field not high elite density ({g15_ed})</div>')
+
+        if g15_plays and not g15_kill:
+            st.html('<div style="font-size:0.78em;color:#94a3b8;margin-bottom:8px">'
+                    'Rule: top_20_edge \u2265 4% AND elite_density = HIGH</div>')
+            for gp in g15_plays:
+                _edge = gp.get("adj_edge", 0)
+                _odds_str = ""
+                if gp.get("close_odds"):
+                    o = gp["close_odds"]
+                    _odds_str = "%+d" % int(o) if o >= 0 else "%d" % int(o)
+                st.html(
+                    f'<div style="display:flex;align-items:center;padding:6px 0;border-bottom:1px solid #1e2d4a">'
+                    f'<span style="background:#f97316;color:#fff;padding:2px 8px;border-radius:4px;'
+                    f'font-size:0.75rem;margin-right:10px">G15 FIELD</span>'
+                    f'<span style="width:160px;font-weight:600;color:#e2e8f0">{gp.get("player_name","")}</span>'
+                    f'<span style="width:80px;color:#94a3b8">DG {gp.get("dg_top20_prob",0):.1f}%</span>'
+                    f'<span style="width:80px;color:#e2e8f0">Adj {gp.get("adj_top20_prob",0):.1f}%</span>'
+                    f'<span style="width:70px;color:#94a3b8">{gp.get("book","")}</span>'
+                    f'<span style="width:55px;color:#94a3b8">{_odds_str}</span>'
+                    f'<span style="width:70px;color:#f97316;font-weight:600">{_edge:+.1f}%</span>'
+                    f'</div>')
+        elif not g15_kill and g15_ed == "HIGH":
+            st.caption("No G15 signals this week (no edges above threshold).")
 
     with matchup_tab:
         matchup_plays = golf.get("matchup_candidates", [])

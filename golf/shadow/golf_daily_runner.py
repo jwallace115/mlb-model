@@ -126,6 +126,40 @@ def _g14_uplift(band, bucket, market):
     return _G14["up"].get(band, {}).get(bucket, {}).get(key, 0.0)
 
 
+# ── G15 Elite Density Top-20 Overlay — frozen parameters ──
+_G15_PATH = Path("golf/research/engine_program/s2_field_compression/g15_frozen_elite_density_uplifts.json")
+_G15 = None
+if _G15_PATH.exists():
+    try:
+        _g15_raw = json.load(open(_G15_PATH))
+        _g15_ed = _g15_raw.get("elite_density_cutpoints")
+        _g15_up = _g15_raw.get("uplifts")
+        if _g15_ed and _g15_up:
+            _G15 = {"ed": _g15_ed, "up": _g15_up,
+                    "skill_def": _g15_raw.get("skill_proxy_definition", ""),
+                    "ed_def": _g15_raw.get("elite_density_definition", "")}
+            print("G15 loaded: elite_density t33=%.4f, t67=%.4f" % (_g15_ed["t33"], _g15_ed["t67"]), flush=True)
+        else:
+            print("WARNING: G15 JSON missing cutpoints or uplifts — G15 disabled", flush=True)
+    except Exception as e:
+        print("WARNING: G15 load failed: %s" % e, flush=True)
+
+
+def _g15_elite_density_bucket(ed):
+    """Assign elite_density to frozen bucket."""
+    if _G15 is None or pd.isna(ed): return None
+    if ed >= _G15["ed"]["t67"]: return "HIGH"
+    if ed >= _G15["ed"]["t33"]: return "MEDIUM"
+    return "LOW"
+
+
+def _g15_uplift(bucket, market="top_20"):
+    """Get frozen uplift for elite density bucket."""
+    if _G15 is None or bucket is None: return 0.0
+    key = {"top_20": "top_20_uplift", "top_5": "top_5_uplift", "win": "win_uplift"}.get(market, "")
+    return _G15["up"].get(bucket, {}).get(key, 0.0)
+
+
 def dg_get(path, params=None):
     if params is None: params = {}
     params["file_format"] = "json"
@@ -913,6 +947,178 @@ def run_g14(log_df=None):
         print(f"    Win watch: {', '.join(g14_win_watch[:10])}", flush=True)
 
 
+def run_g15(log_df=None):
+    """G15 Elite Density Top-20 Overlay — field structure signals."""
+    print("\n--- G15 ELITE DENSITY OVERLAY ---", flush=True)
+
+    if _G15 is None:
+        print("  G15 DISABLED: frozen parameters not loaded.", flush=True)
+        return
+    if RUN_MODE != "live":
+        print("  G15 skipped in test mode.", flush=True)
+        return
+
+    log_file = SHADOW / "golf_shadow_log.parquet"
+    if not log_file.exists():
+        print("  G15: no shadow log.", flush=True)
+        return
+
+    log = pd.read_parquet(log_file)
+    latest_ts = log["run_timestamp"].max()
+    latest = log[log["run_timestamp"] == latest_ts]
+
+    # Compute elite_density from current field predictions
+    field_probs = latest[["player_id", "dg_prob", "market"]].copy()
+    # Get DG probs for skill_proxy (need top_20 and win)
+    t20_rows = latest[latest["market"] == "top_20"][["player_id", "dg_prob"]].rename(columns={"dg_prob": "dg_t20"})
+    win_rows = latest[latest["market"] == "win"][["player_id", "dg_prob"]].rename(columns={"dg_prob": "dg_win"})
+
+    if len(t20_rows) == 0:
+        # Fallback: use prediction file
+        try:
+            pred_live = pd.read_parquet("golf/data/canonical/predictions.parquet")
+            pred_live = pred_live.rename(columns={"top_20_prob": "dg_t20", "win_prob": "dg_win"})
+            eid = latest["event_id"].iloc[0] if "event_id" in latest.columns else 0
+            yr = latest["calendar_year"].iloc[0] if "calendar_year" in latest.columns else 2026
+            ev_pred = pred_live[(pred_live["event_id"] == eid) & (pred_live["calendar_year"] == yr)]
+            t20_rows = ev_pred[["dg_id", "dg_t20"]].rename(columns={"dg_id": "player_id"})
+            win_rows = ev_pred[["dg_id", "dg_win"]].rename(columns={"dg_id": "player_id"})
+        except Exception:
+            pass
+
+    if len(t20_rows) < 20:
+        print("  G15: insufficient field data for elite density.", flush=True)
+        return
+
+    skill_df = t20_rows.merge(win_rows, on="player_id", how="left")
+    skill_df["skill_proxy"] = 0.8 * skill_df["dg_t20"].fillna(0) + 0.2 * skill_df["dg_win"].fillna(0)
+
+    sp = skill_df["skill_proxy"].sort_values(ascending=False).values
+    best = sp[0]
+    elite_count = np.sum(sp >= best * 0.5)
+    elite_density_raw = elite_count / len(sp)
+    ed_bucket = _g15_elite_density_bucket(elite_density_raw)
+
+    # Field compression metrics
+    field_skill_std = np.std(sp)
+    gap_1_20 = sp[0] - sp[min(19, len(sp)-1)]
+
+    print(f"  Elite density: {elite_density_raw:.4f} → {ed_bucket}", flush=True)
+    print(f"  Field: {len(sp)} players, skill_std={field_skill_std:.4f}, gap_1_20={gap_1_20:.4f}", flush=True)
+
+    if ed_bucket != "HIGH":
+        print(f"  G15: field not HIGH elite density — signals suppressed, shadow logged.", flush=True)
+
+    # Process top_20 market rows
+    mask = (log["run_timestamp"] == latest_ts) & (log["market"] == "top_20")
+    g15_signals = []
+    g15_count = 0
+
+    for idx in log[mask].index:
+        row = log.loc[idx]
+
+        # Store tournament-level fields
+        log.loc[idx, "elite_density_raw"] = round(elite_density_raw, 4)
+        log.loc[idx, "elite_density_bucket"] = ed_bucket
+        log.loc[idx, "field_skill_std"] = round(field_skill_std, 4)
+        log.loc[idx, "gap_best_to_20th"] = round(gap_1_20, 4)
+        log.loc[idx, "g15_signal_version"] = "1.0"
+        log.loc[idx, "g15_shadow_mode"] = True
+
+        # Uplift
+        uplift = _g15_uplift(ed_bucket, "top_20")
+        adj_prob = np.clip(row["dg_prob"] + uplift, 0.01, 0.99)
+
+        # Sanity
+        sanity_fail = False
+        if adj_prob > 0.65:
+            sanity_fail = True
+            adj_prob = row["dg_prob"]
+
+        # Fair close prob
+        fair_close = row.get("market_prob_close") or row.get("market_prob_open")
+        if pd.isna(fair_close):
+            edge = np.nan
+            log.loc[idx, "g15_rule_fail_reason"] = "missing_odds"
+            log.loc[idx, "g15_rule_pass"] = False
+        elif sanity_fail:
+            edge = np.nan
+            log.loc[idx, "g15_rule_fail_reason"] = "probability_sanity_violation"
+            log.loc[idx, "g15_rule_pass"] = False
+        else:
+            edge = adj_prob - fair_close
+
+        # Reference book
+        ref_book = ""
+        for bk_col, bk_name in [("pinnacle_odds", "pinnacle"), ("dk_odds", "draftkings"), ("fanduel_odds", "fanduel")]:
+            if pd.notna(row.get(bk_col)):
+                ref_book = bk_name
+                break
+
+        log.loc[idx, "adj_top_20_prob_g15"] = round(adj_prob, 4)
+        log.loc[idx, "top_20_edge_g15"] = round(edge, 4) if pd.notna(edge) else np.nan
+        log.loc[idx, "g15_reference_book"] = ref_book
+
+        # Signal flag
+        signal = (pd.notna(edge) and edge >= 0.04 and ed_bucket == "HIGH" and not sanity_fail)
+
+        if signal:
+            g15_count += 1
+            g15_signals.append(row["player_name"])
+
+        log.loc[idx, "g15_signal_flag"] = signal
+
+        if not signal and not log.loc[idx].get("g15_rule_fail_reason"):
+            if ed_bucket != "HIGH":
+                log.loc[idx, "g15_rule_fail_reason"] = "elite_density_not_high"
+            elif pd.notna(edge) and edge < 0.04:
+                log.loc[idx, "g15_rule_fail_reason"] = "edge_below_threshold"
+            log.loc[idx, "g15_rule_pass"] = False
+        elif signal:
+            log.loc[idx, "g15_rule_pass"] = True
+
+    # Kill switch
+    kill_triggered = False
+    if g15_count > 12:
+        kill_triggered = True
+        print(f"  G15 KILL SWITCH TRIGGERED — {g15_count} signals exceeded 12", flush=True)
+        log.loc[mask & (log.get("g15_signal_flag", False) == True), "g15_signal_flag"] = False
+        log.loc[mask & (log.get("g15_signal_flag", False) == False), "g15_rule_fail_reason"] = "kill_switch_triggered"
+        log.loc[mask, "g15_rule_pass"] = False
+        g15_signals = []
+        g15_count = 0
+
+    # Watchlist: top_5 and win (if uplifts exist)
+    g15_t5_watch = []
+    g15_win_watch = []
+    for market, result_flag, watch_list in [("top_5", "g15_top5_watchlist", g15_t5_watch),
+                                             ("win", "g15_win_watchlist", g15_win_watch)]:
+        m2 = (log["run_timestamp"] == latest_ts) & (log["market"] == market)
+        for idx in log[m2].index:
+            row = log.loc[idx]
+            uplift = _g15_uplift(ed_bucket, market)
+            adj = np.clip(row["dg_prob"] + uplift, 0.01, 0.99)
+            fair = row.get("market_prob_close") or row.get("market_prob_open")
+            edge = adj - fair if pd.notna(fair) else np.nan
+            thresh = 0.04 if market == "top_5" else 0.02
+            watch = pd.notna(edge) and edge >= thresh
+            log.loc[idx, result_flag] = watch
+            if watch:
+                watch_list.append(row["player_name"])
+
+    log.to_parquet(log_file, index=False)
+
+    # Summary
+    print(f"\n  G15 Results:", flush=True)
+    print(f"    Elite density: {ed_bucket} ({elite_density_raw:.4f})", flush=True)
+    print(f"    Top-20 signals: {g15_count}", flush=True)
+    print(f"    Top-5 watchlist: {len(g15_t5_watch)}", flush=True)
+    print(f"    Win watchlist: {len(g15_win_watch)}", flush=True)
+    print(f"    Kill switch: {'TRIGGERED' if kill_triggered else 'OK'}", flush=True)
+    if g15_signals:
+        print(f"    Signals: {', '.join(g15_signals[:10])}", flush=True)
+
+
 def run_matchups(capture_type="close", preds_df=None):
     """Capture matchup/3-ball odds from DG all-pairings + book matchups."""
     ts = datetime.now().isoformat()
@@ -1180,5 +1386,6 @@ if __name__ == "__main__":
     if not args.skip_g13:
         run_g13(result)
     run_g14(result)
+    run_g15(result)
     if args.include_matchups:
         run_matchups(capture_type=args.capture)

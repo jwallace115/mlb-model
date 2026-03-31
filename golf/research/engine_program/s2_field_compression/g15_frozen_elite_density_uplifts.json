@@ -1,0 +1,29 @@
+{
+  "elite_density_cutpoints": {
+    "t33": 0.09722222222222222,
+    "t67": 0.15384615384615385,
+    "median": 0.125
+  },
+  "elite_density_definition": "fraction of field within 50% of best skill_proxy",
+  "skill_proxy_definition": "0.8 * top_20_prob + 0.2 * win_prob",
+  "uplifts": {
+    "LOW": {
+      "top_20_uplift": 0.01658,
+      "top_5_uplift": 0.00717,
+      "win_uplift": 3e-05,
+      "n_train": 5693
+    },
+    "MEDIUM": {
+      "top_20_uplift": 0.01317,
+      "top_5_uplift": 0.00718,
+      "win_uplift": 2e-05,
+      "n_train": 5511
+    },
+    "HIGH": {
+      "top_20_uplift": 0.02212,
+      "top_5_uplift": 0.01298,
+      "win_uplift": 4e-05,
+      "n_train": 4227
+    }
+  }
+}
