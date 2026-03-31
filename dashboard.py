@@ -4985,7 +4985,21 @@ def _render_golf_tab() -> None:
             st.info("\u23f3 Waiting for odds \u2014 Hard Rock lines not yet available via API. "
                     "Check back after the next scheduled odds pull.")
         else:
-                _sub_tabs = st.tabs(_active_tabs if _active_tabs else ["Make Cut"])
+            # Split by market
+            _mkt_map = {}
+            for p in plays:
+                m = p.get("market", "make_cut")
+                _mkt_map.setdefault(m, []).append(p)
+
+            _board_tabs = ["Make Cut", "Top 20", "Top 10", "Top 5", "Winner"]
+            _board_keys = ["make_cut", "top_20", "top_10", "top_5", "win"]
+            _active_tabs = [t for t, k in zip(_board_tabs, _board_keys) if _mkt_map.get(k)]
+            _active_keys = [k for k in _board_keys if _mkt_map.get(k)]
+
+            if not _active_tabs:
+                st.caption("No candidates this week.")
+            else:
+                _sub_tabs = st.tabs(_active_tabs)
 
                 for _st, _mk in zip(_sub_tabs, _active_keys):
                     with _st:
