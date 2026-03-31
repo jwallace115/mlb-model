@@ -219,6 +219,44 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-03-31",
+        "type": "5-leg",
+        "legs": [
+          {
+            "game": "CLE@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "PIT@CIN",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "OAK@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "DET@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "TEX@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {

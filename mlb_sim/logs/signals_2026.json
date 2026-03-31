@@ -646,5 +646,29 @@
     "signal_class":"BOTH_HIGH",
     "shadow_only":false,
     "pre_overlay_tracking":false
+  },
+  {
+    "date":"2026-03-31",
+    "game_id":"824861",
+    "home_team":"BAL",
+    "away_team":"TEX",
+    "signal_side":"UNDER",
+    "stake_units":0.5,
+    "raw_p_under":0.5804,
+    "raw_p_over":0.4196,
+    "line_at_signal_time":8.5,
+    "result":null,
+    "net_units":null,
+    "resolved":0,
+    "s12_overlay_active":0.0,
+    "s12_value":6.962,
+    "base_stake":0.5,
+    "p09_overlay_active":0.0,
+    "p09_value":41.978,
+    "p09_data_available":1.0,
+    "combined_overlay_tier":"NONE",
+    "signal_class":"BASE_LOW",
+    "shadow_only":false,
+    "pre_overlay_tracking":false
   }
 ]
