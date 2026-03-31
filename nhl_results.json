@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-31T22:47:05.859216+00:00",
-  "last_updated": "2026-03-31 22:47 UTC",
+  "generated_at": "2026-03-31T21:02:55.492535+00:00",
+  "last_updated": "2026-03-31 21:02 UTC",
   "pipeline_run_date": "2026-03-31",
   "signals_source": "live",
   "game_date": "2026-03-31",
@@ -19,7 +19,7 @@
       "stake_units": 0.75,
       "caution_flag": 0,
       "volatility_bucket": "low",
-      "lambda_total_calibrated": 5.792257830353657,
+      "lambda_total_calibrated": 5.792257830353658,
       "over_price": -110.0,
       "under_price": -110.0,
       "book": "draftkings",
@@ -603,7 +603,7 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-03-31T22:47:05.885514+00:00",
+    "generated_at": "2026-03-31T21:02:55.496814+00:00",
     "date_reviewed": "2026-03-30",
     "record_summary": {},
     "narrative": null,

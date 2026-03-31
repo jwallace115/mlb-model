@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-31T22:46:53.343785+00:00",
+  "generated_at": "2026-03-31T21:01:49.153804+00:00",
   "game_date": "2026-03-31",
   "is_playoff_day": false,
   "plays": [
@@ -1902,28 +1902,5 @@
       "roi": null,
       "triggered_at": null
     }
-  },
-  "daily_review": {
-    "generated_at": "2026-03-31T22:46:53.455908+00:00",
-    "date_reviewed": "2026-03-30",
-    "record_summary": {
-      "HIGH": {
-        "w": 1,
-        "l": 0,
-        "p": 0
-      },
-      "LOW": {
-        "w": 5,
-        "l": 2,
-        "p": 0
-      },
-      "overall": {
-        "w": 6,
-        "l": 2,
-        "p": 0
-      }
-    },
-    "narrative": null,
-    "generation_status": "client_init_failed"
   }
 }
