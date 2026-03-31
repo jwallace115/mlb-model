@@ -87,10 +87,36 @@
             "game": "MIN@KCR",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "DET@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": "LOSS"
+          },
+          {
+            "game": "OAK@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": "WIN"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-03-31",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "CLE@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "PIT@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
             "result": null
@@ -107,12 +133,12 @@
       }
     ],
     "summary": {
-      "total": 3,
+      "total": 4,
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -3.0,
+      "net_units": -4.0,
       "payout_per_win": 6.0
     }
   },
@@ -164,44 +190,44 @@
             "game": "MIN@KCR",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "DET@ARI",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "OAK@ATL",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "NYM@STL",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "PIT@CIN",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "WIN"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 1,
+      "total": 2,
       "wins": 0,
-      "losses": 1,
+      "losses": 2,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -1.0,
+      "net_units": -2.0,
       "payout_per_win": 24.0
     }
   },
