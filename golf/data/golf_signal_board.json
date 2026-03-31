@@ -81,5 +81,27 @@
     "prerequisite": "CL01 PASS (confirmed)",
     "backtest_roi": "+24.5% (N=2073, 2021-2025, pre-R1 odds)",
     "note": "Backtest ROI invalid for trading — pre-R1 odds used vs post-R1 signal. Live shadow begins on next standard cut event. Promotion gate: N >= 50 live post-R1 shadow bets, ROI >= +5%, positive CLV."
+  },
+  "CL04": {
+    "signal_id": "CL04",
+    "name": "R1 Leader Regression — Top 20/10 Overpricing",
+    "type": "STRUCTURAL_TEST",
+    "status": "DATA_COLLECTION",
+    "registered": "2026-03-31",
+    "wired": "2026-03-31",
+    "capture_window": "Thursday post-R1 (10 PM) — same as CL03",
+    "data_source": "post_r1 mode via /betting-tools/outrights (top_20, top_10)",
+    "markets_logged": ["top_20", "top_10"],
+    "mechanism": "Players with extreme R1 sg_total (>+5) regress ~89% by R2. If post-R1 Top 20/Top 10 odds do not fully adjust for this regression, leaders are overpriced in placement markets.",
+    "structural_findings": {
+      "mean_corr_r1_r2": 0.153,
+      "outlier_high_regression_pct": 88.9,
+      "outlier_high_r2_sg": 0.68,
+      "outlier_high_top20_rate": 0.614,
+      "outlier_high_top10_rate": 0.435,
+      "major_exception": "Majors retain ~20% of R1 signal vs ~10% non-Major"
+    },
+    "prerequisite": "CL04 Phase 1 PASS (structural signal confirmed)",
+    "note": "Structural signal confirmed Phase 1. Post-R1 odds required for Phase 2 validation. Collecting live data. Re-evaluate after N>=50 post-R1 events."
   }
 }

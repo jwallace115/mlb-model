@@ -1481,6 +1481,7 @@ def _fetch_r1_scores_live(event_id, season):
         rows.append({
             "dg_id": dgid, "player_name": pname,
             "r1_score": int(r1_score), "course_par": int(course_par) if course_par else 72,
+            "sg_total": r1.get("sg_total"),
         })
     return rows, d.get("event_name", "Unknown")
 
@@ -1496,6 +1497,7 @@ def _fetch_r1_scores_test(event_id, season):
         rows.append({
             "dg_id": row["dg_id"], "player_name": row["player_name"],
             "r1_score": int(row["round_score"]), "course_par": int(row["course_par"]),
+            "sg_total": row.get("sg_total"),
         })
     events = pd.read_parquet(DATA / "events.parquet")
     ev = events[(events["event_id"] == event_id) & (events["calendar_year"] == season)]
@@ -1714,6 +1716,102 @@ def run_cl03():
 
     total_cl03 = log["cl03_flag"].sum() if "cl03_flag" in log.columns else 0
     print("  Season CL03 total: %d" % total_cl03, flush=True)
+
+    # ── CL04: Log post-R1 Top 20 / Top 10 odds + R1 sg_total buckets ──
+    # Data collection only — no signal, no bet recommendations.
+    print("\n--- CL04 DATA COLLECTION ---", flush=True)
+
+    # Pull post-R1 top_20 and top_10 odds
+    t20_odds = {}
+    t10_odds = {}
+    if RUN_MODE == "live":
+        for mkt, dest in [("top_20", t20_odds), ("top_10", t10_odds)]:
+            d = dg_get("/betting-tools/outrights", {"tour": "pga", "market": mkt, "odds_format": "american"})
+            if d and isinstance(d, dict):
+                for o in d.get("odds", []):
+                    if not isinstance(o, dict):
+                        continue
+                    dgid = o.get("dg_id")
+                    book_odds = {}
+                    for bk in o:
+                        if bk in {"dg_id", "player_name", "datagolf"}:
+                            continue
+                        val = o[bk]
+                        if isinstance(val, dict):
+                            continue
+                        parsed = parse_odds(val)
+                        if pd.notna(parsed):
+                            book_odds[bk] = parsed
+                    if book_odds:
+                        best_odds = max(book_odds.values())
+                        dest[dgid] = american_to_implied(best_odds)
+                print("CL04: %s odds loaded for %d players" % (mkt, len(dest)), flush=True)
+            else:
+                print("CL04: WARNING — %s odds unavailable. Logging nulls." % mkt, flush=True)
+    else:
+        odds_all = pd.read_parquet(DATA / "odds_outrights.parquet")
+        for mkt, dest in [("top_20", t20_odds), ("top_10", t10_odds)]:
+            ev_mkt = odds_all[(odds_all["event_id"] == event_id) & (odds_all["calendar_year"] == season) &
+                              (odds_all["market"] == mkt) & (odds_all["book"] == "draftkings")]
+            for _, o in ev_mkt.iterrows():
+                dest[o["dg_id"]] = american_to_implied(o["close_odds"])
+
+    # Reload log (CL03 already saved it)
+    log = pd.read_parquet(log_file)
+
+    # Ensure CL04 columns exist (append only)
+    for col in ["cl04_top20_market_prob", "cl04_top10_market_prob",
+                "cl04_r1_sg_total", "cl04_r1_bucket", "cl04_r1_position"]:
+        if col not in log.columns:
+            log[col] = np.nan
+
+    # R1 sg_total and position lookup
+    r1_sg_lookup = {}
+    for _, row in r1_df.iterrows():
+        sg = row.get("sg_total")
+        r1_sg_lookup[row["dg_id"]] = float(sg) if pd.notna(sg) else np.nan
+
+    # R1 leaderboard position (rank by r1_score ascending, lower = better)
+    r1_df["r1_position"] = r1_df["r1_score"].rank(method="min").astype(int)
+    r1_pos_lookup = {row["dg_id"]: int(row["r1_position"]) for _, row in r1_df.iterrows()}
+
+    def _cl04_bucket(sg):
+        if pd.isna(sg):
+            return "OTHER"
+        if sg > 5:
+            return "OUTLIER_HIGH"
+        if sg > 3:
+            return "EXTREME_HIGH"
+        if sg > 1:
+            return "HIGH"
+        return "OTHER"
+
+    # Update all make_cut rows for this event (same mask as CL03)
+    latest_ts = log["run_timestamp"].max()
+    mask = ((log["run_timestamp"] == latest_ts) &
+            (log["event_id"] == event_id) &
+            (log["market"] == "make_cut"))
+
+    cl04_logged = 0
+    for idx in log[mask].index:
+        dgid = log.loc[idx, "player_id"]
+        sg = r1_sg_lookup.get(dgid, np.nan)
+        log.loc[idx, "cl04_top20_market_prob"] = t20_odds.get(dgid, np.nan)
+        log.loc[idx, "cl04_top10_market_prob"] = t10_odds.get(dgid, np.nan)
+        log.loc[idx, "cl04_r1_sg_total"] = sg
+        log.loc[idx, "cl04_r1_bucket"] = _cl04_bucket(sg)
+        log.loc[idx, "cl04_r1_position"] = r1_pos_lookup.get(dgid, np.nan)
+        cl04_logged += 1
+
+    log.to_parquet(log_file, index=False)
+
+    # Summary
+    n_t20 = sum(1 for v in t20_odds.values() if pd.notna(v))
+    n_t10 = sum(1 for v in t10_odds.values() if pd.notna(v))
+    n_oh = log[mask & (log["cl04_r1_bucket"] == "OUTLIER_HIGH")].shape[0]
+    n_eh = log[mask & (log["cl04_r1_bucket"] == "EXTREME_HIGH")].shape[0]
+    print("CL04: Logged %d players | T20 odds: %d | T10 odds: %d" % (cl04_logged, n_t20, n_t10), flush=True)
+    print("CL04: OUTLIER_HIGH: %d | EXTREME_HIGH: %d" % (n_oh, n_eh), flush=True)
 
 
 if __name__ == "__main__":
