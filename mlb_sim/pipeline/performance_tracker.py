@@ -17,10 +17,15 @@ logger = logging.getLogger(__name__)
 BASE = Path(__file__).resolve().parent.parent
 SIGNALS_PATH = BASE / "logs" / "signals_2026.parquet"
 PERF_PATH = BASE / "logs" / "rolling_performance_2026.json"
+SHADOW_PERF_PATH = BASE / "logs" / "rolling_performance_shadow_2026.json"
 STATUS_PATH = BASE / "pipeline" / "engine_status.json"
 
 HARD_STOP_ROI = -8.0
 HARD_STOP_MIN_N = 50
+
+# Shadow signal classes (excluded from live tracker from 2026-03-30 onward)
+SHADOW_CLASSES = {"BASE_HIGH", "S12_HIGH"}
+SHADOW_CUTOVER_DATE = "2026-03-30"
 
 
 def _load_resolved():
@@ -29,6 +34,26 @@ def _load_resolved():
         return pd.DataFrame()
     df = pd.read_parquet(SIGNALS_PATH)
     return df[df["resolved"] == 1]
+
+
+def _is_shadow(row):
+    """Check if a resolved bet is shadow. Only applies from cutover date forward."""
+    if str(row.get("date", "")) < SHADOW_CUTOVER_DATE:
+        return False  # pre-cutover bets stay in live tracker
+    if row.get("shadow_only") is True:
+        return True
+    sc = row.get("signal_class")
+    if sc and sc in SHADOW_CLASSES:
+        return True
+    return False
+
+
+def _split_live_shadow(resolved):
+    """Split resolved bets into live and shadow DataFrames."""
+    if len(resolved) == 0:
+        return resolved, pd.DataFrame()
+    shadow_mask = resolved.apply(_is_shadow, axis=1)
+    return resolved[~shadow_mask], resolved[shadow_mask]
 
 
 def _window_stats(df, label=""):
@@ -63,37 +88,28 @@ def _clv_stats(df):
             "n_clv": int(len(clv_rows))}
 
 
-def compute_performance():
-    """Compute all rolling performance metrics and save to JSON."""
-    resolved = _load_resolved()
-
+def _build_tracker(resolved, label=""):
+    """Build tracker dict from a resolved DataFrame."""
     if len(resolved) == 0:
-        result = {"insufficient_data": True, "last_updated": date.today().isoformat(),
-                  "season_to_date": _window_stats(resolved),
-                  "last_25": _window_stats(resolved), "last_50": _window_stats(resolved)}
-        with open(PERF_PATH, "w") as f:
-            json.dump(result, f, indent=2)
-        return result
+        return {"insufficient_data": True, "last_updated": date.today().isoformat(),
+                "season_to_date": _window_stats(resolved),
+                "last_25": _window_stats(resolved), "last_50": _window_stats(resolved)}
 
     resolved = resolved.sort_values("date").reset_index(drop=True)
 
-    # Windows
     std = _window_stats(resolved, "season_to_date")
     last_25 = _window_stats(resolved.tail(25), "last_25")
     last_50 = _window_stats(resolved.tail(50), "last_50")
 
-    # Buckets
     b_057 = _bucket_stats(resolved, "0.57-0.60")
     b_060 = _bucket_stats(resolved, ">0.60")
 
-    # CLV
     clv = _clv_stats(resolved)
 
-    # dual_high_csw subset
-    dhc = resolved[resolved["dual_high_csw"] == 1]
+    dhc = resolved[resolved.get("dual_high_csw", pd.Series(dtype=float)) == 1] if "dual_high_csw" in resolved.columns else pd.DataFrame()
     dhc_stats = _window_stats(dhc) if len(dhc) >= 10 else {"n": int(len(dhc)), "note": "insufficient_data"}
 
-    result = {
+    return {
         "insufficient_data": False,
         "last_updated": date.today().isoformat(),
         "season_to_date": std,
@@ -104,10 +120,26 @@ def compute_performance():
         "dual_high_csw": dhc_stats,
     }
 
+
+def compute_performance():
+    """Compute rolling performance metrics for live and shadow trackers."""
+    resolved = _load_resolved()
+    live, shadow = _split_live_shadow(resolved)
+
+    # Live tracker
+    live_result = _build_tracker(live, "live")
     with open(PERF_PATH, "w") as f:
-        json.dump(result, f, indent=2)
-    logger.info(f"Performance updated: STD N={std['n']}, ROI={std['roi']}")
-    return result
+        json.dump(live_result, f, indent=2)
+    logger.info(f"Live performance: N={live_result.get('season_to_date',{}).get('n',0)}, "
+                f"ROI={live_result.get('season_to_date',{}).get('roi')}")
+
+    # Shadow tracker
+    shadow_result = _build_tracker(shadow, "shadow")
+    with open(SHADOW_PERF_PATH, "w") as f:
+        json.dump(shadow_result, f, indent=2)
+    logger.info(f"Shadow performance: N={shadow_result.get('season_to_date',{}).get('n',0)}")
+
+    return live_result
 
 
 def check_hard_stop(perf):

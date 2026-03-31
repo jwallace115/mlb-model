@@ -3736,6 +3736,30 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                 f'0.57-0.60: {_b057.get("n",0)}sig {_b057.get("roi",0):+.1f}% | '
                                 f'>0.60: {_b060.get("n",0)}sig {_b060.get("roi",0):+.1f}%</div>')
 
+            # Shadow monitoring section
+            _shadow_perf_path = os.path.join(_sim_base, "logs", "rolling_performance_shadow_2026.json")
+            if os.path.exists(_shadow_perf_path):
+                try:
+                    import json as _json_sh
+                    with open(_shadow_perf_path) as _shf:
+                        _sh_perf = _json_sh.load(_shf)
+                    if not _sh_perf.get("insufficient_data"):
+                        _sh_std = _sh_perf.get("season_to_date", {})
+                        _sh_n = _sh_std.get("n", 0)
+                        if _sh_n > 0:
+                            _sh_wr = _sh_std.get("win_rate", 0)
+                            _sh_roi = _sh_std.get("roi", 0)
+                            _sh_net = _sh_std.get("net_units", 0)
+                            st.html(
+                                f'<div style="font-size:0.68em;color:#6b7280;margin-top:4px;'
+                                f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #333">'
+                                f'Shadow monitor (BASE_HIGH, S12_HIGH): '
+                                f'{_sh_n} bets | {_sh_wr:.0f}% win | '
+                                f'{_sh_roi:+.1f}% ROI | {_sh_net:+.2f}u'
+                                f'</div>')
+                except Exception:
+                    pass
+
             # Recent results table
             if os.path.exists(_sim_signals_path):
                 _resolved = _sim_sigs[_sim_sigs["resolved"].isin([1, 2])].sort_values("date", ascending=False).head(20)
