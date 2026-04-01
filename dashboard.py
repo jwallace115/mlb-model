@@ -3802,62 +3802,93 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
 
             # Today's V1 signals now shown on unified game cards above
 
-            # Season performance
-            if os.path.exists(_sim_perf_path):
-                import json as _json3
-                with open(_sim_perf_path) as _pf:
-                    _perf = _json3.load(_pf)
-                if not _perf.get("insufficient_data"):
-                    _std = _perf.get("season_to_date", {})
-                    _l25 = _perf.get("last_25", {})
-                    _l50 = _perf.get("last_50", {})
-                    _parts = []
-                    for _lbl, _w in [("STD", _std), ("L25", _l25), ("L50", _l50)]:
-                        if _w.get("n", 0) >= 10:
-                            _parts.append(f"{_lbl}: {_w['n']}sig {_w['win_rate']:.0f}% {_w['roi']:+.1f}%")
-                        else:
-                            _parts.append(f"{_lbl}: insufficient")
-                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:2px">'
-                            f'📊 Sim Engine: {" | ".join(_parts)}</div>')
+            # ── Unified season performance (reads from signal JSONs directly) ──
+            import json as _json3
+            _MLB_CUT = "2026-03-30"
+            _mlb_tab_v1 = []
+            try:
+                with open(os.path.join(_sim_base, "logs", "signals_2026.json")) as _f:
+                    _mlb_tab_v1 = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
+            except Exception:
+                pass
+            _mlb_tab_f5 = []
+            try:
+                with open(os.path.join(_sim_base, "logs", "f5_signals_2026.json")) as _f:
+                    _mlb_tab_f5 = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
+            except Exception:
+                pass
+            _mlb_tab_rl = []
+            try:
+                with open(os.path.join(_sim_base, "logs", "f5_runline_2026.json")) as _f:
+                    _mlb_tab_rl = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
+            except Exception:
+                pass
 
-                    # Hard stop monitor
-                    _n = _std.get("n", 0); _roi = _std.get("roi", 0)
-                    _roi_color = "#4ade80" if (_roi or 0) > 0 else "#fbbf24" if (_roi or 0) > -4 else "#f87171"
-                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
-                            f'Hard stop: <span style="color:{_roi_color}">{_roi or 0:+.1f}%</span> / −8.0% threshold | '
-                            f'{_n}/50 signals</div>')
+            _v1_live = [r for r in _mlb_tab_v1 if not r.get("shadow_only")]
+            _v1_shadow = [r for r in _mlb_tab_v1 if r.get("shadow_only")]
+            _all_live = _v1_live + _mlb_tab_f5 + _mlb_tab_rl
 
-                    # Bucket breakdown
-                    _bkts = _perf.get("by_bucket", {})
-                    _b057 = _bkts.get("0.57-0.60", {}); _b060 = _bkts.get(">0.60", {})
-                    if (_b057.get("n", 0) + _b060.get("n", 0)) >= 5:
-                        st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
-                                f'0.57-0.60: {_b057.get("n",0)}sig {_b057.get("roi",0):+.1f}% | '
-                                f'>0.60: {_b060.get("n",0)}sig {_b060.get("roi",0):+.1f}%</div>')
+            def _mt_wlp(recs):
+                w = sum(1 for r in recs if r.get("result") == "WIN")
+                l = sum(1 for r in recs if r.get("result") == "LOSS")
+                return w, l
 
-            # Shadow monitoring section
-            _shadow_perf_path = os.path.join(_sim_base, "logs", "rolling_performance_shadow_2026.json")
-            if os.path.exists(_shadow_perf_path):
-                try:
-                    import json as _json_sh
-                    with open(_shadow_perf_path) as _shf:
-                        _sh_perf = _json_sh.load(_shf)
-                    if not _sh_perf.get("insufficient_data"):
-                        _sh_std = _sh_perf.get("season_to_date", {})
-                        _sh_n = _sh_std.get("n", 0)
-                        if _sh_n > 0:
-                            _sh_wr = _sh_std.get("win_rate", 0)
-                            _sh_roi = _sh_std.get("roi", 0)
-                            _sh_net = _sh_std.get("net_units", 0)
-                            st.html(
-                                f'<div style="font-size:0.68em;color:#6b7280;margin-top:4px;'
-                                f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #333">'
-                                f'Shadow monitor (BASE_HIGH, S12_HIGH): '
-                                f'{_sh_n} bets | {_sh_wr:.0f}% win | '
-                                f'{_sh_roi:+.1f}% ROI | {_sh_net:+.2f}u'
-                                f'</div>')
-                except Exception:
-                    pass
+            def _mt_roi(recs):
+                net = sum(float(r.get("net_units", 0) or 0) for r in recs)
+                risked = sum(abs(float(r.get("stake_units", 1) or 1)) for r in recs)
+                return (round(net / risked * 100, 1), round(net, 2)) if risked > 0 else (0.0, 0.0)
+
+            _tw, _tl = _mt_wlp(_all_live)
+            _troi, _tnet = _mt_roi(_all_live)
+            _tn = _tw + _tl
+            _roi_clr = "#4ade80" if _troi > 0 else "#fbbf24" if _troi > -4 else "#f87171"
+
+            if _tn > 0:
+                st.html(
+                    f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px;font-weight:600">'
+                    f'\U0001f4ca Live Production (Mar 30+): '
+                    f'<span style="color:#e2e8f0">{_tw}-{_tl}</span>'
+                    f' <span style="color:{_roi_clr}">ROI {_troi:+.1f}%</span>'
+                    f' <span style="color:#94a3b8">({_tnet:+.2f}u)</span></div>')
+
+                # Engine breakdown
+                _eng_parts = []
+                _v1w, _v1l = _mt_wlp(_v1_live)
+                if _v1w + _v1l > 0:
+                    _v1r, _ = _mt_roi(_v1_live)
+                    _eng_parts.append(f"V1: {_v1w}-{_v1l} ({_v1r:+.1f}%)")
+                _f5w, _f5l = _mt_wlp(_mlb_tab_f5)
+                if _f5w + _f5l > 0:
+                    _f5r, _ = _mt_roi(_mlb_tab_f5)
+                    _eng_parts.append(f"F5: {_f5w}-{_f5l} ({_f5r:+.1f}%)")
+                _rlw, _rll = _mt_wlp(_mlb_tab_rl)
+                if _rlw + _rll > 0:
+                    _rlr, _ = _mt_roi(_mlb_tab_rl)
+                    _eng_parts.append(f"RL: {_rlw}-{_rll} ({_rlr:+.1f}%)")
+                if _eng_parts:
+                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:2px">'
+                            f'{" | ".join(_eng_parts)}</div>')
+
+                # Hard stop monitor (V1 live only)
+                _v1n = _v1w + _v1l
+                _v1roi, _ = _mt_roi(_v1_live) if _v1n > 0 else (0.0, 0.0)
+                _hs_clr = "#4ade80" if _v1roi > 0 else "#fbbf24" if _v1roi > -4 else "#f87171"
+                st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                        f'V1 hard stop: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span>'
+                        f' / \u22128.0% threshold | {_v1n}/50 signals</div>')
+
+            # Shadow monitor
+            if _v1_shadow:
+                _shw, _shl = _mt_wlp(_v1_shadow)
+                _shn = _shw + _shl
+                if _shn > 0:
+                    _shroi, _shnet = _mt_roi(_v1_shadow)
+                    st.html(
+                        f'<div style="font-size:0.68em;color:#6b7280;margin-top:4px;'
+                        f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #333">'
+                        f'Shadow (BASE_HIGH, S12_HIGH): '
+                        f'{_shw}-{_shl} | {_shroi:+.1f}% ROI | {_shnet:+.2f}u'
+                        f'</div>')
 
             # Recent results table
             if os.path.exists(_sim_signals_path):
@@ -3910,66 +3941,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 else:
                     pass  # Status shown in consolidated panel above
 
-            # Today's F5 signals now shown on unified game cards above
-
-            # F5 season performance
-            if os.path.exists(_f5_perf_path):
-                import json as _json_f5p
-                with open(_f5_perf_path) as _f5pf:
-                    _f5_perf = _json_f5p.load(_f5pf)
-                if not _f5_perf.get("insufficient_data"):
-                    _f5_std = _f5_perf.get("season_to_date", {})
-                    _f5_l25 = _f5_perf.get("last_25", {})
-                    _f5_l50 = _f5_perf.get("last_50", {})
-                    _f5_parts = []
-                    for _f5_lbl, _f5_w in [("STD", _f5_std), ("L25", _f5_l25), ("L50", _f5_l50)]:
-                        if _f5_w.get("n", 0) >= 10:
-                            _f5_parts.append(f"{_f5_lbl}: {_f5_w['n']}sig "
-                                             f"{_f5_w['win_rate']:.0f}% {_f5_w['roi']:+.1f}%")
-                        else:
-                            _f5_parts.append(f"{_f5_lbl}: insufficient")
-                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:2px">'
-                            f'\U0001f4ca F5 Engine: {" | ".join(_f5_parts)}</div>')
-
-                    # F5 hard stop monitor
-                    _f5_n = _f5_std.get("n", 0)
-                    _f5_roi = _f5_std.get("roi", 0)
-                    _f5_roi_clr = ("#4ade80" if (_f5_roi or 0) > 0
-                                   else "#fbbf24" if (_f5_roi or 0) > -4
-                                   else "#f87171")
-                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:2px">'
-                            f'F5 hard stop: <span style="color:{_f5_roi_clr}">'
-                            f'{_f5_roi or 0:+.1f}%</span> / \u22128.0% threshold | '
-                            f'{_f5_n}/50 signals</div>')
-
-                    # Side breakdown
-                    _f5_sides = _f5_perf.get("by_side", {}).get("season_to_date", {})
-                    _f5_u = _f5_sides.get("under", {})
-                    _f5_o = _f5_sides.get("over", {})
-                    _f5_side_parts = []
-                    if _f5_u.get("insufficient"):
-                        _f5_side_parts.append(f"Under: {_f5_u.get('n', 0)}sig (insuf)")
-                    elif _f5_u.get("n", 0) >= 5:
-                        _f5_side_parts.append(f"Under: {_f5_u['n']}sig "
-                                              f"{_f5_u['win_rate']:.0f}% {_f5_u['roi']:+.1f}%")
-                    if _f5_o.get("insufficient"):
-                        _f5_side_parts.append(f"Over: {_f5_o.get('n', 0)}sig (insuf)")
-                    elif _f5_o.get("n", 0) >= 5:
-                        _f5_side_parts.append(f"Over: {_f5_o['n']}sig "
-                                              f"{_f5_o['win_rate']:.0f}% {_f5_o['roi']:+.1f}%")
-                    if _f5_side_parts:
-                        st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:2px">'
-                                f'{" | ".join(_f5_side_parts)}</div>')
-
-                    # CLV summary
-                    _f5_clv = _f5_perf.get("clv", {})
-                    if _f5_clv.get("n_clv", 0) >= 10:
-                        st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
-                                f'F5 CLV: {_f5_clv["avg_f5_clv_signed"]:+.3f} avg | '
-                                f'{_f5_clv["pct_positive_f5_clv_signed"]:.0f}% positive</div>')
-                    else:
-                        st.html('<div style="font-size:0.68em;color:#4b5563;margin-bottom:6px">'
-                                'F5 CLV pending</div>')
+            # F5 performance now shown in unified block above
 
             # F5 recent results
             if os.path.exists(_f5_signals_path):
@@ -4041,36 +4013,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 else:
                     pass  # Status shown in consolidated panel above
 
-            # Today's F5 RL signals now shown on unified game cards above
-
-            # Performance
-            if os.path.exists(_rl_perf_path):
-                import json as _json_rlp
-                with open(_rl_perf_path) as _rlpf:
-                    _rl_perf = _json_rlp.load(_rlpf)
-                if not _rl_perf.get("insufficient_data"):
-                    _rl_std = _rl_perf.get("season_to_date", {})
-                    _rl_l25 = _rl_perf.get("last_25", {})
-                    _rl_parts = []
-                    for _rl_lbl, _rl_w in [("STD", _rl_std), ("L25", _rl_l25)]:
-                        if _rl_w.get("n", 0) >= 5:
-                            _rl_parts.append(f"{_rl_lbl}: {_rl_w['n']}sig "
-                                             f"{_rl_w['win_rate']:.0f}% {_rl_w['roi']:+.1f}%")
-                        else:
-                            _rl_parts.append(f"{_rl_lbl}: insufficient")
-                    st.html(f'<div style="font-size:0.72em;color:#94a3b8;margin-bottom:2px">'
-                            f'\U0001f4ca F5 RL: {" | ".join(_rl_parts)}</div>')
-
-                    # Hard stop monitor
-                    _rl_n = _rl_std.get("n", 0)
-                    _rl_roi = _rl_std.get("roi", 0)
-                    _rl_clr = ("#4ade80" if (_rl_roi or 0) > 0
-                               else "#fbbf24" if (_rl_roi or 0) > -5
-                               else "#f87171")
-                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
-                            f'F5 RL hard stop: <span style="color:{_rl_clr}">'
-                            f'{_rl_roi or 0:+.1f}%</span> / \u221210.0% threshold | '
-                            f'{_rl_n}/40 signals</div>')
+            # F5 RL performance now shown in unified block above
 
             # Recent results
             if os.path.exists(_rl_signals_path):
