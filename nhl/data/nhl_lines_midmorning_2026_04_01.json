@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "902c8f6ff45c6855541ed7cef351aed8",
+    "game_date": "2026-04-01",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Vancouver Canucks",
+    "commence_time": "2026-04-02T00:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": -111,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-01T13:25:02.834832+00:00"
+  },
+  {
+    "game_id": "96ceffc5fa63fb301b4128bb29041f01",
+    "game_date": "2026-04-01",
+    "sport": "NHL",
+    "home_team": "San Jose Sharks",
+    "away_team": "Anaheim Ducks",
+    "commence_time": "2026-04-02T01:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": -129,
+    "under_price": 115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-01T13:25:02.834832+00:00"
+  },
+  {
+    "game_id": "643d656ddcc5756af5e6115f9f134a28",
+    "game_date": "2026-04-01",
+    "sport": "NHL",
+    "home_team": "Los Angeles Kings",
+    "away_team": "St Louis Blues",
+    "commence_time": "2026-04-02T01:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 5.5,
+    "over_price": -102,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-01T13:25:02.834832+00:00"
+  }
+]
