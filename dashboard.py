@@ -5603,16 +5603,22 @@ def _render_tracker_tab() -> None:
     # Last updated timestamp
     _tracker_ts = ""
     try:
+        from zoneinfo import ZoneInfo
+        _et = ZoneInfo("America/New_York")
         _perf_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "rolling_performance_2026.json")
         if os.path.exists(_perf_path):
             with open(_perf_path) as _f:
                 _perf = _tj.load(_f)
             _ts_raw = _perf.get("last_updated") or _perf.get("generated_at")
             if _ts_raw:
-                _tracker_ts = _tdt.fromisoformat(_ts_raw.replace("Z", "+00:00")).strftime("%b %-d, %Y %-I:%M %p UTC")
+                _utc_dt = _tdt.fromisoformat(_ts_raw.replace("Z", "+00:00"))
+                _et_dt = _utc_dt.astimezone(_et)
+                _tracker_ts = _et_dt.strftime("%b %-d, %Y %-I:%M %p ET")
         if not _tracker_ts:
             _mtime = os.path.getmtime(_perf_path)
-            _tracker_ts = _tdt.fromtimestamp(_mtime).strftime("%b %-d, %Y %-I:%M %p UTC")
+            _utc_dt = _tdt.fromtimestamp(_mtime, tz=ZoneInfo("UTC"))
+            _et_dt = _utc_dt.astimezone(_et)
+            _tracker_ts = _et_dt.strftime("%b %-d, %Y %-I:%M %p ET")
     except Exception:
         pass
 
