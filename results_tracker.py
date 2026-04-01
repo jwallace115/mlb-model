@@ -258,8 +258,28 @@ def grade_parlays_for_date(game_date: str) -> int:
 
 
 def fetch_final_score(game_pk: int) -> dict | None:
-    """Pull the final linescore from the MLB Stats API."""
+    """Pull the final linescore from the MLB Stats API.
+
+    Only returns scores for games with abstractGameState == 'Final'.
+    Returns None for games that are Preview, In Progress, or any non-final state.
+    """
     try:
+        # Check game status first via schedule endpoint (lightweight)
+        sched_url = f"{MLB_STATS_API}/schedule"
+        sched_resp = requests.get(sched_url, params={"gamePk": game_pk}, timeout=10)
+        sched_resp.raise_for_status()
+        sched_data = sched_resp.json()
+        game_status = None
+        for d in sched_data.get("dates", []):
+            for g in d.get("games", []):
+                if g.get("gamePk") == game_pk:
+                    game_status = g.get("status", {}).get("abstractGameState")
+                    break
+
+        if game_status != "Final":
+            logger.info(f"  game_pk={game_pk}: status={game_status} — skipping (not final)")
+            return None
+
         url = f"{MLB_STATS_API}/game/{game_pk}/linescore"
         resp = requests.get(url, timeout=15)
         resp.raise_for_status()
@@ -270,7 +290,15 @@ def fetch_final_score(game_pk: int) -> dict | None:
         if home_runs is None or away_runs is None:
             return None
 
+        total = float(home_runs + away_runs)
+
+        # Safety check: reject 0-0 scores unless game actually had 0 runs
+        # (extremely rare but possible — e.g. suspended game)
         innings = data.get("innings", [])
+        if total == 0.0 and len(innings) < 5:
+            logger.warning(f"  game_pk={game_pk}: 0-0 score with {len(innings)} innings — rejecting")
+            return None
+
         f5_total = sum(
             (inn.get("home", {}).get("runs") or 0) +
             (inn.get("away", {}).get("runs") or 0)
@@ -278,7 +306,7 @@ def fetch_final_score(game_pk: int) -> dict | None:
         )
 
         return {
-            "total":     float(home_runs + away_runs),
+            "total":     total,
             "f5_total":  float(f5_total),
             "home_runs": home_runs,
             "away_runs": away_runs,
