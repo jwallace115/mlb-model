@@ -696,6 +696,38 @@ def _conf_badge(conf: str) -> str:
     return f'<span class="conf-badge conf-{conf}">{conf.lower()}</span>'
 
 
+def _line_movement_html(current_line, open_total, signal_direction=None):
+    """Render a small line-movement indicator (↑0.5 / ↓0.5).
+
+    Args:
+        current_line: the displayed line (HR override if active, else API line)
+        open_total: the 2 AM opening snapshot line (None if unavailable)
+        signal_direction: "UNDER", "OVER", or None — determines green vs grey coloring
+
+    Returns HTML string or "" if no movement or data missing.
+    """
+    if open_total is None or current_line is None:
+        return ""
+    try:
+        mv = round(float(current_line) - float(open_total), 1)
+    except (TypeError, ValueError):
+        return ""
+    if mv == 0:
+        return ""
+    arrow = "\u2191" if mv > 0 else "\u2193"  # ↑ or ↓
+    # Determine if movement is favorable
+    sd = (signal_direction or "").upper()
+    if sd == "UNDER":
+        favorable = mv < 0  # line dropped = good for under
+    elif sd == "OVER":
+        favorable = mv > 0  # line rose = good for over
+    else:
+        favorable = False
+    color = "#22c55e" if favorable else "#6b7280"  # green or grey
+    return (f' <span style="font-size:0.78em;color:{color};font-weight:500">'
+            f'{arrow}{abs(mv):.1f}</span>')
+
+
 def _proj_row_html(proj: dict, fe: dict, f5e: dict, sim_info: dict = None) -> str:
     full    = proj["proj_total_full"]
     line    = fe.get("consensus")
@@ -966,18 +998,19 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             _hr_ov = _load_hr_overrides(_gdate_sig)
             if stype == "v1" and line is not None:
                 _hr_fg = _hr_ov.get((_gpk_sig, "full_game"))
-                if _hr_fg is not None:
-                    _right_line = f'<span style="font-size:0.82em;color:#4ade80;font-weight:400">O/U {float(_hr_fg):.1f}</span>'
-                else:
-                    _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(line):.1f}</span>'
+                _display_ln = float(_hr_fg) if _hr_fg is not None else float(line)
+                _ln_color = "#4ade80" if _hr_fg is not None else "#94a3b8"
+                _lm_html = _line_movement_html(_display_ln, sig.get("open_line"), "UNDER")
+                _right_line = f'<span style="font-size:0.82em;color:{_ln_color};font-weight:400">O/U {_display_ln:.1f}{_lm_html}</span>'
             elif stype in ("f5_under", "f5_over"):
                 _f5_ln = sig.get("f5_line")
                 if _f5_ln is not None:
                     _hr_f5 = _hr_ov.get((_gpk_sig, "f5_total"))
-                    if _hr_f5 is not None:
-                        _right_line = f'<span style="font-size:0.82em;color:#4ade80;font-weight:400">O/U {float(_hr_f5):.1f}</span>'
-                    else:
-                        _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">O/U {float(_f5_ln):.1f}</span>'
+                    _display_f5 = float(_hr_f5) if _hr_f5 is not None else float(_f5_ln)
+                    _f5_color = "#4ade80" if _hr_f5 is not None else "#94a3b8"
+                    _f5_dir = "UNDER" if stype == "f5_under" else "OVER"
+                    _lm_f5 = _line_movement_html(_display_f5, sig.get("open_line"), _f5_dir)
+                    _right_line = f'<span style="font-size:0.82em;color:{_f5_color};font-weight:400">O/U {_display_f5:.1f}{_lm_f5}</span>'
             elif stype == "f5_rl":
                 _right_line = f'<span style="font-size:0.82em;color:#94a3b8;font-weight:400">-0.5</span>'
 
@@ -1465,8 +1498,9 @@ def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
     ecls      = "edge-pos" if (edge or 0) > 0 else "edge-neg"
     lam_str   = f"{lam:.1f}" if lam is not None else "\u2014"
     line_str  = str(line) if line is not None else "\u2014"
+    _nhl_lm = _line_movement_html(line, s.get("open_total"), side) if line is not None else ""
     stats_parts = [
-        f'<span class="proj-label">Line</span> <span class="proj-val">{line_str}</span>',
+        f'<span class="proj-label">Line</span> <span class="proj-val">{line_str}{_nhl_lm}</span>',
         f'<span class="proj-label">Edge</span> <span class="{ecls}">{edge_pp}</span>',
         f'<span class="proj-label">Model</span> <span class="proj-val">{lam_str}</span>',
         f'<span class="proj-label">Vol</span> <span class="proj-val">{vol}</span>',
@@ -1538,6 +1572,26 @@ def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
 
 def _render_nhl_tab() -> None:
     nhl = load_nhl_results()
+
+    # Inject open_total from 2 AM snapshot into each signal for line movement display
+    if nhl:
+        try:
+            _nhl_gdate = nhl.get("game_date", "")
+            _nhl_open_path = os.path.join(os.path.dirname(__file__), "nhl", "data",
+                                           f"nhl_lines_open_{_nhl_gdate.replace('-','_')}.json")
+            if os.path.exists(_nhl_open_path):
+                with open(_nhl_open_path) as _f:
+                    _nhl_open_snaps = json.load(_f)
+                _nhl_open_map = {}
+                for _s in _nhl_open_snaps:
+                    if _s.get("snapshot_type") == "open":
+                        _nhl_open_map[(_s.get("home_team",""), _s.get("away_team",""))] = _s.get("total_line")
+                for _sig_list in [nhl.get("signals", [])]:
+                    for _s in _sig_list:
+                        _k = (_s.get("home_team",""), _s.get("away_team",""))
+                        _s["open_total"] = _nhl_open_map.get(_k)
+        except Exception:
+            pass
 
     # ── header ────────────────────────────────────────────────────────────────
     col_title, col_btn = st.columns([5, 1])
@@ -2665,7 +2719,9 @@ def _render_nba_card(g: dict) -> None:
             po_label = f"{po_label} (Finals −0.25u)"
         proj_parts.append(f'<span style="color:{po_color};font-weight:600">🏆 {po_label}</span>')
         if line is not None:
-            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}</span>')
+            _nba_sig_dir = signal_dir if signal_dir else lean
+            _nba_lm = _line_movement_html(line, g.get("open_total"), _nba_sig_dir)
+            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}{_nba_lm}</span>')
         sgn = g.get("series_game_number")
         if sgn:
             proj_parts.append(f'<span class="proj-label">Game</span> <span class="proj-val">{sgn}</span>')
@@ -2677,7 +2733,9 @@ def _render_nba_card(g: dict) -> None:
         tc = tier_colors.get(bet_tier, "#a3a3a3")
         proj_parts.append(f'<span style="color:{tc};font-weight:600">{tl}</span>')
         if line is not None:
-            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}</span>')
+            _nba_sig_dir = signal_dir if signal_dir else lean
+            _nba_lm = _line_movement_html(line, g.get("open_total"), _nba_sig_dir)
+            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}{_nba_lm}</span>')
         # Show which signals fire
         signals = []
         if g.get("venue_direction"): signals.append("Venue")
@@ -2689,7 +2747,8 @@ def _render_nba_card(g: dict) -> None:
     else:
         # Non-play — show line only for reference, no model predictions
         if line is not None:
-            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}</span>')
+            _nba_lm = _line_movement_html(line, g.get("open_total"), lean)
+            proj_parts.append(f'<span class="proj-label">Line</span> <span class="proj-val">{line:.1f}{_nba_lm}</span>')
         else:
             proj_parts.append('<span class="proj-label">No line yet</span>')
 
@@ -2919,6 +2978,25 @@ def _render_nba_card(g: dict) -> None:
 
 def _render_nba_tab() -> None:
     nba = load_nba_results()
+
+    # Inject open_total from 2 AM snapshot into each game for line movement display
+    if nba:
+        try:
+            _nba_gdate = nba.get("game_date", "")
+            _nba_open_path = os.path.join(os.path.dirname(__file__), "nba", "data",
+                                           f"nba_lines_open_{_nba_gdate.replace('-','_')}.json")
+            if os.path.exists(_nba_open_path):
+                with open(_nba_open_path) as _f:
+                    _nba_open_snaps = json.load(_f)
+                _nba_open_map = {}
+                for _s in _nba_open_snaps:
+                    if _s.get("snapshot_type") == "open":
+                        _nba_open_map[(_s.get("home_team",""), _s.get("away_team",""))] = _s.get("total_line")
+                for _g in nba.get("plays", []) + nba.get("no_plays", []):
+                    _k = (_g.get("home_team",""), _g.get("away_team",""))
+                    _g["open_total"] = _nba_open_map.get(_k)
+        except Exception:
+            pass
 
     # ── header row ────────────────────────────────────────────────────────────
     col_title, col_btn = st.columns([5, 1])
@@ -4109,6 +4187,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                 _info["st02_active"] = bool(_r.get("st02_overlay_active", 0))
                                 _info["p_under"] = float(_r.get("raw_p_under", 0))
                                 _info["line"] = _r.get("line_at_signal_time")
+                                _info["open_line"] = _r.get("open_line")
                                 _info["shadow_only"] = bool(_r.get("shadow_only", False))
                                 _info["signal_class"] = _r.get("signal_class", "")
                             elif sig_type in ("f5_under", "f5_over"):
