@@ -294,7 +294,49 @@ def run_confirm(game_date: str) -> None:
     else:
         logger.info("CONFIRM 7AM PASS COMPLETE — official signals pushed")
 
-    # Step 5: Post-run cache quality verification
+    # Step 5: Enrich signals with line movement (open vs current)
+    try:
+        open_snap_path = PROJECT_ROOT / "mlb_sim" / "data" / "line_snapshots_open_2026.json"
+        signals_path = PROJECT_ROOT / "mlb_sim" / "logs" / "signals_2026.json"
+
+        if open_snap_path.exists() and signals_path.exists():
+            with open(open_snap_path) as f:
+                open_snaps = json.load(f)
+            with open(signals_path) as f:
+                signals = json.load(f)
+
+            # Build lookup: (home_team, away_team, game_date) → open line
+            open_lookup = {}
+            for snap in open_snaps:
+                if snap.get("snapshot_type") == "open" and snap.get("game_date") == game_date:
+                    key = (snap.get("home_team", ""), snap.get("away_team", ""))
+                    open_lookup[key] = snap.get("total_line")
+
+            enriched = 0
+            for sig in signals:
+                if sig.get("date") != game_date:
+                    continue
+                key = (sig.get("home_team", ""), sig.get("away_team", ""))
+                open_line = open_lookup.get(key)
+                current_line = sig.get("line_at_signal_time")
+                if open_line is not None and current_line is not None:
+                    sig["open_line"] = open_line
+                    sig["line_movement"] = round(current_line - open_line, 1)
+                    enriched += 1
+
+            if enriched > 0:
+                with open(signals_path, "w") as f:
+                    json.dump(signals, f, indent=2)
+                logger.info(f"Line movement enriched: {enriched} signals "
+                            f"(positive = line moved up, negative = line moved down)")
+            else:
+                logger.info("Line movement: no open snapshots matched today's signals")
+        else:
+            logger.info("Line movement: snapshot or signal file not found — skipping")
+    except Exception as e:
+        logger.warning(f"Line movement enrichment failed (non-fatal): {e}")
+
+    # Step 6: Post-run cache quality verification
     final_cache = check_cache_quality(game_date)
     logger.info(f"Final cache: offense={final_cache['offense_teams']} teams, "
                 f"pitchers={final_cache['pitcher_count']} "
