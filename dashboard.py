@@ -4938,7 +4938,7 @@ def _render_home_tab() -> None:
 
     _windows = [
         ("\u26be MLB",     "7:00 AM ET",     "Confirm run complete, final signals locked",   "\u26be MLB" in _active_sports),
-        ("\U0001f3c0 NBA", "6:30 PM ET",     "Evening run captures late injury news",        "\U0001f3c0 NBA" in _active_sports),
+        ("\U0001f3c0 NBA", "9:30 AM / 6:30 PM", "Morning run actionable. Evening captures late injuries.", "\U0001f3c0 NBA" in _active_sports),
         ("\U0001f3d2 NHL", "5:00 PM ET",     "Goalies confirmed, evening pipeline complete", "\U0001f3d2 NHL" in _active_sports),
         ("\u26bd Soccer",  "10:00 AM ET",    "Daily pipeline complete",                      "\u26bd Soccer" in _active_sports),
         ("\u26f3 Golf",    "Thu 8:00 AM ET", "Close capture complete, lines finalized",      _dow in (0, 1, 3)),
@@ -5648,7 +5648,35 @@ def _render_tracker_tab() -> None:
                 net -= s
         return (round(net / risked * 100, 1), round(net, 2)) if risked > 0 else (0.0, 0.0)
 
-    def _render_sport_panel(emoji, name, ow, ol, op, roi_pct, units_net, signal_rows):
+    def _compute_movement(records, side_key="signal_side", lm_key="line_movement", cutoff_date="2026-04-01"):
+        """Compute CLV% and line movement counts from records."""
+        # CLV%: bets where clv > 0
+        clv_pos = sum(1 for r in records if (r.get("clv") or r.get("closing_line_value") or 0) > 0)
+        clv_total = sum(1 for r in records if r.get("clv") is not None or r.get("closing_line_value") is not None)
+        clv_pct = round(clv_pos / clv_total * 100, 1) if clv_total >= 10 else None
+
+        # Line movement (only for bets from April 1 onward)
+        moved_with = 0; moved_against = 0; neutral = 0
+        for r in records:
+            d = r.get("date") or r.get("game_date") or ""
+            if d < cutoff_date:
+                continue
+            lm = r.get(lm_key)
+            if lm is None or not isinstance(lm, (int, float)):
+                continue
+            side = (r.get(side_key) or "").upper()
+            if side == "UNDER":
+                if lm < -0.1: moved_with += 1
+                elif lm > 0.1: moved_against += 1
+                else: neutral += 1
+            elif side == "OVER":
+                if lm > 0.1: moved_with += 1
+                elif lm < -0.1: moved_against += 1
+                else: neutral += 1
+        return clv_pct, moved_with, moved_against, neutral
+
+    def _render_sport_panel(emoji, name, ow, ol, op, roi_pct, units_net, signal_rows,
+                            clv_pct=None, moved_with=0, moved_against=0, neutral=0):
         n = ow + ol + op
         rec_str = f"{ow}-{ol}-{op}"
         roi_color = "#22c55e" if roi_pct > 0 else ("#f87171" if roi_pct < 0 else "#94a3b8")
@@ -5663,6 +5691,19 @@ def _render_tracker_tab() -> None:
                 f'</div>')
             return
 
+        # CLV + movement metrics row
+        _clv_str = f"{clv_pct:.1f}%" if clv_pct is not None else "N/A"
+        _clv_color = "#22c55e" if clv_pct is not None and clv_pct > 50 else (
+            "#f87171" if clv_pct is not None and clv_pct < 50 else "#94a3b8")
+        _mv_total = moved_with + moved_against + neutral
+        _mv_html = ""
+        if _mv_total > 0:
+            _mv_html = (
+                f'<span style="font-size:0.80em;color:#94a3b8;margin-left:8px">'
+                f'Lines: <span style="color:#22c55e">\u2713{moved_with}</span>'
+                f' <span style="color:#f87171">\u2717{moved_against}</span>'
+                f' <span style="color:#64748b">\u2014{neutral}</span></span>')
+
         st.html(
             f'<div style="background:#1e1e2e;border:1px solid #333;border-radius:8px;'
             f'padding:12px 16px;margin-bottom:2px">'
@@ -5671,6 +5712,8 @@ def _render_tracker_tab() -> None:
             f'<span style="font-size:0.9em;color:#e2e8f0;font-weight:600">{rec_str}</span>'
             f'<span style="font-size:0.85em;color:{roi_color};font-weight:600">ROI: {roi_pct:+.1f}%</span>'
             f'<span style="font-size:0.85em;color:{units_color}">Units: {units_net:+.2f}</span>'
+            f'<span style="font-size:0.80em;color:{_clv_color}">CLV: {_clv_str}</span>'
+            f'{_mv_html}'
             f'</div></div>')
 
         if signal_rows:
@@ -5748,7 +5791,9 @@ def _render_tracker_tab() -> None:
     all_mlb = mlb_v1 + mlb_f5 + mlb_rl
     mw, ml, mp = _wlp(all_mlb)
     m_roi, m_net = _roi_from_units(all_mlb)
-    _render_sport_panel("\u26be", "MLB", mw, ml, mp, m_roi, m_net, mlb_signals)
+    _m_clv, _m_mw, _m_ma, _m_mn = _compute_movement(all_mlb, side_key="signal_side")
+    _render_sport_panel("\u26be", "MLB", mw, ml, mp, m_roi, m_net, mlb_signals,
+                        clv_pct=_m_clv, moved_with=_m_mw, moved_against=_m_ma, neutral=_m_mn)
 
     # ── NBA ──
     nba_records = []
@@ -5786,7 +5831,12 @@ def _render_tracker_tab() -> None:
         n_roi = round(n_net / n_risked * 100, 1) if n_risked > 0 else 0.0
     else:
         n_roi, n_net = _roi_flat(nw, nl, np_)
-    _render_sport_panel("\U0001f3c0", "NBA", nw, nl, np_, n_roi, round(n_net, 2), nba_signals)
+    # NBA signal_side is stored as "lean" in signal log
+    _nba_mv_records = [{"signal_side": r.get("lean", "").upper(), "line_movement": r.get("line_movement"),
+                         "clv": r.get("clv"), "game_date": r.get("game_date")} for r in nba_records]
+    _n_clv, _n_mw, _n_ma, _n_mn = _compute_movement(_nba_mv_records)
+    _render_sport_panel("\U0001f3c0", "NBA", nw, nl, np_, n_roi, round(n_net, 2), nba_signals,
+                        clv_pct=_n_clv, moved_with=_n_mw, moved_against=_n_ma, neutral=_n_mn)
 
     # ── NHL ──
     nhl_records = []
@@ -5813,7 +5863,9 @@ def _render_tracker_tab() -> None:
         nhl_signals.append({"name": f"{tier} tier", "w": tw, "l": tl, "p": tp, "roi": tr})
 
     h_roi, h_net = _nhl_roi_units(nhl_records)
-    _render_sport_panel("\U0001f3d2", "NHL", hw, hl_, hp, h_roi, h_net, nhl_signals)
+    _h_clv, _h_mw, _h_ma, _h_mn = _compute_movement(nhl_records)
+    _render_sport_panel("\U0001f3d2", "NHL", hw, hl_, hp, h_roi, h_net, nhl_signals,
+                        clv_pct=_h_clv, moved_with=_h_mw, moved_against=_h_ma, neutral=_h_mn)
 
     # ── Soccer ──
     soc_records = []
@@ -5839,7 +5891,9 @@ def _render_tracker_tab() -> None:
         soc_signals.append({"name": f"{tier} tier", "w": tw, "l": tl, "p": tp, "roi": tr})
 
     s_roi, s_net = _roi_flat(sw_, sl__, sp_)
-    _render_sport_panel("\u26bd", "Soccer", sw_, sl__, sp_, s_roi, s_net, soc_signals)
+    _s_clv, _s_mw, _s_ma, _s_mn = _compute_movement(soc_records)
+    _render_sport_panel("\u26bd", "Soccer", sw_, sl__, sp_, s_roi, s_net, soc_signals,
+                        clv_pct=_s_clv, moved_with=_s_mw, moved_against=_s_ma, neutral=_s_mn)
 
     # ── Golf ──
     golf_records = []
@@ -5864,6 +5918,11 @@ def _render_tracker_tab() -> None:
 
     g_roi, g_net = _roi_flat(gw, gl, gp)
     _render_sport_panel("\u26f3", "Golf", gw, gl, gp, g_roi, g_net, golf_signals)
+
+    st.html('<div style="font-size:0.70em;color:#4b5563;margin-top:8px;font-style:italic">'
+            'CLV > 50% = making correct bets regardless of short-term results. '
+            'Lines: \u2713 = moved with signal, \u2717 = moved against, \u2014 = neutral. '
+            'Movement tracked from Apr 1, 2026.</div>')
 
 
 main()
