@@ -5795,9 +5795,13 @@ def _render_tracker_tab() -> None:
     mlb_rl_pre = [r for r in mlb_rl_all if (r.get("date", "") or "") < _MLB_RESTRUCTURE]
 
     # ── SECTION 1: Live Production (Mar 30+) ──
+    # Split V1 into live (shadow_only=False) and shadow (shadow_only=True)
+    mlb_v1_live = [r for r in mlb_v1 if not r.get("shadow_only")]
+    mlb_v1_shadow = [r for r in mlb_v1 if r.get("shadow_only")]
+
     mlb_signals = []
-    v1_w, v1_l, v1_p = _wlp(mlb_v1)
-    v1_roi, v1_net = _roi_from_units(mlb_v1)
+    v1_w, v1_l, v1_p = _wlp(mlb_v1_live)
+    v1_roi, v1_net = _roi_from_units(mlb_v1_live)
     mlb_signals.append({"name": "V1 UNDER", "w": v1_w, "l": v1_l, "p": v1_p, "roi": v1_roi})
 
     f5u = [r for r in mlb_f5 if r.get("f5_signal_side") == "UNDER"]
@@ -5811,27 +5815,50 @@ def _render_tracker_tab() -> None:
 
     rl_w, rl_l, rl_p = _wlp(mlb_rl)
     rl_roi, _ = _roi_from_units(mlb_rl)
-    mlb_signals.append({"name": "Signal B", "w": rl_w, "l": rl_l, "p": rl_p, "roi": rl_roi})
+    mlb_signals.append({"name": "F5 Run Line", "w": rl_w, "l": rl_l, "p": rl_p, "roi": rl_roi})
 
-    s12 = [r for r in mlb_v1 if r.get("s12_overlay_active")]
+    s12 = [r for r in mlb_v1_live if r.get("s12_overlay_active")]
     s12_w, s12_l, s12_p = _wlp(s12)
     s12_roi, _ = _roi_from_units(s12)
     mlb_signals.append({"name": "S12 overlay", "w": s12_w, "l": s12_l, "p": s12_p, "roi": s12_roi})
 
-    p09 = [r for r in mlb_v1 if r.get("p09_overlay_active")]
+    p09 = [r for r in mlb_v1_live if r.get("p09_overlay_active")]
     p09_w, p09_l, p09_p = _wlp(p09)
     p09_roi, _ = _roi_from_units(p09)
     mlb_signals.append({"name": "P09 overlay", "w": p09_w, "l": p09_l, "p": p09_p, "roi": p09_roi})
 
-    all_mlb = mlb_v1 + mlb_f5 + mlb_rl
-    mw, ml, mp = _wlp(all_mlb)
-    m_roi, m_net = _roi_from_units(all_mlb)
-    _m_clv, _m_mw, _m_ma, _m_mn = _compute_movement(all_mlb, side_key="signal_side")
+    # Combined record: live V1 + all F5 + all RL (excludes shadow V1)
+    all_mlb_live = mlb_v1_live + mlb_f5 + mlb_rl
+    mw, ml, mp = _wlp(all_mlb_live)
+    m_roi, m_net = _roi_from_units(all_mlb_live)
+    _m_clv, _m_mw, _m_ma, _m_mn = _compute_movement(all_mlb_live, side_key="signal_side")
 
     st.html('<div style="font-size:0.72em;color:#64748b;margin-bottom:2px">'
             'Live Production \u2014 Mar 30, 2026 \u2192 Today</div>')
     _render_sport_panel("\u26be", "MLB", mw, ml, mp, m_roi, m_net, mlb_signals,
                         clv_pct=_m_clv, moved_with=_m_mw, moved_against=_m_ma, neutral=_m_mn)
+
+    # ── Shadow observation (BASE_HIGH, S12_HIGH — not traded live) ──
+    if mlb_v1_shadow:
+        sh_w, sh_l, sh_p = _wlp(mlb_v1_shadow)
+        sh_roi, sh_net = _roi_from_units(mlb_v1_shadow)
+        sh_n = sh_w + sh_l + sh_p
+        if sh_n > 0:
+            _shroi_color = "#22c55e" if sh_roi > 0 else ("#f87171" if sh_roi < 0 else "#64748b")
+            with st.expander(f"Shadow observation ({sh_n} bets \u2014 not traded live)", expanded=False):
+                st.html(
+                    f'<div style="background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;'
+                    f'padding:10px 14px;margin-bottom:4px">'
+                    f'<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">'
+                    f'<span style="font-size:0.88em;color:#64748b;font-weight:600">'
+                    f'V1 Shadow \u2014 BASE_HIGH + S12_HIGH</span>'
+                    f'<span style="font-size:0.82em;color:#94a3b8">{sh_w}-{sh_l}-{sh_p}</span>'
+                    f'<span style="font-size:0.82em;color:{_shroi_color}">ROI: {sh_roi:+.1f}%</span>'
+                    f'<span style="font-size:0.82em;color:#94a3b8">Units: {sh_net:+.2f}</span>'
+                    f'</div>'
+                    f'<div style="font-size:0.70em;color:#4b5563;margin-top:6px;font-style:italic">'
+                    f'Shadow signals lack P09 confirmation. Tracked for validation \u2014 not included in live record.</div>'
+                    f'</div>')
 
     # ── SECTION 2: Opening Week (pre-restructure) — collapsed ──
     all_pre = mlb_v1_pre + mlb_f5_pre + mlb_rl_pre
