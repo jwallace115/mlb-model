@@ -628,6 +628,21 @@ def run_pipeline(target_date: date) -> None:
     odds_map = fetch_nhl_odds(target_date)
     print(f"  {len(odds_map)} games with odds")
 
+    # Load open line snapshot for line movement
+    _nhl_open_lookup = {}
+    try:
+        _open_date_str = target_date.isoformat().replace("-", "_")
+        _open_path = NHL_DIR / "data" / f"nhl_lines_open_{_open_date_str}.json"
+        if _open_path.exists():
+            import json as _json_lm
+            with open(_open_path) as _f:
+                for _snap in _json_lm.load(_f):
+                    if _snap.get("snapshot_type") == "open":
+                        _nhl_open_lookup[(_snap.get("home_team",""), _snap.get("away_team",""))] = _snap.get("total_line")
+            print(f"  Open snapshot loaded: {len(_nhl_open_lookup)} games")
+    except Exception as _e:
+        print(f"  Open snapshot load failed (non-fatal): {_e}")
+
     # Process each game
     print(f"\nProcessing {len(games)} games...")
     signals = []
@@ -754,6 +769,10 @@ def run_pipeline(target_date: date) -> None:
                 "away_goalie_b2b":               feat.get("away_goalie_b2b", 0),
                 "home_b2b":                      feat.get("home_b2b", 0),
                 "away_b2b":                      feat.get("away_b2b", 0),
+                # Line movement (open snapshot vs current)
+                "open_total":                    _nhl_open_lookup.get((home, away)),
+                "line_movement":                 round(line - _nhl_open_lookup[(home, away)], 1)
+                                                 if (home, away) in _nhl_open_lookup else None,
             }
             signals.append(signal)
             print(f"    *** SIGNAL: {side}  edge={edge_val:.4f}  tier={tier}  "

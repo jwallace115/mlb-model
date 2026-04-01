@@ -1094,6 +1094,9 @@ def save_projections(game_results: list[dict], game_date: str) -> None:
             "overlay_segment":           g.get("overlay_segment"),
             # High-line UNDER shadow (observation only)
             "high_line_under_shadow":    g.get("high_line_under_shadow", False),
+            # Line movement (open snapshot vs current)
+            "open_total":                g.get("open_total"),
+            "line_movement":             g.get("line_movement"),
         })
 
     new_df = pd.DataFrame(rows)
@@ -2087,6 +2090,43 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
         send_nba_card(game_results, game_date)
     except Exception as e:
         logger.warning(f"Pushover failed (non-fatal): {e}")
+
+    # ── Step 10c: Enrich with line movement (open snapshot vs current) ───────
+    try:
+        _open_snap_date = game_date.replace("-", "_")
+        _open_snap_path = os.path.join(os.path.dirname(__file__), "data",
+                                        f"nba_lines_open_{_open_snap_date}.json")
+        if os.path.exists(_open_snap_path):
+            import json as _json_lm
+            with open(_open_snap_path) as _f:
+                _open_snaps = _json_lm.load(_f)
+            # Build lookup: (home_team, away_team) → open total_line
+            _open_lookup = {}
+            for _snap in _open_snaps:
+                if _snap.get("snapshot_type") == "open":
+                    _open_lookup[(_snap.get("home_team", ""), _snap.get("away_team", ""))] = _snap.get("total_line")
+            _lm_count = 0
+            for g in game_results:
+                _key = (g.get("home_team", ""), g.get("away_team", ""))
+                _open_total = _open_lookup.get(_key)
+                g["open_total"] = _open_total
+                _current = g.get("line")
+                if _open_total is not None and _current is not None:
+                    g["line_movement"] = round(_current - _open_total, 1)
+                    _lm_count += 1
+                else:
+                    g["line_movement"] = None
+            if _lm_count > 0:
+                logger.info(f"Line movement: {_lm_count} games enriched from open snapshot")
+        else:
+            for g in game_results:
+                g["open_total"] = None
+                g["line_movement"] = None
+    except Exception as _e:
+        logger.warning(f"Line movement enrichment failed (non-fatal): {_e}")
+        for g in game_results:
+            g.setdefault("open_total", None)
+            g.setdefault("line_movement", None)
 
     # ── Step 11: Save projections ─────────────────────────────────────────────
     save_projections(game_results, game_date)
