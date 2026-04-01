@@ -617,3 +617,22 @@ if __name__ == "__main__":
     else:
         target = args.date or (date.today() - timedelta(days=1)).isoformat()
         grade_date(target)
+
+        # Push graded results to GitHub immediately so dashboard reflects overnight grades
+        try:
+            import subprocess as _sp
+            _repo = str(Path(__file__).resolve().parent)
+            _push_files = [
+                "results.json", "season_stats.json",
+                "nba_results.json", "nhl_results.json", "soccer_results.json",
+            ]
+            for _f in _push_files:
+                _fp = os.path.join(_repo, _f)
+                if os.path.exists(_fp):
+                    _sp.run(["git", "add", "-f", _fp], cwd=_repo, check=True)
+            _sp.run(["git", "commit", "-m", f"results: {target}"],
+                    cwd=_repo, capture_output=True)
+            _sp.run(["git", "push", "origin", "main"], cwd=_repo, check=True)
+            print("  Pushed graded results to GitHub.")
+        except Exception as _e:
+            print(f"  Git push after grading failed (non-fatal): {_e}")

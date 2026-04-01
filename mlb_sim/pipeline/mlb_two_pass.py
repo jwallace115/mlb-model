@@ -237,14 +237,45 @@ def run_prelim(game_date: str) -> None:
     except Exception as e:
         logger.warning(f"Preliminary signal generation failed: {e}")
 
-    # Step 8: Push opening lines snapshot to GitHub
+    # Step 8: Tag preliminary signals with signal_status = "PRELIMINARY"
     try:
-        snap_file = str(PROJECT_ROOT / "mlb_sim" / "data" / "line_snapshots_2026.json")
-        subprocess.run(["git", "add", "-f", snap_file], cwd=str(PROJECT_ROOT), check=True)
-        subprocess.run(["git", "commit", "-m", f"prelim: opening lines {game_date}"],
+        sig_json_path = PROJECT_ROOT / "mlb_sim" / "logs" / "signals_2026.json"
+        if sig_json_path.exists():
+            with open(sig_json_path) as f:
+                all_sigs = json.load(f)
+            for s in all_sigs:
+                if s.get("date") == game_date and s.get("resolved") != 1:
+                    s["signal_status"] = "PRELIMINARY"
+            with open(sig_json_path, "w") as f:
+                json.dump(all_sigs, f, indent=2)
+            logger.info("Tagged today's signals as PRELIMINARY")
+    except Exception as e:
+        logger.warning(f"Signal tagging failed (non-fatal): {e}")
+
+    # Step 9: Push preliminary signals + overnight results to GitHub
+    try:
+        prelim_files = [
+            str(PROJECT_ROOT / "mlb_sim" / "data" / "line_snapshots_2026.json"),
+            str(PROJECT_ROOT / "mlb_sim" / "logs" / "signals_2026.json"),
+            str(PROJECT_ROOT / "mlb_sim" / "logs" / "f5_signals_2026.json"),
+            str(PROJECT_ROOT / "results.json"),
+            str(PROJECT_ROOT / "season_stats.json"),
+            str(PROJECT_ROOT / "nba_results.json"),
+            str(PROJECT_ROOT / "nhl_results.json"),
+            str(PROJECT_ROOT / "soccer_results.json"),
+        ]
+        for f in prelim_files:
+            if os.path.exists(f):
+                subprocess.run(["git", "add", "-f", f], cwd=str(PROJECT_ROOT), check=True)
+        # Also add performance tracker if it exists
+        perf_path = str(PROJECT_ROOT / "mlb_sim" / "logs" / "rolling_performance_2026.json")
+        if os.path.exists(perf_path):
+            subprocess.run(["git", "add", "-f", perf_path], cwd=str(PROJECT_ROOT), check=True)
+
+        subprocess.run(["git", "commit", "-m", f"prelim: {game_date} signals + overnight results"],
                        cwd=str(PROJECT_ROOT), check=True)
         subprocess.run(["git", "push", "origin", "main"], cwd=str(PROJECT_ROOT), check=True)
-        logger.info("Pushed opening line snapshot")
+        logger.info("Pushed preliminary signals + overnight results")
     except Exception as e:
         logger.warning(f"Git push failed (non-fatal): {e}")
 
@@ -336,7 +367,22 @@ def run_confirm(game_date: str) -> None:
     except Exception as e:
         logger.warning(f"Line movement enrichment failed (non-fatal): {e}")
 
-    # Step 6: Post-run cache quality verification
+    # Step 6: Tag signals as CONFIRMED (overrides PRELIMINARY from 2 AM)
+    try:
+        sig_json_path = PROJECT_ROOT / "mlb_sim" / "logs" / "signals_2026.json"
+        if sig_json_path.exists():
+            with open(sig_json_path) as f:
+                all_sigs = json.load(f)
+            for s in all_sigs:
+                if s.get("date") == game_date and s.get("resolved") != 1:
+                    s["signal_status"] = "CONFIRMED"
+            with open(sig_json_path, "w") as f:
+                json.dump(all_sigs, f, indent=2)
+            logger.info("Tagged today's signals as CONFIRMED")
+    except Exception as e:
+        logger.warning(f"Signal status tagging failed (non-fatal): {e}")
+
+    # Step 7: Post-run cache quality verification
     final_cache = check_cache_quality(game_date)
     logger.info(f"Final cache: offense={final_cache['offense_teams']} teams, "
                 f"pitchers={final_cache['pitcher_count']} "
