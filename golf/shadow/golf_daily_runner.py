@@ -345,8 +345,6 @@ def run(capture_type="close"):
     # ── De-vig odds (use best_odds per player, de-vig across full field) ──
     if len(odds_df) > 0 and "best_odds" in odds_df.columns and odds_df["best_odds"].notna().any():
         odds_df["raw_implied"] = odds_df["best_odds"].apply(american_to_implied)
-    elif len(odds_df) > 0:
-        print("WARNING: best_odds column missing or all-null — skipping de-vig. Edges will be null.", flush=True)
         devigged = []
         for mkt, grp in odds_df.groupby("market"):
             grp = grp.copy()
@@ -360,6 +358,8 @@ def run(capture_type="close"):
                 grp["fair_prob"] = np.nan
             devigged.append(grp)
         odds_df = pd.concat(devigged, ignore_index=True)
+    elif len(odds_df) > 0:
+        print("WARNING: best_odds column missing or all-null — skipping de-vig. Edges will be null.", flush=True)
 
     # ── Compute edges ──
     log_rows = []
