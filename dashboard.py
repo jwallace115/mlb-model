@@ -5765,25 +5765,36 @@ def _render_tracker_tab() -> None:
                 f'margin-bottom:10px;overflow:hidden">{header}{rows_html}</div>')
 
     # ── MLB ──
-    mlb_v1 = []
+    _MLB_RESTRUCTURE = "2026-03-30"  # signal class restructuring date
+
+    mlb_v1_all = []
     try:
         with open("mlb_sim/logs/signals_2026.json") as _f:
-            mlb_v1 = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
+            mlb_v1_all = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
     except Exception:
         pass
-    mlb_f5 = []
+    mlb_f5_all = []
     try:
         with open("mlb_sim/logs/f5_signals_2026.json") as _f:
-            mlb_f5 = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
+            mlb_f5_all = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
     except Exception:
         pass
-    mlb_rl = []
+    mlb_rl_all = []
     try:
         with open("mlb_sim/logs/f5_runline_2026.json") as _f:
-            mlb_rl = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
+            mlb_rl_all = [r for r in _tj.load(_f) if (r.get("date", "") or "") >= cutoff and r.get("result")]
     except Exception:
         pass
 
+    # Split: live production (Mar 30+) vs opening week (pre-restructure)
+    mlb_v1 = [r for r in mlb_v1_all if (r.get("date", "") or "") >= _MLB_RESTRUCTURE]
+    mlb_f5 = [r for r in mlb_f5_all if (r.get("date", "") or "") >= _MLB_RESTRUCTURE]
+    mlb_rl = [r for r in mlb_rl_all if (r.get("date", "") or "") >= _MLB_RESTRUCTURE]
+    mlb_v1_pre = [r for r in mlb_v1_all if (r.get("date", "") or "") < _MLB_RESTRUCTURE]
+    mlb_f5_pre = [r for r in mlb_f5_all if (r.get("date", "") or "") < _MLB_RESTRUCTURE]
+    mlb_rl_pre = [r for r in mlb_rl_all if (r.get("date", "") or "") < _MLB_RESTRUCTURE]
+
+    # ── SECTION 1: Live Production (Mar 30+) ──
     mlb_signals = []
     v1_w, v1_l, v1_p = _wlp(mlb_v1)
     v1_roi, v1_net = _roi_from_units(mlb_v1)
@@ -5816,8 +5827,34 @@ def _render_tracker_tab() -> None:
     mw, ml, mp = _wlp(all_mlb)
     m_roi, m_net = _roi_from_units(all_mlb)
     _m_clv, _m_mw, _m_ma, _m_mn = _compute_movement(all_mlb, side_key="signal_side")
+
+    st.html('<div style="font-size:0.72em;color:#64748b;margin-bottom:2px">'
+            'Live Production \u2014 Mar 30, 2026 \u2192 Today</div>')
     _render_sport_panel("\u26be", "MLB", mw, ml, mp, m_roi, m_net, mlb_signals,
                         clv_pct=_m_clv, moved_with=_m_mw, moved_against=_m_ma, neutral=_m_mn)
+
+    # ── SECTION 2: Opening Week (pre-restructure) — collapsed ──
+    all_pre = mlb_v1_pre + mlb_f5_pre + mlb_rl_pre
+    if all_pre:
+        pw, pl, pp = _wlp(all_pre)
+        p_roi, p_net = _roi_from_units(all_pre)
+        pn = pw + pl + pp
+        if pn > 0:
+            _proi_color = "#22c55e" if p_roi > 0 else ("#f87171" if p_roi < 0 else "#64748b")
+            with st.expander("Show Opening Week results (pre-restructure)", expanded=False):
+                st.html(
+                    f'<div style="background:#1a1a2e;border:1px solid #2d2d44;border-radius:6px;'
+                    f'padding:10px 14px;margin-bottom:4px">'
+                    f'<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">'
+                    f'<span style="font-size:0.88em;color:#64748b;font-weight:600">'
+                    f'Opening Week \u2014 Mar 26\u201329, 2026</span>'
+                    f'<span style="font-size:0.82em;color:#94a3b8">{pw}-{pl}-{pp}</span>'
+                    f'<span style="font-size:0.82em;color:{_proi_color}">ROI: {p_roi:+.1f}%</span>'
+                    f'<span style="font-size:0.82em;color:#94a3b8">Units: {p_net:+.2f}</span>'
+                    f'</div>'
+                    f'<div style="font-size:0.70em;color:#4b5563;margin-top:6px;font-style:italic">'
+                    f'Signal classes restructured March 30. Earlier bets shown for reference only.</div>'
+                    f'</div>')
 
     # ── NBA ──
     nba_records = []
