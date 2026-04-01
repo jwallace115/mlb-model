@@ -694,7 +694,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Chris Sale",
+    "away_sp_name": "Luis Severino"
   },
   {
     "date": "2026-04-01",
@@ -719,7 +721,9 @@
     "signal_class": "S12_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Andrew Abbott",
+    "away_sp_name": "Paul Skenes"
   },
   {
     "date": "2026-04-01",
@@ -744,7 +748,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Cristopher S\u00e1nchez",
+    "away_sp_name": "Cade Cavalli"
   },
   {
     "date": "2026-04-01",
@@ -769,7 +775,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Zac Gallen",
+    "away_sp_name": "Tarik Skubal"
   },
   {
     "date": "2026-04-01",
@@ -794,7 +802,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Noah Cameron",
+    "away_sp_name": "Joe Ryan"
   },
   {
     "date": "2026-04-01",
@@ -819,7 +829,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Yoshinobu Yamamoto",
+    "away_sp_name": "Gavin Williams"
   },
   {
     "date": "2026-04-01",
@@ -844,6 +856,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Trevor Rogers",
+    "away_sp_name": "Nathan Eovaldi"
   }
 ]
