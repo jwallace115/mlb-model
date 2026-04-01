@@ -4937,11 +4937,11 @@ def _render_home_tab() -> None:
     _active_sports = {r[0] for r in _sig_rows} if _sig_rows else set()
 
     _windows = [
-        ("\u26be MLB",     "7:00 AM ET",        "Game time",             "Final signals after confirm run",          "\u26be MLB" in _active_sports),
-        ("\U0001f3c0 NBA", "9:30 AM ET",        "30 min before tip",    "Evening run at 6:30 PM ET",                "\U0001f3c0 NBA" in _active_sports),
-        ("\U0001f3d2 NHL", "7:00 AM ET",        "30 min before puck drop", "Goalies confirmed at 5:00 PM ET",       "\U0001f3d2 NHL" in _active_sports),
-        ("\u26bd Soccer",  "10:00 AM ET",       "Before kickoff",        "Bundesliga only",                          "\u26bd Soccer" in _active_sports),
-        ("\u26f3 Golf",    "Tue 9 AM ET",       "Thursday morning",      "Lines refresh daily 7 AM ET",              _dow in (0, 1, 3)),  # Mon, Tue, Thu
+        ("\u26be MLB",     "7:00 AM ET",     "Confirm run complete, final signals locked",   "\u26be MLB" in _active_sports),
+        ("\U0001f3c0 NBA", "6:30 PM ET",     "Evening run captures late injury news",        "\U0001f3c0 NBA" in _active_sports),
+        ("\U0001f3d2 NHL", "5:00 PM ET",     "Goalies confirmed, evening pipeline complete", "\U0001f3d2 NHL" in _active_sports),
+        ("\u26bd Soccer",  "10:00 AM ET",    "Daily pipeline complete",                      "\u26bd Soccer" in _active_sports),
+        ("\u26f3 Golf",    "Thu 8:00 AM ET", "Close capture complete, lines finalized",      _dow in (0, 1, 3)),
     ]
 
     # Golf note by day
@@ -4956,11 +4956,10 @@ def _render_home_tab() -> None:
     _hdr = ('<div style="display:flex;padding:5px 8px;font-size:0.70em;color:#6b7280;'
             'border-bottom:1px solid #333">'
             '<span style="width:110px">Sport</span>'
-            '<span style="width:110px">Signal Available</span>'
-            '<span style="width:130px">Bet By</span>'
-            '<span style="flex:1">Notes</span></div>')
+            '<span style="width:110px">Bet After</span>'
+            '<span style="flex:1">Why</span></div>')
     _body = ""
-    for sport, avail, bet_by, notes, active in _windows:
+    for sport, bet_after, why, active in _windows:
         if active:
             _row_color = "#fbbf24"
             _row_bg = "background:#1c1400;"
@@ -4973,9 +4972,8 @@ def _render_home_tab() -> None:
         _body += (f'<div style="display:flex;padding:6px 8px;font-size:0.82em;color:{_row_color};'
                   f'{_row_bg}border-bottom:1px solid #1e293b;{_fw}">'
                   f'<span style="width:110px">{sport}</span>'
-                  f'<span style="width:110px">{avail}</span>'
-                  f'<span style="width:130px">{bet_by}</span>'
-                  f'<span style="flex:1">{notes}{_extra}</span></div>')
+                  f'<span style="width:110px">{bet_after}</span>'
+                  f'<span style="flex:1">{why}{_extra}</span></div>')
 
     st.html(f'<div style="background:#0f172a;border:1px solid #1e293b;border-radius:8px;'
             f'overflow:hidden;margin-bottom:12px">{_hdr}{_body}</div>')
