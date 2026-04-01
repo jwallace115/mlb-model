@@ -4213,7 +4213,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 else:
                     noplay_cards.append((b, False))
 
-            # ── Results tracker (yesterday + season) ────────────────────────
+            # ── Yesterday's results (live bets only) ──────────────────────
             try:
                 from datetime import datetime as _dt_rt, timedelta as _td_rt
                 _yesterday = (_dt_rt.strptime(game_date, "%Y-%m-%d") - _td_rt(days=1)).strftime("%Y-%m-%d")
@@ -4229,31 +4229,26 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                 pass
                     return []
 
-                def _engine_stats(rows, date_filter=None):
-                    resolved = [r for r in rows if r.get("resolved") == 1 and r.get("result") in ("WIN", "LOSS", "PUSH")]
-                    if date_filter:
-                        resolved = [r for r in resolved if r.get("date") == date_filter]
+                def _engine_stats_live(rows, date_filter):
+                    """Stats for live bets only (excludes shadow_only=True)."""
+                    resolved = [r for r in rows
+                                if r.get("resolved") == 1
+                                and r.get("result") in ("WIN", "LOSS", "PUSH")
+                                and r.get("date") == date_filter
+                                and not r.get("shadow_only")]
                     w = sum(1 for r in resolved if r["result"] == "WIN")
                     l = sum(1 for r in resolved if r["result"] == "LOSS")
                     net = sum(float(r.get("net_units", 0) or 0) for r in resolved)
                     n = w + l
-                    return {"w": w, "l": l, "n": n, "net": net,
-                            "wr": round(w / n * 100, 1) if n > 0 else None,
-                            "roi": round(net / max(n, 1) * 100, 1) if n > 0 else None}
+                    return {"w": w, "l": l, "n": n, "net": net}
 
                 _v1_rows = _load_signal_json("signals_2026.json")
                 _f5_rows = _load_signal_json("f5_signals_2026.json")
                 _rl_rows = _load_signal_json("f5_runline_2026.json")
 
-                # Yesterday
-                _v1_y = _engine_stats(_v1_rows, _yesterday)
-                _f5_y = _engine_stats(_f5_rows, _yesterday)
-                _rl_y = _engine_stats(_rl_rows, _yesterday)
-
-                # Season
-                _v1_s = _engine_stats(_v1_rows)
-                _f5_s = _engine_stats(_f5_rows)
-                _rl_s = _engine_stats(_rl_rows)
+                _v1_y = _engine_stats_live(_v1_rows, _yesterday)
+                _f5_y = _engine_stats_live(_f5_rows, _yesterday)
+                _rl_y = _engine_stats_live(_rl_rows, _yesterday)
 
                 # Parlay yesterday
                 _pt_data = None
@@ -4268,16 +4263,6 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             pass
                         break
 
-                def _fmt_record(s, show_roi=False):
-                    if s["n"] == 0:
-                        return '<span style="color:#6b7280">\u2014</span>'
-                    clr = "#4ade80" if s["net"] >= 0 else "#f87171"
-                    parts = f'<span style="color:{clr}">{s["w"]}-{s["l"]}</span>'
-                    parts += f' <span style="color:{clr}">({s["net"]:+.1f}u)</span>'
-                    if show_roi and s["wr"] is not None:
-                        parts += f' <span style="color:#6b7280">{s["wr"]:.0f}%</span>'
-                    return parts
-
                 def _parlay_result(pt_data, tier, date_str):
                     if not pt_data:
                         return '<span style="color:#6b7280">\u2014</span>'
@@ -4290,127 +4275,29 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             else: return '<span style="color:#6b7280">pending</span>'
                     return '<span style="color:#6b7280">\u2014</span>'
 
-                def _parlay_season(pt_data, tier):
-                    if not pt_data:
-                        return '<span style="color:#6b7280">\u2014</span>'
-                    s = pt_data.get(tier, {}).get("summary", {})
-                    w, l = s.get("wins", 0), s.get("losses", 0)
-                    if w + l == 0:
-                        return '<span style="color:#6b7280">\u2014</span>'
-                    net = s.get("net_units", 0)
-                    clr = "#4ade80" if net >= 0 else "#f87171"
-                    return f'<span style="color:{clr}">{w}-{l} ({net:+.1f}u)</span>'
-
                 _has_yesterday = _v1_y["n"] + _f5_y["n"] + _rl_y["n"] > 0
 
-                # Unit-size breakdown helper
-                def _by_unit_size(rows, date_filter=None):
-                    resolved = [r for r in rows if r.get("resolved") == 1 and r.get("result") in ("WIN", "LOSS", "PUSH")]
-                    if date_filter:
-                        resolved = [r for r in resolved if r.get("date") == date_filter]
-                    buckets = {}
-                    for r in resolved:
-                        stake = round(float(r.get("stake_units", 0) or 0), 3)
-                        # Merge 0.625/0.63 into 0.62 bucket
-                        if 0.62 <= stake <= 0.63:
-                            stake = 0.62
-                        if stake not in buckets:
-                            buckets[stake] = {"w": 0, "l": 0, "net": 0}
-                        if r["result"] == "WIN":
-                            buckets[stake]["w"] += 1
-                        elif r["result"] == "LOSS":
-                            buckets[stake]["l"] += 1
-                        buckets[stake]["net"] += float(r.get("net_units", 0) or 0)
-                    return buckets
-
-                def _fmt_unit_row(stake, d):
-                    n = d["w"] + d["l"]
-                    if n == 0:
+                def _fmt_rec(s):
+                    if s["n"] == 0:
                         return ""
-                    roi = d["net"] / n * 100 if n > 0 else 0
-                    clr = "#4ade80" if d["net"] >= 0 else "#f87171"
-                    label = f"{stake:.2f}".rstrip("0").rstrip(".") + "u"
-                    return (f'<div style="display:flex;justify-content:space-between">'
-                            f'<span>{label}</span>'
-                            f'<span style="color:{clr}">{d["w"]}-{d["l"]} ({roi:+.1f}%)</span></div>')
+                    clr = "#4ade80" if s["net"] >= 0 else "#f87171"
+                    return f'<span style="color:{clr}">{s["w"]}-{s["l"]} ({s["net"]:+.1f}u)</span>'
 
-                def _tier_breakdown(rows, date_filter=None):
-                    resolved = [r for r in rows if r.get("resolved") == 1 and r.get("result") in ("WIN", "LOSS", "PUSH")]
-                    if date_filter:
-                        resolved = [r for r in resolved if r.get("date") == date_filter]
-                    tiers = {"Low": {"w": 0, "l": 0, "net": 0},
-                             "Medium": {"w": 0, "l": 0, "net": 0},
-                             "High": {"w": 0, "l": 0, "net": 0}}
-                    for r in resolved:
-                        stake = round(float(r.get("stake_units", 0) or 0), 3)
-                        if stake <= 0.625:
-                            tier = "Low"
-                        elif stake <= 1.0:
-                            tier = "Medium"
-                        else:
-                            tier = "High"
-                        if r["result"] == "WIN":
-                            tiers[tier]["w"] += 1
-                        elif r["result"] == "LOSS":
-                            tiers[tier]["l"] += 1
-                        tiers[tier]["net"] += float(r.get("net_units", 0) or 0)
-                    return tiers
-
-                def _fmt_tier_row(tier_name, d):
-                    n = d["w"] + d["l"]
-                    if n == 0:
-                        return ""
-                    roi = d["net"] / n * 100 if n > 0 else 0
-                    clr = "#4ade80" if d["net"] >= 0 else "#f87171"
-                    return (f'<div style="display:flex;justify-content:space-between">'
-                            f'<span>{tier_name}</span>'
-                            f'<span style="color:{clr}">{d["w"]}-{d["l"]} ({roi:+.1f}%)</span></div>')
-
-                _all_rows = _v1_rows + _f5_rows + _rl_rows
-
-                _left = f'<div style="flex:1"><div style="font-weight:700;color:#94a3b8;margin-bottom:4px">YESTERDAY \u2014 {_yesterday}</div>'
+                _html = f'<div style="font-size:0.78em;color:#e2e8f0;padding:10px 14px;background:#0f1729;border-radius:6px;border:1px solid #1e2d4a;margin-bottom:12px">'
+                _html += f'<div style="font-weight:700;color:#94a3b8;margin-bottom:4px">YESTERDAY \u2014 {_yesterday}</div>'
                 if _has_yesterday:
-                    if _v1_y["n"] > 0: _left += f'<div>Full Game: {_fmt_record(_v1_y)}</div>'
-                    if _f5_y["n"] > 0: _left += f'<div>F5 Total: {_fmt_record(_f5_y)}</div>'
-                    if _rl_y["n"] > 0: _left += f'<div>F5 Run Line: {_fmt_record(_rl_y)}</div>'
-                    _left += f'<div>3-Leg: {_parlay_result(_pt_data, "three_leg", _yesterday)}</div>'
-                    _left += f'<div>5-Leg: {_parlay_result(_pt_data, "five_leg", _yesterday)}</div>'
-                    # Unit breakdown yesterday
-                    _y_units = _by_unit_size(_all_rows, _yesterday)
-                    if _y_units:
-                        _left += '<div style="margin-top:6px;border-top:1px solid #1e2d4a;padding-top:4px;font-size:0.92em;color:#6b7280">By Unit Size</div>'
-                        for _s in sorted(_y_units.keys()):
-                            _left += _fmt_unit_row(_s, _y_units[_s])
+                    if _v1_y["n"] > 0:
+                        _html += f'<div>Full Game: {_fmt_rec(_v1_y)}</div>'
+                    if _f5_y["n"] > 0:
+                        _html += f'<div>F5 Total: {_fmt_rec(_f5_y)}</div>'
+                    if _rl_y["n"] > 0:
+                        _html += f'<div>F5 Run Line: {_fmt_rec(_rl_y)}</div>'
+                    _html += f'<div>Parlays: 3-Leg {_parlay_result(_pt_data, "three_leg", _yesterday)} | 5-Leg {_parlay_result(_pt_data, "five_leg", _yesterday)}</div>'
                 else:
-                    _left += '<div style="color:#6b7280">No results yet</div>'
-                _left += '</div>'
-
-                _right = '<div style="flex:1"><div style="font-weight:700;color:#94a3b8;margin-bottom:4px">SEASON (from Mar 25)</div>'
-                _right += f'<div>Full Game: {_fmt_record(_v1_s, show_roi=True)}</div>'
-                _right += f'<div>F5 Total: {_fmt_record(_f5_s, show_roi=True)}</div>'
-                _right += f'<div>F5 Run Line: {_fmt_record(_rl_s, show_roi=True)}</div>'
-                _right += f'<div>3-Leg: {_parlay_season(_pt_data, "three_leg")}</div>'
-                _right += f'<div>5-Leg: {_parlay_season(_pt_data, "five_leg")}</div>'
-                # Unit breakdown season
-                _s_units = _by_unit_size(_all_rows)
-                if _s_units:
-                    _right += '<div style="margin-top:6px;border-top:1px solid #1e2d4a;padding-top:4px;font-size:0.92em;color:#6b7280">By Unit Size</div>'
-                    for _s in sorted(_s_units.keys()):
-                        _right += _fmt_unit_row(_s, _s_units[_s])
-                # Tier breakdown season
-                _s_tiers = _tier_breakdown(_all_rows)
-                if any(d["w"] + d["l"] > 0 for d in _s_tiers.values()):
-                    _right += '<div style="margin-top:6px;border-top:1px solid #1e2d4a;padding-top:4px;font-size:0.92em;color:#6b7280">By Confidence Tier</div>'
-                    for _tn in ["Low", "Medium", "High"]:
-                        _right += _fmt_tier_row(_tn, _s_tiers[_tn])
-                _right += '</div>'
-
-                st.html(
-                    f'<div style="display:flex;gap:20px;font-size:0.78em;color:#e2e8f0;'
-                    f'padding:10px 14px;background:#0f1729;border-radius:6px;border:1px solid #1e2d4a;'
-                    f'margin-bottom:12px">'
-                    f'{_left}{_right}'
-                    f'</div>')
+                    _html += '<div style="color:#6b7280">No results yet</div>'
+                _html += '<div style="margin-top:6px;font-size:0.88em;color:#4b5563">\u2192 See \U0001f4ca Tracker tab for full season stats</div>'
+                _html += '</div>'
+                st.html(_html)
             except Exception:
                 pass
 
