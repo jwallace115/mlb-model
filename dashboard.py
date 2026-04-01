@@ -1136,12 +1136,33 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         disclaimer = ('<div style="font-size:0.68em;color:#4b5563;margin-top:6px;font-style:italic">'
                       'Check your book for current line before placing.</div>')
 
+        # Scratch detection badges
+        _scratch_html = ""
+        for _sig in signals:
+            if _sig.get("scratch_voided"):
+                _old_sp = _sig.get("original_home_sp") or _sig.get("original_away_sp") or ""
+                _new_sp = _sig.get("replacement_home_sp") or _sig.get("replacement_away_sp") or ""
+                _scratch_html = (
+                    f'<div style="background:#2d1515;border:1px solid #dc2626;border-radius:4px;'
+                    f'padding:5px 10px;margin-top:6px;font-size:0.78em;color:#f87171;font-weight:600">'
+                    f'\u26a0\ufe0f Voided \u2014 pitcher scratch ({_old_sp} \u2192 {_new_sp})</div>')
+                break
+            elif _sig.get("scratch_detected"):
+                _old_sp = _sig.get("original_home_sp") or _sig.get("original_away_sp") or ""
+                _new_sp = _sig.get("replacement_home_sp") or _sig.get("replacement_away_sp") or ""
+                _scratch_html = (
+                    f'<div style="background:#1c1400;border:1px solid #f59e0b;border-radius:4px;'
+                    f'padding:5px 10px;margin-top:6px;font-size:0.78em;color:#fbbf24;font-weight:600">'
+                    f'\U0001f504 Updated \u2014 pitcher scratch ({_old_sp} \u2192 {_new_sp})</div>')
+                break
+
         _shadow_html = _shadow_badge_html(game.get("game_pk"), game.get("game_date", ""))
 
-        _border_color = "#ef4444" if has_partial else "#22c55e"
+        _border_color = "#dc2626" if any(s.get("scratch_voided") for s in signals) else (
+            "#ef4444" if has_partial else "#22c55e")
         st.html(
             f'<div class="game-card" style="border-left:3px solid {_border_color}">'
-            f'{l1}{badges}{boost}{explain_html}{_move_html}{_shadow_html}{disclaimer}'
+            f'{l1}{badges}{boost}{explain_html}{_move_html}{_scratch_html}{_shadow_html}{disclaimer}'
             f'</div>'
         )
 
@@ -4181,6 +4202,13 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                             if _tk not in _game_signals:
                                 _game_signals[_tk] = []
                             _info = {"type": sig_type, "stake": float(_r.get("stake_units", 0))}
+                            # Scratch detection fields (all signal types)
+                            _info["scratch_detected"] = bool(_r.get("scratch_detected", False))
+                            _info["scratch_voided"] = bool(_r.get("scratch_voided", False))
+                            _info["original_home_sp"] = _r.get("original_home_sp")
+                            _info["replacement_home_sp"] = _r.get("replacement_home_sp")
+                            _info["original_away_sp"] = _r.get("original_away_sp")
+                            _info["replacement_away_sp"] = _r.get("replacement_away_sp")
                             if sig_type == "v1":
                                 _info["s12_active"] = bool(_r.get("s12_overlay_active", 0))
                                 _info["p09_active"] = bool(_r.get("p09_overlay_active", 0))

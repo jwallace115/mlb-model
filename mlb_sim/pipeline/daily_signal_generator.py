@@ -74,7 +74,9 @@ def _load_signals():
 
 def _save_signals(df):
     SIGNALS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(SIGNALS_PATH, index=False)
+    # Drop scratch/pitcher columns before saving parquet (not in SIGNAL_COLS)
+    parquet_cols = [c for c in df.columns if not c.startswith("_")]
+    df[parquet_cols].to_parquet(SIGNALS_PATH, index=False)
     # Also write JSON for Streamlit Cloud (parquet not committed to git)
     try:
         json_path = SIGNALS_PATH.with_suffix(".json")
@@ -89,7 +91,17 @@ def _save_signals(df):
             if c in df.columns:
                 export_cols.append(c)
         avail = [c for c in export_cols if c in df.columns]
-        df[avail].to_json(json_path, orient="records", indent=2)
+        records = df[avail].to_dict(orient="records")
+        # Inject pitcher names from underscore-prefixed columns (JSON only)
+        for i, row in enumerate(records):
+            idx = df.index[i]
+            for src, dest in [("_home_sp_name", "home_sp_name"), ("_away_sp_name", "away_sp_name")]:
+                if src in df.columns:
+                    val = df.at[idx, src]
+                    if pd.notna(val):
+                        row[dest] = val
+        with open(json_path, "w") as f:
+            json.dump(records, f, indent=2)
     except Exception:
         pass
 
@@ -387,6 +399,9 @@ def generate_signals(game_date_str, schedule, pitcher_db):
             "home_sp_name": home_sp_info.get("name", "TBD"),
             "away_sp_name": away_sp_info.get("name", "TBD"),
         })
+        # Store pitcher names for scratch detection (JSON export only, not in parquet SIGNAL_COLS)
+        sig["_home_sp_name"] = home_sp_info.get("name", "TBD")
+        sig["_away_sp_name"] = away_sp_info.get("name", "TBD")
 
         tags = []
         if s12_active: tags.append("S12")
