@@ -3355,8 +3355,22 @@ def _render_nba_tab() -> None:
             for g in plays:
                 _render_nba_card(g)
         else:
-            st.html('<div class="section-hdr">🎯 Plays</div>')
-            st.caption("No plays above threshold today.")
+            _n_games_total = len(plays) + len(no_plays)
+            if _n_games_total > 0:
+                st.html(
+                    f'<div style="background:#1a1a2e;border:1px solid #333;border-radius:8px;'
+                    f'padding:14px 18px;margin-bottom:12px">'
+                    f'<div style="font-size:1.0em;font-weight:700;color:#94a3b8;margin-bottom:4px">'
+                    f'\U0001f3c0 No NBA plays today</div>'
+                    f'<div style="font-size:0.85em;color:#6b7280">'
+                    f'{_n_games_total} game{"s" if _n_games_total != 1 else ""} scheduled '
+                    f'\u2014 no qualifying signals above threshold.</div></div>')
+            else:
+                st.html(
+                    '<div style="background:#1a1a2e;border:1px solid #333;border-radius:8px;'
+                    'padding:14px 18px;margin-bottom:12px">'
+                    '<div style="font-size:1.0em;font-weight:700;color:#94a3b8;margin-bottom:4px">'
+                    '\U0001f3c0 No NBA games scheduled today</div></div>')
 
         # ── no-plays ──────────────────────────────────────────────────────────────
         if no_plays:
