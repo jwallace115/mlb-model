@@ -345,7 +345,7 @@ st.markdown("""
 
 # ── data loading ──────────────────────────────────────────────────────────────
 
-@st.cache_data(ttl=None, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False)
 def load_results() -> dict | None:
     if not os.path.exists(RESULTS_FILE):
         return None
@@ -353,7 +353,7 @@ def load_results() -> dict | None:
         return json.load(f)
 
 
-@st.cache_data(ttl=None, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False)
 def load_season_stats() -> dict | None:
     if not os.path.exists(SEASON_STATS_FILE):
         return None
@@ -361,7 +361,7 @@ def load_season_stats() -> dict | None:
         return json.load(f)
 
 
-@st.cache_data(ttl=None, show_spinner=False)
+@st.cache_data(ttl=300, show_spinner=False)
 def load_nba_results() -> dict | None:
     if not os.path.exists(NBA_RESULTS_FILE):
         return None
