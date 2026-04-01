@@ -621,7 +621,7 @@ if __name__ == "__main__":
         # Push graded results to GitHub immediately so dashboard reflects overnight grades
         try:
             import subprocess as _sp
-            _repo = str(Path(__file__).resolve().parent)
+            _repo = os.path.dirname(os.path.abspath(__file__))
             _push_files = [
                 "results.json", "season_stats.json",
                 "nba_results.json", "nhl_results.json", "soccer_results.json",
