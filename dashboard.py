@@ -4928,109 +4928,61 @@ def _render_home_tab() -> None:
         st.html('<div style="color:#6b7280;font-size:0.85em;font-style:italic;margin-bottom:16px">'
                 'No active signals today.</div>')
 
-    # ── Season Performance Snapshot ──
+    # ── Betting Windows ──
     st.html('<div style="font-size:1.0em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
-            'Season Performance</div>')
+            '\U0001f4c5 Today\'s Betting Windows</div>')
 
-    def _wlp_home(records):
-        w = sum(1 for r in records if r.get("result") == "WIN")
-        l = sum(1 for r in records if r.get("result") == "LOSS")
-        p = sum(1 for r in records if r.get("result") == "PUSH")
-        return w, l, p
+    _dow = _home_date.today().weekday()  # 0=Mon, 1=Tue, 3=Thu, 4=Fri
+    # Sports with signals today (from _sig_rows built above)
+    _active_sports = {r[0] for r in _sig_rows} if _sig_rows else set()
 
-    def _roi_home(w, l, p):
-        n = w + l + p
-        if n == 0:
-            return 0.0, 0.0
-        net = w * (100 / 110) - l
-        return net / n * 100 if n > 0 else 0.0, net
+    _windows = [
+        ("\u26be MLB",     "7:00 AM ET",        "Game time",             "Final signals after confirm run",          "\u26be MLB" in _active_sports),
+        ("\U0001f3c0 NBA", "9:30 AM ET",        "30 min before tip",    "Evening run at 6:30 PM ET",                "\U0001f3c0 NBA" in _active_sports),
+        ("\U0001f3d2 NHL", "7:00 AM ET",        "30 min before puck drop", "Goalies confirmed at 5:00 PM ET",       "\U0001f3d2 NHL" in _active_sports),
+        ("\u26bd Soccer",  "10:00 AM ET",       "Before kickoff",        "Bundesliga only",                          "\u26bd Soccer" in _active_sports),
+        ("\u26f3 Golf",    "Tue 9 AM ET",       "Thursday morning",      "Lines refresh daily 7 AM ET",              _dow in (0, 1, 3)),  # Mon, Tue, Thu
+    ]
 
-    _perf_rows = []
+    # Golf note by day
+    _golf_note = ""
+    if _dow == 1:
+        _golf_note = " \u2014 Open capture today"
+    elif _dow == 3:
+        _golf_note = " \u2014 Close capture + post-R1 tonight"
+    elif _dow == 0:
+        _golf_note = " \u2014 Grader runs today"
 
-    # MLB from rolling performance
-    try:
-        _mlb_perf_p = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "rolling_performance_2026.json")
-        if os.path.exists(_mlb_perf_p):
-            with open(_mlb_perf_p) as _f:
-                _mlb_perf = json.load(_f)
-            _mp = _mlb_perf if isinstance(_mlb_perf, dict) else {}
-            _mw = _mp.get("wins", 0)
-            _ml = _mp.get("losses", 0)
-            _mn = _mw + _ml
-            _mr = _mp.get("roi", 0)
-            _mu = _mp.get("net_units", 0)
-            if _mn > 0:
-                _perf_rows.append(("⚾ MLB", f"{_mw}-{_ml}", f"{_mu:+.1f}u", _mr))
-    except Exception:
-        pass
+    _hdr = ('<div style="display:flex;padding:5px 8px;font-size:0.70em;color:#6b7280;'
+            'border-bottom:1px solid #333">'
+            '<span style="width:110px">Sport</span>'
+            '<span style="width:110px">Signal Available</span>'
+            '<span style="width:130px">Bet By</span>'
+            '<span style="flex:1">Notes</span></div>')
+    _body = ""
+    for sport, avail, bet_by, notes, active in _windows:
+        if active:
+            _row_color = "#fbbf24"
+            _row_bg = "background:#1c1400;"
+            _fw = "font-weight:600"
+        else:
+            _row_color = "#4b5563"
+            _row_bg = ""
+            _fw = "font-weight:400"
+        _extra = _golf_note if "Golf" in sport else ""
+        _body += (f'<div style="display:flex;padding:6px 8px;font-size:0.82em;color:{_row_color};'
+                  f'{_row_bg}border-bottom:1px solid #1e293b;{_fw}">'
+                  f'<span style="width:110px">{sport}</span>'
+                  f'<span style="width:110px">{avail}</span>'
+                  f'<span style="width:130px">{bet_by}</span>'
+                  f'<span style="flex:1">{notes}{_extra}</span></div>')
 
-    # NBA from signal log
-    try:
-        _nba_log = pd.read_parquet(os.path.join(os.path.dirname(__file__), "nba", "data", "nba_signal_log.parquet"))
-        _nba_2026 = _nba_log[(_nba_log["game_date"] >= "2026-01-01") & _nba_log["result"].notna()]
-        _nw = (_nba_2026["result"] == "WIN").sum()
-        _nl = (_nba_2026["result"] == "LOSS").sum()
-        _nn = _nw + _nl
-        if _nn > 0:
-            _nu = _nw * (100/110) - _nl
-            _nr = _nu / _nn * 100
-            _perf_rows.append(("🏀 NBA", f"{_nw}-{_nl}", f"{_nu:+.1f}u", _nr))
-    except Exception:
-        pass
+    st.html(f'<div style="background:#0f172a;border:1px solid #1e293b;border-radius:8px;'
+            f'overflow:hidden;margin-bottom:12px">{_hdr}{_body}</div>')
 
-    # NHL from decisions
-    try:
-        _nhl_dec = pd.read_parquet(os.path.join(os.path.dirname(__file__), "nhl", "nhl_decisions.parquet"))
-        _nhl_2026 = _nhl_dec[(_nhl_dec["game_date"] >= "2026-01-01") & (_nhl_dec["graded"] == 1)]
-        _hw = (_nhl_2026["result"] == "WIN").sum()
-        _hl = (_nhl_2026["result"] == "LOSS").sum()
-        _hn = _hw + _hl
-        if _hn > 0:
-            _hu = _hw * (100/110) - _hl
-            _hr = _hu / _hn * 100
-            _perf_rows.append(("🏒 NHL", f"{_hw}-{_hl}", f"{_hu:+.1f}u", _hr))
-    except Exception:
-        pass
-
-    # Soccer from decisions
-    try:
-        _soc_dec = pd.read_parquet(os.path.join(os.path.dirname(__file__), "soccer", "data", "soccer_decisions.parquet"))
-        _soc_2026 = _soc_dec[(_soc_dec["game_date"] >= "2026-01-01") & _soc_dec["result"].notna()]
-        _sw = (_soc_2026["result"] == "WIN").sum()
-        _sl = (_soc_2026["result"] == "LOSS").sum()
-        _sn = _sw + _sl
-        if _sn > 0:
-            _su = _sw * (100/110) - _sl
-            _sr = _su / _sn * 100
-            _perf_rows.append(("⚽ Soccer", f"{_sw}-{_sl}", f"{_su:+.1f}u", _sr))
-    except Exception:
-        pass
-
-    if _perf_rows:
-        _hdr = ('<div style="display:flex;padding:4px 8px;font-size:0.72em;color:#6b7280;'
-                'border-bottom:1px solid #333">'
-                '<span style="width:120px">Sport</span>'
-                '<span style="width:80px;text-align:center">Record</span>'
-                '<span style="width:80px;text-align:center">Net</span>'
-                '<span style="width:80px;text-align:center">ROI</span></div>')
-        _body = ""
-        for sport, record, net, roi in _perf_rows:
-            _roi_color = "#22c55e" if roi > 0 else "#ef4444" if roi < 0 else "#6b7280"
-            _body += (f'<div style="display:flex;padding:6px 8px;font-size:0.85em;color:#e2e8f0;'
-                      f'border-bottom:1px solid #1e293b">'
-                      f'<span style="width:120px;font-weight:600">{sport}</span>'
-                      f'<span style="width:80px;text-align:center">{record}</span>'
-                      f'<span style="width:80px;text-align:center">{net}</span>'
-                      f'<span style="width:80px;text-align:center;color:{_roi_color};font-weight:700">'
-                      f'{roi:+.1f}%</span></div>')
-        st.html(f'<div style="background:#0f172a;border:1px solid #1e293b;border-radius:8px;'
-                f'overflow:hidden;margin-bottom:16px">{_hdr}{_body}</div>')
-
-        st.html(f'<div style="color:#4b5563;font-size:0.70em;text-align:center">'
-                f'Season: Mar 25, 2026 \u2192 {_today}</div>')
-    else:
-        st.html('<div style="color:#6b7280;font-size:0.85em;font-style:italic">'
-                'Season performance data loading...</div>')
+    st.html('<div style="font-size:0.75em;color:#6b7280;line-height:1.6">'
+            '\u26a0\ufe0f Preliminary MLB signals available at 2:00 AM ET<br>'
+            '\u2705 Final signals confirmed at 7:00 AM ET</div>')
 
 
 def main() -> None:
