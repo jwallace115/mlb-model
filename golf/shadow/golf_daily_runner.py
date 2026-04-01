@@ -1451,9 +1451,15 @@ def run_composite():
 
 # ── CL03 Inside-Cut R1 Undervaluation — post-R1 shadow capture ──
 # Known no-cut event IDs (playoff events, invitational small fields, etc.)
-_NO_CUT_EVENT_IDS = {5, 11, 12, 16, 27, 28, 34, 60, 473, 476, 478, 480, 519, 521, 527, 550}
+_NO_CUT_EVENT_IDS = {5, 11, 12, 16, 27, 28, 34, 60, 88, 473, 476, 478, 480, 519, 521, 527, 550}
 _CL03_MIN_R1_COMPLETION = 0.80  # 80% of field must have R1 scores
-_CL03_CUT_POSITION = 65  # PGA standard: top 65 + ties make the cut
+_CL03_CUT_POSITION_DEFAULT = 65  # PGA Tour standard: top 65 + ties
+_CL03_CUT_POSITION_MAP = {
+    14: 50,   # Masters — top 50 + ties
+    7: 50,    # Genesis Invitational — signature event, custom cut
+    9: 50,    # Arnold Palmer Invitational — signature event, custom cut
+    23: 50,   # Memorial Tournament — signature event, custom cut
+}
 
 
 def _fetch_r1_scores_live(event_id, season):
@@ -1588,18 +1594,22 @@ def run_cl03():
         print("CL03: WARNING — R1 completion %.1f%% < 80%% threshold. Skipping." % (r1_completion * 100), flush=True)
         return
 
-    # ── Compute projected cut line (65th position by R1 score) ──
+    # ── Compute projected cut line (event-specific position) ──
+    cut_pos = _CL03_CUT_POSITION_MAP.get(int(event_id), _CL03_CUT_POSITION_DEFAULT)
+    is_custom_cut = int(event_id) in _CL03_CUT_POSITION_MAP
+
     r1_df = pd.DataFrame(r1_rows)
     r1_df = r1_df.sort_values("r1_score").reset_index(drop=True)
 
-    if len(r1_df) < _CL03_CUT_POSITION:
-        print("CL03: SKIP — fewer than %d R1 scores (%d). Cannot compute cut line." % (_CL03_CUT_POSITION, len(r1_df)), flush=True)
+    if len(r1_df) < cut_pos:
+        print("CL03: SKIP — fewer than %d R1 scores (%d). Cannot compute cut line." % (cut_pos, len(r1_df)), flush=True)
         return
 
-    projected_cut_line_r1 = int(r1_df.iloc[_CL03_CUT_POSITION - 1]["r1_score"])
+    projected_cut_line_r1 = int(r1_df.iloc[cut_pos - 1]["r1_score"])
     r1_df["distance_from_cut_r1"] = projected_cut_line_r1 - r1_df["r1_score"]
 
-    print("CL03: Projected R1 cut line = %d (65th position)" % projected_cut_line_r1, flush=True)
+    print("CL03: Projected R1 cut line = %d (position %d%s)" % (
+        projected_cut_line_r1, cut_pos, " — custom cut format" if is_custom_cut else ""), flush=True)
 
     # ── Flag INSIDE_1 players (exactly 1 stroke better than cut) ──
     inside_1 = r1_df[r1_df["distance_from_cut_r1"] == 1].copy()
@@ -1667,9 +1677,15 @@ def run_cl03():
 
     # Ensure CL03 columns exist (append only, never rename existing)
     for col in ["cl03_flag", "distance_from_cut_r1", "projected_cut_line_r1",
-                "r1_score", "cl03_market_prob", "cl03_capture_time", "is_standard_cut_event"]:
+                "r1_score", "cl03_market_prob", "cl03_capture_time", "is_standard_cut_event",
+                "cut_position_used", "is_custom_cut_format"]:
         if col not in log.columns:
-            log[col] = np.nan if col != "cl03_flag" else False
+            if col == "cl03_flag":
+                log[col] = False
+            elif col == "is_custom_cut_format":
+                log[col] = False
+            else:
+                log[col] = np.nan
 
     # Find rows for this event in the latest run (make_cut market only)
     latest_ts = log["run_timestamp"].max()
@@ -1692,6 +1708,8 @@ def run_cl03():
             log.loc[idx, "cl03_flag"] = False
             log.loc[idx, "is_standard_cut_event"] = True
             log.loc[idx, "cl03_capture_time"] = ts
+            log.loc[idx, "cut_position_used"] = cut_pos
+            log.loc[idx, "is_custom_cut_format"] = is_custom_cut
             continue
 
         is_inside_1 = dgid in inside_1_ids
@@ -1702,6 +1720,8 @@ def run_cl03():
         log.loc[idx, "cl03_market_prob"] = mc_odds.get(dgid, np.nan)
         log.loc[idx, "cl03_capture_time"] = ts
         log.loc[idx, "is_standard_cut_event"] = True
+        log.loc[idx, "cut_position_used"] = cut_pos
+        log.loc[idx, "is_custom_cut_format"] = is_custom_cut
 
         if is_inside_1:
             cl03_count += 1
