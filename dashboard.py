@@ -5598,9 +5598,27 @@ def _render_golf_tab() -> None:
 def _render_tracker_tab() -> None:
     """Cross-sport performance tracker. Read-only — no signal logic."""
     import json as _tj
-    from datetime import date as _tdate, timedelta as _ttd
+    from datetime import date as _tdate, timedelta as _ttd, datetime as _tdt
 
-    st.html("<h4 style='margin:0 0 8px 0'>📊 Performance Tracker</h4>")
+    # Last updated timestamp
+    _tracker_ts = ""
+    try:
+        _perf_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "rolling_performance_2026.json")
+        if os.path.exists(_perf_path):
+            with open(_perf_path) as _f:
+                _perf = _tj.load(_f)
+            _ts_raw = _perf.get("last_updated") or _perf.get("generated_at")
+            if _ts_raw:
+                _tracker_ts = _tdt.fromisoformat(_ts_raw.replace("Z", "+00:00")).strftime("%b %-d, %Y %-I:%M %p UTC")
+        if not _tracker_ts:
+            _mtime = os.path.getmtime(_perf_path)
+            _tracker_ts = _tdt.fromtimestamp(_mtime).strftime("%b %-d, %Y %-I:%M %p UTC")
+    except Exception:
+        pass
+
+    _ts_html = (f'<span style="float:right;font-size:0.72em;color:#64748b">Last updated: {_tracker_ts}</span>'
+                if _tracker_ts else "")
+    st.html(f"<h4 style='margin:0 0 8px 0'>📊 Performance Tracker{_ts_html}</h4>")
 
     today = _tdate.today()
     window = st.radio(
