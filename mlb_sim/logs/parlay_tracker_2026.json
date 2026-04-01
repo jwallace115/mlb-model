@@ -113,18 +113,44 @@
             "game": "CLE@LAD",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "PIT@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "OAK@ATL",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
+            "result": "WIN"
+          }
+        ],
+        "result": "WIN",
+        "net_units": 5.0
+      },
+      {
+        "date": "2026-04-01",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "DET@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "CLE@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "WSN@PHI",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
             "result": null
           }
         ],
@@ -133,12 +159,12 @@
       }
     ],
     "summary": {
-      "total": 4,
-      "wins": 0,
+      "total": 5,
+      "wins": 1,
       "losses": 4,
       "pending": 0,
-      "win_rate": 0.0,
-      "net_units": -4.0,
+      "win_rate": 20.0,
+      "net_units": 1.0,
       "payout_per_win": 6.0
     }
   },
@@ -228,28 +254,66 @@
             "game": "CLE@LAD",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "PIT@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "OAK@ATL",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "DET@ARI",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "TEX@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-01",
+        "type": "5-leg",
+        "legs": [
+          {
+            "game": "DET@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "CLE@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "WSN@PHI",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": null
+          },
+          {
+            "game": "OAK@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": null
+          },
+          {
+            "game": "MIN@KCR",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
             "result": null
@@ -260,12 +324,12 @@
       }
     ],
     "summary": {
-      "total": 2,
+      "total": 3,
       "wins": 0,
-      "losses": 2,
+      "losses": 3,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -2.0,
+      "net_units": -3.0,
       "payout_per_win": 24.0
     }
   },
