@@ -4834,6 +4834,205 @@ def _render_sgp_section():
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
+def _render_home_tab() -> None:
+    """Render the home landing tab with GIF, today's signals, and season snapshot."""
+    from datetime import date as _home_date
+
+    # ── GIF ──
+    _gif_path = os.path.join(os.path.dirname(__file__), "assets", "fu_money.gif")
+    if os.path.exists(_gif_path):
+        st.image(_gif_path, use_container_width=True)
+    st.html('<div style="text-align:center;color:#6b7280;font-size:0.75em;margin-top:-4px;'
+            'margin-bottom:16px;letter-spacing:1px">iamnotuncertain.net</div>')
+
+    # ── Today's Signals ──
+    _today = _home_date.today().isoformat()
+    st.html('<div style="font-size:1.0em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
+            "Today's Signals</div>")
+
+    _sig_rows = []
+
+    # MLB
+    try:
+        _mlb_p = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "signals_2026.json")
+        if os.path.exists(_mlb_p):
+            with open(_mlb_p) as _f:
+                _mlb_sigs = [s for s in json.load(_f)
+                             if s.get("date") == _today and s.get("resolved") != 1
+                             and not s.get("scratch_voided")]
+            if _mlb_sigs:
+                _dirs = set(s.get("signal_side", "UNDER") for s in _mlb_sigs)
+                _sig_rows.append(("⚾ MLB", len(_mlb_sigs), " / ".join(sorted(_dirs))))
+    except Exception:
+        pass
+
+    # NBA
+    try:
+        nba_r = load_nba_results()
+        if nba_r and nba_r.get("game_date") == _today:
+            _nba_plays = nba_r.get("plays", [])
+            if _nba_plays:
+                _dirs = set(p.get("lean", "").upper() for p in _nba_plays if p.get("lean"))
+                _sig_rows.append(("🏀 NBA", len(_nba_plays), " / ".join(sorted(_dirs))))
+    except Exception:
+        pass
+
+    # NHL
+    try:
+        nhl_r = load_nhl_results()
+        if nhl_r and nhl_r.get("game_date") == _today:
+            _nhl_sigs = nhl_r.get("signals", [])
+            if _nhl_sigs:
+                _dirs = set(s.get("signal_side", "") for s in _nhl_sigs)
+                _sig_rows.append(("🏒 NHL", len(_nhl_sigs), " / ".join(sorted(_dirs))))
+    except Exception:
+        pass
+
+    # Soccer
+    try:
+        soc_r = load_soccer_results()
+        if soc_r and soc_r.get("game_date") == _today:
+            _soc_plays = soc_r.get("plays", [])
+            if _soc_plays:
+                _dirs = set(p.get("lean", "").upper() for p in _soc_plays if p.get("lean"))
+                _sig_rows.append(("⚽ Soccer", len(_soc_plays), " / ".join(sorted(_dirs))))
+    except Exception:
+        pass
+
+    # Golf
+    try:
+        golf_r = load_golf_results()
+        if golf_r:
+            _golf_cands = [p for p in golf_r.get("candidates", []) if p.get("classification") in ("candidate", "lean")]
+            if _golf_cands:
+                _sig_rows.append(("⛳ Golf", len(_golf_cands), "OUTRIGHT"))
+    except Exception:
+        pass
+
+    if _sig_rows:
+        _hdr = ('<div style="display:flex;padding:4px 8px;font-size:0.72em;color:#6b7280;'
+                'border-bottom:1px solid #333">'
+                '<span style="width:120px">Sport</span>'
+                '<span style="width:80px;text-align:center">Signals</span>'
+                '<span style="flex:1">Direction</span></div>')
+        _body = ""
+        for sport, n, dirs in _sig_rows:
+            _body += (f'<div style="display:flex;padding:6px 8px;font-size:0.85em;color:#e2e8f0;'
+                      f'border-bottom:1px solid #1e293b">'
+                      f'<span style="width:120px;font-weight:600">{sport}</span>'
+                      f'<span style="width:80px;text-align:center;color:#fbbf24;font-weight:700">{n}</span>'
+                      f'<span style="flex:1;color:#94a3b8">{dirs}</span></div>')
+        st.html(f'<div style="background:#0f172a;border:1px solid #1e293b;border-radius:8px;'
+                f'overflow:hidden;margin-bottom:16px">{_hdr}{_body}</div>')
+    else:
+        st.html('<div style="color:#6b7280;font-size:0.85em;font-style:italic;margin-bottom:16px">'
+                'No active signals today.</div>')
+
+    # ── Season Performance Snapshot ──
+    st.html('<div style="font-size:1.0em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
+            'Season Performance</div>')
+
+    def _wlp_home(records):
+        w = sum(1 for r in records if r.get("result") == "WIN")
+        l = sum(1 for r in records if r.get("result") == "LOSS")
+        p = sum(1 for r in records if r.get("result") == "PUSH")
+        return w, l, p
+
+    def _roi_home(w, l, p):
+        n = w + l + p
+        if n == 0:
+            return 0.0, 0.0
+        net = w * (100 / 110) - l
+        return net / n * 100 if n > 0 else 0.0, net
+
+    _perf_rows = []
+
+    # MLB from rolling performance
+    try:
+        _mlb_perf_p = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "rolling_performance_2026.json")
+        if os.path.exists(_mlb_perf_p):
+            with open(_mlb_perf_p) as _f:
+                _mlb_perf = json.load(_f)
+            _mp = _mlb_perf if isinstance(_mlb_perf, dict) else {}
+            _mw = _mp.get("wins", 0)
+            _ml = _mp.get("losses", 0)
+            _mn = _mw + _ml
+            _mr = _mp.get("roi", 0)
+            _mu = _mp.get("net_units", 0)
+            if _mn > 0:
+                _perf_rows.append(("⚾ MLB", f"{_mw}-{_ml}", f"{_mu:+.1f}u", _mr))
+    except Exception:
+        pass
+
+    # NBA from signal log
+    try:
+        _nba_log = pd.read_parquet(os.path.join(os.path.dirname(__file__), "nba", "data", "nba_signal_log.parquet"))
+        _nba_2026 = _nba_log[(_nba_log["game_date"] >= "2026-01-01") & _nba_log["result"].notna()]
+        _nw = (_nba_2026["result"] == "WIN").sum()
+        _nl = (_nba_2026["result"] == "LOSS").sum()
+        _nn = _nw + _nl
+        if _nn > 0:
+            _nu = _nw * (100/110) - _nl
+            _nr = _nu / _nn * 100
+            _perf_rows.append(("🏀 NBA", f"{_nw}-{_nl}", f"{_nu:+.1f}u", _nr))
+    except Exception:
+        pass
+
+    # NHL from decisions
+    try:
+        _nhl_dec = pd.read_parquet(os.path.join(os.path.dirname(__file__), "nhl", "nhl_decisions.parquet"))
+        _nhl_2026 = _nhl_dec[(_nhl_dec["game_date"] >= "2026-01-01") & (_nhl_dec["graded"] == 1)]
+        _hw = (_nhl_2026["result"] == "WIN").sum()
+        _hl = (_nhl_2026["result"] == "LOSS").sum()
+        _hn = _hw + _hl
+        if _hn > 0:
+            _hu = _hw * (100/110) - _hl
+            _hr = _hu / _hn * 100
+            _perf_rows.append(("🏒 NHL", f"{_hw}-{_hl}", f"{_hu:+.1f}u", _hr))
+    except Exception:
+        pass
+
+    # Soccer from decisions
+    try:
+        _soc_dec = pd.read_parquet(os.path.join(os.path.dirname(__file__), "soccer", "data", "soccer_decisions.parquet"))
+        _soc_2026 = _soc_dec[(_soc_dec["game_date"] >= "2026-01-01") & _soc_dec["result"].notna()]
+        _sw = (_soc_2026["result"] == "WIN").sum()
+        _sl = (_soc_2026["result"] == "LOSS").sum()
+        _sn = _sw + _sl
+        if _sn > 0:
+            _su = _sw * (100/110) - _sl
+            _sr = _su / _sn * 100
+            _perf_rows.append(("⚽ Soccer", f"{_sw}-{_sl}", f"{_su:+.1f}u", _sr))
+    except Exception:
+        pass
+
+    if _perf_rows:
+        _hdr = ('<div style="display:flex;padding:4px 8px;font-size:0.72em;color:#6b7280;'
+                'border-bottom:1px solid #333">'
+                '<span style="width:120px">Sport</span>'
+                '<span style="width:80px;text-align:center">Record</span>'
+                '<span style="width:80px;text-align:center">Net</span>'
+                '<span style="width:80px;text-align:center">ROI</span></div>')
+        _body = ""
+        for sport, record, net, roi in _perf_rows:
+            _roi_color = "#22c55e" if roi > 0 else "#ef4444" if roi < 0 else "#6b7280"
+            _body += (f'<div style="display:flex;padding:6px 8px;font-size:0.85em;color:#e2e8f0;'
+                      f'border-bottom:1px solid #1e293b">'
+                      f'<span style="width:120px;font-weight:600">{sport}</span>'
+                      f'<span style="width:80px;text-align:center">{record}</span>'
+                      f'<span style="width:80px;text-align:center">{net}</span>'
+                      f'<span style="width:80px;text-align:center;color:{_roi_color};font-weight:700">'
+                      f'{roi:+.1f}%</span></div>')
+        st.html(f'<div style="background:#0f172a;border:1px solid #1e293b;border-radius:8px;'
+                f'overflow:hidden;margin-bottom:16px">{_hdr}{_body}</div>')
+
+        st.html(f'<div style="color:#4b5563;font-size:0.70em;text-align:center">'
+                f'Season: Mar 25, 2026 \u2192 {_today}</div>')
+    else:
+        st.html('<div style="color:#6b7280;font-size:0.85em;font-style:italic">'
+                'Season performance data loading...</div>')
+
+
 def main() -> None:
     data  = load_results()
     stats = load_season_stats()
@@ -4855,7 +5054,10 @@ def main() -> None:
             st.rerun()
 
     # ── sport tabs ────────────────────────────────────────────────────────────
-    tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_reviews, tab_tracker = st.tabs(["⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "📋 Reviews", "📊 Tracker"])
+    tab_home, tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_reviews, tab_tracker = st.tabs(["\U0001f3e0", "⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "📋 Reviews", "📊 Tracker"])
+
+    with tab_home:
+        _render_home_tab()
 
     with tab_mlb:
         _render_mlb_tab(data, stats)
