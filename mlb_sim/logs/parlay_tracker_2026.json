@@ -139,32 +139,32 @@
             "game": "DET@ARI",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "CLE@LAD",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "WSN@PHI",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
-            "result": null
+            "result": "LOSS"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 5,
+      "total": 6,
       "wins": 1,
-      "losses": 4,
+      "losses": 5,
       "pending": 0,
-      "win_rate": 20.0,
-      "net_units": 1.0,
+      "win_rate": 16.7,
+      "net_units": 0.0,
       "payout_per_win": 6.0
     }
   },
@@ -292,44 +292,44 @@
             "game": "DET@ARI",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "CLE@LAD",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "WSN@PHI",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "OAK@ATL",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "MIN@KCR",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
-            "result": null
+            "result": "LOSS"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 3,
+      "total": 4,
       "wins": 0,
-      "losses": 3,
+      "losses": 4,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -3.0,
+      "net_units": -4.0,
       "payout_per_win": 24.0
     }
   },

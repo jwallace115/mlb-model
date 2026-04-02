@@ -20,9 +20,9 @@
     "line_at_signal_time":-0.5,
     "f5_line_closing":null,
     "f5_clv":null,
-    "home_f5_score":1,
-    "away_f5_score":2,
-    "f5_margin":-1,
+    "home_f5_score":1.0,
+    "away_f5_score":2.0,
+    "f5_margin":-1.0,
     "result":"LOSS",
     "net_units":-0.5,
     "resolved":1
@@ -48,11 +48,11 @@
     "line_at_signal_time":-0.5,
     "f5_line_closing":null,
     "f5_clv":null,
-    "home_f5_score":null,
-    "away_f5_score":null,
-    "f5_margin":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "home_f5_score":5.0,
+    "away_f5_score":1.0,
+    "f5_margin":4.0,
+    "result":"WIN",
+    "net_units":0.3289473684,
+    "resolved":1
   }
 ]
