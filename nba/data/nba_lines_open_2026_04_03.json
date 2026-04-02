@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "97f990a7956a23f16f9298270f5b556e",
+    "game_date": "2026-04-03",
+    "sport": "NBA",
+    "home_team": "Oklahoma City Thunder",
+    "away_team": "Los Angeles Lakers",
+    "commence_time": "2026-04-03T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 228.0,
+    "over_price": -108,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-02T06:05:02.285931+00:00"
+  },
+  {
+    "game_id": "67a88265216bd48208f38288dba434ba",
+    "game_date": "2026-04-03",
+    "sport": "NBA",
+    "home_team": "Golden State Warriors",
+    "away_team": "Cleveland Cavaliers",
+    "commence_time": "2026-04-03T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 226.5,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-02T06:05:02.285931+00:00"
+  },
+  {
+    "game_id": "52a9bdfa0493e80275ae71f49de1146f",
+    "game_date": "2026-04-03",
+    "sport": "NBA",
+    "home_team": "Portland Trail Blazers",
+    "away_team": "New Orleans Pelicans",
+    "commence_time": "2026-04-03T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 232.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-02T06:05:02.285931+00:00"
+  },
+  {
+    "game_id": "8acdc53c485cd361a907edc8d53091f2",
+    "game_date": "2026-04-03",
+    "sport": "NBA",
+    "home_team": "Los Angeles Clippers",
+    "away_team": "San Antonio Spurs",
+    "commence_time": "2026-04-03T02:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 231.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-02T06:05:02.285931+00:00"
+  }
+]

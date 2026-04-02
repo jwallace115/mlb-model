@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "e55dd97cbbe9b080f6059d380832d84f",
+    "game_date": "2026-04-03",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Atlanta Braves",
+    "commence_time": "2026-04-03T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -116,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-02T06:05:02.083171+00:00"
+  },
+  {
+    "game_id": "c7e9785b27cff0b87f132c7c63daea75",
+    "game_date": "2026-04-03",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "New York Mets",
+    "commence_time": "2026-04-03T01:45:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -115,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-02T06:05:02.083171+00:00"
+  }
+]
