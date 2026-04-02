@@ -3534,5 +3534,83 @@
     "over_price": -112,
     "under_price": -108,
     "book": "draftkings"
+  },
+  {
+    "game_id": "b69acd5d2b74c9782f22bd2463df8371",
+    "game_date": "2026-04-02",
+    "home_team": "KCR",
+    "away_team": "MIN",
+    "snapshot_time": "2026-04-02T06:00:03.183960",
+    "first_seen_timestamp": "2026-04-02T06:00:03.183935",
+    "snapshot_label": "OPEN",
+    "total_line": 9.0,
+    "over_price": -122,
+    "under_price": 100,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "e55dd97cbbe9b080f6059d380832d84f",
+    "game_date": "2026-04-02",
+    "home_team": "ARI",
+    "away_team": "ATL",
+    "snapshot_time": "2026-04-02T06:00:03.200871",
+    "first_seen_timestamp": "2026-04-02T06:00:03.200847",
+    "snapshot_label": "OPEN",
+    "total_line": 8.5,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "c7e9785b27cff0b87f132c7c63daea75",
+    "game_date": "2026-04-02",
+    "home_team": "SFG",
+    "away_team": "NYM",
+    "snapshot_time": "2026-04-02T06:00:03.221364",
+    "first_seen_timestamp": "2026-04-02T06:00:03.221343",
+    "snapshot_label": "OPEN",
+    "total_line": 7.5,
+    "over_price": 100,
+    "under_price": -122,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "b69acd5d2b74c9782f22bd2463df8371",
+    "game_date": "2026-04-02",
+    "home_team": "KCR",
+    "away_team": "MIN",
+    "snapshot_time": "2026-04-02T06:00:03.232427",
+    "first_seen_timestamp": "2026-04-02T06:00:03.183935",
+    "snapshot_label": "2AM",
+    "total_line": 9.0,
+    "over_price": -122,
+    "under_price": 100,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "e55dd97cbbe9b080f6059d380832d84f",
+    "game_date": "2026-04-02",
+    "home_team": "ARI",
+    "away_team": "ATL",
+    "snapshot_time": "2026-04-02T06:00:03.245759",
+    "first_seen_timestamp": "2026-04-02T06:00:03.200847",
+    "snapshot_label": "2AM",
+    "total_line": 8.5,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "c7e9785b27cff0b87f132c7c63daea75",
+    "game_date": "2026-04-02",
+    "home_team": "SFG",
+    "away_team": "NYM",
+    "snapshot_time": "2026-04-02T06:00:03.254326",
+    "first_seen_timestamp": "2026-04-02T06:00:03.221343",
+    "snapshot_label": "2AM",
+    "total_line": 7.5,
+    "over_price": 100,
+    "under_price": -122,
+    "book": "fanduel"
   }
 ]
