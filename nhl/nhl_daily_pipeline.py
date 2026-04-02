@@ -196,7 +196,7 @@ def fetch_goalies(game_id: int) -> dict:
                                (starter.get("saves", 0) or 0),
                 }
             else:
-                result[key] = {"name": "Unknown", "starter": False, "sa": 0, "ga": 0}
+                result[key] = {"name": "Unknown", "starter": None, "sa": 0, "ga": 0}
         return result
     except Exception:
         return {"home": {}, "away": {}}
@@ -354,10 +354,10 @@ def compute_game_features(home: str, away: str, game_date: date,
     # Goalie adjustments from live info
     feat["home_goalie_fatigue"] = 0   # not computed from live data
     feat["home_goalie_b2b"]     = int(home_b2b)
-    feat["home_backup_flag"]    = 0 if home_goalie_info.get("starter", True) else 1
+    feat["home_backup_flag"]    = int(home_goalie_info.get("starter") is False)
     feat["away_goalie_fatigue"] = 0
     feat["away_goalie_b2b"]     = int(away_b2b)
-    feat["away_backup_flag"]    = 0 if away_goalie_info.get("starter", True) else 1
+    feat["away_backup_flag"]    = int(away_goalie_info.get("starter") is False)
 
     # Schedule features
     feat["home_days_rest"]    = home_rest
@@ -680,8 +680,8 @@ def run_pipeline(target_date: date) -> None:
 
         home_confirmed = bool(home_goalie_info.get("starter") is not None)
         away_confirmed = bool(away_goalie_info.get("starter") is not None)
-        home_backup = int(not home_goalie_info.get("starter", True))
-        away_backup = int(not away_goalie_info.get("starter", True))
+        home_backup = int(home_goalie_info.get("starter") is False)
+        away_backup = int(away_goalie_info.get("starter") is False)
 
         # Compute features
         feat = compute_game_features(
