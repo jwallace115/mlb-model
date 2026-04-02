@@ -1,0 +1,25 @@
+{
+  "features": [
+    "h_rpts",
+    "a_rpts",
+    "h_ropp",
+    "a_ropp",
+    "h_rpace",
+    "a_rpace",
+    "h_r3pa",
+    "a_r3pa",
+    "rest_diff",
+    "home_b2b",
+    "avg_pace",
+    "any_b2b",
+    "ct_c",
+    "low_t",
+    "high_t"
+  ],
+  "ct_mean": 164.11835106382978,
+  "alpha": null,
+  "train": [
+    2022,
+    2023
+  ]
+}

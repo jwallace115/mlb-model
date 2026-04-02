@@ -1,0 +1,44 @@
+M07 Rotation Fragility — HOLDOUT (2024)
+==================================================
+VERDICT: FAIL
+
+FROZEN THRESHOLDS:
+  HHI fragile: > 0.1357
+  HHI stable: < 0.1236
+
+SAMPLE SIZES:
+  Fragile: 158 games
+  Stable: 1 games
+  Total: 262 games
+
+H1 — VARIANCE:
+  var(fragile)=308.26, var(stable)=nan, ratio=0.00x
+  SD(fragile)=17.56, SD(stable)=nan
+  Levene p=1.0000
+
+H2 — TAIL PROBABILITY:
+  P(|error|>10 | fragile)=0.21518987341772153
+  P(|error|>10 | stable)=nan
+
+H3 — MARKET ERROR:
+  Fragile: mean=-2.22, SD=15.72
+  Stable: mean=1.50, SD=nan
+
+H4 — SUBGROUPS:
+  Home fragile only: N=56, var=324.9
+  Away fragile only: N=55, var=227.7
+  Both fragile: N=47, var=387.6
+
+H5 — INTERACTIONS:
+  Fragile+B2B: N=13
+  Fragile vs Stable opp: N=18
+
+HOLDOUT GATES (0/5):
+  FAIL: HO1: var(fragile) > var(stable) — 308.3 vs nan
+  FAIL: HO2: Levene p < 0.20 — p=1.0000
+  FAIL: HO3: tail prob fragile > stable — 0.2152 vs nan
+  FAIL: HO4: mean error within 2.0 of zero — |-2.22| < 2.0
+  FAIL: HO5: SD(error) fragile > stable — 15.72 vs nan
+
+DEPLOYMENT RECOMMENDATION:
+  Holdout does not confirm. Archive.

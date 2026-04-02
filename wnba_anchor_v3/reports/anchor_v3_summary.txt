@@ -1,0 +1,34 @@
+WNBA Anchor V3 (ET-corrected odds)
+==================================================
+Date: 2026-04-03
+Recommendation: NOT READY
+
+DATA: train=363, val=227, holdout=275
+Features (15): ['h_rpts', 'a_rpts', 'h_ropp', 'a_ropp', 'h_rpace', 'a_rpace', 'h_r3pa', 'a_r3pa', 'rest_diff', 'home_b2b', 'any_b2b', 'avg_pace', 'ct_c', 'low_t', 'high_t']
+Alpha: 1000
+
+MODEL PERFORMANCE:
+  Train: anchor=17.31, market=17.56, delta=-0.25
+  Val: anchor=16.51, market=16.06, delta=+0.45
+  Holdout: anchor=16.15, market=16.08, delta=+0.07
+
+VALIDATION 2024:
+  STRONG_OVER: N=18, ROI=-9.6% INV
+  LEAN_OVER: N=94, ROI=-17.7% INV
+  NO_SIGNAL: N=99, ROI=-0.6%
+  LEAN_UNDER: N=8, ROI=-52.3% INV
+  STRONG_UNDER: N=8, ROI=-52.3% INV
+
+HOLDOUT 2025:
+  STRONG_OVER: N=28, ROI=+2.3%
+  LEAN_OVER: N=109, ROI=-13.3%
+  NO_SIGNAL: N=118, ROI=+0.3%
+  LEAN_UNDER: N=13, ROI=+17.5%
+  STRONG_UNDER: N=7, ROI=-18.2% INV
+
+POOLED 2024+2025:
+  STRONG_OVER: N=42, ROI=-15.8%
+  LEAN_OVER: N=211, ROI=-12.2%
+  NO_SIGNAL: N=214, ROI=+0.4%
+  LEAN_UNDER: N=21, ROI=+0.0%
+  STRONG_UNDER: N=14, ROI=-45.5% INV

@@ -1,0 +1,6 @@
+tier,N,mean_edge,mean_actual,mean_line,model_err,mkt_err,over_rate,rmse_model,proxy_roi
+MODEL_STRONG_OVER,27,6.3,151.9,157.9,-12.4,-6.0,29.6,21.3,-43.4
+MODEL_LEAN_OVER,8,2.3,164.9,160.9,1.7,3.9,62.5,18.9,19.3
+MODEL_STRONG_UNDER,31,-9.3,169.7,170.1,8.9,-0.4,58.1,17.5,10.9
+MODEL_LEAN_UNDER,8,-2.0,159.5,167.8,-6.3,-8.2,25.0,11.8,-52.3
+NO_SIGNAL,155,0.1,163.9,163.6,0.9,0.9,52.6,17.3,0.5

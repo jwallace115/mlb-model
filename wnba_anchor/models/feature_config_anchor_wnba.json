@@ -1,0 +1,38 @@
+{
+  "feature_list": [
+    "home_rolling_pts",
+    "away_rolling_pts",
+    "home_rolling_opp_pts",
+    "away_rolling_opp_pts",
+    "home_rolling_pace",
+    "away_rolling_pace",
+    "rest_diff",
+    "home_b2b",
+    "away_b2b",
+    "home_rolling_3pa_rate",
+    "away_rolling_3pa_rate",
+    "home_premium",
+    "early_season_flag",
+    "avg_pace",
+    "pace_diff",
+    "pace_x_offense",
+    "pace_x_defense",
+    "pace_x_3pa",
+    "any_b2b",
+    "home_b2b_x_pts",
+    "away_b2b_x_pts",
+    "home_b2b_x_def",
+    "away_b2b_x_def",
+    "closing_total_centered",
+    "low_total_flag",
+    "high_total_flag"
+  ],
+  "alpha": 1000.0,
+  "closing_total_mean": 163.26339285714286,
+  "closing_total_q25": 157.5,
+  "closing_total_q75": 167.5,
+  "training_years": [
+    2021,
+    2022
+  ]
+}

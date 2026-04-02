@@ -1,0 +1,9 @@
+M07 Training: 7/8 — CONDITIONAL_PASS
+PASS: T1: independence (not quality proxy) — proxy=False
+PASS: T2: variance expansion (Levene) — p=0.0154, expand=True
+PASS: T3: tail probability increase — frag=0.0625, stab=0.0000
+PASS: T4: variance is primary — var_frag=355.6, var_stab=112.1
+PASS: T5: residual test positive — fh=1.486, fa=-0.222
+FAIL: T6: delta_R2>0.005 — 0.003166
+PASS: T7: permutation>=85th — 88.4th
+PASS: T8: year consistent variance — True

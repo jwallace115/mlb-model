@@ -1,0 +1,31 @@
+WNBA Residual Signal Discovery
+==================================================
+Date: 2026-04-03
+
+BASELINE (2022-2024): mean_err=-0.46, SD=16.08
+
+RESULTS (18 hypotheses tested):
+  H15_strong_disagreement: THIN_SAMPLE (gap=-8.44, p=0.2993)
+  H03_low_edge_under: THIN_SAMPLE (gap=6.4, p=0.2697)
+  H11_offense_mismatch: CANDIDATE (gap=-4.75, p=0.026)
+  H18_late_season: NULL (gap=4.38, p=0.2252)
+  H08_high_total: NULL (gap=2.69, p=0.297)
+  H14_pace_mismatch: NULL (gap=-2.68, p=0.221)
+  H05a_b2b_under: THIN_SAMPLE (gap=1.74, p=0.7646)
+  H02_high_edge_over: NULL (gap=-1.58, p=0.6896)
+  H10_rest_matched: NULL (gap=-1.38, p=0.5195)
+  H07_low_total: NULL (gap=-1.28, p=0.5816)
+  H06_rest_edge_agree: NULL (gap=-1.16, p=0.7349)
+  H13_both_strong_defense: NULL (gap=1.09, p=0.7781)
+  H12_both_high_offense: THIN_SAMPLE (gap=1.06, p=0.8324)
+  H09_early_season: NULL (gap=0.3, p=0.9209)
+  H01_decile_monotonicity: DESCRIPTIVE (gap=nan, p=nan)
+  H05b_b2b_over: THIN_SAMPLE (gap=nan, p=nan)
+  H16_home_premium_high: SKIPPED (gap=nan, p=nan)
+  H17_home_premium_negative: SKIPPED (gap=nan, p=nan)
+
+CANDIDATES: 1
+WATCH: 0
+
+CAUTION: Multiple testing — 21 hypotheses tested.
+Holdout stability required before any signal is considered real.

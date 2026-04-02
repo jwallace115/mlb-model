@@ -1,0 +1,4 @@
+tier,N,mean_edge,mean_mkt_err,over_rate,proxy_roi,inverted
+STRONG_OVER,54,3.5,1.4,55.6,6.1,False
+LEAN_OVER,84,2.6,-1.1,44.0,-13.5,True
+NO_SIGNAL,7,1.2,-6.3,57.1,-18.2,False

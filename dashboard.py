@@ -4848,7 +4848,7 @@ def main() -> None:
             st.rerun()
 
     # ── sport tabs ────────────────────────────────────────────────────────────
-    tab_home, tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_reviews, tab_tracker = st.tabs(["\U0001f3e0", "⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "📋 Reviews", "📊 Tracker"])
+    tab_home, tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_wnba_arch, tab_reviews, tab_tracker = st.tabs(["\U0001f3e0", "⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "🏀 WNBA", "📋 Reviews", "📊 Tracker"])
 
     with tab_home:
         _render_home_tab()
@@ -4871,11 +4871,517 @@ def main() -> None:
     with tab_golf:
         _render_golf_tab()
 
+    with tab_wnba_arch:
+        _render_wnba_archetype_tab()
+
     with tab_reviews:
         _render_reviews_tab()
 
     with tab_tracker:
         _render_tracker_tab()
+
+
+# ── WNBA Archetype tab rendering ──────────────────────────────────────────────
+
+_ARCH_SHORT = {
+    "HIGH_AST_RATE_LOW_OPP_FTA_RATE": "AST",
+    "HIGH_TOP2_SHARE_LOW_N_PLAYERS": "TOP2",
+    "HIGH_PF_RATE_LOW_STL_TOV_RATIO": "PF",
+    "HIGH_STL_TOV_RATIO_LOW_TOV_RATE": "STL",
+}
+
+
+@st.cache_data(ttl=300)
+def _load_wnba_arch_registry():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "wnba_archetype_board", "config", "archetype_signal_registry.json")
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+@st.cache_data(ttl=300)
+def _load_wnba_arch_signals_2026():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "wnba_archetype_board", "data", "signals", "wnba_archetype_signals_2026.json")
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+@st.cache_data(ttl=300)
+def _load_wnba_arch_tracker():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "wnba_archetype_board", "data", "logs", "signal_tracker.parquet")
+    try:
+        return pd.read_parquet(path)
+    except Exception:
+        return pd.DataFrame()
+
+
+@st.cache_data(ttl=300)
+def _load_wnba_arch_historical():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "wnba_archetype_board", "reports", "historical_signal_performance.csv")
+    try:
+        return pd.read_csv(path)
+    except Exception:
+        return pd.DataFrame()
+
+
+def _wnba_arch_tier_badge(tier: str) -> str:
+    """Top-right confidence tier badge following _conf_badge pattern."""
+    colors = {
+        "TIER_1": ("gold", "#fbbf24", "#422006"),
+        "TIER_2": ("silver", "#94a3b8", "#1e293b"),
+        "TIER_3": ("gray", "#64748b", "#1e2535"),
+    }
+    label, color, bg = colors.get(tier, ("?", "#64748b", "#1e2535"))
+    return (f'<span style="background:{bg};color:{color};border:1px solid {color};'
+            f'border-radius:4px;padding:2px 8px;font-size:0.75em;font-weight:700;'
+            f'letter-spacing:0.05em;text-transform:uppercase;float:right">{tier}</span>')
+
+
+def _wnba_arch_signal_pill(sig: dict, mode_label: str = "") -> str:
+    """Archetype signal pill following MLB modifier pill pattern."""
+    tier = sig.get("confidence_tier", "TIER_3")
+    is_top = tier in ("TIER_1", "TIER_2")
+    color = "#22c55e" if is_top else "#eab308"
+    bg = "#052e16" if is_top else "#1c1400"
+    sid = sig.get("signal_id", "?")
+    h_short = _ARCH_SHORT.get(sig.get("home_archetype", ""), "?")
+    a_short = _ARCH_SHORT.get(sig.get("away_archetype", ""), "?")
+    direction = sig.get("direction", "?")
+    mode_tag = ""
+    if mode_label:
+        mode_tag = f' <span style="font-size:0.80em;opacity:0.7">{mode_label}</span>'
+    return (f'<span style="background:{bg};color:{color};border:1px solid {color};'
+            f'border-radius:10px;padding:2px 8px;font-size:0.75em;font-weight:600;'
+            f'margin-right:4px;margin-bottom:3px;display:inline-block">'
+            f'[{sid}] {h_short} vs {a_short} \u2192 {direction}{mode_tag}</span>')
+
+
+def _wnba_arch_render_game_card(game: dict, matched_signals: list, registry_map: dict) -> None:
+    """Render a single WNBA archetype game card."""
+    home = game.get("home_team", "?")
+    away = game.get("away_team", "?")
+    gdate = game.get("game_date", "")
+    closing = game.get("closing_total")
+    expansion = game.get("expansion_game", False)
+    h_state_src = game.get("home_state_source", "")
+    a_state_src = game.get("away_state_source", "")
+
+    # Check for conflicts
+    directions = set()
+    for s in matched_signals:
+        reg = registry_map.get(s.get("signal_id"))
+        if reg:
+            directions.add(reg.get("direction"))
+    is_conflict = len(directions) > 1
+
+    # Border color: green if closing_total, orange-red if conflict, red if no line
+    if is_conflict:
+        border = "#ef4444"
+    elif closing is not None:
+        border = "#22c55e"
+    else:
+        border = "#dc2626"
+
+    matchup = f"{away} @ {home}"
+
+    # Best tier among matched signals
+    tier_rank = {"TIER_1": 1, "TIER_2": 2, "TIER_3": 3}
+    best_tier = "TIER_3"
+    secondary_tiers = []
+    for s in matched_signals:
+        reg = registry_map.get(s.get("signal_id"))
+        if reg:
+            t = reg.get("confidence_tier", "TIER_3")
+            if tier_rank.get(t, 3) < tier_rank.get(best_tier, 3):
+                best_tier = t
+    for s in matched_signals:
+        reg = registry_map.get(s.get("signal_id"))
+        if reg:
+            t = reg.get("confidence_tier", "TIER_3")
+            if t != best_tier and t not in secondary_tiers:
+                secondary_tiers.append(t)
+
+    # Header
+    line_str = f"O/U {closing:.1f}" if closing is not None else "No line"
+    status = "CONFLICT" if is_conflict else ""
+    header = (
+        f'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">'
+        f'<div>'
+        f'<span style="font-size:1.05em;font-weight:700;color:#e2e8f0">{matchup}</span>'
+        f'<span style="font-size:0.78em;color:#6b7280;margin-left:8px">{gdate}</span>'
+        f'<span style="font-size:0.78em;color:#94a3b8;margin-left:8px">{line_str}</span>'
+        f'</div>'
+        f'<div>{_wnba_arch_tier_badge(best_tier)}</div>'
+        f'</div>'
+    )
+
+    # Secondary tier note
+    sec_html = ""
+    if secondary_tiers:
+        sec_html = (f'<div style="text-align:right;font-size:0.68em;color:#64748b;margin-top:-2px">'
+                    f'Also: {", ".join(secondary_tiers)}</div>')
+
+    # Conflict banner
+    conflict_html = ""
+    if is_conflict:
+        conflict_html = (
+            '<div style="background:#2d1515;border:1px solid #ef4444;border-radius:4px;'
+            'padding:5px 10px;margin-top:6px;font-size:0.78em;color:#f87171;font-weight:600">'
+            'Conflicting season/state signals \u2014 excluded from primary tracking</div>'
+        )
+
+    # Signal pills
+    pills_html = '<div style="margin-top:4px;line-height:2.0">'
+    for s in matched_signals:
+        reg = registry_map.get(s.get("signal_id"))
+        if reg:
+            mode_label = reg.get("archetype_mode", "")
+            pills_html += _wnba_arch_signal_pill(reg, mode_label)
+    pills_html += '</div>'
+
+    # Inline metrics per signal
+    metrics_html = '<div style="margin-top:3px;font-size:0.75em;color:#6b7280">'
+    for s in matched_signals:
+        reg = registry_map.get(s.get("signal_id"))
+        if reg:
+            sid = reg.get("signal_id", "?")
+            n = reg.get("discovery_N", 0)
+            roi = reg.get("discovery_proxy_roi", 0)
+            # Get hit rate from historical performance if available
+            hit = ""
+            metrics_html += (f'{sid}: N={n} \u00b7 ROI +{roi:.1f}% '
+                             f'<span style="color:#2d3748;margin:0 4px">\u00b7</span>')
+    metrics_html = metrics_html.rstrip(' <span style="color:#2d3748;margin:0 4px">\u00b7</span>')
+    metrics_html += '</div>'
+
+    # Small flags
+    flags_html = ""
+    flag_parts = []
+    if expansion:
+        flag_parts.append('<span style="color:#f59e0b;font-size:0.72em">\U0001f536 Expansion game</span>')
+    if h_state_src == "SEASON_ONLY" or a_state_src == "SEASON_ONLY":
+        flag_parts.append('<span style="color:#94a3b8;font-size:0.72em">\U0001f4c5 Season-only</span>')
+    if flag_parts:
+        flags_html = f'<div style="margin-top:4px">{" &nbsp; ".join(flag_parts)}</div>'
+
+    st.html(
+        f'<div class="game-card" style="border-left:4px solid {border}">'
+        f'{header}{sec_html}{pills_html}{metrics_html}{conflict_html}{flags_html}'
+        f'</div>'
+    )
+
+
+def _render_wnba_archetype_tab() -> None:
+    """WNBA Archetype Signals tab."""
+    registry = _load_wnba_arch_registry()
+    signals_2026 = _load_wnba_arch_signals_2026()
+    tracker = _load_wnba_arch_tracker()
+    hist_perf = _load_wnba_arch_historical()
+
+    # Validate confidence_tier is present
+    if registry and "confidence_tier" not in registry[0]:
+        st.error("confidence_tier missing from archetype_signal_registry.json")
+        return
+
+    registry_map = {s["signal_id"]: s for s in registry}
+
+    # Build tier map for tracker lookups
+    tier_map = {s["signal_id"]: s.get("confidence_tier", "TIER_3") for s in registry}
+
+    # ── Section 1: Status Caption ──
+    st.caption("\U0001f3c0 WNBA Archetype Signals \u2014 Structural team matchup signals. "
+               "Monitoring 2026 season for live validation.")
+
+    # ── Section 2: Today's Games ──
+    if not signals_2026:
+        # Check if season hasn't started (before May typically)
+        from datetime import date
+        today = date.today()
+        if today.month < 5:
+            st.html('<div class="game-card" style="border-left:4px solid #374151">'
+                    '<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
+                    'WNBA season not started yet. System ready for opening day.</div></div>')
+        else:
+            st.html('<div class="game-card" style="border-left:4px solid #374151">'
+                    '<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
+                    'No WNBA archetype signals today.</div>'
+                    '<div style="font-size:0.78em;color:#6b7280;margin-top:3px">'
+                    'Signals will appear automatically on game days.</div></div>')
+    else:
+        # Group signals by game_id
+        game_signals = {}
+        for s in signals_2026:
+            gid = s.get("game_id", "")
+            if gid not in game_signals:
+                game_signals[gid] = {"game": s, "signals": []}
+            game_signals[gid]["signals"].append(s)
+
+        # Separate primary, conflict, and no-signal games
+        primary_cards = []
+        conflict_cards = []
+        no_signal = []
+
+        for gid, gs in game_signals.items():
+            matched = gs["signals"]
+            # Determine if any actual signals matched
+            has_signal = any(s.get("signal_id") for s in matched)
+            if not has_signal:
+                no_signal.append(gs["game"])
+                continue
+
+            # Check for direction conflict
+            dirs = set()
+            for s in matched:
+                reg = registry_map.get(s.get("signal_id"))
+                if reg:
+                    dirs.add(reg.get("direction"))
+            if len(dirs) > 1:
+                conflict_cards.append(gs)
+            else:
+                # Sort by best tier
+                best = min(
+                    (registry_map.get(s.get("signal_id"), {}).get("confidence_tier", "TIER_3")
+                     for s in matched if s.get("signal_id")),
+                    default="TIER_3"
+                )
+                primary_cards.append((best, gs))
+
+        # Sort primary: TIER_1 first
+        primary_cards.sort(key=lambda x: x[0])
+
+        for _, gs in primary_cards:
+            _wnba_arch_render_game_card(gs["game"], gs["signals"], registry_map)
+
+        # Conflict cards
+        if conflict_cards:
+            st.html('<div style="font-size:0.78em;color:#ef4444;font-weight:600;'
+                    'margin-top:12px;margin-bottom:4px">Excluded Conflicts</div>')
+            for gs in conflict_cards:
+                _wnba_arch_render_game_card(gs["game"], gs["signals"], registry_map)
+
+        # No signal games
+        if no_signal:
+            with st.expander(f"No Signal Games Today ({len(no_signal)})"):
+                for g in no_signal:
+                    away = g.get("away_team", "?")
+                    home = g.get("home_team", "?")
+                    cl = g.get("closing_total")
+                    line_s = f" \u00b7 O/U {cl:.1f}" if cl is not None else ""
+                    st.html(f'<div style="font-size:0.82em;color:#6b7280">'
+                            f'{away} @ {home}{line_s}</div>')
+
+    # ── Section 3: Historical Signal Board ──
+    st.html('<div style="margin-top:18px;border-top:1px solid #1e293b;padding-top:12px">'
+            '<span style="font-size:0.95em;font-weight:700;color:#e2e8f0">'
+            'Historical Signal Board</span></div>')
+
+    if hist_perf.empty:
+        st.warning("Historical performance file not found.")
+    else:
+        # Row 1 — Overall
+        total_n = int(hist_perf["N"].sum())
+        total_w = int(hist_perf["W"].astype(int).sum())
+        total_l = int(hist_perf["L"].astype(int).sum())
+        # Compute aggregate proxy ROI weighted by N
+        total_roi = (hist_perf["proxy_roi"] * hist_perf["N"]).sum() / total_n if total_n else 0
+        # Positive seasons: count unique seasons in tracker
+        pos_seasons = "4/4"  # frozen from research
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Total Signals", total_n)
+        c2.metric("Proxy ROI", f"+{total_roi:.1f}%")
+        c3.metric("Positive Seasons", pos_seasons)
+
+        # Row 2 — By mode
+        mc1, mc2 = st.columns(2)
+        for col, mode in [(mc1, "SEASON"), (mc2, "STATE")]:
+            sub = hist_perf[hist_perf["mode"] == mode]
+            if not sub.empty:
+                mn = int(sub["N"].sum())
+                mr = (sub["proxy_roi"] * sub["N"]).sum() / mn if mn else 0
+                col.metric(f"{mode.title()} Mode", f"N={mn}, ROI +{mr:.1f}%")
+
+        # Row 3 — By direction
+        dc1, dc2 = st.columns(2)
+        for col, d in [(dc1, "OVER"), (dc2, "UNDER")]:
+            sub = hist_perf[hist_perf["direction"] == d]
+            if not sub.empty:
+                dn = int(sub["N"].sum())
+                dr = (sub["proxy_roi"] * sub["N"]).sum() / dn if dn else 0
+                col.metric(f"{d.title()}", f"N={dn}, ROI +{dr:.1f}%")
+
+        # Row 4 — By tier (from registry confidence_tier)
+        tc1, tc2, tc3 = st.columns(3)
+        for col, tier in [(tc1, "TIER_1"), (tc2, "TIER_2"), (tc3, "TIER_3")]:
+            tier_ids = [s["signal_id"] for s in registry if s.get("confidence_tier") == tier]
+            sub = hist_perf[hist_perf["signal_id"].isin(tier_ids)]
+            if not sub.empty:
+                tn = int(sub["N"].sum())
+                tr = (sub["proxy_roi"] * sub["N"]).sum() / tn if tn else 0
+                col.metric(tier, f"N={tn}, ROI +{tr:.1f}%")
+
+        # Top 3 by ROI
+        st.html('<div style="font-size:0.85em;font-weight:600;color:#94a3b8;margin-top:12px">'
+                'Top 3 Signals by ROI</div>')
+        top3 = hist_perf.nlargest(3, "proxy_roi")
+        for _, row in top3.iterrows():
+            sid = row["signal_id"]
+            reg = registry_map.get(sid, {})
+            tier = reg.get("confidence_tier", "?")
+            h_short = _ARCH_SHORT.get(reg.get("home_archetype", ""), "?")
+            a_short = _ARCH_SHORT.get(reg.get("away_archetype", ""), "?")
+            direction = row.get("direction", "?")
+            n = int(row["N"])
+            hit = row.get("hit_rate", 0)
+            roi = row.get("proxy_roi", 0)
+            tier_colors = {"TIER_1": "#fbbf24", "TIER_2": "#94a3b8", "TIER_3": "#64748b"}
+            tc = tier_colors.get(tier, "#64748b")
+            st.html(
+                f'<div class="game-card" style="border-left:3px solid {tc};padding:8px 14px">'
+                f'<div style="display:flex;justify-content:space-between;align-items:center">'
+                f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                f'[{sid}] {h_short} vs {a_short} \u2192 {direction}</span>'
+                f'<span style="font-size:0.72em;color:{tc};font-weight:600">{tier}</span></div>'
+                f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
+                f'N={n} \u00b7 Hit {hit:.1f}% \u00b7 ROI +{roi:.1f}%</div></div>'
+            )
+
+        # All 7 signals expander
+        with st.expander("View all 7 frozen signals"):
+            # Build display table sorted by tier then ROI desc
+            display_rows = []
+            for _, row in hist_perf.iterrows():
+                sid = row["signal_id"]
+                reg = registry_map.get(sid, {})
+                tier = reg.get("confidence_tier", "TIER_3")
+                h_short = _ARCH_SHORT.get(reg.get("home_archetype", ""), "?")
+                a_short = _ARCH_SHORT.get(reg.get("away_archetype", ""), "?")
+                display_rows.append({
+                    "Signal": sid,
+                    "Mode": row.get("mode", "?"),
+                    "Matchup": f"{h_short} vs {a_short}",
+                    "Direction": row.get("direction", "?"),
+                    "Tier": tier,
+                    "N": int(row["N"]),
+                    "ROI": f"+{row.get('proxy_roi', 0):.1f}%",
+                })
+            df_display = pd.DataFrame(display_rows)
+            df_display = df_display.sort_values(
+                by=["Tier", "ROI"], ascending=[True, False]
+            )
+            st.dataframe(df_display, use_container_width=True, hide_index=True)
+
+    # ── Section 4: Tracker ──
+    st.html('<div style="margin-top:18px;border-top:1px solid #1e293b;padding-top:12px">'
+            '<span style="font-size:0.95em;font-weight:700;color:#e2e8f0">'
+            'Signal Tracker</span></div>')
+
+    if tracker.empty:
+        st.html('<div style="font-size:0.82em;color:#6b7280">'
+                'No tracker data available.</div>')
+    else:
+        # Check for 2026 data
+        has_2026 = (tracker["season"] == 2026).any() if "season" in tracker.columns else False
+
+        if not has_2026:
+            st.html('<div style="font-size:0.80em;color:#94a3b8;font-style:italic;margin-bottom:8px">'
+                    '2026 live tracking not started \u2014 displaying historical backfill only.</div>')
+
+        # Add tier column from registry
+        tracker = tracker.copy()
+        tracker["tier"] = tracker["signal_id"].map(tier_map).fillna("TIER_3")
+
+        # Exclude conflicts from summary
+        non_conflict = tracker[tracker["signal_conflict"] == 0] if "signal_conflict" in tracker.columns else tracker
+        conflicts = tracker[tracker["signal_conflict"] == 1] if "signal_conflict" in tracker.columns else pd.DataFrame()
+
+        graded = non_conflict[non_conflict["result"].isin(["WIN", "LOSS", "PUSH"])]
+        total_graded = len(graded)
+        w = (graded["result"] == "WIN").sum()
+        l = (graded["result"] == "LOSS").sum()
+        p = (graded["result"] == "PUSH").sum()
+        hit_pct = w / (w + l) * 100 if (w + l) > 0 else 0
+
+        sc1, sc2, sc3, sc4 = st.columns(4)
+        sc1.metric("Graded", total_graded)
+        sc2.metric("W-L-P", f"{w}-{l}-{p}")
+        sc3.metric("Hit%", f"{hit_pct:.1f}%")
+        # Proxy ROI from tracker
+        if "market_error" in graded.columns and "direction" in graded.columns:
+            correct = 0
+            for _, r in graded.iterrows():
+                me = r.get("market_error", 0) or 0
+                d = r.get("direction", "")
+                if (d == "OVER" and me > 0) or (d == "UNDER" and me < 0):
+                    correct += 1
+            roi_pct = (correct / total_graded - 0.5) * 100 * 2 if total_graded > 0 else 0
+        else:
+            roi_pct = 0
+        sc4.metric("ROI", f"+{roi_pct:.1f}%" if roi_pct >= 0 else f"{roi_pct:.1f}%")
+
+        # By tier
+        st.html('<div style="font-size:0.78em;font-weight:600;color:#94a3b8;margin-top:8px">'
+                'By Tier</div>')
+        tc1, tc2, tc3 = st.columns(3)
+        for col, tier in [(tc1, "TIER_1"), (tc2, "TIER_2"), (tc3, "TIER_3")]:
+            sub = graded[graded["tier"] == tier]
+            sw = (sub["result"] == "WIN").sum()
+            sl = (sub["result"] == "LOSS").sum()
+            sp = (sub["result"] == "PUSH").sum()
+            sh = sw / (sw + sl) * 100 if (sw + sl) > 0 else 0
+            col.metric(tier, f"{sw}-{sl}-{sp} ({sh:.0f}%)")
+
+        # By mode
+        st.html('<div style="font-size:0.78em;font-weight:600;color:#94a3b8;margin-top:4px">'
+                'By Mode</div>')
+        mc1, mc2 = st.columns(2)
+        for col, mode in [(mc1, "SEASON"), (mc2, "STATE")]:
+            sub = graded[graded["archetype_mode"] == mode]
+            sw = (sub["result"] == "WIN").sum()
+            sl = (sub["result"] == "LOSS").sum()
+            sp = (sub["result"] == "PUSH").sum()
+            sh = sw / (sw + sl) * 100 if (sw + sl) > 0 else 0
+            col.metric(f"{mode.title()}", f"{sw}-{sl}-{sp} ({sh:.0f}%)")
+
+        # By expansion
+        if "expansion_game" not in tracker.columns:
+            # Derive from team data — skip if not available
+            pass
+        else:
+            ec1, ec2 = st.columns(2)
+            exp_sub = graded[graded["expansion_game"] == True]
+            non_exp = graded[graded["expansion_game"] == False]
+            for col, label, sub in [(ec1, "Expansion", exp_sub), (ec2, "Non-Expansion", non_exp)]:
+                sw = (sub["result"] == "WIN").sum()
+                sl = (sub["result"] == "LOSS").sum()
+                sp = (sub["result"] == "PUSH").sum()
+                sh = sw / (sw + sl) * 100 if (sw + sl) > 0 else 0
+                col.metric(label, f"{sw}-{sl}-{sp} ({sh:.0f}%)" if len(sub) else "N/A")
+
+        # Conflicts excluded count
+        if len(conflicts) > 0:
+            st.html(f'<div style="font-size:0.72em;color:#6b7280;margin-top:4px">'
+                    f'Conflicts excluded: {len(conflicts)}</div>')
+
+        # Recent 10
+        st.html('<div style="font-size:0.78em;font-weight:600;color:#94a3b8;margin-top:12px">'
+                'Most Recent Graded</div>')
+        recent = graded.sort_values("game_date", ascending=False).head(10)
+        if len(recent) > 0:
+            display_cols = ["game_date", "away_team", "home_team", "signal_id",
+                            "direction", "closing_total", "actual_total", "result"]
+            avail = [c for c in display_cols if c in recent.columns]
+            st.dataframe(recent[avail], use_container_width=True, hide_index=True)
+        else:
+            st.html('<div style="font-size:0.82em;color:#6b7280">No graded signals yet.</div>')
 
 
 # ── Reviews tab rendering ─────────────────────────────────────────────────────
@@ -5861,4 +6367,4 @@ def _render_tracker_tab() -> None:
 
 
 main()
-# cache bust Wed Apr  1 09:20:47 EDT 2026
+# cache bust Wed Apr  2 WNBA archetype tab

@@ -1,0 +1,22 @@
+{
+  "clustering_method": "gmm",
+  "k": 4,
+  "features": [
+    "roll_hhi",
+    "roll_top2_share",
+    "roll_n_players",
+    "roll_stl_rate",
+    "roll_tov_rate",
+    "roll_stl_tov_ratio",
+    "roll_ast_rate",
+    "roll_fg3a_rate",
+    "roll_fta_rate",
+    "roll_oreb_rate",
+    "roll_dreb_rate",
+    "roll_pf_rate",
+    "roll_opp_fta_rate",
+    "roll_pts_sd"
+  ],
+  "normalization": "within_season_z_score",
+  "no_reclustering": true
+}

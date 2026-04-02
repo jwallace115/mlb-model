@@ -1,0 +1,43 @@
+WNBA Model Diagnostics Pass 1
+==================================================
+Date: 2026-04-03
+
+DATA COVERAGE:
+  2021: 175 games, 0 with lines
+  2022: 207 games, 56 with lines
+  2023: 228 games, 52 with lines
+  2024: 229 games, 93 with lines
+  2025: 276 games, 0 with lines
+
+MODEL VS MARKET (holdout 2024, N=93):
+  Model RMSE: 17.78
+  Market RMSE: 15.32
+  Market wins: True
+
+CALIBRATION: Model underpredicts low-total and overpredicts high-total games
+HETEROSCEDASTICITY: BP p=0.3149
+MARKET ANCHOR: model_adj coef=-0.491, p=0.0582, delta_R²=0.032234
+
+TIER PERFORMANCE (2024):
+  MODEL_STRONG_OVER: N=27, over=29.6%, ROI=-43.4%
+  MODEL_LEAN_OVER: N=8, over=62.5%, ROI=19.3%
+  MODEL_STRONG_UNDER: N=31, over=58.1%, ROI=10.9%
+  MODEL_LEAN_UNDER: N=8, over=25.0%, ROI=-52.3%
+  NO_SIGNAL: N=155, over=52.6%, ROI=0.5%
+
+RECOMMENDATION: A. MARKET_ANCHOR_REBUILD
+  Market is better standalone, but model adds marginal value as adjustment
+
+NEXT STEPS:
+  1. Rebuild as market-anchor model: actual_total ~ closing_total + model_features
+  2. Add pace interaction terms (model overpredicts in high-pace environments)
+  3. Implement heteroscedastic simulation (variance by prediction band)
+  4. Focus UNDER tier as primary shadow signal (positive holdout ROI)
+  5. Expand closing line coverage via Odds API 2025 season pull
+
+BOTTOM LINE:
+  The raw model does not beat the market as a standalone predictor.
+  The UNDER tier shows +10.9% proxy ROI in holdout (N=31) — this is the
+  only exploitable edge. Rebuilding as a market-anchor model (line + adjustment)
+  is the most promising path. The model captures some offensive structure
+  (R²=0.11 in-sample) but loses to efficient market pricing out of sample.

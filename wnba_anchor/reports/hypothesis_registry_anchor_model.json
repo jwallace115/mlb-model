@@ -1,0 +1,29 @@
+{
+  "model_id": "WNBA_ANCHOR_V1",
+  "model_name": "WNBA Market-Anchor Totals Adjustment Model",
+  "hypothesis": "The sportsbook closing total is the best baseline forecast for WNBA totals, but rolling team features contain incremental information about the residual error around that line. A model trained on actual_total minus closing_total can identify underpriced UNDER spots more effectively than a direct total prediction model.",
+  "primary_target": "market_adjustment = actual_total - closing_total",
+  "primary_market": "game totals",
+  "train_years": [2021, 2022],
+  "validation_years": [2023],
+  "holdout_years": [2024],
+  "excluded_years": [2020],
+  "core_findings_from_prior_model": [
+    "market beats raw model RMSE",
+    "model adds value as adjustment to line",
+    "strong under tier only positive holdout tier",
+    "overs inverted",
+    "low-total calibration failure",
+    "pace-dependent bias",
+    "home back-to-back mispricing",
+    "heteroscedastic residuals"
+  ],
+  "frozen_thresholds": {
+    "STRONG_UNDER": {"adjustment_max": -3.0, "p_under_min": 0.57},
+    "LEAN_UNDER": {"adjustment_max": -1.5, "p_under_min": 0.53},
+    "LEAN_OVER": {"adjustment_min": 1.5, "p_over_min": 0.53},
+    "STRONG_OVER": {"adjustment_min": 3.0, "p_over_min": 0.57}
+  },
+  "promotion_focus": "UNDER tiers only unless OVER tiers prove non-inverted in validation and holdout",
+  "registered_at": "2026-04-03"
+}

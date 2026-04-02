@@ -1,0 +1,17 @@
+{
+  "signal_id": "M07",
+  "signal_name": "Rotation Fragility",
+  "hypothesis": "Teams with highly concentrated minute distributions (few players carrying most minutes) create nonlinear scoring outcomes when starters leave the floor due to foul trouble, fatigue, or matchup adjustments.",
+  "mechanism": "Rotation concentration increases exposure to weak bench units and creates variance expansion in scoring outcomes.",
+  "train_years": [2021, 2022],
+  "validation_years": [2023],
+  "holdout_years": [2024],
+  "excluded_years": [2020],
+  "primary_market": "game_totals",
+  "metrics": [
+    "minutes_HHI",
+    "top2_minute_share",
+    "rotation_depth"
+  ],
+  "registered_at": "2026-04-03"
+}

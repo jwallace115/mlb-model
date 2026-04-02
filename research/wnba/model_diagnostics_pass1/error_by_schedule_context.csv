@@ -1,0 +1,6 @@
+context,N,mean_actual,mean_pred,model_err,mkt_err,rmse_model
+away_b2b,10,167.1,162.2,4.9,,17.3
+home_b2b,11,167.5,144.2,23.2,5.2,26.0
+both_rested,211,162.8,163.7,-1.0,-2.4,17.4
+rest_edge_home,20,161.6,167.2,-5.5,-9.0,19.5
+rest_edge_away,19,167.1,157.5,9.6,1.3,17.2

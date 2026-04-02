@@ -1,0 +1,27 @@
+M07-v2 Rotation Fragility (Relative Thresholds)
+==================================================
+Date: 2026-04-03
+Verdict: FAIL
+
+v2 uses within-season percentile ranking, not absolute HHI cutoffs.
+
+CLASSIFICATION BY SEASON:
+  2021: FRAG=81, STAB=73, NEUT=182, UNCLASS=82
+  2022: FRAG=100, STAB=116, NEUT=178, UNCLASS=84
+  2023: FRAG=123, STAB=94, NEUT=215, UNCLASS=88
+  2024: FRAG=157, STAB=88, NEUT=193, UNCLASS=86
+  2025: FRAG=115, STAB=116, NEUT=301, UNCLASS=88
+
+INDEPENDENCE: quality_proxy=False
+
+TRAINING (6/8):
+  PASS: T1: independence — proxy=False
+  PASS: T2: Levene p<0.20 & var expand — p=0.0104,exp=True
+  PASS: T3: tail fragile>stable — 0.6250v0.0000
+  PASS: T4: variance primary — var_f=371.8,var_s=111.6
+  FAIL: T5: residual+ — coef=-0.087,p=0.9758
+  PASS: T6: dR2>0.005 — 0.006561
+  FAIL: T7: perm>=85th — 60.0th
+  PASS: T8: year consistent — True
+
+RECOMMENDED: Archive v2. Consider alternative formulations.

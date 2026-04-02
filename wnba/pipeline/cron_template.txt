@@ -1,0 +1,14 @@
+# WNBA Pipeline — uncomment on opening day (~May 16)
+# All times UTC (ET + 4 hours in EDT)
+
+# Morning feature build (8 AM ET = 12:00 UTC)
+# 0 12 * * * cd /root/mlb-model && source venv/bin/activate && python3 wnba/pipeline/build_features.py >> /root/logs/wnba_features.log 2>&1
+
+# Morning model run (8:30 AM ET = 12:30 UTC)
+# 30 12 * * * cd /root/mlb-model && source venv/bin/activate && python3 wnba/pipeline/run_model.py >> /root/logs/wnba_model.log 2>&1
+
+# Live data pull after games complete (10 PM ET = 2 UTC)
+# 0 2 * * * cd /root/mlb-model && source venv/bin/activate && python3 wnba/pipeline/pull_live_games.py >> /root/logs/wnba_live.log 2>&1
+
+# Results grading and push (11 PM ET = 3 UTC)
+# 0 3 * * * cd /root/mlb-model && source venv/bin/activate && python3 wnba/pipeline/push_signals.py >> /root/logs/wnba_push.log 2>&1

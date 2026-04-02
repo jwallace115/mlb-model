@@ -1,0 +1,18 @@
+WNBA Anchor V2
+==================================================
+Date: 2026-04-03
+Rec: NOT READY
+
+Data: train=173, val=146, holdout=145
+Features (15): ['h_rpts', 'a_rpts', 'h_ropp', 'a_ropp', 'h_rpace', 'a_rpace', 'h_r3pa', 'a_r3pa', 'rest_diff', 'home_b2b', 'avg_pace', 'any_b2b', 'ct_c', 'low_t', 'high_t']
+Alpha: 1000
+
+HOLDOUT 2025 TIERS:
+  LEAN_OVER: N=87, ROI=-1.3%
+  NO_SIGNAL: N=50, ROI=-0.7%
+  LEAN_UNDER: N=8, ROI=-52.3% INV
+
+POOLED 2024+2025:
+  LEAN_OVER: N=147, ROI=-11.7%
+  NO_SIGNAL: N=128, ROI=+3.7%
+  LEAN_UNDER: N=16, ROI=-52.3% INV

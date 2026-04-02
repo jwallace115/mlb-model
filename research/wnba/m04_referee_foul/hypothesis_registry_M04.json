@@ -1,0 +1,15 @@
+{
+  "signal_id": "M04",
+  "signal_name": "Referee Foul Environment x Team FTA Dependency",
+  "hypothesis": "WNBA referee crews with historically elevated foul rates interact with teams structurally dependent on free throws to alter scoring outcomes beyond what team offensive quality alone explains.",
+  "mechanism": "High foul crews inflate free throw volume. Teams whose scoring profile relies heavily on FTA benefit disproportionately.",
+  "train_years": [2021, 2022],
+  "validation_years": [2023],
+  "holdout_years": [2024],
+  "excluded_years": [2020],
+  "market_test_years": [2022, 2023],
+  "primary_market": "game_totals",
+  "crew_threshold": "top/bottom quartile among officials with >=20 games",
+  "fta_threshold": "top quartile of rolling team FTA per game",
+  "registered_at": "2026-04-03"
+}

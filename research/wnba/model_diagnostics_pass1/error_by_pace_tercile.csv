@@ -1,0 +1,4 @@
+pace,N,mean_actual,mean_pred,mean_line,model_err,mkt_err,rmse_model,rmse_mkt,over_rate
+LOW,77,159.1,162.9,162.9,-3.7,-0.2,16.8,17.2,53.8
+MID,76,162.8,161.9,163.4,0.9,-3.8,17.3,12.8,41.7
+HIGH,76,167.5,164.0,166.4,3.4,-1.6,19.2,16.3,45.2

@@ -1,0 +1,31 @@
+WNBA Archetype Signal Board
+==================================================
+Date: 2026-04-03
+Status: SHADOW READY
+
+FROZEN SIGNALS (7):
+  ARCH_01: HIGH_AST_RATE_LOW_OPP_FTA_RATE_vs_HIGH_AST_RATE_LO → OVER (N=57, ROI=+21.5%)
+  ARCH_02: HIGH_AST_RATE_LOW_OPP_FTA_RATE_vs_HIGH_TOP2_SHARE_ → UNDER (N=80, ROI=+24.1%)
+  ARCH_03: HIGH_PF_RATE_LOW_STL_TOV_RATIO_vs_HIGH_TOP2_SHARE_ → OVER (N=48, ROI=+19.3%)
+  ARCH_04: HIGH_STL_TOV_RATIO_LOW_TOV_RATE_vs_HIGH_PF_RATE_LO → UNDER (N=25, ROI=+22.2%)
+  ARCH_05: HIGH_STL_TOV_RATIO_LOW_TOV_RATE_vs_HIGH_STL_TOV_RA → UNDER (N=46, ROI=+10.3%)
+  ARCH_06: HIGH_STL_TOV_RATIO_LOW_TOV_RATE_vs_HIGH_TOP2_SHARE → OVER (N=37, ROI=+8.4%)
+  ARCH_07: HIGH_TOP2_SHARE_LOW_N_PLAYERS_vs_HIGH_PF_RATE_LOW_ → OVER (N=56, ROI=+31.9%)
+
+HISTORICAL PERFORMANCE:
+  ARCH_01: OVER   N= 57 hit=64% ROI=+20.7% 
+  ARCH_02: UNDER  N= 80 hit=65% ROI=+24.1% 
+  ARCH_03: OVER   N= 48 hit=62% ROI=+19.3% 
+  ARCH_04: UNDER  N= 25 hit=64% ROI=+22.2% 
+  ARCH_05: UNDER  N= 46 hit=58% ROI=+10.1% 
+  ARCH_06: OVER   N= 37 hit=57% ROI=+8.4% 
+  ARCH_07: OVER   N= 56 hit=69% ROI=+31.3% 
+
+SHADOW STATUS: SHADOW READY
+  Signals with N>=20: 7
+  Stable + positive: 7
+
+RECOMMENDATION:
+  Monitor all 7 stable signals during 2026 WNBA season.
+  Exclude conflict games from primary tracking.
+  Re-evaluate after 50+ signal occurrences in 2026.

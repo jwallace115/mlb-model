@@ -1,0 +1,48 @@
+M07 — Rotation Fragility
+==================================================
+Date: 2026-04-03
+FINAL VERDICT: PROMOTED
+
+FRAGILITY METRICS:
+  minutes_HHI: mean=0.1320, sd=0.0143
+  top2_minute_share: mean=0.3333, sd=0.0325
+  rotation_depth: mean=7.72, sd=1.02
+
+FROZEN THRESHOLDS:
+  HHI fragile: > 0.1357
+  HHI stable: < 0.1236
+  Normalization: mean=0.1297, sd=0.0082
+
+INDEPENDENCE: quality_proxy=False
+  HHI vs rolling_pts: r=0.29 (moderate, not a pure proxy)
+  Partial r (HHI → total | pts): r=0.021 (p=0.32)
+
+VARIANCE (training):
+  Fragile: sd=18.86, var=355.6 (N=176)
+  Stable: sd=10.59, var=112.1 (N=22)
+  Variance ratio: 3.17x
+  Levene p=0.015
+
+REGRESSION (2022):
+  M3 fragile_home coef=4.16 (p=0.43)
+  delta_R2=0.003166
+  Permutation: 88.4th percentile
+
+TRAINING (7/8):
+  PASS: T1 independence (not quality proxy)
+  PASS: T2 variance expansion (Levene p=0.015)
+  PASS: T3 tail probability increase
+  PASS: T4 variance is primary effect
+  PASS: T5 residual test positive
+  FAIL: T6 delta_R2>0.005 (actual=0.003)
+  PASS: T7 permutation>=85th (88.4th)
+  PASS: T8 year consistent variance
+
+VALIDATION (4/4):
+  PASS: V1 var expansion (var_frag=350.7, var_stab=239.6)
+  PASS: V2 Levene directional
+  PASS: V3 MSPE3<MSPE2
+  PASS: V4 effect>=40% (val ratio=1.46, train ratio=3.17, 46%>=40%)
+
+RECOMMENDED: Open holdout (2024). If holdout confirms variance expansion,
+integrate as pregame feature for WNBA totals model.

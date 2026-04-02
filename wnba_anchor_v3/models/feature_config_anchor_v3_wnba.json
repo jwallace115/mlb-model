@@ -1,0 +1,21 @@
+{
+  "features": [
+    "h_rpts",
+    "a_rpts",
+    "h_ropp",
+    "a_ropp",
+    "h_rpace",
+    "a_rpace",
+    "h_r3pa",
+    "a_r3pa",
+    "rest_diff",
+    "home_b2b",
+    "any_b2b",
+    "avg_pace",
+    "ct_c",
+    "low_t",
+    "high_t"
+  ],
+  "alpha": 1000,
+  "ct_mean": 164.37340966921118
+}

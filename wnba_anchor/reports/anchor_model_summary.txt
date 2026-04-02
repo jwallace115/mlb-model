@@ -1,0 +1,35 @@
+WNBA Market-Anchor Model Summary
+==================================================
+Date: 2026-04-03
+
+1. DATA COVERAGE
+  2021: 0 games with closing lines
+  2022: 56 games with closing lines
+  2023: 52 games with closing lines
+  2024: 93 games with closing lines
+  Training effectively: 2022 only (56 rows)
+
+2. MODEL PERFORMANCE
+  Holdout: anchor RMSE=15.83, market RMSE=15.32, delta=+0.50
+  Val:     anchor RMSE=14.90, market RMSE=15.02
+
+3. TIER PERFORMANCE (holdout 2024)
+  STRONG_OVER: N=35, ROI=+9.1%, over=57%
+  LEAN_OVER: N=55, ROI=-18.3%, over=42% INVERTED
+  NO_SIGNAL: N=3, ROI=+90.9%, over=0%
+
+4. FEATURE IMPORTANCE (top 5)
+  home_rolling_opp_pts: +0.1936
+  early_season_flag: -0.1920
+  pace_x_offense: -0.1591
+  away_rolling_pts: -0.1461
+  home_premium: -0.1430
+
+5. DEPLOYMENT
+  Model files: YES
+  Variance map: YES
+  2024 backfill: YES
+  2025 init: YES
+
+6. RECOMMENDATION: NOT READY
+  No tier consistently profitable across val+holdout.

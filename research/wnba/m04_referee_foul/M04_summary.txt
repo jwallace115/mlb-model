@@ -1,0 +1,24 @@
+M04 — Referee Foul Environment x Team FTA Dependency
+==================================================
+Date: 2026-04-03
+Verdict: FAIL
+
+CREW STABILITY: r=0.1815 (FAIL)
+FTA INDEPENDENCE: r(fta_z, pts)=0.2158 (OK)
+
+SIGNAL_H (high crew × high FTA): N=15, mean_total=165.7
+SIGNAL_L (low crew × high FTA):  N=20, mean_total=166.1
+Baseline:                         N=413, mean_total=162.9
+
+REGRESSION: signal_H coef=1.772 (p=0.7709), delta_R²=0.000414
+PERMUTATION: 62.2th percentile
+
+TRAINING (3/8):
+  FAIL: T1: crew stability r>=0.20 — r=0.1815
+  PASS: T2: signal_H positive direction — 165.7 vs 162.9
+  FAIL: T3: signal_L negative direction — 166.1 vs 162.9
+  FAIL: T4: signal_H coef p<0.10 — coef=1.772, p=0.7709
+  PASS: T5: residual test positive — res_coef=1.652
+  FAIL: T6: delta_R2>0.005 — 0.000414
+  FAIL: T7: permutation>=85th — 62.2th
+  PASS: T8: FTA independence — r=0.2158

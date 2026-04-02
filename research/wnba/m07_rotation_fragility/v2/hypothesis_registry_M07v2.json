@@ -1,0 +1,13 @@
+{
+  "signal_id": "M07-v2",
+  "signal_name": "Rotation Fragility (Relative Thresholds)",
+  "hypothesis": "Teams with highly concentrated minute distributions relative to the current season's league distribution produce wider scoring outcomes. Fragility is defined relative to peers in the same season to account for league-wide rotation trends.",
+  "change_from_v1": "Absolute HHI thresholds replaced with within-season percentile ranking. Fragile = top quartile of HHI within season-to-date league distribution. Stable = bottom quartile. Core mechanism hypothesis unchanged.",
+  "train_years": [2021, 2022],
+  "validation_years": [2023],
+  "holdout_years": [2024],
+  "excluded_years": [2020],
+  "fragile_definition": "team HHI_rolling > 75th percentile of all team HHI_rolling values in the same season up to that date",
+  "stable_definition": "team HHI_rolling < 25th percentile of all team HHI_rolling values in the same season up to that date",
+  "registered_at": "2026-04-03"
+}

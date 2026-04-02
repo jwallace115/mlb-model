@@ -1,0 +1,17 @@
+WNBA Live Activation Checklist
+Run through before opening day (~May 16, 2025)
+
+[ ] Set LIVE_MODE = True in pull_live_games.py
+[ ] Uncomment all 4 cron jobs in VM crontab
+[ ] Run: crontab -l to verify jobs are registered
+[ ] Verify nba_api returns 2025 WNBA games
+    (test: pull one game from opening week)
+[ ] Run: python3 wnba/pipeline/validate_pipeline.py — confirm all PASS
+[ ] Run: python3 wnba/pipeline/pull_live_games.py manually for first game
+[ ] Check wnba/data/signals/wnba_signals_2025.json updated correctly
+[ ] Check dashboard WNBA tab shows today's games
+[ ] Run: python3 wnba/pipeline/push_signals.py manually
+[ ] Confirm GitHub push succeeded
+[ ] Confirm Streamlit reads updated file (wait 5 min)
+[ ] Confirm no errors in /root/logs/wnba_*.log
+[ ] Sign off: WNBA system is live

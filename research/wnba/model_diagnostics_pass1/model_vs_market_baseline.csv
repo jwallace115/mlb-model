@@ -1,0 +1,4 @@
+period,N,RMSE_model,MAE_model,RMSE_market,MAE_market,bias_model,bias_market,delta_RMSE
+2023,52,16.93,14.28,15.02,11.59,3.37,2.59,1.91
+2024,93,17.89,14.53,15.32,11.92,-0.85,-2.08,2.57
+Pooled 23-24,145,17.55,14.44,15.21,11.8,0.66,-0.41,2.34

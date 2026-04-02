@@ -1,0 +1,39 @@
+{
+  "model_id": "WNBA_ARCHETYPES_V1",
+  "approach": "Unsupervised clustering on structural style features, then matchup interaction testing.",
+  "feature_categories": [
+    "rotation_concentration",
+    "turnover_ecology",
+    "shot_creation_structure",
+    "rebound_control",
+    "fouling_behavior",
+    "scoring_variance_identity"
+  ],
+  "excluded_variables": [
+    "team_points_per_game",
+    "opponent_points_per_game",
+    "pace_estimates"
+  ],
+  "clustering_methods_tested": [
+    "kmeans",
+    "hierarchical",
+    "gaussian_mixture"
+  ],
+  "k_values_tested": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "seasons": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "excluded": [
+    2020,
+    2021
+  ],
+  "registered_at": "2026-04-03"
+}

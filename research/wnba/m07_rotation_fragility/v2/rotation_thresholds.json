@@ -1,0 +1,13 @@
+{
+  "fragile_percentile_cutoff": 75,
+  "stable_percentile_cutoff": 25,
+  "minimum_reference_pool": 20,
+  "minimum_prior_games_for_rolling": 5,
+  "rolling_window_games": 10,
+  "training_population_mean_HHI": 0.12970927505875576,
+  "training_population_sd_HHI": 0.008209027334263418,
+  "training_population_mean_top2_share": 0.3269673834249827,
+  "training_population_sd_top2_share": 0.015787386705910983,
+  "training_population_mean_rotation_depth": 7.852621809032891,
+  "training_population_sd_rotation_depth": 0.5314302088302306
+}

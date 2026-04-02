@@ -1,0 +1,39 @@
+{
+  "model_id": "WNBA_ANCHOR_V3",
+  "model_name": "WNBA Market-Anchor v3 (ET-corrected odds)",
+  "primary_target": "actual_total - closing_total",
+  "train_years": [
+    2022,
+    2023
+  ],
+  "validation_years": [
+    2024
+  ],
+  "holdout_years": [
+    2025
+  ],
+  "excluded_years": [
+    2020,
+    2021
+  ],
+  "reason_for_v3": "UTC/ET date fix recovered 449 additional games with closing lines",
+  "frozen_thresholds": {
+    "STRONG_UNDER": {
+      "max": -3.0,
+      "p_min": 0.57
+    },
+    "LEAN_UNDER": {
+      "max": -1.5,
+      "p_min": 0.53
+    },
+    "LEAN_OVER": {
+      "min": 1.5,
+      "p_min": 0.53
+    },
+    "STRONG_OVER": {
+      "min": 3.0,
+      "p_min": 0.57
+    }
+  },
+  "registered_at": "2026-04-03"
+}

@@ -1,0 +1,28 @@
+{
+  "feature_list": [
+    "home_rolling_pts",
+    "away_rolling_pts",
+    "home_rolling_opp_pts",
+    "away_rolling_opp_pts",
+    "home_rolling_pace",
+    "away_rolling_pace",
+    "home_rolling_3pa_rate",
+    "away_rolling_3pa_rate",
+    "home_rolling_oreb_rate",
+    "away_rolling_oreb_rate",
+    "home_rolling_fta_rate",
+    "away_rolling_fta_rate",
+    "home_premium",
+    "rest_diff",
+    "home_b2b",
+    "away_b2b",
+    "early_season_flag"
+  ],
+  "selected_alpha": 100.0,
+  "scaler_path": "wnba/models/scaler_wnba.pkl",
+  "training_years": [
+    2021,
+    2022
+  ],
+  "freeze_date": "2026-04-03"
+}

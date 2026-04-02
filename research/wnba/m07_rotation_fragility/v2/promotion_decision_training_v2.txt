@@ -1,0 +1,9 @@
+M07v2 Training: 6/8 — CONDITIONAL_PASS
+PASS: T1: independence — proxy=False
+PASS: T2: Levene p<0.20 & var expand — p=0.0104,exp=True
+PASS: T3: tail fragile>stable — 0.6250v0.0000
+PASS: T4: variance primary — var_f=371.8,var_s=111.6
+FAIL: T5: residual+ — coef=-0.087,p=0.9758
+PASS: T6: dR2>0.005 — 0.006561
+FAIL: T7: perm>=85th — 60.0th
+PASS: T8: year consistent — True
