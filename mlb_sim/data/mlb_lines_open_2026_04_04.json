@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "c58c47a59e543a1a6aa0202a6ca69a25",
+    "game_date": "2026-04-04",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-04-04T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -102,
+    "under_price": -112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-03T06:05:02.324340+00:00"
+  },
+  {
+    "game_id": "c423735bd4d51edf6fe4efc260f2eb08",
+    "game_date": "2026-04-04",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Houston Astros",
+    "commence_time": "2026-04-04T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.0,
+    "over_price": -111,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-03T06:05:02.324340+00:00"
+  },
+  {
+    "game_id": "453461c70d67fa8012419eeefc30e149",
+    "game_date": "2026-04-04",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Atlanta Braves",
+    "commence_time": "2026-04-04T01:46:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": 104,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-03T06:05:02.324340+00:00"
+  },
+  {
+    "game_id": "d9a1b05c6ab0703ea7c26b6fc732451f",
+    "game_date": "2026-04-04",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "New York Mets",
+    "commence_time": "2026-04-04T02:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-03T06:05:02.324340+00:00"
+  }
+]
