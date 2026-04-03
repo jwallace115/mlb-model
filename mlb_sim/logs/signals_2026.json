@@ -886,7 +886,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Sonny Gray",
+    "away_sp_name": "Michael King"
   },
   {
     "date": "2026-04-03",
@@ -911,7 +913,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Michael Lorenzen",
+    "away_sp_name": "Aaron Nola"
   },
   {
     "date": "2026-04-03",
@@ -936,7 +940,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Reid Detmers",
+    "away_sp_name": "Bryan Woo"
   },
   {
     "date": "2026-04-03",
@@ -961,7 +967,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jeffrey Springs",
+    "away_sp_name": "Cristian Javier"
   },
   {
     "date": "2026-04-03",
@@ -986,6 +994,8 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Eduardo Rodriguez",
+    "away_sp_name": "Grant Holmes"
   }
 ]
