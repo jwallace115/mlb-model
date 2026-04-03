@@ -1,10 +1,35 @@
 {
-  "generated_at": "2026-04-02T11:02:23.000186+00:00",
-  "last_updated": "2026-04-02 11:02 UTC",
+  "generated_at": "2026-04-03T11:05:10.027725+00:00",
+  "last_updated": "2026-04-03 11:05 UTC",
   "pipeline_run_date": "2026-04-02",
-  "signals_source": "live",
-  "game_date": "2026-04-02",
-  "today_signals": [
+  "signals_source": "stale",
+  "game_date": "2026-04-03",
+  "today_signals": [],
+  "recent_results": [
+    {
+      "game_id": 2025021203,
+      "game_date": "2026-04-02",
+      "home_team": "SEA",
+      "away_team": "UTA",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.1289564612326043,
+      "confidence_tier": "MEDIUM",
+      "result": "LOSS",
+      "actual_total_goals_final": 8.0
+    },
+    {
+      "game_id": 2025021202,
+      "game_date": "2026-04-02",
+      "home_team": "SJS",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.17222975406996888,
+      "confidence_tier": "MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
+    },
     {
       "game_id": 2025021200,
       "game_date": "2026-04-02",
@@ -12,40 +37,10 @@
       "away_team": "CHI",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.15662975406996882,
-      "edge_bucket": "0.15+",
-      "sim_prob": 0.6523,
+      "edge": 0.20646412571627026,
       "confidence_tier": "MEDIUM",
-      "stake_units": 0.75,
-      "caution_flag": 0,
-      "volatility_bucket": "low",
-      "lambda_total_calibrated": 5.666306701049828,
-      "over_price": -112.0,
-      "under_price": -108.0,
-      "book": "draftkings",
-      "result": "UNGRADED",
-      "graded": 0,
-      "home_goals_scored_rolling_10": 3.0,
-      "away_goals_scored_rolling_10": 2.0,
-      "home_goals_allowed_rolling_10": 3.0,
-      "away_goals_allowed_rolling_10": 3.9,
-      "home_xgf_rolling_20": 3.0971151144105997,
-      "away_xgf_rolling_20": 3.0944998924677467,
-      "home_xga_rolling_20": 3.0946449543496244,
-      "away_xga_rolling_20": 3.094442461065307,
-      "home_pp_pct_rolling_20": 0.21580679920989354,
-      "away_pp_pct_rolling_20": 0.21670021986019264,
-      "home_goalie_vs_team_baseline": 0.0,
-      "away_goalie_vs_team_baseline": 0.0,
-      "home_goalie_b2b": 0,
-      "away_goalie_b2b": 0,
-      "home_b2b": 0,
-      "away_b2b": 0,
-      "goalie_confirmed_home": true,
-      "goalie_confirmed_away": true,
-      "backup_flag_home": 1,
-      "backup_flag_away": 1,
-      "summary": "CHI has been averaging 2.0 goals per game over their last 10 \u2014 one of the quieter offenses in the league. CHI has been allowing 3.9 goals per game over their last 10 \u2014 one of the leakier defenses in the league. That pulls the other way, but not enough to flip the lean. Model has 5.7, market is at 6.5 \u2014 under by 0.8 goals (0.15+ edge)."
+      "result": "WIN",
+      "actual_total_goals_final": 4.0
     },
     {
       "game_id": 2025021199,
@@ -54,43 +49,71 @@
       "away_team": "VAN",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.1351,
-      "edge_bucket": "0.12-0.15",
-      "sim_prob": 0.6351,
+      "edge": 0.17983423618634892,
       "confidence_tier": "MEDIUM",
-      "stake_units": 0.75,
-      "caution_flag": 0,
-      "volatility_bucket": "low",
-      "lambda_total_calibrated": 5.7698414524880555,
-      "over_price": -110.0,
-      "under_price": -110.0,
-      "book": "draftkings",
-      "result": "UNGRADED",
-      "graded": 0,
-      "home_goals_scored_rolling_10": 2.7,
-      "away_goals_scored_rolling_10": 3.0,
-      "home_goals_allowed_rolling_10": 3.1,
-      "away_goals_allowed_rolling_10": 4.5,
-      "home_xgf_rolling_20": 3.0971151144105997,
-      "away_xgf_rolling_20": 3.0944998924677467,
-      "home_xga_rolling_20": 3.0946449543496244,
-      "away_xga_rolling_20": 3.094442461065307,
-      "home_pp_pct_rolling_20": 0.21580679920989354,
-      "away_pp_pct_rolling_20": 0.21670021986019264,
-      "home_goalie_vs_team_baseline": 0.0,
-      "away_goalie_vs_team_baseline": 0.0,
-      "home_goalie_b2b": 0,
-      "away_goalie_b2b": 0,
-      "home_b2b": 0,
-      "away_b2b": 0,
-      "goalie_confirmed_home": true,
-      "goalie_confirmed_away": true,
-      "backup_flag_home": 1,
-      "backup_flag_away": 1,
-      "summary": "MIN has been scoring 2.7 goals per game at home over their last 10 \u2014 below-average offense. VAN has been allowing 4.5 goals per game over their last 10 \u2014 one of the leakier defenses in the league. That pulls the other way, but not enough to flip the lean. Model has 5.8, market is at 6.5 \u2014 under by 0.7 goals (0.12-0.15 edge)."
-    }
-  ],
-  "recent_results": [
+      "result": "LOSS",
+      "actual_total_goals_final": 7.0
+    },
+    {
+      "game_id": 2025021194,
+      "game_date": "2026-04-02",
+      "home_team": "NJD",
+      "away_team": "WSH",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.13533587428372984,
+      "confidence_tier": "MEDIUM",
+      "result": "LOSS",
+      "actual_total_goals_final": 10.0
+    },
+    {
+      "game_id": 2025021197,
+      "game_date": "2026-04-02",
+      "home_team": "CAR",
+      "away_team": "CBJ",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.16672975406996882,
+      "confidence_tier": "MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 6.0
+    },
+    {
+      "game_id": 2025021193,
+      "game_date": "2026-04-02",
+      "home_team": "FLA",
+      "away_team": "BOS",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.1296358742837299,
+      "confidence_tier": "MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 3.0
+    },
+    {
+      "game_id": 2025021192,
+      "game_date": "2026-04-02",
+      "home_team": "TBL",
+      "away_team": "PIT",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.13243423618634892,
+      "confidence_tier": "MEDIUM",
+      "result": "LOSS",
+      "actual_total_goals_final": 9.0
+    },
+    {
+      "game_id": 2025021191,
+      "game_date": "2026-04-02",
+      "home_team": "OTT",
+      "away_team": "BUF",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.1336608695652174,
+      "confidence_tier": "MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
+    },
     {
       "game_id": 2025021190,
       "game_date": "2026-04-01",
@@ -99,7 +122,7 @@
       "signal_side": "UNDER",
       "closing_total": 6.5,
       "edge": 0.17414353876739558,
-      "confidence_tier": "MEDIUM",
+      "confidence_tier": "HIGH",
       "result": "LOSS",
       "actual_total_goals_final": 7.0
     },
@@ -135,7 +158,7 @@
       "signal_side": "UNDER",
       "closing_total": 6.5,
       "edge": 0.1789435387673956,
-      "confidence_tier": "MEDIUM",
+      "confidence_tier": "HIGH",
       "result": "LOSS",
       "actual_total_goals_final": 9.0
     },
@@ -147,7 +170,7 @@
       "signal_side": "UNDER",
       "closing_total": 6.5,
       "edge": 0.15962975406996882,
-      "confidence_tier": "MEDIUM",
+      "confidence_tier": "HIGH",
       "result": "WIN",
       "actual_total_goals_final": 6.0
     },
@@ -176,54 +199,6 @@
       "actual_total_goals_final": 5.0
     },
     {
-      "game_id": 2025021156,
-      "game_date": "2026-03-28",
-      "home_team": "PIT",
-      "away_team": "DAL",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.1224324675324675,
-      "confidence_tier": "MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 9.0
-    },
-    {
-      "game_id": 2025021162,
-      "game_date": "2026-03-28",
-      "home_team": "COL",
-      "away_team": "WPG",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.11945888528345106,
-      "confidence_tier": "LOW",
-      "result": "WIN",
-      "actual_total_goals_final": 6.0
-    },
-    {
-      "game_id": 2025021152,
-      "game_date": "2026-03-28",
-      "home_team": "TBL",
-      "away_team": "OTT",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.2003794380981785,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 6.0
-    },
-    {
-      "game_id": 2025021154,
-      "game_date": "2026-03-28",
-      "home_team": "EDM",
-      "away_team": "ANA",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.24509264104660672,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 6.0
-    },
-    {
       "game_id": 2025021155,
       "game_date": "2026-03-28",
       "home_team": "BOS",
@@ -234,6 +209,18 @@
       "confidence_tier": "MEDIUM",
       "result": "LOSS",
       "actual_total_goals_final": 9.0
+    },
+    {
+      "game_id": 2025021159,
+      "game_date": "2026-03-28",
+      "home_team": "BUF",
+      "away_team": "SEA",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.10716576381365117,
+      "confidence_tier": "LOW",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
     },
     {
       "game_id": 2025021158,
@@ -248,6 +235,18 @@
       "actual_total_goals_final": 5.0
     },
     {
+      "game_id": 2025021154,
+      "game_date": "2026-03-28",
+      "home_team": "EDM",
+      "away_team": "ANA",
+      "signal_side": "OVER",
+      "closing_total": 4.5,
+      "edge": 0.20822145748987853,
+      "confidence_tier": "HIGH",
+      "result": "WIN",
+      "actual_total_goals_final": 6.0
+    },
+    {
       "game_id": 2025021157,
       "game_date": "2026-03-28",
       "home_team": "CAR",
@@ -260,28 +259,52 @@
       "actual_total_goals_final": 7.0
     },
     {
+      "game_id": 2025021156,
+      "game_date": "2026-03-28",
+      "home_team": "PIT",
+      "away_team": "DAL",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.1224324675324675,
+      "confidence_tier": "MEDIUM",
+      "result": "LOSS",
+      "actual_total_goals_final": 9.0
+    },
+    {
       "game_id": 2025021154,
       "game_date": "2026-03-28",
       "home_team": "EDM",
       "away_team": "ANA",
-      "signal_side": "OVER",
-      "closing_total": 4.5,
-      "edge": 0.20822145748987853,
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.24509264104660672,
       "confidence_tier": "MEDIUM",
       "result": "WIN",
       "actual_total_goals_final": 6.0
     },
     {
-      "game_id": 2025021159,
+      "game_id": 2025021152,
       "game_date": "2026-03-28",
-      "home_team": "BUF",
-      "away_team": "SEA",
+      "home_team": "TBL",
+      "away_team": "OTT",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.10716576381365117,
+      "edge": 0.2003794380981785,
+      "confidence_tier": "HIGH",
+      "result": "WIN",
+      "actual_total_goals_final": 6.0
+    },
+    {
+      "game_id": 2025021162,
+      "game_date": "2026-03-28",
+      "home_team": "COL",
+      "away_team": "WPG",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.11945888528345106,
       "confidence_tier": "LOW",
       "result": "WIN",
-      "actual_total_goals_final": 5.0
+      "actual_total_goals_final": 6.0
     },
     {
       "game_id": 2025021151,
@@ -344,18 +367,6 @@
       "actual_total_goals_final": 7.0
     },
     {
-      "game_id": 2025021136,
-      "game_date": "2026-03-25",
-      "home_team": "TOR",
-      "away_team": "NYR",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.13473246753246748,
-      "confidence_tier": "MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 7.0
-    },
-    {
       "game_id": 2025021135,
       "game_date": "2026-03-25",
       "home_team": "BUF",
@@ -368,40 +379,16 @@
       "actual_total_goals_final": 7.0
     },
     {
-      "game_id": 2025021127,
-      "game_date": "2026-03-24",
-      "home_team": "TBL",
-      "away_team": "MIN",
+      "game_id": 2025021136,
+      "game_date": "2026-03-25",
+      "home_team": "TOR",
+      "away_team": "NYR",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.11503246753246743,
-      "confidence_tier": "LOW",
-      "result": "LOSS",
-      "actual_total_goals_final": 9.0
-    },
-    {
-      "game_id": 2025021126,
-      "game_date": "2026-03-24",
-      "home_team": "PIT",
-      "away_team": "COL",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.17908658526171983,
+      "edge": 0.13473246753246748,
       "confidence_tier": "MEDIUM",
       "result": "LOSS",
-      "actual_total_goals_final": 8.0
-    },
-    {
-      "game_id": 2025021120,
-      "game_date": "2026-03-24",
-      "home_team": "BOS",
-      "away_team": "TOR",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.15313587428372988,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 6.0
+      "actual_total_goals_final": 7.0
     },
     {
       "game_id": 2025021122,
@@ -416,16 +403,40 @@
       "actual_total_goals_final": 5.0
     },
     {
-      "game_id": 2025021113,
-      "game_date": "2026-03-22",
-      "home_team": "CHI",
-      "away_team": "NSH",
-      "signal_side": "OVER",
-      "closing_total": 5.5,
-      "edge": 0.21334067796610173,
+      "game_id": 2025021120,
+      "game_date": "2026-03-24",
+      "home_team": "BOS",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.15313587428372988,
+      "confidence_tier": "MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 6.0
+    },
+    {
+      "game_id": 2025021126,
+      "game_date": "2026-03-24",
+      "home_team": "PIT",
+      "away_team": "COL",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.17908658526171983,
       "confidence_tier": "MEDIUM",
       "result": "LOSS",
-      "actual_total_goals_final": 5.0
+      "actual_total_goals_final": 8.0
+    },
+    {
+      "game_id": 2025021127,
+      "game_date": "2026-03-24",
+      "home_team": "TBL",
+      "away_team": "MIN",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.11503246753246743,
+      "confidence_tier": "LOW",
+      "result": "LOSS",
+      "actual_total_goals_final": 9.0
     },
     {
       "game_id": 2025021114,
@@ -440,39 +451,15 @@
       "actual_total_goals_final": 1.0
     },
     {
-      "game_id": 2025021106,
-      "game_date": "2026-03-21",
-      "home_team": "OTT",
-      "away_team": "TOR",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.113958885283451,
-      "confidence_tier": "LOW",
-      "result": "LOSS",
-      "actual_total_goals_final": 7.0
-    },
-    {
-      "game_id": 2025021104,
-      "game_date": "2026-03-21",
-      "home_team": "CBJ",
-      "away_team": "SEA",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.10846576381365114,
-      "confidence_tier": "LOW",
-      "result": "LOSS",
-      "actual_total_goals_final": 7.0
-    },
-    {
-      "game_id": 2025021103,
-      "game_date": "2026-03-21",
-      "home_team": "SJS",
-      "away_team": "PHI",
+      "game_id": 2025021113,
+      "game_date": "2026-03-22",
+      "home_team": "CHI",
+      "away_team": "NSH",
       "signal_side": "OVER",
-      "closing_total": 4.5,
-      "edge": 0.20002145748987843,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
+      "closing_total": 5.5,
+      "edge": 0.21334067796610173,
+      "confidence_tier": "HIGH",
+      "result": "LOSS",
       "actual_total_goals_final": 5.0
     },
     {
@@ -488,18 +475,6 @@
       "actual_total_goals_final": 5.0
     },
     {
-      "game_id": 2025021101,
-      "game_date": "2026-03-21",
-      "home_team": "MIN",
-      "away_team": "DAL",
-      "signal_side": "OVER",
-      "closing_total": 5.5,
-      "edge": 0.16908185947101245,
-      "confidence_tier": "MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 3.0
-    },
-    {
       "game_id": 2025021100,
       "game_date": "2026-03-21",
       "home_team": "NSH",
@@ -510,6 +485,18 @@
       "confidence_tier": "MEDIUM",
       "result": "WIN",
       "actual_total_goals_final": 5.0
+    },
+    {
+      "game_id": 2025021101,
+      "game_date": "2026-03-21",
+      "home_team": "MIN",
+      "away_team": "DAL",
+      "signal_side": "OVER",
+      "closing_total": 5.5,
+      "edge": 0.16908185947101245,
+      "confidence_tier": "HIGH",
+      "result": "LOSS",
+      "actual_total_goals_final": 3.0
     },
     {
       "game_id": 2025021099,
@@ -524,6 +511,42 @@
       "actual_total_goals_final": 9.0
     },
     {
+      "game_id": 2025021103,
+      "game_date": "2026-03-21",
+      "home_team": "SJS",
+      "away_team": "PHI",
+      "signal_side": "OVER",
+      "closing_total": 4.5,
+      "edge": 0.20002145748987843,
+      "confidence_tier": "HIGH",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
+    },
+    {
+      "game_id": 2025021104,
+      "game_date": "2026-03-21",
+      "home_team": "CBJ",
+      "away_team": "SEA",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.10846576381365114,
+      "confidence_tier": "LOW",
+      "result": "LOSS",
+      "actual_total_goals_final": 7.0
+    },
+    {
+      "game_id": 2025021106,
+      "game_date": "2026-03-21",
+      "home_team": "OTT",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.113958885283451,
+      "confidence_tier": "LOW",
+      "result": "LOSS",
+      "actual_total_goals_final": 7.0
+    },
+    {
       "game_id": 2025021094,
       "game_date": "2026-03-20",
       "home_team": "TOR",
@@ -534,30 +557,6 @@
       "confidence_tier": "MEDIUM",
       "result": "LOSS",
       "actual_total_goals_final": 7.0
-    },
-    {
-      "game_id": 2025021088,
-      "game_date": "2026-03-19",
-      "home_team": "MIN",
-      "away_team": "CHI",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.12725888528345097,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 3.0
-    },
-    {
-      "game_id": 2025021086,
-      "game_date": "2026-03-19",
-      "home_team": "CBJ",
-      "away_team": "NYR",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.10395888528345099,
-      "confidence_tier": "LOW",
-      "result": "LOSS",
-      "actual_total_goals_final": 9.0
     }
   ],
   "season_performance": {
@@ -613,10 +612,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 753,
+    "total_graded": 762,
     "ot_games": 173,
     "so_games": 60,
-    "ot_rate": 0.2297,
+    "ot_rate": 0.227,
     "ot_flips": 44,
     "ot_flip_rate": 0.2543,
     "under_ot_losses": 67,
@@ -633,8 +632,8 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-04-02T11:02:23.026989+00:00",
-    "date_reviewed": "2026-04-01",
+    "generated_at": "2026-04-03T11:05:10.059090+00:00",
+    "date_reviewed": "2026-04-02",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"

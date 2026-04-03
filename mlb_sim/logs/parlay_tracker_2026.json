@@ -156,6 +156,32 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-04-03",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "HOU@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 10.0,
+            "result": null
+          },
+          {
+            "game": "PHI@COL",
+            "bet": "FULL GAME UNDER",
+            "line": 10.0,
+            "result": null
+          },
+          {
+            "game": "SDP@BOS",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {
@@ -321,6 +347,44 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-04-03",
+        "type": "5-leg",
+        "legs": [
+          {
+            "game": "HOU@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 10.0,
+            "result": null
+          },
+          {
+            "game": "PHI@COL",
+            "bet": "FULL GAME UNDER",
+            "line": 10.0,
+            "result": null
+          },
+          {
+            "game": "SDP@BOS",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "SEA@LAA",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          },
+          {
+            "game": "ATL@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {
