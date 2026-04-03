@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "1de936f832a2d7aed41e05852cacadcb",
+    "game_date": "2026-04-03",
+    "sport": "NHL",
+    "home_team": "New York Islanders",
+    "away_team": "Philadelphia Flyers",
+    "commence_time": "2026-04-03T23:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 5.5,
+    "over_price": -111,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-03T13:25:02.767028+00:00"
+  },
+  {
+    "game_id": "d45f9e5f21f7e0880b1a5c17ccf1d1c7",
+    "game_date": "2026-04-03",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "St Louis Blues",
+    "commence_time": "2026-04-04T02:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": 105,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-03T13:25:02.767028+00:00"
+  }
+]
