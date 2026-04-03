@@ -1,0 +1,35 @@
+CL03 / Make-Cut Edge by Player Archetype — Quick Test
+=======================================================
+
+NOTE: CL03 post-R1 data not yet captured in shadow log.
+Using pre-event make-cut market signals as proxy.
+
+MAKE-CUT MARKET
+----------------------------------------
+OVERALL     N= 118  Win=52.5%  Edge=-14.5pp  ROI=-21.6%
+ARCH_01     N=   6  Win=50.0%  Edge=-4.7pp  ROI=-8.6%
+ARCH_02     N=  22  Win=50.0%  Edge=-11.0pp  ROI=-18.0%
+ARCH_03     N=  39  Win=46.2%  Edge=-20.0pp  ROI=-30.2%
+ARCH_04     N=  51  Win=58.8%  Edge=-12.9pp  ROI=-18.0%
+
+ALL MARKETS POOLED
+----------------------------------------
+OVERALL     N= 590  Win=16.9%  Edge=-2.4pp  ROI=-12.3%
+ARCH_01     N=  30  Win=13.3%  Edge=-1.1pp  ROI=-7.4%
+ARCH_02     N= 110  Win=17.3%  Edge=+0.6pp  ROI=+3.3%
+ARCH_03     N= 195  Win=16.4%  Edge=-2.6pp  ROI=-13.7%
+ARCH_04     N= 255  Win=17.6%  Edge=-3.6pp  ROI=-17.0%
+
+INTERPRETATION
+----------------------------------------
+Make-cut best: ARCH_01 (edge -4.7pp)
+Make-cut worst: ARCH_03 (edge -20.0pp)
+Spread: 15.3pp
+
+All-market best: ARCH_02 (edge +0.6pp)
+All-market worst: ARCH_04 (edge -3.6pp)
+Spread: 4.2pp
+CONCLUSION: Material archetype differentiation. Clusters useful.
+
+CAVEAT: Only 653 graded signals total. Small samples per archetype cell.
+CL03 post-R1 capture needed before definitive conclusion.

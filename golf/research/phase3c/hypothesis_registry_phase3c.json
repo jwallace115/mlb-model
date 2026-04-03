@@ -1,0 +1,23 @@
+{
+  "research_id": "GOLF_PHASE3C_LITE",
+  "hypothesis": "Player style archetypes (v3 residualized clusters) contain information about placement market mispricing that is not captured by DataGolf skill probabilities alone. Specifically, certain style clusters will show systematic over or underperformance relative to their DG-implied probability in top20, top10, top5, and make_cut markets. Books may also systematically shade archetype prices differently from DG.",
+  "primary_markets": [
+    "top_20",
+    "top_10",
+    "top_5",
+    "make_cut"
+  ],
+  "primary_outputs": [
+    "dg_residual_by_archetype",
+    "book_vs_dg_gap_by_archetype"
+  ],
+  "control_variable": "DG probability for each market",
+  "archetypes_used": "player_archetypes_v3.parquet \u2014 frozen",
+  "cluster_version": "v3 \u2014 residualized style clustering",
+  "cluster_prob_threshold": 0.4,
+  "minimum_n_per_cell": 20,
+  "minimum_n_per_market": 100,
+  "significance_threshold": 0.1,
+  "effect_threshold_pp": 3.0,
+  "registered_at": "2026-04-03"
+}

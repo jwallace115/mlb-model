@@ -20,7 +20,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -44,7 +44,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -68,7 +68,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -92,7 +92,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -116,7 +116,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -140,7 +140,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -164,7 +164,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -188,7 +188,7 @@
     "p09_data_available": NaN,
     "combined_overlay_tier": null,
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -212,7 +212,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "S12_ONLY",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -236,7 +236,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "S12_ONLY",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -260,7 +260,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "NONE",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -284,7 +284,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "BOTH",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -308,7 +308,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "NONE",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -332,7 +332,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "P09_ONLY",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -356,7 +356,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "NONE",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -380,7 +380,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "S12_ONLY",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {
@@ -404,7 +404,7 @@
     "p09_data_available": 1.0,
     "combined_overlay_tier": "NONE",
     "signal_class": null,
-    "shadow_only": null,
+    "shadow_only": false,
     "pre_overlay_tracking": null
   },
   {

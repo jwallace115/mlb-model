@@ -1,0 +1,5 @@
+subset,fit_metric,spearman_r,p_value,N
+all,deviation_fit_score,0.0023128325670742017,0.746928222579537,19469
+all,raw_fit_score,0.272102674426797,0.0,19469
+high_match,deviation_fit_score,0.002617670727865045,0.7150069858070891,19460
+high_match,raw_fit_score,0.27170005101603745,0.0,19460

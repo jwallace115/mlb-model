@@ -1,0 +1,180 @@
+GOLF PHASE 3D — Archetype × Book Price & Course Structure
+============================================================
+
+1. Q1: BOOK RESIDUAL BY ARCHETYPE
+----------------------------------------
+  top_20   × ALL       : N=29392  bk_resid=+6.0pp  ROI=+30.3%  dg_resid=9.23457279941243pp  compression=+3.3pp  
+  top_20   × STYLE_01  : N= 3404  bk_resid=+0.7pp  ROI=+4.8%  dg_resid=5.407511890720418pp  compression=+4.7pp  NULL
+  top_20   × STYLE_02  : N= 1483  bk_resid=-1.2pp  ROI=-7.6%  dg_resid=3.645817952156802pp  compression=+4.9pp  NULL
+  top_20   × STYLE_03  : N=19340  bk_resid=+8.0pp  ROI=+37.6%  dg_resid=10.744469815646635pp  compression=+2.7pp  CANDIDATE
+  top_20   × STYLE_04  : N= 5165  bk_resid=+3.9pp  ROI=+21.1%  dg_resid=7.562465434914454pp  compression=+3.6pp  CANDIDATE
+  top_10   × ALL       : N=28903  bk_resid=+2.2pp  ROI=+20.7%  dg_resid=4.4067125671239635pp  compression=+2.2pp  
+  top_10   × STYLE_01  : N= 3302  bk_resid=+0.8pp  ROI=+11.4%  dg_resid=3.359741029217626pp  compression=+2.6pp  NULL
+  top_10   × STYLE_02  : N= 1434  bk_resid=-1.1pp  ROI=-14.6%  dg_resid=1.3042637044139718pp  compression=+2.4pp  NULL
+  top_10   × STYLE_03  : N=19148  bk_resid=+3.0pp  ROI=+25.4%  dg_resid=5.064549953173945pp  compression=+2.1pp  CANDIDATE
+  top_10   × STYLE_04  : N= 5019  bk_resid=+1.1pp  ROI=+11.4%  dg_resid=3.462720202874729pp  compression=+2.3pp  NULL
+  top_5    × ALL       : N=29493  bk_resid=+1.0pp  ROI=+18.2%  dg_resid=2.361665083463477pp  compression=+1.3pp  
+  top_5    × STYLE_01  : N= 3402  bk_resid=+0.2pp  ROI=+6.0%  dg_resid=1.7002883515227014pp  compression=+1.5pp  NULL
+  top_5    × STYLE_02  : N= 1484  bk_resid=-0.3pp  ROI=-6.2%  dg_resid=1.5214741125766793pp  compression=+1.8pp  NULL
+  top_5    × STYLE_03  : N=19428  bk_resid=+1.5pp  ROI=+25.3%  dg_resid=2.7547077458107174pp  compression=+1.2pp  WATCH
+  top_5    × STYLE_04  : N= 5179  bk_resid=-0.1pp  ROI=-1.8%  dg_resid=1.5331098682200794pp  compression=+1.6pp  NULL
+
+2. CROSS-ARCHETYPE SPREAD
+----------------------------------------
+market   arch_A   arch_B  residual_gap_pp      p_value              verdict   N_A   N_B
+top_20 STYLE_03 STYLE_04         4.098224 4.013649e-10     SPREAD_CONFIRMED 19340  5165
+top_20 STYLE_01 STYLE_04        -3.237641 6.973770e-05     SPREAD_CONFIRMED  3404  5165
+top_20 STYLE_01 STYLE_03        -7.335865 4.803570e-28     SPREAD_CONFIRMED  3404 19340
+top_20 STYLE_02 STYLE_01        -1.924303 7.997734e-02 NO_MEANINGFUL_SPREAD  1483  3404
+top_20 STYLE_02 STYLE_03        -9.260168 1.773470e-20     SPREAD_CONFIRMED  1483 19340
+top_20 STYLE_02 STYLE_04        -5.161944 2.428311e-06     SPREAD_CONFIRMED  1483  5165
+top_10 STYLE_03 STYLE_04         1.867135 1.690718e-04 NO_MEANINGFUL_SPREAD 19148  5019
+top_10 STYLE_01 STYLE_04        -0.344420 5.734805e-01 NO_MEANINGFUL_SPREAD  3302  5019
+top_10 STYLE_01 STYLE_03        -2.211555 1.268459e-05     SPREAD_CONFIRMED  3302 19148
+top_10 STYLE_02 STYLE_01        -1.916823 1.591450e-02 NO_MEANINGFUL_SPREAD  1434  3302
+top_10 STYLE_02 STYLE_03        -4.128378 6.927244e-09     SPREAD_CONFIRMED  1434 19148
+top_10 STYLE_02 STYLE_04        -2.261243 4.154546e-03     SPREAD_CONFIRMED  1434  5019
+ top_5 STYLE_03 STYLE_04         1.640810 3.292844e-06 NO_MEANINGFUL_SPREAD 19428  5179
+ top_5 STYLE_01 STYLE_04         0.313808 4.731224e-01 NO_MEANINGFUL_SPREAD  3402  5179
+ top_5 STYLE_01 STYLE_03        -1.327002 3.797473e-04 NO_MEANINGFUL_SPREAD  3402 19428
+ top_5 STYLE_02 STYLE_01        -0.494357 4.159662e-01 NO_MEANINGFUL_SPREAD  1484  3402
+ top_5 STYLE_02 STYLE_03        -1.821360 9.394292e-04 NO_MEANINGFUL_SPREAD  1484 19428
+ top_5 STYLE_02 STYLE_04        -0.180549 7.616444e-01 NO_MEANINGFUL_SPREAD  1484  5179
+
+3. RANK BAND ANALYSIS
+----------------------------------------
+market archetype rank_band     N  book_resid_pp  ACTUAL_ODDS_ROI
+top_20  STYLE_01     ELITE   151      18.042853        43.414199
+top_20  STYLE_01   MIDTIER   755       3.184168        15.219383
+top_20  STYLE_01    FRINGE  2498      -1.130367       -11.062904
+top_20  STYLE_02     ELITE   142       3.441639        12.183440
+top_20  STYLE_02   MIDTIER   755       0.734608         4.251541
+top_20  STYLE_02    FRINGE   586      -4.936757       -39.131112
+top_20  STYLE_03     ELITE  5817      13.106848        41.355818
+top_20  STYLE_03   MIDTIER 10482       6.890914        38.102432
+top_20  STYLE_03    FRINGE  3041       2.136698        16.832416
+top_20  STYLE_04     ELITE  1192      12.687362        43.738561
+top_20  STYLE_04   MIDTIER  2661       3.713882        21.807626
+top_20  STYLE_04    FRINGE  1312      -3.648112       -29.753991
+top_10  STYLE_01     ELITE   149      13.215490        44.440443
+top_10  STYLE_01   MIDTIER   739       1.281300        12.212904
+top_10  STYLE_01    FRINGE  2414      -0.133600        -3.064950
+top_10  STYLE_02     ELITE   143      -0.038114        -0.247126
+top_10  STYLE_02   MIDTIER   743      -0.242318        -2.961207
+top_10  STYLE_02    FRINGE   548      -2.622133       -50.650861
+top_10  STYLE_03     ELITE  5807       4.912687        25.341974
+top_10  STYLE_03   MIDTIER 10388       2.684944        28.930133
+top_10  STYLE_03    FRINGE  2953       0.327479         5.711025
+top_10  STYLE_04     ELITE  1194       7.387251        44.146868
+top_10  STYLE_04   MIDTIER  2605      -0.086236        -0.963123
+top_10  STYLE_04    FRINGE  1220      -2.397566       -44.827840
+ top_5  STYLE_01     ELITE   153      10.641409        71.665179
+ top_5  STYLE_01   MIDTIER   754       0.517322         9.490671
+ top_5  STYLE_01    FRINGE  2495      -0.507247       -20.864977
+ top_5  STYLE_02     ELITE   142       6.041182        75.108022
+ top_5  STYLE_02   MIDTIER   754       0.374655         8.265958
+ top_5  STYLE_02    FRINGE   588      -2.628679       -79.441458
+ top_5  STYLE_03     ELITE  5893       3.010190        29.485986
+ top_5  STYLE_03   MIDTIER 10492       1.214023        25.856469
+ top_5  STYLE_03    FRINGE  3043      -0.130655        -4.230705
+ top_5  STYLE_04     ELITE  1203       1.484968        15.790019
+ top_5  STYLE_04   MIDTIER  2663       0.124657         2.920134
+ top_5  STYLE_04    FRINGE  1313      -1.978565       -68.403224
+
+4. COURSE PROXIES
+----------------------------------------
+Scoring environment: terciles of mean to-par per event
+Event class: MAJOR / ELEVATED / REGULAR_STANDARD
+
+5. Q2: ARCHETYPE × COURSE INTERACTION
+----------------------------------------
+  top_20   × STYLE_01   × LOW_SCORING_ENV   : N=7077  bk_resid=+0.0pp  ROI=+0.0%  
+  top_20   × STYLE_01   × MID_SCORING_ENV   : N=7684  bk_resid=-1.3pp  ROI=-9.5%  
+  top_20   × STYLE_01   × HIGH_SCORING_ENV  : N=5485  bk_resid=+5.1pp  ROI=+37.7%  INTERACTION_CANDIDATE
+  top_20   × STYLE_02   × LOW_SCORING_ENV   : N=2539  bk_resid=-2.3pp  ROI=-14.6%  
+  top_20   × STYLE_02   × MID_SCORING_ENV   : N=2668  bk_resid=+1.7pp  ROI=+9.7%  
+  top_20   × STYLE_02   × HIGH_SCORING_ENV  : N=3451  bk_resid=-1.5pp  ROI=-9.7%  
+  top_20   × STYLE_03   × LOW_SCORING_ENV   : N=34658  bk_resid=+6.8pp  ROI=+31.5%  INTERACTION_CANDIDATE
+  top_20   × STYLE_03   × MID_SCORING_ENV   : N=39916  bk_resid=+8.2pp  ROI=+37.8%  INTERACTION_CANDIDATE
+  top_20   × STYLE_03   × HIGH_SCORING_ENV  : N=43852  bk_resid=+10.5pp  ROI=+52.0%  INTERACTION_CANDIDATE
+  top_20   × STYLE_04   × LOW_SCORING_ENV   : N=9669  bk_resid=+1.8pp  ROI=+9.2%  
+  top_20   × STYLE_04   × MID_SCORING_ENV   : N=10896  bk_resid=+6.2pp  ROI=+34.3%  INTERACTION_CANDIDATE
+  top_20   × STYLE_04   × HIGH_SCORING_ENV  : N=10863  bk_resid=+4.4pp  ROI=+24.8%  INTERACTION_CANDIDATE
+  top_10   × STYLE_01   × LOW_SCORING_ENV   : N=6959  bk_resid=+0.9pp  ROI=+12.8%  
+  top_10   × STYLE_01   × MID_SCORING_ENV   : N=7581  bk_resid=-0.6pp  ROI=-9.6%  
+  top_10   × STYLE_01   × HIGH_SCORING_ENV  : N=5169  bk_resid=+3.3pp  ROI=+48.2%  INTERACTION_CANDIDATE
+  top_10   × STYLE_02   × LOW_SCORING_ENV   : N=2511  bk_resid=-0.1pp  ROI=-0.7%  
+  top_10   × STYLE_02   × MID_SCORING_ENV   : N=2559  bk_resid=+0.3pp  ROI=+4.1%  
+  top_10   × STYLE_02   × HIGH_SCORING_ENV  : N=3320  bk_resid=-1.9pp  ROI=-26.8%  
+  top_10   × STYLE_03   × LOW_SCORING_ENV   : N=34643  bk_resid=+2.8pp  ROI=+23.0%  
+  top_10   × STYLE_03   × MID_SCORING_ENV   : N=39531  bk_resid=+2.4pp  ROI=+20.3%  
+  top_10   × STYLE_03   × HIGH_SCORING_ENV  : N=43349  bk_resid=+4.3pp  ROI=+38.9%  INTERACTION_CANDIDATE
+  top_10   × STYLE_04   × LOW_SCORING_ENV   : N=9530  bk_resid=-0.7pp  ROI=-6.6%  
+  top_10   × STYLE_04   × MID_SCORING_ENV   : N=10665  bk_resid=+0.8pp  ROI=+7.5%  
+  top_10   × STYLE_04   × HIGH_SCORING_ENV  : N=10418  bk_resid=+3.2pp  ROI=+34.4%  INTERACTION_CANDIDATE
+  top_5    × STYLE_01   × LOW_SCORING_ENV   : N=7092  bk_resid=+0.4pp  ROI=+9.3%  
+  top_5    × STYLE_01   × MID_SCORING_ENV   : N=7649  bk_resid=-0.6pp  ROI=-16.2%  
+  top_5    × STYLE_01   × HIGH_SCORING_ENV  : N=5485  bk_resid=+1.8pp  ROI=+53.6%  
+  top_5    × STYLE_02   × LOW_SCORING_ENV   : N=2545  bk_resid=+0.7pp  ROI=+17.4%  
+  top_5    × STYLE_02   × MID_SCORING_ENV   : N=2661  bk_resid=+0.4pp  ROI=+8.8%  
+  top_5    × STYLE_02   × HIGH_SCORING_ENV  : N=3450  bk_resid=-0.9pp  ROI=-21.1%  
+  top_5    × STYLE_03   × LOW_SCORING_ENV   : N=35014  bk_resid=+2.0pp  ROI=+31.4%  
+  top_5    × STYLE_03   × MID_SCORING_ENV   : N=39902  bk_resid=+1.0pp  ROI=+17.5%  
+  top_5    × STYLE_03   × HIGH_SCORING_ENV  : N=43893  bk_resid=+2.0pp  ROI=+34.8%  
+  top_5    × STYLE_04   × LOW_SCORING_ENV   : N=9712  bk_resid=-0.9pp  ROI=-17.0%  
+  top_5    × STYLE_04   × MID_SCORING_ENV   : N=10886  bk_resid=+0.2pp  ROI=+3.4%  
+  top_5    × STYLE_04   × HIGH_SCORING_ENV  : N=10891  bk_resid=+0.1pp  ROI=+1.5%  
+
+6. COURSE MATCH REVERSION
+----------------------------------------
+WARNING: field_size unavailable — raw finish position used
+market archetype  divergence_N  divergence_resid_pp  divergence_ROI  comparison_N  comparison_resid_pp    gap_pp
+top_20  STYLE_01         24573            -4.680961      -31.365514         95782             2.078730 -6.759691
+top_20  STYLE_02         10687            -7.003278      -41.708843         39612             1.066117 -8.069394
+top_20  STYLE_03        171287             2.771073       13.187434        551985            10.547508 -7.776434
+top_20  STYLE_04         43225            -0.238698       -1.301399        147420             6.015683 -6.254381
+top_10  STYLE_01         24196            -1.613176      -21.094908         93377             1.702780 -3.315957
+top_10  STYLE_02         10605            -3.486220      -43.767925         38186             0.454066 -3.940286
+top_10  STYLE_03        170507             0.472433        4.094925        547646             4.076128 -3.603694
+top_10  STYLE_04         42373            -0.044600       -0.470587        143546             1.733255 -1.777854
+ top_5  STYLE_01         24588            -1.043141      -25.895077         95597             0.729223 -1.772364
+ top_5  STYLE_02         10667            -1.318375      -30.008903         39596             0.576728 -1.895103
+ top_5  STYLE_03        171796             0.040392        0.664757        553312             2.149911 -2.109519
+ top_5  STYLE_04         43234            -1.423287      -29.020946        147644             0.328524 -1.751811
+
+7. STABILITY & SKILL ROBUSTNESS
+----------------------------------------
+signal_type market archetype  early_N  early_resid  early_ROI  late_N  late_resid  late_ROI stability  midtier_resid  elite_resid    skill_check  conf60_resid  style_check
+         Q1 top_20  STYLE_03    16589     9.116826  43.007057    2751    1.356513  6.130897    STABLE       6.890914    13.106848 MIDTIER_ROBUST      8.141269 STYLE_DRIVEN
+         Q1 top_20  STYLE_04     4099     3.975262  21.666790    1066    3.682041 18.893219    STABLE       3.713882    12.687362 MIDTIER_ROBUST      3.454625 STYLE_DRIVEN
+         Q1 top_10  STYLE_03    16339     3.481963  29.430615    2809    0.176013  1.516366    STABLE       2.684944     4.912687 MIDTIER_ROBUST      3.204186 STYLE_DRIVEN
+         Q1  top_5  STYLE_03    16638     1.774856  28.931202    2790    0.196752  3.277041    STABLE       1.214023     3.010190 MIDTIER_ROBUST      1.654316 STYLE_DRIVEN
+
+8. DEPLOYABILITY
+----------------------------------------
+market archetype      flag  bets_per_season  ACTUAL_ODDS_ROI  edge_filtered_ROI  edge_filtered_N_season  improvement_pp           edge_helps  typical_odds stable midtier_robust style_driven  kelly_illustrative          verdict
+top_20  STYLE_03 CANDIDATE      2762.857143        37.566020         122.658440              699.285714       85.092419 EDGE_FILTERING_HELPS 21.3% implied STABLE MIDTIER_ROBUST STYLE_DRIVEN            0.101856 DEPLOY_CANDIDATE
+top_20  STYLE_04 CANDIDATE       737.857143        21.066451         108.695480              149.857143       87.629029 EDGE_FILTERING_HELPS 18.6% implied STABLE MIDTIER_ROBUST STYLE_DRIVEN            0.048083 DEPLOY_CANDIDATE
+top_10  STYLE_03 CANDIDATE      2735.428571        25.401820         127.123498              459.285714      101.721678 EDGE_FILTERING_HELPS 11.8% implied STABLE MIDTIER_ROBUST STYLE_DRIVEN            0.033979 DEPLOY_CANDIDATE
+ top_5  STYLE_03     WATCH      2775.428571        25.314548         171.002041              383.000000      145.687492 EDGE_FILTERING_HELPS  6.1% implied STABLE MIDTIER_ROBUST STYLE_DRIVEN            0.016491          MONITOR
+
+9. BOTTOM LINE
+========================================
+
+Q1: Do archetype edges survive book price?
+  3 candidates survive (of 8 DG candidates from Phase 3C)
+  Books capture significant portion of DG gap but spread persists
+
+Cross-archetype spread: 8 pairwise spreads confirmed
+
+Q2: Course structure amplification: 9 interaction candidates
+
+Edge filtering helps: 4 signals improve with DG-edge filter
+
+Course match reversion: 12 cells tested
+
+DEPLOY_CANDIDATE: 3
+MONITOR: 1
+NOT_READY: 0
+
+Recommended next step: Build archetype overlay into live golf signal pipeline.

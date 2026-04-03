@@ -1,0 +1,56 @@
+{
+  "sg_ott_share_abs": {
+    "model_form": "raw"
+  },
+  "sg_app_share_abs": {
+    "model_form": "raw"
+  },
+  "sg_putt_share_abs": {
+    "model_form": "raw"
+  },
+  "sg_arg_share_abs": {
+    "model_form": "raw"
+  },
+  "t2g_vs_putt_balance": {
+    "model_form": "quadratic",
+    "intercept": -0.020972201702486475,
+    "coef_linear": 0.6410943429434722,
+    "coef_quad": 0.07269895123445758
+  },
+  "ott_vs_app_balance": {
+    "model_form": "raw"
+  },
+  "score_sd": {
+    "model_form": "raw"
+  },
+  "score_skew": {
+    "model_form": "raw"
+  },
+  "round_delta_sd": {
+    "model_form": "raw"
+  },
+  "birdie_rate": {
+    "model_form": "quadratic",
+    "intercept": 3.6670707393984734,
+    "coef_linear": 0.3398116315000409,
+    "coef_quad": 0.02440703226358354
+  },
+  "bogey_rate": {
+    "model_form": "quadratic",
+    "intercept": 2.6383563596154183,
+    "coef_linear": -0.28539464814349436,
+    "coef_quad": 0.023622808977051858
+  },
+  "aggression_index": {
+    "model_form": "quadratic",
+    "intercept": 1.0287143797830558,
+    "coef_linear": 0.6252062796435353,
+    "coef_quad": 0.000784223286531035
+  },
+  "cut_made_rate": {
+    "model_form": "quadratic",
+    "intercept": 0.5589584172306148,
+    "coef_linear": 0.2184161577177319,
+    "coef_quad": 0.012543176820328357
+  }
+}

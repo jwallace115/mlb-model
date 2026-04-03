@@ -1,0 +1,142 @@
+GOLF PHASE 3C-LITE — Archetype × Placement Market Interaction
+============================================================
+
+1. DATA COVERAGE
+  make_cut: 28476 rows with DG prob
+  top_20: 28360 rows with DG prob
+  top_10: 28360 rows with DG prob
+  top_5: 28360 rows with DG prob
+
+2. RAW MARKET ERROR (book implied vs actual)
+  market archetype     N  implied_pct  actual_pct  error_pp  proxy_roi_110 flag
+make_cut       ALL 13143    67.121821   65.007989 -2.113832      -3.149247  NaN
+make_cut  STYLE_01   827    59.068183   54.897219 -4.170964      -7.061270    *
+make_cut  STYLE_02   523    58.660286   53.919694 -4.740592      -8.081434    *
+make_cut  STYLE_03  9605    68.393727   66.496616 -1.897111      -2.773808     
+make_cut  STYLE_04  2188    66.604949   64.945155 -1.659794      -2.491998     
+  top_20       ALL 29392    19.752119   25.728089  5.975970      30.254831  NaN
+  top_20  STYLE_01  3404    13.982121   14.659224  0.677103       4.842637     
+  top_20  STYLE_02  1483    16.486579   15.239380 -1.247200      -7.564940     
+  top_20  STYLE_03 19340    21.330362   29.343330  8.012968      37.566020    *
+  top_20  STYLE_04  5165    18.582836   22.497580  3.914744      21.066451    *
+  top_10       ALL 28903    10.710723   12.925994  2.215271      20.682739  NaN
+  top_10  STYLE_01  3302     6.876596    7.662023  0.785427      11.421739     
+  top_10  STYLE_02  1434     7.756222    6.624826 -1.131396     -14.586947     
+  top_10  STYLE_03 19148    11.798297   14.795279  2.996982      25.401820     
+  top_10  STYLE_04  5019     9.928133   11.057980  1.129847      11.380258     
+   top_5       ALL 29493     5.569226    6.584613  1.015387      18.232103  NaN
+   top_5  STYLE_01  3402     3.658844    3.880071  0.221227       6.046363     
+   top_5  STYLE_02  1484     4.383642    4.110512 -0.273130      -6.230672     
+   top_5  STYLE_03 19428     6.115967    7.664196  1.548229      25.314548     
+   top_5  STYLE_04  5179     5.112855    5.020274 -0.092581      -1.810750     
+
+3. DG-CONTROLLED — PRIMARY RESULT
+  market archetype     N  mean_dg_resid_pp          p_dg signal_flag
+make_cut       ALL 28476          2.740565  1.601265e-22            
+make_cut  STYLE_01  3247          1.851633  2.556148e-02        NULL
+make_cut  STYLE_02  1403         -0.096790  9.398971e-01        NULL
+make_cut  STYLE_03 18872          2.895151  3.797425e-17       WATCH
+make_cut  STYLE_04  4954          3.537865  1.777442e-07   CANDIDATE
+  top_20       ALL 28360          9.234573 1.253882e-292            
+  top_20  STYLE_01  3220          5.407512  1.523599e-19   CANDIDATE
+  top_20  STYLE_02  1401          3.645818  1.211582e-04   CANDIDATE
+  top_20  STYLE_03 18808         10.744470 1.383288e-239   CANDIDATE
+  top_20  STYLE_04  4931          7.562465  6.541439e-38   CANDIDATE
+  top_10       ALL 28360          4.406713 3.216218e-114            
+  top_10  STYLE_01  3220          3.359741  1.297440e-13   CANDIDATE
+  top_10  STYLE_02  1401          1.304264  4.937865e-02        NULL
+  top_10  STYLE_03 18808          5.064550  4.046241e-89   CANDIDATE
+  top_10  STYLE_04  4931          3.462720  1.873535e-15   CANDIDATE
+   top_5       ALL 28360          2.361665  2.010335e-59            
+   top_5  STYLE_01  3220          1.700288  2.547843e-07        NULL
+   top_5  STYLE_02  1401          1.521474  3.548719e-03        NULL
+   top_5  STYLE_03 18808          2.754708  4.684732e-47       WATCH
+   top_5  STYLE_04  4931          1.533110  9.389482e-07        NULL
+
+4. BOOK vs DG GAP
+  make_cut × STYLE_01: gap=+8.5pp  p=0.000
+  make_cut × STYLE_02: gap=+6.7pp  p=0.000
+  make_cut × STYLE_03: gap=+6.1pp  p=0.000
+  make_cut × STYLE_04: gap=+6.7pp  p=0.000
+  top_20 × STYLE_01: gap=+4.6pp  p=0.000
+  top_20 × STYLE_02: gap=+4.7pp  p=0.000
+  top_20 × STYLE_03: gap=+2.5pp  p=0.000
+  top_20 × STYLE_04: gap=+3.0pp  p=0.000
+  top_10 × STYLE_01: gap=+2.4pp  p=0.000
+  top_10 × STYLE_02: gap=+2.3pp  p=0.000
+  top_10 × STYLE_03: gap=+2.0pp  p=0.000
+  top_10 × STYLE_04: gap=+2.1pp  p=0.000
+  top_5 × STYLE_01: gap=+1.6pp  p=0.000
+  top_5 × STYLE_02: gap=+1.8pp  p=0.000
+  top_5 × STYLE_03: gap=+1.1pp  p=0.000
+  top_5 × STYLE_04: gap=+1.4pp  p=0.000
+
+5. CANDIDATE SIGNALS: 8
+  make_cut × STYLE_04: dg_resid=+3.5pp  p=0.000  N=4954
+  top_20 × STYLE_01: dg_resid=+5.4pp  p=0.000  N=3220
+  top_20 × STYLE_02: dg_resid=+3.6pp  p=0.000  N=1401
+  top_20 × STYLE_03: dg_resid=+10.7pp  p=0.000  N=18808
+  top_20 × STYLE_04: dg_resid=+7.6pp  p=0.000  N=4931
+  top_10 × STYLE_01: dg_resid=+3.4pp  p=0.000  N=3220
+  top_10 × STYLE_03: dg_resid=+5.1pp  p=0.000  N=18808
+  top_10 × STYLE_04: dg_resid=+3.5pp  p=0.000  N=4931
+
+6. WATCH SIGNALS: 2
+  make_cut × STYLE_03: dg_resid=+2.9pp  p=0.000  N=18872
+  top_5 × STYLE_03: dg_resid=+2.8pp  p=0.000  N=18808
+
+7. SKILL CONFOUND CHECK
+  market archetype     N        Q1       Q2        Q3        Q4      verdict
+make_cut  STYLE_04  4954  0.951726 3.918268  5.320128  3.831313 SKILL_ROBUST
+  top_20  STYLE_01  3220  2.359552 9.914413 10.770415 23.408690 SKILL_ROBUST
+  top_20  STYLE_02  1401  0.789194 4.076154  6.065551  9.717444 SKILL_ROBUST
+  top_20  STYLE_03 18808  6.799748 6.879722 12.175927 14.517177 SKILL_ROBUST
+  top_20  STYLE_04  4931  1.358589 4.251680  8.659106 16.560510 SKILL_ROBUST
+  top_10  STYLE_01  3220  1.526685 5.185425  5.015889 21.369535 SKILL_ROBUST
+  top_10  STYLE_03 18808  2.583242 3.327930  5.836721  6.992011 SKILL_ROBUST
+  top_10  STYLE_04  4931 -0.190036 0.769414  3.192416 10.599687 SKILL_ROBUST
+make_cut  STYLE_03 18872  3.318333 6.640094  1.237716  1.214811 SKILL_ROBUST
+   top_5  STYLE_03 18808  1.506810 1.901796  2.929837  3.915940 SKILL_ROBUST
+
+8. STABILITY CHECK
+  market archetype  early_N  early_resid  late_N  late_resid stability
+make_cut  STYLE_04     3874     3.272755    1080    4.488826    STABLE
+  top_20  STYLE_01     2020     5.947247    1200    4.498959    STABLE
+  top_20  STYLE_02      778     2.548886     623    5.015662    STABLE
+  top_20  STYLE_03    16052    11.589342    2756    5.823608    STABLE
+  top_20  STYLE_04     3854     7.580294    1077    7.498666    STABLE
+  top_10  STYLE_01     2020     3.496357    1200    3.129770    STABLE
+  top_10  STYLE_03    16052     5.491135    2756    2.579954    STABLE
+  top_10  STYLE_04     3854     3.524254    1077    3.242523    STABLE
+make_cut  STYLE_03    16094     3.049273    2778    2.002262    STABLE
+   top_5  STYLE_03    16052     2.948204    2756    1.627712    STABLE
+
+9. BOOK vs DG INTERPRETATION
+  make_cut × STYLE_01: Both DG and market misprice
+  make_cut × STYLE_02: Market shades from DG (CLV source?)
+  make_cut × STYLE_03: Both DG and market misprice
+  make_cut × STYLE_04: Both DG and market misprice
+  top_20 × STYLE_01: Both DG and market misprice
+  top_20 × STYLE_02: Both DG and market misprice
+  top_20 × STYLE_03: Both DG and market misprice
+  top_20 × STYLE_04: Both DG and market misprice
+  top_10 × STYLE_01: Both DG and market misprice
+  top_10 × STYLE_02: Both DG and market misprice
+  top_10 × STYLE_03: Both DG and market misprice
+  top_10 × STYLE_04: Both DG and market misprice
+  top_5 × STYLE_01: Both DG and market misprice
+  top_5 × STYLE_02: Both DG and market misprice
+  top_5 × STYLE_03: Both DG and market misprice
+  top_5 × STYLE_04: Both DG and market misprice
+
+10. BOTTOM LINE
+----------------------------------------
+CANDIDATE signals found: 8
+  Skill-robust: 10/10
+  Stable across periods: 10/10
+WATCH signals: 2
+
+VERDICT: Archetype × market signal detected.
+
+Recommended next step:
+  Phase 3D: Build archetype overlay for live signals.

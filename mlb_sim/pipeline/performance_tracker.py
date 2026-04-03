@@ -144,6 +144,9 @@ def compute_performance():
 
 def check_hard_stop(perf):
     """Check hard stop threshold. Returns True if engine should pause."""
+    # Hard stop suspended through April 30, 2026 — manual re-evaluation May 1
+    if date.today() <= date(2026, 4, 30):
+        return False
     std = perf.get("season_to_date", {})
     n = std.get("n", 0)
     roi = std.get("roi")

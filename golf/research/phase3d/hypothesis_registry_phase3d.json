@@ -1,0 +1,26 @@
+{
+  "research_id": "GOLF_PHASE3D",
+  "primary_questions": [
+    "Q1: Does archetype spread persist vs book implied probability?",
+    "Q2: Does archetype x course structure amplify placement edges?"
+  ],
+  "hypothesis_q1": "Certain style archetypes will show positive book_residual (actual > book_implied) even after books have already shaded above DG. The spread across archetypes vs book price will be smaller than vs DG but non-zero for at least one archetype x market combination.",
+  "hypothesis_q2": "Archetype x course structure interactions will produce larger and more stable placement edges than archetype alone. Specifically: STYLE_01 (bomber) will outperform in high-scoring environments. STYLE_04 (grinder/putter) will outperform in low-scoring environments.",
+  "primary_markets": [
+    "top_20",
+    "top_10",
+    "top_5"
+  ],
+  "primary_statistical_metric": "book_residual",
+  "primary_economic_metric": "ACTUAL_ODDS_ROI",
+  "course_proxies": [
+    "scoring_environment_bucket",
+    "event_class",
+    "field_strength"
+  ],
+  "archetypes_version": "v3 \u2014 frozen",
+  "minimum_n_per_cell": 20,
+  "significance_threshold": 0.1,
+  "effect_threshold_pp": 2.5,
+  "registered_at": "2026-04-03"
+}

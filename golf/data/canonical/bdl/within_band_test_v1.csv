@@ -1,0 +1,10 @@
+test,band,subset,N,spearman_r,win_rate,p_value,verdict,mc_mean,mm_mean
+corr_2R_score,MID_TIER,ALL,1875,-0.0146,,0.5264,WRONG_DIRECTION,,
+made_cut,MID_TIER,ALL,1875,,,0.0131,WEAK,-0.00044,0.00084
+corr_final_score,MID_TIER,ALL,1414,-0.07,,0.0084,WRONG_DIRECTION,,
+corr_2R_score,ELITE,ALL,1091,-0.1649,,0.0,WRONG_DIRECTION,,
+corr_final_score,ELITE,ALL,905,-0.1938,,0.0,WRONG_DIRECTION,,
+corr_2R_score,CONTENDER,ALL,919,-0.096,,0.0036,WRONG_DIRECTION,,
+corr_final_score,CONTENDER,ALL,773,-0.124,,0.0005,WRONG_DIRECTION,,
+corr_2R_score,FRINGE,ALL,2065,0.013,,0.5562,NULL,,
+corr_2R_score,LONGSHOT,ALL,11298,0.0216,,0.0214,NULL,,

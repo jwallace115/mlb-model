@@ -1,0 +1,194 @@
+GOLF PHASE 3C V2 — Player × Course Archetype Interaction
+=======================================================
+
+1. DATA COVERAGE
+  Analysis rows: 65510
+  Matchup types: 16
+  Course join coverage: 74.6%
+
+2. MARKET-WIDE BASELINE
+market season     N   hit_pct  implied_pct  baseline_resid_pp
+top_20   2019  9346 29.338755    20.555564           8.783190
+top_20   2020  3380 24.082840    17.712718           6.370122
+top_20   2021  2650 23.924528    19.119584           4.804945
+top_20   2022  2527 23.941433    18.111638           5.829795
+top_20   2023  1901 22.882693    18.657118           4.225576
+top_20   2024  1398 23.605150    20.349646           3.255504
+top_20   2025   792 15.530303    18.494807          -2.964504
+top_10   2019  8690 14.533947    11.581603           2.952344
+top_10   2020  3397 12.098911     9.287035           2.811876
+top_10   2021  2670 12.284644    10.123267           2.161378
+top_10   2022  2538 13.435776     9.447635           3.988141
+top_10   2023  1973 11.150532     9.499280           1.651252
+top_10   2024  1408 10.866477    10.047651           0.818827
+top_10   2025   819  7.814408     8.885339          -1.070931
+ top_5   2019  9346  6.837150     5.872365           0.964785
+ top_5   2020  3382  6.859846     4.626474           2.233372
+ top_5   2021  2650  7.283019     5.576899           1.706120
+ top_5   2022  2532  6.319115     5.318252           1.000864
+ top_5   2023  1922  5.931322     5.305088           0.626233
+ top_5   2024  1398  6.509299     4.811095           1.698204
+ top_5   2025   791  3.413401     4.295014          -0.881613
+top_20    ALL 21994 25.838865    19.413484           6.425381
+top_10    ALL 21495 12.933240    10.391518           2.541723
+ top_5    ALL 22021  6.611870     5.408206           1.203665
+
+3. TIE/EXCLUSION RULES
+  Ties: numeric position (T14=14)
+  WD/DQ/MDF: excluded (actual_result=null)
+
+4. PLAYER ARCHETYPE BASELINE (relative_book_residual)
+market archetype     N  raw_resid_pp  relative_resid_pp  ACTUAL_ODDS_ROI      p_value
+top_20  STYLE_01  2332      1.406817          -5.018564        10.182396 2.118968e-12
+top_20  STYLE_02  1098     -1.378042          -7.803423        -8.893683 3.657202e-13
+top_20  STYLE_03 14702      8.269494           1.844113        39.586270 5.508545e-07
+top_20  STYLE_04  3862      4.654096          -1.771285        25.449761 7.652726e-03
+top_10  STYLE_01  2238      1.509110          -1.032613        22.632684 5.961359e-02
+top_10  STYLE_02  1057     -1.456708          -3.998431       -20.421664 4.781673e-08
+top_10  STYLE_03 14477      3.237714           0.695991        28.368374 1.631348e-02
+top_10  STYLE_04  3723      1.591270          -0.950453        16.605971 5.683460e-02
+ top_5  STYLE_01  2332      0.668688          -0.534977        18.696225 1.871068e-01
+ top_5  STYLE_02  1098     -0.804095          -2.007760       -19.694780 2.119188e-04
+ top_5  STYLE_03 14723      1.800307           0.596642        30.503713 6.390195e-03
+ top_5  STYLE_04  3868     -0.174897          -1.378562        -3.491344 5.871797e-05
+
+5. COURSE ARCHETYPE BASELINE (relative_book_residual)
+market course_type    N  raw_resid_pp  relative_resid_pp  ACTUAL_ODDS_ROI  p_value
+top_20    COURSE_A 3547      8.071224           1.645843        44.892613 0.023975
+top_20    COURSE_B 5349      4.168852          -2.256529        20.801326 0.000077
+top_20    COURSE_C 9110      7.137804           0.712423        36.618631 0.111831
+top_20    COURSE_D 3988      6.360736          -0.064645        32.341604 0.924793
+top_10    COURSE_A 3529      2.964520           0.422797        29.604760 0.447295
+top_10    COURSE_B 5282      1.612228          -0.929495        15.129972 0.035675
+top_10    COURSE_C 8786      2.607751           0.066028        25.320072 0.849211
+top_10    COURSE_D 3898      3.269639           0.727916        30.893388 0.182969
+ top_5    COURSE_A 3566      1.526704           0.323039        29.821948 0.432293
+ top_5    COURSE_B 5349      1.304350           0.100685        23.712603 0.766965
+ top_5    COURSE_C 9117      1.217114           0.013449        22.415407 0.958537
+ top_5    COURSE_D 3989      0.749131          -0.454534        13.637832 0.239673
+
+6. INTERACTION MATRIX (N>=12)
+market        matchup_type    N  relative_resid_pp      p_value  ACTUAL_ODDS_ROI               flag
+top_20 STYLE_01_x_COURSE_A  403          -5.693472 5.811927e-04         5.170149 MISMATCH_CANDIDATE
+top_20 STYLE_01_x_COURSE_B  645          -6.604292 4.490957e-07        -1.324069 MISMATCH_CANDIDATE
+top_20 STYLE_01_x_COURSE_C  924          -3.831350 1.089356e-03        19.324863 MISMATCH_CANDIDATE
+top_20 STYLE_01_x_COURSE_D  360          -4.469129 1.599114e-02        13.051951 MISMATCH_CANDIDATE
+top_20 STYLE_02_x_COURSE_A  149          -8.652043 2.868816e-03       -13.104360 MISMATCH_CANDIDATE
+top_20 STYLE_02_x_COURSE_B  238          -6.324879 5.572738e-03         0.708498 MISMATCH_CANDIDATE
+top_20 STYLE_02_x_COURSE_C  461          -8.209621 7.589535e-07       -11.388448 MISMATCH_CANDIDATE
+top_20 STYLE_02_x_COURSE_D  250          -7.956192 5.121170e-04        -9.856606 MISMATCH_CANDIDATE
+top_20 STYLE_03_x_COURSE_A 2395           3.688999 7.016322e-05        54.221300          CANDIDATE
+top_20 STYLE_03_x_COURSE_B 3485          -1.297949 7.704669e-02        23.257698                   
+top_20 STYLE_03_x_COURSE_C 6095           3.029546 1.337618e-07        44.926159          CANDIDATE
+top_20 STYLE_03_x_COURSE_D 2727           1.589758 6.579264e-02        38.116931              WATCH
+top_20 STYLE_04_x_COURSE_A  600           0.977129 5.760388e-01        40.903518                   
+top_20 STYLE_04_x_COURSE_B  981          -1.816238 1.802612e-01        24.737183                   
+top_20 STYLE_04_x_COURSE_C 1630          -2.852829 3.878680e-03        19.622305 MISMATCH_CANDIDATE
+top_20 STYLE_04_x_COURSE_D  651          -1.528633 3.477580e-01        26.987168                   
+top_10 STYLE_01_x_COURSE_A  395          -0.625341 6.484404e-01        26.625497                   
+top_10 STYLE_01_x_COURSE_B  646          -1.779097 6.835562e-02        12.293841                   
+top_10 STYLE_01_x_COURSE_C  858          -0.792249 3.652831e-01        27.297001                   
+top_10 STYLE_01_x_COURSE_D  339          -0.693015 6.406084e-01        24.354515                   
+top_10 STYLE_02_x_COURSE_A  145          -5.397532 9.958541e-03       -31.511659 MISMATCH_CANDIDATE
+top_10 STYLE_02_x_COURSE_B  232          -0.231853 9.033464e-01        34.261643                   
+top_10 STYLE_02_x_COURSE_C  435          -4.257168 1.123306e-04       -24.496560 MISMATCH_CANDIDATE
+top_10 STYLE_02_x_COURSE_D  245          -6.277720 6.674978e-08       -56.664912 MISMATCH_CANDIDATE
+top_10 STYLE_03_x_COURSE_A 2392           1.185178 9.588468e-02        35.117812                   
+top_10 STYLE_03_x_COURSE_B 3450          -0.449685 4.408504e-01        17.398990                   
+top_10 STYLE_03_x_COURSE_C 5947           0.881789 4.966388e-02        30.414569                   
+top_10 STYLE_03_x_COURSE_D 2688           1.320064 5.835082e-02        33.038332                   
+top_10 STYLE_04_x_COURSE_A  597          -0.524692 6.783898e-01        20.776435                   
+top_10 STYLE_04_x_COURSE_B  954          -2.259009 1.727567e-02         2.922002                   
+top_10 STYLE_04_x_COURSE_C 1546          -1.379210 6.894260e-02        11.979436                   
+top_10 STYLE_04_x_COURSE_D  626           1.696576 2.005575e-01        46.985247                   
+ top_5 STYLE_01_x_COURSE_A  403          -0.031016 9.762056e-01        30.939551        EXPLORATORY
+ top_5 STYLE_01_x_COURSE_B  645          -0.178192 8.227375e-01        29.546976        EXPLORATORY
+ top_5 STYLE_01_x_COURSE_C  924          -1.712005 1.667406e-03       -14.818615        EXPLORATORY
+ top_5 STYLE_01_x_COURSE_D  360           1.282669 3.053891e-01        63.710397        EXPLORATORY
+ top_5 STYLE_02_x_COURSE_A  149          -0.622156 7.373532e-01        12.146105        EXPLORATORY
+ top_5 STYLE_02_x_COURSE_B  238           0.701744 6.343553e-01        53.571222        EXPLORATORY
+ top_5 STYLE_02_x_COURSE_C  460          -2.687383 3.198523e-04       -36.255332        EXPLORATORY
+ top_5 STYLE_02_x_COURSE_D  251          -4.153937 4.532054e-08       -71.168216        EXPLORATORY
+ top_5 STYLE_03_x_COURSE_A 2411           0.426310 4.118153e-01        30.299388        EXPLORATORY
+ top_5 STYLE_03_x_COURSE_B 3485           0.511271 2.555697e-01        27.897243        EXPLORATORY
+ top_5 STYLE_03_x_COURSE_C 6100           0.966657 5.418527e-03        36.510161        EXPLORATORY
+ top_5 STYLE_03_x_COURSE_D 2727           0.028655 9.542851e-01        20.693643        EXPLORATORY
+ top_5 STYLE_04_x_COURSE_A  603           0.380306 6.913684e-01        31.368701        EXPLORATORY
+ top_5 STYLE_04_x_COURSE_B  981          -1.320384 5.642363e-02        -2.329870        EXPLORATORY
+ top_5 STYLE_04_x_COURSE_C 1633          -1.810106 3.678623e-04       -12.091330        EXPLORATORY
+ top_5 STYLE_04_x_COURSE_D  651          -2.012905 1.309268e-02       -16.326165        EXPLORATORY
+
+7. PRE-REGISTERED VERDICTS
+  H1: STYLE_01_x_COURSE_A → REVERSED (rel=-5.7pp)
+  H2: STYLE_04_x_COURSE_D → REVERSED (rel=-1.5pp)
+  H3: STYLE_03_x_COURSE_B → NULL (rel=-1.3pp)
+  H4: STYLE_01_x_COURSE_D → CONFIRMED (rel=-4.5pp)
+  H5: STYLE_04_x_COURSE_A → CONFIRMED (rel=+1.0pp)
+
+8. CANDIDATES: 2
+  top_20 STYLE_03_x_COURSE_A: rel=+3.7pp ROI=+54.2%
+  top_20 STYLE_03_x_COURSE_C: rel=+3.0pp ROI=+44.9%
+
+9. MISMATCH FADES: 12
+  top_20 STYLE_01_x_COURSE_A: rel=-5.7pp
+  top_20 STYLE_01_x_COURSE_B: rel=-6.6pp
+  top_20 STYLE_01_x_COURSE_C: rel=-3.8pp
+  top_20 STYLE_01_x_COURSE_D: rel=-4.5pp
+  top_20 STYLE_02_x_COURSE_A: rel=-8.7pp
+  top_20 STYLE_02_x_COURSE_B: rel=-6.3pp
+  top_20 STYLE_02_x_COURSE_C: rel=-8.2pp
+  top_20 STYLE_02_x_COURSE_D: rel=-8.0pp
+  top_20 STYLE_04_x_COURSE_C: rel=-2.9pp
+  top_10 STYLE_02_x_COURSE_A: rel=-5.4pp
+  top_10 STYLE_02_x_COURSE_C: rel=-4.3pp
+  top_10 STYLE_02_x_COURSE_D: rel=-6.3pp
+
+10. ADDITIONALITY
+market             matchup  interaction_rel_pp  player_rel_pp  course_rel_pp  interaction_lift_pp   verdict
+top_20 STYLE_03_x_COURSE_A            3.688999       1.844113       1.645843             1.844886  ADDITIVE
+top_20 STYLE_03_x_COURSE_C            3.029546       1.844113       0.712423             1.185433  ADDITIVE
+top_20 STYLE_03_x_COURSE_D            1.589758       1.844113      -0.064645            -0.254355 REDUNDANT
+
+11. SKILL BAND CHECK
+market             matchup    band    N  relative_resid_pp
+top_20 STYLE_03_x_COURSE_A   ELITE  607          11.351056
+top_20 STYLE_03_x_COURSE_A MIDTIER 1183           3.124812
+top_20 STYLE_03_x_COURSE_A  FRINGE  605          -2.895191
+top_20 STYLE_03_x_COURSE_C   ELITE 1528           8.083918
+top_20 STYLE_03_x_COURSE_C MIDTIER 3019           4.679051
+top_20 STYLE_03_x_COURSE_C  FRINGE 1548          -5.176484
+top_20 STYLE_03_x_COURSE_D   ELITE  694           7.125680
+top_20 STYLE_03_x_COURSE_D MIDTIER 1351           3.689498
+top_20 STYLE_03_x_COURSE_D  FRINGE  682          -8.203026
+
+12. STABILITY
+market             matchup  early_N  early_rel_pp  early_ROI  late_N  late_rel_pp  late_ROI stability
+top_20 STYLE_03_x_COURSE_A     2009      4.791588  60.962596     386    -2.049604 21.904565  UNSTABLE
+top_20 STYLE_03_x_COURSE_C     5293      4.331009  51.353303     802    -5.559784  3.988376  UNSTABLE
+top_20 STYLE_03_x_COURSE_D     2438      2.136054  40.508257     289    -3.018790 16.928994  UNSTABLE
+
+13. EDGE FILTERING
+market             matchup  full_N  full_ROI  filtered_N  filtered_ROI                helps
+top_20 STYLE_03_x_COURSE_A    2333 57.146652         666    149.444332 EDGE_FILTERING_HELPS
+top_20 STYLE_03_x_COURSE_C    5889 45.692483        1619    122.644284 EDGE_FILTERING_HELPS
+top_20 STYLE_03_x_COURSE_D    2541 42.417870         790    140.437633 EDGE_FILTERING_HELPS
+
+14. VOLUME ESTIMATES
+  top_20 STYLE_03_x_COURSE_A: 342/season
+  top_20 STYLE_03_x_COURSE_C: 871/season
+  top_20 STYLE_03_x_COURSE_D: 390/season
+
+15. DEPLOYABILITY
+market             matchup      flag  N_per_season  relative_resid_pp  interaction_lift_pp  ACTUAL_ODDS_ROI  edge_filtered_ROI   stable best_skill_band  additive   verdict
+top_20 STYLE_03_x_COURSE_A CANDIDATE    342.142857           3.688999             1.844886        54.221300         149.444332 UNSTABLE           ELITE  ADDITIVE NOT_READY
+top_20 STYLE_03_x_COURSE_C CANDIDATE    870.714286           3.029546             1.185433        44.926159         122.644284 UNSTABLE           ELITE  ADDITIVE NOT_READY
+top_20 STYLE_03_x_COURSE_D     WATCH    389.571429           1.589758            -0.254355        38.116931         140.437633 UNSTABLE           ELITE REDUNDANT NOT_READY
+
+16. BOTTOM LINE
+----------------------------------------
+DEPLOY_CANDIDATE: 0
+MONITOR: 0
+MISMATCH_FADE candidates: 12
+
+No interaction signal survives relative baseline test.
+Player × course matching does not add value beyond components.

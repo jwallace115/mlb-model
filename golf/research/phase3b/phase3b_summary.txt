@@ -1,0 +1,21 @@
+GOLF PHASE 3B — Course Archetype Clustering
+==================================================
+
+Course-years clustered: 258
+Unique courses: 97
+Features: 17
+Selected k=4
+
+CENTROIDS:
+cluster_label  N  score_mean  score_std  score_skew  birdie_rate  bogey_rate  eagle_rate  double_rate  sg_ott_std  sg_app_std  sg_putt_std  sg_arg_std  gir_mean  driving_dist_mean  driving_acc_mean  scrambling_mean  great_shot_rate  poor_shot_rate  mean_prob
+     COURSE_A 48   70.093769   3.048938    0.330588     4.275457    2.260379    0.139060     0.376560    1.157083    1.753772     1.692172    1.061175  0.693028         291.064050          0.645978         0.639545         3.496032        3.911991   0.985423
+     COURSE_B 62   69.198986   2.824127    0.283603     4.127567    2.148670    0.109921     0.224579    1.042147    1.524283     1.688999    0.973552  0.719491         293.942307          0.633238         0.635014         3.102380        3.390062   0.989608
+     COURSE_C 97   70.733071   2.890022    0.276448     3.454397    2.750083    0.076424     0.320414    1.033240    1.607699     1.690202    1.099889  0.630927         289.296306          0.557855         0.635192         3.187157        3.744918   0.999342
+     COURSE_D 51   72.275616   3.291003    0.367025     3.176938    3.321292    0.077314     0.493033    1.155831    1.735564     1.720049    1.226080  0.599611         290.354965          0.614014         0.589901         3.530698        4.220734   0.995470
+
+STABILITY: 75.9% mean persistence (39 courses with 3+ years)
+
+DIFFICULTY SPREAD: 3.08 strokes
+Assessment: DIFFICULTY_DOMINATED
+
+NEXT: Phase 3C v2 — player archetype × course archetype interactions

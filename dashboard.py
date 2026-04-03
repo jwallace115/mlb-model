@@ -3887,9 +3887,15 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _v1n = _v1w + _v1l
                 _v1roi, _ = _mt_roi(_v1_live) if _v1n > 0 else (0.0, 0.0)
                 _hs_clr = "#4ade80" if _v1roi > 0 else "#fbbf24" if _v1roi > -4 else "#f87171"
-                st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
-                        f'V1 hard stop: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span>'
-                        f' / \u22128.0% threshold | {_v1n}/50 signals</div>')
+                from datetime import date as _hs_date
+                if _hs_date.today() <= _hs_date(2026, 4, 30):
+                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                            f'\u23f8 Hard stop suspended through April 30 \u2014 manual re-evaluation May 1'
+                            f' | V1: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span> ({_v1n} signals)</div>')
+                else:
+                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                            f'V1 hard stop: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span>'
+                            f' / \u22128.0% threshold | {_v1n}/50 signals</div>')
 
             # Shadow monitor
             if _v1_shadow:

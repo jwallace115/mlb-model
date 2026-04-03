@@ -1,0 +1,24 @@
+{
+  "research_id": "GOLF_PHASE3C_V2",
+  "hypothesis": "Specific player style x course type combinations produce systematic placement market mispricing not captured by DG skill probabilities alone. Edges measured as relative_book_residual above market-wide baseline.",
+  "pre_registered_interactions": [
+    "H1: STYLE_01 x COURSE_A \u2192 OVER top_20 (bomber in scoring feast)",
+    "H2: STYLE_04 x COURSE_D \u2192 OVER top_20 (grinder in hard grind)",
+    "H3: STYLE_03 x COURSE_B \u2192 OVER top_20 (balanced on easy precision)",
+    "H4: STYLE_01 x COURSE_D \u2192 NULL or UNDER top_20 (style mismatch)",
+    "H5: STYLE_04 x COURSE_A \u2192 NULL top_20 (grinder in birdie fest)"
+  ],
+  "primary_markets": [
+    "top_20",
+    "top_10"
+  ],
+  "exploratory_market": "top_5",
+  "primary_statistical_metric": "relative_book_residual above market baseline",
+  "economic_metric": "ACTUAL_ODDS_ROI at actual book odds",
+  "player_cluster_prob_threshold": 0.4,
+  "course_cluster_prob_threshold": 0.7,
+  "minimum_n_per_cell": 15,
+  "significance_threshold": 0.1,
+  "relative_effect_threshold_pp": 2.5,
+  "registered_at": "2026-04-03"
+}

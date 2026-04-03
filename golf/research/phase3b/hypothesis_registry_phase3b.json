@@ -1,0 +1,17 @@
+{
+  "research_id": "GOLF_PHASE3B",
+  "objective": "Classify PGA Tour courses into structural style archetypes using scoring environment, skill component distributions, and volatility metrics. Archetypes capture HOW a course plays, not just how hard it is.",
+  "expected_archetypes": [
+    "BIRDIE_FACTORY: high birdie rate, high scoring, low bogey",
+    "GRIND: low birdie, high bogey, low variance",
+    "DRIVER_ADVANTAGE: high driving dist premium, low driving acc",
+    "PRECISION: driving accuracy premium, low GIR",
+    "SCRAMBLE: low GIR, high scrambling value",
+    "PUTTING_CONTEST: high GIR, putting separates players"
+  ],
+  "clustering_method": "GMM k=4,5,6",
+  "grain": "course_year (each venue-year is one profile)",
+  "data_source": "dg_rounds_expanded.parquet \u2014 123,561 rounds",
+  "shotlink_coverage": "~83-90% of events have GIR/driving stats",
+  "registered_at": "2026-04-03"
+}
