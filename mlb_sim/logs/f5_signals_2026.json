@@ -716,10 +716,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":4.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-04-03",
@@ -735,10 +735,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":4.0,
+    "result":"LOSS",
+    "net_units":-0.5,
+    "resolved":1
   },
   {
     "date":"2026-04-03",
@@ -754,10 +754,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":11.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-03",
@@ -773,10 +773,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":0.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-04-03",
@@ -792,10 +792,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":12.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-03",
@@ -808,6 +808,44 @@
     "p_under_full":0.5849,
     "p_over_full":0.4151,
     "f5_line":5.0,
+    "f5_line_closing":null,
+    "f5_clv_raw":null,
+    "f5_clv_signed":null,
+    "actual_f5_total":0.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
+  },
+  {
+    "date":"2026-04-04",
+    "game_id":"822757",
+    "home_team":"WSN",
+    "away_team":"LAD",
+    "f5_signal_side":"UNDER",
+    "signal_tier":"primary_under",
+    "stake_units":0.75,
+    "p_under_full":0.5759,
+    "p_over_full":0.4241,
+    "f5_line":5.0,
+    "f5_line_closing":null,
+    "f5_clv_raw":null,
+    "f5_clv_signed":null,
+    "actual_f5_total":null,
+    "result":null,
+    "net_units":null,
+    "resolved":0
+  },
+  {
+    "date":"2026-04-04",
+    "game_id":"825104",
+    "home_team":"ARI",
+    "away_team":"ATL",
+    "f5_signal_side":"UNDER",
+    "signal_tier":"primary_under",
+    "stake_units":0.75,
+    "p_under_full":0.708,
+    "p_over_full":0.292,
+    "f5_line":5.5,
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
