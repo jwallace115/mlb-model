@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "2c78d22f888a922842d18ab0938e9db4",
+    "game_date": "2026-04-05",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Philadelphia Phillies",
+    "commence_time": "2026-04-05T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.0,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-04T06:05:01.878648+00:00"
+  },
+  {
+    "game_id": "415818bc74e8e550d87f1a25d6276e94",
+    "game_date": "2026-04-05",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "New York Mets",
+    "commence_time": "2026-04-05T01:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -103,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-04T06:05:01.878648+00:00"
+  },
+  {
+    "game_id": "a17bc682d534fc4be2a0873853346c69",
+    "game_date": "2026-04-05",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-04-05T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": 100,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-04T06:05:01.878648+00:00"
+  }
+]
