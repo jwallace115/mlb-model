@@ -1006,7 +1006,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jake Irvin",
+    "away_sp_name": "Tyler Glasnow"
   },
   {
     "date": "2026-04-04",
@@ -1031,6 +1033,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Michael Soroka",
+    "away_sp_name": "Bryce Elder"
   }
 ]
