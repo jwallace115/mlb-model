@@ -1054,7 +1054,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Braxton Ashcraft",
+    "away_sp_name": "Chris Bassitt"
   },
   {
     "date": "2026-04-05",
@@ -1079,7 +1081,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Ranger Suarez",
+    "away_sp_name": "Walker Buehler"
   },
   {
     "date": "2026-04-05",
@@ -1104,7 +1108,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Simeon Woods Richardson",
+    "away_sp_name": "Nick Martinez"
   },
   {
     "date": "2026-04-05",
@@ -1129,7 +1135,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Tomoyuki Sugano",
+    "away_sp_name": "Taijuan Walker"
   },
   {
     "date": "2026-04-05",
@@ -1154,7 +1162,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jacob Lopez",
+    "away_sp_name": "Lance McCullers Jr."
   },
   {
     "date": "2026-04-05",
@@ -1179,6 +1189,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Ryan Johnson",
+    "away_sp_name": "Luis Castillo"
   }
 ]
