@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-04-04T11:00:06.942163Z",
+  "generated_at": "2026-04-05T11:00:06.691036Z",
   "is_spring_training": false,
-  "total_tracked": 307,
+  "total_tracked": 323,
   "total_plays": 40,
   "overall": {
     "wins": 5,
@@ -259,17 +259,17 @@
     }
   },
   "projection_accuracy": {
-    "tracked": 303,
+    "tracked": 318,
     "mae": 4.2,
-    "avg_bias": 0.9,
-    "within_1_run": 12.9,
-    "within_2_runs": 32.3,
-    "within_3_runs": 45.5,
+    "avg_bias": 0.83,
+    "within_1_run": 13.2,
+    "within_2_runs": 32.4,
+    "within_3_runs": 45.3,
     "mae_by_stars": {
       "\u2b50\u2b50\u2b50": 5.83,
       "\u2b50\u2b50": 3.71,
       "\u2b50": 5.52,
-      "NO PLAY": 4.14
+      "NO PLAY": 4.15
     }
   },
   "factor_correlations": [

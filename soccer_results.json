@@ -1,28 +1,14 @@
 {
-  "generated_at": "2026-04-04T11:05:40.266994+00:00",
-  "last_updated": "2026-04-04 11:05 UTC",
+  "generated_at": "2026-04-05T11:05:50.429609+00:00",
+  "last_updated": "2026-04-05 11:05 UTC",
   "pipeline_run_date": "2026-03-21",
   "signals_source": "stale",
-  "game_date": "2026-04-04",
+  "game_date": "2026-04-05",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
   "active_scope_note": "Active: Bundesliga MEDIUM tier only. All other leagues/tiers computed and logged to shadow.",
   "today_signals": [],
-  "recent_results": [
-    {
-      "game_id": "EPL_2025-26_2026-03-21_Leeds_Brentford",
-      "game_date": "2026-03-21",
-      "league_id": "EPL",
-      "home_team": "Leeds",
-      "away_team": "Brentford",
-      "signal_side": "OVER",
-      "closing_total": 2.5,
-      "edge": 0.4410485933503836,
-      "confidence_tier": "HIGH",
-      "result": "LOSS",
-      "actual_total_goals": 0.0
-    }
-  ],
+  "recent_results": [],
   "season_performance": {
     "overall": {
       "W": 0,
@@ -172,10 +158,11 @@
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-04-04T11:05:40.303996+00:00",
-    "date_reviewed": "2026-04-03",
+    "generated_at": "2026-04-05T11:05:50.467429+00:00",
+    "date_reviewed": "2026-04-04",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  }
+  },
+  "weekly_review": null
 }
