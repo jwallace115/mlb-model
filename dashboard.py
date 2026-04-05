@@ -4197,20 +4197,24 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             _load_json_signals("f5_signals_2026.json", "f5_under")  # type corrected inside
             _load_json_signals("f5_runline_2026.json", "f5_rl")
 
-            # Check for PRELIMINARY signals — show banner if any exist
-            _has_prelim = any(
-                s.get("signal_status") == "PRELIMINARY"
-                for sigs in _game_signals.values() for s in sigs
-            )
-            if _has_prelim:
-                st.html(
-                    '<div style="background:#1c1400;border:2px solid #d97706;border-radius:8px;'
-                    'padding:10px 16px;margin-bottom:12px">'
-                    '<span style="color:#fbbf24;font-weight:700;font-size:0.95em">'
-                    '\u26a0\ufe0f PRELIMINARY</span>'
-                    '<span style="color:#fde68a;margin-left:8px;font-size:0.85em">'
-                    'Opening lines captured at 2 AM ET. Final signals update at 7 AM ET.'
-                    '</span></div>')
+            # Check for PRELIMINARY signals — show banner only 2-7 AM ET
+            from datetime import datetime as _prelim_dt
+            from pytz import timezone as _prelim_tz
+            _et_hour = _prelim_dt.now(_prelim_tz("America/New_York")).hour
+            if 2 <= _et_hour < 7:
+                _has_prelim = any(
+                    s.get("signal_status") == "PRELIMINARY"
+                    for sigs in _game_signals.values() for s in sigs
+                )
+                if _has_prelim:
+                    st.html(
+                        '<div style="background:#1c1400;border:2px solid #d97706;border-radius:8px;'
+                        'padding:10px 16px;margin-bottom:12px">'
+                        '<span style="color:#fbbf24;font-weight:700;font-size:0.95em">'
+                        '\u26a0\ufe0f PRELIMINARY</span>'
+                        '<span style="color:#fde68a;margin-left:8px;font-size:0.85em">'
+                        'Opening lines captured at 2 AM ET. Final signals update at 7 AM ET.'
+                        '</span></div>')
 
             all_games = (plays or []) + (no_plays or [])
             play_cards = []

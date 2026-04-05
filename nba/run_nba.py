@@ -1193,30 +1193,38 @@ def _log_signals_to_signal_log(game_date: str) -> None:
         if key in already_logged:
             continue
 
-        # Derive primary signal_type
+        # Derive primary signal_type (NA-safe checks for nullable pandas dtypes)
+        _vs = g.get("venue_signal"); _vs_ok = pd.notna(_vs) and str(_vs) != "<NA>"
+        _or = g.get("oreb_confirms"); _or_ok = pd.notna(_or) and bool(_or)
+        _ss = g.get("shot_signal"); _ss_ok = pd.notna(_ss) and str(_ss) != "<NA>"
+        _rs = g.get("ref_signal"); _rs_ok = pd.notna(_rs) and str(_rs) not in ("<NA>", "NONE", "UNKNOWN")
+        _ps = g.get("pace_signal"); _ps_ok = pd.notna(_ps) and str(_ps) != "<NA>"
+
         if str(g.get("bet_tier", "")) == "REF_UNDER":
             sig_type = "REF_UNDER"
-        elif g.get("venue_signal") and str(g["venue_signal"]) != "<NA>":
-            sig_type = str(g["venue_signal"])
-        elif g.get("oreb_confirms"):
+        elif _vs_ok:
+            sig_type = str(_vs)
+        elif _or_ok:
             sig_type = "OREB_CONFIRMS"
-        elif g.get("shot_signal") and str(g["shot_signal"]) != "<NA>":
-            sig_type = str(g["shot_signal"])
-        elif g.get("ref_signal") and str(g["ref_signal"]) not in ("<NA>", "NONE", "UNKNOWN"):
-            sig_type = str(g["ref_signal"])
-        elif g.get("pace_signal") and str(g["pace_signal"]) != "<NA>":
-            sig_type = str(g["pace_signal"])
+        elif _ss_ok:
+            sig_type = str(_ss)
+        elif _rs_ok:
+            sig_type = str(_rs)
+        elif _ps_ok:
+            sig_type = str(_ps)
         else:
             sig_type = str(g.get("signal_class", "UNKNOWN"))
 
         # Derive direction from tier/lean
         bt = str(g.get("bet_tier", ""))
+        _vd = g.get("venue_direction"); _vd_ok = pd.notna(_vd) and str(_vd) != "<NA>"
+        _sd = g.get("shot_direction"); _sd_ok = pd.notna(_sd) and str(_sd) != "<NA>"
         if bt == "REF_UNDER":
             direction = "UNDER"
-        elif g.get("venue_direction") and str(g["venue_direction"]) != "<NA>":
-            direction = str(g["venue_direction"])
-        elif g.get("shot_direction") and str(g["shot_direction"]) != "<NA>":
-            direction = str(g["shot_direction"])
+        elif _vd_ok:
+            direction = str(_vd)
+        elif _sd_ok:
+            direction = str(_sd)
         else:
             direction = str(g.get("lean", "UNKNOWN"))
 
@@ -1235,11 +1243,11 @@ def _log_signals_to_signal_log(game_date: str) -> None:
             "closing_line":       g.get("line"),
             "book_used":          "Hard Rock" if g.get("line") is not None else None,
             "units":              units,
-            "venue_signal":       bool(g.get("venue_signal") and str(g["venue_signal"]) != "<NA>"),
-            "oreb_confirms":      bool(g.get("oreb_confirms")),
-            "shot_over_signal":   bool(g.get("shot_direction") == "OVER"),
-            "pace_signal":        bool(g.get("pace_signal") and str(g["pace_signal"]) != "<NA>"),
-            "shot_under_signal":  bool(g.get("shot_direction") == "UNDER"),
+            "venue_signal":       _vs_ok,
+            "oreb_confirms":      _or_ok,
+            "shot_over_signal":   _sd_ok and str(_sd) == "OVER",
+            "pace_signal":        _ps_ok,
+            "shot_under_signal":  _sd_ok and str(_sd) == "UNDER",
             "actual_total":       None,
             "result":             None,
             "units_won_lost":     None,

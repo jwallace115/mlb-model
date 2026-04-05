@@ -1,0 +1,10 @@
+model,alpha,r,auc,diff
+A_sim,0.0,,,
+B_sim_drift,0.25,,,
+C_sim_drift_gap,0.25,,,
+B_sim_drift,0.5,,,
+C_sim_drift_gap,0.5,,,
+B_sim_drift,1.0,,,
+C_sim_drift_gap,1.0,,,
+B_sim_drift,2.0,,,
+C_sim_drift_gap,2.0,,,
