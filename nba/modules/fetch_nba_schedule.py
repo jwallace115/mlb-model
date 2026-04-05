@@ -84,15 +84,22 @@ def fetch_today_schedule(game_date: Optional[str] = None) -> list[dict]:
         return []
 
     # Build game_id → {home_team, away_team} from line_score
+    # Use HOME_TEAM_ID from header to correctly assign home vs away
+    # (LineScore lists visitor first, home second — order is NOT reliable)
+    home_ids: dict[str, str] = {}
+    for _, row in header.iterrows():
+        gid = str(row.get("GAME_ID", "")).strip()
+        home_ids[gid] = str(row.get("HOME_TEAM_ID", ""))
+
     team_map: dict[str, dict] = {}
     for _, row in ls.iterrows():
         gid   = str(row.get("GAME_ID", "")).strip()
         abbr  = _norm_team(str(row.get("TEAM_ABBREVIATION", "")))
-        loc   = str(row.get("TEAM_CITY_NAME", "")) or ""
-        # LineScore HOME/AWAY determined by order; use GAME_SEQUENCE if available
-        # Fall back to tracking home as first seen, away as second
+        tid   = str(row.get("TEAM_ID", ""))
         if gid not in team_map:
-            team_map[gid] = {"home_team": abbr, "away_team": None}
+            team_map[gid] = {}
+        if tid == home_ids.get(gid):
+            team_map[gid]["home_team"] = abbr
         else:
             team_map[gid]["away_team"] = abbr
 
