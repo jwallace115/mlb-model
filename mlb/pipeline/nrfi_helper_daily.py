@@ -32,6 +32,16 @@ SHADOW_LOG = PROJECT_ROOT / "research" / "mlb_first_inning" / "nrfi_shadow_log_2
 MODEL_DIR = PROJECT_ROOT / "research" / "mlb_first_inning"
 MLB_API = "https://statsapi.mlb.com/api/v1"
 
+# Schedule uses 3-letter codes; hitter/pitcher game logs use different abbreviations
+_SCHED_TO_HGL = {
+    "TBR": "TB", "SDP": "SD", "WSN": "WSH", "CHW": "CWS",
+    "KCR": "KC", "SFG": "SF", "ARI": "AZ", "OAK": "ATH",
+}
+
+def _norm_team(abbr: str) -> str:
+    """Normalize schedule team abbreviation to hitter/pitcher game log abbreviation."""
+    return _SCHED_TO_HGL.get(abbr, abbr)
+
 
 # ── Model loading ────────────────────────────────────────────────────────────
 
@@ -51,6 +61,8 @@ def _build_features_for_game(game: dict, hgl: pd.DataFrame, pgl: pd.DataFrame,
     game_pk = game["game_pk"]
     home = game["home_team"]
     away = game["away_team"]
+    home_hgl = _norm_team(home)
+    away_hgl = _norm_team(away)
     home_sp_id = game.get("home_probable_pitcher", {}).get("id")
     away_sp_id = game.get("away_probable_pitcher", {}).get("id")
     home_sp_hand = game.get("home_probable_pitcher", {}).get("throws", "")
@@ -59,7 +71,7 @@ def _build_features_for_game(game: dict, hgl: pd.DataFrame, pgl: pd.DataFrame,
     feats = {"game_pk": game_pk, "home_team": home, "away_team": away}
 
     # ── Top-3 offense rolling 15 (team-level, from historical game logs) ──
-    for side, team, opp_sp_hand in [("away", away, home_sp_hand), ("home", home, away_sp_hand)]:
+    for side, team, opp_sp_hand in [("away", away_hgl, home_sp_hand), ("home", home_hgl, away_sp_hand)]:
         team_games = hgl[(hgl["team"] == team) & (hgl["batting_order_position"].isin([1, 2, 3]))].copy()
         if len(team_games) == 0:
             return None
@@ -114,7 +126,7 @@ def _build_features_for_game(game: dict, hgl: pd.DataFrame, pgl: pd.DataFrame,
             )
 
     # ── TTO1 ──
-    for prefix, sp_id, side in [("home", home_sp_id, "home"), ("away", away_sp_id, "away")]:
+    for prefix, sp_id, side in [("home", home_sp_id, "home"), ("away", away_sp_id, "away")]:  # TTO uses pitcher_id, not team
         if sp_id is None:
             feats[f"{side}_sp_tto1"] = None
             continue
