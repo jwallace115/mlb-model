@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "8ebdedac2e58e94bed89333cd792d164",
+    "game_date": "2026-04-07",
+    "sport": "NHL",
+    "home_team": "San Jose Sharks",
+    "away_team": "Chicago Blackhawks",
+    "commence_time": "2026-04-07T02:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 102,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-06T06:05:02.387578+00:00"
+  },
+  {
+    "game_id": "39339d355c5e85fc42b06ea3c942c5b4",
+    "game_date": "2026-04-07",
+    "sport": "NHL",
+    "home_team": "Los Angeles Kings",
+    "away_team": "Nashville Predators",
+    "commence_time": "2026-04-07T02:30:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": 103,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-06T06:05:02.387578+00:00"
+  }
+]
