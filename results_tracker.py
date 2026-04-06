@@ -305,9 +305,14 @@ def fetch_final_score(game_pk: int) -> dict | None:
             for inn in innings[:5]
         )
 
+        # Safety: if F5=0 but game total>0, inning-level run data is corrupt
+        if f5_total == 0 and total > 0:
+            logger.warning(f"  game_pk={game_pk}: F5=0 but total={total} — inning data corrupt, skipping F5")
+            f5_total = None
+
         return {
             "total":     total,
-            "f5_total":  float(f5_total),
+            "f5_total":  float(f5_total) if f5_total is not None else None,
             "home_runs": home_runs,
             "away_runs": away_runs,
         }
