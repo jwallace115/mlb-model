@@ -192,85 +192,109 @@ def run_daily(game_date: str | None = None):
 
     # Build features for each game
     rows = []
+    dropped = []
     for g in games:
         feats = _build_features_for_game(g, hgl, pgl, tto, gt)
         if feats is None:
+            dropped.append({"game_pk": g["game_pk"], "home_team": g["home_team"],
+                            "away_team": g["away_team"], "drop_reason": "no_lineup_history"})
             continue
         feats["_game"] = g
         rows.append(feats)
 
-    if not rows:
-        print(f"No scorable games for {game_date}.")
-        return
-
     # Score
-    feat_df = pd.DataFrame(rows)
+    def _has_missing(vals):
+        return any(v is None or (isinstance(v, float) and np.isnan(v)) for v in vals)
+
     scored = []
-    for _, row in feat_df.iterrows():
-        top1_vals = [row.get(f) for f in top1_art["features"]]
-        bot1_vals = [row.get(f) for f in bot1_art["features"]]
+    if rows:
+        feat_df = pd.DataFrame(rows)
+        for _, row in feat_df.iterrows():
+            top1_vals = [row.get(f) for f in top1_art["features"]]
+            bot1_vals = [row.get(f) for f in bot1_art["features"]]
 
-        def _has_missing(vals):
-            return any(v is None or (isinstance(v, float) and np.isnan(v)) for v in vals)
-        if _has_missing(top1_vals) or _has_missing(bot1_vals):
-            continue
+            if _has_missing(top1_vals) or _has_missing(bot1_vals):
+                missing = [f for f, v in zip(top1_art["features"] + bot1_art["features"],
+                                              top1_vals + bot1_vals)
+                           if v is None or (isinstance(v, float) and np.isnan(v))]
+                dropped.append({"game_pk": row["game_pk"], "home_team": row["home_team"],
+                                "away_team": row["away_team"],
+                                "drop_reason": f"missing_features:{','.join(missing[:3])}"})
+                continue
 
-        x_t = np.array(top1_vals, dtype=float).reshape(1, -1)
-        x_b = np.array(bot1_vals, dtype=float).reshape(1, -1)
-        p_top1 = float(top1_art["model"].predict_proba(top1_art["scaler"].transform(x_t))[0, 1])
-        p_bot1 = float(bot1_art["model"].predict_proba(bot1_art["scaler"].transform(x_b))[0, 1])
-        p_yrfi = 1 - (1 - p_top1) * (1 - p_bot1)
+            x_t = pd.DataFrame([top1_vals], columns=top1_art["features"])
+            x_b = pd.DataFrame([bot1_vals], columns=bot1_art["features"])
+            p_top1 = float(top1_art["model"].predict_proba(top1_art["scaler"].transform(x_t))[0, 1])
+            p_bot1 = float(bot1_art["model"].predict_proba(bot1_art["scaler"].transform(x_b))[0, 1])
+            p_yrfi = 1 - (1 - p_top1) * (1 - p_bot1)
 
-        scored.append({
-            "game_pk": row["game_pk"],
-            "home_team": row["home_team"],
-            "away_team": row["away_team"],
-            "p_top1": p_top1,
-            "p_bot1": p_bot1,
-            "p_yrfi": p_yrfi,
-        })
+            scored.append({
+                "game_pk": row["game_pk"],
+                "home_team": row["home_team"],
+                "away_team": row["away_team"],
+                "p_top1": p_top1,
+                "p_bot1": p_bot1,
+                "p_yrfi": p_yrfi,
+            })
 
-    if not scored:
-        print(f"No games with complete features for {game_date}.")
-        return
-
-    scored_df = pd.DataFrame(scored)
-    slate_size = len(scored_df)
-
-    # Compute within-slate rank percentiles
-    scored_df["combined_rank_pct"] = scored_df["p_yrfi"].rank(pct=True)
-    scored_df["top1_rank_pct"] = scored_df["p_top1"].rank(pct=True)
-    scored_df["bot1_rank_pct"] = scored_df["p_bot1"].rank(pct=True)
-
-    # Apply frozen qualification rule
-    b10_cut = scored_df["p_yrfi"].quantile(0.10)
-    top1_b30_cut = scored_df["p_top1"].quantile(0.30)
-    bot1_b30_cut = scored_df["p_bot1"].quantile(0.30)
-
-    scored_df["qualifies"] = (
-        (scored_df["p_yrfi"] <= b10_cut) &
-        (scored_df["p_top1"] <= top1_b30_cut) &
-        (scored_df["p_bot1"] <= bot1_b30_cut)
-    )
-
-    # Build log entries
+    slate_size = len(scored) + len(dropped)
     now = datetime.now(timezone.utc).isoformat()
     new_entries = []
-    for _, r in scored_df.iterrows():
+
+    # Scored games — compute ranks and qualification
+    if scored:
+        scored_df = pd.DataFrame(scored)
+        scored_df["combined_rank_pct"] = scored_df["p_yrfi"].rank(pct=True)
+        scored_df["top1_rank_pct"] = scored_df["p_top1"].rank(pct=True)
+        scored_df["bot1_rank_pct"] = scored_df["p_bot1"].rank(pct=True)
+
+        b10_cut = scored_df["p_yrfi"].quantile(0.10)
+        top1_b30_cut = scored_df["p_top1"].quantile(0.30)
+        bot1_b30_cut = scored_df["p_bot1"].quantile(0.30)
+
+        scored_df["qualifies"] = (
+            (scored_df["p_yrfi"] <= b10_cut) &
+            (scored_df["p_top1"] <= top1_b30_cut) &
+            (scored_df["p_bot1"] <= bot1_b30_cut)
+        )
+
+        for _, r in scored_df.iterrows():
+            new_entries.append({
+                "date": game_date,
+                "logged_at": now,
+                "slate_size": slate_size,
+                "game_id": str(r["game_pk"]),
+                "away_team": r["away_team"],
+                "home_team": r["home_team"],
+                "p_top1_run": round(r["p_top1"], 4),
+                "p_bot1_run": round(r["p_bot1"], 4),
+                "p_yrfi": round(r["p_yrfi"], 4),
+                "combined_rank_pct": round(r["combined_rank_pct"], 3),
+                "top1_rank_pct": round(r["top1_rank_pct"], 3),
+                "bot1_rank_pct": round(r["bot1_rank_pct"], 3),
+                "qualifies": bool(r["qualifies"]),
+                "result_yrfi": None,
+                "result_nrfi": None,
+                "resolved": False,
+            })
+
+    # Dropped games — log with nulls and drop reason
+    for d in dropped:
         new_entries.append({
             "date": game_date,
             "logged_at": now,
             "slate_size": slate_size,
-            "game_id": str(r["game_pk"]),
-            "away_team": r["away_team"],
-            "home_team": r["home_team"],
-            "p_top1_run": round(r["p_top1"], 4),
-            "p_bot1_run": round(r["p_bot1"], 4),
-            "p_yrfi": round(r["p_yrfi"], 4),
-            "combined_rank_pct": round(r["combined_rank_pct"], 3),
-            "top1_rank_pct": round(r["top1_rank_pct"], 3),
-            "bot1_rank_pct": round(r["bot1_rank_pct"], 3),
-            "qualifies": bool(r["qualifies"]),
+            "game_id": str(d["game_pk"]),
+            "away_team": d["away_team"],
+            "home_team": d["home_team"],
+            "p_top1_run": None,
+            "p_bot1_run": None,
+            "p_yrfi": None,
+            "combined_rank_pct": None,
+            "top1_rank_pct": None,
+            "bot1_rank_pct": None,
+            "qualifies": False,
+            "drop_reason": d["drop_reason"],
             "result_yrfi": None,
             "result_nrfi": None,
             "resolved": False,
@@ -280,10 +304,13 @@ def run_daily(game_date: str | None = None):
     with open(SHADOW_LOG, "w") as f:
         json.dump(log, f, indent=2)
 
-    quals = [e for e in new_entries if e["qualifies"]]
+    quals = [e for e in new_entries if e.get("qualifies")]
     print(f"NRFI Helper — {game_date}")
-    print(f"  Slate: {slate_size} games scored")
+    print(f"  Slate: {len(scored)} scored, {len(dropped)} dropped ({slate_size} total)")
     print(f"  Qualifiers: {len(quals)}")
+    if dropped:
+        for d in dropped:
+            print(f"    DROPPED: {d['away_team']}@{d['home_team']} — {d['drop_reason']}")
     for q in quals:
         print(f"    {q['away_team']}@{q['home_team']}  p_yrfi={q['p_yrfi']:.4f}  "
               f"rank={q['combined_rank_pct']:.3f}")
