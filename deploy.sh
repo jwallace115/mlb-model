@@ -6,6 +6,15 @@ set -e
 
 MSG=${1:-"update"}
 
+# Pre-deploy validation
+echo "Running pre-deploy validation..."
+python3 shared/pre_deploy_check.py
+if [ $? -ne 0 ]; then
+    echo "❌ Pre-deploy validation FAILED. Fix errors before deploying."
+    exit 1
+fi
+echo "✅ Validation passed. Deploying..."
+
 echo "=== Pushing to GitHub ==="
 git add -A
 git commit -m "$MSG" || echo "Nothing to commit"
