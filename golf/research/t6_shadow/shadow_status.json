@@ -1,19 +1,22 @@
 {
-  "status": "SHADOW TRACKING NOT YET ACTIVE",
-  "reason": "No 2026 H2H odds available locally. DataGolf odds_matchups.parquet covers 2019-2025 only.",
+  "status": "SHADOW TRACKING ACTIVE — AWAITING FIRST CAPTURE",
+  "tracked_types": {
+    "T7": {
+      "label": "putting-dependent weak-BS (extreme)",
+      "historical_residual": -5.1,
+      "profile": {"bs": -2.74, "putt_dep": 3.063, "cut_rate": 0.59},
+      "tier": "primary"
+    },
+    "T3": {
+      "label": "modest BS, low putting dep, low vol, weak cut",
+      "historical_residual": -2.2,
+      "profile": {"bs": -0.31, "putt_dep": -0.42, "vol": -0.67, "cut_rate": 0.52},
+      "tier": "secondary"
+    }
+  },
+  "taxonomy": "KMeans k=8, 5 axes (bs, putt_dep, par5_tilt, vol, cut_rate)",
   "taxonomy_reconstructed": true,
-  "t6_profile": {
-    "bs": -1.04,
-    "putt_dep": 1.015,
-    "cut_rate": 0.44
-  },
-  "t7_extreme_profile": {
-    "bs": -2.74,
-    "putt_dep": 3.063,
-    "cut_rate": 0.59
-  },
-  "note": "Both T6 and T7 from rebuild represent putting-dependent weak-BS types. T6 is the primary target (N=1163), T7 is the extreme tail (N=223).",
-  "data_needed": "2026 PGA Tour 72-hole H2H odds from DataGolf or BallDontLie",
-  "next_action": "Pull 2026 H2H odds when available, then populate shadow log",
-  "checkpoint": "REVIEW AFTER 25 SETTLED T6 FADES"
+  "data_source": "DataGolf betting-tools/matchups (tournament_matchups market)",
+  "next_action": "Run --mode capture when next PGA Tour event matchups are posted (typically Wednesday)",
+  "checkpoint": "REVIEW AFTER 25 SETTLED T7 FADES + 25 SETTLED T3 FADES"
 }
