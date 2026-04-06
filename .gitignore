@@ -11,8 +11,13 @@ nba/data/nba_stop_rule_state.json
 # ── Logs ──────────────────────────────────────────────────────────────────────
 logs/
 
-# ── MLB signal logs (runtime state — sync via git_push.sh, never resolve conflicts) ──
+# ── MLB signal logs (runtime state — sync via git_push.sh) ──
 mlb_sim/logs/*_2026.json
+!mlb_sim/logs/signals_2026.json
+!mlb_sim/logs/f5_signals_2026.json
+!mlb_sim/logs/f5_runline_2026.json
+!mlb_sim/logs/rolling_performance_2026.json
+!mlb_sim/logs/rolling_performance_shadow_2026.json
 
 # ── Secrets ───────────────────────────────────────────────────────────────────
 .env
