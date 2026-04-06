@@ -1453,9 +1453,8 @@ def run_pipeline(game_date: str, use_odds: bool = True,
             }
             all_signals.append(sig)
 
-            # ── V2.2c shadow logging (non-fatal) ──────────────────────────
-            if signal_qualifies:
-                _log_v2_2c_shadow(sig)
+            # ── V2.2c shadow logging (all fixtures, not just qualified) ──
+            _log_v2_2c_shadow(sig)
 
     # ── Write decisions ──────────────────────────────────────────────────────
     if all_signals:
@@ -1534,49 +1533,6 @@ def main():
     elif not stop_status["suspended_tiers"]:
         print("  ✓ All tiers active — no suspensions")
     print()
-
-    # ── V2.2c Shadow Challenger ────────────────────────────────────────────
-    try:
-        _V22C_ALPHA = 0.66
-        _V22C_LOG = SOCCER_DIR / "data" / "v2_2c_shadow_2026.json"
-        _v22c_log = json.load(open(_V22C_LOG)) if _V22C_LOG.exists() else []
-        _v22c_existing = set((e.get("date"), e.get("game_id")) for e in _v22c_log)
-
-        # Read today's fixtures from decisions file
-        if DECISIONS_PATH.exists():
-            _dec = pd.read_parquet(DECISIONS_PATH)
-            _today_dec = _dec[_dec["game_date"] == game_date]
-            _v22c_new = 0
-            for _, _r in _today_dec.iterrows():
-                _gid = _r.get("game_id", "")
-                if (game_date, _gid) in _v22c_existing:
-                    continue
-                _mkt = _r.get("market_fair_p_over_2_5")
-                _cal = _r.get("ridge_cal_p")
-                if pd.notna(_mkt) and pd.notna(_cal):
-                    _v22c_p = float(_mkt + _V22C_ALPHA * (_cal - _mkt))
-                    _v22c_log.append({
-                        "date": game_date,
-                        "game_id": _gid,
-                        "home_team": _r.get("home_team", ""),
-                        "away_team": _r.get("away_team", ""),
-                        "league": _r.get("league_id", ""),
-                        "v2_2c_pred": round(_v22c_p, 4),
-                        "v2_2_pred": round(float(_cal), 4),
-                        "market_p": round(float(_mkt), 4),
-                        "signal_fired": bool(_r.get("result") is not None and _r.get("edge", 0) >= 0.06),
-                        "result": None,
-                        "resolved": False,
-                    })
-                    _v22c_new += 1
-            if _v22c_new > 0:
-                with open(_V22C_LOG, "w") as _f:
-                    json.dump(_v22c_log, _f, indent=2)
-                print(f"  V2.2c shadow: {_v22c_new} fixtures logged")
-            else:
-                print(f"  V2.2c shadow: no new fixtures to log")
-    except Exception as _e:
-        print(f"  V2.2c shadow error (non-fatal): {_e}")
 
     # Auto-push + timestamp
     import subprocess
