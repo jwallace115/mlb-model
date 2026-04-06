@@ -135,13 +135,17 @@ def _build_features_for_game(game: dict, hgl: pd.DataFrame, pgl: pd.DataFrame,
         feats["dome"] = 1 if row.get("roof_status") in ("closed", "dome") else 0
     else:
         # Defaults for current-day games not yet in game_table
-        from config import PARK_FACTORS
-        park_id = game.get("venue_name", "")
-        pf = PARK_FACTORS.get(park_id, {})
-        feats["park_factor_hr"] = pf.get("hr_factor", 100)
-        feats["temperature"] = 72.0  # fallback
-        feats["wind_speed"] = 5.0    # fallback
-        feats["dome"] = 1 if pf.get("dome") else 0
+        try:
+            from config import STADIUMS
+            venue = game.get("venue_name", "")
+            stadium = STADIUMS.get(game["home_team"], {})
+            feats["park_factor_hr"] = stadium.get("park_factor", 100)
+            feats["dome"] = 1 if stadium.get("roof") in ("dome", "retractable") else 0
+        except Exception:
+            feats["park_factor_hr"] = 100
+            feats["dome"] = 0
+        feats["temperature"] = 72.0  # fallback — weather not critical for ranking
+        feats["wind_speed"] = 5.0
 
     return feats
 
