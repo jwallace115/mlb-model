@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-06T11:01:10.071795+00:00",
+  "generated_at": "2026-04-06T21:01:26.136819+00:00",
   "game_date": "2026-04-06",
   "is_playoff_day": false,
   "plays": [
@@ -11,14 +11,14 @@
       "game_time_et": "8:00 pm et",
       "pred_total": 238.93,
       "lean": "OVER",
-      "p_over": 0.5562,
+      "p_over": 0.5497,
       "confidence": "HIGH",
       "line": 236.5,
       "edge": 2.43,
       "market_gap_flag": false,
       "pred_h1": 119.19,
       "h1_lean": "OVER",
-      "h1_p_over": 0.6811,
+      "h1_p_over": 0.6762,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -72,7 +72,7 @@
       "ref_sizing_adj": 0.0,
       "final_sizing": 1.5,
       "high_line_under_shadow": false,
-      "summary": "PHI is giving up 116.5 points per 100 possessions \u2014 one of the worst defensive marks in the league. Model has 238.9 at 103.5 possessions per game, 2.4 pts above the 236.5 line \u2014 over. P(over) 56%, edge +2.4 pts."
+      "summary": "PHI is giving up 116.5 points per 100 possessions \u2014 one of the worst defensive marks in the league. Model has 238.9 at 103.5 possessions per game, 2.4 pts above the 236.5 line \u2014 over. P(over) 55%, edge +2.4 pts."
     },
     {
       "game_date": "2026-04-06",
@@ -82,14 +82,14 @@
       "game_time_et": "7:00 pm et",
       "pred_total": 230.4,
       "lean": "OVER",
-      "p_over": 0.509,
+      "p_over": 0.5139,
       "confidence": "HIGH",
       "line": 229.5,
       "edge": 0.9,
       "market_gap_flag": false,
       "pred_h1": 115.9,
       "h1_lean": "OVER",
-      "h1_p_over": 0.5721,
+      "h1_p_over": 0.5796,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -155,14 +155,14 @@
       "game_time_et": "7:00 pm et",
       "pred_total": 226.91,
       "lean": "OVER",
-      "p_over": 0.5354,
+      "p_over": 0.5293,
       "confidence": "LOW",
       "line": 225.5,
       "edge": 1.41,
       "market_gap_flag": false,
       "pred_h1": 113.88,
       "h1_lean": "OVER",
-      "h1_p_over": 0.5061,
+      "h1_p_over": 0.5091,
       "h1_confidence": "LOW",
       "h1_line": null,
       "h1_edge": null,
@@ -226,14 +226,14 @@
       "game_time_et": "8:00 pm et",
       "pred_total": 234.84,
       "lean": "UNDER",
-      "p_over": 0.4376,
+      "p_over": 0.4455,
       "confidence": "LOW",
       "line": 237.5,
       "edge": -2.66,
       "market_gap_flag": false,
       "pred_h1": 118.6,
       "h1_lean": "OVER",
-      "h1_p_over": 0.66,
+      "h1_p_over": 0.6616,
       "h1_confidence": "MEDIUM",
       "h1_line": null,
       "h1_edge": null,
@@ -297,14 +297,14 @@
       "game_time_et": "9:00 pm et",
       "pred_total": 217.93,
       "lean": "UNDER",
-      "p_over": 0.1162,
+      "p_over": 0.1167,
       "confidence": "LOW",
       "line": 240.0,
       "edge": -22.07,
       "market_gap_flag": true,
       "pred_h1": 113.25,
       "h1_lean": "UNDER",
-      "h1_p_over": 0.4843,
+      "h1_p_over": 0.4957,
       "h1_confidence": "LOW",
       "h1_line": null,
       "h1_edge": null,
@@ -1340,28 +1340,5 @@
       "roi": null,
       "triggered_at": null
     }
-  },
-  "daily_review": {
-    "generated_at": "2026-04-06T11:01:25.891592+00:00",
-    "date_reviewed": "2026-04-05",
-    "record_summary": {
-      "MEDIUM": {
-        "w": 3,
-        "l": 1,
-        "p": 0
-      },
-      "LOW": {
-        "w": 4,
-        "l": 3,
-        "p": 0
-      },
-      "overall": {
-        "w": 7,
-        "l": 4,
-        "p": 0
-      }
-    },
-    "narrative": "## Solid Night Despite One Blowup\n\nThe model went 7-4 with a +21.5% ROI, anchored by a strong medium-confidence tier that nearly swept the board.\n\n## MEDIUM TIER REVIEW\n\nWent 3-1 with a +43.2% ROI, but that one loss was a doozy. The three wins were clean \u2014 Boston-Toronto stayed under as both teams played at a crawl (pace around 95-100) with solid defense on both sides. Milwaukee-Memphis flew over 227.5 as expected, with Memphis's defense leaking badly (allowing 116.8 points per 100 possessions) and the game hitting 246. Cleveland-Indiana stayed comfortably under with Indiana's offense struggling (106.4 offensive efficiency).\n\nThen came **OKC at Utah**, projected at 215.8 but landing at 257 \u2014 a brutal 41-point miss. The model saw Utah playing slow (97.1 pace) with both teams defending reasonably well (allowing 112.8 and 106.4 respectively). What happened? The game clearly ran faster than Utah's recent pace suggested, and at least one defense \u2014 likely both \u2014 had a nightmare performance well beyond their rolling averages. Without overtime data or injury info, this looks like the simulation got caught by a pace explosion and defensive collapse that the pregame numbers didn't forecast. Sometimes variance bites hard.\n\n## LOW TIER SUMMARY\n\nThe low-confidence plays went 4-3 for +9.1% ROI \u2014 exactly the kind of split you expect from lower-edge spots.\n\n## WHAT TO WATCH\n\nThat Utah pace number (97.1) clearly wasn't predictive last night when the game hit 257 total points. Worth monitoring whether their recent tempo has been artificially suppressed by opponent or if there's more volatility in their pace than the rolling average captures. Otherwise, the medium-tier edge continues to show real teeth when it avoids the occasional blowup game.",
-    "generation_status": "success"
   }
 }
