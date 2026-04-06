@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "6e1c8f2b345c36cffadaf88c2bb4b58a",
+    "game_date": "2026-04-06",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "St Louis Blues",
+    "commence_time": "2026-04-06T01:46:56Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": -107,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-06T03:00:04.926264+00:00"
+  },
+  {
+    "game_id": "fe2964a4d81fc7d5106b2adb91a0eea7",
+    "game_date": "2026-04-06",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Tampa Bay Lightning",
+    "commence_time": "2026-04-06T23:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": -102,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-06T03:00:04.926264+00:00"
+  },
+  {
+    "game_id": "6d82b1e5218e93552d9ecf472339de25",
+    "game_date": "2026-04-06",
+    "sport": "NHL",
+    "home_team": "Winnipeg Jets",
+    "away_team": "Seattle Kraken",
+    "commence_time": "2026-04-06T23:30:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": 103,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-06T03:00:04.926264+00:00"
+  },
+  {
+    "game_id": "8ebdedac2e58e94bed89333cd792d164",
+    "game_date": "2026-04-06",
+    "sport": "NHL",
+    "home_team": "San Jose Sharks",
+    "away_team": "Chicago Blackhawks",
+    "commence_time": "2026-04-07T02:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": 103,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-06T03:00:04.926264+00:00"
+  },
+  {
+    "game_id": "39339d355c5e85fc42b06ea3c942c5b4",
+    "game_date": "2026-04-06",
+    "sport": "NHL",
+    "home_team": "Los Angeles Kings",
+    "away_team": "Nashville Predators",
+    "commence_time": "2026-04-07T02:30:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": 103,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-06T03:00:04.926264+00:00"
+  }
+]
