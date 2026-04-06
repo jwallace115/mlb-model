@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-06T00:41:32.188200+00:00",
+  "generated_at": "2026-04-06T01:04:50.394861+00:00",
   "overall_status": "RED",
   "checks": {
     "cron_jobs": {
@@ -9,55 +9,55 @@
           "job": "mlb_prelim",
           "status": "OK",
           "last_run": "2026-04-05T06:01:18.608997+00:00",
-          "hours_since_run": 18.7
+          "hours_since_run": 19.1
         },
         {
           "job": "mlb_confirm",
           "status": "OK",
           "last_run": "2026-04-05T11:05:56.737466+00:00",
-          "hours_since_run": 13.6
+          "hours_since_run": 14.0
         },
         {
           "job": "nhl_morning",
           "status": "OK",
           "last_run": "2026-04-05T11:01:23.439605+00:00",
-          "hours_since_run": 13.7
+          "hours_since_run": 14.1
         },
         {
           "job": "nhl_evening",
           "status": "OK",
           "last_run": "2026-04-05T21:00:29.575984+00:00",
-          "hours_since_run": 3.7
+          "hours_since_run": 4.1
         },
         {
           "job": "soccer",
           "status": "OK",
           "last_run": "2026-04-05T14:00:06.733187+00:00",
-          "hours_since_run": 10.7
+          "hours_since_run": 11.1
         },
         {
           "job": "results",
           "status": "OK",
           "last_run": "2026-04-05T05:55:07.228777+00:00",
-          "hours_since_run": 18.8
+          "hours_since_run": 19.2
         },
         {
           "job": "lines_open",
           "status": "OK",
           "last_run": "2026-04-05T06:05:03.612159+00:00",
-          "hours_since_run": 18.6
+          "hours_since_run": 19.0
         },
         {
           "job": "lines_closing",
           "status": "OK",
           "last_run": "2026-04-05T03:00:06.206490+00:00",
-          "hours_since_run": 21.7
+          "hours_since_run": 22.1
         },
         {
           "job": "scratch_check",
           "status": "OK",
           "last_run": "2026-04-05T22:30:04.881161+00:00",
-          "hours_since_run": 2.2
+          "hours_since_run": 2.6
         }
       ]
     },
@@ -69,7 +69,7 @@
           "status": "OK",
           "size_kb": 29.7,
           "last_modified": "2026-04-05T20:30:04.955697+00:00",
-          "hours_since_modified": 4.2,
+          "hours_since_modified": 4.6,
           "record_count": 49
         },
         {
@@ -77,7 +77,7 @@
           "status": "OK",
           "size_kb": 21.9,
           "last_modified": "2026-04-05T06:01:12.849916+00:00",
-          "hours_since_modified": 18.7,
+          "hours_since_modified": 19.1,
           "record_count": 52
         },
         {
@@ -85,7 +85,7 @@
           "status": "OK",
           "size_kb": 70.3,
           "last_modified": "2026-04-05T11:05:36.734184+00:00",
-          "hours_since_modified": 13.6,
+          "hours_since_modified": 14.0,
           "record_count": 771
         },
         {
@@ -93,7 +93,7 @@
           "status": "OK",
           "size_kb": 220.7,
           "last_modified": "2026-04-05T11:00:20.318712+00:00",
-          "hours_since_modified": 13.7,
+          "hours_since_modified": 14.1,
           "record_count": 13297
         }
       ]
@@ -160,8 +160,9 @@
       "credits_remaining": 4993106
     },
     "dashboard": {
-      "status": "RED",
-      "error": "HTTPSConnectionPool(host='iamnotuncertain.net', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<HTTPSConnection(host='iamnotuncertain.net', port=443) at 0x7f99c61284a0>, 'Connection to iamnotuncertain.net timed out. (connect timeout=10)'))"
+      "status": "GREEN",
+      "last_push": "2026-04-05 21:04:38 -0400",
+      "hours_ago": 4.0
     },
     "signal_activity": {
       "mlb": {
@@ -184,12 +185,11 @@
     "nba_macbook_sync": {
       "status": "GREEN",
       "last_sync": "2026-04-05T18:01:39.800833+00:00",
-      "hours_ago": 6.7
+      "hours_ago": 7.1
     }
   },
   "warnings": [],
   "errors": [
-    "Zero-score grading errors: 8",
-    "Dashboard unreachable: HTTPSConnectionPool(host='iamnotuncertain.net', port=443): Max retries exceeded with url: / (Caused by ConnectTimeoutError(<HTTPSConnection(host='iamnotuncertain.net', port=443) at 0x7f99c61284a0>, 'Connection to iamnotuncertain.net timed out. (connect timeout=10)'))"
+    "Zero-score grading errors: 8"
   ]
 }
