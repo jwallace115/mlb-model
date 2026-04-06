@@ -4,7 +4,9 @@
 
 MSG=${1:-"pipeline auto-push $(date -u +%Y-%m-%dT%H:%M:%SZ)"}
 
-cd /root/mlb-model
+# Navigate to repo root (works on both VM and MacBook)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR/.."
 
 # Abort if git is in a conflicted state
 if [ -d .git ] && git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
