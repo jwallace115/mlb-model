@@ -403,6 +403,31 @@ def _last_run_label(data: dict) -> str:
         return ts
 
 
+def _pipeline_freshness(key: str) -> str:
+    """Return HTML snippet showing last pipeline run time for a sport."""
+    try:
+        lu_path = os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")
+        if not os.path.exists(lu_path):
+            return "<span style='font-size:0.75em;color:#64748b'>Last updated: unknown</span>"
+        with open(lu_path) as f:
+            lu = json.load(f)
+        ts_str = lu.get(key)
+        if not ts_str:
+            return "<span style='font-size:0.75em;color:#64748b'>Last updated: unknown</span>"
+        from zoneinfo import ZoneInfo
+        dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+        dt_et = dt.astimezone(ZoneInfo("America/New_York"))
+        label = dt_et.strftime("%b %-d, %-I:%M %p ET")
+        hours_ago = (datetime.now(dt.tzinfo) - dt).total_seconds() / 3600
+        if hours_ago > 26:
+            return (f"<span style='font-size:0.75em;color:#eab308'>"
+                    f"\u26a0\ufe0f Last updated: {label} (stale)</span>")
+        return (f"<span style='font-size:0.75em;color:#94a3b8'>"
+                f"\U0001f4ca Last updated: {label}</span>")
+    except Exception:
+        return "<span style='font-size:0.75em;color:#64748b'>Last updated: unknown</span>"
+
+
 # ── season header rendering ───────────────────────────────────────────────────
 
 def _pct_color(pct: float | None) -> str:
@@ -1660,6 +1685,8 @@ def _render_nhl_tab() -> None:
                 f"</div>"
             )
 
+        st.html(_pipeline_freshness("nhl"))
+
         today_signals  = nhl.get("today_signals", [])
         recent_results = nhl.get("recent_results", [])
         season_perf    = nhl.get("season_performance", {})
@@ -2264,6 +2291,7 @@ def _render_soccer_tab() -> None:
       <div style="font-size:0.85em">This section is coming soon. Back-end tracking is active.</div>
     </div>
     """)
+    st.html(_pipeline_freshness("soccer"))
     return
 
     soccer = load_soccer_results()
@@ -3060,6 +3088,8 @@ def _render_nba_tab() -> None:
     picks_tab, review_tab = st.tabs(["Today's Picks", "Results Review"])
 
     with picks_tab:
+        st.html(_pipeline_freshness("nba"))
+
         plays               = nba.get("plays", [])
         no_plays            = nba.get("no_plays", [])
         accuracy            = nba.get("season_accuracy", {})
@@ -4216,6 +4246,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         'Opening lines captured at 2 AM ET. Final signals update at 7 AM ET.'
                         '</span></div>')
 
+            st.html(_pipeline_freshness("mlb_confirm"))
+
             all_games = (plays or []) + (no_plays or [])
             play_cards = []
             shadow_cards = []
@@ -5139,6 +5171,7 @@ def _render_wnba_archetype_tab() -> None:
     # ── Section 1: Status Caption ──
     st.caption("\U0001f3c0 WNBA Archetype Signals \u2014 Structural team matchup signals. "
                "Monitoring 2026 season for live validation.")
+    st.html(_pipeline_freshness("wnba"))
 
     # ── Section 2: Today's Games ──
     if not signals_2026:
@@ -5620,6 +5653,8 @@ def _render_golf_tab() -> None:
         if st.button("Refresh", key="golf_refresh", use_container_width=True):
             st.cache_data.clear()
             st.rerun()
+
+    st.html(_pipeline_freshness("golf"))
 
     if golf is None:
         st.info("No Golf data available yet. Run `python push_golf.py` to generate.")

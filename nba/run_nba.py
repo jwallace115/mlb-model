@@ -2170,3 +2170,14 @@ if __name__ == "__main__":
         use_odds=not args.no_odds,
         skip_results=args.skip_results,
     )
+
+    # Auto-push + timestamp
+    import json as _j, subprocess as _sp
+    _lu = os.path.join(NBA_DIR, "..", "shared", "last_updated.json")
+    _lu = os.path.normpath(_lu)
+    _d = _j.load(open(_lu)) if os.path.exists(_lu) else {}
+    _d["nba"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(_lu, "w") as _f:
+        _j.dump(_d, _f, indent=2)
+    _sp.run(["bash", os.path.normpath(os.path.join(NBA_DIR, "..", "shared", "git_push.sh")),
+             "NBA pipeline run"], capture_output=True)

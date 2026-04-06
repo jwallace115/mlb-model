@@ -29,6 +29,14 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(levelna
 logger = logging.getLogger("mlb_two_pass")
 
 
+def _update_last_run(key):
+    p = PROJECT_ROOT / "shared" / "last_updated.json"
+    d = json.load(open(p)) if p.exists() else {}
+    d[key] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(p, "w") as f:
+        json.dump(d, f, indent=2)
+
+
 def _yesterday(game_date: str) -> str:
     return (datetime.strptime(game_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
 
@@ -157,6 +165,7 @@ def run_prelim(game_date: str) -> None:
     2:00 AM preliminary pass.
     Grades, refreshes caches, captures early lines, generates preliminary signals.
     """
+    _update_last_run("mlb_prelim")
     logger.info(f"{'='*60}")
     logger.info(f"PRELIM 2AM PASS — {game_date}")
     logger.info(f"{'='*60}")
@@ -291,6 +300,7 @@ def run_confirm(game_date: str) -> None:
     7:00 AM confirmation pass.
     Verifies grading completeness, re-refreshes, generates official signals, pushes.
     """
+    _update_last_run("mlb_confirm")
     logger.info(f"{'='*60}")
     logger.info(f"CONFIRM 7AM PASS — {game_date}")
     logger.info(f"{'='*60}")

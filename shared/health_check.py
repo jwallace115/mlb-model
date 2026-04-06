@@ -369,6 +369,16 @@ def main():
         print(f"  Errors: {errors_list}")
     print(f"  Saved: {STATUS_PATH}")
 
+    # Timestamp + auto-push
+    _lu = ROOT / "shared" / "last_updated.json"
+    _d = json.load(open(_lu)) if _lu.exists() else {}
+    _d["health_check"] = NOW.isoformat()
+    with open(_lu, "w") as f:
+        json.dump(_d, f, indent=2)
+    import subprocess
+    subprocess.run(["bash", str(ROOT / "shared" / "git_push.sh"), "Health check run"],
+                   capture_output=True)
+
 
 if __name__ == "__main__":
     main()

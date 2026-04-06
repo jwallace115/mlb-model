@@ -34,6 +34,15 @@ logger = logging.getLogger("results_tracker")
 _STAR_COUNT = {"⭐⭐⭐": 3, "⭐⭐": 2, "⭐": 1}
 
 
+def _update_last_run(key):
+    from datetime import datetime as _dt
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "shared", "last_updated.json")
+    d = json.load(open(p)) if os.path.exists(p) else {}
+    d[key] = _dt.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(p, "w") as f:
+        json.dump(d, f, indent=2)
+
+
 # ── MLB Stats API helpers ──────────────────────────────────────────────────────
 
 def fetch_boxscore(game_pk: int) -> dict | None:
@@ -439,6 +448,7 @@ def grade_date(game_date: str) -> list[dict]:
     Fetches scores from MLB Stats API if not yet stored.
     Returns list of graded_result dicts written to DB.
     """
+    _update_last_run("results_grader")
     db.init_db()
 
     with db.get_conn() as conn:
@@ -651,21 +661,8 @@ if __name__ == "__main__":
         target = args.date or (date.today() - timedelta(days=1)).isoformat()
         grade_date(target)
 
-        # Push graded results to GitHub immediately so dashboard reflects overnight grades
-        try:
-            import subprocess as _sp
-            _repo = os.path.dirname(os.path.abspath(__file__))
-            _push_files = [
-                "results.json", "season_stats.json",
-                "nba_results.json", "nhl_results.json", "soccer_results.json",
-            ]
-            for _f in _push_files:
-                _fp = os.path.join(_repo, _f)
-                if os.path.exists(_fp):
-                    _sp.run(["git", "add", "-f", _fp], cwd=_repo, check=True)
-            _sp.run(["git", "commit", "-m", f"results: {target}"],
-                    cwd=_repo, capture_output=True)
-            _sp.run(["git", "push", "origin", "main"], cwd=_repo, check=True)
-            print("  Pushed graded results to GitHub.")
-        except Exception as _e:
-            print(f"  Git push after grading failed (non-fatal): {_e}")
+        # Push graded results to GitHub
+        import subprocess as _sp
+        _repo = os.path.dirname(os.path.abspath(__file__))
+        _sp.run(["bash", os.path.join(_repo, "shared", "git_push.sh"),
+                 f"Results grader {target}"], capture_output=True)

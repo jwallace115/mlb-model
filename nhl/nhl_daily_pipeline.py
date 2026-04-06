@@ -974,3 +974,13 @@ if __name__ == "__main__":
         grade_yesterday(target - timedelta(days=1))
 
     run_pipeline(target)
+
+    # Auto-push + timestamp
+    import subprocess
+    _lu = BASE_DIR / "shared" / "last_updated.json"
+    _d = json.load(open(_lu)) if _lu.exists() else {}
+    _d["nhl"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(_lu, "w") as f:
+        json.dump(_d, f, indent=2)
+    subprocess.run(["bash", str(BASE_DIR / "shared" / "git_push.sh"), "NHL pipeline run"],
+                   capture_output=True)

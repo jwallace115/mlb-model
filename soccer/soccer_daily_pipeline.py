@@ -1535,6 +1535,16 @@ def main():
         print("  ✓ All tiers active — no suspensions")
     print()
 
+    # Auto-push + timestamp
+    import subprocess
+    _lu = BASE_DIR / "shared" / "last_updated.json"
+    _d = json.load(open(_lu)) if _lu.exists() else {}
+    _d["soccer"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(_lu, "w") as f:
+        json.dump(_d, f, indent=2)
+    subprocess.run(["bash", str(BASE_DIR / "shared" / "git_push.sh"), "Soccer pipeline run"],
+                   capture_output=True)
+
 
 if __name__ == "__main__":
     main()

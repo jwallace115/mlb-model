@@ -1857,3 +1857,13 @@ if __name__ == "__main__":
         run_composite()
         if args.include_matchups:
             run_matchups(capture_type=args.capture)
+
+    # Auto-push + timestamp
+    import subprocess
+    _lu_path = PROJECT_ROOT / "shared" / "last_updated.json"
+    _d = json.load(open(_lu_path)) if _lu_path.exists() else {}
+    _d["golf"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    with open(_lu_path, "w") as f:
+        json.dump(_d, f, indent=2)
+    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+                    f"Golf {args.capture} run"], capture_output=True)
