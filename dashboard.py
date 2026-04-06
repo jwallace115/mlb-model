@@ -4547,8 +4547,88 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     st.caption(f"CLV: insufficient sample ({clv.get('total_with_clv', 0)} games). "
                                "Builds up once refresh.py has captured closing lines.")
 
+    # ── NRFI Parlay Helper (Research) ────────────────────────────────────
+    _render_nrfi_helper_section()
+
     # ── SGP Monitor — Phase 0 ─────────────────────────────────────────────
     _render_sgp_section()
+
+
+def _render_nrfi_helper_section():
+    """NRFI Parlay Helper — research shadow tracker display."""
+    import json as _nrfi_json
+    from datetime import date as _nrfi_date
+
+    nrfi_path = os.path.join(os.path.dirname(__file__), "research", "mlb_first_inning",
+                             "nrfi_shadow_log_2026.json")
+    if not os.path.exists(nrfi_path):
+        return
+
+    try:
+        with open(nrfi_path) as _f:
+            nrfi_log = _nrfi_json.load(_f)
+    except Exception:
+        return
+
+    if not nrfi_log:
+        return
+
+    st.divider()
+    st.html(
+        '<div style="font-size:0.88em;font-weight:700;color:#94a3b8;margin-bottom:4px">'
+        'NRFI Parlay Helper (Research)</div>'
+        '<div style="font-size:0.72em;color:#64748b;margin-bottom:8px">'
+        'Educated guess filter \u2014 not a betting signal. '
+        'Based on historical NRFI suppression patterns.</div>')
+
+    today = _nrfi_date.today().isoformat()
+    today_entries = [e for e in nrfi_log if e.get("date") == today and e.get("qualifies")]
+
+    if today_entries:
+        for e in sorted(today_entries, key=lambda x: x.get("p_yrfi", 1)):
+            p = e.get("p_yrfi", 0)
+            rank = e.get("combined_rank_pct", 0)
+            st.html(
+                f'<div style="background:#0d1a0d;border:1px solid #166534;border-radius:6px;'
+                f'padding:8px 14px;margin-bottom:4px;font-size:0.82em">'
+                f'<span style="color:#86efac;font-weight:600">'
+                f'{e.get("away_team")} @ {e.get("home_team")}</span>'
+                f'<span style="color:#64748b;margin-left:12px">'
+                f'p(YRFI)={p:.3f} \u00b7 rank={rank:.0%}</span></div>')
+    else:
+        st.html(
+            '<div style="font-size:0.78em;color:#64748b;padding:6px 14px;'
+            'background:#0f1117;border-radius:4px;margin-bottom:4px">'
+            'No qualifying NRFI candidates today.</div>')
+
+    # Compact tracker
+    resolved = [e for e in nrfi_log if e.get("resolved")]
+    quals_resolved = [e for e in resolved if e.get("qualifies")]
+    total_logged = len(nrfi_log)
+    total_quals = sum(1 for e in nrfi_log if e.get("qualifies"))
+    dates_logged = len(set(e.get("date") for e in nrfi_log))
+
+    if resolved:
+        all_nrfi = sum(1 for e in resolved if e.get("result_nrfi") == 1)
+        all_pct = all_nrfi / len(resolved) * 100
+        qual_nrfi = sum(1 for e in quals_resolved if e.get("result_nrfi") == 1)
+        qual_pct = (qual_nrfi / len(quals_resolved) * 100) if quals_resolved else 0
+        avg_pool = total_quals / max(dates_logged, 1)
+
+        st.html(
+            f'<div style="font-size:0.72em;color:#64748b;padding:4px 14px">'
+            f'{total_logged} games logged \u00b7 {total_quals} qualifiers \u00b7 '
+            f'{dates_logged} days \u00b7 avg pool {avg_pool:.1f}/day<br>'
+            f'Qualifier NRFI: <span style="color:#94a3b8">'
+            f'{qual_nrfi}/{len(quals_resolved)} ({qual_pct:.1f}%)</span> \u00b7 '
+            f'Full-slate NRFI: <span style="color:#94a3b8">'
+            f'{all_nrfi}/{len(resolved)} ({all_pct:.1f}%)</span>'
+            f'</div>')
+    else:
+        st.html(
+            f'<div style="font-size:0.72em;color:#64748b;padding:4px 14px">'
+            f'{total_logged} games logged \u00b7 {total_quals} qualifiers \u00b7 '
+            f'awaiting grading</div>')
 
 
 def _render_sgp_section():
