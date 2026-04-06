@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-06T07:00:28.080208",
+  "generated_at": "2026-04-06T08:00:14.503300",
   "sport": "golf",
   "event_name": "Valero Texas Open",
   "event_id": 41,
@@ -528,19 +528,35 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 117,
-      "hit_rate": 47.9,
-      "roi": 2.3,
-      "clv": -11.5
+      "n": 547,
+      "hit_rate": 52.7,
+      "roi": -9.5,
+      "clv": -9.6
     },
     "top_20": {
-      "n": 3,
-      "hit_rate": 33.3,
-      "roi": 93.3,
-      "clv": 3.1
+      "n": 185,
+      "hit_rate": 37.8,
+      "roi": 455.2,
+      "clv": -51.1
     }
   },
   "recent_results": [
+    {
+      "event_name": "Texas Children's Houston Open",
+      "event_id": 20,
+      "year": 2026,
+      "n_candidates": 143,
+      "hit_rate": 37.1,
+      "roi": 594.1
+    },
+    {
+      "event_name": "Valero Texas Open",
+      "event_id": 41,
+      "year": 2026,
+      "n_candidates": 469,
+      "hit_rate": 52.9,
+      "roi": -13.8
+    },
     {
       "event_name": "Bank of Utah Championship",
       "event_id": 554,

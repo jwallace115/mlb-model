@@ -16,6 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 os.chdir(ROOT)
 
+ON_VM = os.path.exists("/root/logs/")
+
 STATUS_PATH = ROOT / "shared" / "health_status.json"
 NOW = datetime.now(timezone.utc)
 TODAY = date.today().isoformat()
@@ -37,6 +39,8 @@ def file_mtime(path):
 # ── A. CRON JOB FRESHNESS ────────────────────────────────────────────────────
 
 def check_cron_jobs():
+    if not ON_VM:
+        return {"status": "GREEN", "details": [], "note": "skipped (not on VM)"}
     jobs = [
         ("mlb_prelim", "/root/logs/mlb_prelim.log", 26),
         ("mlb_confirm", "/root/logs/mlb_confirm.log", 26),
