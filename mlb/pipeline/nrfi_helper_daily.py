@@ -50,7 +50,43 @@ def _load_models():
         top1 = pickle.load(f)
     with open(MODEL_DIR / "micro_model_bot1.pkl", "rb") as f:
         bot1 = pickle.load(f)
-    return top1, bot1
+    arch = None
+    arch_path = MODEL_DIR / "starter_archetype_model.pkl"
+    if arch_path.exists():
+        with open(arch_path, "rb") as f:
+            arch = pickle.load(f)
+    return top1, bot1, arch
+
+
+def _classify_starter_archetype(sp_id, pgl, sc_ps, arch_artifact):
+    """Classify a starter's archetype from rolling stats. Returns label string or None."""
+    if arch_artifact is None or sp_id is None:
+        return None
+    km = arch_artifact["kmeans"]
+    scaler = arch_artifact["scaler"]
+    label_map = arch_artifact["label_map"]
+
+    # Compute rolling 5-start features for this pitcher
+    sp = pgl[pgl["player_id"] == sp_id].sort_values("game_date")
+    if len(sp) < 2:
+        return None
+    sp = sp.copy()
+    sp["bb_rate_p"] = sp["walks"] / sp["batters_faced"].clip(lower=1)
+    bb_r5 = sp["bb_rate_p"].rolling(5, min_periods=2).mean().iloc[-1]
+
+    # Statcast rolling
+    sc = sc_ps[sc_ps["pitcher_id"] == sp_id].sort_values("game_date") if sc_ps is not None else pd.DataFrame()
+    if len(sc) < 2:
+        return None
+    whiff_r5 = sc["whiff_rate"].rolling(5, min_periods=2).mean().iloc[-1]
+    hh_r5 = sc["hard_hit_rate"].rolling(5, min_periods=2).mean().iloc[-1]
+
+    if any(pd.isna([whiff_r5, bb_r5, hh_r5])):
+        return None
+
+    vec = np.array([[whiff_r5, bb_r5, hh_r5]])
+    cluster = int(km.predict(scaler.transform(vec))[0])
+    return label_map.get(cluster)
 
 
 # ── Feature building ─────────────────────────────────────────────────────────
@@ -182,13 +218,21 @@ def run_daily(game_date: str | None = None):
         return
 
     # Load models + historical data
-    top1_art, bot1_art = _load_models()
+    top1_art, bot1_art, arch_art = _load_models()
     hgl = pd.read_parquet("mlb/data/hitter_game_logs.parquet")
     hgl = hgl[hgl["starter_flag"] == 1].copy()
     pgl = pd.read_parquet("mlb/data/pitcher_game_logs.parquet")
     pgl = pgl[pgl["starter_flag"] == 1].copy()
     tto = pd.read_parquet("research/data_pulls/pitcher_tto_splits.parquet")
     gt = pd.read_parquet("sim/data/game_table.parquet")
+
+    # Load Statcast per-start for archetype classification
+    sc_ps = None
+    try:
+        sc_ps = pd.read_parquet("research/statcast_enrichment/pitcher_statcast_per_start.parquet")
+        sc_ps = sc_ps.sort_values(["pitcher_id", "game_date"])
+    except Exception:
+        pass
 
     # Build features for each game
     rows = []
@@ -228,6 +272,13 @@ def run_daily(game_date: str | None = None):
             p_bot1 = float(bot1_art["model"].predict_proba(bot1_art["scaler"].transform(x_b))[0, 1])
             p_yrfi = 1 - (1 - p_top1) * (1 - p_bot1)
 
+            # Classify home starter archetype for Phase 8 overlay
+            _gobj = row.get("_game")
+            home_sp_id = None
+            if isinstance(_gobj, dict):
+                home_sp_id = _gobj.get("home_probable_pitcher", {}).get("id")
+            home_arch = _classify_starter_archetype(home_sp_id, pgl, sc_ps, arch_art)
+
             scored.append({
                 "game_pk": row["game_pk"],
                 "home_team": row["home_team"],
@@ -235,6 +286,7 @@ def run_daily(game_date: str | None = None):
                 "p_top1": p_top1,
                 "p_bot1": p_bot1,
                 "p_yrfi": p_yrfi,
+                "home_starter_archetype": home_arch,
             })
 
     slate_size = len(scored) + len(dropped)
@@ -252,10 +304,21 @@ def run_daily(game_date: str | None = None):
         top1_b30_cut = scored_df["p_top1"].quantile(0.30)
         bot1_b30_cut = scored_df["p_bot1"].quantile(0.30)
 
-        scored_df["qualifies"] = (
+        # Phase 4 Rule D
+        scored_df["qualifies_phase4"] = (
             (scored_df["p_yrfi"] <= b10_cut) &
             (scored_df["p_top1"] <= top1_b30_cut) &
             (scored_df["p_bot1"] <= bot1_b30_cut)
+        )
+
+        # Phase 8 overlay: Phase 4 AND home starter is NOT CONTACT_RISK
+        scored_df["qualifies_phase8"] = (
+            scored_df["qualifies_phase4"] &
+            (scored_df["home_starter_archetype"] != "CONTACT_RISK")
+        )
+        # If archetype is null (missing data), keep Phase 4 qualification as-is
+        scored_df.loc[scored_df["home_starter_archetype"].isna(), "qualifies_phase8"] = (
+            scored_df.loc[scored_df["home_starter_archetype"].isna(), "qualifies_phase4"]
         )
 
         for _, r in scored_df.iterrows():
@@ -272,7 +335,10 @@ def run_daily(game_date: str | None = None):
                 "combined_rank_pct": round(r["combined_rank_pct"], 3),
                 "top1_rank_pct": round(r["top1_rank_pct"], 3),
                 "bot1_rank_pct": round(r["bot1_rank_pct"], 3),
-                "qualifies": bool(r["qualifies"]),
+                "home_starter_archetype": r.get("home_starter_archetype"),
+                "qualifies": bool(r["qualifies_phase8"]),
+                "qualifies_phase4": bool(r["qualifies_phase4"]),
+                "qualifies_phase8": bool(r["qualifies_phase8"]),
                 "result_yrfi": None,
                 "result_nrfi": None,
                 "resolved": False,
@@ -293,7 +359,10 @@ def run_daily(game_date: str | None = None):
             "combined_rank_pct": None,
             "top1_rank_pct": None,
             "bot1_rank_pct": None,
+            "home_starter_archetype": None,
             "qualifies": False,
+            "qualifies_phase4": False,
+            "qualifies_phase8": False,
             "drop_reason": d["drop_reason"],
             "result_yrfi": None,
             "result_nrfi": None,
@@ -304,16 +373,23 @@ def run_daily(game_date: str | None = None):
     with open(SHADOW_LOG, "w") as f:
         json.dump(log, f, indent=2)
 
-    quals = [e for e in new_entries if e.get("qualifies")]
+    q_p4 = [e for e in new_entries if e.get("qualifies_phase4")]
+    q_p8 = [e for e in new_entries if e.get("qualifies_phase8")]
+    excluded = [e for e in new_entries if e.get("qualifies_phase4") and not e.get("qualifies_phase8")]
     print(f"NRFI Helper — {game_date}")
     print(f"  Slate: {len(scored)} scored, {len(dropped)} dropped ({slate_size} total)")
-    print(f"  Qualifiers: {len(quals)}")
+    print(f"  Phase 4 qualifiers: {len(q_p4)}")
+    print(f"  Phase 8 qualifiers: {len(q_p8)}")
+    if excluded:
+        for e in excluded:
+            print(f"    EXCLUDED (home CONTACT_RISK): {e['away_team']}@{e['home_team']} "
+                  f"arch={e.get('home_starter_archetype')}")
     if dropped:
         for d in dropped:
             print(f"    DROPPED: {d['away_team']}@{d['home_team']} — {d['drop_reason']}")
-    for q in quals:
+    for q in q_p8:
         print(f"    {q['away_team']}@{q['home_team']}  p_yrfi={q['p_yrfi']:.4f}  "
-              f"rank={q['combined_rank_pct']:.3f}")
+              f"rank={q['combined_rank_pct']:.3f}  home_arch={q.get('home_starter_archetype')}")
 
     # Auto-push
     subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),

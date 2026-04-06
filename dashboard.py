@@ -4579,10 +4579,13 @@ def _render_nrfi_helper_section():
         'NRFI Parlay Helper (Research)</div>'
         '<div style="font-size:0.72em;color:#64748b;margin-bottom:8px">'
         'Educated guess filter \u2014 not a betting signal. '
-        'Based on historical NRFI suppression patterns.</div>')
+        'Based on historical NRFI suppression patterns.<br>'
+        '<span style="font-size:0.90em">Current version excludes home starters '
+        'with CONTACT_RISK archetype.</span></div>')
 
     today = _nrfi_date.today().isoformat()
-    today_entries = [e for e in nrfi_log if e.get("date") == today and e.get("qualifies")]
+    today_entries = [e for e in nrfi_log if e.get("date") == today
+                     and e.get("qualifies_phase8", e.get("qualifies"))]
 
     if today_entries:
         for e in sorted(today_entries, key=lambda x: x.get("p_yrfi", 1)):
@@ -4601,11 +4604,11 @@ def _render_nrfi_helper_section():
             'background:#0f1117;border-radius:4px;margin-bottom:4px">'
             'No qualifying NRFI candidates today.</div>')
 
-    # Compact tracker
+    # Compact tracker — use Phase 8 qualification where available, fall back to Phase 4
     resolved = [e for e in nrfi_log if e.get("resolved")]
-    quals_resolved = [e for e in resolved if e.get("qualifies")]
+    quals_resolved = [e for e in resolved if e.get("qualifies_phase8", e.get("qualifies"))]
     total_logged = len(nrfi_log)
-    total_quals = sum(1 for e in nrfi_log if e.get("qualifies"))
+    total_quals = sum(1 for e in nrfi_log if e.get("qualifies_phase8", e.get("qualifies")))
     dates_logged = len(set(e.get("date") for e in nrfi_log))
 
     if resolved:
