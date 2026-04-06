@@ -113,6 +113,29 @@ def check_signal_files():
                 status = "YELLOW"
         except Exception as e:
             details.append({"file": name, "status": "ERROR", "error": str(e)})
+
+    # Soccer canonical currency
+    try:
+        soccer_canon = ROOT / "soccer" / "data" / "soccer_canonical.parquet"
+        if soccer_canon.exists():
+            import pandas as pd
+            sc = pd.read_parquet(soccer_canon)
+            cutoff_30d = (date.today() - timedelta(days=30)).isoformat()
+            recent = sc[sc["game_date"] >= cutoff_30d]
+            n_recent = len(recent)
+            if n_recent >= 30:
+                details.append({"file": "soccer_canonical", "status": "OK", "recent_30d": n_recent})
+            elif n_recent > 0:
+                details.append({"file": "soccer_canonical", "status": "STALE", "recent_30d": n_recent})
+                warnings_list.append(f"Soccer canonical stale — only {n_recent} rows in last 30 days")
+                status = "YELLOW"
+            else:
+                details.append({"file": "soccer_canonical", "status": "EMPTY", "recent_30d": 0})
+                errors_list.append("Soccer canonical empty — pipeline likely broken")
+                status = "RED"
+    except Exception:
+        pass
+
     return {"status": status, "details": details}
 
 
