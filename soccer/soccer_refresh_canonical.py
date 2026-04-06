@@ -98,11 +98,39 @@ def fetch_fixtures(api_key: str, league_id: int, season: int,
         return []
 
 
+STATS_CACHE_DIR = DATA_DIR / "cache" / "stats"
+STATS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def fetch_fixture_stats(api_key: str, fixture_id: int) -> list[dict]:
+    """Fetch per-team statistics for a single fixture. Cached by fixture_id."""
+    cache_file = STATS_CACHE_DIR / f"stats_{fixture_id}.json"
+    if cache_file.exists():
+        return json.loads(cache_file.read_text()).get("response", [])
+
+    headers = {"x-apisports-key": api_key}
+    params = {"fixture": fixture_id}
+    try:
+        time.sleep(0.15)
+        resp = requests.get(
+            f"{API_FOOTBALL_BASE}/fixtures/statistics",
+            headers=headers, params=params, timeout=20,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        cache_file.write_text(json.dumps(data))
+        return data.get("response", [])
+    except Exception as e:
+        logger.warning(f"Failed to fetch stats for fixture {fixture_id}: {e}")
+        return []
+
+
 def get_stat(statistics: list[dict], team_name: str, stat_type: str) -> float | None:
     for s in statistics:
         if team_name.lower() in s.get("team", {}).get("name", "").lower():
             for item in s.get("statistics", []):
-                if stat_type.lower() in item.get("type", "").lower():
+                api_type = item.get("type", "").lower().replace("_", " ")
+                if stat_type.lower() == api_type:
                     v = item.get("value")
                     if v is None or v == "":
                         return None
@@ -203,6 +231,12 @@ def main():
         completed = [f for f in fixtures
                      if f.get("fixture", {}).get("status", {}).get("short", "") in ("FT", "AET", "PEN")]
         logger.info(f"[{league_id}] {len(completed)} completed fixtures on {target_date}")
+
+        # Enrich each completed fixture with statistics (xG, shots)
+        for fix in completed:
+            fid = fix.get("fixture", {}).get("id")
+            if fid and not fix.get("statistics"):
+                fix["statistics"] = fetch_fixture_stats(api_key, fid)
 
         for fix in completed:
             row = parse_fixture(fix, league_id)
