@@ -4857,6 +4857,35 @@ def main() -> None:
             st.cache_data.clear()
             st.rerun()
 
+    # ── health status banner ─────────────────────────────────────────────────
+    try:
+        _hs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "shared", "health_status.json")
+        if os.path.exists(_hs_path):
+            with open(_hs_path) as _hsf:
+                _hs = json.load(_hsf)
+            _hs_age = (datetime.utcnow() - datetime.fromisoformat(_hs["generated_at"].replace("Z","+00:00")).replace(tzinfo=None)).total_seconds() / 3600
+            if _hs_age <= 26:
+                _hs_overall = _hs.get("overall_status", "GREEN")
+                _hs_warns = _hs.get("warnings", [])
+                _hs_errs = _hs.get("errors", [])
+                if _hs_overall == "GREEN":
+                    st.html('<div style="font-size:0.68em;color:#22c55e;margin-bottom:4px">'
+                            '\u2705 All systems operational</div>')
+                elif _hs_overall == "YELLOW":
+                    _hs_w1 = _hs_warns[0] if _hs_warns else ""
+                    with st.expander(f"\u26a0\ufe0f {len(_hs_warns)} warning(s) \u2014 {_hs_w1}", expanded=False):
+                        for w in _hs_warns:
+                            st.html(f'<div style="font-size:0.75em;color:#eab308">{w}</div>')
+                elif _hs_overall == "RED":
+                    _hs_e1 = _hs_errs[0] if _hs_errs else ""
+                    with st.expander(f"\U0001f534 {len(_hs_errs)} error(s) \u2014 {_hs_e1}", expanded=True):
+                        for e in _hs_errs:
+                            st.html(f'<div style="font-size:0.75em;color:#f87171">{e}</div>')
+                        for w in _hs_warns:
+                            st.html(f'<div style="font-size:0.75em;color:#eab308">{w}</div>')
+    except Exception:
+        pass
+
     # ── sport tabs ────────────────────────────────────────────────────────────
     tab_home, tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_wnba_arch, tab_reviews, tab_tracker = st.tabs(["\U0001f3e0", "⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "🏀 WNBA", "📋 Reviews", "📊 Tracker"])
 
