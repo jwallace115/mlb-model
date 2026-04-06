@@ -106,17 +106,17 @@ ALL_LEAGUES = {
     "LGA": {
         "api_football_id": 140,
         "odds_sport":      "soccer_spain_la_liga",
-        "season":          2024,
+        "season":          2025,
     },
     "SEA": {
         "api_football_id": 135,
         "odds_sport":      "soccer_italy_serie_a",
-        "season":          2024,
+        "season":          2025,
     },
     "LG1": {
         "api_football_id": 61,
         "odds_sport":      "soccer_france_ligue_one",
-        "season":          2024,
+        "season":          2025,
     },
 }
 
