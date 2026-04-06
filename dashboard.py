@@ -4199,7 +4199,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
 
             # Check for PRELIMINARY signals — show banner only 2-7 AM ET
             from datetime import datetime as _prelim_dt
-            from pytz import timezone as _prelim_tz
+            from zoneinfo import ZoneInfo as _prelim_tz
             _et_hour = _prelim_dt.now(_prelim_tz("America/New_York")).hour
             if 2 <= _et_hour < 7:
                 _has_prelim = any(
