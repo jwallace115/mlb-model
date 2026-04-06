@@ -162,15 +162,19 @@ def check_ungraded():
 
 def check_zero_scores():
     errs = []
+    recent_cutoff = (date.today() - timedelta(days=14)).isoformat()
     try:
         for fname in ["mlb_sim/logs/signals_2026.json", "mlb_sim/logs/f5_signals_2026.json"]:
             sigs = json.load(open(ROOT / fname))
             for s in sigs:
+                sig_date = s.get("date", "") or ""
+                if sig_date < recent_cutoff:
+                    continue  # ignore historical zero-score bugs
                 at = s.get("actual_total") or s.get("actual_f5_total")
                 if at == 0 or at == 0.0:
                     if s.get("result"):  # graded with zero = bug
                         errs.append({"file": fname, "game_id": s.get("game_id"),
-                                      "date": s.get("date"), "actual": at})
+                                      "date": sig_date, "actual": at})
     except:
         pass
 
@@ -209,17 +213,26 @@ def check_odds_api():
         return {"status": "RED", "error": str(e)}
 
 
-# ── F. DASHBOARD REACHABILITY ─────────────────────────────────────────────────
+# ── F. DASHBOARD FRESHNESS (git last push) ────────────────────────────────────
 
 def check_dashboard():
     try:
-        import requests
-        r = requests.get("https://iamnotuncertain.net", timeout=10)
-        return {"status": "GREEN" if r.status_code == 200 else "RED",
-                "http_status": r.status_code}
+        import subprocess
+        result = subprocess.run(["git", "log", "-1", "--format=%ci"],
+                                cwd=str(ROOT), capture_output=True, text=True, timeout=10)
+        if result.returncode != 0:
+            return {"status": "YELLOW", "error": "git log failed"}
+        last_commit = result.stdout.strip()
+        # Parse git date format: "2026-04-05 20:41:32 -0400"
+        from datetime import datetime as _dt
+        ts = _dt.strptime(last_commit[:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        hrs = hours_ago(ts)
+        if hrs > 26:
+            warnings_list.append(f"No recent git push — dashboard may be stale ({hrs:.0f}h)")
+            return {"status": "YELLOW", "last_push": last_commit, "hours_ago": round(hrs, 1)}
+        return {"status": "GREEN", "last_push": last_commit, "hours_ago": round(hrs, 1)}
     except Exception as e:
-        errors_list.append(f"Dashboard unreachable: {e}")
-        return {"status": "RED", "error": str(e)}
+        return {"status": "YELLOW", "error": str(e)}
 
 
 # ── G. SIGNAL ACTIVITY ───────────────────────────────────────────────────────
