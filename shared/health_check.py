@@ -170,8 +170,8 @@ def check_zero_scores():
                 sig_date = s.get("date", "") or ""
                 if sig_date < recent_cutoff:
                     continue  # ignore historical zero-score bugs
-                at = s.get("actual_total") or s.get("actual_f5_total")
-                if at == 0 or at == 0.0:
+                at = s.get("actual_total") if s.get("actual_total") is not None else s.get("actual_f5_total")
+                if at is not None and at == 0:
                     if s.get("result"):  # graded with zero = bug
                         errs.append({"file": fname, "game_id": s.get("game_id"),
                                       "date": sig_date, "actual": at})
