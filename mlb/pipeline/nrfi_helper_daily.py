@@ -210,7 +210,9 @@ def run_daily(game_date: str | None = None):
         top1_vals = [row.get(f) for f in top1_art["features"]]
         bot1_vals = [row.get(f) for f in bot1_art["features"]]
 
-        if any(v is None for v in top1_vals) or any(v is None for v in bot1_vals):
+        def _has_missing(vals):
+            return any(v is None or (isinstance(v, float) and np.isnan(v)) for v in vals)
+        if _has_missing(top1_vals) or _has_missing(bot1_vals):
             continue
 
         x_t = np.array(top1_vals, dtype=float).reshape(1, -1)
