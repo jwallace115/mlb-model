@@ -2284,16 +2284,6 @@ def _render_soccer_parlay_candidates(parlay_candidates: list,
 
 
 def _render_soccer_tab() -> None:
-    st.html("""
-    <div style="text-align:center;padding:60px 20px;color:#94a3b8">
-      <div style="font-size:2em;margin-bottom:12px">🚧</div>
-      <div style="font-size:1.1em;font-weight:600;margin-bottom:8px">Under Construction</div>
-      <div style="font-size:0.85em">This section is coming soon. Back-end tracking is active.</div>
-    </div>
-    """)
-    st.html(_pipeline_freshness("soccer"))
-    return
-
     soccer = load_soccer_results()
 
     # ── header ────────────────────────────────────────────────────────────────
