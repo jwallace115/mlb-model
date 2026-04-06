@@ -101,9 +101,9 @@ def _build_features_for_game(game: dict, hgl: pd.DataFrame, pgl: pd.DataFrame,
                 ])
                 feats[f"{side}_plat_frac"] = plat
             else:
-                feats[f"{side}_plat_frac"] = None
+                feats[f"{side}_plat_frac"] = 0.58  # population mean fallback
         else:
-            feats[f"{side}_plat_frac"] = None
+            feats[f"{side}_plat_frac"] = 0.58
 
     # ── Pitcher rolling 5 ──
     for prefix, sp_id in [("hsp", home_sp_id), ("asp", away_sp_id)]:
