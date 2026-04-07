@@ -118,11 +118,6 @@ def evaluate_mlb_stop_rules() -> dict:
     state = _load_state()
     changed = False
 
-    # Early-season grace period: skip evaluation until May 1, 2026
-    from datetime import date as _date
-    if _date.today() < _date(2026, 5, 1):
-        return _status_dict(state)
-
     # If full model already suspended, no further evaluation needed (sticky)
     if state.get("model_suspended"):
         return _status_dict(state)
@@ -134,11 +129,17 @@ def evaluate_mlb_stop_rules() -> dict:
     except Exception:
         all_rows = []
 
+    # Exclude March signals: opening weeks are noisy (pitcher form, weather,
+    # lineup instability). Only April 1+ signals count toward stop rule gates.
+    from datetime import date as _date
+    april_1 = f"{_date.today().year}-04-01"
+
     live_rows = [
         r for r in all_rows
         if r.get("was_a_play") == 1
         and r.get("result") in ("WIN", "LOSS", "PUSH")
         and r.get("decision_line_source") == "real"
+        and (r.get("game_date") or "") >= april_1
     ]
 
     if not live_rows:
