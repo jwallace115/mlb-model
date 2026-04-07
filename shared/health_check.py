@@ -54,6 +54,11 @@ def check_cron_jobs():
         ("nrfi_helper", "/root/logs/nrfi_helper.log", 26),
         ("pitcher_logs_update", "/root/logs/pitcher_logs_update.log", 26),
         ("statcast_update", "/root/logs/statcast_update.log", 26),
+        ("wnba_features", "/root/logs/wnba_features.log", 26),
+        ("wnba_model", "/root/logs/wnba_model.log", 26),
+        ("wnba_archetypes", "/root/logs/wnba_archetypes.log", 26),
+        ("wnba_live", "/root/logs/wnba_live.log", 26),
+        ("wnba_push", "/root/logs/wnba_push.log", 26),
     ]
     details = []
     status = "GREEN"
@@ -84,6 +89,7 @@ def check_signal_files():
         ("mlb_f5", "mlb_sim/logs/f5_signals_2026.json", 48),
         ("nhl", "nhl/nhl_decisions.parquet", 48),
         ("golf_shadow", "golf/shadow/golf_shadow_log.parquet", 168),  # weekly
+        ("wnba_matchup_board", "wnba_archetype_board/data/daily_matchup_board.parquet", 48),
     ]
     details = []
     status = "GREEN"
