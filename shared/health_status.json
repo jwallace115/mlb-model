@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-07T12:24:39.101555+00:00",
+  "generated_at": "2026-04-07T12:25:26.630666+00:00",
   "overall_status": "YELLOW",
   "checks": {
     "cron_jobs": {
@@ -110,7 +110,7 @@
       ]
     },
     "signal_files": {
-      "status": "GREEN",
+      "status": "YELLOW",
       "details": [
         {
           "file": "mlb_v1",
@@ -146,7 +146,11 @@
         },
         {
           "file": "wnba_matchup_board",
-          "status": "MISSING"
+          "status": "STALE",
+          "size_kb": 38.3,
+          "last_modified": "2026-04-02T18:01:13+00:00",
+          "hours_since_modified": 114.4,
+          "record_count": 959
         },
         {
           "file": "soccer_canonical",
@@ -235,7 +239,7 @@
     },
     "dashboard": {
       "status": "GREEN",
-      "last_push": "2026-04-07 08:24:31 -0400",
+      "last_push": "2026-04-07 08:25:16 -0400",
       "hours_ago": 4.0
     },
     "signal_activity": {
@@ -263,6 +267,7 @@
     }
   },
   "warnings": [
+    "Signal file stale: wnba_matchup_board (114h)",
     "Ungraded signals: nba (1 gaps)"
   ],
   "errors": []
