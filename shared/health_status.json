@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-07T10:01:10.795075+00:00",
+  "generated_at": "2026-04-07T10:02:11.927244+00:00",
   "overall_status": "YELLOW",
   "checks": {
     "cron_jobs": {
@@ -45,7 +45,7 @@
           "job": "lines_open",
           "status": "OK",
           "last_run": "2026-04-07T06:05:03.693285+00:00",
-          "hours_since_run": 3.9
+          "hours_since_run": 4.0
         },
         {
           "job": "lines_closing",
@@ -202,8 +202,8 @@
     },
     "dashboard": {
       "status": "GREEN",
-      "last_push": "2026-04-07 06:01:01 -0400",
-      "hours_ago": 4.0
+      "last_push": "2026-04-07 10:01:12 +0000",
+      "hours_ago": 0.0
     },
     "signal_activity": {
       "mlb": {
