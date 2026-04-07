@@ -137,6 +137,41 @@ def check_signal_files():
     except Exception:
         pass
 
+    # Shadow log freshness checks
+    shadow_logs = [
+        ("cs013_shadow", "mlb_sim/logs/cs013_shadow_2026.json", 48),
+        ("cs028_shadow", "mlb_sim/logs/cs028_shadow_2026.json", 48),
+        ("cs004_shadow", "mlb_sim/logs/cs004_shadow_2026.json", 48),
+        ("kp04_shadow", "mlb_sim/logs/kp04_shadow_2026.json", 48),
+        ("combined_short_exit_shadow", "mlb_sim/logs/combined_short_exit_shadow_2026.json", 48),
+        ("shadow_signals", "mlb_sim/logs/shadow_signals_2026.json", 48),
+    ]
+    for name, path, max_hours in shadow_logs:
+        try:
+            full = ROOT / path
+            if not full.exists():
+                details.append({"file": name, "status": "MISSING"})
+                warnings_list.append(f"Shadow log missing: {name}")
+                status = "YELLOW" if status != "RED" else status
+                continue
+            mt = file_mtime(str(full))
+            hrs = hours_ago(mt) if mt else 999
+            sz = full.stat().st_size
+            n = None
+            try:
+                n = len(json.load(open(full)))
+            except:
+                pass
+            st = "OK" if hrs <= max_hours else "STALE"
+            details.append({"file": name, "status": st, "size_kb": round(sz/1024, 1),
+                             "last_modified": mt.isoformat() if mt else None,
+                             "hours_since_modified": round(hrs, 1), "record_count": n})
+            if st == "STALE":
+                warnings_list.append(f"Shadow log stale: {name} ({hrs:.0f}h)")
+                status = "YELLOW" if status != "RED" else status
+        except Exception as e:
+            details.append({"file": name, "status": "ERROR", "error": str(e)})
+
     # JSON/parquet sync check for signal files
     for label, json_path, pq_path in [
         ("f5_signals", "mlb_sim/logs/f5_signals_2026.json", "mlb_sim/logs/f5_signals_2026.parquet"),

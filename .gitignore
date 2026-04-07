@@ -18,6 +18,12 @@ mlb_sim/logs/*_2026.json
 !mlb_sim/logs/f5_runline_2026.json
 !mlb_sim/logs/rolling_performance_2026.json
 !mlb_sim/logs/rolling_performance_shadow_2026.json
+!mlb_sim/logs/cs013_shadow_2026.json
+!mlb_sim/logs/cs028_shadow_2026.json
+!mlb_sim/logs/cs004_shadow_2026.json
+!mlb_sim/logs/kp04_shadow_2026.json
+!mlb_sim/logs/combined_short_exit_shadow_2026.json
+!mlb_sim/logs/shadow_signals_2026.json
 
 # ── Secrets ───────────────────────────────────────────────────────────────────
 .env
