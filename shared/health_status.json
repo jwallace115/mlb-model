@@ -1,51 +1,129 @@
 {
-  "generated_at": "2026-04-07T02:10:02.285987+00:00",
+  "generated_at": "2026-04-07T09:43:44.765290+00:00",
   "overall_status": "YELLOW",
   "checks": {
     "cron_jobs": {
-      "status": "GREEN",
-      "details": [],
-      "note": "skipped (not on VM)"
+      "status": "YELLOW",
+      "details": [
+        {
+          "job": "mlb_prelim",
+          "status": "OK",
+          "last_run": "2026-04-07T06:01:57.775669+00:00",
+          "hours_since_run": 3.7
+        },
+        {
+          "job": "mlb_confirm",
+          "status": "OK",
+          "last_run": "2026-04-06T11:05:17.311677+00:00",
+          "hours_since_run": 22.6
+        },
+        {
+          "job": "nhl_morning",
+          "status": "OK",
+          "last_run": "2026-04-06T11:00:16.721322+00:00",
+          "hours_since_run": 22.7
+        },
+        {
+          "job": "nhl_evening",
+          "status": "OK",
+          "last_run": "2026-04-06T21:00:32.082403+00:00",
+          "hours_since_run": 12.7
+        },
+        {
+          "job": "soccer",
+          "status": "OK",
+          "last_run": "2026-04-06T14:00:10.461795+00:00",
+          "hours_since_run": 19.7
+        },
+        {
+          "job": "results",
+          "status": "OK",
+          "last_run": "2026-04-07T05:55:05.635849+00:00",
+          "hours_since_run": 3.8
+        },
+        {
+          "job": "lines_open",
+          "status": "OK",
+          "last_run": "2026-04-07T06:05:03.693285+00:00",
+          "hours_since_run": 3.6
+        },
+        {
+          "job": "lines_closing",
+          "status": "OK",
+          "last_run": "2026-04-07T03:00:06.424439+00:00",
+          "hours_since_run": 6.7
+        },
+        {
+          "job": "scratch_check",
+          "status": "OK",
+          "last_run": "2026-04-06T22:30:07.134092+00:00",
+          "hours_since_run": 11.2
+        },
+        {
+          "job": "nrfi_helper",
+          "status": "MISSING",
+          "last_run": null,
+          "hours_since_run": null
+        },
+        {
+          "job": "pitcher_logs_update",
+          "status": "OK",
+          "last_run": "2026-04-07T05:50:08.453622+00:00",
+          "hours_since_run": 3.9
+        }
+      ]
     },
     "signal_files": {
-      "status": "GREEN",
+      "status": "YELLOW",
       "details": [
         {
           "file": "mlb_v1",
           "status": "OK",
-          "size_kb": 29.9,
-          "last_modified": "2026-04-07T01:54:45.910359+00:00",
-          "hours_since_modified": 0.3,
-          "record_count": 51
+          "size_kb": 17.6,
+          "last_modified": "2026-04-07T09:42:15.967584+00:00",
+          "hours_since_modified": 0.0,
+          "record_count": 30
         },
         {
           "file": "mlb_f5",
           "status": "OK",
-          "size_kb": 22.8,
-          "last_modified": "2026-04-06T19:09:34.736295+00:00",
-          "hours_since_modified": 7.0,
-          "record_count": 52
+          "size_kb": 12.2,
+          "last_modified": "2026-04-07T09:42:15.967584+00:00",
+          "hours_since_modified": 0.0,
+          "record_count": 29
         },
         {
           "file": "nhl",
           "status": "OK",
           "size_kb": 70.1,
-          "last_modified": "2026-04-07T01:54:46.104078+00:00",
-          "hours_since_modified": 0.3,
+          "last_modified": "2026-04-07T01:45:13.871360+00:00",
+          "hours_since_modified": 8.0,
           "record_count": 765
         },
         {
           "file": "golf_shadow",
           "status": "OK",
           "size_kb": 238.1,
-          "last_modified": "2026-04-06T12:00:13.785486+00:00",
-          "hours_since_modified": 14.2,
+          "last_modified": "2026-04-06T12:12:32.366109+00:00",
+          "hours_since_modified": 21.5,
           "record_count": 10664
         },
         {
           "file": "soccer_canonical",
           "status": "OK",
-          "recent_30d": 125
+          "recent_30d": 113
+        },
+        {
+          "file": "f5_signals_sync",
+          "status": "DESYNC",
+          "json_count": 29,
+          "parquet_count": 52
+        },
+        {
+          "file": "v1_signals_sync",
+          "status": "DESYNC",
+          "json_count": 30,
+          "parquet_count": 53
         }
       ]
     },
@@ -53,10 +131,24 @@
       "status": "YELLOW",
       "gaps": [
         {
+          "sport": "mlb_v1",
+          "count": 2,
+          "dates": [
+            "2026-03-31"
+          ]
+        },
+        {
           "sport": "mlb_f5",
           "count": 4,
           "dates": [
             "2026-03-31"
+          ]
+        },
+        {
+          "sport": "nba",
+          "count": 1,
+          "dates": [
+            "2026-04-05"
           ]
         }
       ]
@@ -67,39 +159,44 @@
     },
     "odds_api": {
       "status": "GREEN",
-      "credits_remaining": 4918513
+      "credits_remaining": 4918429
     },
     "dashboard": {
       "status": "GREEN",
-      "last_push": "2026-04-06 22:03:30 -0400",
-      "hours_ago": 4.1
+      "last_push": "2026-04-07 05:42:12 -0400",
+      "hours_ago": 4.0
     },
     "signal_activity": {
       "mlb": {
-        "last_7_days": 11,
+        "last_7_days": 3,
         "today": 1
       },
       "nba": {
         "last_7_days": 7,
-        "today": 2
+        "today": 0
       },
       "nhl": {
         "last_7_days": 0,
         "today": 0
       },
       "golf": {
-        "last_7_days": 7308,
+        "last_7_days": 2631,
         "today": 0
       }
     },
     "nba_macbook_sync": {
       "status": "GREEN",
-      "last_sync": "2026-04-06T11:01:10.047312+00:00",
-      "hours_ago": 15.1
+      "last_sync": "2026-04-06T12:12:32.376109+00:00",
+      "hours_ago": 21.5
     }
   },
   "warnings": [
-    "Ungraded signals: mlb_f5 (4 gaps)"
+    "Cron log missing: nrfi_helper",
+    "f5_signals JSON/parquet out of sync: JSON=29 parquet=52",
+    "v1_signals JSON/parquet out of sync: JSON=30 parquet=53",
+    "Ungraded signals: mlb_v1 (2 gaps)",
+    "Ungraded signals: mlb_f5 (4 gaps)",
+    "Ungraded signals: nba (1 gaps)"
   ],
   "errors": []
 }
