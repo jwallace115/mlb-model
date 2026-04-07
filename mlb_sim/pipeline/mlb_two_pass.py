@@ -196,6 +196,13 @@ def run_prelim(game_date: str) -> None:
     except Exception as e:
         logger.warning(f"KP04 shadow grading failed (non-fatal): {e}")
 
+    # Step 1e: Grade shadow signals (ST02, ADJ_CONTACT, ADJ_HH, adj_k_rate_last3)
+    try:
+        from mlb_sim.pipeline.shadow_signals import grade_shadow_signals
+        grade_shadow_signals()
+    except Exception as e:
+        logger.warning(f"Shadow signals grading failed (non-fatal): {e}")
+
     # Step 2: Invalidate any stale/poisoned caches from prior runs
     invalidate_stale_cache(game_date)
 

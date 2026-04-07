@@ -11,7 +11,11 @@
     "away_team": "TBR",
     "market_line": 7.5,
     "model_projection": 8.42,
-    "logged_at": "2026-03-28T13:10:58.709714"
+    "logged_at": "2026-03-28T13:10:58.709714",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823082,
@@ -27,7 +31,11 @@
     "model_projection": 8.42,
     "home_pitcher_value": 0.037263,
     "away_pitcher_value": 0.009596,
-    "logged_at": "2026-03-28T13:10:58.709714"
+    "logged_at": "2026-03-28T13:10:58.709714",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823082,
@@ -43,7 +51,11 @@
     "model_projection": 8.42,
     "home_pitcher_value": -0.07519,
     "away_pitcher_value": -0.001099,
-    "logged_at": "2026-03-28T13:10:58.709714"
+    "logged_at": "2026-03-28T13:10:58.709714",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823082,
@@ -59,7 +71,11 @@
     "model_projection": 8.42,
     "home_pitcher_value": -0.101096,
     "away_pitcher_value": 0.059493,
-    "logged_at": "2026-03-28T13:10:58.709714"
+    "logged_at": "2026-03-28T13:10:58.709714",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824701,
@@ -73,7 +89,11 @@
     "away_team": "WSN",
     "market_line": 9.0,
     "model_projection": 9.41,
-    "logged_at": "2026-03-28T13:11:01.447187"
+    "logged_at": "2026-03-28T13:11:01.447187",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824701,
@@ -89,7 +109,11 @@
     "model_projection": 9.41,
     "home_pitcher_value": 0.124512,
     "away_pitcher_value": 0.011436,
-    "logged_at": "2026-03-28T13:11:01.447187"
+    "logged_at": "2026-03-28T13:11:01.447187",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824701,
@@ -105,7 +129,11 @@
     "model_projection": 9.41,
     "home_pitcher_value": -0.059751,
     "away_pitcher_value": -0.015541,
-    "logged_at": "2026-03-28T13:11:01.447187"
+    "logged_at": "2026-03-28T13:11:01.447187",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824701,
@@ -121,7 +149,11 @@
     "model_projection": 9.41,
     "home_pitcher_value": 0.000614,
     "away_pitcher_value": -0.074299,
-    "logged_at": "2026-03-28T13:11:01.447187"
+    "logged_at": "2026-03-28T13:11:01.447187",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822838,
@@ -135,7 +167,11 @@
     "away_team": "OAK",
     "market_line": 8.0,
     "model_projection": 8.4,
-    "logged_at": "2026-03-28T13:11:03.172457"
+    "logged_at": "2026-03-28T13:11:03.172457",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822838,
@@ -151,7 +187,11 @@
     "model_projection": 8.4,
     "home_pitcher_value": 0.043122,
     "away_pitcher_value": -0.03433,
-    "logged_at": "2026-03-28T13:11:03.172457"
+    "logged_at": "2026-03-28T13:11:03.172457",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 822838,
@@ -167,7 +207,11 @@
     "model_projection": 8.4,
     "home_pitcher_value": 0.193512,
     "away_pitcher_value": 0.029646,
-    "logged_at": "2026-03-28T13:11:03.172457"
+    "logged_at": "2026-03-28T13:11:03.172457",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 822838,
@@ -183,7 +227,11 @@
     "model_projection": 8.4,
     "home_pitcher_value": -0.041622,
     "away_pitcher_value": -0.057383,
-    "logged_at": "2026-03-28T13:11:03.172457"
+    "logged_at": "2026-03-28T13:11:03.172457",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824862,
@@ -197,7 +245,11 @@
     "away_team": "MIN",
     "market_line": 7.5,
     "model_projection": 8.35,
-    "logged_at": "2026-03-28T13:11:05.148642"
+    "logged_at": "2026-03-28T13:11:05.148642",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824862,
@@ -213,7 +265,11 @@
     "model_projection": 8.35,
     "home_pitcher_value": 0.093826,
     "away_pitcher_value": -0.063613,
-    "logged_at": "2026-03-28T13:11:05.148642"
+    "logged_at": "2026-03-28T13:11:05.148642",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824862,
@@ -229,7 +285,11 @@
     "model_projection": 8.35,
     "home_pitcher_value": -0.016179,
     "away_pitcher_value": -0.105195,
-    "logged_at": "2026-03-28T13:11:05.148642"
+    "logged_at": "2026-03-28T13:11:05.148642",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824862,
@@ -245,7 +305,11 @@
     "model_projection": 8.35,
     "home_pitcher_value": 0.062493,
     "away_pitcher_value": -0.057515,
-    "logged_at": "2026-03-28T13:11:05.148642"
+    "logged_at": "2026-03-28T13:11:05.148642",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823488,
@@ -259,7 +323,11 @@
     "away_team": "TEX",
     "market_line": 7.0,
     "model_projection": 8.58,
-    "logged_at": "2026-03-28T13:11:07.082804"
+    "logged_at": "2026-03-28T13:11:07.082804",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823488,
@@ -275,7 +343,11 @@
     "model_projection": 8.58,
     "home_pitcher_value": 0.030486,
     "away_pitcher_value": 0.091636,
-    "logged_at": "2026-03-28T13:11:07.082804"
+    "logged_at": "2026-03-28T13:11:07.082804",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823488,
@@ -291,7 +363,11 @@
     "model_projection": 8.58,
     "home_pitcher_value": -0.087062,
     "away_pitcher_value": -0.056498,
-    "logged_at": "2026-03-28T13:11:07.082804"
+    "logged_at": "2026-03-28T13:11:07.082804",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823488,
@@ -307,7 +383,11 @@
     "model_projection": 8.58,
     "home_pitcher_value": 0.00927,
     "away_pitcher_value": -0.101589,
-    "logged_at": "2026-03-28T13:11:07.082804"
+    "logged_at": "2026-03-28T13:11:07.082804",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824540,
@@ -321,7 +401,11 @@
     "away_team": "BOS",
     "market_line": 7.5,
     "model_projection": 8.92,
-    "logged_at": "2026-03-28T13:11:09.132832"
+    "logged_at": "2026-03-28T13:11:09.132832",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824540,
@@ -337,7 +421,11 @@
     "model_projection": 8.92,
     "home_pitcher_value": 0.031716,
     "away_pitcher_value": 0.062155,
-    "logged_at": "2026-03-28T13:11:09.132832"
+    "logged_at": "2026-03-28T13:11:09.132832",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824540,
@@ -353,7 +441,11 @@
     "model_projection": 8.92,
     "home_pitcher_value": -0.016763,
     "away_pitcher_value": -0.099313,
-    "logged_at": "2026-03-28T13:11:09.132832"
+    "logged_at": "2026-03-28T13:11:09.132832",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824540,
@@ -369,7 +461,11 @@
     "model_projection": 8.92,
     "home_pitcher_value": -0.085914,
     "away_pitcher_value": 0.096692,
-    "logged_at": "2026-03-28T13:11:09.132832"
+    "logged_at": "2026-03-28T13:11:09.132832",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823651,
@@ -383,7 +479,11 @@
     "away_team": "PIT",
     "market_line": 8.0,
     "model_projection": 8.07,
-    "logged_at": "2026-03-28T13:11:10.822711"
+    "logged_at": "2026-03-28T13:11:10.822711",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823651,
@@ -399,7 +499,11 @@
     "model_projection": 8.07,
     "home_pitcher_value": -0.025906,
     "away_pitcher_value": 0.050377,
-    "logged_at": "2026-03-28T13:11:10.822711"
+    "logged_at": "2026-03-28T13:11:10.822711",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823651,
@@ -415,7 +519,11 @@
     "model_projection": 8.07,
     "home_pitcher_value": 0.105365,
     "away_pitcher_value": -0.128553,
-    "logged_at": "2026-03-28T13:11:10.822711"
+    "logged_at": "2026-03-28T13:11:10.822711",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823651,
@@ -431,7 +539,11 @@
     "model_projection": 8.07,
     "home_pitcher_value": -0.057822,
     "away_pitcher_value": -0.068437,
-    "logged_at": "2026-03-28T13:11:10.822711"
+    "logged_at": "2026-03-28T13:11:10.822711",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823892,
@@ -445,7 +557,11 @@
     "away_team": "COL",
     "market_line": 7.5,
     "model_projection": 8.22,
-    "logged_at": "2026-03-28T13:11:12.787636"
+    "logged_at": "2026-03-28T13:11:12.787636",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823892,
@@ -461,7 +577,11 @@
     "model_projection": 8.22,
     "home_pitcher_value": 0.070941,
     "away_pitcher_value": -0.050491,
-    "logged_at": "2026-03-28T13:11:12.787636"
+    "logged_at": "2026-03-28T13:11:12.787636",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823892,
@@ -477,7 +597,11 @@
     "model_projection": 8.22,
     "home_pitcher_value": -0.114464,
     "away_pitcher_value": -0.066304,
-    "logged_at": "2026-03-28T13:11:12.787636"
+    "logged_at": "2026-03-28T13:11:12.787636",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823892,
@@ -493,7 +617,11 @@
     "model_projection": 8.22,
     "home_pitcher_value": 0.12591,
     "away_pitcher_value": -0.068164,
-    "logged_at": "2026-03-28T13:11:12.787636"
+    "logged_at": "2026-03-28T13:11:12.787636",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824213,
@@ -507,7 +635,11 @@
     "away_team": "LAA",
     "market_line": 8.5,
     "model_projection": 8.41,
-    "logged_at": "2026-03-28T13:11:14.905027"
+    "logged_at": "2026-03-28T13:11:14.905027",
+    "actual_total": 20.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824213,
@@ -523,7 +655,11 @@
     "model_projection": 8.41,
     "home_pitcher_value": 0.008699,
     "away_pitcher_value": -0.099413,
-    "logged_at": "2026-03-28T13:11:14.905027"
+    "logged_at": "2026-03-28T13:11:14.905027",
+    "actual_total": 20.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824213,
@@ -539,7 +675,11 @@
     "model_projection": 8.41,
     "home_pitcher_value": 0.13283,
     "away_pitcher_value": -0.074358,
-    "logged_at": "2026-03-28T13:11:14.905027"
+    "logged_at": "2026-03-28T13:11:14.905027",
+    "actual_total": 20.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824213,
@@ -555,7 +695,11 @@
     "model_projection": 8.41,
     "home_pitcher_value": -0.041024,
     "away_pitcher_value": 0.006458,
-    "logged_at": "2026-03-28T13:11:14.905027"
+    "logged_at": "2026-03-28T13:11:14.905027",
+    "actual_total": 20.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823811,
@@ -569,7 +713,11 @@
     "away_team": "CHW",
     "market_line": 8.5,
     "model_projection": 8.66,
-    "logged_at": "2026-03-28T13:11:16.830816"
+    "logged_at": "2026-03-28T13:11:16.830816",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823811,
@@ -585,7 +733,11 @@
     "model_projection": 8.66,
     "home_pitcher_value": 0.027114,
     "away_pitcher_value": -0.023944,
-    "logged_at": "2026-03-28T13:11:16.830816"
+    "logged_at": "2026-03-28T13:11:16.830816",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823811,
@@ -601,7 +753,11 @@
     "model_projection": 8.66,
     "home_pitcher_value": 0.108949,
     "away_pitcher_value": -0.085618,
-    "logged_at": "2026-03-28T13:11:16.830816"
+    "logged_at": "2026-03-28T13:11:16.830816",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823811,
@@ -617,7 +773,11 @@
     "model_projection": 8.66,
     "home_pitcher_value": 0.013385,
     "away_pitcher_value": 0.040377,
-    "logged_at": "2026-03-28T13:11:16.830816"
+    "logged_at": "2026-03-28T13:11:16.830816",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824945,
@@ -631,7 +791,11 @@
     "away_team": "KCR",
     "market_line": 8.5,
     "model_projection": 8.8,
-    "logged_at": "2026-03-28T13:11:18.508823"
+    "logged_at": "2026-03-28T13:11:18.508823",
+    "actual_total": 8.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824945,
@@ -647,7 +811,11 @@
     "model_projection": 8.8,
     "home_pitcher_value": 0.056195,
     "away_pitcher_value": -0.098598,
-    "logged_at": "2026-03-28T13:11:18.508823"
+    "logged_at": "2026-03-28T13:11:18.508823",
+    "actual_total": 8.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824945,
@@ -663,7 +831,11 @@
     "model_projection": 8.8,
     "home_pitcher_value": -0.19098,
     "away_pitcher_value": -0.01316,
-    "logged_at": "2026-03-28T13:11:18.508823"
+    "logged_at": "2026-03-28T13:11:18.508823",
+    "actual_total": 8.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824945,
@@ -679,7 +851,11 @@
     "model_projection": 8.8,
     "home_pitcher_value": 0.123028,
     "away_pitcher_value": -0.101587,
-    "logged_at": "2026-03-28T13:11:18.508823"
+    "logged_at": "2026-03-28T13:11:18.508823",
+    "actual_total": 8.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823241,
@@ -693,7 +869,11 @@
     "away_team": "NYY",
     "market_line": 8.5,
     "model_projection": 8.88,
-    "logged_at": "2026-03-28T13:11:20.356066"
+    "logged_at": "2026-03-28T13:11:20.356066",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823241,
@@ -709,7 +889,11 @@
     "model_projection": 8.88,
     "home_pitcher_value": -0.02353,
     "away_pitcher_value": 0.024056,
-    "logged_at": "2026-03-28T13:11:20.356066"
+    "logged_at": "2026-03-28T13:11:20.356066",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823241,
@@ -725,7 +909,11 @@
     "model_projection": 8.88,
     "home_pitcher_value": -0.020399,
     "away_pitcher_value": 0.024501,
-    "logged_at": "2026-03-28T13:11:20.356066"
+    "logged_at": "2026-03-28T13:11:20.356066",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823241,
@@ -741,7 +929,11 @@
     "model_projection": 8.88,
     "home_pitcher_value": -0.010978,
     "away_pitcher_value": -0.118962,
-    "logged_at": "2026-03-28T13:11:20.356066"
+    "logged_at": "2026-03-28T13:11:20.356066",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823323,
@@ -755,7 +947,11 @@
     "away_team": "DET",
     "market_line": 8.0,
     "model_projection": 8.7,
-    "logged_at": "2026-03-28T13:11:22.381485"
+    "logged_at": "2026-03-28T13:11:22.381485",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823323,
@@ -771,7 +967,11 @@
     "model_projection": 8.7,
     "home_pitcher_value": -0.031204,
     "away_pitcher_value": 0.062152,
-    "logged_at": "2026-03-28T13:11:22.381485"
+    "logged_at": "2026-03-28T13:11:22.381485",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823323,
@@ -787,7 +987,11 @@
     "model_projection": 8.7,
     "home_pitcher_value": 0.081168,
     "away_pitcher_value": 0.009153,
-    "logged_at": "2026-03-28T13:11:22.381485"
+    "logged_at": "2026-03-28T13:11:22.381485",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823323,
@@ -803,7 +1007,11 @@
     "model_projection": 8.7,
     "home_pitcher_value": -0.01732,
     "away_pitcher_value": -0.030292,
-    "logged_at": "2026-03-28T13:11:22.381485"
+    "logged_at": "2026-03-28T13:11:22.381485",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823973,
@@ -817,7 +1025,11 @@
     "away_team": "ARI",
     "market_line": 9.0,
     "model_projection": 8.51,
-    "logged_at": "2026-03-28T13:11:24.517308"
+    "logged_at": "2026-03-28T13:11:24.517308",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823973,
@@ -833,7 +1045,11 @@
     "model_projection": 8.51,
     "home_pitcher_value": 0.133051,
     "away_pitcher_value": 0.045353,
-    "logged_at": "2026-03-28T13:11:24.517308"
+    "logged_at": "2026-03-28T13:11:24.517308",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823973,
@@ -849,7 +1065,11 @@
     "model_projection": 8.51,
     "home_pitcher_value": 0.024334,
     "away_pitcher_value": 0.062091,
-    "logged_at": "2026-03-28T13:11:24.517308"
+    "logged_at": "2026-03-28T13:11:24.517308",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823973,
@@ -865,7 +1085,11 @@
     "model_projection": 8.51,
     "home_pitcher_value": 0.057031,
     "away_pitcher_value": -0.070765,
-    "logged_at": "2026-03-28T13:11:24.517308"
+    "logged_at": "2026-03-28T13:11:24.517308",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823161,
@@ -879,7 +1103,11 @@
     "away_team": "CLE",
     "market_line": 7.0,
     "model_projection": 7.01,
-    "logged_at": "2026-03-28T13:11:26.598179"
+    "logged_at": "2026-03-28T13:11:26.598179",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823161,
@@ -895,7 +1123,11 @@
     "model_projection": 7.01,
     "home_pitcher_value": 0.06713,
     "away_pitcher_value": 0.051658,
-    "logged_at": "2026-03-28T13:11:26.598179"
+    "logged_at": "2026-03-28T13:11:26.598179",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823161,
@@ -911,7 +1143,11 @@
     "model_projection": 7.01,
     "home_pitcher_value": -0.043757,
     "away_pitcher_value": 0.090081,
-    "logged_at": "2026-03-28T13:11:26.598179"
+    "logged_at": "2026-03-28T13:11:26.598179",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823161,
@@ -927,7 +1163,11 @@
     "model_projection": 7.01,
     "home_pitcher_value": 0.096209,
     "away_pitcher_value": -0.044875,
-    "logged_at": "2026-03-28T13:11:26.598179"
+    "logged_at": "2026-03-28T13:11:26.598179",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824864,
@@ -941,7 +1181,11 @@
     "away_team": "MIN",
     "market_line": 8.5,
     "model_projection": 7.14,
-    "logged_at": "2026-03-29T07:00:09.389237"
+    "logged_at": "2026-03-29T07:00:09.389237",
+    "actual_total": 14.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824864,
@@ -957,7 +1201,11 @@
     "model_projection": 7.14,
     "home_pitcher_value": -0.002101,
     "away_pitcher_value": 0.009985,
-    "logged_at": "2026-03-29T07:00:09.389237"
+    "logged_at": "2026-03-29T07:00:09.389237",
+    "actual_total": 14.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824864,
@@ -973,7 +1221,11 @@
     "model_projection": 7.14,
     "home_pitcher_value": 0.011798,
     "away_pitcher_value": 0.006248,
-    "logged_at": "2026-03-29T07:00:09.389237"
+    "logged_at": "2026-03-29T07:00:09.389237",
+    "actual_total": 14.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824864,
@@ -989,7 +1241,11 @@
     "model_projection": 7.14,
     "home_pitcher_value": 0.046987,
     "away_pitcher_value": -0.001964,
-    "logged_at": "2026-03-29T07:00:09.389237"
+    "logged_at": "2026-03-29T07:00:09.389237",
+    "actual_total": 14.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823487,
@@ -1003,7 +1259,11 @@
     "away_team": "TEX",
     "market_line": 8.0,
     "model_projection": 6.76,
-    "logged_at": "2026-03-29T07:00:16.225792"
+    "logged_at": "2026-03-29T07:00:16.225792",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823487,
@@ -1019,7 +1279,11 @@
     "model_projection": 6.76,
     "home_pitcher_value": 0.059531,
     "away_pitcher_value": 0.095161,
-    "logged_at": "2026-03-29T07:00:16.225792"
+    "logged_at": "2026-03-29T07:00:16.225792",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823487,
@@ -1035,7 +1299,11 @@
     "model_projection": 6.76,
     "home_pitcher_value": 0.150687,
     "away_pitcher_value": -0.024954,
-    "logged_at": "2026-03-29T07:00:16.225792"
+    "logged_at": "2026-03-29T07:00:16.225792",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823487,
@@ -1051,7 +1319,11 @@
     "model_projection": 6.76,
     "home_pitcher_value": 0.058291,
     "away_pitcher_value": -0.03988,
-    "logged_at": "2026-03-29T07:00:16.225792"
+    "logged_at": "2026-03-29T07:00:16.225792",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824944,
@@ -1065,7 +1337,11 @@
     "away_team": "KCR",
     "market_line": 8.0,
     "model_projection": 9.44,
-    "logged_at": "2026-03-29T07:00:19.954182"
+    "logged_at": "2026-03-29T07:00:19.954182",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824944,
@@ -1081,7 +1357,11 @@
     "model_projection": 9.44,
     "home_pitcher_value": -0.06077,
     "away_pitcher_value": 0.0169,
-    "logged_at": "2026-03-29T07:00:19.954182"
+    "logged_at": "2026-03-29T07:00:19.954182",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824944,
@@ -1097,7 +1377,11 @@
     "model_projection": 9.44,
     "home_pitcher_value": 0.091681,
     "away_pitcher_value": 0.017486,
-    "logged_at": "2026-03-29T07:00:19.954182"
+    "logged_at": "2026-03-29T07:00:19.954182",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824944,
@@ -1113,7 +1397,11 @@
     "model_projection": 9.44,
     "home_pitcher_value": -0.132174,
     "away_pitcher_value": -0.077848,
-    "logged_at": "2026-03-29T07:00:19.954182"
+    "logged_at": "2026-03-29T07:00:19.954182",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822837,
@@ -1127,7 +1415,11 @@
     "away_team": "OAK",
     "market_line": 8.5,
     "model_projection": 8.01,
-    "logged_at": "2026-03-29T07:00:23.026576"
+    "logged_at": "2026-03-29T07:00:23.026576",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822837,
@@ -1143,7 +1435,11 @@
     "model_projection": 8.01,
     "home_pitcher_value": -0.022805,
     "away_pitcher_value": -0.012805,
-    "logged_at": "2026-03-29T07:00:23.026576"
+    "logged_at": "2026-03-29T07:00:23.026576",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822837,
@@ -1159,7 +1455,11 @@
     "model_projection": 8.01,
     "home_pitcher_value": -0.029576,
     "away_pitcher_value": -0.016524,
-    "logged_at": "2026-03-29T07:00:23.026576"
+    "logged_at": "2026-03-29T07:00:23.026576",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822837,
@@ -1175,7 +1475,11 @@
     "model_projection": 8.01,
     "home_pitcher_value": -0.076905,
     "away_pitcher_value": -0.15361,
-    "logged_at": "2026-03-29T07:00:23.026576"
+    "logged_at": "2026-03-29T07:00:23.026576",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824538,
@@ -1189,7 +1493,11 @@
     "away_team": "BOS",
     "market_line": 8.0,
     "model_projection": 8.45,
-    "logged_at": "2026-03-29T07:00:25.653493"
+    "logged_at": "2026-03-29T07:00:25.653493",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824538,
@@ -1205,7 +1513,11 @@
     "model_projection": 8.45,
     "home_pitcher_value": -0.027972,
     "away_pitcher_value": 0.036045,
-    "logged_at": "2026-03-29T07:00:25.653493"
+    "logged_at": "2026-03-29T07:00:25.653493",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824538,
@@ -1221,7 +1533,11 @@
     "model_projection": 8.45,
     "home_pitcher_value": -0.058953,
     "away_pitcher_value": -0.027181,
-    "logged_at": "2026-03-29T07:00:25.653493"
+    "logged_at": "2026-03-29T07:00:25.653493",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824538,
@@ -1237,7 +1553,11 @@
     "model_projection": 8.45,
     "home_pitcher_value": -0.067113,
     "away_pitcher_value": 0.105299,
-    "logged_at": "2026-03-29T07:00:25.653493"
+    "logged_at": "2026-03-29T07:00:25.653493",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823647,
@@ -1251,7 +1571,11 @@
     "away_team": "PIT",
     "market_line": 7.5,
     "model_projection": 7.56,
-    "logged_at": "2026-03-29T07:00:27.943653"
+    "logged_at": "2026-03-29T07:00:27.943653",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823647,
@@ -1267,7 +1591,11 @@
     "model_projection": 7.56,
     "home_pitcher_value": 0.026768,
     "away_pitcher_value": 0.013214,
-    "logged_at": "2026-03-29T07:00:27.943653"
+    "logged_at": "2026-03-29T07:00:27.943653",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823647,
@@ -1283,7 +1611,11 @@
     "model_projection": 7.56,
     "home_pitcher_value": -0.001099,
     "away_pitcher_value": -0.061939,
-    "logged_at": "2026-03-29T07:00:27.943653"
+    "logged_at": "2026-03-29T07:00:27.943653",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823647,
@@ -1299,7 +1631,11 @@
     "model_projection": 7.56,
     "home_pitcher_value": 0.007419,
     "away_pitcher_value": -0.030877,
-    "logged_at": "2026-03-29T07:00:27.943653"
+    "logged_at": "2026-03-29T07:00:27.943653",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823891,
@@ -1313,7 +1649,11 @@
     "away_team": "COL",
     "market_line": 8.0,
     "model_projection": 7.48,
-    "logged_at": "2026-03-29T07:00:30.697917"
+    "logged_at": "2026-03-29T07:00:30.697917",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823891,
@@ -1329,7 +1669,11 @@
     "model_projection": 7.48,
     "home_pitcher_value": -0.026557,
     "away_pitcher_value": 0.046553,
-    "logged_at": "2026-03-29T07:00:30.697917"
+    "logged_at": "2026-03-29T07:00:30.697917",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823891,
@@ -1345,7 +1689,11 @@
     "model_projection": 7.48,
     "home_pitcher_value": -0.052529,
     "away_pitcher_value": -0.020742,
-    "logged_at": "2026-03-29T07:00:30.697917"
+    "logged_at": "2026-03-29T07:00:30.697917",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823891,
@@ -1361,7 +1709,11 @@
     "model_projection": 7.48,
     "home_pitcher_value": -0.06793,
     "away_pitcher_value": -0.084255,
-    "logged_at": "2026-03-29T07:00:30.697917"
+    "logged_at": "2026-03-29T07:00:30.697917",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824215,
@@ -1375,7 +1727,11 @@
     "away_team": "LAA",
     "market_line": 9.0,
     "model_projection": 9.15,
-    "logged_at": "2026-03-29T07:00:33.024514"
+    "logged_at": "2026-03-29T07:00:33.024514",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824215,
@@ -1391,7 +1747,11 @@
     "model_projection": 9.15,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.02531,
-    "logged_at": "2026-03-29T07:00:33.024514"
+    "logged_at": "2026-03-29T07:00:33.024514",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824215,
@@ -1407,7 +1767,11 @@
     "model_projection": 9.15,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.15171,
-    "logged_at": "2026-03-29T07:00:33.024514"
+    "logged_at": "2026-03-29T07:00:33.024514",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824215,
@@ -1423,7 +1787,11 @@
     "model_projection": 9.15,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.168044,
-    "logged_at": "2026-03-29T07:00:33.024514"
+    "logged_at": "2026-03-29T07:00:33.024514",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823810,
@@ -1437,7 +1805,11 @@
     "away_team": "CHW",
     "market_line": 7.5,
     "model_projection": 9.95,
-    "logged_at": "2026-03-29T07:00:34.813991"
+    "logged_at": "2026-03-29T07:00:34.813991",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823810,
@@ -1453,7 +1825,11 @@
     "model_projection": 9.95,
     "home_pitcher_value": 0.038292,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-29T07:00:34.813991"
+    "logged_at": "2026-03-29T07:00:34.813991",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823810,
@@ -1469,7 +1845,11 @@
     "model_projection": 9.95,
     "home_pitcher_value": -0.044185,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-29T07:00:34.813991"
+    "logged_at": "2026-03-29T07:00:34.813991",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823810,
@@ -1485,7 +1865,11 @@
     "model_projection": 9.95,
     "home_pitcher_value": -0.024702,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-29T07:00:34.813991"
+    "logged_at": "2026-03-29T07:00:34.813991",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823079,
@@ -1499,7 +1883,11 @@
     "away_team": "TBR",
     "market_line": 8.0,
     "model_projection": 9.8,
-    "logged_at": "2026-03-29T07:00:36.580643"
+    "logged_at": "2026-03-29T07:00:36.580643",
+    "actual_total": 18.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823079,
@@ -1515,7 +1903,11 @@
     "model_projection": 9.8,
     "home_pitcher_value": -0.011812,
     "away_pitcher_value": -9.7e-05,
-    "logged_at": "2026-03-29T07:00:36.580643"
+    "logged_at": "2026-03-29T07:00:36.580643",
+    "actual_total": 18.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823079,
@@ -1531,7 +1923,11 @@
     "model_projection": 9.8,
     "home_pitcher_value": -0.128678,
     "away_pitcher_value": -0.018361,
-    "logged_at": "2026-03-29T07:00:36.580643"
+    "logged_at": "2026-03-29T07:00:36.580643",
+    "actual_total": 18.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823079,
@@ -1547,7 +1943,11 @@
     "model_projection": 9.8,
     "home_pitcher_value": -0.025022,
     "away_pitcher_value": -0.026217,
-    "logged_at": "2026-03-29T07:00:36.580643"
+    "logged_at": "2026-03-29T07:00:36.580643",
+    "actual_total": 18.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824700,
@@ -1561,7 +1961,11 @@
     "away_team": "WSN",
     "market_line": 9.5,
     "model_projection": 11.03,
-    "logged_at": "2026-03-29T07:00:38.355201"
+    "logged_at": "2026-03-29T07:00:38.355201",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824700,
@@ -1577,7 +1981,11 @@
     "model_projection": 11.03,
     "home_pitcher_value": -0.000756,
     "away_pitcher_value": -0.031788,
-    "logged_at": "2026-03-29T07:00:38.355201"
+    "logged_at": "2026-03-29T07:00:38.355201",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824700,
@@ -1593,7 +2001,11 @@
     "model_projection": 11.03,
     "home_pitcher_value": -0.11329,
     "away_pitcher_value": -0.00879,
-    "logged_at": "2026-03-29T07:00:38.355201"
+    "logged_at": "2026-03-29T07:00:38.355201",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824700,
@@ -1609,7 +2021,11 @@
     "model_projection": 11.03,
     "home_pitcher_value": 0.004466,
     "away_pitcher_value": -0.043929,
-    "logged_at": "2026-03-29T07:00:38.355201"
+    "logged_at": "2026-03-29T07:00:38.355201",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823160,
@@ -1623,7 +2039,11 @@
     "away_team": "CLE",
     "market_line": 7.5,
     "model_projection": 8.91,
-    "logged_at": "2026-03-29T07:00:40.759456"
+    "logged_at": "2026-03-29T07:00:40.759456",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823160,
@@ -1639,7 +2059,11 @@
     "model_projection": 8.91,
     "home_pitcher_value": 0.005877,
     "away_pitcher_value": 0.150993,
-    "logged_at": "2026-03-29T07:00:40.759456"
+    "logged_at": "2026-03-29T07:00:40.759456",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823160,
@@ -1655,7 +2079,11 @@
     "model_projection": 8.91,
     "home_pitcher_value": -0.142582,
     "away_pitcher_value": -0.046734,
-    "logged_at": "2026-03-29T07:00:40.759456"
+    "logged_at": "2026-03-29T07:00:40.759456",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823160,
@@ -1671,7 +2099,11 @@
     "model_projection": 8.91,
     "home_pitcher_value": -0.109166,
     "away_pitcher_value": -0.016942,
-    "logged_at": "2026-03-29T07:00:40.759456"
+    "logged_at": "2026-03-29T07:00:40.759456",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824135,
@@ -1685,7 +2117,11 @@
     "away_team": "MIN",
     "market_line": 9.5,
     "model_projection": 8.02,
-    "logged_at": "2026-03-30T07:00:12.033452"
+    "logged_at": "2026-03-30T07:00:12.033452",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824135,
@@ -1701,7 +2137,11 @@
     "model_projection": 8.02,
     "home_pitcher_value": 0.031226,
     "away_pitcher_value": 0.070453,
-    "logged_at": "2026-03-30T07:00:12.033452"
+    "logged_at": "2026-03-30T07:00:12.033452",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824135,
@@ -1717,7 +2157,11 @@
     "model_projection": 8.02,
     "home_pitcher_value": 0.028663,
     "away_pitcher_value": 0.02729,
-    "logged_at": "2026-03-30T07:00:12.033452"
+    "logged_at": "2026-03-30T07:00:12.033452",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824135,
@@ -1733,7 +2177,11 @@
     "model_projection": 8.02,
     "home_pitcher_value": -0.064842,
     "away_pitcher_value": 0.017746,
-    "logged_at": "2026-03-30T07:00:12.033452"
+    "logged_at": "2026-03-30T07:00:12.033452",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824863,
@@ -1747,7 +2195,11 @@
     "away_team": "TEX",
     "market_line": 9.0,
     "model_projection": 8.39,
-    "logged_at": "2026-03-30T07:00:17.419430"
+    "logged_at": "2026-03-30T07:00:17.419430",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824863,
@@ -1763,7 +2215,11 @@
     "model_projection": 8.39,
     "home_pitcher_value": 0.095555,
     "away_pitcher_value": -0.015257,
-    "logged_at": "2026-03-30T07:00:17.419430"
+    "logged_at": "2026-03-30T07:00:17.419430",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824863,
@@ -1779,7 +2235,11 @@
     "model_projection": 8.39,
     "home_pitcher_value": -0.014308,
     "away_pitcher_value": -0.103011,
-    "logged_at": "2026-03-30T07:00:17.419430"
+    "logged_at": "2026-03-30T07:00:17.419430",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824863,
@@ -1795,7 +2255,11 @@
     "model_projection": 8.39,
     "home_pitcher_value": -0.045597,
     "away_pitcher_value": -0.065955,
-    "logged_at": "2026-03-30T07:00:17.419430"
+    "logged_at": "2026-03-30T07:00:17.419430",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824539,
@@ -1809,7 +2273,11 @@
     "away_team": "PIT",
     "market_line": 8.0,
     "model_projection": 8.91,
-    "logged_at": "2026-03-30T07:00:20.865475"
+    "logged_at": "2026-03-30T07:00:20.865475",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824539,
@@ -1825,7 +2293,11 @@
     "model_projection": 8.91,
     "home_pitcher_value": 0.070292,
     "away_pitcher_value": 0.025363,
-    "logged_at": "2026-03-30T07:00:20.865475"
+    "logged_at": "2026-03-30T07:00:20.865475",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824539,
@@ -1841,7 +2313,11 @@
     "model_projection": 8.91,
     "home_pitcher_value": 0.017354,
     "away_pitcher_value": -0.004197,
-    "logged_at": "2026-03-30T07:00:20.865475"
+    "logged_at": "2026-03-30T07:00:20.865475",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824539,
@@ -1857,7 +2333,11 @@
     "model_projection": 8.91,
     "home_pitcher_value": 0.224996,
     "away_pitcher_value": -0.021007,
-    "logged_at": "2026-03-30T07:00:20.865475"
+    "logged_at": "2026-03-30T07:00:20.865475",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823484,
@@ -1871,7 +2351,11 @@
     "away_team": "WSN",
     "market_line": 9.0,
     "model_projection": 9.77,
-    "logged_at": "2026-03-30T07:00:23.784149"
+    "logged_at": "2026-03-30T07:00:23.784149",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823484,
@@ -1887,7 +2371,11 @@
     "model_projection": 9.77,
     "home_pitcher_value": -0.071523,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-30T07:00:23.784149"
+    "logged_at": "2026-03-30T07:00:23.784149",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823484,
@@ -1903,7 +2391,11 @@
     "model_projection": 9.77,
     "home_pitcher_value": -0.07114,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-30T07:00:23.784149"
+    "logged_at": "2026-03-30T07:00:23.784149",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823484,
@@ -1919,7 +2411,11 @@
     "model_projection": 9.77,
     "home_pitcher_value": -0.127375,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-30T07:00:23.784149"
+    "logged_at": "2026-03-30T07:00:23.784149",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823890,
@@ -1933,7 +2429,11 @@
     "away_team": "CHW",
     "market_line": 8.0,
     "model_projection": 8.98,
-    "logged_at": "2026-03-30T07:00:26.644828"
+    "logged_at": "2026-03-30T07:00:26.644828",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823890,
@@ -1949,7 +2449,11 @@
     "model_projection": 8.98,
     "home_pitcher_value": -0.052209,
     "away_pitcher_value": 0.046107,
-    "logged_at": "2026-03-30T07:00:26.644828"
+    "logged_at": "2026-03-30T07:00:26.644828",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823890,
@@ -1965,7 +2469,11 @@
     "model_projection": 8.98,
     "home_pitcher_value": 0.004037,
     "away_pitcher_value": 0.02487,
-    "logged_at": "2026-03-30T07:00:26.644828"
+    "logged_at": "2026-03-30T07:00:26.644828",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823890,
@@ -1981,7 +2489,11 @@
     "model_projection": 8.98,
     "home_pitcher_value": -0.153212,
     "away_pitcher_value": -0.110492,
-    "logged_at": "2026-03-30T07:00:26.644828"
+    "logged_at": "2026-03-30T07:00:26.644828",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822834,
@@ -1995,7 +2507,11 @@
     "away_team": "COL",
     "market_line": 8.5,
     "model_projection": 9.33,
-    "logged_at": "2026-03-30T07:00:29.131757"
+    "logged_at": "2026-03-30T07:00:29.131757",
+    "actual_total": 19.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822834,
@@ -2011,7 +2527,11 @@
     "model_projection": 9.33,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.090135,
-    "logged_at": "2026-03-30T07:00:29.131757"
+    "logged_at": "2026-03-30T07:00:29.131757",
+    "actual_total": 19.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822834,
@@ -2027,7 +2547,11 @@
     "model_projection": 9.33,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.047924,
-    "logged_at": "2026-03-30T07:00:29.131757"
+    "logged_at": "2026-03-30T07:00:29.131757",
+    "actual_total": 19.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822834,
@@ -2043,7 +2567,11 @@
     "model_projection": 9.33,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.111026,
-    "logged_at": "2026-03-30T07:00:29.131757"
+    "logged_at": "2026-03-30T07:00:29.131757",
+    "actual_total": 19.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824943,
@@ -2057,7 +2585,11 @@
     "away_team": "OAK",
     "market_line": 9.5,
     "model_projection": 8.34,
-    "logged_at": "2026-03-30T07:00:31.232619"
+    "logged_at": "2026-03-30T07:00:31.232619",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824943,
@@ -2073,7 +2605,11 @@
     "model_projection": 8.34,
     "home_pitcher_value": -0.033126,
     "away_pitcher_value": 0.065634,
-    "logged_at": "2026-03-30T07:00:31.232619"
+    "logged_at": "2026-03-30T07:00:31.232619",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824943,
@@ -2089,7 +2625,11 @@
     "model_projection": 8.34,
     "home_pitcher_value": -0.04059,
     "away_pitcher_value": 0.100687,
-    "logged_at": "2026-03-30T07:00:31.232619"
+    "logged_at": "2026-03-30T07:00:31.232619",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824943,
@@ -2105,7 +2645,11 @@
     "model_projection": 8.34,
     "home_pitcher_value": -0.006945,
     "away_pitcher_value": 0.091874,
-    "logged_at": "2026-03-30T07:00:31.232619"
+    "logged_at": "2026-03-30T07:00:31.232619",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824702,
@@ -2119,7 +2663,11 @@
     "away_team": "LAA",
     "market_line": 9.5,
     "model_projection": 9.61,
-    "logged_at": "2026-03-30T07:00:33.359367"
+    "logged_at": "2026-03-30T07:00:33.359367",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824702,
@@ -2135,7 +2683,11 @@
     "model_projection": 9.61,
     "home_pitcher_value": 0.041538,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-30T07:00:33.359367"
+    "logged_at": "2026-03-30T07:00:33.359367",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824702,
@@ -2151,7 +2703,11 @@
     "model_projection": 9.61,
     "home_pitcher_value": -0.218971,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-30T07:00:33.359367"
+    "logged_at": "2026-03-30T07:00:33.359367",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824702,
@@ -2167,7 +2723,11 @@
     "model_projection": 9.61,
     "home_pitcher_value": 0.0048,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-30T07:00:33.359367"
+    "logged_at": "2026-03-30T07:00:33.359367",
+    "actual_total": 9.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823809,
@@ -2181,7 +2741,11 @@
     "away_team": "TBR",
     "market_line": 8.0,
     "model_projection": 9.46,
-    "logged_at": "2026-03-30T07:00:35.217870"
+    "logged_at": "2026-03-30T07:00:35.217870",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823809,
@@ -2197,7 +2761,11 @@
     "model_projection": 9.46,
     "home_pitcher_value": -0.02326,
     "away_pitcher_value": -0.016617,
-    "logged_at": "2026-03-30T07:00:35.217870"
+    "logged_at": "2026-03-30T07:00:35.217870",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823809,
@@ -2213,7 +2781,11 @@
     "model_projection": 9.46,
     "home_pitcher_value": 0.111809,
     "away_pitcher_value": 0.097024,
-    "logged_at": "2026-03-30T07:00:35.217870"
+    "logged_at": "2026-03-30T07:00:35.217870",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823809,
@@ -2229,7 +2801,11 @@
     "model_projection": 9.46,
     "home_pitcher_value": -0.045398,
     "away_pitcher_value": -0.096868,
-    "logged_at": "2026-03-30T07:00:35.217870"
+    "logged_at": "2026-03-30T07:00:35.217870",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823080,
@@ -2243,7 +2819,11 @@
     "away_team": "NYM",
     "market_line": 9.0,
     "model_projection": 9.63,
-    "logged_at": "2026-03-30T07:00:37.011424"
+    "logged_at": "2026-03-30T07:00:37.011424",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823080,
@@ -2259,7 +2839,11 @@
     "model_projection": 9.63,
     "home_pitcher_value": null,
     "away_pitcher_value": 0.020171,
-    "logged_at": "2026-03-30T07:00:37.011424"
+    "logged_at": "2026-03-30T07:00:37.011424",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823080,
@@ -2275,7 +2859,11 @@
     "model_projection": 9.63,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.073866,
-    "logged_at": "2026-03-30T07:00:37.011424"
+    "logged_at": "2026-03-30T07:00:37.011424",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823080,
@@ -2291,7 +2879,11 @@
     "model_projection": 9.63,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.03463,
-    "logged_at": "2026-03-30T07:00:37.011424"
+    "logged_at": "2026-03-30T07:00:37.011424",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824214,
@@ -2305,7 +2897,11 @@
     "away_team": "BOS",
     "market_line": 8.5,
     "model_projection": 8.89,
-    "logged_at": "2026-03-30T07:00:38.679617"
+    "logged_at": "2026-03-30T07:00:38.679617",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824214,
@@ -2321,7 +2917,11 @@
     "model_projection": 8.89,
     "home_pitcher_value": -0.067363,
     "away_pitcher_value": 0.024909,
-    "logged_at": "2026-03-30T07:00:38.679617"
+    "logged_at": "2026-03-30T07:00:38.679617",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824214,
@@ -2337,7 +2937,11 @@
     "model_projection": 8.89,
     "home_pitcher_value": -0.228101,
     "away_pitcher_value": 0.001077,
-    "logged_at": "2026-03-30T07:00:38.679617"
+    "logged_at": "2026-03-30T07:00:38.679617",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824214,
@@ -2353,7 +2957,11 @@
     "model_projection": 8.89,
     "home_pitcher_value": -0.065733,
     "away_pitcher_value": 0.054817,
-    "logged_at": "2026-03-30T07:00:38.679617"
+    "logged_at": "2026-03-30T07:00:38.679617",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823320,
@@ -2367,7 +2975,11 @@
     "away_team": "SFG",
     "market_line": 8.0,
     "model_projection": 7.65,
-    "logged_at": "2026-03-30T07:00:40.146904"
+    "logged_at": "2026-03-30T07:00:40.146904",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823320,
@@ -2383,7 +2995,11 @@
     "model_projection": 7.65,
     "home_pitcher_value": 0.041984,
     "away_pitcher_value": -0.035622,
-    "logged_at": "2026-03-30T07:00:40.146904"
+    "logged_at": "2026-03-30T07:00:40.146904",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823320,
@@ -2399,7 +3015,11 @@
     "model_projection": 7.65,
     "home_pitcher_value": 0.055658,
     "away_pitcher_value": -0.013003,
-    "logged_at": "2026-03-30T07:00:40.146904"
+    "logged_at": "2026-03-30T07:00:40.146904",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823320,
@@ -2415,7 +3035,11 @@
     "model_projection": 7.65,
     "home_pitcher_value": -0.071964,
     "away_pitcher_value": 0.03358,
-    "logged_at": "2026-03-30T07:00:40.146904"
+    "logged_at": "2026-03-30T07:00:40.146904",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823159,
@@ -2429,7 +3053,11 @@
     "away_team": "NYY",
     "market_line": 7.5,
     "model_projection": 8.13,
-    "logged_at": "2026-03-30T07:00:41.648912"
+    "logged_at": "2026-03-30T07:00:41.648912",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823159,
@@ -2445,7 +3073,11 @@
     "model_projection": 8.13,
     "home_pitcher_value": 0.068336,
     "away_pitcher_value": -0.036142,
-    "logged_at": "2026-03-30T07:00:41.648912"
+    "logged_at": "2026-03-30T07:00:41.648912",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823159,
@@ -2461,7 +3093,11 @@
     "model_projection": 8.13,
     "home_pitcher_value": 0.134417,
     "away_pitcher_value": -0.099313,
-    "logged_at": "2026-03-30T07:00:41.648912"
+    "logged_at": "2026-03-30T07:00:41.648912",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823159,
@@ -2477,7 +3113,11 @@
     "model_projection": 8.13,
     "home_pitcher_value": -0.032642,
     "away_pitcher_value": -0.167884,
-    "logged_at": "2026-03-30T07:00:41.648912"
+    "logged_at": "2026-03-30T07:00:41.648912",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 825108,
@@ -2491,7 +3131,11 @@
     "away_team": "DET",
     "market_line": 9.0,
     "model_projection": 7.4,
-    "logged_at": "2026-03-30T07:00:43.045547"
+    "logged_at": "2026-03-30T07:00:43.045547",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 825108,
@@ -2507,7 +3151,11 @@
     "model_projection": 7.4,
     "home_pitcher_value": 0.064379,
     "away_pitcher_value": 0.027473,
-    "logged_at": "2026-03-30T07:00:43.045547"
+    "logged_at": "2026-03-30T07:00:43.045547",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 825108,
@@ -2523,7 +3171,11 @@
     "model_projection": 7.4,
     "home_pitcher_value": 0.033593,
     "away_pitcher_value": 0.046301,
-    "logged_at": "2026-03-30T07:00:43.045547"
+    "logged_at": "2026-03-30T07:00:43.045547",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 825108,
@@ -2539,7 +3191,11 @@
     "model_projection": 7.4,
     "home_pitcher_value": -0.013264,
     "away_pitcher_value": -0.129322,
-    "logged_at": "2026-03-30T07:00:43.045547"
+    "logged_at": "2026-03-30T07:00:43.045547",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823972,
@@ -2553,7 +3209,11 @@
     "away_team": "CLE",
     "market_line": 8.5,
     "model_projection": 9.21,
-    "logged_at": "2026-03-30T07:00:44.538751"
+    "logged_at": "2026-03-30T07:00:44.538751",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823972,
@@ -2569,7 +3229,11 @@
     "model_projection": 9.21,
     "home_pitcher_value": 0.048554,
     "away_pitcher_value": -0.027176,
-    "logged_at": "2026-03-30T07:00:44.538751"
+    "logged_at": "2026-03-30T07:00:44.538751",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823972,
@@ -2585,7 +3249,11 @@
     "model_projection": 9.21,
     "home_pitcher_value": -0.073823,
     "away_pitcher_value": 0.158206,
-    "logged_at": "2026-03-30T07:00:44.538751"
+    "logged_at": "2026-03-30T07:00:44.538751",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823972,
@@ -2601,7 +3269,11 @@
     "model_projection": 9.21,
     "home_pitcher_value": -0.075392,
     "away_pitcher_value": 0.000606,
-    "logged_at": "2026-03-30T07:00:44.538751"
+    "logged_at": "2026-03-30T07:00:44.538751",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824861,
@@ -2615,7 +3287,11 @@
     "away_team": "TEX",
     "market_line": 8.5,
     "model_projection": 9.34,
-    "logged_at": "2026-03-31T07:00:12.426939"
+    "logged_at": "2026-03-31T07:00:12.426939",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824861,
@@ -2631,7 +3307,11 @@
     "model_projection": 9.34,
     "home_pitcher_value": -0.158786,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:12.426939"
+    "logged_at": "2026-03-31T07:00:12.426939",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824861,
@@ -2647,7 +3327,11 @@
     "model_projection": 9.34,
     "home_pitcher_value": -0.04098,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:12.426939"
+    "logged_at": "2026-03-31T07:00:12.426939",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824861,
@@ -2663,7 +3347,11 @@
     "model_projection": 9.34,
     "home_pitcher_value": -0.090037,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:12.426939"
+    "logged_at": "2026-03-31T07:00:12.426939",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824537,
@@ -2677,7 +3365,11 @@
     "away_team": "PIT",
     "market_line": 9.0,
     "model_projection": 10.04,
-    "logged_at": "2026-03-31T07:00:18.341234"
+    "logged_at": "2026-03-31T07:00:18.341234",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824537,
@@ -2693,7 +3385,11 @@
     "model_projection": 10.04,
     "home_pitcher_value": 0.033539,
     "away_pitcher_value": 0.041212,
-    "logged_at": "2026-03-31T07:00:18.341234"
+    "logged_at": "2026-03-31T07:00:18.341234",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824537,
@@ -2709,7 +3405,11 @@
     "model_projection": 10.04,
     "home_pitcher_value": 0.014576,
     "away_pitcher_value": -0.06598,
-    "logged_at": "2026-03-31T07:00:18.341234"
+    "logged_at": "2026-03-31T07:00:18.341234",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824537,
@@ -2725,7 +3425,11 @@
     "model_projection": 10.04,
     "home_pitcher_value": -0.021508,
     "away_pitcher_value": 0.034208,
-    "logged_at": "2026-03-31T07:00:18.341234"
+    "logged_at": "2026-03-31T07:00:18.341234",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823485,
@@ -2739,7 +3443,11 @@
     "away_team": "WSN",
     "market_line": 9.0,
     "model_projection": 9.87,
-    "logged_at": "2026-03-31T07:00:21.369878"
+    "logged_at": "2026-03-31T07:00:21.369878",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823485,
@@ -2755,7 +3463,11 @@
     "model_projection": 9.87,
     "home_pitcher_value": null,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:21.369878"
+    "logged_at": "2026-03-31T07:00:21.369878",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823485,
@@ -2771,7 +3483,11 @@
     "model_projection": 9.87,
     "home_pitcher_value": null,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:21.369878"
+    "logged_at": "2026-03-31T07:00:21.369878",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823485,
@@ -2787,7 +3503,11 @@
     "model_projection": 9.87,
     "home_pitcher_value": null,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:21.369878"
+    "logged_at": "2026-03-31T07:00:21.369878",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823888,
@@ -2801,7 +3521,11 @@
     "away_team": "CHW",
     "market_line": 8.5,
     "model_projection": 9.33,
-    "logged_at": "2026-03-31T07:00:24.268379"
+    "logged_at": "2026-03-31T07:00:24.268379",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823888,
@@ -2817,7 +3541,11 @@
     "model_projection": 9.33,
     "home_pitcher_value": -0.002405,
     "away_pitcher_value": 0.059205,
-    "logged_at": "2026-03-31T07:00:24.268379"
+    "logged_at": "2026-03-31T07:00:24.268379",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823888,
@@ -2833,7 +3561,11 @@
     "model_projection": 9.33,
     "home_pitcher_value": -0.120477,
     "away_pitcher_value": 0.036335,
-    "logged_at": "2026-03-31T07:00:24.268379"
+    "logged_at": "2026-03-31T07:00:24.268379",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823888,
@@ -2849,7 +3581,11 @@
     "model_projection": 9.33,
     "home_pitcher_value": -0.098902,
     "away_pitcher_value": -0.108889,
-    "logged_at": "2026-03-31T07:00:24.268379"
+    "logged_at": "2026-03-31T07:00:24.268379",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822836,
@@ -2863,7 +3599,11 @@
     "away_team": "COL",
     "market_line": 8.0,
     "model_projection": 8.45,
-    "logged_at": "2026-03-31T07:00:27.024330"
+    "logged_at": "2026-03-31T07:00:27.024330",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822836,
@@ -2879,7 +3619,11 @@
     "model_projection": 8.45,
     "home_pitcher_value": -0.113267,
     "away_pitcher_value": 0.053373,
-    "logged_at": "2026-03-31T07:00:27.024330"
+    "logged_at": "2026-03-31T07:00:27.024330",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822836,
@@ -2895,7 +3639,11 @@
     "model_projection": 8.45,
     "home_pitcher_value": -0.152884,
     "away_pitcher_value": 0.039124,
-    "logged_at": "2026-03-31T07:00:27.024330"
+    "logged_at": "2026-03-31T07:00:27.024330",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822836,
@@ -2911,7 +3659,11 @@
     "model_projection": 8.45,
     "home_pitcher_value": 0.017275,
     "away_pitcher_value": -0.087802,
-    "logged_at": "2026-03-31T07:00:27.024330"
+    "logged_at": "2026-03-31T07:00:27.024330",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824942,
@@ -2925,7 +3677,11 @@
     "away_team": "OAK",
     "market_line": 9.5,
     "model_projection": 8.49,
-    "logged_at": "2026-03-31T07:00:29.270227"
+    "logged_at": "2026-03-31T07:00:29.270227",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824942,
@@ -2941,7 +3697,11 @@
     "model_projection": 8.49,
     "home_pitcher_value": -0.022197,
     "away_pitcher_value": -0.07792,
-    "logged_at": "2026-03-31T07:00:29.270227"
+    "logged_at": "2026-03-31T07:00:29.270227",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824942,
@@ -2957,7 +3717,11 @@
     "model_projection": 8.49,
     "home_pitcher_value": -0.152752,
     "away_pitcher_value": -0.032064,
-    "logged_at": "2026-03-31T07:00:29.270227"
+    "logged_at": "2026-03-31T07:00:29.270227",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824942,
@@ -2973,7 +3737,11 @@
     "model_projection": 8.49,
     "home_pitcher_value": -0.020217,
     "away_pitcher_value": -0.025165,
-    "logged_at": "2026-03-31T07:00:29.270227"
+    "logged_at": "2026-03-31T07:00:29.270227",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824699,
@@ -2987,7 +3755,11 @@
     "away_team": "LAA",
     "market_line": 7.0,
     "model_projection": 8.69,
-    "logged_at": "2026-03-31T07:00:31.427464"
+    "logged_at": "2026-03-31T07:00:31.427464",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824699,
@@ -3003,7 +3775,11 @@
     "model_projection": 8.69,
     "home_pitcher_value": 0.024251,
     "away_pitcher_value": 0.047303,
-    "logged_at": "2026-03-31T07:00:31.427464"
+    "logged_at": "2026-03-31T07:00:31.427464",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824699,
@@ -3019,7 +3795,11 @@
     "model_projection": 8.69,
     "home_pitcher_value": 0.056956,
     "away_pitcher_value": 0.035302,
-    "logged_at": "2026-03-31T07:00:31.427464"
+    "logged_at": "2026-03-31T07:00:31.427464",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824699,
@@ -3035,7 +3815,11 @@
     "model_projection": 8.69,
     "home_pitcher_value": -0.129864,
     "away_pitcher_value": -0.006972,
-    "logged_at": "2026-03-31T07:00:31.427464"
+    "logged_at": "2026-03-31T07:00:31.427464",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823807,
@@ -3049,7 +3833,11 @@
     "away_team": "TBR",
     "market_line": 7.5,
     "model_projection": 9.01,
-    "logged_at": "2026-03-31T07:00:33.295381"
+    "logged_at": "2026-03-31T07:00:33.295381",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823807,
@@ -3065,7 +3853,11 @@
     "model_projection": 9.01,
     "home_pitcher_value": 0.02065,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:33.295381"
+    "logged_at": "2026-03-31T07:00:33.295381",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823807,
@@ -3081,7 +3873,11 @@
     "model_projection": 9.01,
     "home_pitcher_value": 0.00783,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:33.295381"
+    "logged_at": "2026-03-31T07:00:33.295381",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823807,
@@ -3097,7 +3893,11 @@
     "model_projection": 9.01,
     "home_pitcher_value": 0.02368,
     "away_pitcher_value": null,
-    "logged_at": "2026-03-31T07:00:33.295381"
+    "logged_at": "2026-03-31T07:00:33.295381",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823077,
@@ -3111,7 +3911,11 @@
     "away_team": "NYM",
     "market_line": 8.0,
     "model_projection": 9.54,
-    "logged_at": "2026-03-31T07:00:34.992701"
+    "logged_at": "2026-03-31T07:00:34.992701",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823077,
@@ -3127,7 +3931,11 @@
     "model_projection": 9.54,
     "home_pitcher_value": 0.057448,
     "away_pitcher_value": -0.007003,
-    "logged_at": "2026-03-31T07:00:34.992701"
+    "logged_at": "2026-03-31T07:00:34.992701",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823077,
@@ -3143,7 +3951,11 @@
     "model_projection": 9.54,
     "home_pitcher_value": 0.048835,
     "away_pitcher_value": 0.091163,
-    "logged_at": "2026-03-31T07:00:34.992701"
+    "logged_at": "2026-03-31T07:00:34.992701",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823077,
@@ -3159,7 +3971,11 @@
     "model_projection": 9.54,
     "home_pitcher_value": -0.166086,
     "away_pitcher_value": -0.037395,
-    "logged_at": "2026-03-31T07:00:34.992701"
+    "logged_at": "2026-03-31T07:00:34.992701",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824212,
@@ -3173,7 +3989,11 @@
     "away_team": "BOS",
     "market_line": 7.5,
     "model_projection": 9.06,
-    "logged_at": "2026-03-31T07:00:36.677306"
+    "logged_at": "2026-03-31T07:00:36.677306",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824212,
@@ -3189,7 +4009,11 @@
     "model_projection": 9.06,
     "home_pitcher_value": 0.070093,
     "away_pitcher_value": 0.028519,
-    "logged_at": "2026-03-31T07:00:36.677306"
+    "logged_at": "2026-03-31T07:00:36.677306",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824212,
@@ -3205,7 +4029,11 @@
     "model_projection": 9.06,
     "home_pitcher_value": 0.00087,
     "away_pitcher_value": -0.020525,
-    "logged_at": "2026-03-31T07:00:36.677306"
+    "logged_at": "2026-03-31T07:00:36.677306",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824212,
@@ -3221,7 +4049,11 @@
     "model_projection": 9.06,
     "home_pitcher_value": 0.026222,
     "away_pitcher_value": -0.137194,
-    "logged_at": "2026-03-31T07:00:36.677306"
+    "logged_at": "2026-03-31T07:00:36.677306",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 825107,
@@ -3235,7 +4067,11 @@
     "away_team": "DET",
     "market_line": 9.0,
     "model_projection": 7.85,
-    "logged_at": "2026-03-31T07:00:38.146519"
+    "logged_at": "2026-03-31T07:00:38.146519",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 825107,
@@ -3251,7 +4087,11 @@
     "model_projection": 7.85,
     "home_pitcher_value": 0.048632,
     "away_pitcher_value": 0.007197,
-    "logged_at": "2026-03-31T07:00:38.146519"
+    "logged_at": "2026-03-31T07:00:38.146519",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 825107,
@@ -3267,7 +4107,11 @@
     "model_projection": 7.85,
     "home_pitcher_value": -0.080794,
     "away_pitcher_value": -0.012758,
-    "logged_at": "2026-03-31T07:00:38.146519"
+    "logged_at": "2026-03-31T07:00:38.146519",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 825107,
@@ -3283,7 +4127,11 @@
     "model_projection": 7.85,
     "home_pitcher_value": -0.060989,
     "away_pitcher_value": 0.045396,
-    "logged_at": "2026-03-31T07:00:38.146519"
+    "logged_at": "2026-03-31T07:00:38.146519",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823322,
@@ -3297,7 +4145,11 @@
     "away_team": "SFG",
     "market_line": 8.0,
     "model_projection": 7.64,
-    "logged_at": "2026-03-31T07:00:39.516196"
+    "logged_at": "2026-03-31T07:00:39.516196",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823322,
@@ -3313,7 +4165,11 @@
     "model_projection": 7.64,
     "home_pitcher_value": -0.095798,
     "away_pitcher_value": -0.072783,
-    "logged_at": "2026-03-31T07:00:39.516196"
+    "logged_at": "2026-03-31T07:00:39.516196",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823322,
@@ -3329,7 +4185,11 @@
     "model_projection": 7.64,
     "home_pitcher_value": -0.190644,
     "away_pitcher_value": 0.000687,
-    "logged_at": "2026-03-31T07:00:39.516196"
+    "logged_at": "2026-03-31T07:00:39.516196",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823322,
@@ -3345,7 +4205,11 @@
     "model_projection": 7.64,
     "home_pitcher_value": -0.19105,
     "away_pitcher_value": -0.04009,
-    "logged_at": "2026-03-31T07:00:39.516196"
+    "logged_at": "2026-03-31T07:00:39.516196",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823158,
@@ -3359,7 +4223,11 @@
     "away_team": "NYY",
     "market_line": 7.0,
     "model_projection": 7.87,
-    "logged_at": "2026-03-31T07:00:41.302436"
+    "logged_at": "2026-03-31T07:00:41.302436",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823158,
@@ -3375,7 +4243,11 @@
     "model_projection": 7.87,
     "home_pitcher_value": 0.009678,
     "away_pitcher_value": 0.022413,
-    "logged_at": "2026-03-31T07:00:41.302436"
+    "logged_at": "2026-03-31T07:00:41.302436",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823158,
@@ -3391,7 +4263,11 @@
     "model_projection": 7.87,
     "home_pitcher_value": -0.019834,
     "away_pitcher_value": -0.040537,
-    "logged_at": "2026-03-31T07:00:41.302436"
+    "logged_at": "2026-03-31T07:00:41.302436",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823158,
@@ -3407,7 +4283,11 @@
     "model_projection": 7.87,
     "home_pitcher_value": -0.005137,
     "away_pitcher_value": 0.038987,
-    "logged_at": "2026-03-31T07:00:41.302436"
+    "logged_at": "2026-03-31T07:00:41.302436",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823969,
@@ -3421,7 +4301,11 @@
     "away_team": "CLE",
     "market_line": 8.0,
     "model_projection": 8.26,
-    "logged_at": "2026-03-31T07:00:42.938976"
+    "logged_at": "2026-03-31T07:00:42.938976",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823969,
@@ -3437,7 +4321,11 @@
     "model_projection": 8.26,
     "home_pitcher_value": 0.155771,
     "away_pitcher_value": 0.100402,
-    "logged_at": "2026-03-31T07:00:42.938976"
+    "logged_at": "2026-03-31T07:00:42.938976",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823969,
@@ -3453,7 +4341,11 @@
     "model_projection": 8.26,
     "home_pitcher_value": 0.072909,
     "away_pitcher_value": 0.101063,
-    "logged_at": "2026-03-31T07:00:42.938976"
+    "logged_at": "2026-03-31T07:00:42.938976",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823969,
@@ -3469,7 +4361,11 @@
     "model_projection": 8.26,
     "home_pitcher_value": 0.109436,
     "away_pitcher_value": 0.009018,
-    "logged_at": "2026-03-31T07:00:42.938976"
+    "logged_at": "2026-03-31T07:00:42.938976",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823002,
@@ -3483,7 +4379,11 @@
     "away_team": "CHC",
     "market_line": 8.0,
     "model_projection": 8.17,
-    "logged_at": "2026-04-06T07:00:08.004784"
+    "logged_at": "2026-04-06T07:00:08.004784",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823002,
@@ -3499,7 +4399,11 @@
     "model_projection": 8.17,
     "home_pitcher_value": null,
     "away_pitcher_value": 0.024251,
-    "logged_at": "2026-04-06T07:00:08.004784"
+    "logged_at": "2026-04-06T07:00:08.004784",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823002,
@@ -3515,7 +4419,11 @@
     "model_projection": 8.17,
     "home_pitcher_value": null,
     "away_pitcher_value": 0.056956,
-    "logged_at": "2026-04-06T07:00:08.004784"
+    "logged_at": "2026-04-06T07:00:08.004784",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823002,
@@ -3531,7 +4439,11 @@
     "model_projection": 8.17,
     "home_pitcher_value": null,
     "away_pitcher_value": -0.129864,
-    "logged_at": "2026-04-06T07:00:08.004784"
+    "logged_at": "2026-04-06T07:00:08.004784",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824456,
@@ -3545,7 +4457,11 @@
     "away_team": "KCR",
     "market_line": 7.0,
     "model_projection": 8.65,
-    "logged_at": "2026-04-06T07:00:11.625479"
+    "logged_at": "2026-04-06T07:00:11.625479",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824456,
@@ -3561,7 +4477,11 @@
     "model_projection": 8.65,
     "home_pitcher_value": 0.100402,
     "away_pitcher_value": -0.098598,
-    "logged_at": "2026-04-06T07:00:11.625479"
+    "logged_at": "2026-04-06T07:00:11.625479",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824456,
@@ -3577,7 +4497,11 @@
     "model_projection": 8.65,
     "home_pitcher_value": 0.101063,
     "away_pitcher_value": -0.01316,
-    "logged_at": "2026-04-06T07:00:11.625479"
+    "logged_at": "2026-04-06T07:00:11.625479",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824456,
@@ -3593,7 +4517,11 @@
     "model_projection": 8.65,
     "home_pitcher_value": 0.009018,
     "away_pitcher_value": -0.101587,
-    "logged_at": "2026-04-06T07:00:11.625479"
+    "logged_at": "2026-04-06T07:00:11.625479",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823401,
@@ -3607,7 +4535,11 @@
     "away_team": "SDP",
     "market_line": 8.5,
     "model_projection": 8.71,
-    "logged_at": "2026-04-06T07:00:18.593350"
+    "logged_at": "2026-04-06T07:00:18.593350",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823401,
@@ -3623,7 +4555,11 @@
     "model_projection": 8.71,
     "home_pitcher_value": 0.041212,
     "away_pitcher_value": -0.095798,
-    "logged_at": "2026-04-06T07:00:18.593350"
+    "logged_at": "2026-04-06T07:00:18.593350",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823401,
@@ -3639,7 +4575,11 @@
     "model_projection": 8.71,
     "home_pitcher_value": -0.06598,
     "away_pitcher_value": -0.190644,
-    "logged_at": "2026-04-06T07:00:18.593350"
+    "logged_at": "2026-04-06T07:00:18.593350",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823401,
@@ -3655,7 +4595,11 @@
     "model_projection": 8.71,
     "home_pitcher_value": 0.034208,
     "away_pitcher_value": -0.19105,
-    "logged_at": "2026-04-06T07:00:18.593350"
+    "logged_at": "2026-04-06T07:00:18.593350",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823886,
@@ -3669,7 +4613,11 @@
     "away_team": "CIN",
     "market_line": 8.0,
     "model_projection": 9.11,
-    "logged_at": "2026-04-06T07:00:24.662043"
+    "logged_at": "2026-04-06T07:00:24.662043",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823886,
@@ -3685,7 +4633,11 @@
     "model_projection": 9.11,
     "home_pitcher_value": -0.002405,
     "away_pitcher_value": null,
-    "logged_at": "2026-04-06T07:00:24.662043"
+    "logged_at": "2026-04-06T07:00:24.662043",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823886,
@@ -3701,7 +4653,11 @@
     "model_projection": 9.11,
     "home_pitcher_value": -0.120477,
     "away_pitcher_value": null,
-    "logged_at": "2026-04-06T07:00:24.662043"
+    "logged_at": "2026-04-06T07:00:24.662043",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823886,
@@ -3717,7 +4673,11 @@
     "model_projection": 9.11,
     "home_pitcher_value": -0.098902,
     "away_pitcher_value": null,
-    "logged_at": "2026-04-06T07:00:24.662043"
+    "logged_at": "2026-04-06T07:00:24.662043",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822755,
