@@ -1211,13 +1211,22 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
             from mlb_sim.pipeline.kp04_shadow import compute_kp04, log_kp04_records
             _home_pid = home_sp.get("mlbam_id")
             _away_pid = away_sp.get("mlbam_id")
-            # Lineup K% not available at 7am run — log as PENDING_LINEUP
+            # Build k_lines from props_lines (name-keyed → pitcher_id-keyed)
+            _kp04_k_lines = {}
+            for _kpid, _kpname in [(_home_pid, home_sp.get("name")), (_away_pid, away_sp.get("name"))]:
+                if _kpid and _kpname:
+                    _pk = props_lines.get(_kpname.lower(), {})
+                    if _pk.get("k") is not None:
+                        _kp04_k_lines[int(_kpid)] = {
+                            "k_line": _pk["k"],
+                            "over_price": _pk.get("k_over_price"),
+                        }
             _kp04_records = compute_kp04(
                 game_id=gk, date_str=game_date,
                 home_team=home, away_team=away,
                 home_pitcher_id=_home_pid, away_pitcher_id=_away_pid,
                 home_pitcher_name=home_sp.get("name"), away_pitcher_name=away_sp.get("name"),
-                k_lines=None, lineup_data=None,
+                k_lines=_kp04_k_lines or None, lineup_data=None,
             )
             log_kp04_records(_kp04_records)
         except Exception as e:

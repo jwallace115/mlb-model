@@ -6,8 +6,10 @@ Fallback source : The Odds API (pitcher_strikeouts / batter_total_bases)
 
 Returns dict keyed by player name.lower():
     {
-        "k":  float | None,   # strikeout total line
-        "tb": float | None,   # total bases line
+        "k":  float | None,            # strikeout total line
+        "tb": float | None,            # total bases line
+        "k_over_price":  int | None,   # K over American odds (e.g. -120)
+        "tb_over_price": int | None,   # TB over American odds
     }
 """
 
@@ -140,12 +142,15 @@ def _fetch_dk_props(home_team: str, away_team: str) -> dict:
             if line is None:
                 continue
 
+            odds_price = _safe_float(oc.get("oddsAmerican") or oc.get("price") or oc.get("odds"))
             if key not in result:
-                result[key] = {"k": None, "tb": None}
+                result[key] = {"k": None, "tb": None, "k_over_price": None, "tb_over_price": None}
             if is_k:
                 result[key]["k"] = line
+                result[key]["k_over_price"] = int(odds_price) if odds_price is not None else None
             elif is_tb:
                 result[key]["tb"] = line
+                result[key]["tb_over_price"] = int(odds_price) if odds_price is not None else None
 
     logger.info(f"DK props: {len(result)} players for {away_team}@{home_team}")
     return result
@@ -232,14 +237,17 @@ def _fetch_odds_api_props(
                 if pt is None or name not in ("over", "under"):
                     continue
                 key = player.lower()
+                price = outcome.get("price")
                 if key not in result:
-                    result[key] = {"k": None, "tb": None}
+                    result[key] = {"k": None, "tb": None, "k_over_price": None, "tb_over_price": None}
                 # Use the "over" line as the standard line
                 if name == "over":
                     if is_k:
                         result[key]["k"]  = pt
+                        result[key]["k_over_price"] = int(price) if price is not None else None
                     elif is_tb:
                         result[key]["tb"] = pt
+                        result[key]["tb_over_price"] = int(price) if price is not None else None
 
     logger.info(f"Odds API props: {len(result)} players for {away_team}@{home_team}")
     return result
