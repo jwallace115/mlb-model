@@ -1,12 +1,12 @@
 MLB PHASE M2 — DATA QUALITY REPORT
 ==================================================
-Generated: 2026-03-19 14:31
+Generated: 2026-04-07 01:40
 
 DATASETS BUILT:
-  hitter_game_logs.parquet:   201,605 rows × 28 cols
-  pitcher_game_logs.parquet:  83,042 rows × 22 cols
-  lineups.parquet:            174,870 rows × 10 cols
-  team_game_index.parquet:    19,430 rows × 9 cols
+  hitter_game_logs.parquet:   204,548 rows × 28 cols
+  pitcher_game_logs.parquet:  84,287 rows × 22 cols
+  lineups.parquet:            177,408 rows × 10 cols
+  team_game_index.parquet:    19,714 rows × 9 cols
 
 COVERAGE BY SEASON:
   Hitters:
@@ -14,41 +14,44 @@ COVERAGE BY SEASON:
     2023:  50,495 rows, 2,430 games,  717 players
     2024:  50,478 rows, 2,427 games,  700 players
     2025:  50,594 rows, 2,428 games,  720 players
+    2026:   2,943 rows,   141 games,  414 players
   Pitchers:
     2022:  20,883 rows, 2,430 games,  871 players
     2023:  20,634 rows, 2,430 games,  863 players
     2024:  20,676 rows, 2,427 games,  855 players
     2025:  20,849 rows, 2,428 games,  873 players
+    2026:   1,245 rows,   141 games,  420 players
   Lineups:
     2022:  43,740 rows, 2,430 games,  750 players
     2023:  43,740 rows, 2,430 games,  714 players
     2024:  43,686 rows, 2,427 games,  699 players
     2025:  43,704 rows, 2,428 games,  717 players
+    2026:   2,538 rows,   141 games,  405 players
 
 GAME COVERAGE:
-  Game table games: 9715
-  Games with hitter data: 9715 (100.0%)
-  Games with pitcher data: 9715 (100.0%)
-  Games with lineup data: 9715 (100.0%)
-  Missing boxscores: 0
+  Game table games: 9857
+  Games with hitter data: 9856 (100.0%)
+  Games with pitcher data: 9856 (100.0%)
+  Games with lineup data: 9856 (100.0%)
+  Missing boxscores: 1
   Parse errors: 0
 
 LINEUP COMPLETENESS:
-  Full 9-man lineups: 19,430/19,430 (100.0%)
+  Full 9-man lineups: 19,712/19,712 (100.0%)
 
 HANDEDNESS COVERAGE:
-  Batter hand: 201,605/201,605 (100.0%)
-  Pitcher hand: 83,042/83,042 (100.0%)
+  Batter hand: 204,490/204,548 (100.0%)
+  Pitcher hand: 84,281/84,287 (100.0%)
 
 NULL RATES:
   Hitters:
-    batter_hand              :      0 (0.0%)
-    opp_pitcher_hand         :      0 (0.0%)
-    obp                      :  7,056 (3.5%)
-    slg                      :  8,928 (4.4%)
-    iso                      :  8,928 (4.4%)
+    batter_hand              :     58 (0.0%)
+    opp_pitcher_hand         :     11 (0.0%)
+    obp                      :  7,151 (3.5%)
+    slg                      :  9,054 (4.4%)
+    iso                      :  9,054 (4.4%)
   Pitchers:
-    pitcher_hand             :      0 (0.0%)
+    pitcher_hand             :      6 (0.0%)
     pitches                  :      0 (0.0%)
     batters_faced            :      0 (0.0%)
 

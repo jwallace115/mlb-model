@@ -6,8 +6,8 @@ HITTER GAME LOGS:
   Path: sim/data/cache/boxscores/*.json
   Endpoint: /api/v1/game/{game_pk}/boxscore
   Fields: battingOrder + players.stats.batting
-  Games processed: 9715
-  Missing: 0
+  Games processed: 9857
+  Missing: 1
 
 PITCHER GAME LOGS:
   Source: MLB Stats API boxscores (same cache)
