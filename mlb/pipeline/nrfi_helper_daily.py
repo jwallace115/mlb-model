@@ -58,6 +58,62 @@ def _load_models():
     return top1, bot1, arch
 
 
+def _compute_top3_stability(game_pk: int, home_team: str, away_team: str,
+                             lineups_df: pd.DataFrame) -> dict:
+    """
+    Phase 11 — compare today's confirmed top-3 batting order to each team's
+    prior game top-3.  Uses MLB Stats API live feed for today's lineup and
+    lineups.parquet for the prior game.
+
+    Returns {"home": "stable"/"changed"/"unknown",
+             "away": "stable"/"changed"/"unknown",
+             "both_changed": True/False/None}
+    None means lineups not yet confirmed.
+    """
+    from modules.lineup_monitor import fetch_batting_order
+
+    today_order = fetch_batting_order(game_pk)  # {"home": [name,...], "away": [...]}
+
+    result = {"home": "unknown", "away": "unknown", "both_changed": None}
+    sides_changed = {}
+
+    for side, team in [("home", _norm_team(home_team)), ("away", _norm_team(away_team))]:
+        today_names = today_order.get(side, [])
+        if len(today_names) < 3:
+            # Lineups not yet posted for this side
+            sides_changed[side] = None
+            continue
+
+        today_top3 = set(n.strip().lower() for n in today_names[:3])
+
+        # Find prior game top-3 from lineups.parquet
+        team_lu = lineups_df[lineups_df["team"] == team].copy()
+        if team_lu.empty:
+            sides_changed[side] = None
+            continue
+
+        # Most recent game_pk for this team
+        last_gp = team_lu.sort_values("game_date")["game_pk"].iloc[-1]
+        prior_top3_df = team_lu[(team_lu["game_pk"] == last_gp) &
+                                (team_lu["batting_order_position"] <= 3)]
+        if prior_top3_df.empty:
+            sides_changed[side] = None
+            continue
+
+        prior_top3 = set(n.strip().lower() for n in prior_top3_df["player_name"])
+        changed = len(today_top3 - prior_top3) > 0
+        sides_changed[side] = changed
+        result[side] = "changed" if changed else "stable"
+
+    # Compute both_changed — None if either side is unknown
+    if sides_changed.get("home") is None or sides_changed.get("away") is None:
+        result["both_changed"] = None
+    else:
+        result["both_changed"] = (sides_changed["home"] and sides_changed["away"])
+
+    return result
+
+
 def _classify_starter_archetype(sp_id, pgl, sc_ps, arch_artifact):
     """Classify a starter's archetype from rolling stats. Returns label string or None."""
     if arch_artifact is None or sp_id is None:
@@ -234,6 +290,10 @@ def run_daily(game_date: str | None = None):
     except Exception:
         pass
 
+    # Load historical lineups for Phase 11 top-3 stability check
+    lineups_df = pd.read_parquet("mlb/data/lineups.parquet")
+    lineups_df["game_date"] = pd.to_datetime(lineups_df["game_date"])
+
     # Build features for each game
     rows = []
     dropped = []
@@ -279,6 +339,12 @@ def run_daily(game_date: str | None = None):
                 home_sp_id = _gobj.get("home_probable_pitcher", {}).get("id")
             home_arch = _classify_starter_archetype(home_sp_id, pgl, sc_ps, arch_art)
 
+            # Phase 11 — top-3 lineup stability
+            stability = _compute_top3_stability(
+                int(row["game_pk"]), row["home_team"], row["away_team"],
+                lineups_df,
+            )
+
             scored.append({
                 "game_pk": row["game_pk"],
                 "home_team": row["home_team"],
@@ -287,6 +353,9 @@ def run_daily(game_date: str | None = None):
                 "p_bot1": p_bot1,
                 "p_yrfi": p_yrfi,
                 "home_starter_archetype": home_arch,
+                "top3_stability_home": stability["home"],
+                "top3_stability_away": stability["away"],
+                "both_changed": stability["both_changed"],
             })
 
     slate_size = len(scored) + len(dropped)
@@ -322,6 +391,14 @@ def run_daily(game_date: str | None = None):
         )
 
         for _, r in scored_df.iterrows():
+            # Phase 11: Phase 8 AND NOT both_changed
+            # null (not False) when lineups aren't confirmed
+            bc = r.get("both_changed")
+            if bc is None:
+                q_p11 = None  # lineups not yet confirmed
+            else:
+                q_p11 = bool(r["qualifies_phase8"]) and not bc
+
             new_entries.append({
                 "date": game_date,
                 "logged_at": now,
@@ -339,6 +416,10 @@ def run_daily(game_date: str | None = None):
                 "qualifies": bool(r["qualifies_phase8"]),
                 "qualifies_phase4": bool(r["qualifies_phase4"]),
                 "qualifies_phase8": bool(r["qualifies_phase8"]),
+                "top3_stability_home": r.get("top3_stability_home"),
+                "top3_stability_away": r.get("top3_stability_away"),
+                "both_changed": bc,
+                "qualifies_phase11": q_p11,
                 "result_yrfi": None,
                 "result_nrfi": None,
                 "resolved": False,
@@ -363,6 +444,10 @@ def run_daily(game_date: str | None = None):
             "qualifies": False,
             "qualifies_phase4": False,
             "qualifies_phase8": False,
+            "top3_stability_home": None,
+            "top3_stability_away": None,
+            "both_changed": None,
+            "qualifies_phase11": None,
             "drop_reason": d["drop_reason"],
             "result_yrfi": None,
             "result_nrfi": None,
@@ -375,21 +460,38 @@ def run_daily(game_date: str | None = None):
 
     q_p4 = [e for e in new_entries if e.get("qualifies_phase4")]
     q_p8 = [e for e in new_entries if e.get("qualifies_phase8")]
-    excluded = [e for e in new_entries if e.get("qualifies_phase4") and not e.get("qualifies_phase8")]
+    q_p11 = [e for e in new_entries if e.get("qualifies_phase11") is True]
+    p11_pending = any(e.get("qualifies_phase11") is None and e.get("qualifies_phase8")
+                      for e in new_entries)
+    excl_arch = [e for e in new_entries if e.get("qualifies_phase4") and not e.get("qualifies_phase8")]
+    excl_lineup = [e for e in new_entries if e.get("qualifies_phase8")
+                   and e.get("both_changed") is True]
     print(f"NRFI Helper — {game_date}")
     print(f"  Slate: {len(scored)} scored, {len(dropped)} dropped ({slate_size} total)")
-    print(f"  Phase 4 qualifiers: {len(q_p4)}")
-    print(f"  Phase 8 qualifiers: {len(q_p8)}")
-    if excluded:
-        for e in excluded:
+    print(f"  Phase 4 qualifiers:  {len(q_p4)}")
+    print(f"  Phase 8 qualifiers:  {len(q_p8)}")
+    if p11_pending:
+        print(f"  Phase 11 qualifiers: {len(q_p11)} (lineups pending for some games)")
+    else:
+        print(f"  Phase 11 qualifiers: {len(q_p11)}")
+    if excl_arch:
+        for e in excl_arch:
             print(f"    EXCLUDED (home CONTACT_RISK): {e['away_team']}@{e['home_team']} "
                   f"arch={e.get('home_starter_archetype')}")
+    if excl_lineup:
+        for e in excl_lineup:
+            print(f"    EXCLUDED (both top-3 changed): {e['away_team']}@{e['home_team']} "
+                  f"home={e.get('top3_stability_home')} away={e.get('top3_stability_away')}")
     if dropped:
         for d in dropped:
             print(f"    DROPPED: {d['away_team']}@{d['home_team']} — {d['drop_reason']}")
-    for q in q_p8:
+    for q in (q_p11 if q_p11 else q_p8):
+        stability = ""
+        if q.get("top3_stability_home") and q.get("top3_stability_home") != "unknown":
+            stability = f"  top3=[H:{q['top3_stability_home']},A:{q['top3_stability_away']}]"
         print(f"    {q['away_team']}@{q['home_team']}  p_yrfi={q['p_yrfi']:.4f}  "
-              f"rank={q['combined_rank_pct']:.3f}  home_arch={q.get('home_starter_archetype')}")
+              f"rank={q['combined_rank_pct']:.3f}  home_arch={q.get('home_starter_archetype')}"
+              f"{stability}")
 
     # Auto-push
     subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),

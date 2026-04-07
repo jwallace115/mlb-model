@@ -4571,35 +4571,67 @@ def _render_nrfi_helper_section():
         '<div style="font-size:0.72em;color:#64748b;margin-bottom:8px">'
         'Educated guess filter \u2014 not a betting signal. '
         'Based on historical NRFI suppression patterns.<br>'
-        '<span style="font-size:0.90em">Current version excludes home starters '
-        'with CONTACT_RISK archetype.</span></div>')
+        '<span style="font-size:0.90em">Excludes CONTACT_RISK home starters '
+        'and games where both teams changed top-3 lineup.</span></div>')
 
     today = _nrfi_date.today().isoformat()
-    today_entries = [e for e in nrfi_log if e.get("date") == today
-                     and e.get("qualifies_phase8", e.get("qualifies"))]
+    today_all = [e for e in nrfi_log if e.get("date") == today]
+
+    # Determine whether Phase 11 data is available for today
+    has_p11 = any(e.get("qualifies_phase11") is not None for e in today_all)
+
+    if has_p11:
+        today_entries = [e for e in today_all if e.get("qualifies_phase11") is True]
+    else:
+        today_entries = [e for e in today_all
+                         if e.get("qualifies_phase8", e.get("qualifies"))]
 
     if today_entries:
         for e in sorted(today_entries, key=lambda x: x.get("p_yrfi", 1)):
             p = e.get("p_yrfi", 0)
             rank = e.get("combined_rank_pct", 0)
+            stab_parts = []
+            sh = e.get("top3_stability_home")
+            sa = e.get("top3_stability_away")
+            if sh and sh != "unknown":
+                stab_parts.append(f"H:{sh}")
+            if sa and sa != "unknown":
+                stab_parts.append(f"A:{sa}")
+            stab_str = (" \u00b7 top3=" + ",".join(stab_parts)) if stab_parts else ""
             st.html(
                 f'<div style="background:#0d1a0d;border:1px solid #166534;border-radius:6px;'
                 f'padding:8px 14px;margin-bottom:4px;font-size:0.82em">'
                 f'<span style="color:#86efac;font-weight:600">'
                 f'{e.get("away_team")} @ {e.get("home_team")}</span>'
                 f'<span style="color:#64748b;margin-left:12px">'
-                f'p(YRFI)={p:.3f} \u00b7 rank={rank:.0%}</span></div>')
+                f'p(YRFI)={p:.3f} \u00b7 rank={rank:.0%}{stab_str}</span></div>')
     else:
         st.html(
             '<div style="font-size:0.78em;color:#64748b;padding:6px 14px;'
             'background:#0f1117;border-radius:4px;margin-bottom:4px">'
             'No qualifying NRFI candidates today.</div>')
 
-    # Compact tracker — use Phase 8 qualification where available, fall back to Phase 4
+    if not has_p11:
+        # Show note when Phase 11 lineup filter hasn't run yet
+        p8_today = [e for e in today_all
+                     if e.get("qualifies_phase8", e.get("qualifies"))]
+        if p8_today:
+            st.html(
+                '<div style="font-size:0.68em;color:#64748b;padding:2px 14px;'
+                'font-style:italic">'
+                'Awaiting lineup confirmation for final filter.</div>')
+
+    # Compact tracker — use best available qualification
     resolved = [e for e in nrfi_log if e.get("resolved")]
-    quals_resolved = [e for e in resolved if e.get("qualifies_phase8", e.get("qualifies"))]
+    quals_resolved = [e for e in resolved
+                      if e.get("qualifies_phase11",
+                               e.get("qualifies_phase8",
+                                     e.get("qualifies")))]
     total_logged = len(nrfi_log)
-    total_quals = sum(1 for e in nrfi_log if e.get("qualifies_phase8", e.get("qualifies")))
+    total_quals = sum(1 for e in nrfi_log
+                      if e.get("qualifies_phase11",
+                               e.get("qualifies_phase8",
+                                     e.get("qualifies"))))
     dates_logged = len(set(e.get("date") for e in nrfi_log))
 
     if resolved:
