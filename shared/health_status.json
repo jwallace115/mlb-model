@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-07T12:25:26.630666+00:00",
+  "generated_at": "2026-04-07T12:26:19.400735+00:00",
   "overall_status": "YELLOW",
   "checks": {
     "cron_jobs": {
@@ -45,7 +45,7 @@
           "job": "lines_open",
           "status": "OK",
           "last_run": "2026-04-07T06:05:03.693285+00:00",
-          "hours_since_run": 6.3
+          "hours_since_run": 6.4
         },
         {
           "job": "lines_closing",
@@ -133,7 +133,7 @@
           "status": "OK",
           "size_kb": 70.4,
           "last_modified": "2026-04-07T11:59:09.992551+00:00",
-          "hours_since_modified": 0.4,
+          "hours_since_modified": 0.5,
           "record_count": 770
         },
         {
@@ -239,8 +239,8 @@
     },
     "dashboard": {
       "status": "GREEN",
-      "last_push": "2026-04-07 08:25:16 -0400",
-      "hours_ago": 4.0
+      "last_push": "2026-04-07 12:25:28 +0000",
+      "hours_ago": 0.0
     },
     "signal_activity": {
       "mlb": {
