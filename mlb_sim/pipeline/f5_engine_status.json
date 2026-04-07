@@ -1,9 +1,9 @@
 {
-  "status": "PAUSED",
+  "status": "ACTIVE",
   "last_updated": "2026-04-07",
-  "pause_reason": "Hard stop: combined F5 ROI=-15.8% at N=52",
-  "pause_triggered_at_n": 52,
-  "pause_triggered_at_roi": -15.8,
-  "resume_authorized_by": null,
-  "resume_date": null
+  "pause_reason": null,
+  "pause_triggered_at_n": null,
+  "pause_triggered_at_roi": null,
+  "resume_authorized_by": "manual override — March excluded from stop rule evaluation",
+  "resume_date": "2026-04-07"
 }

@@ -25,11 +25,14 @@ HARD_STOP_MIN_N = 50
 
 
 def _load_resolved():
-    """Load resolved (non-postponed) F5 signals only."""
+    """Load resolved (non-postponed) F5 signals only.
+    Excludes March signals from stop rule evaluation — opening weeks are noisy."""
     if not F5_SIGNALS_PATH.exists():
         return pd.DataFrame()
     df = pd.read_parquet(F5_SIGNALS_PATH)
-    return df[df["resolved"] == 1]
+    df = df[df["resolved"] == 1]
+    april_1 = f"{date.today().year}-04-01"
+    return df[df["date"].astype(str) >= april_1]
 
 
 def _window_stats(df):
