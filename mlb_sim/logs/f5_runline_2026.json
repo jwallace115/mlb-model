@@ -138,5 +138,33 @@
     "result":"LOSS",
     "net_units":-0.5,
     "resolved":1
+  },
+  {
+    "date":"2026-04-07",
+    "game_id":"823402",
+    "home_team":"PIT",
+    "away_team":"SDP",
+    "home_sp_name":"Paul Skenes",
+    "away_sp_name":"Nick Pivetta",
+    "home_sp_xfip":3.115,
+    "away_sp_xfip":4.124,
+    "xfip_gap":1.009,
+    "home_f5_line":-0.5,
+    "away_f5_line":0.5,
+    "home_f5_price":-108,
+    "away_f5_price":-120,
+    "bet_side":"HOME",
+    "bet_line":-0.5,
+    "bet_price":-108,
+    "stake_units":0.5,
+    "line_at_signal_time":-0.5,
+    "f5_line_closing":null,
+    "f5_clv":null,
+    "home_f5_score":null,
+    "away_f5_score":null,
+    "f5_margin":null,
+    "result":null,
+    "net_units":null,
+    "resolved":0
   }
 ]
