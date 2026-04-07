@@ -118,6 +118,11 @@ def evaluate_mlb_stop_rules() -> dict:
     state = _load_state()
     changed = False
 
+    # Early-season grace period: skip evaluation until May 1, 2026
+    from datetime import date as _date
+    if _date.today() < _date(2026, 5, 1):
+        return _status_dict(state)
+
     # If full model already suspended, no further evaluation needed (sticky)
     if state.get("model_suspended"):
         return _status_dict(state)
