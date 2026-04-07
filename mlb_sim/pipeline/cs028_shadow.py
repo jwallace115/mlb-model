@@ -248,3 +248,54 @@ def log_cs028_record(game_id, date, home_team, away_team,
         )
     else:
         logger.debug(f"  CS028 logged: {home_team} score={cs028_result.get('home_blowup_score')}")
+
+
+def grade_cs028_shadow(season: int = 2026):
+    """Grade unresolved CS028 shadow entries using game_table actuals."""
+    import pandas as pd
+
+    log_path = LOG_DIR / f"cs028_shadow_{season}.json"
+    gt_path = Path(__file__).resolve().parent.parent.parent / "sim" / "data" / "game_table.parquet"
+
+    if not log_path.exists() or not gt_path.exists():
+        return
+
+    try:
+        data = json.loads(log_path.read_text())
+    except Exception:
+        return
+
+    gt = pd.read_parquet(gt_path)
+    actuals = dict(zip(gt["game_pk"].astype(int), gt["actual_total"]))
+
+    graded = 0
+    for entry in data:
+        if entry.get("resolved"):
+            continue
+        game_id = entry.get("game_id")
+        closing = entry.get("closing_total")
+        actual = actuals.get(int(game_id)) if game_id else None
+        if actual is None or closing is None:
+            continue
+
+        if actual > closing:
+            entry["actual_over_under"] = "OVER"
+        elif actual < closing:
+            entry["actual_over_under"] = "UNDER"
+        else:
+            entry["actual_over_under"] = "PUSH"
+
+        if entry.get("signal_fires"):
+            entry["result"] = ("WIN" if entry["actual_over_under"] == "OVER"
+                               else "LOSS" if entry["actual_over_under"] == "UNDER"
+                               else "PUSH")
+        else:
+            entry["result"] = None
+
+        entry["resolved"] = True
+        entry["actual_total"] = float(actual)
+        graded += 1
+
+    if graded > 0:
+        log_path.write_text(json.dumps(data, indent=2, default=str))
+        logger.info(f"CS028 grader: resolved {graded} entries")
