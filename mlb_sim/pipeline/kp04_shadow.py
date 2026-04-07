@@ -107,6 +107,57 @@ def _build_bb_cache():
         return {}
 
 
+def _build_lineup_k_cache():
+    """Build per-team batting K rate from pitcher_game_logs (current season).
+
+    Uses opposing pitchers' strikeouts / batters_faced to derive each team's
+    K tendency as batters. No external data source required.
+    """
+    global _lineup_k_cache
+    if _lineup_k_cache:
+        return _lineup_k_cache
+
+    try:
+        from datetime import date as _date
+        current_year = _date.today().year
+
+        if not DATA_PATH.exists():
+            return {}
+
+        pgl = pd.read_parquet(DATA_PATH)
+        p = pgl[pgl["season"] == current_year].copy()
+        if p.empty:
+            return {}
+
+        # Derive opponent from game_pk team pairs
+        game_teams = p.groupby("game_pk")["team"].apply(set).to_dict()
+
+        def get_opp(row):
+            teams = game_teams.get(row["game_pk"], set())
+            others = teams - {row["team"]}
+            return others.pop() if others else ""
+
+        p["batting_team"] = p.apply(get_opp, axis=1)
+        p = p[p["batting_team"] != ""]
+
+        # Per-team batting K rate = sum(Ks thrown at them) / sum(BF against them)
+        team_stats = p.groupby("batting_team").agg(
+            total_k=("strikeouts", "sum"),
+            total_bf=("batters_faced", "sum"),
+        ).reset_index()
+        team_stats = team_stats[team_stats["total_bf"] > 0]
+        team_stats["k_rate"] = team_stats["total_k"] / team_stats["total_bf"]
+
+        _lineup_k_cache = dict(zip(team_stats["batting_team"], team_stats["k_rate"]))
+        logger.info(f"KP04 lineup K cache: {len(_lineup_k_cache)} teams, "
+                    f"{sum(1 for v in _lineup_k_cache.values() if v >= LINEUP_K_THRESHOLD)} above threshold")
+        return _lineup_k_cache
+
+    except Exception as e:
+        logger.warning(f"KP04 lineup K cache build failed: {e}")
+        return {}
+
+
 def _build_start_count_cache():
     """Count prior starts per pitcher in current season."""
     global _start_count_cache
@@ -144,6 +195,13 @@ def compute_kp04(game_id, date_str, home_team, away_team,
         _build_bb_cache()
     if not _start_count_cache:
         _build_start_count_cache()
+
+    # If no lineup_data provided, derive from pitcher_game_logs
+    if lineup_data is None:
+        if not _lineup_k_cache:
+            _build_lineup_k_cache()
+        if _lineup_k_cache:
+            lineup_data = _lineup_k_cache
 
     records = []
     lineup_confirmed = lineup_data is not None
@@ -222,3 +280,57 @@ def log_kp04_records(records):
         pending = sum(1 for r in new if not r.get("lineup_confirmed"))
         logger.info(f"KP04 shadow: {len(new)} logged, {flagged} flagged"
                     f"{f', {pending} PENDING_LINEUP' if pending else ''}")
+
+
+def grade_kp04_shadow(season: int = 2026):
+    """Grade unresolved KP04 shadow entries using pitcher_game_logs actuals."""
+    log_path = LOG_DIR / f"kp04_shadow_{season}.json"
+
+    if not log_path.exists() or not DATA_PATH.exists():
+        return
+
+    try:
+        data = json.loads(log_path.read_text())
+    except Exception:
+        return
+
+    pgl = pd.read_parquet(DATA_PATH)
+    starters = pgl[(pgl["starter_flag"] == 1) & (pgl["season"] == season)]
+    # Build lookup: (game_pk, player_id) → strikeouts
+    k_lookup = {}
+    for _, row in starters.iterrows():
+        k_lookup[(int(row["game_pk"]), int(row["player_id"]))] = int(row["strikeouts"])
+
+    graded = 0
+    for entry in data:
+        if entry.get("resolved"):
+            continue
+        game_id = entry.get("game_id")
+        pitcher_id = entry.get("pitcher_id")
+        if game_id is None or pitcher_id is None:
+            continue
+
+        actual_k = k_lookup.get((int(game_id), int(pitcher_id)))
+        if actual_k is None:
+            continue
+
+        entry["actual_k"] = actual_k
+
+        # Grade flagged signals against closing K line (fall back to opening)
+        k_line = entry.get("closing_k_line") or entry.get("k_line")
+        if entry.get("kp04_flag") and k_line is not None:
+            if actual_k > k_line:
+                entry["result"] = "WIN"
+            elif actual_k < k_line:
+                entry["result"] = "LOSS"
+            else:
+                entry["result"] = "PUSH"
+        else:
+            entry["result"] = None
+
+        entry["resolved"] = True
+        graded += 1
+
+    if graded > 0:
+        log_path.write_text(json.dumps(data, indent=2, default=str))
+        logger.info(f"KP04 grader: resolved {graded} entries")
