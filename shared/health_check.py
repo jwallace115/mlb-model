@@ -137,6 +137,35 @@ def check_signal_files():
     except Exception:
         pass
 
+    # JSON/parquet sync check for signal files
+    for label, json_path, pq_path in [
+        ("f5_signals", "mlb_sim/logs/f5_signals_2026.json", "mlb_sim/logs/f5_signals_2026.parquet"),
+        ("v1_signals", "mlb_sim/logs/signals_2026.json", "mlb_sim/logs/signals_2026.parquet"),
+    ]:
+        try:
+            jp = ROOT / json_path
+            pp = ROOT / pq_path
+            if not jp.exists():
+                continue
+            n_json = len(json.load(open(jp)))
+            if not pp.exists():
+                details.append({"file": f"{label}_sync", "status": "MISSING_PARQUET"})
+                errors_list.append(f"{label} parquet missing — grader may not work")
+                status = "RED"
+                continue
+            import pandas as pd
+            n_pq = len(pd.read_parquet(pp))
+            if n_json != n_pq:
+                details.append({"file": f"{label}_sync", "status": "DESYNC",
+                                "json_count": n_json, "parquet_count": n_pq})
+                warnings_list.append(f"{label} JSON/parquet out of sync: JSON={n_json} parquet={n_pq}")
+                status = "YELLOW" if status != "RED" else "RED"
+            else:
+                details.append({"file": f"{label}_sync", "status": "OK",
+                                "count": n_json})
+        except Exception:
+            pass
+
     return {"status": status, "details": details}
 
 
