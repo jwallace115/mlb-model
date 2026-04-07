@@ -1245,7 +1245,8 @@
     "combined_overlay_tier": "S12_ONLY",
     "signal_class": "S12_LOW",
     "shadow_only": false,
-    "pre_overlay_tracking": false
+    "pre_overlay_tracking": false,
+    "signal_status": "CONFIRMED"
   },
   {
     "date": "2026-04-07",
@@ -1269,6 +1270,7 @@
     "combined_overlay_tier": "NONE",
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
-    "pre_overlay_tracking": false
+    "pre_overlay_tracking": false,
+    "signal_status": "CONFIRMED"
   }
 ]
