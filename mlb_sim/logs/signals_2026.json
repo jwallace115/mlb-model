@@ -1246,7 +1246,9 @@
     "signal_class": "S12_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Kevin Gausman",
+    "away_sp_name": "Yoshinobu Yamamoto"
   },
   {
     "date": "2026-04-07",
@@ -1271,6 +1273,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Kyle Freeland",
+    "away_sp_name": "Mike Burrows"
   }
 ]
