@@ -53,6 +53,7 @@ def check_cron_jobs():
         ("scratch_check", "/root/logs/scratch_check.log", 26),
         ("nrfi_helper", "/root/logs/nrfi_helper.log", 26),
         ("pitcher_logs_update", "/root/logs/pitcher_logs_update.log", 26),
+        ("statcast_update", "/root/logs/statcast_update.log", 192),  # weekly
     ]
     details = []
     status = "GREEN"
