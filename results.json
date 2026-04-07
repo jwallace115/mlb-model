@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-07T11:02:41.834486Z",
+  "generated_at": "2026-04-07T11:41:06.110226Z",
   "game_date": "2026-04-07",
   "plays": [],
   "no_plays": [
@@ -72,76 +72,6 @@
         "value": false
       },
       "summary": "Model leans under at 8.6 runs but confidence is low without a market line to validate the value. Revisit when odds post."
-    },
-    {
-      "rating": "NO PLAY",
-      "game": {
-        "game_pk": 824618,
-        "game_date": "2026-04-07",
-        "game_time": "02:10 PM CDT",
-        "game_time_et": "03:10 PM ET",
-        "status": "Scheduled",
-        "home_team": "CHW",
-        "away_team": "BAL",
-        "home_team_id": 145,
-        "away_team_id": 110,
-        "home_probable_pitcher": "{'id': 681343, 'name': 'Shane Smith', 'throws': ''}",
-        "away_probable_pitcher": "{'id': 669432, 'name': 'Trevor Rogers', 'throws': ''}",
-        "venue_name": "Rate Field",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 8.14,
-        "proj_total_f5": 4.45,
-        "confidence": "LOW",
-        "confidence_score": 0.406,
-        "factors": {
-          "sp_home_xfip": 4.251,
-          "sp_away_xfip": 3.962,
-          "sp_home_siera": 4.251,
-          "sp_away_siera": 3.962,
-          "sp_home_ip_per_start": 5.5,
-          "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 86.2,
-          "away_wrc_plus": 97.7,
-          "park_factor": 1.0,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
-          "home_sp_fb_pct": 0.35,
-          "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.151,
-          "away_bp_fatigue": 0.151,
-          "home_bp_innings_used": 11.3,
-          "away_bp_innings_used": 11.3,
-          "home_bp_xfip": 4.25,
-          "away_bp_xfip": 4.25,
-          "home_tier1_red": 0,
-          "away_tier1_red": 0
-        }
-      },
-      "full_edge": {
-        "edge": 1.14,
-        "lean": "OVER",
-        "consensus": 7.0,
-        "value": true
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "Model leans under at 8.1 runs but confidence is low without a market line to validate the value. Revisit when odds post."
     },
     {
       "rating": "NO PLAY",
@@ -581,11 +511,11 @@
         "home_umpire": null
       },
       "proj": {
-        "lean": "NEUTRAL",
-        "proj_total_full": 8.75,
-        "proj_total_f5": 4.82,
+        "lean": "UNDER",
+        "proj_total_full": 8.21,
+        "proj_total_f5": 4.53,
         "confidence": "LOW",
-        "confidence_score": 0.141,
+        "confidence_score": 0.191,
         "factors": {
           "sp_home_xfip": 3.984,
           "sp_away_xfip": 4.161,
@@ -596,15 +526,15 @@
           "home_wrc_plus": 103.1,
           "away_wrc_plus": 92.2,
           "park_factor": 1.03,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 15.0,
+          "wind_direction": 309,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 40.8,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0007,
+          "temp_factor": 0.9376,
+          "home_wind_adj": 1.0007,
+          "away_wind_adj": 1.0007,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -620,8 +550,8 @@
         }
       },
       "full_edge": {
-        "edge": 0.25,
-        "lean": "OVER",
+        "edge": -0.29,
+        "lean": "UNDER",
         "consensus": 8.5,
         "value": false
       },
@@ -631,7 +561,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "The park (PF 103) pushes toward the over while sp_avg counters in the other direction \u2014 the model nets out at 8.8 runs with no clear dominant force. Pass."
+      "summary": "Model has 8.2 runs, market has 8.5 \u2014 only 0.3 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play."
     },
     {
       "rating": "NO PLAY",
@@ -792,10 +722,10 @@
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 9.06,
-        "proj_total_f5": 4.97,
+        "proj_total_full": 9.14,
+        "proj_total_f5": 5.02,
         "confidence": "LOW",
-        "confidence_score": 0.253,
+        "confidence_score": 0.168,
         "factors": {
           "sp_home_xfip": 4.164,
           "sp_away_xfip": 4.072,
@@ -806,15 +736,15 @@
           "home_wrc_plus": 94.3,
           "away_wrc_plus": 97.4,
           "park_factor": 1.07,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 7.4,
+          "wind_direction": 125,
+          "wind_desc": "Blowing L to R",
+          "temperature_f": 71.0,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0119,
+          "temp_factor": 0.998,
+          "home_wind_adj": 1.0119,
+          "away_wind_adj": 1.0119,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -830,7 +760,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.56,
+        "edge": 1.64,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -862,10 +792,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.6,
-        "proj_total_f5": 4.79,
+        "proj_total_full": 8.61,
+        "proj_total_f5": 4.8,
         "confidence": "LOW",
-        "confidence_score": 0.177,
+        "confidence_score": 0.094,
         "factors": {
           "sp_home_xfip": 4.39,
           "sp_away_xfip": 4.175,
@@ -876,15 +806,15 @@
           "home_wrc_plus": 88.0,
           "away_wrc_plus": 107.6,
           "park_factor": 0.97,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 6.4,
+          "wind_direction": 219,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 66.6,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0124,
+          "temp_factor": 0.9892,
+          "home_wind_adj": 1.0124,
+          "away_wind_adj": 1.0124,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -900,7 +830,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.1,
+        "edge": 0.11,
         "lean": "OVER",
         "consensus": 8.5,
         "value": false
@@ -912,76 +842,6 @@
         "value": false
       },
       "summary": "Model has 8.6 runs, market has 8.5 \u2014 only 0.1 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play."
-    },
-    {
-      "rating": "\u2b50\u2b50",
-      "game": {
-        "game_pk": 823235,
-        "game_date": "2026-04-07",
-        "game_time": "06:45 PM PDT",
-        "game_time_et": "09:45 PM ET",
-        "status": "Scheduled",
-        "home_team": "SFG",
-        "away_team": "PHI",
-        "home_team_id": 137,
-        "away_team_id": 143,
-        "home_probable_pitcher": "{'id': 592662, 'name': 'Robbie Ray', 'throws': ''}",
-        "away_probable_pitcher": "{'id': 650911, 'name': 'Cristopher S\u00e1nchez', 'throws': ''}",
-        "venue_name": "Oracle Park",
-        "home_umpire": null
-      },
-      "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 7.64,
-        "proj_total_f5": 4.15,
-        "confidence": "MEDIUM",
-        "confidence_score": 0.567,
-        "factors": {
-          "sp_home_xfip": 4.111,
-          "sp_away_xfip": 3.768,
-          "sp_home_siera": 4.111,
-          "sp_away_siera": 3.768,
-          "sp_home_ip_per_start": 5.5,
-          "sp_away_ip_per_start": 5.5,
-          "home_wrc_plus": 84.4,
-          "away_wrc_plus": 101.2,
-          "park_factor": 0.96,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
-          "home_sp_fb_pct": 0.35,
-          "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
-          "home_bp_fatigue": 0.049,
-          "away_bp_fatigue": 0.107,
-          "home_bp_innings_used": 3.7,
-          "away_bp_innings_used": 8.0,
-          "home_bp_xfip": 4.25,
-          "away_bp_xfip": 4.25,
-          "home_tier1_red": 0,
-          "away_tier1_red": 0
-        }
-      },
-      "full_edge": {
-        "edge": 0.64,
-        "lean": "OVER",
-        "consensus": 7.0,
-        "value": true
-      },
-      "f5_edge": {
-        "edge": null,
-        "lean": null,
-        "consensus": null,
-        "value": false
-      },
-      "summary": "Cristopher S\u00e1nchez is at 3.77 xFIP \u2014 solid, mid-rotation \u2014 going up against a well below average SFG lineup (84 wRC+). Tough spot for SFG's bats. Both lineups grade below average (PHI 101 / SFG 84 wRC+), and the park (PF 96) gives pitchers an extra edge. Model has 7.6, market is at 7.0 \u2014 under by +0.6 runs."
     },
     {
       "rating": "\u2b50\u2b50",
@@ -1002,10 +862,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 11.01,
-        "proj_total_f5": 6.21,
+        "proj_total_full": 11.1,
+        "proj_total_f5": 6.26,
         "confidence": "MEDIUM",
-        "confidence_score": 0.562,
+        "confidence_score": 0.638,
         "factors": {
           "sp_home_xfip": 4.482,
           "sp_away_xfip": 4.227,
@@ -1016,15 +876,15 @@
           "home_wrc_plus": 90.0,
           "away_wrc_plus": 116.4,
           "park_factor": 1.17,
-          "wind_speed_mph": 0.0,
-          "wind_direction": 0,
-          "wind_desc": "Unknown",
-          "temperature_f": 72.0,
-          "weather_desc": "Data unavailable",
-          "wind_factor": 1.0,
-          "temp_factor": 1.0,
-          "home_wind_adj": 1.0,
-          "away_wind_adj": 1.0,
+          "wind_speed_mph": 9.9,
+          "wind_direction": 176,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 64.7,
+          "weather_desc": "Clear",
+          "wind_factor": 1.0238,
+          "temp_factor": 0.9854,
+          "home_wind_adj": 1.0238,
+          "away_wind_adj": 1.0238,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -1040,7 +900,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.51,
+        "edge": 0.6,
         "lean": "OVER",
         "consensus": 10.5,
         "value": true
@@ -1051,7 +911,147 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Coors Field (PF 117) is in a category of its own \u2014 the altitude inflates scoring regardless of pitching quality. HOU (116) and COL (90 wRC+) both grade above average, and starters are evenly matched (Mike Burrows 4.23 / Kyle Freeland 4.48 xFIP). Model has 11.0, market is at 10.5 \u2014 over by +0.5 runs."
+      "summary": "Coors Field (PF 117) is in a category of its own \u2014 the altitude inflates scoring regardless of pitching quality. HOU (116) and COL (90 wRC+) both grade above average, and starters are evenly matched (Mike Burrows 4.23 / Kyle Freeland 4.48 xFIP). Model has 11.1, market is at 10.5 \u2014 over by +0.6 runs."
+    },
+    {
+      "rating": "\u2b50\u2b50",
+      "game": {
+        "game_pk": 823235,
+        "game_date": "2026-04-07",
+        "game_time": "06:45 PM PDT",
+        "game_time_et": "09:45 PM ET",
+        "status": "Scheduled",
+        "home_team": "SFG",
+        "away_team": "PHI",
+        "home_team_id": 137,
+        "away_team_id": 143,
+        "home_probable_pitcher": "{'id': 592662, 'name': 'Robbie Ray', 'throws': ''}",
+        "away_probable_pitcher": "{'id': 650911, 'name': 'Cristopher S\u00e1nchez', 'throws': ''}",
+        "venue_name": "Oracle Park",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.63,
+        "proj_total_f5": 4.14,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.463,
+        "factors": {
+          "sp_home_xfip": 4.111,
+          "sp_away_xfip": 3.768,
+          "sp_home_siera": 4.111,
+          "sp_away_siera": 3.768,
+          "sp_home_ip_per_start": 5.5,
+          "sp_away_ip_per_start": 5.5,
+          "home_wrc_plus": 84.4,
+          "away_wrc_plus": 101.2,
+          "park_factor": 0.96,
+          "wind_speed_mph": 18.0,
+          "wind_direction": 287,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 56.4,
+          "weather_desc": "Mainly Clear",
+          "wind_factor": 1.0307,
+          "temp_factor": 0.9688,
+          "home_wind_adj": 1.0307,
+          "away_wind_adj": 1.0307,
+          "home_sp_fb_pct": 0.35,
+          "away_sp_fb_pct": 0.35,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.049,
+          "away_bp_fatigue": 0.107,
+          "home_bp_innings_used": 3.7,
+          "away_bp_innings_used": 8.0,
+          "home_bp_xfip": 4.25,
+          "away_bp_xfip": 4.25,
+          "home_tier1_red": 0,
+          "away_tier1_red": 0
+        }
+      },
+      "full_edge": {
+        "edge": 0.63,
+        "lean": "OVER",
+        "consensus": 7.0,
+        "value": true
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Cristopher S\u00e1nchez is at 3.77 xFIP \u2014 solid, mid-rotation \u2014 going up against a well below average SFG lineup (84 wRC+). Tough spot for SFG's bats. Both lineups grade below average (PHI 101 / SFG 84 wRC+), and the park (PF 96) gives pitchers an extra edge. Model has 7.6, market is at 7.0 \u2014 under by +0.6 runs."
+    },
+    {
+      "rating": "\u2b50",
+      "game": {
+        "game_pk": 824618,
+        "game_date": "2026-04-07",
+        "game_time": "02:10 PM CDT",
+        "game_time_et": "03:10 PM ET",
+        "status": "Scheduled",
+        "home_team": "CHW",
+        "away_team": "BAL",
+        "home_team_id": 145,
+        "away_team_id": 110,
+        "home_probable_pitcher": "{'id': 681343, 'name': 'Shane Smith', 'throws': ''}",
+        "away_probable_pitcher": "{'id': 669432, 'name': 'Trevor Rogers', 'throws': ''}",
+        "venue_name": "Rate Field",
+        "home_umpire": null
+      },
+      "proj": {
+        "lean": "UNDER",
+        "proj_total_full": 7.42,
+        "proj_total_f5": 4.06,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.619,
+        "factors": {
+          "sp_home_xfip": 4.251,
+          "sp_away_xfip": 3.962,
+          "sp_home_siera": 4.251,
+          "sp_away_siera": 3.962,
+          "sp_home_ip_per_start": 5.5,
+          "sp_away_ip_per_start": 5.5,
+          "home_wrc_plus": 86.2,
+          "away_wrc_plus": 97.7,
+          "park_factor": 1.0,
+          "wind_speed_mph": 6.8,
+          "wind_direction": 63,
+          "wind_desc": "Blowing L to R",
+          "temperature_f": 31.8,
+          "weather_desc": "Overcast",
+          "wind_factor": 0.991,
+          "temp_factor": 0.9196,
+          "home_wind_adj": 0.991,
+          "away_wind_adj": 0.991,
+          "home_sp_fb_pct": 0.35,
+          "away_sp_fb_pct": 0.35,
+          "umpire_name": "Unknown",
+          "umpire_runs_factor": 1.0,
+          "home_bp_fatigue": 0.151,
+          "away_bp_fatigue": 0.151,
+          "home_bp_innings_used": 11.3,
+          "away_bp_innings_used": 11.3,
+          "home_bp_xfip": 4.25,
+          "away_bp_xfip": 4.25,
+          "home_tier1_red": 0,
+          "away_tier1_red": 0
+        }
+      },
+      "full_edge": {
+        "edge": 0.42,
+        "lean": "OVER",
+        "consensus": 7.0,
+        "value": false
+      },
+      "f5_edge": {
+        "edge": null,
+        "lean": null,
+        "consensus": null,
+        "value": false
+      },
+      "summary": "Both lineups grade below average \u2014 BAL at 98 wRC+ and CHW at 86. Weak bats on both sides suppress the total. 32\u00b0F further suppresses scoring, and starters are evenly matched (Trevor Rogers 3.96 / Shane Smith 4.25 xFIP). Model has 7.4, market is at 7.0 \u2014 under by +0.4 runs."
     }
   ],
   "parlay": [],
@@ -1064,11 +1064,11 @@
       "market": "full",
       "market_label": "UNDER 7.0",
       "rating": "\u2b50\u2b50",
-      "projection": 7.64,
+      "projection": 7.63,
       "line": 7.0,
       "lean": "UNDER",
-      "edge": 0.64,
-      "confidence_score": 0.567
+      "edge": 0.63,
+      "confidence_score": 0.463
     },
     {
       "game_pk": 824375,
@@ -1077,11 +1077,11 @@
       "market": "full",
       "market_label": "OVER 10.5",
       "rating": "\u2b50\u2b50",
-      "projection": 11.01,
+      "projection": 11.1,
       "line": 10.5,
       "lean": "OVER",
-      "edge": 0.51,
-      "confidence_score": 0.562
+      "edge": 0.6,
+      "confidence_score": 0.638
     }
   ],
   "parlay_7": [
@@ -1092,11 +1092,11 @@
       "market": "full",
       "market_label": "UNDER 7.0",
       "rating": "\u2b50\u2b50",
-      "projection": 7.64,
+      "projection": 7.63,
       "line": 7.0,
       "lean": "UNDER",
-      "edge": 0.64,
-      "confidence_score": 0.567
+      "edge": 0.63,
+      "confidence_score": 0.463
     },
     {
       "game_pk": 824375,
@@ -1105,11 +1105,24 @@
       "market": "full",
       "market_label": "OVER 10.5",
       "rating": "\u2b50\u2b50",
-      "projection": 11.01,
+      "projection": 11.1,
       "line": 10.5,
       "lean": "OVER",
-      "edge": 0.51,
-      "confidence_score": 0.562
+      "edge": 0.6,
+      "confidence_score": 0.638
+    },
+    {
+      "game_pk": 824618,
+      "player_name": null,
+      "matchup": "BAL @ CHW",
+      "market": "full",
+      "market_label": "UNDER 7.0",
+      "rating": "\u2b50",
+      "projection": 7.42,
+      "line": 7.0,
+      "lean": "UNDER",
+      "edge": 0.42,
+      "confidence_score": 0.619
     }
   ],
   "season_record": {
@@ -1140,7 +1153,7 @@
       "MEDIUM": {
         "n": 21,
         "roi": -27.27,
-        "triggered_at": "2026-04-07T11:02:41.877139+00:00"
+        "triggered_at": "2026-04-07T11:41:06.153897+00:00"
       },
       "LOW": {
         "n": null,
@@ -1155,7 +1168,7 @@
     }
   },
   "daily_review": {
-    "generated_at": "2026-04-07T11:02:41.905070+00:00",
+    "generated_at": "2026-04-07T11:41:06.178426+00:00",
     "date_reviewed": "2026-04-06",
     "record_summary": {
       "MEDIUM": {
