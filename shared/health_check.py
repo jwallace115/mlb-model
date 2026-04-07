@@ -89,7 +89,7 @@ def check_signal_files():
         ("mlb_f5", "mlb_sim/logs/f5_signals_2026.json", 48),
         ("nhl", "nhl/nhl_decisions.parquet", 48),
         ("golf_shadow", "golf/shadow/golf_shadow_log.parquet", 168),  # weekly
-        ("wnba_matchup_board", "wnba_archetype_board/data/daily_matchup_board.parquet", 48),
+        ("wnba_matchup_board", "wnba_archetype_board/data/current/daily_matchup_board.parquet", 48),
     ]
     details = []
     status = "GREEN"
