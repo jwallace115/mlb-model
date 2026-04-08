@@ -1472,22 +1472,6 @@
     "logged_at": "2026-04-07T11:56:19.827464"
   },
   {
-    "game_id": 823403,
-    "date": "2026-04-08",
-    "season": 2026,
-    "home_team": "PIT",
-    "away_team": "SDP",
-    "combined_short_exit_value": 0.2,
-    "combined_short_exit_favorable_zone": false,
-    "v1_direction_context": "NONE",
-    "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
-    "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:20.724986"
-  },
-  {
     "game_id": 824455,
     "date": "2026-04-08",
     "season": 2026,
@@ -1710,5 +1694,21 @@
     "over_hit": null,
     "market_residual_over": null,
     "logged_at": "2026-04-08T02:00:51.987915"
+  },
+  {
+    "game_id": 823403,
+    "date": "2026-04-08",
+    "season": 2026,
+    "home_team": "PIT",
+    "away_team": "SDP",
+    "combined_short_exit_value": 0.2,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-08T11:00:20.444992"
   }
 ]
