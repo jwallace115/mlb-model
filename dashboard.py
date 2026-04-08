@@ -4975,6 +4975,92 @@ def _render_home_tab() -> None:
             '\u2705 Final signals confirmed at 7:00 AM ET</div>')
 
 
+# ── NCAAF Portal Shock tab rendering ──────────────────────────────────────────
+
+def _render_ncaaf_portal_tab() -> None:
+    """NCAAF Portal Shock — research-grade early-season signal (Weeks 1-4)."""
+    import json as _ncaaf_json
+
+    st.markdown("### 🏈 NCAAF Portal Overcorrection — Weeks 1-4")
+    st.caption("Research-grade early-season angle. Validated on 2022-2025 Weeks 1-4 only.")
+
+    log_path = os.path.join(os.path.dirname(__file__), "ncaaf", "logs",
+                            "portal_shock_signal_log.json")
+
+    if not os.path.exists(log_path):
+        st.info("No NCAAF portal shock signal log found. Signal activates Weeks 1-4 of the college football season (late August – September).")
+        return
+
+    with open(log_path) as _f:
+        signals = _ncaaf_json.load(_f)
+
+    if not signals:
+        st.info("No qualifying signals logged yet.")
+        return
+
+    # Current season signals
+    from datetime import date as _ncaaf_date
+    current_year = _ncaaf_date.today().year
+    # NCAAF season year: if we're in Jan-Jul, the upcoming season is current_year
+    # If Aug-Dec, the current season is current_year
+    current_season = current_year if _ncaaf_date.today().month >= 8 else current_year
+
+    current = [s for s in signals if s.get("season") == current_season]
+    historical = [s for s in signals if s.get("season") != current_season]
+
+    # Season performance summary
+    graded = [s for s in signals if s.get("ats_result") in ("COVER", "NO_COVER")]
+    if graded:
+        covers = sum(1 for s in graded if s["ats_result"] == "COVER")
+        total = len(graded)
+        rate = covers / total * 100
+
+        tier_stats = {}
+        for tier_label in ["TIER_1_BASE", "TIER_2_STRONG", "TIER_3_PREMIUM"]:
+            tsub = [s for s in graded if s["highest_tier"] == tier_label]
+            tc = sum(1 for s in tsub if s["ats_result"] == "COVER")
+            tier_stats[tier_label] = (tc, len(tsub))
+
+        st.markdown(f"**Historical (2022-2025):** {covers}-{total - covers} ATS "
+                    f"({rate:.1f}% cover)")
+
+        cols = st.columns(3)
+        for i, (tier, (tc, tn)) in enumerate(tier_stats.items()):
+            label = tier.replace("TIER_1_", "").replace("TIER_2_", "").replace("TIER_3_", "")
+            tr = tc / tn * 100 if tn > 0 else 0
+            cols[i].metric(label, f"{tc}-{tn - tc}", f"{tr:.0f}%")
+
+    # Current season qualifiers
+    if current:
+        st.markdown(f"#### {current_season} Season Qualifiers")
+        for s in sorted(current, key=lambda x: (x.get("week", 0), x.get("team", ""))):
+            tier = s.get("highest_tier", "")
+            tier_short = {"TIER_3_PREMIUM": "Premium", "TIER_2_STRONG": "Strong",
+                          "TIER_1_BASE": "Base"}.get(tier, tier)
+            color = {"TIER_3_PREMIUM": "#22c55e", "TIER_2_STRONG": "#eab308",
+                     "TIER_1_BASE": "#6b7280"}.get(tier, "#6b7280")
+            result = s.get("ats_result", "PENDING")
+            result_icon = {"COVER": "✅", "NO_COVER": "❌", "PUSH": "➖"}.get(result, "⏳")
+
+            st.html(
+                f'<div style="background:#1a1a2e;border-left:4px solid {color};'
+                f'padding:8px 12px;margin-bottom:6px;border-radius:4px;font-size:0.85em">'
+                f'<span style="color:{color};font-weight:700">Wk{s.get("week","")} [{tier_short}]</span> '
+                f'{s.get("team","")} vs {s.get("opponent","")} '
+                f'<span style="color:#94a3b8">({s.get("spread","")})</span> '
+                f'{result_icon} '
+                f'<span style="color:#64748b;font-size:0.8em">{s.get("note","")[:80]}</span>'
+                f'</div>'
+            )
+    else:
+        st.info(f"No {current_season} qualifiers yet. Signal activates Weeks 1-4 (late August - September).")
+
+    # Disclaimer
+    st.markdown("---")
+    st.caption("Market may be overcorrecting for portal departures while retained core remains intact. "
+               "Research-grade — validated on 2022-2025 Weeks 1-4 only. Not a full NCAAF model.")
+
+
 def main() -> None:
     data  = load_results()
     stats = load_season_stats()
@@ -5025,7 +5111,7 @@ def main() -> None:
         pass
 
     # ── sport tabs ────────────────────────────────────────────────────────────
-    tab_home, tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_wnba_arch, tab_reviews, tab_tracker = st.tabs(["\U0001f3e0", "⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "🏀 WNBA", "📋 Reviews", "📊 Tracker"])
+    tab_home, tab_mlb, tab_nba, tab_nhl, tab_soccer, tab_nfl, tab_golf, tab_wnba_arch, tab_ncaaf, tab_reviews, tab_tracker = st.tabs(["\U0001f3e0", "⚾ MLB", "🏀 NBA", "🏒 NHL", "⚽ Soccer", "🏈 NFL", "⛳ Golf", "🏀 WNBA", "🏈 NCAAF", "📋 Reviews", "📊 Tracker"])
 
     with tab_home:
         _render_home_tab()
@@ -5050,6 +5136,9 @@ def main() -> None:
 
     with tab_wnba_arch:
         _render_wnba_archetype_tab()
+
+    with tab_ncaaf:
+        _render_ncaaf_portal_tab()
 
     with tab_reviews:
         _render_reviews_tab()
