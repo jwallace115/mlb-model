@@ -6168,6 +6168,68 @@
     "logged_at": "2026-04-07T11:56:19.835571"
   },
   {
+    "game_id": 823403,
+    "date": "2026-04-08",
+    "signal_name": "ST02_road_trip_6plus",
+    "signal_value": null,
+    "favorable_zone_flag": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "home_team": "PIT",
+    "away_team": "SDP",
+    "market_line": 7.5,
+    "model_projection": 8.91,
+    "logged_at": "2026-04-08T14:48:55.907782"
+  },
+  {
+    "game_id": 823403,
+    "date": "2026-04-08",
+    "signal_name": "ADJ_CONTACT",
+    "signal_value": -0.002363,
+    "favorable_zone_flag": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "home_team": "PIT",
+    "away_team": "SDP",
+    "market_line": 7.5,
+    "model_projection": 8.91,
+    "home_pitcher_value": 0.050377,
+    "away_pitcher_value": -0.055103,
+    "logged_at": "2026-04-08T14:48:55.907782"
+  },
+  {
+    "game_id": 823403,
+    "date": "2026-04-08",
+    "signal_name": "ADJ_HH",
+    "signal_value": -0.043993,
+    "favorable_zone_flag": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "home_team": "PIT",
+    "away_team": "SDP",
+    "market_line": 7.5,
+    "model_projection": 8.91,
+    "home_pitcher_value": -0.128553,
+    "away_pitcher_value": 0.040568,
+    "logged_at": "2026-04-08T14:48:55.907782"
+  },
+  {
+    "game_id": 823403,
+    "date": "2026-04-08",
+    "signal_name": "adj_k_rate_last3",
+    "signal_value": -0.10558,
+    "favorable_zone_flag": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "home_team": "PIT",
+    "away_team": "SDP",
+    "market_line": 7.5,
+    "model_projection": 8.91,
+    "home_pitcher_value": -0.068437,
+    "away_pitcher_value": -0.142724,
+    "logged_at": "2026-04-08T14:48:55.907782"
+  },
+  {
     "game_id": 824455,
     "date": "2026-04-08",
     "signal_name": "ST02_road_trip_6plus",
@@ -6179,7 +6241,7 @@
     "away_team": "KCR",
     "market_line": 7.0,
     "model_projection": 8.56,
-    "logged_at": "2026-04-08T02:00:25.434990"
+    "logged_at": "2026-04-08T14:49:07.455226"
   },
   {
     "game_id": 824455,
@@ -6195,7 +6257,7 @@
     "model_projection": 8.56,
     "home_pitcher_value": 0.051658,
     "away_pitcher_value": 0.064109,
-    "logged_at": "2026-04-08T02:00:25.434990"
+    "logged_at": "2026-04-08T14:49:07.455226"
   },
   {
     "game_id": 824455,
@@ -6211,7 +6273,7 @@
     "model_projection": 8.56,
     "home_pitcher_value": 0.090081,
     "away_pitcher_value": -0.126099,
-    "logged_at": "2026-04-08T02:00:25.434990"
+    "logged_at": "2026-04-08T14:49:07.455226"
   },
   {
     "game_id": 824455,
@@ -6227,7 +6289,7 @@
     "model_projection": 8.56,
     "home_pitcher_value": -0.044875,
     "away_pitcher_value": 0.073608,
-    "logged_at": "2026-04-08T02:00:25.434990"
+    "logged_at": "2026-04-08T14:49:07.455226"
   },
   {
     "game_id": 824779,
@@ -6240,8 +6302,8 @@
     "home_team": "BOS",
     "away_team": "MIL",
     "market_line": 7.5,
-    "model_projection": 8.46,
-    "logged_at": "2026-04-08T02:00:28.279613"
+    "model_projection": 8.19,
+    "logged_at": "2026-04-08T14:49:09.144672"
   },
   {
     "game_id": 824779,
@@ -6254,10 +6316,10 @@
     "home_team": "BOS",
     "away_team": "MIL",
     "market_line": 7.5,
-    "model_projection": 8.46,
+    "model_projection": 8.19,
     "home_pitcher_value": 0.062155,
     "away_pitcher_value": null,
-    "logged_at": "2026-04-08T02:00:28.279613"
+    "logged_at": "2026-04-08T14:49:09.144672"
   },
   {
     "game_id": 824779,
@@ -6270,10 +6332,10 @@
     "home_team": "BOS",
     "away_team": "MIL",
     "market_line": 7.5,
-    "model_projection": 8.46,
+    "model_projection": 8.19,
     "home_pitcher_value": -0.099313,
     "away_pitcher_value": null,
-    "logged_at": "2026-04-08T02:00:28.279613"
+    "logged_at": "2026-04-08T14:49:09.144672"
   },
   {
     "game_id": 824779,
@@ -6286,10 +6348,10 @@
     "home_team": "BOS",
     "away_team": "MIL",
     "market_line": 7.5,
-    "model_projection": 8.46,
+    "model_projection": 8.19,
     "home_pitcher_value": 0.096692,
     "away_pitcher_value": null,
-    "logged_at": "2026-04-08T02:00:28.279613"
+    "logged_at": "2026-04-08T14:49:09.144672"
   },
   {
     "game_id": 824617,
@@ -6302,8 +6364,8 @@
     "home_team": "CHW",
     "away_team": "BAL",
     "market_line": 7.5,
-    "model_projection": 8.13,
-    "logged_at": "2026-04-08T02:00:31.016798"
+    "model_projection": 8.18,
+    "logged_at": "2026-04-08T14:49:10.604421"
   },
   {
     "game_id": 824617,
@@ -6316,10 +6378,10 @@
     "home_team": "CHW",
     "away_team": "BAL",
     "market_line": 7.5,
-    "model_projection": 8.13,
+    "model_projection": 8.18,
     "home_pitcher_value": -0.023944,
     "away_pitcher_value": 0.093826,
-    "logged_at": "2026-04-08T02:00:31.016798"
+    "logged_at": "2026-04-08T14:49:10.604421"
   },
   {
     "game_id": 824617,
@@ -6332,10 +6394,10 @@
     "home_team": "CHW",
     "away_team": "BAL",
     "market_line": 7.5,
-    "model_projection": 8.13,
+    "model_projection": 8.18,
     "home_pitcher_value": -0.085618,
     "away_pitcher_value": -0.016179,
-    "logged_at": "2026-04-08T02:00:31.016798"
+    "logged_at": "2026-04-08T14:49:10.604421"
   },
   {
     "game_id": 824617,
@@ -6348,10 +6410,10 @@
     "home_team": "CHW",
     "away_team": "BAL",
     "market_line": 7.5,
-    "model_projection": 8.13,
+    "model_projection": 8.18,
     "home_pitcher_value": 0.040377,
     "away_pitcher_value": 0.062493,
-    "logged_at": "2026-04-08T02:00:31.016798"
+    "logged_at": "2026-04-08T14:49:10.604421"
   },
   {
     "game_id": 822915,
@@ -6364,8 +6426,8 @@
     "home_team": "TEX",
     "away_team": "SEA",
     "market_line": 7.5,
-    "model_projection": 8.94,
-    "logged_at": "2026-04-08T02:00:33.985022"
+    "model_projection": 8.95,
+    "logged_at": "2026-04-08T14:49:12.269331"
   },
   {
     "game_id": 822915,
@@ -6378,10 +6440,10 @@
     "home_team": "TEX",
     "away_team": "SEA",
     "market_line": 7.5,
-    "model_projection": 8.94,
+    "model_projection": 8.95,
     "home_pitcher_value": 0.095161,
     "away_pitcher_value": 0.06713,
-    "logged_at": "2026-04-08T02:00:33.985022"
+    "logged_at": "2026-04-08T14:49:12.269331"
   },
   {
     "game_id": 822915,
@@ -6394,10 +6456,10 @@
     "home_team": "TEX",
     "away_team": "SEA",
     "market_line": 7.5,
-    "model_projection": 8.94,
+    "model_projection": 8.95,
     "home_pitcher_value": -0.024954,
     "away_pitcher_value": -0.043757,
-    "logged_at": "2026-04-08T02:00:33.985022"
+    "logged_at": "2026-04-08T14:49:12.269331"
   },
   {
     "game_id": 822915,
@@ -6410,10 +6472,10 @@
     "home_team": "TEX",
     "away_team": "SEA",
     "market_line": 7.5,
-    "model_projection": 8.94,
+    "model_projection": 8.95,
     "home_pitcher_value": -0.03988,
     "away_pitcher_value": 0.096209,
-    "logged_at": "2026-04-08T02:00:33.985022"
+    "logged_at": "2026-04-08T14:49:12.269331"
   },
   {
     "game_id": 822833,
@@ -6426,8 +6488,8 @@
     "home_team": "TOR",
     "away_team": "LAD",
     "market_line": 7.5,
-    "model_projection": 9.44,
-    "logged_at": "2026-04-08T02:00:36.030400"
+    "model_projection": 9.42,
+    "logged_at": "2026-04-08T14:49:13.628562"
   },
   {
     "game_id": 822833,
@@ -6440,10 +6502,10 @@
     "home_team": "TOR",
     "away_team": "LAD",
     "market_line": 7.5,
-    "model_projection": 9.44,
+    "model_projection": 9.42,
     "home_pitcher_value": 0.043122,
     "away_pitcher_value": 0.155771,
-    "logged_at": "2026-04-08T02:00:36.030400"
+    "logged_at": "2026-04-08T14:49:13.628562"
   },
   {
     "game_id": 822833,
@@ -6456,10 +6518,10 @@
     "home_team": "TOR",
     "away_team": "LAD",
     "market_line": 7.5,
-    "model_projection": 9.44,
+    "model_projection": 9.42,
     "home_pitcher_value": 0.193512,
     "away_pitcher_value": 0.072909,
-    "logged_at": "2026-04-08T02:00:36.030400"
+    "logged_at": "2026-04-08T14:49:13.628562"
   },
   {
     "game_id": 822833,
@@ -6472,10 +6534,10 @@
     "home_team": "TOR",
     "away_team": "LAD",
     "market_line": 7.5,
-    "model_projection": 9.44,
+    "model_projection": 9.42,
     "home_pitcher_value": -0.041622,
     "away_pitcher_value": 0.109436,
-    "logged_at": "2026-04-08T02:00:36.030400"
+    "logged_at": "2026-04-08T14:49:13.628562"
   },
   {
     "game_id": 824374,
@@ -6488,8 +6550,8 @@
     "home_team": "COL",
     "away_team": "HOU",
     "market_line": 11.5,
-    "model_projection": 11.03,
-    "logged_at": "2026-04-08T02:00:38.368354"
+    "model_projection": 11.25,
+    "logged_at": "2026-04-08T14:49:15.113865"
   },
   {
     "game_id": 824374,
@@ -6502,10 +6564,10 @@
     "home_team": "COL",
     "away_team": "HOU",
     "market_line": 11.5,
-    "model_projection": 11.03,
+    "model_projection": 11.25,
     "home_pitcher_value": -0.050491,
     "away_pitcher_value": 0.008699,
-    "logged_at": "2026-04-08T02:00:38.368354"
+    "logged_at": "2026-04-08T14:49:15.113865"
   },
   {
     "game_id": 824374,
@@ -6518,10 +6580,10 @@
     "home_team": "COL",
     "away_team": "HOU",
     "market_line": 11.5,
-    "model_projection": 11.03,
+    "model_projection": 11.25,
     "home_pitcher_value": -0.066304,
     "away_pitcher_value": 0.13283,
-    "logged_at": "2026-04-08T02:00:38.368354"
+    "logged_at": "2026-04-08T14:49:15.113865"
   },
   {
     "game_id": 824374,
@@ -6534,10 +6596,10 @@
     "home_team": "COL",
     "away_team": "HOU",
     "market_line": 11.5,
-    "model_projection": 11.03,
+    "model_projection": 11.25,
     "home_pitcher_value": -0.068164,
     "away_pitcher_value": -0.041024,
-    "logged_at": "2026-04-08T02:00:38.368354"
+    "logged_at": "2026-04-08T14:49:15.113865"
   },
   {
     "game_id": 823234,
@@ -6550,8 +6612,8 @@
     "home_team": "SFG",
     "away_team": "PHI",
     "market_line": 8.5,
-    "model_projection": 8.16,
-    "logged_at": "2026-04-08T02:00:39.898754"
+    "model_projection": 8.26,
+    "logged_at": "2026-04-08T14:49:16.491442"
   },
   {
     "game_id": 823234,
@@ -6564,10 +6626,10 @@
     "home_team": "SFG",
     "away_team": "PHI",
     "market_line": 8.5,
-    "model_projection": 8.16,
+    "model_projection": 8.26,
     "home_pitcher_value": -0.02353,
     "away_pitcher_value": 0.030486,
-    "logged_at": "2026-04-08T02:00:39.898754"
+    "logged_at": "2026-04-08T14:49:16.491442"
   },
   {
     "game_id": 823234,
@@ -6580,10 +6642,10 @@
     "home_team": "SFG",
     "away_team": "PHI",
     "market_line": 8.5,
-    "model_projection": 8.16,
+    "model_projection": 8.26,
     "home_pitcher_value": -0.020399,
     "away_pitcher_value": -0.087062,
-    "logged_at": "2026-04-08T02:00:39.898754"
+    "logged_at": "2026-04-08T14:49:16.491442"
   },
   {
     "game_id": 823234,
@@ -6596,10 +6658,10 @@
     "home_team": "SFG",
     "away_team": "PHI",
     "market_line": 8.5,
-    "model_projection": 8.16,
+    "model_projection": 8.26,
     "home_pitcher_value": -0.010978,
     "away_pitcher_value": 0.00927,
-    "logged_at": "2026-04-08T02:00:39.898754"
+    "logged_at": "2026-04-08T14:49:16.491442"
   },
   {
     "game_id": 822753,
@@ -6612,8 +6674,8 @@
     "home_team": "WSN",
     "away_team": "STL",
     "market_line": 8.5,
-    "model_projection": 9.62,
-    "logged_at": "2026-04-08T02:00:41.665991"
+    "model_projection": 9.64,
+    "logged_at": "2026-04-08T14:49:17.943510"
   },
   {
     "game_id": 822753,
@@ -6626,10 +6688,10 @@
     "home_team": "WSN",
     "away_team": "STL",
     "market_line": 8.5,
-    "model_projection": 9.62,
+    "model_projection": 9.64,
     "home_pitcher_value": 0.011436,
     "away_pitcher_value": 0.037263,
-    "logged_at": "2026-04-08T02:00:41.665991"
+    "logged_at": "2026-04-08T14:49:17.943510"
   },
   {
     "game_id": 822753,
@@ -6642,10 +6704,10 @@
     "home_team": "WSN",
     "away_team": "STL",
     "market_line": 8.5,
-    "model_projection": 9.62,
+    "model_projection": 9.64,
     "home_pitcher_value": -0.015541,
     "away_pitcher_value": -0.07519,
-    "logged_at": "2026-04-08T02:00:41.665991"
+    "logged_at": "2026-04-08T14:49:17.943510"
   },
   {
     "game_id": 822753,
@@ -6658,10 +6720,10 @@
     "home_team": "WSN",
     "away_team": "STL",
     "market_line": 8.5,
-    "model_projection": 9.62,
+    "model_projection": 9.64,
     "home_pitcher_value": -0.074299,
     "away_pitcher_value": -0.101096,
-    "logged_at": "2026-04-08T02:00:41.665991"
+    "logged_at": "2026-04-08T14:49:17.943510"
   },
   {
     "game_id": 824050,
@@ -6674,8 +6736,8 @@
     "home_team": "LAA",
     "away_team": "ATL",
     "market_line": 8.5,
-    "model_projection": 8.36,
-    "logged_at": "2026-04-08T02:00:43.209523"
+    "model_projection": 8.38,
+    "logged_at": "2026-04-08T14:49:19.303290"
   },
   {
     "game_id": 824050,
@@ -6688,10 +6750,10 @@
     "home_team": "LAA",
     "away_team": "ATL",
     "market_line": 8.5,
-    "model_projection": 8.36,
+    "model_projection": 8.38,
     "home_pitcher_value": -0.099413,
     "away_pitcher_value": -0.06077,
-    "logged_at": "2026-04-08T02:00:43.209523"
+    "logged_at": "2026-04-08T14:49:19.303290"
   },
   {
     "game_id": 824050,
@@ -6704,10 +6766,10 @@
     "home_team": "LAA",
     "away_team": "ATL",
     "market_line": 8.5,
-    "model_projection": 8.36,
+    "model_projection": 8.38,
     "home_pitcher_value": -0.074358,
     "away_pitcher_value": 0.091681,
-    "logged_at": "2026-04-08T02:00:43.209523"
+    "logged_at": "2026-04-08T14:49:19.303290"
   },
   {
     "game_id": 824050,
@@ -6720,10 +6782,10 @@
     "home_team": "LAA",
     "away_team": "ATL",
     "market_line": 8.5,
-    "model_projection": 8.36,
+    "model_projection": 8.38,
     "home_pitcher_value": 0.006458,
     "away_pitcher_value": -0.132174,
-    "logged_at": "2026-04-08T02:00:43.209523"
+    "logged_at": "2026-04-08T14:49:19.303290"
   },
   {
     "game_id": 823646,
@@ -6736,8 +6798,8 @@
     "home_team": "NYM",
     "away_team": "ARI",
     "market_line": 7.5,
-    "model_projection": 8.09,
-    "logged_at": "2026-04-08T02:00:44.590026"
+    "model_projection": 8.11,
+    "logged_at": "2026-04-08T14:49:20.419179"
   },
   {
     "game_id": 823646,
@@ -6750,10 +6812,10 @@
     "home_team": "NYM",
     "away_team": "ARI",
     "market_line": 7.5,
-    "model_projection": 8.09,
+    "model_projection": 8.11,
     "home_pitcher_value": -0.025906,
     "away_pitcher_value": 0.077276,
-    "logged_at": "2026-04-08T02:00:44.590026"
+    "logged_at": "2026-04-08T14:49:20.419179"
   },
   {
     "game_id": 823646,
@@ -6766,10 +6828,10 @@
     "home_team": "NYM",
     "away_team": "ARI",
     "market_line": 7.5,
-    "model_projection": 8.09,
+    "model_projection": 8.11,
     "home_pitcher_value": 0.105365,
     "away_pitcher_value": -0.057208,
-    "logged_at": "2026-04-08T02:00:44.590026"
+    "logged_at": "2026-04-08T14:49:20.419179"
   },
   {
     "game_id": 823646,
@@ -6782,10 +6844,10 @@
     "home_team": "NYM",
     "away_team": "ARI",
     "market_line": 7.5,
-    "model_projection": 8.09,
+    "model_projection": 8.11,
     "home_pitcher_value": -0.057822,
     "away_pitcher_value": -0.130538,
-    "logged_at": "2026-04-08T02:00:44.590026"
+    "logged_at": "2026-04-08T14:49:20.419179"
   },
   {
     "game_id": 823000,
@@ -6799,7 +6861,7 @@
     "away_team": "CHC",
     "market_line": 8.0,
     "model_projection": 8.63,
-    "logged_at": "2026-04-08T02:00:45.788078"
+    "logged_at": "2026-04-08T14:49:21.420398"
   },
   {
     "game_id": 823000,
@@ -6815,7 +6877,7 @@
     "model_projection": 8.63,
     "home_pitcher_value": 0.009596,
     "away_pitcher_value": 0.001341,
-    "logged_at": "2026-04-08T02:00:45.788078"
+    "logged_at": "2026-04-08T14:49:21.420398"
   },
   {
     "game_id": 823000,
@@ -6831,7 +6893,7 @@
     "model_projection": 8.63,
     "home_pitcher_value": -0.001099,
     "away_pitcher_value": 0.031109,
-    "logged_at": "2026-04-08T02:00:45.788078"
+    "logged_at": "2026-04-08T14:49:21.420398"
   },
   {
     "game_id": 823000,
@@ -6847,7 +6909,7 @@
     "model_projection": 8.63,
     "home_pitcher_value": 0.059493,
     "away_pitcher_value": 0.021455,
-    "logged_at": "2026-04-08T02:00:45.788078"
+    "logged_at": "2026-04-08T14:49:21.420398"
   },
   {
     "game_id": 823885,
@@ -6860,8 +6922,8 @@
     "home_team": "MIA",
     "away_team": "CIN",
     "market_line": 7.5,
-    "model_projection": 8.67,
-    "logged_at": "2026-04-08T02:00:48.221857"
+    "model_projection": 8.77,
+    "logged_at": "2026-04-08T14:49:22.901519"
   },
   {
     "game_id": 823885,
@@ -6874,10 +6936,10 @@
     "home_team": "MIA",
     "away_team": "CIN",
     "market_line": 7.5,
-    "model_projection": 8.67,
+    "model_projection": 8.77,
     "home_pitcher_value": 0.070941,
     "away_pitcher_value": 0.031716,
-    "logged_at": "2026-04-08T02:00:48.221857"
+    "logged_at": "2026-04-08T14:49:22.901519"
   },
   {
     "game_id": 823885,
@@ -6890,10 +6952,10 @@
     "home_team": "MIA",
     "away_team": "CIN",
     "market_line": 7.5,
-    "model_projection": 8.67,
+    "model_projection": 8.77,
     "home_pitcher_value": -0.114464,
     "away_pitcher_value": -0.016763,
-    "logged_at": "2026-04-08T02:00:48.221857"
+    "logged_at": "2026-04-08T14:49:22.901519"
   },
   {
     "game_id": 823885,
@@ -6906,10 +6968,10 @@
     "home_team": "MIA",
     "away_team": "CIN",
     "market_line": 7.5,
-    "model_projection": 8.67,
+    "model_projection": 8.77,
     "home_pitcher_value": 0.12591,
     "away_pitcher_value": -0.085914,
-    "logged_at": "2026-04-08T02:00:48.221857"
+    "logged_at": "2026-04-08T14:49:22.901519"
   },
   {
     "game_id": 823564,
@@ -6922,8 +6984,8 @@
     "home_team": "NYY",
     "away_team": "OAK",
     "market_line": 8.5,
-    "model_projection": 8.52,
-    "logged_at": "2026-04-08T02:00:49.861348"
+    "model_projection": 8.54,
+    "logged_at": "2026-04-08T14:49:24.019119"
   },
   {
     "game_id": 823564,
@@ -6936,10 +6998,10 @@
     "home_team": "NYY",
     "away_team": "OAK",
     "market_line": 8.5,
-    "model_projection": 8.52,
+    "model_projection": 8.54,
     "home_pitcher_value": 0.024056,
     "away_pitcher_value": -0.038851,
-    "logged_at": "2026-04-08T02:00:49.861348"
+    "logged_at": "2026-04-08T14:49:24.019119"
   },
   {
     "game_id": 823564,
@@ -6952,10 +7014,10 @@
     "home_team": "NYY",
     "away_team": "OAK",
     "market_line": 8.5,
-    "model_projection": 8.52,
+    "model_projection": 8.54,
     "home_pitcher_value": 0.024501,
     "away_pitcher_value": 0.045663,
-    "logged_at": "2026-04-08T02:00:49.861348"
+    "logged_at": "2026-04-08T14:49:24.019119"
   },
   {
     "game_id": 823564,
@@ -6968,10 +7030,10 @@
     "home_team": "NYY",
     "away_team": "OAK",
     "market_line": 8.5,
-    "model_projection": 8.52,
+    "model_projection": 8.54,
     "home_pitcher_value": -0.118962,
     "away_pitcher_value": -0.126954,
-    "logged_at": "2026-04-08T02:00:49.861348"
+    "logged_at": "2026-04-08T14:49:24.019119"
   },
   {
     "game_id": 823726,
@@ -6984,8 +7046,8 @@
     "home_team": "MIN",
     "away_team": "DET",
     "market_line": 8.0,
-    "model_projection": 8.28,
-    "logged_at": "2026-04-08T02:00:51.999116"
+    "model_projection": 8.23,
+    "logged_at": "2026-04-08T14:49:25.467381"
   },
   {
     "game_id": 823726,
@@ -6998,10 +7060,10 @@
     "home_team": "MIN",
     "away_team": "DET",
     "market_line": 8.0,
-    "model_projection": 8.28,
+    "model_projection": 8.23,
     "home_pitcher_value": 0.009985,
     "away_pitcher_value": 0.011886,
-    "logged_at": "2026-04-08T02:00:51.999116"
+    "logged_at": "2026-04-08T14:49:25.467381"
   },
   {
     "game_id": 823726,
@@ -7014,10 +7076,10 @@
     "home_team": "MIN",
     "away_team": "DET",
     "market_line": 8.0,
-    "model_projection": 8.28,
+    "model_projection": 8.23,
     "home_pitcher_value": 0.006248,
     "away_pitcher_value": -0.072352,
-    "logged_at": "2026-04-08T02:00:51.999116"
+    "logged_at": "2026-04-08T14:49:25.467381"
   },
   {
     "game_id": 823726,
@@ -7030,71 +7092,9 @@
     "home_team": "MIN",
     "away_team": "DET",
     "market_line": 8.0,
-    "model_projection": 8.28,
+    "model_projection": 8.23,
     "home_pitcher_value": -0.001964,
     "away_pitcher_value": -0.081872,
-    "logged_at": "2026-04-08T02:00:51.999116"
-  },
-  {
-    "game_id": 823403,
-    "date": "2026-04-08",
-    "signal_name": "ST02_road_trip_6plus",
-    "signal_value": null,
-    "favorable_zone_flag": false,
-    "v1_direction_context": "NONE",
-    "closing_total": 7.5,
-    "home_team": "PIT",
-    "away_team": "SDP",
-    "market_line": 7.5,
-    "model_projection": 9.17,
-    "logged_at": "2026-04-08T11:00:24.312451"
-  },
-  {
-    "game_id": 823403,
-    "date": "2026-04-08",
-    "signal_name": "ADJ_CONTACT",
-    "signal_value": -0.002363,
-    "favorable_zone_flag": false,
-    "v1_direction_context": "NONE",
-    "closing_total": 7.5,
-    "home_team": "PIT",
-    "away_team": "SDP",
-    "market_line": 7.5,
-    "model_projection": 9.17,
-    "home_pitcher_value": 0.050377,
-    "away_pitcher_value": -0.055103,
-    "logged_at": "2026-04-08T11:00:24.312451"
-  },
-  {
-    "game_id": 823403,
-    "date": "2026-04-08",
-    "signal_name": "ADJ_HH",
-    "signal_value": -0.043993,
-    "favorable_zone_flag": false,
-    "v1_direction_context": "NONE",
-    "closing_total": 7.5,
-    "home_team": "PIT",
-    "away_team": "SDP",
-    "market_line": 7.5,
-    "model_projection": 9.17,
-    "home_pitcher_value": -0.128553,
-    "away_pitcher_value": 0.040568,
-    "logged_at": "2026-04-08T11:00:24.312451"
-  },
-  {
-    "game_id": 823403,
-    "date": "2026-04-08",
-    "signal_name": "adj_k_rate_last3",
-    "signal_value": -0.10558,
-    "favorable_zone_flag": false,
-    "v1_direction_context": "NONE",
-    "closing_total": 7.5,
-    "home_team": "PIT",
-    "away_team": "SDP",
-    "market_line": 7.5,
-    "model_projection": 9.17,
-    "home_pitcher_value": -0.068437,
-    "away_pitcher_value": -0.142724,
-    "logged_at": "2026-04-08T11:00:24.312451"
+    "logged_at": "2026-04-08T14:49:25.467381"
   }
 ]

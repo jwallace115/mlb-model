@@ -1472,6 +1472,22 @@
     "logged_at": "2026-04-07T11:56:19.827464"
   },
   {
+    "game_id": 823403,
+    "date": "2026-04-08",
+    "season": 2026,
+    "home_team": "PIT",
+    "away_team": "SDP",
+    "combined_short_exit_value": 0.2,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-08T14:48:53.710143"
+  },
+  {
     "game_id": 824455,
     "date": "2026-04-08",
     "season": 2026,
@@ -1485,7 +1501,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:25.424136"
+    "logged_at": "2026-04-08T14:49:07.446027"
   },
   {
     "game_id": 824779,
@@ -1501,7 +1517,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:28.269381"
+    "logged_at": "2026-04-08T14:49:09.134099"
   },
   {
     "game_id": 824617,
@@ -1517,7 +1533,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:31.004040"
+    "logged_at": "2026-04-08T14:49:10.594891"
   },
   {
     "game_id": 822915,
@@ -1533,7 +1549,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:33.974834"
+    "logged_at": "2026-04-08T14:49:12.259645"
   },
   {
     "game_id": 822833,
@@ -1549,7 +1565,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:36.024435"
+    "logged_at": "2026-04-08T14:49:13.618853"
   },
   {
     "game_id": 824374,
@@ -1565,7 +1581,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:38.357785"
+    "logged_at": "2026-04-08T14:49:15.103515"
   },
   {
     "game_id": 823234,
@@ -1581,7 +1597,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:39.888212"
+    "logged_at": "2026-04-08T14:49:16.481960"
   },
   {
     "game_id": 822753,
@@ -1597,7 +1613,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:41.654532"
+    "logged_at": "2026-04-08T14:49:17.934957"
   },
   {
     "game_id": 824050,
@@ -1613,7 +1629,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:43.197428"
+    "logged_at": "2026-04-08T14:49:19.293704"
   },
   {
     "game_id": 823646,
@@ -1629,7 +1645,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:44.579174"
+    "logged_at": "2026-04-08T14:49:20.409652"
   },
   {
     "game_id": 823000,
@@ -1645,7 +1661,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:45.774668"
+    "logged_at": "2026-04-08T14:49:21.410975"
   },
   {
     "game_id": 823885,
@@ -1661,7 +1677,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:48.211558"
+    "logged_at": "2026-04-08T14:49:22.892665"
   },
   {
     "game_id": 823564,
@@ -1677,7 +1693,7 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:49.848011"
+    "logged_at": "2026-04-08T14:49:24.007186"
   },
   {
     "game_id": 823726,
@@ -1693,22 +1709,6 @@
     "actual_result_over": null,
     "over_hit": null,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T02:00:51.987915"
-  },
-  {
-    "game_id": 823403,
-    "date": "2026-04-08",
-    "season": 2026,
-    "home_team": "PIT",
-    "away_team": "SDP",
-    "combined_short_exit_value": 0.2,
-    "combined_short_exit_favorable_zone": false,
-    "v1_direction_context": "NONE",
-    "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
-    "market_residual_over": null,
-    "logged_at": "2026-04-08T11:00:20.444992"
+    "logged_at": "2026-04-08T14:49:25.457660"
   }
 ]
