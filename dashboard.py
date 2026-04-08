@@ -4977,18 +4977,107 @@ def _render_home_tab() -> None:
 
 # ── NCAAF Portal Shock tab rendering ──────────────────────────────────────────
 
+def _ncaaf_pill(label: str, color: str, bg: str) -> str:
+    """Render an NCAAF signal pill — same style as MLB modifier pills."""
+    return (f'<span style="background:{bg};color:{color};border:1px solid {color};'
+            f'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600;'
+            f'margin-right:3px">{label}</span>')
+
+
+def _render_ncaaf_signal_card(s: dict) -> None:
+    """Render a single NCAAF signal card — matches MLB/NHL card visual style."""
+    team = s.get("team", "")
+    opponent = s.get("opponent", "")
+    side = s.get("side", "")
+    spread = s.get("spread")
+    week = s.get("week", "")
+    conf = s.get("conference", "")
+    result = s.get("ats_result")
+
+    # Tier-based styling
+    t3 = s.get("portal_tier_3", False)
+    t2 = s.get("portal_tier_2", False)
+    highest = s.get("highest_tier", "TIER_1_BASE")
+
+    if t3:
+        border_color = "#22c55e"
+    elif t2:
+        border_color = "#eab308"
+    else:
+        border_color = "#374151"
+
+    # Build signal pills
+    pills = []
+    pills.append(_ncaaf_pill("Portal", "#60a5fa", "#172554"))
+    if t2:
+        pills.append(_ncaaf_pill("Favored", "#eab308", "#1c1400"))
+    if t3:
+        pills.append(_ncaaf_pill("Premium", "#22c55e", "#052e16"))
+    pill_html = '<div style="margin-top:4px;margin-bottom:2px;line-height:1.8">' + "".join(pills) + '</div>'
+
+    # Result badge
+    result_html = ""
+    if result == "COVER":
+        result_html = '<span style="color:#22c55e;font-weight:700;margin-left:6px">COVER</span>'
+    elif result == "NO_COVER":
+        result_html = '<span style="color:#ef4444;font-weight:700;margin-left:6px">NO COVER</span>'
+    elif result == "PUSH":
+        result_html = '<span style="color:#94a3b8;font-weight:700;margin-left:6px">PUSH</span>'
+
+    # Spread display
+    spread_str = f"{spread:+.1f}" if spread is not None else ""
+
+    # Stats row
+    sep = ' <span style="color:#2d3748;margin:0 2px">&middot;</span> '
+    stats_parts = [
+        f'<span style="color:#94a3b8;font-size:0.75em">Spread</span> '
+        f'<span style="color:#e2e8f0;font-weight:600">{spread_str}</span>',
+        f'<span style="color:#94a3b8;font-size:0.75em">Conf</span> '
+        f'<span style="color:#e2e8f0">{conf}</span>',
+        f'<span style="color:#94a3b8;font-size:0.75em">Net shock</span> '
+        f'<span style="color:#e2e8f0">{s.get("net_star_shock", "")}</span>',
+        f'<span style="color:#94a3b8;font-size:0.75em">Ret PPA</span> '
+        f'<span style="color:#e2e8f0">{s.get("returning_ppa", ""):.1%}</span>'
+        if isinstance(s.get("returning_ppa"), (int, float)) else "",
+    ]
+    stats_parts = [p for p in stats_parts if p]
+    stats_row = sep.join(stats_parts)
+
+    # Card HTML
+    st.html(
+        f'<div style="background:#111827;border:1px solid {border_color};border-radius:8px;'
+        f'padding:10px 14px;margin-bottom:8px">'
+        f'<div style="display:flex;justify-content:space-between;align-items:center">'
+        f'<div>'
+        f'<span style="color:#e2e8f0;font-weight:700;font-size:0.95em">'
+        f'Wk{week} {sep} {team} vs {opponent}</span>'
+        f'{result_html}'
+        f'</div>'
+        f'<span style="color:{border_color};font-size:0.75em;font-weight:600">'
+        f'{highest.replace("TIER_1_","").replace("TIER_2_","").replace("TIER_3_","")}</span>'
+        f'</div>'
+        f'<div style="margin-top:4px;font-size:0.8em">{stats_row}</div>'
+        f'{pill_html}'
+        f'<div style="color:#64748b;font-size:0.72em;margin-top:4px">'
+        f'Market may be overcorrecting for portal departures — retained core intact.</div>'
+        f'</div>'
+    )
+
+
 def _render_ncaaf_portal_tab() -> None:
     """NCAAF Portal Shock — research-grade early-season signal (Weeks 1-4)."""
     import json as _ncaaf_json
 
     st.markdown("### 🏈 NCAAF Portal Overcorrection — Weeks 1-4")
-    st.caption("Research-grade early-season angle. Validated on 2022-2025 Weeks 1-4 only.")
+    st.caption("Research signal. Validated on 2022-2025 Weeks 1-4 only.")
 
     log_path = os.path.join(os.path.dirname(__file__), "ncaaf", "logs",
                             "portal_shock_signal_log.json")
 
     if not os.path.exists(log_path):
-        st.info("No NCAAF portal shock signal log found. Signal activates Weeks 1-4 of the college football season (late August – September).")
+        st.info("No NCAAF portal shock signal log found. "
+                "Signal activates Weeks 1-4 of the college football season "
+                "(late August - September).")
         return
 
     with open(log_path) as _f:
@@ -5001,64 +5090,51 @@ def _render_ncaaf_portal_tab() -> None:
     # Current season signals
     from datetime import date as _ncaaf_date
     current_year = _ncaaf_date.today().year
-    # NCAAF season year: if we're in Jan-Jul, the upcoming season is current_year
-    # If Aug-Dec, the current season is current_year
     current_season = current_year if _ncaaf_date.today().month >= 8 else current_year
 
     current = [s for s in signals if s.get("season") == current_season]
-    historical = [s for s in signals if s.get("season") != current_season]
 
-    # Season performance summary
-    graded = [s for s in signals if s.get("ats_result") in ("COVER", "NO_COVER")]
-    if graded:
-        covers = sum(1 for s in graded if s["ats_result"] == "COVER")
-        total = len(graded)
-        rate = covers / total * 100
-
-        tier_stats = {}
-        for tier_label in ["TIER_1_BASE", "TIER_2_STRONG", "TIER_3_PREMIUM"]:
-            tsub = [s for s in graded if s["highest_tier"] == tier_label]
-            tc = sum(1 for s in tsub if s["ats_result"] == "COVER")
-            tier_stats[tier_label] = (tc, len(tsub))
-
-        st.markdown(f"**Historical (2022-2025):** {covers}-{total - covers} ATS "
-                    f"({rate:.1f}% cover)")
-
-        cols = st.columns(3)
-        for i, (tier, (tc, tn)) in enumerate(tier_stats.items()):
-            label = tier.replace("TIER_1_", "").replace("TIER_2_", "").replace("TIER_3_", "")
-            tr = tc / tn * 100 if tn > 0 else 0
-            cols[i].metric(label, f"{tc}-{tn - tc}", f"{tr:.0f}%")
-
-    # Current season qualifiers
+    # ── Current season game cards ──
     if current:
         st.markdown(f"#### {current_season} Season Qualifiers")
         for s in sorted(current, key=lambda x: (x.get("week", 0), x.get("team", ""))):
-            tier = s.get("highest_tier", "")
-            tier_short = {"TIER_3_PREMIUM": "Premium", "TIER_2_STRONG": "Strong",
-                          "TIER_1_BASE": "Base"}.get(tier, tier)
-            color = {"TIER_3_PREMIUM": "#22c55e", "TIER_2_STRONG": "#eab308",
-                     "TIER_1_BASE": "#6b7280"}.get(tier, "#6b7280")
-            result = s.get("ats_result", "PENDING")
-            result_icon = {"COVER": "✅", "NO_COVER": "❌", "PUSH": "➖"}.get(result, "⏳")
-
-            st.html(
-                f'<div style="background:#1a1a2e;border-left:4px solid {color};'
-                f'padding:8px 12px;margin-bottom:6px;border-radius:4px;font-size:0.85em">'
-                f'<span style="color:{color};font-weight:700">Wk{s.get("week","")} [{tier_short}]</span> '
-                f'{s.get("team","")} vs {s.get("opponent","")} '
-                f'<span style="color:#94a3b8">({s.get("spread","")})</span> '
-                f'{result_icon} '
-                f'<span style="color:#64748b;font-size:0.8em">{s.get("note","")[:80]}</span>'
-                f'</div>'
-            )
+            _render_ncaaf_signal_card(s)
     else:
-        st.info(f"No {current_season} qualifiers yet. Signal activates Weeks 1-4 (late August - September).")
+        st.info(f"No {current_season} qualifiers yet. "
+                f"Signal activates Weeks 1-4 (late August - September).")
 
-    # Disclaimer
+    # ── Historical performance summary ──
     st.markdown("---")
-    st.caption("Market may be overcorrecting for portal departures while retained core remains intact. "
-               "Research-grade — validated on 2022-2025 Weeks 1-4 only. Not a full NCAAF model.")
+    st.markdown("#### 2022-2025 Backtested Performance")
+
+    graded = [s for s in signals if s.get("ats_result") in ("COVER", "NO_COVER")]
+    if not graded:
+        return
+
+    # Tier summary table
+    tier_rows = []
+    for tier_label, display in [("TIER_1_BASE", "Tier 1 — Base"),
+                                 ("TIER_2_STRONG", "Tier 2 — Strong"),
+                                 ("TIER_3_PREMIUM", "Tier 3 — Premium")]:
+        # Count all signals at this tier level or higher
+        if tier_label == "TIER_1_BASE":
+            tsub = graded  # all are at least Tier 1
+        elif tier_label == "TIER_2_STRONG":
+            tsub = [s for s in graded if s.get("portal_tier_2")]
+        else:
+            tsub = [s for s in graded if s.get("portal_tier_3")]
+        tc = sum(1 for s in tsub if s["ats_result"] == "COVER")
+        tn = len(tsub)
+        tr = tc / tn * 100 if tn > 0 else 0
+        tier_rows.append({"Tier": display, "N": tn, "Covers": tc,
+                          "ATS %": f"{tr:.1f}%", "Record": f"{tc}-{tn - tc}"})
+
+    import pandas as _ncaaf_pd
+    st.dataframe(_ncaaf_pd.DataFrame(tier_rows).set_index("Tier"),
+                 use_container_width=True)
+
+    st.caption("ATS % includes all qualifying team-games at that tier level or higher. "
+               "Research-grade — not a full NCAAF model.")
 
 
 def main() -> None:
