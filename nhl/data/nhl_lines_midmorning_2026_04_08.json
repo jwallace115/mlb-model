@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "6fa535997519071d94f8b99009c37323",
+    "game_date": "2026-04-08",
+    "sport": "NHL",
+    "home_team": "New York Rangers",
+    "away_team": "Buffalo Sabres",
+    "commence_time": "2026-04-08T23:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": 105,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-08T13:25:02.965578+00:00"
+  },
+  {
+    "game_id": "ddad431e590f1bcd2f9d5838a22cd080",
+    "game_date": "2026-04-08",
+    "sport": "NHL",
+    "home_team": "Toronto Maple Leafs",
+    "away_team": "Washington Capitals",
+    "commence_time": "2026-04-08T23:40:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": -103,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-08T13:25:02.965578+00:00"
+  },
+  {
+    "game_id": "a02ab4eeac994c0c08264e1685e2e7bc",
+    "game_date": "2026-04-08",
+    "sport": "NHL",
+    "home_team": "San Jose Sharks",
+    "away_team": "Edmonton Oilers",
+    "commence_time": "2026-04-09T02:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 6.5,
+    "over_price": -120,
+    "under_price": 107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-08T13:25:02.965578+00:00"
+  }
+]
