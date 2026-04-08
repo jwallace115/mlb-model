@@ -166,15 +166,15 @@ def get_games_with_lines(season, week=None):
             "game_id": gid,
             "season": season,
             "week": week_num,
-            "home_team": g.get("home_team"),
-            "away_team": g.get("away_team"),
-            "home_conference": g.get("home_conference"),
-            "away_conference": g.get("away_conference"),
-            "home_points": g.get("home_points"),
-            "away_points": g.get("away_points"),
+            "home_team": g.get("homeTeam") or g.get("home_team"),
+            "away_team": g.get("awayTeam") or g.get("away_team"),
+            "home_conference": g.get("homeConference") or g.get("home_conference"),
+            "away_conference": g.get("awayConference") or g.get("away_conference"),
+            "home_points": g.get("homePoints") or g.get("home_points"),
+            "away_points": g.get("awayPoints") or g.get("away_points"),
             "spread": spread,  # negative = home favored
-            "neutral_site": g.get("neutral_site", False),
-            "start_date": g.get("start_date"),
+            "neutral_site": g.get("neutralSite") or g.get("neutral_site", False),
+            "start_date": g.get("startDate") or g.get("start_date"),
         })
 
     logger.info(f"  {season} Weeks 0-4: {len(result)} games with lines")
