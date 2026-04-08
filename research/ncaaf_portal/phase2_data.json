@@ -1,0 +1,190 @@
+{
+  "best_bucket": "B",
+  "best_label": "NEG_SHOCK + HIGH_RETURNING",
+  "decision": "ADVANCE",
+  "q25_threshold": -29.0,
+  "ret_median": 0.551,
+  "n_team_seasons": 534,
+  "n_observations": 6822,
+  "n_early": 2430,
+  "bucket_A": {
+    "label": "NEGATIVE_SHOCK (baseline)",
+    "N": 513,
+    "covers": 277,
+    "cover_pct": 54.0,
+    "mean_ats": 1.23,
+    "p_binom": 0.0773,
+    "by_season": {
+      "2022": {
+        "N": 158,
+        "cover_pct": 55.7,
+        "mean_ats": 1.16
+      },
+      "2023": {
+        "N": 133,
+        "cover_pct": 48.9,
+        "mean_ats": -0.42
+      },
+      "2024": {
+        "N": 104,
+        "cover_pct": 51.9,
+        "mean_ats": 1.18
+      },
+      "2025": {
+        "N": 118,
+        "cover_pct": 59.3,
+        "mean_ats": 3.22
+      }
+    }
+  },
+  "bucket_B": {
+    "label": "NEG_SHOCK + HIGH_RETURNING",
+    "N": 259,
+    "covers": 146,
+    "cover_pct": 56.4,
+    "mean_ats": 1.77,
+    "p_binom": 0.0466,
+    "by_season": {
+      "2022": {
+        "N": 107,
+        "cover_pct": 57.9,
+        "mean_ats": 1.67
+      },
+      "2023": {
+        "N": 75,
+        "cover_pct": 54.7,
+        "mean_ats": 0.61
+      },
+      "2024": {
+        "N": 34,
+        "cover_pct": 50.0,
+        "mean_ats": 0.76
+      },
+      "2025": {
+        "N": 43,
+        "cover_pct": 60.5,
+        "mean_ats": 4.85
+      }
+    }
+  },
+  "bucket_C": {
+    "label": "NEG_SHOCK + RETURNING_QB",
+    "N": 71,
+    "covers": 39,
+    "cover_pct": 54.9,
+    "mean_ats": 0.04,
+    "p_binom": 0.4767,
+    "by_season": {
+      "2022": {
+        "N": 26,
+        "cover_pct": 50.0,
+        "mean_ats": -2.27
+      },
+      "2023": {
+        "N": 27,
+        "cover_pct": 48.1,
+        "mean_ats": -1.54
+      },
+      "2024": {
+        "N": 3,
+        "cover_pct": 66.7,
+        "mean_ats": 5.33
+      },
+      "2025": {
+        "N": 15,
+        "cover_pct": 73.3,
+        "mean_ats": 5.8
+      }
+    }
+  },
+  "bucket_D": {
+    "label": "NEG_SHOCK + COACH_CONTINUITY",
+    "N": 413,
+    "covers": 228,
+    "cover_pct": 55.2,
+    "mean_ats": 1.77,
+    "p_binom": 0.0386,
+    "by_season": {
+      "2022": {
+        "N": 146,
+        "cover_pct": 56.8,
+        "mean_ats": 1.69
+      },
+      "2023": {
+        "N": 113,
+        "cover_pct": 49.6,
+        "mean_ats": -0.15
+      },
+      "2024": {
+        "N": 64,
+        "cover_pct": 56.2,
+        "mean_ats": 2.09
+      },
+      "2025": {
+        "N": 90,
+        "cover_pct": 58.9,
+        "mean_ats": 4.07
+      }
+    }
+  },
+  "bucket_E": {
+    "label": "NEG_SHOCK + RET_QB + COACH_CONT",
+    "N": 63,
+    "covers": 33,
+    "cover_pct": 52.4,
+    "mean_ats": -0.79,
+    "p_binom": 0.8013,
+    "by_season": {
+      "2022": {
+        "N": 26,
+        "cover_pct": 50.0,
+        "mean_ats": -2.27
+      },
+      "2023": {
+        "N": 23,
+        "cover_pct": 47.8,
+        "mean_ats": -1.41
+      },
+      "2024": {
+        "N": 3,
+        "cover_pct": 66.7,
+        "mean_ats": 5.33
+      },
+      "2025": {
+        "N": 11,
+        "cover_pct": 63.6,
+        "mean_ats": 2.32
+      }
+    }
+  },
+  "bucket_F": {
+    "label": "NEG_SHOCK + HIGH_RET + RET_QB",
+    "N": 38,
+    "covers": 24,
+    "cover_pct": 63.2,
+    "mean_ats": 2.08,
+    "p_binom": 0.1433,
+    "by_season": {
+      "2022": {
+        "N": 15,
+        "cover_pct": 46.7,
+        "mean_ats": -3.03
+      },
+      "2023": {
+        "N": 12,
+        "cover_pct": 66.7,
+        "mean_ats": 2.71
+      },
+      "2024": {
+        "N": 3,
+        "cover_pct": 66.7,
+        "mean_ats": 5.33
+      },
+      "2025": {
+        "N": 8,
+        "cover_pct": 87.5,
+        "mean_ats": 9.5
+      }
+    }
+  }
+}

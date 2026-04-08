@@ -76,11 +76,11 @@
     "line_at_signal_time":-0.5,
     "f5_line_closing":null,
     "f5_clv":null,
-    "home_f5_score":null,
-    "away_f5_score":null,
-    "f5_margin":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "home_f5_score":2.0,
+    "away_f5_score":0.0,
+    "f5_margin":2.0,
+    "result":"WIN",
+    "net_units":0.462962963,
+    "resolved":1
   }
 ]
