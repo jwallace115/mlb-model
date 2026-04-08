@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "08c9fd2b6b80f1f763e2c2eb3e935208",
+    "game_date": "2026-04-09",
+    "sport": "NBA",
+    "home_team": "San Antonio Spurs",
+    "away_team": "Portland Trail Blazers",
+    "commence_time": "2026-04-09T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 233.5,
+    "over_price": -107,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-08T06:05:02.682316+00:00"
+  },
+  {
+    "game_id": "41c07b1937b8a59703253dc470ca4ddb",
+    "game_date": "2026-04-09",
+    "sport": "NBA",
+    "home_team": "Denver Nuggets",
+    "away_team": "Memphis Grizzlies",
+    "commence_time": "2026-04-09T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 244.5,
+    "over_price": -109,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-08T06:05:02.682316+00:00"
+  },
+  {
+    "game_id": "3e95057b94b2d930c8cc201db634eaf8",
+    "game_date": "2026-04-09",
+    "sport": "NBA",
+    "home_team": "Phoenix Suns",
+    "away_team": "Dallas Mavericks",
+    "commence_time": "2026-04-09T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 231.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "fanduel",
+    "capture_timestamp": "2026-04-08T06:05:02.682316+00:00"
+  },
+  {
+    "game_id": "68ab4a35de88dba88af31eeb3ba710fb",
+    "game_date": "2026-04-09",
+    "sport": "NBA",
+    "home_team": "Los Angeles Clippers",
+    "away_team": "Oklahoma City Thunder",
+    "commence_time": "2026-04-09T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 226.0,
+    "over_price": -109,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-08T06:05:02.682316+00:00"
+  }
+]
