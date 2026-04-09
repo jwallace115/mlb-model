@@ -3513,11 +3513,58 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         # Shadow monitoring section (BASE_HIGH and S12_HIGH — non-P09 high conviction)
         if shadow_cards:
             st.html(
-                '<div style="margin-top:16px;padding:8px 14px;background:#1a1a2e;'
-                'border:1px solid #333;border-radius:6px;font-size:0.82em;color:#ef4444;font-weight:700">'
-                'SHADOW MONITORING \u2014 NOT FOR BETTING</div>')
+                '<hr style="border:none;border-top:1px solid #333;margin:12px 0 8px 0">'
+                '<div style="font-size:0.72em;color:#94a3b8;font-weight:600;margin-bottom:6px">'
+                '\u25d0 Shadow Monitoring</div>')
             for b, sigs in shadow_cards:
-                _render_card(b, signals=sigs, has_partial=True)
+                _game = b.get("game", {})
+                _gpk_sc = str(_game.get("game_pk", ""))
+                _gdate_sc = _game.get("game_date", "")
+                _sc_sh = _load_shadow_flags(_gdate_sc).get(_gpk_sc, {})
+                _has_tt = (_sc_sh.get("tt_under_h") or _sc_sh.get("tt_under_a") or
+                           _sc_sh.get("tt_over_h"))
+                if _has_tt and not sigs:
+                    # TT-only shadow game — use universal card
+                    _sc_matchup = f"{_game.get('away_team','')} @ {_game.get('home_team','')}"
+                    _sc_time = _game.get("game_time_et", "") or _game.get("game_time", "")
+                    _sc_f = b.get("proj", {}).get("factors", {})
+                    _sc_wx_parts = []
+                    _sc_temp = _sc_f.get("temperature_f")
+                    if _sc_temp is not None:
+                        _sc_wx_parts.append(f"{_sc_temp:.0f}\u00b0F")
+                    _sc_wind = _sc_f.get("wind_speed_mph") or 0
+                    if _sc_wind >= 5 and "dome" not in str(_sc_f.get("wind_desc","")).lower():
+                        _sc_wd = str(_sc_f.get("wind_desc","")).replace("Blowing ","").replace("blowing ","")
+                        _sc_wx_parts.append(f"{_sc_wind:.0f}mph Wind {_sc_wd}")
+                    _sc_wx = " \u00b7 ".join(_sc_wx_parts) if _sc_wx_parts else ""
+                    # Wagers from TT flags
+                    _sc_wagers = []
+                    if _sc_sh.get("tt_under_h"):
+                        _ph = _sc_sh.get("tt_posted_h", "")
+                        _sc_wagers.append(f"UNDER {_ph} (home total) \u00b7 shadow")
+                    if _sc_sh.get("tt_under_a"):
+                        _pa = _sc_sh.get("tt_posted_a", "")
+                        _sc_wagers.append(f"UNDER {_pa} (away total) \u00b7 shadow")
+                    if _sc_sh.get("tt_over_h"):
+                        _ph = _sc_sh.get("tt_posted_h", "")
+                        _sc_wagers.append(f"OVER {_ph} (home total) \u00b7 shadow")
+                    # Pills
+                    _sc_pills = [_universal_pill("Team Totals", "#fff", "#2563eb")]
+                    # Stats
+                    _sc_stats = []
+                    _gh = _sc_sh.get("tt_gap_h")
+                    _ga = _sc_sh.get("tt_gap_a")
+                    if _gh is not None: _sc_stats.append(f"H gap: {_gh:+.2f}")
+                    if _ga is not None: _sc_stats.append(f"A gap: {_ga:+.2f}")
+                    _sc_line = b.get("full_edge", {}).get("consensus")
+                    if _sc_line: _sc_stats.append(f"Game line: {_sc_line}")
+                    _render_game_card_universal(
+                        matchup=_sc_matchup, time_str=_sc_time, tier="SHADOW",
+                        wagers=_sc_wagers, pills=_sc_pills, stats=_sc_stats,
+                        weather=_sc_wx)
+                else:
+                    # V1/F5 shadow signal — use legacy card
+                    _render_card(b, signals=sigs, has_partial=True)
 
         # Just For Fun parlays — built from play_cards only (same pool as Today's Plays)
         if len(play_cards) >= 3:
