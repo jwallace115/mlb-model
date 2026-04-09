@@ -840,17 +840,30 @@ def _load_shadow_flags(game_date):
 
     try:
         import json as _json_sh
-        # ST02 from shadow_signals
+        # ST02 + ADJ signals from shadow_signals
         for _p in [f"mlb_sim/logs/shadow_signals_{season}.json",
                     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                  "mlb_sim", "logs", f"shadow_signals_{season}.json")]:
             if os.path.exists(_p):
                 with open(_p) as _f:
                     for r in _json_sh.load(_f):
-                        if r.get("date") == game_date and r.get("signal_name", "").startswith("ST02"):
-                            gid = r.get("game_id")
+                        if r.get("date") != game_date:
+                            continue
+                        gid = r.get("game_id")
+                        sn = r.get("signal_name", "")
+                        fz = bool(r.get("favorable_zone_flag"))
+                        if sn.startswith("ST02"):
                             flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
-                            flags[gid]["st02"] = bool(r.get("favorable_zone_flag"))
+                            flags[gid]["st02"] = fz
+                        elif sn == "ADJ_HH" and fz:
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
+                            flags[gid]["adj_hh"] = True
+                        elif sn == "ADJ_CONTACT" and fz:
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
+                            flags[gid]["adj_contact"] = True
+                        elif sn == "adj_k_rate_last3" and fz:
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
+                            flags[gid]["adj_k_rate"] = True
                 break
 
         # CS013 from cs013_shadow
@@ -3113,8 +3126,10 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             _pill("CS028 blowup", "#eab308", "#1c1400"),
             _pill("KP04 K-prop", "#eab308", "#1c1400"),
             _pill("ST02 road", "#eab308", "#1c1400"),
-            _pill("Short exit", "#eab308", "#1c1400"),
             _pill("Team Totals", "#eab308", "#1c1400"),
+            _pill("ADJ Hard Hit", "#eab308", "#1c1400"),
+            _pill("ADJ Contact", "#eab308", "#1c1400"),
+            _pill("ADJ K-rate", "#eab308", "#1c1400"),
         ]
 
         _html_parts = []
@@ -3372,8 +3387,10 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             _sh_tt = _load_shadow_flags(_gdate_tt).get(_gpk_tt, {})
             _has_tt = (_sh_tt.get("tt_under_h") or _sh_tt.get("tt_under_a") or
                        _sh_tt.get("tt_over_h"))
-            if _has_tt:
-                # Route to shadow section as a no-signal card (signals=None)
+            _has_adj = (_sh_tt.get("adj_hh") or _sh_tt.get("adj_contact") or
+                        _sh_tt.get("adj_k_rate"))
+            if _has_tt or _has_adj:
+                # Route to shadow section (TT or ADJ signal active)
                 shadow_cards.append((_b, []))
             else:
                 _remaining_noplay.append((_b, _partial))
@@ -3523,7 +3540,9 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _sc_sh = _load_shadow_flags(_gdate_sc).get(_gpk_sc, {})
                 _has_tt = (_sc_sh.get("tt_under_h") or _sc_sh.get("tt_under_a") or
                            _sc_sh.get("tt_over_h"))
-                if _has_tt and not sigs:
+                _has_adj = (_sc_sh.get("adj_hh") or _sc_sh.get("adj_contact") or
+                            _sc_sh.get("adj_k_rate"))
+                if (_has_tt or _has_adj) and not sigs:
                     # TT-only shadow game — use universal card
                     _sc_matchup = f"{_game.get('away_team','')} @ {_game.get('home_team','')}"
                     _sc_time = _game.get("game_time_et", "") or _game.get("game_time", "")
@@ -3548,8 +3567,22 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     if _sc_sh.get("tt_over_h"):
                         _ph = _sc_sh.get("tt_posted_h", "")
                         _sc_wagers.append(f"OVER {_ph} (home total) \u00b7 shadow")
+                    if _has_adj and not _has_tt:
+                        _sc_line = b.get("full_edge", {}).get("consensus")
+                        if _sc_line:
+                            _sc_wagers.append(f"LEAN UNDER {_sc_line} \u00b7 shadow")
                     # Pills
-                    _sc_pills = [_universal_pill("Team Totals", "#fff", "#2563eb")]
+                    _sc_pills = []
+                    if _has_tt:
+                        _sc_pills.append(_universal_pill("Team Totals", "#fff", "#2563eb"))
+                    if _sc_sh.get("adj_hh"):
+                        _sc_pills.append(_universal_pill("ADJ Hard Hit", "#fff", "#7c3aed"))
+                    if _sc_sh.get("adj_contact"):
+                        _sc_pills.append(_universal_pill("ADJ Contact", "#fff", "#7c3aed"))
+                    if _sc_sh.get("adj_k_rate"):
+                        _sc_pills.append(_universal_pill("ADJ K-rate", "#fff", "#7c3aed"))
+                    if not _sc_pills:
+                        _sc_pills.append(_universal_pill("SHADOW", "#fff", "#dc2626"))
                     # Stats
                     _sc_stats = []
                     _gh = _sc_sh.get("tt_gap_h")
