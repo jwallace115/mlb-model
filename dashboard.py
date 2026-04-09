@@ -3059,7 +3059,13 @@ def _render_nba_tab() -> None:
     all_games = (nba.get("plays", []) or []) + (nba.get("no_plays", []) or [])
     _ACTIVE_TIERS = {"TIER_1A", "TIER_1B", "TIER_2", "REF_UNDER", "P1", "P2", "P4"}
     active = [g for g in all_games if g.get("bet_tier") in _ACTIVE_TIERS]
-    shadow = [g for g in all_games if g not in active and (g.get("archetype_signal") or g.get("shot_signal"))]
+    def _nba_has_signal(g):
+        for k in ("archetype_signal", "shot_signal", "venue_signal"):
+            v = g.get(k)
+            if v is not None and str(v) not in ("", "<NA>", "nan", "None", "False"):
+                return True
+        return False
+    shadow = [g for g in all_games if g not in active and _nba_has_signal(g)]
     other = [g for g in all_games if g not in active and g not in shadow]
 
     # ── signal status row (pill style) ──
@@ -3147,21 +3153,33 @@ def _render_nba_tab() -> None:
         st.html('<hr style="border:none;border-top:1px solid #333;margin:12px 0 8px 0">'
                 '<div style="font-size:0.72em;color:#94a3b8;font-weight:600;margin-bottom:6px">'
                 '\u25d0 Shadow Monitoring</div>')
+        def _nba_valid(v):
+            return v is not None and str(v) not in ("", "<NA>", "nan", "None", "False")
         for g in shadow:
             matchup = f"{g.get('away_team','')} @ {g.get('home_team','')}"
             time_str = g.get("game_time_et", "")
             pills = []
-            if g.get("archetype_signal"): pills.append(_universal_pill("Archetype", "#eab308", "#1c1400"))
-            if g.get("shot_signal"): pills.append(_universal_pill("Shot", "#eab308", "#1c1400"))
-            if g.get("venue_signal"): pills.append(_universal_pill("Venue", "#eab308", "#1c1400"))
-            stats = []
+            if _nba_valid(g.get("archetype_signal")): pills.append(_universal_pill("Archetype", "#eab308", "#1c1400"))
+            if _nba_valid(g.get("shot_signal")): pills.append(_universal_pill("Shot profile", "#eab308", "#1c1400"))
+            if _nba_valid(g.get("venue_signal")): pills.append(_universal_pill("Venue", "#eab308", "#1c1400"))
+            rs = g.get("ref_signal")
+            if _nba_valid(rs) and rs not in ("NONE", "UNKNOWN"):
+                pills.append(_universal_pill(f"Ref {rs}", "#eab308", "#1c1400"))
+            # Wager lean
+            wagers = []
+            lean = g.get("lean", "")
             line = g.get("line")
+            if lean and line:
+                wagers.append(f"LEAN {lean} {line} \u00b7 shadow")
+            stats = []
             if line: stats.append(f"Line: {line}")
             pred = g.get("pred_total")
             if pred: stats.append(f"Proj: {pred:.1f}")
+            edge = g.get("edge")
+            if edge is not None: stats.append(f"Edge: {edge:+.1f}")
             _render_game_card_universal(
                 matchup=matchup, time_str=time_str, tier="SHADOW",
-                wagers=[], pills=pills, stats=stats, weather="")
+                wagers=wagers, pills=pills, stats=stats, weather="")
 
     # ── ALL OTHER GAMES ──
     if other:
