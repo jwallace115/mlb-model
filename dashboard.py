@@ -916,6 +916,10 @@ def _load_shadow_flags(game_date):
                             flags[gpk]["tt_under_h"] = bool(r.get("home_tt_under_flag"))
                             flags[gpk]["tt_under_a"] = bool(r.get("away_tt_under_flag"))
                             flags[gpk]["tt_over_h"] = bool(r.get("home_tt_over_flag"))
+                            flags[gpk]["tt_posted_h"] = r.get("posted_home_total")
+                            flags[gpk]["tt_posted_a"] = r.get("posted_away_total")
+                            flags[gpk]["tt_gap_h"] = r.get("gap_home")
+                            flags[gpk]["tt_gap_a"] = r.get("gap_away")
                 break
     except Exception:
         pass
@@ -1114,11 +1118,23 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
 
         # Team Total pills — join by game_pk (clean canonical key)
         if _sh_flags.get("tt_under_h"):
-            _yellow_mods.append(_mpill("TT\u2193H", "#60a5fa", "#172554"))
+            _tt_ph = _sh_flags.get("tt_posted_h", "")
+            _tt_gh = _sh_flags.get("tt_gap_h")
+            _tt_detail = f" {_tt_ph}" if _tt_ph else ""
+            _tt_gap_s = f" ({_tt_gh:+.1f})" if _tt_gh is not None else ""
+            _yellow_mods.append(_mpill(f"TT\u2193H{_tt_detail}{_tt_gap_s}", "#60a5fa", "#172554"))
         if _sh_flags.get("tt_under_a"):
-            _yellow_mods.append(_mpill("TT\u2193A", "#60a5fa", "#172554"))
+            _tt_pa = _sh_flags.get("tt_posted_a", "")
+            _tt_ga = _sh_flags.get("tt_gap_a")
+            _tt_detail = f" {_tt_pa}" if _tt_pa else ""
+            _tt_gap_s = f" ({_tt_ga:+.1f})" if _tt_ga is not None else ""
+            _yellow_mods.append(_mpill(f"TT\u2193A{_tt_detail}{_tt_gap_s}", "#60a5fa", "#172554"))
         if _sh_flags.get("tt_over_h"):
-            _yellow_mods.append(_mpill("TT\u2191H", "#eab308", "#1c1400"))
+            _tt_ph = _sh_flags.get("tt_posted_h", "")
+            _tt_gh = _sh_flags.get("tt_gap_h")
+            _tt_detail = f" {_tt_ph}" if _tt_ph else ""
+            _tt_gap_s = f" ({_tt_gh:+.1f})" if _tt_gh is not None else ""
+            _yellow_mods.append(_mpill(f"TT\u2191H{_tt_detail}{_tt_gap_s}", "#eab308", "#1c1400"))
 
         if _green_mods or _yellow_mods:
             _mod_pills = ('<div style="margin-top:4px;margin-bottom:2px;line-height:1.8">'
