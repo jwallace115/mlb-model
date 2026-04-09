@@ -311,8 +311,9 @@ def run_prelim(game_date: str) -> None:
 
         subprocess.run(["git", "commit", "-m", f"prelim: {game_date} signals + overnight results"],
                        cwd=str(PROJECT_ROOT), check=True)
-        subprocess.run(["git", "push", "origin", "main"], cwd=str(PROJECT_ROOT), check=True)
-        logger.info("Pushed preliminary signals + overnight results")
+        # Push handled by push_daemon.sh
+        # subprocess.run(["git", "push", "origin", "main"], cwd=str(PROJECT_ROOT), check=True)
+        logger.info("Preliminary signals committed — push_daemon will push")
     except Exception as e:
         logger.warning(f"Git push failed (non-fatal): {e}")
 

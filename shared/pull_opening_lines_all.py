@@ -240,9 +240,10 @@ def main():
             subprocess.run(
                 ["git", "commit", "-m", f"lines({snapshot_type}): {target_date}"],
                 cwd=str(PROJECT_ROOT), check=True)
-            subprocess.run(["git", "push", "origin", "main"],
-                           cwd=str(PROJECT_ROOT), check=True)
-            logger.info("Pushed line snapshots to GitHub")
+            # Push handled by push_daemon.sh
+            # subprocess.run(["git", "push", "origin", "main"],
+            #                cwd=str(PROJECT_ROOT), check=True)
+            logger.info("Line snapshots committed — push_daemon will push")
         except Exception as e:
             logger.warning(f"Git push failed (non-fatal): {e}")
     else:

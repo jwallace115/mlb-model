@@ -279,9 +279,10 @@ def run(game_date_str=None):
         subprocess.run(["git", "commit", "-m",
                         f"scratch check: {scratches_found} scratches {game_date_str}"],
                        cwd=str(PROJECT_ROOT), check=True)
-        subprocess.run(["git", "push", "origin", "main"],
-                       cwd=str(PROJECT_ROOT), check=True)
-        logger.info("Pushed updated signals to GitHub")
+        # Push handled by push_daemon.sh
+        # subprocess.run(["git", "push", "origin", "main"],
+        #                cwd=str(PROJECT_ROOT), check=True)
+        logger.info("Scratch signals committed — push_daemon will push")
     except Exception as e:
         logger.warning(f"Git push failed (non-fatal): {e}")
 

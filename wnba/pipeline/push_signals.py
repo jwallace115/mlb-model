@@ -32,8 +32,9 @@ def main():
         subprocess.run(["git", "add", "-f", str(SIGNALS_PATH)], cwd=str(ROOT), check=True)
         subprocess.run(["git", "commit", "-m", f"wnba signals: {date.today().isoformat()}"],
                        cwd=str(ROOT), check=True)
-        subprocess.run(["git", "push", "origin", "main"], cwd=str(ROOT), check=True)
-        print(f"Pushed: {graded} graded, {pending} pending")
+        # Push handled by push_daemon.sh
+        # subprocess.run(["git", "push", "origin", "main"], cwd=str(ROOT), check=True)
+        print(f"Committed: {graded} graded, {pending} pending — push_daemon will push")
     except Exception as e:
         print(f"Git push failed: {e}")
 

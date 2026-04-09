@@ -338,10 +338,10 @@ def main():
     logger.info(f"Signal log: {len(log)} total, {len(graded)} graded, "
                 f"ATS: {covers}-{no_covers}")
 
-    # Git push
-    import subprocess
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                     "NCAAF portal shock signal update"], capture_output=True)
+    # Push handled by push_daemon.sh
+    # import subprocess
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                  "NCAAF portal shock signal update"], capture_output=True)
 
 
 if __name__ == "__main__":
