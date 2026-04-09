@@ -1502,7 +1502,8 @@ def _save_nhl_hr_override(game_id, date_str, api_line, hr_line):
 
 
 def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
-    """Render a single NHL signal card matching the MLB card visual style."""
+    """Render a single NHL signal card matching the MLB card visual style.
+    MEDIUM/LOW tiers suspended 2026-04-09 — only HIGH displayed as plays."""
     home    = s.get("home_team", "")
     away    = s.get("away_team", "")
     side    = s.get("signal_side", "")
@@ -1523,8 +1524,8 @@ def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
     b2b_gh  = int(s.get("home_goalie_b2b") or 0)
     b2b_ga  = int(s.get("away_goalie_b2b") or 0)
 
-    is_play   = tier in ("HIGH", "MEDIUM")
-    conf_star = {"HIGH": "star3", "MEDIUM": "star2"}.get(tier, "noplay")
+    is_play   = tier in ("HIGH",)  # MEDIUM/LOW suspended 2026-04-09
+    conf_star = {"HIGH": "star3"}.get(tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
     _border   = "#22c55e" if is_play else "#374151"
 

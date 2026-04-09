@@ -551,11 +551,13 @@ def confidence_tier(edge: float, home_confirmed: bool, away_confirmed: bool,
     vol_bucket = "high" if (backup_h + backup_a) >= 2 else "normal"
     if edge >= 0.15 and home_confirmed and away_confirmed and vol_bucket != "high":
         return "HIGH"
+    # MEDIUM and LOW tiers suspended 2026-04-09: 33.3% and 26.7% win rates.
+    # Logged as SHADOW for tracking but not displayed as actionable plays.
     if edge >= 0.12:
-        return "MEDIUM"
-    return "LOW"
+        return "SHADOW_MEDIUM"
+    return "SHADOW_LOW"
 
-STAKE_UNITS = {"HIGH": 1.0, "MEDIUM": 0.75, "LOW": 0.5}
+STAKE_UNITS = {"HIGH": 1.0, "SHADOW_MEDIUM": 0.0, "SHADOW_LOW": 0.0}
 
 def edge_bucket_label(edge: float) -> str:
     if edge < 0.12:
