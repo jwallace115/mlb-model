@@ -3070,8 +3070,8 @@ def _render_nba_tab() -> None:
 
     # ── signal status row (pill style) ──
     _render_signal_status_row(
-        active_labels=["CORE venue", "Venue + OREB", "Venue standalone", "REF UNDER"] if active else [],
-        shadow_labels=["Archetype UNDER", "Shot profile", "Pace UNDER"] if shadow else []
+        active_labels=["Venue matchup", "OREB overlay", "Ref signal"],
+        shadow_labels=["Archetype UNDER", "Shot profile", "Pace UNDER"]
     )
 
     # ── season performance ──
