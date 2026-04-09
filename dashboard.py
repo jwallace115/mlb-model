@@ -900,6 +900,36 @@ def _load_shadow_flags(game_date):
                                                     "cs028": False, "cs028_cs013_both": False, "kp04": False})
                             flags[gid]["kp04"] = True
                 break
+
+        # Team Totals from team_total_shadow
+        for _p in [f"mlb_sim/logs/team_total_shadow_{season}.json",
+                    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "mlb_sim", "logs", f"team_total_shadow_{season}.json")]:
+            if os.path.exists(_p):
+                with open(_p) as _f:
+                    for r in _json_sh.load(_f):
+                        if r.get("date") == game_date:
+                            # Match by team names since TT uses Odds API event_id not game_pk
+                            home = r.get("home_team", "")
+                            away = r.get("away_team", "")
+                            # Try to find matching game_id in existing flags
+                            matched_gid = None
+                            for gid_candidate in flags:
+                                pass  # We'll match by team name below
+                            # Store by home+away key for later lookup
+                            tt_key = f"tt_{home}_{away}"
+                            flags[tt_key] = {
+                                "tt_under_h": bool(r.get("home_tt_under_flag")),
+                                "tt_under_a": bool(r.get("away_tt_under_flag")),
+                                "tt_over_h": bool(r.get("home_tt_over_flag")),
+                                "tt_home_team": home,
+                                "tt_away_team": away,
+                                "tt_gap_h": r.get("gap_home"),
+                                "tt_gap_a": r.get("gap_away"),
+                                "tt_posted_h": r.get("posted_home_total"),
+                                "tt_posted_a": r.get("posted_away_total"),
+                            }
+                break
     except Exception:
         pass
 
@@ -1094,6 +1124,25 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             _yellow_mods.append(_mpill("KP04", "#eab308", "#1c1400"))
         if _has_st02:
             _yellow_mods.append(_mpill("ST02", "#eab308", "#1c1400"))
+
+        # Team Total pills — match by team names from shadow flags
+        _all_sh = _load_shadow_flags(_gdate_sh)
+        _home_t = game.get("home_team", "")
+        _away_t = game.get("away_team", "")
+        for _tt_key, _tt_val in _all_sh.items():
+            if not _tt_key.startswith("tt_"):
+                continue
+            _tt_h = _tt_val.get("tt_home_team", "")
+            _tt_a = _tt_val.get("tt_away_team", "")
+            if (_home_t and (_home_t in _tt_h or _tt_h in _home_t) and
+                _away_t and (_away_t in _tt_a or _tt_a in _away_t)):
+                if _tt_val.get("tt_under_h"):
+                    _yellow_mods.append(_mpill("TT\u2193H", "#60a5fa", "#172554"))
+                if _tt_val.get("tt_under_a"):
+                    _yellow_mods.append(_mpill("TT\u2193A", "#60a5fa", "#172554"))
+                if _tt_val.get("tt_over_h"):
+                    _yellow_mods.append(_mpill("TT\u2191H", "#eab308", "#1c1400"))
+                break
 
         if _green_mods or _yellow_mods:
             _mod_pills = ('<div style="margin-top:4px;margin-bottom:2px;line-height:1.8">'
@@ -3815,6 +3864,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 _pill("KP04 K-prop", "#eab308", "#1c1400"),
                 _pill("ST02 road", "#eab308", "#1c1400"),
                 _pill("Short exit", "#eab308", "#1c1400"),
+                _pill("Team Totals", "#eab308", "#1c1400"),
             ]
 
             _html_parts = []
@@ -4109,67 +4159,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         except Exception:
             pass
 
-        # ── Team Total Shadow Signals (research display) ────────────────────
-        try:
-            _tt_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "team_total_shadow_2026.json")
-            if os.path.exists(_tt_path):
-                import json as _json_tt
-                with open(_tt_path) as _ttf:
-                    _tt_all = _json_tt.load(_ttf)
-                from datetime import date as _tt_date
-                _tt_today = [t for t in _tt_all if t.get("date") == _tt_date.today().isoformat()]
-                _tt_signals = [t for t in _tt_today
-                               if t.get("home_tt_under_flag") or t.get("away_tt_under_flag") or t.get("home_tt_over_flag")]
-
-                if _tt_signals:
-                    st.markdown("#### Team Total Signals")
-                    st.caption("Research signal. Validated 2023-2025. Shadow tracking only.")
-
-                    _ttpill = lambda label, color, bg: (
-                        f'<span style="background:{bg};color:{color};border:1px solid {color};'
-                        f'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600;'
-                        f'margin-right:3px">{label}</span>')
-
-                    for _tts in _tt_signals:
-                        _pills = []
-                        if _tts.get("home_tt_under_flag"):
-                            _pills.append(_ttpill("TT UNDER H", "#60a5fa", "#172554"))
-                        if _tts.get("away_tt_under_flag"):
-                            _pills.append(_ttpill("TT UNDER A", "#60a5fa", "#172554"))
-                        if _tts.get("home_tt_over_flag"):
-                            _pills.append(_ttpill("TT OVER H", "#eab308", "#1c1400"))
-                        _pill_html = "".join(_pills)
-
-                        _home = _tts.get("home_team", "")
-                        _away = _tts.get("away_team", "")
-                        _ph = _tts.get("posted_home_total", "")
-                        _pa = _tts.get("posted_away_total", "")
-                        _gh = _tts.get("gap_home")
-                        _ga = _tts.get("gap_away")
-                        _gh_str = f"{_gh:+.2f}" if _gh is not None else ""
-                        _ga_str = f"{_ga:+.2f}" if _ga is not None else ""
-
-                        st.html(
-                            f'<div style="background:#111827;border:1px solid #1e3a5f;border-radius:8px;'
-                            f'padding:10px 14px;margin-bottom:6px">'
-                            f'<div style="display:flex;justify-content:space-between;align-items:center">'
-                            f'<span style="color:#e2e8f0;font-weight:700;font-size:0.9em">'
-                            f'{_away} @ {_home}</span>'
-                            f'<span style="font-size:0.75em;color:#94a3b8">'
-                            f'H:{_ph} ({_gh_str}) A:{_pa} ({_ga_str})</span>'
-                            f'</div>'
-                            f'<div style="margin-top:4px;line-height:1.8">{_pill_html}</div>'
-                            f'<div style="color:#64748b;font-size:0.72em;margin-top:2px">'
-                            f'Fair value model suggests posted team total is mispriced — '
-                            f'opposing SP quality and truncation adjustment drive the gap.</div>'
-                            f'</div>'
-                        )
-                elif _tt_today:
-                    st.caption("Team Totals: No signals today (all gaps below threshold).")
-                else:
-                    st.caption("Team total lines not yet available for today.")
-        except Exception:
-            pass
+        # Team Total signals now integrated into game card pills above (TT↓H, TT↓A, TT↑H)
 
         # ── Market Timing section (research display) ─────────────────────────
         try:
