@@ -4094,6 +4094,68 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         except Exception:
             pass
 
+        # ── Team Total Shadow Signals (research display) ────────────────────
+        try:
+            _tt_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "team_total_shadow_2026.json")
+            if os.path.exists(_tt_path):
+                import json as _json_tt
+                with open(_tt_path) as _ttf:
+                    _tt_all = _json_tt.load(_ttf)
+                from datetime import date as _tt_date
+                _tt_today = [t for t in _tt_all if t.get("date") == _tt_date.today().isoformat()]
+                _tt_signals = [t for t in _tt_today
+                               if t.get("home_tt_under_flag") or t.get("away_tt_under_flag") or t.get("home_tt_over_flag")]
+
+                if _tt_signals:
+                    st.markdown("#### Team Total Signals")
+                    st.caption("Research signal. Validated 2023-2025. Shadow tracking only.")
+
+                    _ttpill = lambda label, color, bg: (
+                        f'<span style="background:{bg};color:{color};border:1px solid {color};'
+                        f'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600;'
+                        f'margin-right:3px">{label}</span>')
+
+                    for _tts in _tt_signals:
+                        _pills = []
+                        if _tts.get("home_tt_under_flag"):
+                            _pills.append(_ttpill("TT UNDER H", "#60a5fa", "#172554"))
+                        if _tts.get("away_tt_under_flag"):
+                            _pills.append(_ttpill("TT UNDER A", "#60a5fa", "#172554"))
+                        if _tts.get("home_tt_over_flag"):
+                            _pills.append(_ttpill("TT OVER H", "#eab308", "#1c1400"))
+                        _pill_html = "".join(_pills)
+
+                        _home = _tts.get("home_team", "")
+                        _away = _tts.get("away_team", "")
+                        _ph = _tts.get("posted_home_total", "")
+                        _pa = _tts.get("posted_away_total", "")
+                        _gh = _tts.get("gap_home")
+                        _ga = _tts.get("gap_away")
+                        _gh_str = f"{_gh:+.2f}" if _gh is not None else ""
+                        _ga_str = f"{_ga:+.2f}" if _ga is not None else ""
+
+                        st.html(
+                            f'<div style="background:#111827;border:1px solid #1e3a5f;border-radius:8px;'
+                            f'padding:10px 14px;margin-bottom:6px">'
+                            f'<div style="display:flex;justify-content:space-between;align-items:center">'
+                            f'<span style="color:#e2e8f0;font-weight:700;font-size:0.9em">'
+                            f'{_away} @ {_home}</span>'
+                            f'<span style="font-size:0.75em;color:#94a3b8">'
+                            f'H:{_ph} ({_gh_str}) A:{_pa} ({_ga_str})</span>'
+                            f'</div>'
+                            f'<div style="margin-top:4px;line-height:1.8">{_pill_html}</div>'
+                            f'<div style="color:#64748b;font-size:0.72em;margin-top:2px">'
+                            f'Fair value model suggests posted team total is mispriced — '
+                            f'opposing SP quality and truncation adjustment drive the gap.</div>'
+                            f'</div>'
+                        )
+                elif _tt_today:
+                    st.caption("Team Totals: No signals today (all gaps below threshold).")
+                else:
+                    st.caption("Team total lines not yet available for today.")
+        except Exception:
+            pass
+
         # ── Market Timing section (research display) ─────────────────────────
         try:
             _timing_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "timing_analysis_2026.json")

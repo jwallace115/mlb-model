@@ -24,6 +24,7 @@ mlb_sim/logs/*_2026.json
 !mlb_sim/logs/kp04_shadow_2026.json
 !mlb_sim/logs/combined_short_exit_shadow_2026.json
 !mlb_sim/logs/shadow_signals_2026.json
+!mlb_sim/logs/team_total_shadow_2026.json
 
 # ── Secrets ───────────────────────────────────────────────────────────────────
 .env

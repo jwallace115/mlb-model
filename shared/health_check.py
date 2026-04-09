@@ -54,6 +54,7 @@ def check_cron_jobs():
         ("nrfi_helper", "/root/logs/nrfi_helper.log", 26),
         ("pitcher_logs_update", "/root/logs/pitcher_logs_update.log", 26),
         ("statcast_update", "/root/logs/statcast_update.log", 26),
+        ("team_totals_pull", "/root/logs/team_totals_pull.log", 26),
         ("wnba_features", "/root/logs/wnba_features.log", 26),
         ("wnba_model", "/root/logs/wnba_model.log", 26),
         ("wnba_archetypes", "/root/logs/wnba_archetypes.log", 26),
@@ -152,6 +153,7 @@ def check_signal_files():
         ("kp04_shadow", "mlb_sim/logs/kp04_shadow_2026.json", 48),
         ("combined_short_exit_shadow", "mlb_sim/logs/combined_short_exit_shadow_2026.json", 48),
         ("shadow_signals", "mlb_sim/logs/shadow_signals_2026.json", 48),
+        ("team_total_shadow", "mlb_sim/logs/team_total_shadow_2026.json", 48),
     ]
     for name, path, max_hours in shadow_logs:
         try:
