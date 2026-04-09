@@ -3563,8 +3563,49 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         wagers=_sc_wagers, pills=_sc_pills, stats=_sc_stats,
                         weather=_sc_wx)
                 else:
-                    # V1/F5 shadow signal — use legacy card
-                    _render_card(b, signals=sigs, has_partial=True)
+                    # V1/F5/CS028/ST02 shadow — universal card
+                    _sc_matchup = f"{_game.get('away_team','')} @ {_game.get('home_team','')}"
+                    _sc_time = _game.get("game_time_et", "") or _game.get("game_time", "")
+                    _sc_f = b.get("proj", {}).get("factors", {})
+                    _sc_wx_parts = []
+                    _sc_temp = _sc_f.get("temperature_f")
+                    if _sc_temp is not None:
+                        _sc_wx_parts.append(f"{_sc_temp:.0f}\u00b0F")
+                    _sc_wind = _sc_f.get("wind_speed_mph") or 0
+                    if _sc_wind >= 5 and "dome" not in str(_sc_f.get("wind_desc","")).lower():
+                        _sc_wd = str(_sc_f.get("wind_desc","")).replace("Blowing ","").replace("blowing ","")
+                        _sc_wx_parts.append(f"{_sc_wind:.0f}mph Wind {_sc_wd}")
+                    _sc_wx = " \u00b7 ".join(_sc_wx_parts) if _sc_wx_parts else ""
+                    # Determine signal type and wager direction
+                    _sc_line = b.get("full_edge", {}).get("consensus")
+                    _sc_wagers = []
+                    _sc_pills = []
+                    _sc_stats = []
+                    if _sc_line: _sc_stats.append(f"Line: {_sc_line}")
+                    _sc_proj = b.get("proj", {}).get("proj_total_full")
+                    if _sc_proj: _sc_stats.append(f"Proj: {_sc_proj:.1f}")
+                    for _sig in (sigs or []):
+                        _stype = _sig.get("type", "v1")
+                        _side = _sig.get("side", "UNDER")
+                        if _sc_line:
+                            _sc_wagers.append(f"{_side} {_sc_line} \u00b7 shadow")
+                        if _stype == "v1" and _sig.get("shadow_only"):
+                            _sc_pills.append(_universal_pill("BASE HIGH", "#fff", "#dc2626"))
+                        elif "s12" in str(_sig.get("s12_active","")):
+                            _sc_pills.append(_universal_pill("S12 HIGH", "#fff", "#dc2626"))
+                    # CS028/ST02 from shadow flags
+                    if _sc_sh.get("cs028"):
+                        _sc_pills.append(_universal_pill("CS028", "#fff", "#dc2626"))
+                        if not _sc_wagers and _sc_line:
+                            _sc_wagers.append(f"OVER {_sc_line} \u00b7 shadow")
+                    if _sc_sh.get("st02"):
+                        _sc_pills.append(_universal_pill("ST02 Road", "#fff", "#6b7280"))
+                    if not _sc_pills:
+                        _sc_pills.append(_universal_pill("SHADOW", "#fff", "#dc2626"))
+                    _render_game_card_universal(
+                        matchup=_sc_matchup, time_str=_sc_time, tier="SHADOW",
+                        wagers=_sc_wagers, pills=_sc_pills, stats=_sc_stats,
+                        weather=_sc_wx)
 
         # Just For Fun parlays — built from play_cards only (same pool as Today's Plays)
         if len(play_cards) >= 3:
