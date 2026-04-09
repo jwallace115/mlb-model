@@ -1939,6 +1939,17 @@ def _render_nhl_tab() -> None:
         home    = s.get("home_team", "")
         away    = s.get("away_team", "")
         side    = s.get("signal_side", "")
+        # Convert UTC commence_time to ET
+        _ct = s.get("commence_time", "")
+        _time_et = ""
+        if _ct and len(_ct) >= 16:
+            try:
+                from datetime import datetime as _dt_nhl, timezone as _tz_nhl, timedelta as _td_nhl
+                _utc = _dt_nhl.fromisoformat(_ct.replace("Z", "+00:00"))
+                _et = _utc.astimezone(_tz_nhl(_td_nhl(hours=-4)))  # EDT
+                _time_et = _et.strftime("%-I:%M %p ET")
+            except Exception:
+                pass
         edge    = s.get("edge")
         sim     = s.get("sim_prob")
         line    = s.get("closing_total")
@@ -2016,7 +2027,7 @@ def _render_nhl_tab() -> None:
         matchup = f"{away} @ {home}"
         _render_game_card_universal(
             matchup=matchup,
-            time_str="",
+            time_str=_time_et,
             tier=card_tier,
             wagers=card_wagers,
             pills=card_pills,

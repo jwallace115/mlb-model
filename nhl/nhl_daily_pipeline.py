@@ -514,6 +514,7 @@ def fetch_nhl_odds(target_date: date) -> dict[tuple, dict]:
                             "over_price":  int(over.get("price", -110)),
                             "under_price": int(under.get("price", -110)),
                             "book":        book_key,
+                            "commence_time": game.get("commence_time", ""),
                         }
                         break
 
@@ -763,6 +764,7 @@ def run_pipeline(target_date: date) -> None:
                 "over_price":               over_price,
                 "under_price":              under_price,
                 "book":                     odds.get("book", ""),
+                "commence_time":            odds.get("commence_time", ""),
                 "actual_total_goals_final": np.nan,
                 "result":                   "UNGRADED",
                 "graded":                   0,
