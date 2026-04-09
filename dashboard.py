@@ -1862,8 +1862,8 @@ def _render_nhl_tab() -> None:
     n_active  = len(plays)
     n_shadow  = len(shadows)
     _render_signal_status_row(
-        active_labels=[f"{s.get('away_team','')} @ {s.get('home_team','')}" for s in plays],
-        shadow_labels=["MEDIUM tier (suspended)", "LOW tier (suspended)"] if shadows else []
+        active_labels=["NHL Model", "High Edge (\u22650.15)"] if plays else [],
+        shadow_labels=["Medium tier (suspended)", "Low tier (suspended)"] if shadows else []
     )
 
     # ── (c) Season performance summary ────────────────────────────────────────
@@ -3426,8 +3426,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         f'{_shw}-{_shl} | {_shroi:+.1f}% ROI | {_shnet:+.2f}u'
                         f'</div>')
 
-            # Recent results table
-            if os.path.exists(_sim_signals_path):
+            # Recent results tables removed — see Tracker tab for full history
+            if False:  # dead block — kept for reference, will be cleaned up
                 _sim_sigs = pd.read_parquet(_sim_signals_path)
                 _resolved = _sim_sigs[_sim_sigs["resolved"].isin([1, 2])].sort_values("date", ascending=False).head(20)
                 _pending = _sim_sigs[_sim_sigs["resolved"] == 0].sort_values("date", ascending=False).head(5)
@@ -3592,61 +3592,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
 
         # Team Total signals now integrated into game card pills above (TT↓H, TT↓A, TT↑H)
 
-        # ── Market Timing section (research display) ─────────────────────────
-        try:
-            _timing_path = os.path.join(os.path.dirname(__file__), "mlb_sim", "logs", "timing_analysis_2026.json")
-            if os.path.exists(_timing_path):
-                import json as _json_t
-                with open(_timing_path) as _tf:
-                    _timing = _json_t.load(_tf)
-                _coh = _timing.get("cohorts", {})
-                _max_n = max((c.get("n", 0) for c in _coh.values()), default=0)
-                with st.expander("📊 Market Timing (research)", expanded=False):
-                    if _max_n < 25:
-                        st.html(f'<div style="font-size:0.78em;color:#6b7280">'
-                                f'Market timing analysis available after 25 resolved signals ({_max_n} so far).</div>')
-                    else:
-                        _t_rows = ""
-                        for _tname, _tlabel in [("signal_time", "Signal time"),
-                                                ("open", "Open (7AM)"),
-                                                ("midday", "Midday (11AM)"),
-                                                ("close_pull", "Close pull (5PM)")]:
-                            _tc = _coh.get(_tname, {})
-                            _tn = _tc.get("n", 0)
-                            _insuf = " (INSUF)" if _tc.get("insufficient") else ""
-                            _twr = f"{_tc['win_rate']:.0f}%" if _tc.get("win_rate") is not None else "—"
-                            _troi = f"{_tc['observational_roi']:+.1f}%" if _tc.get("observational_roi") is not None else "—"
-                            _tal = f"{_tc['avg_line']:.1f}" if _tc.get("avg_line") is not None else "—"
-                            _tclv = f"{_tc['avg_clv']:+.2f}" if _tc.get("avg_clv") is not None else "—"
-                            _t_rows += (f'<tr><td>{_tlabel}</td><td>{_tn}{_insuf}</td>'
-                                        f'<td>{_twr}</td><td>{_troi}</td><td>{_tal}</td><td>{_tclv}</td></tr>')
-                        st.html(f'<table style="font-size:0.72em;width:100%;border-collapse:collapse">'
-                                f'<tr style="color:#94a3b8"><th>Pull Time</th><th>N</th><th>Win%</th>'
-                                f'<th>Obs ROI</th><th>Avg Line</th><th>Avg CLV</th></tr>'
-                                f'{_t_rows}</table>'
-                                f'<div style="font-size:0.65em;color:#4b5563;margin-top:4px">'
-                                f'Win/loss graded at each cohort\'s captured line, not production closing line. '
-                                f'Close pull = latest scheduled pregame pull, not guaranteed market close.</div>')
-
-                        # Complete records comparison
-                        _comp = _timing.get("complete_records", {})
-                        _cn = _comp.get("n_complete_records", 0)
-                        if _cn >= 25:
-                            _c_rows = ""
-                            for _tname, _tlabel in [("signal_time", "Signal"),
-                                                    ("open", "Open"), ("midday", "Midday"),
-                                                    ("close_pull", "Close")]:
-                                _cc = _comp.get(_tname, {})
-                                _cwr = f"{_cc['win_rate']:.0f}%" if _cc.get("win_rate") is not None else "—"
-                                _croi = f"{_cc['observational_roi']:+.1f}%" if _cc.get("observational_roi") is not None else "—"
-                                _c_rows += f'<tr><td>{_tlabel}</td><td>{_cwr}</td><td>{_croi}</td></tr>'
-                            st.html(f'<div style="font-size:0.70em;color:#94a3b8;margin-top:6px">'
-                                    f'Complete records ({_cn} signals with all four lines):</div>'
-                                    f'<table style="font-size:0.70em;width:60%;border-collapse:collapse">'
-                                    f'<tr style="color:#6b7280"><th>Cohort</th><th>Win%</th><th>Obs ROI</th></tr>'
-                                    f'{_c_rows}</table>')
-        except Exception:
-            pass
+        # Market Timing and Recent Signal expanders removed — see Tracker tab
 
         # ── no data state ─────────────────────────────────────────────────────
         if data is None:
