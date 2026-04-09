@@ -1295,7 +1295,35 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
 
         _shadow_html_np = _shadow_badge_html(game.get("game_pk"), game.get("game_date", ""))
 
-        _np_border = "#ef4444" if has_partial else "#374151"
+        # TT pills on no-play cards — same logic as play cards
+        _npill = lambda label, color, bg: (
+            f'<span style="background:{bg};color:{color};border:1px solid {color};'
+            f'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600;'
+            f'margin-right:3px">{label}</span>')
+        _np_tt_pills = ""
+        _gpk_np = str(game.get("game_pk", ""))
+        _gdate_np = game.get("game_date", "")
+        _np_sh = _load_shadow_flags(_gdate_np).get(_gpk_np, {})
+        _np_tt_parts = []
+        if _np_sh.get("tt_under_h"):
+            _ph = _np_sh.get("tt_posted_h", "")
+            _gh = _np_sh.get("tt_gap_h")
+            _np_tt_parts.append(_npill(f"TT\u2193H {_ph} ({_gh:+.1f})" if _gh is not None else f"TT\u2193H {_ph}", "#60a5fa", "#172554"))
+        if _np_sh.get("tt_under_a"):
+            _pa = _np_sh.get("tt_posted_a", "")
+            _ga = _np_sh.get("tt_gap_a")
+            _np_tt_parts.append(_npill(f"TT\u2193A {_pa} ({_ga:+.1f})" if _ga is not None else f"TT\u2193A {_pa}", "#60a5fa", "#172554"))
+        if _np_sh.get("tt_over_h"):
+            _ph = _np_sh.get("tt_posted_h", "")
+            _gh = _np_sh.get("tt_gap_h")
+            _np_tt_parts.append(_npill(f"TT\u2191H {_ph} ({_gh:+.1f})" if _gh is not None else f"TT\u2191H {_ph}", "#eab308", "#1c1400"))
+        if _np_tt_parts:
+            _np_tt_pills = '<div style="margin-top:4px;line-height:1.8">' + "".join(_np_tt_parts) + '</div>'
+            _np_border_override = "#1e3a5f"  # blue border for TT-only cards
+        else:
+            _np_border_override = None
+
+        _np_border = _np_border_override if _np_border_override else ("#ef4444" if has_partial else "#374151")
         st.html(
             f'<div class="game-card" style="border-left:3px solid {_np_border}">'
             f'<div style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
@@ -1303,7 +1331,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
             f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
             f'<div class="card-summary">{summary}</div>'
-            f'{_reason}{_shadow_html_np}'
+            f'{_np_tt_pills}{_reason}{_shadow_html_np}'
             f'</div>'
     )
 
@@ -3175,7 +3203,7 @@ def _render_nba_tab() -> None:
                 if os.path.exists(_hl_path):
                     _hld = pd.read_csv(_hl_path, dtype=str)
                     # Today's tagged games
-                    _today_str = _nba.get("game_date", "")
+                    _today_str = nba.get("game_date", "") if nba else ""
                     _hl_today = _hld[_hld["game_date"] == _today_str]
                     for _, _hlr in _hl_today.iterrows():
                         st.html(f'<div style="font-size:0.72em;color:#a78bfa;margin-bottom:3px">'
@@ -3990,6 +4018,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
 
             # Recent results table
             if os.path.exists(_sim_signals_path):
+                _sim_sigs = pd.read_parquet(_sim_signals_path)
                 _resolved = _sim_sigs[_sim_sigs["resolved"].isin([1, 2])].sort_values("date", ascending=False).head(20)
                 _pending = _sim_sigs[_sim_sigs["resolved"] == 0].sort_values("date", ascending=False).head(5)
                 _show = pd.concat([_pending, _resolved]).head(20)

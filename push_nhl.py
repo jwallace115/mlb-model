@@ -68,7 +68,7 @@ def load_today_signals(game_date: str) -> list[dict]:
                 "edge_bucket":      r.get("edge_bucket"),
                 "sim_prob":         _safe(r.get("sim_prob")),
                 "confidence_tier":  r.get("confidence_tier"),
-                "stake_units":      float(r.get("stake_units") or {"HIGH": 1.0, "MEDIUM": 0.75}.get(r.get("confidence_tier"), 0.75)),
+                "stake_units":      float(r.get("stake_units") or {"HIGH": 1.0, "MEDIUM": 0.75, "SHADOW_MEDIUM": 0.0, "SHADOW_LOW": 0.0}.get(r.get("confidence_tier"), 0.75)),
                 # caution_flag: display warning only — does not suppress signal
                 "caution_flag":     int(r.get("caution_flag") or 0),
                 "volatility_bucket": r.get("volatility_bucket"),
@@ -387,7 +387,7 @@ def write_nhl_json(game_date: str = None) -> str:
             s["summary"] = ""
 
     # Sort today's signals: HIGH first, then by edge desc
-    tier_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
+    tier_order = {"HIGH": 0, "MEDIUM": 1, "SHADOW_MEDIUM": 2, "LOW": 3, "SHADOW_LOW": 4}
     today_signals.sort(key=lambda s: (
         tier_order.get(s.get("confidence_tier", "LOW"), 2),
         -(s.get("edge") or 0),
@@ -418,7 +418,7 @@ def write_nhl_json(game_date: str = None) -> str:
 
     # Per-signal field assertions
     valid_sides = {"OVER", "UNDER"}
-    valid_tiers = {"HIGH", "MEDIUM", "LOW"}
+    valid_tiers = {"HIGH", "MEDIUM", "SHADOW_MEDIUM", "LOW", "SHADOW_LOW"}
     for i, s in enumerate(today_signals):
         if s.get("game_id") is None:
             warnings_found.append(f"signal[{i}]: game_id is null")
