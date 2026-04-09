@@ -1628,22 +1628,24 @@ def _universal_pill(label: str, color: str, bg: str) -> str:
 
 
 def _render_signal_status_row(active_labels: list[str], shadow_labels: list[str]) -> None:
-    """Render standardized signal status row — pill style matching MLB."""
+    """Render standardized signal status row — two rows, pill style matching MLB."""
     _pill = lambda label, color, bg: (
         f'<span style="background:{bg};color:{color};border:1px solid {color};'
         f'border-radius:10px;padding:2px 8px;font-size:0.72em;font-weight:600;'
         f'margin-right:4px">{label}</span>')
-    parts = []
+    html = ""
     if active_labels:
         green_pills = "".join(_pill(l, "#fff", "#16a34a") for l in active_labels)
-        parts.append(f'<span style="color:#64748b;font-size:0.72em;font-weight:600;margin-right:6px">'
-                     f'\u25cf Active</span>{green_pills}')
+        html += (f'<div style="margin-bottom:4px">'
+                 f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px">'
+                 f'\u25cf Active</span>{green_pills}</div>')
     if shadow_labels:
         yellow_pills = "".join(_pill(l, "#eab308", "#1c1400") for l in shadow_labels)
-        parts.append(f'<span style="color:#64748b;font-size:0.72em;font-weight:600;margin-right:6px;'
-                     f'margin-left:8px">\u25d0 Shadow</span>{yellow_pills}')
-    if parts:
-        st.html(f'<div style="margin-bottom:10px;line-height:2">{"".join(parts)}</div>')
+        html += (f'<div>'
+                 f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px">'
+                 f'\u25d0 Shadow</span>{yellow_pills}</div>')
+    if html:
+        st.html(f'<div style="margin-bottom:10px">{html}</div>')
 
 
 def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
