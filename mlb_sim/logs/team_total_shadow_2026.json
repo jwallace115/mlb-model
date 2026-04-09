@@ -2,6 +2,7 @@
   {
     "date": "2026-04-09",
     "event_id": "7852034521d5a37d9d67116eba334699",
+    "game_pk": 823884,
     "home_team": "Miami Marlins",
     "away_team": "Cincinnati Reds",
     "home_sp": null,
@@ -19,17 +20,18 @@
     "home_tt_under_flag": false,
     "away_tt_under_flag": false,
     "home_tt_over_flag": false,
-    "n_books": 12,
+    "n_books": 14,
     "actual_home_runs": null,
     "actual_away_runs": null,
     "home_tt_result": null,
     "away_tt_result": null,
     "resolved": false,
-    "logged_at": "2026-04-09T12:12:20.337996+00:00"
+    "logged_at": "2026-04-09T14:26:28.885195+00:00"
   },
   {
     "date": "2026-04-09",
     "event_id": "842973bf2205e8427934b84ebfa68898",
+    "game_pk": 823565,
     "home_team": "New York Yankees",
     "away_team": "Athletics",
     "home_sp": null,
@@ -53,11 +55,12 @@
     "home_tt_result": null,
     "away_tt_result": null,
     "resolved": false,
-    "logged_at": "2026-04-09T12:12:20.337996+00:00"
+    "logged_at": "2026-04-09T14:26:28.885195+00:00"
   },
   {
     "date": "2026-04-09",
     "event_id": "4a900f08d0a609bca4a6bda0d78e00a5",
+    "game_pk": 823724,
     "home_team": "Minnesota Twins",
     "away_team": "Detroit Tigers",
     "home_sp": null,
@@ -81,11 +84,12 @@
     "home_tt_result": null,
     "away_tt_result": null,
     "resolved": false,
-    "logged_at": "2026-04-09T12:12:20.337996+00:00"
+    "logged_at": "2026-04-09T14:26:28.885195+00:00"
   },
   {
     "date": "2026-04-09",
     "event_id": "24a184f33e22a7efc5cc7c836d3b270a",
+    "game_pk": 823645,
     "home_team": "New York Mets",
     "away_team": "Arizona Diamondbacks",
     "home_sp": null,
@@ -109,11 +113,12 @@
     "home_tt_result": null,
     "away_tt_result": null,
     "resolved": false,
-    "logged_at": "2026-04-09T12:12:20.337996+00:00"
+    "logged_at": "2026-04-09T14:26:28.885195+00:00"
   },
   {
     "date": "2026-04-09",
     "event_id": "eef70c714ae56d35f8173ff025e0e8bd",
+    "game_pk": 824130,
     "home_team": "Kansas City Royals",
     "away_team": "Chicago White Sox",
     "home_sp": null,
@@ -137,6 +142,6 @@
     "home_tt_result": null,
     "away_tt_result": null,
     "resolved": false,
-    "logged_at": "2026-04-09T12:12:20.337996+00:00"
+    "logged_at": "2026-04-09T14:26:28.885195+00:00"
   }
 ]
