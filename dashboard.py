@@ -1717,7 +1717,7 @@ def _render_nhl_tab() -> None:
                 for _s in _nhl_open_snaps:
                     if _s.get("snapshot_type") == "open":
                         _nhl_open_map[(_s.get("home_team",""), _s.get("away_team",""))] = _s.get("total_line")
-                for _sig_list in [nhl.get("signals", [])]:
+                for _sig_list in [nhl.get("today_signals", []), nhl.get("signals", [])]:
                     for _s in _sig_list:
                         _k = (_s.get("home_team",""), _s.get("away_team",""))
                         _s["open_total"] = _nhl_open_map.get(_k)
@@ -1780,8 +1780,9 @@ def _render_nhl_tab() -> None:
         # ── SECTION 1: Today's Signals ─────────────────────────────────────────────
         _nhl_game_date = nhl.get("game_date", "")
         if today_signals:
-            plays    = [s for s in today_signals if s.get("confidence_tier") in ("HIGH", "MEDIUM")]
-            no_plays = [s for s in today_signals if s not in plays]
+            plays    = [s for s in today_signals if s.get("confidence_tier") == "HIGH"]
+            shadows  = [s for s in today_signals if s.get("confidence_tier", "").startswith("SHADOW_")]
+            no_plays = [s for s in today_signals if s not in plays and s not in shadows]
             _n_games = len(set((s.get("home_team","") + s.get("away_team","")) for s in plays))
             _n_sigs  = len(plays)
             st.html(f'<div class="section-hdr">\U0001f3af Today\'s Signals \u2014 '
@@ -1791,7 +1792,14 @@ def _render_nhl_tab() -> None:
                 for s in plays:
                     _render_nhl_signal_card(s, game_date=_nhl_game_date)
             else:
-                st.caption("No HIGH/MEDIUM signals today.")
+                st.caption("No HIGH signals today.")
+            if shadows:
+                with st.expander(
+                    f"Shadow signals (suspended tiers) \u2014 {len(shadows)}",
+                    expanded=False
+                ):
+                    for s in shadows:
+                        _render_nhl_signal_card(s, game_date=_nhl_game_date)
             if no_plays:
                 with st.expander(
                     f"Low-confidence signals \u2014 {len(no_plays)}",
