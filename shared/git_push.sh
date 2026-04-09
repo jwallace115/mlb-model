@@ -36,10 +36,24 @@ git commit -m "auto: $MSG"
 
 # Pull remote changes before pushing (handles VM/MacBook race)
 if ! git pull --rebase origin main 2>>"$ERR_LOG"; then
-    echo "ERROR: git pull --rebase failed — aborting push"
-    echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL — $MSG" >> "$ERR_LOG"
-    git rebase --abort 2>/dev/null
-    exit 1
+    # Auto-resolve last_updated.json (most common conflict source)
+    if git diff --name-only --diff-filter=U 2>/dev/null | grep -q 'shared/last_updated.json'; then
+        git checkout --theirs shared/last_updated.json 2>/dev/null
+        git add shared/last_updated.json 2>/dev/null
+        if git rebase --continue 2>>"$ERR_LOG"; then
+            echo "Auto-resolved last_updated.json conflict"
+        else
+            echo "ERROR: rebase still failing after auto-resolve — aborting"
+            echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL_AFTER_AUTORESOLVE — $MSG" >> "$ERR_LOG"
+            git rebase --abort 2>/dev/null
+            exit 1
+        fi
+    else
+        echo "ERROR: git pull --rebase failed — aborting push"
+        echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL — $MSG" >> "$ERR_LOG"
+        git rebase --abort 2>/dev/null
+        exit 1
+    fi
 fi
 
 # Push with error capture

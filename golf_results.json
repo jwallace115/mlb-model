@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-04-09T07:00:33.785235",
+  "generated_at": "2026-04-09T08:00:40.014077",
   "sport": "golf",
   "event_name": "Masters Tournament",
   "event_id": 14,
   "is_major": true,
-  "last_updated": "2026-04-09T07:00:07.705752",
+  "last_updated": "2026-04-09T08:00:06.384627",
   "n_candidates": 20,
   "n_leans": 46,
   "plays": [
@@ -777,188 +777,188 @@
   ],
   "matchup_candidates": [
     {
-      "player_1": "Ramey, Chad",
-      "player_2": "Wallace, Matt",
-      "player_3": "Ewart, A.J.",
+      "player_1": "Ortiz, Carlos",
+      "player_2": "Homa, Max",
+      "player_3": "Kataoka, Naoyuki",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 25.2,
+      "bet_edge": 24.8,
       "classification": "candidate"
     },
     {
-      "player_1": "Kim, Si Woo",
-      "player_2": "Moore, Taylor",
-      "player_3": "Penge, Marco",
+      "player_1": "Olazabal, Jose Maria",
+      "player_2": "Neergaard-Petersen, Rasmus",
+      "player_3": "Potgieter, Aldrich",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 24.9,
+      "bet_edge": 50.8,
       "classification": "candidate"
     },
     {
-      "player_1": "Svensson, Adam",
-      "player_2": "Lebioda, Hank",
-      "player_3": "Thompson, Davis",
+      "player_1": "Cabrera, Angel",
+      "player_2": "Valimaki, Sami",
+      "player_3": "Herrington, Jackson",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 26.7,
+      "bet_edge": 39.2,
       "classification": "candidate"
     },
     {
-      "player_1": "Schenk, Adam",
-      "player_2": "Lamprecht, Christo",
-      "player_3": "Ghim, Doug",
+      "player_1": "Schwartzel, Charl",
+      "player_2": "Fox, Ryan",
+      "player_3": "Greyserman, Max",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 28.3,
+      "bet_edge": 19.7,
       "classification": "candidate"
     },
     {
-      "player_1": "Noren, Alex",
-      "player_2": "Matsuyama, Hideki",
-      "player_3": "Valimaki, Sami",
+      "player_1": "Singh, Vijay",
+      "player_2": "Hojgaard, Rasmus",
+      "player_3": "McCarty, Matt",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 19.9,
+      "bet_edge": 52.5,
       "classification": "candidate"
     },
     {
-      "player_1": "Snedeker, Brandt",
-      "player_2": "Van Rooyen, Erik",
-      "player_3": "Kanaya, Takumi",
+      "player_1": "Reitan, Kristoffer",
+      "player_2": "Kitayama, Kurt",
+      "player_3": "Jarvis, Casey",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 27.8,
+      "bet_edge": 38.8,
       "classification": "candidate"
     },
     {
-      "player_1": "Streelman, Kevin",
-      "player_2": "Horschel, Billy",
-      "player_3": "Sargent, Gordon",
+      "player_1": "Watson, Bubba",
+      "player_2": "Echavarria, Nico",
+      "player_3": "Holtz, Brandon",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 33.1,
+      "bet_edge": 8.4,
       "classification": "candidate"
     },
     {
-      "player_1": "Harman, Brian",
-      "player_2": "Hossler, Beau",
-      "player_3": "Jaeger, Stephan",
+      "player_1": "Smith, Cameron",
+      "player_2": "Knapp, Jake",
+      "player_3": "Burns, Sam",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 28.8,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Yu, Kevin",
-      "player_2": "Bauchou, Zach",
-      "player_3": "Cole, Eric",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 61.5,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Kang, Jeffrey",
-      "player_2": "Walker, Danny",
-      "player_3": "Meissner, Mac",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 25.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Novak, Andrew",
-      "player_2": "Eckroat, Austin",
-      "player_3": "Highsmith, Joe",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 13.2,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Bezuidenhout, Christiaan",
-      "player_2": "Zalatoris, Will",
-      "player_3": "Smotherman, Austin",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 16.2,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Kirk, Chris",
-      "player_2": "Spaun, J.J.",
-      "player_3": "Phillips, Chandler",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 18.1,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "McNealy, Maverick",
-      "player_2": "Kim, S.H.",
-      "player_3": "Whaley, Vince",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 42.9,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Fleetwood, Tommy",
-      "player_2": "Kim, Michael",
-      "player_3": "Reitan, Kristoffer",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 26.7,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Dumont De Chassart, Adrien",
-      "player_2": "Ford, David",
-      "player_3": "Clanton, Luke",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 15.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Parry, John",
-      "player_2": "Ryder, Sam",
-      "player_3": "Hisatsune, Ryo",
-      "match_type": "3_ball",
-      "book": "datagolf_model",
-      "bet_edge": 43.1,
+      "bet_edge": 18.0,
       "classification": "candidate"
     },
     {
       "player_1": "Taylor, Nick",
-      "player_2": "Spieth, Jordan",
-      "player_3": "McCarty, Matt",
+      "player_2": "Bradley, Keegan",
+      "player_3": "Gerard, Ryan",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 42.7,
+      "bet_edge": 38.6,
       "classification": "candidate"
     },
     {
-      "player_1": "Putnam, Andrew",
-      "player_2": "Smalley, Alex",
-      "player_3": "Fisk, Steven",
+      "player_1": "Day, Jason",
+      "player_2": "Johnson, Dustin",
+      "player_3": "Lowry, Shane",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 34.8,
+      "bet_edge": 36.4,
       "classification": "candidate"
     },
     {
-      "player_1": "Burgoon, Bronson",
-      "player_2": "Waring, Paul",
-      "player_3": "Hubbard, Mark",
+      "player_1": "Fleetwood, Tommy",
+      "player_2": "Reed, Patrick",
+      "player_3": "Bhatia, Akshay",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 57.8,
+      "bet_edge": 23.2,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fitzpatrick, Matt",
+      "player_2": "DeChambeau, Bryson",
+      "player_3": "Schauffele, Xander",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 27.9,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Matsuyama, Hideki",
+      "player_2": "Henley, Russell",
+      "player_3": "Morikawa, Collin",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 28.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "McIlroy, Rory",
+      "player_2": "Young, Cameron",
+      "player_3": "Howell, Mason",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 12.7,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Noren, Alex",
+      "player_2": "Cantlay, Patrick",
+      "player_3": "Hovland, Viktor",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 18.0,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Im, Sungjae",
+      "player_2": "Stevens, Sam",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 6.5,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Campbell, Brian",
+      "player_2": "McKibbin, Tom",
+      "player_3": "Novak, Andrew",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 39.3,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Weir, Mike",
+      "player_2": "Clark, Wyndham",
+      "player_3": "Pulcini, Mateo",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 33.0,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Johnson, Zach",
+      "player_2": "Kim, Michael",
+      "player_3": "Hojgaard, Nicolai",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 29.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Willett, Danny",
+      "player_2": "Riley, Davis",
+      "player_3": "Fang, Ethan",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 44.0,
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 87,
-  "matchup_n_leans": 19,
+  "matchup_n_candidates": 495,
+  "matchup_n_leans": 130,
   "g13_signals": [
     {
       "player_name": "Morikawa, Collin",
