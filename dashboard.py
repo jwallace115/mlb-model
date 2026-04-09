@@ -2345,278 +2345,6 @@ def _soccer_result_badge(result: str) -> str:
     return '<td class="dim">—</td>'
 
 
-def _render_soccer_signal_card(s: dict) -> None:
-    home    = s.get("home_team", "")
-    away    = s.get("away_team", "")
-    edge    = s.get("edge")
-    tier    = s.get("confidence_tier", "LOW")
-    model_t = s.get("model_total")
-    move    = s.get("market_move_to_over_2_5")
-    lineup  = bool(s.get("lineup_confirmed", False))
-    summary = s.get("summary", "")
-    gt      = s.get("game_time_et", "")
-    league  = s.get("league_id", "")
-    over_p  = s.get("over_price")
-
-    is_play   = tier in ("HIGH", "MEDIUM")
-    conf_star = {"HIGH": "star3", "MEDIUM": "star2"}.get(tier, "noplay")
-    card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
-
-    sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
-
-    league_tag = (
-        '<span style="font-size:0.72em;color:#4a5568;margin-right:6px">'
-        f'{_soccer_league_label(league)}'
-        f'</span>'
-    )
-    over_badge = (
-        '<span style="background:#052e16;color:#22c55e;border:1px solid #22c55e;'
-        'border-radius:4px;padding:1px 7px;font-size:0.72em;font-weight:700;'
-        'letter-spacing:0.06em;margin-right:6px">OVER 2.5</span>'
-    )
-
-    header = (
-        f'<div class="card-header">'
-        f'{over_badge}{league_tag}'
-        f'<span class="matchup">{away} @ {home}</span>'
-        f'{_soccer_tier_badge(tier)}'
-        f'</div>'
-    )
-
-    edge_pp  = f"{edge * 100:+.1f}pp" if edge is not None else "—"
-    ecls     = "edge-pos" if (edge or 0) > 0 else "edge-neg"
-    model_s  = f"{model_t:.1f}" if model_t is not None else "—"
-    over_s   = f"{over_p:.2f}" if over_p is not None else "—"
-
-    stats_parts = [
-        f'<span class="proj-label">Line</span> <span class="proj-val">2.5</span>',
-        f'<span class="proj-label">Edge</span> <span class="{ecls}">{edge_pp}</span>',
-        f'<span class="proj-label">Model Goals</span> <span class="proj-val">{model_s}</span>',
-    ]
-    if over_p is not None:
-        stats_parts.append(
-            f'<span class="proj-label">Over Price</span> <span class="proj-val">{over_s}</span>'
-        )
-    if gt:
-        stats_parts.append(
-            f'<span class="proj-label">Kickoff</span> <span class="proj-val">{gt}</span>'
-        )
-    stats_row = f'<div class="proj-row">{sep.join(stats_parts)}</div>'
-
-    move_html = ""
-    move_badge = _soccer_move_badge(move)
-    lineup_icon = "✓ Lineup confirmed" if lineup else "? Lineup estimated"
-    lineup_color = "#22c55e" if lineup else "#4a5568"
-    move_html = (
-        f'<div style="font-size:0.80em;color:#4a5568;margin-bottom:7px">'
-        f'{move_badge}'
-        f'&nbsp;&nbsp;|&nbsp;&nbsp;'
-        f'<span style="color:{lineup_color}">{lineup_icon}</span>'
-        f'</div>'
-    )
-
-    summary_html = (
-        f'<div class="card-summary">{summary}</div>' if summary else ""
-    )
-
-    st.html(
-        f'<div class="{card_cls}">'
-        f'{header}{stats_row}{move_html}{summary_html}'
-        f'</div>'
-    )
-
-
-def _parlay_candidate_card_html(c: dict) -> str:
-    """Build HTML for a single Over 1.5 candidate card."""
-    home     = c.get("home_team", "")
-    away     = c.get("away_team", "")
-    league   = c.get("league", "")
-    tier     = c.get("confidence_tier", "HIGH")
-    proj     = c.get("projected_total")
-    p_over   = c.get("model_p_over_1_5")
-    mkt_p    = c.get("market_implied_p_1_5")
-    mkt_line = c.get("market_line_1_5")
-    lineup   = bool(c.get("lineup_confirmed", False))
-    gt       = c.get("game_time_et", "")
-
-    league_tag = (
-        '<span style="font-size:0.72em;color:#4a5568;margin-right:6px">'
-        f'{_soccer_league_label(league)}'
-        '</span>'
-    )
-    over15_badge = (
-        '<span style="background:#1e1b4b;color:#a5b4fc;border:1px solid #6366f1;'
-        'border-radius:4px;padding:1px 7px;font-size:0.72em;font-weight:700;'
-        'letter-spacing:0.06em;margin-right:6px">OVER 1.5</span>'
-    )
-    tier_color  = "#22c55e" if tier == "VERY HIGH" else "#f59e0b"
-    tier_bg     = "#052e16" if tier == "VERY HIGH" else "#431407"
-    tier_border = "#166534" if tier == "VERY HIGH" else "#9a3412"
-    tier_badge  = (
-        f'<span style="background:{tier_bg};color:{tier_color};'
-        f'border:1px solid {tier_border};border-radius:4px;padding:1px 7px;'
-        f'font-size:0.72em;font-weight:700;margin-left:6px">{tier}</span>'
-    )
-    header = (
-        f'<div class="card-header">'
-        f'{over15_badge}{league_tag}'
-        f'<span class="matchup">{away} @ {home}</span>'
-        f'{tier_badge}'
-        f'</div>'
-    )
-
-    sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
-    proj_s = f"{proj:.1f}" if proj is not None else "—"
-    p_s    = f"{p_over * 100:.1f}%" if p_over is not None else "—"
-    stats_parts = [
-        f'<span class="proj-label">Projected Goals</span> <span class="proj-val">{proj_s}</span>',
-        f'<span class="proj-label">P(Over 1.5)</span> <span class="proj-val" style="color:#a5b4fc">{p_s}</span>',
-    ]
-    if mkt_line is not None and mkt_p is not None:
-        stats_parts.append(
-            f'<span class="proj-label">Market 1.5</span>'
-            f' <span class="proj-val">{mkt_p * 100:.1f}%</span>'
-        )
-    if gt:
-        stats_parts.append(
-            f'<span class="proj-label">Kickoff</span> <span class="proj-val">{gt}</span>'
-        )
-    stats_row = f'<div class="proj-row">{sep.join(stats_parts)}</div>'
-
-    lineup_icon  = "✓ Lineup confirmed" if lineup else "? Lineup estimated"
-    lineup_color = "#22c55e" if lineup else "#4a5568"
-    lineup_html  = (
-        f'<div style="font-size:0.80em;color:{lineup_color};margin-bottom:4px">'
-        f'{lineup_icon}</div>'
-    )
-    return (
-        f'<div class="game-card" style="border-color:#334155">'
-        f'{header}{stats_row}{lineup_html}'
-        f'</div>'
-    )
-
-
-def _render_soccer_parlay_candidates(parlay_candidates: list,
-                                     suggested_parlay: dict) -> None:
-    """
-    Render Over 1.5 parlay section: suggested parlay + additional candidates.
-    Entertainment / parlay-support only — not a validated standalone product.
-    """
-    st.html('<div class="section-hdr">⚽ Over 1.5 Parlay Candidates</div>')
-
-    # Disclaimer — neutral info style
-    st.html(
-        '<div style="background:#0f172a;border:1px solid #334155;border-radius:6px;'
-        'padding:8px 14px;margin-bottom:12px;font-size:0.80em;color:#94a3b8">'
-        '⚠️ <strong>Entertainment / parlay-support only.</strong> '
-        'Not validated for standalone betting. Model probability only — '
-        'not a proven edge product. Parlay legs are correlated when from the '
-        'same league or match day.'
-        '</div>'
-    )
-
-    # ── Suggested parlay block ────────────────────────────────────────────────
-    sp = suggested_parlay or {}
-    leg_count   = sp.get("leg_count", 0)
-    combined_p  = sp.get("combined_prob")
-    corr_note   = sp.get("correlation_note", False)
-    legs        = sp.get("legs", [])
-
-    if leg_count == 0:
-        # No candidates at all
-        st.caption(
-            "No parlay candidates today — check back on the next match day."
-        )
-        return
-
-    if leg_count == 1:
-        header_label = "1 Parlay Candidate Today (insufficient for multi-leg)"
-    elif leg_count == 2:
-        header_label = f"Suggested 2-Leg Parlay (only {len(parlay_candidates)} candidates today)"
-    else:
-        header_label = "🎯 Suggested 3-Leg Parlay"
-
-    # Build leg rows HTML
-    sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
-    legs_html = ""
-    for i, leg in enumerate(legs):
-        lg       = leg.get("league", "")
-        home     = leg.get("home_team", "")
-        away     = leg.get("away_team", "")
-        gt       = leg.get("game_time_et", "")
-        proj     = leg.get("projected_total")
-        p_over   = leg.get("model_p_over_1_5")
-        tier     = leg.get("confidence_tier", "HIGH")
-        edge_1_5 = leg.get("edge_1_5")
-
-        league_ico = _soccer_league_label(lg).split(" ")[0]
-        tier_color = "#22c55e" if tier == "VERY HIGH" else "#f59e0b"
-        tier_badge = (
-            f'<span style="background:#1a1a2e;color:{tier_color};'
-            f'border:1px solid {tier_color};border-radius:3px;padding:0 5px;'
-            f'font-size:0.70em;font-weight:700;margin-left:5px">{tier}</span>'
-        )
-
-        p_s    = f"{p_over * 100:.1f}%" if p_over is not None else "—"
-        proj_s = f"{proj:.1f}" if proj is not None else "—"
-
-        parts = [
-            f'<span style="color:#e2e8f0;font-weight:600">{away} @ {home}</span>',
-            f'<span style="color:#94a3b8">P(1.5): <strong style="color:#a5b4fc">{p_s}</strong></span>',
-            f'<span style="color:#94a3b8">Proj: {proj_s} goals</span>',
-        ]
-        if gt:
-            parts.append(f'<span style="color:#64748b">{gt} ET</span>')
-
-        legs_html += (
-            f'<div style="padding:6px 0;border-bottom:1px solid #1e293b;'
-            f'font-size:0.83em">'
-            f'{league_ico} {sep.join(parts)}{tier_badge}'
-            f'</div>'
-        )
-
-    # Combined probability row
-    comb_s = f"{combined_p * 100:.1f}%" if combined_p is not None else "—"
-    corr_html = (
-        '<div style="font-size:0.76em;color:#f59e0b;margin-top:6px">'
-        '⚠️ Multiple legs from same league — may be correlated'
-        '</div>'
-        if corr_note else ""
-    )
-    footer_html = (
-        f'<div style="margin-top:8px;font-size:0.82em;color:#94a3b8">'
-        f'Estimated combined probability: '
-        f'<strong style="color:#e2e8f0">{comb_s}</strong>'
-        f'</div>'
-        f'<div style="font-size:0.72em;color:#4a5568;margin-top:3px">'
-        f'Assumes independence — actual probability may be lower if legs are correlated.'
-        f'</div>'
-        f'{corr_html}'
-    )
-
-    st.html(
-        f'<div class="game-card" style="border-color:#4338ca;background:#0f0f2e">'
-        f'<div class="card-header" style="margin-bottom:4px">'
-        f'<span style="font-weight:700;color:#c7d2fe;font-size:0.95em">{header_label}</span>'
-        f'<span style="font-size:0.72em;color:#64748b;margin-left:8px">'
-        f'High-confidence goal environments — parlay use only</span>'
-        f'</div>'
-        f'{legs_html}'
-        f'{footer_html}'
-        f'</div>'
-    )
-
-    # ── Additional candidates list (capped at 6, sorted P DESC) ──────────────
-    if parlay_candidates:
-        st.html(
-            '<div style="font-size:0.78em;font-weight:600;color:#64748b;'
-            'margin:14px 0 6px 0;text-transform:uppercase;letter-spacing:0.05em">'
-            'All Candidates Today</div>'
-        )
-        for c in parlay_candidates[:6]:
-            st.html(_parlay_candidate_card_html(c))
-
-
 def _render_soccer_tab() -> None:
     soccer = load_soccer_results()
 
@@ -2691,7 +2419,7 @@ def _render_soccer_tab() -> None:
 
     # Signal status row
     _render_signal_status_row(
-        active_labels=["V2.2 Bundesliga"] if active_sigs else [],
+        active_labels=["V2.2 Bundesliga", "Ridge residual"] if active_sigs else ["Ridge residual"],
         shadow_labels=["V2.2c challenger"] if shadow_sigs else [],
     )
 
@@ -2771,12 +2499,6 @@ def _render_soccer_tab() -> None:
         with st.expander(f"All other signals \u2014 {len(other_sigs)}", expanded=False):
             for s in other_sigs:
                 _soccer_universal_card(s, "NONE")
-
-    # ── SECTION 1b: Over 1.5 Parlay Candidates ────────────────────────────────
-    _render_soccer_parlay_candidates(
-        soccer.get("parlay_candidates", []),
-        soccer.get("suggested_parlay", {}),
-    )
 
     # ── SECTION 2: Recent Results ──────────────────────────────────────────────
     st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
@@ -3334,636 +3056,650 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     if stats:
         _render_season_header(stats)
 
-    # (single-content tab — Results Review removed, content lives in Tracker tab)
-    if True:
-        # ── stop rule suspension banner ────────────────────────────────────────
-        _mlb_stop = (data or {}).get("stop_rule_status", {})
-        _mlb_model_susp  = _mlb_stop.get("model_suspended", False)
-        _mlb_tier_susps  = _mlb_stop.get("suspended_tiers", [])
-        _mlb_full_detail = _mlb_stop.get("full_model_details", {})
-        _mlb_tier_detail = _mlb_stop.get("tier_details", {})
+    # ── stop rule suspension banner ────────────────────────────────────────
+    _mlb_stop = (data or {}).get("stop_rule_status", {})
+    _mlb_model_susp  = _mlb_stop.get("model_suspended", False)
+    _mlb_tier_susps  = _mlb_stop.get("suspended_tiers", [])
+    _mlb_full_detail = _mlb_stop.get("full_model_details", {})
+    _mlb_tier_detail = _mlb_stop.get("tier_details", {})
 
-        if _mlb_model_susp:
-            # Case B: full model suspended
-            _fn = _mlb_full_detail.get("n", "?")
-            _fr = _mlb_full_detail.get("roi")
-            _fr_str = f"{_fr:.1f}%" if _fr is not None else "?"
+    if _mlb_model_susp:
+        # Case B: full model suspended
+        _fn = _mlb_full_detail.get("n", "?")
+        _fr = _mlb_full_detail.get("roi")
+        _fr_str = f"{_fr:.1f}%" if _fr is not None else "?"
+        st.html(f"""
+        <div style="background:#2d1515;border:2px solid #dc2626;border-radius:8px;
+                    padding:12px 16px;margin-bottom:14px">
+          <span style="color:#f87171;font-weight:700;font-size:1.05em">
+            🚨 MLB MODEL FULLY SUSPENDED
+          </span>
+          <span style="color:#fca5a5;margin-left:10px;font-size:0.88em">
+            Full-model ROI hit {_fr_str} on {_fn} live plays (threshold: −12%).
+            All signals are paused.
+          </span>
+          <div style="color:#fca5a5;font-size:0.80em;margin-top:6px">
+            Manual reset required:
+            <code>python mlb_reset_stop_rules.py --reason "..."</code>
+          </div>
+        </div>
+        """)
+    elif _mlb_tier_susps:
+        # Case A: one or more tiers suspended, model still running
+        for _t in _mlb_tier_susps:
+            _td = _mlb_tier_detail.get(_t, {})
+            _tn = _td.get("n", "?")
+            _tr = _td.get("roi")
+            _tr_str = f"{_tr:.1f}%" if _tr is not None else "?"
             st.html(f"""
-            <div style="background:#2d1515;border:2px solid #dc2626;border-radius:8px;
-                        padding:12px 16px;margin-bottom:14px">
-              <span style="color:#f87171;font-weight:700;font-size:1.05em">
-                🚨 MLB MODEL FULLY SUSPENDED
+            <div style="background:#2d1b0e;border:2px solid #d97706;border-radius:8px;
+                        padding:12px 16px;margin-bottom:8px">
+              <span style="color:#fbbf24;font-weight:700;font-size:1.05em">
+                ⛔ MLB {_t} tier suspended
               </span>
-              <span style="color:#fca5a5;margin-left:10px;font-size:0.88em">
-                Full-model ROI hit {_fr_str} on {_fn} live plays (threshold: −12%).
-                All signals are paused.
+              <span style="color:#fde68a;margin-left:10px;font-size:0.88em">
+                {_t}-confidence tier ROI hit {_tr_str} on {_tn} live plays
+                (threshold: −10%). {_t} signals paused. Other tiers continue.
               </span>
-              <div style="color:#fca5a5;font-size:0.80em;margin-top:6px">
+              <div style="color:#fde68a;font-size:0.80em;margin-top:6px">
                 Manual reset required:
                 <code>python mlb_reset_stop_rules.py --reason "..."</code>
               </div>
             </div>
             """)
-        elif _mlb_tier_susps:
-            # Case A: one or more tiers suspended, model still running
-            for _t in _mlb_tier_susps:
-                _td = _mlb_tier_detail.get(_t, {})
-                _tn = _td.get("n", "?")
-                _tr = _td.get("roi")
-                _tr_str = f"{_tr:.1f}%" if _tr is not None else "?"
-                st.html(f"""
-                <div style="background:#2d1b0e;border:2px solid #d97706;border-radius:8px;
-                            padding:12px 16px;margin-bottom:8px">
-                  <span style="color:#fbbf24;font-weight:700;font-size:1.05em">
-                    ⛔ MLB {_t} tier suspended
-                  </span>
-                  <span style="color:#fde68a;margin-left:10px;font-size:0.88em">
-                    {_t}-confidence tier ROI hit {_tr_str} on {_tn} live plays
-                    (threshold: −10%). {_t} signals paused. Other tiers continue.
-                  </span>
-                  <div style="color:#fde68a;font-size:0.80em;margin-top:6px">
-                    Manual reset required:
-                    <code>python mlb_reset_stop_rules.py --reason "..."</code>
-                  </div>
-                </div>
-                """)
 
-        # ── Consolidated engine & shadow status panel ─────────────────────
+    # ── Consolidated engine & shadow status panel ─────────────────────
+    try:
+        _status_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
+        _pill = lambda label, color, bg: (
+            f'<span style="background:{bg};color:{color};border:1px solid {color};'
+            f'border-radius:10px;padding:2px 8px;font-size:0.68em;font-weight:600;'
+            f'margin-right:4px;white-space:nowrap">{label}</span>')
+
+        # GREEN — active engines
+        _green_pills = []
+        # Sim engine
+        _es = os.path.join(_status_base, "pipeline", "engine_status.json")
+        if os.path.exists(_es):
+            import json as _json_st
+            with open(_es) as _esf:
+                if _json_st.load(_esf).get("status") != "PAUSED":
+                    _green_pills.append(_pill("Sim engine", "#22c55e", "#052e16"))
+        # F5 engine
+        _f5s = os.path.join(_status_base, "pipeline", "f5_engine_status.json")
+        if os.path.exists(_f5s):
+            with open(_f5s) as _f5sf:
+                if _json_st.load(_f5sf).get("status") != "PAUSED":
+                    _green_pills.append(_pill("F5 engine", "#22c55e", "#052e16"))
+        # F5 Run Line
+        _rls = os.path.join(_status_base, "pipeline", "f5_runline_status.json")
+        if os.path.exists(_rls):
+            with open(_rls) as _rlsf:
+                if _json_st.load(_rlsf).get("status") != "PAUSED":
+                    _green_pills.append(_pill("F5 Run Line", "#22c55e", "#052e16"))
+        # S12 overlay
+        _s12c = os.path.join(_status_base, "pipeline", "s12_overlay_config.json")
+        if os.path.exists(_s12c):
+            with open(_s12c) as _s12f:
+                if _json_st.load(_s12f).get("s12_cutoff_top20"):
+                    _green_pills.append(_pill("S12 overlay", "#22c55e", "#052e16"))
+        # P09 overlay
+        _p09c = os.path.join(_status_base, "pipeline", "p09_overlay_config.json")
+        if os.path.exists(_p09c):
+            with open(_p09c) as _p09f:
+                if _json_st.load(_p09f).get("p09_cutoff_bottom20"):
+                    _green_pills.append(_pill("P09 overlay", "#22c55e", "#052e16"))
+        # YELLOW — shadow monitors (always shown; these are wired in run_model.py)
+        _yellow_pills = [
+            _pill("CS013 bullpen", "#eab308", "#1c1400"),
+            _pill("CS028 blowup", "#eab308", "#1c1400"),
+            _pill("KP04 K-prop", "#eab308", "#1c1400"),
+            _pill("ST02 road", "#eab308", "#1c1400"),
+            _pill("Short exit", "#eab308", "#1c1400"),
+            _pill("Team Totals", "#eab308", "#1c1400"),
+        ]
+
+        _html_parts = []
+        if _green_pills:
+            _html_parts.append(
+                f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px">'
+                f'\u25cf Active</span>' + "".join(_green_pills))
+        if _yellow_pills:
+            _html_parts.append(
+                f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px;'
+                f'margin-left:8px">\u25d0 Shadow</span>' + "".join(_yellow_pills))
+        if _html_parts:
+            st.html(f'<div style="margin-bottom:8px;line-height:2">{"".join(_html_parts)}</div>')
+    except Exception:
+        pass
+
+    # ── MLB Sim Engine — UNDER signals (2026 live) ───────────────────────
+    try:
+        _sim_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
+        _sim_status_path = os.path.join(_sim_base, "pipeline", "engine_status.json")
+        _sim_signals_path = os.path.join(_sim_base, "logs", "signals_2026.parquet")
+        _sim_perf_path = os.path.join(_sim_base, "logs", "rolling_performance_2026.json")
+
+        # Engine status indicator
+        if os.path.exists(_sim_status_path):
+            import json as _json2
+            with open(_sim_status_path) as _sf:
+                _sim_status = _json2.load(_sf)
+            if _sim_status.get("status") == "PAUSED":
+                st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
+                        'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
+                        '⚠️ MLB Under Engine paused — manual review required before resuming.</div>')
+            else:
+                pass  # Status shown in consolidated panel above
+
+        # Today's V1 signals now shown on unified game cards above
+
+        # ── Unified season performance (reads from signal JSONs directly) ──
+        import json as _json3
+        _MLB_CUT = "2026-03-30"
+        _mlb_tab_v1 = []
         try:
-            _status_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
-            _pill = lambda label, color, bg: (
-                f'<span style="background:{bg};color:{color};border:1px solid {color};'
-                f'border-radius:10px;padding:2px 8px;font-size:0.68em;font-weight:600;'
-                f'margin-right:4px;white-space:nowrap">{label}</span>')
-
-            # GREEN — active engines
-            _green_pills = []
-            # Sim engine
-            _es = os.path.join(_status_base, "pipeline", "engine_status.json")
-            if os.path.exists(_es):
-                import json as _json_st
-                with open(_es) as _esf:
-                    if _json_st.load(_esf).get("status") != "PAUSED":
-                        _green_pills.append(_pill("Sim engine", "#22c55e", "#052e16"))
-            # F5 engine
-            _f5s = os.path.join(_status_base, "pipeline", "f5_engine_status.json")
-            if os.path.exists(_f5s):
-                with open(_f5s) as _f5sf:
-                    if _json_st.load(_f5sf).get("status") != "PAUSED":
-                        _green_pills.append(_pill("F5 engine", "#22c55e", "#052e16"))
-            # F5 Run Line
-            _rls = os.path.join(_status_base, "pipeline", "f5_runline_status.json")
-            if os.path.exists(_rls):
-                with open(_rls) as _rlsf:
-                    if _json_st.load(_rlsf).get("status") != "PAUSED":
-                        _green_pills.append(_pill("F5 Run Line", "#22c55e", "#052e16"))
-            # S12 overlay
-            _s12c = os.path.join(_status_base, "pipeline", "s12_overlay_config.json")
-            if os.path.exists(_s12c):
-                with open(_s12c) as _s12f:
-                    if _json_st.load(_s12f).get("s12_cutoff_top20"):
-                        _green_pills.append(_pill("S12 overlay", "#22c55e", "#052e16"))
-            # P09 overlay
-            _p09c = os.path.join(_status_base, "pipeline", "p09_overlay_config.json")
-            if os.path.exists(_p09c):
-                with open(_p09c) as _p09f:
-                    if _json_st.load(_p09f).get("p09_cutoff_bottom20"):
-                        _green_pills.append(_pill("P09 overlay", "#22c55e", "#052e16"))
-            # YELLOW — shadow monitors (always shown; these are wired in run_model.py)
-            _yellow_pills = [
-                _pill("CS013 bullpen", "#eab308", "#1c1400"),
-                _pill("CS028 blowup", "#eab308", "#1c1400"),
-                _pill("KP04 K-prop", "#eab308", "#1c1400"),
-                _pill("ST02 road", "#eab308", "#1c1400"),
-                _pill("Short exit", "#eab308", "#1c1400"),
-                _pill("Team Totals", "#eab308", "#1c1400"),
-            ]
-
-            _html_parts = []
-            if _green_pills:
-                _html_parts.append(
-                    f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px">'
-                    f'\u25cf Active</span>' + "".join(_green_pills))
-            if _yellow_pills:
-                _html_parts.append(
-                    f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px;'
-                    f'margin-left:8px">\u25d0 Shadow</span>' + "".join(_yellow_pills))
-            if _html_parts:
-                st.html(f'<div style="margin-bottom:8px;line-height:2">{"".join(_html_parts)}</div>')
+            with open(os.path.join(_sim_base, "logs", "signals_2026.json")) as _f:
+                _mlb_tab_v1 = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
+        except Exception:
+            pass
+        _mlb_tab_f5 = []
+        try:
+            with open(os.path.join(_sim_base, "logs", "f5_signals_2026.json")) as _f:
+                _mlb_tab_f5 = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
+        except Exception:
+            pass
+        _mlb_tab_rl = []
+        try:
+            with open(os.path.join(_sim_base, "logs", "f5_runline_2026.json")) as _f:
+                _mlb_tab_rl = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
         except Exception:
             pass
 
-        # ── MLB Sim Engine — UNDER signals (2026 live) ───────────────────────
-        try:
-            _sim_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
-            _sim_status_path = os.path.join(_sim_base, "pipeline", "engine_status.json")
-            _sim_signals_path = os.path.join(_sim_base, "logs", "signals_2026.parquet")
-            _sim_perf_path = os.path.join(_sim_base, "logs", "rolling_performance_2026.json")
+        _v1_live = [r for r in _mlb_tab_v1 if not r.get("shadow_only")]
+        _v1_shadow = [r for r in _mlb_tab_v1 if r.get("shadow_only")]
+        _all_live = _v1_live + _mlb_tab_f5 + _mlb_tab_rl
 
-            # Engine status indicator
-            if os.path.exists(_sim_status_path):
-                import json as _json2
-                with open(_sim_status_path) as _sf:
-                    _sim_status = _json2.load(_sf)
-                if _sim_status.get("status") == "PAUSED":
-                    st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
-                            'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
-                            '⚠️ MLB Under Engine paused — manual review required before resuming.</div>')
-                else:
-                    pass  # Status shown in consolidated panel above
+        def _mt_wlp(recs):
+            w = sum(1 for r in recs if r.get("result") == "WIN")
+            l = sum(1 for r in recs if r.get("result") == "LOSS")
+            return w, l
 
-            # Today's V1 signals now shown on unified game cards above
+        def _mt_roi(recs):
+            net = sum(float(r.get("net_units", 0) or 0) for r in recs)
+            risked = sum(abs(float(r.get("stake_units", 1) or 1)) for r in recs)
+            return (round(net / risked * 100, 1), round(net, 2)) if risked > 0 else (0.0, 0.0)
 
-            # ── Unified season performance (reads from signal JSONs directly) ──
-            import json as _json3
-            _MLB_CUT = "2026-03-30"
-            _mlb_tab_v1 = []
-            try:
-                with open(os.path.join(_sim_base, "logs", "signals_2026.json")) as _f:
-                    _mlb_tab_v1 = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
-            except Exception:
-                pass
-            _mlb_tab_f5 = []
-            try:
-                with open(os.path.join(_sim_base, "logs", "f5_signals_2026.json")) as _f:
-                    _mlb_tab_f5 = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
-            except Exception:
-                pass
-            _mlb_tab_rl = []
-            try:
-                with open(os.path.join(_sim_base, "logs", "f5_runline_2026.json")) as _f:
-                    _mlb_tab_rl = [r for r in _json3.load(_f) if r.get("result") and (r.get("date","") or "") >= _MLB_CUT]
-            except Exception:
-                pass
+        _tw, _tl = _mt_wlp(_all_live)
+        _troi, _tnet = _mt_roi(_all_live)
+        _tn = _tw + _tl
+        _roi_clr = "#4ade80" if _troi > 0 else "#fbbf24" if _troi > -4 else "#f87171"
 
-            _v1_live = [r for r in _mlb_tab_v1 if not r.get("shadow_only")]
-            _v1_shadow = [r for r in _mlb_tab_v1 if r.get("shadow_only")]
-            _all_live = _v1_live + _mlb_tab_f5 + _mlb_tab_rl
+        if _tn > 0:
+            st.html(
+                f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px;font-weight:600">'
+                f'\U0001f4ca Live Production (Mar 30+): '
+                f'<span style="color:#e2e8f0">{_tw}-{_tl}</span>'
+                f' <span style="color:{_roi_clr}">ROI {_troi:+.1f}%</span>'
+                f' <span style="color:#94a3b8">({_tnet:+.2f}u)</span></div>')
 
-            def _mt_wlp(recs):
-                w = sum(1 for r in recs if r.get("result") == "WIN")
-                l = sum(1 for r in recs if r.get("result") == "LOSS")
-                return w, l
+            # Engine breakdown
+            _eng_parts = []
+            _v1w, _v1l = _mt_wlp(_v1_live)
+            if _v1w + _v1l > 0:
+                _v1r, _ = _mt_roi(_v1_live)
+                _eng_parts.append(f"V1: {_v1w}-{_v1l} ({_v1r:+.1f}%)")
+            _f5w, _f5l = _mt_wlp(_mlb_tab_f5)
+            if _f5w + _f5l > 0:
+                _f5r, _ = _mt_roi(_mlb_tab_f5)
+                _eng_parts.append(f"F5: {_f5w}-{_f5l} ({_f5r:+.1f}%)")
+            _rlw, _rll = _mt_wlp(_mlb_tab_rl)
+            if _rlw + _rll > 0:
+                _rlr, _ = _mt_roi(_mlb_tab_rl)
+                _eng_parts.append(f"RL: {_rlw}-{_rll} ({_rlr:+.1f}%)")
+            if _eng_parts:
+                st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:2px">'
+                        f'{" | ".join(_eng_parts)}</div>')
 
-            def _mt_roi(recs):
-                net = sum(float(r.get("net_units", 0) or 0) for r in recs)
-                risked = sum(abs(float(r.get("stake_units", 1) or 1)) for r in recs)
-                return (round(net / risked * 100, 1), round(net, 2)) if risked > 0 else (0.0, 0.0)
+            # Hard stop monitor (V1 live only)
+            _v1n = _v1w + _v1l
+            _v1roi, _ = _mt_roi(_v1_live) if _v1n > 0 else (0.0, 0.0)
+            _hs_clr = "#4ade80" if _v1roi > 0 else "#fbbf24" if _v1roi > -4 else "#f87171"
+            from datetime import date as _hs_date
+            if _hs_date.today() <= _hs_date(2026, 4, 30):
+                st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                        f'\u23f8 Hard stop suspended through April 30 \u2014 manual re-evaluation May 1'
+                        f' | V1: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span> ({_v1n} signals)</div>')
+            else:
+                st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
+                        f'V1 hard stop: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span>'
+                        f' / \u22128.0% threshold | {_v1n}/50 signals</div>')
 
-            _tw, _tl = _mt_wlp(_all_live)
-            _troi, _tnet = _mt_roi(_all_live)
-            _tn = _tw + _tl
-            _roi_clr = "#4ade80" if _troi > 0 else "#fbbf24" if _troi > -4 else "#f87171"
-
-            if _tn > 0:
+        # Shadow monitor
+        if _v1_shadow:
+            _shw, _shl = _mt_wlp(_v1_shadow)
+            _shn = _shw + _shl
+            if _shn > 0:
+                _shroi, _shnet = _mt_roi(_v1_shadow)
                 st.html(
-                    f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px;font-weight:600">'
-                    f'\U0001f4ca Live Production (Mar 30+): '
-                    f'<span style="color:#e2e8f0">{_tw}-{_tl}</span>'
-                    f' <span style="color:{_roi_clr}">ROI {_troi:+.1f}%</span>'
-                    f' <span style="color:#94a3b8">({_tnet:+.2f}u)</span></div>')
+                    f'<div style="font-size:0.68em;color:#6b7280;margin-top:4px;'
+                    f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #333">'
+                    f'Shadow (BASE_HIGH, S12_HIGH): '
+                    f'{_shw}-{_shl} | {_shroi:+.1f}% ROI | {_shnet:+.2f}u'
+                    f'</div>')
 
-                # Engine breakdown
-                _eng_parts = []
-                _v1w, _v1l = _mt_wlp(_v1_live)
-                if _v1w + _v1l > 0:
-                    _v1r, _ = _mt_roi(_v1_live)
-                    _eng_parts.append(f"V1: {_v1w}-{_v1l} ({_v1r:+.1f}%)")
-                _f5w, _f5l = _mt_wlp(_mlb_tab_f5)
-                if _f5w + _f5l > 0:
-                    _f5r, _ = _mt_roi(_mlb_tab_f5)
-                    _eng_parts.append(f"F5: {_f5w}-{_f5l} ({_f5r:+.1f}%)")
-                _rlw, _rll = _mt_wlp(_mlb_tab_rl)
-                if _rlw + _rll > 0:
-                    _rlr, _ = _mt_roi(_mlb_tab_rl)
-                    _eng_parts.append(f"RL: {_rlw}-{_rll} ({_rlr:+.1f}%)")
-                if _eng_parts:
-                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:2px">'
-                            f'{" | ".join(_eng_parts)}</div>')
+    except Exception:
+        pass
 
-                # Hard stop monitor (V1 live only)
-                _v1n = _v1w + _v1l
-                _v1roi, _ = _mt_roi(_v1_live) if _v1n > 0 else (0.0, 0.0)
-                _hs_clr = "#4ade80" if _v1roi > 0 else "#fbbf24" if _v1roi > -4 else "#f87171"
-                from datetime import date as _hs_date
-                if _hs_date.today() <= _hs_date(2026, 4, 30):
-                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
-                            f'\u23f8 Hard stop suspended through April 30 \u2014 manual re-evaluation May 1'
-                            f' | V1: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span> ({_v1n} signals)</div>')
-                else:
-                    st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
-                            f'V1 hard stop: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span>'
-                            f' / \u22128.0% threshold | {_v1n}/50 signals</div>')
+    # Team Total signals now integrated into game card pills above (TT↓H, TT↓A, TT↑H)
 
-            # Shadow monitor
-            if _v1_shadow:
-                _shw, _shl = _mt_wlp(_v1_shadow)
-                _shn = _shw + _shl
-                if _shn > 0:
-                    _shroi, _shnet = _mt_roi(_v1_shadow)
-                    st.html(
-                        f'<div style="font-size:0.68em;color:#6b7280;margin-top:4px;'
-                        f'padding:4px 8px;background:#1a1a2e;border-radius:4px;border:1px solid #333">'
-                        f'Shadow (BASE_HIGH, S12_HIGH): '
-                        f'{_shw}-{_shl} | {_shroi:+.1f}% ROI | {_shnet:+.2f}u'
-                        f'</div>')
+    # Market Timing and Recent Signal expanders removed — see Tracker tab
 
-        except Exception:
-            pass
+    # ── no data state ─────────────────────────────────────────────────────
+    if data is None:
+        st.info(
+            "No projections available yet. "
+            "Run `python push_results.py` on your local machine to publish today's card."
+        )
+        if stats:
+            _render_analytics(stats)
+    else:
+        game_date = data.get("game_date", "")
+        plays     = data.get("plays", [])
+        no_plays  = data.get("no_plays", [])
 
-        # Team Total signals now integrated into game card pills above (TT↓H, TT↓A, TT↑H)
+        if game_date:
+            st.caption(f"Projections for **{game_date}**")
 
-        # Market Timing and Recent Signal expanders removed — see Tracker tab
+        # Load ALL signals into unified per-game map: team_key → [signal_list]
+        import json as _json_sig
+        _game_signals = {}  # "away@home" → list of signal dicts
+        _base_dir = os.path.dirname(os.path.abspath(__file__))
 
-        # ── no data state ─────────────────────────────────────────────────────
-        if data is None:
-            st.info(
-                "No projections available yet. "
-                "Run `python push_results.py` on your local machine to publish today's card."
+        def _load_json_signals(name, sig_type, date_field="date"):
+            for _p in [os.path.join(_base_dir, "mlb_sim", "logs", name),
+                       f"mlb_sim/logs/{name}"]:
+                if not os.path.exists(_p):
+                    continue
+                try:
+                    with open(_p) as _f:
+                        _rows = _json_sig.load(_f)
+                    for _r in _rows:
+                        if str(_r.get(date_field, "")) != str(game_date):
+                            continue
+                        _tk = f'{_r.get("away_team","")}@{_r.get("home_team","")}'
+                        if _tk not in _game_signals:
+                            _game_signals[_tk] = []
+                        _info = {"type": sig_type, "stake": float(_r.get("stake_units", 0))}
+                        _info["signal_status"] = _r.get("signal_status")
+                        # Scratch detection fields (all signal types)
+                        _info["scratch_detected"] = bool(_r.get("scratch_detected", False))
+                        _info["scratch_voided"] = bool(_r.get("scratch_voided", False))
+                        _info["original_home_sp"] = _r.get("original_home_sp")
+                        _info["replacement_home_sp"] = _r.get("replacement_home_sp")
+                        _info["original_away_sp"] = _r.get("original_away_sp")
+                        _info["replacement_away_sp"] = _r.get("replacement_away_sp")
+                        if sig_type == "v1":
+                            _info["s12_active"] = bool(_r.get("s12_overlay_active", 0))
+                            _info["p09_active"] = bool(_r.get("p09_overlay_active", 0))
+                            _info["st02_active"] = bool(_r.get("st02_overlay_active", 0))
+                            _info["p_under"] = float(_r.get("raw_p_under", 0))
+                            _info["line"] = _r.get("line_at_signal_time")
+                            _info["open_line"] = _r.get("open_line")
+                            _info["shadow_only"] = bool(_r.get("shadow_only", False))
+                            _info["signal_class"] = _r.get("signal_class", "")
+                        elif sig_type in ("f5_under", "f5_over"):
+                            side = _r.get("f5_signal_side", "")
+                            _info["type"] = "f5_under" if side == "UNDER" else "f5_over"
+                            _info["f5_line"] = _r.get("f5_line")
+                            _info["p_under"] = float(_r.get("p_under_full", 0))
+                            _info["p_over"] = float(_r.get("p_over_full", 0))
+                        _game_signals[_tk].append(_info)
+                except Exception:
+                    pass
+                break
+
+        _load_json_signals("signals_2026.json", "v1")
+        _load_json_signals("f5_signals_2026.json", "f5_under")  # type corrected inside
+        _load_json_signals("f5_runline_2026.json", "f5_rl")
+
+        # Check for PRELIMINARY signals — show banner only 2-7 AM ET
+        from datetime import datetime as _prelim_dt
+        from zoneinfo import ZoneInfo as _prelim_tz
+        _et_hour = _prelim_dt.now(_prelim_tz("America/New_York")).hour
+        if 2 <= _et_hour < 7:
+            _has_prelim = any(
+                s.get("signal_status") == "PRELIMINARY"
+                for sigs in _game_signals.values() for s in sigs
             )
-            if stats:
-                _render_analytics(stats)
-        else:
-            game_date = data.get("game_date", "")
-            plays     = data.get("plays", [])
-            no_plays  = data.get("no_plays", [])
+            if _has_prelim:
+                st.html(
+                    '<div style="background:#1c1400;border:2px solid #d97706;border-radius:8px;'
+                    'padding:10px 16px;margin-bottom:12px">'
+                    '<span style="color:#fbbf24;font-weight:700;font-size:0.95em">'
+                    '\u26a0\ufe0f PRELIMINARY</span>'
+                    '<span style="color:#fde68a;margin-left:8px;font-size:0.85em">'
+                    'Opening lines captured at 2 AM ET. Final signals update at 7 AM ET.'
+                    '</span></div>')
 
-            if game_date:
-                st.caption(f"Projections for **{game_date}**")
+        st.html(_pipeline_freshness("mlb_confirm"))
 
-            # Load ALL signals into unified per-game map: team_key → [signal_list]
-            import json as _json_sig
-            _game_signals = {}  # "away@home" → list of signal dicts
-            _base_dir = os.path.dirname(os.path.abspath(__file__))
+        all_games = (plays or []) + (no_plays or [])
+        play_cards = []
+        shadow_cards = []
+        noplay_cards = []
+        for b in all_games:
+            _tk = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
+            _sigs = _game_signals.get(_tk, [])
+            if _sigs:
+                # Split: if ALL V1 signals for this game are shadow_only (and no F5/RL),
+                # route to shadow. Otherwise route to live plays.
+                _live_sigs = [s for s in _sigs if not s.get("shadow_only")]
+                _shadow_sigs = [s for s in _sigs if s.get("shadow_only")]
+                if _live_sigs:
+                    play_cards.append((b, _live_sigs))
+                if _shadow_sigs:
+                    shadow_cards.append((b, _shadow_sigs))
+                if not _live_sigs and not _shadow_sigs:
+                    play_cards.append((b, _sigs))  # fallback: treat as live
+            else:
+                noplay_cards.append((b, False))
 
-            def _load_json_signals(name, sig_type, date_field="date"):
-                for _p in [os.path.join(_base_dir, "mlb_sim", "logs", name),
-                           f"mlb_sim/logs/{name}"]:
-                    if not os.path.exists(_p):
-                        continue
+        # ── Route noplay cards with active TT signals into shadow_cards ──────
+        _tt_noplay = []
+        _remaining_noplay = []
+        for _b, _partial in noplay_cards:
+            _gpk_tt = str(_b.get("game", {}).get("game_pk", ""))
+            _gdate_tt = _b.get("game", {}).get("game_date", "")
+            _sh_tt = _load_shadow_flags(_gdate_tt).get(_gpk_tt, {})
+            _has_tt = (_sh_tt.get("tt_under_h") or _sh_tt.get("tt_under_a") or
+                       _sh_tt.get("tt_over_h"))
+            if _has_tt:
+                # Route to shadow section as a no-signal card (signals=None)
+                shadow_cards.append((_b, []))
+            else:
+                _remaining_noplay.append((_b, _partial))
+        noplay_cards = _remaining_noplay
+
+        # ── Yesterday's results (live bets only) ──────────────────────
+        try:
+            from datetime import datetime as _dt_rt, timedelta as _td_rt
+            _yesterday = (_dt_rt.strptime(game_date, "%Y-%m-%d") - _td_rt(days=1)).strftime("%Y-%m-%d")
+
+            def _load_signal_json(name):
+                for _p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "mlb_sim", "logs", name), f"mlb_sim/logs/{name}"]:
+                    if os.path.exists(_p):
+                        try:
+                            with open(_p) as _f:
+                                return _json_sig.load(_f)
+                        except Exception:
+                            pass
+                return []
+
+            def _engine_stats_live(rows, date_filter):
+                """Stats for live bets only (excludes shadow_only=True)."""
+                resolved = [r for r in rows
+                            if r.get("resolved") == 1
+                            and r.get("result") in ("WIN", "LOSS", "PUSH")
+                            and r.get("date") == date_filter
+                            and not r.get("shadow_only")]
+                w = sum(1 for r in resolved if r["result"] == "WIN")
+                l = sum(1 for r in resolved if r["result"] == "LOSS")
+                net = sum(float(r.get("net_units", 0) or 0) for r in resolved)
+                n = w + l
+                return {"w": w, "l": l, "n": n, "net": net}
+
+            _v1_rows = _load_signal_json("signals_2026.json")
+            _f5_rows = _load_signal_json("f5_signals_2026.json")
+            _rl_rows = _load_signal_json("f5_runline_2026.json")
+
+            _v1_y = _engine_stats_live(_v1_rows, _yesterday)
+            _f5_y = _engine_stats_live(_f5_rows, _yesterday)
+            _rl_y = _engine_stats_live(_rl_rows, _yesterday)
+
+            # Parlay yesterday
+            _pt_data = None
+            for _pp in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "mlb_sim", "logs", "parlay_tracker_2026.json"),
+                        "mlb_sim/logs/parlay_tracker_2026.json"]:
+                if os.path.exists(_pp):
                     try:
-                        with open(_p) as _f:
-                            _rows = _json_sig.load(_f)
-                        for _r in _rows:
-                            if str(_r.get(date_field, "")) != str(game_date):
-                                continue
-                            _tk = f'{_r.get("away_team","")}@{_r.get("home_team","")}'
-                            if _tk not in _game_signals:
-                                _game_signals[_tk] = []
-                            _info = {"type": sig_type, "stake": float(_r.get("stake_units", 0))}
-                            _info["signal_status"] = _r.get("signal_status")
-                            # Scratch detection fields (all signal types)
-                            _info["scratch_detected"] = bool(_r.get("scratch_detected", False))
-                            _info["scratch_voided"] = bool(_r.get("scratch_voided", False))
-                            _info["original_home_sp"] = _r.get("original_home_sp")
-                            _info["replacement_home_sp"] = _r.get("replacement_home_sp")
-                            _info["original_away_sp"] = _r.get("original_away_sp")
-                            _info["replacement_away_sp"] = _r.get("replacement_away_sp")
-                            if sig_type == "v1":
-                                _info["s12_active"] = bool(_r.get("s12_overlay_active", 0))
-                                _info["p09_active"] = bool(_r.get("p09_overlay_active", 0))
-                                _info["st02_active"] = bool(_r.get("st02_overlay_active", 0))
-                                _info["p_under"] = float(_r.get("raw_p_under", 0))
-                                _info["line"] = _r.get("line_at_signal_time")
-                                _info["open_line"] = _r.get("open_line")
-                                _info["shadow_only"] = bool(_r.get("shadow_only", False))
-                                _info["signal_class"] = _r.get("signal_class", "")
-                            elif sig_type in ("f5_under", "f5_over"):
-                                side = _r.get("f5_signal_side", "")
-                                _info["type"] = "f5_under" if side == "UNDER" else "f5_over"
-                                _info["f5_line"] = _r.get("f5_line")
-                                _info["p_under"] = float(_r.get("p_under_full", 0))
-                                _info["p_over"] = float(_r.get("p_over_full", 0))
-                            _game_signals[_tk].append(_info)
+                        with open(_pp) as _pf:
+                            _pt_data = _json_sig.load(_pf)
                     except Exception:
                         pass
                     break
 
-            _load_json_signals("signals_2026.json", "v1")
-            _load_json_signals("f5_signals_2026.json", "f5_under")  # type corrected inside
-            _load_json_signals("f5_runline_2026.json", "f5_rl")
+            def _parlay_result(pt_data, tier, date_str):
+                if not pt_data:
+                    return '<span style="color:#6b7280">\u2014</span>'
+                parlays = pt_data.get(tier, {}).get("parlays", [])
+                for p in parlays:
+                    if p.get("date") == date_str:
+                        r = p.get("result", "pending")
+                        if r == "WIN": return '<span style="color:#4ade80">W</span>'
+                        elif r == "LOSS": return '<span style="color:#f87171">L</span>'
+                        else: return '<span style="color:#6b7280">pending</span>'
+                return '<span style="color:#6b7280">\u2014</span>'
 
-            # Check for PRELIMINARY signals — show banner only 2-7 AM ET
-            from datetime import datetime as _prelim_dt
-            from zoneinfo import ZoneInfo as _prelim_tz
-            _et_hour = _prelim_dt.now(_prelim_tz("America/New_York")).hour
-            if 2 <= _et_hour < 7:
-                _has_prelim = any(
-                    s.get("signal_status") == "PRELIMINARY"
-                    for sigs in _game_signals.values() for s in sigs
-                )
-                if _has_prelim:
-                    st.html(
-                        '<div style="background:#1c1400;border:2px solid #d97706;border-radius:8px;'
-                        'padding:10px 16px;margin-bottom:12px">'
-                        '<span style="color:#fbbf24;font-weight:700;font-size:0.95em">'
-                        '\u26a0\ufe0f PRELIMINARY</span>'
-                        '<span style="color:#fde68a;margin-left:8px;font-size:0.85em">'
-                        'Opening lines captured at 2 AM ET. Final signals update at 7 AM ET.'
-                        '</span></div>')
+            _has_yesterday = _v1_y["n"] + _f5_y["n"] + _rl_y["n"] > 0
 
-            st.html(_pipeline_freshness("mlb_confirm"))
+            def _fmt_rec(s):
+                if s["n"] == 0:
+                    return ""
+                clr = "#4ade80" if s["net"] >= 0 else "#f87171"
+                return f'<span style="color:{clr}">{s["w"]}-{s["l"]} ({s["net"]:+.1f}u)</span>'
 
-            all_games = (plays or []) + (no_plays or [])
-            play_cards = []
-            shadow_cards = []
-            noplay_cards = []
-            for b in all_games:
-                _tk = f'{b["game"]["away_team"]}@{b["game"]["home_team"]}'
-                _sigs = _game_signals.get(_tk, [])
-                if _sigs:
-                    # Split: if ALL V1 signals for this game are shadow_only (and no F5/RL),
-                    # route to shadow. Otherwise route to live plays.
-                    _live_sigs = [s for s in _sigs if not s.get("shadow_only")]
-                    _shadow_sigs = [s for s in _sigs if s.get("shadow_only")]
-                    if _live_sigs:
-                        play_cards.append((b, _live_sigs))
-                    if _shadow_sigs:
-                        shadow_cards.append((b, _shadow_sigs))
-                    if not _live_sigs and not _shadow_sigs:
-                        play_cards.append((b, _sigs))  # fallback: treat as live
-                else:
-                    noplay_cards.append((b, False))
+            _html = f'<div style="font-size:0.78em;color:#e2e8f0;padding:10px 14px;background:#0f1729;border-radius:6px;border:1px solid #1e2d4a;margin-bottom:12px">'
+            _html += f'<div style="font-weight:700;color:#94a3b8;margin-bottom:4px">YESTERDAY \u2014 {_yesterday}</div>'
+            if _has_yesterday:
+                if _v1_y["n"] > 0:
+                    _html += f'<div>Full Game: {_fmt_rec(_v1_y)}</div>'
+                if _f5_y["n"] > 0:
+                    _html += f'<div>F5 Total: {_fmt_rec(_f5_y)}</div>'
+                if _rl_y["n"] > 0:
+                    _html += f'<div>F5 Run Line: {_fmt_rec(_rl_y)}</div>'
+                _html += f'<div>Parlays: 3-Leg {_parlay_result(_pt_data, "three_leg", _yesterday)} | 5-Leg {_parlay_result(_pt_data, "five_leg", _yesterday)}</div>'
+            else:
+                _html += '<div style="color:#6b7280">No results yet</div>'
+            _html += '<div style="margin-top:6px;font-size:0.88em;color:#4b5563">\u2192 See \U0001f4ca Tracker tab for full season stats</div>'
+            _html += '</div>'
+            st.html(_html)
+        except Exception:
+            pass
 
-            # ── Yesterday's results (live bets only) ──────────────────────
-            try:
-                from datetime import datetime as _dt_rt, timedelta as _td_rt
-                _yesterday = (_dt_rt.strptime(game_date, "%Y-%m-%d") - _td_rt(days=1)).strftime("%Y-%m-%d")
+        # ── Shadow signals summary ────────────────────────────────────
+        try:
+            _sf = _load_shadow_flags(game_date)
+            _n_games = len(plays or []) + len(no_plays or [])
+            _n_st02 = sum(1 for f in _sf.values() if f.get("st02"))
+            _n_cs013 = sum(1 for f in _sf.values() if f.get("cs013"))
+            _n_conflict = sum(1 for f in _sf.values() if f.get("st02") and f.get("cs013"))
+            if _n_st02 > 0 or _n_cs013 > 0:
+                _sh_parts = []
+                if _n_cs013 > 0:
+                    _sh_parts.append(f'CS013 fires on {_n_cs013} of {_n_games} games')
+                if _n_st02 > 0:
+                    _sh_parts.append(f'ST02 fires on {_n_st02} of {_n_games} games')
+                if _n_conflict > 0:
+                    _sh_parts.append(f'Both fire (conflict) on {_n_conflict}')
+                _sh_text = ' &middot; '.join(_sh_parts)
+                st.html(
+                    f'<div style="font-size:0.72em;color:#6b7280;padding:6px 14px;'
+                    f'background:#0d1117;border-radius:4px;border:1px solid #1e293b;'
+                    f'margin-bottom:10px">'
+                    f'<span style="color:#78716c">SHADOW SIGNALS TODAY</span> &mdash; '
+                    f'{_sh_text}</div>')
+        except Exception:
+            pass
 
-                def _load_signal_json(name):
-                    for _p in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               "mlb_sim", "logs", name), f"mlb_sim/logs/{name}"]:
-                        if os.path.exists(_p):
-                            try:
-                                with open(_p) as _f:
-                                    return _json_sig.load(_f)
-                            except Exception:
-                                pass
-                    return []
+        # Play cards — sort by max stake descending, then game time
+        def _card_sort_key(item):
+            b, sigs = item
+            max_stake = max((float(s.get("stake", 0)) for s in sigs), default=0)
+            gtime = b.get("game", {}).get("game_time_et", "") or b.get("game", {}).get("game_time", "") or "99:99"
+            return (-max_stake, gtime)
 
-                def _engine_stats_live(rows, date_filter):
-                    """Stats for live bets only (excludes shadow_only=True)."""
-                    resolved = [r for r in rows
-                                if r.get("resolved") == 1
-                                and r.get("result") in ("WIN", "LOSS", "PUSH")
-                                and r.get("date") == date_filter
-                                and not r.get("shadow_only")]
-                    w = sum(1 for r in resolved if r["result"] == "WIN")
-                    l = sum(1 for r in resolved if r["result"] == "LOSS")
-                    net = sum(float(r.get("net_units", 0) or 0) for r in resolved)
-                    n = w + l
-                    return {"w": w, "l": l, "n": n, "net": net}
+        play_cards.sort(key=_card_sort_key)
 
-                _v1_rows = _load_signal_json("signals_2026.json")
-                _f5_rows = _load_signal_json("f5_signals_2026.json")
-                _rl_rows = _load_signal_json("f5_runline_2026.json")
+        if play_cards:
+            _n_games = len(play_cards)
+            _n_wagers = sum(len(sigs) for _, sigs in play_cards)
+            st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 '
+                    f'{_n_games} game{"s" if _n_games != 1 else ""} \u00b7 '
+                    f'{_n_wagers} wager{"s" if _n_wagers != 1 else ""}</div>')
+            for b, sigs in play_cards:
+                _render_card(b, signals=sigs)
 
-                _v1_y = _engine_stats_live(_v1_rows, _yesterday)
-                _f5_y = _engine_stats_live(_f5_rows, _yesterday)
-                _rl_y = _engine_stats_live(_rl_rows, _yesterday)
+        # Shadow monitoring section (BASE_HIGH and S12_HIGH — non-P09 high conviction)
+        if shadow_cards:
+            st.html(
+                '<div style="margin-top:16px;padding:8px 14px;background:#1a1a2e;'
+                'border:1px solid #333;border-radius:6px;font-size:0.82em;color:#ef4444;font-weight:700">'
+                'SHADOW MONITORING \u2014 NOT FOR BETTING</div>')
+            for b, sigs in shadow_cards:
+                _render_card(b, signals=sigs, has_partial=True)
 
-                # Parlay yesterday
+        # Just For Fun parlays — built from play_cards only (same pool as Today's Plays)
+        if len(play_cards) >= 3:
+            _parlay_legs = []
+            for _b, _sigs in play_cards:
+                _g = _b.get("game", {})
+                _tk = f'{_g.get("away_team", "")} @ {_g.get("home_team", "")}'
+                # V1 takes priority, then F5, then RL
+                _v1_sig = next((s for s in _sigs if s.get("type") == "v1"), None)
+                _f5_sig = next((s for s in _sigs if s.get("type") in ("f5_under", "f5_over")), None)
+                if _v1_sig:
+                    _parlay_legs.append({
+                        "matchup": _tk,
+                        "bet": "FULL GAME UNDER",
+                        "p": float(_v1_sig.get("p_under", 0)),
+                    })
+                elif _f5_sig:
+                    _f5_side = "OVER" if _f5_sig.get("type") == "f5_over" else "UNDER"
+                    _f5_p = float(_f5_sig.get("p_under", 0) if _f5_side == "UNDER" else _f5_sig.get("p_over", 0))
+                    _parlay_legs.append({
+                        "matchup": _tk,
+                        "bet": f"F5 {_f5_side}",
+                        "p": _f5_p if _f5_p > 0 else 0.5,
+                    })
+            _parlay_legs.sort(key=lambda x: x["p"], reverse=True)
+
+            if len(_parlay_legs) >= 3:
+                def _render_parlay_card(title, legs):
+                    html = (f'<div style="margin:8px 0;padding:10px 14px;background:#0f1729;'
+                            f'border-radius:6px;border:1px solid #1e2d4a">')
+                    html += (f'<div style="font-size:0.82em;font-weight:700;color:#94a3b8;'
+                             f'margin-bottom:6px;letter-spacing:0.05em">'
+                             f'\u2500\u2500 {title} \u2500\u2500</div>')
+                    for leg in legs:
+                        html += (f'<div style="font-size:0.82em;color:#e2e8f0;margin-bottom:3px;'
+                                 f'padding:3px 0">'
+                                 f'\U0001f535 {leg["matchup"]} \u2014 {leg["bet"]}</div>')
+                    html += ('<div style="font-size:0.65em;color:#4b5563;margin-top:6px;font-style:italic">'
+                             'Fun only \u00b7 Not a recommended wager</div>')
+                    html += '</div>'
+                    return html
+
+                st.html('<div style="font-size:0.92em;font-weight:700;color:#fbbf24;'
+                        'margin-top:14px;margin-bottom:4px">\u26a1 JUST FOR FUN PARLAYS</div>')
+                st.html(_render_parlay_card("3-LEG PARLAY", _parlay_legs[:3]))
+                if len(_parlay_legs) >= 5:
+                    st.html(_render_parlay_card("5-LEG PARLAY", _parlay_legs[:5]))
+
+                # Parlay record display
                 _pt_data = None
-                for _pp in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            "mlb_sim", "logs", "parlay_tracker_2026.json"),
-                            "mlb_sim/logs/parlay_tracker_2026.json"]:
-                    if os.path.exists(_pp):
+                for _pt_path in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "mlb_sim", "logs", "parlay_tracker_2026.json"),
+                                 "mlb_sim/logs/parlay_tracker_2026.json"]:
+                    if os.path.exists(_pt_path):
                         try:
-                            with open(_pp) as _pf:
-                                _pt_data = _json_sig.load(_pf)
+                            with open(_pt_path) as _ptf:
+                                _pt_data = _json_sig.load(_ptf)
                         except Exception:
                             pass
                         break
 
-                def _parlay_result(pt_data, tier, date_str):
-                    if not pt_data:
-                        return '<span style="color:#6b7280">\u2014</span>'
-                    parlays = pt_data.get(tier, {}).get("parlays", [])
-                    for p in parlays:
-                        if p.get("date") == date_str:
-                            r = p.get("result", "pending")
-                            if r == "WIN": return '<span style="color:#4ade80">W</span>'
-                            elif r == "LOSS": return '<span style="color:#f87171">L</span>'
-                            else: return '<span style="color:#6b7280">pending</span>'
-                    return '<span style="color:#6b7280">\u2014</span>'
+                if _pt_data:
+                    _s3 = _pt_data.get("three_leg", {}).get("summary", {})
+                    _s5 = _pt_data.get("five_leg", {}).get("summary", {})
+                    _t3 = _s3.get("total", 0)
+                    _t5 = _s5.get("total", 0)
+                    _combined = _t3 + _t5
 
-                _has_yesterday = _v1_y["n"] + _f5_y["n"] + _rl_y["n"] > 0
+                    if _combined > 0:
+                        _w3 = _s3.get("wins", 0); _l3 = _s3.get("losses", 0)
+                        _w5 = _s5.get("wins", 0); _l5 = _s5.get("losses", 0)
+                        _wr = (_w3 + _w5) / _combined * 100 if _combined > 0 else 0
+                        _net3 = _s3.get("net_units", 0); _net5 = _s5.get("net_units", 0)
 
-                def _fmt_rec(s):
-                    if s["n"] == 0:
-                        return ""
-                    clr = "#4ade80" if s["net"] >= 0 else "#f87171"
-                    return f'<span style="color:{clr}">{s["w"]}-{s["l"]} ({s["net"]:+.1f}u)</span>'
-
-                _html = f'<div style="font-size:0.78em;color:#e2e8f0;padding:10px 14px;background:#0f1729;border-radius:6px;border:1px solid #1e2d4a;margin-bottom:12px">'
-                _html += f'<div style="font-weight:700;color:#94a3b8;margin-bottom:4px">YESTERDAY \u2014 {_yesterday}</div>'
-                if _has_yesterday:
-                    if _v1_y["n"] > 0:
-                        _html += f'<div>Full Game: {_fmt_rec(_v1_y)}</div>'
-                    if _f5_y["n"] > 0:
-                        _html += f'<div>F5 Total: {_fmt_rec(_f5_y)}</div>'
-                    if _rl_y["n"] > 0:
-                        _html += f'<div>F5 Run Line: {_fmt_rec(_rl_y)}</div>'
-                    _html += f'<div>Parlays: 3-Leg {_parlay_result(_pt_data, "three_leg", _yesterday)} | 5-Leg {_parlay_result(_pt_data, "five_leg", _yesterday)}</div>'
-                else:
-                    _html += '<div style="color:#6b7280">No results yet</div>'
-                _html += '<div style="margin-top:6px;font-size:0.88em;color:#4b5563">\u2192 See \U0001f4ca Tracker tab for full season stats</div>'
-                _html += '</div>'
-                st.html(_html)
-            except Exception:
-                pass
-
-            # ── Shadow signals summary ────────────────────────────────────
-            try:
-                _sf = _load_shadow_flags(game_date)
-                _n_games = len(plays or []) + len(no_plays or [])
-                _n_st02 = sum(1 for f in _sf.values() if f.get("st02"))
-                _n_cs013 = sum(1 for f in _sf.values() if f.get("cs013"))
-                _n_conflict = sum(1 for f in _sf.values() if f.get("st02") and f.get("cs013"))
-                if _n_st02 > 0 or _n_cs013 > 0:
-                    _sh_parts = []
-                    if _n_cs013 > 0:
-                        _sh_parts.append(f'CS013 fires on {_n_cs013} of {_n_games} games')
-                    if _n_st02 > 0:
-                        _sh_parts.append(f'ST02 fires on {_n_st02} of {_n_games} games')
-                    if _n_conflict > 0:
-                        _sh_parts.append(f'Both fire (conflict) on {_n_conflict}')
-                    _sh_text = ' &middot; '.join(_sh_parts)
-                    st.html(
-                        f'<div style="font-size:0.72em;color:#6b7280;padding:6px 14px;'
-                        f'background:#0d1117;border-radius:4px;border:1px solid #1e293b;'
-                        f'margin-bottom:10px">'
-                        f'<span style="color:#78716c">SHADOW SIGNALS TODAY</span> &mdash; '
-                        f'{_sh_text}</div>')
-            except Exception:
-                pass
-
-            # Play cards — sort by max stake descending, then game time
-            def _card_sort_key(item):
-                b, sigs = item
-                max_stake = max((float(s.get("stake", 0)) for s in sigs), default=0)
-                gtime = b.get("game", {}).get("game_time_et", "") or b.get("game", {}).get("game_time", "") or "99:99"
-                return (-max_stake, gtime)
-
-            play_cards.sort(key=_card_sort_key)
-
-            if play_cards:
-                _n_games = len(play_cards)
-                _n_wagers = sum(len(sigs) for _, sigs in play_cards)
-                st.html(f'<div class="section-hdr">Today\u2019s Plays \u2014 '
-                        f'{_n_games} game{"s" if _n_games != 1 else ""} \u00b7 '
-                        f'{_n_wagers} wager{"s" if _n_wagers != 1 else ""}</div>')
-                for b, sigs in play_cards:
-                    _render_card(b, signals=sigs)
-
-            # Shadow monitoring section (BASE_HIGH and S12_HIGH — non-P09 high conviction)
-            if shadow_cards:
-                st.html(
-                    '<div style="margin-top:16px;padding:8px 14px;background:#1a1a2e;'
-                    'border:1px solid #333;border-radius:6px;font-size:0.82em;color:#ef4444;font-weight:700">'
-                    'SHADOW MONITORING \u2014 NOT FOR BETTING</div>')
-                for b, sigs in shadow_cards:
-                    _render_card(b, signals=sigs, has_partial=True)
-
-            # Just For Fun parlays — built from play_cards only (same pool as Today's Plays)
-            if len(play_cards) >= 3:
-                _parlay_legs = []
-                for _b, _sigs in play_cards:
-                    _g = _b.get("game", {})
-                    _tk = f'{_g.get("away_team", "")} @ {_g.get("home_team", "")}'
-                    # V1 takes priority, then F5, then RL
-                    _v1_sig = next((s for s in _sigs if s.get("type") == "v1"), None)
-                    _f5_sig = next((s for s in _sigs if s.get("type") in ("f5_under", "f5_over")), None)
-                    if _v1_sig:
-                        _parlay_legs.append({
-                            "matchup": _tk,
-                            "bet": "FULL GAME UNDER",
-                            "p": float(_v1_sig.get("p_under", 0)),
-                        })
-                    elif _f5_sig:
-                        _f5_side = "OVER" if _f5_sig.get("type") == "f5_over" else "UNDER"
-                        _f5_p = float(_f5_sig.get("p_under", 0) if _f5_side == "UNDER" else _f5_sig.get("p_over", 0))
-                        _parlay_legs.append({
-                            "matchup": _tk,
-                            "bet": f"F5 {_f5_side}",
-                            "p": _f5_p if _f5_p > 0 else 0.5,
-                        })
-                _parlay_legs.sort(key=lambda x: x["p"], reverse=True)
-
-                if len(_parlay_legs) >= 3:
-                    def _render_parlay_card(title, legs):
-                        html = (f'<div style="margin:8px 0;padding:10px 14px;background:#0f1729;'
-                                f'border-radius:6px;border:1px solid #1e2d4a">')
-                        html += (f'<div style="font-size:0.82em;font-weight:700;color:#94a3b8;'
-                                 f'margin-bottom:6px;letter-spacing:0.05em">'
-                                 f'\u2500\u2500 {title} \u2500\u2500</div>')
-                        for leg in legs:
-                            html += (f'<div style="font-size:0.82em;color:#e2e8f0;margin-bottom:3px;'
-                                     f'padding:3px 0">'
-                                     f'\U0001f535 {leg["matchup"]} \u2014 {leg["bet"]}</div>')
-                        html += ('<div style="font-size:0.65em;color:#4b5563;margin-top:6px;font-style:italic">'
-                                 'Fun only \u00b7 Not a recommended wager</div>')
-                        html += '</div>'
-                        return html
-
-                    st.html('<div style="font-size:0.92em;font-weight:700;color:#fbbf24;'
-                            'margin-top:14px;margin-bottom:4px">\u26a1 JUST FOR FUN PARLAYS</div>')
-                    st.html(_render_parlay_card("3-LEG PARLAY", _parlay_legs[:3]))
-                    if len(_parlay_legs) >= 5:
-                        st.html(_render_parlay_card("5-LEG PARLAY", _parlay_legs[:5]))
-
-                    # Parlay record display
-                    _pt_data = None
-                    for _pt_path in [os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                     "mlb_sim", "logs", "parlay_tracker_2026.json"),
-                                     "mlb_sim/logs/parlay_tracker_2026.json"]:
-                        if os.path.exists(_pt_path):
-                            try:
-                                with open(_pt_path) as _ptf:
-                                    _pt_data = _json_sig.load(_ptf)
-                            except Exception:
-                                pass
-                            break
-
-                    if _pt_data:
-                        _s3 = _pt_data.get("three_leg", {}).get("summary", {})
-                        _s5 = _pt_data.get("five_leg", {}).get("summary", {})
-                        _t3 = _s3.get("total", 0)
-                        _t5 = _s5.get("total", 0)
-                        _combined = _t3 + _t5
-
-                        if _combined > 0:
-                            _w3 = _s3.get("wins", 0); _l3 = _s3.get("losses", 0)
-                            _w5 = _s5.get("wins", 0); _l5 = _s5.get("losses", 0)
-                            _wr = (_w3 + _w5) / _combined * 100 if _combined > 0 else 0
-                            _net3 = _s3.get("net_units", 0); _net5 = _s5.get("net_units", 0)
-
-                            if _wr > 40:
-                                _flavor = "Running hot \u2014 enjoy it while it lasts"
-                            elif _wr < 20:
-                                _flavor = "This is why we don\u2019t bet parlays"
-                            else:
-                                _flavor = "Parlays are entertainment, not strategy"
-
-                            st.html(
-                                f'<div style="margin:8px 0;padding:8px 14px;background:#0f1729;'
-                                f'border-radius:6px;border:1px solid #1e2d4a;font-size:0.78em">'
-                                f'<div style="display:flex;gap:30px;color:#94a3b8">'
-                                f'<div><span style="font-weight:700">3-LEG</span> '
-                                f'{_w3}-{_l3} | Net: {_net3:+.1f}u</div>'
-                                f'<div><span style="font-weight:700">5-LEG</span> '
-                                f'{_w5}-{_l5} | Net: {_net5:+.1f}u</div>'
-                                f'</div>'
-                                f'<div style="font-size:0.85em;color:#6b7280;margin-top:4px;'
-                                f'font-style:italic">{_flavor}</div>'
-                                f'</div>')
+                        if _wr > 40:
+                            _flavor = "Running hot \u2014 enjoy it while it lasts"
+                        elif _wr < 20:
+                            _flavor = "This is why we don\u2019t bet parlays"
                         else:
-                            _p3 = _s3.get("pending", 0); _p5 = _s5.get("pending", 0)
-                            st.html(
-                                f'<div style="font-size:0.72em;color:#6b7280;margin-top:6px;font-style:italic">'
-                                f'Tracking started March 26, 2026 '
-                                f'({_p3 + _p5} pending)</div>')
+                            _flavor = "Parlays are entertainment, not strategy"
 
-            # No-play cards — collapsed
-            if noplay_cards:
-                with st.expander(f"All Other Games Today ({len(noplay_cards)})"):
-                    for b, _partial in noplay_cards:
-                        _render_card(b, has_partial=_partial)
+                        st.html(
+                            f'<div style="margin:8px 0;padding:8px 14px;background:#0f1729;'
+                            f'border-radius:6px;border:1px solid #1e2d4a;font-size:0.78em">'
+                            f'<div style="display:flex;gap:30px;color:#94a3b8">'
+                            f'<div><span style="font-weight:700">3-LEG</span> '
+                            f'{_w3}-{_l3} | Net: {_net3:+.1f}u</div>'
+                            f'<div><span style="font-weight:700">5-LEG</span> '
+                            f'{_w5}-{_l5} | Net: {_net5:+.1f}u</div>'
+                            f'</div>'
+                            f'<div style="font-size:0.85em;color:#6b7280;margin-top:4px;'
+                            f'font-style:italic">{_flavor}</div>'
+                            f'</div>')
+                    else:
+                        _p3 = _s3.get("pending", 0); _p5 = _s5.get("pending", 0)
+                        st.html(
+                            f'<div style="font-size:0.72em;color:#6b7280;margin-top:6px;font-style:italic">'
+                            f'Tracking started March 26, 2026 '
+                            f'({_p3 + _p5} pending)</div>')
 
-            # ── CLV section ───────────────────────────────────────────────────
-            clv = (data or {}).get("mlb_clv_summary", {})
-            if clv and clv.get("clv_available"):
-                with st.expander("📈 MLB Closing Line Value (CLV)", expanded=False):
-                    n_clv = clv.get("total_with_clv", 0)
-                    cov   = clv.get("clv_coverage_pct", 0.0)
-                    if clv.get("coverage_warning"):
-                        st.warning(f"CLV coverage low ({cov:.0f}%) — data may be incomplete.")
-                    c1, c2, c3, c4 = st.columns(4)
-                    avg = clv.get("avg_clv")
-                    med = clv.get("median_clv")
-                    pct = clv.get("pct_positive_clv")
-                    c1.metric("Avg CLV", f"{avg:+.3f}" if avg is not None else "—")
-                    c2.metric("Median CLV", f"{med:+.3f}" if med is not None else "—")
-                    c3.metric("% Positive CLV", f"{pct:.1f}%" if pct is not None else "—")
-                    c4.metric("Games w/ CLV", f"{n_clv} ({cov:.0f}% cov)")
-                    by_tier = clv.get("avg_clv_by_tier", {})
-                    if any(v is not None for v in by_tier.values()):
-                        st.caption("Avg CLV by confidence tier")
-                        tc = st.columns(3)
-                        for i, t in enumerate(("HIGH", "MEDIUM", "LOW")):
-                            v = by_tier.get(t)
-                            tc[i].metric(t, f"{v:+.3f}" if v is not None else "—")
-                    st.caption(
-                        "CLV measures whether decision lines beat closing lines. "
-                        "Positive = sharp (line moved in model's favor)."
-                    )
-            elif clv and not clv.get("clv_available"):
-                reason = clv.get("reason", "")
-                if "insufficient" in reason:
-                    st.caption(f"CLV: insufficient sample ({clv.get('total_with_clv', 0)} games). "
-                               "Builds up once refresh.py has captured closing lines.")
+        # No-play cards — collapsed
+        if noplay_cards:
+            with st.expander(f"All Other Games Today ({len(noplay_cards)})"):
+                for b, _partial in noplay_cards:
+                    _render_card(b, has_partial=_partial)
 
-    # ── NRFI Parlay Helper (Research) ────────────────────────────────────
+        # ── CLV section ───────────────────────────────────────────────────
+        clv = (data or {}).get("mlb_clv_summary", {})
+        if clv and clv.get("clv_available"):
+            with st.expander("📈 MLB Closing Line Value (CLV)", expanded=False):
+                n_clv = clv.get("total_with_clv", 0)
+                cov   = clv.get("clv_coverage_pct", 0.0)
+                if clv.get("coverage_warning"):
+                    st.warning(f"CLV coverage low ({cov:.0f}%) — data may be incomplete.")
+                c1, c2, c3, c4 = st.columns(4)
+                avg = clv.get("avg_clv")
+                med = clv.get("median_clv")
+                pct = clv.get("pct_positive_clv")
+                c1.metric("Avg CLV", f"{avg:+.3f}" if avg is not None else "—")
+                c2.metric("Median CLV", f"{med:+.3f}" if med is not None else "—")
+                c3.metric("% Positive CLV", f"{pct:.1f}%" if pct is not None else "—")
+                c4.metric("Games w/ CLV", f"{n_clv} ({cov:.0f}% cov)")
+                by_tier = clv.get("avg_clv_by_tier", {})
+                if any(v is not None for v in by_tier.values()):
+                    st.caption("Avg CLV by confidence tier")
+                    tc = st.columns(3)
+                    for i, t in enumerate(("HIGH", "MEDIUM", "LOW")):
+                        v = by_tier.get(t)
+                        tc[i].metric(t, f"{v:+.3f}" if v is not None else "—")
+                st.caption(
+                    "CLV measures whether decision lines beat closing lines. "
+                    "Positive = sharp (line moved in model's favor)."
+                )
+        elif clv and not clv.get("clv_available"):
+            reason = clv.get("reason", "")
+            if "insufficient" in reason:
+                st.caption(f"CLV: insufficient sample ({clv.get('total_with_clv', 0)} games). "
+                           "Builds up once refresh.py has captured closing lines.")
+
+# ── NRFI Parlay Helper (Research) ────────────────────────────────────
     _render_nrfi_helper_section()
 
     # ── SGP Monitor — Phase 0 ─────────────────────────────────────────────
