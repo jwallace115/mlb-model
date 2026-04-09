@@ -1179,8 +1179,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         else:
             _explain = "Signal fired based on pitching matchup analysis."
 
-        explain_html = (f'<div style="font-size:0.80em;color:#94a3b8;margin-top:6px;line-height:1.4">'
-                        f'{_explain}</div>')
+        explain_html = ""  # Explanation text removed — stats row is sufficient
 
         # Line movement narrative (appended to explanation if available)
         _move_html = ""
@@ -1317,31 +1316,6 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             _ph = _np_sh.get("tt_posted_h", "")
             _gh = _np_sh.get("tt_gap_h")
             _np_tt_parts.append(_npill(f"TT\u2191H {_ph} ({_gh:+.1f})" if _gh is not None else f"TT\u2191H {_ph}", "#eab308", "#1c1400"))
-        # TT wager lines for no-play cards with TT signals
-        _np_tt_wagers_html = ""
-        if _np_tt_parts:
-            _np_tt_wager_lines = []
-            if _np_sh.get("tt_under_h"):
-                _ph = _np_sh.get("tt_posted_h", "")
-                _gh = _np_sh.get("tt_gap_h")
-                _gap_s = f" ({_gh:+.1f})" if _gh is not None else ""
-                _np_tt_wager_lines.append(f"TT UNDER H {_ph}{_gap_s} \u00b7 shadow")
-            if _np_sh.get("tt_under_a"):
-                _pa = _np_sh.get("tt_posted_a", "")
-                _ga = _np_sh.get("tt_gap_a")
-                _gap_s = f" ({_ga:+.1f})" if _ga is not None else ""
-                _np_tt_wager_lines.append(f"TT UNDER A {_pa}{_gap_s} \u00b7 shadow")
-            if _np_sh.get("tt_over_h"):
-                _ph = _np_sh.get("tt_posted_h", "")
-                _gh = _np_sh.get("tt_gap_h")
-                _gap_s = f" ({_gh:+.1f})" if _gh is not None else ""
-                _np_tt_wager_lines.append(f"TT OVER H {_ph}{_gap_s} \u00b7 shadow")
-            if _np_tt_wager_lines:
-                _np_tt_wagers_html = '<div style="margin-top:3px">' + "".join(
-                    f'<div style="font-size:0.82em;font-weight:700;color:#60a5fa">{w}</div>'
-                    for w in _np_tt_wager_lines
-                ) + '</div>'
-
         if _np_tt_parts:
             _np_tt_pills = '<div style="margin-top:4px;line-height:1.8">' + "".join(_np_tt_parts) + '</div>'
             _np_border_override = "#1e3a5f"  # blue border for TT-only cards
@@ -1355,8 +1329,7 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             f'{matchup} \u2014 {time_str}</div>'
             f'<div style="font-size:0.75em;color:#6b7280;margin-top:2px">'
             f'{wx_line}{" \u00b7 " if wx_line else ""}{proj_line}</div>'
-            f'<div class="card-summary">{summary}</div>'
-            f'{_np_tt_wagers_html}{_np_tt_pills}{_reason}{_shadow_html_np}'
+            f'{_np_tt_pills}{_reason}{_shadow_html_np}'
             f'</div>'
     )
 
