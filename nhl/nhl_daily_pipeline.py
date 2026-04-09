@@ -546,18 +546,32 @@ def compute_edges(sim_probs: dict, over_price: float, under_price: float) -> dic
 # ---------------------------------------------------------------------------
 # Confidence tier
 # ---------------------------------------------------------------------------
+def _load_nhl_stop_rules():
+    """Load NHL tier stop rules from config. Returns dict."""
+    _rules_path = Path(__file__).resolve().parent / "data" / "nhl_stop_rules.json"
+    try:
+        if _rules_path.exists():
+            import json as _json_sr
+            return _json_sr.loads(_rules_path.read_text())
+    except Exception:
+        pass
+    return {"high_tier": "active", "medium_tier": "active", "low_tier": "active"}
+
+_NHL_STOP_RULES = _load_nhl_stop_rules()
+
+
 def confidence_tier(edge: float, home_confirmed: bool, away_confirmed: bool,
                     backup_h: int, backup_a: int) -> str:
     vol_bucket = "high" if (backup_h + backup_a) >= 2 else "normal"
-    if edge >= 0.15 and home_confirmed and away_confirmed and vol_bucket != "high":
+    # HIGH: edge >= 0.15 and not high volatility. Goalie confirmation is a display flag, not a gate.
+    if edge >= 0.15 and vol_bucket != "high":
         return "HIGH"
-    # MEDIUM and LOW tiers suspended 2026-04-09: 33.3% and 26.7% win rates.
-    # Logged as SHADOW for tracking but not displayed as actionable plays.
     if edge >= 0.12:
-        return "SHADOW_MEDIUM"
-    return "SHADOW_LOW"
+        # Config-driven: active or shadow
+        return "MEDIUM" if _NHL_STOP_RULES.get("medium_tier") == "active" else "SHADOW_MEDIUM"
+    return "LOW" if _NHL_STOP_RULES.get("low_tier") == "active" else "SHADOW_LOW"
 
-STAKE_UNITS = {"HIGH": 1.0, "SHADOW_MEDIUM": 0.0, "SHADOW_LOW": 0.0}
+STAKE_UNITS = {"HIGH": 1.0, "MEDIUM": 0.75, "SHADOW_MEDIUM": 0.0, "LOW": 0.5, "SHADOW_LOW": 0.0}
 
 def edge_bucket_label(edge: float) -> str:
     if edge < 0.12:

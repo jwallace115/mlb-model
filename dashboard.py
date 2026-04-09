@@ -1502,8 +1502,7 @@ def _save_nhl_hr_override(game_id, date_str, api_line, hr_line):
 
 
 def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
-    """Render a single NHL signal card matching the MLB card visual style.
-    MEDIUM/LOW tiers suspended 2026-04-09 — only HIGH displayed as plays."""
+    """Render a single NHL signal card. HIGH = play, SHADOW = red-border shadow card."""
     home    = s.get("home_team", "")
     away    = s.get("away_team", "")
     side    = s.get("signal_side", "")
@@ -1524,20 +1523,35 @@ def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
     b2b_gh  = int(s.get("home_goalie_b2b") or 0)
     b2b_ga  = int(s.get("away_goalie_b2b") or 0)
 
-    is_play   = tier in ("HIGH",)  # MEDIUM/LOW suspended 2026-04-09
+    is_shadow = tier.startswith("SHADOW_")
+    is_play   = tier == "HIGH"
     conf_star = {"HIGH": "star3"}.get(tier, "noplay")
     card_cls  = f"game-card {conf_star}" if is_play else "game-card noplay"
-    _border   = "#22c55e" if is_play else "#374151"
+    _border   = "#22c55e" if is_play else ("#dc2626" if is_shadow else "#374151")
 
     matchup   = f"{away} @ {home}"
     sep = ' <span style="color:#2d3748;margin:0 2px">·</span> '
+
+    # Goalie TBD badge (display flag, not a gate)
+    goalie_tbd = ""
+    if is_play and (not conf_h or not conf_a):
+        goalie_tbd = (' <span style="background:#1c1400;color:#eab308;border:1px solid #eab308;'
+                      'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600">'
+                      '\u26a0\ufe0f Goalies TBD</span>')
+
+    # Shadow label for MEDIUM/LOW
+    shadow_label = ""
+    if is_shadow:
+        shadow_label = (' <span style="background:#2d1515;color:#f87171;border:1px solid #dc2626;'
+                        'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600">'
+                        'SHADOW</span>')
 
     # Header: side badge | matchup | tier badge (with units)
     header = (
         f'<div class="card-header">'
         f'{_nhl_side_badge(side)}'
         f'<span class="matchup">{matchup}</span>'
-        f'{_nhl_conf_badge(tier, stake)}'
+        f'{_nhl_conf_badge(tier, stake)}{goalie_tbd}{shadow_label}'
         f'</div>'
     )
 
