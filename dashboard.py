@@ -901,34 +901,21 @@ def _load_shadow_flags(game_date):
                             flags[gid]["kp04"] = True
                 break
 
-        # Team Totals from team_total_shadow
+        # Team Totals from team_total_shadow — join by game_pk
         for _p in [f"mlb_sim/logs/team_total_shadow_{season}.json",
                     os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                  "mlb_sim", "logs", f"team_total_shadow_{season}.json")]:
             if os.path.exists(_p):
                 with open(_p) as _f:
                     for r in _json_sh.load(_f):
-                        if r.get("date") == game_date:
-                            # Match by team names since TT uses Odds API event_id not game_pk
-                            home = r.get("home_team", "")
-                            away = r.get("away_team", "")
-                            # Try to find matching game_id in existing flags
-                            matched_gid = None
-                            for gid_candidate in flags:
-                                pass  # We'll match by team name below
-                            # Store by home+away key for later lookup
-                            tt_key = f"tt_{home}_{away}"
-                            flags[tt_key] = {
-                                "tt_under_h": bool(r.get("home_tt_under_flag")),
-                                "tt_under_a": bool(r.get("away_tt_under_flag")),
-                                "tt_over_h": bool(r.get("home_tt_over_flag")),
-                                "tt_home_team": home,
-                                "tt_away_team": away,
-                                "tt_gap_h": r.get("gap_home"),
-                                "tt_gap_a": r.get("gap_away"),
-                                "tt_posted_h": r.get("posted_home_total"),
-                                "tt_posted_a": r.get("posted_away_total"),
-                            }
+                        if r.get("date") == game_date and r.get("game_pk"):
+                            gpk = str(r["game_pk"])
+                            flags.setdefault(gpk, {"st02": False, "cs013": False,
+                                                    "signal_tier": None, "cs028": False,
+                                                    "cs028_cs013_both": False, "kp04": False})
+                            flags[gpk]["tt_under_h"] = bool(r.get("home_tt_under_flag"))
+                            flags[gpk]["tt_under_a"] = bool(r.get("away_tt_under_flag"))
+                            flags[gpk]["tt_over_h"] = bool(r.get("home_tt_over_flag"))
                 break
     except Exception:
         pass
@@ -1125,24 +1112,13 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         if _has_st02:
             _yellow_mods.append(_mpill("ST02", "#eab308", "#1c1400"))
 
-        # Team Total pills — match by team names from shadow flags
-        _all_sh = _load_shadow_flags(_gdate_sh)
-        _home_t = game.get("home_team", "")
-        _away_t = game.get("away_team", "")
-        for _tt_key, _tt_val in _all_sh.items():
-            if not _tt_key.startswith("tt_"):
-                continue
-            _tt_h = _tt_val.get("tt_home_team", "")
-            _tt_a = _tt_val.get("tt_away_team", "")
-            if (_home_t and (_home_t in _tt_h or _tt_h in _home_t) and
-                _away_t and (_away_t in _tt_a or _tt_a in _away_t)):
-                if _tt_val.get("tt_under_h"):
-                    _yellow_mods.append(_mpill("TT\u2193H", "#60a5fa", "#172554"))
-                if _tt_val.get("tt_under_a"):
-                    _yellow_mods.append(_mpill("TT\u2193A", "#60a5fa", "#172554"))
-                if _tt_val.get("tt_over_h"):
-                    _yellow_mods.append(_mpill("TT\u2191H", "#eab308", "#1c1400"))
-                break
+        # Team Total pills — join by game_pk (clean canonical key)
+        if _sh_flags.get("tt_under_h"):
+            _yellow_mods.append(_mpill("TT\u2193H", "#60a5fa", "#172554"))
+        if _sh_flags.get("tt_under_a"):
+            _yellow_mods.append(_mpill("TT\u2193A", "#60a5fa", "#172554"))
+        if _sh_flags.get("tt_over_h"):
+            _yellow_mods.append(_mpill("TT\u2191H", "#eab308", "#1c1400"))
 
         if _green_mods or _yellow_mods:
             _mod_pills = ('<div style="margin-top:4px;margin-bottom:2px;line-height:1.8">'

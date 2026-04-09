@@ -212,6 +212,7 @@ def compute_signals(game_date=None):
         signals.append({
             "date": game_date,
             "event_id": event_id,
+            "game_pk": tt.get("game_pk"),
             "home_team": home,
             "away_team": away,
             "home_sp": home_sp_name or None,

@@ -34,7 +34,35 @@ logger = logging.getLogger("pull_team_totals")
 
 ODDS_KEY = os.getenv("ODDS_API_KEY", "")
 ODDS_BASE = "https://api.the-odds-api.com/v4/sports/baseball_mlb"
+MLB_API = "https://statsapi.mlb.com/api/v1"
 TT_PATH = PROJECT_ROOT / "mlb_sim" / "data" / "team_totals_2026.json"
+NAME_MAP_PATH = PROJECT_ROOT / "mlb" / "data" / "team_name_map.json"
+
+
+def _load_team_name_map():
+    """Load Odds API full name → MLB abbreviation map."""
+    try:
+        return json.loads(NAME_MAP_PATH.read_text())
+    except Exception:
+        return {}
+
+
+def _fetch_game_pk_map(game_date):
+    """Fetch game_pk → (home_abbr, away_abbr) from MLB Stats API for a date."""
+    try:
+        r = requests.get(f"{MLB_API}/schedule", params={"sportId": 1, "date": game_date}, timeout=10)
+        pk_map = {}  # (home_abbr, away_abbr) → game_pk
+        for d in r.json().get("dates", []):
+            for g in d.get("games", []):
+                home = g.get("teams", {}).get("home", {}).get("team", {}).get("abbreviation", "")
+                away = g.get("teams", {}).get("away", {}).get("team", {}).get("abbreviation", "")
+                pk = g.get("gamePk")
+                if home and away and pk:
+                    pk_map[(home, away)] = pk
+        return pk_map
+    except Exception as e:
+        logger.warning(f"MLB schedule fetch failed: {e}")
+        return {}
 
 
 def pull_team_totals(game_date=None):
@@ -68,6 +96,11 @@ def pull_team_totals(game_date=None):
         today_events = events
 
     logger.info(f"Events found: {len(today_events)}")
+
+    # Fetch game_pk map from MLB Stats API
+    name_map = _load_team_name_map()
+    pk_map = _fetch_game_pk_map(game_date)
+    logger.info(f"MLB schedule: {len(pk_map)} games with game_pk")
 
     records = []
     for ev in today_events:
@@ -134,11 +167,30 @@ def pull_team_totals(game_date=None):
         home_consensus = round(float(sorted([h["line"] for h in home_lines])[len(home_lines) // 2]), 1) if home_lines else None
         away_consensus = round(float(sorted([a["line"] for a in away_lines])[len(away_lines) // 2]), 1) if away_lines else None
 
+        # Resolve game_pk via team name normalization
+        home_abbr = name_map.get(home, "")
+        away_abbr = name_map.get(away, "")
+        game_pk = pk_map.get((home_abbr, away_abbr))
+        if not game_pk and home_abbr and away_abbr:
+            # Try OAK/ATH alias
+            for h_try in [home_abbr, {"ATH": "OAK", "OAK": "ATH"}.get(home_abbr, "")]:
+                for a_try in [away_abbr, {"ATH": "OAK", "OAK": "ATH"}.get(away_abbr, "")]:
+                    if (h_try, a_try) in pk_map:
+                        game_pk = pk_map[(h_try, a_try)]
+                        break
+                if game_pk:
+                    break
+        if not game_pk:
+            logger.warning(f"No game_pk for {away}@{home} ({away_abbr}@{home_abbr})")
+
         records.append({
             "game_date": commence[:10] if commence else game_date,
             "event_id": eid,
+            "game_pk": game_pk,
             "home_team": home,
             "away_team": away,
+            "home_team_abbr": home_abbr,
+            "away_team_abbr": away_abbr,
             "commence_time": commence,
             "home_total_line": home_consensus,
             "away_total_line": away_consensus,
