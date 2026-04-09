@@ -203,6 +203,20 @@ def run_prelim(game_date: str) -> None:
     except Exception as e:
         logger.warning(f"Shadow signals grading failed (non-fatal): {e}")
 
+    # Step 1f: Grade CS004 shadow entries
+    try:
+        from mlb_sim.pipeline.cs004_shadow import grade_cs004_shadow
+        grade_cs004_shadow()
+    except Exception as e:
+        logger.warning(f"CS004 shadow grading failed (non-fatal): {e}")
+
+    # Step 1g: Grade combined short exit shadow entries
+    try:
+        from mlb_sim.pipeline.combined_short_exit_shadow import grade_combined_short_exit
+        grade_combined_short_exit()
+    except Exception as e:
+        logger.warning(f"Combined short exit grading failed (non-fatal): {e}")
+
     # Step 2: Invalidate any stale/poisoned caches from prior runs
     invalidate_stale_cache(game_date)
 

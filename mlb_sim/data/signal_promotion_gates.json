@@ -1,0 +1,44 @@
+{
+  "ADJ_HH": {
+    "review_gate_n": 50,
+    "min_roi": 10.0,
+    "status": "SHADOW",
+    "notes": "16-7 +32.8% ROI at N=23 fired. Review at N=50 resolved."
+  },
+  "ADJ_CONTACT": {
+    "review_gate_n": 50,
+    "min_roi": 10.0,
+    "status": "SHADOW",
+    "notes": "22-14 +16.7% ROI at N=36 fired. Review at N=50 resolved."
+  },
+  "ADJ_K_RATE": {
+    "review_gate_n": 50,
+    "min_roi": 10.0,
+    "status": "SHADOW",
+    "notes": "9-5 +22.7% ROI at N=14 fired. Review at N=50 resolved."
+  },
+  "CS028": {
+    "review_gate_n": 150,
+    "min_roi": 5.0,
+    "status": "SHADOW",
+    "notes": "60.3% val over rate. No live fires yet."
+  },
+  "CS013": {
+    "review_gate_n": 150,
+    "min_roi": 5.0,
+    "status": "SHADOW",
+    "notes": "No live fires yet."
+  },
+  "KP04": {
+    "review_gate_n": 100,
+    "min_roi": 5.0,
+    "status": "SHADOW",
+    "notes": "First signals expected mid-April."
+  },
+  "TEAM_TOTALS": {
+    "review_gate_n": 100,
+    "min_roi": 5.0,
+    "status": "SHADOW",
+    "notes": "Deployed April 9 2026."
+  }
+}

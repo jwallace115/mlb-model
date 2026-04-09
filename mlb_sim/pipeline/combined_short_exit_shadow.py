@@ -207,3 +207,58 @@ def fill_actuals(season, game_results):
         json.dump(records, f, indent=2)
 
     return filled
+
+
+def grade_combined_short_exit(season: int = 2026):
+    """Grade unresolved combined short exit shadow entries."""
+    import pandas as pd
+
+    log_path = LOG_DIR / f"combined_short_exit_shadow_{season}.json"
+    gt_path = Path(__file__).resolve().parent.parent.parent / "sim" / "data" / "game_table.parquet"
+
+    if not log_path.exists() or not gt_path.exists():
+        return
+
+    try:
+        data = json.loads(log_path.read_text())
+    except Exception:
+        return
+
+    gt = pd.read_parquet(gt_path)
+    actuals = dict(zip(gt["game_pk"].astype(int), gt["actual_total"]))
+
+    graded = 0
+    for entry in data:
+        if entry.get("resolved"):
+            continue
+        game_id = entry.get("game_id")
+        closing = entry.get("closing_total")
+        actual = actuals.get(int(game_id)) if game_id else None
+        if actual is None or closing is None:
+            continue
+
+        entry["actual_total"] = float(actual)
+
+        if actual > closing:
+            entry["actual_result_over"] = 1
+            entry["over_hit"] = True
+        elif actual < closing:
+            entry["actual_result_over"] = 0
+            entry["over_hit"] = False
+        else:
+            entry["actual_result_over"] = 0
+            entry["over_hit"] = False
+
+        # Combined short exit is an OVER signal
+        if entry.get("combined_short_exit_favorable_zone"):
+            entry["result"] = ("WIN" if entry["over_hit"]
+                               else "LOSS")
+        else:
+            entry["result"] = None
+
+        entry["resolved"] = True
+        graded += 1
+
+    if graded > 0:
+        log_path.write_text(json.dumps(data, indent=2, default=str))
+        logger.info(f"Combined short exit grader: resolved {graded} entries")

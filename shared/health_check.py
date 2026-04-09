@@ -182,6 +182,21 @@ def check_signal_files():
         except Exception as e:
             details.append({"file": name, "status": "ERROR", "error": str(e)})
 
+    # Signal promotion gate check
+    try:
+        _gates_path = ROOT / "mlb_sim" / "data" / "signal_promotion_gates.json"
+        if _gates_path.exists():
+            _gates = json.load(open(_gates_path))
+            for _sig_name, _gate in _gates.items():
+                if _gate.get("status") == "SHADOW":
+                    _n = _gate.get("current_resolved", 0)
+                    _gate_n = _gate.get("review_gate_n", 999)
+                    if _n >= _gate_n:
+                        warnings_list.append(f"Signal {_sig_name} hit review gate (N={_n} >= {_gate_n}) — evaluate for promotion")
+                        status = "YELLOW" if status != "RED" else status
+    except Exception:
+        pass
+
     # JSON/parquet sync check for signal files
     for label, json_path, pq_path in [
         ("f5_signals", "mlb_sim/logs/f5_signals_2026.json", "mlb_sim/logs/f5_signals_2026.parquet"),
