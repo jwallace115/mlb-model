@@ -74,10 +74,33 @@ if ! git pull --rebase origin main >> "$LOG" 2>&1; then
     fi
 fi
 
-# Push
+# Check for incoming code changes (from MacBook deploys)
+BEFORE_HASH=$(git rev-parse HEAD)
+
+# Fetch remote to detect incoming changes
+git fetch origin >> "$LOG" 2>&1
+REMOTE_HASH=$(git rev-parse origin/main)
+
+# Push local changes
 if git push origin main >> "$LOG" 2>&1; then
     echo "$TIMESTAMP — PUSH SUCCESS" >> "$LOG"
 else
     echo "$TIMESTAMP — PUSH FAILED: push rejected" >> "$LOG"
     exit 1
+fi
+
+# Pull any remote changes (from MacBook deploys)
+if [ "$BEFORE_HASH" != "$REMOTE_HASH" ]; then
+    git pull --rebase origin main >> "$LOG" 2>&1
+fi
+
+AFTER_HASH=$(git rev-parse HEAD)
+
+# Restart Streamlit if .py code files changed
+if [ "$BEFORE_HASH" != "$AFTER_HASH" ]; then
+    CHANGED_PY=$(git diff --name-only "$BEFORE_HASH" "$AFTER_HASH" | grep '\.py$' | wc -l)
+    if [ "$CHANGED_PY" -gt 0 ]; then
+        systemctl restart streamlit-dashboard 2>/dev/null
+        echo "$TIMESTAMP — restarted Streamlit ($CHANGED_PY .py files changed)" >> "$LOG"
+    fi
 fi

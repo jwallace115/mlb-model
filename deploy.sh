@@ -22,6 +22,10 @@ git pull --rebase origin main
 git push
 
 echo "=== Syncing VM ==="
-ssh root@142.93.242.4 "cd /root/mlb-model && git pull"
+ssh root@142.93.242.4 "cd /root/mlb-model && git fetch origin && git reset --hard origin/main"
+
+echo "=== Restarting Streamlit if code changed ==="
+ssh root@142.93.242.4 "cd /root/mlb-model && bash shared/push_daemon.sh" 2>/dev/null
+echo "VM synced and Streamlit restarted if code changed"
 
 echo "=== Deploy complete ==="
