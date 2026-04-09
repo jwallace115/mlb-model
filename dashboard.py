@@ -2018,14 +2018,13 @@ def _render_nhl_tab() -> None:
     else:
         st.caption("No HIGH signals today.")
 
-    # ── (e) Shadow Monitoring (collapsed) ─────────────────────────────────────
+    # ── (e) Shadow Monitoring (inline) ──────────────────────────────────────
     if shadows:
-        with st.expander(
-            f"Shadow Monitoring \u2014 {len(shadows)} signal{'s' if len(shadows) != 1 else ''}",
-            expanded=False
-        ):
-            for s in shadows:
-                _nhl_universal_card(s)
+        st.html('<hr style="border:none;border-top:1px solid #333;margin:12px 0 8px 0">'
+                '<div style="font-size:0.72em;color:#94a3b8;font-weight:600;margin-bottom:6px">'
+                '\u25d0 Shadow Monitoring</div>')
+        for s in shadows:
+            _nhl_universal_card(s)
 
     # ── (f) All Other Games (collapsed) ───────────────────────────────────────
     if no_plays:
@@ -3026,20 +3025,22 @@ def _render_nba_tab() -> None:
 
     # ── SHADOW MONITORING ──
     if shadow:
-        with st.expander(f"Shadow monitoring \u2014 {len(shadow)} games", expanded=False):
-            for g in shadow:
-                matchup = f"{g.get('away_team','')} @ {g.get('home_team','')}"
-                time_str = g.get("game_time_et", "")
-                pills = []
-                if g.get("archetype_signal"): pills.append(_universal_pill("Archetype", "#eab308", "#1c1400"))
-                if g.get("shot_signal"): pills.append(_universal_pill("Shot", "#eab308", "#1c1400"))
-                if g.get("venue_signal"): pills.append(_universal_pill("Venue", "#eab308", "#1c1400"))
-                stats = []
-                line = g.get("line")
-                if line: stats.append(f"Line: {line}")
-                pred = g.get("pred_total")
-                if pred: stats.append(f"Proj: {pred:.1f}")
-                _render_game_card_universal(matchup, time_str, "SHADOW", pills, stats)
+        st.html('<hr style="border:none;border-top:1px solid #333;margin:12px 0 8px 0">'
+                '<div style="font-size:0.72em;color:#94a3b8;font-weight:600;margin-bottom:6px">'
+                '\u25d0 Shadow Monitoring</div>')
+        for g in shadow:
+            matchup = f"{g.get('away_team','')} @ {g.get('home_team','')}"
+            time_str = g.get("game_time_et", "")
+            pills = []
+            if g.get("archetype_signal"): pills.append(_universal_pill("Archetype", "#eab308", "#1c1400"))
+            if g.get("shot_signal"): pills.append(_universal_pill("Shot", "#eab308", "#1c1400"))
+            if g.get("venue_signal"): pills.append(_universal_pill("Venue", "#eab308", "#1c1400"))
+            stats = []
+            line = g.get("line")
+            if line: stats.append(f"Line: {line}")
+            pred = g.get("pred_total")
+            if pred: stats.append(f"Proj: {pred:.1f}")
+            _render_game_card_universal(matchup, time_str, "SHADOW", pills, stats)
 
     # ── ALL OTHER GAMES ──
     if other:
