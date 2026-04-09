@@ -672,9 +672,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 0,
+    "result_nrfi": 1,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -697,9 +697,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -722,9 +722,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 0,
+    "result_nrfi": 1,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -747,9 +747,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 0,
+    "result_nrfi": 1,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -772,9 +772,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 0,
+    "result_nrfi": 1,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -797,9 +797,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -822,9 +822,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 0,
+    "result_nrfi": 1,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -847,9 +847,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 0,
+    "result_nrfi": 1,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -872,9 +872,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -897,9 +897,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -922,9 +922,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -947,9 +947,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -972,9 +972,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -997,9 +997,9 @@
     "top3_stability_away": "unknown",
     "both_changed": null,
     "qualifies_phase11": null,
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 1,
+    "result_nrfi": 0,
+    "resolved": true
   },
   {
     "date": "2026-04-08",
@@ -1023,8 +1023,8 @@
     "both_changed": null,
     "qualifies_phase11": null,
     "drop_reason": "missing_features:away_sp_tto1,asp_era_r5,asp_bb9_r5",
-    "result_yrfi": null,
-    "result_nrfi": null,
-    "resolved": false
+    "result_yrfi": 0,
+    "result_nrfi": 1,
+    "resolved": true
   }
 ]
