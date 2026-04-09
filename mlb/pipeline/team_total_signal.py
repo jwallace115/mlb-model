@@ -22,6 +22,7 @@ import argparse
 import json
 import logging
 import os
+import subprocess
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -349,6 +350,10 @@ def main():
         signals = compute_signals()
         if signals:
             save_signals(signals)
+
+    # Auto-push
+    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+                     "Team total shadow signal update"], capture_output=True)
 
 
 if __name__ == "__main__":
