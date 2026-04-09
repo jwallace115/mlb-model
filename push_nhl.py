@@ -76,6 +76,7 @@ def load_today_signals(game_date: str) -> list[dict]:
                 "over_price":       _safe(r.get("over_price")),
                 "under_price":      _safe(r.get("under_price")),
                 "book":             r.get("book"),
+                "commence_time":    r.get("commence_time"),
                 "result":           r.get("result"),
                 "graded":           int(r.get("graded") or 0),
                 # Scoring-form features for summary (present in signals after Phase 6.1)
