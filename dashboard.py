@@ -1576,8 +1576,9 @@ def _render_game_card_universal(
     matchup: str,
     time_str: str,
     tier: str,  # "ACTIVE", "SHADOW", "NONE"
-    pills: list[str],  # list of pre-rendered pill HTML strings
+    pills: list[str],  # list of pre-rendered pill HTML strings — signal types only
     stats: list[str],  # list of "Label: Value" stat strings
+    wagers: list[str] | None = None,  # e.g. ["UNDER 6.5"] or ["UNDER 4.5 (away total)"]
     extra_html: str = "",  # goalie row, weather, etc.
     disclaimer: str = "",
 ) -> None:
@@ -1587,10 +1588,24 @@ def _render_game_card_universal(
 
     sep = ' <span style="color:#2d3748;margin:0 2px">&middot;</span> '
 
-    # Header — omit dash when no time
-    time_part = f" &mdash; {time_str}" if time_str else ""
+    # Header — matchup + time
+    time_part = f" &middot; {time_str}" if time_str else ""
     header = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
               f'{matchup}{time_part}</div>')
+
+    # Wager lines (below matchup, above pills)
+    wager_html = ""
+    if wagers:
+        wager_lines = "".join(
+            f'<div style="font-size:0.85em;font-weight:700;color:#fbbf24">{w}</div>'
+            for w in wagers
+        )
+        wager_html = f'<div style="margin-top:2px">{wager_lines}</div>'
+
+    # Pills row (signal types only — no wager direction)
+    pill_html = ""
+    if pills:
+        pill_html = '<div style="margin-top:4px;line-height:1.8">' + "".join(pills) + '</div>'
 
     # Stats row
     stats_html = ""
@@ -1599,11 +1614,6 @@ def _render_game_card_universal(
                  f'<span style="color:#e2e8f0;font-size:0.82em;font-weight:600">{s.split(":",1)[1].strip()}</span>'
                  for s in stats if ":" in s]
         stats_html = f'<div style="margin-top:3px">{sep.join(parts)}</div>'
-
-    # Pills row
-    pill_html = ""
-    if pills:
-        pill_html = '<div style="margin-top:4px;line-height:1.8">' + "".join(pills) + '</div>'
 
     # Shadow disclaimer
     disc_html = ""
@@ -1615,7 +1625,7 @@ def _render_game_card_universal(
 
     st.html(
         f'<div class="game-card" style="border-left:4px solid {border}">'
-        f'{header}{stats_html}{pill_html}{extra_html}{disc_html}'
+        f'{header}{wager_html}{pill_html}{stats_html}{extra_html}{disc_html}'
         f'</div>'
     )
 
@@ -1938,9 +1948,12 @@ def _render_nhl_tab() -> None:
         else:
             card_pills.append(_universal_pill(tier, "#64748b", "#0f172a"))
 
-        if side:
-            side_color = "#22c55e" if side.upper() == "UNDER" else "#f87171"
-            card_pills.append(_universal_pill(side.upper(), side_color, "#0f172a"))
+        # Wager line (not a pill)
+        card_wagers = []
+        if side and line is not None:
+            card_wagers.append(f"{side.upper()} {line}")
+        elif side:
+            card_wagers.append(side.upper())
 
         # Build stats
         edge_pp  = f"{edge * 100:+.1f}pp" if edge is not None else "\u2014"
@@ -1984,6 +1997,7 @@ def _render_nhl_tab() -> None:
             tier=card_tier,
             pills=card_pills,
             stats=card_stats,
+            wagers=card_wagers,
             extra_html=goalie_row + caution_html,
         )
 
@@ -2989,15 +3003,18 @@ def _render_nba_tab() -> None:
         for g in active:
             matchup = f"{g.get('away_team','')} @ {g.get('home_team','')}"
             time_str = g.get("game_time_et", "")
+            # Wager line
+            lean = g.get("lean", "")
+            line = g.get("line")
+            wagers = []
+            if lean and line:
+                wagers.append(f"{lean} {line}")
+            elif lean:
+                wagers.append(lean)
+            # Pills — signal types only
             pills = []
             bt = g.get("bet_tier", "")
             if bt: pills.append(_universal_pill(bt, "#fff", "#16a34a"))
-            lean = g.get("lean", "")
-            if lean:
-                lc = "#ef4444" if lean == "OVER" else "#3b82f6"
-                pills.append(_universal_pill(lean, "#fff", lc))
-            sz = g.get("final_sizing")
-            if sz: pills.append(_universal_pill(f"{sz}u", "#e2e8f0", "#374151"))
             rs = g.get("ref_signal")
             if rs and rs not in ("NONE", "UNKNOWN"):
                 pills.append(_universal_pill(f"REF {rs}", "#eab308", "#1c1400"))
@@ -3005,8 +3022,8 @@ def _render_nba_tab() -> None:
                 pills.append(_universal_pill("VENUE", "#22c55e", "#052e16"))
             if g.get("oreb_confirms"):
                 pills.append(_universal_pill("OREB", "#22c55e", "#052e16"))
+            # Stats
             stats = []
-            line = g.get("line")
             if line: stats.append(f"Line: {line}")
             edge = g.get("edge")
             if edge is not None: stats.append(f"Edge: {edge:+.1f}")
@@ -3019,7 +3036,7 @@ def _render_nba_tab() -> None:
             if g.get("home_injuries"): inj.append(f'{g["home_team"]} Out: {", ".join(g["home_injuries"][:3])}')
             if g.get("away_injuries"): inj.append(f'{g["away_team"]} Out: {", ".join(g["away_injuries"][:3])}')
             if inj: extra = f'<div style="font-size:0.72em;color:#94a3b8;margin-top:3px">{" | ".join(inj)}</div>'
-            _render_game_card_universal(matchup, time_str, "ACTIVE", pills, stats, extra_html=extra)
+            _render_game_card_universal(matchup, time_str, "ACTIVE", pills, stats, wagers=wagers, extra_html=extra)
     else:
         st.caption("No plays today.")
 
