@@ -1958,18 +1958,11 @@ def _render_nhl_tab() -> None:
         vol     = s.get("volatility_bucket", "low") or "low"
         summary = s.get("summary", "")
 
-        conf_h  = bool(s.get("goalie_confirmed_home", True))
-        conf_a  = bool(s.get("goalie_confirmed_away", True))
-        back_h  = int(s.get("backup_flag_home") or 0)
-        back_a  = int(s.get("backup_flag_away") or 0)
-        b2b_gh  = int(s.get("home_goalie_b2b") or 0)
-        b2b_ga  = int(s.get("away_goalie_b2b") or 0)
-
         is_shadow = tier.startswith("SHADOW_")
         is_play   = tier == "HIGH"
         card_tier = "ACTIVE" if is_play else ("SHADOW" if is_shadow else "NONE")
 
-        # Build pills
+        # Build pills — signal types only, no goalie status
         card_pills: list[str] = []
         if is_play:
             card_pills.append(_universal_pill("HIGH", "#fff", "#16a34a"))
@@ -1982,14 +1975,6 @@ def _render_nhl_tab() -> None:
                 card_pills.append(_universal_pill("LOW", "#64748b", "#0f172a"))
         else:
             card_pills.append(_universal_pill(tier, "#64748b", "#0f172a"))
-
-        # Goalie status pills
-        if conf_h and conf_a and not back_h and not back_a:
-            card_pills.append(_universal_pill("\u2713 Starters", "#22c55e", "#052e16"))
-        elif back_h or back_a:
-            card_pills.append(_universal_pill("\u26a0\ufe0f Backup", "#dc2626", "#2d1515"))
-        elif not conf_h or not conf_a:
-            card_pills.append(_universal_pill("\u26a0\ufe0f Starter TBD", "#eab308", "#1c1400"))
 
         # Wager line with unit size
         card_wagers = []
