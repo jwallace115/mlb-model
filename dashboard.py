@@ -1862,8 +1862,8 @@ def _render_nhl_tab() -> None:
     n_active  = len(plays)
     n_shadow  = len(shadows)
     _render_signal_status_row(
-        active_labels=[f"{n_active} HIGH"] if n_active > 0 else [],
-        shadow_labels=[f"{n_shadow} MEDIUM/LOW (suspended)"] if n_shadow > 0 else []
+        active_labels=[f"{s.get('away_team','')} @ {s.get('home_team','')}" for s in plays],
+        shadow_labels=["MEDIUM tier (suspended)", "LOW tier (suspended)"] if shadows else []
     )
 
     # ── (c) Season performance summary ────────────────────────────────────────
