@@ -200,9 +200,10 @@ def main():
     print(f"\n  Summary: {total_new} new rows, {len(total_pitchers)} unique pitchers")
 
     # Auto-push
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                     "Statcast pitch data incremental update"],
-                    capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                  "Statcast pitch data incremental update"],
+    #                 capture_output=True)
 
 
 if __name__ == "__main__":

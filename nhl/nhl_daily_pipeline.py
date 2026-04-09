@@ -982,5 +982,6 @@ if __name__ == "__main__":
     _d["nhl"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     with open(_lu, "w") as f:
         json.dump(_d, f, indent=2)
-    subprocess.run(["bash", str(BASE_DIR / "shared" / "git_push.sh"), "NHL pipeline run"],
-                   capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(BASE_DIR / "shared" / "git_push.sh"), "NHL pipeline run"],
+    #                capture_output=True)

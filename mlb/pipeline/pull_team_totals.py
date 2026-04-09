@@ -184,8 +184,9 @@ def main():
         save_records(records)
 
     # Auto-push
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                     "Team total lines pull"], capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                  "Team total lines pull"], capture_output=True)
 
 
 if __name__ == "__main__":

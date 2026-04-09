@@ -138,36 +138,8 @@ def serialize_results(raw: list[dict], game_date: str) -> dict:
 # ── git push ───────────────────────────────────────────────────────────────────
 
 def git_push(repo_dir: str, game_date: str, files: list[str]) -> bool:
-    def run(cmd):
-        result = subprocess.run(cmd, cwd=repo_dir, capture_output=True, text=True)
-        if result.returncode != 0:
-            print(f"  [git error] {' '.join(cmd)}\n  {result.stderr.strip()}",
-                  file=sys.stderr)
-            return False
-        return True
-
-    for f in files:
-        print(f"  git add {f} ...")
-        if not run(["git", "add", "-f", f]):
-            return False
-
-    status = subprocess.run(
-        ["git", "status", "--porcelain"] + files,
-        cwd=repo_dir, capture_output=True, text=True,
-    )
-    if not status.stdout.strip():
-        print("  Nothing to commit — JSON files unchanged.")
-        return True
-
-    print("  git commit ...")
-    if not run(["git", "commit", "-m", f"results: {game_date}"]):
-        return False
-
-    print("  git push ...")
-    if not run(["git", "push"]):
-        return False
-
-    print("  Pushed successfully.")
+    # Push handled by push_daemon.sh — function kept as stub so callers don't break
+    print("  Push handled by push_daemon — skipping git_push().")
     return True
 
 

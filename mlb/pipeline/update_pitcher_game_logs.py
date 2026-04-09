@@ -220,9 +220,10 @@ def main():
     print(f"  2026: {n_2026} rows ({relievers_2026} reliever appearances)")
 
     # Auto-push
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                     "Pitcher game logs incremental update"],
-                   capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                  "Pitcher game logs incremental update"],
+    #                capture_output=True)
 
 
 if __name__ == "__main__":

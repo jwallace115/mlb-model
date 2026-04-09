@@ -55,6 +55,7 @@ def check_cron_jobs():
         ("pitcher_logs_update", "/root/logs/pitcher_logs_update.log", 26),
         ("statcast_update", "/root/logs/statcast_update.log", 26),
         ("team_totals_pull", "/root/logs/team_totals_pull.log", 26),
+        ("push_daemon", "/root/logs/push_daemon.log", 1),  # runs every 30min
         ("wnba_features", "/root/logs/wnba_features.log", 26),
         ("wnba_model", "/root/logs/wnba_model.log", 26),
         ("wnba_archetypes", "/root/logs/wnba_archetypes.log", 26),
@@ -477,9 +478,10 @@ def main():
     _d["health_check"] = NOW.isoformat()
     with open(_lu, "w") as f:
         json.dump(_d, f, indent=2)
-    import subprocess
-    subprocess.run(["bash", str(ROOT / "shared" / "git_push.sh"), "Health check run"],
-                   capture_output=True)
+    # Push handled by push_daemon.sh
+    # import subprocess
+    # subprocess.run(["bash", str(ROOT / "shared" / "git_push.sh"), "Health check run"],
+    #                capture_output=True)
 
 
 if __name__ == "__main__":

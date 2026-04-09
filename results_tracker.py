@@ -661,8 +661,8 @@ if __name__ == "__main__":
         target = args.date or (date.today() - timedelta(days=1)).isoformat()
         grade_date(target)
 
-        # Push graded results to GitHub
-        import subprocess as _sp
-        _repo = os.path.dirname(os.path.abspath(__file__))
-        _sp.run(["bash", os.path.join(_repo, "shared", "git_push.sh"),
-                 f"Results grader {target}"], capture_output=True)
+        # Push handled by push_daemon.sh
+        # import subprocess as _sp
+        # _repo = os.path.dirname(os.path.abspath(__file__))
+        # _sp.run(["bash", os.path.join(_repo, "shared", "git_push.sh"),
+        #          f"Results grader {target}"], capture_output=True)

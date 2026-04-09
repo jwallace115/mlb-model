@@ -494,8 +494,9 @@ def run_daily(game_date: str | None = None):
               f"{stability}")
 
     # Auto-push
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                    f"NRFI helper {game_date}"], capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                 f"NRFI helper {game_date}"], capture_output=True)
 
 
 # ── Grading ──────────────────────────────────────────────────────────────────
@@ -578,8 +579,9 @@ def grade():
         print(f"  Qualifier NRFI:  {qual_nrfi:.1%}")
 
     # Auto-push
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                    "NRFI grader run"], capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                 "NRFI grader run"], capture_output=True)
 
 
 # ── Entry point ──────────────────────────────────────────────────────────────

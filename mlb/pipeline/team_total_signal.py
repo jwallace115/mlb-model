@@ -352,8 +352,9 @@ def main():
             save_signals(signals)
 
     # Auto-push
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                     "Team total shadow signal update"], capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                  "Team total shadow signal update"], capture_output=True)
 
 
 if __name__ == "__main__":

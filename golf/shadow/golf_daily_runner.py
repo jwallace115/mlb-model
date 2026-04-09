@@ -1865,5 +1865,6 @@ if __name__ == "__main__":
     _d["golf"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     with open(_lu_path, "w") as f:
         json.dump(_d, f, indent=2)
-    subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
-                    f"Golf {args.capture} run"], capture_output=True)
+    # Push handled by push_daemon.sh
+    # subprocess.run(["bash", str(PROJECT_ROOT / "shared" / "git_push.sh"),
+    #                 f"Golf {args.capture} run"], capture_output=True)
