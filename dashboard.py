@@ -1570,6 +1570,69 @@ def _save_nhl_hr_override(game_id, date_str, api_line, hr_line):
     _nhl_hr_cache.pop(date_str, None)
 
 
+# ── Shared universal card / pill helpers ──────────────────────────────────────
+
+def _render_game_card_universal(
+    matchup: str,
+    time_str: str,
+    tier: str,  # "ACTIVE", "SHADOW", "NONE"
+    pills: list[str],  # list of pre-rendered pill HTML strings
+    stats: list[str],  # list of "Label: Value" stat strings
+    explanation: str = "",
+    extra_html: str = "",  # goalie row, weather, etc.
+    disclaimer: str = "",
+) -> None:
+    """Universal game card — one function, every sport, every tier."""
+    border_colors = {"ACTIVE": "#16a34a", "SHADOW": "#dc2626", "NONE": "#6b7280"}
+    border = border_colors.get(tier, "#6b7280")
+
+    sep = ' <span style="color:#2d3748;margin:0 2px">&middot;</span> '
+
+    # Header
+    header = (f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0">'
+              f'{matchup} &mdash; {time_str}</div>')
+
+    # Stats row
+    stats_html = ""
+    if stats:
+        parts = [f'<span style="color:#94a3b8;font-size:0.75em">{s.split(":")[0]}:</span> '
+                 f'<span style="color:#e2e8f0;font-size:0.82em;font-weight:600">{s.split(":",1)[1].strip()}</span>'
+                 for s in stats if ":" in s]
+        stats_html = f'<div style="margin-top:3px">{sep.join(parts)}</div>'
+
+    # Pills row
+    pill_html = ""
+    if pills:
+        pill_html = '<div style="margin-top:4px;line-height:1.8">' + "".join(pills) + '</div>'
+
+    # Explanation
+    explain_html = ""
+    if explanation:
+        explain_html = (f'<div style="font-size:0.75em;color:#6b7280;margin-top:4px;font-style:italic">'
+                       f'{explanation}</div>')
+
+    # Shadow disclaimer
+    disc_html = ""
+    if tier == "SHADOW" and not disclaimer:
+        disc_html = ('<div style="font-size:0.68em;color:#f87171;margin-top:4px">'
+                    'Research signal &mdash; shadow tracking only, not a play recommendation.</div>')
+    elif disclaimer:
+        disc_html = f'<div style="font-size:0.68em;color:#94a3b8;margin-top:4px">{disclaimer}</div>'
+
+    st.html(
+        f'<div class="game-card" style="border-left:4px solid {border}">'
+        f'{header}{stats_html}{pill_html}{extra_html}{explain_html}{disc_html}'
+        f'</div>'
+    )
+
+
+def _universal_pill(label: str, color: str, bg: str) -> str:
+    """Render a signal pill — standard style across all sports."""
+    return (f'<span style="background:{bg};color:{color};border:1px solid {color};'
+            f'border-radius:10px;padding:1px 7px;font-size:0.68em;font-weight:600;'
+            f'margin-right:3px">{label}</span>')
+
+
 def _render_nhl_signal_card(s: dict, game_date: str = "") -> None:
     """Render a single NHL signal card. HIGH = play, SHADOW = red-border shadow card."""
     home    = s.get("home_team", "")
@@ -1724,7 +1787,7 @@ def _render_nhl_tab() -> None:
         except Exception:
             pass
 
-    # ── header ────────────────────────────────────────────────────────────────
+    # ── (a) Header ────────────────────────────────────────────────────────────
     col_title, col_btn = st.columns([5, 1])
     with col_title:
         if nhl:
@@ -1751,87 +1814,281 @@ def _render_nhl_tab() -> None:
         )
         return
 
-    picks_tab, review_tab = st.tabs(["Today's Picks", "Results Review"])
+    # ── Freshness stamp ───────────────────────────────────────────────────────
+    last_updated   = nhl.get("last_updated", "")
+    signals_source = nhl.get("signals_source", "")
+    src_color      = "#22c55e" if signals_source == "live" else "#f59e0b"
+    if last_updated or signals_source:
+        src_html = (
+            f"&nbsp;&nbsp;|&nbsp;&nbsp;Source: "
+            f"<strong style='color:{src_color}'>{signals_source}</strong>"
+        ) if signals_source else ""
+        st.html(
+            f"<div style='font-size:0.75em;color:#4a5568;margin-bottom:8px'>"
+            f"Last updated: <strong style='color:#94a3b8'>{last_updated}</strong>"
+            f"{src_html}"
+            f"</div>"
+        )
 
-    with picks_tab:
-        # FIX 5: freshness stamp
-        last_updated    = nhl.get("last_updated", "")
-        signals_source  = nhl.get("signals_source", "")
-        src_color       = "#22c55e" if signals_source == "live" else "#f59e0b"
-        if last_updated or signals_source:
-            src_html = (
-                f"&nbsp;&nbsp;|&nbsp;&nbsp;Source: "
-                f"<strong style='color:{src_color}'>{signals_source}</strong>"
-            ) if signals_source else ""
-            st.html(
-                f"<div style='font-size:0.75em;color:#4a5568;margin-bottom:8px'>"
-                f"Last updated: <strong style='color:#94a3b8'>{last_updated}</strong>"
-                f"{src_html}"
-                f"</div>"
+    st.html(_pipeline_freshness("nhl"))
+
+    today_signals  = nhl.get("today_signals", [])
+    recent_results = nhl.get("recent_results", [])
+    season_perf    = nhl.get("season_performance", {})
+    ot_diag_nhl    = nhl.get("ot_diagnostics", {})
+    _nhl_game_date = nhl.get("game_date", "")
+
+    # ── Classify signals ──────────────────────────────────────────────────────
+    plays    = [s for s in today_signals if s.get("confidence_tier") == "HIGH"]
+    shadows  = [s for s in today_signals if s.get("confidence_tier", "").startswith("SHADOW_")]
+    no_plays = [s for s in today_signals if s not in plays and s not in shadows]
+
+    # ── (b) Signal status row ─────────────────────────────────────────────────
+    n_active  = len(plays)
+    n_shadow  = len(shadows)
+    st.html(
+        f'<div style="font-size:0.80em;color:#94a3b8;margin-bottom:10px">'
+        f'Active: <strong style="color:#16a34a">{n_active} HIGH</strong>'
+        f'&nbsp;&nbsp;|&nbsp;&nbsp;'
+        f'Shadow: <strong style="color:#dc2626">{n_shadow} MEDIUM/LOW</strong>'
+        f'</div>'
+    )
+
+    # ── (c) Season performance summary ────────────────────────────────────────
+    if recent_results:
+        W = sum(1 for r in recent_results if r.get("result") == "WIN")
+        L = sum(1 for r in recent_results if r.get("result") == "LOSS")
+        P = sum(1 for r in recent_results if r.get("result") == "PUSH")
+        n = W + L + P
+        hit = W / (W + L) if (W + L) > 0 else None
+        roi = (W * (100.0 / 110.0) - L) / n * 100 if n > 0 else None
+
+        hit_cls = "green" if (hit or 0) >= 0.525 else "yellow" if (hit or 0) >= 0.50 else "red"
+        hit_str = f"{hit * 100:.1f}%" if hit is not None else "\u2014"
+        roi_str = f"{roi:+.1f}%" if roi is not None else "\u2014"
+
+        st.html(f"""
+        <div class="season-banner" style="padding:10px 16px;margin-bottom:10px">
+          <div class="stat-grid">
+            <div class="stat-block">
+              <div class="num">{W}-{L}-{P}</div>
+              <div class="lbl">W-L-P (14d)</div>
+            </div>
+            <div class="stat-block">
+              <div class="num {hit_cls}">{hit_str}</div>
+              <div class="lbl">Hit Rate</div>
+            </div>
+            <div class="stat-block">
+              <div class="num">{roi_str}</div>
+              <div class="lbl">ROI @ -110</div>
+            </div>
+          </div>
+        </div>
+        """)
+
+    # ── Helper: build universal card for an NHL signal ────────────────────────
+    def _nhl_universal_card(s: dict) -> None:
+        home    = s.get("home_team", "")
+        away    = s.get("away_team", "")
+        side    = s.get("signal_side", "")
+        edge    = s.get("edge")
+        sim     = s.get("sim_prob")
+        line    = s.get("closing_total")
+        lam     = s.get("lambda_total_calibrated")
+        tier    = s.get("confidence_tier", "MEDIUM")
+        vol     = s.get("volatility_bucket", "low") or "low"
+        summary = s.get("summary", "")
+
+        conf_h  = bool(s.get("goalie_confirmed_home", True))
+        conf_a  = bool(s.get("goalie_confirmed_away", True))
+        back_h  = int(s.get("backup_flag_home") or 0)
+        back_a  = int(s.get("backup_flag_away") or 0)
+        b2b_gh  = int(s.get("home_goalie_b2b") or 0)
+        b2b_ga  = int(s.get("away_goalie_b2b") or 0)
+
+        is_shadow = tier.startswith("SHADOW_")
+        is_play   = tier == "HIGH"
+        card_tier = "ACTIVE" if is_play else ("SHADOW" if is_shadow else "NONE")
+
+        # Build pills
+        card_pills: list[str] = []
+        if is_play:
+            card_pills.append(_universal_pill("HIGH", "#fff", "#16a34a"))
+            if not conf_h or not conf_a:
+                card_pills.append(_universal_pill("\u26a0\ufe0f Goalies TBD", "#eab308", "#1c1400"))
+        elif is_shadow:
+            card_pills.append(_universal_pill("SHADOW", "#fff", "#dc2626"))
+            inner_tier = tier.replace("SHADOW_", "")
+            if inner_tier == "MEDIUM":
+                card_pills.append(_universal_pill("MEDIUM", "#eab308", "#1c1400"))
+            elif inner_tier == "LOW":
+                card_pills.append(_universal_pill("LOW", "#64748b", "#0f172a"))
+        else:
+            card_pills.append(_universal_pill(tier, "#64748b", "#0f172a"))
+
+        if side:
+            side_color = "#22c55e" if side.upper() == "UNDER" else "#f87171"
+            card_pills.append(_universal_pill(side.upper(), side_color, "#0f172a"))
+
+        # Build stats
+        edge_pp  = f"{edge * 100:+.1f}pp" if edge is not None else "\u2014"
+        lam_str  = f"{lam:.1f}" if lam is not None else "\u2014"
+        line_str = str(line) if line is not None else "\u2014"
+        card_stats = [
+            f"Line: {line_str}",
+            f"Edge: {edge_pp}",
+            f"Model: {lam_str}",
+            f"Vol: {vol}",
+        ]
+        if sim is not None:
+            card_stats.append(f"P({side.lower()}): {sim * 100:.0f}%")
+
+        # Goalie status row (extra_html)
+        gh_status = _nhl_goalie_status(conf_h, bool(back_h), bool(b2b_gh))
+        ga_status = _nhl_goalie_status(conf_a, bool(back_a), bool(b2b_ga))
+        goalie_row = (
+            f'<div style="font-size:0.80em;color:#4a5568;margin-top:4px">'
+            f'<strong style="color:#64748b">{home}</strong> {gh_status}'
+            f'&nbsp;&nbsp;|&nbsp;&nbsp;'
+            f'<strong style="color:#64748b">{away}</strong> {ga_status}'
+            f'</div>'
+        )
+
+        # Caution banner for 6.5-line overs
+        caut = int(s.get("caution_flag") or 0)
+        caution_html = ""
+        if caut:
+            caution_html = (
+                '<div style="background:#1c1400;border:1px solid #92400e;border-radius:4px;'
+                'padding:5px 10px;margin-top:6px;font-size:0.78em;color:#fde68a">'
+                '\u26a0 6.5-line over \u2014 caution bucket: historically underpriced ~4pp for this model'
+                '</div>'
             )
 
-        st.html(_pipeline_freshness("nhl"))
+        matchup = f"{away} @ {home}"
+        _render_game_card_universal(
+            matchup=matchup,
+            time_str="",
+            tier=card_tier,
+            pills=card_pills,
+            stats=card_stats,
+            explanation=summary,
+            extra_html=goalie_row + caution_html,
+        )
 
-        today_signals  = nhl.get("today_signals", [])
-        recent_results = nhl.get("recent_results", [])
-        season_perf    = nhl.get("season_performance", {})
-        ot_diag_nhl    = nhl.get("ot_diagnostics", {})
+        # ── Hard Rock line override (ACTIVE only) ──
+        if is_play and line is not None:
+            _gid = str(s.get("game_id", ""))
+            _nhl_hr = _load_nhl_hr_overrides(_nhl_game_date)
+            _hr_val = _nhl_hr.get(_gid)
+            if _hr_val is not None:
+                st.html(f'<div style="font-size:0.68em;color:#a78bfa;margin-top:-4px;margin-bottom:4px">'
+                        f'\U0001f7e3 HR {_hr_val:.1f} (API {line})</div>')
+            with st.expander(f"\u270f\ufe0f HR line override \u2014 {matchup}", expanded=False):
+                _col1, _col2 = st.columns(2)
+                _col1.number_input("Total (API: {:.1f})".format(line),
+                                   min_value=0.0, max_value=15.0, step=0.5,
+                                   value=_hr_val if _hr_val else line,
+                                   key=f"nhl_hr_{_gid}")
+                if _col2.button("Save", key=f"nhl_hr_save_{_gid}"):
+                    _val = st.session_state.get(f"nhl_hr_{_gid}")
+                    if _val is not None and abs(_val - line) > 0.01:
+                        _save_nhl_hr_override(_gid, _nhl_game_date, line, _val)
+                    st.rerun()
 
-        # ── SECTION 1: Today's Signals ─────────────────────────────────────────────
-        _nhl_game_date = nhl.get("game_date", "")
-        if today_signals:
-            plays    = [s for s in today_signals if s.get("confidence_tier") == "HIGH"]
-            shadows  = [s for s in today_signals if s.get("confidence_tier", "").startswith("SHADOW_")]
-            no_plays = [s for s in today_signals if s not in plays and s not in shadows]
-            _n_games = len(set((s.get("home_team","") + s.get("away_team","")) for s in plays))
-            _n_sigs  = len(plays)
-            st.html(f'<div class="section-hdr">\U0001f3af Today\'s Signals \u2014 '
-                    f'{_n_games} game{"s" if _n_games != 1 else ""} \u00b7 '
-                    f'{_n_sigs} signal{"s" if _n_sigs != 1 else ""}</div>')
-            if plays:
-                for s in plays:
-                    _render_nhl_signal_card(s, game_date=_nhl_game_date)
-            else:
-                st.caption("No HIGH signals today.")
-            if shadows:
-                with st.expander(
-                    f"Shadow signals (suspended tiers) \u2014 {len(shadows)}",
-                    expanded=False
-                ):
-                    for s in shadows:
-                        _render_nhl_signal_card(s, game_date=_nhl_game_date)
-            if no_plays:
-                with st.expander(
-                    f"Low-confidence signals \u2014 {len(no_plays)}",
-                    expanded=False
-                ):
-                    for s in no_plays:
-                        _render_nhl_signal_card(s, game_date=_nhl_game_date)
-        else:
-            st.html('<div class="section-hdr">\U0001f3af Today\'s Signals</div>')
-            st.caption("No qualified signals today (threshold: +12pp edge).")
+    # ── (d) Today's Plays (ACTIVE) ────────────────────────────────────────────
+    _n_games = len(set((s.get("home_team","") + s.get("away_team","")) for s in plays)) if plays else 0
+    st.html(f'<div class="section-hdr">\U0001f3af Today\'s Plays \u2014 '
+            f'{_n_games} game{"s" if _n_games != 1 else ""} \u00b7 '
+            f'{n_active} signal{"s" if n_active != 1 else ""}</div>')
+    if plays:
+        for s in plays:
+            _nhl_universal_card(s)
+    else:
+        st.caption("No HIGH signals today.")
 
-        # ── SECTION 2: Recent Results (last 14 days) ───────────────────────────────
-        st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
-        if recent_results:
-            # Quick W/L/P summary
-            W = sum(1 for r in recent_results if r.get("result") == "WIN")
-            L = sum(1 for r in recent_results if r.get("result") == "LOSS")
-            P = sum(1 for r in recent_results if r.get("result") == "PUSH")
-            n = W + L + P
-            hit = W / (W + L) if (W + L) > 0 else None
-            roi = (W * (100.0 / 110.0) - L) / n * 100 if n > 0 else None
+    # ── (e) Shadow Monitoring (collapsed) ─────────────────────────────────────
+    if shadows:
+        with st.expander(
+            f"Shadow Monitoring \u2014 {len(shadows)} signal{'s' if len(shadows) != 1 else ''}",
+            expanded=False
+        ):
+            for s in shadows:
+                _nhl_universal_card(s)
 
+    # ── (f) All Other Games (collapsed) ───────────────────────────────────────
+    if no_plays:
+        with st.expander(
+            f"All Other Games \u2014 {len(no_plays)}",
+            expanded=False
+        ):
+            for s in no_plays:
+                _nhl_universal_card(s)
+
+    # ── (g) Recent Results table ──────────────────────────────────────────────
+    st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
+    if recent_results:
+        rows_html = ""
+        for r in recent_results:
+            matchup = f"{r.get('away_team','')} @ {r.get('home_team','')}"
+            side    = r.get("signal_side", "")
+            line    = r.get("closing_total")
+            edge    = r.get("edge")
+            actual  = r.get("actual_total_goals_final")
+            result  = r.get("result", "")
+            tier    = r.get("confidence_tier", "LOW")
+            gd      = r.get("game_date", "")
+
+            line_s   = str(line) if line is not None else "\u2014"
+            edge_s   = f"{edge:+.3f}" if edge is not None else "\u2014"
+            actual_s = str(int(actual)) if actual is not None else "\u2014"
+            rows_html += (
+                f'<tr>'
+                f'<td class="dim">{gd}</td>'
+                f'<td>{matchup}</td>'
+                f'<td>{_nhl_conf_badge(tier)} {_nhl_side_badge(side)}</td>'
+                f'<td>{line_s}</td>'
+                f'<td class="dim">{edge_s}</td>'
+                f'<td class="dim">{actual_s}</td>'
+                f'<td>{_nhl_result_badge(result)}</td>'
+                f'</tr>'
+            )
+        st.html(f"""
+        <table class="star-table">
+          <thead><tr>
+            <th>Date</th><th>Matchup</th><th>Signal</th>
+            <th>Line</th><th>Edge</th><th>Actual</th><th>Result</th>
+          </tr></thead>
+          <tbody>{rows_html}</tbody>
+        </table>
+        """)
+    else:
+        st.caption("No graded live signals in the past 14 days.")
+
+    # ── Season Performance (historical) ───────────────────────────────────────
+    st.html('<div class="section-hdr">📊 Season Performance (Historical Backtest)</div>')
+    if season_perf:
+        tab_val, tab_oos, tab_comb = st.tabs(
+            ["2023-24 Validate", "2024-25 OOS", "Combined"]
+        )
+
+        def _perf_block(split_key: str):
+            d = season_perf.get(split_key, {})
+            if not d or d.get("n", 0) == 0:
+                st.caption("No data.")
+                return
+            W, L, P, n = d["W"], d["L"], d["P"], d["n"]
+            hit = d.get("hit")
+            roi = d.get("roi")
             hit_cls = "green" if (hit or 0) >= 0.525 else "yellow" if (hit or 0) >= 0.50 else "red"
-            hit_str = f"{hit * 100:.1f}%" if hit is not None else "—"
-            roi_str = f"{roi:+.1f}%" if roi is not None else "—"
-
+            hit_str = f"{hit * 100:.1f}%" if hit is not None else "\u2014"
+            roi_str = f"{roi:+.2f}%" if roi is not None else "\u2014"
             st.html(f"""
-            <div class="season-banner" style="padding:10px 16px;margin-bottom:10px">
+            <div class="season-banner">
               <div class="stat-grid">
                 <div class="stat-block">
                   <div class="num">{W}-{L}-{P}</div>
-                  <div class="lbl">W-L-P (14d)</div>
+                  <div class="lbl">W-L-P (n={n})</div>
                 </div>
                 <div class="stat-block">
                   <div class="num {hit_cls}">{hit_str}</div>
@@ -1845,214 +2102,139 @@ def _render_nhl_tab() -> None:
             </div>
             """)
 
-            # Table of individual results
-            rows_html = ""
-            for r in recent_results:
-                matchup = f"{r.get('away_team','')} @ {r.get('home_team','')}"
-                side    = r.get("signal_side", "")
-                line    = r.get("closing_total")
-                edge    = r.get("edge")
-                actual  = r.get("actual_total_goals_final")
-                result  = r.get("result", "")
-                tier    = r.get("confidence_tier", "LOW")
-                gd      = r.get("game_date", "")
+            # By confidence tier
+            by_tier = season_perf.get("by_confidence_tier", {})
+            if by_tier:
+                tier_rows = ""
+                for tier in ("HIGH", "MEDIUM", "LOW"):
+                    td = by_tier.get(tier, {})
+                    if not td or td.get("n", 0) == 0:
+                        continue
+                    th = td.get("hit")    # None when W+L=0
+                    tr = td.get("roi")    # None when n=0
+                    th_cls  = "green" if (th or 0) >= 0.525 else "yellow" if (th or 0) >= 0.50 else "red"
+                    th_disp = f"{th * 100:.1f}%" if th is not None else "\u2014"
+                    tr_disp = f"{tr:+.2f}%" if tr is not None else "\u2014"
+                    tier_rows += (
+                        f'<tr>'
+                        f'<td>{_nhl_conf_badge(tier)}</td>'
+                        f'<td class="dim">{td["n"]}</td>'
+                        f'<td>{td["W"]}-{td["L"]}-{td["P"]}</td>'
+                        f'<td class="{th_cls}">{th_disp}</td>'
+                        f'<td class="dim">{tr_disp}</td>'
+                        f'</tr>'
+                    )
+                if tier_rows:
+                    st.html(f"""
+                    <table class="star-table" style="margin-top:8px">
+                      <thead><tr>
+                        <th>Tier</th><th>n</th><th>W-L-P</th><th>Hit%</th><th>ROI</th>
+                      </tr></thead>
+                      <tbody>{tier_rows}</tbody>
+                    </table>
+                    """)
 
-                line_s   = str(line) if line is not None else "—"
-                edge_s   = f"{edge:+.3f}" if edge is not None else "—"
-                actual_s = str(int(actual)) if actual is not None else "—"
-                rows_html += (
-                    f'<tr>'
-                    f'<td class="dim">{gd}</td>'
-                    f'<td>{matchup}</td>'
-                    f'<td>{_nhl_conf_badge(tier)} {_nhl_side_badge(side)}</td>'
-                    f'<td>{line_s}</td>'
-                    f'<td class="dim">{edge_s}</td>'
-                    f'<td class="dim">{actual_s}</td>'
-                    f'<td>{_nhl_result_badge(result)}</td>'
-                    f'</tr>'
-                )
-            st.html(f"""
-            <table class="star-table">
-              <thead><tr>
-                <th>Date</th><th>Matchup</th><th>Signal</th>
-                <th>Line</th><th>Edge</th><th>Actual</th><th>Result</th>
-              </tr></thead>
-              <tbody>{rows_html}</tbody>
-            </table>
-            """)
+        with tab_val:
+            _perf_block("validate")
+        with tab_oos:
+            _perf_block("oos")
+        with tab_comb:
+            _perf_block("combined")
+
+        st.html("""
+        <div style="font-size:0.75em;color:#4a5568;margin-top:10px;line-height:1.6">
+          Validate = 2023-24 (in-sample calibration) · OOS = 2024-25 (blind forward test)<br>
+          Threshold: edge ≥ 0.10 · Juice: -110 · Break-even: 52.38%<br>
+          Note: 6.5-line OVERs underpriced ~4pp in backtest — use caution flag as guide
+        </div>
+        """)
+    else:
+        st.caption("Season performance data unavailable.")
+
+    # ── (h) OT Diagnostics ────────────────────────────────────────────────────
+    if ot_diag_nhl and ot_diag_nhl.get("total_graded", 0) > 0:
+        ot_g    = ot_diag_nhl.get("ot_games", 0)
+        so_g    = ot_diag_nhl.get("so_games", 0)
+        total_g = ot_diag_nhl.get("total_graded", 1)
+        ot_rt   = ot_diag_nhl.get("ot_rate")
+        flips   = ot_diag_nhl.get("ot_flips", 0)
+        frate   = ot_diag_nhl.get("ot_flip_rate")
+        ul      = ot_diag_nhl.get("under_ot_losses", 0)
+        ol      = ot_diag_nhl.get("over_ot_losses", 0)
+        ot_rt_s = f"{ot_rt * 100:.1f}%" if ot_rt is not None else "\u2014"
+        frate_s = f"{frate * 100:.1f}%" if frate is not None else "\u2014"
+        st.html(f"""
+        <div style="background:#0f1117;border:1px solid #1e2535;border-radius:6px;
+                    padding:10px 14px;margin-bottom:10px;font-size:0.82em">
+          <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
+                      letter-spacing:0.08em;margin-bottom:8px">OT Diagnostics (Live Signals)</div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:6px">
+            <span>OT game rate: <strong>{ot_rt_s}</strong></span>
+            <span>OT flips (changed outcome): <strong>{flips}</strong> of {ot_g} OT games ({frate_s})</span>
+            <span>Shootout games: <strong>{so_g}</strong></span>
+            <span>Under losses from OT: <strong>{ul}</strong></span>
+            <span>Over losses from OT: <strong>{ol}</strong></span>
+          </div>
+          <div style="color:#4a5568;font-size:0.78em">
+            Official grading includes OT/SO per sportsbook rules. OT diagnostics are for analysis only.
+          </div>
+        </div>
+        """)
+
+    # ── CLV Summary ───────────────────────────────────────────────────────────
+    clv_nhl = nhl.get("clv_summary", {})
+    if clv_nhl:
+        n_clv    = clv_nhl.get("total_with_clv", 0)
+        avg_clv  = clv_nhl.get("avg_clv")
+        pct_pos  = clv_nhl.get("pct_positive_clv")
+        coverage = clv_nhl.get("clv_coverage", 0.0)
+
+        st.html('<div class="section-hdr">📈 CLV Summary (Closing Line Value)</div>')
+
+        if n_clv < 20:
+            st.caption(f"Insufficient sample for CLV conclusions (n={n_clv})")
+        elif coverage < 50:
+            st.caption(f"CLV coverage low — closing line capture not yet fully populated ({coverage:.0f}%)")
         else:
-            st.caption("No graded live signals in the past 14 days.")
-
-        # ── SECTION 3: Season Performance (historical) ─────────────────────────────
-        st.html('<div class="section-hdr">📊 Season Performance (Historical Backtest)</div>')
-        if season_perf:
-            tab_val, tab_oos, tab_comb = st.tabs(
-                ["2023-24 Validate", "2024-25 OOS", "Combined"]
-            )
-
-            def _perf_block(split_key: str):
-                d = season_perf.get(split_key, {})
-                if not d or d.get("n", 0) == 0:
-                    st.caption("No data.")
-                    return
-                W, L, P, n = d["W"], d["L"], d["P"], d["n"]
-                hit = d.get("hit")
-                roi = d.get("roi")
-                hit_cls = "green" if (hit or 0) >= 0.525 else "yellow" if (hit or 0) >= 0.50 else "red"
-                hit_str = f"{hit * 100:.1f}%" if hit is not None else "—"
-                roi_str = f"{roi:+.2f}%" if roi is not None else "—"
-                st.html(f"""
-                <div class="season-banner">
-                  <div class="stat-grid">
-                    <div class="stat-block">
-                      <div class="num">{W}-{L}-{P}</div>
-                      <div class="lbl">W-L-P (n={n})</div>
-                    </div>
-                    <div class="stat-block">
-                      <div class="num {hit_cls}">{hit_str}</div>
-                      <div class="lbl">Hit Rate</div>
-                    </div>
-                    <div class="stat-block">
-                      <div class="num">{roi_str}</div>
-                      <div class="lbl">ROI @ -110</div>
-                    </div>
-                  </div>
+            avg_clv_s = f"{avg_clv:+.2f}" if avg_clv is not None else "\u2014"
+            pct_pos_s = f"{pct_pos:.0f}%" if pct_pos is not None else "\u2014"
+            avg_color = "#22c55e" if (avg_clv or 0) > 0 else "#ef4444"
+            pct_color = "#22c55e" if (pct_pos or 0) > 50 else "#ef4444"
+            by_side   = clv_nhl.get("avg_clv_by_side", {})
+            over_clv  = by_side.get("OVER")
+            under_clv = by_side.get("UNDER")
+            over_s    = f"{over_clv:+.2f}" if over_clv is not None else "\u2014"
+            under_s   = f"{under_clv:+.2f}" if under_clv is not None else "\u2014"
+            st.html(f"""
+            <div class="season-banner" style="padding:10px 16px;margin-bottom:6px">
+              <div class="stat-grid">
+                <div class="stat-block">
+                  <div class="num" style="color:{avg_color}">{avg_clv_s}</div>
+                  <div class="lbl">Avg CLV (pts)</div>
                 </div>
-                """)
-
-                # By confidence tier
-                by_tier = season_perf.get("by_confidence_tier", {})
-                if by_tier:
-                    tier_rows = ""
-                    for tier in ("HIGH", "MEDIUM", "LOW"):
-                        td = by_tier.get(tier, {})
-                        if not td or td.get("n", 0) == 0:
-                            continue
-                        th = td.get("hit")    # None when W+L=0
-                        tr = td.get("roi")    # None when n=0
-                        th_cls  = "green" if (th or 0) >= 0.525 else "yellow" if (th or 0) >= 0.50 else "red"
-                        th_disp = f"{th * 100:.1f}%" if th is not None else "—"
-                        tr_disp = f"{tr:+.2f}%" if tr is not None else "—"
-                        tier_rows += (
-                            f'<tr>'
-                            f'<td>{_nhl_conf_badge(tier)}</td>'
-                            f'<td class="dim">{td["n"]}</td>'
-                            f'<td>{td["W"]}-{td["L"]}-{td["P"]}</td>'
-                            f'<td class="{th_cls}">{th_disp}</td>'
-                            f'<td class="dim">{tr_disp}</td>'
-                            f'</tr>'
-                        )
-                    if tier_rows:
-                        st.html(f"""
-                        <table class="star-table" style="margin-top:8px">
-                          <thead><tr>
-                            <th>Tier</th><th>n</th><th>W-L-P</th><th>Hit%</th><th>ROI</th>
-                          </tr></thead>
-                          <tbody>{tier_rows}</tbody>
-                        </table>
-                        """)
-
-            with tab_val:
-                _perf_block("validate")
-            with tab_oos:
-                _perf_block("oos")
-            with tab_comb:
-                _perf_block("combined")
-
-            st.html("""
-            <div style="font-size:0.75em;color:#4a5568;margin-top:10px;line-height:1.6">
-              Validate = 2023-24 (in-sample calibration) · OOS = 2024-25 (blind forward test)<br>
-              Threshold: edge ≥ 0.10 · Juice: -110 · Break-even: 52.38%<br>
-              Note: 6.5-line OVERs underpriced ~4pp in backtest — use caution flag as guide
+                <div class="stat-block">
+                  <div class="num" style="color:{pct_color}">{pct_pos_s}</div>
+                  <div class="lbl">% Positive CLV</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num">{over_s}</div>
+                  <div class="lbl">OVER CLV</div>
+                </div>
+                <div class="stat-block">
+                  <div class="num">{under_s}</div>
+                  <div class="lbl">UNDER CLV</div>
+                </div>
+              </div>
             </div>
-            """)
-        else:
-            st.caption("Season performance data unavailable.")
-
-        # ── SECTION 4: OT Diagnostics ─────────────────────────────────────────────
-        if ot_diag_nhl and ot_diag_nhl.get("total_graded", 0) > 0:
-            ot_g    = ot_diag_nhl.get("ot_games", 0)
-            so_g    = ot_diag_nhl.get("so_games", 0)
-            total_g = ot_diag_nhl.get("total_graded", 1)
-            ot_rt   = ot_diag_nhl.get("ot_rate")
-            flips   = ot_diag_nhl.get("ot_flips", 0)
-            frate   = ot_diag_nhl.get("ot_flip_rate")
-            ul      = ot_diag_nhl.get("under_ot_losses", 0)
-            ol      = ot_diag_nhl.get("over_ot_losses", 0)
-            ot_rt_s = f"{ot_rt * 100:.1f}%" if ot_rt is not None else "—"
-            frate_s = f"{frate * 100:.1f}%" if frate is not None else "—"
-            st.html(f"""
-            <div style="background:#0f1117;border:1px solid #1e2535;border-radius:6px;
-                        padding:10px 14px;margin-bottom:10px;font-size:0.82em">
-              <div style="font-size:0.72em;color:#4a5568;text-transform:uppercase;
-                          letter-spacing:0.08em;margin-bottom:8px">OT Diagnostics (Live Signals)</div>
-              <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:6px">
-                <span>OT game rate: <strong>{ot_rt_s}</strong></span>
-                <span>OT flips (changed outcome): <strong>{flips}</strong> of {ot_g} OT games ({frate_s})</span>
-                <span>Shootout games: <strong>{so_g}</strong></span>
-                <span>Under losses from OT: <strong>{ul}</strong></span>
-                <span>Over losses from OT: <strong>{ol}</strong></span>
-              </div>
-              <div style="color:#4a5568;font-size:0.78em">
-                Official grading includes OT/SO per sportsbook rules. OT diagnostics are for analysis only.
-              </div>
+            <div style="font-size:0.73em;color:#4a5568;margin-top:4px;line-height:1.5">
+              CLV measures whether decision lines beat closing lines.
+              Positive = sharp. Target: &gt;0 on average.
+              NHL skews UNDER — per-side split matters.
             </div>
             """)
 
-        # ── CLV Summary ────────────────────────────────────────────────────────────
-        clv_nhl = nhl.get("clv_summary", {})
-        if clv_nhl:
-            n_clv    = clv_nhl.get("total_with_clv", 0)
-            avg_clv  = clv_nhl.get("avg_clv")
-            pct_pos  = clv_nhl.get("pct_positive_clv")
-            coverage = clv_nhl.get("clv_coverage", 0.0)
-
-            st.html('<div class="section-hdr">📈 CLV Summary (Closing Line Value)</div>')
-
-            if n_clv < 20:
-                st.caption(f"Insufficient sample for CLV conclusions (n={n_clv})")
-            elif coverage < 50:
-                st.caption(f"CLV coverage low — closing line capture not yet fully populated ({coverage:.0f}%)")
-            else:
-                avg_clv_s = f"{avg_clv:+.2f}" if avg_clv is not None else "—"
-                pct_pos_s = f"{pct_pos:.0f}%" if pct_pos is not None else "—"
-                avg_color = "#22c55e" if (avg_clv or 0) > 0 else "#ef4444"
-                pct_color = "#22c55e" if (pct_pos or 0) > 50 else "#ef4444"
-                by_side   = clv_nhl.get("avg_clv_by_side", {})
-                over_clv  = by_side.get("OVER")
-                under_clv = by_side.get("UNDER")
-                over_s    = f"{over_clv:+.2f}" if over_clv is not None else "—"
-                under_s   = f"{under_clv:+.2f}" if under_clv is not None else "—"
-                st.html(f"""
-                <div class="season-banner" style="padding:10px 16px;margin-bottom:6px">
-                  <div class="stat-grid">
-                    <div class="stat-block">
-                      <div class="num" style="color:{avg_color}">{avg_clv_s}</div>
-                      <div class="lbl">Avg CLV (pts)</div>
-                    </div>
-                    <div class="stat-block">
-                      <div class="num" style="color:{pct_color}">{pct_pos_s}</div>
-                      <div class="lbl">% Positive CLV</div>
-                    </div>
-                    <div class="stat-block">
-                      <div class="num">{over_s}</div>
-                      <div class="lbl">OVER CLV</div>
-                    </div>
-                    <div class="stat-block">
-                      <div class="num">{under_s}</div>
-                      <div class="lbl">UNDER CLV</div>
-                    </div>
-                  </div>
-                </div>
-                <div style="font-size:0.73em;color:#4a5568;margin-top:4px;line-height:1.5">
-                  CLV measures whether decision lines beat closing lines.
-                  Positive = sharp. Target: &gt;0 on average.
-                  NHL skews UNDER — per-side split matters.
-                </div>
-                """)
-
-    with review_tab:
-        _render_review_tab("nhl", {"daily_review": nhl.get("daily_review"), "weekly_review": nhl.get("weekly_review")})
+    # ── AI Review ─────────────────────────────────────────────────────────────
+    _render_review_tab("nhl", {"daily_review": nhl.get("daily_review"), "weekly_review": nhl.get("weekly_review")})
 
 
 # ── Soccer tab rendering ───────────────────────────────────────────────────────
