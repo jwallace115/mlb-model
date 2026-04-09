@@ -1862,8 +1862,8 @@ def _render_nhl_tab() -> None:
     n_active  = len(plays)
     n_shadow  = len(shadows)
     _render_signal_status_row(
-        active_labels=["NHL Model", "High Edge (\u22650.15)"] if plays else [],
-        shadow_labels=["Medium tier (suspended)", "Low tier (suspended)"] if shadows else []
+        active_labels=["Totals OVER/UNDER", "High edge (\u22650.15)"] if plays else [],
+        shadow_labels=["Medium edge (0.12\u20130.15)", "Low edge (<0.12)"] if shadows else []
     )
 
     # ── (c) Season performance summary ────────────────────────────────────────
@@ -2952,8 +2952,8 @@ def _render_nba_tab() -> None:
 
     # ── signal status row (pill style) ──
     _render_signal_status_row(
-        active_labels=["Venue signal", "OREB signal", "Ref signal"] if active else [],
-        shadow_labels=["Archetype candidates"] if shadow else []
+        active_labels=["CORE venue", "Venue + OREB", "Venue standalone", "REF UNDER"] if active else [],
+        shadow_labels=["Archetype UNDER", "Shot profile", "Pace UNDER"] if shadow else []
     )
 
     # ── season performance ──
@@ -3425,167 +3425,6 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         f'Shadow (BASE_HIGH, S12_HIGH): '
                         f'{_shw}-{_shl} | {_shroi:+.1f}% ROI | {_shnet:+.2f}u'
                         f'</div>')
-
-            # Recent results tables removed — see Tracker tab for full history
-            if False:  # dead block — kept for reference, will be cleaned up
-                _sim_sigs = pd.read_parquet(_sim_signals_path)
-                _resolved = _sim_sigs[_sim_sigs["resolved"].isin([1, 2])].sort_values("date", ascending=False).head(20)
-                _pending = _sim_sigs[_sim_sigs["resolved"] == 0].sort_values("date", ascending=False).head(5)
-                _show = pd.concat([_pending, _resolved]).head(20)
-                if len(_show) > 0:
-                    with st.expander("📋 Recent Sim Signals", expanded=False):
-                        _rows_html = ""
-                        for _, _r in _show.iterrows():
-                            _res = _r.get("result", "Pending") or "Pending"
-                            _net = f"{float(_r['net_units']):+.2f}u" if pd.notna(_r.get("net_units")) else "—"
-                            _clr = "#4ade80" if _res == "WIN" else "#f87171" if _res == "LOSS" else "#6b7280" if _res == "PUSH" else "#4b5563"
-                            _pu = f"{float(_r['raw_p_under'])*100:.0f}%" if pd.notna(_r.get("raw_p_under")) else "—"
-                            _ln = f"{float(_r['line_at_signal_time']):.1f}" if pd.notna(_r.get("line_at_signal_time")) else "—"
-                            _act = f"{float(_r['actual_total']):.0f}" if pd.notna(_r.get("actual_total")) else "—"
-                            # Check for HR override
-                            _gid = str(_r.get("game_id", ""))
-                            _hr = _load_hr_overrides(str(_r.get("date", ""))).get((_gid, "full_game"))
-                            if _hr is not None:
-                                _ln = f'<span style="color:#a78bfa">HR {_hr:.1f}</span> <span style="color:#4b5563">(API {_ln})</span>'
-                            _rows_html += (f'<tr style="color:{_clr}">'
-                                           f'<td>{_r.get("date","")}</td>'
-                                           f'<td>{_r.get("away_team","")}@{_r.get("home_team","")}</td>'
-                                           f'<td>{_ln}</td><td>{_pu}</td><td>{_r.get("stake_units","")}u</td>'
-                                           f'<td>{_act}</td><td>{_res}</td><td>{_net}</td></tr>')
-                        st.html(f'<table style="font-size:0.75em;width:100%;border-collapse:collapse">'
-                                f'<tr style="color:#94a3b8"><th>Date</th><th>Matchup</th><th>Line</th>'
-                                f'<th>p_under</th><th>Stake</th><th>Actual</th><th>Result</th><th>Net</th></tr>'
-                                f'{_rows_html}</table>')
-        except Exception:
-            pass
-
-        # ── F5 Signal Engine — Under + Over on first-5-innings totals ────────
-        try:
-            _f5_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
-            _f5_status_path = os.path.join(_f5_base, "pipeline", "f5_engine_status.json")
-            _f5_signals_path = os.path.join(_f5_base, "logs", "f5_signals_2026.parquet")
-            _f5_perf_path = os.path.join(_f5_base, "logs", "f5_rolling_performance_2026.json")
-
-            # F5 engine status
-            if os.path.exists(_f5_status_path):
-                import json as _json_f5s
-                with open(_f5_status_path) as _f5sf:
-                    _f5_status = _json_f5s.load(_f5sf)
-                if _f5_status.get("status") == "PAUSED":
-                    st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
-                            'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
-                            '\u26a0\ufe0f F5 Engine paused \u2014 manual review required.</div>')
-                else:
-                    pass  # Status shown in consolidated panel above
-
-            # F5 performance now shown in unified block above
-
-            # F5 recent results
-            if os.path.exists(_f5_signals_path):
-                _f5_all = pd.read_parquet(_f5_signals_path)
-                _f5_resolved = _f5_all[_f5_all["resolved"].isin([1, 2])].sort_values(
-                    "date", ascending=False).head(15)
-                _f5_pending = _f5_all[_f5_all["resolved"] == 0].sort_values(
-                    "date", ascending=False).head(5)
-                _f5_show = pd.concat([_f5_pending, _f5_resolved]).head(15)
-                if len(_f5_show) > 0:
-                    with st.expander("\U0001f4cb Recent F5 Signals", expanded=False):
-                        _f5_rows_html = ""
-                        for _, _fr in _f5_show.iterrows():
-                            _f5_res = _fr.get("result", "Pending") or "Pending"
-                            _f5_net = (f"{float(_fr['net_units']):+.2f}u"
-                                       if pd.notna(_fr.get("net_units")) else "\u2014")
-                            _f5_clr = ("#4ade80" if _f5_res == "WIN"
-                                       else "#f87171" if _f5_res == "LOSS"
-                                       else "#9ca3af" if _f5_res == "PUSH"
-                                       else "#d1d5db" if _f5_res == "POSTPONED"
-                                       else "#4b5563")
-                            _f5_ln_d = (f"{float(_fr['f5_line']):.1f}"
-                                        if pd.notna(_fr.get("f5_line")) else "\u2014")
-                            # Check for HR override
-                            _f5_gid = str(_fr.get("game_id", ""))
-                            _f5_hr = _load_hr_overrides(str(_fr.get("date", ""))).get((_f5_gid, "f5_total"))
-                            if _f5_hr is not None:
-                                _f5_ln_d = f'<span style="color:#a78bfa">HR {_f5_hr:.1f}</span> <span style="color:#4b5563">(API {_f5_ln_d})</span>'
-                            _f5_side_d = _fr.get("f5_signal_side", "")
-                            _f5_stake_d = _fr.get("stake_units", "")
-                            _f5_act_d = (f"{float(_fr['actual_f5_total']):.0f}"
-                                         if pd.notna(_fr.get("actual_f5_total")) else "\u2014")
-                            _f5_rows_html += (
-                                f'<tr style="color:{_f5_clr}">'
-                                f'<td>{_fr.get("date","")}</td>'
-                                f'<td>{_fr.get("away_team","")}@{_fr.get("home_team","")}</td>'
-                                f'<td>{_f5_ln_d}</td><td>{_f5_side_d}</td>'
-                                f'<td>{_f5_stake_d}u</td><td>{_f5_act_d}</td>'
-                                f'<td>{_f5_res}</td><td>{_f5_net}</td></tr>')
-                        st.html(
-                            f'<table style="font-size:0.75em;width:100%;border-collapse:collapse">'
-                            f'<tr style="color:#94a3b8"><th>Date</th><th>Matchup</th>'
-                            f'<th>F5 Line</th><th>Side</th><th>Stake</th>'
-                            f'<th>Actual</th><th>Result</th><th>Net</th></tr>'
-                            f'{_f5_rows_html}</table>')
-                else:
-                    st.html('<div style="font-size:0.78em;color:#6b7280">'
-                            'No resolved F5 signals yet.</div>')
-
-        except Exception:
-            pass
-
-        # ── F5 Run Line Signal Engine (Live) ─────────────────────────────────
-        try:
-            _rl_base = os.path.join(os.path.dirname(__file__), "mlb_sim")
-            _rl_status_path = os.path.join(_rl_base, "pipeline", "f5_runline_status.json")
-            _rl_signals_path = os.path.join(_rl_base, "logs", "f5_runline_2026.parquet")
-            _rl_perf_path = os.path.join(_rl_base, "logs", "f5_runline_performance_2026.json")
-
-            # Status
-            if os.path.exists(_rl_status_path):
-                import json as _json_rl
-                with open(_rl_status_path) as _rlf:
-                    _rl_status = _json_rl.load(_rlf)
-                if _rl_status.get("status") == "PAUSED":
-                    st.html('<div style="background:#2d1515;border:2px solid #dc2626;border-radius:6px;'
-                            'padding:8px 12px;margin-bottom:8px;font-size:0.85em;color:#f87171;font-weight:600">'
-                            '\u26a0\ufe0f F5 Run Line paused \u2014 manual review required.</div>')
-                else:
-                    pass  # Status shown in consolidated panel above
-
-            # F5 RL performance now shown in unified block above
-
-            # Recent results
-            if os.path.exists(_rl_signals_path):
-                _rl_all = pd.read_parquet(_rl_signals_path)
-                _rl_resolved = _rl_all[_rl_all["resolved"].isin([1, 2])].sort_values(
-                    "date", ascending=False).head(10)
-                _rl_pending = _rl_all[_rl_all["resolved"] == 0].sort_values(
-                    "date", ascending=False).head(5)
-                _rl_show = pd.concat([_rl_pending, _rl_resolved]).head(10)
-                if len(_rl_show) > 0:
-                    with st.expander("\U0001f4cb Recent F5 Run Line Signals", expanded=False):
-                        _rl_rows = ""
-                        for _, _rr in _rl_show.iterrows():
-                            _rl_res = _rr.get("result", "Pending") or "Pending"
-                            _rl_net = (f"{float(_rr['net_units']):+.2f}u"
-                                       if pd.notna(_rr.get("net_units")) else "\u2014")
-                            _rl_c = ("#4ade80" if _rl_res == "WIN"
-                                     else "#f87171" if _rl_res == "LOSS"
-                                     else "#9ca3af" if _rl_res == "PUSH"
-                                     else "#4b5563")
-                            _rl_gap_d = f"{float(_rr.get('xfip_gap', 0)):.1f}" if pd.notna(_rr.get("xfip_gap")) else ""
-                            _rl_pr_d = f"{int(_rr.get('bet_price', 0))}" if pd.notna(_rr.get("bet_price")) else ""
-                            _rl_mg = f"{int(_rr.get('f5_margin', 0))}" if pd.notna(_rr.get("f5_margin")) else "\u2014"
-                            _rl_rows += (
-                                f'<tr style="color:{_rl_c}">'
-                                f'<td>{_rr.get("date","")}</td>'
-                                f'<td>{_rr.get("away_team","")}@{_rr.get("home_team","")}</td>'
-                                f'<td>{_rl_gap_d}</td><td>HOME {_rl_pr_d}</td>'
-                                f'<td>{_rl_mg}</td><td>{_rl_res}</td><td>{_rl_net}</td></tr>')
-                        st.html(
-                            f'<table style="font-size:0.75em;width:100%;border-collapse:collapse">'
-                            f'<tr style="color:#94a3b8"><th>Date</th><th>Matchup</th>'
-                            f'<th>Gap</th><th>Bet</th><th>Margin</th>'
-                            f'<th>Result</th><th>Net</th></tr>'
-                            f'{_rl_rows}</table>')
 
         except Exception:
             pass
