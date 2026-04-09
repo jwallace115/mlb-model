@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-09T11:33:48.234159Z",
+  "generated_at": "2026-04-09T13:03:38.119158Z",
   "game_date": "2026-04-09",
   "plays": [],
   "no_plays": [
@@ -10,7 +10,7 @@
         "game_date": "2026-04-09",
         "game_time": "12:10 PM EDT",
         "game_time_et": "12:10 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "MIA",
         "away_team": "CIN",
         "home_team_id": 146,
@@ -18,14 +18,14 @@
         "home_probable_pitcher": "{'id': 676974, 'name': 'Max Meyer', 'throws': ''}",
         "away_probable_pitcher": "{'id': 695076, 'name': 'Rhett Lowder', 'throws': ''}",
         "venue_name": "loanDepot park",
-        "home_umpire": null
+        "home_umpire": "Sean Barber"
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.34,
-        "proj_total_f5": 4.64,
+        "proj_total_full": 8.32,
+        "proj_total_f5": 4.63,
         "confidence": "LOW",
-        "confidence_score": 0.425,
+        "confidence_score": 0.43,
         "factors": {
           "sp_home_xfip": 4.461,
           "sp_away_xfip": 4.046,
@@ -36,18 +36,18 @@
           "home_wrc_plus": 97.6,
           "away_wrc_plus": 95.5,
           "park_factor": 0.98,
-          "wind_speed_mph": 13.5,
-          "wind_direction": 43,
+          "wind_speed_mph": 14.9,
+          "wind_direction": 44,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 72.6,
-          "weather_desc": "Mainly Clear",
-          "wind_factor": 0.9797,
-          "temp_factor": 1.0012,
-          "home_wind_adj": 0.9797,
-          "away_wind_adj": 0.9797,
+          "temperature_f": 72.2,
+          "weather_desc": "Overcast",
+          "wind_factor": 0.9781,
+          "temp_factor": 1.0004,
+          "home_wind_adj": 0.9781,
+          "away_wind_adj": 0.9781,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
+          "umpire_name": "Sean Barber",
           "umpire_runs_factor": 1.0,
           "home_bp_fatigue": 0.061,
           "away_bp_fatigue": 0.154,
@@ -60,7 +60,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.34,
+        "edge": 0.32,
         "lean": "OVER",
         "consensus": 8.0,
         "value": false
@@ -92,10 +92,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.54,
+        "proj_total_full": 8.52,
         "proj_total_f5": 4.73,
         "confidence": "LOW",
-        "confidence_score": 0.111,
+        "confidence_score": 0.115,
         "factors": {
           "sp_home_xfip": 4.209,
           "sp_away_xfip": 4.16,
@@ -106,15 +106,15 @@
           "home_wrc_plus": 105.7,
           "away_wrc_plus": 90.8,
           "park_factor": 1.03,
-          "wind_speed_mph": 11.0,
-          "wind_direction": 151,
+          "wind_speed_mph": 10.6,
+          "wind_direction": 148,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 42.7,
-          "weather_desc": "Clear",
-          "wind_factor": 1.0099,
-          "temp_factor": 0.9414,
-          "home_wind_adj": 1.0099,
-          "away_wind_adj": 1.0099,
+          "temperature_f": 42.6,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0082,
+          "temp_factor": 0.9412,
+          "home_wind_adj": 1.0082,
+          "away_wind_adj": 1.0082,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -130,7 +130,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.54,
+        "edge": 0.52,
         "lean": "OVER",
         "consensus": 8.0,
         "value": true
@@ -162,10 +162,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.41,
-        "proj_total_f5": 4.81,
+        "proj_total_full": 8.45,
+        "proj_total_f5": 4.83,
         "confidence": "LOW",
-        "confidence_score": 0.142,
+        "confidence_score": 0.133,
         "factors": {
           "sp_home_xfip": 4.579,
           "sp_away_xfip": 4.437,
@@ -176,15 +176,15 @@
           "home_wrc_plus": 94.8,
           "away_wrc_plus": 103.9,
           "park_factor": 0.99,
-          "wind_speed_mph": 8.4,
-          "wind_direction": 326,
+          "wind_speed_mph": 8.9,
+          "wind_direction": 321,
           "wind_desc": "Blowing In from CF",
-          "temperature_f": 42.2,
-          "weather_desc": "Light Drizzle",
-          "wind_factor": 0.9801,
-          "temp_factor": 0.9404,
-          "home_wind_adj": 0.9801,
-          "away_wind_adj": 0.9801,
+          "temperature_f": 44.4,
+          "weather_desc": "Overcast",
+          "wind_factor": 0.9797,
+          "temp_factor": 0.9448,
+          "home_wind_adj": 0.9797,
+          "away_wind_adj": 0.9797,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -200,7 +200,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.41,
+        "edge": 0.45,
         "lean": "OVER",
         "consensus": 8.0,
         "value": false
@@ -211,7 +211,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Light Drizzle in the forecast makes run totals unreliable here \u2014 weather games carry too much variance to project confidently. Skip this one."
+      "summary": "Model has 8.4 runs, market has 8.0 \u2014 only 0.4 runs of separation, below the 0.5-run threshold. The under lean is there but the margin isn't wide enough to play."
     },
     {
       "rating": "NO PLAY",
@@ -232,10 +232,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 7.84,
-        "proj_total_f5": 4.29,
+        "proj_total_full": 7.82,
+        "proj_total_f5": 4.28,
         "confidence": "LOW",
-        "confidence_score": 0.412,
+        "confidence_score": 0.416,
         "factors": {
           "sp_home_xfip": 4.004,
           "sp_away_xfip": 4.12,
@@ -246,15 +246,15 @@
           "home_wrc_plus": 102.8,
           "away_wrc_plus": 96.0,
           "park_factor": 0.94,
-          "wind_speed_mph": 10.9,
-          "wind_direction": 152,
+          "wind_speed_mph": 10.0,
+          "wind_direction": 151,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 42.3,
-          "weather_desc": "Mainly Clear",
-          "wind_factor": 1.0199,
-          "temp_factor": 0.9406,
-          "home_wind_adj": 1.0199,
-          "away_wind_adj": 1.0199,
+          "temperature_f": 42.1,
+          "weather_desc": "Partly Cloudy",
+          "wind_factor": 1.018,
+          "temp_factor": 0.9402,
+          "home_wind_adj": 1.018,
+          "away_wind_adj": 1.018,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -270,7 +270,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.84,
+        "edge": 0.82,
         "lean": "OVER",
         "consensus": 7.0,
         "value": true
@@ -302,10 +302,10 @@
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 9.03,
-        "proj_total_f5": 5.14,
+        "proj_total_full": 8.94,
+        "proj_total_f5": 5.09,
         "confidence": "LOW",
-        "confidence_score": 0.248,
+        "confidence_score": 0.253,
         "factors": {
           "sp_home_xfip": 4.476,
           "sp_away_xfip": 4.574,
@@ -316,15 +316,15 @@
           "home_wrc_plus": 101.3,
           "away_wrc_plus": 83.8,
           "park_factor": 1.0,
-          "wind_speed_mph": 13.5,
-          "wind_direction": 187,
+          "wind_speed_mph": 9.9,
+          "wind_direction": 198,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 75.8,
+          "temperature_f": 75.6,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0337,
-          "temp_factor": 1.0076,
-          "home_wind_adj": 1.0337,
-          "away_wind_adj": 1.0337,
+          "wind_factor": 1.0241,
+          "temp_factor": 1.0072,
+          "home_wind_adj": 1.0241,
+          "away_wind_adj": 1.0241,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -340,10 +340,10 @@
         }
       },
       "full_edge": {
-        "edge": -0.47,
+        "edge": -0.56,
         "lean": "UNDER",
         "consensus": 9.5,
-        "value": false
+        "value": true
       },
       "f5_edge": {
         "edge": null,
@@ -351,7 +351,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Sp_avg pushes toward the over while some under factors counters in the other direction \u2014 the model nets out at 9.0 runs with no clear dominant force. Pass."
+      "summary": "Sp_avg pushes toward the over while some under factors counters in the other direction \u2014 the model nets out at 8.9 runs with no clear dominant force. Pass."
     },
     {
       "rating": "NO PLAY",
@@ -372,10 +372,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.16,
-        "proj_total_f5": 4.59,
+        "proj_total_full": 8.15,
+        "proj_total_f5": 4.58,
         "confidence": "LOW",
-        "confidence_score": 0.281,
+        "confidence_score": 0.285,
         "factors": {
           "sp_home_xfip": 4.408,
           "sp_away_xfip": 4.25,
@@ -386,15 +386,15 @@
           "home_wrc_plus": 101.9,
           "away_wrc_plus": 92.7,
           "park_factor": 0.95,
-          "wind_speed_mph": 4.3,
-          "wind_direction": 295,
+          "wind_speed_mph": 5.1,
+          "wind_direction": 285,
           "wind_desc": "Blowing In from CF",
-          "temperature_f": 65.2,
+          "temperature_f": 65.0,
           "weather_desc": "Overcast",
-          "wind_factor": 0.9896,
-          "temp_factor": 0.9864,
-          "home_wind_adj": 0.9896,
-          "away_wind_adj": 0.9896,
+          "wind_factor": 0.9884,
+          "temp_factor": 0.986,
+          "home_wind_adj": 0.9884,
+          "away_wind_adj": 0.9884,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -410,7 +410,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.16,
+        "edge": 0.15,
         "lean": "OVER",
         "consensus": 8.0,
         "value": false
@@ -482,7 +482,7 @@
     }
   },
   "daily_review": {
-    "generated_at": "2026-04-09T11:33:48.311621+00:00",
+    "generated_at": "2026-04-09T13:03:38.186961+00:00",
     "date_reviewed": "2026-04-08",
     "record_summary": {
       "MEDIUM": {
