@@ -48,15 +48,26 @@ def _load_team_name_map():
 
 
 def _fetch_game_pk_map(game_date):
-    """Fetch game_pk → (home_abbr, away_abbr) from MLB Stats API for a date."""
+    """Fetch (home_abbr, away_abbr) → game_pk from MLB Stats API for a date."""
+    # Team ID → abbreviation (from config.py)
+    ID_TO_ABB = {
+        108: "LAA", 109: "ARI", 110: "BAL", 111: "BOS", 112: "CHC",
+        113: "CIN", 114: "CLE", 115: "COL", 116: "DET", 117: "HOU",
+        118: "KCR", 119: "LAD", 120: "WSN", 121: "NYM", 133: "OAK",
+        134: "PIT", 135: "SDP", 136: "SEA", 137: "SFG", 138: "STL",
+        139: "TBR", 140: "TEX", 141: "TOR", 142: "MIN", 143: "PHI",
+        144: "ATL", 145: "CHW", 146: "MIA", 147: "NYY", 158: "MIL",
+    }
     try:
         r = requests.get(f"{MLB_API}/schedule", params={"sportId": 1, "date": game_date}, timeout=10)
         pk_map = {}  # (home_abbr, away_abbr) → game_pk
         for d in r.json().get("dates", []):
             for g in d.get("games", []):
-                home = g.get("teams", {}).get("home", {}).get("team", {}).get("abbreviation", "")
-                away = g.get("teams", {}).get("away", {}).get("team", {}).get("abbreviation", "")
+                home_id = g.get("teams", {}).get("home", {}).get("team", {}).get("id")
+                away_id = g.get("teams", {}).get("away", {}).get("team", {}).get("id")
                 pk = g.get("gamePk")
+                home = ID_TO_ABB.get(home_id, "")
+                away = ID_TO_ABB.get(away_id, "")
                 if home and away and pk:
                     pk_map[(home, away)] = pk
         return pk_map
