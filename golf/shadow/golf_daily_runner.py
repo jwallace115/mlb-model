@@ -1463,35 +1463,58 @@ _CL03_CUT_POSITION_MAP = {
 
 
 def _fetch_r1_scores_live(event_id, season):
-    """Fetch current-event R1 scores via /historical-raw-data/rounds.
+    """Fetch current-event R1 scores for CL03 post-R1 capture.
 
-    This is a dedicated fetch for CL03 post-R1 capture only.
-    Does NOT check event_completed — that gate stays in golf_grader.py.
+    Primary: /preds/in-play (available during live tournaments).
+    Fallback: /historical-raw-data/rounds (available after event completes).
     """
-    d = dg_get("/historical-raw-data/rounds", {"tour": "pga", "event_id": int(event_id), "year": int(season)})
-    if not d or not isinstance(d, dict):
-        return None, None
-    scores = d.get("scores", [])
-    if not scores:
-        return None, None
+    # Primary: in-play endpoint — has live R1 scores during the tournament
+    d = dg_get("/preds/in-play", {"tour": "pga", "dead_heat": "no", "odds_format": "american"})
+    if d and isinstance(d, dict):
+        info = d.get("info", {})
+        data = d.get("data", [])
+        if data and info.get("current_round", 0) >= 1:
+            rows = []
+            for p in data:
+                r1 = p.get("R1")
+                if r1 is None:
+                    continue
+                rows.append({
+                    "dg_id": p.get("dg_id"),
+                    "player_name": p.get("player_name", ""),
+                    "r1_score": int(r1),
+                    "course_par": 72,  # in-play doesn't return course_par per player
+                    "sg_total": None,
+                })
+            if rows:
+                ev_name = info.get("event_name", "Unknown")
+                print("CL03: R1 scores from in-play endpoint (%d players)" % len(rows), flush=True)
+                return rows, ev_name
 
-    rows = []
-    for player in scores:
-        dgid = player.get("dg_id")
-        pname = player.get("player_name", "")
-        r1 = player.get("round_1")
-        if not r1 or not isinstance(r1, dict):
-            continue
-        r1_score = r1.get("score")
-        course_par = r1.get("course_par")
-        if r1_score is None:
-            continue
-        rows.append({
-            "dg_id": dgid, "player_name": pname,
-            "r1_score": int(r1_score), "course_par": int(course_par) if course_par else 72,
-            "sg_total": r1.get("sg_total"),
-        })
-    return rows, d.get("event_name", "Unknown")
+    # Fallback: historical-raw-data (works for completed events)
+    d2 = dg_get("/historical-raw-data/rounds", {"tour": "pga", "event_id": int(event_id), "year": int(season)})
+    if d2 and isinstance(d2, dict):
+        scores = d2.get("scores", [])
+        rows = []
+        for player in scores:
+            r1 = player.get("round_1")
+            if not r1 or not isinstance(r1, dict):
+                continue
+            r1_score = r1.get("score")
+            if r1_score is None:
+                continue
+            rows.append({
+                "dg_id": player.get("dg_id"),
+                "player_name": player.get("player_name", ""),
+                "r1_score": int(r1_score),
+                "course_par": int(r1.get("course_par") or 72),
+                "sg_total": r1.get("sg_total"),
+            })
+        if rows:
+            print("CL03: R1 scores from historical endpoint (%d players)" % len(rows), flush=True)
+            return rows, d2.get("event_name", "Unknown")
+
+    return None, None
 
 
 def _fetch_r1_scores_test(event_id, season):
