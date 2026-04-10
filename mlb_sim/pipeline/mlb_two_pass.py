@@ -217,6 +217,13 @@ def run_prelim(game_date: str) -> None:
     except Exception as e:
         logger.warning(f"Combined short exit grading failed (non-fatal): {e}")
 
+    # Step 1h: Grade team total shadow entries
+    try:
+        from mlb.pipeline.team_total_signal import grade_signals as grade_tt_shadow
+        grade_tt_shadow()
+    except Exception as e:
+        logger.warning(f"TT shadow grading failed (non-fatal): {e}")
+
     # Step 2: Invalidate any stale/poisoned caches from prior runs
     invalidate_stale_cache(game_date)
 

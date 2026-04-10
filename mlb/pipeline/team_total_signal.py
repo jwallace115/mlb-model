@@ -278,34 +278,23 @@ def grade_signals():
         return
 
     gt = pd.read_parquet(GT_PATH)
-    # Build lookup: try matching by team names + date
-    actuals = {}
+    # Build lookup by game_pk (primary) and date+team (fallback)
+    actuals_by_pk = {}
     for _, row in gt.iterrows():
-        key = (str(row["date"])[:10] if "date" in gt.columns else "",
-               row.get("home_team", ""), row.get("away_team", ""))
-        actuals[key] = {
-            "home_score": row.get("home_score"),
-            "away_score": row.get("away_score"),
-        }
+        pk = int(row["game_pk"]) if pd.notna(row.get("game_pk")) else None
+        if pk and pd.notna(row.get("home_score")):
+            actuals_by_pk[pk] = {
+                "home_score": row["home_score"],
+                "away_score": row["away_score"],
+            }
 
     graded = 0
     for entry in data:
         if entry.get("resolved"):
             continue
 
-        # Try to find actual scores
-        d = entry.get("date", "")
-        # Odds API uses full team names, game_table uses abbreviations
-        # This matching is imperfect — will need team name normalization
-        actual = None
-        for (gd, ht, at), scores in actuals.items():
-            if gd == d and scores.get("home_score") is not None:
-                # Check if team names overlap
-                if (ht in entry.get("home_team", "") or
-                    entry.get("home_team", "") in ht):
-                    actual = scores
-                    break
-
+        gpk = entry.get("game_pk")
+        actual = actuals_by_pk.get(int(gpk)) if gpk else None
         if actual is None:
             continue
 
