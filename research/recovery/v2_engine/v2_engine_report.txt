@@ -1,0 +1,192 @@
+# V2 Engine - Model Results
+
+
+## Model_A (target=actual_total)
+Features: ['sp_fip_diff', 'sp_fip_sum', 'offense_diff', 'offense_sum', 'bp_fip_diff', 'bp_fip_sum', 'bp_avail_diff', 'park_factor_runs', 'temperature', 'wind_factor_effective', 'umpire_over_rate', 'rest_diff', 'doubleheader_flag', 'flyball_wind_interaction']
+Intercept: 8.9114
+Coefficients:
+  park_factor_runs               +0.5082
+  temperature                    +0.3406
+  sp_fip_diff                    -0.2454
+  sp_fip_sum                     +0.2189
+  offense_sum                    +0.1378
+  flyball_wind_interaction       +0.1132
+  bp_avail_diff                  +0.1062
+  wind_factor_effective          +0.0669
+  umpire_over_rate               -0.0633
+  bp_fip_sum                     -0.0523
+  bp_fip_diff                    -0.0335
+  doubleheader_flag              -0.0334
+  rest_diff                      -0.0192
+  offense_diff                   -0.0139
+  Train: RMSE=4.4282, MAE=3.4977
+  Val: RMSE=4.2648, MAE=3.3909
+  OOS: RMSE=4.5665, MAE=3.6145
+
+## Model_B (target=market_error)
+Features: ['sp_fip_diff', 'sp_fip_sum', 'offense_diff', 'offense_sum', 'bp_fip_diff', 'bp_fip_sum', 'bp_avail_diff', 'park_factor_runs', 'temperature', 'wind_factor_effective', 'umpire_over_rate', 'rest_diff', 'doubleheader_flag', 'flyball_wind_interaction']
+Intercept: 0.4290
+Coefficients:
+  sp_fip_sum                     -0.2365
+  bp_fip_sum                     -0.1906
+  sp_fip_diff                    -0.1408
+  temperature                    +0.1177
+  bp_avail_diff                  +0.0862
+  wind_factor_effective          +0.0778
+  offense_sum                    -0.0728
+  umpire_over_rate               -0.0440
+  bp_fip_diff                    +0.0318
+  park_factor_runs               +0.0296
+  doubleheader_flag              -0.0284
+  rest_diff                      -0.0221
+  flyball_wind_interaction       -0.0159
+  offense_diff                   -0.0072
+  Train: RMSE=4.3897, MAE=3.4731
+  Val: RMSE=4.2298, MAE=3.3481
+  OOS: RMSE=4.5058, MAE=3.5695
+
+## Model_C (target=actual_total)
+Features: ['sp_fip_diff', 'sp_fip_sum', 'offense_diff', 'offense_sum', 'bp_fip_diff', 'bp_fip_sum', 'bp_avail_diff', 'park_factor_runs', 'temperature', 'wind_factor_effective', 'umpire_over_rate', 'rest_diff', 'doubleheader_flag', 'flyball_wind_interaction', 'market_total']
+Intercept: 8.9114
+Coefficients:
+  market_total                   +0.8227
+  temperature                    +0.1641
+  sp_fip_diff                    -0.1625
+  bp_fip_sum                     -0.1618
+  sp_fip_sum                     -0.1417
+  park_factor_runs               +0.1292
+  bp_avail_diff                  +0.0903
+  wind_factor_effective          +0.0755
+  umpire_over_rate               -0.0480
+  doubleheader_flag              -0.0295
+  offense_sum                    -0.0289
+  rest_diff                      -0.0215
+  bp_fip_diff                    +0.0182
+  flyball_wind_interaction       +0.0110
+  offense_diff                   -0.0086
+  Train: RMSE=4.3874, MAE=3.4704
+  Val: RMSE=4.2292, MAE=3.3505
+  OOS: RMSE=4.5085, MAE=3.5713
+
+
+# Phase 3: Market Comparison
+
+
+## Model_A
+  Model RMSE: 4.5665 vs Market: 4.5163 (delta: +0.0501)
+  Thresh    Dir     N     W     L   Hit%  ROI@-110  ROI@real
+    0.00  under   699   355   314  53.1%     +1.3%     +0.5%
+    0.00   over  1698   784   838  48.3%     -7.7%     -7.8%
+    0.25  under   469   232   212  52.3%     -0.2%     -1.2%
+    0.25   over  1369   627   688  47.7%     -9.0%     -9.3%
+    0.50  under   277   130   133  49.4%     -5.6%     -6.4%
+    0.50   over  1035   478   515  48.1%     -8.1%     -8.5%
+    0.75  under   180    91    81  52.9%     +1.0%     +0.3%
+    0.75   over   726   314   377  45.4%    -13.2%    -13.7%
+    1.00  under   110    52    54  49.1%     -6.3%     -6.7%
+    1.00   over   466   215   225  48.9%     -6.7%     -7.1%
+    1.50  under    59    30    27  52.6%     +0.5%     +0.3%
+    1.50   over   148    61    74  45.2%    -13.7%    -14.1%
+
+## Model_B
+  Model RMSE: 4.5058 vs Market: 4.5163 (delta: -0.0105)
+  Thresh    Dir     N     W     L   Hit%  ROI@-110  ROI@real
+    0.00  under   162    83    74  52.9%     +0.9%     +1.0%
+    0.00   over  2235  1024  1110  48.0%     -8.4%     -8.3%
+    0.25  under    27    12    14  46.2%    -11.9%    -11.8%
+    0.25   over  1738   790   865  47.7%     -8.9%     -8.8%
+    0.50   over   915   408   461  47.0%    -10.4%    -10.2%
+    0.75   over   298   142   141  50.2%     -4.2%     -4.1%
+    1.00   over    58    25    32  43.9%    -16.3%    -15.8%
+
+## Model_C
+  Model RMSE: 4.5085 vs Market: 4.5163 (delta: -0.0078)
+  Thresh    Dir     N     W     L   Hit%  ROI@-110  ROI@real
+    0.00  under   248   119   121  49.6%     -5.3%     -5.6%
+    0.00   over  2149   977  1074  47.6%     -9.1%     -9.0%
+    0.25  under    64    29    32  47.5%     -9.2%     -9.2%
+    0.25   over  1662   771   817  48.6%     -7.3%     -7.3%
+    0.50  under    14     6     8  42.9%    -18.2%    -18.0%
+    0.50   over   920   424   454  48.3%     -7.8%     -7.9%
+    0.75   over   361   161   182  46.9%    -10.4%    -10.7%
+    1.00   over    90    38    45  45.8%    -12.6%    -13.2%
+
+
+# Phase 4: Signal Map
+
+
+## Model_B - Context Splits (OOS 2025)
+  Context                                      N  MdlRMSE  MktRMSE   Delta  U_Hit  O_Hit   U_ROI   O_ROI
+  SP mismatch large (|FIP diff|>1.0)         350    4.421    4.407  +0.015   0.0%  48.4%   +0.0%   -7.5%
+  SP mismatch small (|FIP diff|<0.3)         788    4.542    4.557  -0.015   0.0%  43.2%   +0.0%  -17.5%
+  Total band low (<7.5)                      144    3.899    3.899  +0.000   0.0%  45.1%   +0.0%  -15.2%
+  Total band mid (7.5-9.5)                  2073    4.497    4.508  -0.011   0.0%  46.7%   +0.0%  -10.5%
+  Total band high (>9.5)                     180    5.031    5.044  -0.012   0.0%  50.0%   +0.0%   -4.3%
+  BP mismatch (|bp_fip_diff|>0.5)           1209    4.481    4.464  +0.017   0.0%  43.1%   +0.0%  -17.5%
+  Cold weather (temp<50)                      71    3.631    3.626  +0.005   0.0%   0.0%   +0.0%   +0.0%
+  Hot weather (temp>85)                      214    4.561    4.584  -0.024   0.0%  46.8%   +0.0%  -10.4%
+  High wind (wind_eff>0.3)                   933    4.640    4.656  -0.017   0.0%  46.7%   +0.0%  -10.9%
+  Ump high over (top Q)                      597    4.703    4.761  -0.058   0.0%  54.8%   +0.0%   +4.6%
+  Ump low over (bottom Q)                    598    4.261    4.191  +0.070   0.0%  40.4%   +0.0%  -22.5%
+
+## Model_C - Context Splits (OOS 2025)
+  Context                                      N  MdlRMSE  MktRMSE   Delta  U_Hit  O_Hit   U_ROI   O_ROI
+  SP mismatch large (|FIP diff|>1.0)         350    4.437    4.407  +0.030   0.0%  48.7%   +0.0%   -7.1%
+  SP mismatch small (|FIP diff|<0.3)         788    4.544    4.557  -0.012  66.7%  45.9%  +27.4%  -12.7%
+  Total band low (<7.5)                      144    3.905    3.899  +0.006   0.0%  46.0%   +0.0%  -13.7%
+  Total band mid (7.5-9.5)                  2073    4.498    4.508  -0.010   0.0%  48.5%   +0.0%   -7.4%
+  Total band high (>9.5)                     180    5.046    5.044  +0.003  55.6%  48.0%   +5.9%   -8.3%
+  BP mismatch (|bp_fip_diff|>0.5)           1209    4.482    4.464  +0.019  44.4%  47.3%  -16.1%   -9.7%
+  Cold weather (temp<50)                      71    3.605    3.626  -0.022   0.0%  40.0%   +0.0%  -24.3%
+  Hot weather (temp>85)                      214    4.566    4.584  -0.019   0.0%  47.2%   +0.0%   -9.5%
+  High wind (wind_eff>0.3)                   933    4.648    4.656  -0.008   0.0%  46.6%   +0.0%  -11.2%
+  Ump high over (top Q)                      597    4.716    4.761  -0.046  42.9%  54.6%  -17.0%   +4.0%
+  Ump low over (bottom Q)                    598    4.262    4.191  +0.071   0.0%  44.0%   +0.0%  -16.1%
+
+
+# Phase 5: Threshold Derivation
+
+
+## Model_C - Threshold scan
+  Thresh    Dir |  N_v  Hit_v   ROI_v |  N_o  Hit_o   ROI_o | Stable
+    0.25  under |   28  55.6%   +4.8% |   64  47.5%   -9.2% |     no
+    0.25   over | 1787  50.7%   -3.1% | 1662  48.6%   -7.3% |     no
+    0.50  under |    6  33.3%  -36.7% |   14  42.9%  -18.0% |     no
+    0.50   over | 1095  51.0%   -2.8% |  920  48.3%   -7.9% |     no
+    0.75   over |  463  49.3%   -6.2% |  361  46.9%  -10.7% |     no
+    1.00   over |  113  50.9%   -3.7% |   90  45.8%  -13.2% |     no
+    1.25   over |   17  60.0%  +13.5% |   20  44.4%  -14.8% |     no
+
+## Model_B - Threshold scan
+  Thresh    Dir |  N_v  Hit_v   ROI_v |  N_o  Hit_o   ROI_o | Stable
+    0.25  under |   22  40.9%  -21.4% |   27  46.2%  -11.8% |     no
+    0.25   over | 1789  50.3%   -3.9% | 1738  47.7%   -8.8% |     no
+    0.50   over | 1001  51.5%   -1.7% |  915  47.0%  -10.2% |     no
+    0.75   over |  347  47.5%   -9.3% |  298  50.2%   -4.1% |     no
+    1.00   over |   66  45.8%  -13.5% |   58  43.9%  -15.8% |     no
+
+
+# Phase 6: Verdict
+
+Market RMSE (OOS 2025):  4.5163
+Model A RMSE (OOS 2025): 4.5665
+Model B RMSE (OOS 2025): 4.5058
+Model C RMSE (OOS 2025): 4.5085
+Best signal: Model_C over edge>=0.5: N=920, Hit=48.3%, ROI=-7.9%
+
+>>> VERDICT: SHADOW-ONLY <<<
+
+
+# Phase 7: V1 vs V2 Comparison
+
+Metric                                  Market       V2_A       V2_B       V2_C
+--------------------------------------------------------------------------------
+RMSE (OOS 2025)                         4.5163     4.5665     4.5058     4.5085
+MAE (OOS 2025)                          3.5244     3.6145     3.5695     3.5713
+Corr(pred, actual) OOS                  0.2008     0.1235     0.1952     0.1913
+Delta-R2 vs market                          --    -0.0216    +0.0045    +0.0033
+
+Phase 9 baseline (from project memory):
+  25 features, Ridge(alpha=50), sigma=4.361
+  Phase 8 OOS STRONG tier: +2.3% ROI
+  Phase 7 OOS ROI @ edge>=1.0: -0.5%

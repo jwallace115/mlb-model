@@ -1,0 +1,35 @@
+# V2 Feature Inventory
+
+## PIT Baseball Features (16)
+  - home_sp_xfip [PIT-safe]
+  - away_sp_xfip [PIT-safe]
+  - home_sp_k_pct [PIT-safe]
+  - away_sp_k_pct [PIT-safe]
+  - home_sp_bb_pct [PIT-safe]
+  - away_sp_bb_pct [PIT-safe]
+  - home_sp_avg_ip [PIT-safe]
+  - away_sp_avg_ip [PIT-safe]
+  - home_wrc_plus [PIT-safe]
+  - away_wrc_plus [PIT-safe]
+  - home_high_leverage_avail [PIT-safe]
+  - away_high_leverage_avail [PIT-safe]
+  - home_bullpen_delta [PIT-safe]
+  - away_bullpen_delta [PIT-safe]
+  - home_bp_delta_exposure [PIT-safe]
+  - away_bp_delta_exposure [PIT-safe]
+
+## PIT Context Features (9)
+  - park_factor_runs [PIT-safe]
+  - park_factor_hr [PIT-safe]
+  - temperature [PIT-safe]
+  - wind_factor_effective [PIT-safe]
+  - umpire_over_rate [PIT-safe]
+  - home_rest_days [PIT-safe]
+  - away_rest_days [PIT-safe]
+  - doubleheader_flag [PIT-safe]
+  - flyball_wind_interaction [PIT-safe]
+
+## Market-Derived (from canonical odds)
+  - total_line [MARKET - closing total]
+  - total_over_price [MARKET - closing over juice]
+  - total_under_price [MARKET - closing under juice]
