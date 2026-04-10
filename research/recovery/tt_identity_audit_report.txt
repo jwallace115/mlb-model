@@ -1,0 +1,197 @@
+======================================================================
+PHASE 1: CODE PATH COMPARISON
+======================================================================
+
+PARAMETER COMPARISON:
+  Parameter                      Phase 6 Report       Live Signal          Backtest v1/v2      
+  ------------------------------------------------------------------------------------------
+  HOME_SHARE                     0.5015               0.5015               N/A (sim-based)     
+  TRUNCATION_ADJ                 0.248                0.248                N/A (sim-based)     
+  SP metric                      xFIP                 ERA                  xFIP (via sim)      
+  League avg baseline            4.231 (xFIP)         4.50 (ERA)           per-pitcher xFIP    
+  SP_INNINGS_FACTOR              0.621                0.621                N/A                 
+  GAP_THRESHOLD                  0.25                 0.25                 N/A (run_gap)       
+  Direction: home under          YES                  YES                  suppressed under    
+  Direction: away under          YES                  YES                  suppressed under    
+  Direction: home over           YES                  YES                  no                  
+  Direction: away over           NO (weak)            NO                   no                  
+  Starter source                 feature_table xFIP   MLB API + PGL ERA    sim_inputs xFIP     
+  Min starts gate                none stated          none (shift(1))      sim coverage        
+  Degraded fallback              N/A                  league avg ERA       N/A                 
+  Price in log                   real TT prices       NO prices            real TT prices      
+
+KEY FORMULA DIFFERENCES:
+  1. SP metric: Phase 6 report used xFIP (pitcher skill metric).
+     Live signal uses ERA (results-based). These are DIFFERENT stats.
+     xFIP avg ~4.23, ERA avg ~4.50 in the study period.
+  2. League avg baseline: 4.231 (xFIP) vs 4.50 (ERA).
+  3. Backtest v1/v2 used SIMULATION-DERIVED per-team projections,
+     not the formula at all. They use Monte Carlo with S2 starter
+     path model + neg-binomial draws. They identify "suppressed team"
+     (lower mu) and bet THAT team TT under.
+     This is a COMPLETELY DIFFERENT methodology from the live formula.
+
+======================================================================
+PHASE 2: LIVE FORMULA APPLIED TO HISTORICAL DATA
+======================================================================
+  Games with TT lines + scores: 5467
+  By season: {2023: 639, 2024: 2411, 2025: 2417}
+  Home SP ERA available: 4020/6825
+  Away SP ERA available: 6679/6825
+  Both available: 3949/6825
+  Non-degraded games: 3949
+
+LIVE FORMULA RESULTS (non-degraded, ERA-based):
+
+  Season 2023 (N=466):
+    Fire rates: H_UNDER=317 (68.0%), A_UNDER=199 (42.7%), H_OVER=59 (12.7%)
+    H_UNDER: N=317+0push, win%=53.0%, ROI=+1.2%, net=+3.7u
+    A_UNDER: N=199+0push, win%=46.2%, ROI=-11.7%, net=-23.4u
+    H_OVER: N=59+0push, win%=44.1%, ROI=-15.9%, net=-9.4u
+  Season 2024 (N=1775):
+    Fire rates: H_UNDER=1190 (67.0%), A_UNDER=777 (43.8%), H_OVER=238 (13.4%)
+    H_UNDER: N=1190+0push, win%=51.3%, ROI=-2.0%, net=-23.5u
+    A_UNDER: N=777+0push, win%=51.4%, ROI=-2.0%, net=-15.3u
+    H_OVER: N=238+0push, win%=46.2%, ROI=-11.8%, net=-28.0u
+  Season 2025 (N=1708):
+    Fire rates: H_UNDER=1219 (71.4%), A_UNDER=723 (42.3%), H_OVER=199 (11.7%)
+    H_UNDER: N=1219+0push, win%=50.8%, ROI=-3.1%, net=-37.3u
+    A_UNDER: N=723+0push, win%=53.4%, ROI=+1.9%, net=+13.9u
+    H_OVER: N=199+0push, win%=47.7%, ROI=-8.9%, net=-17.6u
+  Season ALL (N=3949):
+    Fire rates: H_UNDER=2726 (69.0%), A_UNDER=1699 (43.0%), H_OVER=496 (12.6%)
+    H_UNDER: N=2726+0push, win%=51.3%, ROI=-2.1%, net=-57.1u
+    A_UNDER: N=1699+0push, win%=51.6%, ROI=-1.5%, net=-24.7u
+    H_OVER: N=496+0push, win%=46.6%, ROI=-11.1%, net=-55.0u
+
+FIRE RATE BY MONTH (non-degraded):
+  Month 3: N=69, H_UNDER=45 (65.2%), A_UNDER=34 (49.3%)
+  Month 4: N=558, H_UNDER=377 (67.6%), A_UNDER=222 (39.8%)
+  Month 5: N=594, H_UNDER=409 (68.9%), A_UNDER=266 (44.8%)
+  Month 6: N=569, H_UNDER=395 (69.4%), A_UNDER=270 (47.5%)
+  Month 7: N=537, H_UNDER=380 (70.8%), A_UNDER=221 (41.2%)
+  Month 8: N=772, H_UNDER=529 (68.5%), A_UNDER=325 (42.1%)
+  Month 9: N=842, H_UNDER=586 (69.6%), A_UNDER=358 (42.5%)
+  Month 10: N=8, H_UNDER=5 (62.5%), A_UNDER=3 (37.5%)
+
+FIRE RATE BY SP START COUNT (non-degraded, both SP):
+  Starts >= 1: N_games=3949, H_UNDER: N=2726 wr=51.3% roi=-2.1% | A_UNDER: N=1699 wr=51.6% roi=-1.5%
+  Starts >= 2: N_games=3949, H_UNDER: N=2726 wr=51.3% roi=-2.1% | A_UNDER: N=1699 wr=51.6% roi=-1.5%
+  Starts >= 3: N_games=3796, H_UNDER: N=2647 wr=51.2% roi=-2.2% | A_UNDER: N=1640 wr=51.6% roi=-1.5%
+  Starts >= 5: N_games=3540, H_UNDER: N=2493 wr=51.1% roi=-2.4% | A_UNDER: N=1533 wr=51.9% roi=-0.9%
+  Starts >= 10: N_games=3064, H_UNDER: N=2205 wr=50.5% roi=-3.6% | A_UNDER: N=1354 wr=51.8% roi=-1.0%
+
+======================================================================
+PHASE 6 REPORT FORMULA (xFIP-based) FOR COMPARISON
+======================================================================
+  Games with TT lines + xFIP: 5467
+
+PHASE 6 REPORT FORMULA RESULTS (xFIP-based):
+  Season 2023 (N=639):
+    Fire rates: H_UNDER=299 (46.8%), A_UNDER=174 (27.2%), H_OVER=133 (20.8%)
+    H_UNDER: N=299+0push, win%=51.8%, ROI=-1.0%, net=-3.1u
+    A_UNDER: N=174+0push, win%=44.3%, ROI=-15.5%, net=-27.0u
+    H_OVER: N=133+0push, win%=43.6%, ROI=-16.7%, net=-22.3u
+  Season 2024 (N=2411):
+    Fire rates: H_UNDER=1393 (57.8%), A_UNDER=762 (31.6%), H_OVER=296 (12.3%)
+    H_UNDER: N=1393+0push, win%=54.3%, ROI=+3.7%, net=+52.2u
+    A_UNDER: N=762+0push, win%=53.9%, ROI=+3.0%, net=+22.6u
+    H_OVER: N=296+0push, win%=48.0%, ROI=-8.4%, net=-24.9u
+  Season 2025 (N=2417):
+    Fire rates: H_UNDER=1280 (53.0%), A_UNDER=624 (25.8%), H_OVER=331 (13.7%)
+    H_UNDER: N=1280+0push, win%=53.4%, ROI=+1.9%, net=+23.9u
+    A_UNDER: N=624+0push, win%=55.3%, ROI=+5.6%, net=+34.6u
+    H_OVER: N=331+0push, win%=44.7%, ROI=-14.6%, net=-48.5u
+  Season ALL (N=5467):
+    Fire rates: H_UNDER=2972 (54.4%), A_UNDER=1560 (28.5%), H_OVER=760 (13.9%)
+    H_UNDER: N=2972+0push, win%=53.7%, ROI=+2.5%, net=+73.0u
+    A_UNDER: N=1560+0push, win%=53.4%, ROI=+1.9%, net=+30.3u
+    H_OVER: N=760+0push, win%=45.8%, ROI=-12.6%, net=-95.6u
+
+======================================================================
+PHASE 3: LOOK-AHEAD / PIT SAFETY CHECK
+======================================================================
+
+Feature table xFIP check (is it look-ahead?):
+  Avg within-pitcher-season std of xFIP: 0.0000
+  Pitchers with std=0 (constant = look-ahead): 490/490
+  *** WARNING: xFIP appears CONSTANT within season -> likely END-OF-SEASON (LOOK-AHEAD)
+
+======================================================================
+PHASE 4: PRICE CONSISTENCY
+======================================================================
+
+Live signal: NO prices logged (confirmed from shadow log keys)
+
+Phase 6 report: All ROI computed at FLAT -110
+  Quote: "No juice adjustment. All ROI computed at flat -110."
+
+Backtest v1/v2: Real TT prices available but ROI also computed at flat -110
+
+Actual TT under juice (from research historical):
+  home_under_price: mean American=-44, mean implied prob=0.5264
+  away_under_price: mean American=-44, mean implied prob=0.5263
+
+Canonical TT under prices:
+  home_total_under_price: mean American=-56, mean implied prob=0.5329
+  away_total_under_price: mean American=-59, mean implied prob=0.5332
+
+======================================================================
+PHASE 5: FINAL VERDICT
+======================================================================
+
+FINDING 1 -- THREE DIFFERENT OBJECTS:
+  A. Phase 6 report (the "58%%/56%%" claims):
+     - Formula: HOME_SHARE=0.5015, TRUNCATION=0.248, SP=xFIP, baseline=4.231
+     - Used feature_table xFIP (potentially look-ahead)
+     - Hit rates reported: 56-58%% at various thresholds
+     - Against: posted TT lines from team_totals_historical.parquet
+
+  B. Backtest v1/v2 scripts (research/team_totals/):
+     - Completely different methodology: Monte Carlo simulation
+     - Uses S2 starter-path model + negative binomial draws
+     - Identifies "suppressed team" by sim-derived expected runs
+     - Bets suppressed team TT under when run_gap >= threshold
+     - This is NOT the same formula as Phase 6 or live
+
+  C. Live signal (mlb/pipeline/team_total_signal.py):
+     - Formula: HOME_SHARE=0.5015, TRUNCATION=0.248, SP=ERA, baseline=4.50
+     - Uses pitcher_game_logs expanding ERA (PIT-safe, shift(1))
+     - Gets starter identity from MLB Stats API probablePitcher
+     - No prices logged
+     - Degraded mode: falls back to league avg ERA when pitcher unknown
+
+FINDING 2 -- FORMULA DRIFT (Phase 6 Report -> Live):
+  - SP metric changed: xFIP -> ERA (different stat entirely)
+  - League baseline changed: 4.231 -> 4.50
+  - These changes were NOT validated with a backtest
+  - The 58%%/56%% claims from Phase 6 report CANNOT be attributed to
+    the live formula because the live formula uses different inputs
+
+FINDING 3 -- POTENTIAL LOOK-AHEAD in Phase 6:
+  - Feature table xFIP may be end-of-season (check std analysis above)
+  - If look-ahead, the 58%%/56%% claims are inflated
+
+FINDING 4 -- PRICE GAP:
+  - All backtests used flat -110 ROI
+  - Live signal logs NO prices
+  - Real TT under prices may carry heavier juice
+  - At true vig, break-even is higher than 52.4%%
+
+======================================================================
+VERDICT: NEVER-MATCHED
+======================================================================
+
+The live TT signal was NEVER the same object as the original backtest.
+Three distinct methodologies exist:
+  1. Phase 6 formula (xFIP-based, possibly look-ahead)
+  2. Backtest v1/v2 (simulation-based suppressed team)
+  3. Live signal (ERA-based formula, different baseline)
+
+The 58%%/56%% hit rates from Phase 6 were generated with xFIP (baseline
+4.231). The live signal uses ERA (baseline 4.50). These are different
+stats with different distributions. No backtest validated the ERA switch.
+
+Additionally, the backtest scripts in research/team_totals/ use an
+entirely different approach (Monte Carlo simulation) that has NO
+connection to the formula used in the live signal.
