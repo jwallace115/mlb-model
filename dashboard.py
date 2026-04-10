@@ -454,7 +454,9 @@ def _pipeline_freshness(*keys: str) -> str:
         label = dt_et.strftime("%b %-d, %-I:%M %p ET")
         pipe_label = _PIPELINE_LABELS.get(best_key, best_key)
         hours_ago = (datetime.now(best_dt.tzinfo) - best_dt).total_seconds() / 3600
-        if hours_ago > 26:
+        # Suppress staleness for off-season sports (WNBA pre-May 16)
+        _stale_threshold = 1000 if best_key == "wnba" and datetime.now().month < 6 else 26
+        if hours_ago > _stale_threshold:
             return (f"<span style='font-size:0.75em;color:#eab308'>"
                     f"\u26a0\ufe0f Last updated: {label} \u00b7 {pipe_label} (stale)</span>")
         return (f"<span style='font-size:0.75em;color:#94a3b8'>"
@@ -1039,7 +1041,7 @@ def _shadow_badge_html(game_pk, game_date):
                         'CS028+CS013 both active</span>') if cs028_cs013 else ''
         return ('<div style="font-size:0.70em;color:#f87171;margin-top:4px;'
                 'padding:2px 6px;background:#292524;border-radius:4px;display:inline-block">'
-                '\U0001f534 CS028 bullpen blowup shadow'
+                '\U0001f534 CS028 bullpen blowup'
                 + overlap_note +
                 '<span style="color:#78716c;font-size:0.9em"> SHADOW</span></div>')
     return ""
@@ -1124,21 +1126,26 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
             _row_style = 'display:flex;justify-content:space-between;align-items:baseline;margin-top:4px'
 
             if stype == "v1":
+                _v1_ln = f" {float(line):.1f}" if line is not None else ""
                 badges += (f'<div style="{_row_style}">'
                            f'<span style="font-size:1.05em;font-weight:700;color:{sc}">'
-                           f'Full Game Total UNDER \u00b7 {_stake_display}u</span>'
+                           f'Full Game Total UNDER{_v1_ln} \u00b7 {_stake_display}u</span>'
                            f'{_right_line}</div>')
                 if sig.get("s12_active"):
                     has_s12 = True
             elif stype == "f5_under":
+                _f5_val = sig.get("f5_line")
+                _f5_ln_txt = f" {float(_f5_val):.1f}" if _f5_val else ""
                 badges += (f'<div style="{_row_style}">'
                            f'<span style="font-size:0.95em;font-weight:700;color:#67e8f9">'
-                           f'F5 Total UNDER \u00b7 {_stake_display}u</span>'
+                           f'F5 Total UNDER{_f5_ln_txt} \u00b7 {_stake_display}u</span>'
                            f'{_right_line}</div>')
             elif stype == "f5_over":
+                _f5_val = sig.get("f5_line")
+                _f5_ln_txt = f" {float(_f5_val):.1f}" if _f5_val else ""
                 badges += (f'<div style="{_row_style}">'
                            f'<span style="font-size:0.95em;font-weight:700;color:#fbbf24">'
-                           f'F5 Total OVER \u00b7 {_stake_display}u</span>'
+                           f'F5 Total OVER{_f5_ln_txt} \u00b7 {_stake_display}u</span>'
                            f'{_right_line}</div>')
             elif stype == "f5_rl":
                 badges += (f'<div style="{_row_style}">'
@@ -1216,6 +1223,14 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         _mod_pills = ""
         _green_mods = []
         _yellow_mods = []
+        # Base signal type pills
+        _types = [s.get("type", "") for s in signals]
+        if "v1" in _types:
+            _green_mods.append(_mpill("V1", "#22c55e", "#052e16"))
+        if "f5_under" in _types or "f5_over" in _types:
+            _green_mods.append(_mpill("F5 engine", "#22c55e", "#052e16"))
+        if "f5_rl" in _types:
+            _green_mods.append(_mpill("F5 RL Signal B", "#22c55e", "#052e16"))
         if has_s12:
             _green_mods.append(_mpill("S12", "#22c55e", "#052e16"))
         if _has_p09:
@@ -3238,6 +3253,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             _pill("ADJ Hard Hit", "#eab308", "#1c1400"),
             _pill("ADJ Contact", "#eab308", "#1c1400"),
             _pill("ADJ K-rate", "#eab308", "#1c1400"),
+            _pill("ADJ BB rate", "#eab308", "#1c1400"),
+            _pill("ADJ Run Supp", "#eab308", "#1c1400"),
         ]
 
         _html_parts = []
