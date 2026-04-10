@@ -1812,7 +1812,10 @@ def run_cl03():
     for col in ["cl04_top20_market_prob", "cl04_top10_market_prob",
                 "cl04_r1_sg_total", "cl04_r1_bucket", "cl04_r1_position"]:
         if col not in log.columns:
-            log[col] = np.nan
+            log[col] = None if col == "cl04_r1_bucket" else np.nan
+    # Cast string column to object to avoid float64 assignment errors
+    if "cl04_r1_bucket" in log.columns:
+        log["cl04_r1_bucket"] = log["cl04_r1_bucket"].astype(object)
 
     # R1 sg_total and position lookup
     r1_sg_lookup = {}
