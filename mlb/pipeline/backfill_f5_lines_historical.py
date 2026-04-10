@@ -85,7 +85,7 @@ TEAM_NAME_MAP = {
 }
 
 SEASON_RANGES = {
-    2023: (date(2023, 3, 30), date(2023, 10, 2)),
+    2023: (date(2023, 5, 3), date(2023, 10, 2)),   # F5 coverage starts May 3
     2024: (date(2024, 3, 28), date(2024, 9, 30)),
     2025: (date(2025, 3, 27), date(2025, 9, 29)),
 }
@@ -283,6 +283,11 @@ def backfill(seasons: list[int] | None = None, dry_run_dates: list[str] | None =
             bookmakers = game_data.get("bookmakers", [])
             canonical = pick_canonical_book(bookmakers)
 
+            # Only write rows with actual F5 line data
+            if canonical is None:
+                date_games += 1
+                continue
+
             # Resolve game_pk
             game_pk, actual_f5 = resolve_game_pk(game_table, dt, home_abbr, away_abbr)
 
@@ -294,10 +299,10 @@ def backfill(seasons: list[int] | None = None, dry_run_dates: list[str] | None =
                 "game_time": commence[11:16] + " UTC" if len(commence) > 16 else "",
                 "pull_timestamp": dt_query,
                 "pull_type": "historical_backfill",
-                "book_key": canonical["book_key"] if canonical else "",
-                "f5_total": canonical["f5_total"] if canonical else None,
-                "f5_over_price": canonical["f5_over_price"] if canonical else None,
-                "f5_under_price": canonical["f5_under_price"] if canonical else None,
+                "book_key": canonical["book_key"],
+                "f5_total": canonical["f5_total"],
+                "f5_over_price": canonical["f5_over_price"],
+                "f5_under_price": canonical["f5_under_price"],
                 "f5_moneyline_home": None,
                 "f5_moneyline_away": None,
                 "actual_f5_total": actual_f5,
@@ -305,8 +310,7 @@ def backfill(seasons: list[int] | None = None, dry_run_dates: list[str] | None =
             }
             rows.append(row)
             date_games += 1
-            if canonical:
-                date_f5 += 1
+            date_f5 += 1
             if game_pk:
                 date_joined += 1
 
@@ -319,16 +323,17 @@ def backfill(seasons: list[int] | None = None, dry_run_dates: list[str] | None =
         # Checkpoint after each date
         completed.add(dt)
         ckpt["completed_dates"] = sorted(completed)
-        ckpt["credits_used"] = ckpt.get("credits_used", 0) + date_games + 1  # +1 for events call
-        ckpt["total_games"] = ckpt.get("total_games", 0) + date_games
+        ckpt["credits_used"] = ckpt.get("credits_used", 0) + len(events) + 1  # events + 1 list call
+        ckpt["total_games"] = ckpt.get("total_games", 0) + date_f5
         save_checkpoint(ckpt)
 
-        # Save parquet periodically (every date)
-        df = pd.DataFrame(rows)
-        df.to_parquet(OUTPUT_PATH, index=False)
+        # Save parquet periodically (every 5 dates to reduce I/O)
+        if len(completed) % 5 == 0 and rows:
+            df = pd.DataFrame(rows)
+            df.to_parquet(OUTPUT_PATH, index=False)
 
-        if total_games_session % 50 == 0 and total_games_session > 0:
-            logger.info(f"Progress: {total_games_session} games processed, {len(completed)} dates done")
+        if total_games_session % 100 == 0 and total_games_session > 0:
+            logger.info(f"Progress: {total_games_session} games processed, {len(completed)} dates done, {len(rows)} rows saved")
 
         time.sleep(2)
 
