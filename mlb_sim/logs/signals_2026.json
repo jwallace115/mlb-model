@@ -766,7 +766,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Chase Burns",
+    "away_sp_name": "Jack Kochanowicz"
   },
   {
     "date": "2026-04-10",
@@ -791,7 +793,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Patrick Corbin",
+    "away_sp_name": "Simeon Woods Richardson"
   },
   {
     "date": "2026-04-10",
@@ -816,6 +820,8 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Tyler Glasnow",
+    "away_sp_name": "Kumar Rocker"
   }
 ]
