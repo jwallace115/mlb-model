@@ -52,7 +52,10 @@ logger = logging.getLogger("odds_backfill")
 # ---------------------------------------------------------------------------
 API_BASE = "https://api.the-odds-api.com/v4/historical/sports/baseball_mlb"
 QUERY_HOUR = "16:00:00Z"  # noon ET — pre-game, catches closing lines
-MARKETS = "h2h,spreads,totals,alternate_totals,team_totals"
+CORE_MARKETS = "h2h,spreads,totals"
+# alternate_totals: available ~mid-2023+; team_totals: available 2024+
+# Requested as separate call to avoid 422 killing the core markets
+EXTRA_MARKETS = "alternate_totals,team_totals"
 
 BOOK_PRIORITY = [
     "pinnacle", "draftkings", "fanduel", "bovada", "betonlineag",
@@ -160,18 +163,52 @@ def get_events_for_date(dt_str: str) -> list[dict]:
     return r.json().get("data", [])
 
 
-def get_odds_for_event(event_id: str, dt_str: str) -> tuple[dict, str] | None:
+def get_odds_for_event(event_id: str, dt_str: str) -> tuple[dict, str, int] | None:
+    """Pull odds in two passes: core markets (always), extras (graceful 422).
+
+    Returns (game_data, remaining_credits, api_calls_made) or None.
+    """
+    # Pass 1: core markets (h2h, spreads, totals) — always available
     r = requests.get(f"{API_BASE}/events/{event_id}/odds", params={
         "apiKey": ODDS_API_KEY,
         "regions": "us",
-        "markets": MARKETS,
+        "markets": CORE_MARKETS,
         "oddsFormat": "american",
         "date": dt_str,
     }, timeout=20)
     remaining = r.headers.get("x-requests-remaining", "?")
     if r.status_code != 200:
         return None
-    return r.json().get("data", {}), remaining
+    game_data = r.json().get("data", {})
+    calls = 1
+
+    # Pass 2: extra markets (alternate_totals, team_totals) — may 422 for older dates
+    time.sleep(0.15)
+    r2 = requests.get(f"{API_BASE}/events/{event_id}/odds", params={
+        "apiKey": ODDS_API_KEY,
+        "regions": "us",
+        "markets": EXTRA_MARKETS,
+        "oddsFormat": "american",
+        "date": dt_str,
+    }, timeout=20)
+    remaining = r2.headers.get("x-requests-remaining", remaining)
+    calls += 1
+
+    if r2.status_code == 200:
+        extra_data = r2.json().get("data", {})
+        # Merge extra bookmaker markets into core bookmaker list
+        extra_by_key = {b["key"]: b for b in extra_data.get("bookmakers", [])}
+        for book in game_data.get("bookmakers", []):
+            extra_book = extra_by_key.get(book["key"])
+            if extra_book:
+                book["markets"].extend(extra_book.get("markets", []))
+        # Add books that only appear in extras
+        core_keys = {b["key"] for b in game_data.get("bookmakers", [])}
+        for ek, eb in extra_by_key.items():
+            if ek not in core_keys:
+                game_data["bookmakers"].append(eb)
+
+    return game_data, remaining, calls
 
 
 def american_to_implied(price: float) -> float:
@@ -407,14 +444,15 @@ def backfill(seasons: list[int] | None = None,
                 continue
 
             result = get_odds_for_event(event_id, dt_query)
-            total_api_calls += 1
-            time.sleep(0.3)
-
             if result is None:
+                total_api_calls += 1
                 total_games += 1
+                time.sleep(0.3)
                 continue
 
-            game_data, remaining = result
+            game_data, remaining, calls_made = result
+            total_api_calls += calls_made
+            time.sleep(0.3)
             bookmakers = game_data.get("bookmakers", [])
 
             canonical = extract_canonical(bookmakers, home_full, away_full)
