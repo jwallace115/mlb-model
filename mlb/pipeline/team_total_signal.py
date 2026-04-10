@@ -99,44 +99,26 @@ def compute_signals(game_date=None):
     era_map = _load_starter_era()
     logger.info(f"Starter ERA map: {len(era_map)} pitchers")
 
-    # Load game info for starter matching
-    # Try to get today's starters from pitcher_game_logs or game schedule
-    pgl = pd.read_parquet(PGL_PATH) if PGL_PATH.exists() else pd.DataFrame()
-    sp_today = pgl[(pgl["starter_flag"] == 1) & (pgl["game_date"] == game_date)] if not pgl.empty else pd.DataFrame()
-
-    # Also try signals file for starter info
-    signals_path = PROJECT_ROOT / "mlb_sim" / "logs" / "signals_2026.json"
-    game_starters = {}
-    if signals_path.exists():
-        try:
-            sigs = json.loads(signals_path.read_text())
-            for s in sigs:
-                if s.get("date") == game_date:
-                    gid = s.get("game_id")
-                    if gid:
-                        game_starters[str(gid)] = {
-                            "home_sp": s.get("home_sp_name", ""),
-                            "away_sp": s.get("away_sp_name", ""),
-                            "home_sp_id": s.get("home_sp_id"),
-                            "away_sp_id": s.get("away_sp_id"),
-                            "closing_total": s.get("line_at_signal_time"),
-                        }
-        except Exception:
-            pass
-
-    # Also get closing totals from line snapshots
-    snap_path = PROJECT_ROOT / "mlb_sim" / "data" / "line_snapshots_2026.json"
-    closing_totals = {}
-    if snap_path.exists():
-        try:
-            snaps = json.loads(snap_path.read_text())
-            for s in snaps:
-                if s.get("game_date") == game_date and s.get("snapshot_label") in ("CLOSING", "5PM", "OPEN"):
-                    gid = s.get("game_id")
-                    if gid and s.get("total_line"):
-                        closing_totals[gid] = float(s["total_line"])
-        except Exception:
-            pass
+    # Fetch today's probable starters from MLB Stats API
+    _schedule_starters = {}
+    try:
+        import requests
+        r = requests.get("https://statsapi.mlb.com/api/v1/schedule", params={
+            "sportId": 1, "date": game_date, "hydrate": "probablePitcher"
+        }, timeout=15)
+        for g in r.json().get("dates", [{}])[0].get("games", []):
+            gpk = str(g["gamePk"])
+            hp = g.get("teams", {}).get("home", {}).get("probablePitcher", {})
+            ap = g.get("teams", {}).get("away", {}).get("probablePitcher", {})
+            _schedule_starters[gpk] = {
+                "home_pid": hp.get("id"),
+                "away_pid": ap.get("id"),
+                "home_name": hp.get("fullName", ""),
+                "away_name": ap.get("fullName", ""),
+            }
+        logger.info(f"MLB API starters: {len(_schedule_starters)} games")
+    except Exception as e:
+        logger.warning(f"MLB API starter fetch failed: {e}")
 
     signals = []
     for tt in tt_records:
@@ -149,15 +131,9 @@ def compute_signals(game_date=None):
         if posted_home is None and posted_away is None:
             continue
 
-        # Find closing total — try line snapshots or derive from team totals
+        # Derive closing total from team totals
         closing_total = None
-        for gid, ct in closing_totals.items():
-            # Match by looking for the same teams in snapshots
-            # This is imperfect but workable
-            pass
-
-        # Derive from team totals as fallback
-        if closing_total is None and posted_home is not None and posted_away is not None:
+        if posted_home is not None and posted_away is not None:
             closing_total = posted_home + posted_away
 
         if closing_total is None:
@@ -168,28 +144,30 @@ def compute_signals(game_date=None):
         away_sp_era = LEAGUE_AVG_ERA
         home_sp_name = ""
         away_sp_name = ""
+        sp_adj_available_home = False
+        sp_adj_available_away = False
 
-        # Try to match starters
-        for gid, info in game_starters.items():
-            if info.get("home_sp") and info.get("away_sp"):
-                # Simple team name matching (Odds API uses full names, signals use abbreviations)
-                pass
+        # Match starters via MLB Stats API schedule (probablePitcher)
+        gpk = str(tt.get("game_pk", ""))
+        home_abbr = tt.get("home_team_abbr", "")
+        away_abbr = tt.get("away_team_abbr", "")
 
-        # Use pitcher_game_logs for ERA
-        # Match by team abbreviation from today's starters
-        if not sp_today.empty:
-            for _, row in sp_today.iterrows():
-                pid = row["player_id"]
-                team = row.get("team", "")
-                era = era_map.get(pid)
-                if era is not None:
-                    # Check if this team is home or away in this TT record
-                    if team and (team in home or home in team):
-                        home_sp_era = era
-                        home_sp_name = row.get("player_name", "")
-                    elif team and (team in away or away in team):
-                        away_sp_era = era
-                        away_sp_name = row.get("player_name", "")
+        if gpk in _schedule_starters:
+            h_pid = _schedule_starters[gpk].get("home_pid")
+            a_pid = _schedule_starters[gpk].get("away_pid")
+            if h_pid and h_pid in era_map:
+                home_sp_era = era_map[h_pid]
+                home_sp_name = _schedule_starters[gpk].get("home_name", "")
+                sp_adj_available_home = True
+            if a_pid and a_pid in era_map:
+                away_sp_era = era_map[a_pid]
+                away_sp_name = _schedule_starters[gpk].get("away_name", "")
+                sp_adj_available_away = True
+
+        degraded = not sp_adj_available_home or not sp_adj_available_away
+        if degraded:
+            logger.warning(f"TT degraded mode: {away}@{home} — "
+                           f"sp_home={sp_adj_available_home}, sp_away={sp_adj_available_away}")
 
         # ── Compute fair values using frozen formula ──
         truncation_adj = TRUNCATION_ADJ
@@ -231,6 +209,10 @@ def compute_signals(game_date=None):
             "away_tt_under_flag": away_tt_under,
             "home_tt_over_flag": home_tt_over,
             "n_books": tt.get("n_books", 0),
+            "degraded_mode": degraded,
+            "degraded_reason": "missing_sp_era_2026" if degraded else None,
+            "sp_adj_available_home": sp_adj_available_home,
+            "sp_adj_available_away": sp_adj_available_away,
             "actual_home_runs": None,
             "actual_away_runs": None,
             "home_tt_result": None,

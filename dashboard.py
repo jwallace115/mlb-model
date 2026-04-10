@@ -982,6 +982,7 @@ def _load_shadow_flags(game_date):
                             flags[gpk]["tt_posted_a"] = r.get("posted_away_total")
                             flags[gpk]["tt_gap_h"] = r.get("gap_home")
                             flags[gpk]["tt_gap_a"] = r.get("gap_away")
+                            flags[gpk]["tt_degraded"] = bool(r.get("degraded_mode"))
                 break
     except Exception:
         pass
@@ -3607,6 +3608,69 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             _html += '<div style="margin-top:6px;font-size:0.88em;color:#4b5563">\u2192 See \U0001f4ca Tracker tab for full season stats</div>'
             _html += '</div>'
             st.html(_html)
+
+            # ── Shadow Yesterday subsection ────────────────────────────
+            _sy_parts = []
+            # TT shadow
+            try:
+                _tt_y_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                          "mlb_sim", "logs", "team_total_shadow_2026.json")
+                if os.path.exists(_tt_y_path):
+                    with open(_tt_y_path) as _f:
+                        _tt_y_all = json.load(_f)
+                    _tt_y = [r for r in _tt_y_all if r.get("date") == _yesterday and r.get("resolved")]
+                    _tt_fired = [r for r in _tt_y if r.get("home_tt_under_flag") or r.get("away_tt_under_flag") or r.get("home_tt_over_flag")]
+                    if _tt_fired:
+                        _tw = sum(1 for r in _tt_fired
+                                  if (r.get("home_tt_under_flag") and r.get("home_tt_result") == "UNDER")
+                                  or (r.get("away_tt_under_flag") and r.get("away_tt_result") == "UNDER")
+                                  or (r.get("home_tt_over_flag") and r.get("home_tt_result") == "OVER"))
+                        _tl = sum(1 for r in _tt_fired
+                                  if (r.get("home_tt_under_flag") and r.get("home_tt_result") == "OVER")
+                                  or (r.get("away_tt_under_flag") and r.get("away_tt_result") == "OVER")
+                                  or (r.get("home_tt_over_flag") and r.get("home_tt_result") == "UNDER"))
+                        _td = sum(1 for r in _tt_fired if r.get("degraded_mode"))
+                        _deg_note = f" ({_td} degraded)" if _td else ""
+                        _sy_parts.append(f"Team Totals: {_tw}-{_tl}{_deg_note}")
+            except Exception:
+                pass
+            # ADJ shadow
+            try:
+                _adj_y_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                           "mlb_sim", "logs", "shadow_signals_2026.json")
+                if os.path.exists(_adj_y_path):
+                    with open(_adj_y_path) as _f:
+                        _adj_y_all = json.load(_f)
+                    _adj_y = [r for r in _adj_y_all if r.get("date") == _yesterday
+                              and r.get("resolved") and r.get("favorable_zone_flag")
+                              and r.get("result") in ("WIN", "LOSS", "PUSH")]
+                    if _adj_y:
+                        from collections import Counter as _Ctr
+                        _adj_by_name = {}
+                        for r in _adj_y:
+                            sn = r.get("signal_name", "")
+                            _adj_by_name.setdefault(sn, {"w": 0, "l": 0})
+                            if r["result"] == "WIN":
+                                _adj_by_name[sn]["w"] += 1
+                            elif r["result"] == "LOSS":
+                                _adj_by_name[sn]["l"] += 1
+                        for sn, wl in sorted(_adj_by_name.items()):
+                            _sy_parts.append(f"{sn}: {wl['w']}-{wl['l']}")
+            except Exception:
+                pass
+
+            if _sy_parts:
+                _sy_html = (
+                    f'<div style="font-size:0.72em;color:#6b7280;padding:8px 14px;'
+                    f'background:#0d1117;border-radius:4px;border:1px solid #1e293b;margin-bottom:10px">'
+                    f'<div style="font-weight:600;color:#78716c;margin-bottom:3px">'
+                    f'SHADOW YESTERDAY \u2014 {_yesterday}</div>'
+                )
+                for _sp in _sy_parts:
+                    _sy_html += f'<div>{_sp}</div>'
+                _sy_html += '<div style="color:#4b5563;font-size:0.9em;margin-top:3px">Research signals \u2014 not live wagers.</div>'
+                _sy_html += '</div>'
+                st.html(_sy_html)
         except Exception:
             pass
 
@@ -3700,7 +3764,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     # Pills
                     _sc_pills = []
                     if _has_tt:
-                        _sc_pills.append(_universal_pill("Team Totals", "#fff", "#2563eb"))
+                        _tt_deg = " (degraded)" if _sc_sh.get("tt_degraded") else ""
+                        _sc_pills.append(_universal_pill(f"Team Totals{_tt_deg}", "#fff", "#2563eb"))
                     if _sc_sh.get("adj_hh"):
                         _sc_pills.append(_universal_pill("ADJ Hard Hit", "#fff", "#7c3aed"))
                     if _sc_sh.get("adj_contact"):
