@@ -1698,17 +1698,21 @@ def run_cl03():
 
     log = pd.read_parquet(log_file)
 
-    # Ensure CL03 columns exist (append only, never rename existing)
-    for col in ["cl03_flag", "distance_from_cut_r1", "projected_cut_line_r1",
-                "r1_score", "cl03_market_prob", "cl03_capture_time", "is_standard_cut_event",
-                "cut_position_used", "is_custom_cut_format"]:
+    # Ensure CL03 columns exist with correct dtypes
+    _cl03_col_defaults = {
+        "cl03_flag": False, "distance_from_cut_r1": np.nan,
+        "projected_cut_line_r1": np.nan, "r1_score": np.nan,
+        "cl03_market_prob": np.nan, "cl03_capture_time": None,
+        "is_standard_cut_event": None, "cut_position_used": np.nan,
+        "is_custom_cut_format": None,
+    }
+    for col, default in _cl03_col_defaults.items():
         if col not in log.columns:
-            if col == "cl03_flag":
-                log[col] = False
-            elif col == "is_custom_cut_format":
-                log[col] = False
-            else:
-                log[col] = np.nan
+            log[col] = default
+    # Cast string/bool columns to object to avoid float64 assignment errors
+    for col in ["cl03_capture_time", "is_standard_cut_event", "is_custom_cut_format", "cl03_flag"]:
+        if col in log.columns:
+            log[col] = log[col].astype(object)
 
     # Find rows for this event in the latest run (make_cut market only)
     latest_ts = log["run_timestamp"].max()
