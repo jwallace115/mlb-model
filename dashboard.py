@@ -905,6 +905,12 @@ def _load_shadow_flags(game_date):
                         elif sn == "adj_k_rate_last3" and fz:
                             flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
                             flags[gid]["adj_k_rate"] = True
+                        elif sn == "ADJ_BB_RATE" and fz:
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
+                            flags[gid]["adj_bb_rate"] = True
+                        elif sn == "ADJ_RUN_SUPP" and fz:
+                            flags.setdefault(gid, {"st02": False, "cs013": False, "signal_tier": None})
+                            flags[gid]["adj_run_supp"] = True
                 break
 
         # CS013 from cs013_shadow
@@ -1164,6 +1170,18 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
                        f'UNDER {float(line):.1f} \u00b7 shadow</span>'
                        f'<span style="font-size:0.68em;color:#6b7280">'
                        f'ADJ CONTACT</span></div>')
+        if _sw_flags.get("adj_bb_rate") and line:
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'UNDER {float(line):.1f} \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'ADJ BB rate</span></div>')
+        if _sw_flags.get("adj_run_supp") and line:
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'UNDER {float(line):.1f} \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'ADJ Run Supp</span></div>')
         if _sw_flags.get("tt_under_h"):
             _tt_lh = _sw_flags.get("tt_posted_h", "?")
             badges += (f'<div style="{_sw_row}">'
@@ -3478,7 +3496,8 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             _has_tt = (_sh_tt.get("tt_under_h") or _sh_tt.get("tt_under_a") or
                        _sh_tt.get("tt_over_h"))
             _has_adj = (_sh_tt.get("adj_hh") or _sh_tt.get("adj_contact") or
-                        _sh_tt.get("adj_k_rate"))
+                        _sh_tt.get("adj_k_rate") or _sh_tt.get("adj_bb_rate") or
+                        _sh_tt.get("adj_run_supp"))
             if _has_tt or _has_adj:
                 # Route to shadow section (TT or ADJ signal active)
                 shadow_cards.append((_b, []))
@@ -3671,6 +3690,10 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         _sc_pills.append(_universal_pill("ADJ Contact", "#fff", "#7c3aed"))
                     if _sc_sh.get("adj_k_rate"):
                         _sc_pills.append(_universal_pill("ADJ K-rate", "#fff", "#7c3aed"))
+                    if _sc_sh.get("adj_bb_rate"):
+                        _sc_pills.append(_universal_pill("ADJ BB rate", "#fff", "#7c3aed"))
+                    if _sc_sh.get("adj_run_supp"):
+                        _sc_pills.append(_universal_pill("ADJ Run Supp", "#fff", "#7c3aed"))
                     if not _sc_pills:
                         _sc_pills.append(_universal_pill("SHADOW", "#fff", "#dc2626"))
                     # Stats

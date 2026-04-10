@@ -40,5 +40,17 @@
     "min_roi": 5.0,
     "status": "SHADOW",
     "notes": "Deployed April 9 2026."
+  },
+  "ADJ_BB_RATE": {
+    "review_gate_n": 50,
+    "min_roi": 10.0,
+    "status": "SHADOW",
+    "notes": "61.6% under rate +17.5% ROI historical (2024-2025). Strongest ADJ signal historically."
+  },
+  "ADJ_RUN_SUPP": {
+    "review_gate_n": 50,
+    "min_roi": 5.0,
+    "status": "SHADOW",
+    "notes": "56.1% under rate +7.1% ROI historical (2024-2025)."
   }
 }

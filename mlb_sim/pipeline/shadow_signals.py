@@ -22,7 +22,7 @@ LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
 
 # ── Caches (built once per pipeline run) ──────────────────────────────
 _schedule_cache = {}   # game_pk → schedule context
-_adj_form_cache = {}   # pitcher_id → {adj_k_rate_last3, adj_contact_rate_last3, adj_hard_hit_last3}
+_adj_form_cache = {}   # pitcher_id → {adj_k_rate_last3, adj_contact_rate_last3, adj_hard_hit_last3, adj_bb_rate_last3, adj_run_suppression_last3}
 
 
 # ======================================================================
@@ -169,6 +169,8 @@ def _build_adj_form_lookup():
                 "adj_k_rate_last3": _safe_round(row.get("adj_k_rate_last3")),
                 "adj_contact_rate_last3": _safe_round(row.get("adj_contact_rate_last3")),
                 "adj_hard_hit_last3": _safe_round(row.get("adj_hard_hit_last3")),
+                "adj_bb_rate_last3": _safe_round(row.get("adj_bb_rate_last3")),
+                "adj_run_suppression_last3": _safe_round(row.get("adj_run_suppression_last3")),
             }
         logger.info(f"Adj form lookup built: {len(_adj_form_cache)} pitchers")
         return _adj_form_cache
@@ -204,7 +206,8 @@ def compute_adj_signals(home_pitcher_id, away_pitcher_id):
     away_form = get_pitcher_adj_form(away_pitcher_id) or {}
 
     results = {}
-    for metric in ["adj_k_rate_last3", "adj_contact_rate_last3", "adj_hard_hit_last3"]:
+    for metric in ["adj_k_rate_last3", "adj_contact_rate_last3", "adj_hard_hit_last3",
+                    "adj_bb_rate_last3", "adj_run_suppression_last3"]:
         h_val = home_form.get(metric)
         a_val = away_form.get(metric)
         if h_val is not None and a_val is not None:
@@ -298,6 +301,8 @@ def log_shadow_signals(game_id, date, season, home_team, away_team,
         ("adj_contact_rate_last3", "ADJ_CONTACT"),
         ("adj_hard_hit_last3", "ADJ_HH"),
         ("adj_k_rate_last3", "adj_k_rate_last3"),
+        ("adj_bb_rate_last3", "ADJ_BB_RATE"),
+        ("adj_run_suppression_last3", "ADJ_RUN_SUPP"),
     ]:
         sig = adj_results.get(signal_name, {})
         new_records.append({
