@@ -819,10 +819,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:28.204477"
+    "logged_at": "2026-04-06T11:00:28.204477",
+    "result": null,
+    "resolved": true,
+    "actual_total": 15.0
   },
   {
     "game_id": 824783,
@@ -834,10 +837,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:31.329770"
+    "logged_at": "2026-04-06T11:00:31.329770",
+    "result": null,
+    "resolved": true,
+    "actual_total": 14.0
   },
   {
     "game_id": 822832,
@@ -849,10 +855,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:34.104308"
+    "logged_at": "2026-04-06T11:00:34.104308",
+    "result": null,
+    "resolved": true,
+    "actual_total": 16.0
   },
   {
     "game_id": 823728,
@@ -864,10 +873,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:38.906776"
+    "logged_at": "2026-04-06T11:00:38.906776",
+    "result": null,
+    "resolved": true,
+    "actual_total": 10.0
   },
   {
     "game_id": 824619,
@@ -879,10 +891,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:42.877924"
+    "logged_at": "2026-04-06T11:00:42.877924",
+    "result": null,
+    "resolved": true,
+    "actual_total": 3.0
   },
   {
     "game_id": 822918,
@@ -894,10 +909,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:45.031666"
+    "logged_at": "2026-04-06T11:00:45.031666",
+    "result": null,
+    "resolved": true,
+    "actual_total": 3.0
   },
   {
     "game_id": 824376,
@@ -909,10 +927,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 10.0,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:46.965745"
+    "logged_at": "2026-04-06T11:00:46.965745",
+    "result": null,
+    "resolved": true,
+    "actual_total": 16.0
   },
   {
     "game_id": 824052,
@@ -924,10 +945,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:48.883936"
+    "logged_at": "2026-04-06T11:00:48.883936",
+    "result": null,
+    "resolved": true,
+    "actual_total": 8.0
   },
   {
     "game_id": 823237,
@@ -939,10 +963,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-06T11:00:50.537573"
+    "logged_at": "2026-04-06T11:00:50.537573",
+    "result": null,
+    "resolved": true,
+    "actual_total": 10.0
   },
   {
     "game_id": 824457,
@@ -954,10 +981,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 3,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:02.258069"
+    "logged_at": "2026-04-07T11:56:02.258069",
+    "result": null,
+    "resolved": true,
+    "actual_total": 3.0
   },
   {
     "game_id": 824618,
@@ -969,10 +999,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:03.871263"
+    "logged_at": "2026-04-07T11:56:03.871263",
+    "result": null,
+    "resolved": true,
+    "actual_total": 6.0
   },
   {
     "game_id": 823648,
@@ -984,10 +1017,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "PUSH",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:04.942347"
+    "logged_at": "2026-04-07T11:56:04.942347",
+    "result": null,
+    "resolved": true,
+    "actual_total": 7.0
   },
   {
     "game_id": 823402,
@@ -999,10 +1035,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 2,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 6.5,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:06.222146"
+    "logged_at": "2026-04-07T11:56:06.222146",
+    "result": null,
+    "resolved": true,
+    "actual_total": 8.0
   },
   {
     "game_id": 822999,
@@ -1014,10 +1053,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:07.250224"
+    "logged_at": "2026-04-07T11:56:07.250224",
+    "result": null,
+    "resolved": true,
+    "actual_total": 11.0
   },
   {
     "game_id": 823887,
@@ -1029,10 +1071,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:08.569421"
+    "logged_at": "2026-04-07T11:56:08.569421",
+    "result": null,
+    "resolved": true,
+    "actual_total": 9.0
   },
   {
     "game_id": 822754,
@@ -1044,10 +1089,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:09.810139"
+    "logged_at": "2026-04-07T11:56:09.810139",
+    "result": null,
+    "resolved": true,
+    "actual_total": 13.0
   },
   {
     "game_id": 824780,
@@ -1059,10 +1107,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 1,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:11.193335"
+    "logged_at": "2026-04-07T11:56:11.193335",
+    "result": null,
+    "resolved": true,
+    "actual_total": 5.0
   },
   {
     "game_id": 823567,
@@ -1074,10 +1125,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 2,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:12.272495"
+    "logged_at": "2026-04-07T11:56:12.272495",
+    "result": null,
+    "resolved": true,
+    "actual_total": 8.0
   },
   {
     "game_id": 822831,
@@ -1089,10 +1143,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 4,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:13.527641"
+    "logged_at": "2026-04-07T11:56:13.527641",
+    "result": null,
+    "resolved": true,
+    "actual_total": 5.0
   },
   {
     "game_id": 823727,
@@ -1104,10 +1161,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 2,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:14.825899"
+    "logged_at": "2026-04-07T11:56:14.825899",
+    "result": null,
+    "resolved": true,
+    "actual_total": 6.0
   },
   {
     "game_id": 822916,
@@ -1119,10 +1179,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 1,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:16.135006"
+    "logged_at": "2026-04-07T11:56:16.135006",
+    "result": null,
+    "resolved": true,
+    "actual_total": 5.0
   },
   {
     "game_id": 824375,
@@ -1134,10 +1197,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 2,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 10.5,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:17.378259"
+    "logged_at": "2026-04-07T11:56:17.378259",
+    "result": null,
+    "resolved": true,
+    "actual_total": 6.0
   },
   {
     "game_id": 824051,
@@ -1149,10 +1215,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 1,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:18.628694"
+    "logged_at": "2026-04-07T11:56:18.628694",
+    "result": null,
+    "resolved": true,
+    "actual_total": 9.0
   },
   {
     "game_id": 823235,
@@ -1164,10 +1233,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-07T11:56:19.868736"
+    "logged_at": "2026-04-07T11:56:19.868736",
+    "result": null,
+    "resolved": true,
+    "actual_total": 6.0
   },
   {
     "game_id": 823403,
@@ -1179,10 +1251,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 3,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:05.750077"
+    "logged_at": "2026-04-08T14:49:05.750077",
+    "result": null,
+    "resolved": true,
+    "actual_total": 10.0
   },
   {
     "game_id": 824455,
@@ -1194,10 +1269,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:07.494480"
+    "logged_at": "2026-04-08T14:49:07.494480",
+    "result": null,
+    "resolved": true,
+    "actual_total": 12.0
   },
   {
     "game_id": 824779,
@@ -1209,10 +1287,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 2,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:09.182300"
+    "logged_at": "2026-04-08T14:49:09.182300",
+    "result": null,
+    "resolved": true,
+    "actual_total": 5.0
   },
   {
     "game_id": 824617,
@@ -1224,10 +1305,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:10.645773"
+    "logged_at": "2026-04-08T14:49:10.645773",
+    "result": null,
+    "resolved": true,
+    "actual_total": 8.0
   },
   {
     "game_id": 822915,
@@ -1239,10 +1323,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 5,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:12.308763"
+    "logged_at": "2026-04-08T14:49:12.308763",
+    "result": null,
+    "resolved": true,
+    "actual_total": 3.0
   },
   {
     "game_id": 822833,
@@ -1254,10 +1341,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 4,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:13.670851"
+    "logged_at": "2026-04-08T14:49:13.670851",
+    "result": null,
+    "resolved": true,
+    "actual_total": 7.0
   },
   {
     "game_id": 824374,
@@ -1269,10 +1359,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 3,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 11.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:15.155780"
+    "logged_at": "2026-04-08T14:49:15.155780",
+    "result": null,
+    "resolved": true,
+    "actual_total": 10.0
   },
   {
     "game_id": 823234,
@@ -1284,10 +1377,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:16.530502"
+    "logged_at": "2026-04-08T14:49:16.530502",
+    "result": null,
+    "resolved": true,
+    "actual_total": 5.0
   },
   {
     "game_id": 822753,
@@ -1299,10 +1395,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:17.981034"
+    "logged_at": "2026-04-08T14:49:17.981034",
+    "result": null,
+    "resolved": true,
+    "actual_total": 7.0
   },
   {
     "game_id": 824050,
@@ -1314,10 +1413,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 3,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:19.342370"
+    "logged_at": "2026-04-08T14:49:19.342370",
+    "result": null,
+    "resolved": true,
+    "actual_total": 10.0
   },
   {
     "game_id": 823646,
@@ -1329,10 +1431,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:20.459087"
+    "logged_at": "2026-04-08T14:49:20.459087",
+    "result": null,
+    "resolved": true,
+    "actual_total": 9.0
   },
   {
     "game_id": 823000,
@@ -1344,10 +1449,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "PUSH",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:21.459193"
+    "logged_at": "2026-04-08T14:49:21.459193",
+    "result": null,
+    "resolved": true,
+    "actual_total": 8.0
   },
   {
     "game_id": 823885,
@@ -1359,10 +1467,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:22.935634"
+    "logged_at": "2026-04-08T14:49:22.935634",
+    "result": null,
+    "resolved": true,
+    "actual_total": 11.0
   },
   {
     "game_id": 823564,
@@ -1374,10 +1485,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 1,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:24.059995"
+    "logged_at": "2026-04-08T14:49:24.059995",
+    "result": null,
+    "resolved": true,
+    "actual_total": 5.0
   },
   {
     "game_id": 823726,
@@ -1389,10 +1503,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 2,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-08T14:49:25.508160"
+    "logged_at": "2026-04-08T14:49:25.508160",
+    "result": null,
+    "resolved": true,
+    "actual_total": 14.0
   },
   {
     "game_id": 823884,
@@ -1404,10 +1521,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 3,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-09T13:03:20.894137"
+    "logged_at": "2026-04-09T13:03:20.894137",
+    "result": "WIN",
+    "resolved": true,
+    "actual_total": 9.0
   },
   {
     "game_id": 823565,
@@ -1419,10 +1539,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 2,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-09T13:03:22.549963"
+    "logged_at": "2026-04-09T13:03:22.549963",
+    "result": null,
+    "resolved": true,
+    "actual_total": 1.0
   },
   {
     "game_id": 823724,
@@ -1434,10 +1557,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 1,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-09T13:03:24.079734"
+    "logged_at": "2026-04-09T13:03:24.079734",
+    "result": null,
+    "resolved": true,
+    "actual_total": 4.0
   },
   {
     "game_id": 823645,
@@ -1449,10 +1575,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 4,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-04-09T13:03:25.492521"
+    "logged_at": "2026-04-09T13:03:25.492521",
+    "result": null,
+    "resolved": true,
+    "actual_total": 8.0
   },
   {
     "game_id": 824130,
@@ -1464,10 +1593,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "UNDER",
     "closing_total": 9.5,
     "clv": null,
-    "logged_at": "2026-04-09T13:03:26.901377"
+    "logged_at": "2026-04-09T13:03:26.901377",
+    "result": null,
+    "resolved": true,
+    "actual_total": 2.0
   },
   {
     "game_id": 823319,
@@ -1479,10 +1611,13 @@
     "threshold_used": 0.2563,
     "relievers_scored": 0,
     "cs013_also_active": false,
-    "actual_over_under": null,
+    "actual_over_under": "OVER",
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-04-09T13:03:28.391589"
+    "logged_at": "2026-04-09T13:03:28.391589",
+    "result": null,
+    "resolved": true,
+    "actual_total": 10.0
   },
   {
     "game_id": 824695,
