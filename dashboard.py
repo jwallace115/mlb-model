@@ -1140,6 +1140,52 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
                            f'F5 Run Line HOME -0.5 \u00b7 {_stake_display}u</span>'
                            f'{_right_line}</div>')
 
+        # Shadow wager lines — append shadow signal wagers below live wagers
+        _gpk_sw = str(game.get("game_pk", ""))
+        _gdate_sw = game.get("game_date", "")
+        _sw_flags = _load_shadow_flags(_gdate_sw).get(_gpk_sw, {})
+        _sw_row = ('display:flex;justify-content:space-between;'
+                   'align-items:baseline;margin-top:4px')
+        if _sw_flags.get("cs028") and line:
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'OVER {float(line):.1f} \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'CS028</span></div>')
+        if _sw_flags.get("adj_hh") and line:
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'UNDER {float(line):.1f} \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'ADJ HH</span></div>')
+        elif _sw_flags.get("adj_contact") and line:
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'UNDER {float(line):.1f} \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'ADJ CONTACT</span></div>')
+        if _sw_flags.get("tt_under_h"):
+            _tt_lh = _sw_flags.get("tt_posted_h", "?")
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'UNDER {_tt_lh} (home total) \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'TT</span></div>')
+        if _sw_flags.get("tt_under_a"):
+            _tt_la = _sw_flags.get("tt_posted_a", "?")
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'UNDER {_tt_la} (away total) \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'TT</span></div>')
+        if _sw_flags.get("tt_over_h"):
+            _tt_lh = _sw_flags.get("tt_posted_h", "?")
+            badges += (f'<div style="{_sw_row}">'
+                       f'<span style="font-size:0.88em;font-weight:700;color:#e2e8f0">'
+                       f'OVER {_tt_lh} (home total) \u00b7 shadow</span>'
+                       f'<span style="font-size:0.68em;color:#6b7280">'
+                       f'TT</span></div>')
+
         # Check for P09 and ST02 overlays from V1 signal data
         _has_p09 = any(s.get("p09_active") for s in signals if s.get("type") == "v1")
         _has_st02 = any(s.get("st02_active") for s in signals if s.get("type") == "v1")
