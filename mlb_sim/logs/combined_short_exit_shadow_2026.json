@@ -9,11 +9,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:05.604251"
+    "logged_at": "2026-03-27T07:00:05.604251",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822839,
@@ -25,11 +27,13 @@
     "combined_short_exit_favorable_zone": true,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:06.868712"
+    "logged_at": "2026-03-27T07:00:06.868712",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823893,
@@ -41,11 +45,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:13.475662"
+    "logged_at": "2026-03-27T07:00:13.475662",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824946,
@@ -57,11 +63,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:18.675305"
+    "logged_at": "2026-03-27T07:00:18.675305",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824216,
@@ -73,11 +81,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:22.640438"
+    "logged_at": "2026-03-27T07:00:22.640438",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823324,
@@ -89,11 +99,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:25.633462"
+    "logged_at": "2026-03-27T07:00:25.633462",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823162,
@@ -105,11 +117,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:28.815616"
+    "logged_at": "2026-03-27T07:00:28.815616",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823971,
@@ -121,11 +135,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-27T07:00:31.396709"
+    "logged_at": "2026-03-27T07:00:31.396709",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823082,
@@ -137,11 +153,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:10:58.436802"
+    "logged_at": "2026-03-28T13:10:58.436802",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824701,
@@ -153,11 +171,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 12.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:01.446568"
+    "logged_at": "2026-03-28T13:11:01.446568",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822838,
@@ -169,11 +189,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 15.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:03.171793"
+    "logged_at": "2026-03-28T13:11:03.171793",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824862,
@@ -185,11 +207,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:05.147045"
+    "logged_at": "2026-03-28T13:11:05.147045",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823488,
@@ -201,11 +225,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:07.081470"
+    "logged_at": "2026-03-28T13:11:07.081470",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824540,
@@ -217,11 +243,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:09.130605"
+    "logged_at": "2026-03-28T13:11:09.130605",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823651,
@@ -233,11 +261,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:10.819375"
+    "logged_at": "2026-03-28T13:11:10.819375",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823892,
@@ -249,11 +279,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:12.785219"
+    "logged_at": "2026-03-28T13:11:12.785219",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824213,
@@ -265,11 +297,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 20.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:14.902532"
+    "logged_at": "2026-03-28T13:11:14.902532",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823811,
@@ -281,11 +315,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:16.828538"
+    "logged_at": "2026-03-28T13:11:16.828538",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824945,
@@ -297,11 +333,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:18.507513"
+    "logged_at": "2026-03-28T13:11:18.507513",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823241,
@@ -313,11 +351,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 4.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:20.354110"
+    "logged_at": "2026-03-28T13:11:20.354110",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823323,
@@ -329,11 +369,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:22.378623"
+    "logged_at": "2026-03-28T13:11:22.378623",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823973,
@@ -345,11 +387,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:24.516719"
+    "logged_at": "2026-03-28T13:11:24.516719",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823161,
@@ -361,11 +405,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-28T13:11:26.596686"
+    "logged_at": "2026-03-28T13:11:26.596686",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824864,
@@ -377,11 +423,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 14.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:09.102234"
+    "logged_at": "2026-03-29T07:00:09.102234",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823487,
@@ -393,11 +441,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:16.220550"
+    "logged_at": "2026-03-29T07:00:16.220550",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824944,
@@ -409,11 +459,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:19.950450"
+    "logged_at": "2026-03-29T07:00:19.950450",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822837,
@@ -425,11 +477,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:23.024004"
+    "logged_at": "2026-03-29T07:00:23.024004",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824538,
@@ -441,11 +495,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:25.650845"
+    "logged_at": "2026-03-29T07:00:25.650845",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823647,
@@ -457,11 +513,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:27.939913"
+    "logged_at": "2026-03-29T07:00:27.939913",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823891,
@@ -473,11 +531,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:30.694111"
+    "logged_at": "2026-03-29T07:00:30.694111",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824215,
@@ -489,11 +549,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 16.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:33.020506"
+    "logged_at": "2026-03-29T07:00:33.020506",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823810,
@@ -505,11 +567,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 16.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:34.811153"
+    "logged_at": "2026-03-29T07:00:34.811153",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823079,
@@ -521,11 +585,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 18.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:36.576014"
+    "logged_at": "2026-03-29T07:00:36.576014",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824700,
@@ -537,11 +603,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:38.352644"
+    "logged_at": "2026-03-29T07:00:38.352644",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823160,
@@ -553,11 +621,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-29T07:00:40.757030"
+    "logged_at": "2026-03-29T07:00:40.757030",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824135,
@@ -569,11 +639,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 4.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:11.765423"
+    "logged_at": "2026-03-30T07:00:11.765423",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824863,
@@ -585,11 +657,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:17.414491"
+    "logged_at": "2026-03-30T07:00:17.414491",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824539,
@@ -601,11 +675,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 2.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:20.861750"
+    "logged_at": "2026-03-30T07:00:20.861750",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823484,
@@ -617,11 +693,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 15.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:23.780690"
+    "logged_at": "2026-03-30T07:00:23.780690",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823890,
@@ -633,11 +711,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 13.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:26.638688"
+    "logged_at": "2026-03-30T07:00:26.638688",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822834,
@@ -649,11 +729,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 19.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:29.127756"
+    "logged_at": "2026-03-30T07:00:29.127756",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824943,
@@ -665,11 +747,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 4.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:31.230279"
+    "logged_at": "2026-03-30T07:00:31.230279",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824702,
@@ -681,11 +765,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:33.353477"
+    "logged_at": "2026-03-30T07:00:33.353477",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823809,
@@ -697,11 +783,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:35.213338"
+    "logged_at": "2026-03-30T07:00:35.213338",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823080,
@@ -713,11 +801,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:37.007597"
+    "logged_at": "2026-03-30T07:00:37.007597",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824214,
@@ -729,11 +819,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:38.674182"
+    "logged_at": "2026-03-30T07:00:38.674182",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823320,
@@ -745,11 +837,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:40.143916"
+    "logged_at": "2026-03-30T07:00:40.143916",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823159,
@@ -761,11 +855,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:41.641577"
+    "logged_at": "2026-03-30T07:00:41.641577",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 825108,
@@ -777,11 +873,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 15.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:43.040722"
+    "logged_at": "2026-03-30T07:00:43.040722",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823972,
@@ -793,11 +891,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-30T07:00:44.534649"
+    "logged_at": "2026-03-30T07:00:44.534649",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824861,
@@ -809,11 +909,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 13.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:12.134623"
+    "logged_at": "2026-03-31T07:00:12.134623",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824537,
@@ -825,11 +927,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:18.336057"
+    "logged_at": "2026-03-31T07:00:18.336057",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823485,
@@ -841,11 +945,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:21.365379"
+    "logged_at": "2026-03-31T07:00:21.365379",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823888,
@@ -857,11 +963,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:24.263577"
+    "logged_at": "2026-03-31T07:00:24.263577",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822836,
@@ -873,11 +981,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:27.017503"
+    "logged_at": "2026-03-31T07:00:27.017503",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824942,
@@ -889,11 +999,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:29.267198"
+    "logged_at": "2026-03-31T07:00:29.267198",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824699,
@@ -905,11 +1017,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 2.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:31.423205"
+    "logged_at": "2026-03-31T07:00:31.423205",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823807,
@@ -921,11 +1035,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:33.289659"
+    "logged_at": "2026-03-31T07:00:33.289659",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823077,
@@ -937,11 +1053,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:34.987420"
+    "logged_at": "2026-03-31T07:00:34.987420",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824212,
@@ -953,11 +1071,13 @@
     "combined_short_exit_favorable_zone": true,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:36.673581"
+    "logged_at": "2026-03-31T07:00:36.673581",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 825107,
@@ -969,11 +1089,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 12.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:38.140875"
+    "logged_at": "2026-03-31T07:00:38.140875",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823322,
@@ -985,11 +1107,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 12.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:39.509355"
+    "logged_at": "2026-03-31T07:00:39.509355",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823158,
@@ -1001,11 +1125,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:41.297843"
+    "logged_at": "2026-03-31T07:00:41.297843",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823969,
@@ -1017,11 +1143,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-03-31T07:00:42.936222"
+    "logged_at": "2026-03-31T07:00:42.936222",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823002,
@@ -1033,11 +1161,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 10.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:07.748577"
+    "logged_at": "2026-04-06T07:00:07.748577",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824456,
@@ -1049,11 +1179,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:11.615301"
+    "logged_at": "2026-04-06T07:00:11.615301",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823401,
@@ -1065,11 +1197,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:18.584261"
+    "logged_at": "2026-04-06T07:00:18.584261",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823886,
@@ -1081,11 +1215,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 2.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:24.652940"
+    "logged_at": "2026-04-06T07:00:24.652940",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822755,
