@@ -1,0 +1,35 @@
+object,type,status,contamination_path,live_inference,historical_training,action
+V1 Ridge Model (phase9_baseline_model.pkl),trained model,CAVEATED,Weights learned from contaminated feature_table.parquet,Clean — pulls current FG API daily,CONTAMINATED — 14 of 25 features from end-of-season FG/Savant aggregates,KEEP LIVE with caveat; retrain on PIT-clean features
+V1 feature_table.parquet,training data,CONTAMINATED,sim/modules/fg_historical.py pulls season-final FG leaderboard per year (ind=0),N/A — not used at inference,CONTAMINATED — xFIP/SIERA/K%/BB%/avg_ip/wRC+ are season-final,Rebuild PIT-clean version
+V1 Rules Mode (run_model.py rules path),live pipeline,CLEAN,No trained model; uses live FG API,Clean — daily FG pull,N/A — no historical training dependency,No action needed
+S2 Starter Path Model (starter_path_model.pkl),trained model,CAVEATED,sp_xfip from feature_table (contaminated); CSW/whiff/fstrike from per-start rolling (clean),Clean — live Statcast per-start metrics,CONTAMINATED — sp_xfip from season-final FG in training,KEEP LIVE; retrain with PIT sp_fip
+flyball_wind_interaction,V1 feature,CONTAMINATED,fb_pct from season-final FG (not in game logs),N/A — computed from V1 feature_table,CONTAMINATED — requires season-final fly ball rate,Drop or rebuild with game-log fly_outs proxy
+S12 Overlay,live overlay,CAVEATED,Cutoff (8.4468) derived from 2024 research using season-final xFIP,Clean — uses live CSW + live xFIP,CAVEATED — threshold from contaminated research,KEEP LIVE; re-derive cutoff after V1 retrain
+P09 Overlay,live overlay,CAVEATED,Cutoff (31.7305) derived from research using hard-hit rolling (clean),Clean — uses live Statcast hard-hit rate,CLEAN data but trained cutoff may shift after V1 retrain,KEEP LIVE; re-validate cutoff
+F5 Totals Engine,live signal,CAVEATED,Consumes V1 p_under/p_over (from caveated V1 Ridge),Clean — reads V1 live output,CAVEATED — thresholds tuned on contaminated V1 output,KEEP LIVE; re-validate thresholds after V1 retrain
+F5 Run Line Signal,live signal,CAVEATED,xFIP gap threshold (>=1.0) not validated PIT-clean,Clean — uses live FG xFIP,CAVEATED — threshold from unvalidated research,KEEP LIVE; re-validate threshold
+CS013 Shadow,shadow signal,CLEAN,Per-game boxscores with shift(1); reliever degradation from game logs,Clean,Clean — strictly per-game prior data,No action needed
+CS028 Shadow,shadow signal,CLEAN,Per-game boxscores with shift(1),Clean,Clean,No action needed
+CS004 Shadow,shadow signal,CLEAN,Per-game boxscores with shift(1),Clean,Clean,No action needed
+KP04 Shadow,shadow signal,CLEAN,Per-start Statcast with shift(1),Clean,Clean — thresholds from 2023 P75 percentiles of clean data,No action needed
+ST02 Overlay,live overlay,CLEAN,Schedule data only (rest days / travel),Clean,Clean — no trained model,No action needed
+ADJ Signals (adj_k_rate/contact/hh),shadow signal,CLEAN,Per-start Statcast with shift(1).rolling(); opponent-adjusted,Clean,Clean — v2 build confirms shift(1).rolling(),No action needed
+P09 per-start metrics,data pipeline,CLEAN,Statcast per-start with shift(1).rolling(),Clean,Clean,No action needed
+Combined Short Exit Shadow,shadow signal,CLEAN,Per-start IP from pitcher_game_logs with shift(1).rolling(15),Clean,Clean,No action needed
+high_leverage_avail (V1 feature),V1 feature,CLEAN,Per-game boxscores with shift(1),Clean,Clean — properly PIT,No action needed
+bullpen_delta / bp_delta_exposure (V1 features),V1 feature,CONTAMINATED,bullpen_delta uses contaminated bp_xfip from feature_table,N/A at training time,CONTAMINATED — bp_xfip from season-final FG,Rebuild with PIT bullpen FIP
+park_factor_runs / park_factor_hr,V1 feature,CLEAN,Static per-park values from config.py,Clean,Clean — no temporal dependency,No action needed
+temperature / wind_factor_effective,V1 feature,CLEAN,Per-game weather from Open-Meteo API,Clean,Clean — per-game actual weather,No action needed
+umpire_over_rate,V1 feature,CLEAN,Static umpire ratings table,Clean,Clean — no temporal dependency,No action needed
+home_rest_days / away_rest_days,V1 feature,CLEAN,Per-game from schedule,Clean,Clean,No action needed
+doubleheader_flag,V1 feature,CLEAN,Per-game from schedule,Clean,Clean,No action needed
+home_wrc_plus / away_wrc_plus,V1 feature,CONTAMINATED,Season-final FG wRC+ from fg_historical.py,N/A at training time,CONTAMINATED — end-of-season aggregate,Rebuild with PIT offense RPG proxy
+home_sp_xfip / away_sp_xfip,V1 feature,CONTAMINATED,Season-final FG xFIP from fg_historical.py,N/A at training time,CONTAMINATED — end-of-season aggregate,Rebuild with PIT FIP from game logs
+home_sp_k_pct / away_sp_k_pct,V1 feature,CONTAMINATED,Season-final FG K% from fg_historical.py,N/A at training time,CONTAMINATED — end-of-season aggregate,Rebuild with PIT K% from game logs
+home_sp_bb_pct / away_sp_bb_pct,V1 feature,CONTAMINATED,Season-final FG BB% from fg_historical.py,N/A at training time,CONTAMINATED — end-of-season aggregate,Rebuild with PIT BB% from game logs
+home_sp_avg_ip / away_sp_avg_ip,V1 feature,CONTAMINATED,Season-final FG avg IP from fg_historical.py,N/A at training time,CONTAMINATED — end-of-season aggregate,Rebuild with PIT avg IP from game logs
+Cross-market triangle research,research,CLEAN,Market data only (closing lines vs TT vs side),N/A,Clean — uses only market prices,Conclusions valid
+TT-to-side feasibility research,research,CLEAN,Market data only (TT fair values vs ML prices),N/A,Clean — uses only market prices,Conclusions valid
+MLB Side Engine Phases 2-4 (original),research,VOID,Used contaminated season-final FG features,N/A,CONTAMINATED,Already voided and rebuilt clean
+MLB Side Engine (clean rerun),research,CLEAN,Rebuilt with PIT features (baseball_features_pit.parquet),N/A,Clean — shift(1) + expanding,Conclusions valid (NEAR MISS result)
+Team Totals Engine,live pipeline,CLEAN,Uses live MLB API for starters; PGL for ERA (now PIT-fixed),Clean,Clean after PIT fix,No action needed
