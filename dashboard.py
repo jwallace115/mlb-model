@@ -404,29 +404,70 @@ def _last_run_label(data: dict) -> str:
         return ts
 
 
-def _pipeline_freshness(key: str) -> str:
-    """Return HTML snippet showing last pipeline run time for a sport."""
+_PIPELINE_LABELS = {
+    "mlb_prelim": "MLB prelim",
+    "mlb_confirm": "MLB confirm",
+    "results_grader": "Results grader",
+    "nhl": "NHL",
+    "nba": "NBA",
+    "soccer": "Soccer",
+    "golf": "Golf",
+    "health_check": "Health check",
+    "wnba": "WNBA",
+}
+
+
+def _load_last_updated() -> dict:
     try:
         lu_path = os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")
-        if not os.path.exists(lu_path):
-            return "<span style='font-size:0.75em;color:#64748b'>Last updated: unknown</span>"
-        with open(lu_path) as f:
-            lu = json.load(f)
-        ts_str = lu.get(key)
-        if not ts_str:
+        if os.path.exists(lu_path):
+            with open(lu_path) as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return {}
+
+
+def _pipeline_freshness(*keys: str) -> str:
+    """Return HTML snippet showing last pipeline run time.
+
+    Accepts one or more keys — picks the most recent among them.
+    """
+    try:
+        lu = _load_last_updated()
+        if not lu:
             return "<span style='font-size:0.75em;color:#64748b'>Last updated: unknown</span>"
         from zoneinfo import ZoneInfo
-        dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
-        dt_et = dt.astimezone(ZoneInfo("America/New_York"))
+        best_dt = None
+        best_key = None
+        for key in keys:
+            ts_str = lu.get(key)
+            if not ts_str or not isinstance(ts_str, str) or "T" not in ts_str:
+                continue
+            dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+            if best_dt is None or dt > best_dt:
+                best_dt = dt
+                best_key = key
+        if best_dt is None:
+            return "<span style='font-size:0.75em;color:#64748b'>Last updated: unknown</span>"
+        dt_et = best_dt.astimezone(ZoneInfo("America/New_York"))
         label = dt_et.strftime("%b %-d, %-I:%M %p ET")
-        hours_ago = (datetime.now(dt.tzinfo) - dt).total_seconds() / 3600
+        pipe_label = _PIPELINE_LABELS.get(best_key, best_key)
+        hours_ago = (datetime.now(best_dt.tzinfo) - best_dt).total_seconds() / 3600
         if hours_ago > 26:
             return (f"<span style='font-size:0.75em;color:#eab308'>"
-                    f"\u26a0\ufe0f Last updated: {label} (stale)</span>")
+                    f"\u26a0\ufe0f Last updated: {label} \u00b7 {pipe_label} (stale)</span>")
         return (f"<span style='font-size:0.75em;color:#94a3b8'>"
-                f"\U0001f4ca Last updated: {label}</span>")
+                f"\U0001f4ca Last updated: {label} \u00b7 {pipe_label}</span>")
     except Exception:
         return "<span style='font-size:0.75em;color:#64748b'>Last updated: unknown</span>"
+
+
+def _global_freshness() -> str:
+    """Return HTML showing the most recent timestamp across ALL pipeline keys."""
+    lu = _load_last_updated()
+    all_keys = [k for k in lu if k != "health_check"]
+    return _pipeline_freshness(*all_keys) if all_keys else _pipeline_freshness("health_check")
 
 
 # ── season header rendering ───────────────────────────────────────────────────
@@ -2318,6 +2359,7 @@ def _soccer_result_badge(result: str) -> str:
 
 def _render_soccer_tab() -> None:
     soccer = load_soccer_results()
+    st.html(_pipeline_freshness("soccer"))
 
     # ── header ────────────────────────────────────────────────────────────────
     col_title, col_btn = st.columns([5, 1])
@@ -2727,6 +2769,7 @@ def _save_nba_hr_override(game_id, date_str, api_line, hr_line):
 
 def _render_nba_tab() -> None:
     nba = load_nba_results()
+    st.html(_pipeline_freshness("nba"))
 
     # ── header ──
     col_title, col_btn = st.columns([5, 1])
@@ -2935,6 +2978,7 @@ def _render_nba_tab() -> None:
 # ── mlb tab renderer ──────────────────────────────────────────────────────────
 
 def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
+    st.html(_pipeline_freshness("mlb_confirm", "mlb_prelim"))
     # ── Opening Night game card — March 25, 2026 ─────────────────────────
     _od_date = "2026-03-25"
     _od_games = [
@@ -4380,17 +4424,14 @@ def _render_ncaaf_portal_tab() -> None:
 def main() -> None:
     data  = load_results()
     stats = load_season_stats()
-    last_run = _last_run_label(data) if data else _last_run_label(stats) if stats else "never"
 
     # ── page header ───────────────────────────────────────────────────────────
     col_title, col_btn = st.columns([5, 1])
     with col_title:
         st.html(
             f"<h3 style='margin:0 0 4px 0'>⚾ I Am Not Uncertain</h3>"
-            f"<span style='font-size:0.78em;color:#4a5568'>"
-            f"Last updated {last_run}"
-            f"</span>"
         )
+        st.html(_global_freshness())
     with col_btn:
         st.write("")
         if st.button("🔄 Refresh", use_container_width=True):
