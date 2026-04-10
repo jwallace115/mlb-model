@@ -1,0 +1,23 @@
+{
+  "verdict": "DIMINISHED",
+  "reason": "Weak or unstable edge",
+  "s12_formula": "avg(home_csw, away_csw) - 5 * avg(home_xfip, away_xfip)",
+  "old_cutoff": 8.4468,
+  "n_games_pit_safe": 9040,
+  "n_games_full": 9040,
+  "s12_all_wr": 52.0,
+  "s12_all_roi": -0.8,
+  "blind_under_roi": -2.5,
+  "s12_edge_vs_blind_pp": 1.8,
+  "best_oos_threshold": 13.5,
+  "best_oos_roi": 7.2,
+  "best_oos_n": 80,
+  "season_rois": {
+    "2022": 1.7,
+    "2023": -2.5,
+    "2024": -6.2,
+    "2025": 4.3
+  },
+  "positive_seasons": "2/4",
+  "contamination_delta_pp": 0.0
+}
