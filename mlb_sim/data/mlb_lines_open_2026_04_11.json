@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "36591f5636cf3c3e62dda6b7e8fb3440",
+    "game_date": "2026-04-11",
+    "sport": "MLB",
+    "home_team": "St. Louis Cardinals",
+    "away_team": "Boston Red Sox",
+    "commence_time": "2026-04-11T00:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-10T06:05:02.341982+00:00"
+  },
+  {
+    "game_id": "59f40327564ee4d08604733d721958f5",
+    "game_date": "2026-04-11",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Colorado Rockies",
+    "commence_time": "2026-04-11T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -115,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-10T06:05:02.341982+00:00"
+  },
+  {
+    "game_id": "a75e638966e5f1f6faed34c459043f44",
+    "game_date": "2026-04-11",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Houston Astros",
+    "commence_time": "2026-04-11T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -107,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-10T06:05:02.341982+00:00"
+  },
+  {
+    "game_id": "e346f0bf21a45185de1dcf8a928deedf",
+    "game_date": "2026-04-11",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Texas Rangers",
+    "commence_time": "2026-04-11T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-10T06:05:02.341982+00:00"
+  }
+]
