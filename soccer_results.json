@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-09T16:00:06.037848+00:00",
-  "last_updated": "2026-04-09 16:00 UTC",
-  "pipeline_run_date": "2026-03-21",
-  "signals_source": "stale",
-  "game_date": "2026-04-09",
+  "generated_at": "2026-04-10T11:28:53.422829+00:00",
+  "last_updated": "2026-04-10 11:28 UTC",
+  "pipeline_run_date": "2026-04-10",
+  "signals_source": "live",
+  "game_date": "2026-04-10",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
   "active_scope_note": "Active: Bundesliga MEDIUM tier only. All other leagues/tiers computed and logged to shadow.",
@@ -149,17 +149,46 @@
       "deployment_start_date": "2026-03-18"
     }
   },
-  "parlay_candidates": [],
+  "parlay_candidates": [
+    {
+      "game_id": "LG1_2025-26_2026-04-10_Marseille_Metz",
+      "game_date": "2026-04-10",
+      "league": "LG1",
+      "home_team": "Marseille",
+      "away_team": "Metz",
+      "game_time_et": "3:05 PM ET",
+      "projected_total": 3.94,
+      "model_p_over_1_5": 0.9039,
+      "confidence_tier": "VERY HIGH",
+      "market_line_1_5": null,
+      "market_implied_p_1_5": null,
+      "edge_1_5": null,
+      "lineup_confirmed": false
+    }
+  ],
   "suggested_parlay": {
-    "available": false,
-    "legs": [],
-    "combined_prob": null,
-    "leg_count": 0,
+    "available": true,
+    "legs": [
+      {
+        "game_id": "LG1_2025-26_2026-04-10_Marseille_Metz",
+        "home_team": "Marseille",
+        "away_team": "Metz",
+        "league": "LG1",
+        "game_time_et": "3:05 PM ET",
+        "projected_total": 3.94,
+        "model_p_over_1_5": 0.9039,
+        "confidence_tier": "VERY HIGH",
+        "market_line_1_5": null,
+        "edge_1_5": null
+      }
+    ],
+    "combined_prob": 0.9039,
+    "leg_count": 1,
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-04-09T16:00:06.044332+00:00",
-    "date_reviewed": "2026-04-08",
+    "generated_at": "2026-04-10T11:28:53.464541+00:00",
+    "date_reviewed": "2026-04-09",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
