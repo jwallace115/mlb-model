@@ -1227,15 +1227,15 @@ def _render_card(b: dict, signals: list = None, has_partial: bool = False) -> No
         # Base signal type pills
         _types = [s.get("type", "") for s in signals]
         if "v1" in _types:
-            _green_mods.append(_mpill("V1 Legacy", "#f59e0b", "#1c1400"))
+            _green_mods.append(_mpill("V1", "#22c55e", "#052e16"))
         if "f5_under" in _types or "f5_over" in _types:
-            _yellow_mods.append(_mpill("F5 Inactive", "#6b7280", "#1a1a2e"))
+            _green_mods.append(_mpill("F5 engine", "#22c55e", "#052e16"))
         if "f5_rl" in _types:
-            _green_mods.append(_mpill("Signal B (F5 RL)", "#22c55e", "#052e16"))
+            _green_mods.append(_mpill("F5 RL Signal B", "#22c55e", "#052e16"))
         if has_s12:
-            _yellow_mods.append(_mpill("S12 Archived", "#6b7280", "#1a1a2e"))
+            _green_mods.append(_mpill("S12", "#22c55e", "#052e16"))
         if _has_p09:
-            _yellow_mods.append(_mpill("P09 Archived", "#6b7280", "#1a1a2e"))
+            _green_mods.append(_mpill("P09", "#22c55e", "#052e16"))
 
         # Shadow signals from per-game log data
         _gpk_sh = str(game.get("game_pk", ""))
@@ -2010,11 +2010,6 @@ def _render_nhl_tab() -> None:
     )
 
     # ── (c) Season performance summary ────────────────────────────────────────
-    st.html('<div style="font-size:0.68em;color:#78716c;margin-bottom:4px;'
-            'padding:3px 8px;background:#1a1a1a;border-radius:4px;border:1px solid #2d2d44">'
-            'NHL Model A aligned \u2014 new shadow tracker. '
-            'Legacy record below is from pre-reset system.</div>')
-
     if recent_results:
         W = sum(1 for r in recent_results if r.get("result") == "WIN")
         L = sum(1 for r in recent_results if r.get("result") == "LOSS")
@@ -2223,10 +2218,6 @@ def _render_nhl_tab() -> None:
 
     # ── Season Performance (historical) ───────────────────────────────────────
     st.html('<div class="section-hdr">📊 Season Performance (Historical Backtest)</div>')
-    st.html('<div style="font-size:0.72em;color:#78716c;margin-bottom:6px;'
-            'padding:4px 8px;background:#1a1a1a;border-radius:4px;border:1px solid #333">'
-            'ARCHIVED \u2014 Legacy System (MoneyPuck-dependent). '
-            'Identity broken Apr 11. New aligned Model A tracker starts fresh.</div>')
     if season_perf:
         tab_val, tab_oos, tab_comb = st.tabs(
             ["2023-24 Validate", "2024-25 OOS", "Combined"]
@@ -2604,11 +2595,6 @@ def _render_soccer_tab() -> None:
 
     # ── SECTION 2: Recent Results ──────────────────────────────────────────────
     st.html('<div class="section-hdr">📋 Recent Results — Last 14 Days</div>')
-    st.html('<div style="font-size:0.68em;color:#78716c;margin-bottom:4px;'
-            'padding:3px 8px;background:#1a1a1a;border-radius:4px;border:1px solid #2d2d44">'
-            'NHL Model A aligned \u2014 new shadow tracker. '
-            'Legacy record below is from pre-reset system.</div>')
-
     if recent_results:
         W = sum(1 for r in recent_results if r.get("result") == "WIN")
         L = sum(1 for r in recent_results if r.get("result") == "LOSS")
@@ -3225,61 +3211,62 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             f'border-radius:10px;padding:2px 8px;font-size:0.68em;font-weight:600;'
             f'margin-right:4px;white-space:nowrap">{label}</span>')
 
-        # GREEN — active engines (only Signal B / F5 Run Line remains active)
+        # GREEN — active engines
         _green_pills = []
+        # Sim engine
+        _es = os.path.join(_status_base, "pipeline", "engine_status.json")
+        if os.path.exists(_es):
+            import json as _json_st
+            with open(_es) as _esf:
+                if _json_st.load(_esf).get("status") != "PAUSED":
+                    _green_pills.append(_pill("Sim engine", "#22c55e", "#052e16"))
+        # F5 engine
+        _f5s = os.path.join(_status_base, "pipeline", "f5_engine_status.json")
+        if os.path.exists(_f5s):
+            with open(_f5s) as _f5sf:
+                if _json_st.load(_f5sf).get("status") != "PAUSED":
+                    _green_pills.append(_pill("F5 engine", "#22c55e", "#052e16"))
+        # F5 Run Line
         _rls = os.path.join(_status_base, "pipeline", "f5_runline_status.json")
         if os.path.exists(_rls):
-            import json as _json_st
             with open(_rls) as _rlsf:
                 if _json_st.load(_rlsf).get("status") != "PAUSED":
-                    _green_pills.append(_pill("Signal B (F5 RL)", "#22c55e", "#052e16"))
-
-        # YELLOW — shadow monitors
+                    _green_pills.append(_pill("F5 Run Line", "#22c55e", "#052e16"))
+        # S12 overlay
+        _s12c = os.path.join(_status_base, "pipeline", "s12_overlay_config.json")
+        if os.path.exists(_s12c):
+            with open(_s12c) as _s12f:
+                if _json_st.load(_s12f).get("s12_cutoff_top20"):
+                    _green_pills.append(_pill("S12 overlay", "#22c55e", "#052e16"))
+        # P09 overlay
+        _p09c = os.path.join(_status_base, "pipeline", "p09_overlay_config.json")
+        if os.path.exists(_p09c):
+            with open(_p09c) as _p09f:
+                if _json_st.load(_p09f).get("p09_cutoff_bottom20"):
+                    _green_pills.append(_pill("P09 overlay", "#22c55e", "#052e16"))
+        # YELLOW — shadow monitors (always shown; these are wired in run_model.py)
         _yellow_pills = [
             _pill("CS013 bullpen", "#eab308", "#1c1400"),
             _pill("CS028 blowup", "#eab308", "#1c1400"),
             _pill("KP04 K-prop", "#eab308", "#1c1400"),
             _pill("ST02 road", "#eab308", "#1c1400"),
-            _pill("CS004", "#eab308", "#1c1400"),
-            _pill("BASE_HIGH", "#eab308", "#1c1400"),
-            _pill("S12_HIGH", "#eab308", "#1c1400"),
-        ]
-
-        # GRAY — inactive (slot preserved, not deployable)
-        _gray_pills = [
-            _pill("F5 Totals", "#6b7280", "#1a1a2e"),
-            _pill("ADJ Hard Hit", "#6b7280", "#1a1a2e"),
-            _pill("ADJ Contact", "#6b7280", "#1a1a2e"),
-            _pill("ADJ K-rate", "#6b7280", "#1a1a2e"),
-            _pill("ADJ BB rate", "#6b7280", "#1a1a2e"),
-            _pill("ADJ Run Supp", "#6b7280", "#1a1a2e"),
-        ]
-
-        # DIM — archived (legacy, historical only)
-        _arch_pills = [
-            _pill("V1 Totals", "#94a3b8", "#0f0f1a"),
-            _pill("S12 overlay", "#94a3b8", "#0f0f1a"),
-            _pill("P09 overlay", "#94a3b8", "#0f0f1a"),
-            _pill("Team Totals", "#94a3b8", "#0f0f1a"),
+            _pill("Team Totals", "#eab308", "#1c1400"),
+            _pill("ADJ Hard Hit", "#eab308", "#1c1400"),
+            _pill("ADJ Contact", "#eab308", "#1c1400"),
+            _pill("ADJ K-rate", "#eab308", "#1c1400"),
+            _pill("ADJ BB rate", "#eab308", "#1c1400"),
+            _pill("ADJ Run Supp", "#eab308", "#1c1400"),
         ]
 
         _html_parts = []
         if _green_pills:
             _html_parts.append(
-                '<span style="color:#22c55e;font-size:0.65em;font-weight:600;margin-right:6px">'
-                '\u25cf Active</span>' + "".join(_green_pills))
+                f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px">'
+                f'\u25cf Active</span>' + "".join(_green_pills))
         if _yellow_pills:
             _html_parts.append(
-                '<span style="color:#eab308;font-size:0.65em;font-weight:600;margin-right:6px;'
-                'margin-left:8px">\u25d0 Shadow</span>' + "".join(_yellow_pills))
-        if _gray_pills:
-            _html_parts.append(
-                '<span style="color:#6b7280;font-size:0.65em;font-weight:600;margin-right:6px;'
-                'margin-left:8px">\u25cb Inactive</span>' + "".join(_gray_pills))
-        if _arch_pills:
-            _html_parts.append(
-                '<span style="color:#4b5563;font-size:0.65em;font-weight:600;margin-right:6px;'
-                'margin-left:8px">\u25a1 Archived</span>' + "".join(_arch_pills))
+                f'<span style="color:#64748b;font-size:0.65em;font-weight:600;margin-right:6px;'
+                f'margin-left:8px">\u25d0 Shadow</span>' + "".join(_yellow_pills))
         if _html_parts:
             st.html(f'<div style="margin-bottom:8px;line-height:2">{"".join(_html_parts)}</div>')
     except Exception:
@@ -3350,7 +3337,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         if _tn > 0:
             st.html(
                 f'<div style="font-size:0.78em;color:#e2e8f0;margin-bottom:4px;font-weight:600">'
-                f'\U0001f4ca Production Record (Mar 30+): '
+                f'\U0001f4ca Live Production (Mar 30+): '
                 f'<span style="color:#e2e8f0">{_tw}-{_tl}</span>'
                 f' <span style="color:{_roi_clr}">ROI {_troi:+.1f}%</span>'
                 f' <span style="color:#94a3b8">({_tnet:+.2f}u)</span></div>')
@@ -3386,12 +3373,6 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 st.html(f'<div style="font-size:0.68em;color:#6b7280;margin-bottom:6px">'
                         f'V1 hard stop: <span style="color:{_hs_clr}">{_v1roi:+.1f}%</span>'
                         f' / \u22128.0% threshold | {_v1n}/50 signals</div>')
-
-            # V1 legacy disclaimer
-            st.html('<div style="font-size:0.68em;color:#78716c;margin-bottom:6px;'
-                    'padding:4px 8px;background:#1a1a1a;border-radius:4px;border:1px solid #333">'
-                    '\u26a0\ufe0f V1 historical validation void (Apr 11 reset). '
-                    'Engine runs for research continuity. Record shown is unvalidated legacy data.</div>')
 
         # Shadow monitor
         if _v1_shadow:
@@ -5953,7 +5934,7 @@ def _render_tracker_tab() -> None:
     mlb_signals = []
     v1_w, v1_l, v1_p = _wlp(mlb_v1_full_live)
     v1_roi, v1_net = _roi_from_units(mlb_v1_full_live)
-    mlb_signals.append({"name": "V1 Legacy", "w": v1_w, "l": v1_l, "p": v1_p, "roi": v1_roi})
+    mlb_signals.append({"name": "V1 UNDER", "w": v1_w, "l": v1_l, "p": v1_p, "roi": v1_roi})
 
     f5u = [r for r in mlb_f5_full if r.get("f5_signal_side") == "UNDER"]
     f5o = [r for r in mlb_f5_full if r.get("f5_signal_side") == "OVER"]
@@ -5966,17 +5947,17 @@ def _render_tracker_tab() -> None:
 
     rl_w, rl_l, rl_p = _wlp(mlb_rl_full)
     rl_roi, _ = _roi_from_units(mlb_rl_full)
-    mlb_signals.append({"name": "Signal B (RL)", "w": rl_w, "l": rl_l, "p": rl_p, "roi": rl_roi})
+    mlb_signals.append({"name": "F5 Run Line", "w": rl_w, "l": rl_l, "p": rl_p, "roi": rl_roi})
 
     s12 = [r for r in mlb_v1_full_live if r.get("s12_overlay_active")]
     s12_w, s12_l, s12_p = _wlp(s12)
     s12_roi, _ = _roi_from_units(s12)
-    mlb_signals.append({"name": "S12 Archived", "w": s12_w, "l": s12_l, "p": s12_p, "roi": s12_roi})
+    mlb_signals.append({"name": "S12 overlay", "w": s12_w, "l": s12_l, "p": s12_p, "roi": s12_roi})
 
     p09 = [r for r in mlb_v1_full_live if r.get("p09_overlay_active")]
     p09_w, p09_l, p09_p = _wlp(p09)
     p09_roi, _ = _roi_from_units(p09)
-    mlb_signals.append({"name": "P09 Archived", "w": p09_w, "l": p09_l, "p": p09_p, "roi": p09_roi})
+    mlb_signals.append({"name": "P09 overlay", "w": p09_w, "l": p09_l, "p": p09_p, "roi": p09_roi})
 
     all_mlb_live = mlb_v1_full_live + mlb_f5_full + mlb_rl_full
     mw, ml, mp = _wlp(all_mlb_live)
@@ -6163,4 +6144,4 @@ def _render_tracker_tab() -> None:
 
 
 main()
-# cache bust Fri Apr 11 site reset — state model applied
+# cache bust Wed Apr  2 WNBA archetype tab
