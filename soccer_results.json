@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-04-11T14:01:11.397914+00:00",
-  "last_updated": "2026-04-11 14:01 UTC",
-  "pipeline_run_date": "2026-04-10",
-  "signals_source": "stale",
+  "generated_at": "2026-04-11T17:43:21.097802+00:00",
+  "last_updated": "2026-04-11 17:43 UTC",
+  "pipeline_run_date": "2026-04-11",
+  "signals_source": "live",
   "game_date": "2026-04-11",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
@@ -149,16 +149,45 @@
       "deployment_start_date": "2026-03-18"
     }
   },
-  "parlay_candidates": [],
+  "parlay_candidates": [
+    {
+      "game_id": "BUN_2025-26_2026-04-11_VfL_Wolfsburg_Eintracht_Frankfurt",
+      "game_date": "2026-04-11",
+      "league": "BUN",
+      "home_team": "VfL Wolfsburg",
+      "away_team": "Eintracht Frankfurt",
+      "game_time_et": "9:30 AM ET",
+      "projected_total": 3.92,
+      "model_p_over_1_5": 0.9024,
+      "confidence_tier": "VERY HIGH",
+      "market_line_1_5": null,
+      "market_implied_p_1_5": null,
+      "edge_1_5": null,
+      "lineup_confirmed": false
+    }
+  ],
   "suggested_parlay": {
-    "available": false,
-    "legs": [],
-    "combined_prob": null,
-    "leg_count": 0,
+    "available": true,
+    "legs": [
+      {
+        "game_id": "BUN_2025-26_2026-04-11_VfL_Wolfsburg_Eintracht_Frankfurt",
+        "home_team": "VfL Wolfsburg",
+        "away_team": "Eintracht Frankfurt",
+        "league": "BUN",
+        "game_time_et": "9:30 AM ET",
+        "projected_total": 3.92,
+        "model_p_over_1_5": 0.9024,
+        "confidence_tier": "VERY HIGH",
+        "market_line_1_5": null,
+        "edge_1_5": null
+      }
+    ],
+    "combined_prob": 0.9024,
+    "leg_count": 1,
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-04-11T14:01:11.404467+00:00",
+    "generated_at": "2026-04-11T17:43:21.104869+00:00",
     "date_reviewed": "2026-04-10",
     "record_summary": {},
     "narrative": null,
