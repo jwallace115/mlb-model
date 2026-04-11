@@ -1,4 +1,4 @@
-# NHL Audit — Phase 1: Object Inventory
+# NHL Audit -- Phase 1: Object Inventory
 
 ## Date: 2026-04-10
 
@@ -20,21 +20,21 @@
 ### Model Artifacts
 | File | Purpose |
 |------|---------|
-| ridge_home_model.pkl | Home score Ridge model (α selected on validate) |
-| ridge_away_model.pkl | Away score Ridge model (α selected on validate) |
+| ridge_home_model.pkl | Home score Ridge model (alpha selected on validate) |
+| ridge_away_model.pkl | Away score Ridge model (alpha selected on validate) |
 
 ### Data Artifacts
 | File | Shape | Purpose |
 |------|-------|---------|
-| nhl_games_canonical.csv | 6506 × 62 | Raw game data 2021-2025 (+ 2025-26 appended) |
-| nhl_feature_table.parquet | 6506 × 54 | Feature table with rolling stats |
-| nhl_sim_results.parquet | — | Phase 4 simulation results |
-| nhl_sim_results_calibrated.parquet | — | Phase 4.5 calibrated results |
-| nhl_model_outputs.parquet | — | Phase 5 model outputs |
-| nhl_market_snapshots.parquet | 5246 × 13 | Market snapshot data |
-| nhl_clv_snapshots.parquet | 86 × 7 | CLV tracking |
-| nhl_decisions.parquet | 783 × 56 | All signals (train/val/oos/live) |
-| nhl_results.parquet | — | Graded results |
+| nhl_games_canonical.csv | 6506 x 62 | Raw game data 2021-2025 (+ 2025-26 appended) |
+| nhl_feature_table.parquet | 6506 x 54 | Feature table with rolling stats |
+| nhl_sim_results.parquet | -- | Phase 4 simulation results |
+| nhl_sim_results_calibrated.parquet | -- | Phase 4.5 calibrated results |
+| nhl_model_outputs.parquet | -- | Phase 5 model outputs |
+| nhl_market_snapshots.parquet | 5246 x 13 | Market snapshot data |
+| nhl_clv_snapshots.parquet | 86 x 7 | CLV tracking |
+| nhl_decisions.parquet | 783 x 56 | All signals (train/val/oos/live) |
+| nhl_results.parquet | -- | Graded results |
 
 ### Live Pipeline
 | File | Purpose | Trust Status |
@@ -45,16 +45,16 @@
 | nhl_summaries.py | Plain-English signal summaries | LOW RISK |
 | push_nhl.py | Serialize to JSON for dashboard | LOW RISK |
 
-### Research (Archetypes — not deployed)
+### Research (Archetypes -- not deployed)
 | File | Purpose |
 |------|---------|
 | research_archetypes/*.py | 6-phase archetype research program |
 | research_archetypes/*.md | Archetype research documentation |
 
 ### Data Sources
-- NHL Stats API (api-web.nhle.com/v1) — schedule, boxscore, goalie
-- MoneyPuck (bulk CSV) — xGoals, Corsi, HD shots (2021-2024 only)
-- The Odds API — historical + live closing totals
+- NHL Stats API (api-web.nhle.com/v1) -- schedule, boxscore, goalie
+- MoneyPuck (bulk CSV) -- xGoals, Corsi, HD shots (2021-2024 only)
+- The Odds API -- historical + live closing totals
 
 ## Season Split Configuration
 - Train: 2021-22, 2022-23 (2624 games)
