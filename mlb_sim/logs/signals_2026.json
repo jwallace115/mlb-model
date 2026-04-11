@@ -1390,7 +1390,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Eric Lauer",
+    "away_sp_name": "Joe Ryan"
   },
   {
     "date": "2026-04-11",
@@ -1415,6 +1417,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Michael Wacha",
+    "away_sp_name": "Erick Fedde"
   }
 ]
