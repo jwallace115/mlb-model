@@ -93,9 +93,9 @@ starters = pgl[pgl["starter_flag"] == 1][["game_pk", "player_id", "team", "home_
 print(f"  starters: {starters.shape[0]} starts")
 
 # Split starters into home/away
-home_sp = starters[starters["home_away"] == "home"][["game_pk", "player_id"]].rename(
+home_sp = starters[starters["home_away"] == "H"][["game_pk", "player_id"]].rename(
     columns={"player_id": "home_sp_id"})
-away_sp = starters[starters["home_away"] == "away"][["game_pk", "player_id"]].rename(
+away_sp = starters[starters["home_away"] == "A"][["game_pk", "player_id"]].rename(
     columns={"player_id": "away_sp_id"})
 
 # Merge to get both starters per game
