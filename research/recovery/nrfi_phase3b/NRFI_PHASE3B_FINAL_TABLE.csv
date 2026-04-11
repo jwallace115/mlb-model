@@ -1,0 +1,17 @@
+variable,gate,role,N,NRFI_pct,delta_pp,provenance,stability,mechanism,note
+day_game,A (F5<=4.0),WIDENER,515,69.7,6.4,PIT-SAFE,"3/3 yrs same sign, drift=1.3pp","Day games = more shadows, lower temps, less HBP risk",Strongest single overlay in Gate A
+day_game,B (F5<=4.5),WIDENER,1342,58.3,3.8,PIT-SAFE,"3/3 yrs same sign, drift=1.8pp",Same as above,Good volume
+day+hitter_park,A (F5<=4.0),WIDENER,165,72.1,8.8,PIT-SAFE,"3/3 yrs same sign, drift=5.3pp",Hitter parks already low-lined; day game compounds NRFI bias,Counter-intuitive: hitter park helps inside low-line gate
+day+hitter_park,B (F5<=4.5),WIDENER,365,60.5,6.0,PIT-SAFE,"3/3 yrs same sign, drift=2.8pp",Same,"Good volume, stable"
+ump_under+windy,C (total<=8),WIDENER,268,60.1,4.5,PIT-SAFE,"4/4 yrs same sign, drift=0.7pp",Under-leaning ump + wind disrupts contact,"Most stable overlay found (4yr consistent, lowest drift)"
+strong_wind>=15,A (F5<=4.0),WIDENER,71,71.8,8.6,PIT-SAFE (game-time wx),2/2 yrs same sign,Strong wind disrupts 1st-inning contact,"Small N, but large effect. UNVERIFIABLE if not hourly resolution"
+cold+pitcher_park,B (F5<=4.5),WIDENER,71,70.4,15.9,PIT-SAFE,2/2 yrs same sign (no 2022 data),Cold deadens ball + pitcher-friendly park,Largest delta but small N; early-season only
+pf=94 (Oakland),B (F5<=4.5),SELECTOR,402,61.2,6.7,PIT-SAFE (static park ID),"3/3 yrs same sign, drift=5.1pp",Extreme pitcher-friendly park identity,Oakland Coliseum; consistent but volatile magnitude
+strong_wind>=15,C (total<=8),SELECTOR,248,60.9,5.3,PIT-SAFE (game-time wx),3/4 yrs same sign,Wind disrupts contact,2025 flipped negative (N=11 only). Mostly stable
+strong_wind>=15,D (total<=9),SELECTOR,411,57.2,4.4,PIT-SAFE (game-time wx),3/4 yrs same sign,Same,2023 negative. Modest effect
+night_game,A (F5<=4.0),DISQUALIFIER,735,58.8,-4.5,PIT-SAFE,"3/3 yrs same sign, drift=0.7pp","Night games = warmer, more scoring, better hitter visibility",Inverse of day_game widener. Very stable disqualifier
+day+cold,C (total<=8),DISQUALIFIER,179,48.6,-7.0,PIT-SAFE,4/4 yrs same sign,Cold day games with low totals = SP control already priced in; cold disrupts pitcher grip too,Counter-intuitive: cold should help NRFI but hurts pitchers in low-total games
+indoor,D (total<=9),DISQUALIFIER,316,50.0,-2.8,PIT-SAFE,3/4 yrs negative,Domes remove weather edge; controlled environment favors hitters,"Modest effect, somewhat consistent"
+park_bucket (pitcher vs neutral vs hitter),all,NON-FACTOR,9900,,0.0,PIT-SAFE,Inconsistent across gates,Park factor already embedded in line,Hitter parks actually HELP NRFI in Gates A/B (selection effect: low line + hitter park = elite SPs)
+umpire_over_rate alone,all,NON-FACTOR,9900,,0.0,PIT-SAFE (static career),Mixed,Full-game ump tendency doesn't predict 1st inning specifically,Only works in interaction with wind (C gate)
+temperature alone,all,NON-FACTOR,9900,,0.0,PIT-SAFE if hourly,Inconsistent direction,Cold helps ball die but also hurts pitcher grip,Only works in interaction with pitcher park (B gate)

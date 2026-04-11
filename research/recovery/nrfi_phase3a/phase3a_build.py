@@ -140,10 +140,11 @@ def pit_safe_rolling(group):
     g["sp_1st_starts"] = g["cum_starts"]
     return g
 
-# Use pitcher_id+season as groupby but keep pitcher_id in output
-fi_df["_grp"] = fi_df["pitcher_id"].astype(str) + "_" + fi_df["season"].astype(str)
-fi_df = fi_df.groupby("_grp", group_keys=False).apply(pit_safe_rolling)
-fi_df = fi_df.drop(columns=["_grp"])
+# Apply rolling within pitcher+season groups
+parts = []
+for (pid, szn), grp in fi_df.groupby(["pitcher_id", "season"]):
+    parts.append(pit_safe_rolling(grp))
+fi_df = pd.concat(parts, ignore_index=True)
 valid = fi_df["sp_1st_era"].notna().sum()
 print(f"  With valid metrics (5+ prior starts): {valid} ({valid/len(fi_df)*100:.1f}%)")
 print(f"  sp_1st_era range: {fi_df['sp_1st_era'].min():.3f} - {fi_df['sp_1st_era'].max():.3f}")
@@ -200,9 +201,10 @@ def pit_safe_hitter_rolling(group):
     g["hitter_cum_pa"] = cum_pa
     return g
 
-top3["_grp"] = top3["player_id"].astype(str) + "_" + top3["season"].astype(str)
-top3 = top3.groupby("_grp", group_keys=False).apply(pit_safe_hitter_rolling)
-top3 = top3.drop(columns=["_grp"])
+parts_h = []
+for (pid, szn), grp in top3.groupby(["player_id", "season"]):
+    parts_h.append(pit_safe_hitter_rolling(grp))
+top3 = pd.concat(parts_h, ignore_index=True)
 valid_h = top3["hitter_obp"].notna().sum()
 print(f"  With valid hitter metrics (20+ prior PA): {valid_h} ({valid_h/len(top3)*100:.1f}%)")
 
