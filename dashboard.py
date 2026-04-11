@@ -399,8 +399,304 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
 
 
 def _render_nba_tab() -> None:
-    st.markdown("---")
-    st.markdown("**System reset \u2014 rebuilding.**")
+    import json, os
+    from datetime import date, datetime
+    import pandas as pd
+    from dashboard_components import (render_status_header, _universal_pill,
+                                       _render_game_card_universal, _pipeline_freshness)
+
+    # --- 1. LOAD TIMESTAMPS ---
+    lu = None
+    try:
+        lu_path = os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")
+        lu_data = json.load(open(lu_path))
+        nba_ts = lu_data.get("nba")
+        if nba_ts:
+            from zoneinfo import ZoneInfo
+            dt = datetime.fromisoformat(nba_ts.replace("Z", "+00:00"))
+            lu = dt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
+    except Exception:
+        pass
+
+    # --- 2. STATUS HEADERS ---
+    render_status_header(
+        object_name="\U0001f3c0 NBA Road Warrior Model",
+        object_id="nba_road_warrior_20260322",
+        status="LIVE",
+        tracker_start="March 22, 2026",
+        current_threshold="venue + archetype qualifying",
+        replaces="NBA Base Model \u2014 archived March 2026",
+        last_updated=lu,
+    )
+
+    render_status_header(
+        object_name="\U0001f3c0 NBA Referee Under",
+        object_id="nba_ref_under_20260322",
+        status="SHADOW",
+        tracker_start="March 22, 2026",
+        current_threshold="ref crew match + 0.75u flat",
+        last_updated=lu,
+    )
+
+    # --- 3. LOAD SIGNAL LOG ---
+    log_path = os.path.join(os.path.dirname(__file__), "nba", "data", "nba_signal_log.parquet")
+    signal_log = pd.DataFrame()
+    try:
+        if os.path.exists(log_path):
+            signal_log = pd.read_parquet(log_path)
+    except Exception:
+        pass
+
+    # --- 4. SIGNAL STATUS PILLS ---
+    rw_signals = signal_log[signal_log["signal_type"].str.contains("ROAD_WARRIOR", na=False)] if len(signal_log) else pd.DataFrame()
+    ref_signals = signal_log[signal_log["signal_type"].str.contains("REF_UNDER", na=False)] if len(signal_log) else pd.DataFrame()
+    oreb_signals = signal_log[signal_log["signal_type"].str.contains("OREB_CONFIRMS", na=False)] if len(signal_log) else pd.DataFrame()
+
+    active_pills = []
+    if len(rw_signals):
+        rw_tiers = set(rw_signals["tier"].dropna().unique())
+        active_pills.append(_universal_pill("Road Warrior", "#fff", "#16a34a"))
+        for t in ["TIER_1A", "TIER_1B", "TIER_2"]:
+            if t in rw_tiers:
+                active_pills.append(_universal_pill(t, "#fff", "#dc2626"))
+
+    if active_pills:
+        pill_html = "".join(active_pills)
+        st.html(
+            '<div style="margin:8px 0">'
+            '<span style="color:#22c55e;font-size:0.68em;font-weight:600;margin-right:6px">'
+            '\u25cf Active</span>' + pill_html + '</div>'
+        )
+
+    shadow_pills = []
+    if len(ref_signals):
+        shadow_pills.append(_universal_pill("Ref Under", "#fff", "#2563eb"))
+    if len(oreb_signals):
+        shadow_pills.append(_universal_pill("OREB Confirms", "#fff", "#2563eb"))
+
+    if shadow_pills:
+        pill_html = "".join(shadow_pills)
+        st.html(
+            '<div style="margin:8px 0">'
+            '<span style="color:#64748b;font-size:0.68em;font-weight:600;margin-right:6px">'
+            '\u25d0 Shadow</span>' + pill_html + '</div>'
+        )
+
+    # --- 5. ARCHETYPE RULES BLOCK ---
+    rules_html = (
+        '<div style="font-size:0.72em;color:#94a3b8;padding:8px 12px;background:#0d1117;'
+        'border-radius:4px;border:1px solid #1e293b;margin:8px 0">'
+        '<div style="font-weight:600;color:#78716c;margin-bottom:4px">Active Signal Archetypes</div>'
+        '<div><b>ROAD_WARRIOR_at_STRONG_HOME</b>: venue_signal + away team qualifies &rarr; OVER</div>'
+        '<div style="margin-top:2px">TIER_1A: 1.5u &nbsp;|&nbsp; TIER_1B: 1.5u &nbsp;|&nbsp; TIER_2: 1.0u</div>'
+        '<div style="color:#4b5563;margin-top:4px">'
+        'Shadow: REF_UNDER (0.75u flat) &nbsp;|&nbsp; OREB_CONFIRMS &nbsp;|&nbsp; BALANCED_vs_PASSIVE</div>'
+        '</div>'
+    )
+    st.html(rules_html)
+
+    # --- 6. TODAY'S SIGNALS ---
+    today_str = date.today().isoformat()
+    results_path = os.path.join(os.path.dirname(__file__), "nba_results.json")
+    today_plays = []
+    nba_meta = {}
+    try:
+        if os.path.exists(results_path):
+            nba_meta = json.load(open(results_path))
+            today_plays = nba_meta.get("plays", [])
+    except Exception:
+        pass
+
+    # Also check signal log for today
+    today_from_log = signal_log[signal_log["game_date"] == today_str] if len(signal_log) and "game_date" in signal_log.columns else pd.DataFrame()
+
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
+        "Today's Signals</div>"
+    )
+
+    if len(today_plays):
+        for p in today_plays:
+            away = p.get("away_team", "?")
+            home = p.get("home_team", "?")
+            matchup = f"{away} @ {home}"
+            tier = p.get("tier", p.get("confidence", ""))
+            side = p.get("signal_side", p.get("lean", ""))
+            line = p.get("line", p.get("closing_line", "?"))
+            edge = p.get("edge", 0)
+            pred = p.get("pred_total", "?")
+
+            stake_map = {"TIER_1A": "1.5u", "TIER_1B": "1.5u", "TIER_2": "1.0u"}
+            stake = stake_map.get(tier, "0.75u")
+            wagers = [f"{side} {line} \u00b7 {stake}"]
+            pills = [_universal_pill(tier, "#fff", "#dc2626")]
+
+            stats_list = []
+            if pred and pred != "?":
+                stats_list.append(f"Model: {pred:.1f}" if isinstance(pred, (int, float)) else f"Model: {pred}")
+            if edge:
+                stats_list.append(f"Edge: {edge:.1f}" if isinstance(edge, (int, float)) else f"Edge: {edge}")
+
+            _render_game_card_universal(
+                matchup=matchup,
+                time_str="",
+                tier=tier,
+                wagers=wagers,
+                pills=pills,
+                stats=stats_list,
+            )
+    elif len(today_from_log):
+        for _, row in today_from_log.iterrows():
+            away = row.get("away_team", "?")
+            home = row.get("home_team", "?")
+            matchup = f"{away} @ {home}"
+            tier = row.get("tier", "")
+            side = row.get("direction", "")
+            line = row.get("closing_line", "?")
+            sig_type = row.get("signal_type", "")
+
+            stake_map = {"TIER_1A": "1.5u", "TIER_1B": "1.5u", "TIER_2": "1.0u", "REF_UNDER": "0.75u"}
+            stake = stake_map.get(tier, "0.5u")
+            wagers = [f"{side} {line} \u00b7 {stake}"]
+
+            is_rw = "ROAD_WARRIOR" in sig_type
+            pill_bg = "#dc2626" if is_rw else "#2563eb"
+            pill_label = tier if is_rw else "REF_UNDER"
+            pills = [_universal_pill(pill_label, "#fff", pill_bg)]
+
+            disclaimer = None if is_rw else "Shadow signal \u2014 not a live wager"
+            _render_game_card_universal(
+                matchup=matchup,
+                time_str="",
+                tier="SHADOW" if not is_rw else tier,
+                wagers=wagers,
+                pills=pills,
+                stats=[f"Type: {sig_type}"],
+                disclaimer=disclaimer,
+            )
+    else:
+        st.html(
+            '<div style="font-size:0.75em;color:#6b7280;padding:6px 12px;background:#0d1117;'
+            'border-radius:4px;border:1px solid #1e293b">'
+            'No signals today \u2014 next slate pending</div>'
+        )
+
+    # --- 7. ROAD WARRIOR TRACKER ---
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+        'Road Warrior Tracker</div>'
+    )
+
+    rw_resolved = rw_signals[rw_signals["result"].isin(["WIN", "LOSS", "PUSH"])] if len(rw_signals) else pd.DataFrame()
+    rw_wins = int((rw_resolved["result"] == "WIN").sum()) if len(rw_resolved) else 0
+    rw_losses = int((rw_resolved["result"] == "LOSS").sum()) if len(rw_resolved) else 0
+    rw_pushes = int((rw_resolved["result"] == "PUSH").sum()) if len(rw_resolved) else 0
+    rw_n = rw_wins + rw_losses
+    rw_pnl = float(rw_resolved["units_won_lost"].sum()) if len(rw_resolved) and "units_won_lost" in rw_resolved.columns else 0
+    rw_staked = float(rw_resolved["units"].sum()) if len(rw_resolved) and "units" in rw_resolved.columns else 0
+    rw_roi = (rw_pnl / rw_staked * 100) if rw_staked > 0 else 0
+    rw_hit = (rw_wins / rw_n * 100) if rw_n > 0 else 0
+
+    st.html(
+        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
+        f'<span style="font-weight:700">{rw_wins}-{rw_losses}-{rw_pushes}</span>'
+        f' &nbsp;|&nbsp; Hit: {rw_hit:.1f}% &nbsp;|&nbsp; ROI: {rw_roi:+.1f}%'
+        f' &nbsp;|&nbsp; P&L: {rw_pnl:+.2f}u'
+        f' &nbsp;|&nbsp; {len(rw_signals) - len(rw_resolved)} pending'
+        f'</div>'
+    )
+
+    if len(rw_signals):
+        rows = []
+        for _, s in rw_signals.iterrows():
+            rows.append({
+                "Date": s.get("game_date", ""),
+                "Matchup": f"{s.get('away_team', '?')}@{s.get('home_team', '?')}",
+                "Tier": s.get("tier", ""),
+                "Dir": s.get("direction", ""),
+                "Line": s.get("closing_line", ""),
+                "Units": s.get("units", ""),
+                "Result": s.get("result", "pending") if pd.notna(s.get("result")) else "pending",
+                "P&L": f"{s['units_won_lost']:+.2f}" if pd.notna(s.get("units_won_lost")) else "",
+            })
+        df_rw = pd.DataFrame(rows)
+        st.dataframe(df_rw, use_container_width=True, hide_index=True)
+
+    # --- 8. REF UNDER SHADOW TRACKER ---
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+        'Referee Under Shadow Tracker</div>'
+    )
+
+    ref_resolved = ref_signals[ref_signals["result"].isin(["WIN", "LOSS", "PUSH"])] if len(ref_signals) else pd.DataFrame()
+    ref_wins = int((ref_resolved["result"] == "WIN").sum()) if len(ref_resolved) else 0
+    ref_losses = int((ref_resolved["result"] == "LOSS").sum()) if len(ref_resolved) else 0
+    ref_pushes = int((ref_resolved["result"] == "PUSH").sum()) if len(ref_resolved) else 0
+    ref_n = ref_wins + ref_losses
+    ref_pnl = float(ref_resolved["units_won_lost"].sum()) if len(ref_resolved) and "units_won_lost" in ref_resolved.columns else 0
+    ref_staked = float(ref_resolved["units"].sum()) if len(ref_resolved) and "units" in ref_resolved.columns else 0
+    ref_roi = (ref_pnl / ref_staked * 100) if ref_staked > 0 else 0
+    ref_hit = (ref_wins / ref_n * 100) if ref_n > 0 else 0
+
+    st.html(
+        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
+        f'<span style="font-weight:700">{ref_wins}-{ref_losses}-{ref_pushes}</span>'
+        f' &nbsp;|&nbsp; Hit: {ref_hit:.1f}% &nbsp;|&nbsp; ROI: {ref_roi:+.1f}%'
+        f' &nbsp;|&nbsp; P&L: {ref_pnl:+.2f}u (shadow)'
+        f' &nbsp;|&nbsp; {len(ref_signals) - len(ref_resolved)} pending'
+        f'</div>'
+    )
+
+    if len(ref_signals):
+        rows = []
+        for _, s in ref_signals.iterrows():
+            rows.append({
+                "Date": s.get("game_date", ""),
+                "Matchup": f"{s.get('away_team', '?')}@{s.get('home_team', '?')}",
+                "Dir": s.get("direction", ""),
+                "Line": s.get("closing_line", ""),
+                "Result": s.get("result", "pending") if pd.notna(s.get("result")) else "pending",
+                "P&L": f"{s['units_won_lost']:+.2f}" if pd.notna(s.get("units_won_lost")) else "",
+            })
+        df_ref = pd.DataFrame(rows)
+        st.dataframe(df_ref, use_container_width=True, hide_index=True)
+
+    # --- 9. SEASON ACCURACY BLOCK ---
+    season_acc = nba_meta.get("season_accuracy", {})
+    if season_acc:
+        overall = season_acc.get("overall", {})
+        st.html(
+            '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+            'Core Model Accuracy</div>'
+        )
+        n_games = overall.get("n", 0)
+        mae = overall.get("mae", 0)
+        hr = overall.get("hr", 0)
+        bias = overall.get("bias", 0)
+        st.html(
+            f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+            f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
+            f'{n_games} games graded &nbsp;|&nbsp; MAE: {mae:.1f} &nbsp;|&nbsp; '
+            f'Hit rate: {hr:.1f}% &nbsp;|&nbsp; Bias: {bias:+.1f}'
+            f'</div>'
+        )
+
+    # --- 10. LEGACY DISCLOSURE ---
+    st.html(
+        '<hr style="border:none;border-top:1px solid #1e293b;margin:20px 0 12px 0">'
+        '<div style="font-size:0.68em;color:#4b5563;padding:6px 12px;background:#0a0a0a;'
+        'border-radius:4px;border:1px solid #1a1a1a">'
+        '<div style="font-weight:600;margin-bottom:3px">'
+        'NBA Base Model \u2014 Archived March 2026</div>'
+        'Prior full-game totals model (ridge-based) was retired in favor of '
+        'archetype-driven signal detection. Legacy W-L record and ROI figures '
+        'belong to a different model object and are excluded from current metrics. '
+        'Archived archetypes: PLAYOFF_BOARDS (inactive, monitoring only).'
+        '</div>'
+    )
+
 
 
 def _render_nhl_tab() -> None:
