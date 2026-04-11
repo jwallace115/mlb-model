@@ -83,6 +83,7 @@ from nba.config import (
     SEASON_TYPE_REGULAR,
     VALIDATION_SEASON,
     H1_FEATURES_PATH,
+    LOCATION_MIN_GAMES,
 )
 from nba.modules.simulate import simulate_game
 
@@ -113,11 +114,16 @@ def _build_current_team_states(game_date: str) -> dict:
     """
     Compute rolling efficiency state for each team as of game_date.
 
-    For live use (unlike training), we include the team's most recent completed
-    game in the rolling window (no shift). Rolling window = 15 games.
+    Uses location-specific rolling for ortg/drtg/pace (home games only for
+    home team features, away games only for away team features) to match
+    training features.py. Falls back to overall rolling if fewer than
+    LOCATION_MIN_GAMES same-location games available.
+    Rolling window = 15 games.
 
     Returns dict: {team_abbr: {ortg, drtg, pace, fg3a_rate, ft_rate,
-                                ortg_trend, pace_trend, games_in_season}}
+                                ortg_trend, pace_trend, games_in_season,
+                                ortg_home, drtg_home, pace_home,
+                                ortg_away, drtg_away, pace_away}}
     """
     from nba.modules.fetch_box_stats import fetch_box_stats
 
@@ -172,6 +178,7 @@ def _build_current_team_states(game_date: str) -> dict:
         recent15 = cur.tail(ROLLING_WINDOW)
         recent5  = cur.tail(5)
 
+        # Overall rolling (used for trends and fallback)
         ortg_roll15 = recent15["ortg"].mean()
         drtg_roll15 = recent15["drtg"].mean()
         pace_roll15 = recent15["pace"].mean()
@@ -182,12 +189,36 @@ def _build_current_team_states(game_date: str) -> dict:
         ortg_trend = round(float(ortg_roll5 - ortg_roll15), 3)
         pace_trend = round(float(pace_roll5 - pace_roll15), 3)
 
-        # Style features
+        # Location-specific rolling (matches training features.py)
+        # FIX 2026-04-11: training uses location_rolling with LOCATION_MIN_GAMES fallback
+        loc_splits = {}
+        for loc_label, loc_code in [("home", "H"), ("away", "A")]:
+            loc_games = cur[cur["location"] == loc_code]
+            loc_recent = loc_games.tail(ROLLING_WINDOW)
+            if len(loc_recent) >= LOCATION_MIN_GAMES:
+                loc_splits[f"ortg_{loc_label}"] = loc_recent["ortg"].mean()
+                loc_splits[f"drtg_{loc_label}"] = loc_recent["drtg"].mean()
+                loc_splits[f"pace_{loc_label}"] = loc_recent["pace"].mean()
+            else:
+                # Fallback to overall rolling (same as training features.py)
+                loc_splits[f"ortg_{loc_label}"] = ortg_roll15
+                loc_splits[f"drtg_{loc_label}"] = drtg_roll15
+                loc_splits[f"pace_{loc_label}"] = pace_roll15
+
+        # Style features (no location split in training)
         fg3a_rate = recent15["fg3a_rate"].mean() if "fg3a_rate" in cur.columns else 0.36
         ft_rate   = recent15["ft_rate"].mean()   if "ft_rate"   in cur.columns else 0.28
 
         # Prior-season blending for early season
         bl = baselines.get((team, CURRENT_SEASON), {})
+        # Blend location-specific values (matches training _resolve_team_features)
+        ortg_home = _blend(loc_splits["ortg_home"], bl.get("ortg", np.nan), n)
+        drtg_home = _blend(loc_splits["drtg_home"], bl.get("drtg", np.nan), n)
+        pace_home = _blend(loc_splits["pace_home"], bl.get("pace", np.nan), n)
+        ortg_away = _blend(loc_splits["ortg_away"], bl.get("ortg", np.nan), n)
+        drtg_away = _blend(loc_splits["drtg_away"], bl.get("drtg", np.nan), n)
+        pace_away = _blend(loc_splits["pace_away"], bl.get("pace", np.nan), n)
+        # Overall blended (for trend, style, and non-location features)
         ortg = _blend(ortg_roll15, bl.get("ortg", np.nan), n)
         drtg = _blend(drtg_roll15, bl.get("drtg", np.nan), n)
         pace = _blend(pace_roll15, bl.get("pace", np.nan), n)
@@ -196,6 +227,13 @@ def _build_current_team_states(game_date: str) -> dict:
             "ortg":          round(float(ortg), 2),
             "drtg":          round(float(drtg), 2),
             "pace":          round(float(pace), 2),
+            # Location-split values (used by Ridge feature builder)
+            "ortg_home":     round(float(ortg_home), 2),
+            "drtg_home":     round(float(drtg_home), 2),
+            "pace_home":     round(float(pace_home), 2),
+            "ortg_away":     round(float(ortg_away), 2),
+            "drtg_away":     round(float(drtg_away), 2),
+            "pace_away":     round(float(pace_away), 2),
             "fg3a_rate":     round(float(fg3a_rate), 4),
             "ft_rate":       round(float(ft_rate), 4),
             "ortg_trend":    ortg_trend,
@@ -514,6 +552,13 @@ def _blend_playoff_features(reg_state: dict, series_roll: dict,
             state[state_key] = round(
                 w_playoff * series_val + w_reg * state[state_key], 2
             )
+            # FIX 2026-04-11: Also blend location-split keys so feat_row stays aligned
+            for loc_suffix in ["_home", "_away"]:
+                loc_key = state_key + loc_suffix
+                if loc_key in state:
+                    state[loc_key] = round(
+                        w_playoff * series_val + w_reg * state[loc_key], 2
+                    )
 
     return state
 
@@ -582,7 +627,8 @@ def _flag_archetype_matchups(game_results: list[dict], game_date: str) -> None:
         g["archetype_direction"] = None
         g["archetype_note"] = None
 
-        if away in _ELITE_DEF2 and home in _ELITE_DEF:
+        # KILLED 2026-04-11 — revalidation verdict: COLLAPSES (43% OOS, -18% ROI)
+        if False:  # was: away in _ELITE_DEF2 and home in _ELITE_DEF
             g["archetype_signal"] = "ELITE_DEF2_at_ELITE_DEF"
             g["archetype_direction"] = "UNDER"
             g["archetype_note"] = "UNDER — hist edge -3.0pts (p=0.022)"
@@ -1750,29 +1796,36 @@ def run(game_date: str = None, use_odds: bool = True, skip_results: bool = False
                 # Blend regular-season rolling with series rolling
                 home_state = _blend_playoff_features(home_state, series_roll, "home", w_p)
                 away_state = _blend_playoff_features(away_state, series_roll, "away", w_p)
+                # FIX 2026-04-11: Also blend raw state so Ridge feat_row gets playoff data
+                home_state_raw = _blend_playoff_features(home_state_raw, series_roll, "home", w_p)
+                away_state_raw = _blend_playoff_features(away_state_raw, series_roll, "away", w_p)
             else:
                 # Game 1: pure regular season rolling (w_playoff = 0)
                 pass
 
         playoff_blend_weight = series_meta.get("playoff_blend_weight", 0.0) if is_playoff else None
 
-        # Build feature vector (unchanged — playoff blending modified the state values above)
+        # Build feature vector
+        # FIX 2026-04-11: Use location-split values to match training features.py
+        # home_ortg = home team's ORtg from home games only (with overall fallback)
+        # away_ortg = away team's ORtg from away games only (with overall fallback)
+        # Injury adjustment NOT applied to Ridge features (training had injury_adj=0.0)
         feat_row = {
-            "home_ortg":       home_state["ortg"],
-            "away_ortg":       away_state["ortg"],
-            "home_drtg":       home_state["drtg"],
-            "away_drtg":       away_state["drtg"],
-            "home_pace":       home_state["pace"],
-            "away_pace":       away_state["pace"],
+            "home_ortg":       home_state_raw.get("ortg_home", home_state_raw["ortg"]),
+            "away_ortg":       away_state_raw.get("ortg_away", away_state_raw["ortg"]),
+            "home_drtg":       home_state_raw.get("drtg_home", home_state_raw["drtg"]),
+            "away_drtg":       away_state_raw.get("drtg_away", away_state_raw["drtg"]),
+            "home_pace":       home_state_raw.get("pace_home", home_state_raw["pace"]),
+            "away_pace":       away_state_raw.get("pace_away", away_state_raw["pace"]),
             "b2b_flag_away":   b2b_away,
-            "home_ortg_trend": home_state["ortg_trend"],
-            "away_ortg_trend": away_state["ortg_trend"],
-            "home_pace_trend": home_state["pace_trend"],
-            "away_pace_trend": away_state["pace_trend"],
-            "home_3pa_rate":   home_state["fg3a_rate"],
-            "away_3pa_rate":   away_state["fg3a_rate"],
-            "home_ft_rate":    home_state["ft_rate"],
-            "away_ft_rate":    away_state["ft_rate"],
+            "home_ortg_trend": home_state_raw["ortg_trend"],
+            "away_ortg_trend": away_state_raw["ortg_trend"],
+            "home_pace_trend": home_state_raw["pace_trend"],
+            "away_pace_trend": away_state_raw["pace_trend"],
+            "home_3pa_rate":   home_state_raw["fg3a_rate"],
+            "away_3pa_rate":   away_state_raw["fg3a_rate"],
+            "home_ft_rate":    home_state_raw["ft_rate"],
+            "away_ft_rate":    away_state_raw["ft_rate"],
         }
         X = np.array([[feat_row[c] for c in FEATURE_COLS]])
 

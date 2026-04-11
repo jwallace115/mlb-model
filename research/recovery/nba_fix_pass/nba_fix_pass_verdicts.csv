@@ -1,0 +1,10 @@
+fix_id,target,priority,status,description,risk
+FIX1,ELITE_DEF2 signal,HIGH,APPLIED,"Killed via if False guard -- 43% OOS hit rate / -18% ROI",NONE
+FIX2,Location-split rolling,MEDIUM,APPLIED,"Added home/away location-specific rolling to _build_current_team_states; fallback to overall if < 5 games",LOW
+FIX3,Ridge feat_row wiring,MEDIUM,APPLIED,"feat_row now uses ortg_home/ortg_away from raw state (pre-injury) to match training distribution",LOW
+FIX4,Playoff blend extension,LOW,APPLIED,"_blend_playoff_features now also blends location-split keys",LOW
+FIX5,Playoff blend raw state,LOW,APPLIED,"Playoff blend applied to raw state so feat_row gets playoff data",LOW
+FIX6,LOCATION_MIN_GAMES import,LOW,APPLIED,"Added missing config import",NONE
+INJURY,Injury adjustment decision,MEDIUM,DECIDED,"Disabled for Ridge features; kept for display. Training had injury_adj=0.0",LOW
+ROAD_WARRIOR,Road Warrior signal,N/A,UNCHANGED,"Only surviving archetype; verified untouched",NONE
+PLAYOFF_BOARDS,P1/P2/P4 boards,N/A,UNCHANGED,"Structurally sound; no parity issue found",NONE
