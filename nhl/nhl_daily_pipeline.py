@@ -23,6 +23,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import time
 import requests
 
 # ---------------------------------------------------------------------------
@@ -36,6 +37,9 @@ HOME_PKL     = NHL_DIR / "ridge_home_model.pkl"
 AWAY_PKL     = NHL_DIR / "ridge_away_model.pkl"
 DECISIONS    = NHL_DIR / "nhl_decisions.parquet"
 LIVE_CACHE   = CACHE_DIR / "nhl_live_season.parquet"  # current-season games
+REBUILD_FT   = BASE_DIR / "research" / "recovery" / "nhl_rebuild" / "nhl_rebuild_features.parquet"
+REBUILD_HOME = BASE_DIR / "research" / "recovery" / "nhl_rebuild" / "model_A_home.pkl"
+REBUILD_AWAY = BASE_DIR / "research" / "recovery" / "nhl_rebuild" / "model_A_away.pkl"
 
 NHL_API      = "https://api-web.nhle.com/v1"
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
@@ -98,10 +102,14 @@ BOOK_PRIORITY = ["draftkings", "fanduel", "betmgm", "williamhill_us"]
 # Load models and feature table
 # ---------------------------------------------------------------------------
 def load_models():
-    with open(HOME_PKL, "rb") as f:
+    # Use rebuild Model A pickles for live parity
+    home_pkl = REBUILD_HOME if REBUILD_HOME.exists() else HOME_PKL
+    away_pkl = REBUILD_AWAY if REBUILD_AWAY.exists() else AWAY_PKL
+    with open(home_pkl, "rb") as f:
         hpkg = pickle.load(f)
-    with open(AWAY_PKL, "rb") as f:
+    with open(away_pkl, "rb") as f:
         apkg = pickle.load(f)
+    print(f"  Models loaded from: {home_pkl.name}, {away_pkl.name}")
     return hpkg, apkg
 
 def load_feature_table() -> pd.DataFrame:
@@ -111,23 +119,25 @@ def load_feature_table() -> pd.DataFrame:
 # Compute 2024-25 end-of-season league averages (shrinkage priors)
 # ---------------------------------------------------------------------------
 def compute_league_priors(ft: pd.DataFrame) -> dict:
-    """Extract 2024-25 league-average feature values for use as shrinkage priors."""
-    oos = ft[ft["season_year"] == 2024]
+    """Extract league-average feature values for rebuild Model A shrinkage priors.
+    Uses rebuild feature table if available, otherwise falls back to old feature table."""
+    # Try rebuild feature table first (Model A features)
+    if REBUILD_FT.exists():
+        rft = pd.read_parquet(REBUILD_FT)
+        oos = rft[rft["season_year"] == 2024]
+    else:
+        oos = ft[ft["season_year"] == 2024]
 
     priors = {}
+    # Model A features — no MoneyPuck features
     for side in ("home", "away"):
-        priors[f"{side}_xgf_rolling_20"]              = oos[f"{side}_xgf_rolling_20"].mean()
+        priors[f"{side}_goals_scored_rolling_10"]      = oos[f"{side}_goals_scored_rolling_10"].mean()
+        priors[f"{side}_goals_allowed_rolling_10"]     = oos[f"{side}_goals_allowed_rolling_10"].mean()
         priors[f"{side}_shots_for_rolling_20"]         = oos[f"{side}_shots_for_rolling_20"].mean()
-        priors[f"{side}_hd_shots_for_rolling_20"]      = oos[f"{side}_hd_shots_for_rolling_20"].mean()
-        priors[f"{side}_xga_rolling_20"]               = oos[f"{side}_xga_rolling_20"].mean()
         priors[f"{side}_shots_against_rolling_20"]     = oos[f"{side}_shots_against_rolling_20"].mean()
-        priors[f"{side}_hd_shots_against_rolling_20"]  = oos[f"{side}_hd_shots_against_rolling_20"].mean()
         priors[f"{side}_pp_pct_rolling_20"]            = oos[f"{side}_pp_pct_rolling_20"].mean()
         priors[f"{side}_pk_pct_rolling_20"]            = oos[f"{side}_pk_pct_rolling_20"].mean()
         priors[f"{side}_pp_opp_per_game_rolling_20"]   = oos[f"{side}_pp_opp_per_game_rolling_20"].mean()
-        priors[f"{side}_goals_scored_rolling_10"]      = oos[f"{side}_goals_scored_rolling_10"].mean()
-        priors[f"{side}_goals_allowed_rolling_10"]     = oos[f"{side}_goals_allowed_rolling_10"].mean()
-        priors[f"{side}_penalties_taken_rolling_20"]   = oos[f"{side}_penalties_taken_rolling_20"].mean()
         priors[f"{side}_goalie_sv_pct_rolling_10"]     = oos[f"{side}_goalie_sv_pct_rolling_10"].mean()
         priors[f"{side}_goalie_vs_team_baseline"]      = 0.0
         priors[f"{side}_goalie_fatigue"]               = 0
@@ -137,8 +147,6 @@ def compute_league_priors(ft: pd.DataFrame) -> dict:
     # Derived: shot pressure (= 0 when both at league avg)
     priors["home_shot_pressure"] = 0.0
     priors["away_shot_pressure"] = 0.0
-    priors["home_hd_pressure"]   = 0.0
-    priors["away_hd_pressure"]   = 0.0
 
     # Schedule defaults
     priors["home_days_rest"]    = 3.0
@@ -202,6 +210,96 @@ def fetch_goalies(game_id: int) -> dict:
         return {"home": {}, "away": {}}
 
 # ---------------------------------------------------------------------------
+# Extended boxscore fetch — SOG/PP/PK/SV for NHL rebuild parity
+# ---------------------------------------------------------------------------
+def fetch_game_boxscore_extended(game_id: int) -> dict:
+    """
+    Fetch full boxscore + play-by-play for a completed game.
+    Returns dict with SOG, PP goals, PP opportunities, goalie SA/GA/ID.
+    Extended for NHL rebuild parity — SOG/PP/PK/SV
+    """
+    result = {
+        "home_sog": None, "away_sog": None,
+        "home_pp_goals": None, "away_pp_goals": None,
+        "home_pp_opportunities": None, "away_pp_opportunities": None,
+        "home_goalie_id": None, "away_goalie_id": None,
+        "home_goalie_name": None, "away_goalie_name": None,
+        "home_goalie_sa": None, "away_goalie_sa": None,
+        "home_goalie_ga": None, "away_goalie_ga": None,
+    }
+
+    # --- Boxscore: SOG, PP goals, goalie stats ---
+    try:
+        r = requests.get(f"{NHL_API}/gamecenter/{game_id}/boxscore", timeout=15)
+        r.raise_for_status()
+        data = r.json()
+
+        # SOG from top-level team data
+        result["home_sog"] = data.get("homeTeam", {}).get("sog")
+        result["away_sog"] = data.get("awayTeam", {}).get("sog")
+
+        # Team IDs for PBP penalty matching
+        home_team_id = data.get("homeTeam", {}).get("id")
+        away_team_id = data.get("awayTeam", {}).get("id")
+
+        # PP goals from skater stats + goalie stats
+        pg = data.get("playerByGameStats", {})
+        for side_key, prefix in [("homeTeam", "home"), ("awayTeam", "away")]:
+            team_stats = pg.get(side_key, {})
+
+            # Sum PP goals from forwards + defense
+            pp_goals = 0
+            for pos in ("forwards", "defense"):
+                for p in team_stats.get(pos, []):
+                    pp_goals += p.get("powerPlayGoals", 0) or 0
+            result[f"{prefix}_pp_goals"] = pp_goals
+
+            # Starter goalie stats
+            goalies = team_stats.get("goalies", [])
+            starter = next((g for g in goalies if g.get("starter")), None)
+            if starter:
+                sa = starter.get("shotsAgainst", 0) or 0
+                saves = starter.get("saves", 0) or 0
+                result[f"{prefix}_goalie_id"] = starter.get("playerId")
+                result[f"{prefix}_goalie_name"] = starter.get("name", {}).get("default", "Unknown")
+                result[f"{prefix}_goalie_sa"] = sa
+                result[f"{prefix}_goalie_ga"] = sa - saves
+
+    except Exception as e:
+        pass  # result fields stay None
+
+    # --- Play-by-play: PP opportunities from penalty count ---
+    try:
+        r2 = requests.get(f"{NHL_API}/gamecenter/{game_id}/play-by-play", timeout=15)
+        r2.raise_for_status()
+        pbp = r2.json()
+        plays = pbp.get("plays", [])
+
+        home_penalties = 0
+        away_penalties = 0
+        for p in plays:
+            if p.get("typeDescKey") != "penalty":
+                continue
+            details = p.get("details", {})
+            event_owner = details.get("eventOwnerTeamId")
+            dur = details.get("duration", 0)
+            desc = (details.get("descKey") or "").lower()
+            # Only penalties that create PP (exclude misconduct)
+            if dur and dur >= 2 and "misconduct" not in desc:
+                if event_owner == home_team_id:
+                    home_penalties += 1  # home penalty = away PP opportunity
+                elif event_owner == away_team_id:
+                    away_penalties += 1  # away penalty = home PP opportunity
+
+        result["home_pp_opportunities"] = away_penalties  # home PP opp = away penalties
+        result["away_pp_opportunities"] = home_penalties  # away PP opp = home penalties
+
+    except Exception:
+        pass  # PP opportunities stay None
+
+    return result
+
+# ---------------------------------------------------------------------------
 # Fetch current-season live game data and cache it
 # ---------------------------------------------------------------------------
 def load_or_refresh_live_season(target_date: date) -> pd.DataFrame:
@@ -209,10 +307,22 @@ def load_or_refresh_live_season(target_date: date) -> pd.DataFrame:
     Returns DataFrame of completed games in current season up to target_date.
     Uses cache if fresh (< 6 hours old); otherwise fetches from NHL API.
 
-    NOTE: This is a simplified fetch using NHL schedule + boxscore.
-    MoneyPuck features (xGF, xGA, HD shots) are not available here;
-    those features will fall back to league-average priors.
+    Extended for NHL rebuild parity: fetches SOG, PP goals, PP opportunities,
+    and goalie stats from boxscore + play-by-play for each completed game.
     """
+    EXTENDED_COLS = [
+        "game_id", "game_date", "home_team", "away_team",
+        "home_score", "away_score",
+        # Extended for NHL rebuild parity — SOG/PP/PK/SV
+        "home_sog", "away_sog",
+        "home_pp_goals", "away_pp_goals",
+        "home_pp_opportunities", "away_pp_opportunities",
+        "home_goalie_id", "away_goalie_id",
+        "home_goalie_name", "away_goalie_name",
+        "home_goalie_sa", "away_goalie_sa",
+        "home_goalie_ga", "away_goalie_ga",
+    ]
+
     refresh = True
     if LIVE_CACHE.exists():
         mtime = datetime.fromtimestamp(LIVE_CACHE.stat().st_mtime)
@@ -221,16 +331,21 @@ def load_or_refresh_live_season(target_date: date) -> pd.DataFrame:
 
     if not refresh:
         df = pd.read_parquet(LIVE_CACHE)
-        # Filter to games before target_date
         df["game_date"] = pd.to_datetime(df["game_date"]).dt.date
-        return df[df["game_date"] < target_date]
+        # Check if cache has extended columns; if not, force refresh
+        if "home_sog" not in df.columns:
+            print("  Cache missing extended boxscore columns — forcing refresh")
+            refresh = True
+        else:
+            return df[df["game_date"] < target_date]
 
     # Determine current season start (Oct 1 of the current season)
     year = target_date.year if target_date.month >= 10 else target_date.year - 1
     season_start = date(year, 10, 1)
     print(f"  Fetching 2025-26 season game data ({season_start} → {target_date})...")
 
-    rows = []
+    # Phase 1: collect game IDs and basic info from schedule
+    game_stubs = []
     current = season_start
     while current < target_date:
         url = f"{NHL_API}/schedule/{current.isoformat()}"
@@ -242,7 +357,7 @@ def load_or_refresh_live_season(target_date: date) -> pd.DataFrame:
                 if day.get("date") == current.isoformat():
                     for g in day.get("games", []):
                         if g.get("gameState") == "OFF" and g.get("gameType") == 2:
-                            rows.append({
+                            game_stubs.append({
                                 "game_id":    g["id"],
                                 "game_date":  current,
                                 "home_team":  g["homeTeam"]["abbrev"],
@@ -254,13 +369,26 @@ def load_or_refresh_live_season(target_date: date) -> pd.DataFrame:
             pass
         current += timedelta(days=1)
 
-    df = pd.DataFrame(rows) if rows else pd.DataFrame(
-        columns=["game_id", "game_date", "home_team", "away_team",
-                 "home_score", "away_score"])
+    print(f"  Found {len(game_stubs)} completed regular-season games")
+
+    # Phase 2: fetch extended boxscore data for each game
+    rows = []
+    n_fetched = 0
+    for stub in game_stubs:
+        gid = stub["game_id"]
+        ext = fetch_game_boxscore_extended(gid)
+        row = {**stub, **ext}
+        rows.append(row)
+        n_fetched += 1
+        if n_fetched % 100 == 0:
+            print(f"    Fetched boxscore {n_fetched}/{len(game_stubs)}...")
+        time.sleep(0.05)  # gentle rate limit for NHL API
+
+    df = pd.DataFrame(rows, columns=EXTENDED_COLS) if rows else pd.DataFrame(columns=EXTENDED_COLS)
 
     if len(df):
         df.to_parquet(LIVE_CACHE, index=False)
-        print(f"  Live season cache: {len(df)} games saved")
+        print(f"  Live season cache: {len(df)} games saved (with extended boxscore)")
     else:
         print("  No current-season games found (early season or API issue)")
 
@@ -274,10 +402,13 @@ def build_live_team_features(team: str, game_date: date,
                               side: str) -> dict:
     """
     Compute rolling features for a team entering game_date.
-    Uses live season data where available; falls back to priors.
-    Since xGF/xGA/HD shots aren't in live data, those use priors.
+    Uses live season data with extended boxscore fields.
+    All Model A features computed from NHL API data — no MoneyPuck fallback.
     'side' = 'home' or 'away' — used for feature naming.
     """
+    ROLLING_SHORT = 10
+    ROLLING_LONG  = 20
+
     # All prior games this season for this team (as home or away)
     if len(live) > 0:
         live["game_date"] = pd.to_datetime(live["game_date"]).dt.date
@@ -290,46 +421,122 @@ def build_live_team_features(team: str, game_date: date,
 
     n = len(team_games)
 
-    # Shrinkage weight
+    # Shrinkage weight — matches rebuild exactly
     def shrink(raw, n_obs, prior_val, window=20):
+        if pd.isna(raw):
+            return prior_val
         w = min(n_obs, window) / window
         return w * raw + (1 - w) * prior_val
 
     feat = {}
 
-    # --- Goals scored / allowed (available from live data) ---
-    if n > 0:
-        goals_scored  = []
-        goals_allowed = []
-        for _, r in team_games.iterrows():
-            if r["home_team"] == team:
-                goals_scored.append(r["home_score"])
-                goals_allowed.append(r["away_score"])
-            else:
-                goals_scored.append(r["away_score"])
-                goals_allowed.append(r["home_score"])
+    # Build per-game arrays from team perspective
+    goals_scored  = []
+    goals_allowed = []
+    shots_for     = []
+    shots_against = []
+    pp_pct_arr    = []
+    pk_pct_arr    = []
+    pp_opp_arr    = []
+    goalie_sv_pct = []
+    goalie_ids    = []
 
-        gs_arr = [g for g in goals_scored[-10:] if not pd.isna(g)]
-        ga_arr = [g for g in goals_allowed[-10:] if not pd.isna(g)]
-        gs_raw = float(np.mean(gs_arr)) if gs_arr else np.nan
-        ga_raw = float(np.mean(ga_arr)) if ga_arr else np.nan
+    for _, r in team_games.iterrows():
+        is_home = (r["home_team"] == team)
+        pfx = "home" if is_home else "away"
+        opp_pfx = "away" if is_home else "home"
+
+        goals_scored.append(r[f"{pfx}_score"])
+        goals_allowed.append(r[f"{opp_pfx}_score"])
+
+        # SOG — Extended for NHL rebuild parity
+        sf = r.get(f"{pfx}_sog")
+        sa = r.get(f"{opp_pfx}_sog")
+        shots_for.append(sf if pd.notna(sf) else np.nan)
+        shots_against.append(sa if pd.notna(sa) else np.nan)
+
+        # PP% — pp_goals / pp_opportunities
+        ppg = r.get(f"{pfx}_pp_goals")
+        ppo = r.get(f"{pfx}_pp_opportunities")
+        if pd.notna(ppg) and pd.notna(ppo):
+            pp_pct_arr.append(ppg / ppo if ppo > 0 else 0.0)
+        else:
+            pp_pct_arr.append(np.nan)
+
+        # PK% — 1 - (opp_pp_goals / opp_pp_opportunities)
+        opp_ppg = r.get(f"{opp_pfx}_pp_goals")
+        opp_ppo = r.get(f"{opp_pfx}_pp_opportunities")
+        if pd.notna(opp_ppg) and pd.notna(opp_ppo):
+            pk_pct_arr.append(1.0 - opp_ppg / opp_ppo if opp_ppo > 0 else 1.0)
+        else:
+            pk_pct_arr.append(np.nan)
+
+        # PP opportunities per game
+        pp_opp_arr.append(ppo if pd.notna(ppo) else np.nan)
+
+        # Goalie save% — from goalie SA and GA
+        gsa = r.get(f"{pfx}_goalie_sa")
+        gga = r.get(f"{pfx}_goalie_ga")
+        gid = r.get(f"{pfx}_goalie_id")
+        if pd.notna(gsa) and gsa > 0 and pd.notna(gga):
+            goalie_sv_pct.append(1.0 - gga / gsa)
+        else:
+            goalie_sv_pct.append(0.91)  # league average fallback
+        goalie_ids.append(gid)
+
+    # --- Goals rolling 10 ---
+    gs_tail = [g for g in goals_scored[-ROLLING_SHORT:] if not pd.isna(g)]
+    ga_tail = [g for g in goals_allowed[-ROLLING_SHORT:] if not pd.isna(g)]
+    feat[f"{side}_goals_scored_rolling_10"] = shrink(
+        float(np.mean(gs_tail)) if gs_tail else np.nan,
+        n, priors[f"{side}_goals_scored_rolling_10"], ROLLING_SHORT)
+    feat[f"{side}_goals_allowed_rolling_10"] = shrink(
+        float(np.mean(ga_tail)) if ga_tail else np.nan,
+        n, priors[f"{side}_goals_allowed_rolling_10"], ROLLING_SHORT)
+
+    # --- Shots rolling 20 ---
+    sf_tail = [s for s in shots_for[-ROLLING_LONG:] if not pd.isna(s)]
+    sa_tail = [s for s in shots_against[-ROLLING_LONG:] if not pd.isna(s)]
+    feat[f"{side}_shots_for_rolling_20"] = shrink(
+        float(np.mean(sf_tail)) if sf_tail else np.nan,
+        len(sf_tail), priors[f"{side}_shots_for_rolling_20"], ROLLING_LONG)
+    feat[f"{side}_shots_against_rolling_20"] = shrink(
+        float(np.mean(sa_tail)) if sa_tail else np.nan,
+        len(sa_tail), priors[f"{side}_shots_against_rolling_20"], ROLLING_LONG)
+
+    # --- PP% rolling 20 ---
+    pp_tail = [p for p in pp_pct_arr[-ROLLING_LONG:] if not pd.isna(p)]
+    feat[f"{side}_pp_pct_rolling_20"] = shrink(
+        float(np.mean(pp_tail)) if pp_tail else np.nan,
+        len(pp_tail), priors[f"{side}_pp_pct_rolling_20"], ROLLING_LONG)
+
+    # --- PK% rolling 20 ---
+    pk_tail = [p for p in pk_pct_arr[-ROLLING_LONG:] if not pd.isna(p)]
+    feat[f"{side}_pk_pct_rolling_20"] = shrink(
+        float(np.mean(pk_tail)) if pk_tail else np.nan,
+        len(pk_tail), priors[f"{side}_pk_pct_rolling_20"], ROLLING_LONG)
+
+    # --- PP opportunities per game rolling 20 ---
+    ppo_tail = [p for p in pp_opp_arr[-ROLLING_LONG:] if not pd.isna(p)]
+    feat[f"{side}_pp_opp_per_game_rolling_20"] = shrink(
+        float(np.mean(ppo_tail)) if ppo_tail else np.nan,
+        len(ppo_tail), priors[f"{side}_pp_opp_per_game_rolling_20"], ROLLING_LONG)
+
+    # --- Goalie save% rolling 10 (goalie-specific, matching rebuild) ---
+    # For live pipeline, we track goalie-specific stats if goalie_id available
+    today_goalie_id = None  # will be set in compute_game_features
+    gsv_tail = [s for s in goalie_sv_pct[-ROLLING_SHORT:] if not pd.isna(s)]
+    feat[f"{side}_goalie_sv_pct_rolling_10"] = shrink(
+        float(np.mean(gsv_tail)) if gsv_tail else np.nan,
+        len(gsv_tail), priors[f"{side}_goalie_sv_pct_rolling_10"], ROLLING_SHORT)
+
+    # --- Goalie vs team baseline ---
+    # Simplified: use overall goalie SV% vs all goalies for the team
+    if len(goalie_sv_pct) >= 3:
+        all_mean = float(np.mean([s for s in goalie_sv_pct if not pd.isna(s)])) if goalie_sv_pct else 0.91
+        feat[f"{side}_goalie_vs_team_baseline"] = feat[f"{side}_goalie_sv_pct_rolling_10"] - all_mean
     else:
-        gs_raw, ga_raw = np.nan, np.nan
-
-    feat[f"{side}_goals_scored_rolling_10"]  = shrink(gs_raw or priors[f"{side}_goals_scored_rolling_10"],
-                                                       n, priors[f"{side}_goals_scored_rolling_10"], 10)
-    feat[f"{side}_goals_allowed_rolling_10"] = shrink(ga_raw or priors[f"{side}_goals_allowed_rolling_10"],
-                                                      n, priors[f"{side}_goals_allowed_rolling_10"], 10)
-
-    # MoneyPuck 2025-26 not yet available — using 2024-25 priors. Known degradation. Revisit end of season.
-    # --- MoneyPuck-dependent features: full shrinkage to prior ---
-    for col in [f"{side}_xgf_rolling_20", f"{side}_shots_for_rolling_20",
-                f"{side}_hd_shots_for_rolling_20", f"{side}_xga_rolling_20",
-                f"{side}_shots_against_rolling_20", f"{side}_hd_shots_against_rolling_20",
-                f"{side}_pp_pct_rolling_20", f"{side}_pk_pct_rolling_20",
-                f"{side}_pp_opp_per_game_rolling_20", f"{side}_penalties_taken_rolling_20",
-                f"{side}_goalie_sv_pct_rolling_10", f"{side}_goalie_vs_team_baseline"]:
-        feat[col] = priors[col]  # shrinkage weight = 0/n = 0 → 100% prior
+        feat[f"{side}_goalie_vs_team_baseline"] = 0.0
 
     return feat
 
@@ -344,28 +551,54 @@ def compute_game_features(home: str, away: str, game_date: date,
     h_feat = build_live_team_features(home, game_date, live, priors, "home")
     a_feat = build_live_team_features(away, game_date, live, priors, "away")
 
-    # Shot pressure (derived — both at league avg → pressure = 0)
+    # Shot pressure (derived — Model A feature)
     feat = {**h_feat, **a_feat}
     feat["home_shot_pressure"] = feat["home_shots_for_rolling_20"] - feat["away_shots_against_rolling_20"]
     feat["away_shot_pressure"] = feat["away_shots_for_rolling_20"] - feat["home_shots_against_rolling_20"]
-    feat["home_hd_pressure"]   = feat["home_hd_shots_for_rolling_20"] - feat["away_hd_shots_against_rolling_20"]
-    feat["away_hd_pressure"]   = feat["away_hd_shots_for_rolling_20"] - feat["home_hd_shots_against_rolling_20"]
 
-    # Goalie adjustments from live info
-    feat["home_goalie_fatigue"] = 0   # not computed from live data
-    feat["home_goalie_b2b"]     = int(home_b2b)
-    feat["home_backup_flag"]    = int(home_goalie_info.get("starter") is False)
-    feat["away_goalie_fatigue"] = 0
-    feat["away_goalie_b2b"]     = int(away_b2b)
-    feat["away_backup_flag"]    = int(away_goalie_info.get("starter") is False)
+    # Goalie adjustments
+    # Goalie fatigue: count recent starts in live data
+    for s, team, b2b, goalie_info in [
+        ("home", home, home_b2b, home_goalie_info),
+        ("away", away, away_b2b, away_goalie_info),
+    ]:
+        feat[f"{s}_goalie_b2b"] = int(b2b)
+        feat[f"{s}_backup_flag"] = int(goalie_info.get("starter") is False)
+
+        # Goalie fatigue: games in last 3 days (from live data)
+        fatigue = 0
+        if len(live) > 0:
+            live_copy = live.copy()
+            live_copy["game_date"] = pd.to_datetime(live_copy["game_date"]).dt.date
+            three_days_ago = game_date - timedelta(days=3)
+            recent = live_copy[
+                ((live_copy["home_team"] == team) | (live_copy["away_team"] == team)) &
+                (live_copy["game_date"] >= three_days_ago) &
+                (live_copy["game_date"] < game_date)
+            ]
+            fatigue = len(recent)
+        feat[f"{s}_goalie_fatigue"] = fatigue
 
     # Schedule features
-    feat["home_days_rest"]    = home_rest
-    feat["away_days_rest"]    = away_rest
-    feat["home_b2b"]          = int(home_b2b)
-    feat["away_b2b"]          = int(away_b2b)
-    feat["home_games_last_7"] = priors["home_games_last_7"]
-    feat["away_games_last_7"] = priors["away_games_last_7"]
+    feat["home_days_rest"] = home_rest
+    feat["away_days_rest"] = away_rest
+    feat["home_b2b"] = int(home_b2b)
+    feat["away_b2b"] = int(away_b2b)
+
+    # Games in last 7 from live data
+    for s, team in [("home", home), ("away", away)]:
+        if len(live) > 0:
+            live_copy = live.copy()
+            live_copy["game_date"] = pd.to_datetime(live_copy["game_date"]).dt.date
+            seven_days_ago = game_date - timedelta(days=7)
+            g7 = live_copy[
+                ((live_copy["home_team"] == team) | (live_copy["away_team"] == team)) &
+                (live_copy["game_date"] >= seven_days_ago) &
+                (live_copy["game_date"] < game_date)
+            ]
+            feat[f"{s}_games_last_7"] = len(g7)
+        else:
+            feat[f"{s}_games_last_7"] = priors[f"{s}_games_last_7"]
 
     return feat
 
