@@ -1,0 +1,13 @@
+object,verdict,key_issue,risk_level,action_needed
+ridge_model_pkl,CAVEATED,Location-split features in training vs overall rolling in live; 6/15 features affected,MEDIUM,Add location-specific rolling to live _build_current_team_states
+features_py_training,PROVEN LIVE-IDENTICAL,Clean shift(1) and blending logic,NONE,None
+ROAD_WARRIOR_at_STRONG_HOME,PROVEN LIVE-IDENTICAL,Survives OOS (63.2% hit +20.7% ROI),NONE,Keep as-is
+ELITE_DEF2_at_ELITE_DEF,PROVEN LIVE-IDENTICAL but UNTRUSTED,COLLAPSES OOS (43% hit -18% ROI) but still active in production,HIGH,Disable immediately per KILL verdict
+BALANCED_OFF_vs_PASSIVE_DEF,PROVEN LIVE-IDENTICAL,DIMINISHED OOS (51.4% hit -1.8% ROI),LOW,Keep as context-only
+ELITE_OREB_vs_WEAK_BOXOUT,PROVEN LIVE-IDENTICAL,DIMINISHED OOS (50.4% hit -3.7% ROI),LOW,Keep as amplifier only
+THREE_HEAVY_vs_FOUL_PRONE,CLEAN BUT NOT LIVE-IDENTICAL,Not separately revalidated; generates CONTEXT_ONLY signals,LOW,Revalidate OOS when data available
+playoff_boards_P1_P2_P4,CAVEATED,Underpowered 3-season samples; structurally sound,MEDIUM,Monitor live performance
+playoff_series_blend,CLEAN BUT NOT LIVE-IDENTICAL,Cannot verify on VM; calibrated from 2025 shadow,LOW,Verify on MacBook
+injury_adjustments,CLEAN BUT NOT LIVE-IDENTICAL,Model trained without injuries but live applies them,MEDIUM,Retrain with injury features or document as known asymmetry
+totals_base_model_pkl,UNTRUSTED,Orphan file not used by live pipeline,NONE,Document as deprecated
+variance_model_pkl,UNTRUSTED,Orphan file not used by live pipeline,NONE,Document as deprecated
