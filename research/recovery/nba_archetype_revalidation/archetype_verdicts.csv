@@ -1,0 +1,5 @@
+archetype,direction,verdict,reason,oos_n,oos_hit_rate,oos_roi,oos_edge,ins_n,ins_hit_rate,ins_roi
+ELITE_DEF2_at_ELITE_DEF,UNDER,COLLAPSES,"OOS hit rate 43.0% below breakeven, ROI -18.0%",122,0.4298,-18.0,-2.1,61,0.459,-12.4
+BALANCED_OFF_vs_PASSIVE_DEF,OVER,DIMINISHED,"OOS hit rate 51.4% at breakeven, edge +1.3pts positive but thin",319,0.5143,-1.8,1.3,155,0.5548,5.9
+ROAD_WARRIOR_at_STRONG_HOME,OVER,SURVIVES,OOS hit rate 63.2% with positive ROI +20.7%,226,0.6323,20.7,6.2,114,0.6549,25.0
+ELITE_OREB_vs_WEAK_BOXOUT,OVER,DIMINISHED,"OOS hit rate 50.4% at breakeven, edge +0.2pts positive but thin",1121,0.5045,-3.7,0.2,563,0.5358,2.3
