@@ -462,15 +462,18 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     # Filter to top3 only
     top3_all = [s for s in all_selections if s.get("selected_top3")]
 
-    # --- 4. TODAY'S NRFI CARD ---
+    # --- 4. TODAY'S NRFI CARD (single combined card) ---
     today = date.today().isoformat()
-    today_top3 = [s for s in top3_all if s.get("run_date") == today]
-
-    st.html('<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
-            "Today's NRFI Card</div>")
+    today_top3 = sorted(
+        [s for s in top3_all if s.get("run_date") == today],
+        key=lambda x: x.get("selector_rank", 99),
+    )
 
     if today_top3:
-        for s in sorted(today_top3, key=lambda x: x.get("selector_rank", 99)):
+        n_legs = len(today_top3)
+        # Build leg rows
+        leg_rows = ""
+        for s in today_top3:
             rank = s.get("selector_rank", "?")
             matchup = s.get("matchup", "")
             if not matchup:
@@ -485,27 +488,38 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                     time_et = dt.astimezone(ZoneInfo("America/New_York")).strftime("%-I:%M %p ET")
                 except Exception:
                     time_et = time_utc[11:16] + " UTC"
-
-            pills = [
-                _universal_pill(f"#{rank}", "#fff", "#2563eb"),
-                _universal_pill("NRFI", "#fff", "#dc2626"),
-            ]
-            wagers = [f"{matchup}  \u00b7  {time_et}" if time_et else matchup]
-            stats_row = [f"F5 Total: {f5:.1f}"] if f5 else ["F5: unavailable"]
-
-            _render_game_card_universal(
-                matchup=matchup,
-                time_str=time_et,
-                tier="SHADOW",
-                wagers=wagers,
-                pills=pills,
-                stats=stats_row,
-                disclaimer="Research shadow \u2014 not a live wager recommendation",
+            f5_str = f"F5: {f5:.1f}" if f5 else "F5: —"
+            time_part = f"  \u00b7  {time_et}" if time_et else ""
+            leg_rows += (
+                f'<div style="padding:3px 0;font-size:0.88em;color:#e2e8f0">'
+                f'<span style="color:#60a5fa;font-weight:700">#{rank}</span>'
+                f'&nbsp;&nbsp;{matchup}{time_part}'
+                f'&nbsp;&nbsp;<span style="color:#94a3b8;font-size:0.9em">{f5_str}</span>'
+                f'</div>'
             )
+
+        nrfi_pill = _universal_pill("NRFI", "#fff", "#dc2626")
+        card_html = (
+            f'<div style="border:1px solid #dc2626;border-radius:8px;padding:12px 16px;'
+            f'background:#0f1729;margin:12px 0">'
+            f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
+            f"Today's NRFI Card  \u00b7  {n_legs} leg{'s' if n_legs != 1 else ''}  \u00b7  "
+            f'<span style="color:#f87171">shadow</span></div>'
+            f'<hr style="border:none;border-top:1px solid #1e293b;margin:6px 0">'
+            f'{leg_rows}'
+            f'<hr style="border:none;border-top:1px solid #1e293b;margin:6px 0">'
+            f'<div style="margin-top:6px">{nrfi_pill}'
+            f'<span style="font-size:0.68em;color:#4b5563;margin-left:8px">'
+            f'Research shadow \u2014 not a live wager recommendation</span></div>'
+            f'</div>'
+        )
+        st.html(card_html)
     else:
-        st.html('<div style="font-size:0.75em;color:#6b7280;padding:6px 12px;background:#0d1117;'
-                'border-radius:4px;border:1px solid #1e293b">'
-                'No selections today \u2014 next slate pending</div>')
+        st.html(
+            '<div style="font-size:0.75em;color:#6b7280;padding:6px 12px;background:#0d1117;'
+            'border-radius:4px;border:1px solid #1e293b;margin:12px 0">'
+            'No selections today \u2014 next slate pending</div>'
+        )
 
     # --- 5. SHADOW TRACKER ---
     st.html('<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
