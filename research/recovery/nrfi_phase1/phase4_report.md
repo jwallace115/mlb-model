@@ -1,4 +1,20 @@
 # Phase 4: NRFI Rate by Full-Game Closing Total
 
-Games with closing total: 0/9900
-Insufficient games with closing totals for analysis.
+Games with closing total: 9508/9900
+
+Total     Games   NRFI     Rate   Avg1st
+------------------------------------------
+<=7.0       707    414   58.6%    0.678
+7.5        1562    851   54.5%    0.702
+8.0        1838   1017   55.3%    0.725
+8.5        2318   1190   51.3%    0.827
+9.0        1635    783   47.9%    0.889
+9.5         749    341   45.5%    1.011
+10.0        276    106   38.4%    1.167
+10.5        150     55   36.7%    1.307
+11.0        115     47   40.9%    1.061
+>11.0       158     64   40.5%    1.051
+
+## Key findings:
+  Low (<=8.0): 55.6%  |  Mid (8.5-9.5): 49.2%  |  High (>9.5): 38.9%
+  Low-vs-High spread: +16.7%

@@ -1,18 +1,37 @@
-# NRFI Phase 1 — Executive Summary
+# NRFI Phase 1 -- Executive Summary
 
 Generated: 2026-04-11
-Data: 9900 MLB games, [np.int64(2022), np.int64(2023), np.int64(2024), np.int64(2025), np.int64(2026)]
+Data: 9900 MLB games, seasons 2022-2026
 
 ## Key Findings
 
-1. **Overall NRFI rate: 51.2%** across 9900 games (2022-2026)
+1. **Overall NRFI rate: 51.2%** across 9900 games
    - Top-1 clean (away 0 in 1st): 73.5%
    - Bot-1 clean (home 0 in 1st): 69.3%
-   - Fair NRFI price (no vig): -95
-   - Typical market price: -135 (implied 57.4%)
+   - Fair price (no vig): -95
+   - Blind ROI at -135: -10.8%
 
-5. **Environment effects are modest**
+2. **Full-game total is the strongest NRFI filter**
+   - Total <=8.0: NRFI = 55.6% (n=4107)
+   - Total >=10.0: NRFI = 38.9% (n=699)
+   - Spread: +16.7%
+
+3. **F5 total provides independent confirmation**
+   - F5 <=4.0: NRFI = 63.3% (n=1250)
+   - F5 >=5.5: NRFI = 36.9% (n=1234)
+
+4. **Best combined filter (FG<=8.5 AND F5<=5.0):**
+   - NRFI = 55.6% (n=4130)
+   - Lift: +4.4%
+   - ROI at -135: -3.2%
+
+5. **Tightest filter (FG<=7.5 AND F5<=4.5):**
+   - NRFI = 55.7% (n=1303)
+   - ROI at -135: -3.0%
+
+6. **Environment effects are modest**
    - Dome: 50.5%, Outdoor: 51.3%
+   - Pitcher park (<97): 53.0%, Hitter park (>103): 50.4%
 
 ## Season stability
   2022: NRFI = 51.8% (2430 games)
@@ -22,15 +41,16 @@ Data: 9900 MLB games, [np.int64(2022), np.int64(2023), np.int64(2024), np.int64(
   2026: NRFI = 55.6% (187 games)
 
 ## Actionable framework
-Select top-3 NRFI legs daily using:
+Select top-3 NRFI legs daily:
 1. Closing total <= 8.5
-2. F5 total <= 5.0 (when available)
+2. F5 total <= 5.0
 3. Micro-model p_yrfi bottom 10%
-4. Exclude CONTACT_RISK archetype starters
+4. Exclude CONTACT_RISK starters
 5. Exclude both-top-3-changed lineups
-6. Prefer dome/mild temperature
+6. Pitcher park preferred
 
 ## Files
-- `nrfi_research_table.parquet` — 9900 rows, canonical NRFI table
-- `NRFI_PHASE1_FINAL_TABLE.csv` — same, CSV format
-- Phase reports: phase2-phase8 markdown files
+- nrfi_research_table.parquet -- 9900 rows
+- NRFI_PHASE1_FINAL_TABLE.csv -- same, CSV
+- first_inning_cache.json -- MLB API cache
+- phase2-8_report.md -- detailed reports

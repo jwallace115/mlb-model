@@ -1,4 +1,18 @@
 # Phase 5: NRFI Rate by F5 Closing Total
 
-Games with F5 closing total: 0/9900
-Insufficient games with F5 closing totals for analysis.
+Games with F5 total: 6635/9900
+
+F5        Games   NRFI     Rate   Avg1st
+------------------------------------------
+<=3.5      1050    688   65.5%    0.413
+4.0         200    103   51.5%    1.010
+4.5        3823   1976   51.7%    0.684
+5.0         328    162   49.4%    1.034
+5.5         939    374   39.8%    1.027
+6.0          41     15   36.6%    1.659
+6.5         154     47   30.5%    1.162
+>6.5        100     19   19.0%    1.710
+
+## Key findings:
+  Low F5 (<=4.0): 63.3%  |  High F5 (>5.0): 36.9%
+  Spread: +26.4%

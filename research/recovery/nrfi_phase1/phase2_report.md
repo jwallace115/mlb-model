@@ -6,7 +6,6 @@ Overall NRFI rate: 0.5123 (51.2%)
 Overall YRFI rate: 0.4877 (48.8%)
 
 Implied fair NRFI price (no vig): -95
-Implied fair YRFI price (no vig): -105
 
 Games per day: mean=13.3, median=15
 NRFIs per day: mean=6.8, median=7
