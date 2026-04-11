@@ -394,8 +394,168 @@ def load_soccer_results() -> dict | None:
 # ── stub sport tabs (rebuilding) ──────────────────────────────────────────────
 
 def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
-    st.markdown("---")
-    st.markdown("**System reset \u2014 rebuilding.**")
+    import json, os
+    from datetime import date, datetime
+    from dashboard_components import (render_status_header, _universal_pill,
+                                       _render_game_card_universal,
+                                       _render_signal_status_row)
+
+    # --- 1. STATUS HEADER ---
+    lu = None
+    try:
+        lu_data = json.load(open(os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")))
+        for key in ["mlb_confirm", "mlb_prelim"]:
+            ts = lu_data.get(key)
+            if ts and isinstance(ts, str) and "T" in ts:
+                from zoneinfo import ZoneInfo
+                dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                lu = dt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
+                break
+    except Exception:
+        pass
+
+    render_status_header(
+        object_name="MLB — NRFI Daily Selector",
+        object_id="mlb_nrfi_selector_v1_20260411",
+        status="SHADOW",
+        tracker_start="April 11, 2026",
+        current_threshold="F5 total <= 4.0",
+        replaces=None,
+        last_updated=lu,
+    )
+
+    # --- 2. SIGNAL STATUS ROW ---
+    _render_signal_status_row(active_labels=[], shadow_labels=["NRFI Selector"])
+
+    # --- 3. SELECTOR RULES BLOCK ---
+    st.html(
+        '<div style="font-size:0.72em;color:#94a3b8;padding:8px 12px;background:#0d1117;'
+        'border-radius:4px;border:1px solid #1e293b;margin:8px 0">'
+        '<div style="font-weight:600;color:#78716c;margin-bottom:4px">Frozen Selector Ruleset</div>'
+        '<div>Qualify: F5 closing total &le; 4.0</div>'
+        '<div>Disqualify: Night game AND F5 = 4.0 exactly</div>'
+        '<div>Rank: F5 total ascending</div>'
+        '<div>Card: Top 3 daily</div>'
+        '</div>'
+    )
+
+    # --- LOAD TRACKER DATA ---
+    tracker_path = os.path.join(os.path.dirname(__file__), "mlb", "logs", "nrfi_selector_v1_2026.json")
+    all_selections = []
+    try:
+        if os.path.exists(tracker_path):
+            tracker = json.load(open(tracker_path))
+            all_selections = tracker.get("selections", [])
+    except Exception:
+        pass
+
+    # Dedup on game_pk
+    seen_gpk = set()
+    deduped = []
+    for s in all_selections:
+        gpk = s.get("game_pk")
+        if gpk not in seen_gpk:
+            seen_gpk.add(gpk)
+            deduped.append(s)
+    all_selections = deduped
+
+    # Filter to top3 only
+    top3_all = [s for s in all_selections if s.get("selected_top3")]
+
+    # --- 4. TODAY'S NRFI CARD ---
+    today = date.today().isoformat()
+    today_top3 = [s for s in top3_all if s.get("run_date") == today]
+
+    st.html('<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
+            "Today's NRFI Card</div>")
+
+    if today_top3:
+        for s in sorted(today_top3, key=lambda x: x.get("selector_rank", 99)):
+            rank = s.get("selector_rank", "?")
+            matchup = s.get("matchup", "")
+            if not matchup:
+                matchup = f"{s.get('away_team', '?')} @ {s.get('home_team', '?')}"
+            f5 = s.get("f5_total")
+            time_utc = s.get("game_time_utc", "")
+            time_et = ""
+            if time_utc and len(time_utc) >= 16:
+                try:
+                    from zoneinfo import ZoneInfo
+                    dt = datetime.fromisoformat(time_utc.replace("Z", "+00:00"))
+                    time_et = dt.astimezone(ZoneInfo("America/New_York")).strftime("%-I:%M %p ET")
+                except Exception:
+                    time_et = time_utc[11:16] + " UTC"
+
+            pills = [
+                _universal_pill(f"#{rank}", "#fff", "#2563eb"),
+                _universal_pill("NRFI", "#fff", "#dc2626"),
+            ]
+            wagers = [f"{matchup}  \u00b7  {time_et}" if time_et else matchup]
+            stats_row = [f"F5 Total: {f5:.1f}"] if f5 else ["F5: unavailable"]
+
+            _render_game_card_universal(
+                matchup=matchup,
+                time_str=time_et,
+                tier="SHADOW",
+                wagers=wagers,
+                pills=pills,
+                stats=stats_row,
+                disclaimer="Research shadow \u2014 not a live wager recommendation",
+            )
+    else:
+        st.html('<div style="font-size:0.75em;color:#6b7280;padding:6px 12px;background:#0d1117;'
+                'border-radius:4px;border:1px solid #1e293b">'
+                'No selections today \u2014 next slate pending</div>')
+
+    # --- 5. SHADOW TRACKER ---
+    st.html('<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+            'Shadow Tracker \u2014 NRFI Selector (started April 11, 2026)</div>')
+
+    resolved = [s for s in top3_all if s.get("nrfi_result") is not None]
+    wins = sum(1 for s in resolved if s.get("win_loss") == "W")
+    losses = sum(1 for s in resolved if s.get("win_loss") == "L")
+    n_resolved = len(resolved)
+    n_pending = len(top3_all) - n_resolved
+    hit_pct = (wins / n_resolved * 100) if n_resolved > 0 else 0
+
+    # Card hit rate: slates where all selected legs won
+    resolved_dates = sorted(set(s["run_date"] for s in resolved))
+    card_wins = 0
+    card_total = 0
+    for d in resolved_dates:
+        day_resolved = [s for s in resolved if s["run_date"] == d]
+        if len(day_resolved) >= 1:
+            card_total += 1
+            if all(s.get("win_loss") == "W" for s in day_resolved):
+                card_wins += 1
+    card_pct = (card_wins / card_total * 100) if card_total > 0 else 0
+
+    st.html(
+        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
+        f'<span style="font-weight:700">{wins}-{losses}</span>'
+        f' \u00b7 Leg hit: {hit_pct:.1f}%'
+        f' \u00b7 Card hit: {card_pct:.0f}% ({card_wins}/{card_total} slates)'
+        f' \u00b7 {n_resolved} resolved, {n_pending} pending'
+        f'</div>'
+    )
+
+    # Tracker table (resolved only)
+    if resolved:
+        import pandas as pd
+        rows = []
+        for s in sorted(resolved, key=lambda x: (x["run_date"], x.get("selector_rank", 99))):
+            rows.append({
+                "Date": s.get("run_date", ""),
+                "#": s.get("selector_rank", ""),
+                "Matchup": s.get("matchup", ""),
+                "F5": s.get("f5_total", ""),
+                "Result": "NRFI" if s.get("nrfi_result") else "YRFI",
+                "W/L": s.get("win_loss", ""),
+            })
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    else:
+        st.html('<div style="font-size:0.72em;color:#6b7280">No resolved selections yet</div>')
 
 
 def _render_nba_tab() -> None:
