@@ -38,8 +38,8 @@ AWAY_PKL     = NHL_DIR / "ridge_away_model.pkl"
 DECISIONS    = NHL_DIR / "nhl_decisions.parquet"
 LIVE_CACHE   = CACHE_DIR / "nhl_live_season.parquet"  # current-season games
 REBUILD_FT   = BASE_DIR / "research" / "recovery" / "nhl_rebuild" / "nhl_rebuild_features.parquet"
-REBUILD_HOME = BASE_DIR / "research" / "recovery" / "nhl_final_alignment" / "model_A_home.pkl"
-REBUILD_AWAY = BASE_DIR / "research" / "recovery" / "nhl_final_alignment" / "model_A_away.pkl"
+REBUILD_HOME = BASE_DIR / "research" / "recovery" / "nhl_rebuild" / "model_A_home.pkl"
+REBUILD_AWAY = BASE_DIR / "research" / "recovery" / "nhl_rebuild" / "model_A_away.pkl"
 
 NHL_API      = "https://api-web.nhle.com/v1"
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
@@ -49,7 +49,7 @@ SEED      = 42
 THRESHOLD = 0.12
 
 # Validate-season fallback drift (from Phase 4.5)
-VALIDATE_DRIFT = 0.0  # Aligned model (PK% corrected) -- no drift needed
+VALIDATE_DRIFT = 0.4458
 
 # Min current-season games before using rolling (vs fallback prior)
 MIN_SEASON_GAMES = 10
@@ -1154,38 +1154,6 @@ def run_pipeline(target_date: date) -> None:
         append_to_decisions(signals)
     else:
         print("  No qualified signals — nhl_decisions.parquet unchanged")
-    # -- Write to aligned shadow tracker --
-    _tracker_path = NHL_DIR / "logs" / "nhl_shadow_aligned_2026.json"
-    if signals:
-        try:
-            import json as _json_trk
-            if _tracker_path.exists():
-                _trk = _json_trk.loads(_tracker_path.read_text())
-            else:
-                _trk = {
-                    "model_version": "model_A_aligned_v1",
-                    "object_id": "nhl_shadow_aligned_20260411",
-                    "start_date": "2026-04-11",
-                    "signals": []
-                }
-            for _sig in signals:
-                _trk["signals"].append({
-                    "game_id": _sig["game_id"],
-                    "game_date": _sig["game_date"],
-                    "home_team": _sig["home_team"],
-                    "away_team": _sig["away_team"],
-                    "signal_side": _sig["signal_side"],
-                    "edge": round(_sig["edge"], 4),
-                    "tier": _sig["confidence_tier"],
-                    "closing_total": _sig["closing_total"],
-                    "lambda_total": round(_sig["lambda_total_calibrated"], 3),
-                    "drift_applied": 0.0,
-                })
-            _tracker_path.write_text(_json_trk.dumps(_trk, indent=2))
-            print(f"  Shadow tracker updated: {len(_trk['signals'])} total signals")
-        except Exception as _e:
-            print(f"  WARNING: Shadow tracker write failed: {_e}")
-
 
 # ---------------------------------------------------------------------------
 # Grade yesterday's live signals

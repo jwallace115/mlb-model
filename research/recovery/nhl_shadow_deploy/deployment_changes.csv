@@ -1,0 +1,9 @@
+phase,component,old_value,new_value,status,verified
+1,REBUILD_HOME path,research/recovery/nhl_rebuild/model_A_home.pkl,research/recovery/nhl_final_alignment/model_A_home.pkl,APPLIED,YES
+1,REBUILD_AWAY path,research/recovery/nhl_rebuild/model_A_away.pkl,research/recovery/nhl_final_alignment/model_A_away.pkl,APPLIED,YES
+2,VALIDATE_DRIFT,0.4458,0.0,APPLIED,YES
+3,Shadow tracker,none,nhl/logs/nhl_shadow_aligned_2026.json,CREATED,YES
+4,Live season cache,stale check,cleared (rebuilt on first run),APPLIED,YES
+5,Dry run (2026-04-11),N/A,15 games / 2 signals / lambdas 5.45-6.34,PASSED,YES
+6,Stop rules,unchanged,HIGH=active MEDIUM=shadow LOW=shadow,CONFIRMED,YES
+7,Monitoring,N/A,bias/WR/regime checks defined,DOCUMENTED,YES
