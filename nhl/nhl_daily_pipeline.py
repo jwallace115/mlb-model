@@ -1168,19 +1168,22 @@ def run_pipeline(target_date: date) -> None:
                     "start_date": "2026-04-11",
                     "signals": []
                 }
+            _existing_gpks = {s.get("game_id") for s in _trk["signals"]}
             for _sig in signals:
-                _trk["signals"].append({
-                    "game_id": _sig["game_id"],
-                    "game_date": _sig["game_date"],
-                    "home_team": _sig["home_team"],
-                    "away_team": _sig["away_team"],
-                    "signal_side": _sig["signal_side"],
-                    "edge": round(_sig["edge"], 4),
-                    "tier": _sig["confidence_tier"],
-                    "closing_total": _sig["closing_total"],
-                    "lambda_total": round(_sig["lambda_total_calibrated"], 3),
-                    "drift_applied": 0.0,
-                })
+                if _sig["game_id"] not in _existing_gpks:
+                    _trk["signals"].append({
+                        "game_id": _sig["game_id"],
+                        "game_date": _sig["game_date"],
+                        "home_team": _sig["home_team"],
+                        "away_team": _sig["away_team"],
+                        "signal_side": _sig["signal_side"],
+                        "edge": round(_sig["edge"], 4),
+                        "tier": _sig["confidence_tier"],
+                        "closing_total": _sig["closing_total"],
+                        "lambda_total": round(_sig["lambda_total_calibrated"], 3),
+                        "drift_applied": 0.0,
+                    })
+                    _existing_gpks.add(_sig["game_id"])
             _tracker_path.write_text(_json_trk.dumps(_trk, indent=2))
             print(f"  Shadow tracker updated: {len(_trk['signals'])} total signals")
         except Exception as _e:

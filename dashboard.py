@@ -445,6 +445,16 @@ def _render_nhl_tab() -> None:
     except Exception:
         pass
 
+    # Dedup by game_id (prevents multiple pipeline runs from inflating counts)
+    _seen_gpk = set()
+    _deduped = []
+    for _s in shadow_data:
+        _gpk = _s.get("game_id", _s.get("game_pk"))
+        if _gpk not in _seen_gpk:
+            _seen_gpk.add(_gpk)
+            _deduped.append(_s)
+    shadow_data = _deduped
+
     # --- 3. SIGNAL STATUS ROW ---
     fired_tiers = set()
     for s in shadow_data:
@@ -453,7 +463,7 @@ def _render_nhl_tab() -> None:
         if clean:
             fired_tiers.add(clean)
 
-    shadow_pills = []
+    shadow_pills = [_universal_pill("Model A", "#fff", "#2563eb")]
     for tier_name in ["HIGH", "MEDIUM", "LOW"]:
         if tier_name in fired_tiers:
             shadow_pills.append(_universal_pill(tier_name, "#fff", "#dc2626"))
