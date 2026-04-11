@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "589e8e7f45909b6c4b71110f0aa61d3b",
+    "game_date": "2026-04-12",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-04-12T00:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -114,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-11T06:05:03.073513+00:00"
+  },
+  {
+    "game_id": "0b2041c964c8c6d47aa6eb31e9095564",
+    "game_date": "2026-04-12",
+    "sport": "NHL",
+    "home_team": "San Jose Sharks",
+    "away_team": "Vancouver Canucks",
+    "commence_time": "2026-04-12T02:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -116,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-11T06:05:03.073513+00:00"
+  }
+]
