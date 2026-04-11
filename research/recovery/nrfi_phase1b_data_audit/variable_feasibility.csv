@@ -1,0 +1,13 @@
+variable,status,source,coverage_games,coverage_pct,date_range,nrfi_signal_strength,notes
+home_total_line,FEASIBLE_NOW,canonical_odds,4893,98%,2024-2025,MODERATE,Full-game team total; already in parquet
+away_total_line,FEASIBLE_NOW,canonical_odds,4893,98%,2024-2025,MODERATE,Full-game team total; already in parquet
+tt_max,FEASIBLE_NOW,derived,4893,98%,2024-2025,STRONG,"max(home_tt, away_tt); 55.0% to 44.1% NRFI spread"
+tt_min,FEASIBLE_NOW,derived,4893,98%,2024-2025,MODERATE,"min(home_tt, away_tt); 52.4% to 40.9% NRFI spread"
+tt_dispersion,FEASIBLE_NOW,derived,4893,98%,2024-2025,MODERATE,tt_max - tt_min; high dispersion hurts NRFI
+both_below_4,FEASIBLE_NOW,derived,4893,98%,2024-2025,STRONG,55.0% vs 50.0% NRFI rate (+5.0pp)
+nrfi_market_price,FEASIBLE_NOW,yrfi_lines_historical,4399,~90%,2024-2025,STRONG,Closing NRFI O/U 0.5 price
+nrfi_implied_prob,FEASIBLE_NOW,derived_from_prices,4399,~90%,2024-2025,STRONG,Market implied NRFI probability
+f5_team_total_home,NOT_FEASIBLE,does_not_exist,0,0%,N/A,UNKNOWN,No F5 team total market exists
+f5_team_total_away,NOT_FEASIBLE,does_not_exist,0,0%,N/A,UNKNOWN,No F5 team total market exists
+first_inning_team_total,NOT_FEASIBLE,does_not_exist,0,0%,N/A,UNKNOWN,No 1st-inning team total market exists
+team_totals_2022,NOT_FEASIBLE,expired,0,0%,expired,UNKNOWN,Events >12mo expired from Odds API
