@@ -1233,11 +1233,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 15.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:28.178721"
+    "logged_at": "2026-04-06T07:00:28.178721",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824783,
@@ -1249,11 +1251,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 14.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:31.308551"
+    "logged_at": "2026-04-06T07:00:31.308551",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822832,
@@ -1265,11 +1269,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 16.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:34.079845"
+    "logged_at": "2026-04-06T07:00:34.079845",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823728,
@@ -1281,11 +1287,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 10.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:38.882558"
+    "logged_at": "2026-04-06T07:00:38.882558",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824619,
@@ -1297,11 +1305,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:42.851221"
+    "logged_at": "2026-04-06T07:00:42.851221",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822918,
@@ -1313,11 +1323,13 @@
     "combined_short_exit_favorable_zone": true,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:45.006692"
+    "logged_at": "2026-04-06T07:00:45.006692",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824376,
@@ -1329,11 +1341,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 10.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 16.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:46.939065"
+    "logged_at": "2026-04-06T07:00:46.939065",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824052,
@@ -1345,11 +1359,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:48.859093"
+    "logged_at": "2026-04-06T07:00:48.859093",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823237,
@@ -1361,11 +1377,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 10.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-06T07:00:50.509696"
+    "logged_at": "2026-04-06T07:00:50.509696",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824457,
@@ -1377,11 +1395,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:55:52.146320"
+    "logged_at": "2026-04-07T11:55:52.146320",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824618,
@@ -1393,11 +1413,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:03.835333"
+    "logged_at": "2026-04-07T11:56:03.835333",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823648,
@@ -1409,11 +1431,13 @@
     "combined_short_exit_favorable_zone": true,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:04.905912"
+    "logged_at": "2026-04-07T11:56:04.905912",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823402,
@@ -1425,11 +1449,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 6.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:06.182353"
+    "logged_at": "2026-04-07T11:56:06.182353",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822999,
@@ -1441,11 +1467,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:07.216624"
+    "logged_at": "2026-04-07T11:56:07.216624",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823887,
@@ -1457,11 +1485,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:08.529762"
+    "logged_at": "2026-04-07T11:56:08.529762",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822754,
@@ -1473,11 +1503,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 13.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:09.770736"
+    "logged_at": "2026-04-07T11:56:09.770736",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824780,
@@ -1489,11 +1521,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:11.148747"
+    "logged_at": "2026-04-07T11:56:11.148747",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823567,
@@ -1505,11 +1539,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:12.233252"
+    "logged_at": "2026-04-07T11:56:12.233252",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822831,
@@ -1521,11 +1557,13 @@
     "combined_short_exit_favorable_zone": true,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:13.485651"
+    "logged_at": "2026-04-07T11:56:13.485651",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823727,
@@ -1537,11 +1575,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:14.785201"
+    "logged_at": "2026-04-07T11:56:14.785201",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822916,
@@ -1553,11 +1593,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:16.092527"
+    "logged_at": "2026-04-07T11:56:16.092527",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824375,
@@ -1569,11 +1611,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 10.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:17.339374"
+    "logged_at": "2026-04-07T11:56:17.339374",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824051,
@@ -1585,11 +1629,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:18.586792"
+    "logged_at": "2026-04-07T11:56:18.586792",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823235,
@@ -1601,11 +1647,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 6.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-07T11:56:19.827464"
+    "logged_at": "2026-04-07T11:56:19.827464",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823403,
@@ -1617,11 +1665,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 10.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:48:53.710143"
+    "logged_at": "2026-04-08T14:48:53.710143",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824455,
@@ -1633,11 +1683,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 12.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:07.446027"
+    "logged_at": "2026-04-08T14:49:07.446027",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824779,
@@ -1649,11 +1701,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:09.134099"
+    "logged_at": "2026-04-08T14:49:09.134099",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824617,
@@ -1665,11 +1719,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:10.594891"
+    "logged_at": "2026-04-08T14:49:10.594891",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822915,
@@ -1681,11 +1737,13 @@
     "combined_short_exit_favorable_zone": true,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 3.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:12.259645"
+    "logged_at": "2026-04-08T14:49:12.259645",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 822833,
@@ -1697,11 +1755,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:13.618853"
+    "logged_at": "2026-04-08T14:49:13.618853",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824374,
@@ -1713,11 +1773,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 11.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 10.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:15.103515"
+    "logged_at": "2026-04-08T14:49:15.103515",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823234,
@@ -1729,11 +1791,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:16.481960"
+    "logged_at": "2026-04-08T14:49:16.481960",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822753,
@@ -1745,11 +1809,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 7.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:17.934957"
+    "logged_at": "2026-04-08T14:49:17.934957",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824050,
@@ -1761,11 +1827,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 10.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:19.293704"
+    "logged_at": "2026-04-08T14:49:19.293704",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823646,
@@ -1777,11 +1845,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:20.409652"
+    "logged_at": "2026-04-08T14:49:20.409652",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823000,
@@ -1793,11 +1863,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:21.410975"
+    "logged_at": "2026-04-08T14:49:21.410975",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823885,
@@ -1809,11 +1881,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 11.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:22.892665"
+    "logged_at": "2026-04-08T14:49:22.892665",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823564,
@@ -1825,11 +1899,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 5.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:24.007186"
+    "logged_at": "2026-04-08T14:49:24.007186",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823726,
@@ -1841,11 +1917,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 14.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-08T14:49:25.457660"
+    "logged_at": "2026-04-08T14:49:25.457660",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823884,
@@ -1857,11 +1935,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 9.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-09T13:03:09.411098"
+    "logged_at": "2026-04-09T13:03:09.411098",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823565,
@@ -1873,11 +1953,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 1.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-09T13:03:22.503784"
+    "logged_at": "2026-04-09T13:03:22.503784",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823724,
@@ -1889,11 +1971,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 4.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-09T13:03:24.024914"
+    "logged_at": "2026-04-09T13:03:24.024914",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823645,
@@ -1905,11 +1989,13 @@
     "combined_short_exit_favorable_zone": true,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 8.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-09T13:03:25.448530"
+    "logged_at": "2026-04-09T13:03:25.448530",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 824130,
@@ -1921,11 +2007,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 2.0,
+    "actual_result_over": 0,
+    "over_hit": false,
     "market_residual_over": null,
-    "logged_at": "2026-04-09T13:03:26.851012"
+    "logged_at": "2026-04-09T13:03:26.851012",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823319,
@@ -1937,11 +2025,13 @@
     "combined_short_exit_favorable_zone": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "actual_total": null,
-    "actual_result_over": null,
-    "over_hit": null,
+    "actual_total": 10.0,
+    "actual_result_over": 1,
+    "over_hit": true,
     "market_residual_over": null,
-    "logged_at": "2026-04-09T13:03:28.342762"
+    "logged_at": "2026-04-09T13:03:28.342762",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824695,
@@ -2182,5 +2272,245 @@
     "over_hit": null,
     "market_residual_over": null,
     "logged_at": "2026-04-10T11:26:25.286389"
+  },
+  {
+    "game_id": 823480,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "PHI",
+    "away_team": "ARI",
+    "combined_short_exit_value": 0.266667,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:20.632202"
+  },
+  {
+    "game_id": 824294,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "DET",
+    "away_team": "MIA",
+    "combined_short_exit_value": 0.2,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:35.204305"
+  },
+  {
+    "game_id": 824697,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "CHC",
+    "away_team": "PIT",
+    "combined_short_exit_value": 0.452381,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 6.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:38.125793"
+  },
+  {
+    "game_id": 822830,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "TOR",
+    "away_team": "MIN",
+    "combined_short_exit_value": 0.333333,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.0,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:40.962436"
+  },
+  {
+    "game_id": 824535,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "CIN",
+    "away_team": "LAA",
+    "combined_short_exit_value": null,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 9.0,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:43.396921"
+  },
+  {
+    "game_id": 823644,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "NYM",
+    "away_team": "OAK",
+    "combined_short_exit_value": 0.333333,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:45.971766"
+  },
+  {
+    "game_id": 824129,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "KCR",
+    "away_team": "CHW",
+    "combined_short_exit_value": 0.266667,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 9.0,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:48.272704"
+  },
+  {
+    "game_id": 822996,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "TBR",
+    "away_team": "NYY",
+    "combined_short_exit_value": 0.133333,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:49.132699"
+  },
+  {
+    "game_id": 823805,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "MIL",
+    "away_team": "WSN",
+    "combined_short_exit_value": null,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.0,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:51.128586"
+  },
+  {
+    "game_id": 824857,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "BAL",
+    "away_team": "SFG",
+    "combined_short_exit_value": 0.166667,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:52.972731"
+  },
+  {
+    "game_id": 823074,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "STL",
+    "away_team": "BOS",
+    "combined_short_exit_value": null,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:54.702570"
+  },
+  {
+    "game_id": 824939,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "ATL",
+    "away_team": "CLE",
+    "combined_short_exit_value": 0.25,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.0,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:56.673403"
+  },
+  {
+    "game_id": 823316,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "SDP",
+    "away_team": "COL",
+    "combined_short_exit_value": 0.233333,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:00:58.608985"
+  },
+  {
+    "game_id": 823967,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "LAD",
+    "away_team": "TEX",
+    "combined_short_exit_value": 0.366667,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:01:00.295479"
+  },
+  {
+    "game_id": 823155,
+    "date": "2026-04-11",
+    "season": 2026,
+    "home_team": "SEA",
+    "away_team": "HOU",
+    "combined_short_exit_value": 0.4,
+    "combined_short_exit_favorable_zone": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "actual_total": null,
+    "actual_result_over": null,
+    "over_hit": null,
+    "market_residual_over": null,
+    "logged_at": "2026-04-11T06:01:02.200216"
   }
 ]

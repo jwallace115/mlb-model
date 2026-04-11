@@ -1304,7 +1304,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-06T07:00:28.198041"
+    "logged_at": "2026-04-06T07:00:28.198041",
+    "actual_total": 15.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824783,
@@ -1319,7 +1323,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-06T07:00:31.325203"
+    "logged_at": "2026-04-06T07:00:31.325203",
+    "actual_total": 14.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822832,
@@ -1334,7 +1342,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-04-06T07:00:34.098529"
+    "logged_at": "2026-04-06T07:00:34.098529",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823728,
@@ -1349,7 +1361,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-06T07:00:38.899614"
+    "logged_at": "2026-04-06T07:00:38.899614",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824619,
@@ -1364,7 +1380,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "logged_at": "2026-04-06T07:00:42.871410"
+    "logged_at": "2026-04-06T07:00:42.871410",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822918,
@@ -1379,7 +1399,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-06T07:00:45.026003"
+    "logged_at": "2026-04-06T07:00:45.026003",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824376,
@@ -1394,7 +1418,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 10.0,
-    "logged_at": "2026-04-06T07:00:46.960074"
+    "logged_at": "2026-04-06T07:00:46.960074",
+    "actual_total": 16.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824052,
@@ -1409,7 +1437,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-06T07:00:48.878595"
+    "logged_at": "2026-04-06T07:00:48.878595",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823237,
@@ -1424,7 +1456,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-06T07:00:50.531946"
+    "logged_at": "2026-04-06T07:00:50.531946",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824457,
@@ -1439,7 +1475,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-07T11:55:54.387750"
+    "logged_at": "2026-04-07T11:55:54.387750",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824618,
@@ -1454,7 +1494,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-07T11:56:03.859041"
+    "logged_at": "2026-04-07T11:56:03.859041",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823648,
@@ -1469,7 +1513,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-07T11:56:04.933517"
+    "logged_at": "2026-04-07T11:56:04.933517",
+    "actual_total": 7.0,
+    "actual_over_under": "PUSH",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823402,
@@ -1484,7 +1532,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 6.5,
-    "logged_at": "2026-04-07T11:56:06.209108"
+    "logged_at": "2026-04-07T11:56:06.209108",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822999,
@@ -1499,7 +1551,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-07T11:56:07.238370"
+    "logged_at": "2026-04-07T11:56:07.238370",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823887,
@@ -1514,7 +1570,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-07T11:56:08.557191"
+    "logged_at": "2026-04-07T11:56:08.557191",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822754,
@@ -1529,7 +1589,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-07T11:56:09.797777"
+    "logged_at": "2026-04-07T11:56:09.797777",
+    "actual_total": 13.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824780,
@@ -1544,7 +1608,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-07T11:56:11.181614"
+    "logged_at": "2026-04-07T11:56:11.181614",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823567,
@@ -1559,7 +1627,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-04-07T11:56:12.261119"
+    "logged_at": "2026-04-07T11:56:12.261119",
+    "actual_total": 8.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822831,
@@ -1574,7 +1646,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-07T11:56:13.514096"
+    "logged_at": "2026-04-07T11:56:13.514096",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823727,
@@ -1589,7 +1665,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-07T11:56:14.813673"
+    "logged_at": "2026-04-07T11:56:14.813673",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 822916,
@@ -1604,7 +1684,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-07T11:56:16.122338"
+    "logged_at": "2026-04-07T11:56:16.122338",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824375,
@@ -1619,7 +1703,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 10.5,
-    "logged_at": "2026-04-07T11:56:17.366922"
+    "logged_at": "2026-04-07T11:56:17.366922",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824051,
@@ -1634,7 +1722,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-04-07T11:56:18.614985"
+    "logged_at": "2026-04-07T11:56:18.614985",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823235,
@@ -1649,7 +1741,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-07T11:56:19.856472"
+    "logged_at": "2026-04-07T11:56:19.856472",
+    "actual_total": 6.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823403,
@@ -1664,7 +1760,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-08T14:48:56.269670"
+    "logged_at": "2026-04-08T14:48:56.269670",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824455,
@@ -1679,7 +1779,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-08T14:49:07.478615"
+    "logged_at": "2026-04-08T14:49:07.478615",
+    "actual_total": 12.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824779,
@@ -1694,7 +1798,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-08T14:49:09.165325"
+    "logged_at": "2026-04-08T14:49:09.165325",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824617,
@@ -1709,7 +1817,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-08T14:49:10.629435"
+    "logged_at": "2026-04-08T14:49:10.629435",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822915,
@@ -1724,7 +1836,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-08T14:49:12.292675"
+    "logged_at": "2026-04-08T14:49:12.292675",
+    "actual_total": 3.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822833,
@@ -1739,7 +1855,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-08T14:49:13.656255"
+    "logged_at": "2026-04-08T14:49:13.656255",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 824374,
@@ -1754,7 +1874,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 11.5,
-    "logged_at": "2026-04-08T14:49:15.140716"
+    "logged_at": "2026-04-08T14:49:15.140716",
+    "actual_total": 10.0,
+    "actual_over_under": "UNDER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823234,
@@ -1769,7 +1893,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-04-08T14:49:16.517047"
+    "logged_at": "2026-04-08T14:49:16.517047",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 822753,
@@ -1784,7 +1912,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-04-08T14:49:17.966135"
+    "logged_at": "2026-04-08T14:49:17.966135",
+    "actual_total": 7.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824050,
@@ -1799,7 +1931,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-04-08T14:49:19.326741"
+    "logged_at": "2026-04-08T14:49:19.326741",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823646,
@@ -1814,7 +1950,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-08T14:49:20.446308"
+    "logged_at": "2026-04-08T14:49:20.446308",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823000,
@@ -1829,7 +1969,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-08T14:49:21.444625"
+    "logged_at": "2026-04-08T14:49:21.444625",
+    "actual_total": 8.0,
+    "actual_over_under": "PUSH",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823885,
@@ -1844,7 +1988,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-04-08T14:49:22.922400"
+    "logged_at": "2026-04-08T14:49:22.922400",
+    "actual_total": 11.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823564,
@@ -1859,7 +2007,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-04-08T14:49:24.045097"
+    "logged_at": "2026-04-08T14:49:24.045097",
+    "actual_total": 5.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823726,
@@ -1874,7 +2026,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-08T14:49:25.492419"
+    "logged_at": "2026-04-08T14:49:25.492419",
+    "actual_total": 14.0,
+    "actual_over_under": "OVER",
+    "result": "WIN",
+    "resolved": true
   },
   {
     "game_id": 823884,
@@ -1889,7 +2045,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-09T13:03:11.823908"
+    "logged_at": "2026-04-09T13:03:11.823908",
+    "actual_total": 9.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823565,
@@ -1904,7 +2064,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-09T13:03:22.536984"
+    "logged_at": "2026-04-09T13:03:22.536984",
+    "actual_total": 1.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823724,
@@ -1919,7 +2083,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-09T13:03:24.063106"
+    "logged_at": "2026-04-09T13:03:24.063106",
+    "actual_total": 4.0,
+    "actual_over_under": "UNDER",
+    "result": "LOSS",
+    "resolved": true
   },
   {
     "game_id": 823645,
@@ -1934,7 +2102,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-04-09T13:03:25.479114"
+    "logged_at": "2026-04-09T13:03:25.479114",
+    "actual_total": 8.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824130,
@@ -1949,7 +2121,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "logged_at": "2026-04-09T13:03:26.887625"
+    "logged_at": "2026-04-09T13:03:26.887625",
+    "actual_total": 2.0,
+    "actual_over_under": "UNDER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 823319,
@@ -1964,7 +2140,11 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-04-09T13:03:28.376306"
+    "logged_at": "2026-04-09T13:03:28.376306",
+    "actual_total": 10.0,
+    "actual_over_under": "OVER",
+    "result": null,
+    "resolved": true
   },
   {
     "game_id": 824695,
@@ -2190,5 +2370,230 @@
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
     "logged_at": "2026-04-10T11:26:25.340239"
+  },
+  {
+    "game_id": 823480,
+    "date": "2026-04-11",
+    "home_team": "PHI",
+    "away_team": "ARI",
+    "home_bullpen_tail_score": 4.97,
+    "away_bullpen_tail_score": null,
+    "combined_tail_score": 4.97,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.5,
+    "logged_at": "2026-04-11T06:00:23.038361"
+  },
+  {
+    "game_id": 824294,
+    "date": "2026-04-11",
+    "home_team": "DET",
+    "away_team": "MIA",
+    "home_bullpen_tail_score": 3.7259,
+    "away_bullpen_tail_score": 4.9,
+    "combined_tail_score": 4.9,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "logged_at": "2026-04-11T06:00:35.271528"
+  },
+  {
+    "game_id": 824697,
+    "date": "2026-04-11",
+    "home_team": "CHC",
+    "away_team": "PIT",
+    "home_bullpen_tail_score": 4.1111,
+    "away_bullpen_tail_score": 4.3367,
+    "combined_tail_score": 4.3367,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 6.5,
+    "logged_at": "2026-04-11T06:00:38.197626"
+  },
+  {
+    "game_id": 822830,
+    "date": "2026-04-11",
+    "home_team": "TOR",
+    "away_team": "MIN",
+    "home_bullpen_tail_score": 6.1867,
+    "away_bullpen_tail_score": 5.3233,
+    "combined_tail_score": 6.1867,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.0,
+    "logged_at": "2026-04-11T06:00:41.034511"
+  },
+  {
+    "game_id": 824535,
+    "date": "2026-04-11",
+    "home_team": "CIN",
+    "away_team": "LAA",
+    "home_bullpen_tail_score": 5.0667,
+    "away_bullpen_tail_score": 4.2833,
+    "combined_tail_score": 5.0667,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 9.0,
+    "logged_at": "2026-04-11T06:00:43.480032"
+  },
+  {
+    "game_id": 823644,
+    "date": "2026-04-11",
+    "home_team": "NYM",
+    "away_team": "OAK",
+    "home_bullpen_tail_score": 3.0,
+    "away_bullpen_tail_score": 5.09,
+    "combined_tail_score": 5.09,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "logged_at": "2026-04-11T06:00:46.035060"
+  },
+  {
+    "game_id": 824129,
+    "date": "2026-04-11",
+    "home_team": "KCR",
+    "away_team": "CHW",
+    "home_bullpen_tail_score": null,
+    "away_bullpen_tail_score": null,
+    "combined_tail_score": null,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 9.0,
+    "logged_at": "2026-04-11T06:00:48.348197"
+  },
+  {
+    "game_id": 822996,
+    "date": "2026-04-11",
+    "home_team": "TBR",
+    "away_team": "NYY",
+    "home_bullpen_tail_score": null,
+    "away_bullpen_tail_score": 3.4944,
+    "combined_tail_score": 3.4944,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "logged_at": "2026-04-11T06:00:49.205739"
+  },
+  {
+    "game_id": 823805,
+    "date": "2026-04-11",
+    "home_team": "MIL",
+    "away_team": "WSN",
+    "home_bullpen_tail_score": 4.825,
+    "away_bullpen_tail_score": null,
+    "combined_tail_score": 4.825,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.0,
+    "logged_at": "2026-04-11T06:00:51.195486"
+  },
+  {
+    "game_id": 824857,
+    "date": "2026-04-11",
+    "home_team": "BAL",
+    "away_team": "SFG",
+    "home_bullpen_tail_score": 3.5019,
+    "away_bullpen_tail_score": null,
+    "combined_tail_score": 3.5019,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "logged_at": "2026-04-11T06:00:53.043029"
+  },
+  {
+    "game_id": 823074,
+    "date": "2026-04-11",
+    "home_team": "STL",
+    "away_team": "BOS",
+    "home_bullpen_tail_score": 3.5667,
+    "away_bullpen_tail_score": 4.4852,
+    "combined_tail_score": 4.4852,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "logged_at": "2026-04-11T06:00:54.775236"
+  },
+  {
+    "game_id": 824939,
+    "date": "2026-04-11",
+    "home_team": "ATL",
+    "away_team": "CLE",
+    "home_bullpen_tail_score": 1.1444,
+    "away_bullpen_tail_score": 2.4167,
+    "combined_tail_score": 2.4167,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.0,
+    "logged_at": "2026-04-11T06:00:56.742656"
+  },
+  {
+    "game_id": 823316,
+    "date": "2026-04-11",
+    "home_team": "SDP",
+    "away_team": "COL",
+    "home_bullpen_tail_score": null,
+    "away_bullpen_tail_score": 4.0,
+    "combined_tail_score": 4.0,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.5,
+    "logged_at": "2026-04-11T06:00:58.684053"
+  },
+  {
+    "game_id": 823967,
+    "date": "2026-04-11",
+    "home_team": "LAD",
+    "away_team": "TEX",
+    "home_bullpen_tail_score": 3.85,
+    "away_bullpen_tail_score": 2.3117,
+    "combined_tail_score": 3.85,
+    "cs004_favorable_zone": false,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 8.5,
+    "logged_at": "2026-04-11T06:01:00.376190"
+  },
+  {
+    "game_id": 823155,
+    "date": "2026-04-11",
+    "home_team": "SEA",
+    "away_team": "HOU",
+    "home_bullpen_tail_score": 3.4312,
+    "away_bullpen_tail_score": 12.6708,
+    "combined_tail_score": 12.6708,
+    "cs004_favorable_zone": true,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "logged_at": "2026-04-11T06:01:02.282616"
   }
 ]

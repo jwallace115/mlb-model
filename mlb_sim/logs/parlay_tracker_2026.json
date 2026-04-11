@@ -217,32 +217,32 @@
             "game": "LAA@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "MIN@TOR",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "TEX@LAD",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 8,
+      "total": 9,
       "wins": 1,
-      "losses": 7,
+      "losses": 8,
       "pending": 0,
-      "win_rate": 12.5,
-      "net_units": -2.0,
+      "win_rate": 11.1,
+      "net_units": -3.0,
       "payout_per_win": 6.0
     }
   },
