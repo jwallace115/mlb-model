@@ -1,0 +1,6 @@
+label,dim,bet_side,status,disc_n,disc_resid,disc_roi_fav,disc_roi_dog,val_n,val_resid,oos_n,oos_resid
+SP-LED,reason,fav,KILL,166,0.0894,11.8,-22.75,96,-0.0598,109,-0.0228
+MIXED,reason,dog,KEEP,540,-0.025,-8.56,1.09,333,-0.0163,358,-0.0367
+LATE-CONVERT,winpath,dog,KILL,248,-0.0244,-8.44,0.97,127,0.0306,165,-0.0608
+UNCLASSIFIED,winpath,fav,KILL,332,0.0392,2.97,-12.11,208,-0.0073,202,-0.0443
+MIXED+LATE-CONVERT,cross,dog,KILL,162,-0.0429,-11.82,4.73,81,0.0195,96,-0.0022
