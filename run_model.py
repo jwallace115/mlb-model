@@ -1138,12 +1138,14 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
             from mlb_sim.pipeline.shadow_signals import (
                 compute_st02, compute_adj_signals,
                 log_shadow_signals, _v1_direction,
+                extract_closing_prices,
             )
             _st02 = compute_st02(gk)
             _home_pid = home_sp.get("mlbam_id")
             _away_pid = away_sp.get("mlbam_id")
             _adj = compute_adj_signals(_home_pid, _away_pid)
             _v1dir = _v1_direction(proj)
+            _prices = extract_closing_prices(odds.get("full") or {})
             log_shadow_signals(
                 game_id=gk, date=game_date,
                 season=int(game_date[:4]),
@@ -1153,6 +1155,9 @@ def run(game_date: Optional[str] = None, quiet: bool = False,
                 closing_total=full_cons,
                 market_line=full_cons,
                 model_projection=proj.get("proj_total_full"),
+                closing_under_price=_prices.get("closing_under_price"),
+                closing_over_price=_prices.get("closing_over_price"),
+                price_source=_prices.get("price_source"),
             )
         except Exception as e:
             logger.warning(f"Shadow signals tracking failed (non-fatal): {e}")

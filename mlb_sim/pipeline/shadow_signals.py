@@ -252,13 +252,70 @@ def _v1_direction(proj):
 
 
 # ======================================================================
+# Price extraction helper
+# ======================================================================
+
+def extract_closing_prices(odds_dict):
+    """
+    Extract closing under/over prices from the odds dict returned by
+    modules/odds.get_game_lines().
+
+    Parameters
+    ----------
+    odds_dict : dict
+        The per-game odds dict, e.g. {"full": {"consensus": 8.5,
+        "best_under": {"book": "pinnacle", "line": 8.5, "odds": -105},
+        "best_over":  {"book": "pinnacle", "line": 8.5, "odds": -115},
+        "draftkings": {"line": 8.5, "over": -110, "under": -110}, ...},
+        "f5": {...}}
+
+    Returns
+    -------
+    dict with keys: closing_under_price, closing_over_price, price_source.
+    All values may be None if data is unavailable.
+
+    Priority: pinnacle > draftkings > fanduel > best_under/best_over.
+    """
+    full = (odds_dict or {}).get("full") or {}
+    if not full:
+        return {"closing_under_price": None, "closing_over_price": None, "price_source": None}
+
+    _BOOK_PRIORITY = ["pinnacle", "draftkings", "fanduel"]
+    for bk in _BOOK_PRIORITY:
+        book_data = full.get(bk)
+        if book_data and book_data.get("under") is not None and book_data.get("over") is not None:
+            return {
+                "closing_under_price": int(book_data["under"]),
+                "closing_over_price": int(book_data["over"]),
+                "price_source": bk,
+            }
+
+    # Fallback: best_under / best_over (may come from different books)
+    bu = full.get("best_under")
+    bo = full.get("best_over")
+    if bu and bo:
+        src = bu.get("book", "unknown")
+        if bu.get("book") != bo.get("book"):
+            src = f"{bu.get('book', '?')}+{bo.get('book', '?')}"
+        return {
+            "closing_under_price": int(bu["odds"]),
+            "closing_over_price": int(bo["odds"]),
+            "price_source": src,
+        }
+
+    return {"closing_under_price": None, "closing_over_price": None, "price_source": None}
+
+
+# ======================================================================
 # Logging
 # ======================================================================
 
 def log_shadow_signals(game_id, date, season, home_team, away_team,
                        st02_result, adj_results, v1_direction_context,
                        closing_total=None, market_line=None,
-                       model_projection=None):
+                       model_projection=None,
+                       closing_under_price=None, closing_over_price=None,
+                       price_source=None):
     """
     Log all four shadow signals to a single JSON file per season.
     Each signal gets its own record in the array.
@@ -293,6 +350,9 @@ def log_shadow_signals(game_id, date, season, home_team, away_team,
         "away_team": away_team,
         "market_line": market_line,
         "model_projection": model_projection,
+        "closing_under_price": closing_under_price,
+        "closing_over_price": closing_over_price,
+        "price_source": price_source,
         "logged_at": now,
     })
 
@@ -319,6 +379,9 @@ def log_shadow_signals(game_id, date, season, home_team, away_team,
             "model_projection": model_projection,
             "home_pitcher_value": sig.get("home_value"),
             "away_pitcher_value": sig.get("away_value"),
+            "closing_under_price": closing_under_price,
+            "closing_over_price": closing_over_price,
+            "price_source": price_source,
             "logged_at": now,
         })
 
