@@ -1,0 +1,9 @@
+signal,name,disc_status,disc_corr,val_status,val_roi,val_over_rate,oos_status,oos_roi,oos_over_rate,oos_n,verdict
+OV043,bullpen_overuse_pitches_3g,PASS,0.0397,PASS,4.3,0.5462,FAIL,-3.6,0.5059,253,KILL
+OV016,high_pitch_count_fatigue,DIRECTIONAL,0.0195,PASS,1.4,0.5331,FAIL,-7.1,0.4869,191,KILL
+OV001,bb_x_hard_hit,PASS,0.0449,MARGINAL,-4.2,0.5021,FAIL,-10.1,0.4721,610,KILL
+OV021,low_k_contact_both,PASS,0.0669,PASS,11.0,0.5812,FAIL,-7.9,0.4826,259,KILL
+OV041,short_starter_x_weak_bp,DIRECTIONAL,0.0068,MARGINAL,-3.5,0.5064,FAIL,-3.5,0.5055,455,KILL
+OV_FIP_BOTH,both_starters_high_era,PASS,0.0323,MARGINAL,-3.1,0.5085,FAIL,-6.5,0.489,456,KILL
+OV_ERA_SPIKE,era_spike_combined,DIRECTIONAL,0.0142,MARGINAL,-0.6,0.5214,FAIL,-1.6,0.5153,262,KILL
+OV_BP_IP,bp_ip_last_2d_combined,DIRECTIONAL,0.0212,PASS,2.8,0.5401,FAIL,-10.8,0.4696,494,KILL
