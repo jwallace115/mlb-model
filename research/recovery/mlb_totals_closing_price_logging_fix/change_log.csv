@@ -1,0 +1,6 @@
+phase,file,change_type,description,lines_affected,backward_compatible
+PHASE3,mlb_sim/pipeline/shadow_signals.py,new_function,extract_closing_prices() helper - extracts under/over prices from odds dict with pinnacle>dk>fd priority,~60 lines inserted before logging section,yes
+PHASE3,mlb_sim/pipeline/shadow_signals.py,signature_change,log_shadow_signals() gains 3 new kwargs: closing_under_price closing_over_price price_source (all default None),line 258-263,yes
+PHASE3,mlb_sim/pipeline/shadow_signals.py,record_schema,ST02 record dict now includes closing_under_price closing_over_price price_source,lines 284-297,yes
+PHASE3,mlb_sim/pipeline/shadow_signals.py,record_schema,ADJ signal record dicts now include closing_under_price closing_over_price price_source,lines 308-323,yes
+PENDING,run_model.py,NOT_APPLIED,Caller must import extract_closing_prices and pass prices to log_shadow_signals,lines ~1138-1157,n/a
