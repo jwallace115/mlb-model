@@ -1077,10 +1077,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":9.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-11",
@@ -1096,10 +1096,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":1.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-04-11",
@@ -1112,6 +1112,25 @@
     "p_under_full":0.4097,
     "p_over_full":0.5903,
     "f5_line":4.5,
+    "f5_line_closing":null,
+    "f5_clv_raw":null,
+    "f5_clv_signed":null,
+    "actual_f5_total":2.0,
+    "result":"LOSS",
+    "net_units":-0.5,
+    "resolved":1
+  },
+  {
+    "date":"2026-04-12",
+    "game_id":"824126",
+    "home_team":"KCR",
+    "away_team":"CHW",
+    "f5_signal_side":"UNDER",
+    "signal_tier":"primary_under",
+    "stake_units":0.75,
+    "p_under_full":0.6662,
+    "p_over_full":0.3338,
+    "f5_line":5.5,
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
