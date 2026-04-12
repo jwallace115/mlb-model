@@ -1,0 +1,12 @@
+file,line,type,action,notes
+mlb_sim/pipeline/f5_runline_status.json,,status_file,UPDATED,SHADOW -> ARCHIVED
+mlb_sim/pipeline/f5_runline_signal_generator.py,418-420,generator,MODIFIED,Added ARCHIVED gate before PAUSED check
+run_model.py,1336-1343,caller,NO_CHANGE,try/except wrapper; returns [] safely
+push_results.py,411,json_push,NO_CHANGE,Pushes existing JSON file; no signals emitted
+dashboard.py,,display,NO_CHANGE,No Signal B references found
+mlb_sim/pipeline/f5_runline_tracker.py,,perf_tracker,NO_CHANGE,Reads signals file; no new signals to track
+mlb_sim/pipeline/line_overrides.py,47,market_enum,NO_CHANGE,f5_runline enum value only; not a caller
+mlb_sim/logs/f5_runline_2026.parquet,,tracker_data,PRESERVED,7 historical signals retained
+mlb_sim/logs/f5_runline_2026.json,,tracker_json,PRESERVED,JSON mirror of parquet
+mlb_sim/logs/f5_runline_lines_2026.parquet,,lines_data,PRESERVED,F5 spread pulls retained
+mlb_sim/logs/f5_runline_performance_2026.json,,perf_data,PRESERVED,Performance snapshot retained
