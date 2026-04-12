@@ -1,45 +1,31 @@
 {
-  "generated_at": "2026-04-12T11:08:22.683403+00:00",
-  "last_updated": "2026-04-12 11:08 UTC",
-  "pipeline_run_date": "2026-04-11",
-  "signals_source": "stale",
+  "generated_at": "2026-04-12T14:01:04.694484+00:00",
+  "last_updated": "2026-04-12 14:01 UTC",
+  "pipeline_run_date": "2026-04-12",
+  "signals_source": "live",
   "game_date": "2026-04-12",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
   "active_scope_note": "Active: Bundesliga MEDIUM tier only. All other leagues/tiers computed and logged to shadow.",
   "today_signals": [],
-  "recent_results": [
-    {
-      "game_id": "BUN_2025-26_2026-04-11_VfL_Wolfsburg_Eintracht_Frankfurt",
-      "game_date": "2026-04-11",
-      "league_id": "BUN",
-      "home_team": "VfL Wolfsburg",
-      "away_team": "Eintracht Frankfurt",
-      "signal_side": "OVER",
-      "closing_total": 2.5,
-      "edge": 0.1357868020304568,
-      "confidence_tier": "HIGH",
-      "result": "WIN",
-      "actual_total_goals": 3.0
-    }
-  ],
+  "recent_results": [],
   "season_performance": {
     "overall": {
-      "W": 1,
+      "W": 0,
       "L": 1,
       "P": 0,
-      "n": 2,
-      "hit": 0.5,
-      "roi": -4.55
+      "n": 1,
+      "hit": 0.0,
+      "roi": -100.0
     },
     "by_tier": {
       "HIGH": {
-        "W": 1,
+        "W": 0,
         "L": 1,
         "P": 0,
-        "n": 2,
-        "hit": 0.5,
-        "roi": -4.55
+        "n": 1,
+        "hit": 0.0,
+        "roi": -100.0
       },
       "MEDIUM": {
         "W": 0,
@@ -59,14 +45,6 @@
       }
     },
     "by_league": {
-      "BUN": {
-        "W": 1,
-        "L": 0,
-        "P": 0,
-        "n": 1,
-        "hit": 1.0,
-        "roi": 90.91
-      },
       "EPL": {
         "W": 0,
         "L": 1,
@@ -94,12 +72,12 @@
         "roi": null
       },
       "0.10+": {
-        "W": 1,
+        "W": 0,
         "L": 1,
         "P": 0,
-        "n": 2,
-        "hit": 0.5,
-        "roi": -4.55
+        "n": 1,
+        "hit": 0.0,
+        "roi": -100.0
       }
     },
     "market_movement": {
@@ -112,12 +90,12 @@
         "roi": null
       },
       "no_significant_movement": {
-        "W": 1,
+        "W": 0,
         "L": 1,
         "P": 0,
-        "n": 2,
-        "hit": 0.5,
-        "roi": -4.55
+        "n": 1,
+        "hit": 0.0,
+        "roi": -100.0
       }
     },
     "oos_reference": {
@@ -171,26 +149,49 @@
       "deployment_start_date": "2026-03-18"
     }
   },
-  "parlay_candidates": [],
+  "parlay_candidates": [
+    {
+      "game_id": "BUN_2025-26_2026-04-12_VfB_Stuttgart_Hamburger_SV",
+      "game_date": "2026-04-12",
+      "league": "BUN",
+      "home_team": "VfB Stuttgart",
+      "away_team": "Hamburger SV",
+      "game_time_et": "11:30 AM ET",
+      "projected_total": 3.92,
+      "model_p_over_1_5": 0.9024,
+      "confidence_tier": "VERY HIGH",
+      "market_line_1_5": null,
+      "market_implied_p_1_5": null,
+      "edge_1_5": null,
+      "lineup_confirmed": false
+    }
+  ],
   "suggested_parlay": {
-    "available": false,
-    "legs": [],
-    "combined_prob": null,
-    "leg_count": 0,
+    "available": true,
+    "legs": [
+      {
+        "game_id": "BUN_2025-26_2026-04-12_VfB_Stuttgart_Hamburger_SV",
+        "home_team": "VfB Stuttgart",
+        "away_team": "Hamburger SV",
+        "league": "BUN",
+        "game_time_et": "11:30 AM ET",
+        "projected_total": 3.92,
+        "model_p_over_1_5": 0.9024,
+        "confidence_tier": "VERY HIGH",
+        "market_line_1_5": null,
+        "edge_1_5": null
+      }
+    ],
+    "combined_prob": 0.9024,
+    "leg_count": 1,
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-04-12T11:08:22.724764+00:00",
+    "generated_at": "2026-04-12T14:01:04.701280+00:00",
     "date_reviewed": "2026-04-11",
-    "record_summary": {
-      "overall": {
-        "w": 0,
-        "l": 0,
-        "p": 0
-      }
-    },
+    "record_summary": {},
     "narrative": null,
-    "generation_status": "client_init_failed"
+    "generation_status": "no_games"
   },
   "weekly_review": null
 }
