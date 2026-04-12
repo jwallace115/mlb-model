@@ -72,11 +72,17 @@ def load_schedule(game_date: str) -> list[dict]:
 
     Returns list of dicts with game_pk, teams, time, day/night.
     """
+    from shared.retry_utils import retry_request
     url = "https://statsapi.mlb.com/api/v1/schedule"
-    r = requests.get(url, params={"sportId": 1, "date": game_date, "hydrate": "team"},
-                     timeout=15)
-    r.raise_for_status()
-    raw_games = r.json().get("dates", [{}])[0].get("games", [])
+
+    def _fetch_schedule():
+        resp = requests.get(url, params={"sportId": 1, "date": game_date, "hydrate": "team"},
+                            timeout=15)
+        resp.raise_for_status()
+        return resp.json()
+
+    data = retry_request(_fetch_schedule, max_retries=2, base_wait=15, label="MLB schedule")
+    raw_games = data.get("dates", [{}])[0].get("games", [])
     games = []
     for g in raw_games:
         home = g["teams"]["home"]["team"]

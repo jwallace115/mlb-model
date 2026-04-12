@@ -224,11 +224,14 @@ def compute_league_priors(ft: pd.DataFrame) -> dict:
 # ---------------------------------------------------------------------------
 def fetch_schedule(target_date: date) -> list[dict]:
     """Return list of game dicts for target_date."""
+    from shared.retry_utils import retry_request
     url = f"{NHL_API}/schedule/{target_date.isoformat()}"
     try:
-        r = requests.get(url, timeout=15)
-        r.raise_for_status()
-        data = r.json()
+        def _fetch():
+            r = requests.get(url, timeout=15)
+            r.raise_for_status()
+            return r.json()
+        data = retry_request(_fetch, max_retries=3, base_wait=30, label="NHL schedule")
         for day in data.get("gameWeek", []):
             if day.get("date") == target_date.isoformat():
                 return day.get("games", [])
@@ -810,9 +813,13 @@ def fetch_nhl_odds(target_date: date) -> dict[tuple, dict]:
         "oddsFormat":  "american",
         "bookmakers":  ",".join(BOOK_PRIORITY),
     }
+    from shared.retry_utils import retry_request
     try:
-        r = requests.get(url, params=params, timeout=20)
-        r.raise_for_status()
+        def _fetch_odds():
+            resp = requests.get(url, params=params, timeout=20)
+            resp.raise_for_status()
+            return resp
+        r = retry_request(_fetch_odds, max_retries=2, base_wait=15, label="NHL Odds API")
     except Exception as e:
         print(f"  WARNING: Odds API error: {e}")
         return {}
