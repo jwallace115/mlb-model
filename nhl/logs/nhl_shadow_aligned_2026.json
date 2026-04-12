@@ -1,0 +1,55 @@
+{
+  "model_version": "model_A_aligned_v1",
+  "object_id": "nhl_shadow_aligned_20260411",
+  "start_date": "2026-04-11",
+  "signals": [
+    {
+      "game_id": 2025021274,
+      "game_date": "2026-04-11",
+      "home_team": "COL",
+      "away_team": "VGK",
+      "signal_side": "UNDER",
+      "edge": 0.145,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.446,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021275,
+      "game_date": "2026-04-11",
+      "home_team": "SJS",
+      "away_team": "VAN",
+      "signal_side": "UNDER",
+      "edge": 0.1823,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.576,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021267,
+      "game_date": "2026-04-11",
+      "home_team": "NSH",
+      "away_team": "MIN",
+      "signal_side": "OVER",
+      "edge": 0.1771,
+      "tier": "HIGH",
+      "closing_total": 4.5,
+      "lambda_total": 6.45,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021269,
+      "game_date": "2026-04-11",
+      "home_team": "UTA",
+      "away_team": "CAR",
+      "signal_side": "OVER",
+      "edge": 0.2145,
+      "tier": "HIGH",
+      "closing_total": 5.5,
+      "lambda_total": 6.108,
+      "drift_applied": 0.0
+    }
+  ]
+}
