@@ -11,9 +11,16 @@ Launch:  streamlit run dashboard.py
 import json
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import streamlit as st
+
+_ET = ZoneInfo("America/New_York")
+
+def _today_et() -> str:
+    """Return today's date in ET as YYYY-MM-DD string."""
+    return datetime.now(_ET).date().isoformat()
 
 RESULTS_FILE      = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.json")
 SEASON_STATS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "season_stats.json")
@@ -463,7 +470,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     top3_all = [s for s in all_selections if s.get("selected_top3")]
 
     # --- 4. TODAY'S NRFI CARD (single combined card) ---
-    today = date.today().isoformat()
+    today = _today_et()
     today_top3 = sorted(
         [s for s in top3_all if s.get("run_date") == today],
         key=lambda x: x.get("selector_rank", 99),
@@ -670,7 +677,7 @@ def _render_nba_tab() -> None:
     st.html(rules_html)
 
     # --- 6. TODAY'S SIGNALS ---
-    today_str = date.today().isoformat()
+    today_str = _today_et()
     results_path = os.path.join(os.path.dirname(__file__), "nba_results.json")
     today_plays = []
     nba_meta = {}
@@ -968,7 +975,7 @@ def _render_nhl_tab() -> None:
     st.html(rules_html)
 
     # --- 5. TODAY'S GAMES ---
-    today = date.today().isoformat()
+    today = _today_et()
     today_signals = [s for s in shadow_data if s.get("game_date", "") == today]
 
     st.html(
@@ -1114,7 +1121,7 @@ def _render_home_tab() -> None:
             'margin-bottom:16px;letter-spacing:1px">iamnotuncertain.net</div>')
 
     # ── Today's Signals ──
-    _today = _home_date.today().isoformat()
+    _today = _today_et()
     st.html('<div style="font-size:1.0em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
             "Today's Signals</div>")
 
@@ -1200,7 +1207,7 @@ def _render_home_tab() -> None:
     st.html('<div style="font-size:1.0em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
             '\U0001f4c5 Today\'s Betting Windows</div>')
 
-    _dow = _home_date.today().weekday()  # 0=Mon, 1=Tue, 3=Thu, 4=Fri
+    _dow = datetime.now(_ET).weekday()  # 0=Mon, 1=Tue, 3=Thu, 4=Fri
     # Sports with signals today (from _sig_rows built above)
     _active_sports = {r[0] for r in _sig_rows} if _sig_rows else set()
 
