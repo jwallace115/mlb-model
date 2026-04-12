@@ -93,10 +93,10 @@ rel_team = rel.groupby(["team","game_date"]).agg(
     bp_er=("earned_runs","sum"), bp_ip=("innings_pitched","sum")).reset_index()
 rel_team = rel_team.sort_values(["team","game_date"])
 
-rel_team["bp_era9_r10"] = rel_team.groupby("team").apply(
-    lambda g: (g["bp_er"].rolling(10,min_periods=5).mean().shift(1) /
-               g["bp_er"].rolling(10,min_periods=5).mean().shift(1).clip(lower=0.01)) * 9
-    if False else pd.Series(dtype=float)).reset_index(drop=True)
+# REMOVED broken line
+# REMOVED
+# REMOVED
+# REMOVED
 
 # Simpler: compute bp ERA per game, then rolling mean
 rel_team["bp_era_game"] = (rel_team["bp_er"] / rel_team["bp_ip"].clip(lower=0.1)) * 9
