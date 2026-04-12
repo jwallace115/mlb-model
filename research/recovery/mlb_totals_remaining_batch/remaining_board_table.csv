@@ -1,0 +1,16 @@
+Object_ID,Object_Name,Prior_Classification,Updated_Classification,2026_Shadow_N,2026_Hit_Pct,Backtest_ROI_2025,Fire_Rate,Next_Review,Action
+C1,ADJ_CONTACT,RETEST REQUIRED,CONTINUE SHADOW,63,55.6%,+0.4%,61%,N=100 (early May),Monitor
+C2,ADJ_HH,RETEST REQUIRED,CONTINUE SHADOW,33,63.6%,+5.6%,31%,N=50 (late Apr),Monitor - BEST CANDIDATE
+C3,adj_k_rate,RETEST REQUIRED,CONTINUE SHADOW,28,60.7%,+4.1%,25%,N=50 (late Apr),Monitor
+C5,ADJ_RUN_SUPP,RETEST REQUIRED,CONTINUE SHADOW,32,59.4%,+1.8%,50%,N=50 (late Apr),Monitor
+C9,CS004,RETEST REQUIRED,CONTINUE SHADOW,20,60.0%,n/a,16%,N=50 (early May),Monitor
+C4,ADJ_BB_RATE,CLEAN KILL,CONFIRMED KILL,16,50.0%,-3.6%,17%,-,Dead
+C6,CS013,UNVERIFIABLE,DORMANT,0,-,-,0%,-,Dead code
+C7,CS028,UNVERIFIABLE,DORMANT,0,-,-,0%,-,Dead code
+C8,KP04,UNVERIFIABLE,DORMANT,0,-,-,0%,-,Dead code
+C10,Combined Short Exit,UNVERIFIABLE,DORMANT,0,-,-,0%,-,Dead code
+D3,F5 RL Signal B Home,CLEAN (KEEP),ARCHIVED,7,28.6%,-6.2%,-,-,Deactivated
+D5,CS025 F5 RL Overlay,CONDITIONAL,ARCHIVE,-,-,-,-,-,Parent dead
+D6,F5 Standalone,DEFERRED,ARCHIVE,-,-,-,-,-,No evidence basis
+F3,F5/FG Path Mismatch,RETEST REQUIRED,ARCHIVE,-,53.7% (HEI bucket),+2.5% (thin),n/a,-,Real but not exploitable
+G1,Over Scanner Wave 1,RETEST REQUIRED,CLEAN KILL,-,-,-8.0% avg,-,-,0/8 survived
