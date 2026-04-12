@@ -1,0 +1,39 @@
+{
+  "object_id": "mlb_mixed_bp_adv_dog_v1",
+  "ruleset_version": "frozen_v1",
+  "start_date": "2026-04-12",
+  "signals": [
+    {
+      "game_pk": 824859,
+      "game_date": "2026-04-12",
+      "matchup": "SFG @ BAL",
+      "fav_team": "BAL",
+      "dog_team": "SFG",
+      "fav_side": "home",
+      "fav_implied": 0.5402,
+      "dog_ml_price": 113,
+      "sp_fip_diff": 0.642,
+      "off_diff": -0.55,
+      "bp_era_diff": 0.26,
+      "fav_bp_era": 4.57,
+      "dog_bp_era": 4.31,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823075,
+      "game_date": "2026-04-12",
+      "matchup": "BOS @ STL",
+      "fav_team": "BOS",
+      "dog_team": "STL",
+      "fav_side": "away",
+      "fav_implied": 0.5329,
+      "dog_ml_price": 110,
+      "sp_fip_diff": -0.172,
+      "off_diff": -0.45,
+      "bp_era_diff": 0.156,
+      "fav_bp_era": 4.636,
+      "dog_bp_era": 4.48,
+      "win_loss": null
+    }
+  ]
+}
