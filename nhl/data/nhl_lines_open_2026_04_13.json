@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "85a783c58b0e8c374840728506c370ce",
+    "game_date": "2026-04-13",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Vancouver Canucks",
+    "commence_time": "2026-04-13T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -131,
+    "under_price": 115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-12T06:05:02.921122+00:00"
+  },
+  {
+    "game_id": "89b1cd5af8c961cacf717aa39b626f47",
+    "game_date": "2026-04-13",
+    "sport": "NHL",
+    "home_team": "Calgary Flames",
+    "away_team": "Utah Mammoth",
+    "commence_time": "2026-04-13T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-12T06:05:02.921122+00:00"
+  }
+]
