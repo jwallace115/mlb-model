@@ -403,9 +403,233 @@ def load_soccer_results() -> dict | None:
 def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     import json, os
     from datetime import date, datetime
+    from collections import defaultdict
     from dashboard_components import (render_status_header, _universal_pill,
                                        _render_game_card_universal,
                                        _render_signal_status_row)
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # SIDES SHADOW SECTION
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # --- Load sides tracker data ---
+    _sides_trackers = {}
+    for _sname, _slabel in [
+        ("mlb_mixed_night_dog_shadow_2026", "Night Dog"),
+        ("mlb_mixed_bp_adv_dog_shadow_2026", "BP Adv Dog"),
+    ]:
+        _spath = os.path.join(os.path.dirname(__file__), "mlb", "logs", f"{_sname}.json")
+        try:
+            if os.path.exists(_spath):
+                _sraw = json.load(open(_spath))
+                _sides_trackers[_slabel] = _sraw.get("signals", [])
+            else:
+                _sides_trackers[_slabel] = []
+        except Exception:
+            _sides_trackers[_slabel] = []
+
+    night_all = _sides_trackers.get("Night Dog", [])
+    bp_all = _sides_trackers.get("BP Adv Dog", [])
+
+    # --- Status headers ---
+    lu = None
+    try:
+        lu_data = json.load(open(os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")))
+        for key in ["mlb_confirm", "mlb_prelim"]:
+            ts = lu_data.get(key)
+            if ts and isinstance(ts, str) and "T" in ts:
+                from zoneinfo import ZoneInfo
+                dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                lu = dt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
+                break
+    except Exception:
+        pass
+
+    render_status_header(
+        object_name="MLB Sides — Night Dog",
+        object_id="mlb_mixed_night_dog_shadow_2026",
+        status="SHADOW",
+        tracker_start="April 12, 2026",
+        current_threshold="Night game · MIXED class · dog ML",
+        replaces=None,
+        last_updated=lu,
+    )
+    render_status_header(
+        object_name="MLB Sides — BP Adv Dog",
+        object_id="mlb_mixed_bp_adv_dog_shadow_2026",
+        status="SHADOW",
+        tracker_start="April 12, 2026",
+        current_threshold="Dog BP ERA < Fav BP ERA · MIXED class · dog ML",
+        replaces=None,
+        last_updated=lu,
+    )
+
+    # --- Signal status pills ---
+    _sides_shadow_labels = []
+    if night_all:
+        _sides_shadow_labels.append("Night Dog")
+    if bp_all:
+        _sides_shadow_labels.append("BP Adv Dog")
+    _render_signal_status_row(active_labels=[], shadow_labels=_sides_shadow_labels if _sides_shadow_labels else ["Night Dog", "BP Adv Dog"])
+
+    # --- Today's sides cards ---
+    _sides_today = _today_et()
+
+    night_today = [s for s in night_all if s.get("game_date") == _sides_today]
+    bp_today = [s for s in bp_all if s.get("game_date") == _sides_today]
+
+    game_signals = defaultdict(list)
+    for sig in night_today:
+        gpk = sig.get("game_pk", sig.get("game_id"))
+        game_signals[gpk].append(("night_dog", sig))
+    for sig in bp_today:
+        gpk = sig.get("game_pk", sig.get("game_id"))
+        game_signals[gpk].append(("bp_adv_dog", sig))
+
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
+        "Today's Sides Signals</div>"
+    )
+
+    if game_signals:
+        for gpk, signals_list in game_signals.items():
+            # Use first signal for matchup / time
+            first_sig = signals_list[0][1]
+            matchup = first_sig.get("matchup", "?")
+            time_et = ""
+            time_utc = first_sig.get("game_time_utc", "")
+            if time_utc and len(time_utc) >= 16:
+                try:
+                    from zoneinfo import ZoneInfo
+                    _dt = datetime.fromisoformat(time_utc.replace("Z", "+00:00"))
+                    time_et = _dt.astimezone(ZoneInfo("America/New_York")).strftime("%-I:%M %p ET")
+                except Exception:
+                    time_et = ""
+
+            time_part = f" · {time_et}" if time_et else ""
+
+            signal_lines_html = ""
+            for sig_type, sig in signals_list:
+                dog_team = sig.get("dog_team", "?")
+                if sig_type == "night_dog":
+                    signal_lines_html += (
+                        f'<div style="padding:3px 0">'
+                        f'{_universal_pill("Night Dog", "#fff", "#2563eb")}'
+                        f'{_universal_pill("PRIMARY", "#fff", "#6b7280")}'
+                        f'<span style="font-size:0.85em;color:#e2e8f0;margin-left:6px">'
+                        f'{dog_team} ML · shadow</span>'
+                        f'<span style="font-size:0.72em;color:#94a3b8;margin-left:8px">'
+                        f'Night game · MIXED class</span>'
+                        f'</div>'
+                    )
+                elif sig_type == "bp_adv_dog":
+                    bp_dog = sig.get("dog_bp_era", 0)
+                    bp_fav = sig.get("fav_bp_era", 0)
+                    bp_dog_str = f"{bp_dog:.2f}" if isinstance(bp_dog, (int, float)) else str(bp_dog)
+                    bp_fav_str = f"{bp_fav:.2f}" if isinstance(bp_fav, (int, float)) else str(bp_fav)
+                    signal_lines_html += (
+                        f'<div style="padding:3px 0">'
+                        f'{_universal_pill("BP Adv Dog", "#fff", "#2563eb")}'
+                        f'{_universal_pill("SECONDARY", "#fff", "#6b7280")}'
+                        f'<span style="font-size:0.85em;color:#e2e8f0;margin-left:6px">'
+                        f'{dog_team} ML · shadow</span>'
+                        f'<span style="font-size:0.72em;color:#94a3b8;margin-left:8px">'
+                        f'Dog BP: {bp_dog_str} · Fav BP: {bp_fav_str}</span>'
+                        f'</div>'
+                    )
+
+            card_html = (
+                f'<div style="border:1px solid #dc2626;border-radius:8px;padding:12px 16px;'
+                f'background:#0f1729;margin:8px 0">'
+                f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
+                f'{matchup}{time_part} · <span style="color:#f87171">shadow</span></div>'
+                f'<hr style="border:none;border-top:1px solid #1e293b;margin:4px 0">'
+                f'{signal_lines_html}'
+                f'<hr style="border:none;border-top:1px solid #1e293b;margin:4px 0">'
+                f'<div style="font-size:0.68em;color:#4b5563;margin-top:4px">'
+                f'Research shadow — not a live wager recommendation</div>'
+                f'</div>'
+            )
+            st.html(card_html)
+    else:
+        st.html(
+            '<div style="font-size:0.75em;color:#6b7280;padding:6px 12px;background:#0d1117;'
+            'border-radius:4px;border:1px solid #1e293b">'
+            'No sides signals today — next slate pending</div>'
+        )
+
+    # --- Sides tracker: Night Dog ---
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+        'Shadow Tracker — Night Dog (started April 12, 2026)</div>'
+    )
+    _nd_resolved = [s for s in night_all if s.get("win_loss") in ("W", "L")]
+    _nd_wins = sum(1 for s in _nd_resolved if s.get("win_loss") == "W")
+    _nd_losses = sum(1 for s in _nd_resolved if s.get("win_loss") == "L")
+    _nd_n = len(_nd_resolved)
+    _nd_pend = len(night_all) - _nd_n
+    _nd_hit = (_nd_wins / _nd_n * 100) if _nd_n > 0 else 0
+    st.html(
+        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
+        f'<span style="font-weight:700">{_nd_wins}-{_nd_losses}</span>'
+        f' &nbsp;|&nbsp; Hit: {_nd_hit:.1f}%'
+        f' &nbsp;|&nbsp; {_nd_n} resolved, {_nd_pend} pending'
+        f'</div>'
+    )
+    if night_all:
+        import pandas as pd
+        _nd_rows = []
+        for s in night_all:
+            _nd_rows.append({
+                "Date": s.get("game_date", ""),
+                "Matchup": s.get("matchup", ""),
+                "Dog": s.get("dog_team", ""),
+                "ML": s.get("dog_ml_price", ""),
+                "W/L": s.get("win_loss") or "pending",
+            })
+        st.dataframe(pd.DataFrame(_nd_rows), use_container_width=True, hide_index=True)
+
+    # --- Sides tracker: BP Adv Dog ---
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+        'Shadow Tracker — BP Adv Dog (started April 12, 2026)</div>'
+    )
+    _bp_resolved = [s for s in bp_all if s.get("win_loss") in ("W", "L")]
+    _bp_wins = sum(1 for s in _bp_resolved if s.get("win_loss") == "W")
+    _bp_losses = sum(1 for s in _bp_resolved if s.get("win_loss") == "L")
+    _bp_n = len(_bp_resolved)
+    _bp_pend = len(bp_all) - _bp_n
+    _bp_hit = (_bp_wins / _bp_n * 100) if _bp_n > 0 else 0
+    st.html(
+        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
+        f'<span style="font-weight:700">{_bp_wins}-{_bp_losses}</span>'
+        f' &nbsp;|&nbsp; Hit: {_bp_hit:.1f}%'
+        f' &nbsp;|&nbsp; {_bp_n} resolved, {_bp_pend} pending'
+        f'</div>'
+    )
+    if bp_all:
+        import pandas as pd
+        _bp_rows = []
+        for s in bp_all:
+            _bp_rows.append({
+                "Date": s.get("game_date", ""),
+                "Matchup": s.get("matchup", ""),
+                "Dog": s.get("dog_team", ""),
+                "ML": s.get("dog_ml_price", ""),
+                "Dog BP": f"{s.get('dog_bp_era', 0):.2f}" if isinstance(s.get('dog_bp_era'), (int, float)) else "",
+                "Fav BP": f"{s.get('fav_bp_era', 0):.2f}" if isinstance(s.get('fav_bp_era'), (int, float)) else "",
+                "W/L": s.get("win_loss") or "pending",
+            })
+        st.dataframe(pd.DataFrame(_bp_rows), use_container_width=True, hide_index=True)
+
+    # --- Divider between sides and NRFI ---
+    st.html('<hr style="border:none;border-top:2px solid #1e293b;margin:24px 0 16px 0">')
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # NRFI SECTION (existing)
+    # ═══════════════════════════════════════════════════════════════════════════
 
     # --- 1. STATUS HEADER ---
     lu = None
