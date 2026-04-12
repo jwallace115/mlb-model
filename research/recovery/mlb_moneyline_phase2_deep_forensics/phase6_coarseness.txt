@@ -1,0 +1,76 @@
+## Fav SP declining + Dog SP improving
+Price band distribution (all splits):
+  big_dog: N=0 (too few)
+  mid_dog: N=459, WR=0.458, impl=0.458, resid=-0.0003
+  slight: N=195, WR=0.456, impl=0.491, resid=-0.0349
+Home/Away split:
+  home_bet: N=300, WR=0.460, impl=0.471, resid=-0.0115
+  away_bet: N=354, WR=0.455, impl=0.465, resid=-0.0098
+Feature magnitude (fav_sp_era_div): median=-1.24, p25=-2.37, p75=-0.55
+Feature magnitude (dog_sp_era_div): median=1.06, p25=0.49, p75=1.81
+
+## Dog SP materially improving (div>0.5)
+Price band distribution (all splits):
+  big_dog: N=0 (too few)
+  mid_dog: N=693, WR=0.463, impl=0.459, resid=+0.0046
+  slight: N=278, WR=0.500, impl=0.491, resid=+0.0086
+Home/Away split:
+  home_bet: N=444, WR=0.453, impl=0.471, resid=-0.0186
+  away_bet: N=527, WR=0.491, impl=0.465, resid=+0.0263
+
+## BP workload mismatch favors dog
+Price band distribution (all splits):
+  big_dog: N=0 (too few)
+  mid_dog: N=1110, WR=0.468, impl=0.458, resid=+0.0107
+  slight: N=404, WR=0.498, impl=0.492, resid=+0.0060
+Home/Away split:
+  home_bet: N=601, WR=0.473, impl=0.471, resid=+0.0016
+  away_bet: N=913, WR=0.479, impl=0.464, resid=+0.0146
+Feature magnitude (bp_workload_mismatch): median=2.30, p25=1.10, p75=3.90
+
+## Dog better recent form (RD5)
+Price band distribution (all splits):
+  big_dog: N=0 (too few)
+  mid_dog: N=1945, WR=0.461, impl=0.458, resid=+0.0036
+  slight: N=860, WR=0.509, impl=0.491, resid=+0.0179
+Home/Away split:
+  home_bet: N=1133, WR=0.462, impl=0.471, resid=-0.0090
+  away_bet: N=1672, WR=0.485, impl=0.466, resid=+0.0194
+Feature magnitude (rd5_mismatch): median=2.00, p25=1.00, p75=3.40
+
+## INT1: SP+RD5 mismatch (dog)
+Price band distribution (all splits):
+  big_dog: N=0 (too few)
+  mid_dog: N=433, WR=0.443, impl=0.459, resid=-0.0159
+  slight: N=185, WR=0.481, impl=0.491, resid=-0.0096
+Home/Away split:
+  home_bet: N=246, WR=0.415, impl=0.470, resid=-0.0554
+  away_bet: N=372, WR=0.481, impl=0.468, resid=+0.0134
+Feature magnitude (rd5_mismatch): median=2.20, p25=1.00, p75=3.40
+
+## INT2: SP+BP mismatch (dog)
+Price band distribution (all splits):
+  big_dog: N=0 (too few)
+  mid_dog: N=372, WR=0.435, impl=0.459, resid=-0.0233
+  slight: N=149, WR=0.490, impl=0.491, resid=-0.0012
+Home/Away split:
+  home_bet: N=220, WR=0.432, impl=0.471, resid=-0.0391
+  away_bet: N=301, WR=0.465, impl=0.466, resid=-0.0008
+
+## INT4: Triple mismatch SP+BP+RD5 (dog)
+Price band distribution (all splits):
+  big_dog: N=0 (too few)
+  mid_dog: N=178, WR=0.433, impl=0.460, resid=-0.0271
+  slight: N=76, WR=0.513, impl=0.491, resid=+0.0226
+Home/Away split:
+  home_bet: N=96, WR=0.438, impl=0.472, resid=-0.0346
+  away_bet: N=158, WR=0.468, impl=0.467, resid=+0.0013
+
+## INT5: Fav SP improving + hot streak (fav)
+Price band distribution (all splits):
+  heavy_fav: N=83, WR=0.530, impl=0.563, resid=-0.0329
+  mid_fav: N=306, WR=0.539, impl=0.537, resid=+0.0020
+  slight_fav: N=149, WR=0.510, impl=0.508, resid=+0.0022
+Home/Away split:
+  home_bet: N=206, WR=0.529, impl=0.538, resid=-0.0084
+  away_bet: N=332, WR=0.530, impl=0.530, resid=-0.0002
