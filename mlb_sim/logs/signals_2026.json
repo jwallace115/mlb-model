@@ -1438,7 +1438,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Noah Cameron",
+    "away_sp_name": "Grant Taylor"
   },
   {
     "date": "2026-04-12",
@@ -1463,6 +1465,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jameson Taillon",
+    "away_sp_name": "Bubba Chandler"
   }
 ]
