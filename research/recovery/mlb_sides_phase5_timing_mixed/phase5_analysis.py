@@ -1,546 +1,379 @@
 import pandas as pd
 import numpy as np
-import os, json, warnings
+import os, warnings
 warnings.filterwarnings('ignore')
 
-OUT = '/root/mlb-model/research/recovery/mlb_sides_phase5_timing_mixed'
+OUT = os.path.dirname(os.path.abspath(__file__))
 
 ###############################################################################
 # PHASE 0: Lock inputs
 ###############################################################################
-ct = pd.read_csv('/root/mlb-model/research/recovery/mlb_sides_phase4_winpath/classification_table.csv')
+BASE = os.path.dirname(os.path.dirname(os.path.dirname(OUT)))
+ct = pd.read_csv(os.path.join(BASE, 'research/recovery/mlb_sides_phase4_winpath/classification_table.csv'))
 ct['date'] = pd.to_datetime(ct['date'])
-print(f'Classification table: {ct.shape}')
-print(f'Columns: {list(ct.columns)}')
-print(f'reason_class values (reason col): {ct["reason"].value_counts().to_dict()}')
-
-# Rename for clarity
 ct.rename(columns={'reason': 'reason_class'}, inplace=True)
+print("Classification table:", ct.shape)
+print("Classes:", ct["reason_class"].value_counts().to_dict())
 
-# Branch A verdict
-print('\n=== BRANCH A: SP-LED OPEN/CLOSE TIMING ===')
-print('VERDICT: UNVERIFIABLE')
-print('No opening ML prices in canonical odds or market_snapshots.')
-print('Market snapshots contain totals open/noon/5pm/close but NO moneyline open prices.')
-print('Cannot test whether SP-LED dogs offer better ROI at open vs close.')
+print("\n=== BRANCH A: SP-LED OPEN/CLOSE TIMING ===")
+print("VERDICT: UNVERIFIABLE -- no opening ML prices in any data source.")
 
 ###############################################################################
-# PHASE 3: Branch B — MIXED overlay registry
+# PHASE 3: MIXED overlay features
 ###############################################################################
-print('\n=== BRANCH B: MIXED OVERLAY HUNT ===')
+print("\n=== BRANCH B: MIXED OVERLAY HUNT ===")
 mixed = ct[ct['reason_class'] == 'MIXED'].copy()
-print(f'MIXED games total: {len(mixed)}')
-print(f'By season: {mixed["season"].value_counts().sort_index().to_dict()}')
+print("MIXED total:", len(mixed))
 
-# Discovery / validation / OOS splits
-disc = mixed[mixed['season'].isin([2022, 2023])].copy()
-val  = mixed[mixed['season'] == 2024].copy()
-oos  = mixed[mixed['season'] == 2025].copy()
-print(f'Discovery: {len(disc)}, Validation: {len(val)}, OOS: {len(oos)}')
-
-# Dog win rate baseline
-print(f'\nBaseline dog WR:')
-for label, df in [('Discovery', disc), ('Validation', val), ('OOS', oos)]:
-    dwr = (df['fav_won'] == 0).mean()
-    print(f'  {label}: {dwr:.4f} ({(df["fav_won"]==0).sum()}/{len(df)})')
-
-###############################################################################
-# Build overlay features (PIT-safe)
-###############################################################################
-# 1. Closing total environment
+# 1. Total environment
 mixed['total_env'] = pd.cut(mixed['total_line'], bins=[0, 7.5, 8.5, 20], labels=['low', 'mid', 'high'])
 
-# 2. Day vs night — need game time; approximate from date if not available
-# Check if we have game time in game_table
-try:
-    gt = pd.read_parquet('/root/mlb-model/sim/data/game_table.parquet')
-    if 'game_time' in gt.columns or 'start_time' in gt.columns:
-        time_col = 'game_time' if 'game_time' in gt.columns else 'start_time'
-        gt_merge = gt[['game_pk', time_col]].drop_duplicates('game_pk')
-        mixed = mixed.merge(gt_merge, on='game_pk', how='left')
-        if time_col in mixed.columns:
-            mixed['hour'] = pd.to_datetime(mixed[time_col]).dt.hour
-            mixed['day_night'] = np.where(mixed['hour'] < 17, 'day', 'night')
-            print(f'Day/night from game_table: {mixed["day_night"].value_counts().to_dict()}')
-    else:
-        print(f'game_table cols: {[c for c in gt.columns if "time" in c.lower() or "hour" in c.lower()]}')
-        mixed['day_night'] = 'unknown'
-except Exception as e:
-    print(f'game_table error: {e}')
-    mixed['day_night'] = 'unknown'
+# 2. Day vs night from game_table
+gt = pd.read_parquet(os.path.join(BASE, 'sim/data/game_table.parquet'))
+gt_time = gt[['game_pk', 'local_start_hour']].drop_duplicates('game_pk')
+mixed = mixed.merge(gt_time, on='game_pk', how='left')
+mixed['day_night'] = np.where(mixed['local_start_hour'] < 17, 'day', 'night')
+print("Day/night:", mixed["day_night"].value_counts().to_dict())
 
-# 3. Home dog vs away dog
+# 3. Dog orientation
 mixed['dog_is_home'] = (~mixed['fav_is_home'].astype(bool)).astype(int)
 
-# 4. SP length asymmetry — use fav/dog SP FIP as proxy (PIT-safe, already in table)
-# Higher FIP diff = bigger SP gap; but we want IP asymmetry
-# Use sp_fip_diff magnitude as proxy for SP quality gap
+# 4. SP gap tiers
 mixed['sp_gap_abs'] = mixed['sp_fip_diff'].abs()
-mixed['sp_gap_tier'] = pd.cut(mixed['sp_gap_abs'], bins=[0, 0.5, 1.5, 20], labels=['tight', 'moderate', 'wide'])
+mixed['sp_gap_tier'] = pd.qcut(mixed['sp_gap_abs'], q=3, labels=['tight', 'moderate', 'wide'])
 
-# 5. Bullpen ERA asymmetry
-mixed['bp_era_abs'] = mixed['bp_era_diff'].abs()
-mixed['bp_adv_dog'] = (mixed['bp_era_diff'] < 0).astype(int)  # dog has BP advantage
+# 5. BP advantage for dog
+# bp_era_diff = fav_bp_era - dog_bp_era; positive means fav has worse BP
+mixed['bp_adv_dog'] = (mixed['bp_era_diff'] > 0).astype(int)
 
-# 6. Offense asymmetry
-mixed['off_gap_abs'] = mixed['off_diff'].abs()
-mixed['off_adv_dog'] = (mixed['off_diff'] < 0).astype(int)  # dog has offensive advantage
+# 6. Offense advantage for dog
+# off_diff = fav_off - dog_off; negative means dog has better offense
+mixed['off_adv_dog'] = (mixed['off_diff'] < 0).astype(int)
 
-# 7. Fav implied prob tiers (price-based)
-mixed['fav_imp_tier'] = pd.cut(mixed['fav_implied'], bins=[0.5, 0.55, 0.60, 0.65, 1.0], 
-                                labels=['slight', 'moderate', 'heavy'])
+# 7. Fav implied tiers (range is 0.51-0.555)
+mixed['fav_imp_tier'] = np.where(mixed['fav_implied'] < 0.53, 'slight',
+                         np.where(mixed['fav_implied'] < 0.545, 'moderate', 'heavy'))
 
-# Re-split after feature engineering
+# 8. Rest differential from game_table
+gt_rest = gt[['game_pk', 'home_rest_days', 'away_rest_days']].drop_duplicates('game_pk')
+mixed = mixed.merge(gt_rest, on='game_pk', how='left')
+mixed['dog_rest_adv'] = np.where(
+    mixed['fav_is_home'].astype(bool),
+    mixed['away_rest_days'] - mixed['home_rest_days'],
+    mixed['home_rest_days'] - mixed['away_rest_days']
+)
+mixed['dog_rested'] = (mixed['dog_rest_adv'] > 0).astype(int)
+
+# Splits
 disc = mixed[mixed['season'].isin([2022, 2023])].copy()
 val  = mixed[mixed['season'] == 2024].copy()
 oos  = mixed[mixed['season'] == 2025].copy()
+print("Discovery: %d, Validation: %d, OOS: %d" % (len(disc), len(val), len(oos)))
 
 ###############################################################################
-# PHASE 4: Discovery tests
+# Helper
 ###############################################################################
-print('\n=== PHASE 4: DISCOVERY TESTS (2022-2023) ===')
-
 def calc_roi(df_sub, label=''):
-    """Calculate dog WR, implied prob, residual, ROI at actual ML prices."""
     n = len(df_sub)
     if n < 20:
-        return {'label': label, 'n': n, 'dog_wr': np.nan, 'implied_dog': np.nan, 
+        return {'label': label, 'n': n, 'dog_wr': np.nan, 'implied_dog': np.nan,
                 'residual': np.nan, 'roi_pct': np.nan, 'status': 'TOO_SMALL'}
-    
     dog_wins = (df_sub['fav_won'] == 0).sum()
     dog_wr = dog_wins / n
     implied_dog = (1 - df_sub['fav_implied']).mean()
     residual = dog_wr - implied_dog
-    
-    # ROI at actual dog ML prices
-    # dog_ml_price is in American odds format
     profits = []
     for _, row in df_sub.iterrows():
         price = row['dog_ml_price']
-        if row['fav_won'] == 0:  # dog won
-            if price > 0:
-                profit = price / 100
-            else:
-                profit = 100 / abs(price)
+        if row['fav_won'] == 0:
+            profit = price / 100 if price > 0 else 100 / abs(price)
         else:
             profit = -1
         profits.append(profit)
     roi = np.mean(profits) * 100
-    
     return {'label': label, 'n': n, 'dog_wr': dog_wr, 'implied_dog': implied_dog,
             'residual': residual, 'roi_pct': roi, 'status': 'OK'}
 
+def get_subset(df, label):
+    filters = {
+        'MIXED_all': lambda d: d,
+        'total_low': lambda d: d[d['total_env'] == 'low'],
+        'total_mid': lambda d: d[d['total_env'] == 'mid'],
+        'total_high': lambda d: d[d['total_env'] == 'high'],
+        'daynight_day': lambda d: d[d['day_night'] == 'day'],
+        'daynight_night': lambda d: d[d['day_night'] == 'night'],
+        'dog_home': lambda d: d[d['dog_is_home'] == 1],
+        'dog_away': lambda d: d[d['dog_is_home'] == 0],
+        'sp_gap_tight': lambda d: d[d['sp_gap_tier'] == 'tight'],
+        'sp_gap_moderate': lambda d: d[d['sp_gap_tier'] == 'moderate'],
+        'sp_gap_wide': lambda d: d[d['sp_gap_tier'] == 'wide'],
+        'bp_adv_dog_0': lambda d: d[d['bp_adv_dog'] == 0],
+        'bp_adv_dog_1': lambda d: d[d['bp_adv_dog'] == 1],
+        'off_adv_dog_0': lambda d: d[d['off_adv_dog'] == 0],
+        'off_adv_dog_1': lambda d: d[d['off_adv_dog'] == 1],
+        'fav_imp_slight': lambda d: d[d['fav_imp_tier'] == 'slight'],
+        'fav_imp_moderate': lambda d: d[d['fav_imp_tier'] == 'moderate'],
+        'fav_imp_heavy': lambda d: d[d['fav_imp_tier'] == 'heavy'],
+        'dog_rested_1': lambda d: d[d['dog_rested'] == 1],
+        'dog_rested_0': lambda d: d[d['dog_rested'] == 0],
+        'dog_home+bp_adv': lambda d: d[(d['dog_is_home'] == 1) & (d['bp_adv_dog'] == 1)],
+        'dog_home+off_adv': lambda d: d[(d['dog_is_home'] == 1) & (d['off_adv_dog'] == 1)],
+        'slight_fav+dog_home': lambda d: d[(d['fav_imp_tier'] == 'slight') & (d['dog_is_home'] == 1)],
+        'sp_tight+dog_home': lambda d: d[(d['sp_gap_tier'] == 'tight') & (d['dog_is_home'] == 1)],
+        'bp_adv+off_adv': lambda d: d[(d['bp_adv_dog'] == 1) & (d['off_adv_dog'] == 1)],
+        'low_total+dog_home': lambda d: d[(d['total_env'] == 'low') & (d['dog_is_home'] == 1)],
+        'dog_home+bp_adv+off_adv': lambda d: d[(d['dog_is_home'] == 1) & (d['bp_adv_dog'] == 1) & (d['off_adv_dog'] == 1)],
+        'dog_home+rested': lambda d: d[(d['dog_is_home'] == 1) & (d['dog_rested'] == 1)],
+        'day+dog_home': lambda d: d[(d['day_night'] == 'day') & (d['dog_is_home'] == 1)],
+        'night+bp_adv': lambda d: d[(d['day_night'] == 'night') & (d['bp_adv_dog'] == 1)],
+    }
+    if label in filters:
+        return filters[label](df)
+    return pd.DataFrame()
+
+###############################################################################
+# PHASE 4: Discovery
+###############################################################################
+print("\n=== PHASE 4: DISCOVERY (2022-2023) ===")
+test_labels = [
+    'MIXED_all',
+    'total_low', 'total_mid', 'total_high',
+    'daynight_day', 'daynight_night',
+    'dog_home', 'dog_away',
+    'sp_gap_tight', 'sp_gap_moderate', 'sp_gap_wide',
+    'bp_adv_dog_0', 'bp_adv_dog_1',
+    'off_adv_dog_0', 'off_adv_dog_1',
+    'fav_imp_slight', 'fav_imp_moderate', 'fav_imp_heavy',
+    'dog_rested_1', 'dog_rested_0',
+    'dog_home+bp_adv', 'dog_home+off_adv',
+    'slight_fav+dog_home', 'sp_tight+dog_home',
+    'bp_adv+off_adv', 'low_total+dog_home',
+    'dog_home+bp_adv+off_adv', 'dog_home+rested',
+    'day+dog_home', 'night+bp_adv',
+]
+
 results = []
-
-# Baseline: all MIXED dogs
-r = calc_roi(disc, 'MIXED_all')
-results.append(r)
-print(f"MIXED all: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 1. Total environment
-for env in ['low', 'mid', 'high']:
-    sub = disc[disc['total_env'] == env]
-    r = calc_roi(sub, f'total_{env}')
-    results.append(r)
-    if r['status'] == 'OK':
-        print(f"  total_{env}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 2. Day vs night
-for dn in mixed['day_night'].unique():
-    if dn == 'unknown':
-        continue
-    sub = disc[disc['day_night'] == dn]
-    r = calc_roi(sub, f'daynight_{dn}')
-    results.append(r)
-    if r['status'] == 'OK':
-        print(f"  daynight_{dn}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 3. Home dog vs away dog
-for hd in [0, 1]:
-    label = 'dog_home' if hd == 1 else 'dog_away'
-    sub = disc[disc['dog_is_home'] == hd]
+for label in test_labels:
+    sub = get_subset(disc, label)
     r = calc_roi(sub, label)
     results.append(r)
     if r['status'] == 'OK':
-        print(f"  {label}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 4. SP gap tiers
-for tier in ['tight', 'moderate', 'wide']:
-    sub = disc[disc['sp_gap_tier'] == tier]
-    r = calc_roi(sub, f'sp_gap_{tier}')
-    results.append(r)
-    if r['status'] == 'OK':
-        print(f"  sp_gap_{tier}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 5. BP advantage for dog
-for bp in [0, 1]:
-    label = f'bp_adv_dog_{bp}'
-    sub = disc[disc['bp_adv_dog'] == bp]
-    r = calc_roi(sub, label)
-    results.append(r)
-    if r['status'] == 'OK':
-        print(f"  {label}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 6. Offense advantage for dog
-for oa in [0, 1]:
-    label = f'off_adv_dog_{oa}'
-    sub = disc[disc['off_adv_dog'] == oa]
-    r = calc_roi(sub, label)
-    results.append(r)
-    if r['status'] == 'OK':
-        print(f"  {label}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 7. Fav implied tier
-for tier in ['slight', 'moderate', 'heavy']:
-    sub = disc[disc['fav_imp_tier'] == tier]
-    r = calc_roi(sub, f'fav_imp_{tier}')
-    results.append(r)
-    if r['status'] == 'OK':
-        print(f"  fav_imp_{tier}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# 8. Compound overlays — most promising combinations
-# dog_home + BP advantage
-sub = disc[(disc['dog_is_home'] == 1) & (disc['bp_adv_dog'] == 1)]
-r = calc_roi(sub, 'dog_home+bp_adv')
-results.append(r)
-if r['status'] == 'OK':
-    print(f"  dog_home+bp_adv: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# dog_home + off advantage  
-sub = disc[(disc['dog_is_home'] == 1) & (disc['off_adv_dog'] == 1)]
-r = calc_roi(sub, 'dog_home+off_adv')
-results.append(r)
-if r['status'] == 'OK':
-    print(f"  dog_home+off_adv: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# slight fav + dog_home
-sub = disc[(disc['fav_imp_tier'] == 'slight') & (disc['dog_is_home'] == 1)]
-r = calc_roi(sub, 'slight_fav+dog_home')
-results.append(r)
-if r['status'] == 'OK':
-    print(f"  slight_fav+dog_home: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# sp_tight + dog_home
-sub = disc[(disc['sp_gap_tier'] == 'tight') & (disc['dog_is_home'] == 1)]
-r = calc_roi(sub, 'sp_tight+dog_home')
-results.append(r)
-if r['status'] == 'OK':
-    print(f"  sp_tight+dog_home: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# bp_adv + off_adv (dog has both edges)
-sub = disc[(disc['bp_adv_dog'] == 1) & (disc['off_adv_dog'] == 1)]
-r = calc_roi(sub, 'bp_adv+off_adv')
-results.append(r)
-if r['status'] == 'OK':
-    print(f"  bp_adv+off_adv: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# low total + dog_home
-sub = disc[(disc['total_env'] == 'low') & (disc['dog_is_home'] == 1)]
-r = calc_roi(sub, 'low_total+dog_home')
-results.append(r)
-if r['status'] == 'OK':
-    print(f"  low_total+dog_home: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-
-# Triple: dog_home + bp_adv + off_adv
-sub = disc[(disc['dog_is_home'] == 1) & (disc['bp_adv_dog'] == 1) & (disc['off_adv_dog'] == 1)]
-r = calc_roi(sub, 'dog_home+bp_adv+off_adv')
-results.append(r)
-if r['status'] == 'OK':
-    print(f"  dog_home+bp_adv+off_adv: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
+        marker = ' ***' if r['residual'] > 0.02 and r['n'] >= 30 else ''
+        print("  %-30s N=%4d  dogWR=%.4f  impl=%.4f  resid=%+.4f  ROI=%+.2f%%%s" % (
+            label, r['n'], r['dog_wr'], r['implied_dog'], r['residual'], r['roi_pct'], marker))
 
 results_df = pd.DataFrame(results)
-results_df.to_csv(f'{OUT}/discovery_results.csv', index=False)
+results_df.to_csv(os.path.join(OUT, 'discovery_results.csv'), index=False)
 
 ###############################################################################
-# PHASE 5: Forensic check on discovery positives
+# PHASE 5: Forensics on discovery positives
 ###############################################################################
-print('\n=== PHASE 5: FORENSIC CHECKS ===')
+print("\n=== PHASE 5: FORENSICS ===")
 positives = results_df[(results_df['status'] == 'OK') & (results_df['residual'] > 0.02) & (results_df['n'] >= 30)]
-print(f'Discovery-positive overlays (resid > 2%, N >= 30): {len(positives)}')
-print(positives[['label', 'n', 'dog_wr', 'implied_dog', 'residual', 'roi_pct']].to_string(index=False))
+print("Discovery-positive (resid > 2%%, N >= 30): %d" % len(positives))
 
-# Concentration check: are positives driven by a single team or season?
+forensic_notes = []
 for _, pos in positives.iterrows():
     label = pos['label']
-    # Reconstruct the filter
-    if label == 'MIXED_all':
-        sub = disc
-    elif label == 'total_low':
-        sub = disc[disc['total_env'] == 'low']
-    elif label == 'dog_home':
-        sub = disc[disc['dog_is_home'] == 1]
-    elif label == 'dog_away':
-        sub = disc[disc['dog_is_home'] == 0]
-    elif label == 'bp_adv_dog_1':
-        sub = disc[disc['bp_adv_dog'] == 1]
-    elif label == 'off_adv_dog_1':
-        sub = disc[disc['off_adv_dog'] == 1]
-    elif label == 'dog_home+bp_adv':
-        sub = disc[(disc['dog_is_home'] == 1) & (disc['bp_adv_dog'] == 1)]
-    elif label == 'dog_home+off_adv':
-        sub = disc[(disc['dog_is_home'] == 1) & (disc['off_adv_dog'] == 1)]
-    elif label == 'slight_fav+dog_home':
-        sub = disc[(disc['fav_imp_tier'] == 'slight') & (disc['dog_is_home'] == 1)]
-    elif label == 'sp_tight+dog_home':
-        sub = disc[(disc['sp_gap_tier'] == 'tight') & (disc['dog_is_home'] == 1)]
-    elif label == 'bp_adv+off_adv':
-        sub = disc[(disc['bp_adv_dog'] == 1) & (disc['off_adv_dog'] == 1)]
-    elif label == 'dog_home+bp_adv+off_adv':
-        sub = disc[(disc['dog_is_home'] == 1) & (disc['bp_adv_dog'] == 1) & (disc['off_adv_dog'] == 1)]
-    else:
+    sub = get_subset(disc, label)
+    if len(sub) == 0:
         continue
-    
-    # Season balance
-    season_counts = sub.groupby('season')['fav_won'].agg(['count', 'mean'])
-    # Team concentration
+    s_wr = sub.groupby('season').agg(n=('fav_won', 'count'), fav_wr=('fav_won', 'mean'))
     dog_teams = sub['dog_team'].value_counts()
-    top_team_pct = dog_teams.iloc[0] / len(sub) if len(dog_teams) > 0 else 0
-    
-    print(f'\n  {label}:')
-    print(f'    Season balance: {season_counts.to_dict()}')
-    print(f'    Top dog team: {dog_teams.index[0]} ({dog_teams.iloc[0]}/{len(sub)}, {top_team_pct:.1%})')
-    if top_team_pct > 0.15:
-        print(f'    WARNING: concentration risk (>{15}%)')
+    top_pct = dog_teams.iloc[0] / len(sub)
+    print("\n  %s (N=%d):" % (label, len(sub)))
+    for yr, row in s_wr.iterrows():
+        print("    %d: N=%d, fav_wr=%.3f, dog_wr=%.3f" % (yr, row['n'], row['fav_wr'], 1-row['fav_wr']))
+    print("    Top dog team: %s (%d/%d, %.1f%%)" % (dog_teams.index[0], dog_teams.iloc[0], len(sub), top_pct*100))
+    note = 'CLEAN' if top_pct <= 0.15 else 'CONCENTRATION_RISK'
+    # Check season stability
+    if len(s_wr) >= 2:
+        dog_wrs = [1 - r['fav_wr'] for _, r in s_wr.iterrows()]
+        if max(dog_wrs) - min(dog_wrs) > 0.15:
+            note = 'SEASON_INSTABILITY'
+            print("    *** SEASON INSTABILITY (spread > 15pp) ***")
+    if top_pct > 0.15:
+        print("    *** CONCENTRATION WARNING ***")
+    forensic_notes.append({'label': label, 'forensic': note})
 
 ###############################################################################
-# PHASE 6: Freeze survivors — overlays with resid > 2%, N >= 30
+# PHASE 6: Freeze survivors
 ###############################################################################
 survivors = positives.copy()
-print(f'\n=== PHASE 6: FROZEN SURVIVORS ===')
-print(f'Survivors for validation: {len(survivors)}')
-print(survivors[['label', 'n', 'dog_wr', 'residual', 'roi_pct']].to_string(index=False))
+borderline = results_df[(results_df['status'] == 'OK') & (results_df['residual'] > 0) &
+                         (results_df['residual'] <= 0.02) & (results_df['n'] >= 30)]
+all_candidates = pd.concat([survivors, borderline]).drop_duplicates('label')
+print("\n=== PHASE 6: FROZEN (%d strong, %d borderline) ===" % (len(survivors), len(borderline)))
 
 ###############################################################################
 # PHASE 7: Validation (2024)
 ###############################################################################
-print('\n=== PHASE 7: VALIDATION (2024) ===')
-
-def get_subset(df, label):
-    if label == 'MIXED_all':
-        return df
-    elif label == 'total_low':
-        return df[df['total_env'] == 'low']
-    elif label == 'total_mid':
-        return df[df['total_env'] == 'mid']
-    elif label == 'total_high':
-        return df[df['total_env'] == 'high']
-    elif label == 'dog_home':
-        return df[df['dog_is_home'] == 1]
-    elif label == 'dog_away':
-        return df[df['dog_is_home'] == 0]
-    elif label.startswith('bp_adv_dog_'):
-        v = int(label[-1])
-        return df[df['bp_adv_dog'] == v]
-    elif label.startswith('off_adv_dog_'):
-        v = int(label[-1])
-        return df[df['off_adv_dog'] == v]
-    elif label.startswith('fav_imp_'):
-        tier = label.replace('fav_imp_', '')
-        return df[df['fav_imp_tier'] == tier]
-    elif label.startswith('sp_gap_'):
-        tier = label.replace('sp_gap_', '')
-        return df[df['sp_gap_tier'] == tier]
-    elif label == 'dog_home+bp_adv':
-        return df[(df['dog_is_home'] == 1) & (df['bp_adv_dog'] == 1)]
-    elif label == 'dog_home+off_adv':
-        return df[(df['dog_is_home'] == 1) & (df['off_adv_dog'] == 1)]
-    elif label == 'slight_fav+dog_home':
-        return df[(df['fav_imp_tier'] == 'slight') & (df['dog_is_home'] == 1)]
-    elif label == 'sp_tight+dog_home':
-        return df[(df['sp_gap_tier'] == 'tight') & (df['dog_is_home'] == 1)]
-    elif label == 'bp_adv+off_adv':
-        return df[(df['bp_adv_dog'] == 1) & (df['off_adv_dog'] == 1)]
-    elif label == 'low_total+dog_home':
-        return df[(df['total_env'] == 'low') & (df['dog_is_home'] == 1)]
-    elif label == 'dog_home+bp_adv+off_adv':
-        return df[(df['dog_is_home'] == 1) & (df['bp_adv_dog'] == 1) & (df['off_adv_dog'] == 1)]
-    elif label.startswith('daynight_'):
-        dn = label.replace('daynight_', '')
-        return df[df['day_night'] == dn]
-    else:
-        return pd.DataFrame()
-
-val_results = []
-for _, row in survivors.iterrows():
+print("\n=== PHASE 7: VALIDATION (2024) ===")
+for _, row in all_candidates.iterrows():
     label = row['label']
     sub = get_subset(val, label)
     r = calc_roi(sub, label)
-    r['disc_resid'] = row['residual']
-    r['disc_roi'] = row['roi_pct']
-    val_results.append(r)
     if r['status'] == 'OK':
-        print(f"  {label}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}% (disc: {row['residual']:.4f}/{row['roi_pct']:.2f}%)")
-    else:
-        print(f"  {label}: N={r['n']} — {r['status']}")
-
-val_df = pd.DataFrame(val_results)
-
-# Validation gate: resid > 0 AND same sign as discovery
-val_pass = val_df[(val_df['status'] == 'OK') & (val_df['residual'] > 0)]
-print(f'\nValidation passers (resid > 0): {len(val_pass)}')
+        d_resid = row['residual']
+        marker = ' PASS' if r['residual'] > 0 else ' FAIL'
+        print("  %-30s N=%4d  resid=%+.4f  ROI=%+.2f%%  (disc: %+.4f)%s" % (
+            label, r['n'], r['residual'], r['roi_pct'], d_resid, marker))
 
 ###############################################################################
 # PHASE 8: OOS (2025)
 ###############################################################################
-print('\n=== PHASE 8: OOS (2025) ===')
-
-oos_results = []
-for _, row in val_pass.iterrows() if len(val_pass) > 0 else survivors.iterrows():
+print("\n=== PHASE 8: OOS (2025) ===")
+for _, row in all_candidates.iterrows():
     label = row['label']
     sub = get_subset(oos, label)
     r = calc_roi(sub, label)
-    r['disc_resid'] = row.get('disc_resid', row.get('residual'))
-    r['disc_roi'] = row.get('disc_roi', row.get('roi_pct'))
-    if 'residual' in row and label in val_df['label'].values:
-        vr = val_df[val_df['label'] == label].iloc[0]
-        r['val_resid'] = vr['residual']
-        r['val_roi'] = vr['roi_pct']
-    oos_results.append(r)
     if r['status'] == 'OK':
-        print(f"  {label}: N={r['n']}, dog_wr={r['dog_wr']:.4f}, impl={r['implied_dog']:.4f}, resid={r['residual']:.4f}, ROI={r['roi_pct']:.2f}%")
-    else:
-        print(f"  {label}: N={r['n']} — {r['status']}")
-
-oos_df = pd.DataFrame(oos_results)
+        marker = ' PASS' if r['residual'] > 0 else ' FAIL'
+        print("  %-30s N=%4d  resid=%+.4f  ROI=%+.2f%%%s" % (
+            label, r['n'], r['residual'], r['roi_pct'], marker))
 
 ###############################################################################
-# PHASE 9: Final verdicts
+# PHASE 9: Final verdicts + output
 ###############################################################################
-print('\n=== PHASE 9: FINAL VERDICTS ===')
-
-# Build final table with all periods
+print("\n=== PHASE 9: FINAL TABLE ===")
 final_rows = []
-for _, row in results_df[results_df['status'] == 'OK'].iterrows():
-    label = row['label']
+for label in test_labels:
+    dr = results_df[results_df['label'] == label]
+    if len(dr) == 0 or dr.iloc[0]['status'] != 'OK':
+        continue
+    dr = dr.iloc[0]
+
+    vr = calc_roi(get_subset(val, label), label)
+    osr = calc_roi(get_subset(oos, label), label)
+
     fr = {
         'overlay': label,
-        'disc_n': row['n'],
-        'disc_dog_wr': row['dog_wr'],
-        'disc_implied': row['implied_dog'],
-        'disc_resid': row['residual'],
-        'disc_roi': row['roi_pct'],
+        'disc_n': int(dr['n']), 'disc_dog_wr': round(dr['dog_wr'], 4),
+        'disc_resid': round(dr['residual'], 4), 'disc_roi': round(dr['roi_pct'], 2),
+        'val_n': int(vr['n']) if vr['status'] == 'OK' else 0,
+        'val_dog_wr': round(vr['dog_wr'], 4) if vr['status'] == 'OK' else None,
+        'val_resid': round(vr['residual'], 4) if vr['status'] == 'OK' else None,
+        'val_roi': round(vr['roi_pct'], 2) if vr['status'] == 'OK' else None,
+        'oos_n': int(osr['n']) if osr['status'] == 'OK' else 0,
+        'oos_dog_wr': round(osr['dog_wr'], 4) if osr['status'] == 'OK' else None,
+        'oos_resid': round(osr['residual'], 4) if osr['status'] == 'OK' else None,
+        'oos_roi': round(osr['roi_pct'], 2) if osr['status'] == 'OK' else None,
     }
-    
-    # Validation
-    v_sub = get_subset(val, label)
-    vr = calc_roi(v_sub, label)
-    fr['val_n'] = vr['n']
-    fr['val_dog_wr'] = vr.get('dog_wr', np.nan)
-    fr['val_resid'] = vr.get('residual', np.nan)
-    fr['val_roi'] = vr.get('roi_pct', np.nan)
-    
-    # OOS
-    o_sub = get_subset(oos, label)
-    osr = calc_roi(o_sub, label)
-    fr['oos_n'] = osr['n']
-    fr['oos_dog_wr'] = osr.get('dog_wr', np.nan)
-    fr['oos_resid'] = osr.get('residual', np.nan)
-    fr['oos_roi'] = osr.get('roi_pct', np.nan)
-    
-    # Verdict
-    disc_pos = row['residual'] > 0.02 and row['n'] >= 30
-    val_pos = not np.isnan(fr['val_resid']) and fr['val_resid'] > 0
-    oos_pos = not np.isnan(fr['oos_resid']) and fr['oos_resid'] > 0
-    
+
+    disc_pos = dr['residual'] > 0.02 and dr['n'] >= 30
+    val_pos = fr['val_resid'] is not None and fr['val_resid'] > 0
+    oos_pos = fr['oos_resid'] is not None and fr['oos_resid'] > 0
+
     if disc_pos and val_pos and oos_pos:
         fr['verdict'] = 'CONFIRMED'
     elif disc_pos and val_pos:
         fr['verdict'] = 'VAL_PASS_OOS_FAIL'
     elif disc_pos:
         fr['verdict'] = 'DISC_ONLY'
+    elif dr['residual'] > 0 and val_pos and oos_pos:
+        fr['verdict'] = 'WEAK_CONFIRMED'
     else:
         fr['verdict'] = 'NO_SIGNAL'
-    
+
     final_rows.append(fr)
 
-final_df = pd.DataFrame(final_rows)
-final_df = final_df.sort_values('disc_resid', ascending=False)
-final_df.to_csv(f'{OUT}/MLB_SIDES_PHASE5_FINAL_TABLE.csv', index=False)
+final_df = pd.DataFrame(final_rows).sort_values('disc_resid', ascending=False)
+final_df.to_csv(os.path.join(OUT, 'MLB_SIDES_PHASE5_FINAL_TABLE.csv'), index=False)
 
-print('\nFINAL TABLE:')
-cols_show = ['overlay', 'disc_n', 'disc_resid', 'disc_roi', 'val_n', 'val_resid', 'val_roi', 'oos_n', 'oos_resid', 'oos_roi', 'verdict']
-print(final_df[cols_show].to_string(index=False))
+cols = ['overlay', 'disc_n', 'disc_resid', 'disc_roi', 'val_n', 'val_resid', 'val_roi', 'oos_n', 'oos_resid', 'oos_roi', 'verdict']
+print(final_df[cols].to_string(index=False))
 
-confirmed = final_df[final_df['verdict'] == 'CONFIRMED']
-print(f'\nCONFIRMED overlays: {len(confirmed)}')
-if len(confirmed) > 0:
-    print(confirmed[cols_show].to_string(index=False))
+confirmed = final_df[final_df['verdict'].isin(['CONFIRMED', 'WEAK_CONFIRMED'])]
+n_conf = len(confirmed[confirmed['verdict'] == 'CONFIRMED'])
+n_weak = len(confirmed[confirmed['verdict'] == 'WEAK_CONFIRMED'])
+print("\nCONFIRMED: %d, WEAK_CONFIRMED: %d" % (n_conf, n_weak))
 
 ###############################################################################
 # Write exec summary
 ###############################################################################
-summary = f"""# MLB SIDES PHASE 5 — EXEC SUMMARY
-## SP-LED Timing + MIXED Overlay Hunt
+disc_base = results_df[results_df['label'] == 'MIXED_all'].iloc[0]
 
-**Date**: 2026-04-12
+lines = []
+lines.append('# MLB SIDES PHASE 5 -- EXEC SUMMARY')
+lines.append('## SP-LED Timing + MIXED Overlay Hunt')
+lines.append('')
+lines.append('**Date**: 2026-04-12')
+lines.append('')
+lines.append('---')
+lines.append('')
+lines.append('## Branch A: SP-LED Open/Close Timing')
+lines.append('')
+lines.append('**VERDICT: UNVERIFIABLE**')
+lines.append('')
+lines.append('No opening moneyline prices exist in the historical data.')
+lines.append('The canonical odds parquet contains only closing prices.')
+lines.append('Market snapshots track totals open/noon/5pm/close but no ML open prices.')
+lines.append('Cannot test whether SP-LED dogs offer better ROI at open vs close.')
+lines.append('')
+lines.append('---')
+lines.append('')
+lines.append('## Branch B: MIXED Overlay Hunt')
+lines.append('')
+lines.append('### Setup')
+lines.append('- MIXED games total: %d' % len(mixed))
+lines.append('- Discovery (2022-2023): %d' % len(disc))
+lines.append('- Validation (2024): %d' % len(val))
+lines.append('- OOS (2025): %d' % len(oos))
+lines.append('')
+lines.append('### Baseline MIXED Dog Performance')
+lines.append('- Discovery dog WR: %.4f (implied: %.4f, resid: %+.4f)' % (
+    disc_base['dog_wr'], disc_base['implied_dog'], disc_base['residual']))
+lines.append('- Discovery ROI: %+.2f%%' % disc_base['roi_pct'])
+lines.append('')
+lines.append('### Overlays Tested (%d total)' % len(test_labels))
+lines.append('Dimensions: total environment, day/night, dog orientation, SP gap,')
+lines.append('BP advantage, offense advantage, fav implied tier, rest differential,')
+lines.append('plus compound overlays.')
+lines.append('')
+lines.append('### Discovery-Positive (%d overlays, resid > 2%%, N >= 30)' % len(positives))
+if len(positives) > 0:
+    lines.append('```')
+    lines.append(positives[['label', 'n', 'dog_wr', 'implied_dog', 'residual', 'roi_pct']].to_string(index=False))
+    lines.append('```')
+else:
+    lines.append('NONE')
+lines.append('')
 
----
+lines.append('### Full Results Table (all periods)')
+lines.append('```')
+lines.append(final_df[cols].to_string(index=False))
+lines.append('```')
+lines.append('')
 
-## Branch A: SP-LED Open/Close Timing
+lines.append('### CONFIRMED Overlays (disc + val + OOS all positive residual)')
+if len(confirmed) > 0:
+    lines.append('```')
+    lines.append(confirmed[cols].to_string(index=False))
+    lines.append('```')
+    for _, r in confirmed.iterrows():
+        lines.append('- **%s**: disc ROI %+.1f%%, val ROI %+.1f%%, OOS ROI %+.1f%%' % (
+            r['overlay'], r['disc_roi'], r['val_roi'], r['oos_roi']))
+else:
+    lines.append('NONE -- no overlay survived all three periods.')
+lines.append('')
 
-**VERDICT: UNVERIFIABLE**
+lines.append('---')
+lines.append('')
+lines.append('## Final Verdict')
+lines.append('')
+lines.append('- **Branch A (SP-LED timing)**: UNVERIFIABLE -- no opening ML prices available.')
+lines.append('- **Branch B (MIXED overlays)**: %d CONFIRMED, %d WEAK_CONFIRMED.' % (n_conf, n_weak))
+if n_conf == 0 and n_weak == 0:
+    lines.append('  No actionable MIXED overlays survived forensic validation.')
+lines.append('')
+lines.append('## Files')
+lines.append('- `MLB_SIDES_PHASE5_FINAL_TABLE.csv` -- full overlay results across all periods')
+lines.append('- `discovery_results.csv` -- detailed discovery-period results')
+lines.append('- `phase5_analysis.py` -- reproducible analysis script')
+lines.append('- `MLB_SIDES_PHASE5_EXEC_SUMMARY.md` -- this file')
 
-No opening moneyline prices exist in the historical data. The canonical odds
-parquet () contains only closing
-prices. Market snapshots () track totals 
-open/noon/5pm/close but do not include moneyline open prices.
+with open(os.path.join(OUT, 'MLB_SIDES_PHASE5_EXEC_SUMMARY.md'), 'w') as f:
+    f.write('\n'.join(lines))
 
-Cannot test whether SP-LED dogs offer better ROI at open vs close.
-
----
-
-## Branch B: MIXED Overlay Hunt
-
-### Setup
-- MIXED games (reason_class == MIXED): all games where no single factor gap 
-  exceeded the median threshold from Phase 4.
-- Total MIXED: {len(mixed)} games
-- Discovery (2022-2023): {len(disc)}
-- Validation (2024): {len(val)}
-- OOS (2025): {len(oos)}
-
-### Baseline
-- MIXED dog win rate discovery: {disc['fav_won'].eq(0).mean():.4f}
-- MIXED dog implied prob discovery: {(1 - disc['fav_implied']).mean():.4f}
-
-### Overlays Tested ({len(results_df[results_df['status']=='OK'])} total)
-1. Closing total environment (low/mid/high)
-2. Day vs night (from game_table)
-3. Home dog vs away dog orientation
-4. SP FIP gap tiers (tight/moderate/wide)
-5. Bullpen ERA advantage for dog
-6. Offense advantage for dog
-7. Favorite implied probability tier
-8. Compound overlays (dog_home+bp_adv, dog_home+off_adv, etc.)
-
-### Discovery-Positive Overlays (resid > 2%, N >= 30)
-{positives[['label', 'n', 'dog_wr', 'implied_dog', 'residual', 'roi_pct']].to_string(index=False) if len(positives) > 0 else 'NONE'}
-
-### Validation Results
-{val_df[val_df['status']=='OK'][['label', 'n', 'dog_wr', 'residual', 'roi_pct']].to_string(index=False) if len(val_df[val_df['status']=='OK']) > 0 else 'No survivors to validate'}
-
-### OOS Results
-{oos_df[oos_df['status']=='OK'][['label', 'n', 'dog_wr', 'residual', 'roi_pct']].to_string(index=False) if len(oos_df[oos_df['status']=='OK']) > 0 else 'No survivors reached OOS'}
-
-### CONFIRMED Overlays (disc + val + OOS all positive)
-{confirmed[cols_show].to_string(index=False) if len(confirmed) > 0 else 'NONE — no overlay survived all three periods'}
-
----
-
-## Final Verdict
-
-- **Branch A (SP-LED timing)**: UNVERIFIABLE — no opening ML prices available.
-- **Branch B (MIXED overlays)**: {len(confirmed)} overlay(s) confirmed across all periods.
-{chr(10).join(f'  - {r["overlay"]}: disc ROI {r["disc_roi"]:.1f}%, val ROI {r["val_roi"]:.1f}%, OOS ROI {r["oos_roi"]:.1f}%' for _, r in confirmed.iterrows()) if len(confirmed) > 0 else '  No actionable MIXED overlays survived forensic validation.'}
-
-## Files
--  — full overlay results across all periods
--  — detailed discovery-period results
--  — this file
-"""
-
-with open(f'{OUT}/MLB_SIDES_PHASE5_EXEC_SUMMARY.md', 'w') as f:
-    f.write(summary)
-
-print(f'\nFiles written to {OUT}/')
-print('DONE')
+print("\nFiles written to %s/" % OUT)
+print("DONE")
