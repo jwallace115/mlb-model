@@ -1,0 +1,3 @@
+object,disc_n,disc_resid,disc_roi,val_n,val_resid,val_roi,oos_n,oos_resid,oos_roi,pit_safe,verdict
+bp_adv_dog,241,0.0624,8.68,147,0.0519,6.3,179,0.0416,3.73,True,GO -- SHADOW
+night_dog,381,0.0349,3.13,245,0.0337,2.64,268,0.0533,6.5,True,GO -- SHADOW
