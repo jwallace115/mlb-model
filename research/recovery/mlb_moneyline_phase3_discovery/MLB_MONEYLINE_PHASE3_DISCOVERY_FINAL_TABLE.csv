@@ -1,0 +1,10 @@
+Candidate,Description,D_N,D_Resid,D_ROI,V_N,V_Resid,V_ROI,O_N,O_Resid,O_ROI,Verdict
+C1,BP Availability Proxy (workload),404,0.0195,-0.48,185,0.001,-4.01,176,-0.0218,-7.38,"MONITOR (val pass, OOS fail)"
+C3,Post-Extras Depletion,130,-0.0194,-9.65,52,-0.0353,-11.7,72,-0.0612,-16.3,KILL
+C4,"SPID (SP good, BP bad = bet SP side)",0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,KILL
+C5,Low-Variance SP Advantage,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,KILL
+C6,Short-Leash SP x Weak BP,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,KILL
+C7,Velocity Floor Breach,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,KILL
+C8,Command vs Stuff Archetype,0,0.0,0.0,0,0.0,0.0,0,0.0,0.0,KILL
+C9,Low-Total Dog Compression,425,-0.0272,-9.78,243,-0.0055,-5.46,163,0.008,-2.64,KILL
+C10,Home Dog + BP Edge,196,-0.0498,-14.41,105,-0.0078,-5.66,84,0.1057,17.05,KILL
