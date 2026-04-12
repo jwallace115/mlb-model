@@ -50,6 +50,30 @@
       "closing_total": 5.5,
       "lambda_total": 6.108,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021278,
+      "game_date": "2026-04-12",
+      "home_team": "CBJ",
+      "away_team": "BOS",
+      "signal_side": "UNDER",
+      "edge": 0.1329,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.643,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021279,
+      "game_date": "2026-04-12",
+      "home_team": "NJD",
+      "away_team": "OTT",
+      "signal_side": "UNDER",
+      "edge": 0.1252,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.593,
+      "drift_applied": 0.0
     }
   ]
 }
