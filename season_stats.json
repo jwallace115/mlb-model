@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-04-11T11:00:07.277434Z",
+  "generated_at": "2026-04-12T11:00:06.761393Z",
   "is_spring_training": false,
-  "total_tracked": 403,
-  "total_plays": 57,
+  "total_tracked": 418,
+  "total_plays": 58,
   "overall": {
     "wins": 14,
-    "losses": 20,
+    "losses": 21,
     "pushes": 1,
     "no_line": 21,
-    "total": 57,
-    "decided": 34,
-    "win_pct": 41.2,
-    "roi": -21.4,
-    "units": -7.27
+    "total": 58,
+    "decided": 35,
+    "win_pct": 40.0,
+    "roi": -23.6,
+    "units": -8.27
   },
   "by_stars": {
     "\u2b50\u2b50\u2b50": {
@@ -28,14 +28,14 @@
     },
     "\u2b50\u2b50": {
       "wins": 7,
-      "losses": 14,
+      "losses": 15,
       "pushes": 1,
       "no_line": 11,
-      "total": 33,
-      "decided": 21,
-      "win_pct": 33.3,
-      "roi": -36.4,
-      "units": -7.64
+      "total": 34,
+      "decided": 22,
+      "win_pct": 31.8,
+      "roi": -39.3,
+      "units": -8.64
     },
     "\u2b50": {
       "wins": 5,
@@ -63,14 +63,14 @@
     },
     "MEDIUM": {
       "wins": 12,
-      "losses": 16,
+      "losses": 17,
       "pushes": 1,
       "no_line": 20,
-      "total": 50,
-      "decided": 28,
-      "win_pct": 42.9,
-      "roi": -18.2,
-      "units": -5.09
+      "total": 51,
+      "decided": 29,
+      "win_pct": 41.4,
+      "roi": -21.0,
+      "units": -6.09
     },
     "LOW": {
       "wins": 0,
@@ -124,14 +124,14 @@
     "dome": {
       "label": "Dome",
       "wins": 0,
-      "losses": 0,
+      "losses": 1,
       "pushes": 0,
       "no_line": 2,
-      "total": 2,
-      "decided": 0,
-      "win_pct": null,
-      "roi": null,
-      "units": null
+      "total": 3,
+      "decided": 1,
+      "win_pct": 0.0,
+      "roi": -100.0,
+      "units": -1.0
     },
     "unknown": {
       "label": "Unknown",
@@ -186,14 +186,14 @@
     "dome": {
       "label": "Dome",
       "wins": 0,
-      "losses": 0,
+      "losses": 1,
       "pushes": 0,
       "no_line": 2,
-      "total": 2,
-      "decided": 0,
-      "win_pct": null,
-      "roi": null,
-      "units": null
+      "total": 3,
+      "decided": 1,
+      "win_pct": 0.0,
+      "roi": -100.0,
+      "units": -1.0
     },
     "unknown": {
       "label": "Unknown",
@@ -224,14 +224,14 @@
     "neutral": {
       "label": "Neutral Park (0.97\u20131.03)",
       "wins": 9,
-      "losses": 11,
+      "losses": 12,
       "pushes": 0,
       "no_line": 15,
-      "total": 35,
-      "decided": 20,
-      "win_pct": 45.0,
-      "roi": -14.1,
-      "units": -2.82
+      "total": 36,
+      "decided": 21,
+      "win_pct": 42.9,
+      "roi": -18.2,
+      "units": -3.82
     },
     "hitter": {
       "label": "Hitter's Park (PF > 1.03)",
@@ -259,17 +259,17 @@
     }
   },
   "projection_accuracy": {
-    "tracked": 398,
-    "mae": 4.06,
-    "avg_bias": 0.61,
-    "within_1_run": 14.8,
-    "within_2_runs": 32.9,
-    "within_3_runs": 45.2,
+    "tracked": 413,
+    "mae": 4.02,
+    "avg_bias": 0.6,
+    "within_1_run": 15.3,
+    "within_2_runs": 33.4,
+    "within_3_runs": 45.8,
     "mae_by_stars": {
       "\u2b50\u2b50\u2b50": 5.83,
-      "\u2b50\u2b50": 3.62,
+      "\u2b50\u2b50": 3.54,
       "\u2b50": 5.18,
-      "NO PLAY": 4.01
+      "NO PLAY": 3.99
     }
   },
   "factor_correlations": [
@@ -300,14 +300,14 @@
     {
       "factor": "Neutral Park",
       "wins": 9,
-      "losses": 11,
+      "losses": 12,
       "pushes": 0,
       "no_line": 15,
-      "total": 35,
-      "decided": 20,
-      "win_pct": 45.0,
-      "roi": -14.1,
-      "units": -2.82
+      "total": 36,
+      "decided": 21,
+      "win_pct": 42.9,
+      "roi": -18.2,
+      "units": -3.82
     },
     {
       "factor": "Hitter's Park",
@@ -322,18 +322,6 @@
       "units": -1.27
     },
     {
-      "factor": "Confidence: MEDIUM",
-      "wins": 12,
-      "losses": 16,
-      "pushes": 1,
-      "no_line": 20,
-      "total": 50,
-      "decided": 28,
-      "win_pct": 42.9,
-      "roi": -18.2,
-      "units": -5.09
-    },
-    {
       "factor": "Wind: Cross/Calm",
       "wins": 8,
       "losses": 11,
@@ -344,6 +332,18 @@
       "win_pct": 42.1,
       "roi": -19.6,
       "units": -3.73
+    },
+    {
+      "factor": "Confidence: MEDIUM",
+      "wins": 12,
+      "losses": 17,
+      "pushes": 1,
+      "no_line": 20,
+      "total": 51,
+      "decided": 29,
+      "win_pct": 41.4,
+      "roi": -21.0,
+      "units": -6.09
     },
     {
       "factor": "Wind: Blowing In",

@@ -1138,5 +1138,24 @@
     "result":null,
     "net_units":null,
     "resolved":0
+  },
+  {
+    "date":"2026-04-12",
+    "game_id":"824696",
+    "home_team":"CHC",
+    "away_team":"PIT",
+    "f5_signal_side":"UNDER",
+    "signal_tier":"primary_under",
+    "stake_units":0.75,
+    "p_under_full":0.8208,
+    "p_over_full":0.1792,
+    "f5_line":6.5,
+    "f5_line_closing":null,
+    "f5_clv_raw":null,
+    "f5_clv_signed":null,
+    "actual_f5_total":null,
+    "result":null,
+    "net_units":null,
+    "resolved":0
   }
 ]
