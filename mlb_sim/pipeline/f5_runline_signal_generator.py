@@ -419,6 +419,9 @@ def run_daily(game_date_str, schedule=None, pitcher_db=None):
 
     # Step 4
     status = _load_status()
+    if status and status.get("status") == "ARCHIVED":
+        logger.info(f"F5 run line ARCHIVED: {status.get('archived_reason', 'no reason')}")
+        return []
     if status and status.get("status") == "PAUSED":
         logger.info(f"F5 run line PAUSED: {status.get('pause_reason')}")
         return []

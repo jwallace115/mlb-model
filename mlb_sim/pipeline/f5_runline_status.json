@@ -1,10 +1,16 @@
 {
-  "status": "SHADOW",
+  "status": "ARCHIVED",
+  "archived_date": "2026-04-12",
+  "archived_reason": "Clean PIT-safe backtest: 53.9% hit rate, -6.2% ROI at -135. Original +27.9% was contaminated. Live 2026 shadow: 2W-5L, -48.8% ROI.",
+  "prior_status": "SHADOW",
+  "prior_note": "Reactivation audit: threshold updated 1.0->1.5, awaiting 30+ resolved signals at new threshold",
+  "object_id": "mlb_f5_rl_signal_b_home",
+  "threshold": 1.5,
   "last_updated": "2026-04-12",
-  "pause_reason": "Reactivation audit: threshold updated 1.0->1.5, awaiting 30+ resolved signals at new threshold",
+  "pause_reason": null,
   "pause_triggered_at_n": null,
   "pause_triggered_at_roi": null,
   "resume_authorized_by": null,
   "resume_date": null,
-  "deployment_note": "Threshold fixed to 1.5 per reset audit directive. Shadow until reactivation gate (30+ resolved at 1.5)."
+  "deployment_note": "Permanently archived. Do not reactivate without new research basis."
 }
