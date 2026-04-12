@@ -1,0 +1,39 @@
+Object_ID,Object_Name,Type,Classification,Failure_Modes,Best_Evidence,ROI_OOS,N_OOS,PIT_Safe,V1_Dependent,Action,Review_Date
+A1,V1 Ridge Contaminated,Trained model,REBUILD REQUIRED,FM1+FM8,Weights from contaminated training,-,-,Inference yes / Training no,Self,Replace when V2+ ready,-
+A2,V1 Ridge PIT Clean,Trained model,CLEAN KILL,None,-13.2% OOS all thresholds,-13.2%,55,Yes,No,Closed permanently,-
+A3,V1 Rules Mode,Heuristic,ARCHIVE,FM8,Operational infrastructure,-,-,Yes,No,Keep as fallback,-
+A4,V2 Baseline Engine,Trained model,CLEAN KILL,None,RMSE +0.01 vs market / over bias,-,-,Yes,No,Closed permanently,-
+B1,S12 Overlay,Overlay,CLEAN KILL,FM1+FM5,In-sample negative all thresholds,-0.8%,2596,Live yes / cutoff no,Yes (overlay),Disable shadow logging,2026-04-14
+B2,P09 Overlay,Overlay,CLEAN KILL,FM1+FM5,OOS inverts (active worse),-2.9%,-,Yes,Yes (overlay),Disable shadow logging,2026-04-14
+B3,ST02 Overlay,Overlay,CLEAN KILL,None,ROI=-0.3% N=2172,-0.3%,2172,Yes,Yes (overlay),Disable shadow logging,2026-04-14
+B4,flyball_wind Discrete,Overlay,ARCHIVE,FM1,+4pp in unprofitable universe,-,-,Yes,V2 parent,Retain for reference,-
+C1,ADJ_CONTACT,Shadow signal,RETEST REQUIRED,FM3+FM4,53.8% hit (N=65),-,-,Yes,No (live),Wait for N=100 + real prices,2026-05-01
+C2,ADJ_HH,Shadow signal,RETEST REQUIRED,FM3+FM4,61.8% hit (N=34),-,-,Yes,No (live),Wait for N=100 + real prices,2026-05-15
+C3,ADJ_K_RATE,Shadow signal,RETEST REQUIRED,FM3+FM4,56.7% hit (N=30),-,-,Yes,No (live),Wait for N=100 + real prices,2026-05-15
+C4,ADJ_BB_RATE,Shadow signal,CLEAN KILL,None,50.0% hit (N=16),-,-,Yes,No (live),Closed permanently,-
+C5,ADJ_RUN_SUPP,Shadow signal,RETEST REQUIRED,FM3+FM4,55.9% hit (N=34),-,-,Yes,No (live),Wait for N=100 + real prices,2026-05-15
+C6,CS013,Shadow signal,UNVERIFIABLE,None,0 fires in 128 games,-,-,Yes,No,Keep code / stop review,2026-04-30
+C7,CS028,Shadow signal,UNVERIFIABLE,None,2 fires / 1 resolved,-,-,Yes,No,Keep code / stop review,2026-04-30
+C8,KP04,Shadow signal,UNVERIFIABLE,FM5+FM6,0 fires in 226 games,-,-,Yes,No,Keep code / stop review,2026-04-30
+C9,CS004,Shadow signal,RETEST REQUIRED,None,Directional promise,-,-,Yes,No,Check fire rate,2026-05-01
+C10,Combined Short Exit,Shadow signal,UNVERIFIABLE,None,0 fires in 128 games,-,-,Yes,No,Keep code / stop review,2026-04-30
+D1,F5 Totals Under,Signal,VOID/CONTAMINATED,FM1,85% signal collapse with clean V1,-,-,V1 dependency,Yes (direct),Disable shadow logging,2026-04-14
+D2,F5 Totals Over,Signal,VOID/CONTAMINATED,FM1,Same V1 dependency,-,-,V1 dependency,Yes (direct),Hold for independent rebuild,-
+D3,F5 RL Signal B Home,Signal,CLEAN (KEEP),None,+27.9% pooled ROI,+29.1%,335,Yes,No,Protect and monitor,Ongoing
+D4,F5 RL Signal B Away,Signal,CLEAN KILL,None,-3.5% OOS,-3.5%,-,Yes,No,Closed permanently,-
+D5,CS025 F5 RL Overlay,Overlay,CONDITIONAL,None,74.5% hit but no lift over D3,-,-,Yes,No,Retest only if D3 degrades,-
+D6,F5 Standalone,Planned,DEFERRED,N/A,Does not exist,-,-,-,-,Not built,-
+E1,Team Totals Home Under,Signal,VOID/CONTAMINATED,FM1+FM3+FM7,5/5 red flags / never-matched,-,-,Live yes / research no,Research coeff,Disable shadow logging,2026-04-14
+E2,Team Totals Away Under,Signal,VOID/CONTAMINATED,FM1+FM3+FM7,Same as E1,-,-,Live yes / research no,Research coeff,Disable shadow logging,2026-04-14
+E3,Team Totals Away Over,Signal,CLEAN KILL,None,52-54% below vig,-,-,-,-,Closed permanently,-
+F1,Alt-Total Surface,Research,WRONG MARKET FRAME,None,82% directional consistency / vig absorbs,-,-,Yes,No,Closed,-
+F2,Run-Line Asymmetry,Research,CLEAN KILL,None,35.8% vs 35.9% cover rate,-,-,Yes,No,Closed permanently,-
+F3,F5/FG Path Mismatch,Research,RETEST REQUIRED,None,Research in progress,-,-,Yes,No,Complete analysis,2026-05-31
+F4,Cross-Market Triangle,Research,ARCHIVE,None,Market structure info,-,-,Yes,No,Retain for reference,-
+G1,Over Scanner Wave 1,Research,RETEST REQUIRED,FM4,OV043/OV016 standalone positive,-,-,Yes,V1 interaction gate,Clean standalone retest,2026-05-31
+G2,V2 Over Bias,Diagnostic,ARCHIVE,None,+0.43 run systematic bias,-,-,Yes,No,Diagnostic only,-
+H1,Distribution Shape,Research,ARCHIVE,None,174K starter-games classified,-,-,Yes,No,Props infrastructure,-
+H2,NRFI Selector,Research,WRONG MARKET FRAME,None,55.7% vs 57.4% implied,-3.0%,-,Yes,No,Frozen ready if vig drops,-
+H3,MLB Props,Research,ARCHIVE,None,Multiple phases / separate track,-,-,Varies,No,Separate research,-
+I1,Canonical Board,Infrastructure,ARCHIVE,None,44 concepts catalogued,-,-,-,-,Reference only,-
+I2,Engines 1-6,Infrastructure,ARCHIVE,None,Discovery scan complete,-,-,-,-,Reference only,-
