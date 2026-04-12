@@ -857,7 +857,7 @@ def fetch_nhl_odds(target_date: date) -> dict[tuple, dict]:
                         }
                         break
 
-        if best:
+        if best and 4.5 <= best["line"] <= 7.5:  # sanity: reject regulation-only or garbled totals
             result[(home_abbrev, away_abbrev)] = best
 
     return result
