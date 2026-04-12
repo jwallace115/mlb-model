@@ -1,0 +1,27 @@
+phase,check,status,detail
+P0,Signal identity,LOCKED,"F5 RL Signal B (Home), gap >= 1.5, live FG xFIP"
+P0,Threshold in code (pre-fix),MISMATCH,Code had 1.0; reset audit directed 1.5
+P0,Status in file (pre-fix),MISMATCH,File had ACTIVE; state map directed SHADOW
+P1,xFIP source,CLEAN,Live FanGraphs API via get_pitcher_metrics()
+P1,V1 dependency,NONE,No imports from V1 engine
+P1,S12/P09 dependency,NONE,No overlay references
+P1,Contaminated tables,NONE,No feature_table or historical xFIP usage
+P1,Home-only routing,PASS,bet_side hardcoded to HOME
+P1,Grading logic,PASS,margin > 0 WIN / < 0 LOSS / == 0 PUSH
+P2,Tracker entries total,7,All resolved
+P2,Entries at gap >= 1.5,1,"2026-04-05 gap=1.503 LOSS"
+P2,Entries at gap < 1.5 (legacy),6,Would not fire at corrected threshold
+P2,Mixed thresholds,YES,Tracker contains signals from two threshold eras
+P3,Threshold fix,APPLIED,XFIP_GAP_THRESHOLD 1.0 -> 1.5
+P3,Status fix,APPLIED,status ACTIVE -> SHADOW
+P4,run_model.py integration,PASS,Line 1338 calls f5rl_daily()
+P4,push_results.py integration,PASS,Line 411 pushes JSON
+P4,Dashboard integration,PASS,Green pill hidden under SHADOW
+P5,Dry run import,PASS,All imports clean
+P5,Dry run signals today,0,Max gap +0.404 (15 games)
+P5,Pitcher DB build,PASS,1452 entries
+P6,Green pill,HIDDEN,SHADOW status blocks display
+P6,Tracker display,NEEDS DISCLAIMER,Shows legacy 2-5 record
+P7,Reactivation gate (30+ at 1.5),FAIL,1 of 30 required
+P7,Decision,SHADOW,Continue logging; not live-traded
+P7,Estimated gate date,~Sep 2026,~0.2 signals/day firing rate

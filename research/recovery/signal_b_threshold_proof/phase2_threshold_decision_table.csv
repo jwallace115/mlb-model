@@ -1,0 +1,8 @@
+event_num,date,source_file,threshold_value,data_basis,pit_safe,under_rate_2024,under_rate_2025,assessment
+1,pre-2026-03-25,research/f5_runline/run_f5_runline_research.py,1.0,season-final FanGraphs xFIP (sim_inputs parquet),NO,N/A (not tested with PIT data),N/A,CONTAMINATED — static xFIP per pitcher per season
+2,2026-03-25,mlb_sim/pipeline/f5_runline_signal_generator.py (commit 32c687d9),1.0,adopted from research,NO (inherited),N/A,N/A,Deployed without PIT validation
+3,pre-2026-04-11,research/recovery/mlb_operational_triage.md,1.0,flagged as untested,NO,N/A,N/A,Noted as reasonable heuristic but not PIT-validated
+4,pre-2026-04-11,research/recovery/v1_dependency_revalidation/object2_f5_runline.md,1.0 tested,PIT-safe expanding means (baseball_features_pit_v1.parquet),YES,50.3%,53.1%,BORDERLINE — near coin-flip
+4b,pre-2026-04-11,same file,1.5 tested,PIT-safe expanding means,YES,59.4%,60.0%,STRONG — stable edge both seasons
+5,2026-04-11,research/recovery/site_reset/02_state_map.md,1.5 (directive),PIT FIP gap analysis,YES,59.4%,60.0%,Directive to change code
+6,2026-04-12,research/recovery/signal_b_reactivation/phase0_locked_spec.md,1.5 (confirmed),full provenance audit,YES,59.4%,60.0%,Code updated (uncommitted)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-F5 Run Line Signal Generator — Signal B (xFIP mismatch >= 1.0, home side).
+F5 Run Line Signal Generator — Signal B (xFIP mismatch >= 1.5, home side).
 Independent from V1, F5 totals, and all other engines.
 """
 
@@ -25,7 +25,7 @@ STATUS_PATH = PIPELINE / "f5_runline_status.json"
 LINES_PATH = LOGS / "f5_runline_lines_2026.parquet"
 PERF_PATH = LOGS / "f5_runline_performance_2026.json"
 
-XFIP_GAP_THRESHOLD = 1.0
+XFIP_GAP_THRESHOLD = 1.5
 STAKE = 0.5
 WIN_UNIT = 100 / 110  # fallback
 

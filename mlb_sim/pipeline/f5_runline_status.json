@@ -1,10 +1,10 @@
 {
-  "status": "ACTIVE",
-  "last_updated": "2026-03-25",
-  "pause_reason": null,
+  "status": "SHADOW",
+  "last_updated": "2026-04-12",
+  "pause_reason": "Reactivation audit: threshold updated 1.0->1.5, awaiting 30+ resolved signals at new threshold",
   "pause_triggered_at_n": null,
   "pause_triggered_at_roi": null,
   "resume_authorized_by": null,
   "resume_date": null,
-  "deployment_note": "Signal B live launch with conservative 0.5u stake"
+  "deployment_note": "Threshold fixed to 1.5 per reset audit directive. Shadow until reactivation gate (30+ resolved at 1.5)."
 }
