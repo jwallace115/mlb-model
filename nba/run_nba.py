@@ -613,6 +613,7 @@ _ARCHETYPE_GAMES_2026 = {
     ("ORL", "BOS"): "2026-04-12",
 }
 
+ELITE_DEF2_ENABLED = False  # Retired April 2026 — collapses on clean revalidation (-18% OOS ROI)
 _ELITE_DEF = {"BOS", "CLE", "GSW", "MIL", "MIN", "OKC"}
 _ELITE_DEF2 = {"HOU", "LAC", "LAL", "MIA", "NYK", "ORL", "SAC"}
 
@@ -627,8 +628,7 @@ def _flag_archetype_matchups(game_results: list[dict], game_date: str) -> None:
         g["archetype_direction"] = None
         g["archetype_note"] = None
 
-        # KILLED 2026-04-11 — revalidation verdict: COLLAPSES (43% OOS, -18% ROI)
-        if False:  # was: away in _ELITE_DEF2 and home in _ELITE_DEF
+        if ELITE_DEF2_ENABLED and away in _ELITE_DEF2 and home in _ELITE_DEF:
             g["archetype_signal"] = "ELITE_DEF2_at_ELITE_DEF"
             g["archetype_direction"] = "UNDER"
             g["archetype_note"] = "UNDER — hist edge -3.0pts (p=0.022)"

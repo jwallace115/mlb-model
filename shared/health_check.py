@@ -155,6 +155,8 @@ def check_signal_files():
         ("combined_short_exit_shadow", "mlb_sim/logs/combined_short_exit_shadow_2026.json", 48),
         ("shadow_signals", "mlb_sim/logs/shadow_signals_2026.json", 48),
         ("team_total_shadow", "mlb_sim/logs/team_total_shadow_2026.json", 48),
+        ("nhl_shadow_aligned", "nhl/logs/nhl_shadow_aligned_2026.json", 26),
+        ("nrfi_selector", "mlb/logs/nrfi_selector_v1_2026.json", 26),
     ]
     for name, path, max_hours in shadow_logs:
         try:
