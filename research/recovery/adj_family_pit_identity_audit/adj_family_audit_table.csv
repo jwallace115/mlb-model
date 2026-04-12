@@ -1,0 +1,6 @@
+signal,pit_safe,identity_match,research_roi,standalone_roi_2025,shadow_2026_hit_pct,shadow_2026_n,feature_frozen,v1_gate_live,correct_field_populated,status
+ADJ_CONTACT,YES,MISMATCH,-,-2.4% (pooled) / +0.4% (2025),55.6%,63,YES,NO,NO,CONTINUE_SHADOW
+ADJ_HH,YES,MISMATCH,-,-2.6% (pooled) / +5.6% (2025),63.6%,33,YES,NO,NO,CONTINUE_SHADOW
+adj_k_rate_last3,YES,MISMATCH,-,-0.6% (pooled) / +4.1% (2025),60.7%,28,YES,NO,NO,CONTINUE_SHADOW
+ADJ_BB_RATE,YES,MISMATCH,-,-3.6% (pooled) / -1.8% (2025),50.0%,16,YES,NO,NO,CONTINUE_SHADOW
+ADJ_RUN_SUPP,YES,MISMATCH,-,-1.8% (pooled) / +1.8% (2025),59.4%,32,YES,NO,NO,CONTINUE_SHADOW
