@@ -1,7 +1,7 @@
 {
   "build_type": "INTRADAY DECISION PANEL V1",
   "build_note": "MPS remains RESERVED / DATA-BLOCKED. This build creates the historical intraday decision panel only. No signals have been tested, no decision filters have been defined, and no changes to the canonical spec have been made.",
-  "generated_at": "2026-04-13T13:47:31.984883Z",
+  "generated_at": "2026-04-13T14:19:44.563983Z",
   "mps_status": "RESERVED / DATA-BLOCKED",
   "source_universe": {
     "seasons": [
@@ -12,4 +12,101 @@
     ],
     "total_games": 9715,
     "by_season": {
-      "2022": 
+      "2022": 2430,
+      "2023": 2430,
+      "2024": 2427,
+      "2025": 2428
+    }
+  },
+  "acquisition": {
+    "new_probe_calls_made": 2100,
+    "credits_remaining": "4117721",
+    "probes": [
+      "DT_0700 (11:00 UTC)",
+      "DT_1000 (14:00 UTC)",
+      "DT_1200 (16:00 UTC)"
+    ],
+    "sleep_sec": 0.35,
+    "date_batching": true,
+    "hard_stop": false
+  },
+  "panel_structure": {
+    "rows": 9715,
+    "columns": 118,
+    "states": [
+      "open_0001",
+      "dt_0700",
+      "dt_1000",
+      "dt_1200",
+      "final_close"
+    ]
+  },
+  "usable_rates_pct": {
+    "open_0001": 88.4,
+    "dt_0700": 95.8,
+    "dt_1000": 98.6,
+    "dt_1200": 99.6,
+    "final_close": 99.9
+  },
+  "integrity_flags": {
+    "open_late_flag_total": 0,
+    "dt0700_near_open_flag_total": 0,
+    "final_close_post_first_pitch_total": 2503,
+    "close_post_fp_by_season": {
+      "2022": 649,
+      "2023": 634,
+      "2024": 626,
+      "2025": 594
+    }
+  },
+  "continuity_rates_pct": {
+    "open_0700": 85.2,
+    "open_1000": 86.2,
+    "open_1200": 86.4,
+    "dt0700_close": 94.2,
+    "dt1000_close": 97.9,
+    "dt1200_close": 99.1,
+    "open_close": 86.1
+  },
+  "low_coverage_months": [
+    [
+      "open_0001",
+      "2022-05",
+      78.6
+    ],
+    [
+      "open_0001",
+      "2022-09",
+      75.8
+    ],
+    [
+      "open_0001",
+      "2022-10",
+      61.5
+    ],
+    [
+      "open_0001",
+      "2023-09",
+      73.5
+    ],
+    [
+      "open_0001",
+      "2023-10",
+      33.3
+    ],
+    [
+      "dt_0700",
+      "2023-10",
+      66.7
+    ]
+  ],
+  "verdict": "PANEL BUILT WITH MATERIAL GAPS",
+  "output_files": {
+    "panel_parquet": "mlb_intraday_decision_panel_v1_2022_2025.parquet",
+    "source_manifest_csv": "mlb_intraday_decision_panel_v1_source_manifest.csv",
+    "raw_records_parquet": "intraday_raw_records.parquet",
+    "build_report_md": "MLB_INTRADAY_DECISION_PANEL_V1_BUILD.md",
+    "raw_json": "MLB_INTRADAY_DECISION_PANEL_V1_RAW.json",
+    "log": "intraday_acquisition.log"
+  }
+}
