@@ -1,0 +1,15 @@
+{
+  "build_type": "INTRADAY DECISION PANEL V1",
+  "build_note": "MPS remains RESERVED / DATA-BLOCKED. This build creates the historical intraday decision panel only. No signals have been tested, no decision filters have been defined, and no changes to the canonical spec have been made.",
+  "generated_at": "2026-04-13T13:47:31.984883Z",
+  "mps_status": "RESERVED / DATA-BLOCKED",
+  "source_universe": {
+    "seasons": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "total_games": 9715,
+    "by_season": {
+      "2022": 

@@ -45,3 +45,197 @@
 2026-04-13 13:29:00,729  INFO       Calls: 1050 | Date: 2023-09-20 | Probe: DT_1200 | Credits: 4128221
 2026-04-13 13:29:45,460  INFO       Calls: 1100 | Date: 2024-03-31 | Probe: DT_1000 | Credits: 4127721
 2026-04-13 13:29:45,909  INFO       Checkpoint saved at call 1100
+2026-04-13 13:30:43,849  INFO       Calls: 1150 | Date: 2024-04-17 | Probe: DT_0700 | Credits: 4127221
+2026-04-13 13:31:31,483  INFO       Calls: 1200 | Date: 2024-05-03 | Probe: DT_1200 | Credits: 4126721
+2026-04-13 13:31:31,977  INFO       Checkpoint saved at call 1200
+2026-04-13 13:32:20,325  INFO       Calls: 1250 | Date: 2024-05-20 | Probe: DT_1000 | Credits: 4126221
+2026-04-13 13:33:07,665  INFO       Calls: 1300 | Date: 2024-06-06 | Probe: DT_0700 | Credits: 4125721
+2026-04-13 13:33:08,177  INFO       Checkpoint saved at call 1300
+2026-04-13 13:33:54,019  INFO       Calls: 1350 | Date: 2024-06-22 | Probe: DT_1200 | Credits: 4125221
+2026-04-13 13:34:38,084  INFO       Calls: 1400 | Date: 2024-07-09 | Probe: DT_1000 | Credits: 4124721
+2026-04-13 13:34:38,641  INFO       Checkpoint saved at call 1400
+2026-04-13 13:35:24,668  INFO       Calls: 1450 | Date: 2024-07-30 | Probe: DT_0700 | Credits: 4124221
+2026-04-13 13:36:10,370  INFO       Calls: 1500 | Date: 2024-08-15 | Probe: DT_1200 | Credits: 4123721
+2026-04-13 13:36:11,009  INFO       Checkpoint saved at call 1500
+2026-04-13 13:36:59,262  INFO       Calls: 1550 | Date: 2024-09-01 | Probe: DT_1000 | Credits: 4123221
+2026-04-13 13:37:45,426  INFO       Calls: 1600 | Date: 2024-09-18 | Probe: DT_0700 | Credits: 4122721
+2026-04-13 13:37:45,999  INFO       Checkpoint saved at call 1600
+2026-04-13 13:38:32,872  INFO       Calls: 1650 | Date: 2025-03-31 | Probe: DT_1200 | Credits: 4122221
+2026-04-13 13:39:21,320  INFO       Calls: 1700 | Date: 2025-04-17 | Probe: DT_1000 | Credits: 4121721
+2026-04-13 13:39:21,962  INFO       Checkpoint saved at call 1700
+2026-04-13 13:40:12,048  INFO       Calls: 1750 | Date: 2025-05-04 | Probe: DT_0700 | Credits: 4121221
+2026-04-13 13:41:01,005  INFO       Calls: 1800 | Date: 2025-05-20 | Probe: DT_1200 | Credits: 4120721
+2026-04-13 13:41:01,692  INFO       Checkpoint saved at call 1800
+2026-04-13 13:41:50,964  INFO       Calls: 1850 | Date: 2025-06-06 | Probe: DT_1000 | Credits: 4120221
+2026-04-13 13:42:40,861  INFO       Calls: 1900 | Date: 2025-06-23 | Probe: DT_0700 | Credits: 4119721
+2026-04-13 13:42:41,542  INFO       Checkpoint saved at call 1900
+2026-04-13 13:43:30,891  INFO       Calls: 1950 | Date: 2025-07-09 | Probe: DT_1200 | Credits: 4119221
+2026-04-13 13:44:21,362  INFO       Calls: 2000 | Date: 2025-07-30 | Probe: DT_1000 | Credits: 4118721
+2026-04-13 13:44:22,103  INFO       Checkpoint saved at call 2000
+2026-04-13 13:45:14,535  INFO       Calls: 2050 | Date: 2025-08-16 | Probe: DT_0700 | Credits: 4118221
+2026-04-13 13:46:04,568  INFO       Calls: 2100 | Date: 2025-09-01 | Probe: DT_1200 | Credits: 4117721
+2026-04-13 13:46:05,314  INFO       Checkpoint saved at call 2100
+2026-04-13 13:46:56,854  INFO       Calls: 2150 | Date: 2025-09-18 | Probe: DT_1000 | Credits: 4117221
+2026-04-13 13:47:27,150  INFO     Acquisition complete. Total calls: 2181, Credits remaining: 4116911
+2026-04-13 13:47:27,908  INFO     Raw records saved: 29145 rows → /root/mlb-model/research/recovery/mlb_totals_context_engine_v1/intraday_decision_panel_v1/intraday_raw_records.parquet
+2026-04-13 13:47:27,909  INFO     STEP 4: Building final panel table...
+2026-04-13 13:47:27,996  INFO     Raw records: 29145 rows, probes: {'DT_0700': 9715, 'DT_1000': 9715, 'DT_1200': 9715}
+2026-04-13 13:47:28,130  INFO       Merged DT_0700: 9715 records
+2026-04-13 13:47:28,145  INFO       Merged DT_1000: 9715 records
+2026-04-13 13:47:28,164  INFO       Merged DT_1200: 9715 records
+2026-04-13 13:47:29,379  INFO       Pair built: open_0700
+2026-04-13 13:47:29,710  INFO       Pair built: open_1000
+2026-04-13 13:47:30,039  INFO       Pair built: open_1200
+2026-04-13 13:47:30,368  INFO       Pair built: dt0700_close
+2026-04-13 13:47:30,689  INFO       Pair built: dt1000_close
+2026-04-13 13:47:31,016  INFO       Pair built: dt1200_close
+2026-04-13 13:47:31,344  INFO       Pair built: open_close
+2026-04-13 13:47:31,524  INFO     Panel saved: 9715 rows × 117 cols → /root/mlb-model/research/recovery/mlb_totals_context_engine_v1/intraday_decision_panel_v1/mlb_intraday_decision_panel_v1_2022_2025.parquet
+2026-04-13 13:47:31,525  INFO     STEP 5: Computing QA tables...
+2026-04-13 13:47:31,525  INFO     
+=== TABLE A: Usable data (quality_flag==OK) by state × season ===
+2026-04-13 13:47:31,549  INFO       open_0001        2022  1979/2430  (81.4%)
+2026-04-13 13:47:31,549  INFO       open_0001        2023  2059/2430  (84.7%)
+2026-04-13 13:47:31,549  INFO       open_0001        2024  2192/2427  (90.3%)
+2026-04-13 13:47:31,550  INFO       open_0001        2025  2355/2428  (97.0%)
+2026-04-13 13:47:31,572  INFO       dt_0700          2022  2240/2430  (92.2%)
+2026-04-13 13:47:31,572  INFO       dt_0700          2023  2256/2430  (92.8%)
+2026-04-13 13:47:31,573  INFO       dt_0700          2024  2396/2427  (98.7%)
+2026-04-13 13:47:31,573  INFO       dt_0700          2025  2411/2428  (99.3%)
+2026-04-13 13:47:31,594  INFO       dt_1000          2022  2365/2430  (97.3%)
+2026-04-13 13:47:31,594  INFO       dt_1000          2023  2364/2430  (97.3%)
+2026-04-13 13:47:31,594  INFO       dt_1000          2024  2422/2427  (99.8%)
+2026-04-13 13:47:31,594  INFO       dt_1000          2025  2427/2428  (100.0%)
+2026-04-13 13:47:31,617  INFO       dt_1200          2022  2413/2430  (99.3%)
+2026-04-13 13:47:31,617  INFO       dt_1200          2023  2410/2430  (99.2%)
+2026-04-13 13:47:31,617  INFO       dt_1200          2024  2425/2427  (99.9%)
+2026-04-13 13:47:31,617  INFO       dt_1200          2025  2428/2428  (100.0%)
+2026-04-13 13:47:31,638  INFO       final_close      2022  2427/2430  (99.9%)
+2026-04-13 13:47:31,639  INFO       final_close      2023  2426/2430  (99.8%)
+2026-04-13 13:47:31,639  INFO       final_close      2024  2425/2427  (99.9%)
+2026-04-13 13:47:31,639  INFO       final_close      2025  2428/2428  (100.0%)
+2026-04-13 13:47:31,639  INFO     
+=== TABLE B: Book selection by state × season ===
+2026-04-13 13:47:31,649  INFO     
+  open_0001:
+open_0001_selected_book  draftkings  fanduel
+season                                      
+2022                             23     1956
+2023                             59     2000
+2024                             54     2138
+2025                             52     2303
+2026-04-13 13:47:31,655  INFO     
+  dt_0700:
+dt_0700_selected_book  draftkings  fanduel
+season                                    
+2022                           38     2202
+2023                           70     2186
+2024                           10     2386
+2025                            1     2410
+2026-04-13 13:47:31,662  INFO     
+  dt_1000:
+dt_1000_selected_book  draftkings  fanduel
+season                                    
+2022                           19     2346
+2023                           15     2349
+2024                            0     2422
+2025                            0     2427
+2026-04-13 13:47:31,669  INFO     
+  dt_1200:
+dt_1200_selected_book  draftkings  fanduel
+season                                    
+2022                            9     2404
+2023                            8     2402
+2024                            1     2424
+2025                            0     2428
+2026-04-13 13:47:31,674  INFO     
+  final_close:
+final_close_selected_book  draftkings  fanduel
+season                                        
+2022                                5     2422
+2023                                2     2424
+2024                               11     2414
+2025                               15     2413
+2026-04-13 13:47:31,674  INFO     
+=== TABLE C: Continuity pair quality ===
+2026-04-13 13:47:31,682  INFO     
+  Pair open_0700:
+open_0700_pair_quality_flag  CROSS_BOOK  MISSING_ONE  SAME_DRAFTKINGS  SAME_FANDUEL
+season                                                                             
+2022                                 30          486                3          1911
+2023                                 87          401                7          1935
+2024                                 62          238                1          2126
+2025                                 52           77                0          2299
+2026-04-13 13:47:31,689  INFO     
+  Pair open_1000:
+open_1000_pair_quality_flag  CROSS_BOOK  MISSING_ONE  SAME_DRAFTKINGS  SAME_FANDUEL
+season                                                                             
+2022                                 28          461                1          1940
+2023                                 60          377                1          1992
+2024                                 54          236                0          2137
+2025                                 51           74                0          2303
+2026-04-13 13:47:31,697  INFO     
+  Pair open_1200:
+open_1200_pair_quality_flag  CROSS_BOOK  MISSING_ONE  SAME_DRAFTKINGS  SAME_FANDUEL
+season                                                                             
+2022                                 24          455                0          1951
+2023                                 60          371                1          1998
+2024                                 55          236                0          2136
+2025                                 52           73                0          2303
+2026-04-13 13:47:31,704  INFO     
+  Pair dt0700_close:
+dt0700_close_pair_quality_flag  CROSS_BOOK  MISSING_ONE  SAME_FANDUEL
+season                                                               
+2022                                    42          192          2196
+2023                                    71          175          2184
+2024                                    20           33          2374
+2025                                    16           17          2395
+2026-04-13 13:47:31,711  INFO     
+  Pair dt1000_close:
+dt1000_close_pair_quality_flag  CROSS_BOOK  MISSING_ONE  SAME_DRAFTKINGS  SAME_FANDUEL
+season                                                                                
+2022                                    19           68                1          2342
+2023                                    16           70                0          2344
+2024                                    11            7                0          2409
+2025                                    15            1                0          2412
+2026-04-13 13:47:31,719  INFO     
+  Pair dt1200_close:
+dt1200_close_pair_quality_flag  CROSS_BOOK  MISSING_ONE  SAME_DRAFTKINGS  SAME_FANDUEL
+season                                                                                
+2022                                    10           20                1          2399
+2023                                     9           24                0          2397
+2024                                    10            4                1          2412
+2025                                    15            0                0          2413
+2026-04-13 13:47:31,727  INFO     
+  Pair open_close:
+open_close_pair_quality_flag  CROSS_BOOK  MISSING_ONE  SAME_DRAFTKINGS  SAME_FANDUEL
+season                                                                              
+2022                                  26          451                0          1953
+2023                                  58          372                1          1999
+2024                                  64          237                0          2126
+2025                                  67           73                0          2288
+2026-04-13 13:47:31,727  INFO     
+=== TABLE D: Timestamp delta (median min) by state × season ===
+2026-04-13 13:47:31,730  INFO       open_0001      : {2022: 6.0, 2023: 0.3, 2024: 0.4, 2025: 0.4}
+2026-04-13 13:47:31,732  INFO       dt_0700        : {2022: 5.0, 2023: 4.3, 2024: 4.4, 2025: 4.4}
+2026-04-13 13:47:31,733  INFO       dt_1000        : {2022: 5.0, 2023: 4.3, 2024: 4.4, 2025: 4.4}
+2026-04-13 13:47:31,734  INFO       dt_1200        : {2022: 5.0, 2023: 4.3, 2024: 4.4, 2025: 4.4}
+2026-04-13 13:47:31,736  INFO       final_close    : {2022: 5.0, 2023: 4.3, 2024: 4.4, 2025: 4.4}
+2026-04-13 13:47:31,736  INFO     
+=== Integrity flags by season ===
+2026-04-13 13:47:31,738  INFO       open_late_flag: {2022: 0, 2023: 0, 2024: 0, 2025: 0}
+2026-04-13 13:47:31,740  INFO       dt0700_near_open_flag: {2022: 0, 2023: 0, 2024: 0, 2025: 0}
+2026-04-13 13:47:31,741  INFO       final_close_post_first_pitch_flag: {2022: 649, 2023: 634, 2024: 626, 2025: 594}
+2026-04-13 13:47:31,742  INFO     
+=== Monthly coverage check (any state × month below 80%) ===
+2026-04-13 13:47:31,850  INFO       LOW COVERAGE: open_0001 @ 2022-05 = 78.6%
+2026-04-13 13:47:31,850  INFO       LOW COVERAGE: open_0001 @ 2022-09 = 75.8%
+2026-04-13 13:47:31,850  INFO       LOW COVERAGE: open_0001 @ 2022-10 = 61.5%
+2026-04-13 13:47:31,850  INFO       LOW COVERAGE: open_0001 @ 2023-09 = 73.5%
+2026-04-13 13:47:31,850  INFO       LOW COVERAGE: open_0001 @ 2023-10 = 33.3%
+2026-04-13 13:47:31,882  INFO       LOW COVERAGE: dt_0700 @ 2023-10 = 66.7%
+2026-04-13 13:47:31,977  INFO     STEP 6: Writing reports...
+2026-04-13 13:47:31,984  INFO     
+Build verdict: PANEL BUILT WITH MATERIAL GAPS
+2026-04-13 13:47:31,984  INFO       avg usable rate (DT probes): 98.0%
+2026-04-13 13:47:31,984  INFO       material low months (<70%): 3
