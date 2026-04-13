@@ -1,22 +1,21 @@
-PHASE 5: Path Error Diagnostic
-path_error = actual_late_runs - market_implied_late
-Positive = market underestimated late scoring
 
---- DISCOVERY (2773 games) ---
-  BALANCED             N= 977  path_err=-0.039 (t=-0.42, p=0.676)  FG over=0.456 under=0.510
-  COMPRESSED_LOW       N= 344  path_err=+0.574 (t=+3.76, p=0.000)  FG over=0.558 under=0.427
-  EARLY_HEAVY          N= 520  path_err=+0.870 (t=+6.41, p=0.000)  FG over=0.573 under=0.394
-  ELEVATED_LATE        N= 796  path_err=-0.509 (t=-4.37, p=0.000)  FG over=0.436 under=0.514
-  LATE_HEAVY           N= 136  path_err=-0.496 (t=-1.86, p=0.065)  FG over=0.456 under=0.463
---- VALIDATION (2389 games) ---
-  BALANCED             N=1002  path_err=+0.053 (t=+0.57, p=0.571)  FG over=0.469 under=0.490
-  COMPRESSED_LOW       N= 617  path_err=+0.128 (t=+1.13, p=0.257)  FG over=0.499 under=0.468
-  EARLY_HEAVY          N= 182  path_err=+1.179 (t=+5.00, p=0.000)  FG over=0.604 under=0.352
-  ELEVATED_LATE        N= 526  path_err=-0.695 (t=-5.37, p=0.000)  FG over=0.428 under=0.504
-  LATE_HEAVY           N=  62  path_err=-1.363 (t=-4.11, p=0.000)  FG over=0.355 under=0.613
---- OOS (2393 games) ---
-  BALANCED             N= 911  path_err=+0.033 (t=+0.34, p=0.735)  FG over=0.481 under=0.497
-  COMPRESSED_LOW       N= 512  path_err=+0.033 (t=+0.28, p=0.782)  FG over=0.469 under=0.490
-  EARLY_HEAVY          N= 287  path_err=+0.902 (t=+4.18, p=0.000)  FG over=0.516 under=0.432
-  ELEVATED_LATE        N= 632  path_err=-0.613 (t=-4.51, p=0.000)  FG over=0.407 under=0.514
-  LATE_HEAVY           N=  51  path_err=-0.471 (t=-1.05, p=0.297)  FG over=0.412 under=0.549
+--- DISCOVERY (n=3419) ---
+  BALANCED             N=1235 path_err=-0.048 (t=-0.58 p=0.564) over=0.453
+  COMPRESSED_LOW       N= 412 path_err=+0.513 (t=+3.73 p=0.000) over=0.546
+  EARLY_HEAVY          N= 638 path_err=+0.865 (t=+6.94 p=0.000) over=0.561
+  ELEVATED_LATE        N= 966 path_err=-0.532 (t=-5.08 p=0.000) over=0.435
+  LATE_HEAVY           N= 168 path_err=-0.711 (t=-3.10 p=0.002) over=0.446
+
+--- VALIDATION (n=2946) ---
+  BALANCED             N=1244 path_err=+0.096 (t=+1.15 p=0.252) over=0.468
+  COMPRESSED_LOW       N= 789 path_err=+0.122 (t=+1.21 p=0.228) over=0.503
+  EARLY_HEAVY          N= 218 path_err=+1.055 (t=+5.04 p=0.000) over=0.601
+  ELEVATED_LATE        N= 628 path_err=-0.611 (t=-5.15 p=0.000) over=0.436
+  LATE_HEAVY           N=  67 path_err=-1.418 (t=-4.52 p=0.000) over=0.328
+
+--- OOS (n=3026) ---
+  BALANCED             N=1170 path_err=-0.014 (t=-0.17 p=0.868) over=0.480
+  COMPRESSED_LOW       N= 622 path_err=+0.063 (t=+0.58 p=0.565) over=0.469
+  EARLY_HEAVY          N= 369 path_err=+0.844 (t=+4.32 p=0.000) over=0.499
+  ELEVATED_LATE        N= 807 path_err=-0.595 (t=-5.03 p=0.000) over=0.413
+  LATE_HEAVY           N=  58 path_err=-0.578 (t=-1.41 p=0.164) over=0.414

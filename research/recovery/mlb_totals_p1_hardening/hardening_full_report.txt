@@ -1,0 +1,232 @@
+======================================================================
+PHASE 0: Lock exact object
+======================================================================
+Loaded P1 table: (9391, 50)
+Columns: ['gpk', 'date', 'season', 'home_team', 'away_team', 'home_score', 'away_score', 'actual_total', 'actual_f5_total', 'park_factor_runs', 'temperature', 'wind_speed', 'wind_direction', 'home_rest_days', 'away_rest_days', 'umpire_over_rate', 'innings_played', 'completed_early', 'total_line', 'total_over_price', 'total_under_price', 'f5_line', 'late_implied', 'f5_ratio', 'actual_late', 'path_state', 'fg_over', 'fg_under', 'fg_push', 'path_error']
+
+Frozen thresholds from discovery:
+  f5_ratio p67 = 0.5625  (EARLY_HEAVY = f5_ratio > p67)
+  temperature median (disc EARLY_HEAVY) = 74.8F
+  Warm = temperature >= 74.8F (discovery median)
+  Side = FG OVER
+  Price = actual closing over price (total_over_price)
+  Double-check: disc EARLY_HEAVY temp median = 74.8F
+
+======================================================================
+PHASE 1: Rebuild matches — verify N per split
+======================================================================
+
+EARLY_HEAVY total: 1225
+EARLY_HEAVY + warm (temp >= 75F): 597
+
+N per split:
+  discovery: 319
+  validation: 105
+  oos: 173
+
+Expected from P1: discovery=319, validation=105, oos=173
+Controls (EARLY_HEAVY, temp < 75F): 628
+
+======================================================================
+PHASE 2: Concentration audit
+======================================================================
+
+Top 10 home teams:
+  WSN: 94
+  KCR: 76
+  PHI: 54
+  ATL: 52
+  BAL: 42
+  CIN: 39
+  NYM: 31
+  NYY: 27
+  LAD: 26
+  STL: 26
+
+Month distribution:
+  Month  3: 2
+  Month  4: 7
+  Month  5: 29
+  Month  6: 132
+  Month  7: 190
+  Month  8: 150
+  Month  9: 86
+  Month 10: 1
+
+Temperature stats:
+  count    597.000000
+mean      82.779732
+std        5.106103
+min       74.800000
+25%       78.500000
+50%       82.100000
+75%       86.100000
+max      101.600000
+
+Top 5 home teams (across all splits):
+  ['WSN', 'KCR', 'PHI']
+
+Leave-one-out: top 3 teams
+  Exclude WSN: N=503, win=0.573, ROI=+14.2%
+  Exclude KCR: N=521, win=0.599, ROI=+18.3%
+  Exclude PHI: N=543, win=0.587, ROI=+16.3%
+
+Leave-one-out: hottest month (7)
+  Exclude month 7: N=407, win=0.587, ROI=+17.3%
+
+Leave-one-out: by month
+  Exclude month  3: N=595, win=0.585, ROI=+15.7%
+  Exclude month  4: N=590, win=0.588, ROI=+16.2%
+  Exclude month  5: N=568, win=0.600, ROI=+18.2%
+  Exclude month  6: N=465, win=0.591, ROI=+15.3%
+  Exclude month  7: N=407, win=0.587, ROI=+17.3%
+  Exclude month  8: N=447, win=0.584, ROI=+16.3%
+  Exclude month  9: N=511, win=0.568, ROI=+13.0%
+  Exclude month 10: N=596, win=0.586, ROI=+15.9%
+
+======================================================================
+PHASE 3: Micro-band stability
+======================================================================
+
+By FG total line:
+  <=8.0: N=  45, win=0.711, ROI=+40.7%
+  8.5: N=  81, win=0.753, ROI=+40.2%
+  9.0: N= 162, win=0.519, ROI=+11.9%
+  9.5: N= 279, win=0.559, ROI=+7.8%
+  >=10.0: N= 309, win=0.560, ROI=+8.2%
+
+By temperature band:
+  75-74: N=0 (too few)
+  75-84: N= 362, win=0.575, ROI=+14.1%
+  85+: N= 199, win=0.588, ROI=+16.6%
+
+By closing over price:
+  <=-120: N=  14, win=1.000, ROI=+81.4%
+  -120 to -110: N= 253, win=0.664, ROI=+27.3%
+  -110 to -105: N= 131, win=0.542, ROI=+9.9%
+  -105 to +100: N= 123, win=0.488, ROI=+2.2%
+  +100+: N=  76, win=0.487, ROI=-1.1%
+
+======================================================================
+PHASE 4: Proxy risk audit — is warm temp just a summer proxy?
+======================================================================
+
+By month group:
+  Apr-May (early): N=  36, win=0.333, ROI=-23.2%
+  Jun-Aug (summer): N= 472, win=0.583, ROI=+15.2%
+  Sep-Oct (late): N=  87, win=0.701, ROI=+34.5%
+
+By month group, per split:
+
+  Apr-May (early):
+    discovery: N= 17, win=0.294, ROI=-28.2%
+    validation: N=  8, win=0.625, ROI=+32.8%
+    oos: N= 11, win=0.182, ROI=-56.0%
+
+  Jun-Aug (summer):
+    discovery: N=238, win=0.618, ROI=+21.1%
+    validation: N= 92, win=0.565, ROI=+8.8%
+    oos: N=142, win=0.535, ROI=+9.6%
+
+  Sep-Oct (late):
+    discovery: N= 64, win=0.688, ROI=+30.0%
+    validation: N=  5, win=1.000, ROI=+88.1%
+    oos: N= 18, win=0.667, ROI=+35.7%
+
+Dome/outdoor check:
+  Dome/retractable: N=  23, win=0.652, ROI=+24.9%
+  Outdoor: N= 574, win=0.584, ROI=+15.6%
+
+Day vs Night: no game_time column available, skip
+
+Warm-climate parks vs cold-climate parks:
+  Warm-climate parks: N= 132, win=0.500, ROI=+2.4%
+  Cold-climate parks: N= 465, win=0.611, ROI=+19.8%
+
+======================================================================
+PHASE 5: Late-scoring mechanism confirmation
+======================================================================
+
+ALL — matched(N=597) vs controls(N=628):
+  Actual F5 runs:  matched=6.37, control=5.80, diff=+0.57 (t=2.83, p=0.005)
+  Actual late runs: matched=4.30, control=4.12, diff=+0.17 (t=0.95, p=0.342)
+  Actual total:    matched=10.66, control=9.92, diff=+0.74
+
+DISCOVERY — matched(N=319) vs controls(N=319):
+  Actual F5 runs:  matched=6.56, control=5.58, diff=+0.98 (t=3.51, p=0.000)
+  Actual late runs: matched=4.41, control=4.15, diff=+0.26 (t=1.04, p=0.298)
+  Actual total:    matched=10.97, control=9.73, diff=+1.24
+
+VALIDATION — matched(N=105) vs controls(N=113):
+  Actual F5 runs:  matched=6.03, control=6.27, diff=-0.24 (t=-0.54, p=0.592)
+  Actual late runs: matched=4.06, control=4.19, diff=-0.14 (t=-0.36, p=0.718)
+  Actual total:    matched=10.09, control=10.46, diff=-0.37
+
+OOS — matched(N=173) vs controls(N=196):
+  Actual F5 runs:  matched=6.21, control=5.90, diff=+0.32 (t=0.85, p=0.396)
+  Actual late runs: matched=4.24, control=4.04, diff=+0.20 (t=0.54, p=0.587)
+  Actual total:    matched=10.45, control=9.93, diff=+0.52
+
+======================================================================
+PHASE 6: Regime decay audit — year-by-year
+======================================================================
+  2023: N=319, win=0.614, ROI=+20.2%, avg_price=-91, avg_line=9.1, avg_temp=82F
+  2024: N=105, win=0.590, ROI=+14.4%, avg_price=-81, avg_line=9.2, avg_temp=84F
+  2025: N=173, win=0.532, ROI=+9.1%, avg_price=-75, avg_line=9.2, avg_temp=83F
+
+======================================================================
+PHASE 7: Live feasibility — temperature source audit
+======================================================================
+
+CRITICAL FINDING:
+- game_table.parquet uses Open-Meteo ARCHIVE API (historical actual weather)
+  → sim/phase1_build_game_table.py: fetch_historical_weather()
+  → This fetches actual game-time temperature AFTER the game occurred
+
+- Live pipeline uses Open-Meteo FORECAST API
+  → modules/weather.py: fetch_weather()
+  → forecast_days=2, returns current forecast for upcoming games
+
+IMPLICATION:
+- The research object was built on ACTUAL game-time temperature (known postgame)
+- Live deployment would use FORECAST temperature (known pregame)
+- These are DIFFERENT information sets
+- Forecast error adds noise; warm threshold may not match actual conditions
+
+RISK: Moderate
+- Open-Meteo forecasts are generally accurate for same-day temperature
+- Threshold is a median split (~75F), not a tight boundary
+- Most games near the threshold boundary are marginal anyway
+- But systematic forecast bias (e.g., afternoon vs evening games) could shift hit rates
+
+
+======================================================================
+PHASE 8: Shadow design (conditional on go)
+======================================================================
+
+Overall: N=597, win=0.586, ROI=+16.0%
+OOS (2025): N=173, win=0.532, ROI=+9.1%
+
+Shadow Design:
+1. Trigger: path_state == EARLY_HEAVY AND forecast_temperature >= 75F
+2. Side: FG OVER
+3. Logging: game_pk, date, home_team, away_team, total_line, f5_line, f5_ratio,
+   forecast_temp, actual_temp (backfilled), closing_over_price, actual_total, result
+4. Minimum shadow: 30 games before any live action
+5. Kill switch: if running win_rate < 0.48 after 30+ games
+
+
+======================================================================
+PHASE 9: Go / No-Go Decision
+======================================================================
+  [PASS] OOS ROI positive: +9.1%
+  [PASS] OOS win rate > 52%: 0.532
+  [PASS] No single month drives signal
+  [PASS] No single team drives signal
+  [FAIL] Late-scoring mechanism confirmed: t=0.95, p=0.342
+  [PASS] Signal outside summer (Apr-May, Sep): win=0.600, N=125
+  [PASS] No regime decay (all years ROI > -2%)
+  [PASS] Forecast temperature feasibility: moderate risk, median split is coarse enough
+
+  SCORECARD: 7/8 checks passed
+  DECISION: CONDITIONAL GO — proceed to shadow
