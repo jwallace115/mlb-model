@@ -1,0 +1,230 @@
+{
+  "taxonomy_name": "MPS_DESCRIPTIVE_TAXONOMY_V1",
+  "status": "FROZEN",
+  "mps_status": "RESERVED / DATA-BLOCKED",
+  "source_table": "research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/mps_historical_snapshots_2022_2025.parquet",
+  "total_rows": 9715,
+  "primary_count": 6240,
+  "cross_book_count": 215,
+  "incomplete_count": 3260,
+  "post_first_pitch_excluded": 0,
+  "bad_timestamp_order_excluded": 2503,
+  "primitive_dimensions": {
+    "NUMBER_MOVE_DIR": {
+      "formula": "close_selected_line - open_selected_line",
+      "classes": [
+        "OVERWARD (>0)",
+        "FLAT (==0)",
+        "UNDERWARD (<0)"
+      ]
+    },
+    "NUMBER_MOVE_SIZE": {
+      "formula": "abs(close_selected_line - open_selected_line)",
+      "classes": [
+        "ZERO (==0)",
+        "HALF_RUN (0 < x < 1.0)",
+        "ONE_PLUS (>=1.0)"
+      ]
+    },
+    "OVER_JUICE_DIR": {
+      "formula": "close_selected_over_price - open_selected_over_price",
+      "sign_convention": "American odds; more negative = more expensive = more action",
+      "classes": [
+        "TOWARD_OVER (diff<0, over became more expensive)",
+        "FLAT (==0)",
+        "TOWARD_UNDER (diff>0, over became cheaper)"
+      ]
+    },
+    "OVER_JUICE_SIZE": {
+      "formula": "abs(close_selected_over_price - open_selected_over_price)",
+      "classes": [
+        "ZERO",
+        "SMALL (<=P33)",
+        "MEDIUM (P33<x<=P67)",
+        "LARGE (>P67)"
+      ]
+    },
+    "UNDER_JUICE_DIR": {
+      "formula": "close_selected_under_price - open_selected_under_price",
+      "sign_convention": "American odds; more negative = more expensive = more action",
+      "classes": [
+        "TOWARD_UNDER (diff<0, under became more expensive)",
+        "FLAT (==0)",
+        "TOWARD_OVER (diff>0, under became cheaper)"
+      ]
+    },
+    "UNDER_JUICE_SIZE": {
+      "formula": "abs(close_selected_under_price - open_selected_under_price)",
+      "classes": [
+        "ZERO",
+        "SMALL (<=P33)",
+        "MEDIUM (P33<x<=P67)",
+        "LARGE (>P67)"
+      ]
+    },
+    "BOOK_QUALITY_CLASS": {
+      "classes": [
+        "SAME_BOOK_FANDUEL",
+        "SAME_BOOK_DRAFTKINGS",
+        "CROSS_BOOK",
+        "INCOMPLETE"
+      ]
+    },
+    "CLOSE_RULE_CLASS": {
+      "source_field": "close_rule_used",
+      "classes": [
+        "EVENING_1800ET",
+        "DAY_TMINUS60"
+      ]
+    }
+  },
+  "juice_size_cutpoints": {
+    "over_juice_p33": 6.0,
+    "over_juice_p67": 14.0,
+    "under_juice_p33": 6.0,
+    "under_juice_p67": 14.0
+  },
+  "juice_cutpoint_derivation_window": "PRIMARY_DESCRIPTIVE 2022-2025, non-zero moves only",
+  "archetype_names": [
+    "STATIC",
+    "JUICE_ONLY_OVER",
+    "JUICE_ONLY_UNDER",
+    "NUMBER_UP_SMALL",
+    "NUMBER_UP_LARGE",
+    "NUMBER_DOWN_SMALL",
+    "NUMBER_DOWN_LARGE"
+  ],
+  "archetype_definitions": {
+    "STATIC": "NUMBER_MOVE_DIR==FLAT AND OVER_JUICE_DIR==FLAT",
+    "JUICE_ONLY_OVER": "NUMBER_MOVE_DIR==FLAT AND OVER_JUICE_DIR==TOWARD_OVER",
+    "JUICE_ONLY_UNDER": "NUMBER_MOVE_DIR==FLAT AND OVER_JUICE_DIR==TOWARD_UNDER",
+    "NUMBER_UP_SMALL": "NUMBER_MOVE_DIR==OVERWARD AND NUMBER_MOVE_SIZE==HALF_RUN",
+    "NUMBER_UP_LARGE": "NUMBER_MOVE_DIR==OVERWARD AND NUMBER_MOVE_SIZE==ONE_PLUS",
+    "NUMBER_DOWN_SMALL": "NUMBER_MOVE_DIR==UNDERWARD AND NUMBER_MOVE_SIZE==HALF_RUN",
+    "NUMBER_DOWN_LARGE": "NUMBER_MOVE_DIR==UNDERWARD AND NUMBER_MOVE_SIZE==ONE_PLUS"
+  },
+  "overall_archetype_counts": {
+    "JUICE_ONLY_UNDER": 1487,
+    "NUMBER_DOWN_SMALL": 1402,
+    "JUICE_ONLY_OVER": 1361,
+    "NUMBER_UP_SMALL": 999,
+    "STATIC": 425,
+    "NUMBER_DOWN_LARGE": 320,
+    "NUMBER_UP_LARGE": 246
+  },
+  "archetype_counts_by_season": {
+    "2022": {
+      "JUICE_ONLY_UNDER": 350,
+      "NUMBER_DOWN_SMALL": 340,
+      "JUICE_ONLY_OVER": 263,
+      "NUMBER_UP_SMALL": 252,
+      "NUMBER_DOWN_LARGE": 75,
+      "NUMBER_UP_LARGE": 74,
+      "STATIC": 57
+    },
+    "2023": {
+      "JUICE_ONLY_OVER": 328,
+      "NUMBER_DOWN_SMALL": 325,
+      "JUICE_ONLY_UNDER": 319,
+      "NUMBER_UP_SMALL": 288,
+      "STATIC": 112,
+      "NUMBER_UP_LARGE": 56,
+      "NUMBER_DOWN_LARGE": 56
+    },
+    "2024": {
+      "JUICE_ONLY_UNDER": 400,
+      "NUMBER_DOWN_SMALL": 376,
+      "JUICE_ONLY_OVER": 331,
+      "NUMBER_UP_SMALL": 225,
+      "STATIC": 119,
+      "NUMBER_DOWN_LARGE": 84,
+      "NUMBER_UP_LARGE": 62
+    },
+    "2025": {
+      "JUICE_ONLY_OVER": 439,
+      "JUICE_ONLY_UNDER": 418,
+      "NUMBER_DOWN_SMALL": 361,
+      "NUMBER_UP_SMALL": 234,
+      "STATIC": 137,
+      "NUMBER_DOWN_LARGE": 105,
+      "NUMBER_UP_LARGE": 54
+    }
+  },
+  "archetype_counts_by_month": {
+    "3": {
+      "JUICE_ONLY_OVER": 33,
+      "JUICE_ONLY_UNDER": 19,
+      "NUMBER_DOWN_SMALL": 16,
+      "NUMBER_UP_SMALL": 15,
+      "STATIC": 13,
+      "NUMBER_DOWN_LARGE": 4,
+      "NUMBER_UP_LARGE": 1
+    },
+    "4": {
+      "JUICE_ONLY_UNDER": 245,
+      "NUMBER_DOWN_SMALL": 238,
+      "JUICE_ONLY_OVER": 225,
+      "NUMBER_UP_SMALL": 190,
+      "STATIC": 69,
+      "NUMBER_DOWN_LARGE": 47,
+      "NUMBER_UP_LARGE": 44
+    },
+    "5": {
+      "JUICE_ONLY_OVER": 244,
+      "NUMBER_DOWN_SMALL": 234,
+      "JUICE_ONLY_UNDER": 226,
+      "NUMBER_UP_SMALL": 201,
+      "STATIC": 70,
+      "NUMBER_DOWN_LARGE": 62,
+      "NUMBER_UP_LARGE": 47
+    },
+    "6": {
+      "JUICE_ONLY_UNDER": 247,
+      "NUMBER_DOWN_SMALL": 238,
+      "JUICE_ONLY_OVER": 189,
+      "NUMBER_UP_SMALL": 162,
+      "STATIC": 59,
+      "NUMBER_DOWN_LARGE": 57,
+      "NUMBER_UP_LARGE": 43
+    },
+    "7": {
+      "JUICE_ONLY_UNDER": 237,
+      "JUICE_ONLY_OVER": 213,
+      "NUMBER_DOWN_SMALL": 185,
+      "NUMBER_UP_SMALL": 144,
+      "STATIC": 80,
+      "NUMBER_DOWN_LARGE": 44,
+      "NUMBER_UP_LARGE": 40
+    },
+    "8": {
+      "JUICE_ONLY_UNDER": 250,
+      "JUICE_ONLY_OVER": 246,
+      "NUMBER_DOWN_SMALL": 239,
+      "NUMBER_UP_SMALL": 163,
+      "STATIC": 63,
+      "NUMBER_DOWN_LARGE": 58,
+      "NUMBER_UP_LARGE": 38
+    },
+    "9": {
+      "JUICE_ONLY_UNDER": 254,
+      "NUMBER_DOWN_SMALL": 239,
+      "JUICE_ONLY_OVER": 207,
+      "NUMBER_UP_SMALL": 118,
+      "STATIC": 69,
+      "NUMBER_DOWN_LARGE": 42,
+      "NUMBER_UP_LARGE": 29
+    },
+    "10": {
+      "NUMBER_DOWN_SMALL": 13,
+      "JUICE_ONLY_UNDER": 9,
+      "NUMBER_DOWN_LARGE": 6,
+      "NUMBER_UP_SMALL": 6,
+      "NUMBER_UP_LARGE": 4,
+      "JUICE_ONLY_OVER": 4,
+      "STATIC": 2
+    }
+  },
+  "stability_flags": [],
+  "taxonomy_verdict": "FROZEN",
+  "status_statement": "MPS remains RESERVED / DATA-BLOCKED. This taxonomy defines a descriptive market-path language only. No path states have been tested for predictive value, no signals have been tested, and no changes to the canonical spec have been made."
+}
