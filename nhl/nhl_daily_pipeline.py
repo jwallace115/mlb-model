@@ -1201,6 +1201,33 @@ def run_pipeline(target_date: date) -> None:
 # ---------------------------------------------------------------------------
 # Grade yesterday's live signals
 # ---------------------------------------------------------------------------
+def _sync_shadow_tracker(dec) -> None:
+    """Propagate grading results from decisions parquet into shadow tracker JSON."""
+    _tracker_path = NHL_DIR / "logs" / "nhl_shadow_aligned_2026.json"
+    if not _tracker_path.exists():
+        return
+    import json as _json_sync
+    _trk = _json_sync.loads(_tracker_path.read_text())
+    _graded_map = {}
+    for _, _r in dec[(dec["graded"] == 1) & (dec["split"] == "live")].iterrows():
+        _graded_map[int(_r["game_id"])] = {
+            "result": _r["result"],
+            "actual_total": int(_r["actual_total_goals_final"]) if pd.notna(_r.get("actual_total_goals_final")) else None,
+        }
+    _synced = 0
+    for _sig in _trk.get("signals", []):
+        _gid = _sig.get("game_id")
+        if _gid in _graded_map and _sig.get("result") in (None, "NONE", "UNGRADED"):
+            _sig["result"] = _graded_map[_gid]["result"]
+            _sig["actual_total"] = _graded_map[_gid]["actual_total"]
+            _synced += 1
+    if _synced:
+        _tracker_path.write_text(_json_sync.dumps(_trk, indent=2))
+        print(f"  Shadow tracker synced: {_synced} signal(s) updated with results.")
+    else:
+        print("  Shadow tracker: no new results to sync.")
+
+
 def grade_yesterday(yesterday: date) -> None:
     """
     Fetch yesterday's final scores from NHLe API and grade any live signals
@@ -1234,6 +1261,8 @@ def grade_yesterday(yesterday: date) -> None:
 
     if pending.empty:
         print(f"  Graded 0 new rows, skipped {skipped_count} already-graded rows.")
+        # Still sync shadow tracker even if no new grading needed
+        _sync_shadow_tracker(dec)
         return
 
     print(f"  {len(pending)} pending signal(s) to grade.")
@@ -1354,6 +1383,9 @@ def grade_yesterday(yesterday: date) -> None:
         print(f"  Decisions file updated.")
     else:
         print("  No new rows written — file unchanged.")
+
+    # ── Sync grading results into shadow tracker JSON ──────────────────────
+    _sync_shadow_tracker(dec)
 
 
 # ---------------------------------------------------------------------------
