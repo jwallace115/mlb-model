@@ -1,0 +1,317 @@
+{
+  "audit_date": "2026-04-12",
+  "audit_scope": "MLB Totals Context Engine V1 - MPS Data Availability Audit",
+  "mps_status": "RESERVED / DATA-BLOCKED",
+  "warehouse_track": {
+    "files_scanned": 477,
+    "snapshot_files_found": 0,
+    "key_files_checked": [
+      "sim/data/market_snapshots.parquet: 4855 rows, open_total all null, 2024-2025",
+      "mlb_sim/data/mlb_odds_closing_canonical.parquet: 11406 rows, closing only, 2022-2025",
+      "sim/data/mlb_historical_closing_lines.parquet: 3911 rows, closing only, 2022-2025",
+      "mlb_sim/data/line_snapshots_2026.json: 2026 forward-collection only",
+      "data/line_movement.csv: 2026 season only, no historical backfill"
+    ],
+    "verdict": "NO OPEN SNAPSHOT DATA FOUND for 2022-2025 MLB games"
+  },
+  "odds_api_track": {
+    "canonical_table": "research/recovery/mlb_totals_context_engine_v1/context_engine_raw_table.parquet",
+    "canonical_games_total": 9715,
+    "sample_size": 20,
+    "sample_season": 2024,
+    "random_state": 42,
+    "api_calls_made": 46,
+    "credits_before": 4363724,
+    "credits_after": 4363324,
+    "credits_consumed": 400,
+    "open_probe_utc": "13:00:00Z",
+    "open_probe_et": "09:00 ET",
+    "close_probe_utc_primary": "22:00:00Z",
+    "close_probe_et_primary": "18:00 ET",
+    "open_hit_rate": "20/20",
+    "open_hit_pct": 1.0,
+    "close_hit_rate_primary": "14/20",
+    "close_hit_pct_primary": 0.7,
+    "close_hit_rate_adaptive": "20/20",
+    "close_hit_pct_adaptive": 1.0,
+    "close_miss_reason": "6 afternoon games already started by 18:00 ET; recovered with 16:00 ET probe",
+    "same_book_parity_evening": "14/14",
+    "same_book_parity_rate": 1.0,
+    "best_bookmaker": "fanduel",
+    "equivalent_bookmakers": [
+      "draftkings",
+      "betonlineag",
+      "lowvig",
+      "betus"
+    ],
+    "timestamp_offset_minutes": -4,
+    "timestamp_note": "API returns snapshot at ~:55 of each hour; 4-minute delta is consistent API behavior"
+  },
+  "early_enough_assessment": {
+    "n_games_analyzed": 14,
+    "note": "Evening games only with confirmed pre-game close snapshot",
+    "total_drifts": [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.5,
+      0.0,
+      0.0,
+      0.5,
+      0.0,
+      0.0,
+      0.5,
+      0.0
+    ],
+    "median_total_drift": 0.0,
+    "mean_total_drift": 0.179,
+    "pct_zero_drift": 71.4,
+    "pct_drift_geq_half": 28.6,
+    "median_price_drift_points": 4.5,
+    "games_with_drift": [
+      {
+        "game": "2024-08-23 HOU@BAL",
+        "open": 9.0,
+        "close": 8.0,
+        "drift": 1.0
+      },
+      {
+        "game": "2024-09-10 CIN@STL",
+        "open": 8.0,
+        "close": 8.5,
+        "drift": 0.5
+      },
+      {
+        "game": "2024-07-30 COL@LAA",
+        "open": 8.5,
+        "close": 9.0,
+        "drift": 0.5
+      }
+    ],
+    "assessment": "EARLY-ENOUGH STATUS UNCERTAIN",
+    "interpretation": "09:00 ET probe captures 28.6% of games with detectable total drift (>=0.5). Price/juice drift present even in total-locked games. Earlier probe (07:00-08:00 ET) may increase detectability."
+  },
+  "coverage_projection": {
+    "evening_games_pct_approx": 70,
+    "afternoon_games_pct_approx": 30,
+    "overall_verdict": "POTENTIALLY VIABLE with adaptive probe time",
+    "coverage_risk": false
+  },
+  "full_backfill_estimate": {
+    "games_to_backfill": 9715,
+    "api_calls_per_game": 2,
+    "total_api_calls": 19430,
+    "credits_available": 4363324,
+    "credit_sufficient": true,
+    "credit_margin_factor": 224.6,
+    "estimated_runtime_hours": 2.7,
+    "recommended_open_probe": "13:00:00Z (09:00 ET)",
+    "recommended_close_probe_evening": "22:00:00Z (18:00 ET)",
+    "recommended_close_probe_afternoon": "20:00:00Z (16:00 ET) with game-time lookup",
+    "recommended_bookmaker": "fanduel",
+    "intermediate_snapshots": "OPTIONAL"
+  },
+  "sample_games": [
+    {
+      "game_date": "2024-08-06",
+      "away": "DET",
+      "home": "SEA",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 7.5,
+      "close_total_fd": 7.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-07-26",
+      "away": "MIN",
+      "home": "DET",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 7.5,
+      "close_total_fd": 7.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-08-23",
+      "away": "HOU",
+      "home": "BAL",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 9.0,
+      "close_total_fd": 8.0,
+      "total_drift": 1.0
+    },
+    {
+      "game_date": "2024-08-27",
+      "away": "TBR",
+      "home": "SEA",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 6.5,
+      "close_total_fd": 6.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-06-28",
+      "away": "SDP",
+      "home": "BOS",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 9.5,
+      "close_total_fd": 9.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-04-03",
+      "away": "TOR",
+      "home": "HOU",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 9.0,
+      "close_total_fd": 9.0,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-09-10",
+      "away": "CIN",
+      "home": "STL",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 8.0,
+      "close_total_fd": 8.5,
+      "total_drift": 0.5
+    },
+    {
+      "game_date": "2024-05-30",
+      "away": "CHC",
+      "home": "MIL",
+      "open_found": true,
+      "close_found": false,
+      "note": "afternoon game"
+    },
+    {
+      "game_date": "2024-06-02",
+      "away": "TEX",
+      "home": "MIA",
+      "open_found": true,
+      "close_found": false,
+      "note": "afternoon game"
+    },
+    {
+      "game_date": "2024-04-09",
+      "away": "CHC",
+      "home": "SDP",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 8.0,
+      "close_total_fd": 8.0,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-08-11",
+      "away": "TEX",
+      "home": "NYY",
+      "open_found": true,
+      "close_found": false,
+      "note": "afternoon game"
+    },
+    {
+      "game_date": "2024-08-13",
+      "away": "HOU",
+      "home": "TBR",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 7.5,
+      "close_total_fd": 7.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-05-14",
+      "away": "LAD",
+      "home": "SFG",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 8.5,
+      "close_total_fd": 8.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-04-19",
+      "away": "NYM",
+      "home": "LAD",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 8.5,
+      "close_total_fd": 8.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-08-24",
+      "away": "LAA",
+      "home": "TOR",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 8.5,
+      "close_total_fd": 8.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-05-12",
+      "away": "MIN",
+      "home": "TOR",
+      "open_found": true,
+      "close_found": false,
+      "note": "afternoon game"
+    },
+    {
+      "game_date": "2024-07-30",
+      "away": "COL",
+      "home": "LAA",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 8.5,
+      "close_total_fd": 9.0,
+      "total_drift": 0.5
+    },
+    {
+      "game_date": "2024-08-07",
+      "away": "CIN",
+      "home": "MIA",
+      "open_found": true,
+      "close_found": true,
+      "open_total_fd": 8.5,
+      "close_total_fd": 8.5,
+      "total_drift": 0.0
+    },
+    {
+      "game_date": "2024-09-29",
+      "away": "TBR",
+      "home": "BOS",
+      "open_found": true,
+      "close_found": false,
+      "note": "afternoon game"
+    },
+    {
+      "game_date": "2024-05-12",
+      "away": "CLE",
+      "home": "CHW",
+      "open_found": true,
+      "close_found": false,
+      "note": "afternoon game"
+    }
+  ],
+  "audit_verdict": "PARTIALLY VIABLE",
+  "primary_gap": "09:00 ET open probe shows 71% zero total-drift; price drift may be more actionable. Full backfill acquisition (19,430 API calls) is the blocking prerequisite.",
+  "warehouse_snapshot_files_found": 0,
+  "open_hit_rate": "20/20",
+  "close_hit_rate": "14/20 direct, 20/20 adaptive",
+  "same_book_parity_rate": "14/14 evening games (100%)",
+  "best_bookmaker": "fanduel",
+  "median_total_drift": 0.0,
+  "pct_zero_drift": 71.4,
+  "mps_activation_status": "MPS remains RESERVED / DATA-BLOCKED. This audit is a data availability finding only. No path states have been defined, no signals have been tested, and no changes to the canonical spec have been made."
+}
