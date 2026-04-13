@@ -892,6 +892,3 @@ print()
 print("7. MPS STATUS: RESERVED / DATA-BLOCKED — no change")
 print("   No path states defined. No signals tested. No spec changes.")
 print("=" * 60)
-
-PYEOF
-echo "Script created successfully"
