@@ -1,0 +1,6 @@
+candidate_time_et,candidate_time_utc,total_games,usable_n,usable_pct,fd_primary_n,dk_fallback_n,incomplete_n,same_book_parity_pct,same_fd_n,same_dk_n,median_hrs_before_game,after_game_start_n,same_book_fd_pairs,median_total_drift,pct_drift_ge_0_5,pct_drift_ge_1_0,pct_drift_zero,median_over_juice_drift,median_under_juice_drift,pct_zero_juice,path_agreement_n,path_agreement_pct,c1_coverage_pass,c2_parity_pass,c3_timing_pass,c4_movement_pass,c5_agreement_pass,all_criteria_pass
+07:00 ET,11:00 UTC,638,638,100.0,631,7,0,100.0,629,626,11.0,0,629,0.0,42.0,3.0,58.0,7.0,7.0,11.1,638,37.3,True,True,True,True,False,False
+08:00 ET,12:00 UTC,638,638,100.0,637,1,0,100.0,635,631,10.0,0,635,0.0,41.3,2.4,58.7,7.0,7.0,11.8,638,40.6,True,True,True,False,False,False
+09:00 ET,13:00 UTC,638,638,100.0,637,1,0,100.0,635,632,9.0,0,635,0.0,35.9,1.6,64.1,6.0,6.0,15.4,638,47.5,True,True,True,True,False,False
+10:00 ET,14:00 UTC,638,638,100.0,638,0,0,100.0,636,633,8.0,0,636,0.0,30.0,0.9,70.0,5.0,6.0,18.4,638,55.2,True,True,True,True,False,False
+12:00 ET,16:00 UTC,638,638,100.0,638,0,0,100.0,636,634,6.0,2,636,0.0,16.0,1.3,84.0,2.0,2.0,37.9,638,74.3,True,True,False,True,True,False

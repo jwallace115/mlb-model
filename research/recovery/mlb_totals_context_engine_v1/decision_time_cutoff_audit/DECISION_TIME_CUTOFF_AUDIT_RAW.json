@@ -1,0 +1,361 @@
+{
+  "audit_type": "DECISION_TIME_CUTOFF_AUDIT",
+  "mps_status": "RESERVED \u2014 MPS REMAINS BLOCKED \u2014 DATA ONLY",
+  "generated_at": "2026-04-13T11:41:02.362392+00:00",
+  "sample": {
+    "total": 800,
+    "comparable": 638,
+    "by_season": {
+      "2022": {
+        "total": 200,
+        "day": 52,
+        "evening": 148,
+        "comparable": 152
+      },
+      "2023": {
+        "total": 200,
+        "day": 57,
+        "evening": 143,
+        "comparable": 157
+      },
+      "2024": {
+        "total": 200,
+        "day": 67,
+        "evening": 133,
+        "comparable": 167
+      },
+      "2025": {
+        "total": 200,
+        "day": 62,
+        "evening": 138,
+        "comparable": 162
+      }
+    },
+    "open_late_count": 0,
+    "post_first_pitch_excluded": 162
+  },
+  "table_a_coverage": [
+    {
+      "Time": "07:00 ET",
+      "UTC": "11:00 UTC",
+      "Events": 638,
+      "Matched": 638,
+      "Usable": 638,
+      "Usable_pct": 100.0,
+      "FD_primary": 631,
+      "DK_fallback": 7,
+      "Incomplete": 0
+    },
+    {
+      "Time": "08:00 ET",
+      "UTC": "12:00 UTC",
+      "Events": 638,
+      "Matched": 638,
+      "Usable": 638,
+      "Usable_pct": 100.0,
+      "FD_primary": 637,
+      "DK_fallback": 1,
+      "Incomplete": 0
+    },
+    {
+      "Time": "09:00 ET",
+      "UTC": "13:00 UTC",
+      "Events": 638,
+      "Matched": 638,
+      "Usable": 638,
+      "Usable_pct": 100.0,
+      "FD_primary": 637,
+      "DK_fallback": 1,
+      "Incomplete": 0
+    },
+    {
+      "Time": "10:00 ET",
+      "UTC": "14:00 UTC",
+      "Events": 638,
+      "Matched": 638,
+      "Usable": 638,
+      "Usable_pct": 100.0,
+      "FD_primary": 638,
+      "DK_fallback": 0,
+      "Incomplete": 0
+    },
+    {
+      "Time": "12:00 ET",
+      "UTC": "16:00 UTC",
+      "Events": 638,
+      "Matched": 638,
+      "Usable": 638,
+      "Usable_pct": 100.0,
+      "FD_primary": 638,
+      "DK_fallback": 0,
+      "Incomplete": 0
+    }
+  ],
+  "table_b_parity": [
+    {
+      "Time": "07:00 ET",
+      "N_usable": 638,
+      "Same_FD": 629,
+      "Same_DK": 626,
+      "Same_any": 638,
+      "Parity_pct": 100.0,
+      "Cross_book": 0,
+      "Incomplete": 0
+    },
+    {
+      "Time": "08:00 ET",
+      "N_usable": 638,
+      "Same_FD": 635,
+      "Same_DK": 631,
+      "Same_any": 638,
+      "Parity_pct": 100.0,
+      "Cross_book": 0,
+      "Incomplete": 0
+    },
+    {
+      "Time": "09:00 ET",
+      "N_usable": 638,
+      "Same_FD": 635,
+      "Same_DK": 632,
+      "Same_any": 638,
+      "Parity_pct": 100.0,
+      "Cross_book": 0,
+      "Incomplete": 0
+    },
+    {
+      "Time": "10:00 ET",
+      "N_usable": 638,
+      "Same_FD": 636,
+      "Same_DK": 633,
+      "Same_any": 638,
+      "Parity_pct": 100.0,
+      "Cross_book": 0,
+      "Incomplete": 0
+    },
+    {
+      "Time": "12:00 ET",
+      "N_usable": 638,
+      "Same_FD": 636,
+      "Same_DK": 634,
+      "Same_any": 638,
+      "Parity_pct": 100.0,
+      "Cross_book": 0,
+      "Incomplete": 0
+    }
+  ],
+  "table_c_timing": [
+    {
+      "Time": "07:00 ET",
+      "Median_hrs_before": 11.0,
+      "P10_hrs_before": 6.0,
+      "P90_hrs_before": 12.0,
+      "After_game_start": 0,
+      "Median_min_before": 660.0,
+      "P90_min_before": 720.0
+    },
+    {
+      "Time": "08:00 ET",
+      "Median_hrs_before": 10.0,
+      "P10_hrs_before": 5.0,
+      "P90_hrs_before": 11.0,
+      "After_game_start": 0,
+      "Median_min_before": 600.0,
+      "P90_min_before": 660.0
+    },
+    {
+      "Time": "09:00 ET",
+      "Median_hrs_before": 9.0,
+      "P10_hrs_before": 4.0,
+      "P90_hrs_before": 10.0,
+      "After_game_start": 0,
+      "Median_min_before": 540.0,
+      "P90_min_before": 600.0
+    },
+    {
+      "Time": "10:00 ET",
+      "Median_hrs_before": 8.0,
+      "P10_hrs_before": 3.0,
+      "P90_hrs_before": 9.0,
+      "After_game_start": 0,
+      "Median_min_before": 480.0,
+      "P90_min_before": 540.0
+    },
+    {
+      "Time": "12:00 ET",
+      "Median_hrs_before": 6.0,
+      "P10_hrs_before": 1.0,
+      "P90_hrs_before": 7.0,
+      "After_game_start": 2,
+      "Median_min_before": 360.0,
+      "P90_min_before": 420.0
+    }
+  ],
+  "table_d_line_drift": [
+    {
+      "Time": "07:00 ET",
+      "N_pairs": 629,
+      "Median_drift": 0.0,
+      "Pct_ge_0_5": 42.0,
+      "Pct_ge_1_0": 3.0,
+      "Pct_zero": 58.0
+    },
+    {
+      "Time": "08:00 ET",
+      "N_pairs": 635,
+      "Median_drift": 0.0,
+      "Pct_ge_0_5": 41.3,
+      "Pct_ge_1_0": 2.4,
+      "Pct_zero": 58.7
+    },
+    {
+      "Time": "09:00 ET",
+      "N_pairs": 635,
+      "Median_drift": 0.0,
+      "Pct_ge_0_5": 35.9,
+      "Pct_ge_1_0": 1.6,
+      "Pct_zero": 64.1
+    },
+    {
+      "Time": "10:00 ET",
+      "N_pairs": 636,
+      "Median_drift": 0.0,
+      "Pct_ge_0_5": 30.0,
+      "Pct_ge_1_0": 0.9,
+      "Pct_zero": 70.0
+    },
+    {
+      "Time": "12:00 ET",
+      "N_pairs": 636,
+      "Median_drift": 0.0,
+      "Pct_ge_0_5": 16.0,
+      "Pct_ge_1_0": 1.3,
+      "Pct_zero": 84.0
+    }
+  ],
+  "table_e_juice_drift": [
+    {
+      "Time": "07:00 ET",
+      "N_pairs": 629,
+      "Median_over_drift": 7.0,
+      "Median_under_drift": 7.0,
+      "Pct_zero_juice": 11.1
+    },
+    {
+      "Time": "08:00 ET",
+      "N_pairs": 635,
+      "Median_over_drift": 7.0,
+      "Median_under_drift": 7.0,
+      "Pct_zero_juice": 11.8
+    },
+    {
+      "Time": "09:00 ET",
+      "N_pairs": 635,
+      "Median_over_drift": 6.0,
+      "Median_under_drift": 6.0,
+      "Pct_zero_juice": 15.4
+    },
+    {
+      "Time": "10:00 ET",
+      "N_pairs": 636,
+      "Median_over_drift": 5.0,
+      "Median_under_drift": 6.0,
+      "Pct_zero_juice": 18.4
+    },
+    {
+      "Time": "12:00 ET",
+      "N_pairs": 636,
+      "Median_over_drift": 2.0,
+      "Median_under_drift": 2.0,
+      "Pct_zero_juice": 37.9
+    }
+  ],
+  "table_f_path_agreement": [
+    {
+      "Time": "07:00 ET",
+      "N": 638,
+      "Agreement_pct": 37.3,
+      "Stable_partial": 424,
+      "Stable_full": 155
+    },
+    {
+      "Time": "08:00 ET",
+      "N": 638,
+      "Agreement_pct": 40.6,
+      "Stable_partial": 400,
+      "Stable_full": 155
+    },
+    {
+      "Time": "09:00 ET",
+      "N": 638,
+      "Agreement_pct": 47.5,
+      "Stable_partial": 320,
+      "Stable_full": 155
+    },
+    {
+      "Time": "10:00 ET",
+      "N": 638,
+      "Agreement_pct": 55.2,
+      "Stable_partial": 262,
+      "Stable_full": 155
+    },
+    {
+      "Time": "12:00 ET",
+      "N": 638,
+      "Agreement_pct": 74.3,
+      "Stable_partial": 209,
+      "Stable_full": 155
+    }
+  ],
+  "criteria_evaluation": [
+    {
+      "Time": "07:00 ET",
+      "C1_coverage": "100.0% PASS",
+      "C2_parity": "100.0% PASS",
+      "C3_timing": "PASS (0 after-game)",
+      "C4_movement": "PASS (BASELINE)",
+      "C5_agreement": "37.3% FAIL",
+      "ALL_PASS": false
+    },
+    {
+      "Time": "08:00 ET",
+      "C1_coverage": "100.0% PASS",
+      "C2_parity": "100.0% PASS",
+      "C3_timing": "PASS (0 after-game)",
+      "C4_movement": "FAIL (no reduction)",
+      "C5_agreement": "40.6% FAIL",
+      "ALL_PASS": false
+    },
+    {
+      "Time": "09:00 ET",
+      "C1_coverage": "100.0% PASS",
+      "C2_parity": "100.0% PASS",
+      "C3_timing": "PASS (0 after-game)",
+      "C4_movement": "PASS (pct05_reduced_6.1\u22655pp)",
+      "C5_agreement": "47.5% FAIL",
+      "ALL_PASS": false
+    },
+    {
+      "Time": "10:00 ET",
+      "C1_coverage": "100.0% PASS",
+      "C2_parity": "100.0% PASS",
+      "C3_timing": "PASS (0 after-game)",
+      "C4_movement": "PASS (pct05_reduced_12.0\u22655pp)",
+      "C5_agreement": "55.2% FAIL",
+      "ALL_PASS": false
+    },
+    {
+      "Time": "12:00 ET",
+      "C1_coverage": "100.0% PASS",
+      "C2_parity": "100.0% PASS",
+      "C3_timing": "FAIL (2 after-game)",
+      "C4_movement": "PASS (pct05_reduced_26.0\u22655pp; over_drift_reduced_5.0\u22653; under_drift_reduced_5.0\u22653)",
+      "C5_agreement": "74.3% PASS",
+      "ALL_PASS": false
+    }
+  ],
+  "verdict": "NO CLEAR DECISION CUTOFF YET \u2014 Best compromise: 12:00 ET (4/5 criteria)",
+  "verdict_reason": "No time satisfies all 5 criteria; 12:00 ET passes most",
+  "api_calls_this_session": 2060,
+  "credits_remaining": "4138734",
+  "disclaimer": "MPS remains RESERVED / DATA-BLOCKED. This audit selects a decision-time cutoff only. No signals have been tested, no predictive value has been claimed, and no changes to the canonical spec have been made."
+}
