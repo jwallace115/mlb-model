@@ -310,3 +310,54 @@
 2026-04-13 05:58:34,159 [INFO]   Progress: 6100/9715 games | calls=12200 | credits_remaining=4235791 | rate=1.17 calls/s | ETA=103min
 2026-04-13 05:58:35,428 [INFO]   Checkpoint saved at 6100 games
 2026-04-13 05:59:22,535 [INFO]   Progress: 6125/9715 games | calls=12250 | credits_remaining=4235291 | rate=1.17 calls/s | ETA=102min
+2026-04-13 06:00:15,565 [WARNING]   Game 745728 [2024-07-03] CLOSE error: HTTP_503
+2026-04-13 06:00:25,970 [INFO]   Progress: 6150/9715 games | calls=12300 | credits_remaining=4234795 | rate=1.17 calls/s | ETA=102min
+2026-04-13 06:01:15,981 [INFO]   Progress: 6175/9715 games | calls=12350 | credits_remaining=4234259 | rate=1.17 calls/s | ETA=101min
+2026-04-13 06:01:59,262 [INFO]   Progress: 6200/9715 games | calls=12400 | credits_remaining=4233759 | rate=1.17 calls/s | ETA=100min
+2026-04-13 06:02:00,592 [INFO]   Checkpoint saved at 6200 games
+2026-04-13 06:02:43,608 [INFO]   Progress: 6225/9715 games | calls=12450 | credits_remaining=4233259 | rate=1.17 calls/s | ETA=100min
+2026-04-13 06:03:27,625 [INFO]   Progress: 6250/9715 games | calls=12500 | credits_remaining=4232759 | rate=1.17 calls/s | ETA=99min
+2026-04-13 06:04:10,866 [INFO]   Progress: 6275/9715 games | calls=12550 | credits_remaining=4232259 | rate=1.17 calls/s | ETA=98min
+2026-04-13 06:04:56,158 [INFO]   Progress: 6300/9715 games | calls=12600 | credits_remaining=4231759 | rate=1.17 calls/s | ETA=98min
+2026-04-13 06:04:57,534 [INFO]   Checkpoint saved at 6300 games
+2026-04-13 06:05:43,204 [INFO]   Progress: 6325/9715 games | calls=12650 | credits_remaining=4231256 | rate=1.17 calls/s | ETA=97min
+2026-04-13 06:06:28,123 [INFO]   Progress: 6350/9715 games | calls=12700 | credits_remaining=4230756 | rate=1.17 calls/s | ETA=96min
+2026-04-13 06:07:11,809 [INFO]   Progress: 6375/9715 games | calls=12750 | credits_remaining=4230256 | rate=1.17 calls/s | ETA=95min
+2026-04-13 06:07:58,189 [INFO]   Progress: 6400/9715 games | calls=12800 | credits_remaining=4229756 | rate=1.17 calls/s | ETA=95min
+2026-04-13 06:07:59,476 [INFO]   Checkpoint saved at 6400 games
+2026-04-13 06:08:45,099 [INFO]   Progress: 6425/9715 games | calls=12850 | credits_remaining=4229256 | rate=1.17 calls/s | ETA=94min
+2026-04-13 06:09:29,764 [INFO]   Progress: 6450/9715 games | calls=12900 | credits_remaining=4228756 | rate=1.17 calls/s | ETA=93min
+2026-04-13 06:10:14,811 [INFO]   Progress: 6475/9715 games | calls=12950 | credits_remaining=4228256 | rate=1.17 calls/s | ETA=93min
+2026-04-13 06:10:58,511 [INFO]   Progress: 6500/9715 games | calls=13000 | credits_remaining=4227756 | rate=1.17 calls/s | ETA=92min
+2026-04-13 06:10:59,921 [INFO]   Checkpoint saved at 6500 games
+2026-04-13 06:11:45,098 [INFO]   Progress: 6525/9715 games | calls=13050 | credits_remaining=4227256 | rate=1.17 calls/s | ETA=91min
+2026-04-13 06:12:28,234 [INFO]   Progress: 6550/9715 games | calls=13100 | credits_remaining=4226756 | rate=1.17 calls/s | ETA=91min
+2026-04-13 06:13:14,053 [INFO]   Progress: 6575/9715 games | calls=13150 | credits_remaining=4226256 | rate=1.16 calls/s | ETA=90min
+2026-04-13 06:13:58,438 [INFO]   Progress: 6600/9715 games | calls=13200 | credits_remaining=4225756 | rate=1.16 calls/s | ETA=89min
+2026-04-13 06:13:59,764 [INFO]   Checkpoint saved at 6600 games
+2026-04-13 06:14:46,619 [INFO]   Progress: 6625/9715 games | calls=13250 | credits_remaining=4225256 | rate=1.16 calls/s | ETA=88min
+2026-04-13 06:15:31,782 [INFO]   Progress: 6650/9715 games | calls=13300 | credits_remaining=4224756 | rate=1.16 calls/s | ETA=88min
+2026-04-13 06:16:17,932 [INFO]   Progress: 6675/9715 games | calls=13350 | credits_remaining=4224256 | rate=1.16 calls/s | ETA=87min
+2026-04-13 06:17:02,036 [INFO]   Progress: 6700/9715 games | calls=13400 | credits_remaining=4223756 | rate=1.16 calls/s | ETA=86min
+2026-04-13 06:17:03,507 [INFO]   Checkpoint saved at 6700 games
+2026-04-13 06:17:48,809 [INFO]   Progress: 6725/9715 games | calls=13450 | credits_remaining=4223256 | rate=1.16 calls/s | ETA=86min
+2026-04-13 06:18:34,240 [INFO]   Progress: 6750/9715 games | calls=13500 | credits_remaining=4222756 | rate=1.16 calls/s | ETA=85min
+2026-04-13 06:19:18,354 [INFO]   Progress: 6775/9715 games | calls=13550 | credits_remaining=4222256 | rate=1.16 calls/s | ETA=84min
+2026-04-13 06:20:05,323 [INFO]   Progress: 6800/9715 games | calls=13600 | credits_remaining=4221756 | rate=1.16 calls/s | ETA=84min
+2026-04-13 06:20:06,829 [INFO]   Checkpoint saved at 6800 games
+2026-04-13 06:20:51,615 [INFO]   Progress: 6825/9715 games | calls=13650 | credits_remaining=4221256 | rate=1.16 calls/s | ETA=83min
+2026-04-13 06:21:36,973 [INFO]   Progress: 6850/9715 games | calls=13700 | credits_remaining=4220756 | rate=1.16 calls/s | ETA=82min
+2026-04-13 06:22:21,537 [INFO]   Progress: 6875/9715 games | calls=13750 | credits_remaining=4220256 | rate=1.16 calls/s | ETA=82min
+2026-04-13 06:23:08,882 [INFO]   Progress: 6900/9715 games | calls=13800 | credits_remaining=4219756 | rate=1.16 calls/s | ETA=81min
+2026-04-13 06:23:10,176 [INFO]   Checkpoint saved at 6900 games
+2026-04-13 06:23:54,919 [INFO]   Progress: 6925/9715 games | calls=13850 | credits_remaining=4219256 | rate=1.16 calls/s | ETA=80min
+2026-04-13 06:24:40,070 [INFO]   Progress: 6950/9715 games | calls=13900 | credits_remaining=4218756 | rate=1.16 calls/s | ETA=79min
+2026-04-13 06:25:24,616 [INFO]   Progress: 6975/9715 games | calls=13950 | credits_remaining=4218256 | rate=1.16 calls/s | ETA=79min
+2026-04-13 06:26:10,491 [INFO]   Progress: 7000/9715 games | calls=14000 | credits_remaining=4217756 | rate=1.16 calls/s | ETA=78min
+2026-04-13 06:26:11,920 [INFO]   Checkpoint saved at 7000 games
+2026-04-13 06:26:55,416 [INFO]   Progress: 7025/9715 games | calls=14050 | credits_remaining=4217256 | rate=1.16 calls/s | ETA=77min
+2026-04-13 06:27:41,413 [INFO]   Progress: 7050/9715 games | calls=14100 | credits_remaining=4216756 | rate=1.16 calls/s | ETA=77min
+2026-04-13 06:28:26,982 [INFO]   Progress: 7075/9715 games | calls=14150 | credits_remaining=4216256 | rate=1.16 calls/s | ETA=76min
+2026-04-13 06:29:13,077 [INFO]   Progress: 7100/9715 games | calls=14200 | credits_remaining=4215756 | rate=1.16 calls/s | ETA=75min
+2026-04-13 06:29:14,528 [INFO]   Checkpoint saved at 7100 games
+2026-04-13 06:29:59,594 [INFO]   Progress: 7125/9715 games | calls=14250 | credits_remaining=4215256 | rate=1.16 calls/s | ETA=74min

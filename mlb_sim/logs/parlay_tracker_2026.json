@@ -234,6 +234,32 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-04-13",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "TEX@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "LAA@NYY",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "NYM@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {
