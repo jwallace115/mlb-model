@@ -1,5 +1,5 @@
-label,N,wins,losses,win_pct,avg_price,roi,clv
-Discovery 2023,0,0,0,,,,
-Validation 2024,0,0,0,,,,
-OOS 2025,0,0,0,,,,
-ALL,0,0,0,,,,
+label,N,wins,losses,win_pct,avg_price,roi,clv,avg_implied
+Discovery 2023,204,125,79,0.6127,-113.8,14.87,0.0808,0.532
+Validation 2024,90,52,38,0.5778,-112.6,8.92,0.0484,0.5294
+OOS 2025,84,51,33,0.6071,-113.1,14.26,0.0767,0.5304
+ALL,378,228,150,0.6032,-113.4,13.32,0.0722,0.531
