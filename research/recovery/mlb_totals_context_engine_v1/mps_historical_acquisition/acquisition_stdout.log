@@ -1,0 +1,66 @@
+BUILD ONLY — MPS REMAINS BLOCKED
+============================================================
+2026-04-13 03:05:02,628 [INFO] API key loaded: 878a2871...
+BUILD ONLY — MPS REMAINS BLOCKED
+2026-04-13 03:05:02,629 [INFO] Building game manifest...
+2026-04-13 03:05:02,751 [INFO] Loaded context table: 9715 games, seasons [2022, 2023, 2024, 2025]
+2026-04-13 03:05:03,755 [INFO] Manifest saved: 9715 games → /root/mlb-model/research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/mps_source_game_manifest_2022_2025.csv
+
+Manifest summary:
+  Total games: 9715
+  By season: {2022: 2430, 2023: 2430, 2024: 2427, 2025: 2428}
+  Day games: 3697 (38.1%)
+  Evening games: 6018 (61.9%)
+2026-04-13 03:05:03,760 [INFO] Game universe: 9715 games, seasons [2022, 2023, 2024, 2025]
+2026-04-13 03:05:03,763 [INFO] Games remaining: 9715 / 9715
+/root/mlb-model/research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/build_mps_snapshots.py:475: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  credits_log.append({"ts": datetime.utcnow().isoformat(),
+/root/mlb-model/research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/build_mps_snapshots.py:503: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  credits_log.append({"ts": datetime.utcnow().isoformat(),
+2026-04-13 03:05:42,727 [INFO]   Progress: 25/9715 games | calls=50 | credits_remaining=4357291 | rate=1.28 calls/s | ETA=252min
+2026-04-13 03:06:21,679 [INFO]   Progress: 50/9715 games | calls=100 | credits_remaining=4356791 | rate=1.28 calls/s | ETA=251min
+2026-04-13 03:07:00,107 [INFO]   Progress: 75/9715 games | calls=150 | credits_remaining=4356291 | rate=1.29 calls/s | ETA=249min
+2026-04-13 03:07:39,447 [INFO]   Progress: 100/9715 games | calls=200 | credits_remaining=4355791 | rate=1.28 calls/s | ETA=249min
+2026-04-13 03:07:39,470 [INFO]   Checkpoint saved at 100 games
+2026-04-13 03:08:18,601 [INFO]   Progress: 125/9715 games | calls=250 | credits_remaining=4355291 | rate=1.28 calls/s | ETA=249min
+2026-04-13 03:08:56,827 [INFO]   Progress: 150/9715 games | calls=300 | credits_remaining=4354791 | rate=1.29 calls/s | ETA=248min
+2026-04-13 03:09:37,373 [INFO]   Progress: 175/9715 games | calls=350 | credits_remaining=4354291 | rate=1.28 calls/s | ETA=249min
+2026-04-13 03:10:20,286 [INFO]   Progress: 200/9715 games | calls=400 | credits_remaining=4353791 | rate=1.26 calls/s | ETA=251min
+2026-04-13 03:10:20,323 [INFO]   Checkpoint saved at 200 games
+2026-04-13 03:10:59,887 [INFO]   Progress: 225/9715 games | calls=450 | credits_remaining=4353291 | rate=1.26 calls/s | ETA=250min
+2026-04-13 03:11:38,894 [INFO]   Progress: 250/9715 games | calls=500 | credits_remaining=4352791 | rate=1.27 calls/s | ETA=249min
+2026-04-13 03:12:17,515 [INFO]   Progress: 275/9715 games | calls=550 | credits_remaining=4352291 | rate=1.27 calls/s | ETA=248min
+2026-04-13 03:12:56,414 [INFO]   Progress: 300/9715 games | calls=600 | credits_remaining=4351791 | rate=1.27 calls/s | ETA=247min
+2026-04-13 03:12:56,481 [INFO]   Checkpoint saved at 300 games
+2026-04-13 03:13:35,352 [INFO]   Progress: 325/9715 games | calls=650 | credits_remaining=4351291 | rate=1.27 calls/s | ETA=246min
+2026-04-13 03:14:13,802 [INFO]   Progress: 350/9715 games | calls=700 | credits_remaining=4350791 | rate=1.27 calls/s | ETA=245min
+2026-04-13 03:14:51,968 [INFO]   Progress: 375/9715 games | calls=750 | credits_remaining=4350291 | rate=1.28 calls/s | ETA=244min
+2026-04-13 03:15:32,859 [INFO]   Progress: 400/9715 games | calls=800 | credits_remaining=4349791 | rate=1.27 calls/s | ETA=244min
+2026-04-13 03:15:32,940 [INFO]   Checkpoint saved at 400 games
+2026-04-13 03:16:11,495 [INFO]   Progress: 425/9715 games | calls=850 | credits_remaining=4349291 | rate=1.27 calls/s | ETA=243min
+2026-04-13 03:16:50,103 [INFO]   Progress: 450/9715 games | calls=900 | credits_remaining=4348791 | rate=1.27 calls/s | ETA=242min
+2026-04-13 03:17:28,576 [INFO]   Progress: 475/9715 games | calls=950 | credits_remaining=4348291 | rate=1.28 calls/s | ETA=241min
+2026-04-13 03:18:08,941 [INFO]   Progress: 500/9715 games | calls=1000 | credits_remaining=4347791 | rate=1.27 calls/s | ETA=241min
+2026-04-13 03:18:09,052 [INFO]   Checkpoint saved at 500 games
+2026-04-13 03:18:47,810 [INFO]   Progress: 525/9715 games | calls=1050 | credits_remaining=4347291 | rate=1.27 calls/s | ETA=240min
+2026-04-13 03:19:26,986 [INFO]   Progress: 550/9715 games | calls=1100 | credits_remaining=4346791 | rate=1.27 calls/s | ETA=240min
+2026-04-13 03:20:05,361 [INFO]   Progress: 575/9715 games | calls=1150 | credits_remaining=4346291 | rate=1.28 calls/s | ETA=239min
+2026-04-13 03:20:43,881 [INFO]   Progress: 600/9715 games | calls=1200 | credits_remaining=4345791 | rate=1.28 calls/s | ETA=238min
+2026-04-13 03:20:43,992 [INFO]   Checkpoint saved at 600 games
+2026-04-13 03:21:22,679 [INFO]   Progress: 625/9715 games | calls=1250 | credits_remaining=4345291 | rate=1.28 calls/s | ETA=237min
+2026-04-13 03:22:01,989 [INFO]   Progress: 650/9715 games | calls=1300 | credits_remaining=4344791 | rate=1.28 calls/s | ETA=237min
+2026-04-13 03:22:40,199 [INFO]   Progress: 675/9715 games | calls=1350 | credits_remaining=4344291 | rate=1.28 calls/s | ETA=236min
+2026-04-13 03:23:19,506 [INFO]   Progress: 700/9715 games | calls=1400 | credits_remaining=4343791 | rate=1.28 calls/s | ETA=235min
+2026-04-13 03:23:19,657 [INFO]   Checkpoint saved at 700 games
+2026-04-13 03:23:57,752 [INFO]   Progress: 725/9715 games | calls=1450 | credits_remaining=4343291 | rate=1.28 calls/s | ETA=234min
+2026-04-13 03:24:37,093 [INFO]   Progress: 750/9715 games | calls=1500 | credits_remaining=4342791 | rate=1.28 calls/s | ETA=234min
+2026-04-13 03:25:15,664 [INFO]   Progress: 775/9715 games | calls=1550 | credits_remaining=4342291 | rate=1.28 calls/s | ETA=233min
+2026-04-13 03:25:55,111 [INFO]   Progress: 800/9715 games | calls=1600 | credits_remaining=4341791 | rate=1.28 calls/s | ETA=232min
+2026-04-13 03:25:55,264 [INFO]   Checkpoint saved at 800 games
+2026-04-13 03:26:34,279 [INFO]   Progress: 825/9715 games | calls=1650 | credits_remaining=4341291 | rate=1.28 calls/s | ETA=232min
+2026-04-13 03:27:13,218 [INFO]   Progress: 850/9715 games | calls=1700 | credits_remaining=4340791 | rate=1.28 calls/s | ETA=231min
+2026-04-13 03:27:52,890 [INFO]   Progress: 875/9715 games | calls=1750 | credits_remaining=4340291 | rate=1.28 calls/s | ETA=231min
+2026-04-13 03:28:32,358 [INFO]   Progress: 900/9715 games | calls=1800 | credits_remaining=4339791 | rate=1.28 calls/s | ETA=230min
+2026-04-13 03:28:32,550 [INFO]   Checkpoint saved at 900 games
+2026-04-13 03:29:11,700 [INFO]   Progress: 925/9715 games | calls=1850 | credits_remaining=4339291 | rate=1.28 calls/s | ETA=229min
+2026-04-13 03:29:50,592 [INFO]   Progress: 950/9715 games | calls=1900 | credits_remaining=4338791 | rate=1.28 calls/s | ETA=229min
