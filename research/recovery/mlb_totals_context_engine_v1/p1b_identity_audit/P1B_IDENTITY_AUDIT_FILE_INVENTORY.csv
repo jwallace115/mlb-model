@@ -1,0 +1,19 @@
+path,purpose,relevance
+mlb/pipeline/mlb_totals_p1b_shadow.py,Primary P1B implementation — signal generation grading summary,AUTHORITATIVE
+mlb/logs/mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json,Live signal tracker for 2026 season — stores all qualifying signals and grades,AUTHORITATIVE
+mlb_sim_f5/data/f5_lines_2026.parquet,F5 total lines used for ratio gate — one canonical row per game,GATE_INPUT
+mlb_sim/data/line_snapshots_2026.json,Full-game line snapshots by label (OPEN/2AM/5PM/CLOSING) — primary over_price source,GATE_INPUT
+data/cache/odds_full_{date}.json,Fallback Odds API cache — used only when line_snapshots lacks data for the date,GATE_INPUT_FALLBACK
+modules/weather.py,Weather fetch module — fetch_weather() called per game for temperature,TEMPERATURE_SOURCE
+dashboard.py,Dashboard UI — reads P1B tracker for display only; no write access,DISPLAY_ONLY
+research/recovery/mlb_totals_p1b_shadow_deploy/MLB_TOTALS_P1B_SHADOW_EXEC_SUMMARY.md,Deployment exec summary for P1B shadow,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1b_shadow_deploy/phase0_frozen_spec_lock.md,Frozen spec lock for P1B deployment,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1b_coldwarm_child/PHASE0_THESIS.md,Original P1B thesis document,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1b_coldwarm_child/MLB_TOTALS_P1B_EXEC_SUMMARY.md,P1B executive summary from coldwarm child project,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1b_coldwarm_child/build_p1b.py,Build script for P1B signal from coldwarm child project,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1_fg_f5_path_engine/MLB_TOTALS_P1_EXEC_SUMMARY.md,Parent P1 engine exec summary,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1_fg_f5_path_engine/run_full_pipeline.py,Parent P1 engine pipeline runner,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1_hardening/hardening.py,P1 hardening phase script,RESEARCH_HISTORY
+research/recovery/mlb_totals_p1_hardening/MLB_TOTALS_P1_HARDENING_EXEC_SUMMARY.md,P1 hardening exec summary,RESEARCH_HISTORY
+research/recovery/mlb_totals_context_engine_v1/intraday_decision_panel_v1/mlb_intraday_decision_panel_v1_2022_2025.parquet,Intraday decision panel — has DT over_price fields but NO temperature — 9715 rows,DT_PANEL
+research/recovery/mlb_totals_context_engine_v1/CONTEXT_ENGINE_V1_OUTPUT_REGISTRY.json,Context engine output registry — describes BRE ESP LSP outputs; no P1B direct reference,CONTEXT_REFERENCE

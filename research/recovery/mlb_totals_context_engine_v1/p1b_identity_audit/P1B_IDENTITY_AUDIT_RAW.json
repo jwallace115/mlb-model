@@ -1,0 +1,165 @@
+{
+  "audit_metadata": {
+    "audit_date": "2026-04-13",
+    "object_id": "mlb_p1b_coldwarm_earlyheavy_over_v1",
+    "ruleset_version": "frozen_v1",
+    "status": "SHADOW_ONLY",
+    "status_statement": "P1B remains SHADOW ONLY. This audit documents the current implementation and its identity implications only. No signals have been tested, no pipeline changes have been made, and no decision-time variants have been frozen."
+  },
+  "implementation_footprint": {
+    "main_script": "mlb/pipeline/mlb_totals_p1b_shadow.py",
+    "main_script_bytes": 18498,
+    "main_script_last_modified": "2026-04-13T01:08:00",
+    "tracker_path": "mlb/logs/mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json",
+    "tracker_signals_count": 0,
+    "tracker_note": "Zero signals \u2014 season window is June-September; April is outside window",
+    "cron_signal_generation": "20 15 * * * (15:20 UTC = 11:20 AM ET)",
+    "cron_grading": "10 6 * * * (06:10 UTC = 2:10 AM ET)",
+    "dashboard_reference": "dashboard.py lines 412-427 \u2014 read-only display",
+    "research_files": [
+      "research/recovery/mlb_totals_p1b_shadow_deploy/",
+      "research/recovery/mlb_totals_p1b_coldwarm_child/",
+      "research/recovery/mlb_totals_p1_fg_f5_path_engine/",
+      "research/recovery/mlb_totals_p1_hardening/"
+    ]
+  },
+  "frozen_rules": {
+    "object_id": "mlb_p1b_coldwarm_earlyheavy_over_v1",
+    "month_window": {
+      "min": 6,
+      "max": 9,
+      "label": "June-September"
+    },
+    "park_set": {
+      "type": "cold_climate_outdoor",
+      "count": 18,
+      "teams": [
+        "BAL",
+        "BOS",
+        "CHC",
+        "CHW",
+        "CIN",
+        "CLE",
+        "COL",
+        "DET",
+        "KCR",
+        "MIN",
+        "NYM",
+        "NYY",
+        "PHI",
+        "PIT",
+        "SEA",
+        "SFG",
+        "STL",
+        "WSN"
+      ]
+    },
+    "temp_threshold_f": 75.0,
+    "f5_ratio_threshold": 0.5625,
+    "f5_ratio_direction": "f5_total / fg_total > 0.5625",
+    "over_price_max": -105,
+    "side": "OVER"
+  },
+  "temperature_identity": {
+    "field_name": "forecast_temp_f",
+    "source_module": "modules/weather.py",
+    "source_function": "fetch_weather(home_team, game_time_et)",
+    "api": "Open-Meteo hourly forecast (api.open-meteo.com/v1/forecast)",
+    "fetch_timing": "live at script run time (11:20 AM ET for cron)",
+    "forecast_target": "game's first-pitch local hour on today's ET date",
+    "is_cached": false,
+    "is_refreshed_per_run": true,
+    "parity_monitor": null,
+    "parity_monitor_note": "No mechanism compares forecast_temp_f to realized first-pitch temperature. weather_timestamp field records fetch time only.",
+    "dt_compatibility": "NOT_COMPATIBLE \u2014 each DT window would fetch a different forecast; no historical DT-labeled temperature exists in panel",
+    "dome_handling": "is_dome=True games are excluded before temperature check"
+  },
+  "price_gate_identity": {
+    "field_name": "over_price",
+    "gate_rule": "over_price <= -105",
+    "primary_source": "mlb_sim/data/line_snapshots_2026.json \u2014 latest snapshot by snapshot_time for target date",
+    "fallback_source": "data/cache/odds_full_{date}.json",
+    "snapshot_labels_available": [
+      "OPEN",
+      "2AM",
+      "5PM",
+      "CLOSING"
+    ],
+    "snapshot_utc_hours": {
+      "OPEN": "00-06 UTC",
+      "2AM": "00-06 UTC",
+      "5PM": "17 UTC",
+      "CLOSING": "17 UTC"
+    },
+    "price_at_1120_am_et_run": {
+      "available_label": "2AM",
+      "available_utc": "00-06 UTC",
+      "note": "5PM and CLOSING snapshots at 17:00 UTC are not yet available at 15:20 UTC cron run"
+    },
+    "price_alignment_concern": "Research validation price source is unverified \u2014 if original research used closing prices, live deployment using 2AM prices creates a definition mismatch",
+    "dt_window_coverage": {
+      "dt_0700": {
+        "field": "dt_0700_selected_over_price",
+        "non_null_pct": 95.8,
+        "snapshot_available": "2AM (same as 11:20 AM run)"
+      },
+      "dt_1000": {
+        "field": "dt_1000_selected_over_price",
+        "non_null_pct": 98.6,
+        "snapshot_available": "2AM (same as 11:20 AM run)"
+      },
+      "dt_1200": {
+        "field": "dt_1200_selected_over_price",
+        "non_null_pct": 99.6,
+        "snapshot_available": "2AM (same as 11:20 AM run unless intraday snapshot added)"
+      }
+    },
+    "dt_panel_has_over_price": true,
+    "dt_panel_has_temperature": false
+  },
+  "object_identity_implications": {
+    "temperature_requires_new_object": true,
+    "temperature_reason": "No DT-labeled historical temperature values exist. Each DT window would use a different forecast fetch time, making them semantically distinct objects.",
+    "price_requires_new_object": "AMBIGUOUS",
+    "price_reason": "DT0700/DT1000/DT1200 all see the same 2AM snapshot in current infrastructure. A DT-close variant using 5PM/CLOSING would be a new object. Price alignment with original research is unverified.",
+    "f5_ratio_dt_compatible": "LIKELY \u2014 F5 canonical line does not change intraday, but no per-window snapshots exist",
+    "park_and_month_dt_invariant": true
+  },
+  "frozen_dimensions": {
+    "count": 7,
+    "items": [
+      "object_id: mlb_p1b_coldwarm_earlyheavy_over_v1",
+      "ruleset_version: frozen_v1",
+      "park_set: 18 cold-climate outdoor parks",
+      "month_window: June-September",
+      "f5_ratio_threshold: > 0.5625",
+      "over_price_gate: <= -105",
+      "temperature_threshold: >= 75.0 F"
+    ]
+  },
+  "unresolved_dimensions": {
+    "count": 5,
+    "items": [
+      "temperature_dt_semantics: No DT-labeled temperature snapshots; live fetch at run time only",
+      "price_source_alignment: Original research price source (2AM vs closing) unverified against live deployment",
+      "temperature_parity_monitor: No forecast vs realized comparison mechanism",
+      "f5_line_dt_snapshots: Only one canonical row per game; no per-DT F5 line history",
+      "panel_temperature_absence: intraday_decision_panel_v1 has no temperature column; cannot backtest temperature gate against panel"
+    ]
+  },
+  "readiness_verdict": {
+    "ready_for_dt_evaluation": false,
+    "blockers": [
+      "Temperature has no DT-labeled historical values in the decision panel",
+      "Price source alignment between research validation and live deployment is unverified",
+      "No parity monitor exists for forecast vs realized temperature",
+      "F5 line DT snapshots not available in panel"
+    ],
+    "pre_conditions_required": [
+      "Confirm which price snapshot was used in original P1B research validation",
+      "Enrich intraday_decision_panel_v1 with temperature at each DT window or document single-fetch policy",
+      "Document DT variant price policy (same 2AM for all windows vs per-window capture)",
+      "Decide whether parity monitor is required before freeze"
+    ]
+  }
+}
