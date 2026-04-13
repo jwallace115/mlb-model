@@ -29,6 +29,7 @@ import requests
 # ---------------------------------------------------------------------------
 NHL_DIR   = Path(__file__).parent
 BASE_DIR  = NHL_DIR.parent
+sys.path.insert(0, str(BASE_DIR))
 CACHE_DIR = NHL_DIR / "cache"
 CACHE_DIR.mkdir(exist_ok=True)
 
