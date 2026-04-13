@@ -1,0 +1,101 @@
+{
+  "object_name": "MLB Totals Context Engine V1 x MPS Descriptive Taxonomy V1 Crosswalk",
+  "object_id": "CROSSWALK-MLBCE-V1-MPS-V1",
+  "version": "1.0",
+  "date_frozen": "2026-04-13",
+  "status": "CROSSWALK FROZEN",
+  "comparable_universe_rows": 6240,
+  "total_ctx_rows": 9715,
+  "total_mps_rows": 9715,
+  "excluded_cross_book_incomplete": 3475,
+  "unmatched_rows": 0,
+  "seasons_covered": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "context_outputs": [
+    "bre",
+    "esp",
+    "ss",
+    "bs",
+    "wpl"
+  ],
+  "mps_archetypes": [
+    "NUMBER_UP_SMALL",
+    "NUMBER_UP_LARGE",
+    "NUMBER_DOWN_SMALL",
+    "NUMBER_DOWN_LARGE",
+    "JUICE_ONLY_OVER",
+    "JUICE_ONLY_UNDER",
+    "STATIC"
+  ],
+  "response_families": [
+    "OVERWARD_NUMBER",
+    "UNDERWARD_NUMBER",
+    "OVERWARD_JUICE_ONLY",
+    "UNDERWARD_JUICE_ONLY",
+    "STATIC"
+  ],
+  "family_map": {
+    "NUMBER_UP_SMALL": "OVERWARD_NUMBER",
+    "NUMBER_UP_LARGE": "OVERWARD_NUMBER",
+    "NUMBER_DOWN_SMALL": "UNDERWARD_NUMBER",
+    "NUMBER_DOWN_LARGE": "UNDERWARD_NUMBER",
+    "JUICE_ONLY_OVER": "OVERWARD_JUICE_ONLY",
+    "JUICE_ONLY_UNDER": "UNDERWARD_JUICE_ONLY",
+    "STATIC": "STATIC"
+  },
+  "cut_points": {
+    "bre": {
+      "p33": 40.8016,
+      "p67": 56.4509
+    },
+    "esp": {
+      "p33": 36.4465,
+      "p67": 48.5482
+    },
+    "ss": {
+      "p33": 45.9406,
+      "p67": 57.3818
+    },
+    "bs": {
+      "p33": 39.3433,
+      "p67": 53.6771
+    },
+    "wpl": {
+      "p33": 0.1738,
+      "p67": 0.872
+    }
+  },
+  "bucket_labels": {
+    "bre": [
+      "LOW",
+      "MID",
+      "HIGH"
+    ],
+    "esp": [
+      "LOW",
+      "MID",
+      "HIGH"
+    ],
+    "ss": [
+      "FRAGILE",
+      "MODERATE",
+      "STABLE"
+    ],
+    "bs": [
+      "LOW",
+      "MID",
+      "HIGH"
+    ],
+    "wpl": [
+      "LOW",
+      "MID",
+      "HIGH"
+    ]
+  },
+  "disclaimer": "MPS remains RESERVED / DATA-BLOCKED. This crosswalk is a descriptive mapping between frozen context outputs and frozen market-path archetypes only. No signals have been tested, no predictive value has been claimed, and no changes to the canonical spec have been made.",
+  "crosswalk_verdict": "CROSSWALK FROZEN"
+}
