@@ -353,9 +353,36 @@
       "ALL_PASS": false
     }
   ],
-  "verdict": "NO CLEAR DECISION CUTOFF YET \u2014 Best compromise: 12:00 ET (4/5 criteria)",
+  "verdict": "NO CLEAR DECISION CUTOFF YET \u2014 Best compromise: 10:00 ET (C1-C4 pass, timing-safe) or 12:00 ET (C1-C2, C4-C5 pass, 2.5% C3 exposure)",
   "verdict_reason": "No time satisfies all 5 criteria; 12:00 ET passes most",
   "api_calls_this_session": 2060,
   "credits_remaining": "4138734",
-  "disclaimer": "MPS remains RESERVED / DATA-BLOCKED. This audit selects a decision-time cutoff only. No signals have been tested, no predictive value has been claimed, and no changes to the canonical spec have been made."
+  "disclaimer": "MPS remains RESERVED / DATA-BLOCKED. This audit selects a decision-time cutoff only. No signals have been tested, no predictive value has been claimed, and no changes to the canonical spec have been made.",
+  "verdict_detail": {
+    "10_et": {
+      "pass": [
+        "C1 coverage 100%",
+        "C2 parity 100%",
+        "C3 timing safe (0 after-game)",
+        "C4 movement (pct>=0.5 reduced 12pp)"
+      ],
+      "fail": [
+        "C5 path agreement 55.2% < 70%"
+      ],
+      "note": "Best option if timing safety is paramount. Path agreement improves substantially vs 07:00 ET but does not reach 70% threshold."
+    },
+    "12_et": {
+      "pass": [
+        "C1 coverage 100%",
+        "C2 parity 100%",
+        "C4 movement (pct>=0.5 reduced 26pp; juice drift reduced 5pts)",
+        "C5 path agreement 74.3% > 70%"
+      ],
+      "fail": [
+        "C3 timing: 2 games after start (0.3%), 14 games at exact game start (2.2%) \u2014 combined 2.5% exposure"
+      ],
+      "note": "Strongest path agreement signal. C3 failure is operationally minor (2.5% of games, all early-afternoon day games starting at or before noon ET). These games should be excluded or handled with a pre-noon probe in production."
+    },
+    "recommendation": "10:00 ET is recommended as the CONSERVATIVE SAFE CUTOFF \u2014 full timing safety, meaningful movement reduction (pct>=0.5 down from 42% to 30%), and 100% book coverage. 12:00 ET is the AGGRESSIVE CUTOFF \u2014 best path agreement (74.3%) and movement reduction, but requires an exception handler for pre-noon games."
+  }
 }
