@@ -409,6 +409,45 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                        _render_signal_status_row)
 
     # ═══════════════════════════════════════════════════════════════════════════
+    # P1B COLD-WARM EARLY_HEAVY OVER — STATUS HEADER
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # --- Load P1B tracker data ---
+    _p1b_tracker_path = os.path.join(os.path.dirname(__file__), "mlb", "logs",
+                                     "mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json")
+    _p1b_all = []
+    try:
+        if os.path.exists(_p1b_tracker_path):
+            _p1b_raw = json.load(open(_p1b_tracker_path))
+            _p1b_all = _p1b_raw.get("signals", [])
+    except Exception:
+        pass
+
+    # --- P1B last updated timestamp ---
+    _p1b_lu = None
+    try:
+        _p1b_lu_data = json.load(open(os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")))
+        for _pk in ["mlb_confirm", "mlb_prelim"]:
+            _pts = _p1b_lu_data.get(_pk)
+            if _pts and isinstance(_pts, str) and "T" in _pts:
+                from zoneinfo import ZoneInfo
+                _pdt = datetime.fromisoformat(_pts.replace("Z", "+00:00"))
+                _p1b_lu = _pdt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
+                break
+    except Exception:
+        pass
+
+    render_status_header(
+        object_name="P1B Cold-Warm EARLY_HEAVY Over",
+        object_id="mlb_p1b_coldwarm_earlyheavy_over_v1",
+        status="SHADOW",
+        tracker_start="April 2026",
+        current_threshold="EARLY_HEAVY + cold park + temp \u226575\u00b0F + Jun-Sep + over \u2264-105",
+        replaces=None,
+        last_updated=_p1b_lu,
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
     # SIDES SHADOW SECTION
     # ═══════════════════════════════════════════════════════════════════════════
 
@@ -470,13 +509,18 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         _sides_shadow_labels.append("Night Dog")
     if bp_all:
         _sides_shadow_labels.append("BP Adv Dog")
-    _render_signal_status_row(active_labels=[], shadow_labels=_sides_shadow_labels if _sides_shadow_labels else ["Night Dog", "BP Adv Dog"])
+    _sides_shadow_labels.append("P1B Cold-Warm Over")
+    _render_signal_status_row(active_labels=[], shadow_labels=_sides_shadow_labels if _sides_shadow_labels else ["Night Dog", "BP Adv Dog", "P1B Cold-Warm Over"])
 
     # --- Today's sides cards ---
     _sides_today = _today_et()
 
     night_today = [s for s in night_all if s.get("game_date") == _sides_today]
     bp_today = [s for s in bp_all if s.get("game_date") == _sides_today]
+
+    # P1B today signals
+    _p1b_today_date = _today_et()
+    p1b_today = [s for s in _p1b_all if s.get("date") == _p1b_today_date]
 
     game_signals = defaultdict(list)
     for sig in night_today:
@@ -485,6 +529,10 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     for sig in bp_today:
         gpk = sig.get("game_pk", sig.get("game_id"))
         game_signals[gpk].append(("bp_adv_dog", sig))
+    for sig in p1b_today:
+        gpk = sig.get("game_pk")
+        if gpk:
+            game_signals[gpk].append(("p1b_coldwarm", sig))
 
     st.html(
         '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
@@ -535,6 +583,25 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                         f'{dog_team} ML · shadow</span>'
                         f'<span style="font-size:0.72em;color:#94a3b8;margin-left:8px">'
                         f'Dog BP: {bp_dog_str} · Fav BP: {bp_fav_str}</span>'
+                        f'</div>'
+                    )
+                elif sig_type == "p1b_coldwarm":
+                    _p1b_home = sig.get("home_team", "?")
+                    _p1b_away = sig.get("away_team", "?")
+                    _p1b_fg = sig.get("fg_total", 0)
+                    _p1b_temp = sig.get("forecast_temp_f", 0)
+                    _p1b_f5r = sig.get("f5_ratio", 0)
+                    _p1b_price = sig.get("over_price", "")
+                    _p1b_fg_str = f"{_p1b_fg:.1f}" if isinstance(_p1b_fg, (int, float)) else str(_p1b_fg)
+                    _p1b_f5r_str = f"{_p1b_f5r:.3f}" if isinstance(_p1b_f5r, (int, float)) else str(_p1b_f5r)
+                    signal_lines_html += (
+                        f'<div style="padding:3px 0">'
+                        f'{_universal_pill("P1B Cold-Warm", "#fff", "#2563eb")}'
+                        f'{_universal_pill("SHADOW", "#fff", "#dc2626")}'
+                        f'<span style="font-size:0.85em;color:#e2e8f0;margin-left:6px">'
+                        f'{_p1b_home} vs {_p1b_away} FG OVER {_p1b_fg_str} \u00b7 shadow</span>'
+                        f'<span style="font-size:0.72em;color:#94a3b8;margin-left:8px">'
+                        f'Cold park \u00b7 {_p1b_temp:.0f}\u00b0F \u00b7 F5 ratio {_p1b_f5r_str} \u00b7 Over {_p1b_price}</span>'
                         f'</div>'
                     )
 
@@ -623,6 +690,71 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                 "W/L": s.get("win_loss") or "pending",
             })
         st.dataframe(pd.DataFrame(_bp_rows), use_container_width=True, hide_index=True)
+
+    # --- P1B tracker ---
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+        'Shadow Tracker \u2014 P1B Cold-Warm EARLY_HEAVY Over</div>'
+    )
+    _p1b_resolved = [s for s in _p1b_all if s.get("result") in ("W", "L")]
+    _p1b_wins = sum(1 for s in _p1b_resolved if s.get("result") == "W")
+    _p1b_losses = sum(1 for s in _p1b_resolved if s.get("result") == "L")
+    _p1b_pushes = sum(1 for s in _p1b_resolved if s.get("result") == "P")
+    _p1b_n = len(_p1b_resolved)
+    _p1b_pend = len([s for s in _p1b_all if not s.get("graded")])
+    _p1b_hit = (_p1b_wins / _p1b_n * 100) if _p1b_n > 0 else 0
+
+    # ROI calc: use actual over_price if available, else flat -110 synthetic
+    _p1b_roi_units = 0.0
+    _p1b_roi_n = 0
+    _p1b_synthetic = False
+    for _ps in _p1b_resolved:
+        _pprice = _ps.get("over_price")
+        if _pprice and isinstance(_pprice, (int, float)) and _pprice != 0:
+            if _ps["result"] == "W":
+                _p1b_roi_units += (100 / abs(_pprice)) if _pprice < 0 else (_pprice / 100)
+            elif _ps["result"] == "L":
+                _p1b_roi_units -= 1
+            _p1b_roi_n += 1
+        else:
+            _p1b_synthetic = True
+            if _ps["result"] == "W":
+                _p1b_roi_units += 100 / 110
+            elif _ps["result"] == "L":
+                _p1b_roi_units -= 1
+            _p1b_roi_n += 1
+    _p1b_roi_pct = (_p1b_roi_units / _p1b_roi_n * 100) if _p1b_roi_n > 0 else 0
+    _p1b_roi_label = "ROI (synthetic -110)" if _p1b_synthetic else "ROI"
+
+    st.html(
+        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
+        f'<span style="font-weight:700">{_p1b_wins}-{_p1b_losses}</span>'
+        f' &nbsp;|&nbsp; Hit: {_p1b_hit:.1f}%'
+        f' &nbsp;|&nbsp; {_p1b_roi_label}: {_p1b_roi_pct:+.1f}%'
+        f' &nbsp;|&nbsp; {_p1b_n} resolved, {_p1b_pend} pending'
+        f'</div>'
+    )
+    if _p1b_resolved:
+        import pandas as pd
+        _p1b_rows = []
+        for _ps in sorted(_p1b_resolved, key=lambda x: x.get("date", "")):
+            _p1b_rows.append({
+                "Date": _ps.get("date", ""),
+                "Matchup": f"{_ps.get('away_team', '?')} @ {_ps.get('home_team', '?')}",
+                "FG Total": _ps.get("fg_total", ""),
+                "Over Price": _ps.get("over_price", ""),
+                "Temp": f"{_ps.get('forecast_temp_f', '')}\u00b0F" if _ps.get("forecast_temp_f") else "",
+                "Result": _ps.get("result", ""),
+            })
+        st.dataframe(pd.DataFrame(_p1b_rows), use_container_width=True, hide_index=True)
+    else:
+        st.html('<div style="font-size:0.72em;color:#6b7280">No resolved signals yet</div>')
+
+    st.html(
+        '<div style="font-size:0.68em;color:#4b5563;margin-top:4px;font-style:italic">'
+        'Object fires June\u2013September only. Forward shadow accumulation begins June 2026.</div>'
+    )
 
     # --- Divider between sides and NRFI ---
     st.html('<hr style="border:none;border-top:2px solid #1e293b;margin:24px 0 16px 0">')
