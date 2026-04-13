@@ -1,0 +1,12 @@
+family,source_file,pit_safe,coverage_pct_2022_2025,approved,notes
+Starter Quality,mlb/data/pitcher_game_logs.parquet,YES,100%,YES,shift(1) + rolling 5-start window required
+Starter Depth,mlb/data/pitcher_game_logs.parquet,YES,100%,YES,IP volatility and short-exit rate
+Bullpen Quality,sim/data/bullpen_features.parquet,YES,~90%,YES,Opening-day nulls filled with 0
+Bullpen Freshness,mlb/data/pitcher_game_logs.parquet,YES,100%,YES,Derived from reliever subset with date filter
+Offense Quality,mlb/data/hitter_game_logs.parquet,YES,100%,YES,Rolling 10-game team aggregates shift(1)
+Park Effects,sim/data/game_table.parquet,YES - static,100%,YES,Structural venue property not derived from outcomes
+Weather,sim/data/game_table.parquet,YES - physical measurement,~99%,YES,Dome/closed roof zeroes out wind and temp effect
+Market Geometry,mlb_historical_closing_lines + market_snapshots,YES - contextual,78-100% by season,YES - partial,Closing total only; open total unavailable; MPS data-blocked 2022-2023
+Home/Away Asymmetry,pitcher_game_logs + hitter_game_logs + game_table,YES,100%,YES,Derived at game level from approved sources
+V1 Feature Table,sim/data/feature_table.parquet,NO - PIT contaminated,N/A,FORBIDDEN,Built by sim/phase2_build_features.py with season-level aggregates
+Opponent Adjusted Engine V2,research/opponent_adjusted_engine_v2/,UNKNOWN,N/A,FORBIDDEN,Ambiguous lineage per charter rules

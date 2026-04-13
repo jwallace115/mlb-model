@@ -1,0 +1,9 @@
+output,classification,disc_corr,target_variable,val_mono,oos_mono,esp_lsp_flag,notes
+BRE - Baseline Run Environment,CORE KEEP,0.098,actual_total,PASS,PASS,N/A,Park + lineup + umpire composite; consistent all splits
+ESP - Early Scoring Pressure,CORE KEEP,0.091,actual_f5_total,PASS,PASS,N/A,SP fragility drives F5 pressure; stable signal
+LSP - Late Scoring Pressure,USEFUL BUT SECONDARY,0.049,late_runs,PASS,PASS,FLAGGED r=0.724 with ESP,High correlation with ESP limits distinctness; still directionally valid
+SS - Starter Stability,CORE KEEP,0.215,combined_IP,PASS,PASS,N/A,Strongest output; IP-based rolling signal very stable
+BS - Bullpen Stability,CORE KEEP,-0.049,late_runs,PASS,PASS,N/A,UNSTABLE -> more late runs; consistent across splits
+WPL - Weather and Park Lift,CORE KEEP,0.154,actual_total,PASS,PASS,N/A,LIFTED games +1.0 run vs baseline in OOS; consistent
+TCV - Compression/Volatility,USEFUL BUT SECONDARY,weak,total_std,PASS,BORDERLINE,N/A,Effect size small (< 0.2 std spread); conceptually valid but modest
+MPS - Market Path Shape,DATA-BLOCKED,N/A,N/A,N/A,N/A,N/A,Open lines unavailable all seasons; cannot compute

@@ -1,0 +1,265 @@
+{
+  "engine": {
+    "name": "MLB Totals Context Engine V1",
+    "id": "MLBCE-V1",
+    "version": "1.0",
+    "date_frozen": "2026-04-12",
+    "classification": "descriptive_decomposition",
+    "is_betting_engine": false,
+    "canonical_table_rows": 9715,
+    "canonical_table_cols_raw": 72,
+    "canonical_table_cols_output": 35,
+    "discovery_seasons": [2022, 2023],
+    "validation_season": 2024,
+    "oos_season": 2025,
+    "excluded_2026": true
+  },
+  "outputs": [
+    {
+      "code": "BRE",
+      "name": "Baseline Run Environment",
+      "status": "PRIMARY",
+      "formula": "0.40 * norm(park_factor_runs) + 0.35 * norm(lineup_ops) + 0.25 * norm(umpire_over_rate)",
+      "sub_formulas": {
+        "lineup_ops": "avg(home_obp_r10 + home_slg_r10, away_obp_r10 + away_slg_r10) / 2"
+      },
+      "weights": {"park_factor_runs": 0.40, "lineup_ops": 0.35, "umpire_over_rate": 0.25},
+      "required_columns": ["park_factor_runs", "home_obp_r10", "home_slg_r10", "away_obp_r10", "away_slg_r10", "umpire_over_rate"],
+      "normalization": "discovery 5th-95th percentile, anchored to 2022-2023",
+      "buckets": {
+        "LOW": {"threshold": "< 39.41", "label": "LOW"},
+        "MEDIUM": {"threshold": "39.41 to 55.45", "label": "MEDIUM"},
+        "HIGH": {"threshold": "> 55.45", "label": "HIGH"}
+      },
+      "direction": "higher = higher run-scoring environment",
+      "discovery_corr": 0.098,
+      "target_variable": "actual_total",
+      "val_monotonic": "PASS",
+      "oos_monotonic": "PASS",
+      "output_column": "bre",
+      "label_column": "bre_label",
+      "intended_usage": ["structural_prior", "niche_object_segmentation"],
+      "forbidden_usage": ["direct_betting_trigger", "combined_betting_score", "threshold_optimization"]
+    },
+    {
+      "code": "ESP",
+      "name": "Early Scoring Pressure",
+      "status": "PRIMARY",
+      "formula": "0.50 * avg_sp_fragility + 0.30 * norm(lineup_ops) + 0.20 * BRE",
+      "sub_formulas": {
+        "SP_fragility_per_team": "0.50 * norm(er_per9_r5) + 0.30 * (100 - norm(avg_ip_r5)) + 0.20 * norm(short_exit_r5)",
+        "avg_sp_fragility": "avg(home_SP_fragility, away_SP_fragility)"
+      },
+      "weights": {"avg_sp_fragility": 0.50, "lineup_ops": 0.30, "BRE": 0.20},
+      "sp_fragility_weights": {"er_per9_r5": 0.50, "avg_ip_r5_inverted": 0.30, "short_exit_r5": 0.20},
+      "required_columns": ["home_sp_er9_r5", "home_sp_avg_ip_r5", "home_sp_short_exit_r5", "away_sp_er9_r5", "away_sp_avg_ip_r5", "away_sp_short_exit_r5", "home_obp_r10", "home_slg_r10", "away_obp_r10", "away_slg_r10"],
+      "depends_on_computed": ["BRE"],
+      "normalization": "discovery 5th-95th percentile, anchored to 2022-2023",
+      "buckets": {
+        "LOW": {"threshold": "< 36.03", "label": "LOW"},
+        "MEDIUM": {"threshold": "36.03 to 49.89", "label": "MEDIUM"},
+        "HIGH": {"threshold": "> 49.89", "label": "HIGH"}
+      },
+      "direction": "higher = more early-inning run scoring pressure",
+      "discovery_corr": 0.091,
+      "target_variable": "actual_f5_total",
+      "val_monotonic": "PASS",
+      "oos_monotonic": "PASS",
+      "output_column": "esp",
+      "label_column": "esp_label",
+      "redundancy_warning": "r=0.724 with LSP — ESP and LSP share inputs and cannot be treated as independent evidence",
+      "intended_usage": ["F5_totals_niche_objects", "early_inning_structural_characterization"],
+      "forbidden_usage": ["direct_betting_trigger", "combined_betting_score", "independent_evidence_with_LSP"]
+    },
+    {
+      "code": "LSP",
+      "name": "Late Scoring Pressure",
+      "status": "SECONDARY",
+      "formula": "0.45 * avg_bp_instability + 0.30 * norm(lineup_ops) + 0.25 * avg_sp_fragility",
+      "sub_formulas": {
+        "BP_instability_per_team": "norm(bp_pit_last3) * 0.60 + (1 - hl_avail) * 100 * 0.40",
+        "avg_bp_instability": "avg(home_BP_instability, away_BP_instability)"
+      },
+      "weights": {"avg_bp_instability": 0.45, "lineup_ops": 0.30, "avg_sp_fragility": 0.25},
+      "required_columns": ["home_bp_pit_last3", "home_bp_hl_avail", "away_bp_pit_last3", "away_bp_hl_avail", "home_obp_r10", "home_slg_r10", "away_obp_r10", "away_slg_r10", "home_sp_er9_r5", "home_sp_avg_ip_r5", "home_sp_short_exit_r5", "away_sp_er9_r5", "away_sp_avg_ip_r5", "away_sp_short_exit_r5"],
+      "normalization": "discovery 5th-95th percentile, anchored to 2022-2023",
+      "buckets": {
+        "LOW": {"threshold": "< 43.08", "label": "LOW"},
+        "MEDIUM": {"threshold": "43.08 to 54.37", "label": "MEDIUM"},
+        "HIGH": {"threshold": "> 54.37", "label": "HIGH"}
+      },
+      "direction": "higher = more late-inning run scoring pressure",
+      "discovery_corr": 0.049,
+      "target_variable": "late_runs (actual_total - actual_f5_total)",
+      "val_monotonic": "PASS",
+      "oos_monotonic": "PASS",
+      "output_column": "lsp",
+      "label_column": "lsp_label",
+      "redundancy_warning": "r=0.724 with ESP — shared inputs; not independent evidence",
+      "intended_usage": ["F5_under_fullgame_over_divergence_detection", "late_inning_context"],
+      "forbidden_usage": ["direct_betting_trigger", "combined_betting_score", "independent_evidence_with_ESP", "lead_driver"]
+    },
+    {
+      "code": "SS",
+      "name": "Starter Stability",
+      "status": "PRIMARY",
+      "formula": "avg(SP_stability_home, SP_stability_away)",
+      "sub_formulas": {
+        "SP_stability_per_team": "0.40 * norm(avg_ip_r5) + 0.35 * norm(k_rate_r5) + 0.25 * (100 - norm(bb_rate_r5))"
+      },
+      "weights_per_team": {"avg_ip_r5": 0.40, "k_rate_r5": 0.35, "bb_rate_r5_inverted": 0.25},
+      "both_stable_flag_threshold": 55,
+      "required_columns": ["home_sp_avg_ip_r5", "home_sp_k_rate_r5", "home_sp_bb_rate_r5", "away_sp_avg_ip_r5", "away_sp_k_rate_r5", "away_sp_bb_rate_r5"],
+      "normalization": "discovery 5th-95th percentile, anchored to 2022-2023",
+      "buckets": {
+        "FRAGILE": {"threshold": "< 45.92", "label": "FRAGILE"},
+        "AVERAGE": {"threshold": "45.92 to 57.09", "label": "AVERAGE"},
+        "STABLE": {"threshold": "> 57.09", "label": "STABLE"}
+      },
+      "direction": "higher = more stable starters, lower expected run total",
+      "discovery_corr": 0.215,
+      "target_variable": "combined_actual_IP",
+      "val_monotonic": "PASS",
+      "oos_monotonic": "PASS",
+      "output_column": "ss",
+      "label_column": "ss_label",
+      "sub_score_columns": ["home_sp_stability", "away_sp_stability"],
+      "binary_flag_column": "both_stable_flag",
+      "p1b_oos_suppression_runs": 0.48,
+      "intended_usage": ["P1B_anchor", "under_niche_objects", "structural_pitching_regime_segmentation"],
+      "forbidden_usage": ["direct_betting_trigger", "combined_betting_score"]
+    },
+    {
+      "code": "BS",
+      "name": "Bullpen Stability",
+      "status": "PRIMARY",
+      "formula": "avg(BP_stability_home, BP_stability_away)",
+      "sub_formulas": {
+        "BP_stability_per_team": "0.40 * (100 - norm(rel_last3)) + 0.40 * (100 - norm(pit_last3)) + 0.20 * hl_avail * 100"
+      },
+      "weights_per_team": {"rel_last3_inverted": 0.40, "pit_last3_inverted": 0.40, "hl_avail": 0.20},
+      "required_columns": ["home_bp_rel_last3", "home_bp_pit_last3", "home_bp_hl_avail", "away_bp_rel_last3", "away_bp_pit_last3", "away_bp_hl_avail"],
+      "normalization": "discovery 5th-95th percentile, anchored to 2022-2023",
+      "buckets": {
+        "UNSTABLE": {"threshold": "< 38.86", "label": "UNSTABLE"},
+        "NEUTRAL": {"threshold": "38.86 to 53.26", "label": "NEUTRAL"},
+        "STABLE": {"threshold": "> 53.26", "label": "STABLE"}
+      },
+      "direction": "higher = fresher bullpens, lower expected late-inning runs",
+      "discovery_corr": -0.049,
+      "target_variable": "late_runs",
+      "val_monotonic": "PASS",
+      "oos_monotonic": "PASS",
+      "output_column": "bs",
+      "label_column": "bs_label",
+      "sub_score_columns": ["home_bp_stability", "away_bp_stability"],
+      "intended_usage": ["complement_to_SS", "bullpen_implosion_risk_context", "over_niche_object_conditioning"],
+      "forbidden_usage": ["direct_betting_trigger", "combined_betting_score"]
+    },
+    {
+      "code": "WPL",
+      "name": "Weather and Park Lift",
+      "status": "PRIMARY",
+      "formula_outdoor": "0.40 * park_deviation + 0.40 * temp_effect + 0.20 * wind_effect",
+      "formula_dome": "park_deviation",
+      "sub_formulas": {
+        "park_deviation": "(park_factor_runs - 100) / 3",
+        "temp_effect": "(temperature - 65) / 10",
+        "wind_effect": "wind_speed * 0.1 [unsigned — direction not signed in V1]"
+      },
+      "weights_outdoor": {"park_deviation": 0.40, "temp_effect": 0.40, "wind_effect": 0.20},
+      "required_columns": ["park_factor_runs", "temperature", "wind_speed", "is_dome_or_closed"],
+      "normalization": "physical scaling — not percentile ranked",
+      "buckets": {
+        "SUPPRESSED": {"threshold": "< -1.0", "label": "SUPPRESSED"},
+        "NEUTRAL": {"threshold": "-1.0 to 1.0", "label": "NEUTRAL"},
+        "LIFTED": {"threshold": "> 1.0", "label": "LIFTED"}
+      },
+      "direction": "higher (more positive) = physical conditions lift run scoring",
+      "discovery_corr": 0.154,
+      "target_variable": "actual_total",
+      "val_monotonic": "PASS",
+      "oos_monotonic": "PASS",
+      "output_column": "wpl",
+      "label_column": "wpl_label",
+      "known_limitation": "Wind direction not signed — park CF bearing data unavailable in V1; wind is treated as volatility-additive only",
+      "intended_usage": ["environmental_context", "niche_object_regime_awareness", "WPL_P1B_interaction"],
+      "forbidden_usage": ["direct_betting_trigger", "combined_betting_score"]
+    },
+    {
+      "code": "TCV",
+      "name": "Total Compression / Volatility State",
+      "status": "SECONDARY",
+      "formula": "0.40 * sp_variance + 0.35 * avg_bp_instability + 0.25 * norm(|ESP - SS|)",
+      "sub_formulas": {
+        "sp_variance": "avg(norm(home_sp_ip_std_r5), norm(away_sp_ip_std_r5))",
+        "avg_bp_instability": "same as LSP component",
+        "esp_ss_spread": "norm(abs(ESP - SS))"
+      },
+      "weights": {"sp_variance": 0.40, "avg_bp_instability": 0.35, "esp_ss_spread": 0.25},
+      "required_columns": ["home_sp_ip_std_r5", "away_sp_ip_std_r5", "home_bp_pit_last3", "home_bp_hl_avail", "away_bp_pit_last3", "away_bp_hl_avail"],
+      "depends_on_computed": ["ESP", "SS"],
+      "normalization": "discovery 5th-95th percentile, anchored to 2022-2023",
+      "buckets": {
+        "COMPRESSED": {"threshold": "< 42.46", "label": "COMPRESSED"},
+        "BALANCED": {"threshold": "42.46 to 53.32", "label": "BALANCED"},
+        "VOLATILE": {"threshold": "> 53.32", "label": "VOLATILE"}
+      },
+      "direction": "higher = wider outcome distribution / higher tail risk",
+      "discovery_corr": "weak",
+      "target_variable": "total_std (standard deviation of actual_total)",
+      "val_monotonic": "FAIL — reversal in validation split",
+      "oos_monotonic": "BORDERLINE",
+      "output_column": "tcv",
+      "label_column": "tcv_label",
+      "warnings": ["validation split monotonicity reversal", "effect size < 0.2 std across buckets", "borderline OOS performance"],
+      "intended_usage": ["tail_risk_context", "extreme_outcome_bucket_conditioning"],
+      "forbidden_usage": ["direct_betting_trigger", "lead_driver", "combined_betting_score"]
+    },
+    {
+      "code": "MPS",
+      "name": "Market Path Shape",
+      "status": "RESERVED-BLOCKED",
+      "formula": "NOT COMPUTABLE — open total lines unavailable for all seasons 2022-2025",
+      "required_columns_blocked": ["open_total (unavailable)", "noon_total (unavailable)", "close_total"],
+      "intended_categories": ["EARLY-HEAVY", "LATE-HEAVY", "BALANCED", "COMPRESSED", "DATA-BLOCKED"],
+      "current_value_all_rows": "DATA-BLOCKED",
+      "discovery_corr": null,
+      "target_variable": "line_movement",
+      "val_monotonic": null,
+      "oos_monotonic": null,
+      "output_column": "mps",
+      "label_column": "mps_label",
+      "blocked_reason": "Open total lines unavailable for all seasons 2022-2025. Historical Odds API pull captured closing snapshots only. CLV (2024-2025) does not provide directional open-to-close movement.",
+      "no_proxy_authorized": true,
+      "unblock_requirements": "Live collection of opening totals for minimum 2 full seasons (2026-2027) before formula development can begin on new discovery data",
+      "intended_usage_when_unblocked": ["market_intelligence_context", "sharpness_classification_for_niche_objects"],
+      "forbidden_usage": ["all_use_forbidden_in_V1", "CLV_proxy_not_authorized", "any_approximation_not_authorized"]
+    }
+  ],
+  "governance_rules": {
+    "rule_1": "Context Engine V1 is descriptive/decomposition only — NOT a betting engine",
+    "rule_2": "PRIMARY outputs: BRE, ESP, SS, BS, WPL",
+    "rule_3": "SECONDARY outputs: LSP, TCV",
+    "rule_4": "RESERVED/BLOCKED: MPS — no proxy authorized",
+    "rule_5": "ESP and LSP share inputs (r=0.724) and cannot both be treated as independent evidence",
+    "rule_6": "TCV is weak context only — not a lead driver",
+    "rule_7": "Downstream objects must validate their own use of these outputs independently",
+    "rule_8": "Any formula/input/fallback/threshold change creates V2 or a new object — not a V1 update",
+    "rule_9": "Engine may characterize downstream objects (e.g. P1B) but cannot redefine them",
+    "rule_10": "No combined betting score may be derived from these outputs"
+  },
+  "identity_lock": {
+    "creates_new_object": [
+      "formula coefficient change (any output)",
+      "input column substitution (any output)",
+      "normalization bound re-anchoring",
+      "bucket threshold change (any output)",
+      "addition of signed wind direction to WPL",
+      "MPS activation with any formula",
+      "inclusion of any forbidden source file",
+      "extension of discovery period beyond 2023",
+      "any re-fitting, optimization, or re-calibration"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+output,formula_inputs,weights,bucket_low_threshold,bucket_high_threshold,discovery_corr,target_variable
+BRE,park_factor_runs|lineup_ops|umpire_over_rate,0.40|0.35|0.25,39.41,55.45,0.0980,actual_total
+ESP,avg_sp_fragility|lineup_ops|BRE,0.50|0.30|0.20,36.03,49.89,0.0911,actual_f5_total
+LSP,avg_bp_instability|lineup_ops|avg_sp_fragility,0.45|0.30|0.25,43.08,54.37,0.0490,late_runs
+SS,avg_ip_r5|k_rate_r5|bb_rate_r5,0.40|0.35|0.25,45.92,57.09,0.2151,combined_actual_IP
+BS,rel_last3_inv|pit_last3_inv|hl_avail,0.40|0.40|0.20,38.86,53.26,-0.0494,late_runs
+WPL,park_deviation|temp_effect|wind_effect,0.40|0.40|0.20,-1.00,1.00,0.1542,actual_total
+TCV,sp_variance|avg_bp_instability|esp_ss_spread,0.40|0.35|0.25,42.46,53.32,N/A,total_std
+MPS,N/A - DATA BLOCKED,N/A,N/A,N/A,N/A,line_movement
