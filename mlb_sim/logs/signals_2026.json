@@ -1486,7 +1486,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Will Warren",
+    "away_sp_name": "Yusei Kikuchi"
   },
   {
     "date": "2026-04-13",
@@ -1511,7 +1513,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Luis Severino",
+    "away_sp_name": "Nathan Eovaldi"
   },
   {
     "date": "2026-04-13",
@@ -1536,6 +1540,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Justin Wrobleski",
+    "away_sp_name": "David Peterson"
   }
 ]
