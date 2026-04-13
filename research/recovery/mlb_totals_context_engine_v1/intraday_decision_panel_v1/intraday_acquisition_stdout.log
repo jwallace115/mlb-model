@@ -1,0 +1,49 @@
+2026-04-13 13:14:29,481  INFO     ============================================================
+2026-04-13 13:14:29,482  INFO     BUILD ONLY — INTRADAY DECISION PANEL V1
+2026-04-13 13:14:29,482  INFO     ============================================================
+2026-04-13 13:14:29,482  INFO     API key loaded: 878a2871...
+2026-04-13 13:14:29,482  INFO     STEP 1: Loading MPS substrate...
+2026-04-13 13:14:29,562  INFO     Substrate: 9715 games, 44 cols
+2026-04-13 13:14:29,566  INFO     Seasons: {2022: np.int64(2430), 2023: np.int64(2430), 2024: np.int64(2427), 2025: np.int64(2428)}
+2026-04-13 13:14:29,567  INFO     STEP 2: Building game manifest...
+2026-04-13 13:14:29,577  INFO     Manifest: 9715 games
+2026-04-13 13:14:29,647  INFO     Manifest saved: /root/mlb-model/research/recovery/mlb_totals_context_engine_v1/intraday_decision_panel_v1/mlb_intraday_decision_panel_v1_source_manifest.csv
+2026-04-13 13:14:29,647  INFO     STEP 3: Starting intraday probe acquisition...
+2026-04-13 13:14:29,716  INFO     Unique game dates: 727
+2026-04-13 13:14:29,716  INFO     Total probe calls needed: 2181 (3 probes × 727 dates)
+2026-04-13 13:14:29,716  INFO     Already completed (game×probe) keys: 0
+2026-04-13 13:15:12,101  INFO       Calls: 50 | Date: 2022-04-23 | Probe: DT_1000 | Credits: 4138224
+2026-04-13 13:15:52,431  INFO       Calls: 100 | Date: 2022-05-10 | Probe: DT_0700 | Credits: 4137724
+/root/mlb-model/research/recovery/mlb_totals_context_engine_v1/intraday_decision_panel_v1/build_intraday_panel.py:310: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  cp["last_updated"] = datetime.utcnow().isoformat()
+2026-04-13 13:15:52,504  INFO       Checkpoint saved at call 100
+2026-04-13 13:16:30,485  INFO       Calls: 150 | Date: 2022-05-26 | Probe: DT_1200 | Credits: 4137224
+2026-04-13 13:17:09,162  INFO       Calls: 200 | Date: 2022-06-12 | Probe: DT_1000 | Credits: 4136724
+2026-04-13 13:17:09,272  INFO       Checkpoint saved at call 200
+2026-04-13 13:17:47,227  INFO       Calls: 250 | Date: 2022-06-29 | Probe: DT_0700 | Credits: 4136224
+2026-04-13 13:18:25,847  INFO       Calls: 300 | Date: 2022-07-15 | Probe: DT_1200 | Credits: 4135724
+2026-04-13 13:18:25,991  INFO       Checkpoint saved at call 300
+2026-04-13 13:19:04,356  INFO       Calls: 350 | Date: 2022-08-04 | Probe: DT_1000 | Credits: 4135224
+2026-04-13 13:19:42,532  INFO       Calls: 400 | Date: 2022-08-21 | Probe: DT_0700 | Credits: 4134724
+2026-04-13 13:19:42,714  INFO       Checkpoint saved at call 400
+2026-04-13 13:20:21,441  INFO       Calls: 450 | Date: 2022-09-06 | Probe: DT_1200 | Credits: 4134224
+2026-04-13 13:21:00,923  INFO       Calls: 500 | Date: 2022-09-23 | Probe: DT_1000 | Credits: 4133724
+2026-04-13 13:21:01,154  INFO       Checkpoint saved at call 500
+2026-04-13 13:21:40,814  INFO       Calls: 550 | Date: 2023-04-03 | Probe: DT_0700 | Credits: 4133224
+2026-04-13 13:22:23,433  INFO       Calls: 600 | Date: 2023-04-19 | Probe: DT_1200 | Credits: 4132724
+2026-04-13 13:22:23,718  INFO       Checkpoint saved at call 600
+2026-04-13 13:23:06,675  INFO       Calls: 650 | Date: 2023-05-06 | Probe: DT_1000 | Credits: 4132224
+2026-04-13 13:23:49,425  INFO       Calls: 700 | Date: 2023-05-23 | Probe: DT_0700 | Credits: 4131724
+2026-04-13 13:23:49,718  INFO       Checkpoint saved at call 700
+2026-04-13 13:24:32,354  INFO       Calls: 750 | Date: 2023-06-08 | Probe: DT_1200 | Credits: 4131224
+2026-04-13 13:25:16,402  INFO       Calls: 800 | Date: 2023-06-25 | Probe: DT_1000 | Credits: 4130721
+2026-04-13 13:25:16,754  INFO       Checkpoint saved at call 800
+2026-04-13 13:25:59,815  INFO       Calls: 850 | Date: 2023-07-16 | Probe: DT_0700 | Credits: 4130221
+2026-04-13 13:26:43,195  INFO       Calls: 900 | Date: 2023-08-01 | Probe: DT_1200 | Credits: 4129721
+2026-04-13 13:26:43,592  INFO       Checkpoint saved at call 900
+2026-04-13 13:27:27,852  INFO       Calls: 950 | Date: 2023-08-18 | Probe: DT_1000 | Credits: 4129221
+2026-04-13 13:28:12,582  INFO       Calls: 1000 | Date: 2023-09-04 | Probe: DT_0700 | Credits: 4128721
+2026-04-13 13:28:13,005  INFO       Checkpoint saved at call 1000
+2026-04-13 13:29:00,729  INFO       Calls: 1050 | Date: 2023-09-20 | Probe: DT_1200 | Credits: 4128221
+2026-04-13 13:29:45,460  INFO       Calls: 1100 | Date: 2024-03-31 | Probe: DT_1000 | Credits: 4127721
+2026-04-13 13:29:45,909  INFO       Checkpoint saved at call 1100
