@@ -1,0 +1,77 @@
+{
+  "build_type": "MPS_HISTORICAL_ACQUISITION",
+  "mps_status": "RESERVED \u2014 MPS REMAINS BLOCKED \u2014 DATA ONLY",
+  "generated_at": "2026-04-13T07:53:02.542298",
+  "source_universe": {
+    "total_games": 9715,
+    "seasons": {
+      "2022": {
+        "n": 2430,
+        "open_ok": 1979,
+        "close_ok": 2427,
+        "both_ok": 1979
+      },
+      "2023": {
+        "n": 2430,
+        "open_ok": 2059,
+        "close_ok": 2426,
+        "both_ok": 2058
+      },
+      "2024": {
+        "n": 2427,
+        "open_ok": 2192,
+        "close_ok": 2425,
+        "both_ok": 2190
+      },
+      "2025": {
+        "n": 2428,
+        "open_ok": 2355,
+        "close_ok": 2428,
+        "both_ok": 2355
+      }
+    }
+  },
+  "acquisition": {
+    "open_usable": 8585,
+    "close_usable": 9706,
+    "both_usable": 8582,
+    "both_pct": 88.3,
+    "credits_remaining_final": "4163456"
+  },
+  "book_selection": {
+    "open": {
+      "fanduel": 8397,
+      "None": 1130,
+      "draftkings": 188
+    },
+    "close": {
+      "fanduel": 9673,
+      "draftkings": 33,
+      "None": 9
+    }
+  },
+  "pair_quality": {
+    "SAME_FANDUEL": 8366,
+    "INCOMPLETE": 1127,
+    "CROSS_BOOK": 215,
+    "BOTH_MISSING": 6,
+    "SAME_DRAFTKINGS": 1
+  },
+  "timestamp_quality": {
+    "open": {
+      "median": 0.4,
+      "p90": 6.0
+    },
+    "close": {
+      "median": 4.4,
+      "p90": 5.0
+    }
+  },
+  "verdict": "SNAPSHOT SUBSTRATE BUILT CLEANLY",
+  "output_files": {
+    "manifest": "/root/mlb-model/research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/mps_source_game_manifest_2022_2025.csv",
+    "final_parquet": "/root/mlb-model/research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/mps_historical_snapshots_2022_2025.parquet",
+    "build_report": "/root/mlb-model/research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/MPS_HISTORICAL_ACQUISITION_BUILD.md",
+    "raw_json": "/root/mlb-model/research/recovery/mlb_totals_context_engine_v1/mps_historical_acquisition/MPS_HISTORICAL_ACQUISITION_RAW.json"
+  }
+}
