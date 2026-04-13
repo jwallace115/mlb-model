@@ -622,5 +622,37 @@
     "actual_goals": null,
     "result": null,
     "logged_at": "2026-04-12T14:01:03.822612+00:00"
+  },
+  {
+    "game_id": "EPL_2025-26_2026-04-13_Manchester_United_Leeds",
+    "date": "2026-04-13",
+    "league": "EPL",
+    "home_team": "Manchester United",
+    "away_team": "Leeds",
+    "v2_2_edge": -0.075722,
+    "v2_2_p_over": 0.492754,
+    "v2_2c_edge": -0.049976,
+    "v2_2c_p_over": 0.518499,
+    "market_p_over": 0.568475,
+    "closing_line": 2.5,
+    "actual_goals": null,
+    "result": null,
+    "logged_at": "2026-04-13T11:10:27.257783+00:00"
+  },
+  {
+    "game_id": "SEA_2025-26_2026-04-13_Fiorentina_Lazio",
+    "date": "2026-04-13",
+    "league": "SEA",
+    "home_team": "Fiorentina",
+    "away_team": "Lazio",
+    "v2_2_edge": -0.37228,
+    "v2_2_p_over": 0.05,
+    "v2_2c_edge": -0.245705,
+    "v2_2c_p_over": 0.176575,
+    "market_p_over": 0.42228,
+    "closing_line": 2.5,
+    "actual_goals": null,
+    "result": null,
+    "logged_at": "2026-04-13T11:10:30.500502+00:00"
   }
 ]
