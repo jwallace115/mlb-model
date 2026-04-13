@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "a5f186ae13718f117194fdc34bae1f01",
+    "game_date": "2026-04-14",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Texas Rangers",
+    "commence_time": "2026-04-14T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 102,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-13T06:05:03.279329+00:00"
+  },
+  {
+    "game_id": "af4723d660204fd1fb7719261eb7f74b",
+    "game_date": "2026-04-14",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "New York Mets",
+    "commence_time": "2026-04-14T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 102,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-13T06:05:03.279329+00:00"
+  }
+]
