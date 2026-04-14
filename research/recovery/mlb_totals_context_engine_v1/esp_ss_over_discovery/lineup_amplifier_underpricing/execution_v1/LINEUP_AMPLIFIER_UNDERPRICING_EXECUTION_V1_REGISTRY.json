@@ -1,0 +1,73 @@
+{
+  test_name: LINEUP_AMPLIFIER_UNDERPRICING,
+  execution_version: v1,
+  execution_date: 2026-04-14,
+  frozen_memo_date: 2026-04-13,
+  protocol: pit_safe_staged_discovery,
+  universe: {
+    definition: ESP AND SS 45.9406,
+    total_games_pre_merge: 1743,
+    total_games_post_merge: 1692,
+    seasons: {2022: 342, 2023: 518, 2024: 422, 2025: 410}
+  },
+  trait_families_declared: [BB_PCT, ISO, OPS_control, Handedness_SKIPPED],
+  feature_source: mlb/data/hitter_game_logs.parquet,
+  feature_construction: rolling_30_shift1_strict_pit_safe,
+  frozen_median_cuts: {
+    avg_bb_pct: 0.081911,
+    avg_iso: 0.156165,
+    avg_ops: 0.708279
+  },
+  stage_a: {
+    seasons: [2022, 2023],
+    n_games: 860,
+    BB_PCT: {
+      high_n: 430, high_mean: 9.488,
+      low_n: 430, low_mean: 9.191,
+      raw_gap: 0.2977,
+      t_stat: 0.9248,
+      p_raw: 0.3553,
+      partial_r_controlling_ops: -0.0098,
+      partial_p: 0.7752,
+      seasonal_gap_2022: 0.335,
+      seasonal_gap_2023: -0.101,
+      season_reversal: true
+    },
+    ISO: {
+      high_n: 430, high_mean: 9.395,
+      low_n: 430, low_mean: 9.284,
+      raw_gap: 0.1116,
+      t_stat: 0.3467,
+      p_raw: 0.7289,
+      partial_r_controlling_ops: 0.0245,
+      partial_p: 0.4728,
+      seasonal_gap_2022: -0.904,
+      seasonal_gap_2023: 0.249,
+      season_reversal: true
+    },
+    OPS_control: {
+      high_n: 430, high_mean: 9.540,
+      low_n: 430, low_mean: 9.140,
+      raw_gap: 0.4000,
+      t_stat: 1.2432,
+      p_raw: 0.2141,
+      seasonal_gap_2022: -0.893,
+      seasonal_gap_2023: 0.774,
+      season_reversal: true
+    },
+    kill_rule_triggered: true,
+    kill_rule_reason: No trait family shows residual beyond OPS control. BB_PCT partial_r=-0.010, ISO partial_r=+0.025. Both near-zero.
+  },
+  stage_b: {executed: false, reason: kill_rule_stage_a},
+  stage_c: {executed: false, reason: kill_rule_stage_a},
+  stage_d: {executed: false, reason: kill_rule_stage_a},
+  final_verdict: NO-GO_CLOSE_NOW,
+  live_object_created: false,
+  shadow_object_modified: false,
+  files_written: [
+    LINEUP_AMPLIFIER_UNDERPRICING_EXECUTION_V1.md,
+    LINEUP_AMPLIFIER_UNDERPRICING_EXECUTION_V1_REGISTRY.json,
+    LINEUP_AMPLIFIER_UNDERPRICING_STAGE_TABLES.csv,
+    LINEUP_AMPLIFIER_UNDERPRICING_SELF_AUDIT.md
+  ]
+}
