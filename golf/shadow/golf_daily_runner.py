@@ -1451,7 +1451,7 @@ def run_composite():
 
 # ── CL03 Inside-Cut R1 Undervaluation — post-R1 shadow capture ──
 # Known no-cut event IDs (playoff events, invitational small fields, etc.)
-_NO_CUT_EVENT_IDS = {5, 11, 16, 27, 28, 34, 60, 88, 473, 476, 478, 480, 519, 521, 527, 550}
+_NO_CUT_EVENT_IDS = {16, 60, 88, 473, 476, 478, 519, 521, 550}
 _CL03_MIN_R1_COMPLETION = 0.80  # 80% of field must have R1 scores
 _CL03_CUT_POSITION_DEFAULT = 65  # PGA Tour standard: top 65 + ties
 _CL03_CUT_POSITION_MAP = {
