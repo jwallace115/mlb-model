@@ -1,0 +1,46 @@
+{
+  "object_name": "FRONT_LOADED_DISTRIBUTION_SHAPE",
+  "execution_id": "V1",
+  "executed_date": "2026-04-14",
+  "type": "frozen_pit_safe_research_execution",
+  "input_table": "research/recovery/mlb_totals_context_engine_v1/context_engine_output_table.parquet",
+  "universe_definition": {
+    "esp_cut": "> 48.5482 (HIGH tercile)",
+    "ss_cut": "<= 45.9406 (FRAGILE tercile)",
+    "n_games": 1743,
+    "by_season": {
+      "2022": 356,
+      "2023": 518,
+      "2024": 422,
+      "2025": 447
+    }
+  },
+  "inning_window": "innings_1_3 (frozen in hardening memo)",
+  "data_source": "MLB Stats API linescore endpoint",
+  "cache_file": "execution_v1/inning_cache.json",
+  "cache_entries": 5020,
+  "adjacent_universes_declared_before_results": true,
+  "adj1": "ESP=HIGH x SS=MODERATE (n=977)",
+  "adj2": "ESP=MID x SS=FRAGILE (n=1057)",
+  "board_sample": "n=2000, random_state=42",
+  "stage_results": {
+    "stage_a_discovery_gap_pp": 1.126,
+    "stage_a_discovery_t": 0.991,
+    "stage_a_discovery_p": 0.3216,
+    "stage_a_discovery_pass": false,
+    "stage_a_discovery_criterion": ">=+7pp",
+    "stage_a_validation_gap_pp": 3.068,
+    "stage_a_validation_p": 0.0566,
+    "stage_a_oos_gap_pp": 4.094,
+    "stage_a_oos_p": 0.0095,
+    "stage_b_run": false,
+    "stage_b_skip_reason": "Stage A failed \u2014 kill triggered",
+    "stage_c_run": false,
+    "stage_c_skip_reason": "Stage A failed \u2014 kill triggered"
+  },
+  "final_verdict": "NO-GO \u2014 CLOSE NOW",
+  "verdict_reason": "Discovery gap +1.13pp, far below the +7pp threshold. No stage can continue after a kill.",
+  "live_object_authorized": false,
+  "shadow_object_modified": false,
+  "live_object_modified": false
+}

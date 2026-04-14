@@ -97,7 +97,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.737,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 5
     },
     {
       "game_id": 2025021289,
@@ -109,6 +111,32 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.647,
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 3
+    },
+    {
+      "game_id": 2025021296,
+      "game_date": "2026-04-14",
+      "home_team": "MIN",
+      "away_team": "ANA",
+      "signal_side": "UNDER",
+      "edge": 0.1659,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.642,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021298,
+      "game_date": "2026-04-14",
+      "home_team": "CGY",
+      "away_team": "COL",
+      "signal_side": "UNDER",
+      "edge": 0.1557,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.652,
       "drift_applied": 0.0
     }
   ]

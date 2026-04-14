@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-04-13T11:00:07.770387Z",
+  "generated_at": "2026-04-14T11:00:11.512496Z",
   "is_spring_training": false,
-  "total_tracked": 433,
-  "total_plays": 61,
+  "total_tracked": 443,
+  "total_plays": 63,
   "overall": {
     "wins": 14,
-    "losses": 23,
-    "pushes": 1,
+    "losses": 24,
+    "pushes": 2,
     "no_line": 22,
-    "total": 61,
-    "decided": 37,
-    "win_pct": 37.8,
-    "roi": -27.8,
-    "units": -10.27
+    "total": 63,
+    "decided": 38,
+    "win_pct": 36.8,
+    "roi": -29.7,
+    "units": -11.27
   },
   "by_stars": {
     "\u2b50\u2b50\u2b50": {
@@ -28,14 +28,14 @@
     },
     "\u2b50\u2b50": {
       "wins": 7,
-      "losses": 17,
-      "pushes": 1,
+      "losses": 18,
+      "pushes": 2,
       "no_line": 11,
-      "total": 36,
-      "decided": 24,
-      "win_pct": 29.2,
-      "roi": -44.3,
-      "units": -10.64
+      "total": 38,
+      "decided": 25,
+      "win_pct": 28.0,
+      "roi": -46.5,
+      "units": -11.64
     },
     "\u2b50": {
       "wins": 5,
@@ -63,14 +63,14 @@
     },
     "MEDIUM": {
       "wins": 12,
-      "losses": 19,
-      "pushes": 1,
+      "losses": 20,
+      "pushes": 2,
       "no_line": 21,
-      "total": 54,
-      "decided": 31,
-      "win_pct": 38.7,
-      "roi": -26.1,
-      "units": -8.09
+      "total": 56,
+      "decided": 32,
+      "win_pct": 37.5,
+      "roi": -28.4,
+      "units": -9.09
     },
     "LOW": {
       "wins": 0,
@@ -100,14 +100,14 @@
     "mild": {
       "label": "50\u201375\u00b0F",
       "wins": 6,
-      "losses": 15,
-      "pushes": 0,
+      "losses": 16,
+      "pushes": 1,
       "no_line": 10,
-      "total": 32,
-      "decided": 21,
-      "win_pct": 28.6,
-      "roi": -45.5,
-      "units": -9.55
+      "total": 34,
+      "decided": 22,
+      "win_pct": 27.3,
+      "roi": -47.9,
+      "units": -10.55
     },
     "warm": {
       "label": "> 75\u00b0F",
@@ -163,9 +163,9 @@
       "label": "Blowing In",
       "wins": 3,
       "losses": 6,
-      "pushes": 0,
+      "pushes": 1,
       "no_line": 7,
-      "total": 17,
+      "total": 18,
       "decided": 9,
       "win_pct": 33.3,
       "roi": -36.4,
@@ -174,14 +174,14 @@
     "neutral": {
       "label": "Cross / Calm",
       "wins": 8,
-      "losses": 11,
+      "losses": 12,
       "pushes": 1,
       "no_line": 9,
-      "total": 29,
-      "decided": 19,
-      "win_pct": 42.1,
-      "roi": -19.6,
-      "units": -3.73
+      "total": 30,
+      "decided": 20,
+      "win_pct": 40.0,
+      "roi": -23.6,
+      "units": -4.73
     },
     "dome": {
       "label": "Dome",
@@ -213,9 +213,9 @@
       "label": "Pitcher's Park (PF < 0.97)",
       "wins": 2,
       "losses": 5,
-      "pushes": 1,
+      "pushes": 2,
       "no_line": 4,
-      "total": 12,
+      "total": 13,
       "decided": 7,
       "win_pct": 28.6,
       "roi": -45.5,
@@ -224,14 +224,14 @@
     "neutral": {
       "label": "Neutral Park (0.97\u20131.03)",
       "wins": 9,
-      "losses": 14,
+      "losses": 15,
       "pushes": 0,
       "no_line": 15,
-      "total": 38,
-      "decided": 23,
-      "win_pct": 39.1,
-      "roi": -25.3,
-      "units": -5.82
+      "total": 39,
+      "decided": 24,
+      "win_pct": 37.5,
+      "roi": -28.4,
+      "units": -6.82
     },
     "hitter": {
       "label": "Hitter's Park (PF > 1.03)",
@@ -259,17 +259,17 @@
     }
   },
   "projection_accuracy": {
-    "tracked": 428,
-    "mae": 3.98,
-    "avg_bias": 0.61,
-    "within_1_run": 15.2,
-    "within_2_runs": 33.9,
-    "within_3_runs": 46.5,
+    "tracked": 438,
+    "mae": 4.04,
+    "avg_bias": 0.72,
+    "within_1_run": 15.1,
+    "within_2_runs": 33.6,
+    "within_3_runs": 46.1,
     "mae_by_stars": {
       "\u2b50\u2b50\u2b50": 5.83,
-      "\u2b50\u2b50": 3.44,
+      "\u2b50\u2b50": 3.58,
       "\u2b50": 4.96,
-      "NO PLAY": 3.96
+      "NO PLAY": 4.01
     }
   },
   "factor_correlations": [
@@ -312,46 +312,46 @@
     {
       "factor": "Wind: Cross/Calm",
       "wins": 8,
-      "losses": 11,
+      "losses": 12,
       "pushes": 1,
       "no_line": 9,
-      "total": 29,
-      "decided": 19,
-      "win_pct": 42.1,
-      "roi": -19.6,
-      "units": -3.73
+      "total": 30,
+      "decided": 20,
+      "win_pct": 40.0,
+      "roi": -23.6,
+      "units": -4.73
     },
     {
       "factor": "Neutral Park",
       "wins": 9,
-      "losses": 14,
+      "losses": 15,
       "pushes": 0,
       "no_line": 15,
-      "total": 38,
-      "decided": 23,
-      "win_pct": 39.1,
-      "roi": -25.3,
-      "units": -5.82
+      "total": 39,
+      "decided": 24,
+      "win_pct": 37.5,
+      "roi": -28.4,
+      "units": -6.82
     },
     {
       "factor": "Confidence: MEDIUM",
       "wins": 12,
-      "losses": 19,
-      "pushes": 1,
+      "losses": 20,
+      "pushes": 2,
       "no_line": 21,
-      "total": 54,
-      "decided": 31,
-      "win_pct": 38.7,
-      "roi": -26.1,
-      "units": -8.09
+      "total": 56,
+      "decided": 32,
+      "win_pct": 37.5,
+      "roi": -28.4,
+      "units": -9.09
     },
     {
       "factor": "Wind: Blowing In",
       "wins": 3,
       "losses": 6,
-      "pushes": 0,
+      "pushes": 1,
       "no_line": 7,
-      "total": 17,
+      "total": 18,
       "decided": 9,
       "win_pct": 33.3,
       "roi": -36.4,
@@ -370,28 +370,28 @@
       "units": -2.18
     },
     {
-      "factor": "Temp 50\u201375\u00b0F",
-      "wins": 6,
-      "losses": 15,
-      "pushes": 0,
-      "no_line": 10,
-      "total": 32,
-      "decided": 21,
-      "win_pct": 28.6,
-      "roi": -45.5,
-      "units": -9.55
-    },
-    {
       "factor": "Pitcher's Park",
       "wins": 2,
       "losses": 5,
-      "pushes": 1,
+      "pushes": 2,
       "no_line": 4,
-      "total": 12,
+      "total": 13,
       "decided": 7,
       "win_pct": 28.6,
       "roi": -45.5,
       "units": -3.18
+    },
+    {
+      "factor": "Temp 50\u201375\u00b0F",
+      "wins": 6,
+      "losses": 16,
+      "pushes": 1,
+      "no_line": 10,
+      "total": 34,
+      "decided": 22,
+      "win_pct": 27.3,
+      "roi": -47.9,
+      "units": -10.55
     }
   ],
   "biggest_misses": [
@@ -569,18 +569,18 @@
     },
     "parlay_5": {
       "parlay_type": "parlay_5",
-      "total": 9,
+      "total": 10,
       "hits": 0,
-      "misses": 9,
-      "decided": 9,
+      "misses": 10,
+      "decided": 10,
       "hit_pct": 0.0
     },
     "parlay_7": {
       "parlay_type": "parlay_7",
-      "total": 8,
+      "total": 9,
       "hits": 0,
-      "misses": 8,
-      "decided": 8,
+      "misses": 9,
+      "decided": 9,
       "hit_pct": 0.0
     }
   }
