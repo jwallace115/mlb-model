@@ -1,0 +1,69 @@
+{
+  "object_name": "SURVIVAL_THRESHOLD_PATH",
+  "execution_version": "V1",
+  "execution_date": "2026-04-14",
+  "executor": "Claude claude-sonnet-4-6",
+  "plan_file": "SURVIVAL_THRESHOLD_PATH_TEST_PLAN.md",
+  "hardening_memo": "SURVIVAL_THRESHOLD_PATH_HARDENING_MEMO.md",
+  "frozen_threshold_ip": 3.0,
+  "frozen_esp_high_cutoff": 48.5482,
+  "frozen_ss_fragile_cutoff": 45.9406,
+  "universe": {
+    "definition": "ESP > 48.5482 AND SS <= 45.9406",
+    "total_games": 1743,
+    "by_season": {
+      "2022": 356,
+      "2023": 518,
+      "2024": 422,
+      "2025": 447
+    }
+  },
+  "path_split": {
+    "BREAK": 263,
+    "SURVIVAL": 1480,
+    "break_rate_pct": 15.1
+  },
+  "stage_a": {
+    "status": "PASS",
+    "discovery_gap": 1.76,
+    "validation_gap": 2.82,
+    "oos_gap": 3.63,
+    "seasons_positive": 4,
+    "seasons_total": 4,
+    "gap_criterion_met": true,
+    "seasons_criterion_met": true
+  },
+  "stage_b": {
+    "status": "KILL",
+    "target_gap": 2.42,
+    "board_gap": 2.5,
+    "board_to_target_ratio": 1.033,
+    "kill_threshold": 0.8,
+    "kill_triggered": true,
+    "adj1_high_mod_gap": 1.89,
+    "adj2_mid_frag_gap": 2.09,
+    "conclusion": "Pattern is generic \u2014 board-wide gap exceeds target universe gap"
+  },
+  "stage_c": {
+    "status": "NOT_BINDING (Stage B killed branch)",
+    "proxy_tested": "min_rolling_avg_ip (expanding mean shift-1)",
+    "break_mean_proxy": 3.45,
+    "survival_mean_proxy": 4.39,
+    "proxy_gap": 0.94,
+    "cohens_d": 0.8,
+    "t_stat": 7.29,
+    "p_value": "<0.0001",
+    "proxy_separates_paths": true,
+    "proxy_is_novel": false,
+    "note": "Large effect but mechanically expected \u2014 starters with low historical IP more often exit before 3 IP. Does not constitute new object under Stage B kill."
+  },
+  "final_verdict": "NO-GO \u2014 CLOSE NOW",
+  "verdict_reason": "Stage B kill rule triggered. Board-wide BREAK-SURVIVAL gap (2.50) >= 80% of target universe gap (2.42). Pattern is not unique to ESP=HIGH x SS=FRAGILE.",
+  "branch_status": "CLOSED",
+  "outputs": [
+    "SURVIVAL_THRESHOLD_PATH_EXECUTION_V1.md",
+    "SURVIVAL_THRESHOLD_PATH_EXECUTION_V1_REGISTRY.json",
+    "SURVIVAL_THRESHOLD_PATH_STAGE_TABLES.csv",
+    "SURVIVAL_THRESHOLD_PATH_SELF_AUDIT.md"
+  ]
+}
