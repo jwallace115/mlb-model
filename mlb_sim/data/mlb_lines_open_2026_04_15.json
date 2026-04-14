@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "4f93a0b7adae6d305b4095cc30172ed9",
+    "game_date": "2026-04-15",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Texas Rangers",
+    "commence_time": "2026-04-15T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -120,
+    "under_price": 100,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-14T06:05:02.316366+00:00"
+  },
+  {
+    "game_id": "70099d392f8cdba638b5d8e7d6dce3e2",
+    "game_date": "2026-04-15",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-04-15T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -120,
+    "under_price": 100,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-14T06:05:02.316366+00:00"
+  },
+  {
+    "game_id": "bf8721941657f63c8758e23bdee938ba",
+    "game_date": "2026-04-15",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "New York Mets",
+    "commence_time": "2026-04-15T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-14T06:05:02.316366+00:00"
+  }
+]
