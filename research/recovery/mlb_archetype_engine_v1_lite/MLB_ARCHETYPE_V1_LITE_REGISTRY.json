@@ -1,0 +1,97 @@
+{
+  "project": "MLB Archetype Engine V1-Lite",
+  "build_date": "2026-04-14",
+  "splits": {
+    "discovery": [
+      2022,
+      2023
+    ],
+    "validation": [
+      2024
+    ],
+    "oos": [
+      2025
+    ]
+  },
+  "sources_used": [
+    "mlb/data/hitter_game_logs.parquet",
+    "mlb/data/pitcher_game_logs.parquet",
+    "sim/data/game_table.parquet"
+  ],
+  "excluded_sources": [
+    "pitcher_recent_adjusted_features.parquet",
+    "sim/phase2_build_features.py",
+    "mlb_sim/data/ V1-era tables"
+  ],
+  "lineup_dimensions": {
+    "PATIENCE": "Rolling 15-game BB/PA, shift(1), min 10 games",
+    "DAMAGE": "Rolling 15-game ISO=(2B+2*3B+3*HR)/AB, shift(1), min 10 games",
+    "CONCENTRATION": "Rolling 15-game mean Gini(slot_hits), shift(1), min 10 games"
+  },
+  "starter_dimensions": {
+    "BAT-MISS": "Rolling 5-start K/BF, shift(1), min 3 starts",
+    "COMMAND": "Rolling 5-start BB/BF, shift(1), min 3 starts"
+  },
+  "archetype_labels": {
+    "PATIENT_DAMAGE": "High BB%, High ISO",
+    "PATIENT_CONTACT": "High BB%, Low ISO",
+    "IMPATIENT_POWER": "Low BB%, High ISO",
+    "IMPATIENT_WEAK": "Low BB%, Low ISO",
+    "MIXED": "Middle terciles"
+  },
+  "sp_profile_labels": {
+    "ELITE": "High K%, Low BB%",
+    "WILD_POWER": "High K%, High BB%",
+    "CONTACT": "Low K%, Low BB%",
+    "VULNERABLE": "Low K%, High BB%",
+    "AVERAGE": "Middle terciles"
+  },
+  "tercile_cuts": {
+    "patience_bb_pct": {
+      "low_cut": 0.07575757575757576,
+      "high_cut": 0.09042553191489362
+    },
+    "damage_iso": {
+      "low_cut": 0.1431451612903226,
+      "high_cut": 0.1702970297029703
+    },
+    "gini_conc": {
+      "low_cut": 0.5017857588227957,
+      "high_cut": 0.5382250671139559
+    },
+    "sp_k_pct": {
+      "low_cut": 0.1896551724137931,
+      "high_cut": 0.24193548387096775
+    },
+    "sp_bb_pct": {
+      "low_cut": 0.06060606060606061,
+      "high_cut": 0.08661417322834646
+    }
+  },
+  "results": {
+    "discovery_pass": true,
+    "validation_pass": false,
+    "oos_pass": null
+  },
+  "verdict": "NO-GO",
+  "verdict_detail": "Discovery showed signal but validation failed directional consistency.",
+  "data_quality_notes": {
+    "home_lineup_arch_coverage": "26.7%",
+    "away_lineup_arch_coverage": "98.2%",
+    "root_cause": "hitter_game_logs has 128K away-batter rows vs 76K home-batter rows \u2014 structural asymmetry",
+    "impact": "Valid team-halves (14,234) are asymmetrically weighted toward away-team observations",
+    "interpretation": "Discovery signal (max_residual=0.804) and validation failure (40% dir_consistency) should be viewed in light of this bias"
+  },
+  "validation_analysis": {
+    "directional_consistency": "40.0%",
+    "expected_by_chance": "50%",
+    "below_chance": true,
+    "interpretation": "Interaction effects in validation are not only absent but directionally opposite to discovery \u2014 strong evidence of no stable signal in these dimensions",
+    "possible_explanations": [
+      "True null: lineup archetypes at this granularity have no persistent effect on run scoring",
+      "Structural bias: home-side coverage asymmetry in source data creates non-representative discovery sample",
+      "Label instability: 15-game rolling windows may not capture stable lineup identity at team level",
+      "Dimension choice: BB%, ISO, K%, BB% may be too noisy at game-log aggregation level"
+    ]
+  }
+}
