@@ -1,0 +1,97 @@
+{
+  "project": "MLB Archetype Engine V1-Lite",
+  "run_type": "RERUN_AFTER_SOURCE_FIX",
+  "run_date": "2026-04-14",
+  "prior_run_date": "2026-04-14",
+  "splits": {
+    "discovery": [2022, 2023],
+    "validation": [2024],
+    "oos": [2025]
+  },
+  "sources_used": [
+    "mlb/data/hitter_game_logs.parquet",
+    "mlb/data/pitcher_game_logs.parquet",
+    "sim/data/game_table.parquet"
+  ],
+  "lineup_dimensions": {
+    "PATIENCE": "Rolling 15-game BB/PA, shift(1), min 10 games",
+    "DAMAGE": "Rolling 15-game ISO=(2B+2*3B+3*HR)/AB, shift(1), min 10 games",
+    "CONCENTRATION": "Rolling 15-game mean Gini(slot_hits), shift(1), min 10 games"
+  },
+  "starter_dimensions": {
+    "BAT-MISS": "Rolling 5-start K/BF, shift(1), min 3 starts",
+    "COMMAND": "Rolling 5-start BB/BF, shift(1), min 3 starts"
+  },
+  "archetype_labels": {
+    "PATIENT_DAMAGE": "High BB%, High ISO",
+    "PATIENT_CONTACT": "High BB%, Low ISO",
+    "IMPATIENT_POWER": "Low BB%, High ISO",
+    "IMPATIENT_WEAK": "Low BB%, Low ISO",
+    "MIXED": "Middle terciles"
+  },
+  "sp_profile_labels": {
+    "ELITE": "High K%, Low BB%",
+    "WILD_POWER": "High K%, High BB%",
+    "CONTACT": "Low K%, Low BB%",
+    "VULNERABLE": "Low K%, High BB%",
+    "AVERAGE": "Middle terciles"
+  },
+  "tercile_cuts": {
+    "home_patience": {"low_cut": 0.0729, "high_cut": 0.0867},
+    "away_patience": {"low_cut": 0.0724, "high_cut": 0.0870},
+    "home_damage":   {"low_cut": 0.1435, "high_cut": 0.1720},
+    "away_damage":   {"low_cut": 0.1441, "high_cut": 0.1697},
+    "home_sp_k_pct": {"low_cut": 0.1902, "high_cut": 0.2426},
+    "away_sp_k_pct": {"low_cut": 0.1925, "high_cut": 0.2427},
+    "home_sp_bb_pct":{"low_cut": 0.0627, "high_cut": 0.0878},
+    "away_sp_bb_pct":{"low_cut": 0.0619, "high_cut": 0.0880}
+  },
+  "source_repair": {
+    "action": "Vectorized merge of home_away flags against game_table truth",
+    "backup_created": "mlb/data/hitter_game_logs_pre_ha_fix_backup.parquet",
+    "h_before": 102121,
+    "a_before": 102427,
+    "h_after": 102121,
+    "a_after": 102427,
+    "rows_changed": 0,
+    "both_a_games_before": 0,
+    "both_a_games_after": 0,
+    "unresolved_pct": 0.0,
+    "diagnosis": "Source data was already balanced. Prior run's asymmetry claim was a false diagnosis."
+  },
+  "coverage": {
+    "team_game_rows": 19712,
+    "lineup_full_coverage_pct": 98.4,
+    "coverage_home_pct": 98.4,
+    "coverage_away_pct": 98.4,
+    "sp_coverage_pct": 90.4,
+    "discovery_games_full_cov": 2233,
+    "validation_games_full_cov": 1242,
+    "oos_games_full_cov": 1161
+  },
+  "results": {
+    "discovery_pass": true,
+    "discovery_max_residual": 1.1581,
+    "discovery_mean_residual": 0.3347,
+    "discovery_active_cells": 16,
+    "validation_pass": true,
+    "validation_dir_consistency": 0.667,
+    "validation_cells_compared": 15,
+    "oos_pass": false,
+    "oos_dir_consistency": 0.438,
+    "oos_cells_compared": 16
+  },
+  "verdict": "NO-GO",
+  "verdict_detail": "Discovery and validation passed but OOS (2025) failed directional consistency (43.8% < 60%). Signal does not hold out-of-sample.",
+  "comparison_to_prior_run": {
+    "prior_verdict": "NO-GO",
+    "verdict_changed": false,
+    "prior_validation_pass": false,
+    "prior_validation_dir_consistency": "40.0%",
+    "current_validation_pass": true,
+    "current_validation_dir_consistency": "66.7%",
+    "key_change": "With balanced home/away coverage (98.4% each), validation now passes. Prior run's validation failure was driven by the false asymmetry — actually a SP-starters column name bug (pitcher_id vs player_id) causing SP features to be null, not a home_away flag issue.",
+    "oos_result": "New: OOS 2025 run reveals signal does not hold (43.8% dir consistency). Prior run never reached OOS.",
+    "conclusion": "NO-GO verdict unchanged. Prior run stopped at validation (false fail). Rerun passes validation but fails OOS. Signal is absent in true holdout data."
+  }
+}
