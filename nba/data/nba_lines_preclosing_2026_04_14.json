@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "25f53495c4044a1d8fb682e3715eb7b3",
+    "game_date": "2026-04-14",
+    "sport": "NBA",
+    "home_team": "Charlotte Hornets",
+    "away_team": "Miami Heat",
+    "commence_time": "2026-04-14T23:40:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 228.5,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-14T22:00:03.430720+00:00"
+  },
+  {
+    "game_id": "0999cb23cd03811476b378dd4045ea16",
+    "game_date": "2026-04-14",
+    "sport": "NBA",
+    "home_team": "Phoenix Suns",
+    "away_team": "Portland Trail Blazers",
+    "commence_time": "2026-04-15T02:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 216.0,
+    "over_price": -105,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-14T22:00:03.430720+00:00"
+  },
+  {
+    "game_id": "f7264c00c662a127d58f4ab12fc498bc",
+    "game_date": "2026-04-14",
+    "sport": "NBA",
+    "home_team": "Philadelphia 76ers",
+    "away_team": "Orlando Magic",
+    "commence_time": "2026-04-15T23:40:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 221.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-14T22:00:03.430720+00:00"
+  }
+]
