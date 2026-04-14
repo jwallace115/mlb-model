@@ -138,6 +138,18 @@
       "closing_total": 6.5,
       "lambda_total": 5.652,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021293,
+      "game_date": "2026-04-14",
+      "home_team": "NYI",
+      "away_team": "CAR",
+      "signal_side": "UNDER",
+      "edge": 0.1259,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.839,
+      "drift_applied": 0.0
     }
   ]
 }
