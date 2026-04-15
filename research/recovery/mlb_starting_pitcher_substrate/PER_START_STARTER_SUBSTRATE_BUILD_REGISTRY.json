@@ -1,0 +1,163 @@
+{
+  "build_name": "PER_START_STARTER_SUBSTRATE",
+  "build_date": "2026-04-14",
+  "build_timestamp": "2026-04-14T00:00:00",
+  "status": "COMPLETE",
+  "pit_safety": "PASS",
+  "authorized_output_files": [
+    "research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+    "research/recovery/mlb_starting_pitcher_substrate/per_start_starter_substrate.parquet",
+    "research/recovery/mlb_starting_pitcher_substrate/PER_START_STARTER_SUBSTRATE_BUILD_REPORT.md",
+    "research/recovery/mlb_starting_pitcher_substrate/PER_START_STARTER_SUBSTRATE_BUILD_REGISTRY.json",
+    "research/recovery/mlb_starting_pitcher_substrate/PER_START_STARTER_SUBSTRATE_SELF_AUDIT.md"
+  ],
+  "statcast_backfill_2026": {
+    "script": "research/statcast_enrichment/backfill_2026_v3.py",
+    "method": "append-only to existing parquet (v3 \u2014 safe)",
+    "chunks_pulled": [
+      {
+        "id": "2026_03a",
+        "start": "2026-03-20",
+        "end": "2026-03-26",
+        "pitcher_starts": 220
+      },
+      {
+        "id": "2026_03b",
+        "start": "2026-03-27",
+        "end": "2026-04-02",
+        "pitcher_starts": 241
+      },
+      {
+        "id": "2026_04a",
+        "start": "2026-04-03",
+        "end": "2026-04-09",
+        "pitcher_starts": 274
+      },
+      {
+        "id": "2026_04b",
+        "start": "2026-04-10",
+        "end": "2026-04-14",
+        "pitcher_starts": 169
+      }
+    ],
+    "total_rows_added": 904,
+    "dtype_fix": "cast nullable Int64 columns (zone, game_pk, pitcher) to float before boolean ops; add .fillna(False) before .astype(int)",
+    "date_normalization": "2026 chunks had datetime64[ns] game_date; normalized to str YYYY-MM-DD before concat"
+  },
+  "statcast_file": {
+    "path": "research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+    "rows_before": 20662,
+    "rows_after": 21566,
+    "rows_added": 904,
+    "coverage_by_year": {
+      "2022": {
+        "before": 5134,
+        "after": 5134,
+        "delta": 0
+      },
+      "2023": {
+        "before": 5114,
+        "after": 5114,
+        "delta": 0
+      },
+      "2024": {
+        "before": 5268,
+        "after": 5268,
+        "delta": 0
+      },
+      "2025": {
+        "before": 5146,
+        "after": 5146,
+        "delta": 0
+      },
+      "2026": {
+        "before": 0,
+        "after": 904,
+        "delta": 904
+      }
+    },
+    "pit_safety_check": "PASS \u2014 all 2022-2025 row counts unchanged"
+  },
+  "starter_spine": {
+    "source": "mlb/data/pitcher_game_logs.parquet",
+    "filter": "starter_flag == 1",
+    "total_rows": 19914,
+    "by_season": {
+      "2022": 4860,
+      "2023": 4860,
+      "2024": 4854,
+      "2025": 4856,
+      "2026": 484
+    }
+  },
+  "enrichment_join": {
+    "type": "LEFT JOIN",
+    "left_table": "starter spine (pitcher_game_logs filtered)",
+    "right_table": "pitcher_statcast_per_start",
+    "keys": [
+      "game_pk",
+      "player_id / pitcher_id (both MLBAM)"
+    ],
+    "overall_match_rate_pct": 92.3,
+    "match_by_season": {
+      "2022": {
+        "total": 4860,
+        "matched": 4531,
+        "rate_pct": 93.2,
+        "unmatched": 329
+      },
+      "2023": {
+        "total": 4860,
+        "matched": 4339,
+        "rate_pct": 89.3,
+        "unmatched": 521
+      },
+      "2024": {
+        "total": 4854,
+        "matched": 4579,
+        "rate_pct": 94.3,
+        "unmatched": 275
+      },
+      "2025": {
+        "total": 4856,
+        "matched": 4457,
+        "rate_pct": 91.8,
+        "unmatched": 399
+      },
+      "2026": {
+        "total": 484,
+        "matched": 471,
+        "rate_pct": 97.3,
+        "unmatched": 13
+      }
+    },
+    "unmatched_root_causes": [
+      "Opener or short start < 30 pitches in Statcast (primary \u2014 unmatched mean PGL pitches = 58.9)",
+      "Missing chunk data: 2022-03, 2024-10, 2025-10 months not covered",
+      "game_pk mismatch (doubleheaders, rescheduled games)",
+      "Statcast raw data gaps for specific games"
+    ]
+  },
+  "substrate_file": {
+    "path": "research/recovery/mlb_starting_pitcher_substrate/per_start_starter_substrate.parquet",
+    "rows": 19914,
+    "columns": 43,
+    "column_groups": {
+      "pgl_columns": 22,
+      "statcast_columns": 21
+    }
+  },
+  "scripts_used": [
+    "research/statcast_enrichment/run_enrichment.py (reference \u2014 _aggregate_pitcher_start function)",
+    "research/statcast_enrichment/backfill_2026_v2.py (2026 chunk pull \u2014 wrote 4 chunk files)",
+    "research/statcast_enrichment/backfill_2026_v3.py (append-only merge \u2014 wrote updated parquet)"
+  ],
+  "objects_not_modified": [
+    "run_model.py",
+    "shadow_run.py",
+    "modules/ (all)",
+    "config.py",
+    "sim/ (all)",
+    "mlb_sim/ (all)"
+  ]
+}
