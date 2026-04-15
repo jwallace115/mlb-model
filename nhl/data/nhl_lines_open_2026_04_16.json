@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "c6dc2eb7ca9bcce1e2735b4673fc88b1",
+    "game_date": "2026-04-16",
+    "sport": "NHL",
+    "home_team": "Chicago Blackhawks",
+    "away_team": "San Jose Sharks",
+    "commence_time": "2026-04-16T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -105,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-15T06:05:03.211635+00:00"
+  },
+  {
+    "game_id": "95e2cb9751126776827294c1530f4823",
+    "game_date": "2026-04-16",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Seattle Kraken",
+    "commence_time": "2026-04-16T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -114,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-15T06:05:03.211635+00:00"
+  }
+]
