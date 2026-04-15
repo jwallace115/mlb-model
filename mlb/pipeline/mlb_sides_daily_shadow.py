@@ -165,7 +165,7 @@ def fetch_schedule(target_date: str) -> list:
 
 def fetch_game_results(game_pk: int) -> Optional[dict]:
     """Fetch final score for a completed game."""
-    url = f"{MLB_API}/game/{game_pk}/feed/live"
+    url = f"https://statsapi.mlb.com/api/v1.1/game/{game_pk}/feed/live"
     try:
         r = requests.get(url, timeout=15)
         r.raise_for_status()
