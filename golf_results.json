@@ -1,56 +1,67 @@
 {
-  "generated_at": "2026-04-14T07:00:26.664966",
+  "generated_at": "2026-04-15T07:00:26.096505",
   "sport": "golf",
   "event_name": "RBC Heritage",
   "event_id": 12,
   "is_major": false,
-  "last_updated": "2026-04-14T07:00:07.555927",
+  "last_updated": "2026-04-15T07:00:06.465939",
   "n_candidates": 0,
-  "n_leans": 4,
+  "n_leans": 5,
   "plays": [
     {
       "player_name": "Yellamaraju, Sudarshan",
       "dg_id": 29925,
       "market": "top_20",
-      "model_prob": 15.4,
-      "market_prob": 21.7,
-      "edge": -6.3,
+      "model_prob": 15.1,
+      "market_prob": 22.9,
+      "edge": -7.8,
       "direction": "under",
       "classification": "lean",
-      "close_odds": 325.0
+      "close_odds": 300.0
     },
     {
-      "player_name": "Thorbjornsen, Michael",
-      "dg_id": 26649,
+      "player_name": "Spieth, Jordan",
+      "dg_id": 14636,
       "market": "top_20",
-      "model_prob": 20.9,
-      "market_prob": 26.3,
-      "edge": -5.5,
+      "model_prob": 32.3,
+      "market_prob": 39.8,
+      "edge": -7.5,
       "direction": "under",
       "classification": "lean",
-      "close_odds": 250.0
+      "close_odds": 130.0
     },
     {
       "player_name": "Putnam, Andrew",
       "dg_id": 14704,
       "market": "top_20",
-      "model_prob": 20.7,
-      "market_prob": 15.4,
-      "edge": 5.4,
+      "model_prob": 21.3,
+      "market_prob": 15.3,
+      "edge": 6.0,
       "direction": "over",
       "classification": "lean",
       "close_odds": 500.0
     },
     {
-      "player_name": "Gotterup, Chris",
-      "dg_id": 27774,
+      "player_name": "Noren, Alex",
+      "dg_id": 10419,
       "market": "top_20",
-      "model_prob": 26.6,
-      "market_prob": 31.8,
-      "edge": -5.2,
-      "direction": "under",
+      "model_prob": 34.9,
+      "market_prob": 29.5,
+      "edge": 5.4,
+      "direction": "over",
       "classification": "lean",
-      "close_odds": 190.0
+      "close_odds": 210.0
+    },
+    {
+      "player_name": "MacIntyre, Robert",
+      "dg_id": 23323,
+      "market": "top_20",
+      "model_prob": 42.4,
+      "market_prob": 37.4,
+      "edge": 5.0,
+      "direction": "over",
+      "classification": "lean",
+      "close_odds": 145.0
     }
   ],
   "season_stats": {
