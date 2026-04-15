@@ -1,0 +1,106 @@
+{
+  "substrate_name": "mlb_weather_substrate",
+  "version": "1.0",
+  "build_date": "2026-04-15",
+  "build_timestamp": "2026-04-15 14:23:10",
+  "source_file": "sim/data/game_table.parquet",
+  "output_file": "research/recovery/mlb_weather_substrate/mlb_weather_substrate.parquet",
+  "grain": "one row per game_pk",
+  "total_rows": 9902,
+  "total_columns": 9,
+  "seasons_covered": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "game_pk_unique": true,
+  "full_row_duplicates": 0,
+  "classification_table": {
+    "identity_fields": [
+      "game_pk",
+      "date",
+      "season",
+      "home_team",
+      "away_team"
+    ],
+    "approved_weather_features": [
+      "temperature",
+      "wind_speed",
+      "wind_direction"
+    ],
+    "carried_context_fields": [
+      "roof_status"
+    ],
+    "excluded_derived_fields": [
+      "wind_factor",
+      "wind_factor_effective",
+      "flyball_wind"
+    ]
+  },
+  "null_rate_by_field": {
+    "game_pk": 0.0,
+    "date": 0.0,
+    "season": 0.0,
+    "home_team": 0.0,
+    "away_team": 0.0,
+    "temperature": 0.0,
+    "wind_speed": 0.0,
+    "wind_direction": 0.0,
+    "roof_status": 0.0
+  },
+  "value_ranges": {
+    "temperature": {
+      "min": 27.4,
+      "max": 111.9,
+      "mean": 71.87860028277116,
+      "std": 9.915392586296404,
+      "units": "degrees_F"
+    },
+    "wind_speed": {
+      "min": 0.0,
+      "max": 32.9,
+      "mean": 6.301131084629368,
+      "std": 4.953689863270994,
+      "units": "mph"
+    },
+    "wind_direction": {
+      "min": 0.0,
+      "max": 360.0,
+      "encoding": "meteorological_degrees_0_is_north_clockwise",
+      "units": "degrees"
+    }
+  },
+  "roof_status_counts": {
+    "open": 7586,
+    "retractable": 1989,
+    "dome": 327
+  },
+  "neutralized_roof_row_summary": {
+    "policy": "dome and retractable-roof venues set to temperature=72F, wind_speed=0, wind_direction=0",
+    "dome_games": 327,
+    "retractable_games": 1989,
+    "total_neutralized": 2316,
+    "pct_of_all_games": 23.4
+  },
+  "season_game_counts": {
+    "2022": 2430,
+    "2023": 2430,
+    "2024": 2427,
+    "2025": 2428,
+    "2026": 187
+  },
+  "source_semantics": {
+    "historical_rows_2022_2025": "Open-Meteo archive API, fetched at game-start UTC hour for home venue coordinates. Retroactive but gametime-aligned. No future leakage.",
+    "live_rows_2026": "Open-Meteo forecast API, fetched pregame. Genuine pregame data.",
+    "dome_retractable_rows": "Neutralized to 72F/0mph/0deg by documented policy. Not real sensor readings."
+  },
+  "pit_safety_verdict": "PASS",
+  "pit_safety_rationale": "All fields reflect pregame-known or gametime conditions. No in-game, post-game, or outcome data included. Derived interaction features excluded.",
+  "excluded_field_rationale": {
+    "wind_factor": "Derived cosine projection of wind relative to CF bearing. Belongs in feature engineering layer.",
+    "wind_factor_effective": "Derived field with known downstream bug in kp04_shadow.py. Excluded until corrected.",
+    "flyball_wind": "Interaction feature (flyball_pct x wind). Belongs in feature engineering layer, not raw substrate."
+  }
+}
