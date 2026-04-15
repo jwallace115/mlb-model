@@ -156,6 +156,18 @@
       "drift_applied": 0.0,
       "result": "WIN",
       "actual_total": 3
+    },
+    {
+      "game_id": 2025021304,
+      "game_date": "2026-04-15",
+      "home_team": "OTT",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "edge": 0.124,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 6.119,
+      "drift_applied": 0.0
     }
   ]
 }
