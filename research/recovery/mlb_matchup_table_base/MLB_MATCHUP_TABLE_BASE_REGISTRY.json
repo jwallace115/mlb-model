@@ -1,7 +1,7 @@
 {
   "table_name": "mlb_matchup_table_base",
   "version": "1.0",
-  "build_timestamp": "2026-04-15T10:29:13.230788",
+  "build_timestamp": "2026-04-15T10:30:39.874532",
   "output_file": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
   "row_count": 19804,
   "column_count": 107,
@@ -259,4 +259,63 @@
   ],
   "coverage_by_season": [
     {
-      "season": 
+      "season": 2022,
+      "rows": 4860,
+      "lineup_pct": 96.9,
+      "bullpen_pct": 100.0,
+      "opp_starter_id_pct": 100.0,
+      "opp_sp_profile_pct": 86.3
+    },
+    {
+      "season": 2023,
+      "rows": 4860,
+      "lineup_pct": 96.9,
+      "bullpen_pct": 100.0,
+      "opp_starter_id_pct": 100.0,
+      "opp_sp_profile_pct": 85.6
+    },
+    {
+      "season": 2024,
+      "rows": 4854,
+      "lineup_pct": 96.9,
+      "bullpen_pct": 100.0,
+      "opp_starter_id_pct": 100.0,
+      "opp_sp_profile_pct": 85.9
+    },
+    {
+      "season": 2025,
+      "rows": 4856,
+      "lineup_pct": 96.9,
+      "bullpen_pct": 100.0,
+      "opp_starter_id_pct": 100.0,
+      "opp_sp_profile_pct": 86.1
+    },
+    {
+      "season": 2026,
+      "rows": 374,
+      "lineup_pct": 35.3,
+      "bullpen_pct": 100.0,
+      "opp_starter_id_pct": 100.0,
+      "opp_sp_profile_pct": 17.9
+    }
+  ],
+  "residual_miss": {
+    "rows_with_opp_starter_id": 19804,
+    "rows_with_opp_sp_profile": 16769,
+    "missing_profile_despite_id": 3035,
+    "not_in_rolling_sp": 0,
+    "in_rolling_sp_all_null": 3035,
+    "interpretation": "All 3035 misses are pitchers present in rolling_sp but whose rolling window fields are entirely null due to insufficient prior starts (season debut or early appearances). Not data errors."
+  },
+  "pit_safety": {
+    "existing_files_modified": false,
+    "background_tasks_used": false,
+    "commits_or_pushes": false,
+    "files_written": [
+      "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
+      "research/recovery/mlb_matchup_table_base/MLB_MATCHUP_TABLE_BASE_REPORT.md",
+      "research/recovery/mlb_matchup_table_base/MLB_MATCHUP_TABLE_BASE_REGISTRY.json",
+      "research/recovery/mlb_matchup_table_base/MLB_MATCHUP_TABLE_BASE_SELF_AUDIT.md"
+    ]
+  }
+}
