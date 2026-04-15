@@ -1,0 +1,77 @@
+{
+  "object_name": "Batter-Game Hitter Statcast Substrate",
+  "object_id": "mlb_batter_game_statcast_v1",
+  "version": "1.0",
+  "build_date": "2026-04-15",
+  "canonical_source_pattern": "mlb/props/data/statcast_chunk_*.parquet",
+  "join_target": "mlb/data/hitter_game_logs.parquet",
+  "dedup_key": [
+    "game_pk",
+    "pitcher",
+    "at_bat_number",
+    "pitch_number"
+  ],
+  "chunk_files_count": 33,
+  "raw_pitch_rows": 3193983,
+  "duplicate_pitch_rows": 0,
+  "retained_pitch_rows": 3193983,
+  "bip_rows": 563743,
+  "batter_game_rows": 197497,
+  "join_match_rate": 87.31,
+  "unmatched_batter_game_rows": 28699,
+  "output_columns": [
+    "game_pk",
+    "game_date",
+    "batter",
+    "player_id",
+    "team",
+    "home_away",
+    "season",
+    "batting_order_position",
+    "total_pitches",
+    "bip_count",
+    "avg_exit_velo",
+    "hard_hit_rate",
+    "barrel_rate",
+    "avg_launch_angle",
+    "xwoba_contact",
+    "xba_contact",
+    "xslg_contact"
+  ],
+  "xba_included": true,
+  "xslg_included": true,
+  "season_coverage": {
+    "2022": {
+      "joined": 48319,
+      "total": 58073,
+      "rate": 83.20389854149089
+    },
+    "2023": {
+      "joined": 48762,
+      "total": 55366,
+      "rate": 88.07210201206517
+    },
+    "2024": {
+      "joined": 48751,
+      "total": 54388,
+      "rate": 89.6355813782452
+    },
+    "2025": {
+      "joined": 48815,
+      "total": 53674,
+      "rate": 90.94719976152327
+    },
+    "2026": {
+      "joined": 2850,
+      "total": 4695,
+      "rate": 60.70287539936102
+    }
+  },
+  "pit_safe_status": "APPROVED AS SUBSTRATE",
+  "warnings": [
+    "batting_order_position carried from HGL but NOT approved as pregame lineup-card feature",
+    "No rolling features built \u2014 this is per-game substrate only",
+    "Future rolling builds must use strict date < game_date with shift(1)"
+  ],
+  "status": "BUILD COMPLETE"
+}
