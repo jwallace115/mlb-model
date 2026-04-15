@@ -1,0 +1,126 @@
+{
+  "substrate_id": "MLB_UMPIRE_SUBSTRATE_v1",
+  "build_date": "2026-04-15",
+  "source_game_table": "sim/data/game_table.parquet",
+  "source_ratings_module": "modules/umpires.py",
+  "repair_id_dependency": "MLB_UMPIRE_RATINGS_2026_REPAIR",
+  "output_file": "research/recovery/mlb_umpire_substrate/mlb_umpire_substrate.parquet",
+  "rows": 9902,
+  "columns": 8,
+  "game_pk_unique": true,
+  "seasons_covered": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "umpire_ratings_entries": 92,
+  "ineligible_below_threshold": 19,
+  "coverage": {
+    "matched_games": 9626,
+    "total_games": 9902,
+    "coverage_pct": 97.2,
+    "neutral_fallback_games": 276,
+    "by_season": {
+      "2022": {
+        "matched": 2271,
+        "total": 2430,
+        "pct": 93.5
+      },
+      "2023": {
+        "matched": 2420,
+        "total": 2430,
+        "pct": 99.6
+      },
+      "2024": {
+        "matched": 2393,
+        "total": 2427,
+        "pct": 98.6
+      },
+      "2025": {
+        "matched": 2359,
+        "total": 2428,
+        "pct": 97.2
+      },
+      "2026": {
+        "matched": 183,
+        "total": 187,
+        "pct": 97.9
+      }
+    }
+  },
+  "field_classification": {
+    "game_pk": "IDENTITY",
+    "date": "IDENTITY",
+    "season": "IDENTITY",
+    "umpire_name": "CARRIED_ONLY_SUPPORT_FIELD",
+    "umpire_id": "CARRIED_ONLY_SUPPORT_FIELD",
+    "umpire_over_rate": "APPROVED_UMPIRE_FEATURE",
+    "umpire_k_rate": "CARRIED_ONLY_SUPPORT_FIELD",
+    "umpire_matched": "CARRIED_ONLY_SUPPORT_FIELD"
+  },
+  "usage_scope": {
+    "identity_scope": "All games in game_table (2022-2026). game_pk is the join key.",
+    "ratings_scope": "umpire_over_rate is 2026-frozen: ratings computed from 2022-2025 outcomes only. No 2026 outcome data in ratings.",
+    "historical_backtest_scope": "NOT PIT-safe for 2022-2025 backtests. Full 4-year outcome window baked into ratings. Historical backtest use requires separate PIT-safe rebuild (rolling or leave-one-season-out).",
+    "live_2026_scope": "APPROVED for 2026 daily model pipeline. No look-ahead contamination for 2026 games.",
+    "umpire_k_rate_scope": "CARRIED_ONLY -- all zeros, not rebuildable from game_table. Do not promote to active feature."
+  },
+  "distribution": {
+    "umpire_over_rate_mean": 1.000877,
+    "umpire_over_rate_std": 0.049102,
+    "umpire_over_rate_min": 0.9,
+    "umpire_over_rate_max": 1.1,
+    "umpire_over_rate_median": 1.0,
+    "clamped_at_floor_umpires": 7,
+    "clamped_at_ceiling_umpires": 3,
+    "umpire_k_rate_all_zero": true
+  },
+  "pit_safety": {
+    "no_2026_data_in_ratings": true,
+    "game_pk_unique_confirmed": true,
+    "zero_duplicates": true,
+    "zero_nulls": true,
+    "modules_umpires_py_not_modified_in_this_step": true,
+    "no_commits_or_pushes": true,
+    "no_background_tasks": true,
+    "only_authorized_files_written": true
+  },
+  "spot_checks": {
+    "Lance Barrett": {
+      "games": 125,
+      "runs_factor": 1.0193,
+      "matched": true,
+      "note": "Bug-fixed: was missing from UMPIRE_RATINGS"
+    },
+    "Alfonso Marquez": {
+      "games": 121,
+      "runs_factor": 1.07,
+      "matched": true,
+      "note": "Bug-fixed: unicode NFKD normalization"
+    },
+    "Ted Barrett": {
+      "games": 29,
+      "runs_factor": 1.0,
+      "matched": false,
+      "note": "Correctly neutral (below 30-game threshold)"
+    },
+    "Angel Hernandez": {
+      "runs_factor": 1.064,
+      "matched": true,
+      "note": "Standard rated umpire"
+    },
+    "UNKNOWN_UMP": {
+      "runs_factor": 1.0,
+      "matched": false,
+      "note": "Neutral fallback for unrecognized names"
+    }
+  },
+  "files_written": [
+    "research/recovery/mlb_umpire_substrate/mlb_umpire_substrate.parquet",
+    "research/recovery/mlb_umpire_substrate/MLB_UMPIRE_SUBSTRATE_REPORT.md",
+    "research/recovery/mlb_umpire_substrate/MLB_UMPIRE_SUBSTRATE_REGISTRY.json",
+    "research/recovery/mlb_umpire_substrate/MLB_UMPIRE_SUBSTRATE_SELF_AUDIT.md"
+  ]
+}
