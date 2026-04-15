@@ -1,0 +1,91 @@
+{
+  "repair_id": "MLB_UMPIRE_RATINGS_2026_REPAIR",
+  "repair_date": "2026-04-15",
+  "methodology": "frozen_2026_from_game_table",
+  "data_source": "sim/data/game_table.parquet",
+  "seasons_used": [2022, 2023, 2024, 2025],
+  "seasons_excluded": [2026],
+  "total_qualifying_games": 9715,
+  "league_avg_total": 8.870201,
+  "min_games_threshold": 30,
+  "clamp_floor": 0.900,
+  "clamp_ceiling": 1.100,
+  "eligible_umpires": 92,
+  "ineligible_umpires": 19,
+  "clamped_floor_count": 7,
+  "clamped_ceiling_count": 3,
+  "coverage_before": {
+    "rated_in_table": 62,
+    "matched_gt_umpires": 50,
+    "total_gt_umpires": 111,
+    "umpire_coverage_pct": 45.0,
+    "game_coverage": 5027,
+    "total_games": 9902,
+    "game_coverage_pct": 50.8
+  },
+  "coverage_after": {
+    "rated_in_table": 92,
+    "matched_gt_umpires": 92,
+    "total_gt_umpires": 111,
+    "umpire_coverage_pct": 82.9,
+    "game_coverage": 9626,
+    "total_games": 9902,
+    "game_coverage_pct": 97.2
+  },
+  "bugs_fixed": [
+    {
+      "name": "Lance Barrett missing",
+      "description": "Lance Barrett present in game_table (122 games, rf=1.0193) but absent from UMPIRE_RATINGS. Last-name fallback incorrectly matched Ted Barrett (rf=0.975) causing -2.5pp systematic error.",
+      "resolution": "Added Lance Barrett with runs_factor=1.0193 derived from 122 games 2022-2025"
+    },
+    {
+      "name": "Alfonso Marquez unicode",
+      "description": "game_table stores 'Alfonso Marquez' (accented). Old table used ASCII key 'Alfonso Marquez'. Exact-match failed; relied on fragile last-name fallback.",
+      "resolution": "Canonical key is now 'Alfonso Marquez' (accented). NFKD _NORM_LOOKUP resolves both spellings deterministically."
+    },
+    {
+      "name": "Last-name fallback cross-collision",
+      "description": "get_umpire_rating() last-name fallback caused Lance Barrett -> Ted Barrett cross-family collision.",
+      "resolution": "Last-name fallback removed. Lookup: exact match -> NFKD normalized match -> neutral."
+    }
+  ],
+  "neutralized_fields": {
+    "k_tendency": "0.000 (not rebuildable from game_table alone)",
+    "sigma_mult": "1.00 (not rebuildable from game_table alone)"
+  },
+  "ineligible_umpires_list": [
+    "James Jean (29 games)",
+    "Ted Barrett (29 games)",
+    "Jonathan Parra (27 games)",
+    "Jerry Meals (27 games)",
+    "Jim Reynolds (21 games)",
+    "Bill Welke (20 games)",
+    "David Arrieta (19 games)",
+    "Ed Hickox (18 games)",
+    "Willie Traynor (15 games)",
+    "Marty Foster (11 games)",
+    "Jose Navas (11 games)",
+    "Tom Hallion (10 games)",
+    "Greg Gibson (10 games)",
+    "Jen Pawol (6 games)",
+    "Tyler Jones (5 games)",
+    "Dexter Kelley (4 games)",
+    "Randy Rosenberg (4 games)",
+    "Steven Jaschinski (4 games)",
+    "Lew Williams (2 games)"
+  ],
+  "pit_safety": {
+    "no_2026_data_in_ratings": true,
+    "function_signature_unchanged": true,
+    "output_schema_unchanged": true,
+    "no_commits_or_pushes": true,
+    "only_authorized_files_written": true,
+    "backup_created": "modules/umpires.py.bak_2026"
+  },
+  "files_written": [
+    "modules/umpires.py",
+    "research/recovery/mlb_umpire_ratings_repair/MLB_UMPIRE_RATINGS_2026_REPAIR_REPORT.md",
+    "research/recovery/mlb_umpire_ratings_repair/MLB_UMPIRE_RATINGS_2026_REPAIR_REGISTRY.json",
+    "research/recovery/mlb_umpire_ratings_repair/MLB_UMPIRE_RATINGS_2026_REPAIR_SELF_AUDIT.md"
+  ]
+}
