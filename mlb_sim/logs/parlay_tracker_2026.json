@@ -269,18 +269,44 @@
             "game": "LAA@NYY",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "SFG@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "WSN@PIT",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
+            "result": "PUSH"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-15",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "ARI@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "LAA@NYY",
+            "bet": "FULL GAME UNDER",
+            "line": 10.0,
+            "result": null
+          },
+          {
+            "game": "TEX@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
             "result": null
           }
         ],
@@ -289,12 +315,12 @@
       }
     ],
     "summary": {
-      "total": 10,
+      "total": 11,
       "wins": 1,
-      "losses": 9,
+      "losses": 10,
       "pending": 0,
-      "win_rate": 10.0,
-      "net_units": -4.0,
+      "win_rate": 9.1,
+      "net_units": -5.0,
       "payout_per_win": 6.0
     }
   },
@@ -536,30 +562,68 @@
             "game": "LAA@NYY",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
+            "result": "WIN"
+          },
+          {
+            "game": "SFG@CIN",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": "WIN"
+          },
+          {
+            "game": "WSN@PIT",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": "PUSH"
+          },
+          {
+            "game": "ARI@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": "WIN"
+          },
+          {
+            "game": "TEX@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
+            "result": "WIN"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-15",
+        "type": "5-leg",
+        "legs": [
+          {
+            "game": "ARI@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "LAA@NYY",
+            "bet": "FULL GAME UNDER",
+            "line": 10.0,
+            "result": null
+          },
+          {
+            "game": "TEX@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "MIA@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
             "result": null
           },
           {
             "game": "SFG@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
-          },
-          {
-            "game": "WSN@PIT",
-            "bet": "FULL GAME UNDER",
-            "line": 9.0,
-            "result": null
-          },
-          {
-            "game": "ARI@BAL",
-            "bet": "FULL GAME UNDER",
-            "line": 8.5,
-            "result": null
-          },
-          {
-            "game": "TEX@OAK",
-            "bet": "FULL GAME UNDER",
-            "line": 8.5,
             "result": null
           }
         ],
@@ -568,12 +632,12 @@
       }
     ],
     "summary": {
-      "total": 6,
+      "total": 7,
       "wins": 0,
-      "losses": 6,
+      "losses": 7,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -6.0,
+      "net_units": -7.0,
       "payout_per_win": 24.0
     }
   },
