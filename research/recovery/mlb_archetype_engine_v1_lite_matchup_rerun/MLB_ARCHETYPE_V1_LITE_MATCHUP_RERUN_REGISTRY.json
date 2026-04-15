@@ -1,0 +1,101 @@
+{
+  "project": "MLB Archetype Engine V1-Lite Matchup Rerun",
+  "build_date": "2026-04-15",
+  "source_base": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
+  "original_registry": "research/recovery/mlb_archetype_engine_v1_lite/MLB_ARCHETYPE_V1_LITE_REGISTRY.json",
+  "same_object_verdict": "SAME CONCEPT, MEDIATED THROUGH MATCHUP BASE",
+  "concentration_dimension_status": "DROPPED \u2014 no Gini slot-hits field in matchup base",
+  "splits": {
+    "discovery": [
+      2022,
+      2023
+    ],
+    "validation": [
+      2024
+    ],
+    "oos": [
+      2025
+    ]
+  },
+  "frozen_predictor_fields": {
+    "PATIENCE": "plate_bb_rate_last_15",
+    "DAMAGE": "damage_iso_last_15",
+    "BAT-MISS": "opp_sp_batmiss_k_rate_last_5",
+    "COMMAND": "opp_sp_command_bb_rate_last_5"
+  },
+  "tercile_cuts_from_discovery": {
+    "patience_bb_rate": {
+      "low_cut": 0.0734675585749448,
+      "high_cut": 0.08799568578661833
+    },
+    "damage_iso": {
+      "low_cut": 0.1411440469744612,
+      "high_cut": 0.16802842715739758
+    },
+    "sp_k_rate": {
+      "low_cut": 0.19005241022784877,
+      "high_cut": 0.24193788819875775
+    },
+    "sp_bb_rate": {
+      "low_cut": 0.061835536444232085,
+      "high_cut": 0.08858659054311228
+    }
+  },
+  "data_counts": {
+    "pre_filter_rows": 19430,
+    "post_filter_rows": 15578,
+    "dropped_missing_predictor_or_outcome": 3852,
+    "by_season": {
+      "2022": 3926,
+      "2023": 3867,
+      "2024": 3881,
+      "2025": 3904
+    },
+    "discovery_rows": 7793
+  },
+  "grand_mean_runs": 4.4347,
+  "home_away_distribution": "symmetric \u2014 9902 H / 9902 A in full matchup base",
+  "home_side_coverage_note": "RESOLVED vs original V1-lite \u2014 matchup base has symmetric H/A rows (no asymmetry bias)",
+  "archetype_labels": {
+    "PATIENT_DAMAGE": "High BB%, High ISO",
+    "PATIENT_CONTACT": "High BB%, Low ISO",
+    "IMPATIENT_POWER": "Low BB%, High ISO",
+    "IMPATIENT_WEAK": "Low BB%, Low ISO",
+    "MIXED": "Middle terciles"
+  },
+  "sp_profile_labels": {
+    "ELITE": "High K%, Low BB%",
+    "WILD_POWER": "High K%, High BB%",
+    "CONTACT": "Low K%, Low BB%",
+    "VULNERABLE": "Low K%, High BB%",
+    "AVERAGE": "Middle terciles"
+  },
+  "advancement_standards": {
+    "discovery": "max |interaction residual| >= 0.50 runs",
+    "validation": "directional_consistency >= 60%",
+    "oos": "directional_consistency >= 50%"
+  },
+  "results": {
+    "discovery_max_residual": 0.7191,
+    "discovery_pass": true,
+    "validation_directional_consistency_pct": 56.0,
+    "validation_cells_agree": 14,
+    "validation_cells_total": 25,
+    "validation_pass": false,
+    "oos_directional_consistency_pct": 48.0,
+    "oos_cells_agree": 12,
+    "oos_cells_total": 25,
+    "oos_pass": false
+  },
+  "verdict": "NO-GO",
+  "verdict_detail": "Discovery passed (max residual 0.719). Validation failed (56.0% directional consistency, threshold 60%). OOS failed (48.0%, below-chance, threshold 50%). Signal does not persist.",
+  "vs_original_v1_lite": {
+    "original_verdict": "NO-GO",
+    "original_validation_consistency": "40.0%",
+    "rerun_validation_consistency": "56.0%",
+    "original_home_coverage_bias": "26.7% home lineup coverage \u2014 structural asymmetry",
+    "rerun_home_coverage": "Symmetric (50/50 H/A)",
+    "interpretation": "Fixing the home-side coverage asymmetry improved validation from 40% to 56% but does not cross the 60% threshold. Core conclusion unchanged: no stable interaction signal.",
+    "concentration_dimension": "Present in original, absent in rerun \u2014 3-dim original vs 2-dim matchup rerun"
+  }
+}
