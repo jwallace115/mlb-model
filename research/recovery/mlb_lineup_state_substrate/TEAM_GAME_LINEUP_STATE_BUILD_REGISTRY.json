@@ -1,0 +1,145 @@
+{
+  "substrate_name": "TEAM_GAME_LINEUP_STATE",
+  "version": "1.0.0",
+  "build_timestamp": "2026-04-15T09:12:33Z",
+  "status": "COMPLETE",
+  "output_files": {
+    "primary_parquet": "research/recovery/mlb_lineup_state_substrate/team_game_lineup_state.parquet",
+    "build_report": "research/recovery/mlb_lineup_state_substrate/TEAM_GAME_LINEUP_STATE_BUILD_REPORT.md",
+    "registry": "research/recovery/mlb_lineup_state_substrate/TEAM_GAME_LINEUP_STATE_BUILD_REGISTRY.json",
+    "self_audit": "research/recovery/mlb_lineup_state_substrate/TEAM_GAME_LINEUP_STATE_SELF_AUDIT.md"
+  },
+  "output_shape": {
+    "rows": 19712,
+    "cols": 54
+  },
+  "seasons_covered": [2022, 2023, 2024, 2025, 2026],
+  "granularity": "team-game",
+  "join_keys": ["game_pk", "team"],
+  "inputs": [
+    {
+      "name": "batter_game_statcast",
+      "path": "research/recovery/mlb_hitter_statcast_substrate/batter_game_statcast.parquet",
+      "rows": 197497,
+      "cols": 17,
+      "seasons": {"2022": 48319, "2023": 48762, "2024": 48751, "2025": 48815, "2026": 2850},
+      "role": "statcast_contact_quality"
+    },
+    {
+      "name": "hitter_game_logs",
+      "path": "mlb/data/hitter_game_logs.parquet",
+      "rows": 204548,
+      "cols": 28,
+      "seasons": {"2022": 50038, "2023": 50495, "2024": 50478, "2025": 50594, "2026": 2943},
+      "role": "box_score_plate_shape"
+    },
+    {
+      "name": "game_table",
+      "path": "sim/data/game_table.parquet",
+      "rows": 9902,
+      "cols": 30,
+      "role": "game_number_for_doubleheader_sort",
+      "cols_used": ["game_pk", "game_number"]
+    }
+  ],
+  "team_normalization_map": {
+    "AZ": "ARI",
+    "CWS": "CHW",
+    "KC": "KCR",
+    "SD": "SDP",
+    "SF": "SFG",
+    "TB": "TBR",
+    "WSH": "WSN",
+    "ATH": "OAK"
+  },
+  "layers": {
+    "layer_a_box": {
+      "description": "Box-score offense shape aggregated from hitter_game_logs",
+      "group_keys": ["game_pk", "team_norm", "season", "game_date"],
+      "rows_after_agg": 19712
+    },
+    "layer_b_statcast": {
+      "description": "Statcast contact quality aggregated from batter_game_statcast",
+      "group_keys": ["game_pk", "team_norm", "season"],
+      "rows_after_agg": 19712,
+      "coverage_pct": 99.99
+    },
+    "join_type": "left (box-score spine)",
+    "joined_rows": 19712
+  },
+  "rolling_spec": {
+    "sort_order": ["team", "season", "game_date", "game_number"],
+    "pit_safe_mechanism": "shift(1) before rolling window within (team, season) group",
+    "windows": {
+      "7":  {"min_periods": 5},
+      "10": {"min_periods": 7},
+      "15": {"min_periods": 10},
+      "20": {"min_periods": 12}
+    },
+    "feature_families": {
+      "contact_quality": {
+        "metrics": ["contact_ev", "contact_hh_rate", "contact_barrel_rate", "contact_la", "contact_xwoba", "contact_xba", "contact_xslg"],
+        "source": "batter_game_statcast",
+        "col_count": 28
+      },
+      "plate_discipline": {
+        "metrics": ["plate_bb_rate", "plate_k_rate"],
+        "source": "hitter_game_logs",
+        "col_count": 8
+      },
+      "damage_shape": {
+        "metrics": ["damage_iso", "damage_hr_rate"],
+        "source": "hitter_game_logs",
+        "col_count": 8
+      }
+    },
+    "total_rolling_cols": 44
+  },
+  "field_disposition": {
+    "identity_cols": ["game_pk", "game_date", "season", "team", "home_away", "game_number"],
+    "approved_rolling_cols": [
+      "contact_ev_last_7", "contact_ev_last_10", "contact_ev_last_15", "contact_ev_last_20",
+      "contact_hh_rate_last_7", "contact_hh_rate_last_10", "contact_hh_rate_last_15", "contact_hh_rate_last_20",
+      "contact_barrel_rate_last_7", "contact_barrel_rate_last_10", "contact_barrel_rate_last_15", "contact_barrel_rate_last_20",
+      "contact_la_last_7", "contact_la_last_10", "contact_la_last_15", "contact_la_last_20",
+      "contact_xwoba_last_7", "contact_xwoba_last_10", "contact_xwoba_last_15", "contact_xwoba_last_20",
+      "contact_xba_last_7", "contact_xba_last_10", "contact_xba_last_15", "contact_xba_last_20",
+      "contact_xslg_last_7", "contact_xslg_last_10", "contact_xslg_last_15", "contact_xslg_last_20",
+      "plate_bb_rate_last_7", "plate_bb_rate_last_10", "plate_bb_rate_last_15", "plate_bb_rate_last_20",
+      "plate_k_rate_last_7", "plate_k_rate_last_10", "plate_k_rate_last_15", "plate_k_rate_last_20",
+      "damage_iso_last_7", "damage_iso_last_10", "damage_iso_last_15", "damage_iso_last_20",
+      "damage_hr_rate_last_7", "damage_hr_rate_last_10", "damage_hr_rate_last_15", "damage_hr_rate_last_20"
+    ],
+    "carried_only_cols": ["n_batters", "sc_batter_count", "sc_total_bip", "total_pa"],
+    "excluded_per_game_realized": [
+      "total_ab", "total_hits", "total_walks", "total_k", "total_hr",
+      "total_doubles", "total_triples",
+      "bb_rate", "k_rate", "hr_rate", "iso",
+      "sc_avg_exit_velo", "sc_hard_hit_rate", "sc_barrel_rate",
+      "sc_avg_launch_angle", "sc_xwoba_contact", "sc_xba_contact", "sc_xslg_contact"
+    ]
+  },
+  "null_rates_rolling": {
+    "last_7":  "3.8%",
+    "last_10": "5.3%",
+    "last_15": "7.5%",
+    "last_20": "8.7%",
+    "null_cause": "Season-start games where team has fewer prior games than min_periods — structurally correct"
+  },
+  "doubleheader_stats": {
+    "game_number_2_team_game_rows": 324,
+    "game_number_1_team_game_rows": 19388
+  },
+  "pit_safety": {
+    "verdict": "PASS",
+    "method": "shift(1) before rolling within (team, season) group sorted by (game_date, game_number)",
+    "per_game_realized_excluded_from_output": true,
+    "background_tasks_used": false
+  },
+  "warnings": [
+    "2 rows (0.01%) missing Statcast — negligible, expected for data gaps",
+    "2026 partial season — early-season rows will have null rolling features until min_periods met",
+    "carried_only cols (total_pa, n_batters, sc_batter_count, sc_total_bip) are per-game actuals — not PIT-safe for use as predictive features",
+    "home_away encoding is 'A'/'H' (from HGL source)"
+  ]
+}

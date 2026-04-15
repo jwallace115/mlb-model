@@ -1,0 +1,220 @@
+{
+  "substrate_name": "rolling_starter_profile",
+  "version": "1.0",
+  "build_timestamp": "2026-04-15 09:28:44 UTC",
+  "output_file": "research/recovery/mlb_starter_profile_substrate/rolling_starter_profile.parquet",
+  "input_file": "research/recovery/mlb_starting_pitcher_substrate/per_start_starter_substrate.parquet",
+  "auxiliary_input": "sim/data/game_table.parquet",
+  "rows": 19914,
+  "cols": 55,
+  "seasons": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "identity_cols": [
+    "game_pk",
+    "game_date",
+    "season",
+    "player_id",
+    "player_name",
+    "team",
+    "opponent",
+    "pitcher_hand",
+    "home_away",
+    "game_number"
+  ],
+  "approved_rolling_cols": [
+    "batmiss_k_rate_last_3",
+    "batmiss_k_rate_last_5",
+    "batmiss_k_rate_last_10",
+    "batmiss_whiff_rate_last_3",
+    "batmiss_whiff_rate_last_5",
+    "batmiss_whiff_rate_last_10",
+    "command_bb_rate_last_3",
+    "command_bb_rate_last_5",
+    "command_bb_rate_last_10",
+    "command_zone_rate_last_3",
+    "command_zone_rate_last_5",
+    "command_zone_rate_last_10",
+    "contact_hh_allowed_last_3",
+    "contact_hh_allowed_last_5",
+    "contact_hh_allowed_last_10",
+    "contact_barrel_allowed_last_3",
+    "contact_barrel_allowed_last_5",
+    "contact_barrel_allowed_last_10",
+    "contact_ev_allowed_last_3",
+    "contact_ev_allowed_last_5",
+    "contact_ev_allowed_last_10",
+    "contact_la_allowed_last_3",
+    "contact_la_allowed_last_5",
+    "contact_la_allowed_last_10",
+    "workload_ip_last_3",
+    "workload_ip_last_5",
+    "workload_ip_last_10",
+    "workload_bf_last_3",
+    "workload_bf_last_5",
+    "workload_bf_last_10",
+    "workload_pitches_last_3",
+    "workload_pitches_last_5",
+    "workload_pitches_last_10",
+    "workload_ppbf_last_3",
+    "workload_ppbf_last_5",
+    "workload_ppbf_last_10",
+    "damage_hr_rate_last_3",
+    "damage_hr_rate_last_5",
+    "damage_hr_rate_last_10",
+    "damage_hits_per_bf_last_3",
+    "damage_hits_per_bf_last_5",
+    "damage_hits_per_bf_last_10"
+  ],
+  "carried_only_cols": [
+    "sc_enriched",
+    "batters_faced",
+    "innings_pitched"
+  ],
+  "excluded_raw_cols": [
+    "strikeouts",
+    "walks",
+    "hits_allowed",
+    "earned_runs",
+    "home_runs_allowed",
+    "ground_outs",
+    "fly_outs",
+    "air_outs",
+    "runs_allowed",
+    "bip",
+    "hard_hits",
+    "barrels",
+    "swings",
+    "whiffs",
+    "in_zone",
+    "outside_zone",
+    "chases",
+    "zone_swings",
+    "zone_contacts",
+    "total_pitches",
+    "spin_rate_ff",
+    "spin_rate_sl",
+    "extension",
+    "release_point_x",
+    "release_point_z",
+    "k_rate",
+    "bb_rate",
+    "hr_rate",
+    "hits_per_bf",
+    "whip_game",
+    "pitches_per_bf",
+    "starter_flag"
+  ],
+  "rolling_spec": {
+    "windows": {
+      "3": 2,
+      "5": 3,
+      "10": 5
+    },
+    "group_keys": [
+      "player_id",
+      "season"
+    ],
+    "sort_keys": [
+      "player_id",
+      "season",
+      "game_date",
+      "game_number"
+    ],
+    "shift": 1,
+    "aggregation": "mean"
+  },
+  "feature_families": {
+    "BATMISS": [
+      "batmiss_k_rate_last_3",
+      "batmiss_k_rate_last_5",
+      "batmiss_k_rate_last_10",
+      "batmiss_whiff_rate_last_3",
+      "batmiss_whiff_rate_last_5",
+      "batmiss_whiff_rate_last_10"
+    ],
+    "COMMAND": [
+      "command_bb_rate_last_3",
+      "command_bb_rate_last_5",
+      "command_bb_rate_last_10",
+      "command_zone_rate_last_3",
+      "command_zone_rate_last_5",
+      "command_zone_rate_last_10"
+    ],
+    "CONTACT": [
+      "contact_hh_allowed_last_3",
+      "contact_hh_allowed_last_5",
+      "contact_hh_allowed_last_10",
+      "contact_barrel_allowed_last_3",
+      "contact_barrel_allowed_last_5",
+      "contact_barrel_allowed_last_10",
+      "contact_ev_allowed_last_3",
+      "contact_ev_allowed_last_5",
+      "contact_ev_allowed_last_10",
+      "contact_la_allowed_last_3",
+      "contact_la_allowed_last_5",
+      "contact_la_allowed_last_10"
+    ],
+    "WORKLOAD": [
+      "workload_ip_last_3",
+      "workload_ip_last_5",
+      "workload_ip_last_10",
+      "workload_bf_last_3",
+      "workload_bf_last_5",
+      "workload_bf_last_10",
+      "workload_pitches_last_3",
+      "workload_pitches_last_5",
+      "workload_pitches_last_10",
+      "workload_ppbf_last_3",
+      "workload_ppbf_last_5",
+      "workload_ppbf_last_10"
+    ],
+    "DAMAGE": [
+      "damage_hr_rate_last_3",
+      "damage_hr_rate_last_5",
+      "damage_hr_rate_last_10",
+      "damage_hits_per_bf_last_3",
+      "damage_hits_per_bf_last_5",
+      "damage_hits_per_bf_last_10"
+    ]
+  },
+  "null_rates": {
+    "by_window": {
+      "3": 16.1,
+      "5": 22.25,
+      "10": 32.65
+    },
+    "by_season": {
+      "2022": 21.36,
+      "2023": 23.18,
+      "2024": 22.06,
+      "2025": 21.77,
+      "2026": 86.87
+    }
+  },
+  "sc_enrichment_by_season": {
+    "2022": 93.23,
+    "2023": 89.28,
+    "2024": 94.33,
+    "2025": 91.78,
+    "2026": 97.31
+  },
+  "pit_safety": {
+    "verdict": "PASS",
+    "shift_applied": true,
+    "cross_season_leak": false,
+    "forward_fill": false,
+    "doubleheader_safe": true
+  },
+  "warnings": [
+    "2026 null rates high (86.9%) \u2014 early season, few prior starts in window",
+    "balls_in_zone / contacts_in_zone absent from source substrate",
+    "SC enrichment 2023 slightly low (89.3%) \u2014 source data gap",
+    "min_periods: last_3=2, last_5=3, last_10=5 \u2014 early starters will have NaN in wider windows"
+  ],
+  "status": "APPROVED"
+}
