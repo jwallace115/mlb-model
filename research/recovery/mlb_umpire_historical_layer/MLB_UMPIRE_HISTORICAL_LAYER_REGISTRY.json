@@ -1,0 +1,158 @@
+{
+  "layer_name": "MLB Umpire Historical Prior-Season Ratings",
+  "build_timestamp": "2026-04-15T18:39:53Z",
+  "source_file": "sim/data/game_table.parquet",
+  "output_file": "research/recovery/mlb_umpire_historical_layer/mlb_umpire_prior_season_ratings.parquet",
+  "total_rows": 453,
+  "seasons_covered": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "season_rule": "For season Y, ratings use only completed games from seasons strictly < Y. 2022 is all-NULL (no pre-2022 data in repo).",
+  "outcome_field": "actual_total",
+  "identity_field": "umpire_name_normalized (NFKD unicode normalization + combining-char strip)",
+  "minimum_sample_games": 30,
+  "formula": "runs_factor = umpire_avg_total_prior / league_avg_total_prior, clamped [0.900, 1.100]",
+  "pit_safe": true,
+  "duplicates_on_season_umpire": 0,
+  "coverage_by_season": {
+    "2022": {
+      "rated": 0,
+      "total": 96,
+      "coverage_pct": 0.0
+    },
+    "2023": {
+      "rated": 34,
+      "total": 94,
+      "coverage_pct": 36.2
+    },
+    "2024": {
+      "rated": 75,
+      "total": 90,
+      "coverage_pct": 83.3
+    },
+    "2025": {
+      "rated": 82,
+      "total": 92,
+      "coverage_pct": 89.1
+    },
+    "2026": {
+      "rated": 78,
+      "total": 81,
+      "coverage_pct": 96.3
+    }
+  },
+  "neutral_or_unavailable_by_season": {
+    "2022": {
+      "no_prior_data_in_repo": 96
+    },
+    "2023": {
+      "not_in_prior_seasons": 7,
+      "insufficient_games_lt30": 53
+    },
+    "2024": {
+      "not_in_prior_seasons": 3,
+      "insufficient_games_lt30": 12
+    },
+    "2025": {
+      "not_in_prior_seasons": 5,
+      "insufficient_games_lt30": 5
+    },
+    "2026": {
+      "not_in_prior_seasons": 0,
+      "insufficient_games_lt30": 3
+    }
+  },
+  "excluded_fields": [
+    {
+      "field": "umpire_k_rate",
+      "reason": "Not rebuildable from game_table.parquet; approved inputs do not include strikeout-rate data"
+    }
+  ],
+  "clamp_bounds": {
+    "min": 0.9,
+    "max": 1.1
+  },
+  "clamped_rows": 31,
+  "league_avg_by_season": {
+    "2022": null,
+    "2023": 8.567,
+    "2024": 8.899,
+    "2025": 8.862,
+    "2026": 8.87
+  },
+  "fields": [
+    {
+      "name": "season",
+      "type": "int64",
+      "nullable": false,
+      "description": "Target season for which this rating applies"
+    },
+    {
+      "name": "umpire_name",
+      "type": "object",
+      "nullable": false,
+      "description": "Original umpire name from game_table"
+    },
+    {
+      "name": "umpire_name_normalized",
+      "type": "object",
+      "nullable": false,
+      "description": "NFKD-normalized canonical match key"
+    },
+    {
+      "name": "umpire_id",
+      "type": "int64",
+      "nullable": false,
+      "description": "MLB Stats API umpire numeric ID"
+    },
+    {
+      "name": "prior_season_umpire_over_rate",
+      "type": "float64",
+      "nullable": true,
+      "description": "runs_factor from prior seasons; NULL if has_prior_rating=False"
+    },
+    {
+      "name": "prior_season_games",
+      "type": "int64",
+      "nullable": false,
+      "description": "Prior-season game count (0 if umpire not in prior seasons)"
+    },
+    {
+      "name": "prior_seasons_used",
+      "type": "object",
+      "nullable": false,
+      "description": "Comma-separated seasons contributing; empty string for 2022"
+    },
+    {
+      "name": "league_avg_total_prior",
+      "type": "float64",
+      "nullable": true,
+      "description": "League mean actual_total from prior seasons; NULL for 2022"
+    },
+    {
+      "name": "umpire_avg_total_prior",
+      "type": "float64",
+      "nullable": true,
+      "description": "Umpire mean actual_total from prior seasons; NULL if not in prior pool or 2022"
+    },
+    {
+      "name": "has_prior_rating",
+      "type": "bool",
+      "nullable": false,
+      "description": "True iff prior_season_umpire_over_rate is a valid number"
+    }
+  ],
+  "carry_forward_notes": [
+    "2022 all-NULL \u2014 models should use neutral value (1.000) or drop umpire feature for that season",
+    "2023 coverage 36.2% \u2014 thin but PIT-safe; consider additional regularization",
+    "League baselines differ by season and are not poolable across years",
+    "This layer is distinct from the 2026-frozen forward-use umpire repair layer",
+    "umpire_k_rate excluded \u2014 not rebuildable from approved inputs",
+    "Clamp [0.900, 1.100] applied; 31 rows hit boundary, mostly early thin-sample seasons",
+    "Unicode normalization resolves diacritic variants (e.g., Alfonso Marquez)"
+  ]
+}
