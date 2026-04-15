@@ -1,0 +1,71 @@
+{
+  "repair_date": "2026-04-15",
+  "operator": "claude-sonnet-4-6",
+  "scope": "MLB bullpen substrate repair + 2026 extension",
+  "defects_repaired": [
+    {
+      "id": "CG_GAP",
+      "description": "Complete-game team-games absent from bullpen_features",
+      "root_cause": "Feature builder only aggregated reliever rows; teams with CG had no scaffold row",
+      "games_affected": 128,
+      "seasons_affected": [
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "fix": "Left-join all-team-games scaffold onto per-game relievers; zero-fill n_relievers/total_pitches"
+    },
+    {
+      "id": "CLOSER_LOOKAHEAD",
+      "description": "high_leverage_available used full-season GF totals for closer ranking",
+      "root_cause": "groupby(team,season).sum() of games_finished included all future games in season",
+      "severity": "within-season look-ahead bias",
+      "fix": "Incremental processing: trailing cumulative GF per pitcher updated game-by-game",
+      "pit_safe_logic": "top-3 ranked by trailing GF from strict prior games (date < game_date)"
+    }
+  ],
+  "extension": {
+    "season": 2026,
+    "games_added": 187,
+    "pitcher_rows_added": 1627,
+    "team_game_feature_rows_added": 374,
+    "boxscores_source": "sim/data/cache/boxscores/ (all 187 cached, no API calls)"
+  },
+  "staging_files": {
+    "bullpen_usage_repaired": "research/recovery/mlb_bullpen_substrate/bullpen_usage_repaired.parquet",
+    "bullpen_features_repaired": "research/recovery/mlb_bullpen_substrate/bullpen_features_repaired.parquet"
+  },
+  "production_files": {
+    "bullpen_usage": "sim/data/bullpen_usage.parquet",
+    "bullpen_features": "sim/data/bullpen_features.parquet",
+    "bullpen_usage_backup": "sim/data/bullpen_usage.parquet.bak",
+    "bullpen_features_backup": "sim/data/bullpen_features.parquet.bak"
+  },
+  "staging_checks": {
+    "schema_match": true,
+    "grain_no_dupes": true,
+    "backward_compat": true,
+    "cg_fix_complete": true,
+    "pit_safe": true,
+    "null_rate_acceptable": true
+  },
+  "row_counts": {
+    "usage_before": 83042,
+    "usage_after": 84669,
+    "features_before": 19302,
+    "features_after": 19804
+  },
+  "hla_distribution": {
+    "original": {
+      "rested": 6697,
+      "fatigued": 12605,
+      "rate": 0.347
+    },
+    "repaired": {
+      "rested": 7206,
+      "fatigued": 12598,
+      "rate": 0.364
+    }
+  }
+}
