@@ -1,0 +1,78 @@
+{
+  "canonical_system": "game_table_style",
+  "canonical_system_description": "MLB Stats API / game_table team abbreviations",
+  "source_systems": {
+    "statcast_style": {
+      "description": "Baseball Savant / pybaseball team abbreviations",
+      "substrates_using": [
+        "hitter",
+        "per_start_sp",
+        "rolling_sp"
+      ],
+      "mapping": {
+        "ATH": "OAK",
+        "AZ": "ARI",
+        "CWS": "CHW",
+        "KC": "KCR",
+        "SD": "SDP",
+        "SF": "SFG",
+        "TB": "TBR",
+        "WSH": "WSN"
+      }
+    },
+    "game_table_style": {
+      "description": "MLB Stats API / game_table / bullpen team abbreviations",
+      "substrates_using": [
+        "lineup_state",
+        "bullpen_features",
+        "bullpen_usage",
+        "game_table"
+      ],
+      "mapping": {}
+    }
+  },
+  "resolved_mismatches": [
+    {
+      "source_system": "statcast_style",
+      "source_code": "ATH",
+      "canonical_code": "OAK"
+    },
+    {
+      "source_system": "statcast_style",
+      "source_code": "AZ",
+      "canonical_code": "ARI"
+    },
+    {
+      "source_system": "statcast_style",
+      "source_code": "CWS",
+      "canonical_code": "CHW"
+    },
+    {
+      "source_system": "statcast_style",
+      "source_code": "KC",
+      "canonical_code": "KCR"
+    },
+    {
+      "source_system": "statcast_style",
+      "source_code": "SD",
+      "canonical_code": "SDP"
+    },
+    {
+      "source_system": "statcast_style",
+      "source_code": "SF",
+      "canonical_code": "SFG"
+    },
+    {
+      "source_system": "statcast_style",
+      "source_code": "TB",
+      "canonical_code": "TBR"
+    },
+    {
+      "source_system": "statcast_style",
+      "source_code": "WSH",
+      "canonical_code": "WSN"
+    }
+  ],
+  "total_mismatch_teams": 8,
+  "usage_rule": "Any cross-substrate join using a team key must normalize team codes to canonical (game_table_style) before merging. Apply: df['team'] = df['team'].map(lambda x: mapping.get(x, x))"
+}

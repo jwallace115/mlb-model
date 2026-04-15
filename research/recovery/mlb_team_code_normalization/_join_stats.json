@@ -1,0 +1,32 @@
+{
+  "test1_lineup_state_x_bullpen": {
+    "before": 19712,
+    "after": 19712,
+    "total": 19712,
+    "recovery": 0
+  },
+  "test2_lineup_state_x_rolling_sp": {
+    "before": 14939,
+    "after": 19712,
+    "total": 19712,
+    "recovery": 4773
+  },
+  "test3_lineup_state_x_hitter": {
+    "before": 14939,
+    "after": 19712,
+    "total": 19712,
+    "recovery": 4773
+  },
+  "test4_rolling_sp_x_bullpen": {
+    "before": 15006,
+    "after": 19804,
+    "total": 19914,
+    "recovery": 4798
+  },
+  "test5_hitter_tg_x_game_table": {
+    "before": 7472,
+    "after": 9856,
+    "total": 19712,
+    "recovery": 2384
+  }
+}

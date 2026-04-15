@@ -1,0 +1,115 @@
+{
+  "artifact": "MLB_TEAM_CODE_NORMALIZATION",
+  "version": "1.0",
+  "date": "2026-04-15",
+  "status": "VERIFIED",
+  "canonical_system": "game_table_style",
+  "canonical_description": "MLB Stats API abbreviations matching sim/data/game_table.parquet",
+  "canonical_team_count": 30,
+  "canonical_teams": [
+    "ARI",
+    "ATL",
+    "BAL",
+    "BOS",
+    "CHC",
+    "CHW",
+    "CIN",
+    "CLE",
+    "COL",
+    "DET",
+    "HOU",
+    "KCR",
+    "LAA",
+    "LAD",
+    "MIA",
+    "MIL",
+    "MIN",
+    "NYM",
+    "NYY",
+    "OAK",
+    "PHI",
+    "PIT",
+    "SDP",
+    "SEA",
+    "SFG",
+    "STL",
+    "TBR",
+    "TEX",
+    "TOR",
+    "WSN"
+  ],
+  "substrates": {
+    "game_table_style_native": {
+      "substrates": [
+        "lineup_state",
+        "bullpen_features",
+        "bullpen_usage",
+        "game_table"
+      ],
+      "requires_normalization": false,
+      "verified_exact_match": true
+    },
+    "statcast_style_requires_normalization": {
+      "substrates": [
+        "hitter",
+        "per_start_sp",
+        "rolling_sp"
+      ],
+      "requires_normalization": true,
+      "normalization_map": {
+        "ATH": "OAK",
+        "AZ": "ARI",
+        "CWS": "CHW",
+        "KC": "KCR",
+        "SD": "SDP",
+        "SF": "SFG",
+        "TB": "TBR",
+        "WSH": "WSN"
+      }
+    }
+  },
+  "join_verification": {
+    "test1_lineup_state_x_bullpen": {
+      "before_pct": 100.0,
+      "after_pct": 100.0,
+      "recovery": 0,
+      "note": "Baseline \u2014 both canonical"
+    },
+    "test2_lineup_state_x_rolling_sp": {
+      "before_pct": 75.8,
+      "after_pct": 100.0,
+      "recovery": 4773,
+      "note": "Full recovery"
+    },
+    "test3_lineup_state_x_hitter": {
+      "before_pct": 75.8,
+      "after_pct": 100.0,
+      "recovery": 4773,
+      "note": "Full recovery"
+    },
+    "test4_rolling_sp_x_bullpen": {
+      "before_pct": 75.4,
+      "after_pct": 99.4,
+      "recovery": 4798,
+      "note": "0.6% residual gap is game_pk coverage, not team-code"
+    },
+    "test5_hitter_tg_x_game_table": {
+      "before_pct": 37.9,
+      "after_pct": 50.0,
+      "recovery": 2384,
+      "note": "50% ceiling expected (home_team join only)"
+    }
+  },
+  "usage_rule": "Normalize Statcast-style team codes to canonical before any cross-substrate join. Use: df['team'] = df['team'].map(lambda x: normalization_map.get(x, x))",
+  "caveats": [
+    "Rolling-starter partial-window averaging (first-N-games-of-season) is a separate documented limitation, not a team-code normalization issue.",
+    "OAK and ATH both appear in Statcast substrates across seasons; both map to canonical OAK.",
+    "T4 residual 0.6% gap reflects game_pk coverage differences, confirmed not a team-code issue."
+  ],
+  "files": [
+    "mlb_team_code_normalization_map.json",
+    "MLB_TEAM_CODE_NORMALIZATION_REPORT.md",
+    "MLB_TEAM_CODE_NORMALIZATION_REGISTRY.json",
+    "MLB_TEAM_CODE_NORMALIZATION_SELF_AUDIT.md"
+  ]
+}
