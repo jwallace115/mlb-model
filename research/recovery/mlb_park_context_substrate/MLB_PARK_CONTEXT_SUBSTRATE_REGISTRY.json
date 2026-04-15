@@ -1,0 +1,220 @@
+{
+  "substrate_name": "mlb_park_context_substrate",
+  "version": "1.0",
+  "created": "2026-04-15 11:43:30",
+  "source_file": "sim/data/game_table.parquet",
+  "output_file": "research/recovery/mlb_park_context_substrate/mlb_park_context_substrate.parquet",
+  "grain": "game_pk (one row per MLB game)",
+  "rows": 9902,
+  "columns": 17,
+  "seasons": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "season_coverage": {
+    "2022": 2430,
+    "2023": 2430,
+    "2024": 2427,
+    "2025": 2428,
+    "2026": 187
+  },
+  "game_pk_unique": true,
+  "duplicate_rows": 0,
+  "pit_safety": "PASS",
+  "fields": {
+    "game_pk": {
+      "classification": "CARRIED_ONLY",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 9902,
+      "description": "Primary join key; MLB Stats API game_pk integer"
+    },
+    "date": {
+      "classification": "CARRIED_ONLY",
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 742,
+      "description": "Game date string (YYYY-MM-DD)"
+    },
+    "season": {
+      "classification": "CARRIED_ONLY",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 5,
+      "description": "Season year (int)"
+    },
+    "home_team": {
+      "classification": "CARRIED_ONLY",
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 30,
+      "description": "Home team abbreviation (MLB standard 3-letter)"
+    },
+    "away_team": {
+      "classification": "CARRIED_ONLY",
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 30,
+      "description": "Away team abbreviation (MLB standard 3-letter)"
+    },
+    "venue_id": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 39,
+      "description": "MLB Stats API venue integer ID; unique per physical ballpark"
+    },
+    "venue_name": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 43,
+      "description": "Human-readable venue name; static per venue_id"
+    },
+    "park_id": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 39,
+      "description": "Alias for venue_id in game_table; same integer; retained for backward compatibility"
+    },
+    "park_factor_runs": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 15,
+      "description": "Preseason static run-environment factor per home_team; confirmed single value per team across all 5 seasons; source: static lookup in game_table build (matches config.py PARK_FACTORS table)"
+    },
+    "park_factor_hr": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 15,
+      "description": "Preseason static HR-environment factor per home_team; same confirmation as park_factor_runs"
+    },
+    "roof_status": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 3,
+      "description": "Venue roof type: open / retractable / dome; static structural property per ballpark; source: MLB Stats API venue metadata"
+    },
+    "game_number": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 2,
+      "description": "Doubleheader game number: 1 (first game or single game) or 2 (nightcap); pregame schedule info"
+    },
+    "doubleheader_flag": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 2,
+      "description": "Binary 0/1: 1 if any doubleheader game, 0 otherwise; derived from schedule; pregame-safe"
+    },
+    "game_hour_utc": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 14,
+      "description": "Scheduled start hour in UTC (0-23); from MLB Stats API schedule; 0 nulls"
+    },
+    "local_start_hour": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "float64",
+      "null_count": 2316,
+      "null_pct": 23.39,
+      "nunique": 13,
+      "description": "Scheduled local start hour (float); null for ~23% of rows due to missing timezone resolution in historical records; use game_hour_utc as fallback when null"
+    },
+    "home_rest_days": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 6,
+      "description": "Days since home team last played; computed via shift from prior rows sorted by team+date; capped at 5; PIT-safe (prior games only)"
+    },
+    "away_rest_days": {
+      "classification": "APPROVED_CONTEXT_FEATURE",
+      "dtype": "int64",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "nunique": 6,
+      "description": "Days since away team last played; same computation as home_rest_days; PIT-safe"
+    }
+  },
+  "approved_feature_fields": [
+    "venue_id",
+    "venue_name",
+    "park_id",
+    "park_factor_runs",
+    "park_factor_hr",
+    "roof_status",
+    "game_number",
+    "doubleheader_flag",
+    "game_hour_utc",
+    "local_start_hour",
+    "home_rest_days",
+    "away_rest_days"
+  ],
+  "carried_only_fields": [
+    "game_pk",
+    "date",
+    "season",
+    "home_team",
+    "away_team"
+  ],
+  "excluded_fields": [
+    "temperature",
+    "wind_speed",
+    "wind_direction",
+    "umpire_name",
+    "umpire_id",
+    "umpire_over_rate",
+    "umpire_k_rate",
+    "home_score",
+    "away_score",
+    "actual_total",
+    "actual_f5_total",
+    "innings_played",
+    "completed_early"
+  ],
+  "excluded_weather_fields": [
+    "temperature",
+    "wind_speed",
+    "wind_direction"
+  ],
+  "excluded_umpire_fields": [
+    "umpire_name",
+    "umpire_id",
+    "umpire_over_rate",
+    "umpire_k_rate"
+  ],
+  "excluded_postgame_fields": [
+    "home_score",
+    "away_score",
+    "actual_total",
+    "actual_f5_total",
+    "innings_played",
+    "completed_early"
+  ]
+}
