@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "2813553c6a0cdab5c77497cf373aa7af",
+    "game_date": "2026-04-17",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Colorado Rockies",
+    "commence_time": "2026-04-17T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -118,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-16T06:05:02.398484+00:00"
+  },
+  {
+    "game_id": "34fa181a3e06104ac8bb8d652bffbae7",
+    "game_date": "2026-04-17",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-04-17T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -114,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-16T06:05:02.398484+00:00"
+  }
+]
