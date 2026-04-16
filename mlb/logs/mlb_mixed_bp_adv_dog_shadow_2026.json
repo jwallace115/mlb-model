@@ -36,6 +36,22 @@
       "dog_bp_era": 4.48,
       "win_loss": "L",
       "final_score": "9-3"
+    },
+    {
+      "game_pk": 824530,
+      "game_date": "2026-04-16",
+      "matchup": "SFG @ CIN",
+      "fav_team": "CIN",
+      "dog_team": "SFG",
+      "fav_side": "home",
+      "fav_implied": 0.539,
+      "dog_ml_price": 112,
+      "sp_fip_diff": -0.342,
+      "off_diff": -0.7,
+      "bp_era_diff": 0.403,
+      "fav_bp_era": 4.716,
+      "dog_bp_era": 4.313,
+      "win_loss": null
     }
   ]
 }

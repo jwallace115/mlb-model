@@ -167,6 +167,44 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 6.119,
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 4
+    },
+    {
+      "game_id": 2025021307,
+      "game_date": "2026-04-16",
+      "home_team": "NSH",
+      "away_team": "ANA",
+      "signal_side": "UNDER",
+      "edge": 0.132,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.707,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021308,
+      "game_date": "2026-04-16",
+      "home_team": "WPG",
+      "away_team": "SJS",
+      "signal_side": "UNDER",
+      "edge": 0.1233,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.678,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2025021312,
+      "game_date": "2026-04-16",
+      "home_team": "COL",
+      "away_team": "SEA",
+      "signal_side": "UNDER",
+      "edge": 0.1245,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.538,
       "drift_applied": 0.0
     }
   ]
