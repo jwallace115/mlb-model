@@ -1846,7 +1846,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Braxton Ashcraft",
+    "away_sp_name": "Foster Griffin"
   },
   {
     "date": "2026-04-16",
@@ -1871,7 +1873,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Keider Montero",
+    "away_sp_name": "Kris Bubic"
   },
   {
     "date": "2026-04-16",
@@ -1896,6 +1900,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jacob Lopez",
+    "away_sp_name": "Jack Leiter"
   }
 ]
