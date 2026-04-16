@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-04-15T07:00:26.096505",
+  "generated_at": "2026-04-16T07:00:25.912499",
   "sport": "golf",
   "event_name": "RBC Heritage",
   "event_id": 12,
   "is_major": false,
-  "last_updated": "2026-04-15T07:00:06.465939",
+  "last_updated": "2026-04-16T07:00:04.494887",
   "n_candidates": 0,
-  "n_leans": 5,
+  "n_leans": 4,
   "plays": [
     {
       "player_name": "Yellamaraju, Sudarshan",
@@ -20,48 +20,37 @@
       "close_odds": 300.0
     },
     {
-      "player_name": "Spieth, Jordan",
-      "dg_id": 14636,
-      "market": "top_20",
-      "model_prob": 32.3,
-      "market_prob": 39.8,
-      "edge": -7.5,
-      "direction": "under",
-      "classification": "lean",
-      "close_odds": 130.0
-    },
-    {
       "player_name": "Putnam, Andrew",
       "dg_id": 14704,
       "market": "top_20",
       "model_prob": 21.3,
-      "market_prob": 15.3,
-      "edge": 6.0,
+      "market_prob": 15.2,
+      "edge": 6.1,
       "direction": "over",
       "classification": "lean",
       "close_odds": 500.0
     },
     {
-      "player_name": "Noren, Alex",
-      "dg_id": 10419,
+      "player_name": "Kim, Si Woo",
+      "dg_id": 14609,
       "market": "top_20",
-      "model_prob": 34.9,
-      "market_prob": 29.5,
-      "edge": 5.4,
+      "model_prob": 46.9,
+      "market_prob": 41.6,
+      "edge": 5.3,
       "direction": "over",
       "classification": "lean",
-      "close_odds": 210.0
+      "close_odds": 120.0
     },
     {
-      "player_name": "MacIntyre, Robert",
-      "dg_id": 23323,
+      "player_name": "Spieth, Jordan",
+      "dg_id": 14636,
       "market": "top_20",
-      "model_prob": 42.4,
-      "market_prob": 37.4,
-      "edge": 5.0,
-      "direction": "over",
+      "model_prob": 32.3,
+      "market_prob": 37.6,
+      "edge": -5.3,
+      "direction": "under",
       "classification": "lean",
-      "close_odds": 145.0
+      "close_odds": 143.0
     }
   ],
   "season_stats": {
