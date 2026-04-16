@@ -1324,10 +1324,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":7.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-15",
@@ -1343,10 +1343,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":10.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-15",
@@ -1362,10 +1362,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":6.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-15",
@@ -1381,10 +1381,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":7.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-15",
@@ -1400,10 +1400,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":2.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-04-15",
@@ -1419,10 +1419,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":4.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
   },
   {
     "date":"2026-04-15",
@@ -1435,6 +1435,63 @@
     "p_under_full":0.573,
     "p_over_full":0.427,
     "f5_line":4.5,
+    "f5_line_closing":null,
+    "f5_clv_raw":null,
+    "f5_clv_signed":null,
+    "actual_f5_total":3.0,
+    "result":"WIN",
+    "net_units":0.6818181818,
+    "resolved":1
+  },
+  {
+    "date":"2026-04-16",
+    "game_id":"823396",
+    "home_team":"PIT",
+    "away_team":"WSN",
+    "f5_signal_side":"UNDER",
+    "signal_tier":"primary_under",
+    "stake_units":0.75,
+    "p_under_full":0.6492,
+    "p_over_full":0.3508,
+    "f5_line":4.5,
+    "f5_line_closing":null,
+    "f5_clv_raw":null,
+    "f5_clv_signed":null,
+    "actual_f5_total":null,
+    "result":null,
+    "net_units":null,
+    "resolved":0
+  },
+  {
+    "date":"2026-04-16",
+    "game_id":"824289",
+    "home_team":"DET",
+    "away_team":"KCR",
+    "f5_signal_side":"UNDER",
+    "signal_tier":"primary_under",
+    "stake_units":0.75,
+    "p_under_full":0.5772,
+    "p_over_full":0.4228,
+    "f5_line":4.5,
+    "f5_line_closing":null,
+    "f5_clv_raw":null,
+    "f5_clv_signed":null,
+    "actual_f5_total":null,
+    "result":null,
+    "net_units":null,
+    "resolved":0
+  },
+  {
+    "date":"2026-04-16",
+    "game_id":"825023",
+    "home_team":"OAK",
+    "away_team":"TEX",
+    "f5_signal_side":"UNDER",
+    "signal_tier":"primary_under",
+    "stake_units":0.75,
+    "p_under_full":0.6226,
+    "p_over_full":0.3774,
+    "f5_line":5.0,
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
