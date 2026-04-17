@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "76d3bd29c4c5d001c2404fb6d3010c36",
+    "game_date": "2026-04-17",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Ottawa Senators",
+    "commence_time": "2026-04-18T19:00:47Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": -114,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-17T22:00:02.611722+00:00"
+  },
+  {
+    "game_id": "ccf74c5469950496a135719b827ce942",
+    "game_date": "2026-04-17",
+    "sport": "NHL",
+    "home_team": "Dallas Stars",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-04-18T21:30:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": 104,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-17T22:00:02.611722+00:00"
+  }
+]
