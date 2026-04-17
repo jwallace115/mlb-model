@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "88586e525b98a2c062f1f6d75e8d0fe1",
+    "game_date": "2026-04-17",
+    "sport": "NHL",
+    "home_team": "Calgary Flames",
+    "away_team": "Los Angeles Kings",
+    "commence_time": "2026-04-17T01:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 4.5,
+    "over_price": -108,
+    "under_price": -120,
+    "book": "fanduel",
+    "capture_timestamp": "2026-04-17T03:00:14.786259+00:00"
+  },
+  {
+    "game_id": "9d37384a47dfd1b17638086559bb3726",
+    "game_date": "2026-04-17",
+    "sport": "NHL",
+    "home_team": "Edmonton Oilers",
+    "away_team": "Vancouver Canucks",
+    "commence_time": "2026-04-17T01:11:00Z",
+    "snapshot_type": "closing",
+    "total_line": 7.5,
+    "over_price": -176,
+    "under_price": 134,
+    "book": "fanduel",
+    "capture_timestamp": "2026-04-17T03:00:14.786259+00:00"
+  },
+  {
+    "game_id": "96784cc6006a3540914823666e6561d1",
+    "game_date": "2026-04-17",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Seattle Kraken",
+    "commence_time": "2026-04-17T02:21:23Z",
+    "snapshot_type": "closing",
+    "total_line": 4.5,
+    "over_price": -125,
+    "under_price": -104,
+    "book": "fanduel",
+    "capture_timestamp": "2026-04-17T03:00:14.786259+00:00"
+  },
+  {
+    "game_id": "76d3bd29c4c5d001c2404fb6d3010c36",
+    "game_date": "2026-04-17",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Ottawa Senators",
+    "commence_time": "2026-04-18T19:00:47Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": -111,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-17T03:00:14.786259+00:00"
+  },
+  {
+    "game_id": "ccf74c5469950496a135719b827ce942",
+    "game_date": "2026-04-17",
+    "sport": "NHL",
+    "home_team": "Dallas Stars",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-04-18T21:30:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": 103,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-17T03:00:14.786259+00:00"
+  }
+]
