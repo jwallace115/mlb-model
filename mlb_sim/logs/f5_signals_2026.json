@@ -1457,10 +1457,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":8.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-16",
@@ -1476,10 +1476,10 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":7.0,
+    "result":"LOSS",
+    "net_units":-0.75,
+    "resolved":1
   },
   {
     "date":"2026-04-16",
@@ -1495,9 +1495,9 @@
     "f5_line_closing":null,
     "f5_clv_raw":null,
     "f5_clv_signed":null,
-    "actual_f5_total":null,
-    "result":null,
-    "net_units":null,
-    "resolved":0
+    "actual_f5_total":5.0,
+    "result":"PUSH",
+    "net_units":0.0,
+    "resolved":1
   }
 ]
