@@ -2,5 +2,22 @@
   "object_id": "mlb_mixed_night_dog_v1",
   "ruleset_version": "frozen_v1",
   "start_date": "2026-04-12",
-  "signals": []
+  "signals": [
+    {
+      "game_pk": 824778,
+      "game_date": "2026-04-17",
+      "matchup": "DET @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "DET",
+      "fav_side": "home",
+      "fav_implied": 0.544,
+      "dog_ml_price": 114,
+      "sp_fip_diff": -0.382,
+      "off_diff": 0.25,
+      "bp_era_diff": 0.374,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
+    }
+  ]
 }
