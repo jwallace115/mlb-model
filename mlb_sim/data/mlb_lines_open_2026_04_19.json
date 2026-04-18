@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "6e5129c6e0fc6e1f6fcaff97e0a79ebc",
+    "game_date": "2026-04-19",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Toronto Blue Jays",
+    "commence_time": "2026-04-19T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 100,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-18T06:05:02.985489+00:00"
+  },
+  {
+    "game_id": "de78c77cca84245548d38b8c40c65391",
+    "game_date": "2026-04-19",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-04-19T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.0,
+    "over_price": -113,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-18T06:05:02.985489+00:00"
+  },
+  {
+    "game_id": "18200eb582e3bee33b38016accc8cc4e",
+    "game_date": "2026-04-19",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-04-19T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -112,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-18T06:05:02.985489+00:00"
+  }
+]
