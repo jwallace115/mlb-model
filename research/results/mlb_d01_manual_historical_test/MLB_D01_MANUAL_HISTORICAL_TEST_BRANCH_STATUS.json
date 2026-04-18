@@ -1,0 +1,26 @@
+{
+  "branch_name": "MLB_D01_OPPOSING_STARTER_WORKLOAD_TRAJECTORY_COLLAPSE",
+  "branch_type": "MANUAL_HISTORICAL_HYPOTHESIS_TEST",
+  "candidate_id": "MLB_D01",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "object_scope_used": "MLB totals — opposing starter workload trajectory collapse",
+  "canonical_object_used": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet (fallback)",
+  "current_status": "ADVANCE",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "date_opened": "2026-04-17",
+  "last_updated": "2026-04-17",
+  "discovery_gap": "+0.426",
+  "validation_gap": "+0.028",
+  "oos_gap": "+0.565",
+  "key_caveats": [
+    "Validation severely attenuated (93% shrinkage from discovery)",
+    "Non-monotonic staged profile: +0.426 -> +0.028 -> +0.565",
+    "Manual split enforcement — full orchestration governance not available",
+    "Fallback data object used (matchup_table_base, not canonical historical object)",
+    "Candidate originated from provisional discovery pass (not fully governed)"
+  ],
+  "banned_source_check_passed": true,
+  "banned_source_check_note": "Formal manifests unavailable; field approval verified against matchup table base registry only",
+  "anti_duplication_passed": true,
+  "notes": "D01 passes all pre-declared staged gates and advances with documented validation-attenuation caveat. Not deployment-ready. May proceed to further evaluation (economic reality check, component isolation) under continued governance constraints."
+}

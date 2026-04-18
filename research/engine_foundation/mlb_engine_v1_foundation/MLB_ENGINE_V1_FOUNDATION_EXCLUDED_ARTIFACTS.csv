@@ -1,0 +1,23 @@
+artifact_family,original_path_or_pattern,exclusion_reason,exclusion_type,notes
+H03_family_closeout,research/results/mlb_h03_family_closeout/,Branch family closeout — research result not engine foundation,NON_FOUNDATION_BRANCH_OUTPUT,Provisional closeout reconstructed from verified summaries. Anti-duplication reference only.
+H01_original_branch,research/results/mlb_h01_bullpen_forced_exposure/,Original branch artifacts never persisted,NON_FOUNDATION_BRANCH_OUTPUT,Truly missing — never existed on disk.
+H02_original_branch,research/results/mlb_h02_bullpen_stress_simple/,Original branch artifacts never persisted,NON_FOUNDATION_BRANCH_OUTPUT,Truly missing — never existed on disk.
+H03_parent_original,research/results/mlb_h03_bullpen_stress_x_short_outing_risk/,Original branch artifacts never persisted,NON_FOUNDATION_BRANCH_OUTPUT,Truly missing — never existed on disk.
+H03A_through_H03D,research/results/mlb_h03a_* through mlb_h03d_*/,Original child branch artifacts never persisted,NON_FOUNDATION_BRANCH_OUTPUT,Truly missing — never existed on disk.
+D01_manual_test,research/results/mlb_d01_manual_historical_test/,Provisional hypothesis test result,PROVISIONAL_OUTPUT,Manually advanced from provisional discovery. Not foundation.
+D01A_formulation_check,research/results/mlb_d01a_formulation_stability_check/,Provisional child check result,PROVISIONAL_OUTPUT,MIXED_INCONCLUSIVE verdict. Not foundation.
+D02_manual_test,research/results/mlb_d02_manual_historical_test/,Provisional hypothesis test result — shelved,PROVISIONAL_OUTPUT,SHELVED. Not foundation.
+D_family_status,research/results/mlb_d_family_status/,Family status memo,PROVISIONAL_OUTPUT,D_FAMILY_NOT_ACTIONABLE. Not foundation.
+bounded_discovery_pass_01,research/discovery/mlb_bounded_discovery_pass_01/,Provisional discovery pass + governance memos,PROVISIONAL_OUTPUT,Governance incomplete. Ideas only — not foundation.
+orchestration_layer,research/orchestration/ (7 files),Never created — conceptual only,GOVERNANCE_CONCEPT_ONLY,Orchestrator / config / router / templates / schema / report / registry all missing.
+approved_manifest,research/recovery/mlb_stack_standardization/MLB_STACK_APPROVED_OBJECTS_MANIFEST.json,Never created,GOVERNANCE_CONCEPT_ONLY,Stack acceptance memo serves as informal equivalent.
+banned_manifest,research/recovery/mlb_stack_standardization/MLB_STACK_BANNED_OBJECTS_MANIFEST.json,Never created,GOVERNANCE_CONCEPT_ONLY,No formal banned list exists.
+canonical_historical_object,research/recovery/mlb_canonical_historical_research_matchup_object/,Never created — resolved to mlb_matchup_table_base,GOVERNANCE_CONCEPT_ONLY,Naming resolved by this package. matchup_table_base IS the real object.
+v1_clean_backtest,research/recovery/v1_clean_backtest/,Old V1 lineage — not current engine foundation,AMBIGUOUS_LINEAGE,Pre-substrate-stack work.
+v1_clean_model,research/recovery/v1_clean_model/,Old V1 lineage — not current engine foundation,AMBIGUOUS_LINEAGE,Pre-substrate-stack work.
+v1_clean_features,research/recovery/v1_clean_features/,Old V1 lineage — not current engine foundation,AMBIGUOUS_LINEAGE,Pre-substrate-stack work.
+v1_clean_calibration,research/recovery/v1_clean_calibration/,Old V1 lineage — not current engine foundation,AMBIGUOUS_LINEAGE,Pre-substrate-stack work.
+v2_engine,research/recovery/v2_engine/,Old V2 lineage — not current engine foundation,AMBIGUOUS_LINEAGE,Pre-substrate-stack work.
+phase2_derivatives,sim/phase2_build_features.py and derivatives,Phase 2 build outputs — superseded by substrate stack,AMBIGUOUS_LINEAGE,Not part of current foundation.
+mlb_archetype_engine_v1_lite,research/recovery/mlb_archetype_engine_v1_lite*/,Archetype engine variants — separate from foundation,OUTSIDE_SCOPE,Not part of matchup-table-based engine foundation.
+mlb_totals_context_engine_v1,research/recovery/mlb_totals_context_engine_v1/,Context engine — separate project,OUTSIDE_SCOPE,Different engine architecture.

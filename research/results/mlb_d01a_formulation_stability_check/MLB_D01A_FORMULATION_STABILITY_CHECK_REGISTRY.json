@@ -1,0 +1,65 @@
+{
+  "branch_name": "MLB_D01A_FORMULATION_STABILITY_CHECK",
+  "parent_branch": "MLB_D01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_D01",
+  "candidate_name": "Opposing Starter Workload Trajectory Collapse",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "test_date": "2026-04-17",
+  "operator": "Claude (automated research assistant)",
+  "governance_status": "MANUAL_SPLIT_ENFORCEMENT — full orchestration governance not available; inherits parent governance limitations",
+  "data_object_used": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
+  "outcome_variable_source": "sim/data/game_table.parquet (actual_total)",
+  "orchestration_used_yes_no": false,
+  "fallback_used_yes_no": true,
+  "parent_data_object_matched": true,
+  "frozen_comparison_groups": {
+    "COMPONENT_A_ONLY": {
+      "definition": "opp_sp_workload_ip_last_3 <= 1.0",
+      "note": "Parent threshold 1.0 applied literally to field 1 as standalone level threshold. Degenerate: flags ~0% of rows because no MLB starter averages <= 1.0 IP."
+    },
+    "COMPONENT_B_ONLY": {
+      "definition": "opp_sp_workload_ip_last_10 >= 1.0",
+      "note": "Parent threshold 1.0 applied literally to field 2 as standalone level threshold. Degenerate: flags ~100% of rows because all MLB starters average >= 1.0 IP."
+    },
+    "D01_FULL_FORMULATION": {
+      "definition": "opp_sp_workload_ip_last_10 - opp_sp_workload_ip_last_3 >= 1.0",
+      "note": "Exact parent rule inherited without modification."
+    }
+  },
+  "structural_ambiguity_note": "D01 is a gap rule, not a conjunction of two independent level-threshold flags. The parent threshold (1.0) was designed as a minimum gap between windows, not as a level for either field. Applying it to individual fields produces degenerate component groups. This is the expected structural result, not a test failure.",
+  "split_policy": {
+    "discovery": "2022-2023",
+    "validation": "2024",
+    "OOS": "2025",
+    "enforcement": "manual"
+  },
+  "stability_standard": {
+    "FORMULATION_REAL": "Full formulation at least as stage-stable as both components and meaningfully stronger",
+    "COMPONENT_DOMINATED": "One component alone explains most of the signal",
+    "MIXED_INCONCLUSIVE": "No clean dominance pattern or full formulation not clearly more trustworthy",
+    "CLOSE": "Formulation not structurally trustworthy enough to continue"
+  },
+  "discovery_sample_summary": {
+    "component_a": {"n_flagged": 13, "gap": -1.169, "note": "BELOW_30_FLOOR"},
+    "component_b": {"n_flagged": 6778, "gap": 1.937, "note": "UNFLAGGED_BELOW_30"},
+    "full_formulation": {"n_flagged": 300, "gap": 0.426, "note": "valid"}
+  },
+  "validation_sample_summary": {
+    "component_a": {"n_flagged": 6, "gap": 1.590, "note": "BELOW_30_FLOOR"},
+    "component_b": {"n_flagged": 3381, "gap": 2.747, "note": "UNFLAGGED_BELOW_30"},
+    "full_formulation": {"n_flagged": 159, "gap": 0.028, "note": "severe attenuation"}
+  },
+  "oos_sample_summary": {
+    "component_a": {"n_flagged": 0, "gap": "N/A", "note": "ZERO_FLAGGED"},
+    "component_b": {"n_flagged": 3402, "gap": "N/A", "note": "ZERO_UNFLAGGED"},
+    "full_formulation": {"n_flagged": 157, "gap": 0.565, "note": "valid"}
+  },
+  "mechanism_check_result": {
+    "still_trajectory_not_generic": true,
+    "formulation_structurally_distinct": true,
+    "note": "Degenerate components confirm the signal is inherently a gap/trajectory measure, not reducible to either field level. However, this follows from gap-rule structure, not from empirical robustness evidence."
+  },
+  "final_verdict": "MIXED_INCONCLUSIVE",
+  "final_verdict_note": "Component-dominance decomposition cannot be meaningfully executed for gap rules. Neither component provides a credible alternative. Validation attenuation remains unresolved. D01 is not dismissed but not confirmed as structurally stable."
+}

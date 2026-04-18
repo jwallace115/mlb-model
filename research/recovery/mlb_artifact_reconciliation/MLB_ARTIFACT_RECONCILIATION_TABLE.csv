@@ -1,0 +1,34 @@
+artifact_family,expected_canonical_path,local_status,remote_status,exact_local_path_if_found,exact_remote_path_if_found,equivalent_found_under_different_name,provenance_status,action_required
+H03_FAMILY_CLOSEOUT,research/results/mlb_h03_family_closeout/,PRESENT,MISSING,research/results/mlb_h03_family_closeout/ (4 files),N/A,NO,LOCAL_ONLY,COPY_LOCAL_TO_REMOTE
+BOUNDED_DISCOVERY_PASS_01,research/discovery/mlb_bounded_discovery_pass_01/,PRESENT,MISSING,research/discovery/mlb_bounded_discovery_pass_01/ (6 files),N/A,NO,LOCAL_ONLY,COPY_LOCAL_TO_REMOTE
+D01_MANUAL_TEST,research/results/mlb_d01_manual_historical_test/,PRESENT,MISSING,research/results/mlb_d01_manual_historical_test/ (5 files),N/A,NO,LOCAL_ONLY,COPY_LOCAL_TO_REMOTE
+D01A_FORMULATION_CHECK,research/results/mlb_d01a_formulation_stability_check/,PRESENT,MISSING,research/results/mlb_d01a_formulation_stability_check/ (5 files),N/A,NO,LOCAL_ONLY,COPY_LOCAL_TO_REMOTE
+D02_MANUAL_TEST,research/results/mlb_d02_manual_historical_test/,PRESENT,MISSING,research/results/mlb_d02_manual_historical_test/ (5 files),N/A,NO,LOCAL_ONLY,COPY_LOCAL_TO_REMOTE
+D_FAMILY_STATUS,research/results/mlb_d_family_status/,PRESENT,MISSING,research/results/mlb_d_family_status/ (4 files),N/A,NO,LOCAL_ONLY,COPY_LOCAL_TO_REMOTE
+MATCHUP_TABLE_BASE,research/recovery/mlb_matchup_table_base/,PRESENT,PRESENT,research/recovery/mlb_matchup_table_base/ (4 files),research/recovery/mlb_matchup_table_base/ (4 files),NO,BOTH_MATCHING,NONE
+SUBSTRATE_STACK_ACCEPTANCE,research/recovery/mlb_substrate_stack/,PRESENT,PRESENT,research/recovery/mlb_substrate_stack/ (1 file),research/recovery/mlb_substrate_stack/ (1 file),NO,BOTH_MATCHING,NONE
+TEAM_CODE_NORMALIZATION,research/recovery/mlb_team_code_normalization/,PRESENT,PRESENT,research/recovery/mlb_team_code_normalization/ (5 files),research/recovery/mlb_team_code_normalization/ (5 files),NO,BOTH_MATCHING,NONE
+BULLPEN_SUBSTRATE,research/recovery/mlb_bullpen_substrate/,PRESENT,PRESENT,research/recovery/mlb_bullpen_substrate/ (6 files),research/recovery/mlb_bullpen_substrate/ (6 files),NO,BOTH_MATCHING,NONE
+STARTER_PROFILE_SUBSTRATE,research/recovery/mlb_starter_profile_substrate/,PRESENT,PRESENT,research/recovery/mlb_starter_profile_substrate/ (4 files),research/recovery/mlb_starter_profile_substrate/ (4 files),NO,BOTH_MATCHING,NONE
+STARTING_PITCHER_SUBSTRATE,research/recovery/mlb_starting_pitcher_substrate/,PRESENT,PRESENT,research/recovery/mlb_starting_pitcher_substrate/ (4 files),research/recovery/mlb_starting_pitcher_substrate/ (4 files),NO,BOTH_MATCHING,NONE
+LINEUP_STATE_SUBSTRATE,research/recovery/mlb_lineup_state_substrate/,PRESENT,PRESENT,research/recovery/mlb_lineup_state_substrate/ (4 files),research/recovery/mlb_lineup_state_substrate/ (4 files),NO,BOTH_MATCHING,NONE
+HITTER_STATCAST_SUBSTRATE,research/recovery/mlb_hitter_statcast_substrate/,PRESENT,PRESENT,research/recovery/mlb_hitter_statcast_substrate/ (4 files),research/recovery/mlb_hitter_statcast_substrate/ (4 files),NO,BOTH_MATCHING,NONE
+UMPIRE_RATINGS_REPAIR,research/recovery/mlb_umpire_ratings_repair/,PRESENT,PRESENT,research/recovery/mlb_umpire_ratings_repair/ (3 files),research/recovery/mlb_umpire_ratings_repair/ (3 files),NO,BOTH_MATCHING,NONE
+UMPIRE_HISTORICAL_LAYER,research/recovery/mlb_umpire_historical_layer/,PRESENT,PRESENT,research/recovery/mlb_umpire_historical_layer/ (4 files),research/recovery/mlb_umpire_historical_layer/ (4 files),NO,BOTH_MATCHING,NONE
+UMPIRE_SUBSTRATE,research/recovery/mlb_umpire_substrate/,PRESENT,PRESENT,research/recovery/mlb_umpire_substrate/ (4 files),research/recovery/mlb_umpire_substrate/ (4 files),NO,BOTH_MATCHING,NONE
+WEATHER_SUBSTRATE,research/recovery/mlb_weather_substrate/,PRESENT,PRESENT,research/recovery/mlb_weather_substrate/ (4 files),research/recovery/mlb_weather_substrate/ (4 files),NO,BOTH_MATCHING,NONE
+PARK_CONTEXT_SUBSTRATE,research/recovery/mlb_park_context_substrate/,PRESENT,PRESENT,research/recovery/mlb_park_context_substrate/ (4 files),research/recovery/mlb_park_context_substrate/ (4 files),NO,BOTH_MATCHING,NONE
+CANONICAL_HISTORICAL_OBJECT,research/recovery/mlb_canonical_historical_research_matchup_object/,MISSING,MISSING,N/A,N/A,matchup_table_base is functional equivalent,TRULY_MISSING,NEEDS_MANUAL_DECISION
+ORCHESTRATION_LAYER,research/orchestration/ (7 config/control files),MISSING,MISSING,N/A (only __pycache__ present locally),N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+APPROVED_MANIFEST,research/recovery/mlb_stack_standardization/MLB_STACK_APPROVED_OBJECTS_MANIFEST.json,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+BANNED_MANIFEST,research/recovery/mlb_stack_standardization/MLB_STACK_BANNED_OBJECTS_MANIFEST.json,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+BRANCH_STATUS_SCHEMA,research/orchestration/mlb_research_branch_status_schema.json,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+ORCHESTRATION_REPORT,research/orchestration/MLB_RESEARCH_ORCHESTRATION_REPORT.md,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+ORCHESTRATION_REGISTRY,research/orchestration/MLB_RESEARCH_ORCHESTRATION_REGISTRY.json,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+H01_BRANCH_ARTIFACTS,research/results/mlb_h01_bullpen_forced_exposure/,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+H02_BRANCH_ARTIFACTS,research/results/mlb_h02_bullpen_stress_simple/,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+H03_PARENT_BRANCH_ARTIFACTS,research/results/mlb_h03_bullpen_stress_x_short_outing_risk/,MISSING,MISSING,N/A,N/A,H03 closeout reconstructed from summaries,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+H03A_BRANCH_ARTIFACTS,research/results/mlb_h03a_economic_reality_check/,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+H03B_BRANCH_ARTIFACTS,research/results/mlb_h03b_component_dominance_check/,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+H03C_BRANCH_ARTIFACTS,research/results/mlb_h03c_market_structure_check/,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE
+H03D_BRANCH_ARTIFACTS,research/results/mlb_h03d_within_band_residual_check/,MISSING,MISSING,N/A,N/A,NO,TRULY_MISSING,TRULY_MISSING_DO_NOT_FAKE

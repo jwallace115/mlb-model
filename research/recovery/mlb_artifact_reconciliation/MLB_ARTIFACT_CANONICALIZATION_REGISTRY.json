@@ -1,0 +1,135 @@
+{
+  "reconciliation_date": "2026-04-18",
+  "operator": "Claude (automated research assistant)",
+  "local_root": "/Users/jw115/mlb-model",
+  "remote_root": "/root/mlb-model (root@142.93.242.4)",
+  "inventory_summary": {
+    "artifact_families_reconciled": 32,
+    "both_matching": 13,
+    "local_only": 6,
+    "remote_only": 0,
+    "truly_missing": 13,
+    "equivalents_under_different_name": 1
+  },
+  "local_only_families": [
+    {
+      "family": "H03_FAMILY_CLOSEOUT",
+      "path": "research/results/mlb_h03_family_closeout/",
+      "file_count": 4,
+      "reason": "Created in session; never committed per prompt instructions"
+    },
+    {
+      "family": "BOUNDED_DISCOVERY_PASS_01",
+      "path": "research/discovery/mlb_bounded_discovery_pass_01/",
+      "file_count": 6,
+      "reason": "Created in session; never committed per prompt instructions"
+    },
+    {
+      "family": "D01_MANUAL_TEST",
+      "path": "research/results/mlb_d01_manual_historical_test/",
+      "file_count": 5,
+      "reason": "Created in session; never committed per prompt instructions"
+    },
+    {
+      "family": "D01A_FORMULATION_CHECK",
+      "path": "research/results/mlb_d01a_formulation_stability_check/",
+      "file_count": 5,
+      "reason": "Created in session; never committed per prompt instructions"
+    },
+    {
+      "family": "D02_MANUAL_TEST",
+      "path": "research/results/mlb_d02_manual_historical_test/",
+      "file_count": 5,
+      "reason": "Created in session; never committed per prompt instructions"
+    },
+    {
+      "family": "D_FAMILY_STATUS",
+      "path": "research/results/mlb_d_family_status/",
+      "file_count": 4,
+      "reason": "Created in session; never committed per prompt instructions"
+    }
+  ],
+  "truly_missing_families": [
+    {
+      "family": "ORCHESTRATION_LAYER",
+      "expected_files": 7,
+      "status": "NEVER_CREATED",
+      "recreate_effort": "HIGH — requires new design and software engineering"
+    },
+    {
+      "family": "MANIFESTS",
+      "expected_files": 2,
+      "status": "NEVER_CREATED",
+      "recreate_effort": "MEDIUM — requires governance decisions about approved/banned objects"
+    },
+    {
+      "family": "CANONICAL_HISTORICAL_OBJECT",
+      "expected_files": 3,
+      "status": "NEVER_CREATED",
+      "equivalent_exists": "mlb_matchup_table_base",
+      "recreate_effort": "LOW — can be resolved by formal aliasing or naming decision"
+    },
+    {
+      "family": "H01_ORIGINAL_BRANCH",
+      "expected_files": 3,
+      "status": "NEVER_PERSISTED",
+      "recreate_effort": "NOT_RECOVERABLE"
+    },
+    {
+      "family": "H02_ORIGINAL_BRANCH",
+      "expected_files": 3,
+      "status": "NEVER_PERSISTED",
+      "recreate_effort": "NOT_RECOVERABLE"
+    },
+    {
+      "family": "H03_PARENT_ORIGINAL_BRANCH",
+      "expected_files": 3,
+      "status": "NEVER_PERSISTED",
+      "recreate_effort": "NOT_RECOVERABLE",
+      "note": "Provisional closeout reconstructed from verified summaries exists locally"
+    },
+    {
+      "family": "H03A_ORIGINAL_BRANCH",
+      "expected_files": 3,
+      "status": "NEVER_PERSISTED",
+      "recreate_effort": "NOT_RECOVERABLE"
+    },
+    {
+      "family": "H03B_ORIGINAL_BRANCH",
+      "expected_files": 3,
+      "status": "NEVER_PERSISTED",
+      "recreate_effort": "NOT_RECOVERABLE"
+    },
+    {
+      "family": "H03C_ORIGINAL_BRANCH",
+      "expected_files": 3,
+      "status": "NEVER_PERSISTED",
+      "recreate_effort": "NOT_RECOVERABLE"
+    },
+    {
+      "family": "H03D_ORIGINAL_BRANCH",
+      "expected_files": 3,
+      "status": "NEVER_PERSISTED",
+      "recreate_effort": "NOT_RECOVERABLE"
+    }
+  ],
+  "naming_equivalences": [
+    {
+      "expected_name": "mlb_canonical_historical_research_matchup_object",
+      "actual_name": "mlb_matchup_table_base",
+      "relationship": "functional_equivalent",
+      "resolution": "NEEDS_MANUAL_DECISION"
+    }
+  ],
+  "safe_canonicalizations_executed": 0,
+  "manual_decisions_required": 4,
+  "manual_decisions": [
+    "Commit and push local session work to remote",
+    "Resolve canonical object naming (alias vs rename vs separate)",
+    "Design and create orchestration layer (7 files)",
+    "Design and create approved/banned manifests (2 files)"
+  ],
+  "files_deleted": 0,
+  "files_overwritten": 0,
+  "files_fabricated": 0
+}

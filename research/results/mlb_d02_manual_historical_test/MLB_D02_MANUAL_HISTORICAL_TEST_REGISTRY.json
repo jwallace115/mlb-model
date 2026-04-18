@@ -1,0 +1,74 @@
+{
+  "branch_name": "MLB_D02_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_D02",
+  "candidate_name": "Opposing Starter Pitch Efficiency Deterioration",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "test_date": "2026-04-17",
+  "operator": "Claude (automated research assistant)",
+  "governance_status": "MANUAL_SPLIT_ENFORCEMENT — full orchestration governance not available",
+  "data_object_used": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
+  "outcome_variable_source": "sim/data/game_table.parquet (actual_total)",
+  "orchestration_used_yes_no": false,
+  "fallback_used_yes_no": true,
+  "split_policy": {
+    "discovery": "2022-2023",
+    "validation": "2024",
+    "OOS": "2025",
+    "enforcement": "manual"
+  },
+  "frozen_field_list": [
+    "opp_sp_workload_ppbf_last_3",
+    "opp_sp_workload_ppbf_last_10"
+  ],
+  "frozen_rule_definition": "deterioration_flag = 1 when opp_sp_workload_ppbf_last_3 - opp_sp_workload_ppbf_last_10 >= 0.3",
+  "frozen_threshold_logic": {
+    "threshold": 0.3,
+    "unit": "pitches per batter faced gap (last_3 minus last_10)",
+    "grounding": "domain_knowledge_only — 0.3 ppbf increase represents ~7-8% efficiency loss, ~7.5 extra pitches per start"
+  },
+  "advancement_standard": {
+    "discovery_nontrivial_floor": 0.10,
+    "discovery_min_flagged_N": 30,
+    "discovery_direction": "flagged > unflagged (positive gap)",
+    "validation_same_sign": true,
+    "oos_material_reversal_threshold": "reversal magnitude > 20% of discovery magnitude"
+  },
+  "discovery_sample_summary": {
+    "n_total": 6782,
+    "n_flagged": 411,
+    "n_unflagged": 6371,
+    "games_flagged": 396,
+    "mean_flagged": 8.788,
+    "mean_unflagged": 8.945,
+    "gap": -0.157
+  },
+  "validation_sample_summary": {
+    "n_total": 3382,
+    "n_flagged": 229,
+    "n_unflagged": 3153,
+    "games_flagged": 223,
+    "mean_flagged": 8.969,
+    "mean_unflagged": 8.730,
+    "gap": 0.239
+  },
+  "oos_sample_summary": {
+    "n_total": 3402,
+    "n_flagged": 199,
+    "n_unflagged": 3203,
+    "games_flagged": 192,
+    "mean_flagged": 8.789,
+    "mean_unflagged": 8.914,
+    "gap": -0.125
+  },
+  "gate_results": {
+    "discovery_N_ok": true,
+    "discovery_nontrivial": true,
+    "discovery_direction_correct": false,
+    "validation_same_sign": false,
+    "oos_material_reversal": true
+  },
+  "anti_duplication_result": "N/A — candidate shelved before anti-duplication is relevant",
+  "final_verdict": "SHELVE",
+  "final_verdict_note": "Discovery direction inconsistent with mechanism (-0.157). Full staged profile shows sign reversals in every stage (-/+/-). No consistent directional signal. Primary expected failure mode (ppbf as noisy proxy) materialized."
+}

@@ -1,0 +1,4 @@
+stage,n_total,n_flagged,n_unflagged,games_flagged,games_unflagged,mean_flagged,mean_unflagged,gap,note
+DISCOVERY,6782,300,6482,297,3915,9.343,8.917,+0.426,Non-trivial positive gap; N well above 30 floor
+VALIDATION,3382,159,3223,157,1968,8.774,8.745,+0.028,Same sign preserved but severely attenuated (93% shrinkage from discovery)
+OOS,3402,157,3245,154,1972,9.446,8.880,+0.565,Strong positive gap; no reversal; non-monotonic profile noted

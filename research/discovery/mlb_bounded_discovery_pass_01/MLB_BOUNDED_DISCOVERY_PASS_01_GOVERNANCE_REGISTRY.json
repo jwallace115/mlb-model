@@ -1,0 +1,68 @@
+{
+  "pass_name": "MLB_BOUNDED_DISCOVERY_PASS_01",
+  "governance_memo_date": "2026-04-17",
+  "operator": "Claude (automated research assistant)",
+  "governance_status": "INCOMPLETE",
+  "candidate_ids": ["MLB_D01", "MLB_D02"],
+  "provisional_candidate_ids": ["MLB_D01", "MLB_D02"],
+  "formally_approved_candidate_ids": [],
+  "missing_required_artifacts": {
+    "orchestration_layer": [
+      "research/orchestration/mlb_research_orchestrator.py",
+      "research/orchestration/mlb_research_orchestration_config.json",
+      "research/orchestration/mlb_research_object_router.json",
+      "research/orchestration/mlb_research_workflow_templates.json",
+      "research/orchestration/mlb_research_branch_status_schema.json",
+      "research/orchestration/MLB_RESEARCH_ORCHESTRATION_REPORT.md",
+      "research/orchestration/MLB_RESEARCH_ORCHESTRATION_REGISTRY.json"
+    ],
+    "canonical_object": [
+      "research/recovery/mlb_canonical_historical_research_matchup_object/mlb_canonical_historical_research_matchup_object.parquet",
+      "research/recovery/mlb_canonical_historical_research_matchup_object/MLB_CANONICAL_HISTORICAL_RESEARCH_MATCHUP_OBJECT_REGISTRY.json",
+      "research/recovery/mlb_canonical_historical_research_matchup_object/MLB_CANONICAL_HISTORICAL_RESEARCH_MATCHUP_OBJECT_REPORT.md"
+    ],
+    "manifests": [
+      "research/recovery/mlb_stack_standardization/MLB_STACK_APPROVED_OBJECTS_MANIFEST.json",
+      "research/recovery/mlb_stack_standardization/MLB_STACK_BANNED_OBJECTS_MANIFEST.json"
+    ]
+  },
+  "substitutions_used": {
+    "canonical_object": {
+      "specified": "research/recovery/mlb_canonical_historical_research_matchup_object/mlb_canonical_historical_research_matchup_object.parquet",
+      "actual": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
+      "reason": "Specified object does not exist on disk. Matchup table base is the accepted research base layer."
+    },
+    "manifest_check": {
+      "specified": "MLB_STACK_APPROVED_OBJECTS_MANIFEST.json + MLB_STACK_BANNED_OBJECTS_MANIFEST.json",
+      "actual": "Matchup table base registry approved feature list",
+      "reason": "Manifest files do not exist. Used informal field-classification check against registry."
+    },
+    "anti_duplication": {
+      "specified": "Repo-resident closeout artifacts",
+      "actual": "Local provisional closeout files (reconstructed from verified summaries)",
+      "reason": "Original H03 family repo artifacts do not exist. Used provisional closeout created same session."
+    }
+  },
+  "operational_readiness": "NOT_READY",
+  "operational_readiness_reason": "Governance control layer (orchestration, canonical object, manifests) does not exist. Discovery pass operated with documented substitutions, not under formal governance.",
+  "allowed_next_actions": [
+    "Preserve D01 and D02 as provisional ideas",
+    "Manually inspect candidates",
+    "Convert a candidate into a bounded test prompt with explicit human approval and provenance acknowledgement",
+    "Use candidates as input for a future fully-governed discovery pass"
+  ],
+  "disallowed_next_actions": [
+    "Treat D01/D02 as fully approved autonomous candidates",
+    "Cite this pass as proof the discovery engine is operational",
+    "Open broad autonomous discovery based on this pass",
+    "Skip governance restoration because the ideas look good"
+  ],
+  "restoration_requirements": [
+    "All 7 orchestration layer files must exist and be readable",
+    "Canonical historical research matchup object must exist with registry and report",
+    "Approved and banned manifests must exist and be populated",
+    "Anti-duplication closeout references must be on-disk (not session-reconstructed)",
+    "Verification pass must confirm end-to-end governance without substitutions"
+  ],
+  "final_memo_verdict": "PROVISIONAL_ONLY"
+}

@@ -1,0 +1,58 @@
+{
+  "pass_name": "MLB_BOUNDED_DISCOVERY_PASS_01",
+  "pass_date": "2026-04-17",
+  "operator": "Claude (automated research assistant)",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "canonical_object_used": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
+  "canonical_object_note": "The specified canonical historical research matchup object (research/recovery/mlb_canonical_historical_research_matchup_object/) does not exist. Substituted with mlb_matchup_table_base, the accepted MLB matchup table base (19804 rows, 107 columns, 2022-2026). Substitution documented in report.",
+  "approved_manifest_path": "NOT_AVAILABLE — research/recovery/mlb_stack_standardization/MLB_STACK_APPROVED_OBJECTS_MANIFEST.json does not exist",
+  "banned_manifest_path": "NOT_AVAILABLE — research/recovery/mlb_stack_standardization/MLB_STACK_BANNED_OBJECTS_MANIFEST.json does not exist",
+  "orchestration_layer_note": "All 7 specified orchestration files do not exist on disk. Discovery pass proceeded using the matchup table base registry and substrate stack acceptance memo as the available governance context.",
+  "anti_duplication_reference": {
+    "source": "LOCAL_REPO_CLOSEOUT + SESSION_CONTEXT",
+    "closeout_file": "research/results/mlb_h03_family_closeout/MLB_H03_FAMILY_PROVISIONAL_CLOSEOUT_MEMO.md",
+    "closeout_provenance": "RECONSTRUCTED_FROM_VERIFIED_SUMMARIES (created 2026-04-17)",
+    "families_screened_out": [
+      "H01 — forced bullpen exposure (SHELVE: brittle 4-field conjunction)",
+      "H02 — broad bullpen stress (SHELVE: diluted, discovery gate failed)",
+      "H03 — bullpen stress x short-outing risk (CLOSED: real mechanism, not deployable edge)",
+      "H03A-D — child branches (all inconclusive/weak/mixed)",
+      "V1-lite — generic quality restatements"
+    ]
+  },
+  "candidates_considered_count": 3,
+  "candidates_advanced_count": 2,
+  "candidates_rejected_count": 1,
+  "advanced_candidate_ids": ["MLB_D01", "MLB_D02"],
+  "rejected_candidate_ids": ["unnamed_bullpen_acute_spike"],
+  "advanced_candidates": {
+    "MLB_D01": {
+      "name": "Opposing Starter Workload Trajectory Collapse",
+      "fields": ["opp_sp_workload_ip_last_3", "opp_sp_workload_ip_last_10"],
+      "field_count": 2,
+      "threshold": "opp_sp_workload_ip_last_10 - opp_sp_workload_ip_last_3 >= 1.0",
+      "threshold_grounding": "domain_knowledge_only",
+      "test_form": "single-split staged hypothesis test (flagged vs unflagged residual)",
+      "new_infrastructure_required": false,
+      "recommendation": "ADVANCE_TO_TEST"
+    },
+    "MLB_D02": {
+      "name": "Opposing Starter Pitch Efficiency Deterioration",
+      "fields": ["opp_sp_workload_ppbf_last_3", "opp_sp_workload_ppbf_last_10"],
+      "field_count": 2,
+      "threshold": "opp_sp_workload_ppbf_last_3 - opp_sp_workload_ppbf_last_10 >= 0.3",
+      "threshold_grounding": "domain_knowledge_only",
+      "test_form": "single-split staged hypothesis test (flagged vs unflagged residual)",
+      "new_infrastructure_required": false,
+      "recommendation": "ADVANCE_TO_TEST"
+    }
+  },
+  "rejected_candidates": {
+    "bullpen_acute_spike": {
+      "name": "Bullpen Acute Spike Recovery",
+      "rejection_reason": "Too close to H01/H02 — same core mechanism at different measurement frequency",
+      "recommendation": "REJECT"
+    }
+  },
+  "final_recommendation": "ADVANCE MLB_D01 and MLB_D02 to staged hypothesis testing"
+}

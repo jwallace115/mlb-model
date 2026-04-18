@@ -1,0 +1,22 @@
+{
+  "branch_name": "MLB_D02_OPPOSING_STARTER_PITCH_EFFICIENCY_DETERIORATION",
+  "branch_type": "MANUAL_HISTORICAL_HYPOTHESIS_TEST",
+  "candidate_id": "MLB_D02",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "object_scope_used": "MLB totals — opposing starter pitch efficiency deterioration",
+  "canonical_object_used": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet (fallback)",
+  "current_status": "SHELVE",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "date_opened": "2026-04-17",
+  "last_updated": "2026-04-17",
+  "discovery_gap": "-0.157",
+  "validation_gap": "+0.239",
+  "oos_gap": "-0.125",
+  "key_caveats": [
+    "Discovery direction wrong: flagged games had LOWER totals (opposite of mechanism)",
+    "Full staged profile: -0.157 / +0.239 / -0.125 — sign reversal every stage",
+    "Primary expected failure mode materialized: ppbf is a noisy proxy influenced by opposing lineup approach"
+  ],
+  "banned_source_check_passed": true,
+  "notes": "D02 shelved. Discovery direction inconsistent with mechanism. No consistent directional signal across stages. Does not merit further child-branch work."
+}

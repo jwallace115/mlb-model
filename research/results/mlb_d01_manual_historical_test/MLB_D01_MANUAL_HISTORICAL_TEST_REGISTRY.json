@@ -1,0 +1,88 @@
+{
+  "branch_name": "MLB_D01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_D01",
+  "candidate_name": "Opposing Starter Workload Trajectory Collapse",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "test_date": "2026-04-17",
+  "operator": "Claude (automated research assistant)",
+  "governance_status": "MANUAL_SPLIT_ENFORCEMENT — full orchestration governance not available",
+  "data_object_used": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet",
+  "outcome_variable_source": "sim/data/game_table.parquet (actual_total)",
+  "orchestration_used_yes_no": false,
+  "fallback_used_yes_no": true,
+  "fallback_note": "Canonical historical research matchup object does not exist. matchup_table_base used as approved fallback (same object used by discovery pass).",
+  "split_policy": {
+    "discovery": "2022-2023",
+    "validation": "2024",
+    "OOS": "2025",
+    "enforcement": "manual"
+  },
+  "frozen_field_list": [
+    "opp_sp_workload_ip_last_3",
+    "opp_sp_workload_ip_last_10"
+  ],
+  "frozen_rule_definition": "collapse_flag = 1 when opp_sp_workload_ip_last_10 - opp_sp_workload_ip_last_3 >= 1.0",
+  "frozen_threshold_logic": {
+    "threshold": 1.0,
+    "unit": "innings pitched gap (last_10 avg minus last_3 avg)",
+    "grounding": "domain_knowledge_only — 1.0 IP gap represents meaningful workload trajectory collapse per baseball conventions"
+  },
+  "advancement_standard": {
+    "discovery_nontrivial_floor": 0.10,
+    "discovery_min_flagged_N": 30,
+    "discovery_direction": "flagged > unflagged (positive gap)",
+    "validation_same_sign": true,
+    "oos_material_reversal_threshold": "reversal magnitude > 20% of discovery magnitude"
+  },
+  "discovery_sample_summary": {
+    "n_total": 6782,
+    "n_flagged": 300,
+    "n_unflagged": 6482,
+    "games_flagged": 297,
+    "mean_flagged": 9.343,
+    "mean_unflagged": 8.917,
+    "gap": 0.426
+  },
+  "validation_sample_summary": {
+    "n_total": 3382,
+    "n_flagged": 159,
+    "n_unflagged": 3223,
+    "games_flagged": 157,
+    "mean_flagged": 8.774,
+    "mean_unflagged": 8.745,
+    "gap": 0.028
+  },
+  "oos_sample_summary": {
+    "n_total": 3402,
+    "n_flagged": 157,
+    "n_unflagged": 3245,
+    "games_flagged": 154,
+    "mean_flagged": 9.446,
+    "mean_unflagged": 8.880,
+    "gap": 0.565
+  },
+  "gate_results": {
+    "discovery_N_ok": true,
+    "discovery_nontrivial": true,
+    "discovery_direction_correct": true,
+    "validation_same_sign": true,
+    "oos_material_reversal": false
+  },
+  "anti_duplication_result": {
+    "not_generic_starter_fade": true,
+    "not_generic_weak_starter": true,
+    "not_h03_recycle": true,
+    "not_v1_lite": true,
+    "needs_new_features": false,
+    "verdict": "PASS"
+  },
+  "key_caveats": [
+    "Validation severely attenuated: +0.426 discovery -> +0.028 validation (93% shrinkage)",
+    "Non-monotonic staged profile: strong -> near-zero -> strong",
+    "Governance incomplete: manual split enforcement, fallback data object, no orchestration",
+    "D01 was a provisional discovery candidate, manually advanced by human decision"
+  ],
+  "final_verdict": "ADVANCE",
+  "final_verdict_note": "All pre-declared staged gates passed. Validation attenuation is a documented caveat carried forward."
+}

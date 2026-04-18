@@ -1,0 +1,41 @@
+{
+  "foundation_name": "MLB_ENGINE_V1_FOUNDATION",
+  "build_date": "2026-04-18",
+  "caveats": [
+    {
+      "id": "CAVEAT_01",
+      "artifact_family": "mlb_bullpen_substrate",
+      "severity": "MODERATE",
+      "text": "Builder self-audit falsely claimed no background tasks were used during build. Background tasks WERE used. Substantive PIT-safety was independently verified and accepted per the Stack Acceptance Memo (2026-04-15). Data integrity is confirmed but process attestation from the original builder is not trustworthy.",
+      "source": "MLB_SUBSTRATE_STACK_ACCEPTANCE_MEMO.md, Section 4 (Frozen Caveats)"
+    },
+    {
+      "id": "CAVEAT_02",
+      "artifact_family": "mlb_starter_profile_substrate",
+      "severity": "LOW",
+      "text": "Rolling Statcast fields use available-only averaging. When a start within a rolling window lacks Statcast enrichment, pandas rolling().mean() silently averages over the non-null subset. A last_3 window with 1 unenriched start produces a value from 2 observations, indistinguishable from a fully observed window.",
+      "source": "MLB_SUBSTRATE_STACK_ACCEPTANCE_MEMO.md, Section 4 (Frozen Caveats)"
+    },
+    {
+      "id": "CAVEAT_03",
+      "artifact_family": "mlb_matchup_table_base",
+      "severity": "LOW",
+      "text": "mlb_matchup_table_base is the real current base object that was referred to in prior prompts as 'mlb_canonical_historical_research_matchup_object'. That intended canonical name never existed as a separate artifact. This package formally resolves the naming: mlb_matchup_table_base IS the canonical object.",
+      "source": "MLB_ENGINE_FOUNDATION_CONTENT_AUDIT_REPORT.md, Sections 1 and 4"
+    },
+    {
+      "id": "CAVEAT_04",
+      "artifact_family": "governance_layer",
+      "severity": "HIGH",
+      "text": "The intended governance layer (orchestration system, approved/banned manifests, branch status schema) does not exist and has never been created. This foundation package provides included/excluded artifact manifests as a practical substitute for formal manifests. It does NOT provide orchestration, routing, or workflow automation. Those remain missing.",
+      "source": "MLB_ENGINE_FOUNDATION_CONTENT_AUDIT_REPORT.md, Section 7"
+    },
+    {
+      "id": "CAVEAT_05",
+      "artifact_family": "mlb_umpire_ratings_repair",
+      "severity": "LOW",
+      "text": "Umpire ratings repair is documentation-only (3 doc files, no data parquet). The actual fix was applied directly to config.py UMPIRE_RATINGS. The repair docs are authoritative as a record of what was changed but there is no standalone data artifact to independently verify the repair.",
+      "source": "MLB_ENGINE_FOUNDATION_CONTENT_AUDIT_TABLE.csv"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "branch_name": "MLB_H03_FAMILY",
+  "branch_type": "FAMILY_CLOSEOUT",
+  "object_scope_used": "MLB totals — bullpen stress x starter short-outing risk interaction family",
+  "canonical_object_used": "MLB game totals (over/under)",
+  "current_status": "CLOSE",
+  "provenance_type": "RECONSTRUCTED_FROM_VERIFIED_SUMMARIES",
+  "date_opened": "unknown — repo artifacts unavailable",
+  "last_updated": "2026-04-17",
+  "closeout_date": "2026-04-17",
+  "family_disposition": "CLOSE AS ACTIVE EDGE-SEARCH FAMILY; PRESERVE AS FUTURE LAYER / CONTEXT CANDIDATE",
+  "member_branches": [
+    {
+      "branch": "MLB_H01_BULLPEN_FORCED_EXPOSURE",
+      "verdict": "SHELVE",
+      "role": "precursor"
+    },
+    {
+      "branch": "MLB_H02_BULLPEN_STRESS_SIMPLE",
+      "verdict": "SHELVE",
+      "role": "precursor"
+    },
+    {
+      "branch": "MLB_H03_BULLPEN_STRESS_X_SHORT_OUTING_RISK",
+      "verdict": "ADVANCE",
+      "role": "parent"
+    },
+    {
+      "branch": "MLB_H03A_ECONOMIC_REALITY_CHECK",
+      "verdict": "INCONCLUSIVE",
+      "role": "child"
+    },
+    {
+      "branch": "MLB_H03B_COMPONENT_DOMINANCE_CHECK",
+      "verdict": "INTERACTION_DOMINANT",
+      "role": "child"
+    },
+    {
+      "branch": "MLB_H03C_MARKET_STRUCTURE_CHECK",
+      "verdict": "MIXED_INCONCLUSIVE",
+      "role": "child"
+    },
+    {
+      "branch": "MLB_H03D_WITHIN_BAND_RESIDUAL_CHECK",
+      "verdict": "WEAK_CONDITIONAL_SIGNAL",
+      "role": "child"
+    }
+  ],
+  "key_caveats": [
+    "Provisional closeout — reconstructed from verified summaries, not from repo artifacts on disk",
+    "H03 is structurally real but not currently deployable",
+    "Market prices most of the mechanism already (H03A)",
+    "No stable broad-total-bucket concentration found (H03C)",
+    ">9.5 closing-total pocket suggestive but underpowered (H03D)",
+    "Cross-reference against original artifacts if recovered"
+  ],
+  "banned_source_check_passed": true,
+  "notes": "Closed as active edge-search family; preserved as future layer/context candidate."
+}

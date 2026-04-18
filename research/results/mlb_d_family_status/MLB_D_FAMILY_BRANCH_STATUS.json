@@ -1,0 +1,35 @@
+{
+  "branch_name": "MLB_D_FAMILY",
+  "branch_type": "FAMILY_STATUS_MEMO",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "current_status": "PARTIALLY_CLOSED",
+  "governance_status": "INCOMPLETE",
+  "date_opened": "2026-04-17",
+  "last_updated": "2026-04-17",
+  "member_branches": [
+    {
+      "branch": "MLB_D01_MANUAL_HISTORICAL_TEST",
+      "status": "UNRESOLVED_CAUTION",
+      "role": "parent candidate"
+    },
+    {
+      "branch": "MLB_D01A_FORMULATION_STABILITY_CHECK",
+      "status": "MIXED_INCONCLUSIVE",
+      "role": "child check (completed)"
+    },
+    {
+      "branch": "MLB_D02_MANUAL_HISTORICAL_TEST",
+      "status": "SHELVED",
+      "role": "sibling candidate (closed)"
+    }
+  ],
+  "key_caveats": [
+    "D01 technically passed staged gates but validation attenuation (93%) is severe and unresolved",
+    "D01A component-dominance check degenerate for gap rules — did not confirm formulation stability",
+    "D02 cleanly shelved — discovery direction wrong, sign reversals every stage",
+    "All branches operated outside full orchestration governance with fallback data object",
+    "Bounded discovery engine readiness not proven by this family"
+  ],
+  "banned_source_check_passed": true,
+  "notes": "D01 unresolved/cautionary, D01A inconclusive, D02 shelved, autonomous bounded discovery readiness not proven."
+}

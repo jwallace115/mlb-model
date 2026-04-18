@@ -1,0 +1,23 @@
+{
+  "branch_name": "MLB_D01A_FORMULATION_STABILITY_CHECK",
+  "branch_type": "CHILD_FORMULATION_CHECK",
+  "parent_branch": "MLB_D01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_D01",
+  "mechanism_family": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY",
+  "object_scope_used": "MLB totals — opposing starter workload trajectory collapse formulation decomposition",
+  "canonical_object_used": "research/recovery/mlb_matchup_table_base/mlb_matchup_table_base.parquet (fallback, matched to parent)",
+  "current_status": "MIXED_INCONCLUSIVE",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "date_opened": "2026-04-17",
+  "last_updated": "2026-04-17",
+  "key_caveats": [
+    "Component-dominance decomposition degenerate — gap rule cannot be cleanly decomposed into standalone level-threshold components",
+    "Component A (last_3 <= 1.0): flagged 0-13 rows per stage, below evidence floor in all stages",
+    "Component B (last_10 >= 1.0): flagged 99.9-100% of rows per stage, no meaningful comparison possible",
+    "Full formulation reproduces parent D01 results exactly but decomposition cannot diagnose validation attenuation",
+    "Parent D01 validation attenuation (+0.426 -> +0.028, 93% shrinkage) remains unresolved",
+    "Inherited governance limitations: manual enforcement, fallback data object, provisional candidate path"
+  ],
+  "banned_source_check_passed": true,
+  "notes": "D01 is not dismissed by this check (neither component provides a credible alternative), but neither is it confirmed as structurally stable. The component-dominance format does not apply cleanly to gap rules. Further diagnostic work should use economic reality check or sample-stability analysis rather than component decomposition."
+}

@@ -1,0 +1,49 @@
+{
+  "family_name": "MLB_D_FAMILY",
+  "family_description": "FORCED-ROLE / ROLE-INSTABILITY / STATE-TRANSITION ASYMMETRY — opposing starter workload trajectory candidates",
+  "memo_date": "2026-04-17",
+  "operator": "Claude (automated research assistant)",
+  "discovery_pass": "MLB_BOUNDED_DISCOVERY_PASS_01",
+  "discovery_governance_status": "INCOMPLETE",
+  "discovery_governance_note": "All 7 orchestration files, canonical historical object, and approved/banned manifests missing. Pass operated with documented substitutions.",
+  "d01_status": "UNRESOLVED_CAUTION",
+  "d01_detail": {
+    "branch": "MLB_D01_MANUAL_HISTORICAL_TEST",
+    "verdict": "ADVANCE (with validation-attenuation caveat)",
+    "discovery_gap": "+0.426",
+    "validation_gap": "+0.028 (93% attenuation)",
+    "oos_gap": "+0.565",
+    "note": "Technically passing but non-clean staged profile. Not structurally confirmed."
+  },
+  "d01a_status": "MIXED_INCONCLUSIVE",
+  "d01a_detail": {
+    "branch": "MLB_D01A_FORMULATION_STABILITY_CHECK",
+    "verdict": "MIXED_INCONCLUSIVE",
+    "note": "Component-dominance decomposition degenerate — gap rule cannot be decomposed into standalone level-threshold components. Did not confirm formulation stability. Validation attenuation unresolved."
+  },
+  "d02_status": "SHELVED",
+  "d02_detail": {
+    "branch": "MLB_D02_MANUAL_HISTORICAL_TEST",
+    "verdict": "SHELVE",
+    "discovery_gap": "-0.157 (wrong direction)",
+    "validation_gap": "+0.239 (sign reversal)",
+    "oos_gap": "-0.125 (sign reversal again)",
+    "note": "Closed. No ambiguity. Primary expected failure mode materialized."
+  },
+  "bounded_discovery_readiness": "NOT_PROVEN",
+  "bounded_discovery_readiness_note": "Pass 01 demonstrated idea generation capability but not governance compliance, reliable signal production, or readiness to replace manual hypothesis construction.",
+  "allowed_future_action": [
+    "Preserve D01 as unresolved note",
+    "Manual human-directed follow-up on D01 only (economic reality check or sample-stability analysis)",
+    "Preserve D02 as shelved",
+    "Future fully-governed discovery pass if governance infrastructure is restored"
+  ],
+  "disallowed_current_action": [
+    "Promote D01 to production or shadow edge candidate",
+    "Treat D01 as structurally confirmed",
+    "Reopen D02",
+    "Cite D-family as proof autonomous bounded discovery is operational",
+    "Expand D-family broadly without explicit human direction"
+  ],
+  "final_status_verdict": "D_FAMILY_NOT_ACTIONABLE"
+}

@@ -1,0 +1,10 @@
+stage,group_name,n_total,n_flagged,n_unflagged,games_flagged,games_unflagged,mean_flagged,mean_unflagged,gap,note
+DISCOVERY,COMPONENT_A (last_3 <= 1.0),6782,13,6769,13,3916,7.769,8.938,-1.169,BELOW_30_FLOOR — degenerate; parent gap threshold not meaningful as standalone level
+DISCOVERY,COMPONENT_B (last_10 >= 1.0),6782,6778,4,3924,4,8.937,7.000,+1.937,UNFLAGGED_BELOW_30 — degenerate; flags 99.9% of rows
+DISCOVERY,D01_FULL_FORMULATION (gap >= 1.0),6782,300,6482,297,3915,9.343,8.917,+0.426,Valid comparison; reproduces parent D01 discovery
+VALIDATION,COMPONENT_A (last_3 <= 1.0),3382,6,3376,6,1968,10.333,8.744,+1.590,BELOW_30_FLOOR — degenerate
+VALIDATION,COMPONENT_B (last_10 >= 1.0),3382,3381,1,1968,1,8.747,6.000,+2.747,UNFLAGGED_BELOW_30 — degenerate; flags 100.0% of rows
+VALIDATION,D01_FULL_FORMULATION (gap >= 1.0),3382,159,3223,157,1968,8.774,8.745,+0.028,Valid comparison; reproduces parent D01 validation (severe attenuation)
+OOS,COMPONENT_A (last_3 <= 1.0),3402,0,3402,0,1972,N/A,8.907,N/A,ZERO_FLAGGED — degenerate; no rows meet threshold
+OOS,COMPONENT_B (last_10 >= 1.0),3402,3402,0,1972,0,8.907,N/A,N/A,ZERO_UNFLAGGED — degenerate; flags 100% of rows
+OOS,D01_FULL_FORMULATION (gap >= 1.0),3402,157,3245,154,1972,9.446,8.880,+0.565,Valid comparison; reproduces parent D01 OOS

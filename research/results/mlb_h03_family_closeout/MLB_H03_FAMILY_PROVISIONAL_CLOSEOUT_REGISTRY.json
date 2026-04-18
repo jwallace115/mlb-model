@@ -1,0 +1,128 @@
+{
+  "family_name": "MLB_H03_FAMILY",
+  "family_description": "Bullpen Stress x Own-Starter Short-Outing Risk — interaction hypothesis family",
+  "closeout_date": "2026-04-17",
+  "operator": "Claude (automated research assistant)",
+  "document_type": "PROVISIONAL_FAMILY_CLOSEOUT",
+  "provenance_type": "RECONSTRUCTED_FROM_VERIFIED_SUMMARIES",
+  "provenance_note": "Repo artifacts for H01, H02, H03, H03A-D, and orchestration files were unavailable at time of closeout. This registry was reconstructed from verified user-confirmed branch summaries provided in the closeout prompt. Provisional pending future repo artifact recovery.",
+  "family_disposition": "CLOSE AS ACTIVE EDGE-SEARCH FAMILY; PRESERVE AS FUTURE LAYER / CONTEXT CANDIDATE",
+  "branches": {
+    "total": 7,
+    "shelved": 2,
+    "advanced": 1,
+    "child_branches_tested": 4
+  },
+  "h01_verdict": {
+    "branch_name": "MLB_H01_BULLPEN_FORCED_EXPOSURE",
+    "verdict": "SHELVE",
+    "discovery": "+0.91 runs",
+    "validation": "-0.42 runs (sign reversal)",
+    "oos": "+0.74 runs",
+    "interpretation": "4-field conjunction too brittle / unstable"
+  },
+  "h02_verdict": {
+    "branch_name": "MLB_H02_BULLPEN_STRESS_SIMPLE",
+    "verdict": "SHELVE",
+    "discovery": "+0.01 runs",
+    "validation": "+0.16 runs",
+    "oos": "+0.28 runs",
+    "interpretation": "Too broad / diluted; discovery non-triviality gate failed"
+  },
+  "h03_verdict": {
+    "branch_name": "MLB_H03_BULLPEN_STRESS_X_SHORT_OUTING_RISK",
+    "verdict": "ADVANCE",
+    "discovery": "+0.43 runs",
+    "validation": "+0.15 runs",
+    "oos": "+0.57 runs",
+    "interpretation": "First clean staged pass; real interaction signal"
+  },
+  "h03a_verdict": {
+    "branch_name": "MLB_H03A_ECONOMIC_REALITY_CHECK",
+    "verdict": "INCONCLUSIVE",
+    "discovery_flagged_residual": "+0.63",
+    "discovery_unflagged_residual": "+0.45",
+    "incremental_discovery_gap": "+0.19",
+    "validation_incremental_gap": "-0.06 (reversal)",
+    "oos_incremental_gap": "+0.23",
+    "interpretation": "Market prices much of the mechanism already; incremental residual modest and inconsistent"
+  },
+  "h03b_verdict": {
+    "branch_name": "MLB_H03B_COMPONENT_DOMINANCE_CHECK",
+    "verdict": "INTERACTION_DOMINANT",
+    "component_a_bullpen_stress_alone": {
+      "discovery": "+0.02",
+      "validation": "+0.16",
+      "oos": "+0.20"
+    },
+    "component_b_starter_short_outing_alone": {
+      "discovery": "+0.20",
+      "validation": "+0.01",
+      "oos": "+0.28"
+    },
+    "interaction_h03": {
+      "discovery": "+0.43",
+      "validation": "+0.15",
+      "oos": "+0.57"
+    },
+    "interpretation": "Interaction is genuine driver; not a fake conjunction or single-component artifact"
+  },
+  "h03c_verdict": {
+    "branch_name": "MLB_H03C_MARKET_STRUCTURE_CHECK",
+    "verdict": "MIXED_INCONCLUSIVE",
+    "low_total": {
+      "discovery": "+0.99",
+      "validation": "+0.26",
+      "oos": "+0.57",
+      "oos_note": "N=21, below floor"
+    },
+    "mid_total": {
+      "discovery": "+0.53",
+      "validation": "+0.06",
+      "oos": "+0.95"
+    },
+    "high_total": {
+      "discovery": "+0.58",
+      "validation": "+0.93",
+      "oos": "+0.15"
+    },
+    "interpretation": "No single broad market-total environment reliably concentrates the residual edge"
+  },
+  "h03d_verdict": {
+    "branch_name": "MLB_H03D_WITHIN_BAND_RESIDUAL_CHECK",
+    "verdict": "WEAK_CONDITIONAL_SIGNAL",
+    "band_1_6.5_7.5": {
+      "discovery_gap": "+0.47",
+      "validation": "-0.34 (reversal)"
+    },
+    "band_2_7.5_8.5": {
+      "discovery_gap": "+0.09 (below floor)"
+    },
+    "band_3_8.5_9.5": {
+      "discovery_gap": "-0.20 (negative)"
+    },
+    "band_4_9.5_plus": {
+      "discovery_gap": "+0.92",
+      "validation": "+0.38 (N=21, below floor)",
+      "oos": "+1.77"
+    },
+    "interpretation": ">9.5 closing-total neighborhood suggestive but below evidence standard / underpowered"
+  },
+  "final_family_conclusion": "H03 is a real structural interaction mechanism but not a confirmed standalone current-system edge. The interaction is genuine and not reducible to one component. Economic reality testing suggests the market prices most of the effect already. Broad total-bucket segmentation did not isolate a stable residual pocket. A >9.5 closing-total pocket appeared suggestive but remained below evidence standard. Preserve as future layer / context candidate only.",
+  "allowed_future_use": [
+    "Context modifier in a multi-layer model",
+    "Conditioning variable for a future primary edge signal",
+    "Re-evaluation if >9.5 closing-total pocket gains sufficient sample size",
+    "Re-evaluation if market structure changes reduce pricing efficiency for this mechanism"
+  ],
+  "disallowed_current_use": [
+    "Production deployment",
+    "Shadow edge candidate",
+    "Active child-branch expansion",
+    "Weakening standards to rescue the family",
+    "Claiming economic exploitability from current results"
+  ],
+  "carry_forward_note": "H03 (bullpen stress \u00d7 own-starter short-outing risk) is a real interaction mechanism but not a confirmed standalone edge. Economic reality testing suggests the market prices most of the effect already. Broad total-bucket segmentation did not isolate a stable residual pocket. A high-total (>9.5 closing total) pocket appeared suggestive but remained below evidence standard. Preserve H03 as a future layer / context modifier candidate rather than an active edge family.",
+  "next_research_direction": "Move active research attention to new MLB hypothesis families more likely to produce currently usable edge. H03 is no longer an active candidate for research resources.",
+  "final_closeout_verdict": "PROVISIONAL CLOSE AS ACTIVE EDGE FAMILY"
+}

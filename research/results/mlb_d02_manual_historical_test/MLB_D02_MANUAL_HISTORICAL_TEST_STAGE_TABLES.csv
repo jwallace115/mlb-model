@@ -1,0 +1,4 @@
+stage,n_total,n_flagged,n_unflagged,games_flagged,games_unflagged,mean_flagged,mean_unflagged,gap,note
+DISCOVERY,6782,411,6371,396,3890,8.788,8.945,-0.157,DIRECTION WRONG — flagged games had lower totals (opposite of mechanism prediction)
+VALIDATION,3382,229,3153,223,1944,8.969,8.730,+0.239,Sign reversal from discovery — directionally inconsistent
+OOS,3402,199,3203,192,1954,8.789,8.914,-0.125,Returns to negative — full profile is -/+/- with no consistent signal
