@@ -347,10 +347,36 @@
             "game": "NYM@CHC",
             "bet": "FULL GAME UNDER",
             "line": 10.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "LAD@COL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": "WIN"
+          },
+          {
+            "game": "CHW@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-18",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "LAD@COL",
+            "bet": "FULL GAME UNDER",
+            "line": 11.0,
+            "result": null
+          },
+          {
+            "game": "SFG@WSN",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
             "result": null
@@ -367,12 +393,12 @@
       }
     ],
     "summary": {
-      "total": 13,
+      "total": 14,
       "wins": 1,
-      "losses": 12,
+      "losses": 13,
       "pending": 0,
-      "win_rate": 7.7,
-      "net_units": -7.0,
+      "win_rate": 7.1,
+      "net_units": -8.0,
       "payout_per_win": 6.0
     }
   },
@@ -690,44 +716,44 @@
             "game": "NYM@CHC",
             "bet": "FULL GAME UNDER",
             "line": 10.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "LAD@COL",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "CHW@OAK",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "KCR@NYY",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "ATL@PHI",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 8,
+      "total": 9,
       "wins": 0,
-      "losses": 8,
+      "losses": 9,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -8.0,
+      "net_units": -9.0,
       "payout_per_win": 24.0
     }
   },
