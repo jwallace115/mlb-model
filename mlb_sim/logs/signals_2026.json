@@ -2038,7 +2038,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Cade Cavalli",
+    "away_sp_name": "Adrian Houser"
   },
   {
     "date": "2026-04-18",
@@ -2063,7 +2065,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Luis Severino",
+    "away_sp_name": "Erick Fedde"
   },
   {
     "date": "2026-04-18",
@@ -2088,7 +2092,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Lance McCullers Jr.",
+    "away_sp_name": "Andre Pallante"
   },
   {
     "date": "2026-04-18",
@@ -2113,6 +2119,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Ryan Feltner",
+    "away_sp_name": "Emmet Sheehan"
   }
 ]
