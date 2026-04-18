@@ -212,6 +212,18 @@
       "drift_applied": 0.0,
       "result": "WIN",
       "actual_total": 2
+    },
+    {
+      "game_id": 2025030161,
+      "game_date": "2026-04-18",
+      "home_team": "DAL",
+      "away_team": "MIN",
+      "signal_side": "OVER",
+      "edge": 0.1206,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 5.5,
+      "lambda_total": 5.893,
+      "drift_applied": 0.0
     }
   ]
 }
