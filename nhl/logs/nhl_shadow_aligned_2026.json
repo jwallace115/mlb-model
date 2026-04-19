@@ -223,7 +223,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 5.5,
       "lambda_total": 5.893,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 7
     }
   ]
 }
