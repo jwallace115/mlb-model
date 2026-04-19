@@ -2134,7 +2134,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Michael Lorenzen",
+    "away_sp_name": "Roki Sasaki"
   },
   {
     "date": "2026-04-19",
@@ -2159,7 +2161,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jeffrey Springs",
+    "away_sp_name": "Noah Schultz"
   },
   {
     "date": "2026-04-19",
@@ -2184,7 +2188,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Ryne Nelson",
+    "away_sp_name": "Kevin Gausman"
   },
   {
     "date": "2026-04-19",
@@ -2209,6 +2215,8 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Andrew Painter",
+    "away_sp_name": "Grant Holmes"
   }
 ]
