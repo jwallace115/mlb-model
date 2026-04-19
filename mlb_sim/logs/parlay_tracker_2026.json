@@ -373,18 +373,44 @@
             "game": "LAD@COL",
             "bet": "FULL GAME UNDER",
             "line": 11.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "SFG@WSN",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
+            "result": "LOSS"
+          },
+          {
+            "game": "CHW@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-19",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "LAD@COL",
+            "bet": "FULL GAME UNDER",
+            "line": 11.5,
             "result": null
           },
           {
             "game": "CHW@OAK",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "TOR@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
             "result": null
           }
         ],
@@ -393,12 +419,12 @@
       }
     ],
     "summary": {
-      "total": 14,
+      "total": 15,
       "wins": 1,
-      "losses": 13,
+      "losses": 14,
       "pending": 0,
-      "win_rate": 7.1,
-      "net_units": -8.0,
+      "win_rate": 6.7,
+      "net_units": -9.0,
       "payout_per_win": 6.0
     }
   },
