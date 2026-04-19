@@ -1,0 +1,19 @@
+{
+  "branch_name": "MLB_W01A_COMPONENT_DOMINANCE_CHECK",
+  "branch_type": "CHILD_COMPONENT_DOMINANCE_CHECK",
+  "parent_branch": "MLB_W01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_W01",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "current_status": "MIXED_INCONCLUSIVE",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "runtime_object_used": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "last_updated": "2026-04-19",
+  "key_caveats": [
+    "Component A (starter alone) carries ~75% of signal",
+    "Component B (bullpen alone) adds ~25% amplification in discovery/OOS but near-zero standalone",
+    "Full formulation consistently strongest but not by a wide margin over Comp A",
+    "Validation anomalous for all three groups",
+    "Neither cleanly interaction-real nor cleanly component-dominated"
+  ],
+  "notes": "MIXED_INCONCLUSIVE. The W01 conjunction has real but asymmetric structure. Comp A is primary, Comp B amplifies modestly. Not dead, not confirmed."
+}

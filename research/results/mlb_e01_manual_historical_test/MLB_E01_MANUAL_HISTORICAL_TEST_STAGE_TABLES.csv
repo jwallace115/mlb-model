@@ -1,0 +1,4 @@
+stage,n_total,n_flagged,n_unflagged,outcome_mean_flagged,outcome_mean_unflagged,gap,note
+DISCOVERY,9300,4071,5229,8.969,8.860,+0.109,Positive direction correct. Flag rate 43.8% — very broad. Gap barely above 0.10 floor.
+VALIDATION,4644,1978,2666,8.883,8.680,+0.202,Same sign; gap strengthens. Flag rate 42.6%.
+OOS,4646,2637,2009,9.007,8.777,+0.230,Same sign; gap strengthens further. Flag rate 56.8% — majority flagged. Monotonic profile across all stages.

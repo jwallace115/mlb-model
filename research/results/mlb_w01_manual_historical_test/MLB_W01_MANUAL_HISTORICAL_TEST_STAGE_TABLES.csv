@@ -1,0 +1,4 @@
+stage,n_total,n_flagged,n_unflagged,outcome_mean_flagged,outcome_mean_unflagged,gap,note
+DISCOVERY,8353,745,7608,9.213,8.890,+0.323,Positive direction correct. Flag rate 8.9% — selective. N well above 30.
+VALIDATION,4169,288,3881,8.764,8.745,+0.019,Same sign preserved but severely attenuated (94% shrinkage from discovery).
+OOS,4180,314,3866,9.185,8.821,+0.363,Strong positive gap. No reversal. Non-monotonic profile noted (+0.323 -> +0.019 -> +0.363).

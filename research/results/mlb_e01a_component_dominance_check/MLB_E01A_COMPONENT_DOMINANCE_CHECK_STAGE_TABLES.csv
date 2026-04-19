@@ -1,0 +1,10 @@
+stage,group_name,n_total,n_flagged,n_unflagged,outcome_mean_flagged,outcome_mean_unflagged,gap,note
+DISCOVERY,COMPONENT_A_ONLY,9300,4071,5229,8.969,8.860,+0.109,Barrel rate >= 0.08 alone. Identical to full formulation.
+DISCOVERY,COMPONENT_B_ONLY,9300,9300,0,8.907,N/A,N/A,park_factor_hr >= 1.10 flags 100% of rows. DEGENERATE — threshold too low. No unflagged group.
+DISCOVERY,E01_FULL_FORMULATION,9300,4071,5229,8.969,8.860,+0.109,Identical to Component A. park_factor_hr contributes nothing.
+VALIDATION,COMPONENT_A_ONLY,4644,1978,2666,8.883,8.680,+0.202,Identical to full formulation.
+VALIDATION,COMPONENT_B_ONLY,4644,4644,0,8.767,N/A,N/A,park_factor_hr >= 1.10 flags 100%. DEGENERATE.
+VALIDATION,E01_FULL_FORMULATION,4644,1978,2666,8.883,8.680,+0.202,Identical to Component A.
+OOS,COMPONENT_A_ONLY,4646,2637,2009,9.007,8.777,+0.230,Identical to full formulation.
+OOS,COMPONENT_B_ONLY,4646,4646,0,9.007,N/A,N/A,park_factor_hr >= 1.10 flags 100%. DEGENERATE.
+OOS,E01_FULL_FORMULATION,4646,2637,2009,9.007,8.777,+0.230,Identical to Component A.

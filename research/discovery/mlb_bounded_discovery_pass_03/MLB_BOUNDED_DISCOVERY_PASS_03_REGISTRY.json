@@ -1,0 +1,52 @@
+{
+  "pass_name": "MLB_BOUNDED_DISCOVERY_PASS_03",
+  "pass_date": "2026-04-19",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "orchestration_root": "research/orchestration/",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "runtime_object_version": "1.0 (HISTORICAL_CLEAN, 19804x130)",
+  "prior_closeout_read": true,
+  "prior_closeout_source": "PERSISTED_CLOSEOUT_FILES",
+  "prior_closeout_files_read": [
+    "research/results/mlb_e_family_pass_02_closeout/MLB_E_FAMILY_PASS_02_CLOSEOUT_MEMO.md",
+    "research/results/mlb_e_family_pass_02_closeout/MLB_E_FAMILY_PASS_02_CLOSEOUT_REGISTRY.json",
+    "research/results/mlb_e_family_pass_02_closeout/MLB_E_FAMILY_PASS_02_CLOSEOUT_SELF_AUDIT.md"
+  ],
+  "candidates_considered": 4,
+  "candidates_advanced": 2,
+  "candidates_rejected": 2,
+  "advanced_candidate_ids": ["MLB_W01", "MLB_W02"],
+  "rejected_candidates": [
+    {"name": "High-Leverage Unavailable x Short-Outing Starter", "reason": "Too close to H01/H03 family"},
+    {"name": "Opp SP Pitch Count Trajectory x Bullpen Depletion", "reason": "Overlaps with D01 trajectory concept"}
+  ],
+  "advanced_candidates": {
+    "MLB_W01": {
+      "name": "Short-Outing Starter x Depleted Bullpen Conjunction",
+      "fields": ["opp_sp_workload_ip_last_3", "bullpen_pitches_last_3_games"],
+      "field_count": 2,
+      "interaction_form": "AND rule",
+      "threshold": "opp_sp_workload_ip_last_3 <= 4.67 AND bullpen_pitches_last_3_games >= 200",
+      "threshold_grounding": "domain_knowledge_only",
+      "new_infrastructure_required": false,
+      "recommendation": "ADVANCE_TO_TEST"
+    },
+    "MLB_W02": {
+      "name": "Opposing Starter Command Instability x High Bullpen Usage",
+      "fields": ["opp_sp_command_bb_rate_last_3", "relievers_used_last_3_games"],
+      "field_count": 2,
+      "interaction_form": "AND rule",
+      "threshold": "opp_sp_command_bb_rate_last_3 >= 0.10 AND relievers_used_last_3_games >= 12",
+      "threshold_grounding": "domain_knowledge_only",
+      "new_infrastructure_required": false,
+      "recommendation": "ADVANCE_TO_TEST"
+    }
+  },
+  "outside_package_inputs_used": false,
+  "caveats_carried": ["CAVEAT_01", "CAVEAT_02", "CAVEAT_03"],
+  "final_status": "DISCOVERY_PASS_COMPLETE",
+  "notes": "Third post-rebuild discovery pass. Both candidates are true conjunctions with two independent threshold conditions. Anti-duplication checked against H03, D01, E01/E02, and generic bullpen/starter logic. Prior E-family lessons (vacuous thresholds, unsupported semantics) explicitly carried forward."
+}

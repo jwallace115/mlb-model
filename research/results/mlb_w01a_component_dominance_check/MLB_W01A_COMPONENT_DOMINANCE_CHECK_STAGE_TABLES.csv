@@ -1,0 +1,10 @@
+stage,group_name,n_total,n_flagged,n_unflagged,outcome_mean_flagged,outcome_mean_unflagged,gap,note
+DISCOVERY,COMPONENT_A_ONLY,8353,2079,6274,9.104,8.858,+0.247,Short-outing starter alone. 24.9% flagged. Substantial signal.
+DISCOVERY,COMPONENT_B_ONLY,8353,2869,5484,8.926,8.916,+0.011,Depleted bullpen alone. 34.3% flagged. Near-zero signal.
+DISCOVERY,W01_FULL_FORMULATION,8353,745,7608,9.213,8.890,+0.323,Full conjunction. 8.9% flagged. Strongest gap — exceeds both components.
+VALIDATION,COMPONENT_A_ONLY,4169,913,3256,8.752,8.745,+0.008,Collapses in validation. Near-zero.
+VALIDATION,COMPONENT_B_ONLY,4169,1312,2857,8.882,8.684,+0.198,Bullpen alone shows validation signal (+0.198). Surprising reversal of component roles.
+VALIDATION,W01_FULL_FORMULATION,4169,288,3881,8.764,8.745,+0.019,Full conjunction also collapses in validation.
+OOS,COMPONENT_A_ONLY,4180,950,3230,9.078,8.781,+0.297,Rebounds strongly in OOS.
+OOS,COMPONENT_B_ONLY,4180,1377,2803,8.858,8.844,+0.015,Near-zero again in OOS.
+OOS,W01_FULL_FORMULATION,4180,314,3866,9.185,8.821,+0.363,Full conjunction strongest in OOS — exceeds both components.

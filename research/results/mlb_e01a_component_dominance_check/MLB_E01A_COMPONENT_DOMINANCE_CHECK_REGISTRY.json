@@ -1,0 +1,31 @@
+{
+  "branch_name": "MLB_E01A_COMPONENT_DOMINANCE_CHECK",
+  "parent_branch": "MLB_E01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_E01",
+  "candidate_name": "Barrel Rate x Park HR Factor",
+  "mechanism_family": "CONTACT-SHAPE x RUN-ENVIRONMENT INTERACTION",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "build_date": "2026-04-18",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "orchestration_root": "research/orchestration/",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "comparison_groups_frozen": {
+    "COMPONENT_A_ONLY": "contact_barrel_rate_last_10 >= 0.08",
+    "COMPONENT_B_ONLY": "park_factor_hr >= 1.10",
+    "E01_FULL_FORMULATION": "contact_barrel_rate_last_10 >= 0.08 AND park_factor_hr >= 1.10"
+  },
+  "interaction_form_frozen": "AND rule",
+  "threshold_logic_frozen": "barrel_rate >= 0.08 AND park_factor_hr >= 1.10",
+  "split_policy": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025"},
+  "outside_package_inputs_used": false,
+  "nesting_structure": "FULLY_NESTED — Component B flags 100% of rows; Full Formulation = Component A exactly",
+  "key_finding": "park_factor_hr >= 1.10 is a vacuous threshold that excludes zero rows. The claimed interaction collapses to barrel rate alone.",
+  "component_a_discovery_gap": 0.109,
+  "component_b_discovery_gap": "N/A (degenerate — 100% flagged)",
+  "full_formulation_discovery_gap": 0.109,
+  "final_verdict": "COMPONENT_DOMINATED",
+  "final_verdict_note": "E01 interaction does not exist. Component B (park_factor_hr) is vacuous. Full formulation equals Component A (barrel rate) exactly. Signal is single-factor contact quality, not a contact-shape x environment interaction.",
+  "notes": "The park_factor_hr >= 1.10 threshold was set from domain knowledge but falls below the minimum value in the runtime object data. All games have park_factor_hr >= 1.10. The interaction was never actually tested."
+}

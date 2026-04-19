@@ -1,0 +1,33 @@
+{
+  "branch_name": "MLB_W01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_W01",
+  "candidate_name": "Short-Outing Starter x Depleted Bullpen",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "build_date": "2026-04-19",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "orchestration_root": "research/orchestration/",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "field_list_frozen": ["opp_sp_workload_ip_last_3", "opp_bullpen_pitches_last_3 (self-join from bullpen_pitches_last_3_games)"],
+  "interaction_form_frozen": "AND rule — both must exceed threshold simultaneously",
+  "field_side_resolution_frozen": "BATTING TEAM perspective — flagged when OPPOSING team has short-outing starter AND depleted bullpen",
+  "threshold_logic_frozen": "opp_sp_workload_ip_last_3 <= 4.67 AND opp_bullpen_pitches_last_3 >= 200",
+  "threshold_grounding": "domain_knowledge_only",
+  "split_policy": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025"},
+  "outside_package_inputs_used": false,
+  "self_join_note": "opponent bullpen pitches obtained via self-join on (game_pk, opponent_team) from existing approved field",
+  "discovery_summary": {"n_total": 8353, "n_flagged": 745, "flag_rate": "8.9%", "mean_flagged": 9.213, "mean_unflagged": 8.890, "gap": 0.323},
+  "validation_summary": {"n_total": 4169, "n_flagged": 288, "flag_rate": "6.9%", "mean_flagged": 8.764, "mean_unflagged": 8.745, "gap": 0.019},
+  "oos_summary": {"n_total": 4180, "n_flagged": 314, "flag_rate": "7.5%", "mean_flagged": 9.185, "mean_unflagged": 8.821, "gap": 0.363},
+  "gate_results": {"discovery_N_ok": true, "discovery_nontrivial": true, "discovery_direction_correct": true, "validation_same_sign": true, "oos_material_reversal": false},
+  "key_caveats": [
+    "Validation severely attenuated: +0.323 -> +0.019 (94% shrinkage)",
+    "Non-monotonic staged profile: +0.323 -> +0.019 -> +0.363",
+    "Same validation-dip pattern as D01 — may reflect 2024 structural differences or inherent conjunction noise"
+  ],
+  "final_verdict": "ADVANCE",
+  "final_verdict_note": "All staged gates passed. Selective flag rate (7-9%), non-vacuous thresholds, genuine conjunction. Validation attenuation is documented caveat.",
+  "notes": "W01 is structurally more satisfying than prior D01 — selective flag rate, non-vacuous thresholds, both components contribute. Self-join on runtime object to obtain opponent bullpen state. Component-dominance check is the natural next step."
+}

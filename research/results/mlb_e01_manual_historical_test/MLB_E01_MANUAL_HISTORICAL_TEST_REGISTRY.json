@@ -1,0 +1,52 @@
+{
+  "branch_name": "MLB_E01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_E01",
+  "candidate_name": "Barrel Rate x Park HR Factor",
+  "mechanism_family": "CONTACT-SHAPE x RUN-ENVIRONMENT INTERACTION",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "build_date": "2026-04-18",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "orchestration_root": "research/orchestration/",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "runtime_object_version": "1.0 (HISTORICAL_CLEAN, 19804x130)",
+  "field_list_frozen": ["contact_barrel_rate_last_10", "park_factor_hr"],
+  "interaction_form_frozen": "AND rule — both must exceed threshold simultaneously",
+  "threshold_logic_frozen": "contact_barrel_rate_last_10 >= 0.08 AND park_factor_hr >= 1.10",
+  "threshold_grounding": "domain_knowledge_only",
+  "direction_frozen": "flagged > unflagged on actual_total",
+  "split_policy": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025"},
+  "outside_package_inputs_used": false,
+  "caveats_carried": ["CAVEAT_01", "CAVEAT_02", "CAVEAT_03"],
+  "discovery_summary": {
+    "n_total": 9300, "n_flagged": 4071, "n_unflagged": 5229,
+    "flag_rate": "43.8%",
+    "mean_flagged": 8.969, "mean_unflagged": 8.860, "gap": 0.109
+  },
+  "validation_summary": {
+    "n_total": 4644, "n_flagged": 1978, "n_unflagged": 2666,
+    "flag_rate": "42.6%",
+    "mean_flagged": 8.883, "mean_unflagged": 8.680, "gap": 0.202
+  },
+  "oos_summary": {
+    "n_total": 4646, "n_flagged": 2637, "n_unflagged": 2009,
+    "flag_rate": "56.8%",
+    "mean_flagged": 9.007, "mean_unflagged": 8.777, "gap": 0.230
+  },
+  "gate_results": {
+    "discovery_N_ok": true,
+    "discovery_nontrivial": true,
+    "discovery_direction_correct": true,
+    "validation_same_sign": true,
+    "oos_material_reversal": false
+  },
+  "key_caveats": [
+    "Flag rate extremely broad (43-57%) — closer to median split than targeted interaction",
+    "Discovery gap marginal (+0.109, barely above 0.10 floor)",
+    "Component-dominance check needed to determine if park_factor_hr alone explains most of the signal"
+  ],
+  "final_verdict": "ADVANCE",
+  "final_verdict_note": "All staged gates passed with clean monotonic profile. Broad flag rate is a serious structural caveat requiring component-dominance check before further promotion.",
+  "notes": "First hypothesis test through the post-rebuild engine stack. Engine stack: MLB_ENGINE_V1_FOUNDATION + MLB_RESEARCH_ORCHESTRATION_V1 + MLB_RUNTIME_OBJECT_V1."
+}

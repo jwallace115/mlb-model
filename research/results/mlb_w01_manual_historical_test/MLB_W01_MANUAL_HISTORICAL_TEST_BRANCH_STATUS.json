@@ -1,0 +1,22 @@
+{
+  "branch_name": "MLB_W01_SHORT_OUTING_STARTER_X_DEPLETED_BULLPEN",
+  "branch_type": "MANUAL_HISTORICAL_HYPOTHESIS_TEST",
+  "candidate_id": "MLB_W01",
+  "parent_context": "MLB_BOUNDED_DISCOVERY_PASS_03",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "current_status": "ADVANCE",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "object_scope_used": "MLB totals — opposing short-outing starter x opposing depleted bullpen",
+  "runtime_object_used": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "last_updated": "2026-04-19",
+  "discovery_gap": "+0.323",
+  "validation_gap": "+0.019",
+  "oos_gap": "+0.363",
+  "key_caveats": [
+    "Validation attenuated 94% (same non-monotonic pattern as D01)",
+    "Flag rate selective at 7-9% — genuinely targeted conjunction",
+    "Both thresholds non-vacuous",
+    "Self-join used to obtain opponent bullpen state"
+  ],
+  "notes": "All staged gates passed. Selective flag rate, genuine conjunction, mechanism-distinct from H03/D01/E-family. Validation attenuation is primary concern. Component-dominance check is natural next step."
+}

@@ -1,0 +1,22 @@
+{
+  "branch_name": "MLB_E01_BARREL_RATE_X_PARK_HR_FACTOR",
+  "branch_type": "MANUAL_HISTORICAL_HYPOTHESIS_TEST",
+  "candidate_id": "MLB_E01",
+  "parent_context": "MLB_BOUNDED_DISCOVERY_PASS_02",
+  "mechanism_family": "CONTACT-SHAPE x RUN-ENVIRONMENT INTERACTION",
+  "current_status": "ADVANCE",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "object_scope_used": "MLB totals — barrel rate x park HR factor interaction",
+  "runtime_object_used": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "last_updated": "2026-04-18",
+  "discovery_gap": "+0.109",
+  "validation_gap": "+0.202",
+  "oos_gap": "+0.230",
+  "key_caveats": [
+    "Flag rate 43-57% — extremely broad, closer to median split than targeted interaction",
+    "Discovery gap marginal (+0.109)",
+    "Monotonic profile is encouraging but component-dominance check is critical next step",
+    "Manual advancement from provisional discovery"
+  ],
+  "notes": "All staged gates passed. Clean monotonic profile (+0.109 -> +0.202 -> +0.230). Broad flag rate requires component-dominance check to determine if park_factor_hr alone drives most of the signal."
+}

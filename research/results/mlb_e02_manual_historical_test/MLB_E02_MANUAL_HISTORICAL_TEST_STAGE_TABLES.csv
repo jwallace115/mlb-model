@@ -1,0 +1,4 @@
+stage,n_total,n_flagged,n_unflagged,outcome_mean_flagged,outcome_mean_unflagged,gap,note
+DISCOVERY,N/A,N/A,N/A,N/A,N/A,N/A,HARD_STOP — wind-out definition cannot be constructed honestly from available fields
+VALIDATION,N/A,N/A,N/A,N/A,N/A,N/A,HARD_STOP — no staged results computed
+OOS,N/A,N/A,N/A,N/A,N/A,N/A,HARD_STOP — no staged results computed

@@ -1,0 +1,40 @@
+{
+  "branch_name": "MLB_W01A_COMPONENT_DOMINANCE_CHECK",
+  "parent_branch": "MLB_W01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_W01",
+  "candidate_name": "Short-Outing Starter x Depleted Bullpen",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "build_date": "2026-04-19",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "exact_parent_rule_confirmed": {
+    "fields": ["opp_sp_workload_ip_last_3", "opp_bullpen_pitches_last_3 (self-join)"],
+    "form": "AND rule",
+    "thresholds": "IP <= 4.67 AND bullpen_pitches >= 200",
+    "side": "batting team perspective",
+    "direction": "flagged > unflagged"
+  },
+  "component_groups_frozen": {
+    "COMPONENT_A_ONLY": "opp_sp_workload_ip_last_3 <= 4.67",
+    "COMPONENT_B_ONLY": "opp_bullpen_pitches_last_3 >= 200",
+    "W01_FULL_FORMULATION": "IP <= 4.67 AND bullpen_pitches >= 200"
+  },
+  "overlap_structure": "OVERLAPPING_NOT_NESTED — both components flag distinct subsets beyond the full formulation; neither is vacuous",
+  "discovery_results": {
+    "comp_a_gap": 0.247, "comp_a_flagged": 2079, "comp_a_pct": "24.9%",
+    "comp_b_gap": 0.011, "comp_b_flagged": 2869, "comp_b_pct": "34.3%",
+    "full_gap": 0.323, "full_flagged": 745, "full_pct": "8.9%"
+  },
+  "validation_results": {
+    "comp_a_gap": 0.008, "comp_b_gap": 0.198, "full_gap": 0.019
+  },
+  "oos_results": {
+    "comp_a_gap": 0.297, "comp_b_gap": 0.015, "full_gap": 0.363
+  },
+  "key_finding": "Component A carries ~75% of signal. Component B adds ~25% amplification in non-validation stages. Full formulation consistently strongest in discovery and OOS. Validation anomalous for all groups.",
+  "final_verdict": "MIXED_INCONCLUSIVE",
+  "final_verdict_note": "Asymmetric but real structure. Not cleanly interaction-dominant (Comp A too strong alone). Not cleanly component-dominated (Comp B adds value). Validation anomalous for all groups.",
+  "notes": "Both components are non-vacuous, non-nested. Full formulation amplifies Comp A by ~25-30%. Pattern is 'primary component + amplifier' rather than 'genuine interaction.'"
+}

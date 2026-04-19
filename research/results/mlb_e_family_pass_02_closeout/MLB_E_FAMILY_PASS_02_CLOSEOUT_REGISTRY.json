@@ -1,0 +1,34 @@
+{
+  "family_name": "MLB_E_FAMILY_PASS_02",
+  "family_scope": "CONTACT_SHAPE_X_RUN_ENVIRONMENT_INTERACTION",
+  "closeout_date": "2026-04-18",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "provenance_type": "LOCAL_PERSISTED_ARTIFACTS_ONLY",
+  "engine_stack": "MLB_ENGINE_V1_FOUNDATION + MLB_RESEARCH_ORCHESTRATION_V1 + MLB_RUNTIME_OBJECT_V1",
+  "pass_02_verdict": "DISCOVERY_PASS_COMPLETE",
+  "e01_verdict": "ADVANCE_WITH_CAVEAT (parent) -> COMPONENT_DOMINATED (child E01A)",
+  "e01a_verdict": "COMPONENT_DOMINATED — park_factor_hr >= 1.10 is vacuous, full formulation = barrel rate alone",
+  "e02_verdict": "HARD_STOP — park orientation data missing from frozen stack, cannot define wind-out honestly",
+  "final_family_disposition": "CLOSED_FOR_NOW_UNDER_CURRENT_STACK",
+  "allowed_future_use": [
+    "Preserve as documented research history",
+    "Reference E01 threshold-discipline lesson in future candidate generation",
+    "Reference E02 stack-boundary lesson in future candidate generation",
+    "Revisit if park-orientation data is added to a future V2 foundation package"
+  ],
+  "disallowed_current_use": [
+    "Advance E01",
+    "Advance E02",
+    "Reinterpret E01 as barrel-rate-alone continuation",
+    "Continue pass-02 child branching",
+    "Claim pass 02 found a structurally valid candidate"
+  ],
+  "reopen_requirements": [
+    "Approved park orientation / field-direction semantics data layer for honest WIND_OUT mapping",
+    "OR a materially different candidate design not dependent on vacuous environmental thresholds or unsupported wind semantics"
+  ],
+  "next_research_direction": "New bounded discovery pass in a different mechanism family",
+  "final_closeout_verdict": "NO_SURVIVING_CANDIDATE",
+  "notes": "Pass 02 completed honestly. E01 failed structurally (component-dominated). E02 hard-stopped legitimately (missing semantic support). Rebuilt engine governance worked correctly."
+}

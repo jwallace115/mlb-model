@@ -1,0 +1,21 @@
+{
+  "branch_name": "MLB_E_FAMILY_PASS_02",
+  "branch_type": "FAMILY_CLOSEOUT",
+  "current_status": "CLOSE",
+  "provenance_type": "LOCAL_PERSISTED_ARTIFACTS_ONLY",
+  "date_opened": "2026-04-18",
+  "last_updated": "2026-04-18",
+  "member_branches": [
+    {"branch": "MLB_BOUNDED_DISCOVERY_PASS_02", "verdict": "DISCOVERY_PASS_COMPLETE", "role": "discovery"},
+    {"branch": "MLB_E01_MANUAL_HISTORICAL_TEST", "verdict": "ADVANCE_WITH_CAVEAT", "role": "parent_test"},
+    {"branch": "MLB_E01A_COMPONENT_DOMINANCE_CHECK", "verdict": "COMPONENT_DOMINATED", "role": "child_check"},
+    {"branch": "MLB_E02_MANUAL_HISTORICAL_TEST", "verdict": "HARD_STOP", "role": "parent_test"}
+  ],
+  "key_caveats": [
+    "E01 interaction does not exist — park_factor_hr threshold vacuous",
+    "E02 hard-stopped due to missing park-orientation semantics",
+    "No surviving candidate under current frozen stack",
+    "Family closed for now, not permanently"
+  ],
+  "notes": "Pass 02 produced no surviving candidate. E01 was component-dominated. E02 hard-stopped due to missing park-orientation semantics in the frozen stack."
+}

@@ -1,0 +1,19 @@
+{
+  "branch_name": "MLB_E01A_COMPONENT_DOMINANCE_CHECK",
+  "branch_type": "CHILD_COMPONENT_DOMINANCE_CHECK",
+  "parent_branch": "MLB_E01_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_E01",
+  "mechanism_family": "CONTACT-SHAPE x RUN-ENVIRONMENT INTERACTION",
+  "current_status": "COMPONENT_DOMINATED",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "object_scope_used": "MLB totals — barrel rate x park HR factor component decomposition",
+  "runtime_object_used": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "last_updated": "2026-04-18",
+  "key_caveats": [
+    "park_factor_hr >= 1.10 flags 100% of rows — vacuous threshold",
+    "Full formulation = Component A exactly — no interaction present",
+    "E01 signal is barrel rate alone, not contact-shape x environment interaction",
+    "Threshold discipline lesson: domain-grounded threshold was vacuous because field scale did not match assumption"
+  ],
+  "notes": "COMPONENT_DOMINATED. The E01 interaction does not exist. Park HR factor threshold is below the field minimum. The full formulation collapses to barrel rate alone."
+}

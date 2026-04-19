@@ -1,0 +1,19 @@
+{
+  "branch_name": "MLB_E02_LAUNCH_ANGLE_X_WIND_OUT",
+  "branch_type": "MANUAL_HISTORICAL_HYPOTHESIS_TEST",
+  "candidate_id": "MLB_E02",
+  "parent_context": "MLB_BOUNDED_DISCOVERY_PASS_02",
+  "mechanism_family": "CONTACT-SHAPE x RUN-ENVIRONMENT INTERACTION",
+  "current_status": "HARD_STOP",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "object_scope_used": "MLB totals — launch angle x wind-out interaction (attempted)",
+  "runtime_object_used": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "last_updated": "2026-04-18",
+  "key_caveats": [
+    "Park orientation data not available in frozen foundation package",
+    "wind_direction degrees alone cannot define honest park-specific wind-out",
+    "No staged results computed — HARD STOP before execution",
+    "Mechanism is physically plausible but untestable with current V1 foundation"
+  ],
+  "notes": "HARD_STOP. Cannot define wind-out honestly without park orientation data. E02 is preserved as a future candidate if park orientation data is added to a V2 foundation package."
+}
