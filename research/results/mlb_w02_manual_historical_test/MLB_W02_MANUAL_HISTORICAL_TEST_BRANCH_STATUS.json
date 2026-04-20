@@ -1,0 +1,15 @@
+{
+  "branch_name": "MLB_W02_MANUAL_HISTORICAL_TEST",
+  "branch_type": "MANUAL_HISTORICAL_HYPOTHESIS_TEST",
+  "candidate_id": "MLB_W02",
+  "candidate_name": "Command Instability x High Bullpen Usage",
+  "parent_context": "MLB_BOUNDED_DISCOVERY_PASS_03",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "current_status": "SHELVE",
+  "runtime_object_used": "mlb_runtime_object_v1.parquet (19430x130, HISTORICAL_CLEAN)",
+  "foundation_package_used": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "orchestration_used": "research/orchestration/",
+  "outside_package_inputs": false,
+  "last_updated": "2026-04-19",
+  "notes": "OOS material reversal (-0.464 vs discovery +0.450) is decisive. Discovery/validation amplification pattern followed by OOS sign flip indicates signal instability. No further branches warranted. W-family status: W01 PRESERVE_AS_CONTEXT, W02 SHELVE."
+}

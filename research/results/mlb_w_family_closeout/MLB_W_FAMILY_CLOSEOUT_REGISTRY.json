@@ -1,0 +1,32 @@
+{
+  "family_name": "MLB_W_FAMILY_WORKLOAD_DEPTH_HANDOFF",
+  "closeout_date": "2026-04-20",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "discovery_pass": "MLB_BOUNDED_DISCOVERY_PASS_03",
+  "family_disposition": "CLOSED — both candidates tested, neither produced confirmed exploitable edge",
+  "w01_verdict": "PRESERVE_AS_CONTEXT",
+  "w01a_verdict": "MIXED_INCONCLUSIVE",
+  "w01b_verdict": "PRESERVE_AS_CONTEXT",
+  "w02_verdict": "SHELVE",
+  "final_family_conclusion": "W-family mechanism (starter handoff stress x bullpen depth pressure) is structurally real but market-priced. No branch produced a confirmed exploitable edge. W01 preserved as context layer candidate. W02 failed OOS decisively.",
+  "starter_fragility_component_a_note": "Component A alone (opp_sp_workload_ip_last_3 <= 4.67) showed the most consistent structure: disc +0.247 / val +0.008 / OOS +0.297. Worth revisiting as standalone in a future pass with tighter threshold design.",
+  "allowed_future_use": [
+    "Anti-duplication reference for future discovery passes",
+    "Context layer in future multi-signal model architecture",
+    "Component A standalone investigation in future bounded discovery",
+    "Regime-sensitivity reference (W02 amplification-then-reversal pattern)"
+  ],
+  "disallowed_current_use": [
+    "Production deployment",
+    "Shadow edge candidate",
+    "Live betting recommendation",
+    "Economic exploitability claim",
+    "Reopening W02 without genuinely different theoretical basis"
+  ],
+  "w01_carry_forward_note": "W01 (short-outing starter risk x depleted bullpen) is a real structural mechanism but not a confirmed exploitable edge. The market prices most of the effect through closing totals. Residual is trivial in discovery, reverses in validation, and near-zero in OOS. Preserve as future layer/context candidate.",
+  "w01_component_a_carry_forward_note": "The starter fragility component alone (opp_sp_short_outing risk threshold) showed the most consistent structure across the W01 family — disc +0.247 / val +0.008 / OOS +0.297. Not exploitable as currently formulated, but worth revisiting as a standalone signal in a future bounded discovery pass with tighter threshold design.",
+  "w02_carry_forward_note": "W02 (command instability x high bullpen usage) showed strong discovery and amplified validation but reversed materially in OOS (-0.464). Amplification pattern — validation stronger than discovery — was a warning sign of regime concentration. OOS sign flip is decisive. Shelved. Do not reopen without genuinely different theoretical basis.",
+  "next_research_direction": "Move to a genuinely different mechanism family. W-family (WORKLOAD / DEPTH / HANDOFF ASYMMETRY) is exhausted as an active edge-search direction.",
+  "final_closeout_verdict": "W-FAMILY CLOSED — both candidates tested, both closed, family exhausted"
+}

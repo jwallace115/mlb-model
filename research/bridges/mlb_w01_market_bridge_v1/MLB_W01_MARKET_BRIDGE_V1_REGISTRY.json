@@ -1,0 +1,27 @@
+{
+  "object_name": "MLB_W01_MARKET_BRIDGE_V1",
+  "version": "1.0",
+  "build_date": "2026-04-19",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "bridge_source_authorization_scope": "W01B_ONLY_ONE_TIME_MARKET_BRIDGE",
+  "runtime_object_source": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "bridge_source_path": "mlb_sim/data/mlb_odds_closing_canonical.parquet",
+  "join_key": "game_pk",
+  "bookmaker_selected": "DraftKings (book_key == 'draftkings')",
+  "market_selected": "full-game total (total_line field)",
+  "selection_rule": "DraftKings rows only -> dedup by latest pull_timestamp per game_pk -> drop null total_line -> rename to closing_total -> one row per game_pk",
+  "row_count_before_join": 19430,
+  "row_count_after_join": 19430,
+  "grain_duplicates_after_join": 0,
+  "closing_total_null_rate": "2.2% (436/19430)",
+  "season_coverage_summary": {
+    "2022": "4674/4860 non-null (96.2%)",
+    "2023": "4742/4860 non-null (97.6%)",
+    "2024": "4784/4854 non-null (98.6%)",
+    "2025": "4794/4856 non-null (98.7%)"
+  },
+  "w01_relevant_coverage_summary": "16376/19430 rows with both opp_sp_workload_ip_last_3 and closing_total non-null",
+  "final_status": "BRIDGE_READY",
+  "notes": "One-time bridge for W01B economic reality check. closing_total null rate 2.2% — below 5% threshold. Does not modify runtime object. Does not promote odds source into frozen package."
+}

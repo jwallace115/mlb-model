@@ -1,0 +1,19 @@
+{
+  "schema_name": "MLB_RESEARCH_BRANCH_STATUS",
+  "version": "1.0",
+  "fields": {
+    "branch_name": {"type": "string", "required": true},
+    "branch_type": {"type": "string", "required": true, "allowed_values": ["HISTORICAL_HYPOTHESIS_TEST", "CHILD_BRANCH_CHECK", "BOUNDED_CANDIDATE_GENERATION", "ECONOMIC_REALITY_CHECK", "COMPONENT_DOMINANCE_CHECK", "MARKET_STRUCTURE_CHECK", "CLOSEOUT_MEMO", "FAMILY_STATUS_MEMO", "GOVERNANCE_AUDIT", "FAMILY_CLOSEOUT"]},
+    "parent_branch": {"type": "string", "required": false},
+    "current_status": {"type": "string", "required": true, "allowed_values": ["OPEN", "SHADOW", "ADVANCE", "SHELVE", "CLOSE", "ARCHIVED", "MIXED_INCONCLUSIVE", "INACTIVE", "UNRESOLVED_CAUTION", "HARD_STOP", "COMPONENT_DOMINATED"]},
+    "opening_date": {"type": "string", "required": true, "format": "YYYY-MM-DD"},
+    "last_updated": {"type": "string", "required": true, "format": "YYYY-MM-DD"},
+    "advancement_type": {"type": "string", "required": true, "allowed_values": ["ORCHESTRATED", "MANUAL_FROM_PROVISIONAL", "MANUAL_CHILD_CHECK", "CLOSEOUT", "GOVERNANCE_ONLY"]},
+    "data_source_scope": {"type": "string", "required": true},
+    "base_object_used": {"type": "string", "required": true},
+    "artifact_families_used": {"type": "array", "required": true, "items": "string"},
+    "caveats_applied": {"type": "array", "required": true, "items": "string"},
+    "provenance_type": {"type": "string", "required": true, "allowed_values": ["FULL_ORCHESTRATION", "MANUAL_SPLIT_ENFORCEMENT", "RECONSTRUCTED_FROM_VERIFIED_SUMMARIES", "PROVISIONAL"]},
+    "notes": {"type": "string", "required": false}
+  }
+}

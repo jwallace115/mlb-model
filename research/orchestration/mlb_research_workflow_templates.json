@@ -1,0 +1,84 @@
+{
+  "templates": [
+    {
+      "workflow_name": "historical_hypothesis_test",
+      "allowed_scope": "Test a single frozen hypothesis against the historical base object",
+      "required_opening_confirmation_fields": ["candidate_id", "mechanism_claim", "frozen_field_list", "frozen_threshold_logic", "split_policy"],
+      "required_inputs": ["base_object", "game_table"],
+      "required_caveat_behavior": "Surface all caveats for requested artifact families before results",
+      "forbidden_behavior": ["repo-wide search", "post-discovery tuning", "alternative threshold search", "use of excluded artifacts"],
+      "split_policy_requirements": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025", "enforcement": "strict"},
+      "output_expectations": ["report", "registry", "stage_tables", "self_audit", "branch_status"]
+    },
+    {
+      "workflow_name": "historical_child_branch_check",
+      "allowed_scope": "Test a child question against an already-tested parent branch",
+      "required_opening_confirmation_fields": ["parent_branch", "child_question", "frozen_comparison_groups", "split_policy"],
+      "required_inputs": ["base_object", "game_table", "parent_branch_registry"],
+      "required_caveat_behavior": "Inherit parent caveats plus surface any new caveats",
+      "forbidden_behavior": ["modify parent rule", "search alternatives", "use excluded artifacts"],
+      "split_policy_requirements": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025", "enforcement": "strict"},
+      "output_expectations": ["report", "registry", "stage_tables", "self_audit", "branch_status"]
+    },
+    {
+      "workflow_name": "bounded_candidate_generation",
+      "allowed_scope": "Generate max N candidate ideas within one mechanism family",
+      "required_opening_confirmation_fields": ["mechanism_family", "max_candidates", "anti_duplication_references"],
+      "required_inputs": ["base_object (field existence check only)"],
+      "required_caveat_behavior": "Surface foundation caveats; no data inspection beyond field existence",
+      "forbidden_behavior": ["broad table mining", "distribution inspection for threshold selection", "use of excluded artifacts", "repo-wide search"],
+      "split_policy_requirements": "N/A (candidate generation, not testing)",
+      "output_expectations": ["report", "registry", "self_audit"]
+    },
+    {
+      "workflow_name": "economic_reality_check",
+      "allowed_scope": "Test whether a signal survives after accounting for market pricing",
+      "required_opening_confirmation_fields": ["parent_branch", "residual_definition", "market_proxy_fields", "split_policy"],
+      "required_inputs": ["base_object", "game_table", "market_bridge_if_needed"],
+      "required_caveat_behavior": "Surface all caveats; document market-proxy limitations",
+      "forbidden_behavior": ["modify parent signal", "search alternative residual definitions", "use excluded artifacts"],
+      "split_policy_requirements": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025", "enforcement": "strict"},
+      "output_expectations": ["report", "registry", "stage_tables", "self_audit", "branch_status"]
+    },
+    {
+      "workflow_name": "component_dominance_check",
+      "allowed_scope": "Test whether a multi-field signal is dominated by one component",
+      "required_opening_confirmation_fields": ["parent_branch", "frozen_component_definitions", "split_policy"],
+      "required_inputs": ["base_object", "game_table", "parent_branch_registry"],
+      "required_caveat_behavior": "Inherit parent caveats; document component-decomposition limitations",
+      "forbidden_behavior": ["modify parent rule", "invent new thresholds", "use excluded artifacts"],
+      "split_policy_requirements": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025", "enforcement": "strict"},
+      "output_expectations": ["report", "registry", "stage_tables", "self_audit", "branch_status"]
+    },
+    {
+      "workflow_name": "market_structure_check",
+      "allowed_scope": "Test whether a signal concentrates in specific market-total environments",
+      "required_opening_confirmation_fields": ["parent_branch", "bucket_definitions", "split_policy"],
+      "required_inputs": ["base_object", "game_table"],
+      "required_caveat_behavior": "Surface all caveats; document bucket-size limitations",
+      "forbidden_behavior": ["modify parent signal", "search many bucket definitions", "use excluded artifacts"],
+      "split_policy_requirements": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025", "enforcement": "strict"},
+      "output_expectations": ["report", "registry", "stage_tables", "self_audit", "branch_status"]
+    },
+    {
+      "workflow_name": "closeout_memo",
+      "allowed_scope": "Document the final disposition of a branch family",
+      "required_opening_confirmation_fields": ["family_name", "branch_list", "final_disposition"],
+      "required_inputs": ["all branch artifacts for the family"],
+      "required_caveat_behavior": "Preserve all branch caveats in the closeout",
+      "forbidden_behavior": ["alter branch verdicts", "reopen closed branches", "promote to deployment"],
+      "split_policy_requirements": "N/A (documentation only)",
+      "output_expectations": ["memo", "registry", "self_audit", "branch_status"]
+    },
+    {
+      "workflow_name": "governance_audit",
+      "allowed_scope": "Audit a package, branch family, or system for integrity and PIT-safety",
+      "required_opening_confirmation_fields": ["audit_target", "audit_scope"],
+      "required_inputs": ["target artifacts"],
+      "required_caveat_behavior": "Surface all caveats found during audit",
+      "forbidden_behavior": ["modify audited artifacts", "rebuild data", "run tests"],
+      "split_policy_requirements": "N/A (audit only)",
+      "output_expectations": ["report", "table", "self_audit"]
+    }
+  ]
+}

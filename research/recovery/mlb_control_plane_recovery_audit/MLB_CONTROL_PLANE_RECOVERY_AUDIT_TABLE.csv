@@ -1,0 +1,22 @@
+target_group,target_name,expected_canonical_path,found_path,status,safe_to_restore,note
+ORCHESTRATION,MLB_RESEARCH_START_HERE.md,research/orchestration/MLB_RESEARCH_START_HERE.md,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,MLB_RESEARCH_ORCHESTRATION_REPORT.md,research/orchestration/MLB_RESEARCH_ORCHESTRATION_REPORT.md,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,MLB_RESEARCH_ORCHESTRATION_REGISTRY.json,research/orchestration/MLB_RESEARCH_ORCHESTRATION_REGISTRY.json,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,MLB_RESEARCH_ORCHESTRATION_SELF_AUDIT.md,research/orchestration/MLB_RESEARCH_ORCHESTRATION_SELF_AUDIT.md,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,mlb_research_orchestrator.py,research/orchestration/mlb_research_orchestrator.py,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,mlb_research_orchestration_config.json,research/orchestration/mlb_research_orchestration_config.json,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,mlb_research_object_router.json,research/orchestration/mlb_research_object_router.json,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,mlb_research_workflow_templates.json,research/orchestration/mlb_research_workflow_templates.json,N/A,MISSING,NO,Not found anywhere under repo root
+ORCHESTRATION,mlb_research_branch_status_schema.json,research/orchestration/mlb_research_branch_status_schema.json,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,mlb_runtime_object_v1.parquet,research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,MLB_RUNTIME_OBJECT_V1_REPORT.md,research/runtime_objects/mlb_runtime_object_v1/MLB_RUNTIME_OBJECT_V1_REPORT.md,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,MLB_RUNTIME_OBJECT_V1_REGISTRY.json,research/runtime_objects/mlb_runtime_object_v1/MLB_RUNTIME_OBJECT_V1_REGISTRY.json,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,MLB_RUNTIME_OBJECT_V1_FIELD_DICTIONARY.csv,research/runtime_objects/mlb_runtime_object_v1/MLB_RUNTIME_OBJECT_V1_FIELD_DICTIONARY.csv,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,MLB_RUNTIME_OBJECT_V1_START_HERE.md,research/runtime_objects/mlb_runtime_object_v1/MLB_RUNTIME_OBJECT_V1_START_HERE.md,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,MLB_RUNTIME_OBJECT_V1_BUILD_SELF_AUDIT.md,research/runtime_objects/mlb_runtime_object_v1/MLB_RUNTIME_OBJECT_V1_BUILD_SELF_AUDIT.md,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,mlb_runtime_object_v1_pre_correction_backup.parquet,research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1_pre_correction_backup.parquet,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,MLB_RUNTIME_OBJECT_V1_INCLUDED_FAMILIES.csv,research/runtime_objects/mlb_runtime_object_v1/MLB_RUNTIME_OBJECT_V1_INCLUDED_FAMILIES.csv,N/A,MISSING,NO,Not found anywhere under repo root
+RUNTIME_OBJECT,MLB_RUNTIME_OBJECT_V1_EXCLUDED_OR_DEFERRED_FAMILIES.csv,research/runtime_objects/mlb_runtime_object_v1/MLB_RUNTIME_OBJECT_V1_EXCLUDED_OR_DEFERRED_FAMILIES.csv,N/A,MISSING,NO,Not found anywhere under repo root
+PASS_02,MLB_BOUNDED_DISCOVERY_PASS_02_REPORT.md,research/discovery/mlb_bounded_discovery_pass_02/MLB_BOUNDED_DISCOVERY_PASS_02_REPORT.md,N/A,MISSING,NO,Not found anywhere under repo root
+PASS_02,MLB_BOUNDED_DISCOVERY_PASS_02_REGISTRY.json,research/discovery/mlb_bounded_discovery_pass_02/MLB_BOUNDED_DISCOVERY_PASS_02_REGISTRY.json,N/A,MISSING,NO,Not found anywhere under repo root
+PASS_02,MLB_BOUNDED_DISCOVERY_PASS_02_SELF_AUDIT.md,research/discovery/mlb_bounded_discovery_pass_02/MLB_BOUNDED_DISCOVERY_PASS_02_SELF_AUDIT.md,N/A,MISSING,NO,Not found anywhere under repo root

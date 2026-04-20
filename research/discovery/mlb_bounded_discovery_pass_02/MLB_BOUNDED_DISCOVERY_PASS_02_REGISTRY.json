@@ -1,0 +1,37 @@
+{
+  "pass_name": "MLB_BOUNDED_DISCOVERY_PASS_02",
+  "pass_date": "2026-04-18",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "provenance_type": "RECONSTRUCTED_FROM_VERIFIED_SESSION_RECORDS",
+  "reconstruction_date": "2026-04-19",
+  "reconstruction_note": "Reconstructed from verified session records. Original artifacts were not durable at canonical path. Outcomes are authoritative based on documented session results.",
+  "mechanism_family": "CONTACT-SHAPE x RUN-ENVIRONMENT INTERACTION",
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "orchestration_root": "research/orchestration/",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "candidates_considered": 3,
+  "candidates_advanced": 2,
+  "advanced_candidate_ids": ["MLB_E01", "MLB_E02"],
+  "rejected_candidates": [{"name": "High xwOBA x High Park Factor", "reason": "Generic quality x generic environment"}],
+  "advanced_candidates": {
+    "MLB_E01": {
+      "name": "Barrel Rate x Park HR Factor",
+      "fields": ["contact_barrel_rate_last_10", "park_factor_hr"],
+      "interaction_form": "AND rule",
+      "threshold": "contact_barrel_rate_last_10 >= 0.08 AND park_factor_hr >= 1.10"
+    },
+    "MLB_E02": {
+      "name": "Launch Angle x Wind-Out",
+      "fields": ["contact_la_last_10", "wind_speed", "wind_direction"],
+      "interaction_form": "AND rule (intended)"
+    }
+  },
+  "e01_final_disposition": "CLOSED_COMPONENT_DOMINATED",
+  "e01_disposition_detail": "park_factor_hr >= 1.10 vacuous — flagged 100% of rows. Full formulation = barrel rate alone.",
+  "e02_final_disposition": "HARD_STOP_DATA_GAP_RESOLVABLE",
+  "e02_disposition_detail": "Park orientation data missing from frozen stack. Cannot define wind-out honestly. Resolvable if park bearing data added to V2.",
+  "family_closeout_verdict": "CLOSED_UNDER_CURRENT_FROZEN_STACK",
+  "outside_package_inputs_used": false,
+  "final_status": "DISCOVERY_PASS_COMPLETE",
+  "notes": "First post-rebuild discovery pass. Both candidates failed structurally — E01 via vacuous threshold, E02 via missing semantic support. Engine governance worked correctly by catching both failures."
+}

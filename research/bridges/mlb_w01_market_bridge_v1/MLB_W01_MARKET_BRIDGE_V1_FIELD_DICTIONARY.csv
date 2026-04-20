@@ -1,0 +1,2 @@
+field_name,source_object,source_path,role,status,description
+closing_total,mlb_odds_closing_canonical,mlb_sim/data/mlb_odds_closing_canonical.parquet,MARKET_BRIDGE_FIELD,BRIDGE_ONLY,DraftKings full-game closing total line. One-time bridge for W01B. Not part of frozen foundation package.

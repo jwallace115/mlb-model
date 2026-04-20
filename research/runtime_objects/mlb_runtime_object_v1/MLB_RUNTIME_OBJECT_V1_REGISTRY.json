@@ -1,0 +1,30 @@
+{
+  "object_name": "MLB_RUNTIME_OBJECT_V1",
+  "version": "1.0",
+  "build_date": "2026-04-19",
+  "rebuild_note": "Rebuilt from frozen foundation package after session-loss event. Historical scope 2022-2025 only. Umpire rating fields excluded from initial build.",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "orchestration_layer_path": "research/orchestration/",
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "real_current_base_object": "research/engine_foundation/mlb_engine_v1_foundation/base_object/mlb_matchup_table_base.parquet",
+  "base_object_status": "REAL_CURRENT_BASE_OBJECT",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "row_count": 19430,
+  "column_count": 130,
+  "season_coverage": [2022, 2023, 2024, 2025],
+  "object_grain": "one row per (game_pk, team) — team-side view",
+  "grain_duplicates": 0,
+  "merged_artifact_families": ["mlb_matchup_table_base", "game_table_spine", "mlb_umpire_substrate"],
+  "deferred_artifact_families": ["mlb_lineup_state_substrate", "mlb_bullpen_substrate", "mlb_starter_profile_substrate", "mlb_starting_pitcher_substrate", "mlb_hitter_statcast_substrate", "mlb_weather_substrate", "mlb_park_context_substrate", "mlb_umpire_historical_layer", "mlb_team_code_normalization", "mlb_umpire_ratings_repair", "mlb_substrate_stack_acceptance", "bullpen_features_production"],
+  "join_keys_used": [
+    {"join": "base + game_table", "key": "game_pk", "type": "left", "match_rate": "100%"},
+    {"join": "result + umpire_substrate", "key": "game_pk", "type": "left", "match_rate": "100%"}
+  ],
+  "removed_fields": ["umpire_over_rate", "umpire_k_rate"],
+  "umpire_rating_rule": "Historical umpire rating features are NOT embedded in this object. When needed, they must be joined from mlb_umpire_historical_layer through the frozen foundation package.",
+  "caveats_applied": ["CAVEAT_01", "CAVEAT_02", "CAVEAT_03"],
+  "outside_package_inputs_used": false,
+  "final_status": "RUNTIME_OBJECT_READY_HISTORICAL_CLEAN",
+  "notes": "19430 rows (2022-2025 historical only, 2026 excluded). 130 columns. Umpire rating fields excluded. Built from frozen foundation only."
+}

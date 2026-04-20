@@ -1,0 +1,77 @@
+{
+  "pass_id": "mlb_bounded_discovery_pass_04",
+  "pass_date": "2026-04-20",
+  "mechanism_family": "STANDALONE_STARTER_FRAGILITY",
+  "runtime_object_version": "mlb_runtime_object_v1",
+  "runtime_object_shape": [19430, 130],
+  "foundation_package": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "caveats_carried": ["CAVEAT_01", "CAVEAT_02"],
+  "candidates_defined": 6,
+  "candidates_data_gap": 2,
+  "candidates_tested": 4,
+  "candidates_surviving_flag_rate": 4,
+  "candidates_surviving_discovery": 1,
+  "candidates_surviving_validation": 0,
+  "candidates_surviving_oos": 0,
+  "candidates_pending_economic_test": 0,
+  "disposition": "ALL_DEAD",
+  "splits": {
+    "discovery": {"date_range": "< 2024-01-01", "rows": 9720},
+    "validation": {"date_range": ">= 2024-01-01 AND < 2025-01-01", "rows": 4854},
+    "oos": {"date_range": ">= 2025-01-01 AND < 2026-01-01", "rows": 4856}
+  },
+  "candidates": [
+    {
+      "id": "S1_short_outing",
+      "field": "opp_sp_workload_ip_last_3",
+      "threshold": "<= 4.67",
+      "flag_rate_discovery": 0.2489,
+      "gap_discovery": 0.247,
+      "gap_validation": 0.008,
+      "gap_oos": null,
+      "disposition": "DEAD_VALIDATION_COLLAPSE"
+    },
+    {
+      "id": "S2_poor_command",
+      "field": "opp_sp_command_bb_rate_last_3",
+      "threshold": ">= 0.10",
+      "flag_rate_discovery": 0.2635,
+      "gap_discovery": 0.149,
+      "gap_validation": null,
+      "gap_oos": null,
+      "disposition": "DEAD_DISCOVERY_BELOW_THRESHOLD"
+    },
+    {
+      "id": "S5_barrel_damage",
+      "field": "opp_sp_contact_barrel_allowed_last_3",
+      "threshold": ">= 0.07",
+      "flag_rate_discovery": 0.1225,
+      "gap_discovery": 0.076,
+      "gap_validation": null,
+      "gap_oos": null,
+      "disposition": "DEAD_DISCOVERY_WEAK"
+    },
+    {
+      "id": "S6_laboring",
+      "field": "opp_sp_workload_ppbf_last_3",
+      "threshold": ">= 4.10",
+      "flag_rate_discovery": 0.2451,
+      "gap_discovery": -0.125,
+      "gap_validation": null,
+      "gap_oos": null,
+      "disposition": "DEAD_DISCOVERY_WRONG_DIRECTION"
+    },
+    {
+      "id": "S3_performance_degradation",
+      "field": "rolling ERA or FIP (not in runtime object)",
+      "threshold": null,
+      "disposition": "DATA_GAP"
+    },
+    {
+      "id": "S4_workload_cliff",
+      "field": "pitcher rest days (not in runtime object)",
+      "threshold": null,
+      "disposition": "DATA_GAP"
+    }
+  ]
+}

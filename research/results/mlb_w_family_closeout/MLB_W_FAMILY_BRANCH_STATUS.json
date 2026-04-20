@@ -1,0 +1,15 @@
+{
+  "branch_name": "MLB_W_FAMILY",
+  "branch_type": "FAMILY_CLOSEOUT",
+  "current_status": "CLOSE",
+  "discovery_pass": "MLB_BOUNDED_DISCOVERY_PASS_03",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "candidates_tested": ["MLB_W01", "MLB_W02"],
+  "child_branches": ["MLB_W01A", "MLB_W01B"],
+  "w01_final_status": "PRESERVE_AS_CONTEXT",
+  "w01a_final_status": "MIXED_INCONCLUSIVE",
+  "w01b_final_status": "PRESERVE_AS_CONTEXT",
+  "w02_final_status": "SHELVE",
+  "last_updated": "2026-04-20",
+  "notes": "Closed as active edge-search family. W01 preserved as future layer/context candidate. W02 shelved. Starter fragility Component A noted for future standalone investigation."
+}

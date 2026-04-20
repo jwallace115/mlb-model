@@ -1,0 +1,4 @@
+stage,n_total,n_flagged,n_unflagged,outcome_mean_flagged,outcome_mean_unflagged,gap,note
+DISCOVERY,8353,406,7947,9.347,8.897,0.450,Direction correct. N=406 well above 30. Flag rate 4.9%.
+VALIDATION,4169,210,3959,9.405,8.712,0.693,Sign preserved and amplified vs discovery. Flag rate 5.0%.
+OOS,4180,220,3960,8.409,8.873,-0.464,MATERIAL REVERSAL — sign flips negative with magnitude exceeding discovery.

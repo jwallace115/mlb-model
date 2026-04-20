@@ -1,0 +1,21 @@
+{
+  "orchestration_name": "MLB_RESEARCH_ORCHESTRATION_V1",
+  "build_date": "2026-04-19",
+  "rebuild_note": "Rebuilt from frozen foundation package after session-loss event. Original build 2026-04-18.",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "package_root_enforced": "research/engine_foundation/mlb_engine_v1_foundation",
+  "real_current_base_object": "research/engine_foundation/mlb_engine_v1_foundation/base_object/mlb_matchup_table_base.parquet",
+  "default_deny": true,
+  "repo_wide_fallback_allowed": false,
+  "closest_equivalent_substitution_allowed": false,
+  "included_artifact_manifest": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_INCLUDED_ARTIFACTS.csv",
+  "excluded_artifact_manifest": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_EXCLUDED_ARTIFACTS.csv",
+  "caveats_file": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_CAVEATS.json",
+  "session_log": "research/SESSION_LOG.txt",
+  "workflow_templates_file": "research/orchestration/mlb_research_workflow_templates.json",
+  "branch_status_schema_file": "research/orchestration/mlb_research_branch_status_schema.json",
+  "python_orchestrator_file": "research/orchestration/mlb_research_orchestrator.py",
+  "final_status": "ORCHESTRATION_READY",
+  "notes": "Rebuilt 2026-04-19 from frozen foundation package. All design decisions inherited from original build. SESSION_LOG.txt added as mandatory session-start checkpoint."
+}

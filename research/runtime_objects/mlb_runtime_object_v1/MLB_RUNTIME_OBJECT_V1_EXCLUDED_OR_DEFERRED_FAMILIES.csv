@@ -1,0 +1,17 @@
+artifact_family,package_source_path_or_reference,status,reason,notes
+mlb_lineup_state_substrate,research/recovery/mlb_lineup_state_substrate/,AVAILABLE_BUT_NOT_MERGED,Already in base object,44 lineup features present via base.
+mlb_bullpen_substrate,research/recovery/mlb_bullpen_substrate/,AVAILABLE_BUT_NOT_MERGED,Already in base object,5 bullpen features present via base.
+mlb_starter_profile_substrate,research/recovery/mlb_starter_profile_substrate/,AVAILABLE_BUT_NOT_MERGED,Already in base object,42 opp SP features present via base.
+mlb_starting_pitcher_substrate,research/recovery/mlb_starting_pitcher_substrate/,AVAILABLE_BUT_NOT_MERGED,Already in base object,Per-start stats used during base build.
+mlb_hitter_statcast_substrate,research/recovery/mlb_hitter_statcast_substrate/,AVAILABLE_BUT_NOT_MERGED,Different grain,Batter-game grain. Feeds lineup_state.
+mlb_weather_substrate,research/recovery/mlb_weather_substrate/,AVAILABLE_BUT_NOT_MERGED,Fields via game_table,No new columns.
+mlb_park_context_substrate,research/recovery/mlb_park_context_substrate/,AVAILABLE_BUT_NOT_MERGED,Fields via game_table,No new columns.
+mlb_umpire_historical_layer,research/recovery/mlb_umpire_historical_layer/,AVAILABLE_BUT_NOT_MERGED,Different grain,Join when umpire ratings needed.
+mlb_team_code_normalization,research/recovery/mlb_team_code_normalization/,AVAILABLE_BUT_NOT_MERGED,Applied during base build,Static mapping consumed.
+mlb_umpire_ratings_repair,research/recovery/mlb_umpire_ratings_repair/,AVAILABLE_BUT_NOT_MERGED,Docs only,No data to merge.
+mlb_substrate_stack_acceptance,provenance/,AVAILABLE_BUT_NOT_MERGED,Provenance only,Not data.
+bullpen_features_production,sim/data/bullpen_features.parquet,AVAILABLE_BUT_NOT_MERGED,Redundant,Same as bullpen_substrate.
+H03_family_closeout,research/results/mlb_h03_family_closeout/,EXCLUDED_BY_FOUNDATION,Branch output,Not engine foundation.
+D01_manual_test,research/results/mlb_d01_manual_historical_test/,EXCLUDED_BY_FOUNDATION,Provisional output,Not engine foundation.
+v1_clean_backtest,research/recovery/v1_clean_backtest/,FORBIDDEN,Ambiguous lineage,Pre-substrate-stack.
+v2_engine,research/recovery/v2_engine/,FORBIDDEN,Ambiguous lineage,Pre-substrate-stack.

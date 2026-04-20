@@ -1,0 +1,21 @@
+{
+  "orchestration_name": "MLB_RESEARCH_ORCHESTRATION_V1",
+  "build_date": "2026-04-19",
+  "rebuild_note": "Rebuilt from frozen foundation package after session-loss event. Original build 2026-04-18.",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "local_root": "/Users/jw115/mlb-model",
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation",
+  "foundation_registry_path": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_REGISTRY.json",
+  "included_manifest_path": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_INCLUDED_ARTIFACTS.csv",
+  "excluded_manifest_path": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_EXCLUDED_ARTIFACTS.csv",
+  "caveats_path": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_CAVEATS.json",
+  "pit_safe_signoff_report_path": "research/engine_foundation/mlb_engine_v1_foundation/MLB_ENGINE_V1_FOUNDATION_PIT_SAFE_SIGNOFF_REPORT.md",
+  "real_current_base_object_path": "research/engine_foundation/mlb_engine_v1_foundation/base_object/mlb_matchup_table_base.parquet",
+  "session_log_path": "research/SESSION_LOG.txt",
+  "default_deny": true,
+  "allow_repo_wide_fallback": false,
+  "allow_closest_equivalent_substitution": false,
+  "require_opening_confirmation": true,
+  "require_caveat_carryforward": true,
+  "require_exact_path_validation": true
+}

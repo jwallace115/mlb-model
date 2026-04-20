@@ -1,0 +1,7 @@
+stage,group_name,n_total,n_flagged,n_unflagged,raw_mean_flagged,raw_mean_unflagged,raw_gap,residual_mean_flagged,residual_mean_unflagged,residual_gap,rows_excluded_null_closing,note
+DISCOVERY,COMPONENT_A_ONLY,8353,2079,6274,9.104,8.858,+0.247,0.472,0.455,+0.017,227,Raw gap +0.247 collapses to residual +0.017. Market prices ~93% of starter-alone effect.
+DISCOVERY,W01_FULL_FORMULATION,8353,745,7608,9.213,8.890,+0.323,0.532,0.452,+0.080,227,Raw gap +0.323 becomes residual +0.080. Conjunction retains more residual than Comp A alone.
+VALIDATION,COMPONENT_A_ONLY,4169,913,3256,8.752,8.745,+0.008,0.284,0.471,-0.188,48,Raw gap near zero. Residual reverses to -0.188. Market overprices starter weakness in 2024.
+VALIDATION,W01_FULL_FORMULATION,4169,288,3881,8.764,8.745,+0.019,0.240,0.445,-0.204,48,Raw gap near zero. Residual reverses to -0.204. Conjunction also fails validation residual.
+OOS,COMPONENT_A_ONLY,4180,950,3230,9.078,8.781,+0.297,0.322,0.331,-0.009,51,Raw gap +0.297 collapses to residual -0.009. Market fully prices starter-alone effect OOS.
+OOS,W01_FULL_FORMULATION,4180,314,3866,9.185,8.821,+0.363,0.350,0.327,+0.023,51,Raw gap +0.363 becomes residual +0.023. Tiny positive residual survives but economically trivial.

@@ -1,0 +1,13 @@
+{
+  "branch_name": "MLB_W01B_ECONOMIC_REALITY_CHECK",
+  "branch_type": "CHILD_ECONOMIC_REALITY_CHECK",
+  "parent_branch": "MLB_W01_MANUAL_HISTORICAL_TEST",
+  "child_context": "MLB_W01A_COMPONENT_DOMINANCE_CHECK",
+  "candidate_id": "MLB_W01",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "current_status": "PRESERVE_AS_CONTEXT",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "runtime_object_used": "research/bridges/mlb_w01_market_bridge_v1/mlb_w01_market_bridge_v1.parquet",
+  "last_updated": "2026-04-19",
+  "notes": "Market prices 75-94% of W01 raw effect. Discovery residual +0.080 (small), validation -0.204 (reversal), OOS +0.023 (trivial). Preserved as context only — real mechanism, not currently exploitable."
+}

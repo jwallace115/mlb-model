@@ -1,0 +1,40 @@
+{
+  "branch_name": "MLB_W01B_ECONOMIC_REALITY_CHECK",
+  "parent_branch": "MLB_W01_MANUAL_HISTORICAL_TEST",
+  "child_context": "MLB_W01A_COMPONENT_DOMINANCE_CHECK",
+  "candidate_id": "MLB_W01",
+  "candidate_name": "Short-Outing Starter x Depleted Bullpen",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "advancement_type": "MANUAL_CHILD_CHECK",
+  "build_date": "2026-04-19",
+  "operator": "Claude (automated research assistant)",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "bridge_object_used": "research/bridges/mlb_w01_market_bridge_v1/mlb_w01_market_bridge_v1.parquet",
+  "market_field_used": "closing_total",
+  "bookmaker": "DraftKings",
+  "residual_definition": "actual_total - closing_total",
+  "exact_parent_rule_confirmed": true,
+  "threshold_logic": "opp_sp_workload_ip_last_3 <= 4.67 AND opp_bullpen_pitches_last_3 >= 200",
+  "split_policy": {"discovery": "2022-2023", "validation": "2024", "OOS": "2025"},
+  "null_rows_excluded_count": {"discovery": 227, "validation": 48, "OOS": 51},
+  "component_a_residual_summary": {
+    "discovery": "+0.017",
+    "validation": "-0.188",
+    "OOS": "-0.009"
+  },
+  "w01_residual_summary": {
+    "discovery": "+0.080",
+    "validation": "-0.204",
+    "OOS": "+0.023"
+  },
+  "key_findings": [
+    "Market prices 75-94% of W01 raw effect through closing totals",
+    "Discovery residual +0.080 — small but positive for conjunction",
+    "Validation residual -0.204 — material reversal",
+    "OOS residual +0.023 — trivial positive",
+    "Conjunction adds marginal value over Component A in residual space but not enough to overcome validation failure"
+  ],
+  "final_verdict": "PRESERVE_AS_CONTEXT",
+  "final_verdict_note": "Real structural mechanism but market already prices most of the effect. Residual too small and unstable for economic exploitation.",
+  "notes": "First economic reality check through post-rebuild engine stack. Market closes most of the gap."
+}

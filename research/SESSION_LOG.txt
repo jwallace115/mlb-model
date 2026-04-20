@@ -1,0 +1,21 @@
+2026-04-19 | SESSION_LOG | research/SESSION_LOG.txt | 1 | CREATED
+---
+2026-04-19 | STARTUP_VERIFICATION | /Users/jw115/mlb-model/research/ | -- | COMPLETE
+ENGINE_FOUNDATION: PRESENT (7 of 7 files confirmed)
+ORCHESTRATION: MISSING (0 of 7 files confirmed)
+RUNTIME_OBJECT: MISSING (0 of 5 files confirmed)
+RESULTS: PRESENT (subdirs found: mlb_h03_family_closeout mlb_w01_manual_historical_test mlb_w01a_component_dominance_check)
+DISCOVERY_PASS_02: MISSING
+DISCOVERY_PASS_03: PRESENT
+CLOSING_ODDS: PRESENT
+REBUILD_REQUIRED: ORCHESTRATION (7 files), RUNTIME_OBJECT (5+ files), DISCOVERY_PASS_02 (3 files)
+---
+2026-04-19 | mlb_orchestration | research/orchestration/ | 9 | VERIFIED
+2026-04-19 | mlb_runtime_object_v1 | research/runtime_objects/mlb_runtime_object_v1/ | 8 | VERIFIED — 19430x130 HISTORICAL_CLEAN
+2026-04-19 | mlb_discovery_pass_02 | research/discovery/mlb_bounded_discovery_pass_02/ | 3 | VERIFIED — RECONSTRUCTED_FROM_SESSION_RECORDS
+2026-04-19 | DURABILITY_VERIFICATION | all_control_plane_artifacts | 31 | PASS — all files present at canonical paths
+2026-04-19 | mlb_w01_market_bridge_v1 | research/bridges/mlb_w01_market_bridge_v1/ | 6 | BRIDGE_READY — closing_total null rate: 2.2% — DK full-game 2022-2025 96-99% coverage
+2026-04-19 | mlb_w01b_economic_reality_check | research/results/mlb_w01b_economic_reality_check/ | 5 | PRESERVE_AS_CONTEXT — residual small/reversed/trivial across stages
+2026-04-19 | mlb_w02_manual_historical_test | research/results/mlb_w02_manual_historical_test/ | 5 | SHELVE — OOS material reversal (-0.464 vs discovery +0.450)
+2026-04-20 | mlb_w_family_closeout | research/results/mlb_w_family_closeout/ | 4 | COMPLETE — W01 PRESERVE_AS_CONTEXT, W02 SHELVE
+2026-04-20 | mlb_discovery_pass_04 | research/discovery/mlb_bounded_discovery_pass_04/ | 3 | COMPLETE — 0 candidates survived to OOS; all 4 tested DEAD (S1 validation collapse, S2/S5 weak discovery, S6 wrong direction)

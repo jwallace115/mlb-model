@@ -1,0 +1,63 @@
+{
+  "branch_name": "MLB_W02_MANUAL_HISTORICAL_TEST",
+  "candidate_id": "MLB_W02",
+  "candidate_name": "Command Instability x High Bullpen Usage",
+  "mechanism_family": "WORKLOAD / DEPTH / HANDOFF ASYMMETRY",
+  "advancement_type": "MANUAL_FROM_PROVISIONAL_DISCOVERY",
+  "primary_source_of_truth": "LOCAL_MAC",
+  "outside_package_inputs_used": false,
+  "foundation_package_root": "research/engine_foundation/mlb_engine_v1_foundation/",
+  "orchestration_root": "research/orchestration/",
+  "runtime_object_path": "research/runtime_objects/mlb_runtime_object_v1/mlb_runtime_object_v1.parquet",
+  "runtime_object_version": "1.0 (HISTORICAL_CLEAN, 19430x130)",
+  "parent_discovery": "MLB_BOUNDED_DISCOVERY_PASS_03",
+  "field_list_frozen": ["opp_sp_command_bb_rate_last_3", "relievers_used_last_3_games (opponent via self-join)"],
+  "field_count": 2,
+  "interaction_form_frozen": "AND rule — both conditions must fire simultaneously",
+  "threshold_logic_frozen": "opp_sp_command_bb_rate_last_3 >= 0.10 AND opp_relievers_used_last_3 >= 12",
+  "threshold_grounding": "domain_knowledge_only",
+  "direction": "flagged > unflagged (higher actual_total expected)",
+  "side_resolution": "BATTING_TEAM_PERSPECTIVE",
+  "split_policy": {
+    "discovery": "2022-2023",
+    "validation": "2024",
+    "OOS": "2025"
+  },
+  "usable_rows": 16702,
+  "component_a_flag_rate": "26.6% (4444/16702)",
+  "component_b_flag_rate": "19.6% (3276/16702)",
+  "full_formulation_flag_rate": "5.0% (836/16702)",
+  "vacuous_check": "PASS — neither component vacuous",
+  "discovery_summary": {
+    "n_total": 8353,
+    "n_flagged": 406,
+    "flag_pct": 4.9,
+    "mean_flagged": 9.347,
+    "mean_unflagged": 8.897,
+    "gap": 0.450,
+    "verdict": "Direction correct, non-trivial, N well above 30"
+  },
+  "validation_summary": {
+    "n_total": 4169,
+    "n_flagged": 210,
+    "flag_pct": 5.0,
+    "mean_flagged": 9.405,
+    "mean_unflagged": 8.712,
+    "gap": 0.693,
+    "verdict": "Sign preserved, amplified vs discovery"
+  },
+  "oos_summary": {
+    "n_total": 4180,
+    "n_flagged": 220,
+    "flag_pct": 5.3,
+    "mean_flagged": 8.409,
+    "mean_unflagged": 8.873,
+    "gap": -0.464,
+    "verdict": "MATERIAL REVERSAL — sign flips negative, magnitude exceeds discovery"
+  },
+  "final_verdict": "SHELVE",
+  "caveats_carried": ["CAVEAT_01 (bullpen process)", "CAVEAT_02 (SC averaging)", "CAVEAT_03 (naming)"],
+  "anti_duplication_checked_against": ["W01", "H03", "D01", "generic_starter_weakness", "generic_bullpen_fatigue"],
+  "w01_lessons_applied": ["vacuous_threshold_check", "component_dominance_awareness", "market_residual_awareness", "validation_attenuation_warning"],
+  "notes": "W02 shelved due to decisive OOS material reversal. Discovery/validation pattern (amplifying) followed by OOS reversal (-0.464) indicates signal instability. Validation amplification (+0.693 vs +0.450 discovery) is itself a red flag — true signals generally attenuate, not amplify. No further branches warranted."
+}

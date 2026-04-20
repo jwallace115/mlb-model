@@ -1,0 +1,16 @@
+artifact_family,package_source_path,merged_into_runtime_object,authority_status,pit_safe_status,join_key,match_rate,caveat_applied,runtime_role,notes
+mlb_matchup_table_base,base_object/mlb_matchup_table_base.parquet,YES,AUTHORITATIVE,PIT_SAFE_APPROVED_WITH_CAVEAT,N/A (base),N/A (base),YES (CAVEAT_03 naming),BASE_OBJECT,19430 rows (2022-2025). Real current base object.
+game_table_spine,sim/data/game_table.parquet,YES,AUTHORITATIVE,PIT_SAFE_APPROVED,game_pk,100%,NONE,OUTCOME_AND_CONTEXT,22 columns (umpire rating fields excluded).
+mlb_umpire_substrate,research/recovery/mlb_umpire_substrate/mlb_umpire_substrate.parquet,YES,AUTHORITATIVE,PIT_SAFE_APPROVED,game_pk,100%,NONE,UMPIRE_SUPPLEMENT,1 column: umpire_matched.
+mlb_lineup_state_substrate,research/recovery/mlb_lineup_state_substrate/team_game_lineup_state.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,AVAILABLE_BUT_NOT_MERGED,Already in base object.
+mlb_bullpen_substrate,research/recovery/mlb_bullpen_substrate/bullpen_features_repaired.parquet,NO,AUTHORITATIVE_WITH_CAVEATS,PIT_SAFE_APPROVED_WITH_CAVEAT,N/A,N/A,YES (CAVEAT_01),AVAILABLE_BUT_NOT_MERGED,Already in base object.
+mlb_starter_profile_substrate,research/recovery/mlb_starter_profile_substrate/rolling_starter_profile.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED_WITH_CAVEAT,N/A,N/A,YES (CAVEAT_02),AVAILABLE_BUT_NOT_MERGED,Already in base object.
+mlb_starting_pitcher_substrate,research/recovery/mlb_starting_pitcher_substrate/per_start_starter_substrate.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,AVAILABLE_BUT_NOT_MERGED,Already in base object.
+mlb_hitter_statcast_substrate,research/recovery/mlb_hitter_statcast_substrate/batter_game_statcast.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,AVAILABLE_BUT_NOT_MERGED,Feeds lineup_state.
+mlb_umpire_historical_layer,research/recovery/mlb_umpire_historical_layer/mlb_umpire_prior_season_ratings.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,AVAILABLE_BUT_NOT_MERGED,Different grain. Join when needed.
+mlb_weather_substrate,research/recovery/mlb_weather_substrate/mlb_weather_substrate.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,AVAILABLE_BUT_NOT_MERGED,Fields already via game_table.
+mlb_park_context_substrate,research/recovery/mlb_park_context_substrate/mlb_park_context_substrate.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,AVAILABLE_BUT_NOT_MERGED,Fields already via game_table.
+mlb_team_code_normalization,research/recovery/mlb_team_code_normalization/mlb_team_code_normalization_map.json,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,AVAILABLE_BUT_NOT_MERGED,Applied during base build.
+mlb_umpire_ratings_repair,research/recovery/mlb_umpire_ratings_repair/,NO,AUTHORITATIVE_WITH_CAVEATS,PIT_SAFE_APPROVED_WITH_CAVEAT,N/A,N/A,YES (CAVEAT_05),AVAILABLE_BUT_NOT_MERGED,Docs only.
+mlb_substrate_stack_acceptance,provenance/MLB_SUBSTRATE_STACK_ACCEPTANCE_MEMO.md,NO,AUTHORITATIVE,PIT_SAFE_APPROVED,N/A,N/A,NONE,PROVENANCE_ONLY,Acceptance memo.
+bullpen_features_production,sim/data/bullpen_features.parquet,NO,AUTHORITATIVE,PIT_SAFE_APPROVED_WITH_CAVEAT,N/A,N/A,YES (CAVEAT_01),AVAILABLE_BUT_NOT_MERGED,Same as bullpen_substrate.
