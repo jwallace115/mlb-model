@@ -399,32 +399,32 @@
             "game": "LAD@COL",
             "bet": "FULL GAME UNDER",
             "line": 11.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "CHW@OAK",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "TOR@ARI",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "LOSS"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 15,
+      "total": 16,
       "wins": 1,
-      "losses": 14,
+      "losses": 15,
       "pending": 0,
-      "win_rate": 6.7,
-      "net_units": -9.0,
+      "win_rate": 6.2,
+      "net_units": -10.0,
       "payout_per_win": 6.0
     }
   },
