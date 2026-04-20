@@ -70,6 +70,22 @@
       "dog_bp_era": 4.252,
       "win_loss": "L",
       "final_score": "0-1"
+    },
+    {
+      "game_pk": 824776,
+      "game_date": "2026-04-20",
+      "matchup": "DET @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "DET",
+      "fav_side": "home",
+      "fav_implied": 0.5559,
+      "dog_ml_price": 120,
+      "sp_fip_diff": -0.711,
+      "off_diff": 0.25,
+      "bp_era_diff": 0.364,
+      "fav_bp_era": 4.621,
+      "dog_bp_era": 4.258,
+      "win_loss": null
     }
   ]
 }
