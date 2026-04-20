@@ -2230,7 +2230,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Seth Lugo",
+    "away_sp_name": "Kyle Bradish"
   },
   {
     "date": "2026-04-20",
@@ -2255,6 +2257,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jose Quintana",
+    "away_sp_name": "Justin Wrobleski"
   }
 ]
