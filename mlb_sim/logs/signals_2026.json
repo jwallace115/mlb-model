@@ -2278,7 +2278,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Kris Bubic",
+    "away_sp_name": "Shane Baz"
   },
   {
     "date": "2026-04-21",
@@ -2303,7 +2305,9 @@
     "signal_class": "S12_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Shota Imanaga",
+    "away_sp_name": "Jes\u00fas Luzardo"
   },
   {
     "date": "2026-04-21",
@@ -2328,6 +2332,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Merrill Kelly",
+    "away_sp_name": "Sean Burke"
   }
 ]
