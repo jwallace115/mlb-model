@@ -416,6 +416,32 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-04-21",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "BAL@KCR",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "CHW@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "PHI@CHC",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {
