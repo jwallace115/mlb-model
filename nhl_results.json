@@ -1,11 +1,23 @@
 {
-  "generated_at": "2026-04-20T11:07:44.994678+00:00",
-  "last_updated": "2026-04-20 11:07 UTC",
-  "pipeline_run_date": "2026-04-18",
+  "generated_at": "2026-04-21T11:08:00.076920+00:00",
+  "last_updated": "2026-04-21 11:08 UTC",
+  "pipeline_run_date": "2026-04-20",
   "signals_source": "stale",
-  "game_date": "2026-04-20",
+  "game_date": "2026-04-21",
   "today_signals": [],
   "recent_results": [
+    {
+      "game_id": 2025030181,
+      "game_date": "2026-04-20",
+      "home_team": "EDM",
+      "away_team": "ANA",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.18194111471654895,
+      "confidence_tier": "HIGH",
+      "result": "LOSS",
+      "actual_total_goals_final": 7.0
+    },
     {
       "game_id": 2025030161,
       "game_date": "2026-04-18",
@@ -67,16 +79,16 @@
       "actual_total_goals_final": 4.0
     },
     {
-      "game_id": 2025021296,
+      "game_id": 2025021298,
       "game_date": "2026-04-14",
-      "home_team": "MIN",
-      "away_team": "ANA",
+      "home_team": "CGY",
+      "away_team": "COL",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.14186753246753253,
-      "confidence_tier": "SHADOW_MEDIUM",
+      "edge": 0.1556702459300312,
+      "confidence_tier": "HIGH",
       "result": "WIN",
-      "actual_total_goals_final": 5.0
+      "actual_total_goals_final": 4.0
     },
     {
       "game_id": 2025021293,
@@ -91,25 +103,13 @@
       "actual_total_goals_final": 3.0
     },
     {
-      "game_id": 2025021298,
+      "game_id": 2025021296,
       "game_date": "2026-04-14",
-      "home_team": "CGY",
-      "away_team": "COL",
+      "home_team": "MIN",
+      "away_team": "ANA",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.1556702459300312,
-      "confidence_tier": "HIGH",
-      "result": "WIN",
-      "actual_total_goals_final": 4.0
-    },
-    {
-      "game_id": 2025021287,
-      "game_date": "2026-04-13",
-      "home_team": "NSH",
-      "away_team": "SJS",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.13436576381365117,
+      "edge": 0.14186753246753253,
       "confidence_tier": "SHADOW_MEDIUM",
       "result": "WIN",
       "actual_total_goals_final": 5.0
@@ -125,6 +125,18 @@
       "confidence_tier": "HIGH",
       "result": "WIN",
       "actual_total_goals_final": 3.0
+    },
+    {
+      "game_id": 2025021287,
+      "game_date": "2026-04-13",
+      "home_team": "NSH",
+      "away_team": "SJS",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.13436576381365117,
+      "confidence_tier": "SHADOW_MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
     },
     {
       "game_id": 2025021279,
@@ -146,6 +158,18 @@
       "signal_side": "UNDER",
       "closing_total": 6.5,
       "edge": 0.13286086956521737,
+      "confidence_tier": "SHADOW_MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
+    },
+    {
+      "game_id": 2025021274,
+      "game_date": "2026-04-11",
+      "home_team": "COL",
+      "away_team": "VGK",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.14495888528345102,
       "confidence_tier": "SHADOW_MEDIUM",
       "result": "WIN",
       "actual_total_goals_final": 5.0
@@ -187,30 +211,6 @@
       "actual_total_goals_final": 7.0
     },
     {
-      "game_id": 2025021274,
-      "game_date": "2026-04-11",
-      "home_team": "COL",
-      "away_team": "VGK",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.14495888528345102,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 5.0
-    },
-    {
-      "game_id": 2025021259,
-      "game_date": "2026-04-09",
-      "home_team": "SEA",
-      "away_team": "VGK",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.14923246753246744,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 7.0
-    },
-    {
       "game_id": 2025021260,
       "game_date": "2026-04-09",
       "home_team": "LAK",
@@ -223,6 +223,18 @@
       "actual_total_goals_final": 5.0
     },
     {
+      "game_id": 2025021252,
+      "game_date": "2026-04-09",
+      "home_team": "NYI",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.16366576381365117,
+      "confidence_tier": "HIGH",
+      "result": "LOSS",
+      "actual_total_goals_final": 8.0
+    },
+    {
       "game_id": 2025021258,
       "game_date": "2026-04-09",
       "home_team": "ANA",
@@ -233,6 +245,18 @@
       "confidence_tier": "HIGH",
       "result": "LOSS",
       "actual_total_goals_final": 7.0
+    },
+    {
+      "game_id": 2025021257,
+      "game_date": "2026-04-09",
+      "home_team": "UTA",
+      "away_team": "NSH",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.12455646123260433,
+      "confidence_tier": "SHADOW_MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
     },
     {
       "game_id": 2025021256,
@@ -283,16 +307,16 @@
       "actual_total_goals_final": 6.0
     },
     {
-      "game_id": 2025021252,
+      "game_id": 2025021259,
       "game_date": "2026-04-09",
-      "home_team": "NYI",
-      "away_team": "TOR",
+      "home_team": "SEA",
+      "away_team": "VGK",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.16366576381365117,
-      "confidence_tier": "HIGH",
+      "edge": 0.14923246753246744,
+      "confidence_tier": "SHADOW_MEDIUM",
       "result": "LOSS",
-      "actual_total_goals_final": 8.0
+      "actual_total_goals_final": 7.0
     },
     {
       "game_id": 2025021255,
@@ -307,30 +331,6 @@
       "actual_total_goals_final": 9.0
     },
     {
-      "game_id": 2025021257,
-      "game_date": "2026-04-09",
-      "home_team": "UTA",
-      "away_team": "NSH",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.12455646123260433,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 5.0
-    },
-    {
-      "game_id": 2025021245,
-      "game_date": "2026-04-08",
-      "home_team": "TOR",
-      "away_team": "WSH",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.15769999999999995,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 4.0
-    },
-    {
       "game_id": 2025021246,
       "game_date": "2026-04-08",
       "home_team": "SJS",
@@ -343,28 +343,16 @@
       "actual_total_goals_final": 7.0
     },
     {
-      "game_id": 2025021243,
-      "game_date": "2026-04-07",
-      "home_team": "ANA",
-      "away_team": "NSH",
+      "game_id": 2025021245,
+      "game_date": "2026-04-08",
+      "home_team": "TOR",
+      "away_team": "WSH",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.18268658526171977,
+      "edge": 0.15769999999999995,
       "confidence_tier": "MEDIUM",
       "result": "WIN",
-      "actual_total_goals_final": 5.0
-    },
-    {
-      "game_id": 2025021242,
-      "game_date": "2026-04-07",
-      "home_team": "VAN",
-      "away_team": "VGK",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.16706576381365112,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 3.0
+      "actual_total_goals_final": 4.0
     },
     {
       "game_id": 2025021241,
@@ -403,6 +391,30 @@
       "actual_total_goals_final": 7.0
     },
     {
+      "game_id": 2025021242,
+      "game_date": "2026-04-07",
+      "home_team": "VAN",
+      "away_team": "VGK",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.16706576381365112,
+      "confidence_tier": "MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 3.0
+    },
+    {
+      "game_id": 2025021243,
+      "game_date": "2026-04-07",
+      "home_team": "ANA",
+      "away_team": "NSH",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.18268658526171977,
+      "confidence_tier": "MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
+    },
+    {
       "game_id": 2025021234,
       "game_date": "2026-04-07",
       "home_team": "OTT",
@@ -413,42 +425,6 @@
       "confidence_tier": "MEDIUM",
       "result": "LOSS",
       "actual_total_goals_final": 8.0
-    },
-    {
-      "game_id": 2025021231,
-      "game_date": "2026-04-06",
-      "home_team": "SJS",
-      "away_team": "CHI",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.16836086956521745,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 5.0
-    },
-    {
-      "game_id": 2025021230,
-      "game_date": "2026-04-06",
-      "home_team": "WPG",
-      "away_team": "SEA",
-      "signal_side": "UNDER",
-      "closing_total": 7.5,
-      "edge": 0.1451193150139387,
-      "confidence_tier": "MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 8.0
-    },
-    {
-      "game_id": 2025021229,
-      "game_date": "2026-04-06",
-      "home_team": "BUF",
-      "away_team": "TBL",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.13537024593003122,
-      "confidence_tier": "MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 6.0
     }
   ],
   "season_performance": {
@@ -504,10 +480,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 790,
+    "total_graded": 791,
     "ot_games": 180,
     "so_games": 64,
-    "ot_rate": 0.2278,
+    "ot_rate": 0.2276,
     "ot_flips": 48,
     "ot_flip_rate": 0.2667,
     "under_ot_losses": 72,
@@ -524,8 +500,8 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-04-20T11:07:45.025128+00:00",
-    "date_reviewed": "2026-04-19",
+    "generated_at": "2026-04-21T11:08:00.150732+00:00",
+    "date_reviewed": "2026-04-20",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"

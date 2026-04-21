@@ -19,6 +19,22 @@
       "local_start_hour": 19.25,
       "win_loss": "L",
       "final_score": "0-1"
+    },
+    {
+      "game_pk": 824290,
+      "game_date": "2026-04-21",
+      "matchup": "MIL @ DET",
+      "fav_team": "DET",
+      "dog_team": "MIL",
+      "fav_side": "home",
+      "fav_implied": 0.5139,
+      "dog_ml_price": 101,
+      "sp_fip_diff": 0.019,
+      "off_diff": -0.8,
+      "bp_era_diff": 0.338,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }

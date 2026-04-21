@@ -87,6 +87,22 @@
       "dog_bp_era": 4.258,
       "win_loss": "L",
       "final_score": "6-8"
+    },
+    {
+      "game_pk": 824290,
+      "game_date": "2026-04-21",
+      "matchup": "MIL @ DET",
+      "fav_team": "DET",
+      "dog_team": "MIL",
+      "fav_side": "home",
+      "fav_implied": 0.5139,
+      "dog_ml_price": 101,
+      "sp_fip_diff": 0.019,
+      "off_diff": -0.8,
+      "bp_era_diff": 0.338,
+      "fav_bp_era": 4.256,
+      "dog_bp_era": 3.918,
+      "win_loss": null
     }
   ]
 }
