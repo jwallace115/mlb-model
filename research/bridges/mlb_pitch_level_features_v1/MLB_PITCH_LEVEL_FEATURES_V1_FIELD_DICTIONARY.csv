@@ -1,0 +1,77 @@
+field_name,description,window,pit_safe,null_rate
+game_pk,Identity,identity,YES,0.0
+pitcher,Identity,identity,YES,0.0
+player_name,Identity,identity,YES,0.0
+p_throws,Identity,identity,YES,0.0
+game_date,Identity,identity,YES,0.0
+season,Identity,identity,YES,0.0
+total_pitches,Identity,identity,YES,0.0
+arm_angle_mean_last_3,Rolling feature,3,YES,0.3520
+arm_angle_mean_last_5,Rolling feature,5,YES,0.3983
+ch_pct_last_3,Rolling feature,3,YES,0.1402
+ch_pct_last_5,Rolling feature,5,YES,0.2013
+chase_rate_last_3,Rolling feature,3,YES,0.1402
+chase_rate_last_5,Rolling feature,5,YES,0.2013
+edge_rate_last_3,Rolling feature,3,YES,0.1402
+edge_rate_last_5,Rolling feature,5,YES,0.2013
+ff_pct_last_3,Rolling feature,3,YES,0.1402
+ff_pct_last_5,Rolling feature,5,YES,0.2013
+heart_drift_last_3,Rolling feature,3,YES,0.1402
+heart_drift_last_5,Rolling feature,5,YES,0.2013
+heart_rate_last_3,Rolling feature,3,YES,0.1402
+heart_rate_last_5,Rolling feature,5,YES,0.2013
+pfx_x_mean_last_3,Rolling feature,3,YES,0.1402
+pfx_x_mean_last_5,Rolling feature,5,YES,0.2013
+pfx_x_std_last_3,Rolling feature,3,YES,0.1402
+pfx_x_std_last_5,Rolling feature,5,YES,0.2013
+pfx_z_mean_last_3,Rolling feature,3,YES,0.1402
+pfx_z_mean_last_5,Rolling feature,5,YES,0.2013
+pfx_z_std_last_3,Rolling feature,3,YES,0.1402
+pfx_z_std_last_5,Rolling feature,5,YES,0.2013
+primary_mix_drift_last_3,Rolling feature,3,YES,0.1402
+primary_mix_drift_last_5,Rolling feature,5,YES,0.2013
+primary_pitch_pct_last_3,Rolling feature,3,YES,0.1402
+primary_pitch_pct_last_5,Rolling feature,5,YES,0.2013
+secondary_2strike_drift_last_3,Rolling feature,3,YES,0.1406
+secondary_2strike_drift_last_5,Rolling feature,5,YES,0.2016
+secondary_pitch_pct_last_3,Rolling feature,3,YES,0.1402
+secondary_pitch_pct_last_5,Rolling feature,5,YES,0.2013
+sl_pct_last_3,Rolling feature,3,YES,0.1402
+sl_pct_last_5,Rolling feature,5,YES,0.2013
+spin_ff_mean_last_3,Rolling feature,3,YES,0.2272
+spin_ff_mean_last_5,Rolling feature,5,YES,0.2825
+spin_sl_mean_last_3,Rolling feature,3,YES,0.5071
+spin_sl_mean_last_5,Rolling feature,5,YES,0.5458
+two_strike_ff_pct_last_3,Rolling feature,3,YES,0.1406
+two_strike_ff_pct_last_5,Rolling feature,5,YES,0.2016
+two_strike_secondary_pct_last_3,Rolling feature,3,YES,0.1406
+two_strike_secondary_pct_last_5,Rolling feature,5,YES,0.2016
+velo_drift_last_3,Rolling feature,3,YES,0.2270
+velo_drift_last_5,Rolling feature,5,YES,0.2823
+velo_effective_mean_last_3,Rolling feature,3,YES,0.1402
+velo_effective_mean_last_5,Rolling feature,5,YES,0.2013
+velo_ff_mean_last_3,Rolling feature,3,YES,0.2270
+velo_ff_mean_last_5,Rolling feature,5,YES,0.2823
+velo_mean_last_3,Rolling feature,3,YES,0.1402
+velo_mean_last_5,Rolling feature,5,YES,0.2013
+velo_std_last_3,Rolling feature,3,YES,0.1402
+velo_std_last_5,Rolling feature,5,YES,0.2013
+zone_drift_last_3,Rolling feature,3,YES,0.1402
+zone_drift_last_5,Rolling feature,5,YES,0.2013
+zone_rate_last_3,Rolling feature,3,YES,0.1402
+zone_rate_last_5,Rolling feature,5,YES,0.2013
+heart_rate_season_baseline,Expanding baseline,expanding,YES,0.0742
+primary_pitch_pct_season_baseline,Expanding baseline,expanding,YES,0.0742
+two_strike_secondary_pct_season_baseline,Expanding baseline,expanding,YES,0.0743
+velo_ff_mean_season_baseline,Expanding baseline,expanding,YES,0.1296
+zone_rate_season_baseline,Expanding baseline,expanding,YES,0.0742
+heart_drift_last_3,Drift from baseline,3,YES,0.1402
+heart_drift_last_5,Drift from baseline,5,YES,0.2013
+primary_mix_drift_last_3,Drift from baseline,3,YES,0.1402
+primary_mix_drift_last_5,Drift from baseline,5,YES,0.2013
+secondary_2strike_drift_last_3,Drift from baseline,3,YES,0.1406
+secondary_2strike_drift_last_5,Drift from baseline,5,YES,0.2016
+velo_drift_last_3,Drift from baseline,3,YES,0.2270
+velo_drift_last_5,Drift from baseline,5,YES,0.2823
+zone_drift_last_3,Drift from baseline,3,YES,0.1402
+zone_drift_last_5,Drift from baseline,5,YES,0.2013

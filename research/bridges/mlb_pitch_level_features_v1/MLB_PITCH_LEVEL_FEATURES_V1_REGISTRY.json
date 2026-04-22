@@ -1,0 +1,24 @@
+{
+  "bridge_id": "mlb_pitch_level_features_v1",
+  "created": "2026-04-22",
+  "source_files": [
+    "chunks/pitcher_statcast_2022_*_raw.parquet",
+    "statcast_pitchers.parquet (2023-2025)"
+  ],
+  "grain": "game_pk + pitcher",
+  "shape": "16873 x 66",
+  "date_range": "2022-04-07 to 2025-09-28",
+  "scope": "starters only, 2022-2025",
+  "pit_safe": true,
+  "shift_verified": true,
+  "season_boundary_reset": true,
+  "baseline_type": "expanding_mean_pit_safe",
+  "arm_angle_caveat": "2023+ only, null for 2022",
+  "proprietary_metrics": [
+    "velo_drift",
+    "zone_drift",
+    "heart_drift",
+    "primary_mix_drift",
+    "secondary_2strike_drift"
+  ]
+}
