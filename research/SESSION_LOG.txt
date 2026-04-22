@@ -19,3 +19,9 @@ REBUILD_REQUIRED: ORCHESTRATION (7 files), RUNTIME_OBJECT (5+ files), DISCOVERY_
 2026-04-19 | mlb_w02_manual_historical_test | research/results/mlb_w02_manual_historical_test/ | 5 | SHELVE — OOS material reversal (-0.464 vs discovery +0.450)
 2026-04-20 | mlb_w_family_closeout | research/results/mlb_w_family_closeout/ | 4 | COMPLETE — W01 PRESERVE_AS_CONTEXT, W02 SHELVE
 2026-04-20 | mlb_discovery_pass_04 | research/discovery/mlb_bounded_discovery_pass_04/ | 3 | COMPLETE — 0 candidates survived to OOS; all 4 tested DEAD (S1 validation collapse, S2/S5 weak discovery, S6 wrong direction)
+2026-04-22 | mlb_batter_aggregate_bridge_v1 | research/bridges/mlb_batter_aggregate_bridge_v1/ | 4 | COMMITTED 366c52db — 19430x25, 100% match, SHIFT_VERIFIED
+2026-04-22 | mlb_runtime_object_v2 | research/runtime_objects/mlb_runtime_object_v2/ | 5 | COMMITTED 6366f605 — 19430x150, V1+20 batting rolling
+2026-04-22 | mlb_f5_discovery_pass_01 | research/discovery/mlb_f5_discovery_pass_01/ | 4 | COMMITTED c35627fa — 0/35 candidates advancing, F5 market efficient vs V2 features
+2026-04-22 | mlb_pitch_level_features_v1 | research/bridges/mlb_pitch_level_features_v1/ | 4 | COMMITTED ba9ab63e — 16873x66, 5 drift metrics, SHIFT_VERIFIED
+2026-04-22 | mlb_runtime_object_v3 | research/runtime_objects/mlb_runtime_object_v3/ | 5 | COMMITTED 0c72e8a7 — 19430x209, V2+59 opp_pl_*, 80.4% match
+2026-04-22 | mlb_f5_discovery_pass_02 | research/discovery/mlb_f5_discovery_pass_02/ | 4 | COMMITTED 5605d4dc — 2/53 disc advance, 0 val survive, both reversed. F5 drift market equally efficient.
