@@ -2350,7 +2350,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Michael Wacha",
+    "away_sp_name": "Chris Bassitt"
   },
   {
     "date": "2026-04-22",
@@ -2375,7 +2377,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Casey Mize",
+    "away_sp_name": "Chad Patrick"
   },
   {
     "date": "2026-04-22",
@@ -2400,7 +2404,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Tomoyuki Sugano",
+    "away_sp_name": "Walker Buehler"
   },
   {
     "date": "2026-04-22",
@@ -2425,6 +2431,8 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Eduardo Rodriguez",
+    "away_sp_name": "Anthony Kay"
   }
 ]
