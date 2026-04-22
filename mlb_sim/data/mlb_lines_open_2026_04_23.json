@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "2a8e5f1a3a4ac585a773ec30d535e4e0",
+    "game_date": "2026-04-23",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Pittsburgh Pirates",
+    "commence_time": "2026-04-23T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-22T06:05:02.632961+00:00"
+  },
+  {
+    "game_id": "863d10a0d1fd4ccb9810966d4740d766",
+    "game_date": "2026-04-23",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-04-23T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 12.0,
+    "over_price": -106,
+    "under_price": -114,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-22T06:05:02.632961+00:00"
+  },
+  {
+    "game_id": "dfff7f7620a1af42549f691892c9c7cd",
+    "game_date": "2026-04-23",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-04-23T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -119,
+    "under_price": 104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-22T06:05:02.632961+00:00"
+  },
+  {
+    "game_id": "a51b58a3d9fe032b72e59da66a7243fc",
+    "game_date": "2026-04-23",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-04-23T01:46:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-22T06:05:02.632961+00:00"
+  }
+]
