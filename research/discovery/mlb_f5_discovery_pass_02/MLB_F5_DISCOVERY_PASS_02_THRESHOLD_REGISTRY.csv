@@ -1,0 +1,16 @@
+field_name,direction,threshold_value,discovery_flag_rate,window,pit_safe
+opp_pl_velo_drift_last_3,low,-0.06000,0.330,last_3,YES
+opp_pl_velo_drift_last_5,low,-0.01200,0.330,last_5,YES
+opp_pl_zone_drift_last_3,low,-0.00700,0.330,last_3,YES
+opp_pl_zone_drift_last_5,low,-0.00350,0.330,last_5,YES
+opp_pl_heart_drift_last_3,high,0.00450,0.330,last_3,YES
+opp_pl_secondary_2strike_drift_last_3,low,-0.01550,0.330,last_3,YES
+opp_pl_secondary_2strike_drift_last_5,low,-0.00800,0.330,last_5,YES
+opp_pl_primary_mix_drift_last_3,low,-0.01100,0.330,last_3,YES
+opp_pl_velo_std_last_3,high,5.69000,0.330,last_3,YES
+opp_pl_pfx_z_std_last_3,high,0.76000,0.330,last_3,YES
+batting_hard_hit_rate_last_3,high,0.42000,0.330,last_3,YES
+batting_hard_hit_rate_last_5,high,0.41600,0.330,last_5,YES
+batting_barrel_rate_last_3,high,0.09200,0.334,last_3,YES
+batting_xwoba_contact_last_3,high,0.38900,0.330,last_3,YES
+batting_avg_exit_velo_last_3,high,89.30000,0.330,last_3,YES

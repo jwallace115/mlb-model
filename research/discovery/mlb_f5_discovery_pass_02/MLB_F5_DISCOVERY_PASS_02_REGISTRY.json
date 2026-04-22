@@ -1,0 +1,19 @@
+{
+  "pass_id": "mlb_f5_discovery_pass_02",
+  "date": "2026-04-22",
+  "runtime_object": "mlb_runtime_object_v3",
+  "market": "f5_totals",
+  "benchmark": "f5_opening_line_2am_et",
+  "primary_features": "proprietary_drift_metrics",
+  "discovery_window": "2023-05-03_to_2023-12-31",
+  "candidates_mg": 12,
+  "candidates_enumeration_initial": 41,
+  "candidates_total": 53,
+  "candidates_surviving_flag_rate": 53,
+  "candidates_surviving_discovery": 2,
+  "candidates_surviving_validation": 0,
+  "candidates_surviving_oos": 0,
+  "any_f5_drift_edge_candidates": "NO",
+  "disposition_summary": "2 discovery advancers (2strike_drift×xwOBA gap=-0.387, zone_drift×xwOBA gap=-0.342) both reversed in 2024 validation. F5 drift market equally efficient as full-game.",
+  "runtime_seconds": 4.1
+}
