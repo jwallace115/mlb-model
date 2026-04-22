@@ -1,0 +1,19 @@
+{
+  "object_id": "mlb_runtime_object_v3",
+  "created": "2026-04-22",
+  "parent_object": "mlb_runtime_object_v2",
+  "bridge_added": "mlb_pitch_level_features_v1",
+  "shape": "19430 x 209",
+  "grain": "game_pk + team",
+  "scope": "2022-2025 historical only",
+  "pit_safe": true,
+  "new_column_prefix": "opp_pl_",
+  "new_columns": 59,
+  "caveats": [
+    "opp_pl_arm_angle_* null for 2022",
+    "opp_pl_* ~20% null early-season"
+  ],
+  "v2_columns_modified": false,
+  "v2_rows_modified": false,
+  "status": "RUNTIME_OBJECT_READY_HISTORICAL_CLEAN"
+}

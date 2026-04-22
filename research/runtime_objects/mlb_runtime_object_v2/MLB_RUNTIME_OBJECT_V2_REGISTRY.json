@@ -1,0 +1,16 @@
+{
+  "object_id": "mlb_runtime_object_v2",
+  "created": "2026-04-22",
+  "parent": "mlb_runtime_object_v1",
+  "bridge": "mlb_batter_aggregate_bridge_v1",
+  "shape": "19430 x 150",
+  "grain": "game_pk + team",
+  "date_range": "2022-04-07 to 2025-09-28",
+  "scope": "2022-2025 historical only",
+  "pit_safe": true,
+  "new_columns": 20,
+  "new_column_family": "batting_rolling",
+  "v1_columns_modified": false,
+  "v1_rows_modified": false,
+  "status": "RUNTIME_OBJECT_READY_HISTORICAL_CLEAN"
+}
