@@ -1,0 +1,27 @@
+{
+  "artifact_name": "mlb_archetype_phase2_v1",
+  "canonical_path": "/Users/jw115/mlb-model/research/archetype_engine/mlb_archetype_phase2_v1",
+  "phase": "PHASE_2_OUTCOME_TESTING",
+  "benchmark": "mlb_odds_open_canonical.parquet \u2014 7am opening line",
+  "outcome_variable": "actual_total - open_total (open_residual)",
+  "flags_tested": [
+    "HANDOFF_COLLAPSE",
+    "DEPTH_MISMATCH",
+    "PATH_ASYMMETRY"
+  ],
+  "flags_skipped": [
+    "CONTROLLED_GAME",
+    "BURST_SUPPRESSOR"
+  ],
+  "dispositions": {
+    "HANDOFF_COLLAPSE": "LOW_SAMPLE",
+    "DEPTH_MISMATCH": "LOW_SAMPLE",
+    "PATH_ASYMMETRY": "DEAD",
+    "CONTROLLED_GAME": "INSUFFICIENT_SAMPLE",
+    "BURST_SUPPRESSOR": "INSUFFICIENT_SAMPLE"
+  },
+  "shadow_candidates": [],
+  "build_date": "2026-04-23",
+  "status": "PHASE_2_COMPLETE",
+  "next_phase": "NO_SHADOW_CANDIDATES \u2014 archetype program complete"
+}
