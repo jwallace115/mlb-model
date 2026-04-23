@@ -1,0 +1,9 @@
+{
+  "sport": "baseball_mlb",
+  "phase": "derivatives",
+  "markets": ["team_totals", "alternate_totals"],
+  "seasons": ["2024", "2025"],
+  "completed_event_timestamps": [],
+  "total_events_pulled": 0,
+  "last_updated": null
+}
