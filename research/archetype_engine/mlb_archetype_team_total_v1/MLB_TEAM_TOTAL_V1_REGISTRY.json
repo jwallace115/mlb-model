@@ -1,0 +1,46 @@
+{
+  "artifact_name": "mlb_archetype_team_total_v1",
+  "canonical_path": "/Users/jw115/mlb-model/research/archetype_engine/mlb_archetype_team_total_v1",
+  "test_type": "team_total_within_bucket_binary_ou",
+  "benchmark": "mlb_odds_open_canonical.parquet \u2014 team total open line",
+  "windows": {
+    "discovery": "2024-04-01 to 2024-10-01",
+    "validation": "2025-04-01 to 2025-07-31",
+    "oos": "2025-08-01 to 2025-10-01"
+  },
+  "window_shift_reason": "team_totals API coverage sparse pre-Aug 2023 \u2014 2024/2025 only",
+  "signals_tested": [
+    "A1_CLUSTERED",
+    "A2_VOLATILE",
+    "A3_FRONT_LOADED",
+    "A4_STABLE_DEEP_LU",
+    "A5_HIGH_TURNOVER_LU",
+    "B1_OPP_SHORT_LEASH",
+    "B2_OPP_INEFFICIENT",
+    "B3_OPP_DEPLETED_BRIDGE",
+    "B4_OPP_USAGE_STRESSED"
+  ],
+  "break_even_threshold": 0.5238,
+  "bucket_definitions": {
+    "LOW_TT": "total_line <= 4.0",
+    "MID_TT": "4.5 <= total_line <= 5.5",
+    "HIGH_TT": "total_line >= 6.0"
+  },
+  "dispositions": {
+    "A1_CLUSTERED": "DEAD",
+    "A2_VOLATILE": "DEAD",
+    "A3_FRONT_LOADED": "DEAD",
+    "A4_STABLE_DEEP_LU": "DEAD",
+    "A5_HIGH_TURNOVER_LU": "SHADOW_CANDIDATE",
+    "B1_OPP_SHORT_LEASH": "DEAD",
+    "B2_OPP_INEFFICIENT": "MONITOR",
+    "B3_OPP_DEPLETED_BRIDGE": "DEAD",
+    "B4_OPP_USAGE_STRESSED": "DEAD"
+  },
+  "shadow_candidates": [
+    "A5_HIGH_TURNOVER_LU"
+  ],
+  "build_date": "2026-04-23",
+  "status": "COMPLETE",
+  "next_phase": "PHASE_3_MARKET_TRANSLATION"
+}
