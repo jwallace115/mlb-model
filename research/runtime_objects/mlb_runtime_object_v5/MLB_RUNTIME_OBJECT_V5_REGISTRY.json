@@ -1,0 +1,10 @@
+{
+  "object_id": "mlb_runtime_object_v5",
+  "created": "2026-04-22",
+  "parent": "mlb_runtime_object_v4",
+  "bridge": "mlb_bullpen_leverage_bridge_v1",
+  "team_normalization_fix": "v1.1",
+  "shape": "19430x252",
+  "pit_safe": true,
+  "status": "RUNTIME_OBJECT_READY_HISTORICAL_CLEAN"
+}

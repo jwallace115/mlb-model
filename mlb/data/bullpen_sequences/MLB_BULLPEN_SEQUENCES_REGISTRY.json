@@ -1,0 +1,36 @@
+{
+  "artifact_name": "mlb_bullpen_appearances_2022_2025",
+  "canonical_path": "/Users/jw115/mlb-model/mlb/data/bullpen_sequences/",
+  "output_file": "mlb_bullpen_appearances_2022_2025.parquet",
+  "source": "MLB Stats API /api/v1/game/{gamePk}/boxscore",
+  "game_pk_sources": ["mlb_odds_closing_canonical.parquet", "mlb_runtime_object_v6.parquet"],
+  "schema": {
+    "game_pk": "int — MLB game identifier",
+    "team_side": "str — home or away",
+    "appearance_order": "int — 1=starter, 2=first reliever, etc.",
+    "is_starter": "bool — True if appearance_order == 1",
+    "pitcher_id": "int — MLB pitcher person ID",
+    "pitcher_name": "str — full name",
+    "outs_recorded": "int — outs recorded in this appearance",
+    "batters_faced": "int — batters faced",
+    "hits_allowed": "int",
+    "runs_allowed": "int",
+    "inherited_runners": "int",
+    "inherited_scored": "int",
+    "strikes_thrown": "int",
+    "pitches_thrown": "int"
+  },
+  "row_count": 83042,
+  "unique_games": 9715,
+  "failed_games": 0,
+  "pull_date": "2026-04-23",
+  "status": "COMPLETE",
+  "sanity_checks": {
+    "starter_mean_outs": 15.6,
+    "starter_mean_pitches": 85.1,
+    "reliever_mean_outs": 3.4,
+    "reliever_mean_pitches": 18.7,
+    "max_appearance_order": 10
+  },
+  "notes": "appearance_order=1 is starter. Relievers are appearance_order >= 2. September 2023 included in raw data — research phases exclude per ops doc."
+}

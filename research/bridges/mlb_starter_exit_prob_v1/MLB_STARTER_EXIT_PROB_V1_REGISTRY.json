@@ -1,0 +1,31 @@
+{
+  "bridge_id": "mlb_starter_exit_prob_v1",
+  "created": "2026-04-22",
+  "source_2022": "DATA_GAP \u2014 2022 raw chunks lack inning column",
+  "source_2023_2025": "statcast_pitchers.parquet",
+  "grain": "game_pk + team",
+  "shape": "12098 x 21",
+  "outcome_variables": [
+    "exited_by_4",
+    "exited_by_5",
+    "exited_by_6",
+    "exited_by_7"
+  ],
+  "rolling_windows": [
+    "last_5",
+    "last_10"
+  ],
+  "baseline_type": "expanding_mean_pit_safe",
+  "composite_score": "deterioration_score_norm",
+  "deterioration_corr_with_exited_by_5": "+0.0396",
+  "pit_safe": true,
+  "shift_verified": true,
+  "season_boundary_reset": true,
+  "simulation_phase": "Phase_1_Component_2",
+  "scope": "2023-2025",
+  "caveats": [
+    "2022 DATA_GAP (raw chunks lack inning)",
+    "exit_prob null for first 3-5 starts per season",
+    "deterioration_score null when drift features null"
+  ]
+}

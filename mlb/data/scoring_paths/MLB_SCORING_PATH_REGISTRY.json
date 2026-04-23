@@ -1,0 +1,20 @@
+{
+  "artifact_name": "mlb_inning_scoring_2022_2025",
+  "canonical_path": "/Users/jw115/mlb-model/mlb/data/scoring_paths/",
+  "output_file": "mlb_inning_scoring_2022_2025.parquet",
+  "source": "MLB Stats API /api/v1/game/{gamePk}/linescore",
+  "game_pk_sources": ["mlb_odds_closing_canonical.parquet", "mlb_runtime_object_v6.parquet"],
+  "schema": {
+    "game_pk": "int — MLB game identifier",
+    "inning_num": "int — inning number 1-based, extras included",
+    "home_runs": "int — runs scored by home team in this inning",
+    "away_runs": "int — runs scored by away team in this inning"
+  },
+  "row_count": 88545,
+  "unique_games": 9713,
+  "failed_games": 0,
+  "inning_range": "1 to 15",
+  "pull_date": "2026-04-23",
+  "status": "COMPLETE",
+  "notes": "September 2023 data included — research phases exclude Sept 2023 per ops doc. Raw data layer only. 2 game_pks in universe (9715) returned no linescore data (likely postponed/cancelled)."
+}

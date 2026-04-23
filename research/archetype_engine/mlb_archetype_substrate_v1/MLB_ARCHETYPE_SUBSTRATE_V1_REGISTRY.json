@@ -1,0 +1,82 @@
+{
+  "artifact_name": "mlb_archetype_substrate_v1",
+  "canonical_path": "/Users/jw115/mlb-model/research/archetype_engine/mlb_archetype_substrate_v1/",
+  "spec_version": "v2",
+  "phase": "PHASE_0_SUBSTRATE_AND_STABILITY_AUDIT",
+  "data_sources": {
+    "scoring_path": "mlb_inning_scoring_2022_2025.parquet — commit 30228698",
+    "bullpen_sequences": "mlb_bullpen_appearances_2022_2025.parquet — commit ac79a656",
+    "lineups": "mlb_lineups_historical.parquet",
+    "starter_exit": "mlb_starter_exit_prob_v1.parquet"
+  },
+  "windows": {
+    "discovery": "2023-04-01 to 2023-08-31 (September 2023 excluded)",
+    "validation": "2024-04-01 to 2024-10-01",
+    "oos": "2025-04-01 to 2025-10-01",
+    "excluded": "2022 full year, September 2023"
+  },
+  "families": {
+    "scoring_path": {
+      "file": "mlb_archetype_scoring_path_v1.parquet",
+      "shape": "19426 x 21",
+      "surviving_labels": ["CLUSTERED", "DISPERSED", "FRONT_LOADED", "BACK_LOADED", "VOLATILE"],
+      "killed_labels": ["CONSISTENT — TALENT_CLUSTER_DISQUALIFIED (corr_talent=+0.416, residual_pct=20%)"],
+      "gate1_temporal": "All surviving labels STABLE or CAUTION",
+      "gate3_talent": "CONSISTENT killed (residual < 25%); all others RETAIN",
+      "window_sufficient_rate": 0.985
+    },
+    "bullpen_handoff": {
+      "file": "mlb_archetype_bullpen_handoff_v1.parquet",
+      "shape": "19302 x 18",
+      "surviving_labels": ["TOP_HEAVY", "BALANCED_DEPTH", "DEPLETED_BRIDGE", "CLOSER_DEPENDENT"],
+      "killed_labels": [],
+      "gate1_temporal": "All labels pass (target 40%)",
+      "gate3_talent": "All CLEANER (corr < 0.3)",
+      "window_sufficient_rate": 0.989
+    },
+    "starter_behavioral": {
+      "file": "mlb_archetype_starter_behavioral_v1.parquet",
+      "shape": "19430 x 17",
+      "surviving_labels": ["DEEP_STABLE", "SHORT_LEASH_VOLATILE", "INEFFICIENT_PITCHER"],
+      "killed_labels": ["EFFICIENT_DURABLE — TALENT_CLUSTER_DISQUALIFIED (corr_talent=+0.591, residual_pct=22%)"],
+      "gate1_temporal": "All surviving labels pass (target 50%)",
+      "gate3_talent": "EFFICIENT_DURABLE killed (corr > 0.5, residual < 25%); DEEP_STABLE retained (residual 55%); SHORT_LEASH_VOLATILE retained (residual 64%); INEFFICIENT_PITCHER retained (residual 67%)",
+      "window_sufficient_rate": 0.853
+    },
+    "lineup_stability": {
+      "file": "mlb_archetype_lineup_stability_v1.parquet",
+      "shape": "19426 x 14",
+      "surviving_labels": ["STABLE_DEEP", "HIGH_TURNOVER", "TOP_HEAVY_STABLE", "ROTATING_BOTTOM"],
+      "killed_labels": [],
+      "gate1_temporal": "STABLE_DEEP STABLE (0.716), HIGH_TURNOVER STABLE (0.716), TOP_HEAVY_STABLE CAUTION (0.548), ROTATING_BOTTOM STABLE (0.728)",
+      "gate3_talent": "All CLEANER (corr_resid < 0.02 for all labels)",
+      "window_sufficient_rate": 0.971
+    }
+  },
+  "taxonomy_floor_not_met": [],
+  "talent_cluster_disqualified": [
+    "scoring_path.CONSISTENT",
+    "starter_behavioral.EFFICIENT_DURABLE"
+  ],
+  "edge_test_ready": [
+    "scoring_path.CLUSTERED (N=241)",
+    "scoring_path.DISPERSED (N=260)",
+    "scoring_path.FRONT_LOADED (N=1194)",
+    "scoring_path.BACK_LOADED (N=1392)",
+    "scoring_path.VOLATILE (N=1193)",
+    "bullpen_handoff.TOP_HEAVY (N=787)",
+    "bullpen_handoff.BALANCED_DEPTH (N=955)",
+    "bullpen_handoff.DEPLETED_BRIDGE (N=836)",
+    "bullpen_handoff.CLOSER_DEPENDENT (N=715)",
+    "starter_behavioral.DEEP_STABLE (N=478)",
+    "starter_behavioral.SHORT_LEASH_VOLATILE (N=796)",
+    "starter_behavioral.INEFFICIENT_PITCHER (N=1048)",
+    "lineup_stability.STABLE_DEEP (N=930)",
+    "lineup_stability.HIGH_TURNOVER (N=732)",
+    "lineup_stability.TOP_HEAVY_STABLE (N=330)",
+    "lineup_stability.ROTATING_BOTTOM (N=779)"
+  ],
+  "build_date": "2026-04-23",
+  "status": "PHASE_0_COMPLETE",
+  "next_phase": "PHASE_1_MATCHUP_INTERACTION — requires all four gates passed"
+}

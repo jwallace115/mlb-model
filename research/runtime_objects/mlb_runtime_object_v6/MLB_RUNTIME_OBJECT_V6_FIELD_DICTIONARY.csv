@@ -1,0 +1,264 @@
+field_name,source_family,source_path,field_role,caveat_status,notes
+game_pk,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+date,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+season,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+game_number,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+team,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+opponent_team,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+home_away,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+home_team,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+away_team,mlb_matchup_table_base,base_object,IDENTITY,NONE,
+opp_starter_id,mlb_matchup_table_base,base_object,CARRIED_ONLY,NONE,
+opp_starter_name,mlb_matchup_table_base,base_object,CARRIED_ONLY,NONE,
+n_batters,mlb_matchup_table_base,base_object,CARRIED_ONLY,NONE,
+sc_batter_count,mlb_matchup_table_base,base_object,CARRIED_ONLY,NONE,
+sc_total_bip,mlb_matchup_table_base,base_object,CARRIED_ONLY,NONE,
+total_pa,mlb_matchup_table_base,base_object,CARRIED_ONLY,NONE,
+opp_sp_sc_enriched,mlb_matchup_table_base,base_object,CARRIED_ONLY,NONE,
+contact_ev_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_ev_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_ev_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_ev_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_hh_rate_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_hh_rate_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_hh_rate_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_hh_rate_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_barrel_rate_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_barrel_rate_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_barrel_rate_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_barrel_rate_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_la_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_la_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_la_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_la_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xwoba_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xwoba_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xwoba_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xwoba_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xba_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xba_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xba_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xba_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xslg_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xslg_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xslg_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+contact_xslg_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_bb_rate_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_bb_rate_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_bb_rate_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_bb_rate_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_k_rate_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_k_rate_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_k_rate_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+plate_k_rate_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_iso_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_iso_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_iso_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_iso_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_hr_rate_last_7,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_hr_rate_last_10,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_hr_rate_last_15,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+damage_hr_rate_last_20,mlb_matchup_table_base (lineup_state),base_object,LINEUP_FEATURE,NONE,
+relievers_used_last_game,mlb_matchup_table_base (bullpen_substrate),base_object,BULLPEN_FEATURE,YES (CAVEAT_01),Bullpen substrate process caveat.
+relievers_used_last_3_games,mlb_matchup_table_base (bullpen_substrate),base_object,BULLPEN_FEATURE,YES (CAVEAT_01),Bullpen substrate process caveat.
+bullpen_pitches_last_game,mlb_matchup_table_base (bullpen_substrate),base_object,BULLPEN_FEATURE,YES (CAVEAT_01),Bullpen substrate process caveat.
+bullpen_pitches_last_3_games,mlb_matchup_table_base (bullpen_substrate),base_object,BULLPEN_FEATURE,YES (CAVEAT_01),Bullpen substrate process caveat.
+high_leverage_available,mlb_matchup_table_base (bullpen_substrate),base_object,BULLPEN_FEATURE,YES (CAVEAT_01),Bullpen substrate process caveat.
+opp_sp_batmiss_k_rate_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_batmiss_k_rate_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_batmiss_k_rate_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_batmiss_whiff_rate_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_batmiss_whiff_rate_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_batmiss_whiff_rate_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_command_bb_rate_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_command_bb_rate_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_command_bb_rate_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_command_zone_rate_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_command_zone_rate_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_command_zone_rate_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_hh_allowed_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_hh_allowed_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_hh_allowed_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_barrel_allowed_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_barrel_allowed_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_barrel_allowed_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_ev_allowed_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_ev_allowed_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_ev_allowed_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_la_allowed_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_la_allowed_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_contact_la_allowed_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_ip_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_ip_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_ip_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_bf_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_bf_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_bf_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_pitches_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_pitches_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_pitches_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_ppbf_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_ppbf_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_workload_ppbf_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_damage_hr_rate_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_damage_hr_rate_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_damage_hr_rate_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_damage_hits_per_bf_last_3,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_damage_hits_per_bf_last_5,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+opp_sp_damage_hits_per_bf_last_10,mlb_matchup_table_base (starter_profile),base_object,OPP_SP_FEATURE,YES (CAVEAT_02),SC averaging caveat.
+home_score,game_table_spine,sim/data/game_table.parquet,OUTCOME,NONE,
+away_score,game_table_spine,sim/data/game_table.parquet,OUTCOME,NONE,
+actual_total,game_table_spine,sim/data/game_table.parquet,OUTCOME,NONE,
+actual_f5_total,game_table_spine,sim/data/game_table.parquet,OUTCOME,NONE,
+venue_id,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+venue_name,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+park_id,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+home_rest_days,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+away_rest_days,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+doubleheader_flag,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+temperature,game_table_spine,sim/data/game_table.parquet,WEATHER,NONE,
+wind_speed,game_table_spine,sim/data/game_table.parquet,WEATHER,NONE,
+wind_direction,game_table_spine,sim/data/game_table.parquet,WEATHER,NONE,
+roof_status,game_table_spine,sim/data/game_table.parquet,WEATHER,NONE,
+park_factor_runs,game_table_spine,sim/data/game_table.parquet,PARK_CONTEXT,NONE,
+park_factor_hr,game_table_spine,sim/data/game_table.parquet,PARK_CONTEXT,NONE,
+umpire_name,game_table_spine,sim/data/game_table.parquet,UMPIRE_IDENTITY,NONE,Identity only — not a rating feature.
+umpire_id,game_table_spine,sim/data/game_table.parquet,UMPIRE_IDENTITY,NONE,Identity only — not a rating feature.
+game_hour_utc,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+local_start_hour,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+innings_played,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+completed_early,game_table_spine,sim/data/game_table.parquet,GAME_CONTEXT,NONE,
+umpire_matched,mlb_umpire_substrate,umpire_substrate,UMPIRE_QUALITY,NONE,Quality flag only — not a rating feature.
+batting_avg_exit_velo_last_1,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.6%
+batting_avg_exit_velo_last_10,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 3.1%
+batting_avg_exit_velo_last_3,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.2%
+batting_avg_exit_velo_last_5,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.9%
+batting_barrel_rate_last_1,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.6%
+batting_barrel_rate_last_10,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 3.1%
+batting_barrel_rate_last_3,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.2%
+batting_barrel_rate_last_5,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.9%
+batting_hard_hit_rate_last_1,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.6%
+batting_hard_hit_rate_last_10,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 3.1%
+batting_hard_hit_rate_last_3,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.2%
+batting_hard_hit_rate_last_5,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.9%
+batting_total_bip_last_1,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.0%
+batting_total_bip_last_10,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.0%
+batting_total_bip_last_3,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.0%
+batting_total_bip_last_5,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.0%
+batting_xwoba_contact_last_1,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 0.6%
+batting_xwoba_contact_last_10,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 3.1%
+batting_xwoba_contact_last_3,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.2%
+batting_xwoba_contact_last_5,mlb_batter_aggregate_bridge_v1,bridge,BATTING_ROLLING,YES (CAVEAT_06),Null rate: 1.9%
+opp_pl_arm_angle_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:43.7%
+opp_pl_arm_angle_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:47.8%
+opp_pl_ch_pct_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_ch_pct_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_chase_rate_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_chase_rate_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_edge_rate_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_edge_rate_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_ff_pct_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_ff_pct_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_heart_drift_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_heart_drift_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_heart_rate_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_heart_rate_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_heart_rate_season_baseline,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:19.6%
+opp_pl_pfx_x_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_pfx_x_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_pfx_x_std_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_pfx_x_std_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_pfx_z_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_pfx_z_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_pfx_z_std_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_pfx_z_std_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_primary_mix_drift_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_primary_mix_drift_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_primary_pitch_pct_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_primary_pitch_pct_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_primary_pitch_pct_season_baseline,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:19.6%
+opp_pl_secondary_2strike_drift_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.4%
+opp_pl_secondary_2strike_drift_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.7%
+opp_pl_secondary_pitch_pct_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_secondary_pitch_pct_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_sl_pct_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_sl_pct_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_spin_ff_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:32.9%
+opp_pl_spin_ff_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:37.7%
+opp_pl_spin_sl_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:57.2%
+opp_pl_spin_sl_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:60.6%
+opp_pl_two_strike_ff_pct_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.4%
+opp_pl_two_strike_ff_pct_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.7%
+opp_pl_two_strike_secondary_pct_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.4%
+opp_pl_two_strike_secondary_pct_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.7%
+opp_pl_two_strike_secondary_pct_season_baseline,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:19.6%
+opp_pl_velo_drift_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:32.9%
+opp_pl_velo_drift_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:37.7%
+opp_pl_velo_effective_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_velo_effective_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_velo_ff_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:32.9%
+opp_pl_velo_ff_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:37.7%
+opp_pl_velo_ff_mean_season_baseline,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:24.4%
+opp_pl_velo_mean_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_velo_mean_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_velo_std_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_velo_std_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_zone_drift_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_zone_drift_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_zone_rate_last_3,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:25.3%
+opp_pl_zone_rate_last_5,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:30.6%
+opp_pl_zone_rate_season_baseline,mlb_pitch_level_features_v1,bridge,OPP_PL_FEATURE,YES,Null:19.6%
+top_order_hard_hit_rate,mlb_lineup_quality_bridge_v1,top_order,YES,null_22=0.0%,null_2325=99.8%
+top_order_barrel_rate,mlb_lineup_quality_bridge_v1,top_order,YES,null_22=0.0%,null_2325=99.8%
+top_order_avg_exit_velo,mlb_lineup_quality_bridge_v1,top_order,YES,null_22=0.0%,null_2325=99.8%
+top_order_xwoba_contact,mlb_lineup_quality_bridge_v1,top_order,YES,null_22=0.0%,null_2325=99.8%
+top_order_coverage,mlb_lineup_quality_bridge_v1,top_order,YES,null_22=100.0%,null_2325=100.0%
+middle_order_hard_hit_rate,mlb_lineup_quality_bridge_v1,middle_order,YES,null_22=0.0%,null_2325=99.4%
+middle_order_barrel_rate,mlb_lineup_quality_bridge_v1,middle_order,YES,null_22=0.0%,null_2325=99.4%
+middle_order_avg_exit_velo,mlb_lineup_quality_bridge_v1,middle_order,YES,null_22=0.0%,null_2325=99.4%
+middle_order_xwoba_contact,mlb_lineup_quality_bridge_v1,middle_order,YES,null_22=0.0%,null_2325=99.4%
+middle_order_coverage,mlb_lineup_quality_bridge_v1,middle_order,YES,null_22=100.0%,null_2325=100.0%
+bottom_order_hard_hit_rate,mlb_lineup_quality_bridge_v1,bottom_order,YES,null_22=0.0%,null_2325=99.8%
+bottom_order_barrel_rate,mlb_lineup_quality_bridge_v1,bottom_order,YES,null_22=0.0%,null_2325=99.8%
+bottom_order_avg_exit_velo,mlb_lineup_quality_bridge_v1,bottom_order,YES,null_22=0.0%,null_2325=99.8%
+bottom_order_xwoba_contact,mlb_lineup_quality_bridge_v1,bottom_order,YES,null_22=0.0%,null_2325=99.8%
+bottom_order_coverage,mlb_lineup_quality_bridge_v1,bottom_order,YES,null_22=100.0%,null_2325=100.0%
+lineup_depth_dropoff_hh,mlb_lineup_quality_bridge_v1,derived,YES,null_22=0.0%,null_2325=99.3%
+lineup_depth_dropoff_ev,mlb_lineup_quality_bridge_v1,derived,YES,null_22=0.0%,null_2325=99.3%
+lineup_quality_hh,mlb_lineup_quality_bridge_v1,derived,YES,null_22=0.0%,null_2325=98.8%
+lineup_quality_ev,mlb_lineup_quality_bridge_v1,derived,YES,null_22=0.0%,null_2325=98.8%
+lineup_quality_xwoba,mlb_lineup_quality_bridge_v1,derived,YES,null_22=0.0%,null_2325=98.8%
+lineup_coverage_overall,mlb_lineup_quality_bridge_v1,derived,YES,null_22=100.0%,null_2325=100.0%
+high_lev_k_rate_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=73.5%
+high_lev_k_rate_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=85.8%
+high_lev_bb_rate_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=73.5%
+high_lev_bb_rate_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=85.8%
+high_lev_hr_rate_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=73.5%
+high_lev_hr_rate_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=85.8%
+med_lev_k_rate_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=80.8%
+med_lev_k_rate_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=90.1%
+med_lev_bb_rate_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=80.8%
+med_lev_bb_rate_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=90.1%
+low_lev_k_rate_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=78.3%
+low_lev_k_rate_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=88.9%
+low_lev_bb_rate_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=78.3%
+low_lev_bb_rate_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=88.9%
+leverage_gap_k_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=34.6%
+leverage_gap_k_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=41.5%
+leverage_gap_bb_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=34.6%
+leverage_gap_bb_last_10,bullpen_bridge,YES,nn22=0.0%,nn2325=41.5%
+high_lev_k_rate_baseline,bullpen_bridge,YES,nn22=0.0%,nn2325=93.8%
+high_lev_k_rate_drift_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=73.5%
+high_lev_bb_rate_baseline,bullpen_bridge,YES,nn22=0.0%,nn2325=93.8%
+high_lev_bb_rate_drift_last_5,bullpen_bridge,YES,nn22=0.0%,nn2325=73.5%
+exit_prob_by_4_last_5,mlb_starter_exit_prob_v1,rolling,last_5,YES,null_22=0.0%,null_2325=69.8%
+exit_prob_by_4_last_10,mlb_starter_exit_prob_v1,rolling,last_10,YES,null_22=0.0%,null_2325=60.5%
+exit_prob_by_5_last_5,mlb_starter_exit_prob_v1,rolling,last_5,YES,null_22=0.0%,null_2325=69.8%
+exit_prob_by_5_last_10,mlb_starter_exit_prob_v1,rolling,last_10,YES,null_22=0.0%,null_2325=60.5%
+exit_prob_by_6_last_5,mlb_starter_exit_prob_v1,rolling,last_5,YES,null_22=0.0%,null_2325=69.8%
+exit_prob_by_6_last_10,mlb_starter_exit_prob_v1,rolling,last_10,YES,null_22=0.0%,null_2325=60.5%
+exit_prob_by_7_last_5,mlb_starter_exit_prob_v1,rolling,last_5,YES,null_22=0.0%,null_2325=69.8%
+exit_prob_by_7_last_10,mlb_starter_exit_prob_v1,rolling,last_10,YES,null_22=0.0%,null_2325=60.5%
+exit_prob_by_5_baseline,mlb_starter_exit_prob_v1,expanding,,YES,null_22=0.0%,null_2325=79.6%
+exit_prob_by_5_drift_last_5,mlb_starter_exit_prob_v1,rolling,last_5,YES,null_22=0.0%,null_2325=69.8%
+deterioration_score_norm,mlb_starter_exit_prob_v1,composite,,YES,null_22=0.0%,null_2325=60.0%

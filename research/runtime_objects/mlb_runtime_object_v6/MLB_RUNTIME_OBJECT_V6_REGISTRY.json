@@ -1,0 +1,25 @@
+{
+  "object_id": "mlb_runtime_object_v6",
+  "created": "2026-04-22",
+  "parent_object": "mlb_runtime_object_v5",
+  "bridge_added": "mlb_starter_exit_prob_v1",
+  "grain": "game_pk + team",
+  "shape": "19430 x 263",
+  "date_range": "2022-04-07 to 2025-09-28",
+  "scope": "2022-2025 historical only",
+  "pit_safe": true,
+  "simulation_phase": "Phase_1_Component_2_joined",
+  "new_columns": 11,
+  "outcome_columns_excluded": true,
+  "caveats": [
+    "starter exit features null for 2022 \u2014 DATA_GAP_2022_INNING",
+    "starter exit features null for first 5 starts per pitcher per season",
+    "deterioration_score null when drift/exit prob component null",
+    "bullpen leverage null for 2022 \u2014 inherited from V5",
+    "lineup quality null for 2022 \u2014 inherited from V4",
+    "effective research window for simulation features: 2023-2025"
+  ],
+  "v5_columns_modified": false,
+  "v5_rows_modified": false,
+  "status": "RUNTIME_OBJECT_READY_HISTORICAL_CLEAN"
+}

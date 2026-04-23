@@ -1,0 +1,11 @@
+# Self Audit
+- Engine foundation read? **YES**
+- Starters only? **YES**
+- Shift verified? **YES** — 5 pitchers
+- Season boundaries? **YES**
+- exit_inning = max inning? **YES**
+- No imputation? **YES**
+- No 2026? **YES**
+- Deterioration corr: **r=+0.0396**
+- PIT provenance: **PASS**
+- Runtime: 6.3s

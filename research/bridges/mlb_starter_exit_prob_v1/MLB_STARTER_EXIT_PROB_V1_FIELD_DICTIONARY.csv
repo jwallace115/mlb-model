@@ -1,0 +1,22 @@
+field_name,type,derivation,window,pit_safe,notes
+game_pk,identity,,,YES,
+team,identity,,,YES,
+game_date,identity,,,YES,
+season,identity,,,YES,
+pitcher,identity,,,YES,
+exit_inning,outcome,max inning pitched,,YES,actual outcome
+exited_by_4,outcome,exit_inning<=4,,YES,binary
+exited_by_5,outcome,exit_inning<=5,,YES,binary
+exited_by_6,outcome,exit_inning<=6,,YES,binary
+exited_by_7,outcome,exit_inning<=7,,YES,binary
+exit_prob_by_4_last_5,rolling,shift(1).rolling(5),last_5,YES,
+exit_prob_by_4_last_10,rolling,shift(1).rolling(10),last_10,YES,
+exit_prob_by_5_last_5,rolling,shift(1).rolling(5),last_5,YES,
+exit_prob_by_5_last_10,rolling,shift(1).rolling(10),last_10,YES,
+exit_prob_by_6_last_5,rolling,shift(1).rolling(5),last_5,YES,
+exit_prob_by_6_last_10,rolling,shift(1).rolling(10),last_10,YES,
+exit_prob_by_7_last_5,rolling,shift(1).rolling(5),last_5,YES,
+exit_prob_by_7_last_10,rolling,shift(1).rolling(10),last_10,YES,
+exit_prob_by_5_baseline,expanding,shift(1).expanding(),expanding,YES,
+exit_prob_by_5_drift_last_5,drift,last_5 - baseline,,YES,
+deterioration_score_norm,composite,exit_drift+velo_drift+zone_drift,,YES,season-normalized
