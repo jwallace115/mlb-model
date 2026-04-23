@@ -1,3 +1,23 @@
 {
-  "shards": []
+  "shards": [
+    {
+      "shard_id": 1,
+      "filename": "mlb_mainline_shard_0001.parquet",
+      "row_count": 5008,
+      "min_snapshot": "2022-04-07T11:00:00Z",
+      "max_snapshot": "2022-04-09T17:00:00Z",
+      "min_game_date": "2022-04-07",
+      "max_game_date": "2022-04-10",
+      "bookmakers": [
+        "betmgm",
+        "bovada",
+        "draftkings",
+        "fanduel",
+        "mybookieag",
+        "pinnacle"
+      ],
+      "sha256": "e5452755772f8113d62fd86df33f19b13d80f0171cd99f5353439afbeb2fc5ed",
+      "committed_at": null
+    }
+  ]
 }
