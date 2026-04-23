@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "0ce48ecb61f40bc3bd784adfe7f8e811",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Oklahoma City Thunder",
+    "away_team": "Phoenix Suns",
+    "commence_time": "2026-04-23T01:48:04Z",
+    "snapshot_type": "closing",
+    "total_line": 225.0,
+    "over_price": -111,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T03:00:05.106894+00:00"
+  },
+  {
+    "game_id": "b2b129565e14b8782b318b699b05ab3b",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Atlanta Hawks",
+    "away_team": "New York Knicks",
+    "commence_time": "2026-04-23T23:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 216.0,
+    "over_price": -112,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T03:00:05.106894+00:00"
+  },
+  {
+    "game_id": "b754568efb2036d7f3b661cc8093e66f",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Toronto Raptors",
+    "away_team": "Cleveland Cavaliers",
+    "commence_time": "2026-04-24T00:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 219.0,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T03:00:05.106894+00:00"
+  },
+  {
+    "game_id": "c548073cbcde990c77986a123bd2d5bd",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Minnesota Timberwolves",
+    "away_team": "Denver Nuggets",
+    "commence_time": "2026-04-24T01:30:00Z",
+    "snapshot_type": "closing",
+    "total_line": 234.0,
+    "over_price": -105,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T03:00:05.106894+00:00"
+  },
+  {
+    "game_id": "8d8ab21ae69d529ee4bd01fb8ace8276",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Philadelphia 76ers",
+    "away_team": "Boston Celtics",
+    "commence_time": "2026-04-24T23:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 216.0,
+    "over_price": -110,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T03:00:05.106894+00:00"
+  }
+]
