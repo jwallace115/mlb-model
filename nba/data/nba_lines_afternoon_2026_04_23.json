@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "b2b129565e14b8782b318b699b05ab3b",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Atlanta Hawks",
+    "away_team": "New York Knicks",
+    "commence_time": "2026-04-23T23:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 215.0,
+    "over_price": -103,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.115351+00:00"
+  },
+  {
+    "game_id": "b754568efb2036d7f3b661cc8093e66f",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Toronto Raptors",
+    "away_team": "Cleveland Cavaliers",
+    "commence_time": "2026-04-24T00:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 221.5,
+    "over_price": -104,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.115351+00:00"
+  },
+  {
+    "game_id": "c548073cbcde990c77986a123bd2d5bd",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Minnesota Timberwolves",
+    "away_team": "Denver Nuggets",
+    "commence_time": "2026-04-24T01:30:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 234.0,
+    "over_price": 101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.115351+00:00"
+  },
+  {
+    "game_id": "8d8ab21ae69d529ee4bd01fb8ace8276",
+    "game_date": "2026-04-23",
+    "sport": "NBA",
+    "home_team": "Philadelphia 76ers",
+    "away_team": "Boston Celtics",
+    "commence_time": "2026-04-24T23:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 216.0,
+    "over_price": -107,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.115351+00:00"
+  }
+]
