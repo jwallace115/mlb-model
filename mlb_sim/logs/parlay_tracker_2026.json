@@ -451,32 +451,32 @@
             "game": "SDP@COL",
             "bet": "FULL GAME UNDER",
             "line": 11.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "BAL@KCR",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "MIL@DET",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "WIN"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 17,
+      "total": 18,
       "wins": 1,
-      "losses": 16,
+      "losses": 17,
       "pending": 0,
-      "win_rate": 5.9,
-      "net_units": -11.0,
+      "win_rate": 5.6,
+      "net_units": -12.0,
       "payout_per_win": 6.0
     }
   },
