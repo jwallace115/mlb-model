@@ -2979,6 +2979,25 @@
         "pinnacle"
       ],
       "sha256": "40ddd238a904983573e495bee61381013ba10bfe4c127268af75eb6f00746472",
+      "committed_at": "2026-04-23T17:02:40.442178Z"
+    },
+    {
+      "shard_id": 158,
+      "filename": "mlb_mainline_shard_0158.parquet",
+      "row_count": 5530,
+      "min_snapshot": "2023-09-17T23:00:00Z",
+      "max_snapshot": "2023-09-19T23:00:00Z",
+      "min_game_date": "2023-09-17",
+      "max_game_date": "2023-09-21",
+      "bookmakers": [
+        "betmgm",
+        "bovada",
+        "draftkings",
+        "fanduel",
+        "mybookieag",
+        "pinnacle"
+      ],
+      "sha256": "d519bd02465fbfe9dcbf4fd4c74e4e295df290ce816efaaca4611ed7797c85ff",
       "committed_at": null
     }
   ]
