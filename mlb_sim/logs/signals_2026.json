@@ -2446,7 +2446,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Edward Cabrera",
+    "away_sp_name": "Cristopher S\u00e1nchez"
   },
   {
     "date": "2026-04-23",
@@ -2471,7 +2473,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Michael Soroka",
+    "away_sp_name": "Davis Martin"
   },
   {
     "date": "2026-04-23",
@@ -2496,6 +2500,8 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jacob deGrom",
+    "away_sp_name": "Bubba Chandler"
   }
 ]
