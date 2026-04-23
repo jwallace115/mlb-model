@@ -1,0 +1,30 @@
+{
+  "artifact_name": "mlb_archetype_within_bucket_v1",
+  "canonical_path": "/Users/jw115/mlb-model/research/archetype_engine/mlb_archetype_within_bucket_v1",
+  "test_type": "within_bucket_binary_ou",
+  "benchmark": "mlb_odds_open_canonical.parquet \u2014 7am opening line",
+  "flags_tested": [
+    "PATH_ASYMMETRY",
+    "HANDOFF_COLLAPSE",
+    "DEPTH_MISMATCH"
+  ],
+  "flags_skipped": [
+    "CONTROLLED_GAME",
+    "BURST_SUPPRESSOR"
+  ],
+  "break_even_threshold": 0.5238,
+  "bucket_definitions": {
+    "LOW_LINE": "open_total < 8.0",
+    "MID_LINE": "8.0 <= open_total <= 9.0",
+    "HIGH_LINE": "open_total > 9.0"
+  },
+  "dispositions": {
+    "PATH_ASYMMETRY": "MONITOR",
+    "HANDOFF_COLLAPSE": "MONITOR",
+    "DEPTH_MISMATCH": "MONITOR"
+  },
+  "shadow_candidates": "NONE",
+  "build_date": "2026-04-23",
+  "status": "COMPLETE",
+  "next_phase": "NO_SHADOW_CANDIDATES \u2014 archetype within-bucket program complete"
+}
