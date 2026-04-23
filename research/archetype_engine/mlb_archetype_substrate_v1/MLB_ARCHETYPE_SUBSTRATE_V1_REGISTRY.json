@@ -27,12 +27,28 @@
     },
     "bullpen_handoff": {
       "file": "mlb_archetype_bullpen_handoff_v1.parquet",
-      "shape": "19302 x 18",
-      "surviving_labels": ["TOP_HEAVY", "BALANCED_DEPTH", "DEPLETED_BRIDGE", "CLOSER_DEPENDENT"],
+      "shape": "19302 x 21",
+      "surviving_labels": ["TOP_HEAVY", "BALANCED_DEPTH", "DEPLETED_BRIDGE", "CLOSER_DEPENDENT", "USAGE_STRESSED"],
       "killed_labels": [],
-      "gate1_temporal": "All labels pass (target 40%)",
-      "gate3_talent": "All CLEANER (corr < 0.3)",
-      "window_sufficient_rate": 0.989
+      "gate1_temporal": "All labels pass (target 40%). USAGE_STRESSED retention=0.716 STABLE.",
+      "gate3_talent": "All CLEANER (corr < 0.3). USAGE_STRESSED corr_talent=+0.238 CLEANER.",
+      "window_sufficient_rate": 0.989,
+      "usage_stressed_patch": {
+        "added": "2026-04-23",
+        "note": "Added in patch — omitted from initial build due to rolling workload feature gap. Patch April 23, 2026.",
+        "thresholds": {"prior_2day_pitches_rolling_p75": 117.20, "relievers_used_prior_2days_rolling_p65": 5.30},
+        "n_discovery": 711,
+        "n_validation": 738,
+        "n_oos": 910,
+        "gate1_retention": 0.716,
+        "gate1_verdict": "STABLE",
+        "gate2_prevalence": {"2023": 20.8, "2024": 15.6, "2025": 19.2},
+        "gate3_corr_talent": 0.238,
+        "gate3_verdict": "RETAIN",
+        "gate4_status": "EDGE_TEST_READY",
+        "redundancy": "No pairs > 70% overlap (max: BALANCED_DEPTH at 20.1%)",
+        "final_status": "EDGE_TEST_READY"
+      }
     },
     "starter_behavioral": {
       "file": "mlb_archetype_starter_behavioral_v1.parquet",
@@ -68,6 +84,7 @@
     "bullpen_handoff.BALANCED_DEPTH (N=955)",
     "bullpen_handoff.DEPLETED_BRIDGE (N=836)",
     "bullpen_handoff.CLOSER_DEPENDENT (N=715)",
+    "bullpen_handoff.USAGE_STRESSED (N=711)",
     "starter_behavioral.DEEP_STABLE (N=478)",
     "starter_behavioral.SHORT_LEASH_VOLATILE (N=796)",
     "starter_behavioral.INEFFICIENT_PITCHER (N=1048)",
