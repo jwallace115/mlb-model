@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "d618bdbd532e173a5e9e0f985de4af4c",
+    "game_date": "2026-04-23",
+    "sport": "NHL",
+    "home_team": "Boston Bruins",
+    "away_team": "Buffalo Sabres",
+    "commence_time": "2026-04-23T23:20:08Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.0,
+    "over_price": -112,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.356383+00:00"
+  },
+  {
+    "game_id": "51287ae15947cf3f02665904d8b8be9d",
+    "game_date": "2026-04-23",
+    "sport": "NHL",
+    "home_team": "Ottawa Senators",
+    "away_team": "Carolina Hurricanes",
+    "commence_time": "2026-04-23T23:40:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 5.5,
+    "over_price": -119,
+    "under_price": 106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.356383+00:00"
+  },
+  {
+    "game_id": "524a4ecbfee90fb1259c3e30014629ab",
+    "game_date": "2026-04-23",
+    "sport": "NHL",
+    "home_team": "Los Angeles Kings",
+    "away_team": "Colorado Avalanche",
+    "commence_time": "2026-04-24T02:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 5.5,
+    "over_price": -101,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.356383+00:00"
+  },
+  {
+    "game_id": "ae9003a3e6fcbb6dcb1aa2bb4ce6947a",
+    "game_date": "2026-04-23",
+    "sport": "NHL",
+    "home_team": "Montr\u00e9al Canadiens",
+    "away_team": "Tampa Bay Lightning",
+    "commence_time": "2026-04-24T23:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.0,
+    "over_price": 102,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-23T18:00:03.356383+00:00"
+  }
+]
