@@ -6549,7 +6549,7 @@
         "pinnacle"
       ],
       "sha256": "521286e068ac2bb9b89c7f6da0dae0cd0ed0474a0f6a0ae82007adf53f7d6ac7",
-      "committed_at": null
+      "committed_at": "2026-04-23T21:16:13.150614+00:00"
     },
     {
       "shard_id": 5,
@@ -6567,6 +6567,42 @@
         "pinnacle"
       ],
       "sha256": "36ca5ec5a44718fa3aff0b8da60fb42a0fb05f7587ed3a0fb59803c46a62c4b4",
+      "committed_at": "2026-04-23T21:16:13.150662+00:00"
+    },
+    {
+      "shard_id": 6,
+      "filename": "mlb_team_totals_shard_0006.parquet",
+      "row_count": 6018,
+      "min_snapshot": "2024-05-21T20:00:00Z",
+      "max_snapshot": "2024-06-02T17:00:00Z",
+      "min_game_date": "2024-05-21",
+      "max_game_date": "2024-06-02",
+      "bookmakers": [
+        "betmgm",
+        "bovada",
+        "draftkings",
+        "fanduel",
+        "pinnacle"
+      ],
+      "sha256": "548f4b8832d93a04a8b8e08f47fc4b682b0328fdee3c6a60de8d6b2ce39f1d39",
+      "committed_at": null
+    },
+    {
+      "shard_id": 6,
+      "filename": "mlb_alt_totals_shard_0006.parquet",
+      "row_count": 46381,
+      "min_snapshot": "2024-05-21T20:00:00Z",
+      "max_snapshot": "2024-06-02T17:00:00Z",
+      "min_game_date": "2024-05-21",
+      "max_game_date": "2024-06-02",
+      "bookmakers": [
+        "betmgm",
+        "bovada",
+        "draftkings",
+        "fanduel",
+        "pinnacle"
+      ],
+      "sha256": "03d34704b6c853075cd1f0b328105d2963b77bd8da69d7ce5b5364d72b4d451d",
       "committed_at": null
     }
   ]
