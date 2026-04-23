@@ -25,3 +25,27 @@ REBUILD_REQUIRED: ORCHESTRATION (7 files), RUNTIME_OBJECT (5+ files), DISCOVERY_
 2026-04-22 | mlb_pitch_level_features_v1 | research/bridges/mlb_pitch_level_features_v1/ | 4 | COMMITTED ba9ab63e — 16873x66, 5 drift metrics, SHIFT_VERIFIED
 2026-04-22 | mlb_runtime_object_v3 | research/runtime_objects/mlb_runtime_object_v3/ | 5 | COMMITTED 0c72e8a7 — 19430x209, V2+59 opp_pl_*, 80.4% match
 2026-04-22 | mlb_f5_discovery_pass_02 | research/discovery/mlb_f5_discovery_pass_02/ | 4 | COMMITTED 5605d4dc — 2/53 disc advance, 0 val survive, both reversed. F5 drift market equally efficient.
+2026-04-22 | mlb_lineup_historical | mlb/data/lineups/ | 6 | COMMITTED 16226d49 — 175,086 rows, 9,713 games, 2022-2025, 102% coverage
+2026-04-22 | mlb_lineup_quality_bridge_v1 | research/bridges/mlb_lineup_quality_bridge_v1/ | 4 | COMMITTED 58c326a0 — 19426x26, prior season slot-weighted, 100% V3 match, PRIOR_SEASON_VERIFIED
+2026-04-22 | mlb_runtime_object_v4 | research/runtime_objects/mlb_runtime_object_v4/ | 5 | COMMITTED f88fdf02 — 19430x230, V3+21 lineup quality, 2022 null (no prior), 2023-2025 ~98% nn
+2026-04-22 | mlb_lineup_discovery_pass_01 | research/discovery/mlb_lineup_discovery_pass_01/ | 4 | COMMITTED b1917dc4 — 5/63 disc advance (all under), 0 val survive (4 reversed, 1 collapsed). Lineup quality adds info but market efficient.
+2026-04-22 | mlb_lineup_niche_pass_01 | research/discovery/mlb_lineup_niche_pass_01/ | 4 | COMMITTED f3f94677 — N04 (cold×bottom weak) HELD DIRECTION in 2024 (-0.061 vs broad +0.347) — only directionally consistent signal in program. Magnitude insufficient for OOS.
+2026-04-22 | mlb_bullpen_leverage_bridge_v1 | research/bridges/mlb_bullpen_leverage_bridge_v1/ | 4 | COMMITTED 340ff334 — 14798x26, HIGH/MED/LOW tiers via delta_run_exp, SHIFT_VERIFIED, 2022 DATA_GAP, sim phase 1
+2026-04-22 | mlb_runtime_object_v5 | research/runtime_objects/mlb_runtime_object_v5/ | 5 | COMMITTED cd01bf8e — 19430x252, V4+22 bullpen leverage, 2022 null, 2023-2025 ~50-58% nn, sim phase 1 joined
+2026-04-22 | mlb_bullpen_bridge_v1.1_fix | research/bridges/mlb_bullpen_leverage_bridge_v1/ | 4 | COMMITTED 3029768b — team normalization fixed, 2024/2025 match 99.2% (was 56%). Sep 2023 SOURCE DATA GAP.
+2026-04-22 | mlb_bullpen_leverage_discovery_pass_01 | research/discovery/mlb_bullpen_leverage_discovery_pass_01/ | 4 | COMMITTED 51dd2a5a — 10/40 held direction ALL 3 STAGES. REVISED: data availability artifact.
+2026-04-22 | mlb_starter_exit_prob_v1 | research/bridges/mlb_starter_exit_prob_v1/ | 4 | COMMITTED 8da67b66 — 12098x21, P(exit<=4/5/6/7) rolling, SHIFT_VERIFIED, sim phase 1 component 2
+2026-04-22 | mlb_runtime_object_v6 | research/runtime_objects/mlb_runtime_object_v6/ | 5 | COMMITTED 874034fe — 19430x263, V5+11 starter exit prob, sim phase 1 complete
+2026-04-22 | mlb_phase2a_discovery_pass_01 | research/discovery/mlb_phase2a_discovery_pass_01/ | 4 | COMMITTED f0f9585e — 0/39 surviving OOS, framework DEAD
+2026-04-22 | mlb_sim_engine_v1 | research/simulation/mlb_sim_engine_v1/ | 6 | COMMITTED 8f821834 — dist shape adj, Brier worse than baseline all seasons
+2026-04-22 | mlb_sim_shape_audit_v1 | research/simulation/mlb_sim_engine_v1/ | 1 | COMMITTED 6b873cd3 — NO_SHAPE_SIGNAL
+2026-04-22 | mlb_outcome_band_analysis_v1 | research/discovery/mlb_outcome_band_analysis_v1/ | 4 | COMMITTED ed226124 — 55 hypotheses, all monotonic mean effects
+2026-04-22 | mlb_autonomous_engine_v1 | research/discovery/mlb_autonomous_engine_v1/ | 4 | COMMITTED 22aff870 — 22 survivors, severe OOS attenuation
+2026-04-23 | mlb_inning_scoring_pull | mlb/data/scoring_paths/ | 3 | COMMITTED 30228698 — 9713 games, 88545 rows, 0 failures
+2026-04-23 | mlb_bullpen_sequences_pull | mlb/data/bullpen_sequences/ | 3 | COMMITTED ac79a656 — 9715 games, 83042 rows, 0 failures
+2026-04-23 | mlb_archetype_substrate_v1 | research/archetype_engine/mlb_archetype_substrate_v1/ | 5 | COMMITTED 45945560 — PHASE_0_COMPLETE, 16 labels, 2 killed
+2026-04-23 | PIPELINE_RESET_RECOVERY | all research artifacts | -- | RECOVERED via git reflog, pushed to origin 27235d3f
+2026-04-23 | mlb_archetype_bullpen_patch | research/archetype_engine/mlb_archetype_substrate_v1/ | 1 | COMMITTED ebd73ec0 — USAGE_STRESSED added, N_disc=711, Gate1=STABLE(0.716), Gate3=CLEANER(r=0.238), EDGE_TEST_READY
+2026-04-23 | mlb_archetype_matchup_v1 | research/archetype_engine/mlb_archetype_matchup_v1/ | 2 | COMMITTED fc891af6 — PHASE_1_COMPLETE — 100% assigned — flags: HANDOFF_COLLAPSE=163, CONTROLLED_GAME=86, DEPTH_MISMATCH=169, PATH_ASYMMETRY=420, BURST_SUPPRESSOR=34
+2026-04-23 | mlb_archetype_phase2_v1 | research/archetype_engine/mlb_archetype_phase2_v1/ | 3 | COMMITTED 13c4d2bc — PHASE_2_COMPLETE — tested: HANDOFF_COLLAPSE/DEPTH_MISMATCH/PATH_ASYMMETRY — shadow candidates: NONE — PATH_ASYMMETRY DEAD (val reversal), HANDOFF_COLLAPSE LOW_SAMPLE, DEPTH_MISMATCH LOW_SAMPLE
+2026-04-23 | mlb_archetype_within_bucket_v1 | research/archetype_engine/mlb_archetype_within_bucket_v1/ | 3 | COMMITTED d8eb8e9d — 3 flags MONITOR, 0 shadow candidates — DEPTH_MISMATCH best: HIGH_LINE under consistent all 3 stages (disc -0.066, val -0.111, oos -0.101) but all p>0.20
