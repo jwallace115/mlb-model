@@ -251,7 +251,9 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 5.5,
       "lambda_total": 6.735,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 7
     },
     {
       "game_id": 2025030182,
@@ -263,7 +265,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 6.002,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 10
     }
   ]
 }

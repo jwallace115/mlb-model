@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-22T11:03:49.300314+00:00",
-  "game_date": "2026-04-22",
+  "generated_at": "2026-04-23T11:03:42.322699+00:00",
+  "game_date": "2026-04-23",
   "is_playoff_day": false,
   "plays": [],
   "no_plays": [],
@@ -49,15 +49,15 @@
     },
     {
       "game_date": "2026-04-12",
-      "away_team": "CHI",
-      "home_team": "DAL",
+      "away_team": "BKN",
+      "home_team": "TOR",
       "signal_side": "UNDER",
-      "line": 246.0,
-      "edge": -9.13,
+      "line": 219.5,
+      "edge": -1.77,
       "result": "LOSS",
       "tier": "MEDIUM",
-      "pred_total": 236.87,
-      "actual_total": 277.0
+      "pred_total": 217.73,
+      "actual_total": 237.0
     },
     {
       "game_date": "2026-04-12",
@@ -121,18 +121,6 @@
     },
     {
       "game_date": "2026-04-12",
-      "away_team": "BKN",
-      "home_team": "TOR",
-      "signal_side": "UNDER",
-      "line": 219.5,
-      "edge": -1.77,
-      "result": "LOSS",
-      "tier": "MEDIUM",
-      "pred_total": 217.73,
-      "actual_total": 237.0
-    },
-    {
-      "game_date": "2026-04-12",
       "away_team": "MIL",
       "home_team": "PHI",
       "signal_side": "OVER",
@@ -142,6 +130,18 @@
       "tier": "LOW",
       "pred_total": 227.41,
       "actual_total": 232.0
+    },
+    {
+      "game_date": "2026-04-12",
+      "away_team": "CHI",
+      "home_team": "DAL",
+      "signal_side": "UNDER",
+      "line": 246.0,
+      "edge": -9.13,
+      "result": "LOSS",
+      "tier": "MEDIUM",
+      "pred_total": 236.87,
+      "actual_total": 277.0
     },
     {
       "game_date": "2026-04-12",
@@ -217,15 +217,15 @@
     },
     {
       "game_date": "2026-04-10",
-      "away_team": "OKC",
-      "home_team": "DEN",
-      "signal_side": "OVER",
-      "line": 231.5,
-      "edge": 0.73,
-      "result": "WIN",
+      "away_team": "GSW",
+      "home_team": "SAC",
+      "signal_side": "UNDER",
+      "line": 229.5,
+      "edge": -19.89,
+      "result": "LOSS",
       "tier": "LOW",
-      "pred_total": 232.23,
-      "actual_total": 234.0
+      "pred_total": 209.61,
+      "actual_total": 242.0
     },
     {
       "game_date": "2026-04-10",
@@ -241,18 +241,6 @@
     },
     {
       "game_date": "2026-04-10",
-      "away_team": "GSW",
-      "home_team": "SAC",
-      "signal_side": "UNDER",
-      "line": 229.5,
-      "edge": -19.89,
-      "result": "LOSS",
-      "tier": "LOW",
-      "pred_total": 209.61,
-      "actual_total": 242.0
-    },
-    {
-      "game_date": "2026-04-10",
       "away_team": "LAC",
       "home_team": "POR",
       "signal_side": "UNDER",
@@ -265,15 +253,15 @@
     },
     {
       "game_date": "2026-04-10",
-      "away_team": "MEM",
-      "home_team": "UTA",
+      "away_team": "NOP",
+      "home_team": "BOS",
       "signal_side": "UNDER",
-      "line": 248.0,
-      "edge": -22.22,
-      "result": "PUSH",
+      "line": 224.0,
+      "edge": -4.1,
+      "result": "LOSS",
       "tier": "LOW",
-      "pred_total": 225.78,
-      "actual_total": 248.0
+      "pred_total": 219.9,
+      "actual_total": 262.0
     },
     {
       "game_date": "2026-04-10",
@@ -289,6 +277,18 @@
     },
     {
       "game_date": "2026-04-10",
+      "away_team": "OKC",
+      "home_team": "DEN",
+      "signal_side": "OVER",
+      "line": 231.5,
+      "edge": 0.73,
+      "result": "WIN",
+      "tier": "LOW",
+      "pred_total": 232.23,
+      "actual_total": 234.0
+    },
+    {
+      "game_date": "2026-04-10",
       "away_team": "DAL",
       "home_team": "SAS",
       "signal_side": "UNDER",
@@ -301,15 +301,15 @@
     },
     {
       "game_date": "2026-04-10",
-      "away_team": "DET",
-      "home_team": "CHA",
-      "signal_side": "UNDER",
-      "line": 224.0,
-      "edge": -0.86,
+      "away_team": "BKN",
+      "home_team": "MIL",
+      "signal_side": "OVER",
+      "line": 219.0,
+      "edge": 6.84,
       "result": "WIN",
-      "tier": "MEDIUM",
-      "pred_total": 223.14,
-      "actual_total": 218.0
+      "tier": "LOW",
+      "pred_total": 225.84,
+      "actual_total": 233.0
     },
     {
       "game_date": "2026-04-10",
@@ -349,15 +349,15 @@
     },
     {
       "game_date": "2026-04-10",
-      "away_team": "NOP",
-      "home_team": "BOS",
+      "away_team": "MEM",
+      "home_team": "UTA",
       "signal_side": "UNDER",
-      "line": 224.0,
-      "edge": -4.1,
-      "result": "LOSS",
+      "line": 248.0,
+      "edge": -22.22,
+      "result": "PUSH",
       "tier": "LOW",
-      "pred_total": 219.9,
-      "actual_total": 262.0
+      "pred_total": 225.78,
+      "actual_total": 248.0
     },
     {
       "game_date": "2026-04-10",
@@ -385,15 +385,27 @@
     },
     {
       "game_date": "2026-04-10",
-      "away_team": "BKN",
-      "home_team": "MIL",
-      "signal_side": "OVER",
-      "line": 219.0,
-      "edge": 6.84,
+      "away_team": "DET",
+      "home_team": "CHA",
+      "signal_side": "UNDER",
+      "line": 224.0,
+      "edge": -0.86,
       "result": "WIN",
+      "tier": "MEDIUM",
+      "pred_total": 223.14,
+      "actual_total": 218.0
+    },
+    {
+      "game_date": "2026-04-09",
+      "away_team": "BOS",
+      "home_team": "NYK",
+      "signal_side": "UNDER",
+      "line": 215.5,
+      "edge": -0.28,
+      "result": "LOSS",
       "tier": "LOW",
-      "pred_total": 225.84,
-      "actual_total": 233.0
+      "pred_total": 215.22,
+      "actual_total": 218.0
     },
     {
       "game_date": "2026-04-09",
@@ -406,18 +418,6 @@
       "tier": "MEDIUM",
       "pred_total": 231.98,
       "actual_total": 217.0
-    },
-    {
-      "game_date": "2026-04-09",
-      "away_team": "MIA",
-      "home_team": "TOR",
-      "signal_side": "UNDER",
-      "line": 239.0,
-      "edge": -5.23,
-      "result": "LOSS",
-      "tier": "MEDIUM",
-      "pred_total": 233.77,
-      "actual_total": 242.0
     },
     {
       "game_date": "2026-04-09",
@@ -445,18 +445,6 @@
     },
     {
       "game_date": "2026-04-09",
-      "away_team": "BOS",
-      "home_team": "NYK",
-      "signal_side": "UNDER",
-      "line": 215.5,
-      "edge": -0.28,
-      "result": "LOSS",
-      "tier": "LOW",
-      "pred_total": 215.22,
-      "actual_total": 218.0
-    },
-    {
-      "game_date": "2026-04-09",
       "away_team": "LAL",
       "home_team": "GSW",
       "signal_side": "UNDER",
@@ -468,88 +456,16 @@
       "actual_total": 222.0
     },
     {
-      "game_date": "2026-04-08",
-      "away_team": "POR",
-      "home_team": "SAS",
+      "game_date": "2026-04-09",
+      "away_team": "MIA",
+      "home_team": "TOR",
       "signal_side": "UNDER",
-      "line": 228.5,
-      "edge": -10.8,
-      "result": "WIN",
-      "tier": "LOW",
-      "pred_total": 217.7,
-      "actual_total": 213.0
-    },
-    {
-      "game_date": "2026-04-08",
-      "away_team": "MIL",
-      "home_team": "DET",
-      "signal_side": "OVER",
-      "line": 222.0,
-      "edge": 4.83,
-      "result": "WIN",
-      "tier": "LOW",
-      "pred_total": 226.83,
-      "actual_total": 248.0
-    },
-    {
-      "game_date": "2026-04-08",
-      "away_team": "MEM",
-      "home_team": "DEN",
-      "signal_side": "UNDER",
-      "line": 246.5,
-      "edge": -4.3,
+      "line": 239.0,
+      "edge": -5.23,
       "result": "LOSS",
-      "tier": "LOW",
-      "pred_total": 242.2,
-      "actual_total": 255.0
-    },
-    {
-      "game_date": "2026-04-08",
-      "away_team": "MIN",
-      "home_team": "ORL",
-      "signal_side": "UNDER",
-      "line": 231.5,
-      "edge": -21.55,
-      "result": "LOSS",
-      "tier": "LOW",
-      "pred_total": 209.95,
-      "actual_total": 252.0
-    },
-    {
-      "game_date": "2026-04-08",
-      "away_team": "OKC",
-      "home_team": "LAC",
-      "signal_side": "OVER",
-      "line": 225.5,
-      "edge": 1.43,
-      "result": "WIN",
-      "tier": "LOW",
-      "pred_total": 226.93,
-      "actual_total": 238.0
-    },
-    {
-      "game_date": "2026-04-08",
-      "away_team": "DAL",
-      "home_team": "PHX",
-      "signal_side": "UNDER",
-      "line": 233.0,
-      "edge": -9.71,
-      "result": "WIN",
-      "tier": "LOW",
-      "pred_total": 223.29,
-      "actual_total": 219.0
-    },
-    {
-      "game_date": "2026-04-08",
-      "away_team": "ATL",
-      "home_team": "CLE",
-      "signal_side": "UNDER",
-      "line": 236.5,
-      "edge": -6.19,
-      "result": "LOSS",
-      "tier": "LOW",
-      "pred_total": 230.31,
-      "actual_total": 238.0
+      "tier": "MEDIUM",
+      "pred_total": 233.77,
+      "actual_total": 242.0
     }
   ],
   "ot_diagnostics": {
@@ -631,8 +547,8 @@
     }
   },
   "daily_review": {
-    "generated_at": "2026-04-22T11:03:49.488430+00:00",
-    "date_reviewed": "2026-04-21",
+    "generated_at": "2026-04-23T11:03:42.461118+00:00",
+    "date_reviewed": "2026-04-22",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
