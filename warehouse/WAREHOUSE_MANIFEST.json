@@ -3663,6 +3663,25 @@
         "pinnacle"
       ],
       "sha256": "fbe7af0a072385f8793f1c16e9dd09cd9255b3a0aa1853062e77c9af4f525171",
+      "committed_at": "2026-04-23T17:18:23.990737Z"
+    },
+    {
+      "shard_id": 194,
+      "filename": "mlb_mainline_shard_0194.parquet",
+      "row_count": 5034,
+      "min_snapshot": "2024-05-27T23:00:00Z",
+      "max_snapshot": "2024-05-29T17:00:00Z",
+      "min_game_date": "2024-05-27",
+      "max_game_date": "2024-05-30",
+      "bookmakers": [
+        "betmgm",
+        "bovada",
+        "draftkings",
+        "fanduel",
+        "mybookieag",
+        "pinnacle"
+      ],
+      "sha256": "037cf22dd0814f67d027083a256e7dc95b0a6f05e594769f99bf6b815fb06c6d",
       "committed_at": null
     }
   ]
