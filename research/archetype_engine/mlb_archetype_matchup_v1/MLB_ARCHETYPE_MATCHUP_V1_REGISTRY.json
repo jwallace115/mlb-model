@@ -1,0 +1,38 @@
+{
+  "artifact_name": "mlb_archetype_matchup_v1",
+  "canonical_path": "/Users/jw115/mlb-model/research/archetype_engine/mlb_archetype_matchup_v1/",
+  "phase": "PHASE_1_MATCHUP_INTERACTION",
+  "spec_version": "v2",
+  "input_substrates": {
+    "scoring_path": "mlb_archetype_scoring_path_v1.parquet",
+    "bullpen_handoff": "mlb_archetype_bullpen_handoff_v1.parquet",
+    "starter_behavioral": "mlb_archetype_starter_behavioral_v1.parquet",
+    "lineup_stability": "mlb_archetype_lineup_stability_v1.parquet"
+  },
+  "matchup_flags": {
+    "HANDOFF_COLLAPSE": "SHORT_LEASH_VOLATILE starter x DEPLETED_BRIDGE bullpen (same team) — structural over",
+    "CONTROLLED_GAME": "DEEP_STABLE starter x TOP_HEAVY bullpen (same team) — structural under",
+    "DEPTH_MISMATCH": "USAGE_STRESSED bullpen x opposing STABLE_DEEP lineup (cross-team) — late-inning disadvantage",
+    "PATH_ASYMMETRY": "FRONT_LOADED offense x opposing BACK_LOADED offense (cross-team) — divergent game path",
+    "BURST_SUPPRESSOR": "CLUSTERED offense x opposing DEEP_STABLE starter (cross-team) — high variance distribution"
+  },
+  "windows": {
+    "discovery": "2023-04-01 to 2023-08-31 (September 2023 excluded)",
+    "validation": "2024-04-01 to 2024-10-01",
+    "oos": "2025-04-01 to 2025-10-01"
+  },
+  "flag_counts": {
+    "HANDOFF_COLLAPSE": {"discovery": 163, "validation": 231, "oos": 179, "flag_eligible_disc": 1919, "status": "EDGE_TEST_PENDING"},
+    "CONTROLLED_GAME": {"discovery": 86, "validation": 101, "oos": 90, "flag_eligible_disc": 1919, "status": "TAXONOMY_FLOOR_NOT_MET"},
+    "DEPTH_MISMATCH": {"discovery": 169, "validation": 212, "oos": 245, "flag_eligible_disc": 1952, "status": "EDGE_TEST_PENDING"},
+    "PATH_ASYMMETRY": {"discovery": 420, "validation": 556, "oos": 509, "flag_eligible_disc": 1953, "status": "EDGE_TEST_READY"},
+    "BURST_SUPPRESSOR": {"discovery": 34, "validation": 48, "oos": 24, "flag_eligible_disc": 1926, "status": "TAXONOMY_FLOOR_NOT_MET"}
+  },
+  "row_count": 9522,
+  "fully_assigned_pct": 100.0,
+  "multi_flag_rate_disc": 5.7,
+  "zero_flag_rate_disc": 61.5,
+  "build_date": "2026-04-23",
+  "status": "PHASE_1_COMPLETE",
+  "next_phase": "PHASE_2_OUTCOME_TESTING — benchmark: mlb_odds_open_canonical.parquet"
+}
