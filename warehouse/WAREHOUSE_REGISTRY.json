@@ -1,0 +1,32 @@
+{
+  "warehouse_version": "v1",
+  "created": "2026-04-23",
+  "branch": "warehouse",
+  "build_status": "IN_PROGRESS",
+  "sports": {
+    "baseball_mlb": {
+      "phase": "PHASE_1_MAINLINE",
+      "markets": ["h2h", "spreads", "totals"],
+      "bookmakers": ["draftkings","fanduel","betmgm","caesars","hard_rock","bet365","bovada","betonline_ag","mybookieag","pinnacle"],
+      "seasons": ["2022","2023","2024","2025"],
+      "snapshot_times_utc": ["11:00","14:00","17:00","20:00","23:00"],
+      "snapshot_times_et": ["6am","9am","noon","3pm","6pm"],
+      "season_date_ranges": {
+        "2022": ["2022-04-07","2022-10-05"],
+        "2023": ["2023-03-30","2023-10-01"],
+        "2024": ["2024-03-20","2024-10-01"],
+        "2025": ["2025-03-27","2025-09-28"]
+      },
+      "shards_expected": null,
+      "shards_complete": 0,
+      "status": "IN_PROGRESS"
+    }
+  },
+  "durability": {
+    "checkpoint_interval": 500,
+    "shard_interval": 5000,
+    "commit_interval": 5000,
+    "branch": "warehouse",
+    "never_push_to_main": true
+  }
+}
