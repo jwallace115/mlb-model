@@ -63,3 +63,6 @@ nhl/cache/moneypuck_all_teams.csv
 nhl/cache/
 research/signal_discovery/engine6_cascade/mlb_pbp_2022_2025.parquet
 research/signal_discovery/
+
+# ── Research session log (never reset by pipeline) ──
+research/SESSION_LOG.txt
