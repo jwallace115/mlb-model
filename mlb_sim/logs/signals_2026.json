@@ -2574,7 +2574,14 @@
     "pre_overlay_tracking": false,
     "signal_status": "CONFIRMED",
     "home_sp_name": "Bryan Hudson",
-    "away_sp_name": "Miles Mikolas"
+    "away_sp_name": "Miles Mikolas",
+    "scratch_voided": true,
+    "scratch_detected": true,
+    "original_home_sp": "Bryan Hudson",
+    "original_away_sp": "Miles Mikolas",
+    "replacement_home_sp": "Bryan Hudson",
+    "replacement_away_sp": "PJ Poulin",
+    "scratch_detected_at": "2026-04-24T22:30:05.977207+00:00"
   },
   {
     "date": "2026-04-24",
