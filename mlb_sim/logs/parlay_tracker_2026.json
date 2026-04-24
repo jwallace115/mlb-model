@@ -477,18 +477,44 @@
             "game": "PHI@CHC",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "CHW@ARI",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "PIT@TEX",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
+            "result": "WIN"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-24",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "PHI@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "CHC@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "NYY@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
             "result": null
           }
         ],
@@ -497,12 +523,12 @@
       }
     ],
     "summary": {
-      "total": 18,
+      "total": 19,
       "wins": 1,
-      "losses": 17,
+      "losses": 18,
       "pending": 0,
-      "win_rate": 5.6,
-      "net_units": -12.0,
+      "win_rate": 5.3,
+      "net_units": -13.0,
       "payout_per_win": 6.0
     }
   },
@@ -849,6 +875,44 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-04-24",
+        "type": "5-leg",
+        "legs": [
+          {
+            "game": "PHI@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "CHC@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "NYY@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "WSN@CHW",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "BOS@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {
