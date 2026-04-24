@@ -268,6 +268,18 @@
       "drift_applied": 0.0,
       "result": "LOSS",
       "actual_total": 10
+    },
+    {
+      "game_id": 2025030183,
+      "game_date": "2026-04-24",
+      "home_team": "ANA",
+      "away_team": "EDM",
+      "signal_side": "UNDER",
+      "edge": 0.1619,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 6.15,
+      "drift_applied": 0.0
     }
   ]
 }
