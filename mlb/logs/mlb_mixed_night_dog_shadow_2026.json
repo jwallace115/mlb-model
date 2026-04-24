@@ -53,6 +53,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "2-5"
+    },
+    {
+      "game_pk": 822992,
+      "game_date": "2026-04-24",
+      "matchup": "MIN @ TBR",
+      "fav_team": "TBR",
+      "dog_team": "MIN",
+      "fav_side": "home",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": -0.752,
+      "off_diff": 0.4,
+      "bp_era_diff": -0.473,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
     }
   ]
 }
