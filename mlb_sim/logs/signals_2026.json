@@ -2518,7 +2518,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Brandon Young",
+    "away_sp_name": "Brayan Bello"
   },
   {
     "date": "2026-04-24",
@@ -2543,7 +2545,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Grant Holmes",
+    "away_sp_name": "Andrew Painter"
   },
   {
     "date": "2026-04-24",
@@ -2568,7 +2572,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Bryan Hudson",
+    "away_sp_name": "Miles Mikolas"
   },
   {
     "date": "2026-04-24",
@@ -2593,7 +2599,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Lance McCullers Jr.",
+    "away_sp_name": "Will Warren"
   },
   {
     "date": "2026-04-24",
@@ -2618,6 +2626,8 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Emmet Sheehan",
+    "away_sp_name": "Jameson Taillon"
   }
 ]
