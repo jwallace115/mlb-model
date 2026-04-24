@@ -1,0 +1,8 @@
+signal_id,direction,leakage_risk,disc_hit_rate,val_hit_rate,oos_hit_rate,oos_real_roi,attenuation_oos,oos_n,verdict,deploy_flag,notes
+ARCH_01,OVER,SELECTION_LEAKAGE_LIKELY,0.643,0.438,0.704,34.3,-9.5,27,CLEAN,True,OOS strengthens vs disc
+ARCH_02,UNDER,SELECTION_LEAKAGE_LIKELY,0.656,0.65,0.643,22.7,2.0,28,CLEAN,True,Most consistent signal — stable all 4 seasons
+ARCH_03,OVER,SELECTION_LEAKAGE_LIKELY,0.615,0.611,0.647,23.5,-5.1,17,CLEAN,True,Strengthens OOS
+ARCH_04,UNDER,SELECTION_LEAKAGE_LIKELY,0.6,0.6,0.7,33.6,-16.7,10,INSUFFICIENT_SAMPLE,True,N=10 thin but direction holds
+ARCH_05,UNDER,SELECTION_LEAKAGE_LIKELY,0.556,0.75,0.286,-45.5,48.6,7,INSUFFICIENT_SAMPLE,True,"N=7, reversed OOS — monitor closely"
+ARCH_06,OVER,SELECTION_LEAKAGE_LIKELY,0.565,0.667,0.545,4.1,3.5,11,INSUFFICIENT_SAMPLE,True,Marginal but direction holds
+ARCH_07,OVER,SELECTION_LEAKAGE_LIKELY,0.55,0.833,0.667,27.3,-21.2,18,CLEAN,True,Strong OOS improvement
