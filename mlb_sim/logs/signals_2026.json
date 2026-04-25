@@ -2638,7 +2638,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Zac Gallen",
+    "away_sp_name": "Germ\u00e1n M\u00e1rquez"
   },
   {
     "date": "2026-04-25",
@@ -2663,7 +2665,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Mike Burrows",
+    "away_sp_name": "Ryan Weathers"
   },
   {
     "date": "2026-04-25",
@@ -2688,7 +2692,9 @@
     "signal_class": "S12_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jacob Misiorowski",
+    "away_sp_name": "Mitch Keller"
   },
   {
     "date": "2026-04-25",
@@ -2713,7 +2719,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Brady Singer",
+    "away_sp_name": "Jack Flaherty"
   },
   {
     "date": "2026-04-25",
@@ -2738,7 +2746,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Roki Sasaki",
+    "away_sp_name": "Colin Rea"
   },
   {
     "date": "2026-04-25",
@@ -2763,6 +2773,8 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Bryce Elder",
+    "away_sp_name": "Zack Wheeler"
   }
 ]
