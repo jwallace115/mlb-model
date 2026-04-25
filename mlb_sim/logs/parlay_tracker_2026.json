@@ -503,12 +503,38 @@
             "game": "PHI@ATL",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "CHC@LAD",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
+            "result": "LOSS"
+          },
+          {
+            "game": "NYY@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-25",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "SDP@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 15.5,
+            "result": null
+          },
+          {
+            "game": "PHI@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
             "result": null
           },
           {
@@ -523,12 +549,12 @@
       }
     ],
     "summary": {
-      "total": 19,
+      "total": 20,
       "wins": 1,
-      "losses": 18,
+      "losses": 19,
       "pending": 0,
-      "win_rate": 5.3,
-      "net_units": -13.0,
+      "win_rate": 5.0,
+      "net_units": -14.0,
       "payout_per_win": 6.0
     }
   },
@@ -884,12 +910,50 @@
             "game": "PHI@ATL",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "CHC@LAD",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
+            "result": "LOSS"
+          },
+          {
+            "game": "NYY@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": "LOSS"
+          },
+          {
+            "game": "WSN@CHW",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": "WIN"
+          },
+          {
+            "game": "BOS@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-25",
+        "type": "5-leg",
+        "legs": [
+          {
+            "game": "SDP@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 15.5,
+            "result": null
+          },
+          {
+            "game": "PHI@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 8.5,
             "result": null
           },
           {
@@ -899,13 +963,13 @@
             "result": null
           },
           {
-            "game": "WSN@CHW",
+            "game": "CHC@LAD",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
             "result": null
           },
           {
-            "game": "BOS@BAL",
+            "game": "DET@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
             "result": null
@@ -916,12 +980,12 @@
       }
     ],
     "summary": {
-      "total": 9,
+      "total": 10,
       "wins": 0,
-      "losses": 9,
+      "losses": 10,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -9.0,
+      "net_units": -10.0,
       "payout_per_win": 24.0
     }
   },
