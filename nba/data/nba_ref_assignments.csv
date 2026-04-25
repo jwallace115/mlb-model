@@ -1,5 +1,5 @@
 game_id,game_date,home_team,away_team,ref_1,ref_2,ref_3,crew_high_count,crew_high_exact,ref_signal
-0042500103,2026-04-25,ORL,DET,,,,,,UNKNOWN
-0042500143,2026-04-25,PHX,OKC,,,,,,UNKNOWN
-0042500124,2026-04-25,ATL,NYK,,,,,,UNKNOWN
-0042500164,2026-04-25,MIN,DEN,,,,,,UNKNOWN
+0042500103,2026-04-25,ORL,DET,Mitchell Ervin,Nick Buchert,Tony Brothers,2,2,REF_OVER
+0042500143,2026-04-25,PHX,OKC,James Capers,Kevin Cutler,Tyler Ford,0,0,REF_UNDER
+0042500124,2026-04-25,ATL,NYK,Gediminas Petraitis,Scott Foster,Sean Corbin,2,2,REF_OVER
+0042500164,2026-04-25,MIN,DEN,Marc Davis,Pat Fraher,Sean Wright,1,1,NONE
