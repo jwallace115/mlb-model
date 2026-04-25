@@ -279,6 +279,20 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 6.15,
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 11
+    },
+    {
+      "game_id": 2025030144,
+      "game_date": "2026-04-25",
+      "home_team": "PHI",
+      "away_team": "PIT",
+      "signal_side": "OVER",
+      "edge": 0.1421,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 5.5,
+      "lambda_total": 6.735,
       "drift_applied": 0.0
     }
   ]

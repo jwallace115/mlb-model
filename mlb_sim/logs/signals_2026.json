@@ -2638,7 +2638,7 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED"
   },
   {
     "date": "2026-04-25",
@@ -2663,7 +2663,7 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED"
   },
   {
     "date": "2026-04-25",
@@ -2688,7 +2688,7 @@
     "signal_class": "S12_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED"
   },
   {
     "date": "2026-04-25",
@@ -2713,7 +2713,7 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED"
   },
   {
     "date": "2026-04-25",
@@ -2738,7 +2738,7 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED"
   },
   {
     "date": "2026-04-25",
@@ -2763,6 +2763,6 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "PRELIMINARY"
+    "signal_status": "CONFIRMED"
   }
 ]
