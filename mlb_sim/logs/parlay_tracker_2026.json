@@ -529,16 +529,42 @@
             "game": "SDP@ARI",
             "bet": "FULL GAME UNDER",
             "line": 15.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "PHI@ATL",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "NYY@HOU",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-04-26",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "SDP@ARI",
+            "bet": "FULL GAME UNDER",
+            "line": 15.5,
+            "result": null
+          },
+          {
+            "game": "CHC@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "DET@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
             "result": null
@@ -549,12 +575,12 @@
       }
     ],
     "summary": {
-      "total": 20,
+      "total": 21,
       "wins": 1,
-      "losses": 19,
+      "losses": 20,
       "pending": 0,
-      "win_rate": 5.0,
-      "net_units": -14.0,
+      "win_rate": 4.8,
+      "net_units": -15.0,
       "payout_per_win": 6.0
     }
   },
@@ -948,44 +974,44 @@
             "game": "SDP@ARI",
             "bet": "FULL GAME UNDER",
             "line": 15.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "PHI@ATL",
             "bet": "FULL GAME UNDER",
             "line": 8.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "NYY@HOU",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "CHC@LAD",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "DET@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 10,
+      "total": 11,
       "wins": 0,
-      "losses": 10,
+      "losses": 11,
       "pending": 0,
       "win_rate": 0.0,
-      "net_units": -10.0,
+      "net_units": -11.0,
       "payout_per_win": 24.0
     }
   },
