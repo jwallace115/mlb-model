@@ -2782,7 +2782,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Rhett Lowder",
+    "away_sp_name": "Keider Montero"
   },
   {
     "date": "2026-04-26",
@@ -2807,7 +2809,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Spencer Arrighetti",
+    "away_sp_name": "Luis Gil"
   },
   {
     "date": "2026-04-26",
@@ -2832,7 +2836,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Ryne Nelson",
+    "away_sp_name": "Michael King"
   },
   {
     "date": "2026-04-26",
@@ -2857,6 +2863,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Justin Wrobleski",
+    "away_sp_name": "Shota Imanaga"
   }
 ]
