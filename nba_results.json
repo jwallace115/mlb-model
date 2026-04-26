@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-25T11:04:06.174038+00:00",
-  "game_date": "2026-04-25",
+  "generated_at": "2026-04-26T11:03:54.594287+00:00",
+  "game_date": "2026-04-26",
   "is_playoff_day": false,
   "plays": [],
   "no_plays": [],
@@ -295,10 +295,11 @@
     }
   },
   "daily_review": {
-    "generated_at": "2026-04-25T11:04:06.391857+00:00",
-    "date_reviewed": "2026-04-24",
+    "generated_at": "2026-04-26T11:03:54.700922+00:00",
+    "date_reviewed": "2026-04-25",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  }
+  },
+  "weekly_review": null
 }

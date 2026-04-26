@@ -70,6 +70,22 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "L",
       "final_score": "2-6"
+    },
+    {
+      "game_pk": 824122,
+      "game_date": "2026-04-26",
+      "matchup": "LAA @ KCR",
+      "fav_team": "KCR",
+      "dog_team": "LAA",
+      "fav_side": "home",
+      "fav_implied": 0.5284,
+      "dog_ml_price": 107,
+      "sp_fip_diff": -0.12,
+      "off_diff": 0.8,
+      "bp_era_diff": 0.176,
+      "day_night": "night",
+      "local_start_hour": 18.333333333333332,
+      "win_loss": null
     }
   ]
 }
