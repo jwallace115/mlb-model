@@ -310,6 +310,18 @@
       "drift_applied": 0.0,
       "result": "WIN",
       "actual_total": 6
+    },
+    {
+      "game_id": 2025030154,
+      "game_date": "2026-04-26",
+      "home_team": "LAK",
+      "away_team": "COL",
+      "signal_side": "OVER",
+      "edge": 0.1372,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 4.5,
+      "lambda_total": 5.944,
+      "drift_applied": 0.0
     }
   ]
 }
