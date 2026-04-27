@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "371ff765cd40348073b510b2f45d81e9",
+    "game_date": "2026-04-28",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "New York Yankees",
+    "commence_time": "2026-04-28T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-27T06:05:02.601673+00:00"
+  },
+  {
+    "game_id": "717163f13d80f9495ad5b88b9396ca1a",
+    "game_date": "2026-04-28",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Chicago Cubs",
+    "commence_time": "2026-04-28T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -102,
+    "under_price": -112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-27T06:05:02.601673+00:00"
+  },
+  {
+    "game_id": "65f2df473a540a92e7f974a290ed36fb",
+    "game_date": "2026-04-28",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Miami Marlins",
+    "commence_time": "2026-04-28T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-27T06:05:02.601673+00:00"
+  }
+]

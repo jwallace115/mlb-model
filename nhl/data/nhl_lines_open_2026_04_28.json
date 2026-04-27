@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "8ac64c0fb7471af7aaeb79ec29b21108",
+    "game_date": "2026-04-28",
+    "sport": "NHL",
+    "home_team": "Utah Mammoth",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-04-28T01:30:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -120,
+    "under_price": 105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-27T06:05:03.154682+00:00"
+  },
+  {
+    "game_id": "dd8f3e272072c61a152ca09488cca7c8",
+    "game_date": "2026-04-28",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Boston Bruins",
+    "commence_time": "2026-04-28T23:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -102,
+    "under_price": -112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-27T06:05:03.154682+00:00"
+  },
+  {
+    "game_id": "e8322a50bcedf7972380cade07b6278d",
+    "game_date": "2026-04-28",
+    "sport": "NHL",
+    "home_team": "Dallas Stars",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-04-29T00:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -121,
+    "under_price": 105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-27T06:05:03.154682+00:00"
+  },
+  {
+    "game_id": "31e4aee667b88ad646e816ee99e31915",
+    "game_date": "2026-04-28",
+    "sport": "NHL",
+    "home_team": "Edmonton Oilers",
+    "away_team": "Anaheim Ducks",
+    "commence_time": "2026-04-29T02:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -166,
+    "under_price": 140,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-27T06:05:03.154682+00:00"
+  },
+  {
+    "game_id": "380c27de2b84a263be1c51bd96c29a4c",
+    "game_date": "2026-04-28",
+    "sport": "NHL",
+    "home_team": "Tampa Bay Lightning",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-04-29T23:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -118,
+    "under_price": -102,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-27T06:05:03.154682+00:00"
+  }
+]
