@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "d907fb8cd63fbde63d560602dec6d6ab",
+    "game_date": "2026-04-27",
+    "sport": "NHL",
+    "home_team": "Pittsburgh Penguins",
+    "away_team": "Philadelphia Flyers",
+    "commence_time": "2026-04-27T23:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": 106,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-27T22:00:02.801415+00:00"
+  },
+  {
+    "game_id": "8ac64c0fb7471af7aaeb79ec29b21108",
+    "game_date": "2026-04-27",
+    "sport": "NHL",
+    "home_team": "Utah Mammoth",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-04-28T01:40:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": 106,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-27T22:00:02.801415+00:00"
+  },
+  {
+    "game_id": "dd8f3e272072c61a152ca09488cca7c8",
+    "game_date": "2026-04-27",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Boston Bruins",
+    "commence_time": "2026-04-28T23:40:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.0,
+    "over_price": 101,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-27T22:00:02.801415+00:00"
+  }
+]
