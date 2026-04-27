@@ -1,21 +1,37 @@
 {
-  "generated_at": "2026-04-27T07:00:24.891552",
+  "generated_at": "2026-04-27T08:00:19.045802",
   "sport": "golf",
   "season_stats": {
     "make_cut": {
-      "n": 547,
-      "hit_rate": 52.7,
-      "roi": -9.5,
-      "clv": -9.6
+      "n": 597,
+      "hit_rate": 53.8,
+      "roi": -10.3,
+      "clv": -9.5
     },
     "top_20": {
-      "n": 185,
-      "hit_rate": 37.8,
-      "roi": 455.2,
-      "clv": -51.1
+      "n": 665,
+      "hit_rate": 34.3,
+      "roi": 149.8,
+      "clv": -17.0
     }
   },
   "recent_results": [
+    {
+      "event_name": "RBC Heritage",
+      "event_id": 12,
+      "year": 2026,
+      "n_candidates": 244,
+      "hit_rate": 30.3,
+      "roi": 21.2
+    },
+    {
+      "event_name": "Masters Tournament",
+      "event_id": 14,
+      "year": 2026,
+      "n_candidates": 286,
+      "hit_rate": 40.9,
+      "roi": 32.3
+    },
     {
       "event_name": "Texas Children's Houston Open",
       "event_id": 20,
