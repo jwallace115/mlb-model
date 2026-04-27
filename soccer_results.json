@@ -1,28 +1,14 @@
 {
-  "generated_at": "2026-04-26T11:07:45.779437+00:00",
-  "last_updated": "2026-04-26 11:07 UTC",
+  "generated_at": "2026-04-27T11:07:33.239328+00:00",
+  "last_updated": "2026-04-27 11:07 UTC",
   "pipeline_run_date": "2026-04-12",
   "signals_source": "stale",
-  "game_date": "2026-04-26",
+  "game_date": "2026-04-27",
   "deployment_start_date": "2026-03-17",
   "model_description": "Soccer Over 2.5 Specialist (V2.2 Ridge). OVER signals only.",
   "active_scope_note": "Active: Bundesliga MEDIUM tier only. All other leagues/tiers computed and logged to shadow.",
   "today_signals": [],
-  "recent_results": [
-    {
-      "game_id": "BUN_2025-26_2026-04-12_VfB_Stuttgart_Hamburger_SV",
-      "game_date": "2026-04-12",
-      "league_id": "BUN",
-      "home_team": "VfB Stuttgart",
-      "away_team": "Hamburger SV",
-      "signal_side": "OVER",
-      "closing_total": 2.5,
-      "edge": 0.06192660550458717,
-      "confidence_tier": "LOW",
-      "result": "WIN",
-      "actual_total_goals": 4.0
-    }
-  ],
+  "recent_results": [],
   "season_performance": {
     "overall": {
       "W": 1,
@@ -180,11 +166,10 @@
     "correlation_note": false
   },
   "daily_review": {
-    "generated_at": "2026-04-26T11:07:45.813347+00:00",
-    "date_reviewed": "2026-04-25",
+    "generated_at": "2026-04-27T11:07:33.323196+00:00",
+    "date_reviewed": "2026-04-26",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  },
-  "weekly_review": null
+  }
 }

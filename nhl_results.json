@@ -1,11 +1,23 @@
 {
-  "generated_at": "2026-04-26T11:07:30.831212+00:00",
-  "last_updated": "2026-04-26 11:07 UTC",
-  "pipeline_run_date": "2026-04-25",
+  "generated_at": "2026-04-27T11:07:17.383715+00:00",
+  "last_updated": "2026-04-27 11:07 UTC",
+  "pipeline_run_date": "2026-04-26",
   "signals_source": "stale",
-  "game_date": "2026-04-26",
+  "game_date": "2026-04-27",
   "today_signals": [],
   "recent_results": [
+    {
+      "game_id": 2025030154,
+      "game_date": "2026-04-26",
+      "home_team": "LAK",
+      "away_team": "COL",
+      "signal_side": "OVER",
+      "closing_total": 5.5,
+      "edge": 0.14397943809817848,
+      "confidence_tier": "SHADOW_MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 6.0
+    },
     {
       "game_id": 2025030144,
       "game_date": "2026-04-25",
@@ -197,30 +209,6 @@
       "confidence_tier": "SHADOW_MEDIUM",
       "result": "WIN",
       "actual_total_goals_final": 5.0
-    },
-    {
-      "game_id": 2025021279,
-      "game_date": "2026-04-12",
-      "home_team": "NJD",
-      "away_team": "OTT",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.12515646123260438,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 7.0
-    },
-    {
-      "game_id": 2025021278,
-      "game_date": "2026-04-12",
-      "home_team": "CBJ",
-      "away_team": "BOS",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.13286086956521737,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 5.0
     }
   ],
   "season_performance": {
@@ -276,10 +264,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 796,
+    "total_graded": 797,
     "ot_games": 180,
     "so_games": 64,
-    "ot_rate": 0.2261,
+    "ot_rate": 0.2258,
     "ot_flips": 48,
     "ot_flip_rate": 0.2667,
     "under_ot_losses": 72,
@@ -296,11 +284,10 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-04-26T11:07:30.899072+00:00",
-    "date_reviewed": "2026-04-25",
+    "generated_at": "2026-04-27T11:07:17.439642+00:00",
+    "date_reviewed": "2026-04-26",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  },
-  "weekly_review": null
+  }
 }
