@@ -555,32 +555,32 @@
             "game": "SDP@ARI",
             "bet": "FULL GAME UNDER",
             "line": 15.5,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "CHC@LAD",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "DET@CIN",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 21,
+      "total": 22,
       "wins": 1,
-      "losses": 20,
+      "losses": 21,
       "pending": 0,
-      "win_rate": 4.8,
-      "net_units": -15.0,
+      "win_rate": 4.5,
+      "net_units": -16.0,
       "payout_per_win": 6.0
     }
   },
