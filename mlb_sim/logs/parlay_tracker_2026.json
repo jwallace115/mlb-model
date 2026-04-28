@@ -572,6 +572,32 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
+      },
+      {
+        "date": "2026-04-28",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "HOU@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "DET@ATL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "MIA@LAD",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
+            "result": null
+          }
+        ],
+        "result": "pending",
+        "net_units": null
       }
     ],
     "summary": {
