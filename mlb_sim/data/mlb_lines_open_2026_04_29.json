@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "bb7e51c3ed5e76ca658d46e6b586c0fa",
+    "game_date": "2026-04-29",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "New York Yankees",
+    "commence_time": "2026-04-29T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -101,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-28T06:05:02.684290+00:00"
+  },
+  {
+    "game_id": "630b5c008c0741c01c32f890068fa598",
+    "game_date": "2026-04-29",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Kansas City Royals",
+    "commence_time": "2026-04-29T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -102,
+    "under_price": -118,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-28T06:05:02.684290+00:00"
+  },
+  {
+    "game_id": "d221d6de333533ced3489663067a588d",
+    "game_date": "2026-04-29",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Chicago Cubs",
+    "commence_time": "2026-04-29T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-28T06:05:02.684290+00:00"
+  },
+  {
+    "game_id": "54e35854b4573f13cd3a3491cd75cfa1",
+    "game_date": "2026-04-29",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Miami Marlins",
+    "commence_time": "2026-04-29T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -105,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-28T06:05:02.684290+00:00"
+  }
+]
