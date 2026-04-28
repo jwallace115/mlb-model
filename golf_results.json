@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-28T07:00:29.588575",
+  "generated_at": "2026-04-28T09:01:23.727199",
   "sport": "golf",
   "season_stats": {
     "make_cut": {
@@ -239,20 +239,13 @@
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 179,
-  "matchup_n_leans": 27,
+  "matchup_n_candidates": 99,
+  "matchup_n_leans": 30,
   "g13_signals": [],
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
   "g14_signals": [],
-  "g14_win_watchlist": [
-    {
-      "player_name": "Young, Cameron",
-      "dg_win_prob": 6.9,
-      "adj_win_prob": 7.6,
-      "win_edge": 2.0
-    }
-  ],
+  "g14_win_watchlist": [],
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
