@@ -1,23 +1,23 @@
 {
   "insufficient_data": false,
-  "last_updated": "2026-04-28",
+  "last_updated": "2026-04-29",
   "season_to_date": {
-    "n": 65,
-    "win_rate": 41.5,
-    "roi": -20.0,
-    "net_units": -13.59
+    "n": 67,
+    "win_rate": 43.3,
+    "roi": -16.8,
+    "net_units": -11.77
   },
   "last_25": {
     "n": 25,
-    "win_rate": 24.0,
-    "roi": -55.9,
-    "net_units": -14.55
+    "win_rate": 32.0,
+    "roi": -41.3,
+    "net_units": -10.73
   },
   "last_50": {
     "n": 50,
-    "win_rate": 32.0,
-    "roi": -39.8,
-    "net_units": -20.48
+    "win_rate": 34.0,
+    "roi": -36.7,
+    "net_units": -18.8
   },
   "by_bucket": {
     "0.57-0.60": {
@@ -27,16 +27,16 @@
       "net_units": null
     },
     ">0.60": {
-      "n": 65,
-      "win_rate": 41.5,
-      "roi": -20.0,
-      "net_units": -13.59
+      "n": 67,
+      "win_rate": 43.3,
+      "roi": -16.8,
+      "net_units": -11.77
     }
   },
   "clv": {
     "avg_clv": -0.015,
     "pct_positive_clv": 0.0,
-    "n_clv": 65
+    "n_clv": 67
   },
   "dual_high_csw": {
     "n": 3,
