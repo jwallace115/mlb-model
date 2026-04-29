@@ -581,18 +581,44 @@
             "game": "HOU@BAL",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "DET@ATL",
             "bet": "FULL GAME UNDER",
             "line": 9.5,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "MIA@LAD",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
+            "result": "WIN"
+          }
+        ],
+        "result": "WIN",
+        "net_units": 5.0
+      },
+      {
+        "date": "2026-04-29",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "KCR@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 10.0,
+            "result": null
+          },
+          {
+            "game": "CHC@SDP",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
+            "result": null
+          },
+          {
+            "game": "HOU@BAL",
+            "bet": "FULL GAME UNDER",
+            "line": 9.0,
             "result": null
           }
         ],
@@ -601,12 +627,12 @@
       }
     ],
     "summary": {
-      "total": 22,
-      "wins": 1,
+      "total": 23,
+      "wins": 2,
       "losses": 21,
       "pending": 0,
-      "win_rate": 4.5,
-      "net_units": -16.0,
+      "win_rate": 8.7,
+      "net_units": -11.0,
       "payout_per_win": 6.0
     }
   },
