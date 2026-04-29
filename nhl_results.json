@@ -1,10 +1,11 @@
 {
-  "generated_at": "2026-04-28T11:07:25.189530+00:00",
-  "last_updated": "2026-04-28 11:07 UTC",
+  "generated_at": "2026-04-29T11:07:42.629227+00:00",
+  "last_updated": "2026-04-29 11:07 UTC",
   "pipeline_run_date": "2026-04-28",
-  "signals_source": "live",
-  "game_date": "2026-04-28",
-  "today_signals": [
+  "signals_source": "stale",
+  "game_date": "2026-04-29",
+  "today_signals": [],
+  "recent_results": [
     {
       "game_id": 2025030185,
       "game_date": "2026-04-28",
@@ -12,44 +13,11 @@
       "away_team": "ANA",
       "signal_side": "UNDER",
       "closing_total": 6.5,
-      "edge": 0.17433877182420227,
-      "edge_bucket": "0.15+",
-      "sim_prob": 0.5747,
+      "edge": 0.16816975415942387,
       "confidence_tier": "HIGH",
-      "stake_units": 1.0,
-      "caution_flag": 0,
-      "volatility_bucket": "low",
-      "lambda_total_calibrated": 6.185743588066252,
-      "over_price": -166.0,
-      "under_price": 140.0,
-      "book": "draftkings",
-      "commence_time": "2026-04-29T02:10:00Z",
-      "result": "UNGRADED",
-      "graded": 0,
-      "home_goals_scored_rolling_10": 2.9040396341463417,
-      "away_goals_scored_rolling_10": 3.208079268292683,
-      "home_goals_allowed_rolling_10": 2.9040396341463417,
-      "away_goals_allowed_rolling_10": 2.908079268292683,
-      "home_xgf_rolling_20": null,
-      "away_xgf_rolling_20": null,
-      "home_xga_rolling_20": null,
-      "away_xga_rolling_20": null,
-      "home_pp_pct_rolling_20": 0.20968199525745257,
-      "away_pp_pct_rolling_20": 0.19871379573170733,
-      "home_goalie_vs_team_baseline": 0.0,
-      "away_goalie_vs_team_baseline": 0.0,
-      "home_goalie_b2b": 0,
-      "away_goalie_b2b": 0,
-      "home_b2b": 0,
-      "away_b2b": 0,
-      "goalie_confirmed_home": false,
-      "goalie_confirmed_away": false,
-      "backup_flag_home": 0,
-      "backup_flag_away": 0,
-      "summary": "We're projecting 6.2 combined goals here \u2014 that's 0.3 below the 6.5 line, a gap the market hasn't priced in. ANA has been averaging 3.2 goals per game over their last 10 \u2014 above-average offense. That pulls the other way, but not enough to flip the lean. Model has 6.2, market is at 6.5 \u2014 under by 0.3 goals (0.15+ edge)."
-    }
-  ],
-  "recent_results": [
+      "result": "WIN",
+      "actual_total_goals_final": 5.0
+    },
     {
       "game_id": 2025030145,
       "game_date": "2026-04-27",
@@ -205,42 +173,6 @@
       "confidence_tier": "SHADOW_MEDIUM",
       "result": "WIN",
       "actual_total_goals_final": 4.0
-    },
-    {
-      "game_id": 2025021298,
-      "game_date": "2026-04-14",
-      "home_team": "CGY",
-      "away_team": "COL",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.1556702459300312,
-      "confidence_tier": "HIGH",
-      "result": "WIN",
-      "actual_total_goals_final": 4.0
-    },
-    {
-      "game_id": 2025021293,
-      "game_date": "2026-04-14",
-      "home_team": "NYI",
-      "away_team": "CAR",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.1259,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 3.0
-    },
-    {
-      "game_id": 2025021296,
-      "game_date": "2026-04-14",
-      "home_team": "MIN",
-      "away_team": "ANA",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.14186753246753253,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 5.0
     }
   ],
   "season_performance": {
@@ -296,10 +228,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 798,
+    "total_graded": 799,
     "ot_games": 180,
     "so_games": 64,
-    "ot_rate": 0.2256,
+    "ot_rate": 0.2253,
     "ot_flips": 48,
     "ot_flip_rate": 0.2667,
     "under_ot_losses": 72,
@@ -316,8 +248,8 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-04-28T11:07:25.218749+00:00",
-    "date_reviewed": "2026-04-27",
+    "generated_at": "2026-04-29T11:07:42.658715+00:00",
+    "date_reviewed": "2026-04-28",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
