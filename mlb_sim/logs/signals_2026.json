@@ -2974,7 +2974,9 @@
     "signal_class": "S12_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Tyler Glasnow",
+    "away_sp_name": "Sandy Alcantara"
   },
   {
     "date": "2026-04-29",
@@ -2999,7 +3001,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Matt Waldron",
+    "away_sp_name": "Jameson Taillon"
   },
   {
     "date": "2026-04-29",
@@ -3024,7 +3028,9 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Chris Bassitt",
+    "away_sp_name": "Peter Lambert"
   },
   {
     "date": "2026-04-29",
@@ -3049,6 +3055,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Luis Severino",
+    "away_sp_name": "Michael Wacha"
   }
 ]
