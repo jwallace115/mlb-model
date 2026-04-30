@@ -3070,7 +3070,9 @@
     "signal_class": "BASE_LOW",
     "shadow_only": false,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Andrew Abbott",
+    "away_sp_name": "Michael Lorenzen"
   },
   {
     "date": "2026-04-30",
@@ -3095,6 +3097,8 @@
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
     "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "signal_status": "CONFIRMED",
+    "home_sp_name": "Jeffrey Springs",
+    "away_sp_name": "Noah Cameron"
   }
 ]
