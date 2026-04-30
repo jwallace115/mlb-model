@@ -1,6 +1,25 @@
 {
-  "generated_at": "2026-04-29T07:00:25.612868",
+  "generated_at": "2026-04-30T07:00:49.209759",
   "sport": "golf",
+  "event_name": "Cadillac Championship",
+  "event_id": 556,
+  "is_major": false,
+  "last_updated": "2026-04-30T07:00:29.423065",
+  "n_candidates": 0,
+  "n_leans": 1,
+  "plays": [
+    {
+      "player_name": "Hovland, Viktor",
+      "dg_id": 18841,
+      "market": "top_20",
+      "model_prob": 35.3,
+      "market_prob": 40.4,
+      "edge": -5.1,
+      "direction": "under",
+      "classification": "lean",
+      "close_odds": 127.0
+    }
+  ],
   "season_stats": {
     "make_cut": {
       "n": 597,
