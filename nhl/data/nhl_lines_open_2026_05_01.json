@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "d89705412ebe2b5f2281fb9e44b12459",
+    "game_date": "2026-05-01",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Edmonton Oilers",
+    "commence_time": "2026-05-01T02:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": 104,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-30T06:05:03.714905+00:00"
+  },
+  {
+    "game_id": "e8e7f71bd27bb8061fbbd5af896ae23c",
+    "game_date": "2026-05-01",
+    "sport": "NHL",
+    "home_team": "Boston Bruins",
+    "away_team": "Buffalo Sabres",
+    "commence_time": "2026-05-01T23:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -118,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-30T06:05:03.714905+00:00"
+  },
+  {
+    "game_id": "666be81702350734d3483a03c4603f67",
+    "game_date": "2026-05-01",
+    "sport": "NHL",
+    "home_team": "Montr\u00e9al Canadiens",
+    "away_team": "Tampa Bay Lightning",
+    "commence_time": "2026-05-01T23:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -106,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-30T06:05:03.714905+00:00"
+  }
+]
