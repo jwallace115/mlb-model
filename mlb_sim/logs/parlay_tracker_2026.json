@@ -607,32 +607,32 @@
             "game": "KCR@OAK",
             "bet": "FULL GAME UNDER",
             "line": 10.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "CHC@SDP",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "PUSH"
           },
           {
             "game": "HOU@BAL",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "LOSS"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 23,
+      "total": 24,
       "wins": 2,
-      "losses": 21,
+      "losses": 22,
       "pending": 0,
-      "win_rate": 8.7,
-      "net_units": -11.0,
+      "win_rate": 8.3,
+      "net_units": -12.0,
       "payout_per_win": 6.0
     }
   },

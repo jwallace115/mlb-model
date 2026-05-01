@@ -1,9 +1,9 @@
 {
-  "status": "ACTIVE",
-  "last_updated": "2026-03-24",
-  "pause_reason": null,
-  "pause_triggered_at_n": null,
-  "pause_triggered_at_roi": null,
+  "status": "PAUSED",
+  "last_updated": "2026-05-01",
+  "pause_reason": "Hard stop: ROI=-11.8% at N=57",
+  "pause_triggered_at_n": 57,
+  "pause_triggered_at_roi": -11.8,
   "resume_authorized_by": null,
   "resume_date": null
 }
