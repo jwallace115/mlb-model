@@ -104,6 +104,22 @@
       "local_start_hour": 18.166666666666668,
       "win_loss": "W",
       "final_score": "1-0"
+    },
+    {
+      "game_pk": 824287,
+      "game_date": "2026-05-01",
+      "matchup": "TEX @ DET",
+      "fav_team": "DET",
+      "dog_team": "TEX",
+      "fav_side": "home",
+      "fav_implied": 0.5162,
+      "dog_ml_price": 102,
+      "sp_fip_diff": 0.023,
+      "off_diff": 0.15,
+      "bp_era_diff": -0.29,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }

@@ -1,10 +1,11 @@
 {
-  "generated_at": "2026-04-30T11:07:32.371566+00:00",
-  "last_updated": "2026-04-30 11:07 UTC",
+  "generated_at": "2026-05-01T11:07:36.622632+00:00",
+  "last_updated": "2026-05-01 11:07 UTC",
   "pipeline_run_date": "2026-04-30",
-  "signals_source": "live",
-  "game_date": "2026-04-30",
-  "today_signals": [
+  "signals_source": "stale",
+  "game_date": "2026-05-01",
+  "today_signals": [],
+  "recent_results": [
     {
       "game_id": 2025030186,
       "game_date": "2026-04-30",
@@ -13,43 +14,22 @@
       "signal_side": "UNDER",
       "closing_total": 6.5,
       "edge": 0.18016975415942388,
-      "edge_bucket": "0.15+",
-      "sim_prob": 0.5868,
       "confidence_tier": "HIGH",
-      "stake_units": 1.0,
-      "caution_flag": 0,
-      "volatility_bucket": "low",
-      "lambda_total_calibrated": 6.109341228558063,
-      "over_price": -162.0,
-      "under_price": 136.0,
-      "book": "draftkings",
-      "commence_time": "2026-05-01T02:00:00Z",
-      "result": "UNGRADED",
-      "graded": 0,
-      "home_goals_scored_rolling_10": 3.116158536585366,
-      "away_goals_scored_rolling_10": 2.7121189024390246,
-      "home_goals_allowed_rolling_10": 3.216158536585366,
-      "away_goals_allowed_rolling_10": 2.9121189024390244,
-      "home_xgf_rolling_20": null,
-      "away_xgf_rolling_20": null,
-      "home_xga_rolling_20": null,
-      "away_xga_rolling_20": null,
-      "home_pp_pct_rolling_20": 0.21586456216124658,
-      "away_pp_pct_rolling_20": 0.19919789549457992,
-      "home_goalie_vs_team_baseline": 0.0,
-      "away_goalie_vs_team_baseline": 0.0,
-      "home_goalie_b2b": 0,
-      "away_goalie_b2b": 0,
-      "home_b2b": 0,
-      "away_b2b": 0,
-      "goalie_confirmed_home": false,
-      "goalie_confirmed_away": false,
-      "backup_flag_home": 0,
-      "backup_flag_away": 0,
-      "summary": "EDM has been averaging 2.7 goals per game over their last 10 \u2014 below-average offense. ANA has been allowing 3.2 goals per game over their last 10 \u2014 giving up more than average. That pulls the other way, but not enough to flip the lean. Model has 6.1, market is at 6.5 \u2014 under by 0.4 goals (0.15+ edge)."
-    }
-  ],
-  "recent_results": [
+      "result": "LOSS",
+      "actual_total_goals_final": 7.0
+    },
+    {
+      "game_id": 2025030166,
+      "game_date": "2026-04-30",
+      "home_team": "MIN",
+      "away_team": "DAL",
+      "signal_side": "OVER",
+      "closing_total": 5.5,
+      "edge": 0.12433587428372994,
+      "confidence_tier": "SHADOW_MEDIUM",
+      "result": "WIN",
+      "actual_total_goals_final": 7.0
+    },
     {
       "game_id": 2025030146,
       "game_date": "2026-04-29",
@@ -181,42 +161,6 @@
       "confidence_tier": "SHADOW_MEDIUM",
       "result": "WIN",
       "actual_total_goals_final": 7.0
-    },
-    {
-      "game_id": 2025021307,
-      "game_date": "2026-04-16",
-      "home_team": "NSH",
-      "away_team": "ANA",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.13203587428372987,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 9.0
-    },
-    {
-      "game_id": 2025021308,
-      "game_date": "2026-04-16",
-      "home_team": "WPG",
-      "away_team": "SJS",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.12331341473828028,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "LOSS",
-      "actual_total_goals_final": 7.0
-    },
-    {
-      "game_id": 2025021312,
-      "game_date": "2026-04-16",
-      "home_team": "COL",
-      "away_team": "SEA",
-      "signal_side": "UNDER",
-      "closing_total": 6.5,
-      "edge": 0.12445888528345095,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 2.0
     }
   ],
   "season_performance": {
@@ -272,10 +216,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 800,
+    "total_graded": 802,
     "ot_games": 180,
     "so_games": 64,
-    "ot_rate": 0.225,
+    "ot_rate": 0.2244,
     "ot_flips": 48,
     "ot_flip_rate": 0.2667,
     "under_ot_losses": 72,
@@ -292,8 +236,8 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-04-30T11:07:32.401357+00:00",
-    "date_reviewed": "2026-04-29",
+    "generated_at": "2026-05-01T11:07:36.651017+00:00",
+    "date_reviewed": "2026-04-30",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
