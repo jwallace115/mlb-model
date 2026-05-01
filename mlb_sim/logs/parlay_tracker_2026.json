@@ -607,18 +607,44 @@
             "game": "KCR@OAK",
             "bet": "FULL GAME UNDER",
             "line": 10.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "CHC@SDP",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "PUSH"
           },
           {
             "game": "HOU@BAL",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
+            "result": "LOSS"
+          }
+        ],
+        "result": "LOSS",
+        "net_units": -1.0
+      },
+      {
+        "date": "2026-05-01",
+        "type": "3-leg",
+        "legs": [
+          {
+            "game": "ATL@COL",
+            "bet": "FULL GAME UNDER",
+            "line": 11.0,
+            "result": null
+          },
+          {
+            "game": "CLE@OAK",
+            "bet": "FULL GAME UNDER",
+            "line": 9.5,
+            "result": null
+          },
+          {
+            "game": "PHI@MIA",
+            "bet": "FULL GAME UNDER",
+            "line": 8.0,
             "result": null
           }
         ],
@@ -627,12 +653,12 @@
       }
     ],
     "summary": {
-      "total": 23,
+      "total": 24,
       "wins": 2,
-      "losses": 21,
+      "losses": 22,
       "pending": 0,
-      "win_rate": 8.7,
-      "net_units": -11.0,
+      "win_rate": 8.3,
+      "net_units": -12.0,
       "payout_per_win": 6.0
     }
   },
