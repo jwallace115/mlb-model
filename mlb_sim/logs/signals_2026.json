@@ -3009,9 +3009,9 @@
     "raw_p_under": 0.6034,
     "raw_p_over": 0.3966,
     "line_at_signal_time": 9.0,
-    "result": null,
-    "net_units": NaN,
-    "resolved": 0,
+    "result": "LOSS",
+    "net_units": -1.0,
+    "resolved": 1,
     "s12_overlay_active": 0.0,
     "s12_value": 2.73,
     "base_stake": 1.0,
@@ -3057,9 +3057,9 @@
     "raw_p_under": 0.5727,
     "raw_p_over": 0.4273,
     "line_at_signal_time": 9.0,
-    "result": null,
-    "net_units": NaN,
-    "resolved": 0,
+    "result": "LOSS",
+    "net_units": -0.5,
+    "resolved": 1,
     "s12_overlay_active": 0.0,
     "s12_value": 3.195,
     "base_stake": 0.5,
@@ -3069,10 +3069,7 @@
     "combined_overlay_tier": "NONE",
     "signal_class": "BASE_LOW",
     "shadow_only": false,
-    "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED",
-    "home_sp_name": "Andrew Abbott",
-    "away_sp_name": "Michael Lorenzen"
+    "pre_overlay_tracking": false
   },
   {
     "date": "2026-04-30",
@@ -3084,9 +3081,9 @@
     "raw_p_under": 0.6868,
     "raw_p_over": 0.3132,
     "line_at_signal_time": 10.0,
-    "result": null,
-    "net_units": NaN,
-    "resolved": 0,
+    "result": "WIN",
+    "net_units": 0.9091,
+    "resolved": 1,
     "s12_overlay_active": 0.0,
     "s12_value": 6.31,
     "base_stake": 1.0,
@@ -3096,9 +3093,6 @@
     "combined_overlay_tier": "NONE",
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
-    "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED",
-    "home_sp_name": "Jeffrey Springs",
-    "away_sp_name": "Noah Cameron"
+    "pre_overlay_tracking": false
   }
 ]
