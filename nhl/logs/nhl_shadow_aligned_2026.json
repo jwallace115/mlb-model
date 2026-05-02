@@ -394,6 +394,18 @@
       "drift_applied": 0.0,
       "result": "WIN",
       "actual_total": 7
+    },
+    {
+      "game_id": 2025030221,
+      "game_date": "2026-05-02",
+      "home_team": "CAR",
+      "away_team": "PHI",
+      "signal_side": "OVER",
+      "edge": 0.1241,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 5.5,
+      "lambda_total": 6.374,
+      "drift_applied": 0.0
     }
   ]
 }
