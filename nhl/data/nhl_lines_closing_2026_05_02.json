@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "c5c914c5b8c28d64ff00b6e65dbd3831",
+    "game_date": "2026-05-02",
+    "sport": "NHL",
+    "home_team": "Utah Mammoth",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-05-02T02:21:00Z",
+    "snapshot_type": "closing",
+    "total_line": 5.5,
+    "over_price": 112,
+    "under_price": -135,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T03:00:05.620447+00:00"
+  },
+  {
+    "game_id": "e525b26df615c89d31e7affabdb475e3",
+    "game_date": "2026-05-02",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Philadelphia Flyers",
+    "commence_time": "2026-05-03T00:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 5.5,
+    "over_price": -115,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T03:00:05.620447+00:00"
+  },
+  {
+    "game_id": "6ff22480704fc10dca4fb5f56513a4f4",
+    "game_date": "2026-05-02",
+    "sport": "NHL",
+    "home_team": "Tampa Bay Lightning",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-03T21:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 5.5,
+    "over_price": 122,
+    "under_price": -140,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T03:00:05.620447+00:00"
+  },
+  {
+    "game_id": "dd40fd7156c9a60a0ce8365206fc9310",
+    "game_date": "2026-05-02",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-05-03T23:00:15Z",
+    "snapshot_type": "closing",
+    "total_line": 5.5,
+    "over_price": -134,
+    "under_price": 110,
+    "book": "fanduel",
+    "capture_timestamp": "2026-05-02T03:00:05.620447+00:00"
+  }
+]
