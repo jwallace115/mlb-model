@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "a37e80a2e3cf3aaa3ae84a9124987058",
+    "game_date": "2026-05-02",
+    "sport": "NBA",
+    "home_team": "Boston Celtics",
+    "away_team": "Philadelphia 76ers",
+    "commence_time": "2026-05-02T23:40:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 204.0,
+    "over_price": -112,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T18:00:03.404631+00:00"
+  },
+  {
+    "game_id": "be60e6f50fc77fc3a3cf6925472bad91",
+    "game_date": "2026-05-02",
+    "sport": "NBA",
+    "home_team": "Detroit Pistons",
+    "away_team": "Orlando Magic",
+    "commence_time": "2026-05-03T19:40:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 203.0,
+    "over_price": 101,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T18:00:03.404631+00:00"
+  },
+  {
+    "game_id": "a463f640631f8b0580966b909965de14",
+    "game_date": "2026-05-02",
+    "sport": "NBA",
+    "home_team": "Cleveland Cavaliers",
+    "away_team": "Toronto Raptors",
+    "commence_time": "2026-05-03T23:40:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 211.5,
+    "over_price": -107,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T18:00:03.404631+00:00"
+  }
+]
