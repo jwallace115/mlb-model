@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "e525b26df615c89d31e7affabdb475e3",
+    "game_date": "2026-05-02",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Philadelphia Flyers",
+    "commence_time": "2026-05-03T00:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 5.5,
+    "over_price": -112,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T13:25:02.889135+00:00"
+  },
+  {
+    "game_id": "6ff22480704fc10dca4fb5f56513a4f4",
+    "game_date": "2026-05-02",
+    "sport": "NHL",
+    "home_team": "Tampa Bay Lightning",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-03T22:10:00Z",
+    "snapshot_type": "midmorning",
+    "total_line": 5.5,
+    "over_price": 122,
+    "under_price": -140,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T13:25:02.889135+00:00"
+  }
+]
