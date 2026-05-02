@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "d5dfcb82d0a54536cff3e16f1858d180",
+    "game_date": "2026-05-03",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Atlanta Braves",
+    "commence_time": "2026-05-03T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "fanduel",
+    "capture_timestamp": "2026-05-02T06:05:02.964048+00:00"
+  },
+  {
+    "game_id": "826eb43891b621623989f26eb6deccab",
+    "game_date": "2026-05-03",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-05-03T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T06:05:02.964048+00:00"
+  },
+  {
+    "game_id": "b23ef59a61f5e3a71d93b5ae6eed4786",
+    "game_date": "2026-05-03",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "New York Mets",
+    "commence_time": "2026-05-03T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T06:05:02.964048+00:00"
+  },
+  {
+    "game_id": "383d74609e0b5f77bfaf7eaa55477b31",
+    "game_date": "2026-05-03",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Kansas City Royals",
+    "commence_time": "2026-05-03T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T06:05:02.964048+00:00"
+  }
+]

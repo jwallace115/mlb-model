@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "e525b26df615c89d31e7affabdb475e3",
+    "game_date": "2026-05-03",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Philadelphia Flyers",
+    "commence_time": "2026-05-03T00:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -115,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T06:05:03.541362+00:00"
+  },
+  {
+    "game_id": "6ff22480704fc10dca4fb5f56513a4f4",
+    "game_date": "2026-05-03",
+    "sport": "NHL",
+    "home_team": "Tampa Bay Lightning",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-03T22:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": 122,
+    "under_price": -140,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-02T06:05:03.541362+00:00"
+  },
+  {
+    "game_id": "dd40fd7156c9a60a0ce8365206fc9310",
+    "game_date": "2026-05-03",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-05-03T23:00:15Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -125,
+    "under_price": 105,
+    "book": "draftkings",
+    "capture_timestamp": "2026-05-02T06:05:03.541362+00:00"
+  }
+]
