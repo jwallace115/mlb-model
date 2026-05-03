@@ -1,11 +1,23 @@
 {
-  "generated_at": "2026-05-02T11:09:29.233428+00:00",
-  "last_updated": "2026-05-02 11:09 UTC",
-  "pipeline_run_date": "2026-04-30",
+  "generated_at": "2026-05-03T11:07:39.255639+00:00",
+  "last_updated": "2026-05-03 11:07 UTC",
+  "pipeline_run_date": "2026-05-02",
   "signals_source": "stale",
-  "game_date": "2026-05-02",
+  "game_date": "2026-05-03",
   "today_signals": [],
   "recent_results": [
+    {
+      "game_id": 2025030221,
+      "game_date": "2026-05-02",
+      "home_team": "CAR",
+      "away_team": "PHI",
+      "signal_side": "OVER",
+      "closing_total": 5.5,
+      "edge": 0.12413423618634883,
+      "confidence_tier": "SHADOW_MEDIUM",
+      "result": "LOSS",
+      "actual_total_goals_final": 3.0
+    },
     {
       "game_id": 2025030186,
       "game_date": "2026-04-30",
@@ -149,18 +161,6 @@
       "confidence_tier": "HIGH",
       "result": "LOSS",
       "actual_total_goals_final": 7.0
-    },
-    {
-      "game_id": 2025030161,
-      "game_date": "2026-04-18",
-      "home_team": "DAL",
-      "away_team": "MIN",
-      "signal_side": "OVER",
-      "closing_total": 5.5,
-      "edge": 0.12056015523932734,
-      "confidence_tier": "SHADOW_MEDIUM",
-      "result": "WIN",
-      "actual_total_goals_final": 7.0
     }
   ],
   "season_performance": {
@@ -216,10 +216,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 802,
+    "total_graded": 803,
     "ot_games": 180,
     "so_games": 64,
-    "ot_rate": 0.2244,
+    "ot_rate": 0.2242,
     "ot_flips": 48,
     "ot_flip_rate": 0.2667,
     "under_ot_losses": 72,
@@ -236,10 +236,11 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-05-02T11:09:29.302149+00:00",
-    "date_reviewed": "2026-05-01",
+    "generated_at": "2026-05-03T11:07:39.292706+00:00",
+    "date_reviewed": "2026-05-02",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  }
+  },
+  "weekly_review": null
 }
