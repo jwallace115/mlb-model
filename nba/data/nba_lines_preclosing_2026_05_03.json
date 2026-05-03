@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "be60e6f50fc77fc3a3cf6925472bad91",
+    "game_date": "2026-05-03",
+    "sport": "NBA",
+    "home_team": "Detroit Pistons",
+    "away_team": "Orlando Magic",
+    "commence_time": "2026-05-03T19:41:39Z",
+    "snapshot_type": "preclosing",
+    "total_line": 204.0,
+    "over_price": -113,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-03T22:00:03.459153+00:00"
+  },
+  {
+    "game_id": "a463f640631f8b0580966b909965de14",
+    "game_date": "2026-05-03",
+    "sport": "NBA",
+    "home_team": "Cleveland Cavaliers",
+    "away_team": "Toronto Raptors",
+    "commence_time": "2026-05-03T23:40:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 209.0,
+    "over_price": -110,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-03T22:00:03.459153+00:00"
+  }
+]
