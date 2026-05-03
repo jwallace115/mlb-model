@@ -659,32 +659,32 @@
             "game": "CLE@OAK",
             "bet": "FULL GAME UNDER",
             "line": 10.0,
-            "result": null
+            "result": "LOSS"
           },
           {
             "game": "NYM@LAA",
             "bet": "FULL GAME UNDER",
             "line": 8.0,
-            "result": null
+            "result": "WIN"
           },
           {
             "game": "HOU@BOS",
             "bet": "FULL GAME UNDER",
             "line": 9.0,
-            "result": null
+            "result": "PUSH"
           }
         ],
-        "result": "pending",
-        "net_units": null
+        "result": "LOSS",
+        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 25,
+      "total": 26,
       "wins": 2,
-      "losses": 23,
+      "losses": 24,
       "pending": 0,
-      "win_rate": 8.0,
-      "net_units": -13.0,
+      "win_rate": 7.7,
+      "net_units": -14.0,
       "payout_per_win": 6.0
     }
   },
