@@ -2625,9 +2625,9 @@
     "raw_p_under": 0.5866,
     "raw_p_over": 0.4134,
     "line_at_signal_time": 8.0,
-    "result": null,
-    "net_units": NaN,
-    "resolved": 0,
+    "result": "LOSS",
+    "net_units": -0.5,
+    "resolved": 1,
     "s12_overlay_active": 0.0,
     "s12_value": 7.61,
     "base_stake": 0.5,
@@ -2637,8 +2637,7 @@
     "combined_overlay_tier": "NONE",
     "signal_class": "BASE_LOW",
     "shadow_only": false,
-    "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "pre_overlay_tracking": false
   },
   {
     "date": "2026-05-02",
@@ -2650,9 +2649,9 @@
     "raw_p_under": 0.6845,
     "raw_p_over": 0.3155,
     "line_at_signal_time": 10.0,
-    "result": null,
-    "net_units": NaN,
-    "resolved": 0,
+    "result": "LOSS",
+    "net_units": -1.0,
+    "resolved": 1,
     "s12_overlay_active": 0.0,
     "s12_value": 1.692,
     "base_stake": 1.0,
@@ -2662,8 +2661,7 @@
     "combined_overlay_tier": "NONE",
     "signal_class": "BASE_HIGH",
     "shadow_only": true,
-    "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "pre_overlay_tracking": false
   },
   {
     "date": "2026-05-02",
@@ -2675,9 +2673,9 @@
     "raw_p_under": 0.5901,
     "raw_p_over": 0.4099,
     "line_at_signal_time": 9.0,
-    "result": null,
-    "net_units": NaN,
-    "resolved": 0,
+    "result": "PUSH",
+    "net_units": 0.0,
+    "resolved": 1,
     "s12_overlay_active": 0.0,
     "s12_value": 6.705,
     "base_stake": 0.5,
@@ -2687,8 +2685,7 @@
     "combined_overlay_tier": "NONE",
     "signal_class": "BASE_LOW",
     "shadow_only": false,
-    "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "pre_overlay_tracking": false
   },
   {
     "date": "2026-05-02",
@@ -2700,9 +2697,9 @@
     "raw_p_under": 0.6166,
     "raw_p_over": 0.3834,
     "line_at_signal_time": 8.0,
-    "result": null,
-    "net_units": NaN,
-    "resolved": 0,
+    "result": "WIN",
+    "net_units": 1.1364,
+    "resolved": 1,
     "s12_overlay_active": 1.0,
     "s12_value": 13.415,
     "base_stake": 1.0,
@@ -2712,7 +2709,6 @@
     "combined_overlay_tier": "S12_ONLY",
     "signal_class": "S12_HIGH",
     "shadow_only": true,
-    "pre_overlay_tracking": false,
-    "signal_status": "CONFIRMED"
+    "pre_overlay_tracking": false
   }
 ]
