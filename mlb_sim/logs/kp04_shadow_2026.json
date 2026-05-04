@@ -14156,9 +14156,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 1,
     "result": null,
-    "logged_at": "2026-05-03T06:00:41.810859"
+    "logged_at": "2026-05-03T06:00:41.810859",
+    "resolved": true
   },
   {
     "game_id": 823711,
@@ -14173,9 +14174,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-05-03T06:00:41.810888"
+    "logged_at": "2026-05-03T06:00:41.810888",
+    "resolved": true
   },
   {
     "game_id": 824769,
@@ -14190,9 +14192,10 @@
     "k_line": 4.5,
     "opening_k_line": 4.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 3,
     "result": null,
-    "logged_at": "2026-05-03T06:00:46.213414"
+    "logged_at": "2026-05-03T06:00:46.213414",
+    "resolved": true
   },
   {
     "game_id": 824769,
@@ -14207,9 +14210,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 3,
     "result": null,
-    "logged_at": "2026-05-03T06:00:46.213434"
+    "logged_at": "2026-05-03T06:00:46.213434",
+    "resolved": true
   },
   {
     "game_id": 823387,
@@ -14224,9 +14228,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
-    "result": null,
-    "logged_at": "2026-05-03T06:00:50.374109"
+    "actual_k": 6,
+    "result": "WIN",
+    "logged_at": "2026-05-03T06:00:50.374109",
+    "resolved": true
   },
   {
     "game_id": 823387,
@@ -14241,9 +14246,10 @@
     "k_line": 6.5,
     "opening_k_line": 6.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 7,
     "result": null,
-    "logged_at": "2026-05-03T06:00:50.374134"
+    "logged_at": "2026-05-03T06:00:50.374134",
+    "resolved": true
   },
   {
     "game_id": 823555,
@@ -14258,9 +14264,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-05-03T06:00:53.923137"
+    "logged_at": "2026-05-03T06:00:53.923137",
+    "resolved": true
   },
   {
     "game_id": 822742,
@@ -14292,9 +14299,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 1,
     "result": null,
-    "logged_at": "2026-05-03T06:00:58.365109"
+    "logged_at": "2026-05-03T06:00:58.365109",
+    "resolved": true
   },
   {
     "game_id": 822987,
@@ -14309,9 +14317,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 5,
     "result": null,
-    "logged_at": "2026-05-03T06:00:58.365132"
+    "logged_at": "2026-05-03T06:00:58.365132",
+    "resolved": true
   },
   {
     "game_id": 823875,
@@ -14326,9 +14335,10 @@
     "k_line": 3.5,
     "opening_k_line": 3.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 1,
     "result": null,
-    "logged_at": "2026-05-03T06:01:01.694062"
+    "logged_at": "2026-05-03T06:01:01.694062",
+    "resolved": true
   },
   {
     "game_id": 823875,
@@ -14343,9 +14353,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 10,
     "result": null,
-    "logged_at": "2026-05-03T06:01:01.694089"
+    "logged_at": "2026-05-03T06:01:01.694089",
+    "resolved": true
   },
   {
     "game_id": 823065,
@@ -14360,9 +14371,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 3,
     "result": null,
-    "logged_at": "2026-05-03T06:01:04.849073"
+    "logged_at": "2026-05-03T06:01:04.849073",
+    "resolved": true
   },
   {
     "game_id": 823065,
@@ -14377,9 +14389,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 0,
     "result": null,
-    "logged_at": "2026-05-03T06:01:04.849099"
+    "logged_at": "2026-05-03T06:01:04.849099",
+    "resolved": true
   },
   {
     "game_id": 824687,
@@ -14394,9 +14407,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 5,
     "result": null,
-    "logged_at": "2026-05-03T06:01:07.943254"
+    "logged_at": "2026-05-03T06:01:07.943254",
+    "resolved": true
   },
   {
     "game_id": 824687,
@@ -14411,9 +14425,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 5,
     "result": null,
-    "logged_at": "2026-05-03T06:01:07.943276"
+    "logged_at": "2026-05-03T06:01:07.943276",
+    "resolved": true
   },
   {
     "game_id": 824364,
@@ -14428,9 +14443,10 @@
     "k_line": 3.5,
     "opening_k_line": 3.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 7,
     "result": null,
-    "logged_at": "2026-05-03T06:01:11.153745"
+    "logged_at": "2026-05-03T06:01:11.153745",
+    "resolved": true
   },
   {
     "game_id": 824364,
@@ -14445,9 +14461,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-05-03T06:01:11.153767"
+    "logged_at": "2026-05-03T06:01:11.153767",
+    "resolved": true
   },
   {
     "game_id": 825013,
@@ -14462,9 +14479,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 3,
     "result": null,
-    "logged_at": "2026-05-03T06:01:13.334670"
+    "logged_at": "2026-05-03T06:01:13.334670",
+    "resolved": true
   },
   {
     "game_id": 825013,
@@ -14479,9 +14497,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-05-03T06:01:13.334688"
+    "logged_at": "2026-05-03T06:01:13.334688",
+    "resolved": true
   },
   {
     "game_id": 824043,
@@ -14496,9 +14515,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-05-03T06:01:15.579319"
+    "logged_at": "2026-05-03T06:01:15.579319",
+    "resolved": true
   },
   {
     "game_id": 824043,
@@ -14513,9 +14533,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-05-03T06:01:15.579341"
+    "logged_at": "2026-05-03T06:01:15.579341",
+    "resolved": true
   },
   {
     "game_id": 823145,
@@ -14530,9 +14551,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 5,
     "result": null,
-    "logged_at": "2026-05-03T06:01:17.821947"
+    "logged_at": "2026-05-03T06:01:17.821947",
+    "resolved": true
   },
   {
     "game_id": 823145,
@@ -14547,9 +14569,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 7,
     "result": null,
-    "logged_at": "2026-05-03T06:01:17.821972"
+    "logged_at": "2026-05-03T06:01:17.821972",
+    "resolved": true
   },
   {
     "game_id": 823307,
@@ -14564,9 +14587,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 7,
     "result": null,
-    "logged_at": "2026-05-03T06:01:20.101483"
+    "logged_at": "2026-05-03T06:01:20.101483",
+    "resolved": true
   },
   {
     "game_id": 823307,
@@ -14581,9 +14605,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 5,
     "result": null,
-    "logged_at": "2026-05-03T06:01:20.101523"
+    "logged_at": "2026-05-03T06:01:20.101523",
+    "resolved": true
   },
   {
     "game_id": 824285,
@@ -14598,9 +14623,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 1,
     "result": null,
-    "logged_at": "2026-05-03T06:01:23.161383"
+    "logged_at": "2026-05-03T06:01:23.161383",
+    "resolved": true
   },
   {
     "game_id": 824285,
@@ -14615,8 +14641,383 @@
     "k_line": 4.5,
     "opening_k_line": 4.5,
     "closing_k_line": null,
+    "actual_k": 10,
+    "result": null,
+    "logged_at": "2026-05-03T06:01:23.161405",
+    "resolved": true
+  },
+  {
+    "game_id": 824363,
+    "date": "2026-05-04",
+    "pitcher_name": "Tomoyuki Sugano",
+    "pitcher_id": 608372,
+    "bb_usage": 0.2529,
+    "lineup_k_pct": 0.2145,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
     "actual_k": null,
     "result": null,
-    "logged_at": "2026-05-03T06:01:23.161405"
+    "logged_at": "2026-05-04T06:00:33.694840"
+  },
+  {
+    "game_id": 824283,
+    "date": "2026-05-04",
+    "pitcher_name": "Tarik Skubal",
+    "pitcher_id": 669373,
+    "bb_usage": 0.1661,
+    "lineup_k_pct": 0.2189,
+    "over_odds": 107,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": 7.5,
+    "opening_k_line": 7.5,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:38.379298"
+  },
+  {
+    "game_id": 824283,
+    "date": "2026-05-04",
+    "pitcher_name": "Payton Tolle",
+    "pitcher_id": 801139,
+    "bb_usage": 0.1118,
+    "lineup_k_pct": 0.2171,
+    "over_odds": -147,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": 4.5,
+    "opening_k_line": 4.5,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:38.379322"
+  },
+  {
+    "game_id": 822984,
+    "date": "2026-05-04",
+    "pitcher_name": "Nick Martinez",
+    "pitcher_id": 607259,
+    "bb_usage": 0.1219,
+    "lineup_k_pct": 0.178,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:39.469236"
+  },
+  {
+    "game_id": 823874,
+    "date": "2026-05-04",
+    "pitcher_name": "Janson Junk",
+    "pitcher_id": 676083,
+    "bb_usage": 0.4816,
+    "lineup_k_pct": 0.218,
+    "over_odds": -130,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": 3.5,
+    "opening_k_line": 3.5,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:43.738802"
+  },
+  {
+    "game_id": 823874,
+    "date": "2026-05-04",
+    "pitcher_name": "Aaron Nola",
+    "pitcher_id": 605400,
+    "bb_usage": 0.3004,
+    "lineup_k_pct": 0.2206,
+    "over_odds": 105,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": 5.5,
+    "opening_k_line": 5.5,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:43.738866"
+  },
+  {
+    "game_id": 823552,
+    "date": "2026-05-04",
+    "pitcher_name": "Cam Schlittler",
+    "pitcher_id": 693645,
+    "bb_usage": 0.1072,
+    "lineup_k_pct": 0.2415,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:47.610152"
+  },
+  {
+    "game_id": 823552,
+    "date": "2026-05-04",
+    "pitcher_name": "Shane Baz",
+    "pitcher_id": 669358,
+    "bb_usage": 0.3211,
+    "lineup_k_pct": 0.2284,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:47.610176"
+  },
+  {
+    "game_id": 824684,
+    "date": "2026-05-04",
+    "pitcher_name": "Edward Cabrera",
+    "pitcher_id": 665795,
+    "bb_usage": 0.3248,
+    "lineup_k_pct": 0.2473,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:51.301303"
+  },
+  {
+    "game_id": 824684,
+    "date": "2026-05-04",
+    "pitcher_name": "Chase Petty",
+    "pitcher_id": 695534,
+    "bb_usage": null,
+    "lineup_k_pct": 0.205,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:51.301324"
+  },
+  {
+    "game_id": 824120,
+    "date": "2026-05-04",
+    "pitcher_name": "Michael Wacha",
+    "pitcher_id": 608379,
+    "bb_usage": 0.1747,
+    "lineup_k_pct": 0.2059,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:54.926798"
+  },
+  {
+    "game_id": 824120,
+    "date": "2026-05-04",
+    "pitcher_name": "Tanner Bibee",
+    "pitcher_id": 676440,
+    "bb_usage": 0.1412,
+    "lineup_k_pct": null,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:54.926867"
+  },
+  {
+    "game_id": 823064,
+    "date": "2026-05-04",
+    "pitcher_name": "Kyle Leahy",
+    "pitcher_id": 681517,
+    "bb_usage": 0.4132,
+    "lineup_k_pct": 0.2037,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:58.269217"
+  },
+  {
+    "game_id": 823064,
+    "date": "2026-05-04",
+    "pitcher_name": "Chad Patrick",
+    "pitcher_id": 694477,
+    "bb_usage": 0.1445,
+    "lineup_k_pct": 0.2152,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:00:58.269238"
+  },
+  {
+    "game_id": 824201,
+    "date": "2026-05-04",
+    "pitcher_name": "Steven Okert",
+    "pitcher_id": 595345,
+    "bb_usage": null,
+    "lineup_k_pct": 0.2049,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:01.580847"
+  },
+  {
+    "game_id": 824201,
+    "date": "2026-05-04",
+    "pitcher_name": "Yoshinobu Yamamoto",
+    "pitcher_id": 808967,
+    "bb_usage": 0.1891,
+    "lineup_k_pct": 0.197,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:01.580872"
+  },
+  {
+    "game_id": 824039,
+    "date": "2026-05-04",
+    "pitcher_name": "Jos\u00e9 Soriano",
+    "pitcher_id": 667755,
+    "bb_usage": 0.3117,
+    "lineup_k_pct": null,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:04.682066"
+  },
+  {
+    "game_id": 824039,
+    "date": "2026-05-04",
+    "pitcher_name": "Davis Martin",
+    "pitcher_id": 663436,
+    "bb_usage": 0.2578,
+    "lineup_k_pct": 0.2557,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:04.682090"
+  },
+  {
+    "game_id": 823143,
+    "date": "2026-05-04",
+    "pitcher_name": "Logan Gilbert",
+    "pitcher_id": 669302,
+    "bb_usage": 0.3297,
+    "lineup_k_pct": 0.1959,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:07.572615"
+  },
+  {
+    "game_id": 823143,
+    "date": "2026-05-04",
+    "pitcher_name": "JR Ritchie",
+    "pitcher_id": 702275,
+    "bb_usage": 0.3656,
+    "lineup_k_pct": 0.2419,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:07.572634"
+  },
+  {
+    "game_id": 823228,
+    "date": "2026-05-04",
+    "pitcher_name": "Trevor McDonald",
+    "pitcher_id": 686790,
+    "bb_usage": null,
+    "lineup_k_pct": null,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:10.452114"
+  },
+  {
+    "game_id": 823228,
+    "date": "2026-05-04",
+    "pitcher_name": "Randy V\u00e1squez",
+    "pitcher_id": 681190,
+    "bb_usage": 0.2089,
+    "lineup_k_pct": null,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-05-04T06:01:10.452155"
   }
 ]
