@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "644f37a134497f23c6d3821ad599b48b",
+    "game_date": "2026-05-04",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Philadelphia Flyers",
+    "commence_time": "2026-05-04T23:10:00Z",
+    "snapshot_type": "preclosing",
+    "total_line": 5.5,
+    "over_price": 117,
+    "under_price": -131,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-04T22:00:03.233839+00:00"
+  },
+  {
+    "game_id": "df8e2f4e8a0bfcff34d6bbd0619bc3dd",
+    "game_date": "2026-05-04",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Anaheim Ducks",
+    "commence_time": "2026-05-05T01:40:18Z",
+    "snapshot_type": "preclosing",
+    "total_line": 6.5,
+    "over_price": -107,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-04T22:00:03.233839+00:00"
+  }
+]
