@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "df8e2f4e8a0bfcff34d6bbd0619bc3dd",
+    "game_date": "2026-05-05",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Anaheim Ducks",
+    "commence_time": "2026-05-05T01:50:18Z",
+    "snapshot_type": "closing",
+    "total_line": 4.5,
+    "over_price": -102,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-05T03:00:04.661981+00:00"
+  },
+  {
+    "game_id": "fbc314d1e8c60127f6b1a302f544af53",
+    "game_date": "2026-05-05",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-05-06T00:10:08Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-05T03:00:04.661981+00:00"
+  },
+  {
+    "game_id": "8458afd03d1b3e8305f8e6362cd8e3b7",
+    "game_date": "2026-05-05",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-06T23:00:36Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": 105,
+    "under_price": -120,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-05T03:00:04.661981+00:00"
+  }
+]
