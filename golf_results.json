@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-05T07:01:57.277420",
+  "generated_at": "2026-05-05T09:00:37.532535",
   "sport": "golf",
   "season_stats": {
     "make_cut": {
@@ -59,188 +59,188 @@
   ],
   "matchup_candidates": [
     {
-      "player_1": "Rodgers, Patrick",
-      "player_2": "Wallace, Matt",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Woodland, Gary",
+      "player_2": "Homa, Max",
+      "player_3": "Pendrith, Taylor",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 11.4,
+      "bet_edge": 40.1,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fox, Ryan",
+      "player_2": "Campbell, Brian",
+      "player_3": "Stevens, Sam",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 45.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Bradley, Keegan",
+      "player_2": "Thorbjornsen, Michael",
+      "player_3": "Coody, Pierceson",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 16.8,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fleetwood, Tommy",
+      "player_2": "Matsuyama, Hideki",
+      "player_3": "Yellamaraju, Sudarshan",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 15.3,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Glover, Lucas",
+      "player_2": "Spaun, J.J.",
+      "player_3": "McCarthy, Denny",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 28.8,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Day, Jason",
+      "player_2": "Rodgers, Patrick",
+      "player_3": "McNealy, Maverick",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 30.0,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Thomas, Justin",
+      "player_2": "Lee, Min Woo",
+      "player_3": "Gotterup, Chris",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 27.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Burns, Sam",
+      "player_2": "Wallace, Matt",
+      "player_3": "Castillo, Ricky",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 24.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Scott, Adam",
+      "player_2": "Fitzpatrick, Alex",
+      "player_3": "Gerard, Ryan",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 33.2,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Conners, Corey",
+      "player_2": "Greyserman, Max",
+      "player_3": "Hojgaard, Nicolai",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 20.3,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Harman, Brian",
+      "player_2": "Kitayama, Kurt",
+      "player_3": "Potgieter, Aldrich",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 35.4,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Lowry, Shane",
+      "player_2": "Hoge, Tom",
+      "player_3": "Morikawa, Collin",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 48.9,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Henley, Russell",
+      "player_2": "Berger, Daniel",
+      "player_3": "Hall, Harry",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 33.3,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Cauley, Bud",
+      "player_2": "Poston, J.T.",
+      "player_3": "Bridgeman, Jacob",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 35.5,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fowler, Rickie",
+      "player_2": "Spieth, Jordan",
+      "player_3": "Putnam, Andrew",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 40.1,
       "classification": "candidate"
     },
     {
       "player_1": "Dahmen, Joel",
-      "player_2": "Hoge, Tom",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 14.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Pendrith, Taylor",
-      "player_2": "Theegala, Sahith",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 6.0,
-      "classification": "lean"
-    },
-    {
-      "player_1": "Lipsky, David",
-      "player_2": "McCarty, Matt",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 9.2,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "McCarthy, Denny",
-      "player_2": "Hisatsune, Ryo",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 5.9,
-      "classification": "lean"
-    },
-    {
-      "player_1": "Im, Sungjae",
-      "player_2": "McNealy, Maverick",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 14.3,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Spaun, J.J.",
-      "player_2": "Griffin, Ben",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 9.3,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Straka, Sepp",
-      "player_2": "Hall, Harry",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 14.7,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Bhatia, Akshay",
-      "player_2": "Castillo, Ricky",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 14.3,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Scheffler, Scottie",
-      "player_2": "Young, Cameron",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 8.6,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Rose, Justin",
-      "player_2": "Scott, Adam",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_2": "Smith, Jordan",
+      "player_3": "Hisatsune, Ryo",
+      "match_type": "3_ball",
       "book": "datagolf_model",
       "bet_edge": 23.9,
       "classification": "candidate"
     },
     {
-      "player_1": "Thomas, Justin",
-      "player_2": "Spieth, Jordan",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Straka, Sepp",
+      "player_2": "Kim, Michael",
+      "player_3": "Smalley, Alex",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 23.0,
+      "bet_edge": 18.8,
       "classification": "candidate"
     },
     {
-      "player_1": "Mitchell, Keith",
-      "player_2": "Smalley, Alex",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "English, Harris",
+      "player_2": "Hovland, Viktor",
+      "player_3": "Blanchet, Chandler",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 18.5,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Kitayama, Kurt",
-      "player_2": "Yellamaraju, Sudarshan",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 32.5,
+      "bet_edge": 18.9,
       "classification": "candidate"
     },
     {
       "player_1": "Noren, Alex",
-      "player_2": "Fox, Ryan",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_2": "Taylor, Nick",
+      "player_3": "Bhatia, Akshay",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 10.4,
+      "bet_edge": 32.3,
       "classification": "candidate"
     },
     {
-      "player_1": "Knapp, Jake",
-      "player_2": "Poston, J.T.",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Vegas, Jhonattan",
+      "player_2": "Echavarria, Nico",
+      "player_3": "Theegala, Sahith",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 25.8,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Blanchet, Chandler",
-      "player_2": "Potgieter, Aldrich",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 37.6,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Glover, Lucas",
-      "player_2": "Berger, Daniel",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 22.6,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Taylor, Nick",
-      "player_2": "Hojgaard, Nicolai",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 10.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Conners, Corey",
-      "player_2": "Thorbjornsen, Michael",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 9.0,
+      "bet_edge": 31.0,
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 358,
-  "matchup_n_leans": 97,
+  "matchup_n_candidates": 112,
+  "matchup_n_leans": 12,
   "g13_signals": [],
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
@@ -249,118 +249,7 @@
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
-  "g15_signals": [
-    {
-      "player_name": "Schauffele, Xander",
-      "dg_rank": null,
-      "dg_top20_prob": 61.2,
-      "adj_top20_prob": 63.4,
-      "book": "draftkings",
-      "close_odds": -170.0,
-      "fair_prob": 57.1,
-      "adj_edge": 6.3
-    },
-    {
-      "player_name": "Kim, Si Woo",
-      "dg_rank": null,
-      "dg_top20_prob": 48.5,
-      "adj_top20_prob": 50.7,
-      "book": "draftkings",
-      "close_odds": 100.0,
-      "fair_prob": 45.3,
-      "adj_edge": 5.3
-    },
-    {
-      "player_name": "Scott, Adam",
-      "dg_rank": null,
-      "dg_top20_prob": 41.9,
-      "adj_top20_prob": 44.1,
-      "book": "draftkings",
-      "close_odds": 130.0,
-      "fair_prob": 39.4,
-      "adj_edge": 4.7
-    },
-    {
-      "player_name": "Hojgaard, Nicolai",
-      "dg_rank": null,
-      "dg_top20_prob": 37.2,
-      "adj_top20_prob": 39.4,
-      "book": "draftkings",
-      "close_odds": 160.0,
-      "fair_prob": 34.9,
-      "adj_edge": 4.5
-    },
-    {
-      "player_name": "Knapp, Jake",
-      "dg_rank": null,
-      "dg_top20_prob": 35.5,
-      "adj_top20_prob": 37.7,
-      "book": "draftkings",
-      "close_odds": 175.0,
-      "fair_prob": 33.0,
-      "adj_edge": 4.7
-    },
-    {
-      "player_name": "Spaun, J.J.",
-      "dg_rank": null,
-      "dg_top20_prob": 37.3,
-      "adj_top20_prob": 39.5,
-      "book": "draftkings",
-      "close_odds": 165.0,
-      "fair_prob": 34.2,
-      "adj_edge": 5.3
-    },
-    {
-      "player_name": "Thomas, Justin",
-      "dg_rank": null,
-      "dg_top20_prob": 32.6,
-      "adj_top20_prob": 34.8,
-      "book": "draftkings",
-      "close_odds": 195.0,
-      "fair_prob": 30.7,
-      "adj_edge": 4.1
-    },
-    {
-      "player_name": "Bradley, Keegan",
-      "dg_rank": null,
-      "dg_top20_prob": 32.0,
-      "adj_top20_prob": 34.2,
-      "book": "draftkings",
-      "close_odds": 220.0,
-      "fair_prob": 28.3,
-      "adj_edge": 5.9
-    },
-    {
-      "player_name": "Stevens, Sam",
-      "dg_rank": null,
-      "dg_top20_prob": 29.4,
-      "adj_top20_prob": 31.6,
-      "book": "draftkings",
-      "close_odds": 250.0,
-      "fair_prob": 25.9,
-      "adj_edge": 5.7
-    },
-    {
-      "player_name": "Coody, Pierceson",
-      "dg_rank": null,
-      "dg_top20_prob": 25.2,
-      "adj_top20_prob": 27.4,
-      "book": "draftkings",
-      "close_odds": 300.0,
-      "fair_prob": 22.7,
-      "adj_edge": 4.7
-    },
-    {
-      "player_name": "Rodgers, Patrick",
-      "dg_rank": null,
-      "dg_top20_prob": 16.4,
-      "adj_top20_prob": 18.6,
-      "book": "draftkings",
-      "close_odds": 550.0,
-      "fair_prob": 14.0,
-      "adj_edge": 4.7
-    }
-  ],
+  "g15_signals": [],
   "g15_elite_density_bucket": "HIGH",
   "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
