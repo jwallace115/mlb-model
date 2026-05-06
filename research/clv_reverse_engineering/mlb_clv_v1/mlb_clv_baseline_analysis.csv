@@ -1,0 +1,14 @@
+dimension,bucket,n_games,pct_significant_move,pct_up_among_movers,mean_line_move
+line_bucket,<7,105,26.7,21.0,0.081
+line_bucket,7-7.5,264,37.9,25.0,0.072
+line_bucket,7.5-8,388,48.5,22.7,-0.0026
+line_bucket,8-8.5,589,37.9,19.2,0.0008
+line_bucket,8.5-9,420,40.2,17.6,-0.0262
+line_bucket,9-9.5,244,41.4,17.2,-0.0205
+line_bucket,9.5-10,65,41.5,13.8,-0.0769
+line_bucket,10+,116,44.0,14.7,-0.056
+month,4,258,45.3,,-0.0698
+month,5,624,43.4,,0.0264
+month,6,643,42.0,,0.028
+month,7,322,36.3,,-0.014
+month,8,344,32.6,,-0.0363
