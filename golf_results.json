@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-05T09:00:37.532535",
+  "generated_at": "2026-05-06T07:00:28.021218",
   "sport": "golf",
   "season_stats": {
     "make_cut": {
@@ -249,7 +249,108 @@
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
-  "g15_signals": [],
+  "g15_signals": [
+    {
+      "player_name": "Scott, Adam",
+      "dg_rank": null,
+      "dg_top20_prob": 42.9,
+      "adj_top20_prob": 45.1,
+      "book": "pinnacle",
+      "close_odds": 130.0,
+      "fair_prob": 40.4,
+      "adj_edge": 4.7
+    },
+    {
+      "player_name": "Hojgaard, Nicolai",
+      "dg_rank": null,
+      "dg_top20_prob": 37.0,
+      "adj_top20_prob": 39.2,
+      "book": "draftkings",
+      "close_odds": 166.0,
+      "fair_prob": 34.9,
+      "adj_edge": 4.3
+    },
+    {
+      "player_name": "Spaun, J.J.",
+      "dg_rank": null,
+      "dg_top20_prob": 37.7,
+      "adj_top20_prob": 40.0,
+      "book": "draftkings",
+      "close_odds": 165.0,
+      "fair_prob": 35.0,
+      "adj_edge": 4.9
+    },
+    {
+      "player_name": "Gerard, Ryan",
+      "dg_rank": null,
+      "dg_top20_prob": 30.6,
+      "adj_top20_prob": 32.8,
+      "book": "draftkings",
+      "close_odds": 225.0,
+      "fair_prob": 28.6,
+      "adj_edge": 4.2
+    },
+    {
+      "player_name": "Stevens, Sam",
+      "dg_rank": null,
+      "dg_top20_prob": 29.9,
+      "adj_top20_prob": 32.1,
+      "book": "draftkings",
+      "close_odds": 250.0,
+      "fair_prob": 26.5,
+      "adj_edge": 5.5
+    },
+    {
+      "player_name": "Cauley, Bud",
+      "dg_rank": null,
+      "dg_top20_prob": 24.8,
+      "adj_top20_prob": 27.1,
+      "book": "draftkings",
+      "close_odds": 340.0,
+      "fair_prob": 21.1,
+      "adj_edge": 5.9
+    },
+    {
+      "player_name": "Harman, Brian",
+      "dg_rank": null,
+      "dg_top20_prob": 20.9,
+      "adj_top20_prob": 23.1,
+      "book": "draftkings",
+      "close_odds": 430.0,
+      "fair_prob": 17.5,
+      "adj_edge": 5.6
+    },
+    {
+      "player_name": "Poston, J.T.",
+      "dg_rank": null,
+      "dg_top20_prob": 20.3,
+      "adj_top20_prob": 22.5,
+      "book": "draftkings",
+      "close_odds": 430.0,
+      "fair_prob": 17.5,
+      "adj_edge": 5.0
+    },
+    {
+      "player_name": "Rodgers, Patrick",
+      "dg_rank": null,
+      "dg_top20_prob": 16.8,
+      "adj_top20_prob": 19.0,
+      "book": "draftkings",
+      "close_odds": 600.0,
+      "fair_prob": 13.3,
+      "adj_edge": 5.7
+    },
+    {
+      "player_name": "Novak, Andrew",
+      "dg_rank": null,
+      "dg_top20_prob": 16.1,
+      "adj_top20_prob": 18.3,
+      "book": "draftkings",
+      "close_odds": 550.0,
+      "fair_prob": 14.3,
+      "adj_edge": 4.0
+    }
+  ],
   "g15_elite_density_bucket": "HIGH",
   "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
