@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "fbc314d1e8c60127f6b1a302f544af53",
+    "game_date": "2026-05-05",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-05-06T00:10:08Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.5,
+    "over_price": 103,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-05T18:00:03.177615+00:00"
+  },
+  {
+    "game_id": "8458afd03d1b3e8305f8e6362cd8e3b7",
+    "game_date": "2026-05-05",
+    "sport": "NHL",
+    "home_team": "Buffalo Sabres",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-06T23:10:36Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.0,
+    "over_price": 105,
+    "under_price": -120,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-05T18:00:03.177615+00:00"
+  }
+]

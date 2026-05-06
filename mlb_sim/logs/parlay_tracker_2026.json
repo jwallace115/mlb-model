@@ -624,67 +624,15 @@
         ],
         "result": "LOSS",
         "net_units": -1.0
-      },
-      {
-        "date": "2026-05-01",
-        "type": "3-leg",
-        "legs": [
-          {
-            "game": "ATL@COL",
-            "bet": "FULL GAME UNDER",
-            "line": 11.0,
-            "result": "LOSS"
-          },
-          {
-            "game": "CLE@OAK",
-            "bet": "FULL GAME UNDER",
-            "line": 9.5,
-            "result": "LOSS"
-          },
-          {
-            "game": "PHI@MIA",
-            "bet": "FULL GAME UNDER",
-            "line": 8.0,
-            "result": "LOSS"
-          }
-        ],
-        "result": "LOSS",
-        "net_units": -1.0
-      },
-      {
-        "date": "2026-05-02",
-        "type": "3-leg",
-        "legs": [
-          {
-            "game": "CLE@OAK",
-            "bet": "FULL GAME UNDER",
-            "line": 10.0,
-            "result": "LOSS"
-          },
-          {
-            "game": "NYM@LAA",
-            "bet": "FULL GAME UNDER",
-            "line": 8.0,
-            "result": "WIN"
-          },
-          {
-            "game": "HOU@BOS",
-            "bet": "FULL GAME UNDER",
-            "line": 9.0,
-            "result": "PUSH"
-          }
-        ],
-        "result": "LOSS",
-        "net_units": -1.0
       }
     ],
     "summary": {
-      "total": 26,
+      "total": 24,
       "wins": 2,
-      "losses": 24,
+      "losses": 22,
       "pending": 0,
-      "win_rate": 7.7,
-      "net_units": -14.0,
+      "win_rate": 8.3,
+      "net_units": -12.0,
       "payout_per_win": 6.0
     }
   },

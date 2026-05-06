@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "4868659ab89eec9f59b336ce39d0d61e",
+    "game_date": "2026-04-30",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Utah Mammoth",
+    "commence_time": "2026-04-30T02:20:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -107,
+    "under_price": -107,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-29T06:05:03.147532+00:00"
+  },
+  {
+    "game_id": "d91a1a692308bcc3e5e624a34c62ff28",
+    "game_date": "2026-04-30",
+    "sport": "NHL",
+    "home_team": "Minnesota Wild",
+    "away_team": "Dallas Stars",
+    "commence_time": "2026-04-30T23:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -120,
+    "under_price": 104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-29T06:05:03.147532+00:00"
+  },
+  {
+    "game_id": "d89705412ebe2b5f2281fb9e44b12459",
+    "game_date": "2026-04-30",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Edmonton Oilers",
+    "commence_time": "2026-05-01T02:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -155,
+    "under_price": 130,
+    "book": "draftkings",
+    "capture_timestamp": "2026-04-29T06:05:03.147532+00:00"
+  },
+  {
+    "game_id": "e8e7f71bd27bb8061fbbd5af896ae23c",
+    "game_date": "2026-04-30",
+    "sport": "NHL",
+    "home_team": "Boston Bruins",
+    "away_team": "Buffalo Sabres",
+    "commence_time": "2026-05-01T23:00:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -118,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-04-29T06:05:03.147532+00:00"
+  }
+]

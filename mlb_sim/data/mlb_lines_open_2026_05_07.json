@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "3d9ff7b926b247cb73447ca5c7a7428e",
+    "game_date": "2026-05-07",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "New York Mets",
+    "commence_time": "2026-05-07T01:21:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-05-06T06:05:03.471325+00:00"
+  },
+  {
+    "game_id": "de899b461227924fc52c2f9492e9fe56",
+    "game_date": "2026-05-07",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Pittsburgh Pirates",
+    "commence_time": "2026-05-07T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": 100,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-06T06:05:03.471325+00:00"
+  }
+]

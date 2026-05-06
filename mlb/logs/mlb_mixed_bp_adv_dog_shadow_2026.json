@@ -121,6 +121,57 @@
       "dog_bp_era": 3.922,
       "win_loss": "L",
       "final_score": "2-5"
+    },
+    {
+      "game_pk": 824202,
+      "game_date": "2026-04-26",
+      "matchup": "NYY @ HOU",
+      "fav_team": "NYY",
+      "dog_team": "HOU",
+      "fav_side": "away",
+      "fav_implied": 0.55,
+      "dog_ml_price": 117,
+      "sp_fip_diff": 0.08,
+      "off_diff": -0.5,
+      "bp_era_diff": 0.233,
+      "fav_bp_era": 4.132,
+      "dog_bp_era": 3.899,
+      "win_loss": "W",
+      "final_score": "4-7"
+    },
+    {
+      "game_pk": 824122,
+      "game_date": "2026-04-26",
+      "matchup": "LAA @ KCR",
+      "fav_team": "KCR",
+      "dog_team": "LAA",
+      "fav_side": "home",
+      "fav_implied": 0.5284,
+      "dog_ml_price": 107,
+      "sp_fip_diff": -0.12,
+      "off_diff": 0.8,
+      "bp_era_diff": 0.176,
+      "fav_bp_era": 5.065,
+      "dog_bp_era": 4.889,
+      "win_loss": "L",
+      "final_score": "9-11"
+    },
+    {
+      "game_pk": 825016,
+      "game_date": "2026-04-30",
+      "matchup": "KCR @ OAK",
+      "fav_team": "OAK",
+      "dog_team": "KCR",
+      "fav_side": "home",
+      "fav_implied": 0.542,
+      "dog_ml_price": 113,
+      "sp_fip_diff": -0.35,
+      "off_diff": -0.65,
+      "bp_era_diff": 0.094,
+      "fav_bp_era": 5.136,
+      "dog_bp_era": 5.042,
+      "win_loss": "L",
+      "final_score": "3-6"
     }
   ]
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "c361a0b8c035a055bd9497b52674e3fb",
+    "game_date": "2026-05-02",
+    "sport": "NBA",
+    "home_team": "Houston Rockets",
+    "away_team": "Los Angeles Lakers",
+    "commence_time": "2026-05-02T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 206.5,
+    "over_price": -107,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-01T06:05:02.998117+00:00"
+  },
+  {
+    "game_id": "a37e80a2e3cf3aaa3ae84a9124987058",
+    "game_date": "2026-05-02",
+    "sport": "NBA",
+    "home_team": "Boston Celtics",
+    "away_team": "Philadelphia 76ers",
+    "commence_time": "2026-05-02T23:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 206.0,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-01T06:05:02.998117+00:00"
+  }
+]
