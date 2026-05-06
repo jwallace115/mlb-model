@@ -1,0 +1,20 @@
+signal_type,game_date,game_pk,dog_team,fav_team,fav_side,bet_side,dog_ml_price,result,matchup,final_score,graded_result,ml_home_price,ml_away_price,home_team,away_team,bet_price_american,break_even,won,actual_profit,synthetic_profit,price_tier,year
+night_dog,2026-04-17,824778,DET,BOS,home,away,114,L,DET @ BOS,0-1,LOSS,,,,,114.0,0.4672897196261682,False,-1.0,-1.0,DOG,2026
+night_dog,2026-04-21,824290,MIL,DET,home,away,101,W,MIL @ DET,12-4,WIN,,,,,101.0,0.4975124378109453,True,1.01,0.909,PICK,2026
+night_dog,2026-04-22,824286,MIL,DET,home,away,117,L,MIL @ DET,2-5,LOSS,,,,,117.0,0.4608294930875576,False,-1.0,-1.0,DOG,2026
+night_dog,2026-04-24,822992,MIN,TBR,home,away,109,L,MIN @ TBR,2-6,LOSS,,,,,109.0,0.4784688995215311,False,-1.0,-1.0,DOG,2026
+night_dog,2026-04-26,824122,LAA,KCR,home,away,107,L,LAA @ KCR,9-11,LOSS,,,,,107.0,0.4830917874396135,False,-1.0,-1.0,DOG,2026
+night_dog,2026-04-28,824447,TBR,CLE,home,away,117,W,TBR @ CLE,1-0,WIN,,,,,117.0,0.4608294930875576,True,1.17,0.909,DOG,2026
+night_dog,2026-05-01,824287,TEX,DET,home,away,102,W,TEX @ DET,5-4,WIN,,,,,102.0,0.49504950495049505,True,1.02,0.909,PICK,2026
+night_dog,2026-05-02,824284,TEX,DET,home,away,117,L,TEX @ DET,1-5,LOSS,,,,,117.0,0.4608294930875576,False,-1.0,-1.0,DOG,2026
+night_dog,2026-05-03,824285,TEX,DET,home,away,100,L,TEX @ DET,1-7,LOSS,,,,,100.0,0.5,False,-1.0,-1.0,PICK,2026
+bp_adv_dog,2026-04-12,824859,SFG,BAL,home,away,113,L,SFG @ BAL,2-6,LOSS,,,,,113.0,0.4694835680751174,False,-1.0,-1.0,DOG,2026
+bp_adv_dog,2026-04-12,823075,STL,BOS,away,home,110,L,BOS @ STL,9-3,LOSS,,,,,110.0,0.47619047619047616,False,-1.0,-1.0,DOG,2026
+bp_adv_dog,2026-04-16,824530,SFG,CIN,home,away,112,W,SFG @ CIN,3-0,WIN,,,,,112.0,0.4716981132075472,True,1.12,0.909,DOG,2026
+bp_adv_dog,2026-04-17,824778,DET,BOS,home,away,114,L,DET @ BOS,0-1,LOSS,,,,,114.0,0.4672897196261682,False,-1.0,-1.0,DOG,2026
+bp_adv_dog,2026-04-20,824776,DET,BOS,home,away,120,L,DET @ BOS,6-8,LOSS,,,,,120.0,0.45454545454545453,False,-1.0,-1.0,DOG,2026
+bp_adv_dog,2026-04-21,824290,MIL,DET,home,away,101,W,MIL @ DET,12-4,WIN,,,,,101.0,0.4975124378109453,True,1.01,0.909,PICK,2026
+bp_adv_dog,2026-04-22,824286,MIL,DET,home,away,117,L,MIL @ DET,2-5,LOSS,,,,,117.0,0.4608294930875576,False,-1.0,-1.0,DOG,2026
+bp_adv_dog,2026-04-26,824202,HOU,NYY,away,home,117,W,NYY @ HOU,4-7,WIN,,,,,117.0,0.4608294930875576,True,1.17,0.909,DOG,2026
+bp_adv_dog,2026-04-26,824122,LAA,KCR,home,away,107,L,LAA @ KCR,9-11,LOSS,,,,,107.0,0.4830917874396135,False,-1.0,-1.0,DOG,2026
+bp_adv_dog,2026-04-30,825016,KCR,OAK,home,away,113,L,KCR @ OAK,3-6,LOSS,,,,,113.0,0.4694835680751174,False,-1.0,-1.0,DOG,2026
