@@ -1,0 +1,5 @@
+bookmaker,n_events,pct_lag0,pct_lag1,pct_lag2,pct_never,mean_lag_snapshots,mean_lag_minutes,small_move_lag,large_move_lag,early_move_lag,late_move_lag,up_lag,down_lag
+draftkings,5965,58.8,6.1,1.6,32.8,0.17,15.0,0.18,0.04,0.28,0.04,0.18,0.16
+fanduel,5965,50.2,5.2,1.9,41.9,0.2,18.0,0.22,0.04,0.34,0.04,0.21,0.2
+betmgm,5965,46.3,7.8,2.6,42.5,0.27,24.0,0.29,0.06,0.44,0.04,0.27,0.27
+bovada,5965,80.7,0.9,0.1,18.2,0.02,2.0,0.02,0.0,0.03,0.01,0.02,0.02
