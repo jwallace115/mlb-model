@@ -1,0 +1,7 @@
+bookmaker,n_signal_games,mean_point_move,pct_down_05_signal,pct_down_05_baseline,lift_pp,corr_with_source,same_direction_rate,both_down_05_pct,pct_equal_better_6am,pct_worse_6am,mean_line_advantage,verdict
+betmgm,280,-0.0286,22.5,21.4,1.1,0.773,74.6,15.1,91.8,8.2,0.016,FAST_FOLLOWER_WINDOW_SMALL
+bovada,287,0.0174,17.8,23.2,-5.4,0.84,81.1,14.0,91.2,8.8,-0.025,NOT_PORTABLE
+draftkings,297,-0.0152,23.6,22.9,0.7,,,,,,,NOT_PORTABLE
+fanduel,298,-0.0268,18.5,18.7,-0.2,0.69,67.3,10.8,87.2,12.8,0.002,NOT_PORTABLE
+mybookieag,225,-0.0222,24.9,22.1,2.7,0.831,79.9,18.8,92.4,7.6,0.0,FAST_FOLLOWER_WINDOW_SMALL
+pinnacle,238,-0.0063,17.6,23.1,-5.4,0.713,79.7,13.6,90.3,9.7,-0.028,NOT_PORTABLE
