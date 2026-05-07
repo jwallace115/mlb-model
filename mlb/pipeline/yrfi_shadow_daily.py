@@ -401,6 +401,17 @@ def main():
                 if (e["game_date"], e["home_team"], e["away_team"], e["log_date"])
                 not in new_keys]
     combined = existing + new_entries
+
+    # ── Grade prior ungraded entries ──
+    from mlb.pipeline.yrfi_grading_utils import grade_entry
+    graded_now = 0
+    for i, entry in enumerate(combined):
+        if entry.get("result_graded") is not True and entry.get("game_date", "") < game_date_str:
+            combined[i] = grade_entry(entry, sleep_secs=0.3)
+            if combined[i].get("result_graded") is True:
+                graded_now += 1
+    logger.info(f"Graded {graded_now} prior entries")
+
     _save_shadow_log(combined)
 
     # ── Daily card ──
