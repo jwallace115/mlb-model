@@ -409,395 +409,67 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
                                        _render_signal_status_row)
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # P1B COLD-WARM EARLY_HEAVY OVER — STATUS HEADER
+    # A. SHADOW PILLS ROW
     # ═══════════════════════════════════════════════════════════════════════════
-
-    # --- Load P1B tracker data ---
-    _p1b_tracker_path = os.path.join(os.path.dirname(__file__), "mlb", "logs",
-                                     "mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json")
-    _p1b_all = []
-    try:
-        if os.path.exists(_p1b_tracker_path):
-            _p1b_raw = json.load(open(_p1b_tracker_path))
-            _p1b_all = _p1b_raw.get("signals", [])
-    except Exception:
-        pass
-
-    # --- P1B last updated timestamp ---
-    _p1b_lu = None
-    try:
-        _p1b_lu_data = json.load(open(os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")))
-        for _pk in ["mlb_confirm", "mlb_prelim"]:
-            _pts = _p1b_lu_data.get(_pk)
-            if _pts and isinstance(_pts, str) and "T" in _pts:
-                from zoneinfo import ZoneInfo
-                _pdt = datetime.fromisoformat(_pts.replace("Z", "+00:00"))
-                _p1b_lu = _pdt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
-                break
-    except Exception:
-        pass
-
-    render_status_header(
-        object_name="P1B Cold-Warm EARLY_HEAVY Over",
-        object_id="mlb_p1b_coldwarm_earlyheavy_over_v1",
-        status="SHADOW",
-        tracker_start="April 2026",
-        current_threshold="EARLY_HEAVY + cold park + temp \u226575\u00b0F + Jun-Sep + over \u2264-105",
-        replaces=None,
-        last_updated=_p1b_lu,
+    _render_signal_status_row(
+        active_labels=[],
+        shadow_labels=["Night Dog", "BP Adv Dog", "P1B Cold-Warm",
+                       "YRFI 1+", "YRFI 2+", "YRFI 3+", "NRFI Card (info)"],
     )
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # SIDES SHADOW SECTION
+    # B. TIMESTAMP
     # ═══════════════════════════════════════════════════════════════════════════
+    _mlb_lu = None
+    try:
+        _lu_data = json.load(open(os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")))
+        for _lk in ["mlb_confirm", "mlb_prelim"]:
+            _lts = _lu_data.get(_lk)
+            if _lts and isinstance(_lts, str) and "T" in _lts:
+                from zoneinfo import ZoneInfo
+                _ldt = datetime.fromisoformat(_lts.replace("Z", "+00:00"))
+                _mlb_lu = _ldt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
+                break
+    except Exception:
+        pass
+    if _mlb_lu:
+        st.html(f'<div style="font-size:0.68em;color:#64748b;margin-bottom:8px">Last updated: {_mlb_lu}</div>')
 
-    # --- Load sides tracker data ---
-    _sides_trackers = {}
-    for _sname, _slabel in [
-        ("mlb_mixed_night_dog_shadow_2026", "Night Dog"),
-        ("mlb_mixed_bp_adv_dog_shadow_2026", "BP Adv Dog"),
-    ]:
-        _spath = os.path.join(os.path.dirname(__file__), "mlb", "logs", f"{_sname}.json")
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DATA LOADERS
+    # ═══════════════════════════════════════════════════════════════════════════
+    _base = os.path.dirname(__file__)
+
+    def _load_json(rel_path, key=None):
         try:
-            if os.path.exists(_spath):
-                _sraw = json.load(open(_spath))
-                _sides_trackers[_slabel] = _sraw.get("signals", [])
-            else:
-                _sides_trackers[_slabel] = []
+            p = os.path.join(_base, rel_path)
+            if os.path.exists(p):
+                raw = json.load(open(p))
+                return raw.get(key, []) if key else raw
         except Exception:
-            _sides_trackers[_slabel] = []
+            pass
+        return []
 
-    night_all = _sides_trackers.get("Night Dog", [])
-    bp_all = _sides_trackers.get("BP Adv Dog", [])
+    night_all = _load_json("mlb/logs/mlb_mixed_night_dog_shadow_2026.json", "signals")
+    bp_all = _load_json("mlb/logs/mlb_mixed_bp_adv_dog_shadow_2026.json", "signals")
+    _p1b_all = _load_json("mlb/logs/mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json", "signals")
+    _yrfi_all = _load_json("mlb/logs/yrfi_shadow_2026.json")
 
-    # --- Status headers ---
-    lu = None
-    try:
-        lu_data = json.load(open(os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")))
-        for key in ["mlb_confirm", "mlb_prelim"]:
-            ts = lu_data.get(key)
-            if ts and isinstance(ts, str) and "T" in ts:
-                from zoneinfo import ZoneInfo
-                dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-                lu = dt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
-                break
-    except Exception:
-        pass
-
-    render_status_header(
-        object_name="MLB Sides — Night Dog",
-        object_id="mlb_mixed_night_dog_shadow_2026",
-        status="SHADOW",
-        tracker_start="April 12, 2026",
-        current_threshold="Night game · MIXED class · dog ML",
-        replaces=None,
-        last_updated=lu,
-    )
-    render_status_header(
-        object_name="MLB Sides — BP Adv Dog",
-        object_id="mlb_mixed_bp_adv_dog_shadow_2026",
-        status="SHADOW",
-        tracker_start="April 12, 2026",
-        current_threshold="Dog BP ERA < Fav BP ERA · MIXED class · dog ML",
-        replaces=None,
-        last_updated=lu,
-    )
-
-    # --- Signal status pills ---
-    _sides_shadow_labels = []
-    if night_all:
-        _sides_shadow_labels.append("Night Dog")
-    if bp_all:
-        _sides_shadow_labels.append("BP Adv Dog")
-    _sides_shadow_labels.append("P1B Cold-Warm Over")
-    _render_signal_status_row(active_labels=[], shadow_labels=_sides_shadow_labels if _sides_shadow_labels else ["Night Dog", "BP Adv Dog", "P1B Cold-Warm Over"])
-
-    # --- Today's sides cards ---
-    _sides_today = _today_et()
-
-    night_today = [s for s in night_all if s.get("game_date") == _sides_today]
-    bp_today = [s for s in bp_all if s.get("game_date") == _sides_today]
-
-    # P1B today signals
-    _p1b_today_date = _today_et()
-    p1b_today = [s for s in _p1b_all if s.get("date") == _p1b_today_date]
-
-    game_signals = defaultdict(list)
-    for sig in night_today:
-        gpk = sig.get("game_pk", sig.get("game_id"))
-        game_signals[gpk].append(("night_dog", sig))
-    for sig in bp_today:
-        gpk = sig.get("game_pk", sig.get("game_id"))
-        game_signals[gpk].append(("bp_adv_dog", sig))
-    for sig in p1b_today:
-        gpk = sig.get("game_pk")
-        if gpk:
-            game_signals[gpk].append(("p1b_coldwarm", sig))
-
-    st.html(
-        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
-        "Today's Sides Signals</div>"
-    )
-
-    if game_signals:
-        for gpk, signals_list in game_signals.items():
-            # Use first signal for matchup / time
-            first_sig = signals_list[0][1]
-            matchup = first_sig.get("matchup", "?")
-            time_et = ""
-            time_utc = first_sig.get("game_time_utc", "")
-            if time_utc and len(time_utc) >= 16:
-                try:
-                    from zoneinfo import ZoneInfo
-                    _dt = datetime.fromisoformat(time_utc.replace("Z", "+00:00"))
-                    time_et = _dt.astimezone(ZoneInfo("America/New_York")).strftime("%-I:%M %p ET")
-                except Exception:
-                    time_et = ""
-
-            time_part = f" · {time_et}" if time_et else ""
-
-            signal_lines_html = ""
-            for sig_type, sig in signals_list:
-                dog_team = sig.get("dog_team", "?")
-                if sig_type == "night_dog":
-                    signal_lines_html += (
-                        f'<div style="padding:3px 0">'
-                        f'{_universal_pill("Night Dog", "#fff", "#2563eb")}'
-                        f'{_universal_pill("PRIMARY", "#fff", "#6b7280")}'
-                        f'<span style="font-size:0.85em;color:#e2e8f0;margin-left:6px">'
-                        f'{dog_team} ML · shadow</span>'
-                        f'<span style="font-size:0.72em;color:#94a3b8;margin-left:8px">'
-                        f'Night game · MIXED class</span>'
-                        f'</div>'
-                    )
-                elif sig_type == "bp_adv_dog":
-                    bp_dog = sig.get("dog_bp_era", 0)
-                    bp_fav = sig.get("fav_bp_era", 0)
-                    bp_dog_str = f"{bp_dog:.2f}" if isinstance(bp_dog, (int, float)) else str(bp_dog)
-                    bp_fav_str = f"{bp_fav:.2f}" if isinstance(bp_fav, (int, float)) else str(bp_fav)
-                    signal_lines_html += (
-                        f'<div style="padding:3px 0">'
-                        f'{_universal_pill("BP Adv Dog", "#fff", "#2563eb")}'
-                        f'{_universal_pill("SECONDARY", "#fff", "#6b7280")}'
-                        f'<span style="font-size:0.85em;color:#e2e8f0;margin-left:6px">'
-                        f'{dog_team} ML · shadow</span>'
-                        f'<span style="font-size:0.72em;color:#94a3b8;margin-left:8px">'
-                        f'Dog BP: {bp_dog_str} · Fav BP: {bp_fav_str}</span>'
-                        f'</div>'
-                    )
-                elif sig_type == "p1b_coldwarm":
-                    _p1b_home = sig.get("home_team", "?")
-                    _p1b_away = sig.get("away_team", "?")
-                    _p1b_fg = sig.get("fg_total", 0)
-                    _p1b_temp = sig.get("forecast_temp_f", 0)
-                    _p1b_f5r = sig.get("f5_ratio", 0)
-                    _p1b_price = sig.get("over_price", "")
-                    _p1b_fg_str = f"{_p1b_fg:.1f}" if isinstance(_p1b_fg, (int, float)) else str(_p1b_fg)
-                    _p1b_f5r_str = f"{_p1b_f5r:.3f}" if isinstance(_p1b_f5r, (int, float)) else str(_p1b_f5r)
-                    signal_lines_html += (
-                        f'<div style="padding:3px 0">'
-                        f'{_universal_pill("P1B Cold-Warm", "#fff", "#2563eb")}'
-                        f'{_universal_pill("SHADOW", "#fff", "#dc2626")}'
-                        f'<span style="font-size:0.85em;color:#e2e8f0;margin-left:6px">'
-                        f'{_p1b_home} vs {_p1b_away} FG OVER {_p1b_fg_str} \u00b7 shadow</span>'
-                        f'<span style="font-size:0.72em;color:#94a3b8;margin-left:8px">'
-                        f'Cold park \u00b7 {_p1b_temp:.0f}\u00b0F \u00b7 F5 ratio {_p1b_f5r_str} \u00b7 Over {_p1b_price}</span>'
-                        f'</div>'
-                    )
-
-            card_html = (
-                f'<div style="border:1px solid #dc2626;border-radius:8px;padding:12px 16px;'
-                f'background:#0f1729;margin:8px 0">'
-                f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
-                f'{matchup}{time_part} · <span style="color:#f87171">shadow</span></div>'
-                f'<hr style="border:none;border-top:1px solid #1e293b;margin:4px 0">'
-                f'{signal_lines_html}'
-                f'<hr style="border:none;border-top:1px solid #1e293b;margin:4px 0">'
-                f'<div style="font-size:0.68em;color:#4b5563;margin-top:4px">'
-                f'Research shadow — not a live wager recommendation</div>'
-                f'</div>'
-            )
-            st.html(card_html)
-    else:
-        st.html(
-            '<div style="font-size:0.75em;color:#6b7280;padding:6px 12px;background:#0d1117;'
-            'border-radius:4px;border:1px solid #1e293b">'
-            'No sides signals today — next slate pending</div>'
-        )
-
-    # --- Sides tracker: Night Dog ---
-    st.html(
-        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
-        'Shadow Tracker — Night Dog (started April 12, 2026)</div>'
-    )
-    _nd_resolved = [s for s in night_all if s.get("win_loss") in ("W", "L")]
-    _nd_wins = sum(1 for s in _nd_resolved if s.get("win_loss") == "W")
-    _nd_losses = sum(1 for s in _nd_resolved if s.get("win_loss") == "L")
-    _nd_n = len(_nd_resolved)
-    _nd_pend = len(night_all) - _nd_n
-    _nd_hit = (_nd_wins / _nd_n * 100) if _nd_n > 0 else 0
-    st.html(
-        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
-        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
-        f'<span style="font-weight:700">{_nd_wins}-{_nd_losses}</span>'
-        f' &nbsp;|&nbsp; Hit: {_nd_hit:.1f}%'
-        f' &nbsp;|&nbsp; {_nd_n} resolved, {_nd_pend} pending'
-        f'</div>'
-    )
-    if night_all:
-        import pandas as pd
-        _nd_rows = []
-        for s in night_all:
-            _nd_rows.append({
-                "Date": s.get("game_date", ""),
-                "Matchup": s.get("matchup", ""),
-                "Dog": s.get("dog_team", ""),
-                "ML": s.get("dog_ml_price", ""),
-                "W/L": s.get("win_loss") or "pending",
-            })
-        st.dataframe(pd.DataFrame(_nd_rows), use_container_width=True, hide_index=True)
-
-    # --- Sides tracker: BP Adv Dog ---
-    st.html(
-        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
-        'Shadow Tracker — BP Adv Dog (started April 12, 2026)</div>'
-    )
-    _bp_resolved = [s for s in bp_all if s.get("win_loss") in ("W", "L")]
-    _bp_wins = sum(1 for s in _bp_resolved if s.get("win_loss") == "W")
-    _bp_losses = sum(1 for s in _bp_resolved if s.get("win_loss") == "L")
-    _bp_n = len(_bp_resolved)
-    _bp_pend = len(bp_all) - _bp_n
-    _bp_hit = (_bp_wins / _bp_n * 100) if _bp_n > 0 else 0
-    st.html(
-        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
-        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
-        f'<span style="font-weight:700">{_bp_wins}-{_bp_losses}</span>'
-        f' &nbsp;|&nbsp; Hit: {_bp_hit:.1f}%'
-        f' &nbsp;|&nbsp; {_bp_n} resolved, {_bp_pend} pending'
-        f'</div>'
-    )
-    if bp_all:
-        import pandas as pd
-        _bp_rows = []
-        for s in bp_all:
-            _bp_rows.append({
-                "Date": s.get("game_date", ""),
-                "Matchup": s.get("matchup", ""),
-                "Dog": s.get("dog_team", ""),
-                "ML": s.get("dog_ml_price", ""),
-                "Dog BP": f"{s.get('dog_bp_era', 0):.2f}" if isinstance(s.get('dog_bp_era'), (int, float)) else "",
-                "Fav BP": f"{s.get('fav_bp_era', 0):.2f}" if isinstance(s.get('fav_bp_era'), (int, float)) else "",
-                "W/L": s.get("win_loss") or "pending",
-            })
-        st.dataframe(pd.DataFrame(_bp_rows), use_container_width=True, hide_index=True)
-
-    # --- P1B tracker ---
-    st.html(
-        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
-        'Shadow Tracker \u2014 P1B Cold-Warm EARLY_HEAVY Over</div>'
-    )
-    _p1b_resolved = [s for s in _p1b_all if s.get("result") in ("W", "L")]
-    _p1b_wins = sum(1 for s in _p1b_resolved if s.get("result") == "W")
-    _p1b_losses = sum(1 for s in _p1b_resolved if s.get("result") == "L")
-    _p1b_pushes = sum(1 for s in _p1b_resolved if s.get("result") == "P")
-    _p1b_n = len(_p1b_resolved)
-    _p1b_pend = len([s for s in _p1b_all if not s.get("graded")])
-    _p1b_hit = (_p1b_wins / _p1b_n * 100) if _p1b_n > 0 else 0
-
-    # ROI calc: use actual over_price if available, else flat -110 synthetic
-    _p1b_roi_units = 0.0
-    _p1b_roi_n = 0
-    _p1b_synthetic = False
-    for _ps in _p1b_resolved:
-        _pprice = _ps.get("over_price")
-        if _pprice and isinstance(_pprice, (int, float)) and _pprice != 0:
-            if _ps["result"] == "W":
-                _p1b_roi_units += (100 / abs(_pprice)) if _pprice < 0 else (_pprice / 100)
-            elif _ps["result"] == "L":
-                _p1b_roi_units -= 1
-            _p1b_roi_n += 1
-        else:
-            _p1b_synthetic = True
-            if _ps["result"] == "W":
-                _p1b_roi_units += 100 / 110
-            elif _ps["result"] == "L":
-                _p1b_roi_units -= 1
-            _p1b_roi_n += 1
-    _p1b_roi_pct = (_p1b_roi_units / _p1b_roi_n * 100) if _p1b_roi_n > 0 else 0
-    _p1b_roi_label = "ROI (synthetic -110)" if _p1b_synthetic else "ROI"
-
-    st.html(
-        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
-        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
-        f'<span style="font-weight:700">{_p1b_wins}-{_p1b_losses}</span>'
-        f' &nbsp;|&nbsp; Hit: {_p1b_hit:.1f}%'
-        f' &nbsp;|&nbsp; {_p1b_roi_label}: {_p1b_roi_pct:+.1f}%'
-        f' &nbsp;|&nbsp; {_p1b_n} resolved, {_p1b_pend} pending'
-        f'</div>'
-    )
-    if _p1b_resolved:
-        import pandas as pd
-        _p1b_rows = []
-        for _ps in sorted(_p1b_resolved, key=lambda x: x.get("date", "")):
-            _p1b_rows.append({
-                "Date": _ps.get("date", ""),
-                "Matchup": f"{_ps.get('away_team', '?')} @ {_ps.get('home_team', '?')}",
-                "FG Total": _ps.get("fg_total", ""),
-                "Over Price": _ps.get("over_price", ""),
-                "Temp": f"{_ps.get('forecast_temp_f', '')}\u00b0F" if _ps.get("forecast_temp_f") else "",
-                "Result": _ps.get("result", ""),
-            })
-        st.dataframe(pd.DataFrame(_p1b_rows), use_container_width=True, hide_index=True)
-    else:
-        st.html('<div style="font-size:0.72em;color:#6b7280">No resolved signals yet</div>')
-
-    st.html(
-        '<div style="font-size:0.68em;color:#4b5563;margin-top:4px;font-style:italic">'
-        'Object fires June\u2013September only. Forward shadow accumulation begins June 2026.</div>'
-    )
-
-    # --- Divider between sides and NRFI ---
-    st.html('<hr style="border:none;border-top:2px solid #1e293b;margin:24px 0 16px 0">')
+    # NRFI selector
+    _nrfi_raw = _load_json("mlb/logs/nrfi_selector_v1_2026.json", "selections")
+    _nrfi_seen = set()
+    _nrfi_deduped = []
+    for _ns in _nrfi_raw:
+        _ngpk = _ns.get("game_pk")
+        if _ngpk not in _nrfi_seen:
+            _nrfi_seen.add(_ngpk)
+            _nrfi_deduped.append(_ns)
+    top3_all = [s for s in _nrfi_deduped if s.get("selected_top3")]
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # YRFI ROBUST FAMILY V1 — FIRST-INNING PROPS SHADOW
+    # YRFI TIER STATS HELPER
     # ═══════════════════════════════════════════════════════════════════════════
-
-    # --- Load YRFI shadow log ---
-    _yrfi_path = os.path.join(os.path.dirname(__file__), "mlb", "logs",
-                               "yrfi_shadow_2026.json")
-    _yrfi_all = []
-    try:
-        if os.path.exists(_yrfi_path):
-            _yrfi_all = json.load(open(_yrfi_path))
-    except Exception:
-        _yrfi_all = []
-
-    # --- YRFI last updated derived from max run_timestamp in the log itself ---
-    _yrfi_lu = None
-    try:
-        _yrfi_ts_list = [e.get("run_timestamp") for e in _yrfi_all
-                         if e.get("run_timestamp")]
-        if _yrfi_ts_list:
-            from zoneinfo import ZoneInfo
-            _yrfi_dt = datetime.fromisoformat(max(_yrfi_ts_list).replace("Z", "+00:00"))
-            _yrfi_lu = _yrfi_dt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
-    except Exception:
-        pass
-
-    render_status_header(
-        object_name="MLB First-Inning \u2014 YRFI Robust Family V1",
-        object_id="mlb_yrfi_robust_v1_2026",
-        status="SHADOW",
-        tracker_start="May 7, 2026",
-        current_threshold="6 launch-angle/contact signals \u00b7 2+ consensus = primary deployment target",
-        replaces=None,
-        last_updated=_yrfi_lu,
-    )
-
-    # --- Tier statistics helper ---
     def _yrfi_tier_stats(entries, tier_key):
-        from collections import defaultdict
         fired = [e for e in entries if e.get(tier_key) is True]
         graded = [e for e in fired if e.get("result_graded") is True]
         n_graded = len(graded)
@@ -805,296 +477,286 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
         losses = sum(1 for e in graded if e.get("result_yrfi") == 0)
         hit_rate = (wins / n_graded * 100) if n_graded > 0 else 0.0
         profit_entries = [e for e in graded if e.get("yrfi_profit_units") is not None]
-        n_with_price = len(profit_entries)
+        n_priced = len(profit_entries)
         profit_sum = sum((e.get("yrfi_profit_units") or 0) for e in profit_entries)
-        roi = (profit_sum / n_with_price * 100) if n_with_price > 0 else 0.0
+        roi = (profit_sum / n_priced * 100) if n_priced > 0 else 0.0
         month_profit = defaultdict(float)
         for e in profit_entries:
             gd = e.get("game_date", "")
             if len(gd) >= 7:
                 month_profit[gd[:7]] += (e.get("yrfi_profit_units") or 0)
-        months_positive = sum(1 for m in month_profit if month_profit[m] > 0)
+        months_pos = sum(1 for m in month_profit if month_profit[m] > 0)
         return {"fired_n": len(fired), "graded_n": n_graded,
                 "wins": wins, "losses": losses,
-                "hit_rate": hit_rate, "roi": roi,
-                "months_positive": months_positive}
-
-    # --- Today's YRFI fires ---
-    _yrfi_today_date = _today_et()
-    yrfi_today = [e for e in _yrfi_all
-                  if e.get("game_date") == _yrfi_today_date
-                  and (e.get("yrfi_1plus") or e.get("yrfi_2plus") or e.get("yrfi_3plus"))]
-
-    st.html(
-        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
-        "Today's YRFI Fires</div>"
-    )
-
-    if yrfi_today:
-        def _tier_rank(e):
-            if e.get("yrfi_3plus"): return 0
-            if e.get("yrfi_2plus"): return 1
-            return 2
-        for e in sorted(yrfi_today, key=_tier_rank):
-            if e.get("yrfi_3plus"):
-                tier_label, tier_color = "3+ HIGH-CONV", "#dc2626"
-            elif e.get("yrfi_2plus"):
-                tier_label, tier_color = "2+ PRIMARY", "#22c55e"
-            else:
-                tier_label, tier_color = "1+", "#94a3b8"
-            away = e.get("away_team", "?")
-            home = e.get("home_team", "?")
-            fd_price = e.get("fd_yrfi_price")
-            if isinstance(fd_price, int):
-                price_str = f"FD YRFI {fd_price:+d}"
-            else:
-                price_str = "FD price NA"
-            sig_count = e.get("unique_signal_count", 0)
-            fired_signals = e.get("fired_signals", []) or []
-            sig_str = ", ".join(fired_signals) if fired_signals else "\u2014"
-            st.html(
-                f'<div style="background:#0f1729;border-left:3px solid {tier_color};'
-                f'padding:8px 12px;margin:4px 0;border-radius:4px;font-size:0.78em;color:#e2e8f0">'
-                f'<span style="color:{tier_color};font-weight:700">{tier_label}</span>'
-                f' &nbsp;|&nbsp; {away} @ {home}'
-                f' &nbsp;|&nbsp; {price_str}'
-                f' &nbsp;|&nbsp; {sig_count} unique: {sig_str}</div>'
-            )
-    else:
-        st.html(
-            '<div style="font-size:0.78em;color:#64748b;padding:8px 0">'
-            'No YRFI fires today \u2014 next slate pending</div>'
-        )
-
-    # --- Shadow Tracker — three tiers ---
-    st.html(
-        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
-        'Shadow Tracker \u2014 YRFI Robust Family V1 (started May 7, 2026)</div>'
-    )
-
-    _yrfi_tier_specs = [
-        ("yrfi_1plus", "1+ consensus", "", None),
-        ("yrfi_2plus", "2+ consensus", "PRIMARY", 100),
-        ("yrfi_3plus", "3+ consensus", "HIGH-CONV", 50),
-    ]
-
-    for _tier_key, _tier_label, _badge, _gate_n in _yrfi_tier_specs:
-        _stats = _yrfi_tier_stats(_yrfi_all, _tier_key)
-        if _badge == "PRIMARY":
-            _badge_html = ('<span style="background:#052e16;color:#22c55e;border:1px solid #22c55e;'
-                           'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
-                           'margin-left:6px">PRIMARY</span>')
-        elif _badge == "HIGH-CONV":
-            _badge_html = ('<span style="background:#1c0d0d;color:#dc2626;border:1px solid #dc2626;'
-                           'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
-                           'margin-left:6px">HIGH-CONV</span>')
-        else:
-            _badge_html = ""
-
-        if _stats["graded_n"] == 0:
-            _record = "0-0"
-            _hit_str = "--"
-            _roi_str = "--"
-        else:
-            _record = f'{_stats["wins"]}-{_stats["losses"]}'
-            _hit_str = f'{_stats["hit_rate"]:.1f}%'
-            _roi_str = f'{_stats["roi"]:+.1f}%'
-
-        if _gate_n is not None:
-            _gate_str = f' &nbsp;|&nbsp; N={_stats["graded_n"]}/{_gate_n} graded'
-            if _tier_key == "yrfi_2plus":
-                _gate_str += f' &nbsp;|&nbsp; {_stats["months_positive"]}/3 months pos'
-        else:
-            _gate_str = f' &nbsp;|&nbsp; N={_stats["graded_n"]} graded'
-
-        st.html(
-            f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
-            f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:6px">'
-            f'<span style="color:#94a3b8;font-weight:600;display:inline-block;min-width:120px">'
-            f'{_tier_label}</span>{_badge_html}'
-            f' &nbsp;|&nbsp; <span style="font-weight:700">{_record}</span>'
-            f' &nbsp;|&nbsp; Hit: {_hit_str}'
-            f' &nbsp;|&nbsp; ROI: {_roi_str}'
-            f'{_gate_str}</div>'
-        )
-
-    # --- Divider before NRFI section ---
-    st.html('<hr style="border:none;border-top:2px solid #1e293b;margin:24px 0 16px 0">')
+                "hit_rate": hit_rate, "roi": roi, "months_positive": months_pos}
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # NRFI SECTION (existing)
+    # C. TODAY'S NRFI CARD MINI-BLOCK
     # ═══════════════════════════════════════════════════════════════════════════
-
-    # --- 1. STATUS HEADER ---
-    lu = None
-    try:
-        lu_data = json.load(open(os.path.join(os.path.dirname(__file__), "shared", "last_updated.json")))
-        for key in ["mlb_confirm", "mlb_prelim"]:
-            ts = lu_data.get(key)
-            if ts and isinstance(ts, str) and "T" in ts:
-                from zoneinfo import ZoneInfo
-                dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-                lu = dt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
-                break
-    except Exception:
-        pass
-
-    render_status_header(
-        object_name="MLB — NRFI Daily Selector",
-        object_id="mlb_nrfi_selector_v1_20260411",
-        status="SHADOW",
-        tracker_start="April 11, 2026",
-        current_threshold="F5 total <= 4.0",
-        replaces=None,
-        last_updated=lu,
-    )
-
-    # --- 2. SIGNAL STATUS ROW ---
-    _render_signal_status_row(active_labels=[], shadow_labels=["NRFI Selector"])
-
-    # --- 3. SELECTOR RULES BLOCK ---
-    st.html(
-        '<div style="font-size:0.72em;color:#94a3b8;padding:8px 12px;background:#0d1117;'
-        'border-radius:4px;border:1px solid #1e293b;margin:8px 0">'
-        '<div style="font-weight:600;color:#78716c;margin-bottom:4px">Frozen Selector Ruleset</div>'
-        '<div>Qualify: F5 closing total &le; 4.0</div>'
-        '<div>Disqualify: Night game AND F5 = 4.0 exactly</div>'
-        '<div>Rank: F5 total ascending</div>'
-        '<div>Card: Top 3 daily</div>'
-        '</div>'
-    )
-
-    # --- LOAD TRACKER DATA ---
-    tracker_path = os.path.join(os.path.dirname(__file__), "mlb", "logs", "nrfi_selector_v1_2026.json")
-    all_selections = []
-    try:
-        if os.path.exists(tracker_path):
-            tracker = json.load(open(tracker_path))
-            all_selections = tracker.get("selections", [])
-    except Exception:
-        pass
-
-    # Dedup on game_pk
-    seen_gpk = set()
-    deduped = []
-    for s in all_selections:
-        gpk = s.get("game_pk")
-        if gpk not in seen_gpk:
-            seen_gpk.add(gpk)
-            deduped.append(s)
-    all_selections = deduped
-
-    # Filter to top3 only
-    top3_all = [s for s in all_selections if s.get("selected_top3")]
-
-    # --- 4. TODAY'S NRFI CARD (single combined card) ---
     today = _today_et()
     today_top3 = sorted(
         [s for s in top3_all if s.get("run_date") == today],
         key=lambda x: x.get("selector_rank", 99),
     )
-
     if today_top3:
-        n_legs = len(today_top3)
-        # Build leg rows
-        leg_rows = ""
+        _nrfi_legs_html = ""
         for s in today_top3:
-            rank = s.get("selector_rank", "?")
-            matchup = s.get("matchup", "")
-            if not matchup:
-                matchup = f"{s.get('away_team', '?')} @ {s.get('home_team', '?')}"
-            f5 = s.get("f5_total")
-            time_utc = s.get("game_time_utc", "")
-            time_et = ""
-            if time_utc and len(time_utc) >= 16:
+            _rank = s.get("selector_rank", "?")
+            _mu = s.get("matchup") or f"{s.get('away_team','?')} @ {s.get('home_team','?')}"
+            _f5 = s.get("f5_total")
+            _f5s = f"F5: {_f5:.1f}" if _f5 else "F5: \u2014"
+            _nrfi_legs_html += (
+                f'<div style="padding:2px 0;font-size:0.85em;color:#e2e8f0">'
+                f'<span style="color:#60a5fa;font-weight:700">#{_rank}</span>'
+                f'&nbsp;&nbsp;{_mu}&nbsp;&nbsp;'
+                f'<span style="color:#94a3b8;font-size:0.9em">{_f5s}</span></div>'
+            )
+        st.html(
+            f'<div style="border:1px solid #6b7280;border-radius:8px;padding:10px 14px;'
+            f'background:#0f1729;margin:8px 0">'
+            f'<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin-bottom:6px">'
+            f"Today's NRFI Card \u00b7 {len(today_top3)} legs \u00b7 "
+            f'<span style="color:#94a3b8;font-size:0.8em">informational only</span></div>'
+            f'{_nrfi_legs_html}</div>'
+        )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # D. TODAY'S MLB SLATE — PER-GAME UNIVERSAL CARDS
+    # ═══════════════════════════════════════════════════════════════════════════
+    st.html('<div style="font-size:0.95em;font-weight:700;color:#e2e8f0;margin:16px 0 8px 0">'
+            "Today's MLB Slate</div>")
+
+    night_today = [s for s in night_all if s.get("game_date") == today]
+    bp_today = [s for s in bp_all if s.get("game_date") == today]
+    p1b_today = [s for s in _p1b_all if s.get("date") == today]
+    yrfi_today = [e for e in _yrfi_all
+                  if e.get("game_date") == today
+                  and (e.get("yrfi_1plus") or e.get("yrfi_2plus") or e.get("yrfi_3plus"))]
+
+    game_signals = defaultdict(list)
+    for sig in night_today:
+        _gk = sig.get("game_pk", sig.get("game_id", ""))
+        game_signals[_gk].append(("night_dog", sig))
+    for sig in bp_today:
+        _gk = sig.get("game_pk", sig.get("game_id", ""))
+        game_signals[_gk].append(("bp_adv_dog", sig))
+    for sig in p1b_today:
+        _gk = sig.get("game_pk")
+        if _gk:
+            game_signals[_gk].append(("p1b_coldwarm", sig))
+    for sig in yrfi_today:
+        _gk = sig.get("game_pk", f"{sig.get('game_date')}|{sig.get('home_team')}|{sig.get('away_team')}")
+        game_signals[_gk].append(("yrfi", sig))
+    for sig in today_top3:
+        _gk = sig.get("game_pk")
+        if _gk:
+            game_signals[_gk].append(("nrfi_leg", sig))
+
+    if game_signals:
+        for _gpk, _sigs in game_signals.items():
+            _first = _sigs[0][1]
+            _matchup = _first.get("matchup") or f"{_first.get('away_team','?')} @ {_first.get('home_team','?')}"
+            _time_et = ""
+            _tutc = _first.get("game_time_utc", "")
+            if _tutc and len(_tutc) >= 16:
                 try:
                     from zoneinfo import ZoneInfo
-                    dt = datetime.fromisoformat(time_utc.replace("Z", "+00:00"))
-                    time_et = dt.astimezone(ZoneInfo("America/New_York")).strftime("%-I:%M %p ET")
+                    _tdt = datetime.fromisoformat(_tutc.replace("Z", "+00:00"))
+                    _time_et = _tdt.astimezone(ZoneInfo("America/New_York")).strftime("%-I:%M %p ET")
                 except Exception:
-                    time_et = time_utc[11:16] + " UTC"
-            f5_str = f"F5: {f5:.1f}" if f5 else "F5: —"
-            time_part = f"  \u00b7  {time_et}" if time_et else ""
-            leg_rows += (
-                f'<div style="padding:3px 0;font-size:0.88em;color:#e2e8f0">'
-                f'<span style="color:#60a5fa;font-weight:700">#{rank}</span>'
-                f'&nbsp;&nbsp;{matchup}{time_part}'
-                f'&nbsp;&nbsp;<span style="color:#94a3b8;font-size:0.9em">{f5_str}</span>'
-                f'</div>'
-            )
+                    pass
 
-        nrfi_pill = _universal_pill("NRFI", "#fff", "#dc2626")
-        card_html = (
-            f'<div style="border:1px solid #dc2626;border-radius:8px;padding:12px 16px;'
-            f'background:#0f1729;margin:12px 0">'
-            f'<div style="font-size:0.92em;font-weight:700;color:#e2e8f0;margin-bottom:8px">'
-            f"Today's NRFI Card  \u00b7  {n_legs} leg{'s' if n_legs != 1 else ''}  \u00b7  "
-            f'<span style="color:#f87171">shadow</span></div>'
-            f'<hr style="border:none;border-top:1px solid #1e293b;margin:6px 0">'
-            f'{leg_rows}'
-            f'<hr style="border:none;border-top:1px solid #1e293b;margin:6px 0">'
-            f'<div style="margin-top:6px">{nrfi_pill}'
-            f'<span style="font-size:0.68em;color:#4b5563;margin-left:8px">'
-            f'Research shadow \u2014 not a live wager recommendation</span></div>'
-            f'</div>'
-        )
-        st.html(card_html)
+            pills = []
+            wagers = []
+            stats_lines = []
+
+            for _stype, _sig in _sigs:
+                if _stype == "night_dog":
+                    pills.append(_universal_pill("Night Dog", "#fff", "#2563eb"))
+                    _dog = _sig.get("dog_team", "?")
+                    _ml = _sig.get("dog_ml_price", "?")
+                    wagers.append(f"{_dog} ML {_ml} \u00b7 Night Dog \u00b7 MIXED")
+                elif _stype == "bp_adv_dog":
+                    pills.append(_universal_pill("BP Adv Dog", "#fff", "#2563eb"))
+                    _dog = _sig.get("dog_team", "?")
+                    _ml = _sig.get("dog_ml_price", "?")
+                    _bpd = _sig.get("dog_bp_era", 0)
+                    _bpf = _sig.get("fav_bp_era", 0)
+                    _bpds = f"{_bpd:.2f}" if isinstance(_bpd, (int, float)) else str(_bpd)
+                    _bpfs = f"{_bpf:.2f}" if isinstance(_bpf, (int, float)) else str(_bpf)
+                    wagers.append(f"{_dog} ML {_ml} \u00b7 BP Adv Dog \u00b7 BP {_bpds} vs {_bpfs}")
+                elif _stype == "p1b_coldwarm":
+                    pills.append(_universal_pill("P1B Cold-Warm", "#fff", "#2563eb"))
+                    _fg = _sig.get("fg_total", 0)
+                    _op = _sig.get("over_price", "")
+                    _tmp = _sig.get("forecast_temp_f", 0)
+                    _fgs = f"{_fg:.1f}" if isinstance(_fg, (int, float)) else str(_fg)
+                    _tmps = f"{_tmp:.0f}" if isinstance(_tmp, (int, float)) else str(_tmp)
+                    wagers.append(f"FG OVER {_fgs} {_op} \u00b7 P1B Cold-Warm \u00b7 {_tmps}\u00b0F")
+                elif _stype == "nrfi_leg":
+                    pills.append(_universal_pill("NRFI Card (info)", "#fff", "#6b7280"))
+                    _f5v = _sig.get("f5_total")
+                    _f5s = f"{_f5v:.1f}" if _f5v else "\u2014"
+                    wagers.append(f"NRFI leg \u00b7 F5 total {_f5s} \u00b7 part of today's parlay card")
+
+            # YRFI: only highest tier pill
+            _yrfi_sigs_here = [s for t, s in _sigs if t == "yrfi"]
+            if _yrfi_sigs_here:
+                _ye = _yrfi_sigs_here[0]
+                if _ye.get("yrfi_3plus"):
+                    pills.append(_universal_pill("YRFI 3+ HIGH-CONV", "#fff", "#dc2626"))
+                    _tl = "3+"
+                elif _ye.get("yrfi_2plus"):
+                    pills.append(_universal_pill("YRFI 2+ PRIMARY", "#fff", "#16a34a"))
+                    _tl = "2+"
+                else:
+                    pills.append(_universal_pill("YRFI 1+", "#fff", "#94a3b8"))
+                    _tl = "1+"
+                _fdp = _ye.get("fd_yrfi_price")
+                _be = _ye.get("fd_break_even")
+                if _fdp is not None and isinstance(_fdp, (int, float)):
+                    _bes = f" \u00b7 BE {_be*100:.1f}%" if _be else ""
+                    wagers.append(f"YRFI \u00b7 FD {int(_fdp):+d} \u00b7 {_tl} consensus{_bes}")
+                else:
+                    wagers.append(f"YRFI \u00b7 FD price unavailable \u00b7 {_tl} consensus")
+                _fsigs = _ye.get("fired_signals", [])
+                if _fsigs:
+                    stats_lines.append(f"Signals: {', '.join(_fsigs)}")
+                _ac = (_ye.get("away_batting_context") or {}).get("signal_count", 0)
+                _hc = (_ye.get("home_batting_context") or {}).get("signal_count", 0)
+                _ctx = "both" if _ac > 0 and _hc > 0 else ("away" if _ac > 0 else "home")
+                stats_lines.append(f"Context: {_ctx}")
+
+            _render_game_card_universal(
+                matchup=_matchup,
+                time_str=_time_et,
+                tier="SHADOW",
+                wagers=wagers,
+                pills=pills,
+                stats=stats_lines if stats_lines else None,
+            )
     else:
         st.html(
             '<div style="font-size:0.75em;color:#6b7280;padding:6px 12px;background:#0d1117;'
-            'border-radius:4px;border:1px solid #1e293b;margin:12px 0">'
-            'No selections today \u2014 next slate pending</div>'
+            'border-radius:4px;border:1px solid #1e293b">'
+            'No MLB signals today \u2014 next slate pending</div>'
         )
 
-    # --- 5. SHADOW TRACKER ---
-    st.html('<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
-            'Shadow Tracker \u2014 NRFI Selector (started April 11, 2026)</div>')
+    # ═══════════════════════════════════════════════════════════════════════════
+    # E. TRACKER PERFORMANCE
+    # ═══════════════════════════════════════════════════════════════════════════
+    st.html('<hr style="border:none;border-top:2px solid #1e293b;margin:24px 0 16px 0">')
+    st.html('<div style="font-size:0.95em;font-weight:700;color:#e2e8f0;margin:0 0 8px 0">'
+            'Tracker Performance</div>')
 
-    resolved = [s for s in top3_all if s.get("nrfi_result") is not None]
-    wins = sum(1 for s in resolved if s.get("win_loss") == "W")
-    losses = sum(1 for s in resolved if s.get("win_loss") == "L")
-    n_resolved = len(resolved)
-    n_pending = len(top3_all) - n_resolved
-    hit_pct = (wins / n_resolved * 100) if n_resolved > 0 else 0
+    def _perf_row(label, record, hit_str, roi_str, detail, bg="#0f1729", badge_html=""):
+        st.html(
+            f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:{bg};'
+            f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:4px">'
+            f'<span style="color:#94a3b8;font-weight:600;display:inline-block;min-width:130px">'
+            f'{label}</span>{badge_html}'
+            f' &nbsp;|&nbsp; <span style="font-weight:700">{record}</span>'
+            f' &nbsp;|&nbsp; Hit: {hit_str}'
+            f' &nbsp;|&nbsp; ROI: {roi_str}'
+            f' &nbsp;|&nbsp; {detail}</div>'
+        )
 
-    # Card hit rate: slates where all selected legs won
-    resolved_dates = sorted(set(s["run_date"] for s in resolved))
-    card_wins = 0
-    card_total = 0
-    for d in resolved_dates:
-        day_resolved = [s for s in resolved if s["run_date"] == d]
-        if len(day_resolved) >= 1:
-            card_total += 1
-            if all(s.get("win_loss") == "W" for s in day_resolved):
-                card_wins += 1
-    card_pct = (card_wins / card_total * 100) if card_total > 0 else 0
+    # Night Dog
+    _nd_res = [s for s in night_all if s.get("win_loss") in ("W", "L")]
+    _nd_w = sum(1 for s in _nd_res if s.get("win_loss") == "W")
+    _nd_l = len(_nd_res) - _nd_w
+    _nd_pend = len(night_all) - len(_nd_res)
+    _perf_row("Night Dog", f"{_nd_w}-{_nd_l}",
+              f"{_nd_w/len(_nd_res)*100:.1f}%" if _nd_res else "--", "--",
+              f"{len(_nd_res)} resolved, {_nd_pend} pending")
 
-    st.html(
-        f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
-        f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:8px">'
-        f'<span style="font-weight:700">{wins}-{losses}</span>'
-        f' \u00b7 Leg hit: {hit_pct:.1f}%'
-        f' \u00b7 Card hit: {card_pct:.0f}% ({card_wins}/{card_total} slates)'
-        f' \u00b7 {n_resolved} resolved, {n_pending} pending'
-        f'</div>'
-    )
+    # BP Adv Dog
+    _bp_res = [s for s in bp_all if s.get("win_loss") in ("W", "L")]
+    _bp_w = sum(1 for s in _bp_res if s.get("win_loss") == "W")
+    _bp_l = len(_bp_res) - _bp_w
+    _bp_pend = len(bp_all) - len(_bp_res)
+    _perf_row("BP Adv Dog", f"{_bp_w}-{_bp_l}",
+              f"{_bp_w/len(_bp_res)*100:.1f}%" if _bp_res else "--", "--",
+              f"{len(_bp_res)} resolved, {_bp_pend} pending")
 
-    # Tracker table (resolved only)
-    if resolved:
-        import pandas as pd
-        rows = []
-        for s in sorted(resolved, key=lambda x: (x["run_date"], x.get("selector_rank", 99))):
-            rows.append({
-                "Date": s.get("run_date", ""),
-                "#": s.get("selector_rank", ""),
-                "Matchup": s.get("matchup", ""),
-                "F5": s.get("f5_total", ""),
-                "Result": "NRFI" if s.get("nrfi_result") else "YRFI",
-                "W/L": s.get("win_loss", ""),
-            })
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
-    else:
-        st.html('<div style="font-size:0.72em;color:#6b7280">No resolved selections yet</div>')
+    # P1B Cold-Warm
+    _p1b_res = [s for s in _p1b_all if s.get("result") in ("W", "L")]
+    _p1b_w = sum(1 for s in _p1b_res if s.get("result") == "W")
+    _p1b_l = len(_p1b_res) - _p1b_w
+    _p1b_pend = len([s for s in _p1b_all if not s.get("graded")])
+    _p1b_roi_u = 0.0
+    _p1b_roi_n = 0
+    for _ps in _p1b_res:
+        _pp = _ps.get("over_price")
+        if _pp and isinstance(_pp, (int, float)) and _pp != 0:
+            _p1b_roi_u += (100 / abs(_pp)) if _pp < 0 else (_pp / 100) if _ps["result"] == "W" else -1
+            _p1b_roi_n += 1
+    _p1b_roi_s = f"{_p1b_roi_u/_p1b_roi_n*100:+.1f}%" if _p1b_roi_n > 0 else "--"
+    _perf_row("P1B Cold-Warm", f"{_p1b_w}-{_p1b_l}",
+              f"{_p1b_w/len(_p1b_res)*100:.1f}%" if _p1b_res else "--", _p1b_roi_s,
+              f"{len(_p1b_res)} resolved (fires Jun\u2013Sep)")
+
+    # YRFI tiers
+    _badge_primary = ('<span style="background:#052e16;color:#22c55e;border:1px solid #22c55e;'
+                       'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
+                       'margin-left:4px">PRIMARY</span>')
+    _badge_hc = ('<span style="background:#1c0d0d;color:#dc2626;border:1px solid #dc2626;'
+                  'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
+                  'margin-left:4px">HIGH-CONV</span>')
+
+    for _tk, _tl, _badge, _gn in [
+        ("yrfi_1plus", "YRFI 1+", "", None),
+        ("yrfi_2plus", "YRFI 2+", _badge_primary, 100),
+        ("yrfi_3plus", "YRFI 3+", _badge_hc, 50),
+    ]:
+        _ys = _yrfi_tier_stats(_yrfi_all, _tk)
+        _yr = f'{_ys["wins"]}-{_ys["losses"]}' if _ys["graded_n"] > 0 else "0-0"
+        _yh = f'{_ys["hit_rate"]:.1f}%' if _ys["graded_n"] > 0 else "--"
+        _yro = f'{_ys["roi"]:+.1f}%' if _ys["graded_n"] > 0 else "--"
+        _det = f'N={_ys["graded_n"]} graded'
+        if _gn is not None:
+            _det = f'N={_ys["graded_n"]}/{_gn} graded'
+        if _tk == "yrfi_2plus":
+            _det += f' \u00b7 {_ys["months_positive"]}/3 months pos'
+        _perf_row(_tl, _yr, _yh, _yro, _det, badge_html=_badge)
+
+    # NRFI Card (INFO)
+    _nrfi_res = [s for s in top3_all if s.get("nrfi_result") is not None]
+    _nrfi_w = sum(1 for s in _nrfi_res if s.get("win_loss") == "W")
+    _nrfi_l = len(_nrfi_res) - _nrfi_w
+    _nrfi_pend = len(top3_all) - len(_nrfi_res)
+    _nrfi_hit = f"{_nrfi_w/len(_nrfi_res)*100:.1f}%" if _nrfi_res else "--"
+    _res_dates = sorted(set(s["run_date"] for s in _nrfi_res)) if _nrfi_res else []
+    _cw = sum(1 for d in _res_dates if all(s.get("win_loss") == "W" for s in _nrfi_res if s["run_date"] == d))
+    _ct = len(_res_dates)
+    _card_str = f"Card: {_cw}/{_ct}" if _ct > 0 else "Card: --"
+    _info_badge = ('<span style="background:#1f1814;color:#94a3b8;border:1px solid #78716c;'
+                    'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
+                    'margin-left:4px">INFO</span>')
+    _perf_row("NRFI Card", f"{_nrfi_w}-{_nrfi_l}", f"Leg: {_nrfi_hit}",
+              _card_str, f"{len(_nrfi_res)} resolved, {_nrfi_pend} pending",
+              bg="#1f1814", badge_html=_info_badge)
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # F. SIGNAL DEFINITIONS EXPANDER
+    # ═══════════════════════════════════════════════════════════════════════════
+    with st.expander("Signal definitions", expanded=False):
+        st.html(
+            '<div style="font-size:0.72em;color:#94a3b8;line-height:1.7">'
+            '<p><b>Night Dog:</b> Dog ML when night game \u00b7 MIXED class. Tracker started Apr 12, 2026.</p>'
+            '<p><b>BP Adv Dog:</b> Dog ML when dog BP ERA &lt; fav BP ERA \u00b7 MIXED class. '
+            'Tracker started Apr 12, 2026.</p>'
+            '<p><b>P1B Cold-Warm:</b> Full-game OVER when EARLY_HEAVY scoring + cold park + '
+            'temp \u226575\u00b0F + Jun\u2013Sep + over \u2264-105. Fires Jun\u2013Sep only.</p>'
+            '<p><b>YRFI Robust V1:</b> 6 launch-angle/contact signals. Three tiers '
+            '(1+/2+/3+ unique signals fired). Market: FanDuel YRFI. Tracker started May 7, 2026.<br>'
+            'Promotion gates \u2014 2+: N\u2265100, ROI &gt; +5%, hit rate &gt; BE +3pp, '
+            '3+ months positive. 3+: N\u226550, ROI &gt; +8%, hit rate &gt; BE +5pp.</p>'
+            '<p><b>NRFI Card:</b> F5 total \u22644.0, top 3 daily picks. INFORMATIONAL ONLY \u2014 '
+            'F5\u22644.0 produces 59.3% NRFI; market prices at -150 (BE 59.9%); edge -0.6pp. '
+            'Use as parlay filter, not capital-deployable signal.</p>'
+            '</div>'
+        )
 
 
 def _render_nba_tab() -> None:
