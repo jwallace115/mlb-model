@@ -26,6 +26,20 @@ mlb_sim/logs/*_2026.json
 !mlb_sim/logs/shadow_signals_2026.json
 !mlb_sim/logs/team_total_shadow_2026.json
 
+# ── MLB tab shadow logs (runtime state — sync via push_daemon.sh) ──
+# The global logs/ rule (line 12) ignores any directory named logs/.
+# To allow-list individual files inside mlb/logs/, we must first un-ignore
+# the directory itself, then re-ignore everything in it, then allow-list
+# the specific files. Same pattern git uses for nested negation.
+!mlb/logs/
+mlb/logs/*
+!mlb/logs/mlb_mixed_night_dog_shadow_2026.json
+!mlb/logs/mlb_mixed_bp_adv_dog_shadow_2026.json
+!mlb/logs/mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json
+!mlb/logs/nrfi_selector_v1_2026.json
+!mlb/logs/yrfi_shadow_2026.json
+!mlb/logs/yrfi_odds_2026.json
+
 # ── Secrets ───────────────────────────────────────────────────────────────────
 .env
 .env.*
