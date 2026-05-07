@@ -7114,15 +7114,15 @@
     "game_date": "2026-05-07",
     "home_team": "NYY",
     "away_team": "TEX",
-    "home_blowup_score": 0.090093,
+    "home_blowup_score": 0.111936,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 7,
+    "relievers_scored": 4,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-05-07T06:00:39.956767"
+    "logged_at": "2026-05-07T06:00:20.834631"
   },
   {
     "game_id": 822741,
@@ -7137,7 +7137,7 @@
     "actual_over_under": null,
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-05-07T06:00:44.359771"
+    "logged_at": "2026-05-07T06:00:27.439728"
   },
   {
     "game_id": 824117,
@@ -7152,37 +7152,37 @@
     "actual_over_under": null,
     "closing_total": 9.5,
     "clv": null,
-    "logged_at": "2026-05-07T06:00:47.881949"
+    "logged_at": "2026-05-07T06:00:31.787160"
   },
   {
     "game_id": 824681,
     "game_date": "2026-05-07",
     "home_team": "CHC",
     "away_team": "CIN",
-    "home_blowup_score": 0.141521,
+    "home_blowup_score": 0.128603,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 5,
+    "relievers_scored": 6,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-05-07T06:00:51.288304"
+    "logged_at": "2026-05-07T06:00:35.967841"
   },
   {
     "game_id": 824362,
     "game_date": "2026-05-07",
     "home_team": "COL",
     "away_team": "NYM",
-    "home_blowup_score": 0.261521,
+    "home_blowup_score": 0.381936,
     "signal_fires": true,
     "threshold_used": 0.2563,
-    "relievers_scored": 7,
+    "relievers_scored": 5,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 10.5,
     "clv": null,
-    "logged_at": "2026-05-07T06:00:54.152260"
+    "logged_at": "2026-05-07T06:00:39.506802"
   },
   {
     "game_id": 825090,
@@ -7197,44 +7197,29 @@
     "actual_over_under": null,
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-05-07T06:00:56.929601"
+    "logged_at": "2026-05-07T06:00:42.692672"
   },
   {
     "game_id": 823467,
     "game_date": "2026-05-07",
     "home_team": "PHI",
     "away_team": "OAK",
-    "home_blowup_score": 0.094855,
+    "home_blowup_score": 0.084158,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 6,
+    "relievers_scored": 9,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-05-07T06:00:59.959192"
+    "logged_at": "2026-05-07T06:00:47.007588"
   },
   {
     "game_id": 823870,
     "game_date": "2026-05-07",
     "home_team": "MIA",
     "away_team": "BAL",
-    "home_blowup_score": 0.111521,
-    "signal_fires": false,
-    "threshold_used": 0.2563,
-    "relievers_scored": 8,
-    "cs013_also_active": true,
-    "actual_over_under": null,
-    "closing_total": 8.5,
-    "clv": null,
-    "logged_at": "2026-05-07T06:01:03.106064"
-  },
-  {
-    "game_id": 824767,
-    "game_date": "2026-05-07",
-    "home_team": "BOS",
-    "away_team": "TBR",
-    "home_blowup_score": 0.141521,
+    "home_blowup_score": 0.101936,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 5,
@@ -7242,7 +7227,22 @@
     "actual_over_under": null,
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-05-07T06:01:06.126433"
+    "logged_at": "2026-05-07T06:00:50.459577"
+  },
+  {
+    "game_id": 824767,
+    "game_date": "2026-05-07",
+    "home_team": "BOS",
+    "away_team": "TBR",
+    "home_blowup_score": 0.161936,
+    "signal_fires": false,
+    "threshold_used": 0.2563,
+    "relievers_scored": 8,
+    "cs013_also_active": true,
+    "actual_over_under": null,
+    "closing_total": 8.5,
+    "clv": null,
+    "logged_at": "2026-05-07T06:00:53.763842"
   },
   {
     "game_id": 823306,
@@ -7257,6 +7257,6 @@
     "actual_over_under": null,
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-05-07T06:01:08.573921"
+    "logged_at": "2026-05-07T06:00:56.149583"
   }
 ]

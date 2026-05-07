@@ -760,6 +760,168 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     st.html('<hr style="border:none;border-top:2px solid #1e293b;margin:24px 0 16px 0">')
 
     # ═══════════════════════════════════════════════════════════════════════════
+    # YRFI ROBUST FAMILY V1 — FIRST-INNING PROPS SHADOW
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # --- Load YRFI shadow log ---
+    _yrfi_path = os.path.join(os.path.dirname(__file__), "mlb", "logs",
+                               "yrfi_shadow_2026.json")
+    _yrfi_all = []
+    try:
+        if os.path.exists(_yrfi_path):
+            _yrfi_all = json.load(open(_yrfi_path))
+    except Exception:
+        _yrfi_all = []
+
+    # --- YRFI last updated derived from max run_timestamp in the log itself ---
+    _yrfi_lu = None
+    try:
+        _yrfi_ts_list = [e.get("run_timestamp") for e in _yrfi_all
+                         if e.get("run_timestamp")]
+        if _yrfi_ts_list:
+            from zoneinfo import ZoneInfo
+            _yrfi_dt = datetime.fromisoformat(max(_yrfi_ts_list).replace("Z", "+00:00"))
+            _yrfi_lu = _yrfi_dt.astimezone(ZoneInfo("America/New_York")).strftime("%b %-d, %-I:%M %p ET")
+    except Exception:
+        pass
+
+    render_status_header(
+        object_name="MLB First-Inning \u2014 YRFI Robust Family V1",
+        object_id="mlb_yrfi_robust_v1_2026",
+        status="SHADOW",
+        tracker_start="May 7, 2026",
+        current_threshold="6 launch-angle/contact signals \u00b7 2+ consensus = primary deployment target",
+        replaces=None,
+        last_updated=_yrfi_lu,
+    )
+
+    # --- Tier statistics helper ---
+    def _yrfi_tier_stats(entries, tier_key):
+        from collections import defaultdict
+        fired = [e for e in entries if e.get(tier_key) is True]
+        graded = [e for e in fired if e.get("result_graded") is True]
+        n_graded = len(graded)
+        wins = sum(1 for e in graded if e.get("result_yrfi") == 1)
+        losses = sum(1 for e in graded if e.get("result_yrfi") == 0)
+        hit_rate = (wins / n_graded * 100) if n_graded > 0 else 0.0
+        profit_entries = [e for e in graded if e.get("yrfi_profit_units") is not None]
+        n_with_price = len(profit_entries)
+        profit_sum = sum((e.get("yrfi_profit_units") or 0) for e in profit_entries)
+        roi = (profit_sum / n_with_price * 100) if n_with_price > 0 else 0.0
+        month_profit = defaultdict(float)
+        for e in profit_entries:
+            gd = e.get("game_date", "")
+            if len(gd) >= 7:
+                month_profit[gd[:7]] += (e.get("yrfi_profit_units") or 0)
+        months_positive = sum(1 for m in month_profit if month_profit[m] > 0)
+        return {"fired_n": len(fired), "graded_n": n_graded,
+                "wins": wins, "losses": losses,
+                "hit_rate": hit_rate, "roi": roi,
+                "months_positive": months_positive}
+
+    # --- Today's YRFI fires ---
+    _yrfi_today_date = _today_et()
+    yrfi_today = [e for e in _yrfi_all
+                  if e.get("game_date") == _yrfi_today_date
+                  and (e.get("yrfi_1plus") or e.get("yrfi_2plus") or e.get("yrfi_3plus"))]
+
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:12px 0 6px 0">'
+        "Today's YRFI Fires</div>"
+    )
+
+    if yrfi_today:
+        def _tier_rank(e):
+            if e.get("yrfi_3plus"): return 0
+            if e.get("yrfi_2plus"): return 1
+            return 2
+        for e in sorted(yrfi_today, key=_tier_rank):
+            if e.get("yrfi_3plus"):
+                tier_label, tier_color = "3+ HIGH-CONV", "#dc2626"
+            elif e.get("yrfi_2plus"):
+                tier_label, tier_color = "2+ PRIMARY", "#22c55e"
+            else:
+                tier_label, tier_color = "1+", "#94a3b8"
+            away = e.get("away_team", "?")
+            home = e.get("home_team", "?")
+            fd_price = e.get("fd_yrfi_price")
+            if isinstance(fd_price, int):
+                price_str = f"FD YRFI {fd_price:+d}"
+            else:
+                price_str = "FD price NA"
+            sig_count = e.get("unique_signal_count", 0)
+            fired_signals = e.get("fired_signals", []) or []
+            sig_str = ", ".join(fired_signals) if fired_signals else "\u2014"
+            st.html(
+                f'<div style="background:#0f1729;border-left:3px solid {tier_color};'
+                f'padding:8px 12px;margin:4px 0;border-radius:4px;font-size:0.78em;color:#e2e8f0">'
+                f'<span style="color:{tier_color};font-weight:700">{tier_label}</span>'
+                f' &nbsp;|&nbsp; {away} @ {home}'
+                f' &nbsp;|&nbsp; {price_str}'
+                f' &nbsp;|&nbsp; {sig_count} unique: {sig_str}</div>'
+            )
+    else:
+        st.html(
+            '<div style="font-size:0.78em;color:#64748b;padding:8px 0">'
+            'No YRFI fires today \u2014 next slate pending</div>'
+        )
+
+    # --- Shadow Tracker — three tiers ---
+    st.html(
+        '<div style="font-size:0.85em;font-weight:700;color:#e2e8f0;margin:16px 0 6px 0">'
+        'Shadow Tracker \u2014 YRFI Robust Family V1 (started May 7, 2026)</div>'
+    )
+
+    _yrfi_tier_specs = [
+        ("yrfi_1plus", "1+ consensus", "", None),
+        ("yrfi_2plus", "2+ consensus", "PRIMARY", 100),
+        ("yrfi_3plus", "3+ consensus", "HIGH-CONV", 50),
+    ]
+
+    for _tier_key, _tier_label, _badge, _gate_n in _yrfi_tier_specs:
+        _stats = _yrfi_tier_stats(_yrfi_all, _tier_key)
+        if _badge == "PRIMARY":
+            _badge_html = ('<span style="background:#052e16;color:#22c55e;border:1px solid #22c55e;'
+                           'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
+                           'margin-left:6px">PRIMARY</span>')
+        elif _badge == "HIGH-CONV":
+            _badge_html = ('<span style="background:#1c0d0d;color:#dc2626;border:1px solid #dc2626;'
+                           'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
+                           'margin-left:6px">HIGH-CONV</span>')
+        else:
+            _badge_html = ""
+
+        if _stats["graded_n"] == 0:
+            _record = "0-0"
+            _hit_str = "--"
+            _roi_str = "--"
+        else:
+            _record = f'{_stats["wins"]}-{_stats["losses"]}'
+            _hit_str = f'{_stats["hit_rate"]:.1f}%'
+            _roi_str = f'{_stats["roi"]:+.1f}%'
+
+        if _gate_n is not None:
+            _gate_str = f' &nbsp;|&nbsp; N={_stats["graded_n"]}/{_gate_n} graded'
+            if _tier_key == "yrfi_2plus":
+                _gate_str += f' &nbsp;|&nbsp; {_stats["months_positive"]}/3 months pos'
+        else:
+            _gate_str = f' &nbsp;|&nbsp; N={_stats["graded_n"]} graded'
+
+        st.html(
+            f'<div style="font-size:0.78em;color:#e2e8f0;padding:8px 12px;background:#0f1729;'
+            f'border-radius:4px;border:1px solid #1e2d4a;margin-bottom:6px">'
+            f'<span style="color:#94a3b8;font-weight:600;display:inline-block;min-width:120px">'
+            f'{_tier_label}</span>{_badge_html}'
+            f' &nbsp;|&nbsp; <span style="font-weight:700">{_record}</span>'
+            f' &nbsp;|&nbsp; Hit: {_hit_str}'
+            f' &nbsp;|&nbsp; ROI: {_roi_str}'
+            f'{_gate_str}</div>'
+        )
+
+    # --- Divider before NRFI section ---
+    st.html('<hr style="border:none;border-top:2px solid #1e293b;margin:24px 0 16px 0">')
+
+    # ═══════════════════════════════════════════════════════════════════════════
     # NRFI SECTION (existing)
     # ═══════════════════════════════════════════════════════════════════════════
 
