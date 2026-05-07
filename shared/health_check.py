@@ -86,12 +86,16 @@ def check_cron_jobs():
 # ── B. SIGNAL FILE FRESHNESS ─────────────────────────────────────────────────
 
 def check_signal_files():
+    # Off-season suppression for WNBA: pre-June, raise threshold to 1000h
+    # (matches dashboard_components.py off-season logic). Reverts to 48h on June 1.
+    _wnba_threshold = 1000 if datetime.now().month < 6 else 48
+
     files = [
         ("mlb_v1", "mlb_sim/logs/signals_2026.json", 48),
-        ("mlb_f5", "mlb_sim/logs/f5_signals_2026.json", 48),
+        # mlb_f5 monitor removed: F5 engine archived (Signal B closure, master doc Section 8)
         ("nhl", "nhl/nhl_decisions.parquet", 48),
         ("golf_shadow", "golf/shadow/golf_shadow_log.parquet", 168),  # weekly
-        ("wnba_matchup_board", "wnba_archetype_board/data/current/daily_matchup_board.parquet", 48),
+        ("wnba_matchup_board", "wnba_archetype_board/data/current/daily_matchup_board.parquet", _wnba_threshold),
     ]
     details = []
     status = "GREEN"
@@ -251,15 +255,7 @@ def check_ungraded():
     except:
         pass
 
-    # MLB F5
-    try:
-        sigs = json.load(open(ROOT / "mlb_sim/logs/f5_signals_2026.json"))
-        ungraded = [s for s in sigs if not s.get("result") and (s.get("date", "") or "") < yesterday]
-        if ungraded:
-            gaps.append({"sport": "mlb_f5", "count": len(ungraded),
-                          "dates": list(set(s.get("date") for s in ungraded))})
-    except:
-        pass
+    # mlb_f5 block removed: F5 engine archived (Signal B closure, master doc Section 8)
 
     # NBA
     try:
@@ -286,7 +282,7 @@ def check_zero_scores():
     errs = []
     recent_cutoff = (date.today() - timedelta(days=14)).isoformat()
     try:
-        for fname in ["mlb_sim/logs/signals_2026.json", "mlb_sim/logs/f5_signals_2026.json"]:
+        for fname in ["mlb_sim/logs/signals_2026.json"]:
             sigs = json.load(open(ROOT / fname))
             for s in sigs:
                 sig_date = s.get("date", "") or ""

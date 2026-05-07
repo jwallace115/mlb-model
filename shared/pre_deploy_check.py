@@ -120,10 +120,9 @@ except Exception:
     pass
 
 # D. Signal files
+# F5 + F5 runline (Signal B) removed — engines archived per master doc Section 8
 sig_files = [
     "mlb_sim/logs/signals_2026.json",
-    "mlb_sim/logs/f5_signals_2026.json",
-    "mlb_sim/logs/f5_runline_2026.json",
     "nba/data/nba_signal_log.parquet",
 ]
 all_present = True
