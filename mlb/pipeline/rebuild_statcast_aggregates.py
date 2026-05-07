@@ -197,6 +197,51 @@ def _build_pitcher_aggregate(raw):
     # Filter to meaningful starts (>= 30 pitches)
     agg = agg[agg["total_pitches"] >= 30].copy()
 
+    # ── 2-strike secondary pitch mix (for YRFI signals S2/S4) ──
+    PRIMARY_FB = {"FF", "SI", "FC", "FA"}
+    if "pitch_type" in df.columns and "strikes" in df.columns:
+        df["is_secondary"] = (~df["pitch_type"].isin(PRIMARY_FB)).astype(int)
+        df["is_two_strike"] = (df["strikes"].fillna(-1) == 2).astype(int)
+        df["is_two_strike_secondary"] = (
+            (df["is_two_strike"] == 1) & (df["is_secondary"] == 1)
+        ).astype(int)
+
+        pitch_mix = df.groupby(["pitcher", "game_date", "game_pk"]).agg(
+            two_strike_pitch_count=("is_two_strike", "sum"),
+            two_strike_secondary_count=("is_two_strike_secondary", "sum"),
+            secondary_pitch_count=("is_secondary", "sum"),
+        ).reset_index().rename(columns={"pitcher": "pitcher_id"})
+
+        pitch_mix["two_strike_secondary_pct"] = np.where(
+            pitch_mix["two_strike_pitch_count"] > 0,
+            pitch_mix["two_strike_secondary_count"] / pitch_mix["two_strike_pitch_count"],
+            np.nan,
+        )
+        pitch_mix["secondary_pitch_pct"] = np.where(
+            True,  # total_pitches always > 0 at this point
+            pitch_mix["secondary_pitch_count"],  # will divide after merge
+            np.nan,
+        )
+
+        agg = agg.merge(
+            pitch_mix[["pitcher_id", "game_date", "game_pk",
+                        "two_strike_secondary_pct", "two_strike_pitch_count",
+                        "two_strike_secondary_count", "secondary_pitch_count"]],
+            on=["pitcher_id", "game_date", "game_pk"], how="left",
+        )
+        agg["secondary_pitch_pct"] = agg["secondary_pitch_count"] / agg["total_pitches"].clip(lower=1)
+        agg = agg.drop(columns=["two_strike_pitch_count", "two_strike_secondary_count",
+                                  "secondary_pitch_count"])
+
+        nn_2s = agg["two_strike_secondary_pct"].notna().sum()
+        nn_sp = agg["secondary_pitch_pct"].notna().sum()
+        print(f"  two_strike_secondary_pct non-null: {nn_2s:,}")
+        print(f"  secondary_pitch_pct non-null: {nn_sp:,}")
+    else:
+        agg["two_strike_secondary_pct"] = np.nan
+        agg["secondary_pitch_pct"] = np.nan
+        print("  WARNING: pitch_type or strikes column missing — 2-strike features null")
+
     print(f"  Rows: {len(agg):,}")
     print(f"  Date range: {agg['game_date'].min()} to {agg['game_date'].max()}")
     print(f"  Columns: {agg.columns.tolist()}")
