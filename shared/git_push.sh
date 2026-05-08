@@ -36,12 +36,25 @@ git commit -m "auto: $MSG"
 
 # Pull remote changes before pushing (handles VM/MacBook race)
 if ! git pull --rebase origin main 2>>"$ERR_LOG"; then
-    # Auto-resolve last_updated.json (most common conflict source)
-    if git diff --name-only --diff-filter=U 2>/dev/null | grep -q 'shared/last_updated.json'; then
-        git checkout --theirs shared/last_updated.json 2>/dev/null
-        git add shared/last_updated.json 2>/dev/null
+    # Auto-resolve known generated-artifact conflicts (high-frequency
+    # pipeline outputs where --theirs is the safe strategy). Same
+    # pattern as push_daemon.sh.
+    SAFE_FILES=(
+        "shared/last_updated.json"
+        "mlb_sim/data/line_snapshots_2026.json"
+    )
+    RESOLVED=0
+    for sf in "${SAFE_FILES[@]}"; do
+        if git diff --name-only --diff-filter=U 2>/dev/null | grep -qF "$sf"; then
+            git checkout --theirs "$sf" 2>/dev/null
+            git add "$sf" 2>/dev/null
+            RESOLVED=1
+        fi
+    done
+
+    if [ $RESOLVED -eq 1 ]; then
         if git rebase --continue 2>>"$ERR_LOG"; then
-            echo "Auto-resolved last_updated.json conflict"
+            echo "Auto-resolved generated-artifact conflicts"
         else
             echo "ERROR: rebase still failing after auto-resolve — aborting"
             echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL_AFTER_AUTORESOLVE — $MSG" >> "$ERR_LOG"
