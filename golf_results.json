@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-07T22:07:04.829291",
+  "generated_at": "2026-05-08T07:00:26.695843",
   "sport": "golf",
   "event_name": "Truist Championship",
   "event_id": 480,
   "is_major": false,
-  "last_updated": "2026-05-07T22:06:44.351719",
+  "last_updated": "2026-05-08T07:00:05.025551",
   "n_candidates": 45,
   "n_leans": 11,
   "plays": [
@@ -13,7 +13,7 @@
       "dg_id": 28635,
       "market": "top_20",
       "model_prob": 22.8,
-      "market_prob": 74.5,
+      "market_prob": 74.6,
       "edge": -51.7,
       "direction": "under",
       "classification": "candidate",
@@ -24,7 +24,7 @@
       "dg_id": 17488,
       "market": "top_20",
       "model_prob": 15.6,
-      "market_prob": 59.1,
+      "market_prob": 59.2,
       "edge": -43.5,
       "direction": "under",
       "classification": "candidate",
@@ -46,11 +46,11 @@
       "dg_id": 17646,
       "market": "top_20",
       "model_prob": 54.7,
-      "market_prob": 19.3,
-      "edge": 35.4,
+      "market_prob": 20.6,
+      "edge": 34.1,
       "direction": "over",
       "classification": "candidate",
-      "close_odds": 380.0
+      "close_odds": 350.0
     },
     {
       "player_name": "Taylor, Nick",
@@ -79,7 +79,7 @@
       "dg_id": 17511,
       "market": "top_20",
       "model_prob": 34.2,
-      "market_prob": 65.4,
+      "market_prob": 65.5,
       "edge": -31.3,
       "direction": "under",
       "classification": "candidate",
@@ -91,7 +91,7 @@
       "market": "top_20",
       "model_prob": 24.2,
       "market_prob": 54.9,
-      "edge": -30.6,
+      "edge": -30.7,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -145.0
@@ -101,8 +101,8 @@
       "dg_id": 23602,
       "market": "top_20",
       "model_prob": 37.0,
-      "market_prob": 65.0,
-      "edge": -28.0,
+      "market_prob": 65.1,
+      "edge": -28.1,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -235.0
@@ -141,17 +141,6 @@
       "close_odds": 1600.0
     },
     {
-      "player_name": "Day, Jason",
-      "dg_id": 9771,
-      "market": "top_20",
-      "model_prob": 32.0,
-      "market_prob": 6.2,
-      "edge": 25.9,
-      "direction": "over",
-      "classification": "candidate",
-      "close_odds": 1400.0
-    },
-    {
       "player_name": "Finau, Tony",
       "dg_id": 11676,
       "market": "top_20",
@@ -161,6 +150,17 @@
       "direction": "under",
       "classification": "candidate",
       "close_odds": 150.0
+    },
+    {
+      "player_name": "Day, Jason",
+      "dg_id": 9771,
+      "market": "top_20",
+      "model_prob": 32.0,
+      "market_prob": 6.6,
+      "edge": 25.4,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 1300.0
     },
     {
       "player_name": "Conners, Corey",
@@ -218,6 +218,17 @@
       "close_odds": 470.0
     },
     {
+      "player_name": "Fleetwood, Tommy",
+      "dg_id": 12294,
+      "market": "top_20",
+      "model_prob": 46.5,
+      "market_prob": 67.0,
+      "edge": -20.5,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -260.0
+    },
+    {
       "player_name": "MacIntyre, Robert",
       "dg_id": 23323,
       "market": "top_20",
@@ -227,17 +238,6 @@
       "direction": "over",
       "classification": "candidate",
       "close_odds": 470.0
-    },
-    {
-      "player_name": "Fleetwood, Tommy",
-      "dg_id": 12294,
-      "market": "top_20",
-      "model_prob": 46.5,
-      "market_prob": 66.9,
-      "edge": -20.5,
-      "direction": "under",
-      "classification": "candidate",
-      "close_odds": -260.0
     },
     {
       "player_name": "Burns, Sam",
@@ -256,7 +256,7 @@
       "market": "top_20",
       "model_prob": 28.5,
       "market_prob": 47.7,
-      "edge": -19.1,
+      "edge": -19.2,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -106.0
@@ -284,6 +284,17 @@
       "close_odds": 150.0
     },
     {
+      "player_name": "Coody, Pierceson",
+      "dg_id": 28309,
+      "market": "top_20",
+      "model_prob": 25.9,
+      "market_prob": 9.8,
+      "edge": 16.2,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 850.0
+    },
+    {
       "player_name": "Hisatsune, Ryo",
       "dg_id": 22760,
       "market": "top_20",
@@ -299,7 +310,7 @@
       "dg_id": 14139,
       "market": "top_20",
       "model_prob": 32.9,
-      "market_prob": 48.5,
+      "market_prob": 48.6,
       "edge": -15.6,
       "direction": "under",
       "classification": "candidate",
@@ -328,17 +339,6 @@
       "close_odds": 270.0
     },
     {
-      "player_name": "Coody, Pierceson",
-      "dg_id": 28309,
-      "market": "top_20",
-      "model_prob": 25.9,
-      "market_prob": 10.9,
-      "edge": 15.0,
-      "direction": "over",
-      "classification": "candidate",
-      "close_odds": 750.0
-    },
-    {
       "player_name": "English, Harris",
       "dg_id": 14577,
       "market": "top_20",
@@ -355,7 +355,7 @@
       "market": "top_20",
       "model_prob": 13.2,
       "market_prob": 28.1,
-      "edge": -14.8,
+      "edge": -14.9,
       "direction": "under",
       "classification": "candidate",
       "close_odds": 230.0
@@ -399,7 +399,7 @@
       "market": "top_20",
       "model_prob": 24.8,
       "market_prob": 11.6,
-      "edge": 13.3,
+      "edge": 13.2,
       "direction": "over",
       "classification": "candidate",
       "close_odds": 700.0
@@ -416,6 +416,17 @@
       "close_odds": 310.0
     },
     {
+      "player_name": "Poston, J.T.",
+      "dg_id": 21554,
+      "market": "top_20",
+      "model_prob": 20.3,
+      "market_prob": 7.7,
+      "edge": 12.6,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 1100.0
+    },
+    {
       "player_name": "Kim, Michael",
       "dg_id": 17543,
       "market": "top_20",
@@ -425,17 +436,6 @@
       "direction": "under",
       "classification": "candidate",
       "close_odds": 230.0
-    },
-    {
-      "player_name": "Poston, J.T.",
-      "dg_id": 21554,
-      "market": "top_20",
-      "model_prob": 20.3,
-      "market_prob": 8.4,
-      "edge": 11.9,
-      "direction": "over",
-      "classification": "candidate",
-      "close_odds": 1000.0
     },
     {
       "player_name": "Novak, Andrew",
@@ -454,7 +454,7 @@
       "market": "top_20",
       "model_prob": 33.7,
       "market_prob": 43.1,
-      "edge": -9.4,
+      "edge": -9.5,
       "direction": "under",
       "classification": "candidate",
       "close_odds": 115.0
@@ -476,7 +476,7 @@
       "market": "top_20",
       "model_prob": 10.2,
       "market_prob": 19.1,
-      "edge": -8.9,
+      "edge": -9.0,
       "direction": "under",
       "classification": "candidate",
       "close_odds": 385.0
@@ -526,17 +526,6 @@
       "close_odds": -166.0
     },
     {
-      "player_name": "Rodgers, Patrick",
-      "dg_id": 16283,
-      "market": "top_20",
-      "model_prob": 16.8,
-      "market_prob": 24.4,
-      "edge": -7.6,
-      "direction": "under",
-      "classification": "lean",
-      "close_odds": 280.0
-    },
-    {
       "player_name": "McCarthy, Denny",
       "dg_id": 19870,
       "market": "top_20",
@@ -581,11 +570,22 @@
       "close_odds": 340.0
     },
     {
+      "player_name": "Rodgers, Patrick",
+      "dg_id": 16283,
+      "market": "top_20",
+      "model_prob": 16.8,
+      "market_prob": 23.2,
+      "edge": -6.4,
+      "direction": "under",
+      "classification": "lean",
+      "close_odds": 300.0
+    },
+    {
       "player_name": "Hovland, Viktor",
       "dg_id": 18841,
       "market": "top_20",
       "model_prob": 37.9,
-      "market_prob": 44.1,
+      "market_prob": 44.2,
       "edge": -6.3,
       "direction": "under",
       "classification": "lean",
@@ -858,13 +858,13 @@
       "player_name": "McIlroy, Rory",
       "dg_win_prob": 11.2,
       "adj_win_prob": 11.8,
-      "win_edge": 5.6
+      "win_edge": 5.5
     },
     {
       "player_name": "Schauffele, Xander",
       "dg_win_prob": 7.4,
       "adj_win_prob": 8.1,
-      "win_edge": 3.1
+      "win_edge": 3.0
     },
     {
       "player_name": "Fitzpatrick, Matt",
