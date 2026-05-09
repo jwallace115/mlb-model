@@ -2,6 +2,12 @@
 # Called by pipeline scripts after completing a run
 # Usage: bash shared/git_push.sh "MLB confirm run"
 
+# launchd has no interactive editor; required for git rebase --continue
+# after auto-resolved conflicts
+export GIT_EDITOR=true
+export EDITOR=true
+export VISUAL=true
+
 MSG=${1:-"pipeline auto-push $(date -u +%Y-%m-%dT%H:%M:%SZ)"}
 
 # Navigate to repo root (works on both VM and MacBook)
