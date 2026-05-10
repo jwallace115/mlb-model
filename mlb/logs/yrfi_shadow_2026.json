@@ -3485,12 +3485,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 0,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 0,
+    "total_1st_runs": 0,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -3564,12 +3568,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 1,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 1,
+    "home_1st_runs": 0,
+    "total_1st_runs": 1,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -3656,12 +3664,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 0,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 0,
+    "total_1st_runs": 0,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -3747,7 +3759,8 @@
     "result_graded": false,
     "graded_date": null,
     "notes": [
-      "FD_PRICE_UNAVAILABLE"
+      "FD_PRICE_UNAVAILABLE",
+      "GRADE_PENDING_STATUS_DR"
     ]
   },
   {
@@ -3826,12 +3839,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 1,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 3,
+    "home_1st_runs": 0,
+    "total_1st_runs": 3,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -3905,12 +3922,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 0,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 0,
+    "total_1st_runs": 0,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -3991,12 +4012,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 1,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 1,
+    "home_1st_runs": 0,
+    "total_1st_runs": 1,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4074,12 +4099,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 0,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 0,
+    "total_1st_runs": 0,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4166,12 +4195,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 1,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 2,
+    "total_1st_runs": 2,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4249,12 +4282,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 1,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 2,
+    "total_1st_runs": 2,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4332,12 +4369,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 1,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 1,
+    "home_1st_runs": 0,
+    "total_1st_runs": 1,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4415,12 +4456,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 0,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 0,
+    "total_1st_runs": 0,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4502,12 +4547,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 0,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 0,
+    "total_1st_runs": 0,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4585,12 +4634,16 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
-    "result_yrfi": null,
-    "result_graded": false,
-    "graded_date": null,
+    "result_yrfi": 0,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
     "notes": [
       "FD_PRICE_UNAVAILABLE"
-    ]
+    ],
+    "away_1st_runs": 0,
+    "home_1st_runs": 0,
+    "total_1st_runs": 0,
+    "yrfi_profit_units": null
   },
   {
     "log_date": "2026-05-09",
@@ -4664,11 +4717,1229 @@
     "fd_nrfi_price": null,
     "fd_break_even": null,
     "fd_price_available": false,
+    "result_yrfi": 1,
+    "result_graded": true,
+    "graded_date": "2026-05-10",
+    "notes": [
+      "FD_PRICE_UNAVAILABLE"
+    ],
+    "away_1st_runs": 1,
+    "home_1st_runs": 0,
+    "total_1st_runs": 1,
+    "yrfi_profit_units": null
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "2f41717fcce350329e8ac46662be3d88",
+    "game_pk": 823868,
+    "home_team": "MIA",
+    "away_team": "WSN",
+    "home_starter": "Sandy Alcantara",
+    "away_starter": "Cade Cavalli",
+    "away_batting_context": {
+      "opposing_starter": "Sandy Alcantara",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 16.18768,
+        "opp_sp_contact_la_allowed_last_10": 17.147683,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.555567,
+        "opp_pl_secondary_2strike_drift_last_3": -0.063965,
+        "opp_sp_workload_ip_last_3": 5.366667,
+        "opp_sp_command_bb_rate_last_3": 0.077512,
+        "bullpen_pitches_last_3_games": 183.0,
+        "contact_hh_rate_last_15": null,
+        "contact_xslg_last_7": null
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": null
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OFFENSE_BATTING_INSUFFICIENT"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Cade Cavalli",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 11.568441,
+        "opp_sp_contact_la_allowed_last_10": 7.971809,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.554343,
+        "opp_pl_secondary_2strike_drift_last_3": -0.029226,
+        "opp_sp_workload_ip_last_3": 5.0,
+        "opp_sp_command_bb_rate_last_3": 0.070146,
+        "bullpen_pitches_last_3_games": null,
+        "contact_hh_rate_last_15": 0.40628,
+        "contact_xslg_last_7": 0.503643
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "BULLPEN_DATA_UNAVAILABLE"
+      ]
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 100,
+    "fd_nrfi_price": -128,
+    "fd_break_even": 0.5,
+    "fd_price_available": true,
     "result_yrfi": null,
     "result_graded": false,
     "graded_date": null,
-    "notes": [
-      "FD_PRICE_UNAVAILABLE"
-    ]
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "42a6a833eaecf112c826202eb1d596f9",
+    "game_pk": 824845,
+    "home_team": "BAL",
+    "away_team": "OAK",
+    "home_starter": "Chris Bassitt",
+    "away_starter": "Luis Severino",
+    "away_batting_context": {
+      "opposing_starter": "Chris Bassitt",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 11.732111,
+        "opp_sp_contact_la_allowed_last_10": 13.595047,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.408736,
+        "opp_pl_secondary_2strike_drift_last_3": -0.000403,
+        "opp_sp_workload_ip_last_3": 5.1,
+        "opp_sp_command_bb_rate_last_3": 0.086631,
+        "bullpen_pitches_last_3_games": 217.0,
+        "contact_hh_rate_last_15": 0.379781,
+        "contact_xslg_last_7": 0.423704
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": true,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 1,
+      "fired": [
+        "S4_XSLG_2STRIKE"
+      ],
+      "notes": []
+    },
+    "home_batting_context": {
+      "opposing_starter": "Luis Severino",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 19.560222,
+        "opp_sp_contact_la_allowed_last_10": 20.06147,
+        "opp_pl_zone_drift_last_5": 0.009903,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.449176,
+        "opp_pl_secondary_2strike_drift_last_3": 0.02671,
+        "opp_sp_workload_ip_last_3": 6.066667,
+        "opp_sp_command_bb_rate_last_3": 0.067265,
+        "bullpen_pitches_last_3_games": 157.0,
+        "contact_hh_rate_last_15": 0.372114,
+        "contact_xslg_last_7": 0.504748
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "unique_signal_count": 1,
+    "total_context_signal_count": 1,
+    "fired_signals": [
+      "S4_XSLG_2STRIKE"
+    ],
+    "yrfi_1plus": true,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": -146,
+    "fd_nrfi_price": 114,
+    "fd_break_even": 0.5935,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "73c2cde50707b32c9767a0a8fbb2e7d2",
+    "game_pk": 824765,
+    "home_team": "BOS",
+    "away_team": "TBR",
+    "home_starter": "Payton Tolle",
+    "away_starter": "Nick Martinez",
+    "away_batting_context": {
+      "opposing_starter": "Payton Tolle",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 26.8054,
+        "opp_sp_contact_la_allowed_last_10": 24.044674,
+        "opp_pl_zone_drift_last_5": 0.061236,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.27193,
+        "opp_pl_secondary_2strike_drift_last_3": 0.0,
+        "opp_sp_workload_ip_last_3": 5.733333,
+        "opp_sp_command_bb_rate_last_3": 0.095152,
+        "bullpen_pitches_last_3_games": 157.0,
+        "contact_hh_rate_last_15": null,
+        "contact_xslg_last_7": null
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": true,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": null
+      },
+      "signal_count": 1,
+      "fired": [
+        "S1_LA_WORKLOAD"
+      ],
+      "notes": [
+        "OFFENSE_BATTING_INSUFFICIENT"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Nick Martinez",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 16.912143,
+        "opp_sp_contact_la_allowed_last_10": 14.420595,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.440009,
+        "opp_pl_secondary_2strike_drift_last_3": -0.028414,
+        "opp_sp_workload_ip_last_3": 6.666667,
+        "opp_sp_command_bb_rate_last_3": 0.040317,
+        "bullpen_pitches_last_3_games": null,
+        "contact_hh_rate_last_15": 0.467298,
+        "contact_xslg_last_7": 0.515659
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "BULLPEN_DATA_UNAVAILABLE"
+      ]
+    },
+    "unique_signal_count": 1,
+    "total_context_signal_count": 1,
+    "fired_signals": [
+      "S1_LA_WORKLOAD"
+    ],
+    "yrfi_1plus": true,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": -104,
+    "fd_nrfi_price": -120,
+    "fd_break_even": 0.5098,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "6dd9cd4491079d3cedf1f7d3ff85b358",
+    "game_pk": 823463,
+    "home_team": "PHI",
+    "away_team": "COL",
+    "home_starter": "Cristopher S\u00e1nchez",
+    "away_starter": "Tomoyuki Sugano",
+    "away_batting_context": {
+      "opposing_starter": "Cristopher S\u00e1nchez",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": -0.234766,
+        "opp_sp_contact_la_allowed_last_10": 1.395657,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.715266,
+        "opp_pl_secondary_2strike_drift_last_3": 0.000654,
+        "opp_sp_workload_ip_last_3": 6.433333,
+        "opp_sp_command_bb_rate_last_3": 0.070754,
+        "bullpen_pitches_last_3_games": 152.0,
+        "contact_hh_rate_last_15": 0.415648,
+        "contact_xslg_last_7": 0.560368
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "home_batting_context": {
+      "opposing_starter": "Tomoyuki Sugano",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 20.289374,
+        "opp_sp_contact_la_allowed_last_10": 18.374378,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.444585,
+        "opp_pl_secondary_2strike_drift_last_3": 0.05726,
+        "opp_sp_workload_ip_last_3": 5.133333,
+        "opp_sp_command_bb_rate_last_3": 0.093281,
+        "bullpen_pitches_last_3_games": 153.0,
+        "contact_hh_rate_last_15": 0.372326,
+        "contact_xslg_last_7": 0.424631
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": true,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 1,
+      "fired": [
+        "S4_XSLG_2STRIKE"
+      ],
+      "notes": []
+    },
+    "unique_signal_count": 1,
+    "total_context_signal_count": 1,
+    "fired_signals": [
+      "S4_XSLG_2STRIKE"
+    ],
+    "yrfi_1plus": true,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 104,
+    "fd_nrfi_price": -132,
+    "fd_break_even": 0.4902,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "9bfd5fd962a5ede4a98e0c595c9db46f",
+    "game_pk": 822819,
+    "home_team": "TOR",
+    "away_team": "LAA",
+    "home_starter": "Spencer Miles",
+    "away_starter": "Jos\u00e9 Soriano",
+    "away_batting_context": {
+      "opposing_starter": "Spencer Miles",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 25.264706,
+        "opp_sp_contact_la_allowed_last_10": 25.264706,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.423077,
+        "opp_pl_secondary_2strike_drift_last_3": 0.0,
+        "opp_sp_workload_ip_last_3": null,
+        "opp_sp_command_bb_rate_last_3": null,
+        "bullpen_pitches_last_3_games": 199.0,
+        "contact_hh_rate_last_15": 0.426574,
+        "contact_xslg_last_7": 0.569475
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": null,
+        "S2_COMMAND_DRIFT": null,
+        "S3_COMMAND_LA": null,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OPP_STARTER_PGL_INSUFFICIENT"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Jos\u00e9 Soriano",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 15.402246,
+        "opp_sp_contact_la_allowed_last_10": 11.280249,
+        "opp_pl_zone_drift_last_5": 0.015622,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.569911,
+        "opp_pl_secondary_2strike_drift_last_3": 0.010572,
+        "opp_sp_workload_ip_last_3": 4.666667,
+        "opp_sp_command_bb_rate_last_3": 0.086957,
+        "bullpen_pitches_last_3_games": 180.0,
+        "contact_hh_rate_last_15": 0.412486,
+        "contact_xslg_last_7": 0.583866
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": -106,
+    "fd_nrfi_price": -120,
+    "fd_break_even": 0.5146,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "3751eb6375883244bf07ebaa76d74e35",
+    "game_pk": 824520,
+    "home_team": "CIN",
+    "away_team": "HOU",
+    "home_starter": "Andrew Abbott",
+    "away_starter": "Kai-Wei Teng",
+    "away_batting_context": {
+      "opposing_starter": "Andrew Abbott",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 24.743412,
+        "opp_sp_contact_la_allowed_last_10": 21.729822,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.487507,
+        "opp_pl_secondary_2strike_drift_last_3": 0.084264,
+        "opp_sp_workload_ip_last_3": 5.066667,
+        "opp_sp_command_bb_rate_last_3": 0.11731,
+        "bullpen_pitches_last_3_games": 189.0,
+        "contact_hh_rate_last_15": 0.34568,
+        "contact_xslg_last_7": 0.597301
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": true
+      },
+      "signal_count": 1,
+      "fired": [
+        "S6_CONTACT_HH_LA"
+      ],
+      "notes": []
+    },
+    "home_batting_context": {
+      "opposing_starter": "Kai-Wei Teng",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 21.853001,
+        "opp_sp_contact_la_allowed_last_10": 20.353167,
+        "opp_pl_zone_drift_last_5": 0.006959,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.625728,
+        "opp_pl_secondary_2strike_drift_last_3": -0.041424,
+        "opp_sp_workload_ip_last_3": 3.333333,
+        "opp_sp_command_bb_rate_last_3": 0.065278,
+        "bullpen_pitches_last_3_games": 245.0,
+        "contact_hh_rate_last_15": 0.423039,
+        "contact_xslg_last_7": 0.597837
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "unique_signal_count": 1,
+    "total_context_signal_count": 1,
+    "fired_signals": [
+      "S6_CONTACT_HH_LA"
+    ],
+    "yrfi_1plus": true,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": -120,
+    "fd_nrfi_price": -106,
+    "fd_break_even": 0.5455,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "4d2a59061aec314f7265432aacbe8df1",
+    "game_pk": 824440,
+    "home_team": "CLE",
+    "away_team": "MIN",
+    "home_starter": "Gavin Williams",
+    "away_starter": "Andrew Morris",
+    "away_batting_context": {
+      "opposing_starter": "Gavin Williams",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 16.987472,
+        "opp_sp_contact_la_allowed_last_10": 17.854797,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.561343,
+        "opp_pl_secondary_2strike_drift_last_3": 0.082176,
+        "opp_sp_workload_ip_last_3": 6.4,
+        "opp_sp_command_bb_rate_last_3": 0.049383,
+        "bullpen_pitches_last_3_games": 215.0,
+        "contact_hh_rate_last_15": 0.408424,
+        "contact_xslg_last_7": 0.441811
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": true,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 1,
+      "fired": [
+        "S2_COMMAND_DRIFT"
+      ],
+      "notes": []
+    },
+    "home_batting_context": {
+      "opposing_starter": "Andrew Morris",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 19.040869,
+        "opp_sp_contact_la_allowed_last_10": 19.040869,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.509921,
+        "opp_pl_secondary_2strike_drift_last_3": 0.027116,
+        "opp_sp_workload_ip_last_3": null,
+        "opp_sp_command_bb_rate_last_3": null,
+        "bullpen_pitches_last_3_games": 206.0,
+        "contact_hh_rate_last_15": 0.383118,
+        "contact_xslg_last_7": 0.502579
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": null,
+        "S2_COMMAND_DRIFT": null,
+        "S3_COMMAND_LA": null,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OPP_STARTER_PGL_INSUFFICIENT"
+      ]
+    },
+    "unique_signal_count": 1,
+    "total_context_signal_count": 1,
+    "fired_signals": [
+      "S2_COMMAND_DRIFT"
+    ],
+    "yrfi_1plus": true,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 136,
+    "fd_nrfi_price": -174,
+    "fd_break_even": 0.4237,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "d58ee5722b0d27c98714b46a090df16f",
+    "game_pk": 824605,
+    "home_team": "CHW",
+    "away_team": "SEA",
+    "home_starter": "Davis Martin",
+    "away_starter": "Logan Gilbert",
+    "away_batting_context": {
+      "opposing_starter": "Davis Martin",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 14.37039,
+        "opp_sp_contact_la_allowed_last_10": 13.953821,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.558407,
+        "opp_pl_secondary_2strike_drift_last_3": -0.038303,
+        "opp_sp_workload_ip_last_3": 6.1,
+        "opp_sp_command_bb_rate_last_3": 0.026709,
+        "bullpen_pitches_last_3_games": null,
+        "contact_hh_rate_last_15": 0.432574,
+        "contact_xslg_last_7": 0.532176
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "BULLPEN_DATA_UNAVAILABLE"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Logan Gilbert",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 18.205556,
+        "opp_sp_contact_la_allowed_last_10": 22.34396,
+        "opp_pl_zone_drift_last_5": 0.000271,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.762011,
+        "opp_pl_secondary_2strike_drift_last_3": 0.059297,
+        "opp_sp_workload_ip_last_3": 5.0,
+        "opp_sp_command_bb_rate_last_3": 0.072302,
+        "bullpen_pitches_last_3_games": 163.0,
+        "contact_hh_rate_last_15": null,
+        "contact_xslg_last_7": null
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": null
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OFFENSE_BATTING_INSUFFICIENT"
+      ]
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 108,
+    "fd_nrfi_price": -138,
+    "fd_break_even": 0.4808,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "e254b4d802742c85bc156989d1b71346",
+    "game_pk": 823793,
+    "home_team": "MIL",
+    "away_team": "NYY",
+    "home_starter": "Logan Henderson",
+    "away_starter": "Carlos Rod\u00f3n",
+    "away_batting_context": {
+      "opposing_starter": "Logan Henderson",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 29.113862,
+        "opp_sp_contact_la_allowed_last_10": 29.688219,
+        "opp_pl_zone_drift_last_5": null,
+        "opp_pl_two_strike_secondary_pct_season_baseline": null,
+        "opp_pl_secondary_2strike_drift_last_3": null,
+        "opp_sp_workload_ip_last_3": 4.033333,
+        "opp_sp_command_bb_rate_last_3": 0.074074,
+        "bullpen_pitches_last_3_games": 179.0,
+        "contact_hh_rate_last_15": 0.43924,
+        "contact_xslg_last_7": 0.586255
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": null,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "home_batting_context": {
+      "opposing_starter": "Carlos Rod\u00f3n",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 11.572528,
+        "opp_sp_contact_la_allowed_last_10": 12.007586,
+        "opp_pl_zone_drift_last_5": null,
+        "opp_pl_two_strike_secondary_pct_season_baseline": null,
+        "opp_pl_secondary_2strike_drift_last_3": null,
+        "opp_sp_workload_ip_last_3": 6.333333,
+        "opp_sp_command_bb_rate_last_3": 0.041202,
+        "bullpen_pitches_last_3_games": 79.0,
+        "contact_hh_rate_last_15": 0.420356,
+        "contact_xslg_last_7": 0.613636
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": null,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 100,
+    "fd_nrfi_price": -128,
+    "fd_break_even": 0.5,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "f39e9272c26acb799cf16afa62e26316",
+    "game_pk": 822902,
+    "home_team": "TEX",
+    "away_team": "CHC",
+    "home_starter": "Jacob deGrom",
+    "away_starter": "Jameson Taillon",
+    "away_batting_context": {
+      "opposing_starter": "Jacob deGrom",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 19.955402,
+        "opp_sp_contact_la_allowed_last_10": 22.117092,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.66328,
+        "opp_pl_secondary_2strike_drift_last_3": -0.002525,
+        "opp_sp_workload_ip_last_3": 5.766667,
+        "opp_sp_command_bb_rate_last_3": 0.026838,
+        "bullpen_pitches_last_3_games": 139.0,
+        "contact_hh_rate_last_15": 0.435438,
+        "contact_xslg_last_7": 0.511507
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": true,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 1,
+      "fired": [
+        "S3_COMMAND_LA"
+      ],
+      "notes": []
+    },
+    "home_batting_context": {
+      "opposing_starter": "Jameson Taillon",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 22.903703,
+        "opp_sp_contact_la_allowed_last_10": 23.173946,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.513849,
+        "opp_pl_secondary_2strike_drift_last_3": 0.057968,
+        "opp_sp_workload_ip_last_3": 5.733333,
+        "opp_sp_command_bb_rate_last_3": 0.075445,
+        "bullpen_pitches_last_3_games": 158.0,
+        "contact_hh_rate_last_15": 0.410727,
+        "contact_xslg_last_7": 0.547796
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": true,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 1,
+      "fired": [
+        "S1_LA_WORKLOAD"
+      ],
+      "notes": []
+    },
+    "unique_signal_count": 2,
+    "total_context_signal_count": 2,
+    "fired_signals": [
+      "S1_LA_WORKLOAD",
+      "S3_COMMAND_LA"
+    ],
+    "yrfi_1plus": true,
+    "yrfi_2plus": true,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 112,
+    "fd_nrfi_price": -142,
+    "fd_break_even": 0.4717,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "24f0fb743655b2176ff9d2f1d17bc2d0",
+    "game_pk": 823221,
+    "home_team": "SFG",
+    "away_team": "PIT",
+    "home_starter": "Tyler Mahle",
+    "away_starter": "Bubba Chandler",
+    "away_batting_context": {
+      "opposing_starter": "Tyler Mahle",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 19.050059,
+        "opp_sp_contact_la_allowed_last_10": 22.079854,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.491986,
+        "opp_pl_secondary_2strike_drift_last_3": -0.060535,
+        "opp_sp_workload_ip_last_3": 5.7,
+        "opp_sp_command_bb_rate_last_3": 0.086247,
+        "bullpen_pitches_last_3_games": null,
+        "contact_hh_rate_last_15": 0.418523,
+        "contact_xslg_last_7": 0.506152
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "BULLPEN_DATA_UNAVAILABLE"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Bubba Chandler",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 28.018446,
+        "opp_sp_contact_la_allowed_last_10": 21.449303,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.484632,
+        "opp_pl_secondary_2strike_drift_last_3": 0.042424,
+        "opp_sp_workload_ip_last_3": 4.666667,
+        "opp_sp_command_bb_rate_last_3": 0.194993,
+        "bullpen_pitches_last_3_games": 133.0,
+        "contact_hh_rate_last_15": null,
+        "contact_xslg_last_7": null
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": null
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OFFENSE_BATTING_INSUFFICIENT"
+      ]
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 100,
+    "fd_nrfi_price": -128,
+    "fd_break_even": 0.5,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "1a0f51cf52137e602d477a383aededcd",
+    "game_pk": 825085,
+    "home_team": "ARI",
+    "away_team": "NYM",
+    "home_starter": "Eduardo Rodriguez",
+    "away_starter": "Huascar Brazob\u00e1n",
+    "away_batting_context": {
+      "opposing_starter": "Eduardo Rodriguez",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 16.325849,
+        "opp_sp_contact_la_allowed_last_10": 18.331729,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.319271,
+        "opp_pl_secondary_2strike_drift_last_3": -0.044931,
+        "opp_sp_workload_ip_last_3": 5.4,
+        "opp_sp_command_bb_rate_last_3": 0.138099,
+        "bullpen_pitches_last_3_games": null,
+        "contact_hh_rate_last_15": 0.469158,
+        "contact_xslg_last_7": 0.589666
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "BULLPEN_DATA_UNAVAILABLE"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Huascar Brazob\u00e1n",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 6.670455,
+        "opp_sp_contact_la_allowed_last_10": 9.703561,
+        "opp_pl_zone_drift_last_5": -0.022713,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.583333,
+        "opp_pl_secondary_2strike_drift_last_3": -0.009259,
+        "opp_sp_workload_ip_last_3": 1.333333,
+        "opp_sp_command_bb_rate_last_3": 0.130952,
+        "bullpen_pitches_last_3_games": 120.0,
+        "contact_hh_rate_last_15": null,
+        "contact_xslg_last_7": null
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": null
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OFFENSE_BATTING_INSUFFICIENT"
+      ]
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": -113,
+    "fd_nrfi_price": -113,
+    "fd_break_even": 0.5305,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "bdfc7e1e5ee8e2389bbdfb8f9521a582",
+    "game_pk": 823305,
+    "home_team": "SDP",
+    "away_team": "STL",
+    "home_starter": "Walker Buehler",
+    "away_starter": "Kyle Leahy",
+    "away_batting_context": {
+      "opposing_starter": "Walker Buehler",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 14.459307,
+        "opp_sp_contact_la_allowed_last_10": 18.986947,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.589634,
+        "opp_pl_secondary_2strike_drift_last_3": -0.053402,
+        "opp_sp_workload_ip_last_3": 3.833333,
+        "opp_sp_command_bb_rate_last_3": 0.098086,
+        "bullpen_pitches_last_3_games": null,
+        "contact_hh_rate_last_15": 0.411965,
+        "contact_xslg_last_7": 0.586893
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "BULLPEN_DATA_UNAVAILABLE"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Kyle Leahy",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 12.332556,
+        "opp_sp_contact_la_allowed_last_10": 11.741873,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.540649,
+        "opp_pl_secondary_2strike_drift_last_3": 0.00329,
+        "opp_sp_workload_ip_last_3": 5.066667,
+        "opp_sp_command_bb_rate_last_3": 0.066667,
+        "bullpen_pitches_last_3_games": 222.0,
+        "contact_hh_rate_last_15": null,
+        "contact_xslg_last_7": null
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": null
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OFFENSE_BATTING_INSUFFICIENT"
+      ]
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": -104,
+    "fd_nrfi_price": -122,
+    "fd_break_even": 0.5098,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "ab56a10bb0c4a672e1d846d67e7f703e",
+    "game_pk": 823954,
+    "home_team": "LAD",
+    "away_team": "ATL",
+    "home_starter": "Justin Wrobleski",
+    "away_starter": "Bryce Elder",
+    "away_batting_context": {
+      "opposing_starter": "Justin Wrobleski",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 15.034992,
+        "opp_sp_contact_la_allowed_last_10": 16.777071,
+        "opp_pl_zone_drift_last_5": 0.011665,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.480022,
+        "opp_pl_secondary_2strike_drift_last_3": -0.01948,
+        "opp_sp_workload_ip_last_3": 6.333333,
+        "opp_sp_command_bb_rate_last_3": 0.063272,
+        "bullpen_pitches_last_3_games": 151.0,
+        "contact_hh_rate_last_15": 0.393457,
+        "contact_xslg_last_7": 0.521928
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "home_batting_context": {
+      "opposing_starter": "Bryce Elder",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 15.335833,
+        "opp_sp_contact_la_allowed_last_10": 15.229547,
+        "opp_pl_zone_drift_last_5": 0.0,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.517832,
+        "opp_pl_secondary_2strike_drift_last_3": -0.063112,
+        "opp_sp_workload_ip_last_3": 6.333333,
+        "opp_sp_command_bb_rate_last_3": 0.093845,
+        "bullpen_pitches_last_3_games": 94.0,
+        "contact_hh_rate_last_15": 0.388274,
+        "contact_xslg_last_7": 0.545729
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": false,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": []
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": -113,
+    "fd_nrfi_price": -113,
+    "fd_break_even": 0.5305,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
+  },
+  {
+    "log_date": "2026-05-10",
+    "run_timestamp": "2026-05-10T11:30:06.104023+00:00",
+    "game_date": "2026-05-10",
+    "game_id": "1a85cdf5d7c53f361d8dd4b822af8f09",
+    "game_pk": 824113,
+    "home_team": "KCR",
+    "away_team": "DET",
+    "home_starter": "Noah Cameron",
+    "away_starter": "Brenan Hanifee",
+    "away_batting_context": {
+      "opposing_starter": "Noah Cameron",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": 14.200478,
+        "opp_sp_contact_la_allowed_last_10": 15.032279,
+        "opp_pl_zone_drift_last_5": -0.021635,
+        "opp_pl_two_strike_secondary_pct_season_baseline": 0.601648,
+        "opp_pl_secondary_2strike_drift_last_3": 0.0,
+        "opp_sp_workload_ip_last_3": 5.066667,
+        "opp_sp_command_bb_rate_last_3": 0.090709,
+        "bullpen_pitches_last_3_games": null,
+        "contact_hh_rate_last_15": 0.337494,
+        "contact_xslg_last_7": 0.482899
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": false,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": false,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": false
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "BULLPEN_DATA_UNAVAILABLE"
+      ]
+    },
+    "home_batting_context": {
+      "opposing_starter": "Brenan Hanifee",
+      "features": {
+        "opp_sp_contact_la_allowed_last_5": -0.394805,
+        "opp_sp_contact_la_allowed_last_10": 4.715747,
+        "opp_pl_zone_drift_last_5": null,
+        "opp_pl_two_strike_secondary_pct_season_baseline": null,
+        "opp_pl_secondary_2strike_drift_last_3": null,
+        "opp_sp_workload_ip_last_3": 1.4,
+        "opp_sp_command_bb_rate_last_3": 0.047619,
+        "bullpen_pitches_last_3_games": 159.0,
+        "contact_hh_rate_last_15": null,
+        "contact_xslg_last_7": null
+      },
+      "signals": {
+        "S1_LA_WORKLOAD": false,
+        "S2_COMMAND_DRIFT": null,
+        "S3_COMMAND_LA": false,
+        "S4_XSLG_2STRIKE": null,
+        "S5_BULLPEN_ZONE": null,
+        "S6_CONTACT_HH_LA": null
+      },
+      "signal_count": 0,
+      "fired": [],
+      "notes": [
+        "OFFENSE_BATTING_INSUFFICIENT"
+      ]
+    },
+    "unique_signal_count": 0,
+    "total_context_signal_count": 0,
+    "fired_signals": [],
+    "yrfi_1plus": false,
+    "yrfi_2plus": false,
+    "yrfi_3plus": false,
+    "fd_yrfi_price": 104,
+    "fd_nrfi_price": -132,
+    "fd_break_even": 0.4902,
+    "fd_price_available": true,
+    "result_yrfi": null,
+    "result_graded": false,
+    "graded_date": null,
+    "notes": []
   }
 ]
