@@ -43,33 +43,66 @@ git commit -m "auto: $MSG"
 # Pull remote changes before pushing (handles VM/MacBook race)
 if ! git pull --rebase origin main 2>>"$ERR_LOG"; then
     # Auto-resolve known generated-artifact conflicts (high-frequency
-    # pipeline outputs where --theirs is the safe strategy). Same
-    # pattern as push_daemon.sh.
+    # pipeline outputs where --theirs is the safe strategy). N-pass
+    # loop handles multi-step rebases where different steps conflict
+    # on different safe files. Matches push_daemon.sh resilience.
     SAFE_FILES=(
+        # Cross-machine timestamp registry
         "shared/last_updated.json"
+        # MLB sim outputs
         "mlb_sim/data/line_snapshots_2026.json"
+        # MLB shadow logs
+        "mlb/logs/mlb_mixed_night_dog_shadow_2026.json"
+        "mlb/logs/mlb_mixed_bp_adv_dog_shadow_2026.json"
+        "mlb/logs/mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json"
+        "mlb/logs/nrfi_selector_v1_2026.json"
+        "mlb/logs/yrfi_shadow_2026.json"
+        "mlb/logs/yrfi_odds_2026.json"
+        # Golf shadow outputs (parity with push_daemon.sh)
+        "golf/shadow/golf_daily_best_board.parquet"
+        "golf/shadow/golf_shadow_log.parquet"
+        # WNBA shadow outputs
+        "wnba/shadow/p6_shadow_log.txt"
+        "wnba/shadow/prop_candidates.parquet"
+        "wnba/shadow/clv_log.parquet"
+        "wnba/shadow/graded_results.parquet"
+        # WNBA core data
+        "wnba/data/player_game_logs.parquet"
+        "wnba/data/player_game_logs_enriched.parquet"
+        "wnba/data/team_game_logs.parquet"
+        "wnba/data/game_index.parquet"
     )
-    RESOLVED=0
-    for sf in "${SAFE_FILES[@]}"; do
-        if git diff --name-only --diff-filter=U 2>/dev/null | grep -qF "$sf"; then
-            git checkout --theirs "$sf" 2>/dev/null
-            git add "$sf" 2>/dev/null
-            RESOLVED=1
-        fi
-    done
 
-    if [ $RESOLVED -eq 1 ]; then
-        if git rebase --continue 2>>"$ERR_LOG"; then
-            echo "Auto-resolved generated-artifact conflicts"
-        else
-            echo "ERROR: rebase still failing after auto-resolve — aborting"
-            echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL_AFTER_AUTORESOLVE — $MSG" >> "$ERR_LOG"
+    MAX_PASSES=5
+    for ((pass=1; pass <= MAX_PASSES; pass++)); do
+        RESOLVED=0
+        for sf in "${SAFE_FILES[@]}"; do
+            if git diff --name-only --diff-filter=U 2>/dev/null | grep -qF "$sf"; then
+                git checkout --theirs "$sf" 2>/dev/null
+                git add "$sf" 2>/dev/null
+                RESOLVED=1
+            fi
+        done
+
+        if [ $RESOLVED -eq 0 ]; then
+            # No SAFE_FILES matched — non-safe conflict, fail loud
+            echo "ERROR: non-safe conflict on pass $pass — aborting"
+            echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL_NONSAFE_CONFLICT — pass=$pass — $MSG" >> "$ERR_LOG"
+            git diff --name-only --diff-filter=U 2>>"$ERR_LOG"
             git rebase --abort 2>/dev/null
             exit 1
         fi
-    else
-        echo "ERROR: git pull --rebase failed — aborting push"
-        echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL — $MSG" >> "$ERR_LOG"
+
+        if GIT_EDITOR=true git rebase --continue 2>>"$ERR_LOG"; then
+            echo "Auto-resolved generated-artifact conflicts (pass=$pass)"
+            break
+        fi
+    done
+
+    # Hit MAX_PASSES without rebase completing
+    if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
+        echo "ERROR: rebase still failing after $MAX_PASSES passes — aborting"
+        echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) REBASE_FAIL_MAX_PASSES_EXCEEDED — $MSG" >> "$ERR_LOG"
         git rebase --abort 2>/dev/null
         exit 1
     fi
