@@ -189,6 +189,22 @@
       "dog_bp_era": 3.911,
       "win_loss": "W",
       "final_score": "0-6"
+    },
+    {
+      "game_pk": 824765,
+      "game_date": "2026-05-10",
+      "matchup": "TBR @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "TBR",
+      "fav_side": "home",
+      "fav_implied": 0.5467,
+      "dog_ml_price": 112,
+      "sp_fip_diff": 0.266,
+      "off_diff": -0.4,
+      "bp_era_diff": 0.566,
+      "fav_bp_era": 4.603,
+      "dog_bp_era": 4.037,
+      "win_loss": null
     }
   ]
 }
