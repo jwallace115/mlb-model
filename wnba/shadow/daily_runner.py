@@ -463,6 +463,7 @@ def run(run_date=None, test_fixture=None):
         candidate_rows.append({
             "player_id": pid, "player_name": pname,
             "game_id": prop["game_id"], "game_date": run_date,
+            "commence_time": prop.get("commence_time"),
             "market": prop["market"], "line": line,
             "home_team": prop["home_team"], "away_team": prop["away_team"],
             "best_over_odds": best_over, "best_over_book": prop["best_over_book"],
