@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "928fcf1398f0f1814ca5aeebaae169b7",
+    "game_date": "2026-05-11",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-05-11T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -103,
+    "under_price": -112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-10T06:05:03.758741+00:00"
+  },
+  {
+    "game_id": "5058a52208f300b86ae178b9da64d51e",
+    "game_date": "2026-05-11",
+    "sport": "NHL",
+    "home_team": "Minnesota Wild",
+    "away_team": "Colorado Avalanche",
+    "commence_time": "2026-05-12T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 103,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-10T06:05:03.758741+00:00"
+  }
+]
