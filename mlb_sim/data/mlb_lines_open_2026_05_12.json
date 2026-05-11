@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "aead05342952ab70ff6c1a772b4295d4",
+    "game_date": "2026-05-12",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Arizona Diamondbacks",
+    "commence_time": "2026-05-12T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-11T06:05:02.376359+00:00"
+  },
+  {
+    "game_id": "80622319ceec1faf47baaee869656e13",
+    "game_date": "2026-05-12",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-05-12T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-11T06:05:02.376359+00:00"
+  },
+  {
+    "game_id": "875a5a258588aff680ae69335167dec2",
+    "game_date": "2026-05-12",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "San Francisco Giants",
+    "commence_time": "2026-05-12T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -102,
+    "under_price": -112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-11T06:05:02.376359+00:00"
+  }
+]
