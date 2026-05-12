@@ -58,8 +58,22 @@ if ! git pull --rebase origin main 2>>"$ERR_LOG"; then
         "mlb/logs/nrfi_selector_v1_2026.json"
         "mlb/logs/yrfi_shadow_2026.json"
         "mlb/logs/yrfi_odds_2026.json"
-        # MLB sim rolling performance
+        # MLB sim logs (all generated shadow/signal/performance outputs)
         "mlb_sim/logs/rolling_performance_2026.json"
+        "mlb_sim/logs/rolling_performance_shadow_2026.json"
+        "mlb_sim/logs/shadow_signals_2026.json"
+        "mlb_sim/logs/combined_short_exit_shadow_2026.json"
+        "mlb_sim/logs/cs004_shadow_2026.json"
+        "mlb_sim/logs/cs013_shadow_2026.json"
+        "mlb_sim/logs/cs028_shadow_2026.json"
+        "mlb_sim/logs/kp04_shadow_2026.json"
+        # MLB sim pipeline state
+        "mlb_sim/pipeline/engine_status.json"
+        # MLB F5 (archived but files still tracked)
+        "mlb_sim_f5/data/f5_coverage_2026.json"
+        "mlb_sim_f5/data/f5_lines_2026.parquet"
+        # MLB data
+        "data/line_movement.csv"
         # MLB props shadow
         "mlb/props/shadow/mlb_props_hits_po_shadow.parquet"
         # Golf shadow outputs
