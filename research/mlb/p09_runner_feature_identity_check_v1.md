@@ -1,5 +1,59 @@
 # P09 Runner Feature-Identity Check V1
 
+## Amendment — Verdict Reconciliation (May 12, 2026)
+
+The original verdict on this artifact was incorrect under its own threshold rules.
+
+**Original reported verdict, preserved below:** MATCH
+
+**Reason invalid:** Max delta 0.069048 exceeds the MISMATCH threshold of >= 0.05 defined in the original verdict rules. The MATCH verdict required max delta < 0.02. The SOFT MATCH verdict required max delta < 0.05. Neither threshold is satisfied. Under the raw rules, the correct classification is MISMATCH.
+
+**Audit note:** This reconciliation is required because the original verdict masked a threshold contradiction. The explanation for the divergence (input data freshness) was correct and well-documented, but applying a MATCH label to a result that violated the stated MATCH threshold creates an evidence contradiction that must be surfaced directly, not hidden behind a plausible-sounding conclusion.
+
+**Corrected multi-part verdict:**
+
+A. Formula identity: **PASS**
+- When the same input data is used (aggregate parquet), all 29 starters produce identical values (delta = 0.000000). The formula `avg(home_hh_r5, away_hh_r5) * park_run_factor` is correctly implemented. `compute_p09()` match is exact.
+
+B. Signal identity: **PASS**
+- 0 signal_fired disagreements across all 14 games where both implementations produced values. No game changes from fire to no-fire or vice versa.
+
+C. PIT skip: **PASS**
+- Both implementations skip exactly the same game (LAA@TOR, Spencer Miles < 3 starts). No case where runner produced a value the independent implementation considers PIT-unsafe.
+
+D. Input freshness parity: **PARTIAL**
+- 27/29 starters: identical input data, identical output.
+- 2/29 starters: pitch-level chunks contain extra regular-season appearances not in the pre-built aggregate:
+  - Brenan Hanifee (669724): runner=0.362381, independent=0.293333, delta=0.069048. Cause: chunks have 3 extra dates (2024-08-01, 2025-08-01, 2025-09-01) not in aggregate. signal_fired: both false. PIT safety: both compliant.
+  - Keegan Akin (669211): runner=0.483333, independent=0.433333, delta=0.050000. Cause: chunks have 2 extra dates (2024-06-01, 2025-09-01) not in aggregate. signal_fired: both false. PIT safety: both compliant.
+- The aggregate parquet is the spec-defined canonical source. The runner correctly uses it. The pitch-level chunks were updated with newer Statcast data after the aggregate was last rebuilt, creating a data freshness gap between the two sources.
+
+E. Raw delta threshold: **FAIL**
+- Mean absolute delta: 0.004105 (threshold for MATCH was < 0.005 — borderline)
+- Max delta: 0.069048 (threshold for MATCH was < 0.02, for SOFT MATCH was < 0.05 — exceeds both)
+- This FAIL is entirely attributable to the input freshness parity issue in item D, not to any formula, signal, or PIT defect.
+
+**Final push recommendation:** SAFE TO PUSH 2acf51fc WITH MONITORING NOTE
+
+Justification: All of the following hold:
+- Formula identity = PASS
+- Signal identity = PASS (0 disagreements)
+- PIT skip = PASS (full agreement)
+- Raw delta threshold = FAIL, but caused exclusively by documented input-freshness difference, not formula/PIT error
+- Both divergent rows are documented with specific extra dates identified
+- Neither divergent row changes signal_fired or creates a PIT violation
+
+**Monitoring follow-up (required):**
+- Re-run this feature-identity check after the next Statcast aggregate rebuild (`rebuild_statcast_aggregates.py`).
+- Re-check the same 2 divergent starter-game pairs (Hanifee 669724, Akin 669211).
+- If max delta on those pairs drops below 0.02, the input-freshness explanation is confirmed and monitoring can be closed.
+- If the delta persists or grows after a fresh rebuild, escalate before relying on P09 shadow output for any promotion decision.
+
+**Forensic preservation:**
+The original artifact content is preserved below this amendment for audit history.
+
+---
+
 **Date:** 2026-05-12
 **Runner commit:** 2acf51fc
 **Dry-run date:** 2026-05-10
@@ -7,7 +61,7 @@
 
 ---
 
-## A. Verdict
+## A. Verdict (ORIGINAL — SEE AMENDMENT ABOVE)
 
 **MATCH**
 
