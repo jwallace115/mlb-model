@@ -206,3 +206,36 @@ If this gating check fails, no P09 runner code should be written until the diver
 1. **Canonical sportsbook confirmation:** DraftKings is proposed as canonical for P09 shadow tracking because it's already captured in `line_snapshots_2026.json`. Hard Rock is not in any current API pipeline. Confirm DraftKings or specify alternative.
 
 That is the only item requiring Jeff confirmation. All other decisions are resolved with repo evidence.
+
+---
+
+## G. Final Decision: Canonical Sportsbook
+
+**Decision date:** 2026-05-12
+
+**Decision:** DraftKings is the canonical sportsbook for standalone P09 shadow tracking.
+
+**Reason:** DraftKings provides the cleanest and most consistent API/odds-history coverage for full-game MLB totals shadow tracking. DraftKings totals are already captured in `line_snapshots_2026.json` at multiple daily snapshots (OPEN, 2AM, 5PM, CLOSING). No new API pipeline is required.
+
+**Alt-book capture policy:** Allowed and preferred if available without blocking the first implementation. Alt-book capture is forensic only unless later promoted by a separate decision.
+
+**Permitted alt books:**
+- Hard Rock
+- Pinnacle
+- Bovada
+- BetOnline
+- Bookmaker
+- Bet365
+
+**Reporting rules:**
+- Canonical ROI and hit-rate reporting uses DraftKings only.
+- Alt-book prices are forensic only unless later promoted by separate decision.
+- Alt-book capture must not block the first implementation.
+
+**Live betting authorization:** NO
+
+**Promotion authorization:** NO
+
+**Section F resolution:** This decision resolves Section F item 1 ("B3: Canonical sportsbook confirmation"). Jeff confirms DraftKings as canonical.
+
+**Section 12 open questions status:** All Section 12 open questions from the P09 standalone shadow spec v1 are now resolved or explicitly carried into implementation gates. No pending Jeff decisions remain. The implementation prompt may be drafted.
