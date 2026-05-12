@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "2beede5a8210abeeb2e13ba043e1c103",
+    "game_date": "2026-05-12",
+    "sport": "NHL",
+    "home_team": "Montr\u00e9al Canadiens",
+    "away_team": "Buffalo Sabres",
+    "commence_time": "2026-05-12T23:10:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.0,
+    "over_price": -113,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-12T18:00:02.619401+00:00"
+  },
+  {
+    "game_id": "7ae3c1e1386143c564a15ec014e904c1",
+    "game_date": "2026-05-12",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Anaheim Ducks",
+    "commence_time": "2026-05-13T01:50:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 6.0,
+    "over_price": -112,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-12T18:00:02.619401+00:00"
+  }
+]
