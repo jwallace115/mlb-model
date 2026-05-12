@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "0db68bfa022e22873f48b8539addd5ae",
+    "game_date": "2026-05-12",
+    "sport": "NBA",
+    "home_team": "Los Angeles Lakers",
+    "away_team": "Oklahoma City Thunder",
+    "commence_time": "2026-05-12T02:48:00Z",
+    "snapshot_type": "closing",
+    "total_line": 213.5,
+    "over_price": -113,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-12T03:00:03.963496+00:00"
+  },
+  {
+    "game_id": "09800f9101b348d4a66742a3d8888b82",
+    "game_date": "2026-05-12",
+    "sport": "NBA",
+    "home_team": "San Antonio Spurs",
+    "away_team": "Minnesota Timberwolves",
+    "commence_time": "2026-05-13T00:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 218.5,
+    "over_price": -106,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-12T03:00:03.963496+00:00"
+  },
+  {
+    "game_id": "c3531530e77a4ada542bdbff23de5409",
+    "game_date": "2026-05-12",
+    "sport": "NBA",
+    "home_team": "Detroit Pistons",
+    "away_team": "Cleveland Cavaliers",
+    "commence_time": "2026-05-13T23:30:00Z",
+    "snapshot_type": "closing",
+    "total_line": 212.0,
+    "over_price": -108,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-12T03:00:03.963496+00:00"
+  }
+]
