@@ -58,9 +58,19 @@ if ! git pull --rebase origin main 2>>"$ERR_LOG"; then
         "mlb/logs/nrfi_selector_v1_2026.json"
         "mlb/logs/yrfi_shadow_2026.json"
         "mlb/logs/yrfi_odds_2026.json"
-        # Golf shadow outputs (parity with push_daemon.sh)
+        # MLB sim rolling performance
+        "mlb_sim/logs/rolling_performance_2026.json"
+        # MLB props shadow
+        "mlb/props/shadow/mlb_props_hits_po_shadow.parquet"
+        # Golf shadow outputs
         "golf/shadow/golf_daily_best_board.parquet"
         "golf/shadow/golf_shadow_log.parquet"
+        "golf/shadow/golf_matchup_log.parquet"
+        "golf_results.json"
+        # NBA model_c shadow
+        "nba/model_c/shadow/model_c_po_shadow.parquet"
+        "nba/model_c/shadow/prop_lines_archive.parquet"
+        "nba/model_c/shadow/raw/prop_lines_raw.parquet"
         # WNBA shadow outputs
         "wnba/shadow/p6_shadow_log.txt"
         "wnba/shadow/prop_candidates.parquet"
