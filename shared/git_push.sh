@@ -76,6 +76,8 @@ if ! git pull --rebase origin main 2>>"$ERR_LOG"; then
         "data/line_movement.csv"
         # NBA cache
         "nba/data/cache/games_2025-26_regular_season.json"
+        # Soccer daily cache (high-frequency conflicts)
+        "soccer/data/cache/daily/"
         # MLB props shadow
         "mlb/props/shadow/mlb_props_hits_po_shadow.parquet"
         # Golf shadow outputs
