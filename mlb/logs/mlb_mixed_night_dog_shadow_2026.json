@@ -172,6 +172,38 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "W",
       "final_score": "0-6"
+    },
+    {
+      "game_pk": 824927,
+      "game_date": "2026-05-12",
+      "matchup": "CHC @ ATL",
+      "fav_team": "ATL",
+      "dog_team": "CHC",
+      "fav_side": "home",
+      "fav_implied": 0.546,
+      "dog_ml_price": 115,
+      "sp_fip_diff": -0.071,
+      "off_diff": -0.25,
+      "bp_era_diff": -0.388,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823790,
+      "game_date": "2026-05-12",
+      "matchup": "SDP @ MIL",
+      "fav_team": "MIL",
+      "dog_team": "SDP",
+      "fav_side": "home",
+      "fav_implied": 0.548,
+      "dog_ml_price": 116,
+      "sp_fip_diff": -0.022,
+      "off_diff": -0.1,
+      "bp_era_diff": -0.163,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
