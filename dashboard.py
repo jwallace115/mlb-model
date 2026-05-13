@@ -454,6 +454,7 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
     bp_all = _load_json("mlb/logs/mlb_mixed_bp_adv_dog_shadow_2026.json", "signals")
     _p1b_all = _load_json("mlb/logs/mlb_p1b_coldwarm_earlyheavy_over_shadow_2026.json", "signals")
     _yrfi_all = _load_json("mlb/logs/yrfi_shadow_2026.json")
+    _p09_all = _load_json("mlb/logs/p09_shadow_2026.json")
 
     # NRFI selector
     _nrfi_raw = _load_json("mlb/logs/nrfi_selector_v1_2026.json", "selections")
@@ -737,6 +738,50 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
               _card_str, f"{len(_nrfi_res)} resolved, {_nrfi_pend} pending",
               bg="#1f1814", badge_html=_info_badge)
 
+    # P09 Shadow — Not Live
+    _P09_LABEL = "P09 Shadow \u2014 Not Live"
+    _p09_badge = ('<span style="background:#1c1917;color:#a8a29e;border:1px solid #78716c;'
+                   'border-radius:8px;padding:1px 6px;font-size:0.65em;font-weight:700;'
+                   'margin-left:4px">SHADOW</span>')
+    _p09_fired = [e for e in _p09_all if e.get("signal_fired") is True
+                  and e.get("selected_side") == "UNDER"]
+    _p09_graded = [e for e in _p09_fired if e.get("graded") is True
+                   and e.get("result") in ("WIN", "LOSS", "PUSH")
+                   and e.get("selected_price") is not None
+                   and e.get("market_status") != "DRAFTKINGS_MISSING"]
+    _p09_n = len(_p09_graded)
+    _p09_w = sum(1 for e in _p09_graded if e["result"] == "WIN")
+    _p09_l = sum(1 for e in _p09_graded if e["result"] == "LOSS")
+    _p09_push = sum(1 for e in _p09_graded if e["result"] == "PUSH")
+    _p09_profit = sum(e.get("profit_units", 0) or 0 for e in _p09_graded)
+    _p09_dk_miss = sum(1 for e in _p09_all
+                       if e.get("market_status") == "DRAFTKINGS_MISSING")
+    _p09_ungraded = sum(1 for e in _p09_fired if not e.get("graded"))
+    if _p09_n > 0:
+        _p09_hit = f"{_p09_w / _p09_n * 100:.1f}%"
+        _p09_roi = f"{_p09_profit / _p09_n * 100:+.1f}%"
+        _p09_rec = f"{_p09_w}-{_p09_l}" + (f"-{_p09_push}" if _p09_push else "")
+    else:
+        _p09_hit = "--"
+        _p09_roi = "--"
+        _p09_rec = "0-0"
+    if _p09_n < 25:
+        _p09_state = "Sample too small"
+    elif _p09_n < 50:
+        _p09_state = "Below review gate \u2014 N<50"
+    elif _p09_n < 100:
+        _p09_state = "Review gate threshold met \u2014 still not live"
+    else:
+        _p09_state = "Promotion consideration sample threshold met \u2014 requires Jeff approval"
+    if not _p09_all:
+        _p09_det = "No P09 shadow rows yet"
+    else:
+        _p09_det = (f"N={_p09_n} graded fires \u00b7 {_p09_state}"
+                    f" \u00b7 {_p09_dk_miss} DK miss \u00b7 {_p09_ungraded} ungraded"
+                    f" \u00b7 DraftKings canonical \u00b7 Monitoring only")
+    _perf_row(_P09_LABEL, _p09_rec, _p09_hit, _p09_roi, _p09_det,
+              bg="#1c1917", badge_html=_p09_badge)
+
     # ═══════════════════════════════════════════════════════════════════════════
     # F. SIGNAL DEFINITIONS EXPANDER
     # ═══════════════════════════════════════════════════════════════════════════
@@ -755,6 +800,11 @@ def _render_mlb_tab(data: dict | None, stats: dict | None) -> None:
             '<p><b>NRFI Card:</b> F5 total \u22644.0, top 3 daily picks. INFORMATIONAL ONLY \u2014 '
             'F5\u22644.0 produces 59.3% NRFI; market prices at -150 (BE 59.9%); edge -0.6pp. '
             'Use as parlay filter, not capital-deployable signal.</p>'
+            '<p><b>P09 Shadow \u2014 Not Live:</b> Contact suppression UNDER. '
+            'P09 = avg(home_hh_r5, away_hh_r5) \u00d7 park_run_factor. '
+            'LOW values (\u226431.7305) predict UNDER. DraftKings canonical. '
+            'Shadow-only \u2014 not live, not promoted, not approved for betting-card output. '
+            'Review gate: N\u226550. Promotion consideration: N\u2265100, ROI &gt; +3%, requires Jeff approval.</p>'
             '</div>'
         )
 
