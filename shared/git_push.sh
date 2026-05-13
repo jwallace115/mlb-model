@@ -58,6 +58,7 @@ if ! git pull --rebase origin main 2>>"$ERR_LOG"; then
         "mlb/logs/nrfi_selector_v1_2026.json"
         "mlb/logs/yrfi_shadow_2026.json"
         "mlb/logs/yrfi_odds_2026.json"
+        "mlb/logs/p09_shadow_2026.json"
         # MLB sim logs (all generated shadow/signal/performance outputs)
         "mlb_sim/logs/rolling_performance_2026.json"
         "mlb_sim/logs/rolling_performance_shadow_2026.json"

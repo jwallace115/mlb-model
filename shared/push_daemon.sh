@@ -37,6 +37,7 @@ if ! git pull --rebase origin main >> "$LOG" 2>&1; then
         "shared/last_updated.json"
         "golf/shadow/golf_daily_best_board.parquet"
         "golf/shadow/golf_shadow_log.parquet"
+        "mlb/logs/p09_shadow_2026.json"
     )
     RESOLVED=0
     for sf in "${SAFE_FILES[@]}"; do
