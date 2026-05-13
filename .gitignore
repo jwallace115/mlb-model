@@ -39,6 +39,7 @@ mlb/logs/*
 !mlb/logs/nrfi_selector_v1_2026.json
 !mlb/logs/yrfi_shadow_2026.json
 !mlb/logs/yrfi_odds_2026.json
+!mlb/logs/p09_shadow_2026.json
 
 # ── Secrets ───────────────────────────────────────────────────────────────────
 .env
