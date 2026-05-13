@@ -206,6 +206,22 @@
       "dog_bp_era": 4.037,
       "win_loss": "W",
       "final_score": "4-1"
+    },
+    {
+      "game_pk": 823710,
+      "game_date": "2026-05-13",
+      "matchup": "MIA @ MIN",
+      "fav_team": "MIA",
+      "dog_team": "MIN",
+      "fav_side": "away",
+      "fav_implied": 0.5284,
+      "dog_ml_price": 107,
+      "sp_fip_diff": -0.011,
+      "off_diff": 0.2,
+      "bp_era_diff": 0.032,
+      "fav_bp_era": 4.681,
+      "dog_bp_era": 4.649,
+      "win_loss": null
     }
   ]
 }
