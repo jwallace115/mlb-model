@@ -247,6 +247,7 @@ def run_prelim(game_date: str) -> None:
         games = resp.json()
 
         # Save raw odds response for downstream shadow runners (e.g. P09)
+        _odds_final = f"odds_full_{game_date}.json"
         try:
             from config import CACHE_DIR
             os.makedirs(CACHE_DIR, exist_ok=True)
