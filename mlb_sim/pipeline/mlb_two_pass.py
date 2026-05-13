@@ -246,6 +246,19 @@ def run_prelim(game_date: str) -> None:
         resp.raise_for_status()
         games = resp.json()
 
+        # Save raw odds response for downstream shadow runners (e.g. P09)
+        try:
+            from config import CACHE_DIR
+            os.makedirs(CACHE_DIR, exist_ok=True)
+            _odds_final = os.path.join(CACHE_DIR, f"odds_full_{game_date}.json")
+            _odds_tmp = _odds_final + ".tmp"
+            with open(_odds_tmp, "w") as _of:
+                json.dump(games, _of)
+            os.replace(_odds_tmp, _odds_final)
+            logger.info(f"Raw odds cache saved: {os.path.basename(_odds_final)} ({len(games)} games)")
+        except Exception as _ce:
+            logger.warning(f"Raw odds cache write failed ({os.path.basename(_odds_final)}): {_ce}")
+
         # Store as OPEN for today
         stored, skipped, no_line = store_snapshots_from_odds_response(games, "OPEN", game_date)
         logger.info(f"Opening lines: stored={stored}, skipped={skipped}, no_line={no_line}")
