@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "a6224f9c00c2799d9f58de009bf48393",
+    "game_date": "2026-05-17",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-05-17T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -105,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-16T06:05:03.102090+00:00"
+  },
+  {
+    "game_id": "8c4164a5b90b37ee80487fbe77607394",
+    "game_date": "2026-05-17",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "San Francisco Giants",
+    "commence_time": "2026-05-17T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -105,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-16T06:05:03.102090+00:00"
+  }
+]
