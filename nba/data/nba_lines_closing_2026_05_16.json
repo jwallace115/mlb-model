@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "1bd4432ce20bc61756180bf2d1c59c91",
+    "game_date": "2026-05-16",
+    "sport": "NBA",
+    "home_team": "Minnesota Timberwolves",
+    "away_team": "San Antonio Spurs",
+    "commence_time": "2026-05-16T01:49:00Z",
+    "snapshot_type": "closing",
+    "total_line": 237.5,
+    "over_price": -108,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-16T03:00:04.072326+00:00"
+  },
+  {
+    "game_id": "465746f51ad349641512f36c52306968",
+    "game_date": "2026-05-16",
+    "sport": "NBA",
+    "home_team": "Detroit Pistons",
+    "away_team": "Cleveland Cavaliers",
+    "commence_time": "2026-05-17T22:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 204.5,
+    "over_price": -115,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-16T03:00:04.072326+00:00"
+  }
+]
