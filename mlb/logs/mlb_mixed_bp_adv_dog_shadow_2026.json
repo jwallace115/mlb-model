@@ -223,6 +223,22 @@
       "dog_bp_era": 4.649,
       "win_loss": "L",
       "final_score": "9-5"
+    },
+    {
+      "game_pk": 824279,
+      "game_date": "2026-05-17",
+      "matchup": "TOR @ DET",
+      "fav_team": "TOR",
+      "dog_team": "DET",
+      "fav_side": "away",
+      "fav_implied": 0.5379,
+      "dog_ml_price": 111,
+      "sp_fip_diff": -0.788,
+      "off_diff": 0.1,
+      "bp_era_diff": 0.388,
+      "fav_bp_era": 4.671,
+      "dog_bp_era": 4.283,
+      "win_loss": null
     }
   ]
 }
