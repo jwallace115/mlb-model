@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-17T07:00:30.038344",
+  "generated_at": "2026-05-18T07:00:27.475956",
   "sport": "golf",
   "event_name": "PGA Championship",
   "event_id": 33,
   "is_major": true,
-  "last_updated": "2026-05-17T07:00:06.508694",
+  "last_updated": "2026-05-18T07:00:05.691157",
   "n_candidates": 54,
   "n_leans": 12,
   "plays": [
@@ -14,7 +14,7 @@
       "market": "top_20",
       "model_prob": 17.8,
       "market_prob": 82.9,
-      "edge": -65.1,
+      "edge": -65.0,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -850.0
@@ -46,7 +46,7 @@
       "dg_id": 20722,
       "market": "top_20",
       "model_prob": 6.2,
-      "market_prob": 59.4,
+      "market_prob": 59.3,
       "edge": -53.2,
       "direction": "under",
       "classification": "candidate",
@@ -68,8 +68,8 @@
       "dg_id": 18634,
       "market": "top_20",
       "model_prob": 25.2,
-      "market_prob": 62.8,
-      "edge": -37.6,
+      "market_prob": 62.7,
+      "edge": -37.5,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -210.0
@@ -91,7 +91,7 @@
       "market": "top_20",
       "model_prob": 6.7,
       "market_prob": 42.1,
-      "edge": -35.5,
+      "edge": -35.4,
       "direction": "under",
       "classification": "candidate",
       "close_odds": 120.0
@@ -134,7 +134,7 @@
       "dg_id": 6093,
       "market": "top_20",
       "model_prob": 21.5,
-      "market_prob": 52.4,
+      "market_prob": 52.3,
       "edge": -30.9,
       "direction": "under",
       "classification": "candidate",
@@ -145,7 +145,7 @@
       "dg_id": 13562,
       "market": "top_20",
       "model_prob": 23.3,
-      "market_prob": 54.1,
+      "market_prob": 54.0,
       "edge": -30.7,
       "direction": "under",
       "classification": "candidate",
@@ -156,8 +156,8 @@
       "dg_id": 18079,
       "market": "top_20",
       "model_prob": 20.6,
-      "market_prob": 50.6,
-      "edge": -30.0,
+      "market_prob": 50.5,
+      "edge": -29.9,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -120.0
@@ -168,7 +168,7 @@
       "market": "top_20",
       "model_prob": 13.4,
       "market_prob": 43.1,
-      "edge": -29.8,
+      "edge": -29.7,
       "direction": "under",
       "classification": "candidate",
       "close_odds": 115.0
@@ -178,8 +178,8 @@
       "dg_id": 19195,
       "market": "top_20",
       "model_prob": 53.7,
-      "market_prob": 82.4,
-      "edge": -28.7,
+      "market_prob": 82.3,
+      "edge": -28.6,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -800.0
@@ -189,7 +189,7 @@
       "dg_id": 24968,
       "market": "top_20",
       "model_prob": 21.3,
-      "market_prob": 49.6,
+      "market_prob": 49.5,
       "edge": -28.2,
       "direction": "under",
       "classification": "candidate",
@@ -223,7 +223,7 @@
       "market": "top_20",
       "model_prob": 27.0,
       "market_prob": 54.4,
-      "edge": -27.4,
+      "edge": -27.3,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -142.0
@@ -255,11 +255,11 @@
       "dg_id": 19895,
       "market": "top_20",
       "model_prob": 50.0,
-      "market_prob": 75.0,
-      "edge": -25.1,
+      "market_prob": 74.1,
+      "edge": -24.1,
       "direction": "under",
       "classification": "candidate",
-      "close_odds": -425.0
+      "close_odds": -400.0
     },
     {
       "player_name": "Lee, Min Woo",
@@ -278,7 +278,7 @@
       "market": "top_20",
       "model_prob": 24.5,
       "market_prob": 2.1,
-      "edge": 22.4,
+      "edge": 22.5,
       "direction": "over",
       "classification": "candidate",
       "close_odds": 4400.0
@@ -300,7 +300,7 @@
       "market": "top_20",
       "model_prob": 57.0,
       "market_prob": 78.4,
-      "edge": -21.4,
+      "edge": -21.3,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -550.0
@@ -317,26 +317,26 @@
       "close_odds": 6000.0
     },
     {
-      "player_name": "Harman, Brian",
-      "dg_id": 8825,
-      "market": "top_20",
-      "model_prob": 12.3,
-      "market_prob": 29.0,
-      "edge": -16.7,
-      "direction": "under",
-      "classification": "candidate",
-      "close_odds": 220.0
-    },
-    {
       "player_name": "Lindberg, Mikael",
       "dg_id": 20084,
       "market": "top_20",
       "model_prob": 8.1,
-      "market_prob": 24.4,
-      "edge": -16.3,
+      "market_prob": 25.0,
+      "edge": -17.0,
       "direction": "under",
       "classification": "candidate",
-      "close_odds": 280.0
+      "close_odds": 270.0
+    },
+    {
+      "player_name": "Harman, Brian",
+      "dg_id": 8825,
+      "market": "top_20",
+      "model_prob": 12.3,
+      "market_prob": 28.9,
+      "edge": -16.7,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": 220.0
     },
     {
       "player_name": "Lowry, Shane",
@@ -420,11 +420,11 @@
       "dg_id": 23838,
       "market": "top_20",
       "model_prob": 13.5,
-      "market_prob": 1.5,
+      "market_prob": 1.6,
       "edge": 11.9,
       "direction": "over",
       "classification": "candidate",
-      "close_odds": 6000.0
+      "close_odds": 5700.0
     },
     {
       "player_name": "Jaeger, Stephan",
@@ -504,17 +504,6 @@
       "close_odds": 8400.0
     },
     {
-      "player_name": "Stevens, Sam",
-      "dg_id": 25569,
-      "market": "top_20",
-      "model_prob": 13.4,
-      "market_prob": 3.2,
-      "edge": 10.2,
-      "direction": "over",
-      "classification": "candidate",
-      "close_odds": 2800.0
-    },
-    {
       "player_name": "Burns, Sam",
       "dg_id": 19483,
       "market": "top_20",
@@ -526,11 +515,22 @@
       "close_odds": 145.0
     },
     {
+      "player_name": "Stevens, Sam",
+      "dg_id": 25569,
+      "market": "top_20",
+      "model_prob": 13.4,
+      "market_prob": 3.3,
+      "edge": 10.1,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 2700.0
+    },
+    {
       "player_name": "Hoge, Tom",
       "dg_id": 15575,
       "market": "top_20",
       "model_prob": 2.2,
-      "market_prob": 12.4,
+      "market_prob": 12.3,
       "edge": -10.1,
       "direction": "under",
       "classification": "candidate",
@@ -581,26 +581,26 @@
       "close_odds": 870.0
     },
     {
-      "player_name": "Berger, Daniel",
-      "dg_id": 17606,
-      "market": "top_20",
-      "model_prob": 10.9,
-      "market_prob": 2.6,
-      "edge": 8.4,
-      "direction": "over",
-      "classification": "candidate",
-      "close_odds": 3500.0
-    },
-    {
       "player_name": "Johnson, Dustin",
       "dg_id": 12422,
       "market": "top_20",
       "model_prob": 9.1,
       "market_prob": 17.5,
-      "edge": -8.4,
+      "edge": -8.3,
       "direction": "under",
       "classification": "candidate",
       "close_odds": 430.0
+    },
+    {
+      "player_name": "Berger, Daniel",
+      "dg_id": 17606,
+      "market": "top_20",
+      "model_prob": 10.9,
+      "market_prob": 2.7,
+      "edge": 8.2,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 3300.0
     },
     {
       "player_name": "Novak, Andrew",
@@ -640,7 +640,7 @@
       "dg_id": 14704,
       "market": "top_20",
       "model_prob": 9.1,
-      "market_prob": 16.3,
+      "market_prob": 16.2,
       "edge": -7.1,
       "direction": "under",
       "classification": "lean",
@@ -674,7 +674,7 @@
       "market": "top_20",
       "model_prob": 10.7,
       "market_prob": 17.5,
-      "edge": -6.8,
+      "edge": -6.7,
       "direction": "under",
       "classification": "lean",
       "close_odds": 430.0
@@ -691,26 +691,26 @@
       "close_odds": 10000.0
     },
     {
-      "player_name": "Fox, Ryan",
-      "dg_id": 11889,
-      "market": "top_20",
-      "model_prob": 11.6,
-      "market_prob": 5.1,
-      "edge": 6.4,
-      "direction": "over",
-      "classification": "lean",
-      "close_odds": 1700.0
-    },
-    {
       "player_name": "Scheffler, Scottie",
       "dg_id": 18417,
       "market": "top_20",
       "model_prob": 69.1,
-      "market_prob": 62.8,
+      "market_prob": 62.7,
       "edge": 6.3,
       "direction": "over",
       "classification": "lean",
       "close_odds": -210.0
+    },
+    {
+      "player_name": "Fox, Ryan",
+      "dg_id": 11889,
+      "market": "top_20",
+      "model_prob": 11.6,
+      "market_prob": 5.5,
+      "edge": 6.1,
+      "direction": "over",
+      "classification": "lean",
+      "close_odds": 1600.0
     },
     {
       "player_name": "Spieth, Jordan",
@@ -718,7 +718,7 @@
       "market": "top_20",
       "model_prob": 24.3,
       "market_prob": 18.5,
-      "edge": 5.7,
+      "edge": 5.8,
       "direction": "over",
       "classification": "lean",
       "close_odds": 400.0
@@ -984,7 +984,7 @@
       "player_name": "Scheffler, Scottie",
       "dg_win_prob": 13.5,
       "adj_win_prob": 14.1,
-      "win_edge": 9.0
+      "win_edge": 9.2
     },
     {
       "player_name": "Young, Cameron",
