@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "13c307bac70250bed56ce2a649cc492e",
+    "game_date": "2026-05-19",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Texas Rangers",
+    "commence_time": "2026-05-19T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.0,
+    "over_price": 100,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-18T06:05:03.079044+00:00"
+  },
+  {
+    "game_id": "a8e5153e31f262e9df1bef1566519c3f",
+    "game_date": "2026-05-19",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Athletics",
+    "commence_time": "2026-05-19T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -105,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-18T06:05:03.079044+00:00"
+  },
+  {
+    "game_id": "daf39ff0f5f85b7da76274b743b1ab1f",
+    "game_date": "2026-05-19",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "San Francisco Giants",
+    "commence_time": "2026-05-19T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-18T06:05:03.079044+00:00"
+  },
+  {
+    "game_id": "14c70bb665938baff9719079a82cbb93",
+    "game_date": "2026-05-19",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-05-19T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -114,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-18T06:05:03.079044+00:00"
+  },
+  {
+    "game_id": "d98976061eadebf5d9ba5c0632212976",
+    "game_date": "2026-05-19",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-05-19T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-18T06:05:03.079044+00:00"
+  }
+]
