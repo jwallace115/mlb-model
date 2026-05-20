@@ -223,6 +223,38 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "9-5"
+    },
+    {
+      "game_pk": 824111,
+      "game_date": "2026-05-20",
+      "matchup": "BOS @ KCR",
+      "fav_team": "KCR",
+      "dog_team": "BOS",
+      "fav_side": "home",
+      "fav_implied": 0.5208,
+      "dog_ml_price": 104,
+      "sp_fip_diff": 0.466,
+      "off_diff": 0.35,
+      "bp_era_diff": 0.421,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823057,
+      "game_date": "2026-05-20",
+      "matchup": "PIT @ STL",
+      "fav_team": "STL",
+      "dog_team": "PIT",
+      "fav_side": "home",
+      "fav_implied": 0.5173,
+      "dog_ml_price": 102,
+      "sp_fip_diff": 0.545,
+      "off_diff": -0.05,
+      "bp_era_diff": -0.332,
+      "day_night": "night",
+      "local_start_hour": 18.75,
+      "win_loss": null
     }
   ]
 }
