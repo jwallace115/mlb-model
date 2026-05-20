@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "eb71b24bcac6134977abdc1add17dd0a",
+    "game_date": "2026-05-21",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-05-21T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": 100,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-20T06:05:03.026751+00:00"
+  },
+  {
+    "game_id": "359cc9aec9f8a43ddd53ba06ce331765",
+    "game_date": "2026-05-21",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Athletics",
+    "commence_time": "2026-05-21T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -103,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-20T06:05:03.026751+00:00"
+  }
+]
