@@ -2535,5 +2535,467 @@
     },
     "notes": [],
     "grading_status": "NO_SIGNAL"
+  },
+  {
+    "date": "2026-05-21",
+    "game_id": "824274",
+    "away_team": "CLE",
+    "home_team": "DET",
+    "away_starter": "Joey Cantillo",
+    "home_starter": "Casey Mize",
+    "away_hard_hit_rate_rolling5": 0.424809,
+    "home_hard_hit_rate_rolling5": 0.357858,
+    "park_run_factor": 99,
+    "p09_score": 38.742,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.5,
+    "price_over": 103,
+    "price_under": -124,
+    "market_timestamp": "2026-05-21T05:59:03Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.5,
+        "over_price": -102,
+        "under_price": -120,
+        "last_update": "2026-05-21T05:59:42Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 7.5,
+        "over_price": 105,
+        "under_price": -121,
+        "last_update": "2026-05-21T06:00:01Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-21T11:30:07.331120+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-18|odds_cache:odds_full_2026-05-21.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 57
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 38
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-21.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-21",
+    "game_id": "823056",
+    "away_team": "PIT",
+    "home_team": "STL",
+    "away_starter": "Braxton Ashcraft",
+    "home_starter": "Dustin May",
+    "away_hard_hit_rate_rolling5": 0.377851,
+    "home_hard_hit_rate_rolling5": 0.531988,
+    "park_run_factor": 97,
+    "p09_score": 44.1272,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.0,
+    "price_over": -102,
+    "price_under": -118,
+    "market_timestamp": "2026-05-21T05:59:03Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.5,
+        "over_price": -122,
+        "under_price": 100,
+        "last_update": "2026-05-21T05:59:42Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.0,
+        "over_price": 101,
+        "under_price": -116,
+        "last_update": "2026-05-21T06:00:01Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-21T11:30:07.331120+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-18|odds_cache:odds_full_2026-05-21.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 45
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 27
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-21.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-21",
+    "game_id": "822733",
+    "away_team": "NYM",
+    "home_team": "WSN",
+    "away_starter": "David Peterson",
+    "home_starter": "Cade Cavalli",
+    "away_hard_hit_rate_rolling5": 0.511602,
+    "home_hard_hit_rate_rolling5": 0.416814,
+    "park_run_factor": 101,
+    "p09_score": 46.885,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.5,
+    "price_over": -108,
+    "price_under": -112,
+    "market_timestamp": "2026-05-21T05:59:03Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.5,
+        "over_price": -105,
+        "under_price": -115,
+        "last_update": "2026-05-21T05:59:42Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.5,
+        "over_price": -106,
+        "under_price": -108,
+        "last_update": "2026-05-21T06:00:01Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-21T11:30:07.331120+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-18|odds_cache:odds_full_2026-05-21.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 18
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 101
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-21.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-21",
+    "game_id": "823864",
+    "away_team": "ATL",
+    "home_team": "MIA",
+    "away_starter": "Spencer Strider",
+    "home_starter": "Sandy Alcantara",
+    "away_hard_hit_rate_rolling5": 0.421246,
+    "home_hard_hit_rate_rolling5": 0.408326,
+    "park_run_factor": 98,
+    "p09_score": 40.649,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.5,
+    "price_over": -114,
+    "price_under": -105,
+    "market_timestamp": "2026-05-21T05:59:03Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.5,
+        "over_price": -114,
+        "under_price": -106,
+        "last_update": "2026-05-21T05:59:42Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 7.5,
+        "over_price": -113,
+        "under_price": -101,
+        "last_update": "2026-05-21T06:00:01Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-21T11:30:07.331120+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-18|odds_cache:odds_full_2026-05-21.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 98
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 85
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-21.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-21",
+    "game_id": "823545",
+    "away_team": "TOR",
+    "home_team": "NYY",
+    "away_starter": "Braydon Fisher",
+    "home_starter": "Carlos Rod\u00f3n",
+    "away_hard_hit_rate_rolling5": 0.37619,
+    "home_hard_hit_rate_rolling5": 0.325906,
+    "park_run_factor": 103,
+    "p09_score": 36.158,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.0,
+    "price_over": -115,
+    "price_under": -104,
+    "market_timestamp": "2026-05-21T05:59:03Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.5,
+        "over_price": 102,
+        "under_price": -124,
+        "last_update": "2026-05-21T05:59:42Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-21T11:30:07.331120+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-18|odds_cache:odds_full_2026-05-21.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 112
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 4
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-21.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-21",
+    "game_id": "824031",
+    "away_team": "OAK",
+    "home_team": "LAA",
+    "away_starter": "Luis Severino",
+    "home_starter": "Jos\u00e9 Soriano",
+    "away_hard_hit_rate_rolling5": 0.388132,
+    "home_hard_hit_rate_rolling5": 0.366593,
+    "park_run_factor": 97,
+    "p09_score": 36.6042,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.0,
+    "price_over": -118,
+    "price_under": -102,
+    "market_timestamp": "2026-05-21T05:59:03Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.5,
+        "over_price": -104,
+        "under_price": -118,
+        "last_update": "2026-05-21T05:59:42Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.5,
+        "over_price": 101,
+        "under_price": -115,
+        "last_update": "2026-05-21T06:00:01Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-21T11:30:07.331120+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-18|odds_cache:odds_full_2026-05-21.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 63
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 106
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-21.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-21",
+    "game_id": "825083",
+    "away_team": "COL",
+    "home_team": "ARI",
+    "away_starter": "Zach Agnos",
+    "home_starter": "Eduardo Rodriguez",
+    "away_hard_hit_rate_rolling5": 0.384646,
+    "home_hard_hit_rate_rolling5": 0.3575,
+    "park_run_factor": 98,
+    "p09_score": 36.3652,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 9.0,
+    "price_over": -120,
+    "price_under": 100,
+    "market_timestamp": "2026-05-21T05:59:03Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 9.0,
+        "over_price": -115,
+        "under_price": -105,
+        "last_update": "2026-05-21T05:59:42Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-21T11:30:07.331120+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-18|odds_cache:odds_full_2026-05-21.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 88
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 7
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-21.json"
+    },
+    "notes": []
   }
 ]
