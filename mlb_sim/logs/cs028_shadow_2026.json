@@ -9859,7 +9859,7 @@
     "game_date": "2026-05-22",
     "home_team": "CHC",
     "away_team": "HOU",
-    "home_blowup_score": 0.14471,
+    "home_blowup_score": 0.145097,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 7,
@@ -9867,14 +9867,14 @@
     "actual_over_under": null,
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-05-22T06:00:42.237561"
+    "logged_at": "2026-05-22T06:09:44.045116"
   },
   {
     "game_id": 824518,
     "game_date": "2026-05-22",
     "home_team": "CIN",
     "away_team": "STL",
-    "home_blowup_score": 0.230425,
+    "home_blowup_score": 0.230811,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 7,
@@ -9882,14 +9882,14 @@
     "actual_over_under": null,
     "closing_total": 9.5,
     "clv": null,
-    "logged_at": "2026-05-22T06:00:48.186615"
+    "logged_at": "2026-05-22T06:09:47.705156"
   },
   {
     "game_id": 823461,
     "game_date": "2026-05-22",
     "home_team": "PHI",
     "away_team": "CLE",
-    "home_blowup_score": 0.092329,
+    "home_blowup_score": 0.092716,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 6,
@@ -9897,14 +9897,29 @@
     "actual_over_under": null,
     "closing_total": 6.5,
     "clv": null,
-    "logged_at": "2026-05-22T06:00:53.327663"
+    "logged_at": "2026-05-22T06:09:52.532929"
   },
   {
     "game_id": 823546,
     "game_date": "2026-05-22",
     "home_team": "NYY",
     "away_team": "TBR",
-    "home_blowup_score": 0.138996,
+    "home_blowup_score": 0.145097,
+    "signal_fires": false,
+    "threshold_used": 0.2563,
+    "relievers_scored": 7,
+    "cs013_also_active": true,
+    "actual_over_under": null,
+    "closing_total": 8.0,
+    "clv": null,
+    "logged_at": "2026-05-22T06:09:57.156790"
+  },
+  {
+    "game_id": 822816,
+    "game_date": "2026-05-22",
+    "home_team": "TOR",
+    "away_team": "PIT",
+    "home_blowup_score": 0.139383,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 5,
@@ -9912,29 +9927,14 @@
     "actual_over_under": null,
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-05-22T06:00:57.768202"
-  },
-  {
-    "game_id": 822816,
-    "game_date": "2026-05-22",
-    "home_team": "TOR",
-    "away_team": "PIT",
-    "home_blowup_score": 0.092329,
-    "signal_fires": false,
-    "threshold_used": 0.2563,
-    "relievers_scored": 6,
-    "cs013_also_active": true,
-    "actual_over_under": null,
-    "closing_total": 8.0,
-    "clv": null,
-    "logged_at": "2026-05-22T06:01:02.589695"
+    "logged_at": "2026-05-22T06:10:00.165133"
   },
   {
     "game_id": 824761,
     "game_date": "2026-05-22",
     "home_team": "BOS",
     "away_team": "MIN",
-    "home_blowup_score": 0.158996,
+    "home_blowup_score": 0.159383,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 6,
@@ -9942,14 +9942,14 @@
     "actual_over_under": null,
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:07.052945"
+    "logged_at": "2026-05-22T06:10:09.260744"
   },
   {
     "game_id": 823863,
     "game_date": "2026-05-22",
     "home_team": "MIA",
     "away_team": "NYM",
-    "home_blowup_score": 0.158996,
+    "home_blowup_score": 0.184383,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 8,
@@ -9957,14 +9957,14 @@
     "actual_over_under": null,
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:11.306286"
+    "logged_at": "2026-05-22T06:25:34.183199"
   },
   {
     "game_id": 824842,
     "game_date": "2026-05-22",
     "home_team": "BAL",
     "away_team": "DET",
-    "home_blowup_score": 0.183996,
+    "home_blowup_score": 0.184383,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 8,
@@ -9972,22 +9972,22 @@
     "actual_over_under": null,
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:15.417385"
+    "logged_at": "2026-05-22T06:25:35.875575"
   },
   {
     "game_id": 824922,
     "game_date": "2026-05-22",
     "home_team": "ATL",
     "away_team": "WSN",
-    "home_blowup_score": 0.233996,
+    "home_blowup_score": 0.199383,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 8,
+    "relievers_scored": 10,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:19.279546"
+    "logged_at": "2026-05-22T06:25:37.447344"
   },
   {
     "game_id": 824110,
@@ -10002,14 +10002,14 @@
     "actual_over_under": null,
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:23.089268"
+    "logged_at": "2026-05-22T06:25:39.083268"
   },
   {
     "game_id": 823788,
     "game_date": "2026-05-22",
     "home_team": "MIL",
     "away_team": "LAD",
-    "home_blowup_score": 0.133996,
+    "home_blowup_score": 0.134383,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 8,
@@ -10017,14 +10017,14 @@
     "actual_over_under": null,
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:26.831385"
+    "logged_at": "2026-05-22T06:25:40.662610"
   },
   {
     "game_id": 824029,
     "game_date": "2026-05-22",
     "home_team": "LAA",
     "away_team": "TEX",
-    "home_blowup_score": 0.208996,
+    "home_blowup_score": 0.209383,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 8,
@@ -10032,7 +10032,7 @@
     "actual_over_under": null,
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:30.206294"
+    "logged_at": "2026-05-22T06:25:42.283958"
   },
   {
     "game_id": 825082,
@@ -10047,7 +10047,7 @@
     "actual_over_under": null,
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:33.485712"
+    "logged_at": "2026-05-22T06:25:45.938179"
   },
   {
     "game_id": 823298,
@@ -10062,7 +10062,7 @@
     "actual_over_under": null,
     "closing_total": 8.0,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:36.775158"
+    "logged_at": "2026-05-22T06:25:48.769285"
   },
   {
     "game_id": 823223,
@@ -10077,6 +10077,6 @@
     "actual_over_under": null,
     "closing_total": 7.0,
     "clv": null,
-    "logged_at": "2026-05-22T06:01:39.959276"
+    "logged_at": "2026-05-22T06:25:51.810070"
   }
 ]

@@ -12359,7 +12359,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-05-22T06:00:41.271676"
+    "logged_at": "2026-05-22T02:09:43.821149"
   },
   {
     "game_id": 824518,
@@ -12377,7 +12377,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "logged_at": "2026-05-22T06:00:48.148950"
+    "logged_at": "2026-05-22T02:09:47.692945"
   },
   {
     "game_id": 823461,
@@ -12395,25 +12395,25 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 6.5,
-    "logged_at": "2026-05-22T06:00:53.288740"
+    "logged_at": "2026-05-22T02:09:52.520713"
   },
   {
     "game_id": 823546,
     "date": "2026-05-22",
     "home_team": "NYY",
     "away_team": "TBR",
-    "home_degraded_relievers": 4,
+    "home_degraded_relievers": 3,
     "away_degraded_relievers": 0,
-    "combined_degraded_count": 4,
+    "combined_degraded_count": 3,
     "cs013_flag": true,
     "cs013_status": "OK",
-    "cs020_acceleration_score": 0.4667,
+    "cs020_acceleration_score": 0.6,
     "cs020_flag": true,
     "signal_tier": "HIGH",
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-22T06:00:57.726419"
+    "logged_at": "2026-05-22T02:09:57.144269"
   },
   {
     "game_id": 822816,
@@ -12421,17 +12421,17 @@
     "home_team": "TOR",
     "away_team": "PIT",
     "home_degraded_relievers": 1,
-    "away_degraded_relievers": 6,
-    "combined_degraded_count": 6,
+    "away_degraded_relievers": 5,
+    "combined_degraded_count": 5,
     "cs013_flag": true,
     "cs013_status": "OK",
-    "cs020_acceleration_score": 0.9333,
+    "cs020_acceleration_score": 0.7333,
     "cs020_flag": true,
     "signal_tier": "HIGH",
     "cs004_flag": true,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-22T06:01:02.550999"
+    "logged_at": "2026-05-22T02:10:00.154057"
   },
   {
     "game_id": 824761,
@@ -12449,7 +12449,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-22T06:01:07.016889"
+    "logged_at": "2026-05-22T02:10:09.248644"
   },
   {
     "game_id": 823863,
@@ -12457,7 +12457,7 @@
     "home_team": "MIA",
     "away_team": "NYM",
     "home_degraded_relievers": 3,
-    "away_degraded_relievers": 3,
+    "away_degraded_relievers": 2,
     "combined_degraded_count": 3,
     "cs013_flag": true,
     "cs013_status": "OK",
@@ -12467,7 +12467,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-22T06:01:11.271390"
+    "logged_at": "2026-05-22T02:25:34.170715"
   },
   {
     "game_id": 824842,
@@ -12485,7 +12485,7 @@
     "cs004_flag": true,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-05-22T06:01:15.382085"
+    "logged_at": "2026-05-22T02:25:35.863437"
   },
   {
     "game_id": 824922,
@@ -12503,7 +12503,7 @@
     "cs004_flag": true,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "logged_at": "2026-05-22T06:01:19.231688"
+    "logged_at": "2026-05-22T02:25:37.435278"
   },
   {
     "game_id": 824110,
@@ -12521,7 +12521,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-22T06:01:23.051471"
+    "logged_at": "2026-05-22T02:25:39.069270"
   },
   {
     "game_id": 823788,
@@ -12539,7 +12539,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-05-22T06:01:26.789324"
+    "logged_at": "2026-05-22T02:25:40.649908"
   },
   {
     "game_id": 824029,
@@ -12557,7 +12557,7 @@
     "cs004_flag": true,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-22T06:01:30.164849"
+    "logged_at": "2026-05-22T02:25:42.271827"
   },
   {
     "game_id": 825082,
@@ -12575,7 +12575,7 @@
     "cs004_flag": true,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "logged_at": "2026-05-22T06:01:33.447409"
+    "logged_at": "2026-05-22T02:25:45.920870"
   },
   {
     "game_id": 823298,
@@ -12593,7 +12593,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-22T06:01:36.737598"
+    "logged_at": "2026-05-22T02:25:48.756985"
   },
   {
     "game_id": 823223,
@@ -12611,6 +12611,6 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-05-22T06:01:39.908653"
+    "logged_at": "2026-05-22T02:25:51.797956"
   }
 ]
