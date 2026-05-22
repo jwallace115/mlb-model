@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "d9aa6127776677dd67d86ba3b93d0353",
+    "game_date": "2026-05-22",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-22T00:20:36Z",
+    "snapshot_type": "closing",
+    "total_line": 8.5,
+    "over_price": 1300,
+    "under_price": -3200,
+    "book": "draftkings",
+    "capture_timestamp": "2026-05-22T03:00:04.580579+00:00"
+  },
+  {
+    "game_id": "959b72accceca17f9912258671ba38bd",
+    "game_date": "2026-05-22",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-05-23T00:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-22T03:00:04.580579+00:00"
+  },
+  {
+    "game_id": "1a0c681f6a7b1142cce9a2de55ada661",
+    "game_date": "2026-05-22",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-23T23:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 5.5,
+    "over_price": -130,
+    "under_price": 110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-05-22T03:00:04.580579+00:00"
+  }
+]
