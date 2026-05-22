@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "7b814a0bc57622abcbc708d9e9a27fca",
+    "game_date": "2026-05-23",
+    "sport": "NBA",
+    "home_team": "San Antonio Spurs",
+    "away_team": "Oklahoma City Thunder",
+    "commence_time": "2026-05-23T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 218.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-22T06:05:02.707387+00:00"
+  },
+  {
+    "game_id": "4247d31ac7706ebe455b8f221c9e4184",
+    "game_date": "2026-05-23",
+    "sport": "NBA",
+    "home_team": "Cleveland Cavaliers",
+    "away_team": "New York Knicks",
+    "commence_time": "2026-05-24T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 213.5,
+    "over_price": -108,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-22T06:05:02.707387+00:00"
+  }
+]
