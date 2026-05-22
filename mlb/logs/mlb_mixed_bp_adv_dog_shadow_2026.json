@@ -257,6 +257,22 @@
       "dog_bp_era": 4.569,
       "win_loss": "W",
       "final_score": "4-3"
+    },
+    {
+      "game_pk": 824842,
+      "game_date": "2026-05-22",
+      "matchup": "DET @ BAL",
+      "fav_team": "BAL",
+      "dog_team": "DET",
+      "fav_side": "home",
+      "fav_implied": 0.546,
+      "dog_ml_price": 115,
+      "sp_fip_diff": -0.06,
+      "off_diff": -0.4,
+      "bp_era_diff": 0.36,
+      "fav_bp_era": 4.64,
+      "dog_bp_era": 4.28,
+      "win_loss": null
     }
   ]
 }

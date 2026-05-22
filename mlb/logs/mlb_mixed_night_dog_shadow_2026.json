@@ -257,6 +257,38 @@
       "local_start_hour": 18.75,
       "win_loss": "W",
       "final_score": "7-0"
+    },
+    {
+      "game_pk": 823863,
+      "game_date": "2026-05-22",
+      "matchup": "NYM @ MIA",
+      "fav_team": "NYM",
+      "dog_team": "MIA",
+      "fav_side": "away",
+      "fav_implied": 0.5306,
+      "dog_ml_price": 108,
+      "sp_fip_diff": 0.086,
+      "off_diff": 0.15,
+      "bp_era_diff": -0.242,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824842,
+      "game_date": "2026-05-22",
+      "matchup": "DET @ BAL",
+      "fav_team": "BAL",
+      "dog_team": "DET",
+      "fav_side": "home",
+      "fav_implied": 0.546,
+      "dog_ml_price": 115,
+      "sp_fip_diff": -0.06,
+      "off_diff": -0.4,
+      "bp_era_diff": 0.36,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
     }
   ]
 }
