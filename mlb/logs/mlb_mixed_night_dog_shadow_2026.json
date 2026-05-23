@@ -272,7 +272,8 @@
       "bp_era_diff": -0.242,
       "day_night": "night",
       "local_start_hour": 19.166666666666668,
-      "win_loss": null
+      "win_loss": "W",
+      "final_score": "1-2"
     },
     {
       "game_pk": 824842,
@@ -288,7 +289,8 @@
       "bp_era_diff": 0.36,
       "day_night": "night",
       "local_start_hour": 19.25,
-      "win_loss": null
+      "win_loss": "L",
+      "final_score": "4-7"
     }
   ]
 }
