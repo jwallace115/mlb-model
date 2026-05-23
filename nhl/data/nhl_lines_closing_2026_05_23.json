@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "959b72accceca17f9912258671ba38bd",
+    "game_date": "2026-05-23",
+    "sport": "NHL",
+    "home_team": "Colorado Avalanche",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-05-23T00:15:00Z",
+    "snapshot_type": "closing",
+    "total_line": 3.5,
+    "over_price": -156,
+    "under_price": 120,
+    "book": "fanduel",
+    "capture_timestamp": "2026-05-23T03:00:05.557389+00:00"
+  },
+  {
+    "game_id": "1a0c681f6a7b1142cce9a2de55ada661",
+    "game_date": "2026-05-23",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-05-23T23:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": 100,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-23T03:00:05.557389+00:00"
+  }
+]
