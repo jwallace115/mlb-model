@@ -274,6 +274,22 @@
       "dog_bp_era": 4.28,
       "win_loss": "L",
       "final_score": "4-7"
+    },
+    {
+      "game_pk": 824028,
+      "game_date": "2026-05-24",
+      "matchup": "TEX @ LAA",
+      "fav_team": "LAA",
+      "dog_team": "TEX",
+      "fav_side": "home",
+      "fav_implied": 0.537,
+      "dog_ml_price": 108,
+      "sp_fip_diff": -0.073,
+      "off_diff": -0.05,
+      "bp_era_diff": 0.412,
+      "fav_bp_era": 4.968,
+      "dog_bp_era": 4.557,
+      "win_loss": null
     }
   ]
 }
