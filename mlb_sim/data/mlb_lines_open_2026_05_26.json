@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "664888c720cda0a13b39fa74f0032e0e",
+    "game_date": "2026-05-26",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Colorado Rockies",
+    "commence_time": "2026-05-26T01:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 104,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-25T06:05:04.039221+00:00"
+  },
+  {
+    "game_id": "e03d047a725cd7870eb6b6eaf8b23942",
+    "game_date": "2026-05-26",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-05-26T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.5,
+    "over_price": -101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-25T06:05:04.039221+00:00"
+  }
+]
