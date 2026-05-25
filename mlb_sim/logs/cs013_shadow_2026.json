@@ -13159,7 +13159,7 @@
     "home_team": "PIT",
     "away_team": "CHC",
     "home_degraded_relievers": 4,
-    "away_degraded_relievers": 1,
+    "away_degraded_relievers": 2,
     "combined_degraded_count": 4,
     "cs013_flag": true,
     "cs013_status": "OK",
@@ -13169,7 +13169,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-25T06:00:40.180875"
+    "logged_at": "2026-05-25T02:00:26.513886"
   },
   {
     "game_id": 824838,
@@ -13182,12 +13182,12 @@
     "cs013_flag": true,
     "cs013_status": "OK",
     "cs020_acceleration_score": 0.8667,
-    "cs020_flag": true,
-    "signal_tier": "HIGH",
+    "cs020_flag": false,
+    "signal_tier": "LOW",
     "cs004_flag": true,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-25T06:00:46.834364"
+    "logged_at": "2026-05-25T02:00:32.916139"
   },
   {
     "game_id": 824598,
@@ -13205,7 +13205,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-25T06:00:51.724346"
+    "logged_at": "2026-05-25T02:00:38.471509"
   },
   {
     "game_id": 823784,
@@ -13223,7 +13223,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-25T06:00:56.589365"
+    "logged_at": "2026-05-25T02:00:43.969974"
   },
   {
     "game_id": 824107,
@@ -13235,20 +13235,20 @@
     "combined_degraded_count": 4,
     "cs013_flag": true,
     "cs013_status": "OK",
-    "cs020_acceleration_score": 1.0667,
+    "cs020_acceleration_score": 0.6667,
     "cs020_flag": true,
     "signal_tier": "HIGH",
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "logged_at": "2026-05-25T06:01:00.994051"
+    "logged_at": "2026-05-25T02:00:48.775788"
   },
   {
     "game_id": 823625,
     "date": "2026-05-25",
     "home_team": "NYM",
     "away_team": "CIN",
-    "home_degraded_relievers": 3,
+    "home_degraded_relievers": 4,
     "away_degraded_relievers": 7,
     "combined_degraded_count": 7,
     "cs013_flag": true,
@@ -13259,7 +13259,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-25T06:01:05.314485"
+    "logged_at": "2026-05-25T02:00:53.624579"
   },
   {
     "game_id": 823219,
@@ -13277,7 +13277,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-25T06:01:08.776694"
+    "logged_at": "2026-05-25T02:00:58.620086"
   },
   {
     "game_id": 824437,
@@ -13295,7 +13295,7 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-25T06:01:12.629178"
+    "logged_at": "2026-05-25T02:01:03.730163"
   },
   {
     "game_id": 823296,
@@ -13303,8 +13303,8 @@
     "home_team": "SDP",
     "away_team": "PHI",
     "home_degraded_relievers": 0,
-    "away_degraded_relievers": 5,
-    "combined_degraded_count": 5,
+    "away_degraded_relievers": 4,
+    "combined_degraded_count": 4,
     "cs013_flag": true,
     "cs013_status": "OK",
     "cs020_acceleration_score": 0.4667,
@@ -13313,25 +13313,25 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-25T06:01:15.670273"
+    "logged_at": "2026-05-25T02:01:07.101393"
   },
   {
     "game_id": 822899,
     "date": "2026-05-25",
     "home_team": "TEX",
     "away_team": "HOU",
-    "home_degraded_relievers": 2,
+    "home_degraded_relievers": 1,
     "away_degraded_relievers": 1,
-    "combined_degraded_count": 2,
-    "cs013_flag": true,
+    "combined_degraded_count": 1,
+    "cs013_flag": false,
     "cs013_status": "OK",
     "cs020_acceleration_score": 1.8333,
     "cs020_flag": true,
-    "signal_tier": "HIGH",
+    "signal_tier": null,
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-05-25T06:01:19.524790"
+    "logged_at": "2026-05-25T02:01:11.022792"
   },
   {
     "game_id": 822812,
@@ -13343,31 +13343,31 @@
     "combined_degraded_count": 2,
     "cs013_flag": true,
     "cs013_status": "OK",
-    "cs020_acceleration_score": 0.7333,
+    "cs020_acceleration_score": 0.9333,
     "cs020_flag": true,
     "signal_tier": "HIGH",
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-25T06:01:23.009614"
+    "logged_at": "2026-05-25T02:01:15.630591"
   },
   {
     "game_id": 823948,
     "date": "2026-05-25",
     "home_team": "LAD",
     "away_team": "COL",
-    "home_degraded_relievers": 0,
+    "home_degraded_relievers": 1,
     "away_degraded_relievers": 4,
     "combined_degraded_count": 4,
     "cs013_flag": true,
     "cs013_status": "OK",
     "cs020_acceleration_score": 1.4333,
-    "cs020_flag": false,
-    "signal_tier": "LOW",
+    "cs020_flag": true,
+    "signal_tier": "HIGH",
     "cs004_flag": true,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "logged_at": "2026-05-25T06:01:25.800288"
+    "logged_at": "2026-05-25T02:01:19.676437"
   },
   {
     "game_id": 825005,
@@ -13385,6 +13385,6 @@
     "cs004_flag": false,
     "v1_direction_context": "NONE",
     "closing_total": 10.5,
-    "logged_at": "2026-05-25T06:01:28.491024"
+    "logged_at": "2026-05-25T02:01:27.494117"
   }
 ]
