@@ -291,6 +291,22 @@
       "local_start_hour": 19.25,
       "win_loss": "L",
       "final_score": "4-7"
+    },
+    {
+      "game_pk": 824596,
+      "game_date": "2026-05-27",
+      "matchup": "MIN @ CHW",
+      "fav_team": "CHW",
+      "dog_team": "MIN",
+      "fav_side": "home",
+      "fav_implied": 0.5369,
+      "dog_ml_price": 111,
+      "sp_fip_diff": -0.181,
+      "off_diff": -0.25,
+      "bp_era_diff": 0.409,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
