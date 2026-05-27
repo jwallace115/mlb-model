@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "228dd3c2e156b75b9ed49b10de2e6765",
+    "game_date": "2026-05-28",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Houston Astros",
+    "commence_time": "2026-05-28T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -106,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-27T06:05:02.906569+00:00"
+  },
+  {
+    "game_id": "77b3529d80cffeb203543f5f2201f8ff",
+    "game_date": "2026-05-28",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Colorado Rockies",
+    "commence_time": "2026-05-28T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-05-27T06:05:02.906569+00:00"
+  }
+]
