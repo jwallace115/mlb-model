@@ -308,6 +308,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "2-15"
+    },
+    {
+      "game_pk": 824834,
+      "game_date": "2026-05-28",
+      "matchup": "TOR @ BAL",
+      "fav_team": "BAL",
+      "dog_team": "TOR",
+      "fav_side": "home",
+      "fav_implied": 0.539,
+      "dog_ml_price": 112,
+      "sp_fip_diff": -0.76,
+      "off_diff": -0.5,
+      "bp_era_diff": 0.006,
+      "day_night": "night",
+      "local_start_hour": 18.583333333333332,
+      "win_loss": null
     }
   ]
 }
