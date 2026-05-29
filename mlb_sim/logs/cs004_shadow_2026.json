@@ -11797,14 +11797,14 @@
     "home_team": "CIN",
     "away_team": "ATL",
     "home_bullpen_tail_score": 4.75,
-    "away_bullpen_tail_score": 7.5056,
-    "combined_tail_score": 7.5056,
+    "away_bullpen_tail_score": 7.4438,
+    "combined_tail_score": 7.4438,
     "cs004_favorable_zone": true,
     "st02_flag": false,
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.5,
-    "logged_at": "2026-05-29T06:00:27.236173"
+    "logged_at": "2026-05-29T02:42:20.001588"
   },
   {
     "game_id": 822732,
@@ -11819,37 +11819,37 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 9.0,
-    "logged_at": "2026-05-29T06:00:41.551383"
+    "logged_at": "2026-05-29T02:42:23.526763"
   },
   {
     "game_id": 823377,
     "date": "2026-05-29",
     "home_team": "PIT",
     "away_team": "MIN",
-    "home_bullpen_tail_score": 4.95,
-    "away_bullpen_tail_score": 5.7204,
-    "combined_tail_score": 5.7204,
+    "home_bullpen_tail_score": 3.6033,
+    "away_bullpen_tail_score": 3.2759,
+    "combined_tail_score": 3.6033,
     "cs004_favorable_zone": false,
     "st02_flag": false,
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-29T06:00:45.857699"
+    "logged_at": "2026-05-29T02:42:26.481138"
   },
   {
     "game_id": 824835,
     "date": "2026-05-29",
     "home_team": "BAL",
     "away_team": "TOR",
-    "home_bullpen_tail_score": 8.2317,
-    "away_bullpen_tail_score": 4.85,
-    "combined_tail_score": 8.2317,
+    "home_bullpen_tail_score": 8.4519,
+    "away_bullpen_tail_score": 4.8833,
+    "combined_tail_score": 8.4519,
     "cs004_favorable_zone": true,
     "st02_flag": false,
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-05-29T06:00:49.793216"
+    "logged_at": "2026-05-29T02:42:31.365717"
   },
   {
     "game_id": 824433,
@@ -11857,14 +11857,14 @@
     "home_team": "CLE",
     "away_team": "BOS",
     "home_bullpen_tail_score": 2.3093,
-    "away_bullpen_tail_score": 4.0,
-    "combined_tail_score": 4.0,
+    "away_bullpen_tail_score": 4.9,
+    "combined_tail_score": 4.9,
     "cs004_favorable_zone": false,
     "st02_flag": false,
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-29T06:00:53.486629"
+    "logged_at": "2026-05-29T02:42:33.990287"
   },
   {
     "game_id": 822978,
@@ -11872,14 +11872,14 @@
     "home_team": "TBR",
     "away_team": "LAA",
     "home_bullpen_tail_score": null,
-    "away_bullpen_tail_score": 6.3646,
-    "combined_tail_score": 6.3646,
+    "away_bullpen_tail_score": 12.463,
+    "combined_tail_score": 12.463,
     "cs004_favorable_zone": true,
     "st02_flag": false,
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-29T06:00:54.620606"
+    "logged_at": "2026-05-29T02:42:35.510309"
   },
   {
     "game_id": 823623,
@@ -11894,7 +11894,7 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-29T06:00:57.797140"
+    "logged_at": "2026-05-29T02:42:37.332767"
   },
   {
     "game_id": 823055,
@@ -11909,7 +11909,7 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-29T06:01:01.060011"
+    "logged_at": "2026-05-29T02:42:39.373316"
   },
   {
     "game_id": 824594,
@@ -11917,36 +11917,36 @@
     "home_team": "CHW",
     "away_team": "DET",
     "home_bullpen_tail_score": null,
-    "away_bullpen_tail_score": 6.3883,
-    "combined_tail_score": 6.3883,
+    "away_bullpen_tail_score": 6.4083,
+    "combined_tail_score": 6.4083,
     "cs004_favorable_zone": true,
     "st02_flag": false,
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-05-29T06:01:04.482430"
+    "logged_at": "2026-05-29T02:42:44.395659"
   },
   {
     "game_id": 822894,
     "date": "2026-05-29",
     "home_team": "TEX",
     "away_team": "KCR",
-    "home_bullpen_tail_score": 6.9074,
+    "home_bullpen_tail_score": 6.9792,
     "away_bullpen_tail_score": null,
-    "combined_tail_score": 6.9074,
+    "combined_tail_score": 6.9792,
     "cs004_favorable_zone": true,
     "st02_flag": false,
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.5,
-    "logged_at": "2026-05-29T06:01:07.661794"
+    "logged_at": "2026-05-29T02:42:48.373411"
   },
   {
     "game_id": 824191,
     "date": "2026-05-29",
     "home_team": "HOU",
     "away_team": "MIL",
-    "home_bullpen_tail_score": 3.9479,
+    "home_bullpen_tail_score": 3.9104,
     "away_bullpen_tail_score": 4.0,
     "combined_tail_score": 4.0,
     "cs004_favorable_zone": false,
@@ -11954,7 +11954,7 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
-    "logged_at": "2026-05-29T06:01:10.811473"
+    "logged_at": "2026-05-29T02:42:51.676352"
   },
   {
     "game_id": 824353,
@@ -11969,7 +11969,7 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 10.5,
-    "logged_at": "2026-05-29T06:01:13.586748"
+    "logged_at": "2026-05-29T02:42:53.941398"
   },
   {
     "game_id": 825002,
@@ -11984,7 +11984,7 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 10.0,
-    "logged_at": "2026-05-29T06:01:15.889148"
+    "logged_at": "2026-05-29T02:42:55.967260"
   },
   {
     "game_id": 823135,
@@ -11999,7 +11999,7 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 7.0,
-    "logged_at": "2026-05-29T06:01:18.196966"
+    "logged_at": "2026-05-29T02:42:57.826300"
   },
   {
     "game_id": 823946,
@@ -12014,6 +12014,6 @@
     "st02_cs004_conflict": false,
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
-    "logged_at": "2026-05-29T06:01:20.450973"
+    "logged_at": "2026-05-29T02:42:59.661436"
   }
 ]
