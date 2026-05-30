@@ -8041,5 +8041,1011 @@
       "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-28.json"
     },
     "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "824593",
+    "away_team": "DET",
+    "home_team": "CHW",
+    "away_starter": "Framber Valdez",
+    "home_starter": "Anthony Kay",
+    "away_hard_hit_rate_rolling5": 0.490278,
+    "home_hard_hit_rate_rolling5": 0.328785,
+    "park_run_factor": 100,
+    "p09_score": 40.9532,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.0,
+    "price_over": -107,
+    "price_under": -112,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.0,
+        "over_price": -104,
+        "under_price": -118,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.0,
+        "over_price": -103,
+        "under_price": -111,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 11
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 130
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "822731",
+    "away_team": "SDP",
+    "home_team": "WSN",
+    "away_starter": "Michael King",
+    "home_starter": "Foster Griffin",
+    "away_hard_hit_rate_rolling5": 0.268225,
+    "home_hard_hit_rate_rolling5": 0.349429,
+    "park_run_factor": 101,
+    "p09_score": 31.1915,
+    "cutoff": 31.7305,
+    "signal_fired": true,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.5,
+    "price_over": -112,
+    "price_under": -108,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.5,
+        "over_price": -122,
+        "under_price": 100,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 7.5,
+        "over_price": -109,
+        "under_price": -105,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": "UNDER",
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 8
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 91
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "822893",
+    "away_team": "KCR",
+    "home_team": "TEX",
+    "away_starter": "Seth Lugo",
+    "home_starter": "Kumar Rocker",
+    "away_hard_hit_rate_rolling5": 0.459057,
+    "home_hard_hit_rate_rolling5": 0.451746,
+    "park_run_factor": 107,
+    "p09_score": 48.728,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.0,
+    "price_over": -105,
+    "price_under": -114,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.5,
+        "over_price": -122,
+        "under_price": 100,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.0,
+        "over_price": -101,
+        "under_price": -113,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 24
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 99
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "824833",
+    "away_team": "TOR",
+    "home_team": "BAL",
+    "away_starter": "Trey Yesavage",
+    "home_starter": "Brandon Young",
+    "away_hard_hit_rate_rolling5": 0.261658,
+    "home_hard_hit_rate_rolling5": 0.388629,
+    "park_run_factor": 106,
+    "p09_score": 34.4652,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.5,
+    "price_over": -112,
+    "price_under": -108,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.5,
+        "over_price": -122,
+        "under_price": 100,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 7.5,
+        "over_price": -107,
+        "under_price": -107,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 18
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 9
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "823375",
+    "away_team": "MIN",
+    "home_team": "PIT",
+    "away_starter": "Bailey Ober",
+    "home_starter": "Mitch Keller",
+    "away_hard_hit_rate_rolling5": 0.280732,
+    "home_hard_hit_rate_rolling5": 0.391101,
+    "park_run_factor": 101,
+    "p09_score": 33.9276,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.0,
+    "price_over": -119,
+    "price_under": -102,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.5,
+        "over_price": 100,
+        "under_price": -122,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.5,
+        "over_price": 100,
+        "under_price": -114,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 135
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 104
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "824431",
+    "away_team": "BOS",
+    "home_team": "CLE",
+    "away_starter": "Sonny Gray",
+    "home_starter": "Parker Messick",
+    "away_hard_hit_rate_rolling5": 0.322672,
+    "home_hard_hit_rate_rolling5": 0.369015,
+    "park_run_factor": 98,
+    "p09_score": 33.8927,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.0,
+    "price_over": 101,
+    "price_under": -121,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 6.5,
+        "over_price": -122,
+        "under_price": 100,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 6.5,
+        "over_price": -115,
+        "under_price": 101,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 15
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 123
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "822975",
+    "away_team": "LAA",
+    "home_team": "TBR",
+    "away_starter": "Reid Detmers",
+    "home_starter": "Drew Rasmussen",
+    "away_hard_hit_rate_rolling5": 0.355323,
+    "home_hard_hit_rate_rolling5": 0.278986,
+    "park_run_factor": 97,
+    "p09_score": 30.764,
+    "cutoff": 31.7305,
+    "signal_fired": true,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.0,
+    "price_over": -112,
+    "price_under": -108,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.0,
+        "over_price": -115,
+        "under_price": -105,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 7.0,
+        "over_price": -110,
+        "under_price": -104,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": "UNDER",
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 82
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 84
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "823622",
+    "away_team": "MIA",
+    "home_team": "NYM",
+    "away_starter": "Tyler Phillips",
+    "home_starter": "Christian Scott",
+    "away_hard_hit_rate_rolling5": 0.278889,
+    "home_hard_hit_rate_rolling5": 0.312987,
+    "park_run_factor": 94,
+    "p09_score": 27.8182,
+    "cutoff": 31.7305,
+    "signal_fired": true,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.0,
+    "price_over": -114,
+    "price_under": -105,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.0,
+        "over_price": -115,
+        "under_price": -105,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 7.0,
+        "over_price": -111,
+        "under_price": -103,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": "UNDER",
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 15
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 27
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "824190",
+    "away_team": "MIL",
+    "home_team": "HOU",
+    "away_starter": "Brandon Sproat",
+    "home_starter": "Peter Lambert",
+    "away_hard_hit_rate_rolling5": 0.363919,
+    "home_hard_hit_rate_rolling5": 0.379708,
+    "park_run_factor": 100,
+    "p09_score": 37.1814,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.5,
+    "price_over": -118,
+    "price_under": -102,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.5,
+        "over_price": -115,
+        "under_price": -105,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.5,
+        "over_price": -116,
+        "under_price": 101,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 44
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 12
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "823054",
+    "away_team": "CHC",
+    "home_team": "STL",
+    "away_starter": "Ben Brown",
+    "home_starter": "Kyle Leahy",
+    "away_hard_hit_rate_rolling5": 0.429692,
+    "home_hard_hit_rate_rolling5": 0.512549,
+    "park_run_factor": 97,
+    "p09_score": 45.6987,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.0,
+    "price_over": -113,
+    "price_under": -106,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.5,
+        "over_price": -105,
+        "under_price": -115,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 8.0,
+        "over_price": -113,
+        "under_price": -101,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 29
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 44
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "824513",
+    "away_team": "ATL",
+    "home_team": "CIN",
+    "away_starter": "Mart\u00edn P\u00e9rez",
+    "home_starter": "Brady Singer",
+    "away_hard_hit_rate_rolling5": 0.400162,
+    "home_hard_hit_rate_rolling5": 0.405288,
+    "park_run_factor": 107,
+    "p09_score": 43.0916,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 9.5,
+    "price_over": -103,
+    "price_under": -117,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 9.5,
+        "over_price": 100,
+        "under_price": -122,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 9.5,
+        "over_price": -107,
+        "under_price": -107,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 127
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 102
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "824352",
+    "away_team": "SFG",
+    "home_team": "COL",
+    "away_starter": "Adrian Houser",
+    "home_starter": "Ryan Feltner",
+    "away_hard_hit_rate_rolling5": 0.454118,
+    "home_hard_hit_rate_rolling5": 0.372176,
+    "park_run_factor": 117,
+    "p09_score": 48.3382,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 11.0,
+    "price_over": 100,
+    "price_under": -120,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 10.5,
+        "over_price": -122,
+        "under_price": 100,
+        "last_update": "2026-05-30T06:00:06Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 68
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 90
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "825000",
+    "away_team": "NYY",
+    "home_team": "OAK",
+    "away_starter": "Ryan Weathers",
+    "home_starter": "J.T. Ginn",
+    "away_hard_hit_rate_rolling5": 0.455752,
+    "home_hard_hit_rate_rolling5": 0.363135,
+    "park_run_factor": 95,
+    "p09_score": 38.8972,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 9.5,
+    "price_over": -112,
+    "price_under": -107,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 9.5,
+        "over_price": -110,
+        "under_price": -110,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 9.5,
+        "over_price": -112,
+        "under_price": -102,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 37
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 46
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "823132",
+    "away_team": "ARI",
+    "home_team": "SEA",
+    "away_starter": "Ryne Nelson",
+    "home_starter": "Bryan Woo",
+    "away_hard_hit_rate_rolling5": 0.407753,
+    "home_hard_hit_rate_rolling5": 0.377598,
+    "park_run_factor": 94,
+    "p09_score": 36.9115,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 7.0,
+    "price_over": -107,
+    "price_under": -113,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 7.0,
+        "over_price": -110,
+        "under_price": -110,
+        "last_update": "2026-05-30T06:00:06Z"
+      },
+      {
+        "book": "pinnacle",
+        "total_line": 7.0,
+        "over_price": 102,
+        "under_price": -117,
+        "last_update": "2026-05-30T05:59:43Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 79
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 99
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
+  },
+  {
+    "date": "2026-05-30",
+    "game_id": "823945",
+    "away_team": "PHI",
+    "home_team": "LAD",
+    "away_starter": "Jes\u00fas Luzardo",
+    "home_starter": "Roki Sasaki",
+    "away_hard_hit_rate_rolling5": 0.277892,
+    "home_hard_hit_rate_rolling5": 0.469438,
+    "park_run_factor": 95,
+    "p09_score": 35.4982,
+    "cutoff": 31.7305,
+    "signal_fired": false,
+    "canonical_sportsbook": "DraftKings",
+    "market_total": 8.5,
+    "price_over": -108,
+    "price_under": -112,
+    "market_timestamp": "2026-05-30T05:57:51Z",
+    "market_status": "OK",
+    "alt_books": [
+      {
+        "book": "fanduel",
+        "total_line": 8.5,
+        "over_price": 100,
+        "under_price": -122,
+        "last_update": "2026-05-30T06:00:06Z"
+      }
+    ],
+    "selected_side": null,
+    "actual_total": null,
+    "result": null,
+    "graded": false,
+    "created_at": "2026-05-30T11:30:06.996919+00:00",
+    "updated_at": null,
+    "data_version": "runner:p09_shadow_daily_v1|config_cutoff:31.7305|statcast:2026-05-28|odds_cache:odds_full_2026-05-30.json",
+    "pit_safety_flags": {
+      "shift1_applied": true,
+      "rolling_window": 5,
+      "min_periods": 3,
+      "starter_source": "schedule_api_probable_pitcher_id",
+      "home_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 15
+      },
+      "away_starter_pit": {
+        "shift1_applied": true,
+        "rolling_window": 5,
+        "min_periods": 3,
+        "prior_starts_only": true,
+        "appearances_available": 102
+      }
+    },
+    "source_files": {
+      "statcast": "/root/mlb-model/research/statcast_enrichment/pitcher_statcast_per_start.parquet",
+      "odds_cache": "/root/mlb-model/data/cache/odds_full_2026-05-30.json"
+    },
+    "notes": []
   }
 ]
