@@ -1,0 +1,175 @@
+{
+  "snapshot_label": "2026-05-31_1300_ET",
+  "snapshot_time_et": "13:00",
+  "date": "2026-05-31",
+  "total_games": 15,
+  "lineups_confirmed": 10,
+  "coverage_pct": 66.7,
+  "games": [
+    {
+      "game_pk": 824832,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "12:15",
+      "hours_to_first_pitch": -0.75,
+      "status": "In Progress",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 822729,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "13:35",
+      "hours_to_first_pitch": 0.58,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 823373,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "13:35",
+      "hours_to_first_pitch": 0.58,
+      "status": "Pre-Game",
+      "home_lineup_count": 0,
+      "away_lineup_count": 9,
+      "lineup_confirmed": false
+    },
+    {
+      "game_pk": 824430,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "13:40",
+      "hours_to_first_pitch": 0.67,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 822976,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "13:40",
+      "hours_to_first_pitch": 0.67,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 824512,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "13:40",
+      "hours_to_first_pitch": 0.67,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 823621,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "13:40",
+      "hours_to_first_pitch": 0.67,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 824592,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "14:10",
+      "hours_to_first_pitch": 1.17,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 824187,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "14:10",
+      "hours_to_first_pitch": 1.17,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 822895,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "14:35",
+      "hours_to_first_pitch": 1.58,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 824354,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "15:10",
+      "hours_to_first_pitch": 2.17,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 825001,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "16:05",
+      "hours_to_first_pitch": 3.08,
+      "status": "Scheduled",
+      "home_lineup_count": 0,
+      "away_lineup_count": 0,
+      "lineup_confirmed": false
+    },
+    {
+      "game_pk": 823133,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "16:10",
+      "hours_to_first_pitch": 3.17,
+      "status": "Scheduled",
+      "home_lineup_count": 0,
+      "away_lineup_count": 0,
+      "lineup_confirmed": false
+    },
+    {
+      "game_pk": 823944,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "16:10",
+      "hours_to_first_pitch": 3.17,
+      "status": "Scheduled",
+      "home_lineup_count": 0,
+      "away_lineup_count": 0,
+      "lineup_confirmed": false
+    },
+    {
+      "game_pk": 823053,
+      "game_date": "2026-05-31",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "19:20",
+      "hours_to_first_pitch": 6.33,
+      "status": "Scheduled",
+      "home_lineup_count": 0,
+      "away_lineup_count": 0,
+      "lineup_confirmed": false
+    }
+  ]
+}
