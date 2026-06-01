@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-01T07:02:37.894826",
+  "generated_at": "2026-06-01T08:00:37.931746",
   "sport": "golf",
   "event_name": "Charles Schwab Challenge",
   "event_id": 21,
@@ -693,26 +693,26 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 597,
-      "hit_rate": 53.8,
-      "roi": -10.3,
-      "clv": -9.5
+      "n": 1483,
+      "hit_rate": 53.3,
+      "roi": 11.7,
+      "clv": -12.0
     },
     "top_20": {
-      "n": 1145,
-      "hit_rate": 34.1,
-      "roi": 91.9,
-      "clv": -10.1
+      "n": 1521,
+      "hit_rate": 36.7,
+      "roi": 83.7,
+      "clv": -10.6
     }
   },
   "recent_results": [
     {
-      "event_name": "Texas Children's Houston Open",
-      "event_id": 20,
+      "event_name": "PGA Championship",
+      "event_id": 33,
       "year": 2026,
-      "n_candidates": 143,
-      "hit_rate": 37.1,
-      "roi": 594.1
+      "n_candidates": 791,
+      "hit_rate": 50.9,
+      "roi": 42.5
     },
     {
       "event_name": "Valero Texas Open",
