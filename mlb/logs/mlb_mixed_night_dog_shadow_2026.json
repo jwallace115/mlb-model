@@ -342,6 +342,38 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "L",
       "final_score": "7-9"
+    },
+    {
+      "game_pk": 824754,
+      "game_date": "2026-06-02",
+      "matchup": "BAL @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "BAL",
+      "fav_side": "home",
+      "fav_implied": 0.55,
+      "dog_ml_price": 117,
+      "sp_fip_diff": -0.708,
+      "off_diff": 0.65,
+      "bp_era_diff": -0.091,
+      "day_night": "night",
+      "local_start_hour": 18.75,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823700,
+      "game_date": "2026-06-02",
+      "matchup": "CHW @ MIN",
+      "fav_team": "CHW",
+      "dog_team": "MIN",
+      "fav_side": "away",
+      "fav_implied": 0.524,
+      "dog_ml_price": 105,
+      "sp_fip_diff": -0.061,
+      "off_diff": -0.25,
+      "bp_era_diff": 0.366,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
