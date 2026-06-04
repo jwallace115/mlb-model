@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "51cce7bcf24220f34920f5fc8ae977d5",
+    "game_date": "2026-06-05",
+    "sport": "MLB",
+    "home_team": "Chicago Cubs",
+    "away_team": "Athletics",
+    "commence_time": "2026-06-05T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.0,
+    "over_price": -115,
+    "under_price": -105,
+    "book": "draftkings",
+    "capture_timestamp": "2026-06-04T06:05:02.736735+00:00"
+  },
+  {
+    "game_id": "bd13c90444ac849f846564fe0fa941e7",
+    "game_date": "2026-06-05",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Pittsburgh Pirates",
+    "commence_time": "2026-06-05T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-04T06:05:02.736735+00:00"
+  },
+  {
+    "game_id": "2acc5473be6d726025c973a3d148e6b0",
+    "game_date": "2026-06-05",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-06-05T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -101,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-04T06:05:02.736735+00:00"
+  }
+]
