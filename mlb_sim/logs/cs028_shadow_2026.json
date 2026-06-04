@@ -12529,82 +12529,82 @@
     "game_date": "2026-06-04",
     "home_team": "PHI",
     "away_team": "SDP",
-    "home_blowup_score": 0.159906,
+    "home_blowup_score": 0.193224,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 8,
+    "relievers_scored": 6,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-06-04T06:00:39.070165"
+    "logged_at": "2026-06-04T06:00:24.135701"
   },
   {
     "game_id": 824753,
     "game_date": "2026-06-04",
     "home_team": "BOS",
     "away_team": "BAL",
-    "home_blowup_score": 0.126572,
+    "home_blowup_score": 0.13489,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 9,
+    "relievers_scored": 8,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 10.0,
     "clv": null,
-    "logged_at": "2026-06-04T06:00:44.452455"
+    "logged_at": "2026-06-04T06:00:29.145531"
   },
   {
     "game_id": 823542,
     "game_date": "2026-06-04",
     "home_team": "NYY",
     "away_team": "CLE",
-    "home_blowup_score": 0.139906,
+    "home_blowup_score": 0.05989,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 5,
+    "relievers_scored": 4,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-06-04T06:00:48.386886"
+    "logged_at": "2026-06-04T06:00:33.574027"
   },
   {
     "game_id": 823779,
     "game_date": "2026-06-04",
     "home_team": "MIL",
     "away_team": "SFG",
-    "home_blowup_score": 0.159906,
+    "home_blowup_score": 0.193224,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 8,
+    "relievers_scored": 6,
     "cs013_also_active": false,
     "actual_over_under": null,
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-06-04T06:00:52.135269"
+    "logged_at": "2026-06-04T06:00:37.812791"
   },
   {
     "game_id": 824919,
     "game_date": "2026-06-04",
     "home_team": "ATL",
     "away_team": "TOR",
-    "home_blowup_score": 0.234906,
+    "home_blowup_score": 0.193224,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 8,
+    "relievers_scored": 9,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 7.5,
     "clv": null,
-    "logged_at": "2026-06-04T06:00:55.802967"
+    "logged_at": "2026-06-04T06:00:42.190022"
   },
   {
     "game_id": 823698,
     "game_date": "2026-06-04",
     "home_team": "MIN",
     "away_team": "KCR",
-    "home_blowup_score": 0.184906,
+    "home_blowup_score": 0.23489,
     "signal_fires": false,
     "threshold_used": 0.2563,
     "relievers_scored": 8,
@@ -12612,37 +12612,37 @@
     "actual_over_under": null,
     "closing_total": 9.0,
     "clv": null,
-    "logged_at": "2026-06-04T06:00:59.267776"
+    "logged_at": "2026-06-04T06:00:46.317175"
   },
   {
     "game_id": 824672,
     "game_date": "2026-06-04",
     "home_team": "CHC",
     "away_team": "OAK",
-    "home_blowup_score": 0.179906,
+    "home_blowup_score": 0.13989,
     "signal_fires": false,
     "threshold_used": 0.2563,
-    "relievers_scored": 5,
+    "relievers_scored": 10,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 10.0,
     "clv": null,
-    "logged_at": "2026-06-04T06:01:03.071010"
+    "logged_at": "2026-06-04T06:00:50.300002"
   },
   {
     "game_id": 824185,
     "game_date": "2026-06-04",
     "home_team": "HOU",
     "away_team": "PIT",
-    "home_blowup_score": 0.234906,
-    "signal_fires": false,
+    "home_blowup_score": 0.25989,
+    "signal_fires": true,
     "threshold_used": 0.2563,
-    "relievers_scored": 8,
+    "relievers_scored": 6,
     "cs013_also_active": true,
     "actual_over_under": null,
     "closing_total": 8.5,
     "clv": null,
-    "logged_at": "2026-06-04T06:01:06.839390"
+    "logged_at": "2026-06-04T06:00:54.184507"
   },
   {
     "game_id": 825076,
@@ -12657,6 +12657,6 @@
     "actual_over_under": null,
     "closing_total": 9.5,
     "clv": null,
-    "logged_at": "2026-06-04T06:01:10.310046"
+    "logged_at": "2026-06-04T06:00:57.654191"
   }
 ]
