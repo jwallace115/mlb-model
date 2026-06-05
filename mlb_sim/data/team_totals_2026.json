@@ -84165,5 +84165,461 @@
       }
     ],
     "snapshot_time": "2026-06-04T11:05:03.388751+00:00"
+  },
+  {
+    "game_date": "2026-06-05",
+    "event_id": "c482750265f6c9f18fd75cadd8a212f7",
+    "game_pk": 824673,
+    "home_team": "Chicago Cubs",
+    "away_team": "San Francisco Giants",
+    "home_team_abbr": "CHC",
+    "away_team_abbr": "SFG",
+    "commence_time": "2026-06-05T18:21:00Z",
+    "home_total_line": 5.5,
+    "away_total_line": 4.5,
+    "n_books": 4,
+    "home_books": [
+      {
+        "book": "bovada",
+        "line": 5.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betonlineag",
+        "line": 5.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": -124,
+        "under_price": -103
+      },
+      {
+        "book": "draftkings",
+        "line": 5.5,
+        "over_price": -125,
+        "under_price": -105
+      }
+    ],
+    "away_books": [
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -136,
+        "under_price": 107
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -125,
+        "under_price": -105
+      }
+    ],
+    "snapshot_time": "2026-06-05T11:05:03.797768+00:00"
+  },
+  {
+    "game_date": "2026-06-05",
+    "event_id": "66ea890e18af0833c92b1b73b4f70b31",
+    "game_pk": 823455,
+    "home_team": "Philadelphia Phillies",
+    "away_team": "Chicago White Sox",
+    "home_team_abbr": "PHI",
+    "away_team_abbr": "CHW",
+    "commence_time": "2026-06-05T22:41:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 3.5,
+    "n_books": 4,
+    "home_books": [
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": -115,
+        "under_price": -115
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -117,
+        "under_price": -109
+      }
+    ],
+    "away_books": [
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -115,
+        "under_price": -115
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -109,
+        "under_price": -117
+      }
+    ],
+    "snapshot_time": "2026-06-05T11:05:03.797768+00:00"
+  },
+  {
+    "game_date": "2026-06-05",
+    "event_id": "61be630678b155cf69cedc7df6691776",
+    "game_pk": 824271,
+    "home_team": "Detroit Tigers",
+    "away_team": "Seattle Mariners",
+    "home_team_abbr": "DET",
+    "away_team_abbr": "SEA",
+    "commence_time": "2026-06-05T22:41:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 4.5,
+    "n_books": 4,
+    "home_books": [
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -105,
+        "under_price": -125
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -103,
+        "under_price": -125
+      }
+    ],
+    "away_books": [
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 113,
+        "under_price": -145
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 114,
+        "under_price": -143
+      }
+    ],
+    "snapshot_time": "2026-06-05T11:05:03.797768+00:00"
+  },
+  {
+    "game_date": "2026-06-05",
+    "event_id": "ff5101661dae20bbc5596f819b19aa91",
+    "game_pk": 823538,
+    "home_team": "New York Yankees",
+    "away_team": "Boston Red Sox",
+    "home_team_abbr": "NYY",
+    "away_team_abbr": "BOS",
+    "commence_time": "2026-06-05T23:06:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 3,
+    "home_books": [
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -150,
+        "under_price": 117
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 114,
+        "under_price": -145
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -139,
+        "under_price": 110
+      }
+    ],
+    "away_books": [
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -115,
+        "under_price": -115
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -115,
+        "under_price": -115
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -118,
+        "under_price": -108
+      }
+    ],
+    "snapshot_time": "2026-06-05T11:05:03.797768+00:00"
+  },
+  {
+    "game_date": "2026-06-05",
+    "event_id": "13b67b1c59ce70e7e4910ab5e9bd5368",
+    "game_pk": 822810,
+    "home_team": "Toronto Blue Jays",
+    "away_team": "Baltimore Orioles",
+    "home_team_abbr": "TOR",
+    "away_team_abbr": "BAL",
+    "commence_time": "2026-06-05T23:08:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 3.5,
+    "n_books": 4,
+    "home_books": [
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 103,
+        "under_price": -133
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -107,
+        "under_price": -120
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -135
+      }
+    ],
+    "away_books": [
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -118,
+        "under_price": -112
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -117,
+        "under_price": -109
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      }
+    ],
+    "snapshot_time": "2026-06-05T11:05:03.797768+00:00"
+  },
+  {
+    "game_date": "2026-06-05",
+    "event_id": "3017532baf3b1684dbd61a6fe522963f",
+    "game_pk": 823860,
+    "home_team": "Miami Marlins",
+    "away_team": "Tampa Bay Rays",
+    "home_team_abbr": "MIA",
+    "away_team_abbr": "TBR",
+    "commence_time": "2026-06-05T23:11:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 4.5,
+    "n_books": 4,
+    "home_books": [
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -105,
+        "under_price": -125
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 105,
+        "under_price": -134
+      }
+    ],
+    "away_books": [
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 108,
+        "under_price": -138
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -139
+      }
+    ],
+    "snapshot_time": "2026-06-05T11:05:03.797768+00:00"
+  },
+  {
+    "game_date": "2026-06-05",
+    "event_id": "0337473e55cde0d4fc1639b00f3693bb",
+    "game_pk": 824914,
+    "home_team": "Atlanta Braves",
+    "away_team": "Pittsburgh Pirates",
+    "home_team_abbr": "ATL",
+    "away_team_abbr": "PIT",
+    "commence_time": "2026-06-05T23:16:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 3.5,
+    "n_books": 4,
+    "home_books": [
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -134
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -135
+      }
+    ],
+    "away_books": [
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -132,
+        "under_price": 104
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      }
+    ],
+    "snapshot_time": "2026-06-05T11:05:03.797768+00:00"
   }
 ]

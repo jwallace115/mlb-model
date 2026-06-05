@@ -376,6 +376,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "W",
       "final_score": "4-6"
+    },
+    {
+      "game_pk": 824271,
+      "game_date": "2026-06-05",
+      "matchup": "SEA @ DET",
+      "fav_team": "SEA",
+      "dog_team": "DET",
+      "fav_side": "away",
+      "fav_implied": 0.5559,
+      "dog_ml_price": 120,
+      "sp_fip_diff": 0.217,
+      "off_diff": 0.15,
+      "bp_era_diff": -0.414,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
