@@ -2,5 +2,24 @@
   "object_id": "mlb_p1b_coldwarm_earlyheavy_over_v1",
   "ruleset_version": "frozen_v1",
   "start_date": "2026-04-13",
-  "signals": []
+  "signals": [
+    {
+      "date": "2026-06-06",
+      "game_pk": 823454,
+      "home_team": "PHI",
+      "away_team": "CHW",
+      "side": "OVER",
+      "fg_total": 9.5,
+      "over_price": -120,
+      "f5_total": 5.5,
+      "f5_ratio": 0.5789,
+      "forecast_temp_f": 94.5,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-06-06T15:20:06.389988+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-06-06T15:20:06.390046+00:00"
+    }
+  ]
 }
