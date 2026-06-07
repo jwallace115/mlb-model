@@ -20,6 +20,24 @@
       "result": "L",
       "graded": true,
       "generated_at": "2026-06-06T15:20:06.390046+00:00"
+    },
+    {
+      "date": "2026-06-07",
+      "game_pk": 823047,
+      "home_team": "STL",
+      "away_team": "CIN",
+      "side": "OVER",
+      "fg_total": 8.5,
+      "over_price": -134,
+      "f5_total": 5.0,
+      "f5_ratio": 0.5882,
+      "forecast_temp_f": 87.2,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-06-07T15:20:06.548585+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-06-07T15:20:06.548640+00:00"
     }
   ]
 }
