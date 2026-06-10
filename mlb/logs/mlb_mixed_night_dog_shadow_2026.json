@@ -478,6 +478,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "W",
       "final_score": "3-5"
+    },
+    {
+      "game_pk": 824103,
+      "game_date": "2026-06-10",
+      "matchup": "TEX @ KCR",
+      "fav_team": "TEX",
+      "dog_team": "KCR",
+      "fav_side": "away",
+      "fav_implied": 0.5315,
+      "dog_ml_price": 108,
+      "sp_fip_diff": 0.044,
+      "off_diff": -0.75,
+      "bp_era_diff": -0.483,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
