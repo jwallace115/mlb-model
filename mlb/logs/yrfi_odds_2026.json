@@ -12478,5 +12478,213 @@
         "point": 0.5
       }
     ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "6a361e2e668b6f93df3fd6c75b2f8c8c",
+    "commence_time": "2026-06-11T17:11:00Z",
+    "home_team": "Miami Marlins",
+    "away_team": "Arizona Diamondbacks",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -125,
+    "nrfi_price": -102,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -125,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -102,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "103e4247d0f4067efa75745bdf3a2a55",
+    "commence_time": "2026-06-11T17:11:00Z",
+    "home_team": "Detroit Tigers",
+    "away_team": "Minnesota Twins",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -106,
+    "nrfi_price": -120,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -106,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -120,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "b954a694ef58ec4b5f1142bcef652628",
+    "commence_time": "2026-06-11T17:11:00Z",
+    "home_team": "New York Mets",
+    "away_team": "St. Louis Cardinals",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -125,
+    "nrfi_price": -102,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -125,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -102,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "7a9289361be29573a7a9569a8346274c",
+    "commence_time": "2026-06-11T18:11:00Z",
+    "home_team": "Kansas City Royals",
+    "away_team": "Texas Rangers",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -154,
+    "nrfi_price": 120,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -154,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": 120,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "14f78bdcb2257396aa9a320978303578",
+    "commence_time": "2026-06-11T19:11:00Z",
+    "home_team": "Colorado Rockies",
+    "away_team": "Chicago Cubs",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -148,
+    "nrfi_price": 116,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -148,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": 116,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "26337efce0c9013343238d70cee99f18",
+    "commence_time": "2026-06-11T22:41:00Z",
+    "home_team": "Pittsburgh Pirates",
+    "away_team": "Los Angeles Dodgers",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -140,
+    "nrfi_price": 110,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -140,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": 110,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "03b661c71806115f4d198f6078d2c785",
+    "commence_time": "2026-06-11T23:06:00Z",
+    "home_team": "Baltimore Orioles",
+    "away_team": "Seattle Mariners",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -111,
+    "nrfi_price": -115,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -111,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -115,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-06-11T11:05:02.707198+00:00",
+    "pull_date": "2026-06-11",
+    "game_id": "e90acfc04f67e9efe70e9b835ecdb5cc",
+    "commence_time": "2026-06-11T23:41:00Z",
+    "home_team": "Chicago White Sox",
+    "away_team": "Atlanta Braves",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -106,
+    "nrfi_price": -120,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -106,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -120,
+        "point": 0.5
+      }
+    ]
   }
 ]

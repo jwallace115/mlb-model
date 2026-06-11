@@ -342,6 +342,22 @@
       "dog_bp_era": 4.625,
       "win_loss": "W",
       "final_score": "4-6"
+    },
+    {
+      "game_pk": 824101,
+      "game_date": "2026-06-11",
+      "matchup": "TEX @ KCR",
+      "fav_team": "KCR",
+      "dog_team": "TEX",
+      "fav_side": "home",
+      "fav_implied": 0.5196,
+      "dog_ml_price": 103,
+      "sp_fip_diff": -0.724,
+      "off_diff": 0.75,
+      "bp_era_diff": 0.478,
+      "fav_bp_era": 5.041,
+      "dog_bp_era": 4.563,
+      "win_loss": null
     }
   ]
 }
