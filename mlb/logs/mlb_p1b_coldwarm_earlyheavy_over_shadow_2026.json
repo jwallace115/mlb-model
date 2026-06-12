@@ -38,6 +38,24 @@
       "result": "L",
       "graded": true,
       "generated_at": "2026-06-07T15:20:06.548640+00:00"
+    },
+    {
+      "date": "2026-06-12",
+      "game_pk": 824826,
+      "home_team": "BAL",
+      "away_team": "SDP",
+      "side": "OVER",
+      "fg_total": 8.5,
+      "over_price": -122,
+      "f5_total": 5.0,
+      "f5_ratio": 0.5882,
+      "forecast_temp_f": 91.9,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-06-12T15:20:04.970728+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-06-12T15:20:04.970788+00:00"
     }
   ]
 }
