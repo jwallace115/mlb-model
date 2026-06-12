@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "f5978dc3ccd113075da44542f6ee1e9a",
+    "game_date": "2026-06-13",
+    "sport": "MLB",
+    "home_team": "Kansas City Royals",
+    "away_team": "Houston Astros",
+    "commence_time": "2026-06-13T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -115,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-12T06:05:02.778957+00:00"
+  },
+  {
+    "game_id": "4be65ae4c2c4b00e97e31396ea055fa7",
+    "game_date": "2026-06-13",
+    "sport": "MLB",
+    "home_team": "Minnesota Twins",
+    "away_team": "St. Louis Cardinals",
+    "commence_time": "2026-06-13T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -109,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-12T06:05:02.778957+00:00"
+  },
+  {
+    "game_id": "1972be0f278db4fe870972f2d97254c2",
+    "game_date": "2026-06-13",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Tampa Bay Rays",
+    "commence_time": "2026-06-13T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-12T06:05:02.778957+00:00"
+  },
+  {
+    "game_id": "6cf3e8040acf1a1d7d7e7f5b1c0ce4e8",
+    "game_date": "2026-06-13",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Colorado Rockies",
+    "commence_time": "2026-06-13T02:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 14.0,
+    "over_price": -101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-12T06:05:02.778957+00:00"
+  },
+  {
+    "game_id": "f22b44b04b70c9956c01233a8b94b5cd",
+    "game_date": "2026-06-13",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "Chicago Cubs",
+    "commence_time": "2026-06-13T02:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -105,
+    "under_price": -114,
+    "book": "draftkings",
+    "capture_timestamp": "2026-06-12T06:05:02.778957+00:00"
+  }
+]
