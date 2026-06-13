@@ -359,6 +359,22 @@
       "dog_bp_era": 4.563,
       "win_loss": "W",
       "final_score": "4-2"
+    },
+    {
+      "game_pk": 824508,
+      "game_date": "2026-06-13",
+      "matchup": "ARI @ CIN",
+      "fav_team": "ARI",
+      "dog_team": "CIN",
+      "fav_side": "away",
+      "fav_implied": 0.55,
+      "dog_ml_price": 117,
+      "sp_fip_diff": 0.799,
+      "off_diff": 0.6,
+      "bp_era_diff": 0.284,
+      "fav_bp_era": 5.134,
+      "dog_bp_era": 4.85,
+      "win_loss": null
     }
   ]
 }
