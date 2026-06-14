@@ -376,6 +376,22 @@
       "dog_bp_era": 4.85,
       "win_loss": "W",
       "final_score": "1-2"
+    },
+    {
+      "game_pk": 823615,
+      "game_date": "2026-06-14",
+      "matchup": "ATL @ NYM",
+      "fav_team": "NYM",
+      "dog_team": "ATL",
+      "fav_side": "home",
+      "fav_implied": 0.5139,
+      "dog_ml_price": 101,
+      "sp_fip_diff": -0.495,
+      "off_diff": -0.4,
+      "bp_era_diff": 0.511,
+      "fav_bp_era": 4.384,
+      "dog_bp_era": 3.873,
+      "win_loss": null
     }
   ]
 }
