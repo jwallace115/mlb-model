@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T07:00:29.861416",
+  "generated_at": "2026-06-15T08:01:42.406497",
   "sport": "golf",
   "event_name": "RBC Canadian Open",
   "event_id": 32,
@@ -638,16 +638,16 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 1483,
+      "n": 2352,
       "hit_rate": 53.3,
-      "roi": 11.7,
-      "clv": -12.0
+      "roi": 6.7,
+      "clv": -11.7
     },
     "top_20": {
-      "n": 1521,
-      "hit_rate": 36.7,
-      "roi": 83.7,
-      "clv": -10.6
+      "n": 1902,
+      "hit_rate": 37.3,
+      "roi": 77.8,
+      "clv": -11.0
     }
   },
   "recent_results": [
