@@ -106,9 +106,9 @@
       "forecast_temp_f": 91.5,
       "weather_source": "open_meteo_forecast",
       "weather_timestamp": "2026-06-14T15:20:04.415141+00:00",
-      "actual_total": null,
-      "result": null,
-      "graded": false,
+      "actual_total": 7,
+      "result": "L",
+      "graded": true,
       "generated_at": "2026-06-14T15:20:04.415203+00:00"
     }
   ]
