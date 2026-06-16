@@ -393,6 +393,22 @@
       "dog_bp_era": 3.873,
       "win_loss": "L",
       "final_score": "1-8"
+    },
+    {
+      "game_pk": 823045,
+      "game_date": "2026-06-16",
+      "matchup": "SDP @ STL",
+      "fav_team": "STL",
+      "dog_team": "SDP",
+      "fav_side": "home",
+      "fav_implied": 0.515,
+      "dog_ml_price": 101,
+      "sp_fip_diff": 0.652,
+      "off_diff": -0.2,
+      "bp_era_diff": 0.488,
+      "fav_bp_era": 4.491,
+      "dog_bp_era": 4.003,
+      "win_loss": null
     }
   ]
 }

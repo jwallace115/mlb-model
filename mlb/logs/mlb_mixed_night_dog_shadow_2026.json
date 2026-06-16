@@ -512,6 +512,22 @@
       "local_start_hour": 19.333333333333332,
       "win_loss": "W",
       "final_score": "6-4"
+    },
+    {
+      "game_pk": 823045,
+      "game_date": "2026-06-16",
+      "matchup": "SDP @ STL",
+      "fav_team": "STL",
+      "dog_team": "SDP",
+      "fav_side": "home",
+      "fav_implied": 0.515,
+      "dog_ml_price": 101,
+      "sp_fip_diff": 0.652,
+      "off_diff": -0.2,
+      "bp_era_diff": 0.488,
+      "day_night": "night",
+      "local_start_hour": 18.75,
+      "win_loss": null
     }
   ]
 }
