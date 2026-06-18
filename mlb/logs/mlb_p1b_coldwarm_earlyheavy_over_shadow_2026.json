@@ -110,6 +110,24 @@
       "result": "L",
       "graded": true,
       "generated_at": "2026-06-14T15:20:04.415203+00:00"
+    },
+    {
+      "date": "2026-06-18",
+      "game_pk": 823125,
+      "home_team": "SEA",
+      "away_team": "BAL",
+      "side": "OVER",
+      "fg_total": 7.5,
+      "over_price": -114,
+      "f5_total": 4.5,
+      "f5_ratio": 0.6,
+      "forecast_temp_f": 76.2,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-06-18T15:20:05.560003+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-06-18T15:20:05.560058+00:00"
     }
   ]
 }
