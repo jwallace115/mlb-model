@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "4bb2c510f37ac3221423f6fe96d81822",
+    "game_date": "2026-06-21",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Pittsburgh Pirates",
+    "commence_time": "2026-06-21T01:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.5,
+    "over_price": 100,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-20T06:05:02.653054+00:00"
+  },
+  {
+    "game_id": "bc0eb3e2abd5d0ddb3e22dc71abf652a",
+    "game_date": "2026-06-21",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Minnesota Twins",
+    "commence_time": "2026-06-21T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -119,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-20T06:05:02.653054+00:00"
+  },
+  {
+    "game_id": "8e059160b850333f99e5414be7fede74",
+    "game_date": "2026-06-21",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Baltimore Orioles",
+    "commence_time": "2026-06-21T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -112,
+    "under_price": -107,
+    "book": "draftkings",
+    "capture_timestamp": "2026-06-20T06:05:02.653054+00:00"
+  },
+  {
+    "game_id": "c17cdf3ec5c9c493c782139a03e71bcc",
+    "game_date": "2026-06-21",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Boston Red Sox",
+    "commence_time": "2026-06-21T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": 104,
+    "under_price": -120,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-20T06:05:02.653054+00:00"
+  }
+]
