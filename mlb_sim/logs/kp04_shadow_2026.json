@@ -34475,9 +34475,10 @@
     "k_line": 4.5,
     "opening_k_line": 4.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 4,
     "result": null,
-    "logged_at": "2026-06-18T02:09:45.601076"
+    "logged_at": "2026-06-18T02:09:45.601076",
+    "resolved": true
   },
   {
     "game_id": 824748,
@@ -34492,9 +34493,10 @@
     "k_line": 4.5,
     "opening_k_line": 4.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-06-18T02:09:45.601087"
+    "logged_at": "2026-06-18T02:09:45.601087",
+    "resolved": true
   },
   {
     "game_id": 823772,
@@ -34509,9 +34511,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 3,
     "result": null,
-    "logged_at": "2026-06-18T02:09:50.688426"
+    "logged_at": "2026-06-18T02:09:50.688426",
+    "resolved": true
   },
   {
     "game_id": 823772,
@@ -34526,9 +34529,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 9,
     "result": null,
-    "logged_at": "2026-06-18T02:09:50.688429"
+    "logged_at": "2026-06-18T02:09:50.688429",
+    "resolved": true
   },
   {
     "game_id": 822889,
@@ -34543,9 +34547,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 4,
     "result": null,
-    "logged_at": "2026-06-18T02:09:54.240615"
+    "logged_at": "2026-06-18T02:09:54.240615",
+    "resolved": true
   },
   {
     "game_id": 822889,
@@ -34560,9 +34565,10 @@
     "k_line": 6.5,
     "opening_k_line": 6.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 7,
     "result": null,
-    "logged_at": "2026-06-18T02:09:54.240618"
+    "logged_at": "2026-06-18T02:09:54.240618",
+    "resolved": true
   },
   {
     "game_id": 823125,
@@ -34577,9 +34583,10 @@
     "k_line": 6.5,
     "opening_k_line": 6.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 9,
     "result": null,
-    "logged_at": "2026-06-18T02:09:57.788199"
+    "logged_at": "2026-06-18T02:09:57.788199",
+    "resolved": true
   },
   {
     "game_id": 823125,
@@ -34594,9 +34601,10 @@
     "k_line": 5.5,
     "opening_k_line": 5.5,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 9,
     "result": null,
-    "logged_at": "2026-06-18T02:09:57.788202"
+    "logged_at": "2026-06-18T02:09:57.788202",
+    "resolved": true
   },
   {
     "game_id": 823448,
@@ -34611,9 +34619,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-06-18T02:10:00.166242"
+    "logged_at": "2026-06-18T02:10:00.166242",
+    "resolved": true
   },
   {
     "game_id": 823448,
@@ -34628,9 +34637,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 5,
     "result": null,
-    "logged_at": "2026-06-18T02:10:00.166245"
+    "logged_at": "2026-06-18T02:10:00.166245",
+    "resolved": true
   },
   {
     "game_id": 823533,
@@ -34645,9 +34655,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 8,
     "result": null,
-    "logged_at": "2026-06-18T02:10:05.529298"
+    "logged_at": "2026-06-18T02:10:05.529298",
+    "resolved": true
   },
   {
     "game_id": 823533,
@@ -34713,9 +34724,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 6,
     "result": null,
-    "logged_at": "2026-06-18T02:11:08.912237"
+    "logged_at": "2026-06-18T02:11:08.912237",
+    "resolved": true
   },
   {
     "game_id": 824098,
@@ -34730,9 +34742,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 2,
     "result": null,
-    "logged_at": "2026-06-18T02:11:08.912239"
+    "logged_at": "2026-06-18T02:11:08.912239",
+    "resolved": true
   },
   {
     "game_id": 824989,
@@ -34747,8 +34760,9 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 7,
     "result": null,
-    "logged_at": "2026-06-18T02:11:11.266574"
+    "logged_at": "2026-06-18T02:11:11.266574",
+    "resolved": true
   }
 ]
