@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "4244628ff5c52a85f4e83f8dc171ed4e",
+    "game_date": "2026-06-23",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Boston Red Sox",
+    "commence_time": "2026-06-23T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.5,
+    "over_price": -112,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-22T06:05:02.398615+00:00"
+  },
+  {
+    "game_id": "541d3f8c1e87131917cbf8386a2563f6",
+    "game_date": "2026-06-23",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Baltimore Orioles",
+    "commence_time": "2026-06-23T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 104,
+    "under_price": -119,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-22T06:05:02.398615+00:00"
+  },
+  {
+    "game_id": "66c3c3524e444f31fe9fc224ac058351",
+    "game_date": "2026-06-23",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Atlanta Braves",
+    "commence_time": "2026-06-23T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -104,
+    "under_price": -118,
+    "book": "fanduel",
+    "capture_timestamp": "2026-06-22T06:05:02.398615+00:00"
+  }
+]
