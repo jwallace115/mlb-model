@@ -410,6 +410,22 @@
       "dog_bp_era": 4.003,
       "win_loss": "L",
       "final_score": "2-3"
+    },
+    {
+      "game_pk": 823851,
+      "game_date": "2026-06-22",
+      "matchup": "TEX @ MIA",
+      "fav_team": "MIA",
+      "dog_team": "TEX",
+      "fav_side": "home",
+      "fav_implied": 0.5379,
+      "dog_ml_price": 111,
+      "sp_fip_diff": 0.79,
+      "off_diff": 0.6,
+      "bp_era_diff": 0.052,
+      "fav_bp_era": 4.639,
+      "dog_bp_era": 4.588,
+      "win_loss": null
     }
   ]
 }

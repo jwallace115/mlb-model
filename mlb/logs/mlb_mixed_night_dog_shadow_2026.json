@@ -546,6 +546,38 @@
       "local_start_hour": 18.75,
       "win_loss": "W",
       "final_score": "3-0"
+    },
+    {
+      "game_pk": 823851,
+      "game_date": "2026-06-22",
+      "matchup": "TEX @ MIA",
+      "fav_team": "MIA",
+      "dog_team": "TEX",
+      "fav_side": "home",
+      "fav_implied": 0.5379,
+      "dog_ml_price": 111,
+      "sp_fip_diff": 0.79,
+      "off_diff": 0.6,
+      "bp_era_diff": 0.052,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823613,
+      "game_date": "2026-06-22",
+      "matchup": "CHC @ NYM",
+      "fav_team": "CHC",
+      "dog_team": "NYM",
+      "fav_side": "away",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": 0.409,
+      "off_diff": 0.65,
+      "bp_era_diff": -0.084,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
     }
   ]
 }
