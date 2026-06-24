@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "0c4f44574b86346807453d2bfde5280e",
+    "game_date": "2026-06-25",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Atlanta Braves",
+    "commence_time": "2026-06-25T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -101,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-24T06:05:03.648170+00:00"
+  },
+  {
+    "game_id": "74b391c5a12588e6bdf6f98be072b920",
+    "game_date": "2026-06-25",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "Athletics",
+    "commence_time": "2026-06-25T01:46:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -103,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-24T06:05:03.648170+00:00"
+  }
+]
