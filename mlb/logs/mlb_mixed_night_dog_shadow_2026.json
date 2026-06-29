@@ -580,6 +580,22 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "L",
       "final_score": "10-3"
+    },
+    {
+      "game_pk": 822792,
+      "game_date": "2026-06-29",
+      "matchup": "NYM @ TOR",
+      "fav_team": "TOR",
+      "dog_team": "NYM",
+      "fav_side": "home",
+      "fav_implied": 0.5379,
+      "dog_ml_price": 111,
+      "sp_fip_diff": -0.558,
+      "off_diff": -0.5,
+      "bp_era_diff": 0.26,
+      "day_night": "night",
+      "local_start_hour": 19.116666666666667,
+      "win_loss": null
     }
   ]
 }
