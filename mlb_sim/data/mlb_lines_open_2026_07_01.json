@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "090b0370fb46541b0a17771a0d86e281",
+    "game_date": "2026-07-01",
+    "sport": "MLB",
+    "home_team": "Chicago Cubs",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-07-01T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.5,
+    "over_price": -102,
+    "under_price": -118,
+    "book": "draftkings",
+    "capture_timestamp": "2026-06-30T06:05:03.082456+00:00"
+  },
+  {
+    "game_id": "878878a6f002b3712f580e398e40dc1a",
+    "game_date": "2026-07-01",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Minnesota Twins",
+    "commence_time": "2026-07-01T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -101,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-30T06:05:03.082456+00:00"
+  },
+  {
+    "game_id": "c9a7f8f74b4ae9a65c80d47993dfeb86",
+    "game_date": "2026-07-01",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Miami Marlins",
+    "commence_time": "2026-07-01T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.5,
+    "over_price": -102,
+    "under_price": -118,
+    "book": "draftkings",
+    "capture_timestamp": "2026-06-30T06:05:03.082456+00:00"
+  },
+  {
+    "game_id": "1c4be9313fc412b34cc158daa4b7fdac",
+    "game_date": "2026-07-01",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-07-01T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.5,
+    "over_price": -118,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-30T06:05:03.082456+00:00"
+  },
+  {
+    "game_id": "835944b5efc736fb06b73068a981fde5",
+    "game_date": "2026-07-01",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-07-01T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-06-30T06:05:03.082456+00:00"
+  }
+]
