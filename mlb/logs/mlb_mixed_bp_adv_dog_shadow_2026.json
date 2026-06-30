@@ -444,6 +444,22 @@
       "dog_bp_era": 4.359,
       "win_loss": "L",
       "final_score": "1-2"
+    },
+    {
+      "game_pk": 822793,
+      "game_date": "2026-06-30",
+      "matchup": "NYM @ TOR",
+      "fav_team": "TOR",
+      "dog_team": "NYM",
+      "fav_side": "home",
+      "fav_implied": 0.523,
+      "dog_ml_price": 105,
+      "sp_fip_diff": 0.084,
+      "off_diff": -0.5,
+      "bp_era_diff": 0.253,
+      "fav_bp_era": 4.617,
+      "dog_bp_era": 4.363,
+      "win_loss": null
     }
   ]
 }
