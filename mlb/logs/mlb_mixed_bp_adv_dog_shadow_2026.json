@@ -461,6 +461,22 @@
       "dog_bp_era": 4.363,
       "win_loss": "W",
       "final_score": "3-0"
+    },
+    {
+      "game_pk": 824660,
+      "game_date": "2026-07-01",
+      "matchup": "SDP @ CHC",
+      "fav_team": "CHC",
+      "dog_team": "SDP",
+      "fav_side": "home",
+      "fav_implied": 0.546,
+      "dog_ml_price": 115,
+      "sp_fip_diff": -0.013,
+      "off_diff": 0.35,
+      "bp_era_diff": 0.323,
+      "fav_bp_era": 4.331,
+      "dog_bp_era": 4.008,
+      "win_loss": null
     }
   ]
 }
