@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "155102fc6ca2d46399a620f515ffe2b3",
+    "game_date": "2026-07-02",
+    "sport": "MLB",
+    "home_team": "Milwaukee Brewers",
+    "away_team": "Cincinnati Reds",
+    "commence_time": "2026-07-02T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-01T06:05:03.324372+00:00"
+  },
+  {
+    "game_id": "c771b9e374413d651231684704a5bbfe",
+    "game_date": "2026-07-02",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Minnesota Twins",
+    "commence_time": "2026-07-02T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-01T06:05:03.324372+00:00"
+  },
+  {
+    "game_id": "8cb46e5f7992c07772b03c820bcc5a46",
+    "game_date": "2026-07-02",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Miami Marlins",
+    "commence_time": "2026-07-02T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.0,
+    "over_price": -102,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-01T06:05:03.324372+00:00"
+  },
+  {
+    "game_id": "4613f606f40dfab948c795bcde2caaa2",
+    "game_date": "2026-07-02",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "San Francisco Giants",
+    "commence_time": "2026-07-02T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-01T06:05:03.324372+00:00"
+  },
+  {
+    "game_id": "89e2407a67afd5e02ec12a372a53fa18",
+    "game_date": "2026-07-02",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-07-02T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -116,
+    "under_price": -104,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-01T06:05:03.324372+00:00"
+  }
+]
