@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "63d068d292e5a379ba2a1d669c979313",
+    "game_date": "2026-07-03",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Detroit Tigers",
+    "commence_time": "2026-07-03T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -113,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-02T06:05:02.567742+00:00"
+  },
+  {
+    "game_id": "283444f773ee82cae9a5977e9266baac",
+    "game_date": "2026-07-03",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-07-03T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -102,
+    "under_price": -112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-02T06:05:02.567742+00:00"
+  },
+  {
+    "game_id": "ae95cd98700fec55791774682d6b0b06",
+    "game_date": "2026-07-03",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-07-03T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -121,
+    "under_price": 100,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-02T06:05:02.567742+00:00"
+  }
+]
