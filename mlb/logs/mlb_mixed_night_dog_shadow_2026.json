@@ -614,6 +614,22 @@
       "local_start_hour": 19.116666666666667,
       "win_loss": "W",
       "final_score": "3-0"
+    },
+    {
+      "game_pk": 824498,
+      "game_date": "2026-07-03",
+      "matchup": "BAL @ CIN",
+      "fav_team": "BAL",
+      "dog_team": "CIN",
+      "fav_side": "away",
+      "fav_implied": 0.5262,
+      "dog_ml_price": 106,
+      "sp_fip_diff": -0.109,
+      "off_diff": 0.15,
+      "bp_era_diff": -0.207,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
     }
   ]
 }
