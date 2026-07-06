@@ -631,6 +631,22 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "L",
       "final_score": "3-0"
+    },
+    {
+      "game_pk": 824900,
+      "game_date": "2026-07-06",
+      "matchup": "NYM @ ATL",
+      "fav_team": "ATL",
+      "dog_team": "NYM",
+      "fav_side": "home",
+      "fav_implied": 0.5399,
+      "dog_ml_price": 112,
+      "sp_fip_diff": -0.48,
+      "off_diff": 0.4,
+      "bp_era_diff": -0.535,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
     }
   ]
 }
