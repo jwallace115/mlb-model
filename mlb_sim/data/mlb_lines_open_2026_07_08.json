@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "c6ef398cb6827a8a660c67c3f3e6dbd5",
+    "game_date": "2026-07-08",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-07-08T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -115,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-07T06:05:02.861925+00:00"
+  },
+  {
+    "game_id": "622a46f12d0dc3b057125b0b59f00507",
+    "game_date": "2026-07-08",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Arizona Diamondbacks",
+    "commence_time": "2026-07-08T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -116,
+    "under_price": -104,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-07T06:05:02.861925+00:00"
+  },
+  {
+    "game_id": "0ae1e836fd92f0f98b83e2d7451f6f97",
+    "game_date": "2026-07-08",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "Toronto Blue Jays",
+    "commence_time": "2026-07-08T01:46:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -104,
+    "under_price": -116,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-07T06:05:02.861925+00:00"
+  },
+  {
+    "game_id": "8df69c8e501590af54db5363e5fdc3af",
+    "game_date": "2026-07-08",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Colorado Rockies",
+    "commence_time": "2026-07-08T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -113,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-07T06:05:02.861925+00:00"
+  }
+]
