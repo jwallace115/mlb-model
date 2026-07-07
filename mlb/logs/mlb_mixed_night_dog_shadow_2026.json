@@ -648,6 +648,22 @@
       "local_start_hour": 19.25,
       "win_loss": "W",
       "final_score": "7-6"
+    },
+    {
+      "game_pk": 824579,
+      "game_date": "2026-07-07",
+      "matchup": "BOS @ CHW",
+      "fav_team": "BOS",
+      "dog_team": "CHW",
+      "fav_side": "away",
+      "fav_implied": 0.5336,
+      "dog_ml_price": 109,
+      "sp_fip_diff": -0.664,
+      "off_diff": 0.25,
+      "bp_era_diff": -0.382,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
