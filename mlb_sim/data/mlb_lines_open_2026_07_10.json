@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "c2c3eb02058f54f27b00aeb1e59224f9",
+    "game_date": "2026-07-10",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-07-10T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -111,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-09T06:05:02.534014+00:00"
+  },
+  {
+    "game_id": "ff7fcfaa73e919c6a69c375313853a91",
+    "game_date": "2026-07-10",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Arizona Diamondbacks",
+    "commence_time": "2026-07-10T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-09T06:05:02.534014+00:00"
+  }
+]
