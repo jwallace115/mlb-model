@@ -478,6 +478,22 @@
       "dog_bp_era": 4.008,
       "win_loss": "L",
       "final_score": "3-23"
+    },
+    {
+      "game_pk": 822955,
+      "game_date": "2026-07-10",
+      "matchup": "SEA @ TBR",
+      "fav_team": "TBR",
+      "dog_team": "SEA",
+      "fav_side": "home",
+      "fav_implied": 0.5262,
+      "dog_ml_price": 106,
+      "sp_fip_diff": 0.416,
+      "off_diff": 0.5,
+      "bp_era_diff": 0.13,
+      "fav_bp_era": 4.094,
+      "dog_bp_era": 3.963,
+      "win_loss": null
     }
   ]
 }

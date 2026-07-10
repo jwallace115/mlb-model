@@ -665,6 +665,54 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "8-1"
+    },
+    {
+      "game_pk": 824252,
+      "game_date": "2026-07-10",
+      "matchup": "PHI @ DET",
+      "fav_team": "DET",
+      "dog_team": "PHI",
+      "fav_side": "home",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": 0.078,
+      "off_diff": -0.1,
+      "bp_era_diff": -0.129,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 822955,
+      "game_date": "2026-07-10",
+      "matchup": "SEA @ TBR",
+      "fav_team": "TBR",
+      "dog_team": "SEA",
+      "fav_side": "home",
+      "fav_implied": 0.5262,
+      "dog_ml_price": 106,
+      "sp_fip_diff": 0.416,
+      "off_diff": 0.5,
+      "bp_era_diff": 0.13,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823604,
+      "game_date": "2026-07-10",
+      "matchup": "BOS @ NYM",
+      "fav_team": "NYM",
+      "dog_team": "BOS",
+      "fav_side": "home",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": -0.13,
+      "off_diff": 0.35,
+      "bp_era_diff": -0.089,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
     }
   ]
 }
