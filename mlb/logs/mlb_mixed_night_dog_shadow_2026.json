@@ -716,6 +716,22 @@
       "local_start_hour": 19.25,
       "win_loss": "W",
       "final_score": "6-2"
+    },
+    {
+      "game_pk": 824249,
+      "game_date": "2026-07-11",
+      "matchup": "PHI @ DET",
+      "fav_team": "PHI",
+      "dog_team": "DET",
+      "fav_side": "away",
+      "fav_implied": 0.5528,
+      "dog_ml_price": 118,
+      "sp_fip_diff": -0.72,
+      "off_diff": 0.1,
+      "bp_era_diff": 0.128,
+      "day_night": "night",
+      "local_start_hour": 18.166666666666668,
+      "win_loss": null
     }
   ]
 }
