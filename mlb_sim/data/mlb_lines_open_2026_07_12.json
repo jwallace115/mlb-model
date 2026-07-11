@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "db5e5f99da28e0ea52c06c7694fb5ad1",
+    "game_date": "2026-07-12",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Toronto Blue Jays",
+    "commence_time": "2026-07-12T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -101,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-11T06:05:02.427987+00:00"
+  },
+  {
+    "game_id": "6b6370ec220748ce5deae40b503bb29c",
+    "game_date": "2026-07-12",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Arizona Diamondbacks",
+    "commence_time": "2026-07-12T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 100,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-11T06:05:02.427987+00:00"
+  }
+]
