@@ -196,9 +196,9 @@
       "forecast_temp_f": 84.2,
       "weather_source": "open_meteo_forecast",
       "weather_timestamp": "2026-07-10T15:20:03.941255+00:00",
-      "actual_total": null,
-      "result": null,
-      "graded": false,
+      "actual_total": 12,
+      "result": "W",
+      "graded": true,
       "generated_at": "2026-07-10T15:20:03.941328+00:00"
     },
     {
@@ -214,9 +214,9 @@
       "forecast_temp_f": 79.5,
       "weather_source": "open_meteo_forecast",
       "weather_timestamp": "2026-07-10T15:20:04.344546+00:00",
-      "actual_total": null,
-      "result": null,
-      "graded": false,
+      "actual_total": 8,
+      "result": "L",
+      "graded": true,
       "generated_at": "2026-07-10T15:20:04.344605+00:00"
     }
   ]

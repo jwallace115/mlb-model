@@ -680,7 +680,8 @@
       "bp_era_diff": -0.129,
       "day_night": "night",
       "local_start_hour": 18.666666666666668,
-      "win_loss": null
+      "win_loss": "L",
+      "final_score": "2-10"
     },
     {
       "game_pk": 822955,
@@ -696,7 +697,8 @@
       "bp_era_diff": 0.13,
       "day_night": "night",
       "local_start_hour": 19.166666666666668,
-      "win_loss": null
+      "win_loss": "L",
+      "final_score": "2-7"
     },
     {
       "game_pk": 823604,
@@ -712,7 +714,8 @@
       "bp_era_diff": -0.089,
       "day_night": "night",
       "local_start_hour": 19.25,
-      "win_loss": null
+      "win_loss": "W",
+      "final_score": "6-2"
     }
   ]
 }
