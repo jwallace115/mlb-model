@@ -512,6 +512,22 @@
       "dog_bp_era": 4.297,
       "win_loss": "L",
       "final_score": "4-2"
+    },
+    {
+      "game_pk": 823602,
+      "game_date": "2026-07-12",
+      "matchup": "BOS @ NYM",
+      "fav_team": "BOS",
+      "dog_team": "NYM",
+      "fav_side": "away",
+      "fav_implied": 0.5242,
+      "dog_ml_price": 102,
+      "sp_fip_diff": 0.495,
+      "off_diff": -0.35,
+      "bp_era_diff": 0.073,
+      "fav_bp_era": 4.534,
+      "dog_bp_era": 4.461,
+      "win_loss": null
     }
   ]
 }
