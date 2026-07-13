@@ -37112,9 +37112,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 4,
     "result": null,
-    "logged_at": "2026-07-10T02:00:41.013411"
+    "logged_at": "2026-07-10T02:00:41.013411",
+    "resolved": true
   },
   {
     "game_id": 823200,
@@ -37129,9 +37130,10 @@
     "k_line": null,
     "opening_k_line": null,
     "closing_k_line": null,
-    "actual_k": null,
+    "actual_k": 1,
     "result": null,
-    "logged_at": "2026-07-10T02:00:41.013414"
+    "logged_at": "2026-07-10T02:00:41.013414",
+    "resolved": true
   },
   {
     "game_id": 823358,
