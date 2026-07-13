@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T07:06:08.409328",
+  "generated_at": "2026-07-13T08:01:05.591300",
   "sport": "golf",
   "event_name": "Genesis Scottish Open",
   "event_id": 541,
@@ -561,27 +561,19 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 2352,
-      "hit_rate": 53.3,
-      "roi": 6.7,
-      "clv": -11.7
+      "n": 4349,
+      "hit_rate": 51.5,
+      "roi": 16.2,
+      "clv": -14.2
     },
     "top_20": {
-      "n": 1902,
-      "hit_rate": 37.3,
-      "roi": 77.8,
-      "clv": -11.0
+      "n": 2669,
+      "hit_rate": 36.5,
+      "roi": 61.7,
+      "clv": -10.7
     }
   },
   "recent_results": [
-    {
-      "event_name": "PGA Championship",
-      "event_id": 33,
-      "year": 2026,
-      "n_candidates": 791,
-      "hit_rate": 50.9,
-      "roi": 42.5
-    },
     {
       "event_name": "Valero Texas Open",
       "event_id": 41,
@@ -597,6 +589,14 @@
       "n_candidates": 264,
       "hit_rate": 37.1,
       "roi": 34.8
+    },
+    {
+      "event_name": "Genesis Scottish Open",
+      "event_id": 541,
+      "year": 2026,
+      "n_candidates": 935,
+      "hit_rate": 44.8,
+      "roi": 30.9
     },
     {
       "event_name": "Bank of Utah Championship",
