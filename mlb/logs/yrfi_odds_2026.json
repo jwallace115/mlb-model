@@ -23632,5 +23632,31 @@
         "point": 0.5
       }
     ]
+  },
+  {
+    "pull_timestamp": "2026-07-14T11:05:03.094569+00:00",
+    "pull_date": "2026-07-14",
+    "game_id": "7fecfdecc539334a88781da1943c5e9a",
+    "commence_time": "2026-07-15T00:01:00Z",
+    "home_team": "National League",
+    "away_team": "American League",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": 114,
+    "nrfi_price": -146,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": 114,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -146,
+        "point": 0.5
+      }
+    ]
   }
 ]
