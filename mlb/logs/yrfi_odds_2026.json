@@ -23658,5 +23658,31 @@
         "point": 0.5
       }
     ]
+  },
+  {
+    "pull_timestamp": "2026-07-16T11:05:03.243484+00:00",
+    "pull_date": "2026-07-16",
+    "game_id": "7ad2e88701ead09625333188a5b653b2",
+    "commence_time": "2026-07-16T23:11:00Z",
+    "home_team": "Philadelphia Phillies",
+    "away_team": "New York Mets",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": -122,
+    "nrfi_price": -104,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": -122,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -104,
+        "point": 0.5
+      }
+    ]
   }
 ]
