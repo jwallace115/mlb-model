@@ -1,0 +1,21 @@
+{
+  "snapshot_label": "2026-07-16_1300_ET",
+  "snapshot_time_et": "13:00",
+  "date": "2026-07-16",
+  "total_games": 1,
+  "lineups_confirmed": 0,
+  "coverage_pct": 0.0,
+  "games": [
+    {
+      "game_pk": 823440,
+      "game_date": "2026-07-16",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "19:10",
+      "hours_to_first_pitch": 6.17,
+      "status": "Scheduled",
+      "home_lineup_count": 0,
+      "away_lineup_count": 0,
+      "lineup_confirmed": false
+    }
+  ]
+}
