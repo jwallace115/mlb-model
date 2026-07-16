@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-16T07:07:15.599629",
+  "generated_at": "2026-07-16T08:02:03.668565",
   "sport": "golf",
   "event_name": "The Open Championship",
   "event_id": 100,
   "is_major": true,
-  "last_updated": "2026-07-16T07:06:45.852227",
+  "last_updated": "2026-07-16T08:01:30.869694",
   "n_candidates": 154,
   "n_leans": 6,
   "plays": [
@@ -1832,7 +1832,7 @@
       "player_3": "Nicholas, James",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 46.2,
+      "bet_edge": 46.4,
       "classification": "candidate"
     },
     {
@@ -1859,7 +1859,7 @@
       "player_3": "Homa, Max",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 26.1,
+      "bet_edge": 26.4,
       "classification": "candidate"
     },
     {
@@ -1868,7 +1868,7 @@
       "player_3": "Fitzpatrick, Alex",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 17.1,
+      "bet_edge": 16.9,
       "classification": "candidate"
     },
     {
@@ -1877,7 +1877,7 @@
       "player_3": "Couvra, Martin",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 64.2,
+      "bet_edge": 64.0,
       "classification": "candidate"
     },
     {
@@ -1886,7 +1886,7 @@
       "player_3": "Laopakdee, Fifa",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 9.2,
+      "bet_edge": 9.3,
       "classification": "candidate"
     },
     {
@@ -1895,7 +1895,7 @@
       "player_3": "Knapp, Jake",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 23.7,
+      "bet_edge": 22.8,
       "classification": "candidate"
     },
     {
@@ -1904,7 +1904,7 @@
       "player_3": "Grinberg, Lev",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 27.0,
+      "bet_edge": 27.4,
       "classification": "candidate"
     },
     {
@@ -1913,7 +1913,7 @@
       "player_3": "Bradbury, Dan",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 69.6,
+      "bet_edge": 69.7,
       "classification": "candidate"
     },
     {
@@ -1922,7 +1922,7 @@
       "player_3": "Pulcini, Mateo",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 11.8,
+      "bet_edge": 11.9,
       "classification": "candidate"
     },
     {
@@ -1931,7 +1931,7 @@
       "player_3": "Lagergren, Joakim",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 16.4,
+      "bet_edge": 15.8,
       "classification": "candidate"
     },
     {
@@ -1940,7 +1940,7 @@
       "player_3": "Kaneko, Kota",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 31.4,
+      "bet_edge": 31.5,
       "classification": "candidate"
     },
     {
@@ -1958,7 +1958,7 @@
       "player_3": "Bhatia, Akshay",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 28.0,
+      "bet_edge": 28.3,
       "classification": "candidate"
     },
     {
@@ -1976,7 +1976,7 @@
       "player_3": "Hovland, Viktor",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 56.2,
+      "bet_edge": 56.6,
       "classification": "candidate"
     },
     {
@@ -1985,7 +1985,7 @@
       "player_3": "Thomas, Justin",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 22.1,
+      "bet_edge": 22.4,
       "classification": "candidate"
     },
     {
@@ -1994,7 +1994,7 @@
       "player_3": "DeChambeau, Bryson",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 17.0,
+      "bet_edge": 17.2,
       "classification": "candidate"
     },
     {
@@ -2003,12 +2003,12 @@
       "player_3": "Rahm, Jon",
       "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 48.6,
+      "bet_edge": 48.5,
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 492,
-  "matchup_n_leans": 122,
+  "matchup_n_candidates": 661,
+  "matchup_n_leans": 156,
   "g13_signals": [
     {
       "player_name": "Fitzpatrick, Alex",
