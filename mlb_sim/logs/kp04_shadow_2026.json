@@ -37655,5 +37655,39 @@
     "result": null,
     "logged_at": "2026-07-12T02:16:30.306102",
     "resolved": true
+  },
+  {
+    "game_id": 823440,
+    "date": "2026-07-16",
+    "pitcher_name": "Aaron Nola",
+    "pitcher_id": 605400,
+    "bb_usage": 0.3472,
+    "lineup_k_pct": 0.2197,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-07-16T02:18:53.388142"
+  },
+  {
+    "game_id": 823440,
+    "date": "2026-07-16",
+    "pitcher_name": "Christian Scott",
+    "pitcher_id": 681035,
+    "bb_usage": 0.2661,
+    "lineup_k_pct": 0.2363,
+    "over_odds": null,
+    "kp04_flag": false,
+    "lineup_confirmed": true,
+    "k_line": null,
+    "opening_k_line": null,
+    "closing_k_line": null,
+    "actual_k": null,
+    "result": null,
+    "logged_at": "2026-07-16T02:18:53.388150"
   }
 ]

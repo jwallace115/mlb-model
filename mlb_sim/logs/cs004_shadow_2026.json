@@ -17040,5 +17040,20 @@
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
     "logged_at": "2026-07-12T02:16:30.280330"
+  },
+  {
+    "game_id": 823440,
+    "date": "2026-07-16",
+    "home_team": "PHI",
+    "away_team": "NYM",
+    "home_bullpen_tail_score": 6.5533,
+    "away_bullpen_tail_score": 9.6733,
+    "combined_tail_score": 9.6733,
+    "cs004_favorable_zone": true,
+    "st02_flag": false,
+    "st02_cs004_conflict": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 9.5,
+    "logged_at": "2026-07-16T02:18:51.865756"
   }
 ]

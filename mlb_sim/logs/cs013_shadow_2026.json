@@ -20334,5 +20334,23 @@
     "v1_direction_context": "NONE",
     "closing_total": 8.5,
     "logged_at": "2026-07-12T02:16:30.291259"
+  },
+  {
+    "game_id": 823440,
+    "date": "2026-07-16",
+    "home_team": "PHI",
+    "away_team": "NYM",
+    "home_degraded_relievers": 5,
+    "away_degraded_relievers": 7,
+    "combined_degraded_count": 7,
+    "cs013_flag": true,
+    "cs013_status": "OK",
+    "cs020_acceleration_score": 1.0667,
+    "cs020_flag": true,
+    "signal_tier": "HIGH",
+    "cs004_flag": true,
+    "v1_direction_context": "NONE",
+    "closing_total": 9.5,
+    "logged_at": "2026-07-16T02:18:52.966785"
   }
 ]
