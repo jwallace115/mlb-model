@@ -32602,5 +32602,31 @@
     "over_price": -110,
     "under_price": -110,
     "book": "fanduel"
+  },
+  {
+    "game_id": "7ad2e88701ead09625333188a5b653b2",
+    "game_date": "2026-07-16",
+    "home_team": "PHI",
+    "away_team": "NYM",
+    "snapshot_time": "2026-07-16T02:03:46.924427",
+    "first_seen_timestamp": "2026-07-16T02:03:46.924422",
+    "snapshot_label": "OPEN",
+    "total_line": 9.5,
+    "over_price": -118,
+    "under_price": -104,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "7ad2e88701ead09625333188a5b653b2",
+    "game_date": "2026-07-16",
+    "home_team": "PHI",
+    "away_team": "NYM",
+    "snapshot_time": "2026-07-16T02:03:46.940236",
+    "first_seen_timestamp": "2026-07-16T02:03:46.924422",
+    "snapshot_label": "2AM",
+    "total_line": 9.5,
+    "over_price": -118,
+    "under_price": -104,
+    "book": "fanduel"
   }
 ]
