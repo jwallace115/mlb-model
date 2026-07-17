@@ -750,6 +750,22 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "W",
       "final_score": "4-1"
+    },
+    {
+      "game_pk": 822789,
+      "game_date": "2026-07-17",
+      "matchup": "CHW @ TOR",
+      "fav_team": "TOR",
+      "dog_team": "CHW",
+      "fav_side": "home",
+      "fav_implied": 0.552,
+      "dog_ml_price": 118,
+      "sp_fip_diff": -0.038,
+      "off_diff": 0.1,
+      "bp_era_diff": -0.288,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
     }
   ]
 }
