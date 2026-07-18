@@ -236,6 +236,24 @@
       "result": "L",
       "graded": true,
       "generated_at": "2026-07-16T15:20:04.229760+00:00"
+    },
+    {
+      "date": "2026-07-18",
+      "game_pk": 824088,
+      "home_team": "KCR",
+      "away_team": "SDP",
+      "side": "OVER",
+      "fg_total": 10.5,
+      "over_price": -118,
+      "f5_total": 6.0,
+      "f5_ratio": 0.5714,
+      "forecast_temp_f": 93.1,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-07-18T15:20:03.397050+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-07-18T15:20:03.397115+00:00"
     }
   ]
 }
