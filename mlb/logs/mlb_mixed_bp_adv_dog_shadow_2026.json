@@ -529,6 +529,38 @@
       "dog_bp_era": 4.461,
       "win_loss": "L",
       "final_score": "3-2"
+    },
+    {
+      "game_pk": 822790,
+      "game_date": "2026-07-18",
+      "matchup": "CHW @ TOR",
+      "fav_team": "CHW",
+      "dog_team": "TOR",
+      "fav_side": "away",
+      "fav_implied": 0.5139,
+      "dog_ml_price": 101,
+      "sp_fip_diff": 0.509,
+      "off_diff": -0.1,
+      "bp_era_diff": 0.277,
+      "fav_bp_era": 4.893,
+      "dog_bp_era": 4.616,
+      "win_loss": null
+    },
+    {
+      "game_pk": 825059,
+      "game_date": "2026-07-18",
+      "matchup": "STL @ ARI",
+      "fav_team": "ARI",
+      "dog_team": "STL",
+      "fav_side": "home",
+      "fav_implied": 0.524,
+      "dog_ml_price": 105,
+      "sp_fip_diff": 0.147,
+      "off_diff": -0.65,
+      "bp_era_diff": 0.564,
+      "fav_bp_era": 5.079,
+      "dog_bp_era": 4.515,
+      "win_loss": null
     }
   ]
 }
