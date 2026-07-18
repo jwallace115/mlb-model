@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "b1c11c1965517ee6fc64d8fcb9f8e6e3",
+    "game_date": "2026-07-19",
+    "sport": "MLB",
+    "home_team": "New York Yankees",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-07-19T00:09:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-18T06:05:02.900644+00:00"
+  },
+  {
+    "game_id": "fc2051a727661b285a4718bc4738966e",
+    "game_date": "2026-07-19",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "San Francisco Giants",
+    "commence_time": "2026-07-19T00:09:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -120,
+    "under_price": 104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-18T06:05:02.900644+00:00"
+  },
+  {
+    "game_id": "ded1e582d76a9362d25395cef8921336",
+    "game_date": "2026-07-19",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Washington Nationals",
+    "commence_time": "2026-07-19T02:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.0,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-18T06:05:02.900644+00:00"
+  },
+  {
+    "game_id": "9933e32d7b9c200975b046306d80856d",
+    "game_date": "2026-07-19",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Detroit Tigers",
+    "commence_time": "2026-07-19T02:08:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -111,
+    "under_price": -103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-18T06:05:02.900644+00:00"
+  }
+]
