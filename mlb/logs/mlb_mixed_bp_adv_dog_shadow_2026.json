@@ -563,6 +563,54 @@
       "dog_bp_era": 4.515,
       "win_loss": "L",
       "final_score": "3-5"
+    },
+    {
+      "game_pk": 822786,
+      "game_date": "2026-07-19",
+      "matchup": "CHW @ TOR",
+      "fav_team": "CHW",
+      "dog_team": "TOR",
+      "fav_side": "away",
+      "fav_implied": 0.5173,
+      "dog_ml_price": 102,
+      "sp_fip_diff": 0.683,
+      "off_diff": -0.1,
+      "bp_era_diff": 0.265,
+      "fav_bp_era": 4.892,
+      "dog_bp_era": 4.627,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824739,
+      "game_date": "2026-07-19",
+      "matchup": "TBR @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "TBR",
+      "fav_side": "home",
+      "fav_implied": 0.546,
+      "dog_ml_price": 115,
+      "sp_fip_diff": -0.166,
+      "off_diff": -0.4,
+      "bp_era_diff": 0.419,
+      "fav_bp_era": 4.508,
+      "dog_bp_era": 4.089,
+      "win_loss": null
+    },
+    {
+      "game_pk": 825057,
+      "game_date": "2026-07-19",
+      "matchup": "STL @ ARI",
+      "fav_team": "ARI",
+      "dog_team": "STL",
+      "fav_side": "home",
+      "fav_implied": 0.5262,
+      "dog_ml_price": 106,
+      "sp_fip_diff": 0.092,
+      "off_diff": -0.65,
+      "bp_era_diff": 0.561,
+      "fav_bp_era": 5.079,
+      "dog_bp_era": 4.519,
+      "win_loss": null
     }
   ]
 }
