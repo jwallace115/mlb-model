@@ -767,6 +767,38 @@
       "local_start_hour": 19.25,
       "win_loss": "W",
       "final_score": "12-4"
+    },
+    {
+      "game_pk": 822787,
+      "game_date": "2026-07-21",
+      "matchup": "TBR @ TOR",
+      "fav_team": "TBR",
+      "dog_team": "TOR",
+      "fav_side": "away",
+      "fav_implied": 0.5139,
+      "dog_ml_price": 101,
+      "sp_fip_diff": 0.134,
+      "off_diff": 0.55,
+      "bp_era_diff": -0.532,
+      "day_night": "night",
+      "local_start_hour": 19.116666666666667,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824735,
+      "game_date": "2026-07-21",
+      "matchup": "BAL @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "BAL",
+      "fav_side": "home",
+      "fav_implied": 0.5545,
+      "dog_ml_price": 116,
+      "sp_fip_diff": -0.111,
+      "off_diff": 0.65,
+      "bp_era_diff": -0.103,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
     }
   ]
 }
