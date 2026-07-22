@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "83d83fb84e3bfedb96b4ae81d9283bfb",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "Chicago Cubs",
+    "away_team": "Detroit Tigers",
+    "commence_time": "2026-07-23T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -102,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-22T06:05:02.449932+00:00"
+  },
+  {
+    "game_id": "5a272ddcdf5d8b9d87abacf3a492c021",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-07-23T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-22T06:05:02.449932+00:00"
+  },
+  {
+    "game_id": "46df00997efe9e30fd9b1130a3774851",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Miami Marlins",
+    "commence_time": "2026-07-23T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-22T06:05:02.449932+00:00"
+  }
+]
