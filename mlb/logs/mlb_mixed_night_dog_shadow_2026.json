@@ -800,6 +800,22 @@
       "day_night": "night",
       "local_start_hour": 19.166666666666668,
       "win_loss": null
+    },
+    {
+      "game_pk": 824896,
+      "game_date": "2026-07-22",
+      "matchup": "SDP @ ATL",
+      "fav_team": "ATL",
+      "dog_team": "SDP",
+      "fav_side": "home",
+      "fav_implied": 0.5185,
+      "dog_ml_price": 103,
+      "sp_fip_diff": 0.734,
+      "off_diff": 0.1,
+      "bp_era_diff": -0.189,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
     }
   ]
 }
