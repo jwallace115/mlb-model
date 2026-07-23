@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "22fc220be6958e93fba4354054d8fd16",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "Atlanta Braves",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-07-23T16:16:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 10.5,
+    "over_price": -117,
+    "under_price": -111,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-23T18:00:02.851561+00:00"
+  },
+  {
+    "game_id": "5c7e77b42c0db49ce882d3c9473d74c1",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "Cleveland Guardians",
+    "away_team": "Minnesota Twins",
+    "commence_time": "2026-07-23T17:11:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 4.5,
+    "over_price": 104,
+    "under_price": -135,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-23T18:00:02.851561+00:00"
+  },
+  {
+    "game_id": "36ba7a8a8c46e8cc308c1dd037995889",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "Toronto Blue Jays",
+    "away_team": "Tampa Bay Rays",
+    "commence_time": "2026-07-23T19:08:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 8.5,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-23T18:00:02.851561+00:00"
+  },
+  {
+    "game_id": "8e2411581a27c6dccd9eae0b233fe64c",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "St. Louis Cardinals",
+    "away_team": "Arizona Diamondbacks",
+    "commence_time": "2026-07-23T21:16:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 7.5,
+    "over_price": -105,
+    "under_price": -114,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-23T18:00:02.851561+00:00"
+  },
+  {
+    "game_id": "38d3052ec454022a14314b324e0ff5f3",
+    "game_date": "2026-07-23",
+    "sport": "MLB",
+    "home_team": "Detroit Tigers",
+    "away_team": "Kansas City Royals",
+    "commence_time": "2026-07-23T22:41:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 8.5,
+    "over_price": -109,
+    "under_price": -111,
+    "book": "draftkings",
+    "capture_timestamp": "2026-07-23T18:00:02.851561+00:00"
+  }
+]
