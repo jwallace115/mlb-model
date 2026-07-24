@@ -614,6 +614,22 @@
       "dog_bp_era": 4.519,
       "win_loss": "L",
       "final_score": "7-8"
+    },
+    {
+      "game_pk": 823352,
+      "game_date": "2026-07-24",
+      "matchup": "CHC @ PIT",
+      "fav_team": "PIT",
+      "dog_team": "CHC",
+      "fav_side": "home",
+      "fav_implied": 0.5185,
+      "dog_ml_price": 103,
+      "sp_fip_diff": 0.235,
+      "off_diff": -0.5,
+      "bp_era_diff": 0.494,
+      "fav_bp_era": 4.872,
+      "dog_bp_era": 4.377,
+      "win_loss": null
     }
   ]
 }

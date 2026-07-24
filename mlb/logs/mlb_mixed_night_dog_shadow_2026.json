@@ -818,6 +818,38 @@
       "local_start_hour": 19.25,
       "win_loss": "L",
       "final_score": "6-7"
+    },
+    {
+      "game_pk": 823352,
+      "game_date": "2026-07-24",
+      "matchup": "CHC @ PIT",
+      "fav_team": "PIT",
+      "dog_team": "CHC",
+      "fav_side": "home",
+      "fav_implied": 0.5185,
+      "dog_ml_price": 103,
+      "sp_fip_diff": 0.235,
+      "off_diff": -0.5,
+      "bp_era_diff": 0.494,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824733,
+      "game_date": "2026-07-24",
+      "matchup": "TOR @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "TOR",
+      "fav_side": "home",
+      "fav_implied": 0.5379,
+      "dog_ml_price": 111,
+      "sp_fip_diff": -0.248,
+      "off_diff": 0.15,
+      "bp_era_diff": -0.126,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
     }
   ]
 }
