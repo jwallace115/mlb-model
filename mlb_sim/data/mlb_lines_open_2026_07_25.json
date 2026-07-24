@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "7623b2ff95daaba1c14165f508c506b8",
+    "game_date": "2026-07-25",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-07-25T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-24T06:05:02.856434+00:00"
+  },
+  {
+    "game_id": "6f9f1f656034bccc0a22e55a976cdf3b",
+    "game_date": "2026-07-25",
+    "sport": "MLB",
+    "home_team": "Minnesota Twins",
+    "away_team": "Athletics",
+    "commence_time": "2026-07-25T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-24T06:05:02.856434+00:00"
+  },
+  {
+    "game_id": "e52022e436fbab769c0e31e1eec70f53",
+    "game_date": "2026-07-25",
+    "sport": "MLB",
+    "home_team": "St. Louis Cardinals",
+    "away_team": "Cincinnati Reds",
+    "commence_time": "2026-07-25T00:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -114,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-24T06:05:02.856434+00:00"
+  },
+  {
+    "game_id": "2192276baf2c4e8e5358e9905c801e2f",
+    "game_date": "2026-07-25",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-07-25T02:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -106,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-24T06:05:02.856434+00:00"
+  }
+]
