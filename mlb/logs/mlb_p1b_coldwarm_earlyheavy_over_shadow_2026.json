@@ -290,6 +290,42 @@
       "result": "W",
       "graded": true,
       "generated_at": "2026-07-22T15:20:03.669250+00:00"
+    },
+    {
+      "date": "2026-07-24",
+      "game_pk": 822707,
+      "home_team": "WSN",
+      "away_team": "ARI",
+      "side": "OVER",
+      "fg_total": 9.5,
+      "over_price": -110,
+      "f5_total": 5.5,
+      "f5_ratio": 0.5789,
+      "forecast_temp_f": 82.0,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-07-24T15:20:03.903311+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-07-24T15:20:03.903372+00:00"
+    },
+    {
+      "date": "2026-07-24",
+      "game_pk": 823680,
+      "home_team": "MIN",
+      "away_team": "OAK",
+      "side": "OVER",
+      "fg_total": 9.5,
+      "over_price": -120,
+      "f5_total": 5.5,
+      "f5_ratio": 0.5789,
+      "forecast_temp_f": 79.2,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-07-24T15:20:04.368333+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-07-24T15:20:04.368389+00:00"
     }
   ]
 }
