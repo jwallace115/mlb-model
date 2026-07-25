@@ -631,6 +631,22 @@
       "dog_bp_era": 4.377,
       "win_loss": "W",
       "final_score": "3-2"
+    },
+    {
+      "game_pk": 822948,
+      "game_date": "2026-07-25",
+      "matchup": "CLE @ TBR",
+      "fav_team": "TBR",
+      "dog_team": "CLE",
+      "fav_side": "home",
+      "fav_implied": 0.552,
+      "dog_ml_price": 118,
+      "sp_fip_diff": 0.163,
+      "off_diff": 0.75,
+      "bp_era_diff": 0.373,
+      "fav_bp_era": 4.071,
+      "dog_bp_era": 3.698,
+      "win_loss": null
     }
   ]
 }

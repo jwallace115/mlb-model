@@ -852,6 +852,22 @@
       "local_start_hour": 19.25,
       "win_loss": "L",
       "final_score": "4-6"
+    },
+    {
+      "game_pk": 822948,
+      "game_date": "2026-07-25",
+      "matchup": "CLE @ TBR",
+      "fav_team": "TBR",
+      "dog_team": "CLE",
+      "fav_side": "home",
+      "fav_implied": 0.552,
+      "dog_ml_price": 118,
+      "sp_fip_diff": 0.163,
+      "off_diff": 0.75,
+      "bp_era_diff": 0.373,
+      "day_night": "night",
+      "local_start_hour": 18.166666666666668,
+      "win_loss": null
     }
   ]
 }
