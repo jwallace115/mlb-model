@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "45eb66bca21d81d652f8f776e25c0a60",
+    "game_date": "2026-07-30",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Houston Astros",
+    "commence_time": "2026-07-30T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -112,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-29T06:05:02.801790+00:00"
+  },
+  {
+    "game_id": "8777958bb59fab1de0fad4589b6bc278",
+    "game_date": "2026-07-30",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Boston Red Sox",
+    "commence_time": "2026-07-30T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.5,
+    "over_price": -106,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-29T06:05:02.801790+00:00"
+  },
+  {
+    "game_id": "94e1ca20cc591b6b6cdc042c16880a40",
+    "game_date": "2026-07-30",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-07-30T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-07-29T06:05:02.801790+00:00"
+  }
+]
