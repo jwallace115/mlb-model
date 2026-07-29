@@ -920,6 +920,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "W",
       "final_score": "8-7"
+    },
+    {
+      "game_pk": 823022,
+      "game_date": "2026-07-29",
+      "matchup": "CHC @ STL",
+      "fav_team": "CHC",
+      "dog_team": "STL",
+      "fav_side": "away",
+      "fav_implied": 0.5218,
+      "dog_ml_price": 104,
+      "sp_fip_diff": -0.179,
+      "off_diff": 0.55,
+      "bp_era_diff": -0.165,
+      "day_night": "night",
+      "local_start_hour": 18.75,
+      "win_loss": null
     }
   ]
 }
