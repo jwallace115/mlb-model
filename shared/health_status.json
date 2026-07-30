@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T10:30:01.607799+00:00",
+  "generated_at": "2026-07-30T10:30:01.762967+00:00",
   "overall_status": "RED",
   "checks": {
     "cron_jobs": {
@@ -8,115 +8,115 @@
         {
           "job": "mlb_prelim",
           "status": "OK",
-          "last_run": "2026-07-29T06:00:03.553033+00:00",
+          "last_run": "2026-07-30T06:00:04.083292+00:00",
           "hours_since_run": 4.5
         },
         {
           "job": "mlb_confirm",
           "status": "OK",
-          "last_run": "2026-07-28T11:00:04.452292+00:00",
+          "last_run": "2026-07-29T11:00:04.807456+00:00",
           "hours_since_run": 23.5
         },
         {
           "job": "nhl_morning",
           "status": "OK",
-          "last_run": "2026-07-28T11:12:11.564814+00:00",
-          "hours_since_run": 23.3
+          "last_run": "2026-07-29T11:20:22.476338+00:00",
+          "hours_since_run": 23.2
         },
         {
           "job": "nhl_evening",
           "status": "OK",
-          "last_run": "2026-07-28T22:30:10.498820+00:00",
+          "last_run": "2026-07-29T22:30:12.665958+00:00",
           "hours_since_run": 12.0
         },
         {
           "job": "soccer",
           "status": "OK",
-          "last_run": "2026-07-28T14:00:11.624768+00:00",
+          "last_run": "2026-07-29T14:00:11.360607+00:00",
           "hours_since_run": 20.5
         },
         {
           "job": "results",
           "status": "OK",
-          "last_run": "2026-07-29T05:55:02.346277+00:00",
+          "last_run": "2026-07-30T05:55:02.031364+00:00",
           "hours_since_run": 4.6
         },
         {
           "job": "lines_open",
           "status": "OK",
-          "last_run": "2026-07-29T06:05:04.572674+00:00",
+          "last_run": "2026-07-30T06:05:05.100705+00:00",
           "hours_since_run": 4.4
         },
         {
           "job": "lines_closing",
           "status": "OK",
-          "last_run": "2026-07-29T03:00:06.028929+00:00",
+          "last_run": "2026-07-30T03:00:06.661478+00:00",
           "hours_since_run": 7.5
         },
         {
           "job": "scratch_check",
           "status": "OK",
-          "last_run": "2026-07-28T22:30:06.579764+00:00",
+          "last_run": "2026-07-29T22:30:07.240881+00:00",
           "hours_since_run": 12.0
         },
         {
           "job": "nrfi_helper",
           "status": "OK",
-          "last_run": "2026-07-29T10:06:05.109629+00:00",
+          "last_run": "2026-07-30T10:06:05.177255+00:00",
           "hours_since_run": 0.4
         },
         {
           "job": "pitcher_logs_update",
           "status": "OK",
-          "last_run": "2026-07-29T05:50:08.616445+00:00",
+          "last_run": "2026-07-30T05:50:09.228844+00:00",
           "hours_since_run": 4.7
         },
         {
           "job": "statcast_update",
           "status": "OK",
-          "last_run": "2026-07-29T04:00:18.980983+00:00",
+          "last_run": "2026-07-30T04:00:22.624274+00:00",
           "hours_since_run": 6.5
         },
         {
           "job": "team_totals_pull",
           "status": "OK",
-          "last_run": "2026-07-28T11:05:15.331662+00:00",
+          "last_run": "2026-07-29T11:05:14.787863+00:00",
           "hours_since_run": 23.4
         },
         {
           "job": "push_daemon",
           "status": "OK",
-          "last_run": "2026-07-29T10:00:02.610193+00:00",
+          "last_run": "2026-07-30T10:00:02.917869+00:00",
           "hours_since_run": 0.5
         },
         {
           "job": "wnba_features",
           "status": "OK",
-          "last_run": "2026-07-28T12:00:10.760412+00:00",
+          "last_run": "2026-07-29T12:00:12.357537+00:00",
           "hours_since_run": 22.5
         },
         {
           "job": "wnba_model",
           "status": "OK",
-          "last_run": "2026-07-28T12:30:05.852177+00:00",
+          "last_run": "2026-07-29T12:30:08.423785+00:00",
           "hours_since_run": 22.0
         },
         {
           "job": "wnba_archetypes",
           "status": "OK",
-          "last_run": "2026-07-28T13:00:41.406055+00:00",
+          "last_run": "2026-07-29T13:00:25.565279+00:00",
           "hours_since_run": 21.5
         },
         {
           "job": "wnba_live",
           "status": "OK",
-          "last_run": "2026-07-29T02:00:02.062596+00:00",
+          "last_run": "2026-07-30T02:00:01.972277+00:00",
           "hours_since_run": 8.5
         },
         {
           "job": "wnba_push",
           "status": "OK",
-          "last_run": "2026-07-29T03:00:02.165855+00:00",
+          "last_run": "2026-07-30T03:00:02.295422+00:00",
           "hours_since_run": 7.5
         }
       ]
@@ -129,7 +129,7 @@
           "status": "STALE",
           "size_kb": 75.9,
           "last_modified": "2026-06-08T11:00:08.007768+00:00",
-          "hours_since_modified": 1223.5,
+          "hours_since_modified": 1247.5,
           "record_count": 129
         },
         {
@@ -137,23 +137,23 @@
           "status": "STALE",
           "size_kb": 74.2,
           "last_modified": "2026-05-10T11:00:08.615424+00:00",
-          "hours_since_modified": 1919.5,
+          "hours_since_modified": 1943.5,
           "record_count": 815
         },
         {
           "file": "golf_shadow",
           "status": "OK",
-          "size_kb": 1885.4,
-          "last_modified": "2026-07-28T13:01:06.826410+00:00",
-          "hours_since_modified": 21.5,
-          "record_count": 94007
+          "size_kb": 1902.1,
+          "last_modified": "2026-07-29T11:00:55.879183+00:00",
+          "hours_since_modified": 23.5,
+          "record_count": 94735
         },
         {
           "file": "wnba_matchup_board",
           "status": "STALE",
           "size_kb": 38.3,
           "last_modified": "2026-04-02T18:01:13+00:00",
-          "hours_since_modified": 2824.5,
+          "hours_since_modified": 2848.5,
           "record_count": 959
         },
         {
@@ -166,7 +166,7 @@
           "status": "STALE",
           "size_kb": 576.4,
           "last_modified": "2026-07-24T09:30:05.592273+00:00",
-          "hours_since_modified": 121.0,
+          "hours_since_modified": 145.0,
           "record_count": 1201
         },
         {
@@ -174,7 +174,7 @@
           "status": "STALE",
           "size_kb": 443.5,
           "last_modified": "2026-07-24T09:30:05.594272+00:00",
-          "hours_since_modified": 121.0,
+          "hours_since_modified": 145.0,
           "record_count": 1178
         },
         {
@@ -182,7 +182,7 @@
           "status": "STALE",
           "size_kb": 500.7,
           "last_modified": "2026-07-24T09:30:05.589272+00:00",
-          "hours_since_modified": 121.0,
+          "hours_since_modified": 145.0,
           "record_count": 1201
         },
         {
@@ -190,7 +190,7 @@
           "status": "STALE",
           "size_kb": 959.3,
           "last_modified": "2026-07-24T09:30:05.599272+00:00",
-          "hours_since_modified": 121.0,
+          "hours_since_modified": 145.0,
           "record_count": 2282
         },
         {
@@ -198,7 +198,7 @@
           "status": "STALE",
           "size_kb": 517.6,
           "last_modified": "2026-07-24T09:30:05.586272+00:00",
-          "hours_since_modified": 121.0,
+          "hours_since_modified": 145.0,
           "record_count": 1201
         },
         {
@@ -206,38 +206,38 @@
           "status": "STALE",
           "size_kb": 3576.3,
           "last_modified": "2026-07-24T09:30:05.613273+00:00",
-          "hours_since_modified": 121.0,
+          "hours_since_modified": 145.0,
           "record_count": 7078
         },
         {
           "file": "team_total_shadow",
           "status": "OK",
-          "size_kb": 1045.0,
-          "last_modified": "2026-07-28T11:05:15.326663+00:00",
+          "size_kb": 1057.3,
+          "last_modified": "2026-07-29T11:05:14.785863+00:00",
           "hours_since_modified": 23.4,
-          "record_count": 1099
+          "record_count": 1112
         },
         {
           "file": "nhl_shadow_aligned",
           "status": "STALE",
           "size_kb": 10.7,
           "last_modified": "2026-05-10T11:00:08.660425+00:00",
-          "hours_since_modified": 1919.5,
+          "hours_since_modified": 1943.5,
           "record_count": 4
         },
         {
           "file": "nrfi_selector",
           "status": "OK",
           "size_kb": 593.7,
-          "last_modified": "2026-07-29T06:00:06.924085+00:00",
+          "last_modified": "2026-07-30T06:00:07.451312+00:00",
           "hours_since_modified": 4.5,
           "record_count": 4
         },
         {
           "file": "mlb_night_dog_shadow",
           "status": "OK",
-          "size_kb": 23.0,
-          "last_modified": "2026-07-29T06:05:05.027681+00:00",
+          "size_kb": 23.5,
+          "last_modified": "2026-07-30T06:05:05.498709+00:00",
           "hours_since_modified": 4.4,
           "record_count": 4
         },
@@ -245,7 +245,7 @@
           "file": "mlb_bp_adv_dog_shadow",
           "status": "OK",
           "size_kb": 15.6,
-          "last_modified": "2026-07-29T06:05:05.046681+00:00",
+          "last_modified": "2026-07-30T06:05:05.502709+00:00",
           "hours_since_modified": 4.4,
           "record_count": 4
         },
@@ -297,11 +297,11 @@
     },
     "odds_api": {
       "status": "GREEN",
-      "credits_remaining": 17781
+      "credits_remaining": 17695
     },
     "dashboard": {
       "status": "GREEN",
-      "last_push": "2026-07-29 06:30:02 +0000",
+      "last_push": "2026-07-30 06:30:02 +0000",
       "hours_ago": 4.0
     },
     "signal_activity": {
@@ -318,29 +318,29 @@
         "today": 0
       },
       "golf": {
-        "last_7_days": 6451,
+        "last_7_days": 6464,
         "today": 0
       }
     },
     "nba_macbook_sync": {
       "status": "YELLOW",
       "last_sync": "2026-05-30T14:30:04.860946+00:00",
-      "hours_ago": 1436.0
+      "hours_ago": 1460.0
     }
   },
   "warnings": [
-    "Signal file stale: mlb_v1 (1223h)",
-    "Signal file stale: nhl (1919h)",
-    "Signal file stale: wnba_matchup_board (2824h)",
-    "Shadow log stale: cs013_shadow (121h)",
-    "Shadow log stale: cs028_shadow (121h)",
-    "Shadow log stale: cs004_shadow (121h)",
-    "Shadow log stale: kp04_shadow (121h)",
-    "Shadow log stale: combined_short_exit_shadow (121h)",
-    "Shadow log stale: shadow_signals (121h)",
-    "Shadow log stale: nhl_shadow_aligned (1919h)",
+    "Signal file stale: mlb_v1 (1247h)",
+    "Signal file stale: nhl (1943h)",
+    "Signal file stale: wnba_matchup_board (2848h)",
+    "Shadow log stale: cs013_shadow (145h)",
+    "Shadow log stale: cs028_shadow (145h)",
+    "Shadow log stale: cs004_shadow (145h)",
+    "Shadow log stale: kp04_shadow (145h)",
+    "Shadow log stale: combined_short_exit_shadow (145h)",
+    "Shadow log stale: shadow_signals (145h)",
+    "Shadow log stale: nhl_shadow_aligned (1943h)",
     "Ungraded signals: nba (51 gaps)",
-    "NBA MacBook sync stale (1436h)"
+    "NBA MacBook sync stale (1460h)"
   ],
   "errors": [
     "Soccer canonical empty \u2014 pipeline likely broken"
