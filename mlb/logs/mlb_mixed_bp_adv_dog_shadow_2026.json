@@ -648,6 +648,22 @@
       "dog_bp_era": 3.698,
       "win_loss": "L",
       "final_score": "0-3"
+    },
+    {
+      "game_pk": 823023,
+      "game_date": "2026-07-30",
+      "matchup": "CHC @ STL",
+      "fav_team": "STL",
+      "dog_team": "CHC",
+      "fav_side": "home",
+      "fav_implied": 0.5218,
+      "dog_ml_price": 104,
+      "sp_fip_diff": -0.579,
+      "off_diff": -0.55,
+      "bp_era_diff": 0.164,
+      "fav_bp_era": 4.522,
+      "dog_bp_era": 4.358,
+      "win_loss": null
     }
   ]
 }
