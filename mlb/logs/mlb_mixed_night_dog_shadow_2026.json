@@ -954,6 +954,22 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "W",
       "final_score": "5-2"
+    },
+    {
+      "game_pk": 824649,
+      "game_date": "2026-08-01",
+      "matchup": "NYY @ CHC",
+      "fav_team": "NYY",
+      "dog_team": "CHC",
+      "fav_side": "away",
+      "fav_implied": 0.5284,
+      "dog_ml_price": 107,
+      "sp_fip_diff": -0.733,
+      "off_diff": 0.1,
+      "bp_era_diff": -0.324,
+      "day_night": "night",
+      "local_start_hour": 18.25,
+      "win_loss": null
     }
   ]
 }
