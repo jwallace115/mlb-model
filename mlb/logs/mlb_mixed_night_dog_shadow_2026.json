@@ -971,6 +971,38 @@
       "local_start_hour": 18.25,
       "win_loss": "W",
       "final_score": "2-5"
+    },
+    {
+      "game_pk": 824484,
+      "game_date": "2026-08-04",
+      "matchup": "OAK @ CIN",
+      "fav_team": "CIN",
+      "dog_team": "OAK",
+      "fav_side": "home",
+      "fav_implied": 0.552,
+      "dog_ml_price": 118,
+      "sp_fip_diff": -0.428,
+      "off_diff": -0.5,
+      "bp_era_diff": -0.54,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824731,
+      "game_date": "2026-08-04",
+      "matchup": "CHW @ BOS",
+      "fav_team": "BOS",
+      "dog_team": "CHW",
+      "fav_side": "home",
+      "fav_implied": 0.544,
+      "dog_ml_price": 114,
+      "sp_fip_diff": -0.341,
+      "off_diff": 0.25,
+      "bp_era_diff": -0.393,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
     }
   ]
 }
