@@ -1005,6 +1005,38 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "L",
       "final_score": "2-14"
+    },
+    {
+      "game_pk": 824806,
+      "game_date": "2026-08-05",
+      "matchup": "LAA @ BAL",
+      "fav_team": "BAL",
+      "dog_team": "LAA",
+      "fav_side": "home",
+      "fav_implied": 0.548,
+      "dog_ml_price": 116,
+      "sp_fip_diff": -0.03,
+      "off_diff": -0.2,
+      "bp_era_diff": -0.253,
+      "day_night": "night",
+      "local_start_hour": 18.583333333333332,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824082,
+      "game_date": "2026-08-05",
+      "matchup": "MIN @ KCR",
+      "fav_team": "KCR",
+      "dog_team": "MIN",
+      "fav_side": "home",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": -0.124,
+      "off_diff": 0.35,
+      "bp_era_diff": 0.435,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }

@@ -665,6 +665,22 @@
       "dog_bp_era": 4.358,
       "win_loss": "W",
       "final_score": "4-2"
+    },
+    {
+      "game_pk": 824082,
+      "game_date": "2026-08-05",
+      "matchup": "MIN @ KCR",
+      "fav_team": "KCR",
+      "dog_team": "MIN",
+      "fav_side": "home",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": -0.124,
+      "off_diff": 0.35,
+      "bp_era_diff": 0.435,
+      "fav_bp_era": 5.136,
+      "dog_bp_era": 4.701,
+      "win_loss": null
     }
   ]
 }
