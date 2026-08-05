@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "25afb7f521e15df3fe39a9d8d2db3bb7",
+    "game_date": "2026-08-06",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-08-06T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -122,
+    "under_price": 101,
+    "book": "draftkings",
+    "capture_timestamp": "2026-08-05T06:05:03.026585+00:00"
+  },
+  {
+    "game_id": "c11df69093aad0e5197616cffda86d73",
+    "game_date": "2026-08-06",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Detroit Tigers",
+    "commence_time": "2026-08-06T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -102,
+    "under_price": -118,
+    "book": "draftkings",
+    "capture_timestamp": "2026-08-05T06:05:03.026585+00:00"
+  }
+]
