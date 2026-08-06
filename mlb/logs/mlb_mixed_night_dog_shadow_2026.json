@@ -1039,6 +1039,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "1-2"
+    },
+    {
+      "game_pk": 824080,
+      "game_date": "2026-08-06",
+      "matchup": "MIN @ KCR",
+      "fav_team": "KCR",
+      "dog_team": "MIN",
+      "fav_side": "home",
+      "fav_implied": 0.5399,
+      "dog_ml_price": 112,
+      "sp_fip_diff": -0.28,
+      "off_diff": 0.35,
+      "bp_era_diff": 0.422,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
