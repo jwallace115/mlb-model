@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "30fc735653380dfae5b9de10acf8b5f6",
+    "game_date": "2026-08-09",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-08-09T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -114,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-08T06:05:02.637124+00:00"
+  },
+  {
+    "game_id": "79a0c1e324175df9d0c7f93de8d4dc44",
+    "game_date": "2026-08-09",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Tampa Bay Rays",
+    "commence_time": "2026-08-09T01:50:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -111,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-08T06:05:02.637124+00:00"
+  }
+]
