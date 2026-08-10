@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T07:13:04.787939",
+  "generated_at": "2026-08-10T08:02:01.632393",
   "sport": "golf",
   "event_name": "Wyndham Championship",
   "event_id": 13,
@@ -693,34 +693,34 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 4349,
-      "hit_rate": 51.5,
-      "roi": 16.2,
-      "clv": -14.2
+      "n": 6496,
+      "hit_rate": 50.8,
+      "roi": 16.8,
+      "clv": -14.1
     },
     "top_20": {
-      "n": 2669,
-      "hit_rate": 36.5,
-      "roi": 61.7,
-      "clv": -10.7
+      "n": 3204,
+      "hit_rate": 37.0,
+      "roi": 56.6,
+      "clv": -11.1
     }
   },
   "recent_results": [
     {
-      "event_name": "Valero Texas Open",
-      "event_id": 41,
+      "event_name": "Rocket Classic",
+      "event_id": 524,
       "year": 2026,
-      "n_candidates": 469,
-      "hit_rate": 52.9,
-      "roi": -13.8
+      "n_candidates": 885,
+      "hit_rate": 48.2,
+      "roi": 16.9
     },
     {
-      "event_name": "Truist Championship",
-      "event_id": 480,
+      "event_name": "3M Open",
+      "event_id": 525,
       "year": 2026,
-      "n_candidates": 264,
-      "hit_rate": 37.1,
-      "roi": 34.8
+      "n_candidates": 846,
+      "hit_rate": 46.5,
+      "roi": 8.2
     },
     {
       "event_name": "Genesis Scottish Open",
