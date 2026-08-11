@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T08:02:01.632393",
+  "generated_at": "2026-08-11T07:00:41.498517",
   "sport": "golf",
   "event_name": "Wyndham Championship",
   "event_id": 13,
@@ -693,34 +693,34 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 6496,
-      "hit_rate": 50.8,
-      "roi": 16.8,
-      "clv": -14.1
+      "n": 4349,
+      "hit_rate": 51.5,
+      "roi": 16.2,
+      "clv": -14.2
     },
     "top_20": {
-      "n": 3204,
-      "hit_rate": 37.0,
-      "roi": 56.6,
-      "clv": -11.1
+      "n": 2669,
+      "hit_rate": 36.5,
+      "roi": 61.7,
+      "clv": -10.7
     }
   },
   "recent_results": [
     {
-      "event_name": "Rocket Classic",
-      "event_id": 524,
+      "event_name": "Valero Texas Open",
+      "event_id": 41,
       "year": 2026,
-      "n_candidates": 885,
-      "hit_rate": 48.2,
-      "roi": 16.9
+      "n_candidates": 469,
+      "hit_rate": 52.9,
+      "roi": -13.8
     },
     {
-      "event_name": "3M Open",
-      "event_id": 525,
+      "event_name": "Truist Championship",
+      "event_id": 480,
       "year": 2026,
-      "n_candidates": 846,
-      "hit_rate": 46.5,
-      "roi": 8.2
+      "n_candidates": 264,
+      "hit_rate": 37.1,
+      "roi": 34.8
     },
     {
       "event_name": "Genesis Scottish Open",
@@ -935,62 +935,13 @@
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
   "g14_signals": [],
-  "g14_win_watchlist": [
-    {
-      "player_name": "Young, Cameron",
-      "dg_win_prob": 9.6,
-      "adj_win_prob": 10.3,
-      "win_edge": 10.2
-    },
-    {
-      "player_name": "Koivun, Jackson",
-      "dg_win_prob": 3.9,
-      "adj_win_prob": 4.4,
-      "win_edge": 4.1
-    },
-    {
-      "player_name": "Matsuyama, Hideki",
-      "dg_win_prob": 3.7,
-      "adj_win_prob": 3.4,
-      "win_edge": 2.7
-    },
-    {
-      "player_name": "Thomas, Justin",
-      "dg_win_prob": 2.8,
-      "adj_win_prob": 2.6,
-      "win_edge": 2.5
-    },
-    {
-      "player_name": "Rai, Aaron",
-      "dg_win_prob": 2.6,
-      "adj_win_prob": 2.3,
-      "win_edge": 2.3
-    },
-    {
-      "player_name": "Ghim, Doug",
-      "dg_win_prob": 2.4,
-      "adj_win_prob": 2.2,
-      "win_edge": 2.2
-    },
-    {
-      "player_name": "Bradley, Keegan",
-      "dg_win_prob": 1.9,
-      "adj_win_prob": 2.6,
-      "win_edge": 2.6
-    },
-    {
-      "player_name": "McNealy, Maverick",
-      "dg_win_prob": 1.9,
-      "adj_win_prob": 2.5,
-      "win_edge": 2.5
-    }
-  ],
-  "g14_field_type": "WEAK",
+  "g14_win_watchlist": [],
+  "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
   "g15_signals": [],
-  "g15_elite_density_bucket": "LOW",
-  "g15_kill_switch": false,
+  "g15_elite_density_bucket": "HIGH",
+  "g15_kill_switch": true,
   "g15_status": "LIVE_SHADOW",
   "model_info": {
     "model": "DG logistic + G13 wave + G14 tail + G15 elite density",
