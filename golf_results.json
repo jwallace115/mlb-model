@@ -1,31 +1,20 @@
 {
-  "generated_at": "2026-08-11T09:00:38.167442",
+  "generated_at": "2026-08-12T07:00:30.329598",
   "sport": "golf",
   "event_name": "FedEx St. Jude Championship",
   "event_id": 27,
   "is_major": false,
-  "last_updated": "2026-08-11T09:00:08.035839",
+  "last_updated": "2026-08-12T07:00:09.110520",
   "n_candidates": 0,
-  "n_leans": 2,
+  "n_leans": 1,
   "plays": [
-    {
-      "player_name": "Woodland, Gary",
-      "dg_id": 12577,
-      "market": "top_20",
-      "model_prob": 16.6,
-      "market_prob": 21.8,
-      "edge": -5.2,
-      "direction": "under",
-      "classification": "lean",
-      "close_odds": 325.0
-    },
     {
       "player_name": "Brennan, Michael",
       "dg_id": 29197,
       "market": "top_20",
-      "model_prob": 25.8,
+      "model_prob": 25.5,
       "market_prob": 30.9,
-      "edge": -5.1,
+      "edge": -5.4,
       "direction": "under",
       "classification": "lean",
       "close_odds": 200.0
