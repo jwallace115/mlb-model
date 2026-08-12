@@ -1056,6 +1056,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "W",
       "final_score": "4-3"
+    },
+    {
+      "game_pk": 822779,
+      "game_date": "2026-08-12",
+      "matchup": "BOS @ TOR",
+      "fav_team": "BOS",
+      "dog_team": "TOR",
+      "fav_side": "away",
+      "fav_implied": 0.539,
+      "dog_ml_price": 112,
+      "sp_fip_diff": -0.234,
+      "off_diff": 0.15,
+      "bp_era_diff": -0.159,
+      "day_night": "night",
+      "local_start_hour": 19.116666666666667,
+      "win_loss": null
     }
   ]
 }
