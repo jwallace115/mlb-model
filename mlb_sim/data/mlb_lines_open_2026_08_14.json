@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "f9b96108d4bae8b60bcda1e87549bedc",
+    "game_date": "2026-08-14",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Texas Rangers",
+    "commence_time": "2026-08-14T02:08:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-13T06:05:02.392335+00:00"
+  },
+  {
+    "game_id": "4071566704903e79a0090ba8e886f060",
+    "game_date": "2026-08-14",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Milwaukee Brewers",
+    "commence_time": "2026-08-14T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -102,
+    "under_price": -112,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-13T06:05:02.392335+00:00"
+  }
+]
