@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-12T07:00:30.329598",
+  "generated_at": "2026-08-13T07:00:31.580707",
   "sport": "golf",
   "event_name": "FedEx St. Jude Championship",
   "event_id": 27,
   "is_major": false,
-  "last_updated": "2026-08-12T07:00:09.110520",
+  "last_updated": "2026-08-13T07:00:08.443722",
   "n_candidates": 0,
   "n_leans": 1,
   "plays": [
@@ -13,11 +13,11 @@
       "dg_id": 29197,
       "market": "top_20",
       "model_prob": 25.5,
-      "market_prob": 30.9,
-      "edge": -5.4,
+      "market_prob": 32.6,
+      "edge": -7.1,
       "direction": "under",
       "classification": "lean",
-      "close_odds": 200.0
+      "close_odds": 185.0
     }
   ],
   "season_stats": {
@@ -270,7 +270,7 @@
   "g14_status": "LIVE_SHADOW",
   "g15_signals": [],
   "g15_elite_density_bucket": "HIGH",
-  "g15_kill_switch": false,
+  "g15_kill_switch": true,
   "g15_status": "LIVE_SHADOW",
   "model_info": {
     "model": "DG logistic + G13 wave + G14 tail + G15 elite density",
