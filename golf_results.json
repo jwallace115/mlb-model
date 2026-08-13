@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T07:00:31.580707",
+  "generated_at": "2026-08-13T08:10:49.314542",
   "sport": "golf",
   "event_name": "FedEx St. Jude Championship",
   "event_id": 27,
@@ -78,80 +78,71 @@
   ],
   "matchup_candidates": [
     {
-      "player_1": "Taylor, Nick",
-      "player_2": "Pendrith, Taylor",
+      "player_1": "Stevens, Sam",
+      "player_2": "Coody, Pierceson",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 13.3,
+      "bet_edge": 9.2,
       "classification": "candidate"
     },
     {
-      "player_1": "Hojgaard, Rasmus",
-      "player_2": "Nyholm, Pontus",
+      "player_1": "English, Harris",
+      "player_2": "McNealy, Maverick",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 11.8,
+      "bet_edge": 13.9,
       "classification": "candidate"
     },
     {
-      "player_1": "Koepka, Brooks",
-      "player_2": "Akina, Kihei",
+      "player_1": "Noren, Alex",
+      "player_2": "Cole, Eric",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 25.7,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Kirk, Chris",
-      "player_2": "Fitzpatrick, Alex",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 17.3,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Schmid, Matti",
-      "player_2": "Walker, Danny",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 5.3,
+      "bet_edge": 5.6,
       "classification": "lean"
     },
     {
-      "player_1": "Crowe, Trace",
-      "player_2": "McCarty, Matt",
+      "player_1": "Hisatsune, Ryo",
+      "player_2": "Echavarria, Nico",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 15.4,
+      "bet_edge": 15.8,
       "classification": "candidate"
     },
     {
-      "player_1": "Finau, Tony",
-      "player_2": "Bradley, Keegan",
+      "player_1": "Straka, Sepp",
+      "player_2": "Thorbjornsen, Michael",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 5.3,
+      "bet_edge": 9.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fleetwood, Tommy",
+      "player_2": "Spieth, Jordan",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 32.7,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Aberg, Ludvig",
+      "player_2": "Kim, Tom",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 5.0,
       "classification": "lean"
     },
     {
-      "player_1": "Hoge, Tom",
-      "player_2": "Chatfield, Davis",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 22.4,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Rai, Aaron",
-      "player_2": "Shipley, Neal",
+      "player_1": "Woodland, Gary",
+      "player_2": "Smalley, Alex",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
@@ -159,107 +150,116 @@
       "classification": "candidate"
     },
     {
-      "player_1": "Kizzire, Patton",
-      "player_2": "Ramey, Chad",
+      "player_1": "Poston, J.T.",
+      "player_2": "MacIntyre, Robert",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 16.3,
+      "bet_edge": 5.6,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Reitan, Kristoffer",
+      "player_2": "Gerard, Ryan",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 14.0,
       "classification": "candidate"
     },
     {
-      "player_1": "Streelman, Kevin",
-      "player_2": "Cauley, Bud",
+      "player_1": "Kitayama, Kurt",
+      "player_2": "Hojgaard, Nicolai",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 8.1,
+      "bet_edge": 18.2,
       "classification": "candidate"
     },
     {
-      "player_1": "Olesen, Thorbjorn",
-      "player_2": "Fishburn, Patrick",
+      "player_1": "Fowler, Rickie",
+      "player_2": "Henley, Russell",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 11.4,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Parry, John",
-      "player_2": "Lower, Justin",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 9.7,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Bezuidenhout, Christiaan",
-      "player_2": "Hoey, Rico",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 11.3,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "McCarthy, Denny",
-      "player_2": "Suber, Jackson",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 11.9,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Phillips, Chandler",
-      "player_2": "Collet, Tyler",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 27.2,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Dahmen, Joel",
-      "player_2": "Im, Sungjae",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 9.3,
+      "bet_edge": 12.4,
       "classification": "candidate"
     },
     {
       "player_1": "Thomas, Justin",
-      "player_2": "Spieth, Jordan",
+      "player_2": "Kim, Si Woo",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 33.8,
+      "bet_edge": 8.7,
       "classification": "candidate"
     },
     {
-      "player_1": "Horschel, Billy",
-      "player_2": "James, Ben",
+      "player_1": "Harman, Brian",
+      "player_2": "Smith, Jordan",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 31.5,
+      "bet_edge": 5.5,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Conners, Corey",
+      "player_2": "Hall, Harry",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 13.1,
       "classification": "candidate"
     },
     {
-      "player_1": "Roy, Kevin",
-      "player_2": "Bauchou, Zach",
+      "player_1": "Im, Sungjae",
+      "player_2": "Yellamaraju, Sudarshan",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 40.5,
+      "bet_edge": 10.2,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Mitchell, Keith",
+      "player_2": "McCarty, Matt",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 22.9,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Cantlay, Patrick",
+      "player_2": "Theegala, Sahith",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 8.7,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Knapp, Jake",
+      "player_2": "Griffin, Ben",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 8.9,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Lee, Min Woo",
+      "player_2": "Gotterup, Chris",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 10.7,
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 77,
-  "matchup_n_leans": 33,
+  "matchup_n_candidates": 366,
+  "matchup_n_leans": 116,
   "g13_signals": [],
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
