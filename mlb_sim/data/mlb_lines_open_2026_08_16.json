@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "c7a2e07e8423be48d4f797c2aab365ae",
+    "game_date": "2026-08-16",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Kansas City Royals",
+    "commence_time": "2026-08-16T01:38:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -110,
+    "under_price": -104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-15T06:05:02.769775+00:00"
+  },
+  {
+    "game_id": "1145a9db8d138b13599e168a340ad3c7",
+    "game_date": "2026-08-16",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Texas Rangers",
+    "commence_time": "2026-08-16T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": 102,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-15T06:05:02.769775+00:00"
+  }
+]
