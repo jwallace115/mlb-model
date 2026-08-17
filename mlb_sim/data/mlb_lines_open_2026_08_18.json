@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "8ccc90357b1b20ca35a6c2da51638dbc",
+    "game_date": "2026-08-18",
+    "sport": "MLB",
+    "home_team": "Chicago Cubs",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-08-18T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-17T06:05:02.964057+00:00"
+  },
+  {
+    "game_id": "84c8b9f4c2aee2ab9c8fc52bc1f0011b",
+    "game_date": "2026-08-18",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-08-18T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.0,
+    "over_price": 100,
+    "under_price": -114,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-17T06:05:02.964057+00:00"
+  }
+]
