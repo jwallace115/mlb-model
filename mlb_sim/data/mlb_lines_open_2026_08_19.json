@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "1b3b4a290694391bf3fe17adc8693cbd",
+    "game_date": "2026-08-19",
+    "sport": "MLB",
+    "home_team": "Chicago Cubs",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-08-19T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -109,
+    "under_price": -111,
+    "book": "draftkings",
+    "capture_timestamp": "2026-08-18T06:05:02.745470+00:00"
+  },
+  {
+    "game_id": "096d5e043fbd3287be8f69948955c5dd",
+    "game_date": "2026-08-19",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Washington Nationals",
+    "commence_time": "2026-08-19T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -113,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-18T06:05:02.745470+00:00"
+  },
+  {
+    "game_id": "52dec86968ebff8e1b8bf35717696527",
+    "game_date": "2026-08-19",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-08-19T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-18T06:05:02.745470+00:00"
+  },
+  {
+    "game_id": "ea131cf353575f759f07ef2dddd66dc7",
+    "game_date": "2026-08-19",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-08-19T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.5,
+    "over_price": -112,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-18T06:05:02.745470+00:00"
+  }
+]
