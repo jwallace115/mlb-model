@@ -1090,6 +1090,22 @@
       "local_start_hour": 19.083333333333332,
       "win_loss": "L",
       "final_score": "8-5"
+    },
+    {
+      "game_pk": 823586,
+      "game_date": "2026-08-18",
+      "matchup": "SDP @ NYM",
+      "fav_team": "SDP",
+      "dog_team": "NYM",
+      "fav_side": "away",
+      "fav_implied": 0.5139,
+      "dog_ml_price": 101,
+      "sp_fip_diff": 0.329,
+      "off_diff": 0.3,
+      "bp_era_diff": -0.353,
+      "day_night": "night",
+      "local_start_hour": 19.166666666666668,
+      "win_loss": null
     }
   ]
 }
