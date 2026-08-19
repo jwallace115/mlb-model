@@ -1107,6 +1107,38 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "L",
       "final_score": "5-2"
+    },
+    {
+      "game_pk": 823424,
+      "game_date": "2026-08-19",
+      "matchup": "MIA @ PHI",
+      "fav_team": "PHI",
+      "dog_team": "MIA",
+      "fav_side": "home",
+      "fav_implied": 0.5379,
+      "dog_ml_price": 111,
+      "sp_fip_diff": 0.202,
+      "off_diff": -0.35,
+      "bp_era_diff": -0.236,
+      "day_night": "night",
+      "local_start_hour": 18.083333333333332,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823748,
+      "game_date": "2026-08-19",
+      "matchup": "SEA @ MIL",
+      "fav_team": "MIL",
+      "dog_team": "SEA",
+      "fav_side": "home",
+      "fav_implied": 0.5369,
+      "dog_ml_price": 111,
+      "sp_fip_diff": 0.405,
+      "off_diff": 0.65,
+      "bp_era_diff": -0.157,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
