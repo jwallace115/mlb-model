@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T09:00:38.011893",
+  "generated_at": "2026-08-19T07:00:27.086252",
   "sport": "golf",
   "event_name": "BMW Championship",
   "event_id": 28,
@@ -33,34 +33,34 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 7213,
-      "hit_rate": 51.3,
-      "roi": 15.0,
-      "clv": -14.0
+      "n": 4349,
+      "hit_rate": 51.5,
+      "roi": 16.2,
+      "clv": -14.2
     },
     "top_20": {
-      "n": 3402,
-      "hit_rate": 36.8,
-      "roi": 54.7,
-      "clv": -11.1
+      "n": 2669,
+      "hit_rate": 36.5,
+      "roi": 61.7,
+      "clv": -10.7
     }
   },
   "recent_results": [
     {
-      "event_name": "Rocket Classic",
-      "event_id": 524,
+      "event_name": "Valero Texas Open",
+      "event_id": 41,
       "year": 2026,
-      "n_candidates": 885,
-      "hit_rate": 48.2,
-      "roi": 16.9
+      "n_candidates": 469,
+      "hit_rate": 52.9,
+      "roi": -13.8
     },
     {
-      "event_name": "3M Open",
-      "event_id": 525,
+      "event_name": "Truist Championship",
+      "event_id": 480,
       "year": 2026,
-      "n_candidates": 846,
-      "hit_rate": 46.5,
-      "roi": 8.2
+      "n_candidates": 264,
+      "hit_rate": 37.1,
+      "roi": 34.8
     },
     {
       "event_name": "Genesis Scottish Open",
@@ -279,7 +279,118 @@
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
-  "g15_signals": [],
+  "g15_signals": [
+    {
+      "player_name": "Aberg, Ludvig",
+      "dg_rank": null,
+      "dg_top20_prob": 61.9,
+      "adj_top20_prob": 64.1,
+      "book": "draftkings",
+      "close_odds": -161.0,
+      "fair_prob": 57.9,
+      "adj_edge": 6.1
+    },
+    {
+      "player_name": "Schauffele, Xander",
+      "dg_rank": null,
+      "dg_top20_prob": 61.9,
+      "adj_top20_prob": 64.1,
+      "book": "draftkings",
+      "close_odds": -172.0,
+      "fair_prob": 59.4,
+      "adj_edge": 4.7
+    },
+    {
+      "player_name": "Kim, Si Woo",
+      "dg_rank": null,
+      "dg_top20_prob": 55.0,
+      "adj_top20_prob": 57.2,
+      "book": "draftkings",
+      "close_odds": -130.0,
+      "fair_prob": 53.1,
+      "adj_edge": 4.1
+    },
+    {
+      "player_name": "Lee, Min Woo",
+      "dg_rank": null,
+      "dg_top20_prob": 43.4,
+      "adj_top20_prob": 45.6,
+      "book": "draftkings",
+      "close_odds": 130.0,
+      "fair_prob": 40.8,
+      "adj_edge": 4.8
+    },
+    {
+      "player_name": "Gerard, Ryan",
+      "dg_rank": null,
+      "dg_top20_prob": 42.7,
+      "adj_top20_prob": 44.9,
+      "book": "draftkings",
+      "close_odds": 138.0,
+      "fair_prob": 39.5,
+      "adj_edge": 5.5
+    },
+    {
+      "player_name": "Spaun, J.J.",
+      "dg_rank": null,
+      "dg_top20_prob": 40.1,
+      "adj_top20_prob": 42.3,
+      "book": "draftkings",
+      "close_odds": 150.0,
+      "fair_prob": 37.6,
+      "adj_edge": 4.8
+    },
+    {
+      "player_name": "Griffin, Ben",
+      "dg_rank": null,
+      "dg_top20_prob": 41.4,
+      "adj_top20_prob": 43.6,
+      "book": "draftkings",
+      "close_odds": 163.0,
+      "fair_prob": 35.7,
+      "adj_edge": 7.9
+    },
+    {
+      "player_name": "Smalley, Alex",
+      "dg_rank": null,
+      "dg_top20_prob": 34.1,
+      "adj_top20_prob": 36.3,
+      "book": "draftkings",
+      "close_odds": 200.0,
+      "fair_prob": 31.3,
+      "adj_edge": 5.0
+    },
+    {
+      "player_name": "Fitzpatrick, Alex",
+      "dg_rank": null,
+      "dg_top20_prob": 33.5,
+      "adj_top20_prob": 35.7,
+      "book": "draftkings",
+      "close_odds": 210.0,
+      "fair_prob": 30.3,
+      "adj_edge": 5.4
+    },
+    {
+      "player_name": "Cauley, Bud",
+      "dg_rank": null,
+      "dg_top20_prob": 33.2,
+      "adj_top20_prob": 35.5,
+      "book": "draftkings",
+      "close_odds": 200.0,
+      "fair_prob": 31.3,
+      "adj_edge": 4.2
+    },
+    {
+      "player_name": "Hisatsune, Ryo",
+      "dg_rank": null,
+      "dg_top20_prob": 26.1,
+      "adj_top20_prob": 28.3,
+      "book": "draftkings",
+      "close_odds": 300.0,
+      "fair_prob": 23.5,
+      "adj_edge": 4.8
+    }
+  ],
   "g15_elite_density_bucket": "HIGH",
   "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
