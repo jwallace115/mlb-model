@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21T07:00:26.526269",
+  "generated_at": "2026-08-22T07:10:35.096257",
   "sport": "golf",
   "event_name": "BMW Championship",
   "event_id": 28,
@@ -720,43 +720,55 @@
       "player_name": "Scheffler, Scottie",
       "dg_win_prob": 18.1,
       "adj_win_prob": 18.7,
-      "win_edge": 16.5
+      "win_edge": 16.3
+    },
+    {
+      "player_name": "Aberg, Ludvig",
+      "dg_win_prob": 5.7,
+      "adj_win_prob": 6.2,
+      "win_edge": 5.4
     },
     {
       "player_name": "Schauffele, Xander",
       "dg_win_prob": 5.5,
       "adj_win_prob": 6.1,
-      "win_edge": 5.0
+      "win_edge": 5.3
     },
     {
       "player_name": "Young, Cameron",
       "dg_win_prob": 4.3,
       "adj_win_prob": 5.0,
-      "win_edge": 4.4
+      "win_edge": 4.2
     },
     {
       "player_name": "Fleetwood, Tommy",
       "dg_win_prob": 3.8,
       "adj_win_prob": 4.5,
-      "win_edge": 3.2
+      "win_edge": 4.3
     },
     {
       "player_name": "Burns, Sam",
       "dg_win_prob": 3.7,
       "adj_win_prob": 4.4,
-      "win_edge": 3.8
+      "win_edge": 4.2
+    },
+    {
+      "player_name": "Fitzpatrick, Matt",
+      "dg_win_prob": 3.4,
+      "adj_win_prob": 3.9,
+      "win_edge": 3.6
     },
     {
       "player_name": "Kim, Si Woo",
       "dg_win_prob": 3.0,
       "adj_win_prob": 2.8,
-      "win_edge": 2.2
+      "win_edge": 2.8
     },
     {
-      "player_name": "Hovland, Viktor",
-      "dg_win_prob": 2.5,
-      "adj_win_prob": 2.9,
-      "win_edge": 2.5
+      "player_name": "Matsuyama, Hideki",
+      "dg_win_prob": 2.4,
+      "adj_win_prob": 2.1,
+      "win_edge": 2.1
     }
   ],
   "g14_field_type": "STRONG",
