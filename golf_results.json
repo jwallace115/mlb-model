@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T07:03:35.871467",
+  "generated_at": "2026-08-27T08:03:29.060094",
   "sport": "golf",
   "event_name": "TOUR Championship",
   "event_id": 60,
@@ -92,7 +92,7 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 6.6,
+      "bet_edge": 6.3,
       "classification": "lean"
     },
     {
@@ -101,7 +101,7 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 25.6,
+      "bet_edge": 25.5,
       "classification": "candidate"
     },
     {
@@ -110,7 +110,7 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 16.6,
+      "bet_edge": 16.4,
       "classification": "candidate"
     },
     {
@@ -128,7 +128,7 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 17.4,
+      "bet_edge": 17.6,
       "classification": "candidate"
     },
     {
@@ -137,7 +137,7 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 20.9,
+      "bet_edge": 20.8,
       "classification": "candidate"
     },
     {
@@ -146,7 +146,7 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 7.4,
+      "bet_edge": 7.6,
       "classification": "lean"
     },
     {
@@ -155,17 +155,8 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 8.2,
+      "bet_edge": 8.3,
       "classification": "candidate"
-    },
-    {
-      "player_1": "Burns, Sam",
-      "player_2": "Morikawa, Collin",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 5.1,
-      "classification": "lean"
     },
     {
       "player_1": "Kim, Si Woo",
@@ -173,7 +164,7 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 14.4,
+      "bet_edge": 14.2,
       "classification": "candidate"
     },
     {
@@ -182,84 +173,93 @@
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 16.1,
+      "bet_edge": 16.0,
       "classification": "candidate"
     },
     {
-      "player_1": "Lee, Min Woo",
-      "player_2": "Bridgeman, Jacob",
+      "player_1": "Fox, Ryan",
+      "player_2": "Fitzpatrick, Alex",
       "player_3": "",
       "match_type": "tournament_matchups",
       "book": "bet365",
-      "bet_edge": 9.2,
+      "bet_edge": 24.8,
       "classification": "candidate"
     },
     {
-      "player_1": "Lee, Min Woo",
-      "player_2": "Bridgeman, Jacob",
+      "player_1": "Fox, Ryan",
+      "player_2": "Fitzpatrick, Alex",
       "player_3": "",
       "match_type": "tournament_matchups",
-      "book": "bovada",
-      "bet_edge": 8.0,
-      "classification": "lean"
-    },
-    {
-      "player_1": "Cantlay, Patrick",
-      "player_2": "Young, Cameron",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 6.5,
-      "classification": "lean"
-    },
-    {
-      "player_1": "Cantlay, Patrick",
-      "player_2": "Young, Cameron",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bovada",
-      "bet_edge": 6.7,
-      "classification": "lean"
-    },
-    {
-      "player_1": "Cantlay, Patrick",
-      "player_2": "Young, Cameron",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "caesars",
-      "bet_edge": 10.0,
+      "book": "betcris",
+      "bet_edge": 28.1,
       "classification": "candidate"
     },
     {
-      "player_1": "Cantlay, Patrick",
-      "player_2": "Young, Cameron",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "fanduel",
-      "bet_edge": 9.9,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Burns, Sam",
-      "player_2": "Clark, Wyndham",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 16.2,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Burns, Sam",
-      "player_2": "Clark, Wyndham",
+      "player_1": "Fox, Ryan",
+      "player_2": "Fitzpatrick, Alex",
       "player_3": "",
       "match_type": "tournament_matchups",
       "book": "betonline",
-      "bet_edge": 13.0,
+      "bet_edge": 26.0,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fox, Ryan",
+      "player_2": "Fitzpatrick, Alex",
+      "player_3": "",
+      "match_type": "tournament_matchups",
+      "book": "bovada",
+      "bet_edge": 24.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fox, Ryan",
+      "player_2": "Fitzpatrick, Alex",
+      "player_3": "",
+      "match_type": "tournament_matchups",
+      "book": "draftkings",
+      "bet_edge": 24.8,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Fox, Ryan",
+      "player_2": "Fitzpatrick, Alex",
+      "player_3": "",
+      "match_type": "tournament_matchups",
+      "book": "unibet",
+      "bet_edge": 28.2,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Woodland, Gary",
+      "player_2": "Kim, Tom",
+      "player_3": "",
+      "match_type": "tournament_matchups",
+      "book": "bet365",
+      "bet_edge": 24.6,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Woodland, Gary",
+      "player_2": "Kim, Tom",
+      "player_3": "",
+      "match_type": "tournament_matchups",
+      "book": "bovada",
+      "bet_edge": 23.5,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Woodland, Gary",
+      "player_2": "Kim, Tom",
+      "player_3": "",
+      "match_type": "tournament_matchups",
+      "book": "unibet",
+      "bet_edge": 19.3,
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 170,
-  "matchup_n_leans": 53,
+  "matchup_n_candidates": 223,
+  "matchup_n_leans": 78,
   "g13_signals": [],
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
