@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-25T09:00:37.358512",
+  "generated_at": "2026-08-27T07:03:35.871467",
   "sport": "golf",
   "event_name": "TOUR Championship",
   "event_id": 60,
   "is_major": false,
-  "last_updated": "2026-08-25T09:00:09.131540",
+  "last_updated": "2026-08-27T07:03:15.504304",
   "n_candidates": 0,
   "n_leans": 1,
   "plays": [
@@ -12,9 +12,9 @@
       "player_name": "Woodland, Gary",
       "dg_id": 12577,
       "market": "top_20",
-      "model_prob": 54.3,
-      "market_prob": 60.5,
-      "edge": -6.2,
+      "model_prob": 54.4,
+      "market_prob": 60.3,
+      "edge": -5.9,
       "direction": "under",
       "classification": "lean",
       "close_odds": -170.0
@@ -264,7 +264,14 @@
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
   "g14_signals": [],
-  "g14_win_watchlist": [],
+  "g14_win_watchlist": [
+    {
+      "player_name": "Schauffele, Xander",
+      "dg_win_prob": 8.4,
+      "adj_win_prob": 9.1,
+      "win_edge": 2.4
+    }
+  ],
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
