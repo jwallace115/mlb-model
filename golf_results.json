@@ -1,23 +1,254 @@
 {
-  "generated_at": "2026-08-27T08:03:29.060094",
+  "generated_at": "2026-08-27T22:07:49.097887",
   "sport": "golf",
   "event_name": "TOUR Championship",
   "event_id": 60,
   "is_major": false,
-  "last_updated": "2026-08-27T07:03:15.504304",
-  "n_candidates": 0,
-  "n_leans": 1,
+  "last_updated": "2026-08-27T22:07:27.653755",
+  "n_candidates": 18,
+  "n_leans": 4,
   "plays": [
+    {
+      "player_name": "Lee, Min Woo",
+      "dg_id": 16841,
+      "market": "top_20",
+      "model_prob": 58.8,
+      "market_prob": 90.0,
+      "edge": -31.2,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -1300.0
+    },
+    {
+      "player_name": "Reitan, Kristoffer",
+      "dg_id": 21407,
+      "market": "top_20",
+      "model_prob": 51.7,
+      "market_prob": 25.9,
+      "edge": 25.8,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 275.0
+    },
+    {
+      "player_name": "Young, Cameron",
+      "dg_id": 26651,
+      "market": "top_20",
+      "model_prob": 73.4,
+      "market_prob": 50.8,
+      "edge": 22.6,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": -110.0
+    },
+    {
+      "player_name": "Henley, Russell",
+      "dg_id": 14578,
+      "market": "top_20",
+      "model_prob": 68.6,
+      "market_prob": 46.2,
+      "edge": 22.5,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 110.0
+    },
+    {
+      "player_name": "Bhatia, Akshay",
+      "dg_id": 26096,
+      "market": "top_20",
+      "model_prob": 45.9,
+      "market_prob": 65.7,
+      "edge": -19.7,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -210.0
+    },
+    {
+      "player_name": "Matsuyama, Hideki",
+      "dg_id": 13562,
+      "market": "top_20",
+      "model_prob": 72.4,
+      "market_prob": 52.9,
+      "edge": 19.6,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": -120.0
+    },
+    {
+      "player_name": "Gotterup, Chris",
+      "dg_id": 27774,
+      "market": "top_20",
+      "model_prob": 71.1,
+      "market_prob": 88.8,
+      "edge": -17.8,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -1100.0
+    },
+    {
+      "player_name": "Fox, Ryan",
+      "dg_id": 11889,
+      "market": "top_20",
+      "model_prob": 40.6,
+      "market_prob": 57.4,
+      "edge": -16.8,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -145.0
+    },
     {
       "player_name": "Woodland, Gary",
       "dg_id": 12577,
       "market": "top_20",
       "model_prob": 54.4,
-      "market_prob": 60.3,
-      "edge": -5.9,
+      "market_prob": 71.1,
+      "edge": -16.7,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -275.0
+    },
+    {
+      "player_name": "Kim, Si Woo",
+      "dg_id": 14609,
+      "market": "top_20",
+      "model_prob": 73.9,
+      "market_prob": 57.4,
+      "edge": 16.5,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": -145.0
+    },
+    {
+      "player_name": "Morikawa, Collin",
+      "dg_id": 22085,
+      "market": "top_20",
+      "model_prob": 74.8,
+      "market_prob": 89.5,
+      "edge": -14.7,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -1200.0
+    },
+    {
+      "player_name": "Hovland, Viktor",
+      "dg_id": 18841,
+      "market": "top_20",
+      "model_prob": 72.6,
+      "market_prob": 87.2,
+      "edge": -14.6,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -900.0
+    },
+    {
+      "player_name": "Gerard, Ryan",
+      "dg_id": 29767,
+      "market": "top_20",
+      "model_prob": 64.8,
+      "market_prob": 79.0,
+      "edge": -14.2,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -440.0
+    },
+    {
+      "player_name": "Aberg, Ludvig",
+      "dg_id": 23950,
+      "market": "top_20",
+      "model_prob": 75.7,
+      "market_prob": 87.7,
+      "edge": -12.0,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -950.0
+    },
+    {
+      "player_name": "Rose, Justin",
+      "dg_id": 6093,
+      "market": "top_20",
+      "model_prob": 59.7,
+      "market_prob": 48.5,
+      "edge": 11.3,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": 100.0
+    },
+    {
+      "player_name": "Burns, Sam",
+      "dg_id": 19483,
+      "market": "top_20",
+      "model_prob": 73.7,
+      "market_prob": 84.0,
+      "edge": -10.3,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -650.0
+    },
+    {
+      "player_name": "Cantlay, Patrick",
+      "dg_id": 15466,
+      "market": "top_20",
+      "model_prob": 77.5,
+      "market_prob": 68.4,
+      "edge": 9.0,
+      "direction": "over",
+      "classification": "candidate",
+      "close_odds": -240.0
+    },
+    {
+      "player_name": "Scott, Adam",
+      "dg_id": 6430,
+      "market": "top_20",
+      "model_prob": 62.9,
+      "market_prob": 71.8,
+      "edge": -8.8,
+      "direction": "under",
+      "classification": "candidate",
+      "close_odds": -285.0
+    },
+    {
+      "player_name": "Fitzpatrick, Matt",
+      "dg_id": 17646,
+      "market": "top_20",
+      "model_prob": 74.1,
+      "market_prob": 82.0,
+      "edge": -8.0,
       "direction": "under",
       "classification": "lean",
-      "close_odds": -170.0
+      "close_odds": -550.0
+    },
+    {
+      "player_name": "Bridgeman, Jacob",
+      "dg_id": 29433,
+      "market": "top_20",
+      "model_prob": 54.7,
+      "market_prob": 48.5,
+      "edge": 6.3,
+      "direction": "over",
+      "classification": "lean",
+      "close_odds": 100.0
+    },
+    {
+      "player_name": "Fleetwood, Tommy",
+      "dg_id": 12294,
+      "market": "top_20",
+      "model_prob": 76.3,
+      "market_prob": 82.0,
+      "edge": -5.8,
+      "direction": "under",
+      "classification": "lean",
+      "close_odds": -550.0
+    },
+    {
+      "player_name": "Clark, Wyndham",
+      "dg_id": 23604,
+      "market": "top_20",
+      "model_prob": 72.5,
+      "market_prob": 77.5,
+      "edge": -5.1,
+      "direction": "under",
+      "classification": "lean",
+      "close_odds": -400.0
     }
   ],
   "season_stats": {
@@ -266,16 +497,93 @@
   "g14_signals": [],
   "g14_win_watchlist": [
     {
+      "player_name": "McIlroy, Rory",
+      "dg_win_prob": 8.7,
+      "adj_win_prob": 9.4,
+      "win_edge": 5.7
+    },
+    {
       "player_name": "Schauffele, Xander",
       "dg_win_prob": 8.4,
       "adj_win_prob": 9.1,
+      "win_edge": 5.4
+    },
+    {
+      "player_name": "Cantlay, Patrick",
+      "dg_win_prob": 4.4,
+      "adj_win_prob": 4.8,
+      "win_edge": 3.5
+    },
+    {
+      "player_name": "Young, Cameron",
+      "dg_win_prob": 4.0,
+      "adj_win_prob": 4.7,
+      "win_edge": 4.2
+    },
+    {
+      "player_name": "Kim, Si Woo",
+      "dg_win_prob": 3.2,
+      "adj_win_prob": 3.0,
+      "win_edge": 2.5
+    },
+    {
+      "player_name": "Matsuyama, Hideki",
+      "dg_win_prob": 3.1,
+      "adj_win_prob": 2.8,
       "win_edge": 2.4
+    },
+    {
+      "player_name": "Henley, Russell",
+      "dg_win_prob": 2.4,
+      "adj_win_prob": 3.0,
+      "win_edge": 2.8
     }
   ],
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
-  "g15_signals": [],
+  "g15_signals": [
+    {
+      "player_name": "Rose, Justin",
+      "dg_rank": null,
+      "dg_top20_prob": 59.7,
+      "adj_top20_prob": 62.0,
+      "book": "draftkings",
+      "close_odds": 100.0,
+      "fair_prob": 48.5,
+      "adj_edge": 13.5
+    },
+    {
+      "player_name": "Reitan, Kristoffer",
+      "dg_rank": null,
+      "dg_top20_prob": 51.7,
+      "adj_top20_prob": 53.9,
+      "book": "draftkings",
+      "close_odds": 275.0,
+      "fair_prob": 25.9,
+      "adj_edge": 28.0
+    },
+    {
+      "player_name": "Bridgeman, Jacob",
+      "dg_rank": null,
+      "dg_top20_prob": 54.7,
+      "adj_top20_prob": 56.9,
+      "book": "draftkings",
+      "close_odds": 100.0,
+      "fair_prob": 48.5,
+      "adj_edge": 8.5
+    },
+    {
+      "player_name": "Fitzpatrick, Alex",
+      "dg_rank": null,
+      "dg_top20_prob": 50.9,
+      "adj_top20_prob": 53.1,
+      "book": "draftkings",
+      "close_odds": 105.0,
+      "fair_prob": 47.3,
+      "adj_edge": 5.8
+    }
+  ],
   "g15_elite_density_bucket": "HIGH",
   "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
