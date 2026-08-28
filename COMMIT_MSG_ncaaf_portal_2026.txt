@@ -1,0 +1,23 @@
+ncaaf: portal overcorrection 2026 forward test — registry, frozen spec, snapshot/runner/grader
+
+Registry + review (ops v9 Rule 7) of the NCAAF Portal Overcorrection badge.
+Findings: 4 of 5 mandatory checks FAIL. Check 2 (Bucket B selected best-of-six
+on the same data, no held-out OOS), Check 1b (net_star_shock built from a
+completed season's portal list), Check 3 (8 identity breaks incl. Week 0
+inclusion, no FBS filter, no price capture), Check 4 (flat -110 only).
+Master doc claim "Portal Shock Badge: LIVE" is unsupported — never scheduled,
+zero 2026 rows, log gitignored, dashboard tab is a stub.
+
+Adds a clean 2026 Weeks 1-4 forward test, framed as FALSIFICATION ONLY
+(spec §6: ~40-60 obs/season vs ~1200 needed to confirm; pre-registered
+interpretation bands fixed in advance, no band authorises a bet).
+
+- freeze_snapshot: write-once 2026 classification, refuses to overwrite
+- shadow_daily: append-only, Weeks 1-4 (Week 0 excluded), FBS filter,
+  captures spread + provider + timestamp
+- grading_utils: update-in-place, idempotent, grades off the captured spread
+  (fixes the (game_id, team) dedup defect that made forward grading impossible)
+- .gitignore: ncaaf/logs allow-list per ops v9 §16
+
+ATS convention verified against the research formula: 40k random cases, 0
+mismatches. SHADOW ONLY. No capital. No promotion.

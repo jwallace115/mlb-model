@@ -41,6 +41,12 @@ mlb/logs/*
 !mlb/logs/yrfi_odds_2026.json
 !mlb/logs/p09_shadow_2026.json
 
+# ── NCAAF portal shadow (ops v9 §16 allow-list — the bare `logs/` rule on
+#    line 12 otherwise silently hides this, the v37 YRFI failure mode) ──
+!ncaaf/logs/
+ncaaf/logs/*
+!ncaaf/logs/portal_2026_shadow.json
+
 # ── Secrets ───────────────────────────────────────────────────────────────────
 .env
 .env.*
@@ -81,3 +87,8 @@ research/signal_discovery/
 
 # ── Research session log (never reset by pipeline) ──
 research/SESSION_LOG.txt
+
+# Scratch quarantine (device_bash cannot delete; remove manually)
+_to_delete/
+**/_to_delete/
+.gitignore.bak_*
