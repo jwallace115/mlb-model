@@ -92,3 +92,6 @@ research/SESSION_LOG.txt
 _to_delete/
 **/_to_delete/
 .gitignore.bak_*
+
+# env backups from scripts/set_env_key.sh
+.env.bak.*

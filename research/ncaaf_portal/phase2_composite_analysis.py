@@ -12,7 +12,10 @@ from scipy import stats
 from collections import defaultdict, Counter
 
 # API setup
-API_KEY = "VxpuqPMW/47ICJaR5wgxFmFwxXv6mpE9/jWXXCbucjo0QCer4g9mdb5xskr9NTAf"
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env", override=True)
+API_KEY = os.getenv("CFBD_API_KEY", "")
 BASE = "https://api.collegefootballdata.com"
 HEADERS = {"Authorization": f"Bearer {API_KEY}", "Accept": "application/json"}
 SEASONS = [2022, 2023, 2024, 2025]

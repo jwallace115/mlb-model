@@ -1,12 +1,13 @@
 {
   "p09_cutoff_bottom20": 31.7305,
-  "overlay_status": "ACTIVE",
+  "overlay_status": "DEAD",
   "overlay_version": "1.0",
   "stake_rules": {
-    "p09_only": 1.25,
+    "p09_only": 1.0,
     "s12_only": 1.25,
-    "both": 1.5,
+    "both": 1.0,
     "cap": 1.5
   },
-  "deployment_note": "P09 under amplifier — contact suppression in pitcher parks. 2024-derived cutoff."
+  "deployment_note": "DEAD — Clean Kill #4 (PHASE7_CLEAN_KILLS.md). Overlay inverts: active=50.9%, inactive=52.8%. Stake multipliers zeroed 2026-08-28.",
+  "killed_date": "2026-08-28"
 }

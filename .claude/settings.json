@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "deny": [
+      "Bash(git push*)",
+      "Bash(git remote set-url*)",
+      "Bash(crontab -r*)",
+      "Bash(rm -rf*)",
+      "Edit(./ncaaf/data/portal_2026_classification_frozen.json)",
+      "Write(./ncaaf/data/portal_2026_classification_frozen.json)",
+      "Bash(mv*portal_2026_classification_frozen*)",
+      "Bash(rm*portal_2026_classification_frozen*)",
+      "Edit(./research/ncaaf_portal/NCAAF_PORTAL_2026_FROZEN_SPEC.md)",
+      "Read(./.env)",
+      "Read(~/.ssh/**)",
+      "Edit(./.git/**)",
+      "Bash(git clean*)",
+      "Bash(git reset --hard*)",
+      "Bash(git checkout -- *)",
+      "Bash(git checkout .*)",
+      "Bash(git rebase*)",
+      "Bash(git push --force*)",
+      "Bash(git branch -D*)"
+    ],
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash(python3*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(crontab -l*)",
+      "Bash(launchctl list*)",
+      "Bash(which*)",
+      "Bash(ls*)",
+      "Bash(grep*)",
+      "Bash(tail*)",
+      "Bash(head*)"
+    ]
+  }
+}

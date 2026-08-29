@@ -38,8 +38,8 @@
 - **Currently trustable as live edge:** 0
 - **Shadow-only (validated, active data collection):** 10 (YRFI, P1B, CS013, CS004, KP04, Combined Short Exit, Team Total, S12, NRFI Selector INFO, CS028 insufficient sample)
 - **Shadow-only (unvalidated):** 2 (Night Dog, BP Adv Dog)
-- **Shadow-only (paused):** 3 (V1 Totals, P09, NRFI Helper)
-- **Dead/archived:** 4 (F5 Totals, F5 Runline, ADJ Family, none currently active)
+- **Shadow-only (paused):** 2 (V1 Totals, NRFI Helper)
+- **Dead/archived:** 5 (F5 Totals, F5 Runline, ADJ Family, P09 — Clean Kill #4)
 - **UNKNOWN critical fields:** VM cron verification deferred for all systems
 - **ADJ May 15 activation:** DELAYED — all 5 signals DIMINISHED
 
@@ -62,7 +62,7 @@
 | NRFI Selector | NRFI parlay | negative (-0.6pp) | real F5 | VALIDATED_SHADOW (INFO) | Not edge — filter only |
 | NRFI Helper | NRFI micro model | UNKNOWN | UNKNOWN | UNVALIDATED_SHADOW | First-pass; needs review |
 | S12 Overlay | FG UNDER overlay | mixed (DIMINISHED) | real closing | VALIDATED_SHADOW | Overall ROI negative |
-| P09 Overlay | FG UNDER overlay | positive (ADVANCE) | proxy | VALIDATED_SHADOW (PAUSED with V1) | Active config but V1 paused |
+| P09 Overlay | FG UNDER overlay | CLEAN KILL (inverts) | proxy | DEAD (Clean Kill #4) | Overlay inverts — active worse than inactive |
 | F5 Totals Engine | F5 totals | UNKNOWN | real closing | ARCHIVED | Engine archived |
 | F5 Runline | F5 runline | contaminated | real closing | ARCHIVED | Contaminated; archived |
 | ADJ Family | FG UNDER | negative (DIMINISHED) | real closing | VALIDATED_NEGATIVE_DEAD | All 5 DIMINISHED |
@@ -196,20 +196,20 @@ Same schema as Night Dog. **STATUS: UNVALIDATED_SHADOW.** Same open questions.
 1. **SYSTEM NAME:** P09 — Contact Suppression UNDER Overlay
 2. **MARKET:** Full-game totals UNDER (overlay)
 3. **THESIS:** `((home_hh + away_hh)/2) * park_run_factor` — LOW values predict UNDER
-4. **VALIDATION ARTIFACT:** `research/signal_scanner/p09_revalidation.md` — ADVANCE (5/5 score). Permutation PASS. Season-stable. Robust. Independent.
-5. **VALIDATION RESULT:** positive
+4. **VALIDATION ARTIFACT:** `research/signal_scanner/p09_revalidation.md` — ADVANCE (5/5 score). **SUPERSEDED** by `research/recovery/mlb_totals_reset_audit/PHASE7_CLEAN_KILLS.md` Clean Kill #4.
+5. **VALIDATION RESULT:** CLEAN KILL — OOS blind-under: active=50.9%, inactive=52.8%. Active is WORSE. Overlay inverts direction.
 6. **PRICING BASIS:** proxy (research used closing totals, not bet-level prices)
-7. **PIT-SAFETY STATUS:** UNKNOWN
+7. **PIT-SAFETY STATUS:** N/A (dead)
 8. **LIVE IMPLEMENTATION FILES:** `mlb_sim/pipeline/p09_overlay.py`, `mlb_sim/pipeline/p09_overlay_config.json`
-9. **LIVE OUTPUT FILES:** UNKNOWN — not independently verified
-10. **CONSUMER PATH:** Embedded in V1 daily_signal_generator
-11. **CRON / LAUNCHD:** Runs within V1 pipeline (PAUSED)
-12. **RESEARCH OBJECT VS LIVE OBJECT MATCH:** UNKNOWN — config shows `overlay_status: ACTIVE` with stake rules, but live/research threshold match not verified
-13. **GRADING PATH:** Via V1 engine grader (PAUSED)
-14. **OUTPUT FRESHNESS:** UNKNOWN
-15. **STATUS:** VALIDATED_SHADOW (PAUSED with V1) — Positive validation exists. Active config with stake multipliers (`p09_only: 1.25, both: 1.5`). But runs within V1 which is PAUSED. Changed from v1 UNCLASSIFIED because validation + active config provide sufficient evidence for classification.
+9. **LIVE OUTPUT FILES:** N/A
+10. **CONSUMER PATH:** NONE — removed
+11. **CRON / LAUNCHD:** NONE
+12. **RESEARCH OBJECT VS LIVE OBJECT MATCH:** N/A
+13. **GRADING PATH:** N/A
+14. **OUTPUT FRESHNESS:** N/A
+15. **STATUS:** DEAD (Clean Kill #4) — Permanently killed per PHASE7_CLEAN_KILLS.md. Reopening condition: NONE. Earlier ADVANCE 5/5 and active config with stake multipliers (`p09_only: 1.25, both: 1.5`) are withdrawn. The kill test is the later, more rigorous evaluation.
 16. **OUT-OF-SCOPE:** S12 (separate overlay), ADJ (separate overlay family)
-17. **OPEN QUESTIONS:** Live output and grading not independently verified. P09 requires decision review before any live-money interpretation.
+17. **OPEN QUESTIONS:** Config file `p09_overlay_config.json` should have `overlay_status` set to DEAD to prevent accidental re-activation.
 
 ### 15. F5 Totals Engine
 
