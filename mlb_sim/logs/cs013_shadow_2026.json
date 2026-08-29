@@ -23504,24 +23504,6 @@
     "logged_at": "2026-07-30T02:00:40.587289"
   },
   {
-    "game_id": 823539,
-    "date": "2026-08-29",
-    "home_team": "NYY",
-    "away_team": "BOS",
-    "home_degraded_relievers": 4,
-    "away_degraded_relievers": 8,
-    "combined_degraded_count": 8,
-    "cs013_flag": true,
-    "cs013_status": "OK",
-    "cs020_acceleration_score": 0.7619,
-    "cs020_flag": true,
-    "signal_tier": "HIGH",
-    "cs004_flag": false,
-    "v1_direction_context": "NONE",
-    "closing_total": 7.5,
-    "logged_at": "2026-08-29T02:00:15.497798"
-  },
-  {
     "game_id": 823501,
     "date": "2026-08-29",
     "home_team": "NYY",
@@ -23808,5 +23790,23 @@
     "v1_direction_context": "NONE",
     "closing_total": 8.0,
     "logged_at": "2026-08-29T02:00:48.701574"
+  },
+  {
+    "game_id": 823539,
+    "date": "2026-08-29",
+    "home_team": "NYY",
+    "away_team": "BOS",
+    "home_degraded_relievers": 4,
+    "away_degraded_relievers": 8,
+    "combined_degraded_count": 8,
+    "cs013_flag": true,
+    "cs013_status": "OK",
+    "cs020_acceleration_score": 0.7619,
+    "cs020_flag": true,
+    "signal_tier": "HIGH",
+    "cs004_flag": false,
+    "v1_direction_context": "NONE",
+    "closing_total": 7.5,
+    "logged_at": "2026-08-29T07:00:10.658618"
   }
 ]

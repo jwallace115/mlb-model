@@ -19155,21 +19155,6 @@
     "logged_at": "2026-07-30T06:00:40.600280"
   },
   {
-    "game_id": 823539,
-    "game_date": "2026-08-29",
-    "home_team": "NYY",
-    "away_team": "BOS",
-    "home_blowup_score": 0.140167,
-    "signal_fires": false,
-    "threshold_used": 0.2563,
-    "relievers_scored": 10,
-    "cs013_also_active": true,
-    "actual_over_under": null,
-    "closing_total": 7.5,
-    "clv": null,
-    "logged_at": "2026-08-29T06:00:15.695279"
-  },
-  {
     "game_id": 823501,
     "game_date": "2026-08-29",
     "home_team": "NYY",
@@ -19408,5 +19393,20 @@
     "closing_total": 8.0,
     "clv": null,
     "logged_at": "2026-08-29T06:00:48.713762"
+  },
+  {
+    "game_id": 823539,
+    "game_date": "2026-08-29",
+    "home_team": "NYY",
+    "away_team": "BOS",
+    "home_blowup_score": 0.140167,
+    "signal_fires": false,
+    "threshold_used": 0.2563,
+    "relievers_scored": 10,
+    "cs013_also_active": true,
+    "actual_over_under": null,
+    "closing_total": 7.5,
+    "clv": null,
+    "logged_at": "2026-08-29T11:00:10.874088"
   }
 ]
