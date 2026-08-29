@@ -95,3 +95,12 @@ _to_delete/
 
 # env backups from scripts/set_env_key.sh
 .env.bak.*
+
+# ── SQLite recovery artifacts (large binaries, keep local only) ────────────
+data/*.db.corrupt_*
+data/*.db.prerecover_*
+data/*.db.pre_promote_*
+data/*.db.corrupt_backup
+data/.fuse_hidden*
+data/*.db-wal
+data/*.db-shm
