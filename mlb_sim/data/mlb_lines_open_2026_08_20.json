@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "8a02d651eed1b9025dca5ab193f2fb68",
+    "game_date": "2026-08-20",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "Washington Nationals",
+    "commence_time": "2026-08-20T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings",
+    "capture_timestamp": "2026-08-19T06:05:02.681667+00:00"
+  },
+  {
+    "game_id": "fa53df0ea33f6bbfb66e7e6198f715dd",
+    "game_date": "2026-08-20",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-08-20T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "fanduel",
+    "capture_timestamp": "2026-08-19T06:05:02.681667+00:00"
+  },
+  {
+    "game_id": "322d54946bb18482b7d8348b69b6942e",
+    "game_date": "2026-08-20",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Los Angeles Dodgers",
+    "commence_time": "2026-08-20T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.5,
+    "over_price": 101,
+    "under_price": -115,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-19T06:05:02.681667+00:00"
+  }
+]

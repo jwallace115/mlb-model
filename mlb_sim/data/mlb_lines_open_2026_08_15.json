@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "460030cd885edbe6318ada07a319efb4",
+    "game_date": "2026-08-15",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-08-15T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -115,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-14T06:05:02.342743+00:00"
+  },
+  {
+    "game_id": "9d19aea6561484f2c862df00e4ddb562",
+    "game_date": "2026-08-15",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Kansas City Royals",
+    "commence_time": "2026-08-15T01:39:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.0,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-14T06:05:02.342743+00:00"
+  },
+  {
+    "game_id": "481f3fef3aca60dd9a1d5f67af61fdef",
+    "game_date": "2026-08-15",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Milwaukee Brewers",
+    "commence_time": "2026-08-15T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -115,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-14T06:05:02.342743+00:00"
+  },
+  {
+    "game_id": "e390cc4f170e6f93279b33d776a6b2a4",
+    "game_date": "2026-08-15",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "Colorado Rockies",
+    "commence_time": "2026-08-15T02:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -112,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-08-14T06:05:02.342743+00:00"
+  }
+]
