@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-01T07:01:48.067604",
+  "generated_at": "2026-09-01T09:00:34.915234",
   "sport": "golf",
   "event_name": "TOUR Championship",
   "event_id": 60,
   "is_major": false,
-  "last_updated": "2026-08-30T07:00:05.324203",
+  "last_updated": "2026-09-01T09:00:06.935624",
   "n_candidates": 23,
   "n_leans": 0,
   "plays": [
@@ -13,7 +13,7 @@
       "dg_id": 15466,
       "market": "top_20",
       "model_prob": 77.5,
-      "market_prob": 30.0,
+      "market_prob": 30.1,
       "edge": 47.4,
       "direction": "over",
       "classification": "candidate",
@@ -24,7 +24,7 @@
       "dg_id": 13562,
       "market": "top_20",
       "model_prob": 72.4,
-      "market_prob": 26.0,
+      "market_prob": 26.1,
       "edge": 46.4,
       "direction": "over",
       "classification": "candidate",
@@ -68,8 +68,8 @@
       "dg_id": 6430,
       "market": "top_20",
       "model_prob": 62.9,
-      "market_prob": 96.4,
-      "edge": -33.5,
+      "market_prob": 96.5,
+      "edge": -33.6,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -8000.0
@@ -91,7 +91,7 @@
       "market": "top_20",
       "model_prob": 64.8,
       "market_prob": 96.7,
-      "edge": -31.9,
+      "edge": -32.0,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -10000.0
@@ -113,7 +113,7 @@
       "market": "top_20",
       "model_prob": 58.8,
       "market_prob": 87.4,
-      "edge": -28.5,
+      "edge": -28.6,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -850.0
@@ -134,7 +134,7 @@
       "dg_id": 18841,
       "market": "top_20",
       "model_prob": 72.6,
-      "market_prob": 97.6,
+      "market_prob": 97.7,
       "edge": -25.1,
       "direction": "under",
       "classification": "candidate",
@@ -145,8 +145,8 @@
       "dg_id": 14578,
       "market": "top_20",
       "model_prob": 68.6,
-      "market_prob": 90.1,
-      "edge": -21.5,
+      "market_prob": 90.2,
+      "edge": -21.6,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -1200.0
@@ -189,8 +189,8 @@
       "dg_id": 19483,
       "market": "top_20",
       "model_prob": 73.7,
-      "market_prob": 91.5,
-      "edge": -17.8,
+      "market_prob": 91.6,
+      "edge": -17.9,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -1499.0
@@ -200,11 +200,11 @@
       "dg_id": 12577,
       "market": "top_20",
       "model_prob": 54.4,
-      "market_prob": 39.9,
-      "edge": 14.5,
+      "market_prob": 39.1,
+      "edge": 15.3,
       "direction": "over",
       "classification": "candidate",
-      "close_odds": 145.0
+      "close_odds": 150.0
     },
     {
       "player_name": "Bhatia, Akshay",
@@ -234,7 +234,7 @@
       "market": "top_20",
       "model_prob": 83.4,
       "market_prob": 95.3,
-      "edge": -11.8,
+      "edge": -11.9,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -4000.0
@@ -244,7 +244,7 @@
       "dg_id": 17646,
       "market": "top_20",
       "model_prob": 74.1,
-      "market_prob": 85.4,
+      "market_prob": 85.5,
       "edge": -11.4,
       "direction": "under",
       "classification": "candidate",
@@ -255,8 +255,8 @@
       "dg_id": 14609,
       "market": "top_20",
       "model_prob": 73.9,
-      "market_prob": 84.6,
-      "edge": -10.7,
+      "market_prob": 84.7,
+      "edge": -10.8,
       "direction": "under",
       "classification": "candidate",
       "close_odds": -650.0
@@ -320,327 +320,197 @@
   ],
   "matchup_candidates": [
     {
-      "player_1": "Rose, Justin",
-      "player_2": "Scott, Adam",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 24.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Hovland, Viktor",
-      "player_2": "MacIntyre, Robert",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 6.3,
-      "classification": "lean"
-    },
-    {
-      "player_1": "Smalley, Alex",
-      "player_2": "Fitzpatrick, Alex",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 25.5,
-      "classification": "candidate"
-    },
-    {
       "player_1": "Cantlay, Patrick",
       "player_2": "Reitan, Kristoffer",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 16.4,
+      "bet_edge": 19.0,
       "classification": "candidate"
     },
     {
       "player_1": "Woodland, Gary",
-      "player_2": "Gerard, Ryan",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 19.8,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Matsuyama, Hideki",
       "player_2": "Bhatia, Akshay",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 17.6,
+      "bet_edge": 35.9,
       "classification": "candidate"
     },
     {
-      "player_1": "Henley, Russell",
-      "player_2": "Bridgeman, Jacob",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 20.8,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "McIlroy, Rory",
+      "player_1": "Fox, Ryan",
       "player_2": "Schauffele, Xander",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 7.6,
-      "classification": "lean"
+      "bet_edge": 10.3,
+      "classification": "candidate"
     },
     {
       "player_1": "Fleetwood, Tommy",
-      "player_2": "Aberg, Ludvig",
+      "player_2": "Fitzpatrick, Alex",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 8.3,
+      "bet_edge": 19.9,
       "classification": "candidate"
     },
     {
-      "player_1": "Kim, Si Woo",
-      "player_2": "Gotterup, Chris",
+      "player_1": "Fitzpatrick, Matt",
+      "player_2": "Clark, Wyndham",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 14.2,
+      "bet_edge": 20.3,
       "classification": "candidate"
     },
     {
-      "player_1": "Clark, Wyndham",
+      "player_1": "Rose, Justin",
+      "player_2": "Kim, Si Woo",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 15.7,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Henley, Russell",
+      "player_2": "Lee, Min Woo",
+      "player_3": "",
+      "match_type": "dg_model_h2h",
+      "book": "datagolf_model",
+      "bet_edge": 14.0,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "McIlroy, Rory",
       "player_2": "Young, Cameron",
       "player_3": "",
       "match_type": "dg_model_h2h",
       "book": "datagolf_model",
-      "bet_edge": 16.0,
-      "classification": "candidate"
+      "bet_edge": 7.1,
+      "classification": "lean"
     },
     {
-      "player_1": "Fox, Ryan",
-      "player_2": "Fitzpatrick, Alex",
+      "player_1": "Cantlay, Patrick",
+      "player_2": "Schauffele, Xander",
       "player_3": "",
-      "match_type": "tournament_matchups",
+      "match_type": "round_matchups",
       "book": "bet365",
-      "bet_edge": 24.8,
+      "bet_edge": 9.1,
       "classification": "candidate"
     },
     {
-      "player_1": "Fox, Ryan",
-      "player_2": "Fitzpatrick, Alex",
+      "player_1": "Cantlay, Patrick",
+      "player_2": "Schauffele, Xander",
       "player_3": "",
-      "match_type": "tournament_matchups",
+      "match_type": "round_matchups",
       "book": "betcris",
-      "bet_edge": 28.1,
+      "bet_edge": 9.5,
       "classification": "candidate"
     },
     {
-      "player_1": "Fox, Ryan",
-      "player_2": "Fitzpatrick, Alex",
+      "player_1": "Cantlay, Patrick",
+      "player_2": "Schauffele, Xander",
       "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "betonline",
-      "bet_edge": 26.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Fox, Ryan",
-      "player_2": "Fitzpatrick, Alex",
-      "player_3": "",
-      "match_type": "tournament_matchups",
+      "match_type": "round_matchups",
       "book": "bovada",
-      "bet_edge": 24.6,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Fox, Ryan",
-      "player_2": "Fitzpatrick, Alex",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "draftkings",
-      "bet_edge": 24.8,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Fox, Ryan",
-      "player_2": "Fitzpatrick, Alex",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "unibet",
-      "bet_edge": 28.2,
+      "bet_edge": 9.1,
       "classification": "candidate"
     },
     {
       "player_1": "Woodland, Gary",
-      "player_2": "Kim, Tom",
+      "player_2": "Reitan, Kristoffer",
       "player_3": "",
-      "match_type": "tournament_matchups",
+      "match_type": "round_matchups",
       "book": "bet365",
-      "bet_edge": 24.6,
-      "classification": "candidate"
+      "bet_edge": 5.8,
+      "classification": "lean"
     },
     {
       "player_1": "Woodland, Gary",
-      "player_2": "Kim, Tom",
+      "player_2": "Reitan, Kristoffer",
       "player_3": "",
-      "match_type": "tournament_matchups",
+      "match_type": "round_matchups",
       "book": "bovada",
-      "bet_edge": 23.5,
-      "classification": "candidate"
+      "bet_edge": 5.7,
+      "classification": "lean"
     },
     {
-      "player_1": "Woodland, Gary",
-      "player_2": "Kim, Tom",
+      "player_1": "Matsuyama, Hideki",
+      "player_2": "Morikawa, Collin",
       "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "unibet",
-      "bet_edge": 19.3,
+      "match_type": "round_matchups",
+      "book": "bet365",
+      "bet_edge": 5.1,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Matsuyama, Hideki",
+      "player_2": "Morikawa, Collin",
+      "player_3": "",
+      "match_type": "round_matchups",
+      "book": "bovada",
+      "bet_edge": 5.1,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Smalley, Alex",
+      "player_2": "Bhatia, Akshay",
+      "player_3": "",
+      "match_type": "round_matchups",
+      "book": "bet365",
+      "bet_edge": 5.3,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Smalley, Alex",
+      "player_2": "Bhatia, Akshay",
+      "player_3": "",
+      "match_type": "round_matchups",
+      "book": "bovada",
+      "bet_edge": 7.4,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Rose, Justin",
+      "player_2": "Fitzpatrick, Alex",
+      "player_3": "",
+      "match_type": "round_matchups",
+      "book": "bet365",
+      "bet_edge": 6.5,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Rose, Justin",
+      "player_2": "Fitzpatrick, Alex",
+      "player_3": "",
+      "match_type": "round_matchups",
+      "book": "bovada",
+      "bet_edge": 6.4,
+      "classification": "lean"
+    },
+    {
+      "player_1": "Fleetwood, Tommy",
+      "player_2": "Kim, Si Woo",
+      "player_3": "",
+      "match_type": "round_matchups",
+      "book": "bet365",
+      "bet_edge": 16.8,
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 223,
-  "matchup_n_leans": 78,
+  "matchup_n_candidates": 91,
+  "matchup_n_leans": 38,
   "g13_signals": [],
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
   "g14_signals": [],
-  "g14_win_watchlist": [
-    {
-      "player_name": "McIlroy, Rory",
-      "dg_win_prob": 8.7,
-      "adj_win_prob": 9.4,
-      "win_edge": 6.5
-    },
-    {
-      "player_name": "Schauffele, Xander",
-      "dg_win_prob": 8.4,
-      "adj_win_prob": 9.1,
-      "win_edge": 9.1
-    },
-    {
-      "player_name": "Cantlay, Patrick",
-      "dg_win_prob": 4.4,
-      "adj_win_prob": 4.8,
-      "win_edge": 4.8
-    },
-    {
-      "player_name": "Young, Cameron",
-      "dg_win_prob": 4.0,
-      "adj_win_prob": 4.7,
-      "win_edge": 3.0
-    },
-    {
-      "player_name": "Morikawa, Collin",
-      "dg_win_prob": 4.0,
-      "adj_win_prob": 3.7,
-      "win_edge": 3.6
-    },
-    {
-      "player_name": "Burns, Sam",
-      "dg_win_prob": 3.8,
-      "adj_win_prob": 4.5,
-      "win_edge": 3.7
-    },
-    {
-      "player_name": "Fleetwood, Tommy",
-      "dg_win_prob": 3.8,
-      "adj_win_prob": 4.5,
-      "win_edge": 4.4
-    },
-    {
-      "player_name": "Clark, Wyndham",
-      "dg_win_prob": 3.6,
-      "adj_win_prob": 3.5,
-      "win_edge": 3.5
-    },
-    {
-      "player_name": "Kim, Si Woo",
-      "dg_win_prob": 3.2,
-      "adj_win_prob": 3.0,
-      "win_edge": 2.9
-    },
-    {
-      "player_name": "Fitzpatrick, Matt",
-      "dg_win_prob": 3.2,
-      "adj_win_prob": 3.6,
-      "win_edge": 3.4
-    },
-    {
-      "player_name": "Matsuyama, Hideki",
-      "dg_win_prob": 3.1,
-      "adj_win_prob": 2.8,
-      "win_edge": 2.8
-    },
-    {
-      "player_name": "Henley, Russell",
-      "dg_win_prob": 2.4,
-      "adj_win_prob": 3.0,
-      "win_edge": 2.5
-    },
-    {
-      "player_name": "MacIntyre, Robert",
-      "dg_win_prob": 1.7,
-      "adj_win_prob": 2.3,
-      "win_edge": 2.3
-    }
-  ],
+  "g14_win_watchlist": [],
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
-  "g15_signals": [
-    {
-      "player_name": "MacIntyre, Robert",
-      "dg_rank": null,
-      "dg_top20_prob": 62.4,
-      "adj_top20_prob": 64.6,
-      "book": "draftkings",
-      "close_odds": 300.0,
-      "fair_prob": 24.4,
-      "adj_edge": 40.2
-    },
-    {
-      "player_name": "Smalley, Alex",
-      "dg_rank": null,
-      "dg_top20_prob": 55.6,
-      "adj_top20_prob": 57.8,
-      "book": "draftkings",
-      "close_odds": 650.0,
-      "fair_prob": 13.0,
-      "adj_edge": 44.8
-    },
-    {
-      "player_name": "Woodland, Gary",
-      "dg_rank": null,
-      "dg_top20_prob": 54.4,
-      "adj_top20_prob": 56.6,
-      "book": "draftkings",
-      "close_odds": 145.0,
-      "fair_prob": 39.9,
-      "adj_edge": 16.7
-    },
-    {
-      "player_name": "Reitan, Kristoffer",
-      "dg_rank": null,
-      "dg_top20_prob": 51.7,
-      "adj_top20_prob": 53.9,
-      "book": "draftkings",
-      "close_odds": 700.0,
-      "fair_prob": 12.2,
-      "adj_edge": 41.7
-    },
-    {
-      "player_name": "Bhatia, Akshay",
-      "dg_rank": null,
-      "dg_top20_prob": 45.9,
-      "adj_top20_prob": 48.1,
-      "book": "draftkings",
-      "close_odds": 210.0,
-      "fair_prob": 31.5,
-      "adj_edge": 16.7
-    }
-  ],
+  "g15_signals": [],
   "g15_elite_density_bucket": "HIGH",
   "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
