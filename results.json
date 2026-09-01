@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-01T15:00:26.584687Z",
+  "generated_at": "2026-09-01T16:00:32.351640Z",
   "game_date": "2026-09-01",
   "plays": [
     {
@@ -21,10 +21,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 11.2,
-        "proj_total_f5": 6.64,
+        "proj_total_full": 11.18,
+        "proj_total_f5": 6.63,
         "confidence": "MEDIUM",
-        "confidence_score": 0.662,
+        "confidence_score": 0.656,
         "factors": {
           "sp_home_xfip": 4.977,
           "sp_away_xfip": 5.099,
@@ -35,15 +35,15 @@
           "home_wrc_plus": 99.0,
           "away_wrc_plus": 99.5,
           "park_factor": 1.07,
-          "wind_speed_mph": 4.7,
-          "wind_direction": 245,
-          "wind_desc": "Blowing Out to CF",
-          "temperature_f": 94.8,
+          "wind_speed_mph": 4.1,
+          "wind_direction": 261,
+          "wind_desc": "Blowing R to L",
+          "temperature_f": 95.2,
           "weather_desc": "Clear",
-          "wind_factor": 1.0096,
-          "temp_factor": 1.0456,
-          "home_wind_adj": 1.0096,
-          "away_wind_adj": 1.0096,
+          "wind_factor": 1.0065,
+          "temp_factor": 1.0464,
+          "home_wind_adj": 1.0065,
+          "away_wind_adj": 1.0065,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -59,7 +59,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.7,
+        "edge": 1.68,
         "lean": "OVER",
         "consensus": 9.5,
         "value": true
@@ -96,7 +96,7 @@
         "proj_total_full": 9.85,
         "proj_total_f5": 5.51,
         "confidence": "MEDIUM",
-        "confidence_score": 0.47,
+        "confidence_score": 0.471,
         "factors": {
           "sp_home_xfip": 4.43,
           "sp_away_xfip": 4.234,
@@ -107,15 +107,15 @@
           "home_wrc_plus": 101.0,
           "away_wrc_plus": 101.1,
           "park_factor": 1.03,
-          "wind_speed_mph": 4.9,
+          "wind_speed_mph": 5.7,
           "wind_direction": 219,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 87.5,
+          "temperature_f": 87.0,
           "weather_desc": "Clear",
-          "wind_factor": 1.0077,
-          "temp_factor": 1.031,
-          "home_wind_adj": 1.0077,
-          "away_wind_adj": 1.0077,
+          "wind_factor": 1.009,
+          "temp_factor": 1.03,
+          "home_wind_adj": 1.009,
+          "away_wind_adj": 1.009,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -142,7 +142,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Scorching 88\u00b0F temperatures juice fly balls and sap pitchers' stuff early. Run-friendly conditions. The park (PF 103) is hitter-friendly, and MIL's pen is taxed (12 innings last 2 days). Model has 9.8, market is at 10.5 \u2014 over by -0.7 runs.",
+      "summary": "Wrigley Field plays at PF 103 \u2014 a genuine hitter's environment that adds run-scoring value on top of everything else. 87\u00b0F heat adds to the over lean, and MIL's pen is taxed (12 innings last 2 days). Model has 9.8, market is at 10.5 \u2014 over by -0.7 runs.",
       "props": [],
       "alerts": []
     },
@@ -165,10 +165,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 10.38,
-        "proj_total_f5": 5.69,
+        "proj_total_full": 10.33,
+        "proj_total_f5": 5.67,
         "confidence": "MEDIUM",
-        "confidence_score": 0.464,
+        "confidence_score": 0.453,
         "factors": {
           "sp_home_xfip": 3.986,
           "sp_away_xfip": 4.175,
@@ -179,15 +179,15 @@
           "home_wrc_plus": 97.3,
           "away_wrc_plus": 99.6,
           "park_factor": 1.17,
-          "wind_speed_mph": 5.4,
-          "wind_direction": 99,
+          "wind_speed_mph": 5.3,
+          "wind_direction": 75,
           "wind_desc": "Blowing L to R",
-          "temperature_f": 83.6,
+          "temperature_f": 84.1,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0065,
-          "temp_factor": 1.0232,
-          "home_wind_adj": 1.0065,
-          "away_wind_adj": 1.0065,
+          "wind_factor": 1.0012,
+          "temp_factor": 1.0242,
+          "home_wind_adj": 1.0012,
+          "away_wind_adj": 1.0012,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -203,7 +203,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.62,
+        "edge": -0.67,
         "lean": "UNDER",
         "consensus": 11.0,
         "value": true
@@ -214,7 +214,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Coors Field (PF 117) is in a category of its own \u2014 the altitude inflates scoring regardless of pitching quality. Starters are evenly matched (Kyle Bradish 4.17 / Gabriel Hughes 3.99 xFIP), and 84\u00b0F heat adds to the over lean. Model has 10.4, market is at 11.0 \u2014 over by -0.6 runs.",
+      "summary": "Coors Field (PF 117) is in a category of its own \u2014 the altitude inflates scoring regardless of pitching quality. Starters are evenly matched (Kyle Bradish 4.17 / Gabriel Hughes 3.99 xFIP), and 84\u00b0F heat adds to the over lean. Model has 10.3, market is at 11.0 \u2014 over by -0.7 runs.",
       "props": [],
       "alerts": []
     },
@@ -237,10 +237,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 10.33,
-        "proj_total_f5": 5.99,
+        "proj_total_full": 10.36,
+        "proj_total_f5": 6.01,
         "confidence": "MEDIUM",
-        "confidence_score": 0.719,
+        "confidence_score": 0.726,
         "factors": {
           "sp_home_xfip": 4.947,
           "sp_away_xfip": 4.57,
@@ -252,14 +252,14 @@
           "away_wrc_plus": 100.6,
           "park_factor": 1.01,
           "wind_speed_mph": 4.6,
-          "wind_direction": 247,
-          "wind_desc": "Blowing R to L",
-          "temperature_f": 93.6,
-          "weather_desc": "Clear",
-          "wind_factor": 1.0063,
-          "temp_factor": 1.0432,
-          "home_wind_adj": 1.0063,
-          "away_wind_adj": 1.0063,
+          "wind_direction": 227,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 93.4,
+          "weather_desc": "Overcast",
+          "wind_factor": 1.0092,
+          "temp_factor": 1.0428,
+          "home_wind_adj": 1.0092,
+          "away_wind_adj": 1.0092,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -275,7 +275,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.33,
+        "edge": 0.36,
         "lean": "OVER",
         "consensus": 10.0,
         "value": false
@@ -286,7 +286,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Jake Irvin is at a 4.95 xFIP this season \u2014 below average \u2014 and ATL's lineup is near league average at 101 wRC+. That's a favorable matchup for the offense. 94\u00b0F heat adds to the over lean, and WSN's pen is taxed (11 innings last 2 days). Model has 10.3, market is at 10.0 \u2014 over by +0.3 runs.",
+      "summary": "Jake Irvin is at a 4.95 xFIP this season \u2014 below average \u2014 and ATL's lineup is near league average at 101 wRC+. That's a favorable matchup for the offense. 93\u00b0F heat adds to the over lean, and WSN's pen is taxed (11 innings last 2 days). Model has 10.4, market is at 10.0 \u2014 over by +0.4 runs.",
       "props": [],
       "alerts": []
     }
@@ -310,11 +310,11 @@
         "home_umpire": null
       },
       "proj": {
-        "lean": "UNDER",
-        "proj_total_full": 8.62,
-        "proj_total_f5": 4.66,
+        "lean": "NEUTRAL",
+        "proj_total_full": 8.72,
+        "proj_total_f5": 4.71,
         "confidence": "LOW",
-        "confidence_score": 0.331,
+        "confidence_score": 0.146,
         "factors": {
           "sp_home_xfip": 4.391,
           "sp_away_xfip": 3.385,
@@ -325,15 +325,15 @@
           "home_wrc_plus": 98.9,
           "away_wrc_plus": 100.0,
           "park_factor": 0.98,
-          "wind_speed_mph": 6.8,
-          "wind_direction": 261,
-          "wind_desc": "Blowing R to L",
-          "temperature_f": 95.0,
+          "wind_speed_mph": 3.5,
+          "wind_direction": 198,
+          "wind_desc": "Blowing Out to CF",
+          "temperature_f": 96.6,
           "weather_desc": "Clear",
-          "wind_factor": 0.9982,
-          "temp_factor": 1.046,
-          "home_wind_adj": 0.9982,
-          "away_wind_adj": 0.9982,
+          "wind_factor": 1.0073,
+          "temp_factor": 1.0492,
+          "home_wind_adj": 1.0073,
+          "away_wind_adj": 1.0073,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -349,7 +349,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.12,
+        "edge": 1.22,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -360,7 +360,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.6 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Temperature (97\u00b0F) pushes toward the over while sp_avg counters in the other direction \u2014 the model nets out at 8.7 runs with no clear dominant force. Pass.",
       "props": [],
       "alerts": []
     },
@@ -376,17 +376,17 @@
         "away_team": "SEA",
         "home_team_id": 111,
         "away_team_id": 136,
-        "home_probable_pitcher": "{'id': None, 'name': 'TBD', 'throws': ''}",
+        "home_probable_pitcher": "{'id': 699151, 'name': 'Jedixson Paez', 'throws': ''}",
         "away_probable_pitcher": "{'id': 693433, 'name': 'Bryan Woo', 'throws': ''}",
         "venue_name": "Fenway Park",
         "home_umpire": null
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.62,
-        "proj_total_f5": 4.69,
+        "proj_total_full": 8.68,
+        "proj_total_f5": 4.72,
         "confidence": "LOW",
-        "confidence_score": 0.332,
+        "confidence_score": 0.137,
         "factors": {
           "sp_home_xfip": 4.25,
           "sp_away_xfip": 3.731,
@@ -397,15 +397,15 @@
           "home_wrc_plus": 99.2,
           "away_wrc_plus": 99.5,
           "park_factor": 1.04,
-          "wind_speed_mph": 6.7,
-          "wind_direction": 76,
+          "wind_speed_mph": 5.0,
+          "wind_direction": 100,
           "wind_desc": "Blowing In from CF",
-          "temperature_f": 63.2,
+          "temperature_f": 63.3,
           "weather_desc": "Overcast",
-          "wind_factor": 0.9844,
-          "temp_factor": 0.9824,
-          "home_wind_adj": 0.9844,
-          "away_wind_adj": 0.9844,
+          "wind_factor": 0.9912,
+          "temp_factor": 0.9826,
+          "home_wind_adj": 0.9912,
+          "away_wind_adj": 0.9912,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -421,7 +421,7 @@
         }
       },
       "full_edge": {
-        "edge": 1.62,
+        "edge": 1.68,
         "lean": "OVER",
         "consensus": 7.0,
         "value": true
@@ -432,9 +432,20 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.6 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Model leans under at 8.7 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
       "props": [],
-      "alerts": []
+      "alerts": [
+        {
+          "type": "SP_SCRATCH_HOME",
+          "player_out": "TBD",
+          "player_in": "Jedixson Paez",
+          "old_projection": 8.62,
+          "new_projection": 8.68,
+          "projection_delta": 0.06,
+          "old_confidence": "LOW",
+          "new_confidence": "LOW"
+        }
+      ]
     },
     {
       "rating": "NO PLAY",
@@ -455,10 +466,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.07,
-        "proj_total_f5": 4.36,
-        "confidence": "LOW",
-        "confidence_score": 0.444,
+        "proj_total_full": 8.05,
+        "proj_total_f5": 4.35,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.628,
         "factors": {
           "sp_home_xfip": 4.137,
           "sp_away_xfip": 3.579,
@@ -469,15 +480,15 @@
           "home_wrc_plus": 96.9,
           "away_wrc_plus": 93.2,
           "park_factor": 0.98,
-          "wind_speed_mph": 9.2,
-          "wind_direction": 267,
+          "wind_speed_mph": 7.4,
+          "wind_direction": 272,
           "wind_desc": "Blowing R to L",
-          "temperature_f": 89.3,
+          "temperature_f": 88.7,
           "weather_desc": "Clear",
-          "wind_factor": 0.9972,
-          "temp_factor": 1.0346,
-          "home_wind_adj": 0.9972,
-          "away_wind_adj": 0.9972,
+          "wind_factor": 0.9962,
+          "temp_factor": 1.0334,
+          "home_wind_adj": 0.9962,
+          "away_wind_adj": 0.9962,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -493,7 +504,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.07,
+        "edge": 0.05,
         "lean": "OVER",
         "consensus": 8.0,
         "value": false
@@ -538,10 +549,10 @@
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 8.97,
-        "proj_total_f5": 4.97,
+        "proj_total_full": 8.83,
+        "proj_total_f5": 4.9,
         "confidence": "LOW",
-        "confidence_score": 0.248,
+        "confidence_score": 0.281,
         "factors": {
           "sp_home_xfip": 4.329,
           "sp_away_xfip": 4.128,
@@ -552,15 +563,15 @@
           "home_wrc_plus": 98.6,
           "away_wrc_plus": 99.2,
           "park_factor": 1.0,
-          "wind_speed_mph": 3.7,
-          "wind_direction": 57,
-          "wind_desc": "Blowing L to R",
-          "temperature_f": 79.9,
+          "wind_speed_mph": 6.8,
+          "wind_direction": 11,
+          "wind_desc": "Blowing In from CF",
+          "temperature_f": 78.1,
           "weather_desc": "Overcast",
-          "wind_factor": 0.995,
-          "temp_factor": 1.0158,
-          "home_wind_adj": 0.995,
-          "away_wind_adj": 0.995,
+          "wind_factor": 0.9833,
+          "temp_factor": 1.0122,
+          "home_wind_adj": 0.9833,
+          "away_wind_adj": 0.9833,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -576,7 +587,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.47,
+        "edge": 0.33,
         "lean": "OVER",
         "consensus": 8.5,
         "value": false
@@ -587,7 +598,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Starters are well-matched (Sean Burke 4.13 / Ronel Blanco 4.33 xFIP) and lineups are similarly average (CHW 99 / HOU 99 wRC+). Model projects 9.0 runs but there's no exploitable edge \u2014 pass.",
+      "summary": "Starters are well-matched (Sean Burke 4.13 / Ronel Blanco 4.33 xFIP) and lineups are similarly average (CHW 99 / HOU 99 wRC+). Model projects 8.8 runs but there's no exploitable edge \u2014 pass.",
       "props": [],
       "alerts": []
     },
@@ -610,10 +621,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.57,
-        "proj_total_f5": 5.39,
+        "proj_total_full": 9.53,
+        "proj_total_f5": 5.37,
         "confidence": "LOW",
-        "confidence_score": 0.217,
+        "confidence_score": 0.208,
         "factors": {
           "sp_home_xfip": 4.377,
           "sp_away_xfip": 4.366,
@@ -624,15 +635,15 @@
           "home_wrc_plus": 97.9,
           "away_wrc_plus": 97.3,
           "park_factor": 1.0,
-          "wind_speed_mph": 10.1,
-          "wind_direction": 205,
+          "wind_speed_mph": 8.9,
+          "wind_direction": 212,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 96.8,
+          "temperature_f": 96.6,
           "weather_desc": "Clear",
-          "wind_factor": 1.0237,
-          "temp_factor": 1.0496,
-          "home_wind_adj": 1.0237,
-          "away_wind_adj": 1.0237,
+          "wind_factor": 1.0198,
+          "temp_factor": 1.0492,
+          "home_wind_adj": 1.0198,
+          "away_wind_adj": 1.0198,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -648,7 +659,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.43,
+        "edge": -0.47,
         "lean": "UNDER",
         "consensus": 10.0,
         "value": false
@@ -659,7 +670,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model has 9.6 runs, market has 10.0 \u2014 only 0.4 runs of separation, below the 0.5-run threshold. The over lean is there but the margin isn't wide enough to play.",
+      "summary": "Model has 9.5 runs, market has 10.0 \u2014 only 0.5 runs of separation, below the 0.5-run threshold. The over lean is there but the margin isn't wide enough to play.",
       "props": [],
       "alerts": []
     },
@@ -683,9 +694,9 @@
       "proj": {
         "lean": "NEUTRAL",
         "proj_total_full": 8.73,
-        "proj_total_f5": 4.89,
+        "proj_total_f5": 4.9,
         "confidence": "LOW",
-        "confidence_score": 0.066,
+        "confidence_score": 0.064,
         "factors": {
           "sp_home_xfip": 4.871,
           "sp_away_xfip": 3.683,
@@ -699,10 +710,10 @@
           "wind_speed_mph": 6.5,
           "wind_direction": 224,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 72.8,
+          "temperature_f": 73.3,
           "weather_desc": "Clear",
           "wind_factor": 1.0117,
-          "temp_factor": 1.0016,
+          "temp_factor": 1.0026,
           "home_wind_adj": 1.0117,
           "away_wind_adj": 1.0117,
           "home_sp_fb_pct": 0.35,
@@ -754,10 +765,10 @@
       },
       "proj": {
         "lean": "NEUTRAL",
-        "proj_total_full": 9.25,
+        "proj_total_full": 9.26,
         "proj_total_f5": 5.36,
         "confidence": "LOW",
-        "confidence_score": 0.327,
+        "confidence_score": 0.328,
         "factors": {
           "sp_home_xfip": 4.403,
           "sp_away_xfip": 4.84,
@@ -771,10 +782,10 @@
           "wind_speed_mph": 6.5,
           "wind_direction": 248,
           "wind_desc": "Blowing Out to CF",
-          "temperature_f": 68.8,
+          "temperature_f": 69.1,
           "weather_desc": "Clear",
           "wind_factor": 1.0119,
-          "temp_factor": 0.9936,
+          "temp_factor": 0.9942,
           "home_wind_adj": 1.0119,
           "away_wind_adj": 1.0119,
           "home_sp_fb_pct": 0.35,
@@ -792,7 +803,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.25,
+        "edge": 0.26,
         "lean": "OVER",
         "consensus": 9.0,
         "value": false
@@ -803,7 +814,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Sp_avg pushes toward the over while the park (PF 95) counters in the other direction \u2014 the model nets out at 9.2 runs with no clear dominant force. Pass.",
+      "summary": "Sp_avg pushes toward the over while the park (PF 95) counters in the other direction \u2014 the model nets out at 9.3 runs with no clear dominant force. Pass.",
       "props": [],
       "alerts": []
     },
@@ -826,10 +837,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.31,
-        "proj_total_f5": 4.44,
-        "confidence": "LOW",
-        "confidence_score": 0.432,
+        "proj_total_full": 8.28,
+        "proj_total_f5": 4.42,
+        "confidence": "MEDIUM",
+        "confidence_score": 0.572,
         "factors": {
           "sp_home_xfip": 3.676,
           "sp_away_xfip": 3.852,
@@ -840,15 +851,15 @@
           "home_wrc_plus": 98.4,
           "away_wrc_plus": 99.9,
           "park_factor": 0.99,
-          "wind_speed_mph": 4.0,
-          "wind_direction": 251,
+          "wind_speed_mph": 2.9,
+          "wind_direction": 279,
           "wind_desc": "Blowing R to L",
           "temperature_f": 82.0,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0007,
+          "wind_factor": 0.9971,
           "temp_factor": 1.02,
-          "home_wind_adj": 1.0007,
-          "away_wind_adj": 1.0007,
+          "home_wind_adj": 0.9971,
+          "away_wind_adj": 0.9971,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -864,7 +875,7 @@
         }
       },
       "full_edge": {
-        "edge": -0.19,
+        "edge": -0.22,
         "lean": "UNDER",
         "consensus": 8.5,
         "value": false
@@ -898,10 +909,10 @@
       },
       "proj": {
         "lean": "UNDER",
-        "proj_total_full": 8.36,
+        "proj_total_full": 8.35,
         "proj_total_f5": 4.41,
         "confidence": "LOW",
-        "confidence_score": 0.421,
+        "confidence_score": 0.289,
         "factors": {
           "sp_home_xfip": 3.384,
           "sp_away_xfip": 3.942,
@@ -912,15 +923,15 @@
           "home_wrc_plus": 98.9,
           "away_wrc_plus": 97.6,
           "park_factor": 1.01,
-          "wind_speed_mph": 8.4,
-          "wind_direction": 253,
+          "wind_speed_mph": 8.6,
+          "wind_direction": 249,
           "wind_desc": "Blowing R to L",
-          "temperature_f": 88.3,
+          "temperature_f": 87.4,
           "weather_desc": "Clear",
-          "wind_factor": 0.9989,
-          "temp_factor": 1.0326,
-          "home_wind_adj": 0.9989,
-          "away_wind_adj": 0.9989,
+          "wind_factor": 1.0004,
+          "temp_factor": 1.0308,
+          "home_wind_adj": 1.0004,
+          "away_wind_adj": 1.0004,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -936,7 +947,7 @@
         }
       },
       "full_edge": {
-        "edge": 0.86,
+        "edge": 0.85,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -947,7 +958,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans under at 8.4 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Model leans under at 8.3 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
       "props": [],
       "alerts": []
     },
@@ -1042,10 +1053,10 @@
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.72,
-        "proj_total_f5": 5.33,
+        "proj_total_full": 9.65,
+        "proj_total_f5": 5.29,
         "confidence": "LOW",
-        "confidence_score": 0.306,
+        "confidence_score": 0.29,
         "factors": {
           "sp_home_xfip": 4.09,
           "sp_away_xfip": 4.115,
@@ -1056,15 +1067,15 @@
           "home_wrc_plus": 96.1,
           "away_wrc_plus": 98.1,
           "park_factor": 1.07,
-          "wind_speed_mph": 6.0,
-          "wind_direction": 146,
-          "wind_desc": "Blowing Out to CF",
-          "temperature_f": 96.2,
+          "wind_speed_mph": 5.1,
+          "wind_direction": 124,
+          "wind_desc": "Blowing L to R",
+          "temperature_f": 95.2,
           "weather_desc": "Overcast",
-          "wind_factor": 1.0131,
-          "temp_factor": 1.0484,
-          "home_wind_adj": 1.0131,
-          "away_wind_adj": 1.0131,
+          "wind_factor": 1.008,
+          "temp_factor": 1.0464,
+          "home_wind_adj": 1.008,
+          "away_wind_adj": 1.008,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
           "umpire_name": "Unknown",
@@ -1080,7 +1091,7 @@
         }
       },
       "full_edge": {
-        "edge": 2.22,
+        "edge": 2.15,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -1106,11 +1117,24 @@
       "market": "full",
       "market_label": "OVER 9.5",
       "rating": "\u2b50\u2b50",
-      "projection": 11.2,
+      "projection": 11.18,
       "line": 9.5,
       "lean": "OVER",
-      "edge": 1.7,
-      "confidence_score": 0.662
+      "edge": 1.68,
+      "confidence_score": 0.656
+    },
+    {
+      "game_pk": 824313,
+      "player_name": null,
+      "matchup": "BAL @ COL",
+      "market": "full",
+      "market_label": "OVER 11.0",
+      "rating": "\u2b50\u2b50",
+      "projection": 10.33,
+      "line": 11.0,
+      "lean": "OVER",
+      "edge": -0.67,
+      "confidence_score": 0.453
     },
     {
       "game_pk": 824633,
@@ -1123,20 +1147,7 @@
       "line": 10.5,
       "lean": "OVER",
       "edge": -0.65,
-      "confidence_score": 0.47
-    },
-    {
-      "game_pk": 824313,
-      "player_name": null,
-      "matchup": "BAL @ COL",
-      "market": "full",
-      "market_label": "OVER 11.0",
-      "rating": "\u2b50\u2b50",
-      "projection": 10.38,
-      "line": 11.0,
-      "lean": "OVER",
-      "edge": -0.62,
-      "confidence_score": 0.464
+      "confidence_score": 0.471
     }
   ],
   "parlay_7": [
@@ -1147,11 +1158,24 @@
       "market": "full",
       "market_label": "OVER 9.5",
       "rating": "\u2b50\u2b50",
-      "projection": 11.2,
+      "projection": 11.18,
       "line": 9.5,
       "lean": "OVER",
-      "edge": 1.7,
-      "confidence_score": 0.662
+      "edge": 1.68,
+      "confidence_score": 0.656
+    },
+    {
+      "game_pk": 824313,
+      "player_name": null,
+      "matchup": "BAL @ COL",
+      "market": "full",
+      "market_label": "OVER 11.0",
+      "rating": "\u2b50\u2b50",
+      "projection": 10.33,
+      "line": 11.0,
+      "lean": "OVER",
+      "edge": -0.67,
+      "confidence_score": 0.453
     },
     {
       "game_pk": 824633,
@@ -1164,20 +1188,7 @@
       "line": 10.5,
       "lean": "OVER",
       "edge": -0.65,
-      "confidence_score": 0.47
-    },
-    {
-      "game_pk": 824313,
-      "player_name": null,
-      "matchup": "BAL @ COL",
-      "market": "full",
-      "market_label": "OVER 11.0",
-      "rating": "\u2b50\u2b50",
-      "projection": 10.38,
-      "line": 11.0,
-      "lean": "OVER",
-      "edge": -0.62,
-      "confidence_score": 0.464
+      "confidence_score": 0.471
     },
     {
       "game_pk": 822687,
@@ -1186,11 +1197,11 @@
       "market": "full",
       "market_label": "OVER 10.0",
       "rating": "\u2b50",
-      "projection": 10.33,
+      "projection": 10.36,
       "line": 10.0,
       "lean": "OVER",
-      "edge": 0.33,
-      "confidence_score": 0.719
+      "edge": 0.36,
+      "confidence_score": 0.726
     }
   ],
   "season_record": {
