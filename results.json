@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T15:00:36.669169Z",
+  "generated_at": "2026-09-02T16:00:35.707666Z",
   "game_date": "2026-09-02",
   "plays": [
     {
@@ -39,7 +39,7 @@
           "wind_direction": 229,
           "wind_desc": "Blowing R to L",
           "temperature_f": 92.3,
-          "weather_desc": "Clear",
+          "weather_desc": "Partly Cloudy",
           "wind_factor": 1.0149,
           "temp_factor": 1.0406,
           "home_wind_adj": 1.0149,
@@ -155,7 +155,7 @@
         "game_date": "2026-09-02",
         "game_time": "12:40 PM MST",
         "game_time_et": "03:40 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "ARI",
         "away_team": "PHI",
         "home_team_id": 109,
@@ -163,14 +163,14 @@
         "home_probable_pitcher": "{'id': 664199, 'name': 'Taylor Clarke', 'throws': ''}",
         "away_probable_pitcher": "{'id': 691725, 'name': 'Andrew Painter', 'throws': ''}",
         "venue_name": "Chase Field",
-        "home_umpire": null
+        "home_umpire": "Gabe Morales"
       },
       "proj": {
         "lean": "OVER",
-        "proj_total_full": 9.34,
-        "proj_total_f5": 5.25,
+        "proj_total_full": 9.58,
+        "proj_total_f5": 5.39,
         "confidence": "LOW",
-        "confidence_score": 0.214,
+        "confidence_score": 0.197,
         "factors": {
           "sp_home_xfip": 4.224,
           "sp_away_xfip": 4.451,
@@ -192,8 +192,8 @@
           "away_wind_adj": 1.0104,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Gabe Morales",
+          "umpire_runs_factor": 1.0266,
           "home_bp_fatigue": 0.093,
           "away_bp_fatigue": 0.073,
           "home_bp_innings_used": 7.0,
@@ -216,7 +216,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans over at 9.3 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "Model leans over at 9.6 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
       "props": [],
       "alerts": []
     },
@@ -473,7 +473,7 @@
           "wind_direction": 328,
           "wind_desc": "Blowing In from CF",
           "temperature_f": 85.4,
-          "weather_desc": "Overcast",
+          "weather_desc": "Mainly Clear",
           "wind_factor": 0.9731,
           "temp_factor": 1.0268,
           "home_wind_adj": 0.9731,
@@ -890,7 +890,7 @@
         "proj_total_full": 9.09,
         "proj_total_f5": 4.99,
         "confidence": "LOW",
-        "confidence_score": 0.0,
+        "confidence_score": 0.154,
         "factors": {
           "sp_home_xfip": 4.134,
           "sp_away_xfip": 4.039,
@@ -958,7 +958,7 @@
         "game_date": "2026-09-02",
         "game_time": "01:35 PM CDT",
         "game_time_et": "02:35 PM ET",
-        "status": "Scheduled",
+        "status": "Pre-Game",
         "home_team": "TEX",
         "away_team": "OAK",
         "home_team_id": 140,
@@ -966,14 +966,14 @@
         "home_probable_pitcher": "{'id': 674003, 'name': 'Cody Bradford', 'throws': ''}",
         "away_probable_pitcher": "{'id': 682052, 'name': 'Jacob Lopez', 'throws': ''}",
         "venue_name": "Globe Life Field",
-        "home_umpire": null
+        "home_umpire": "Nic Lentz"
       },
       "proj": {
-        "lean": "OVER",
-        "proj_total_full": 9.73,
-        "proj_total_f5": 5.36,
+        "lean": "NEUTRAL",
+        "proj_total_full": 9.23,
+        "proj_total_f5": 5.08,
         "confidence": "LOW",
-        "confidence_score": 0.176,
+        "confidence_score": 0.113,
         "factors": {
           "sp_home_xfip": 4.459,
           "sp_away_xfip": 3.787,
@@ -995,8 +995,8 @@
           "away_wind_adj": 1.0246,
           "home_sp_fb_pct": 0.35,
           "away_sp_fb_pct": 0.35,
-          "umpire_name": "Unknown",
-          "umpire_runs_factor": 1.0,
+          "umpire_name": "Nic Lentz",
+          "umpire_runs_factor": 0.9485,
           "home_bp_fatigue": 0.061,
           "away_bp_fatigue": 0.132,
           "home_bp_innings_used": 4.6,
@@ -1008,7 +1008,7 @@
         }
       },
       "full_edge": {
-        "edge": 2.23,
+        "edge": 1.73,
         "lean": "OVER",
         "consensus": 7.5,
         "value": true
@@ -1019,7 +1019,7 @@
         "consensus": null,
         "value": false
       },
-      "summary": "Model leans over at 9.7 runs but confidence is low without a market line to validate the value. Revisit when odds post.",
+      "summary": "The park (PF 107) pushes toward the over while Nic Lentz behind the plate counters in the other direction \u2014 the model nets out at 9.2 runs with no clear dominant force. Pass.",
       "props": [],
       "alerts": []
     },
@@ -1060,7 +1060,7 @@
           "wind_direction": 96,
           "wind_desc": "Blowing L to R",
           "temperature_f": 82.8,
-          "weather_desc": "Overcast",
+          "weather_desc": "Clear",
           "wind_factor": 0.9997,
           "temp_factor": 1.0216,
           "home_wind_adj": 0.9997,
