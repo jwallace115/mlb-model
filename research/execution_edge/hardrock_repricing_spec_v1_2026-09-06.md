@@ -151,4 +151,26 @@ data). Kalshi cross-contract consistency scan (background). Capacity logging spe
 
 ## AMENDMENTS
 
-*(none — v1 as frozen 2026-09-06)*
+### A1 — 2026-09-06 (later same day): capture live; §8 dependency table superseded
+
+- Multi-book capture SCHEDULED AND VERIFIED (claude-code session 2026-09-06):
+  LaunchAgents `com.mlbmodel.capture.mlb` (15-min) and `com.mlbmodel.capture.football`
+  (30-min); key fingerprint `ac6e89a0` (paid) on every run; output under
+  `data/odds_archive/{baseball_mlb,nfl,ncaaf}/line_history/season=2026/`.
+  Divergence pushed to zero; freeze artifact durable.
+- **Credit recompute:** StartInterval runs 24/7, not game-hours — 576 credits/day
+  ≈ 17,280/month = **13.6% headroom** on the 20K plan (supersedes the runbook's
+  10,080 / 2x figure). No prop markets can be added on this plan. If headroom
+  tightens, prefer calendar-windowed schedules over a plan upgrade.
+- **OPEN ISSUE — hardrockbet_fl ABSENT on MLB** in all morning snapshots
+  (verified 12:18Z: 9/10 books, 15 games, zero HR rows), present on NFL.
+  The Aug-28 dry run had HR on 16 MLB games, so this is likely posting-time
+  behavior (HR posts MLB near game day/time). MUST verify HR MLB presence in
+  afternoon/evening snapshots before treating the experiment as accruing.
+  If HR only posts hours before first pitch, the observable pre-game window is
+  compressed and the §3 censoring caveat binds harder; record HR
+  first-appearance time per game as a measured quantity (no threshold change).
+- Hardening (not yet done): capture script hard-stops on any API error;
+  add 1 retry / 5s backoff so football capture survives transient resets.
+- Unverified: whether zero-game calls cost 0 credits; Kalshi capture status.
+- **No thresholds, event definitions, or gates changed.**
