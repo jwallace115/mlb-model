@@ -326,6 +326,24 @@
       "result": "L",
       "graded": true,
       "generated_at": "2026-07-24T15:20:04.368389+00:00"
+    },
+    {
+      "date": "2026-09-06",
+      "game_pk": 824065,
+      "home_team": "KCR",
+      "away_team": "TOR",
+      "side": "OVER",
+      "fg_total": 9.5,
+      "over_price": -120,
+      "f5_total": 5.5,
+      "f5_ratio": 0.5789,
+      "forecast_temp_f": 98.2,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-09-06T15:20:03.201640+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-09-06T15:20:03.201716+00:00"
     }
   ]
 }
