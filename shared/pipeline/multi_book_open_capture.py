@@ -84,20 +84,31 @@ def _scrub(text):
     return re.sub(r"(apiKey=)[^&\s'\"]+", r"\1<APIKEY-REDACTED>", t)
 
 
-def pull(sport):
+def pull(sport, retries=1, backoff=5):
     p = {"apiKey": KEY, "markets": ",".join(MARKETS),
          "bookmakers": ",".join(BOOKS), "oddsFormat": "american"}
-    try:
-        r = requests.get(f"{BASE}/sports/{sport}/odds/", params=p, timeout=45)
-    except requests.RequestException as e:
-        log.error(f"HARD STOP: network error on {sport}: {type(e).__name__}: {_scrub(e)}")
-        log.error("Nothing written. Safe to re-run."); sys.exit(1)
-    if r.status_code != 200:
-        log.error(f"HARD STOP: {sport} -> HTTP {r.status_code}: {_scrub(r.text[:250])}")
-        sys.exit(1)
-    used = r.headers.get("x-requests-last")
-    rem  = r.headers.get("x-requests-remaining")
-    return r.json(), used, rem
+    for attempt in range(1 + retries):
+        try:
+            r = requests.get(f"{BASE}/sports/{sport}/odds/", params=p, timeout=45)
+        except requests.RequestException as e:
+            if attempt < retries:
+                log.warning(f"{sport}: transient error ({type(e).__name__}), retrying in {backoff}s...")
+                time.sleep(backoff)
+                continue
+            log.error(f"HARD STOP: network error on {sport}: {type(e).__name__}: {_scrub(e)}")
+            log.error("Nothing written. Safe to re-run."); sys.exit(1)
+        if r.status_code != 200:
+            if attempt < retries and r.status_code >= 500:
+                log.warning(f"{sport}: HTTP {r.status_code}, retrying in {backoff}s...")
+                time.sleep(backoff)
+                continue
+            log.error(f"HARD STOP: {sport} -> HTTP {r.status_code}: {_scrub(r.text[:250])}")
+            sys.exit(1)
+        used = r.headers.get("x-requests-last")
+        rem  = r.headers.get("x-requests-remaining")
+        if int(rem or 0) < 3000:
+            log.warning(f"CREDIT ALERT: x-requests-remaining={rem} — approaching plan limit")
+        return r.json(), used, rem
 
 
 def flatten(games, sport, snap_iso):

@@ -132,6 +132,24 @@ Rules for the log: separate **what a command returned** from **what it means**.
 "DONE" means the command exited 0, not that the situation is safe. State what was
 NOT done and what remains unverified — those lines are the point of the file.
 
+## PIPELINE ARCHITECTURE — VM-default rule
+
+**Default: every pipeline runs on the VM via cron.** `push_daemon.sh` syncs
+writes to GitHub every 30 min. Streamlit Cloud reads from GitHub.
+
+VM: DigitalOcean droplet (`root@142.93.242.4`), repo at `/root/mlb-model`,
+Python venv at `/root/mlb-model/venv`. Decision test: SSH to VM, attempt the
+data source's API call. 200 OK + resource budget fits → VM. Blocked → Mac
+(documented exception). See `iamnotuncertain_operations_v9.md` §15 and
+master doc v39 §17 for the full rule.
+
+**Canonical-writer rule:** exactly one host captures per pipeline. No
+dual-writer overlap (doubles credit burn or causes data conflicts).
+
+**Current exceptions (Mac-only):**
+- NBA (`stats.nba.com` blocks DigitalOcean IPs — permanent)
+- Statcast aggregate rebuild (2GB RAM limit — interim)
+
 ## DIVISION OF LABOUR
 
 Claude Code (this repo, native): anything touching an API, cron/launchd, files outside
