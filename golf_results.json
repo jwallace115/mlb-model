@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-08T07:00:26.543672",
+  "generated_at": "2026-09-08T09:00:36.022989",
   "sport": "golf",
   "event_name": "TOUR Championship",
   "event_id": 60,
   "is_major": false,
-  "last_updated": "2026-09-08T07:00:07.501415",
+  "last_updated": "2026-09-08T09:00:06.872418",
   "n_candidates": 23,
   "n_leans": 0,
   "plays": [
@@ -506,141 +506,11 @@
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
   "g14_signals": [],
-  "g14_win_watchlist": [
-    {
-      "player_name": "McIlroy, Rory",
-      "dg_win_prob": 8.7,
-      "adj_win_prob": 9.4,
-      "win_edge": 6.5
-    },
-    {
-      "player_name": "Schauffele, Xander",
-      "dg_win_prob": 8.4,
-      "adj_win_prob": 9.1,
-      "win_edge": 9.1
-    },
-    {
-      "player_name": "Cantlay, Patrick",
-      "dg_win_prob": 4.4,
-      "adj_win_prob": 4.8,
-      "win_edge": 4.8
-    },
-    {
-      "player_name": "Young, Cameron",
-      "dg_win_prob": 4.0,
-      "adj_win_prob": 4.7,
-      "win_edge": 3.2
-    },
-    {
-      "player_name": "Morikawa, Collin",
-      "dg_win_prob": 4.0,
-      "adj_win_prob": 3.7,
-      "win_edge": 3.6
-    },
-    {
-      "player_name": "Burns, Sam",
-      "dg_win_prob": 3.8,
-      "adj_win_prob": 4.5,
-      "win_edge": 3.7
-    },
-    {
-      "player_name": "Fleetwood, Tommy",
-      "dg_win_prob": 3.8,
-      "adj_win_prob": 4.5,
-      "win_edge": 4.4
-    },
-    {
-      "player_name": "Clark, Wyndham",
-      "dg_win_prob": 3.6,
-      "adj_win_prob": 3.5,
-      "win_edge": 3.4
-    },
-    {
-      "player_name": "Kim, Si Woo",
-      "dg_win_prob": 3.2,
-      "adj_win_prob": 3.0,
-      "win_edge": 2.8
-    },
-    {
-      "player_name": "Fitzpatrick, Matt",
-      "dg_win_prob": 3.2,
-      "adj_win_prob": 3.6,
-      "win_edge": 3.4
-    },
-    {
-      "player_name": "Matsuyama, Hideki",
-      "dg_win_prob": 3.1,
-      "adj_win_prob": 2.8,
-      "win_edge": 2.8
-    },
-    {
-      "player_name": "Henley, Russell",
-      "dg_win_prob": 2.4,
-      "adj_win_prob": 3.0,
-      "win_edge": 2.5
-    },
-    {
-      "player_name": "MacIntyre, Robert",
-      "dg_win_prob": 1.7,
-      "adj_win_prob": 2.3,
-      "win_edge": 2.3
-    }
-  ],
+  "g14_win_watchlist": [],
   "g14_field_type": "STRONG",
   "g14_kill_switch": false,
   "g14_status": "LIVE_SHADOW",
-  "g15_signals": [
-    {
-      "player_name": "MacIntyre, Robert",
-      "dg_rank": null,
-      "dg_top20_prob": 62.4,
-      "adj_top20_prob": 64.6,
-      "book": "draftkings",
-      "close_odds": 300.0,
-      "fair_prob": 24.4,
-      "adj_edge": 40.2
-    },
-    {
-      "player_name": "Smalley, Alex",
-      "dg_rank": null,
-      "dg_top20_prob": 55.6,
-      "adj_top20_prob": 57.8,
-      "book": "draftkings",
-      "close_odds": 650.0,
-      "fair_prob": 13.0,
-      "adj_edge": 44.8
-    },
-    {
-      "player_name": "Woodland, Gary",
-      "dg_rank": null,
-      "dg_top20_prob": 54.4,
-      "adj_top20_prob": 56.6,
-      "book": "draftkings",
-      "close_odds": 150.0,
-      "fair_prob": 39.1,
-      "adj_edge": 17.5
-    },
-    {
-      "player_name": "Reitan, Kristoffer",
-      "dg_rank": null,
-      "dg_top20_prob": 51.7,
-      "adj_top20_prob": 53.9,
-      "book": "draftkings",
-      "close_odds": 700.0,
-      "fair_prob": 12.2,
-      "adj_edge": 41.7
-    },
-    {
-      "player_name": "Bhatia, Akshay",
-      "dg_rank": null,
-      "dg_top20_prob": 45.9,
-      "adj_top20_prob": 48.1,
-      "book": "draftkings",
-      "close_odds": 210.0,
-      "fair_prob": 31.5,
-      "adj_edge": 16.6
-    }
-  ],
+  "g15_signals": [],
   "g15_elite_density_bucket": "HIGH",
   "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
