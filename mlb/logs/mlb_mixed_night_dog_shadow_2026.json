@@ -1141,6 +1141,38 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "W",
       "final_score": "7-5"
+    },
+    {
+      "game_pk": 823821,
+      "game_date": "2026-09-08",
+      "matchup": "NYM @ MIA",
+      "fav_team": "MIA",
+      "dog_team": "NYM",
+      "fav_side": "home",
+      "fav_implied": 0.5489,
+      "dog_ml_price": 116,
+      "sp_fip_diff": -0.613,
+      "off_diff": -0.15,
+      "bp_era_diff": 0.3,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824063,
+      "game_date": "2026-09-08",
+      "matchup": "ARI @ KCR",
+      "fav_team": "ARI",
+      "dog_team": "KCR",
+      "fav_side": "away",
+      "fav_implied": 0.5185,
+      "dog_ml_price": 103,
+      "sp_fip_diff": -0.402,
+      "off_diff": -0.55,
+      "bp_era_diff": -0.044,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
