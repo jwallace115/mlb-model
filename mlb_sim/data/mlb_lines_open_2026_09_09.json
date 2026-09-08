@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "bbab891f2a9defcd506aafce495b42dc",
+    "game_date": "2026-09-09",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Toronto Blue Jays",
+    "commence_time": "2026-09-09T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -109,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-08T06:05:02.278529+00:00"
+  },
+  {
+    "game_id": "24d1608c7ffefab567006f6da92fc5f0",
+    "game_date": "2026-09-09",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Washington Nationals",
+    "commence_time": "2026-09-09T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -104,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-08T06:05:02.278529+00:00"
+  },
+  {
+    "game_id": "7fe872788a9a570ceb3aa6918bbf641d",
+    "game_date": "2026-09-09",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "St. Louis Cardinals",
+    "commence_time": "2026-09-09T01:46:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -109,
+    "under_price": -105,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-08T06:05:02.278529+00:00"
+  },
+  {
+    "game_id": "f01c292dd868a51b739e2283164a5e94",
+    "game_date": "2026-09-09",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "Cincinnati Reds",
+    "commence_time": "2026-09-09T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -116,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-08T06:05:02.278529+00:00"
+  }
+]
