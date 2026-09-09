@@ -1175,6 +1175,38 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "5-3"
+    },
+    {
+      "game_pk": 823818,
+      "game_date": "2026-09-09",
+      "matchup": "NYM @ MIA",
+      "fav_team": "MIA",
+      "dog_team": "NYM",
+      "fav_side": "home",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": 0.078,
+      "off_diff": -0.15,
+      "bp_era_diff": 0.305,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823739,
+      "game_date": "2026-09-09",
+      "matchup": "CHC @ MIL",
+      "fav_team": "MIL",
+      "dog_team": "CHC",
+      "fav_side": "home",
+      "fav_implied": 0.546,
+      "dog_ml_price": 115,
+      "sp_fip_diff": 0.048,
+      "off_diff": -0.45,
+      "bp_era_diff": -0.525,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }

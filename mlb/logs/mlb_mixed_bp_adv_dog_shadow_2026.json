@@ -733,6 +733,22 @@
       "dog_bp_era": 4.404,
       "win_loss": "W",
       "final_score": "7-5"
+    },
+    {
+      "game_pk": 823818,
+      "game_date": "2026-09-09",
+      "matchup": "NYM @ MIA",
+      "fav_team": "MIA",
+      "dog_team": "NYM",
+      "fav_side": "home",
+      "fav_implied": 0.5327,
+      "dog_ml_price": 109,
+      "sp_fip_diff": 0.078,
+      "off_diff": -0.15,
+      "bp_era_diff": 0.305,
+      "fav_bp_era": 4.702,
+      "dog_bp_era": 4.397,
+      "win_loss": null
     }
   ]
 }
