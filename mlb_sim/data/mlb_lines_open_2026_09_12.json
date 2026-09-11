@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "33fe59d6a76323b4bbbed9cc6cf368e9",
+    "game_date": "2026-09-12",
+    "sport": "MLB",
+    "home_team": "Minnesota Twins",
+    "away_team": "Cleveland Guardians",
+    "commence_time": "2026-09-12T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -113,
+    "under_price": -101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-11T06:05:02.655028+00:00"
+  },
+  {
+    "game_id": "c4e5d894df1c758237b65a07b20a62b2",
+    "game_date": "2026-09-12",
+    "sport": "MLB",
+    "home_team": "St. Louis Cardinals",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-09-12T00:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": 101,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-11T06:05:02.655028+00:00"
+  },
+  {
+    "game_id": "d30d8cd5fc6b55f7548118280dd2b37f",
+    "game_date": "2026-09-12",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-09-12T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 10.0,
+    "over_price": -115,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-11T06:05:02.655028+00:00"
+  },
+  {
+    "game_id": "89750de1ac29c31e5d404f2f05763ca9",
+    "game_date": "2026-09-12",
+    "sport": "MLB",
+    "home_team": "San Francisco Giants",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-09-12T02:16:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -108,
+    "under_price": -106,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-11T06:05:02.655028+00:00"
+  }
+]
