@@ -37,6 +37,7 @@ COST
     python3 shared/pipeline/nws_weather_capture.py --dry-run     # pull, write nothing
     python3 shared/pipeline/nws_weather_capture.py               # capture
     python3 shared/pipeline/nws_weather_capture.py --stadiums BUF GB
+    python3 shared/pipeline/nws_weather_capture.py --refresh-grid   # re-pick stations (see STATION_CANDIDATES)
 
 Cron (VM, UTC):  0 */3 * * *  cd /root/mlb-model && venv/bin/python3 shared/pipeline/nws_weather_capture.py >> logs/nws_capture.log 2>&1
 """
@@ -74,6 +75,16 @@ GRID_CACHE = OUT_ROOT / "gridpoints.json"
 LEGACY_KEYS = {"OAK", "SD", "STL", "LA"}
 
 OBS_LOOKBACK_HOURS = 27  # every-3h cron + slack; dedup happens at read time
+
+# Station choice: NWS lists stations nearest-first, but the nearest is often a small
+# municipal field that reports every hour or two with gaps (first run: ARI 12 obs,
+# BAL 26, JAX 32 in 27h vs 300+ at 5-minute ASOS airports). For a kickoff-hour match
+# a dense reporter 10 miles off beats a sparse one 3 miles off. Evaluate the nearest
+# STATION_CANDIDATES by 27h observation count; take the densest that clears
+# MIN_OBS_27H, ties to the nearer. Cached in gridpoints.json with the candidates,
+# so the choice is auditable and only changes on --refresh-grid.
+STATION_CANDIDATES = 4
+MIN_OBS_27H = 20
 
 
 # --------------------------------------------------------------------------- helpers
@@ -143,40 +154,69 @@ def _get(url, params=None, retries=2, backoff=10):
 
 # --------------------------------------------------------------------------- lookups
 
-def resolve_gridpoint(key, st) -> dict:
-    """One-time: /points -> hourly forecast URL + nearest observation station."""
+def choose_station(cands: list) -> dict | None:
+    """cands: [{station_id, station_name, rank, obs_27h}] nearest-first. Pure; unit-tested."""
+    if not cands:
+        return None
+    ok = [c for c in cands if (c.get("obs_27h") or -1) >= MIN_OBS_27H]
+    pool = ok if ok else [c for c in cands if (c.get("obs_27h") or -1) >= 0] or cands
+    return sorted(pool, key=lambda c: (-(c.get("obs_27h") or -1), c["rank"]))[0]
+
+
+def resolve_gridpoint(key, st, previous=None) -> dict:
+    """One-time: /points -> hourly forecast URL + best nearby observation station."""
     p = _get(f"{BASE}/points/{st['lat']:.4f},{st['lon']:.4f}")["properties"]
     stations = _get(p["observationStations"])
-    feats = stations.get("features", [])
-    station_id = feats[0]["properties"]["stationIdentifier"] if feats else None
-    station_name = feats[0]["properties"].get("name") if feats else None
-    return {
+    now = datetime.now(timezone.utc)
+    start = (now - timedelta(hours=OBS_LOOKBACK_HOURS)).isoformat(timespec="seconds")
+    cands = []
+    for rank, f in enumerate(stations.get("features", [])[:STATION_CANDIDATES]):
+        sid = f["properties"]["stationIdentifier"]
+        try:
+            ob = _get(f"{BASE}/stations/{sid}/observations",
+                      params={"start": start, "end": now.isoformat(timespec="seconds"), "limit": 500})
+            n = len(ob.get("features", []))
+        except Exception as e:
+            log.warning(f"  {key}: candidate {sid} observations failed ({type(e).__name__}); scoring -1")
+            n = -1
+        cands.append({"station_id": sid, "station_name": f["properties"].get("name"), "rank": rank, "obs_27h": n})
+        time.sleep(0.5)
+    best = choose_station(cands)
+    out = {
         "grid_id": p.get("gridId"), "grid_x": p.get("gridX"), "grid_y": p.get("gridY"),
         "forecast_hourly_url": p.get("forecastHourly"),
-        "station_id": station_id, "station_name": station_name,
-        "resolved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "station_id": best["station_id"] if best else None,
+        "station_name": best["station_name"] if best else None,
+        "station_candidates": cands,
+        "resolved_at_utc": now.isoformat(timespec="seconds"),
     }
+    if previous and previous.get("station_id") and previous["station_id"] != out["station_id"]:
+        out["previous_station_id"] = previous["station_id"]
+    return out
 
 
 def load_grid_cache(stadiums, refresh=False) -> dict:
-    cache = {}
-    if GRID_CACHE.exists() and not refresh:
-        cache = json.load(open(GRID_CACHE))
+    old = json.load(open(GRID_CACHE)) if GRID_CACHE.exists() else {}
+    cache = {} if refresh else dict(old)
     changed = False
     for key, st in stadiums.items():
         if key in cache and cache[key].get("forecast_hourly_url") and cache[key].get("station_id"):
             continue
         try:
-            cache[key] = resolve_gridpoint(key, st)
+            cache[key] = resolve_gridpoint(key, st, previous=old.get(key))
             changed = True
-            log.info(f"  resolved {key}: grid {cache[key]['grid_id']} {cache[key]['grid_x']},{cache[key]['grid_y']} "
-                     f"station {cache[key]['station_id']} ({cache[key]['station_name']})")
+            c = cache[key]
+            picked = next((x for x in c.get("station_candidates", []) if x["station_id"] == c["station_id"]), {})
+            log.info(f"  resolved {key}: grid {c['grid_id']} {c['grid_x']},{c['grid_y']} "
+                     f"station {c['station_id']} ({c['station_name']}) rank {picked.get('rank')} "
+                     f"obs27h {picked.get('obs_27h')}" + (f" [was {c['previous_station_id']}]" if c.get("previous_station_id") else ""))
             time.sleep(0.5)
         except Exception as e:
             log.error(f"  could not resolve gridpoint for {key}: {e}")
     if changed:
+        merged = dict(old); merged.update(cache)   # a --stadiums subset refresh never drops other venues
         GRID_CACHE.parent.mkdir(parents=True, exist_ok=True)
-        json.dump(cache, open(GRID_CACHE, "w"), indent=1)
+        json.dump(merged, open(GRID_CACHE, "w"), indent=1)
     return cache
 
 
@@ -294,6 +334,14 @@ def selftest():
     assert fc[1]["precip_prob_pct"] is None and fc[1]["temp_f"] == 73
     ob = parse_observations(_SAMPLE_OBS, "BUF", st, grid, "2026-09-11T15:05:00+00:00")
     assert len(ob) == 1 and ob[0]["temp_f"] == 71.1 and ob[0]["wind_mph"] == 10.4 and ob[0]["wind_gust_mph"] is None
+    # station choice: densest reporter above the floor, ties to the nearer; fall back sanely
+    C = lambda sid, r, n: {"station_id": sid, "station_name": sid, "rank": r, "obs_27h": n}
+    assert choose_station([C("KGEU", 0, 12), C("KPHX", 1, 340), C("KLUF", 2, 55)])["station_id"] == "KPHX"
+    assert choose_station([C("KBUF", 0, 320), C("KIAG", 1, 330)])["station_id"] == "KIAG"
+    assert choose_station([C("KAAA", 0, 25), C("KBBB", 1, 25)])["station_id"] == "KAAA"   # tie -> nearer
+    assert choose_station([C("KAAA", 0, 5), C("KBBB", 1, 9)])["station_id"] == "KBBB"     # none clear floor -> densest
+    assert choose_station([C("KAAA", 0, -1), C("KBBB", 1, -1)])["station_id"] == "KAAA"   # all failed -> nearest
+    assert choose_station([]) is None
     stadiums = load_stadiums()
     assert 20 <= len(stadiums) <= 30, f"unexpected stadium count {len(stadiums)}"
     assert "NYJ" not in stadiums or "NYG" not in stadiums, "NYG/NYJ should dedupe to one location"
@@ -302,7 +350,7 @@ def selftest():
     assert nfl_season(datetime(2026, 9, 11, tzinfo=timezone.utc)) == 2026
     assert nfl_season(datetime(2027, 1, 20, tzinfo=timezone.utc)) == 2026
     df = pd.DataFrame(fc); assert list(df.columns)[0] == "fetched_at_utc"
-    log.info(f"SELFTEST OK — parsing, unit conversion, {len(stadiums)} venues: {', '.join(sorted(stadiums))}")
+    log.info(f"SELFTEST OK — parsing, unit conversion, station choice, {len(stadiums)} venues: {', '.join(sorted(stadiums))}")
 
 
 # --------------------------------------------------------------------------- main

@@ -4,9 +4,36 @@
   "grid_x": 152,
   "grid_y": 62,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/PSR/152,62/forecast/hourly",
-  "station_id": "KGEU",
-  "station_name": "Glendale, Glendale Municipal Airport",
-  "resolved_at_utc": "2026-09-11T12:56:19+00:00"
+  "station_id": "KDVT",
+  "station_name": "Phoenix, Phoenix-Deer Valley Municipal Airport",
+  "station_candidates": [
+   {
+    "station_id": "KGEU",
+    "station_name": "Glendale, Glendale Municipal Airport",
+    "rank": 0,
+    "obs_27h": 12
+   },
+   {
+    "station_id": "KLUF",
+    "station_name": "Luke Air Force Base / Phoenix",
+    "rank": 1,
+    "obs_27h": 32
+   },
+   {
+    "station_id": "KGYR",
+    "station_name": "Goodyear Municipal",
+    "rank": 2,
+    "obs_27h": 17
+   },
+   {
+    "station_id": "KDVT",
+    "station_name": "Phoenix, Phoenix-Deer Valley Municipal Airport",
+    "rank": 3,
+    "obs_27h": 171
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:09:52+00:00",
+  "previous_station_id": "KGEU"
  },
  "ATL": {
   "grid_id": "FFC",
@@ -15,34 +42,141 @@
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/FFC/50,87/forecast/hourly",
   "station_id": "KFTY",
   "station_name": "Fulton County Airport-Brown Field",
-  "resolved_at_utc": "2026-09-11T12:56:20+00:00"
+  "station_candidates": [
+   {
+    "station_id": "KFTY",
+    "station_name": "Fulton County Airport-Brown Field",
+    "rank": 0,
+    "obs_27h": 349
+   },
+   {
+    "station_id": "KATL",
+    "station_name": "Atlanta, Hartsfield - Jackson Atlanta International Airport",
+    "rank": 1,
+    "obs_27h": 348
+   },
+   {
+    "station_id": "KPDK",
+    "station_name": "Atlanta, De Kalb-Peachtree Airport",
+    "rank": 2,
+    "obs_27h": 349
+   },
+   {
+    "station_id": "KMGE",
+    "station_name": "Marietta / Dobbins Air Force Base",
+    "rank": 3,
+    "obs_27h": 25
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:09:56+00:00"
  },
  "BAL": {
   "grid_id": "LWX",
   "grid_x": 109,
   "grid_y": 90,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/LWX/109,90/forecast/hourly",
-  "station_id": "KDMH",
-  "station_name": "Baltimore, Inner Harbor",
-  "resolved_at_utc": "2026-09-11T12:56:21+00:00"
+  "station_id": "KBWI",
+  "station_name": "Baltimore, Baltimore-Washington International Airport",
+  "station_candidates": [
+   {
+    "station_id": "KDMH",
+    "station_name": "Baltimore, Inner Harbor",
+    "rank": 0,
+    "obs_27h": 27
+   },
+   {
+    "station_id": "KBWI",
+    "station_name": "Baltimore, Baltimore-Washington International Airport",
+    "rank": 1,
+    "obs_27h": 348
+   },
+   {
+    "station_id": "KMTN",
+    "station_name": "Baltimore / Martin",
+    "rank": 2,
+    "obs_27h": 42
+   },
+   {
+    "station_id": "KNAK",
+    "station_name": "Annapolis, United States Naval Academy",
+    "rank": 3,
+    "obs_27h": 35
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:04+00:00",
+  "previous_station_id": "KDMH"
  },
  "BUF": {
   "grid_id": "BUF",
   "grid_x": 39,
   "grid_y": 42,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/BUF/39,42/forecast/hourly",
-  "station_id": "KBUF",
-  "station_name": "Buffalo, Greater Buffalo International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:22+00:00"
+  "station_id": "KDKK",
+  "station_name": "Dunkirk, Chautauqua County / Dunkirk Airport",
+  "station_candidates": [
+   {
+    "station_id": "KBUF",
+    "station_name": "Buffalo, Greater Buffalo International Airport",
+    "rank": 0,
+    "obs_27h": 347
+   },
+   {
+    "station_id": "KIAG",
+    "station_name": "Niagara Falls, Niagara Falls International Airport",
+    "rank": 1,
+    "obs_27h": 345
+   },
+   {
+    "station_id": "KDKK",
+    "station_name": "Dunkirk, Chautauqua County / Dunkirk Airport",
+    "rank": 2,
+    "obs_27h": 352
+   },
+   {
+    "station_id": "KGVQ",
+    "station_name": "Genesee County Airport",
+    "rank": 3,
+    "obs_27h": 0
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:10+00:00",
+  "previous_station_id": "KBUF"
  },
  "CAR": {
   "grid_id": "GSP",
   "grid_x": 118,
   "grid_y": 65,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/GSP/118,65/forecast/hourly",
-  "station_id": "KCLT",
-  "station_name": "Charlotte/Douglas International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:23+00:00"
+  "station_id": "KAKH",
+  "station_name": "Gastonia Municipal Airport",
+  "station_candidates": [
+   {
+    "station_id": "KCLT",
+    "station_name": "Charlotte/Douglas International Airport",
+    "rank": 0,
+    "obs_27h": 338
+   },
+   {
+    "station_id": "KJQF",
+    "station_name": "Concord Regional Airport",
+    "rank": 1,
+    "obs_27h": 42
+   },
+   {
+    "station_id": "KAKH",
+    "station_name": "Gastonia Municipal Airport",
+    "rank": 2,
+    "obs_27h": 347
+   },
+   {
+    "station_id": "KUZA",
+    "station_name": "Rock Hill, Rock Hill - York County Airport",
+    "rank": 3,
+    "obs_27h": 347
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:16+00:00",
+  "previous_station_id": "KCLT"
  },
  "CHI": {
   "grid_id": "LOT",
@@ -51,61 +185,249 @@
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/LOT/76,72/forecast/hourly",
   "station_id": "KMDW",
   "station_name": "Chicago, Chicago Midway Airport",
-  "resolved_at_utc": "2026-09-11T12:56:23+00:00"
+  "station_candidates": [
+   {
+    "station_id": "KMDW",
+    "station_name": "Chicago, Chicago Midway Airport",
+    "rank": 0,
+    "obs_27h": 347
+   },
+   {
+    "station_id": "KORD",
+    "station_name": "Chicago, Chicago-O'Hare International Airport",
+    "rank": 1,
+    "obs_27h": 347
+   },
+   {
+    "station_id": "KGYY",
+    "station_name": "Gary Regional Airport",
+    "rank": 2,
+    "obs_27h": 36
+   },
+   {
+    "station_id": "KIGQ",
+    "station_name": "Lansing Municipal Airport",
+    "rank": 3,
+    "obs_27h": 81
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:23+00:00"
  },
  "CIN": {
   "grid_id": "ILN",
   "grid_x": 35,
   "grid_y": 38,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/ILN/35,38/forecast/hourly",
-  "station_id": "KLUK",
-  "station_name": "Cincinnati, Cincinnati Municipal Airport Lunken Field",
-  "resolved_at_utc": "2026-09-11T12:56:24+00:00"
+  "station_id": "KCVG",
+  "station_name": "Cincinnati/Northern Kentucky International Airport",
+  "station_candidates": [
+   {
+    "station_id": "KLUK",
+    "station_name": "Cincinnati, Cincinnati Municipal Airport Lunken Field",
+    "rank": 0,
+    "obs_27h": 354
+   },
+   {
+    "station_id": "KCVG",
+    "station_name": "Cincinnati/Northern Kentucky International Airport",
+    "rank": 1,
+    "obs_27h": 355
+   },
+   {
+    "station_id": "KI67",
+    "station_name": "Cincinnati W Airport",
+    "rank": 2,
+    "obs_27h": 77
+   },
+   {
+    "station_id": "KI69",
+    "station_name": "Batavia Clermont County Airport",
+    "rank": 3,
+    "obs_27h": 77
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:29+00:00",
+  "previous_station_id": "KLUK"
  },
  "CLE": {
   "grid_id": "CLE",
   "grid_x": 83,
   "grid_y": 65,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/CLE/83,65/forecast/hourly",
-  "station_id": "KBKL",
-  "station_name": "Cleveland, Burke Lakefront Airport",
-  "resolved_at_utc": "2026-09-11T12:56:25+00:00"
+  "station_id": "KAKR",
+  "station_name": "Akron, Akron Fulton International Airport",
+  "station_candidates": [
+   {
+    "station_id": "KBKL",
+    "station_name": "Cleveland, Burke Lakefront Airport",
+    "rank": 0,
+    "obs_27h": 346
+   },
+   {
+    "station_id": "KCLE",
+    "station_name": "Cleveland Hopkins International Airport",
+    "rank": 1,
+    "obs_27h": 352
+   },
+   {
+    "station_id": "KLPR",
+    "station_name": "Lorain / Elyria, Lorain County Regional Airport",
+    "rank": 2,
+    "obs_27h": 352
+   },
+   {
+    "station_id": "KAKR",
+    "station_name": "Akron, Akron Fulton International Airport",
+    "rank": 3,
+    "obs_27h": 355
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:36+00:00",
+  "previous_station_id": "KBKL"
  },
  "DAL": {
   "grid_id": "FWD",
   "grid_x": 78,
   "grid_y": 103,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/FWD/78,103/forecast/hourly",
-  "station_id": "KGPM",
-  "station_name": "Grand Prairie, Grand Prairie Municipal Airport",
-  "resolved_at_utc": "2026-09-11T12:56:26+00:00"
+  "station_id": "KRBD",
+  "station_name": "Dallas, Redbird Airport",
+  "station_candidates": [
+   {
+    "station_id": "KGPM",
+    "station_name": "Grand Prairie, Grand Prairie Municipal Airport",
+    "rank": 0,
+    "obs_27h": 81
+   },
+   {
+    "station_id": "KGKY",
+    "station_name": "Arlington Municipal Airport",
+    "rank": 1,
+    "obs_27h": 346
+   },
+   {
+    "station_id": "KDFW",
+    "station_name": "Dallas/Fort Worth International Airport",
+    "rank": 2,
+    "obs_27h": 328
+   },
+   {
+    "station_id": "KRBD",
+    "station_name": "Dallas, Redbird Airport",
+    "rank": 3,
+    "obs_27h": 348
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:43+00:00",
+  "previous_station_id": "KGPM"
  },
  "DEN": {
   "grid_id": "BOU",
   "grid_x": 62,
   "grid_y": 62,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/BOU/62,62/forecast/hourly",
-  "station_id": "KBJC",
-  "station_name": "Broomfield / Jeffco",
-  "resolved_at_utc": "2026-09-11T12:56:26+00:00"
+  "station_id": "KAPA",
+  "station_name": "Denver - Centennial Airport",
+  "station_candidates": [
+   {
+    "station_id": "KBJC",
+    "station_name": "Broomfield / Jeffco",
+    "rank": 0,
+    "obs_27h": 51
+   },
+   {
+    "station_id": "KBKF",
+    "station_name": "Buckley Space Force Base",
+    "rank": 1,
+    "obs_27h": 24
+   },
+   {
+    "station_id": "KAPA",
+    "station_name": "Denver - Centennial Airport",
+    "rank": 2,
+    "obs_27h": 347
+   },
+   {
+    "station_id": "KEIK",
+    "station_name": "Erie Municipal Airport",
+    "rank": 3,
+    "obs_27h": 81
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:49+00:00",
+  "previous_station_id": "KBJC"
  },
  "GB": {
   "grid_id": "GRB",
   "grid_x": 78,
   "grid_y": 31,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/GRB/78,31/forecast/hourly",
-  "station_id": "KGRB",
-  "station_name": "Green Bay, Austin Straubel International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:27+00:00"
+  "station_id": "KMTW",
+  "station_name": "Manitowoc, Manitowoc County Airport",
+  "station_candidates": [
+   {
+    "station_id": "KGRB",
+    "station_name": "Green Bay, Austin Straubel International Airport",
+    "rank": 0,
+    "obs_27h": 337
+   },
+   {
+    "station_id": "KOCQ",
+    "station_name": "Oconto J. Douglas Bake Municipal Airport",
+    "rank": 1,
+    "obs_27h": 80
+   },
+   {
+    "station_id": "KATW",
+    "station_name": "Appleton-Outagamie",
+    "rank": 2,
+    "obs_27h": 43
+   },
+   {
+    "station_id": "KMTW",
+    "station_name": "Manitowoc, Manitowoc County Airport",
+    "rank": 3,
+    "obs_27h": 347
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:10:54+00:00",
+  "previous_station_id": "KGRB"
  },
  "HOU": {
   "grid_id": "HGX",
   "grid_x": 61,
   "grid_y": 91,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/HGX/61,91/forecast/hourly",
-  "station_id": "KHOU",
-  "station_name": "Houston, Houston Hobby Airport",
-  "resolved_at_utc": "2026-09-11T12:56:28+00:00"
+  "station_id": "KSGR",
+  "station_name": "Houston, Sugar Land Municipal / Hull Field Airport",
+  "station_candidates": [
+   {
+    "station_id": "KHOU",
+    "station_name": "Houston, Houston Hobby Airport",
+    "rank": 0,
+    "obs_27h": 348
+   },
+   {
+    "station_id": "KSGR",
+    "station_name": "Houston, Sugar Land Municipal / Hull Field Airport",
+    "rank": 1,
+    "obs_27h": 356
+   },
+   {
+    "station_id": "KLVJ",
+    "station_name": "Houston, Pearland Regional Airport",
+    "rank": 2,
+    "obs_27h": 352
+   },
+   {
+    "station_id": "KEFD",
+    "station_name": "Houston / Ellington",
+    "rank": 3,
+    "obs_27h": 24
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:00+00:00",
+  "previous_station_id": "KHOU"
  },
  "IND": {
   "grid_id": "IND",
@@ -114,25 +436,105 @@
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/IND/58,69/forecast/hourly",
   "station_id": "KIND",
   "station_name": "Indianapolis International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:29+00:00"
+  "station_candidates": [
+   {
+    "station_id": "KIND",
+    "station_name": "Indianapolis International Airport",
+    "rank": 0,
+    "obs_27h": 355
+   },
+   {
+    "station_id": "KEYE",
+    "station_name": "Indianapolis, Eagle Creek Airpark",
+    "rank": 1,
+    "obs_27h": 352
+   },
+   {
+    "station_id": "KMQJ",
+    "station_name": "Indianapolis Regional Airport",
+    "rank": 2,
+    "obs_27h": 78
+   },
+   {
+    "station_id": "KTYQ",
+    "station_name": "INDIANAPOLIS",
+    "rank": 3,
+    "obs_27h": 80
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:06+00:00"
  },
  "JAX": {
   "grid_id": "JAX",
   "grid_x": 66,
   "grid_y": 64,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/JAX/66,64/forecast/hourly",
-  "station_id": "KNIP",
-  "station_name": "Jacksonville Naval Air Station",
-  "resolved_at_utc": "2026-09-11T12:56:29+00:00"
+  "station_id": "KCRG",
+  "station_name": "Jacksonville Craig Municipal Airport",
+  "station_candidates": [
+   {
+    "station_id": "KNIP",
+    "station_name": "Jacksonville Naval Air Station",
+    "rank": 0,
+    "obs_27h": 33
+   },
+   {
+    "station_id": "KCRG",
+    "station_name": "Jacksonville Craig Municipal Airport",
+    "rank": 1,
+    "obs_27h": 358
+   },
+   {
+    "station_id": "KJAX",
+    "station_name": "Jacksonville International Airport",
+    "rank": 2,
+    "obs_27h": 348
+   },
+   {
+    "station_id": "KNRB",
+    "station_name": "Mayport Naval Station - Adm David L. McDonald Field",
+    "rank": 3,
+    "obs_27h": 29
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:11+00:00",
+  "previous_station_id": "KNIP"
  },
  "KC": {
   "grid_id": "EAX",
   "grid_x": 47,
   "grid_y": 48,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/EAX/47,48/forecast/hourly",
-  "station_id": "KMKC",
-  "station_name": "Kansas City, Kansas City Downtown Airport",
-  "resolved_at_utc": "2026-09-11T12:56:30+00:00"
+  "station_id": "KLXT",
+  "station_name": "Kansas City - Lee's Summit Regional Airport",
+  "station_candidates": [
+   {
+    "station_id": "KMKC",
+    "station_name": "Kansas City, Kansas City Downtown Airport",
+    "rank": 0,
+    "obs_27h": 359
+   },
+   {
+    "station_id": "KLXT",
+    "station_name": "Kansas City - Lee's Summit Regional Airport",
+    "rank": 1,
+    "obs_27h": 367
+   },
+   {
+    "station_id": "KOJC",
+    "station_name": "Olathe, Johnson County Executive Airport",
+    "rank": 2,
+    "obs_27h": 359
+   },
+   {
+    "station_id": "KMCI",
+    "station_name": "Kansas City, Kansas City International Airport",
+    "rank": 3,
+    "obs_27h": 344
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:17+00:00",
+  "previous_station_id": "KMKC"
  },
  "MIA": {
   "grid_id": "MFL",
@@ -141,16 +543,69 @@
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/MFL/107,58/forecast/hourly",
   "station_id": "KHWO",
   "station_name": "Hollywood, North Perry Airport",
-  "resolved_at_utc": "2026-09-11T12:56:31+00:00"
+  "station_candidates": [
+   {
+    "station_id": "KHWO",
+    "station_name": "Hollywood, North Perry Airport",
+    "rank": 0,
+    "obs_27h": 359
+   },
+   {
+    "station_id": "KOPF",
+    "station_name": "Miami, Opa Locka Airport",
+    "rank": 1,
+    "obs_27h": 355
+   },
+   {
+    "station_id": "KFLL",
+    "station_name": "Fort Lauderdale/Hollywood International Airport",
+    "rank": 2,
+    "obs_27h": 352
+   },
+   {
+    "station_id": "KMIA",
+    "station_name": "Miami, Miami International Airport",
+    "rank": 3,
+    "obs_27h": 349
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:23+00:00"
  },
  "NE": {
   "grid_id": "BOX",
   "grid_x": 67,
   "grid_y": 88,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/BOX/67,88/forecast/hourly",
-  "station_id": "KOWD",
-  "station_name": "Norwood, Norwood Memorial Airport",
-  "resolved_at_utc": "2026-09-11T12:56:32+00:00"
+  "station_id": "KSFZ",
+  "station_name": "Pawtucket, North Central State Airport",
+  "station_candidates": [
+   {
+    "station_id": "KOWD",
+    "station_name": "Norwood, Norwood Memorial Airport",
+    "rank": 0,
+    "obs_27h": 329
+   },
+   {
+    "station_id": "KSFZ",
+    "station_name": "Pawtucket, North Central State Airport",
+    "rank": 1,
+    "obs_27h": 341
+   },
+   {
+    "station_id": "KTAN",
+    "station_name": "Taunton, Taunton Municipal Airport",
+    "rank": 2,
+    "obs_27h": 326
+   },
+   {
+    "station_id": "KBOS",
+    "station_name": "Boston, Logan International Airport",
+    "rank": 3,
+    "obs_27h": 330
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:30+00:00",
+  "previous_station_id": "KOWD"
  },
  "NYG": {
   "grid_id": "OKX",
@@ -159,7 +614,33 @@
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/OKX/30,46/forecast/hourly",
   "station_id": "KTEB",
   "station_name": "Teterboro, Teterboro Airport",
-  "resolved_at_utc": "2026-09-11T12:56:33+00:00"
+  "station_candidates": [
+   {
+    "station_id": "KTEB",
+    "station_name": "Teterboro, Teterboro Airport",
+    "rank": 0,
+    "obs_27h": 348
+   },
+   {
+    "station_id": "KNYC",
+    "station_name": "New York City, Central Park",
+    "rank": 1,
+    "obs_27h": 27
+   },
+   {
+    "station_id": "KEWR",
+    "station_name": "Newark, Newark International Airport",
+    "rank": 2,
+    "obs_27h": 348
+   },
+   {
+    "station_id": "KLGA",
+    "station_name": "New York, La Guardia Airport",
+    "rank": 3,
+    "obs_27h": 347
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:36+00:00"
  },
  "PHI": {
   "grid_id": "PHI",
@@ -168,34 +649,141 @@
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/PHI/50,76/forecast/hourly",
   "station_id": "KPHL",
   "station_name": "Philadelphia, Philadelphia International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:33+00:00"
+  "station_candidates": [
+   {
+    "station_id": "KPHL",
+    "station_name": "Philadelphia, Philadelphia International Airport",
+    "rank": 0,
+    "obs_27h": 348
+   },
+   {
+    "station_id": "KPNE",
+    "station_name": "Philadelphia, Northeast Philadelphia Airport",
+    "rank": 1,
+    "obs_27h": 27
+   },
+   {
+    "station_id": "KVAY",
+    "station_name": "Mount Holly, South Jersey Regional Airport",
+    "rank": 2,
+    "obs_27h": 27
+   },
+   {
+    "station_id": "KLOM",
+    "station_name": "Philadelphia - Wings Field Airport",
+    "rank": 3,
+    "obs_27h": 0
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:42+00:00"
  },
  "PIT": {
   "grid_id": "PBZ",
   "grid_x": 77,
   "grid_y": 66,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/PBZ/77,66/forecast/hourly",
-  "station_id": "KAGC",
-  "station_name": "Pittsburgh - Allegheny County Airport",
-  "resolved_at_utc": "2026-09-11T12:56:34+00:00"
+  "station_id": "KBTP",
+  "station_name": "Pittsburgh/Butler Regional Airport",
+  "station_candidates": [
+   {
+    "station_id": "KAGC",
+    "station_name": "Pittsburgh - Allegheny County Airport",
+    "rank": 0,
+    "obs_27h": 355
+   },
+   {
+    "station_id": "KPIT",
+    "station_name": "Pittsburgh International Airport",
+    "rank": 1,
+    "obs_27h": 351
+   },
+   {
+    "station_id": "KBTP",
+    "station_name": "Pittsburgh/Butler Regional Airport",
+    "rank": 2,
+    "obs_27h": 365
+   },
+   {
+    "station_id": "KAFJ",
+    "station_name": "Washington County Airport",
+    "rank": 3,
+    "obs_27h": 36
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:47+00:00",
+  "previous_station_id": "KAGC"
  },
  "SEA": {
   "grid_id": "SEW",
   "grid_x": 125,
   "grid_y": 67,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/SEW/125,67/forecast/hourly",
-  "station_id": "KBFI",
-  "station_name": "Boeing Field - King County International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:35+00:00"
+  "station_id": "KRNT",
+  "station_name": "Renton Municipal Airport",
+  "station_candidates": [
+   {
+    "station_id": "KBFI",
+    "station_name": "Boeing Field - King County International Airport",
+    "rank": 0,
+    "obs_27h": 322
+   },
+   {
+    "station_id": "SEAW1",
+    "station_name": "SEATTLE WEATHER FORECAST OFFICE",
+    "rank": 1,
+    "obs_27h": 27
+   },
+   {
+    "station_id": "KRNT",
+    "station_name": "Renton Municipal Airport",
+    "rank": 2,
+    "obs_27h": 324
+   },
+   {
+    "station_id": "T144T",
+    "station_name": "S144TH TUKWILA",
+    "rank": 3,
+    "obs_27h": 105
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:52+00:00",
+  "previous_station_id": "KBFI"
  },
  "SF": {
   "grid_id": "MTR",
   "grid_x": 97,
   "grid_y": 86,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/MTR/97,86/forecast/hourly",
-  "station_id": "KNUQ",
-  "station_name": "Mountain View, Moffett Field",
-  "resolved_at_utc": "2026-09-11T12:56:36+00:00"
+  "station_id": "KSJC",
+  "station_name": "San Jose, San Jose International Airport",
+  "station_candidates": [
+   {
+    "station_id": "KNUQ",
+    "station_name": "Mountain View, Moffett Field",
+    "rank": 0,
+    "obs_27h": 80
+   },
+   {
+    "station_id": "KSJC",
+    "station_name": "San Jose, San Jose International Airport",
+    "rank": 1,
+    "obs_27h": 351
+   },
+   {
+    "station_id": "AW020",
+    "station_name": "AE6EO MOUNTAIN VIEW",
+    "rank": 2,
+    "obs_27h": 160
+   },
+   {
+    "station_id": "KPAO",
+    "station_name": "Palo Alto Airport",
+    "rank": 3,
+    "obs_27h": 14
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:11:57+00:00",
+  "previous_station_id": "KNUQ"
  },
  "TB": {
   "grid_id": "TBW",
@@ -204,24 +792,104 @@
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/TBW/69,99/forecast/hourly",
   "station_id": "KTPA",
   "station_name": "Tampa, Tampa International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:37+00:00"
+  "station_candidates": [
+   {
+    "station_id": "KTPA",
+    "station_name": "Tampa, Tampa International Airport",
+    "rank": 0,
+    "obs_27h": 353
+   },
+   {
+    "station_id": "KTPF",
+    "station_name": "Tampa, Peter O Knight Airport",
+    "rank": 1,
+    "obs_27h": 78
+   },
+   {
+    "station_id": "KVDF",
+    "station_name": "Tampa, Vandenberg Airport",
+    "rank": 2,
+    "obs_27h": 78
+   },
+   {
+    "station_id": "KPIE",
+    "station_name": "St. Petersburg/Clearwater Airport",
+    "rank": 3,
+    "obs_27h": 11
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:12:02+00:00"
  },
  "TEN": {
   "grid_id": "OHX",
   "grid_x": 50,
   "grid_y": 57,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/OHX/50,57/forecast/hourly",
-  "station_id": "KBNA",
-  "station_name": "Nashville, Nashville International Airport",
-  "resolved_at_utc": "2026-09-11T12:56:37+00:00"
+  "station_id": "KMQY",
+  "station_name": "Smyrna, Smyrna Airport",
+  "station_candidates": [
+   {
+    "station_id": "KBNA",
+    "station_name": "Nashville, Nashville International Airport",
+    "rank": 0,
+    "obs_27h": 347
+   },
+   {
+    "station_id": "KMQY",
+    "station_name": "Smyrna, Smyrna Airport",
+    "rank": 1,
+    "obs_27h": 353
+   },
+   {
+    "station_id": "KXNX",
+    "station_name": "Music City Executive Airport",
+    "rank": 2,
+    "obs_27h": 70
+   },
+   {
+    "station_id": "KM54",
+    "station_name": "Lebanon Municipal Airport",
+    "rank": 3,
+    "obs_27h": 57
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:12:07+00:00",
+  "previous_station_id": "KBNA"
  },
  "WAS": {
   "grid_id": "LWX",
   "grid_x": 102,
   "grid_y": 73,
   "forecast_hourly_url": "https://api.weather.gov/gridpoints/LWX/102,73/forecast/hourly",
-  "station_id": "KCGS",
-  "station_name": "College Park Airport",
-  "resolved_at_utc": "2026-09-11T12:56:38+00:00"
+  "station_id": "KDCA",
+  "station_name": "Washington/Reagan National Airport, DC",
+  "station_candidates": [
+   {
+    "station_id": "KCGS",
+    "station_name": "College Park Airport",
+    "rank": 0,
+    "obs_27h": 80
+   },
+   {
+    "station_id": "KADW",
+    "station_name": "Camp Springs / Andrews Air Force Base",
+    "rank": 1,
+    "obs_27h": 29
+   },
+   {
+    "station_id": "KDCA",
+    "station_name": "Washington/Reagan National Airport, DC",
+    "rank": 2,
+    "obs_27h": 355
+   },
+   {
+    "station_id": "KBWI",
+    "station_name": "Baltimore, Baltimore-Washington International Airport",
+    "rank": 3,
+    "obs_27h": 348
+   }
+  ],
+  "resolved_at_utc": "2026-09-11T13:12:12+00:00",
+  "previous_station_id": "KCGS"
  }
 }
