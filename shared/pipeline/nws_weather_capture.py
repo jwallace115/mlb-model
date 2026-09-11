@@ -76,15 +76,26 @@ LEGACY_KEYS = {"OAK", "SD", "STL", "LA"}
 
 OBS_LOOKBACK_HOURS = 27  # every-3h cron + slack; dedup happens at read time
 
-# Station choice: NWS lists stations nearest-first, but the nearest is often a small
-# municipal field that reports every hour or two with gaps (first run: ARI 12 obs,
-# BAL 26, JAX 32 in 27h vs 300+ at 5-minute ASOS airports). For a kickoff-hour match
-# a dense reporter 10 miles off beats a sparse one 3 miles off. Evaluate the nearest
-# STATION_CANDIDATES by 27h observation count; take the densest that clears
-# MIN_OBS_27H, ties to the nearer. Cached in gridpoints.json with the candidates,
-# so the choice is auditable and only changes on --refresh-grid.
+# Station choice. NWS lists stations nearest-first, and the nearest is usually the
+# right answer -- but occasionally it is a small field with real gaps (ARI/KGEU
+# reported 12 times in 27h).
+#
+# We grade on HOUR COVERAGE, not observation count. A trial needs ONE reading at the
+# kickoff hour, so an hourly ASOS at the stadium (27 obs, 27/27 hours) is exactly as
+# useful as a 5-minute ASOS (324 obs, 27/27 hours) -- and far more useful than a
+# 5-minute ASOS forty miles away. Scoring by raw count got this backwards: it dropped
+# KBUF for KDKK (Dunkirk, ~40 mi from Highmark) over a 5-observation difference, and
+# KGRB for KMTW (Manitowoc, ~35 mi from Lambeau) over 10 -- differences that are
+# transmission noise, at the two stadiums whose weather the show most cares about.
+# The "ties to the nearer" rule never fired because raw counts never tie exactly.
+#
+# So: keep the nearest candidate that covers at least MIN_HOURS_27H of the last 27
+# hours. Proximity wins; coverage is only a floor. obs_27h is still recorded for the
+# audit trail. Cached in gridpoints.json with all candidates, so the choice is
+# auditable and only moves on --refresh-grid.
 STATION_CANDIDATES = 4
-MIN_OBS_27H = 20
+MIN_HOURS_27H = 24          # of OBS_LOOKBACK_HOURS; tolerates a couple of dropped hours
+MIN_OBS_27H = 20            # retained for the audit trail; no longer selects
 
 
 # --------------------------------------------------------------------------- helpers
@@ -155,12 +166,21 @@ def _get(url, params=None, retries=2, backoff=10):
 # --------------------------------------------------------------------------- lookups
 
 def choose_station(cands: list) -> dict | None:
-    """cands: [{station_id, station_name, rank, obs_27h}] nearest-first. Pure; unit-tested."""
+    """Nearest candidate that covers enough of the window.
+
+    cands: [{station_id, station_name, rank, hours_27h, obs_27h}] nearest-first
+    (rank 0 == nearest). Pure; unit-tested in --selftest.
+
+    Proximity is the objective; hour coverage is only a floor. If nothing clears the
+    floor, fall back to the best-covered candidate, ties to the nearer.
+    """
     if not cands:
         return None
-    ok = [c for c in cands if (c.get("obs_27h") or -1) >= MIN_OBS_27H]
-    pool = ok if ok else [c for c in cands if (c.get("obs_27h") or -1) >= 0] or cands
-    return sorted(pool, key=lambda c: (-(c.get("obs_27h") or -1), c["rank"]))[0]
+    ok = [c for c in cands if (c.get("hours_27h") or -1) >= MIN_HOURS_27H]
+    if ok:
+        return min(ok, key=lambda c: c["rank"])
+    scored = [c for c in cands if (c.get("hours_27h") or -1) >= 0] or cands
+    return sorted(scored, key=lambda c: (-(c.get("hours_27h") or -1), c["rank"]))[0]
 
 
 def resolve_gridpoint(key, st, previous=None) -> dict:
@@ -175,11 +195,15 @@ def resolve_gridpoint(key, st, previous=None) -> dict:
         try:
             ob = _get(f"{BASE}/stations/{sid}/observations",
                       params={"start": start, "end": now.isoformat(timespec="seconds"), "limit": 500})
-            n = len(ob.get("features", []))
+            feats = ob.get("features", [])
+            n = len(feats)
+            hrs = len({t[:13] for t in
+                       (x.get("properties", {}).get("timestamp") or "" for x in feats) if t})
         except Exception as e:
             log.warning(f"  {key}: candidate {sid} observations failed ({type(e).__name__}); scoring -1")
-            n = -1
-        cands.append({"station_id": sid, "station_name": f["properties"].get("name"), "rank": rank, "obs_27h": n})
+            n = hrs = -1
+        cands.append({"station_id": sid, "station_name": f["properties"].get("name"),
+                      "rank": rank, "hours_27h": hrs, "obs_27h": n})
         time.sleep(0.5)
     best = choose_station(cands)
     out = {
@@ -209,7 +233,7 @@ def load_grid_cache(stadiums, refresh=False) -> dict:
             picked = next((x for x in c.get("station_candidates", []) if x["station_id"] == c["station_id"]), {})
             log.info(f"  resolved {key}: grid {c['grid_id']} {c['grid_x']},{c['grid_y']} "
                      f"station {c['station_id']} ({c['station_name']}) rank {picked.get('rank')} "
-                     f"obs27h {picked.get('obs_27h')}" + (f" [was {c['previous_station_id']}]" if c.get("previous_station_id") else ""))
+                     f"hours27h {picked.get('hours_27h')} obs27h {picked.get('obs_27h')}" + (f" [was {c['previous_station_id']}]" if c.get("previous_station_id") else ""))
             time.sleep(0.5)
         except Exception as e:
             log.error(f"  could not resolve gridpoint for {key}: {e}")
@@ -334,13 +358,21 @@ def selftest():
     assert fc[1]["precip_prob_pct"] is None and fc[1]["temp_f"] == 73
     ob = parse_observations(_SAMPLE_OBS, "BUF", st, grid, "2026-09-11T15:05:00+00:00")
     assert len(ob) == 1 and ob[0]["temp_f"] == 71.1 and ob[0]["wind_mph"] == 10.4 and ob[0]["wind_gust_mph"] is None
-    # station choice: densest reporter above the floor, ties to the nearer; fall back sanely
-    C = lambda sid, r, n: {"station_id": sid, "station_name": sid, "rank": r, "obs_27h": n}
-    assert choose_station([C("KGEU", 0, 12), C("KPHX", 1, 340), C("KLUF", 2, 55)])["station_id"] == "KPHX"
-    assert choose_station([C("KBUF", 0, 320), C("KIAG", 1, 330)])["station_id"] == "KIAG"
-    assert choose_station([C("KAAA", 0, 25), C("KBBB", 1, 25)])["station_id"] == "KAAA"   # tie -> nearer
-    assert choose_station([C("KAAA", 0, 5), C("KBBB", 1, 9)])["station_id"] == "KBBB"     # none clear floor -> densest
-    assert choose_station([C("KAAA", 0, -1), C("KBBB", 1, -1)])["station_id"] == "KAAA"   # all failed -> nearest
+    # station choice: nearest station that covers the window; density never outranks proximity
+    C = lambda sid, r, h, n=None: {"station_id": sid, "station_name": sid, "rank": r,
+                                   "hours_27h": h, "obs_27h": n if n is not None else h * 12}
+    # an hourly reporter at the stadium beats a 5-minute reporter 40 miles away
+    assert choose_station([C("KBUF", 0, 27, 347), C("KIAG", 1, 27, 345),
+                           C("KDKK", 2, 27, 352)])["station_id"] == "KBUF"
+    assert choose_station([C("KGRB", 0, 27, 337), C("KMTW", 3, 27, 347)])["station_id"] == "KGRB"
+    assert choose_station([C("KDMH", 0, 27, 27), C("KBWI", 1, 27, 348)])["station_id"] == "KDMH"
+    # a genuinely gappy nearest station is skipped for the next one that covers
+    assert choose_station([C("KGEU", 0, 12, 12), C("KLUF", 1, 27, 32),
+                           C("KGYR", 2, 16, 17)])["station_id"] == "KLUF"
+    # nobody clears the floor -> best coverage, ties to the nearer
+    assert choose_station([C("KAAA", 0, 10), C("KBBB", 1, 18)])["station_id"] == "KBBB"
+    assert choose_station([C("KAAA", 0, 10), C("KBBB", 1, 10)])["station_id"] == "KAAA"
+    assert choose_station([C("KAAA", 0, -1), C("KBBB", 1, -1)])["station_id"] == "KAAA"
     assert choose_station([]) is None
     stadiums = load_stadiums()
     assert 20 <= len(stadiums) <= 30, f"unexpected stadium count {len(stadiums)}"
@@ -350,7 +382,7 @@ def selftest():
     assert nfl_season(datetime(2026, 9, 11, tzinfo=timezone.utc)) == 2026
     assert nfl_season(datetime(2027, 1, 20, tzinfo=timezone.utc)) == 2026
     df = pd.DataFrame(fc); assert list(df.columns)[0] == "fetched_at_utc"
-    log.info(f"SELFTEST OK — parsing, unit conversion, station choice, {len(stadiums)} venues: {', '.join(sorted(stadiums))}")
+    log.info(f"SELFTEST OK — parsing, unit conversion, station choice (hour coverage), {len(stadiums)} venues: {', '.join(sorted(stadiums))}")
 
 
 # --------------------------------------------------------------------------- main
