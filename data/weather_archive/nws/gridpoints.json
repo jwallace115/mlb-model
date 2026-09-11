@@ -33,11 +33,10 @@
     "station_name": "Phoenix, Phoenix-Deer Valley Municipal Airport",
     "rank": 3,
     "hours_27h": 15,
-    "obs_27h": 177
+    "obs_27h": 178
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:32:14+00:00",
-  "previous_station_id": "KDVT"
+  "resolved_at_utc": "2026-09-11T13:36:30+00:00"
  },
  "ATL": {
   "grid_id": "FFC",
@@ -76,7 +75,7 @@
     "obs_27h": 26
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:32:18+00:00"
+  "resolved_at_utc": "2026-09-11T13:36:34+00:00"
  },
  "BAL": {
   "grid_id": "LWX",
@@ -115,8 +114,7 @@
     "obs_27h": 35
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:32:23+00:00",
-  "previous_station_id": "KBWI"
+  "resolved_at_utc": "2026-09-11T13:36:39+00:00"
  },
  "BUF": {
   "grid_id": "BUF",
@@ -155,8 +153,7 @@
     "obs_27h": 0
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:32:28+00:00",
-  "previous_station_id": "KDKK"
+  "resolved_at_utc": "2026-09-11T13:36:43+00:00"
  },
  "CAR": {
   "grid_id": "GSP",
@@ -171,7 +168,7 @@
     "station_name": "Charlotte/Douglas International Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 341
+    "obs_27h": 340
    },
    {
     "station_id": "KJQF",
@@ -195,8 +192,7 @@
     "obs_27h": 348
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:32:33+00:00",
-  "previous_station_id": "KAKH"
+  "resolved_at_utc": "2026-09-11T13:36:48+00:00"
  },
  "CHI": {
   "grid_id": "LOT",
@@ -232,10 +228,10 @@
     "station_name": "Lansing Municipal Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 81
+    "obs_27h": 80
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:32:38+00:00"
+  "resolved_at_utc": "2026-09-11T13:36:53+00:00"
  },
  "CIN": {
   "grid_id": "ILN",
@@ -257,25 +253,24 @@
     "station_name": "Cincinnati/Northern Kentucky International Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 356
+    "obs_27h": 355
    },
    {
     "station_id": "KI67",
     "station_name": "Cincinnati W Airport",
     "rank": 2,
     "hours_27h": 27,
-    "obs_27h": 77
+    "obs_27h": 76
    },
    {
     "station_id": "KI69",
     "station_name": "Batavia Clermont County Airport",
     "rank": 3,
     "hours_27h": 26,
-    "obs_27h": 77
+    "obs_27h": 76
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:32:43+00:00",
-  "previous_station_id": "KCVG"
+  "resolved_at_utc": "2026-09-11T13:36:58+00:00"
  },
  "CLE": {
   "grid_id": "CLE",
@@ -290,32 +285,31 @@
     "station_name": "Cleveland, Burke Lakefront Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 348
+    "obs_27h": 347
    },
    {
     "station_id": "KCLE",
     "station_name": "Cleveland Hopkins International Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 354
+    "obs_27h": 353
    },
    {
     "station_id": "KLPR",
     "station_name": "Lorain / Elyria, Lorain County Regional Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 354
+    "obs_27h": 353
    },
    {
     "station_id": "KAKR",
     "station_name": "Akron, Akron Fulton International Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 356
+    "obs_27h": 355
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:33:27+00:00",
-  "previous_station_id": "KAKR"
+  "resolved_at_utc": "2026-09-11T13:37:03+00:00"
  },
  "DAL": {
   "grid_id": "FWD",
@@ -330,32 +324,31 @@
     "station_name": "Grand Prairie, Grand Prairie Municipal Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 81
+    "obs_27h": 80
    },
    {
     "station_id": "KGKY",
     "station_name": "Arlington Municipal Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 348
+    "obs_27h": 347
    },
    {
     "station_id": "KDFW",
     "station_name": "Dallas/Fort Worth International Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 330
+    "obs_27h": 329
    },
    {
     "station_id": "KRBD",
     "station_name": "Dallas, Redbird Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 350
+    "obs_27h": 349
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:33:33+00:00",
-  "previous_station_id": "KRBD"
+  "resolved_at_utc": "2026-09-11T13:37:09+00:00"
  },
  "DEN": {
   "grid_id": "BOU",
@@ -370,7 +363,7 @@
     "station_name": "Broomfield / Jeffco",
     "rank": 0,
     "hours_27h": 23,
-    "obs_27h": 50
+    "obs_27h": 49
    },
    {
     "station_id": "KBKF",
@@ -384,18 +377,17 @@
     "station_name": "Denver - Centennial Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 350
+    "obs_27h": 349
    },
    {
     "station_id": "KEIK",
     "station_name": "Erie Municipal Airport",
     "rank": 3,
     "hours_27h": 27,
-    "obs_27h": 80
+    "obs_27h": 79
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:33:38+00:00",
-  "previous_station_id": "KAPA"
+  "resolved_at_utc": "2026-09-11T13:37:14+00:00"
  },
  "GB": {
   "grid_id": "GRB",
@@ -410,14 +402,14 @@
     "station_name": "Green Bay, Austin Straubel International Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 339
+    "obs_27h": 338
    },
    {
     "station_id": "KOCQ",
     "station_name": "Oconto J. Douglas Bake Municipal Airport",
     "rank": 1,
     "hours_27h": 27,
-    "obs_27h": 80
+    "obs_27h": 79
    },
    {
     "station_id": "KATW",
@@ -431,11 +423,10 @@
     "station_name": "Manitowoc, Manitowoc County Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 349
+    "obs_27h": 348
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:33:43+00:00",
-  "previous_station_id": "KMTW"
+  "resolved_at_utc": "2026-09-11T13:37:19+00:00"
  },
  "HOU": {
   "grid_id": "HGX",
@@ -450,14 +441,14 @@
     "station_name": "Houston, Houston Hobby Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 350
+    "obs_27h": 349
    },
    {
     "station_id": "KSGR",
     "station_name": "Houston, Sugar Land Municipal / Hull Field Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 358
+    "obs_27h": 357
    },
    {
     "station_id": "KLVJ",
@@ -474,8 +465,7 @@
     "obs_27h": 24
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:33:48+00:00",
-  "previous_station_id": "KSGR"
+  "resolved_at_utc": "2026-09-11T13:37:24+00:00"
  },
  "IND": {
   "grid_id": "IND",
@@ -490,31 +480,31 @@
     "station_name": "Indianapolis International Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 357
+    "obs_27h": 356
    },
    {
     "station_id": "KEYE",
     "station_name": "Indianapolis, Eagle Creek Airpark",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 354
+    "obs_27h": 353
    },
    {
     "station_id": "KMQJ",
     "station_name": "Indianapolis Regional Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 78
+    "obs_27h": 77
    },
    {
     "station_id": "KTYQ",
     "station_name": "INDIANAPOLIS",
     "rank": 3,
     "hours_27h": 27,
-    "obs_27h": 80
+    "obs_27h": 79
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:33:53+00:00"
+  "resolved_at_utc": "2026-09-11T13:37:29+00:00"
  },
  "JAX": {
   "grid_id": "JAX",
@@ -536,14 +526,14 @@
     "station_name": "Jacksonville Craig Municipal Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 360
+    "obs_27h": 359
    },
    {
     "station_id": "KJAX",
     "station_name": "Jacksonville International Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 351
+    "obs_27h": 350
    },
    {
     "station_id": "KNRB",
@@ -553,8 +543,7 @@
     "obs_27h": 29
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:33:59+00:00",
-  "previous_station_id": "KCRG"
+  "resolved_at_utc": "2026-09-11T13:37:34+00:00"
  },
  "KC": {
   "grid_id": "EAX",
@@ -569,32 +558,31 @@
     "station_name": "Kansas City, Kansas City Downtown Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 361
+    "obs_27h": 360
    },
    {
     "station_id": "KLXT",
     "station_name": "Kansas City - Lee's Summit Regional Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 370
+    "obs_27h": 369
    },
    {
     "station_id": "KOJC",
     "station_name": "Olathe, Johnson County Executive Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 360
+    "obs_27h": 359
    },
    {
     "station_id": "KMCI",
     "station_name": "Kansas City, Kansas City International Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 345
+    "obs_27h": 344
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:04+00:00",
-  "previous_station_id": "KLXT"
+  "resolved_at_utc": "2026-09-11T13:37:39+00:00"
  },
  "MIA": {
   "grid_id": "MFL",
@@ -609,31 +597,31 @@
     "station_name": "Hollywood, North Perry Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 359
+    "obs_27h": 358
    },
    {
     "station_id": "KOPF",
     "station_name": "Miami, Opa Locka Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 356
+    "obs_27h": 355
    },
    {
     "station_id": "KFLL",
     "station_name": "Fort Lauderdale/Hollywood International Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 353
+    "obs_27h": 352
    },
    {
     "station_id": "KMIA",
     "station_name": "Miami, Miami International Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 350
+    "obs_27h": 349
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:10+00:00"
+  "resolved_at_utc": "2026-09-11T13:37:45+00:00"
  },
  "NE": {
   "grid_id": "BOX",
@@ -648,32 +636,31 @@
     "station_name": "Norwood, Norwood Memorial Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 329
+    "obs_27h": 328
    },
    {
     "station_id": "KSFZ",
     "station_name": "Pawtucket, North Central State Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 342
+    "obs_27h": 341
    },
    {
     "station_id": "KTAN",
     "station_name": "Taunton, Taunton Municipal Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 326
+    "obs_27h": 325
    },
    {
     "station_id": "KBOS",
     "station_name": "Boston, Logan International Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 330
+    "obs_27h": 329
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:16+00:00",
-  "previous_station_id": "KSFZ"
+  "resolved_at_utc": "2026-09-11T13:37:52+00:00"
  },
  "NYG": {
   "grid_id": "OKX",
@@ -688,7 +675,7 @@
     "station_name": "Teterboro, Teterboro Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 349
+    "obs_27h": 348
    },
    {
     "station_id": "KNYC",
@@ -702,17 +689,17 @@
     "station_name": "Newark, Newark International Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 349
+    "obs_27h": 348
    },
    {
     "station_id": "KLGA",
     "station_name": "New York, La Guardia Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 348
+    "obs_27h": 347
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:22+00:00"
+  "resolved_at_utc": "2026-09-11T13:37:58+00:00"
  },
  "PHI": {
   "grid_id": "PHI",
@@ -727,7 +714,7 @@
     "station_name": "Philadelphia, Philadelphia International Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 349
+    "obs_27h": 348
    },
    {
     "station_id": "KPNE",
@@ -751,7 +738,7 @@
     "obs_27h": 0
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:27+00:00"
+  "resolved_at_utc": "2026-09-11T13:38:03+00:00"
  },
  "PIT": {
   "grid_id": "PBZ",
@@ -766,32 +753,31 @@
     "station_name": "Pittsburgh - Allegheny County Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 356
+    "obs_27h": 355
    },
    {
     "station_id": "KPIT",
     "station_name": "Pittsburgh International Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 353
+    "obs_27h": 352
    },
    {
     "station_id": "KBTP",
     "station_name": "Pittsburgh/Butler Regional Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 365
+    "obs_27h": 364
    },
    {
     "station_id": "KAFJ",
     "station_name": "Washington County Airport",
     "rank": 3,
     "hours_27h": 3,
-    "obs_27h": 32
+    "obs_27h": 30
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:32+00:00",
-  "previous_station_id": "KBTP"
+  "resolved_at_utc": "2026-09-11T13:38:08+00:00"
  },
  "SEA": {
   "grid_id": "SEW",
@@ -806,7 +792,7 @@
     "station_name": "Boeing Field - King County International Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 324
+    "obs_27h": 323
    },
    {
     "station_id": "SEAW1",
@@ -820,7 +806,7 @@
     "station_name": "Renton Municipal Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 327
+    "obs_27h": 326
    },
    {
     "station_id": "T144T",
@@ -830,8 +816,7 @@
     "obs_27h": 105
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:38+00:00",
-  "previous_station_id": "KRNT"
+  "resolved_at_utc": "2026-09-11T13:38:13+00:00"
  },
  "SF": {
   "grid_id": "MTR",
@@ -846,14 +831,14 @@
     "station_name": "Mountain View, Moffett Field",
     "rank": 0,
     "hours_27h": 27,
-    "obs_27h": 80
+    "obs_27h": 79
    },
    {
     "station_id": "KSJC",
     "station_name": "San Jose, San Jose International Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 352
+    "obs_27h": 351
    },
    {
     "station_id": "AW020",
@@ -870,8 +855,7 @@
     "obs_27h": 14
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:42+00:00",
-  "previous_station_id": "KSJC"
+  "resolved_at_utc": "2026-09-11T13:38:18+00:00"
  },
  "TB": {
   "grid_id": "TBW",
@@ -886,21 +870,21 @@
     "station_name": "Tampa, Tampa International Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 355
+    "obs_27h": 354
    },
    {
     "station_id": "KTPF",
     "station_name": "Tampa, Peter O Knight Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 78
+    "obs_27h": 77
    },
    {
     "station_id": "KVDF",
     "station_name": "Tampa, Vandenberg Airport",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 78
+    "obs_27h": 77
    },
    {
     "station_id": "KPIE",
@@ -910,7 +894,7 @@
     "obs_27h": 12
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:47+00:00"
+  "resolved_at_utc": "2026-09-11T13:38:23+00:00"
  },
  "TEN": {
   "grid_id": "OHX",
@@ -925,21 +909,21 @@
     "station_name": "Nashville, Nashville International Airport",
     "rank": 0,
     "hours_27h": 28,
-    "obs_27h": 349
+    "obs_27h": 348
    },
    {
     "station_id": "KMQY",
     "station_name": "Smyrna, Smyrna Airport",
     "rank": 1,
     "hours_27h": 28,
-    "obs_27h": 355
+    "obs_27h": 354
    },
    {
     "station_id": "KXNX",
     "station_name": "Music City Executive Airport",
     "rank": 2,
     "hours_27h": 27,
-    "obs_27h": 71
+    "obs_27h": 70
    },
    {
     "station_id": "KM54",
@@ -949,8 +933,7 @@
     "obs_27h": 59
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:52+00:00",
-  "previous_station_id": "KMQY"
+  "resolved_at_utc": "2026-09-11T13:38:27+00:00"
  },
  "WAS": {
   "grid_id": "LWX",
@@ -965,7 +948,7 @@
     "station_name": "College Park Airport",
     "rank": 0,
     "hours_27h": 27,
-    "obs_27h": 80
+    "obs_27h": 79
    },
    {
     "station_id": "KADW",
@@ -979,17 +962,16 @@
     "station_name": "Washington/Reagan National Airport, DC",
     "rank": 2,
     "hours_27h": 28,
-    "obs_27h": 356
+    "obs_27h": 355
    },
    {
     "station_id": "KBWI",
     "station_name": "Baltimore, Baltimore-Washington International Airport",
     "rank": 3,
     "hours_27h": 28,
-    "obs_27h": 349
+    "obs_27h": 348
    }
   ],
-  "resolved_at_utc": "2026-09-11T13:34:57+00:00",
-  "previous_station_id": "KDCA"
+  "resolved_at_utc": "2026-09-11T13:38:32+00:00"
  }
 }
