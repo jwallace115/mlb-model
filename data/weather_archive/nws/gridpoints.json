@@ -1,0 +1,227 @@
+{
+ "ARI": {
+  "grid_id": "PSR",
+  "grid_x": 152,
+  "grid_y": 62,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/PSR/152,62/forecast/hourly",
+  "station_id": "KGEU",
+  "station_name": "Glendale, Glendale Municipal Airport",
+  "resolved_at_utc": "2026-09-11T12:56:19+00:00"
+ },
+ "ATL": {
+  "grid_id": "FFC",
+  "grid_x": 50,
+  "grid_y": 87,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/FFC/50,87/forecast/hourly",
+  "station_id": "KFTY",
+  "station_name": "Fulton County Airport-Brown Field",
+  "resolved_at_utc": "2026-09-11T12:56:20+00:00"
+ },
+ "BAL": {
+  "grid_id": "LWX",
+  "grid_x": 109,
+  "grid_y": 90,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/LWX/109,90/forecast/hourly",
+  "station_id": "KDMH",
+  "station_name": "Baltimore, Inner Harbor",
+  "resolved_at_utc": "2026-09-11T12:56:21+00:00"
+ },
+ "BUF": {
+  "grid_id": "BUF",
+  "grid_x": 39,
+  "grid_y": 42,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/BUF/39,42/forecast/hourly",
+  "station_id": "KBUF",
+  "station_name": "Buffalo, Greater Buffalo International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:22+00:00"
+ },
+ "CAR": {
+  "grid_id": "GSP",
+  "grid_x": 118,
+  "grid_y": 65,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/GSP/118,65/forecast/hourly",
+  "station_id": "KCLT",
+  "station_name": "Charlotte/Douglas International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:23+00:00"
+ },
+ "CHI": {
+  "grid_id": "LOT",
+  "grid_x": 76,
+  "grid_y": 72,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/LOT/76,72/forecast/hourly",
+  "station_id": "KMDW",
+  "station_name": "Chicago, Chicago Midway Airport",
+  "resolved_at_utc": "2026-09-11T12:56:23+00:00"
+ },
+ "CIN": {
+  "grid_id": "ILN",
+  "grid_x": 35,
+  "grid_y": 38,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/ILN/35,38/forecast/hourly",
+  "station_id": "KLUK",
+  "station_name": "Cincinnati, Cincinnati Municipal Airport Lunken Field",
+  "resolved_at_utc": "2026-09-11T12:56:24+00:00"
+ },
+ "CLE": {
+  "grid_id": "CLE",
+  "grid_x": 83,
+  "grid_y": 65,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/CLE/83,65/forecast/hourly",
+  "station_id": "KBKL",
+  "station_name": "Cleveland, Burke Lakefront Airport",
+  "resolved_at_utc": "2026-09-11T12:56:25+00:00"
+ },
+ "DAL": {
+  "grid_id": "FWD",
+  "grid_x": 78,
+  "grid_y": 103,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/FWD/78,103/forecast/hourly",
+  "station_id": "KGPM",
+  "station_name": "Grand Prairie, Grand Prairie Municipal Airport",
+  "resolved_at_utc": "2026-09-11T12:56:26+00:00"
+ },
+ "DEN": {
+  "grid_id": "BOU",
+  "grid_x": 62,
+  "grid_y": 62,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/BOU/62,62/forecast/hourly",
+  "station_id": "KBJC",
+  "station_name": "Broomfield / Jeffco",
+  "resolved_at_utc": "2026-09-11T12:56:26+00:00"
+ },
+ "GB": {
+  "grid_id": "GRB",
+  "grid_x": 78,
+  "grid_y": 31,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/GRB/78,31/forecast/hourly",
+  "station_id": "KGRB",
+  "station_name": "Green Bay, Austin Straubel International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:27+00:00"
+ },
+ "HOU": {
+  "grid_id": "HGX",
+  "grid_x": 61,
+  "grid_y": 91,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/HGX/61,91/forecast/hourly",
+  "station_id": "KHOU",
+  "station_name": "Houston, Houston Hobby Airport",
+  "resolved_at_utc": "2026-09-11T12:56:28+00:00"
+ },
+ "IND": {
+  "grid_id": "IND",
+  "grid_x": 58,
+  "grid_y": 69,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/IND/58,69/forecast/hourly",
+  "station_id": "KIND",
+  "station_name": "Indianapolis International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:29+00:00"
+ },
+ "JAX": {
+  "grid_id": "JAX",
+  "grid_x": 66,
+  "grid_y": 64,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/JAX/66,64/forecast/hourly",
+  "station_id": "KNIP",
+  "station_name": "Jacksonville Naval Air Station",
+  "resolved_at_utc": "2026-09-11T12:56:29+00:00"
+ },
+ "KC": {
+  "grid_id": "EAX",
+  "grid_x": 47,
+  "grid_y": 48,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/EAX/47,48/forecast/hourly",
+  "station_id": "KMKC",
+  "station_name": "Kansas City, Kansas City Downtown Airport",
+  "resolved_at_utc": "2026-09-11T12:56:30+00:00"
+ },
+ "MIA": {
+  "grid_id": "MFL",
+  "grid_x": 107,
+  "grid_y": 58,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/MFL/107,58/forecast/hourly",
+  "station_id": "KHWO",
+  "station_name": "Hollywood, North Perry Airport",
+  "resolved_at_utc": "2026-09-11T12:56:31+00:00"
+ },
+ "NE": {
+  "grid_id": "BOX",
+  "grid_x": 67,
+  "grid_y": 88,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/BOX/67,88/forecast/hourly",
+  "station_id": "KOWD",
+  "station_name": "Norwood, Norwood Memorial Airport",
+  "resolved_at_utc": "2026-09-11T12:56:32+00:00"
+ },
+ "NYG": {
+  "grid_id": "OKX",
+  "grid_x": 30,
+  "grid_y": 46,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/OKX/30,46/forecast/hourly",
+  "station_id": "KTEB",
+  "station_name": "Teterboro, Teterboro Airport",
+  "resolved_at_utc": "2026-09-11T12:56:33+00:00"
+ },
+ "PHI": {
+  "grid_id": "PHI",
+  "grid_x": 50,
+  "grid_y": 76,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/PHI/50,76/forecast/hourly",
+  "station_id": "KPHL",
+  "station_name": "Philadelphia, Philadelphia International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:33+00:00"
+ },
+ "PIT": {
+  "grid_id": "PBZ",
+  "grid_x": 77,
+  "grid_y": 66,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/PBZ/77,66/forecast/hourly",
+  "station_id": "KAGC",
+  "station_name": "Pittsburgh - Allegheny County Airport",
+  "resolved_at_utc": "2026-09-11T12:56:34+00:00"
+ },
+ "SEA": {
+  "grid_id": "SEW",
+  "grid_x": 125,
+  "grid_y": 67,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/SEW/125,67/forecast/hourly",
+  "station_id": "KBFI",
+  "station_name": "Boeing Field - King County International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:35+00:00"
+ },
+ "SF": {
+  "grid_id": "MTR",
+  "grid_x": 97,
+  "grid_y": 86,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/MTR/97,86/forecast/hourly",
+  "station_id": "KNUQ",
+  "station_name": "Mountain View, Moffett Field",
+  "resolved_at_utc": "2026-09-11T12:56:36+00:00"
+ },
+ "TB": {
+  "grid_id": "TBW",
+  "grid_x": 69,
+  "grid_y": 99,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/TBW/69,99/forecast/hourly",
+  "station_id": "KTPA",
+  "station_name": "Tampa, Tampa International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:37+00:00"
+ },
+ "TEN": {
+  "grid_id": "OHX",
+  "grid_x": 50,
+  "grid_y": 57,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/OHX/50,57/forecast/hourly",
+  "station_id": "KBNA",
+  "station_name": "Nashville, Nashville International Airport",
+  "resolved_at_utc": "2026-09-11T12:56:37+00:00"
+ },
+ "WAS": {
+  "grid_id": "LWX",
+  "grid_x": 102,
+  "grid_y": 73,
+  "forecast_hourly_url": "https://api.weather.gov/gridpoints/LWX/102,73/forecast/hourly",
+  "station_id": "KCGS",
+  "station_name": "College Park Airport",
+  "resolved_at_utc": "2026-09-11T12:56:38+00:00"
+ }
+}
