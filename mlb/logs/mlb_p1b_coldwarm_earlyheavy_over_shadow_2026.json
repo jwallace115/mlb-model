@@ -380,6 +380,24 @@
       "result": "L",
       "graded": true,
       "generated_at": "2026-09-09T15:20:03.827685+00:00"
+    },
+    {
+      "date": "2026-09-12",
+      "game_pk": 824224,
+      "home_team": "DET",
+      "away_team": "COL",
+      "side": "OVER",
+      "fg_total": 8.5,
+      "over_price": -105,
+      "f5_total": 5.0,
+      "f5_ratio": 0.5882,
+      "forecast_temp_f": 78.3,
+      "weather_source": "open_meteo_forecast",
+      "weather_timestamp": "2026-09-12T15:20:03.671920+00:00",
+      "actual_total": null,
+      "result": null,
+      "graded": false,
+      "generated_at": "2026-09-12T15:20:03.671972+00:00"
     }
   ]
 }
