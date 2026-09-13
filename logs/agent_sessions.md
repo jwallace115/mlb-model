@@ -32,3 +32,25 @@
 - TOP 10 target share 2024 wk18: Nabers NYG 0.345, Thomas JAX 0.337, McBride ARI 0.307, Nacua LA 0.303, Brown PHI 0.288, London ATL 0.286, Jefferson MIN 0.283, Chase CIN 0.272, Jeudy CLE 0.269, Allen CHI 0.264
 - NOT DONE: Step 4 (audit)
 - UNVERIFIED: whether grid RMSE improvement (0.23 to 0.14) is genuine vs old formula or partly from zero-evidence override reducing error on zero-touch predictions
+
+## 2026-09-13T23:15Z  claude-code (Phase 1B Step 4)
+- COMMITTED: nfl_sim Phase 1B step 4: attribute reliability audit (D11) (e44c3407c)
+- RAN: nfl/sim/reliability_audit.py — 189,481 plays, 17,418 receiver-game rows, 8,235 rusher-game rows
+- FULL TABLE:
+  | Attribute           | Group     |    N |     r |    r8 | YoY r | PASS/FAIL |
+  | target_share        | receivers | 1105 | 0.890 | 0.942 | 0.802 | PASS      |
+  | rz_target_share     | receivers | 1073 | 0.579 | 0.733 | 0.521 | PASS      |
+  | adot                | receivers | 1105 | 0.848 | 0.918 | 0.759 | PASS      |
+  | catch_rate          | receivers | 1105 | 0.375 | 0.546 | 0.219 | PASS      |
+  | yac_per_rec         | receivers |  991 | 0.530 | 0.693 | 0.322 | PASS      |
+  | yards_per_target    | receivers | 1105 | 0.286 | 0.445 | 0.096 | FAIL      |
+  | explosive_rec_rate  | receivers | 1105 | 0.228 | 0.372 | 0.109 | FAIL      |
+  | carry_share         | rushers   |  438 | 0.960 | 0.980 | 0.832 | PASS      |
+  | gl_carry_share      | rushers   |  245 | 0.720 | 0.837 | 0.568 | PASS      |
+  | yards_per_carry     | rushers   |  438 | 0.419 | 0.590 | 0.231 | PASS      |
+  | explosive_rush_rate | rushers   |  438 | 0.312 | 0.476 | 0.151 | FAIL      |
+- RECENT FORM: target_share RMSE(std)=0.06813 RMSE(std+l3)=0.06727 delta=+0.00086; carry_share RMSE(std)=0.15025 RMSE(std+l3)=0.14547 delta=+0.00478. Both positive (recent form adds marginal info).
+- DEFENSE SPLIT: ypt_defense_split r=-0.046 r8=-0.097 N=913 FAIL. Player-level matchup sensitivity vs pass defense type is noise, not a stable trait.
+- NOT DONE: engine code, anchoring, pricing. No files touched outside nfl/sim/reliability_audit.py and research/nfl_sim/phase1_attribute_reliability.md.
+- NOT DONE: git push (denied by permission; user must push manually)
+- UNVERIFIED: whether catch_rate (r8=0.546, barely passing, YoY=0.219) will hold up in forward validation or is borderline noise elevated by pooling
