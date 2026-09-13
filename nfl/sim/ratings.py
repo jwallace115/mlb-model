@@ -115,9 +115,42 @@ def get_shrink_target(league_means, season):
     """Shrink target for season s is ALWAYS the s-1 league mean (FIX 2)."""
     if season - 1 in league_means:
         return league_means[season - 1]
-    # Fallback: earliest available
     earliest = min(league_means.keys())
     return league_means[earliest]
+
+
+def get_universe(game_aggs_or_plays, season, team_col="team"):
+    """Return (teams, weeks) for the 32-team universe.
+    teams = 32 teams from s-1 plus any new abbreviation in s.
+    weeks = 1 through min(22, last observed week in s + 1).
+    Accepts either a dict of agg DataFrames or a single DataFrame."""
+    all_teams = set()
+    last_week = 0
+
+    if isinstance(game_aggs_or_plays, dict):
+        for label, agg in game_aggs_or_plays.items():
+            prior = agg[agg["season"] == season - 1]
+            curr = agg[agg["season"] == season]
+            all_teams.update(prior[team_col].unique())
+            all_teams.update(curr[team_col].unique())
+            if not curr.empty:
+                last_week = max(last_week, int(curr["week"].max()))
+    else:
+        df = game_aggs_or_plays
+        for col in [team_col, "home_team", "away_team"]:
+            if col in df.columns:
+                prior = df[df["season"] == season - 1]
+                curr = df[df["season"] == season]
+                all_teams.update(prior[col].dropna().unique())
+                all_teams.update(curr[col].dropna().unique())
+        curr = df[df["season"] == season]
+        if not curr.empty:
+            last_week = int(curr["week"].max())
+
+    if last_week == 0:
+        last_week = 1
+    weeks = list(range(1, min(22, last_week + 1) + 1))
+    return sorted(all_teams), weeks
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -142,18 +175,15 @@ def build_team_ratings_fast(game_aggs, league_means, params, output_seasons=None
         else:
             stat_cols["stuff_rate"] = "rush_stuff_sum"
 
-        seasons = output_seasons or sorted(agg_df["season"].unique())
+        seasons = output_seasons or sorted(set(agg_df["season"].unique()) & set(OUTPUT_SEASONS))
         for season in seasons:
-            if season not in agg_df["season"].values:
-                continue
             s_agg = agg_df[agg_df["season"] == season]
             prior_agg = agg_df[agg_df["season"] == season - 1] if season - 1 in agg_df["season"].values else None
 
-            # FIX 2: shrink target is ALWAYS s-1 league mean
             lg = get_shrink_target(league_means, season)
 
-            teams = sorted(s_agg["team"].unique())
-            weeks = sorted(s_agg["week"].unique())
+            # Universe fix: 32 teams from s-1, weeks 1..last+1
+            teams, weeks = get_universe(game_aggs, season)
 
             for team in teams:
                 tg = s_agg[s_agg["team"] == team].sort_values("week")
@@ -329,11 +359,8 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means):
     for season in OUTPUT_SEASONS:
         ss = scrimmage_plays[scrimmage_plays["season"] == season]
         all_s = all_plays[all_plays["season"] == season]
-        if ss.empty:
-            continue
         lg = get_shrink_target(league_means, season)
-        teams = sorted(ss["posteam"].dropna().unique())
-        weeks = sorted(ss["week"].unique())
+        teams, weeks = get_universe(scrimmage_plays, season, team_col="posteam")
 
         # FIX 1: league 4th-down go rate from ALL play types
         fourth_all = all_s[
@@ -412,8 +439,7 @@ def build_situational_proe(scrimmage_plays, params, league_means):
         else:
             lg_proe = {}
 
-        teams = sorted(ss["posteam"].dropna().unique())
-        weeks = sorted(ss["week"].unique())
+        teams, weeks = get_universe(scrim, season, team_col="posteam")
         for team in teams:
             tp = ss[ss["posteam"] == team]
             for w in weeks:
@@ -526,6 +552,23 @@ def pit_assertion(game_aggs, all_plays, league_means, params):
         if not ts.empty:
             assert abs(float(fs_row["proe"]) - float(ts.iloc[0]["proe"])) < 1e-9, "PIT FAIL sit PROE"
             print(f"    PASS: situational PROE ({test_team} wk{test_week} bucket={bucket})")
+
+    # Also test week 10 (at the truncation boundary)
+    full_row10 = full_ratings[(full_ratings["season"] == 2023) & (full_ratings["week"] == 10) &
+                               (full_ratings["team"] == "KC") & (full_ratings["unit"] == "pass_off")]
+    trunc_ratings10 = build_team_ratings_fast(trunc_aggs, trunc_league, params,
+                                              output_seasons=[2023])
+    trunc_row10 = trunc_ratings10[(trunc_ratings10["season"] == 2023) & (trunc_ratings10["week"] == 10) &
+                                   (trunc_ratings10["team"] == "KC") & (trunc_ratings10["unit"] == "pass_off")]
+    if not full_row10.empty and not trunc_row10.empty:
+        for col in ["epa", "success", "explosive", "sack_rate", "int_rate", "n_plays"]:
+            if col in full_row10.columns:
+                fv = float(full_row10.iloc[0][col])
+                tv = float(trunc_row10.iloc[0][col])
+                assert abs(fv - tv) < 1e-9, f"PIT FAIL team wk10 {col}: full={fv} trunc={tv}"
+        print(f"    PASS: team (KC 2023 wk10 pass_off — at truncation boundary)")
+    else:
+        print(f"    SKIP: wk10 not in output (full_empty={full_row10.empty}, trunc_empty={trunc_row10.empty})")
 
     print("  PIT ASSERTION: ALL PASSED")
 
@@ -753,7 +796,7 @@ def main():
         "k_tendency": 200,
         "tuned_on": "2021-2024",
         "holdout": "2025",
-        "ratings_commit": sha,
+        "built_at_parent_commit": sha,
         "grid_results": [{
             "half_life": g["half_life"], "prior_weight": g["prior_weight"],
             "k": g["k"], "mean_rmse": g["mean_rmse"],
@@ -774,6 +817,45 @@ def main():
     team_ratings = build_team_ratings_fast(game_aggs, league_means, params,
                                            output_seasons=OUTPUT_SEASONS)
     print(f"  {len(team_ratings):,} rows")
+
+    # Universe assertions
+    for s in OUTPUT_SEASONS:
+        sr = team_ratings[team_ratings["season"] == s]
+        n_teams = sr["team"].nunique()
+        assert n_teams == 32, f"FAIL: {s} has {n_teams} teams, expected 32"
+    s26 = team_ratings[team_ratings["season"] == 2026]
+    assert 1 in s26["week"].values and 2 in s26["week"].values, "FAIL: 2026 missing wk1 or wk2"
+    print(f"  Universe assertions: all seasons 32 teams, 2026 has wk1+wk2 ✓")
+    for s in OUTPUT_SEASONS:
+        sr = team_ratings[team_ratings["season"] == s]
+        wks = sorted(sr["week"].unique())
+        print(f"    {s}: {sr['team'].nunique()} teams × {len(wks)} weeks ({min(wks)}-{max(wks)})")
+
+    # Identity check against old ratings
+    old_path = Path("/tmp/team_ratings_old.parquet")
+    if old_path.exists():
+        old = pd.read_parquet(old_path)
+        # Compare rows that exist in both (same season, week, team, unit)
+        merge_cols = ["season", "week", "team", "unit"]
+        num_cols = [c for c in old.columns if c not in merge_cols]
+        merged = old.merge(team_ratings, on=merge_cols, suffixes=("_old", "_new"), how="inner")
+        n_compared = len(merged)
+        mismatches = 0
+        for col in num_cols:
+            old_col = f"{col}_old"
+            new_col = f"{col}_new"
+            if old_col in merged.columns and new_col in merged.columns:
+                diff = (merged[old_col] - merged[new_col]).abs()
+                bad = diff[diff > 1e-9]
+                if len(bad) > 0:
+                    mismatches += len(bad)
+                    print(f"  IDENTITY MISMATCH: {col} has {len(bad)} rows differing > 1e-9")
+        if mismatches > 0:
+            print(f"  FAIL: {mismatches} total mismatches against old ratings")
+            sys.exit(1)
+        print(f"  Identity check: {n_compared} old rows match new to 1e-9 ✓")
+    else:
+        print(f"  Identity check: SKIP (no old file at /tmp/team_ratings_old.parquet)")
 
     # FIX 3: verify 2021 wk1 pass_off ratings are NOT all identical
     wk1_2021 = team_ratings[(team_ratings["season"] == 2021) & (team_ratings["week"] == 1) &
