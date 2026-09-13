@@ -1,0 +1,2102 @@
+{
+  "id": "7e09efed7e12c659b82740b67ce2f9a1",
+  "sport_key": "americanfootball_nfl",
+  "sport_title": "NFL",
+  "commence_time": "2026-09-13T17:00:00Z",
+  "home_team": "Houston Texans",
+  "away_team": "Buffalo Bills",
+  "bookmakers": [
+    {
+      "key": "hardrockbet_fl",
+      "title": "Hard Rock Bet (FL)",
+      "markets": [
+        {
+          "key": "player_anytime_td",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Yes",
+              "description": "Jaylin Noel",
+              "price": 550
+            },
+            {
+              "name": "Yes",
+              "description": "C.J. Stroud",
+              "price": 800
+            },
+            {
+              "name": "Yes",
+              "description": "Jackson Hawes",
+              "price": 1100
+            },
+            {
+              "name": "Yes",
+              "description": "Ty Johnson",
+              "price": 575
+            },
+            {
+              "name": "Yes",
+              "description": "Cade Stover",
+              "price": 1750
+            },
+            {
+              "name": "Yes",
+              "description": "Skyler Bell",
+              "price": 2250
+            },
+            {
+              "name": "Yes",
+              "description": "Joshua Palmer",
+              "price": 800
+            },
+            {
+              "name": "Yes",
+              "description": "Xavier Hutchinson",
+              "price": 400
+            },
+            {
+              "name": "Yes",
+              "description": "Foster Moreau",
+              "price": 900
+            },
+            {
+              "name": "Yes",
+              "description": "Woody Marks",
+              "price": 250
+            },
+            {
+              "name": "Yes",
+              "description": "DJ Moore",
+              "price": 260
+            },
+            {
+              "name": "Yes",
+              "description": "Ray Davis",
+              "price": 575
+            },
+            {
+              "name": "Yes",
+              "description": "Khalil Shakir",
+              "price": 325
+            },
+            {
+              "name": "Yes",
+              "description": "Nico Collins",
+              "price": 150
+            },
+            {
+              "name": "Yes",
+              "description": "David Montgomery",
+              "price": -110
+            },
+            {
+              "name": "Yes",
+              "description": "James Cook",
+              "price": 100
+            },
+            {
+              "name": "Yes",
+              "description": "Keon Coleman",
+              "price": 525
+            },
+            {
+              "name": "Yes",
+              "description": "Dalton Schultz",
+              "price": 300
+            },
+            {
+              "name": "Yes",
+              "description": "Kayshon Boutte",
+              "price": 325
+            },
+            {
+              "name": "Yes",
+              "description": "Josh Allen",
+              "price": 125
+            },
+            {
+              "name": "Yes",
+              "description": "Dawson Knox",
+              "price": 575
+            },
+            {
+              "name": "Yes",
+              "description": "British Brooks",
+              "price": 4000
+            },
+            {
+              "name": "Yes",
+              "description": "Marlin Klein",
+              "price": 1750
+            },
+            {
+              "name": "Yes",
+              "description": "Dalton Kincaid",
+              "price": 300
+            },
+            {
+              "name": "Yes",
+              "description": "Keleki Latu",
+              "price": 1400
+            },
+            {
+              "name": "Yes",
+              "description": "Jared Wayne",
+              "price": 4000
+            }
+          ]
+        },
+        {
+          "key": "player_pass_attempts",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -120,
+              "point": 31.5
+            },
+            {
+              "name": "Under",
+              "description": "C.J. Stroud",
+              "price": -110,
+              "point": 31.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 30.5
+            },
+            {
+              "name": "Under",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 30.5
+            }
+          ]
+        },
+        {
+          "key": "player_pass_completions",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -130,
+              "point": 19.5
+            },
+            {
+              "name": "Under",
+              "description": "Josh Allen",
+              "price": 100,
+              "point": 19.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -125,
+              "point": 19.5
+            },
+            {
+              "name": "Under",
+              "description": "C.J. Stroud",
+              "price": -105,
+              "point": 19.5
+            }
+          ]
+        },
+        {
+          "key": "player_pass_interceptions",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -125,
+              "point": 0.5
+            },
+            {
+              "name": "Under",
+              "description": "C.J. Stroud",
+              "price": -105,
+              "point": 0.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -125,
+              "point": 0.5
+            },
+            {
+              "name": "Under",
+              "description": "Josh Allen",
+              "price": -105,
+              "point": 0.5
+            }
+          ]
+        },
+        {
+          "key": "player_pass_tds",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 115,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "C.J. Stroud",
+              "price": -155,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 140,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "Josh Allen",
+              "price": -190,
+              "point": 1.5
+            }
+          ]
+        },
+        {
+          "key": "player_pass_yds",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 224.5
+            },
+            {
+              "name": "Under",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 224.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -115,
+              "point": 221.5
+            },
+            {
+              "name": "Under",
+              "description": "C.J. Stroud",
+              "price": -115,
+              "point": 221.5
+            }
+          ]
+        },
+        {
+          "key": "player_reception_yds",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -115,
+              "point": 10.5
+            },
+            {
+              "name": "Under",
+              "description": "David Montgomery",
+              "price": -115,
+              "point": 10.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": -115,
+              "point": 13.5
+            },
+            {
+              "name": "Under",
+              "description": "Dawson Knox",
+              "price": -115,
+              "point": 13.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -110,
+              "point": 9.5
+            },
+            {
+              "name": "Under",
+              "description": "Woody Marks",
+              "price": -120,
+              "point": 9.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": -115,
+              "point": 25.5
+            },
+            {
+              "name": "Under",
+              "description": "Kayshon Boutte",
+              "price": -115,
+              "point": 25.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -120,
+              "point": 19.5
+            },
+            {
+              "name": "Under",
+              "description": "James Cook",
+              "price": -110,
+              "point": 19.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -115,
+              "point": 69.5
+            },
+            {
+              "name": "Under",
+              "description": "Nico Collins",
+              "price": -115,
+              "point": 69.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": -115,
+              "point": 34.5
+            },
+            {
+              "name": "Under",
+              "description": "Dalton Schultz",
+              "price": -115,
+              "point": 34.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": -115,
+              "point": 38.5
+            },
+            {
+              "name": "Under",
+              "description": "Dalton Kincaid",
+              "price": -115,
+              "point": 38.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": -115,
+              "point": 17.5
+            },
+            {
+              "name": "Under",
+              "description": "Xavier Hutchinson",
+              "price": -115,
+              "point": 17.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": -115,
+              "point": 36.5
+            },
+            {
+              "name": "Under",
+              "description": "Khalil Shakir",
+              "price": -115,
+              "point": 36.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -115,
+              "point": 47.5
+            },
+            {
+              "name": "Under",
+              "description": "DJ Moore",
+              "price": -115,
+              "point": 47.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": -115,
+              "point": 14.5
+            },
+            {
+              "name": "Under",
+              "description": "Jaylin Noel",
+              "price": -115,
+              "point": 14.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": -110,
+              "point": 12.5
+            },
+            {
+              "name": "Under",
+              "description": "Joshua Palmer",
+              "price": -120,
+              "point": 12.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": -115,
+              "point": 11.5
+            },
+            {
+              "name": "Under",
+              "description": "Keon Coleman",
+              "price": -115,
+              "point": 11.5
+            }
+          ]
+        },
+        {
+          "key": "player_receptions",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": -115,
+              "point": 3.5
+            },
+            {
+              "name": "Under",
+              "description": "Dalton Schultz",
+              "price": -115,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -130,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "David Montgomery",
+              "price": 100,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 140,
+              "point": 2.5
+            },
+            {
+              "name": "Under",
+              "description": "Kayshon Boutte",
+              "price": -185,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -130,
+              "point": 2.5
+            },
+            {
+              "name": "Under",
+              "description": "James Cook",
+              "price": 100,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 100,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "Dawson Knox",
+              "price": -130,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -145,
+              "point": 3.5
+            },
+            {
+              "name": "Under",
+              "description": "DJ Moore",
+              "price": 115,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -115,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "Woody Marks",
+              "price": -115,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": -130,
+              "point": 3.5
+            },
+            {
+              "name": "Under",
+              "description": "Khalil Shakir",
+              "price": 100,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": 115,
+              "point": 5.5
+            },
+            {
+              "name": "Under",
+              "description": "Nico Collins",
+              "price": -150,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": -155,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "Xavier Hutchinson",
+              "price": 120,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": -105,
+              "point": 3.5
+            },
+            {
+              "name": "Under",
+              "description": "Dalton Kincaid",
+              "price": -125,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": -110,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "Jaylin Noel",
+              "price": -120,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 155,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "Joshua Palmer",
+              "price": -220,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 165,
+              "point": 1.5
+            },
+            {
+              "name": "Under",
+              "description": "Keon Coleman",
+              "price": -230,
+              "point": 1.5
+            }
+          ]
+        },
+        {
+          "key": "player_rush_attempts",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 6.5
+            },
+            {
+              "name": "Under",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -125,
+              "point": 16.5
+            },
+            {
+              "name": "Under",
+              "description": "James Cook",
+              "price": -105,
+              "point": 16.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -120,
+              "point": 13.5
+            },
+            {
+              "name": "Under",
+              "description": "David Montgomery",
+              "price": -110,
+              "point": 13.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -125,
+              "point": 6.5
+            },
+            {
+              "name": "Under",
+              "description": "Woody Marks",
+              "price": -105,
+              "point": 6.5
+            }
+          ]
+        },
+        {
+          "key": "player_rush_yds",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -115,
+              "point": 26.5
+            },
+            {
+              "name": "Under",
+              "description": "Woody Marks",
+              "price": -115,
+              "point": 26.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -115,
+              "point": 55.5
+            },
+            {
+              "name": "Under",
+              "description": "David Montgomery",
+              "price": -115,
+              "point": 55.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -115,
+              "point": 10.5
+            },
+            {
+              "name": "Under",
+              "description": "C.J. Stroud",
+              "price": -115,
+              "point": 10.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 31.5
+            },
+            {
+              "name": "Under",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 31.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -115,
+              "point": 74.5
+            },
+            {
+              "name": "Under",
+              "description": "James Cook",
+              "price": -115,
+              "point": 74.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hardrockbet_fl",
+      "title": "Hard Rock Bet (FL)",
+      "markets": [
+        {
+          "key": "player_pass_yds_alternate",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -500,
+              "point": 174.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 900,
+              "point": 324.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 160,
+              "point": 249.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -7000,
+              "point": 124.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 525,
+              "point": 299.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -1500,
+              "point": 149.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -115,
+              "point": 224.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 900,
+              "point": 324.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -6000,
+              "point": 124.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -1300,
+              "point": 149.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 300,
+              "point": 274.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 500,
+              "point": 299.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -110,
+              "point": 224.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 300,
+              "point": 274.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 170,
+              "point": 249.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -210,
+              "point": 199.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": -475,
+              "point": 174.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -230,
+              "point": 199.5
+            }
+          ]
+        },
+        {
+          "key": "player_reception_yds_alternate",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 400,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": -120,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 900,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -1800,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -500,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 1300,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 150,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 200,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 600,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 190,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 2000,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 550,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 165,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 1000,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 375,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 300,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": 650,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 550,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 125,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 600,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 200,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": 125,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 750,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 525,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 115,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": 250,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 475,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": -230,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -105,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 700,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 300,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 1500,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": 185,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": -110,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": 325,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 2250,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 275,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -180,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 300,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 300,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 900,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 350,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -275,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 150,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 2500,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -140,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": -250,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 1600,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -500,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": -300,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 650,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 1400,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 2250,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 1100,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 105,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 400,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 180,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 600,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 1200,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 2500,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 210,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 475,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 700,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 1500,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 3000,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 220,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 650,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 1300,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 450,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 3000,
+              "point": 79.5
+            }
+          ]
+        },
+        {
+          "key": "player_receptions_alternate",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 650,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -145,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -375,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -115,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 325,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -180,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": -350,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": -300,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": -220,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -8000,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": 375,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 375,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 140,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 700,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 1200,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 180,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 325,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 2250,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": 1100,
+              "point": 9.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -425,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": -1300,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": 115,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 1600,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 750,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": -105,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": -1100,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -130,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": 275,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -425,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": -1600,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 600,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 180,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": 550,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 3000,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 230,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": 1000,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": -115,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -130,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 650,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 300,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 1200,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 100,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 160,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 1750,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 200,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": 600,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 400,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 750,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 1300,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": -155,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 575,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": -1300,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "DJ Moore",
+              "price": 145,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 1750,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Dawson Knox",
+              "price": 300,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Khalil Shakir",
+              "price": -130,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 750,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": 1600,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Schultz",
+              "price": 350,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Hutchinson",
+              "price": 150,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": -260,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 250,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Kayshon Boutte",
+              "price": 1750,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Nico Collins",
+              "price": 210,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Dalton Kincaid",
+              "price": -950,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 260,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": -110,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 1600,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylin Noel",
+              "price": 650,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 155,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 1300,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Joshua Palmer",
+              "price": 450,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 1400,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 500,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Keon Coleman",
+              "price": 165,
+              "point": 1.5
+            }
+          ]
+        },
+        {
+          "key": "player_rush_attempts_alternate",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -3000,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -6000,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 275,
+              "point": 17.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 110,
+              "point": 14.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -450,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 750,
+              "point": 14.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -175,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 2000,
+              "point": 17.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 230,
+              "point": 20.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 1750,
+              "point": 17.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 400,
+              "point": 11.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -3000,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -190,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -250,
+              "point": 11.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -240,
+              "point": 14.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -1100,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 1750,
+              "point": 23.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 500,
+              "point": 23.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 165,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 800,
+              "point": 14.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 350,
+              "point": 11.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 600,
+              "point": 20.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -500,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 1200,
+              "point": 26.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 105,
+              "point": 17.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 150,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -800,
+              "point": 11.5
+            }
+          ]
+        },
+        {
+          "key": "player_rush_yds_alternate",
+          "last_update": "2026-09-13T11:27:58Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 1300,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 1000,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -425,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -165,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -300,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 500,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 600,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 2500,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 250,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 155,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 1600,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 195,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -185,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 375,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": -1200,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": 325,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 700,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": 300,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 230,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Josh Allen",
+              "price": -210,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -900,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "C.J. Stroud",
+              "price": 3000,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": 105,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "David Montgomery",
+              "price": 130,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "James Cook",
+              "price": -6000,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Woody Marks",
+              "price": -130,
+              "point": 24.5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
