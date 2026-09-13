@@ -104,3 +104,4 @@ data/*.db.corrupt_backup
 data/.fuse_hidden*
 data/*.db-wal
 data/*.db-shm
+nfl/data/pbp/
