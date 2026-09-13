@@ -504,12 +504,9 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                 lw_r = s_active[s_active["week"] < w]["week"].max() if not s_active[s_active["week"] < w].empty else None
                 if lw_r is not None:
                     w_roster_full = s_active[s_active["week"] == lw_r]
-            # Share universe = anyone who was ACT (on-field eligible) at any point
-            # in weeks <= w this season. Includes INA/Out players who were
-            # previously ACT (like Hurts wk17-18). Excludes players who were
-            # never ACT (pure game-day inactives with no evidence).
-            ever_act_this_season = s_active[(s_active["week"] <= w) & (s_active["status"] == "ACT")]
-            act_roster_pids = set(ever_act_this_season["player_id"].unique())
+            # Share universe = 53-man roster (ACT or INA status) for this week
+            act_roster = w_roster_full[w_roster_full["status"].isin({"ACT", "INA"})]
+            act_roster_pids = set(act_roster["player_id"].unique())
 
             week_roster = s_roster[s_roster["week"] == w] if "week" in s_roster.columns else s_roster
             if week_roster.empty:
@@ -624,14 +621,40 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
             shrunk_car = (opp_car * obs_car + k_share * p_car_v) / (opp_car + k_share)
             shrunk_gl = (opp_gl * obs_gl + k_share * p_gl_v) / (opp_gl + k_share)
 
-            blend_tgt = (1 - prior_weight) * shrunk_tgt + prior_weight * (
+            # Blend: weight the prior into the estimate. The prior_weight
+            # decays with evidence (n_eff / k_share) to avoid adding a fixed
+            # floor to shares that must sum to 1.
+            pw_eff_tgt = prior_weight * k_share / (opp_tgt + k_share)
+            pw_eff_rz = prior_weight * k_share / (opp_rz + k_share)
+            pw_eff_car = prior_weight * k_share / (opp_car + k_share)
+            pw_eff_gl = prior_weight * k_share / (opp_gl + k_share)
+
+            blend_tgt = (1 - pw_eff_tgt) * shrunk_tgt + pw_eff_tgt * (
                 prior_regression * p_tgt_v + (1 - prior_regression) * dg_tgt_v)
-            blend_rz = (1 - prior_weight) * shrunk_rz + prior_weight * (
+            blend_rz = (1 - pw_eff_rz) * shrunk_rz + pw_eff_rz * (
                 prior_regression * p_rz_v + (1 - prior_regression) * dg_rz_v)
-            blend_car = (1 - prior_weight) * shrunk_car + prior_weight * (
+            blend_car = (1 - pw_eff_car) * shrunk_car + pw_eff_car * (
                 prior_regression * p_car_v + (1 - prior_regression) * dg_car_v)
-            blend_gl = (1 - prior_weight) * shrunk_gl + prior_weight * (
+            blend_gl = (1 - pw_eff_gl) * shrunk_gl + pw_eff_gl * (
                 prior_regression * p_gl_v + (1 - prior_regression) * dg_gl_v)
+
+            # Players with 0 opp (never active for a game) get near-zero
+            blend_tgt[opp_tgt == 0] = 1e-8
+            blend_rz[opp_rz == 0] = 1e-8
+            blend_car[opp_car == 0] = 1e-8
+            blend_gl[opp_gl == 0] = 1e-8
+
+            # Strong evidence override: player was active for >= k_share team
+            # opportunities with 0 own touches → evidence of ~0 share, override
+            # the prior blend.
+            raw_tgt_arr = merged["raw_tgt"].values if "raw_tgt" in merged.columns else np.zeros(len(merged))
+            raw_car_arr = merged["raw_car"].values if "raw_car" in merged.columns else np.zeros(len(merged))
+            zero_tgt_evidence = (raw_tgt_arr == 0) & (opp_tgt > 0)
+            zero_car_evidence = (raw_car_arr == 0) & (opp_car > 0)
+            blend_tgt[zero_tgt_evidence] = 1e-8
+            blend_rz[zero_tgt_evidence] = 1e-8
+            blend_car[zero_car_evidence] = 1e-8
+            blend_gl[zero_car_evidence] = 1e-8
 
             # ── Renormalise per team ──
             teams = merged["team"].values
