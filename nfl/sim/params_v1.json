@@ -1,0 +1,10 @@
+{
+  "half_life": Infinity,
+  "prior_weight": 0.3,
+  "k": 200,
+  "k_qb": 200,
+  "k_kicker": 50,
+  "k_tendency": 200,
+  "tuned_on": "2021-2024",
+  "holdout": "2025"
+}
