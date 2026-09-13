@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 PBP_DIR = ROOT / "nfl" / "data" / "pbp"
 PBP_DIR.mkdir(parents=True, exist_ok=True)
 
-SEASONS = [2021, 2022, 2023, 2024, 2025, 2026]
+SEASONS = [2020, 2021, 2022, 2023, 2024, 2025, 2026]
 
 REQUIRED_COLUMNS = [
     "game_id", "season", "week", "home_team", "away_team",
