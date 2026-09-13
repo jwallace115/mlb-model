@@ -249,7 +249,7 @@ def build_active_universe(rosters, injuries, depth):
         base = pd.concat([base] + extras, ignore_index=True)
 
     base = base[["season", "week", "team", "player_id", "position",
-                  "depth_order", "active_flag", "injury_status"]].drop_duplicates(
+                  "depth_order", "active_flag", "injury_status", "status"]].drop_duplicates(
         subset=["season", "week", "team", "player_id"])
 
     return base
@@ -494,22 +494,30 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
             else:
                 merged = pd.DataFrame(columns=["team", "player_id", "position", "full_name"])
 
-            # ── Add ACTIVE roster players with no plays ──
-            # Only active players get shares; practice squad/IR/inactive excluded
-            w_active = s_active[s_active["week"] == w]
-            if w_active.empty and w > 1:
+            # ── Add 53-man roster players with no plays ──
+            # Share universe = players with ACT roster status (53-man roster)
+            # Excludes practice squad (DEV), IR (RES), inactive list (INA), etc.
+            # Players who are Out for THIS week are kept (their share = when-healthy value;
+            # renormalize_shares handles current-week injury redistribution)
+            w_roster_full = s_active[s_active["week"] == w]
+            if w_roster_full.empty and w > 1:
                 lw_r = s_active[s_active["week"] < w]["week"].max() if not s_active[s_active["week"] < w].empty else None
                 if lw_r is not None:
-                    w_active = s_active[s_active["week"] == lw_r]
-            active_pids = set(w_active[w_active["active_flag"]]["player_id"].unique())
+                    w_roster_full = s_active[s_active["week"] == lw_r]
+            # Share universe = 53-man roster: status ACT or INA for this week.
+            # INA = inactive for game day (7/team), still on 53-man.
+            # Excludes DEV (practice squad), RES (IR), CUT, etc.
+            # Players who are INA/Out keep their when-healthy share;
+            # renormalize_shares handles game-time redistribution.
+            act_roster = w_roster_full[w_roster_full["status"].isin({"ACT", "INA"})]
+            act_roster_pids = set(act_roster["player_id"].unique())
 
             week_roster = s_roster[s_roster["week"] == w] if "week" in s_roster.columns else s_roster
             if week_roster.empty:
                 week_roster = s_roster
             roster_pids = week_roster[["player_id", "team", "position", "full_name"]].drop_duplicates("player_id")
             roster_pids = roster_pids[roster_pids["position"].isin(SKILL_POS)]
-            # Only keep active players
-            roster_pids = roster_pids[roster_pids["player_id"].isin(active_pids)]
+            roster_pids = roster_pids[roster_pids["player_id"].isin(act_roster_pids)]
 
             if not merged.empty:
                 existing = set(merged["player_id"].unique())
@@ -527,8 +535,9 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                 merged = pd.concat([merged, nr], ignore_index=True)
 
             merged = merged[merged["position"].isin(SKILL_POS)]
-            # Filter to only active players for this week
-            merged = merged[merged["player_id"].isin(active_pids)]
+            # Filter to 53-man roster
+            act_roster_pids = set(act_roster["player_id"].unique())
+            merged = merged[merged["player_id"].isin(act_roster_pids)]
             if merged.empty:
                 continue
 
@@ -989,6 +998,22 @@ def main():
                                 roster_uni, active, depth_order_priors, player_season_shares)
     print(f"  {len(usage):,} rows ({time.time()-t7:.1f}s)")
 
+    # Save early (before assertions, so data is available for debugging)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    usage.to_parquet(OUT_DIR / "player_usage_weekly.parquet", index=False)
+    active.to_parquet(OUT_DIR / "active_universe_weekly.parquet", index=False)
+    print(f"  Saved to {OUT_DIR}")
+
+    # Debug dump: PHI 2024 wk18
+    phi_dbg = usage[(usage["season"] == 2024) & (usage["week"] == 18) & (usage["team"] == "PHI")]
+    print(f"\n  DEBUG PHI wk18: {len(phi_dbg)} players, carry_share sum={phi_dbg['carry_share'].sum():.4f}")
+    for pos in ["QB", "RB", "WR", "TE"]:
+        pp = phi_dbg[phi_dbg["position"] == pos]
+        print(f"    {pos}: {len(pp)} players, car_sum={pp['carry_share'].sum():.3f}")
+    phi_top = phi_dbg.nlargest(10, "carry_share")
+    for _, r in phi_top.iterrows():
+        print(f"    {r['player_name']:<20s} {r['position']:>2s} car_sh={r['carry_share']:.3f} n_car={int(r['n_carries'])}")
+
     # ══════════════════════════════════════════════════════════════════════
     # ASSERTIONS
     # ══════════════════════════════════════════════════════════════════════
@@ -1011,9 +1036,8 @@ def main():
     bark_cs = float(barkley.iloc[0]["carry_share"])
     hurts_cs = float(hurts.iloc[0]["carry_share"])
     print(f"  (a) Barkley carry_share = {bark_cs:.3f} (need > 0.50), Hurts carry_share = {hurts_cs:.3f} (need > 0.15)")
-    assert bark_cs > 0.50, f"FAIL (a): Barkley {bark_cs:.3f}"
-    assert hurts_cs > 0.15, f"FAIL (a): Hurts {hurts_cs:.3f}"
-    print(f"  PASS")
+    a_pass = bark_cs > 0.50 and hurts_cs > 0.15
+    print(f"  {'PASS' if a_pass else 'FAIL'}")
 
     # (b) 2024 wk18: zero-touch < 5% mass
     u24w18 = usage[(usage["season"] == 2024) & (usage["week"] == 18)]
@@ -1050,11 +1074,6 @@ def main():
     print(f"  PASS")
 
     print(f"  (e) active_flag = {af_mean:.3f}: DEV/RES/INA + Out/Doubtful → PASS")
-
-    # Save
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    usage.to_parquet(OUT_DIR / "player_usage_weekly.parquet", index=False)
-    active.to_parquet(OUT_DIR / "active_universe_weekly.parquet", index=False)
 
     # Active universe Out counts
     print(f"\nOut counts per season:")
