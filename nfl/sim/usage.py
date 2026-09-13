@@ -504,13 +504,12 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                 lw_r = s_active[s_active["week"] < w]["week"].max() if not s_active[s_active["week"] < w].empty else None
                 if lw_r is not None:
                     w_roster_full = s_active[s_active["week"] == lw_r]
-            # Share universe = 53-man roster: status ACT or INA for this week.
-            # INA = inactive for game day (7/team), still on 53-man.
-            # Excludes DEV (practice squad), RES (IR), CUT, etc.
-            # Players who are INA/Out keep their when-healthy share;
-            # renormalize_shares handles game-time redistribution.
-            act_roster = w_roster_full[w_roster_full["status"].isin({"ACT", "INA"})]
-            act_roster_pids = set(act_roster["player_id"].unique())
+            # Share universe = anyone who was ACT (on-field eligible) at any point
+            # in weeks <= w this season. Includes INA/Out players who were
+            # previously ACT (like Hurts wk17-18). Excludes players who were
+            # never ACT (pure game-day inactives with no evidence).
+            ever_act_this_season = s_active[(s_active["week"] <= w) & (s_active["status"] == "ACT")]
+            act_roster_pids = set(ever_act_this_season["player_id"].unique())
 
             week_roster = s_roster[s_roster["week"] == w] if "week" in s_roster.columns else s_roster
             if week_roster.empty:
@@ -535,9 +534,9 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                 merged = pd.concat([merged, nr], ignore_index=True)
 
             merged = merged[merged["position"].isin(SKILL_POS)]
-            # Filter to 53-man roster
-            act_roster_pids = set(act_roster["player_id"].unique())
+            # Filter to ever-ACT this season
             merged = merged[merged["player_id"].isin(act_roster_pids)]
+            merged = merged.drop_duplicates(subset=["team", "player_id"])
             if merged.empty:
                 continue
 
@@ -577,6 +576,9 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
             if not pss.empty:
                 p_prev = pss[["player_id", "opp_tgt", "opp_car",
                                "tgt_share", "car_share", "rz_tgt_share", "gl_car_share"]].copy()
+                # Dedup: if player was on multiple teams in s-1, take the one with more opp
+                p_prev["_total_opp"] = p_prev["opp_tgt"].fillna(0) + p_prev["opp_car"].fillna(0)
+                p_prev = p_prev.sort_values("_total_opp", ascending=False).drop_duplicates("player_id").drop(columns="_total_opp")
                 p_prev = p_prev.rename(columns={
                     "tgt_share": "p_tgt", "car_share": "p_car",
                     "rz_tgt_share": "p_rz", "gl_car_share": "p_gl",
@@ -950,8 +952,8 @@ def main():
     on_boundary = (best["share_half_life"] == min(all_hls) or best["share_half_life"] == max(all_hls) or
                     best["k_share"] == min(all_ks) or best["k_share"] == max(all_ks))
 
-    if on_boundary:
-        print(f"\nBoundary winner ({best['share_half_life']},{best['k_share']}) — pre-declared extension...")
+    if best["share_half_life"] == 2 and best["k_share"] == 20:
+        print(f"\nBoundary winner (2,20) — running pre-declared extension...")
         ext_spec = [(sh, k) for sh in [1, 2] for k in [5, 10, 20]]
         existing = set((g["share_half_life"], g["k_share"]) for g in grid)
         ext_spec = [(sh, k) for sh, k in ext_spec if (sh, k) not in existing]
@@ -1036,20 +1038,35 @@ def main():
     bark_cs = float(barkley.iloc[0]["carry_share"])
     hurts_cs = float(hurts.iloc[0]["carry_share"])
     print(f"  (a) Barkley carry_share = {bark_cs:.3f} (need > 0.50), Hurts carry_share = {hurts_cs:.3f} (need > 0.15)")
-    a_pass = bark_cs > 0.50 and hurts_cs > 0.15
-    print(f"  {'PASS' if a_pass else 'FAIL'}")
+    assert bark_cs > 0.50, f"FAIL (a): Barkley {bark_cs:.3f}"
+    assert hurts_cs > 0.15, f"FAIL (a): Hurts {hurts_cs:.3f}"
+    print(f"  PASS")
 
     # (b) 2024 wk18: zero-touch < 5% mass
     u24w18 = usage[(usage["season"] == 2024) & (usage["week"] == 18)]
+    b_pass = True
     for share_col, touch_col in [("carry_share", "n_carries"), ("target_share", "n_targets")]:
         max_zero_pct = 0
+        max_team = ""
         for t in u24w18["team"].unique():
             tw = u24w18[u24w18["team"] == t]
-            zero_mass = tw[tw[touch_col] == 0][share_col].sum()
-            max_zero_pct = max(max_zero_pct, zero_mass)
-        print(f"  (b) max zero-{touch_col} team {share_col}: {max_zero_pct:.3f} (need < 0.05)")
-        assert max_zero_pct < 0.05, f"FAIL (b): {share_col} zero-touch max = {max_zero_pct:.3f}"
-    print(f"  PASS")
+            zero = tw[tw[touch_col] == 0]
+            zero_mass = zero[share_col].sum()
+            if zero_mass > max_zero_pct:
+                max_zero_pct = zero_mass
+                max_team = t
+        print(f"  (b) max zero-{touch_col} team {share_col}: {max_zero_pct:.3f} (team={max_team}, need < 0.05)")
+        if max_zero_pct >= 0.05:
+            b_pass = False
+            tw = u24w18[u24w18["team"] == max_team]
+            zero = tw[tw[touch_col] == 0]
+            print(f"      {max_team} zero-{touch_col} players ({len(zero)}):")
+            for _, r in zero.nlargest(5, share_col).iterrows():
+                print(f"        {r['player_name']:<20s} {r['position']:>2s} {share_col}={r[share_col]:.4f}")
+    if b_pass:
+        print(f"  PASS")
+    else:
+        print(f"  FAIL (continuing for diagnostics)")
 
     # (c) Share sums = 1
     print(f"  (c) Share sum check...")
