@@ -376,6 +376,10 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means):
             for w in weeks:
                 avail = tp_scrim[tp_scrim["week"] < w]
                 if avail.empty:
+                    # Prior-only row
+                    rows.append({"season": season, "week": w, "team": team,
+                                  "proe": 0.0, "pace_sec": 28.0,
+                                  "fourth_down_go_rate": lg_4th_go, "n_plays": 0})
                     continue
 
                 # Overall PROE
@@ -445,6 +449,10 @@ def build_situational_proe(scrimmage_plays, params, league_means):
             for w in weeks:
                 avail = tp[tp["week"] < w]
                 if avail.empty:
+                    # Prior-only: emit rows for each bucket in the prior
+                    for bucket, lg_val in lg_proe.items():
+                        rows.append({"season": season, "week": w, "team": team,
+                                      "bucket": bucket, "proe": lg_val, "n_plays": 0})
                     continue
                 for bucket in avail["bucket"].dropna().unique():
                     bp = avail[(avail["bucket"] == bucket) & avail["pass_oe"].notna()]
