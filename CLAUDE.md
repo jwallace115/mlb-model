@@ -161,3 +161,7 @@ changed** — reading the artifacts rather than the report. Note the limit: same
 family, so this catches claim-vs-file mismatches, not shared misconceptions. Its sandbox **cannot reach** `api.collegefootballdata.com`,
 `api.the-odds-api.com`, or `api.elections.kalshi.com`, and mounts only the three
 project folders.
+
+## SESSION CONDUCT
+
+Do not estimate, budget, or narrate how long this work will take you, and do not pause to ask whether to split it up. Runtime pre-checks apply to scripts you run, not to your own session. Correctness is the only criterion; take a faster path only when it is also the right one. Work until the assertions pass and the commit is pushed.
