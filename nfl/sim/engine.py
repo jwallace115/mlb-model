@@ -238,17 +238,94 @@ def _build_pass_depth_arrays():
 
 LG_POS_CATCH = {"WR": 0.629, "TE": 0.699, "RB": 0.776, "QB": 0.692}
 
+# FIX 1: Beta-binomial overdispersion (phi) by position, MLE-fitted 2021-2024
+PHI_TARGET = {"WR": 42.9, "TE": 85.0, "RB": 71.3}
+PHI_CARRY = {"RB": 7.9, "QB": 20.0, "WR": 200.0, "TE": 200.0}  # WR/TE carry phi high = near-deterministic
+
+# FIX 2: Measured redistribution PROPORTIONAL weights (normalized to sum=1).
+# Derived from 2021-2024 mean deltas, N >= 20 per cell.
+# When absent WR: delta WR=.0313 TE=.0151 RB=.0074 → proportional 58/28/14
+# When absent TE: delta TE=.0354 WR=.0192 RB=.0020 → proportional 63/34/4
+# When absent RB: delta WR=.0304 RB=.0145 TE=.0068 → proportional 59/28/13
+REDIST_TARGET = {
+    ("WR", "WR"): 0.582, ("WR", "TE"): 0.281, ("WR", "RB"): 0.138, ("WR", "QB"): 0.0,
+    ("TE", "WR"): 0.339, ("TE", "TE"): 0.625, ("TE", "RB"): 0.035, ("TE", "QB"): 0.0,
+    ("RB", "WR"): 0.588, ("RB", "TE"): 0.131, ("RB", "RB"): 0.280, ("RB", "QB"): 0.0,
+    ("QB", "WR"): 0.50,  ("QB", "TE"): 0.30,  ("QB", "RB"): 0.20,  ("QB", "QB"): 0.0,
+}
+# Carry redistribution when RB out: RB=.1485 QB=.0319 WR=.0013 TE=.0001 → 82/18/1/0
+REDIST_CARRY = {
+    ("RB", "RB"): 0.817, ("RB", "QB"): 0.175, ("RB", "WR"): 0.007, ("RB", "TE"): 0.001,
+    ("QB", "RB"): 0.60,  ("QB", "QB"): 0.40,  ("QB", "WR"): 0.0,   ("QB", "TE"): 0.0,
+    ("WR", "RB"): 0.50,  ("WR", "QB"): 0.20,  ("WR", "WR"): 0.30,  ("WR", "TE"): 0.0,
+    ("TE", "RB"): 0.50,  ("TE", "QB"): 0.20,  ("TE", "WR"): 0.20,  ("TE", "TE"): 0.10,
+}
+
+
+def _renormalize_measured(shares_df, active_ids, depth_map=None):
+    """Renormalize with position-aware redistribution (FIX 2).
+
+    Vacated share from inactive player at position P is distributed to active
+    players using measured proportional weights (sum to 1 per absent position).
+    Within each beneficiary position, distributed equally among active players.
+    """
+    df = shares_df.copy()
+    active_set = set(active_ids)
+    SKILL_POS = {"RB", "WR", "TE", "QB"}
+
+    for sc, redist_table in [
+        ("target_share", REDIST_TARGET),
+        ("rz_target_share", REDIST_TARGET),
+        ("carry_share", REDIST_CARRY),
+        ("gl_carry_share", REDIST_CARRY),
+    ]:
+        if sc not in df.columns:
+            continue
+        for pos in SKILL_POS:
+            mask = df["position"] == pos
+            inactive_mask = mask & ~df["player_id"].isin(active_set)
+            vacated = df.loc[inactive_mask, sc].sum()
+            if vacated <= 0:
+                continue
+            df.loc[inactive_mask, sc] = 0.0
+
+            # Distribute vacated share using proportional weights
+            # Weights are (absent_pos, beneficiary_pos) -> fraction of vacated
+            distributed = 0.0
+            for ben_pos in SKILL_POS:
+                ben_mask = (df["position"] == ben_pos) & df["player_id"].isin(active_set)
+                if not ben_mask.any():
+                    continue
+                wt = redist_table.get((pos, ben_pos), 0.0)
+                if wt <= 0:
+                    continue
+                n_ben = ben_mask.sum()
+                df.loc[ben_mask, sc] += vacated * wt / n_ben
+                distributed += vacated * wt
+            # Any undistributed (from missing beneficiary positions) goes to same-pos
+            residual = vacated - distributed
+            if residual > 1e-8:
+                same_mask = (df["position"] == pos) & df["player_id"].isin(active_set)
+                if same_mask.any():
+                    df.loc[same_mask, sc] += residual / same_mask.sum()
+
+        # Final renormalize to 1
+        active_mask = df["player_id"].isin(active_set)
+        total = df.loc[active_mask, sc].sum()
+        if total > 0:
+            df.loc[active_mask, sc] /= total
+            df.loc[~active_mask, sc] = 0.0
+
+    return df
+
 
 def _build_player_context(home, away, season, week, player_usage, active_uni,
-                           qb_ratings=None):
-    """Build per-team player context for allocation."""
-    from nfl.sim.usage import renormalize_shares
-
+                           qb_ratings=None, n_sims=1, rng=None):
+    """Build per-team player context with per-sim dispersed shares (FIX 1)."""
     teams = [home, away]
     pctx = [None, None]
 
     for ti, team in enumerate(teams):
-        # Get active IDs
         au = active_uni[(active_uni["season"] == season) &
                         (active_uni["week"] == week) &
                         (active_uni["team"] == team)]
@@ -261,7 +338,6 @@ def _build_player_context(home, away, season, week, player_usage, active_uni,
                 au = au[au["week"] == mx]
         active_ids = au[au["active_flag"] == True]["player_id"].tolist()
 
-        # Get usage
         pu = player_usage[(player_usage["season"] == season) &
                           (player_usage["week"] == week) &
                           (player_usage["team"] == team)]
@@ -273,64 +349,101 @@ def _build_player_context(home, away, season, week, player_usage, active_uni,
                 mx = pu["week"].max()
                 pu = pu[pu["week"] == mx]
         if pu.empty or not active_ids:
-            # Fallback: no player data
             pctx[ti] = None
             continue
 
-        # Renormalize shares to active set
-        depth_map = dict(zip(au["player_id"], au["depth_order"].fillna(99)))
-        renormed = renormalize_shares(pu, active_ids, depth_map=depth_map)
-        # Keep only active players with nonzero share
+        # FIX 2: measured redistribution
+        renormed = _renormalize_measured(pu, active_ids)
         renormed = renormed[renormed["player_id"].isin(active_ids)].copy()
-
-        # Sort by target_share descending for stable ordering
         renormed = renormed.sort_values("target_share", ascending=False).reset_index(drop=True)
 
-        # Build cumulative share arrays
-        # Target pool: receivers only (WR/TE/RB); QBs are not targets
-        is_receiver = np.isin(renormed["position"].values, ["WR", "TE", "RB"])
-        ts = renormed["target_share"].values.copy()
-        ts[~is_receiver] = 0.0
-        ts /= max(ts.sum(), 1e-12)
-        rts = renormed["rz_target_share"].values.copy()
-        rts[~is_receiver] = 0.0
-        rts /= max(rts.sum(), 1e-12)
-        # Carry pool: all positions (QB designed runs come through QB's carry_share)
-        cs = renormed["carry_share"].values.copy()
-        cs /= max(cs.sum(), 1e-12)
-        gcs = renormed["gl_carry_share"].values.copy()
-        gcs /= max(gcs.sum(), 1e-12)
-
         positions = renormed["position"].values
+        is_receiver = np.isin(positions, ["WR", "TE", "RB"])
+
+        # Mean shares (before dispersion)
+        ts_mean = renormed["target_share"].values.copy()
+        ts_mean[~is_receiver] = 0.0
+        ts_sum = max(ts_mean.sum(), 1e-12)
+        ts_mean /= ts_sum
+
+        rts_mean = renormed["rz_target_share"].values.copy()
+        rts_mean[~is_receiver] = 0.0
+        rts_sum = max(rts_mean.sum(), 1e-12)
+        rts_mean /= rts_sum
+
+        cs_mean = renormed["carry_share"].values.copy()
+        cs_sum = max(cs_mean.sum(), 1e-12)
+        cs_mean /= cs_sum
+
+        gcs_mean = renormed["gl_carry_share"].values.copy()
+        gcs_sum = max(gcs_mean.sum(), 1e-12)
+        gcs_mean /= gcs_sum
+
+        n_pl = len(renormed)
+        N = n_sims
+
+        # FIX 1: per-sim Beta-dispersed shares
+        # For each player, draw game-level share from Beta(share*phi, (1-share)*phi)
+        # then renormalise within the sim.
+        def _disperse(mean_shares, phi_map, pos_arr, rng_obj):
+            """Draw (N, n_pl) dispersed shares, renormalize per sim."""
+            out = np.empty((N, n_pl), dtype=np.float64)
+            for j in range(n_pl):
+                p = max(mean_shares[j], 1e-6)
+                phi = phi_map.get(pos_arr[j], 100.0)
+                a = p * phi
+                b = (1 - p) * phi
+                a = max(a, 0.01)
+                b = max(b, 0.01)
+                out[:, j] = rng_obj.beta(a, b)
+            # Renormalize each sim
+            row_sums = out.sum(axis=1, keepdims=True)
+            row_sums[row_sums == 0] = 1.0
+            out /= row_sums
+            return out
+
+        if rng is not None:
+            tgt_shares = _disperse(ts_mean, PHI_TARGET, positions, rng)       # (N, n_pl)
+            rz_tgt_shares = _disperse(rts_mean, PHI_TARGET, positions, rng)
+            car_shares = _disperse(cs_mean, PHI_CARRY, positions, rng)
+            gl_car_shares = _disperse(gcs_mean, PHI_CARRY, positions, rng)
+            # Precompute cumulative sums per sim: (N, n_pl)
+            tgt_cumsum = np.cumsum(tgt_shares, axis=1)
+            rz_tgt_cumsum = np.cumsum(rz_tgt_shares, axis=1)
+            car_cumsum = np.cumsum(car_shares, axis=1)
+            gl_car_cumsum = np.cumsum(gl_car_shares, axis=1)
+        else:
+            # Fallback: no dispersion
+            tgt_cumsum = np.tile(np.cumsum(ts_mean), (N, 1))
+            rz_tgt_cumsum = np.tile(np.cumsum(rts_mean), (N, 1))
+            car_cumsum = np.tile(np.cumsum(cs_mean), (N, 1))
+            gl_car_cumsum = np.tile(np.cumsum(gcs_mean), (N, 1))
+
         catch_rates = np.clip(renormed["catch_rate"].fillna(0.65).values, 0.2, 0.95)
         adots = renormed["adot"].fillna(8.0).values
         lg_catch = np.array([LG_POS_CATCH.get(p, 0.65) for p in positions])
 
-        # QB1: depth_order 1 QB, or first QB
         qb_mask = positions == "QB"
         qb_idx = -1
         if qb_mask.any():
             qb_candidates = renormed[qb_mask]
-            if depth_map:
-                qb_depths = qb_candidates["player_id"].map(depth_map).fillna(99)
-                qb_idx = qb_candidates.index[qb_depths.values.argmin()]
-            else:
-                qb_idx = qb_candidates.index[0]
-            # Convert to position in the sorted array
+            depth_map_local = dict(zip(au["player_id"], au["depth_order"].fillna(99)))
+            qb_depths = qb_candidates["player_id"].map(depth_map_local).fillna(99)
+            qb_idx = qb_candidates.index[qb_depths.values.argmin()]
             qb_idx = renormed.index.get_loc(qb_idx)
 
         pctx[ti] = {
             "ids": renormed["player_id"].values,
             "names": renormed["player_name"].values,
             "positions": positions,
-            "target_cumsum": np.cumsum(ts),
-            "rz_target_cumsum": np.cumsum(rts),
-            "carry_cumsum": np.cumsum(cs),
-            "gl_carry_cumsum": np.cumsum(gcs),
+            "tgt_cumsum": tgt_cumsum,         # (N, n_pl)
+            "rz_tgt_cumsum": rz_tgt_cumsum,
+            "car_cumsum": car_cumsum,
+            "gl_car_cumsum": gl_car_cumsum,
             "catch_rates": catch_rates,
             "lg_catch": lg_catch,
             "adots": adots,
-            "n_players": len(renormed),
+            "n_players": n_pl,
             "qb_idx": qb_idx,
             "team": team,
         }
@@ -483,7 +596,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     player_ctx = None
     if has_players:
         player_ctx = _build_player_context(home, away, season, week,
-                                            player_usage, active_uni, qb_ratings)
+                                            player_usage, active_uni, qb_ratings,
+                                            n_sims=n_sims, rng=rng)
         if player_ctx[0] is None or player_ctx[1] is None:
             has_players = False
             player_ctx = None
@@ -1138,15 +1252,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     tm_yl = yl_p[tm_idx]
                     u_tgt = u_target[tm_g]
 
-                    # Select target: rz_target_share when yl<=20
+                    # Select target using per-sim cumsum (FIX 1: dispersed shares)
                     use_rz = tm_yl <= 20
                     tidx = np.empty(len(tm_idx), dtype=np.int32)
-                    if (~use_rz).any():
-                        tidx[~use_rz] = np.searchsorted(pc["target_cumsum"],
-                                                         u_tgt[~use_rz])
-                    if use_rz.any():
-                        tidx[use_rz] = np.searchsorted(pc["rz_target_cumsum"],
-                                                        u_tgt[use_rz])
+                    # Per-sim lookup: pc["tgt_cumsum"] is (N, n_pl)
+                    for jj in range(len(tm_idx)):
+                        si = tm_g[jj]  # sim index
+                        cs_row = pc["rz_tgt_cumsum"][si] if use_rz[jj] else pc["tgt_cumsum"][si]
+                        tidx[jj] = np.searchsorted(cs_row, u_tgt[jj])
                     tidx = np.clip(tidx, 0, pc["n_players"] - 1)
 
                     play_target_idx[tm_idx] = tidx
@@ -1524,12 +1637,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                     use_gl = tm_yl <= 5
                     ridx = np.empty(len(tm_idx), dtype=np.int32)
-                    if (~use_gl).any():
-                        ridx[~use_gl] = np.searchsorted(pc["carry_cumsum"],
-                                                         u_rsh[~use_gl])
-                    if use_gl.any():
-                        ridx[use_gl] = np.searchsorted(pc["gl_carry_cumsum"],
-                                                        u_rsh[use_gl])
+                    # Per-sim lookup (FIX 1: dispersed shares)
+                    for jj in range(len(tm_idx)):
+                        si = tm_g[jj]
+                        cs_row = pc["gl_car_cumsum"][si] if use_gl[jj] else pc["car_cumsum"][si]
+                        ridx[jj] = np.searchsorted(cs_row, u_rsh[jj])
                     ridx = np.clip(ridx, 0, pc["n_players"] - 1)
                     play_rusher_idx[tm_idx] = ridx
                     play_rusher_team[tm_idx] = ti

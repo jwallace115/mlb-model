@@ -1,4 +1,45 @@
 
+## 2026-09-15T12:00Z  claude-code (Phase 2B-fix — dispersion, redistribution, pool)
+- FIX 1 (share dispersion): Fitted Beta-binomial phi by MLE from 2021-2024 PBP:
+  WR targets phi=42.9 (N=8115), TE=85.0 (N=3923), RB=71.3 (N=3935),
+  RB carries phi=7.9 (N=4801), QB carries=20.0 (N=1795).
+  Per-sim Beta-dispersed shares drawn at game start, renormalized within sim.
+  25%-share WR target SD: sim=2.73 vs actual=3.40. Under-dispersed because
+  renormalization damps variance (sum-to-one constraint).
+- FIX 2 (measured redistribution): Replaced position-agnostic depth-weighted
+  redistribution with proportional weights from 2021-2024 data:
+  - When WR out: 58% -> WR, 28% -> TE, 14% -> RB
+  - When RB out (carries): 82% -> RB, 18% -> QB, <1% -> WR
+  Carry share by position: WR 6.9% (was 7.4%, actual 3.2%). Still FAIL (3.7pp)
+  because base carry_share from usage model assigns 2-3% to each WR via shrinkage.
+- FIX 3 (pool check): Sim top-3 share 0.47-0.82, actual 0.46-0.79. No D14 issue.
+- K1-P (N=1000, 1087 games, v4):
+  CHECK A (position shares): WR targets -3.7pp FAIL, TE +3.4pp FAIL, WR carries +3.7pp FAIL.
+    Mechanism: player_usage shrinkage prior assigns too much share to non-primary positions.
+  CHECK B RELIABILITY (P(rec>=3)):
+  | Dec | Sim P | Actual | Gap |
+  |-----|-------|--------|-----|
+  | 0 | 0.002 | 0.042 | -0.040 PASS |
+  | 1 | 0.041 | 0.149 | -0.108 FAIL |
+  | 2 | 0.108 | 0.221 | -0.113 FAIL |
+  | 3 | 0.197 | 0.325 | -0.128 FAIL |
+  | 4 | 0.304 | 0.368 | -0.064 FAIL |
+  | 5 | 0.427 | 0.452 | -0.025 PASS |
+  | 6 | 0.571 | 0.545 | +0.027 PASS |
+  | 7 | 0.738 | 0.673 | +0.065 FAIL |
+  | 8 | 0.905 | 0.805 | +0.100 FAIL |
+  Improved vs prior (decile 8 gap: +0.28 -> +0.10, 64% reduction). Still FAIL at
+  low deciles (gamescript-driven targets not modelled) and high (renorm damping).
+  CHECK C (rec dist top-3): 0=2.8%/5.7% PASS, 1-3=43.8%/42.5% PASS, 4-6=39.2%/35.6% FAIL (+3.5pp), 7+=14.3%/16.1% PASS.
+  CHECK D (face validity): Top-10 all WR/TE, no TE2 without TE1 out. Noah Gray gone.
+    Brian Thomas Jr. sim 12.1 tgt vs L4 actual 12.0.
+  CHECK E: sum assertions 0 mismatches, runtime 1.20s/game (1.7x overhead).
+- P(rush>=50) calibration FAIL at deciles 3-9 (sim over-confident by 10-25pp).
+  Mechanism: team-level rush yards table, no player-level yards differentiation
+  (ypc held for v2 per D11).
+- NOT DONE: Lower phi to compensate for renorm damping (would violate "measured");
+  position-aware carry prior floors (ratings layer change); player-level ypc.
+
 ## 2026-09-15T07:00Z  claude-code (Phase 2B — player allocation in engine)
 - IMPLEMENTED: Player allocation in simulate_game(). Target selection by cumulative
   target_share (rz_target_share when yl<=20), rusher by carry_share (gl when yl<=5).
