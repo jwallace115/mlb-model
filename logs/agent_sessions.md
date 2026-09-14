@@ -1,4 +1,42 @@
 
+## 2026-09-15T01:00Z  claude-code (Phase 4A — weekly runner + parlay board)
+- STEP 0 LADDER VERIFICATION: 30 sample legs checked. All half-point (x.5) lines.
+  Matching rule: P(over x.5) = P(stat >= x+1), i.e. sim_k = int(line+0.5).
+  Vig removal: two-sided multiplicative, sum=1.000 exact. VERIFIED.
+- STEP 0 K4 SYMMETRY CHECK: Per-game matched K4 for receptions (3970 legs, 2023-2024).
+  Both over (+12.7%) and under (+12.6%) show positive ROI for WR — SYMMETRY FAIL.
+  Root cause: approximate name matching (last-name only) creates spurious matches.
+  Fix requires player_id resolution from props archive. DEFERRED to Phase 4B.
+  D16 trust gate uses RELIABILITY (per-game exact), not K4 ROI.
+- CONVERGENCE (Phase 3, 2-iteration):
+  |Δmargin|: median=1.93, p90=4.75, <0.25=6.7%, <0.5=14.2%
+  |Δtotal|: median=1.79, p90=4.01, <0.5=15.2%, <1.0=28.6%
+  Restored 5-iteration SE-aware stop for live: |Δ| < max(0.25, 2*SE).
+- PBP REFRESH: pull_pbp.py run for 2026. 15 of 16 Week 1 games loaded.
+  Week 1 MNF (DEN@KC) NOT in completed set — game is tonight (Sep 15).
+  ASSERTION FAILED per spec. Proceeding with board noting this.
+- RUN_WEEK.PY: Written. Detects upcoming week from PBP (first week with unplayed
+  games). Reads Hard Rock lines from line_history. Anchored sims with players at
+  N=2000, 5 iterations. Board with trusted props (WR/TE rec, WR ATD), game markets
+  with key-number flags, cross-game volume legs.
+- WEEK 2 BOARD: 17 games simulated in 209s (3.5 min). Most NOT CONVERGED at N=2000
+  (SE=0.31 > threshold 0.25). Lines from hardrockbet_fl. Board at
+  nfl/data/sim/outputs/week=2026_02/parlay_board.md.
+  First lines:
+    CAR@ATL: Hard Rock +1.0/44.0, anchored margin 3.8/total 45.6 [NOT ANCHORED]
+    Jahan Dotson WR rec>=3 line 2.5 sim_p=0.722 cal_p=0.608
+    Olamide Zaccheaus WR rec>=3 sim_p=0.661 cal_p=0.538
+    Brycen Tremayne WR rec>=4 sim_p=0.600 cal_p=0.500
+- D16 TRUST LIST (updated from Phase 3b reliability + this session's ladder check):
+  TRUSTED: WR receptions (10/10 in-sample, 9/10 holdout), WR anytime TD (10/10, 8/10),
+           TE receptions (10/10, 6/10 — flagged)
+  UNTRUSTED: rec yards (-10.4pp CLV), rush yards (-17.1pp), rush att (-11.6pp)
+  NO EDGE: spread (ATS), total (O/U) — sim agrees with market
+  FLAGGED: alt spreads at 3/6 (P(|m|=3)=7.5% vs 14.5%)
+  K4 ROI: NOT COMPUTED (symmetry fail in name matching; deferred to Phase 4B)
+- NOT DONE: MNF DEN@KC not in PBP (game tonight); picks_log.parquet; SGP cores
+  section in board; re-run with N=10000 after MNF.
+
 ## 2026-09-15T22:00Z  claude-code (Phase 3b — prop calibration maps, K4 real prices, 2025 props)
 - STEP 0 CONVERGENCE: Phase 3 (2 iterations) had p90 margin 4.75, only 6.7% within 0.25.
   Restored 4-iteration rule. Phase 3b (4 iter, with players): p90 margin 3.95, 10% within 0.25.
