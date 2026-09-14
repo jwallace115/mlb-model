@@ -63,6 +63,9 @@ def _load_tables():
         _CACHE["turnover"] = json.load(f)
     with open(TABLES_DIR / "constants.json") as f:
         _CACHE["constants"] = json.load(f)
+    depth_path = TABLES_DIR / "pass_depth_outcomes.parquet"
+    if depth_path.exists():
+        _CACHE["pass_depth"] = pd.read_parquet(depth_path)
     _CACHE["tables"] = True
 
 
@@ -204,6 +207,138 @@ def _build_punt_lookup():
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# PASS DEPTH ARRAYS (for player allocation)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def _build_pass_depth_arrays():
+    """Build 5D arrays (down, dist, zone, depth) for depth-split yards."""
+    if "pass_depth" not in _CACHE:
+        return None, None
+    tbl = _CACHE["pass_depth"]
+    dist_map = {"short": 0, "med": 1, "long": 2}
+    zone_map = {"own20": 0, "own40": 1, "midfield": 2, "opp20": 3, "rz10": 4}
+    depth_map = {"short": 0, "deep": 1}
+
+    shape = (5, 3, 5, 2)
+    yds_succ = np.full(shape + (101,), 10.0)
+    yds_fail = np.full(shape + (101,), 3.0)
+
+    for _, r in tbl.iterrows():
+        d = int(r["down"])
+        di = dist_map.get(r["dist"])
+        zi = zone_map.get(r["zone"])
+        dpi = depth_map.get(r["depth"])
+        if di is None or zi is None or dpi is None:
+            continue
+        yds_succ[d, di, zi, dpi] = np.array(r["yds_success_q"])
+        yds_fail[d, di, zi, dpi] = np.array(r["yds_fail_q"])
+
+    return yds_succ, yds_fail
+
+
+LG_POS_CATCH = {"WR": 0.629, "TE": 0.699, "RB": 0.776, "QB": 0.692}
+
+
+def _build_player_context(home, away, season, week, player_usage, active_uni,
+                           qb_ratings=None):
+    """Build per-team player context for allocation."""
+    from nfl.sim.usage import renormalize_shares
+
+    teams = [home, away]
+    pctx = [None, None]
+
+    for ti, team in enumerate(teams):
+        # Get active IDs
+        au = active_uni[(active_uni["season"] == season) &
+                        (active_uni["week"] == week) &
+                        (active_uni["team"] == team)]
+        if au.empty:
+            au = active_uni[(active_uni["season"] == season) &
+                            (active_uni["week"] <= week) &
+                            (active_uni["team"] == team)]
+            if not au.empty:
+                mx = au["week"].max()
+                au = au[au["week"] == mx]
+        active_ids = au[au["active_flag"] == True]["player_id"].tolist()
+
+        # Get usage
+        pu = player_usage[(player_usage["season"] == season) &
+                          (player_usage["week"] == week) &
+                          (player_usage["team"] == team)]
+        if pu.empty:
+            pu = player_usage[(player_usage["season"] == season) &
+                              (player_usage["week"] <= week) &
+                              (player_usage["team"] == team)]
+            if not pu.empty:
+                mx = pu["week"].max()
+                pu = pu[pu["week"] == mx]
+        if pu.empty or not active_ids:
+            # Fallback: no player data
+            pctx[ti] = None
+            continue
+
+        # Renormalize shares to active set
+        depth_map = dict(zip(au["player_id"], au["depth_order"].fillna(99)))
+        renormed = renormalize_shares(pu, active_ids, depth_map=depth_map)
+        # Keep only active players with nonzero share
+        renormed = renormed[renormed["player_id"].isin(active_ids)].copy()
+
+        # Sort by target_share descending for stable ordering
+        renormed = renormed.sort_values("target_share", ascending=False).reset_index(drop=True)
+
+        # Build cumulative share arrays
+        # Target pool: receivers only (WR/TE/RB); QBs are not targets
+        is_receiver = np.isin(renormed["position"].values, ["WR", "TE", "RB"])
+        ts = renormed["target_share"].values.copy()
+        ts[~is_receiver] = 0.0
+        ts /= max(ts.sum(), 1e-12)
+        rts = renormed["rz_target_share"].values.copy()
+        rts[~is_receiver] = 0.0
+        rts /= max(rts.sum(), 1e-12)
+        # Carry pool: all positions (QB designed runs come through QB's carry_share)
+        cs = renormed["carry_share"].values.copy()
+        cs /= max(cs.sum(), 1e-12)
+        gcs = renormed["gl_carry_share"].values.copy()
+        gcs /= max(gcs.sum(), 1e-12)
+
+        positions = renormed["position"].values
+        catch_rates = np.clip(renormed["catch_rate"].fillna(0.65).values, 0.2, 0.95)
+        adots = renormed["adot"].fillna(8.0).values
+        lg_catch = np.array([LG_POS_CATCH.get(p, 0.65) for p in positions])
+
+        # QB1: depth_order 1 QB, or first QB
+        qb_mask = positions == "QB"
+        qb_idx = -1
+        if qb_mask.any():
+            qb_candidates = renormed[qb_mask]
+            if depth_map:
+                qb_depths = qb_candidates["player_id"].map(depth_map).fillna(99)
+                qb_idx = qb_candidates.index[qb_depths.values.argmin()]
+            else:
+                qb_idx = qb_candidates.index[0]
+            # Convert to position in the sorted array
+            qb_idx = renormed.index.get_loc(qb_idx)
+
+        pctx[ti] = {
+            "ids": renormed["player_id"].values,
+            "names": renormed["player_name"].values,
+            "positions": positions,
+            "target_cumsum": np.cumsum(ts),
+            "rz_target_cumsum": np.cumsum(rts),
+            "carry_cumsum": np.cumsum(cs),
+            "gl_carry_cumsum": np.cumsum(gcs),
+            "catch_rates": catch_rates,
+            "lg_catch": lg_catch,
+            "adots": adots,
+            "n_players": len(renormed),
+            "qb_idx": qb_idx,
+            "team": team,
+        }
+
+    return pctx
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # TEAM CONTEXT (pre-computed per game)
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -334,7 +469,8 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
 
 def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   team_r=None, tend=None, sit=None, kicker=None, league=None,
-                  _dummy_draw=False):
+                  _dummy_draw=False,
+                  player_usage=None, active_uni=None, qb_ratings=None):
     _load_tables()
     if team_r is None:
         team_r, tend, sit, kicker, league = _load_ratings()
@@ -342,10 +478,25 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     rng = np.random.default_rng(seed)
     ctx = _build_game_context(home, away, season, week, team_r, tend, sit, kicker, league)
 
+    # Player allocation context
+    has_players = player_usage is not None and active_uni is not None
+    player_ctx = None
+    if has_players:
+        player_ctx = _build_player_context(home, away, season, week,
+                                            player_usage, active_uni, qb_ratings)
+        if player_ctx[0] is None or player_ctx[1] is None:
+            has_players = False
+            player_ctx = None
+
     # Build lookup arrays
     (pa_fumble, pa_sack, pa_sack_yds, pa_int, pa_comp, pa_succ,
      pa_yds_succ, pa_yds_fail) = _build_pass_arrays()
     (ru_fum, ru_succ, ru_yds_succ, ru_yds_fail) = _build_rush_arrays()
+
+    # Depth-split pass yards (for player allocation)
+    pd_yds_succ, pd_yds_fail = (None, None)
+    if has_players and "pass_depth" in _CACHE:
+        pd_yds_succ, pd_yds_fail = _build_pass_depth_arrays()
     clock_q = _build_clock_arrays()
     fd_lookup = _build_4th_down_lookup()
     fg_lookup = _build_fg_lookup()
@@ -412,6 +563,20 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_clock_used = np.zeros(N, dtype=np.float32)  # Total clock consumed by play draws
 
     # No scale factors — all numbers come from tables built from data
+
+    # Player-level stat accumulators: (N, n_players) per team, 13 stats
+    # 0=targets 1=recs 2=rec_yds 3=rec_td 4=carries 5=rush_yds 6=rush_td
+    # 7=pass_att 8=pass_cmp 9=pass_yds 10=pass_td 11=ints 12=sacks
+    PL_TGT, PL_REC, PL_RECYD, PL_RECTD = 0, 1, 2, 3
+    PL_CAR, PL_RUSHYD, PL_RUSHTD = 4, 5, 6
+    PL_PATT, PL_PCMP, PL_PYD, PL_PTD, PL_INT, PL_SACK = 7, 8, 9, 10, 11, 12
+    N_PL_STATS = 13
+    pl_stats = None
+    if has_players:
+        pl_stats = [
+            np.zeros((N, player_ctx[0]["n_players"], N_PL_STATS), dtype=np.int32),
+            np.zeros((N, player_ctx[1]["n_players"], N_PL_STATS), dtype=np.int32),
+        ]
 
     # OT state: track first-possession-complete for OT rules
     ot_first_poss_team = np.full(N, -1, dtype=np.int8)
@@ -534,6 +699,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_ot = rng.random(N)
         u_punt_td = rng.random(N)
         u_ko_td = rng.random(N)
+        u_target = rng.random(N)
+        u_rusher = rng.random(N)
 
         # --- Quarter / half / game end ---
         time_up = alive & (clock <= 0)
@@ -953,7 +1120,51 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             not_sacked = ~pass_fumbled & ~sacked
             intercepted = not_sacked & (u2 < tbl_int)
             attempt_ok = not_sacked & ~intercepted
-            completed = attempt_ok & (u3 < tbl_comp)
+
+            # --- Player allocation: target selection + completion tilt ---
+            play_target_idx = np.full(n_p, -1, dtype=np.int32)
+            play_target_team = np.full(n_p, -1, dtype=np.int8)
+            play_depth = np.zeros(n_p, dtype=np.int8)  # 0=short, 1=deep
+
+            if has_players:
+                player_comp = tbl_comp.copy()
+                for ti in [0, 1]:
+                    tm = poss_p == ti
+                    if not tm.any() or player_ctx[ti] is None:
+                        continue
+                    pc = player_ctx[ti]
+                    tm_idx = np.where(tm)[0]
+                    tm_g = g_idx[tm_idx]
+                    tm_yl = yl_p[tm_idx]
+                    u_tgt = u_target[tm_g]
+
+                    # Select target: rz_target_share when yl<=20
+                    use_rz = tm_yl <= 20
+                    tidx = np.empty(len(tm_idx), dtype=np.int32)
+                    if (~use_rz).any():
+                        tidx[~use_rz] = np.searchsorted(pc["target_cumsum"],
+                                                         u_tgt[~use_rz])
+                    if use_rz.any():
+                        tidx[use_rz] = np.searchsorted(pc["rz_target_cumsum"],
+                                                        u_tgt[use_rz])
+                    tidx = np.clip(tidx, 0, pc["n_players"] - 1)
+
+                    play_target_idx[tm_idx] = tidx
+                    play_target_team[tm_idx] = ti
+                    play_depth[tm_idx] = (pc["adots"][tidx] >= 10).astype(np.int8)
+
+                    # Logit-additive completion tilt by player catch_rate
+                    p_catch = pc["catch_rates"][tidx]
+                    p_lg = pc["lg_catch"][tidx]
+                    catch_shift = _logit(p_catch) - _logit(p_lg)
+                    player_comp[tm_idx] = _sigmoid(
+                        _logit(tbl_comp[tm_idx]) + catch_shift)
+
+                player_comp = np.clip(player_comp, 0.15, 0.98)
+                completed = attempt_ok & (u3 < player_comp)
+            else:
+                completed = attempt_ok & (u3 < tbl_comp)
+
             incomplete = attempt_ok & ~completed
 
             # Compute yards
@@ -973,15 +1184,31 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # Completion yards — success/fail split with matchup tilt
             comp_succ = completed & (u4 < tbl_succ)
             comp_fail = completed & ~comp_succ
-            for yds_mask, yds_tbl in [(comp_succ, pa_yds_succ), (comp_fail, pa_yds_fail)]:
-                if yds_mask.any():
-                    idx = np.where(yds_mask)[0]
-                    for d_v in range(1, 5):
-                        for di_v in range(3):
-                            for zi_v in range(5):
-                                m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&(zi_p[idx]==zi_v)]
-                                if len(m):
-                                    yards[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
+
+            if has_players and pd_yds_succ is not None:
+                # Depth-specific yards tables
+                for yds_mask, yds_tbl in [(comp_succ, pd_yds_succ), (comp_fail, pd_yds_fail)]:
+                    if yds_mask.any():
+                        idx = np.where(yds_mask)[0]
+                        for d_v in range(1, 5):
+                            for di_v in range(3):
+                                for zi_v in range(5):
+                                    for dp_v in range(2):
+                                        m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&
+                                                (zi_p[idx]==zi_v)&(play_depth[idx]==dp_v)]
+                                        if len(m):
+                                            yards[m] = np.interp(u5[m], xs101,
+                                                                  yds_tbl[d_v, di_v, zi_v, dp_v])
+            else:
+                for yds_mask, yds_tbl in [(comp_succ, pa_yds_succ), (comp_fail, pa_yds_fail)]:
+                    if yds_mask.any():
+                        idx = np.where(yds_mask)[0]
+                        for d_v in range(1, 5):
+                            for di_v in range(3):
+                                for zi_v in range(5):
+                                    m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&(zi_p[idx]==zi_v)]
+                                    if len(m):
+                                        yards[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
 
             # D6 additive EPA shift: after drawing yards, shift by matchup EPA
             for ti in [0, 1]:
@@ -1086,6 +1313,48 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ev_comp[g_idx[completed]] += 1
             fd_comp = normal_comp & (yds_int >= dist_live[p_idx])
             ev_first_downs[g_idx[fd_comp | td_mask]] += 1
+
+            # --- Player stat tracking (pass) ---
+            if has_players:
+                for ti in [0, 1]:
+                    tm = play_target_team == ti
+                    if not tm.any() or player_ctx[ti] is None:
+                        continue
+                    pc = player_ctx[ti]
+                    qb = pc["qb_idx"]
+
+                    # Targets: thrown passes (non-sacked, non-fumbled)
+                    for j in np.where(tm & not_sacked & ~pass_fumbled)[0]:
+                        pl_stats[ti][g_idx[j], play_target_idx[j], PL_TGT] += 1
+                    # Receptions: all completions (count only)
+                    for j in np.where(tm & completed)[0]:
+                        pl_stats[ti][g_idx[j], play_target_idx[j], PL_REC] += 1
+                    # Normal completion yards (non-TD, matching team code)
+                    for j in np.where(tm & normal_comp)[0]:
+                        pl_stats[ti][g_idx[j], play_target_idx[j], PL_RECYD] += max(yds_int[j], 0)
+                    # Receiving TDs: yards = yl_p (distance to EZ)
+                    for j in np.where(tm & td_mask)[0]:
+                        gi, pi = g_idx[j], play_target_idx[j]
+                        pl_stats[ti][gi, pi, PL_RECTD] += 1
+                        pl_stats[ti][gi, pi, PL_RECYD] += int(yl_p[j])
+                    # QB stats
+                    if qb >= 0:
+                        # Attempts = thrown passes (excludes sacks, fumbles)
+                        for j in np.where(tm & not_sacked & ~pass_fumbled)[0]:
+                            pl_stats[ti][g_idx[j], qb, PL_PATT] += 1
+                        for j in np.where(tm & completed)[0]:
+                            pl_stats[ti][g_idx[j], qb, PL_PCMP] += 1
+                        # Pass yards: normal comps
+                        for j in np.where(tm & normal_comp)[0]:
+                            pl_stats[ti][g_idx[j], qb, PL_PYD] += max(yds_int[j], 0)
+                        # Pass TDs + their yards
+                        for j in np.where(tm & td_mask)[0]:
+                            pl_stats[ti][g_idx[j], qb, PL_PTD] += 1
+                            pl_stats[ti][g_idx[j], qb, PL_PYD] += int(yl_p[j])
+                        for j in np.where(tm & intercepted)[0]:
+                            pl_stats[ti][g_idx[j], qb, PL_INT] += 1
+                        for j in np.where(tm & sacked)[0]:
+                            pl_stats[ti][g_idx[j], qb, PL_SACK] += 1
 
             # Clock: pass plays — vectorised
             # Map outcome type: 0=incomplete, 1=first_down, 2=complete_inbounds, 3=drive_ending
@@ -1238,6 +1507,50 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             fd_rush = normal_rush & (yds_r >= dist_live[r_idx])
             ev_first_downs[g_idx_r[fd_rush | td_r]] += 1
 
+            # --- Player stat tracking (rush) ---
+            if has_players:
+                # Build rusher index for all rush plays (like pass target selection)
+                play_rusher_idx = np.full(n_r, -1, dtype=np.int32)
+                play_rusher_team = np.full(n_r, -1, dtype=np.int8)
+                for ti in [0, 1]:
+                    tm = poss_r == ti
+                    if not tm.any() or player_ctx[ti] is None:
+                        continue
+                    pc = player_ctx[ti]
+                    tm_idx = np.where(tm)[0]
+                    tm_g = g_idx_r[tm_idx]
+                    tm_yl = yl_r[tm_idx]
+                    u_rsh = u_rusher[tm_g]
+
+                    use_gl = tm_yl <= 5
+                    ridx = np.empty(len(tm_idx), dtype=np.int32)
+                    if (~use_gl).any():
+                        ridx[~use_gl] = np.searchsorted(pc["carry_cumsum"],
+                                                         u_rsh[~use_gl])
+                    if use_gl.any():
+                        ridx[use_gl] = np.searchsorted(pc["gl_carry_cumsum"],
+                                                        u_rsh[use_gl])
+                    ridx = np.clip(ridx, 0, pc["n_players"] - 1)
+                    play_rusher_idx[tm_idx] = ridx
+                    play_rusher_team[tm_idx] = ti
+
+                    # Carry count (all rushes including fumbles)
+                    for j in range(len(tm_idx)):
+                        pl_stats[ti][tm_g[j], ridx[j], PL_CAR] += 1
+                    # Normal rush yards (non-TD, non-fumble, non-safety)
+                    for j in np.where(tm & normal_r)[0]:
+                        loc = np.searchsorted(tm_idx, j)
+                        if loc < len(tm_idx) and tm_idx[loc] == j:
+                            pl_stats[ti][g_idx_r[j], ridx[loc], PL_RUSHYD] += max(yds_r[j], 0)
+                    # Rush TDs: yards = yl_r (distance to EZ)
+                    for j in np.where(tm & td_r)[0]:
+                        loc = np.searchsorted(tm_idx, j)
+                        if loc < len(tm_idx) and tm_idx[loc] == j:
+                            pi = ridx[loc]
+                            gi = g_idx_r[j]
+                            pl_stats[ti][gi, pi, PL_RUSHTD] += 1
+                            pl_stats[ti][gi, pi, PL_RUSHYD] += int(yl_r[j])
+
             # Clock: rush plays — vectorised
             ot_idx_r = np.ones(n_r, dtype=np.int8)  # 1=run, 0=first_down, 2=drive_ending
             fd_rush_all = not_fum & (yds_r >= dist_live[r_idx])
@@ -1287,7 +1600,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     score_h_1h[not_rec] = 0
     score_a_1h[not_rec] = 0
 
-    return pd.DataFrame({
+    team_df = pd.DataFrame({
         "home_score": score_h,
         "away_score": score_a,
         "home_1h": score_h_1h,
@@ -1314,6 +1627,41 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_penalties": ev_penalties,
         "ev_clock_used": ev_clock_used,
     })
+
+    if not has_players:
+        return team_df
+
+    # Build long-form player stats table
+    stat_names = ["targets", "receptions", "rec_yds", "rec_td",
+                   "carries", "rush_yds", "rush_td",
+                   "pass_att", "pass_cmp", "pass_yds", "pass_td",
+                   "interceptions", "sacks"]
+    pl_rows = []
+    for ti in [0, 1]:
+        pc = player_ctx[ti]
+        if pc is None:
+            continue
+        arr = pl_stats[ti]  # (N, n_players, 13)
+        any_stat = arr.any(axis=(0, 2))  # (n_players,) — players with any stat
+        for pi in np.where(any_stat)[0]:
+            for si in range(N):
+                if arr[si, pi].any():
+                    row = {
+                        "sim_id": si,
+                        "player_id": pc["ids"][pi],
+                        "player_name": pc["names"][pi],
+                        "position": pc["positions"][pi],
+                        "team": pc["team"],
+                    }
+                    for k, nm in enumerate(stat_names):
+                        row[nm] = int(arr[si, pi, k])
+                    row["anytime_td"] = int(arr[si, pi, PL_RECTD] + arr[si, pi, PL_RUSHTD])
+                    pl_rows.append(row)
+
+    player_df = pd.DataFrame(pl_rows) if pl_rows else pd.DataFrame(
+        columns=["sim_id", "player_id", "player_name", "position", "team"] + stat_names + ["anytime_td"])
+
+    return team_df, player_df
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
