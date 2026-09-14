@@ -105,3 +105,4 @@ data/.fuse_hidden*
 data/*.db-wal
 data/*.db-shm
 nfl/data/pbp/
+nfl/data/sim/k1p_*.parquet
