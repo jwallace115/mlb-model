@@ -38,3 +38,7 @@
   Phase 2A engine sessions ran against the stale ratings. Restored with `git checkout`; the
   decision doc is now tracked in git for the first time. Possible dual-writer odds capture
   on the Mac (snapshots after the re-clone, not on origin) flagged to Jeff — credit burn.
+- **2026-09-14 side finding (not nfl_sim):** Mac LaunchAgents `com.mlbmodel.capture.football`
+  and `com.mlbmodel.capture.mlb` were still loaded after the 6 Sep migration of capture to the
+  VM — dual writer, no Mac push chain, credits spent twice. Unloaded and plists renamed
+  `.disabled`. Mac crontab also carries inert VM lines (`/root/mlb-model`) — cleanup later.

@@ -1,4 +1,52 @@
 
+## 2026-09-14T06:30Z  claude-code (Phase 2A iter 3 — scoring gap + margin=3)
+- MEASURED: Proper scoring decomposition (td_team==posteam). Non-offensive TDs = 0.241/game = 0.72 pts/team total. Unmodeled punt+KO return TDs = 0.10 pts/team ONLY. Previous session's "~1.75 pts/team from ST TDs" was WRONG by 2.4×. Dominant gap: fewer offensive TDs per drive (0.205 vs 0.229) from EPA success/fail yards split compressing upper tail.
+- FIXED: Switched pass/rush yards to unsplit yds_all_q distributions. p95 at midfield: 31 yds (was 27 blended). Recovered ~0.4 pts/team. TRADEOFF: success tilt removed → corr(sim margin, spread) degraded 0.759 → 0.506.
+- ADDED: Punt return TDs (0.00245/punt) and kickoff return TDs (0.00246/kickoff) from table G empirical rates.
+- REBUILT: 4th-down table with 7 score × 4 clock states (min_n=10, 3-level fallback). Trail1-3 at opp40 in Q4<2:00 → 96-100% FG rate (correct "kick to tie" behavior).
+- IMPROVED: Kneel-out logic accounts for ~1 opponent timeout. Team 4th-down override restricted to Q1-3 only.
+- RAN K1: 1087 games × 2000 sims, 1032s total
+  - Mean pts/team 19.5 vs 22.4 actual → **PASS** (±3, was FAIL at 19.1)
+  - Plays/game 125.3 → **PASS**
+  - Drives/game 20.9 → **PASS**
+  - SD margin (pooled) 13.23 vs 14.20 → **PASS**
+  - SD total (pooled) 11.82 vs 13.61 → **PASS**
+  - P(|margin|=3) 8.51% vs 14.54% → **FAIL**
+  - P(|margin|=6) 5.47% vs 7.54% → **FAIL**
+  - P(|margin|=7) 8.06% → **PASS**
+  - P(|margin|=10) 6.68% → **PASS**
+  - P(|margin|=14) 4.68% → **PASS**
+  - corr(sim margin, spread) 0.506 (INFO, degraded from 0.759)
+  - OT rate 3.3% (actual ~5-6%)
+  - **K1: 9/11 PASS, 2 FAIL** (was 8/11)
+- COMMITTED: 827a89ed5 on main, rebased on origin
+- NOT DONE: git push (permission denied — needs manual push)
+- NOT DONE: P(|margin|=3) fix — structural, requires Phase 2B coaching-decision modeling and restored team differentiation
+- UNVERIFIED: whether restoring team differentiation (via yards-quantile shift in Phase 2B) recovers corr without losing the scoring improvement
+
+## 2026-09-14T00:45Z  claude-code (Phase 2A FIX A–C + K1)
+- VERIFIED: Phase 1 inputs clean — params_v1.json k=100, prior_regression=0.5, usage share_half_life=4/k_share=20; tendencies_weekly 4th-down go rate wk18 mean=0.684, sd=0.054
+- FIXED (FIX A): Re-enabled team 4th-down override in engine.py; lg_go corrected from 0.164 (raw PBP) to tendencies mean (~0.68)
+- FIXED (FIX B): Pre-draw 26 fixed-size rng.random(N) per step. RNG insensitivity test: 5 games × 2000 sims, all z < 1.4, PASS
+- FIXED (FIX C): K1 "SD margin" now uses pooled simulated margins; team differentiation SD reported separately as INFO
+- FIXED: n_plays no longer counts punts/FGs/kneels (scrimmage-only)
+- FIXED: Drive-ending clock over-deduction — TDs/INTs/fumbles now use ~8s (actual) instead of 33-39s; recovered ~6 plays/game
+- FIXED: Added ev_tds, ev_fg_made counters for diagnostics
+- RAN K1: 1087 games × 2000 sims, 1051s total
+  - Mean pts/team 19.1 vs 22.4 actual → **FAIL** (−3.3, from unmodeled ST TDs + compressed differentiation)
+  - Plays/game 124.2 → **PASS**
+  - Drives/game 20.8 → **PASS**
+  - SD margin (pooled) 13.36 vs 14.20 → **PASS** (within ±1.0)
+  - SD total (pooled) 11.83 vs 13.61 → **PASS** (within ±2.0)
+  - P(|margin|=3) 8.80% vs 14.54% → **FAIL**
+  - P(|margin|=6) 5.17% vs 7.54% → **FAIL**
+  - P(|margin|=7,10,14) → all PASS
+  - corr(sim margin, spread) 0.759
+  - **K1 NOT PASSED** — 3 of 11 checks fail
+- COMMITTED: fae2efb53 on main, rebased on origin
+- NOT DONE: git push (permission denied — needs manual push)
+- UNVERIFIED: whether special-teams TDs (~1.75 pts/team) fully close the scoring gap once added
+
 ## 2026-09-13T19:50Z  claude-code (Phase 1B-FIX-2)
 - COMMITTED: CLAUDE.md SESSION CONDUCT section (6ee1e7174)
 - COMMITTED: nfl_sim Phase 1B-fix-2 (f41f34c14) — share shrinkage on team opportunities, depth-order priors, active universe 2026, grid re-run
