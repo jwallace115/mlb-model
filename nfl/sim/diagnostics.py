@@ -5,6 +5,7 @@ import sys, time
 from pathlib import Path
 import numpy as np
 import pandas as pd
+from nfl.sim.seed_util import stable_seed
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PBP_DIR = ROOT / "nfl" / "data" / "pbp"
@@ -200,7 +201,7 @@ if __name__ == "__main__":
     t0 = time.time()
     results = []
     for _, g in sample.iterrows():
-        s = hash((g["game_id"], 42)) % (2**31)
+        s = stable_seed((g["game_id"], 42))
         r = simulate_game(g["home_team"], g["away_team"], 2023, int(g["week"]),
                           n_sims=2000, seed=s,
                           team_r=team_r, tend=tend, sit=sit, kicker=kicker, league=league)

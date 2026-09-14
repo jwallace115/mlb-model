@@ -18,6 +18,7 @@ import numpy as np
 import pandas as pd
 
 from nfl.sim.engine import simulate_game, _load_tables, _load_ratings
+from nfl.sim.seed_util import stable_seed
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -56,7 +57,7 @@ def estimate_jacobian(n_sims=500, n_games=50, seed=99):
     dm_dh, dt_dh, dm_da, dt_da = [], [], [], []
 
     for _, g in games.iterrows():
-        s = hash((g["game_id"], 42)) % (2**31)
+        s = stable_seed((g["game_id"], 42))
         m0, t0, _, _ = _run_sim(g["home_team"], g["away_team"],
                                  g["season"], int(g["week"]),
                                  n_sims, s, 0, 0, False, **kw)

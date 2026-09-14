@@ -1,4 +1,30 @@
 
+## 2026-09-15T19:00Z  claude-code (Phase 5A — engine repair)
+- FIX 1 TERMINATION: Removed two batch-wide `continue` statements (time_up, kneeling) that
+  burned play-steps for non-affected sims. Safety cap raised to 800, hitting it raises
+  RuntimeError. Added `game_over` and `clock_remaining` columns. T1: all sims finish, 0 ties
+  without OT, tie rate 0.90%.
+- FIX 2 SEEDS: Created `nfl/sim/seed_util.py` with `stable_seed()` via `zlib.crc32`. Replaced
+  all 7 `hash()` call sites. T2: cross-process byte-identical at N=200.
+- FIX 3 PIT: `lg_pace` and `lg_4th_go` filtered to `(season-1) OR (season, week < w)`. All
+  other ctx assignments audited — already PIT by construction. T3: identical on 2023 wk 9
+  and 2022 wk 3.
+- FIX 4 PLAYER ALLOCATION-ONLY (D19): Removed catch_rate completion tilt and depth-split
+  yards tables from outcome path. T4: |margin diff| < 2*SE, KS p > 0.05 at N=4,000.
+- FIX 5 TENDENCY KEYS: Added fallback counter. Fallback rate 0.75% (thin cells only, not
+  format mismatch — Bug 14 already fixed in Phase 2A).
+- FIX 6 RULES: (a) 2pt decisions from twopt_decision.parquet; (b) season-aware OT with
+  postseason no-ties and additional periods; (c) random opening possession per sim; (d) kickoff
+  yl from kickoff.parquet; (e) negative yards unclipped in stat accumulation; (f) dead
+  punt-touchback branch removed.
+- FIX 7 OFFSET CONTINUITY: Float game state (yl, dist as float32) + stochastic EPA rounding
+  (per-play dithered shift with dedicated u_epa_pass/u_epa_rush draws). Pre-fix max jump 4.43 ->
+  post-fix 0.55. T7: max adjacent delta 0.55, 0 reversals > 0.3.
+- K1 POST-5A: 9 PASS, 3 FAIL (same as D15). pts/team 18.9 (was 19.5), pass yds 222.8 (was
+  227.5, actual 221.0), corr 0.800 (was 0.769). Runtime 482s.
+- COMMITTED: D19 and D20 added to decision doc. Tests: 22 passed, 0 failed.
+- NOT DONE: K1 with players ON (not specified). Calibration map re-fit (5C). Key-number layer.
+
 ## 2026-09-15T12:00Z  claude-code (Phase 4B-fix — anchoring solver, grading, ATD)
 - FIX 1 ANCHORING SOLVER: Replaced fixed 5-step Newton with 8-step damped Newton +
   best-iteration selection. Step damping: halve until predicted move <6 pts per channel.

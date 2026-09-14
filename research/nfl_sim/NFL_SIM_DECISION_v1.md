@@ -115,3 +115,21 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   the same 8-step solver before the identity claim is restored.** Do not re-fit now.
   ATD note corrected: `actual_atd = 0` shortcut was in `_score_player_props` (unused path),
   not in `run_cal_players.py` (which produced the maps correctly). WR ATD stays TRUSTED.
+- **2026-09-15 Phase 5A engine repair.**
+  **D19 — PLAYER ATTRIBUTES ARE ALLOCATION-ONLY IN v2.** The player layer had two
+  outcome-shaping paths: (1) completion probability tilted by player catch_rate via
+  logit-additive shift; (2) depth-split pass yards tables selected by receiver aDOT.
+  Both removed. Same game/seed/offsets: team-level outcomes now identical with and without
+  players (T4 verified at N=4,000 via KS test and SE comparison). Any player-level outcome
+  shaping is a v3 question behind a new reliability gate.
+  **D20 — 5A ENGINE REPAIRS.** Seven fixes: (1) game termination — all sims now reach a
+  valid terminal state; (2) reproducible seeds via zlib.crc32; (3) PIT filtering for
+  lg_pace/lg_4th_go; (4) player allocation-only; (5) playcall fallback counter; (6) NFL
+  rules: 2pt decisions from table, season-aware OT, random opening possession, kickoff from
+  table, negative yards unclipped, dead punt-touchback removed; (7) offset-response
+  continuity via float game state + stochastic EPA rounding.
+  **All prior K-numbers, calibration maps, and boards are superseded.** Maps to be re-fit
+  in 5C on 2021-2024 only. 2025 treated as inspected; 2026 prospective is the only OOS.
+  K1 post-5A: 9 PASS, 3 FAIL (same 3 as D15: pts/team, P(|m|=3), P(|m|=6)). New passes:
+  corr 0.800 (was 0.769), pass yds 222.8 (was 227.5, actual 221), tie rate 0.90%.
+  See `research/nfl_sim/phase5a_engine_repair.md`.

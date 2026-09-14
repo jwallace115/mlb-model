@@ -12,6 +12,7 @@ import sys, time, os, gc, numpy as np, pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from nfl.sim.engine import simulate_game, _load_tables, _load_ratings
+from nfl.sim.seed_util import stable_seed
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, "nfl", "data", "sim", "outputs")
@@ -59,7 +60,7 @@ for i, (_, g) in enumerate(sg.iterrows()):
     spread = g["spread_line"]; tl = g["total_line"]
     if pd.isna(spread) or pd.isna(tl):
         continue
-    seed = hash((gid, 42)) % (2**31)
+    seed = stable_seed((gid, 42))
     mkt_margin = float(spread)
     mkt_total = float(tl)
 

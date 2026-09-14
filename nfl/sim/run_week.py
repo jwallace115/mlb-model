@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
 from nfl.sim.engine import simulate_game, _load_tables, _load_ratings
+from nfl.sim.seed_util import stable_seed
 from nfl.sim.names import (FULL_TO_ABBR, load_roster, _build_roster_lookup,
                            resolve_player, is_player_name)
 from nfl.sim.calibration import load_calibration
@@ -163,7 +164,7 @@ def run_chunked_game(home, away, season, week, spread, total, n_sims,
     Up to 8 iterations; convergence at |market - mean| < 2*SE on both.
     Common random numbers: same seed set across all iterations.
     """
-    base_seed = hash((home, away, season, week, 42)) % (2**31)
+    base_seed = stable_seed((home, away, season, week, 42))
     n_chunks = max(1, n_sims // chunk_size)
     game_key = f"{away}@{home}"
     # J matrix for damping prediction

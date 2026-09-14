@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from nfl.sim.seed_util import stable_seed
 from sklearn.isotonic import IsotonicRegression
 
 from nfl.sim.engine import _load_tables, _load_ratings
@@ -67,7 +68,7 @@ def run_anchored_backtest(seasons, n_sims=1000, J_inv=None):
             total = g["total_line"]
             if pd.isna(spread) or pd.isna(total):
                 continue
-            seed = hash((g["game_id"], 42)) % (2**31)
+            seed = stable_seed((g["game_id"], 42))
             r = anchor_game(
                 g["home_team"], g["away_team"], s, int(g["week"]),
                 spread, total, n_sims=n_sims, seed=seed,
