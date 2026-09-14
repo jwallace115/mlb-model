@@ -583,13 +583,22 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
 def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   team_r=None, tend=None, sit=None, kicker=None, league=None,
                   _dummy_draw=False,
-                  player_usage=None, active_uni=None, qb_ratings=None):
+                  player_usage=None, active_uni=None, qb_ratings=None,
+                  epa_home_offset=0.0, epa_away_offset=0.0):
     _load_tables()
     if team_r is None:
         team_r, tend, sit, kicker, league = _load_ratings()
 
     rng = np.random.default_rng(seed)
     ctx = _build_game_context(home, away, season, week, team_r, tend, sit, kicker, league)
+
+    # D7 anchoring offsets: added to the D6 EPA shift channel (same mechanism)
+    if epa_home_offset != 0.0:
+        ctx["t0_pass_epa_shift"] += epa_home_offset
+        ctx["t0_rush_epa_shift"] += epa_home_offset
+    if epa_away_offset != 0.0:
+        ctx["t1_pass_epa_shift"] += epa_away_offset
+        ctx["t1_rush_epa_shift"] += epa_away_offset
 
     # Player allocation context
     has_players = player_usage is not None and active_uni is not None

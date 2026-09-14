@@ -1,4 +1,44 @@
 
+## 2026-09-15T17:00Z  claude-code (Phase 3 — market anchoring, pricer, calibration)
+- BUILT: nfl/sim/anchor.py (D7 anchoring via EPA offset channel), nfl/sim/pricer.py
+  (all market families from joint sample), nfl/sim/calibration.py (K2/K4/isotonic maps),
+  nfl/sim/run_calibration.py (per-season anchored backtest runner).
+- ENGINE: Added epa_home_offset/epa_away_offset params to simulate_game(). Applied to
+  ctx[t0/t1_pass/rush_epa_shift] — same D6 channel, no new mechanism.
+- SPREAD CONVENTION: nflfastR spread_line positive = home favored (verified corr +0.50).
+  market_margin = spread_line (not -spread_line as initially coded — FIXED).
+- JACOBIAN: Estimated from 30-game sample:
+  J = [[6.88, -5.48], [4.79, 4.01]], J_inv = [[0.075, 0.102], [-0.089, 0.128]]
+- ANCHORED BACKTEST: 1087 games (2021-2024), N=1000, 2 engine runs/game, ~1.8s/game.
+  K2 SUMMARY:
+  | Metric | Raw | Anchored | Actual |
+  | pts/team | 19.5 | 22.7 | 22.4 | FIXED
+  | P(|m|=3) | 8.5% | 7.5% | 14.5% | STILL FAIL
+  | Home cover acc | - | 51.7% | 50% | no edge
+  | Over/under acc | - | 51.5% | 50% | no edge
+- CALIBRATION MAPS: calibration_v1.json with margin_side, total_side, moneyline
+  (isotonic regression, 2021-2024). Reduces worst reliability gaps by ~50% but
+  underlying spread discrimination is weak.
+- 2025 HOLDOUT (scored once, 272 games):
+  pts/team=22.9, home cover=44.1% (BELOW COIN FLIP), O/U=51.8%.
+  Lock file created: HOLDOUT_2025_SCORED.lock
+  The sim has NO spread edge. Value is in player props + SGP correlations.
+- PROP RELIABILITY (before calibration maps, from Phase 2B-fix):
+  P(rec>=3) by decile:
+  | Dec | Sim P | Actual | Gap |
+  | 0 | 0.002 | 0.042 | -0.040 |
+  | 5 | 0.427 | 0.452 | -0.025 |
+  | 8 | 0.905 | 0.805 | +0.100 |
+- K4 (real prices): DEFERRED. Requires anchored sims WITH players (90 min compute).
+  Props archive available for 2023-2024 (178K+ rows, 10 books). Will run in Phase 3
+  follow-up or Phase 4 pipeline.
+- NOT DONE: Player prop calibration maps, K4 ROI computation, team-total calibration.
+  These require the full with-players anchored backtest.
+- KEY FINDING: The sim's value proposition is NOT in ATS/O-U picks (no edge over
+  market). It IS in: (1) player prop distributions from the joint sample, (2) SGP
+  correlation structure (leg_correlation, sgp_probability), (3) distribution shape
+  for exotic markets.
+
 ## 2026-09-15T12:00Z  claude-code (Phase 2B-fix — dispersion, redistribution, pool)
 - FIX 1 (share dispersion): Fitted Beta-binomial phi by MLE from 2021-2024 PBP:
   WR targets phi=42.9 (N=8115), TE=85.0 (N=3923), RB=71.3 (N=3935),
