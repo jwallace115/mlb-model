@@ -1,4 +1,21 @@
 
+## 2026-09-14T18:15Z  claude-code (MNF props pull — DEN@KC)
+- RAN: Hard Rock props pull on VM (root@142.93.242.4) for single MNF event
+  Denver Broncos @ Kansas City Chiefs (commence 2026-09-15T00:15Z).
+- CREDITS: 15 used (10 primary + 5 alt markets × 1 event). x-requests-remaining: 11,285.
+- OUTPUT: 298 prop lines (76 primary + 222 alt) from hardrockbet_fl.
+  Raw JSON: data/odds_archive/nfl/props/raw_live/hardrock_20260914T1810Z/
+  Merged into: data/odds_archive/nfl/props/season=2026/month=09/data_2026_09.parquet
+  pull_batch: live_hardrock_mnf_close
+- PLAYERS RETURNED (all 10 requested): Kenneth Walker III (rec O3.5 +125, rush O65.5 -115),
+  Rashee Rice (rec O5.5 +120, rec_yds O52.5 -115), Travis Kelce (rec O4.5 +125, rec_yds O42.5 -115),
+  Courtland Sutton (rec O3.5 -135, rec_yds O42.5 -115), Patrick Mahomes (pass_yds O225.5 -115,
+  pass_td O1.5 +115, rush O14.5 -110), Jaylen Waddle (rec O4.5 -125, rec_yds O59.5 -115),
+  Xavier Worthy (rec O3.5 +120, rec_yds O36.5 -115), RJ Harvey (rec O2.5 -105, rush O18.5 -120),
+  J.K. Dobbins (rush O50.5 -120, rush_att O11.5 -125), Bo Nix (pass_yds O228.5 -115, pass_td O1.5 +125).
+- GAME LINES (latest snapshot): KC -2.5 (-108) / DEN +2.5 (-112), total 43.5, KC ML -130.
+- COMMITTED from VM (add93c4bb), pulled to Mac.
+
 ## 2026-09-15T05:00Z  claude-code (Phase 4A-fix — depth charts, spread sign, week detection)
 - FIX 1 DEPTH CHARTS: 2026 depth_order was 100% NaN → all shares uniform (0.0625).
   Root cause: nflreadpy schema change (pos_rank instead of depth_team, no season/week).
