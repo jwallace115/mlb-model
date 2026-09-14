@@ -261,6 +261,18 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
         ctx[prefix + "rush_explosive"] = _log5(ro["explosive"], rd["explosive"], lb["rush_explosive"])
         ctx[prefix + "rush_stuff"] = _log5(ro["stuff_rate"], rd["stuff_rate"], lb["rush_stuff_rate"])
 
+        # D6 additive EPA component: yards shift per play
+        # S = 5.20 yards per EPA unit (fitted from 2021-2024 within-bucket regression)
+        S_EPA = 5.20
+        off_pass_epa = po["epa"] if "epa" in po.index else 0.0
+        def_pass_epa = pd_["epa"] if "epa" in pd_.index else 0.0
+        off_rush_epa = ro["epa"] if "epa" in ro.index else 0.0
+        def_rush_epa = rd["epa"] if "epa" in rd.index else 0.0
+        # def_epa is EPA opponents achieve: positive = bad defense, negative = good defense
+        # Net matchup EPA = off + def - league (additive, not subtractive on def)
+        ctx[prefix + "pass_epa_shift"] = (off_pass_epa + def_pass_epa - lb.get("pass_epa", 0.0)) * S_EPA
+        ctx[prefix + "rush_epa_shift"] = (off_rush_epa + def_rush_epa - lb.get("rush_epa", 0.0)) * S_EPA
+
     # Tendencies
     for ti, t in enumerate(teams):
         tr = tend[(tend["season"] == season) & (tend["week"] == week) & (tend["team"] == t)]
@@ -942,6 +954,20 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 if len(m):
                                     yards[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
 
+            # D6 additive EPA shift: after drawing yards, shift by matchup EPA
+            for ti in [0, 1]:
+                tm = poss_p == ti
+                if tm.any():
+                    # Apply to completions only (sack yards are mechanical, not offense quality)
+                    comp_tm = completed & tm
+                    if comp_tm.any():
+                        yards[comp_tm] += ctx[f"t{ti}_pass_epa_shift"]
+
+            # Clamp: shifted yards cannot exceed yardline (goal-line cap),
+            # and a negative-yard play cannot be shifted beyond +1 (no synthetic explosives)
+            yards[completed] = np.minimum(yards[completed], yl_p[completed].astype(float))
+            yards[completed] = np.maximum(yards[completed], -15.0)  # floor at empirical min
+
             # --- Apply results to state (vectorised where possible) ---
             yds_int = np.round(yards).astype(int)
             td_mask = completed & (yl_p - yds_int <= 0) & (yds_int > 0)
@@ -1118,6 +1144,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 m = idx[(d_r[idx]==d_v)&(di_r[idx]==di_v)&(zi_r[idx]==zi_v)]
                                 if len(m):
                                     yards_r[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
+
+            # D6 additive EPA shift for rush yards
+            for ti in [0, 1]:
+                tm = poss_r == ti
+                rush_ok = not_fum & tm
+                if rush_ok.any():
+                    yards_r[rush_ok] += ctx[f"t{ti}_rush_epa_shift"]
+            yards_r[not_fum] = np.minimum(yards_r[not_fum], yl_r[not_fum].astype(float))
+            yards_r[not_fum] = np.maximum(yards_r[not_fum], -10.0)
 
             yds_r = np.round(yards_r).astype(int)
             td_r = not_fum & (yl_r - yds_r <= 0) & (yds_r > 0)
