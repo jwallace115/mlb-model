@@ -42,3 +42,27 @@
   and `com.mlbmodel.capture.mlb` were still loaded after the 6 Sep migration of capture to the
   VM — dual writer, no Mac push chain, credits spent twice. Unloaded and plists renamed
   `.disabled`. Mac crontab also carries inert VM lines (`/root/mlb-model`) — cleanup later.
+
+---
+
+## 11. PHASE 2A CLOSE — K1 PROVISIONAL (2026-09-14)
+
+**D15 — K1 accepted as PROVISIONAL.** Final engine commit `89a4d1696` (iteration 6). Sixteen
+real bugs found and fixed across six sessions (3-quarter game, no randomness, RNG uniform
+coupling, clock scope, penalty layer absent, play-call table dead code via key mismatch,
+multiplicative tilt, stale inputs, …) — see `research/nfl_sim/phase2a_realism_report.md`.
+Passing: plays/game 125.9 (124.5), drives 21.4 (21.9), pooled margin SD 14.06 (14.20),
+P(|margin|=7/10/14), pass/rush yards, team differentiation (sim mean-margin SD 6.2 vs
+closing-spread SD 5.9, corr 0.78). Failing: pts/team 19.5 vs 22.4 (−13%);
+P(|margin|=3) 8.5% vs 14.5%; P(|margin|=6) 5.1% vs 7.5%.
+**Why proceed:** D7 anchoring matches mean margin and total to the market by construction,
+so the points mean is corrected downstream. **What stays wrong and where it shows:** the
+3/6 key-number mass is under-generated — affects alt-spread pricing near 3 and 6 and 1H
+shape; TD/FG mix affects team-total shape. **v2 item:** key-number calibration layer
+(empirical reweighting of the margin histogram, fitted on 2021–24, scored on 2025), and the
+success/fail split mechanism review. Both are Phase 3+ refinements, not engine rewrites.
+K1 lines are reported in every downstream report until they pass.
+
+Order from here: **Phase 2B** (player allocation inside the engine — needed for props) →
+**Phase 3** (anchoring + pricer + calibration 2021–24, 2025 scored once) → **Phase 4**
+(weekly run + parlay board). Target: a Week 3 board.
