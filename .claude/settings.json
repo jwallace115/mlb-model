@@ -2,7 +2,6 @@
   "permissions": {
     "defaultMode": "acceptEdits",
     "deny": [
-      "Bash(git push*)",
       "Bash(git remote set-url*)",
       "Bash(crontab -r*)",
       "Bash(rm -rf*)",
