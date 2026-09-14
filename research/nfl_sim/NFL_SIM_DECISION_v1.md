@@ -66,3 +66,15 @@ K1 lines are reported in every downstream report until they pass.
 Order from here: **Phase 2B** (player allocation inside the engine — needed for props) →
 **Phase 3** (anchoring + pricer + calibration 2021–24, 2025 scored once) → **Phase 4**
 (weekly run + parlay board). Target: a Week 3 board.
+- **2026-09-14 Phase 2B-fix + Phase 3 (19ee88142).** Player layer: Beta-binomial share
+  dispersion fitted by position (WR φ 42.9, TE 85.0, RB 71.3; carries RB 7.9, QB 20.0),
+  measured vacated-share redistribution (WR out → 58/28/14 WR/TE/RB), pool concentration
+  matches; reliability now −10pp at low deciles / +10pp at high, ±3pp in the middle. Phase 3:
+  anchoring converges to market mean (pts 22.7 vs 22.4); pricer for all families; isotonic
+  maps for margin/total/team-total; 2025 K2 scored once, lock file written; anchored sim has
+  no ATS edge by construction (2025 home-cover 44.1%, noise). **Gaps:** calibration backtest
+  ran WITHOUT the player layer (Mac memory kills) and at 2 anchoring iterations — prop maps
+  and K4 (real prices) NOT done; P(|margin|=3) 7.5% post-anchoring → alt spreads straddling
+  3/6 must be flagged on the board until a key-number layer exists (v2).
+  Next: Phase 3b (anchored+players 2021–24 in background, prop maps, K4 real prices, 2025 props
+  scored once under a second lock entry) → Phase 4 board for Week 3.

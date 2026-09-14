@@ -1,4 +1,45 @@
 
+## 2026-09-15T22:00Z  claude-code (Phase 3b — prop calibration maps, K4 real prices, 2025 props)
+- STEP 0 CONVERGENCE: Phase 3 (2 iterations) had p90 margin 4.75, only 6.7% within 0.25.
+  Restored 4-iteration rule. Phase 3b (4 iter, with players): p90 margin 3.95, 10% within 0.25.
+  Still above threshold (MC noise SE≈0.44 at N=1000, need N≈3000 for <0.25). Newton step
+  is unbiased — isotonic maps correct aggregate bias. Cost: ~6s/game (was 1.8s).
+- STEP 1: Anchored+players backtest 2021-2024, N=1000, 4 parallel nohup processes.
+  1087 games × ~6s/game = 26 min/season. 13,044 player-game prop summaries.
+  No memory kills (summaries only, no joint samples held).
+- STEP 2 PROP CALIBRATION (after-map reliability table, 2021-2024 in-sample):
+  P(rec>=3) WR (N=17616):
+  | Dec | Raw P | Cal P | Actual | Cal gap | Status |
+  |-----|-------|-------|--------|---------|--------|
+  | 0 | 0.140 | 0.194 | 0.171 | +0.023 | PASS |
+  | 1 | 0.249 | 0.267 | 0.274 | -0.007 | PASS |
+  | 2 | 0.345 | 0.351 | 0.364 | -0.013 | PASS |
+  | 3 | 0.436 | 0.429 | 0.440 | -0.011 | PASS |
+  | 4 | 0.532 | 0.465 | 0.483 | -0.018 | PASS |
+  | 5 | 0.622 | 0.514 | 0.537 | -0.022 | PASS |
+  | 6 | 0.713 | 0.575 | 0.611 | -0.037 | PASS |
+  | 7 | 0.804 | 0.698 | 0.713 | -0.016 | PASS |
+  | 8 | 0.879 | 0.776 | 0.798 | -0.022 | PASS |
+  | 9 | 0.945 | 0.837 | 0.816 | +0.021 | PASS |
+  ALL 10 deciles PASS. Raw gap up to +12.9pp → calibrated max +3.7pp.
+  P(rec>=3) TE: 10/10 PASS. P(rec>=3) RB: 9/10 PASS.
+  P(atd) WR: 10/10 PASS. P(rec_yds>=50) WR: 8/10 PASS.
+  28 total calibration families (3 game + 25 prop) in calibration_v1.json.
+- K4 REAL PRICES (2023-2024, IN-SAMPLE, 9505 matched legs):
+  | Market | N | Mean edge |
+  | player_receptions | 6383 | +2.1pp |
+  | player_reception_yds | 1884 | -10.4pp |
+  | player_rush_attempts | 604 | -11.6pp |
+  | player_rush_yds | 634 | -17.1pp |
+  Receptions ONLY prop with positive edge. Yards/attempts reflect K1 per-drive deficit.
+  Per-leg ROI at closing prices: deferred (requires per-game outcome matching).
+- 2025 PROPS (scored once):
+  P(rec>=3) WR: 9/10 PASS. P(atd) WR: 8/10 PASS. P(rush_yds>=50) RB: 5/10 FAIL.
+  Lock file updated with props entry.
+- NOT DONE: Per-leg ROI at closing prices (needs actual-outcome matching per prop leg);
+  key-number calibration layer; pass_yds/pass_td QB prop maps (no QBs in top-12 player
+  summaries for most games).
+
 ## 2026-09-15T17:00Z  claude-code (Phase 3 — market anchoring, pricer, calibration)
 - BUILT: nfl/sim/anchor.py (D7 anchoring via EPA offset channel), nfl/sim/pricer.py
   (all market families from joint sample), nfl/sim/calibration.py (K2/K4/isotonic maps),
