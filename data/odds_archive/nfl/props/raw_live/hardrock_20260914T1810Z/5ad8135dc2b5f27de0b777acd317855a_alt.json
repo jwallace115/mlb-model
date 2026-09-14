@@ -1,0 +1,1378 @@
+{
+  "id": "5ad8135dc2b5f27de0b777acd317855a",
+  "sport_key": "americanfootball_nfl",
+  "sport_title": "NFL",
+  "commence_time": "2026-09-15T00:15:00Z",
+  "home_team": "Kansas City Chiefs",
+  "away_team": "Denver Broncos",
+  "bookmakers": [
+    {
+      "key": "hardrockbet_fl",
+      "title": "Hard Rock Bet (FL)",
+      "markets": [
+        {
+          "key": "player_pass_yds_alternate",
+          "last_update": "2026-09-14T18:08:59Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -260,
+              "point": 199.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 750,
+              "point": 324.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -125,
+              "point": 224.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -8000,
+              "point": 124.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -135,
+              "point": 224.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -8000,
+              "point": 124.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 850,
+              "point": 324.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 260,
+              "point": 274.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 150,
+              "point": 249.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 450,
+              "point": 299.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -600,
+              "point": 174.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -240,
+              "point": 199.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 275,
+              "point": 274.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -550,
+              "point": 174.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -1600,
+              "point": 149.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -1800,
+              "point": 149.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 140,
+              "point": 249.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 500,
+              "point": 299.5
+            }
+          ]
+        },
+        {
+          "key": "player_reception_yds_alternate",
+          "last_update": "2026-09-14T18:08:59Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 2000,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": -230,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 120,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 850,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 575,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 1600,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 325,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": 275,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": -185,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Adam Trautman",
+              "price": 475,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 450,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 400,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 1000,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 575,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 120,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 1200,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 750,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 3000,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 1000,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": -135,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 325,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 195,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": -125,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": 575,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Adam Trautman",
+              "price": 2500,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 600,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 250,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 475,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": -260,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": -350,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 100,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 300,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Adam Trautman",
+              "price": 1300,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 350,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": -140,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 475,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 1300,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 155,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": -1000,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": -300,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 1200,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 1300,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 3000,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 230,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 1100,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 350,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 115,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 125,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 165,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 575,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 650,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 850,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 105,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": 195,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 2000,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 325,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 3000,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": -750,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": -130,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 260,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 240,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": -400,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 2500,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": 110,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": 400,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": 150,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 2500,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 1300,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 450,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 230,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 650,
+              "point": 49.5
+            }
+          ]
+        },
+        {
+          "key": "player_receptions_alternate",
+          "last_update": "2026-09-14T18:08:59Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 120,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 1750,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 175,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": -450,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": -105,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 2500,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 240,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 1000,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 475,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 1000,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": -135,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": 375,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 700,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": -375,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": 375,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": -350,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Adam Trautman",
+              "price": 190,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 225,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": -1300,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": 155,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": -450,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": -125,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 275,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": 275,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 125,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -210,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Adam Trautman",
+              "price": 2000,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 850,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 550,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Adam Trautman",
+              "price": 600,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 3000,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 300,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 1300,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": -800,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": -300,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": -175,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": -7000,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 130,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 1000,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 300,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 550,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 450,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 3000,
+              "point": 9.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": -325,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Evan Engram",
+              "price": -135,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": 220,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": -105,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": 525,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -700,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": 1200,
+              "point": 9.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": -1500,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Courtland Sutton",
+              "price": 155,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Tyquan Thornton",
+              "price": 575,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": -2200,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 375,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": 120,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 800,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 1750,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": -700,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 120,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 1200,
+              "point": 6.5
+            },
+            {
+              "name": "Over",
+              "description": "Rashee Rice",
+              "price": -175,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 3000,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Travis Kelce",
+              "price": 240,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Pat Bryant",
+              "price": 475,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 125,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": -5000,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": -210,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Jaylen Waddle",
+              "price": 1750,
+              "point": 9.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 3000,
+              "point": 7.5
+            },
+            {
+              "name": "Over",
+              "description": "Noah Gray",
+              "price": 3000,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 275,
+              "point": 2.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 120,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 3000,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 1300,
+              "point": 4.5
+            },
+            {
+              "name": "Over",
+              "description": "Marvin Mims Jr.",
+              "price": 575,
+              "point": 3.5
+            }
+          ]
+        },
+        {
+          "key": "player_rush_attempts_alternate",
+          "last_update": "2026-09-14T18:08:59Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -195,
+              "point": 14.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 120,
+              "point": 17.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -4000,
+              "point": 0.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 600,
+              "point": 20.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 2000,
+              "point": 11.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 450,
+              "point": 23.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 1100,
+              "point": 23.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": -325,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 325,
+              "point": 17.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -550,
+              "point": 11.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 150,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -750,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -110,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 2500,
+              "point": 26.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": -1300,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": -125,
+              "point": 11.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 225,
+              "point": 5.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 450,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 1100,
+              "point": 11.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 240,
+              "point": 20.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": -170,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": -6000,
+              "point": 3.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 800,
+              "point": 26.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 165,
+              "point": 14.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -2500,
+              "point": 0.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -4000,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": -500,
+              "point": 1.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 650,
+              "point": 8.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 3000,
+              "point": 14.5
+            }
+          ]
+        },
+        {
+          "key": "player_rush_yds_alternate",
+          "last_update": "2026-09-14T18:08:59Z",
+          "outcomes": [
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 750,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 1500,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -600,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 240,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": -220,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 1750,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": -750,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Patrick Mahomes",
+              "price": 700,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 575,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 2500,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 300,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -120,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -5000,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 165,
+              "point": 79.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": -130,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 1000,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": -275,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 170,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 425,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Bo Nix",
+              "price": 525,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "RJ Harvey",
+              "price": 140,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "J.K. Dobbins",
+              "price": 160,
+              "point": 64.5
+            },
+            {
+              "name": "Over",
+              "description": "Kenneth Walker III",
+              "price": 375,
+              "point": 99.5
+            },
+            {
+              "name": "Over",
+              "description": "Emmett Johnson",
+              "price": 250,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Emmett Johnson",
+              "price": 1600,
+              "point": 49.5
+            },
+            {
+              "name": "Over",
+              "description": "Emmett Johnson",
+              "price": 750,
+              "point": 39.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 1100,
+              "point": 24.5
+            },
+            {
+              "name": "Over",
+              "description": "Xavier Worthy",
+              "price": 3000,
+              "point": 39.5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
