@@ -203,9 +203,6 @@ def run_chunked_game(home, away, season, week, spread, total, n_sims,
         err = np.array([me, te])
         step = J_INV @ err
 
-        # Relaxation: 0.7x to prevent oscillation from Jacobian mismatch
-        step = step * 0.7
-
         # Damp: halve step until predicted move is within 6 pts on each channel
         for _ in range(5):
             pred = J_FWD @ step

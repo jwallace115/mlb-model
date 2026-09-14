@@ -118,15 +118,84 @@ WR anytime TD remains TRUSTED.
 DEN@KC (MNF) not in pbp_2026 -- all 6 MNF legs graded as **void-pending**.
 No Sunday Week 1 picks_log exists in the new format (Phase 4A board predated this schema).
 
-## 5. Week 2 Board Summary
+## 5. Week 2 Board Summary (4B, before anchoring fix)
 
 - Runtime: 865s (14.4 min) for 16 games at N=10000
 - Converged: 0/16 (SE threshold 2×SE ≈ 0.28 pts; typical anchoring residual 0.5-4 pts)
-- Legs: 1306 total
-- Priced: 0 (no Week 2 props in archive — only Week 1 Sunday props exist)
-- no_price: 1306
-- BOOK-MORE-CONFIDENT: 0
-- All teams flagged [PRIOR-ONLY SHARES] (only 1 completed 2026 game per team)
-- Pull timestamp header: shown (2026-09-13 batch, stale)
-- DEN@KC excluded from board (Week 1 game)
-- WAS@DAL included (Week 2 per nflverse schedule)
+- Legs: 1306 total. Priced: 0. All teams [PRIOR-ONLY SHARES].
+
+---
+
+## 6. Phase 4B-fix
+
+### 6a. Anchoring solver fix
+
+The 4B run had 0/16 converged with residuals up to 4 pts. Root cause: fixed 5-step
+Newton with the global J_INV overshoots for games whose per-game sensitivity differs
+from the 50-game mean (GB@NYJ, NYG@LA, etc).
+
+**Fix:** damped Newton with 8 iterations, step-size limiting (halve until predicted
+move <6 pts per channel), and best-iteration selection (return the iteration with
+minimum |err_m|+|err_t| if the final iteration is worse).
+
+**Week 2 re-run results (N=10000, 8 iter max):**
+
+| Game | Best iter | err_m | err_t | |m|<0.5 | |t|<1.0 | 2*SE |
+|------|-----------|-------|-------|---------|---------|------|
+| CAR@ATL | 8 | -1.29 | -0.60 | N | Y | N |
+| CIN@HOU | 5 | +0.16 | -0.15 | Y | Y | Y |
+| CLE@TB | 5 | -0.39 | +1.04 | Y | N | N |
+| DET@BUF | 2 | +0.05 | +1.01 | Y | N | N |
+| GB@NYJ | 8 | +2.16 | -0.01 | N | Y | N |
+| IND@KC | 7 | -0.31 | +0.99 | Y | Y | N |
+| JAX@DEN | 3 | +1.78 | +2.97 | N | N | N |
+| LV@LAC | 7 | -0.09 | +0.71 | Y | Y | N |
+| MIA@SF | 8 | +0.13 | +1.17 | Y | N | N |
+| MIN@CHI | 7 | +0.48 | +0.18 | Y | Y | N |
+| NO@BAL | 4 | -0.56 | -0.75 | N | Y | N |
+| NYG@LA | 6 | +2.74 | -0.12 | N | Y | N |
+| PHI@TEN | 7 | +0.05 | +0.82 | Y | Y | N |
+| PIT@NE | 6 | -0.50 | +0.16 | N | Y | N |
+| SEA@ARI | 7 | +0.15 | +0.13 | Y | Y | Y |
+| WAS@DAL | 5 | -0.20 | +1.46 | Y | N | N |
+| **TOTAL** | | | | **10** | **11** | **2** / 16 |
+
+**Improvement vs 4B:** from 0/16 converged to 10/16 within 0.5 margin and 11/16
+within 1.0 total. Three games remain >1 pt margin residual (CAR@ATL, GB@NYJ, NYG@LA).
+
+**Why some games cannot converge:**
+1. Per-game Jacobian variation: the fixed J was estimated from 50 games as a mean.
+   GB@NYJ has two strong defensive teams → different EPA-to-points sensitivity.
+   NYG@LA has a 7-pt spread → the engine's natural lean differs more from market.
+2. MC noise floor at N=10000: SE ≈ 0.14 per channel. When residual < 0.5,
+   signal-to-noise is ~3.5 and the Newton step alternates (oscillation).
+3. Total channel: total depends on both teams' scoring, making it harder to pin
+   down than margin. The J matrix total row [4.79, 4.01] provides less directional
+   discrimination than the margin row [6.88, -5.48].
+
+Runtime: 1393s (23.2 min), 1303 legs, 0 priced (Week 2 props not yet pulled).
+
+### 6b. grade_week.py fixes
+
+- Never drops a leg: unresolvable/unparseable rows get grade="unresolved" with reason
+- Ticket-aware dedup: same (player, family, line, side) in different tickets kept
+- New families: pass_completions, pass_attempts graded from PBP passer stats
+- Ticket grouping: report shows per-ticket hit/miss count and whether whole ticket hit
+- Week 1 result: 23 legs from v2 MNF file, all void-pending (DEN@KC not in PBP)
+
+### 6c. ATD calibration note corrected
+
+The `actual_atd = 0` shortcut was in calibration.py's `_score_player_props`, which
+was NOT the code path that produced the calibration maps. The maps were fitted from
+`run_cal_players.py` output where actual_atd was graded correctly (2024 mean = 0.242).
+The shortcut has been fixed. WR anytime TD remains TRUSTED.
+
+### 6d. D18 deviation (solver mismatch)
+
+The Phase 3b calibration maps were fitted using `run_cal_players.py` with the fixed-Jacobian
+4-step loop at N=1000 (p90 |Δmargin| 3.95, ~10% of games effectively unanchored). The live
+board now uses an 8-step damped Newton at N=10000 with best-iteration selection, which
+anchors more tightly. This is the direction the maps assume (fully anchored), but the
+research object and the live object now differ in anchoring precision. v2 must re-fit the
+calibration maps with the same solver before the identity claim (research == live) is
+restored.

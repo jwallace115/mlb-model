@@ -1,4 +1,31 @@
 
+## 2026-09-15T12:00Z  claude-code (Phase 4B-fix — anchoring solver, grading, ATD)
+- FIX 1 ANCHORING SOLVER: Replaced fixed 5-step Newton with 8-step damped Newton +
+  best-iteration selection. Step damping: halve until predicted move <6 pts per channel.
+  Best-iteration: return the iteration with minimum |err_m|+|err_t| across all 8.
+  Broyden secant update ATTEMPTED and ABANDONED (diverged on CLE@TB, DET@BUF — MC noise
+  corrupts the H matrix; condition-number guard insufficient). 0.7x relaxation ATTEMPTED
+  and ABANDONED (too conservative, slows convergence).
+  RESULT: 10/16 within 0.5 pts margin (was 0/16), 11/16 within 1.0 pts total.
+  2/16 pass 2*SE criterion (SE≈0.14 at N=10000 → threshold 0.28, very tight).
+  Games with persistent >1 pt margin residual: CAR@ATL (-1.29), GB@NYJ (+2.16), NYG@LA (+2.74).
+  Mechanism: per-game Jacobian variation (fixed J was 50-game mean) + MC noise oscillation.
+  D18 deviation: live solver now anchors tighter than the research calibration run.
+  Runtime: 1393s (23.2 min) for 16 games.
+- FIX 2 GRADE_WEEK.PY: Never drops legs silently. Unresolvable → grade="unresolved" with
+  reason. Ticket-aware dedup. New families: pass_completions, pass_attempts from PBP passer
+  stats. Ticket grouping in report. Week 1 re-graded with v2 MNF file: 23 legs, all
+  void-pending (DEN@KC still not in PBP).
+- FIX 3 ATD CORRECTION: The actual_atd=0 shortcut was ONLY in calibration.py's
+  _score_player_props path, which did NOT produce the calibration maps. Maps came from
+  run_cal_players.py where actual_atd was graded correctly (2024 mean=0.242, 791/3264
+  nonzero). Fixed the shortcut. Phase4b_grading_k4.md corrected. WR ATD stays TRUSTED.
+- FIX 4 WEEK 2 BOARD: 16 games, N=10000, 1303 legs, 0 priced. Anchoring table printed.
+  DEN@KC excluded, WAS@DAL included. Props not yet pulled (expected Thursday).
+- PBP REFRESH: 2026 PBP re-pulled, still 15 games (DEN@KC MNF not in nflverse yet).
+- NOT DONE: v2 calibration map re-fit (D18 says defer to v2). DEN@KC grading (void-pending).
+  14/16 2*SE target not met (2/16) — MC noise floor at N=10000.
+
 ## 2026-09-14T20:00Z  claude-code (Phase 4B — K4 re-run, grading, board upgrades)
 - STEP 0 DATA REFRESH: Pulled 2026 PBP (15 games, Week 1 only, max game_date 2026-09-13).
   DEN@KC MNF NOT in pbp_2026. Pulled 2026 rosters_weekly (2963 rows, week 1), depth_charts

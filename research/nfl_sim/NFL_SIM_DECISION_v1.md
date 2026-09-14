@@ -104,3 +104,14 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   the sim does not beat closing prices on any individual prop family; its value remains in
   the joint distribution (SGP correlations, conditional structure).
   See `research/nfl_sim/phase4b_grading_k4.md` for full K4 tables and symmetry check.
+- **2026-09-15 Phase 4B-fix (anchoring solver, grading, ATD correction).**
+  **D18 — SOLVER MISMATCH (documented deviation).** The Phase 3b calibration maps were
+  fitted with the fixed-Jacobian 4-step loop at N=1,000 (`run_cal_players.py`), which left
+  p90 |Δmargin| = 3.95 (~10% of games effectively unanchored). The live board now uses an
+  8-step damped Newton at N=10,000 with best-iteration selection, achieving 10/16 within
+  0.5 pts margin, 11/16 within 1.0 pts total. This is the direction the maps assume (fully
+  anchored), and the improvement is real: 4B had 0/16 converged. But the research object
+  and live object now differ in anchoring precision. **v2 must re-fit calibration maps with
+  the same 8-step solver before the identity claim is restored.** Do not re-fit now.
+  ATD note corrected: `actual_atd = 0` shortcut was in `_score_player_props` (unused path),
+  not in `run_cal_players.py` (which produced the maps correctly). WR ATD stays TRUSTED.
