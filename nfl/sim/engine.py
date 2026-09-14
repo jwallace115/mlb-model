@@ -126,7 +126,9 @@ def _build_pass_arrays():
     sack_yds_q = np.full(shape + (101,), -5.0)
     p_int = np.full(shape, 0.02)
     p_comp = np.full(shape, 0.65)
-    yds_all_q = np.full(shape + (101,), 8.0)
+    p_succ = np.full(shape, 0.50)
+    yds_succ_q = np.full(shape + (101,), 12.0)
+    yds_fail_q = np.full(shape + (101,), 3.0)
 
     for _, r in tbl.iterrows():
         d = int(r["down"])
@@ -139,9 +141,11 @@ def _build_pass_arrays():
         sack_yds_q[d, di, zi] = np.array(r["sack_yds_q"])
         p_int[d, di, zi] = r["p_int"]
         p_comp[d, di, zi] = r["p_comp"]
-        yds_all_q[d, di, zi] = np.array(r["yds_all_q"])
+        p_succ[d, di, zi] = r["p_success_given_comp"]
+        yds_succ_q[d, di, zi] = np.array(r["yds_success_q"])
+        yds_fail_q[d, di, zi] = np.array(r["yds_fail_q"])
 
-    return p_fumble, p_sack, sack_yds_q, p_int, p_comp, yds_all_q
+    return p_fumble, p_sack, sack_yds_q, p_int, p_comp, p_succ, yds_succ_q, yds_fail_q
 
 
 def _build_rush_arrays():
@@ -151,7 +155,9 @@ def _build_rush_arrays():
 
     shape = (5, 3, 5)
     p_fum = np.full(shape, 0.01)
-    yds_all_q = np.full(shape + (101,), 3.0)
+    p_succ = np.full(shape, 0.43)
+    yds_succ_q = np.full(shape + (101,), 5.0)
+    yds_fail_q = np.full(shape + (101,), 1.0)
 
     for _, r in tbl.iterrows():
         d = int(r["down"])
@@ -160,9 +166,11 @@ def _build_rush_arrays():
         if di is None or zi is None:
             continue
         p_fum[d, di, zi] = r["p_fumble"]
-        yds_all_q[d, di, zi] = np.array(r["yds_all_q"])
+        p_succ[d, di, zi] = r["p_success"]
+        yds_succ_q[d, di, zi] = np.array(r["yds_success_q"])
+        yds_fail_q[d, di, zi] = np.array(r["yds_fail_q"])
 
-    return p_fum, yds_all_q
+    return p_fum, p_succ, yds_succ_q, yds_fail_q
 
 
 def _build_clock_arrays():
@@ -323,9 +331,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ctx = _build_game_context(home, away, season, week, team_r, tend, sit, kicker, league)
 
     # Build lookup arrays
-    (pa_fumble, pa_sack, pa_sack_yds, pa_int, pa_comp,
-     pa_yds_all) = _build_pass_arrays()
-    (ru_fum, ru_yds_all) = _build_rush_arrays()
+    (pa_fumble, pa_sack, pa_sack_yds, pa_int, pa_comp, pa_succ,
+     pa_yds_succ, pa_yds_fail) = _build_pass_arrays()
+    (ru_fum, ru_succ, ru_yds_succ, ru_yds_fail) = _build_rush_arrays()
     clock_q = _build_clock_arrays()
     fd_lookup = _build_4th_down_lookup()
     fg_lookup = _build_fg_lookup()
@@ -596,7 +604,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 cl = float(clock[i])
 
                 yd_b = "1-2" if yd <= 2 else ("3-5" if yd <= 5 else ("6-10" if yd <= 10 else "11+"))
-                yl_b = "rz" if y <= 10 else ("opp40" if y <= 40 else ("midfield" if y <= 65 else "own35"))
+                # 10-yard field-zone bins
+                if y <= 10: yl_b = "opp1-10"
+                elif y <= 20: yl_b = "opp11-20"
+                elif y <= 30: yl_b = "opp21-30"
+                elif y <= 40: yl_b = "opp31-40"
+                elif y <= 50: yl_b = "opp41-50"
+                elif y <= 60: yl_b = "own41-50"
+                elif y <= 70: yl_b = "own31-40"
+                elif y <= 80: yl_b = "own21-30"
+                elif y <= 90: yl_b = "own11-20"
+                else: yl_b = "own1-10"
 
                 # Fine-grained score bucket
                 if sd < -8: sc_fine = "trail9+"
@@ -620,13 +638,20 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 # Coarse fallback keys
                 sc_coarse = "trail9" if sd < -8 else ("within8" if sd <= 8 else "lead9")
                 qt_coarse = "Q1-3" if qt <= 3 else "Q4"
+                # Coarse 4-zone field position
+                if y <= 10: yl_coarse = "rz"
+                elif y <= 40: yl_coarse = "opp40"
+                elif y <= 65: yl_coarse = "midfield"
+                else: yl_coarse = "own35"
 
-                # Lookup with fallback: fine → coarse score → coarsest
+                # Lookup with 4-level fallback
                 probs = fd_lookup.get((yd_b, yl_b, sc_fine, qt_fine))
                 if probs is None:
                     probs = fd_lookup.get((yd_b, yl_b, f"c_{sc_coarse}", qt_fine))
                 if probs is None:
-                    probs = fd_lookup.get((yd_b, yl_b, f"cc_{sc_coarse}", qt_coarse))
+                    probs = fd_lookup.get((yd_b, f"z_{yl_coarse}", sc_fine, qt_fine))
+                if probs is None:
+                    probs = fd_lookup.get((yd_b, f"zc_{yl_coarse}", f"zc_{sc_coarse}", qt_coarse))
                 if probs is None:
                     if y <= 35:
                         probs = (0.1, 0.1, 0.8)
@@ -856,6 +881,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             tbl_sack = pa_sack[d_p, di_p, zi_p]
             tbl_int = pa_int[d_p, di_p, zi_p]
             tbl_comp = pa_comp[d_p, di_p, zi_p]
+            tbl_succ = pa_succ[d_p, di_p, zi_p].copy()
 
             # Apply matchup via log5 ratio adjustment
             for ti in [0, 1]:
@@ -863,9 +889,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 if tm.any():
                     tbl_sack[tm] *= ctx[f"t{ti}_sack_rate"] / max(lb["pass_sack_rate"], 0.001)
                     tbl_int[tm] *= ctx[f"t{ti}_int_rate"] / max(lb["pass_int_rate"], 0.001)
+                    r_succ = ctx[f"t{ti}_pass_success"] / max(lb["pass_success"], 0.001)
+                    tbl_succ[tm] *= r_succ
             tbl_sack = np.clip(tbl_sack, 0, 0.4)
             tbl_int = np.clip(tbl_int, 0, 0.2)
             tbl_comp = np.clip(tbl_comp, 0.2, 0.95)
+            tbl_succ = np.clip(tbl_succ, 0.05, 0.95)
 
             # Each decision uses its own pre-drawn uniform (indexed by global sim)
             u1 = u_sack[g_idx]
@@ -900,15 +929,18 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             if len(m):
                                 yards[m] = np.interp(u5[m], xs101, pa_sack_yds[d_v, di_v, zi_v])
 
-            # Completion yards — unsplit empirical distribution (yds_all_q)
-            if completed.any():
-                idx = np.where(completed)[0]
-                for d_v in range(1, 5):
-                    for di_v in range(3):
-                        for zi_v in range(5):
-                            m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&(zi_p[idx]==zi_v)]
-                            if len(m):
-                                yards[m] = np.interp(u5[m], xs101, pa_yds_all[d_v, di_v, zi_v])
+            # Completion yards — success/fail split with matchup tilt
+            comp_succ = completed & (u4 < tbl_succ)
+            comp_fail = completed & ~comp_succ
+            for yds_mask, yds_tbl in [(comp_succ, pa_yds_succ), (comp_fail, pa_yds_fail)]:
+                if yds_mask.any():
+                    idx = np.where(yds_mask)[0]
+                    for d_v in range(1, 5):
+                        for di_v in range(3):
+                            for zi_v in range(5):
+                                m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&(zi_p[idx]==zi_v)]
+                                if len(m):
+                                    yards[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
 
             # --- Apply results to state (vectorised where possible) ---
             yds_int = np.round(yards).astype(int)
@@ -1056,24 +1088,36 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
             # Table lookup
             tbl_fum = ru_fum[d_r, di_r, zi_r].copy()
+            tbl_succ_r = ru_succ[d_r, di_r, zi_r].copy()
+
+            # Apply matchup tilt on rush success
+            for ti in [0, 1]:
+                tm = poss_r == ti
+                if tm.any():
+                    r_succ = ctx[f"t{ti}_rush_success"] / max(lb["rush_success"], 0.001)
+                    tbl_succ_r[tm] *= r_succ
+            tbl_succ_r = np.clip(tbl_succ_r, 0.05, 0.95)
 
             u1 = u_rfum[g_idx_r]
+            u2 = u_rsucc[g_idx_r]
             u5 = u_ryards[g_idx_r]
 
             fumbled = u1 < tbl_fum
             not_fum = ~fumbled
+            success_r = not_fum & (u2 < tbl_succ_r)
+            fail_r = not_fum & ~success_r
 
             xs101 = np.linspace(0, 1, 101)
             yards_r = np.zeros(n_r, dtype=np.float64)
-            # Rush yards — unsplit empirical distribution (yds_all_q)
-            if not_fum.any():
-                idx = np.where(not_fum)[0]
-                for d_v in range(1, 5):
-                    for di_v in range(3):
-                        for zi_v in range(5):
-                            m = idx[(d_r[idx]==d_v)&(di_r[idx]==di_v)&(zi_r[idx]==zi_v)]
-                            if len(m):
-                                yards_r[m] = np.interp(u5[m], xs101, ru_yds_all[d_v, di_v, zi_v])
+            for yds_mask, yds_tbl in [(success_r, ru_yds_succ), (fail_r, ru_yds_fail)]:
+                if yds_mask.any():
+                    idx = np.where(yds_mask)[0]
+                    for d_v in range(1, 5):
+                        for di_v in range(3):
+                            for zi_v in range(5):
+                                m = idx[(d_r[idx]==d_v)&(di_r[idx]==di_v)&(zi_r[idx]==zi_v)]
+                                if len(m):
+                                    yards_r[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
 
             yds_r = np.round(yards_r).astype(int)
             td_r = not_fum & (yl_r - yds_r <= 0) & (yds_r > 0)
@@ -1310,7 +1354,7 @@ def k1_report(all_sims, actuals):
     def pf(cond):
         return "PASS" if cond else "FAIL"
 
-    lines.append(f"| Mean pts/team | {sim_pts:.1f} | {act_pts:.1f} | ~22.4 | {pf(abs(sim_pts-act_pts)<3)} |")
+    lines.append(f"| Mean pts/team | {sim_pts:.1f} | {act_pts:.1f} | ±1.5 of actual | {pf(abs(sim_pts-act_pts)<1.5)} |")
 
     sim_ppg = game_means["sim_plays"].mean()
     lines.append(f"| Plays/game | {sim_ppg:.1f} | 124.5 | ~125 | {pf(abs(sim_ppg-124.5)<20)} |")

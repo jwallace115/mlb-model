@@ -317,8 +317,13 @@ def build_fourth_down_table(df):
 
     fourth["ydstogo_b"] = pd.cut(fourth["ydstogo"], bins=[0, 2, 5, 10, 100],
                                   labels=["1-2", "3-5", "6-10", "11+"], right=True)
-    fourth["yl_b"] = pd.cut(fourth["yardline_100"], bins=[0, 10, 40, 65, 100],
-                             labels=["rz", "opp40", "midfield", "own35"], right=True)
+    # 10-yard field-zone bins across the whole field
+    fourth["yl_b"] = pd.cut(fourth["yardline_100"],
+                             bins=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                             labels=["opp1-10", "opp11-20", "opp21-30", "opp31-40",
+                                     "opp41-50", "own41-50", "own31-40", "own21-30",
+                                     "own11-20", "own1-10"],
+                             right=True)
     fourth["score_b"] = _score_bucket_fine(fourth["score_differential"])
     # Use game_seconds_remaining for clock (Q4 seconds left in quarter)
     if "game_seconds_remaining" in fourth.columns:
@@ -335,54 +340,42 @@ def build_fourth_down_table(df):
     fourth.loc[fourth["play_type"] == "punt", "decision"] = "punt"
     fourth.loc[fourth["play_type"] == "field_goal", "decision"] = "fg"
 
-    # Also build coarse fallback tables
+    # Coarse fallback zones
     fourth["score_coarse"] = pd.cut(fourth["score_differential"],
                                      bins=[-100, -9, 8, 100],
                                      labels=["trail9", "within8", "lead9"])
     fourth["qtr_coarse"] = np.where(fourth["qtr"] <= 3, "Q1-3", "Q4")
+    fourth["yl_coarse"] = pd.cut(fourth["yardline_100"],
+                                  bins=[0, 10, 40, 65, 100],
+                                  labels=["rz", "opp40", "midfield", "own35"],
+                                  right=True)
 
-    # Fine-grained table
+    def _add_rows(rows, grp_cols, prefix=""):
+        for key, grp in fourth.groupby(grp_cols, observed=True):
+            n = len(grp)
+            if n < MIN_N:
+                continue
+            vc = grp["decision"].value_counts()
+            yd, yl, sc, qt = key
+            rows.append({
+                "ydstogo_b": yd,
+                "yl_b": f"{prefix}{yl}" if prefix else yl,
+                "score_b": f"{prefix}{sc}" if prefix else sc,
+                "qtr_b": qt, "n": n,
+                "p_go": vc.get("go", 0) / n,
+                "p_punt": vc.get("punt", 0) / n,
+                "p_fg": vc.get("fg", 0) / n,
+            })
+
     rows = []
-    for (yd, yl, sc, qt), grp in fourth.groupby(
-            ["ydstogo_b", "yl_b", "score_b", "qtr_b"], observed=True):
-        n = len(grp)
-        if n < MIN_N:
-            continue
-        vc = grp["decision"].value_counts()
-        rows.append({
-            "ydstogo_b": yd, "yl_b": yl, "score_b": sc, "qtr_b": qt, "n": n,
-            "p_go": vc.get("go", 0) / n,
-            "p_punt": vc.get("punt", 0) / n,
-            "p_fg": vc.get("fg", 0) / n,
-        })
-
-    # Coarse fallback (score) with fine clock
-    for (yd, yl, sc, qt), grp in fourth.groupby(
-            ["ydstogo_b", "yl_b", "score_coarse", "qtr_b"], observed=True):
-        n = len(grp)
-        if n < MIN_N:
-            continue
-        vc = grp["decision"].value_counts()
-        rows.append({
-            "ydstogo_b": yd, "yl_b": yl, "score_b": f"c_{sc}", "qtr_b": qt, "n": n,
-            "p_go": vc.get("go", 0) / n,
-            "p_punt": vc.get("punt", 0) / n,
-            "p_fg": vc.get("fg", 0) / n,
-        })
-
-    # Coarsest fallback (coarse score + coarse clock)
-    for (yd, yl, sc, qt), grp in fourth.groupby(
-            ["ydstogo_b", "yl_b", "score_coarse", "qtr_coarse"], observed=True):
-        n = len(grp)
-        if n < MIN_N:
-            continue
-        vc = grp["decision"].value_counts()
-        rows.append({
-            "ydstogo_b": yd, "yl_b": yl, "score_b": f"cc_{sc}", "qtr_b": qt, "n": n,
-            "p_go": vc.get("go", 0) / n,
-            "p_punt": vc.get("punt", 0) / n,
-            "p_fg": vc.get("fg", 0) / n,
-        })
+    # Level 0: finest (10-yd zone × 7 score × 4 clock)
+    _add_rows(rows, ["ydstogo_b", "yl_b", "score_b", "qtr_b"])
+    # Level 1: coarse score, fine zone + clock
+    _add_rows(rows, ["ydstogo_b", "yl_b", "score_coarse", "qtr_b"], prefix="c_")
+    # Level 2: coarse zone, fine score + clock
+    _add_rows(rows, ["ydstogo_b", "yl_coarse", "score_b", "qtr_b"], prefix="z_")
+    # Level 3: coarse zone + coarse score + coarse clock
+    _add_rows(rows, ["ydstogo_b", "yl_coarse", "score_coarse", "qtr_coarse"], prefix="zc_")
 
     return pd.DataFrame(rows)
 
