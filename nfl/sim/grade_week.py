@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-NFL Sim Phase 4B — Grade a week's picks_log against actual PBP results.
+NFL Sim Phase 4B-fix — Grade a week's picks_log against actual PBP results.
 
 Usage: python3 nfl/sim/grade_week.py --season 2026 --week 1 [--extra path.parquet ...]
+
+Never drops a leg silently. Every input row appears in grades.parquet with one of:
+  hit, miss, void, void-pending, unresolved.
 """
 
-import sys, argparse
+import sys, argparse, re
 from pathlib import Path
 
 import numpy as np
@@ -19,12 +22,24 @@ from nfl.sim.names import (load_roster, _build_roster_lookup, resolve_player,
                            FULL_TO_ABBR)
 
 OUT_BASE = ROOT / "nfl" / "data" / "sim" / "outputs"
-
 TEAM_MAP_INV = {v: k for k, v in FULL_TO_ABBR.items()}
+
+# Canonical picks_log columns (extras are passed through)
+_CANONICAL_COLS = [
+    "season", "week", "game_id", "home", "away", "player_id", "player_name",
+    "position", "family", "line", "side", "sim_p", "cal_p", "tier",
+    "book_price", "book_implied", "one_sided", "pull_batch", "pull_timestamp",
+    "board_generated_utc", "status",
+]
 
 
 def load_picks(season, week, extra_paths=None):
-    """Load picks_log.parquet for the week, plus any extra files."""
+    """Load picks_log.parquet for the week, plus any extra files.
+
+    Rows with player_id already set are NOT re-resolved.
+    Old-format files (with 'leg' column) are converted; unresolvable rows
+    are kept with grade='unresolved'.
+    """
     out_dir = OUT_BASE / f"week={season}_{week:02d}"
     frames = []
     main_path = out_dir / "picks_log.parquet"
@@ -43,21 +58,24 @@ def load_picks(season, week, extra_paths=None):
         raise FileNotFoundError(f"No picks_log for season={season} week={week}")
     picks = pd.concat(frames, ignore_index=True)
 
-    # Handle old MNF format: has 'leg' column like "Kelce rec O4.5" instead of
-    # player_id/family/line/side
+    # Handle old MNF format
     if "leg" in picks.columns and "player_id" not in picks.columns:
         picks = _convert_old_format(picks, season, week)
 
-    # Deduplicate: keep last occurrence per (player_id, family, line, side)
-    dedup_cols = [c for c in ["player_id", "family", "line", "side"] if c in picks.columns]
+    # Deduplicate: keep last occurrence per (player_id, family, line, side, ticket)
+    # Include ticket if present — same leg in different tickets should be kept
+    dedup_cols = [c for c in ["player_id", "family", "line", "side", "ticket"]
+                  if c in picks.columns]
+    if not dedup_cols:
+        dedup_cols = [c for c in ["player_id", "family", "line", "side"]
+                      if c in picks.columns]
     if dedup_cols:
         picks = picks.drop_duplicates(subset=dedup_cols, keep="last")
     return picks
 
 
 def _convert_old_format(df, season, week):
-    """Convert old MNF picks format to new schema."""
-    import re
+    """Convert old MNF picks format to new schema. Never drops rows."""
     roster = load_roster()
     by_team, by_fi, by_league = _build_roster_lookup(roster, season, week)
 
@@ -65,10 +83,27 @@ def _convert_old_format(df, season, week):
     for _, row in df.iterrows():
         leg_str = row.get("leg", "")
         game_str = row.get("game", "")
-        # Parse "Kelce rec O4.5" or "Worthy rec O3.5"
-        m = re.match(r'(.+?)\s+(rec|rush|anytime\s*TD)\s+O([\d.]+)', leg_str)
+        m = re.match(r'(.+?)\s+(rec|rush|anytime\s*TD)\s+O([\d.]+)', str(leg_str))
         if not m:
+            # Unparseable leg — keep as unresolved
+            rows.append({
+                "season": season, "week": week,
+                "game_id": game_str,
+                "home": "", "away": "",
+                "player_id": None,
+                "player_name": str(leg_str),
+                "position": "", "family": "unknown",
+                "line": 0, "side": "over",
+                "sim_p": None, "cal_p": row.get("calibrated_prob"),
+                "tier": "unknown", "book_price": row.get("book_price"),
+                "book_implied": None, "one_sided": True,
+                "pull_batch": None, "pull_timestamp": None,
+                "board_generated_utc": row.get("ts"),
+                "status": "unbet",
+                "_unresolved_reason": f"unparseable leg: {leg_str}",
+            })
             continue
+
         player_last = m.group(1).strip()
         prop_type = m.group(2).strip()
         line = float(m.group(3))
@@ -80,9 +115,8 @@ def _convert_old_format(df, season, week):
         elif "TD" in prop_type:
             family = "anytime_td"
         else:
-            continue
+            family = "unknown"
 
-        # Resolve player
         teams = game_str.split("@") if "@" in game_str else [game_str[:3], game_str[-2:]]
         pid, method = resolve_player(player_last, season, week, teams,
                                      by_team, by_fi, by_league)
@@ -94,19 +128,18 @@ def _convert_old_format(df, season, week):
             "away": teams[0] if len(teams) > 1 else "",
             "player_id": pid,
             "player_name": player_last,
-            "position": "WR",  # default, will be overridden if we can look up
+            "position": "WR",
             "family": family,
             "line": line, "side": "over",
-            "sim_p": None,
-            "cal_p": row.get("calibrated_prob"),
+            "sim_p": None, "cal_p": row.get("calibrated_prob"),
             "tier": row.get("trust", "see board"),
             "book_price": row.get("book_price"),
-            "book_implied": None,
-            "one_sided": True,
-            "pull_batch": None,
-            "pull_timestamp": None,
+            "book_implied": None, "one_sided": True,
+            "pull_batch": None, "pull_timestamp": None,
             "board_generated_utc": row.get("ts"),
             "status": "unbet",
+            "resolve_method": method,
+            "_unresolved_reason": None if pid else f"name not resolved: {player_last}",
         })
 
     return pd.DataFrame(rows)
@@ -126,15 +159,10 @@ def load_game_pbp(season):
 
 def find_game_id(game_str, season, pbp_games):
     """Map 'DEN@KC' style game_id to PBP game_id."""
-    if "@" not in game_str:
+    if not game_str or "@" not in str(game_str):
         return game_str
-    parts = game_str.split("@")
+    parts = str(game_str).split("@")
     away, home = parts[0], parts[1]
-    for gid in pbp_games:
-        if f"_{away}_" in gid or gid.endswith(f"_{away}"):
-            if f"_{home}" in gid:
-                return gid
-    # Also try matching the other way
     for gid in pbp_games:
         g = pbp_games[gid]
         if len(g) > 0:
@@ -145,11 +173,8 @@ def find_game_id(game_str, season, pbp_games):
     return None
 
 
-def grade_leg(row, rec_stats, rush_stats, td_stats):
-    """Grade a single leg against actual stats.
-
-    Returns: 'hit', 'miss', or 'void'.
-    """
+def grade_leg(row, rec_stats, rush_stats, td_stats, pass_stats):
+    """Grade a single leg against actual stats. Returns (grade, reason)."""
     pid = row["player_id"]
     family = row["family"]
     side = row["side"]
@@ -159,8 +184,7 @@ def grade_leg(row, rec_stats, rush_stats, td_stats):
         k = int(line + 0.5)
         ar = rec_stats[rec_stats["player_id"] == pid]
         if len(ar) == 0:
-            # Player not in passing plays — could be void
-            return "void"
+            return ("void", "player not in passing plays")
         actual = int(ar["actual_rec"].iloc[0])
         hit = actual >= k
 
@@ -184,16 +208,27 @@ def grade_leg(row, rec_stats, rush_stats, td_stats):
 
     elif family == "anytime_td":
         ar = td_stats[td_stats["player_id"] == pid]
-        actual = 1 if len(ar) > 0 else 0
-        hit = actual >= 1
+        hit = len(ar) > 0
+
+    elif family == "pass_completions":
+        k = int(line + 0.5)
+        ar = pass_stats[pass_stats["player_id"] == pid]
+        actual = int(ar["actual_completions"].iloc[0]) if len(ar) else 0
+        hit = actual >= k
+
+    elif family == "pass_attempts":
+        k = int(line + 0.5)
+        ar = pass_stats[pass_stats["player_id"] == pid]
+        actual = int(ar["actual_pass_att"].iloc[0]) if len(ar) else 0
+        hit = actual >= k
 
     else:
-        return "void"
+        return ("void", f"unknown family: {family}")
 
     if side == "under":
         hit = not hit
 
-    return "hit" if hit else "miss"
+    return ("hit" if hit else "miss", None)
 
 
 def grade_week(season, week, extra_paths=None):
@@ -203,33 +238,53 @@ def grade_week(season, week, extra_paths=None):
     pbp_games = load_game_pbp(season)
     print(f"PBP games available: {len(pbp_games)}")
 
-    # Grade each leg
-    results = []
+    grades = []
+    reasons = []
     actuals_cache = {}
 
     for _, row in picks.iterrows():
+        # Check for unresolved player_id
+        pid = row.get("player_id")
+        if pid is None or (isinstance(pid, float) and np.isnan(pid)):
+            reason = row.get("_unresolved_reason", "player_id is null")
+            grades.append("unresolved")
+            reasons.append(str(reason))
+            continue
+
         game_str = row.get("game_id", row.get("game", ""))
         pbp_gid = find_game_id(game_str, season, pbp_games)
 
         if pbp_gid is None or pbp_gid not in pbp_games:
-            results.append("void-pending")
+            grades.append("void-pending")
+            reasons.append("game not in PBP")
             continue
 
         if pbp_gid not in actuals_cache:
             game_pbp = pbp_games[pbp_gid]
             rec, rush, td = actual_player_stats(game_pbp)
-            actuals_cache[pbp_gid] = (rec, rush, td)
+            # Pass stats
+            passes = game_pbp[(game_pbp["play_type"] == "pass") &
+                              game_pbp["down"].notna() &
+                              (game_pbp["sack"] != 1)]
+            if len(passes) > 0 and "passer_player_id" in passes.columns:
+                pass_stats = passes[passes["passer_player_id"].notna()].groupby(
+                    "passer_player_id").agg(
+                    actual_completions=("complete_pass", "sum"),
+                    actual_pass_att=("play_id", "count"),
+                ).reset_index().rename(columns={"passer_player_id": "player_id"})
+            else:
+                pass_stats = pd.DataFrame(columns=["player_id", "actual_completions", "actual_pass_att"])
+            actuals_cache[pbp_gid] = (rec, rush, td, pass_stats)
         else:
-            rec, rush, td = actuals_cache[pbp_gid]
+            rec, rush, td, pass_stats = actuals_cache[pbp_gid]
 
-        # Check if player had any snaps (if not in any stat, void)
-        pid = row["player_id"]
+        # Check if player appears in game at all
         in_game = (len(rec[rec["player_id"] == pid]) > 0 or
                    len(rush[rush["player_id"] == pid]) > 0 or
-                   len(td[td["player_id"] == pid]) > 0)
+                   len(td[td["player_id"] == pid]) > 0 or
+                   len(pass_stats[pass_stats["player_id"] == pid]) > 0)
 
         if not in_game:
-            # Check if player appears in any PBP columns at all
             game_pbp = pbp_games[pbp_gid]
             has_plays = False
             for col in ["receiver_player_id", "rusher_player_id", "passer_player_id"]:
@@ -238,13 +293,16 @@ def grade_week(season, week, extra_paths=None):
                         has_plays = True
                         break
             if not has_plays:
-                results.append("void")
+                grades.append("void")
+                reasons.append("player not in game PBP")
                 continue
 
-        grade = grade_leg(row, rec, rush, td)
-        results.append(grade)
+        g, reason = grade_leg(row, rec, rush, td, pass_stats)
+        grades.append(g)
+        reasons.append(reason)
 
-    picks["grade"] = results
+    picks["grade"] = grades
+    picks["grade_reason"] = reasons
     return picks
 
 
@@ -253,7 +311,9 @@ def write_report(picks, season, week):
     out_dir = OUT_BASE / f"week={season}_{week:02d}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    picks.to_parquet(out_dir / "grades.parquet", index=False)
+    # Drop internal columns before saving
+    save_cols = [c for c in picks.columns if not c.startswith("_")]
+    picks[save_cols].to_parquet(out_dir / "grades.parquet", index=False)
 
     graded = picks[picks["grade"].isin(["hit", "miss"])]
     lines = []
@@ -261,8 +321,15 @@ def write_report(picks, season, week):
     lines.append(f"\nTotal legs: {len(picks)}")
     lines.append(f"Graded: {len(graded)} (hit: {(graded['grade']=='hit').sum()}, "
                  f"miss: {(graded['grade']=='miss').sum()})")
-    lines.append(f"Void: {(picks['grade']=='void').sum()}")
-    lines.append(f"Void-pending (game not in PBP): {(picks['grade']=='void-pending').sum()}")
+    n_void = (picks['grade'] == 'void').sum()
+    n_pending = (picks['grade'] == 'void-pending').sum()
+    n_unresolved = (picks['grade'] == 'unresolved').sum()
+    lines.append(f"Void: {n_void}")
+    lines.append(f"Void-pending (game not in PBP): {n_pending}")
+    lines.append(f"Unresolved (player_id missing): {n_unresolved}")
+    if n_unresolved > 0:
+        for _, r in picks[picks['grade'] == 'unresolved'].iterrows():
+            lines.append(f"  - {r.get('player_name','?')}: {r.get('grade_reason','?')}")
     lines.append("")
     lines.append("**One week cannot validate anything -- this is a log, not evidence.**")
     lines.append("")
@@ -274,7 +341,7 @@ def write_report(picks, season, week):
             f.write(report)
         return report
 
-    # Hit rate and Brier by family x position
+    # By family x position
     lines.append("## By family x position")
     lines.append("")
     lines.append("| Family | Position | N | Hit rate | Brier |")
@@ -282,7 +349,7 @@ def write_report(picks, season, week):
     for (fam, pos), g in graded.groupby(["family", "position"]):
         hr = (g["grade"] == "hit").mean()
         hit_int = (g["grade"] == "hit").astype(int)
-        cal_p = g["cal_p"].values
+        cal_p = pd.to_numeric(g["cal_p"], errors="coerce").fillna(0.5).values
         brier = ((cal_p - hit_int.values) ** 2).mean()
         lines.append(f"| {fam:20s} | {pos:4s} | {len(g):4d} | {hr:.3f} | {brier:.3f} |")
 
@@ -292,28 +359,31 @@ def write_report(picks, season, week):
     lines.append("")
     lines.append("| Bin | N | Hit rate | Mean cal_p | Brier |")
     lines.append("|-----|---|----------|------------|-------|")
-    bins = [(0.5, 0.6), (0.6, 0.7), (0.7, 0.8), (0.8, 1.0)]
-    for lo, hi in bins:
-        g = graded[(graded["cal_p"] >= lo) & (graded["cal_p"] < hi)]
+    cal_p_num = pd.to_numeric(graded["cal_p"], errors="coerce")
+    for lo, hi in [(0.5, 0.6), (0.6, 0.7), (0.7, 0.8), (0.8, 1.0)]:
+        mask = (cal_p_num >= lo) & (cal_p_num < hi)
+        g = graded[mask]
         if len(g) == 0:
             continue
         hr = (g["grade"] == "hit").mean()
         hit_int = (g["grade"] == "hit").astype(int)
-        brier = ((g["cal_p"].values - hit_int.values) ** 2).mean()
-        lines.append(f"| {lo:.1f}-{hi:.1f} | {len(g):4d} | {hr:.3f} | {g['cal_p'].mean():.3f} | {brier:.3f} |")
+        cp = cal_p_num[mask].values
+        brier = ((cp - hit_int.values) ** 2).mean()
+        lines.append(f"| {lo:.1f}-{hi:.1f} | {len(g):4d} | {hr:.3f} | {cp.mean():.3f} | {brier:.3f} |")
 
     # By tier
-    lines.append("")
-    lines.append("## By tier")
-    lines.append("")
-    lines.append("| Tier | N | Hit rate |")
-    lines.append("|------|---|----------|")
-    for tier in sorted(graded["tier"].unique()):
-        g = graded[graded["tier"] == tier]
-        hr = (g["grade"] == "hit").mean()
-        lines.append(f"| {tier:40s} | {len(g):4d} | {hr:.3f} |")
+    if "tier" in graded.columns:
+        lines.append("")
+        lines.append("## By tier")
+        lines.append("")
+        lines.append("| Tier | N | Hit rate |")
+        lines.append("|------|---|----------|")
+        for tier in sorted(graded["tier"].dropna().unique()):
+            g = graded[graded["tier"] == tier]
+            hr = (g["grade"] == "hit").mean()
+            lines.append(f"| {str(tier):40s} | {len(g):4d} | {hr:.3f} |")
 
-    # CLV (if closing pull exists)
+    # CLV
     if "book_implied" in graded.columns:
         priced = graded[graded["book_implied"].notna()]
         if len(priced) > 0:
@@ -324,11 +394,28 @@ def write_report(picks, season, week):
             lines.append("|--------|---|---------------------------------|")
             for fam in sorted(priced["family"].unique()):
                 g = priced[priced["family"] == fam]
-                clv = (g["cal_p"] - g["book_implied"]).mean()
+                clv = (pd.to_numeric(g["cal_p"], errors="coerce") -
+                       pd.to_numeric(g["book_implied"], errors="coerce")).mean()
                 lines.append(f"| {fam:20s} | {len(g):4d} | {clv:+.4f} |")
 
+    # By ticket
+    if "ticket" in picks.columns and picks["ticket"].notna().any():
+        lines.append("")
+        lines.append("## By ticket")
+        lines.append("")
+        ticket_picks = picks[picks["ticket"].notna() & picks["grade"].isin(["hit", "miss"])]
+        if len(ticket_picks) > 0:
+            lines.append("| Ticket | Legs | Hits | Misses | All hit? |")
+            lines.append("|--------|------|------|--------|----------|")
+            for ticket, tg in ticket_picks.groupby("ticket"):
+                hits = (tg["grade"] == "hit").sum()
+                misses = (tg["grade"] == "miss").sum()
+                all_hit = "YES" if misses == 0 else "NO"
+                lines.append(f"| {str(ticket):20s} | {len(tg):4d} | {hits:4d} | {misses:4d} | {all_hit:8s} |")
+
     lines.append("")
-    lines.append(f"Sample size: {len(graded)} graded legs from {len(graded['game_id'].unique())} games.")
+    lines.append(f"Sample size: {len(graded)} graded legs from "
+                 f"{len(graded['game_id'].unique())} games.")
     lines.append("One week cannot validate anything.")
 
     report = "\n".join(lines)

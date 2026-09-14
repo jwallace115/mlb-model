@@ -76,12 +76,14 @@ player_id resolution:
 
 ### Anytime TD calibration note
 
-The `actual_atd = 0` simplification in the original calibration code means ATD calibration
-maps were fitted against always-zero actuals. The ATD maps are structurally wrong.
-This does not affect the board because ATD tier assignments are based on reliability
-(decile pass rate), not K4 ROI. The wrong ATD maps produce conservative (lower)
-calibrated probabilities, which is the safe direction. Fixing requires re-running
-the full anchored backtest with correct TD grading -- deferred to a future phase.
+The `actual_atd = 0` shortcut lived only in calibration.py's `_score_player_props` path,
+which is called from `fit_calibration_maps`. The ATD calibration maps in calibration_v1.json
+were NOT fitted from that path — they were fitted from `run_cal_players.py`'s output
+(`cal_players_props_*.parquet`), where `actual_atd` was graded correctly from PBP
+(`touchdown == 1` on rusher/receiver columns). Verified: 2024 mean actual_atd = 0.242
+(791/3264 nonzero), mean p_atd = 0.234 — the maps are valid. The shortcut in
+`_score_player_props` has been fixed to use `actual_player_stats()` td_stats (Phase 4B-fix).
+WR anytime TD remains TRUSTED.
 
 ## 3. Board Changes (Phase 4B)
 

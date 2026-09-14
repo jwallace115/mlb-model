@@ -356,7 +356,8 @@ def _score_player_props(pdf, game_result, prop_data):
         arush = rush_stats[rush_stats["player_id"] == pid]
         actual_rushy = int(arush["actual_rush_yds"].iloc[0]) if len(arush) else 0
 
-        actual_atd = 0  # simplified — matches original behavior
+        atd_row = td_stats[td_stats["player_id"] == pid]
+        actual_atd = 1 if len(atd_row) > 0 else 0
 
         for k in [3, 5, 7]:
             p = (stats["receptions"] >= k).mean()

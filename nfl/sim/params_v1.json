@@ -8,7 +8,7 @@
   "k_tendency": 200,
   "tuned_on": "2021-2024",
   "holdout": "2025",
-  "built_at_parent_commit": "7830c0eb421462943951fb285515f355c65503be",
+  "built_at_parent_commit": "47589330984c4957e8239c6155fc15e802a1cb78",
   "grid_results": [
     {
       "half_life": Infinity,
@@ -370,122 +370,5 @@
       "rmse_pass": 0.3128998444259676,
       "rmse_rush": 0.21183384133068014
     }
-  ],
-  "usage": {
-    "share_half_life": 4,
-    "k_share": 20,
-    "extended_grid": false,
-    "boundary": "BOUNDARY",
-    "formula": "n_eff=team_opp_while_active, prior=own_s-1_share_if_50+opp_else_(pos,depth)_league_mean",
-    "grid_results": [
-      {
-        "share_half_life": 4,
-        "k_share": 20,
-        "mean_rmse": 0.1444308284632119,
-        "rmse_target": 0.08561489888404981,
-        "rmse_carry": 0.20324675804237397,
-        "rmse_wk1_4": 0.08423834876687361,
-        "rmse_wk5_18": 0.08599959525969922
-      },
-      {
-        "share_half_life": 8,
-        "k_share": 20,
-        "mean_rmse": 0.14456278574989742,
-        "rmse_target": 0.08561484667938828,
-        "rmse_carry": 0.20351072482040655,
-        "rmse_wk1_4": 0.08428247769824854,
-        "rmse_wk5_18": 0.08598731939358348
-      },
-      {
-        "share_half_life": 2,
-        "k_share": 20,
-        "mean_rmse": 0.1453289978156359,
-        "rmse_target": 0.08600450981600977,
-        "rmse_carry": 0.20465348581526202,
-        "rmse_wk1_4": 0.0841984515093986,
-        "rmse_wk5_18": 0.08650764577048847
-      },
-      {
-        "share_half_life": Infinity,
-        "k_share": 20,
-        "mean_rmse": 0.14536774580723852,
-        "rmse_target": 0.08588172303404933,
-        "rmse_carry": 0.2048537685804277,
-        "rmse_wk1_4": 0.08434481261431999,
-        "rmse_wk5_18": 0.08631073348331073
-      },
-      {
-        "share_half_life": Infinity,
-        "k_share": 50,
-        "mean_rmse": 0.14730282283155557,
-        "rmse_target": 0.0857040804168132,
-        "rmse_carry": 0.20890156524629797,
-        "rmse_wk1_4": 0.08382571224819711,
-        "rmse_wk5_18": 0.08622705237499784
-      },
-      {
-        "share_half_life": 8,
-        "k_share": 50,
-        "mean_rmse": 0.1475425598081145,
-        "rmse_target": 0.08564685926933292,
-        "rmse_carry": 0.2094382603468961,
-        "rmse_wk1_4": 0.08381849385682441,
-        "rmse_wk5_18": 0.08615609569952404
-      },
-      {
-        "share_half_life": 4,
-        "k_share": 50,
-        "mean_rmse": 0.14849101041118404,
-        "rmse_target": 0.08586495770084349,
-        "rmse_carry": 0.2111170631215246,
-        "rmse_wk1_4": 0.08382463276580424,
-        "rmse_wk5_18": 0.08643234842002444
-      },
-      {
-        "share_half_life": Infinity,
-        "k_share": 100,
-        "mean_rmse": 0.15091670691347314,
-        "rmse_target": 0.08622689390012572,
-        "rmse_carry": 0.21560651992682053,
-        "rmse_wk1_4": 0.0845640628875252,
-        "rmse_wk5_18": 0.08669063985115015
-      },
-      {
-        "share_half_life": 2,
-        "k_share": 50,
-        "mean_rmse": 0.15100179211745293,
-        "rmse_target": 0.08658551275767605,
-        "rmse_carry": 0.2154180714772298,
-        "rmse_wk1_4": 0.08386852500040148,
-        "rmse_wk5_18": 0.08733738558048096
-      },
-      {
-        "share_half_life": 8,
-        "k_share": 100,
-        "mean_rmse": 0.1524371770000511,
-        "rmse_target": 0.0865447062125608,
-        "rmse_carry": 0.21832964778754144,
-        "rmse_wk1_4": 0.08461988984279245,
-        "rmse_wk5_18": 0.08708049873462735
-      },
-      {
-        "share_half_life": 4,
-        "k_share": 100,
-        "mean_rmse": 0.15441067725565938,
-        "rmse_target": 0.08709514027822886,
-        "rmse_carry": 0.22172621423308989,
-        "rmse_wk1_4": 0.08468127426158667,
-        "rmse_wk5_18": 0.08776470533384967
-      },
-      {
-        "share_half_life": 2,
-        "k_share": 100,
-        "mean_rmse": 0.1579741493606106,
-        "rmse_target": 0.08822330023458698,
-        "rmse_carry": 0.22772499848663422,
-        "rmse_wk1_4": 0.08481311886720894,
-        "rmse_wk5_18": 0.08916259540089944
-      }
-    ]
-  }
+  ]
 }

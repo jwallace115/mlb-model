@@ -1,0 +1,41 @@
+Detected upcoming week: 2
+Completed games: 15
+Lines available: 17 games
+  CAR@ATL: spread +1.0, total 44.0 (hardrockbet_fl)
+  CIN@HOU: spread -3.0, total 46.5 (hardrockbet_fl)
+  CLE@TB: spread -8.5, total 41.0 (hardrockbet_fl)
+  DEN@KC: spread -2.5, total 43.5 (hardrockbet_fl)
+  DET@BUF: spread -4.0, total 53.5 (hardrockbet_fl)
+  GB@NYJ: spread +4.0, total 44.0 (hardrockbet_fl)
+  IND@KC: spread -6.0, total 48.0 (hardrockbet_fl)
+  JAX@DEN: spread -2.5, total 44.5 (hardrockbet_fl)
+  LV@LAC: spread -7.0, total 43.5 (hardrockbet_fl)
+  MIA@SF: spread -13.0, total 45.5 (hardrockbet_fl)
+  MIN@CHI: spread -5.5, total 49.0 (hardrockbet_fl)
+  NO@BAL: spread -8.0, total 47.0 (hardrockbet_fl)
+  NYG@LA: spread -7.0, total 48.0 (hardrockbet_fl)
+  PHI@TEN: spread +7.0, total 39.5 (hardrockbet_fl)
+  PIT@NE: spread -5.5, total 42.0 (hardrockbet_fl)
+  SEA@ARI: spread +4.5, total 41.0 (hardrockbet_fl)
+  WAS@DAL: spread -3.5, total 50.5 (hardrockbet_fl)
+  Simulating CAR@ATL... 12.5s, 5 iter, margin 3.8 vs +1.0 [NOT CONVERGED]
+  Simulating CIN@HOU... 12.5s, 5 iter, margin -3.0 vs -3.0 [NOT CONVERGED]
+  Simulating CLE@TB... 12.9s, 5 iter, margin -6.8 vs -8.5 [NOT CONVERGED]
+  Simulating DEN@KC... 13.0s, 5 iter, margin -2.8 vs -2.5 [NOT CONVERGED]
+  Simulating DET@BUF... 12.5s, 5 iter, margin -5.7 vs -4.0 [NOT CONVERGED]
+  Simulating GB@NYJ... 12.1s, 5 iter, margin 1.6 vs +4.0 [NOT CONVERGED]
+  Simulating IND@KC... 12.3s, 5 iter, margin -11.8 vs -6.0 [NOT CONVERGED]
+  Simulating JAX@DEN... 12.5s, 5 iter, margin 0.3 vs -2.5 [NOT CONVERGED]
+  Simulating LV@LAC... 12.2s, 5 iter, margin -6.2 vs -7.0 [NOT CONVERGED]
+  Simulating MIA@SF... 11.5s, 5 iter, margin -10.1 vs -13.0 [NOT CONVERGED]
+  Simulating MIN@CHI... 12.4s, 5 iter, margin 1.4 vs -5.5 [NOT CONVERGED]
+  Simulating NO@BAL... 12.3s, 5 iter, margin -8.7 vs -8.0 [NOT CONVERGED]
+  Simulating NYG@LA... 11.4s, 5 iter, margin -5.5 vs -7.0 [NOT CONVERGED]
+  Simulating PHI@TEN... 12.1s, 5 iter, margin 4.2 vs +7.0 [NOT CONVERGED]
+  Simulating PIT@NE... 11.5s, 5 iter, margin -5.0 vs -5.5
+  Simulating SEA@ARI... 12.1s, 5 iter, margin 3.6 vs +4.5 [NOT CONVERGED]
+  Simulating WAS@DAL... 12.7s, 5 iter, margin -9.2 vs -3.5 [NOT CONVERGED]
+Board written to /Users/jw115/mlb-model/nfl/data/sim/outputs/week=2026_02/parlay_board.md
+
+Total runtime: 209s (3.5 min)
+Games simulated: 17

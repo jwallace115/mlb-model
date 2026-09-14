@@ -122,70 +122,108 @@ def count_team_completed_games(season):
     return counts
 
 
-def run_chunked_game(home, away, season, week, spread, total, n_sims,
-                     chunk_size=2000, **kw):
-    """Run anchored sims in chunks, pooling results.
+def _run_chunks(home, away, season, week, chunk_size, n_chunks, base_seed,
+                dh, da, **kw):
+    """Run n_chunks simulations and pool results."""
+    all_td = []
+    all_pdf = []
+    for ci in range(n_chunks):
+        seed = (base_seed + ci * 7919) % (2**31)
+        result = simulate_game(
+            home, away, season, week, n_sims=chunk_size, seed=seed,
+            epa_home_offset=dh, epa_away_offset=da, **kw)
+        if isinstance(result, tuple):
+            td, pdf = result
+        else:
+            td, pdf = result, None
+        if pdf is not None and ci > 0:
+            pdf = pdf.copy()
+            pdf["sim_id"] = pdf["sim_id"] + ci * chunk_size
+        td = td.copy()
+        td["sim_id"] = td.index + ci * chunk_size
+        all_td.append(td)
+        if pdf is not None:
+            all_pdf.append(pdf)
+        del result
+    pooled_td = pd.concat(all_td, ignore_index=True)
+    pooled_pdf = pd.concat(all_pdf, ignore_index=True) if all_pdf else None
+    del all_td, all_pdf
+    margin = (pooled_td["home_score"] - pooled_td["away_score"]).values.astype(float)
+    total_arr = (pooled_td["home_score"] + pooled_td["away_score"]).values.astype(float)
+    return pooled_td, pooled_pdf, margin.mean(), total_arr.mean(), \
+           margin.std() / np.sqrt(len(margin)), total_arr.std() / np.sqrt(len(total_arr))
 
-    Chunks of chunk_size with distinct seeds. Anchoring iterates on the full
-    pooled sample. Convergence: |market - mean| < 2*SE on both margin and total.
+
+def run_chunked_game(home, away, season, week, spread, total, n_sims,
+                     chunk_size=2000, anchoring_log=None, **kw):
+    """Run anchored sims in chunks with damped Newton.
+
+    Fixed J_INV (from calibration) with step-size damping. Steps whose
+    predicted move exceeds 6 pts of margin or total are halved.
+    Up to 8 iterations; convergence at |market - mean| < 2*SE on both.
+    Common random numbers: same seed set across all iterations.
     """
     base_seed = hash((home, away, season, week, 42)) % (2**31)
     n_chunks = max(1, n_sims // chunk_size)
-    actual_n = n_chunks * chunk_size
+    game_key = f"{away}@{home}"
+    # J matrix for damping prediction
+    J_FWD = np.array([[6.88, -5.48], [4.79, 4.01]])
 
     dh, da = 0.0, 0.0
     raw_m = raw_t = None
+    best_err = float("inf")
+    best_state = None
 
-    for it in range(5):
-        all_td = []
-        all_pdf = []
-        for ci in range(n_chunks):
-            seed = (base_seed + ci * 7919) % (2**31)
-            result = simulate_game(
-                home, away, season, week, n_sims=chunk_size, seed=seed,
-                epa_home_offset=dh, epa_away_offset=da, **kw)
-            if isinstance(result, tuple):
-                td, pdf = result
-            else:
-                td, pdf = result, None
-            # Offset sim_id for player_df
-            if pdf is not None and ci > 0:
-                pdf = pdf.copy()
-                pdf["sim_id"] = pdf["sim_id"] + ci * chunk_size
-            td = td.copy()
-            td["sim_id"] = td.index + ci * chunk_size
-            all_td.append(td)
-            if pdf is not None:
-                all_pdf.append(pdf)
-            del result
-
-        pooled_td = pd.concat(all_td, ignore_index=True)
-        pooled_pdf = pd.concat(all_pdf, ignore_index=True) if all_pdf else None
-        del all_td, all_pdf
-
-        margin = (pooled_td["home_score"] - pooled_td["away_score"]).values.astype(float)
-        total_arr = (pooled_td["home_score"] + pooled_td["away_score"]).values.astype(float)
-        m = margin.mean()
-        t = total_arr.mean()
-        se_m = margin.std() / np.sqrt(actual_n)
-        se_t = total_arr.std() / np.sqrt(actual_n)
+    for it in range(8):
+        pooled_td, pooled_pdf, m, t, se_m, se_t = _run_chunks(
+            home, away, season, week, chunk_size, n_chunks, base_seed,
+            dh, da, **kw)
         if it == 0:
             raw_m, raw_t = m, t
         me = spread - m
         te = total - t
-        # No floors — at N=10k the floors are above the noise
-        thr_m = 2 * se_m
-        thr_t = 2 * se_t
-        if abs(me) < thr_m and abs(te) < thr_t:
+        err_norm = abs(me) + abs(te)
+
+        if anchoring_log is not None:
+            anchoring_log.append({
+                "game": game_key, "iter": it, "dh": dh, "da": da,
+                "margin": m, "total": t, "se_m": se_m, "se_t": se_t,
+                "err_m": me, "err_t": te,
+                "converged": abs(me) < 2 * se_m and abs(te) < 2 * se_t,
+            })
+
+        # Track best iteration
+        if err_norm < best_err:
+            best_err = err_norm
+            best_state = (pooled_td, pooled_pdf, dh, da, it + 1, m, t)
+
+        if abs(me) < 2 * se_m and abs(te) < 2 * se_t:
             return pooled_td, pooled_pdf, dh, da, it + 1, True, raw_m, raw_t, m, t
-        step = J_INV @ np.array([me, te])
+
+        err = np.array([me, te])
+        step = J_INV @ err
+
+        # Relaxation: 0.7x to prevent oscillation from Jacobian mismatch
+        step = step * 0.7
+
+        # Damp: halve step until predicted move is within 6 pts on each channel
+        for _ in range(5):
+            pred = J_FWD @ step
+            if abs(pred[0]) <= 6 and abs(pred[1]) <= 6:
+                break
+            step = step * 0.5
+
         dh += step[0]
         da += step[1]
-        if it < 4:
+        if it < 7:
             del pooled_td, pooled_pdf
             gc.collect()
 
-    return pooled_td, pooled_pdf, dh, da, 5, False, raw_m, raw_t, m, t
+    # Return best iteration if final is worse
+    b_td, b_pdf, b_dh, b_da, b_it, b_m, b_t = best_state
+    if abs(spread - b_m) + abs(total - b_t) < err_norm:
+        return b_td, b_pdf, b_dh, b_da, b_it, False, raw_m, raw_t, b_m, b_t
+    return pooled_td, pooled_pdf, dh, da, 8, False, raw_m, raw_t, m, t
 
 
 def load_props_for_game(home_full, away_full, season, week):
@@ -584,6 +622,7 @@ def main():
 
     # Run anchored sims
     N_SIMS = args.n_sims
+    anchoring_log = []
     print(f"\nSimulating {len(lines)} games at N={N_SIMS} (chunks of 2000)...")
     game_results = []
     converged_count = 0
@@ -592,7 +631,8 @@ def main():
         print(f"  Simulating {away}@{home}...", end="", flush=True)
         st = time.time()
         td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = run_chunked_game(
-            home, away, SEASON, week, ln["spread"], ln["total"], N_SIMS, **kw)
+            home, away, SEASON, week, ln["spread"], ln["total"], N_SIMS,
+            anchoring_log=anchoring_log, **kw)
         dt = time.time() - st
         if conv:
             converged_count += 1
@@ -605,6 +645,29 @@ def main():
             "raw_m": raw_m, "raw_t": raw_t, "anch_m": anch_m, "anch_t": anch_t,
         })
         gc.collect()
+
+    # Write anchoring log
+    out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if anchoring_log:
+        alog_df = pd.DataFrame(anchoring_log)
+        alog_df.to_parquet(out_dir / "anchoring_log.parquet", index=False)
+        # Print per-game summary: show the BEST iteration (min |err_m|+|err_t|)
+        print(f"\n{'Game':16s} {'Iter':>4s} {'err_m':>6s} {'err_t':>6s} {'|m|<.5':>6s} {'|t|<1':>5s} {'2SE':>4s}")
+        print("-" * 56)
+        n_m05 = n_t10 = n_2se = 0
+        for game, gdf in alog_df.groupby("game"):
+            best_idx = (gdf['err_m'].abs() + gdf['err_t'].abs()).idxmin()
+            r = gdf.loc[best_idx]
+            m_ok = abs(r['err_m']) < 0.5
+            t_ok = abs(r['err_t']) < 1.0
+            se_ok = r['converged']
+            n_m05 += m_ok; n_t10 += t_ok; n_2se += se_ok
+            print(f"{game:16s} {int(r['iter'])+1:4d} {r['err_m']:+6.2f} {r['err_t']:+6.2f} "
+                  f"{'Y' if m_ok else 'N':>6s} {'Y' if t_ok else 'N':>5s} "
+                  f"{'Y' if se_ok else 'N':>4s}")
+        n_games = alog_df["game"].nunique()
+        print(f"{'TOTAL':16s}      {n_m05:6d} {n_t10:5d} {n_2se:4d} / {n_games}")
 
     # Build board
     board_text, all_legs = build_board(week, game_results, lines, team_game_counts,
