@@ -71,6 +71,9 @@ def build_pass_table(df):
         n = len(grp)
         if n < 20:
             continue
+        # Fumble lost (on any pass play — sack-fumbles, catch-fumbles, etc.)
+        p_fumble = grp["fumble_lost"].sum() / n if "fumble_lost" in grp.columns else 0.008
+
         # Sack
         sacks = grp[grp["sack"] == 1]
         p_sack = len(sacks) / n
@@ -124,6 +127,7 @@ def build_pass_table(df):
 
         rows.append({
             "down": down, "dist": dist, "zone": zone, "n": n,
+            "p_fumble": p_fumble,
             "p_sack": p_sack,
             "sack_yds_q": sack_yds_q.tolist(),
             "p_int": p_int,
