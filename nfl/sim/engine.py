@@ -126,9 +126,7 @@ def _build_pass_arrays():
     sack_yds_q = np.full(shape + (101,), -5.0)
     p_int = np.full(shape, 0.02)
     p_comp = np.full(shape, 0.65)
-    p_succ = np.full(shape, 0.50)  # P(success | completion), for matchup tilt
-    yds_succ_q = np.full(shape + (101,), 12.0)
-    yds_fail_q = np.full(shape + (101,), 3.0)
+    yds_all_q = np.full(shape + (101,), 8.0)
 
     for _, r in tbl.iterrows():
         d = int(r["down"])
@@ -141,11 +139,9 @@ def _build_pass_arrays():
         sack_yds_q[d, di, zi] = np.array(r["sack_yds_q"])
         p_int[d, di, zi] = r["p_int"]
         p_comp[d, di, zi] = r["p_comp"]
-        p_succ[d, di, zi] = r["p_success_given_comp"]
-        yds_succ_q[d, di, zi] = np.array(r["yds_success_q"])
-        yds_fail_q[d, di, zi] = np.array(r["yds_fail_q"])
+        yds_all_q[d, di, zi] = np.array(r["yds_all_q"])
 
-    return p_fumble, p_sack, sack_yds_q, p_int, p_comp, p_succ, yds_succ_q, yds_fail_q
+    return p_fumble, p_sack, sack_yds_q, p_int, p_comp, yds_all_q
 
 
 def _build_rush_arrays():
@@ -155,9 +151,7 @@ def _build_rush_arrays():
 
     shape = (5, 3, 5)
     p_fum = np.full(shape, 0.01)
-    p_succ = np.full(shape, 0.43)
-    yds_succ_q = np.full(shape + (101,), 5.0)
-    yds_fail_q = np.full(shape + (101,), 1.0)
+    yds_all_q = np.full(shape + (101,), 3.0)
 
     for _, r in tbl.iterrows():
         d = int(r["down"])
@@ -166,11 +160,9 @@ def _build_rush_arrays():
         if di is None or zi is None:
             continue
         p_fum[d, di, zi] = r["p_fumble"]
-        p_succ[d, di, zi] = r["p_success"]
-        yds_succ_q[d, di, zi] = np.array(r["yds_success_q"])
-        yds_fail_q[d, di, zi] = np.array(r["yds_fail_q"])
+        yds_all_q[d, di, zi] = np.array(r["yds_all_q"])
 
-    return p_fum, p_succ, yds_succ_q, yds_fail_q
+    return p_fum, yds_all_q
 
 
 def _build_clock_arrays():
@@ -331,9 +323,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ctx = _build_game_context(home, away, season, week, team_r, tend, sit, kicker, league)
 
     # Build lookup arrays
-    (pa_fumble, pa_sack, pa_sack_yds, pa_int, pa_comp, pa_succ,
-     pa_yds_succ, pa_yds_fail) = _build_pass_arrays()
-    (ru_fum, ru_succ, ru_yds_succ, ru_yds_fail) = _build_rush_arrays()
+    (pa_fumble, pa_sack, pa_sack_yds, pa_int, pa_comp,
+     pa_yds_all) = _build_pass_arrays()
+    (ru_fum, ru_yds_all) = _build_rush_arrays()
     clock_q = _build_clock_arrays()
     fd_lookup = _build_4th_down_lookup()
     fg_lookup = _build_fg_lookup()
@@ -352,6 +344,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     p_penalty_nop = scalars["penalty"]["p_no_play_penalty"]
     p_off_pen = scalars["penalty"].get("p_noplay_offense", 0.615)
     p_auto_first = scalars["penalty"].get("noplay_auto_first", 0.5)
+
+    p_punt_ret_td = to_ret.get("punt_p_ret_td", 0.0024)
+    p_ko_ret_td = to_ret.get("ko_p_ret_td", 0.0025)
 
     lb = ctx["lb"]
 
@@ -438,15 +433,27 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         yl[m] = 75
         _new_drive(m)
 
+    def _check_ko_ret_td(m):
+        """After a kickoff, check for return TD from empirical rate.
+        Scores directly (no recursive kickoff) since P(consecutive) ≈ 0."""
+        for i in np.where(m)[0]:
+            if u_ko_td[i] < p_ko_ret_td:
+                ret_team = poss[i]
+                m1 = np.zeros(N, dtype=bool); m1[i] = True
+                ev_tds[m1] += 1
+                _score_td(m1, np.full(N, ret_team, dtype=np.int8))
+                _do_pat(m1, np.full(N, ret_team, dtype=np.int8))
+                # After KO return TD PAT, opponent gets ball
+                _do_kickoff(m1)
+
     def _handle_td(m, scoring_poss):
         """Full TD sequence: score, PAT, kickoff. scoring_poss = who had the ball."""
         ev_tds[m] += 1
         _score_td(m, scoring_poss)
         _do_pat(m, scoring_poss)
         _do_kickoff(m)
-        # TD/XP/kickoff clock captured in cross-play elapsed table
-        # In OT: check if first possession team scored on defense -> game over
-        # Otherwise mark first poss done if it's a score after change of possession
+        _check_ko_ret_td(m & (qtr < 5))  # no KO return TD in OT
+        # In OT: any score ends the game
         ot_m = m & (qtr >= 5)
         if ot_m.any():
             game_over[ot_m] = True
@@ -505,6 +512,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_rclock = rng.random(N)
         u_pat = rng.random(N)
         u_ot = rng.random(N)
+        u_punt_td = rng.random(N)
+        u_ko_td = rng.random(N)
 
         # --- Quarter / half / game end ---
         time_up = alive & (clock <= 0)
@@ -552,9 +561,20 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         if not alive.any():
             break
 
-        # --- Kneel-down: leading team, Q4, < 2 min, ball ---
+        # --- Kneel-down: leading team can run out the clock ---
+        # Each kneel takes ~40 seconds. A team can kneel out if:
+        #   remaining_clock <= kneels_available * 40
+        # kneels_available = (4 - down) + 1 (current down counts as a kneel)
+        # Simplified timeout model: the opponent has ~1.5 timeouts left in
+        # Q4 on average (3 per half, ~1.5 used by late Q4). Each timeout
+        # stops the clock after a kneel, negating one kneel's clock burn.
+        # Effective kneels = kneels_available - 1.5 (rounded to 1 to be
+        # conservative — ensures we don't kneel when the opponent can stop us).
         score_diff_poss = np.where(poss == 0, score_h - score_a, score_a - score_h)
-        can_kneel = alive & (qtr == 4) & (clock <= 120) & (score_diff_poss > 0) & (down <= 4)
+        kneels_avail = (5 - down).astype(np.float32)  # knees left including this one
+        effective_kneels = np.maximum(kneels_avail - 1.0, 1.0)  # subtract ~1 for timeouts
+        can_kneel = (alive & (qtr == 4) & (score_diff_poss > 0) &
+                     (clock <= effective_kneels * 40) & (clock > 0))
         if can_kneel.any():
             clock[can_kneel] -= 40
             ev_clock_used[can_kneel] += 40
@@ -573,13 +593,40 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 y = int(yl[i])
                 sd = int(score_diff_poss[i])
                 qt = int(qtr[i])
+                cl = float(clock[i])
 
                 yd_b = "1-2" if yd <= 2 else ("3-5" if yd <= 5 else ("6-10" if yd <= 10 else "11+"))
                 yl_b = "rz" if y <= 10 else ("opp40" if y <= 40 else ("midfield" if y <= 65 else "own35"))
-                sc_b = "trail9" if sd < -8 else ("within8" if sd <= 8 else "lead9")
-                qt_b = "Q1-3" if qt <= 3 else "Q4"
 
-                probs = fd_lookup.get((yd_b, yl_b, sc_b, qt_b), None)
+                # Fine-grained score bucket
+                if sd < -8: sc_fine = "trail9+"
+                elif sd < -3: sc_fine = "trail4-8"
+                elif sd < 0: sc_fine = "trail1-3"
+                elif sd == 0: sc_fine = "tied"
+                elif sd <= 3: sc_fine = "lead1-3"
+                elif sd <= 8: sc_fine = "lead4-8"
+                else: sc_fine = "lead9+"
+
+                # Fine-grained clock bucket
+                if qt <= 3:
+                    qt_fine = "Q1-3"
+                elif cl > 300:
+                    qt_fine = "Q4>5"
+                elif cl > 120:
+                    qt_fine = "Q4_2-5"
+                else:
+                    qt_fine = "Q4<2"
+
+                # Coarse fallback keys
+                sc_coarse = "trail9" if sd < -8 else ("within8" if sd <= 8 else "lead9")
+                qt_coarse = "Q1-3" if qt <= 3 else "Q4"
+
+                # Lookup with fallback: fine → coarse score → coarsest
+                probs = fd_lookup.get((yd_b, yl_b, sc_fine, qt_fine))
+                if probs is None:
+                    probs = fd_lookup.get((yd_b, yl_b, f"c_{sc_coarse}", qt_fine))
+                if probs is None:
+                    probs = fd_lookup.get((yd_b, yl_b, f"cc_{sc_coarse}", qt_coarse))
                 if probs is None:
                     if y <= 35:
                         probs = (0.1, 0.1, 0.8)
@@ -590,22 +637,24 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                 p_go, p_punt, p_fg = probs
 
-                # Team 4th-down aggressiveness override
-                ti = poss[i]
-                team_go = ctx[f"t{ti}_4th_go"]
-                lg_go = ctx["lg_4th_go"]
-                if team_go > 0 and lg_go > 0:
-                    ratio = team_go / lg_go
-                    p_go_adj = np.clip(p_go * ratio, 0, 0.95)
-                    leftover = 1.0 - p_go_adj
-                    if p_punt + p_fg > 0:
-                        scale = leftover / (p_punt + p_fg)
-                        p_punt *= scale
-                        p_fg *= scale
-                    else:
-                        p_punt = leftover / 2
-                        p_fg = leftover / 2
-                    p_go = p_go_adj
+                # Team 4th-down aggressiveness override (Q1-Q3 only;
+                # late-game decisions are situation-driven, not style-driven)
+                if qt <= 3:
+                    ti = poss[i]
+                    team_go = ctx[f"t{ti}_4th_go"]
+                    lg_go = ctx["lg_4th_go"]
+                    if team_go > 0 and lg_go > 0:
+                        ratio = team_go / lg_go
+                        p_go_adj = np.clip(p_go * ratio, 0, 0.95)
+                        leftover = 1.0 - p_go_adj
+                        if p_punt + p_fg > 0:
+                            scale = leftover / (p_punt + p_fg)
+                            p_punt *= scale
+                            p_fg *= scale
+                        else:
+                            p_punt = leftover / 2
+                            p_fg = leftover / 2
+                        p_go = p_go_adj
 
                 r = u_4th[i]
                 if r < p_go:
@@ -637,8 +686,19 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     if new_yl < 1:
                         new_yl = 80  # Touchback
                     yl[i] = new_yl
-                poss[punt_m] = 1 - poss[punt_m]
-                _new_drive(punt_m)
+                # Punt return TD (empirical rate from table G)
+                punt_ret_td_m = punt_m.copy()
+                for i in np.where(punt_m)[0]:
+                    if u_punt_td[i] < p_punt_ret_td:
+                        # Return team scores a TD
+                        ret_team = 1 - poss[i]  # Receiving team
+                        m1 = np.zeros(N, dtype=bool); m1[i] = True
+                        poss[i] = 1 - poss[i]
+                        _handle_td(m1, np.full(N, ret_team, dtype=np.int8))
+                        punt_ret_td_m[i] = False  # Don't do normal punt handling
+                normal_punt = punt_m & punt_ret_td_m
+                poss[normal_punt] = 1 - poss[normal_punt]
+                _new_drive(normal_punt)
                 # Punt clock is captured in the cross-play elapsed table
 
             # Execute FGs
@@ -684,6 +744,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 game_over[ot_second] = True
 
                 _do_kickoff(made_full)
+                _check_ko_ret_td(made_full & (qtr < 5))
                 # FG/kickoff clock captured in cross-play elapsed table
 
                 # Miss: opponent gets ball
@@ -795,7 +856,6 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             tbl_sack = pa_sack[d_p, di_p, zi_p]
             tbl_int = pa_int[d_p, di_p, zi_p]
             tbl_comp = pa_comp[d_p, di_p, zi_p]
-            tbl_succ = pa_succ[d_p, di_p, zi_p].copy()
 
             # Apply matchup via log5 ratio adjustment
             for ti in [0, 1]:
@@ -803,13 +863,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 if tm.any():
                     tbl_sack[tm] *= ctx[f"t{ti}_sack_rate"] / max(lb["pass_sack_rate"], 0.001)
                     tbl_int[tm] *= ctx[f"t{ti}_int_rate"] / max(lb["pass_int_rate"], 0.001)
-                    # Success tilt: this is what differentiates teams
-                    r_succ = ctx[f"t{ti}_pass_success"] / max(lb["pass_success"], 0.001)
-                    tbl_succ[tm] *= r_succ
             tbl_sack = np.clip(tbl_sack, 0, 0.4)
             tbl_int = np.clip(tbl_int, 0, 0.2)
             tbl_comp = np.clip(tbl_comp, 0.2, 0.95)
-            tbl_succ = np.clip(tbl_succ, 0.05, 0.95)
 
             # Each decision uses its own pre-drawn uniform (indexed by global sim)
             u1 = u_sack[g_idx]
@@ -844,18 +900,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             if len(m):
                                 yards[m] = np.interp(u5[m], xs101, pa_sack_yds[d_v, di_v, zi_v])
 
-            # Completion yards — split by matchup-adjusted success/fail, batched
-            comp_succ = completed & (u4 < tbl_succ)
-            comp_fail = completed & ~comp_succ
-            for yds_mask, yds_tbl in [(comp_succ, pa_yds_succ), (comp_fail, pa_yds_fail)]:
-                if yds_mask.any():
-                    idx = np.where(yds_mask)[0]
-                    for d_v in range(1, 5):
-                        for di_v in range(3):
-                            for zi_v in range(5):
-                                m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&(zi_p[idx]==zi_v)]
-                                if len(m):
-                                    yards[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
+            # Completion yards — unsplit empirical distribution (yds_all_q)
+            if completed.any():
+                idx = np.where(completed)[0]
+                for d_v in range(1, 5):
+                    for di_v in range(3):
+                        for zi_v in range(5):
+                            m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&(zi_p[idx]==zi_v)]
+                            if len(m):
+                                yards[m] = np.interp(u5[m], xs101, pa_yds_all[d_v, di_v, zi_v])
 
             # --- Apply results to state (vectorised where possible) ---
             yds_int = np.round(yards).astype(int)
@@ -963,7 +1016,6 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                               score_a[gi_arr] - score_h[gi_arr])
             hurry_arr = ((qtr[gi_arr] == 4) |
                          ((qtr[gi_arr] == 2) & (clock[gi_arr] <= 120))) & (sd_arr <= 8)
-            # Build clock keys: (outcome_type_str, hurry_bool)
             ot_strs = ["incomplete", "first_down", "complete_inbounds"]
             xs101 = np.linspace(0, 1, 101)
             # Pace scale per sim
@@ -1004,36 +1056,24 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
             # Table lookup
             tbl_fum = ru_fum[d_r, di_r, zi_r].copy()
-            tbl_succ_r = ru_succ[d_r, di_r, zi_r].copy()
-
-            # Apply matchup tilt on rush success
-            for ti in [0, 1]:
-                tm = poss_r == ti
-                if tm.any():
-                    r_succ = ctx[f"t{ti}_rush_success"] / max(lb["rush_success"], 0.001)
-                    tbl_succ_r[tm] *= r_succ
-            tbl_succ_r = np.clip(tbl_succ_r, 0.05, 0.95)
 
             u1 = u_rfum[g_idx_r]
-            u2 = u_rsucc[g_idx_r]
             u5 = u_ryards[g_idx_r]
 
             fumbled = u1 < tbl_fum
             not_fum = ~fumbled
-            success_r = not_fum & (u2 < tbl_succ_r)
-            fail_r = not_fum & ~success_r
 
             xs101 = np.linspace(0, 1, 101)
             yards_r = np.zeros(n_r, dtype=np.float64)
-            for yds_mask, yds_tbl in [(success_r, ru_yds_succ), (fail_r, ru_yds_fail)]:
-                if yds_mask.any():
-                    idx = np.where(yds_mask)[0]
-                    for d_v in range(1, 5):
-                        for di_v in range(3):
-                            for zi_v in range(5):
-                                m = idx[(d_r[idx]==d_v)&(di_r[idx]==di_v)&(zi_r[idx]==zi_v)]
-                                if len(m):
-                                    yards_r[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
+            # Rush yards — unsplit empirical distribution (yds_all_q)
+            if not_fum.any():
+                idx = np.where(not_fum)[0]
+                for d_v in range(1, 5):
+                    for di_v in range(3):
+                        for zi_v in range(5):
+                            m = idx[(d_r[idx]==d_v)&(di_r[idx]==di_v)&(zi_r[idx]==zi_v)]
+                            if len(m):
+                                yards_r[m] = np.interp(u5[m], xs101, ru_yds_all[d_v, di_v, zi_v])
 
             yds_r = np.round(yards_r).astype(int)
             td_r = not_fum & (yl_r - yds_r <= 0) & (yds_r > 0)

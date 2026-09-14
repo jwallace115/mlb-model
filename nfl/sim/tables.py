@@ -286,9 +286,32 @@ def build_clock_table(df):
 # TABLE E: 4th-down decisions
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _score_bucket_fine(sd):
+    """Fine-grained score differential bucket for end-game decisions."""
+    return pd.cut(sd, bins=[-100, -9, -4, -1, 0, 3, 8, 100],
+                  labels=["trail9+", "trail4-8", "trail1-3", "tied",
+                          "lead1-3", "lead4-8", "lead9+"],
+                  right=True, include_lowest=True)
+
+def _clock_bucket_fine(qtr, gsr):
+    """Fine-grained clock bucket: Q1-3, Q4>5:00, Q4_2-5, Q4<2:00."""
+    q4 = qtr == 4
+    # gsr = game_seconds_remaining within the quarter (half_seconds_remaining is better
+    # for Q4 since it maps directly to seconds left in the game for Q4)
+    return np.where(~q4, "Q1-3",
+           np.where(gsr > 300, "Q4>5",
+           np.where(gsr > 120, "Q4_2-5", "Q4<2")))
+
 def build_fourth_down_table(df):
-    """League P(go/punt/FG) by (ydstogo bucket, yardline_100 bucket, score_state, quarter)."""
-    # Include 4th down scrimmage plays, punts, and FGs
+    """League P(go/punt/FG) by (ydstogo, field_zone, score_state, clock).
+
+    Fine-grained score buckets: trail9+ / trail4-8 / trail1-3 / tied /
+    lead1-3 / lead4-8 / lead9+.
+    Fine-grained Q4 clock: >5:00 / 2:00-5:00 / <2:00.
+    Minimum cell size: 10. Falls back to coarser score (3-way) then
+    coarser clock (Q1-3/Q4) when thin."""
+    MIN_N = 10
+
     fourth = df[(df["down"] == 4) & df["down"].notna()].copy()
     fourth = fourth[fourth["play_type"].isin(["pass", "run", "punt", "field_goal"])].copy()
 
@@ -296,23 +319,66 @@ def build_fourth_down_table(df):
                                   labels=["1-2", "3-5", "6-10", "11+"], right=True)
     fourth["yl_b"] = pd.cut(fourth["yardline_100"], bins=[0, 10, 40, 65, 100],
                              labels=["rz", "opp40", "midfield", "own35"], right=True)
-    fourth["score_b"] = pd.cut(fourth["score_differential"], bins=[-100, -9, 8, 100],
-                                labels=["trail9", "within8", "lead9"])
-    fourth["qtr_b"] = np.where(fourth["qtr"] <= 3, "Q1-3", "Q4")
+    fourth["score_b"] = _score_bucket_fine(fourth["score_differential"])
+    # Use game_seconds_remaining for clock (Q4 seconds left in quarter)
+    if "game_seconds_remaining" in fourth.columns:
+        # game_seconds_remaining counts down from 3600 (start of game)
+        # quarter_seconds = game_seconds_remaining mod 900 (roughly)
+        q_sec = fourth["game_seconds_remaining"].clip(0, 3600)
+        # For Q4: seconds left = game_seconds_remaining directly (it's 0-900 in Q4)
+        fourth["qtr_b"] = _clock_bucket_fine(fourth["qtr"],
+                                              fourth["game_seconds_remaining"])
+    else:
+        fourth["qtr_b"] = np.where(fourth["qtr"] <= 3, "Q1-3", "Q4>5")
 
     fourth["decision"] = "go"
     fourth.loc[fourth["play_type"] == "punt", "decision"] = "punt"
     fourth.loc[fourth["play_type"] == "field_goal", "decision"] = "fg"
 
+    # Also build coarse fallback tables
+    fourth["score_coarse"] = pd.cut(fourth["score_differential"],
+                                     bins=[-100, -9, 8, 100],
+                                     labels=["trail9", "within8", "lead9"])
+    fourth["qtr_coarse"] = np.where(fourth["qtr"] <= 3, "Q1-3", "Q4")
+
+    # Fine-grained table
     rows = []
     for (yd, yl, sc, qt), grp in fourth.groupby(
             ["ydstogo_b", "yl_b", "score_b", "qtr_b"], observed=True):
         n = len(grp)
-        if n < 5:
+        if n < MIN_N:
             continue
         vc = grp["decision"].value_counts()
         rows.append({
             "ydstogo_b": yd, "yl_b": yl, "score_b": sc, "qtr_b": qt, "n": n,
+            "p_go": vc.get("go", 0) / n,
+            "p_punt": vc.get("punt", 0) / n,
+            "p_fg": vc.get("fg", 0) / n,
+        })
+
+    # Coarse fallback (score) with fine clock
+    for (yd, yl, sc, qt), grp in fourth.groupby(
+            ["ydstogo_b", "yl_b", "score_coarse", "qtr_b"], observed=True):
+        n = len(grp)
+        if n < MIN_N:
+            continue
+        vc = grp["decision"].value_counts()
+        rows.append({
+            "ydstogo_b": yd, "yl_b": yl, "score_b": f"c_{sc}", "qtr_b": qt, "n": n,
+            "p_go": vc.get("go", 0) / n,
+            "p_punt": vc.get("punt", 0) / n,
+            "p_fg": vc.get("fg", 0) / n,
+        })
+
+    # Coarsest fallback (coarse score + coarse clock)
+    for (yd, yl, sc, qt), grp in fourth.groupby(
+            ["ydstogo_b", "yl_b", "score_coarse", "qtr_coarse"], observed=True):
+        n = len(grp)
+        if n < MIN_N:
+            continue
+        vc = grp["decision"].value_counts()
+        rows.append({
+            "ydstogo_b": yd, "yl_b": yl, "score_b": f"cc_{sc}", "qtr_b": qt, "n": n,
             "p_go": vc.get("go", 0) / n,
             "p_punt": vc.get("punt", 0) / n,
             "p_fg": vc.get("fg", 0) / n,
@@ -455,7 +521,7 @@ def build_special_teams_table(df):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def build_turnover_table(df):
-    """INT and fumble return yards distributions + P(defensive TD)."""
+    """INT and fumble return yards distributions + P(defensive TD) + ST return TD rates."""
     rows = {}
 
     # INT returns
@@ -470,11 +536,22 @@ def build_turnover_table(df):
     fum_ret_yds = fum["return_yards"].fillna(0).values
     rows["fum_return_yds_q"] = np.quantile(fum_ret_yds, QUANTILE_POINTS).tolist()
     rows["fum_n"] = len(fum)
-    # Fumble recovery TDs
     if "return_touchdown" in fum.columns:
         rows["fum_p_def_td"] = fum["return_touchdown"].sum() / max(len(fum), 1)
     else:
         rows["fum_p_def_td"] = 0.02
+
+    # Punt return TDs (per punt event)
+    punts = df[df["play_type"] == "punt"]
+    punt_ret_td = punts["return_touchdown"].sum() if "return_touchdown" in punts.columns else 0
+    rows["punt_n"] = len(punts)
+    rows["punt_p_ret_td"] = punt_ret_td / max(len(punts), 1)
+
+    # Kickoff return TDs (per kickoff event)
+    kos = df[df["play_type"] == "kickoff"]
+    ko_ret_td = kos["return_touchdown"].sum() if "return_touchdown" in kos.columns else 0
+    rows["ko_n"] = len(kos)
+    rows["ko_p_ret_td"] = ko_ret_td / max(len(kos), 1)
 
     return rows
 
