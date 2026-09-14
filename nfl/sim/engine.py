@@ -310,6 +310,9 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
     # League pace for scaling
     ctx["lg_pace"] = tend["pace_sec"].mean() if len(tend) else 30.0
 
+    # League average 4th-down go rate (from tendencies, for team override scaling)
+    ctx["lg_4th_go"] = tend["fourth_down_go_rate"].mean() if len(tend) else 0.68
+
     return ctx
 
 
@@ -318,7 +321,8 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def simulate_game(home, away, season, week, n_sims=2000, seed=42,
-                  team_r=None, tend=None, sit=None, kicker=None, league=None):
+                  team_r=None, tend=None, sit=None, kicker=None, league=None,
+                  _dummy_draw=False):
     _load_tables()
     if team_r is None:
         team_r, tend, sit, kicker, league = _load_ratings()
@@ -387,6 +391,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_first_downs = np.zeros(N, dtype=np.int16)
     ev_punts = np.zeros(N, dtype=np.int16)
     ev_fg_att = np.zeros(N, dtype=np.int16)
+    ev_fg_made = np.zeros(N, dtype=np.int16)
+    ev_tds = np.zeros(N, dtype=np.int16)
     ev_penalties = np.zeros(N, dtype=np.int16)
     ev_clock_used = np.zeros(N, dtype=np.float32)  # Total clock consumed by play draws
 
@@ -423,8 +429,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         for ti in [0, 1]:
             tm = m & (scoring_team_idx == ti)
             xp_prob[tm] = ctx[f"t{ti}_xp"]
-        u = rng.random(N)
-        made = m & (u < xp_prob)
+        made = m & (u_pat < xp_prob)
         score_h[made & (scoring_team_idx == 0)] += 1
         score_a[made & (scoring_team_idx == 1)] += 1
 
@@ -435,6 +440,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
     def _handle_td(m, scoring_poss):
         """Full TD sequence: score, PAT, kickoff. scoring_poss = who had the ball."""
+        ev_tds[m] += 1
         _score_td(m, scoring_poss)
         _do_pat(m, scoring_poss)
         _do_kickoff(m)
@@ -463,6 +469,42 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         alive = ~game_over
         if not alive.any():
             break
+
+        # RNG insensitivity: optionally insert a dummy draw to verify
+        # that adding one extra draw cannot shift statistics
+        if _dummy_draw:
+            rng.random(N)
+
+        # --- Pre-draw all decision uniforms (constant consumption per step) ---
+        # Each decision gets its own independent U(0,1) vector of size N.
+        # Drawing a fixed count per step makes the sim insensitive to RNG
+        # stream shifts (inserting a dummy draw cannot change statistics).
+        u_4th = rng.random(N)
+        u_punt_net = rng.random(N)
+        u_fg_mk = rng.random(N)
+        u_pen = rng.random(N)
+        u_pen_side = rng.random(N)
+        u_pen_auto = rng.random(N)
+        u_call = rng.random(N)
+        u_sack = rng.random(N)
+        u_int_ = rng.random(N)
+        u_comp = rng.random(N)
+        u_succ = rng.random(N)
+        u_yards = rng.random(N)
+        u_pfum = rng.random(N)
+        u_int_dtd = rng.random(N)
+        u_int_ret = rng.random(N)
+        u_pfum_dtd = rng.random(N)
+        u_pfum_ret = rng.random(N)
+        u_pclock = rng.random(N)
+        u_rfum = rng.random(N)
+        u_rsucc = rng.random(N)
+        u_ryards = rng.random(N)
+        u_rfum_dtd = rng.random(N)
+        u_rfum_ret = rng.random(N)
+        u_rclock = rng.random(N)
+        u_pat = rng.random(N)
+        u_ot = rng.random(N)
 
         # --- Quarter / half / game end ---
         time_up = alive & (clock <= 0)
@@ -495,7 +537,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     ot_flag[tied] = 1
                     qtr[tied] = 5
                     clock[tied] = 600.0
-                    ct = rng.integers(0, 2, size=N).astype(np.int8)
+                    ct = (u_ot >= 0.5).astype(np.int8)
                     poss[tied] = ct[tied]
                     ot_first_poss_team[tied] = ct[tied]
                     yl[tied] = 75
@@ -516,7 +558,6 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         if can_kneel.any():
             clock[can_kneel] -= 40
             ev_clock_used[can_kneel] += 40
-            n_plays[can_kneel] += 1
             continue
 
         # --- 4th down decision ---
@@ -525,7 +566,6 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         fg_m = np.zeros(N, dtype=bool)
 
         if is_4th.any():
-            u4 = rng.random(N)
             idx4 = np.where(is_4th)[0]
 
             for i in idx4:
@@ -550,13 +590,24 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                 p_go, p_punt, p_fg = probs
 
-                # Team 4th-down adjustment disabled: tendencies_weekly
-                # fourth_down_go_rate is 1.0 for all teams (data issue in
-                # the saved parquet — ratings.py assertion passed at build
-                # time but the file on disk has been overwritten). Use table
-                # probabilities only until ratings are rebuilt.
+                # Team 4th-down aggressiveness override
+                ti = poss[i]
+                team_go = ctx[f"t{ti}_4th_go"]
+                lg_go = ctx["lg_4th_go"]
+                if team_go > 0 and lg_go > 0:
+                    ratio = team_go / lg_go
+                    p_go_adj = np.clip(p_go * ratio, 0, 0.95)
+                    leftover = 1.0 - p_go_adj
+                    if p_punt + p_fg > 0:
+                        scale = leftover / (p_punt + p_fg)
+                        p_punt *= scale
+                        p_fg *= scale
+                    else:
+                        p_punt = leftover / 2
+                        p_fg = leftover / 2
+                    p_go = p_go_adj
 
-                r = u4[i]
+                r = u_4th[i]
                 if r < p_go:
                     pass  # Go for it — normal play
                 elif r < p_go + p_punt:
@@ -566,10 +617,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
             # Execute punts
             if punt_m.any():
-                n_plays[punt_m] += 1
                 ev_punts[punt_m] += 1
                 # Punt net yards
-                u_punt = rng.random(N)
                 for i in np.where(punt_m)[0]:
                     y = int(yl[i])
                     if y <= 10:
@@ -583,7 +632,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     q = punt_lookup.get(zn)
                     if q is None:
                         q = punt_lookup.get("midfield", np.full(101, 42.0))
-                    net = np.interp(u_punt[i], np.linspace(0, 1, 101), q)
+                    net = np.interp(u_punt_net[i], np.linspace(0, 1, 101), q)
                     new_yl = int(np.clip(100 - (yl[i] - net), 1, 99))
                     if new_yl < 1:
                         new_yl = 80  # Touchback
@@ -594,10 +643,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
             # Execute FGs
             if fg_m.any():
-                n_plays[fg_m] += 1
                 ev_fg_att[fg_m] += 1
                 fg_dist_arr = yl[fg_m] + 17
-                u_fg = rng.random(fg_m.sum())
                 made_arr = np.zeros(fg_m.sum(), dtype=bool)
                 fg_idx = np.where(fg_m)[0]
                 for j, i in enumerate(fg_idx):
@@ -616,13 +663,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     team_rate = ctx[f"t{ti}_fg"][bk]
                     lg_rate = {"<30": 0.98, "30-39": 0.93, "40-49": 0.78, "50+": 0.68}[bk]
                     adj_rate = np.clip(base_rate * team_rate / max(lg_rate, 0.01), 0, 0.999)
-                    made_arr[j] = u_fg[j] < adj_rate
+                    made_arr[j] = u_fg_mk[i] < adj_rate
 
                 made_full = np.zeros(N, dtype=bool)
                 made_full[fg_idx[made_arr]] = True
                 miss_full = fg_m & ~made_full
 
                 # Score
+                ev_fg_made[made_full] += 1
                 score_h[made_full & (poss == 0)] += 3
                 score_a[made_full & (poss == 1)] += 3
 
@@ -659,11 +707,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # Defense penalties (38.5%): advance ~9 yds, 72.5% auto first down.
         # Defensive penalties are a real source of yards and first downs;
         # their absence would lower scoring by ~3 first downs/game.
-        u_pen = rng.random(N)
         pen_nop = playing & (u_pen < p_penalty_nop)
         if pen_nop.any():
-            u_side = rng.random(N)
-            off_pen = pen_nop & (u_side < p_off_pen)
+            off_pen = pen_nop & (u_pen_side < p_off_pen)
             def_pen = pen_nop & ~off_pen
 
             # Offense penalty: move back ~7 yds, replay down
@@ -676,8 +722,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             pen_no_td = def_pen & ~pen_td
 
             yl[pen_no_td] = np.clip(yl[pen_no_td] - 9, 1, 99).astype(np.int16)
-            u_auto = rng.random(N)
-            auto_1st = pen_no_td & (u_auto < p_auto_first)
+            auto_1st = pen_no_td & (u_pen_auto < p_auto_first)
             down[auto_1st] = 1
             dist[auto_1st] = np.minimum(10, yl[auto_1st]).astype(np.int16)
             ev_first_downs[auto_1st] += 1
@@ -727,8 +772,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             team_proe[tm] = np.array([sit.get(b, overall) for b in bkt_arr[tm]])
         p_pass = _sigmoid(_logit(lg_xpass) + team_proe / 100.0)
 
-        u_call = rng.random(n_live)
-        is_pass = u_call < p_pass
+        is_pass = u_call[live_idx] < p_pass
 
         # Table lookup indices
         di_arr = _dist_idx(dist_live)
@@ -767,17 +811,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             tbl_comp = np.clip(tbl_comp, 0.2, 0.95)
             tbl_succ = np.clip(tbl_succ, 0.05, 0.95)
 
-            # Draw outcomes — keep original draw order to preserve RNG stream
-            u1 = rng.random(n_p)  # sack
-            u2 = rng.random(n_p)  # INT
-            u3 = rng.random(n_p)  # complete
-            u4 = rng.random(n_p)  # success given completion
-            u5 = rng.random(n_p)  # yards quantile
-            u_pfum = rng.random(n_p)  # pass fumble (drawn AFTER to preserve stream)
+            # Each decision uses its own pre-drawn uniform (indexed by global sim)
+            u1 = u_sack[g_idx]
+            u2 = u_int_[g_idx]
+            u3 = u_comp[g_idx]
+            u4 = u_succ[g_idx]
+            u5 = u_yards[g_idx]
+            u_pfum_p = u_pfum[g_idx]
 
             # Pass fumble: ~0.8% of pass plays, drawn from table
             tbl_pfum = pa_fumble[d_p, di_p, zi_p] if hasattr(pa_fumble, '__getitem__') else np.full(n_p, 0.008)
-            pass_fumbled = u_pfum < tbl_pfum
+            pass_fumbled = u_pfum_p < tbl_pfum
 
             sacked = ~pass_fumbled & (u1 < tbl_sack)
             not_sacked = ~pass_fumbled & ~sacked
@@ -869,29 +913,27 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 m = np.zeros(N, dtype=bool); m[gi] = True; _new_drive(m)
 
             # Interceptions (per-sim — ~1-2/game)
-            int_u = rng.random(n_p); int_ret_u = rng.random(n_p)
             for j in np.where(intercepted)[0]:
                 gi = g_idx[j]
                 turnovers[gi] += 1; n_plays[gi] += 1
-                if int_u[j] < p_int_def_td:
+                if u_int_dtd[gi] < p_int_def_td:
                     m = np.zeros(N, dtype=bool); m[gi] = True
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
                 else:
-                    ret = int(np.interp(int_ret_u[j], np.linspace(0, 1, 101), int_ret_q))
+                    ret = int(np.interp(u_int_ret[gi], np.linspace(0, 1, 101), int_ret_q))
                     yl[gi] = int(np.clip(100 - (yl[gi] + ret), 1, 99))
                     poss[gi] = 1 - poss[gi]
                     m = np.zeros(N, dtype=bool); m[gi] = True; _new_drive(m)
 
             # Pass fumbles (per-sim — ~0.5/game)
-            pfum_u2 = rng.random(n_p); pfum_ret_u = rng.random(n_p)
             for j in np.where(pass_fumbled)[0]:
                 gi = g_idx[j]
                 turnovers[gi] += 1; n_plays[gi] += 1
-                if pfum_u2[j] < p_fum_def_td:
+                if u_pfum_dtd[gi] < p_fum_def_td:
                     m = np.zeros(N, dtype=bool); m[gi] = True
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
                 else:
-                    ret = int(np.interp(pfum_ret_u[j], np.linspace(0, 1, 101), fum_ret_q))
+                    ret = int(np.interp(u_pfum_ret[gi], np.linspace(0, 1, 101), fum_ret_q))
                     yl[gi] = int(np.clip(100 - (yl[gi] + ret), 1, 99))
                     poss[gi] = 1 - poss[gi]
                     m = np.zeros(N, dtype=bool); m[gi] = True; _new_drive(m)
@@ -906,11 +948,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ev_first_downs[g_idx[fd_comp | td_mask]] += 1
 
             # Clock: pass plays — vectorised
-            # Map outcome type: 0=incomplete, 1=first_down, 2=complete_inbounds
+            # Map outcome type: 0=incomplete, 1=first_down, 2=complete_inbounds, 3=drive_ending
             ot_idx = np.full(n_p, 2, dtype=np.int8)
             ot_idx[incomplete] = 0
             fd_pass = completed & (yds_int >= dist_live[p_idx])
-            ot_idx[fd_pass | td_mask] = 1
+            ot_idx[fd_pass] = 1
+            # Drive-ending plays (TD, INT, fumble) stop the game clock —
+            # actual elapsed is ~8-10s, not the 33-39s of the regular category
+            ot_idx[td_mask | intercepted | pass_fumbled] = 3
             # Hurry-up flag
             gi_arr = g_idx
             sd_arr = np.where(poss[gi_arr] == 0,
@@ -920,7 +965,6 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                          ((qtr[gi_arr] == 2) & (clock[gi_arr] <= 120))) & (sd_arr <= 8)
             # Build clock keys: (outcome_type_str, hurry_bool)
             ot_strs = ["incomplete", "first_down", "complete_inbounds"]
-            u_clock = rng.random(n_p)
             xs101 = np.linspace(0, 1, 101)
             # Pace scale per sim
             pace_arr = np.where(poss[gi_arr] == 0,
@@ -933,10 +977,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     cq = clock_q.get((ot_strs[oi], hi),
                                       clock_q.get((ot_strs[oi], False), np.full(101, 30.0)))
                     m_idx = np.where(mask)[0]
-                    elapsed = np.interp(u_clock[m_idx], xs101, cq) * pace_arr[m_idx]
+                    elapsed = np.interp(u_pclock[gi_arr[m_idx]], xs101, cq) * pace_arr[m_idx]
                     elapsed = np.maximum(elapsed, 3.0)
                     clock[gi_arr[m_idx]] -= elapsed.astype(np.float32)
                     ev_clock_used[gi_arr[m_idx]] += elapsed.astype(np.float32)
+            # Drive-ending plays: short clock (game clock stops on scoring/turnovers)
+            de_mask = (ot_idx == 3) & ~game_over[gi_arr]
+            if de_mask.any():
+                de_idx = np.where(de_mask)[0]
+                de_elapsed = np.maximum(u_pclock[gi_arr[de_idx]] * 16.0, 3.0)  # ~8s mean
+                clock[gi_arr[de_idx]] -= de_elapsed.astype(np.float32)
+                ev_clock_used[gi_arr[de_idx]] += de_elapsed.astype(np.float32)
 
         # --- RUSH PLAYS (vectorised) ---
         rm = ~is_pass
@@ -963,9 +1014,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     tbl_succ_r[tm] *= r_succ
             tbl_succ_r = np.clip(tbl_succ_r, 0.05, 0.95)
 
-            u1 = rng.random(n_r)  # fumble
-            u2 = rng.random(n_r)  # success
-            u5 = rng.random(n_r)  # yards
+            u1 = u_rfum[g_idx_r]
+            u2 = u_rsucc[g_idx_r]
+            u5 = u_ryards[g_idx_r]
 
             fumbled = u1 < tbl_fum
             not_fum = ~fumbled
@@ -1022,14 +1073,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 m = np.zeros(N, dtype=bool); m[gi] = True; _new_drive(m)
 
             # Fumbles (per-sim — ~1/game)
-            fum_u = rng.random(n_r); fum_ret_u = rng.random(n_r)
             for j in np.where(fumbled)[0]:
                 gi = g_idx_r[j]; turnovers[gi] += 1; n_plays[gi] += 1
-                if fum_u[j] < p_fum_def_td:
+                if u_rfum_dtd[gi] < p_fum_def_td:
                     m = np.zeros(N, dtype=bool); m[gi] = True
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
                 else:
-                    ret = int(np.interp(fum_ret_u[j], np.linspace(0, 1, 101), fum_ret_q))
+                    ret = int(np.interp(u_rfum_ret[gi], np.linspace(0, 1, 101), fum_ret_q))
                     yl[gi] = int(np.clip(100 - (yl[gi] + ret), 1, 99))
                     poss[gi] = 1 - poss[gi]
                     m = np.zeros(N, dtype=bool); m[gi] = True; _new_drive(m)
@@ -1041,9 +1091,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ev_first_downs[g_idx_r[fd_rush | td_r]] += 1
 
             # Clock: rush plays — vectorised
-            ot_idx_r = np.ones(n_r, dtype=np.int8)  # 1=run
+            ot_idx_r = np.ones(n_r, dtype=np.int8)  # 1=run, 0=first_down, 2=drive_ending
             fd_rush_all = not_fum & (yds_r >= dist_live[r_idx])
-            ot_idx_r[fd_rush_all | td_r] = 0  # 0=first_down
+            ot_idx_r[fd_rush_all] = 0  # 0=first_down
+            ot_idx_r[td_r | fumbled] = 2  # drive-ending: short clock
             gi_r = g_idx_r
             sd_r_arr = np.where(poss[gi_r] == 0,
                                 score_h[gi_r] - score_a[gi_r],
@@ -1051,7 +1102,6 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             hurry_r = ((qtr[gi_r] == 4) |
                        ((qtr[gi_r] == 2) & (clock[gi_r] <= 120))) & (sd_r_arr <= 8)
             ot_strs_r = ["first_down", "run"]
-            u_clock_r = rng.random(n_r)
             xs101 = np.linspace(0, 1, 101)
             pace_r = np.where(poss[gi_r] == 0,
                               ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
@@ -1063,10 +1113,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     cq = clock_q.get((ot_strs_r[oi], hi),
                                       clock_q.get((ot_strs_r[oi], False), np.full(101, 35.0)))
                     m_idx = np.where(mask)[0]
-                    elapsed = np.interp(u_clock_r[m_idx], xs101, cq) * pace_r[m_idx]
+                    elapsed = np.interp(u_rclock[gi_r[m_idx]], xs101, cq) * pace_r[m_idx]
                     elapsed = np.maximum(elapsed, 3.0)
                     clock[gi_r[m_idx]] -= elapsed.astype(np.float32)
                     ev_clock_used[gi_r[m_idx]] += elapsed.astype(np.float32)
+            # Drive-ending rush plays (TDs, fumbles): short clock
+            de_r = (ot_idx_r == 2) & ~game_over[gi_r]
+            if de_r.any():
+                de_idx = np.where(de_r)[0]
+                de_elapsed = np.maximum(u_rclock[gi_r[de_idx]] * 16.0, 3.0)
+                clock[gi_r[de_idx]] -= de_elapsed.astype(np.float32)
+                ev_clock_used[gi_r[de_idx]] += de_elapsed.astype(np.float32)
 
         # --- Turnover on downs ---
         tod = ~game_over & (down > 4)
@@ -1104,6 +1161,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_first_downs": ev_first_downs,
         "ev_punts": ev_punts,
         "ev_fg_att": ev_fg_att,
+        "ev_fg_made": ev_fg_made,
+        "ev_tds": ev_tds,
         "ev_penalties": ev_penalties,
         "ev_clock_used": ev_clock_used,
     })
@@ -1190,10 +1249,19 @@ def k1_report(all_sims, actuals):
     sim_pts = (all_sims["home_score"].mean() + all_sims["away_score"].mean()) / 2
     act_pts = (actuals["home_score"].mean() + actuals["away_score"].mean()) / 2
 
-    sim_margin_sd = game_means["sim_margin"].std()
-    act_margin_sd = game_means["actual_margin"].std()
-    sim_total_sd = game_means["sim_total"].std()
-    act_total_sd = game_means["actual_total"].std()
+    # Pooled SD: SD of ALL individual simulated margins (every sim of every game)
+    pooled_sim_margin_sd = all_sims["sim_margin"].std()
+    actual_margins_all = actuals["home_score"] - actuals["away_score"]
+    act_margin_sd = float(actual_margins_all.std())  # ~14.2
+
+    # Pooled total SD
+    pooled_sim_total_sd = all_sims["sim_total"].std()
+    act_total_sd = float((actuals["home_score"] + actuals["away_score"]).std())
+
+    # Team differentiation (informational): SD of sim MEAN margin across games
+    # vs SD of closing spreads — D7 anchoring supplies the mean
+    diff_sim_sd = game_means["sim_margin"].std()
+    spread_sd = game_means["spread_line"].astype(float).std()
 
     lines.append("## K1 Realism Check\n")
     lines.append("| Metric | Sim | Actual | Target | PASS/FAIL |")
@@ -1210,8 +1278,9 @@ def k1_report(all_sims, actuals):
     sim_dpg = game_means["sim_drives"].mean()
     lines.append(f"| Drives/game | {sim_dpg:.1f} | 21.9 | ~22 | {pf(abs(sim_dpg-21.9)<5)} |")
 
-    lines.append(f"| SD margin | {sim_margin_sd:.2f} | {act_margin_sd:.2f} | ±1.0 | {pf(abs(sim_margin_sd-act_margin_sd)<=1.0)} |")
-    lines.append(f"| SD total | {sim_total_sd:.2f} | {act_total_sd:.2f} | ±2.0 | {pf(abs(sim_total_sd-act_total_sd)<=2.0)} |")
+    lines.append(f"| SD margin (pooled) | {pooled_sim_margin_sd:.2f} | {act_margin_sd:.2f} | ±1.0 of actual | {pf(abs(pooled_sim_margin_sd-act_margin_sd)<=1.0)} |")
+    lines.append(f"| SD total (pooled) | {pooled_sim_total_sd:.2f} | {act_total_sd:.2f} | ±2.0 of actual | {pf(abs(pooled_sim_total_sd-act_total_sd)<=2.0)} |")
+    lines.append(f"| SD sim mean margin | {diff_sim_sd:.2f} | spread SD {spread_sd:.2f} | INFO | INFO |")
 
     actual_margins = actuals["home_score"] - actuals["away_score"]
     for m, target, tol in [(3, 14.27, 2), (6, 7.54, 2), (7, 8.24, 2), (10, 5.06, 2), (14, 4.32, 2)]:

@@ -66,9 +66,10 @@ def print_diagnostics(label, act_df, sim_df):
 
     # 4. Drive stats
     print(f"\n4. DRIVE STATS")
-    s_ppd = sim_df["plays"].mean() / sim_df["drives"].mean()
+    s_scrim = sim_df["ev_pass_plays"] + sim_df["ev_rush_plays"]
+    s_ppd = s_scrim.mean() / sim_df["drives"].mean()
     s_dpg = sim_df["drives"].mean()
-    s_ppg = sim_df["plays"].mean()
+    s_ppg = s_scrim.mean()
     pts = (sim_df["home_score"].mean() + sim_df["away_score"].mean()) / 2
     s_pts_per_drive = pts * 2 / s_dpg
 
@@ -141,6 +142,38 @@ def print_diagnostics(label, act_df, sim_df):
     print(f"  {'FG make rate':22s} {len(fg_made)/len(fg_att):8.3f}")
     sim_fg_per_game = sim_df["ev_fg_att"].mean()
     print(f"  {'Sim FG att/game':22s} {'':8s} {sim_fg_per_game:8.1f}")
+
+    # 8. Explosive plays
+    print(f"\n8. EXPLOSIVE PLAYS")
+    pass_comp = passes[(passes["sack"] != 1) & (passes["interception"] != 1) & (passes["complete_pass"] == 1)]
+    a_expl_pass = (pass_comp["yards_gained"] >= 20).mean()
+    a_expl_rush = (rushes["yards_gained"] >= 12).mean()
+    print(f"  {'Pass explosive ≥20':22s} {a_expl_pass:8.3f}")
+    print(f"  {'Rush explosive ≥12':22s} {a_expl_rush:8.3f}")
+
+    # 9. Yards/play with percentiles
+    print(f"\n9. YARDS/PLAY")
+    all_yds = scrim["yards_gained"].dropna()
+    print(f"  {'Mean yds/play':22s} {all_yds.mean():8.2f}")
+    print(f"  {'90th percentile':22s} {all_yds.quantile(0.90):8.0f}")
+    print(f"  {'95th percentile':22s} {all_yds.quantile(0.95):8.0f}")
+
+    # 10. Sack mean yards
+    print(f"\n10. SACKS")
+    sack_plays = passes[passes["sack"] == 1]
+    a_sack_per_db = len(sack_plays) / len(passes)
+    a_sack_yds = sack_plays["yards_gained"].mean()
+    s_sack_per_db = sim_df["ev_sacks"].sum() / max(s_pass, 1)
+    print(f"  {'Sack rate':22s} {a_sack_per_db:8.4f} {s_sack_per_db:8.4f}")
+    print(f"  {'Mean sack yds':22s} {a_sack_yds:8.1f}")
+
+    # 11. Sim TD/drive
+    if "ev_tds" in sim_df.columns:
+        sim_td_per_drive = sim_df["ev_tds"].sum() / total_dr_sim
+        print(f"\n  TD/drive (sim):  {sim_td_per_drive:.3f}  (actual: {all_dr['td'].mean():.3f})")
+        if "ev_fg_made" in sim_df.columns:
+            sim_fg_rate = sim_df["ev_fg_made"].sum() / max(sim_df["ev_fg_att"].sum(), 1)
+            print(f"  FG make rate (sim): {sim_fg_rate:.3f}  (actual: {len(fg_made)/len(fg_att):.3f})")
 
     # Summary
     margin_sd = (sim_df["home_score"] - sim_df["away_score"]).std()
