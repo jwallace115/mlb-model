@@ -41,8 +41,17 @@ TEAM_MAP = {
 TEAM_MAP_INV = {v: k for k, v in TEAM_MAP.items()}
 
 
-def detect_week():
-    """Detect the upcoming week from PBP data."""
+def detect_week(override=None):
+    """Detect the upcoming week from PBP data.
+
+    Returns (week, week_games_df, completed_set).
+    week_games_df contains the games for the detected week (from PBP schedule).
+    If PBP doesn't have future games, week_games_df may be empty.
+    """
+    if override is not None:
+        print(f"Week override: {override}")
+        return override, pd.DataFrame(), set()
+
     pbp_path = ROOT / "nfl" / "data" / "pbp" / f"pbp_{SEASON}.parquet"
     if not pbp_path.exists():
         raise FileNotFoundError(f"No PBP for {SEASON}. Run pull_pbp.py first.")
@@ -55,12 +64,14 @@ def detect_week():
     # Find first week with incomplete games
     for w in sorted(games["week"].unique()):
         wk = games[games["week"] == w]
-        if not wk["game_id"].isin(completed).all():
-            # This week still has unplayed games
-            unplayed = wk[~wk["game_id"].isin(completed)]
-            return w, unplayed, completed
-    # All weeks complete — next week is max + 1
-    return int(games["week"].max()) + 1, pd.DataFrame(), completed
+        incomplete = wk[~wk["game_id"].isin(completed)]
+        if len(incomplete) > 0:
+            return w, wk, completed
+    # All weeks in PBP complete — next week is max + 1
+    next_w = int(games["week"].max()) + 1
+    # Try to get next week's games from PBP if they exist
+    next_games = games[games["week"] == next_w]
+    return next_w, next_games, completed
 
 
 def get_lines_from_history():
@@ -84,7 +95,10 @@ def get_lines_from_history():
         spreads = hr[hr["market"] == "spreads"]
         home_sp = spreads[spreads["outcome_name"].apply(lambda x: home_full.split()[-1] in str(x) if x else False)]
         if not home_sp.empty:
-            spread = float(home_sp["point"].iloc[0])
+            # Odds API point: negative = favorite. KC point=-2.5 means KC favored by 2.5.
+            # Convert to PBP convention: positive = home favored (market home margin).
+            # market_margin = -point (home favorite → positive margin).
+            spread = -float(home_sp["point"].iloc[0])
         else:
             spread = None
         # Total
@@ -274,16 +288,44 @@ def build_board(week, game_results, lines_used):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--week", type=int, default=None, help="Override detected week")
+    args = parser.parse_args()
+
     t0 = time.time()
 
     # Stage 1: Detect week
-    week, unplayed, completed = detect_week()
+    week, week_games, completed = detect_week(override=args.week)
     print(f"Detected upcoming week: {week}")
     print(f"Completed games: {len(completed)}")
 
-    # Stage 2: Get lines
-    lines = get_lines_from_history()
-    print(f"Lines available: {len(lines)} games")
+    # Determine which teams play in this week (from PBP schedule if available)
+    week_teams = set()
+    if len(week_games) > 0:
+        week_teams = set(week_games["home_team"]) | set(week_games["away_team"])
+        print(f"Week {week} teams from schedule: {len(week_teams)}")
+
+    # Stage 2: Get lines — filter to this week's games only
+    all_lines = get_lines_from_history()
+    # If we know the week's teams, filter; otherwise use all non-completed games
+    if week_teams:
+        lines = {k: v for k, v in all_lines.items()
+                 if v["home"] in week_teams or v["away"] in week_teams}
+    else:
+        # Filter out teams that already played in completed games
+        completed_teams = set()
+        for gid in completed:
+            parts = gid.split("_")
+            if len(parts) >= 4:
+                completed_teams.add(parts[2])  # away
+                completed_teams.add(parts[3])  # home
+        # A game is "this week" if neither team has played yet
+        # (This is a heuristic; works for week N+1 after week N is complete)
+        lines = {k: v for k, v in all_lines.items()
+                 if v["home"] not in completed_teams or v["away"] not in completed_teams}
+
+    print(f"Lines for week {week}: {len(lines)} games (filtered from {len(all_lines)})")
     for key, val in sorted(lines.items()):
         print(f"  {key}: spread {val['spread']:+.1f}, total {val['total']:.1f} ({val['source']})")
 

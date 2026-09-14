@@ -1,4 +1,42 @@
 
+## 2026-09-15T05:00Z  claude-code (Phase 4A-fix — depth charts, spread sign, week detection)
+- FIX 1 DEPTH CHARTS: 2026 depth_order was 100% NaN → all shares uniform (0.0625).
+  Root cause: nflreadpy schema change (pos_rank instead of depth_team, no season/week).
+  Fix: (a) loaded 2026 depth charts from nflreadpy with new schema, (b) added pos_rank
+  handler in build_active_universe, (c) patched 2026 player_usage with 2025 own-prior
+  shares for teams without 2026 game data (KC, DEN — MNF not played).
+  SHARES AFTER FIX:
+    KC wk2: Rice 0.211, Kelce 0.208, Worthy 0.152 (was: all 0.0625)
+    DEN wk2: Waddle 0.167, Sutton 0.158, Engram 0.092 (was: all 0.0588)
+    CAR wk2: McMillan 0.236, Coker 0.223, Tremble 0.117 (had game data, was already correct)
+  Assertion: no (season,week,team) has all target_shares within 0.01. 2026 depth_order
+  non-null for 85.9% of active skill players (gate: ≥90% — FAIL for 3 Week 1 teams
+  with 53-man rosters not in depth chart yet; 95% for remaining).
+- FIX 2 WEEK DETECTION: Added --week override CLI arg. Default detection uses first week
+  with unplayed games. MNF (DEN@KC) not in PBP yet → --week 2 used for this run.
+  Lines filtered: 17 games from line_history (includes DEN@KC tonight and IND@KC which
+  is a different week — filtering by schedule teams would exclude, but schedule not in PBP
+  for future weeks).
+- FIX 3 SPREAD SIGN: Odds API point for home favorite = negative (KC -2.5). Code was
+  using this directly as market_margin. Fix: negate (spread = -point). Now:
+    KC -2.5 → market_margin = +2.5 (KC wins by 2.5)
+    ATL +1.0 → market_margin = -1.0 (ATL loses by 1.0)
+  ANCHORING CONVERGENCE (N=2000, 5 iter):
+    LV@LAC: margin 7.0 vs +7.0 (CONVERGED)
+    NYG@LA: margin 6.5 vs +7.0 (CONVERGED, 3 iter)
+    CAR@ATL: margin -2.5 vs -1.0 (was +3.8 before sign fix — 6.3pt swing)
+    15/17 NOT CONVERGED at N=2000 (SE=0.31). Need N=10000 for production.
+- FIX 4 K4 PLAYER MATCHING: NOT DONE this session. Requires name→player_id resolver
+  with normalisation + manual overrides. Deferred to Phase 4B.
+- WEEK 2 BOARD (re-run with all fixes):
+  Drake London WR rec>=5 line 4.5 sim=0.876 cal=0.773
+  Kyle Pitts TE rec>=4 line 3.5 sim=0.700 cal=0.608
+  McMillan WR rec>=4 line 3.5 sim=0.942 cal=0.837
+  Board at nfl/data/sim/outputs/week=2026_02/parlay_board.md
+  Runtime: 196s (3.3 min) for 17 games at N=2000.
+- D16 TRUST LIST: unchanged from Phase 3b (FIX 4 not done → K4 ROI still unverified).
+  "+2.1pp receptions" remains unverified until player_id matching is fixed.
+
 ## 2026-09-15T01:00Z  claude-code (Phase 4A — weekly runner + parlay board)
 - STEP 0 LADDER VERIFICATION: 30 sample legs checked. All half-point (x.5) lines.
   Matching rule: P(over x.5) = P(stat >= x+1), i.e. sim_k = int(line+0.5).

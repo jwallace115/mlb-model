@@ -221,17 +221,34 @@ def build_active_universe(rosters, injuries, depth):
     base.loc[base["injury_status"].isna() & (base["status"] != "ACT"), "injury_status"] = base["status"]
     base.loc[base["injury_status"].isna(), "injury_status"] = "Active"
 
-    # Depth order — min depth_team per (season, week, team, player, position)
-    if "depth_team" in depth.columns:
-        do = depth[depth["position"].isin(SKILL_POS)].copy()
-        do["depth_team"] = pd.to_numeric(do["depth_team"], errors="coerce")
-        do = do.groupby(["season", "week", "club_code", "gsis_id"], observed=True)[
+    # Depth order — handle both old schema (depth_team, club_code, season/week) and
+    # new schema (pos_rank, team, gsis_id — from nflreadpy 2025+)
+    base["depth_order"] = np.nan
+
+    # Old schema (2020-2024): has season, week, club_code, depth_team
+    if "depth_team" in depth.columns and "season" in depth.columns:
+        old = depth[depth["position"].isin(SKILL_POS) & depth["season"].notna()].copy()
+        old["depth_team"] = pd.to_numeric(old["depth_team"], errors="coerce")
+        old = old.groupby(["season", "week", "club_code", "gsis_id"], observed=True)[
             "depth_team"].min().reset_index()
-        do = do.rename(columns={"club_code": "team", "gsis_id": "player_id", "depth_team": "depth_order"})
-        base = base.merge(do[["season", "week", "team", "player_id", "depth_order"]],
-                          on=["season", "week", "team", "player_id"], how="left")
-    else:
-        base["depth_order"] = np.nan
+        old = old.rename(columns={"club_code": "team", "gsis_id": "player_id", "depth_team": "depth_order"})
+        base = base.drop(columns="depth_order").merge(
+            old[["season", "week", "team", "player_id", "depth_order"]],
+            on=["season", "week", "team", "player_id"], how="left")
+
+    # New schema (2025+): has pos_rank, team, gsis_id, pos_abb
+    if "pos_rank" in depth.columns and "gsis_id" in depth.columns:
+        pos_filter = depth["pos_abb"].isin(["QB", "RB", "WR", "TE"]) if "pos_abb" in depth.columns else pd.Series(True, index=depth.index)
+        new = depth[pos_filter].copy()
+        new["_depth"] = pd.to_numeric(new["pos_rank"], errors="coerce")
+        new = new.groupby(["team", "gsis_id"], observed=True)["_depth"].min().reset_index()
+        new = new.rename(columns={"gsis_id": "player_id", "_depth": "new_depth"})
+        base = base.merge(new[["team", "player_id", "new_depth"]],
+                          on=["team", "player_id"], how="left")
+        # Fill NaN depth_order from new schema
+        fill_mask = base["depth_order"].isna() & base["new_depth"].notna()
+        base.loc[fill_mask, "depth_order"] = base.loc[fill_mask, "new_depth"]
+        base = base.drop(columns="new_depth")
 
     # Carry forward last available week per season (for 2026 wk2+)
     extras = []
