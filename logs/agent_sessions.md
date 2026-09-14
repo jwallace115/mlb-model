@@ -1,4 +1,43 @@
 
+## 2026-09-14T20:00Z  claude-code (Phase 4B — K4 re-run, grading, board upgrades)
+- STEP 0 DATA REFRESH: Pulled 2026 PBP (15 games, Week 1 only, max game_date 2026-09-13).
+  DEN@KC MNF NOT in pbp_2026. Pulled 2026 rosters_weekly (2963 rows, week 1), depth_charts
+  (all seasons), injuries (all seasons). Rebuilt ratings and usage for 2026 — Week 2 PIT
+  ratings now include Week 1 data.
+- STEP 1 NAMES.PY: Built player name -> gsis_id resolver using rosters_weekly.
+  Normalise: lowercase, strip accents, strip punctuation/suffixes, collapse whitespace.
+  Match order: (1) exact on candidate team, (2) unique FI+last on team, (3) unique league.
+  Alias table for: Hollywood Brown, Gabriel/Gabe Davis, Drew/Andrew Ogletree.
+  Resolution rate: 2026=100.0% (364/364), 2024 20k sample=98.7% (5934/6013).
+  Unresolved are retired/cut players not on roster.
+- STEP 2 K4 RE-RUN: 165,268 matched legs (2023-2024 IN-SAMPLE) via player_id resolver.
+  SYMMETRY CHECK: ALL 5 families PASS. Over+under ROI sums to -0.11 to -0.13.
+  Phase 3b "+2.1pp receptions edge" was a NAME-MATCHING ARTIFACT — actual edge is -5.4pp WR.
+  No family shows positive edge on overs. D17 added to decision doc.
+  D16 tiers UNCHANGED (based on reliability, not K4 ROI).
+- STEP 3 RUN_WEEK.PY UPGRADES:
+  (a) --n-sims flag, default 10000, chunks of 2000 with distinct seeds, pooled anchoring.
+      Convergence: |market-mean| < 2*SE (no floors).
+  (b) Props joined via resolver. Columns: book_price, book_implied, one_sided, pull_batch/ts.
+  (c) D16 tiers: TRUSTED / TRUSTED-FLAGGED / WATCH / UNTRUSTED. Price filter: BOOK-MORE-CONFIDENT.
+  (d) Stale-input flag: [PRIOR-ONLY SHARES] for <2 completed games.
+  (e) picks_log.parquet per week. Append-safe (prev saved as picks_log_prev.parquet).
+  (f) Schedule-based game filtering via nflreadpy (excludes Week 1 games from Week 2 board).
+- STEP 3 CALIBRATION.PY REFACTOR: Extracted actual_player_stats() from _score_player_props()
+  into importable helper. Zero behavior change verified on 2023_01_ARI_WAS (rec/rush match exact).
+- STEP 4 GRADE_WEEK.PY: Built grading pipeline. Uses imported actual_player_stats() from
+  calibration.py (per HARD RULES). Handles old MNF format conversion. Grades: hit/miss/void/void-pending.
+  Reports: hit rate and Brier by family×position, by cal_p bin, by tier, CLV where closing exists.
+  Week 1 result: 6 MNF legs all void-pending (DEN@KC not in PBP).
+- STEP 5 WEEK 2 BOARD: 16 games at N=10000, runtime 865s (14.4 min). 1306 legs.
+  Converged: 0/16 (SE threshold ~0.28, residuals 0.5-4 pts — Jacobian approximation, not a bug).
+  Priced: 0 (no Week 2 props in archive). All teams [PRIOR-ONLY SHARES].
+  DEN@KC excluded. WAS@DAL included.
+- NOT DONE: MNF game not in PBP (void-pending until nflverse publishes). Week 2 props not
+  pulled (no Odds API calls this phase). Convergence would benefit from more iterations or
+  better Jacobian — deferred. ATD calibration maps structurally wrong (actual_atd=0 bug in
+  original code) — deferred.
+
 ## 2026-09-14T18:15Z  claude-code (MNF props pull — DEN@KC)
 - RAN: Hard Rock props pull on VM (root@142.93.242.4) for single MNF event
   Denver Broncos @ Kansas City Chiefs (commence 2026-09-15T00:15Z).

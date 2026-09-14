@@ -65,7 +65,7 @@ K1 lines are reported in every downstream report until they pass.
 
 Order from here: **Phase 2B** (player allocation inside the engine — needed for props) →
 **Phase 3** (anchoring + pricer + calibration 2021–24, 2025 scored once) → **Phase 4**
-(weekly run + parlay board). Target: a Week 3 board.
+(weekly run + parlay board). Target: a Week 2 board (2026 Week 1 ends Mon 14 Sep; Week 2 is 17–21 Sep).
 - **2026-09-14 Phase 2B-fix + Phase 3 (19ee88142).** Player layer: Beta-binomial share
   dispersion fitted by position (WR φ 42.9, TE 85.0, RB 71.3; carries RB 7.9, QB 20.0),
   measured vacated-share redistribution (WR out → 58/28/14 WR/TE/RB), pool concentration
@@ -78,3 +78,29 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   3/6 must be flagged on the board until a key-number layer exists (v2).
   Next: Phase 3b (anchored+players 2021–24 in background, prop maps, K4 real prices, 2025 props
   scored once under a second lock entry) → Phase 4 board for Week 3.
+- **2026-09-14 Phase 3b (c83c43d90).** Anchored+player backtest 2021–24 (streaming, 4-iteration
+  rule restored). Prop isotonic maps fitted per (prop type × position): WR receptions 10/10
+  deciles in-sample, 9/10 on 2025 holdout; WR anytime TD 8/10; TE receptions 6/10; WR rec yds
+  7/10; RB rush yds 5/10 (FAIL). Real-price sign (2023–24 in-sample): receptions +2.1pp; rec
+  yds −10.4pp, rush att −11.6pp, rush yds −17.1pp — sizes implausible → suspected leg-matching
+  bug (x.5 vs integer ladder / vig), symmetric check not run; per-leg K4 ROI still not
+  computed. Anchoring convergence: p90 |Δmargin| 3.95 at N=1,000 (MC SE 0.44) → ~10% of games
+  effectively unanchored. 2025 props scored once, lock updated.
+  **D16 — BOARD TRUST RULES (v1):** priced and rankable = WR/TE receptions (TE flagged), WR
+  anytime TD, team markets anchored to Hard Rock; shown but UNTRUSTED = yardage props, rush
+  attempts, until the ladder check passes; alt spreads straddling 3 or 6 flagged (key-number
+  mass under-generated); games with |Δmargin| > 1.0 after anchoring flagged "not anchored".
+- **2026-09-14 WEEK-NUMBER CORRECTION:** the Sept 13 session-log entries labelled the
+  Sunday 13 Sep slate "Week 2". It was **Week 1** (season opened Thu 10 Sep; MNF 14 Sep closes
+  Week 1). The next board is **Week 2** (17–21 Sep). run_week.py must detect the upcoming week
+  from the nflverse schedule (first week with unplayed games), never from a typed number.
+- **2026-09-14 Phase 4B (K4 re-run, grading, board upgrades).**
+  **D17 — K4 SYMMETRY CHECK PASSED.** The Phase 3b "+2.1pp receptions edge" was an artifact of
+  approximate name matching (last-name only). With player_id resolution via rosters_weekly:
+  all 5 families pass the symmetry check (over_ROI + under_ROI ≈ -0.11 to -0.13, consistent
+  with ~5% vig per side). **No family shows positive edge** on the over side. WR receptions
+  mean edge is **-5.4pp** (was reported +2.1pp). D16 tiers UNCHANGED — trust assignments were
+  based on reliability (decile pass rate), not K4 ROI, and remain valid. The K4 result means
+  the sim does not beat closing prices on any individual prop family; its value remains in
+  the joint distribution (SGP correlations, conditional structure).
+  See `research/nfl_sim/phase4b_grading_k4.md` for full K4 tables and symmetry check.
