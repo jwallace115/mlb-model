@@ -1,4 +1,41 @@
 
+## 2026-09-15T07:00Z  claude-code (Phase 2B — player allocation in engine)
+- IMPLEMENTED: Player allocation in simulate_game(). Target selection by cumulative
+  target_share (rz_target_share when yl<=20), rusher by carry_share (gl when yl<=5).
+  QB excluded from target pool. Completion tilt: sigmoid(logit(tbl_comp) +
+  logit(catch_rate) - logit(lg_pos_catch)). Depth-split yards tables (short/deep by
+  air_yards <10/>=10). Returns (team_df, player_df) when player data provided.
+- SUM ASSERTIONS: PASS (0 mismatches / 100,000 sim-games). rec_yds == pass_yds,
+  rush_yds == rush_yds, exact in every sim.
+- K1-P BACKTEST: 1087 games x 1000 sims, 1179s (1.09s/game, 1.6x overhead).
+- K1-P RELIABILITY TABLE (P(rec>=3) calibration, top-3 target-share):
+  | Decile | Sim P | Actual |
+  |--------|-------|--------|
+  | 0 | 0.003 | 0.045 |
+  | 1 | 0.037 | 0.176 |
+  | 2 | 0.089 | 0.303 |
+  | 3 | 0.163 | 0.357 |
+  | 4 | 0.270 | 0.451 |
+  | 5 | 0.401 | 0.491 |
+  | 6 | 0.567 | 0.552 |
+  | 7 | 0.746 | 0.588 |
+  | 8 | 0.930 | 0.651 |
+  Over-concentrated above decile 6. Mechanism: fixed per-play target_share, no
+  game-to-game share noise. v2 fix: Beta noise on per-game share.
+- FACE VALIDITY (2024 wk18, top 5 sim targets):
+  Jerry Jeudy WR 14.7 tgt / 9.9 rec (actual 6 rec)
+  Trey McBride TE 12.5 / 8.7 (actual 7)
+  Noah Gray TE 12.5 / 8.6 (actual 1)
+  Drake London WR 12.5 / 7.8 (actual 10)
+  Brian Thomas Jr. WR 11.2 / 7.4 (actual 7)
+- REC YDS top-1: sim 61.2 vs actual 61.8 (excellent match)
+- RUSH YDS top-1: sim 42.5 vs actual 57.6 (deficit from K1 scoring gap)
+- BUGS FOUND: (1) QBs were in target pool (3.63 tgt/game vs actual 0.04) — fixed
+  by excluding QB from target_share cumsum. (2) WR carries inflated (1.42 vs 0.21)
+  from renormalize_shares() distributing by depth not position — documented, v2 item.
+- NOT DONE: per-game Beta noise on target_share (calibration fix), position-weighted
+  carry renormalization, yac_per_rec / yards_per_carry (held for v2 per D11).
+
 ## 2026-09-14T22:30Z  claude-code (Phase 2A iter 6 FINAL — CHECK 1/2, play-call fix, logit-additive)
 - CHECK 1 (matchup tilt): Confirmed success/sack/INT use bucket base rates (not global),
   BUT via multiplicative ratio, not logit-additive. Changed to logit-additive:
