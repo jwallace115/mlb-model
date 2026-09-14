@@ -854,20 +854,46 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                            score_h[live_idx] - score_a[live_idx],
                            score_a[live_idx] - score_h[live_idx])
 
-        # Pass probability — vectorised bucket construction
-        d_s = np.char.add(down_live.astype(str), ".0")
+        # Pass probability — 7 score × 4 clock with 3-level fallback
+        clock_live = clock[live_idx]
+        d_s = down_live.astype(str)
         di_s = np.where(dist_live <= 3, "short", np.where(dist_live <= 7, "med", "long"))
-        sc_s = np.where(sd_live < -8, "trail9", np.where(sd_live <= 8, "within8", "lead9"))
-        cl_s = np.where(qtr_live <= 3, "Q1-3", "Q4")
-        bkt_arr = np.char.add(np.char.add(np.char.add(np.char.add(
-            d_s, "_"), di_s), "_"), np.char.add(np.char.add(sc_s, "_"), cl_s))
-        lg_xpass = np.array([pc_lookup.get(b, 0.55) for b in bkt_arr])
+        dd = np.char.add(np.char.add(d_s, "_"), di_s)
+
+        # Fine score (7-way, matching 4th-down table)
+        sc_fine = np.where(sd_live < -8, "trail9+",
+                  np.where(sd_live < -3, "trail4-8",
+                  np.where(sd_live < 0, "trail1-3",
+                  np.where(sd_live == 0, "tied",
+                  np.where(sd_live <= 3, "lead1-3",
+                  np.where(sd_live <= 8, "lead4-8", "lead9+"))))))
+        # Fine clock (4-way)
+        cl_fine = np.where(qtr_live <= 3, "Q1-3",
+                  np.where(clock_live > 300, "Q4>5",
+                  np.where(clock_live > 120, "Q4_2-5", "Q4<2")))
+        # Coarse fallbacks
+        sc_coarse = np.where(sd_live < -8, "trail9",
+                    np.where(sd_live <= 8, "within8", "lead9"))
+        cl_coarse = np.where(qtr_live <= 3, "Q1-3", "Q4")
+
+        # Level 0: fine score × fine clock
+        bkt0 = np.char.add(np.char.add(dd, "_"),
+                           np.char.add(np.char.add(sc_fine, "_"), cl_fine))
+        # Level 1: coarse score × fine clock (c_ prefix)
+        bkt1 = np.char.add(np.char.add(dd, "_c_"),
+                           np.char.add(np.char.add(sc_coarse, "_"), cl_fine))
+        # Level 2: coarse score × coarse clock
+        bkt2 = np.char.add(np.char.add(dd, "_"),
+                           np.char.add(np.char.add(sc_coarse, "_"), cl_coarse))
+
+        lg_xpass = np.array([pc_lookup.get(b0, pc_lookup.get(b1, pc_lookup.get(b2, 0.55)))
+                             for b0, b1, b2 in zip(bkt0, bkt1, bkt2)])
         team_proe = np.empty(n_live)
         for ti in [0, 1]:
             tm = poss_live == ti
             sit = ctx[f"t{ti}_sit_proe"]
             overall = ctx[f"t{ti}_proe"]
-            team_proe[tm] = np.array([sit.get(b, overall) for b in bkt_arr[tm]])
+            team_proe[tm] = np.array([sit.get(b, overall) for b in bkt2[tm]])
         p_pass = _sigmoid(_logit(lg_xpass) + team_proe / 100.0)
 
         is_pass = u_call[live_idx] < p_pass
@@ -895,16 +921,19 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             tbl_comp = pa_comp[d_p, di_p, zi_p]
             tbl_succ = pa_succ[d_p, di_p, zi_p].copy()
 
-            # Apply matchup via log5 ratio adjustment
+            # Apply matchup via logit-additive shift on bucket base rates
+            # logit(p_adj) = logit(bucket_rate) + logit(matchup) - logit(league)
             for ti in [0, 1]:
                 tm = poss_p == ti
                 if tm.any():
-                    tbl_sack[tm] *= ctx[f"t{ti}_sack_rate"] / max(lb["pass_sack_rate"], 0.001)
-                    tbl_int[tm] *= ctx[f"t{ti}_int_rate"] / max(lb["pass_int_rate"], 0.001)
-                    r_succ = ctx[f"t{ti}_pass_success"] / max(lb["pass_success"], 0.001)
-                    tbl_succ[tm] *= r_succ
-            tbl_sack = np.clip(tbl_sack, 0, 0.4)
-            tbl_int = np.clip(tbl_int, 0, 0.2)
+                    sack_shift = _logit(ctx[f"t{ti}_sack_rate"]) - _logit(lb["pass_sack_rate"])
+                    tbl_sack[tm] = _sigmoid(_logit(tbl_sack[tm]) + sack_shift)
+                    int_shift = _logit(ctx[f"t{ti}_int_rate"]) - _logit(lb["pass_int_rate"])
+                    tbl_int[tm] = _sigmoid(_logit(tbl_int[tm]) + int_shift)
+                    succ_shift = _logit(ctx[f"t{ti}_pass_success"]) - _logit(lb["pass_success"])
+                    tbl_succ[tm] = _sigmoid(_logit(tbl_succ[tm]) + succ_shift)
+            tbl_sack = np.clip(tbl_sack, 0.001, 0.4)
+            tbl_int = np.clip(tbl_int, 0.001, 0.2)
             tbl_comp = np.clip(tbl_comp, 0.2, 0.95)
             tbl_succ = np.clip(tbl_succ, 0.05, 0.95)
 
@@ -1116,12 +1145,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             tbl_fum = ru_fum[d_r, di_r, zi_r].copy()
             tbl_succ_r = ru_succ[d_r, di_r, zi_r].copy()
 
-            # Apply matchup tilt on rush success
+            # Apply matchup via logit-additive shift on bucket base rates
             for ti in [0, 1]:
                 tm = poss_r == ti
                 if tm.any():
-                    r_succ = ctx[f"t{ti}_rush_success"] / max(lb["rush_success"], 0.001)
-                    tbl_succ_r[tm] *= r_succ
+                    succ_shift = _logit(ctx[f"t{ti}_rush_success"]) - _logit(lb["rush_success"])
+                    tbl_succ_r[tm] = _sigmoid(_logit(tbl_succ_r[tm]) + succ_shift)
             tbl_succ_r = np.clip(tbl_succ_r, 0.05, 0.95)
 
             u1 = u_rfum[g_idx_r]

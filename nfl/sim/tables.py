@@ -203,22 +203,56 @@ def build_rush_table(df):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def build_playcall_table(df):
-    """League pass rate by the same bucket definition used in tendencies_situational_weekly."""
+    """League pass rate by (down, distance, score_state, clock_period).
+
+    Three fallback levels matching the 4th-down table's granularity:
+    - Level 0 (finest): 7 score x 4 clock
+    - Level 1: 3 score x 4 clock  (prefix c_ on score)
+    - Level 2 (coarsest): 3 score x 2 clock
+    Min cell = 20.
+    """
     scrim = df[df["play_type"].isin(["pass", "run"]) & df["down"].notna()].copy()
     scrim["down_b"] = scrim["down"].astype(int).clip(1, 4).astype(str)
     scrim["dist_b"] = _dist_bucket(scrim["ydstogo"])
-    scrim["score_b"] = pd.cut(scrim["score_differential"], bins=[-100, -9, 8, 100],
-                               labels=["trail9", "within8", "lead9"])
-    scrim["clock_b"] = np.where(scrim["qtr"].isin([1, 2, 3]), "Q1-3", "Q4")
-    scrim["bucket"] = (scrim["down_b"] + "_" + scrim["dist_b"].astype(str) + "_" +
-                        scrim["score_b"].astype(str) + "_" + scrim["clock_b"])
-    scrim["is_pass"] = (scrim["play_type"] == "pass").astype(int)
 
-    tbl = scrim.groupby("bucket", observed=True).agg(
-        n=("is_pass", "size"),
-        pass_rate=("is_pass", "mean"),
-    ).reset_index()
-    tbl = tbl[tbl["n"] >= 20]
+    # Fine score (7-way) and fine clock (4-way) — same as 4th-down table
+    scrim["score_fine"] = _score_bucket_fine(scrim["score_differential"])
+    scrim["clock_fine"] = _clock_bucket_fine(scrim["qtr"],
+                                              scrim["game_seconds_remaining"])
+
+    # Coarse fallbacks
+    scrim["score_coarse"] = pd.cut(scrim["score_differential"],
+                                    bins=[-100, -9, 8, 100],
+                                    labels=["trail9", "within8", "lead9"])
+    scrim["clock_coarse"] = np.where(scrim["qtr"].isin([1, 2, 3]), "Q1-3", "Q4")
+
+    scrim["is_pass"] = (scrim["play_type"] == "pass").astype(int)
+    dd = scrim["down_b"] + "_" + scrim["dist_b"].astype(str) + "_"
+
+    rows = []
+
+    # Level 0: finest (7 score x 4 clock)
+    bkt0 = dd + scrim["score_fine"].astype(str) + "_" + scrim["clock_fine"].astype(str)
+    for bkt, grp in scrim.assign(bkt=bkt0).groupby("bkt", observed=True):
+        n = len(grp)
+        if n >= 20:
+            rows.append({"bucket": bkt, "n": n, "pass_rate": grp["is_pass"].mean()})
+
+    # Level 1: coarse score x fine clock  (c_ prefix)
+    bkt1 = dd + "c_" + scrim["score_coarse"].astype(str) + "_" + scrim["clock_fine"].astype(str)
+    for bkt, grp in scrim.assign(bkt=bkt1).groupby("bkt", observed=True):
+        n = len(grp)
+        if n >= 20:
+            rows.append({"bucket": bkt, "n": n, "pass_rate": grp["is_pass"].mean()})
+
+    # Level 2: coarsest (3 score x 2 clock — original format)
+    bkt2 = dd + scrim["score_coarse"].astype(str) + "_" + scrim["clock_coarse"].astype(str)
+    for bkt, grp in scrim.assign(bkt=bkt2).groupby("bkt", observed=True):
+        n = len(grp)
+        if n >= 20:
+            rows.append({"bucket": bkt, "n": n, "pass_rate": grp["is_pass"].mean()})
+
+    tbl = pd.DataFrame(rows)
     return tbl
 
 
