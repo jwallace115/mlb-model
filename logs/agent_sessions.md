@@ -1,4 +1,30 @@
 
+## 2026-09-16T04:30Z  claude-code (Phase 5A-2 — scoring-conversion diagnostic)
+- STEP 1 DRIVE LOG: Added `drive_log=True` parameter to `simulate_game()`. Records
+  per-drive rows (sim_id, team, drive_no, start_yardline, start_quarter, start_clock,
+  plays, yards, result, points, reached_rz, reached_gl). Added aggregate counters:
+  ev_3rd_att, ev_3rd_conv, ev_4th_go, ev_4th_conv, ev_fg_dist_sum. T8: byte-identical
+  at N=2,000 with drive_log on vs off. 6 tests, all passing.
+- STEP 2 ACTUAL DRIVES: 22,870 drives from PBP 2021-2024. Runtime: 95.2s.
+- STEP 3 K1 RUN: 1,087 games x N=500 with drive_log=True. 11,498,654 drive rows.
+  Runtime: 555.3s (0.51 s/game). Saved k1_drives_5a2.parquet and actual_drives.parquet.
+- STEP 4 COMPARISON: 10 sub-tables (4a-4j) by season.
+  MATERIAL GAPS: TD/drive 18.5% vs 22.5% (-4.0pp), FG/drive 14.1% vs 15.8% (-1.8pp),
+  turnover on downs 7.5% vs 5.8% (+1.6pp), end_half+end_game 9.5% vs 3.7% (+5.8pp),
+  P(|margin|=3) 7.9% vs 14.5% (-6.7pp), safety 0.56% vs 0.23% (+0.33pp).
+  NON-MATERIAL: 3rd-down conv 39.7% vs 40.2%, turnovers 2.38 vs 2.46, punt rate,
+  yards match, plays match, drives match, RZ TD rate gap only 3.6pp.
+- STEP 5 ATTRIBUTION: 3.5 pts/team deficit = 2.7 TD shortfall + 0.5 FG shortfall + 0.3 other.
+  Three TABLE GAPS identified, zero engine bugs:
+  (1) Clock hurry flag only activates when trailing <=8 → excess half/game-ending drives
+  (2) 4th-down go rate 3.4pp too high (team override) → fewer FG attempts
+  (3) Key-number |margin|=3 downstream of fewer FGs
+  D22 and D23 proposed (not decided) for clock urgency and 4th-down override cap.
+- COMMITTED: engine.py (drive log + counters), scoring_diagnostic.py, test_engine_5a2.py,
+  phase5a2_scoring_diagnostic.md, decision doc updated with 5A-2 entry.
+- NOT DONE: No code changes to fix table gaps (per spec — these are decision items).
+  No calibration re-fit. No 2025 holdout touched.
+
 ## 2026-09-15T19:00Z  claude-code (Phase 5A — engine repair)
 - FIX 1 TERMINATION: Removed two batch-wide `continue` statements (time_up, kneeling) that
   burned play-steps for non-affected sims. Safety cap raised to 800, hitting it raises

@@ -589,7 +589,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   _dummy_draw=False,
                   player_usage=None, active_uni=None, qb_ratings=None,
                   epa_home_offset=0.0, epa_away_offset=0.0,
-                  season_type="REG"):
+                  season_type="REG", drive_log=False):
     _load_tables()
     if team_r is None:
         team_r, tend, sit, kicker, league = _load_ratings()
@@ -711,6 +711,25 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_penalties = np.zeros(N, dtype=np.int16)
     ev_clock_used = np.zeros(N, dtype=np.float32)  # Total clock consumed by play draws
 
+    # Phase 5A-2 drive-log counters (always allocated, no perf impact)
+    ev_pass_fumbles = np.zeros(N, dtype=np.int16)
+    ev_rush_fumbles = np.zeros(N, dtype=np.int16)
+    ev_3rd_att = np.zeros(N, dtype=np.int16)
+    ev_3rd_conv = np.zeros(N, dtype=np.int16)
+    ev_4th_go = np.zeros(N, dtype=np.int16)
+    ev_4th_conv = np.zeros(N, dtype=np.int16)
+    ev_fg_dist_sum = np.zeros(N, dtype=np.float32)
+    ev_xp_att = np.zeros(N, dtype=np.int16)
+    ev_xp_made = np.zeros(N, dtype=np.int16)
+    ev_2pt_att = np.zeros(N, dtype=np.int16)
+    ev_2pt_made = np.zeros(N, dtype=np.int16)
+    ev_def_tds = np.zeros(N, dtype=np.int16)  # defensive/ST TDs
+    # Per-quarter scoring (cumulative snapshot at quarter transitions)
+    score_h_q = np.zeros((N, 5), dtype=np.int16)  # [q1..q4, OT]
+    score_a_q = np.zeros((N, 5), dtype=np.int16)
+    _prev_score_h = np.zeros(N, dtype=np.int16)
+    _prev_score_a = np.zeros(N, dtype=np.int16)
+
     # No scale factors — all numbers come from tables built from data
 
     # Player-level stat accumulators: (N, n_players) per team, 13 stats
@@ -727,11 +746,68 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             np.zeros((N, player_ctx[1]["n_players"], N_PL_STATS), dtype=np.int32),
         ]
 
+    # --- Drive log instrumentation (Step 1, Phase 5A-2) ---
+    # Tracks per-drive state using score diffs + pending result codes.
+    _dl_start_yl = np.full(N, float(ko_start), dtype=np.float32)
+    _dl_start_qtr = np.ones(N, dtype=np.int8)
+    _dl_start_clock = np.full(N, 900.0, dtype=np.float32)
+    _dl_start_sh = np.zeros(N, dtype=np.int16)
+    _dl_start_sa = np.zeros(N, dtype=np.int16)
+    _dl_plays = np.zeros(N, dtype=np.int16)
+    _dl_yards = np.zeros(N, dtype=np.float32)
+    _dl_reached_rz = np.zeros(N, dtype=bool)
+    _dl_reached_gl = np.zeros(N, dtype=bool)
+    _dl_team = np.zeros(N, dtype=np.int8)  # team that HAD the ball during this drive
+    _dl_result = np.zeros(N, dtype=np.uint8)  # pending result code
+    _DLR_NONE = 0
+    _DLR_TD, _DLR_FGM, _DLR_FGMISS, _DLR_PUNT = 1, 2, 3, 4
+    _DLR_INT, _DLR_FUM, _DLR_DOWNS, _DLR_ENDHALF, _DLR_ENDGAME, _DLR_SAFETY = 5, 6, 7, 8, 9, 10
+    _DLR_NAMES = {1:"TD",2:"FG_made",3:"FG_missed",4:"punt",5:"turnover_int",
+                  6:"turnover_fumble",7:"downs",8:"end_half",9:"end_game",10:"safety"}
+    _dl_rows = []
+
+    def _dl_new_drive(m):
+        """Record ending drive (if result set), then reset for next drive."""
+        if not drive_log or not m.any():
+            return
+        has = m & (_dl_result > 0)
+        if has.any():
+            for i in np.where(has)[0]:
+                # Points scored = total score change from drive start
+                dh = int(score_h[i] - _dl_start_sh[i])
+                da = int(score_a[i] - _dl_start_sa[i])
+                team = int(_dl_team[i])
+                pts = dh if team == 0 else da
+                _dl_rows.append((
+                    i, team, int(n_drives[i]),
+                    float(_dl_start_yl[i]), int(_dl_start_qtr[i]),
+                    float(_dl_start_clock[i]),
+                    int(_dl_plays[i]), float(_dl_yards[i]),
+                    _DLR_NAMES[_dl_result[i]], pts,
+                    bool(_dl_reached_rz[i]), bool(_dl_reached_gl[i]),
+                ))
+        # Reset
+        _dl_team[m] = poss[m]
+        _dl_start_yl[m] = yl[m]
+        _dl_start_qtr[m] = qtr[m]
+        _dl_start_clock[m] = clock[m]
+        _dl_start_sh[m] = score_h[m]
+        _dl_start_sa[m] = score_a[m]
+        _dl_plays[m] = 0
+        _dl_yards[m] = 0
+        _dl_reached_rz[m] = yl[m] <= 20
+        _dl_reached_gl[m] = yl[m] <= 5
+        _dl_result[m] = _DLR_NONE
+
     # OT state: track first-possession-complete for OT rules
     ot_first_poss_team = np.full(N, -1, dtype=np.int8)
     ot_first_poss_done = np.zeros(N, dtype=bool)
 
+    # Initialize drive-log team tracking
+    _dl_team[:] = poss
+
     def _new_drive(m):
+        _dl_new_drive(m)
         down[m] = 1
         dist[m] = np.minimum(10, yl[m])
         n_drives[m] += 1
@@ -945,6 +1021,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 score_h_1h[ht] = score_h[ht]
                 score_a_1h[ht] = score_a[ht]
                 half_recorded[ht] = True
+                _dl_result[ht] = _DLR_ENDHALF
                 # FIX 6c: 2nd-half kickoff to the team that did NOT receive opening
                 poss[ht] = 1 - opening_receiver[ht]
                 yl[ht] = ko_start
@@ -956,10 +1033,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             if end_reg.any():
                 tied = end_reg & (score_h == score_a)
                 not_tied = end_reg & ~tied
+                _dl_result[not_tied] = _DLR_ENDGAME
                 game_over[not_tied] = True
 
                 # OT
                 if tied.any():
+                    _dl_result[tied] = _DLR_ENDHALF  # end of regulation, going to OT
                     ot_flag[tied] = 1
                     qtr[tied] = 5
                     clock[tied] = 600.0
@@ -974,11 +1053,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             if end_ot.any():
                 if season_type == "REG":
                     # Regular season: ties allowed
+                    _dl_result[end_ot] = _DLR_ENDGAME
                     game_over[end_ot] = True
                 else:
                     # FIX 6b: Postseason — no ties, additional OT periods
                     still_tied = end_ot & (score_h == score_a)
                     not_tied_ot = end_ot & ~still_tied
+                    _dl_result[not_tied_ot] = _DLR_ENDGAME
                     game_over[not_tied_ot] = True
                     # Additional period for still-tied postseason games
                     if still_tied.any():
@@ -1113,7 +1194,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                 r = u_4th[i]
                 if r < p_go:
-                    pass  # Go for it — normal play
+                    ev_4th_go[i] += 1  # Go for it — normal play
                 elif r < p_go + p_punt:
                     punt_m[i] = True
                 else:
@@ -1147,10 +1228,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         # Return team scores a TD
                         ret_team = 1 - poss[i]  # Receiving team
                         m1 = np.zeros(N, dtype=bool); m1[i] = True
+                        _dl_result[i] = _DLR_PUNT  # drive ended by punt (ret TD is separate)
                         poss[i] = 1 - poss[i]
                         _handle_td(m1, np.full(N, ret_team, dtype=np.int8))
                         punt_ret_td_m[i] = False  # Don't do normal punt handling
                 normal_punt = punt_m & punt_ret_td_m
+                _dl_result[normal_punt] = _DLR_PUNT
                 poss[normal_punt] = 1 - poss[normal_punt]
                 _new_drive(normal_punt)
                 # Punt clock is captured in the cross-play elapsed table
@@ -1185,6 +1268,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                 # Score
                 ev_fg_made[made_full] += 1
+                ev_fg_dist_sum[fg_idx] += fg_dist_arr
                 score_h[made_full & (poss == 0)] += 3
                 score_a[made_full & (poss == 1)] += 3
 
@@ -1211,6 +1295,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     ot_first_poss_team[ot_still_tied] = 1 - poss[ot_still_tied]
 
                 # Kickoff only for non-game-over sims
+                _dl_result[made_full] = _DLR_FGM
                 ko_eligible = made_full & ~game_over
                 _do_kickoff(ko_eligible)
                 _check_ko_ret_td(ko_eligible & (qtr < 5))
@@ -1218,6 +1303,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                 # Miss: opponent gets ball
                 if miss_full.any():
+                    _dl_result[miss_full] = _DLR_FGMISS
                     yl[miss_full] = np.clip(100 - yl[miss_full], 20, 99)
                     poss[miss_full] = 1 - poss[miss_full]
                     _new_drive(miss_full)
@@ -1491,6 +1577,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             normal_comp = completed & ~td_mask
             normal_sack = sacked & ~safety_mask
 
+            # 3rd/4th-down tracking (before play outcomes change down)
+            is_3rd = down_live[p_idx] == 3
+            is_4th_go_pass = down_live[p_idx] == 4
+            ev_3rd_att[g_idx[is_3rd]] += 1
+
             # Normal completions (vectorised)
             nc_g = g_idx[normal_comp]
             nc_yds = yds[normal_comp]
@@ -1506,6 +1597,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 dist[nc_g[~nc_fd]] = np.maximum(1, dist[nc_g[~nc_fd]] - nc_yds[~nc_fd])
                 down[nc_g[~nc_fd]] += 1
                 n_plays[nc_g] += 1
+                # Drive log: plays + yards + RZ/GL
+                _dl_plays[nc_g] += 1
+                _dl_yards[nc_g] += nc_yds
+                _dl_reached_rz[nc_g] |= yl[nc_g] <= 20
+                _dl_reached_gl[nc_g] |= yl[nc_g] <= 5
 
             # Normal sacks (vectorised)
             ns_g = g_idx[normal_sack]
@@ -1515,12 +1611,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 dist[ns_g] = np.maximum(1, dist[ns_g] - ns_yds)
                 down[ns_g] += 1
                 n_plays[ns_g] += 1
+                _dl_plays[ns_g] += 1
+                _dl_yards[ns_g] += ns_yds
 
             # Incompletes (vectorised)
             inc_g = g_idx[incomplete]
             if len(inc_g):
                 down[inc_g] += 1
                 n_plays[inc_g] += 1
+                _dl_plays[inc_g] += 1
 
             # TDs (per-sim — rare, ~3/game)
             for j in np.where(td_mask)[0]:
@@ -1528,13 +1627,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 if poss[gi] == 0: h_pass_yds[gi] += yl[gi]
                 else: a_pass_yds[gi] += yl[gi]
                 n_plays[gi] += 1
+                _dl_plays[gi] += 1; _dl_yards[gi] += yl[gi]
+                _dl_reached_rz[gi] = True; _dl_reached_gl[gi] = True
+                _dl_result[gi] = _DLR_TD
                 m = np.zeros(N, dtype=bool); m[gi] = True
                 _handle_td(m, np.full(N, poss[gi], dtype=np.int8))
 
             # Safeties (per-sim — extremely rare)
             for j in np.where(safety_mask)[0]:
                 gi = g_idx[j]
-                n_plays[gi] += 1
+                n_plays[gi] += 1; _dl_plays[gi] += 1
+                _dl_result[gi] = _DLR_SAFETY
                 dt = 1 - poss[gi]
                 score_h[gi] += 2 * (dt == 0); score_a[gi] += 2 * (dt == 1)
                 yl[gi] = 75; poss[gi] = 1 - poss[gi]
@@ -1543,7 +1646,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # Interceptions (per-sim — ~1-2/game)
             for j in np.where(intercepted)[0]:
                 gi = g_idx[j]
-                turnovers[gi] += 1; n_plays[gi] += 1
+                turnovers[gi] += 1; n_plays[gi] += 1; _dl_plays[gi] += 1
+                _dl_result[gi] = _DLR_INT
                 if u_int_dtd[gi] < p_int_def_td:
                     m = np.zeros(N, dtype=bool); m[gi] = True
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
@@ -1556,7 +1660,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # Pass fumbles (per-sim — ~0.5/game)
             for j in np.where(pass_fumbled)[0]:
                 gi = g_idx[j]
-                turnovers[gi] += 1; n_plays[gi] += 1
+                turnovers[gi] += 1; n_plays[gi] += 1; _dl_plays[gi] += 1
+                _dl_result[gi] = _DLR_FUM
                 if u_pfum_dtd[gi] < p_fum_def_td:
                     m = np.zeros(N, dtype=bool); m[gi] = True
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
@@ -1574,6 +1679,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ev_comp[g_idx[completed]] += 1
             fd_comp = normal_comp & (yds >= dist_live[p_idx])
             ev_first_downs[g_idx[fd_comp | td_mask]] += 1
+            # 3rd-down conversions (pass)
+            conv_3rd = is_3rd & (fd_comp | td_mask)
+            ev_3rd_conv[g_idx[conv_3rd]] += 1
+            # 4th-down conversions (pass)
+            conv_4th = is_4th_go_pass & (fd_comp | td_mask)
+            ev_4th_conv[g_idx[conv_4th]] += 1
 
             # --- Player stat tracking (pass) ---
             if has_players:
@@ -1723,6 +1834,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             safety_r = not_fum & (yl_r - yds_r >= 100)
             normal_r = not_fum & ~td_r & ~safety_r
 
+            # 3rd/4th-down tracking (rush)
+            is_3rd_r = down_live[r_idx] == 3
+            is_4th_go_rush = down_live[r_idx] == 4
+
             # Normal rushes (vectorised)
             nr_g = g_idx_r[normal_r]
             nr_yds = yds_r[normal_r]
@@ -1738,6 +1853,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 dist[nr_g[~nr_fd]] = np.maximum(1, dist[nr_g[~nr_fd]] - nr_yds[~nr_fd])
                 down[nr_g[~nr_fd]] += 1
                 n_plays[nr_g] += 1
+                # Drive log tracking
+                _dl_plays[nr_g] += 1
+                _dl_yards[nr_g] += nr_yds
+                _dl_reached_rz[nr_g] |= yl[nr_g] <= 20
+                _dl_reached_gl[nr_g] |= yl[nr_g] <= 5
 
             # Rush TDs (per-sim — rare)
             for j in np.where(td_r)[0]:
@@ -1745,12 +1865,16 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 if poss[gi] == 0: h_rush_yds[gi] += yl[gi]
                 else: a_rush_yds[gi] += yl[gi]
                 n_plays[gi] += 1
+                _dl_plays[gi] += 1; _dl_yards[gi] += yl[gi]
+                _dl_reached_rz[gi] = True; _dl_reached_gl[gi] = True
+                _dl_result[gi] = _DLR_TD
                 m = np.zeros(N, dtype=bool); m[gi] = True
                 _handle_td(m, np.full(N, poss[gi], dtype=np.int8))
 
             # Rush safeties (per-sim — extremely rare)
             for j in np.where(safety_r)[0]:
-                gi = g_idx_r[j]; n_plays[gi] += 1
+                gi = g_idx_r[j]; n_plays[gi] += 1; _dl_plays[gi] += 1
+                _dl_result[gi] = _DLR_SAFETY
                 dt = 1 - poss[gi]
                 score_h[gi] += 2 * (dt == 0); score_a[gi] += 2 * (dt == 1)
                 yl[gi] = 75; poss[gi] = 1 - poss[gi]
@@ -1758,7 +1882,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
             # Fumbles (per-sim — ~1/game)
             for j in np.where(fumbled)[0]:
-                gi = g_idx_r[j]; turnovers[gi] += 1; n_plays[gi] += 1
+                gi = g_idx_r[j]; turnovers[gi] += 1; n_plays[gi] += 1; _dl_plays[gi] += 1
+                _dl_result[gi] = _DLR_FUM
                 if u_rfum_dtd[gi] < p_fum_def_td:
                     m = np.zeros(N, dtype=bool); m[gi] = True
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
@@ -1770,9 +1895,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
             # Track rush play events (vectorised)
             ev_rush_plays[g_idx_r] += 1
+            ev_3rd_att[g_idx_r[is_3rd_r]] += 1
             normal_rush = not_fum & ~td_r & ~safety_r
             fd_rush = normal_rush & (yds_r >= dist_live[r_idx])
             ev_first_downs[g_idx_r[fd_rush | td_r]] += 1
+            conv_3rd_r = is_3rd_r & (fd_rush | td_r)
+            ev_3rd_conv[g_idx_r[conv_3rd_r]] += 1
+            conv_4th_r = is_4th_go_rush & (fd_rush | td_r)
+            ev_4th_conv[g_idx_r[conv_4th_r]] += 1
 
             # --- Player stat tracking (rush) ---
             if has_players:
@@ -1856,6 +1986,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # --- Turnover on downs ---
         tod = ~game_over & (down > 4)
         if tod.any():
+            _dl_result[tod] = _DLR_DOWNS
             _change_poss(tod)
 
             # OT: change of possession after first team's drive
@@ -1869,6 +2000,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             f"Safety cap hit: {n_unfinished}/{N} sims unfinished after {MAX_STEPS} steps. "
             f"This indicates a bug in game termination logic."
         )
+
+    # Record any remaining unrecorded drives at game end
+    if drive_log:
+        unrecorded = game_over & (_dl_result > 0)
+        if unrecorded.any():
+            _dl_new_drive(unrecorded)  # This records + resets
 
     # If half was never recorded (0-0 at half), record it
     not_rec = ~half_recorded
@@ -1904,11 +2041,25 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_tds": ev_tds,
         "ev_penalties": ev_penalties,
         "ev_clock_used": ev_clock_used,
+        "ev_3rd_att": ev_3rd_att,
+        "ev_3rd_conv": ev_3rd_conv,
+        "ev_4th_go": ev_4th_go,
+        "ev_4th_conv": ev_4th_conv,
+        "ev_fg_dist_sum": ev_fg_dist_sum,
         "game_over": game_over,
         "clock_remaining": clock_remaining,
     })
     # FIX 5: attach fallback count as metadata
     team_df.attrs["playcall_fallback_count"] = _fallback_count
+
+    # Drive log output
+    if drive_log and _dl_rows:
+        dl_df = pd.DataFrame(_dl_rows, columns=[
+            "sim_id", "team", "drive_no", "start_yardline", "start_quarter",
+            "start_clock", "plays", "yards", "result", "points",
+            "reached_rz", "reached_gl",
+        ])
+        team_df.attrs["drive_log"] = dl_df
 
     if not has_players:
         return team_df

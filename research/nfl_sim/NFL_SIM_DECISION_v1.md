@@ -133,3 +133,18 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   K1 post-5A: 9 PASS, 3 FAIL (same 3 as D15: pts/team, P(|m|=3), P(|m|=6)). New passes:
   corr 0.800 (was 0.769), pass yds 222.8 (was 227.5, actual 221), tie rate 0.90%.
   See `research/nfl_sim/phase5a_engine_repair.md`.
+- **2026-09-15 Phase 5A-2 scoring-conversion diagnostic.**
+  Per-drive log added to engine (byte-identical when off; T8 verified at N=2,000).
+  K1 re-run (1,087 games, N=500, 555s) with per-drive instrumentation.
+  **Finding:** 3.5 pts/team deficit is 77% TD/drive gap (-4.0pp, -2.7 pts), 14% FG
+  gap (-1.8pp, -0.5 pts). Three table gaps identified, zero engine bugs.
+  (1) Excess end_half/end_game drives: 9.5% vs 3.7% actual — clock table hurry flag
+  only activates when trailing <=8, but real teams hurry at end-of-half regardless.
+  (2) 4th-down go rate 3.4pp too high (23.2% vs 19.8%) from team aggressiveness
+  override — converts FG opportunities to failed go attempts, reducing FG att/game
+  from 3.92 to 3.41 and turnover-on-downs 7.5% vs 5.8%.
+  (3) Key-number |margin|=3 deficit (7.9% vs 14.5%) is downstream of fewer FGs.
+  **D22 proposed (not decided):** End-of-half clock urgency table (hurry regardless
+  of score in final 2:00 of each half).
+  **D23 proposed (not decided):** Cap team 4th-down aggressiveness override at 1.15.
+  See `research/nfl_sim/phase5a2_scoring_diagnostic.md`.
