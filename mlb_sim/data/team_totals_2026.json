@@ -202788,5 +202788,1313 @@
       }
     ],
     "snapshot_time": "2026-09-14T11:05:02.504336+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "4ee5706290157d66372729e7e70830e8",
+    "game_pk": 822925,
+    "home_team": "Tampa Bay Rays",
+    "away_team": "Athletics",
+    "home_team_abbr": "TBR",
+    "away_team_abbr": "ATH",
+    "commence_time": "2026-09-15T22:40:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": -111,
+        "under_price": -115
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betrivers",
+        "line": 6.5,
+        "over_price": 225,
+        "under_price": -186
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -115,
+        "under_price": -186
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 143,
+        "under_price": -186
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -154
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -153
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 118,
+        "under_price": -150
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -160
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 225,
+        "under_price": -167
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -139,
+        "under_price": -167
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 130,
+        "under_price": -167
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "2f2faff81101f84158c3cfbd630bcb30",
+    "game_pk": 824384,
+    "home_team": "Cleveland Guardians",
+    "away_team": "Chicago White Sox",
+    "home_team_abbr": "CLE",
+    "away_team_abbr": "CHW",
+    "commence_time": "2026-09-15T22:40:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 4.5,
+    "n_books": 14,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 106,
+        "under_price": -136
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -300,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -162,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 110,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 175,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 270,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 400,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 600,
+        "under_price": -1200
+      },
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 108,
+        "under_price": -138
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 170,
+        "under_price": 130
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 104,
+        "under_price": 130
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -167,
+        "under_price": 130
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -140,
+        "under_price": 110
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -143,
+        "under_price": 112
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -250,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -143,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 120,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 187,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 290,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 450,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 600,
+        "under_price": -1400
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -142,
+        "under_price": 112
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -145,
+        "under_price": 110
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 195,
+        "under_price": 106
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 125,
+        "under_price": 106
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -136,
+        "under_price": 106
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "baa7f738229bf9855e24037a2a30a2cb",
+    "game_pk": 824466,
+    "home_team": "Cincinnati Reds",
+    "away_team": "Los Angeles Dodgers",
+    "home_team_abbr": "CIN",
+    "away_team_abbr": "LAD",
+    "commence_time": "2026-09-15T22:40:00Z",
+    "home_total_line": 2.5,
+    "away_total_line": 5.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 2.5,
+        "over_price": -160,
+        "under_price": 124
+      },
+      {
+        "book": "betonlineag",
+        "line": 2.5,
+        "over_price": -155,
+        "under_price": 121
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 124,
+        "under_price": -160
+      },
+      {
+        "book": "bovada",
+        "line": 2.5,
+        "over_price": -160,
+        "under_price": 120
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -143,
+        "under_price": -305
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 130,
+        "under_price": -305
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 225,
+        "under_price": -305
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 5.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "betonlineag",
+        "line": 5.5,
+        "over_price": 113,
+        "under_price": -145
+      },
+      {
+        "book": "fanduel",
+        "line": 5.5,
+        "over_price": 108,
+        "under_price": -138
+      },
+      {
+        "book": "bovada",
+        "line": 5.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "betrivers",
+        "line": 6.5,
+        "over_price": 165,
+        "under_price": -139
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -148,
+        "under_price": -139
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 110,
+        "under_price": -139
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "e5ea1bb04bd365a0c15838cfb75266f9",
+    "game_pk": 823333,
+    "home_team": "Pittsburgh Pirates",
+    "away_team": "Milwaukee Brewers",
+    "home_team_abbr": "PIT",
+    "away_team_abbr": "MIL",
+    "commence_time": "2026-09-15T22:41:00Z",
+    "home_total_line": 2.5,
+    "away_total_line": 4.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 2.5,
+        "over_price": -113,
+        "under_price": -113
+      },
+      {
+        "book": "draftkings",
+        "line": 2.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betonlineag",
+        "line": 2.5,
+        "over_price": -123,
+        "under_price": -107
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -117,
+        "under_price": -215
+      },
+      {
+        "book": "betrivers",
+        "line": 1.5,
+        "over_price": -250,
+        "under_price": -215
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 163,
+        "under_price": -215
+      },
+      {
+        "book": "bovada",
+        "line": 2.5,
+        "over_price": -120,
+        "under_price": -110
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": -128,
+        "under_price": 100
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -130,
+        "under_price": 100
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betrivers",
+        "line": 6.5,
+        "over_price": 195,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 125,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -127,
+        "under_price": 100
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -125,
+        "under_price": -105
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "015394004322ca670004015ae5bd94a3",
+    "game_pk": 822683,
+    "home_team": "Washington Nationals",
+    "away_team": "Philadelphia Phillies",
+    "home_team_abbr": "WSN",
+    "away_team_abbr": "PHI",
+    "commence_time": "2026-09-15T22:45:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 4.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 2.5,
+        "over_price": -145,
+        "under_price": 114
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": 121,
+        "under_price": -154
+      },
+      {
+        "book": "fanduel",
+        "line": 2.5,
+        "over_price": -148,
+        "under_price": 116
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -160
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 128,
+        "under_price": 115
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 220,
+        "under_price": 115
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -148,
+        "under_price": 115
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -130,
+        "under_price": 100
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": -128,
+        "under_price": 100
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -130,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 6.5,
+        "over_price": 195,
+        "under_price": -103
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 128,
+        "under_price": -103
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -125,
+        "under_price": -103
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "1ddb6d18eafe93f1947471922f1938ea",
+    "game_pk": 822762,
+    "home_team": "Toronto Blue Jays",
+    "away_team": "Detroit Tigers",
+    "home_team_abbr": "TOR",
+    "away_team_abbr": "DET",
+    "commence_time": "2026-09-15T23:08:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 4.5,
+    "n_books": 12,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -154,
+        "under_price": 120
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -333,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -167,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 170,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 270,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 400,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 600,
+        "under_price": -1200
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 180,
+        "under_price": -143
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -155,
+        "under_price": -143
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 112,
+        "under_price": -143
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -135
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -130,
+        "under_price": 102
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -225,
+        "under_price": -1600
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -133,
+        "under_price": -1600
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 130,
+        "under_price": -1600
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 210,
+        "under_price": -1600
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 320,
+        "under_price": -1600
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 480,
+        "under_price": -1600
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 700,
+        "under_price": -1600
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -127,
+        "under_price": -167
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 205,
+        "under_price": -167
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 130,
+        "under_price": -167
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -130,
+        "under_price": 100
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "a1a608b633419833caf64ad8739781f3",
+    "game_pk": 823574,
+    "home_team": "New York Mets",
+    "away_team": "Baltimore Orioles",
+    "home_team_abbr": "NYM",
+    "away_team_abbr": "BAL",
+    "commence_time": "2026-09-15T23:10:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -140,
+        "under_price": 110
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -148,
+        "under_price": 116
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -146,
+        "under_price": 114
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -150,
+        "under_price": 115
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 205,
+        "under_price": -157
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -143,
+        "under_price": -157
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 123,
+        "under_price": -157
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -102
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 225,
+        "under_price": -103
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 138,
+        "under_price": -103
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -124,
+        "under_price": -103
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "256d7de8ceb3804256d260a74263d82c",
+    "game_pk": 824627,
+    "home_team": "Chicago Cubs",
+    "away_team": "Atlanta Braves",
+    "home_team_abbr": "CHC",
+    "away_team_abbr": "ATL",
+    "commence_time": "2026-09-15T23:40:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 4.5,
+    "n_books": 14,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -333,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -175,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 170,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 260,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 400,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 600,
+        "under_price": -1200
+      },
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 112,
+        "under_price": -142
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 175,
+        "under_price": -136
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -165,
+        "under_price": -136
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 107,
+        "under_price": -136
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -135,
+        "under_price": 105
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -135,
+        "under_price": 105
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -250,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -137,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 125,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 200,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 300,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 450,
+        "under_price": -1400
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 650,
+        "under_price": -1400
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -138,
+        "under_price": 108
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -135,
+        "under_price": 105
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 200,
+        "under_price": -159
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -134,
+        "under_price": -159
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 123,
+        "under_price": -159
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "f367b112dcb4fea1a4ff67e49ee1f0cd",
+    "game_pk": 823654,
+    "home_team": "Minnesota Twins",
+    "away_team": "New York Yankees",
+    "home_team_abbr": "MIN",
+    "away_team_abbr": "NYY",
+    "commence_time": "2026-09-15T23:40:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 4.5,
+    "n_books": 6,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 122,
+        "under_price": -156
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 215,
+        "under_price": 120
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 123,
+        "under_price": 120
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -152,
+        "under_price": 120
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": -108,
+        "under_price": -118
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 148,
+        "under_price": -115
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -186,
+        "under_price": -115
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -110,
+        "under_price": -115
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
+  },
+  {
+    "game_date": "2026-09-15",
+    "event_id": "15c9ca42142414287f11247c92905d9f",
+    "game_pk": 823007,
+    "home_team": "St. Louis Cardinals",
+    "away_team": "San Francisco Giants",
+    "home_team_abbr": "STL",
+    "away_team_abbr": "SFG",
+    "commence_time": "2026-09-15T23:45:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 4.5,
+    "n_books": 13,
+    "home_books": [
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -105,
+        "under_price": -125
+      },
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 102,
+        "under_price": -130
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -350,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -182,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 160,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 250,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 375,
+        "under_price": -1200
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 550,
+        "under_price": -1200
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": -103,
+        "under_price": 140
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 160,
+        "under_price": 140
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -180,
+        "under_price": 140
+      }
+    ],
+    "away_books": [
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -115,
+        "under_price": -115
+      },
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -113,
+        "under_price": -113
+      },
+      {
+        "book": "williamhill_us",
+        "line": 2.5,
+        "over_price": -200,
+        "under_price": -2000
+      },
+      {
+        "book": "williamhill_us",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -2000
+      },
+      {
+        "book": "williamhill_us",
+        "line": 4.5,
+        "over_price": 150,
+        "under_price": -2000
+      },
+      {
+        "book": "williamhill_us",
+        "line": 5.5,
+        "over_price": 240,
+        "under_price": -2000
+      },
+      {
+        "book": "williamhill_us",
+        "line": 6.5,
+        "over_price": 350,
+        "under_price": -2000
+      },
+      {
+        "book": "williamhill_us",
+        "line": 7.5,
+        "over_price": 550,
+        "under_price": -2000
+      },
+      {
+        "book": "williamhill_us",
+        "line": 8.5,
+        "over_price": 750,
+        "under_price": -2000
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 235,
+        "under_price": -113
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 148,
+        "under_price": -113
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -113,
+        "under_price": -113
+      }
+    ],
+    "snapshot_time": "2026-09-15T11:05:03.292954+00:00"
   }
 ]
