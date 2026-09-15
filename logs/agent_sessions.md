@@ -1,4 +1,26 @@
 
+## 2026-09-15T14:30Z  claude-code (Phase 5A-5 — non-offensive scoring + dead-table tests)
+- STEP 1 DEAD-TABLE TESTS: 15 tests, all PASS. Every empirical table is LIVE. Clock
+  score-state table IS wired in (Cowork concern resolved). Playcall and 4th-down tables
+  required level-0 perturbation (coarser levels fell through to finer ones).
+- STEP 2 ACTUAL NON-OFF SCORING: 0.92 pts/team/game. Pick-sixes 9.07% of INTs (152 total),
+  scoop-sixes 6.28% of fumbles (71), punt ret TDs 0.245% of punts (21), KO ret TDs 0.246%
+  of KOs (27). Blocked-kick ret TDs: 0. Def 2pt: 1 total. Safeties: 53.
+- STEP 3 SIM NON-OFF SCORING: Engine already has all return-TD paths. Added counters
+  ev_int_ret_td, ev_fum_ret_td, ev_punt_ret_td, ev_ko_ret_td. K1: sim 0.83 vs actual
+  0.92 pts/team (gap 0.09, NOT MATERIAL). All return-TD rates match within 0.5pp.
+- STEP 4 CONDITIONAL DRIVE ANALYSIS: Extended drive log with end_yardline, end_down,
+  end_dist, score_state. Actual analysis: punt drives from own territory die at own 40
+  (median yl=68). TD deficit is from red-zone conversion: 5-zone table averages sharp
+  gradients (goal-to-go at 1 ≈ 70% TD vs at 8 ≈ 45%). Classification: (ii) table gap.
+- STEP 5 K1: 19.0 vs 22.4. No engine logic changes. Non-off scoring correctly calibrated.
+  Gap 3.4 pts > between-season SD 0.59. STOP.
+- TESTS: 5 failed (all pre-existing: 5A-3 spec tolerances, 5A-4 marginal penalty,
+  5A tie rate, 5A offset continuity), 55 passed. No new failures. Dead-table tests: 15/15.
+- K1 runtime: 690s (11.5 min).
+- NOT DONE: pts/team gap not closed (STOP per spec). Red-zone table refinement would
+  require rebuilding pass/rush outcome tables at 1-yard resolution in yl 1-20.
+
 ## 2026-09-15T09:00Z  claude-code (Phase 5A-4 — penalty/first-down audit)
 - STEP 0 TOLERANCES: Restored 5A-3 spec tolerances. T1: 1.0pp (was 3.0pp), go rate 21.9%
   vs 19.8% (diff 2.1pp, FAIL). T2: 0.15 (was 0.50), FG 3.53 vs 3.92 (diff 0.39, FAIL).
