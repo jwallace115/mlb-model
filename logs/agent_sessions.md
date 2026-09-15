@@ -1,3 +1,25 @@
+## 2026-09-15T20:30Z  cowork (Phase 5A-6 — goal-line censoring, EOH FG, Q2<2; executed directly)
+- WORKFLOW: first phase run by Cowork in its cloud workspace (repo clone + staged pbp) and on the
+  Mac shell, no Claude Code relay. Mac workspace went unavailable mid-phase; commits delivered as
+  patches in _cowork_patches/ (git am) because the cloud session cannot push to origin.
+- DIAGNOSIS: per-play TD rate by yardline (engine._DEBUG_YDS collector vs pbp): completions from
+  the 5-10 scored 26% vs 53% real; 40+ completions 0.73 vs 0.97/game; offensive TDs 3.94 vs 4.73.
+  Mechanism: recorded gains are right-censored at the goal line; pooled 5-zone cells biased low.
+- FIX D24: Kaplan-Meier quantiles in tables.py (pass+rush success/fail/all), tail borrowed from
+  the next zone out, n_censored per cell. FIX D25: eoh_fg_decision table + engine hook (non-4th FG
+  0 -> 0.16/game; actual 0.33). FIX D26: Q2<2 clock bucket in playcall/fourth_down tables + engine.
+- TABLES REBUILT: fourth_down 1023->1150 rows, playcall 461->546, pass/rush +n_censored, new
+  eoh_fg_decision (41 rows). All other tables byte-identical (verified) and left untouched.
+  constants.json restored by hand: the builder does not produce 5A-4's safety constants (FLAG).
+- TESTS: nfl/sim/tests/test_engine_5a6.py 8/8 at spec (table populated & monotone; perturbation
+  liveness for eoh + Q2<2; KM unit test; per-play TD rate by bin within 8pp; off TDs within 0.5).
+- K1 (1,087 games, N=500, cloud 2,184 s): pts/team 19.0 -> 21.79 (actual 22.39); TDs 4.80 (4.73);
+  drives 22.1; go rate 20.7%; NEW FAILS pass yds 232.5 (221), SD margin 14.84 (14.20); UNCHANGED
+  FAILS FG att 3.32 (3.92), P(|m|=3) 8.1% (14.5%), tie 0.73%. Full-diagnostic run (drive log)
+  completed sims (2,413 s) then died after table 4a (memory) — drive shares captured in report.
+- NOT DONE: K1 not passed (0.6 pts, FG count, key numbers). 5A-3 spec tests still red.
+- NEXT: 5A-7 KM inside 10-yard zones; late-half possession count / timeouts; FG count.
+
 
 ## 2026-09-15T14:30Z  claude-code (Phase 5A-5 — non-offensive scoring + dead-table tests)
 - STEP 1 DEAD-TABLE TESTS: 15 tests, all PASS. Every empirical table is LIVE. Clock

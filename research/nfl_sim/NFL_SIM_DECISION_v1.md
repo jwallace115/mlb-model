@@ -169,3 +169,33 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   granularity near the goal line). 34 tests, all passing.
   See `research/nfl_sim/phase5a3_scoring_fix.md`.
   See `research/nfl_sim/phase5a2_scoring_diagnostic.md`.
+- **2026-09-15 Phase 5A-6 — GOAL-LINE CENSORING FOUND AND FIXED (Cowork-executed, no relay).**
+  Root cause of the 3.4 pts/team K1 deficit: yardage tables were built from RECORDED gains,
+  which are right-censored at the goal line (a scoring play from the 8 records 8). Pooling
+  censored plays into 5 field zones biased every zone's deeper end downward — TD rate per
+  completion from the 5–10 was 26% in the sim vs 53% real; 40+ completions 0.73 vs 0.97/game.
+  5A-5's "5-zone granularity" hypothesis was directionally right and Cowork's rejection of
+  it (on the drive-entry red-zone table) was wrong; the per-play TD-rate-by-yardline table
+  is the decisive diagnostic and is now the standard for this question.
+  **D24 — Kaplan–Meier yardage quantiles.** `tables._km_quantiles`: scoring plays are
+  censored at yardline_100; the unobservable tail borrows shape from the next zone out
+  (rz10 ← opp20 ← midfield; midfield/own ← open-field gains of the same situation),
+  conditional on gain > last observed value; sentinel 99 (capped by the engine at the
+  goal line) only when no reference qualifies. Applied to pass and rush success/fail/all
+  quantiles; `n_censored` recorded per cell. No constants.
+  **D25 — End-of-half FG on downs 1–3** from empirical table J (`eoh_fg_decision`):
+  state × seconds-left × yardline, min cell 30. Leading teams in Q4 never kick (measured 0).
+  **D26 — Q2<2 clock bucket** in the play-call and 4th-down tables (two-minute drill:
+  pass rate 0.80 vs 0.58; FG rate in range ~10pp higher).
+  K1 after (1,087 games, N=500): pts/team 19.0 → **21.79** (actual 22.39; by season
+  21.6/22.0/21.5/22.2 vs 23.0/21.9/21.8/22.9); off TDs 3.94 → 4.80 (4.73); TDs from ≥ 20
+  out 0.76 → 1.13 (1.13); go rate 20.7% (19.8, within 1pp for the first time); drives 22.1
+  (21.9). New FAILs: pass yds/team 232.5 (221; KM inside 40-yard zones still averages the
+  compression gradient), SD margin 14.84 (14.20). Unchanged FAILs: FG att 3.32 (3.92),
+  P(|m|=3) 8.1% (14.5%), tie rate 0.73% (0.28%). 8 new tests at spec, all passing; 5A-3
+  spec tests still red as reported. Next (5A-7): KM inside 10-yard zones with the same
+  tail chain; late-half possession count (8.2 vs 9.0 snaps in Q2's last 2:00, 4.5 vs 5.6
+  in Q4 — timeouts not modelled); then FG count and key-number mass re-measured.
+  Flagged, not changed: `constants.json` carries hand-written safety constants (5A-4) the
+  builder does not produce, and the engine scales deep sack yardage by 0.687 (5A-4) —
+  both violate the no-constants rule. See `research/nfl_sim/phase5a6_goalline_censoring.md`.
