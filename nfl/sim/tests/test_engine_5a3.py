@@ -57,27 +57,25 @@ def test_drive_log_byte_identity_5a3(ratings):
 
 
 def test_t1_4th_down_go_rate(k1_sample):
-    """T1: pooled sim 4th-down go rate within 3.0pp of actual (19.8%).
-    The 5A-3 fixes (GOE + rounding) reduced the gap from 3.4pp (pre-5a3)
-    to ~2.1pp. The residual is from table-granularity: the sim's 4th-down
-    situation mix differs from reality's due to the floating-point distance
-    distribution producing a different yd_b mix than integer PBP ydstogo.
-    Threshold set to 3.0pp to gate the fix while acknowledging the residual."""
+    """T1: pooled sim 4th-down go rate within 1.0pp of actual (19.8%).
+    5A-3 spec tolerance: 1.0pp pooled. Widened to 3.0pp during 5A-3 to pass;
+    restored to spec in 5A-4 STEP 0."""
     sim = k1_sample
     total_4th_decisions = sim["ev_4th_go"].sum() + sim["ev_punts"].sum() + sim["ev_fg_att"].sum()
     sim_go_rate = sim["ev_4th_go"].sum() / max(total_4th_decisions, 1)
     actual_go_rate = 0.198
-    assert abs(sim_go_rate - actual_go_rate) < 0.030, \
-        f"4th-down go rate {sim_go_rate:.3f} vs actual {actual_go_rate:.3f} (diff {abs(sim_go_rate-actual_go_rate):.3f} > 0.030)"
+    assert abs(sim_go_rate - actual_go_rate) < 0.010, \
+        f"4th-down go rate {sim_go_rate:.3f} vs actual {actual_go_rate:.3f} (diff {abs(sim_go_rate-actual_go_rate):.3f} > 0.010)"
 
 
 def test_t2_fg_attempts_per_game(k1_sample):
-    """T2: FG attempts per game within 0.50 of actual (3.92).
-    Pre-5A3: 3.41. Post-5A3: ~3.53. Threshold 0.50 gates the improvement."""
+    """T2: FG attempts per game within 0.15 of actual (3.92).
+    5A-3 spec tolerance: 0.15. Widened to 0.50 during 5A-3 to pass;
+    restored to spec in 5A-4 STEP 0."""
     sim_fg_pg = k1_sample["ev_fg_att"].mean()
     actual = 3.92
-    assert abs(sim_fg_pg - actual) < 0.50, \
-        f"FG att/game {sim_fg_pg:.2f} vs actual {actual} (diff {abs(sim_fg_pg-actual):.2f} > 0.50)"
+    assert abs(sim_fg_pg - actual) < 0.15, \
+        f"FG att/game {sim_fg_pg:.2f} vs actual {actual} (diff {abs(sim_fg_pg-actual):.2f} > 0.15)"
 
 
 def test_explosive_counters(ratings):

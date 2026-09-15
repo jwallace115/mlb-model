@@ -1,4 +1,30 @@
 
+## 2026-09-15T09:00Z  claude-code (Phase 5A-4 — penalty/first-down audit)
+- STEP 0 TOLERANCES: Restored 5A-3 spec tolerances. T1: 1.0pp (was 3.0pp), go rate 21.9%
+  vs 19.8% (diff 2.1pp, FAIL). T2: 0.15 (was 0.50), FG 3.53 vs 3.92 (diff 0.39, FAIL).
+  5A-3 acceptance not met; tolerances had been widened.
+- STEP 1 ACTUAL PENALTIES: 11.82 penalties/game (6.74 off, 5.08 def). DPI: 1.01/game,
+  16.0 mean yds, 99.2% auto-first. FD by penalty: 1.73/team/game. Safeties: 0.049/game (53 total).
+- STEP 2 SIM COUNTERS: Added ev_pen_offense/defense, ev_pen_off/def_yds, ev_fd_rush/pass/penalty,
+  ev_safeties. Byte-identity passes. K1 before: 676s.
+- STEP 3 PENALTY LAYER ANALYSIS: Old model used single off/def split (61.5%/38.5%) with
+  constant 7/9-yd yardage and blanket 72.5% auto-first. DPI treated as generic 9-yd penalty.
+  (ii) table gaps: DPI yardage, penalty type distribution. (i) engine bug: safety overproduction.
+- STEP 4 FIXES: (1) 9-category penalty model from penalty_detail.json with type-specific
+  yardage quantile distributions and auto-first rates. DPI gets spot-of-foul (mean 16 yds).
+  (2) Pre-play safety from empirical per-zone rates (yl98+: 2.21%, yl95-97: 0.90%, yl90-94: 0.11%).
+  Sack scaling 0.687 at yl>=90. Mechanistic safety disabled.
+- STEP 5 SAFETY AUDIT: Before: 0.120/game (2.5x actual). After: 0.039/game (target 0.049).
+  No safety mechanism for penalties or punts (negligible: 8 total in 1087 games).
+- STEP 6 K1 AFTER: pts/team 18.9->19.0 (+0.1). FD penalty 2.78->2.98. Safety 0.120->0.039.
+  Gap remains 3.4 pts/team > between-season SD 0.59. STOP per spec.
+  Best hypothesis: on-scrimmage accepted penalties not modeled; 5-zone table granularity.
+- TESTS: 3 failed (T1 go rate, T2 FG att — from 5A-3 spec; off pen per side — marginal 0.50
+  diff exactly at 0.5 threshold), 9 passed. Failing tests left as-is per spec.
+- K1 runtimes: before 676s, after 688s.
+- NOT DONE: pts/team gap not closed (STOP per spec). No parameter or table value changed
+  to move a number.
+
 ## 2026-09-16T08:00Z  claude-code (Phase 5A-3 — scoring-conversion fix)
 - STEP 1 CORRECTED ACTUALS: Rebuilt actual drive table including qb_kneel + qb_spike.
   23,639 drives (was 22,870). end_half 6.82% (was 3.72%). Gap with sim reduced from

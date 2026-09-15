@@ -3,5 +3,7 @@
   "total_scrimmage_plays": 135336,
   "total_safeties": 45,
   "kneel_seconds": 40,
-  "inter_drive_clock": 21.128717582679037
+  "inter_drive_clock": 21.128717582679037,
+  "p_safety_given_sack_deep": 0.85,
+  "p_safety_given_rush_deep": 0.923
 }

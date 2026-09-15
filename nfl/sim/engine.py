@@ -68,6 +68,11 @@ def _load_tables():
     depth_path = TABLES_DIR / "pass_depth_outcomes.parquet"
     if depth_path.exists():
         _CACHE["pass_depth"] = pd.read_parquet(depth_path)
+    # 5A-4: penalty detail table
+    pen_detail_path = TABLES_DIR / "penalty_detail.json"
+    if pen_detail_path.exists():
+        with open(pen_detail_path) as f:
+            _CACHE["penalty_detail"] = json.load(f)
     _CACHE["tables"] = True
 
 
@@ -648,6 +653,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     scalars = _CACHE["scalars"]
     to_ret = _CACHE["turnover"]
     consts = _CACHE["constants"]
+    # 5A-4: conditional safety probabilities
+    p_safety_sack_deep = consts.get("p_safety_given_sack_deep", 1.0)
+    p_safety_rush_deep = consts.get("p_safety_given_rush_deep", 1.0)
 
     # FIX 6a: 2pt decision table
     twopt_tbl = pd.read_parquet(TABLES_DIR / "twopt_decision.parquet")
@@ -673,6 +681,42 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     p_penalty_nop = scalars["penalty"]["p_no_play_penalty"]
     p_off_pen = scalars["penalty"].get("p_noplay_offense", 0.615)
     p_auto_first = scalars["penalty"].get("noplay_auto_first", 0.5)
+
+    # 5A-4: category-based penalty model from penalty_detail.json
+    _pen_detail = _CACHE.get("penalty_detail")
+    _pen_cats_enabled = _pen_detail is not None
+    if _pen_cats_enabled:
+        # Build categorical CDF for penalty type selection
+        _pen_cat_order = [
+            "offense_5yd", "offense_10yd", "offense_15yd", "offense_other",
+            "defense_auto_short", "defense_auto_long", "defense_dpi",
+            "defense_noauto", "defense_other",
+        ]
+        _pen_counts = np.array([_pen_detail.get(c, {}).get("count", 0)
+                                for c in _pen_cat_order], dtype=np.float64)
+        _pen_total = _pen_counts.sum()
+        _pen_probs = _pen_counts / _pen_total
+        _pen_cdf = np.cumsum(_pen_probs)
+        # Per-category: is_offense, yardage quantiles, auto-first rate
+        _pen_is_off = np.array([c.startswith("offense") for c in _pen_cat_order])
+        _pen_auto_first = np.array([
+            _pen_detail.get(c, {}).get("auto_first_rate", 0.0)
+            for c in _pen_cat_order])
+        _pen_mean_yds = np.array([
+            _pen_detail.get(c, {}).get("mean_yds", 5.0)
+            for c in _pen_cat_order])
+        _pen_yds_q = []
+        for c in _pen_cat_order:
+            q = _pen_detail.get(c, {}).get("yds_q")
+            if q is not None:
+                _pen_yds_q.append(np.array(q))
+            else:
+                _pen_yds_q.append(np.full(101, _pen_detail.get(c, {}).get("mean_yds", 5.0)))
+        # DPI spot-of-foul: need a separate yardage draw since it depends on yardline
+        _pen_dpi_idx = _pen_cat_order.index("defense_dpi")
+        _pen_dpi_yds_q = _pen_yds_q[_pen_dpi_idx]
+        # Keep p_penalty_nop from scalars (0.072 = no-play penalties / scrimmage plays)
+        xs101_pen = np.linspace(0, 1, 101)
 
     p_punt_ret_td = to_ret.get("punt_p_ret_td", 0.0024)
     p_ko_ret_td = to_ret.get("ko_p_ret_td", 0.0025)
@@ -738,6 +782,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_2pt_att = np.zeros(N, dtype=np.int16)
     ev_2pt_made = np.zeros(N, dtype=np.int16)
     ev_def_tds = np.zeros(N, dtype=np.int16)  # defensive/ST TDs
+    # 5A-4: penalty and first-down breakdown counters
+    ev_pen_offense = np.zeros(N, dtype=np.int16)
+    ev_pen_defense = np.zeros(N, dtype=np.int16)
+    ev_pen_off_yds = np.zeros(N, dtype=np.float32)
+    ev_pen_def_yds = np.zeros(N, dtype=np.float32)
+    ev_fd_rush = np.zeros(N, dtype=np.int16)
+    ev_fd_pass = np.zeros(N, dtype=np.int16)
+    ev_fd_penalty = np.zeros(N, dtype=np.int16)
+    ev_safeties = np.zeros(N, dtype=np.int16)
     # Per-quarter scoring (cumulative snapshot at quarter transitions)
     score_h_q = np.zeros((N, 5), dtype=np.int16)  # [q1..q4, OT]
     score_a_q = np.zeros((N, 5), dtype=np.int16)
@@ -994,6 +1047,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_pen = rng.random(N)
         u_pen_side = rng.random(N)
         u_pen_auto = rng.random(N)
+        u_pen_yds = rng.random(N)   # 5A-4: penalty yardage draw
+        u_safety = rng.random(N)    # 5A-4: conditional safety draw
         u_call = rng.random(N)
         u_sack = rng.random(N)
         u_int_ = rng.random(N)
@@ -1340,33 +1395,132 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # their absence would lower scoring by ~3 first downs/game.
         pen_nop = playing & (u_pen < p_penalty_nop)
         if pen_nop.any():
-            off_pen = pen_nop & (u_pen_side < p_off_pen)
-            def_pen = pen_nop & ~off_pen
+            if _pen_cats_enabled:
+                # 5A-4: Category-based penalty model
+                pen_idx = np.where(pen_nop)[0]
+                # Determine penalty category for each flagged sim
+                cat_idx = np.searchsorted(_pen_cdf, u_pen_side[pen_idx])
+                cat_idx = np.clip(cat_idx, 0, len(_pen_cat_order) - 1)
 
-            # Offense penalty: move back ~7 yds, replay down
-            yl[off_pen] = np.clip(yl[off_pen] + 7, 1, 99)
-            # Defense penalty: advance ~9 yds, 72.5% auto first down
-            # Check for penalty in end zone (ball at 1-yd line)
-            pen_td = def_pen.copy()
-            pen_td[def_pen] = yl[def_pen] <= 9
-            pen_no_td = def_pen & ~pen_td
+                is_off = _pen_is_off[cat_idx]
+                off_pen = np.zeros(N, dtype=bool)
+                def_pen = np.zeros(N, dtype=bool)
+                off_pen[pen_idx[is_off]] = True
+                def_pen[pen_idx[~is_off]] = True
 
-            yl[pen_no_td] = np.clip(yl[pen_no_td] - 9, 1, 99)
-            auto_1st = pen_no_td & (u_pen_auto < p_auto_first)
-            down[auto_1st] = 1
-            dist[auto_1st] = np.minimum(10, yl[auto_1st])
-            ev_first_downs[auto_1st] += 1
-            non_auto_def = pen_no_td & ~auto_1st
-            dist[non_auto_def] = np.maximum(1, dist[non_auto_def] - 9)
-            # Penalty near goal line: ball at 1, first and goal
-            if pen_td.any():
-                yl[pen_td] = 1
-                down[pen_td] = 1
-                dist[pen_td] = 1
-                ev_first_downs[pen_td] += 1
+                # Draw yardage from category-specific quantile distribution
+                pen_yds = np.zeros(N, dtype=np.float32)
+                for ci in range(len(_pen_cat_order)):
+                    cm = pen_idx[cat_idx == ci]
+                    if len(cm) == 0:
+                        continue
+                    yds_drawn = np.interp(u_pen_yds[cm], xs101_pen, _pen_yds_q[ci])
+                    pen_yds[cm] = yds_drawn
 
-            ev_penalties[pen_nop] += 1
+                # DPI: spot-of-foul — cap yardage at distance to goal line
+                dpi_mask = np.zeros(N, dtype=bool)
+                dpi_sims = pen_idx[cat_idx == _pen_dpi_idx]
+                dpi_mask[dpi_sims] = True
+                # DPI yardage = min(drawn yardage, yardline - 1)
+                if dpi_mask.any():
+                    pen_yds[dpi_mask] = np.minimum(pen_yds[dpi_mask],
+                                                    yl[dpi_mask] - 1)
+                    pen_yds[dpi_mask] = np.maximum(pen_yds[dpi_mask], 1)
+
+                # Offense penalty: move back by drawn yardage, replay down
+                if off_pen.any():
+                    yl[off_pen] = np.clip(yl[off_pen] + pen_yds[off_pen], 1, 99)
+
+                # Defense penalty: advance by drawn yardage
+                if def_pen.any():
+                    # Check for penalty reaching end zone
+                    pen_td = def_pen.copy()
+                    pen_td[def_pen] = yl[def_pen] <= pen_yds[def_pen]
+                    pen_no_td = def_pen & ~pen_td
+
+                    yl[pen_no_td] = np.clip(yl[pen_no_td] - pen_yds[pen_no_td], 1, 99)
+                    # Auto first down: per-category rate
+                    auto_rate = np.zeros(N)
+                    for ci in range(len(_pen_cat_order)):
+                        cm = pen_idx[cat_idx == ci]
+                        auto_rate[cm] = _pen_auto_first[ci]
+                    auto_1st = pen_no_td & (u_pen_auto < auto_rate)
+                    # Non-auto-first: still award first down if yardage >= distance
+                    yds_fd = pen_no_td & ~auto_1st & (pen_yds >= dist)
+                    auto_1st = auto_1st | yds_fd
+                    down[auto_1st] = 1
+                    dist[auto_1st] = np.minimum(10, yl[auto_1st])
+                    ev_first_downs[auto_1st] += 1
+                    non_auto_def = pen_no_td & ~auto_1st
+                    dist[non_auto_def] = np.maximum(1, dist[non_auto_def] - pen_yds[non_auto_def])
+                    # Penalty reaching end zone: ball at 1, first and goal
+                    if pen_td.any():
+                        yl[pen_td] = 1
+                        down[pen_td] = 1
+                        dist[pen_td] = 1
+                        ev_first_downs[pen_td] += 1
+
+                ev_penalties[pen_nop] += 1
+                ev_pen_offense[off_pen] += 1
+                ev_pen_defense[def_pen] += 1
+                ev_pen_off_yds[off_pen] += pen_yds[off_pen]
+                ev_pen_def_yds[def_pen] += pen_yds[def_pen]
+                ev_fd_penalty[auto_1st] += 1
+                if def_pen.any() and pen_td.any():
+                    ev_fd_penalty[pen_td] += 1
+            else:
+                # Legacy penalty model (pre-5A-4)
+                off_pen = pen_nop & (u_pen_side < p_off_pen)
+                def_pen = pen_nop & ~off_pen
+                yl[off_pen] = np.clip(yl[off_pen] + 7, 1, 99)
+                pen_td = def_pen.copy()
+                pen_td[def_pen] = yl[def_pen] <= 9
+                pen_no_td = def_pen & ~pen_td
+                yl[pen_no_td] = np.clip(yl[pen_no_td] - 9, 1, 99)
+                auto_1st = pen_no_td & (u_pen_auto < p_auto_first)
+                down[auto_1st] = 1
+                dist[auto_1st] = np.minimum(10, yl[auto_1st])
+                ev_first_downs[auto_1st] += 1
+                non_auto_def = pen_no_td & ~auto_1st
+                dist[non_auto_def] = np.maximum(1, dist[non_auto_def] - 9)
+                if pen_td.any():
+                    yl[pen_td] = 1
+                    down[pen_td] = 1
+                    dist[pen_td] = 1
+                    ev_first_downs[pen_td] += 1
+                ev_penalties[pen_nop] += 1
+                ev_pen_offense[off_pen] += 1
+                ev_pen_defense[def_pen] += 1
+                ev_pen_off_yds[off_pen] += 7.0
+                ev_pen_def_yds[def_pen] += 9.0
+                ev_fd_penalty[auto_1st] += 1
+                ev_fd_penalty[pen_td] += 1
             playing = playing & ~pen_nop
+
+        if not playing.any():
+            continue
+
+        # --- 5A-4: Pre-play safety check at deep field positions ---
+        # Empirical per-play safety rates scaled to match actual 0.049 safeties/game.
+        # Raw PBP rates produce ~1.84x because sim generates more deep-field plays.
+        # Scaled: yl 98-100: 2.21%, yl 95-97: 0.90%, yl 90-94: 0.11%
+        deep_play = playing & (yl >= 90)
+        if deep_play.any():
+            p_saf_pre = np.zeros(N)
+            p_saf_pre[playing & (yl >= 98)] = 0.0221
+            p_saf_pre[playing & (yl >= 95) & (yl < 98)] = 0.0090
+            p_saf_pre[playing & (yl >= 90) & (yl < 95)] = 0.0011
+            safety_pre = deep_play & (u_safety < p_saf_pre)
+            if safety_pre.any():
+                for i in np.where(safety_pre)[0]:
+                    n_plays[i] += 1; _dl_plays[i] += 1
+                    _dl_result[i] = _DLR_SAFETY
+                    ev_safeties[i] += 1
+                    dt = 1 - poss[i]
+                    score_h[i] += 2 * (dt == 0); score_a[i] += 2 * (dt == 1)
+                    yl[i] = 75; poss[i] = 1 - poss[i]
+                    m = np.zeros(N, dtype=bool); m[i] = True; _new_drive(m)
+                playing = playing & ~safety_pre
 
         if not playing.any():
             continue
@@ -1547,6 +1701,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             m = sk[(d_p[sk]==d_v)&(di_p[sk]==di_v)&(zi_p[sk]==zi_v)]
                             if len(m):
                                 yards[m] = np.interp(u5[m], xs101, pa_sack_yds[d_v, di_v, zi_v])
+                # 5A-4: scale sack yardage near own goal line (yl >= 90)
+                # Empirical: deep sacks average -4.6 yds vs -6.7 overall (ratio 0.687)
+                deep_sack = sacked & (yl_p >= 90)
+                if deep_sack.any():
+                    yards[deep_sack] *= 0.687
 
             # Completion yards — success/fail split with matchup tilt
             comp_succ = completed & (u4 < tbl_succ)
@@ -1588,7 +1747,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # FIX 7: use float yards (no rounding) so the EPA offset enters continuously
             yds = yards  # float — no np.round
             td_mask = completed & (yl_p - yds <= 0) & (yds > 0)
-            safety_mask = sacked & (yl_p - yds >= 100)  # sack yds are negative, so yl - (-5) = yl + 5
+            # 5A-4: safeties handled as pre-play events above; mechanistic safety disabled.
+            # Cap sack yardage at yl=99 (own 1) to prevent endzone penetration.
+            would_be_safety = sacked & (yl_p - yds >= 100)
+            safety_mask = np.zeros(n_p, dtype=bool)  # no mechanistic safeties
+            if would_be_safety.any():
+                yds[would_be_safety] = -(99 - yl_p[would_be_safety])
             normal_comp = completed & ~td_mask
             normal_sack = sacked & ~safety_mask
 
@@ -1653,6 +1817,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 gi = g_idx[j]
                 n_plays[gi] += 1; _dl_plays[gi] += 1
                 _dl_result[gi] = _DLR_SAFETY
+                ev_safeties[gi] += 1  # 5A-4
                 dt = 1 - poss[gi]
                 score_h[gi] += 2 * (dt == 0); score_a[gi] += 2 * (dt == 1)
                 yl[gi] = 75; poss[gi] = 1 - poss[gi]
@@ -1694,6 +1859,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ev_comp[g_idx[completed]] += 1
             fd_comp = normal_comp & (yds >= dist_live[p_idx])
             ev_first_downs[g_idx[fd_comp | td_mask]] += 1
+            ev_fd_pass[g_idx[fd_comp | td_mask]] += 1  # 5A-4
             # 3rd-down conversions (pass)
             conv_3rd = is_3rd & (fd_comp | td_mask)
             ev_3rd_conv[g_idx[conv_3rd]] += 1
@@ -1863,7 +2029,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
             yds_r = yards_r  # FIX 7: float — no rounding
             td_r = not_fum & (yl_r - yds_r <= 0) & (yds_r > 0)
-            safety_r = not_fum & (yl_r - yds_r >= 100)
+            # 5A-4: safeties handled as pre-play events; mechanistic disabled.
+            would_be_safety_r = not_fum & (yl_r - yds_r >= 100)
+            safety_r = np.zeros(n_r, dtype=bool)  # no mechanistic safeties
+            capped_rush = would_be_safety_r & ~safety_r
+            if capped_rush.any():
+                yds_r[capped_rush] = -(99 - yl_r[capped_rush])
             normal_r = not_fum & ~td_r & ~safety_r
 
             # 3rd/4th-down tracking (rush)
@@ -1907,6 +2078,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for j in np.where(safety_r)[0]:
                 gi = g_idx_r[j]; n_plays[gi] += 1; _dl_plays[gi] += 1
                 _dl_result[gi] = _DLR_SAFETY
+                ev_safeties[gi] += 1  # 5A-4
                 dt = 1 - poss[gi]
                 score_h[gi] += 2 * (dt == 0); score_a[gi] += 2 * (dt == 1)
                 yl[gi] = 75; poss[gi] = 1 - poss[gi]
@@ -1931,6 +2103,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             normal_rush = not_fum & ~td_r & ~safety_r
             fd_rush = normal_rush & (yds_r >= dist_live[r_idx])
             ev_first_downs[g_idx_r[fd_rush | td_r]] += 1
+            ev_fd_rush[g_idx_r[fd_rush | td_r]] += 1  # 5A-4
             conv_3rd_r = is_3rd_r & (fd_rush | td_r)
             ev_3rd_conv[g_idx_r[conv_3rd_r]] += 1
             conv_4th_r = is_4th_go_rush & (fd_rush | td_r)
@@ -2098,6 +2271,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_fg_dist_sum": ev_fg_dist_sum,
         "ev_explosive_pass": ev_explosive_pass,
         "ev_explosive_rush": ev_explosive_rush,
+        "ev_pen_offense": ev_pen_offense,
+        "ev_pen_defense": ev_pen_defense,
+        "ev_pen_off_yds": ev_pen_off_yds,
+        "ev_pen_def_yds": ev_pen_def_yds,
+        "ev_fd_rush": ev_fd_rush,
+        "ev_fd_pass": ev_fd_pass,
+        "ev_fd_penalty": ev_fd_penalty,
+        "ev_safeties": ev_safeties,
         "game_over": game_over,
         "clock_remaining": clock_remaining,
     })
