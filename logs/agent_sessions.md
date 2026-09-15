@@ -1,3 +1,20 @@
+## 2026-09-16T01:30Z  cowork (Phase 5A-7 — 10-yard-zone KM, timeouts/kneel tables, safety rates; executed directly)
+- BUILT: pass/rush_outcomes_z10 (98/82 cells), timeout_policy (144 rows), kneel_decision (171 rows);
+  constants.json now carries safety_rate_by_zone from the builder. Unchanged tables kept byte-identical.
+- ENGINE: 10-zone arrays with z5 fallback; _zone_idx = ceil(yl/10)-1; to_rem state (3/half, 2 OT);
+  _apply_timeouts after every late scrimmage play (pass + rush paths); kneel block replaced by the
+  table (a kneel is a play); 0.687 sack scale and hand-typed safety rates removed.
+- K1 (1,087 x N=500, 2,660 s cloud): pts/team 22.49 (22.39); comp yds 476.7 vs 474.2/game;
+  late snaps Q2 9.08 (9.03) Q4 6.20 (5.61); TO 1.85/2.16 (1.78/2.08); kneels 1.29 (1.51);
+  FAILS: plays 129.8 (124.5), drives 22.8 (21.9), P(|m|=3) 7.7% (14.5%), |m|<=7 41.6% (49.0%),
+  FG att 3.56 (3.92), SD margin 15.19 (14.20). K1 predates the safety-rate change (0.035 shown;
+  12-game sample with measured rates 0.063 vs 0.049).
+- FOUND: K1 "pass yds" compared sack-inclusive actual with sack-exclusive sim since 2A (coincidental PASS).
+- TESTS: full suite 59 passed / 2 failed (5a3 FG att 3.65 vs 3.92; 5a4 offence penalties 6.19 vs 5.51).
+  5a3 go-rate, 5a tie-rate and 5a offset-continuity tests now pass. Nothing widened.
+- NOT DONE: K1 not passed (key numbers, volume, FG count). Delivered as patches (cloud cannot push).
+- NEXT: 5A-8 close-game diagnostic (margin at 5:00/2:00 -> final), volume/clock audit, FG count.
+
 ## 2026-09-15T20:30Z  cowork (Phase 5A-6 — goal-line censoring, EOH FG, Q2<2; executed directly)
 - WORKFLOW: first phase run by Cowork in its cloud workspace (repo clone + staged pbp) and on the
   Mac shell, no Claude Code relay. Mac workspace went unavailable mid-phase; commits delivered as

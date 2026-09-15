@@ -199,3 +199,26 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   Flagged, not changed: `constants.json` carries hand-written safety constants (5A-4) the
   builder does not produce, and the engine scales deep sack yardage by 0.687 (5A-4) —
   both violate the no-constants rule. See `research/nfl_sim/phase5a6_goalline_censoring.md`.
+- **2026-09-16 Phase 5A-7 — 10-yard zones, timeouts/kneel policy, safety rates in the builder
+  (Cowork-executed).** K1 pts/team 21.79 → **22.49** (actual 22.39); completion yards, yards per
+  completion, yards per rush, late-half snaps, timeouts and offensive TDs now match reality.
+  **D27 — Ten-yard-zone outcome tables with KM.** `pass/rush_outcomes_z10.parquet` (down × dist ×
+  10 zones; KM tail chained zone-by-zone toward the goal line; z5 parent is the thin-cell
+  fallback in `engine._fill_zone_arrays`). The 5A-4 ×0.687 deep-sack scale is removed (the
+  y90/y100 cells carry measured sack yardage).
+  **D28 — Empirical timeout policy and kneel decision.** `timeout_policy.parquet` (side × qtr ×
+  seconds × offence state × clock running) and `kneel_decision.parquet` (qtr × seconds × defence
+  timeouts remaining × down × situation). Timeouts are state (3/half, 2 in OT); a timeout makes
+  the runoff the stopped-clock kind. The 40-second / "opponent has ~1.5 timeouts" kneel
+  heuristic is deleted. Late-Q2 snaps 9.08 (9.03), late-Q4 6.20 (5.61), TO 1.85/2.16 (1.78/2.08).
+  **D29 — Safety rates measured in `build_constants`** (raw per-play rates by own-goal-line
+  bucket); the 5A-4 hand-typed values scaled by 1/1.84 and two unused constants are gone.
+  **K1 DEFINITION CORRECTION:** the "pass yds/team" line compared nflverse pass yards (sacks
+  included) with engine completion yards (sacks excluded) since Phase 2A; on one definition the
+  sim is right (476.7 vs 474.2 completion yards/game). New FAILs are volume: plays 129.8 (124.5),
+  drives 22.8 (21.9), rush plays 55.5 (52.5). UNCHANGED FAIL: key-number mass — P(|m|=3) 7.7%
+  (14.5%), |m| ≤ 7 in 41.6% of games (49.0%) — structural and independent of every scoring fix.
+  Next (5A-8): margin distribution conditional on the margin at 5:00 / 2:00 remaining, sim vs
+  actual, to locate where close-game mass is lost; then volume (+4% drives), FG count.
+  Tests: 59/61 pass (FG att 3.65 vs 3.92 and offence penalties 6.19 vs 5.51 red).
+  See `research/nfl_sim/phase5a7_zones_timeouts.md`.
