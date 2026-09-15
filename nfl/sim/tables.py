@@ -58,6 +58,66 @@ def _dist_bucket(ydstogo):
 # TABLE A: Pass outcomes by situation bucket
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _km_quantiles(yards, yl, censored, q_points=None, sentinel=99.0, ref_gains=None):
+    """5A-6: quantiles of the UNCONSTRAINED gain distribution for a cell whose
+    recorded yards are right-censored at the goal line.
+
+    A scoring play from the 8 records 8 yards, but the play "would have gained"
+    at least 8 — its true gain is unknown. Pooling such plays with plays from the
+    10 or the 20 biases the cell's yardage downward for the deeper end of the
+    zone, which is exactly why the engine scored touchdowns from the 5-10 at half
+    the real rate. Kaplan-Meier treats scoring plays as censored at yardline_100
+    (gain >= yl) and everything else as an exact observation.
+
+    Returns 101 quantiles (q_points) of P(gain <= y). Mass beyond the last
+    uncensored gain (the KM plateau) is filled from `ref_gains` — the same
+    situation's open-field gains (zones where the goal line almost never binds),
+    conditional on gain > last uncensored value — so a heavily censored red-zone
+    cell borrows only the SHAPE of the tail it cannot observe. If no reference is
+    given (or it has < 20 qualifying plays) the plateau goes to `sentinel`; the
+    engine caps any draw at the distance to goal, so a sentinel draw means
+    "reached the end zone". No value is invented: every quantile is an observed
+    gain from this cell, an observed open-field gain, or the sentinel.
+    """
+    if q_points is None:
+        q_points = QUANTILE_POINTS
+    y = np.asarray(yards, dtype=float)
+    c = np.asarray(censored, dtype=bool)
+    ylv = np.asarray(yl, dtype=float)
+    obs = y[~c]                      # exact gains
+    cens_at = ylv[c]                 # gain >= yl on scoring plays
+    vals = np.unique(obs)
+    S = 1.0
+    # F(v) = P(gain <= v) evaluated just after each event value v
+    F_after = np.empty(len(vals))
+    for k, v in enumerate(vals):
+        at_risk = (obs >= v).sum() + (cens_at >= v).sum()
+        d = (obs == v).sum()
+        if at_risk > 0:
+            S *= (1.0 - d / at_risk)
+        F_after[k] = 1.0 - S
+    out = np.empty(len(q_points))
+    F_end = F_after[-1] if len(vals) else 0.0
+    S_end = 1.0 - F_end
+    tail = None
+    if ref_gains is not None and len(vals) and S_end > 1e-9:
+        rg = np.asarray(ref_gains, dtype=float)
+        is_quantile_array = (len(rg) == len(QUANTILE_POINTS))
+        rg = rg[rg > vals[-1]]
+        if len(rg) >= (3 if is_quantile_array else 20):
+            tail = np.sort(rg)
+    for i, p in enumerate(q_points):
+        idx = np.searchsorted(F_after, p, side="left")
+        if idx < len(vals):
+            out[i] = vals[idx]
+        elif tail is not None:
+            u = min(max((p - F_end) / S_end, 0.0), 1.0)
+            out[i] = np.quantile(tail, u)
+        else:
+            out[i] = sentinel
+    return out
+
+
 def build_pass_table(df):
     """Pass outcome distributions by (down, distance, field_zone)."""
     passes = df[(df["play_type"] == "pass") & df["down"].notna()].copy()
@@ -66,8 +126,24 @@ def build_pass_table(df):
     passes["zone"] = _field_zone(passes["yardline_100"])
     passes = passes.dropna(subset=["down_b", "dist_b", "zone"])
 
+    # 5A-6: open-field reference completions (zones where the goal line ~never binds)
+    open_field = passes[passes["zone"].isin(["midfield", "own40", "own20"])
+                        & (passes["sack"] != 1) & (passes["interception"] != 1)
+                        & (passes["complete_pass"] == 1)]
+    def _ref(down, dist, sel):
+        g = open_field[(open_field["down_b"] == down) & (open_field["dist_b"] == dist)]
+        g = sel(g)
+        if len(g) < 50:  # thin: pool across downs for this distance
+            g = sel(open_field[open_field["dist_b"] == dist])
+        return g["yards_gained"].values.astype(float)
+
     rows = []
-    for (down, dist, zone), grp in passes.groupby(["down_b", "dist_b", "zone"], observed=True):
+    ZONE_ORDER = ["own20", "own40", "midfield", "opp20", "rz10"]  # far -> near the goal line
+    _prev = {}  # (down, dist) -> KM arrays of the previous (farther) zone, used as the tail reference
+    _groups = {k: g for k, g in passes.groupby(["down_b", "dist_b", "zone"], observed=True)}
+    _keys = sorted(_groups.keys(), key=lambda k: (k[0], k[1], ZONE_ORDER.index(k[2]) if k[2] in ZONE_ORDER else 99))
+    for (down, dist, zone) in _keys:
+        grp = _groups[(down, dist, zone)]
         n = len(grp)
         if n < 20:
             continue
@@ -107,23 +183,30 @@ def build_pass_table(df):
         # Explosive share within successes
         p_explosive = (comp_success["yards_gained"] >= 20).mean() if len(comp_success) else 0.0
 
-        # Quantile distributions
-        if len(comp_success) >= 5:
-            yds_success_q = np.quantile(comp_success["yards_gained"].values.astype(float), QUANTILE_POINTS)
+        # Quantile distributions — 5A-6: goal-line censoring handled by Kaplan-Meier
+        # (scoring plays are "gain >= yardline_100", not "gain == yardline_100").
+        def _q(g, default, ref):
+            if len(g) >= 5:
+                cens = (g["yards_gained"].values >= g["yardline_100"].values) & (g["yards_gained"].values > 0)
+                return _km_quantiles(g["yards_gained"].values, g["yardline_100"].values, cens, ref_gains=ref)
+            return np.full(101, default)
+        # Tail reference: the previous (farther) zone's KM-corrected quantiles when the
+        # zone is inside the 20 (compression grows toward the goal line, so borrow from
+        # the neighbour, not from open field); open-field raw gains otherwise.
+        pv = _prev.get((down, dist))
+        if zone in ("opp20", "rz10") and pv is not None:
+            ref_s, ref_f, ref_a = pv
         else:
-            yds_success_q = np.full(101, 10.0)
-
-        if len(comp_fail) >= 5:
-            yds_fail_q = np.quantile(comp_fail["yards_gained"].values.astype(float), QUANTILE_POINTS)
-        else:
-            yds_fail_q = np.full(101, 3.0)
-
+            ref_s = _ref(down, dist, lambda g: g[g["epa"] > 0])
+            ref_f = _ref(down, dist, lambda g: g[g["epa"] <= 0])
+            ref_a = _ref(down, dist, lambda g: g)
+        yds_success_q = _q(comp_success, 10.0, ref_s)
+        yds_fail_q = _q(comp_fail, 3.0, ref_f)
         # All completions (unsplit) — the engine uses this to avoid EPA success/fail
         # conflation with first-down conversion
-        if len(comp) >= 5:
-            yds_all_q = np.quantile(comp["yards_gained"].values.astype(float), QUANTILE_POINTS)
-        else:
-            yds_all_q = np.full(101, 6.0)
+        yds_all_q = _q(comp, 6.0, ref_a)
+        _prev[(down, dist)] = (yds_success_q, yds_fail_q, yds_all_q)
+        n_censored = int(((comp["yards_gained"].values >= comp["yardline_100"].values) & (comp["yards_gained"].values > 0)).sum())
 
         rows.append({
             "down": down, "dist": dist, "zone": zone, "n": n,
@@ -137,6 +220,7 @@ def build_pass_table(df):
             "yds_success_q": yds_success_q.tolist(),
             "yds_fail_q": yds_fail_q.tolist(),
             "yds_all_q": yds_all_q.tolist(),
+            "n_censored": n_censored,
         })
 
     return pd.DataFrame(rows)
@@ -153,8 +237,22 @@ def build_rush_table(df):
     rushes["zone"] = _field_zone(rushes["yardline_100"])
     rushes = rushes.dropna(subset=["down_b", "dist_b", "zone"])
 
+    # 5A-6: open-field reference rushes
+    open_field = rushes[rushes["zone"].isin(["midfield", "own40", "own20"])]
+    def _ref(down, dist, sel):
+        g = open_field[(open_field["down_b"] == down) & (open_field["dist_b"] == dist)]
+        g = sel(g)
+        if len(g) < 50:
+            g = sel(open_field[open_field["dist_b"] == dist])
+        return g["yards_gained"].values.astype(float)
+
     rows = []
-    for (down, dist, zone), grp in rushes.groupby(["down_b", "dist_b", "zone"], observed=True):
+    ZONE_ORDER = ["own20", "own40", "midfield", "opp20", "rz10"]
+    _prev = {}
+    _groups = {k: g for k, g in rushes.groupby(["down_b", "dist_b", "zone"], observed=True)}
+    _keys = sorted(_groups.keys(), key=lambda k: (k[0], k[1], ZONE_ORDER.index(k[2]) if k[2] in ZONE_ORDER else 99))
+    for (down, dist, zone) in _keys:
+        grp = _groups[(down, dist, zone)]
         n = len(grp)
         if n < 20:
             continue
@@ -168,21 +266,27 @@ def build_rush_table(df):
         p_stuff = (fail["yards_gained"] <= 0).mean() if len(fail) else 0.0
         p_explosive = (success["yards_gained"] >= 12).mean() if len(success) else 0.0
 
-        if len(success) >= 5:
-            yds_success_q = np.quantile(success["yards_gained"].values.astype(float), QUANTILE_POINTS)
+        # 5A-6: goal-line censoring handled by Kaplan-Meier (see _km_quantiles)
+        def _q(g, default, ref):
+            if len(g) >= 5:
+                cens = (g["yards_gained"].values >= g["yardline_100"].values) & (g["yards_gained"].values > 0)
+                return _km_quantiles(g["yards_gained"].values, g["yardline_100"].values, cens, ref_gains=ref)
+            return np.full(101, default)
+        pv = _prev.get((down, dist))
+        if zone in ("opp20", "rz10") and pv is not None:
+            ref_s, ref_f, ref_a = pv
         else:
-            yds_success_q = np.full(101, 5.0)
-        if len(fail) >= 5:
-            yds_fail_q = np.quantile(fail["yards_gained"].values.astype(float), QUANTILE_POINTS)
-        else:
-            yds_fail_q = np.full(101, 1.0)
+            ref_s = _ref(down, dist, lambda g: g[g["epa"] > 0])
+            ref_f = _ref(down, dist, lambda g: g[g["epa"] <= 0])
+            ref_a = _ref(down, dist, lambda g: g)
+        yds_success_q = _q(success, 5.0, ref_s)
+        yds_fail_q = _q(fail, 1.0, ref_f)
 
         # All rushes (non-fumble) unsplit distribution
         non_fum = grp[grp.get("fumble_lost", 0) != 1] if "fumble_lost" in grp.columns else grp
-        if len(non_fum) >= 5:
-            yds_all_q = np.quantile(non_fum["yards_gained"].values.astype(float), QUANTILE_POINTS)
-        else:
-            yds_all_q = np.full(101, 3.0)
+        yds_all_q = _q(non_fum, 3.0, ref_a)
+        _prev[(down, dist)] = (yds_success_q, yds_fail_q, yds_all_q)
+        n_censored = int(((non_fum["yards_gained"].values >= non_fum["yardline_100"].values) & (non_fum["yards_gained"].values > 0)).sum())
 
         rows.append({
             "down": down, "dist": dist, "zone": zone, "n": n,
@@ -193,6 +297,7 @@ def build_rush_table(df):
             "yds_success_q": yds_success_q.tolist(),
             "yds_fail_q": yds_fail_q.tolist(),
             "yds_all_q": yds_all_q.tolist(),
+            "n_censored": n_censored,
         })
 
     return pd.DataFrame(rows)
@@ -374,13 +479,20 @@ def _score_bucket_fine(sd):
                   right=True, include_lowest=True)
 
 def _clock_bucket_fine(qtr, gsr):
-    """Fine-grained clock bucket: Q1-3, Q4>5:00, Q4_2-5, Q4<2:00."""
+    """Fine-grained clock bucket: Q1-3, Q2<2 (last 2:00 of the 1st half),
+    Q4>5:00, Q4_2-5, Q4<2:00.
+
+    5A-6: the last two minutes of Q2 are their own bucket. Measured 2021-2024:
+    pass rate 0.80 vs 0.58 pooled Q1-3 in every score state, and 4th-down FG
+    rate ~10pp higher in range. gsr = game_seconds_remaining; in Q2 the half
+    clock is gsr - 1800."""
+    qtr = np.asarray(qtr); gsr = np.asarray(gsr, dtype=float)
     q4 = qtr == 4
-    # gsr = game_seconds_remaining within the quarter (half_seconds_remaining is better
-    # for Q4 since it maps directly to seconds left in the game for Q4)
-    return np.where(~q4, "Q1-3",
+    q2late = (qtr == 2) & ((gsr - 1800.0) <= 120.0)
+    return np.where(q2late, "Q2<2",
+           np.where(~q4, "Q1-3",
            np.where(gsr > 300, "Q4>5",
-           np.where(gsr > 120, "Q4_2-5", "Q4<2")))
+           np.where(gsr > 120, "Q4_2-5", "Q4<2"))))
 
 def build_fourth_down_table(df):
     """League P(go/punt/FG) by (ydstogo, field_zone, score_state, clock).
@@ -720,6 +832,53 @@ def build_constants(df):
 # MAIN BUILDER
 # ═══════════════════════════════════════════════════════════════════════════════
 
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TABLE J (5A-6): End-of-half field-goal decision on downs 1-3
+# ═══════════════════════════════════════════════════════════════════════════════
+
+EOH_SEC_BINS = [-1, 3, 6, 10, 20, 40]
+EOH_SEC_LABELS = ["0-3", "4-6", "7-10", "11-20", "21-40"]
+EOH_YL_BINS = [0, 20, 30, 40, 50]
+EOH_YL_LABELS = ["<=20", "21-30", "31-40", "41-50"]
+
+
+def eoh_state(qtr, score_differential):
+    """Decision state for an end-of-half snap on downs 1-3.
+    fg_useful: Q2 (any score), or Q4 tied / trailing by <= 3.
+    Q4_lead: leading in Q4 (real teams kneel; measured P(FG)=0).
+    Q4_trail4+: trailing by 4+ in Q4 (need a TD; measured P(FG)~0.02)."""
+    qtr = np.asarray(qtr); sd = np.asarray(score_differential, dtype=float)
+    return np.where(qtr == 2, "fg_useful",
+           np.where((sd >= -3) & (sd <= 0), "fg_useful",
+           np.where(sd > 0, "Q4_lead", "Q4_trail4+")))
+
+
+def build_eoh_fg_table(df):
+    """League P(field-goal attempt on downs 1-3 | end of half) by
+    (state, seconds-left bucket, yardline bucket), 2021-2024 regular season.
+
+    Population: snaps on downs 1-3, qtr in {2, 4}, half_seconds_remaining <= 40,
+    yardline_100 <= 50, play_type in pass/run/field_goal/qb_spike/qb_kneel.
+    Level 0: state x sec x yl (min cell 30). Level 1: state x sec, pooled over
+    yardline (min cell 30), prefix "all" on yl_b. No cell is invented."""
+    MIN_N = 30
+    d = df[df["down"].isin([1, 2, 3]) & df["qtr"].isin([2, 4])
+           & (df["half_seconds_remaining"] <= 40) & (df["yardline_100"] <= 50)
+           & df["play_type"].isin(["pass", "run", "field_goal", "qb_spike", "qb_kneel"])].copy()
+    d["fg"] = (d["play_type"] == "field_goal").astype(int)
+    d["state"] = eoh_state(d["qtr"], d["score_differential"])
+    d["sec_b"] = pd.cut(d["half_seconds_remaining"], EOH_SEC_BINS, labels=EOH_SEC_LABELS).astype(str)
+    d["yl_b"] = pd.cut(d["yardline_100"], EOH_YL_BINS, labels=EOH_YL_LABELS).astype(str)
+    rows = []
+    for (st, sb, yb), g in d.groupby(["state", "sec_b", "yl_b"]):
+        if len(g) >= MIN_N:
+            rows.append({"state": st, "sec_b": sb, "yl_b": yb, "n": len(g), "p_fg": g["fg"].mean()})
+    for (st, sb), g in d.groupby(["state", "sec_b"]):
+        if len(g) >= MIN_N:
+            rows.append({"state": st, "sec_b": sb, "yl_b": "all", "n": len(g), "p_fg": g["fg"].mean()})
+    return pd.DataFrame(rows)
+
 def build_all():
     print("Loading PBP data (2021-2024, regular season)...")
     df = load_pbp()
@@ -780,6 +939,11 @@ def build_all():
     with open(OUT_DIR / "constants.json", "w") as f:
         json.dump(consts, f, indent=2, default=float)
     print(f"  Safety rate: {consts['p_safety_per_play']:.5f}")
+
+    print("Building end-of-half FG decision table (J, 5A-6)...")
+    eoh_tbl = build_eoh_fg_table(df)
+    eoh_tbl.to_parquet(OUT_DIR / "eoh_fg_decision.parquet", index=False)
+    print(f"  {len(eoh_tbl)} rows")
 
     print("Building pass depth table (I)...")
     depth_tbl = build_pass_depth_table(df)

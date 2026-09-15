@@ -47,6 +47,7 @@ RATINGS_DIR = ROOT / "nfl" / "data" / "sim" / "ratings"
 
 # Module-level cache
 _CACHE = {}
+_DEBUG_YDS = None  # 5A-6 diag: set to a list to collect per-play yards
 
 
 def _load_tables():
@@ -68,6 +69,10 @@ def _load_tables():
     depth_path = TABLES_DIR / "pass_depth_outcomes.parquet"
     if depth_path.exists():
         _CACHE["pass_depth"] = pd.read_parquet(depth_path)
+    # 5A-6: end-of-half FG decision table (downs 1-3)
+    eoh_path = TABLES_DIR / "eoh_fg_decision.parquet"
+    if eoh_path.exists():
+        _CACHE["eoh_fg"] = pd.read_parquet(eoh_path)
     # 5A-4: penalty detail table
     pen_detail_path = TABLES_DIR / "penalty_detail.json"
     if pen_detail_path.exists():
@@ -208,6 +213,21 @@ def _build_4th_down_lookup():
     for _, r in tbl.iterrows():
         d[(r["ydstogo_b"], r["yl_b"], r["score_b"], r["qtr_b"])] = (r["p_go"], r["p_punt"], r["p_fg"])
     return d
+
+
+def _build_eoh_lookup():
+    """5A-6: (state, sec_b, yl_b) -> P(FG attempt on downs 1-3); yl_b 'all' is the
+    pooled-over-yardline fallback. Returns None when the table is absent."""
+    tbl = _CACHE.get("eoh_fg")
+    if tbl is None:
+        return None
+    return {(r["state"], r["sec_b"], r["yl_b"]): float(r["p_fg"]) for _, r in tbl.iterrows()}
+
+
+def _eoh_bucket(cl, y):
+    sec_b = "0-3" if cl <= 3 else ("4-6" if cl <= 6 else ("7-10" if cl <= 10 else ("11-20" if cl <= 20 else "21-40")))
+    yl_b = "<=20" if y <= 20 else ("21-30" if y <= 30 else ("31-40" if y <= 40 else "41-50"))
+    return sec_b, yl_b
 
 
 def _build_fg_lookup():
@@ -644,6 +664,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         pd_yds_succ, pd_yds_fail = _build_pass_depth_arrays()
     clock_q = _build_clock_arrays()
     fd_lookup = _build_4th_down_lookup()
+    eoh_lookup = _build_eoh_lookup()  # 5A-6
     fg_lookup = _build_fg_lookup()
     punt_lookup = _build_punt_lookup()
 
@@ -762,6 +783,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_first_downs = np.zeros(N, dtype=np.int16)
     ev_punts = np.zeros(N, dtype=np.int16)
     ev_fg_att = np.zeros(N, dtype=np.int16)
+    ev_fg_non4th = np.zeros(N, dtype=np.int16)  # 5A-6: FG attempts on downs 1-3
+    ev_eoh_snaps = np.zeros(N, dtype=np.int16)  # 5A-6: snaps on downs 1-3, <=40s left in half, yl<=50
+    ev_late_snaps_q2 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q2
+    ev_late_snaps_q4 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q4
     ev_fg_made = np.zeros(N, dtype=np.int16)
     ev_tds = np.zeros(N, dtype=np.int16)
     ev_penalties = np.zeros(N, dtype=np.int16)
@@ -777,6 +802,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_fg_dist_sum = np.zeros(N, dtype=np.float32)
     ev_explosive_pass = np.zeros(N, dtype=np.int16)  # 5A-3: completions 20+ yds
     ev_explosive_rush = np.zeros(N, dtype=np.int16)  # 5A-3: rushes 10+ yds
+    ev_pass_40 = np.zeros(N, dtype=np.int16)   # 5A-6 diag: completions 40+ yds
+    ev_rush_20 = np.zeros(N, dtype=np.int16)   # 5A-6 diag: rushes 20+ yds
+    ev_td_long = np.zeros(N, dtype=np.int16)   # 5A-6 diag: TDs scored from >= 20 yds out
+    ev_td_short = np.zeros(N, dtype=np.int16)  # 5A-6 diag: TDs scored from < 20 yds out
     ev_xp_att = np.zeros(N, dtype=np.int16)
     ev_xp_made = np.zeros(N, dtype=np.int16)
     ev_2pt_att = np.zeros(N, dtype=np.int16)
@@ -1065,6 +1094,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # Drawing a fixed count per step makes the sim insensitive to RNG
         # stream shifts (inserting a dummy draw cannot change statistics).
         u_4th = rng.random(N)
+        u_eoh = rng.random(N)  # 5A-6: end-of-half FG decision on downs 1-3
         u_punt_net = rng.random(N)
         u_fg_mk = rng.random(N)
         u_pen = rng.random(N)
@@ -1196,7 +1226,32 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         punt_m = np.zeros(N, dtype=bool)
         fg_m = np.zeros(N, dtype=bool)
 
-        if is_4th.any():
+        # --- 5A-6: end-of-half FG on downs 1-3 (empirical table J) ---
+        # Real teams kick before the half expires on any down; the engine only
+        # considered FGs on 4th down (measured deficit: 0.33 non-4th FG att/game).
+        if eoh_lookup is not None:
+            eoh_cand = alive & (down < 4) & ((qtr == 2) | (qtr == 4)) & (clock <= 40) & (yl <= 50)
+            if eoh_cand.any():
+                ev_eoh_snaps[eoh_cand] += 1
+                for i in np.where(eoh_cand)[0]:
+                    sd = int(score_diff_poss[i])
+                    if qtr[i] == 2:
+                        st = "fg_useful"
+                    elif -3 <= sd <= 0:
+                        st = "fg_useful"
+                    elif sd > 0:
+                        st = "Q4_lead"
+                    else:
+                        st = "Q4_trail4+"
+                    sec_b, yl_b = _eoh_bucket(float(clock[i]), float(yl[i]))
+                    p_fg_e = eoh_lookup.get((st, sec_b, yl_b))
+                    if p_fg_e is None:
+                        p_fg_e = eoh_lookup.get((st, sec_b, "all"), 0.0)
+                    if u_eoh[i] < p_fg_e:
+                        fg_m[i] = True
+                        ev_fg_non4th[i] += 1
+
+        if is_4th.any() or fg_m.any():
             idx4 = np.where(is_4th)[0]
 
             for i in idx4:
@@ -1229,8 +1284,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 elif sd <= 8: sc_fine = "lead4-8"
                 else: sc_fine = "lead9+"
 
-                # Fine-grained clock bucket
-                if qt <= 3:
+                # Fine-grained clock bucket (5A-6: Q2<2 = last 2:00 of the 1st half)
+                if qt == 2 and cl <= 120:
+                    qt_fine = "Q2<2"
+                elif qt <= 3:
                     qt_fine = "Q1-3"
                 elif cl > 300:
                     qt_fine = "Q4>5"
@@ -1551,6 +1608,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
         n_live = playing.sum()
         live_idx = np.where(playing)[0]
+        ev_late_snaps_q2[live_idx[(qtr[live_idx] == 2) & (clock[live_idx] <= 120)]] += 1  # 5A-6 diag
+        ev_late_snaps_q4[live_idx[(qtr[live_idx] == 4) & (clock[live_idx] <= 120)]] += 1  # 5A-6 diag
 
         # --- Play call ---
         # Build situation bucket for each live sim
@@ -1577,9 +1636,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   np.where(sd_live <= 3, "lead1-3",
                   np.where(sd_live <= 8, "lead4-8", "lead9+"))))))
         # Fine clock (4-way)
-        cl_fine = np.where(qtr_live <= 3, "Q1-3",
+        cl_fine = np.where((qtr_live == 2) & (clock_live <= 120), "Q2<2",
+                  np.where(qtr_live <= 3, "Q1-3",
                   np.where(clock_live > 300, "Q4>5",
-                  np.where(clock_live > 120, "Q4_2-5", "Q4<2")))
+                  np.where(clock_live > 120, "Q4_2-5", "Q4<2"))))
         # Coarse fallbacks
         sc_coarse = np.where(sd_live < -8, "trail9",
                     np.where(sd_live <= 8, "within8", "lead9"))
@@ -1898,6 +1958,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # 5A-3: explosive pass (20+ yds)
             expl_p = completed & (yds >= 20)
             ev_explosive_pass[g_idx[expl_p]] += 1
+            ev_pass_40[g_idx[completed & (yds >= 40)]] += 1
+            if _DEBUG_YDS is not None:
+                _DEBUG_YDS.append(("pass", np.asarray(yds[completed], dtype=float), np.asarray(yl_p[completed], dtype=float), np.asarray(down_live[p_idx][completed]) if 'down_live' in dir() else None))
+            ev_td_long[g_idx[td_mask & (yl_p >= 20)]] += 1
+            ev_td_short[g_idx[td_mask & (yl_p < 20)]] += 1
 
             # --- Player stat tracking (pass) ---
             if has_players:
@@ -2142,6 +2207,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # 5A-3: explosive rush (10+ yds)
             expl_r = not_fum & (yds_r >= 10)
             ev_explosive_rush[g_idx_r[expl_r]] += 1
+            ev_rush_20[g_idx_r[not_fum & (yds_r >= 20)]] += 1
+            if _DEBUG_YDS is not None:
+                _DEBUG_YDS.append(("rush", np.asarray(yds_r[not_fum], dtype=float), np.asarray(yl_r[not_fum], dtype=float), None))
+            ev_td_long[g_idx_r[td_r & (yl_r >= 20)]] += 1
+            ev_td_short[g_idx_r[td_r & (yl_r < 20)]] += 1
 
             # --- Player stat tracking (rush) ---
             if has_players:
@@ -2291,6 +2361,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_first_downs": ev_first_downs,
         "ev_punts": ev_punts,
         "ev_fg_att": ev_fg_att,
+        "ev_fg_non4th": ev_fg_non4th,
+        "ev_eoh_snaps": ev_eoh_snaps,
+        "ev_late_snaps_q2": ev_late_snaps_q2,
+        "ev_late_snaps_q4": ev_late_snaps_q4,
+        "ev_pass_40": ev_pass_40, "ev_rush_20": ev_rush_20,
+        "ev_td_long": ev_td_long, "ev_td_short": ev_td_short,
         "ev_fg_made": ev_fg_made,
         "ev_tds": ev_tds,
         "ev_penalties": ev_penalties,
