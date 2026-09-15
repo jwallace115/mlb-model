@@ -49,6 +49,17 @@ def _field_zone(yl100):
                   right=True)
 
 
+# 5A-7: 10-yard zones. Label = upper bound of yardline_100 (y10 = inside the 10).
+ZONE10_LABELS = [f"y{k}" for k in range(10, 101, 10)]
+ZONE10_TO_ZONE5 = {"y10": "rz10", "y20": "opp20", "y30": "midfield", "y40": "midfield",
+                   "y50": "midfield", "y60": "midfield", "y70": "own40", "y80": "own40",
+                   "y90": "own20", "y100": "own20"}
+
+
+def _field_zone10(yl100):
+    return pd.cut(yl100, bins=list(range(0, 101, 10)), labels=ZONE10_LABELS, right=True)
+
+
 def _dist_bucket(ydstogo):
     return pd.cut(ydstogo, bins=[0, 3, 7, 100],
                   labels=["short", "med", "long"], right=True)
@@ -118,16 +129,26 @@ def _km_quantiles(yards, yl, censored, q_points=None, sentinel=99.0, ref_gains=N
     return out
 
 
-def build_pass_table(df):
-    """Pass outcome distributions by (down, distance, field_zone)."""
+def build_pass_table(df, zones="z5"):
+    """Pass outcome distributions by (down, distance, field_zone).
+
+    zones="z5": rz10/opp20/midfield/own40/own20 (v1). zones="z10": 10-yard zones
+    (5A-7) — the engine reads z10 and falls back to the z5 parent for thin cells."""
     passes = df[(df["play_type"] == "pass") & df["down"].notna()].copy()
     passes["down_b"] = passes["down"].astype(int).clip(1, 4).astype(str)
     passes["dist_b"] = _dist_bucket(passes["ydstogo"])
-    passes["zone"] = _field_zone(passes["yardline_100"])
+    if zones == "z10":
+        passes["zone"] = _field_zone10(passes["yardline_100"])
+        ZONE_ORDER = list(reversed(ZONE10_LABELS))        # far -> near the goal line
+        BORROW = set(ZONE10_LABELS[:6])                    # y10..y60 borrow from the next zone out
+    else:
+        passes["zone"] = _field_zone(passes["yardline_100"])
+        ZONE_ORDER = ["own20", "own40", "midfield", "opp20", "rz10"]
+        BORROW = {"opp20", "rz10"}
     passes = passes.dropna(subset=["down_b", "dist_b", "zone"])
 
     # 5A-6: open-field reference completions (zones where the goal line ~never binds)
-    open_field = passes[passes["zone"].isin(["midfield", "own40", "own20"])
+    open_field = passes[(passes["yardline_100"] > 60)
                         & (passes["sack"] != 1) & (passes["interception"] != 1)
                         & (passes["complete_pass"] == 1)]
     def _ref(down, dist, sel):
@@ -138,7 +159,6 @@ def build_pass_table(df):
         return g["yards_gained"].values.astype(float)
 
     rows = []
-    ZONE_ORDER = ["own20", "own40", "midfield", "opp20", "rz10"]  # far -> near the goal line
     _prev = {}  # (down, dist) -> KM arrays of the previous (farther) zone, used as the tail reference
     _groups = {k: g for k, g in passes.groupby(["down_b", "dist_b", "zone"], observed=True)}
     _keys = sorted(_groups.keys(), key=lambda k: (k[0], k[1], ZONE_ORDER.index(k[2]) if k[2] in ZONE_ORDER else 99))
@@ -194,7 +214,7 @@ def build_pass_table(df):
         # zone is inside the 20 (compression grows toward the goal line, so borrow from
         # the neighbour, not from open field); open-field raw gains otherwise.
         pv = _prev.get((down, dist))
-        if zone in ("opp20", "rz10") and pv is not None:
+        if zone in BORROW and pv is not None:
             ref_s, ref_f, ref_a = pv
         else:
             ref_s = _ref(down, dist, lambda g: g[g["epa"] > 0])
@@ -230,15 +250,22 @@ def build_pass_table(df):
 # TABLE B: Rush outcomes by situation bucket
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def build_rush_table(df):
+def build_rush_table(df, zones="z5"):
     rushes = df[(df["play_type"] == "run") & df["down"].notna()].copy()
     rushes["down_b"] = rushes["down"].astype(int).clip(1, 4).astype(str)
     rushes["dist_b"] = _dist_bucket(rushes["ydstogo"])
-    rushes["zone"] = _field_zone(rushes["yardline_100"])
+    if zones == "z10":
+        rushes["zone"] = _field_zone10(rushes["yardline_100"])
+        ZONE_ORDER = list(reversed(ZONE10_LABELS))
+        BORROW = set(ZONE10_LABELS[:6])
+    else:
+        rushes["zone"] = _field_zone(rushes["yardline_100"])
+        ZONE_ORDER = ["own20", "own40", "midfield", "opp20", "rz10"]
+        BORROW = {"opp20", "rz10"}
     rushes = rushes.dropna(subset=["down_b", "dist_b", "zone"])
 
     # 5A-6: open-field reference rushes
-    open_field = rushes[rushes["zone"].isin(["midfield", "own40", "own20"])]
+    open_field = rushes[rushes["yardline_100"] > 60]
     def _ref(down, dist, sel):
         g = open_field[(open_field["down_b"] == down) & (open_field["dist_b"] == dist)]
         g = sel(g)
@@ -247,7 +274,6 @@ def build_rush_table(df):
         return g["yards_gained"].values.astype(float)
 
     rows = []
-    ZONE_ORDER = ["own20", "own40", "midfield", "opp20", "rz10"]
     _prev = {}
     _groups = {k: g for k, g in rushes.groupby(["down_b", "dist_b", "zone"], observed=True)}
     _keys = sorted(_groups.keys(), key=lambda k: (k[0], k[1], ZONE_ORDER.index(k[2]) if k[2] in ZONE_ORDER else 99))
@@ -273,7 +299,7 @@ def build_rush_table(df):
                 return _km_quantiles(g["yards_gained"].values, g["yardline_100"].values, cens, ref_gains=ref)
             return np.full(101, default)
         pv = _prev.get((down, dist))
-        if zone in ("opp20", "rz10") and pv is not None:
+        if zone in BORROW and pv is not None:
             ref_s, ref_f, ref_a = pv
         else:
             ref_s = _ref(down, dist, lambda g: g[g["epa"] > 0])
@@ -819,12 +845,21 @@ def build_constants(df):
     # game-clock consumers. Median=13 underweights them.
     inter_drive_median = float(valid_gaps.mean()) if len(valid_gaps) else 21.0
 
+    # 5A-7: per-play safety rates by own-goal-line bucket, RAW (the 5A-4 engine carried
+    # these as hand-typed numbers scaled by 1/1.84 "because the sim generated too many
+    # deep plays"; deep-play counts now match reality, so the measured rates are used).
+    saf_by_zone = {}
+    for key, lo, hi in (("98-100", 98, 100), ("95-97", 95, 97), ("90-94", 90, 94)):
+        g = scrim[(scrim["yardline_100"] >= lo) & (scrim["yardline_100"] <= hi)]
+        saf_by_zone[key] = {"n": int(len(g)),
+                            "p": float(g["safety"].sum() / len(g)) if len(g) else 0.0}
+
     return {
         "p_safety_per_play": safeties / total_plays if total_plays else 0.0004,
         "total_scrimmage_plays": total_plays,
         "total_safeties": int(safeties),
-        "kneel_seconds": 40,
         "inter_drive_clock": inter_drive_median,
+        "safety_rate_by_zone": saf_by_zone,
     }
 
 
@@ -879,6 +914,92 @@ def build_eoh_fg_table(df):
             rows.append({"state": st, "sec_b": sb, "yl_b": "all", "n": len(g), "p_fg": g["fg"].mean()})
     return pd.DataFrame(rows)
 
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TABLES K/L (5A-7): timeout policy and kneel decision at the end of halves
+# ═══════════════════════════════════════════════════════════════════════════════
+
+TO_SEC_BINS = [-1, 30, 60, 120, 180]
+TO_SEC_LABELS = ["0-30", "31-60", "61-120", "121-180"]
+KNEEL_SEC_BINS = [-1, 40, 80, 120, 180]
+KNEEL_SEC_LABELS = ["0-40", "41-80", "81-120", "121-180"]
+
+
+def _late_frame(df):
+    """Scrimmage snaps in the last 3:00 of Q2/Q4 with the next-event timeout flags."""
+    d = df.sort_values(["game_id", "play_id"]).copy()
+    d["next_timeout"] = d.groupby("game_id")["timeout"].shift(-1)
+    d["next_to_team"] = d.groupby("game_id")["timeout_team"].shift(-1)
+    sc = d[d["play_type"].isin(["pass", "run", "qb_kneel", "qb_spike"])].copy()
+    running = ((sc["play_type"] == "run") | ((sc["play_type"] == "pass") & (sc["complete_pass"] == 1)))
+    running = running & (sc["out_of_bounds"] != 1)
+    running = running | (sc["sack"] == 1)
+    sc["clock_running"] = running
+    sc["to_by_off"] = (sc["next_timeout"] == 1) & (sc["next_to_team"] == sc["posteam"])
+    sc["to_by_def"] = (sc["next_timeout"] == 1) & (sc["next_to_team"] == sc["defteam"])
+    sc["off_state"] = np.where(sc["score_differential"] < 0, "trail",
+                      np.where(sc["score_differential"] == 0, "tied", "lead"))
+    return sc[(sc["half_seconds_remaining"] <= 180) & sc["qtr"].isin([2, 4])].copy()
+
+
+def build_timeout_policy(df):
+    """P(timeout called after a snap) by side, keyed (qtr, seconds-left bucket,
+    offense score state, clock running after the play). Measured only where the
+    calling side still has a timeout. Min cell 80; fallback rows pool clock_running
+    (key 'any'), then off_state ('all'). 2021-2024 regular season."""
+    MIN_N = 80
+    late = _late_frame(df)
+    late["sec_b"] = pd.cut(late["half_seconds_remaining"], TO_SEC_BINS, labels=TO_SEC_LABELS).astype(str)
+    rows = []
+    for side, col, rem in (("off", "to_by_off", "posteam_timeouts_remaining"),
+                           ("def", "to_by_def", "defteam_timeouts_remaining")):
+        d = late[late[rem] > 0]
+        for (q, sb, st, cr), g in d.groupby(["qtr", "sec_b", "off_state", "clock_running"]):
+            if len(g) >= MIN_N:
+                rows.append({"side": side, "qtr": int(q), "sec_b": sb, "off_state": st,
+                             "clock_running": str(bool(cr)), "n": len(g), "p_to": g[col].mean()})
+        for (q, sb, st), g in d.groupby(["qtr", "sec_b", "off_state"]):
+            if len(g) >= MIN_N:
+                rows.append({"side": side, "qtr": int(q), "sec_b": sb, "off_state": st,
+                             "clock_running": "any", "n": len(g), "p_to": g[col].mean()})
+        for (q, sb), g in d.groupby(["qtr", "sec_b"]):
+            if len(g) >= MIN_N:
+                rows.append({"side": side, "qtr": int(q), "sec_b": sb, "off_state": "all",
+                             "clock_running": "any", "n": len(g), "p_to": g[col].mean()})
+    return pd.DataFrame(rows)
+
+
+def build_kneel_table(df):
+    """P(kneel | snap on downs 1-3 in the last 3:00 of Q2/Q4) keyed (qtr, seconds
+    bucket, defence timeouts remaining, down, situation). Situation: Q4 -> 'lead'
+    (score_differential > 0; trailing/tied teams do not kneel); Q2 -> 'own' (yl >= 60)
+    or 'opp'. Min cell 30; fallback rows pool down ('any'), then timeouts ('any')."""
+    MIN_N = 30
+    late = _late_frame(df)
+    late = late[late["down"].isin([1, 2, 3])].copy()
+    late["kneel"] = (late["play_type"] == "qb_kneel").astype(int)
+    late["sec_b"] = pd.cut(late["half_seconds_remaining"], KNEEL_SEC_BINS, labels=KNEEL_SEC_LABELS).astype(str)
+    late["def_to"] = late["defteam_timeouts_remaining"].clip(0, 3).astype(int).astype(str)
+    late["situation"] = np.where(late["qtr"] == 4,
+                                 np.where(late["score_differential"] > 0, "lead", "not_lead"),
+                                 np.where(late["yardline_100"] >= 60, "own", "opp"))
+    late = late[late["situation"] != "not_lead"]
+    late["down_s"] = late["down"].astype(int).astype(str)
+    rows = []
+    for (q, sb, dt, dn, sit), g in late.groupby(["qtr", "sec_b", "def_to", "down_s", "situation"]):
+        if len(g) >= MIN_N:
+            rows.append({"qtr": int(q), "sec_b": sb, "def_to": dt, "down": dn, "situation": sit,
+                         "n": len(g), "p_kneel": g["kneel"].mean()})
+    for (q, sb, dt, sit), g in late.groupby(["qtr", "sec_b", "def_to", "situation"]):
+        if len(g) >= MIN_N:
+            rows.append({"qtr": int(q), "sec_b": sb, "def_to": dt, "down": "any", "situation": sit,
+                         "n": len(g), "p_kneel": g["kneel"].mean()})
+    for (q, sb, sit), g in late.groupby(["qtr", "sec_b", "situation"]):
+        if len(g) >= MIN_N:
+            rows.append({"qtr": int(q), "sec_b": sb, "def_to": "any", "down": "any", "situation": sit,
+                         "n": len(g), "p_kneel": g["kneel"].mean()})
+    return pd.DataFrame(rows)
+
 def build_all():
     print("Loading PBP data (2021-2024, regular season)...")
     df = load_pbp()
@@ -895,6 +1016,13 @@ def build_all():
     rush_tbl = build_rush_table(df)
     rush_tbl.to_parquet(OUT_DIR / "rush_outcomes.parquet", index=False)
     print(f"  {len(rush_tbl)} rows")
+
+    print("Building 10-yard-zone outcome tables (A10/B10, 5A-7)...")
+    pass10 = build_pass_table(df, zones="z10")
+    pass10.to_parquet(OUT_DIR / "pass_outcomes_z10.parquet", index=False)
+    rush10 = build_rush_table(df, zones="z10")
+    rush10.to_parquet(OUT_DIR / "rush_outcomes_z10.parquet", index=False)
+    print(f"  pass z10 {len(pass10)} rows, rush z10 {len(rush10)} rows")
 
     print("Building play-call table (C)...")
     pc_tbl = build_playcall_table(df)
@@ -944,6 +1072,13 @@ def build_all():
     eoh_tbl = build_eoh_fg_table(df)
     eoh_tbl.to_parquet(OUT_DIR / "eoh_fg_decision.parquet", index=False)
     print(f"  {len(eoh_tbl)} rows")
+
+    print("Building timeout policy and kneel tables (K/L, 5A-7)...")
+    to_tbl2 = build_timeout_policy(df)
+    to_tbl2.to_parquet(OUT_DIR / "timeout_policy.parquet", index=False)
+    kn_tbl = build_kneel_table(df)
+    kn_tbl.to_parquet(OUT_DIR / "kneel_decision.parquet", index=False)
+    print(f"  timeout policy {len(to_tbl2)} rows, kneel {len(kn_tbl)} rows")
 
     print("Building pass depth table (I)...")
     depth_tbl = build_pass_depth_table(df)

@@ -55,6 +55,10 @@ def _load_tables():
         return
     _CACHE["pass"] = pd.read_parquet(TABLES_DIR / "pass_outcomes.parquet")
     _CACHE["rush"] = pd.read_parquet(TABLES_DIR / "rush_outcomes.parquet")
+    # 5A-7: 10-yard-zone outcome tables (engine reads these; z5 is the thin-cell fallback)
+    for k, fn in (("pass_z10", "pass_outcomes_z10.parquet"), ("rush_z10", "rush_outcomes_z10.parquet")):
+        fp = TABLES_DIR / fn
+        _CACHE[k] = pd.read_parquet(fp) if fp.exists() else None
     _CACHE["playcall"] = pd.read_parquet(TABLES_DIR / "playcall_xpass.parquet")
     _CACHE["clock"] = pd.read_parquet(TABLES_DIR / "clock_runoff.parquet")
     _CACHE["4th"] = pd.read_parquet(TABLES_DIR / "fourth_down.parquet")
@@ -69,6 +73,10 @@ def _load_tables():
     depth_path = TABLES_DIR / "pass_depth_outcomes.parquet"
     if depth_path.exists():
         _CACHE["pass_depth"] = pd.read_parquet(depth_path)
+    # 5A-7: timeout policy and kneel decision tables
+    for k, fn in (("timeout_policy", "timeout_policy.parquet"), ("kneel", "kneel_decision.parquet")):
+        fp = TABLES_DIR / fn
+        _CACHE[k] = pd.read_parquet(fp) if fp.exists() else None
     # 5A-6: end-of-half FG decision table (downs 1-3)
     eoh_path = TABLES_DIR / "eoh_fg_decision.parquet"
     if eoh_path.exists():
@@ -129,63 +137,69 @@ def _quantile_sample_single(q101, u_arr):
 # TABLE INDEX BUILDERS
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def _build_pass_arrays():
-    """Build 4D numpy arrays indexed by (down, dist_bucket, zone) for fast lookup."""
-    tbl = _CACHE["pass"]
+# 5A-7: engine zone index = 10-yard zones. Index k covers yardline_100 in (10k, 10k+10].
+NZONES = 10
+_Z10_LABELS = [f"y{k}" for k in range(10, 101, 10)]           # y10 -> idx 0 ... y100 -> idx 9
+_Z10_INDEX = {lab: i for i, lab in enumerate(_Z10_LABELS)}
+_Z5_INDEX = {"rz10": [0], "opp20": [1], "midfield": [2, 3, 4, 5], "own40": [6, 7], "own20": [8, 9]}
+
+
+def _fill_zone_arrays(tbl5, tbl10, fields, defaults):
+    """Fill (5, 3, NZONES[, 101]) arrays from the z10 table, using the z5 parent row
+    wherever the z10 cell is absent (thin-cell fallback). `fields` maps array name ->
+    (table column, per-cell transform)."""
     dist_map = {"short": 0, "med": 1, "long": 2}
-    zone_map = {"own20": 0, "own40": 1, "midfield": 2, "opp20": 3, "rz10": 4}
+    arrs = {}
+    for name, (col, is_q) in fields.items():
+        shape = (5, 3, NZONES) + ((101,) if is_q else ())
+        arrs[name] = np.full(shape, defaults[name], dtype=float)
+    filled = np.zeros((5, 3, NZONES), dtype=bool)
+    # z5 parents first, then z10 overrides
+    if tbl5 is not None:
+        for _, r in tbl5.iterrows():
+            d = int(r["down"]); di = dist_map.get(r["dist"]); zs = _Z5_INDEX.get(r["zone"])
+            if di is None or zs is None:
+                continue
+            for zi in zs:
+                for name, (col, is_q) in fields.items():
+                    if col in r.index:
+                        arrs[name][d, di, zi] = np.array(r[col]) if is_q else r[col]
+    n10 = 0
+    if tbl10 is not None:
+        for _, r in tbl10.iterrows():
+            d = int(r["down"]); di = dist_map.get(r["dist"]); zi = _Z10_INDEX.get(r["zone"])
+            if di is None or zi is None:
+                continue
+            for name, (col, is_q) in fields.items():
+                if col in r.index:
+                    arrs[name][d, di, zi] = np.array(r[col]) if is_q else r[col]
+            filled[d, di, zi] = True; n10 += 1
+    arrs["_z10_cells"] = n10
+    return arrs
 
-    shape = (5, 3, 5)
-    p_fumble = np.full(shape, 0.008)
-    p_sack = np.full(shape, 0.06)
-    sack_yds_q = np.full(shape + (101,), -5.0)
-    p_int = np.full(shape, 0.02)
-    p_comp = np.full(shape, 0.65)
-    p_succ = np.full(shape, 0.50)
-    yds_succ_q = np.full(shape + (101,), 12.0)
-    yds_fail_q = np.full(shape + (101,), 3.0)
 
-    for _, r in tbl.iterrows():
-        d = int(r["down"])
-        di = dist_map.get(r["dist"])
-        zi = zone_map.get(r["zone"])
-        if di is None or zi is None:
-            continue
-        p_fumble[d, di, zi] = r.get("p_fumble", 0.008)
-        p_sack[d, di, zi] = r["p_sack"]
-        sack_yds_q[d, di, zi] = np.array(r["sack_yds_q"])
-        p_int[d, di, zi] = r["p_int"]
-        p_comp[d, di, zi] = r["p_comp"]
-        p_succ[d, di, zi] = r["p_success_given_comp"]
-        yds_succ_q[d, di, zi] = np.array(r["yds_success_q"])
-        yds_fail_q[d, di, zi] = np.array(r["yds_fail_q"])
-
-    return p_fumble, p_sack, sack_yds_q, p_int, p_comp, p_succ, yds_succ_q, yds_fail_q
+def _build_pass_arrays():
+    """Build numpy arrays indexed by (down, dist_bucket, zone10) for fast lookup.
+    5A-7: 10-yard zones from pass_outcomes_z10, z5 parents as fallback."""
+    fields = {"p_fumble": ("p_fumble", False), "p_sack": ("p_sack", False),
+              "sack_yds_q": ("sack_yds_q", True), "p_int": ("p_int", False),
+              "p_comp": ("p_comp", False), "p_succ": ("p_success_given_comp", False),
+              "yds_succ_q": ("yds_success_q", True), "yds_fail_q": ("yds_fail_q", True)}
+    defaults = {"p_fumble": 0.008, "p_sack": 0.06, "sack_yds_q": -5.0, "p_int": 0.02,
+                "p_comp": 0.65, "p_succ": 0.50, "yds_succ_q": 12.0, "yds_fail_q": 3.0}
+    a = _fill_zone_arrays(_CACHE["pass"], _CACHE.get("pass_z10"), fields, defaults)
+    _CACHE["_pass_z10_cells"] = a["_z10_cells"]
+    return (a["p_fumble"], a["p_sack"], a["sack_yds_q"], a["p_int"], a["p_comp"],
+            a["p_succ"], a["yds_succ_q"], a["yds_fail_q"])
 
 
 def _build_rush_arrays():
-    tbl = _CACHE["rush"]
-    dist_map = {"short": 0, "med": 1, "long": 2}
-    zone_map = {"own20": 0, "own40": 1, "midfield": 2, "opp20": 3, "rz10": 4}
-
-    shape = (5, 3, 5)
-    p_fum = np.full(shape, 0.01)
-    p_succ = np.full(shape, 0.43)
-    yds_succ_q = np.full(shape + (101,), 5.0)
-    yds_fail_q = np.full(shape + (101,), 1.0)
-
-    for _, r in tbl.iterrows():
-        d = int(r["down"])
-        di = dist_map.get(r["dist"])
-        zi = zone_map.get(r["zone"])
-        if di is None or zi is None:
-            continue
-        p_fum[d, di, zi] = r["p_fumble"]
-        p_succ[d, di, zi] = r["p_success"]
-        yds_succ_q[d, di, zi] = np.array(r["yds_success_q"])
-        yds_fail_q[d, di, zi] = np.array(r["yds_fail_q"])
-
-    return p_fum, p_succ, yds_succ_q, yds_fail_q
+    fields = {"p_fum": ("p_fumble", False), "p_succ": ("p_success", False),
+              "yds_succ_q": ("yds_success_q", True), "yds_fail_q": ("yds_fail_q", True)}
+    defaults = {"p_fum": 0.01, "p_succ": 0.43, "yds_succ_q": 5.0, "yds_fail_q": 1.0}
+    a = _fill_zone_arrays(_CACHE["rush"], _CACHE.get("rush_z10"), fields, defaults)
+    _CACHE["_rush_z10_cells"] = a["_z10_cells"]
+    return a["p_fum"], a["p_succ"], a["yds_succ_q"], a["yds_fail_q"]
 
 
 def _build_clock_arrays():
@@ -213,6 +227,32 @@ def _build_4th_down_lookup():
     for _, r in tbl.iterrows():
         d[(r["ydstogo_b"], r["yl_b"], r["score_b"], r["qtr_b"])] = (r["p_go"], r["p_punt"], r["p_fg"])
     return d
+
+
+def _build_timeout_lookup():
+    """5A-7: (side, qtr, sec_b, off_state, clock_running_str) -> P(timeout after the snap)."""
+    tbl = _CACHE.get("timeout_policy")
+    if tbl is None:
+        return None
+    return {(r["side"], int(r["qtr"]), r["sec_b"], r["off_state"], r["clock_running"]): float(r["p_to"])
+            for _, r in tbl.iterrows()}
+
+
+def _build_kneel_lookup():
+    """5A-7: (qtr, sec_b, def_to, down, situation) -> P(kneel)."""
+    tbl = _CACHE.get("kneel")
+    if tbl is None:
+        return None
+    return {(int(r["qtr"]), r["sec_b"], r["def_to"], r["down"], r["situation"]): float(r["p_kneel"])
+            for _, r in tbl.iterrows()}
+
+
+def _to_sec_bucket(cl):
+    return "0-30" if cl <= 30 else ("31-60" if cl <= 60 else ("61-120" if cl <= 120 else "121-180"))
+
+
+def _kneel_sec_bucket(cl):
+    return "0-40" if cl <= 40 else ("41-80" if cl <= 80 else ("81-120" if cl <= 120 else "121-180"))
 
 
 def _build_eoh_lookup():
@@ -665,6 +705,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     clock_q = _build_clock_arrays()
     fd_lookup = _build_4th_down_lookup()
     eoh_lookup = _build_eoh_lookup()  # 5A-6
+    to_lookup = _build_timeout_lookup()  # 5A-7
+    kneel_lookup = _build_kneel_lookup()  # 5A-7
+    xs101_top = np.linspace(0, 1, 101)
     fg_lookup = _build_fg_lookup()
     punt_lookup = _build_punt_lookup()
 
@@ -674,9 +717,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     scalars = _CACHE["scalars"]
     to_ret = _CACHE["turnover"]
     consts = _CACHE["constants"]
-    # 5A-4: conditional safety probabilities
-    p_safety_sack_deep = consts.get("p_safety_given_sack_deep", 1.0)
-    p_safety_rush_deep = consts.get("p_safety_given_rush_deep", 1.0)
+    # 5A-7: per-play safety rates by own-goal-line bucket, measured in tables.build_constants
+    _srz = consts.get("safety_rate_by_zone", {})
+    p_saf_98 = float(_srz.get("98-100", {}).get("p", 0.0))
+    p_saf_95 = float(_srz.get("95-97", {}).get("p", 0.0))
+    p_saf_90 = float(_srz.get("90-94", {}).get("p", 0.0))
 
     # FIX 6a: 2pt decision table
     twopt_tbl = pd.read_parquet(TABLES_DIR / "twopt_decision.parquet")
@@ -785,6 +830,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_fg_att = np.zeros(N, dtype=np.int16)
     ev_fg_non4th = np.zeros(N, dtype=np.int16)  # 5A-6: FG attempts on downs 1-3
     ev_eoh_snaps = np.zeros(N, dtype=np.int16)  # 5A-6: snaps on downs 1-3, <=40s left in half, yl<=50
+    to_rem = np.full((2, N), 3, dtype=np.int8)   # 5A-7: timeouts remaining per team, per half
+    ev_to_off = np.zeros(N, dtype=np.int16)      # 5A-7: offensive timeouts taken (last 3:00 of halves)
+    ev_to_def = np.zeros(N, dtype=np.int16)      # 5A-7: defensive timeouts taken
+    ev_kneels = np.zeros(N, dtype=np.int16)      # 5A-7: kneel-downs
     ev_late_snaps_q2 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q2
     ev_late_snaps_q4 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q4
     ev_fg_made = np.zeros(N, dtype=np.int16)
@@ -1069,10 +1118,36 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         return np.where(d <= 3, 0, np.where(d <= 7, 1, 2)).astype(np.intp)
 
     def _zone_idx(y):
-        return np.where(y > 80, 0,
-               np.where(y > 60, 1,
-               np.where(y > 20, 2,
-               np.where(y > 10, 3, 4)))).astype(np.intp)
+        # 5A-7: 10-yard zones; yardline_100 in (10k, 10k+10] -> k (0 = inside the 10)
+        return np.clip(np.ceil(np.asarray(y, dtype=float) / 10.0) - 1, 0, NZONES - 1).astype(np.intp)
+
+    def _apply_timeouts(gi_arr, ot_idx_arr, sd_arr, u_arr, running_codes=(1, 2), de_code=3, stop_code=0):
+        """5A-7: after a scrimmage play in the last 3:00 of Q2/Q4, the offence or the
+        defence may call a timeout (empirical policy); a timeout makes the runoff to the
+        next snap the stopped-clock kind (`stop_code`). Pass encoding: 0 incomplete /
+        1 first down / 2 complete in bounds / 3 drive-ending. Rush encoding: 0 first down /
+        1 run / 2 drive-ending / 3 stopped (timeout)."""
+        if to_lookup is None:
+            return
+        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] == 4)) & (clock[gi_arr] <= 180) & \
+               ~game_over[gi_arr] & (ot_idx_arr != de_code)
+        for j in np.where(late)[0]:
+            gi = gi_arr[j]
+            q = int(qtr[gi]); sb = _to_sec_bucket(float(clock[gi]))
+            sd_j = int(sd_arr[j])
+            st = "trail" if sd_j < 0 else ("tied" if sd_j == 0 else "lead")
+            run_s = "True" if ot_idx_arr[j] in running_codes else "False"
+            def _p(side):
+                return (to_lookup.get((side, q, sb, st, run_s)) or
+                        to_lookup.get((side, q, sb, st, "any")) or
+                        to_lookup.get((side, q, sb, "all", "any"), 0.0))
+            p_off = _p("off") if to_rem[poss[gi], gi] > 0 else 0.0
+            p_def = _p("def") if to_rem[1 - poss[gi], gi] > 0 else 0.0
+            u = u_arr[gi]
+            if u < p_off:
+                to_rem[poss[gi], gi] -= 1; ev_to_off[gi] += 1; ot_idx_arr[j] = stop_code
+            elif u < p_off + p_def:
+                to_rem[1 - poss[gi], gi] -= 1; ev_to_def[gi] += 1; ot_idx_arr[j] = stop_code
 
     # ═══════════════════════════════════════════════════════════════════════════
     # MAIN LOOP
@@ -1095,6 +1170,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # stream shifts (inserting a dummy draw cannot change statistics).
         u_4th = rng.random(N)
         u_eoh = rng.random(N)  # 5A-6: end-of-half FG decision on downs 1-3
+        u_to = rng.random(N)     # 5A-7: timeout decision after the snap
+        u_kneel = rng.random(N)  # 5A-7: kneel decision
         u_punt_net = rng.random(N)
         u_fg_mk = rng.random(N)
         u_pen = rng.random(N)
@@ -1148,6 +1225,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 poss[ht] = 1 - opening_receiver[ht]
                 yl[ht] = ko_start
                 _new_drive(ht)
+                to_rem[:, ht] = 3  # 5A-7: timeouts reset for the second half
 
             # End of regulation (Q4 over) — only if clock is STILL <= 0
             # after the quarter advance (not just from the previous quarter ending)
@@ -1164,6 +1242,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     ot_flag[tied] = 1
                     qtr[tied] = 5
                     clock[tied] = 600.0
+                    to_rem[:, tied] = 2  # 5A-7: two timeouts each in overtime
                     ct = (u_ot >= 0.5).astype(np.int8)
                     poss[tied] = ct[tied]
                     ot_first_poss_team[tied] = ct[tied]
@@ -1209,15 +1288,58 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # Effective kneels = kneels_available - 1.5 (rounded to 1 to be
         # conservative — ensures we don't kneel when the opponent can stop us).
         score_diff_poss = np.where(poss == 0, score_h - score_a, score_a - score_h)
-        kneels_avail = (5 - down).astype(np.float32)  # knees left including this one
-        effective_kneels = np.maximum(kneels_avail - 1.0, 1.0)  # subtract ~1 for timeouts
-        can_kneel = (alive & (qtr == 4) & (score_diff_poss > 0) &
-                     (clock <= effective_kneels * 40) & (clock > 0))
-        if can_kneel.any():
-            clock[can_kneel] -= 40
-            ev_clock_used[can_kneel] += 40
-            n_plays[can_kneel] += 1
-            # FIX 1: no continue — fall through; kneel sims excluded from playing below
+        # 5A-7: the 40-second / "opponent has ~1.5 timeouts" heuristic is replaced by the
+        # empirical kneel table (qtr x seconds x DEFENCE TIMEOUTS REMAINING x down x
+        # situation) and the empirical timeout policy. A kneel is a play: -1 yard, next
+        # down, running-clock runoff from the clock table, defence may call a timeout.
+        can_kneel = np.zeros(N, dtype=bool)
+        if kneel_lookup is not None:
+            kn_cand = alive & (down < 4) & (clock > 0) & (clock <= 180) & (
+                ((qtr == 4) & (score_diff_poss > 0)) | (qtr == 2))
+            for i in np.where(kn_cand)[0]:
+                q = int(qtr[i]); cl = float(clock[i])
+                sit = "lead" if q == 4 else ("own" if yl[i] >= 60 else "opp")
+                sb = _kneel_sec_bucket(cl)
+                dt = str(int(to_rem[1 - poss[i], i]))
+                dn = str(int(down[i]))
+                pk = kneel_lookup.get((q, sb, dt, dn, sit))
+                if pk is None:
+                    pk = kneel_lookup.get((q, sb, dt, "any", sit))
+                if pk is None:
+                    pk = kneel_lookup.get((q, sb, "any", "any", sit), 0.0)
+                if u_kneel[i] < pk:
+                    can_kneel[i] = True
+            if can_kneel.any():
+                for i in np.where(can_kneel)[0]:
+                    ev_kneels[i] += 1
+                    n_plays[i] += 1; _dl_plays[i] += 1; _dl_yards[i] -= 1.0
+                    yl[i] = min(yl[i] + 1.0, 99.0)
+                    dist[i] = dist[i] + 1.0
+                    down[i] += 1
+                    # clock: running-clock runoff for this score state / period
+                    sd_i = int(score_diff_poss[i])
+                    ss_i = ("trail9+" if sd_i <= -9 else "trail1-8" if sd_i <= -1 else
+                            "tied" if sd_i == 0 else "lead1-8" if sd_i <= 8 else "lead9+")
+                    cp_i = "Q2_late" if (qtr[i] == 2 and clock[i] <= 120) else (
+                        "Q4_late" if (qtr[i] == 4 and clock[i] <= 120) else "normal")
+                    ot_name = "complete_inbounds"
+                    # defence timeout after the kneel?
+                    if to_lookup is not None and to_rem[1 - poss[i], i] > 0 and clock[i] <= 180:
+                        st_i = "trail" if sd_i < 0 else ("tied" if sd_i == 0 else "lead")
+                        p_def = (to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), st_i, "True"))
+                                 or to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), st_i, "any"))
+                                 or to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), "all", "any"), 0.0))
+                        if u_to[i] < p_def:
+                            to_rem[1 - poss[i], i] -= 1; ev_to_def[i] += 1
+                            ot_name = "incomplete"  # clock stopped
+                    cq = clock_q.get((ot_name, ss_i, cp_i))
+                    if cq is None:
+                        cq = clock_q.get((ot_name, f"p_{ss_i}", "all"))
+                    if cq is None:
+                        cq = clock_q.get((ot_name, False), np.full(101, 30.0))
+                    pace_i = (ctx["t0_pace"] if poss[i] == 0 else ctx["t1_pace"]) / ctx["lg_pace"]
+                    el = max(float(np.interp(u_pclock[i], xs101_top, cq)) * pace_i, 3.0)
+                    clock[i] -= np.float32(el); ev_clock_used[i] += np.float32(el)
 
         # --- 4th down decision ---
         # Exclude kneeling sims and sims with expired clock from play execution
@@ -1581,16 +1703,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         if not playing.any():
             continue
 
-        # --- 5A-4: Pre-play safety check at deep field positions ---
-        # Empirical per-play safety rates scaled to match actual 0.049 safeties/game.
-        # Raw PBP rates produce ~1.84x because sim generates more deep-field plays.
-        # Scaled: yl 98-100: 2.21%, yl 95-97: 0.90%, yl 90-94: 0.11%
+        # --- Pre-play safety at deep field positions (5A-4 mechanism, 5A-7 rates) ---
+        # Rates are the measured per-play safety rates from constants.json; the 5A-4
+        # hand-typed values scaled by 1/1.84 are gone.
         deep_play = playing & (yl >= 90)
         if deep_play.any():
             p_saf_pre = np.zeros(N)
-            p_saf_pre[playing & (yl >= 98)] = 0.0221
-            p_saf_pre[playing & (yl >= 95) & (yl < 98)] = 0.0090
-            p_saf_pre[playing & (yl >= 90) & (yl < 95)] = 0.0011
+            p_saf_pre[playing & (yl >= 98)] = p_saf_98
+            p_saf_pre[playing & (yl >= 95) & (yl < 98)] = p_saf_95
+            p_saf_pre[playing & (yl >= 90) & (yl < 95)] = p_saf_90
             safety_pre = deep_play & (u_safety < p_saf_pre)
             if safety_pre.any():
                 for i in np.where(safety_pre)[0]:
@@ -1781,15 +1902,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 sk = np.where(sacked)[0]
                 for d_v in range(1, 5):
                     for di_v in range(3):
-                        for zi_v in range(5):
+                        for zi_v in range(NZONES):
                             m = sk[(d_p[sk]==d_v)&(di_p[sk]==di_v)&(zi_p[sk]==zi_v)]
                             if len(m):
                                 yards[m] = np.interp(u5[m], xs101, pa_sack_yds[d_v, di_v, zi_v])
-                # 5A-4: scale sack yardage near own goal line (yl >= 90)
-                # Empirical: deep sacks average -4.6 yds vs -6.7 overall (ratio 0.687)
-                deep_sack = sacked & (yl_p >= 90)
-                if deep_sack.any():
-                    yards[deep_sack] *= 0.687
+                # 5A-7: the 5A-4 hand scale (0.687) on deep sacks is removed — the y90/y100
+                # zone cells carry their own measured sack-yardage distributions.
 
             # Completion yards — success/fail split with matchup tilt
             comp_succ = completed & (u4 < tbl_succ)
@@ -1802,7 +1920,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     idx = np.where(yds_mask)[0]
                     for d_v in range(1, 5):
                         for di_v in range(3):
-                            for zi_v in range(5):
+                            for zi_v in range(NZONES):
                                 m = idx[(d_p[idx]==d_v)&(di_p[idx]==di_v)&(zi_p[idx]==zi_v)]
                                 if len(m):
                                     yards[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
@@ -2018,6 +2136,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             sd_arr = np.where(poss[gi_arr] == 0,
                               score_h[gi_arr] - score_a[gi_arr],
                               score_a[gi_arr] - score_h[gi_arr])
+            _apply_timeouts(gi_arr, ot_idx, sd_arr, u_to)  # 5A-7
             # 5A-3: score state (5-way)
             ss_arr = np.where(sd_arr <= -9, "trail9+",
                      np.where(sd_arr <= -1, "trail1-8",
@@ -2103,7 +2222,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     idx = np.where(yds_mask)[0]
                     for d_v in range(1, 5):
                         for di_v in range(3):
-                            for zi_v in range(5):
+                            for zi_v in range(NZONES):
                                 m = idx[(d_r[idx]==d_v)&(di_r[idx]==di_v)&(zi_r[idx]==zi_v)]
                                 if len(m):
                                     yards_r[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
@@ -2266,6 +2385,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             sd_r_arr = np.where(poss[gi_r] == 0,
                                 score_h[gi_r] - score_a[gi_r],
                                 score_a[gi_r] - score_h[gi_r])
+            _apply_timeouts(gi_r, ot_idx_r, sd_r_arr, u_to, running_codes=(0, 1), de_code=2, stop_code=3)  # 5A-7
             ss_r_arr = np.where(sd_r_arr <= -9, "trail9+",
                        np.where(sd_r_arr <= -1, "trail1-8",
                        np.where(sd_r_arr == 0, "tied",
@@ -2275,11 +2395,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             q4l_r = (qtr[gi_r] == 4) & (clock[gi_r] <= 120)
             cp_r_arr[q2l_r] = "Q2_late"
             cp_r_arr[q4l_r] = "Q4_late"
-            ot_strs_r = ["first_down", "run"]
+            ot_strs_r = {0: "first_down", 1: "run", 3: "incomplete"}  # 3 = clock stopped by a timeout (5A-7)
             xs101 = np.linspace(0, 1, 101)
             pace_r = np.where(poss[gi_r] == 0,
                               ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
-            for oi in range(2):
+            for oi in (0, 1, 3):
                 ot_name_r = ot_strs_r[oi]
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
                     for cp_val in ["normal", "Q2_late", "Q4_late"]:
@@ -2363,6 +2483,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_fg_att": ev_fg_att,
         "ev_fg_non4th": ev_fg_non4th,
         "ev_eoh_snaps": ev_eoh_snaps,
+        "ev_to_off": ev_to_off, "ev_to_def": ev_to_def, "ev_kneels": ev_kneels,
         "ev_late_snaps_q2": ev_late_snaps_q2,
         "ev_late_snaps_q4": ev_late_snaps_q4,
         "ev_pass_40": ev_pass_40, "ev_rush_20": ev_rush_20,

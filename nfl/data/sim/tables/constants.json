@@ -2,8 +2,19 @@
   "p_safety_per_play": 0.00033250576343323284,
   "total_scrimmage_plays": 135336,
   "total_safeties": 45,
-  "kneel_seconds": 40,
   "inter_drive_clock": 21.128717582679037,
-  "p_safety_given_sack_deep": 0.85,
-  "p_safety_given_rush_deep": 0.923
+  "safety_rate_by_zone": {
+    "98-100": {
+      "n": 419,
+      "p": 0.0405727923627685
+    },
+    "95-97": {
+      "n": 783,
+      "p": 0.016602809706257982
+    },
+    "90-94": {
+      "n": 2460,
+      "p": 0.0020325203252032522
+    }
+  }
 }
