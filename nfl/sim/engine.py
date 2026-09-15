@@ -179,11 +179,21 @@ def _build_rush_arrays():
 
 
 def _build_clock_arrays():
-    """Build clock quantile arrays: key=(outcome_type, hurry) -> (101,) quantiles."""
+    """Build clock quantile arrays.
+    5A-3: primary key = (outcome_type, score_state, clock_period).
+    Fallback chain: (ot, score_state, clock_period) -> (ot, p_score_state, all)
+                  -> (ot, all, all, hurry=True/False) for legacy compat."""
     tbl = _CACHE["clock"]
     d = {}
     for _, r in tbl.iterrows():
-        d[(r["outcome_type"], r["hurry"])] = np.array(r["elapsed_q"])
+        q = np.array(r["elapsed_q"])
+        # 5A-3 keys: (outcome_type, score_state, clock_period)
+        ss = r.get("score_state", "all")
+        cp = r.get("clock_period", "all")
+        d[(r["outcome_type"], ss, cp)] = q
+        # Legacy keys for backward compat
+        if ss == "all":
+            d[(r["outcome_type"], r["hurry"])] = q
     return d
 
 
@@ -534,10 +544,12 @@ def _build_game_context(home, away, season, week, team_r, tend, sit, kicker, lea
             ctx[f"t{ti}_proe"] = tr.iloc[0]["proe"]
             ctx[f"t{ti}_pace"] = tr.iloc[0]["pace_sec"]
             ctx[f"t{ti}_4th_go"] = tr.iloc[0]["fourth_down_go_rate"]
+            ctx[f"t{ti}_4th_goe"] = tr.iloc[0].get("fourth_down_goe", 0.0)
         else:
             ctx[f"t{ti}_proe"] = 0.0
             ctx[f"t{ti}_pace"] = 30.0
             ctx[f"t{ti}_4th_go"] = 0.15
+            ctx[f"t{ti}_4th_goe"] = 0.0
 
     # Situational PROE
     for ti, t in enumerate(teams):
@@ -719,6 +731,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_4th_go = np.zeros(N, dtype=np.int16)
     ev_4th_conv = np.zeros(N, dtype=np.int16)
     ev_fg_dist_sum = np.zeros(N, dtype=np.float32)
+    ev_explosive_pass = np.zeros(N, dtype=np.int16)  # 5A-3: completions 20+ yds
+    ev_explosive_rush = np.zeros(N, dtype=np.int16)  # 5A-3: rushes 10+ yds
     ev_xp_att = np.zeros(N, dtype=np.int16)
     ev_xp_made = np.zeros(N, dtype=np.int16)
     ev_2pt_att = np.zeros(N, dtype=np.int16)
@@ -1108,8 +1122,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             idx4 = np.where(is_4th)[0]
 
             for i in idx4:
-                yd = int(dist[i])
-                y = int(yl[i])
+                yd = int(round(dist[i]))  # 5A-3: round, not truncate (FIX 7 float dist)
+                yd = max(yd, 1)
+                y = int(round(yl[i]))
                 sd = int(score_diff_poss[i])
                 qt = int(qtr[i])
                 cl = float(clock[i])
@@ -1173,15 +1188,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                 p_go, p_punt, p_fg = probs
 
-                # Team 4th-down aggressiveness override (Q1-Q3 only;
-                # late-game decisions are situation-driven, not style-driven)
+                # 5A-3: Team 4th-down GOE override — logit-additive, like PROE.
+                # GOE is in percentage points. Applied Q1-Q3 only (late-game
+                # decisions are situation-driven, not style-driven).
                 if qt <= 3:
                     ti = poss[i]
-                    team_go = ctx[f"t{ti}_4th_go"]
-                    lg_go = ctx["lg_4th_go"]
-                    if team_go > 0 and lg_go > 0:
-                        ratio = team_go / lg_go
-                        p_go_adj = np.clip(p_go * ratio, 0, 0.95)
+                    goe = ctx[f"t{ti}_4th_goe"]
+                    if abs(goe) > 0.01:
+                        p_go_adj = _sigmoid(_logit(np.clip(p_go, 0.01, 0.99)) + goe / 100.0)
+                        p_go_adj = float(np.clip(p_go_adj, 0.0, 0.95))
                         leftover = 1.0 - p_go_adj
                         if p_punt + p_fg > 0:
                             scale = leftover / (p_punt + p_fg)
@@ -1685,6 +1700,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # 4th-down conversions (pass)
             conv_4th = is_4th_go_pass & (fd_comp | td_mask)
             ev_4th_conv[g_idx[conv_4th]] += 1
+            # 5A-3: explosive pass (20+ yds)
+            expl_p = completed & (yds >= 20)
+            ev_explosive_pass[g_idx[expl_p]] += 1
 
             # --- Player stat tracking (pass) ---
             if has_players:
@@ -1730,38 +1748,52 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             pl_stats[ti][g_idx[j], qb, PL_SACK] += 1
 
             # Clock: pass plays — vectorised
-            # Map outcome type: 0=incomplete, 1=first_down, 2=complete_inbounds, 3=drive_ending
+            # 5A-3: score_state × clock_period conditioned clock tables
             ot_idx = np.full(n_p, 2, dtype=np.int8)
             ot_idx[incomplete] = 0
             fd_pass = completed & (yds >= dist_live[p_idx])
             ot_idx[fd_pass] = 1
-            # Drive-ending plays (TD, INT, fumble) stop the game clock —
-            # actual elapsed is ~8-10s, not the 33-39s of the regular category
             ot_idx[td_mask | intercepted | pass_fumbled] = 3
-            # Hurry-up flag
             gi_arr = g_idx
             sd_arr = np.where(poss[gi_arr] == 0,
                               score_h[gi_arr] - score_a[gi_arr],
                               score_a[gi_arr] - score_h[gi_arr])
-            hurry_arr = ((qtr[gi_arr] == 4) |
-                         ((qtr[gi_arr] == 2) & (clock[gi_arr] <= 120))) & (sd_arr <= 8)
+            # 5A-3: score state (5-way)
+            ss_arr = np.where(sd_arr <= -9, "trail9+",
+                     np.where(sd_arr <= -1, "trail1-8",
+                     np.where(sd_arr == 0, "tied",
+                     np.where(sd_arr <= 8, "lead1-8", "lead9+"))))
+            # 5A-3: clock period (3-way)
+            cp_arr = np.full(len(gi_arr), "normal", dtype=object)
+            q2_late_m = (qtr[gi_arr] == 2) & (clock[gi_arr] <= 120)
+            q4_late_m = (qtr[gi_arr] == 4) & (clock[gi_arr] <= 120)
+            cp_arr[q2_late_m] = "Q2_late"
+            cp_arr[q4_late_m] = "Q4_late"
             ot_strs = ["incomplete", "first_down", "complete_inbounds"]
             xs101 = np.linspace(0, 1, 101)
-            # Pace scale per sim
             pace_arr = np.where(poss[gi_arr] == 0,
                                 ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
             for oi in range(3):
-                for hi in [False, True]:
-                    mask = (ot_idx == oi) & (hurry_arr == hi) & ~game_over[gi_arr]
-                    if not mask.any():
-                        continue
-                    cq = clock_q.get((ot_strs[oi], hi),
-                                      clock_q.get((ot_strs[oi], False), np.full(101, 30.0)))
-                    m_idx = np.where(mask)[0]
-                    elapsed = np.interp(u_pclock[gi_arr[m_idx]], xs101, cq) * pace_arr[m_idx]
-                    elapsed = np.maximum(elapsed, 3.0)
-                    clock[gi_arr[m_idx]] -= elapsed.astype(np.float32)
-                    ev_clock_used[gi_arr[m_idx]] += elapsed.astype(np.float32)
+                ot_name = ot_strs[oi]
+                for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
+                    for cp_val in ["normal", "Q2_late", "Q4_late"]:
+                        mask = ((ot_idx == oi) & (ss_arr == ss_val) &
+                                (cp_arr == cp_val) & ~game_over[gi_arr])
+                        if not mask.any():
+                            continue
+                        # 3-level fallback: exact -> parent (p_score_state) -> legacy
+                        cq = clock_q.get((ot_name, ss_val, cp_val))
+                        if cq is None:
+                            cq = clock_q.get((ot_name, f"p_{ss_val}", "all"))
+                        if cq is None:
+                            hurry_legacy = cp_val != "normal" and ss_val in ("trail9+", "trail1-8", "tied")
+                            cq = clock_q.get((ot_name, hurry_legacy),
+                                              clock_q.get((ot_name, False), np.full(101, 30.0)))
+                        m_idx = np.where(mask)[0]
+                        elapsed = np.interp(u_pclock[gi_arr[m_idx]], xs101, cq) * pace_arr[m_idx]
+                        elapsed = np.maximum(elapsed, 3.0)
+                        clock[gi_arr[m_idx]] -= elapsed.astype(np.float32)
+                        ev_clock_used[gi_arr[m_idx]] += elapsed.astype(np.float32)
             # Drive-ending plays: short clock (game clock stops on scoring/turnovers)
             de_mask = (ot_idx == 3) & ~game_over[gi_arr]
             if de_mask.any():
@@ -1903,6 +1935,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ev_3rd_conv[g_idx_r[conv_3rd_r]] += 1
             conv_4th_r = is_4th_go_rush & (fd_rush | td_r)
             ev_4th_conv[g_idx_r[conv_4th_r]] += 1
+            # 5A-3: explosive rush (10+ yds)
+            expl_r = not_fum & (yds_r >= 10)
+            ev_explosive_rush[g_idx_r[expl_r]] += 1
 
             # --- Player stat tracking (rush) ---
             if has_players:
@@ -1948,7 +1983,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             pl_stats[ti][gi, pi, PL_RUSHTD] += 1
                             pl_stats[ti][gi, pi, PL_RUSHYD] += int(round(yl_r[j]))
 
-            # Clock: rush plays — vectorised
+            # Clock: rush plays — vectorised (5A-3: score_state × clock_period)
             ot_idx_r = np.ones(n_r, dtype=np.int8)  # 1=run, 0=first_down, 2=drive_ending
             fd_rush_all = not_fum & (yds_r >= dist_live[r_idx])
             ot_idx_r[fd_rush_all] = 0  # 0=first_down
@@ -1957,24 +1992,39 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             sd_r_arr = np.where(poss[gi_r] == 0,
                                 score_h[gi_r] - score_a[gi_r],
                                 score_a[gi_r] - score_h[gi_r])
-            hurry_r = ((qtr[gi_r] == 4) |
-                       ((qtr[gi_r] == 2) & (clock[gi_r] <= 120))) & (sd_r_arr <= 8)
+            ss_r_arr = np.where(sd_r_arr <= -9, "trail9+",
+                       np.where(sd_r_arr <= -1, "trail1-8",
+                       np.where(sd_r_arr == 0, "tied",
+                       np.where(sd_r_arr <= 8, "lead1-8", "lead9+"))))
+            cp_r_arr = np.full(len(gi_r), "normal", dtype=object)
+            q2l_r = (qtr[gi_r] == 2) & (clock[gi_r] <= 120)
+            q4l_r = (qtr[gi_r] == 4) & (clock[gi_r] <= 120)
+            cp_r_arr[q2l_r] = "Q2_late"
+            cp_r_arr[q4l_r] = "Q4_late"
             ot_strs_r = ["first_down", "run"]
             xs101 = np.linspace(0, 1, 101)
             pace_r = np.where(poss[gi_r] == 0,
                               ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
             for oi in range(2):
-                for hi in [False, True]:
-                    mask = (ot_idx_r == oi) & (hurry_r == hi) & ~game_over[gi_r]
-                    if not mask.any():
-                        continue
-                    cq = clock_q.get((ot_strs_r[oi], hi),
-                                      clock_q.get((ot_strs_r[oi], False), np.full(101, 35.0)))
-                    m_idx = np.where(mask)[0]
-                    elapsed = np.interp(u_rclock[gi_r[m_idx]], xs101, cq) * pace_r[m_idx]
-                    elapsed = np.maximum(elapsed, 3.0)
-                    clock[gi_r[m_idx]] -= elapsed.astype(np.float32)
-                    ev_clock_used[gi_r[m_idx]] += elapsed.astype(np.float32)
+                ot_name_r = ot_strs_r[oi]
+                for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
+                    for cp_val in ["normal", "Q2_late", "Q4_late"]:
+                        mask = ((ot_idx_r == oi) & (ss_r_arr == ss_val) &
+                                (cp_r_arr == cp_val) & ~game_over[gi_r])
+                        if not mask.any():
+                            continue
+                        cq = clock_q.get((ot_name_r, ss_val, cp_val))
+                        if cq is None:
+                            cq = clock_q.get((ot_name_r, f"p_{ss_val}", "all"))
+                        if cq is None:
+                            hurry_legacy = cp_val != "normal" and ss_val in ("trail9+", "trail1-8", "tied")
+                            cq = clock_q.get((ot_name_r, hurry_legacy),
+                                              clock_q.get((ot_name_r, False), np.full(101, 35.0)))
+                        m_idx = np.where(mask)[0]
+                        elapsed = np.interp(u_rclock[gi_r[m_idx]], xs101, cq) * pace_r[m_idx]
+                        elapsed = np.maximum(elapsed, 3.0)
+                        clock[gi_r[m_idx]] -= elapsed.astype(np.float32)
+                        ev_clock_used[gi_r[m_idx]] += elapsed.astype(np.float32)
             # Drive-ending rush plays (TDs, fumbles): short clock
             de_r = (ot_idx_r == 2) & ~game_over[gi_r]
             if de_r.any():
@@ -2046,6 +2096,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_4th_go": ev_4th_go,
         "ev_4th_conv": ev_4th_conv,
         "ev_fg_dist_sum": ev_fg_dist_sum,
+        "ev_explosive_pass": ev_explosive_pass,
+        "ev_explosive_rush": ev_explosive_rush,
         "game_over": game_over,
         "clock_remaining": clock_remaining,
     })

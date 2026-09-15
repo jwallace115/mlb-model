@@ -1,4 +1,26 @@
 
+## 2026-09-16T08:00Z  claude-code (Phase 5A-3 — scoring-conversion fix)
+- STEP 1 CORRECTED ACTUALS: Rebuilt actual drive table including qb_kneel + qb_spike.
+  23,639 drives (was 22,870). end_half 6.82% (was 3.72%). Gap with sim reduced from
+  5.8pp to 2.7pp. 5A-2 §4a was mis-defined.
+- STEP 2 4TH-DOWN FIX (D23): Two bugs fixed:
+  (a) Multiplicative ratio (team_go/lg_go on 4th-and-≤2 between 40s applied to all
+  situations) replaced with GOE logit-additive, computed over ALL situations, shrunk
+  k=200, applied like PROE. GOE stats: mean=0.02, std=1.24pp.
+  (b) Float distance truncation: int(dist) → int(round(dist)) for 4th-down yd_b.
+  Result: go rate 23.2% → 22.1% (residual 2.3pp from table granularity).
+- STEP 3 CLOCK FIX (D22): Clock table rebuilt with (score_state×clock_period×outcome_type),
+  5 score states × 3 clock periods, min cell 100. Binary hurry flag removed from engine.
+  Leading teams in Q4_late: 32s/play (empirical). Trailing: 16s.
+- STEP 4 EXPLOSIVE COUNTERS: ev_explosive_pass (20+), ev_explosive_rush (10+) added.
+  Sim: 5.47/6.08 vs actual 5.93/6.13.
+- STEP 5 K1 AFTER: pts/team 18.9 (unchanged). P(|m|=3) 7.86%→8.50%. P(|m|=7) 6.79%→7.28%
+  (matches actual 7.27%). P(|m|=10) 5.57%→5.08% (matches actual 5.06%). FG att 3.41→3.44.
+  3.5 pts/team gap persists; best hypothesis: 5-zone table granularity near goal line.
+- COMMITTED: engine.py, tables.py, ratings.py, test_engine_5a3.py, scoring_diagnostic_5a3.py,
+  phase5a3_scoring_fix.md, decision doc. 34 tests all passing.
+- NOT DONE: pts/team gap not closed (STOP per spec). Calibration re-fit.
+
 ## 2026-09-16T04:30Z  claude-code (Phase 5A-2 — scoring-conversion diagnostic)
 - STEP 1 DRIVE LOG: Added `drive_log=True` parameter to `simulate_game()`. Records
   per-drive rows (sim_id, team, drive_no, start_yardline, start_quarter, start_clock,

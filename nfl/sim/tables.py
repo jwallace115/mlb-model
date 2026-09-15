@@ -266,7 +266,15 @@ def build_clock_table(df):
     Measures game-clock elapsed from one scrimmage play to the next scrimmage
     play in the same game, regardless of whether a drive change, punt, kickoff,
     or other event occurs in between. This is the sole source of truth for
-    per-play clock consumption in the engine — no separate inter-drive gap."""
+    per-play clock consumption in the engine — no separate inter-drive gap.
+
+    5A-3: conditioned on (score_state × late_clock × outcome_type) instead of
+    a binary hurry flag. Score states: trail9+ / trail1-8 / tied / lead1-8 /
+    lead9+. Clock: Q2_late (≤2:00 of Q2) / Q4_late (≤2:00 of Q4) / normal.
+    Minimum cell: 100 plays; fallback to parent (score_state only, then overall).
+    The binary hurry flag is REMOVED."""
+    MIN_CELL = 100
+
     scrim = df[df["play_type"].isin(["pass", "run"])].copy()
     scrim = scrim.sort_values(["game_id", "play_id"]).copy()
 
@@ -280,36 +288,74 @@ def build_clock_table(df):
     def _outcome_type(row):
         if row["play_type"] == "pass":
             if row.get("complete_pass", 0) == 1:
-                return "complete_inbounds"  # Even OOB completions run clock briefly
+                return "complete_inbounds"
             else:
-                # Incomplete pass OR sack — classified by clock behavior
                 if row.get("sack", 0) == 1:
-                    return "complete_inbounds"  # Sacks are inbounds, clock runs
-                return "incomplete"  # Clock stops on incompletions
+                    return "complete_inbounds"
+                return "incomplete"
         elif row["play_type"] == "run":
             return "run"
         return "run"
 
     scrim["outcome_type"] = scrim.apply(_outcome_type, axis=1)
-    # First down stops (measurement chains, clock runs but ref spots ball)
     scrim.loc[scrim["first_down"] == 1, "outcome_type"] = "first_down"
 
-    # Hurry-up: Q4, or last 2:00 of Q2, trailing or within 8
+    # 5A-3: Score state (5-way)
+    sd = scrim["score_differential"]
+    scrim["score_state"] = np.where(sd <= -9, "trail9+",
+                           np.where(sd <= -1, "trail1-8",
+                           np.where(sd == 0, "tied",
+                           np.where(sd <= 8, "lead1-8", "lead9+"))))
+
+    # 5A-3: Clock period (3-way)
+    q2_late = (scrim["qtr"] == 2) & (scrim["half_seconds_remaining"] <= 120)
+    q4_late = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] <= 120)
+    scrim["clock_period"] = "normal"
+    scrim.loc[q2_late, "clock_period"] = "Q2_late"
+    scrim.loc[q4_late, "clock_period"] = "Q4_late"
+
+    # Legacy hurry flag (kept in table for backward compat / testing)
     scrim["hurry"] = False
     q4 = scrim["qtr"] == 4
-    q2_late = (scrim["qtr"] == 2) & (scrim["half_seconds_remaining"] <= 120)
     trailing_or_close = scrim["score_differential"] <= 8
     scrim.loc[(q4 | q2_late) & trailing_or_close, "hurry"] = True
 
     rows = []
+
+    # Level 0: (outcome_type × score_state × clock_period) — finest
+    for (ot, ss, cp), grp in scrim.groupby(
+            ["outcome_type", "score_state", "clock_period"], observed=True):
+        n = len(grp)
+        if n < MIN_CELL:
+            continue
+        q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+        rows.append({
+            "outcome_type": ot, "score_state": ss, "clock_period": cp,
+            "hurry": False,  # unused; kept for schema compat
+            "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean(),
+        })
+
+    # Level 1 (parent): (outcome_type × score_state) — aggregated over clock
+    for (ot, ss), grp in scrim.groupby(["outcome_type", "score_state"], observed=True):
+        n = len(grp)
+        if n < MIN_CELL:
+            continue
+        q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+        rows.append({
+            "outcome_type": ot, "score_state": f"p_{ss}", "clock_period": "all",
+            "hurry": False, "n": n, "elapsed_q": q.tolist(),
+            "mean": grp["elapsed"].mean(),
+        })
+
+    # Level 2 (grandparent): (outcome_type) — overall, and legacy hurry rows
     for (ot, hurry), grp in scrim.groupby(["outcome_type", "hurry"], observed=True):
         n = len(grp)
         if n < 20:
             continue
         q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
         rows.append({
-            "outcome_type": ot, "hurry": hurry, "n": n,
-            "elapsed_q": q.tolist(),
+            "outcome_type": ot, "score_state": "all", "clock_period": "all",
+            "hurry": hurry, "n": n, "elapsed_q": q.tolist(),
             "mean": grp["elapsed"].mean(),
         })
 

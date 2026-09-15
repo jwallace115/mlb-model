@@ -348,12 +348,75 @@ def build_kicker_ratings(plays, params, league_means):
 # TENDENCIES (FIX 1: 4th-down from unfiltered; FIX 4: situational PROE)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def build_tendencies(scrimmage_plays, all_plays, params, league_means):
-    """Overall PROE, pace, 4th-down go rate.
+def build_tendencies(scrimmage_plays, all_plays, params, league_means,
+                     fourth_down_table=None):
+    """Overall PROE, pace, 4th-down GOE.
     FIX 1: 4th-down computed from ALL plays (incl. punts/FGs in denominator).
-    FIX 2: shrink target = prior season."""
+    FIX 2: shrink target = prior season.
+    5A-3: fourth_down_go_rate replaced by fourth_down_goe — GOE (go-over-
+    expected) measures observed go decisions minus the fourth_down table's
+    expected go probability, summed over each team's own situations. Applied
+    logit-additively in the engine, exactly like PROE."""
     hl = params["half_life"]
     k_t = params.get("k_tendency", 200)
+
+    # Build lookup from the fourth_down decision table for GOE computation
+    fd_lookup = {}
+    if fourth_down_table is not None:
+        for _, r in fourth_down_table.iterrows():
+            fd_lookup[(r["ydstogo_b"], r["yl_b"], r["score_b"], r["qtr_b"])] = r["p_go"]
+
+    def _4th_down_expected_go(row):
+        """Look up the table's expected P(go) for one 4th-down play.
+        Uses the same 4-level fallback as the engine."""
+        yd = row["ydstogo"]
+        y = row["yardline_100"]
+        sd = row["score_differential"]
+        qt = row["qtr"]
+        gsr = row.get("game_seconds_remaining", 900)
+
+        yd_b = "1-2" if yd <= 2 else ("3-5" if yd <= 5 else ("6-10" if yd <= 10 else "11+"))
+        if y <= 10: yl_b = "opp1-10"
+        elif y <= 20: yl_b = "opp11-20"
+        elif y <= 30: yl_b = "opp21-30"
+        elif y <= 40: yl_b = "opp31-40"
+        elif y <= 50: yl_b = "opp41-50"
+        elif y <= 60: yl_b = "own41-50"
+        elif y <= 70: yl_b = "own31-40"
+        elif y <= 80: yl_b = "own21-30"
+        elif y <= 90: yl_b = "own11-20"
+        else: yl_b = "own1-10"
+
+        if sd < -8: sc_fine = "trail9+"
+        elif sd < -3: sc_fine = "trail4-8"
+        elif sd < 0: sc_fine = "trail1-3"
+        elif sd == 0: sc_fine = "tied"
+        elif sd <= 3: sc_fine = "lead1-3"
+        elif sd <= 8: sc_fine = "lead4-8"
+        else: sc_fine = "lead9+"
+
+        if qt <= 3: qt_fine = "Q1-3"
+        elif gsr > 300: qt_fine = "Q4>5"
+        elif gsr > 120: qt_fine = "Q4_2-5"
+        else: qt_fine = "Q4<2"
+
+        sc_coarse = "trail9" if sd < -8 else ("within8" if sd <= 8 else "lead9")
+        qt_coarse = "Q1-3" if qt <= 3 else "Q4"
+        if y <= 10: yl_coarse = "rz"
+        elif y <= 40: yl_coarse = "opp40"
+        elif y <= 65: yl_coarse = "midfield"
+        else: yl_coarse = "own35"
+
+        p = fd_lookup.get((yd_b, yl_b, sc_fine, qt_fine))
+        if p is None:
+            p = fd_lookup.get((yd_b, yl_b, f"c_{sc_coarse}", qt_fine))
+        if p is None:
+            p = fd_lookup.get((yd_b, f"z_{yl_coarse}", sc_fine, qt_fine))
+        if p is None:
+            p = fd_lookup.get((yd_b, f"zc_{yl_coarse}", f"zc_{sc_coarse}", qt_coarse))
+        if p is None:
+            p = 0.15  # conservative fallback
+        return p
 
     rows = []
     for season in OUTPUT_SEASONS:
@@ -362,7 +425,7 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means):
         lg = get_shrink_target(league_means, season)
         teams, weeks = get_universe(scrimmage_plays, season, team_col="posteam")
 
-        # FIX 1: league 4th-down go rate from ALL play types
+        # Legacy lg_4th_go kept for backward compat (unused in engine after 5A-3)
         fourth_all = all_s[
             (all_s["down"] == 4) & (all_s["ydstogo"] <= 2) &
             (all_s["yardline_100"] >= 40) & (all_s["yardline_100"] <= 60) &
@@ -372,14 +435,13 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means):
 
         for team in teams:
             tp_scrim = ss[ss["posteam"] == team]
-            tp_all = all_s[(all_s["posteam"] == team) | (all_s["home_team"] == team) | (all_s["away_team"] == team)]
             for w in weeks:
                 avail = tp_scrim[tp_scrim["week"] < w]
                 if avail.empty:
-                    # Prior-only row
                     rows.append({"season": season, "week": w, "team": team,
                                   "proe": 0.0, "pace_sec": 28.0,
-                                  "fourth_down_go_rate": lg_4th_go, "n_plays": 0})
+                                  "fourth_down_go_rate": lg_4th_go,
+                                  "fourth_down_goe": 0.0, "n_plays": 0})
                     continue
 
                 # Overall PROE
@@ -398,22 +460,39 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means):
                 else:
                     pace = 28.0
 
-                # FIX 1: 4th-down go rate from unfiltered plays
+                # Legacy fourth_down_go_rate (narrow definition)
                 avail_all = all_s[(all_s["week"] < w) & (all_s["posteam"] == team)]
-                f4 = avail_all[
+                f4_narrow = avail_all[
                     (avail_all["down"] == 4) & (avail_all["ydstogo"] <= 2) &
                     (avail_all["yardline_100"] >= 40) & (avail_all["yardline_100"] <= 60) &
                     avail_all["play_type"].isin(["pass", "run", "punt", "field_goal"])
                 ]
-                if len(f4) >= 2:
-                    go = f4["play_type"].isin(["pass", "run"]).mean()
-                    go = _shrink(go, len(f4), k_t, lg_4th_go)
+                if len(f4_narrow) >= 2:
+                    go_narrow = f4_narrow["play_type"].isin(["pass", "run"]).mean()
+                    go_narrow = _shrink(go_narrow, len(f4_narrow), k_t, lg_4th_go)
                 else:
-                    go = lg_4th_go
+                    go_narrow = lg_4th_go
+
+                # 5A-3: Fourth-down GOE over ALL situations
+                # For each of the team's 4th-down plays, compute
+                # (observed_go - table_expected_go), then average and shrink.
+                goe = 0.0
+                if fourth_down_table is not None:
+                    f4_all = avail_all[
+                        (avail_all["down"] == 4) &
+                        avail_all["play_type"].isin(["pass", "run", "punt", "field_goal"])
+                    ]
+                    if len(f4_all) >= 2:
+                        observed = f4_all["play_type"].isin(["pass", "run"]).astype(float).values
+                        expected = f4_all.apply(_4th_down_expected_go, axis=1).values
+                        # GOE in percentage points (like PROE)
+                        raw_goe = (observed - expected).mean() * 100.0
+                        goe = _shrink(raw_goe, len(f4_all), k_t, 0.0)
 
                 rows.append({"season": season, "week": w, "team": team,
                               "proe": proe, "pace_sec": pace,
-                              "fourth_down_go_rate": go, "n_plays": len(avail)})
+                              "fourth_down_go_rate": go_narrow,
+                              "fourth_down_goe": goe, "n_plays": len(avail)})
     return pd.DataFrame(rows)
 
 
@@ -884,8 +963,12 @@ def main():
     kicker = build_kicker_ratings(all_with_types, params, league_means)
     print(f"  {len(kicker):,} rows")
 
-    print("\nBuilding tendencies...")
-    tend = build_tendencies(scrimmage, all_plays, params, league_means)
+    # 5A-3: load fourth_down table for GOE computation
+    fd_tbl_path = ROOT / "nfl" / "data" / "sim" / "tables" / "fourth_down.parquet"
+    fd_tbl = pd.read_parquet(fd_tbl_path) if fd_tbl_path.exists() else None
+    print(f"\nBuilding tendencies (GOE from {len(fd_tbl) if fd_tbl is not None else 0} 4th-down table rows)...")
+    tend = build_tendencies(scrimmage, all_plays, params, league_means,
+                            fourth_down_table=fd_tbl)
     print(f"  {len(tend):,} rows")
 
     # FIX 1 assertion: 4th-down go rate

@@ -148,3 +148,24 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   of score in final 2:00 of each half).
   **D23 proposed (not decided):** Cap team 4th-down aggressiveness override at 1.15.
   See `research/nfl_sim/phase5a2_scoring_diagnostic.md`.
+- **2026-09-16 Phase 5A-3 scoring-conversion fix.**
+  **D22 — Clock runoff conditioned on (score_state × clock_period).** The D22 proposal
+  ("hurry regardless of score") was REJECTED: the 5.8pp end-of-half excess was a
+  definitional artifact (kneel-only drives excluded from actuals; corrected gap is 2.7pp).
+  Clock table now conditioned on 5 score states × 3 clock periods × outcome_type, with
+  100-play minimum and parent fallback. The binary hurry flag is REMOVED from the engine;
+  clock behaviour comes entirely from the empirical table. Leading teams in Q4_late now
+  consume 32s/rush play (from data, reflecting kneeling pace) vs 16s for trailing teams.
+  **D23 — 4th-down GOE override replaces multiplicative ratio.** The D23 proposal ("cap
+  at 1.15") was REJECTED as a fudge constant. The root cause: `fourth_down_go_rate` was
+  measured on 4th-and-≤2 between the 40s only, then applied multiplicatively to ALL
+  situations. Classification: engine bug (mis-scoped multiplier). Fix: GOE = mean(observed
+  go − table expected go) over ALL of a team's 4th-down situations, shrunk with
+  k_tendency=200, applied logit-additively like PROE. Additional bug: `int(dist[i])`
+  truncated float distances (FIX 7), biasing toward "1-2" bucket; fixed to `round()`.
+  Result: go rate 23.2% → 22.1% (target 19.8%, residual 2.3pp from table granularity);
+  FG att 3.41 → 3.44; P(|m|=3) 7.86% → 8.50%; P(|m|=7) 6.79% → 7.28% (matches actual
+  7.27%). pts/team unchanged at 18.9 (3.5 gap remains; best hypothesis: 5-zone table
+  granularity near the goal line). 34 tests, all passing.
+  See `research/nfl_sim/phase5a3_scoring_fix.md`.
+  See `research/nfl_sim/phase5a2_scoring_diagnostic.md`.
