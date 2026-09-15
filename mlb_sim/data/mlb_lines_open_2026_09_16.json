@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "8cac5435079f2d8d51adb91e7950bb26",
+    "game_date": "2026-09-16",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Kansas City Royals",
+    "commence_time": "2026-09-16T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -101,
+    "under_price": -113,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-15T06:05:02.560327+00:00"
+  },
+  {
+    "game_id": "54f473e11bd354c898e74efd34f3f78d",
+    "game_date": "2026-09-16",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-09-16T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "fanduel",
+    "capture_timestamp": "2026-09-15T06:05:02.560327+00:00"
+  },
+  {
+    "game_id": "cce625b7dac12280fdb88a6f44058c93",
+    "game_date": "2026-09-16",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Seattle Mariners",
+    "commence_time": "2026-09-16T01:38:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -114,
+    "under_price": 100,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-15T06:05:02.560327+00:00"
+  },
+  {
+    "game_id": "e9344aee4810e4127e69c73c13c781d7",
+    "game_date": "2026-09-16",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "Miami Marlins",
+    "commence_time": "2026-09-16T01:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": -113,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-15T06:05:02.560327+00:00"
+  }
+]
