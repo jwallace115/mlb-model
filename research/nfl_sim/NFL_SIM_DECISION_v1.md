@@ -222,3 +222,31 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   actual, to locate where close-game mass is lost; then volume (+4% drives), FG count.
   Tests: 59/61 pass (FG att 3.65 vs 3.92 and offence penalties 6.19 vs 5.51 red).
   See `research/nfl_sim/phase5a7_zones_timeouts.md`.
+- **2026-09-16 Phase 5A-8 — close-game diagnostic (Cowork-executed; no engine behaviour change).**
+  Where is the key-number mass lost? Score state when the Q4 clock first reads ≤ 5:00 is nearly
+  right (one-score share 41.9% vs 43.9%; the 2.0pp is all "tied"); reweighting the sim's own
+  endgame to the real 5:00 states recovers only 1.8 of the 7.5pp |final| ≤ 7 gap and 0.6 of the
+  6.9pp gap at 3. **~90% of the missing mass at 3 is created after 5:00.** Tied at 2:00 ends at
+  exactly 3 in 80% of real games vs 34% of sims; the sim endgame is TD-shaped (+7 6.9% vs 2.0%,
+  −7 10.4% vs 7.2% after the 2:00 snapshot) where reality is FG-shaped (+3 11.8% vs 7.0%).
+  Drive decomposition (drives starting ≤ 5:00): trailing by 4–8 the sim punts 24.7% (real 3.7%)
+  and goes on downs 5.9% (25.8%); leading by 1–8 it turns it over on downs 15% (2%); tied it
+  scores TDs 13.5% (4.8%) and FGs 11.5% (25.1%); 14% of tied drives starting ≤ 2:00 end with the
+  clock expiring inside the 35 without a kick (1.6%). OT: 23% of sim OT games end tied (4.3%).
+  **ROOT CAUSE (verified):** the 4th-down fallback levels 2 and 3 are unreachable — the builder
+  prefixes every grouped column (`yl_b = "c_opp21-30"`, `score_b = "z_trail4-8"`) and the engine
+  looks up unprefixed ones; replaying the chain on all 15,589 real 4th downs, levels 2/3 hit 0.0%,
+  and 51.7% of Q4 (99.1% of OT) 4th downs resolve at the coarsest `zc_` cell, which pools a team
+  down 6 with a team up 6 and all of Q4 with its last 2:00 (trail 4–8 late: table p_go 0.34 /
+  p_punt 0.42 vs real 0.83 / 0.14). Dead since the table was introduced. Second mechanism: the
+  game-winning-FG setup (tied / trail ≤ 3, in range, ≤ 40 s) draws its runoff from the pooled
+  Q4_late clock cell, so the drive skips the kicking window. Instrumentation added: `m_q4_300`,
+  `m_q4_120`, `poss_q4_*`, `yl_q4_120` outputs; drive-log `sd_start`, `opp_points`;
+  `nfl/sim/close_game_diagnostic.py`; actual tables `actual_close_games_2021_2024.parquet`,
+  `actual_late_drives_2021_2024.parquet`. Tests `test_engine_5a8.py`: 2 pass, **4 red by design**
+  (T3 fallback reachability; T4 late-drive punt/downs/FG rates) = the 5A-9 acceptance spec.
+  **PROPOSED D30 (needs go, 5A-9):** fix the key mismatch and rebuild the 4th-down fallback so it
+  never pools across the sign of the score (coarsen distance → zone → clock first; Q4_2-5 pools
+  with Q4<2 before Q4>5; min cell from measured variance); EOH-state clock/play-call cells
+  measured from real snaps in that state; re-run K1 with the 5A-8 conditionals as acceptance;
+  re-measure OT ties only after. See `research/nfl_sim/phase5a8_close_games.md`.

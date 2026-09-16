@@ -836,6 +836,16 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_kneels = np.zeros(N, dtype=np.int16)      # 5A-7: kneel-downs
     ev_late_snaps_q2 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q2
     ev_late_snaps_q4 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q4
+    # 5A-8 diag: score state (home - away) and possession when the Q4 clock first reads
+    # <= 5:00 and <= 2:00 at the start of a play. Pure observation: no RNG draws, no
+    # behaviour change. -999 = never reached (cannot happen for a finished game).
+    m_q4_300 = np.full(N, -999, dtype=np.int16)
+    m_q4_120 = np.full(N, -999, dtype=np.int16)
+    poss_q4_300 = np.full(N, -1, dtype=np.int8)
+    poss_q4_120 = np.full(N, -1, dtype=np.int8)
+    yl_q4_120 = np.full(N, -1, dtype=np.int16)
+    _cap300 = np.zeros(N, dtype=bool)
+    _cap120 = np.zeros(N, dtype=bool)
     ev_fg_made = np.zeros(N, dtype=np.int16)
     ev_tds = np.zeros(N, dtype=np.int16)
     ev_penalties = np.zeros(N, dtype=np.int16)
@@ -949,6 +959,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     bool(_dl_reached_rz[i]), bool(_dl_reached_gl[i]),
                     float(_dl_end_yl[i]), int(_dl_end_down[i]),
                     float(_dl_end_dist[i]), ss,
+                    sd_start,  # 5A-8: exact offence score differential at drive start
+                    (da if team == 0 else dh),  # 5A-8: points the DEFENCE scored during the drive
                 ))
         # 5A-5: capture end state before reset (for drives that just recorded)
         # Note: yl/down/dist may already reflect post-drive state for TDs/turnovers
@@ -1277,6 +1289,19 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         alive = ~game_over
         if not alive.any():
             break
+
+        # 5A-8 diag: snapshot the score state the first time the Q4 clock reads <= 5:00 / <= 2:00
+        c300 = alive & (qtr == 4) & (clock <= 300.0) & ~_cap300
+        if c300.any():
+            m_q4_300[c300] = score_h[c300] - score_a[c300]
+            poss_q4_300[c300] = poss[c300]
+            _cap300[c300] = True
+        c120 = alive & (qtr == 4) & (clock <= 120.0) & ~_cap120
+        if c120.any():
+            m_q4_120[c120] = score_h[c120] - score_a[c120]
+            poss_q4_120[c120] = poss[c120]
+            yl_q4_120[c120] = yl[c120]
+            _cap120[c120] = True
 
         # --- Kneel-down: leading team can run out the clock ---
         # Each kneel takes ~40 seconds. A team can kneel out if:
@@ -2486,6 +2511,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_to_off": ev_to_off, "ev_to_def": ev_to_def, "ev_kneels": ev_kneels,
         "ev_late_snaps_q2": ev_late_snaps_q2,
         "ev_late_snaps_q4": ev_late_snaps_q4,
+        "m_q4_300": m_q4_300, "m_q4_120": m_q4_120,           # 5A-8 diag
+        "poss_q4_300": poss_q4_300, "poss_q4_120": poss_q4_120,
+        "yl_q4_120": yl_q4_120,
         "ev_pass_40": ev_pass_40, "ev_rush_20": ev_rush_20,
         "ev_td_long": ev_td_long, "ev_td_short": ev_td_short,
         "ev_fg_made": ev_fg_made,
@@ -2524,6 +2552,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "start_clock", "plays", "yards", "result", "points",
             "reached_rz", "reached_gl",
             "end_yardline", "end_down", "end_dist", "score_state",
+            "sd_start", "opp_points",
         ])
         team_df.attrs["drive_log"] = dl_df
 

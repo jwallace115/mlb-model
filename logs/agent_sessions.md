@@ -1,3 +1,25 @@
+## 2026-09-16T06:30Z  cowork (Phase 5A-8 — close-game diagnostic; executed directly)
+- ADDED (observation only, seed-identical vs HEAD verified on 2 games x 500): engine outputs
+  m_q4_300/m_q4_120/poss_q4_300/poss_q4_120/yl_q4_120; drive-log columns sd_start, opp_points.
+- BUILT: nfl/sim/close_game_diagnostic.py (actual | compare | drives_actual | drives_sim | drives_compare);
+  nfl/data/sim/tables/actual_close_games_2021_2024.parquet (1,087 games),
+  actual_late_drives_2021_2024.parquet (2,805 drives).
+- RAN: K1 1,087 x N=500 twice in the cloud (snapshots 1,676 s; drive log filtered to late drives 1,843 s).
+  Outputs kept out of the tree (scratchpad k1_5a8_team.parquet, late_drives_5a8.parquet).
+- FOUND: state at 5:00 nearly right (one-score 41.9% vs 43.9%); ~90% of the missing |m|=3 mass is
+  created after 5:00. Tied@2:00 -> |final|=3: 80% real vs 34% sim. Sim endgame TD-shaped.
+- ROOT CAUSE: 4th-down fallback levels 2/3 unreachable (builder prefixes yl_b/score_b, engine keys
+  unprefixed); 51.7% of Q4 and 99.1% of OT 4th downs resolve at the coarsest zc_ cell (pools
+  trailing with leading). Trail 4-8 late: table p_punt 0.42 vs real 0.14. Dead since the table existed.
+- SECOND: game-winning-FG setup uses the pooled Q4_late runoff -> 14% of tied late drives expire in
+  range without a kick (real 1.6%); OT ties 23% of OT games (4.3%).
+- TESTS: test_engine_5a8.py 2 passed / 4 red by design (T3 reachability, T4 late-drive rates) =
+  5A-9 acceptance spec. Nothing widened.
+- NOT DONE: no fix applied (diagnostic phase). 5 of 543,500 sims never snapped a play at <= 2:00
+  (single-play runoff > 120 s) — noted, not chased. Delivered as a patch (cloud cannot push).
+- NEXT (on go): 5A-9 — 4th-down fallback rebuild + EOH-state clock cells; K1 re-run with the
+  5A-8 conditionals as acceptance.
+
 ## 2026-09-16T01:30Z  cowork (Phase 5A-7 — 10-yard-zone KM, timeouts/kneel tables, safety rates; executed directly)
 - BUILT: pass/rush_outcomes_z10 (98/82 cells), timeout_policy (144 rows), kneel_decision (171 rows);
   constants.json now carries safety_rate_by_zone from the builder. Unchanged tables kept byte-identical.
