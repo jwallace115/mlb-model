@@ -250,3 +250,34 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   with Q4<2 before Q4>5; min cell from measured variance); EOH-state clock/play-call cells
   measured from real snaps in that state; re-run K1 with the 5A-8 conditionals as acceptance;
   re-measure OT ties only after. See `research/nfl_sim/phase5a8_close_games.md`.
+- **2026-09-16 Phase 5A-9 — endgame repair (Cowork-executed).** Acceptance: full K1 (1,087 × 500,
+  drive log) with the 5A-8 conditionals. **D30 — 4th-down table rebuilt** as a complete
+  1,680-cell grid (ydstogo × 10-yard zone × 7 score states × 6 clock buckets incl. OT); one shared
+  key function (`tables.fourth_down_keys`) for builder and engine; hierarchical Dirichlet shrinkage
+  toward the parent with k measured per level by method of moments (`fourth_down_meta.json`);
+  parent chain coarsens field, then clock (Q4_2-5/Q4<2/OT pool first), then score, and the coarse
+  score grouping is structural — in range: need_td / fg_useful / lead; outside: trail / tied / lead.
+  Hand defaults `(0.1, 0.1, 0.8)` removed; a missing key raises. **D31 — EOH runoff cells** (Q2 vs
+  Q4/OT split, KM-censored, no pace, no floor, timeouts inside the data); EOH FG hook covers OT.
+  **D32 — kneel-then-play defect:** `alive = ~game_over` before the scrimmage block discarded the
+  kneel/expired-clock exclusions since 5A-7, so every kneel was followed by a snap in the same
+  iteration (3rd-down kneel → 4th-down play with no decision → turnover on downs: leaders ended
+  15% of late drives on downs, real 2%). **D33 — FG-setup state** (Q4/OT, tied or trail ≤ 3, inside
+  the 35, ≤ 3:00, downs 1–3): empirical kneel (by seconds × defence timeouts), pass rate (by state ×
+  seconds), in-state rush yardage (KM, n = 322; 2.5–2.9 yds, 4–7% TD vs 3.7 / 10%), and in-state
+  runoff cells where the ≤ 40 s cells store the time left at the next snap (the kneel-to-the-kick
+  fact: 22 of 22 real in-state kneels with ≤ 40 s were followed by the FG at 1–4 s). **D34 —
+  spikes** (`eoh_spike.parquet`: Q4 4–10 s 29–37%, 1 s, a down; EOH FG rate applied conditional on
+  not spiking). RESULT: late-drive behaviour now matches at the drive level (trail 4–8 punt 24.7 →
+  7.9% vs 3.7; leaders on downs 15 → 2% vs 2; tied FG 11.5 → 18.5% vs 25.1; tied TD 13.5 → 7.8% vs
+  4.8); tied at 2:00 → |final| = 3: 34 → 54% (real 80); tied at 5:00 → 3: 31.5 → 42.3% (62.3).
+  **HEADLINE UNCHANGED: P(|final| = 3) 7.7 → 8.1% (14.5); |final| ≤ 7 41.4% (49.0).** The full
+  |margin| histogram is a smoothed version of reality already at 5:00 (mass at 3 within the 1–3
+  bucket 42.6% vs 56.5% real; off-numbers 1/2/4/9/11/13 +7pp; team scores 10/17/20 under, 13/23/26
+  over): the scoring-event COMPOSITION (joint TDs × FGs per team and across teams) is the next
+  diagnostic, not another endgame fix. Also surfaced: 4th-down conversion 44.9% vs ~57%; trailing
+  two-minute drives from own territory expire 24% vs 0.9% (61–120 s starts); trailing offences
+  turn it over 12% vs 35% at ≤ 2:00. Tests: 86 pass / 3 red (5A-3 go rate 21.2 vs 19.8 ± 1.0;
+  5A-4 offence penalties 6.17 vs 5.51 ± 0.5; 5A-9 tied-drive expiry 12.4% vs ≤ 5%); three tests
+  updated for changed premises (dead-table z10 per D27, kneel liveness per D33, D32 string).
+  See `research/nfl_sim/phase5a9_endgame.md`. Next 5A-10: scoring-event composition diagnostic.

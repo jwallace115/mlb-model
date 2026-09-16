@@ -2,9 +2,9 @@
 4th-down decision spec.
 
 Tolerances are the acceptance spec; a failing test is reported red, never widened.
-T3 and T4 are EXPECTED RED on the 5A-8 engine: they encode the defect 5A-8 found
-(4th-down fallback keys never match the table's level-2/3 rows, so late-Q4 decisions
-pool leaders with trailers) and are the acceptance spec for the 5A-9 fix.
+T3 and T4 were RED on the 5A-8 engine by design: they encode the defect 5A-8 found
+(4th-down fallback keys never matched the table's level-2/3 rows, so late-Q4 decisions
+pooled leaders with trailers) and are the acceptance spec for the 5A-9 fix (D30-D33).
 """
 import sys
 from pathlib import Path
@@ -83,24 +83,32 @@ def test_t1_drive_log_has_exact_score_state(ratings):
     assert dl[dl.opp_points > 0].result.isin(["turnover_int", "turnover_fumble", "safety", "punt"]).all()
 
 
-# ── T3: every fallback level of the 4th-down lookup is reachable ─────────────
+# ── T3: the 4th-down table is a complete grid and the engine's keys are the builder's ──
 
-def test_t3_fourth_down_fallback_levels_reachable():
-    """The engine constructs level-2 keys as (yd, yl_b, 'c_<score>', qtr) and level-3 keys as
-    (yd, 'z_<zone>', score, qtr). The builder writes level-2 rows with yl_b='c_<zone>' and
-    level-3 rows with score_b='z_<score>'. If no engine-constructed key can match, those
-    levels are dead and Q4 decisions fall to the coarsest cell."""
+def test_t3_fourth_down_table_is_complete_and_keyed_by_the_shared_function():
+    """5A-8 found the old fallback levels 2/3 unreachable (builder prefixed the grouped
+    columns, the engine looked up unprefixed keys) so 52% of Q4 and 99% of OT decisions
+    used the coarsest cell. 5A-9 (D30) replaced the chain with a complete fine grid and one
+    shared key function; this test is the spec for that."""
+    from nfl.sim.tables import (fourth_down_keys, FD_YD_LABELS, FD_YL_LABELS, FD_SC_LABELS,
+                                FD_CK_LABELS)
     fd = pd.read_parquet(TABLES / "fourth_down.parquet")
+    assert len(fd) == len(FD_YD_LABELS) * len(FD_YL_LABELS) * len(FD_SC_LABELS) * len(FD_CK_LABELS)
     keys = set(zip(fd.ydstogo_b, fd.yl_b, fd.score_b, fd.qtr_b))
-    yl_fine = ["opp1-10", "opp11-20", "opp21-30", "opp31-40", "opp41-50",
-               "own41-50", "own31-40", "own21-30", "own11-20", "own1-10"]
-    sc_fine = ["trail9+", "trail4-8", "trail1-3", "tied", "lead1-3", "lead4-8", "lead9+"]
-    lvl2 = {(yd, yl, f"c_{sc}", q) for yd in ("1-2", "3-5", "6-10", "11+") for yl in yl_fine
-            for sc in ("trail9", "within8", "lead9") for q in ("Q1-3", "Q2<2", "Q4>5", "Q4_2-5", "Q4<2")}
-    lvl3 = {(yd, f"z_{z}", sc, q) for yd in ("1-2", "3-5", "6-10", "11+") for z in ("rz", "opp40", "midfield", "own35")
-            for sc in sc_fine for q in ("Q1-3", "Q2<2", "Q4>5", "Q4_2-5", "Q4<2")}
-    assert len(lvl2 & keys) > 0, "level-2 (coarse score) fallback is unreachable: key format mismatch"
-    assert len(lvl3 & keys) > 0, "level-3 (coarse zone) fallback is unreachable: key format mismatch"
+    assert len(keys) == len(fd), "duplicate cells"
+    assert not fd.yl_b.str.contains("_").any() and not fd.score_b.str.startswith(("c_", "z_", "zc_")).any()
+    assert np.allclose(fd[["p_go", "p_punt", "p_fg"]].sum(axis=1), 1.0)
+    # every key the engine can construct exists: sweep the state space
+    rng = np.random.default_rng(0)
+    n = 20000
+    yd = rng.integers(1, 30, n); y = rng.integers(1, 100, n); sd = rng.integers(-30, 31, n)
+    q = rng.integers(1, 7, n); cl = rng.uniform(0, 900, n)
+    k = fourth_down_keys(yd, y, sd, q, cl)
+    missing = [t for t in zip(*k) if t not in keys]
+    assert not missing, f"{len(missing)} engine keys without a cell, e.g. {missing[:3]}"
+    assert (ROOT / "nfl" / "data" / "sim" / "tables" / "fourth_down_meta.json").exists()
+    src = (ROOT / "nfl" / "sim" / "engine.py").read_text()
+    assert "fourth_down_keys(" in src and "zc_" not in src.split("def simulate_game")[1].split("# 5A-3: Team 4th-down GOE")[0]
 
 
 # ── T4: late-game 4th-down behaviour on the 12-game sample (spec for 5A-9) ───

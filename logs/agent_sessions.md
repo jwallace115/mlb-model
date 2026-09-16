@@ -1,3 +1,28 @@
+## 2026-09-16T13:30Z  cowork (Phase 5A-9 — endgame repair; executed directly)
+- BUILT: fourth_down.parquet rebuilt (1,680-cell complete grid, measured-k shrinkage, OT bucket) +
+  fourth_down_meta.json; clock_runoff.parquet +36 rows (EOH cells by half/state, FG-setup cells by
+  seconds incl. next-snap-time kind, kneel-to-the-kick); eoh_fg_decision rebuilt with OT (+60 n);
+  new fg_setup.parquet (54 rows), fg_setup_rush.parquet (1 KM cell), eoh_spike.parquet (14 rows).
+  All other tables untouched (clock_runoff's 82 original rows verified identical in content).
+- ENGINE: shared fourth_down_keys + single exact lookup (hand defaults removed); EOH/FG-setup
+  runoff draw in pass+rush blocks (timeouts skipped there); FG-setup kneel/play-call/rush overrides;
+  spike play before the EOH FG decision; D32 fix (alive reset dropped kneel/expired exclusions).
+- FOUND: D32 — since 5A-7 every kneel was followed by a scrimmage snap in the same iteration.
+- K1 (1,087 x 500, drive log, 2,103 s cloud): P(|m|=3) 8.12% (14.54), |m|<=7 41.4% (49.0), OT 3.66%
+  (6.4), ties 0.68% (0.28), pts/team 22.68 (22.39), plays 130.0 (124.5), drives 22.9 (21.9), FG att
+  3.70 (3.92), go rate 21.8% (19.8), 4th conv 44.9% (~57), kneels 1.50 (1.51), late-Q4 snaps 5.66 (5.61).
+  Tied@2:00 -> |final|=3: 53.6% (80.0; was 34.2). Late-drive mix now matches at the drive level.
+- FINDING: margin histogram smoothed vs reality already at 5:00 (3/6/10 under; 1/2/4/9/11/13 over);
+  scoring-event composition is the next diagnostic (5A-10), not another endgame fix.
+- TESTS: 89 collected; 86 pass / 3 red (5a3 go rate 0.212 vs 0.198±0.010; 5a4 penalties 6.17 vs
+  5.51±0.5; 5a9 T3 tied-drive expiry 0.124 vs <=0.05). Updated premises: dead-table pass/rush tests
+  now perturb z10 (they failed on HEAD too, since D27); 5a7 kneel liveness zeroes fg_setup too;
+  5a9 D32 string. Nothing widened. 5a8 T4 (trailing punts, leaders' downs, tied FG) green.
+- NOT DONE: no fix for the composition finding; 4th-down conversion deficit; two-minute-drill expiry.
+  Delivered as a patch (cloud cannot push; Mac bridge disconnected at the end of the session).
+- NEXT (on go): 5A-10 scoring-event composition diagnostic (joint TDs x FGs per team/game, by
+  quarter and score state), 4th-down conversion, two-minute drill; then 5B, 5C.
+
 ## 2026-09-16T06:30Z  cowork (Phase 5A-8 — close-game diagnostic; executed directly)
 - ADDED (observation only, seed-identical vs HEAD verified on 2 games x 500): engine outputs
   m_q4_300/m_q4_120/poss_q4_300/poss_q4_120/yl_q4_120; drive-log columns sd_start, opp_points.

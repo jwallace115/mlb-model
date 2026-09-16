@@ -40,6 +40,7 @@ import numpy as np
 import pandas as pd
 
 from nfl.sim.seed_util import stable_seed
+from nfl.sim.tables import fourth_down_keys, eoh_state, fg_setup_state
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 TABLES_DIR = ROOT / "nfl" / "data" / "sim" / "tables"
@@ -48,6 +49,7 @@ RATINGS_DIR = ROOT / "nfl" / "data" / "sim" / "ratings"
 # Module-level cache
 _CACHE = {}
 _DEBUG_YDS = None  # 5A-6 diag: set to a list to collect per-play yards
+_DEBUG_4TH = None  # 5A-9 diag: set to a list to collect (yd_b, yl_b, score_b, clock_b, decision)
 
 
 def _load_tables():
@@ -74,7 +76,9 @@ def _load_tables():
     if depth_path.exists():
         _CACHE["pass_depth"] = pd.read_parquet(depth_path)
     # 5A-7: timeout policy and kneel decision tables
-    for k, fn in (("timeout_policy", "timeout_policy.parquet"), ("kneel", "kneel_decision.parquet")):
+    for k, fn in (("timeout_policy", "timeout_policy.parquet"), ("kneel", "kneel_decision.parquet"),
+                  ("fg_setup", "fg_setup.parquet"), ("fg_setup_rush", "fg_setup_rush.parquet"),
+                  ("eoh_spike", "eoh_spike.parquet")):
         fp = TABLES_DIR / fn
         _CACHE[k] = pd.read_parquet(fp) if fp.exists() else None
     # 5A-6: end-of-half FG decision table (downs 1-3)
@@ -236,6 +240,20 @@ def _build_timeout_lookup():
         return None
     return {(r["side"], int(r["qtr"]), r["sec_b"], r["off_state"], r["clock_running"]): float(r["p_to"])
             for _, r in tbl.iterrows()}
+
+
+def _build_fg_setup_lookup():
+    """5A-9 (D33): (state, sec_b, def_to, down) -> (p_kneel, pass_rate)."""
+    tbl = _CACHE.get("fg_setup")
+    if tbl is None:
+        return None
+    return {(r["state"], r["sec_b"], r["def_to"], r["down"]): (float(r["p_kneel"]), float(r["pass_rate"]))
+            for _, r in tbl.iterrows()}
+
+
+def _fgs_sec_bucket(cl):
+    return "0-20" if cl <= 20 else "21-40" if cl <= 40 else "41-60" if cl <= 60 else \
+           "61-90" if cl <= 90 else "91-120" if cl <= 120 else "121-180"
 
 
 def _build_kneel_lookup():
@@ -707,6 +725,18 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     eoh_lookup = _build_eoh_lookup()  # 5A-6
     to_lookup = _build_timeout_lookup()  # 5A-7
     kneel_lookup = _build_kneel_lookup()  # 5A-7
+    fgs_lookup = _build_fg_setup_lookup()  # 5A-9
+    fgs_rush_q = (np.array(_CACHE["fg_setup_rush"]["yds_q"].iloc[0], dtype=float)
+                  if _CACHE.get("fg_setup_rush") is not None else None)
+    spike_lookup = None
+    if _CACHE.get("eoh_spike") is not None:
+        spike_lookup = {(r["half"], r["sec_b"]): float(r["p_spike"]) for _, r in _CACHE["eoh_spike"].iterrows()}
+    fgs_kneel_q = None
+    _kn = _CACHE["clock"]
+    _kn = _kn[(_kn["outcome_type"] == "kneel") & (_kn["clock_period"] == "fgs")] if "clock_period" in _kn else _kn.iloc[0:0]
+    if len(_kn) == 2:
+        fgs_kneel_q = {"next_sec": np.array(_kn[_kn["score_state"] == "fgs_0-40"]["elapsed_q"].iloc[0], dtype=float),
+                       "elapsed": np.array(_kn[_kn["score_state"] == "fgs_41-180"]["elapsed_q"].iloc[0], dtype=float)}
     xs101_top = np.linspace(0, 1, 101)
     fg_lookup = _build_fg_lookup()
     punt_lookup = _build_punt_lookup()
@@ -846,6 +876,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     yl_q4_120 = np.full(N, -1, dtype=np.int16)
     _cap300 = np.zeros(N, dtype=bool)
     _cap120 = np.zeros(N, dtype=bool)
+    ev_eoh_runoff = np.zeros(N, dtype=np.int16)   # 5A-9: snaps whose runoff came from the EOH cells
+    ev_fgs_snaps = np.zeros(N, dtype=np.int16)    # 5A-9: scrimmage snaps called from the FG-setup cell
+    ev_fgs_runs = np.zeros(N, dtype=np.int16)     # 5A-9: runs drawn from the FG-setup yardage cell
+    ev_fgs_runoff = np.zeros(N, dtype=np.int16)   # 5A-9: snaps whose runoff came from the FG-setup cells
+    ev_spikes = np.zeros(N, dtype=np.int16)       # 5A-9 (D34): spikes
     ev_fg_made = np.zeros(N, dtype=np.int16)
     ev_tds = np.zeros(N, dtype=np.int16)
     ev_penalties = np.zeros(N, dtype=np.int16)
@@ -1133,7 +1168,58 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # 5A-7: 10-yard zones; yardline_100 in (10k, 10k+10] -> k (0 = inside the 10)
         return np.clip(np.ceil(np.asarray(y, dtype=float) / 10.0) - 1, 0, NZONES - 1).astype(np.intp)
 
-    def _apply_timeouts(gi_arr, ot_idx_arr, sd_arr, u_arr, running_codes=(1, 2), de_code=3, stop_code=0):
+    def _eoh_runoff(gi_arr, sd_arr, yl_snap, ot_names, u_arr, exclude):
+        """5A-9 (D31): snaps taken in the end-of-half FG setup (Q2/Q4/OT, <= 40 s, inside the
+        50) draw their runoff from the EOH clock cells measured in that state — real teams
+        spike, kneel to centre or call timeout, so the elapsed to the next snap is ~5-7 s and
+        the Kaplan-Meier plateau (99 s) means the half expires. No pace scaling, no floor,
+        and no separate timeout draw (the measured elapsed already contains the timeouts).
+        Returns the boolean mask (over gi_arr) of snaps handled here."""
+        in_fgs = fgs_state[gi_arr] != ""
+        m_eoh = (((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 40.0)
+                 & (np.asarray(yl_snap) <= 50) & ~game_over[gi_arr] & ~exclude & ~in_fgs)
+        m_fgs = in_fgs & ~game_over[gi_arr] & ~exclude
+        m = m_eoh | m_fgs
+        if not m.any():
+            return m
+        st = eoh_state(qtr[gi_arr][m], sd_arr[m])
+        q_m = qtr[gi_arr][m]
+        st = np.where(st == "fg_useful", np.where(q_m == 2, "fg_useful_Q2", "fg_useful_Q4"), st)
+        idx = np.where(m)[0]
+        for j, s_ in zip(idx, st):
+            gi = gi_arr[j]
+            if m_fgs[j]:
+                sbf = _fgs_sec_bucket(float(clock[gi]))
+                sb = f"fgs_{sbf}"
+                cq = clock_q.get((ot_names[j], sb, "fgs"))
+                if cq is None:
+                    cq = clock_q.get(("all", sb, "fgs"))
+                if cq is None:
+                    cq = clock_q.get((ot_names[j], "fgs_all", "fgs"))
+                if cq is None:
+                    cq = clock_q.get(("all", "fgs_all", "fgs"))
+                ev_fgs_runoff[gi] += 1
+                if sbf in ("0-20", "21-40") and cq is not None:
+                    # next-snap time cell: elapsed = time now - time at the next snap
+                    nxt = float(np.interp(u_arr[gi], xs101_top, cq))
+                    el = float(np.clip(float(clock[gi]) - nxt, 1.0, float(clock[gi])))
+                    clock[gi] -= np.float32(el); ev_clock_used[gi] += np.float32(el)
+                    continue
+            else:
+                key_state = f"eoh_{s_}"
+                cq = clock_q.get((ot_names[j], key_state, "eoh"))
+                if cq is None:
+                    cq = clock_q.get(("all", key_state, "eoh"))
+                if cq is None:
+                    cq = clock_q.get(("all", "eoh_all", "eoh"))
+                ev_eoh_runoff[gi] += 1
+            if cq is None:
+                raise RuntimeError("clock table has no EOH / FG-setup runoff cells")
+            el = float(np.interp(u_arr[gi], xs101_top, cq))
+            clock[gi] -= np.float32(el); ev_clock_used[gi] += np.float32(el)
+        return m
+
+    def _apply_timeouts(gi_arr, ot_idx_arr, sd_arr, u_arr, running_codes=(1, 2), de_code=3, stop_code=0, skip=None):
         """5A-7: after a scrimmage play in the last 3:00 of Q2/Q4, the offence or the
         defence may call a timeout (empirical policy); a timeout makes the runoff to the
         next snap the stopped-clock kind (`stop_code`). Pass encoding: 0 incomplete /
@@ -1143,6 +1229,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             return
         late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] == 4)) & (clock[gi_arr] <= 180) & \
                ~game_over[gi_arr] & (ot_idx_arr != de_code)
+        if skip is not None:
+            late &= ~skip
         for j in np.where(late)[0]:
             gi = gi_arr[j]
             q = int(qtr[gi]); sb = _to_sec_bucket(float(clock[gi]))
@@ -1184,6 +1272,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_eoh = rng.random(N)  # 5A-6: end-of-half FG decision on downs 1-3
         u_to = rng.random(N)     # 5A-7: timeout decision after the snap
         u_kneel = rng.random(N)  # 5A-7: kneel decision
+        u_spike = rng.random(N)  # 5A-9 (D34): spike decision
         u_punt_net = rng.random(N)
         u_fg_mk = rng.random(N)
         u_pen = rng.random(N)
@@ -1318,20 +1407,33 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # situation) and the empirical timeout policy. A kneel is a play: -1 yard, next
         # down, running-clock runoff from the clock table, defence may call a timeout.
         can_kneel = np.zeros(N, dtype=bool)
+        fgs_state = np.full(N, "", dtype=object)
+        if fgs_lookup is not None:
+            fgs_state = fg_setup_state(qtr, score_diff_poss, yl, clock, down)
         if kneel_lookup is not None:
+            fgs_m = alive & (clock > 0) & (fgs_state != "")
             kn_cand = alive & (down < 4) & (clock > 0) & (clock <= 180) & (
                 ((qtr == 4) & (score_diff_poss > 0)) | (qtr == 2))
-            for i in np.where(kn_cand)[0]:
+            for i in np.where(kn_cand | fgs_m)[0]:
                 q = int(qtr[i]); cl = float(clock[i])
-                sit = "lead" if q == 4 else ("own" if yl[i] >= 60 else "opp")
-                sb = _kneel_sec_bucket(cl)
                 dt = str(int(to_rem[1 - poss[i], i]))
                 dn = str(int(down[i]))
-                pk = kneel_lookup.get((q, sb, dt, dn, sit))
-                if pk is None:
-                    pk = kneel_lookup.get((q, sb, dt, "any", sit))
-                if pk is None:
-                    pk = kneel_lookup.get((q, sb, "any", "any", sit), 0.0)
+                if fgs_m[i]:
+                    # 5A-9 (D33): kneel to centre the ball for the field goal
+                    dt3 = "2+" if to_rem[1 - poss[i], i] >= 2 else dt
+                    sbf = _fgs_sec_bucket(cl)
+                    row = (fgs_lookup.get(("any", sbf, dt3, "any")) or
+                           fgs_lookup.get(("any", "any", dt3, "any")) or
+                           fgs_lookup.get(("any", "any", "any", "any")))
+                    pk = row[0]
+                else:
+                    sit = "lead" if q == 4 else ("own" if yl[i] >= 60 else "opp")
+                    sb = _kneel_sec_bucket(cl)
+                    pk = kneel_lookup.get((q, sb, dt, dn, sit))
+                    if pk is None:
+                        pk = kneel_lookup.get((q, sb, dt, "any", sit))
+                    if pk is None:
+                        pk = kneel_lookup.get((q, sb, "any", "any", sit), 0.0)
                 if u_kneel[i] < pk:
                     can_kneel[i] = True
             if can_kneel.any():
@@ -1341,6 +1443,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     yl[i] = min(yl[i] + 1.0, 99.0)
                     dist[i] = dist[i] + 1.0
                     down[i] += 1
+                    if fgs_m[i] and fgs_kneel_q is not None:
+                        # 5A-9 (D33): kneel to the kick — measured next-snap time (<= 40 s)
+                        # or measured elapsed (> 40 s); the defence timeout is inside the data
+                        if clock[i] <= 40.0:
+                            nxt = float(np.interp(u_pclock[i], xs101_top, fgs_kneel_q["next_sec"]))
+                            el = max(float(clock[i]) - nxt, 0.0)
+                        else:
+                            el = float(np.interp(u_pclock[i], xs101_top, fgs_kneel_q["elapsed"]))
+                        clock[i] -= np.float32(el); ev_clock_used[i] += np.float32(el)
+                        ev_fgs_runoff[i] += 1
+                        continue
                     # clock: running-clock runoff for this score state / period
                     sd_i = int(score_diff_poss[i])
                     ss_i = ("trail9+" if sd_i <= -9 else "trail1-8" if sd_i <= -1 else
@@ -1376,8 +1489,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # --- 5A-6: end-of-half FG on downs 1-3 (empirical table J) ---
         # Real teams kick before the half expires on any down; the engine only
         # considered FGs on 4th down (measured deficit: 0.33 non-4th FG att/game).
+        spiked = np.zeros(N, dtype=bool)
         if eoh_lookup is not None:
-            eoh_cand = alive & (down < 4) & ((qtr == 2) | (qtr == 4)) & (clock <= 40) & (yl <= 50)
+            eoh_cand = alive & (down < 4) & ((qtr == 2) | (qtr >= 4)) & (clock <= 40) & (yl <= 50)  # 5A-9: OT included
             if eoh_cand.any():
                 ev_eoh_snaps[eoh_cand] += 1
                 for i in np.where(eoh_cand)[0]:
@@ -1394,10 +1508,26 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     p_fg_e = eoh_lookup.get((st, sec_b, yl_b))
                     if p_fg_e is None:
                         p_fg_e = eoh_lookup.get((st, sec_b, "all"), 0.0)
+                    # 5A-9 (D34): spike first; the FG rate in the table was measured over all
+                    # snaps including spikes, so conditional on not spiking it is p_fg / (1 - p_spike)
+                    p_sp = 0.0
+                    if st == "fg_useful" and spike_lookup is not None:
+                        half = "Q2" if qtr[i] == 2 else "Q4"
+                        p_sp = spike_lookup.get((half, sec_b), spike_lookup.get(("all", sec_b), 0.0))
+                        if u_spike[i] < p_sp:
+                            spiked[i] = True
+                            ev_spikes[i] += 1
+                            n_plays[i] += 1; _dl_plays[i] += 1
+                            down[i] += 1
+                            clock[i] -= np.float32(1.0); ev_clock_used[i] += np.float32(1.0)
+                            continue
+                        p_fg_e = min(p_fg_e / (1.0 - p_sp), 1.0) if p_sp < 1.0 else p_fg_e
                     if u_eoh[i] < p_fg_e:
                         fg_m[i] = True
                         ev_fg_non4th[i] += 1
 
+        alive = alive & ~spiked
+        is_4th = is_4th & ~spiked
         if is_4th.any() or fg_m.any():
             idx4 = np.where(is_4th)[0]
 
@@ -1409,64 +1539,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 qt = int(qtr[i])
                 cl = float(clock[i])
 
-                yd_b = "1-2" if yd <= 2 else ("3-5" if yd <= 5 else ("6-10" if yd <= 10 else "11+"))
-                # 10-yard field-zone bins
-                if y <= 10: yl_b = "opp1-10"
-                elif y <= 20: yl_b = "opp11-20"
-                elif y <= 30: yl_b = "opp21-30"
-                elif y <= 40: yl_b = "opp31-40"
-                elif y <= 50: yl_b = "opp41-50"
-                elif y <= 60: yl_b = "own41-50"
-                elif y <= 70: yl_b = "own31-40"
-                elif y <= 80: yl_b = "own21-30"
-                elif y <= 90: yl_b = "own11-20"
-                else: yl_b = "own1-10"
-
-                # Fine-grained score bucket
-                if sd < -8: sc_fine = "trail9+"
-                elif sd < -3: sc_fine = "trail4-8"
-                elif sd < 0: sc_fine = "trail1-3"
-                elif sd == 0: sc_fine = "tied"
-                elif sd <= 3: sc_fine = "lead1-3"
-                elif sd <= 8: sc_fine = "lead4-8"
-                else: sc_fine = "lead9+"
-
-                # Fine-grained clock bucket (5A-6: Q2<2 = last 2:00 of the 1st half)
-                if qt == 2 and cl <= 120:
-                    qt_fine = "Q2<2"
-                elif qt <= 3:
-                    qt_fine = "Q1-3"
-                elif cl > 300:
-                    qt_fine = "Q4>5"
-                elif cl > 120:
-                    qt_fine = "Q4_2-5"
-                else:
-                    qt_fine = "Q4<2"
-
-                # Coarse fallback keys
-                sc_coarse = "trail9" if sd < -8 else ("within8" if sd <= 8 else "lead9")
-                qt_coarse = "Q1-3" if qt <= 3 else "Q4"
-                # Coarse 4-zone field position
-                if y <= 10: yl_coarse = "rz"
-                elif y <= 40: yl_coarse = "opp40"
-                elif y <= 65: yl_coarse = "midfield"
-                else: yl_coarse = "own35"
-
-                # Lookup with 4-level fallback
+                # 5A-9 (D30): one bucketing shared with the table builder; the table is a
+                # complete grid, so the lookup is exact and there is no fallback chain.
+                yd_b, yl_b, sc_fine, qt_fine = (str(v[0]) for v in fourth_down_keys([yd], [y], [sd], [qt], [cl]))
                 probs = fd_lookup.get((yd_b, yl_b, sc_fine, qt_fine))
                 if probs is None:
-                    probs = fd_lookup.get((yd_b, yl_b, f"c_{sc_coarse}", qt_fine))
-                if probs is None:
-                    probs = fd_lookup.get((yd_b, f"z_{yl_coarse}", sc_fine, qt_fine))
-                if probs is None:
-                    probs = fd_lookup.get((yd_b, f"zc_{yl_coarse}", f"zc_{sc_coarse}", qt_coarse))
-                if probs is None:
-                    if y <= 35:
-                        probs = (0.1, 0.1, 0.8)
-                    elif y <= 50 and yd <= 2:
-                        probs = (0.4, 0.4, 0.2)
-                    else:
-                        probs = (0.1, 0.8, 0.1)
+                    raise RuntimeError(f"fourth_down table has no cell for {(yd_b, yl_b, sc_fine, qt_fine)}")
 
                 p_go, p_punt, p_fg = probs
 
@@ -1492,10 +1570,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 r = u_4th[i]
                 if r < p_go:
                     ev_4th_go[i] += 1  # Go for it — normal play
+                    dec = "go"
                 elif r < p_go + p_punt:
                     punt_m[i] = True
+                    dec = "punt"
                 else:
                     fg_m[i] = True
+                    dec = "fg"
+                if _DEBUG_4TH is not None:
+                    _DEBUG_4TH.append((yd_b, yl_b, sc_fine, qt_fine, dec))
 
             # Execute punts
             if punt_m.any():
@@ -1607,7 +1690,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     _new_drive(miss_full)
 
         # --- Scrimmage plays (non-punt/FG) ---
-        alive = ~game_over
+        # 5A-9 (D32): re-derive from game_over (punt/FG blocks can end games) but KEEP the
+        # kneel and expired-clock exclusions. Until 5A-9 this line reset `alive` to
+        # ~game_over, so every kneel was followed by a scrimmage snap in the same
+        # iteration (a 3rd-down kneel became a 4th-down play with no decision -> turnover
+        # on downs) and snaps were run with the clock already at zero.
+        alive = ~game_over & ~can_kneel & ~spiked & (clock > 0)
         playing = alive & ~punt_m & ~fg_m
         if not playing.any():
             continue
@@ -1823,6 +1911,20 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             overall = ctx[f"t{ti}_proe"]
             team_proe[tm] = np.array([sit.get(b, overall) for b in bkt2[tm]])
         p_pass = _sigmoid(_logit(lg_xpass) + team_proe / 100.0)
+
+        # 5A-9 (D33): in the FG-setup state the play call is situation-driven — the
+        # measured in-state pass rate replaces the general cell and the team PROE tilt
+        if fgs_lookup is not None:
+            fgs_live = fgs_state[live_idx]
+            for j in np.where(fgs_live != "")[0]:
+                gi = live_idx[j]
+                sbf = _fgs_sec_bucket(float(clock[gi]))
+                row = (fgs_lookup.get((fgs_live[j], sbf, "any", "any")) or
+                       fgs_lookup.get(("any", sbf, "any", "any")) or
+                       fgs_lookup.get(("any", "any", "any", "any")))
+                if row is not None and not np.isnan(row[1]):
+                    p_pass[j] = row[1]
+                    ev_fgs_snaps[gi] += 1
 
         is_pass = u_call[live_idx] < p_pass
 
@@ -2161,7 +2263,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             sd_arr = np.where(poss[gi_arr] == 0,
                               score_h[gi_arr] - score_a[gi_arr],
                               score_a[gi_arr] - score_h[gi_arr])
-            _apply_timeouts(gi_arr, ot_idx, sd_arr, u_to)  # 5A-7
+            ot_names_p = np.asarray(["incomplete", "first_down", "complete_inbounds", "drive_end"], dtype=object)[ot_idx]
+            eoh_p = _eoh_runoff(gi_arr, sd_arr, yl_p, ot_names_p, u_pclock, exclude=(ot_idx == 3))   # 5A-9
+            _apply_timeouts(gi_arr, ot_idx, sd_arr, u_to, skip=eoh_p)  # 5A-7
             # 5A-3: score state (5-way)
             ss_arr = np.where(sd_arr <= -9, "trail9+",
                      np.where(sd_arr <= -1, "trail1-8",
@@ -2182,7 +2286,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
                     for cp_val in ["normal", "Q2_late", "Q4_late"]:
                         mask = ((ot_idx == oi) & (ss_arr == ss_val) &
-                                (cp_arr == cp_val) & ~game_over[gi_arr])
+                                (cp_arr == cp_val) & ~game_over[gi_arr] & ~eoh_p)
                         if not mask.any():
                             continue
                         # 3-level fallback: exact -> parent (p_score_state) -> legacy
@@ -2252,10 +2356,19 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 if len(m):
                                     yards_r[m] = np.interp(u5[m], xs101, yds_tbl[d_v, di_v, zi_v])
 
+            # 5A-9 (D33): runs in the FG-setup state draw from the in-state KM cell (the
+            # offence is protecting the kick); no team EPA shift on those snaps
+            fgs_r = np.zeros(n_r, dtype=bool)
+            if fgs_rush_q is not None:
+                fgs_r = not_fum & (fgs_state[g_idx_r] != "")
+                if fgs_r.any():
+                    yards_r[fgs_r] = np.interp(u5[fgs_r], xs101, fgs_rush_q)
+                    ev_fgs_runs[g_idx_r[fgs_r]] += 1
+
             # D6 additive EPA shift for rush yards (FIX 7: stochastic rounding)
             for ti in [0, 1]:
                 tm = poss_r == ti
-                rush_ok = not_fum & tm
+                rush_ok = not_fum & tm & ~fgs_r
                 if rush_ok.any():
                     shift = ctx[f"t{ti}_rush_epa_shift"]
                     shift_floor = np.floor(shift)
@@ -2410,7 +2523,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             sd_r_arr = np.where(poss[gi_r] == 0,
                                 score_h[gi_r] - score_a[gi_r],
                                 score_a[gi_r] - score_h[gi_r])
-            _apply_timeouts(gi_r, ot_idx_r, sd_r_arr, u_to, running_codes=(0, 1), de_code=2, stop_code=3)  # 5A-7
+            ot_names_r = np.asarray(["first_down", "run", "drive_end", "incomplete"], dtype=object)[ot_idx_r]
+            eoh_r = _eoh_runoff(gi_r, sd_r_arr, yl_r, ot_names_r, u_rclock, exclude=(ot_idx_r == 2))   # 5A-9
+            _apply_timeouts(gi_r, ot_idx_r, sd_r_arr, u_to, running_codes=(0, 1), de_code=2, stop_code=3, skip=eoh_r)  # 5A-7
             ss_r_arr = np.where(sd_r_arr <= -9, "trail9+",
                        np.where(sd_r_arr <= -1, "trail1-8",
                        np.where(sd_r_arr == 0, "tied",
@@ -2429,7 +2544,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
                     for cp_val in ["normal", "Q2_late", "Q4_late"]:
                         mask = ((ot_idx_r == oi) & (ss_r_arr == ss_val) &
-                                (cp_r_arr == cp_val) & ~game_over[gi_r])
+                                (cp_r_arr == cp_val) & ~game_over[gi_r] & ~eoh_r)
                         if not mask.any():
                             continue
                         cq = clock_q.get((ot_name_r, ss_val, cp_val))
@@ -2512,6 +2627,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_late_snaps_q2": ev_late_snaps_q2,
         "ev_late_snaps_q4": ev_late_snaps_q4,
         "m_q4_300": m_q4_300, "m_q4_120": m_q4_120,           # 5A-8 diag
+        "ev_eoh_runoff": ev_eoh_runoff, "ev_fgs_snaps": ev_fgs_snaps, "ev_fgs_runs": ev_fgs_runs, "ev_fgs_runoff": ev_fgs_runoff, "ev_spikes": ev_spikes,   # 5A-9
         "poss_q4_300": poss_q4_300, "poss_q4_120": poss_q4_120,
         "yl_q4_120": yl_q4_120,
         "ev_pass_40": ev_pass_40, "ev_rush_20": ev_rush_20,

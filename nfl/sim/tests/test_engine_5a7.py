@@ -92,13 +92,19 @@ def test_t2_kneel_table_live(ratings):
     r = _td(simulate_game(home, away, season, week, n_sims=2000, seed=seed, **ratings))
     assert float(r["ev_kneels"].mean()) > 0.5
     saved = E._CACHE["kneel"].copy()
+    saved_fgs = E._CACHE["fg_setup"].copy() if E._CACHE.get("fg_setup") is not None else None
     try:
         z = saved.copy(); z["p_kneel"] = 0.0
         E._CACHE["kneel"] = z
+        if saved_fgs is not None:  # 5A-9 (D33): FG-setup kneels come from their own table
+            zf = saved_fgs.copy(); zf["p_kneel"] = 0.0
+            E._CACHE["fg_setup"] = zf
         r0 = _td(simulate_game(home, away, season, week, n_sims=2000, seed=seed, **ratings))
         assert float(r0["ev_kneels"].sum()) == 0.0
     finally:
         E._CACHE["kneel"] = saved
+        if saved_fgs is not None:
+            E._CACHE["fg_setup"] = saved_fgs
 
 
 # ── T3: acceptance on a 12-game sample, N=500 ────────────────────────────────

@@ -1,0 +1,52 @@
+{
+  "k_by_level": {
+    "6": {
+      "all": 2.4762968621176498
+    },
+    "5": {
+      "all": 17.65054113740148
+    },
+    "4": {
+      "all": 15.184179200970117
+    },
+    "3": {
+      "need_td": 4.230161649931555,
+      "fg_useful": 59.636556154129536,
+      "lead": 63.15446786457058,
+      "trail": 2.3433131411353973,
+      "tied": Infinity
+    },
+    "2": {
+      "need_td": 41.10353395573514,
+      "fg_useful": Infinity,
+      "lead": 104.4812518650534,
+      "trail": 48.55838955274566,
+      "tied": Infinity
+    },
+    "1": {
+      "need_td": Infinity,
+      "fg_useful": Infinity,
+      "lead": Infinity,
+      "trail": 122.59389914224326,
+      "tied": Infinity
+    },
+    "0": {
+      "need_td": 83.42615210842189,
+      "fg_useful": 79.33499625483893,
+      "lead": 42.96370110817479,
+      "trail": 18.074659556157574,
+      "tied": 10.091746115992976
+    }
+  },
+  "levels": [
+    "yd x zone10 x score7 x clock6",
+    "yd x zone4 x score7 x clock6",
+    "yd x zone4 x score7 x clock4",
+    "yd x zone4 x score3(fd_score_coarse) x clock4",
+    "yd x zone4 x score3",
+    "yd x zone4",
+    "yd",
+    "league"
+  ],
+  "method": "Dirichlet shrinkage toward parent, k by method of moments on the go indicator, per coarse score group at levels 0-3 (5A-9, D30)"
+}

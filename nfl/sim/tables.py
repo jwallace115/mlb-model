@@ -10,6 +10,7 @@ SEASONS: 2021-2024 ONLY. Raises if any row with season >= 2025 is present.
 Regular season only (week <= 18).
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -490,7 +491,134 @@ def build_clock_table(df):
             "mean": grp["elapsed"].mean(),
         })
 
+    rows.extend(_eoh_runoff_rows(df))
+    rows.extend(_fgs_runoff_rows(df))
     return pd.DataFrame(rows)
+
+
+def _fgs_runoff_rows(df):
+    """5A-9 (D33): clock runoff after a scrimmage snap in the FG-setup state (Q4/OT, tied
+    or trailing by 1-3, inside the 35, <= 3:00, downs 1-3), keyed by seconds-left bucket
+    and outcome type. In this state the offence manages the clock to the kick: a run
+    at 0:45 is followed by a timeout at ~0:05, so the elapsed depends on the time left
+    (measured: run at 41-120 s median 6 s, q75 38 s; the half expires before the next
+    snap on 1-2% of snaps). Same measurement as the EOH cells (next snap of any type in
+    the same half, KM with the 99-s sentinel for expiry). Min cell 30; fallbacks pool
+    outcome type ("all") then seconds ("all")."""
+    d = df.sort_values(["game_id", "play_id"]).copy()
+    d["half_id"] = np.where(d["qtr"] <= 2, 1, np.where(d["qtr"] <= 4, 2, 3))
+    snaps = d[d["play_type"].isin(["pass", "run", "field_goal", "punt", "qb_kneel", "qb_spike"])].copy()
+    snaps["next_sec"] = snaps.groupby(["game_id", "half_id"])["half_seconds_remaining"].shift(-1)
+    e = snaps[snaps["play_type"].isin(["pass", "run"])].copy()
+    e["state"] = fg_setup_state(e["qtr"], e["score_differential"], e["yardline_100"],
+                                e["half_seconds_remaining"], e["down"])
+    e = e[e["state"] != ""].copy()
+    e["sec_b"] = pd.cut(e["half_seconds_remaining"], FGS_SEC_BINS, labels=FGS_SEC_LABELS).astype(str)
+    e["outcome_type"] = np.where(e["play_type"] == "run", "run",
+                        np.where((e["complete_pass"] == 1) | (e["sack"] == 1), "complete_inbounds", "incomplete"))
+    e.loc[e["first_down"] == 1, "outcome_type"] = "first_down"
+    cens = e["next_sec"].isna()
+    e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
+    e = e[e["elapsed"] >= 0]
+    rows = []
+    def _row(g, sb, ot):
+        c = g["next_sec"].isna().to_numpy()
+        if sb in ("0-20", "21-40"):
+            # <= 40 s: the offence manages to the kick, so the stable quantity is the time
+            # left at the NEXT snap (kind = next_sec; the half expiring = 0), not the elapsed
+            ns = g["next_sec"].fillna(0.0).to_numpy(dtype=float)
+            return {"outcome_type": ot, "score_state": f"fgs_{sb}", "clock_period": "fgs", "hurry": False,
+                    "n": len(g), "elapsed_q": np.quantile(ns, QUANTILE_POINTS).tolist(),
+                    "mean": float(ns.mean()), "n_censored": int(c.sum()), "kind": "next_sec"}
+        q = _km_quantiles(g["elapsed"].to_numpy(), g["elapsed"].to_numpy(), c)
+        return {"outcome_type": ot, "score_state": f"fgs_{sb}", "clock_period": "fgs", "hurry": False,
+                "n": len(g), "elapsed_q": q.tolist(), "mean": float(g.loc[~c, "elapsed"].mean()),
+                "n_censored": int(c.sum()), "kind": "elapsed"}
+    for (sb, ot), g in e.groupby(["sec_b", "outcome_type"]):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, sb, ot))
+    for sb, g in e.groupby("sec_b"):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, sb, "all"))
+    for ot, g in e.groupby("outcome_type"):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, "all", ot))
+    rows.append(_row(e, "all", "all"))
+    # Kneels in the state: the offence kneels TO THE KICK. Measured (every in-state kneel
+    # 2021-2024): with <= 40 s left the next snap is the field goal with 1-4 s on the
+    # clock; with more time the next snap comes ~35-40 s later (running clock) or at
+    # once if the defence calls timeout. Two rows: the <= 40 s row stores quantiles of
+    # the SECONDS LEFT AT THE NEXT SNAP (kind = "next_sec"); the > 40 s row stores
+    # elapsed like every other cell. Cells this small are kept because the behaviour is
+    # deterministic (22 of 22 and 23 of 23 cases), and reported with their n.
+    k = snaps[snaps["play_type"] == "qb_kneel"].copy()
+    k["state"] = fg_setup_state(k["qtr"], k["score_differential"], k["yardline_100"],
+                                k["half_seconds_remaining"], k["down"])
+    k = k[k["state"] != ""]
+    k_lo = k[k["half_seconds_remaining"] <= 40]; k_hi = k[k["half_seconds_remaining"] > 40]
+    if len(k_lo):
+        ns = k_lo["next_sec"].fillna(0.0).to_numpy(dtype=float)
+        rows.append({"outcome_type": "kneel", "score_state": "fgs_0-40", "clock_period": "fgs", "hurry": False,
+                     "n": len(k_lo), "elapsed_q": np.quantile(ns, QUANTILE_POINTS).tolist(),
+                     "mean": float(ns.mean()), "n_censored": int(k_lo["next_sec"].isna().sum()),
+                     "kind": "next_sec"})
+    if len(k_hi):
+        c = k_hi["next_sec"].isna().to_numpy()
+        el = np.where(c, k_hi["half_seconds_remaining"], k_hi["half_seconds_remaining"] - k_hi["next_sec"]).astype(float)
+        rows.append({"outcome_type": "kneel", "score_state": "fgs_41-180", "clock_period": "fgs", "hurry": False,
+                     "n": len(k_hi), "elapsed_q": _km_quantiles(el, el, c).tolist(),
+                     "mean": float(el[~c].mean()), "n_censored": int(c.sum()), "kind": "elapsed"})
+    return rows
+
+
+EOH_RUNOFF_MIN = 30
+
+
+def _eoh_runoff_rows(df):
+    """5A-9 (D31): clock runoff after a scrimmage snap taken in the end-of-half
+    field-goal setup — qtr 2 / 4 / OT, <= 40 s left in the half, ball inside the 50,
+    keyed by the EOH decision state (fg_useful / Q4_lead / Q4_trail4+, `eoh_state`)
+    and the play's outcome type. 5A-8 found the sim drew these snaps from the pooled
+    Q4_late cell (mean 20-35 s) while real teams spike, kneel to centre or call
+    timeout (median 5 s after a pass), so 14% of tied late drives expired inside the
+    35 without a kick. Elapsed is measured to the NEXT SNAP OF ANY TYPE in the same
+    half (pass/run/FG/punt/kneel/spike) and is right-censored when the half ends
+    first: Kaplan-Meier with the plateau at the 99-second sentinel, which the engine
+    reads as "the clock runs out". Elapsed 0 is kept (a timeout called at the whistle).
+    Min cell 30; fallback rows pool outcome types ("all") and then states ("eoh_all")."""
+    d = df.sort_values(["game_id", "play_id"]).copy()
+    d["half_id"] = np.where(d["qtr"] <= 2, 1, np.where(d["qtr"] <= 4, 2, 3))
+    snaps = d[d["play_type"].isin(["pass", "run", "field_goal", "punt", "qb_kneel", "qb_spike"])].copy()
+    snaps["next_sec"] = snaps.groupby(["game_id", "half_id"])["half_seconds_remaining"].shift(-1)
+    e = snaps[snaps["play_type"].isin(["pass", "run"]) & snaps["qtr"].isin([2, 4, 5, 6])
+              & (snaps["half_seconds_remaining"] <= 40) & (snaps["yardline_100"] <= 50)].copy()
+    e["state"] = eoh_state(e["qtr"], e["score_differential"])
+    # Q2 hurry-up (score before the half) and Q4/OT (kneel it down, deny the opponent
+    # time) are different behaviours in the same decision state: keep them apart
+    e["state"] = np.where(e["state"] == "fg_useful",
+                          np.where(e["qtr"] == 2, "fg_useful_Q2", "fg_useful_Q4"), e["state"])
+    e["outcome_type"] = np.where(e["play_type"] == "run", "run",
+                        np.where((e["complete_pass"] == 1) | (e["sack"] == 1), "complete_inbounds", "incomplete"))
+    e.loc[e["first_down"] == 1, "outcome_type"] = "first_down"
+    cens = e["next_sec"].isna()
+    e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
+    e = e[e["elapsed"] >= 0]
+    cens = e["next_sec"].isna()
+    rows = []
+    def _row(g, st, ot):
+        c = g["next_sec"].isna().to_numpy()
+        q = _km_quantiles(g["elapsed"].to_numpy(), g["elapsed"].to_numpy(), c)
+        return {"outcome_type": ot, "score_state": st, "clock_period": "eoh", "hurry": False,
+                "n": len(g), "elapsed_q": q.tolist(), "mean": float(g.loc[~c, "elapsed"].mean()),
+                "n_censored": int(c.sum())}
+    for (st, ot), g in e.groupby(["state", "outcome_type"]):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, f"eoh_{st}", ot))
+    for st, g in e.groupby("state"):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, f"eoh_{st}", "all"))
+    rows.append(_row(e, "eoh_all", "all"))
+    return rows
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -520,82 +648,161 @@ def _clock_bucket_fine(qtr, gsr):
            np.where(gsr > 300, "Q4>5",
            np.where(gsr > 120, "Q4_2-5", "Q4<2"))))
 
+FD_YD_LABELS = ["1-2", "3-5", "6-10", "11+"]
+FD_YL_LABELS = ["opp1-10", "opp11-20", "opp21-30", "opp31-40", "opp41-50",
+                "own41-50", "own31-40", "own21-30", "own11-20", "own1-10"]
+FD_SC_LABELS = ["trail9+", "trail4-8", "trail1-3", "tied", "lead1-3", "lead4-8", "lead9+"]
+FD_CK_LABELS = ["Q1-3", "Q2<2", "Q4>5", "Q4_2-5", "Q4<2", "OT"]
+FD_YL_COARSE = {"opp1-10": "rz", "opp11-20": "opp40", "opp21-30": "opp40", "opp31-40": "opp40",
+                "opp41-50": "midfield", "own41-50": "midfield", "own31-40": "midfield",
+                "own21-30": "own35", "own11-20": "own35", "own1-10": "own35"}
+FD_CK_COARSE = {"Q1-3": "Q1-3", "Q2<2": "Q2<2", "Q4>5": "Q4>5", "Q4_2-5": "Q4late", "Q4<2": "Q4late", "OT": "Q4late"}
+
+
+def fd_score_coarse(sc7, yl4):
+    """Coarse score grouping for the shrinkage parent, by what the decision turns on:
+    inside the opponent's 40 (rz / opp40) it is whether three points help —
+    need_td (trail 4+) / fg_useful (trail 1-3, tied) / lead; outside it is whether the
+    offence can afford to give the ball back — trail / tied / lead (sign only).
+    Structural, not fitted: the 5A-9 check showed sign-only pooling makes a team down 3
+    in range go instead of kick, and FG-usefulness pooling makes a team down 3 in its
+    own end punt like a tied team."""
+    sc7 = np.asarray(sc7, dtype=object); yl4 = np.asarray(yl4, dtype=object)
+    in_range = np.isin(yl4, ["rz", "opp40"])
+    trail = np.isin(sc7, ["trail9+", "trail4-8", "trail1-3"])
+    need_td = np.isin(sc7, ["trail9+", "trail4-8"])
+    fg_useful = np.isin(sc7, ["trail1-3", "tied"])
+    lead = np.isin(sc7, ["lead1-3", "lead4-8", "lead9+"])
+    out = np.where(in_range, np.where(need_td, "need_td", np.where(fg_useful, "fg_useful", "lead")),
+                   np.where(trail, "trail", np.where(lead, "lead", "tied")))
+    return out.astype(object)
+
+
+def fourth_down_keys(ydstogo, yardline_100, score_diff, qtr, sec_left_in_qtr):
+    """5A-9 (D30): the ONE bucketing used by both the table builder and the engine.
+    Returns (ydstogo_b, yl_b, score_b, clock_b) as object arrays. Clock: Q1-3, Q2<2
+    (last 2:00 of the half), Q4>5, Q4_2-5, Q4<2, OT (any overtime period)."""
+    yd = np.asarray(ydstogo, dtype=float); y = np.asarray(yardline_100, dtype=float)
+    sd = np.asarray(score_diff, dtype=float); q = np.asarray(qtr, dtype=float)
+    cl = np.asarray(sec_left_in_qtr, dtype=float)
+    yd_b = np.where(yd <= 2, "1-2", np.where(yd <= 5, "3-5", np.where(yd <= 10, "6-10", "11+")))
+    zi = np.clip(np.ceil(y / 10.0) - 1, 0, 9).astype(int)
+    yl_b = np.asarray(FD_YL_LABELS, dtype=object)[zi]
+    sc_b = np.where(sd < -8, "trail9+", np.where(sd < -3, "trail4-8", np.where(sd < 0, "trail1-3",
+           np.where(sd == 0, "tied", np.where(sd <= 3, "lead1-3", np.where(sd <= 8, "lead4-8", "lead9+"))))))
+    ck_b = np.where(q >= 5, "OT",
+           np.where((q == 2) & (cl <= 120), "Q2<2",
+           np.where(q <= 3, "Q1-3",
+           np.where(cl > 300, "Q4>5", np.where(cl > 120, "Q4_2-5", "Q4<2")))))
+    return yd_b.astype(object), yl_b.astype(object), sc_b.astype(object), ck_b.astype(object)
+
+
+def _mom_k(child_n, child_x, parent_p):
+    """Method-of-moments Beta-binomial concentration for a set of child cells around
+    their (raw) parent proportions, on a binary indicator. tau^2 = between-cell variance
+    of the true proportion beyond binomial noise; k = p(1-p)/tau^2 - 1. Returns inf when
+    the children are consistent with pure binomial scatter (no extra information)."""
+    n = np.asarray(child_n, dtype=float); x = np.asarray(child_x, dtype=float)
+    pp = np.asarray(parent_p, dtype=float)
+    m = n > 0
+    n, x, pp = n[m], x[m], pp[m]
+    if len(n) < 2:
+        return np.inf
+    p_i = x / n
+    Q = np.sum(n * (p_i - pp) ** 2)
+    binom = np.sum(pp * (1 - pp) * (1 - n / n.sum()))  # E[Q] under no between-cell variance
+    denom = n.sum() - np.sum(n ** 2) / n.sum()
+    tau2 = (Q - binom) / denom if denom > 0 else 0.0
+    if tau2 <= 0:
+        return np.inf
+    pbar = x.sum() / n.sum()
+    return max(pbar * (1 - pbar) / tau2 - 1.0, 0.0)
+
+
 def build_fourth_down_table(df):
-    """League P(go/punt/FG) by (ydstogo, field_zone, score_state, clock).
+    """League P(go / punt / FG) on 4th down, 2021-2024 regular season.
 
-    Fine-grained score buckets: trail9+ / trail4-8 / trail1-3 / tied /
-    lead1-3 / lead4-8 / lead9+.
-    Fine-grained Q4 clock: >5:00 / 2:00-5:00 / <2:00.
-    Minimum cell size: 10. Falls back to coarser score (3-way) then
-    coarser clock (Q1-3/Q4) when thin."""
-    MIN_N = 10
+    5A-9 (D30): hierarchical Dirichlet shrinkage on a COMPLETE fine grid instead of a
+    min-cell fallback chain. Fine key = ydstogo (4) x 10-yard field zone (10) x score
+    state (7) x clock (6: Q1-3, Q2<2, Q4>5, Q4_2-5, Q4<2, OT) = 1,680 rows, every one
+    present, so the engine does one exact lookup and can never fall through to a
+    hand-written default. Each cell's probabilities are its own counts blended with
+    its parent's estimate, p = (x + k * p_parent) / (n + k), with k measured per level
+    by method of moments on the go indicator (no chosen number). Parent chain, coarsest
+    dimension first and NEVER pooling across the sign of the score until level 3:
+      L0 (yd, zone10, score7, clock6)
+      L1 (yd, zone4,  score7, clock6)      field position coarsened
+      L2 (yd, zone4,  score7, clock4)      clock: Q1-3 / Q2<2 / Q4>5 / Q4late(=Q4_2-5, Q4<2, OT)
+      L3 (yd, zone4,  score3, clock3)      score: need_td / fg_useful / lead in range,
+                                            trail / tied / lead outside (fd_score_coarse)
+      L4 (yd, zone4,  score3)              all clock
+      L5 (yd, zone4)                       L6 (yd)                 L7 league
+    The 5A-8 finding: the old chain's levels 2-3 were unreachable (key mismatch) and
+    51.7% of Q4 / 99.1% of OT decisions used a cell that pooled trailing with leading."""
+    d = df[(df["down"] == 4) & df["down"].notna()].copy()
+    d = d[d["play_type"].isin(["pass", "run", "punt", "field_goal"])].copy()
+    yd_b, yl_b, sc_b, ck_b = fourth_down_keys(d["ydstogo"], d["yardline_100"], d["score_differential"],
+                                              d["qtr"], d["quarter_seconds_remaining"])
+    d["yd"] = yd_b; d["yl10"] = yl_b; d["sc7"] = sc_b; d["ck6"] = ck_b
+    d["yl4"] = d["yl10"].map(FD_YL_COARSE); d["sc3"] = fd_score_coarse(d["sc7"], d["yl4"]); d["ck3"] = d["ck6"].map(FD_CK_COARSE)
+    d["go"] = (d["play_type"].isin(["pass", "run"])).astype(int)
+    d["punt"] = (d["play_type"] == "punt").astype(int)
+    d["fg"] = (d["play_type"] == "field_goal").astype(int)
 
-    fourth = df[(df["down"] == 4) & df["down"].notna()].copy()
-    fourth = fourth[fourth["play_type"].isin(["pass", "run", "punt", "field_goal"])].copy()
+    levels = [["yd", "yl10", "sc7", "ck6"], ["yd", "yl4", "sc7", "ck6"], ["yd", "yl4", "sc7", "ck3"],
+              ["yd", "yl4", "sc3", "ck3"], ["yd", "yl4", "sc3"], ["yd", "yl4"], ["yd"], []]
 
-    fourth["ydstogo_b"] = pd.cut(fourth["ydstogo"], bins=[0, 2, 5, 10, 100],
-                                  labels=["1-2", "3-5", "6-10", "11+"], right=True)
-    # 10-yard field-zone bins across the whole field
-    fourth["yl_b"] = pd.cut(fourth["yardline_100"],
-                             bins=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-                             labels=["opp1-10", "opp11-20", "opp21-30", "opp31-40",
-                                     "opp41-50", "own41-50", "own31-40", "own21-30",
-                                     "own11-20", "own1-10"],
-                             right=True)
-    fourth["score_b"] = _score_bucket_fine(fourth["score_differential"])
-    # Use game_seconds_remaining for clock (Q4 seconds left in quarter)
-    if "game_seconds_remaining" in fourth.columns:
-        # game_seconds_remaining counts down from 3600 (start of game)
-        # quarter_seconds = game_seconds_remaining mod 900 (roughly)
-        q_sec = fourth["game_seconds_remaining"].clip(0, 3600)
-        # For Q4: seconds left = game_seconds_remaining directly (it's 0-900 in Q4)
-        fourth["qtr_b"] = _clock_bucket_fine(fourth["qtr"],
-                                              fourth["game_seconds_remaining"])
-    else:
-        fourth["qtr_b"] = np.where(fourth["qtr"] <= 3, "Q1-3", "Q4>5")
+    # complete fine grid with its own counts
+    grid = pd.MultiIndex.from_product([FD_YD_LABELS, FD_YL_LABELS, FD_SC_LABELS, FD_CK_LABELS],
+                                      names=["yd", "yl10", "sc7", "ck6"]).to_frame(index=False)
+    grid["yl4"] = grid["yl10"].map(FD_YL_COARSE); grid["sc3"] = fd_score_coarse(grid["sc7"], grid["yl4"])
+    grid["ck3"] = grid["ck6"].map(FD_CK_COARSE)
+    fine = d.groupby(["yd", "yl10", "sc7", "ck6"], observed=True)[["go", "punt", "fg"]].sum().reset_index()
+    grid = grid.merge(fine, on=["yd", "yl10", "sc7", "ck6"], how="left").fillna({"go": 0, "punt": 0, "fg": 0})
+    grid["n"] = grid["go"] + grid["punt"] + grid["fg"]
+    grid["_all"] = 0
 
-    fourth["decision"] = "go"
-    fourth.loc[fourth["play_type"] == "punt", "decision"] = "punt"
-    fourth.loc[fourth["play_type"] == "field_goal", "decision"] = "fg"
+    def _lvl_cols(L):
+        return levels[L] if levels[L] else ["_all"]
 
-    # Coarse fallback zones
-    fourth["score_coarse"] = pd.cut(fourth["score_differential"],
-                                     bins=[-100, -9, 8, 100],
-                                     labels=["trail9", "within8", "lead9"])
-    fourth["qtr_coarse"] = np.where(fourth["qtr"] <= 3, "Q1-3", "Q4")
-    fourth["yl_coarse"] = pd.cut(fourth["yardline_100"],
-                                  bins=[0, 10, 40, 65, 100],
-                                  labels=["rz", "opp40", "midfield", "own35"],
-                                  right=True)
+    # level sums per grid row (rows sharing a level key get the same sums)
+    for L in range(8):
+        g = grid.groupby(_lvl_cols(L), observed=True)[["go", "punt", "fg", "n"]].transform("sum")
+        for c in ("go", "punt", "fg", "n"):
+            grid[f"{c}_{L}"] = g[c]
 
-    def _add_rows(rows, grp_cols, prefix=""):
-        for key, grp in fourth.groupby(grp_cols, observed=True):
-            n = len(grp)
-            if n < MIN_N:
-                continue
-            vc = grp["decision"].value_counts()
-            yd, yl, sc, qt = key
-            rows.append({
-                "ydstogo_b": yd,
-                "yl_b": f"{prefix}{yl}" if prefix else yl,
-                "score_b": f"{prefix}{sc}" if prefix else sc,
-                "qtr_b": qt, "n": n,
-                "p_go": vc.get("go", 0) / n,
-                "p_punt": vc.get("punt", 0) / n,
-                "p_fg": vc.get("fg", 0) / n,
-            })
+    # top-down shrinkage: est at level 7 is the league proportion
+    k_by_level = {}
+    for c in ("go", "punt", "fg"):
+        grid[f"p{c}_7"] = grid[f"{c}_7"] / grid["n_7"]
+    for L in range(6, -1, -1):
+        # k from the distinct child cells at level L around raw parent proportions;
+        # one k per coarse score group while the score is still in the key (levels 0-3),
+        # because the clock and field dimensions carry far more information for a
+        # trailing offence than for a leading one
+        cells = grid.drop_duplicates(_lvl_cols(L))
+        cells = cells[cells[f"n_{L}"] > 0]
+        groups = cells["sc3"].unique() if L <= 3 else ["all"]
+        k_by_level[L] = {}
+        grid[f"k_{L}"] = np.nan
+        for gname in groups:
+            cg = cells if gname == "all" else cells[cells["sc3"] == gname]
+            k = _mom_k(cg[f"n_{L}"], cg[f"go_{L}"], cg[f"go_{L+1}"] / cg[f"n_{L+1}"])
+            k_by_level[L][str(gname)] = float(k)
+            rowsel = slice(None) if gname == "all" else (grid["sc3"] == gname)
+            grid.loc[rowsel, f"k_{L}"] = k
+        kcol = grid[f"k_{L}"].to_numpy(dtype=float)
+        for c in ("go", "punt", "fg"):
+            shr = (grid[f"{c}_{L}"] + kcol * grid[f"p{c}_{L+1}"]) / (grid[f"n_{L}"] + kcol)
+            grid[f"p{c}_{L}"] = np.where(np.isinf(kcol), grid[f"p{c}_{L+1}"], shr)
 
-    rows = []
-    # Level 0: finest (10-yd zone × 7 score × 4 clock)
-    _add_rows(rows, ["ydstogo_b", "yl_b", "score_b", "qtr_b"])
-    # Level 1: coarse score, fine zone + clock
-    _add_rows(rows, ["ydstogo_b", "yl_b", "score_coarse", "qtr_b"], prefix="c_")
-    # Level 2: coarse zone, fine score + clock
-    _add_rows(rows, ["ydstogo_b", "yl_coarse", "score_b", "qtr_b"], prefix="z_")
-    # Level 3: coarse zone + coarse score + coarse clock
-    _add_rows(rows, ["ydstogo_b", "yl_coarse", "score_coarse", "qtr_coarse"], prefix="zc_")
-
-    return pd.DataFrame(rows)
+    tbl = pd.DataFrame({"ydstogo_b": grid["yd"], "yl_b": grid["yl10"], "score_b": grid["sc7"],
+                        "qtr_b": grid["ck6"], "n": grid["n"].astype(int),
+                        "p_go": grid["pgo_0"], "p_punt": grid["ppunt_0"], "p_fg": grid["pfg_0"]})
+    # rows are complete by construction; probabilities sum to 1 up to float error
+    assert len(tbl) == 4 * 10 * 7 * 6 and np.allclose(tbl[["p_go", "p_punt", "p_fg"]].sum(axis=1), 1.0)
+    tbl.attrs["k_by_level"] = k_by_level
+    return tbl
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -880,7 +1087,7 @@ EOH_YL_LABELS = ["<=20", "21-30", "31-40", "41-50"]
 
 def eoh_state(qtr, score_differential):
     """Decision state for an end-of-half snap on downs 1-3.
-    fg_useful: Q2 (any score), or Q4 tied / trailing by <= 3.
+    fg_useful: Q2 (any score), or Q4/OT tied / trailing by <= 3 (5A-9: OT included).
     Q4_lead: leading in Q4 (real teams kneel; measured P(FG)=0).
     Q4_trail4+: trailing by 4+ in Q4 (need a TD; measured P(FG)~0.02)."""
     qtr = np.asarray(qtr); sd = np.asarray(score_differential, dtype=float)
@@ -898,7 +1105,7 @@ def build_eoh_fg_table(df):
     Level 0: state x sec x yl (min cell 30). Level 1: state x sec, pooled over
     yardline (min cell 30), prefix "all" on yl_b. No cell is invented."""
     MIN_N = 30
-    d = df[df["down"].isin([1, 2, 3]) & df["qtr"].isin([2, 4])
+    d = df[df["down"].isin([1, 2, 3]) & df["qtr"].isin([2, 4, 5, 6])
            & (df["half_seconds_remaining"] <= 40) & (df["yardline_100"] <= 50)
            & df["play_type"].isin(["pass", "run", "field_goal", "qb_spike", "qb_kneel"])].copy()
     d["fg"] = (d["play_type"] == "field_goal").astype(int)
@@ -912,6 +1119,30 @@ def build_eoh_fg_table(df):
     for (st, sb), g in d.groupby(["state", "sec_b"]):
         if len(g) >= MIN_N:
             rows.append({"state": st, "sec_b": sb, "yl_b": "all", "n": len(g), "p_fg": g["fg"].mean()})
+    return pd.DataFrame(rows)
+
+
+def build_eoh_spike_table(df):
+    """5A-9 (D34): P(spike | end-of-half snap on downs 1-3 in the fg_useful state) by half
+    (Q2 / Q4-OT) and seconds-left bucket. The sim had no spike: at 4-10 s left in range a
+    real Q4 offence spikes 29-37% of the time (Q2: 5-20%) and kicks on the next snap; the
+    engine ran a play instead and the half expired. A spike takes 1 s (measured q90 = 1)
+    and a down. Same population as the EOH FG table; min cell 30, pooled over yardline."""
+    MIN_N = 30
+    d = df[df["down"].isin([1, 2, 3]) & df["qtr"].isin([2, 4, 5, 6])
+           & (df["half_seconds_remaining"] <= 40) & (df["yardline_100"] <= 50)
+           & df["play_type"].isin(["pass", "run", "field_goal", "qb_spike", "qb_kneel"])].copy()
+    d["state"] = eoh_state(d["qtr"], d["score_differential"])
+    d = d[d["state"] == "fg_useful"].copy()
+    d["half"] = np.where(d["qtr"] == 2, "Q2", "Q4")
+    d["sec_b"] = pd.cut(d["half_seconds_remaining"], EOH_SEC_BINS, labels=EOH_SEC_LABELS).astype(str)
+    d["spike"] = (d["play_type"] == "qb_spike").astype(int)
+    rows = []
+    for (h, sb), g in d.groupby(["half", "sec_b"]):
+        if len(g) >= MIN_N:
+            rows.append({"half": h, "sec_b": sb, "n": len(g), "p_spike": g["spike"].mean()})
+    for sb, g in d.groupby("sec_b"):
+        rows.append({"half": "all", "sec_b": sb, "n": len(g), "p_spike": g["spike"].mean()})
     return pd.DataFrame(rows)
 
 
@@ -1000,6 +1231,87 @@ def build_kneel_table(df):
                          "n": len(g), "p_kneel": g["kneel"].mean()})
     return pd.DataFrame(rows)
 
+FGS_SEC_BINS = [-1, 20, 40, 60, 90, 120, 180]
+FGS_SEC_LABELS = ["0-20", "21-40", "41-60", "61-90", "91-120", "121-180"]
+FGS_MIN_N = 20
+
+
+def fg_setup_state(qtr, score_differential, yardline_100, sec_left_in_half, down):
+    """5A-9 (D33): the field-goal-setup state — Q4 or OT, offence tied or trailing by
+    1-3, ball inside the 35, <= 3:00 left, downs 1-3. Real offences here kneel to
+    centre the ball (45-56% of snaps at 21-60 s when the defence is out of timeouts),
+    run 62-78% of the time, and score a TD on 9% of snaps; the general tied/Q4<2
+    play-call cell passes 69% of the time. Returns 'tied' / 'trail1-3' / '' (not in state)."""
+    q = np.asarray(qtr, dtype=float); sd = np.asarray(score_differential, dtype=float)
+    y = np.asarray(yardline_100, dtype=float); sec = np.asarray(sec_left_in_half, dtype=float)
+    dn = np.asarray(down, dtype=float)
+    m = (q >= 4) & (sd >= -3) & (sd <= 0) & (y <= 35) & (sec <= 180) & (dn >= 1) & (dn <= 3)
+    return np.where(m, np.where(sd == 0, "tied", "trail1-3"), "").astype(object)
+
+
+def build_fg_setup_rush(df):
+    """5A-9 (D33): yardage quantiles for RUNS in the FG-setup state (Kaplan-Meier,
+    censored at the goal line like every other yardage cell). Measured: mean 2.5-2.9
+    yards and a 4-7% TD rate vs 3.7 yards / 10% for the same field position earlier in
+    the game — the offence is protecting the kick, not attacking. One cell (n ~320),
+    all downs and distances pooled; the pass game in this state is not overridden."""
+    r = df[(df["play_type"] == "run")].copy()
+    r["state"] = fg_setup_state(r["qtr"], r["score_differential"], r["yardline_100"],
+                                r["half_seconds_remaining"], r["down"])
+    r = r[r["state"] != ""]
+    y = r["yards_gained"].to_numpy(dtype=float); yl = r["yardline_100"].to_numpy(dtype=float)
+    cens = (r["touchdown"] == 1).to_numpy()
+    q = _km_quantiles(y, yl, cens)
+    return pd.DataFrame([{"state": "any", "n": len(r), "n_censored": int(cens.sum()),
+                          "yds_q": q.tolist(), "mean_uncensored": float(y[~cens].mean())}])
+
+
+def build_fg_setup_table(df):
+    """P(kneel) and P(pass | not kneel) in the FG-setup state, keyed (state, seconds
+    bucket, defence timeouts remaining 0/1/2+, down). Population: pass / run /
+    qb_kneel / qb_spike snaps (a spike counts as a pass; the FG decision itself belongs
+    to the EOH and 4th-down tables). Min cell 20; fallback rows pool down ('any'),
+    then timeouts ('any'), then state ('any'); plus (state 'any', seconds, timeouts)
+    rows because the kneel decision turns on the defence's timeouts and the play call on
+    the score state. Engine lookup: kneel (any, sec, def_to) -> (any, any, def_to) ->
+    all; pass (state, sec) -> (any, sec) -> all. 2021-2024 regular season."""
+    d = df[df["play_type"].isin(["pass", "run", "qb_kneel", "qb_spike"])].copy()
+    d["state"] = fg_setup_state(d["qtr"], d["score_differential"], d["yardline_100"],
+                                d["half_seconds_remaining"], d["down"])
+    d = d[d["state"] != ""].copy()
+    d["sec_b"] = pd.cut(d["half_seconds_remaining"], FGS_SEC_BINS, labels=FGS_SEC_LABELS).astype(str)
+    d["def_to"] = np.where(d["defteam_timeouts_remaining"] >= 2, "2+",
+                           d["defteam_timeouts_remaining"].fillna(0).astype(int).astype(str))
+    d["down_s"] = d["down"].astype(int).astype(str)
+    d["kneel"] = (d["play_type"] == "qb_kneel").astype(int)
+    d["is_pass"] = d["play_type"].isin(["pass", "qb_spike"]).astype(int)
+    rows = []
+    def _emit(g, st, sb, dt, dn):
+        nk = g[g["kneel"] == 0]
+        rows.append({"state": st, "sec_b": sb, "def_to": dt, "down": dn, "n": len(g),
+                     "p_kneel": g["kneel"].mean(),
+                     "pass_rate": nk["is_pass"].mean() if len(nk) else np.nan})
+    for (st, sb, dt, dn), g in d.groupby(["state", "sec_b", "def_to", "down_s"]):
+        if len(g) >= FGS_MIN_N:
+            _emit(g, st, sb, dt, dn)
+    for (st, sb, dt), g in d.groupby(["state", "sec_b", "def_to"]):
+        if len(g) >= FGS_MIN_N:
+            _emit(g, st, sb, dt, "any")
+    for (st, sb), g in d.groupby(["state", "sec_b"]):
+        if len(g) >= FGS_MIN_N:
+            _emit(g, st, sb, "any", "any")
+    for (sb, dt), g in d.groupby(["sec_b", "def_to"]):
+        if len(g) >= FGS_MIN_N:
+            _emit(g, "any", sb, dt, "any")
+    for sb, g in d.groupby("sec_b"):
+        if len(g) >= FGS_MIN_N:
+            _emit(g, "any", sb, "any", "any")
+    for (dt,), g in d.groupby(["def_to"]):
+        _emit(g, "any", "any", dt, "any")
+    _emit(d, "any", "any", "any", "any")
+    return pd.DataFrame(rows)
+
+
 def build_all():
     print("Loading PBP data (2021-2024, regular season)...")
     df = load_pbp()
@@ -1037,7 +1349,14 @@ def build_all():
     print("Building 4th-down decision table (E)...")
     fd_tbl = build_fourth_down_table(df)
     fd_tbl.to_parquet(OUT_DIR / "fourth_down.parquet", index=False)
-    print(f"  {len(fd_tbl)} rows")
+    with open(OUT_DIR / "fourth_down_meta.json", "w") as f:
+        json.dump({"k_by_level": fd_tbl.attrs["k_by_level"],
+                   "levels": ["yd x zone10 x score7 x clock6", "yd x zone4 x score7 x clock6",
+                              "yd x zone4 x score7 x clock4", "yd x zone4 x score3(fd_score_coarse) x clock4",
+                              "yd x zone4 x score3", "yd x zone4", "yd", "league"],
+                   "method": "Dirichlet shrinkage toward parent, k by method of moments on the go indicator (5A-9, D30)"},
+                  f, indent=2, default=float)
+    print(f"  {len(fd_tbl)} rows (complete grid); k_by_level {fd_tbl.attrs['k_by_level']}")
 
     print("Building special teams tables (F)...")
     st = build_special_teams_table(df)
@@ -1078,6 +1397,11 @@ def build_all():
     to_tbl2.to_parquet(OUT_DIR / "timeout_policy.parquet", index=False)
     kn_tbl = build_kneel_table(df)
     kn_tbl.to_parquet(OUT_DIR / "kneel_decision.parquet", index=False)
+    fgs_tbl = build_fg_setup_table(df)
+    fgs_tbl.to_parquet(OUT_DIR / "fg_setup.parquet", index=False)
+    build_fg_setup_rush(df).to_parquet(OUT_DIR / "fg_setup_rush.parquet", index=False)
+    build_eoh_spike_table(df).to_parquet(OUT_DIR / "eoh_spike.parquet", index=False)
+    print(f"  fg_setup {len(fgs_tbl)} rows (+ fg_setup_rush)")
     print(f"  timeout policy {len(to_tbl2)} rows, kneel {len(kn_tbl)} rows")
 
     print("Building pass depth table (I)...")

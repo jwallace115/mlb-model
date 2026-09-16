@@ -45,13 +45,13 @@ def baseline():
 # --- Pass outcomes table ---
 def test_dead_pass_outcomes(baseline):
     """Perturb pass completion rate in a well-populated cell."""
-    tbl = pd.read_parquet(TABLES_DIR / "pass_outcomes.parquet").copy()
-    # Pick the largest cell (down=1, dist=long, zone=midfield likely)
-    mask = (tbl["down"] == "2") & (tbl["dist"] == "long") & (tbl["zone"] == "midfield")
-    if mask.any():
-        idx = tbl[mask].index[0]
-        tbl.loc[idx, "p_comp"] = min(tbl.loc[idx, "p_comp"] * 1.5, 0.95)
-    r = _run({"pass": tbl})
+    # 5A-7 (D27): the engine reads the 10-yard-zone table, the 5-zone table is only the
+    # thin-cell fallback, so the perturbation goes into the z10 cells of the same region
+    tbl = pd.read_parquet(TABLES_DIR / "pass_outcomes_z10.parquet").copy()
+    mask = (tbl["down"] == "2") & (tbl["dist"] == "long") & tbl["zone"].isin(["y40", "y50", "y60"])
+    assert mask.any()
+    tbl.loc[mask, "p_comp"] = np.minimum(tbl.loc[mask, "p_comp"] * 1.5, 0.95)
+    r = _run({"pass_z10": tbl})
     # Completion rate should change
     diff = abs(r["ev_comp"].mean() - baseline["ev_comp"].mean())
     assert diff > 0.1, f"Pass table perturbation had no effect: comp diff={diff:.3f}"
@@ -60,12 +60,11 @@ def test_dead_pass_outcomes(baseline):
 # --- Rush outcomes table ---
 def test_dead_rush_outcomes(baseline):
     """Perturb rush success rate."""
-    tbl = pd.read_parquet(TABLES_DIR / "rush_outcomes.parquet").copy()
-    mask = (tbl["down"] == "1") & (tbl["dist"] == "long") & (tbl["zone"] == "midfield")
-    if mask.any():
-        idx = tbl[mask].index[0]
-        tbl.loc[idx, "p_success"] = min(tbl.loc[idx, "p_success"] * 1.5, 0.95)
-    r = _run({"rush": tbl})
+    tbl = pd.read_parquet(TABLES_DIR / "rush_outcomes_z10.parquet").copy()  # D27: z10 is what the engine reads
+    mask = (tbl["down"] == "1") & (tbl["dist"] == "long") & tbl["zone"].isin(["y40", "y50", "y60"])
+    assert mask.any()
+    tbl.loc[mask, "p_success"] = np.minimum(tbl.loc[mask, "p_success"] * 1.5, 0.95)
+    r = _run({"rush_z10": tbl})
     diff = abs(r["home_rush_yds"].mean() + r["away_rush_yds"].mean()
                - baseline["home_rush_yds"].mean() - baseline["away_rush_yds"].mean())
     assert diff > 0.5, f"Rush table perturbation had no effect: yds diff={diff:.3f}"
