@@ -281,3 +281,28 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   5A-4 offence penalties 6.17 vs 5.51 ± 0.5; 5A-9 tied-drive expiry 12.4% vs ≤ 5%); three tests
   updated for changed premises (dead-table z10 per D27, kneel liveness per D33, D32 string).
   See `research/nfl_sim/phase5a9_endgame.md`. Next 5A-10: scoring-event composition diagnostic.
+- **2026-09-16 Phase 5A-10 — scoring-event composition (Cowork-executed).** Per-team scoring
+  events match reality on average (TDs 2.45 vs 2.38, XP-miss share 10.7 vs 10.2%, two-point 4.7 vs
+  4.7%, FGs 1.59 vs 1.67, Q4-drive TDs 0.54 vs 0.55) but not in structure: given equal TD counts and
+  a one-FG difference the real margin is exactly 3 in 71% of games, the sim's was 45% (off by one
+  29% vs 10%). **D35 — two-point decision keyed by the EXACT post-TD differential** (period Q1-3 /
+  Q4+ × −16…+16, complete grid, k by method of moments): the real decision is near-deterministic
+  (down 2 / down 5 / up 1 / down 10 → ~97%; down 3 / down 7 / down 4 / tied → ≤ 4%) and the old
+  7-bucket table smeared it (Q4 trail1-8 = 34% everywhere). **D36 — PAT uniform reuse:** `u_pat`
+  decided the two-point question and then the XP make, so conditional on kicking the XP draw was
+  biased (effective make ~92% in trailing Q4 states; K1 miss rate 6.2% vs 5.1%); the two-point
+  conversion borrowed the OT coin-flip uniform. Own draws now. K1 (1,087 × 500): P(|m| = 3) 8.1 →
+  **10.6%** (14.5); 3-composition exactness 45 → 61% (71); mass moved to 3/7/10/14 (7 and 10 now
+  over: 9.1 vs 7.3, 6.2 vs 5.1), 6 short (4.5 vs 7.5), ties 0.88% (0.28). Measured, not fixed:
+  corr(td_home, td_away) 0.12 real vs 0.01 sim (no shared game environment); Q4-drive FGs −13%
+  (all in close games); OT ends tied 19% of OT games vs 4.3%; real one-TD-apart games land on 6
+  in 24% (sim 11%). **D37 — test-cache pollution:** `test_dead_tables_5a5._run` left its last
+  perturbation in the engine cache for every module that ran after it (the DPI-always-40-yards
+  table before 5A-10; the all-two-point table in the first 5A-10 run, which read P(|m| = 3) 0.083),
+  so full-suite results for `test_engine_5a*` from any run that included the dead-table module
+  were contaminated; standalone module runs were clean. Fixed (restore after each run); the
+  `assert True` two-point placeholder is a real perturbation test. Clean suite: 89 pass / 4 red
+  (5A tie rate 1.04% > 1%; 5A-3 go rate 21.1 vs 19.8 ± 1.0; 5A-4 offence penalties 6.21 vs 5.51
+  ± 0.5 — real, not pollution; 5A-9 tied-drive expiry 11.5% vs ≤ 5%). See
+  `research/nfl_sim/phase5a10_scoring_composition.md`. Next 5A-11: OT behaviour (ties), placement
+  of XP/two-point noise, shared game factor, Q4 FG count, 4th-down conversion, two-minute drill.

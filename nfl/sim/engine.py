@@ -78,7 +78,7 @@ def _load_tables():
     # 5A-7: timeout policy and kneel decision tables
     for k, fn in (("timeout_policy", "timeout_policy.parquet"), ("kneel", "kneel_decision.parquet"),
                   ("fg_setup", "fg_setup.parquet"), ("fg_setup_rush", "fg_setup_rush.parquet"),
-                  ("eoh_spike", "eoh_spike.parquet")):
+                  ("eoh_spike", "eoh_spike.parquet"), ("twopt", "twopt_decision.parquet")):
         fp = TABLES_DIR / fn
         _CACHE[k] = pd.read_parquet(fp) if fp.exists() else None
     # 5A-6: end-of-half FG decision table (downs 1-3)
@@ -754,10 +754,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     p_saf_90 = float(_srz.get("90-94", {}).get("p", 0.0))
 
     # FIX 6a: 2pt decision table
-    twopt_tbl = pd.read_parquet(TABLES_DIR / "twopt_decision.parquet")
-    twopt_lookup = {}
-    for _, r in twopt_tbl.iterrows():
-        twopt_lookup[(int(r["qtr"]), r["score_diff"])] = r["p_2pt"]
+    twopt_tbl = _CACHE.get("twopt")
+    if twopt_tbl is None:
+        twopt_tbl = pd.read_parquet(TABLES_DIR / "twopt_decision.parquet")
+    # 5A-10 (D35): exact post-TD differential x period; every key present (complete grid)
+    twopt_lookup = {(r["period"], int(r["sd_post"])): float(r["p_2pt"]) for _, r in twopt_tbl.iterrows()}
     twopt_conv_rate = scalars.get("twopt_conv_rate", 0.48)
 
     # FIX 6d: kickoff start position from table
@@ -1049,15 +1050,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             q = int(qtr[i])
             sd_poss = int(score_h[i] - score_a[i]) if scoring_team_idx[i] == 0 \
                       else int(score_a[i] - score_h[i])
-            # Map score diff to table bucket (after the 6-pt TD is already added)
-            if sd_poss < -14: sc_lbl = "trail15+"
-            elif sd_poss < -8: sc_lbl = "trail9-15"
-            elif sd_poss < 0: sc_lbl = "trail1-8"
-            elif sd_poss <= 1: sc_lbl = "tied_lead1"
-            elif sd_poss <= 8: sc_lbl = "lead2-8"
-            elif sd_poss <= 15: sc_lbl = "lead9-15"
-            else: sc_lbl = "lead15+"
-            p2 = twopt_lookup.get((min(q, 4), sc_lbl), 0.04)
+            # 5A-10 (D35): exact post-TD differential (the 6 is already added), Q1-3 vs Q4+
+            p2 = twopt_lookup[("Q4+" if q >= 4 else "Q1-3", int(np.clip(sd_poss, -16, 16)))]
             go_2pt[i] = u_pat[i] < p2
 
         # 2pt attempts
@@ -1070,7 +1064,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # Cleaner: use the next available uniform. But we draw fixed per step.
             # For correctness, draw the conversion from a different uniform.
             # We'll use u_ot as a secondary draw for 2pt conversion (it's independent).
-            conv = m_2pt & (u_ot < twopt_conv_rate)
+            conv = m_2pt & (u_2pt < twopt_conv_rate)  # 5A-10 (D36): own uniform
             score_h[conv & (scoring_team_idx == 0)] += 2
             score_a[conv & (scoring_team_idx == 1)] += 2
 
@@ -1081,7 +1075,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for ti in [0, 1]:
                 tm = m_xp & (scoring_team_idx == ti)
                 xp_prob[tm] = ctx[f"t{ti}_xp"]
-            made = m_xp & (u_pat < xp_prob)
+            # 5A-10 (D36): u_pat decided the 2-pt question, so conditional on kicking it is
+            # >= p2 and biased high — reusing it made the XP miss rate 6.2% instead of 5.1%
+            made = m_xp & (u_xp < xp_prob)
             score_h[made & (scoring_team_idx == 0)] += 1
             score_a[made & (scoring_team_idx == 1)] += 1
 
@@ -1299,6 +1295,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_rfum_ret = rng.random(N)
         u_rclock = rng.random(N)
         u_pat = rng.random(N)
+        u_xp = rng.random(N)     # 5A-10 (D36): XP make
+        u_2pt = rng.random(N)    # 5A-10 (D36): 2-pt conversion
         u_ot = rng.random(N)
         u_punt_td = rng.random(N)
         u_ko_td = rng.random(N)

@@ -1,3 +1,22 @@
+## 2026-09-16T17:00Z  cowork (Phase 5A-10 — scoring-event composition; executed directly)
+- BUILT: nfl/sim/scoring_composition.py (actual | compare); actual_scoring_composition_2021_2024.parquet
+  (2,174 team-games; reconstructs the final score in 99.6%); twopt_decision.parquet rebuilt as an exact
+  post-TD-differential grid (66 rows, was 26 buckets). No other table touched.
+- ENGINE: D35 exact-differential two-point lookup (table now loaded via _CACHE); D36 own uniforms for
+  XP make and two-point conversion (u_pat / u_ot reuse removed).
+- RAN: K1 1,087 x 500 with drive log twice (5A-9 engine for the diagnostic; D35/D36 engine), ~2,100 s each.
+- RESULT: P(|m|=3) 8.1 -> 10.6% (14.5); 3-composition exact 45 -> 61% (71); 7 and 10 now over, 6 short,
+  ties 0.88% (0.28); Q4-drive TDs match (0.54 vs 0.55), Q4-drive FGs -13%.
+- FOUND: (a) real two-point decisions are exact-number rules the 7-bucket table smeared; (b) XP draw
+  reused the two-point uniform (miss rate 6.2% vs 5.1%); (c) D37 test-cache pollution — dead-table
+  overrides persisted into every later test module; all prior full-suite counts that included
+  test_dead_tables_5a5 are suspect for test_engine_5a* (standalone runs were clean).
+- TESTS (clean suite after D37): 89 passed / 4 red — 5a tie rate 1.04% > 1%; 5a3 go rate 0.211 vs
+  0.198±0.010; 5a4 offence penalties 6.21 vs 5.51±0.5; 5a9 tied-drive expiry 0.115 vs <=0.05. Nothing widened.
+- NOT DONE: OT tie behaviour; XP/two-point placement; shared game factor (corr td_h,td_a 0.12 vs 0.01);
+  Q4 FG count; 4th-down conversion; two-minute drill. Delivered as a patch (cloud cannot push).
+- NEXT (on go): 5A-11 OT audit first (ties 3x real), then the composition placement items; then 5B, 5C.
+
 ## 2026-09-16T13:30Z  cowork (Phase 5A-9 — endgame repair; executed directly)
 - BUILT: fourth_down.parquet rebuilt (1,680-cell complete grid, measured-k shrinkage, OT bucket) +
   fourth_down_meta.json; clock_runoff.parquet +36 rows (EOH cells by half/state, FG-setup cells by

@@ -25,16 +25,26 @@ SEED_VAL = stable_seed(("2023_01_ARI_WAS", 42))
 
 
 def _run(cache_override=None):
-    """Run one game with optional cache override."""
+    """Run one game with optional cache override.
+
+    5A-10: the override is REMOVED afterwards. Until now the last perturbation stayed in
+    the module cache for every test module that ran after this one (the 5A-10 suite run
+    found P(|m|=3) at 0.083 because the all-2-pt table was still loaded), so earlier
+    full-suite results for modules sorted after test_dead_tables_5a5 were contaminated."""
     _CACHE.clear()
     _load_tables()
     if cache_override:
         for k, v in cache_override.items():
             _CACHE[k] = v
     tr, tend, sit, kicker, league = _load_ratings()
-    return simulate_game(*GAME, n_sims=N, seed=SEED_VAL,
-                         team_r=tr, tend=tend, sit=sit, kicker=kicker,
-                         league=league, drive_log=True)
+    try:
+        return simulate_game(*GAME, n_sims=N, seed=SEED_VAL,
+                             team_r=tr, tend=tend, sit=sit, kicker=kicker,
+                             league=league, drive_log=True)
+    finally:
+        if cache_override:
+            _CACHE.clear()
+            _load_tables()
 
 
 @pytest.fixture(scope="module")
@@ -234,19 +244,16 @@ def test_dead_penalty_detail(baseline):
 
 # --- 2pt decision table ---
 def test_dead_twopt_decision(baseline):
-    """Perturbation: set all 2pt attempt rates to 0.80 (normally ~0.04)."""
-    # This table is loaded inline in simulate_game, not via _CACHE.
-    # We'll test by comparing 2pt attempt counts.
-    # Since the table is loaded from disk each call, we need to write a temp file.
-    # Instead, test structurally: if we see any 2pt attempts in baseline at all.
-    # With N=2000 and ~4 TDs/game, at 4% 2pt rate, expect ~0.16 2pt attempts.
-    # At N=2000, should see some.
-    mean_tds = baseline["ev_tds"].mean()
-    assert mean_tds > 0, "No TDs in baseline — cannot test 2pt"
-    # The 2pt table is wired through _do_pat -> twopt_lookup. Since twopt_lookup
-    # is built from a parquet file read inside simulate_game, we can't override
-    # via _CACHE. We'd need to modify the file. Mark as TESTED STRUCTURALLY.
-    assert True
+    """5A-10: the table is in _CACHE now (exact post-TD differential x period). Setting
+    every 2-pt rate to 1.0 must remove all extra points; the old body was `assert True`."""
+    tbl = pd.read_parquet(TABLES_DIR / "twopt_decision.parquet").copy()
+    tbl["p_2pt"] = 1.0
+    r = _run({"twopt": tbl})
+    # with 2-pt on every TD no drive can score exactly 7
+    b_pts = baseline.attrs["drive_log"]; r_pts = r.attrs["drive_log"]
+    assert (b_pts.points == 7).sum() > 0
+    assert (r_pts.points == 7).sum() == 0, "2-pt table perturbation had no effect: extra points still scored"
+    assert (r_pts.points == 8).sum() > 0
 
 
 # --- Kickoff start position ---

@@ -809,6 +809,49 @@ def build_fourth_down_table(df):
 # TABLE F: FG, punt, kickoff, XP, 2pt, penalties
 # ═══════════════════════════════════════════════════════════════════════════════
 
+TWOPT_BUCKETS = [(-100, -15, "trail15+"), (-15, -9, "trail9-15"), (-9, -1, "trail1-8"), (-1, 2, "tied_lead1"),
+                 (2, 9, "lead2-8"), (9, 16, "lead9-15"), (16, 100, "lead15+")]
+
+
+def twopt_bucket(sd):
+    sd = np.asarray(sd, dtype=float)
+    out = np.full(sd.shape, "", dtype=object)
+    for lo, hi, lab in TWOPT_BUCKETS:
+        out[(sd >= lo) & (sd < hi)] = lab
+    return out
+
+
+def build_twopt_table(pat_plays, twopt_plays):
+    """See build_special_teams_table. Rows: period ('Q1-3' / 'Q4+') x sd_post (-16..16,
+    values beyond pooled into the end cells) -> p_2pt, n (own), with k_by_level attrs."""
+    x = pd.concat([pat_plays.assign(two=0), twopt_plays.assign(two=1)], ignore_index=True)
+    x = x[x["score_differential"].notna()].copy()
+    x["period"] = np.where(x["qtr"] >= 4, "Q4+", "Q1-3")
+    x["sd"] = x["score_differential"].clip(-16, 16).astype(int)
+    x["bkt"] = twopt_bucket(x["score_differential"])
+    grid = pd.MultiIndex.from_product([["Q1-3", "Q4+"], list(range(-16, 17))], names=["period", "sd"]).to_frame(index=False)
+    grid["bkt"] = twopt_bucket(grid["sd"])
+    fine = x.groupby(["period", "sd"])["two"].agg(["sum", "size"]).reset_index().rename(columns={"sum": "x", "size": "n"})
+    grid = grid.merge(fine, on=["period", "sd"], how="left").fillna({"x": 0, "n": 0})
+    levels = [["period", "sd"], ["period", "bkt"], ["period"], []]
+    for L, cols in enumerate(levels):
+        if cols:
+            g = grid.groupby(cols)[["x", "n"]].transform("sum")
+        else:
+            g = pd.DataFrame({"x": grid["x"].sum(), "n": grid["n"].sum()}, index=grid.index)
+        grid[f"x_{L}"] = g["x"]; grid[f"n_{L}"] = g["n"]
+    k_by_level = {}
+    grid["p_3"] = grid["x_3"] / grid["n_3"]
+    for L in (2, 1, 0):
+        cells = grid.drop_duplicates(levels[L]); cells = cells[cells[f"n_{L}"] > 0]
+        k = _mom_k(cells[f"n_{L}"], cells[f"x_{L}"], cells[f"x_{L+1}"] / cells[f"n_{L+1}"])
+        k_by_level[L] = float(k)
+        grid[f"p_{L}"] = np.where(np.isinf(k), grid[f"p_{L+1}"], (grid[f"x_{L}"] + k * grid[f"p_{L+1}"]) / (grid[f"n_{L}"] + k))
+    out = pd.DataFrame({"period": grid["period"], "sd_post": grid["sd"], "n": grid["n"].astype(int), "p_2pt": grid["p_0"]})
+    out.attrs["k_by_level"] = k_by_level
+    return out
+
+
 def build_special_teams_table(df):
     """Various special teams tables."""
     result = {}
@@ -879,27 +922,13 @@ def build_special_teams_table(df):
     twopt_rate = twopt_plays["two_point_conv_result"].eq("success").mean() if len(twopt_plays) else 0.48
     result["twopt_conv_rate"] = twopt_rate
 
-    # 2pt attempt rate by score differential bucket and quarter
-    # Combine XP and 2pt: after a TD, was 2pt attempted?
-    td_plays = df[df["touchdown"] == 1].copy()
-    # Simple: just use overall 2pt attempt rate by score diff
-    twopt_rows = []
-    for qtr in [1, 2, 3, 4]:
-        for diff_lo, diff_hi, label in [(-100, -15, "trail15+"), (-15, -9, "trail9-15"),
-                                         (-9, -1, "trail1-8"), (-1, 2, "tied_lead1"),
-                                         (2, 9, "lead2-8"), (9, 16, "lead9-15"), (16, 100, "lead15+")]:
-            n_xp = len(pat_plays[(pat_plays["qtr"] == qtr) &
-                                  (pat_plays["score_differential"] >= diff_lo) &
-                                  (pat_plays["score_differential"] < diff_hi)])
-            n_2pt = len(twopt_plays[(twopt_plays["qtr"] == qtr) &
-                                     (twopt_plays["score_differential"] >= diff_lo) &
-                                     (twopt_plays["score_differential"] < diff_hi)])
-            n_total = n_xp + n_2pt
-            if n_total < 5:
-                continue
-            twopt_rows.append({"qtr": qtr, "score_diff": label, "n": n_total,
-                               "p_2pt": n_2pt / n_total})
-    result["twopt_decision"] = pd.DataFrame(twopt_rows)
+    # 5A-10 (D35): 2-pt decision by EXACT post-TD score differential x period (Q1-3 / Q4+).
+    # The decision is nearly deterministic at specific numbers (down 2 -> 100%, down 5 ->
+    # 100%, up 1 -> 100%, down 10 -> 100%, down 3 -> 0%, down 7 -> 0%) and the old 7-bucket
+    # table smeared them (trail1-8 in Q4 = 34% everywhere), putting margins on 1/2/4 instead
+    # of 3/7. Complete grid -16..+16 (pooled beyond) x 2 periods, each cell shrunk toward
+    # its period x 7-bucket parent, then the period, with k by method of moments.
+    result["twopt_decision"] = build_twopt_table(pat_plays, twopt_plays)
 
     # Penalty on scrimmage: P(accepted penalty), net yards, auto-first-down share
     scrim = df[df["play_type"].isin(["pass", "run"])].copy()
