@@ -1,0 +1,1609 @@
+From 8c4463bb527bf056a2646b50588086e13e343dd6 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 16 Sep 2026 04:54:13 +0000
+Subject: [PATCH] =?UTF-8?q?nfl=5Fsim=20Phase=205A-8:=20close-game=20diagno?=
+ =?UTF-8?q?stic=20=E2=80=94=204th-down=20fallback=20levels=202/3=20unreach?=
+ =?UTF-8?q?able=20(key=20mismatch);=20endgame=20TD-shaped?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Observation-only engine additions (seed-identical vs HEAD): m_q4_300/m_q4_120 score-state
+snapshots with possession and yardline; drive-log sd_start and opp_points.
+nfl/sim/close_game_diagnostic.py builds the actual tables from 2021-2024 pbp and compares
+the full K1 run (1,087 x N=500): state at 5:00 nearly right, ~90% of the missing |m|=3
+mass is created after 5:00; tied at 2:00 ends at 3 in 80% of real games vs 34% of sims.
+Root cause: builder prefixes every grouped column in the 4th-down fallback rows while the
+engine looks up unprefixed keys, so levels 2/3 never match and 51.7% of Q4 / 99.1% of OT
+4th downs resolve at the coarsest cell that pools trailing with leading offences.
+Tests: test_engine_5a8.py 2 pass, 4 red by design (acceptance spec for 5A-9).
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QMk9gfHmH2aTN5pwMcY52R
+---
+ logs/agent_sessions.md                        |  22 ++
+ .../actual_close_games_2021_2024.parquet      | Bin 0 -> 21573 bytes
+ .../actual_late_drives_2021_2024.parquet      | Bin 0 -> 28517 bytes
+ nfl/sim/close_game_diagnostic.py              | 342 ++++++++++++++++++
+ nfl/sim/engine.py                             |  29 ++
+ nfl/sim/tests/test_engine_5a8.py              | 142 ++++++++
+ research/nfl_sim/NFL_SIM_DECISION_v1.md       |  28 ++
+ research/nfl_sim/phase5a8_close_games.md      | 169 +++++++++
+ 8 files changed, 732 insertions(+)
+ create mode 100644 nfl/data/sim/tables/actual_close_games_2021_2024.parquet
+ create mode 100644 nfl/data/sim/tables/actual_late_drives_2021_2024.parquet
+ create mode 100644 nfl/sim/close_game_diagnostic.py
+ create mode 100644 nfl/sim/tests/test_engine_5a8.py
+ create mode 100644 research/nfl_sim/phase5a8_close_games.md
+
+diff --git a/logs/agent_sessions.md b/logs/agent_sessions.md
+index 418a298d..82f1e3c5 100644
+--- a/logs/agent_sessions.md
++++ b/logs/agent_sessions.md
+@@ -1,3 +1,25 @@
++## 2026-09-16T06:30Z  cowork (Phase 5A-8 — close-game diagnostic; executed directly)
++- ADDED (observation only, seed-identical vs HEAD verified on 2 games x 500): engine outputs
++  m_q4_300/m_q4_120/poss_q4_300/poss_q4_120/yl_q4_120; drive-log columns sd_start, opp_points.
++- BUILT: nfl/sim/close_game_diagnostic.py (actual | compare | drives_actual | drives_sim | drives_compare);
++  nfl/data/sim/tables/actual_close_games_2021_2024.parquet (1,087 games),
++  actual_late_drives_2021_2024.parquet (2,805 drives).
++- RAN: K1 1,087 x N=500 twice in the cloud (snapshots 1,676 s; drive log filtered to late drives 1,843 s).
++  Outputs kept out of the tree (scratchpad k1_5a8_team.parquet, late_drives_5a8.parquet).
++- FOUND: state at 5:00 nearly right (one-score 41.9% vs 43.9%); ~90% of the missing |m|=3 mass is
++  created after 5:00. Tied@2:00 -> |final|=3: 80% real vs 34% sim. Sim endgame TD-shaped.
++- ROOT CAUSE: 4th-down fallback levels 2/3 unreachable (builder prefixes yl_b/score_b, engine keys
++  unprefixed); 51.7% of Q4 and 99.1% of OT 4th downs resolve at the coarsest zc_ cell (pools
++  trailing with leading). Trail 4-8 late: table p_punt 0.42 vs real 0.14. Dead since the table existed.
++- SECOND: game-winning-FG setup uses the pooled Q4_late runoff -> 14% of tied late drives expire in
++  range without a kick (real 1.6%); OT ties 23% of OT games (4.3%).
++- TESTS: test_engine_5a8.py 2 passed / 4 red by design (T3 reachability, T4 late-drive rates) =
++  5A-9 acceptance spec. Nothing widened.
++- NOT DONE: no fix applied (diagnostic phase). 5 of 543,500 sims never snapped a play at <= 2:00
++  (single-play runoff > 120 s) — noted, not chased. Delivered as a patch (cloud cannot push).
++- NEXT (on go): 5A-9 — 4th-down fallback rebuild + EOH-state clock cells; K1 re-run with the
++  5A-8 conditionals as acceptance.
++
+ ## 2026-09-16T01:30Z  cowork (Phase 5A-7 — 10-yard-zone KM, timeouts/kneel tables, safety rates; executed directly)
+ - BUILT: pass/rush_outcomes_z10 (98/82 cells), timeout_policy (144 rows), kneel_decision (171 rows);
+   constants.json now carries safety_rate_by_zone from the builder. Unchanged tables kept byte-identical.
+diff --git a/nfl/data/sim/tables/actual_close_games_2021_2024.parquet b/nfl/data/sim/tables/actual_close_games_2021_2024.parquet
+new file mode 100644
+index 0000000000000000000000000000000000000000..4c05d1579275e5a93fa59f9ccd603d2eb8bc22b1
+GIT binary patch
+literal 21573
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/nfl/data/sim/tables/actual_late_drives_2021_2024.parquet b/nfl/data/sim/tables/actual_late_drives_2021_2024.parquet
+new file mode 100644
+index 0000000000000000000000000000000000000000..8070fc793864e213e4bcd4712516c431ab64d56d
+GIT binary patch
+literal 28517
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/nfl/sim/close_game_diagnostic.py b/nfl/sim/close_game_diagnostic.py
+new file mode 100644
+index 00000000..163403f9
+--- /dev/null
++++ b/nfl/sim/close_game_diagnostic.py
+@@ -0,0 +1,342 @@
++#!/usr/bin/env python3
++"""Phase 5A-8: close-game / key-number diagnostic.
++
++Where does the sim lose its close games?  Compare, sim vs actual (2021-2024 REG):
++  * the score-state distribution the first time the Q4 clock reads <= 5:00 and <= 2:00
++  * the final-margin distribution conditional on that state
++  * what happens in the last 5:00 / 2:00 (final minus snapshot margin) by state
++
++Actual side: first play row (any play type, posteam present) in Q4 with
++quarter_seconds_remaining <= 300 (<= 120); pre-play score from posteam_score /
++defteam_score mapped to home - away.  Sim side: engine outputs m_q4_300 / m_q4_120
++(same definition: score at the start of the first play with the Q4 clock <= 300 / 120).
++
++Usage:
++  python nfl/sim/close_game_diagnostic.py actual              -> writes actual table
++  python nfl/sim/close_game_diagnostic.py compare <k1.parquet> -> prints comparison
++"""
++import sys
++from pathlib import Path
++import numpy as np
++import pandas as pd
++
++ROOT = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(ROOT))
++PBP = ROOT / "nfl" / "data" / "pbp"
++SEASONS = [2021, 2022, 2023, 2024]
++ACTUAL_OUT = ROOT / "nfl" / "data" / "sim" / "tables" / "actual_close_games_2021_2024.parquet"
++
++COLS = ["game_id", "season", "week", "season_type", "play_id", "qtr", "quarter_seconds_remaining",
++        "posteam", "home_team", "away_team", "posteam_score", "defteam_score",
++        "home_score", "away_score", "yardline_100"]
++
++
++def build_actual() -> pd.DataFrame:
++    rows = []
++    for s in SEASONS:
++        df = pd.read_parquet(PBP / f"pbp_{s}.parquet", columns=COLS)
++        df = df[(df.season_type == "REG") & (df.week <= 18)]
++        df = df.sort_values(["game_id", "play_id"])
++        for gid, g in df.groupby("game_id", sort=False):
++            home = g.home_team.iloc[0]
++            final = int(g.home_score.iloc[0] - g.away_score.iloc[0])
++            ot = bool((g.qtr >= 5).any())
++            rec = {"game_id": gid, "season": s, "week": int(g.week.iloc[0]),
++                   "final_margin": final, "ot": ot}
++            q4 = g[(g.qtr == 4) & g.posteam.notna() & g.posteam_score.notna()]
++            for sec, tag in ((300, "300"), (120, "120")):
++                h = q4[q4.quarter_seconds_remaining <= sec]
++                if len(h) == 0:
++                    rec[f"m_q4_{tag}"] = np.nan; rec[f"poss_q4_{tag}"] = np.nan
++                    if tag == "120": rec["yl_q4_120"] = np.nan
++                    continue
++                r = h.iloc[0]
++                sign = 1 if r.posteam == home else -1
++                rec[f"m_q4_{tag}"] = sign * (r.posteam_score - r.defteam_score)
++                rec[f"poss_q4_{tag}"] = 0 if r.posteam == home else 1
++                if tag == "120":
++                    rec["yl_q4_120"] = r.yardline_100
++            rows.append(rec)
++    out = pd.DataFrame(rows)
++    return out
++
++
++# ── shared binning ──────────────────────────────────────────────────────────
++
++STATE_BINS = [("tied", 0, 0), ("1-3", 1, 3), ("4-7", 4, 7), ("8-14", 8, 14), ("15+", 15, 999)]
++
++
++def state_bucket(m):
++    a = np.abs(np.asarray(m, dtype=float))
++    out = np.full(a.shape, "", dtype=object)
++    for lab, lo, hi in STATE_BINS:
++        out[(a >= lo) & (a <= hi)] = lab
++    return out
++
++
++def summarize(df: pd.DataFrame, label: str, weights=None) -> dict:
++    """Per-game (actual) or per-sim (sim) frame with final_margin, m_q4_300, m_q4_120, ot."""
++    fm = df.final_margin.to_numpy(); afm = np.abs(fm)
++    d = {"label": label, "n": len(df)}
++    for k in (0, 1, 3, 6, 7):
++        d[f"P(|final|={k})"] = (afm == k).mean()
++    d["P(|final|<=3)"] = (afm <= 3).mean()
++    d["P(|final|<=7)"] = (afm <= 7).mean()
++    d["P(OT)"] = df.ot.mean()
++    d["SD final"] = fm.std()
++    for tag in ("300", "120"):
++        m = df[f"m_q4_{tag}"].to_numpy(dtype=float)
++        sb = state_bucket(m)
++        for lab, _, _ in STATE_BINS:
++            d[f"P(state@{tag}={lab})"] = (sb == lab).mean()
++        d[f"SD m@{tag}"] = np.nanstd(m)
++    return d
++
++
++def conditional_table(df: pd.DataFrame, tag: str) -> pd.DataFrame:
++    """Rows: state bucket at the snapshot; cols: P(final key numbers | state), mean |Δ|."""
++    m = df[f"m_q4_{tag}"].to_numpy(dtype=float)
++    sb = state_bucket(m)
++    fm = df.final_margin.to_numpy(dtype=float); afm = np.abs(fm)
++    delta = np.abs(fm - m)  # points scored by either side after the snapshot (net)
++    rows = []
++    for lab, _, _ in STATE_BINS:
++        k = sb == lab
++        if k.sum() == 0:
++            continue
++        rows.append({"state": lab, "n": int(k.sum()), "share": k.mean(),
++                     "P(final tie)": (afm[k] == 0).mean(),
++                     "P(|final|=3)": (afm[k] == 3).mean(),
++                     "P(|final|<=3)": (afm[k] <= 3).mean(),
++                     "P(|final|<=7)": (afm[k] <= 7).mean(),
++                     "P(|final|>=15)": (afm[k] >= 15).mean(),
++                     "P(no change)": (delta[k] == 0).mean(),
++                     "mean |Δ|": delta[k].mean(),
++                     "P(OT)": df.ot.to_numpy()[k].mean(),
++                     "P(lead flips)": ((np.sign(fm[k]) != np.sign(m[k])) & (m[k] != 0) & (fm[k] != 0)).mean()})
++    return pd.DataFrame(rows).set_index("state")
++
++
++def delta_hist(df: pd.DataFrame, tag: str, state_labels=("tied", "1-3", "4-7")) -> pd.Series:
++    """Distribution of the net change (final - snapshot), signed toward the leader at the snapshot,
++    for one-score states.  +x = leader extends by x, -x = trailer closes by x."""
++    m = df[f"m_q4_{tag}"].to_numpy(dtype=float)
++    fm = df.final_margin.to_numpy(dtype=float)
++    sb = state_bucket(m)
++    k = np.isin(sb, state_labels)
++    sgn = np.where(m[k] >= 0, 1.0, -1.0)
++    d = sgn * (fm[k] - m[k])
++    d = np.clip(d, -21, 21)
++    return pd.Series(d).value_counts(normalize=True).sort_index()
++
++
++def _pct(x):
++    return f"{100*x:5.1f}%"
++
++
++def compare(k1_path: Path):
++    act = pd.read_parquet(ACTUAL_OUT)
++    sim = pd.read_parquet(k1_path)
++    sim = sim.rename(columns={})
++    sim["final_margin"] = sim.home_score - sim.away_score
++    sim["ot"] = sim["ot_flag"].astype(bool) if "ot_flag" in sim else (sim.get("ot", 0) > 0)
++    n0 = len(sim)
++    miss = {c: int((sim[c] == -999).sum()) for c in ("m_q4_300", "m_q4_120")}
++    sim = sim[(sim.m_q4_300 != -999) & (sim.m_q4_120 != -999)].copy()
++    print(f"actual games: {len(act)}   sim games: {sim.game_id.nunique()}  sims: {n0}  "
++          f"(dropped: snapshot never reached {miss} — a single play's runoff carried the clock "
++          f"from >120 s to <=0; clock-table q100 is 118 s before pace)\n")
++
++    # 1. unconditional
++    rows = [summarize(act, "actual"), summarize(sim, "sim")]
++    t = pd.DataFrame(rows).set_index("label").T
++    t["diff (sim-act)"] = t["sim"] - t["actual"]
++    print("== 1. Unconditional: final margin and snapshot-state distributions ==")
++    with pd.option_context("display.float_format", "{:.4f}".format, "display.width", 200):
++        print(t.to_string()); print()
++
++    # 2. conditional on state at 5:00 and 2:00
++    for tag in ("300", "120"):
++        ca = conditional_table(act, tag); cs = conditional_table(sim, tag)
++        print(f"== 2. Conditional on |margin| when the Q4 clock first reads <= {int(tag)//60}:{int(tag)%60:02d} ==")
++        for col in ["share", "P(final tie)", "P(|final|=3)", "P(|final|<=3)", "P(|final|<=7)",
++                    "P(|final|>=15)", "P(no change)", "mean |Δ|", "P(OT)", "P(lead flips)"]:
++            print(f"  {col:16s} " + "  ".join(
++                f"{lab}: act {ca.loc[lab, col]:.3f} sim {cs.loc[lab, col]:.3f}" for lab in ca.index))
++        print("  n (actual games): " + ", ".join(f"{lab} {int(ca.loc[lab,'n'])}" for lab in ca.index))
++        print()
++
++    # 3. net-change histogram in one-score states
++    for tag in ("300", "120"):
++        ha = delta_hist(act, tag); hs = delta_hist(sim, tag)
++        idx = sorted(set(ha.index) | set(hs.index))
++        print(f"== 3. Net change after the {int(tag)//60}:{int(tag)%60:02d} snapshot, one-score states (|m|<=7); "
++              f"+ = leader extends, - = trailer closes ==")
++        print("  Δ      actual    sim")
++        for i in idx:
++            print(f"  {int(i):+3d}   {_pct(ha.get(i, 0.0))}  {_pct(hs.get(i, 0.0))}")
++        print()
++
++    # 4. by-season (aggregate hiding)
++    print("== 4. By season: P(|final|<=7), P(|final|=3), P(state@5:00 one-score) ==")
++    for s in SEASONS:
++        a = act[act.season == s]; b = sim[sim.season == s]
++        sa = state_bucket(a.m_q4_300); sbb = state_bucket(b.m_q4_300)
++        print(f"  {s}: |final|<=7 act {(a.final_margin.abs()<=7).mean():.3f} sim {(b.final_margin.abs()<=7).mean():.3f} | "
++              f"|final|=3 act {(a.final_margin.abs()==3).mean():.3f} sim {(b.final_margin.abs()==3).mean():.3f} | "
++              f"one-score@5:00 act {np.isin(sa, ['tied','1-3','4-7']).mean():.3f} sim {np.isin(sbb, ['tied','1-3','4-7']).mean():.3f}")
++    print()
++
++    # 5. who has the ball at 2:00 in one-score games, and where
++    print("== 5. One-score games (|m|<=7) at 2:00: trailer has the ball; trailer field position ==")
++    for lab, d in (("actual", act), ("sim", sim)):
++        m = d.m_q4_120.to_numpy(dtype=float); one = np.abs(m) <= 7
++        poss = d.poss_q4_120.to_numpy(dtype=float)
++        # trailer has ball: home trailing (m<0) and poss==0, or away trailing (m>0) and poss==1
++        trail_ball = ((m < 0) & (poss == 0)) | ((m > 0) & (poss == 1))
++        tied = m == 0
++        yl = d.yl_q4_120.to_numpy(dtype=float)
++        k = one & ~tied
++        print(f"  {lab}: P(trailer has ball | one-score, not tied) {trail_ball[k].mean():.3f}  "
++              f"median yardline_100 of possessor {np.nanmedian(yl[one]):.0f}  "
++              f"P(possessor inside 40) {(yl[one] <= 40).mean():.3f}")
++    print()
++
++    # 6. lead-holder behaviour: P(final == snapshot) i.e. no more points in last 5:00 / 2:00
++    print("== 6. P(no points by either team after the snapshot), by state ==")
++    for tag in ("300", "120"):
++        for lab, d in (("actual", act), ("sim", sim)):
++            m = d[f"m_q4_{tag}"].to_numpy(dtype=float); fm = d.final_margin.to_numpy(dtype=float)
++            sb = state_bucket(m)
++            print(f"  @{tag}s {lab}: " + "  ".join(f"{s}: {(fm[sb==s]==m[sb==s]).mean():.3f}" for s, _, _ in STATE_BINS))
++    print()
++
++
++# ── Late-drive decomposition: what does each drive that starts in the last 5:00 (or OT) do? ──
++
++LATE_DRIVES_ACTUAL = ROOT / "nfl" / "data" / "sim" / "tables" / "actual_late_drives_2021_2024.parquet"
++RESULT_MAP_ACTUAL = {"Touchdown": "TD", "Field goal": "FG_made", "Punt": "punt",
++                     "Turnover": "turnover", "Opp touchdown": "turnover", "Turnover on downs": "downs",
++                     "End of half": "end_game", "Missed field goal": "FG_missed", "Safety": "safety"}
++RESULT_MAP_SIM = {"TD": "TD", "FG_made": "FG_made", "punt": "punt", "turnover_int": "turnover",
++                  "turnover_fumble": "turnover", "downs": "downs", "end_game": "end_game",
++                  "end_half": "end_game", "FG_missed": "FG_missed", "safety": "safety"}
++RESULTS = ["TD", "FG_made", "FG_missed", "punt", "turnover", "downs", "end_game", "safety"]
++SD_BINS = [("trail9+", -99, -9), ("trail4-8", -8, -4), ("trail1-3", -3, -1), ("tied", 0, 0),
++           ("lead1-3", 1, 3), ("lead4-8", 4, 8), ("lead9+", 9, 99)]
++
++
++def sd_bucket(sd):
++    sd = np.asarray(sd, dtype=float)
++    out = np.full(sd.shape, "", dtype=object)
++    for lab, lo, hi in SD_BINS:
++        out[(sd >= lo) & (sd <= hi)] = lab
++    return out
++
++
++def build_actual_late_drives() -> pd.DataFrame:
++    cols = ["game_id", "season", "week", "season_type", "play_id", "qtr", "quarter_seconds_remaining",
++            "posteam", "posteam_score", "defteam_score", "fixed_drive", "fixed_drive_result",
++            "drive_end_transition", "yardline_100"]
++    rows = []
++    for s in SEASONS:
++        df = pd.read_parquet(PBP / f"pbp_{s}.parquet", columns=cols)
++        df = df[(df.season_type == "REG") & (df.week <= 18) & df.posteam.notna() & df.posteam_score.notna()]
++        df = df.sort_values(["game_id", "play_id"])
++        first = df.groupby(["game_id", "fixed_drive"], sort=False).head(1)
++        late = first[((first.qtr == 4) & (first.quarter_seconds_remaining <= 300)) | (first.qtr >= 5)]
++        for _, r in late.iterrows():
++            res = RESULT_MAP_ACTUAL.get(r.fixed_drive_result)
++            if res is None:
++                continue
++            opp_td = r.fixed_drive_result == "Opp touchdown"
++            rows.append({"game_id": r.game_id, "season": s, "start_quarter": int(r.qtr),
++                         "start_clock": float(r.quarter_seconds_remaining),
++                         "start_yardline": float(r.yardline_100),
++                         "sd_start": int(r.posteam_score - r.defteam_score),
++                         "result": res, "opp_td": bool(opp_td)})
++    return pd.DataFrame(rows)
++
++
++def run_sim_late_drives(out_path: Path, n_sims: int = 500):
++    """Full K1 protocol (1,087 games x N) with the drive log on; keep only drives that start
++    in the last 5:00 of Q4 or in OT, so memory stays small."""
++    import time
++    from nfl.sim.engine import simulate_game, _load_tables, _load_ratings
++    from nfl.sim.seed_util import stable_seed
++    _load_tables(); team_r, tend, sit, kicker, league = _load_ratings()
++    kw = dict(team_r=team_r, tend=tend, sit=sit, kicker=kicker, league=league)
++    keep = []
++    for s in SEASONS:
++        gdf = pd.read_parquet(PBP / f"pbp_{s}.parquet", columns=["game_id", "week", "home_team", "away_team"])
++        games = gdf.drop_duplicates("game_id").query("week <= 18"); t0 = time.time()
++        for _, g in games.iterrows():
++            r = simulate_game(g.home_team, g.away_team, s, int(g.week), n_sims=n_sims,
++                              seed=stable_seed((g.game_id, 42)), drive_log=True, **kw)
++            r = r[0] if isinstance(r, tuple) else r
++            dl = r.attrs["drive_log"]
++            late = dl[((dl.start_quarter == 4) & (dl.start_clock <= 300)) | (dl.start_quarter >= 5)].copy()
++            late["game_id"] = g.game_id; late["season"] = s
++            keep.append(late)
++        pd.concat(keep, ignore_index=True).to_parquet(out_path, index=False)
++        print(f"season {s} done {time.time()-t0:.0f}s, rows so far {sum(len(k) for k in keep)}", flush=True)
++    print("DONE", flush=True)
++
++
++def compare_drives(sim_path: Path):
++    act = pd.read_parquet(LATE_DRIVES_ACTUAL)
++    sim = pd.read_parquet(sim_path)
++    sim["result"] = sim["result"].map(RESULT_MAP_SIM)
++    sim["opp_td"] = sim["opp_points"] >= 6
++    n_games_act = act.game_id.nunique(); n_sim_games = 543500 - 0  # 1,087 x 500
++    print(f"actual late drives: {len(act)} in {n_games_act} games ({len(act)/1087:.2f}/game); "
++          f"sim: {len(sim)} in 1,087 x 500 sims ({len(sim)/543500:.2f}/game)\n")
++
++    for window, name in (("q4_300", "Q4 <= 5:00"), ("q4_120", "Q4 <= 2:00"), ("ot", "OT")):
++        if window == "q4_300":
++            ka = (act.start_quarter == 4) & (act.start_clock <= 300); ks = (sim.start_quarter == 4) & (sim.start_clock <= 300)
++        elif window == "q4_120":
++            ka = (act.start_quarter == 4) & (act.start_clock <= 120); ks = (sim.start_quarter == 4) & (sim.start_clock <= 120)
++        else:
++            ka = act.start_quarter >= 5; ks = sim.start_quarter >= 5
++        a = act[ka]; b = sim[ks]
++        print(f"== Drives starting in {name}: {len(a)/1087:.2f}/game actual vs {len(b)/543500:.2f}/game sim ==")
++        print("  result mix by offence score state at drive start (act | sim), share of drives in that state")
++        for lab, _, _ in SD_BINS:
++            aa = a[sd_bucket(a.sd_start) == lab]; bb = b[sd_bucket(b.sd_start) == lab]
++            if len(aa) == 0 and len(bb) == 0:
++                continue
++            ra = aa.result.value_counts(normalize=True); rb = bb.result.value_counts(normalize=True)
++            print(f"  {lab:9s} n_act {len(aa):4d} ({len(aa)/max(len(a),1):.3f})  n_sim/game {len(bb)/543500:.3f} ({len(bb)/max(len(b),1):.3f})")
++            print("           " + "  ".join(f"{res}: {ra.get(res,0):.3f}|{rb.get(res,0):.3f}" for res in RESULTS)
++                  + f"  oppTD: {aa.opp_td.mean():.3f}|{bb.opp_td.mean():.3f}")
++        print()
++
++    # FG range reached but no kick: in tied / trail1-3 states in the last 2:00, how often does the drive end
++    # with the offence inside the 35 (end_yardline <= 35) without a FG attempt?  (sim only: end_yardline exists)
++    if "end_yardline" in sim:
++        b = sim[(sim.start_quarter == 4) & (sim.start_clock <= 120)]
++        for lab in ("tied", "trail1-3", "lead1-3"):
++            bb = b[sd_bucket(b.sd_start) == lab]
++            inrange_nokick = bb[(bb.end_yardline <= 35) & ~bb.result.isin(["FG_made", "FG_missed", "TD"])]
++            print(f"  sim {lab} drives starting <= 2:00: ended inside the 35 without a kick or TD: "
++                  f"{len(inrange_nokick)/max(len(bb),1):.3f} (results: {inrange_nokick.result.value_counts().to_dict()})")
++    print()
++
++
++if __name__ == "__main__":
++    if sys.argv[1] == "drives_actual":
++        out = build_actual_late_drives()
++        out.to_parquet(LATE_DRIVES_ACTUAL, index=False)
++        print(f"wrote {LATE_DRIVES_ACTUAL} ({len(out)} drives)")
++    elif sys.argv[1] == "drives_sim":
++        run_sim_late_drives(Path(sys.argv[2]))
++    elif sys.argv[1] == "drives_compare":
++        compare_drives(Path(sys.argv[2]))
++    elif sys.argv[1] == "actual":
++        out = build_actual()
++        out.to_parquet(ACTUAL_OUT, index=False)
++        print(f"wrote {ACTUAL_OUT} ({len(out)} games); missing m_q4_300: {out.m_q4_300.isna().sum()}, "
++              f"m_q4_120: {out.m_q4_120.isna().sum()}")
++    elif sys.argv[1] == "compare":
++        compare(Path(sys.argv[2]))
+diff --git a/nfl/sim/engine.py b/nfl/sim/engine.py
+index 171fe160..4ddbcfa2 100644
+--- a/nfl/sim/engine.py
++++ b/nfl/sim/engine.py
+@@ -836,6 +836,16 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+     ev_kneels = np.zeros(N, dtype=np.int16)      # 5A-7: kneel-downs
+     ev_late_snaps_q2 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q2
+     ev_late_snaps_q4 = np.zeros(N, dtype=np.int16)  # 5A-6: scrimmage snaps with <=120s left in Q4
++    # 5A-8 diag: score state (home - away) and possession when the Q4 clock first reads
++    # <= 5:00 and <= 2:00 at the start of a play. Pure observation: no RNG draws, no
++    # behaviour change. -999 = never reached (cannot happen for a finished game).
++    m_q4_300 = np.full(N, -999, dtype=np.int16)
++    m_q4_120 = np.full(N, -999, dtype=np.int16)
++    poss_q4_300 = np.full(N, -1, dtype=np.int8)
++    poss_q4_120 = np.full(N, -1, dtype=np.int8)
++    yl_q4_120 = np.full(N, -1, dtype=np.int16)
++    _cap300 = np.zeros(N, dtype=bool)
++    _cap120 = np.zeros(N, dtype=bool)
+     ev_fg_made = np.zeros(N, dtype=np.int16)
+     ev_tds = np.zeros(N, dtype=np.int16)
+     ev_penalties = np.zeros(N, dtype=np.int16)
+@@ -949,6 +959,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+                     bool(_dl_reached_rz[i]), bool(_dl_reached_gl[i]),
+                     float(_dl_end_yl[i]), int(_dl_end_down[i]),
+                     float(_dl_end_dist[i]), ss,
++                    sd_start,  # 5A-8: exact offence score differential at drive start
++                    (da if team == 0 else dh),  # 5A-8: points the DEFENCE scored during the drive
+                 ))
+         # 5A-5: capture end state before reset (for drives that just recorded)
+         # Note: yl/down/dist may already reflect post-drive state for TDs/turnovers
+@@ -1278,6 +1290,19 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+         if not alive.any():
+             break
+ 
++        # 5A-8 diag: snapshot the score state the first time the Q4 clock reads <= 5:00 / <= 2:00
++        c300 = alive & (qtr == 4) & (clock <= 300.0) & ~_cap300
++        if c300.any():
++            m_q4_300[c300] = score_h[c300] - score_a[c300]
++            poss_q4_300[c300] = poss[c300]
++            _cap300[c300] = True
++        c120 = alive & (qtr == 4) & (clock <= 120.0) & ~_cap120
++        if c120.any():
++            m_q4_120[c120] = score_h[c120] - score_a[c120]
++            poss_q4_120[c120] = poss[c120]
++            yl_q4_120[c120] = yl[c120]
++            _cap120[c120] = True
++
+         # --- Kneel-down: leading team can run out the clock ---
+         # Each kneel takes ~40 seconds. A team can kneel out if:
+         #   remaining_clock <= kneels_available * 40
+@@ -2486,6 +2511,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+         "ev_to_off": ev_to_off, "ev_to_def": ev_to_def, "ev_kneels": ev_kneels,
+         "ev_late_snaps_q2": ev_late_snaps_q2,
+         "ev_late_snaps_q4": ev_late_snaps_q4,
++        "m_q4_300": m_q4_300, "m_q4_120": m_q4_120,           # 5A-8 diag
++        "poss_q4_300": poss_q4_300, "poss_q4_120": poss_q4_120,
++        "yl_q4_120": yl_q4_120,
+         "ev_pass_40": ev_pass_40, "ev_rush_20": ev_rush_20,
+         "ev_td_long": ev_td_long, "ev_td_short": ev_td_short,
+         "ev_fg_made": ev_fg_made,
+@@ -2524,6 +2552,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+             "start_clock", "plays", "yards", "result", "points",
+             "reached_rz", "reached_gl",
+             "end_yardline", "end_down", "end_dist", "score_state",
++            "sd_start", "opp_points",
+         ])
+         team_df.attrs["drive_log"] = dl_df
+ 
+diff --git a/nfl/sim/tests/test_engine_5a8.py b/nfl/sim/tests/test_engine_5a8.py
+new file mode 100644
+index 00000000..302de85e
+--- /dev/null
++++ b/nfl/sim/tests/test_engine_5a8.py
+@@ -0,0 +1,142 @@
++"""Phase 5A-8 tests — close-game diagnostic instrumentation and the late-game
++4th-down decision spec.
++
++Tolerances are the acceptance spec; a failing test is reported red, never widened.
++T3 and T4 are EXPECTED RED on the 5A-8 engine: they encode the defect 5A-8 found
++(4th-down fallback keys never match the table's level-2/3 rows, so late-Q4 decisions
++pool leaders with trailers) and are the acceptance spec for the 5A-9 fix.
++"""
++import sys
++from pathlib import Path
++import numpy as np
++import pandas as pd
++import pytest
++
++ROOT = Path(__file__).resolve().parents[3]
++sys.path.insert(0, str(ROOT))
++
++import nfl.sim.engine as E  # noqa: E402
++from nfl.sim.engine import simulate_game, _load_tables, _load_ratings  # noqa: E402
++from nfl.sim.seed_util import stable_seed  # noqa: E402
++from nfl.sim.close_game_diagnostic import sd_bucket, RESULT_MAP_SIM  # noqa: E402
++
++TABLES = ROOT / "nfl" / "data" / "sim" / "tables"
++
++# Measured 2021-2024 regular season (phase5a8 report), drives starting in Q4 with <= 5:00
++ACT_PUNT_TRAIL4_8 = 0.037     # P(drive ends in a punt | offence trailing by 4-8 at drive start)
++ACT_PUNT_TRAIL1_3 = 0.046
++ACT_DOWNS_LEAD1_8 = 0.021     # P(turnover on downs | offence leading by 1-8)
++ACT_FG_TIED = 0.251           # P(FG made | tied at drive start)
++ACT_TD_TIED = 0.048
++
++SAMPLE_GAMES = [("KC", "BUF", 2023, 6), ("PHI", "DAL", 2022, 10), ("SF", "SEA", 2024, 12),
++                ("DET", "GB", 2023, 4), ("BAL", "CIN", 2022, 14), ("MIA", "NYJ", 2024, 8),
++                ("LA", "ARI", 2023, 12), ("MIN", "CHI", 2022, 6), ("TB", "ATL", 2024, 15),
++                ("DEN", "LV", 2023, 17), ("CLE", "PIT", 2022, 2), ("HOU", "IND", 2024, 5)]
++
++
++@pytest.fixture(scope="module")
++def ratings():
++    _load_tables()
++    team_r, tend, sit, kicker, league = _load_ratings()
++    return dict(team_r=team_r, tend=tend, sit=sit, kicker=kicker, league=league)
++
++
++def _td(r):
++    return r[0] if isinstance(r, tuple) else r
++
++
++# ── T1: snapshot instrumentation is populated and observation-only ───────────
++
++def test_t1_q4_snapshots_populated(ratings):
++    home, away, season, week = SAMPLE_GAMES[0]
++    seed = stable_seed("5a8_t1")
++    r = _td(simulate_game(home, away, season, week, n_sims=2000, seed=seed, **ratings))
++    for c in ("m_q4_300", "m_q4_120", "poss_q4_300", "poss_q4_120", "yl_q4_120"):
++        assert c in r.columns
++    assert (r["m_q4_300"] != -999).all()
++    # a single play's runoff can carry the clock from >120 s to <= 0 (clock-table q100 = 118 s
++    # before pace); measured 5 of 543,500 sims in K1 — anything beyond 0.1% is a regression
++    assert (r["m_q4_120"] == -999).mean() <= 0.001
++    assert set(np.unique(r["poss_q4_300"])) <= {0, 1}
++    assert (r["yl_q4_120"].between(1, 99)).all()
++    # the 2:00 margin can only differ from the 5:00 margin by scoring in between
++    d = (r["m_q4_120"] - r["m_q4_300"]).abs()
++    assert d.max() <= 30
++    # seed-identity with the same call: the snapshot code draws no random numbers
++    r2 = _td(simulate_game(home, away, season, week, n_sims=2000, seed=seed, **ratings))
++    assert np.array_equal(r["home_score"], r2["home_score"]) and np.array_equal(r["m_q4_120"], r2["m_q4_120"])
++
++
++def test_t1_drive_log_has_exact_score_state(ratings):
++    home, away, season, week = SAMPLE_GAMES[1]
++    r = _td(simulate_game(home, away, season, week, n_sims=300, seed=stable_seed("5a8_t1b"),
++                          drive_log=True, **ratings))
++    dl = r.attrs["drive_log"]
++    assert {"sd_start", "opp_points"} <= set(dl.columns)
++    # sd_start is the exact differential behind the coarse score_state label
++    lab = np.where(dl.sd_start <= -9, "trail9+", np.where(dl.sd_start <= -1, "trail1-8",
++          np.where(dl.sd_start == 0, "tied", np.where(dl.sd_start <= 8, "lead1-8", "lead9+"))))
++    assert (lab == dl.score_state.to_numpy()).all()
++    assert (dl.opp_points >= 0).all() and (dl.opp_points <= 8).all()
++    # defensive points only occur on turnover / safety drives, or a punt returned for a TD
++    assert dl[dl.opp_points > 0].result.isin(["turnover_int", "turnover_fumble", "safety", "punt"]).all()
++
++
++# ── T3: every fallback level of the 4th-down lookup is reachable ─────────────
++
++def test_t3_fourth_down_fallback_levels_reachable():
++    """The engine constructs level-2 keys as (yd, yl_b, 'c_<score>', qtr) and level-3 keys as
++    (yd, 'z_<zone>', score, qtr). The builder writes level-2 rows with yl_b='c_<zone>' and
++    level-3 rows with score_b='z_<score>'. If no engine-constructed key can match, those
++    levels are dead and Q4 decisions fall to the coarsest cell."""
++    fd = pd.read_parquet(TABLES / "fourth_down.parquet")
++    keys = set(zip(fd.ydstogo_b, fd.yl_b, fd.score_b, fd.qtr_b))
++    yl_fine = ["opp1-10", "opp11-20", "opp21-30", "opp31-40", "opp41-50",
++               "own41-50", "own31-40", "own21-30", "own11-20", "own1-10"]
++    sc_fine = ["trail9+", "trail4-8", "trail1-3", "tied", "lead1-3", "lead4-8", "lead9+"]
++    lvl2 = {(yd, yl, f"c_{sc}", q) for yd in ("1-2", "3-5", "6-10", "11+") for yl in yl_fine
++            for sc in ("trail9", "within8", "lead9") for q in ("Q1-3", "Q2<2", "Q4>5", "Q4_2-5", "Q4<2")}
++    lvl3 = {(yd, f"z_{z}", sc, q) for yd in ("1-2", "3-5", "6-10", "11+") for z in ("rz", "opp40", "midfield", "own35")
++            for sc in sc_fine for q in ("Q1-3", "Q2<2", "Q4>5", "Q4_2-5", "Q4<2")}
++    assert len(lvl2 & keys) > 0, "level-2 (coarse score) fallback is unreachable: key format mismatch"
++    assert len(lvl3 & keys) > 0, "level-3 (coarse zone) fallback is unreachable: key format mismatch"
++
++
++# ── T4: late-game 4th-down behaviour on the 12-game sample (spec for 5A-9) ───
++
++@pytest.fixture(scope="module")
++def late_drives(ratings):
++    frames = []
++    for home, away, season, week in SAMPLE_GAMES:
++        r = _td(simulate_game(home, away, season, week, n_sims=500,
++                              seed=stable_seed(f"5a8_{season}_{week}_{away}_{home}"),
++                              drive_log=True, **ratings))
++        dl = r.attrs["drive_log"]
++        frames.append(dl[(dl.start_quarter == 4) & (dl.start_clock <= 300)])
++    d = pd.concat(frames, ignore_index=True)
++    d["res"] = d["result"].map(RESULT_MAP_SIM)
++    d["state"] = sd_bucket(d.sd_start)
++    return d
++
++
++def test_t4_trailing_offence_does_not_punt_late(late_drives):
++    d = late_drives
++    p48 = (d[d.state == "trail4-8"].res == "punt").mean()
++    p13 = (d[d.state == "trail1-3"].res == "punt").mean()
++    assert p48 <= ACT_PUNT_TRAIL4_8 + 0.08, f"trail4-8 punt rate {p48:.3f} vs actual {ACT_PUNT_TRAIL4_8}"
++    assert p13 <= ACT_PUNT_TRAIL1_3 + 0.08, f"trail1-3 punt rate {p13:.3f} vs actual {ACT_PUNT_TRAIL1_3}"
++
++
++def test_t4_leading_offence_does_not_go_late(late_drives):
++    d = late_drives
++    k = d.state.isin(["lead1-3", "lead4-8"])
++    downs = (d[k].res == "downs").mean()
++    assert downs <= ACT_DOWNS_LEAD1_8 + 0.05, f"leading offence turnover-on-downs rate {downs:.3f} vs actual {ACT_DOWNS_LEAD1_8}"
++
++
++def test_t4_tied_offence_kicks_not_scores_late(late_drives):
++    d = late_drives[late_drives.state == "tied"]
++    fg = (d.res == "FG_made").mean(); td = (d.res == "TD").mean()
++    assert abs(fg - ACT_FG_TIED) <= 0.08, f"tied-drive FG rate {fg:.3f} vs actual {ACT_FG_TIED}"
++    assert td <= ACT_TD_TIED + 0.05, f"tied-drive TD rate {td:.3f} vs actual {ACT_TD_TIED}"
+diff --git a/research/nfl_sim/NFL_SIM_DECISION_v1.md b/research/nfl_sim/NFL_SIM_DECISION_v1.md
+index fd345a89..176479f9 100644
+--- a/research/nfl_sim/NFL_SIM_DECISION_v1.md
++++ b/research/nfl_sim/NFL_SIM_DECISION_v1.md
+@@ -222,3 +222,31 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
+   actual, to locate where close-game mass is lost; then volume (+4% drives), FG count.
+   Tests: 59/61 pass (FG att 3.65 vs 3.92 and offence penalties 6.19 vs 5.51 red).
+   See `research/nfl_sim/phase5a7_zones_timeouts.md`.
++- **2026-09-16 Phase 5A-8 — close-game diagnostic (Cowork-executed; no engine behaviour change).**
++  Where is the key-number mass lost? Score state when the Q4 clock first reads ≤ 5:00 is nearly
++  right (one-score share 41.9% vs 43.9%; the 2.0pp is all "tied"); reweighting the sim's own
++  endgame to the real 5:00 states recovers only 1.8 of the 7.5pp |final| ≤ 7 gap and 0.6 of the
++  6.9pp gap at 3. **~90% of the missing mass at 3 is created after 5:00.** Tied at 2:00 ends at
++  exactly 3 in 80% of real games vs 34% of sims; the sim endgame is TD-shaped (+7 6.9% vs 2.0%,
++  −7 10.4% vs 7.2% after the 2:00 snapshot) where reality is FG-shaped (+3 11.8% vs 7.0%).
++  Drive decomposition (drives starting ≤ 5:00): trailing by 4–8 the sim punts 24.7% (real 3.7%)
++  and goes on downs 5.9% (25.8%); leading by 1–8 it turns it over on downs 15% (2%); tied it
++  scores TDs 13.5% (4.8%) and FGs 11.5% (25.1%); 14% of tied drives starting ≤ 2:00 end with the
++  clock expiring inside the 35 without a kick (1.6%). OT: 23% of sim OT games end tied (4.3%).
++  **ROOT CAUSE (verified):** the 4th-down fallback levels 2 and 3 are unreachable — the builder
++  prefixes every grouped column (`yl_b = "c_opp21-30"`, `score_b = "z_trail4-8"`) and the engine
++  looks up unprefixed ones; replaying the chain on all 15,589 real 4th downs, levels 2/3 hit 0.0%,
++  and 51.7% of Q4 (99.1% of OT) 4th downs resolve at the coarsest `zc_` cell, which pools a team
++  down 6 with a team up 6 and all of Q4 with its last 2:00 (trail 4–8 late: table p_go 0.34 /
++  p_punt 0.42 vs real 0.83 / 0.14). Dead since the table was introduced. Second mechanism: the
++  game-winning-FG setup (tied / trail ≤ 3, in range, ≤ 40 s) draws its runoff from the pooled
++  Q4_late clock cell, so the drive skips the kicking window. Instrumentation added: `m_q4_300`,
++  `m_q4_120`, `poss_q4_*`, `yl_q4_120` outputs; drive-log `sd_start`, `opp_points`;
++  `nfl/sim/close_game_diagnostic.py`; actual tables `actual_close_games_2021_2024.parquet`,
++  `actual_late_drives_2021_2024.parquet`. Tests `test_engine_5a8.py`: 2 pass, **4 red by design**
++  (T3 fallback reachability; T4 late-drive punt/downs/FG rates) = the 5A-9 acceptance spec.
++  **PROPOSED D30 (needs go, 5A-9):** fix the key mismatch and rebuild the 4th-down fallback so it
++  never pools across the sign of the score (coarsen distance → zone → clock first; Q4_2-5 pools
++  with Q4<2 before Q4>5; min cell from measured variance); EOH-state clock/play-call cells
++  measured from real snaps in that state; re-run K1 with the 5A-8 conditionals as acceptance;
++  re-measure OT ties only after. See `research/nfl_sim/phase5a8_close_games.md`.
+diff --git a/research/nfl_sim/phase5a8_close_games.md b/research/nfl_sim/phase5a8_close_games.md
+new file mode 100644
+index 00000000..886cc0fe
+--- /dev/null
++++ b/research/nfl_sim/phase5a8_close_games.md
+@@ -0,0 +1,169 @@
++# Phase 5A-8: where the sim loses its close games
++
++**Executed by Cowork directly, 2026-09-16.** Diagnostic only — no engine behaviour was
++changed. Two additions to the engine are pure observation (verified seed-identical
++against HEAD on two games × 500): the score state when the Q4 clock first reads ≤ 5:00
++and ≤ 2:00 (`m_q4_300`, `m_q4_120`, possession and yardline), and two drive-log columns
++(`sd_start`, `opp_points`). Script: `nfl/sim/close_game_diagnostic.py`. Actual side built
++from the 2021–2024 regular-season pbp (1,087 games, same population as K1); sim side is
++the full K1 protocol (1,087 games × N = 500, `stable_seed((game_id, 42))`), run twice —
++once for the snapshots (1,676 s cloud) and once with the drive log on, keeping only
++drives that start in the last 5:00 or in OT (1,843 s).
++
++## 1. The question
++
++After 5A-7 every scoring aggregate is near reality (22.49 vs 22.39 pts/team, TDs 4.90 vs
++4.73, FG att 3.56 vs 3.92), yet the sim has too few close games: |final| ≤ 7 in 41.5%
++of sims vs 49.0% of games, |final| = 3 in 7.7% vs 14.5%, OT 3.1% vs 6.4%. Is the deficit
++generated before the last five minutes or during them?
++
++## 2. Answer: during them. The state at 5:00 is nearly right; the endgame is wrong
++
++Score-state distribution the first time the Q4 clock reads ≤ 5:00 (|home − away|):
++
++| state | actual | sim |
++|---|---|---|
++| tied | 5.6% | 3.6% |
++| 1–3 | 16.3% | 16.6% |
++| 4–7 | 22.0% | 21.7% |
++| 8–14 | 27.2% | 27.2% |
++| 15+ | 28.9% | 30.9% |
++
++One-score games at 5:00: 43.9% actual vs 41.9% sim. Reweighting the sim's own
++conditional outcomes to the actual state shares gives P(|final| ≤ 7) = 43.3% and
++P(|final| = 3) = 8.3%: the state at 5:00 explains 1.8 of the 7.5-point |final| ≤ 7 gap
++and 0.6 of the 6.9-point key-number-3 gap. **Roughly 90% of the missing mass at 3 is
++created after 5:00.**
++
++Conditional on the state at 5:00 / at 2:00 (actual → sim):
++
++| state at 5:00 | P(final \|m\| = 3) | P(\|m\| ≤ 3) | P(\|m\| ≤ 7) | P(OT) | P(tie) |
++|---|---|---|---|---|---|
++| tied | 62.3% → 31.5% | 65.6 → 42.1 | 100 → 91.1 | 31.1 → 25.9 | 1.6 → 6.0 |
++| 1–3 | 34.5% → 19.4% | 62.7 → 51.5 | 91.0 → 83.7 | 10.2 → 5.4 | 0.0 → 1.3 |
++| 4–7 | 13.4% → 9.8% | 30.1 → 27.6 | 82.0 → 75.6 | 7.9 → 4.6 | 0.8 → 1.1 |
++| 8–14 | 8.4% → 4.2% | 14.9 → 10.8 | 37.2 → 27.7 | 4.4 → 1.0 | 0.0 → 0.2 |
++
++| state at 2:00 | P(final \|m\| = 3) | P(\|m\| ≤ 7) | P(OT) | P(tie) | mean \|Δ\| |
++|---|---|---|---|---|---|
++| tied | 80.0% → 34.2% | 100 → 94.0 | 30.8 → 38.7 | 1.5 → 9.1 | 3.48 → 4.81 |
++| 1–3 | 34.4% → 25.7% | 95.2 → 91.9 | 11.3 → 5.1 | 0.0 → 1.2 | 2.42 → 2.43 |
++| 4–7 | 12.8% → 7.5% | 92.4 → 87.2 | 9.2 → 3.8 | 0.8 → 0.9 | 2.29 → 2.30 |
++
++Net change after the 2:00 snapshot in one-score games, signed toward the leader
++(+ = leader extends, − = trailer closes): +3 is 11.8% actual vs 7.0% sim; +7 is 2.0% vs
++6.9%; −7 is 7.2% vs 10.4%; −4 is 3.4% vs 1.3%; 0 is 48.3% vs 53.2%. **The sim's endgame
++is TD-shaped where reality is FG-shaped**, in both directions.
++
++By season the picture is identical (|final| = 3: 14.0/16.6/14.0/13.6% actual vs
++7.7/7.6/7.7/7.7% sim; one-score at 5:00: 37.9/47.2/47.4/43.0 vs 42.1/42.1/41.8/41.7).
++The sim is also flat across seasons where reality varies — a separate note for the
++ratings layer, not an endgame issue.
++
++## 3. Drive-level decomposition: what each late drive does
++
++Drives starting in Q4 with ≤ 5:00 left, result mix by the offence's score state at the
++drive start (actual | sim; 1,050 real games with such drives, 543,500 sims):
++
++| state | n act | TD | FG made | punt | turnover | downs | end of game |
++|---|---|---|---|---|---|---|---|
++| trail 9+ | 609 | 17.4 \| 13.9 | 6.6 \| 3.3 | **3.8 \| 12.5** | 20.0 \| 12.5 | 21.3 \| 16.3 | 29.1 \| 40.3 |
++| trail 4–8 | 349 | **30.4 \| 15.4** | 0.3 \| 6.8 | **3.7 \| 24.7** | **28.1 \| 10.9** | **25.8 \| 5.9** | 11.2 \| 34.5 |
++| trail 1–3 | 305 | 9.5 \| 13.1 | **23.9 \| 11.2** | **4.6 \| 22.9** | 19.0 \| 9.5 | 11.1 \| 4.4 | 21.3 \| 36.3 |
++| tied | 187 | **4.8 \| 13.5** | **25.1 \| 11.5** | 33.2 \| 23.8 | 4.8 \| 8.6 | 1.6 \| 4.6 | 24.6 \| 35.3 |
++| lead 1–3 | 204 | 5.4 \| 6.2 | 5.4 \| 4.0 | 27.5 \| 18.8 | 2.5 \| 4.8 | **2.0 \| 15.2** | 55.4 \| 49.7 |
++| lead 4–8 | 412 | 3.4 \| 6.6 | 7.0 \| 4.3 | 26.9 \| 19.0 | 2.4 \| 4.7 | **2.2 \| 15.6** | 55.3 \| 48.5 |
++| lead 9+ | 530 | 6.6 \| 9.1 | 5.7 \| 5.5 | 22.5 \| 17.7 | 1.9 \| 3.2 | 6.4 \| 12.2 | 55.8 \| 51.3 |
++
++Drives starting with ≤ 2:00: a real offence trailing by 4–8 punts 0.0% of the time and
++goes for it on downs 24.5% + throws it away 35.2%; the sim punts 17.2%, turns it over on
++downs 3.6%. Trailing by 1–3: real punt 0.0%, FG 20.9% (+9.6% missed); sim punt 15.6%,
++FG 8.8%. Tied at ≤ 2:00: real drives end in a made FG 18.7%, TD 3.3%; sim 9.3% and 8.6%,
++and **14.0% of sim tied drives end with the clock expiring inside the 35 without a kick
++(real: 1.6%)**.
++
++OT: real OT drives (tied) end FG 26.2% / TD 13.4% / clock expires 1.2%; sim 13.3% /
++21.3% / 10.2%. 23.4% of sim OT games end tied vs 4.3% real (3 of 70).
++
++## 4. Mechanism — a dead fallback in the 4th-down lookup (found, verified)
++
++`tables.build_fourth_down_table` writes four levels: fine (yd × 10-yard zone × 7 score
++states × 5 clock buckets), `c_` (coarse score: trail9 / within8 / lead9), `z_` (coarse
++zone), `zc_` (coarse zone × coarse score × Q1-3 / Q4). `_add_rows(prefix=…)` prefixes
++**every** grouped column, so level-2 rows carry `yl_b = "c_opp21-30"` and level-3 rows
++carry `score_b = "z_trail4-8"`. The engine (`engine.py` 4th-down loop) looks level 2 up
++as `(yd, "opp21-30", "c_within8", qtr)` and level 3 as `(yd, "z_opp40", "trail4-8", qtr)`.
++Neither key can ever exist. Replaying the engine's chain on every real 4th-down snap
++2021–2024 (15,589):
++
++| quarter | resolved at fine cell | resolved at `zc_` (coarsest) |
++|---|---|---|
++| Q1 | 99.4% | 0.6% |
++| Q2 | 78.1% | 21.9% |
++| Q3 | 98.8% | 1.2% |
++| **Q4** | **48.3%** | **51.7%** |
++| **OT** | **0.9%** | **99.1%** |
++
++Levels 2 and 3 are hit 0.0% of the time. On late-Q4 4th downs (≤ 5:00, 1,908 real snaps)
++the table the engine actually consults gives an offence trailing by 4–8 p_go 0.34 /
++p_punt 0.42 (real: 0.83 / 0.14); trailing by 1–3 p_fg 0.38 (real 0.51); leading by 1–8
++p_go 0.23 (real 0.11). The `zc_within8` cell pools a team down 6 with a team up 6 and the
++whole fourth quarter with its last two minutes. That is the punting trailer, the leader
++turning it over on downs, and — through the extra possessions it hands the other side —
++the surplus of ±7 endgames.
++
++Even with the keys matched, level 2 would still pool `within8` across the sign of the
++score; the fine cells for tied / trail1-3 / trail4-8 in Q4_2-5 do not exist at min-cell 10.
++The fallback order must coarsen field position and distance before it coarsens the sign
++of the score, and a decision table cannot run on cells of 10.
++
++## 5. Second mechanism — the game-winning-FG drive is not a state the sim knows
++
++A tied or trailing-by-≤ 3 offence in the last 2:00 in reality reaches range, burns the
++clock, and kicks with ≤ 6 s left (EOH table, measured 5A-6: p_fg 0.80 at 0–3 s, 0.55 at
++4–6 s, 0.003 at 11–20 s, 0 at 21–40 s). The sim reproduces the *decision* rates but not
++the *clock*: a sim play at 11–40 s draws its runoff from the pooled `Q4_late` clock cell
++(mean 20–35 s), so the drive skips past the kicking window and the clock expires in range
++(14.0% of tied drives vs 1.6%), or the offence, still running the normal play-call mix,
++scores a TD instead (13.5% vs 4.8% at 5:00). Real teams in that state spike, kneel to
++centre the ball, or call timeout; the 5A-7 timeout table stops the clock on ~⅓ of those
++snaps, which is the measured average over all late snaps, not the FG-setup state. The fix
++is an empirical clock/play-call cell keyed on the EOH state (tied / trail ≤ 3, in range,
++≤ 40 s), measured from real snaps in that state — no constant.
++
++## 6. What 5A-8 did not find
++
++The score at 5:00 is generated correctly enough (one-score share −2.0pp, all of it
++"tied"). Scoring rates per play, drive starts, and yardage are not the problem — 5A-6/5A-7
++closed those. The remaining ±1.0 SD-of-margin excess (15.19 vs 14.20) is consistent with
++the endgame: real close games compress the margin (FG to tie/lead, kneel-outs), the sim
++lets them drift.
++
++Anomaly noted, not chased: 5 of 543,500 sims never had a play snapped with ≤ 2:00 in Q4
++(one play's runoff carried the clock from > 120 s to ≤ 0; clock-table q100 is 118 s
++before pace). Also a KC–BUF sim margin of −64 (SD-of-margin tail) — worth a glance in the
++volume/clock audit.
++
++## 7. Tests
++
++`nfl/sim/tests/test_engine_5a8.py`: T1 snapshots populated, observation-only
++(seed-identical), drive-log `sd_start` consistent with `score_state`, `opp_points` only
++on turnover / safety / punt-return drives — **2 passed**. T3 (fallback levels 2 and 3
++reachable) and T4 (12-game sample, N = 500: trailing-by-4–8 punt rate ≤ 0.117, trailing-
++by-1–3 ≤ 0.126, leading-by-1–8 turnover-on-downs ≤ 0.071, tied-drive FG within 0.08 of
++0.251 and TD ≤ 0.098) are **4 red by design** — measured 0.250 / 0.160 / 0.110 on the
++5A-8 engine — and are the acceptance spec for 5A-9. Not widened.
++
++## 8. Proposed next phase (5A-9) — needs a go
++
++1. Fix the key mismatch and rebuild the 4th-down fallback: fine → coarse distance →
++   coarse zone → coarse clock, **never** pooling across the sign of the score; Q4_2-5 and
++   Q4<2 pool with each other before pooling with Q4>5; min cell raised (measure the
++   variance, do not pick a number). Empirical rows only.
++2. EOH-state clock and play-call cells (tied / trail ≤ 3 / in range / ≤ 40 s) measured
++   from real snaps in that state; the timeout table gets the same state key.
++3. Re-run K1 with the 5A-8 diagnostics: acceptance is the conditional table in §2, the
++   drive mix in §3, T3/T4 green, and the 5A-3/5A-4 FG-attempt and penalty tests not
++   regressing.
++4. OT: after (1) the OT 4th-down decision resolves at fine cells for the first time;
++   re-measure the OT tie rate before touching anything else there.
+-- 
+2.43.0
+
