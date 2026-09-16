@@ -36,3 +36,13 @@ Sutton 3.5 -170→-135 (cooled, Waddle); Dobbins att 12.5→11.5; RICE 5.5 -110�
 CONFIDENCE (final): Walker 15+ (14.5, -195) · Rice 5+ (4.5, -175) · Kelce 4+ (3.5, -175) · Sutton 4+ (3.5, -135) · Mahomes 22+ comp (21.5, -105)
   independent product ≈ 8% (~+1150 fair); expected SGP price +650..+900; split KC-SGP + DEN two-leg if < +600.
 SWING (final): Walker 17+ (+120) · Rice 6+ (+120) · Kelce 5+ (+125) · Sutton 5+ (+155) · Mahomes 22+ (-105); fair ≈ +5000.
+
+### GRADED 2026-09-16 (KC 31, DEN 10) — 30 logged legs: 9 hit / 21 miss (grade_week.py, nflverse pbp)
+Cash 5-leg +397 ($15): 4/5 — Worthy 3+ ✓, Bryant 2+ ✓, Walker TD ✓, Walker 50+ ✓, Waddle 4+ ✗. LOST.
+Bonus 6-leg +2612 ($20 bonus): 1/6 — Walker 15+ ✓; Rice 6+, Kelce 5+, Sutton 4+, Mahomes 22+, Waddle 5+ ✗. LOST.
+Confidence 5-leg (not played): 1/5 — Walker 15+ ✓; Rice 5+, Kelce 4+, Sutton 4+, Mahomes 22+ ✗.
+Swing 5-leg (not played): 1/5. Sim unbet 9 legs: 2/9 (Bryant 3+, Harvey 3+).
+Script read: KC blew it open and ran (Walker 17+ att) — Mahomes never needed 22 completions; Rice/Kelce volume
+never came; DEN's passing game did not sustain (Sutton, Waddle under). The stale-input flag on Kelce 5+ / Rice 6+
+(2025-role prior, zero 2026 snaps) was the right flag. Kill condition as written ("early Mahomes struggles") was the
+wrong failure mode; the ticket died to a blowout the other way.
