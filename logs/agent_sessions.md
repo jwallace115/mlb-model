@@ -1,3 +1,26 @@
+## 2026-09-17T13:00Z  claude-code (Phase 5B — usage layer repair)
+- EDITED: nfl/sim/params_v1.json — added "usage" block {"share_half_life": 4, "k_share": 20,
+  "frozen_at": "2026-09-17", "frozen_commit": "463a666d0"}.
+- EDITED: nfl/sim/usage.py — (1) build_player_usage raises ValueError if "usage" block missing
+  (no default fallbacks); (2) derive_starting_qbs() function (3-layer: old depth chart > PBP
+  prev-game passer > new depth chart); (3) starting QB with 0 opp retains prior, backup QBs
+  get observed-only share; (4) is_starting_qb column in output; (5) load_roster_data depth_cols
+  expanded to keep pos_rank/pos_abb/team/dt.
+- CREATED: nfl/sim/tests/test_usage_5b.py — 6 tests, all passing.
+- CREATED: research/nfl_sim/phase5b_usage_repair.md — what was wrong, what changed, test table,
+  DET/BUF wk2 spot check.
+- APPENDED: research/nfl_sim/NFL_SIM_DECISION_v1.md — D42 (frozen params), D43 (starting-QB
+  identity), D44 (depth_cols fix).
+- RAN: pytest nfl/sim/tests/test_usage_5b.py — 6/6 pass.
+- RESULT: KC 2026 wk2 QBs: Mahomes 1.0000/1.0000 [STARTER], Fields 0.0000/0.0000 [backup],
+  Nussmeier 0.0000/0.0000 [backup]. Was: all 0.0625 uniform.
+- NOT DONE: full usage rebuild (python3 nfl/sim/usage.py main). The on-disk
+  player_usage_weekly.parquet still has the old (pre-5B) shares. Rebuild required
+  before next board run.
+- NOT DONE: engine.py update to consume is_starting_qb (engine untouched per spec).
+- UNVERIFIED: whether run_week.py or the pricer correctly use the new is_starting_qb
+  flag to select the passer — 5C scope.
+
 ## 2026-09-17T04:30Z  cowork (Phase 5A-11 — overtime audit; executed directly)
 - FOUND (sim OT drive sequences, 12 games x 2000): matched first-drive FGs ended games as ties;
   after a first-drive punt the other team's FG did not end the game; after a first-drive FG the

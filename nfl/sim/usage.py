@@ -69,7 +69,8 @@ PBP_COLS = ["season", "week", "game_id", "posteam", "play_type",
             "receiver_player_id", "rusher_player_id", "passer_player_id",
             "complete_pass", "yards_gained", "air_yards", "yards_after_catch",
             "yardline_100", "qb_scramble", "qb_kneel",
-            "rusher_player_name", "receiver_player_name"]
+            "rusher_player_name", "receiver_player_name",
+            "passer_player_name"]
 
 
 def load_pbp():
@@ -106,7 +107,8 @@ def load_roster_data():
     # Keep only needed columns to save memory
     roster_cols = ["season", "week", "team", "gsis_id", "position", "status", "full_name"]
     rosters = rosters[[c for c in roster_cols if c in rosters.columns]]
-    depth_cols = ["season", "week", "club_code", "gsis_id", "position", "depth_team"]
+    depth_cols = ["season", "week", "club_code", "gsis_id", "position", "depth_team",
+                   "pos_rank", "pos_abb", "team", "dt"]
     depth = depth[[c for c in depth_cols if c in depth.columns]]
     inj_cols = ["season", "week", "team", "gsis_id", "report_status"]
     injuries = injuries[[c for c in inj_cols if c in injuries.columns]]
@@ -198,6 +200,101 @@ def compute_position_priors(rec, car, pos_map):
             sp[f"{pos}_exp_rush"] = pc["exp_rushes"].sum() / max(tc, 1)
         priors[season] = sp
     return priors
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STARTING-QB IDENTIFICATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def derive_starting_qbs(depth, plays):
+    """
+    Identify starting QB per (season, week, team).
+
+    Priority:
+    1. Per-week depth chart (old schema, depth_team=1, 2020-2024)
+    2. Previous game's leading passer from PBP (observed starter)
+    3. Static depth chart snapshot (new schema, pos_rank=1, 2025+)
+
+    Returns: dict[(season, week, team)] -> {'gsis_id': str, 'source': str}
+    """
+    starting = {}
+
+    # Layer 1: Old schema per-week depth charts (2020-2024)
+    if "depth_team" in depth.columns and "season" in depth.columns:
+        old_qb = depth[
+            (depth["position"] == "QB")
+            & depth["season"].notna()
+            & depth["depth_team"].notna()
+        ].copy()
+        old_qb["depth_team"] = pd.to_numeric(old_qb["depth_team"], errors="coerce")
+        qb1 = old_qb[old_qb["depth_team"] == 1].drop_duplicates(
+            ["season", "week", "club_code"], keep="first"
+        )
+        for _, r in qb1.iterrows():
+            s = int(r["season"])
+            w = r["week"]
+            if pd.isna(w):
+                continue
+            w = int(w)
+            starting[(s, w, r["club_code"])] = {
+                "gsis_id": r["gsis_id"],
+                "source": "depth_chart",
+            }
+
+    # Layer 2: PBP leading passer from previous game -> starter for next week
+    if plays is not None:
+        passes = plays[
+            (plays["play_type"] == "pass") & plays["passer_player_id"].notna()
+        ]
+        if not passes.empty:
+            leader = (
+                passes.groupby(
+                    ["season", "week", "posteam", "passer_player_id"], observed=True
+                )
+                .size()
+                .reset_index(name="att")
+            )
+            leader = leader.sort_values("att", ascending=False).drop_duplicates(
+                ["season", "week", "posteam"]
+            )
+            for _, r in leader.iterrows():
+                s = int(r["season"])
+                next_w = int(r["week"]) + 1
+                team = r["posteam"]
+                key = (s, next_w, team)
+                if key not in starting:
+                    starting[key] = {
+                        "gsis_id": r["passer_player_id"],
+                        "source": "prev_game_passer",
+                    }
+
+    # Layer 3: Static depth chart (new schema, 2025+)
+    if "pos_rank" in depth.columns:
+        new_qb = depth[
+            (depth.get("pos_abb", pd.Series(dtype=str)) == "QB")
+            & depth["pos_rank"].notna()
+        ].copy()
+        if not new_qb.empty:
+            new_qb["pos_rank"] = pd.to_numeric(new_qb["pos_rank"], errors="coerce")
+            qb1 = (
+                new_qb[new_qb["pos_rank"] == 1]
+                .sort_values("dt", ascending=False, na_position="last")
+                .drop_duplicates("team", keep="first")
+            )
+            static_qb1 = {r["team"]: r["gsis_id"] for _, r in qb1.iterrows()}
+            for s in OUTPUT_SEASONS:
+                if s < 2025:
+                    continue
+                for w in range(1, 23):
+                    for team, gsis_id in static_qb1.items():
+                        key = (s, w, team)
+                        if key not in starting:
+                            starting[key] = {
+                                "gsis_id": gsis_id,
+                                "source": "depth_chart",
+                            }
+
+    return starting
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -373,9 +470,14 @@ def compute_season_share_data(active_uni, rec, team_tgt, car, team_car):
 
 def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, params,
                         roster_universe, active_universe, depth_order_priors,
-                        player_season_shares, output_seasons=None):
-    sh_hl = params.get("usage", {}).get("share_half_life", float("inf"))
-    k_share = params.get("usage", {}).get("k_share", 50)
+                        player_season_shares, output_seasons=None, starting_qbs=None):
+    if "usage" not in params:
+        raise ValueError(
+            "params_v1.json missing required 'usage' block — "
+            "write share_half_life and k_share, then rerun"
+        )
+    sh_hl = params["usage"]["share_half_life"]
+    k_share = params["usage"]["k_share"]
     prior_weight = params.get("prior_weight", 0.3)
     prior_regression = params.get("prior_regression", 0.5)
     k_rate = params.get("k", 100)
@@ -655,17 +757,47 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
             blend_gl = (1 - pw_eff_gl) * shrunk_gl + pw_eff_gl * (
                 prior_regression * p_gl_v + (1 - prior_regression) * dg_gl_v)
 
-            # Players with 0 opp (never active for a game) get near-zero
-            blend_tgt[opp_tgt == 0] = 1e-8
-            blend_rz[opp_rz == 0] = 1e-8
-            blend_car[opp_car == 0] = 1e-8
-            blend_gl[opp_gl == 0] = 1e-8
-
-            # Strong evidence override: player was active for >= k_share team
-            # opportunities with 0 own touches → evidence of ~0 share, override
-            # the prior blend.
+            # ── Starting-QB allocation ──
             raw_tgt_arr = merged["raw_tgt"].values if "raw_tgt" in merged.columns else np.zeros(len(merged))
             raw_car_arr = merged["raw_car"].values if "raw_car" in merged.columns else np.zeros(len(merged))
+
+            is_qb = merged["position"].values == "QB"
+            is_starter = np.zeros(len(merged), dtype=bool)
+            if starting_qbs is not None:
+                pids = merged["player_id"].values
+                teams_arr_qb = merged["team"].values
+                for i in range(len(merged)):
+                    if is_qb[i]:
+                        sq = starting_qbs.get((season, w, teams_arr_qb[i]))
+                        if sq and sq["gsis_id"] == pids[i]:
+                            is_starter[i] = True
+
+            backup_qb = is_qb & ~is_starter
+
+            # Backup QBs: observed share only (no prior), zero if no touches
+            if backup_qb.any():
+                for arr, obs_arr, opp_arr, raw_arr in [
+                    (blend_tgt, obs_tgt, opp_tgt, raw_tgt_arr),
+                    (blend_rz, obs_rz, opp_rz, raw_tgt_arr),
+                    (blend_car, obs_car, opp_car, raw_car_arr),
+                    (blend_gl, obs_gl, opp_gl, raw_car_arr),
+                ]:
+                    arr[backup_qb] = np.where(
+                        (raw_arr[backup_qb] > 0) & (opp_arr[backup_qb] > 0),
+                        obs_arr[backup_qb],
+                        1e-8,
+                    )
+
+            # Players with 0 opp (never active for a game) get near-zero.
+            # Starting QBs with 0 opp retain their prior-based blend.
+            zero_opp_zeroed = ~is_starter  # starting QBs are exempt
+            blend_tgt[(opp_tgt == 0) & zero_opp_zeroed] = 1e-8
+            blend_rz[(opp_rz == 0) & zero_opp_zeroed] = 1e-8
+            blend_car[(opp_car == 0) & zero_opp_zeroed] = 1e-8
+            blend_gl[(opp_gl == 0) & zero_opp_zeroed] = 1e-8
+
+            # Strong evidence override: player was active for team opportunities
+            # with 0 own touches → evidence of ~0 share.
             zero_tgt_evidence = (raw_tgt_arr == 0) & (opp_tgt > 0)
             zero_car_evidence = (raw_car_arr == 0) & (opp_car > 0)
             blend_tgt[zero_tgt_evidence] = 1e-8
@@ -739,6 +871,7 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                 "yards_per_carry": ypc,
                 "explosive_rec_rate": exp_rec, "explosive_rush_rate": exp_rush,
                 "n_targets": raw_tgt.astype(int), "n_carries": raw_car.astype(int),
+                "is_starting_qb": is_starter,
             })
             all_frames.append(out)
 
@@ -922,6 +1055,12 @@ def main():
     rosters, depth, injuries = load_roster_data()
     print(f"Rosters: {len(rosters):,}, Depth: {len(depth):,}, Injuries: {len(injuries):,} ({time.time()-t1:.1f}s)")
 
+    # Derive starting QBs before deleting scrimmage (needs passer_player_id)
+    starting_qbs = derive_starting_qbs(depth, scrimmage)
+    n_dc = sum(1 for v in starting_qbs.values() if v["source"] == "depth_chart")
+    n_pbp = sum(1 for v in starting_qbs.values() if v["source"] == "prev_game_passer")
+    print(f"Starting QBs: {len(starting_qbs)} entries ({n_dc} depth_chart, {n_pbp} prev_game_passer)")
+
     t2 = time.time()
     rec, team_tgt, car, team_car = build_player_game_aggs(scrimmage)
     del scrimmage
@@ -1037,8 +1176,19 @@ def main():
     print(f"\nBuilding full usage...")
     t7 = time.time()
     usage = build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, params,
-                                roster_uni, active, depth_order_priors, player_season_shares)
+                                roster_uni, active, depth_order_priors, player_season_shares,
+                                starting_qbs=starting_qbs)
     print(f"  {len(usage):,} rows ({time.time()-t7:.1f}s)")
+
+    # Log starting QBs for 2026 week 2
+    print(f"\n  Starting QBs (2026 wk2):")
+    for team in sorted(set(k[2] for k in starting_qbs if k[0] == 2026 and k[1] == 2)):
+        sq = starting_qbs.get((2026, 2, team))
+        if sq:
+            name_row = usage[(usage["season"] == 2026) & (usage["week"] == 2)
+                             & (usage["player_id"] == sq["gsis_id"])]
+            name = name_row["player_name"].iloc[0] if not name_row.empty else sq["gsis_id"]
+            print(f"    {team}: {name} ({sq['source']})")
 
     # Save early (before assertions, so data is available for debugging)
     OUT_DIR.mkdir(parents=True, exist_ok=True)

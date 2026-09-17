@@ -9,6 +9,12 @@
   "tuned_on": "2021-2024",
   "holdout": "2025",
   "built_at_parent_commit": "bc000069ec990046bfbc2a88ba63129eb4b3ad95",
+  "usage": {
+    "share_half_life": 4,
+    "k_share": 20,
+    "frozen_at": "2026-09-17",
+    "frozen_commit": "463a666d0"
+  },
   "grid_results": [
     {
       "half_life": Infinity,

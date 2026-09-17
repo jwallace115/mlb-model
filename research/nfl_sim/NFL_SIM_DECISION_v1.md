@@ -331,3 +331,22 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   5A-9 tied-drive expiry 11.5% vs ≤ 5%). See `research/nfl_sim/phase5a11_overtime.md`. Next: the
   5A-10 list — XP/two-point placement, shared game factor, Q4 FG count, 4th-down conversion,
   two-minute drill; then 5B, 5C.
+- **2026-09-17 Phase 5B — usage layer repair.**
+  **D42 — Frozen usage params.** `params_v1.json` gains a `"usage"` block with
+  `share_half_life=4`, `k_share=20`, `frozen_at=2026-09-17`. `build_player_usage()` raises
+  `ValueError` if the block is missing — no default fallbacks. The values are the Phase 1B
+  grid-search winners (boundary at k=20; extension grid showed k=10 and k=5 were worse).
+  **D43 — Starting-QB identity.** `derive_starting_qbs(depth, plays)`: three-layer priority
+  (old-schema per-week depth chart > PBP prev-game leading passer > new-schema static
+  depth chart). Starting QB with 0 in-season opportunities retains its prior-based blend
+  (exempt from D14 1e-8 override). Backup QBs get share only from observed attempts — no
+  prior influence. `is_starting_qb` boolean column added to the usage output.
+  **Root cause of the MNF Fields attribution:** all KC QBs had zero 2026 touches, D14 zeroed
+  them all to 1e-8, normalization gave each 1/16 = 0.0625 target share. After fix: Mahomes
+  1.0000, Fields 0.0000, Nussmeier 0.0000 (STARTER flag on Mahomes, source: depth_chart).
+  **D44 — depth_cols expanded.** `load_roster_data()` was stripping new-schema columns
+  (`pos_rank`, `pos_abb`, `team`, `dt`) from the depth chart DataFrame, making `derive_starting_qbs`
+  layer 3 inert. Fixed.
+  Tests: `test_usage_5b.py` 6/6 pass (params read, share sums, KC wk17 face validity,
+  starting-QB identity 100%, CAR zero-opp below prior, PIT byte-identity).
+  See `research/nfl_sim/phase5b_usage_repair.md`.
