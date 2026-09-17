@@ -998,3 +998,34 @@
   object must not use depth-order QBs the live object never uses).
 - NOT DONE carried: pricer one-sided coherence (deferred twice), board trust filter, TD label
   cause breakdown (348 vs audit ~128).
+
+## 2026-09-17T23:15Z  claude-code (Phase 5C-2b — usage prior fix, QB starter, halt, playcall, refit)
+- EDITED: nfl/sim/usage.py — D53 deleted 1e-8 override for opp==0 players (prior path now
+  active for all positions). D54 replaced touches heuristic with depth_order fallback;
+  derive_starting_qbs gains active_universe param with roster-at-game-time validation
+  (layer 1/2 candidates checked against roster set). Team-specific roster filter
+  (`act_roster_by_team`) prevents cross-team QB leakage (Flacco on PHI wk18 bug).
+- EDITED: nfl/sim/run_fit.py — D55 no except-and-continue; exception kills pool + exit(1).
+  OUT_DIR changed to fit_5c2b (fresh directory).
+- EDITED: nfl/sim/engine.py — 0.55 literal replaced with KeyError raise (three-level miss).
+- EDITED: nfl/sim/tables.py — playcall table rebuilt with parent pooling (122 pooled rows);
+  every L0/L1/L2 key now exists. 672 total buckets (was 546).
+- EDITED: nfl/sim/tests/test_usage_5b.py — 6 new tests: (j) wk1 QB carry share in range,
+  (k) wk1 target share Spearman > 0.5, (l) wk1 non-backup shares > 1e-6, (m) starter
+  accuracy report + zero unflagged team-weeks, (n) 2026 wk2 spot-check. 14/14 pass.
+- RAN: usage.py rebuild — 0 unflagged team-weeks in 2021-24 wk1-18.
+- RAN: 12-game playcall test at N=200 — 0 sit_proe_miss, 0 fallback, 0 three-level misses.
+- RAN: run_fit.py --seasons 2021 2022 2023 2024 — 1087/1087 converged (100%), 0 errors,
+  mean 3.0 iter, |err_m| 0.153, |err_t| 0.135, ~90 min wall, 10 workers. First clean fit:
+  formerly-error games (2021_13_PHI_NYJ, 2023_09_ARI_CLE, 2023_15_MIN_CIN) all succeeded.
+  2021 wk18 PHI: Minshew correctly flagged (Flacco removed from PHI roster for wk8+).
+- RESULT: wk1 QB carry share 0.04-0.05 (was 0.996 pre-D53); wk1 top target share 0.19-0.21
+  (vs wk2+ 0.23-0.24). Both track weeks 2+ within prior regression band.
+- COMMITTED: 02db086aa (D53/D54/D55/A4 main commit), 7e74c6efa (roster filter fix).
+- NOT DONE: B3 map fit from fit_5c2b (isotonic maps, K4, calibration_v1.json).
+- NOT DONE: A6 pricer one-sided coherence. A7 board trust filter. A8 TD label cause breakdown.
+- NOT DONE: full nfl/sim/tests suite run (item 8).
+- NOT DONE: docs (phase5c2_fit.md, D51-D55, NFL_SIM_DECISION_v1.md).
+- NOT DONE: second commit (docs, calibration, census parquet).
+- UNVERIFIED: starter accuracy % (test (m) prints it but the full run was in the test fixture,
+  not the fit output; need to compute from the fit checkpoints directly).
