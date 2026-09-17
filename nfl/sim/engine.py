@@ -46,6 +46,26 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 TABLES_DIR = ROOT / "nfl" / "data" / "sim" / "tables"
 RATINGS_DIR = ROOT / "nfl" / "data" / "sim" / "ratings"
 
+class _DriveLog(pd.DataFrame):
+    """5A-11 (D41): the drive log lives in `team_df.attrs`. pandas decides whether to keep
+    attrs on `pd.concat` by comparing the attrs dicts with `==`, which compares the two
+    drive logs element-wise and raises when their shapes differ (it only got that far
+    when the other attr, playcall_fallback_count, happened to be equal — a latent flake
+    that surfaced in the 5A-11 suite run). Frame-level equality on a drive log is
+    identity; everything else is a plain DataFrame."""
+    @property
+    def _constructor(self):
+        return pd.DataFrame
+
+    def __eq__(self, other):
+        return self is other
+
+    def __ne__(self, other):
+        return self is not other
+
+    __hash__ = object.__hash__
+
+
 # Module-level cache
 _CACHE = {}
 _DEBUG_YDS = None  # 5A-6 diag: set to a list to collect per-play yards
@@ -247,7 +267,8 @@ def _build_fg_setup_lookup():
     tbl = _CACHE.get("fg_setup")
     if tbl is None:
         return None
-    return {(r["state"], r["sec_b"], r["def_to"], r["down"]): (float(r["p_kneel"]), float(r["pass_rate"]))
+    return {(r["state"], r["sec_b"], r["def_to"], r["down"]): (float(r["p_kneel"]), float(r["pass_rate"]),
+                                                                float(r["p_fg"]) if "p_fg" in tbl and pd.notna(r["p_fg"]) else 0.0)
             for _, r in tbl.iterrows()}
 
 
@@ -1022,6 +1043,27 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     _dl_team[:] = poss
 
     def _new_drive(m):
+        # 5A-11 (D38): in OT the first possession is complete when the first team's drive
+        # ends for ANY reason (punt, turnover, downs, safety, missed FG) — not only on a
+        # score. Until 5A-11 only a score or a turnover on downs marked it, so after a
+        # first-drive punt the other team's field goal was treated as a first-possession
+        # score and the game went on. Every caller switches `poss` to the receiving team
+        # before calling, so the team whose drive just ended is 1 - poss; at the OT kickoff
+        # itself that is the team NOT receiving, never the first-possession team. Game
+        # state only — the drive-log fields are not maintained when the log is off, and
+        # the live object must behave like the research object.
+        # ... and once both teams have possessed, a drive that ends with the score NOT tied
+        # ends the game (the first team kicked a field goal, the second team's possession
+        # came up empty). Until 5A-11 the first team got the ball back and kicked again.
+        first_done = m & (qtr >= 5) & (ot_first_poss_team >= 0) & ((1 - poss) == ot_first_poss_team)
+        ot_first_poss_done[first_done] = True
+        # the drive that ended belonged to the SECOND team (the first team's own scoring
+        # drive is followed by a kickoff, and the second team must still get its possession)
+        over_now = m & (qtr >= 5) & (ot_first_poss_team >= 0) & ((1 - poss) != ot_first_poss_team) \
+                   & ot_first_poss_done & (score_h != score_a) & ~game_over
+        if over_now.any():
+            game_over[over_now] = True
+            _dl_result[over_now] = np.where(_dl_result[over_now] > 0, _dl_result[over_now], _DLR_ENDGAME)
         _dl_new_drive(m)
         down[m] = 1
         dist[m] = np.minimum(10, yl[m])
@@ -1171,7 +1213,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         the Kaplan-Meier plateau (99 s) means the half expires. No pace scaling, no floor,
         and no separate timeout draw (the measured elapsed already contains the timeouts).
         Returns the boolean mask (over gi_arr) of snaps handled here."""
-        in_fgs = fgs_state[gi_arr] != ""
+        in_fgs = (fgs_state[gi_arr] != "") & ((fgs_state[gi_arr] != "ot_sd") | (clock[gi_arr] <= 180.0))
         m_eoh = (((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 40.0)
                  & (np.asarray(yl_snap) <= 50) & ~game_over[gi_arr] & ~exclude & ~in_fgs)
         m_fgs = in_fgs & ~game_over[gi_arr] & ~exclude
@@ -1223,13 +1265,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         1 run / 2 drive-ending / 3 stopped (timeout)."""
         if to_lookup is None:
             return
-        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] == 4)) & (clock[gi_arr] <= 180) & \
+        # 5A-11 (D39): overtime's last 3:00 is the same situation as Q4's (the period ends
+        # the game); the policy table's Q4 rows are used for it
+        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 180) & \
                ~game_over[gi_arr] & (ot_idx_arr != de_code)
         if skip is not None:
             late &= ~skip
         for j in np.where(late)[0]:
             gi = gi_arr[j]
-            q = int(qtr[gi]); sb = _to_sec_bucket(float(clock[gi]))
+            q = min(int(qtr[gi]), 4); sb = _to_sec_bucket(float(clock[gi]))
             sd_j = int(sd_arr[j])
             st = "trail" if sd_j < 0 else ("tied" if sd_j == 0 else "lead")
             run_s = "True" if ot_idx_arr[j] in running_codes else "False"
@@ -1408,6 +1452,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         fgs_state = np.full(N, "", dtype=object)
         if fgs_lookup is not None:
             fgs_state = fg_setup_state(qtr, score_diff_poss, yl, clock, down)
+            # 5A-11 (D40): overtime — the first possession is played for the touchdown (no
+            # FG-setup behaviour); after it, sudden death inside the 35 is its own state
+            in_ot = qtr >= 5
+            fgs_state[in_ot & ~ot_first_poss_done] = ""
+            fgs_state[in_ot & ot_first_poss_done & (yl <= 35) & (down <= 3) & alive] = "ot_sd"
         if kneel_lookup is not None:
             fgs_m = alive & (clock > 0) & (fgs_state != "")
             kn_cand = alive & (down < 4) & (clock > 0) & (clock <= 180) & (
@@ -1420,9 +1469,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     # 5A-9 (D33): kneel to centre the ball for the field goal
                     dt3 = "2+" if to_rem[1 - poss[i], i] >= 2 else dt
                     sbf = _fgs_sec_bucket(cl)
-                    row = (fgs_lookup.get(("any", sbf, dt3, "any")) or
-                           fgs_lookup.get(("any", "any", dt3, "any")) or
-                           fgs_lookup.get(("any", "any", "any", "any")))
+                    if fgs_state[i] == "ot_sd":
+                        row = fgs_lookup.get(("ot_sd", "any", "any", "any"))
+                    else:
+                        row = (fgs_lookup.get(("any", sbf, dt3, "any")) or
+                               fgs_lookup.get(("any", "any", dt3, "any")) or
+                               fgs_lookup.get(("any", "any", "any", "any")))
                     pk = row[0]
                 else:
                     sit = "lead" if q == 4 else ("own" if yl[i] >= 60 else "opp")
@@ -1457,14 +1509,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     ss_i = ("trail9+" if sd_i <= -9 else "trail1-8" if sd_i <= -1 else
                             "tied" if sd_i == 0 else "lead1-8" if sd_i <= 8 else "lead9+")
                     cp_i = "Q2_late" if (qtr[i] == 2 and clock[i] <= 120) else (
-                        "Q4_late" if (qtr[i] == 4 and clock[i] <= 120) else "normal")
+                        "Q4_late" if (qtr[i] >= 4 and clock[i] <= 120) else "normal")
                     ot_name = "complete_inbounds"
                     # defence timeout after the kneel?
                     if to_lookup is not None and to_rem[1 - poss[i], i] > 0 and clock[i] <= 180:
                         st_i = "trail" if sd_i < 0 else ("tied" if sd_i == 0 else "lead")
-                        p_def = (to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), st_i, "True"))
-                                 or to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), st_i, "any"))
-                                 or to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), "all", "any"), 0.0))
+                        q_i = min(int(qtr[i]), 4)  # 5A-11 (D39): OT uses the Q4 rows
+                        p_def = (to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), st_i, "True"))
+                                 or to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), st_i, "any"))
+                                 or to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), "all", "any"), 0.0))
                         if u_to[i] < p_def:
                             to_rem[1 - poss[i], i] -= 1; ev_to_def[i] += 1
                             ot_name = "incomplete"  # clock stopped
@@ -1524,6 +1577,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         fg_m[i] = True
                         ev_fg_non4th[i] += 1
 
+        # 5A-11 (D40): OT sudden death inside the 35 — kick on any down at the measured rate
+        if fgs_lookup is not None:
+            ot_sd_cand = alive & ~spiked & (down < 4) & (fgs_state == "ot_sd") & ~fg_m & ~can_kneel
+            if ot_sd_cand.any():
+                row = fgs_lookup.get(("ot_sd", "any", "any", "any"))
+                if row is not None and row[2] > 0:
+                    kick = ot_sd_cand & (u_eoh < row[2])
+                    fg_m[kick] = True
+                    ev_fg_non4th[kick] += 1
         alive = alive & ~spiked
         is_4th = is_4th & ~spiked
         if is_4th.any() or fg_m.any():
@@ -1656,10 +1718,18 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 # First possession FG: other team gets a chance (all eras)
                 ot_first_scoring = ot_fg & (poss == ot_first_poss_team) & ~ot_first_poss_done
                 ot_first_poss_done[ot_first_scoring] = True
-                # Second possession or later: any FG ends game (sudden death)
+                # Second possession or later: a FG ends the game only if the kicking team
+                # now leads. 5A-11 (D38): matched field goals (3-3 after both possessions)
+                # used to END the game as a tie in the regular season; the rule is sudden
+                # death from there (2 of 12 real first-drive FGs were matched, both games
+                # went on). Postseason keeps its own branch.
                 ot_second = ot_fg & ~ot_first_scoring
                 if season_type == "REG":
-                    game_over[ot_second] = True
+                    ot_leading_reg = ot_second & (
+                        ((poss == 0) & (score_h > score_a)) |
+                        ((poss == 1) & (score_a > score_h))
+                    )
+                    game_over[ot_leading_reg] = True
                 else:
                     # Postseason: game ends ONLY if the scoring team is ahead
                     ot_leading = ot_second & (
@@ -1917,9 +1987,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for j in np.where(fgs_live != "")[0]:
                 gi = live_idx[j]
                 sbf = _fgs_sec_bucket(float(clock[gi]))
-                row = (fgs_lookup.get((fgs_live[j], sbf, "any", "any")) or
-                       fgs_lookup.get(("any", sbf, "any", "any")) or
-                       fgs_lookup.get(("any", "any", "any", "any")))
+                if fgs_live[j] == "ot_sd":
+                    row = fgs_lookup.get(("ot_sd", "any", "any", "any"))
+                else:
+                    row = (fgs_lookup.get((fgs_live[j], sbf, "any", "any")) or
+                           fgs_lookup.get(("any", sbf, "any", "any")) or
+                           fgs_lookup.get(("any", "any", "any", "any")))
                 if row is not None and not np.isnan(row[1]):
                     p_pass[j] = row[1]
                     ev_fgs_snaps[gi] += 1
@@ -2272,7 +2345,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # 5A-3: clock period (3-way)
             cp_arr = np.full(len(gi_arr), "normal", dtype=object)
             q2_late_m = (qtr[gi_arr] == 2) & (clock[gi_arr] <= 120)
-            q4_late_m = (qtr[gi_arr] == 4) & (clock[gi_arr] <= 120)
+            q4_late_m = (qtr[gi_arr] >= 4) & (clock[gi_arr] <= 120)   # 5A-11 (D39): OT included
             cp_arr[q2_late_m] = "Q2_late"
             cp_arr[q4_late_m] = "Q4_late"
             ot_strs = ["incomplete", "first_down", "complete_inbounds"]
@@ -2358,7 +2431,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # offence is protecting the kick); no team EPA shift on those snaps
             fgs_r = np.zeros(n_r, dtype=bool)
             if fgs_rush_q is not None:
-                fgs_r = not_fum & (fgs_state[g_idx_r] != "")
+                fgs_r = not_fum & (fgs_state[g_idx_r] != "") & (fgs_state[g_idx_r] != "ot_sd")  # OT runs are not the Q4 clock-kill runs (4.1 yds vs 2.7)
                 if fgs_r.any():
                     yards_r[fgs_r] = np.interp(u5[fgs_r], xs101, fgs_rush_q)
                     ev_fgs_runs[g_idx_r[fgs_r]] += 1
@@ -2530,7 +2603,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                        np.where(sd_r_arr <= 8, "lead1-8", "lead9+"))))
             cp_r_arr = np.full(len(gi_r), "normal", dtype=object)
             q2l_r = (qtr[gi_r] == 2) & (clock[gi_r] <= 120)
-            q4l_r = (qtr[gi_r] == 4) & (clock[gi_r] <= 120)
+            q4l_r = (qtr[gi_r] >= 4) & (clock[gi_r] <= 120)   # 5A-11 (D39): OT included
             cp_r_arr[q2l_r] = "Q2_late"
             cp_r_arr[q4l_r] = "Q4_late"
             ot_strs_r = {0: "first_down", 1: "run", 3: "incomplete"}  # 3 = clock stopped by a timeout (5A-7)
@@ -2668,7 +2741,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "end_yardline", "end_down", "end_dist", "score_state",
             "sd_start", "opp_points",
         ])
-        team_df.attrs["drive_log"] = dl_df
+        team_df.attrs["drive_log"] = _DriveLog(dl_df)
 
     if not has_players:
         return team_df

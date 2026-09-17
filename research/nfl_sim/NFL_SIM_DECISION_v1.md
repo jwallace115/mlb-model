@@ -306,3 +306,28 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   ± 0.5 — real, not pollution; 5A-9 tied-drive expiry 11.5% vs ≤ 5%). See
   `research/nfl_sim/phase5a10_scoring_composition.md`. Next 5A-11: OT behaviour (ties), placement
   of XP/two-point noise, shared game factor, Q4 FG count, 4th-down conversion, two-minute drill.
+- **2026-09-17 Phase 5A-11 — overtime audit (Cowork-executed).** Real 2021–2024 OT (70 games,
+  176 drives): 2.51 drives per OT; first drive TD 19 / FG 17 / punt 46 / TO 16%; later drives
+  FG-heavy (25–57%); 3 ties (4.3%). Sim (5A-10): P(tie | OT) 18.7%, OT drives FG 13% / TD 21% /
+  expiry 10%. Three rule defects found in the sim's OT drive sequences: matched first-drive FGs
+  ended the game as a TIE (3.6% of overtimes); after a first-drive punt the other team's FG did not
+  end the game (only a score or turnover on downs marked the first possession complete); after a
+  first-drive FG the second team's empty possession did not end the game (the first team kicked
+  again). **D38:** first possession completes when the first team's drive ends for any reason;
+  a drive ending with both teams having possessed and the score not tied ends the game; a FG after
+  the first possession ends the game only if the kicker leads — all on game state, not the drive
+  log. **D39:** OT's last 3:00 uses the Q4 late cells (timeouts, runoff, kneel runoff).
+  **D40:** sudden-death in-range state (`fg_setup` state `ot_sd`, n = 135): after the first
+  possession, inside the 35 on downs 1–3 the offence kicks on the snap 18.5% of the time, passes
+  29% of non-kneel plays, kneels 5%; the first OT possession is played for the TD and excluded.
+  **D41:** the drive-log attr is a DataFrame subclass whose frame-level equality is identity —
+  pandas compared drive logs element-wise on `pd.concat` and raised whenever the other attr
+  happened to match (latent flake; surfaced in the 5A-11 suite run and made two 5A-3 tests error).
+  K1 (1,087 × 500): P(tie | OT) 10.4% (was 18.7; real 4.3 ± wide), OT drives FG 24 / TD 15 / punt
+  38 / expiry 4% (real 26 / 13 / 36 / 1), drives per OT 2.54 (2.51), P(OT) 4.9% (6.4), ties 0.50%
+  (0.28), P(|m| = 3) 10.6 → **11.6%** (14.5), |m| = 7 8.7 (7.3), |m| = 6 4.4 (7.5). Tests:
+  `test_engine_5a11.py` 3 green; 5A tie-rate test green again; 5A-6 liveness test updated for D40;
+  suite 93 pass / 3 red (5A-3 go rate 21.1 vs 19.8 ± 1.0; 5A-4 offence penalties 6.20 vs 5.51 ± 0.5;
+  5A-9 tied-drive expiry 11.5% vs ≤ 5%). See `research/nfl_sim/phase5a11_overtime.md`. Next: the
+  5A-10 list — XP/two-point placement, shared game factor, Q4 FG count, 4th-down conversion,
+  two-minute drill; then 5B, 5C.

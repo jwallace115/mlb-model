@@ -69,14 +69,20 @@ def test_t2_eoh_table_is_live(ratings):
     n_with = int(r["ev_fg_non4th"].sum())
     assert n_with > 0, "no end-of-half FG attempts on downs 1-3 at all"
     saved = E._CACHE["eoh_fg"].copy()
+    saved_fgs = E._CACHE["fg_setup"].copy() if E._CACHE.get("fg_setup") is not None else None
     try:
         z = saved.copy(); z["p_fg"] = 0.0
         E._CACHE["eoh_fg"] = z
+        if saved_fgs is not None:  # 5A-11 (D40): OT sudden-death kicks on downs 1-3 share the counter
+            zf = saved_fgs.copy(); zf["p_fg"] = 0.0
+            E._CACHE["fg_setup"] = zf
         r0 = _team_df(simulate_game(home, away, season, week, n_sims=2000, seed=seed, **ratings))
         assert int(r0["ev_fg_non4th"].sum()) == 0
         assert abs(float(r0["ev_fg_att"].mean()) - float(r["ev_fg_att"].mean())) > 0.02
     finally:
         E._CACHE["eoh_fg"] = saved
+        if saved_fgs is not None:
+            E._CACHE["fg_setup"] = saved_fgs
 
 
 # ── T3: Q2<2 bucket is present in both tables and wired in the engine ────────

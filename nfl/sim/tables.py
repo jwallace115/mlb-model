@@ -1338,7 +1338,25 @@ def build_fg_setup_table(df):
     for (dt,), g in d.groupby(["def_to"]):
         _emit(g, "any", "any", dt, "any")
     _emit(d, "any", "any", "any", "any")
-    return pd.DataFrame(rows)
+    out = pd.DataFrame(rows)
+    out["p_fg"] = np.nan
+    # 5A-11 (D40): overtime sudden death — after the first possession, an offence inside
+    # the 35 kicks on ANY down (19% of downs-1-3 snaps are field-goal attempts), runs 54%,
+    # passes 21%, kneels 5% (2021-2024 regular season, 135 snaps). The first OT possession
+    # is played for the touchdown (no kicks on downs 1-3, pass 51%) and is not in this state.
+    o = df[(df["qtr"] >= 5) & df["down"].isin([1, 2, 3]) & (df["yardline_100"] <= 35)
+           & df["play_type"].isin(["pass", "run", "qb_kneel", "qb_spike", "field_goal"])].copy()
+    o = o.sort_values(["game_id", "play_id"])
+    first_drive = o.groupby("game_id")["fixed_drive"].transform("min")
+    ot_all = df[df["qtr"] >= 5].groupby("game_id")["fixed_drive"].min()
+    o["first_ot_drive"] = o["game_id"].map(ot_all)
+    o = o[o["fixed_drive"] > o["first_ot_drive"]]
+    nk = o[~o["play_type"].isin(["qb_kneel", "field_goal"])]
+    out = pd.concat([out, pd.DataFrame([{"state": "ot_sd", "sec_b": "any", "def_to": "any", "down": "any",
+                                         "n": len(o), "p_kneel": (o["play_type"] == "qb_kneel").mean(),
+                                         "pass_rate": nk["play_type"].isin(["pass", "qb_spike"]).mean(),
+                                         "p_fg": (o["play_type"] == "field_goal").mean()}])], ignore_index=True)
+    return out
 
 
 def build_all():

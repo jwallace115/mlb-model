@@ -1,3 +1,25 @@
+## 2026-09-17T04:30Z  cowork (Phase 5A-11 — overtime audit; executed directly)
+- FOUND (sim OT drive sequences, 12 games x 2000): matched first-drive FGs ended games as ties;
+  after a first-drive punt the other team's FG did not end the game; after a first-drive FG the
+  second team's empty possession did not end the game. Plus: OT's last minutes were not late-game
+  for timeouts/runoff; no sudden-death in-range behaviour (real: kick on any down 18.5% of snaps).
+- ENGINE: D38 (first-possession completion + empty-second-possession end + FG-ends-only-if-leading,
+  on game state), D39 (OT last 3:00 = Q4 late cells), D40 (ot_sd state: FG on any down, play call,
+  kneel; first OT possession excluded), D41 (_DriveLog attr class: identity equality so pd.concat
+  cannot raise). TABLE: fg_setup.parquet +1 row (ot_sd). No other table touched.
+- K1 (1,087 x 500, drive log, 3,095 s): P(tie|OT) 18.7 -> 10.4% (real 4.3, 3/70); OT drive mix
+  FG 24/TD 15/punt 38/expiry 4% (real 26/13/36/1); drives per OT 2.54 (2.51); P(OT) 4.85% (6.4);
+  ties 0.50% (0.28); P(|m|=3) 11.6% (14.5); |m|=7 8.7 (7.3); |m|=6 4.4 (7.5); pts/team 22.73.
+- TESTS: test_engine_5a11.py 3 pass; 5A tie rate green (0.50% <= 1%); 5A-6 liveness test now also
+  zeroes the ot_sd kick rate (D40 shares the non-4th-FG counter). Full suite ran before D41/5A-6
+  update: 91 pass / 3 fail / 2 errors; after the fixes the targeted reruns give 5A-6 green, 5A-3
+  fg-att green, 5A-3 go rate red -> 93 pass / 3 red (5a3 go rate 0.211 vs 0.198±0.010; 5a4 offence
+  penalties 6.20 vs 5.51±0.5; 5a9 tied-drive expiry 0.115 vs <=0.05). Nothing widened.
+- NOT DONE: residual OT ties 10% vs 4% (punt-fests to 0:00; inside the real sample's uncertainty);
+  the 5A-10 composition list. Delivered as a patch (cloud cannot push).
+- NEXT (on go): XP/two-point placement, shared game factor, Q4 FG count, 4th-down conversion,
+  two-minute drill; then 5B (usage builder), 5C (grader/pricer, maps).
+
 ## 2026-09-16T17:00Z  cowork (Phase 5A-10 — scoring-event composition; executed directly)
 - BUILT: nfl/sim/scoring_composition.py (actual | compare); actual_scoring_composition_2021_2024.parquet
   (2,174 team-games; reconstructs the final score in 99.6%); twopt_decision.parquet rebuilt as an exact
