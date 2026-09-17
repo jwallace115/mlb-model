@@ -107,3 +107,6 @@ data/*.db-shm
 nfl/data/pbp/
 nfl/data/sim/k1p_*.parquet
 nfl/data/sim/outputs/k1_drives_5a2.parquet
+
+_cowork_patches/
+data/odds_archive/nfl/props/raw_live/

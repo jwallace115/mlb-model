@@ -847,3 +847,19 @@
   (self-consistency, not truth). Layer 3 (static 2025+ depth chart, latest dt) fills 2025
   wk1/post-bye weeks with a later snapshot — lookahead in a consumed season, none in 2021-24.
 - NOT DONE: engine/run_week consumption of is_starting_qb (5C).
+
+## 2026-09-17T16:30Z  cowork (verification of Phase 5B-fix)
+- READ: origin/main usage.py, test_usage_5b.py, D45, phase5b report. Code does what the log says:
+  main() build-only, --tune is the only writer of params["usage"], layer 3 gated to s >= 2026.
+- FOUND: the code is on origin inside 38110320 "auto: WNBA season updater" (author Jeff, the Mac
+  auto-committer's git add -A swept the Claude Code working tree before it committed); e357d6f8
+  contains only logs/agent_sessions.md. Also swept in: _cowork_patches/5a11_overtime.patch and
+  data/odds_archive/nfl/props/raw_live/hardrock_20260917T1250Z/*.json. Neither path is gitignored.
+- FOUND: tests (g) and (h) run usage.py via subprocess and so REWRITE the tracked
+  nfl/data/sim/ratings/*.parquet on every test run (the parquet on origin is now a test-run
+  by-product: 2932559 -> 2931260 bytes, the 2025 layer-3 change). OUT_DIR needs an env/arg
+  override so tests write to a temp dir.
+- NOTE: layer-3 gate is a hardcoded 2026, not "current season" — will back-fill 2026 historic
+  weeks from a later snapshot next season.
+- Suite count 102 pass / 3 red matches 93 + 9 usage tests; reds unchanged (5A-3, 5A-4, 5A-9).
+- NOT DONE: engine/run_week consumption of is_starting_qb (5C).
