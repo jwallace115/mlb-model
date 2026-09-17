@@ -1,3 +1,20 @@
+## 2026-09-17T14:30Z  claude-code (Phase 5B-fix — tuner/builder split, layer-3 scope)
+- EDITED: nfl/sim/usage.py — (1) main() refactored to build-only; --tune flag runs grid
+  search and writes usage block to params_v1.json (with frozen_at, frozen_commit,
+  grid_results); plain run never writes the file. (2) derive_starting_qbs layer 3 restricted
+  to season >= 2026 (prospective only); 2025 keys left unset, count logged. (3) _load_common()
+  helper extracted. (4) Fixed af_mean NameError in assertion block.
+- EDITED: nfl/sim/tests/test_usage_5b.py — (g) plain main() leaves params_v1.json
+  byte-identical; (h) --tune writes frozen_at/frozen_commit and best=(4,20); (i) no 2025
+  layer-3 QB, every 2026 wk2 team has one. Renamed test (d) docstring to "self-consistency."
+- APPENDED: research/nfl_sim/NFL_SIM_DECISION_v1.md — D45 (tuner/builder split, layer-3 scope).
+- APPENDED: research/nfl_sim/phase5b_usage_repair.md — 5B-fix section.
+- RAN: pytest nfl/sim/tests/test_usage_5b.py — 9/9 pass.
+- RAN: pytest nfl/sim/tests -q — full suite results in commit message.
+- NOT DONE: params_v1.json not modified (no --tune run; the frozen block is already correct).
+- UNVERIFIED: whether the full nfl/sim/tests suite has pre-existing reds from the engine phases
+  (5A-3 go rate, 5A-4 offence penalties, 5A-9 tied-drive expiry were red as of 5A-11).
+
 ## 2026-09-17T13:00Z  claude-code (Phase 5B — usage layer repair)
 - EDITED: nfl/sim/params_v1.json — added "usage" block {"share_half_life": 4, "k_share": 20,
   "frozen_at": "2026-09-17", "frozen_commit": "463a666d0"}.
