@@ -814,23 +814,40 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                         if sq and sq["gsis_id"] == pids[i]:
                             is_starter[i] = True
 
-                # If a team has QBs but none is flagged (depth chart starter not on
-                # roster), pick the QB with the most raw carries or raw targets as
-                # the de facto starter. Ensures every team-week has exactly one.
+                # Ensure every team has exactly one flagged starter QB.
+                # If the flagged QB is Out/inactive (won't appear in the engine's
+                # player context), or if no QB was flagged at all, flag the active
+                # QB with the most raw touches. This covers backup-QB weeks.
+                w_active = s_active[(s_active["week"] == w) & (s_active["active_flag"])]
+                active_pids = set(w_active["player_id"].values) if not w_active.empty else set()
+
                 for t in np.unique(teams_arr_qb):
                     team_qb_mask = is_qb & (teams_arr_qb == t)
-                    if team_qb_mask.any() and not is_starter[team_qb_mask].any():
-                        qb_indices = np.where(team_qb_mask)[0]
-                        # Pick QB with most raw touches
-                        best_idx = qb_indices[0]
-                        best_touches = 0
-                        for qi in qb_indices:
-                            touches = (raw_tgt_arr[qi] if qi < len(raw_tgt_arr) else 0) + \
-                                      (raw_car_arr[qi] if qi < len(raw_car_arr) else 0)
-                            if touches > best_touches:
-                                best_touches = touches
-                                best_idx = qi
-                        is_starter[best_idx] = True
+                    if not team_qb_mask.any():
+                        continue
+                    # Check if the flagged starter is actually active
+                    starter_active = False
+                    for i in np.where(team_qb_mask)[0]:
+                        if is_starter[i] and pids[i] in active_pids:
+                            starter_active = True
+                            break
+                    if starter_active:
+                        continue
+                    # Clear any inactive starter flag and re-flag
+                    is_starter[team_qb_mask] = False
+                    qb_indices = np.where(team_qb_mask)[0]
+                    # Prefer active QBs
+                    active_qbs = [qi for qi in qb_indices if pids[qi] in active_pids]
+                    candidates = active_qbs if active_qbs else list(qb_indices)
+                    best_idx = candidates[0]
+                    best_touches = -1
+                    for qi in candidates:
+                        touches = (raw_tgt_arr[qi] if qi < len(raw_tgt_arr) else 0) + \
+                                  (raw_car_arr[qi] if qi < len(raw_car_arr) else 0)
+                        if touches > best_touches:
+                            best_touches = touches
+                            best_idx = qi
+                    is_starter[best_idx] = True
 
             backup_qb = is_qb & ~is_starter
 
