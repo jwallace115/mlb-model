@@ -809,3 +809,24 @@
 - NOT DONE: 2B player allocation, anchoring, pricing
 - UNVERIFIED: whether rebuilding tendencies_weekly (fixing fourth_down_go_rate) would improve the diagnostic further
 - UNVERIFIED: whether the 2021 season scoring gap (15.0 vs 23.0) is a data coverage issue or a real engine weakness
+
+## 2026-09-17T13:45Z  cowork (verification of Phase 5B, commit 121e4bd31)
+- READ: usage.py diff, params_v1.json, test_usage_5b.py, phase5b report, D42-D44. Code matches the log.
+- FOUND: nfl/data/pbp/pbp_2026.parquet on the Mac was stale (15 games, no DEN@KC) — the
+  KC "Mahomes 1.0 (depth_chart)" spot check was built with zero KC 2026 data. Refreshed via
+  pull_pbp.pull_season(2026) -> 16 games (nflreadpy installed in the bridge VM).
+- RAN: python3 nfl/sim/usage.py (37.7 s) on the fresh pbp -> all 32 wk2 starters now from
+  prev_game_passer (KC Mahomes; MIA Willis, MIN Wentz, SEA Lock, ATL Rush, ARI Brissett —
+  check against news before the board run: layer 2 has no injury-report input).
+  Rewrote nfl/data/sim/ratings/player_usage_weekly.parquet + active_universe_weekly.parquet
+  (tracked, modified in the working tree — Jeff commits).
+- RAN: pytest test_usage_5b.py in the bridge VM -> 6/6 pass (confirms the session's count).
+- DEFECT (5B-fix): usage.py main() still re-runs the 12-point grid on 2021-24 and REWRITES
+  params["usage"] on every build, dropping frozen_at/frozen_commit. D42 is enforced only in
+  build_player_usage (ValueError if absent), not against main(). Values came back identical
+  (4, 20) so the rebuilt parquet equals a frozen build; params_v1.json restored from HEAD.
+  Tuner must be split from the builder.
+- NOTE: test (d) compares derive_starting_qbs against a re-implementation of the same rule
+  (self-consistency, not truth). Layer 3 (static 2025+ depth chart, latest dt) fills 2025
+  wk1/post-bye weeks with a later snapshot — lookahead in a consumed season, none in 2021-24.
+- NOT DONE: engine/run_week consumption of is_starting_qb (5C).
