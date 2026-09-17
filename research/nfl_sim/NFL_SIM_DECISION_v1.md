@@ -386,3 +386,19 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   Throughput: 500 sim-games/s (5 games, N=10000, players ON). Projected 1087-game backtest:
   N=10000 20.5h, N=4000 8.2h, N=2000 4.1h, N=1000 2.1h. Jeff chooses N.
   Tests: `test_5c1.py` 8/8 pass. See `research/nfl_sim/phase5c1_report.md`.
+- **2026-09-17 Phase 5C-1b — Cowork-verified gap closure.**
+  **D46 amended.** `anchor_game` is now a thin wrapper around `run_anchored_chunked`
+  (own loop deleted). `run_cal_players.py` rewritten to call `run_anchored_chunked`
+  (4-iteration loop deleted). All three callers resolve to the same function object (test).
+  **D50 amended.** QB identity tested on all 32 teams for 2026 wk2 (was KC only).
+  For 2026+, raises if no `is_starting_qb`. For historical seasons with usage-table gaps
+  (backup-QB weeks), warns and falls back to depth_order — not silent, but not blocking.
+  **Sit-key rebuild.** `tendencies_situational_weekly.parquet` rebuilt with `int(down)` keys.
+  Zero float-format keys on disk (asserting test). Engine playcall fallback raises KeyError
+  instead of 0.55 literal. `ev_sit_proe_miss` counter added.
+  **SGP.** `sgp_probability` alias deleted; only `sgp_probability_raw` and
+  `sgp_probability_raked` exist. ESS returned as a count.
+  **Usage hygiene.** `OUT_DIR` overridable by `NFL_USAGE_OUT_DIR`; tests (g)/(h) write
+  to tmp_path. Layer-3 uses `current_season` from PBP files, not hardcoded 2026.
+  **MNF re-grade.** v3: 30/30 graded (0 void, was >0 in v2); 9 hits, 21 misses.
+  Tests: `test_5c1.py` 9/9, `test_usage_5b.py` 9/9.

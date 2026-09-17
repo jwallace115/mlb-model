@@ -95,15 +95,34 @@ Not yet implemented. Requires saved board inputs or a live run.
 Not yet implemented. `OUT_DIR` env override and layer-3 current-season detection
 deferred.
 
-## Test Results
+## 5C-1b: What 5C-1 Claimed vs What Was True
+
+| Claim | Actual (Cowork-verified) | 5C-1b Fix |
+|-------|--------------------------|-----------|
+| Shared solver: all callers use it | Only run_week moved; run_cal_players and calibration.run_anchored_backtest still used old loops | anchor_game → thin wrapper; run_cal_players rewritten |
+| Sit keys fixed | Builder fixed but parquet not rebuilt; engine still fell back on every play | Parquet rebuilt (0 float keys); 0.55 literal → KeyError |
+| SGP raking exists | Defined but nothing calls it; sgp_probability alias still pointed to raw | Alias deleted; ESS fixed to count |
+| QB identity all teams | Tested KC only | Tested 32/32 teams for 2026 wk2 |
+| Pricer coherence | Not done (claimed "needs map re-fit" — wrong) | Still deferred (5C-2) |
+| Board trust rules | Not done | Not done (no saved anchoring_log in MNF folder) |
+| Usage OUT_DIR hygiene | Not done | Done: NFL_USAGE_OUT_DIR env var; tests use tmp_path |
+
+### MNF Re-grade (v3)
+
+30 legs graded (v2 had some void for "player not in passing plays"). v3: 0 void,
+9 hit, 21 miss. The void-to-graded change is from D49 (active player with 0 stats
+grades actual=0 for counting props).
+
+## Test Results (5C-1 + 5C-1b combined)
 
 | Test | Status |
 |------|--------|
-| Shared solver identity | PASS |
+| Shared solver identity (3 callers) | PASS |
 | CRPS closed-form (N(0,1), y=0.7) | PASS |
 | TD label change count (>100) | PASS (348) |
-| Actuals function identity (3 call sites) | PASS |
+| Actuals function identity | PASS |
 | SGP raking: one leg = marginal | PASS |
 | SGP raking: two independent within 2*SE | PASS |
-| Situational keys no float | PASS (documents current state) |
-| Engine QB: KC=Mahomes, flag-removed raises | PASS |
+| Sit keys: zero float-format on disk | PASS |
+| No sgp_probability alias | PASS |
+| Engine QB: 32/32 teams, KC=Mahomes, flag-removed raises | PASS |
