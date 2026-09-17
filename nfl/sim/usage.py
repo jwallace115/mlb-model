@@ -680,8 +680,12 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                 lw_r = s_active[s_active["week"] < w]["week"].max() if not s_active[s_active["week"] < w].empty else None
                 if lw_r is not None:
                     w_roster_full = s_active[s_active["week"] == lw_r]
-            # Share universe = 53-man roster (ACT or INA status) for this week
+            # Share universe = 53-man roster (ACT or INA status) for this week.
+            # Team-specific: a player must be on THAT team's roster, not just any team.
             act_roster = w_roster_full[w_roster_full["status"].isin({"ACT", "INA"})]
+            act_roster_by_team = {}
+            for t_name, t_grp in act_roster.groupby("team"):
+                act_roster_by_team[t_name] = set(t_grp["player_id"].unique())
             act_roster_pids = set(act_roster["player_id"].unique())
 
             week_roster = s_roster[s_roster["week"] == w] if "week" in s_roster.columns else s_roster
@@ -707,8 +711,16 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                 merged = pd.concat([merged, nr], ignore_index=True)
 
             merged = merged[merged["position"].isin(SKILL_POS)]
-            # Filter to ever-ACT this season
-            merged = merged[merged["player_id"].isin(act_roster_pids)]
+            # Filter to team-specific roster: player must be on THAT team's
+            # roster for this week (prevents cross-team leakage via PBP history).
+            roster_tp = set()
+            for t_name, pid_set in act_roster_by_team.items():
+                for pid in pid_set:
+                    roster_tp.add((t_name, pid))
+            keep_mask = pd.Series(
+                [(t, p) in roster_tp for t, p in zip(merged["team"], merged["player_id"])],
+                index=merged.index)
+            merged = merged[keep_mask]
             merged = merged.drop_duplicates(subset=["team", "player_id"])
             if merged.empty:
                 continue
