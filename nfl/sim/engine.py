@@ -543,10 +543,25 @@ def _build_player_context(home, away, season, week, player_usage, active_uni,
         qb_idx = -1
         if qb_mask.any():
             qb_candidates = renormed[qb_mask]
-            depth_map_local = dict(zip(au["player_id"], au["depth_order"].fillna(99)))
-            qb_depths = qb_candidates["player_id"].map(depth_map_local).fillna(99)
-            qb_idx = qb_candidates.index[qb_depths.values.argmin()]
-            qb_idx = renormed.index.get_loc(qb_idx)
+            # D46: Use is_starting_qb from player_usage_weekly
+            has_flag = "is_starting_qb" in renormed.columns
+            if has_flag:
+                starter = qb_candidates[qb_candidates["is_starting_qb"] == True]
+                if len(starter) >= 1:
+                    qb_idx = starter.index[0]
+                    qb_idx = renormed.index.get_loc(qb_idx)
+                elif season >= 2026:
+                    raise ValueError(
+                        f"No is_starting_qb=True for {team} {season} wk{week}. "
+                        f"QB candidates: {qb_candidates['player_id'].tolist()}. "
+                        f"Run usage.py to set the flag."
+                    )
+            if qb_idx == -1:
+                # Fallback for historical seasons without the flag
+                depth_map_local = dict(zip(au["player_id"], au["depth_order"].fillna(99)))
+                qb_depths = qb_candidates["player_id"].map(depth_map_local).fillna(99)
+                qb_idx = qb_candidates.index[qb_depths.values.argmin()]
+                qb_idx = renormed.index.get_loc(qb_idx)
 
         pctx[ti] = {
             "ids": renormed["player_id"].values,

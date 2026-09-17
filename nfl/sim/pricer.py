@@ -193,7 +193,7 @@ def _apply_calibration(row, cal_maps):
     return p
 
 
-def sgp_probability(leg_matrix, legs):
+def sgp_probability_raw(leg_matrix, legs):
     """Joint frequency of all legs hitting in the same sim.
 
     legs: list of column names from leg_matrix.
@@ -206,6 +206,63 @@ def sgp_probability(leg_matrix, legs):
         else:
             return 0.0
     return float(mask.mean())
+
+
+def sgp_probability(leg_matrix, legs):
+    """Alias for raw joint frequency (backward compat)."""
+    return sgp_probability_raw(leg_matrix, legs)
+
+
+def sgp_probability_raked(leg_matrix, legs, cal_probs):
+    """Joint probability with iterative proportional fitting (raking).
+
+    Adjusts per-sim weights so the weighted marginal of each leg equals its
+    calibrated probability. Starts from uniform weights; iterates over legs;
+    stops when max marginal error < 1e-6 or 200 iterations.
+
+    Args:
+        leg_matrix: DataFrame with sim_id rows and indicator columns.
+        legs: list of column names from leg_matrix.
+        cal_probs: list of calibrated marginal probabilities, same order as legs.
+
+    Returns:
+        (joint_probability, effective_sample_size)
+    """
+    N = len(leg_matrix)
+    indicators = np.column_stack([
+        leg_matrix[leg].values.astype(np.float64) for leg in legs
+    ])  # (N, n_legs)
+
+    weights = np.ones(N, dtype=np.float64) / N
+
+    for iteration in range(200):
+        max_err = 0.0
+        for j, cal_p in enumerate(cal_probs):
+            col = indicators[:, j]
+            current_marginal = (weights * col).sum()
+            if current_marginal < 1e-15:
+                continue
+            ratio = cal_p / current_marginal
+            weights[col == 1] *= ratio
+            # Renormalize
+            weights /= weights.sum()
+            err = abs((weights * col).sum() - cal_p)
+            max_err = max(max_err, err)
+        if max_err < 1e-6:
+            break
+    else:
+        raise RuntimeError(
+            f"SGP raking did not converge after 200 iterations (max_err={max_err:.2e})"
+        )
+
+    # Joint = weighted frequency of all legs hitting
+    all_hit = indicators.prod(axis=1)
+    joint = (weights * all_hit).sum()
+
+    # Effective sample size: (sum w)^2 / sum(w^2)
+    ess = 1.0 / (N * (weights ** 2).sum())
+
+    return float(joint), float(ess)
 
 
 def leg_correlation(leg_matrix, leg_i, leg_j):

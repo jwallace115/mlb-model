@@ -23,6 +23,7 @@ from nfl.sim.seed_util import stable_seed
 from nfl.sim.names import (FULL_TO_ABBR, load_roster, _build_roster_lookup,
                            resolve_player, is_player_name)
 from nfl.sim.calibration import load_calibration
+from nfl.sim.anchor import run_anchored_chunked
 
 SEASON = 2026
 OUT_BASE = ROOT / "nfl" / "data" / "sim" / "outputs"
@@ -628,7 +629,7 @@ def main():
         home, away = ln["home"], ln["away"]
         print(f"  Simulating {away}@{home}...", end="", flush=True)
         st = time.time()
-        td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = run_chunked_game(
+        td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = run_anchored_chunked(
             home, away, SEASON, week, ln["spread"], ln["total"], N_SIMS,
             anchoring_log=anchoring_log, **kw)
         dt = time.time() - st

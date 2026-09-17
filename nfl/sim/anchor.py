@@ -11,7 +11,7 @@ Market lines:
   Live: Hard Rock pre-kickoff line, fallback consensus median.
 """
 
-import time
+import gc, json, time
 from pathlib import Path
 
 import numpy as np
@@ -142,6 +142,129 @@ def anchor_game(home, away, season, week, market_spread, market_total,
         "anchored_margin": m, "anchored_total": t,
         "market_margin": market_margin, "market_total": market_total,
     }
+
+
+def _load_anchor_params():
+    """Read the 'anchor' block from params_v1.json. Raises if missing."""
+    params_path = ROOT / "nfl" / "sim" / "params_v1.json"
+    with open(params_path) as f:
+        params = json.load(f)
+    if "anchor" not in params:
+        raise ValueError("params_v1.json missing required 'anchor' block")
+    ap = params["anchor"]
+    return {
+        "n_sims": ap["n_sims"],
+        "chunk_size": ap["chunk_size"],
+        "max_iter": ap["max_iter"],
+        "damp_limit_pts": ap["damp_limit_pts"],
+        "J_INV": np.array(ap["J_INV"]),
+        "J_FWD": np.array(ap["J_FWD"]),
+    }
+
+
+def _run_chunks(home, away, season, week, chunk_size, n_chunks, base_seed,
+                dh, da, **kw):
+    """Run n_chunks simulations and pool results."""
+    all_td = []
+    all_pdf = []
+    for ci in range(n_chunks):
+        seed = (base_seed + ci * 7919) % (2**31)
+        result = simulate_game(
+            home, away, season, week, n_sims=chunk_size, seed=seed,
+            epa_home_offset=dh, epa_away_offset=da, **kw)
+        if isinstance(result, tuple):
+            td, pdf = result
+        else:
+            td, pdf = result, None
+        if pdf is not None and ci > 0:
+            pdf = pdf.copy()
+            pdf["sim_id"] = pdf["sim_id"] + ci * chunk_size
+        td = td.copy()
+        td["sim_id"] = td.index + ci * chunk_size
+        all_td.append(td)
+        if pdf is not None:
+            all_pdf.append(pdf)
+        del result
+    pooled_td = pd.concat(all_td, ignore_index=True)
+    pooled_pdf = pd.concat(all_pdf, ignore_index=True) if all_pdf else None
+    del all_td, all_pdf
+    margin = (pooled_td["home_score"] - pooled_td["away_score"]).values.astype(float)
+    total_arr = (pooled_td["home_score"] + pooled_td["away_score"]).values.astype(float)
+    return pooled_td, pooled_pdf, margin.mean(), total_arr.mean(), \
+           margin.std() / np.sqrt(len(margin)), total_arr.std() / np.sqrt(len(total_arr))
+
+
+def run_anchored_chunked(home, away, season, week, spread, total,
+                         n_sims=None, chunk_size=None, max_iter=None,
+                         anchoring_log=None, **kw):
+    """Shared anchoring solver (D45). All call sites use this.
+
+    Reads defaults from params_v1.json anchor block; kwargs override.
+    Fixed J_INV with step-size damping. Convergence at |market - mean| < 2*SE
+    on both channels. Best-iteration return.
+
+    Returns: (team_df, player_df, dh, da, n_iter, converged,
+              raw_m, raw_t, anch_m, anch_t)
+    """
+    ap = _load_anchor_params()
+    n_sims = n_sims or ap["n_sims"]
+    chunk_size = chunk_size or ap["chunk_size"]
+    max_iter = max_iter or ap["max_iter"]
+    J_INV = ap["J_INV"]
+    J_FWD = ap["J_FWD"]
+    damp_limit = ap["damp_limit_pts"]
+
+    base_seed = stable_seed((home, away, season, week, 42))
+    n_chunks = max(1, n_sims // chunk_size)
+
+    dh, da = 0.0, 0.0
+    raw_m = raw_t = None
+    best_err = float("inf")
+    best_state = None
+
+    for it in range(max_iter):
+        pooled_td, pooled_pdf, m, t, se_m, se_t = _run_chunks(
+            home, away, season, week, chunk_size, n_chunks, base_seed,
+            dh, da, **kw)
+        if it == 0:
+            raw_m, raw_t = m, t
+        me = spread - m
+        te = total - t
+        err_norm = abs(me) + abs(te)
+
+        if anchoring_log is not None:
+            anchoring_log.append({
+                "game": f"{away}@{home}", "iter": it, "dh": dh, "da": da,
+                "margin": m, "total": t, "se_m": se_m, "se_t": se_t,
+                "err_m": me, "err_t": te,
+                "converged": abs(me) < 2 * se_m and abs(te) < 2 * se_t,
+            })
+
+        if err_norm < best_err:
+            best_err = err_norm
+            best_state = (pooled_td, pooled_pdf, dh, da, it + 1, m, t)
+
+        if abs(me) < 2 * se_m and abs(te) < 2 * se_t:
+            return pooled_td, pooled_pdf, dh, da, it + 1, True, raw_m, raw_t, m, t
+
+        err = np.array([me, te])
+        step = J_INV @ err
+        for _ in range(5):
+            pred = J_FWD @ step
+            if abs(pred[0]) <= damp_limit and abs(pred[1]) <= damp_limit:
+                break
+            step = step * 0.5
+
+        dh += step[0]
+        da += step[1]
+        if it < max_iter - 1:
+            del pooled_td, pooled_pdf
+            gc.collect()
+
+    b_td, b_pdf, b_dh, b_da, b_it, b_m, b_t = best_state
+    if abs(spread - b_m) + abs(total - b_t) < err_norm:
+        return b_td, b_pdf, b_dh, b_da, b_it, False, raw_m, raw_t, b_m, b_t
+    return pooled_td, pooled_pdf, dh, da, max_iter, False, raw_m, raw_t, m, t
 
 
 def get_market_lines(season, week, game_id=None):

@@ -15,6 +15,16 @@
     "frozen_at": "2026-09-17",
     "frozen_commit": "463a666d0"
   },
+  "anchor": {
+    "n_sims": 10000,
+    "chunk_size": 2000,
+    "max_iter": 8,
+    "damp_limit_pts": 6,
+    "convergence": "2*SE both channels",
+    "J_INV": [[0.07450484, 0.10168527], [-0.08895527, 0.1277827]],
+    "J_FWD": [[6.88, -5.48], [4.79, 4.01]],
+    "J_estimated_with": {"n_sims": 500, "n_games": 50, "seed": 99}
+  },
   "grid_results": [
     {
       "half_life": Infinity,

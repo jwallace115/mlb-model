@@ -501,7 +501,7 @@ def build_situational_proe(scrimmage_plays, params, league_means):
     pass_oe is in nflverse units: percentage points above league expected pass rate."""
     k_t = params.get("k_tendency", 200)
     scrim = scrimmage_plays.copy()
-    scrim["down_b"] = scrim["down"].astype(str)
+    scrim["down_b"] = scrim["down"].astype(int).astype(str)
     scrim["dist_b"] = pd.cut(scrim["ydstogo"], bins=[0, 3, 7, 100],
                               labels=["short", "med", "long"], right=True)
     scrim["score_b"] = pd.cut(scrim["score_differential"], bins=[-100, -9, 8, 100],

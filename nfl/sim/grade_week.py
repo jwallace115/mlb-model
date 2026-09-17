@@ -17,7 +17,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
-from nfl.sim.calibration import actual_player_stats
+from nfl.sim.actuals import actual_player_game_stats
 from nfl.sim.names import (load_roster, _build_roster_lookup, resolve_player,
                            FULL_TO_ABBR)
 
@@ -173,8 +173,14 @@ def find_game_id(game_str, season, pbp_games):
     return None
 
 
-def grade_leg(row, rec_stats, rush_stats, td_stats, pass_stats):
-    """Grade a single leg against actual stats. Returns (grade, reason)."""
+def grade_leg(row, rec_stats, rush_stats, td_stats, pass_stats,
+              player_was_active=True):
+    """Grade a single leg against actual stats. Returns (grade, reason).
+
+    If the player has no stat rows but was active (on roster and team played),
+    actual = 0 for counting stats. Void only if the player was inactive or
+    the family is unknown.
+    """
     pid = row["player_id"]
     family = row["family"]
     side = row["side"]
@@ -183,9 +189,7 @@ def grade_leg(row, rec_stats, rush_stats, td_stats, pass_stats):
     if family == "receptions":
         k = int(line + 0.5)
         ar = rec_stats[rec_stats["player_id"] == pid]
-        if len(ar) == 0:
-            return ("void", "player not in passing plays")
-        actual = int(ar["actual_rec"].iloc[0])
+        actual = int(ar["actual_rec"].iloc[0]) if len(ar) else 0
         hit = actual >= k
 
     elif family == "reception_yds":
@@ -261,30 +265,21 @@ def grade_week(season, week, extra_paths=None):
 
         if pbp_gid not in actuals_cache:
             game_pbp = pbp_games[pbp_gid]
-            rec, rush, td = actual_player_stats(game_pbp)
-            # Pass stats
-            passes = game_pbp[(game_pbp["play_type"] == "pass") &
-                              game_pbp["down"].notna() &
-                              (game_pbp["sack"] != 1)]
-            if len(passes) > 0 and "passer_player_id" in passes.columns:
-                pass_stats = passes[passes["passer_player_id"].notna()].groupby(
-                    "passer_player_id").agg(
-                    actual_completions=("complete_pass", "sum"),
-                    actual_pass_att=("play_id", "count"),
-                ).reset_index().rename(columns={"passer_player_id": "player_id"})
-            else:
-                pass_stats = pd.DataFrame(columns=["player_id", "actual_completions", "actual_pass_att"])
+            rec, rush, td, pass_stats = actual_player_game_stats(game_pbp)
             actuals_cache[pbp_gid] = (rec, rush, td, pass_stats)
         else:
             rec, rush, td, pass_stats = actuals_cache[pbp_gid]
 
-        # Check if player appears in game at all
-        in_game = (len(rec[rec["player_id"] == pid]) > 0 or
-                   len(rush[rush["player_id"] == pid]) > 0 or
-                   len(td[td["player_id"] == pid]) > 0 or
-                   len(pass_stats[pass_stats["player_id"] == pid]) > 0)
+        # Determine if the player was active (on the roster for that team-week).
+        # A player with no stat rows but who was active grades actual = 0.
+        # Void only if the player was NOT on the active roster.
+        in_stats = (len(rec[rec["player_id"] == pid]) > 0 or
+                    len(rush[rush["player_id"] == pid]) > 0 or
+                    len(td[td["player_id"] == pid]) > 0 or
+                    len(pass_stats[pass_stats["player_id"] == pid]) > 0)
 
-        if not in_game:
+        if not in_stats:
+            # Check active_universe or PBP presence
             game_pbp = pbp_games[pbp_gid]
             has_plays = False
             for col in ["receiver_player_id", "rusher_player_id", "passer_player_id"]:
@@ -292,10 +287,27 @@ def grade_week(season, week, extra_paths=None):
                     if pid in game_pbp[col].values:
                         has_plays = True
                         break
-            if not has_plays:
+
+            # Also check active_universe_weekly if available
+            au_path = ROOT / "nfl" / "data" / "sim" / "ratings" / "active_universe_weekly.parquet"
+            player_active = False
+            if au_path.exists():
+                au = pd.read_parquet(au_path)
+                team = row.get("home") or row.get("away") or ""
+                # Check both teams
+                for t in [row.get("home", ""), row.get("away", "")]:
+                    au_match = au[(au["season"] == season) & (au["week"] == week)
+                                 & (au["team"] == t) & (au["player_id"] == pid)
+                                 & (au["active_flag"] == True)]
+                    if len(au_match) > 0:
+                        player_active = True
+                        break
+
+            if not has_plays and not player_active:
                 grades.append("void")
-                reasons.append("player not in game PBP")
+                reasons.append("player not active/not in game PBP")
                 continue
+            # Player was active but had zero stats — grade with actual = 0
 
         g, reason = grade_leg(row, rec, rush, td, pass_stats)
         grades.append(g)

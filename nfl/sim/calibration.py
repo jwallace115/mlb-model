@@ -17,6 +17,7 @@ from sklearn.isotonic import IsotonicRegression
 from nfl.sim.engine import _load_tables, _load_ratings
 from nfl.sim.anchor import anchor_game, estimate_jacobian
 from nfl.sim.pricer import price_game
+from nfl.sim.actuals import actual_player_game_stats
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs"
@@ -90,11 +91,15 @@ def run_anchored_backtest(seasons, n_sims=1000, J_inv=None):
 
 
 def _crps_sample(samples, observed):
-    """CRPS of a sample distribution vs a scalar observation."""
+    """CRPS of a sample distribution vs a scalar observation.
+
+    CRPS = E|S - y| - 0.5 * E|S_i - S_j|
+    The pairwise term np.mean(|S_i - S_j|) is already the double-mean
+    over all i,j pairs, so no additional /n.
+    """
     s = np.sort(samples)
-    n = len(s)
-    crps = np.mean(np.abs(s - observed)) - np.mean(np.abs(
-        s[:, None] - s[None, :])) / (2 * n)
+    crps = np.mean(np.abs(s - observed)) - 0.5 * np.mean(np.abs(
+        s[:, None] - s[None, :]))
     return crps
 
 
@@ -260,65 +265,13 @@ def fit_calibration_maps(results):
 
 
 def actual_player_stats(game_pbp):
-    """Compute actual receiving, rushing, and TD stats from PBP for a single game.
+    """Wrapper: delegates to actuals.actual_player_game_stats.
 
-    Returns:
-      rec_stats: DataFrame(player_id, actual_rec, actual_rec_yds)
-      rush_stats: DataFrame(player_id, actual_rush_yds, actual_carries)
-      td_stats: DataFrame(player_id, actual_atd)  — 1 if scored any TD
+    Returns (rec_stats, rush_stats, td_stats) — the 3-tuple callers expect.
+    The 4th element (pass_stats) is available from actual_player_game_stats directly.
     """
-    # Actual receiving stats
-    passes = game_pbp[(game_pbp["play_type"] == "pass") &
-                       game_pbp["down"].notna() &
-                       (game_pbp["sack"] != 1)]
-    rec_rows = passes[passes["receiver_player_id"].notna()]
-    if len(rec_rows) > 0:
-        rec_stats = rec_rows.groupby("receiver_player_id").agg(
-            actual_rec=("complete_pass", "sum"),
-            actual_rec_yds=("yards_gained",
-                            lambda x: x[rec_rows.loc[x.index, "complete_pass"] == 1].sum()),
-        ).reset_index().rename(columns={"receiver_player_id": "player_id"})
-    else:
-        rec_stats = pd.DataFrame(columns=["player_id", "actual_rec", "actual_rec_yds"])
-
-    # Actual rushing stats
-    rushes = game_pbp[(game_pbp["play_type"] == "run") &
-                       game_pbp["rusher_player_id"].notna()]
-    if len(rushes) > 0:
-        rush_stats = rushes.groupby("rusher_player_id").agg(
-            actual_rush_yds=("yards_gained", "sum"),
-            actual_carries=("play_id", "count"),
-        ).reset_index().rename(columns={"rusher_player_id": "player_id"})
-    else:
-        rush_stats = pd.DataFrame(columns=["player_id", "actual_rush_yds", "actual_carries"])
-
-    # Actual anytime TD
-    td_plays = game_pbp[game_pbp["td_team"].notna()]
-    td_scorers = set()
-    for col in ["receiver_player_id", "rusher_player_id", "passer_player_id"]:
-        if col in td_plays.columns:
-            if col == "passer_player_id":
-                # Passing TDs credit the receiver, not the passer, for anytime TD
-                continue
-            scorers = td_plays[td_plays[col].notna() &
-                               (td_plays["yards_gained"] > 0)][col].unique()
-            td_scorers.update(scorers)
-    # Also check rush TDs (rusher scores)
-    rush_tds = td_plays[(td_plays["play_type"] == "run") &
-                         td_plays["rusher_player_id"].notna()]
-    td_scorers.update(rush_tds["rusher_player_id"].unique())
-    # Receiving TDs
-    rec_tds = td_plays[(td_plays["play_type"] == "pass") &
-                        td_plays["receiver_player_id"].notna() &
-                        (td_plays["complete_pass"] == 1)]
-    td_scorers.update(rec_tds["receiver_player_id"].unique())
-
-    td_stats = pd.DataFrame({
-        "player_id": list(td_scorers),
-        "actual_atd": 1,
-    }) if td_scorers else pd.DataFrame(columns=["player_id", "actual_atd"])
-
-    return rec_stats, rush_stats, td_stats
+    rec, rush, td, _pass = actual_player_game_stats(game_pbp)
+    return rec, rush, td
 
 
 def _score_player_props(pdf, game_result, prop_data):
