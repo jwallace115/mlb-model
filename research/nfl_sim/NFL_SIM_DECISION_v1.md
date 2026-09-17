@@ -350,3 +350,20 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   Tests: `test_usage_5b.py` 6/6 pass (params read, share sums, KC wk17 face validity,
   starting-QB identity 100%, CAR zero-opp below prior, PIT byte-identity).
   See `research/nfl_sim/phase5b_usage_repair.md`.
+- **2026-09-17 Phase 5B-fix — tuner/builder split, layer-3 scope.**
+  **D45 — Tuner separated from builder.** `main()` is now build-only: reads
+  `params_v1.json`, requires the `"usage"` block (raises if absent), never writes
+  the file. A `--tune` flag runs the existing 2021-2024 grid search and writes
+  `share_half_life`, `k_share`, `frozen_at` (UTC date), `frozen_commit`
+  (`git rev-parse --short HEAD`), and `grid_results` into the `"usage"` block.
+  The defect: every plain `python usage.py` run re-ran the 12-point grid and
+  unconditionally overwrote `params["usage"]`, dropping `frozen_at`/`frozen_commit`.
+  D42 was enforced inside `build_player_usage` but not at the builder's own entry point.
+  **Layer-3 scope restricted.** `derive_starting_qbs` layer 3 (static new-schema depth
+  chart) now only fills team-weeks with `season >= 2026` (prospective). For 2025
+  historical weeks the snapshot post-dates the games; the key is left unset and the
+  count of unset keys is logged. No 2025 team-week carries a layer-3 starting QB.
+  Tests: `test_usage_5b.py` 9/9 pass (added (g) params file unchanged after plain
+  main, (h) --tune writes frozen_at/frozen_commit and best=(4,20), (i) no 2025
+  layer-3 QB and every 2026 wk2 team has one).
+  See `research/nfl_sim/phase5b_usage_repair.md`.

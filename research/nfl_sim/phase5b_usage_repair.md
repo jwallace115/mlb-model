@@ -97,3 +97,40 @@ Games used: DET hosted NO (2026_01_NO_DET), BUF at HOU (2026_01_BUF_HOU).
 | Dawson Knox | TE | 0.0636 | 0.0000 | 1 | 0 |
 
 `*` = is_starting_qb
+
+---
+
+## Phase 5B-fix -- Tuner/Builder Split, Layer-3 Scope
+
+**Date:** 2026-09-17
+**Commit:** (see git log)
+
+### Defect (found by Cowork verification of 121e4bd31)
+
+`main()` re-ran the 12-point grid search on 2021-2024 on every build and
+unconditionally wrote `params["usage"]`, dropping `frozen_at`/`frozen_commit`.
+D42 was therefore enforced only inside `build_player_usage()`, not at the
+builder's own entry point.
+
+Additionally, `derive_starting_qbs` layer 3 (static new-schema depth chart)
+filled 2025 historical weeks from a depth-chart snapshot that post-dated those
+games, making 2025 starting-QB assignments unreliable.
+
+### What Changed
+
+1. **`main()` is build-only.** Reads `params_v1.json`, requires the `"usage"`
+   block (raises if absent), builds with the frozen values, never writes the
+   file. A `--tune` flag runs the grid search (2021-2024 only; season>=2025
+   guard retained) and writes `share_half_life`, `k_share`, `frozen_at`,
+   `frozen_commit`, and `grid_results`.
+
+2. **Layer-3 scope restricted to `season >= 2026`.** For 2025 historical weeks
+   the static snapshot is not used; keys are left unset and the count is logged.
+
+### Test Results (appended)
+
+| # | Test | Status |
+|---|------|--------|
+| (g) | plain main() leaves params_v1.json byte-identical (sha256 before/after) | PASS |
+| (h) | --tune writes frozen_at, frozen_commit; chosen point = (4, 20) | PASS |
+| (i) | no 2025 team-week has layer-3 starting QB; every 2026 wk2 team has one | PASS |

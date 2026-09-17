@@ -11,7 +11,9 @@ Phase 5B usage-layer tests.
 (f) PIT byte-identity: 2024 wk10 from truncated data == full-season build
 """
 
+import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -194,8 +196,8 @@ def test_kc_2025_wk17_target_shares(data_bundle, usage_df):
 # ─── (d) starting-QB identity ───────────────────────────────────────────────
 
 def test_starting_qb_identity_2026(data_bundle, usage_df):
-    """Starting-QB for every 2026 team-week matches depth chart or prev-game passer.
-    100% match, no tolerance."""
+    """Self-consistency: starting-QB per 2026 team-week matches the derive rule
+    (depth chart or prev-game passer). 100%, no tolerance."""
     starting_qbs = data_bundle["starting_qbs"]
     depth = data_bundle["depth"]
 
@@ -386,3 +388,84 @@ def test_pit_byte_identity_2024_wk10(data_bundle):
                 f"PIT FAIL {col}: max diff {max_diff:.2e} at {pid} "
                 f"(full={full_vals[idx]:.8f} trunc={trunc_vals[idx]:.8f})"
             )
+
+
+# ─── (g) plain main() leaves params_v1.json byte-identical ──────────────────
+
+def test_plain_main_does_not_write_params():
+    """Plain main() (no --tune) must not modify params_v1.json."""
+    params_path = ROOT / "nfl" / "sim" / "params_v1.json"
+    before = hashlib.sha256(params_path.read_bytes()).hexdigest()
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "nfl" / "sim" / "usage.py")],
+        capture_output=True, text=True, timeout=600,
+    )
+    after = hashlib.sha256(params_path.read_bytes()).hexdigest()
+    assert before == after, (
+        f"params_v1.json changed after plain main()! "
+        f"sha256 before={before[:12]} after={after[:12]}\n"
+        f"stderr tail: {result.stderr[-500:]}"
+    )
+    assert result.returncode == 0, (
+        f"main() exited {result.returncode}\nstderr: {result.stderr[-1000:]}"
+    )
+
+
+# ─── (h) --tune writes frozen_at, frozen_commit, and best=(4,20) ────────────
+
+def test_tune_writes_frozen_fields():
+    """--tune writes frozen_at, frozen_commit, and the chosen point is (4, 20)."""
+    params_path = ROOT / "nfl" / "sim" / "params_v1.json"
+    original_bytes = params_path.read_bytes()
+    try:
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "nfl" / "sim" / "usage.py"), "--tune"],
+            capture_output=True, text=True, timeout=600,
+        )
+        assert result.returncode == 0, (
+            f"--tune exited {result.returncode}\nstderr: {result.stderr[-1000:]}"
+        )
+        params = json.loads(params_path.read_text())
+        usage = params["usage"]
+        assert "frozen_at" in usage, "frozen_at missing after --tune"
+        assert "frozen_commit" in usage, "frozen_commit missing after --tune"
+        assert usage["share_half_life"] == 4, (
+            f"Expected share_half_life=4, got {usage['share_half_life']}"
+        )
+        assert usage["k_share"] == 20, (
+            f"Expected k_share=20, got {usage['k_share']}"
+        )
+    finally:
+        # Restore original params so later tests are unaffected
+        params_path.write_bytes(original_bytes)
+
+
+# ─── (i) layer-3 scope: no 2025 layer-3 QB; every 2026 wk2 has one ─────────
+
+def test_layer3_scope(data_bundle):
+    """No 2025 team-week has a layer-3 starting QB; every 2026 wk2 team has exactly one."""
+    starting_qbs = data_bundle["starting_qbs"]
+
+    # No 2025 entry should carry source="depth_chart" from the static new-schema
+    # (layer 1 old-schema is fine for 2020-2024 but has no 2025 data).
+    # Layer-3 entries have source="depth_chart" and are only for s >= 2026.
+    # Check: any 2025 key that has source "depth_chart" must come from layer 1
+    # (old schema, which only covers up to 2024). So any 2025 depth_chart entry
+    # would be a bug.
+    failures_2025 = []
+    for (s, w, team), v in starting_qbs.items():
+        if s == 2025 and v["source"] == "depth_chart":
+            failures_2025.append(f"({s}, {w}, {team})")
+    assert not failures_2025, (
+        f"Layer-3 leaked into 2025: {len(failures_2025)} entries, "
+        f"first 5: {failures_2025[:5]}"
+    )
+
+    # Every 2026 wk2 team must have exactly one starting QB
+    teams_2026 = set()
+    for (s, w, team) in starting_qbs:
+        if s == 2026 and w == 2:
+            teams_2026.add(team)
+    assert len(teams_2026) == 32, (
+        f"2026 wk2: expected 32 teams with starting QB, got {len(teams_2026)}"
+    )

@@ -23,7 +23,7 @@ own targets or carries — that IS the right sample size for a rate.
 Carries EXCLUDE qb_scramble and qb_kneel (designed runs + QB sneaks only).
 """
 
-import json, sys, time, gc
+import argparse, json, subprocess, sys, time, gc
 from pathlib import Path
 
 import numpy as np
@@ -268,7 +268,10 @@ def derive_starting_qbs(depth, plays):
                         "source": "prev_game_passer",
                     }
 
-    # Layer 3: Static depth chart (new schema, 2025+)
+    # Layer 3: Static depth chart (new schema, prospective only: season >= 2026).
+    # For 2025 historical weeks the snapshot post-dates the games; leave unset
+    # rather than back-fill from a later snapshot.
+    n_layer3_unset = 0
     if "pos_rank" in depth.columns:
         new_qb = depth[
             (depth.get("pos_abb", pd.Series(dtype=str)) == "QB")
@@ -283,7 +286,7 @@ def derive_starting_qbs(depth, plays):
             )
             static_qb1 = {r["team"]: r["gsis_id"] for _, r in qb1.iterrows()}
             for s in OUTPUT_SEASONS:
-                if s < 2025:
+                if s < 2026:
                     continue
                 for w in range(1, 23):
                     for team, gsis_id in static_qb1.items():
@@ -293,6 +296,18 @@ def derive_starting_qbs(depth, plays):
                                 "gsis_id": gsis_id,
                                 "source": "depth_chart",
                             }
+
+    # Count 2025 team-weeks left unset (no old-schema depth chart, no PBP fallback)
+    for s in OUTPUT_SEASONS:
+        if s != 2025:
+            continue
+        for w in range(1, 23):
+            for team in (static_qb1 if "pos_rank" in depth.columns and not new_qb.empty else {}):
+                if (s, w, team) not in starting:
+                    n_layer3_unset += 1
+    if n_layer3_unset:
+        print(f"  derive_starting_qbs: {n_layer3_unset} (2025, week, team) keys unset "
+              f"(no old-schema depth chart, no prev-game PBP)")
 
     return starting
 
@@ -1035,145 +1050,147 @@ def pit_test(rec, team_tgt, car, team_car, pos_map, rate_priors, roster_uni,
 # MAIN
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def main():
+def _load_common():
+    """Load data shared by build and tune paths. Returns a dict."""
     t_start = time.time()
-    print("NFL Sim Phase 1B-FIX-2: Player Usage Shares")
-    print("=" * 60)
-
     plays = load_pbp()
     scrimmage = plays[plays["play_type"].isin(["pass", "run"])].copy()
-    n_scramble = 0
-    if "qb_scramble" in plays.columns:
-        n_scramble = int((plays["play_type"] == "run").sum() - len(scrimmage[scrimmage["play_type"] == "run"]))
-    # Actually count properly
     n_scramble = int(((plays["play_type"] == "run") & (plays.get("qb_scramble", pd.Series(0, index=plays.index)) == 1)).sum())
     del plays
     gc.collect()
-    print(f"Loaded {len(scrimmage):,} scrimmage plays, {n_scramble:,} QB scrambles will be excluded from carries ({time.time()-t_start:.1f}s)")
+    print(f"Loaded {len(scrimmage):,} scrimmage plays, {n_scramble:,} QB scrambles excluded ({time.time()-t_start:.1f}s)")
 
-    t1 = time.time()
     rosters, depth, injuries = load_roster_data()
-    print(f"Rosters: {len(rosters):,}, Depth: {len(depth):,}, Injuries: {len(injuries):,} ({time.time()-t1:.1f}s)")
+    print(f"Rosters: {len(rosters):,}, Depth: {len(depth):,}, Injuries: {len(injuries):,}")
 
-    # Derive starting QBs before deleting scrimmage (needs passer_player_id)
     starting_qbs = derive_starting_qbs(depth, scrimmage)
     n_dc = sum(1 for v in starting_qbs.values() if v["source"] == "depth_chart")
     n_pbp = sum(1 for v in starting_qbs.values() if v["source"] == "prev_game_passer")
     print(f"Starting QBs: {len(starting_qbs)} entries ({n_dc} depth_chart, {n_pbp} prev_game_passer)")
 
-    t2 = time.time()
     rec, team_tgt, car, team_car = build_player_game_aggs(scrimmage)
-    del scrimmage
-    gc.collect()
-    print(f"Aggregates: rec={len(rec):,} rush={len(car):,} ({time.time()-t2:.1f}s)")
+    del scrimmage; gc.collect()
+    print(f"Aggregates: rec={len(rec):,} rush={len(car):,}")
 
     pos_map = build_position_map(rosters)
     rate_priors = compute_position_priors(rec, car, pos_map)
-
     roster_uni = rosters[rosters["position"].isin(SKILL_POS)][
         ["season", "week", "gsis_id", "team", "position", "full_name"]
     ].rename(columns={"gsis_id": "player_id"}).drop_duplicates(["season", "week", "player_id"])
 
-    # Build active universe
-    print("\nBuilding active universe...")
+    print("Building active universe...")
     active = build_active_universe(rosters, injuries, depth)
-    del rosters, depth, injuries
-    gc.collect()
+    del rosters, depth, injuries; gc.collect()
     print(f"  {len(active):,} rows, active_flag mean: {active['active_flag'].mean():.3f}")
 
-    # Assertion (d): 2026 wk2
-    a26w2 = active[(active["season"] == 2026) & (active["week"] == 2)]
-    print(f"  2026 wk2 active_universe: {a26w2['team'].nunique()} teams, {len(a26w2)} rows")
-    assert a26w2["team"].nunique() == 32, f"FAIL (d): 2026 wk2 has {a26w2['team'].nunique()} teams"
-    assert len(a26w2) >= 300, f"FAIL (d): 2026 wk2 has {len(a26w2)} rows"
-
-    # Assertion (e)
-    af_mean = active['active_flag'].mean()
-    inactive_breakdown = active[~active['active_flag']]['injury_status'].value_counts().head(6)
-    print(f"\n  Assertion (e): active_flag mean = {af_mean:.3f}")
-    print(f"  Inactive breakdown:")
-    for s, c in inactive_breakdown.items():
-        print(f"    {s}: {c}")
-    print(f"  → DEV=practice squad, RES=reserve/IR, INA=inactive list, plus Out/Doubtful from injury report")
-
-    # Depth-order priors + player season shares
-    print("\nComputing depth-order priors and player season shares...")
-    t3 = time.time()
+    print("Computing depth-order priors and player season shares...")
     depth_order_priors, player_season_shares = compute_season_share_data(
         active, rec, team_tgt, car, team_car)
-    print(f"  Done ({time.time()-t3:.1f}s), PSS rows: {len(player_season_shares):,}")
+    print(f"  PSS rows: {len(player_season_shares):,}")
 
-    # Print depth-order prior table
-    for s in sorted(depth_order_priors.keys()):
-        print(f"\n  Season {s} depth-order prior table:")
-        dop = depth_order_priors[s]
-        print(f"  {'depth_group':<10s} {'tgt_share':>10s} {'car_share':>10s} {'rz_tgt':>10s} {'gl_car':>10s}")
-        for dg in sorted(dop.keys()):
-            v = dop[dg]
-            print(f"  {dg:<10s} {v['target_share']:>10.4f} {v['carry_share']:>10.4f} "
-                  f"{v['rz_target_share']:>10.4f} {v['gl_carry_share']:>10.4f}")
-
-    # ── Grid ──
-    print(f"\nGrid search (12 points, 2021-2024)...")
-    t5 = time.time()
-    params_base = json.load(open(PARAMS_PATH))
-    best, grid = tune_share_params(
-        rec[rec["season"] <= 2024], team_tgt[team_tgt["season"] <= 2024],
-        car[car["season"] <= 2024], team_car[team_car["season"] <= 2024],
-        pos_map, rate_priors, roster_uni, active[active["season"] <= 2024],
-        depth_order_priors, player_season_shares, params_base)
-    print(f"Grid done: {time.time()-t5:.1f}s")
-
-    # Extension if boundary
-    extended = False
-    all_hls = sorted(set(g["share_half_life"] for g in grid))
-    all_ks = sorted(set(g["k_share"] for g in grid))
-    on_boundary = (best["share_half_life"] == min(all_hls) or best["share_half_life"] == max(all_hls) or
-                    best["k_share"] == min(all_ks) or best["k_share"] == max(all_ks))
-
-    if best["share_half_life"] == 2 and best["k_share"] == 20:
-        print(f"\nBoundary winner (2,20) — running pre-declared extension...")
-        ext_spec = [(sh, k) for sh in [1, 2] for k in [5, 10, 20]]
-        existing = set((g["share_half_life"], g["k_share"]) for g in grid)
-        ext_spec = [(sh, k) for sh, k in ext_spec if (sh, k) not in existing]
-        if ext_spec:
-            t6 = time.time()
-            ext_best, ext_grid = tune_share_params(
-                rec[rec["season"] <= 2024], team_tgt[team_tgt["season"] <= 2024],
-                car[car["season"] <= 2024], team_car[team_car["season"] <= 2024],
-                pos_map, rate_priors, roster_uni, active[active["season"] <= 2024],
-                depth_order_priors, player_season_shares, params_base, grid_spec=ext_spec)
-            print(f"Extension done: {time.time()-t6:.1f}s")
-            combined = grid + ext_grid
-            combined.sort(key=lambda x: x["mean_rmse"])
-            best = combined[0]
-            grid = combined
-            extended = True
-            print(f"Combined best: sh_hl={best['share_half_life']} k={best['k_share']}  RMSE={best['mean_rmse']:.4f}")
-
-    all_hls = sorted(set(g["share_half_life"] for g in grid))
-    all_ks = sorted(set(g["k_share"] for g in grid))
-    on_boundary = (best["share_half_life"] == min(all_hls) or best["share_half_life"] == max(all_hls) or
-                    best["k_share"] == min(all_ks) or best["k_share"] == max(all_ks))
-    boundary_str = "BOUNDARY" if on_boundary else "INTERIOR"
-    print(f"  Chosen point is {boundary_str}.")
-
-    # Update params
-    params = json.load(open(PARAMS_PATH))
-    params["usage"] = {
-        "share_half_life": best["share_half_life"],
-        "k_share": best["k_share"],
-        "extended_grid": extended,
-        "boundary": boundary_str,
-        "formula": "n_eff=team_opp_while_active, prior=own_s-1_share_if_50+opp_else_(pos,depth)_league_mean",
-        "grid_results": [{k: v for k, v in g.items() if k != "by_season"}
-                          for g in sorted(grid, key=lambda x: x["mean_rmse"])],
+    return {
+        "rec": rec, "team_tgt": team_tgt, "car": car, "team_car": team_car,
+        "pos_map": pos_map, "rate_priors": rate_priors,
+        "roster_uni": roster_uni, "active": active,
+        "depth_order_priors": depth_order_priors,
+        "player_season_shares": player_season_shares,
+        "starting_qbs": starting_qbs,
     }
-    with open(PARAMS_PATH, "w") as f:
-        json.dump(params, f, indent=2, default=str)
 
-    # ── Build full usage ──
-    print(f"\nBuilding full usage...")
+
+def main():
+    parser = argparse.ArgumentParser(description="NFL usage builder")
+    parser.add_argument("--tune", action="store_true",
+                        help="Run the grid search on 2021-2024 and write the "
+                             "usage block to params_v1.json (then exit)")
+    args = parser.parse_args()
+
+    t_start = time.time()
+    print("NFL Sim: Player Usage Shares")
+    print("=" * 60)
+
+    d = _load_common()
+    rec, team_tgt, car, team_car = d["rec"], d["team_tgt"], d["car"], d["team_car"]
+    pos_map, rate_priors = d["pos_map"], d["rate_priors"]
+    roster_uni, active = d["roster_uni"], d["active"]
+    depth_order_priors = d["depth_order_priors"]
+    player_season_shares = d["player_season_shares"]
+    starting_qbs = d["starting_qbs"]
+
+    # ── Read frozen params (always required) ──
+    params = json.load(open(PARAMS_PATH))
+
+    if args.tune:
+        # ── TUNE MODE ──────────────────────────────────────────────────
+        print(f"\n--tune: grid search (12 points, 2021-2024)...")
+        t5 = time.time()
+        best, grid = tune_share_params(
+            rec[rec["season"] <= 2024], team_tgt[team_tgt["season"] <= 2024],
+            car[car["season"] <= 2024], team_car[team_car["season"] <= 2024],
+            pos_map, rate_priors, roster_uni, active[active["season"] <= 2024],
+            depth_order_priors, player_season_shares, params)
+        print(f"Grid done: {time.time()-t5:.1f}s")
+
+        # Extension if boundary
+        extended = False
+        if best["share_half_life"] == 2 and best["k_share"] == 20:
+            print(f"\nBoundary winner (2,20) — running pre-declared extension...")
+            ext_spec = [(sh, k) for sh in [1, 2] for k in [5, 10, 20]]
+            existing = set((g["share_half_life"], g["k_share"]) for g in grid)
+            ext_spec = [(sh, k) for sh, k in ext_spec if (sh, k) not in existing]
+            if ext_spec:
+                _, ext_grid = tune_share_params(
+                    rec[rec["season"] <= 2024], team_tgt[team_tgt["season"] <= 2024],
+                    car[car["season"] <= 2024], team_car[team_car["season"] <= 2024],
+                    pos_map, rate_priors, roster_uni, active[active["season"] <= 2024],
+                    depth_order_priors, player_season_shares, params, grid_spec=ext_spec)
+                combined = grid + ext_grid
+                combined.sort(key=lambda x: x["mean_rmse"])
+                best = combined[0]
+                grid = combined
+                extended = True
+                print(f"Combined best: sh_hl={best['share_half_life']} k={best['k_share']}  "
+                      f"RMSE={best['mean_rmse']:.4f}")
+
+        all_hls = sorted(set(g["share_half_life"] for g in grid))
+        all_ks = sorted(set(g["k_share"] for g in grid))
+        on_boundary = (best["share_half_life"] == min(all_hls) or best["share_half_life"] == max(all_hls) or
+                        best["k_share"] == min(all_ks) or best["k_share"] == max(all_ks))
+        boundary_str = "BOUNDARY" if on_boundary else "INTERIOR"
+
+        commit_hash = subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], text=True
+        ).strip()
+
+        params["usage"] = {
+            "share_half_life": best["share_half_life"],
+            "k_share": best["k_share"],
+            "frozen_at": time.strftime("%Y-%m-%d", time.gmtime()),
+            "frozen_commit": commit_hash,
+            "extended_grid": extended,
+            "boundary": boundary_str,
+            "formula": "n_eff=team_opp_while_active, prior=own_s-1_share_if_50+opp_else_(pos,depth)_league_mean",
+            "grid_results": [{k: v for k, v in g.items() if k != "by_season"}
+                              for g in sorted(grid, key=lambda x: x["mean_rmse"])],
+        }
+        with open(PARAMS_PATH, "w") as f:
+            json.dump(params, f, indent=2, default=str)
+        print(f"\nWrote usage block to {PARAMS_PATH} "
+              f"(sh_hl={best['share_half_life']}, k={best['k_share']}, "
+              f"frozen_commit={commit_hash})")
+        print(f"Total elapsed: {time.time()-t_start:.1f}s")
+        return
+
+    # ── BUILD MODE (default) ──────────────────────────────────────────
+    if "usage" not in params:
+        raise ValueError(
+            "params_v1.json missing required 'usage' block — "
+            "run with --tune first, or write share_half_life and k_share manually"
+        )
+    print(f"\nBuilding with frozen params: share_half_life={params['usage']['share_half_life']}, "
+          f"k_share={params['usage']['k_share']} "
+          f"(frozen_at={params['usage'].get('frozen_at', '?')})")
+
     t7 = time.time()
     usage = build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, params,
                                 roster_uni, active, depth_order_priors, player_season_shares,
@@ -1280,7 +1297,7 @@ def main():
     assert len(s26w2) >= 300
     print(f"  PASS")
 
-    print(f"  (e) active_flag = {af_mean:.3f}: DEV/RES/INA + Out/Doubtful → PASS")
+    print(f"  (e) active_flag = {active['active_flag'].mean():.3f}: DEV/RES/INA + Out/Doubtful → PASS")
 
     # Active universe Out counts
     print(f"\nOut counts per season:")
@@ -1340,15 +1357,8 @@ def main():
             print(f"    {r['player_name']:<25s} {r['team']:>3s} {r['position']:>2s}  "
                   f"car_sh={r['carry_share']:.3f}  n={int(r['n_carries'])}")
 
-    # Check 5
-    print(f"\n  RMSE by season:")
-    for s, v in sorted(best.get("by_season", {}).items()):
-        print(f"    {s}: tgt={v['tgt']:.4f}  car={v['car']:.4f}")
-    print(f"  Wk 1-4 tgt RMSE: {best.get('rmse_wk1_4', 'N/A')}")
-    print(f"  Wk 5-18 tgt RMSE: {best.get('rmse_wk5_18', 'N/A')}")
-
     print(f"\nTotal elapsed: {time.time()-t_start:.1f}s")
-    print("Phase 1B-FIX-2 complete.")
+    print("Usage build complete.")
 
 
 if __name__ == "__main__":

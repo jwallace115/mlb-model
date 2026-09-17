@@ -1,0 +1,618 @@
+From 46fbe1c736781ddda0dcb4c020ccc3599e49fd5f Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 17 Sep 2026 12:40:40 +0000
+Subject: [PATCH] =?UTF-8?q?nfl=5Fsim=20Phase=205A-11:=20overtime=20audit?=
+ =?UTF-8?q?=20=E2=80=94=20first-possession=20completion=20and=20empty=20se?=
+ =?UTF-8?q?cond=20possession=20(D38),=20OT=20late-game=20cells=20(D39),=20?=
+ =?UTF-8?q?sudden-death=20in-range=20state=20(D40),=20concat-safe=20drive?=
+ =?UTF-8?q?=20log=20(D41)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Three OT rule defects: matched first-drive FGs ended games as ties; after a first-drive
+punt the other team's FG did not end the game; after a first-drive FG the second team's
+empty possession did not end the game. Fixed on game state (D38). OT's last 3:00 uses the
+Q4 late cells (D39). New ot_sd state from 135 real snaps: kick on any down 18.5%, pass
+29%, kneel 5% after the first possession (D40). Drive-log attr no longer breaks pd.concat
+(D41). K1: P(tie|OT) 18.7 -> 10.4% (real 4.3), OT drive mix now matches, P(|final|=3)
+10.6 -> 11.6% (14.5). Suite 93 pass / 3 red.
+
+Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01QMk9gfHmH2aTN5pwMcY52R
+---
+ logs/agent_sessions.md                  |  22 +++++
+ nfl/data/sim/tables/fg_setup.parquet    | Bin 5184 -> 5755 bytes
+ nfl/sim/engine.py                       | 113 +++++++++++++++++++-----
+ nfl/sim/tables.py                       |  20 ++++-
+ nfl/sim/tests/test_engine_5a11.py       |  89 +++++++++++++++++++
+ nfl/sim/tests/test_engine_5a6.py        |   6 ++
+ research/nfl_sim/NFL_SIM_DECISION_v1.md |  25 ++++++
+ research/nfl_sim/phase5a11_overtime.md  |  85 ++++++++++++++++++
+ 8 files changed, 339 insertions(+), 21 deletions(-)
+ create mode 100644 nfl/sim/tests/test_engine_5a11.py
+ create mode 100644 research/nfl_sim/phase5a11_overtime.md
+
+diff --git a/logs/agent_sessions.md b/logs/agent_sessions.md
+index c39dad81..70d7d6fb 100644
+--- a/logs/agent_sessions.md
++++ b/logs/agent_sessions.md
+@@ -1,3 +1,25 @@
++## 2026-09-17T04:30Z  cowork (Phase 5A-11 — overtime audit; executed directly)
++- FOUND (sim OT drive sequences, 12 games x 2000): matched first-drive FGs ended games as ties;
++  after a first-drive punt the other team's FG did not end the game; after a first-drive FG the
++  second team's empty possession did not end the game. Plus: OT's last minutes were not late-game
++  for timeouts/runoff; no sudden-death in-range behaviour (real: kick on any down 18.5% of snaps).
++- ENGINE: D38 (first-possession completion + empty-second-possession end + FG-ends-only-if-leading,
++  on game state), D39 (OT last 3:00 = Q4 late cells), D40 (ot_sd state: FG on any down, play call,
++  kneel; first OT possession excluded), D41 (_DriveLog attr class: identity equality so pd.concat
++  cannot raise). TABLE: fg_setup.parquet +1 row (ot_sd). No other table touched.
++- K1 (1,087 x 500, drive log, 3,095 s): P(tie|OT) 18.7 -> 10.4% (real 4.3, 3/70); OT drive mix
++  FG 24/TD 15/punt 38/expiry 4% (real 26/13/36/1); drives per OT 2.54 (2.51); P(OT) 4.85% (6.4);
++  ties 0.50% (0.28); P(|m|=3) 11.6% (14.5); |m|=7 8.7 (7.3); |m|=6 4.4 (7.5); pts/team 22.73.
++- TESTS: test_engine_5a11.py 3 pass; 5A tie rate green (0.50% <= 1%); 5A-6 liveness test now also
++  zeroes the ot_sd kick rate (D40 shares the non-4th-FG counter). Full suite ran before D41/5A-6
++  update: 91 pass / 3 fail / 2 errors; after the fixes the targeted reruns give 5A-6 green, 5A-3
++  fg-att green, 5A-3 go rate red -> 93 pass / 3 red (5a3 go rate 0.211 vs 0.198±0.010; 5a4 offence
++  penalties 6.20 vs 5.51±0.5; 5a9 tied-drive expiry 0.115 vs <=0.05). Nothing widened.
++- NOT DONE: residual OT ties 10% vs 4% (punt-fests to 0:00; inside the real sample's uncertainty);
++  the 5A-10 composition list. Delivered as a patch (cloud cannot push).
++- NEXT (on go): XP/two-point placement, shared game factor, Q4 FG count, 4th-down conversion,
++  two-minute drill; then 5B (usage builder), 5C (grader/pricer, maps).
++
+ ## 2026-09-16T17:00Z  cowork (Phase 5A-10 — scoring-event composition; executed directly)
+ - BUILT: nfl/sim/scoring_composition.py (actual | compare); actual_scoring_composition_2021_2024.parquet
+   (2,174 team-games; reconstructs the final score in 99.6%); twopt_decision.parquet rebuilt as an exact
+diff --git a/nfl/data/sim/tables/fg_setup.parquet b/nfl/data/sim/tables/fg_setup.parquet
+index dae41b0eac999ae91def27e6e0abb85a33901763..9a3d23542e7b64cb8d0bda129eab01337f352e4f 100644
+GIT binary patch
+delta 1273
+zcmZuxZD?Cn7(VCb-kX~?q3POldT-5G8`ev-(X{J2SLxVJ(wYy_(KOgEM(b@pnv~>b
+zF5P0PtP_U%qfF}Ak4>iAKyXwLA>xm*Nq#8v#}wHghhNMgG891tL2zuIbDL3x9?m@<
+z@B2RQ`@GM++`8`{|Dka*(T_wFL9sYe5ZD30?mh(ouzbwO7y6$Z5TP@Y&!lb4WSCWn
+zZKdV;avA~TLw-Lp*Z1$l?QwzGO(-}30*9W1r#Ae8U|Y{8p}Bs27hAsXfRC;J6$qHf
+zjbtQy_5q)bWm92aYb!%`OgHcn5Z$M-;0Sweyl~~0%QOj}fF?Z&JsL}H8`+o>7}Yx>
+zx+%m_+#>rSt-&{Ti6hYA7+&F7*m!MoV_Z-g<rqhLL>Ojy&I`S5Gdx3GM6Zf*)-!MS
+z68&0u56;k4+eGVUSAHxd*ES9^<Pr2dM}A}D$PQ6&zpDTS{ar$DNpUo1LI18LL<nJ&
+zCZ%BOu{r#Q<K0^v+o<}E#IfH>y{o_Ss&3RCM}h@ZJi(V7zx8}{gGXc3$tpFJQI$uY
+ztrITzwy|2uHTy)?Yyk)m3XGn1VGyWtIhD&44de#M*(0b@d6{<0*#K%{7xCzPb`fAx
+z^Jr^2@F1r)2xPa$gN)@260nJHL;M5OP5Qq4xN=t1WK9Pq{Z3Y$CO#*ysoxj$pWn3a
+zR_c$Oe!Iq;A4B{J)NhLV1DddR_x=Pop^V;t3yJAc#kA_2h4=#0A4vK&`nJ8>cUAab
+zyx1THH-qoW_?D=D>d<dfLkLi$V5Y2J>2#U+s*F#|`d2ObMl-!*dy2kd`OYaG#_3Nx
+zzGT<$Vf_PIS4PLp2AQTta!U=1OdaCS85vdoQuS;JzjfOF70{E4>M8KA4!^z=o4SI}
+zbOOz<%0~?|ZIsoAwJwL>MjtjgJGt&&f0s9#&lJ-0rcumzpXu^)D?QU3rg3MbY0Vwr
+zqe8;;3+DmbNMe+_TwWI$3lc*3L&o>lhFu3ldcDOhr=A@u&Q|F~mnsFbv&9sB**&*9
+z*;kH+V!3o=qH0XV`qSabmFQAwF*9J<mr}*aTsk~dwQSW`nZ;CRrelNr9yNo5>|9+K
+zNaf=pl1~>WtEoMO6ASt1zGx^~J)GQIi7$=jv&jmN%`Frsa;g5IJ+srX6=Q1XIL|Q^
+zT^c(+7TQ~lntdd=$QVZ&ffYhRyn}FsH&P)9-q9!_hj~zlFT~)>2y+nbAmqjIr@0t}
+vB*y5eHmq@5#A=nFNa=*76(NhYgFCK4$uiRWZ9U#K4*=UvaIXab{=fSd-wQ>i
+
+delta 977
+zcmZuwT}TvB6ux)<cGq+h^WJuJLlnDMZt40{83~TAtF!HDDy1!zjl1jqG`p^@wkbgo
+zJ&2fPw+EpfqM*d5z>tuPkf7)(e2bu>hX|hvqKA5@JCi*~9%h((&-Z=jeCNRYay_p&
+zbWG`XBLN*ihy6%Gpa6j4m=yppI-<pO_r6-eIL9Mlo_)2{I0C2~Rk)Bo+qA2&z{9bu
+z4mle@py@cgyx`(yGd)nBeOV&wkl)^P#p8JEaTIHMIegc?6eyd%mgHxDS3#XtL1zI|
+zia^M}iaA@G^X2gTdMP~(_cCx2I+>p1JqxEeX6}uERyjZNnfB)C3cOx)!~<Dt788aA
+z7R*=}#h5XAjyu9i%yX4Hm@NT463`FckG!UMj(+AI!Y(?)ciWia6gq1tzVU`)zd#Dh
+zSRny@6w#FEXQ;7`uZuAOLa5M$*lcJvx~zzX=BHR$u#HLN>3ZOhGND)`sUbVPEe(}p
+zU3SVB32>rZxgJRQvO~;_YNHXvVI8kR{2G!ow865+H6_TBOn}aY*vyWE`Ugz*9EayP
+z@`WR7bjDJ?Z+UBh6pjq`j}DoNC5WFv@<br(^n<0e@;%(Lg%BRfrcC}Vi0?qME|Pg#
+zX)UdI%x&Te8w0?<<TVMu637D^c|p@$6}@l8Y!l1YqFfy>Ncg)*?rkU2^rN+P&%c>+
+zHVW9%S|-y!@^1^DEck|nEMRh(cGy~r4K}_~jCEqglMW!e98y|Kg|&?1=HkvA7f&DM
+zWpkd`tBj~oywq)P<O5L;9k!R{wM3PyqBJWkeCpy|d!ulvuO}N-liuoZyDxn*b)q`h
+z7l?Ppn-30}`Ht~mueW-jRyA{K@&e=dVxiPIc30w|cAcGl=fmS_Ms4xc1p9mwT5rRc
+zniz_z3DxaSC}V*hUxUAeaofCO!8Y$iUu{qir8?3BHFZXfws>H?F6&RI@xd<UEXtg<
+zH^&B&-La72l)Z{4YZ_J<?lznsHAp6+bQ*U9P!=<VPa$lib$EBlMJE9NKcLzUfbk#y
+E0SCnGGXMYp
+
+diff --git a/nfl/sim/engine.py b/nfl/sim/engine.py
+index 2df54b0e..79881f9d 100644
+--- a/nfl/sim/engine.py
++++ b/nfl/sim/engine.py
+@@ -46,6 +46,26 @@ ROOT = Path(__file__).resolve().parent.parent.parent
+ TABLES_DIR = ROOT / "nfl" / "data" / "sim" / "tables"
+ RATINGS_DIR = ROOT / "nfl" / "data" / "sim" / "ratings"
+ 
++class _DriveLog(pd.DataFrame):
++    """5A-11 (D41): the drive log lives in `team_df.attrs`. pandas decides whether to keep
++    attrs on `pd.concat` by comparing the attrs dicts with `==`, which compares the two
++    drive logs element-wise and raises when their shapes differ (it only got that far
++    when the other attr, playcall_fallback_count, happened to be equal — a latent flake
++    that surfaced in the 5A-11 suite run). Frame-level equality on a drive log is
++    identity; everything else is a plain DataFrame."""
++    @property
++    def _constructor(self):
++        return pd.DataFrame
++
++    def __eq__(self, other):
++        return self is other
++
++    def __ne__(self, other):
++        return self is not other
++
++    __hash__ = object.__hash__
++
++
+ # Module-level cache
+ _CACHE = {}
+ _DEBUG_YDS = None  # 5A-6 diag: set to a list to collect per-play yards
+@@ -247,7 +267,8 @@ def _build_fg_setup_lookup():
+     tbl = _CACHE.get("fg_setup")
+     if tbl is None:
+         return None
+-    return {(r["state"], r["sec_b"], r["def_to"], r["down"]): (float(r["p_kneel"]), float(r["pass_rate"]))
++    return {(r["state"], r["sec_b"], r["def_to"], r["down"]): (float(r["p_kneel"]), float(r["pass_rate"]),
++                                                                float(r["p_fg"]) if "p_fg" in tbl and pd.notna(r["p_fg"]) else 0.0)
+             for _, r in tbl.iterrows()}
+ 
+ 
+@@ -1022,6 +1043,27 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+     _dl_team[:] = poss
+ 
+     def _new_drive(m):
++        # 5A-11 (D38): in OT the first possession is complete when the first team's drive
++        # ends for ANY reason (punt, turnover, downs, safety, missed FG) — not only on a
++        # score. Until 5A-11 only a score or a turnover on downs marked it, so after a
++        # first-drive punt the other team's field goal was treated as a first-possession
++        # score and the game went on. Every caller switches `poss` to the receiving team
++        # before calling, so the team whose drive just ended is 1 - poss; at the OT kickoff
++        # itself that is the team NOT receiving, never the first-possession team. Game
++        # state only — the drive-log fields are not maintained when the log is off, and
++        # the live object must behave like the research object.
++        # ... and once both teams have possessed, a drive that ends with the score NOT tied
++        # ends the game (the first team kicked a field goal, the second team's possession
++        # came up empty). Until 5A-11 the first team got the ball back and kicked again.
++        first_done = m & (qtr >= 5) & (ot_first_poss_team >= 0) & ((1 - poss) == ot_first_poss_team)
++        ot_first_poss_done[first_done] = True
++        # the drive that ended belonged to the SECOND team (the first team's own scoring
++        # drive is followed by a kickoff, and the second team must still get its possession)
++        over_now = m & (qtr >= 5) & (ot_first_poss_team >= 0) & ((1 - poss) != ot_first_poss_team) \
++                   & ot_first_poss_done & (score_h != score_a) & ~game_over
++        if over_now.any():
++            game_over[over_now] = True
++            _dl_result[over_now] = np.where(_dl_result[over_now] > 0, _dl_result[over_now], _DLR_ENDGAME)
+         _dl_new_drive(m)
+         down[m] = 1
+         dist[m] = np.minimum(10, yl[m])
+@@ -1171,7 +1213,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+         the Kaplan-Meier plateau (99 s) means the half expires. No pace scaling, no floor,
+         and no separate timeout draw (the measured elapsed already contains the timeouts).
+         Returns the boolean mask (over gi_arr) of snaps handled here."""
+-        in_fgs = fgs_state[gi_arr] != ""
++        in_fgs = (fgs_state[gi_arr] != "") & ((fgs_state[gi_arr] != "ot_sd") | (clock[gi_arr] <= 180.0))
+         m_eoh = (((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 40.0)
+                  & (np.asarray(yl_snap) <= 50) & ~game_over[gi_arr] & ~exclude & ~in_fgs)
+         m_fgs = in_fgs & ~game_over[gi_arr] & ~exclude
+@@ -1223,13 +1265,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+         1 run / 2 drive-ending / 3 stopped (timeout)."""
+         if to_lookup is None:
+             return
+-        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] == 4)) & (clock[gi_arr] <= 180) & \
++        # 5A-11 (D39): overtime's last 3:00 is the same situation as Q4's (the period ends
++        # the game); the policy table's Q4 rows are used for it
++        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 180) & \
+                ~game_over[gi_arr] & (ot_idx_arr != de_code)
+         if skip is not None:
+             late &= ~skip
+         for j in np.where(late)[0]:
+             gi = gi_arr[j]
+-            q = int(qtr[gi]); sb = _to_sec_bucket(float(clock[gi]))
++            q = min(int(qtr[gi]), 4); sb = _to_sec_bucket(float(clock[gi]))
+             sd_j = int(sd_arr[j])
+             st = "trail" if sd_j < 0 else ("tied" if sd_j == 0 else "lead")
+             run_s = "True" if ot_idx_arr[j] in running_codes else "False"
+@@ -1408,6 +1452,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+         fgs_state = np.full(N, "", dtype=object)
+         if fgs_lookup is not None:
+             fgs_state = fg_setup_state(qtr, score_diff_poss, yl, clock, down)
++            # 5A-11 (D40): overtime — the first possession is played for the touchdown (no
++            # FG-setup behaviour); after it, sudden death inside the 35 is its own state
++            in_ot = qtr >= 5
++            fgs_state[in_ot & ~ot_first_poss_done] = ""
++            fgs_state[in_ot & ot_first_poss_done & (yl <= 35) & (down <= 3) & alive] = "ot_sd"
+         if kneel_lookup is not None:
+             fgs_m = alive & (clock > 0) & (fgs_state != "")
+             kn_cand = alive & (down < 4) & (clock > 0) & (clock <= 180) & (
+@@ -1420,9 +1469,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+                     # 5A-9 (D33): kneel to centre the ball for the field goal
+                     dt3 = "2+" if to_rem[1 - poss[i], i] >= 2 else dt
+                     sbf = _fgs_sec_bucket(cl)
+-                    row = (fgs_lookup.get(("any", sbf, dt3, "any")) or
+-                           fgs_lookup.get(("any", "any", dt3, "any")) or
+-                           fgs_lookup.get(("any", "any", "any", "any")))
++                    if fgs_state[i] == "ot_sd":
++                        row = fgs_lookup.get(("ot_sd", "any", "any", "any"))
++                    else:
++                        row = (fgs_lookup.get(("any", sbf, dt3, "any")) or
++                               fgs_lookup.get(("any", "any", dt3, "any")) or
++                               fgs_lookup.get(("any", "any", "any", "any")))
+                     pk = row[0]
+                 else:
+                     sit = "lead" if q == 4 else ("own" if yl[i] >= 60 else "opp")
+@@ -1457,14 +1509,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+                     ss_i = ("trail9+" if sd_i <= -9 else "trail1-8" if sd_i <= -1 else
+                             "tied" if sd_i == 0 else "lead1-8" if sd_i <= 8 else "lead9+")
+                     cp_i = "Q2_late" if (qtr[i] == 2 and clock[i] <= 120) else (
+-                        "Q4_late" if (qtr[i] == 4 and clock[i] <= 120) else "normal")
++                        "Q4_late" if (qtr[i] >= 4 and clock[i] <= 120) else "normal")
+                     ot_name = "complete_inbounds"
+                     # defence timeout after the kneel?
+                     if to_lookup is not None and to_rem[1 - poss[i], i] > 0 and clock[i] <= 180:
+                         st_i = "trail" if sd_i < 0 else ("tied" if sd_i == 0 else "lead")
+-                        p_def = (to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), st_i, "True"))
+-                                 or to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), st_i, "any"))
+-                                 or to_lookup.get(("def", int(qtr[i]), _to_sec_bucket(float(clock[i])), "all", "any"), 0.0))
++                        q_i = min(int(qtr[i]), 4)  # 5A-11 (D39): OT uses the Q4 rows
++                        p_def = (to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), st_i, "True"))
++                                 or to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), st_i, "any"))
++                                 or to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), "all", "any"), 0.0))
+                         if u_to[i] < p_def:
+                             to_rem[1 - poss[i], i] -= 1; ev_to_def[i] += 1
+                             ot_name = "incomplete"  # clock stopped
+@@ -1524,6 +1577,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+                         fg_m[i] = True
+                         ev_fg_non4th[i] += 1
+ 
++        # 5A-11 (D40): OT sudden death inside the 35 — kick on any down at the measured rate
++        if fgs_lookup is not None:
++            ot_sd_cand = alive & ~spiked & (down < 4) & (fgs_state == "ot_sd") & ~fg_m & ~can_kneel
++            if ot_sd_cand.any():
++                row = fgs_lookup.get(("ot_sd", "any", "any", "any"))
++                if row is not None and row[2] > 0:
++                    kick = ot_sd_cand & (u_eoh < row[2])
++                    fg_m[kick] = True
++                    ev_fg_non4th[kick] += 1
+         alive = alive & ~spiked
+         is_4th = is_4th & ~spiked
+         if is_4th.any() or fg_m.any():
+@@ -1656,10 +1718,18 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+                 # First possession FG: other team gets a chance (all eras)
+                 ot_first_scoring = ot_fg & (poss == ot_first_poss_team) & ~ot_first_poss_done
+                 ot_first_poss_done[ot_first_scoring] = True
+-                # Second possession or later: any FG ends game (sudden death)
++                # Second possession or later: a FG ends the game only if the kicking team
++                # now leads. 5A-11 (D38): matched field goals (3-3 after both possessions)
++                # used to END the game as a tie in the regular season; the rule is sudden
++                # death from there (2 of 12 real first-drive FGs were matched, both games
++                # went on). Postseason keeps its own branch.
+                 ot_second = ot_fg & ~ot_first_scoring
+                 if season_type == "REG":
+-                    game_over[ot_second] = True
++                    ot_leading_reg = ot_second & (
++                        ((poss == 0) & (score_h > score_a)) |
++                        ((poss == 1) & (score_a > score_h))
++                    )
++                    game_over[ot_leading_reg] = True
+                 else:
+                     # Postseason: game ends ONLY if the scoring team is ahead
+                     ot_leading = ot_second & (
+@@ -1917,9 +1987,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+             for j in np.where(fgs_live != "")[0]:
+                 gi = live_idx[j]
+                 sbf = _fgs_sec_bucket(float(clock[gi]))
+-                row = (fgs_lookup.get((fgs_live[j], sbf, "any", "any")) or
+-                       fgs_lookup.get(("any", sbf, "any", "any")) or
+-                       fgs_lookup.get(("any", "any", "any", "any")))
++                if fgs_live[j] == "ot_sd":
++                    row = fgs_lookup.get(("ot_sd", "any", "any", "any"))
++                else:
++                    row = (fgs_lookup.get((fgs_live[j], sbf, "any", "any")) or
++                           fgs_lookup.get(("any", sbf, "any", "any")) or
++                           fgs_lookup.get(("any", "any", "any", "any")))
+                 if row is not None and not np.isnan(row[1]):
+                     p_pass[j] = row[1]
+                     ev_fgs_snaps[gi] += 1
+@@ -2272,7 +2345,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+             # 5A-3: clock period (3-way)
+             cp_arr = np.full(len(gi_arr), "normal", dtype=object)
+             q2_late_m = (qtr[gi_arr] == 2) & (clock[gi_arr] <= 120)
+-            q4_late_m = (qtr[gi_arr] == 4) & (clock[gi_arr] <= 120)
++            q4_late_m = (qtr[gi_arr] >= 4) & (clock[gi_arr] <= 120)   # 5A-11 (D39): OT included
+             cp_arr[q2_late_m] = "Q2_late"
+             cp_arr[q4_late_m] = "Q4_late"
+             ot_strs = ["incomplete", "first_down", "complete_inbounds"]
+@@ -2358,7 +2431,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+             # offence is protecting the kick); no team EPA shift on those snaps
+             fgs_r = np.zeros(n_r, dtype=bool)
+             if fgs_rush_q is not None:
+-                fgs_r = not_fum & (fgs_state[g_idx_r] != "")
++                fgs_r = not_fum & (fgs_state[g_idx_r] != "") & (fgs_state[g_idx_r] != "ot_sd")  # OT runs are not the Q4 clock-kill runs (4.1 yds vs 2.7)
+                 if fgs_r.any():
+                     yards_r[fgs_r] = np.interp(u5[fgs_r], xs101, fgs_rush_q)
+                     ev_fgs_runs[g_idx_r[fgs_r]] += 1
+@@ -2530,7 +2603,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+                        np.where(sd_r_arr <= 8, "lead1-8", "lead9+"))))
+             cp_r_arr = np.full(len(gi_r), "normal", dtype=object)
+             q2l_r = (qtr[gi_r] == 2) & (clock[gi_r] <= 120)
+-            q4l_r = (qtr[gi_r] == 4) & (clock[gi_r] <= 120)
++            q4l_r = (qtr[gi_r] >= 4) & (clock[gi_r] <= 120)   # 5A-11 (D39): OT included
+             cp_r_arr[q2l_r] = "Q2_late"
+             cp_r_arr[q4l_r] = "Q4_late"
+             ot_strs_r = {0: "first_down", 1: "run", 3: "incomplete"}  # 3 = clock stopped by a timeout (5A-7)
+@@ -2668,7 +2741,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
+             "end_yardline", "end_down", "end_dist", "score_state",
+             "sd_start", "opp_points",
+         ])
+-        team_df.attrs["drive_log"] = dl_df
++        team_df.attrs["drive_log"] = _DriveLog(dl_df)
+ 
+     if not has_players:
+         return team_df
+diff --git a/nfl/sim/tables.py b/nfl/sim/tables.py
+index 3d860da8..050e3d94 100644
+--- a/nfl/sim/tables.py
++++ b/nfl/sim/tables.py
+@@ -1338,7 +1338,25 @@ def build_fg_setup_table(df):
+     for (dt,), g in d.groupby(["def_to"]):
+         _emit(g, "any", "any", dt, "any")
+     _emit(d, "any", "any", "any", "any")
+-    return pd.DataFrame(rows)
++    out = pd.DataFrame(rows)
++    out["p_fg"] = np.nan
++    # 5A-11 (D40): overtime sudden death — after the first possession, an offence inside
++    # the 35 kicks on ANY down (19% of downs-1-3 snaps are field-goal attempts), runs 54%,
++    # passes 21%, kneels 5% (2021-2024 regular season, 135 snaps). The first OT possession
++    # is played for the touchdown (no kicks on downs 1-3, pass 51%) and is not in this state.
++    o = df[(df["qtr"] >= 5) & df["down"].isin([1, 2, 3]) & (df["yardline_100"] <= 35)
++           & df["play_type"].isin(["pass", "run", "qb_kneel", "qb_spike", "field_goal"])].copy()
++    o = o.sort_values(["game_id", "play_id"])
++    first_drive = o.groupby("game_id")["fixed_drive"].transform("min")
++    ot_all = df[df["qtr"] >= 5].groupby("game_id")["fixed_drive"].min()
++    o["first_ot_drive"] = o["game_id"].map(ot_all)
++    o = o[o["fixed_drive"] > o["first_ot_drive"]]
++    nk = o[~o["play_type"].isin(["qb_kneel", "field_goal"])]
++    out = pd.concat([out, pd.DataFrame([{"state": "ot_sd", "sec_b": "any", "def_to": "any", "down": "any",
++                                         "n": len(o), "p_kneel": (o["play_type"] == "qb_kneel").mean(),
++                                         "pass_rate": nk["play_type"].isin(["pass", "qb_spike"]).mean(),
++                                         "p_fg": (o["play_type"] == "field_goal").mean()}])], ignore_index=True)
++    return out
+ 
+ 
+ def build_all():
+diff --git a/nfl/sim/tests/test_engine_5a11.py b/nfl/sim/tests/test_engine_5a11.py
+new file mode 100644
+index 00000000..942a0baf
+--- /dev/null
++++ b/nfl/sim/tests/test_engine_5a11.py
+@@ -0,0 +1,89 @@
++"""Phase 5A-11 tests — overtime audit: first-possession completion and the second
++possession coming up empty (D38), OT's last minutes as late-game (D39), sudden-death
++in-range behaviour (D40).
++
++Tolerances are the acceptance spec; a failing test is reported red, never widened.
++"""
++import sys
++from pathlib import Path
++import numpy as np
++import pandas as pd
++import pytest
++
++ROOT = Path(__file__).resolve().parents[3]
++sys.path.insert(0, str(ROOT))
++
++import nfl.sim.engine as E  # noqa: E402
++from nfl.sim.engine import simulate_game, _load_tables, _load_ratings  # noqa: E402
++from nfl.sim.seed_util import stable_seed  # noqa: E402
++
++TABLES = ROOT / "nfl" / "data" / "sim" / "tables"
++
++# Measured 2021-2024 regular season, 70 OT games (phase5a11 report)
++ACT_P_TIE_GIVEN_OT = 3 / 70          # 0.043; the 70-game sample's own 95% interval is ~1-12%
++ACT_OT_DRIVES = 2.51
++ACT_OT_FIRST = {"TD": 0.19, "FG": 0.17, "punt": 0.46}   # first OT drive result mix
++ACT_MATCHED_FG_CONTINUES = 1.0        # 2 of 2 real matched-FG overtimes went on (sudden death)
++
++SAMPLE_GAMES = [("KC", "BUF", 2023, 6), ("PHI", "DAL", 2022, 10), ("SF", "SEA", 2024, 12),
++                ("DET", "GB", 2023, 4), ("BAL", "CIN", 2022, 14), ("MIA", "NYJ", 2024, 8),
++                ("LA", "ARI", 2023, 12), ("MIN", "CHI", 2022, 6), ("TB", "ATL", 2024, 15),
++                ("DEN", "LV", 2023, 17), ("CLE", "PIT", 2022, 2), ("HOU", "IND", 2024, 5)]
++
++
++@pytest.fixture(scope="module")
++def ratings():
++    _load_tables()
++    team_r, tend, sit, kicker, league = _load_ratings()
++    return dict(team_r=team_r, tend=tend, sit=sit, kicker=kicker, league=league)
++
++
++def _td(r):
++    return r[0] if isinstance(r, tuple) else r
++
++
++@pytest.fixture(scope="module")
++def ot_sample(ratings):
++    """OT drive sequences from 12 games x 2000 sims (~1,200 overtimes)."""
++    rows = []
++    for home, away, season, week in SAMPLE_GAMES:
++        r = _td(simulate_game(home, away, season, week, n_sims=2000, seed=stable_seed(f"ot_{season}_{week}_{away}_{home}"),
++                              drive_log=True, **ratings))
++        dl = r.attrs["drive_log"]
++        ot = dl[dl.start_quarter >= 5].sort_values(["sim_id", "drive_no"])
++        tie = (r.home_score == r.away_score).to_numpy()
++        for sid, g in ot.groupby("sim_id"):
++            rows.append({"seq": list(g.result), "tie": bool(tie[sid]), "n": len(g)})
++    return pd.DataFrame(rows)
++
++
++def test_t1_table_has_the_ot_sudden_death_cell():
++    t = pd.read_parquet(TABLES / "fg_setup.parquet")
++    r = t[t.state == "ot_sd"]
++    assert len(r) == 1 and r.n.iloc[0] >= 100
++    assert 0.1 <= r.p_fg.iloc[0] <= 0.3 and 0.2 <= r.pass_rate.iloc[0] <= 0.4
++
++
++def test_t2_ot_rules(ot_sample):
++    s = ot_sample
++    # a matched field goal never ends the game as a tie (sudden death continues)
++    ff = s[s.seq.apply(lambda q: q[:2] == ["FG_made", "FG_made"])]
++    assert len(ff) > 0 and (ff.n > 2).mean() >= ACT_MATCHED_FG_CONTINUES - 1e-9, "matched FGs ended games"
++    # after a first-drive FG, the second team's empty possession ends the game (2 drives)
++    fd = s[s.seq.apply(lambda q: len(q) >= 2 and q[0] == "FG_made" and q[1] in ("punt", "downs", "turnover_int", "turnover_fumble", "FG_missed"))]
++    assert len(fd) > 0 and (fd.n == 2).all(), "first-drive FG + empty second possession did not end the game"
++    # after a first-drive punt, the second team's FG ends the game (sudden death)
++    pf = s[s.seq.apply(lambda q: len(q) >= 2 and q[0] == "punt" and q[1] == "FG_made")]
++    assert len(pf) > 0 and (pf.n == 2).all(), "a FG after both possessed did not end the game"
++    # a first-possession TD ends it at once
++    assert (s[s.seq.apply(lambda q: q[0] == "TD")].n == 1).all()
++
++
++def test_t3_ot_structure(ot_sample):
++    s = ot_sample
++    first = s.seq.str[0].map({"TD": "TD", "FG_made": "FG", "punt": "punt"}).fillna("other")
++    for k, v in ACT_OT_FIRST.items():
++        assert abs(float((first == k).mean()) - v) <= 0.06, f"first OT drive {k}: {float((first == k).mean()):.3f} vs {v}"
++    assert abs(float(s.n.mean()) - ACT_OT_DRIVES) <= 0.35, f"drives per OT {s.n.mean():.2f} vs {ACT_OT_DRIVES}"
++    tie = float(s.tie.mean())
++    assert tie <= ACT_P_TIE_GIVEN_OT + 0.08, f"P(tie | OT) {tie:.3f} vs {ACT_P_TIE_GIVEN_OT:.3f} (was 0.19 before 5A-11)"
+diff --git a/nfl/sim/tests/test_engine_5a6.py b/nfl/sim/tests/test_engine_5a6.py
+index 2f53882e..f260f044 100644
+--- a/nfl/sim/tests/test_engine_5a6.py
++++ b/nfl/sim/tests/test_engine_5a6.py
+@@ -69,14 +69,20 @@ def test_t2_eoh_table_is_live(ratings):
+     n_with = int(r["ev_fg_non4th"].sum())
+     assert n_with > 0, "no end-of-half FG attempts on downs 1-3 at all"
+     saved = E._CACHE["eoh_fg"].copy()
++    saved_fgs = E._CACHE["fg_setup"].copy() if E._CACHE.get("fg_setup") is not None else None
+     try:
+         z = saved.copy(); z["p_fg"] = 0.0
+         E._CACHE["eoh_fg"] = z
++        if saved_fgs is not None:  # 5A-11 (D40): OT sudden-death kicks on downs 1-3 share the counter
++            zf = saved_fgs.copy(); zf["p_fg"] = 0.0
++            E._CACHE["fg_setup"] = zf
+         r0 = _team_df(simulate_game(home, away, season, week, n_sims=2000, seed=seed, **ratings))
+         assert int(r0["ev_fg_non4th"].sum()) == 0
+         assert abs(float(r0["ev_fg_att"].mean()) - float(r["ev_fg_att"].mean())) > 0.02
+     finally:
+         E._CACHE["eoh_fg"] = saved
++        if saved_fgs is not None:
++            E._CACHE["fg_setup"] = saved_fgs
+ 
+ 
+ # ── T3: Q2<2 bucket is present in both tables and wired in the engine ────────
+diff --git a/research/nfl_sim/NFL_SIM_DECISION_v1.md b/research/nfl_sim/NFL_SIM_DECISION_v1.md
+index 4bccd524..14d81899 100644
+--- a/research/nfl_sim/NFL_SIM_DECISION_v1.md
++++ b/research/nfl_sim/NFL_SIM_DECISION_v1.md
+@@ -306,3 +306,28 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
+   ± 0.5 — real, not pollution; 5A-9 tied-drive expiry 11.5% vs ≤ 5%). See
+   `research/nfl_sim/phase5a10_scoring_composition.md`. Next 5A-11: OT behaviour (ties), placement
+   of XP/two-point noise, shared game factor, Q4 FG count, 4th-down conversion, two-minute drill.
++- **2026-09-17 Phase 5A-11 — overtime audit (Cowork-executed).** Real 2021–2024 OT (70 games,
++  176 drives): 2.51 drives per OT; first drive TD 19 / FG 17 / punt 46 / TO 16%; later drives
++  FG-heavy (25–57%); 3 ties (4.3%). Sim (5A-10): P(tie | OT) 18.7%, OT drives FG 13% / TD 21% /
++  expiry 10%. Three rule defects found in the sim's OT drive sequences: matched first-drive FGs
++  ended the game as a TIE (3.6% of overtimes); after a first-drive punt the other team's FG did not
++  end the game (only a score or turnover on downs marked the first possession complete); after a
++  first-drive FG the second team's empty possession did not end the game (the first team kicked
++  again). **D38:** first possession completes when the first team's drive ends for any reason;
++  a drive ending with both teams having possessed and the score not tied ends the game; a FG after
++  the first possession ends the game only if the kicker leads — all on game state, not the drive
++  log. **D39:** OT's last 3:00 uses the Q4 late cells (timeouts, runoff, kneel runoff).
++  **D40:** sudden-death in-range state (`fg_setup` state `ot_sd`, n = 135): after the first
++  possession, inside the 35 on downs 1–3 the offence kicks on the snap 18.5% of the time, passes
++  29% of non-kneel plays, kneels 5%; the first OT possession is played for the TD and excluded.
++  **D41:** the drive-log attr is a DataFrame subclass whose frame-level equality is identity —
++  pandas compared drive logs element-wise on `pd.concat` and raised whenever the other attr
++  happened to match (latent flake; surfaced in the 5A-11 suite run and made two 5A-3 tests error).
++  K1 (1,087 × 500): P(tie | OT) 10.4% (was 18.7; real 4.3 ± wide), OT drives FG 24 / TD 15 / punt
++  38 / expiry 4% (real 26 / 13 / 36 / 1), drives per OT 2.54 (2.51), P(OT) 4.9% (6.4), ties 0.50%
++  (0.28), P(|m| = 3) 10.6 → **11.6%** (14.5), |m| = 7 8.7 (7.3), |m| = 6 4.4 (7.5). Tests:
++  `test_engine_5a11.py` 3 green; 5A tie-rate test green again; 5A-6 liveness test updated for D40;
++  suite 93 pass / 3 red (5A-3 go rate 21.1 vs 19.8 ± 1.0; 5A-4 offence penalties 6.20 vs 5.51 ± 0.5;
++  5A-9 tied-drive expiry 11.5% vs ≤ 5%). See `research/nfl_sim/phase5a11_overtime.md`. Next: the
++  5A-10 list — XP/two-point placement, shared game factor, Q4 FG count, 4th-down conversion,
++  two-minute drill; then 5B, 5C.
+diff --git a/research/nfl_sim/phase5a11_overtime.md b/research/nfl_sim/phase5a11_overtime.md
+new file mode 100644
+index 00000000..cf1d767e
+--- /dev/null
++++ b/research/nfl_sim/phase5a11_overtime.md
+@@ -0,0 +1,85 @@
++# Phase 5A-11: overtime audit — three rule defects and the sudden-death state
++
++**Executed by Cowork directly, 2026-09-17.** Real side: every 2021–2024 regular-season
++overtime (70 games, 176 OT drives, 3 ties). Sim side: 12-game sample × 2,000 sims
++(~1,250 overtimes) for the mechanics, then the full K1 protocol (1,087 games × N = 500,
++drive log on, 3,095 s cloud) for the acceptance numbers.
++
++## 1. Real overtime, 2021–2024 (rules of that era: first-possession TD wins, a
++first-possession FG gives the other team one possession, then sudden death)
++
++Drives per OT 2.51. First drive: TD 19%, FG 17%, missed FG 3%, punt 46%, turnover 16%.
++Second drive: TD 11%, FG 25%, missed FG 11%, punt 27%, turnover 27%. Later drives: FG
++31–57%. Of 12 first-drive FGs, 10 games ended after the second possession and 2 were
++matched and went on. Ties 3 of 70 (4.3%; the 70-game sample's own uncertainty is wide,
++roughly 1–12%). Inside the 35 on downs 1–3: the first-possession offence plays for the
++TD (pass 51%, run 49%, no kicks, TD/snap 11%); after the first possession the offence
++kicks on any down — 19% of those snaps are field-goal attempts — runs 54%, passes 21%,
++kneels 5%.
++
++## 2. What the engine did (5A-10 engine, sim OT drive sequences)
++
++| sequence | share | ended tied |
++|---|---|---|
++| FG, FG | 3.6% | **100%** — matched FGs ended the game as a tie |
++| punt, punt, FG, (4th drive) | 2.5% | no — a FG after both had possessed did **not** end the game |
++| FG, downs, FG | 1.9% | no — the second team's empty possession did not end the game |
++| punt-fests ending at 0:00 | ~9% | yes |
++
++P(tie | OT) 18.7%; drives per OT 2.59; OT drives ending in a FG 13% (real 26%), in a TD
++21% (13%), with the clock expiring 10% (1%).
++
++**D38 — first-possession completion and the empty second possession.** Only a score or a
++turnover on downs marked the first possession complete, so after a first-drive punt the
++other team's field goal was treated as a first-possession score and the game went on; and
++matched field goals ended the regular-season game as a tie instead of continuing in sudden
++death. Now: the first possession is complete when the first team's drive ends for any
++reason (evaluated on game state at every new drive — the drive-log fields are not
++maintained when the log is off); a drive ending with both teams having possessed and the
++score not tied ends the game; a FG after the first possession ends the game only if the
++kicking team leads.
++
++**D39 — overtime's last minutes are late-game.** The timeout policy, the late-Q4 runoff
++cells and the kneel runoff were keyed `qtr == 4`; OT's last 3:00 now uses the same cells
++(the period ends the game either way).
++
++**D40 — the sudden-death in-range state.** After the first possession, inside the 35 on
++downs 1–3: FG attempt on the snap at the measured 18.5% (any down), pass rate 29% of
++non-kneel plays, kneel 5.2% (one cell, n = 135; `fg_setup.parquet` state `ot_sd`). The
++first OT possession is explicitly excluded (played for the touchdown). Runs in this state
++keep the normal outcome cells (real OT in-range runs average 4.1 yards, not the 2.7 of
++the Q4 clock-kill runs).
++
++## 3. Result
++
++| | real | 5A-10 | 5A-11 |
++|---|---|---|---|
++| drives per OT | 2.51 | 2.59 | 2.54 |
++| first drive TD / FG / punt | 19 / 17 / 46% | 19 / 16 / 45% | 19 / 16 / 45% |
++| OT drives: FG / TD / punt / expiry | 26 / 13 / 36 / 1% | 13 / 21 / 34 / 10% | 24 / 15 / 38 / 4% |
++| P(tie \| OT) | 4.3% (3/70) | 18.7% | **10.4%** |
++| P(OT) | 6.4% | 3.7% | 4.9% |
++| tie rate | 0.28% | 0.68% | 0.50% |
++| P(\|final\| = 3) | 14.5% | 10.6% | **11.6%** |
++| P(\|final\| = 7) | 7.3% | 9.1% | 8.7% |
++| P(\|final\| = 6) | 7.5% | 4.5% | 4.4% |
++
++The residual tie rate (10% of overtimes vs 4%) is the punt-fest-to-0:00 sequence; it sits
++inside the real sample's uncertainty and is left alone. The OT frequency itself (4.9% vs
++6.4%) is the 5A-9/5A-10 endgame residual (tied at 2:00 → tie the game / reach OT).
++
++## 4. Tests
++
++`test_engine_5a11.py` (3, green): the `ot_sd` cell exists with measured rates; rule tests
++on ~1,250 sim overtimes — matched FGs always continue, a first-drive FG followed by an
++empty possession always ends in two drives, a FG after both possessed always ends the
++game, a first-possession TD ends it at once; structure — first-drive mix within 6pp,
++drives per OT within 0.35, P(tie | OT) ≤ 0.123. The 5A tie-rate test (≤ 1%) is green
++again (0.50%). Full suite on this commit: see `logs/agent_sessions.md`.
++
++## 5. Next
++
++The remaining 5A-10 list: placement of XP/two-point noise (real one-TD-apart games land on
++6 in 24%, sim 11%), the shared game environment (corr of the two teams' TD counts 0.12 vs
++0.01), Q4 FG count, 4th-down conversion 45% vs 57%, two-minute drill. Then 5B (usage
++builder) and 5C (grader/pricer, maps).
+-- 
+2.43.0
+

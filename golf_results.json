@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-17T07:00:30.333393",
+  "generated_at": "2026-09-17T08:00:37.129376",
   "sport": "golf",
   "event_name": "Biltmore Championship Asheville",
   "event_id": 557,
   "is_major": false,
-  "last_updated": "2026-09-17T07:00:06.945865",
+  "last_updated": "2026-09-17T08:00:06.816815",
   "n_candidates": 121,
   "n_leans": 10,
   "plays": [
@@ -1508,188 +1508,188 @@
   ],
   "matchup_candidates": [
     {
-      "player_1": "Cantlay, Patrick",
-      "player_2": "Reitan, Kristoffer",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Hubbard, Mark",
+      "player_2": "Hardy, Nick",
+      "player_3": "Hodges, Lee",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 19.0,
+      "bet_edge": 30.5,
       "classification": "candidate"
     },
     {
-      "player_1": "Woodland, Gary",
-      "player_2": "Bhatia, Akshay",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Brehm, Ryan",
+      "player_2": "Merritt, Troy",
+      "player_3": "Lower, Justin",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 35.9,
+      "bet_edge": 47.5,
       "classification": "candidate"
     },
     {
-      "player_1": "Fox, Ryan",
-      "player_2": "Schauffele, Xander",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Grillo, Emiliano",
+      "player_2": "Parry, John",
+      "player_3": "Ramey, Chad",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 10.3,
+      "bet_edge": 42.9,
       "classification": "candidate"
     },
     {
-      "player_1": "Fleetwood, Tommy",
-      "player_2": "Fitzpatrick, Alex",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Norlander, Henrik",
+      "player_2": "Bauchou, Zach",
+      "player_3": "Dunlap, Nick",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 19.9,
+      "bet_edge": 57.7,
       "classification": "candidate"
     },
     {
-      "player_1": "Fitzpatrick, Matt",
-      "player_2": "Clark, Wyndham",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Lebioda, Hank",
+      "player_2": "Gordon, Will",
+      "player_3": "Phillips, Chandler",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 20.3,
+      "bet_edge": 22.5,
       "classification": "candidate"
     },
     {
-      "player_1": "Rose, Justin",
-      "player_2": "Kim, Si Woo",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Kohles, Ben",
+      "player_2": "Walker, Danny",
+      "player_3": "Keefer, Johnny",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 15.7,
+      "bet_edge": 25.2,
       "classification": "candidate"
     },
     {
-      "player_1": "Henley, Russell",
-      "player_2": "Lee, Min Woo",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
+      "player_1": "Kirk, Chris",
+      "player_2": "Jaeger, Stephan",
+      "player_3": "Mouw, William",
+      "match_type": "3_ball",
       "book": "datagolf_model",
-      "bet_edge": 14.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "McIlroy, Rory",
-      "player_2": "Young, Cameron",
-      "player_3": "",
-      "match_type": "dg_model_h2h",
-      "book": "datagolf_model",
-      "bet_edge": 7.1,
-      "classification": "lean"
-    },
-    {
-      "player_1": "McCarthy, Denny",
-      "player_2": "Brown, Blades",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 19.6,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "McCarthy, Denny",
-      "player_2": "Brown, Blades",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bovada",
-      "bet_edge": 20.4,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Yu, Kevin",
-      "player_2": "Hojgaard, Rasmus",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 13.9,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Yu, Kevin",
-      "player_2": "Hojgaard, Rasmus",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bovada",
-      "bet_edge": 12.7,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Cole, Eric",
-      "player_2": "James, Ben",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 37.1,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Cole, Eric",
-      "player_2": "James, Ben",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bovada",
-      "bet_edge": 36.9,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Bridgeman, Jacob",
-      "player_2": "Koivun, Jackson",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 9.5,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Bridgeman, Jacob",
-      "player_2": "Koivun, Jackson",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "betonline",
-      "bet_edge": 10.3,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Bridgeman, Jacob",
-      "player_2": "Koivun, Jackson",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bovada",
-      "bet_edge": 10.0,
-      "classification": "candidate"
-    },
-    {
-      "player_1": "Bridgeman, Jacob",
-      "player_2": "Koivun, Jackson",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "caesars",
-      "bet_edge": 10.0,
+      "bet_edge": 16.9,
       "classification": "candidate"
     },
     {
       "player_1": "Conners, Corey",
-      "player_2": "Meissner, Mac",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 6.5,
-      "classification": "lean"
+      "player_2": "Hisatsune, Ryo",
+      "player_3": "Echavarria, Nico",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 19.4,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Pendrith, Taylor",
+      "player_2": "Davis, Cam",
+      "player_3": "Vilips, Karl",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 26.9,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Horschel, Billy",
+      "player_2": "Taylor, Nick",
+      "player_3": "Brown, Blades",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 22.1,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Glover, Lucas",
+      "player_2": "Riley, Davis",
+      "player_3": "Novak, Andrew",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 25.8,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Putnam, Andrew",
+      "player_2": "Kim, Michael",
+      "player_3": "Wu, Dylan",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 11.8,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Todd, Brendon",
+      "player_2": "Duncan, Tyler",
+      "player_3": "Hojgaard, Rasmus",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 60.5,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Hadwin, Adam",
+      "player_2": "Hughes, Mackenzie",
+      "player_3": "Moore, Taylor",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 39.8,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Ventura, Kristoffer",
+      "player_2": "Pavon, Matthieu",
+      "player_3": "Greyserman, Max",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 39.7,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Campos, Rafael",
+      "player_2": "Martin, Ben",
+      "player_3": "Ewart, A.J.",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 36.0,
+      "classification": "candidate"
     },
     {
       "player_1": "Nakajima, Keita",
-      "player_2": "Poston, J.T.",
-      "player_3": "",
-      "match_type": "tournament_matchups",
-      "book": "bet365",
-      "bet_edge": 32.4,
+      "player_2": "Blanchet, Chandler",
+      "player_3": "Crowe, Trace",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 30.4,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Lamprecht, Christo",
+      "player_2": "Salinda, Isaiah",
+      "player_3": "Harper, Keller",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 21.0,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Hirata, Kensei",
+      "player_2": "Stanger, Jimmy",
+      "player_3": "Bertagnole, Carson",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 22.9,
+      "classification": "candidate"
+    },
+    {
+      "player_1": "Tosti, Alejandro",
+      "player_2": "Clanton, Luke",
+      "player_3": "Oxendine, Spencer",
+      "match_type": "3_ball",
+      "book": "datagolf_model",
+      "bet_edge": 18.6,
       "classification": "candidate"
     }
   ],
-  "matchup_n_candidates": 63,
-  "matchup_n_leans": 7,
+  "matchup_n_candidates": 397,
+  "matchup_n_leans": 62,
   "g13_signals": [],
   "g13_avoids": [],
   "g13_status": "LIVE_SHADOW",
