@@ -385,6 +385,95 @@ def build_playcall_table(df):
             rows.append({"bucket": bkt, "n": n, "pass_rate": grp["is_pass"].mean()})
 
     tbl = pd.DataFrame(rows)
+
+    # ── Parent pooling: ensure every possible engine key exists ──
+    # Enumerate all possible keys and fill missing from parent level.
+    DOWNS = ["1", "2", "3", "4"]
+    DISTS = ["short", "med", "long"]
+    SC_FINE = ["trail9+", "trail4-8", "trail1-3", "tied",
+               "lead1-3", "lead4-8", "lead9+"]
+    CL_FINE = ["Q2<2", "Q1-3", "Q4>5", "Q4_2-5", "Q4<2"]
+    SC_COARSE = ["trail9", "within8", "lead9"]
+    CL_COARSE = ["Q1-3", "Q4"]
+    SC_FINE_TO_COARSE = {
+        "trail9+": "trail9", "trail4-8": "within8", "trail1-3": "within8",
+        "tied": "within8", "lead1-3": "within8", "lead4-8": "within8",
+        "lead9+": "lead9",
+    }
+    CL_FINE_TO_COARSE = {
+        "Q2<2": "Q1-3", "Q1-3": "Q1-3",
+        "Q4>5": "Q4", "Q4_2-5": "Q4", "Q4<2": "Q4",
+    }
+
+    existing = set(tbl["bucket"].values)
+    pool_rows = []
+
+    # (down, distance) marginal for ultimate fallback
+    dd_marginal = {}
+    for d in DOWNS:
+        for di in DISTS:
+            mask = (scrim["down_b"] == d) & (scrim["dist_b"] == di)
+            sub = scrim[mask]
+            if len(sub) > 0:
+                dd_marginal[f"{d}_{di}"] = sub["is_pass"].mean()
+            else:
+                dd_marginal[f"{d}_{di}"] = scrim["is_pass"].mean()
+
+    # Level 2: ensure all 72 keys exist
+    for d in DOWNS:
+        for di in DISTS:
+            for sc in SC_COARSE:
+                for cl in CL_COARSE:
+                    bkt = f"{d}_{di}_{sc}_{cl}"
+                    if bkt not in existing:
+                        pool_rows.append({
+                            "bucket": bkt,
+                            "n": 0,
+                            "pass_rate": dd_marginal.get(f"{d}_{di}", 0.55),
+                        })
+                        existing.add(bkt)
+
+    # Level 1: ensure all 180 keys exist (fill from L2 parent)
+    for d in DOWNS:
+        for di in DISTS:
+            for sc in SC_COARSE:
+                for cl in CL_FINE:
+                    bkt = f"{d}_{di}_c_{sc}_{cl}"
+                    if bkt not in existing:
+                        cl_c = CL_FINE_TO_COARSE[cl]
+                        parent = f"{d}_{di}_{sc}_{cl_c}"
+                        parent_row = tbl[tbl["bucket"] == parent]
+                        if not parent_row.empty:
+                            pr = float(parent_row.iloc[0]["pass_rate"])
+                        else:
+                            pr = dd_marginal.get(f"{d}_{di}", 0.55)
+                        pool_rows.append({"bucket": bkt, "n": 0, "pass_rate": pr})
+                        existing.add(bkt)
+
+    # Level 0: ensure all 420 keys exist (fill from L1 parent)
+    for d in DOWNS:
+        for di in DISTS:
+            for sc in SC_FINE:
+                for cl in CL_FINE:
+                    bkt = f"{d}_{di}_{sc}_{cl}"
+                    if bkt not in existing:
+                        sc_c = SC_FINE_TO_COARSE[sc]
+                        l1_bkt = f"{d}_{di}_c_{sc_c}_{cl}"
+                        l1_row = tbl[tbl["bucket"] == l1_bkt]
+                        if not l1_row.empty:
+                            pr = float(l1_row.iloc[0]["pass_rate"])
+                        else:
+                            # Fall through to L2
+                            cl_c = CL_FINE_TO_COARSE[cl]
+                            l2_bkt = f"{d}_{di}_{sc_c}_{cl_c}"
+                            l2_row = tbl[tbl["bucket"] == l2_bkt]
+                            pr = float(l2_row.iloc[0]["pass_rate"]) if not l2_row.empty else dd_marginal.get(f"{d}_{di}", 0.55)
+                        pool_rows.append({"bucket": bkt, "n": 0, "pass_rate": pr})
+                        existing.add(bkt)
+
+    if pool_rows:
+        tbl = pd.concat([tbl, pd.DataFrame(pool_rows)], ignore_index=True)
+
     return tbl
 
 

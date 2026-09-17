@@ -20,7 +20,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / "fit_5c2"
+OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / "fit_5c2b"
 GAMES_DIR = OUT_DIR / "games"
 PARAMS_PATH = ROOT / "nfl" / "sim" / "params_v1.json"
 
@@ -57,21 +57,14 @@ def _run_one_game(args):
         return (game_id, 0.0, 0, True, "skipped")
 
     from nfl.sim.anchor import run_anchored_chunked
-    import traceback
 
     t0 = time.time()
-    try:
-        td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = \
-            run_anchored_chunked(
-                home, away, season, week, spread, total_line,
-                **_WORKER_KW)
-    except (ValueError, KeyError) as e:
-        dt = time.time() - t0
-        # QB flag or playcall issue — record as error checkpoint
-        err_meta = {"game_id": game_id, "error": str(e), "wall_time": dt}
-        pd.DataFrame([err_meta]).to_parquet(
-            GAMES_DIR / f"{game_id}_error.parquet", index=False)
-        return (game_id, dt, 0, False, f"error: {str(e)[:80]}")
+    # D55: no except-and-continue. Any exception propagates to the pool,
+    # kills it, and exits non-zero with the game_id.
+    td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = \
+        run_anchored_chunked(
+            home, away, season, week, spread, total_line,
+            **_WORKER_KW)
     dt = time.time() - t0
 
     # Build checkpoint
@@ -174,20 +167,25 @@ def main():
     print(f"Workers: {workers} (cores={cores}, avail_mem={avail_mem/1e9:.1f}GB, "
           f"peak_rss={peak_rss_mb}MB)")
 
-    # Run
+    # D55: any exception kills the pool and exits non-zero.
     completed = 0
     conv_count = 0
-    with Pool(workers, initializer=_worker_init) as pool:
-        for result in pool.imap_unordered(_run_one_game, all_games):
-            game_id, dt, n_iter, conv, status = result
-            if status == "skipped":
-                continue
-            completed += 1
-            if conv:
-                conv_count += 1
-            flag = "" if conv else " [NOT CONVERGED]"
-            print(f"  [{completed}/{todo}] {game_id}: {dt:.1f}s, {n_iter} iter{flag}",
-                  flush=True)
+    try:
+        with Pool(workers, initializer=_worker_init) as pool:
+            for result in pool.imap_unordered(_run_one_game, all_games):
+                game_id, dt, n_iter, conv, status = result
+                if status == "skipped":
+                    continue
+                completed += 1
+                if conv:
+                    conv_count += 1
+                flag = "" if conv else " [NOT CONVERGED]"
+                print(f"  [{completed}/{todo}] {game_id}: {dt:.1f}s, {n_iter} iter{flag}",
+                      flush=True)
+    except Exception as e:
+        print(f"\nFATAL: worker exception after {completed} games: {e}",
+              file=sys.stderr)
+        sys.exit(1)
 
     total_time = time.time() - t_start
     print(f"\nFit complete: {completed} games in {total_time:.0f}s "

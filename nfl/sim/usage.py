@@ -207,18 +207,32 @@ def compute_position_priors(rec, car, pos_map):
 # STARTING-QB IDENTIFICATION
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def derive_starting_qbs(depth, plays):
+def derive_starting_qbs(depth, plays, active_universe=None):
     """
     Identify starting QB per (season, week, team).
 
     Priority:
     1. Per-week depth chart (old schema, depth_team=1, 2020-2024)
-    2. Previous game's leading passer from PBP (observed starter)
-    3. Static depth chart snapshot (new schema, pos_rank=1, 2025+)
+    2. Most recent previous game's leading passer (search back ≤3 weeks)
+    3. Static depth chart snapshot (new schema, pos_rank=1, current season only)
+
+    Roster-at-game-time: a QB is a candidate only if on that team's
+    roster/active universe for that week.
 
     Returns: dict[(season, week, team)] -> {'gsis_id': str, 'source': str}
     """
     starting = {}
+
+    # Build roster lookup for validation: (season, week, team, player_id) → True
+    roster_set = set()
+    if active_universe is not None and not active_universe.empty:
+        for cols in active_universe[["season", "week", "team", "player_id"]].itertuples(index=False):
+            roster_set.add((int(cols[0]), int(cols[1]), cols[2], cols[3]))
+
+    def _on_roster(s, w, team, gsis_id):
+        if not roster_set:
+            return True  # no roster data → skip validation
+        return (s, w, team, gsis_id) in roster_set
 
     # Layer 1: Old schema per-week depth charts (2020-2024)
     if "depth_team" in depth.columns and "season" in depth.columns:
@@ -237,14 +251,14 @@ def derive_starting_qbs(depth, plays):
             if pd.isna(w):
                 continue
             w = int(w)
-            starting[(s, w, r["club_code"])] = {
-                "gsis_id": r["gsis_id"],
-                "source": "depth_chart",
-            }
+            if _on_roster(s, w, r["club_code"], r["gsis_id"]):
+                starting[(s, w, r["club_code"])] = {
+                    "gsis_id": r["gsis_id"],
+                    "source": "depth_chart",
+                }
 
     # Layer 2: PBP leading passer from the team's most recent previous game.
-    # Searches back up to 3 weeks to cross bye weeks (week w uses the game in
-    # week w-1, w-2, or w-3 for that team).
+    # Searches back up to 3 weeks to cross bye weeks.
     if plays is not None:
         passes = plays[
             (plays["play_type"] == "pass") & plays["passer_player_id"].notna()
@@ -282,16 +296,16 @@ def derive_starting_qbs(depth, plays):
                         prev_w = target_w - lookback
                         for gw, gsis_id in games_list:
                             if gw == prev_w:
-                                starting[key] = {
-                                    "gsis_id": gsis_id,
-                                    "source": "prev_game_passer",
-                                }
+                                if _on_roster(s, target_w, team, gsis_id):
+                                    starting[key] = {
+                                        "gsis_id": gsis_id,
+                                        "source": "prev_game_passer",
+                                    }
                                 break
                         if key in starting:
                             break
 
     # Layer 3: Static depth chart (new schema, prospective only: current season).
-    # Determine current season from PBP files (the latest season with data).
     current_season = max(OUTPUT_SEASONS)
     for s in sorted(OUTPUT_SEASONS, reverse=True):
         if (PBP_DIR / f"pbp_{s}.parquet").exists():
@@ -299,6 +313,7 @@ def derive_starting_qbs(depth, plays):
             break
 
     n_layer3_unset = 0
+    static_qb1 = {}
     if "pos_rank" in depth.columns:
         new_qb = depth[
             (depth.get("pos_abb", pd.Series(dtype=str)) == "QB")
@@ -805,6 +820,7 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
 
             is_qb = merged["position"].values == "QB"
             is_starter = np.zeros(len(merged), dtype=bool)
+            no_starter_teams = []
             if starting_qbs is not None:
                 pids = merged["player_id"].values
                 teams_arr_qb = merged["team"].values
@@ -814,20 +830,16 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                         if sq and sq["gsis_id"] == pids[i]:
                             is_starter[i] = True
 
-                # Ensure every team has exactly one flagged starter QB.
-                # If the flagged QB is Out/inactive (won't appear in the engine's
-                # player context after renormalization), or if no QB was flagged at
-                # all, flag the QB with the most raw touches. Falls through to first
-                # QB if all have zero touches. The engine will apply its own active
-                # filter; the starter flag just needs to land on a QB it will see.
+                # D54: if flagged starter is Out/inactive, re-flag to first
+                # active QB by depth_order. No touches heuristic.
                 w_act = s_active[(s_active["week"] == w) & (s_active["active_flag"])]
                 act_set = set(w_act["player_id"].values) if not w_act.empty else set()
+                depths = merged["depth_order"].values
 
                 for t in np.unique(teams_arr_qb):
                     team_qb_mask = is_qb & (teams_arr_qb == t)
                     if not team_qb_mask.any():
                         continue
-                    # Check if any flagged starter is active
                     ok = False
                     for i in np.where(team_qb_mask)[0]:
                         if is_starter[i] and pids[i] in act_set:
@@ -835,19 +847,19 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                             break
                     if ok:
                         continue
-                    # Re-flag: clear all, pick best active QB by touches
+                    # Clear all, pick first active QB by depth_order
                     is_starter[team_qb_mask] = False
                     qb_idx_list = np.where(team_qb_mask)[0].tolist()
                     act_qbs = [qi for qi in qb_idx_list if pids[qi] in act_set]
-                    pool = act_qbs if act_qbs else qb_idx_list
-                    best = pool[0]
-                    best_t = -1
-                    for qi in pool:
-                        t_val = int(raw_tgt_arr[qi]) + int(raw_car_arr[qi])
-                        if t_val > best_t:
-                            best_t = t_val
-                            best = qi
-                    is_starter[best] = True
+                    if act_qbs:
+                        best = min(act_qbs,
+                                   key=lambda qi: depths[qi] if pd.notna(depths[qi]) else 99)
+                        is_starter[best] = True
+                    else:
+                        no_starter_teams.append(t)
+
+                if no_starter_teams:
+                    print(f"  WARNING: {season} wk{w}: no active QB for {no_starter_teams}")
 
             backup_qb = is_qb & ~is_starter
 
@@ -865,13 +877,9 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                         1e-8,
                     )
 
-            # Players with 0 opp (never active for a game) get near-zero.
-            # Starting QBs with 0 opp retain their prior-based blend.
-            zero_opp_zeroed = ~is_starter  # starting QBs are exempt
-            blend_tgt[(opp_tgt == 0) & zero_opp_zeroed] = 1e-8
-            blend_rz[(opp_rz == 0) & zero_opp_zeroed] = 1e-8
-            blend_car[(opp_car == 0) & zero_opp_zeroed] = 1e-8
-            blend_gl[(opp_gl == 0) & zero_opp_zeroed] = 1e-8
+            # D53: opp==0 players get the D14 prior (already computed by the
+            # shrinkage formula above). No 1e-8 override — absence of evidence
+            # is not evidence of zero share.
 
             # Strong evidence override: player was active for team opportunities
             # with 0 own touches → evidence of ~0 share.
@@ -1125,13 +1133,7 @@ def _load_common():
     rosters, depth, injuries = load_roster_data()
     print(f"Rosters: {len(rosters):,}, Depth: {len(depth):,}, Injuries: {len(injuries):,}")
 
-    starting_qbs = derive_starting_qbs(depth, scrimmage)
-    n_dc = sum(1 for v in starting_qbs.values() if v["source"] == "depth_chart")
-    n_pbp = sum(1 for v in starting_qbs.values() if v["source"] == "prev_game_passer")
-    print(f"Starting QBs: {len(starting_qbs)} entries ({n_dc} depth_chart, {n_pbp} prev_game_passer)")
-
     rec, team_tgt, car, team_car = build_player_game_aggs(scrimmage)
-    del scrimmage; gc.collect()
     print(f"Aggregates: rec={len(rec):,} rush={len(car):,}")
 
     pos_map = build_position_map(rosters)
@@ -1142,8 +1144,14 @@ def _load_common():
 
     print("Building active universe...")
     active = build_active_universe(rosters, injuries, depth)
-    del rosters, depth, injuries; gc.collect()
     print(f"  {len(active):,} rows, active_flag mean: {active['active_flag'].mean():.3f}")
+
+    starting_qbs = derive_starting_qbs(depth, scrimmage, active_universe=active)
+    n_dc = sum(1 for v in starting_qbs.values() if v["source"] == "depth_chart")
+    n_pbp = sum(1 for v in starting_qbs.values() if v["source"] == "prev_game_passer")
+    print(f"Starting QBs: {len(starting_qbs)} entries ({n_dc} depth_chart, {n_pbp} prev_game_passer)")
+
+    del scrimmage, rosters, depth, injuries; gc.collect()
 
     print("Computing depth-order priors and player season shares...")
     depth_order_priors, player_season_shares = compute_season_share_data(

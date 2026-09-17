@@ -1982,12 +1982,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 lg_xpass_list.append(pc_lookup[b2])
                 _fallback_count += 1
             else:
-                # Level-2 miss — use league-average 0.55 as a placeholder.
-                # The builder's bucket key format doesn't cover all engine
-                # combinations (e.g., coarse score "within8" vs table "within8_Q1-3").
-                # This is a table completeness issue, not an engine bug.
-                lg_xpass_list.append(0.55)
-                _fallback_count += 1
+                # A4: three-level miss raises. The playcall table must have
+                # parent-pooled entries for every engine key combination.
+                raise KeyError(
+                    f"Playcall three-level miss: L0={b0} L1={b1} L2={b2}. "
+                    f"Rebuild tables with parent pooling."
+                )
         lg_xpass = np.array(lg_xpass_list)
         team_proe = np.empty(n_live)
         for ti in [0, 1]:
