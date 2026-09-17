@@ -367,3 +367,22 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   main, (h) --tune writes frozen_at/frozen_commit and best=(4,20), (i) no 2025
   layer-3 QB and every 2026 wk2 team has one).
   See `research/nfl_sim/phase5b_usage_repair.md`.
+- **2026-09-17 Phase 5C-1 — grader/pricer coherence, CRPS, QB identity, shared solver.**
+  **D46 — Shared anchoring solver.** `anchor.run_anchored_chunked()` is the single
+  anchoring routine, reading params from the `"anchor"` block in `params_v1.json`
+  (n_sims=10000, chunk_size=2000, max_iter=8, damp_limit_pts=6, J_INV, J_FWD).
+  `run_week.py` imports it. The old 4-iteration loop in `run_cal_players.py` is superseded.
+  **D47 — CRPS fix.** `_crps_sample` had `/ (2*n)` instead of `/ 2` on the pairwise
+  term (the pairwise `np.mean` already averages over n^2 pairs). Every prior K2 CRPS
+  number is void.
+  **D48 — td_player_id for ATD labels.** `actuals.actual_player_game_stats()` uses
+  `td_player_id` (nflfastR canonical scorer) for anytime TD, catching return TDs and
+  lateral scores. 348 player-games change across 2021-2024.
+  **D49 — Grader void rule.** A player with no stat rows but active (on roster, team
+  played) grades actual=0, not void. Void only if inactive/not rostered.
+  **D50 — Engine QB identity.** Engine uses `is_starting_qb` from `player_usage_weekly`.
+  For 2026+ it raises if no starter is flagged (never falls back silently). For 2021-2025
+  it falls back to depth_order (the column was not backfilled).
+  Throughput: 500 sim-games/s (5 games, N=10000, players ON). Projected 1087-game backtest:
+  N=10000 20.5h, N=4000 8.2h, N=2000 4.1h, N=1000 2.1h. Jeff chooses N.
+  Tests: `test_5c1.py` 8/8 pass. See `research/nfl_sim/phase5c1_report.md`.

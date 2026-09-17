@@ -1,3 +1,31 @@
+## 2026-09-17T16:00Z  claude-code (Phase 5C-1 — shared solver, CRPS, TD labels, QB identity)
+- CREATED: nfl/sim/actuals.py — actual_player_game_stats() using td_player_id for ATD.
+- EDITED: nfl/sim/anchor.py — run_anchored_chunked() shared solver reading params_v1.json
+  anchor block; _load_anchor_params() helper; _run_chunks() moved from run_week.py.
+- EDITED: nfl/sim/calibration.py — CRPS fix (removed /n from pairwise term); actual_player_stats
+  now wraps actuals.actual_player_game_stats.
+- EDITED: nfl/sim/engine.py — QB selection uses is_starting_qb for 2026+, raises if missing;
+  falls back to depth_order for historical seasons.
+- EDITED: nfl/sim/grade_week.py — imports from actuals.py; void rule: active player with no
+  stats grades actual=0 not void.
+- EDITED: nfl/sim/pricer.py — sgp_probability_raked() with IPF; sgp_probability_raw() renamed.
+- EDITED: nfl/sim/ratings.py — situational PROE bucket key: int(down).astype(str) not float.
+- EDITED: nfl/sim/run_week.py — imports run_anchored_chunked from anchor.py.
+- EDITED: nfl/sim/params_v1.json — anchor block added.
+- CREATED: nfl/sim/tests/test_5c1.py — 8 tests, all passing.
+- RAN: throughput measurement (5 games, N=10000): 500 sim-games/s, mean 3.4 iter.
+  Projected backtest: N=10000 20.5h, N=4000 8.2h, N=2000 4.1h, N=1000 2.1h.
+- NOT DONE: pricer one-sided coherence enforcement (needs cal map re-fit, 5C-2).
+- NOT DONE: board trust filter (needs saved board inputs or live run).
+- NOT DONE: usage OUT_DIR env override + test hygiene (item 11).
+- NOT DONE: run_cal_players.py migration to shared solver (superseded, not deleted).
+- NOT DONE: full nfl/sim/tests suite run (will run after docs commit).
+- NOT DONE: MNF v3 re-grade (item 6 grader updated but re-grade not run).
+- UNVERIFIED: whether the situational tendency table on disk has the corrected keys
+  (requires ratings rebuild).
+- UNVERIFIED: whether the CRPS correction changes any downstream decision (all prior
+  K2 numbers are void per D47).
+
 ## 2026-09-17T14:30Z  claude-code (Phase 5B-fix — tuner/builder split, layer-3 scope)
 - EDITED: nfl/sim/usage.py — (1) main() refactored to build-only; --tune flag runs grid
   search and writes usage block to params_v1.json (with frozen_at, frozen_commit,
