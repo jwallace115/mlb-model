@@ -57,12 +57,21 @@ def _run_one_game(args):
         return (game_id, 0.0, 0, True, "skipped")
 
     from nfl.sim.anchor import run_anchored_chunked
+    import traceback
 
     t0 = time.time()
-    td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = \
-        run_anchored_chunked(
-            home, away, season, week, spread, total_line,
-            **_WORKER_KW)
+    try:
+        td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = \
+            run_anchored_chunked(
+                home, away, season, week, spread, total_line,
+                **_WORKER_KW)
+    except (ValueError, KeyError) as e:
+        dt = time.time() - t0
+        # QB flag or playcall issue — record as error checkpoint
+        err_meta = {"game_id": game_id, "error": str(e), "wall_time": dt}
+        pd.DataFrame([err_meta]).to_parquet(
+            GAMES_DIR / f"{game_id}_error.parquet", index=False)
+        return (game_id, dt, 0, False, f"error: {str(e)[:80]}")
     dt = time.time() - t0
 
     # Build checkpoint

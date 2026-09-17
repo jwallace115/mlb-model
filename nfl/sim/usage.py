@@ -816,38 +816,38 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
 
                 # Ensure every team has exactly one flagged starter QB.
                 # If the flagged QB is Out/inactive (won't appear in the engine's
-                # player context), or if no QB was flagged at all, flag the active
-                # QB with the most raw touches. This covers backup-QB weeks.
-                w_active = s_active[(s_active["week"] == w) & (s_active["active_flag"])]
-                active_pids = set(w_active["player_id"].values) if not w_active.empty else set()
+                # player context after renormalization), or if no QB was flagged at
+                # all, flag the QB with the most raw touches. Falls through to first
+                # QB if all have zero touches. The engine will apply its own active
+                # filter; the starter flag just needs to land on a QB it will see.
+                w_act = s_active[(s_active["week"] == w) & (s_active["active_flag"])]
+                act_set = set(w_act["player_id"].values) if not w_act.empty else set()
 
                 for t in np.unique(teams_arr_qb):
                     team_qb_mask = is_qb & (teams_arr_qb == t)
                     if not team_qb_mask.any():
                         continue
-                    # Check if the flagged starter is actually active
-                    starter_active = False
+                    # Check if any flagged starter is active
+                    ok = False
                     for i in np.where(team_qb_mask)[0]:
-                        if is_starter[i] and pids[i] in active_pids:
-                            starter_active = True
+                        if is_starter[i] and pids[i] in act_set:
+                            ok = True
                             break
-                    if starter_active:
+                    if ok:
                         continue
-                    # Clear any inactive starter flag and re-flag
+                    # Re-flag: clear all, pick best active QB by touches
                     is_starter[team_qb_mask] = False
-                    qb_indices = np.where(team_qb_mask)[0]
-                    # Prefer active QBs
-                    active_qbs = [qi for qi in qb_indices if pids[qi] in active_pids]
-                    candidates = active_qbs if active_qbs else list(qb_indices)
-                    best_idx = candidates[0]
-                    best_touches = -1
-                    for qi in candidates:
-                        touches = (raw_tgt_arr[qi] if qi < len(raw_tgt_arr) else 0) + \
-                                  (raw_car_arr[qi] if qi < len(raw_car_arr) else 0)
-                        if touches > best_touches:
-                            best_touches = touches
-                            best_idx = qi
-                    is_starter[best_idx] = True
+                    qb_idx_list = np.where(team_qb_mask)[0].tolist()
+                    act_qbs = [qi for qi in qb_idx_list if pids[qi] in act_set]
+                    pool = act_qbs if act_qbs else qb_idx_list
+                    best = pool[0]
+                    best_t = -1
+                    for qi in pool:
+                        t_val = int(raw_tgt_arr[qi]) + int(raw_car_arr[qi])
+                        if t_val > best_t:
+                            best_t = t_val
+                            best = qi
+                    is_starter[best] = True
 
             backup_qb = is_qb & ~is_starter
 
