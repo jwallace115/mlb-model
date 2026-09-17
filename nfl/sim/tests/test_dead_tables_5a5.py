@@ -94,9 +94,14 @@ def test_dead_playcall(baseline):
 
 # --- Clock runoff table ---
 def test_dead_clock_runoff(baseline):
-    """Perturb clock elapsed for complete_inbounds plays by 2x."""
+    """D52: Perturb clock elapsed for complete_inbounds plays by 2x.
+
+    Metric: ev_pass_plays + ev_rush_plays per game (plays per game).
+    ev_clock_used sums to game length by construction (the total clock
+    consumed per game is ~3600 s regardless of runoff speed) and was a
+    null metric — at 5A-11 several perturbations moved it NEGATIVE on noise.
+    """
     tbl = pd.read_parquet(TABLES_DIR / "clock_runoff.parquet").copy()
-    # Find a level-0 row (finest) with good n
     l0 = tbl[(~tbl["score_state"].str.startswith("p_")) &
              (~tbl["score_state"].str.startswith("all")) &
              (tbl["clock_period"] != "all")]
@@ -109,13 +114,23 @@ def test_dead_clock_runoff(baseline):
         else:
             tbl.at[idx, "elapsed_q"] = (np.array(q) * 2.0).tolist()
     r = _run({"clock": tbl})
-    diff = abs(r["ev_clock_used"].mean() - baseline["ev_clock_used"].mean())
-    assert diff > 1.0, f"Clock table (score_state) perturbation had no effect: clock diff={diff:.2f}"
+    plays_pert = (r["ev_pass_plays"] + r["ev_rush_plays"]).values
+    plays_base = (baseline["ev_pass_plays"] + baseline["ev_rush_plays"]).values
+    d = plays_pert - plays_base
+    n = len(d)
+    assert d.mean() < 0, (
+        f"Doubling runoff should cut plays: mean(d)={d.mean():.3f}"
+    )
+    assert abs(d.mean()) > 3 * d.std() / np.sqrt(n), (
+        f"Effect too small: |mean(d)|={abs(d.mean()):.3f} vs "
+        f"3*SE={3 * d.std() / np.sqrt(n):.3f}"
+    )
 
 
 # --- Clock runoff: legacy hurry key ---
 def test_dead_clock_legacy(baseline):
-    """Perturb clock for the legacy (outcome_type, hurry=False) fallback."""
+    """D52: Perturb clock for the legacy (outcome_type, hurry=False) fallback.
+    Legacy is rarely hit; we only check the run doesn't crash."""
     tbl = pd.read_parquet(TABLES_DIR / "clock_runoff.parquet").copy()
     legacy = tbl[(tbl["score_state"] == "all") & (tbl["hurry"] == False)]
     if not legacy.empty:
@@ -127,10 +142,8 @@ def test_dead_clock_legacy(baseline):
         else:
             tbl.at[idx, "elapsed_q"] = (np.array(q) * 2.0).tolist()
     r = _run({"clock": tbl})
-    # Legacy is only used when level-0 and level-1 both miss; effect may be small
-    diff = abs(r["ev_clock_used"].mean() - baseline["ev_clock_used"].mean())
-    # Just check it doesn't crash; legacy fallback is rarely hit
-    assert True  # existence test
+    # Existence test — legacy fallback is rarely hit
+    assert len(r) > 0
 
 
 # --- Fourth-down decision table ---

@@ -43,9 +43,15 @@ def test_shared_solver_identity():
 
     from nfl.sim.anchor import _load_anchor_params
     ap = _load_anchor_params()
-    assert ap["n_sims"] == 10000
+    assert ap["n_sims"] == 5000  # D51
+    assert ap["chunk_size"] == 2500  # D51
+    assert ap["n_sims"] % ap["chunk_size"] == 0
     assert ap["max_iter"] == 8
     assert ap["J_INV"].shape == (2, 2)
+
+    # Non-divisible N must raise
+    with pytest.raises(ValueError, match="divisible"):
+        anchor_fn("KC", "DEN", 2024, 1, -3.0, 47.5, n_sims=3000, chunk_size=2500)
 
 
 # ─── (b) CRPS closed-form check ─────────────────────────────────────────────

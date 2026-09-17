@@ -548,7 +548,6 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--week", type=int, default=None)
-    parser.add_argument("--n-sims", type=int, default=10000)
     args = parser.parse_args()
 
     t0 = time.time()
@@ -619,10 +618,12 @@ def main():
                     break
             break
 
-    # Run anchored sims
-    N_SIMS = args.n_sims
+    # Run anchored sims — N from params anchor block
     anchoring_log = []
-    print(f"\nSimulating {len(lines)} games at N={N_SIMS} (chunks of 2000)...")
+    from nfl.sim.anchor import _load_anchor_params
+    _ap = _load_anchor_params()
+    print(f"\nSimulating {len(lines)} games at N={_ap['n_sims']} "
+          f"(chunks of {_ap['chunk_size']})...")
     game_results = []
     converged_count = 0
     for key, ln in sorted(lines.items()):
@@ -630,7 +631,7 @@ def main():
         print(f"  Simulating {away}@{home}...", end="", flush=True)
         st = time.time()
         td, pdf, dh, da, n_iter, conv, raw_m, raw_t, anch_m, anch_t = run_anchored_chunked(
-            home, away, SEASON, week, ln["spread"], ln["total"], N_SIMS,
+            home, away, SEASON, week, ln["spread"], ln["total"],
             anchoring_log=anchoring_log, **kw)
         dt = time.time() - st
         if conv:

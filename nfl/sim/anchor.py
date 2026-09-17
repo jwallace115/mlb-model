@@ -167,8 +167,13 @@ def run_anchored_chunked(home, away, season, week, spread, total,
     J_FWD = ap["J_FWD"]
     damp_limit = ap["damp_limit_pts"]
 
+    if n_sims % chunk_size != 0:
+        raise ValueError(
+            f"n_sims ({n_sims}) must be divisible by chunk_size ({chunk_size})"
+        )
+
     base_seed = stable_seed((home, away, season, week, 42))
-    n_chunks = max(1, n_sims // chunk_size)
+    n_chunks = n_sims // chunk_size
 
     dh, da = 0.0, 0.0
     raw_m = raw_t = None

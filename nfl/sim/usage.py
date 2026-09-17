@@ -242,7 +242,9 @@ def derive_starting_qbs(depth, plays):
                 "source": "depth_chart",
             }
 
-    # Layer 2: PBP leading passer from previous game -> starter for next week
+    # Layer 2: PBP leading passer from the team's most recent previous game.
+    # Searches back up to 3 weeks to cross bye weeks (week w uses the game in
+    # week w-1, w-2, or w-3 for that team).
     if plays is not None:
         passes = plays[
             (plays["play_type"] == "pass") & plays["passer_player_id"].notna()
@@ -258,16 +260,35 @@ def derive_starting_qbs(depth, plays):
             leader = leader.sort_values("att", ascending=False).drop_duplicates(
                 ["season", "week", "posteam"]
             )
+            # Build a lookup: (season, team) -> list of (week, gsis_id) sorted by week desc
+            team_passers = {}
             for _, r in leader.iterrows():
-                s = int(r["season"])
-                next_w = int(r["week"]) + 1
-                team = r["posteam"]
-                key = (s, next_w, team)
-                if key not in starting:
-                    starting[key] = {
-                        "gsis_id": r["passer_player_id"],
-                        "source": "prev_game_passer",
-                    }
+                key = (int(r["season"]), r["posteam"])
+                team_passers.setdefault(key, []).append(
+                    (int(r["week"]), r["passer_player_id"]))
+            for k in team_passers:
+                team_passers[k].sort(key=lambda x: -x[0])
+
+            # For each team-week, find the most recent game within 3 weeks back
+            for (s, team), games_list in team_passers.items():
+                weeks_played = [w for w, _ in games_list]
+                max_week = max(weeks_played)
+                for target_w in range(2, max_week + 2):  # fill week 2 through max+1
+                    key = (s, target_w, team)
+                    if key in starting:
+                        continue
+                    # Search back up to 3 weeks
+                    for lookback in range(1, 4):
+                        prev_w = target_w - lookback
+                        for gw, gsis_id in games_list:
+                            if gw == prev_w:
+                                starting[key] = {
+                                    "gsis_id": gsis_id,
+                                    "source": "prev_game_passer",
+                                }
+                                break
+                        if key in starting:
+                            break
 
     # Layer 3: Static depth chart (new schema, prospective only: current season).
     # Determine current season from PBP files (the latest season with data).
@@ -792,6 +813,24 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
                         sq = starting_qbs.get((season, w, teams_arr_qb[i]))
                         if sq and sq["gsis_id"] == pids[i]:
                             is_starter[i] = True
+
+                # If a team has QBs but none is flagged (depth chart starter not on
+                # roster), pick the QB with the most raw carries or raw targets as
+                # the de facto starter. Ensures every team-week has exactly one.
+                for t in np.unique(teams_arr_qb):
+                    team_qb_mask = is_qb & (teams_arr_qb == t)
+                    if team_qb_mask.any() and not is_starter[team_qb_mask].any():
+                        qb_indices = np.where(team_qb_mask)[0]
+                        # Pick QB with most raw touches
+                        best_idx = qb_indices[0]
+                        best_touches = 0
+                        for qi in qb_indices:
+                            touches = (raw_tgt_arr[qi] if qi < len(raw_tgt_arr) else 0) + \
+                                      (raw_car_arr[qi] if qi < len(raw_car_arr) else 0)
+                            if touches > best_touches:
+                                best_touches = touches
+                                best_idx = qi
+                        is_starter[best_idx] = True
 
             backup_qb = is_qb & ~is_starter
 

@@ -16,8 +16,8 @@
     "frozen_commit": "463a666d0"
   },
   "anchor": {
-    "n_sims": 10000,
-    "chunk_size": 2000,
+    "n_sims": 5000,
+    "chunk_size": 2500,
     "max_iter": 8,
     "damp_limit_pts": 6,
     "convergence": "2*SE both channels",

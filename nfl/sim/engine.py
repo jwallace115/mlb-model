@@ -543,31 +543,22 @@ def _build_player_context(home, away, season, week, player_usage, active_uni,
         qb_idx = -1
         if qb_mask.any():
             qb_candidates = renormed[qb_mask]
-            # D50: Use is_starting_qb. Raise for current/future seasons.
-            # For historical seasons with unflagged team-weeks, fall back to
-            # depth_order with a warning (usage table has gaps for backup-QB weeks).
-            has_flag = ("is_starting_qb" in renormed.columns)
-            if has_flag:
-                starter = qb_candidates[qb_candidates["is_starting_qb"] == True]
-                if len(starter) >= 1:
-                    qb_idx = starter.index[0]
-                    qb_idx = renormed.index.get_loc(qb_idx)
-            if qb_idx == -1 and season >= 2026:
+            # D50: Use is_starting_qb — raises for ANY season if missing.
+            if "is_starting_qb" not in renormed.columns:
+                raise ValueError(
+                    f"is_starting_qb column missing for {team} {season} wk{week}. "
+                    f"Rebuild player_usage_weekly.parquet with usage.py."
+                )
+            starter = qb_candidates[qb_candidates["is_starting_qb"] == True]
+            if len(starter) >= 1:
+                qb_idx = starter.index[0]
+                qb_idx = renormed.index.get_loc(qb_idx)
+            else:
                 raise ValueError(
                     f"No is_starting_qb=True for {team} {season} wk{week}. "
                     f"QB candidates: {qb_candidates['player_id'].tolist()}. "
                     f"Run usage.py to set the flag."
                 )
-            if qb_idx == -1:
-                # Historical fallback — depth order (logged, not silent)
-                import warnings
-                warnings.warn(
-                    f"is_starting_qb not set for {team} {season} wk{week}; "
-                    f"using depth_order fallback", stacklevel=2)
-                depth_map_local = dict(zip(au["player_id"], au["depth_order"].fillna(99)))
-                qb_depths = qb_candidates["player_id"].map(depth_map_local).fillna(99)
-                qb_idx = qb_candidates.index[qb_depths.values.argmin()]
-                qb_idx = renormed.index.get_loc(qb_idx)
 
         pctx[ti] = {
             "ids": renormed["player_id"].values,
