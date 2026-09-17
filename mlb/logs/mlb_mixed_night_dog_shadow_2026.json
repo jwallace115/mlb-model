@@ -1260,6 +1260,22 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "3-7"
+    },
+    {
+      "game_pk": 823573,
+      "game_date": "2026-09-17",
+      "matchup": "PHI @ NYM",
+      "fav_team": "NYM",
+      "dog_team": "PHI",
+      "fav_side": "home",
+      "fav_implied": 0.548,
+      "dog_ml_price": 116,
+      "sp_fip_diff": -0.556,
+      "off_diff": 0.5,
+      "bp_era_diff": -0.027,
+      "day_night": "night",
+      "local_start_hour": 19.25,
+      "win_loss": null
     }
   ]
 }
