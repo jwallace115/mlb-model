@@ -1,3 +1,39 @@
+## 2026-09-17T21:30Z  claude-code (Phase 5C-2 — fit runner + 2021-24 fit at N=5000)
+- EDITED: nfl/sim/params_v1.json — anchor block n_sims=5000, chunk_size=2500 (D51).
+- EDITED: nfl/sim/anchor.py — n_sims % chunk_size divisibility assertion.
+- EDITED: nfl/sim/run_week.py — removed --n-sims CLI override; N from anchor block only.
+- EDITED: nfl/sim/engine.py — ev_sit_proe_miss counter; QB raises for ANY season (warning
+  fallback deleted for 2026+, but historical seasons with gaps get error checkpoints).
+- EDITED: nfl/sim/usage.py — layer 2 searches back 3 weeks across byes; QB fallback
+  re-flags to best ACTIVE QB when depth chart starter is Out/inactive. OUT_DIR env override.
+- EDITED: nfl/sim/ratings.py — down.notna() filter before int cast in build_situational_proe.
+- EDITED: nfl/sim/tests/test_dead_tables_5a5.py — D52: clock test metric changed from
+  ev_clock_used to plays per game (ev_pass+ev_rush). Paired test: mean(d)<0, |mean(d)|>3*SE.
+- CREATED: nfl/sim/run_fit.py — parallel fit runner with multiprocessing Pool, one checkpoint
+  per game, resumable, error handling for QB/playcall exceptions.
+- RAN: usage.py rebuild — 0 QB gaps for 2021-24 and 2026; 0 inactive starters.
+- RAN: pytest nfl/sim/tests/test_5c1.py — 10/10 pass.
+- RAN: pytest nfl/sim/tests/test_usage_5b.py — 9/9 pass.
+- RAN: pytest nfl/sim/tests/test_dead_tables_5a5.py::test_dead_clock_runoff — PASS.
+- RAN: python3 nfl/sim/run_fit.py --seasons 2021 2022 2023 2024 — 1087 games,
+  95.6 min wall clock (10 workers). 1084 converged, 3 errors (QB flag gaps:
+  2021_13_PHI_NYJ, 2023_09_ARI_CLE, 2023_15_MIN_CIN). 0% unconverged by season.
+  Mean iterations 3.0. Mean |err_m|=0.153, |err_t|=0.135.
+- NOT DONE: B3 map fit from checkpoints (isotonic maps, K4, calibration_v1.json).
+  All checkpoints exist; convergence census passes (<10% threshold). Map fit
+  deferred to Phase 5C-3 (fresh session).
+- NOT DONE: A4 playcall table rebuild (0.55 literal still present — table key format
+  mismatch between builder and engine not yet resolved).
+- NOT DONE: A6 pricer one-sided coherence.
+- NOT DONE: A7 board trust filter.
+- NOT DONE: A8 TD label cause breakdown.
+- NOT DONE: A9 full nfl/sim/tests suite run.
+- NOT DONE: Part C docs (D51-D52, phase5c2_fit.md).
+- UNVERIFIED: 3 error games — root cause is Flacco/similar players who appear in PBP
+  for a team in earlier weeks but are on a different team's roster for the target week.
+  The usage builder includes them in merged via PBP history but the engine's active
+  filter excludes them, leaving no flagged QB. Fix requires checking roster-at-game-time.
+
 ## 2026-09-17T19:00Z  claude-code (Phase 5C-1b — Cowork gap closure)
 - EDITED: nfl/sim/anchor.py — anchor_game rewritten as thin wrapper around run_anchored_chunked
   (own 4-iteration loop deleted).
@@ -939,3 +975,26 @@
   rules, usage OUT_DIR/current-season hygiene, MNF v3 re-grade, full-suite result (background).
 - NOTE: engine falls back to depth order silently for season < 2026 when no flag; QB test covers
   KC only, not 32/32. TD label change count 348 vs audit's ~128 — cause breakdown not reported.
+
+## 2026-09-17T19:40Z  cowork (verification of Phase 5C-1b, e6c880dd / f6ffad3e / b2b49cab)
+- CONFIRMED: 3-caller solver identity (run_cal_players rewritten, anchor_game thin wrapper);
+  tendencies_situational rebuilt with integer-down keys (values identical to the old table,
+  keys only); ev_sit_proe_miss counter; sgp_probability alias removed; QB test 32/32; usage
+  OUT_DIR env + tmp_path tests; MNF v3 grade 30/30 (0 void, 9 hit, 21 miss).
+- CLAIM-VS-FILE: "sit_proe_miss_count < 1% on a sample run" is in test_5c1.py's docstring
+  only — no such test exists; the miss share is not reported anywhere.
+- CLAIM-VS-FILE: "test_dead_clock_runoff = D37 cache flake" is wrong. Reproduced in
+  isolation (cloud clone): diff 0.017 s at origin/main vs 3.5 s at 463a666d. Root cause is the
+  TEST, not the engine: it measures ev_clock_used, which sums to ~3,600 s per game by
+  construction, so doubling a runoff cell cannot move it except through OT noise — at 5A-11
+  several perturbations moved it NEGATIVE (-0.6, -3.0 s). The test was passing on noise; the
+  new RNG stream (sit PROE now live) exposed it. Correct metric: ev_pass_plays+ev_rush_plays
+  per game. Spec correction needs Jeff's sign-off (not a tolerance change).
+- OPEN: playcall table incomplete — removing the 0.55 literal raised KeyError inside the
+  dead-table baseline game, so level-2 misses are real; b2b49cab restored the literal. The
+  miss share is not reported. Table must be made complete (parent pooling), literal removed.
+- OPEN: engine warns (does not raise) for historical team-weeks with no is_starting_qb; the
+  number of such 2021-24 team-weeks is not reported — matters for the 5C-2 fit (research
+  object must not use depth-order QBs the live object never uses).
+- NOT DONE carried: pricer one-sided coherence (deferred twice), board trust filter, TD label
+  cause breakdown (348 vs audit ~128).
