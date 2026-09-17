@@ -543,21 +543,27 @@ def _build_player_context(home, away, season, week, player_usage, active_uni,
         qb_idx = -1
         if qb_mask.any():
             qb_candidates = renormed[qb_mask]
-            # D46: Use is_starting_qb from player_usage_weekly
-            has_flag = "is_starting_qb" in renormed.columns
+            # D50: Use is_starting_qb. Raise for current/future seasons.
+            # For historical seasons with unflagged team-weeks, fall back to
+            # depth_order with a warning (usage table has gaps for backup-QB weeks).
+            has_flag = ("is_starting_qb" in renormed.columns)
             if has_flag:
                 starter = qb_candidates[qb_candidates["is_starting_qb"] == True]
                 if len(starter) >= 1:
                     qb_idx = starter.index[0]
                     qb_idx = renormed.index.get_loc(qb_idx)
-                elif season >= 2026:
-                    raise ValueError(
-                        f"No is_starting_qb=True for {team} {season} wk{week}. "
-                        f"QB candidates: {qb_candidates['player_id'].tolist()}. "
-                        f"Run usage.py to set the flag."
-                    )
+            if qb_idx == -1 and season >= 2026:
+                raise ValueError(
+                    f"No is_starting_qb=True for {team} {season} wk{week}. "
+                    f"QB candidates: {qb_candidates['player_id'].tolist()}. "
+                    f"Run usage.py to set the flag."
+                )
             if qb_idx == -1:
-                # Fallback for historical seasons without the flag
+                # Historical fallback — depth order (logged, not silent)
+                import warnings
+                warnings.warn(
+                    f"is_starting_qb not set for {team} {season} wk{week}; "
+                    f"using depth_order fallback", stacklevel=2)
                 depth_map_local = dict(zip(au["player_id"], au["depth_order"].fillna(99)))
                 qb_depths = qb_candidates["player_id"].map(depth_map_local).fillna(99)
                 qb_idx = qb_candidates.index[qb_depths.values.argmin()]
@@ -780,6 +786,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     pc_lookup = dict(zip(_CACHE["playcall"]["bucket"], _CACHE["playcall"]["pass_rate"]))
     pc_bucket_set = set(pc_lookup.keys())
     _fallback_count = 0  # FIX 5: count playcall fallbacks
+    _sit_proe_miss = 0  # 5C-1b: count sit PROE lookups that miss
     scalars = _CACHE["scalars"]
     to_ret = _CACHE["turnover"]
     consts = _CACHE["constants"]
@@ -1984,15 +1991,25 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 lg_xpass_list.append(pc_lookup[b2])
                 _fallback_count += 1
             else:
-                lg_xpass_list.append(0.55)
-                _fallback_count += 1
+                raise KeyError(
+                    f"Playcall table incomplete: no match for levels "
+                    f"{b0!r} / {b1!r} / {b2!r}. Rebuild the table."
+                )
         lg_xpass = np.array(lg_xpass_list)
         team_proe = np.empty(n_live)
         for ti in [0, 1]:
             tm = poss_live == ti
-            sit = ctx[f"t{ti}_sit_proe"]
+            sit_dict = ctx[f"t{ti}_sit_proe"]
             overall = ctx[f"t{ti}_proe"]
-            team_proe[tm] = np.array([sit.get(b, overall) for b in bkt2[tm]])
+            vals = []
+            for b in bkt2[tm]:
+                v = sit_dict.get(b)
+                if v is None:
+                    _sit_proe_miss += 1
+                    vals.append(overall)
+                else:
+                    vals.append(v)
+            team_proe[tm] = np.array(vals)
         p_pass = _sigmoid(_logit(lg_xpass) + team_proe / 100.0)
 
         # 5A-9 (D33): in the FG-setup state the play call is situation-driven — the
@@ -2746,6 +2763,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     })
     # FIX 5: attach fallback count as metadata
     team_df.attrs["playcall_fallback_count"] = _fallback_count
+    team_df.attrs["sit_proe_miss_count"] = _sit_proe_miss
 
     # Drive log output
     if drive_log and _dl_rows:

@@ -208,11 +208,6 @@ def sgp_probability_raw(leg_matrix, legs):
     return float(mask.mean())
 
 
-def sgp_probability(leg_matrix, legs):
-    """Alias for raw joint frequency (backward compat)."""
-    return sgp_probability_raw(leg_matrix, legs)
-
-
 def sgp_probability_raked(leg_matrix, legs, cal_probs):
     """Joint probability with iterative proportional fitting (raking).
 
@@ -226,7 +221,8 @@ def sgp_probability_raked(leg_matrix, legs, cal_probs):
         cal_probs: list of calibrated marginal probabilities, same order as legs.
 
     Returns:
-        (joint_probability, effective_sample_size)
+        (joint_probability, effective_sample_size_count)
+        ESS is a count (not a fraction): (sum w)^2 / sum(w^2).
     """
     N = len(leg_matrix)
     indicators = np.column_stack([
@@ -259,8 +255,9 @@ def sgp_probability_raked(leg_matrix, legs, cal_probs):
     all_hit = indicators.prod(axis=1)
     joint = (weights * all_hit).sum()
 
-    # Effective sample size: (sum w)^2 / sum(w^2)
-    ess = 1.0 / (N * (weights ** 2).sum())
+    # Effective sample size (count): (sum w)^2 / sum(w^2)
+    # weights sum to 1, so (sum w)^2 = 1; ESS = 1 / sum(w^2)
+    ess = 1.0 / (weights ** 2).sum()
 
     return float(joint), float(ess)
 

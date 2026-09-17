@@ -500,7 +500,7 @@ def build_situational_proe(scrimmage_plays, params, league_means):
     """FIX 4: By-bucket PROE. One row per (season, week, team, bucket).
     pass_oe is in nflverse units: percentage points above league expected pass rate."""
     k_t = params.get("k_tendency", 200)
-    scrim = scrimmage_plays.copy()
+    scrim = scrimmage_plays[scrimmage_plays["down"].notna()].copy()
     scrim["down_b"] = scrim["down"].astype(int).astype(str)
     scrim["dist_b"] = pd.cut(scrim["ydstogo"], bins=[0, 3, 7, 100],
                               labels=["short", "med", "long"], right=True)

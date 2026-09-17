@@ -13,6 +13,7 @@ Phase 5B usage-layer tests.
 
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -392,13 +393,15 @@ def test_pit_byte_identity_2024_wk10(data_bundle):
 
 # ─── (g) plain main() leaves params_v1.json byte-identical ──────────────────
 
-def test_plain_main_does_not_write_params():
-    """Plain main() (no --tune) must not modify params_v1.json."""
+def test_plain_main_does_not_write_params(tmp_path):
+    """Plain main() (no --tune) must not modify params_v1.json.
+    Uses NFL_USAGE_OUT_DIR to avoid overwriting tracked parquets."""
     params_path = ROOT / "nfl" / "sim" / "params_v1.json"
     before = hashlib.sha256(params_path.read_bytes()).hexdigest()
+    env = dict(os.environ, NFL_USAGE_OUT_DIR=str(tmp_path))
     result = subprocess.run(
         [sys.executable, str(ROOT / "nfl" / "sim" / "usage.py")],
-        capture_output=True, text=True, timeout=600,
+        capture_output=True, text=True, timeout=600, env=env,
     )
     after = hashlib.sha256(params_path.read_bytes()).hexdigest()
     assert before == after, (
@@ -413,14 +416,16 @@ def test_plain_main_does_not_write_params():
 
 # ─── (h) --tune writes frozen_at, frozen_commit, and best=(4,20) ────────────
 
-def test_tune_writes_frozen_fields():
-    """--tune writes frozen_at, frozen_commit, and the chosen point is (4, 20)."""
+def test_tune_writes_frozen_fields(tmp_path):
+    """--tune writes frozen_at, frozen_commit, and the chosen point is (4, 20).
+    Uses NFL_USAGE_OUT_DIR to avoid overwriting tracked parquets."""
     params_path = ROOT / "nfl" / "sim" / "params_v1.json"
     original_bytes = params_path.read_bytes()
+    env = dict(os.environ, NFL_USAGE_OUT_DIR=str(tmp_path))
     try:
         result = subprocess.run(
             [sys.executable, str(ROOT / "nfl" / "sim" / "usage.py"), "--tune"],
-            capture_output=True, text=True, timeout=600,
+            capture_output=True, text=True, timeout=600, env=env,
         )
         assert result.returncode == 0, (
             f"--tune exited {result.returncode}\nstderr: {result.stderr[-1000:]}"
@@ -429,14 +434,9 @@ def test_tune_writes_frozen_fields():
         usage = params["usage"]
         assert "frozen_at" in usage, "frozen_at missing after --tune"
         assert "frozen_commit" in usage, "frozen_commit missing after --tune"
-        assert usage["share_half_life"] == 4, (
-            f"Expected share_half_life=4, got {usage['share_half_life']}"
-        )
-        assert usage["k_share"] == 20, (
-            f"Expected k_share=20, got {usage['k_share']}"
-        )
+        assert usage["share_half_life"] == 4
+        assert usage["k_share"] == 20
     finally:
-        # Restore original params so later tests are unaffected
         params_path.write_bytes(original_bytes)
 
 

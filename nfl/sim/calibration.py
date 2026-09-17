@@ -15,7 +15,7 @@ from nfl.sim.seed_util import stable_seed
 from sklearn.isotonic import IsotonicRegression
 
 from nfl.sim.engine import _load_tables, _load_ratings
-from nfl.sim.anchor import anchor_game, estimate_jacobian
+from nfl.sim.anchor import anchor_game, estimate_jacobian, run_anchored_chunked
 from nfl.sim.pricer import price_game
 from nfl.sim.actuals import actual_player_game_stats
 

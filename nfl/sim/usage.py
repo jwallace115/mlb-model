@@ -23,7 +23,7 @@ own targets or carries — that IS the right sample size for a rate.
 Carries EXCLUDE qb_scramble and qb_kneel (designed runs + QB sneaks only).
 """
 
-import argparse, json, subprocess, sys, time, gc
+import argparse, json, os, subprocess, sys, time, gc
 from pathlib import Path
 
 import numpy as np
@@ -31,7 +31,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PBP_DIR = ROOT / "nfl" / "data" / "pbp"
-OUT_DIR = ROOT / "nfl" / "data" / "sim" / "ratings"
+OUT_DIR = Path(os.environ.get("NFL_USAGE_OUT_DIR",
+               str(ROOT / "nfl" / "data" / "sim" / "ratings")))
 PARAMS_PATH = ROOT / "nfl" / "sim" / "params_v1.json"
 
 SEASONS = [2020, 2021, 2022, 2023, 2024, 2025, 2026]
@@ -268,9 +269,14 @@ def derive_starting_qbs(depth, plays):
                         "source": "prev_game_passer",
                     }
 
-    # Layer 3: Static depth chart (new schema, prospective only: season >= 2026).
-    # For 2025 historical weeks the snapshot post-dates the games; leave unset
-    # rather than back-fill from a later snapshot.
+    # Layer 3: Static depth chart (new schema, prospective only: current season).
+    # Determine current season from PBP files (the latest season with data).
+    current_season = max(OUTPUT_SEASONS)
+    for s in sorted(OUTPUT_SEASONS, reverse=True):
+        if (PBP_DIR / f"pbp_{s}.parquet").exists():
+            current_season = s
+            break
+
     n_layer3_unset = 0
     if "pos_rank" in depth.columns:
         new_qb = depth[
@@ -286,7 +292,7 @@ def derive_starting_qbs(depth, plays):
             )
             static_qb1 = {r["team"]: r["gsis_id"] for _, r in qb1.iterrows()}
             for s in OUTPUT_SEASONS:
-                if s < 2026:
+                if s < current_season:
                     continue
                 for w in range(1, 23):
                     for team, gsis_id in static_qb1.items():

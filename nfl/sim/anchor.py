@@ -81,66 +81,19 @@ def estimate_jacobian(n_sims=500, n_games=50, seed=99):
 
 
 def anchor_game(home, away, season, week, market_spread, market_total,
-                n_sims=1000, seed=42, J_inv=None, max_iter=4,
+                n_sims=None, seed=None, J_inv=None, max_iter=None,
                 with_players=True, **kw):
-    """Anchor a single game to market lines.
-
-    market_spread: home-team spread (negative = home favored).
-    market_total: closing total line.
-
-    Returns dict with keys:
-      team_df, player_df, offsets (δh, δa), iterations, converged,
-      raw_margin, raw_total, anchored_margin, anchored_total.
-    """
-    # nflfastR spread_line: positive = home favored (expected home margin).
-    # Verified: corr(spread_line, home_score-away_score) = +0.50 on 2024 data.
-    # These are CLOSING consensus lines.
-    market_margin = market_spread  # home - away expected
-
-    if J_inv is None:
-        # Default from calibration: ~6 pts per yard/play offset
-        J_inv = np.array([[0.081, 0.081],
-                          [-0.081, 0.081]])
-
-    dh, da = 0.0, 0.0
-
-    for it in range(max_iter):
-        m, t, team_df, player_df = _run_sim(
-            home, away, season, week, n_sims, seed,
-            dh, da, with_players, **kw)
-
-        margin_err = market_margin - m
-        total_err = market_total - t
-
-        if it == 0:
-            raw_margin, raw_total = m, t
-
-        if abs(margin_err) < 0.5 and abs(total_err) < 1.0:
-            return {
-                "team_df": team_df, "player_df": player_df,
-                "offsets": (dh, da), "iterations": it + 1,
-                "converged": True,
-                "raw_margin": raw_margin, "raw_total": raw_total,
-                "anchored_margin": m, "anchored_total": t,
-                "market_margin": market_margin, "market_total": market_total,
-            }
-
-        step = J_inv @ np.array([margin_err, total_err])
-        dh += step[0]
-        da += step[1]
-
-    # Final run with last offsets
-    m, t, team_df, player_df = _run_sim(
-        home, away, season, week, n_sims, seed,
-        dh, da, with_players, **kw)
-
+    """Thin wrapper around run_anchored_chunked returning the dict callers expect."""
+    td, pdf, dh, da, n_iter, conv, raw_m, raw_t, m, t = run_anchored_chunked(
+        home, away, season, week, market_spread, market_total,
+        n_sims=n_sims, max_iter=max_iter, **kw)
     return {
-        "team_df": team_df, "player_df": player_df,
-        "offsets": (dh, da), "iterations": max_iter,
-        "converged": abs(market_margin - m) < 0.25 and abs(market_total - t) < 0.5,
-        "raw_margin": raw_margin, "raw_total": raw_total,
+        "team_df": td, "player_df": pdf,
+        "offsets": (dh, da), "iterations": n_iter,
+        "converged": conv,
+        "raw_margin": raw_m, "raw_total": raw_t,
         "anchored_margin": m, "anchored_total": t,
-        "market_margin": market_margin, "market_total": market_total,
+        "market_margin": market_spread, "market_total": market_total,
     }
 
 
