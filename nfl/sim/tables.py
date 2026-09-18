@@ -981,20 +981,31 @@ def build_special_teams_table(df):
                           "mean": net.mean(), "touchback_rate": grp["touchback"].mean()})
     result["punt_net"] = pd.DataFrame(punt_rows)
 
-    # Kickoff: mean starting yardline_100 after kickoff by season
+    # D67: Kickoff start_yl100 measured, not hardcoded. The yardline_100
+    # of the play immediately following each kickoff in the same game.
+    # Use the median (robust to return-TD outliers).
     ko = df[df["play_type"] == "kickoff"].copy()
-    # Touchback = ball at 25 (since 2023: 30 for new rule? — use empirical)
-    # Find next play's yardline_100 for the receiving team
     ko_starts = []
     for s in SEASONS:
         ks = ko[ko["season"] == s]
-        # Touchback rate
         tb_rate = ks["touchback"].mean() if "touchback" in ks.columns else 0.6
-        # Mean return to yardline_100: for non-touchbacks, use kick_distance - return_yards
-        # Simpler: league average starting position after kickoff
-        # Use empirical: ~75 yardline_100 (own 25)
-        ko_starts.append({"season": s, "touchback_rate": tb_rate,
-                          "start_yl100": 75.0})  # Default; will be refined
+        # Find the next play's yardline_100 after each kickoff
+        s_df = df[df["season"] == s].sort_values(["game_id", "play_id"])
+        start_yls = []
+        for _, kr in ks.iterrows():
+            gid = kr["game_id"]
+            pid = kr["play_id"]
+            nxt = s_df[(s_df["game_id"] == gid) & (s_df["play_id"] > pid)]
+            if len(nxt) > 0:
+                yl = nxt.iloc[0].get("yardline_100")
+                if pd.notna(yl):
+                    start_yls.append(int(yl))
+        if start_yls:
+            start_yl = int(np.median(start_yls))
+        else:
+            start_yl = 75
+        ko_starts.append({"season": s, "touchback_rate": float(tb_rate),
+                          "start_yl100": float(start_yl)})
     result["kickoff"] = pd.DataFrame(ko_starts)
 
     # XP make rate

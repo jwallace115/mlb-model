@@ -530,3 +530,24 @@ honoured — now raises, as do unsupported targets: m == 0 with t > 0, m == 1 wi
 t < 1, and t outside (0, 1). The 200-iteration cap, the 1e-6 tolerance, the
 RuntimeError on non-convergence and the ESS definition are unchanged.
 Test: nfl/sim/tests/test_raking_5d3.py.
+
+### D66 — OT Try rules: no PAT after walk-off TD (2026-09-18)
+_handle_td determines the walk-off set BEFORE the PAT. Walk-off (no Try):
+pre-2025 REG any OT TD; defensive OT TD (any season); sudden-death TD where
+the scorer leads. A Try IS attempted on first/second-possession TDs under
+2025+ REG and any postseason, because the Try decides ahead/tied/continue.
+2025+ REG tying TD: after both possessions, a TD that only ties does NOT end
+the game — play continues in sudden death (next score wins). This is NOT
+another round of paired possessions (the postseason ot_sudden_tied reset is
+correct for postseason, wrong for REG and is not copied).
+
+### D67 — Kickoff start table: measured, not hardcoded (2026-09-18)
+tables.py kickoff builder now measures start_yl100 as the median yardline_100
+of the play immediately after each kickoff. The literal 75.0 is deleted.
+Measured values: 2021=75 (N=2874, mode 60.4%), 2022=75 (N=2796, 61.8%),
+2023=75 (N=2816, 77.7%), 2024=70 (N=2911, 64.7%), 2025=69 (N=2900, 20.0%).
+SD: 8.6/8.2/6.5/7.5/9.6. 2024 was 5 yards wrong (table said 75, actual 70).
+2025 modal coverage is 20% — one scalar describes a fifth of its drives.
+touchback_rate is computed by the builder and never read by the engine;
+left in place but noted here.
+fit_5d1 used the wrong 2024 value (75 instead of 70); a re-fit is required.

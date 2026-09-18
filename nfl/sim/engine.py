@@ -1156,56 +1156,106 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 _do_kickoff(m1)
 
     def _handle_td(m, scoring_poss):
-        """Full TD sequence: score, PAT, kickoff. scoring_poss = who had the ball."""
+        """D66: Full TD sequence. Determine walk-off BEFORE the Try.
+        Walk-off OT TDs get NO PAT. A Try is attempted only where play continues."""
         ev_tds[m] += 1
         _score_td(m, scoring_poss)
-        _do_pat(m, scoring_poss)
 
-        # FIX 6b: OT TD rules by season
         ot_m = m & (qtr >= 5)
         reg_m = m & (qtr < 5)
 
+        # ── Determine which OT sims are walk-offs (no Try attempted) ──
+        walkoff = np.zeros(N, dtype=bool)
+
+        if ot_m.any():
+            if season < 2025 and season_type == "REG":
+                # Pre-2025 REG: ANY OT TD ends it — all are walk-offs
+                walkoff[ot_m] = True
+            else:
+                # 2025+ REG or any postseason: paired possessions first
+                ot_first = ot_m & ~ot_first_poss_done
+
+                # Defensive TD on first possession: walk-off, no Try
+                ot_def_td_first = ot_first & (scoring_poss != ot_first_poss_team)
+                walkoff[ot_def_td_first] = True
+
+                # After first possession done: sudden-death TDs
+                ot_sudden = ot_m & ot_first_poss_done & ~ot_first
+                if season_type == "REG":
+                    # D66: 2025+ REG sudden death — only walk-off if LEADS
+                    ot_sudden_ahead = ot_sudden & (
+                        ((scoring_poss == 0) & (score_h + 6 > score_a)) |
+                        ((scoring_poss == 1) & (score_a + 6 > score_h))
+                    )
+                    # Wait — scores already incremented by _score_td. Check current score.
+                    ot_sudden_ahead = ot_sudden & (
+                        ((scoring_poss == 0) & (score_h > score_a)) |
+                        ((scoring_poss == 1) & (score_a > score_h))
+                    )
+                    walkoff[ot_sudden_ahead] = True
+                else:
+                    # Postseason sudden death: walk-off if leading
+                    ot_sudden_ahead = ot_sudden & (
+                        ((scoring_poss == 0) & (score_h > score_a)) |
+                        ((scoring_poss == 1) & (score_a > score_h))
+                    )
+                    walkoff[ot_sudden_ahead] = True
+
+                # First-possession offensive TDs: Try IS attempted (decides ahead/tied)
+                # These are NOT walk-offs.
+
+        # ── PAT: only where NOT a walk-off ──
+        pat_mask = m & ~walkoff
+        _do_pat(pat_mask, scoring_poss)
+
+        # ── Kickoff for regulation TDs ──
         if reg_m.any():
             _do_kickoff(reg_m)
             _check_ko_ret_td(reg_m)
 
+        # ── OT game-over logic (AFTER PAT, so scores reflect the Try) ──
         if ot_m.any():
-            # Pre-2025 regular season: first-possession TD ends the game
             if season < 2025 and season_type == "REG":
-                # First-possession TD ends game
-                ot_first = ot_m & (scoring_poss == ot_first_poss_team) & ~ot_first_poss_done
-                game_over[ot_first] = True
-                # Second-possession or later TD also ends game
-                ot_later = ot_m & ~ot_first
-                game_over[ot_later] = True
+                # Pre-2025 REG: all OT TDs end it (already flagged as walk-off)
+                game_over[ot_m] = True
             else:
-                # 2025+ regular season or any postseason:
-                # first-possession result does NOT end the game
                 ot_first = ot_m & ~ot_first_poss_done
-                ot_first_on_first_team = ot_first & (scoring_poss == ot_first_poss_team)
-                # Mark first possession done, give other team the ball
-                ot_first_poss_done[ot_first_on_first_team] = True
-                if ot_first_on_first_team.any():
-                    _do_kickoff(ot_first_on_first_team)
 
-                # If the DEFENDING team scores (defensive TD) on first poss,
-                # that also counts as completing the first possession
+                # First-possession offensive TD: mark possession done, kick off
+                ot_first_off = ot_first & (scoring_poss == ot_first_poss_team)
+                ot_first_poss_done[ot_first_off] = True
+                if ot_first_off.any():
+                    _do_kickoff(ot_first_off)
+
+                # Defensive TD on first possession: game over (already walk-off)
                 ot_def_td_first = ot_first & (scoring_poss != ot_first_poss_team)
                 ot_first_poss_done[ot_def_td_first] = True
-                game_over[ot_def_td_first] = True  # defensive TD always ends it
+                game_over[ot_def_td_first] = True
 
-                # After first possession done: sudden death
+                # After both possessions: check score
                 ot_sudden = ot_m & ot_first_poss_done & ~ot_first
+
                 if season_type == "REG":
-                    game_over[ot_sudden] = True
-                else:
-                    # Postseason: only end if the scoring team leads
+                    # D66: 2025+ REG — end if LEADING, continue if TIED (sudden death)
                     ot_sudden_ahead = ot_sudden & (
                         ((scoring_poss == 0) & (score_h > score_a)) |
                         ((scoring_poss == 1) & (score_a > score_h))
                     )
                     game_over[ot_sudden_ahead] = True
-                    # Still tied → reset for another round of possessions
+
+                    # Tied after both possessions: sudden death continues
+                    # (next score wins — NOT another round of paired possessions)
+                    ot_sudden_tied = ot_sudden & (score_h == score_a)
+                    if ot_sudden_tied.any():
+                        _do_kickoff(ot_sudden_tied)
+                else:
+                    # Postseason: end if leading
+                    ot_sudden_ahead = ot_sudden & (
+                        ((scoring_poss == 0) & (score_h > score_a)) |
+                        ((scoring_poss == 1) & (score_a > score_h))
+                    )
+                    game_over[ot_sudden_ahead] = True
+                    # Tied → reset for another round of paired possessions
                     ot_sudden_tied = ot_sudden & (score_h == score_a)
                     if ot_sudden_tied.any():
                         ot_first_poss_done[ot_sudden_tied] = False
