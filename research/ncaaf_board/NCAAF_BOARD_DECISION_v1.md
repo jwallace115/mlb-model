@@ -109,3 +109,19 @@ bucket is the strongest result in both windows: phi=0.196 (N=363) discovery,
 phi=0.280 (N=198) validation — combined N=561.
 
 Branch decision: **Branch A** — build the joint outcome table for |spread| >= 14.
+
+### N07 — Joint outcome table v1, Branch A (2026-09-18)
+joint_outcome_table_v1.parquet: 8 cells keyed on (spread_bucket, total_bucket),
+holding empirical P(cover & over), P(cover & under), P(miss & over), P(miss & under).
+Restricted to |spread| >= 14 (the buckets that survived N06).
+
+By spread bucket (2022-2025 combined, N=1119):
+  14-21: N=523, phi=0.084, t=1.93 (marginal, but consistently positive)
+  21+:   N=596, phi=0.224, t=5.48 (strong, all 4 seasons positive)
+
+By season: 2022 phi=0.135 t=2.32, 2023 phi=0.093 t=1.54,
+2024 phi=0.177 t=2.62, 2025 phi=0.227 t=4.12.
+
+Generator: ncaaf/pipeline/build_joint_table.py (committed code, reproducible).
+Spec checks 1b, 2, 3 updated from N/A to REQUIRES ATTENTION — the joint table
+is the first fitted object and introduces provenance requirements.
