@@ -20,7 +20,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / "fit_5c2b"
+OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / "fit_5d1"
 GAMES_DIR = OUT_DIR / "games"
 PARAMS_PATH = ROOT / "nfl" / "sim" / "params_v1.json"
 

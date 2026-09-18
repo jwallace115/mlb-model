@@ -1187,3 +1187,78 @@
 - Repair order 5D-1 usage/fit/maps, 5D-2 engine OT + board wiring + week detection, 5D-3
   grading/CLV/actuals + raking. Team-level maps (margin/total/team total) are not affected by
   the usage leak (D19 allocation-only).
+
+## 2026-09-18T13:25Z  cowork (verification of 5D-1 commit 85f1cb455)
+- SCOPE: read the files, not the report. Commit 85f1cb455 "nfl_sim 5D-1 items 1-3" is ON
+  origin/main.
+- CONFIRMED IN CODE: D59 date-restricted depth fill is real (usage.py 397-443): first-kickoff
+  lookup built from PBP game_date, eligible = snapshots with _dt strictly < that kickoff,
+  latest per (team, gsis_id), fills ONLY where depth_order is NaN, no-eligible rows stay NaN.
+  D60 keys on (team, player_id) — merge at usage.py ~693 and the "must be on THAT team's
+  roster" roster block ~718. D61 opp-weighted aggregate s-1 prior at usage.py ~804-807.
+- CONFIRMED IN DATA (active_universe_weekly.parquet, 87,495 rows): NaN depth_order by season
+  2021 43.8 / 2022 42.0 / 2023 42.2 / 2024 42.9 — matches the claimed ~43%. 2025 10.7,
+  2026 14.3, overall 36.7 (the "~43%" claim is 2021-24 only).
+- NOT DONE, still open in 5D-1: (a) no PIT test that truncates depth/rosters/injuries — no
+  test file added in the commit and none exists on disk; (b) maps NOT refit —
+  nfl/sim/calibration_v1.json untouched since before the commit; (c) K4 with row-level file
+  not produced.
+- DECISION DOC OUT OF SYNC: NFL_SIM_DECISION_v1.md ends at D58. D59/D60/D61 exist only in the
+  commit message. Rule 7 (Registry -> Review -> Decision -> Code) not satisfied.
+- REFIT IS LIVE AS OF THIS ENTRY: fit_5d1/games grew 1632 -> 1678 files during this session
+  (~0.5 files/sec). fit_5d1 has NO fit_census.parquet and NO reliability_deciles.parquet yet.
+  It is running from an UNCOMMITTED run_fit.py whose only diff is OUT_DIR fit_5c2b -> fit_5d1.
+- GIT HAZARD, time-boxed: fit_5d1/games is NOT gitignored (.gitignore line 113 covers
+  fit_5c2/games/ only, not fit_5c2b/ or fit_5d1/). The 30-min `git add -A` auto-committer will
+  sweep every in-progress per-game parquet. .git/index.lock has been held since 13:18Z with no
+  auto-commit since 11:30Z — consistent with an add -A currently walking that directory. Prior
+  convention: keep the two summary parquets, delete games/ afterwards (fit_5c2b has 2 tracked
+  files and no games/ dir on disk).
+- UNVERIFIED: whether 2025/2026 depth_order is CORRECT, as opposed to merely leak-free. The
+  commit's test (2024 byte-identical with/without new-schema depth) proves the leak is closed
+  for history and proves nothing about the live seasons. 2025 wk1 is 12.1% NaN, flat 8.7-11.3%
+  thereafter — plausible for real preseason-onward snapshots, but a single frozen snapshot
+  would look the same from this table alone; the dt distribution in the depth source was not
+  inspected. 2026 wk1 and wk2 are both exactly 14.3%, consistent with wk2 being the
+  carry-forward copy (usage.py 445-458), i.e. Week 2 depth is Week 1 information.
+- UNVERIFIED: season 2020 is present in the rebuild (13,979 rows, 41.7% NaN). No decision
+  states whether 2020 is in the training window.
+- NOTE: the preceding cowork entry is stamped 2026-09-18T16:40Z, ~3h ahead of real time
+  (this entry written at 13:25Z). Timestamp is wrong, not the content.
+- ADDENDUM 13:43Z: .gitignore line 115 added — `nfl/data/sim/outputs/fit_*/games/`. Verified
+  with git check-ignore; `git ls-files --cached nfl/data/sim/outputs/fit_5d1/` returns 0 and no
+  commit touches that path, so NO per-game parquet was ever staged or committed. Hazard closed.
+- ADDENDUM 13:43Z: the index.lock is STALE, not an in-flight add. .git/index mtime is 12:13:51Z
+  (unchanged since commit 85f1cb455); .git/index.lock is 0 bytes, mtime 13:18:56Z, not
+  advancing. The 30-min auto-committer has therefore been dead since 12:13Z. The bridge VM
+  cannot delete it ("Operation not permitted"). NEEDS JEFF, on the Mac:
+  `cd ~/mlb-model && rm -f .git/index.lock`. Until then nothing commits — including the
+  modified nfl/sim/run_fit.py and these log entries.
+- ADDENDUM 13:43Z: refit finished its per-game phase — fit_5d1/games holds 2174 parquets
+  (1087 games x 2 = 2021-24 regular season), static since 13:41, and fit_census.parquet was
+  written at 13:41. reliability_deciles.parquet NOT present; fit_5c2b has it, so either the
+  run is in its last stage or it ended short. UNVERIFIED either way.
+
+## 2026-09-18T18:00Z  claude-code (Phase 5D-1 — usage provenance repair + refit)
+- EDITED: nfl/sim/usage.py — D59 new-schema depth fills only from snapshots with
+  dt < week's first kickoff (PBP game_date). D60 roster insertion keys on
+  (player_id, team). D61 s-1 prior is opp-weighted aggregate across depth groups.
+  Docstring updated to match code (pw_eff decays).
+- EDITED: nfl/sim/run_fit.py — OUT_DIR = fit_5d1.
+- RAN: usage rebuild — all 2021-24 team-weeks have starters, QB carry share 0.04-0.05,
+  starter accuracy 93.0/91.7/90.5/90.2%, ~43% NaN depth_order (position-only prior).
+- TEST: 2024 byte-identical with/without new-schema depth (0 share diff, 0 membership diff).
+- TEST: Traded-player debuts: McCaffrey SF wk7 (tgt=0.126), Hockenson MIN wk9 (0.175),
+  Adams NYJ wk7, Cooper BUF wk7 — all present with non-zero share.
+- RAN: fit_5d1 — 1087/1087 converged, engine 85f1cb455, N=5000, 9 workers, ~94 min.
+- RAN: refit all maps from fit_5d1 — 21 families (margin_side, total_side, team_total +
+  18 prop families). calibration_v1.json with engine_commit, usage_sha, anchor, fit_date.
+- RAN: K4 at real closing (2023-24): 72,897 legs. Symmetry 6/8 pass (pass_yds 2.7pp fail).
+  Positive cells: pass_td over +2.9% (N=425), rush_att under +0.4% (N=774) — inside noise.
+  No family reliably positive on both sides.
+- CREATED: research/nfl_sim/phase5d1_usage_provenance.md.
+- APPENDED: NFL_SIM_DECISION_v1.md — D59, D60, D61.
+- COMMITTED: 85f1cb455 (items 1-3, usage+rebuild). Item 4 (refit+maps+K4) pending.
+- NOT DONE: ten most-changed player-weeks before/after delta table (row-level comparison
+  requires loading both fit_5c2b and fit_5d1 checkpoints side-by-side).
+- UNVERIFIED: pass_yds symmetry gap root cause (2.7pp, unchanged from fit_5c2b).

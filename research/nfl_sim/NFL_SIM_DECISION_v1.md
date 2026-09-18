@@ -455,3 +455,21 @@ implied_under at open < implied_under at pick time. The flag is displayed but
 not acted on automatically. Its hit rate is reported prospectively by week.
 Nothing about this filter is tuned on 2026 data — it is pre-registered before
 any open/close captures are used.
+
+### D59 — Depth provenance rule (2026-09-18)
+New-schema depth chart (pos_rank, dt) fills depth_order ONLY from snapshots
+with dt strictly before the week's first kickoff (from PBP game_date). Rows
+with no eligible snapshot keep NaN depth_order and use the position-only league
+prior. Eliminates class-1b leak of 2025+ depth data into 2021-24 usage.
+Test: 2024 byte-identical with and without new-schema depth data.
+
+### D60 — Traded-player rows (2026-09-18)
+Roster insertion keys on (player_id, team) not player_id alone. A traded player
+with old-team PBP history still gets a new-team row on debut. Tested with
+McCaffrey SF wk7 2022, Hockenson MIN wk9 2022, Adams NYJ wk7 2024, Cooper BUF wk7 2024.
+
+### D61 — s-1 aggregate prior (2026-09-18)
+Prior is the player's opp-weighted aggregate share across all depth groups (not a
+single depth-group row). Docstring updated to match code: pw_eff = prior_weight *
+k_share / (n_eff + k_share) decays with evidence. 1,465/4,478 players had multi-
+depth-group pss rows that were previously deduplicated arbitrarily.
