@@ -125,3 +125,19 @@ By season: 2022 phi=0.135 t=2.32, 2023 phi=0.093 t=1.54,
 Generator: ncaaf/pipeline/build_joint_table.py (committed code, reproducible).
 Spec checks 1b, 2, 3 updated from N/A to REQUIRES ATTENTION — the joint table
 is the first fitted object and introduces provenance requirements.
+
+### N08 — Market microstructure layer (2026-09-18)
+market_microstructure.py: reads tape only, zero credits, zero fitting.
+Pre-kick eligibility enforced (snapshot_utc < commence_time).
+
+Hold by market: spreads 3.6-5.5%, totals 4.1-5.7%, h2h 3.5-5.4%.
+Pinnacle and LowVig lowest (3.6-4.1%); BetRivers highest (5.4-5.7%).
+
+Stale-book: williamhill_us flagged 28 times (mean lag 121h); betmgm 2 flags.
+Null control PASS: 0 stale flags in the most recent 1-hour window.
+
+Move origination: betmgm leads (3,956 changes), pinnacle fewest (1,166).
+N01 found no parlay/SGP market keys for NCAAF, so the parlay pricing
+audit (4a) computes hold from single-leg overround only.
+
+None of this is fitted. Nothing is selected or tuned on outcomes.
