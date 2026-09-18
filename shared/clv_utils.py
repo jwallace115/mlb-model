@@ -25,6 +25,8 @@ SPORT_MAP = {
     "soccer_LGA": "soccer_spain_la_liga",
     "soccer_SEA": "soccer_italy_serie_a",
     "soccer_LG1": "soccer_france_ligue_one",
+    "NFL": "americanfootball_nfl",
+    "NCAAF": "americanfootball_ncaaf",
 }
 
 PROP_MARKET_MAP = {

@@ -56,3 +56,25 @@ SE Louisiana, etc.). Map committed at ncaaf/pipeline/espn_team_map.json.
 
 PIT rule: only articles with published < build_time are eligible. Articles
 from after build_time are excluded.
+
+### N04 — Ticket schema, AI output boundary, CLV convention (2026-09-18)
+AI layer: one Anthropic call per game (claude-sonnet-4-20250514). Permitted outputs:
+  (1) structured flags with headline + published source
+  (2) prose rationale
+  (3) binary veto with reason
+Any numeric pricing field is discarded and logged. An AI-produced number
+would be an unvalidated model.
+
+Ticket schema: event_id, home_team, away_team, commence_time, legs (market,
+side, point, price, book, implied), ai_flags, ai_rationale, build_time,
+reference_only (True per N01), close_price (null, filled by grader),
+clv (null, filled by grader), graded (bool).
+
+CLV: no-vig scale, game identity (event_id), push = void (D64 convention).
+Closing price = last snapshot strictly before commence_time.
+Grader is UPDATE-ONLY: never appends, never re-grades.
+
+Ticket log: ncaaf/logs/ncaaf_board_tickets_2026.json (append-only).
+.gitignore allow-listed at line 49.
+
+SPORT_MAP in shared/clv_utils.py updated: "NCAAF" -> "americanfootball_ncaaf".

@@ -46,6 +46,7 @@ mlb/logs/*
 !ncaaf/logs/
 ncaaf/logs/*
 !ncaaf/logs/portal_2026_shadow.json
+!ncaaf/logs/ncaaf_board_tickets_2026.json
 
 # ── Secrets ───────────────────────────────────────────────────────────────────
 .env
