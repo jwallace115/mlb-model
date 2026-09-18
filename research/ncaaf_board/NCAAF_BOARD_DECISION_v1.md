@@ -78,3 +78,18 @@ Ticket log: ncaaf/logs/ncaaf_board_tickets_2026.json (append-only).
 .gitignore allow-listed at line 49.
 
 SPORT_MAP in shared/clv_utils.py updated: "NCAAF" -> "americanfootball_ncaaf".
+
+### N05 — 2025 held-out data; spread is the close, spreadOpen is pre-game (2026-09-18)
+cfbd_games_2025.parquet: 3,831 games (3,829 with scores).
+cfbd_betting_lines_2025.parquet: 3,345 rows. Bovada: 934 rows, all with
+spread + overUnder + both scores (comparable to ~840/yr in 2022-24).
+Other providers: ESPN Bet 1,542, DraftKings 805+64.
+
+spread vs spreadOpen: differ on 84.8% of Bovada 2025 rows. Examples show
+`spread` tracks the closing line (moves with market), `spreadOpen` is the
+opening line available pre-game. For any downstream build that conditions
+on a line available when a bet is placed, `spreadOpen` must be used.
+
+cfbd_games_2026.parquet: 3,679 games (757 with scores — season in progress).
+Written to SEPARATE files from the 2022-24 data to preserve the audit
+guarantee that 2025 was untouched during the exploratory probe.
