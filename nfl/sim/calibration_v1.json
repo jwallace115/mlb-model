@@ -8990,5 +8990,52 @@
       ],
       "n": 2465
     }
+  },
+  "k4_summary": {
+    "description": "K4 in-sample ROI at -110 synthetic, integer ladder, 2021-24",
+    "families": {
+      "atd": {
+        "n": 12313,
+        "over_roi_pct": 5.8,
+        "under_roi_pct": 44.1
+      },
+      "receptions": {
+        "n": 23773,
+        "over_roi_pct": 31.8,
+        "under_roi_pct": 37.8
+      },
+      "rec_yds": {
+        "n": 32936,
+        "over_roi_pct": 30.3,
+        "under_roi_pct": 41.7
+      },
+      "rush_yds": {
+        "n": 12184,
+        "over_roi_pct": 28.6,
+        "under_roi_pct": 44.6
+      },
+      "pass_att": {
+        "n": 8684,
+        "over_roi_pct": 43.1,
+        "under_roi_pct": 20.5
+      },
+      "pass_yds": {
+        "n": 6217,
+        "over_roi_pct": 26.7,
+        "under_roi_pct": 36.7
+      }
+    },
+    "symmetry_note": "over+under >> -2*vig on all families: expected in-sample, no real closing prices"
+  },
+  "a8_td_labels": {
+    "total_tds_2021_24": 5722,
+    "changed_by_td_player_id": 205,
+    "by_cause": {
+      "receiver_ne_td": 152,
+      "fumble_return": 50,
+      "lateral": 3
+    },
+    "pass_play_mismatches": 213,
+    "reconciliation": "audit ~128 was pass-play subset; full 4-season = 213"
   }
 }
