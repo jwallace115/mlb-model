@@ -1156,3 +1156,13 @@
 - NOT DONE: cron installation on VM (Jeff fills in cadence).
 - UNVERIFIED: MOVED-AGAINST flag end-to-end (requires open + close snapshots
   from the same week, which don't exist yet).
+
+## 2026-09-18T14:10Z  cowork (TNF Week 2 DET@BUF grade)
+- RAN: pull_pbp.pull_season(2026) on the Mac -> 17 games, pbp_2026.parquet refreshed (gitignored).
+- RESULT: BUF 41, DET 31 (total 72 vs 55 line; BUF -5.5 covered). Cowork ticket (book prices +
+  usage, sim out of service at the time): Goff O35.5 att -> 42 HIT; Goff O23.5 cmp -> 26 HIT;
+  St. Brown O7.5 rec -> 9 HIT; LaPorta O4.5 rec -> 6 HIT; Cook O18.5 att -> 21 HIT. 5/5.
+- WAGERED (Jeff): $15 4-leg SGP at +743 (dropped Goff completions as redundant; Cook line was
+  17.5 at bet time) -> HIT, $126.49. Season tally on Jeff's tickets: 2 wins / 4 losses.
+- NOTE: Gibbs 16 carries (book O18.5 at -125 would have lost) — the "book more confident than
+  us" filter read was right this time; one game, not evidence.
