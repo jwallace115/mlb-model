@@ -473,3 +473,60 @@ Prior is the player's opp-weighted aggregate share across all depth groups (not 
 single depth-group row). Docstring updated to match code: pw_eff = prior_weight *
 k_share / (n_eff + k_share) decays with evidence. 1,465/4,478 players had multi-
 depth-group pss rows that were previously deduplicated arbitrarily.
+
+### D62 — Official stat definitions in actuals.py (2026-09-18)
+Rushing attempt universe is play_type in {run, qb_kneel} AND rusher_player_id
+not null AND two_point_attempt != 1. Kneels are official rushing attempts and
+their negative yardage is kept; two-point runs are not rushing attempts. Passing
+attempt universe is play_type in {pass, qb_spike} AND down not null AND sack != 1
+AND passer_player_id not null; a spike is an attempt with 0 yards and no
+completion. Receiving and anytime-TD are unchanged — spikes have no receiver, so
+the receiving universe stays on play_type=="pass".
+Measured in 2024 PBP: +437 kneels, -38 two-point runs (net +399 carries), +75
+spikes. Test: nfl/sim/tests/test_actuals_5d3.py asserts those exact deltas, plus
+a null control that actual_rec, actual_rec_yds and actual_atd are unchanged.
+
+### D63 — K4 is reproducible, and is re-graded on D62 (2026-09-18)
+K4 had no committed generator; k4_rows_fit_5d1.parquet came from an ad-hoc
+script, so the result was not reproducible (Check 3). nfl/sim/run_k4.py is now
+the generator. It first regenerates the committed row file under the OLD actuals
+and asserts a row-for-row match before re-grading under D62, so only grading can
+change. Output: research/nfl_sim/k4_rows_fit_5d1_official.parquet.
+Pricing convention, stated once: raw_side = devig_side * (1 + 2*vig); vig is the
+per-side half margin and the two-way overround is ~1.069.
+Result: exactly 158 rows change, in hit_over/hit_under only — rush_att 94,
+rush_yds 58, pass_att 6, all other families 0. QB rush_att blind under goes from
++18.2% ROI / 63.3% hit / +13.2pp edge / t=+5.33 (N=722) to -4.5% / 51.5% /
++1.4pp / t=-1.28, collapsing independently in both seasons (2023 +19.9% -> -0.8%,
+2024 +16.9% -> -7.1%). After D62 no family has a positive blind side. The
+pre-registered prediction held; the continuous-market null control is
+bit-identical. Independently recomputed from the two parquets by Cowork.
+See research/nfl_sim/k4_official_actuals_2026-09-18.md and
+research/nfl_sim/k4_fit5d1_actuals_contamination_2026-09-18.md.
+
+### D64 — CLV on one scale, with game identity, and push = void (2026-09-18)
+CLV is computed on the no-vig scale on both sides: implied_over/implied_under are
+normalized to sum to 1 at pick time and again at close, and
+CLV = close_devig[side] - pick_devig[side]. Previously both sides were raw
+vig-inclusive, which returned about +2.4pp on an unchanged -110/-110 market.
+The closing-price lookup now requires game identity (event_id / season+week+game)
+instead of matching on player_name + market_key + line and taking the first row
+across the whole season, which could match a different week. No match for that
+game returns NaN rather than falling through. Family vocabulary is unified to one
+set and an unmapped family raises instead of silently returning NaN. A leg whose
+actual equals the line is graded VOID and excluded from both the ROI and hit-rate
+denominators — never assigned to a side by complement. Note 72,893 of 72,897 prop
+lines are half-point, so pushes bind mainly on whole-number and game markets.
+Test: nfl/sim/tests/test_clv_5d3.py.
+
+### D65 — Exact binary IPF in SGP raking (2026-09-18)
+sgp_probability_raked scaled only the hit rows by t/m and then renormalized
+globally, which leaves the leg's marginal at t/(t+1-m) rather than t, so every
+pass undershot the target. The update is now the exact binary IPF step:
+hits *= t/m, non-hits *= (1-t)/(1-m), which makes the marginal equal t after one
+step and is exact for a single leg. The silent `if current_marginal < 1e-15:
+continue` branch — which returned a joint as if an unhittable leg had been
+honoured — now raises, as do unsupported targets: m == 0 with t > 0, m == 1 with
+t < 1, and t outside (0, 1). The 200-iteration cap, the 1e-6 tolerance, the
+RuntimeError on non-convergence and the ESS definition are unchanged.
+Test: nfl/sim/tests/test_raking_5d3.py.
