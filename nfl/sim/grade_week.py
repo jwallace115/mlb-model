@@ -410,6 +410,30 @@ def write_report(picks, season, week):
                        pd.to_numeric(g["book_implied"], errors="coerce")).mean()
                 lines.append(f"| {fam:20s} | {len(g):4d} | {clv:+.4f} |")
 
+    # CLV vs Hard Rock close
+    if "clv" in graded.columns and graded["clv"].notna().any():
+        clv_data = graded[graded["clv"].notna()]
+        lines.append("")
+        lines.append("## CLV vs Hard Rock close (close_implied - pick_implied)")
+        lines.append("")
+        lines.append("| Family | N | Mean CLV |")
+        lines.append("|--------|---|----------|")
+        for fam in sorted(clv_data["family"].unique()):
+            g = clv_data[clv_data["family"] == fam]
+            mean_clv = g["clv"].mean()
+            lines.append(f"| {fam:20s} | {len(g):4d} | {mean_clv:+.4f} |")
+        if "ticket" in clv_data.columns and clv_data["ticket"].notna().any():
+            lines.append("")
+            lines.append("| Ticket | N | Mean CLV |")
+            lines.append("|--------|---|----------|")
+            for ticket, tg in clv_data.groupby("ticket"):
+                if pd.isna(ticket):
+                    continue
+                mean_clv = tg["clv"].mean()
+                lines.append(f"| {str(ticket):20s} | {len(tg):4d} | {mean_clv:+.4f} |")
+        overall = clv_data["clv"].mean()
+        lines.append(f"\nOverall mean CLV: {overall:+.4f} (N={len(clv_data)})")
+
     # By ticket
     if "ticket" in picks.columns and picks["ticket"].notna().any():
         lines.append("")
@@ -437,6 +461,113 @@ def write_report(picks, season, week):
     return report
 
 
+def compute_clv(picks, season):
+    """Add CLV columns by joining picks with archived Hard Rock closing prices.
+
+    CLV = close_implied - pick_implied for the 'over' side.
+    Positive CLV means the line moved in the pick's favor after pick time.
+
+    Loads all Hard Rock snapshots for the season and finds the latest
+    snapshot before each game's commence_time as the closing price.
+    """
+    props_dir = ROOT / "data" / "odds_archive" / "nfl" / "props"
+    frames = []
+    for f in sorted(props_dir.rglob(f"season={season}/**/*.parquet")):
+        if "raw_live" in str(f):
+            continue
+        try:
+            df = pd.read_parquet(f)
+            if "bookmaker" in df.columns:
+                hr = df[df["bookmaker"] == "hardrockbet_fl"]
+                if len(hr) > 0:
+                    frames.append(hr)
+        except Exception:
+            pass
+
+    if not frames:
+        picks["close_price"] = np.nan
+        picks["close_implied"] = np.nan
+        picks["clv"] = np.nan
+        return picks
+
+    archive = pd.concat(frames, ignore_index=True)
+    archive["pull_ts"] = pd.to_datetime(archive["pull_timestamp"], utc=True,
+                                         errors="coerce")
+    archive["commence_dt"] = pd.to_datetime(archive["commence_time"], utc=True,
+                                             errors="coerce")
+    # Only pre-game snapshots
+    archive = archive[archive["pull_ts"] < archive["commence_dt"]]
+
+    # For each (player_name, market_key, line, event_id), find the latest snapshot
+    archive = archive.sort_values("pull_ts", ascending=False)
+    close = archive.drop_duplicates(
+        subset=["event_id", "market_key", "player_name", "line"],
+        keep="first"
+    )
+
+    # Map picks family to market_key
+    family_to_mkt = {
+        "receptions": "player_receptions",
+        "reception_yds": "player_reception_yds",
+        "rush_yds": "player_rush_yds",
+        "rush_attempts": "player_rush_attempts",
+        "anytime_td": "player_anytime_td",
+        "pass_yds": "player_pass_yds",
+        "pass_attempts": "player_pass_attempts",
+        "pass_completions": "player_pass_completions",
+        "pass_tds": "player_pass_tds",
+    }
+
+    close_prices = []
+    close_implieds = []
+    clvs = []
+
+    for _, row in picks.iterrows():
+        pname = row.get("player_name", "")
+        family = row.get("family", "")
+        line = row.get("line")
+        side = row.get("side", "over")
+        pick_implied = row.get("book_implied")
+
+        mkt = family_to_mkt.get(family)
+        if mkt is None or pname is None:
+            close_prices.append(np.nan)
+            close_implieds.append(np.nan)
+            clvs.append(np.nan)
+            continue
+
+        match = close[(close["player_name"] == pname) &
+                      (close["market_key"] == mkt) &
+                      (np.abs(close["line"] - line) < 0.01)]
+
+        if match.empty:
+            close_prices.append(np.nan)
+            close_implieds.append(np.nan)
+            clvs.append(np.nan)
+            continue
+
+        cr = match.iloc[0]
+        if side == "over":
+            cp = cr.get("over_price")
+            ci = cr.get("implied_over")
+        else:
+            cp = cr.get("under_price")
+            ci = cr.get("implied_under")
+
+        close_prices.append(cp)
+        close_implieds.append(ci)
+
+        if pd.notna(ci) and pd.notna(pick_implied) and pick_implied > 0:
+            clvs.append(float(ci) - float(pick_implied))
+        else:
+            clvs.append(np.nan)
+
+    picks["close_price"] = close_prices
+    picks["close_implied"] = close_implieds
+    picks["clv"] = clvs
+    return picks
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--season", type=int, required=True)
@@ -445,6 +576,7 @@ def main():
     args = parser.parse_args()
 
     picks = grade_week(args.season, args.week, args.extra)
+    picks = compute_clv(picks, args.season)
     report = write_report(picks, args.season, args.week)
     print("\n" + report)
 

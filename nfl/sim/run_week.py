@@ -352,6 +352,42 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                     "pull_timestamp": pr.get("pull_timestamp"),
                 }
 
+        # D58: Load open snapshot for MOVED-AGAINST flag
+        open_snapshot = None  # {(player_name, family, line): implied_p}
+        if len(props) > 0:
+            # Look for snapshot_tag == "open" in the props archive
+            props_dir = ROOT / "data" / "odds_archive" / "nfl" / "props"
+            open_frames = []
+            for f in sorted(props_dir.rglob(f"season={SEASON}/**/*.parquet")):
+                if "raw_live" in str(f):
+                    continue
+                try:
+                    odf = pd.read_parquet(f)
+                    if "snapshot_tag" in odf.columns:
+                        opens = odf[(odf["snapshot_tag"] == "open") &
+                                    (odf["bookmaker"] == "hardrockbet_fl") &
+                                    (odf["home_team"] == home_full)]
+                        if len(opens) > 0:
+                            open_frames.append(opens)
+                except Exception:
+                    pass
+            if open_frames:
+                odf = pd.concat(open_frames, ignore_index=True)
+                open_snapshot = {}
+                for _, r in odf.iterrows():
+                    fam = MARKET_KEY_MAP.get(r.get("market_key"))
+                    if fam and r.get("player_name"):
+                        # Resolve name to match picks
+                        pid_o, _ = resolve_player(r["player_name"], SEASON, week,
+                                                   [home, away], by_team, by_fi, by_league)
+                        if pid_o:
+                            bp = props_by_pid.get((pid_o, fam, r.get("line")))
+                            if bp:
+                                # Store the open implied for the over side
+                                imp_over_open = r.get("implied_over")
+                                if pd.notna(imp_over_open):
+                                    open_snapshot[(r["player_name"], fam, r.get("line"))] = imp_over_open
+
         # Player props
         if pdf is not None and len(pdf) > 0:
             pmeans = pdf.groupby(["player_id", "player_name", "position", "team"]).agg(
@@ -426,6 +462,19 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                         has_book = pd.notna(book_price)
                         rankable = has_book and converged
 
+                        # D58: MOVED-AGAINST flag (pre-registered)
+                        moved_against = False
+                        if has_book and open_snapshot is not None:
+                            open_key = (pname, family, line)
+                            open_imp = open_snapshot.get(open_key)
+                            if open_imp is not None and pd.notna(book_implied):
+                                # For over: moved against if market implied_over
+                                # went UP (less value for the over bettor)
+                                if side == "over":
+                                    moved_against = book_implied > open_imp
+                                else:
+                                    moved_against = book_implied > open_imp
+
                         leg = {
                             "season": SEASON, "week": week,
                             "game_id": f"{away}@{home}",
@@ -443,6 +492,7 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                             "board_generated_utc": generated_utc,
                             "status": status,
                             "rankable": rankable,
+                            "moved_against": moved_against,
                         }
                         all_legs.append(leg)
                         return leg

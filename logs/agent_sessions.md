@@ -1117,3 +1117,42 @@
 - NOT DONE: none.
 - UNVERIFIED: pass_yds symmetry gap (2.7pp) root cause — could be PBP sack yards
   or garbage-time stat differences.
+
+## 2026-09-18T04:30Z  cowork (verification of Phase 5C-3b, e10e9f63 / cacef44f)
+- CONFIRMED: K4 at 6-book consensus closing, 72,850 legs 2023-24, vig from the archived
+  two-way prices (expected sum ~ -13%), symmetry 7/8 within 2pp; flat and model-filtered
+  ROI negative in every family (pass_td over +7.3% on 429 legs is inside noise). pass_yds
+  2.7pp symmetry miss logged as a matching bug. Synthetic -110 table deleted. Report
+  corrections (fit-check caption, OOS = 2026 prospective, A8 units 205 plays / 407
+  player-games with 5C-1's 348 marked an undercount) present. D57 appended.
+- NOTE: the model-filtered K4 is IN-SAMPLE relative to the maps (2023-24 games were in the
+  map fit). Negative in-sample is conservative evidence of no edge; the label should still
+  say in-sample. D17 stands, strengthened.
+- STATUS: 5C closed. Sim in service for tickets: roles + correlated script + price filter +
+  raked joints; no edge claim. Next: Week 2 Sunday board (props pull ~260 credits, run_week at
+  N=5000), TNF DET@BUF ticket grade, props open/close capture cron (cadence pending Jeff).
+
+## 2026-09-18T05:30Z  claude-code (Hard Rock props capture pipeline)
+- CREATED: nfl/pipeline/pull_hardrock_props.py — refactored from
+  research/execution_edge/pull_hardrock_props_live.py. --window-hours N,
+  --tag {open,mid,close}, --dry-run. snapshot_tag column added. Append-not-
+  overwrite parquet. Cost pre-check: events x 15 + 1, HALT < 3000.
+  load_dotenv(override=True), key fingerprint at startup, never prints key.
+- EDITED: nfl/sim/grade_week.py — compute_clv() joins picks with Hard Rock
+  archive for closing-price CLV per leg. Report prints mean CLV by family
+  and by ticket. CLV = close_implied - pick_implied (positive = favorable move).
+- EDITED: nfl/sim/run_week.py — D58 MOVED-AGAINST flag: leg flagged if Hard
+  Rock price moved against the pick between open snapshot and pick time.
+  Displayed on board, not acted on automatically. open_snapshot loaded from
+  archive where snapshot_tag == "open".
+- APPENDED: research/nfl_sim/NFL_SIM_DECISION_v1.md — D58 (pre-registered
+  MOVED-AGAINST filter, nothing tuned on 2026 data).
+- CREATED: nfl/sim/tests/test_props_capture.py — 7 tests: window selection
+  (2), tag column, append-not-overwrite, HALT arithmetic (2), CLV join on
+  MNF picks_log (20/30 matched, mean CLV +0.010 receptions). All 7 pass.
+- EDITED: .gitignore — logs/props_capture.log.
+- RAN: dry run (--window-hours 168 --tag open --dry-run): 16 events found
+  (wk2 + ATL@GB), 241 credits, 9305 remaining. No paid calls.
+- NOT DONE: cron installation on VM (Jeff fills in cadence).
+- UNVERIFIED: MOVED-AGAINST flag end-to-end (requires open + close snapshots
+  from the same week, which don't exist yet).

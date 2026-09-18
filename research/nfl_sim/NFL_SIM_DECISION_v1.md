@@ -445,3 +445,13 @@ bug). No family has positive flat-over ROI (consistent with D17). Synthetic
 -110 K4 deleted from calibration_v1.json. Reliability deciles relabelled as
 in-sample fit check (isotonic reproduces its own deciles by construction).
 OOS reference corrected: prospective 2026 only; 2025 consumed.
+
+### D58 — MOVED-AGAINST flag, pre-registered (2026-09-18)
+A leg whose Hard Rock line or price moved against the pick between the open
+snapshot and pick time is flagged MOVED-AGAINST on the board. "Moved against"
+means: for an over pick, implied_over at open < implied_over at pick time (the
+market moved toward the over, making the pick less valuable); for an under pick,
+implied_under at open < implied_under at pick time. The flag is displayed but
+not acted on automatically. Its hit rate is reported prospectively by week.
+Nothing about this filter is tuned on 2026 data — it is pre-registered before
+any open/close captures are used.
