@@ -22,7 +22,8 @@ from nfl.sim.engine import simulate_game, _load_tables, _load_ratings
 from nfl.sim.seed_util import stable_seed
 from nfl.sim.names import (FULL_TO_ABBR, load_roster, _build_roster_lookup,
                            resolve_player, is_player_name)
-from nfl.sim.calibration import load_calibration
+from nfl.sim.calibration import (load_calibration, engine_fingerprint,
+                                 usage_fingerprint)
 from nfl.sim.anchor import run_anchored_chunked
 from nfl.sim.pricer import price_game, sgp_probability_raked
 
@@ -306,11 +307,20 @@ def load_props_for_game(home_full, away_full, season, week):
     return game_df, None, chosen_ts
 
 
-def _check_calibration_stamp():
-    """D70: Metadata gate — compare calibration stamp against running state.
-    Returns (ok, mismatches_list). On mismatch, sim prices are suppressed."""
-    import hashlib, subprocess
-    cal_path = ROOT / "nfl" / "sim" / "calibration_v1.json"
+def _check_calibration_stamp(cal_path=None):
+    """D70/D72: metadata gate — are these maps valid for the sim about to run?
+
+    Compares CONTENT fingerprints, not git commits. The original D70 version
+    compared cal["engine_commit"] against `git rev-parse HEAD`; HEAD moves every
+    30 minutes from the dashboard auto-committer, so that gate went red within
+    half an hour of any re-fit, permanently, on commits that never touched the
+    engine. A commit comparison also cannot see uncommitted edits.
+
+    Returns (ok, mismatches). On mismatch the board suppresses sim prices.
+    """
+    if cal_path is None:
+        cal_path = ROOT / "nfl" / "sim" / "calibration_v1.json"
+    cal_path = Path(cal_path)
     if not cal_path.exists():
         return False, ["calibration_v1.json not found"]
 
@@ -319,23 +329,27 @@ def _check_calibration_stamp():
 
     mismatches = []
 
-    # Engine commit
-    try:
-        head = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"],
-                                        cwd=ROOT, text=True).strip()
-    except Exception:
-        head = "unknown"
-    cal_commit = cal.get("engine_commit", "")
-    if cal_commit and head != cal_commit:
-        mismatches.append(f"engine_commit: cal={cal_commit}, HEAD={head}")
+    # Engine fingerprint (the gate)
+    cal_fp = cal.get("engine_fingerprint")
+    if not cal_fp:
+        mismatches.append(
+            "engine_fingerprint absent — this stamp predates D72 and was written "
+            "by hand; a re-fit is required to produce a gateable stamp")
+    else:
+        try:
+            live_fp = engine_fingerprint()
+        except FileNotFoundError as e:
+            return False, [f"engine fingerprint could not be computed: {e}"]
+        if live_fp != cal_fp:
+            mismatches.append(f"engine_fingerprint: cal={cal_fp}, live={live_fp}")
 
-    # Usage file sha256
-    usage_path = ROOT / "nfl" / "data" / "sim" / "ratings" / "player_usage_weekly.parquet"
-    if usage_path.exists():
-        usage_sha = hashlib.sha256(usage_path.read_bytes()).hexdigest()[:16]
-        cal_sha = cal.get("usage_file_sha256", "")
-        if cal_sha and usage_sha != cal_sha:
-            mismatches.append(f"usage_sha: cal={cal_sha}, disk={usage_sha}")
+    # Usage table the maps were fitted against
+    cal_usage = cal.get("usage_file_sha256")
+    live_usage = usage_fingerprint()
+    if cal_usage and live_usage and live_usage != cal_usage:
+        mismatches.append(f"usage_sha: cal={cal_usage}, disk={live_usage}")
+    elif cal_usage and live_usage is None:
+        mismatches.append("usage table missing on disk")
 
     return len(mismatches) == 0, mismatches
 

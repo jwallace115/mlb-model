@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tests for D68 (detect_week) and D69 (props snapshot selection)."""
 
+import json
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -131,16 +132,97 @@ def test_unknown_tag_raises(tmp_path):
 
 # ── D70: metadata gate ──
 
-def test_stamp_mismatch_suppresses_prices():
-    """A stamp mismatch suppresses sim prices."""
+def test_engine_fingerprint_is_deterministic():
+    """D72: same inputs, same fingerprint."""
+    from nfl.sim.calibration import engine_fingerprint
+    assert engine_fingerprint() == engine_fingerprint()
+    assert len(engine_fingerprint()) == 16
+
+
+def test_engine_fingerprint_moves_when_an_input_changes(tmp_path, monkeypatch):
+    """D72: touching any engine input must change the fingerprint."""
+    import nfl.sim.calibration as cal
+    src = tmp_path / "engine.py"; src.write_text("x = 1")
+    tables = tmp_path / "tables"; tables.mkdir()
+    (tables / "a.parquet").write_bytes(b"AAA")
+    monkeypatch.setattr(cal, "ENGINE_FINGERPRINT_FILES", [src])
+    monkeypatch.setattr(cal, "ENGINE_TABLES_DIR", tables)
+
+    before = cal.engine_fingerprint()
+    (tables / "a.parquet").write_bytes(b"BBB")
+    assert cal.engine_fingerprint() != before, "table change did not move the fingerprint"
+
+    mid = cal.engine_fingerprint()
+    src.write_text("x = 2")
+    assert cal.engine_fingerprint() != mid, "engine change did not move the fingerprint"
+
+
+def test_missing_engine_input_raises(tmp_path, monkeypatch):
+    """A partial fingerprint would compare equal across a real change."""
+    import nfl.sim.calibration as cal
+    tables = tmp_path / "tables"; tables.mkdir()
+    monkeypatch.setattr(cal, "ENGINE_FINGERPRINT_FILES", [tmp_path / "nope.py"])
+    monkeypatch.setattr(cal, "ENGINE_TABLES_DIR", tables)
+    with pytest.raises(FileNotFoundError):
+        cal.engine_fingerprint()
+
+
+def test_gate_passes_when_fingerprint_matches(tmp_path):
+    """D72: a stamp carrying the live fingerprint passes."""
     from nfl.sim.run_week import _check_calibration_stamp
-    ok, mismatches = _check_calibration_stamp()
-    # The engine has changed since calibration was fitted at 85f1cb455,
-    # so the gate is EXPECTED to fire.
-    if not ok:
-        assert len(mismatches) > 0
-        assert any("engine_commit" in m for m in mismatches)
-    # Either way, the function runs without error
+    from nfl.sim.calibration import engine_fingerprint, usage_fingerprint
+    stamp = tmp_path / "cal.json"
+    stamp.write_text(json.dumps({
+        "engine_fingerprint": engine_fingerprint(),
+        "usage_file_sha256": usage_fingerprint(),
+        "maps": {},
+    }))
+    ok, mismatches = _check_calibration_stamp(cal_path=stamp)
+    assert ok, f"gate fired on a matching stamp: {mismatches}"
+
+
+def test_gate_ignores_git_head_and_engine_commit(tmp_path):
+    """THE POINT OF D72. The dashboard auto-committer moves HEAD every 30
+    minutes. A stamp with the right fingerprint but a nonsense engine_commit
+    must still pass, or the gate is permanently red and gets ignored."""
+    from nfl.sim.run_week import _check_calibration_stamp
+    from nfl.sim.calibration import engine_fingerprint, usage_fingerprint
+    stamp = tmp_path / "cal.json"
+    stamp.write_text(json.dumps({
+        "engine_fingerprint": engine_fingerprint(),
+        "usage_file_sha256": usage_fingerprint(),
+        "engine_commit": "deadbeef",      # deliberately wrong
+        "maps": {},
+    }))
+    ok, mismatches = _check_calibration_stamp(cal_path=stamp)
+    assert ok, f"gate fired on a stale engine_commit: {mismatches}"
+
+
+def test_gate_fires_on_fingerprint_mismatch(tmp_path):
+    """A real engine change must fire it."""
+    from nfl.sim.run_week import _check_calibration_stamp
+    from nfl.sim.calibration import usage_fingerprint
+    stamp = tmp_path / "cal.json"
+    stamp.write_text(json.dumps({
+        "engine_fingerprint": "0" * 16,
+        "usage_file_sha256": usage_fingerprint(),
+        "maps": {},
+    }))
+    ok, mismatches = _check_calibration_stamp(cal_path=stamp)
+    assert not ok
+    assert any("engine_fingerprint" in m for m in mismatches)
+
+
+def test_gate_fires_on_prefingerprint_stamp(tmp_path):
+    """The stamp in the repo today has no fingerprint — it was hand-written.
+    The gate must say so rather than pass."""
+    from nfl.sim.run_week import _check_calibration_stamp
+    stamp = tmp_path / "cal.json"
+    stamp.write_text(json.dumps({"engine_commit": "85f1cb455", "maps": {}}))
+    ok, mismatches = _check_calibration_stamp(cal_path=stamp)
+    assert not ok
+    assert any("predates D72" in m for m in mismatches)
+
 
 
 # ── D71: layer log schema ──

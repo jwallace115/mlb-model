@@ -332,24 +332,112 @@ def _score_player_props(pdf, game_result, prop_data):
         prop_data.append({"family": f"prop_atd_{pos}", "pred": p_atd, "hit": actual_atd})
 
 
-def save_calibration(cal_maps, path=None):
-    """Save calibration maps with git sha."""
+# ─────────────────────────────────────────────────────────────────────────────
+# D72: engine fingerprint + calibration stamp
+#
+# The stamp answers one question: are these maps valid for the sim that is
+# about to run? It is a CONTENT hash, not a git commit, for two reasons.
+#   1. HEAD moves every 30 minutes from the Mac dashboard auto-committer. A
+#      HEAD comparison goes red within half an hour of every re-fit, on commits
+#      that never touched the engine, and a gate that is always red gets ignored.
+#   2. A git comparison cannot see UNCOMMITTED edits. fit_5d1 was produced by a
+#      run_fit.py that was uncommitted at the time; a commit-based stamp would
+#      have recorded a hash that did not describe the code that ran.
+#
+# Boundary, chosen deliberately: the fingerprint covers what determines the raw
+# simulated distribution — the engine, the anchoring, the fitted parameters, and
+# every table the engine reads. It does NOT cover nfl/sim/pricer.py. The raking
+# and SGP code there does not change a leg's marginal probability, and folding it
+# in would fire the gate after a raking-only fix, which is the spurious-red
+# failure this decision exists to prevent. If price_game's LEG CONSTRUCTION ever
+# changes, add it here and say so.
+ENGINE_FINGERPRINT_FILES = [
+    ROOT / "nfl" / "sim" / "engine.py",
+    ROOT / "nfl" / "sim" / "anchor.py",
+    ROOT / "nfl" / "sim" / "params_v1.json",
+]
+ENGINE_TABLES_DIR = ROOT / "nfl" / "data" / "sim" / "tables"
+USAGE_PATH = ROOT / "nfl" / "data" / "sim" / "ratings" / "player_usage_weekly.parquet"
+
+
+def engine_fingerprint():
+    """sha256[:16] over the files that determine the simulated distribution.
+
+    Raises if an input is missing — a fingerprint computed over a partial set
+    would silently compare equal across a real change.
+    """
+    import hashlib
+    h = hashlib.sha256()
+    files = list(ENGINE_FINGERPRINT_FILES)
+    if not ENGINE_TABLES_DIR.is_dir():
+        raise FileNotFoundError(f"engine tables dir missing: {ENGINE_TABLES_DIR}")
+    files += sorted(p for p in ENGINE_TABLES_DIR.iterdir() if p.is_file())
+    for f in files:
+        if not f.exists():
+            raise FileNotFoundError(f"engine fingerprint input missing: {f}")
+        h.update(f.name.encode())
+        h.update(b"\x00")
+        h.update(f.read_bytes())
+    return h.hexdigest()[:16]
+
+
+def usage_fingerprint():
+    """sha256[:16] of the usage table the maps were fitted against."""
+    import hashlib
+    if not USAGE_PATH.exists():
+        return None
+    return hashlib.sha256(USAGE_PATH.read_bytes()).hexdigest()[:16]
+
+
+def save_calibration(cal_maps, path=None, fit_dir=None, fit_n_games=None,
+                     unconverged_share=None, anchor=None):
+    """Save calibration maps WITH the full stamp the metadata gate reads.
+
+    D72: the stamp used to be written by hand — no committed code produced
+    engine_commit / usage_file_sha256 / fit_dir, so a re-fit could not
+    reproduce it. This is now the writer. Keys not passed are preserved from
+    the existing file rather than dropped, so a partial call cannot silently
+    strip the anchor block.
+    """
+    import datetime
     if path is None:
         path = ROOT / "nfl" / "sim" / "calibration_v1.json"
 
+    existing = {}
+    if Path(path).exists():
+        try:
+            with open(path) as f:
+                existing = json.load(f)
+        except Exception:
+            existing = {}
+
     try:
-        sha = subprocess.check_output(["git", "rev-parse", "HEAD"],
-                                       cwd=ROOT).decode().strip()[:12]
+        sha = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"],
+                                       cwd=ROOT, text=True).strip()
     except Exception:
         sha = "unknown"
 
-    out = {"git_sha": sha, "maps": {}}
-    for family, data in cal_maps.items():
-        out["maps"][family] = data
+    out = dict(existing)
+    out["engine_fingerprint"] = engine_fingerprint()
+    out["usage_file_sha256"] = usage_fingerprint()
+    out["engine_commit"] = sha          # informational only — NOT gated on
+    out["fit_date"] = datetime.date.today().isoformat()
+    if fit_dir is not None:
+        out["fit_dir"] = fit_dir
+    if fit_n_games is not None:
+        out["fit_n_games"] = fit_n_games
+    if unconverged_share is not None:
+        out["unconverged_share"] = unconverged_share
+    if anchor is not None:
+        out["anchor"] = anchor
+    out.pop("git_sha", None)            # superseded by engine_commit
+    out["maps"] = dict(cal_maps)
 
     with open(path, "w") as f:
         json.dump(out, f, indent=2)
-    print(f"Saved calibration to {path} (sha={sha}, {len(cal_maps)} families)")
+    print(f"Saved calibration to {path} "
+          f"(engine_fingerprint={out['engine_fingerprint']}, "
+          f"usage={out['usage_file_sha256']}, {len(cal_maps)} families)")
     return path
 
 

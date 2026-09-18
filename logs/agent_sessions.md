@@ -1478,3 +1478,39 @@
 - STILL OPEN: re-fit (required, and it should follow the gate fix so the stamp lands on
   something stable); the 5D-1 PIT test still never written; the dt distribution in the depth
   source still never inspected; season 2020 undeclared.
+
+## 2026-09-18T18:29Z  cowork (D72 — metadata gate fixed in-session, not via Claude Code)
+- EDITED on the Mac via the bridge: nfl/sim/calibration.py (engine_fingerprint, usage_fingerprint,
+  save_calibration rewritten as the real stamp writer), nfl/sim/run_week.py
+  (_check_calibration_stamp gates on the fingerprint, takes an optional cal_path so it is
+  testable), nfl/sim/tests/test_board_5d2.py (+7 real tests replacing 1 vacuous one),
+  NFL_SIM_DECISION_v1.md (D72).
+- WHY: D70 compared cal["engine_commit"] to `git rev-parse HEAD`. HEAD moved twice during the
+  session that found this (26e9124af -> dd37978ac) from the dashboard auto-committer, so that
+  gate goes red within 30 min of any re-fit, forever, on commits that never touch the engine.
+  A commit comparison is also blind to uncommitted edits — fit_5d1 was produced by an
+  uncommitted run_fit.py.
+- SECOND DEFECT, larger: no committed code wrote the stamp at all. engine_commit /
+  usage_file_sha256 / fit_dir / fit_n_games / unconverged_share appear in no .py file; the stamp
+  on disk was hand-written during 5D-1 item 4. save_calibration() wrote an OLDER schema
+  ({"git_sha","maps"}) and would have stripped the entire stamp if called. It is now the writer.
+- RAN (returned, not inferred): full suite on the Mac, 928.62s — 4 failed, 157 passed of 161
+  collected. 161 = the prior 155 plus the 6 net-new gate tests. The 4 reds are the SAME four,
+  with the same values (go-rate 0.210 vs 0.198; penalties 6.20 vs 5.51; tied-drives 0.111;
+  starting-QB wk3). ZERO regressions from D72.
+- VERIFIED the new tests are not vacuous: ran the OLD D70 logic against
+  test_gate_ignores_git_head_and_engine_commit — it returns ok=False, i.e. that test fails
+  against the old gate and passes against the new one. The D70 test it replaced asserted
+  nothing at all when the gate passed.
+- VERIFIED the gate fires on the real stamp: "engine_fingerprint absent — this stamp predates
+  D72 and was written by hand; a re-fit is required". Live fingerprint d929ad258504b275.
+- NEW FINDING, same pathology as the gate: test_starting_qb_identity_2026 is STRUCTURALLY
+  PERMANENT, not "wk3 unplayed". The usage carry-forward block (usage.py 445-458) creates
+  week max_w+1 rows, and the test asserts one starting QB for every 2026 team-week including
+  that unplayed one — all 32 teams fail at wk3. It will fail every week of the season, for the
+  upcoming week, forever. A permanently-red test trains people to ignore reds, which is exactly
+  what D72 was written to prevent. Fix: scope the assertion to weeks present in PBP, or mark it
+  xfail with the reason. Not done here.
+- NOT DONE: save_calibration() still has no caller — the step that fits the maps and writes
+  calibration_v1.json does not exist as committed code. The re-fit must call it or the new stamp
+  will again be ungateable. Recorded in D72.

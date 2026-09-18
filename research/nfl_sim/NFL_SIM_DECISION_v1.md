@@ -583,3 +583,57 @@ book_implied, moved_against, snapshot_tag, snapshot_timestamp, tier,
 status, rankable, sim_pricing_enabled, board_generated_utc.
 All layers ON. Ablation is a QUERY against this log later — nothing is
 tuned on 2026 data.
+
+### D72 — Metadata gate on a content fingerprint, not a git commit (2026-09-18)
+D70 compared `cal["engine_commit"]` against `git rev-parse HEAD`. That gate cannot
+work here: the Mac dashboard auto-committer moves HEAD every 30 minutes, so the
+stamp goes stale within half an hour of every re-fit, permanently, on commits that
+never touched the engine — and a gate that is always red is a gate that gets
+ignored. (HEAD moved twice during the session that wrote this entry.) A commit
+comparison is also blind to UNCOMMITTED edits: fit_5d1 was produced by a
+`run_fit.py` that was uncommitted at the time, so a commit-based stamp would have
+recorded a hash that did not describe the code that ran.
+
+`calibration.engine_fingerprint()` is sha256[:16] over the content of the files
+that determine the simulated distribution: `nfl/sim/engine.py`,
+`nfl/sim/anchor.py`, `nfl/sim/params_v1.json`, and every file in
+`nfl/data/sim/tables/`. It raises if an input is missing — a fingerprint over a
+partial set would compare equal across a real change. `engine_commit` is still
+written, as information for humans, and is NOT gated on.
+
+Boundary, chosen deliberately: `nfl/sim/pricer.py` is NOT in the fingerprint. The
+raking and SGP code there does not change a leg's marginal probability, and
+including it would fire the gate after a raking-only fix — the spurious-red
+failure this decision exists to prevent. If `price_game`'s LEG CONSTRUCTION
+changes, add it and record that here.
+
+Second half of the defect: no committed code wrote the stamp at all.
+`engine_commit` / `usage_file_sha256` / `fit_dir` / `fit_n_games` /
+`unconverged_share` appeared in no `.py` file — the stamp on disk was written by
+hand during 5D-1 item 4, the same reproducibility gap K4 had before D63. Worse,
+`save_calibration()` wrote an older schema (`{"git_sha", "maps"}`) and would have
+silently stripped the whole stamp if anyone had called it. `save_calibration()` is
+now the writer: it computes both fingerprints, takes the fit metadata as
+arguments, and merges into the existing file so a partial call cannot drop the
+anchor block.
+
+The stamp in the repo today carries no `engine_fingerprint`, so the gate fires
+with "this stamp predates D72 and was written by hand; a re-fit is required to
+produce a gateable stamp". That is correct and expected — it is also true that the
+engine changed under D66/D67 and that fit_5d1 used the wrong 2024 kickoff value.
+The re-fit resolves all three at once.
+
+Tests (`test_board_5d2.py`): the fingerprint is deterministic; it moves when an
+engine file or a table changes; a missing input raises; a matching stamp passes;
+**a stamp with the correct fingerprint but a deliberately wrong `engine_commit`
+still passes** — that test encodes the auto-committer case and fails against the
+D70 gate; a wrong fingerprint fires; a pre-D72 stamp fires. The D70 test it
+replaced asserted nothing when the gate passed and so could not fail.
+
+Remaining gap, stated rather than hidden: `save_calibration()` is now the correct
+writer but **nothing calls it yet**. The step that fits the isotonic maps and
+writes `calibration_v1.json` does not exist as committed code — same gap K4 had
+before D63 and the stamp had before this entry. Whoever runs the re-fit must call
+`save_calibration(cal_maps, fit_dir=..., fit_n_games=..., unconverged_share=...,
+anchor=...)` rather than hand-writing the JSON, or the new stamp will again be
+ungateable. Wiring that call is part of the re-fit, not of this decision.
