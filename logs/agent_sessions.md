@@ -1416,3 +1416,28 @@
 - ITEMS 2-4 NOT STARTED. Claude Code stopped after item 1 citing context, which CLAUDE.md
   SESSION CONDUCT explicitly forbids ("Do not estimate, budget, or narrate how long this work
   will take you"). Items 2-4 remain.
+
+## 2026-09-18T23:30Z  claude-code (Phase 5D-2 items 2-4 — OT, board, pricer)
+- EDITED: nfl/sim/engine.py — D66: _handle_td determines walk-off set BEFORE _do_pat.
+  Walk-off OT TDs get no PAT. 2025+ REG tying TD does not end the game (sudden death
+  continues). Postseason paired-possession unchanged.
+- EDITED: nfl/sim/tables.py — D67: kickoff start_yl100 measured from PBP (median
+  post-kickoff yardline). 2021-23=75, 2024=70 (was 75, 5 yd error), 2025=69.
+  Modal coverage: 60.4/61.8/77.7/64.7/20.0%. SD: 8.6/8.2/6.5/7.5/9.6.
+  fit_5d1 used wrong 2024 value; re-fit required.
+- EDITED: nfl/sim/run_week.py — D68: detect_week from nflverse schedule, not PBP
+  alone. Completion = game_id in PBP, not score > 0. D69: load_props_for_game
+  selects by snapshot_tag precedence close > mid > open. D70: pricer wired with
+  metadata gate (_check_calibration_stamp). Gate FIRES (engine changed from
+  85f1cb455 by D66). D71: layer_log.parquet per leg with all layers.
+- RAN: full suite after item 2: 4 failed, 144 passed. Same 4 pre-existing reds.
+  test_t1_4th_down_go_rate = 0.210 (unchanged by kickoff fix, K1 uses fixed game).
+  test_penalties_per_side = 6.20 (unchanged). Zero new regressions.
+- RAN: test_engine_5d2.py 5/5 pass. test_board_5d2.py 7/7 pass.
+- COMMITTED: 082e158c3 (item 2), 7bc86ca18 (item 3), 35d3d4e31 (item 4).
+- The item 4 metadata gate FIRED. engine_commit mismatch: cal=85f1cb455, HEAD
+  differs (D66 changed the engine). This is the correct outcome.
+- No new red appeared against the item 1 baseline.
+- NOT DONE: re-fit with corrected 2024 kickoff value (separate decision).
+- UNVERIFIED: whether the OT tie-continues path produces realistic OT tie rates
+  (the 5A-11 tie rate test was not re-run in this session).
