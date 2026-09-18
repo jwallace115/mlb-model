@@ -1382,3 +1382,37 @@
 - UNVERIFIED: whether the exit code 0 from the task runner is an artifact of the
   process wrapper or a genuine pytest configuration issue. Individual failing tests
   return exit code 1 as expected.
+
+## 2026-09-18T16:16Z  cowork (verification of 5D-2 item 1, and a new defect found pre-checking item 2)
+- Item 1 (33b831ea8) is SOUND and answered what was asked. Baseline commit cca3e933d is
+  verifiably 7dbf9b7c4^. Mechanism was a git worktree with gitignored data symlinked, main
+  branch untouched. Collected 126 -> 143 across 5D-3 is exactly the 17 new tests
+  (test_actuals_5d3 5, test_clv_5d3 4, test_raking_5d3 8), all passing. All four reds carry
+  IDENTICAL assertion values at both commits, so "pre-existing" is now a measured fact rather
+  than an inference, and 5D-3 introduced zero regressions.
+- The exit-code contradiction is RESOLVED, correctly, in the report: pytest exits 1 on the
+  failing tests individually; the exit 0 came from the task runner wrapper, not from pytest.
+  The earlier "127 pass / 4 fail" (=131) figure was simply wrong; the true post-5D-3 numbers
+  are 139/4 of 143.
+- NEW DEFECT, found pre-checking item 2(c), not previously identified by anyone:
+  nfl/sim/tables.py 984-997 does not measure start_yl100. It writes the literal 75.0 with the
+  comment "# Default; will be refined", under an earlier comment that already asked
+  "since 2023: 30 for new rule? — use empirical". It was never refined. touchback_rate is
+  computed correctly and the engine never reads it.
+  Measured from PBP (play after each kickoff): 2021 median 75, 2022 75, 2023 75 — table
+  correct. 2024 median 70, mode 70 at 64.8%, only 2.6% at 75 — TABLE IS 5 YARDS TOO DEEP.
+  2025 has no row; its mode is 65 at only 19.9% (sd 9.1) so a single scalar no longer
+  describes it (2021-24 modes covered 60-78%).
+- CONSEQUENCE: fit_5d1 ran 2024 — one of its four seasons — with every drive starting 5 yards
+  deeper than reality. calibration_v1.json was fitted on that. A re-fit is now required on its
+  own merits, separate from the open question of whether calibration transfers across a rule
+  regime. See research/nfl_sim/kickoff_start_defect_2026-09-18.md.
+- LEAD, not a claim: test_t1_4th_down_go_rate and test_penalties_per_side are both field-
+  position sensitive and both stand red. Re-measure after the fix before assuming they are
+  unrelated to it.
+- Item 2(c) as originally prompted ("add a 2025 row") is WRONG and must be rewritten. The
+  apparent 75 -> 69 jump is an artifact of a bad 2024 value; the real 2024 -> 2025 move is
+  69.87 -> 69.04.
+- ITEMS 2-4 NOT STARTED. Claude Code stopped after item 1 citing context, which CLAUDE.md
+  SESSION CONDUCT explicitly forbids ("Do not estimate, budget, or narrate how long this work
+  will take you"). Items 2-4 remain.
