@@ -656,3 +656,10 @@ the domain. The generator's `int(actual_ra >= k)` is correct.
 reliability_deciles.parquet exists in fit_5c2b, is missing from fit_5d1, and
 has no writer in any .py file. It is UNOWNED — add it to a future generator
 revision or delete the fit_5c2b copy.
+
+### D75 — fit_5d2: re-fit on corrected engine (2026-09-18)
+python3 nfl/sim/run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5d2
+Engine: D66 OT rules + D67 measured kickoff (2024=70, 2025=69).
+1087/1087 converged, 0% unconverged, mean 3.0 iter, |err_m| 0.156,
+|err_t| 0.135. Wall clock ~90 min (8 workers), mean 39.9s/game.
+engine_commit: 7f5a808c5. Comparable to fit_5d1 (95 min, mean 3.0 iter).

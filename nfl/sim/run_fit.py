@@ -51,8 +51,9 @@ def _worker_init():
 
 def _run_one_game(args):
     """Process a single game. Returns (game_id, wall_time, n_iter, converged)."""
-    game_id, home, away, season, week, spread, total_line, engine_commit = args
-    out_path = GAMES_DIR / f"{game_id}.parquet"
+    game_id, home, away, season, week, spread, total_line, engine_commit, games_dir = args
+    games_dir = Path(games_dir)
+    out_path = games_dir / f"{game_id}.parquet"
     if out_path.exists():
         return (game_id, 0.0, 0, True, "skipped")
 
@@ -89,7 +90,7 @@ def _run_one_game(args):
                         "targets", "receptions", "rec_yds", "carries", "rush_yds",
                         "pass_att", "pass_cmp", "pass_yds", "pass_td",
                         "anytime_td"]].copy()
-        pdf_save.to_parquet(GAMES_DIR / f"{game_id}_players.parquet", index=False)
+        pdf_save.to_parquet(games_dir / f"{game_id}_players.parquet", index=False)
 
     # Anchoring metadata
     meta = {
@@ -157,7 +158,7 @@ def main():
                 row["game_id"], row["home_team"], row["away_team"],
                 int(row["season"]), int(row["week"]),
                 float(row["spread_line"]), float(row["total_line"]),
-                engine_commit,
+                engine_commit, str(GAMES_DIR),
             ))
 
     # Count already done
