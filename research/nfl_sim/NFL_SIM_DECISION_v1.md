@@ -437,3 +437,11 @@ A6: one-sided coherence enforced (cal_over + cal_under == 1 exactly).
 A7: board trust filter (rankable = Hard Rock price AND converged).
 All maps monotone. Synthetic identity test: max 0.015 < 0.02/decile.
 K4: in-sample only (no Hard Rock closing prices). Symmetry check fails as expected.
+
+### D57 — Real-price K4 from fit_5c2b (2026-09-18)
+72,850 legs graded against 6-book consensus closing (2023-24). Symmetry check
+(|sum - 2/total_imp + 2| < 2pp): 7/8 PASS; pass_yds FAIL at 2.7pp (matching
+bug). No family has positive flat-over ROI (consistent with D17). Synthetic
+-110 K4 deleted from calibration_v1.json. Reliability deciles relabelled as
+in-sample fit check (isotonic reproduces its own deciles by construction).
+OOS reference corrected: prospective 2026 only; 2025 consumed.

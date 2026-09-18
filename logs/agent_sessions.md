@@ -1076,3 +1076,44 @@
 - UNVERIFIED: K4 OOS edge (requires 2025 holdout scoring, gated by lock file).
   Prop families with <1000 obs (prop_rush_yds_WR n=886, prop_atd_QB n=1691)
   may be noisy in live use.
+
+## 2026-09-18T03:20Z  cowork (verification of Phase 5C-3, 415dbbc9..36ad8bba)
+- CONFIRMED: 22 isotonic families in calibration_v1.json with engine_commit/anchor block;
+  pricer one-sided (cal_over+cal_under==1 on DEN@KC); board trust filter; raked SGP only;
+  suite 116/3 with the same three engine reds; docs and D51-D56 present.
+- CLAIM-VS-FILE: "no Hard Rock closing prices in the archive" — the archive holds 178,479
+  (2023) + 161,859 (2024) NFL prop rows from six books (DK, FD, BetMGM, BetRivers, Caesars,
+  Unibet; no Hard Rock, which is fine — D17's K4 used exactly these and passed symmetry).
+  5C-3 item 3 instead graded the sim against a synthetic flat -110 integer ladder: per
+  Check 4 that is triage-only, and the +50-73% over+under figures are an artefact (a
+  calibrated model graded against a vig-free price at its own threshold). K4 NOT DONE.
+  D17 (-5.4pp receptions, no family positive at real closing prices) remains the last
+  real K4 and stands.
+- NOTE: "reliability max gap <= 0.015" is by construction — isotonic regression fitted
+  in-sample reproduces its own deciles. It is a fit check, not calibration evidence.
+- NOTE: report says the OOS test is "the 2025 holdout" — wrong per the standing decision
+  (2025 consumed; only prospective 2026 is OOS). Must be corrected in the report.
+- NOTE: A8 gives 205 changed TDs (unit: TD plays); 5C-1 reported 348 (unit: player-games);
+  "audit counted a single-season subset" is asserted, not shown. Units must be reconciled.
+- STATUS: maps + pricer + board are in service for tickets on the D16-style basis (roles,
+  correlation, price as filter) — not on any edge claim.
+
+## 2026-09-18T04:30Z  claude-code (Phase 5C-3b — real-price K4 + report corrections)
+- EDITED: nfl/sim/calibration_v1.json — synthetic -110 K4 table deleted; real-closing
+  K4 added (72,850 legs, 6-book consensus, 2023-24). Symmetry: 7/8 PASS, pass_yds
+  FAIL at 2.7pp (matching bug). No family positive flat-over ROI.
+- EDITED: research/nfl_sim/phase5c_calibration.md — (a) reliability deciles captioned
+  as in-sample fit check (isotonic reproduces by construction); (b) OOS corrected to
+  prospective 2026 only (2025 consumed per 2026-09-14 decision); (c) A8 reconciled:
+  205 TD plays / 407 player-games (5C-1's ~348 was undercount, not single-season).
+  Synthetic K4 table replaced with real-closing K4.
+- APPENDED: research/nfl_sim/NFL_SIM_DECISION_v1.md — D57 (real-price K4).
+- RAN: K4 pipeline: props archive 2023-24 (340k rows), names.py resolution (74k
+  exact_team), per-book closing before commence_time, consensus devig, graded against
+  fit_5c2b _players checkpoints. 415 games matched, 492 players.
+- RAN: A8 recount: 205 TD plays, 407 player-games (2x - duplicates). 5C-1's ~348
+  was an undercount by a different filter.
+- COMMITTED: e10e9f633 (item 1, real-closing K4), pending (item 2, report + D57).
+- NOT DONE: none.
+- UNVERIFIED: pass_yds symmetry gap (2.7pp) root cause — could be PBP sack yards
+  or garbage-time stat differences.
