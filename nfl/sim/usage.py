@@ -9,11 +9,15 @@ FORMULA (for each share column: target_share, carry_share, rz_target_share, gl_c
     touch_p  = decay-weighted sum of p's own touches over those same games
     obs      = touch_p / opp_p           (0 if opp_p = 0)
     n_eff    = opp_p                     (team opportunities, NOT player touches)
-    prior    = p's own s-1 share if >= 50 team opp while active in s-1;
-               else league mean share for (position, depth_order) from s-1
+    prior    = p's own s-1 aggregate share (opp-weighted across all depth
+               groups) if >= 50 team opp while active in s-1;
+               else league mean share for (position, depth_order) from s-1.
+               depth_order from new-schema snapshots with dt < week's first
+               kickoff only (D59). NaN depth → position-only league prior.
     shrunk   = (n_eff * obs + k_share * prior) / (n_eff + k_share)
-    blend    = (1-prior_weight)*shrunk + prior_weight*(prior_regression*prior
-               + (1-prior_regression)*league_mean_for_position_depth)
+    pw_eff   = prior_weight * k_share / (n_eff + k_share)   [decays with evidence]
+    blend    = (1 - pw_eff) * shrunk + pw_eff * (prior_regression * prior
+               + (1 - prior_regression) * league_mean_for_position_depth)
   Then renormalise each share within (season, week, team) to sum to 1.
   Decay weight per game = 0.5**((w-1-game_week)/share_half_life).
 
@@ -390,19 +394,53 @@ def build_active_universe(rosters, injuries, depth):
             old[["season", "week", "team", "player_id", "depth_order"]],
             on=["season", "week", "team", "player_id"], how="left")
 
-    # New schema (2025+): has pos_rank, team, gsis_id, pos_abb
+    # New schema (2025+): has pos_rank, team, gsis_id, pos_abb, dt.
+    # D59: only use snapshots with dt strictly before the week's first kickoff
+    # to prevent future depth-chart data from leaking into historical seasons.
     if "pos_rank" in depth.columns and "gsis_id" in depth.columns:
         pos_filter = depth["pos_abb"].isin(["QB", "RB", "WR", "TE"]) if "pos_abb" in depth.columns else pd.Series(True, index=depth.index)
-        new = depth[pos_filter].copy()
-        new["_depth"] = pd.to_numeric(new["pos_rank"], errors="coerce")
-        new = new.groupby(["team", "gsis_id"], observed=True)["_depth"].min().reset_index()
-        new = new.rename(columns={"gsis_id": "player_id", "_depth": "new_depth"})
-        base = base.merge(new[["team", "player_id", "new_depth"]],
-                          on=["team", "player_id"], how="left")
-        # Fill NaN depth_order from new schema
-        fill_mask = base["depth_order"].isna() & base["new_depth"].notna()
-        base.loc[fill_mask, "depth_order"] = base.loc[fill_mask, "new_depth"]
-        base = base.drop(columns="new_depth")
+        new_all = depth[pos_filter].copy()
+        new_all["_depth"] = pd.to_numeric(new_all["pos_rank"], errors="coerce")
+        new_all["_dt"] = pd.to_datetime(new_all["dt"], errors="coerce", utc=True)
+
+        # Build first-kickoff lookup from PBP game_date
+        kickoff_by_sw = {}
+        for s in base["season"].unique():
+            pbp_path = PBP_DIR / f"pbp_{int(s)}.parquet"
+            if not pbp_path.exists():
+                continue
+            gdf = pd.read_parquet(pbp_path, columns=["season", "week", "game_date"]).drop_duplicates(["season", "week", "game_date"])
+            gdf["game_date"] = pd.to_datetime(gdf["game_date"], errors="coerce", utc=True)
+            for w in gdf["week"].unique():
+                wg = gdf[gdf["week"] == w]
+                kickoff_by_sw[(int(s), int(w))] = wg["game_date"].min()
+
+        # Per (season, week): take the latest snapshot per (team, player_id)
+        # with dt strictly before the first kickoff of that week.
+        new_depths = []
+        for (s, w), grp in base.groupby(["season", "week"]):
+            kickoff = kickoff_by_sw.get((int(s), int(w)))
+            if kickoff is None or pd.isna(kickoff):
+                continue  # no PBP → no new-schema depth
+            eligible = new_all[new_all["_dt"] < kickoff]
+            if eligible.empty:
+                continue
+            # Latest snapshot per (team, player_id), take min pos_rank
+            latest = (eligible.sort_values("_dt", ascending=False)
+                      .drop_duplicates(["team", "gsis_id"], keep="first"))
+            chunk = latest[["team", "gsis_id", "_depth"]].copy()
+            chunk = chunk.rename(columns={"gsis_id": "player_id", "_depth": "new_depth"})
+            chunk["season"] = s
+            chunk["week"] = w
+            new_depths.append(chunk)
+
+        if new_depths:
+            nd = pd.concat(new_depths, ignore_index=True)
+            base = base.merge(nd, on=["season", "week", "team", "player_id"], how="left")
+            fill_mask = base["depth_order"].isna() & base["new_depth"].notna()
+            base.loc[fill_mask, "depth_order"] = base.loc[fill_mask, "new_depth"]
+            base = base.drop(columns="new_depth")
+        # Rows with no eligible snapshot keep depth_order NaN → position-only prior
 
     # Carry forward last available week per season (for 2026 wk2+)
     extras = []
@@ -695,9 +733,15 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
             roster_pids = roster_pids[roster_pids["position"].isin(SKILL_POS)]
             roster_pids = roster_pids[roster_pids["player_id"].isin(act_roster_pids)]
 
+            # D60: Key on (player_id, team) not player_id alone.
+            # A traded player with old-team PBP history still gets a
+            # new-team row on his first week with the new team.
             if not merged.empty:
-                existing = set(merged["player_id"].unique())
-                new_roster = roster_pids[~roster_pids["player_id"].isin(existing)]
+                existing_tp = set(zip(merged["player_id"], merged["team"]))
+                new_roster = roster_pids[
+                    ~roster_pids.apply(
+                        lambda r: (r["player_id"], r["team"]) in existing_tp,
+                        axis=1)]
             else:
                 new_roster = roster_pids
 
@@ -757,13 +801,29 @@ def build_player_usage(rec, team_tgt, car, team_car, pos_map, rate_priors, param
             for c in ["dg_tgt", "dg_rz", "dg_car", "dg_gl"]:
                 merged[c] = merged[c].fillna(1/15 if "tgt" in c or "rz" in c else 1/10)
 
-            # Player's own s-1 prior (if >= 50 opp)
+            # D61: Player's own s-1 aggregate prior (across all depth groups).
+            # If player was on multiple teams, take the one with the most opp.
             if not pss.empty:
-                p_prev = pss[["player_id", "opp_tgt", "opp_car",
-                               "tgt_share", "car_share", "rz_tgt_share", "gl_car_share"]].copy()
-                # Dedup: if player was on multiple teams in s-1, take the one with more opp
-                p_prev["_total_opp"] = p_prev["opp_tgt"].fillna(0) + p_prev["opp_car"].fillna(0)
-                p_prev = p_prev.sort_values("_total_opp", ascending=False).drop_duplicates("player_id").drop(columns="_total_opp")
+                # Aggregate across depth groups: opp-weighted mean share
+                _p = pss.copy()
+                _p["_w_tgt"] = _p["tgt_share"] * _p["opp_tgt"]
+                _p["_w_car"] = _p["car_share"] * _p["opp_car"]
+                _p["_w_rz"] = _p["rz_tgt_share"] * _p["opp_tgt"]
+                _p["_w_gl"] = _p["gl_car_share"] * _p["opp_car"]
+                p_agg = _p.groupby(["player_id", "team"]).agg(
+                    opp_tgt=("opp_tgt", "sum"), opp_car=("opp_car", "sum"),
+                    _w_tgt=("_w_tgt", "sum"), _w_car=("_w_car", "sum"),
+                    _w_rz=("_w_rz", "sum"), _w_gl=("_w_gl", "sum"),
+                ).reset_index()
+                p_agg["tgt_share"] = np.where(p_agg["opp_tgt"] > 0, p_agg["_w_tgt"] / p_agg["opp_tgt"], 0.0)
+                p_agg["car_share"] = np.where(p_agg["opp_car"] > 0, p_agg["_w_car"] / p_agg["opp_car"], 0.0)
+                p_agg["rz_tgt_share"] = np.where(p_agg["opp_tgt"] > 0, p_agg["_w_rz"] / p_agg["opp_tgt"], 0.0)
+                p_agg["gl_car_share"] = np.where(p_agg["opp_car"] > 0, p_agg["_w_gl"] / p_agg["opp_car"], 0.0)
+                # Dedup across teams: keep the one with the most total opp
+                p_agg["_total_opp"] = p_agg["opp_tgt"] + p_agg["opp_car"]
+                p_prev = (p_agg.sort_values("_total_opp", ascending=False)
+                          .drop_duplicates("player_id")
+                          .drop(columns=["_total_opp", "_w_tgt", "_w_car", "_w_rz", "_w_gl", "team"]))
                 p_prev = p_prev.rename(columns={
                     "tgt_share": "p_tgt", "car_share": "p_car",
                     "rz_tgt_share": "p_rz", "gl_car_share": "p_gl",
