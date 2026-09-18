@@ -39,25 +39,56 @@ TIER_WATCH = {"rush_attempts_RB"}
 
 
 def detect_week(override=None):
+    """D68: detect current week from schedule (not PBP alone).
+
+    Uses the nflverse schedule which lists ALL games including unplayed.
+    A game is complete if it appears in PBP with a final state (any row
+    exists for that game_id), not a score threshold. This prevents:
+    - advancing past a week once TNF is in PBP but Sunday games are not
+    - treating a shutout (home_score==0) as incomplete
+    """
     if override is not None:
         print(f"Week override: {override}")
         return override, pd.DataFrame(), set()
+
+    # Load schedule from nflverse
+    try:
+        import nflreadpy
+        sched = nflreadpy.load_schedules([SEASON]).to_pandas()
+    except Exception:
+        sched = pd.DataFrame()
+
+    # Load PBP for completion check
     pbp_path = ROOT / "nfl" / "data" / "pbp" / f"pbp_{SEASON}.parquet"
-    if not pbp_path.exists():
-        raise FileNotFoundError(f"No PBP for {SEASON}. Run pull_pbp.py first.")
-    df = pd.read_parquet(pbp_path, columns=["game_id", "season", "week",
-                                             "home_team", "away_team",
-                                             "home_score", "away_score"])
-    games = df.drop_duplicates("game_id")
-    completed = set(games[games["home_score"].notna() & (games["home_score"] > 0)]["game_id"])
-    for w in sorted(games["week"].unique()):
-        wk = games[games["week"] == w]
-        incomplete = wk[~wk["game_id"].isin(completed)]
+    pbp_game_ids = set()
+    if pbp_path.exists():
+        pbp = pd.read_parquet(pbp_path, columns=["game_id"])
+        pbp_game_ids = set(pbp["game_id"].unique())
+
+    if sched.empty:
+        # Fallback to PBP-only if schedule unavailable
+        if not pbp_path.exists():
+            raise FileNotFoundError(f"No PBP or schedule for {SEASON}")
+        df = pd.read_parquet(pbp_path, columns=["game_id", "season", "week",
+                                                 "home_team", "away_team"])
+        games = df.drop_duplicates("game_id")
+        for w in sorted(games["week"].unique()):
+            wk = games[games["week"] == w]
+            incomplete = wk[~wk["game_id"].isin(pbp_game_ids)]
+            if len(incomplete) > 0:
+                return w, wk, pbp_game_ids
+        return int(games["week"].max()) + 1, pd.DataFrame(), pbp_game_ids
+
+    # Use schedule: find first week with incomplete games
+    sched = sched[sched["game_type"] == "REG"].copy()
+    for w in sorted(sched["week"].unique()):
+        wk_sched = sched[sched["week"] == w]
+        # A game is complete if its game_id appears in PBP
+        wk_gids = set(wk_sched["game_id"]) if "game_id" in wk_sched.columns else set()
+        incomplete = wk_gids - pbp_game_ids
         if len(incomplete) > 0:
-            return w, wk, completed
-    next_w = int(games["week"].max()) + 1
-    next_games = games[games["week"] == next_w]
-    return next_w, next_games, completed
+            return int(w), wk_sched, pbp_game_ids
+    return int(sched["week"].max()) + 1, pd.DataFrame(), pbp_game_ids
 
 
 def get_week_teams_from_schedule(season, week):
@@ -226,31 +257,52 @@ def run_chunked_game(home, away, season, week, spread, total, n_sims,
 
 
 def load_props_for_game(home_full, away_full, season, week):
-    """Load Hard Rock props for a game from the archive.
+    """D69: Load Hard Rock props, selecting by snapshot_tag precedence.
 
-    Returns DataFrame with columns: player_name, market_key, line,
-    over_price, under_price, implied_over, implied_under, pull_batch,
-    pull_timestamp.
+    Tag precedence: close > mid > open. Within a tag, latest pull_timestamp
+    wins. Returns (DataFrame, chosen_tag, chosen_timestamp). Raises on
+    unknown snapshot_tag rather than falling through.
     """
+    _TAG_PRECEDENCE = {"close": 3, "mid": 2, "open": 1}
+
     props_dir = ROOT / "data" / "odds_archive" / "nfl" / "props" / f"season={season}"
     if not props_dir.exists():
-        return pd.DataFrame()
+        return pd.DataFrame(), None, None
     frames = []
     for root, dirs, files in os.walk(props_dir):
         for f in files:
             if f.endswith('.parquet'):
-                frames.append(pd.read_parquet(os.path.join(root, f)))
+                try:
+                    frames.append(pd.read_parquet(os.path.join(root, f)))
+                except Exception:
+                    pass
     if not frames:
-        return pd.DataFrame()
+        return pd.DataFrame(), None, None
     df = pd.concat(frames, ignore_index=True)
-    # Filter to this game
-    game_df = df[((df["home_team"] == home_full) & (df["away_team"] == away_full))]
+    game_df = df[(df["home_team"] == home_full) & (df["away_team"] == away_full)]
     if game_df.empty:
-        return pd.DataFrame()
-    # Use latest pull_batch
+        return pd.DataFrame(), None, None
+
+    # D69: select by snapshot_tag precedence
+    if "snapshot_tag" in game_df.columns and game_df["snapshot_tag"].notna().any():
+        # Validate tags
+        known_tags = game_df["snapshot_tag"].dropna().unique()
+        for tag in known_tags:
+            if tag not in _TAG_PRECEDENCE:
+                raise ValueError(f"Unknown snapshot_tag '{tag}' in props archive")
+        # Pick highest-precedence tag present
+        best_tag = max(known_tags, key=lambda t: _TAG_PRECEDENCE[t])
+        game_df = game_df[game_df["snapshot_tag"] == best_tag]
+        # Within that tag, latest pull_timestamp
+        game_df = game_df.sort_values("pull_timestamp", ascending=False)
+        chosen_ts = game_df["pull_timestamp"].iloc[0] if len(game_df) > 0 else None
+        return game_df, best_tag, chosen_ts
+
+    # Fallback: no snapshot_tag column (old data) — use latest pull_batch
     latest_batch = sorted(game_df["pull_batch"].unique())[-1]
     game_df = game_df[game_df["pull_batch"] == latest_batch]
-    return game_df
+    chosen_ts = game_df["pull_timestamp"].iloc[0] if len(game_df) > 0 else None
+    return game_df, None, chosen_ts
 
 
 def build_board(week, game_results, lines_used, team_game_counts, roster,
@@ -319,13 +371,13 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
         board_lines.append(f"Anchored: margin {margin.mean():.1f} / total {total_arr.mean():.1f}")
         board_lines.append("")
 
-        # Load props for this game
-        props = load_props_for_game(home_full, away_full, SEASON, week)
+        # D69: Load props with tag precedence
+        props, props_tag, props_chosen_ts = load_props_for_game(home_full, away_full, SEASON, week)
         props_pull_batch = None
         props_pull_ts = None
         if len(props) > 0:
             props_pull_batch = props["pull_batch"].iloc[0]
-            props_pull_ts = str(props["pull_timestamp"].iloc[0])
+            props_pull_ts = str(props_chosen_ts) if props_chosen_ts else str(props["pull_timestamp"].iloc[0])
 
         # Resolve props to player_ids
         by_team, by_fi, by_league = roster_lookups

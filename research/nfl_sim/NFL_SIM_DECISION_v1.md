@@ -551,3 +551,17 @@ SD: 8.6/8.2/6.5/7.5/9.6. 2024 was 5 yards wrong (table said 75, actual 70).
 touchback_rate is computed by the builder and never read by the engine;
 left in place but noted here.
 fit_5d1 used the wrong 2024 value (75 instead of 70); a re-fit is required.
+
+### D68 — detect_week from schedule, not PBP alone (2026-09-18)
+detect_week uses the nflverse schedule (all games, including unplayed) to find
+the first week with incomplete games. A game is complete if its game_id appears
+in PBP (any row exists), not a score threshold — a shutout (home_score==0) is
+no longer misread as incomplete. Prevents advancing past a week once TNF is in
+PBP but Sunday games are not. --week override behavior unchanged.
+
+### D69 — Props snapshot selection by tag precedence (2026-09-18)
+load_props_for_game selects by snapshot_tag: close > mid > open (highest
+precedence tag PRESENT for that game). Within a tag, latest pull_timestamp wins.
+Returns (DataFrame, chosen_tag, chosen_timestamp). Raises ValueError on an
+unknown tag rather than falling through. Tag vocabulary: open, mid, close per
+pull_hardrock_props.py.
