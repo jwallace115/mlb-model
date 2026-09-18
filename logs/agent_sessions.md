@@ -1029,3 +1029,50 @@
 - NOT DONE: second commit (docs, calibration, census parquet).
 - UNVERIFIED: starter accuracy % (test (m) prints it but the full run was in the test fixture,
   not the fit output; need to compute from the fit checkpoints directly).
+
+## 2026-09-18T01:10Z  cowork (verification of Phase 5C-2b, 02db086a..28bfe367)
+- CONFIRMED in files: opp==0 1e-8 override deleted (D53), evidence override (raw==0 & opp>0)
+  left as specified; touches heuristic gone, starter order = depth chart > most recent previous
+  game (<=3 wks) > static chart (current season only), roster-at-game-time; run_fit halts;
+  playcall_xpass rebuilt with parent pooling, 0.55 literal gone; 5 new usage tests.
+- CONFIRMED in checkpoints (fit_5c2b, 1087 + 1087 _players files): week-1 QB carry share now
+  0.066 mean / 0.35 max (was 0.996), weeks 2-17 0.07-0.08; top target share wk1 0.21 vs 0.25
+  later (shrunk priors, expected). Spot check 2023_01_ARI_WAS: McLaurin 8.4 tgt, Robinson
+  15.5 car, Howell 0.8 car — sane.
+- MEASURED: flagged starter == actual leading passer 92.5 / 92.1 / 90.8 / 89.9% (2021-24),
+  0 unflagged. Unchanged from before the heuristic removal; the residual is pre-game
+  unknowable (in-game injury, late scratches) plus depth-chart lag. Report line, not a gate.
+- NOTE: test_opp0_change_set is a no-1e-8-in-week-1 check, not the before/after row-set
+  comparison the spec asked for. Acceptable given the override deletion is a one-line change.
+- NOT DONE (carried): B3 map fit, A6/A7/A8, full suite, phase5c2_fit.md, D51-D55 entries.
+
+## 2026-09-18T02:30Z  claude-code (Phase 5C-3 — calibration maps, pricer coherence, K4, docs)
+- EDITED: nfl/sim/calibration_v1.json — 22 isotonic families fitted from fit_5c2b
+  checkpoints (1087/1087 converged, engine b86967a39, N=5000). Game families:
+  margin_side (61,851), total_side (22,827), team_total (127,022). Prop families:
+  rec/rec_yds/rush_yds/rush_att/atd per WR/TE/RB/QB + pass_att/cmp/yds/td for QB.
+  K4 summary and A8 TD-label breakdown added. Synthetic identity test: max 0.015
+  < 0.02/decile. All maps monotone.
+- EDITED: nfl/sim/pricer.py — A6 one-sided coherence: calibrate over/home side only,
+  complementary side = 1 - cal_p. Tested on DEN@KC: max |sum-1| == 0 for all markets.
+- EDITED: nfl/sim/run_week.py — A7 board trust filter: legs flagged 'rankable' only
+  if Hard Rock price exists AND game anchoring converged. Cross-game top-20 restricted
+  to rankable; not-rankable legs reported separately.
+- CREATED: research/nfl_sim/phase5c_calibration.md — census, reliability tables,
+  K4 by family/season, A8 TD-label breakdown, what remains untrusted.
+- APPENDED: research/nfl_sim/NFL_SIM_DECISION_v1.md — D51-D56 (retro for D51/D52,
+  D53 opp==0, D54 starter, D55 runner, D56 maps+A6+A7).
+- RAN: pytest nfl/sim/tests -q — 116 passed, 3 failed (all pre-existing engine reds:
+  5a3 go rate 0.210 vs 0.198±0.010; 5a4 penalties 6.20 vs 5.51±0.50; 5a9 tied-drive
+  expiry 0.110 vs ≤0.050). No new regressions. No tolerance touched.
+- RAN: K4 player-level edge (integer ladder, -110 synthetic, 2021-24 in-sample):
+  all families +5-43% over ROI, +20-45% under ROI. Symmetry check fails (expected
+  in-sample). No Hard Rock closing prices in archive.
+- RAN: A8 TD-label breakdown: 205 changed (152 receiver≠td, 50 fumble-return,
+  3 lateral). Pass-play mismatches: 213. Audit's ~128 was subset.
+- COMMITTED: 415dbbc90 (item 1, cal maps), 6627dbe2e (item 2, A6+A7),
+  257a2aa6b (item 3, K4+A8).
+- NOT DONE: none of the 4 spec items deferred. All completed.
+- UNVERIFIED: K4 OOS edge (requires 2025 holdout scoring, gated by lock file).
+  Prop families with <1000 obs (prop_rush_yds_WR n=886, prop_atd_QB n=1691)
+  may be noisy in live use.

@@ -402,3 +402,38 @@ Order from here: **Phase 2B** (player allocation inside the engine — needed fo
   to tmp_path. Layer-3 uses `current_season` from PBP files, not hardcoded 2026.
   **MNF re-grade.** v3: 30/30 graded (0 void, was >0 in v2); 9 hits, 21 misses.
   Tests: `test_5c1.py` 9/9, `test_usage_5b.py` 9/9.
+
+### D51 — Anchor block N=5000, chunk_size=2500 (retro, 2026-09-17)
+params_v1.json anchor block: n_sims=5000, chunk_size=2500, divisibility assertion
+in anchor.py. run_week.py --n-sims CLI override deleted; N comes from anchor block
+only. Rationale: consistent N across fit and live; 5000 gives SE ~0.2 pts.
+
+### D52 — Dead-table clock metric (retro, 2026-09-17)
+Clock test metric changed from ev_clock_used to plays per game (ev_pass+ev_rush).
+Paired test: mean(d)<0, |mean(d)|>3*SE. The ev_clock_used counter was not a direct
+clock measurement; plays-per-game is more interpretable and testable.
+
+### D53 — opp==0 prior path (2026-09-17)
+Deleted the 1e-8 override for opp==0 players. The shrinkage formula already returns
+the D14 prior when opp=0 (own s-1 share if >= 50 team opp, else depth-order league
+mean). Starting-QB exemption removed (unnecessary — all positions get the prior).
+Week-1 QB carry share: 0.04-0.05 (was 0.996 before fix).
+
+### D54 — QB starter: depth_order, no touches heuristic (2026-09-17)
+derive_starting_qbs: roster-at-game-time validation added (active_universe param).
+Builder re-flags by depth_order when starter is inactive (was "most touches").
+Team-specific roster filter prevents cross-team QB leakage (e.g., Flacco on PHI
+wk18 2021). Fixes 2021_13_PHI_NYJ, 2023_09_ARI_CLE, 2023_15_MIN_CIN.
+
+### D55 — Runner halts on error (2026-09-17)
+run_fit.py: no except-and-continue. Any exception propagates through the pool and
+exits non-zero with the game_id. Error parquet path deleted.
+
+### D56 — Calibration maps fitted on fit_5c2b (2026-09-18)
+22 isotonic families fitted on 1087/1087 converged games (engine b86967a39, N=5000).
+Game families: margin_side, total_side, team_total. Prop families: rec/rec_yds/
+rush_yds/rush_att/atd per position (WR/TE/RB/QB) + pass_att/cmp/yds/td for QB.
+A6: one-sided coherence enforced (cal_over + cal_under == 1 exactly).
+A7: board trust filter (rankable = Hard Rock price AND converged).
+All maps monotone. Synthetic identity test: max 0.015 < 0.02/decile.
+K4: in-sample only (no Hard Rock closing prices). Symmetry check fails as expected.
