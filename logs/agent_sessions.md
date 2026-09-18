@@ -1576,3 +1576,30 @@
 - STILL OPEN: test_starting_qb_identity_2026 can never go green (usage carry-forward invents
   week max_w+1); three real engine calibration reds; the 5D-1 PIT test was never written; the
   dt distribution in the depth source has never been inspected; season 2020 undeclared.
+
+## 2026-09-18T22:13Z  cowork (autostash conflict resolved; 25 files of committed conflict markers found)
+- The `git sync` after fb6800b19 pushed fine but reported "Applying autostash resulted in
+  conflicts". Working tree was left with shared/last_updated.json UNMERGED (UU) and
+  data/line_movement.csv STAGED WITH CONFLICT MARKERS IN IT. The 30-min `git add -A`
+  auto-committer would have committed both.
+- RESOLVED both by keeping the STASHED side, which was correct in both cases:
+  - data/line_movement.csv row 289 (game 823727 MIN@DET, 2026-04-07): upstream had
+    `6.5/8.48/1.98` absent — open_total 7.0 with close_total, close_timestamp, line_move and
+    final_model_edge all EMPTY, i.e. a half-written row. The stashed side is the complete,
+    internally consistent row (6.5 open / 6.5 close / move 0.0 / edge 1.61) matching its
+    neighbours. line_movement.csv is a HISTORICAL ARCHIVE back to April, not a nightly rewrite,
+    so taking upstream would have permanently lost that game's close data.
+  - shared/last_updated.json: stashed side had the newer nhl/soccer timestamps (21:22 vs 21:14
+    and 14:00). Verified the result parses as JSON.
+- FINDING, five months old and still live: 25 files under soccer/data/cache/daily/ contain
+  COMMITTED conflict markers — `<<<<<<< HEAD` / `>>>>>>> 98132240 (auto: NBA pipeline run)`.
+  Committed by f9cc5b5f9 "auto: NBA pipeline run" on 2026-04-11 19:17:50. ALL 25 FAIL TO PARSE
+  AS JSON (0 of 25 load). Every one is dated 2026-04-11, so a single conflicted tree was swept
+  by `git add -A` in one commit. soccer/data/cache/daily/ is NOT gitignored.
+- ROOT CAUSE is the same mechanism both times: an unresolved merge/stash conflict plus an
+  unattended `git add -A`. It happened in April, it was about to happen again tonight. The
+  auto-committer should refuse to commit when `git ls-files -u` is non-empty, or the cache dir
+  should be gitignored, or both.
+- NOT DONE: the 25 broken files are still in the tree; the bridge VM cannot delete files.
+  They are a daily cache for one date five months ago, so almost certainly unread — but any
+  backfill or replay of 2026-04-11 will crash on them.
