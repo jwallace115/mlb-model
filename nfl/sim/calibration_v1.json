@@ -8991,42 +8991,6 @@
       "n": 2465
     }
   },
-  "k4_summary": {
-    "description": "K4 in-sample ROI at -110 synthetic, integer ladder, 2021-24",
-    "families": {
-      "atd": {
-        "n": 12313,
-        "over_roi_pct": 5.8,
-        "under_roi_pct": 44.1
-      },
-      "receptions": {
-        "n": 23773,
-        "over_roi_pct": 31.8,
-        "under_roi_pct": 37.8
-      },
-      "rec_yds": {
-        "n": 32936,
-        "over_roi_pct": 30.3,
-        "under_roi_pct": 41.7
-      },
-      "rush_yds": {
-        "n": 12184,
-        "over_roi_pct": 28.6,
-        "under_roi_pct": 44.6
-      },
-      "pass_att": {
-        "n": 8684,
-        "over_roi_pct": 43.1,
-        "under_roi_pct": 20.5
-      },
-      "pass_yds": {
-        "n": 6217,
-        "over_roi_pct": 26.7,
-        "under_roi_pct": 36.7
-      }
-    },
-    "symmetry_note": "over+under >> -2*vig on all families: expected in-sample, no real closing prices"
-  },
   "a8_td_labels": {
     "total_tds_2021_24": 5722,
     "changed_by_td_player_id": 205,
@@ -9037,5 +9001,86 @@
     },
     "pass_play_mismatches": 213,
     "reconciliation": "audit ~128 was pass-play subset; full 4-season = 213"
+  },
+  "k4_real_closing": {
+    "description": "K4 at archived real closing prices, 2023-24 (6 books, consensus devig, no Hard Rock)",
+    "vig_formula": "vig = 1 - 1/total_implied; expected_sum = 2/total_implied - 2",
+    "symmetry_spec": "|sum - expected| < 2pp for n>=500",
+    "by_family": {
+      "receptions": {
+        "n": 11135,
+        "flat_over_pct": -9.8,
+        "flat_under_pct": -2.6,
+        "sum_pct": -12.5,
+        "expect_pct": -12.8,
+        "sym_err_pp": 0.3,
+        "sym_pass": true
+      },
+      "rec_yds": {
+        "n": 32475,
+        "flat_over_pct": -7.5,
+        "flat_under_pct": -5.2,
+        "sum_pct": -12.7,
+        "expect_pct": -13.1,
+        "sym_err_pp": 0.4,
+        "sym_pass": true
+      },
+      "rush_yds": {
+        "n": 13684,
+        "flat_over_pct": -9.3,
+        "flat_under_pct": -2.7,
+        "sum_pct": -12.0,
+        "expect_pct": -13.2,
+        "sym_err_pp": 1.2,
+        "sym_pass": true
+      },
+      "rush_att": {
+        "n": 2365,
+        "flat_over_pct": -17.7,
+        "flat_under_pct": 4.5,
+        "sum_pct": -13.2,
+        "expect_pct": -12.7,
+        "sym_err_pp": 0.4,
+        "sym_pass": true
+      },
+      "pass_yds": {
+        "n": 8212,
+        "flat_over_pct": -5.1,
+        "flat_under_pct": -5.3,
+        "sum_pct": -10.4,
+        "expect_pct": -13.1,
+        "sym_err_pp": 2.7,
+        "sym_pass": false,
+        "note": "matching bug: 2.7pp symmetry gap"
+      },
+      "pass_att": {
+        "n": 1431,
+        "flat_over_pct": -11.2,
+        "flat_under_pct": -1.4,
+        "sum_pct": -12.6,
+        "expect_pct": -12.6,
+        "sym_err_pp": 0.0,
+        "sym_pass": true
+      },
+      "pass_cmp": {
+        "n": 1710,
+        "flat_over_pct": -5.0,
+        "flat_under_pct": -6.5,
+        "sum_pct": -11.5,
+        "expect_pct": -12.8,
+        "sym_err_pp": 1.3,
+        "sym_pass": true
+      },
+      "pass_td": {
+        "n": 1838,
+        "flat_over_pct": -8.0,
+        "flat_under_pct": -5.9,
+        "sum_pct": -13.9,
+        "expect_pct": -13.0,
+        "sym_err_pp": 0.9,
+        "sym_pass": true
+      }
+    },
+    "d17_comparison": "receptions flat-over -9.8% (D17: -5.4pp). No family positive (consistent with D17). Model-filtered: rec_yds over -0.4%, rec_yds under -2.2%."
   }
 }
