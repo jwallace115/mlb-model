@@ -663,3 +663,9 @@ Engine: D66 OT rules + D67 measured kickoff (2024=70, 2025=69).
 1087/1087 converged, 0% unconverged, mean 3.0 iter, |err_m| 0.156,
 |err_t| 0.135. Wall clock ~90 min (8 workers), mean 39.9s/game.
 engine_commit: 7f5a808c5. Comparable to fit_5d1 (95 min, mean 3.0 iter).
+
+### D76 — Maps from fit_5d2, gate green, K4 re-run (2026-09-18)
+run_cal_maps.py --fit-dir fit_5d2 → calibration_v1.json via save_calibration.
+21 families fitted. D72 gate GREEN (engine_fingerprint and usage_file_sha256
+both match). K4 at real closing: all cells identical to fit_5d1 (post-D62)
+within 0.1%. No positive blind side. Null control (2023 hits unchanged): PASS.
