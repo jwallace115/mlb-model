@@ -48,10 +48,14 @@ def actual_player_game_stats(game_pbp):
     else:
         rec_stats = pd.DataFrame(columns=["player_id", "actual_rec", "actual_rec_yds"])
 
-    # --- Rushing ---
+    # --- Rushing (D62: official definitions) ---
+    # Attempt universe: play_type in {run, qb_kneel}, rusher_player_id not null,
+    # two_point_attempt != 1. Kneels carry negative yardage — keep it.
+    _two_pt = game_pbp.get("two_point_attempt", pd.Series(0, index=game_pbp.index))
     rushes = game_pbp[
-        (game_pbp["play_type"] == "run")
+        game_pbp["play_type"].isin({"run", "qb_kneel"})
         & game_pbp["rusher_player_id"].notna()
+        & (_two_pt != 1)
     ]
     if len(rushes) > 0:
         rush_stats = rushes.groupby("rusher_player_id").agg(
@@ -78,9 +82,17 @@ def actual_player_game_stats(game_pbp):
         "actual_atd": 1,
     }) if len(td_pids) > 0 else pd.DataFrame(columns=["player_id", "actual_atd"])
 
-    # --- Passing ---
-    if len(passes) > 0 and "passer_player_id" in passes.columns:
-        passer_passes = passes[passes["passer_player_id"].notna()]
+    # --- Passing (D62: official definitions) ---
+    # Attempt universe: play_type in {pass, qb_spike}, down not null (excludes
+    # two-point), sack != 1, passer_player_id not null.
+    # Spikes are attempts with 0 yards and no completion.
+    pass_universe = game_pbp[
+        game_pbp["play_type"].isin({"pass", "qb_spike"})
+        & game_pbp["down"].notna()
+        & (game_pbp.get("sack", pd.Series(0, index=game_pbp.index)) != 1)
+    ]
+    if len(pass_universe) > 0 and "passer_player_id" in pass_universe.columns:
+        passer_passes = pass_universe[pass_universe["passer_player_id"].notna()]
         if len(passer_passes) > 0:
             pass_stats = passer_passes.groupby("passer_player_id").agg(
                 actual_completions=("complete_pass", "sum"),
