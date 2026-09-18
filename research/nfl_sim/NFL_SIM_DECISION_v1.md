@@ -644,3 +644,15 @@ one-line edit. --out-dir is now required (no default). Refuses to write into
 a directory with existing fit_census.parquet unless --force. GAMES_DIR
 derived from --out-dir. Example:
   python3 nfl/sim/run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5d2
+
+### D74 — run_cal_maps.py: map generator from fit checkpoints (2026-09-18)
+nfl/sim/run_cal_maps.py reads fit_<dir>/games/*.parquet, fits isotonic maps,
+and writes calibration_v1.json via save_calibration (the D72 stamp writer).
+Faithfulness against fit_5d1 with --legacy-actuals: 20/21 families reproduce
+to 0.0 y_diff. The one mismatch (prop_rush_att_QB) is a precedence bug in the
+original inline script: `int(val.iloc[0] if len(x) else 0 >= k)` returns the
+raw carry count instead of a boolean, producing a map clipped to y=0.99 across
+the domain. The generator's `int(actual_ra >= k)` is correct.
+reliability_deciles.parquet exists in fit_5c2b, is missing from fit_5d1, and
+has no writer in any .py file. It is UNOWNED — add it to a future generator
+revision or delete the fit_5c2b copy.
