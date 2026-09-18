@@ -1262,3 +1262,42 @@
 - NOT DONE: ten most-changed player-weeks before/after delta table (row-level comparison
   requires loading both fit_5c2b and fit_5d1 checkpoints side-by-side).
 - UNVERIFIED: pass_yds symmetry gap root cause (2.7pp, unchanged from fit_5c2b).
+
+## 2026-09-18T14:35Z  cowork (verification of 5D-1 item 4, commit 678cea69c)
+- 678cea69c is on origin/main. Touched: logs, fit_5d1/fit_census.parquet, calibration_v1.json,
+  run_fit.py, NFL_SIM_DECISION_v1.md (+18), k4_rows_fit_5d1.parquet, phase5d1_usage_provenance.md.
+- CONFIRMED: D59/D60/D61 are now in the decision doc (was D58). calibration_v1.json carries
+  engine_commit 85f1cb455, usage_file_sha256 12c89a3528c567d5, fit_dir fit_5d1, fit_n_games
+  1087, unconverged_share 0.0. Census 1087/1087 converged. fit_5d1/games stayed OUT of git
+  (only fit_census.parquet committed) — the .gitignore line held.
+- CONFIRMED BY RECOMPUTATION: the K4 table reproduces EXACTLY from the committed row-level
+  parquet under raw_side = devig_side*(1+2*vig), two-way overround ~1.069 (~-115/-115). Every
+  cell to 0.1pp. A first reading of `vig` as the full overround did NOT reproduce it and was
+  wrong. No pushes to mishandle: 72,893 of 72,897 lines are half-point.
+- FINDING, material: rush_att blind UNDER is +4.5% (N=2,364, t=+2.32) and PERSISTS both
+  seasons (2023 +3.9% N=1,103; 2024 +5.0% N=1,261). Only family with a positive blind side.
+  The write-up's "inside noise / no persistence" reasoning was applied to the model-filtered
+  cells only; this flat cell, printed in its own table, was never tested.
+- DIAGNOSIS: it is a grading artifact. QB rush_att under +18.2% ROI, 63.3% hit vs 50.1%
+  market (+13.2pp) on N=722; RB +2.5pp on N=1,637. Edge decays monotonically with line size
+  (<=5.5 +12.0pp -> 16-20.5 -0.1pp). Signature of KNEEL-DOWNS EXCLUDED from graded rushing
+  attempts — the defect ChatGPT audit #2 already named and 5D-3 is scheduled to fix. Same
+  fingerprint across families (under-hit minus no-vig implied): rush_att +5.84pp, pass_att
+  +2.67 (spikes excluded from pass att), receptions +1.74, rush_yds +1.56, continuous
+  families ~0. See research/nfl_sim/k4_fit5d1_actuals_contamination_2026-09-18.md.
+- CONSEQUENCE: K4 from fit_5d1 is NOT a deployment gate (Checks 3+4 — graded object is not on
+  official stat definitions). Re-run after 5D-3. Symmetry 6/8 is near-vacuous evidence: both
+  sides of one line sum to -(two-way margin) almost by construction.
+- NOT DONE despite "all 4 items completed": the 5D-1 PIT test was never written.
+  test_usage_5b.py::test_pit_byte_identity_2024_wk10 (mtime 09-17 21:12, predates 5D-1) passes
+  d["active"] UNTRUNCATED to both builds and documents the exemption — active universe is
+  where depth_order/active_flag/injury_status live, the exact class D59 repaired. "13/14 tests
+  pass" is the 5B suite re-run; nothing tests D59/D60/D61.
+- NOT DONE: "Before/after share deltas (10 most-changed player-weeks)" in
+  phase5d1_usage_provenance.md contains no deltas.
+- STILL UNVERIFIED: whether 2025/2026 depth_order is correct as opposed to leak-free (the dt
+  distribution in the depth source was never inspected). 2026 wk1 and wk2 both 14.3% NaN,
+  consistent with wk2 being the carry-forward copy. Season 2020 in the rebuild, undeclared.
+- NOT DONE (cosmetic): "Engine commit 85f1cb455" was stamped while run_fit.py was uncommitted;
+  the diff was OUT_DIR only, so the stamp is materially right but was not reproducible at
+  stamp time.
