@@ -1539,3 +1539,40 @@
 - UNVERIFIED: OT tie rate under D66 (the 5A-11 test was not re-run). The 2024
   scoring directional prediction (shorter fields → more scoring) is structurally
   correct but has no measurable K4 signal because the anchoring solver compensates.
+
+## 2026-09-18T22:07Z  cowork (verification of 5E re-fit, commits f1977ea83 / 7f5a808c5 / 5f75ad2e6 / 429889abb)
+- All four on origin. D73-D76 all in the decision doc, each inside its own item's commit —
+  second clean cycle on Rule 7.
+- GATE VERIFIED INDEPENDENTLY, not taken from the report: _check_calibration_stamp() returns
+  ok=True, [] . stamp engine_fingerprint d929ad258504b275 == live; usage_sha 12c89a3528c567d5
+  == live; fit_dir fit_5d2, 1087 games, unconverged 0.0, 21 families. The D72 gate is genuinely
+  green.
+- IDENTITY HELD in the K4 re-run: k4_rows_fit_5d1_official and k4_rows_fit_5d2 are in identical
+  row order; line, devig_over and the hit flags are unchanged in all 72,897 rows. Only sim_p and
+  cal_p moved, which is what should move.
+- FINDING 1 — a LIVE production defect, filed in D74 as a footnote. prop_rush_att_QB in the
+  shipped calibration_v1.json was y=0.9900 across its ENTIRE domain (n=1481, ONE distinct y
+  value, 100% at the clip ceiling). Every QB rushing-attempt leg was calibrated to 0.99
+  regardless of the sim. Confirmed in the K4 rows: all 722 QB rush_att legs have cal_p exactly
+  0.990, min = max. After the fix 0.189-0.812, 21 distinct values. This makes every
+  MODEL-FILTERED K4 conclusion for that family degenerate, including the "rush_att under +0.4%
+  (N=774)" cell in phase5d1_usage_provenance.md. Second independent defect on the same family
+  as the D62 kneel bug. No other family is degenerate (all 21 have >2 distinct y).
+  See research/nfl_sim/qb_rush_att_map_defect_2026-09-18.md.
+- FINDING 2 — the directional prediction DID leave a measurable signal and the report concluded
+  it did not. Positional comparison of the two K4 row files:
+      2023  mean|d sim_p| = 0.00130  (0.13pp)
+      2024  mean|d sim_p| = 0.01031  (1.03pp), max 0.0886
+      ratio 2024:2023 = 7.94x
+  The change lands almost entirely on 2024, which is exactly where the D67 kickoff fix applies
+  (2023 unchanged at 75, 2024 75->70). The report states "player prop sim_p ... moves by <0.2%"
+  and "no measurable K4 signal" — both wrong by an order of magnitude. The pre-registered
+  prediction is SUPPORTED by the session's own output.
+- FINDING 3 — the stated null control was vacuous. "Null control (2023 hits unchanged): PASS,
+  0 differences" checks hit_over/hit_under, which are graded from PBP actuals and CANNOT move
+  when the engine changes. Both seasons show 0 differences. The real null control is sim_p, and
+  it passes properly on the 7.94x ratio above. A control that cannot fail is not a control.
+- NOT DONE / UNOWNED: reliability_deciles.parquet still has no writer (recorded in D74).
+- STILL OPEN: test_starting_qb_identity_2026 can never go green (usage carry-forward invents
+  week max_w+1); three real engine calibration reds; the 5D-1 PIT test was never written; the
+  dt distribution in the depth source has never been inspected; season 2020 undeclared.
