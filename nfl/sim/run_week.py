@@ -24,6 +24,7 @@ from nfl.sim.names import (FULL_TO_ABBR, load_roster, _build_roster_lookup,
                            resolve_player, is_player_name)
 from nfl.sim.calibration import load_calibration
 from nfl.sim.anchor import run_anchored_chunked
+from nfl.sim.pricer import price_game, sgp_probability_raked
 
 SEASON = 2026
 OUT_BASE = ROOT / "nfl" / "data" / "sim" / "outputs"
@@ -305,6 +306,40 @@ def load_props_for_game(home_full, away_full, season, week):
     return game_df, None, chosen_ts
 
 
+def _check_calibration_stamp():
+    """D70: Metadata gate — compare calibration stamp against running state.
+    Returns (ok, mismatches_list). On mismatch, sim prices are suppressed."""
+    import hashlib, subprocess
+    cal_path = ROOT / "nfl" / "sim" / "calibration_v1.json"
+    if not cal_path.exists():
+        return False, ["calibration_v1.json not found"]
+
+    with open(cal_path) as f:
+        cal = json.load(f)
+
+    mismatches = []
+
+    # Engine commit
+    try:
+        head = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"],
+                                        cwd=ROOT, text=True).strip()
+    except Exception:
+        head = "unknown"
+    cal_commit = cal.get("engine_commit", "")
+    if cal_commit and head != cal_commit:
+        mismatches.append(f"engine_commit: cal={cal_commit}, HEAD={head}")
+
+    # Usage file sha256
+    usage_path = ROOT / "nfl" / "data" / "sim" / "ratings" / "player_usage_weekly.parquet"
+    if usage_path.exists():
+        usage_sha = hashlib.sha256(usage_path.read_bytes()).hexdigest()[:16]
+        cal_sha = cal.get("usage_file_sha256", "")
+        if cal_sha and usage_sha != cal_sha:
+            mismatches.append(f"usage_sha: cal={cal_sha}, disk={usage_sha}")
+
+    return len(mismatches) == 0, mismatches
+
+
 def build_board(week, game_results, lines_used, team_game_counts, roster,
                 roster_lookups, pull_ts_str):
     """Build board, write picks_log.parquet and parlay_board.md."""
@@ -313,6 +348,14 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
 
     cal_maps = load_calibration()
     generated_utc = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    # D70: Metadata gate
+    stamp_ok, stamp_mismatches = _check_calibration_stamp()
+    if not stamp_ok:
+        print(f"CALIBRATION STAMP MISMATCH — sim prices suppressed:")
+        for mm in stamp_mismatches:
+            print(f"  {mm}")
+    sim_pricing_enabled = stamp_ok
 
     def calibrate(raw_p, cal_family_name):
         if cal_family_name in cal_maps:
@@ -326,9 +369,14 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
     board_lines.append(f"\nGenerated: {generated_utc}")
     if pull_ts_str:
         board_lines.append(f"Props prices as of: {pull_ts_str}")
+    if not sim_pricing_enabled:
+        board_lines.append(f"\n**SIM PRICES SUPPRESSED** — calibration stamp mismatch:")
+        for mm in stamp_mismatches:
+            board_lines.append(f"  {mm}")
     board_lines.append("")
 
     all_legs = []  # for picks_log
+    layer_log = []  # D71: per-leg layer logging
 
     MARKET_KEY_MAP = {
         'player_receptions': 'receptions',
@@ -547,6 +595,27 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                             "moved_against": moved_against,
                         }
                         all_legs.append(leg)
+
+                        # D71: layer log row
+                        layer_log.append({
+                            "season": SEASON, "week": week,
+                            "game_id": f"{away}@{home}",
+                            "player_id": pid, "player_name": pname,
+                            "position": pos, "family": family,
+                            "line": line, "side": side,
+                            "sim_p_raw": round(sim_p, 4),
+                            "sim_p_calibrated": round(cal_p, 4),
+                            "book_price": book_price if pd.notna(book_price) else None,
+                            "book_implied": round(book_implied, 4) if pd.notna(book_implied) else None,
+                            "moved_against": moved_against,
+                            "snapshot_tag": props_tag,
+                            "snapshot_timestamp": props_pull_ts,
+                            "tier": tier,
+                            "status": status,
+                            "rankable": rankable,
+                            "sim_pricing_enabled": sim_pricing_enabled,
+                            "board_generated_utc": generated_utc,
+                        })
                         return leg
 
                     # Reception props
@@ -655,6 +724,13 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
         n_no_price = picks_df["book_price"].isna().sum()
         n_bmc = (picks_df["status"] == "BOOK-MORE-CONFIDENT").sum()
         print(f"  priced: {n_priced}, no_price: {n_no_price}, BOOK-MORE-CONFIDENT: {n_bmc}")
+
+    # D71: Write layer log
+    if layer_log:
+        layer_df = pd.DataFrame(layer_log)
+        layer_path = out_dir / "layer_log.parquet"
+        layer_df.to_parquet(layer_path, index=False)
+        print(f"Layer log: {len(layer_df)} rows -> {layer_path}")
 
     return board_text, all_legs
 

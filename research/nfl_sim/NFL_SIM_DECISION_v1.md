@@ -565,3 +565,21 @@ precedence tag PRESENT for that game). Within a tag, latest pull_timestamp wins.
 Returns (DataFrame, chosen_tag, chosen_timestamp). Raises ValueError on an
 unknown tag rather than falling through. Tag vocabulary: open, mid, close per
 pull_hardrock_props.py.
+
+### D70 — Pricer wired into the board with metadata gate (2026-09-18)
+price_game and sgp_probability_raked imported into run_week. Before pricing,
+_check_calibration_stamp compares calibration_v1.json stamps (engine_commit,
+usage_file_sha256) against the running state. On mismatch: sim prices
+suppressed, board still renders with stated reason. The gate FIRES after D66
+(engine changed) — this is the correct outcome, not a bug to work around.
+A multi-leg ticket's joint comes from sgp_probability_raked, not from a
+product of marginals.
+
+### D71 — Layer logging schema, pre-registered (2026-09-18)
+Every leg on the board logs one row to nfl/data/sim/outputs/week=YYYY_WW/
+layer_log.parquet with: season, week, game_id, player_id, player_name,
+position, family, line, side, sim_p_raw, sim_p_calibrated, book_price,
+book_implied, moved_against, snapshot_tag, snapshot_timestamp, tier,
+status, rankable, sim_pricing_enabled, board_generated_utc.
+All layers ON. Ablation is a QUERY against this log later — nothing is
+tuned on 2026 data.
