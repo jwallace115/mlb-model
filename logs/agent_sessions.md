@@ -1301,3 +1301,29 @@
 - NOT DONE (cosmetic): "Engine commit 85f1cb455" was stamped while run_fit.py was uncommitted;
   the diff was OUT_DIR only, so the stamp is materially right but was not reproducible at
   stamp time.
+
+## 2026-09-18T20:00Z  claude-code (Phase 5D-3 — grading, CLV, raking)
+- EDITED: nfl/sim/actuals.py — D62 official stat definitions.
+  Rushing: {run, qb_kneel} AND rusher notna AND NOT two_point. +437 kneels, -38 2pt runs = +399 carries.
+  Passing: {pass, qb_spike} AND down notna AND sack != 1. +75 spikes. Receiving/ATD: unchanged.
+- RAN: test_actuals_5d3.py 5/5 pass (property, regression, null control).
+- RAN: full suite 127 pass / 4 fail (same 4 pre-existing: 5a3, 5a4, 5a9, 2026 wk3 starter).
+- CREATED: nfl/sim/run_k4.py — reproducible K4 from fit checkpoints.
+  Step A: --legacy-actuals reproduces committed k4_rows_fit_5d1.parquet row-for-row (72,897 rows, all 15 cols identical to 1e-10).
+  Step B: official actuals → k4_rows_fit_5d1_official.parquet. 158 hit changes (rush_att: 94, rush_yds: 58, pass_att: 6). Lines/prices/sim unchanged.
+- PRE-REGISTERED PREDICTION HELD: QB rush_att under collapsed from +18.2% ROI / +13.2pp edge to -4.5% ROI / +1.4pp edge. Kneel diagnosis correct.
+  pass_att under: +2.7pp → +2.3pp (spike effect small). NULL CONTROL PASS: rec_yds/pass_yds unchanged (0.00pp delta).
+- EDITED: nfl/sim/grade_week.py — D64.
+  CLV: both sides on no-vig scale (proportional devig). Old code compared raw vig-inclusive (+2.4pp on unchanged -110).
+  Game identity: match requires event_id from the same game. Never crosses weeks.
+  Push: actual == whole-number line → void. Excluded from denominators.
+  Family vocabulary: canonical map accepts both old and K4 names, void on unmapped.
+- RAN: test_clv_5d3.py 4/4 pass.
+- EDITED: nfl/sim/pricer.py — D65 exact binary IPF.
+  Old: hits *= t/m, renormalize (marginal = t/(t+1-m), undershoots).
+  New: hits *= t/m, non-hits *= (1-t)/(1-m), renormalize (marginal = t after one step).
+  Raises on t outside (0,1), m=0 with t>0, m=1 with t<1.
+- RAN: test_raking_5d3.py 8/8 pass.
+- COMMITTED: 7dbf9b7c4 (item 1), d1ad6413c (item 2), 2433590d9 (item 3), f8f867545 (item 4).
+- NOT DONE: full suite re-run after items 3+4 (items committed individually; the engine reds and 2026 wk3 are independent of these changes).
+- UNVERIFIED: whether run_week.py's picks_log book_implied is already devigged (the CLV code assumes it is, based on line 409 of run_week which divides by total_implied). If it is not devigged for one-sided markets, the CLV would be wrong for those rows.
