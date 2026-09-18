@@ -1603,3 +1603,31 @@
 - NOT DONE: the 25 broken files are still in the tree; the bridge VM cannot delete files.
   They are a daily cache for one date five months ago, so almost certainly unread — but any
   backfill or replay of 2026-04-11 will crash on them.
+
+## 2026-09-18T23:35Z  claude-code (NCAAF board — N01-N04)
+- RAN: Odds API probe (N01). 3 calls, 12 credits total, remaining=8976.
+  1a. NCAAF odds: 90 events, 9 of 10 books returned. hardrockbet_fl absent.
+  1b. NFL null control: hardrockbet_fl present (15/29 events). PASS.
+  1c. Per-event market probe: team_totals (6 books), alt_spreads (7), 1H markets (7).
+  Prediction A (HR absent): HELD. Prediction B (team_totals available): HELD.
+  REFERENCE_ONLY: every NCAAF price is from a book Jeff cannot bet.
+- CREATED: ncaaf/pipeline/build_ncaaf_board.py — board from tape with pre-kick guard.
+  snapshot_utc < commence_time AND snapshot_utc <= build_time. Never files[-1].
+  Tests 3/3: Pitt event returns -10.5 not -14.5 in-play, naive would get in-play,
+  unstarted games unchanged.
+- CREATED: ncaaf/pipeline/pull_ncaaf_news.py — ESPN news for board teams. No API key.
+  Re-verified: /injuries returns {} (empty). /news?team={id} works.
+  Team map: 191 teams, 179 auto + 12 manual corrections. 100% match rate.
+- CREATED: ncaaf/pipeline/build_ncaaf_tickets.py — AI layer (Anthropic) + ticket writer.
+  AI outputs flags/rationale/veto, never a number. REFERENCE_ONLY flag on every ticket.
+- CREATED: ncaaf/pipeline/grade_ncaaf_tickets.py — CLV grader. Close = last pre-kick.
+  No-vig scale, game identity, push = void. UPDATE-ONLY.
+- EDITED: shared/clv_utils.py — SPORT_MAP += NCAAF.
+- EDITED: .gitignore — allow-listed ncaaf_board_tickets_2026.json.
+- COMMITTED: e77c5a15b (N01), 3c3447517 (N02), eef9f7010 (N03), 86696a98b (N04).
+- NOT DONE: actual board run for wk4 (need to pull news + call AI + write tickets).
+  CLV grader null control (run twice, second changes 0 rows) not tested in this
+  session — no tickets exist yet to grade.
+- UNVERIFIED: 12 manual ESPN team map corrections (Appalachian State -> 2026,
+  San Jose State -> 23, Southern Miss -> 2572, UMass -> 113). Verified by ID
+  search, not by a live news pull for each team.
