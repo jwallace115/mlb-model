@@ -1631,3 +1631,28 @@
 - UNVERIFIED: 12 manual ESPN team map corrections (Appalachian State -> 2026,
   San Jose State -> 23, Southern Miss -> 2572, UMass -> 113). Verified by ID
   search, not by a live news pull for each team.
+
+## 2026-09-18T23:53Z  claude-code (NCAAF board work order #2 — N05-N08)
+- RAN: pull_cfbd_season.py --year 2025 — 3,831 games, 3,345 lines (Bovada: 934).
+  Written to SEPARATE files (cfbd_games_2025.parquet, cfbd_betting_lines_2025.parquet).
+  Zero Odds API credits. CFBD API only. x-requests-remaining unchanged at 8976.
+- RAN: pull_cfbd_season.py --year 2026 --schedule-only — 3,679 games.
+- DETERMINED (N05): spread = closing line, spreadOpen = opening. Differ 84.8% of rows.
+  Downstream builds must use spreadOpen for pre-game conditioning.
+- RAN: test_joint_correlation.py on 2025 (N06):
+  Null control: P(cover)=0.524, P(over)=0.496. PASS.
+  Prediction 1 (21+ positive phi): phi=0.280, t=3.94. HELD.
+  Prediction 2 (14-21 positive): phi=0.148, t=1.69. HELD.
+  Prediction 3 (0-3,3-7,7-14 flat): DID NOT HOLD (7-14 t=2.27).
+  Branch A earned: build joint outcome table for |spread| >= 14.
+- CREATED: build_joint_table.py — N07 Branch A. 2022-2025, |spread| >= 14, N=1119.
+  21+ phi=0.224 t=5.48 (all 4 seasons positive). 14-21 phi=0.084 t=1.93.
+  Spec checks 1b/2/3 updated from N/A to REQUIRES ATTENTION.
+- CREATED: market_microstructure.py — N08. Zero fitting. Hold, stale, origination.
+  williamhill_us: 28 stale flags (121h lag). Null control: 0 in recent 1h. PASS.
+- COMMITTED: 4cb18b8cf (N05), 43b8ea2f4 (N06), 14d6cd323 (N07), 5ae0dc524 (N08).
+- NOT DONE: 1H joint table (requires bucketed test on half scores, not attempted).
+  Weather layer, CFB context flags, portal tie-in (deferred to work order #3).
+- UNVERIFIED: 12 manual ESPN team map corrections (from work order #1 item 3).
+  The joint table uses Bovada's spread column (the close), not spreadOpen — any
+  live application must condition on spreadOpen instead.
