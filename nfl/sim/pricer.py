@@ -224,11 +224,15 @@ def sgp_probability_raw(leg_matrix, legs):
 
 
 def sgp_probability_raked(leg_matrix, legs, cal_probs):
-    """Joint probability with iterative proportional fitting (raking).
+    """D65: Joint probability with exact binary IPF (raking).
 
-    Adjusts per-sim weights so the weighted marginal of each leg equals its
-    calibrated probability. Starts from uniform weights; iterates over legs;
-    stops when max marginal error < 1e-6 or 200 iterations.
+    Each iteration step scales hit weights by t/m and non-hit weights by
+    (1-t)/(1-m), where t is the target marginal and m is the current
+    weighted marginal. This makes the marginal equal t after one step
+    (exact for a single leg).
+
+    Raises on unsupported targets: m == 0 with t > 0, m == 1 with t < 1,
+    or t outside (0, 1).
 
     Args:
         leg_matrix: DataFrame with sim_id rows and indicator columns.
@@ -244,20 +248,33 @@ def sgp_probability_raked(leg_matrix, legs, cal_probs):
         leg_matrix[leg].values.astype(np.float64) for leg in legs
     ])  # (N, n_legs)
 
+    # Validate targets
+    for j, t in enumerate(cal_probs):
+        if t <= 0 or t >= 1:
+            raise ValueError(
+                f"Target {t} for leg {legs[j]} outside (0, 1)")
+        m = indicators[:, j].mean()
+        if m == 0:
+            raise ValueError(
+                f"No sim hits leg {legs[j]} (m=0) but target={t}>0")
+        if m == 1 and t < 1:
+            raise ValueError(
+                f"All sims hit leg {legs[j]} (m=1) but target={t}<1")
+
     weights = np.ones(N, dtype=np.float64) / N
 
     for iteration in range(200):
         max_err = 0.0
-        for j, cal_p in enumerate(cal_probs):
+        for j, t in enumerate(cal_probs):
             col = indicators[:, j]
-            current_marginal = (weights * col).sum()
-            if current_marginal < 1e-15:
-                continue
-            ratio = cal_p / current_marginal
-            weights[col == 1] *= ratio
+            m = (weights * col).sum()
+            # Exact binary IPF: hits *= t/m, non-hits *= (1-t)/(1-m)
+            hit_mask = col == 1
+            weights[hit_mask] *= t / m
+            weights[~hit_mask] *= (1 - t) / (1 - m)
             # Renormalize
             weights /= weights.sum()
-            err = abs((weights * col).sum() - cal_p)
+            err = abs((weights * col).sum() - t)
             max_err = max(max_err, err)
         if max_err < 1e-6:
             break
