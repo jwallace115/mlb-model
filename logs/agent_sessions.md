@@ -1441,3 +1441,40 @@
 - NOT DONE: re-fit with corrected 2024 kickoff value (separate decision).
 - UNVERIFIED: whether the OT tie-continues path produces realistic OT tie rates
   (the 5A-11 tie rate test was not re-run in this session).
+
+## 2026-09-18T17:58Z  cowork (verification of 5D-2 items 2-4)
+- All four commits on origin. RULE 7 SATISFIED for the first time: D66-D71 are in
+  NFL_SIM_DECISION_v1.md and each pair shipped INSIDE its own item's commit, not after the
+  fact. The prompt change (naming the decision-doc write per item) is what fixed it.
+- CONFIRMED from the rebuilt table: start_yl100 is 2021=75, 2022=75, 2023=75, 2024=70,
+  2025=69 — matching the independent Cowork measurement exactly. tables.py no longer contains
+  the literal 75.0; it takes the median yardline_100 of the play after each kickoff. D67
+  records modal coverage and SD per season, notes touchback_rate is computed and never read,
+  and states that fit_5d1 used the wrong 2024 value and a re-fit is required. Good entry.
+- CONFIRMED: the metadata gate fires, which is the designed outcome (D66 changed the engine
+  away from the stamped engine_commit 85f1cb455).
+- DEFECT IN THE GATE, not in the fact that it fired: _check_calibration_stamp compares
+  cal["engine_commit"] against `git rev-parse HEAD`. HEAD moves every 30 minutes from the Mac
+  auto-committer — commits cb0727e65 (17:30Z) and 75475c674 (17:00Z) sit between item 3 and
+  item 4 and touch nothing but the dashboard. So the moment a re-fit stamps HEAD, the gate goes
+  red again within half an hour and stays red permanently, on commits that never touched the
+  engine. A gate that is always red is a gate that gets ignored. It should compare a content
+  hash of the engine's inputs (nfl/sim/engine.py, nfl/sim/tables.py, nfl/data/sim/tables/) or
+  the last commit touching them — `git log -1 --format=%h -- <those paths>` is 082e158c3 today,
+  and would be stable across dashboard commits.
+- NOT RUN: the full suite was never executed after items 3 and 4. It ran after item 2 only
+  (148 collected = 143 + the 5 test_engine_5d2 tests; 144 passed / 4 reds). Items 3 and 4 then
+  added 7 tests in test_board_5d2.py and rewrote ~186 lines of run_week.py, so the suite at the
+  current state should collect 155 and has not been run at that state. "Zero new reds against
+  the item 1 baseline" is established THROUGH ITEM 2, not through item 4.
+- Timestamp defect, third occurrence: the preceding claude-code entry is stamped
+  2026-09-18T23:30Z, about six hours ahead of real time (the auto-commits around it are 17:30Z).
+  The handoff already says to stamp from `date -u`.
+- NIT, runtime: the new kickoff builder loops iterrows over ~2,900 kickoffs per season and
+  boolean-masks the full season frame inside the loop — O(kickoffs x plays). Correct, but slow
+  for a table rebuild. A merge_asof or groupby shift does the same job.
+- GOOD: the session self-flagged UNVERIFIED on whether the OT tie-continues path produces
+  realistic OT tie rates. That is the right kind of line to leave behind.
+- STILL OPEN: re-fit (required, and it should follow the gate fix so the stamp lands on
+  something stable); the 5D-1 PIT test still never written; the dt distribution in the depth
+  source still never inspected; season 2020 undeclared.
