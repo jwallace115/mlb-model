@@ -150,10 +150,25 @@ def price_game(team_df, player_df, market_spread, market_total,
 
     markets_df = pd.DataFrame(rows)
 
-    # Apply calibration maps if provided
+    # A6: one-sided coherence. Calibrate the over/home side only;
+    # the complementary side = 1 - cal_p. This guarantees
+    # cal_over + cal_under == 1 for every market/line pair.
     if calibration_maps is not None:
+        # Step 1: calibrate every row independently
         markets_df["calibrated_prob"] = markets_df.apply(
             lambda r: _apply_calibration(r, calibration_maps), axis=1)
+        # Step 2: enforce coherence — non-primary side = 1 - primary
+        _PRIMARY = {"over", "home"}
+        for i, row in markets_df.iterrows():
+            if row["side"] not in _PRIMARY:
+                # Find the primary-side complement
+                comp_side = "over" if row["side"] == "under" else "home"
+                comp_line = -row["line"] if row["market"] == "spread" else row["line"]
+                comp = markets_df[(markets_df["market"] == row["market"]) &
+                                  (markets_df["side"] == comp_side) &
+                                  (np.abs(markets_df["line"] - comp_line) < 0.01)]
+                if not comp.empty:
+                    markets_df.at[i, "calibrated_prob"] = 1.0 - comp.iloc[0]["calibrated_prob"]
     else:
         markets_df["calibrated_prob"] = markets_df["fair_prob"]
 

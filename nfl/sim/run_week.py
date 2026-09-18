@@ -422,6 +422,10 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                         if pd.notna(book_implied) and book_implied > cal_p + 0.10:
                             status = "BOOK-MORE-CONFIDENT"
 
+                        # A7: rankable = Hard Rock price exists AND anchoring converged
+                        has_book = pd.notna(book_price)
+                        rankable = has_book and converged
+
                         leg = {
                             "season": SEASON, "week": week,
                             "game_id": f"{away}@{home}",
@@ -438,6 +442,7 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                             "pull_timestamp": props_pull_ts,
                             "board_generated_utc": generated_utc,
                             "status": status,
+                            "rankable": rankable,
                         }
                         all_legs.append(leg)
                         return leg
@@ -500,11 +505,19 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
         board_lines.append("---")
         board_lines.append("")
 
-    # Cross-game top-20 (exclude WATCH, exclude BOOK-MORE-CONFIDENT)
+    # A7: Cross-game top-20 — only rankable legs (Hard Rock price + converged)
     trusted_legs = [l for l in all_legs
                     if l["tier"].startswith("TRUSTED")
                     and l["status"] != "BOOK-MORE-CONFIDENT"
-                    and l["side"] == "over"]
+                    and l["side"] == "over"
+                    and l.get("rankable", False)]
+    not_rankable = [l for l in all_legs
+                    if l["tier"].startswith("TRUSTED")
+                    and l["side"] == "over"
+                    and not l.get("rankable", False)]
+    if not_rankable:
+        board_lines.append(f"## Not rankable ({len(not_rankable)} legs: no Hard Rock price or not converged)")
+        board_lines.append("")
     if trusted_legs:
         board_lines.append("## Cross-game top 20 (trusted, over side, not BOOK-MORE-CONFIDENT)")
         board_lines.append("")
