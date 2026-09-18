@@ -44,3 +44,15 @@ best number (extreme point + book), dispersion (max-min), movement
 n_books, newest snapshot age.
 
 Board header: REFERENCE_ONLY from N01, book name per price.
+
+### N03 — News, not injuries, is layer 2 for NCAAF (2026-09-18)
+Re-verified: ESPN /teams/99/injuries returns {} (empty). /teams/99 has no
+injuries or news key. /news?team={id}&limit=20 WORKS — returns articles with
+headline, description, published (ISO8601), categories with team refs.
+
+Team map: 191 board teams matched to ESPN IDs. 179 auto-matched (93.7%),
+12 required manual correction (name variants: Hawai'i, App State, Ragin',
+SE Louisiana, etc.). Map committed at ncaaf/pipeline/espn_team_map.json.
+
+PIT rule: only articles with published < build_time are eligible. Articles
+from after build_time are excluded.
