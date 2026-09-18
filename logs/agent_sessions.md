@@ -1514,3 +1514,28 @@
 - NOT DONE: save_calibration() still has no caller — the step that fits the maps and writes
   calibration_v1.json does not exist as committed code. The re-fit must call it or the new stamp
   will again be ungateable. Recorded in D72.
+
+## 2026-09-18T20:49Z  claude-code (Phase 5E — re-fit on corrected engine)
+- EDITED: nfl/sim/run_fit.py — D73: --out-dir required (no default), --force guard,
+  GAMES_DIR passed via args tuple (macOS spawn-mode fix).
+- CREATED: nfl/sim/run_cal_maps.py — D74: map generator from fit checkpoints via
+  save_calibration. Faithfulness vs fit_5d1 with --legacy-actuals: 20/21 match
+  exactly. prop_rush_att_QB mismatch is a precedence bug in the committed inline
+  script (raw carry count used as hit label, not boolean). Generator is correct.
+  reliability_deciles.parquet is UNOWNED (no .py file writes it).
+- RAN: run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5d2 — D75:
+  1087/1087 converged, mean 3.0 iter, |err_m| 0.156, |err_t| 0.135.
+  Wall clock: ~90 min (8 workers), consistent with fit_5d1 (95 min).
+  engine_commit: 7f5a808c5.
+- RAN: run_cal_maps.py --fit-dir fit_5d2 → calibration_v1.json (21 families) — D76.
+- D72 gate: GREEN. engine_fingerprint=d929ad258504b275, usage=12c89a3528c567d5.
+- RAN: run_k4.py --fit-dir fit_5d2 → k4_rows_fit_5d2.parquet (72,897 legs).
+  All K4 cells identical to fit_5d1 (post-D62) within 0.1%. No positive blind side.
+  Null control (2023 hits): 0 differences. PASS.
+- COMMITTED: f1977ea83 (item 1), 7f5a808c5 (item 2), 5f75ad2e6 (item 3), 429889abb (item 4).
+- NOT DONE: reliability_deciles.parquet has no writer. prop_rush_att_QB in the
+  committed fit_5d1 calibration was computed with a precedence bug (documented,
+  not fixed retroactively — fit_5d2 replaces it).
+- UNVERIFIED: OT tie rate under D66 (the 5A-11 test was not re-run). The 2024
+  scoring directional prediction (shorter fields → more scoring) is structurally
+  correct but has no measurable K4 signal because the anchoring solver compensates.
