@@ -165,3 +165,64 @@ project folders.
 ## SESSION CONDUCT
 
 Do not estimate, budget, or narrate how long this work will take you, and do not pause to ask whether to split it up. Runtime pre-checks apply to scripts you run, not to your own session. Correctness is the only criterion; take a faster path only when it is also the right one. Work until the assertions pass and the commit is pushed.
+
+## WORK ORDERS — the standing contract for a numbered-item prompt
+
+These are binding on the session regardless of whether the prompt that arrives
+repeats them. They exist because each one has already cost a cycle.
+
+**Shape.** At most 4 items. Commit AND push each item before starting the next.
+Never batch. The 14-item prompts produced deferrals three sessions running.
+
+**Decisions.** Any item that makes a decision writes its `### DNN — title (date)`
+entry into `research/nfl_sim/NFL_SIM_DECISION_v1.md` **in that same commit**.
+Twice, decisions landed only in commit messages and the doc silently fell behind
+the code (D59–D61, then D62–D65). A decision that exists only in a commit message
+does not exist.
+
+**Pre-registration.** Where an item tests a hypothesis, write the prediction into
+the report BEFORE looking at the numbers, then state whether it held. If it did
+not hold, say so plainly — never tune anything to rescue it. Include a null
+control: something the change must NOT move. State it, and check it.
+
+**Reporting a run.** Separate what a command RETURNED from what it MEANS. "DONE"
+means the command exited 0, not that the situation is safe. State what was NOT
+done and what remains UNVERIFIED — those lines are the point.
+
+**Exit codes.** This suite has zero `xfail`/`skip`/`parametrize` markers, so
+pytest exits non-zero if anything genuinely fails. An exit 0 reported alongside
+red tests means a wrapper swallowed it, not that the reds are expected. Say which.
+
+**Known reds.** Before calling a red "pre-existing", check it fails at the parent
+commit with the same value. And check it CAN go green — `test_starting_qb_identity_2026`
+was carried as a known red for three cycles before anyone noticed the usage
+carry-forward invents a week `max_w+1` that no starter is ever assigned to, so it
+fails every week of the season forever. A permanently-red test trains people to
+ignore reds.
+
+**Measure, do not assume.** Constants about the world get derived from the data in
+this repo and the derivation stated. `start_yl100` sat at a hardcoded `75.0` with
+the comment "will be refined" for four seasons and was 5 yards wrong for 2024,
+which contaminated a quarter of the fit window.
+
+**Stamps and gates.** Never gate on `git rev-parse HEAD`. The Mac auto-committer
+moves HEAD every 30 minutes, so a HEAD-based gate goes red within half an hour of
+every re-fit, forever, and then gets ignored. Gate on content (see D72). A git
+comparison is also blind to uncommitted edits, which is how `fit_5d1` got produced
+by an uncommitted `run_fit.py`.
+
+**Generators.** Anything that produces a committed artifact must itself be
+committed code. K4 had no generator until D63; the calibration stamp had no writer
+until D72. Both were hand-run scripts whose outputs could not be reproduced.
+
+**Pushing.** `git push` alone will usually be rejected: `push_daemon.sh` on the VM
+pushes every 30 min and the pipelines keep the tree dirty. Use
+`git pull --rebase --autostash && git push` (aliased as `git sync`).
+`logs/` is gitignored — `git add -f logs/agent_sessions.md`.
+
+**`git status` from the Cowork bridge creates `.git/index.lock` and cannot remove
+it.** The bridge VM has no delete permission, so every bare `git status` there
+leaves a 0-byte lock that blocks the Mac auto-committer until someone runs
+`rm -f .git/index.lock`. This killed the auto-committer for ~90 minutes on
+2026-09-18 and was misdiagnosed as a stale lock. From the bridge, always
+`GIT_OPTIONAL_LOCKS=0 git status` (verified to leave no lock).
