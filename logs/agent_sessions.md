@@ -1327,3 +1327,40 @@
 - COMMITTED: 7dbf9b7c4 (item 1), d1ad6413c (item 2), 2433590d9 (item 3), f8f867545 (item 4).
 - NOT DONE: full suite re-run after items 3+4 (items committed individually; the engine reds and 2026 wk3 are independent of these changes).
 - UNVERIFIED: whether run_week.py's picks_log book_implied is already devigged (the CLV code assumes it is, based on line 409 of run_week which divides by total_implied). If it is not devigged for one-sided markets, the CLV would be wrong for those rows.
+
+## 2026-09-18T15:22Z  cowork (verification of 5D-3, commits 7dbf9b7c4 / d1ad6413c / 2433590d9 / f8f867545)
+- All four commits plus the log commit 5387d9bdd are on origin/main. Each item shipped code
+  AND tests, one commit per item, as instructed.
+- CONFIRMED BY INDEPENDENT RECOMPUTATION from the two committed K4 parquets (not from the
+  report): exactly 158 rows differ, and ONLY hit_over/hit_under differ. line, n_books, sim_p,
+  cal_p, devig_over, devig_under and vig are identical row-for-row. Research-object identity
+  held — the only thing that changed is the grading.
+- Changes by family: rush_att 94, rush_yds 58, pass_att 6, and receptions / rec_yds / pass_yds
+  / pass_cmp / pass_td EXACTLY 0. Null control is bit-identical, not merely "close".
+- QB rush_att blind under, recomputed: BEFORE +18.2% ROI, 63.3% hit vs 50.1% no-vig implied,
+  +13.22pp edge, t=+5.33 (N=722). AFTER -4.5% ROI, 51.5% hit, +1.45pp edge, t=-1.28. Both
+  seasons collapse independently: 2023 +19.9% -> -0.8% (N=304), 2024 +16.9% -> -7.1% (N=418).
+- rush_att all positions: +4.5% (t=+2.32) -> -2.1% (t=-1.06). After the fix NO family has a
+  positive blind under; every t is <= -0.83. The kneel diagnosis was correct and the repair
+  did what was predicted. The report's numbers match this recomputation exactly.
+- NOT DONE: D62-D65 exist only in commit messages. research/nfl_sim/NFL_SIM_DECISION_v1.md
+  still ends at D61 and was touched by NONE of the four commits. Rule 7 (Registry -> Review ->
+  Decision -> Code) unsatisfied for the second cycle running. The 5D-3 prompt said "use D62
+  onward" but never said to write them into the decision doc — prompt defect, not just an
+  execution miss.
+- TEST REPORTING IS NOT RELIABLE, though the code is: there are ZERO xfail or skip markers
+  anywhere in nfl/sim/tests (parametrize count is also 0). pytest therefore CANNOT exit 0 with
+  four genuine failures. The closing claim that "pytest returns 0 when no unexpected failures
+  occur beyond the known xfail-equivalent reds" is false. Either the backgrounded run was not
+  the full suite or its exit code did not come from pytest. Do not record exit 0 as evidence
+  the suite is green.
+- The "pre-existing" label on the three engine reds IS structurally sound: 5D-3 touched neither
+  nfl/sim/engine.py nor test_engine_5a3/5a4/5a9 (git log over the range is empty), so it cannot
+  have caused them. test_starting_qb_identity_2026 was already failing last cycle. What was
+  never done is running the suite at the parent commit to confirm it.
+- UNVERIFIED: items 3 and 4 were checked by reading the diffs (CLV devig + game identity +
+  push=void present; exact binary IPF hits*=t/m and non-hits*=(1-t)/(1-m) present, with raises
+  replacing the silent zero-marginal skip). Their tests were NOT independently re-run here.
+- STILL OPEN from earlier cycles, untouched by 5D-3: the dt distribution in the depth source
+  has never been inspected, so 2025/2026 depth_order is known leak-free but not known correct;
+  2026 wk2 depth is the wk1 carry-forward; season 2020 sits in the rebuild undeclared.
