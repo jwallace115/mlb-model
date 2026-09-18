@@ -27,3 +27,20 @@ Player props not tested.
 
 REFERENCE_ONLY: every NCAAF price is from a book Jeff cannot bet.
 Pre-registered predictions A (HR absent) and B (team_totals available): both HELD.
+
+### N02 — Pre-kick eligibility rule and board field set (2026-09-18)
+A row is eligible only if snapshot_utc < commence_time AND snapshot_utc <=
+build_time. Never read files[-1] — the tape contains in-play odds.
+
+Regression test: Pitt vs Cuse event f06e90b4, the pre-kick filter returns
+point=-10.5/price=-112 (T-30min), not point=-14.5/price=+970 (T+210min
+in-play). The naive files[-1] implementation returns the in-play line,
+confirming the test can fail. Null control: unstarted games have identical
+row counts with and without the filter.
+
+Per game × market × side: consensus point (median), consensus no-vig implied,
+best number (extreme point + book), dispersion (max-min), movement
+(first-seen → latest), key-number proximity (spreads only, dist to 3/7/10/14),
+n_books, newest snapshot age.
+
+Board header: REFERENCE_ONLY from N01, book name per price.
