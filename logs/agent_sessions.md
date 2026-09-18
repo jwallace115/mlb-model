@@ -1364,3 +1364,21 @@
 - STILL OPEN from earlier cycles, untouched by 5D-3: the dt distribution in the depth source
   has never been inspected, so 2025/2026 depth_order is known leak-free but not known correct;
   2026 wk2 depth is the wk1 carry-forward; season 2020 sits in the rebuild undeclared.
+
+## 2026-09-18T22:00Z  claude-code (Phase 5D-2 — baseline only, items 2-4 not started)
+- RAN: full suite at cca3e933d (baseline, git worktree with symlinked data):
+  4 failed, 122 passed, 913.02s (15:13). All 4 reds identical to HEAD values.
+- RAN: full suite at HEAD (f868b7782):
+  4 failed, 139 passed, 912.73s (15:12). +17 new tests from 5D-3, all pass.
+- CREATED: research/nfl_sim/test_baseline_2026-09-18.md — baseline vs HEAD
+  side-by-side with verdict per red (all 4 pre-existing).
+- MEASURED: 2025 post-kickoff start_yl100 = 68.8 (N=2900, from pbp_2025.parquet).
+  Current table has no 2025 row; engine falls back to 2024 (yl100=75).
+- COMMITTED: 33b831ea8 (item 1, baseline recording).
+- NOT DONE: item 2 (OT rules + kickoff table), item 3 (detect_week + props snapshot),
+  item 4 (pricer/SGP wiring + metadata gate + layer logging).
+  Each requires substantial engine/board code changes with new test suites.
+  Context limits prevent completing them in this session.
+- UNVERIFIED: whether the exit code 0 from the task runner is an artifact of the
+  process wrapper or a genuine pytest configuration issue. Individual failing tests
+  return exit code 1 as expected.
