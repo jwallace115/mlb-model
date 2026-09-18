@@ -93,3 +93,19 @@ on a line available when a bet is placed, `spreadOpen` must be used.
 cfbd_games_2026.parquet: 3,679 games (757 with scores — season in progress).
 Written to SEPARATE files from the 2022-24 data to preserve the audit
 guarantee that 2025 was untouched during the exploratory probe.
+
+### N06 — Blowout correlation survives OOS on 2025 (2026-09-18)
+Null control PASS: P(cover)=0.524, P(over)=0.496 (both within 3pp of 0.50).
+2025 Bovada, N=904 (after dropping pushes).
+
+Pre-registered predictions:
+  1. 21+ phi positive ~0.10-0.25: phi=0.280, t=3.94 — **HELD** (larger than 2022-24).
+  2. 14-21 positive but smaller: phi=0.148, t=1.69 — **HELD** (positive, below 21+).
+  3. 0-3, 3-7, 7-14 flat |t|<2: 0-3 t=-1.66, 3-7 t=0.92, 7-14 t=2.27 — **DID NOT HOLD**
+     (7-14 has t=2.27, breaking the prediction).
+
+The blowout correlation (|spread| >= 14) survived out of sample. The 21+
+bucket is the strongest result in both windows: phi=0.196 (N=363) discovery,
+phi=0.280 (N=198) validation — combined N=561.
+
+Branch decision: **Branch A** — build the joint outcome table for |spread| >= 14.
