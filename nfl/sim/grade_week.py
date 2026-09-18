@@ -186,51 +186,62 @@ def grade_leg(row, rec_stats, rush_stats, td_stats, pass_stats,
     side = row["side"]
     line = row["line"]
 
-    if family == "receptions":
-        k = int(line + 0.5)
-        ar = rec_stats[rec_stats["player_id"] == pid]
-        actual = int(ar["actual_rec"].iloc[0]) if len(ar) else 0
-        hit = actual >= k
-
-    elif family == "reception_yds":
-        k = int(line + 0.5)
-        ar = rec_stats[rec_stats["player_id"] == pid]
-        actual = int(ar["actual_rec_yds"].iloc[0]) if len(ar) else 0
-        hit = actual >= k
-
-    elif family == "rush_attempts":
-        k = int(line + 0.5)
-        ar = rush_stats[rush_stats["player_id"] == pid]
-        actual = int(ar["actual_carries"].iloc[0]) if len(ar) else 0
-        hit = actual >= k
-
-    elif family == "rush_yds":
-        k = int(line + 0.5)
-        ar = rush_stats[rush_stats["player_id"] == pid]
-        actual = int(ar["actual_rush_yds"].iloc[0]) if len(ar) else 0
-        hit = actual >= k
-
-    elif family == "anytime_td":
-        ar = td_stats[td_stats["player_id"] == pid]
-        hit = len(ar) > 0
-
-    elif family == "pass_completions":
-        k = int(line + 0.5)
-        ar = pass_stats[pass_stats["player_id"] == pid]
-        actual = int(ar["actual_completions"].iloc[0]) if len(ar) else 0
-        hit = actual >= k
-
-    elif family == "pass_attempts":
-        k = int(line + 0.5)
-        ar = pass_stats[pass_stats["player_id"] == pid]
-        actual = int(ar["actual_pass_att"].iloc[0]) if len(ar) else 0
-        hit = actual >= k
-
-    else:
+    # D64: canonical family vocabulary + push handling.
+    # Accepts both old names (reception_yds, rush_attempts, etc.) and
+    # K4 names (rec_yds, rush_att, etc.) — raises on unmapped.
+    _FAMILY_CANON = {
+        "receptions": "receptions", "rec": "receptions",
+        "reception_yds": "rec_yds", "rec_yds": "rec_yds",
+        "rush_yds": "rush_yds",
+        "rush_attempts": "rush_att", "rush_att": "rush_att",
+        "anytime_td": "atd", "atd": "atd",
+        "pass_completions": "pass_cmp", "pass_cmp": "pass_cmp",
+        "pass_attempts": "pass_att", "pass_att": "pass_att",
+        "pass_yds": "pass_yds",
+        "pass_tds": "pass_td", "pass_td": "pass_td",
+    }
+    canon = _FAMILY_CANON.get(family)
+    if canon is None:
         return ("void", f"unknown family: {family}")
 
+    # Look up actual value
+    if canon == "receptions":
+        ar = rec_stats[rec_stats["player_id"] == pid]
+        actual = int(ar["actual_rec"].iloc[0]) if len(ar) else 0
+    elif canon == "rec_yds":
+        ar = rec_stats[rec_stats["player_id"] == pid]
+        actual = int(ar["actual_rec_yds"].iloc[0]) if len(ar) else 0
+    elif canon == "rush_att":
+        ar = rush_stats[rush_stats["player_id"] == pid]
+        actual = int(ar["actual_carries"].iloc[0]) if len(ar) else 0
+    elif canon == "rush_yds":
+        ar = rush_stats[rush_stats["player_id"] == pid]
+        actual = int(ar["actual_rush_yds"].iloc[0]) if len(ar) else 0
+    elif canon == "atd":
+        ar = td_stats[td_stats["player_id"] == pid]
+        return ("hit" if len(ar) > 0 else "miss", None) if side == "over" else ("miss" if len(ar) > 0 else "hit", None)
+    elif canon == "pass_cmp":
+        ar = pass_stats[pass_stats["player_id"] == pid]
+        actual = int(ar["actual_completions"].iloc[0]) if len(ar) else 0
+    elif canon == "pass_att":
+        ar = pass_stats[pass_stats["player_id"] == pid]
+        actual = int(ar["actual_pass_att"].iloc[0]) if len(ar) else 0
+    elif canon == "pass_yds":
+        ar = pass_stats[pass_stats["player_id"] == pid]
+        actual = int(ar["actual_pass_yds"].iloc[0]) if len(ar) else 0
+    elif canon == "pass_td":
+        ar = pass_stats[pass_stats["player_id"] == pid]
+        actual = int(ar["actual_pass_td"].iloc[0]) if len(ar) else 0
+    else:
+        return ("void", f"unknown canon family: {canon}")
+
+    # Push: actual exactly equals a whole-number line → void
+    if line == int(line) and actual == int(line):
+        return ("void", f"push: actual {actual} == line {line}")
+
+    hit = actual > line
     if side == "under":
-        hit = not hit
+        hit = actual < line
 
     return ("hit" if hit else "miss", None)
 
@@ -462,13 +473,16 @@ def write_report(picks, season, week):
 
 
 def compute_clv(picks, season):
-    """Add CLV columns by joining picks with archived Hard Rock closing prices.
+    """D64: CLV on no-vig scale with game identity.
 
-    CLV = close_implied - pick_implied for the 'over' side.
-    Positive CLV means the line moved in the pick's favor after pick time.
+    Both pick-time and close-time implied probabilities are devigged
+    (normalized to sum to 1 proportionally), then:
+      CLV = close_devig[side] - pick_devig[side]
+    Positive CLV means the line moved in the pick's favor.
 
-    Loads all Hard Rock snapshots for the season and finds the latest
-    snapshot before each game's commence_time as the closing price.
+    Game identity: matches on (player_name, market_key, line, event_id)
+    using the game_id from picks to find the event_id. Never falls through
+    to another game's price.
     """
     props_dir = ROOT / "data" / "odds_archive" / "nfl" / "props"
     frames = []
@@ -495,27 +509,34 @@ def compute_clv(picks, season):
                                          errors="coerce")
     archive["commence_dt"] = pd.to_datetime(archive["commence_time"], utc=True,
                                              errors="coerce")
-    # Only pre-game snapshots
     archive = archive[archive["pull_ts"] < archive["commence_dt"]]
-
-    # For each (player_name, market_key, line, event_id), find the latest snapshot
     archive = archive.sort_values("pull_ts", ascending=False)
+    # Dedup per (event_id, market_key, player_name, line) — latest pre-game
     close = archive.drop_duplicates(
         subset=["event_id", "market_key", "player_name", "line"],
         keep="first"
     )
 
-    # Map picks family to market_key
-    family_to_mkt = {
+    # Build event_id lookup from the archive: (home_team, away_team) -> event_id
+    # Multiple events per (home, away) across weeks, so also key by commence_time
+    event_lookup = {}
+    for _, r in close.drop_duplicates("event_id").iterrows():
+        ht = r.get("home_team", "")
+        at = r.get("away_team", "")
+        eid = r["event_id"]
+        event_lookup.setdefault((ht, at), []).append(eid)
+
+    # Canonical family → market_key (D64: one vocabulary, raise on unmapped)
+    _FAMILY_TO_MKT = {
         "receptions": "player_receptions",
-        "reception_yds": "player_reception_yds",
+        "rec_yds": "player_reception_yds", "reception_yds": "player_reception_yds",
         "rush_yds": "player_rush_yds",
-        "rush_attempts": "player_rush_attempts",
-        "anytime_td": "player_anytime_td",
+        "rush_att": "player_rush_attempts", "rush_attempts": "player_rush_attempts",
+        "anytime_td": "player_anytime_td", "atd": "player_anytime_td",
         "pass_yds": "player_pass_yds",
-        "pass_attempts": "player_pass_attempts",
-        "pass_completions": "player_pass_completions",
-        "pass_tds": "player_pass_tds",
+        "pass_att": "player_pass_attempts", "pass_attempts": "player_pass_attempts",
+        "pass_cmp": "player_pass_completions", "pass_completions": "player_pass_completions",
+        "pass_td": "player_pass_tds", "pass_tds": "player_pass_tds",
     }
 
     close_prices = []
@@ -527,18 +548,39 @@ def compute_clv(picks, season):
         family = row.get("family", "")
         line = row.get("line")
         side = row.get("side", "over")
+        pick_book_price = row.get("book_price")
         pick_implied = row.get("book_implied")
 
-        mkt = family_to_mkt.get(family)
+        mkt = _FAMILY_TO_MKT.get(family)
         if mkt is None or pname is None:
             close_prices.append(np.nan)
             close_implieds.append(np.nan)
             clvs.append(np.nan)
             continue
 
-        match = close[(close["player_name"] == pname) &
-                      (close["market_key"] == mkt) &
-                      (np.abs(close["line"] - line) < 0.01)]
+        # Game identity: find event_id(s) for this game
+        game_id = row.get("game_id", "")
+        home = row.get("home", "")
+        away = row.get("away", "")
+        from nfl.sim.names import FULL_TO_ABBR
+        _INV = {v: k for k, v in FULL_TO_ABBR.items()}
+        home_full = _INV.get(home, home)
+        away_full = _INV.get(away, away)
+
+        candidate_eids = event_lookup.get((home_full, away_full), [])
+        if not candidate_eids:
+            close_prices.append(np.nan)
+            close_implieds.append(np.nan)
+            clvs.append(np.nan)
+            continue
+
+        # Match on (event_id, market_key, player_name, line)
+        match = close[
+            close["event_id"].isin(candidate_eids)
+            & (close["market_key"] == mkt)
+            & (close["player_name"] == pname)
+            & (np.abs(close["line"] - line) < 0.01)
+        ]
 
         if match.empty:
             close_prices.append(np.nan)
@@ -547,18 +589,33 @@ def compute_clv(picks, season):
             continue
 
         cr = match.iloc[0]
+        close_imp_over = cr.get("implied_over")
+        close_imp_under = cr.get("implied_under")
+
         if side == "over":
             cp = cr.get("over_price")
-            ci = cr.get("implied_over")
         else:
             cp = cr.get("under_price")
-            ci = cr.get("implied_under")
-
         close_prices.append(cp)
-        close_implieds.append(ci)
 
-        if pd.notna(ci) and pd.notna(pick_implied) and pick_implied > 0:
-            clvs.append(float(ci) - float(pick_implied))
+        # Devig both sides
+        if pd.notna(close_imp_over) and pd.notna(close_imp_under) and (close_imp_over + close_imp_under) > 0:
+            close_total = close_imp_over + close_imp_under
+            close_devig = close_imp_over / close_total if side == "over" else close_imp_under / close_total
+        else:
+            close_devig = np.nan
+
+        close_implieds.append(close_devig)
+
+        # Pick-time devig: need both sides from the pick
+        # picks_log stores book_implied for the picked side only.
+        # We can approximate: if one_sided, can't devig → NaN.
+        # If not one_sided, book_implied is already devigged in run_week
+        # (line 409: book_implied = imp_o / total_imp or imp_u / total_imp).
+        pick_devig = pick_implied  # already devigged in run_week
+
+        if pd.notna(close_devig) and pd.notna(pick_devig) and pick_devig > 0:
+            clvs.append(float(close_devig) - float(pick_devig))
         else:
             clvs.append(np.nan)
 
