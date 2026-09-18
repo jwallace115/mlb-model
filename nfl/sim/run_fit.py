@@ -20,9 +20,9 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / "fit_5d1"
-GAMES_DIR = OUT_DIR / "games"
 PARAMS_PATH = ROOT / "nfl" / "sim" / "params_v1.json"
+OUT_DIR = None  # D73: set from --out-dir in main()
+GAMES_DIR = None
 
 
 def _get_engine_commit():
@@ -119,7 +119,20 @@ def _run_one_game(args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--seasons", type=int, nargs="+", required=True)
+    parser.add_argument("--out-dir", required=True,
+                        help="Fit output directory name under nfl/data/sim/outputs/")
+    parser.add_argument("--force", action="store_true",
+                        help="Allow writing into a directory with existing census")
     args = parser.parse_args()
+
+    global OUT_DIR, GAMES_DIR
+    OUT_DIR = ROOT / "nfl" / "data" / "sim" / "outputs" / args.out_dir
+    GAMES_DIR = OUT_DIR / "games"
+
+    census_path = OUT_DIR / "fit_census.parquet"
+    if census_path.exists() and not args.force:
+        print(f"HALT: {census_path} already exists. Use --force to overwrite.")
+        sys.exit(1)
 
     t_start = time.time()
     GAMES_DIR.mkdir(parents=True, exist_ok=True)

@@ -637,3 +637,10 @@ before D63 and the stamp had before this entry. Whoever runs the re-fit must cal
 `save_calibration(cal_maps, fit_dir=..., fit_n_games=..., unconverged_share=...,
 anchor=...)` rather than hand-writing the JSON, or the new stamp will again be
 ungateable. Wiring that call is part of the re-fit, not of this decision.
+
+### D73 — run_fit.py --out-dir (required, no default) (2026-09-18)
+OUT_DIR was hardcoded, which is why fit_5d1 was produced by an uncommitted
+one-line edit. --out-dir is now required (no default). Refuses to write into
+a directory with existing fit_census.parquet unless --force. GAMES_DIR
+derived from --out-dir. Example:
+  python3 nfl/sim/run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5d2
