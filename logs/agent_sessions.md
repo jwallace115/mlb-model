@@ -1166,3 +1166,24 @@
   17.5 at bet time) -> HIT, $126.49. Season tally on Jeff's tickets: 2 wins / 4 losses.
 - NOTE: Gibbs 16 carries (book O18.5 at -125 would have lost) — the "book more confident than
   us" filter read was right this time; one game, not evidence.
+
+## 2026-09-18T16:40Z  cowork (adjudication of ChatGPT audit #2, commit 66564012a)
+- Project doc: claude/chatgpt_audit2_adjudication_nfl_sim_2026-09-18.md. Sim stays OUT OF
+  SERVICE for sim-priced tickets; book-price + usage + news tickets continue.
+- CONFIRMED from files: (1) run_week never calls price_game / sgp_probability_raked — the raked
+  function's only callers are tests; (2) usage.py ~393 fills 2021-24 depth_order from 2025+
+  depth snapshots (class-1b leak into usage, fit_5c2b player checkpoints, prop maps, K4
+  model-filtered); (3) traded players absent on debut (usage ~698); s-1 share picks a
+  depth-group row (~487/760); (4) raking zero-hit branch silent, update not exact IPF; pushes
+  assigned by complement; (5) CLV compares no-vig pick prob to raw close implied (+2.4pp on an
+  unchanged -110 market), close match has no game identity; actuals: kneels excluded, 2-pt runs
+  included, spikes excluded; no push grading; (6) engine: Try after game-ending OT TD; 2025+
+  responding TD that ties ends the game; kickoff table own-25 all seasons, no 2025+ row;
+  detect_week from PBP advances past Week 2 once TNF is in the file (use --week 2 Sunday);
+  props snapshot chosen alphabetically by pull_batch.
+- COWORK MISSES: 5C-1b/5C-3 verification said "raked-only joints on the board" without
+  checking a caller existed; the audit brief said K4 "negative in every family" when the
+  report had three positive (noise-level) cells.
+- Repair order 5D-1 usage/fit/maps, 5D-2 engine OT + board wiring + week detection, 5D-3
+  grading/CLV/actuals + raking. Team-level maps (margin/total/team total) are not affected by
+  the usage leak (D19 allocation-only).
