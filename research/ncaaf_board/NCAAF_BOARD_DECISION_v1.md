@@ -141,3 +141,16 @@ N01 found no parlay/SGP market keys for NCAAF, so the parlay pricing
 audit (4a) computes hold from single-leg overround only.
 
 None of this is fitted. Nothing is selected or tuned on outcomes.
+
+### N09 — Bin-convention defect; Prediction 3 HELD (2026-09-18)
+The OOS test used left-closed bins [lo,hi) while the probe used right-closed
+(lo,hi] from pd.cut. The LABELS matched; the EDGES did not. In football
+3/7/14/21 are modal spreads, so the convention reallocates a large mass.
+
+7-14 t=2.27 was 1 of 8 configurations that cleared |t|>2 — the one the
+script happened to use. Under the probe's own bins: t=1.25. **Prediction 3
+HELD.** The "extends further toward the middle" interpretation is withdrawn.
+
+Requirement: any bucketed test MUST report both conventions side by side.
+test_joint_correlation.py now requires --bins (left|right, no default) and
+always prints both. Bin edges are recorded in the output.

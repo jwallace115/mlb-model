@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """
-N06: Test joint (cover, over) correlation on held-out 2025 data.
+N06/N09: Test joint (cover, over) correlation on held-out 2025 data.
 
-Committed code, not hand-run — so the result is reproducible (D63, D72).
+Committed code, reproducible. Reports BOTH bin conventions side by side.
+The --bins flag is REQUIRED — the caller must choose, and both are always shown.
+
+N09 defect: the original used left-closed bins while the probe used right-closed
+(pd.cut). In football, 3/7/14/21 are modal spreads, so the convention reallocates
+a large mass of games across exactly the boundaries being tested.
 """
 
-import sys
+import argparse, sys
 from pathlib import Path
 
 import numpy as np
@@ -13,118 +18,110 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
+BUCKET_EDGES = [0, 3, 7, 14, 21]
+BUCKET_NAMES = ["0-3", "3-7", "7-14", "14-21", "21+"]
+
 
 def load_bovada(year):
-    """Load Bovada lines for a year, compute cover/over indicators."""
     if year == 2025:
         path = ROOT / "research" / "ncaaf" / f"cfbd_betting_lines_{year}.parquet"
     else:
         path = ROOT / "research" / "ncaaf" / "cfbd_betting_lines.parquet"
-
     df = pd.read_parquet(path)
     bov = df[df["provider"] == "Bovada"].copy()
-
     if year != 2025:
         bov = bov[bov["season"] == year] if "season" in bov.columns else bov
-
-    # Filter to complete rows
     bov = bov[bov["spread"].notna() & bov["overUnder"].notna() &
               bov["homeScore"].notna() & bov["awayScore"].notna()]
-
     bov["margin"] = bov["homeScore"] - bov["awayScore"]
     bov["total"] = bov["homeScore"] + bov["awayScore"]
     bov["abs_spread"] = bov["spread"].abs()
-
-    # Cover: home covers if margin + spread > 0 (spread is negative for home fav)
     bov["cover"] = (bov["margin"] + bov["spread"] > 0).astype(int)
     bov["over"] = (bov["total"] > bov["overUnder"]).astype(int)
-
-    # Drop pushes on either leg
     bov = bov[(bov["margin"] + bov["spread"] != 0) & (bov["total"] != bov["overUnder"])]
-
     return bov
 
 
 def compute_phi(df):
-    """Compute phi correlation between cover and over."""
     n = len(df)
     if n < 10:
         return {"n": n, "phi": np.nan, "t": np.nan}
-
     p_cover = df["cover"].mean()
     p_over = df["over"].mean()
     p_joint = ((df["cover"] == 1) & (df["over"] == 1)).mean()
     p_indep = p_cover * p_over
     delta = p_joint - p_indep
-
     denom = np.sqrt(p_cover * (1 - p_cover) * p_over * (1 - p_over))
     phi = delta / denom if denom > 0 else 0
     t = phi * np.sqrt(n) if n > 1 else 0
+    return {"n": n, "p_cover": round(p_cover, 4), "p_over": round(p_over, 4),
+            "p_indep": round(p_indep, 4), "p_joint": round(p_joint, 4),
+            "delta": round(delta, 4), "phi": round(phi, 4), "t": round(t, 2)}
 
-    return {
-        "n": n, "p_cover": round(p_cover, 4), "p_over": round(p_over, 4),
-        "p_indep": round(p_indep, 4), "p_joint": round(p_joint, 4),
-        "delta": round(delta, 4), "phi": round(phi, 4), "t": round(t, 2),
-    }
+
+def bucket_games(bov, convention):
+    """Assign games to buckets under the given convention.
+    left-closed: [lo, hi) — 3 goes in 3-7, 7 in 7-14, 21 in 21+
+    right-closed: (lo, hi] — 3 goes in 0-3, 7 in 3-7, 21 in 14-21
+    """
+    results = []
+    for i, name in enumerate(BUCKET_NAMES):
+        lo = BUCKET_EDGES[i] if i < len(BUCKET_EDGES) else BUCKET_EDGES[-1]
+        hi = BUCKET_EDGES[i + 1] if i + 1 < len(BUCKET_EDGES) else 999
+        if convention == "left":
+            sub = bov[(bov["abs_spread"] >= lo) & (bov["abs_spread"] < hi)]
+        else:  # right-closed
+            if i == 0:
+                sub = bov[(bov["abs_spread"] >= 0) & (bov["abs_spread"] <= lo if lo > 0 else bov["abs_spread"] <= hi)]
+                # Right-closed: (lo, hi] except first bucket is [0, hi]
+                sub = bov[(bov["abs_spread"] >= 0) & (bov["abs_spread"] <= hi)]
+            else:
+                sub = bov[(bov["abs_spread"] > lo) & (bov["abs_spread"] <= hi)]
+        r = compute_phi(sub)
+        r["bucket"] = name
+        r["convention"] = convention
+        results.append(r)
+    return results
 
 
 def run_test(year):
-    """Run the bucketed correlation test for a single year."""
     bov = load_bovada(year)
-    print(f"\n{'='*60}")
+    print(f"\n{'='*70}")
     print(f"Year {year}: N = {len(bov)}")
-    print(f"{'='*60}")
+    print(f"{'='*70}")
 
-    # Null control
     p_cover = bov["cover"].mean()
     p_over = bov["over"].mean()
-    print(f"\nNULL CONTROL:")
-    print(f"  P(home cover) = {p_cover:.4f}  (expect ~0.50)")
-    print(f"  P(over)       = {p_over:.4f}  (expect ~0.50)")
+    print(f"\nNULL CONTROL: P(cover)={p_cover:.4f}, P(over)={p_over:.4f}")
     if abs(p_cover - 0.50) > 0.05 or abs(p_over - 0.50) > 0.05:
-        print(f"  *** HALT: marginals off 0.50 by more than 5pp ***")
+        print("  *** HALT: marginals off 0.50 ***")
 
-    # Pooled
     pooled = compute_phi(bov)
-    print(f"\nPooled: N={pooled['n']}, phi={pooled['phi']}, t={pooled['t']}")
+    print(f"Pooled: N={pooled['n']}, phi={pooled['phi']}, t={pooled['t']}")
 
-    # By bucket
-    buckets = [(0, 3, "0-3"), (3, 7, "3-7"), (7, 14, "7-14"),
-               (14, 21, "14-21"), (21, 999, "21+")]
+    # Report BOTH conventions
+    left = bucket_games(bov, "left")
+    right = bucket_games(bov, "right")
 
-    print(f"\n{'Bucket':>8s} {'N':>5s} {'P(cov)':>7s} {'P(ov)':>7s} {'Indep':>7s} {'Obs':>7s} {'Delta':>7s} {'Phi':>7s} {'t':>6s}")
-    results = []
-    for lo, hi, name in buckets:
-        sub = bov[(bov["abs_spread"] >= lo) & (bov["abs_spread"] < hi)]
-        r = compute_phi(sub)
-        r["bucket"] = name
-        results.append(r)
-        print(f"{name:>8s} {r['n']:>5d} {r.get('p_cover',0):>7.4f} {r.get('p_over',0):>7.4f} "
-              f"{r.get('p_indep',0):>7.4f} {r.get('p_joint',0):>7.4f} {r.get('delta',0):>+7.4f} "
-              f"{r.get('phi',0):>7.4f} {r.get('t',0):>6.2f}")
+    print(f"\n{'Bucket':>8s} | {'LEFT-CLOSED':>30s} | {'RIGHT-CLOSED (probe)':>30s}")
+    print(f"{'':>8s} | {'N':>5s} {'phi':>7s} {'t':>6s} | {'N':>5s} {'phi':>7s} {'t':>6s}")
+    print("-" * 70)
+    for l, r in zip(left, right):
+        print(f"{l['bucket']:>8s} | {l['n']:>5d} {l['phi']:>7.4f} {l['t']:>6.2f} | "
+              f"{r['n']:>5d} {r['phi']:>7.4f} {r['t']:>6.2f}")
 
-    return bov, pooled, results
+    return bov, pooled, left, right
 
 
 if __name__ == "__main__":
-    # Run on 2025 (held out)
-    bov25, pooled25, results25 = run_test(2025)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--bins", choices=["left", "right"], required=True,
+                        help="Bin convention: left-closed [lo,hi) or right-closed (lo,hi]")
+    parser.add_argument("--year", type=int, default=2025)
+    args = parser.parse_args()
 
-    # Verdict
-    print(f"\n{'='*60}")
-    print("VERDICT")
-    print(f"{'='*60}")
+    bov, pooled, left, right = run_test(args.year)
 
-    r21 = next((r for r in results25 if r["bucket"] == "21+"), {})
-    r14 = next((r for r in results25 if r["bucket"] == "14-21"), {})
-    r03 = next((r for r in results25 if r["bucket"] == "0-3"), {})
-    r37 = next((r for r in results25 if r["bucket"] == "3-7"), {})
-    r714 = next((r for r in results25 if r["bucket"] == "7-14"), {})
-
-    pred1 = r21.get("phi", 0) > 0 and r21.get("phi", 0) >= 0.05
-    pred2 = r14.get("phi", 0) > 0
-    pred3 = all(abs(r.get("t", 0)) < 2 for r in [r03, r37, r714])
-
-    print(f"  Prediction 1 (21+ positive phi ~0.10-0.25): phi={r21.get('phi')}, {'HELD' if pred1 else 'DID NOT HOLD'}")
-    print(f"  Prediction 2 (14-21 positive but smaller):  phi={r14.get('phi')}, {'HELD' if pred2 else 'DID NOT HOLD'}")
-    print(f"  Prediction 3 (0-3,3-7,7-14 flat |t|<2):    t={r03.get('t')},{r37.get('t')},{r714.get('t')}, {'HELD' if pred3 else 'DID NOT HOLD'}")
+    primary = left if args.bins == "left" else right
+    print(f"\nPrimary convention: {args.bins}-closed")
+    print(f"Bin edges recorded: {BUCKET_EDGES} + 999, convention={args.bins}")
