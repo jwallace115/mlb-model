@@ -307,6 +307,41 @@ def load_props_for_game(home_full, away_full, season, week):
     return game_df, None, chosen_ts
 
 
+def devig_side(imp_over, imp_under, side):
+    """D82: one no-vig probability for one side, used for BOTH the pick-time price
+    and the opening price so a movement comparison is like-for-like.
+
+    Returns (prob, one_sided). `one_sided` means only one side was quoted, so the
+    value is the RAW implied and carries the book's margin — callers must not
+    compare a one-sided value against a de-vigged one.
+    """
+    if pd.notna(imp_over) and pd.notna(imp_under) and (imp_over + imp_under) > 0:
+        tot = imp_over + imp_under
+        return ((imp_over / tot) if side == "over" else (imp_under / tot)), False
+    if side == "over" and pd.notna(imp_over):
+        return imp_over, True
+    if side == "under" and pd.notna(imp_under):
+        return imp_under, True
+    return np.nan, True
+
+
+def compute_moved_against(book_implied, one_sided, open_raw, side):
+    """D58 + D82: did the side being bet get more expensive since the open?
+
+    Returns True / False / None. **None means NOT MEASURED** — no opening snapshot
+    for this leg — which the ablation must be able to tell apart from "measured and
+    it did not move against". Both sides are de-vigged by the same helper, so the
+    comparison is like-for-like; a de-vigged pick price against a raw opening price
+    is a ~half-margin bias that made the flag unable to fire on an unchanged market.
+    """
+    if open_raw is None or not pd.notna(book_implied):
+        return None
+    open_imp, open_one_sided = devig_side(open_raw[0], open_raw[1], side)
+    if not pd.notna(open_imp) or open_one_sided != one_sided:
+        return None          # not comparable: one de-vigged, one raw
+    return bool(book_implied > open_imp)
+
+
 def is_rankable(has_book, converged, sim_pricing_enabled):
     """D79: the single place that decides whether a leg may be recommended.
 
@@ -512,10 +547,14 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                         if pid_o:
                             bp = props_by_pid.get((pid_o, fam, r.get("line")))
                             if bp:
-                                # Store the open implied for the over side
-                                imp_over_open = r.get("implied_over")
-                                if pd.notna(imp_over_open):
-                                    open_snapshot[(r["player_name"], fam, r.get("line"))] = imp_over_open
+                                # D82: keep BOTH raw sides so the open can be
+                                # de-vigged per side at comparison time. Storing
+                                # implied_over alone forced a raw-vs-no-vig
+                                # comparison and made the flag unable to fire.
+                                o_raw, u_raw = r.get("implied_over"), r.get("implied_under")
+                                if pd.notna(o_raw) or pd.notna(u_raw):
+                                    open_snapshot[(r["player_name"], fam, r.get("line"))] = \
+                                        (o_raw, u_raw)
 
         # Player props
         if pdf is not None and len(pdf) > 0:
@@ -568,19 +607,7 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                         book_price = bp.get("over_price") if side == "over" else bp.get("under_price")
                         imp_o = bp.get("implied_over")
                         imp_u = bp.get("implied_under")
-                        one_sided = False
-                        if pd.notna(imp_o) and pd.notna(imp_u) and (imp_o + imp_u) > 0:
-                            total_imp = imp_o + imp_u
-                            book_implied = (imp_o / total_imp) if side == "over" else (imp_u / total_imp)
-                        elif pd.notna(imp_o) and side == "over":
-                            book_implied = imp_o
-                            one_sided = True
-                        elif pd.notna(imp_u) and side == "under":
-                            book_implied = imp_u
-                            one_sided = True
-                        else:
-                            book_implied = np.nan
-                            one_sided = True
+                        book_implied, one_sided = devig_side(imp_o, imp_u, side)
 
                         # BOOK-MORE-CONFIDENT filter
                         status = "unbet"
@@ -593,18 +620,16 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                         has_book = pd.notna(book_price)
                         rankable = is_rankable(has_book, converged, sim_pricing_enabled)
 
-                        # D58: MOVED-AGAINST flag (pre-registered)
-                        moved_against = False
+                        # D58 + D82: MOVED-AGAINST flag (pre-registered).
+                        # None means NOT MEASURED — no opening snapshot for this
+                        # leg. It was previously initialised to False, which the
+                        # ablation cannot distinguish from "measured, did not move
+                        # against". Every leg on the Week 2 board was in that state.
+                        moved_against = None
                         if has_book and open_snapshot is not None:
-                            open_key = (pname, family, line)
-                            open_imp = open_snapshot.get(open_key)
-                            if open_imp is not None and pd.notna(book_implied):
-                                # For over: moved against if market implied_over
-                                # went UP (less value for the over bettor)
-                                if side == "over":
-                                    moved_against = book_implied > open_imp
-                                else:
-                                    moved_against = book_implied > open_imp
+                            moved_against = compute_moved_against(
+                                book_implied, one_sided,
+                                open_snapshot.get((pname, family, line)), side)
 
                         leg = {
                             "season": SEASON, "week": week,

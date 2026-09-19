@@ -2014,3 +2014,27 @@
   Do not write "structurally impossible" without demonstrating it.
 - Remaining 3 reds are the genuine engine calibration drifts (4th-down go rate, penalties/side,
   tied-drives-reaching-range). Unchanged for many cycles, values stable, and now the ONLY reds.
+
+## 2026-09-19T13:12Z  cowork (D82 — MOVED-AGAINST was measuring nothing)
+- Audit #3 flagged two defects in the movement layer; reading the code found THREE.
+  (1) SCALE: book_implied was de-vigged, the stored open was RAW implied_over. On an unchanged
+      -110/-110 market that is 0.5000 > 0.5238 = False by construction; no move smaller than the
+      book's ~2.4pp margin could ever trip the flag. Demonstrated by running the old comparison.
+  (2) SIDE: the over and under branches were byte-identical, so an under leg compared the
+      de-vigged UNDER probability against the RAW OVER implied.
+  (3) ABSENCE: moved_against initialised to False, so "no opening snapshot" was recorded
+      identically to "measured, did not move against". EVERY leg on the Week 2 board is in that
+      state — only one snapshot covers the slate.
+- FIXED: devig_side() is now used for BOTH sides of the comparison, so it is like-for-like by
+  construction; compute_moved_against() extracted from build_board so it is testable (the D79
+  lesson); the open snapshot stores both raw sides; one-sided vs two-sided quotes return None
+  rather than a number.
+- PROVEN BY EXECUTION, 7 cases: unchanged -> False both sides; over priced up -> True over /
+  False under; under priced up -> True under / False over; no snapshot -> None. 6 tests added,
+  44 pass across board+raking+clv.
+- CONSEQUENCE: any moved_against=False already in a layer log predates D82 and is
+  uninterpretable — it may mean "not measured". Pre-D82 layer logs must not be used to score
+  this layer. Recorded in D82.
+- NOTE: this is the third defect of the same family found in this project — D64 (CLV mixing
+  raw and no-vig), D82 (movement mixing raw and no-vig). Any future comparison of two prices
+  should state explicitly which scale each side is on.

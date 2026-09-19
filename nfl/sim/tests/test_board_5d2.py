@@ -378,3 +378,58 @@ def test_fingerprint_is_row_order_stable(tmp_path, monkeypatch):
         df = pd.read_parquet(d / f)
         df.iloc[::-1].to_parquet(d / f, index=False)
     assert cal.usage_fingerprint() == before, "fingerprint depends on row order"
+
+
+# ── D82: MOVED-AGAINST — like-for-like scale, correct side, None when unmeasured ──
+
+R110 = 110 / 210          # -110 raw implied, both sides => 0.52381
+R130 = 130 / 230          # -130
+R100 = 100 / 210          # the other side of a -110/-130 pair
+
+
+def _flag(open_o, open_u, now_o, now_u, side):
+    from nfl.sim.run_week import compute_moved_against, devig_side
+    bi, one_sided = devig_side(now_o, now_u, side)
+    return compute_moved_against(bi, one_sided, (open_o, open_u), side)
+
+
+def test_moved_against_false_on_an_unchanged_market():
+    """THE POINT OF D82. book_implied was de-vigged while the open was RAW, so on an
+    unchanged -110/-110 market the comparison was 0.5000 > 0.5238 — always False,
+    and unable to fire on any move smaller than the book's margin."""
+    assert _flag(R110, R110, R110, R110, "over") is False
+    assert _flag(R110, R110, R110, R110, "under") is False
+
+
+def test_moved_against_fires_on_the_side_that_got_more_expensive():
+    assert _flag(R110, R110, R130, R100, "over") is True
+    assert _flag(R110, R110, R100, R130, "under") is True
+
+
+def test_moved_against_does_not_fire_on_the_other_side():
+    """The over and under branches used to be byte-identical, so an under leg was
+    compared against the OVER's raw implied."""
+    assert _flag(R110, R110, R130, R100, "under") is False
+    assert _flag(R110, R110, R100, R130, "over") is False
+
+
+def test_moved_against_is_none_when_not_measured():
+    """None != False. Every leg on the Week 2 board had no opening snapshot;
+    recording False there is an observation the ablation never made."""
+    from nfl.sim.run_week import compute_moved_against
+    assert compute_moved_against(0.5, False, None, "over") is None
+
+
+def test_moved_against_is_none_when_scales_are_not_comparable():
+    """One-sided quote vs two-sided quote cannot be compared: one carries the
+    margin and the other does not."""
+    from nfl.sim.run_week import compute_moved_against, devig_side
+    bi, one_sided = devig_side(R110, R110, "over")       # two-sided, de-vigged
+    assert compute_moved_against(bi, one_sided, (R110, None), "over") is None
+
+
+def test_devig_side_matches_for_both_sides():
+    from nfl.sim.run_week import devig_side
+    o, _ = devig_side(R130, R100, "over")
+    u, _ = devig_side(R130, R100, "under")
+    assert abs(o + u - 1.0) < 1e-12, "de-vigged sides must sum to 1"

@@ -781,3 +781,41 @@ environment rather than verifying the environment that produced the checkpoints,
 a watched input can be changed, reddening the gate, and then re-stamped green
 without fitting anything. The stamp should be derived from the fit run, not from
 the moment of writing.
+
+### D82 — MOVED-AGAINST: like-for-like scale, correct side, None when unmeasured (2026-09-19)
+ChatGPT audit #3 flagged two defects in the D58 movement layer. Reading the code found
+three, and all three meant the pre-registered flag was not measuring what it claimed.
+
+**1. Scale mismatch — the flag could not fire.** `book_implied` was de-vigged
+(`imp_o / (imp_o + imp_u)`) while the stored opening value was `implied_over`, RAW
+and vig-inclusive. On an unchanged −110/−110 market the comparison was
+`0.5000 > 0.5238` — False by construction — and no move smaller than the book's
+margin (~2.4pp) could ever trip it. Same class of error as the CLV scale bug D64 fixed.
+
+**2. Wrong side for unders.** The `over` and `under` branches were byte-identical
+(`moved_against = book_implied > open_imp` in both). For an under leg that compared
+the de-vigged UNDER probability against the RAW OVER implied — two different
+quantities on two different scales.
+
+**3. Absence recorded as a negative observation.** `moved_against` was initialised
+to `False` and only overwritten when an opening snapshot existed, so "no open
+captured" was indistinguishable from "measured, did not move against". **Every leg
+on the Week 2 board was in that state**, since only one snapshot covers that slate.
+An ablation cannot subtract a layer it believes it measured.
+
+Fixed by `devig_side(imp_over, imp_under, side)` — one helper used for BOTH the
+pick-time price and the opening price, so the comparison is like-for-like by
+construction — and `compute_moved_against(...)`, extracted so it is testable rather
+than inline in `build_board`. The opening snapshot now stores both raw sides so it
+can be de-vigged per side at comparison time. A one-sided quote compared against a
+two-sided one returns None rather than a number, because one carries the margin and
+the other does not.
+
+Verified by execution, seven cases: unchanged market → False on both sides; over
+priced up → True for over and False for under; under priced up → True for under and
+False for over; no snapshot → None. The old logic was run on the unchanged-market
+case and returns False, confirming the tests discriminate.
+
+**Consequence for the pre-registered design:** every `moved_against = False` already
+written to a layer log predates this fix and is uninterpretable — it may mean "not
+measured". Layer logs written before D82 should not be used to score this layer.
