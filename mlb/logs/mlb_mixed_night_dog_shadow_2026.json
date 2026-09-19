@@ -1294,6 +1294,22 @@
       "local_start_hour": 19.166666666666668,
       "win_loss": "W",
       "final_score": "4-2"
+    },
+    {
+      "game_pk": 823330,
+      "game_date": "2026-09-19",
+      "matchup": "KCR @ PIT",
+      "fav_team": "PIT",
+      "dog_team": "KCR",
+      "fav_side": "home",
+      "fav_implied": 0.5173,
+      "dog_ml_price": 102,
+      "sp_fip_diff": 0.054,
+      "off_diff": 0.15,
+      "bp_era_diff": -0.29,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
