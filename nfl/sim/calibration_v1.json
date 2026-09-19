@@ -1,6 +1,6 @@
 {
-  "engine_commit": "5f75ad2e6",
-  "usage_file_sha256": "12c89a3528c567d5",
+  "engine_commit": "6f7ccd94a",
+  "usage_file_sha256": "3194119bf5bc85cf",
   "anchor": {
     "n_sims": 5000,
     "chunk_size": 2500,
@@ -35,7 +35,7 @@
   },
   "fit_n_games": 1087,
   "unconverged_share": 0.0,
-  "fit_date": "2026-09-18",
+  "fit_date": "2026-09-19",
   "fit_dir": "fit_5d2",
   "maps": {
     "margin_side": {
@@ -8586,5 +8586,11 @@
       "n": 868
     }
   },
-  "engine_fingerprint": "d929ad258504b275"
+  "engine_fingerprint": "d929ad258504b275",
+  "fit_seasons": [
+    2021,
+    2022,
+    2023,
+    2024
+  ]
 }

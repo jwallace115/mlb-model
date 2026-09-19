@@ -345,7 +345,9 @@ def _check_calibration_stamp(cal_path=None):
 
     # Usage table the maps were fitted against
     cal_usage = cal.get("usage_file_sha256")
-    live_usage = usage_fingerprint()
+    # D77: hash only the seasons the maps were fitted on. The stamp records them;
+    # a stamp without fit_seasons predates D77 and falls back to the default.
+    live_usage = usage_fingerprint(cal.get("fit_seasons"))
     if cal_usage and live_usage and live_usage != cal_usage:
         mismatches.append(f"usage_sha: cal={cal_usage}, disk={live_usage}")
     elif cal_usage and live_usage is None:

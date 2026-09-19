@@ -669,3 +669,35 @@ run_cal_maps.py --fit-dir fit_5d2 → calibration_v1.json via save_calibration.
 21 families fitted. D72 gate GREEN (engine_fingerprint and usage_file_sha256
 both match). K4 at real closing: all cells identical to fit_5d1 (post-D62)
 within 0.1%. No positive blind side. Null control (2023 hits unchanged): PASS.
+
+### D77 — Usage fingerprint covers the fit window only (2026-09-19)
+D72 hashed the WHOLE usage file. Refreshing the nflverse inputs and rebuilding
+usage on 2026-09-19 changed only 2026 rows, yet the whole-file hash moved and the
+gate went red on a fit it cannot affect. Measured: the 2021-2024 block came out
+BIT-IDENTICAL across that rebuild — 36,273 usage rows and 57,261 active-universe
+rows, full-frame `.equals()` True — so the maps, fitted exclusively on 2021-2024,
+could not have changed. A 90-minute re-fit would have produced byte-identical maps.
+
+`usage_fingerprint(fit_seasons)` now hashes only the fit-window rows, sorted on
+(season, week, team, player_id) and hashed column-wise so parquet re-encoding and
+row order cannot move it. `save_calibration` records `fit_seasons` in the stamp, so
+the gate is self-describing; a stamp without that key predates D77 and falls back
+to [2021, 2022, 2023, 2024]. Verified: the narrowed fingerprint is `3194119bf5bc85cf`
+on BOTH the pre-refresh and post-refresh usage files.
+
+This is not a workaround to reach green. A gate that reddens on every routine data
+refresh is the same spurious-red failure D72 was written to prevent — it trains
+everyone to ignore it, which is how the pre-D72 gate would have died. The gate now
+detects what it is for: did the data the maps were fitted on change.
+
+`calibration_v1.json` was re-stamped through `save_calibration` (the D72 writer, not
+by hand) with the existing 21 maps unchanged — asserted `after["maps"] == maps`.
+No re-fit. Gate returns ok=True.
+
+**Residual assumption, unchanged by this and still open:** maps fitted on 2021-2024
+are assumed to transfer to the live season. D77 narrows what the gate watches; it
+says nothing about that assumption, which remains untested.
+
+Tests (`test_board_5d2.py`): a 2026-only change does NOT move the fingerprint (this
+test fails against the pre-D77 whole-file hash — verified); a single 2021-2024 cell
+DOES move it; row order does not.

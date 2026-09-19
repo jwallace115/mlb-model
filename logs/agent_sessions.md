@@ -1859,3 +1859,40 @@
 - UNVERIFIED: the 70% abstain rate is a first-run observation, not validated.
   A rate this high on a full slate needs monitoring — it could indicate the
   AI is too conservative, or that the news layer provides insufficient signal.
+
+## 2026-09-19T10:47Z  cowork (D77 gate narrowing; Sunday layer readiness assessed)
+- CORRECTION to my own earlier entry: the "Week 3 role shifts" were computed against HEAD, but
+  the auto-committer (6f7ccd94a "auto: Statcast daily refresh") had already swept the rebuilt
+  usage into HEAD, so a later re-check compared the new file against itself and showed zero
+  change. Redone against the TRUE pre-rebuild baseline 85f1cb455. The finding stands and it is
+  in WEEK 2, the week that plays Sunday: Aaron Jones MIN carry 0.417->0.732, Quinshon Judkins
+  CLE 0.701->0.578, Demond Claiborne MIN 0.130->0.228, Javonte Williams DAL 0.634->0.691,
+  DeMario Douglas NE tgt 0.150->0.192. 8 shifts >4pp in wk2. detect_week returns 2, confirmed
+  by Jeff — the NFL is in Week 2.
+- D77: usage_fingerprint narrowed to the FIT WINDOW. Measured first: the 2021-2024 block is
+  BIT-IDENTICAL across the refresh+rebuild (36,273 usage rows, 57,261 active-universe rows,
+  full-frame .equals() True), so the maps could not have changed and a 90-min re-fit would have
+  produced byte-identical maps. Narrowed fingerprint is 3194119bf5bc85cf on BOTH the pre- and
+  post-refresh files. calibration_v1.json re-stamped THROUGH save_calibration (not by hand),
+  maps asserted unchanged. GATE NOW GREEN. 3 tests added; the key one provably fails against the
+  pre-D77 whole-file hash (verified by running the old logic: hash moves on a 2026-only change).
+- SUNDAY LAYER READINESS — 3 of 5 green:
+    usage/role read      GREEN  refreshed today, materially changed for wk2
+    Hard Rock price      GREEN  878 rows, hardrockbet_fl, 15 games, 10 markets
+    sim probability      GREEN  as of D77 — gate ok=True, no re-fit needed
+    news/injury flag     AMBER  injuries.parquet refreshed (2026 wk1-2, 412 rows); wiring into
+                                the board output NOT verified
+    open->pick movement  RED    UNFIXABLE FOR WEEK 2
+- WHY MOVED-AGAINST CANNOT BE GREEN: exactly ONE snapshot covers the Week 2 slate
+  (pull 2026-09-18T02:50:33Z, tag 'mid', 62.2h before the 09-20 17:00Z kickoff). D58 needs an
+  open to compare against. The Sept 13/14/17 pulls cover earlier games, not this slate, so no
+  retro-tagging can create one — the data was never captured. Manufacturing an "open" from the
+  62h mid snapshot would put a fabricated line into a PRE-REGISTERED log. Not done.
+- ROOT CAUSE, needs the VM (bridge cannot reach root@142.93.242.4): the documented cron is
+  Tue 10:00 / Thu 22:00 / Sun 15:00 UTC. The four actual pulls landed Sun 11:28, Mon 18:10,
+  Thu 12:50, Fri 02:50 — NONE match the schedule. The props cron is not firing; the archive
+  contents came from ad-hoc runs. Also only 15 games captured for a 16-game slate.
+- CONSEQUENCE for the pre-registered design: Week 2 cannot be part of a clean prospective
+  ablation — one layer is absent, and the log would have a hole that gets explained away later.
+  Recommend: Week 2 stays hand tickets; log MOVED-AGAINST explicitly as unavailable rather than
+  silently null; start the scored ablation at Week 3 once open/close capture is verified firing.

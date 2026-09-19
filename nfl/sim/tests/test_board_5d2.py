@@ -246,3 +246,68 @@ def test_layer_log_schema():
     src = inspect.getsource(rw.build_board)
     for field in expected_fields:
         assert f'"{field}"' in src, f"Layer log field {field} not found in build_board"
+
+
+# ── D77: the usage fingerprint covers only the fit window ──
+
+def _write_usage(path, rows):
+    pd.DataFrame(rows).to_parquet(path, index=False)
+
+
+def _usage_rows():
+    out = []
+    for season in (2021, 2022, 2023, 2024, 2026):
+        for wk in (1, 2):
+            out.append({"season": season, "week": wk, "team": "MIN",
+                        "player_id": "00-0000001", "target_share": 0.10,
+                        "carry_share": 0.40})
+    return out
+
+
+def test_usage_fingerprint_ignores_non_fit_seasons(tmp_path, monkeypatch):
+    """THE POINT OF D77. A 2026-only refresh must not move the fingerprint —
+    the maps are fitted on 2021-24, so 2026 roster churn cannot affect them.
+    Before D77 the whole file was hashed and every routine refresh reddened
+    the gate."""
+    import nfl.sim.calibration as cal
+    rows = _usage_rows()
+    a = tmp_path / "a.parquet"; _write_usage(a, rows)
+    monkeypatch.setattr(cal, "USAGE_PATH", a)
+    before = cal.usage_fingerprint()
+
+    changed = [dict(r) for r in rows]
+    for r in changed:                      # move 2026 a lot; fit window untouched
+        if r["season"] == 2026:
+            r["carry_share"] = 0.95
+    b = tmp_path / "b.parquet"; _write_usage(b, changed)
+    monkeypatch.setattr(cal, "USAGE_PATH", b)
+    assert cal.usage_fingerprint() == before, "2026-only change moved the fingerprint"
+
+
+def test_usage_fingerprint_moves_on_fit_season_change(tmp_path, monkeypatch):
+    """A change inside the fit window MUST move it, or the gate is useless."""
+    import nfl.sim.calibration as cal
+    rows = _usage_rows()
+    a = tmp_path / "a.parquet"; _write_usage(a, rows)
+    monkeypatch.setattr(cal, "USAGE_PATH", a)
+    before = cal.usage_fingerprint()
+
+    changed = [dict(r) for r in rows]
+    for r in changed:
+        if r["season"] == 2023:
+            r["carry_share"] = 0.41       # one fit-window cell
+    b = tmp_path / "b.parquet"; _write_usage(b, changed)
+    monkeypatch.setattr(cal, "USAGE_PATH", b)
+    assert cal.usage_fingerprint() != before, "fit-window change did NOT move the fingerprint"
+
+
+def test_usage_fingerprint_is_row_order_stable(tmp_path, monkeypatch):
+    """Deterministic across rebuilds: row order must not matter."""
+    import nfl.sim.calibration as cal
+    rows = _usage_rows()
+    a = tmp_path / "a.parquet"; _write_usage(a, rows)
+    monkeypatch.setattr(cal, "USAGE_PATH", a)
+    before = cal.usage_fingerprint()
+    b = tmp_path / "b.parquet"; _write_usage(b, list(reversed(rows)))
+    monkeypatch.setattr(cal, "USAGE_PATH", b)
+    assert cal.usage_fingerprint() == before, "fingerprint depends on row order"

@@ -381,12 +381,42 @@ def engine_fingerprint():
     return h.hexdigest()[:16]
 
 
-def usage_fingerprint():
-    """sha256[:16] of the usage table the maps were fitted against."""
+# D77: the fingerprint covers ONLY the seasons the maps were fitted on.
+# Hashing the whole file made every routine data refresh red the gate: the maps
+# are fitted on 2021-2024, so 2026 roster churn cannot affect them, yet a 2026-only
+# refresh changed the whole-file hash. Verified 2026-09-19: after refreshing the
+# nflverse inputs and rebuilding usage, the 2021-2024 block was BIT-IDENTICAL
+# (36,273 usage rows, 57,261 active-universe rows, full-frame .equals() True) while
+# the whole-file hash moved. A gate that reds on data that cannot affect the fit is
+# the same spurious-red failure D72 exists to prevent.
+#
+# Residual assumption, unchanged by this and still open: maps fitted on 2021-2024
+# are assumed to transfer to the live season. This narrowing does not address that;
+# it only stops the gate firing on data outside the fit window.
+FIT_SEASONS_DEFAULT = [2021, 2022, 2023, 2024]
+
+
+def usage_fingerprint(fit_seasons=None):
+    """sha256[:16] of the FIT-WINDOW rows of the usage table.
+
+    Deterministic across rebuilds: rows are sorted on a stable key and the frame
+    is hashed column-wise, so parquet-level encoding differences do not move it.
+    """
     import hashlib
+    import pandas as pd
     if not USAGE_PATH.exists():
         return None
-    return hashlib.sha256(USAGE_PATH.read_bytes()).hexdigest()[:16]
+    seasons = list(fit_seasons or FIT_SEASONS_DEFAULT)
+    df = pd.read_parquet(USAGE_PATH)
+    df = df[df["season"].isin(seasons)]
+    key = [c for c in ("season", "week", "team", "player_id") if c in df.columns]
+    df = df.sort_values(key).reset_index(drop=True)
+    h = hashlib.sha256()
+    h.update(",".join(map(str, seasons)).encode())
+    for c in sorted(df.columns):
+        h.update(c.encode())
+        h.update(pd.util.hash_pandas_object(df[c], index=False).values.tobytes())
+    return h.hexdigest()[:16]
 
 
 def save_calibration(cal_maps, path=None, fit_dir=None, fit_n_games=None,
@@ -419,7 +449,8 @@ def save_calibration(cal_maps, path=None, fit_dir=None, fit_n_games=None,
 
     out = dict(existing)
     out["engine_fingerprint"] = engine_fingerprint()
-    out["usage_file_sha256"] = usage_fingerprint()
+    out["fit_seasons"] = list(FIT_SEASONS_DEFAULT)
+    out["usage_file_sha256"] = usage_fingerprint(out["fit_seasons"])
     out["engine_commit"] = sha          # informational only — NOT gated on
     out["fit_date"] = datetime.date.today().isoformat()
     if fit_dir is not None:
