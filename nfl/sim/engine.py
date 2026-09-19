@@ -1300,18 +1300,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 if cq is None:
                     cq = clock_q.get(("all", "fgs_all", "fgs"))
                 ev_fgs_runoff[gi] += 1
-                if cq is not None:
-                    if sbf in ("0-20", "21-40"):
-                        # next-snap time cell: elapsed = time now - time at the next snap
-                        nxt = float(np.interp(u_arr[gi], xs101_top, cq))
-                        el = float(np.clip(float(clock[gi]) - nxt, 1.0, float(clock[gi])))
-                    else:
-                        # D90: elapsed cell for buckets > 40s — same approach as
-                        # the kneel handler (line ~1569). Without this, the clock
-                        # advance fell through to the general play-clock table,
-                        # consuming ~25-35s per play instead of the FG-setup-specific
-                        # runoff, causing tied drives in range to expire.
-                        el = float(np.interp(u_arr[gi], xs101_top, cq))
+                if sbf in ("0-20", "21-40") and cq is not None:
+                    # next-snap time cell: elapsed = time now - time at the next snap
+                    nxt = float(np.interp(u_arr[gi], xs101_top, cq))
+                    el = float(np.clip(float(clock[gi]) - nxt, 1.0, float(clock[gi])))
                     clock[gi] -= np.float32(el); ev_clock_used[gi] += np.float32(el)
                     continue
             else:
@@ -1528,9 +1520,6 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             in_ot = qtr >= 5
             fgs_state[in_ot & ~ot_first_poss_done] = ""
             fgs_state[in_ot & ot_first_poss_done & (yl <= 35) & (down <= 3) & alive] = "ot_sd"
-            # D90: deactivate FG-setup when clock < 5s — no time for a play
-            # before the kick; the EOH FG mechanism can fire on the current down.
-            fgs_state[(clock < 5) & (fgs_state != "")] = ""
         if kneel_lookup is not None:
             fgs_m = alive & (clock > 0) & (fgs_state != "")
             kn_cand = alive & (down < 4) & (clock > 0) & (clock <= 180) & (

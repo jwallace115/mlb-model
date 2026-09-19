@@ -1,3 +1,49 @@
+## 2026-09-19T20:44Z  cowork (D94 — target derivation audit; 5H work order written)
+
+### RETURNED
+- nflverse fixed_drive_result label is "End of half"; derive script compared "End of Half"/"End of Game" -> 0 by construction.
+- Kickoff rows (yardline_100 == 35) inflated "reached the 35": 329 -> 181 with scrimmage snaps only.
+- Matched to the sim test's definition (drive starts Q4 <= 300 s, tied): strict 0/57, broad 2/64 = 0.031 (CI 0.004-0.108).
+- Real go rate by season 0.2087 / 0.1882 / 0.1959 / 0.1997; in the 5A-3 test's own 50 games 0.2016 (n=754, SE 0.0146).
+- Same numbers on the Mac bridge VM (py3.10) and Linux cloud.
+
+### MEANS
+- D86's "verified-correct target" claim is void for tied-drive expiry. Go-rate and penalty targets reproduce and stand.
+- Tied-drive test is still red under a matched target (0.111 vs 0.081), by half as much, and inside the real-side interval.
+- Go-rate spec (+-0.010) is narrower than the real season-to-season range (0.021).
+
+### NOT DONE
+- No test/target/tolerance edited. No engine edit. Sim-side noise floor not yet measured (5H item 1).
+
+## 2026-09-19T20:37Z  cowork (Phase 5G verification — D93)
+
+### RETURNED
+- Commits 98243b9b4, 27e900bb6, 3915f986d, 1c0463916, 1b97fef19 all on origin. Diff of
+  nfl/sim/tests across the phase: empty.
+- Table go rate at actual PBP frequencies, recomputed from committed parquets:
+  pre-5G 0.19938 | D88 v1 0.19618 | D88 amended 0.20163 | truth 0.19802.
+- Engine D90^ vs D90^ + hunk 1 only, 3 games x 2,000 sims seed 42: team_df hashes identical.
+- Side-by-side on Linux: go-rate delta 0.0123 (pre) / 0.014 (HEAD) / 0.011 (D89 only);
+  tied-drive expiry 0.111 / 0.124 / 0.108; penalties per side FAIL / pass / pass.
+- 5G HEAD stamp check: (False, engine_fingerprint cal=d929ad258504b275 live=85d87a0e3256b90e).
+- After restore of 4 files to 3cfccad54 blobs: fingerprint d929ad258504b275, stamp (True, []).
+
+### MEANS
+- D88 made a correct table less correct and the test worse; selected by iterating on the test.
+- D90 "Bug 1" is a no-op with a false mechanism in the record; "Bug 2" is an unmeasured constant.
+- D89 is correct; parked only so the engine matches fit_5d2 for Week 2.
+- The work order's premises for items 1 and 3 were wrong (Cowork's error, inherited from D86).
+- FD-by-penalty red (Mac 0.302) vs green (Linux) and expiry 0.149 vs 0.124: knife-edge metrics
+  flip with the platform's random stream. Read reds near a threshold as "at the boundary".
+
+### NOT DONE
+- Full suite not re-run after the restore (identity shown by blob hash + fingerprint).
+- Board-level refuse-to-rank trace still owed (5G showed a return value only).
+- No re-fit, no K4.
+
+### UNVERIFIED
+- D89-only results on the Mac (measured on Linux only).
+
 ## 2026-09-19T20:16Z  claude-code (Phase 5G work order — D88, D89, D90)
 
 ### Baseline

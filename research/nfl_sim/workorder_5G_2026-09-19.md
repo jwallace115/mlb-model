@@ -1,5 +1,9 @@
 # Phase 5G work order — three engine defects, one re-fit
 
+> **CLOSED 2026-09-19 — see D93.** Items 1 and 3 were ordered on untested premises and their
+> fixes are withdrawn; item 2 (D89) is accepted and parked; item 4 was correctly not run.
+> Do not re-run this order. The successor is a diagnostics-only order.
+
 Date: 2026-09-19
 Repo: jwallace115/mlb-model, branch main
 Scope: nfl/ only. Do not touch ncaaf/ or any MLB path.

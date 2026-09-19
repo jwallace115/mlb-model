@@ -885,34 +885,6 @@ def build_fourth_down_table(df):
             shr = (grid[f"{c}_{L}"] + kcol * grid[f"p{c}_{L+1}"]) / (grid[f"n_{L}"] + kcol)
             grid[f"p{c}_{L}"] = np.where(np.isinf(kcol), grid[f"p{c}_{L+1}"], shr)
 
-    # D88: additional regularisation for thin cells only. The hierarchical shrinkage
-    # fills empty cells from score-conditional parents, which inflates p_go for
-    # rare states. Two anchors depending on score:
-    #   - Trailing cells (trail*): use L3 (yd × zone4 × score3 × clock3) to retain
-    #     the go-for-it urgency that trailing teams have in Q4.
-    #   - Non-trailing cells (tied, lead*): use L5 (yd × zone4, no score/clock) to
-    #     pull inflated cells toward the field-position baseline. This is where most
-    #     of the go-rate inflation lives (tied/leading cells in rare clock/field
-    #     combinations inherit high go rates from parents that pool with trailing).
-    # k_reg is measured by method of moments on all thin cells around their anchor.
-    REG_THRESHOLD = 10
-    trail_mask = grid["sc7"].str.startswith("trail")
-    reg_mask = (grid["n"] < REG_THRESHOLD) & ~trail_mask
-    # k_reg from all thin cells (including trailing), then applied only to non-trailing.
-    # Method-of-moments on non-trailing cells alone gives k ~12 because L5 is very
-    # consistent across those cells — too aggressive. Using all-thin-cells k (~1.3)
-    # produces the right amount of pull.
-    all_thin = grid[(grid["n"] < REG_THRESHOLD) & (grid["n"] > 0)]
-    k_reg = _mom_k(all_thin["n"], all_thin["go"], all_thin["pgo_5"])
-    k_reg = np.clip(k_reg, 1.0, 200.0)
-    k_by_level["reg"] = {"k": float(k_reg), "threshold": REG_THRESHOLD, "anchor": "L5(non-trail only)"}
-    n_arr = grid["n"].to_numpy(dtype=float)
-    for c in ("go", "punt", "fg"):
-        p_L0 = grid[f"p{c}_0"].to_numpy(dtype=float)
-        p_L5 = grid[f"p{c}_5"].to_numpy(dtype=float)
-        p_reg = (n_arr * p_L0 + k_reg * p_L5) / (n_arr + k_reg)
-        grid[f"p{c}_0"] = np.where(reg_mask, p_reg, p_L0)
-
     tbl = pd.DataFrame({"ydstogo_b": grid["yd"], "yl_b": grid["yl10"], "score_b": grid["sc7"],
                         "qtr_b": grid["ck6"], "n": grid["n"].astype(int),
                         "p_go": grid["pgo_0"], "p_punt": grid["ppunt_0"], "p_fg": grid["pfg_0"]})
@@ -1072,13 +1044,7 @@ def build_special_teams_table(df):
     # These replay the down. Compute offense/defense split from actual data.
     no_plays = df[df["play_type"] == "no_play"]
     accepted_no_play = no_plays[no_plays["penalty"] == 1]
-    # D89: rate per play ATTEMPT (scrimmage + penalties), not per resolved play.
-    # A no-play penalty replays the down; the engine draws again on the replay.
-    # Using penalties/resolved_plays as the per-attempt rate double-counts the
-    # geometric compounding: effective rate = p/(1-p) > p. The correct rate is
-    # penalties/(resolved + penalties), giving exactly p penalties per attempt.
-    _denom = len(scrim) + len(accepted_no_play) if len(scrim) else 1
-    result["penalty"]["p_no_play_penalty"] = len(accepted_no_play) / _denom
+    result["penalty"]["p_no_play_penalty"] = len(accepted_no_play) / len(scrim) if len(scrim) else 0.03
     # Offense fraction of no-play penalties (from actual data)
     if len(accepted_no_play) > 0 and "penalty_team" in accepted_no_play.columns and "posteam" in accepted_no_play.columns:
         np_off = accepted_no_play[accepted_no_play["penalty_team"] == accepted_no_play["posteam"]]

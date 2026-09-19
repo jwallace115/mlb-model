@@ -88,6 +88,10 @@ def derive_tied_drive_expiry(pbp):
     # The drive expires if the last play is end_of_game or end_of_half
     # without a scoring event
 
+    # D94: scrimmage snaps only. Kickoff rows carry yardline_100 == 35 and belong to the
+    # receiving team's drive, so without this every tied Q4 drive that began with a
+    # kickoff "reached the 35" (329 drives instead of 181).
+    reg = reg[reg["down"].notna()]
     q4 = reg[reg["qtr"] == 4].copy()
     tied = q4[q4["score_differential"] == 0].copy()
 
@@ -106,7 +110,10 @@ def derive_tied_drive_expiry(pbp):
         # "Expired" = game ended without a kick or score from inside the 35
         # We look at the drive's fixed_drive_result if available
         drive_result = last_play.get("fixed_drive_result", last_play.get("drive_result", ""))
-        is_expired = drive_result in ("End of Half", "End of Game")
+        # D94: nflverse's label is "End of half" (lower-case h; it covers end of game too).
+        # The original compared against "End of Half"/"End of Game", which never match, so
+        # the numerator was 0 by construction.
+        is_expired = drive_result == "End of half"
         # But also check if there was a TD or FG on the drive
         had_td = (grp["touchdown"] == 1).any() if "touchdown" in grp.columns else False
         had_fg = (grp["play_type"] == "field_goal").any()
@@ -128,6 +135,49 @@ def derive_tied_drive_expiry(pbp):
     n_expired = drive_df["expired"].sum()
     rate = n_expired / n_reached if n_reached > 0 else 0.0
     return rate, int(n_expired), n_reached
+
+
+def derive_tied_drive_expiry_matched(pbp):
+    """D94: the real-side number under the SAME definition the sim test uses
+    (test_engine_5a9.py::test_t3_tied_drives_that_reach_range_get_the_kick_off):
+    drive STARTS in Q4 with <= 300 s left, offence tied at the first snap; "reached" =
+    a snap at/inside the 35 (strict), or additionally a play that ENDS at/inside the 35 or
+    a TD (broad — this is what `start_yardline - yards <= 35 | TD | end_yardline <= 35`
+    measures on the sim side). Expired = fixed_drive_result == "End of half".
+    Returns dict with strict/broad counts and the broad expired game_ids."""
+    reg = pbp[(pbp["week"] <= 18) & pbp["drive"].notna() & pbp["posteam"].notna()]
+    scr = reg[reg["down"].notna()].sort_values(["game_id", "play_id"]).copy()
+    scr["yl_after"] = scr["yardline_100"] - scr["yards_gained"].fillna(0)
+    g = scr.groupby(["game_id", "drive"])
+    d = pd.DataFrame({"q": g["qtr"].first(), "clk": g["half_seconds_remaining"].first(),
+                      "sd": g["score_differential"].first(), "min_yl": g["yardline_100"].min(),
+                      "min_after": g["yl_after"].min(), "res": g["fixed_drive_result"].last(),
+                      "td": g["touchdown"].max()}).reset_index()
+    x = d[(d["q"] == 4) & (d["clk"] <= 300) & (d["sd"] == 0)]
+    strict = x[x["min_yl"] <= 35]
+    broad = x[(x["min_yl"] <= 35) | (x["min_after"] <= 35) | (x["td"] == 1)]
+    be = broad[broad["res"] == "End of half"]
+    return {"n_tied_late": len(x),
+            "strict_reached": len(strict), "strict_expired": int((strict["res"] == "End of half").sum()),
+            "broad_reached": len(broad), "broad_expired": len(be),
+            "broad_expired_games": be["game_id"].tolist()}
+
+
+def derive_go_rate_breakdown(pbp):
+    """D94: go rate by season, and in the 50 games test_engine_5a3's k1_sample draws."""
+    out = {}
+    dec = pbp[(pbp["down"] == 4) & (pbp["week"] <= 18) &
+              pbp["play_type"].isin(["run", "pass", "punt", "field_goal"])]
+    for s, grp in dec.groupby("season"):
+        out[int(s)] = (float(grp["play_type"].isin(["run", "pass"]).mean()), len(grp))
+    g23 = pd.read_parquet(PBP_DIR / "pbp_2023.parquet",
+                          columns=["game_id", "season", "week", "home_team", "away_team",
+                                   "home_score", "away_score"]).drop_duplicates("game_id").query("week <= 18")
+    rng = np.random.default_rng(42)
+    samp = g23.iloc[rng.choice(len(g23), 50, replace=False)]["game_id"]
+    ds = dec[dec["game_id"].isin(samp)]
+    out["sample50_2023"] = (float(ds["play_type"].isin(["run", "pass"]).mean()), len(ds))
+    return out
 
 
 def main():
@@ -167,5 +217,19 @@ def main():
     print()
 
 
+def main_d94():
+    pbp = load_pbp(SEASONS)
+    m = derive_tied_drive_expiry_matched(pbp)
+    print("=== D94: TIED-DRIVE EXPIRY, MATCHED TO THE SIM TEST'S DEFINITION ===")
+    print(f"  tied drives starting Q4 <= 300 s: {m['n_tied_late']}")
+    print(f"  strict (a snap at/inside the 35): {m['strict_expired']}/{m['strict_reached']}")
+    print(f"  broad  (sim test's definition):   {m['broad_expired']}/{m['broad_reached']}"
+          f" = {m['broad_expired']/max(m['broad_reached'],1):.4f}   games: {m['broad_expired_games']}")
+    print("=== D94: GO RATE BY SEASON AND IN THE TEST'S OWN 50-GAME SAMPLE ===")
+    for k, (r, n) in derive_go_rate_breakdown(pbp).items():
+        print(f"  {k}: {r:.4f}  (n={n}, binomial SE {np.sqrt(r*(1-r)/n):.4f})")
+
+
 if __name__ == "__main__":
     main()
+    main_d94()

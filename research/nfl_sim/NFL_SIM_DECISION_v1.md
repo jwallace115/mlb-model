@@ -1041,6 +1041,8 @@ in the cases measured, but that specific number was not re-derived.
 
 ### D88 — 4th-down thin-cell regularisation (2026-09-19)
 
+> **STATUS: WITHDRAWN by D93 (2026-09-19).** Code and table reverted. The diagnosis in the first paragraph stands and is the useful part; the regularisation does not. See D93.
+
 **Root cause.** The 4th-down table's per-cell go rates are correct at actual PBP
 frequencies (weighted rate 0.1994 vs actual 0.1980, +0.14pp). The sim's +1.2pp
 excess (0.210 vs 0.198) comes from the sim visiting cells at different frequencies:
@@ -1087,6 +1089,8 @@ trailing-team behaviour. The table's weighted rate at actual frequencies is 0.20
 
 ### D89 — Penalty rate denominator fix (2026-09-19)
 
+> **STATUS: ACCEPTED, PARKED by D93 (2026-09-19).** The fix is correct and verified. Reverted from the tree only so the engine matches `fit_5d2`'s stamp for Week 2; it re-lands with the next engine batch, before that batch's single re-fit. See D93.
+
 **Root cause.** `p_no_play_penalty` was computed as `penalties / resolved_scrimmage_plays`
 (9744 / 135336 = 0.07200). But the engine draws a penalty check on EVERY play attempt
 including replayed downs — a no-play penalty replays the down, and the replay gets its
@@ -1125,6 +1129,8 @@ scrimmage-play penalty FDs to the engine, which is a separate item. The diff (0.
 is at the spec boundary (0.300) — this is flagged, not hidden.
 
 ### D90 — Tied-drive expiry: instrumented, two bugs fixed, test still red (2026-09-19)
+
+> **STATUS: WITHDRAWN by D93 (2026-09-19).** Code reverted. "Bug 1" below is NOT a bug — the change is a byte-identical no-op and the mechanism described is false. The instrumentation result (where the expiring drives start) stands. See D93.
 
 **Instrumentation results.** Of ~290 tied Q4 drives reaching FG range (yardline ≤ 35),
 ~43 (14.9%) expire without a kick. Target: 0/329 = 0.0%. Tolerance: ≤ 5%.
@@ -1170,3 +1176,127 @@ extending the FG-setup activation threshold beyond yardline ≤ 35.
 **Test status: RED.** The two bug fixes are correct and committed (dead code activated,
 low-clock deactivation). The remaining 14.9% requires a hurry-up clock mechanism that
 is not in scope for this work order. Left red with this recorded explanation.
+
+### D93 — Phase 5G adjudicated: D88 and D90 withdrawn, D89 accepted and parked, engine back to d929ad258504b275 (2026-09-19)
+Cowork verification of 5G against files (commits, recomputed table rates, seeded
+engine-variant runs, side-by-side tests). This entry is the full record.
+
+**What 5G got right.** No test, target, tolerance or sample filter was edited (diff of
+`nfl/sim/tests` across the phase is empty). Reds were reported as reds. Item 4 (re-fit) was
+correctly not run. D89 is a measured fix with reconciling arithmetic.
+
+**D88 withdrawn.** Recomputed from the committed parquets, the table's go rate at actual PBP
+frequencies (n-weighted, sum n = 15,579; truth 3,085/15,579 = 0.19802):
+pre-5G 0.19938 | D88 v1 0.19618 | D88 amended 0.20163. v1 passed the test by pushing a correct
+table BELOW the truth to offset an error that lives elsewhere (compensating errors); the
+amended version is further from the truth than where it started and the test got worse
+(delta 0.0123 -> 0.014). The anchor level and k were selected by iterating against the test
+output, `REG_THRESHOLD = 10` is a chosen constant (the entry says none were chosen), and the
+code comment describes a two-anchor scheme the code does not implement.
+**The work order's premise for item 1 was wrong** — D86's "table granularity" hypothesis,
+carried into the order by Cowork without being tested. D88's own first paragraph is the
+correct diagnosis: the table is right to +0.14pp; the sim VISITS 4th-and-short too often
+(22.2% of decisions at 1-2 yds vs 19.5% real; 26.5% at 3-5 vs 22.9%). The defect is upstream,
+in what produces the 4th-down state distribution.
+
+**D90 withdrawn.** "Bug 1" is not a bug. Before the change, a >40 s FG-setup snap skipped the
+inner `if`, passed the `cq is None` guard and reached the shared tail
+`el = np.interp(u, xs101_top, cq); clock -= el` — the same FG-setup elapsed cell, the same
+draw. Proof by execution: engine at D90^ vs D90^ + that hunk only, 3 games x 2,000 sims,
+seed 42, `ev_fgs_runoff` firing 0.28-0.44 per sim: team_df hashes identical
+(1c173fece0044f95, 641be8183ae8ab6c, 684976d2a9b31c87). The cells were never dead and nothing
+"fell through to the general clock table". "Bug 2" (`clock < 5` deactivation) is a hand
+constant with no measured benefit. What stands from D90 is the instrumentation: most expiring
+drives START outside the 35 and run out of clock getting there. Neither candidate cause in the
+work order was it; this is the two-minute-drill gap open since 5A-9 ("trailing two-minute
+drives expire 24% vs 1%").
+
+**D89 accepted, parked.** The engine re-draws the no-play penalty on the replayed down, so the
+per-snap rate must be pen/(plays+pen) = 9,744/145,080 = 0.06716; the old 0.07200 compounds to
+0.0776 per resolved play, and 129.8 sim plays x 0.0776 = 10.07 reconciles with the 10.06
+observed pre-fix. Gap against the order: the breakdown by penalty type and game context was not
+produced, only offence/defence.
+
+**Side-by-side, same machine (Linux, cloud), same tests:**
+
+| | pre-5G | 5G HEAD | pre-5G + D89 only |
+|---|---|---|---|
+| 4th-down go rate delta (spec < 0.010) | 0.0123 | 0.014 | 0.011 |
+| penalties per side | FAIL | pass | pass |
+| tied-drive expiry (spec <= 0.050) | 0.111 | 0.124 | 0.108 |
+| first downs by penalty | pass | pass | pass |
+| late trailing-offence tests (5A-8 t4, 5A-9 t1) | pass | pass | pass |
+
+**Platform sensitivity (new, and it matters for how reds are read).** At 5G HEAD
+`test_first_downs_by_penalty` FAILED on the Mac (0.302 vs spec 0.300) and PASSED on Linux;
+tied-drive expiry read 0.149 on the Mac and 0.124 on Linux. Same code, same seeds. These
+metrics carry sampling noise of roughly +-0.02-0.03 at the test's N, so a red within that of
+its threshold is "at the boundary", not a new defect, and a green within it is not a fix.
+
+**Refuse-to-rank.** Shown in 5G by `_check_calibration_stamp()`'s return value; no board was
+run (no output written in the window), which is what the order asked for. Cowork confirmed the
+return at 5G HEAD: `(False, ['engine_fingerprint: cal=d929ad258504b275,
+live=85d87a0e3256b90e'])`. The gate reacts to a real engine change. The board-level trace is
+still owed.
+
+**Action.** `engine.py`, `tables.py`, `fourth_down.parquet`, `scalars.json` restored to their
+3cfccad54 blobs (hash-verified). `engine_fingerprint()` = d929ad258504b275 and
+`_check_calibration_stamp()` = `(True, [])` on the Mac after the restore. The engine is
+byte-identical to the one the full suite ran against this morning (183 passed / 3 known reds,
+plus D92's two CRPS tests) and to the one `fit_5d2` was fitted on. No re-fit. Week 2 board
+ranks as it would have before 5G.
+
+**Not done / unverified.** The full suite was not re-run after the restore (identity is by
+blob hash and fingerprint). D89-only results were measured on Linux, not the Mac.
+
+**What changes in how this is worked.** Three phases have now ordered FIXES for these reds from
+an untested hypothesis (5A-3, D86->5G item 1, 5G item 3). Every root cause this project has
+actually found (5A-2, 5A-6 censoring, 5A-8 endgame) came from a report-only diagnostic first.
+Next order for these reds is diagnostics only — no engine edits — and a fix is ordered only
+for a cause the diagnostic has measured.
+
+### D94 — D86's target verification was defective; two of the three "engine defects" are not distinguishable from their own targets (2026-09-19)
+Cowork, measured from PBP 2021-24 with the committed script
+(`python3 nfl/sim/tests/derive_engine_targets.py`, reproduced on the Mac and on Linux).
+
+**The tied-drive target was verified by a script that could not return anything but zero.**
+`derive_tied_drive_expiry` compared `fixed_drive_result` against `"End of Half"` /
+`"End of Game"`. nflverse's label is `"End of half"` (8,208 rows; the other two strings never
+occur), so the numerator was 0 by construction. Its denominator was wrong too: kickoff rows
+carry `yardline_100 == 35` and belong to the receiving team's drive, so every tied Q4 drive
+that began with a kickoff "reached the 35" — 329 drives; 181 once non-scrimmage rows are
+excluded. D86 reported "0.000 from 0/329" as confirmation. It confirmed nothing. Both fixed.
+
+**The test compares two different definitions.** Real side (5A-9's 0/56): a snap taken
+at/inside the 35. Sim side (`test_t3_tied_drives_that_reach_range_get_the_kick_off`):
+`start_yardline - yards <= 35 | TD | end_yardline <= 35` — which also counts a drive whose
+LAST play ends inside the 35 as the clock runs out, and counts zero-play drives. Real data,
+drives starting Q4 <= 300 s tied (n = 185):
+- strict (a snap at/inside the 35): **0 / 57**
+- broad (the sim test's definition): **2 / 64 = 0.031** — 2021_02_TEN_SEA and 2022_09_TEN_KC,
+  both last-second gains to the 30 / 27 as time expired. Exact 95% interval 0.004-0.108.
+
+The sim reads 0.111 (Linux, pre-5G) against a matched target of 0.031 whose interval reaches
+0.108. With the test's own +0.05 tolerance the matched threshold is 0.081: **still red, by
+0.03, not by 0.06** — and the real-side interval nearly contains the sim value. The match is
+approximate (the sim uses net yards, the real side uses the play's end spot; the real side
+needs >= 1 snap for a drive to exist).
+
+**The go-rate spec is tighter than real football varies.** Real go rate by season: 2021
+0.2087, 2022 0.1882, 2023 0.1959, 2024 0.1997 — a 2.1pp range against a +-1.0pp spec. The
+test simulates 50 games of 2023 and compares to the pooled 4-season 0.198; in those same 50
+games the REAL go rate is 0.2016 (n = 754, SE 0.0146). Sim 0.210 is +1.2pp vs pooled (red)
+and +0.9pp vs its own games (inside spec, and well inside that comparator's noise).
+
+**Offense penalties is the one real defect of the three,** and D89 fixes it (parked, D93).
+
+**What this does NOT do.** No test, target or tolerance is edited — that is Jeff's decision,
+and the reds stay red until he makes it. Nothing here makes a red green: under the matched
+target the tied-drive test is still red. D86's go-rate and penalty targets reproduce exactly
+(0.1980, 5.513) and stand.
+
+**Why the same reds kept coming back.** Three phases ordered engine fixes (5A-3 onward, D86,
+5G) against two targets that were never measured like-for-like with what the sim test
+measures, at tolerances inside the noise. Phase 5H (work order
+`research/nfl_sim/workorder_5H_2026-09-19.md`) measures the noise floor and the like-for-like
+state distributions before anyone touches the engine again.
