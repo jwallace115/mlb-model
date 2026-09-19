@@ -885,6 +885,49 @@ the old code path to compare against, which no longer exists. The D59 PIT test
 implicitly covers structural correctness: if the aggregate prior introduced a
 time leak, the PIT assertion would catch it.
 
+### D86 — Three standing engine reds are ENGINE DEFECTS, not stale targets (2026-09-19)
+
+All three hardcoded targets re-derived from `nfl/data/pbp/pbp_2021..2024.parquet`
+by `nfl/sim/tests/derive_engine_targets.py` (committed script). All three match
+their hardcoded values exactly.
+
+**(1) test_engine_5a3.py:67 — 4th-down go rate.**
+  Target: 0.198 (3,085 go / 15,579 4th-down decisions, weeks 1–18, 2021–2024).
+  Re-derived: **0.1980** — matches the hardcoded value to 4 decimal places.
+  Sim value (from prompt): 0.210. Delta: +0.012, spec: < 0.010.
+  **Classification: ENGINE DEFECT.** The engine generates 4th-down go attempts
+  1.2pp above the measured rate. The D23 GOE fix (5A-3) and the D30 table rebuild
+  (5A-9) reduced this from 23.2% to ~21%, but the residual 1.2pp persists. The
+  5A-2 diagnostic traced the excess to table granularity. Do NOT widen the
+  tolerance — the target is correct. Fix requires finer table cells or a
+  supplementary correction, which is a Phase 5A-12+ item.
+
+**(2) test_engine_5a4.py:75 — offense penalties per game.**
+  Target: 5.51 (5,993 offense no-play penalties / 1,087 games, weeks 1–18).
+  Re-derived: **5.513** — 5,993/1,087 exactly as the test comment states.
+  Sim value (from prompt): 6.20. Delta: +0.69, spec: < 0.5.
+  **Classification: ENGINE DEFECT.** The engine overproduces offense penalties by
+  ~12.5%. The penalty_detail table drives penalty generation; the rate or the
+  game-context conditioning is too aggressive. Do NOT widen the tolerance. Fix
+  requires auditing the penalty rate table and its draw frequency in the engine.
+
+**(3) test_engine_5a9.py:143 — tied drives reaching the 35 that expire.**
+  Target: 0.0 (0 of 329 tied Q4 drives that reached the opponent's 35 expired
+  without a kick, 2021–2024).
+  Re-derived: **0.0000** — confirmed 0/329.
+  Sim value (from prompt): 0.111. Tolerance: ≤ 0.050 (= target + 0.05).
+  **Classification: ENGINE DEFECT.** 11.1% of the sim's tied drives reaching
+  range expire without a kick, vs 0% in reality. The D33 FG-setup state (5A-9)
+  reduced this from ~14% but did not eliminate it. The remaining expiries likely
+  come from: (a) the clock advancing past the kick window despite the kneel
+  table, or (b) the FG-setup state not triggering for all qualifying situations.
+  Do NOT widen the tolerance — 0/329 is not a coincidence. Fix requires
+  instrumenting the engine's FG-setup state activation to find missed entries.
+
+**Summary:** all three are ENGINE DEFECT (category b). All three targets are
+correct for the current fit window. All three are left RED with this recorded
+explanation. None requires a tolerance change. The derivation script is committed.
+
 ### D84 — Props cron was not firing: entries installed after all scheduled slots (2026-09-19)
 
 **What was wrong.** The three `pull_hardrock_props.py` cron entries were installed
