@@ -308,3 +308,36 @@ SPOT-CHECK:
 0 both-sides violations, 0 legs not on board, 0 pricing numbers discarded.
 All reference_only=True, all graded=False.
 Ticket log: 5 → 8 (+3). Append-only guard passed.
+
+### N22 — Card assembler: conviction-vs-filler, no-overlap invariant (2026-09-19)
+`ncaaf/pipeline/build_ncaaf_cards.py` — reads today's tickets, emits two cards.
+
+CARD A (5-leg conviction): one leg per game, spreads preferred, ranked by spread
+magnitude. All CONVICTION — never weakened to reach 5.
+
+CARD B (10+ longshot): conviction legs first (not on Card A), then FILLER legs
+clearly marked with `leg_type="FILLER"`. At most one leg per game UNLESS the
+pair is a joint-table cover+over pairing (|spread| >= 21), citing the cell and n.
+
+No-overlap invariant: `_leg_key(l) = (event_id, market, side, point)`. Card A
+keys and Card B keys must be disjoint. Assert + raise on violation.
+
+Both-sides tickets from WO7 (which had both spread sides in a single ticket)
+are dropped before card assembly.
+
+Hold computed from actual leg prices with proper two-sided devig from the board
+(multiplicative method), not from assumed -110.
+
+First run: Card A = 5 legs (24.2% hold), Card B = 19 legs (68.1% hold, all
+conviction — no filler needed). AI abstained on 70/89 events (78.7%).
+
+### N23 — Card logging with conviction/filler tagging (2026-09-19)
+Both cards logged to `ncaaf/logs/ncaaf_board_tickets_2026.json` as entries with:
+- `card_id`: "A_5LEG" or "B_LONGSHOT"
+- `graded`: False
+- `reference_only`: True
+- Each leg carries `leg_type` ("CONVICTION" or "FILLER"), `price`, `book`,
+  `snapshot_time`, enabling later CLV breakdown by conviction vs filler.
+
+N16 append-only guard applies: ticket count must not decrease.
+Grading deferred to Sunday 13:00Z scheduled task.

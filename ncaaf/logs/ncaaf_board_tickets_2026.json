@@ -384,5 +384,1042 @@
     "close_price": null,
     "clv": null,
     "graded": false
+  },
+  {
+    "event_id": "529a333381665c34d05b290d2c9eb5b9",
+    "home_team": "Delaware Blue Hens",
+    "away_team": "Coastal Carolina Chanticleers",
+    "commence_time": "2026-09-19T15:30:00Z",
+    "favourite": "Delaware Blue Hens",
+    "underdog": "Coastal Carolina Chanticleers",
+    "spread_magnitude": 5.0,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Coastal Carolina Chanticleers",
+        "point": 5.0,
+        "price": -115.0,
+        "book": "draftkings",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Coastal Carolina demonstrated offensive firepower with a 45-7 blowout of Fordham, featuring multiple TD passes and rushing TDs, suggesting the underdog has more explosive potential than a 5-point discount reflects."
+      }
+    ],
+    "ai_flags": [
+      "Limited sample size: only two games played by Coastal Carolina",
+      "Delaware home field advantage not fully priced in given recent CCU offensive display",
+      "Inconsistent CCU performance (loss to WVU 31-24 vs. dominant win vs. Fordham)"
+    ],
+    "ai_rationale": "Coastal Carolina's Week 2 dominant performance against Fordham shows an offense capable of scoring 45+ points, which conflicts with the market pricing them at +5 as a significant underdog. While the small sample size and home field disadvantage for Delaware warrant caution, the recent offensive explosion provides value on the underdog. The total remains too uncertain given CCU's wide performance range to commit to either side.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "9a69dbd474c6181a4c51f397b9b25d38",
+    "home_team": "Iowa State Cyclones",
+    "away_team": "Bowling Green Falcons",
+    "commence_time": "2026-09-19T16:00:00Z",
+    "favourite": "Iowa State Cyclones",
+    "underdog": "Bowling Green Falcons",
+    "spread_magnitude": 23.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Iowa State Cyclones",
+        "point": -23.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Bowling Green has lost decisively to FBS teams (56-7 to Nebraska, 20-13 to Tarleton State) and faces a significant talent gap against Iowa State."
+      }
+    ],
+    "ai_flags": [
+      "Large spread suggests predictable matchup but limited value for parlay purposes",
+      "Bowling Green appears overmatched based on recent competitive results"
+    ],
+    "ai_rationale": "The 23.5-point spread reflects a clear talent disparity supported by Bowling Green's recent losses to inferior competition. Iowa State should control this game, making the spread a reasonable pick. However, the large margin limits parlay appeal, so I abstain from the totals side due to insufficient information about either team's offensive or defensive efficiency trends this season.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "6eee31d7778965a3e617f10146619c1d",
+    "home_team": "Ohio State Buckeyes",
+    "away_team": "Kent State Golden Flashes",
+    "commence_time": "2026-09-19T16:00:00Z",
+    "favourite": "Ohio State Buckeyes",
+    "underdog": "Kent State Golden Flashes",
+    "spread_magnitude": 52.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Ohio State Buckeyes",
+        "point": -52.5,
+        "price": -110.0,
+        "book": "betonlineag",
+        "implied": 0.5145631067961165,
+        "ai_reason": "Ohio State is a top-6 program playing at home against a FBS lower-tier opponent that was blown out 57-0 in Week 1, while Ohio State's Week 2 loss to Texas shows they remain a strong defensive team."
+      }
+    ],
+    "ai_flags": [
+      "Large spread suggests limited value on the favorite",
+      "Total of 59.0 is difficult to project given Kent State's offensive struggles and Ohio State's recent defensive performance"
+    ],
+    "ai_rationale": "While the 52.5-point spread offers minimal value, Ohio State's elite status and Kent State's historically weak offensive performance (57-0 loss to South Carolina, limited scoring against Wofford) make the spread play the only viable leg. The total is too uncertain to pick with confidence given conflicting signals about offensive output.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "b0cd2e8beaf0dc333daa592a0d3d5c3a",
+    "home_team": "Texas State Bobcats",
+    "away_team": "North Texas Mean Green",
+    "commence_time": "2026-09-19T16:00:00Z",
+    "favourite": "Texas State Bobcats",
+    "underdog": "North Texas Mean Green",
+    "spread_magnitude": 3.0,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "North Texas Mean Green",
+        "point": 3.0,
+        "price": -120.0,
+        "book": "bovada",
+        "implied": 0.5348837209302325,
+        "ai_reason": "North Texas just dominated UNLV 44-6 while Texas State lacks recent comparable offensive output, suggesting the underdog discount may be overpriced."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 62.5,
+        "price": -105.0,
+        "book": "bovada",
+        "implied": 0.5192307692307693,
+        "ai_reason": "North Texas has demonstrated explosive offensive capability (44 points vs UNLV, 38 allowed to Indiana), and the total appears conservative given their recent scoring pace."
+      }
+    ],
+    "ai_flags": [],
+    "ai_rationale": "North Texas enters this matchup with clear momentum from a dominant road win against UNLV just one week prior, establishing their offense can score prolifically. While Indiana's 52-16 victory showed UNT can be vulnerable defensively, the UNLV result (44-6) is more recent and relevant to current form. The spread appears to undervalue this momentum shift and Texas State's unproven offensive capability in comparison.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "5bc9efd5f27827a26c1cf8744bb8c2b1",
+    "home_team": "Minnesota Golden Gophers",
+    "away_team": "Akron Zips",
+    "commence_time": "2026-09-19T16:00:00Z",
+    "favourite": "Minnesota Golden Gophers",
+    "underdog": "Akron Zips",
+    "spread_magnitude": 23.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Minnesota Golden Gophers",
+        "point": -23.5,
+        "price": -110.0,
+        "book": "betmgm",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Minnesota is a strong home favorite against a Group of 6 opponent with concerning defensive vulnerabilities exposed by Wake Forest's 38-16 win."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 49.5,
+        "price": -117.0,
+        "book": "williamhill_us",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Akron demonstrated explosive offensive capability with 45 points against Robert Morris and 4 TD passes from Broughton, suggesting scoring potential despite defensive issues."
+      }
+    ],
+    "ai_flags": [
+      "High dispersion on spreads (3.5) suggests market uncertainty about the true gap",
+      "Akron's offensive output varies significantly (45 vs 16 points in recent games)",
+      "Small total line (49.5) constrains upside on over play"
+    ],
+    "ai_rationale": "Minnesota's home advantage and significant Vegas backing align with Akron's demonstrated defensive weaknesses. Akron's explosive offense (particularly the passing game) provides a pathway to offensive output that could push the combined total higher despite the team's overall struggles, making the Over worth considering despite the modest line.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "8b31d45a11a98ec8e6a9a9a5368a1bf4",
+    "home_team": "Rutgers Scarlet Knights",
+    "away_team": "USC Trojans",
+    "commence_time": "2026-09-19T19:30:00Z",
+    "favourite": "USC Trojans",
+    "underdog": "Rutgers Scarlet Knights",
+    "spread_magnitude": 21.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "USC Trojans",
+        "point": -21.5,
+        "price": -110.0,
+        "book": "betmgm",
+        "implied": 0.5238095238095238,
+        "ai_reason": "USC is ranked No. 12 and favored by a significant margin, while Rutgers just lost to Boston College 28-21 at home, demonstrating vulnerability against comparable competition."
+      }
+    ],
+    "ai_flags": [
+      "USC WR Trent Mosley out with undisclosed injury\u2014monitor impact on offensive depth",
+      "Large spread (21.5) creates parlay risk; totals market relatively balanced at 57.5"
+    ],
+    "ai_rationale": "The spread reflects USC's clear talent and ranking advantage, reinforced by Rutgers' recent loss to a lower-tier opponent. The injury news to USC's receiver is notable but does not overturn the fundamental matchup advantage. I abstain on totals as the 57.5 line appears fairly priced given both teams' recent scoring patterns and lacks a sharp directional signal.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "15ebe2df1d91e584d091d509e70a1a71",
+    "home_team": "Cincinnati Bearcats",
+    "away_team": "Miami (OH) RedHawks",
+    "commence_time": "2026-09-19T19:30:00Z",
+    "favourite": "Cincinnati Bearcats",
+    "underdog": "Miami (OH) RedHawks",
+    "spread_magnitude": 15.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Cincinnati Bearcats",
+        "point": -15.5,
+        "price": -110.0,
+        "book": "betrivers",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Cincinnati has dominated recent opponents (34-15 vs Boston College, strong win vs Western Carolina) with efficient offensive play from JC French IV, while Miami (OH) is a significant step down in competition."
+      },
+      {
+        "market": "totals",
+        "side": "Under",
+        "point": 49.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5283018867924528,
+        "ai_reason": "Cincinnati's recent wins show controlled, efficient play rather than shootouts, and the 49.5 total appears inflated given that Miami (OH) is a Mid-American Conference team likely to struggle offensively against a hot Bearcats squad."
+      }
+    ],
+    "ai_flags": [],
+    "ai_rationale": "Cincinnati enters this matchup with clear momentum after two decisive home wins, particularly with efficient offensive execution from their quarterback. The 15.5-point spread appears appropriate for the talent disparity between a Power Conference team versus a MAC opponent, and the total leans toward under as Cincinnati plays controlled football rather than high-volume scoring affairs.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "790266884d07b6c2aeed8efc216ba610",
+    "home_team": "Baylor Bears",
+    "away_team": "Louisiana Tech Bulldogs",
+    "commence_time": "2026-09-19T20:00:00Z",
+    "favourite": "Baylor Bears",
+    "underdog": "Louisiana Tech Bulldogs",
+    "spread_magnitude": 20.0,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Louisiana Tech Bulldogs",
+        "point": 20.0,
+        "price": -115.0,
+        "book": "draftkings",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Baylor's starting QB DJ Lagway is ruled out, forcing a backup (Nate Bennett) into action against a 20-point spread that assumes full roster health."
+      },
+      {
+        "market": "totals",
+        "side": "Under",
+        "point": 49.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5238095238095238,
+        "ai_reason": "QB transition and uncertainty typically reduces offensive efficiency; Baylor's previous game (44-3 vs Prairie View) is not predictive of output against a competent FBS opponent."
+      }
+    ],
+    "ai_flags": [
+      "Key injury: Baylor QB1 ruled out; backup starting",
+      "Large spread (20.0) may not fully price QB downgrade",
+      "Limited sample on backup QB performance vs FBS competition"
+    ],
+    "ai_rationale": "Baylor's loss of starting QB Lagway is a material shift in team quality that the 20-point spread may not fully capture. While Baylor remains favored, Louisiana Tech as a 20-point underdog with Baylor operating at reduced offensive capacity presents value. The total trends lower due to offensive uncertainty from the QB change and the blowout nature of Baylor's last outing (against inferior competition).",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "089e1a60578160dd6828794656461ba5",
+    "home_team": "Liberty Flames",
+    "away_team": "Ball State Cardinals",
+    "commence_time": "2026-09-19T20:00:00Z",
+    "favourite": "Liberty Flames",
+    "underdog": "Ball State Cardinals",
+    "spread_magnitude": 14.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Ball State Cardinals",
+        "point": 14.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5283018867924528,
+        "ai_reason": "Ball State showed offensive competence with 41 points against Stony Brook and a three-TD performance by Luster, suggesting they can stay competitive against a 14.5 spread despite the talent gap."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 49.5,
+        "price": -120.0,
+        "book": "betmgm",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Ball State's recent offensive output (41 points) combined with Liberty's typical scoring profile suggests the total could exceed 49.5 in a matchup where at least one team is capable of putting up points."
+      }
+    ],
+    "ai_flags": [
+      "limited_recent_liberty_data",
+      "only_two_ball_state_games_available"
+    ],
+    "ai_rationale": "Ball State demonstrated genuine offensive capability by putting 41 points on the board against Stony Brook with an efficient passing game, which provides some evidence they won't be completely shut down despite facing a 14.5 underdog spread. The over is attractive given Ball State's offensive showing and the inherent scoring nature of FBS matchups at this point total.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "bcc250cd218a520bcd287c120644ba05",
+    "home_team": "South Alabama Jaguars",
+    "away_team": "Ohio Bobcats",
+    "commence_time": "2026-09-19T23:00:00Z",
+    "favourite": "South Alabama Jaguars",
+    "underdog": "Ohio Bobcats",
+    "spread_magnitude": 6.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Ohio Bobcats",
+        "point": 6.5,
+        "price": -118.0,
+        "book": "betrivers",
+        "implied": 0.5157129455909943,
+        "ai_reason": "Ohio just won in 3OT with a 3rd-string freshman QB against Jacksonville State, showing resilience and momentum heading into this matchup as an underdog."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 49.0,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5121951219512195,
+        "ai_reason": "Ohio's recent game went to 3OT (29-27), and Nebraska scored 49 points against them just last week, suggesting offensive capability that pushes the total higher."
+      }
+    ],
+    "ai_flags": [
+      "recent_momentum",
+      "qb_depth_concerns_south_alabama"
+    ],
+    "ai_rationale": "Ohio has clear momentum from a dramatic 3OT comeback win and demonstrated offensive output in recent games, making the 6.5-point spread reasonable value for the underdog. The total of 49.0 appears modest given both teams' recent scoring patterns, particularly with Ohio's tendency toward higher-scoring affairs.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "be8b2e012b50c86775a87bb633e330e6",
+    "home_team": "Rice Owls",
+    "away_team": "Western Michigan Broncos",
+    "commence_time": "2026-09-19T23:00:00Z",
+    "favourite": "Western Michigan Broncos",
+    "underdog": "Rice Owls",
+    "spread_magnitude": 9.0,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Western Michigan Broncos",
+        "point": -9.0,
+        "price": -112.0,
+        "book": "draftkings",
+        "implied": 0.5283018867924528,
+        "ai_reason": "Western Michigan is favored against a Rice team that just suffered a 52-0 blowout to Notre Dame, indicating significant quality gap."
+      },
+      {
+        "market": "totals",
+        "side": "Under",
+        "point": 43.5,
+        "price": -105.0,
+        "book": "bovada",
+        "implied": 0.5121951219512195,
+        "ai_reason": "Rice's recent defensive collapse (52-0 loss) combined with low-scoring tendency suggests a defensive showcase rather than an offensive shootout."
+      }
+    ],
+    "ai_flags": [
+      "Rice just played elite competition (Notre Dame) which may not perfectly predict performance vs. mid-tier opponent",
+      "Western Michigan's offensive capability not clearly established from available news"
+    ],
+    "ai_rationale": "Rice displayed severe defensive vulnerability in a 52-0 loss to Notre Dame while Western Michigan travels as a clear favorite. The under plays to Rice's defensive struggles and the likelihood of Western Michigan controlling the game without needing to score heavily, keeping this matchup well under the 43.5 total.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "4a9e833f32775e201ee648c51840df85",
+    "home_team": "UCF Knights",
+    "away_team": "Georgia State Panthers",
+    "commence_time": "2026-09-19T23:00:00Z",
+    "favourite": "UCF Knights",
+    "underdog": "Georgia State Panthers",
+    "spread_magnitude": 17.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Georgia State Panthers",
+        "point": 17.5,
+        "price": -109.0,
+        "book": "williamhill_us",
+        "implied": 0.5327102803738317,
+        "ai_reason": "Georgia State has shown offensive competence in three straight blowout wins (59-10, 31-17) while UCF's recent performance data is absent from the news, suggesting the 17.5-point spread may overestimate UCF's edge."
+      }
+    ],
+    "ai_flags": [
+      "limited_ucf_data",
+      "georgia_state_momentum",
+      "large_spread_dispersion"
+    ],
+    "ai_rationale": "Georgia State enters with demonstrated offensive production across three consecutive games, while UCF's recent form is not reflected in available news. The 17.5-point spread is substantial, and Georgia State's underdog value combined with proven scoring ability warrants a pick on the underdog side. The total is too uncertain to play without additional context on UCF's defensive profile.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "47892b65c28a830d83bbe465b070ce01",
+    "home_team": "Oklahoma Sooners",
+    "away_team": "New Mexico Lobos",
+    "commence_time": "2026-09-19T23:30:00Z",
+    "favourite": "Oklahoma Sooners",
+    "underdog": "New Mexico Lobos",
+    "spread_magnitude": 21.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Oklahoma Sooners",
+        "point": -21.5,
+        "price": -113.0,
+        "book": "betrivers",
+        "implied": 0.5121951219512195,
+        "ai_reason": "Oklahoma is a top-25 program facing a New Mexico team depleted by their starting QB Jack Layne's season-ending injury, making the large spread defensible."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 45.5,
+        "price": -118.0,
+        "book": "betonlineag",
+        "implied": 0.5215311004784688,
+        "ai_reason": "New Mexico has demonstrated explosive offensive capability (70-7 and 38-7 victories in recent games), suggesting the total is set conservatively relative to their scoring potential."
+      }
+    ],
+    "ai_flags": [
+      "starting_qb_injury_new_mexico",
+      "recent_offensive_explosiveness_new_mexico"
+    ],
+    "ai_rationale": "New Mexico's strong recent offensive performances (70-7, 38-7) suggest scoring capability, but the loss of starting QB Jack Layne is a significant structural weakness that Oklahoma should exploit. The spread appears well-calibrated to Oklahoma's quality, while the total may undervalue New Mexico's offense even with backup QB play.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "03297aa8a399c223aa1cc6aa923d9bc6",
+    "home_team": "Northwestern Wildcats",
+    "away_team": "Colorado Buffaloes",
+    "commence_time": "2026-09-19T23:30:00Z",
+    "favourite": "Northwestern Wildcats",
+    "underdog": "Colorado Buffaloes",
+    "spread_magnitude": 3.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Colorado Buffaloes",
+        "point": 3.5,
+        "price": -110.0,
+        "book": "bovada",
+        "implied": 0.5283018867924528,
+        "ai_reason": "Colorado demonstrated explosive offensive efficiency with 5 TDs in the first half alone against Weber State, suggesting the underdog points have value against a Northwestern team without recent comparable performance data."
+      }
+    ],
+    "ai_flags": [
+      "limited_recent_northwestern_data",
+      "colorado_offensive_momentum",
+      "small_spread"
+    ],
+    "ai_rationale": "Colorado's dominant Week 2 performance (52-21 with Julian Lewis throwing 4 first-half TDs and running for another) indicates significant offensive firepower that provides edge value at 3.5 points. The total of 48.0 is difficult to assess without clarity on Northwestern's defensive profile, so abstaining from totals is prudent given the information asymmetry.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "b7cdc05f280bede1f19b996cc9b95753",
+    "home_team": "Maryland Terrapins",
+    "away_team": "Virginia Tech Hokies",
+    "commence_time": "2026-09-19T23:30:00Z",
+    "favourite": "Virginia Tech Hokies",
+    "underdog": "Maryland Terrapins",
+    "spread_magnitude": 3.0,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Maryland Terrapins",
+        "point": 3.0,
+        "price": -120.0,
+        "book": "bovada",
+        "implied": 0.5348837209302325,
+        "ai_reason": "Maryland has dominated two consecutive games (62-0 vs Hampton, 38-14 vs UConn) showing explosive offensive efficiency that suggests they can keep this close or win outright against a favored Virginia Tech team."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 53.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Maryland's recent offensive production (646 yards and 62 points vs Hampton, 38 points vs UConn) combined with Virginia Tech being the road favorite suggests both teams will have scoring opportunities in what could develop into a competitive matchup."
+      }
+    ],
+    "ai_flags": [
+      "limited_vtech_data",
+      "recent_news_sparse"
+    ],
+    "ai_rationale": "Maryland enters this matchup with strong recent form and dominant offensive metrics across two games, while Virginia Tech's recent performance data is not reflected in the available news. The 3-point spread appears to undervalue Maryland's current trajectory, and the total of 53.5 seems conservative given Maryland's offensive output in recent weeks.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "cc6953f45fe5acfc853fdf5e5e28a0e7",
+    "home_team": "Tennessee Volunteers",
+    "away_team": "Kennesaw State Owls",
+    "commence_time": "2026-09-19T23:45:00Z",
+    "favourite": "Tennessee Volunteers",
+    "underdog": "Kennesaw State Owls",
+    "spread_magnitude": 35.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Tennessee Volunteers",
+        "point": -35.5,
+        "price": -115.0,
+        "book": "betonlineag",
+        "implied": 0.5192307692307693,
+        "ai_reason": "Tennessee is a ranked Top 15 program at home against a FCS opponent that just lost 31-17 to Georgia State, making the massive spread appropriate for a talent mismatch."
+      },
+      {
+        "market": "totals",
+        "side": "Under",
+        "point": 60.5,
+        "price": 100.0,
+        "book": "bovada",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Kennesaw State's recent loss to Georgia State and defensive vulnerability suggests Tennessee will control the game with methodical scoring rather than a high-volume offensive showcase."
+      }
+    ],
+    "ai_flags": [
+      "FCS vs FBS matchup with extreme spread",
+      "Kennesaw State coming off narrow loss to FCS opponent Georgia State"
+    ],
+    "ai_rationale": "Tennessee's dominant spread reflects the significant talent gap against an FCS program. Recent news shows Kennesaw State struggled against Georgia State, indicating defensive issues. The Under is supported by Tennessee's likely game script advantage and control, rather than expecting explosive scoring from an undermanned visitor.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "0cdf27f150204b8512bca1e2d7cce051",
+    "home_team": "San Diego State Aztecs",
+    "away_team": "James Madison Dukes",
+    "commence_time": "2026-09-20T02:00:00Z",
+    "favourite": "San Diego State Aztecs",
+    "underdog": "James Madison Dukes",
+    "spread_magnitude": 1.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "James Madison Dukes",
+        "point": 1.5,
+        "price": -112.0,
+        "book": "pinnacle",
+        "implied": 0.5192307692307693,
+        "ai_reason": "JMU's explosive recent form (87-3 dominant win with 3 punt-return TDs, plus convincing Liberty win) under new coach Billy Napier suggests momentum and competence that may not be fully priced into a tight 1.5-point line."
+      }
+    ],
+    "ai_flags": [
+      "Small sample size - only two games into the season",
+      "Wagner is significantly weaker competition than SDSU",
+      "SDSU's FBS pedigree and home field advantage not to be discounted"
+    ],
+    "ai_rationale": "JMU has demonstrated strong offensive execution and special teams dominance in back-to-back wins, including a statement victory over Liberty. The narrow 1.5-point line undervalues this early-season competence. However, the total of 46.5 lacks clarity given the matchup of JMU's explosive recent outputs against SDSU's actual defensive capabilities\u2014insufficient information warrants abstaining on totals.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "f6db4e789ff9341a9c94befc751c5f53",
+    "home_team": "San Jose State Spartans",
+    "away_team": "Fresno State Bulldogs",
+    "commence_time": "2026-09-20T03:00:00Z",
+    "favourite": "Fresno State Bulldogs",
+    "underdog": "San Jose State Spartans",
+    "spread_magnitude": 6.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Fresno State Bulldogs",
+        "point": -6.5,
+        "price": -105.0,
+        "book": "bovada",
+        "implied": 0.5169082125603864,
+        "ai_reason": "Fresno State just dominated Sacramento State 49-3 at home showing offensive firepower, while traveling to San Jose State (a weaker MWC opponent) as a moderate favorite."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 49.5,
+        "price": -120.0,
+        "book": "betrivers",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Fresno State's recent 49-point output combined with San Jose State's defensive limitations suggests offensive production should push above a 49.5 total."
+      }
+    ],
+    "ai_flags": [],
+    "ai_rationale": "Fresno State demonstrated strong offensive output in their latest game and holds a meaningful home-field advantage despite traveling. The moderate 6.5 spread is justified, and the recent scoring trend supports taking the over on a modest total.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "6c95114d806556a04a0d719e62c042d7",
+    "home_team": "West Virginia Mountaineers",
+    "away_team": "Oklahoma State Cowboys",
+    "commence_time": "2026-09-26T23:00:00Z",
+    "favourite": "Oklahoma State Cowboys",
+    "underdog": "West Virginia Mountaineers",
+    "spread_magnitude": 2.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Oklahoma State Cowboys",
+        "point": -2.5,
+        "price": -110.0,
+        "book": "draftkings",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Oklahoma State just upset No. 6 Oregon 39-31 as a significant underdog, demonstrating genuine offensive capability and momentum heading into this matchup."
+      }
+    ],
+    "ai_flags": [
+      "limited_wvu_information",
+      "single_week_sample_size"
+    ],
+    "ai_rationale": "Oklahoma State's dominant upset of a top-6 team provides clear evidence of competitive strength and offensive firepower. While the 2.5-point spread is modest, the recent context suggests Oklahoma State has earned favorite status. The totals market lacks sufficient directional clarity from available information, so abstaining there is appropriate.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T11:01:16.236116+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "card_id": "A_5LEG",
+    "build_time": "2026-09-19T11:09:13.352993+00:00",
+    "reference_only": true,
+    "graded": false,
+    "legs": [
+      {
+        "event_id": "6eee31d7778965a3e617f10146619c1d",
+        "home_team": "Ohio State Buckeyes",
+        "away_team": "Kent State Golden Flashes",
+        "commence_time": "2026-09-19T16:00:00Z",
+        "market": "spreads",
+        "side": "Ohio State Buckeyes",
+        "point": -52.5,
+        "price": -110.0,
+        "book": "betonlineag",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Ohio State is a top-6 program playing at home against a FBS lower-tier opponent that was blown out 57-0 in Week 1, while Ohio State's Week 2 loss to Texas shows they remain a strong defensive team."
+      },
+      {
+        "event_id": "cc6953f45fe5acfc853fdf5e5e28a0e7",
+        "home_team": "Tennessee Volunteers",
+        "away_team": "Kennesaw State Owls",
+        "commence_time": "2026-09-19T23:45:00Z",
+        "market": "spreads",
+        "side": "Tennessee Volunteers",
+        "point": -35.5,
+        "price": -115.0,
+        "book": "betonlineag",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Tennessee is a ranked Top 15 program at home against a FCS opponent that just lost 31-17 to Georgia State, making the massive spread appropriate for a talent mismatch."
+      },
+      {
+        "event_id": "01e9c4d460a55375a75d025e2b1ddbf5",
+        "home_team": "Arkansas Razorbacks",
+        "away_team": "Georgia Bulldogs",
+        "commence_time": "2026-09-19T16:00:00Z",
+        "market": "spreads",
+        "side": "Georgia Bulldogs",
+        "point": -24.5,
+        "price": -115.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Second-ranked Georgia opens SEC play against struggling Arkansas, which just lost decisively to Utah with multiple defensive breakdowns."
+      },
+      {
+        "event_id": "9a69dbd474c6181a4c51f397b9b25d38",
+        "home_team": "Iowa State Cyclones",
+        "away_team": "Bowling Green Falcons",
+        "commence_time": "2026-09-19T16:00:00Z",
+        "market": "spreads",
+        "side": "Iowa State Cyclones",
+        "point": -23.5,
+        "price": -115.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Bowling Green has lost decisively to FBS teams (56-7 to Nebraska, 20-13 to Tarleton State) and faces a significant talent gap against Iowa State."
+      },
+      {
+        "event_id": "5bc9efd5f27827a26c1cf8744bb8c2b1",
+        "home_team": "Minnesota Golden Gophers",
+        "away_team": "Akron Zips",
+        "commence_time": "2026-09-19T16:00:00Z",
+        "market": "spreads",
+        "side": "Minnesota Golden Gophers",
+        "point": -23.5,
+        "price": -110.0,
+        "book": "betmgm",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Minnesota is a strong home favorite against a Group of 6 opponent with concerning defensive vulnerabilities exposed by Wake Forest's 38-16 win."
+      }
+    ]
+  },
+  {
+    "card_id": "B_LONGSHOT",
+    "build_time": "2026-09-19T11:09:13.352993+00:00",
+    "reference_only": true,
+    "graded": false,
+    "legs": [
+      {
+        "event_id": "cc6953f45fe5acfc853fdf5e5e28a0e7",
+        "home_team": "Tennessee Volunteers",
+        "away_team": "Kennesaw State Owls",
+        "commence_time": "2026-09-19T23:45:00Z",
+        "market": "totals",
+        "side": "Under",
+        "point": 60.5,
+        "price": 100.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Kennesaw State's recent loss to Georgia State and defensive vulnerability suggests Tennessee will control the game with methodical scoring rather than a high-volume offensive showcase."
+      },
+      {
+        "event_id": "01e9c4d460a55375a75d025e2b1ddbf5",
+        "home_team": "Arkansas Razorbacks",
+        "away_team": "Georgia Bulldogs",
+        "commence_time": "2026-09-19T16:00:00Z",
+        "market": "totals",
+        "side": "Under",
+        "point": 54.5,
+        "price": -115.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Arkansas's recent defensive performance against Utah suggests limited offensive capability, and Georgia typically plays disciplined, ball-control football in SEC matchups."
+      },
+      {
+        "event_id": "5bc9efd5f27827a26c1cf8744bb8c2b1",
+        "home_team": "Minnesota Golden Gophers",
+        "away_team": "Akron Zips",
+        "commence_time": "2026-09-19T16:00:00Z",
+        "market": "totals",
+        "side": "Over",
+        "point": 49.5,
+        "price": -117.0,
+        "book": "williamhill_us",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Akron demonstrated explosive offensive capability with 45 points against Robert Morris and 4 TD passes from Broughton, suggesting scoring potential despite defensive issues."
+      },
+      {
+        "event_id": "8b31d45a11a98ec8e6a9a9a5368a1bf4",
+        "home_team": "Rutgers Scarlet Knights",
+        "away_team": "USC Trojans",
+        "commence_time": "2026-09-19T19:30:00Z",
+        "market": "spreads",
+        "side": "USC Trojans",
+        "point": -21.5,
+        "price": -110.0,
+        "book": "betmgm",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "USC is ranked No. 12 and favored by a significant margin, while Rutgers just lost to Boston College 28-21 at home, demonstrating vulnerability against comparable competition."
+      },
+      {
+        "event_id": "47892b65c28a830d83bbe465b070ce01",
+        "home_team": "Oklahoma Sooners",
+        "away_team": "New Mexico Lobos",
+        "commence_time": "2026-09-19T23:30:00Z",
+        "market": "spreads",
+        "side": "Oklahoma Sooners",
+        "point": -21.5,
+        "price": -113.0,
+        "book": "betrivers",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Oklahoma is a top-25 program facing a New Mexico team depleted by their starting QB Jack Layne's season-ending injury, making the large spread defensible. [joint-table pair: 21+/OU<50, n=137, delta=0.097]"
+      },
+      {
+        "event_id": "47892b65c28a830d83bbe465b070ce01",
+        "home_team": "Oklahoma Sooners",
+        "away_team": "New Mexico Lobos",
+        "commence_time": "2026-09-19T23:30:00Z",
+        "market": "totals",
+        "side": "Over",
+        "point": 45.5,
+        "price": -118.0,
+        "book": "betonlineag",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "New Mexico has demonstrated explosive offensive capability (70-7 and 38-7 victories in recent games), suggesting the total is set conservatively relative to their scoring potential."
+      },
+      {
+        "event_id": "790266884d07b6c2aeed8efc216ba610",
+        "home_team": "Baylor Bears",
+        "away_team": "Louisiana Tech Bulldogs",
+        "commence_time": "2026-09-19T20:00:00Z",
+        "market": "spreads",
+        "side": "Louisiana Tech Bulldogs",
+        "point": 20.0,
+        "price": -115.0,
+        "book": "draftkings",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Baylor's starting QB DJ Lagway is ruled out, forcing a backup (Nate Bennett) into action against a 20-point spread that assumes full roster health."
+      },
+      {
+        "event_id": "4a9e833f32775e201ee648c51840df85",
+        "home_team": "UCF Knights",
+        "away_team": "Georgia State Panthers",
+        "commence_time": "2026-09-19T23:00:00Z",
+        "market": "spreads",
+        "side": "Georgia State Panthers",
+        "point": 17.5,
+        "price": -109.0,
+        "book": "williamhill_us",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Georgia State has shown offensive competence in three straight blowout wins (59-10, 31-17) while UCF's recent performance data is absent from the news, suggesting the 17.5-point spread may overestimate UCF's edge."
+      },
+      {
+        "event_id": "15ebe2df1d91e584d091d509e70a1a71",
+        "home_team": "Cincinnati Bearcats",
+        "away_team": "Miami (OH) RedHawks",
+        "commence_time": "2026-09-19T19:30:00Z",
+        "market": "spreads",
+        "side": "Cincinnati Bearcats",
+        "point": -15.5,
+        "price": -110.0,
+        "book": "betrivers",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Cincinnati has dominated recent opponents (34-15 vs Boston College, strong win vs Western Carolina) with efficient offensive play from JC French IV, while Miami (OH) is a significant step down in competition."
+      },
+      {
+        "event_id": "089e1a60578160dd6828794656461ba5",
+        "home_team": "Liberty Flames",
+        "away_team": "Ball State Cardinals",
+        "commence_time": "2026-09-19T20:00:00Z",
+        "market": "spreads",
+        "side": "Ball State Cardinals",
+        "point": 14.5,
+        "price": -115.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Ball State showed offensive competence with 41 points against Stony Brook and a three-TD performance by Luster, suggesting they can stay competitive against a 14.5 spread despite the talent gap."
+      },
+      {
+        "event_id": "be8b2e012b50c86775a87bb633e330e6",
+        "home_team": "Rice Owls",
+        "away_team": "Western Michigan Broncos",
+        "commence_time": "2026-09-19T23:00:00Z",
+        "market": "spreads",
+        "side": "Western Michigan Broncos",
+        "point": -9.0,
+        "price": -112.0,
+        "book": "draftkings",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Western Michigan is favored against a Rice team that just suffered a 52-0 blowout to Notre Dame, indicating significant quality gap."
+      },
+      {
+        "event_id": "bcc250cd218a520bcd287c120644ba05",
+        "home_team": "South Alabama Jaguars",
+        "away_team": "Ohio Bobcats",
+        "commence_time": "2026-09-19T23:00:00Z",
+        "market": "spreads",
+        "side": "Ohio Bobcats",
+        "point": 6.5,
+        "price": -118.0,
+        "book": "betrivers",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Ohio just won in 3OT with a 3rd-string freshman QB against Jacksonville State, showing resilience and momentum heading into this matchup as an underdog."
+      },
+      {
+        "event_id": "f6db4e789ff9341a9c94befc751c5f53",
+        "home_team": "San Jose State Spartans",
+        "away_team": "Fresno State Bulldogs",
+        "commence_time": "2026-09-20T03:00:00Z",
+        "market": "spreads",
+        "side": "Fresno State Bulldogs",
+        "point": -6.5,
+        "price": -105.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Fresno State just dominated Sacramento State 49-3 at home showing offensive firepower, while traveling to San Jose State (a weaker MWC opponent) as a moderate favorite."
+      },
+      {
+        "event_id": "529a333381665c34d05b290d2c9eb5b9",
+        "home_team": "Delaware Blue Hens",
+        "away_team": "Coastal Carolina Chanticleers",
+        "commence_time": "2026-09-19T15:30:00Z",
+        "market": "spreads",
+        "side": "Coastal Carolina Chanticleers",
+        "point": 5.0,
+        "price": -115.0,
+        "book": "draftkings",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Coastal Carolina demonstrated offensive firepower with a 45-7 blowout of Fordham, featuring multiple TD passes and rushing TDs, suggesting the underdog has more explosive potential than a 5-point discount reflects."
+      },
+      {
+        "event_id": "03297aa8a399c223aa1cc6aa923d9bc6",
+        "home_team": "Northwestern Wildcats",
+        "away_team": "Colorado Buffaloes",
+        "commence_time": "2026-09-19T23:30:00Z",
+        "market": "spreads",
+        "side": "Colorado Buffaloes",
+        "point": 3.5,
+        "price": -110.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Colorado demonstrated explosive offensive efficiency with 5 TDs in the first half alone against Weber State, suggesting the underdog points have value against a Northwestern team without recent comparable performance data."
+      },
+      {
+        "event_id": "b0cd2e8beaf0dc333daa592a0d3d5c3a",
+        "home_team": "Texas State Bobcats",
+        "away_team": "North Texas Mean Green",
+        "commence_time": "2026-09-19T16:00:00Z",
+        "market": "spreads",
+        "side": "North Texas Mean Green",
+        "point": 3.0,
+        "price": -120.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "North Texas just dominated UNLV 44-6 while Texas State lacks recent comparable offensive output, suggesting the underdog discount may be overpriced."
+      },
+      {
+        "event_id": "b7cdc05f280bede1f19b996cc9b95753",
+        "home_team": "Maryland Terrapins",
+        "away_team": "Virginia Tech Hokies",
+        "commence_time": "2026-09-19T23:30:00Z",
+        "market": "spreads",
+        "side": "Maryland Terrapins",
+        "point": 3.0,
+        "price": -120.0,
+        "book": "bovada",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Maryland has dominated two consecutive games (62-0 vs Hampton, 38-14 vs UConn) showing explosive offensive efficiency that suggests they can keep this close or win outright against a favored Virginia Tech team."
+      },
+      {
+        "event_id": "6c95114d806556a04a0d719e62c042d7",
+        "home_team": "West Virginia Mountaineers",
+        "away_team": "Oklahoma State Cowboys",
+        "commence_time": "2026-09-26T23:00:00Z",
+        "market": "spreads",
+        "side": "Oklahoma State Cowboys",
+        "point": -2.5,
+        "price": -110.0,
+        "book": "draftkings",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "Oklahoma State just upset No. 6 Oregon 39-31 as a significant underdog, demonstrating genuine offensive capability and momentum heading into this matchup."
+      },
+      {
+        "event_id": "0cdf27f150204b8512bca1e2d7cce051",
+        "home_team": "San Diego State Aztecs",
+        "away_team": "James Madison Dukes",
+        "commence_time": "2026-09-20T02:00:00Z",
+        "market": "spreads",
+        "side": "James Madison Dukes",
+        "point": 1.5,
+        "price": -112.0,
+        "book": "pinnacle",
+        "snapshot_time": "2026-09-19T11:09:13.352993+00:00",
+        "leg_type": "CONVICTION",
+        "ai_reason": "JMU's explosive recent form (87-3 dominant win with 3 punt-return TDs, plus convincing Liberty win) under new coach Billy Napier suggests momentum and competence that may not be fully priced into a tight 1.5-point line."
+      }
+    ]
   }
 ]

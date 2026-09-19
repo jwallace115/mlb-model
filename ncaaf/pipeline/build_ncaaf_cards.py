@@ -44,18 +44,18 @@ def american_to_implied(odds):
     return abs(odds) / (abs(odds) + 100)
 
 
-def no_vig_prob(odds):
-    """Approximate no-vig probability from American odds.
+def no_vig_prob_pair(odds_a, odds_b):
+    """Devig a two-outcome market using multiplicative method.
 
-    Without the counterpart side, we use the standard -110 -> 0.50 mapping
-    as an approximation. For lines near -110, the vig is ~4.55%.
+    Returns the no-vig probability for side A.
     """
-    imp = american_to_implied(odds)
-    if np.isnan(imp):
-        return np.nan
-    # Simple devig: assume symmetric vig. This underestimates for heavy
-    # favourites but is the honest calculation without the other side.
-    return imp / 1.04545  # assumes ~4.55% total overround
+    imp_a = american_to_implied(odds_a)
+    imp_b = american_to_implied(odds_b)
+    if np.isnan(imp_a) or np.isnan(imp_b):
+        # Fallback: assume ~4.55% total overround
+        return imp_a / 1.04545 if not np.isnan(imp_a) else np.nan
+    total = imp_a + imp_b
+    return imp_a / total
 
 
 def load_conviction_tickets(build_date):
@@ -118,7 +118,24 @@ def build_cards(conviction_tickets, board_df, build_time):
         if eid not in by_event or t["build_time"] > by_event[eid]["build_time"]:
             by_event[eid] = t
 
-    # Flatten all conviction legs with their metadata
+    # Drop tickets where AI picked both sides of the same market (WO7 bug)
+    clean_events = {}
+    for eid, t in by_event.items():
+        markets_seen = {}
+        bad = False
+        for leg in t["legs"]:
+            mkt = leg["market"]
+            if mkt in markets_seen:
+                print(f"  DROP both-sides ticket: {t['away_team']} @ {t['home_team']} "
+                      f"({mkt}: {markets_seen[mkt]} AND {leg['side']})")
+                bad = True
+                break
+            markets_seen[mkt] = leg["side"]
+        if not bad:
+            clean_events[eid] = t
+    by_event = clean_events
+
+    # Flatten conviction legs — one spread + one total per event max
     conviction_legs = []
     for eid, t in by_event.items():
         for leg in t["legs"]:
@@ -143,17 +160,14 @@ def build_cards(conviction_tickets, board_df, build_time):
 
     print(f"Conviction legs available: {len(conviction_legs)} from {len(by_event)} events")
 
-    # --- CARD A: 5-leg conviction only, one leg per game ---
-    # Rank conviction legs: prefer spreads (more decisive), then by implied edge
-    # One leg per game
-    card_a_legs = []
-    card_a_events = set()
-
-    # Sort: prefer larger spread magnitude (stronger opinion) and spreads market
+    # --- CARD A: 5-leg conviction only, ONE LEG per game ---
+    # Sort: spreads first (more decisive pick), then by spread magnitude
     ranked = sorted(conviction_legs,
-                    key=lambda l: (l["spread_magnitude"], l["market"] == "spreads"),
+                    key=lambda l: (l["market"] == "spreads", l["spread_magnitude"]),
                     reverse=True)
 
+    card_a_legs = []
+    card_a_events = set()
     for leg in ranked:
         if leg["event_id"] in card_a_events:
             continue
@@ -164,73 +178,83 @@ def build_cards(conviction_tickets, board_df, build_time):
 
     print(f"Card A: {len(card_a_legs)} conviction legs")
 
-    # --- CARD B: 10+ legs, conviction first (not in Card A), then FILLER ---
+    # --- CARD B: 10+ legs, conviction first (NOT on Card A), then FILLER ---
+    # Rule: at most ONE leg per game UNLESS joint-table cover+over pair (|spread|>=21)
+    card_a_leg_keys = {_leg_key(l) for l in card_a_legs}
+
+    # Remaining conviction legs not on Card A
+    remaining = [l for l in conviction_legs if _leg_key(l) not in card_a_leg_keys]
+
+    # Group remaining by event: pick best single leg per event,
+    # or allow spread+total pair if |spread| >= 21
+    remaining_by_event = {}
+    for l in remaining:
+        remaining_by_event.setdefault(l["event_id"], []).append(l)
+
     card_b_legs = []
     card_b_events = set()
-    card_b_event_markets = set()  # (event_id, market) to track one-per-game
 
-    # First: remaining conviction legs not on Card A
-    remaining_conviction = [l for l in conviction_legs
-                           if _leg_key(l) not in {_leg_key(a) for a in card_a_legs}]
+    # Sort events by spread magnitude descending
+    event_order = sorted(remaining_by_event.keys(),
+                         key=lambda eid: max(l["spread_magnitude"]
+                                             for l in remaining_by_event[eid]),
+                         reverse=True)
 
-    for leg in sorted(remaining_conviction,
-                      key=lambda l: l["spread_magnitude"], reverse=True):
-        em_key = (leg["event_id"], leg["market"])
-        if em_key in card_b_event_markets:
-            # Check joint-table exception: cover+over pair for |spread|>=21
-            if _can_pair(leg, card_b_legs, joint_table):
-                card_b_legs.append(leg)
-                card_b_event_markets.add(em_key)
-                continue
-            continue
-        if leg["event_id"] in card_b_events and leg["market"] != "totals":
-            # One per game unless it's a totals pair with an existing spread leg
-            existing_markets = [l["market"] for l in card_b_legs if l["event_id"] == leg["event_id"]]
-            if "spreads" in existing_markets and leg["market"] == "totals":
-                if leg["spread_magnitude"] >= 21:
-                    card_b_legs.append(leg)
-                    card_b_event_markets.add(em_key)
-                    continue
-            continue
-        card_b_legs.append(leg)
-        card_b_events.add(leg["event_id"])
-        card_b_event_markets.add(em_key)
+    for eid in event_order:
+        legs = remaining_by_event[eid]
+        spread_mag = max(l["spread_magnitude"] for l in legs)
+        spread_legs = [l for l in legs if l["market"] == "spreads"]
+        total_legs = [l for l in legs if l["market"] == "totals"]
+
+        # Joint-table pair: both spread + total, |spread| >= 21
+        if spread_mag >= 21 and spread_legs and total_legs:
+            # Add both as a pair — cite the joint table cell
+            sl = spread_legs[0]
+            tl = total_legs[0]
+            tb = _total_bucket(tl["point"])
+            jt_row = None
+            if joint_table is not None and tb is not None:
+                match = joint_table[joint_table["total_bucket"] == tb]
+                if not match.empty:
+                    jt_row = match.iloc[0]
+            note = ""
+            if jt_row is not None:
+                note = (f" [joint-table pair: 21+/{tb}, n={int(jt_row['n'])}, "
+                        f"delta={jt_row['delta']:.3f}]")
+            sl["ai_reason"] = (sl["ai_reason"] or "") + note
+            card_b_legs.extend([sl, tl])
+            card_b_events.add(eid)
+        else:
+            # One leg per game: prefer spreads
+            pick = spread_legs[0] if spread_legs else (total_legs[0] if total_legs else None)
+            if pick:
+                card_b_legs.append(pick)
+                card_b_events.add(eid)
 
     conviction_in_b = len(card_b_legs)
     print(f"Card B conviction legs: {conviction_in_b}")
 
-    # Then: FILLER from the board (best-priced legs the AI did NOT pick)
+    # FILLER: if Card B < 10, add filler from board events not on either card
+    filler_count = 0
     if len(card_b_legs) < 10 and not board_df.empty:
-        # Get all today's spread sides from the board
+        used_events = card_a_events | card_b_events
         filler_candidates = []
-        conviction_keys = {(l["event_id"], l["market"], l["side"]) for l in conviction_legs}
 
         for eid in board_df["event_id"].unique():
-            ev = board_df[board_df["event_id"] == eid]
-            if eid in card_b_events or eid in card_a_events:
-                # Already have a leg from this game
+            if eid in used_events:
                 continue
-
-            home = ev.iloc[0]["home_team"]
-            away = ev.iloc[0]["away_team"]
-            commence = ev.iloc[0]["commence_time"]
-
-            # Get spreads rows
+            ev = board_df[board_df["event_id"] == eid]
             spreads = ev[ev["market"] == "spreads"]
-            totals = ev[ev["market"] == "totals"]
-
             if spreads.empty:
                 continue
 
             fav_row = spreads.loc[spreads["consensus_point"].idxmin()]
             spread_mag = abs(fav_row["consensus_point"])
-
-            # Pick the favourite spread as filler (market-default lean)
             filler_candidates.append({
                 "event_id": eid,
-                "home_team": home,
-                "away_team": away,
-                "commence_time": commence,
+                "home_team": ev.iloc[0]["home_team"],
+                "away_team": ev.iloc[0]["away_team"],
+                "commence_time": ev.iloc[0]["commence_time"],
                 "spread_magnitude": spread_mag,
                 "favourite": fav_row["outcome_name"],
                 "underdog": "",
@@ -240,22 +264,21 @@ def build_cards(conviction_tickets, board_df, build_time):
                 "price": fav_row["best_price"],
                 "book": fav_row["best_book"],
                 "implied": fav_row["consensus_implied"],
-                "ai_reason": "FILLER — favourite at posted spread",
+                "ai_reason": "FILLER -- favourite at posted spread",
                 "leg_type": "FILLER",
                 "rationale": "",
             })
 
-        # Sort fillers: larger spreads first (favourites more likely to cover)
+        # Sort fillers: larger spreads first
         filler_candidates.sort(key=lambda l: l["spread_magnitude"], reverse=True)
-
         for filler in filler_candidates:
             if len(card_b_legs) >= 12:
                 break
             card_b_legs.append(filler)
             card_b_events.add(filler["event_id"])
+            filler_count += 1
 
-    filler_in_b = len(card_b_legs) - conviction_in_b
-    print(f"Card B filler legs: {filler_in_b}")
+    print(f"Card B filler legs: {filler_count}")
     print(f"Card B total legs: {len(card_b_legs)}")
 
     # --- OVERLAP CHECK ---
@@ -265,7 +288,7 @@ def build_cards(conviction_tickets, board_df, build_time):
     if overlap:
         raise RuntimeError(f"HALT: Card A/B overlap: {overlap}")
 
-    return card_a_legs, card_b_legs, conviction_in_b, filler_in_b
+    return card_a_legs, card_b_legs, conviction_in_b, filler_count
 
 
 def _leg_key(leg):
@@ -291,14 +314,23 @@ def _can_pair(leg, existing_legs, joint_table):
     return False
 
 
-def compute_card_math(legs):
-    """Compute parlay math from actual leg prices."""
+def compute_card_math(legs, board_df=None):
+    """Compute parlay math from actual leg prices.
+
+    If board_df is provided, uses proper two-sided devig. Otherwise falls
+    back to the crude 4.55% overround assumption.
+    """
     if not legs:
         return {}
 
     decimals = [american_to_decimal(l["price"]) for l in legs]
     implieds = [american_to_implied(l["price"]) for l in legs]
-    no_vig_probs = [no_vig_prob(l["price"]) for l in legs]
+
+    # Compute no-vig probs using proper devig from the board
+    no_vig_probs = []
+    for l in legs:
+        nv = _devig_from_board(l, board_df)
+        no_vig_probs.append(nv)
 
     combined_decimal = 1.0
     for d in decimals:
@@ -326,6 +358,31 @@ def compute_card_math(legs):
         "fair_payout": fair_payout,
         "effective_hold": effective_hold,
     }
+
+
+def _devig_from_board(leg, board_df):
+    """Devig one leg using the counterpart side from the board."""
+    if board_df is None or board_df.empty:
+        imp = american_to_implied(leg["price"])
+        return imp / 1.04545 if not np.isnan(imp) else np.nan
+
+    eid = leg["event_id"]
+    mkt = leg["market"]
+    side = leg["side"]
+
+    ev = board_df[(board_df["event_id"] == eid) & (board_df["market"] == mkt)]
+    if ev.empty:
+        imp = american_to_implied(leg["price"])
+        return imp / 1.04545 if not np.isnan(imp) else np.nan
+
+    # Find the counterpart (other side of same market)
+    other = ev[ev["outcome_name"] != side]
+    if other.empty:
+        imp = american_to_implied(leg["price"])
+        return imp / 1.04545 if not np.isnan(imp) else np.nan
+
+    other_price = other.iloc[0]["best_price"]
+    return no_vig_prob_pair(leg["price"], other_price)
 
 
 def format_cards_md(card_a, card_b, math_a, math_b, conviction_in_b, filler_in_b,
@@ -473,11 +530,19 @@ def main():
     total_events = board_df["event_id"].nunique() if not board_df.empty else 0
     abstain_count = total_events - len(set(t["event_id"] for t in tickets))
 
-    card_a, card_b, conviction_in_b, filler_in_b = build_cards(
+    card_a, card_b, conviction_in_b, filler_count = build_cards(
         tickets, board_df, build_time)
 
-    math_a = compute_card_math(card_a)
-    math_b = compute_card_math(card_b)
+    # Load full board (not just today) for devig lookups
+    full_board = pd.DataFrame()
+    board_dirs = sorted(BOARD_DIR.glob("week=2026_*"))
+    for bd in board_dirs:
+        pq = bd / "ncaaf_board.parquet"
+        if pq.exists():
+            full_board = pd.concat([full_board, pd.read_parquet(pq)], ignore_index=True)
+
+    math_a = compute_card_math(card_a, full_board)
+    math_b = compute_card_math(card_b, full_board)
 
     print(f"\n--- CARD A MATH ---")
     for k, v in math_a.items():
@@ -487,7 +552,7 @@ def main():
         print(f"  {k}: {v}")
 
     # Write cards markdown
-    md = format_cards_md(card_a, card_b, math_a, math_b, conviction_in_b, filler_in_b,
+    md = format_cards_md(card_a, card_b, math_a, math_b, conviction_in_b, filler_count,
                          total_events, abstain_count, build_time)
 
     # Find the right output dir
