@@ -255,3 +255,16 @@ GREEN: guard removes it and returns it in discarded.
 This is the guard's first real demonstration. It was reported as handled
 in N04 (prose), N11 ("never triggered"), N13 ("discards work" but the
 test only checked types). It is now established.
+
+### N18 — Grading deferred: games not yet played (2026-09-19)
+Current time: 2026-09-19T01:09Z. The four Saturday games kick between
+16:00Z and 23:30Z on 2026-09-19 and will settle around 03:00Z on 2026-09-20.
+Nebraska @ Michigan State is 2026-09-26T21:00Z — a week out.
+
+Grading cannot run in this session. The N12 future-kickoff guard will
+correctly skip all 5 tickets. Grading happens in a later session after
+the games settle, with N12/N16/N17 guards in place.
+
+5 tickets: all graded=False, all reference_only=True. Decision prices
+intact. No CLV data yet — the measurement asset begins accumulating
+when the first game settles.
