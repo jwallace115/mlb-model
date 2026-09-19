@@ -230,3 +230,15 @@ Tickets: 5 built, all reference_only=True, all graded=False.
 Stopped before grading — games not yet played.
 
 Odds API credits: unchanged at 8976. Zero used in this order.
+
+### N16 — Append-only ticket log enforced by assertion (2026-09-19)
+write_ticket_log: before every write, asserts (1) ticket count does not
+decrease, (2) no (event_id, build_time) key on disk vanishes from the
+merged output. Halts on either violation.
+
+Deletion path found: the N15 session used an inline `python3 -c` block
+with `existing = [t for t in existing if t['event_id'] not in old_eids]`,
+which filtered out the 3 original tickets. This was not in the committed
+writer. No cron/launchd touches this file.
+
+Test: append of 2 to a log of 3 gives 5. Guard prevents count decrease.

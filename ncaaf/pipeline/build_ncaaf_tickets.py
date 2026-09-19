@@ -159,6 +159,39 @@ def build_tickets(board_df, news_articles, build_time):
     return tickets
 
 
+def write_ticket_log(new_tickets):
+    """N16: Append tickets to the log with monotonicity guard.
+
+    - ticket count must never decrease
+    - no (event_id, build_time) key on disk may vanish
+    Halts on either violation.
+    """
+    TICKET_LOG.parent.mkdir(parents=True, exist_ok=True)
+    existing = []
+    if TICKET_LOG.exists() and TICKET_LOG.stat().st_size > 0:
+        with open(TICKET_LOG) as f:
+            existing = json.load(f)
+
+    before_count = len(existing)
+    before_keys = set((t["event_id"], t["build_time"]) for t in existing)
+
+    merged = existing + list(new_tickets)
+
+    after_keys = set((t["event_id"], t["build_time"]) for t in merged)
+    lost = before_keys - after_keys
+    if lost:
+        raise RuntimeError(
+            f"HALT: append-only violation — {len(lost)} tickets would vanish: "
+            f"{list(lost)[:5]}")
+    if len(merged) < before_count:
+        raise RuntimeError(
+            f"HALT: ticket count would decrease from {before_count} to {len(merged)}")
+
+    with open(TICKET_LOG, "w") as f:
+        json.dump(merged, f, indent=2)
+    print(f"Ticket log: {before_count} -> {len(merged)} (+{len(new_tickets)})")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--season", type=int, default=2026)
@@ -193,15 +226,8 @@ def main():
     tickets = build_tickets(board_df, news_articles, bt)
     print(f"Tickets built: {len(tickets)}")
 
-    # Append to log
-    TICKET_LOG.parent.mkdir(parents=True, exist_ok=True)
-    existing = []
-    if TICKET_LOG.exists() and TICKET_LOG.stat().st_size > 0:
-        with open(TICKET_LOG) as f:
-            existing = json.load(f)
-    existing.extend(tickets)
-    with open(TICKET_LOG, "w") as f:
-        json.dump(existing, f, indent=2)
+    # N16: append-only with monotonicity guard
+    write_ticket_log(tickets)
     print(f"Ticket log: {len(existing)} total tickets -> {TICKET_LOG}")
 
 
