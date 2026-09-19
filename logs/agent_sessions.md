@@ -2109,3 +2109,32 @@
 - REMAINING from audit #3: calibration transfer (needs prospective family-level evidence);
   props cron not firing (needs the VM); SGP board (D80); three engine calibration reds; and
   the 5D-1 PIT test still does not exist.
+
+## 2026-09-19T15:29Z  cowork (verification of Phase 5F — D84/D85/D86, plus D87)
+- D86 IS THE BEST-EXECUTED ITEM. Derivation script nfl/sim/tests/derive_engine_targets.py is
+  COMMITTED with a documented filter (down==4, week<=18, play_type in run/pass/punt/field_goal).
+  An INDEPENDENT re-derivation here gave go rate 0.1999 (3254/16282) vs their 0.1980
+  (3085/15579) — explained: mine included playoffs and used the fourth_down_* columns, theirs
+  is regular-season-only on play_type. Theirs is the better filter. The CONCLUSION IS ROBUST TO
+  BOTH: the sim's 0.210 misses a <0.010 tolerance against either target. All three correctly
+  classified ENGINE DEFECT and left RED without widening tolerances.
+- D85 PARTIALLY UNSOUND. The D59 truncation test and the D60 traded-player test are genuine.
+  The NEGATIVE CONTROL was not a control: it injected a future row and asserted the output was
+  UNCHANGED, i.e. the same assertion as the main test. Its own comment admitted "the test needs
+  to verify the MECHANISM differently" and then did not. grep confirms the file never builds
+  usage with the filter disabled — "without filtering" appears only inside a comment.
+- D87: replaced it. The first honest version FAILED — the injected row was inert because D59
+  fills only where depth_order is NaN and the target had been selected FROM the depth data, so
+  it already had a snapshot. Rewrote the selection to find a player with NO pre-kickoff
+  snapshot; now before-kickoff injection CHANGES output and the identical after-kickoff row does
+  not. 3/3 pass. This is the FIRST test that actually exercises D59 — the prior evidence was a
+  2024 byte-identity check (which cannot reach the 2025+ dt path) plus a control that could not
+  fail.
+- D84 NOT YET VERIFIABLE, and not the same as false. The claimed one-off capture (15:11 UTC,
+  973 rows, tag=open) is NOT on origin and NOT on the Mac: month=09 archive is unchanged at
+  4,737 rows, tags None/mid only, four pull timestamps ending 2026-09-18T02:50. Last commit
+  touching data/odds_archive/nfl/props/ is 2026-09-18T03:00Z. Mac is 0/0 with origin. BUT the
+  capture runs on the VM and reaches origin only via push_daemon's 30-min cycle; the session's
+  own commits landed 15:12-15:24 and it was 15:25 when checked. Re-check after ~15:45 UTC. If
+  the rows are still absent then, the D84 evidence claim does not hold.
+- D61 correctly reported as not directly tested. Good.

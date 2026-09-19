@@ -970,3 +970,32 @@ verification.
 
 **Key fingerprint:** `ac6e89a0` (matches paid account `.env` on VM).
 **Credits:** 8,548 remaining after this verification (threshold 3,000).
+
+### D87 — The D59 negative control was not a control (2026-09-19)
+D85 shipped `test_d59_negative_control` reporting "synthetic future rank-change row
+correctly filtered out". It injected a future-dated row and asserted the output was
+UNCHANGED — which is the same assertion as `test_d59_pit_depth_truncated`, so it
+demonstrated nothing about whether the injected row could have mattered. The file
+said so itself: *"the test needs to verify the MECHANISM differently"* — and then
+did not, falling back to two sanity checks (player present in output; pre-kickoff
+rank > 1), neither of which establishes potency.
+
+Replacing it with a real control — same row, same rank change, differing only in
+`dt` (one hour before vs after kickoff) — made it **FAIL**: the row was inert even
+when validly dated. Cause: D59 fills only where `depth_order` is NaN
+(`usage.py` ~440, `fill_mask = depth_order.isna() & new_depth.notna()`), and the
+target had been selected *from* the depth data, so it already had an eligible
+snapshot and could never be filled.
+
+The control now selects a player with NO pre-kickoff snapshot (therefore NaN
+`depth_order`, therefore fillable), asserts the before-kickoff injection CHANGES
+week-W output, and then asserts the identical row dated after kickoff does NOT.
+That isolates the D59 date filter rather than restating the main test. It skips with
+a stated reason if no fillable target exists.
+
+**This is the first test that actually exercises D59.** The prior evidence was a
+2024 byte-identity check (which cannot exercise the 2025+ `dt` path at all) and a
+control that could not fail.
+
+Unchanged from D85 and correct: D60's traded-player assertions, and the plain
+statement that D61 is not directly tested.

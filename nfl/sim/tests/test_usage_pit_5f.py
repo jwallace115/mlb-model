@@ -173,100 +173,78 @@ def test_d59_pit_depth_truncated(raw_data):
 # ─── D59 NEGATIVE CONTROL: synthetic future depth row MUST change output ──
 
 def test_d59_negative_control(raw_data):
-    """Inject a synthetic depth row with dt AFTER kickoff(W) that changes a
-    player's depth_order. The untruncated build (which incorrectly includes
-    future data) must differ from the truncated build. If it does not, the
-    D59 filtering is not being exercised."""
+    """D87: a control that can actually fail.
+
+    The original version injected a future-dated row and asserted the output was
+    UNCHANGED — the same assertion as test_d59_pit_depth_truncated, so it was not a
+    control at all. Its own comment admitted "the test needs to verify the MECHANISM
+    differently" and then did not. When a real control was added it FAILED: the
+    chosen row was inert, because D59 fills only where depth_order is NaN
+    (usage.py ~440, `fill_mask = depth_order.isna() & new_depth.notna()`) and the
+    target already had an eligible snapshot.
+
+    So: find a player who has NO pre-kickoff depth row (depth_order would be NaN,
+    i.e. fillable), inject the SAME rank-1 row twice differing ONLY in dt, and show
+    that the before-kickoff one changes the output while the after-kickoff one does
+    not. That isolates exactly the D59 date filter.
+    """
     kickoff = _get_kickoff(TEST_SEASON, TEST_WEEK)
     depth = raw_data["depth"].copy()
-
-    # Find a player with depth data to perturb
-    # Michael Carter (ARI) moved from RB3 to RB1 around wk5 2025
-    # We'll create a synthetic row making a player RB1 who wasn't before
     dt_col = pd.to_datetime(depth["dt"], errors="coerce", utc=True)
-    new_schema = depth[dt_col.notna()]
-    ari_rb = new_schema[
-        (new_schema["team"] == "ARI") &
-        (new_schema["pos_abb"] == "RB") &
-        (dt_col[new_schema.index] < kickoff)
-    ]
-    if ari_rb.empty:
-        pytest.skip("No ARI RB depth data before kickoff — cannot test")
+    new_schema = depth[dt_col.notna()].copy()
+    new_schema["_dt"] = dt_col[new_schema.index]
 
-    # Take the latest pre-kickoff row for an RB who is NOT rank 1
-    ari_rb_sorted = ari_rb.copy()
-    ari_rb_sorted["_dt"] = pd.to_datetime(ari_rb_sorted["dt"], errors="coerce", utc=True)
-    ari_rb_sorted = ari_rb_sorted.sort_values("_dt", ascending=False)
-    non_rb1 = ari_rb_sorted[ari_rb_sorted["pos_rank"].astype(float) > 1]
-    if non_rb1.empty:
-        pytest.skip("All ARI RBs are rank 1 — cannot test")
-
-    target_row = non_rb1.iloc[0].copy()
-    target_pid = target_row["gsis_id"]
-
-    # Create synthetic FUTURE depth row that promotes this player to rank 1
-    future_row = target_row.copy()
-    future_row["dt"] = (kickoff + pd.Timedelta(hours=1)).isoformat()
-    future_row["pos_rank"] = 1
-    if "_dt" in future_row.index:
-        future_row = future_row.drop("_dt")
-
-    # Build with original depth (no future injection)
-    original_usage = _build_usage_from(raw_data, output_seasons=[TEST_SEASON])
-
-    # Build with injected future depth row
-    injected_depth = pd.concat([depth, pd.DataFrame([future_row])], ignore_index=True)
-    injected_usage = _build_usage_from(raw_data, depth_override=injected_depth,
-                                        output_seasons=[TEST_SEASON])
-
-    # The D59 filter should make them identical (future row excluded)
-    orig_w = (original_usage[(original_usage["season"] == TEST_SEASON) &
-                             (original_usage["week"] == TEST_WEEK)]
+    base_usage = _build_usage_from(raw_data, output_seasons=[TEST_SEASON])
+    base_w = (base_usage[(base_usage["season"] == TEST_SEASON) &
+                         (base_usage["week"] == TEST_WEEK)]
               .sort_values(["team", "player_id"]).reset_index(drop=True))
-    inj_w = (injected_usage[(injected_usage["season"] == TEST_SEASON) &
-                            (injected_usage["week"] == TEST_WEEK)]
-             .sort_values(["team", "player_id"]).reset_index(drop=True))
+    float_cols = [c for c in base_w.columns if base_w[c].dtype in ("float64", "float32")]
 
-    # They SHOULD be identical because D59 filters out dt >= kickoff
-    float_cols = [c for c in orig_w.columns if orig_w[c].dtype in ("float64", "float32")]
-    identical = True
-    for col in float_cols:
-        ov = orig_w[col].values
-        iv = inj_w[col].values
-        if not np.allclose(ov, iv, equal_nan=True, atol=1e-12):
-            identical = False
+    # players WITH a pre-kickoff snapshot are inert — D59 only fills NaN
+    covered = set(new_schema.loc[new_schema["_dt"] < kickoff, "gsis_id"].dropna())
+    template = new_schema.iloc[0]
+
+    def _inject(pid, team, when):
+        row = template.copy()
+        row["gsis_id"] = pid
+        row["team"] = team
+        row["pos_abb"] = "RB"
+        row["pos_rank"] = 1
+        row["dt"] = when.isoformat()
+        if "_dt" in row.index:
+            row = row.drop("_dt")
+        d = pd.concat([depth, pd.DataFrame([row])], ignore_index=True)
+        u = _build_usage_from(raw_data, depth_override=d, output_seasons=[TEST_SEASON])
+        return (u[(u["season"] == TEST_SEASON) & (u["week"] == TEST_WEEK)]
+                .sort_values(["team", "player_id"]).reset_index(drop=True))
+
+    def _differs(a, b):
+        return any(not np.allclose(a[c].values, b[c].values, equal_nan=True, atol=1e-12)
+                   for c in float_cols)
+
+    candidates = [(r.player_id, r.team) for r in base_w.itertuples()
+                  if r.player_id not in covered][:4]
+    if not candidates:
+        pytest.skip("every player in the week has a pre-kickoff snapshot — "
+                    "no fillable target, so this control cannot be built")
+
+    potent = None
+    for pid, team in candidates:
+        if _differs(base_w, _inject(pid, team, kickoff - pd.Timedelta(hours=1))):
+            potent = (pid, team)
             break
 
-    assert identical, (
-        "D59 negative control INVERTED: injected future depth row changed output "
-        "even though D59 filtering should exclude it. The filter is broken."
-    )
+    assert potent is not None, (
+        "CONTROL FAILED: none of the candidate rows changed the output even when "
+        "dated BEFORE kickoff. The injection is inert, so an after-kickoff "
+        "assertion would prove nothing about D59.")
 
-    # Now verify that WITHOUT D59 filtering, the injection WOULD change output.
-    # We do this by directly checking that the depth row we injected would
-    # actually be picked up: the target player should have a different depth_order
-    # in the active universe if the future row were included without filtering.
-    # Since D59 correctly filters it out, both builds are identical — which means
-    # the test needs to verify the MECHANISM differently.
-    # Check: does the target player exist in the output at all?
-    target_in_output = orig_w[orig_w["player_id"] == target_pid]
-    assert not target_in_output.empty, (
-        f"Target player {target_pid} not in week {TEST_WEEK} output — "
-        f"negative control cannot exercise the path"
-    )
-
-    # Verify the pre-kickoff depth for this player is NOT rank 1
-    # (so promoting to rank 1 would change something if the filter were absent)
-    pre_kickoff_depth = new_schema[
-        (new_schema["gsis_id"] == target_pid) &
-        (new_schema["team"] == "ARI") &
-        (dt_col[new_schema.index] < kickoff)
-    ]
-    pre_ranks = pre_kickoff_depth["pos_rank"].astype(float)
-    assert (pre_ranks > 1).any(), (
-        f"Target player was already rank 1 pre-kickoff — "
-        f"injection would not change depth_order"
-    )
+    pid, team = potent
+    # same row, one hour AFTER kickoff — D59 must exclude it
+    after = _inject(pid, team, kickoff + pd.Timedelta(hours=1))
+    assert not _differs(base_w, after), (
+        f"D59 LEAK: a depth row dated after kickoff changed week {TEST_WEEK} output "
+        f"for {pid} ({team}). The date filter is not excluding future snapshots.")
 
 
 # ─── D60: traded players appear on new team with non-zero share ───────────
