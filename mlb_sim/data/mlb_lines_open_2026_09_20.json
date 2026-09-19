@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "0f7b4e8f0c23ecca42f1c5e69ecc9bcc",
+    "game_date": "2026-09-20",
+    "sport": "MLB",
+    "home_team": "Arizona Diamondbacks",
+    "away_team": "New York Yankees",
+    "commence_time": "2026-09-20T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": 103,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-19T06:05:02.225153+00:00"
+  },
+  {
+    "game_id": "59c14a5981b0869948d86636923f1c90",
+    "game_date": "2026-09-20",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Miami Marlins",
+    "commence_time": "2026-09-20T00:40:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -103,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-19T06:05:02.225153+00:00"
+  },
+  {
+    "game_id": "a0d104e8bf314f79a38436433c2fa67a",
+    "game_date": "2026-09-20",
+    "sport": "MLB",
+    "home_team": "Los Angeles Angels",
+    "away_team": "Minnesota Twins",
+    "commence_time": "2026-09-20T01:38:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": 106,
+    "under_price": -122,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-19T06:05:02.225153+00:00"
+  }
+]
