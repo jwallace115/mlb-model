@@ -1685,3 +1685,32 @@
 - UNVERIFIED: AI no-pricing-number guard (never triggered in the test). The guard
   checks for fields not in the allowed set and discards them — but the model never
   produced one, so the code path that discards was not exercised.
+
+## 2026-09-19T01:00Z  claude-code (NCAAF board work order #4 — N12-N15)
+- EDITED: ncaaf/logs/ncaaf_board_tickets_2026.json — N12: un-sealed 3 tickets
+  (graded=False, 12 legs close_price/clv=null). Decision prices untouched.
+- EDITED: ncaaf/pipeline/grade_ncaaf_tickets.py — N12: future-kickoff guard
+  (skip if commence_time > now UTC), all-zero CLV assertion (halts if every
+  graded CLV is exactly 0.0). Test: future ticket not graded, PASS.
+- EDITED: ncaaf/pipeline/build_ncaaf_tickets.py — N13: model changed to
+  claude-haiku-4-5-20251001 (verified 2026-09-19, only model the key reaches).
+  API failure now raises RuntimeError (was written to ai_rationale).
+  No-pricing-number guard tested with canned response: fair_spread and
+  projected_total discarded. 2/2 tests PASS.
+- EDITED: ncaaf/pipeline/pull_ncaaf_news.py — N14: reads team list from board
+  artifact, not tape snapshot. 146/146 coverage (was 30/146).
+- RAN: end-to-end chain — N15:
+  Board: RETURNED 90 games, 96 dropped by pre-kick filter. MEANS the guard
+    is active.
+  News: RETURNED 3,520 articles, 146 teams queried, 0 zero-article. MEANS
+    layer 2 has full coverage.
+  AI: RETURNED 5/5 succeeded (claude-haiku-4-5-20251001), 0 discards. MEANS
+    the model followed the no-pricing-number instruction. The guard was not
+    triggered in this run but IS tested (N13).
+  Tickets: RETURNED 5 tickets, all reference_only=True, graded=False.
+  STOPPED before grading — Georgia@Arkansas and Colorado@Northwestern kick
+    within hours. Grading in a later session with N12 guards.
+- COMMITTED: dd7a3cf6c (N12), 8b96c9205 (N13), 3905f06e6 (N14), a040034e3 (N15).
+- x-requests-remaining: 8976 (zero Odds API credits used).
+- NOT DONE: grading (games not yet played). Full 90-game ticket build (only 5).
+- UNVERIFIED: 12 manual ESPN team map corrections (same as N11).
