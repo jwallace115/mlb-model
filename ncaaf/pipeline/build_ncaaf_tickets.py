@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 """
-N04: NCAAF ticket writer with AI reasoning layer.
+N19-N20: NCAAF ticket writer — AI selects sides.
 
-One Anthropic call per game. The AI layer's permitted outputs:
-  1. Structured flags with headline source
-  2. Short prose rationale
-  3. Binary veto with reason
-It MAY NOT output a number that enters pricing.
+The AI picks market + side per game. It never emits a pricing number.
+Favourite/underdog derived in CODE from the spread sign, not by the AI.
 """
 
 import argparse, hashlib, json, os, sys, time
 from datetime import datetime, timezone
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -26,10 +24,38 @@ KEY_FP = hashlib.sha256(ANTHROPIC_KEY.strip().encode()).hexdigest()[:8] if ANTHR
 TICKET_LOG = ROOT / "ncaaf" / "logs" / "ncaaf_board_tickets_2026.json"
 
 
-def _call_ai_layer(game_board_rows, news_articles, home, away):
-    """Call Anthropic for one game. Returns (flags, rationale, veto, veto_reason)."""
+def _derive_matchup(board_rows):
+    """N19: derive favourite/underdog from the spread sign in CODE."""
+    spreads = [r for r in board_rows if r.get("market") == "spreads"]
+    totals = [r for r in board_rows if r.get("market") == "totals"]
+    if not spreads:
+        return None
+
+    # The side with negative consensus_point is the favourite
+    fav_row = min(spreads, key=lambda r: r.get("consensus_point", 0))
+    dog_row = max(spreads, key=lambda r: r.get("consensus_point", 0))
+    fav = fav_row["outcome_name"]
+    dog = dog_row["outcome_name"]
+    spread_mag = abs(fav_row["consensus_point"])
+
+    over_row = next((r for r in totals if "Over" in str(r.get("outcome_name", ""))), None)
+    total_line = over_row["consensus_point"] if over_row else None
+
+    return {
+        "favourite": fav, "underdog": dog, "spread_magnitude": spread_mag,
+        "total_line": total_line, "spreads": spreads, "totals": totals,
+        "fav_row": fav_row, "dog_row": dog_row, "over_row": over_row,
+    }
+
+
+def _call_ai_layer(matchup, news_articles, home, away):
+    """Call Anthropic for one game. Returns (pick, discarded).
+
+    pick = {"legs": [...], "abstain": bool, "abstain_reason": str|None,
+            "flags": [...], "rationale": str}
+    """
     if not ANTHROPIC_KEY:
-        raise RuntimeError("HALT: ANTHROPIC_API_KEY not set — AI layer cannot run")
+        raise RuntimeError("HALT: ANTHROPIC_API_KEY not set")
 
     try:
         import anthropic
@@ -37,77 +63,123 @@ def _call_ai_layer(game_board_rows, news_articles, home, away):
     except ImportError:
         raise RuntimeError("HALT: anthropic package not installed")
 
-    # Build prompt
-    board_text = "\n".join(
-        f"  {r.get('market','?')} {r.get('outcome_name','?')}: point={r.get('consensus_point','?')}, "
-        f"implied={r.get('consensus_implied','?'):.3f}, books={r.get('n_books','?')}, "
-        f"disp={r.get('dispersion','?')}, move={r.get('movement','?')}"
-        for r in game_board_rows
-    ) if game_board_rows else "  (no board data)"
+    fav = matchup["favourite"]
+    dog = matchup["underdog"]
+    spread = matchup["spread_magnitude"]
+    total = matchup["total_line"]
+
+    # Build spread options text
+    spread_text = f"{fav} is favoured by {spread}. {dog} is the underdog receiving {spread}."
+    total_text = f"Total line is {total}." if total else ""
 
     news_text = "\n".join(
-        f"  [{a.get('published','?')}] {a.get('headline','?')}"
+        f"  [{a.get('published', '?')}] {a.get('headline', '?')}"
         for a in news_articles[:10]
     ) if news_articles else "  (no recent news)"
 
-    prompt = f"""You are analyzing an NCAAF game: {away} @ {home}.
+    # Available sides for the AI to pick from
+    spread_sides = [f'"{matchup["fav_row"]["outcome_name"]}" (favourite, point={matchup["fav_row"]["consensus_point"]})',
+                    f'"{matchup["dog_row"]["outcome_name"]}" (underdog, point={matchup["dog_row"]["consensus_point"]})']
+    total_sides = []
+    for r in matchup["totals"]:
+        total_sides.append(f'"{r["outcome_name"]}" (point={r["consensus_point"]})')
 
-MARKET DATA (stated facts from the odds archive):
-{board_text}
+    prompt = f"""You are picking sides for an NCAAF parlay ticket: {away} @ {home}.
+
+MATCHUP FACTS (derived from the odds archive):
+  {spread_text}
+  {total_text}
+  Dispersion: spreads {matchup['fav_row'].get('dispersion', 0):.1f}, totals {matchup.get('over_row', {}).get('dispersion', 0) if matchup.get('over_row') else 0:.1f}
+
+AVAILABLE SPREAD SIDES:
+  {chr(10).join('  ' + s for s in spread_sides)}
+
+AVAILABLE TOTAL SIDES:
+  {chr(10).join('  ' + s for s in total_sides)}
 
 RECENT NEWS:
 {news_text}
 
-YOUR TASK: Analyze this game for a parlay board. You must output EXACTLY:
-1. STRUCTURED FLAGS — any of: qb_status_uncertain, weather_mentioned, travel_note,
-   key_injury, coaching_change, rivalry_game. Each must cite the headline and published
-   timestamp it came from. If none apply, output an empty list.
-2. RATIONALE — 2-3 sentences explaining the market setup.
-3. VETO — true/false. True means "do not include this game on the board" with a reason.
+YOUR TASK: Pick at most ONE side for spreads and at most ONE side for totals.
+You may ABSTAIN from this game entirely if neither side has a clear edge from
+the market setup or news. A picker that picks every game picks noise — abstain
+when appropriate.
+
+RESPOND IN JSON:
+{{
+  "legs": [
+    {{"market": "spreads", "side": "<exact outcome_name>", "point": <number>, "reason": "<one sentence>"}},
+    {{"market": "totals", "side": "<exact outcome_name>", "point": <number>, "reason": "<one sentence>"}}
+  ],
+  "abstain": false,
+  "abstain_reason": null,
+  "flags": [],
+  "rationale": "<2-3 sentences>"
+}}
+
+If abstaining: {{"legs": [], "abstain": true, "abstain_reason": "<why>", "flags": [], "rationale": "<brief>"}}
 
 CRITICAL: You may NOT output any number that enters pricing — no probability,
-no projected total, no "fair line". If you produce one it will be discarded.
-
-Respond in JSON: {{"flags": [...], "rationale": "...", "veto": false, "veto_reason": null}}
+no projected total, no "fair line", no "fair spread", no "win probability".
+If you produce one it will be discarded.
 """
 
     try:
         msg = client.messages.create(
-            model="claude-haiku-4-5-20251001",  # N13: verified 2026-09-19
-            max_tokens=500,
+            model="claude-haiku-4-5-20251001",
+            max_tokens=600,
             messages=[{"role": "user", "content": prompt}],
         )
         text = msg.content[0].text.strip()
-        # Parse JSON from response
-        # Strip markdown code fences if present
         if text.startswith("```"):
             text = text.split("```")[1]
             if text.startswith("json"):
                 text = text[4:]
         result = json.loads(text)
 
-        # N17: ENFORCE the no-pricing-number boundary.
-        # Discard any field not in the allowed set. Log each discard.
-        _ALLOWED = {"flags", "rationale", "veto", "veto_reason"}
+        # N17: discard any field not in the allowed set
+        _ALLOWED = {"legs", "abstain", "abstain_reason", "flags", "rationale"}
         discarded = {}
         for key in list(result.keys()):
             if key not in _ALLOWED:
                 discarded[key] = result.pop(key)
                 print(f"  AI output discarded field: {key}={discarded[key]}")
 
-        flags = result.get("flags", [])
-        rationale = result.get("rationale", "")
-        veto = result.get("veto", False)
-        veto_reason = result.get("veto_reason")
-        return flags, rationale, veto, veto_reason, discarded
+        return result, discarded
 
     except Exception as e:
         raise RuntimeError(f"HALT: AI layer failed for {away} @ {home}: {str(e)[:200]}")
 
 
+def _validate_ticket(ticket, board_rows):
+    """N19: assert invariants before writing."""
+    legs = ticket.get("legs", [])
+
+    # 1b: no both-sides of the same market
+    markets_seen = {}
+    for leg in legs:
+        mkt = leg["market"]
+        if mkt in markets_seen:
+            raise RuntimeError(
+                f"HALT: both-sides violation — {mkt} has sides "
+                f"{markets_seen[mkt]} and {leg['side']} in the same ticket")
+        markets_seen[mkt] = leg["side"]
+
+    # 1c: every leg exists on the board
+    board_set = set()
+    for r in board_rows:
+        board_set.add((r["market"], r["outcome_name"], r.get("consensus_point")))
+    for leg in legs:
+        key = (leg["market"], leg["side"], leg["point"])
+        if key not in board_set:
+            raise RuntimeError(
+                f"HALT: leg not on board — {key} not in board rows")
+
+
 def build_tickets(board_df, news_articles, build_time):
-    """Build tickets from board data + AI analysis."""
+    """Build tickets — AI selects sides."""
     tickets = []
+    abstain_count = 0
 
     for eid in board_df["event_id"].unique():
         ev = board_df[board_df["event_id"] == eid]
@@ -115,60 +187,82 @@ def build_tickets(board_df, news_articles, build_time):
         away = ev.iloc[0]["away_team"]
         commence = ev.iloc[0]["commence_time"]
 
-        # Get news for this game's teams
-        game_news = [a for a in news_articles
-                     if a.get("team_name") in (home, away)]
-
-        # AI layer
         game_rows = ev.to_dict("records")
-        flags, rationale, veto, veto_reason, discarded = _call_ai_layer(game_rows, game_news, home, away)
-
-        if veto:
-            print(f"  {away} @ {home}: VETOED — {veto_reason}")
+        matchup = _derive_matchup(game_rows)
+        if matchup is None:
             continue
 
-        # Build a ticket from the game's markets
-        legs = []
-        for _, r in ev.iterrows():
-            if r["market"] in ("spreads", "totals") and pd.notna(r["consensus_point"]):
-                legs.append({
-                    "market": r["market"],
-                    "side": r["outcome_name"],
-                    "point": r["consensus_point"],
-                    "price": r["best_price"],
-                    "book": r["best_book"],
-                    "implied": r["consensus_implied"],
-                })
+        game_news = [a for a in news_articles if a.get("team_name") in (home, away)]
 
-        if len(legs) < 2:
+        result, discarded = _call_ai_layer(matchup, game_news, home, away)
+
+        if result.get("abstain"):
+            abstain_count += 1
+            print(f"  {away} @ {home}: ABSTAIN — {result.get('abstain_reason', '?')}")
+            continue
+
+        ai_legs = result.get("legs", [])
+        if not ai_legs:
+            abstain_count += 1
+            print(f"  {away} @ {home}: no legs returned (implicit abstain)")
+            continue
+
+        # Build legs with best price from the board
+        final_legs = []
+        for al in ai_legs:
+            mkt = al.get("market")
+            side = al.get("side")
+            point = al.get("point")
+            if not mkt or not side:
+                continue
+            # Find the best price on the board for this side
+            board_match = ev[(ev["market"] == mkt) & (ev["outcome_name"] == side)]
+            if board_match.empty:
+                print(f"  WARNING: AI picked {mkt}/{side} but not on board — skipping")
+                continue
+            br = board_match.iloc[0]
+            final_legs.append({
+                "market": mkt, "side": side,
+                "point": br["consensus_point"],
+                "price": br["best_price"],
+                "book": br["best_book"],
+                "implied": br["consensus_implied"],
+                "ai_reason": al.get("reason", ""),
+            })
+
+        if not final_legs:
             continue
 
         ticket = {
             "event_id": eid,
-            "home_team": home,
-            "away_team": away,
+            "home_team": home, "away_team": away,
             "commence_time": commence,
-            "legs": legs,
-            "ai_flags": flags,
-            "ai_rationale": rationale,
+            "favourite": matchup["favourite"],
+            "underdog": matchup["underdog"],
+            "spread_magnitude": matchup["spread_magnitude"],
+            "legs": final_legs,
+            "ai_flags": result.get("flags", []),
+            "ai_rationale": result.get("rationale", ""),
+            "ai_discarded": discarded,
             "build_time": build_time,
-            "reference_only": True,  # N01: hardrockbet_fl absent
-            "close_price": None,  # filled by grader
-            "clv": None,  # filled by grader
+            "reference_only": True,
+            "close_price": None, "clv": None,
             "graded": False,
         }
+
+        # Validate before adding
+        _validate_ticket(ticket, game_rows)
         tickets.append(ticket)
 
+        sides = ", ".join(f"{l['market']}:{l['side']}" for l in final_legs)
+        print(f"  {away} @ {home}: {len(final_legs)} legs [{sides}]")
+
+    print(f"\nTickets: {len(tickets)}, Abstains: {abstain_count}")
     return tickets
 
 
 def write_ticket_log(new_tickets):
-    """N16: Append tickets to the log with monotonicity guard.
-
-    - ticket count must never decrease
-    - no (event_id, build_time) key on disk may vanish
-    Halts on either violation.
-    """
+    """N16: Append tickets to the log with monotonicity guard."""
     TICKET_LOG.parent.mkdir(parents=True, exist_ok=True)
     existing = []
     if TICKET_LOG.exists() and TICKET_LOG.stat().st_size > 0:
@@ -179,16 +273,12 @@ def write_ticket_log(new_tickets):
     before_keys = set((t["event_id"], t["build_time"]) for t in existing)
 
     merged = existing + list(new_tickets)
-
     after_keys = set((t["event_id"], t["build_time"]) for t in merged)
     lost = before_keys - after_keys
     if lost:
-        raise RuntimeError(
-            f"HALT: append-only violation — {len(lost)} tickets would vanish: "
-            f"{list(lost)[:5]}")
+        raise RuntimeError(f"HALT: append-only violation — {len(lost)} tickets vanish")
     if len(merged) < before_count:
-        raise RuntimeError(
-            f"HALT: ticket count would decrease from {before_count} to {len(merged)}")
+        raise RuntimeError(f"HALT: ticket count decrease {before_count} -> {len(merged)}")
 
     with open(TICKET_LOG, "w") as f:
         json.dump(merged, f, indent=2)
@@ -206,13 +296,11 @@ def main():
     print(f"ANTHROPIC_API_KEY fingerprint: {KEY_FP}")
     print(f"Build time: {bt}")
 
-    # Load board
     from ncaaf.pipeline.build_ncaaf_board import build_board
     board_df, _ = build_board(args.season, build_time=bt)
     if board_df.empty:
         print("No board data"); sys.exit(0)
 
-    # Load news
     news_dir = ROOT / "data" / "news_archive" / "ncaaf" / f"season={args.season}"
     news_articles = []
     if news_dir.exists():
@@ -227,11 +315,7 @@ def main():
         return
 
     tickets = build_tickets(board_df, news_articles, bt)
-    print(f"Tickets built: {len(tickets)}")
-
-    # N16: append-only with monotonicity guard
     write_ticket_log(tickets)
-    print(f"Ticket log: {len(existing)} total tickets -> {TICKET_LOG}")
 
 
 if __name__ == "__main__":

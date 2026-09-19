@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""N13/N17: test the no-pricing-number guard — must discard numeric pricing fields."""
+"""N13/N17/N20: test the no-pricing-number guard and API failure handling."""
 
 import json, sys
 from pathlib import Path
@@ -10,17 +10,27 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
+_MOCK_MATCHUP = {
+    "favourite": "Team A", "underdog": "Team B", "spread_magnitude": 7.0,
+    "total_line": 50.0,
+    "fav_row": {"outcome_name": "Team A", "consensus_point": -7.0, "dispersion": 1.0},
+    "dog_row": {"outcome_name": "Team B", "consensus_point": 7.0, "dispersion": 1.0},
+    "over_row": {"outcome_name": "Over", "consensus_point": 50.0, "dispersion": 0.5},
+    "totals": [
+        {"outcome_name": "Over", "consensus_point": 50.0},
+        {"outcome_name": "Under", "consensus_point": 50.0},
+    ],
+}
+
 
 def test_pricing_number_discarded_and_logged():
-    """A canned AI response containing pricing numbers must be discarded,
-    and the discarded fields must be returned."""
+    """A canned AI response containing pricing numbers must be discarded."""
     from ncaaf.pipeline.build_ncaaf_tickets import _call_ai_layer
 
     canned = json.dumps({
-        "flags": [{"flag": "rivalry_game", "headline": "test", "published": "2026-09-19T00:00:00Z"}],
-        "rationale": "The spread is too wide.",
-        "veto": False,
-        "veto_reason": None,
+        "legs": [{"market": "spreads", "side": "Team A", "point": -7.0, "reason": "test"}],
+        "abstain": False, "abstain_reason": None,
+        "flags": [], "rationale": "test",
         "fair_spread": -21.5,
         "projected_total": 52.0,
         "win_probability": 0.78,
@@ -33,22 +43,15 @@ def test_pricing_number_discarded_and_logged():
 
     with patch("ncaaf.pipeline.build_ncaaf_tickets.ANTHROPIC_KEY", "test_key"):
         with patch("anthropic.Anthropic", return_value=mock_client):
-            flags, rationale, veto, veto_reason, discarded = _call_ai_layer(
-                [], [], "Home", "Away")
+            result, discarded = _call_ai_layer(_MOCK_MATCHUP, [], "Home", "Away")
 
-    # The discarded dict must contain the pricing fields
     assert "fair_spread" in discarded, f"fair_spread not discarded: {discarded}"
     assert discarded["fair_spread"] == -21.5
     assert "projected_total" in discarded
-    assert discarded["projected_total"] == 52.0
     assert "win_probability" in discarded
-    assert discarded["win_probability"] == 0.78
-
-    # The returned structure must NOT contain them
-    assert isinstance(flags, list)
-    assert len(flags) == 1  # the rivalry_game flag survived
-    assert rationale == "The spread is too wide."
-    assert veto == False
+    # Allowed fields survived
+    assert "legs" in result
+    assert "rationale" in result
 
 
 def test_guard_with_no_pricing_fields():
@@ -56,10 +59,8 @@ def test_guard_with_no_pricing_fields():
     from ncaaf.pipeline.build_ncaaf_tickets import _call_ai_layer
 
     canned = json.dumps({
-        "flags": [],
-        "rationale": "Normal game.",
-        "veto": False,
-        "veto_reason": None,
+        "legs": [], "abstain": True, "abstain_reason": "no edge",
+        "flags": [], "rationale": "Normal game.",
     })
 
     mock_msg = MagicMock()
@@ -69,14 +70,13 @@ def test_guard_with_no_pricing_fields():
 
     with patch("ncaaf.pipeline.build_ncaaf_tickets.ANTHROPIC_KEY", "test_key"):
         with patch("anthropic.Anthropic", return_value=mock_client):
-            flags, rationale, veto, veto_reason, discarded = _call_ai_layer(
-                [], [], "Home", "Away")
+            result, discarded = _call_ai_layer(_MOCK_MATCHUP, [], "Home", "Away")
 
-    assert discarded == {}, f"Expected empty discarded, got {discarded}"
+    assert discarded == {}
 
 
 def test_api_failure_raises():
-    """An API failure must raise, not write to ai_rationale."""
+    """An API failure must raise."""
     from ncaaf.pipeline.build_ncaaf_tickets import _call_ai_layer
 
     mock_client = MagicMock()
@@ -85,4 +85,4 @@ def test_api_failure_raises():
     with patch("ncaaf.pipeline.build_ncaaf_tickets.ANTHROPIC_KEY", "test_key"):
         with patch("anthropic.Anthropic", return_value=mock_client):
             with pytest.raises(RuntimeError, match="HALT"):
-                _call_ai_layer([], [], "Home", "Away")
+                _call_ai_layer(_MOCK_MATCHUP, [], "Home", "Away")

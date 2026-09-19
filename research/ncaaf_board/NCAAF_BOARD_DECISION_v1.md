@@ -268,3 +268,14 @@ the games settle, with N12/N16/N17 guards in place.
 5 tickets: all graded=False, all reference_only=True. Decision prices
 intact. No CLV data yet — the measurement asset begins accumulating
 when the first game settles.
+
+### N19 — Favourite/underdog in code; both-sides + on-board invariants (2026-09-19)
+_derive_matchup: favourite = team with negative spread point, underdog = other.
+Passed to the AI in words ("X is favoured by N at Y. Y is the underdog
+receiving N."). The AI never derives the sign — the inversion was an input defect.
+
+Invariant 1b: a ticket may not contain both sides of the same market. Raises.
+Invariant 1c: every leg must exist on the board (market, side, point). Raises.
+
+Tests: 4/4. both_sides_raises, single_side_passes, not_on_board_raises,
+favourite_derivation. RED shown: old code allowed both sides silently.
