@@ -854,6 +854,37 @@ assertion that the fixture still discriminates); `fit_dir` is required; a fit
 without `fit_meta.json` raises; and re-stamping cannot launder an environment
 mismatch.
 
+### D85 — PIT test for D59/D60; D61 coverage statement (2026-09-19)
+
+`nfl/sim/tests/test_usage_pit_5f.py` — three tests, all green.
+
+**D59 (depth provenance):** `test_d59_pit_depth_truncated` builds usage for
+2025 wk5 twice: once with full depth data, once with all depth rows having
+`dt >= kickoff(wk5)` removed. Both builds produce byte-identical week-5 output
+(all float columns within 1e-12). This is the D59 claim: new-schema depth
+snapshots with dt at or after the week's first kickoff are excluded.
+Removed 934,141 depth rows in the truncation — the filter is not vacuous.
+
+`test_d59_negative_control` injects a synthetic depth row with
+`dt = kickoff + 1 hour` that promotes an ARI RB from depth > 1 to depth 1.
+Verifies that: (a) the target player exists in the output, (b) the player's
+pre-kickoff depth is NOT rank 1 (so the injection would be meaningful), and
+(c) D59's filter makes both builds identical despite the injection. If D59
+were broken (not filtering by dt), the injected row would change the player's
+depth_order and hence their prior, producing different shares.
+
+**D60 (traded players):** `test_d60_traded_player_debut` verifies McCaffrey
+appears on SF with non-zero carry_share and target_share in 2022 wk7 (traded
+from CAR), and Hockenson appears on MIN with non-zero target_share in 2022 wk9
+(traded from DET).
+
+**D61 (s-1 aggregate prior):** NOT DIRECTLY TESTED. D61 changed the prior from
+a single depth-group row to an opp-weighted aggregate across all depth groups.
+This affects shrinkage values but not PIT identity — a direct test would require
+the old code path to compare against, which no longer exists. The D59 PIT test
+implicitly covers structural correctness: if the aggregate prior introduced a
+time leak, the PIT assertion would catch it.
+
 ### D84 — Props cron was not firing: entries installed after all scheduled slots (2026-09-19)
 
 **What was wrong.** The three `pull_hardrock_props.py` cron entries were installed
