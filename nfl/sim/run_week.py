@@ -307,6 +307,19 @@ def load_props_for_game(home_full, away_full, season, week):
     return game_df, None, chosen_ts
 
 
+def is_rankable(has_book, converged, sim_pricing_enabled):
+    """D79: the single place that decides whether a leg may be recommended.
+
+    Before D79 this was `has_book and converged` inline, and the calibration gate
+    only appended the text "SIM PRICES SUPPRESSED" to the markdown — it never
+    entered the decision. A red stamp therefore shipped calibrated, ranked legs in
+    the cross-game top 20 exactly as a green one did. ChatGPT audit #3 reproduced
+    that by running the board. A gate that announces protection while providing
+    none is worse than no gate.
+    """
+    return bool(has_book) and bool(converged) and bool(sim_pricing_enabled)
+
+
 def _check_calibration_stamp(cal_path=None):
     """D70/D72: metadata gate — are these maps valid for the sim about to run?
 
@@ -574,9 +587,11 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                         if pd.notna(book_implied) and book_implied > cal_p + 0.10:
                             status = "BOOK-MORE-CONFIDENT"
 
-                        # A7: rankable = Hard Rock price exists AND anchoring converged
+                        # A7 + D79: Hard Rock price AND anchoring converged AND a
+                        # valid calibration stamp. The stamp is part of the decision,
+                        # not a banner.
                         has_book = pd.notna(book_price)
-                        rankable = has_book and converged
+                        rankable = is_rankable(has_book, converged, sim_pricing_enabled)
 
                         # D58: MOVED-AGAINST flag (pre-registered)
                         moved_against = False
@@ -703,7 +718,10 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
                     and l["side"] == "over"
                     and not l.get("rankable", False)]
     if not_rankable:
-        board_lines.append(f"## Not rankable ({len(not_rankable)} legs: no Hard Rock price or not converged)")
+        _why = "no Hard Rock price or not converged"
+        if not sim_pricing_enabled:
+            _why = "CALIBRATION STAMP INVALID — nothing is rankable this run"
+        board_lines.append(f"## Not rankable ({len(not_rankable)} legs: {_why})")
         board_lines.append("")
     if trusted_legs:
         board_lines.append("## Cross-game top 20 (trusted, over side, not BOOK-MORE-CONFIDENT)")

@@ -701,3 +701,83 @@ says nothing about that assumption, which remains untested.
 Tests (`test_board_5d2.py`): a 2026-only change does NOT move the fingerprint (this
 test fails against the pre-D77 whole-file hash — verified); a single 2021-2024 cell
 DOES move it; row order does not.
+
+### D78 — IPF convergence is judged after a full sweep (2026-09-19)
+D65 implemented the exact binary update correctly but left the convergence check
+INSIDE the per-leg loop, measuring each leg's error immediately after setting that
+leg exactly. `max_err` was therefore ~0 by construction and the loop broke on the
+first sweep every time, leaving earlier legs off target while the leg set last
+looked perfect. ChatGPT audit #3 reproduced it: requested 60%/70%, final marginals
+68.18%/70%, returned joint 60% against a correct 54.57%.
+
+The check now runs after a complete sweep, across all legs. Also added: two legs
+with identical indicator columns but different targets are unsatisfiable (if A and
+B hit in exactly the same sims then P(A)==P(B) under any reweighting) and now
+raise; and a marginal collapsing to 0 or 1 mid-rake raises rather than dividing.
+
+Verified by execution on a frozen 4-leg fixture that needs 7 sweeps: the fix lands
+every marginal within 4.3e-07 of target, while the old inside-the-sweep logic
+misses by up to 3.36pp. `test_old_inside_sweep_check_would_fail_this_fixture`
+guards that the fixture still discriminates.
+
+**A prior test encoded the bug as its expected answer.** `test_two_correlated_legs`
+built two IDENTICAL columns, asked for 0.7 and 0.5, and asserted the joint equals
+min(t1,t2) — which only held because the broken loop exited after setting the
+second leg. Replaced with the raise, plus a nested-threshold test (over 4.5 implies
+over 3.5) which is the satisfiable case that actually occurs on a board.
+
+### D79 — The calibration stamp enters the ranking decision (2026-09-19)
+D70's gate was decorative. `if not sim_pricing_enabled:` appended the text
+"**SIM PRICES SUPPRESSED**" to the markdown board and did nothing else; `rankable`
+was `has_book and converged` and never consulted the stamp, so a red stamp shipped
+calibrated, ranked legs into the cross-game top 20 exactly as a green one did.
+ChatGPT audit #3 reproduced this on a real board run. A gate that announces
+protection while providing none is worse than no gate, because it is trusted.
+
+`is_rankable(has_book, converged, sim_pricing_enabled)` is now the single decision
+point and the "Not rankable" line names the stamp when that is the cause. Tests
+assert a red stamp yields zero rankable legs, a green stamp still ranks, and the
+call site passes the stamp rather than recomputing the old expression.
+
+### D80 — WITHDRAWN: D70 never wired the pricer into the board (2026-09-19)
+D70 claimed "pricer + raked SGP wired into run_week". It added
+`from nfl.sim.pricer import price_game, sgp_probability_raked` at run_week.py:28
+and **no call site**. `grep -n "price_game(\|sgp_probability_raked("` on run_week.py
+returns nothing; ChatGPT audit #3 instrumented a board run and recorded zero calls.
+This is the SAME defect audit #2 found ("the raked function's only callers are
+tests"), so it survived an entire phase that claimed to fix it — because
+verification read the diff and saw the import.
+
+It is withdrawn rather than patched, because the integration D70 described does not
+exist as a small change:
+  * the board is SINGLE-LEG. It writes `parlay_board.md` but builds no parlay — no
+    leg matrix, no joint, no SGP anywhere. `sgp_probability_raked` has nothing to
+    consume until multi-leg ticket construction exists, which is a feature, not a
+    fix.
+  * `price_game` prices TEAM markets (margin, total, 1H) from `team_df` and returns
+    the SGP leg matrix. The board's player props are computed inline from player
+    sims. They are complementary code paths, not duplicates, so there is no
+    one-line call that makes the claim true.
+Manufacturing a call site to close the finding would be worse than the finding.
+A real SGP board is scoped as its own phase.
+
+### D81 — Fingerprint covers every fit input, not usage alone (2026-09-19)
+ChatGPT audit #3 showed the D77 fingerprint watched `player_usage_weekly` only:
+removing a player from a HISTORICAL active lineup, and altering HISTORICAL team
+passing EPA, both changed the simulated sample while the gate stayed green. The
+fingerprint now covers all eight season-keyed ratings artifacts
+(`FIT_INPUT_FILES`), each restricted to the fit window for the D77 reason, and
+raises on a missing input.
+
+Verified by execution against the real ratings files: perturbing a 2023 value in
+`active_universe_weekly` (depth_order), `player_usage_weekly` (carry_share),
+`team_ratings_weekly` (epa) and `tendencies_weekly` (proe) is CAUGHT in all four
+cases, while the same perturbation on 2026 rows is IGNORED in all cases.
+(A first attempt appeared to miss the active-universe case; the perturbation was
+NaN*1.5+0.123 = NaN on a ~43%-null column, i.e. a no-op test, not a gate failure.)
+
+**Still open, from the same audit:** `save_calibration` stamps the CURRENT
+environment rather than verifying the environment that produced the checkpoints, so
+a watched input can be changed, reddening the gate, and then re-stamped green
+without fitting anything. The stamp should be derived from the fit run, not from
+the moment of writing.

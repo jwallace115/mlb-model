@@ -263,19 +263,40 @@ def sgp_probability_raked(leg_matrix, legs, cal_probs):
 
     weights = np.ones(N, dtype=np.float64) / N
 
+    # D78: two legs with identical indicator columns but different targets are
+    # unsatisfiable — IPF will oscillate forever rather than converge. Reject up
+    # front instead of returning whatever the loop happens to leave behind.
+    for a in range(len(cal_probs)):
+        for b in range(a + 1, len(cal_probs)):
+            if np.array_equal(indicators[:, a], indicators[:, b]) and \
+                    abs(cal_probs[a] - cal_probs[b]) > 1e-12:
+                raise ValueError(
+                    f"legs {legs[a]} and {legs[b]} are identical across all sims but "
+                    f"carry different targets ({cal_probs[a]} vs {cal_probs[b]}) — "
+                    f"unsatisfiable")
+
     for iteration in range(200):
-        max_err = 0.0
+        # One full sweep. Setting leg j exactly disturbs every leg already set,
+        # so convergence CANNOT be judged inside this loop.
         for j, t in enumerate(cal_probs):
             col = indicators[:, j]
             m = (weights * col).sum()
+            if m <= 0.0 or m >= 1.0:
+                raise RuntimeError(
+                    f"leg {legs[j]} marginal collapsed to {m} during raking — "
+                    f"targets are not jointly satisfiable")
             # Exact binary IPF: hits *= t/m, non-hits *= (1-t)/(1-m)
             hit_mask = col == 1
             weights[hit_mask] *= t / m
             weights[~hit_mask] *= (1 - t) / (1 - m)
             # Renormalize
             weights /= weights.sum()
-            err = abs((weights * col).sum() - t)
-            max_err = max(max_err, err)
+
+        # D78: measure AFTER the full sweep, across ALL legs. The previous version
+        # measured each leg's error immediately after setting that leg exactly, so
+        # max_err was ~0 by construction and the loop always broke on sweep 1.
+        max_err = max(abs((weights * indicators[:, j]).sum() - t)
+                      for j, t in enumerate(cal_probs))
         if max_err < 1e-6:
             break
     else:

@@ -1955,3 +1955,41 @@
 - NOT DONE: CLAUDE.md diff audit changes (committed by another process, not touched)
 - UNVERIFIED: whether WO7's both-sides tickets (events 08a2eb7a, 023386f1) had downstream effects beyond the ticket log
 - UNVERIFIED: ESPN news article dedup across the 3 news files now on disk (7,340 total articles, likely many duplicates)
+
+## 2026-09-19T11:23Z  cowork (audit #3 fixes: D78 IPF, D79 gate, D80 withdrawal, D81 fingerprint)
+- D78 IPF: convergence check moved outside the per-leg sweep. PROVEN BY EXECUTION on a frozen
+  4-leg fixture needing 7 sweeps — fix lands every marginal within 4.3e-07; old inside-the-sweep
+  logic misses by up to 3.36pp with the last leg exact (the signature). Added: identical columns
+  with different targets raise; marginal collapsing to 0/1 mid-rake raises.
+  NOTE: the existing test_two_correlated_legs ENCODED THE BUG — identical columns, targets
+  0.7/0.5, asserting joint==min(). It passed only because the broken loop exited early.
+  Replaced with the raise plus a nested-threshold test (the satisfiable real-world case).
+- D79 gate: is_rankable(has_book, converged, sim_pricing_enabled) is now the single decision
+  point; the stamp enters the decision instead of printing a banner. Tests assert a red stamp
+  yields ZERO rankable legs and a green stamp still ranks.
+- D80 WITHDRAWN — D70 never wired the pricer. grep for a call site returns nothing. Withdrawn
+  rather than patched because the board is SINGLE-LEG (writes parlay_board.md, builds no parlay,
+  no leg matrix, no joint) so sgp_probability_raked has nothing to consume, and price_game
+  prices TEAM markets from team_df while the board computes player props inline — complementary
+  paths, not duplicates. A real SGP board is its own phase. Manufacturing a call site to close
+  the finding would be worse than the finding.
+- D81 fingerprint: extended to all eight season-keyed ratings artifacts, fit window only.
+  PROVEN BY EXECUTION against the real files — 2023 perturbations to active_universe
+  (depth_order), player_usage (carry_share), team_ratings (epa) and tendencies (proe) all
+  CAUGHT; the same perturbations on 2026 rows all IGNORED. My first attempt showed a false MISS
+  because NaN*1.5+0.123 is NaN on a ~43%-null column — the test was a no-op, not the gate.
+- calibration_v1.json re-stamped through save_calibration; maps asserted unchanged; gate ok=True.
+- 34 tests pass across test_board_5d2 + test_raking_5d3. My own stale D77 tests (patching
+  USAGE_PATH, which usage_fingerprint no longer reads) were caught by the suite and replaced.
+- NOT DONE / STILL OPEN:
+  (a) save_calibration stamps the CURRENT environment, not the one that produced the
+      checkpoints — a watched input can be changed, go red, and be re-stamped green without
+      fitting. Recorded in D81.
+  (b) the movement layer: missing movement recorded as False rather than null (run_week ~581)
+      and the comparison mixes opening RAW implied with current NO-VIG (~502). Currently moot —
+      no open snapshot exists — but it will bite the moment capture is fixed.
+  (c) SGP board feature (D80).
+  (d) calibration transfer: audit's 2021-23 -> 2024 test showed totals get WORSE (Brier
+      0.24190 -> 0.24560) while receptions and QB rush attempts improve. Needs family-level
+      prospective evidence before any sim price is trusted.
+  (e) FULL SUITE NOT RE-RUN at this state (~15 min). Only the two affected files were run.

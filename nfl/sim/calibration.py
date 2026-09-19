@@ -359,6 +359,24 @@ ENGINE_FINGERPRINT_FILES = [
 ENGINE_TABLES_DIR = ROOT / "nfl" / "data" / "sim" / "tables"
 USAGE_PATH = ROOT / "nfl" / "data" / "sim" / "ratings" / "player_usage_weekly.parquet"
 
+# D81: every season-keyed ratings artifact the engine reads, not just usage.
+# ChatGPT audit #3 showed the D77 fingerprint covered usage alone: removing a
+# player from a HISTORICAL active lineup, and altering HISTORICAL team passing EPA,
+# both changed the simulated sample while the gate stayed green. Each of these is
+# hashed over the fit window only, for the D77 reason — 2026 rows cannot affect a
+# 2021-2024 fit and must not redden the gate.
+RATINGS_DIR = ROOT / "nfl" / "data" / "sim" / "ratings"
+FIT_INPUT_FILES = [
+    "player_usage_weekly.parquet",
+    "active_universe_weekly.parquet",
+    "team_ratings_weekly.parquet",
+    "tendencies_weekly.parquet",
+    "tendencies_situational_weekly.parquet",
+    "qb_ratings_weekly.parquet",
+    "kicker_weekly.parquet",
+    "league_baselines.parquet",
+]
+
 
 def engine_fingerprint():
     """sha256[:16] over the files that determine the simulated distribution.
@@ -407,15 +425,23 @@ def usage_fingerprint(fit_seasons=None):
     if not USAGE_PATH.exists():
         return None
     seasons = list(fit_seasons or FIT_SEASONS_DEFAULT)
-    df = pd.read_parquet(USAGE_PATH)
-    df = df[df["season"].isin(seasons)]
-    key = [c for c in ("season", "week", "team", "player_id") if c in df.columns]
-    df = df.sort_values(key).reset_index(drop=True)
     h = hashlib.sha256()
     h.update(",".join(map(str, seasons)).encode())
-    for c in sorted(df.columns):
-        h.update(c.encode())
-        h.update(pd.util.hash_pandas_object(df[c], index=False).values.tobytes())
+    for fname in FIT_INPUT_FILES:          # D81: all fit inputs, not usage alone
+        fpath = RATINGS_DIR / fname
+        h.update(fname.encode())
+        if not fpath.exists():
+            raise FileNotFoundError(f"fit input missing: {fpath}")
+        df = pd.read_parquet(fpath)
+        if "season" in df.columns:
+            df = df[df["season"].isin(seasons)]   # fit window only (D77)
+        key = [c for c in ("season", "week", "team", "player_id") if c in df.columns]
+        if key:
+            df = df.sort_values(key)
+        df = df.reset_index(drop=True)
+        for c in sorted(df.columns):
+            h.update(c.encode())
+            h.update(pd.util.hash_pandas_object(df[c], index=False).values.tobytes())
     return h.hexdigest()[:16]
 
 

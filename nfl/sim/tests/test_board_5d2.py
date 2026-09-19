@@ -248,66 +248,133 @@ def test_layer_log_schema():
         assert f'"{field}"' in src, f"Layer log field {field} not found in build_board"
 
 
-# ── D77: the usage fingerprint covers only the fit window ──
+# ── D77 + D81: fingerprint scope (fixtures live in the D81 block below) ──
+# The original D77 tests monkeypatched calibration.USAGE_PATH. D81 widened the
+# fingerprint to read every file in FIT_INPUT_FILES from RATINGS_DIR, so USAGE_PATH
+# is no longer the surface under test and those tests were stale. The D81 tests
+# cover the same invariants: fit-window changes are caught, live-season changes are
+# ignored, and a missing input raises.
 
-def _write_usage(path, rows):
-    pd.DataFrame(rows).to_parquet(path, index=False)
+
+# ── D79: the calibration stamp must enter the ranking decision ──
+
+def _selection(legs):
+    """The board's own cross-game top-20 filter (run_week.py ~696)."""
+    return [l for l in legs
+            if l["tier"].startswith("TRUSTED")
+            and l["status"] != "BOOK-MORE-CONFIDENT"
+            and l["side"] == "over"
+            and l.get("rankable", False)]
 
 
-def _usage_rows():
+def _legs(sim_pricing_enabled):
+    from nfl.sim.run_week import is_rankable
     out = []
-    for season in (2021, 2022, 2023, 2024, 2026):
-        for wk in (1, 2):
-            out.append({"season": season, "week": wk, "team": "MIN",
-                        "player_id": "00-0000001", "target_share": 0.10,
-                        "carry_share": 0.40})
+    for i in range(5):
+        out.append({"tier": "TRUSTED", "status": "OK", "side": "over",
+                    "cal_p": 0.7, "rankable":
+                        is_rankable(has_book=True, converged=True,
+                                    sim_pricing_enabled=sim_pricing_enabled)})
     return out
 
 
-def test_usage_fingerprint_ignores_non_fit_seasons(tmp_path, monkeypatch):
-    """THE POINT OF D77. A 2026-only refresh must not move the fingerprint —
-    the maps are fitted on 2021-24, so 2026 roster churn cannot affect them.
-    Before D77 the whole file was hashed and every routine refresh reddened
-    the gate."""
+def test_red_stamp_makes_nothing_rankable():
+    """THE POINT OF D79. Before it, `rankable = has_book and converged` and the
+    stamp only printed a banner, so a red gate still shipped ranked legs into the
+    top 20. Reproduced by ChatGPT audit #3 on a real board run."""
+    assert _selection(_legs(sim_pricing_enabled=False)) == [], \
+        "a red calibration stamp still produced rankable legs"
+
+
+def test_green_stamp_still_ranks():
+    """The gate must not be so strict it blocks a valid run."""
+    assert len(_selection(_legs(sim_pricing_enabled=True))) == 5
+
+
+def test_is_rankable_requires_all_three():
+    from nfl.sim.run_week import is_rankable
+    assert is_rankable(True, True, True)
+    assert not is_rankable(False, True, True)    # no book price
+    assert not is_rankable(True, False, True)    # not converged
+    assert not is_rankable(True, True, False)    # bad stamp  <- the D79 addition
+
+
+def test_board_call_site_uses_the_gate():
+    """Guards against the fix being reverted to the inline expression: the source
+    must pass sim_pricing_enabled into the decision, not recompute it."""
+    import inspect
+    import nfl.sim.run_week as rw
+    src = inspect.getsource(rw.build_board)
+    assert "is_rankable(has_book, converged, sim_pricing_enabled)" in src
+    assert "rankable = has_book and converged" not in src
+
+
+# ── D81: the fingerprint covers every fit input, not usage alone ──
+
+def _ratings_fixture(tmp_path):
+    """Minimal stand-ins for every file in FIT_INPUT_FILES."""
     import nfl.sim.calibration as cal
-    rows = _usage_rows()
-    a = tmp_path / "a.parquet"; _write_usage(a, rows)
-    monkeypatch.setattr(cal, "USAGE_PATH", a)
-    before = cal.usage_fingerprint()
-
-    changed = [dict(r) for r in rows]
-    for r in changed:                      # move 2026 a lot; fit window untouched
-        if r["season"] == 2026:
-            r["carry_share"] = 0.95
-    b = tmp_path / "b.parquet"; _write_usage(b, changed)
-    monkeypatch.setattr(cal, "USAGE_PATH", b)
-    assert cal.usage_fingerprint() == before, "2026-only change moved the fingerprint"
+    for f in cal.FIT_INPUT_FILES:
+        rows = [{"season": s, "week": 1, "team": "MIN", "player_id": "00-1",
+                 "val": 0.5} for s in (2021, 2022, 2023, 2024, 2026)]
+        pd.DataFrame(rows).to_parquet(tmp_path / f, index=False)
+    return tmp_path
 
 
-def test_usage_fingerprint_moves_on_fit_season_change(tmp_path, monkeypatch):
-    """A change inside the fit window MUST move it, or the gate is useless."""
+def _bump(tmp_path, fname, season, newval):
+    d = pd.read_parquet(tmp_path / fname)
+    d.loc[d.season == season, "val"] = newval
+    d.to_parquet(tmp_path / fname, index=False)
+
+
+def test_fingerprint_catches_historical_ratings_change(tmp_path, monkeypatch):
+    """ChatGPT audit #3 reproduced this: altering HISTORICAL team-ratings EPA left
+    the D77 gate green because the fingerprint covered usage alone."""
     import nfl.sim.calibration as cal
-    rows = _usage_rows()
-    a = tmp_path / "a.parquet"; _write_usage(a, rows)
-    monkeypatch.setattr(cal, "USAGE_PATH", a)
+    d = _ratings_fixture(tmp_path)
+    monkeypatch.setattr(cal, "RATINGS_DIR", d)
     before = cal.usage_fingerprint()
-
-    changed = [dict(r) for r in rows]
-    for r in changed:
-        if r["season"] == 2023:
-            r["carry_share"] = 0.41       # one fit-window cell
-    b = tmp_path / "b.parquet"; _write_usage(b, changed)
-    monkeypatch.setattr(cal, "USAGE_PATH", b)
-    assert cal.usage_fingerprint() != before, "fit-window change did NOT move the fingerprint"
+    _bump(d, "team_ratings_weekly.parquet", 2023, 0.9)
+    assert cal.usage_fingerprint() != before, "historical ratings change not caught"
 
 
-def test_usage_fingerprint_is_row_order_stable(tmp_path, monkeypatch):
-    """Deterministic across rebuilds: row order must not matter."""
+def test_fingerprint_catches_historical_active_universe_change(tmp_path, monkeypatch):
+    """The other audit reproduction: removing a player from a historical lineup."""
     import nfl.sim.calibration as cal
-    rows = _usage_rows()
-    a = tmp_path / "a.parquet"; _write_usage(a, rows)
-    monkeypatch.setattr(cal, "USAGE_PATH", a)
+    d = _ratings_fixture(tmp_path)
+    monkeypatch.setattr(cal, "RATINGS_DIR", d)
     before = cal.usage_fingerprint()
-    b = tmp_path / "b.parquet"; _write_usage(b, list(reversed(rows)))
-    monkeypatch.setattr(cal, "USAGE_PATH", b)
+    _bump(d, "active_universe_weekly.parquet", 2023, 0.9)
+    assert cal.usage_fingerprint() != before, "historical active-universe change not caught"
+
+
+def test_fingerprint_still_ignores_2026_in_every_fit_input(tmp_path, monkeypatch):
+    """D77 must survive D81: a live-season change in ANY fit input stays green."""
+    import nfl.sim.calibration as cal
+    d = _ratings_fixture(tmp_path)
+    monkeypatch.setattr(cal, "RATINGS_DIR", d)
+    before = cal.usage_fingerprint()
+    for f in cal.FIT_INPUT_FILES:
+        _bump(d, f, 2026, 0.99)
+    assert cal.usage_fingerprint() == before, "a 2026-only change reddened the gate"
+
+
+def test_missing_fit_input_raises(tmp_path, monkeypatch):
+    import nfl.sim.calibration as cal
+    d = _ratings_fixture(tmp_path)
+    (d / cal.FIT_INPUT_FILES[0]).unlink()
+    monkeypatch.setattr(cal, "RATINGS_DIR", d)
+    with pytest.raises(FileNotFoundError):
+        cal.usage_fingerprint()
+
+
+def test_fingerprint_is_row_order_stable(tmp_path, monkeypatch):
+    """Deterministic across rebuilds: parquet row order must not move it."""
+    import nfl.sim.calibration as cal
+    d = _ratings_fixture(tmp_path)
+    monkeypatch.setattr(cal, "RATINGS_DIR", d)
+    before = cal.usage_fingerprint()
+    for f in cal.FIT_INPUT_FILES:
+        df = pd.read_parquet(d / f)
+        df.iloc[::-1].to_parquet(d / f, index=False)
     assert cal.usage_fingerprint() == before, "fingerprint depends on row order"
