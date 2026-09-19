@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""N13: test the no-pricing-number guard with a canned response."""
+"""N13/N17: test the no-pricing-number guard — must discard numeric pricing fields."""
 
 import json, sys
 from pathlib import Path
@@ -11,36 +11,68 @@ ROOT = Path(__file__).resolve().parent.parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
 
-def test_pricing_number_discarded():
-    """A canned AI response containing a pricing number must be discarded."""
+def test_pricing_number_discarded_and_logged():
+    """A canned AI response containing pricing numbers must be discarded,
+    and the discarded fields must be returned."""
     from ncaaf.pipeline.build_ncaaf_tickets import _call_ai_layer
 
-    # Mock the Anthropic client to return a response with a pricing number
-    canned_response = json.dumps({
-        "flags": [],
+    canned = json.dumps({
+        "flags": [{"flag": "rivalry_game", "headline": "test", "published": "2026-09-19T00:00:00Z"}],
         "rationale": "The spread is too wide.",
         "veto": False,
         "veto_reason": None,
-        "fair_spread": -21.5,  # THIS MUST BE DISCARDED
-        "projected_total": 52.0,  # THIS MUST BE DISCARDED
+        "fair_spread": -21.5,
+        "projected_total": 52.0,
+        "win_probability": 0.78,
     })
 
     mock_msg = MagicMock()
-    mock_msg.content = [MagicMock(text=canned_response)]
-
+    mock_msg.content = [MagicMock(text=canned)]
     mock_client = MagicMock()
     mock_client.messages.create.return_value = mock_msg
 
     with patch("ncaaf.pipeline.build_ncaaf_tickets.ANTHROPIC_KEY", "test_key"):
         with patch("anthropic.Anthropic", return_value=mock_client):
-            flags, rationale, veto, veto_reason = _call_ai_layer(
+            flags, rationale, veto, veto_reason, discarded = _call_ai_layer(
                 [], [], "Home", "Away")
 
-    # The allowed fields are flags, rationale, veto, veto_reason
-    # fair_spread and projected_total must have been discarded
+    # The discarded dict must contain the pricing fields
+    assert "fair_spread" in discarded, f"fair_spread not discarded: {discarded}"
+    assert discarded["fair_spread"] == -21.5
+    assert "projected_total" in discarded
+    assert discarded["projected_total"] == 52.0
+    assert "win_probability" in discarded
+    assert discarded["win_probability"] == 0.78
+
+    # The returned structure must NOT contain them
     assert isinstance(flags, list)
-    assert isinstance(rationale, str)
+    assert len(flags) == 1  # the rivalry_game flag survived
+    assert rationale == "The spread is too wide."
     assert veto == False
+
+
+def test_guard_with_no_pricing_fields():
+    """A clean response produces an empty discarded dict."""
+    from ncaaf.pipeline.build_ncaaf_tickets import _call_ai_layer
+
+    canned = json.dumps({
+        "flags": [],
+        "rationale": "Normal game.",
+        "veto": False,
+        "veto_reason": None,
+    })
+
+    mock_msg = MagicMock()
+    mock_msg.content = [MagicMock(text=canned)]
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = mock_msg
+
+    with patch("ncaaf.pipeline.build_ncaaf_tickets.ANTHROPIC_KEY", "test_key"):
+        with patch("anthropic.Anthropic", return_value=mock_client):
+            flags, rationale, veto, veto_reason, discarded = _call_ai_layer(
+                [], [], "Home", "Away")
+
+    assert discarded == {}, f"Expected empty discarded, got {discarded}"
 
 
 def test_api_failure_raises():

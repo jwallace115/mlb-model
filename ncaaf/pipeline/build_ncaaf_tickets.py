@@ -86,17 +86,20 @@ Respond in JSON: {{"flags": [...], "rationale": "...", "veto": false, "veto_reas
                 text = text[4:]
         result = json.loads(text)
 
-        # ENFORCE: discard any numeric pricing field
+        # N17: ENFORCE the no-pricing-number boundary.
+        # Discard any field not in the allowed set. Log each discard.
+        _ALLOWED = {"flags", "rationale", "veto", "veto_reason"}
+        discarded = {}
         for key in list(result.keys()):
-            if key not in ("flags", "rationale", "veto", "veto_reason"):
-                print(f"  AI output discarded field: {key}={result[key]}")
-                del result[key]
+            if key not in _ALLOWED:
+                discarded[key] = result.pop(key)
+                print(f"  AI output discarded field: {key}={discarded[key]}")
 
         flags = result.get("flags", [])
         rationale = result.get("rationale", "")
         veto = result.get("veto", False)
         veto_reason = result.get("veto_reason")
-        return flags, rationale, veto, veto_reason
+        return flags, rationale, veto, veto_reason, discarded
 
     except Exception as e:
         raise RuntimeError(f"HALT: AI layer failed for {away} @ {home}: {str(e)[:200]}")
@@ -118,7 +121,7 @@ def build_tickets(board_df, news_articles, build_time):
 
         # AI layer
         game_rows = ev.to_dict("records")
-        flags, rationale, veto, veto_reason = _call_ai_layer(game_rows, game_news, home, away)
+        flags, rationale, veto, veto_reason, discarded = _call_ai_layer(game_rows, game_news, home, away)
 
         if veto:
             print(f"  {away} @ {home}: VETOED — {veto_reason}")

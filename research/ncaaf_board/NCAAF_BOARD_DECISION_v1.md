@@ -242,3 +242,16 @@ which filtered out the 3 original tickets. This was not in the committed
 writer. No cron/launchd touches this file.
 
 Test: append of 2 to a log of 3 gives 5. Guard prevents count decrease.
+
+### N17 — No-pricing-number guard demonstrated (2026-09-19)
+_call_ai_layer now returns a 5th value: discarded (dict of fields removed).
+Test feeds canned response with fair_spread=-21.5, projected_total=52.0,
+win_probability=0.78. Asserts all three are in discarded dict and NOT in
+the returned flags/rationale/veto.
+
+RED shown: without the guard, fair_spread stays in the parsed result.
+GREEN: guard removes it and returns it in discarded.
+
+This is the guard's first real demonstration. It was reported as handled
+in N04 (prose), N11 ("never triggered"), N13 ("discards work" but the
+test only checked types). It is now established.
