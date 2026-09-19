@@ -219,3 +219,14 @@ snapshot. This is why N11 covered only 30 of 146 teams.
 Full run: 146 teams queried, 146 with news, 0 zero-article teams.
 2,920 articles. Board-news coverage: 146/146 = 100%.
 Runtime: ~146s (146 teams × 1s sleep).
+
+### N15 — First genuine end-to-end run (2026-09-19)
+Board: 90 games covered, 96 dropped by pre-kick filter.
+News: 3,520 articles, 146/146 board teams (100% coverage).
+AI: 5 calls made (claude-haiku-4-5-20251001), 5 succeeded, 0 discards.
+  Pricing-number guard: not triggered (model followed instructions).
+  Guard is tested (N13 proved it with a canned response).
+Tickets: 5 built, all reference_only=True, all graded=False.
+Stopped before grading — games not yet played.
+
+Odds API credits: unchanged at 8976. Zero used in this order.

@@ -1,6 +1,6 @@
 # NCAAF Board
 
-Build time: 2026-09-19T00:04:31.398582+00:00
+Build time: 2026-09-19T00:59:23.868173+00:00
 Season: 2026
 
 **REFERENCE_ONLY** — all prices from books Jeff cannot bet (N01).
@@ -12,9 +12,9 @@ Kickoff: 2026-09-19T02:30:00Z
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
 | spreads | Oregon Ducks    |  -58.5 |   0.535 |     9 |    -58.5@bovada |  0.5 |  +0.0 |
-| spreads | Portland State  |   58.5 |   0.512 |     9 |     59.0@betmgm |  0.5 |  +0.0 |
-| totals  | Over            |   71.5 |   0.533 |     9 |     70.5@betmgm |  1.0 |  +6.0 |
-| totals  | Under           |   71.5 |   0.512 |     9 |     71.5@bovada |  1.0 |  +6.0 |
+| spreads | Portland State  |   58.5 |   0.512 |     9 |     59.0@lowvig |  0.5 |  +0.0 |
+| totals  | Over            |   71.5 |   0.533 |     9 |     71.5@bovada |    0 |  +6.0 |
+| totals  | Under           |   71.5 |   0.512 |     9 |     71.5@bovada |    0 |  +6.0 |
 
 ## Coastal Carolina Chanticleers @ Delaware Blue Hens
 Kickoff: 2026-09-19T15:30:00Z
@@ -22,11 +22,11 @@ Kickoff: 2026-09-19T15:30:00Z
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Coastal Carolin |      — |   0.364 |     9 |               — |    0 |     — |
-| h2h     | Delaware Blue H |      — |   0.676 |     9 |               — |    0 |     — |
-| spreads | Coastal Carolin |    5.0 |   0.520 |     8 |  5.5@draftkings |  1.0 |  +0.5 |
-| spreads | Delaware Blue H |   -5.0 |   0.524 |     8 |    -4.5@fanduel |  1.0 |  -0.5 |
-| totals  | Over            |   57.5 |   0.519 |     9 |     57.5@bovada |  1.0 |  +0.0 |
-| totals  | Under           |   57.5 |   0.524 |     9 |     57.5@bovada |  1.0 |  +0.0 |
+| h2h     | Delaware Blue H |      — |   0.675 |     9 |               — |    0 |     — |
+| spreads | Coastal Carolin |    5.0 |   0.524 |     8 |  5.5@draftkings |  1.0 |  +0.5 |
+| spreads | Delaware Blue H |   -5.0 |   0.522 |     8 |    -4.5@fanduel |  1.0 |  -0.5 |
+| totals  | Over            |   56.5 |   0.522 |     9 |     56.5@bovada |  2.0 |  -1.0 |
+| totals  | Under           |   56.5 |   0.524 |     9 |     56.5@bovada |  2.0 |  -1.0 |
 
 ## Kansas Jayhawks @ Arizona State Sun Devils
 Kickoff: 2026-09-19T16:00:00Z
@@ -79,8 +79,8 @@ Kickoff: 2026-09-19T16:00:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| spreads | Georgia Tech Ye |  -39.5 |   0.524 |     8 |  -39.5@pinnacle |  1.0 |  +2.0 |
-| spreads | Mercer Bears    |   39.5 |   0.524 |     8 |     40.5@lowvig |  1.0 |  -2.0 |
+| spreads | Georgia Tech Ye |  -39.5 |   0.525 |     8 | -38.5@betrivers |  2.0 |  +2.0 |
+| spreads | Mercer Bears    |   39.5 |   0.524 |     8 |     40.5@lowvig |  2.0 |  -2.0 |
 | totals  | Over            |   59.5 |   0.513 |     8 | 58.5@draftkings |  1.0 |  -1.0 |
 | totals  | Under           |   59.5 |   0.532 |     8 |   59.5@pinnacle |  1.0 |  -1.0 |
 
@@ -161,8 +161,8 @@ Kickoff: 2026-09-19T16:45:00Z
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | NC State Wolfpa |      — |   0.424 |     9 |               — |    0 |     — |
 | h2h     | Vanderbilt Comm |      — |   0.615 |     9 |               — |    0 |     — |
-| spreads | NC State Wolfpa |    3.0 |   0.510 |     9 |     3.5@fanduel |  0.5 |  -2.5 |
-| spreads | Vanderbilt Comm |   -3.0 |   0.535 |     9 |     -3.0@bovada |  0.5 |  +2.5 |
+| spreads | NC State Wolfpa |    3.0 |   0.512 |     9 |      3.5@bovada |  0.5 |  -2.0 |
+| spreads | Vanderbilt Comm |   -3.0 |   0.535 |     9 |   -3.0@pinnacle |  0.5 |  +2.0 |
 | totals  | Over            |   50.5 |   0.528 |     9 |     50.5@bovada |  0.5 |  -2.0 |
 | totals  | Under           |   50.5 |   0.519 |     9 |     50.5@bovada |  0.5 |  -2.0 |
 
@@ -232,7 +232,7 @@ Kickoff: 2026-09-19T19:30:00Z
 | spreads | Rutgers Scarlet |   21.5 |   0.519 |     9 |     22.0@bovada |  0.5 |  -3.5 |
 | spreads | USC Trojans     |  -21.5 |   0.524 |     9 |    -21.5@betmgm |  0.5 |  +3.5 |
 | totals  | Over            |   57.5 |   0.535 |     9 |     57.5@betmgm |  1.0 |  +3.0 |
-| totals  | Under           |   57.5 |   0.519 |     9 |     57.5@bovada |  1.0 |  +3.0 |
+| totals  | Under           |   57.5 |   0.512 |     9 |     57.5@bovada |  1.0 |  +3.0 |
 
 ## Utah State Aggies @ Utah Utes
 Kickoff: 2026-09-19T19:30:00Z
@@ -244,7 +244,7 @@ Kickoff: 2026-09-19T19:30:00Z
 | spreads | Utah State Aggi |   27.5 |   0.523 |     8 |     27.5@bovada |  1.0 |  -1.0 |
 | spreads | Utah Utes       |  -27.5 |   0.524 |     8 |   -26.5@fanduel |  1.0 |  +1.0 |
 | totals  | Over            |   56.5 |   0.526 |     8 |     56.5@bovada |    0 |  -1.0 |
-| totals  | Under           |   56.5 |   0.524 |     8 |     56.5@bovada |    0 |  -1.0 |
+| totals  | Under           |   56.5 |   0.522 |     8 |     56.5@bovada |    0 |  -1.0 |
 
 ## Duquesne Dukes @ Washington State Cougars
 Kickoff: 2026-09-19T19:30:00Z
@@ -287,8 +287,8 @@ Kickoff: 2026-09-19T19:30:00Z
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Michigan Wolver |      — |   0.997 |     2 |               — |    0 |     — |
 | h2h     | UTEP Miners     |      — |   0.023 |     2 |               — |    0 |     — |
-| spreads | Michigan Wolver |  -34.5 |   0.526 |     9 |    -34.5@betmgm |  2.0 |  +0.0 |
-| spreads | UTEP Miners     |   34.5 |   0.512 |     9 | 36.5@williamhill_us |  2.0 |  +0.0 |
+| spreads | Michigan Wolver |  -34.5 |   0.528 |     9 |    -34.5@betmgm |  1.0 |  +0.0 |
+| spreads | UTEP Miners     |   34.5 |   0.512 |     9 |     35.5@bovada |  1.0 |  +0.0 |
 | totals  | Over            |   48.5 |   0.524 |     9 |     48.5@bovada |  1.0 |  +0.0 |
 | totals  | Under           |   48.5 |   0.524 |     9 |     48.5@bovada |  1.0 |  +0.0 |
 
@@ -343,12 +343,12 @@ Kickoff: 2026-09-19T20:00:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| h2h     | Baylor Bears    |      — |   0.927 |     8 |               — |    0 |     — |
-| h2h     | Louisiana Tech  |      — |   0.112 |     8 |               — |    0 |     — |
-| spreads | Baylor Bears    |  -20.0 |   0.522 |     9 | -17.5@williamhill_us |  3.0 |  -1.5 |
-| spreads | Louisiana Tech  |   20.0 |   0.524 |     9 | 20.5@draftkings |  3.0 |  +1.5 |
-| totals  | Over            |   49.5 |   0.519 |     9 | 48.0@betonlineag |  7.5 |  -6.0 |
-| totals  | Under           |   49.5 |   0.528 |     9 |     49.5@bovada |  7.5 |  -6.0 |
+| h2h     | Baylor Bears    |      — |   0.929 |     9 |               — |    0 |     — |
+| h2h     | Louisiana Tech  |      — |   0.112 |     9 |               — |    0 |     — |
+| spreads | Baylor Bears    |  -20.0 |   0.522 |     9 | -19.0@betonlineag |  1.5 |  -1.5 |
+| spreads | Louisiana Tech  |   20.0 |   0.524 |     9 | 20.5@draftkings |  1.5 |  +1.5 |
+| totals  | Over            |   49.5 |   0.519 |     9 | 48.0@betonlineag |  2.5 |  -6.0 |
+| totals  | Under           |   49.5 |   0.528 |     9 |     49.5@bovada |  2.5 |  -6.0 |
 
 ## Ball State Cardinals @ Liberty Flames
 Kickoff: 2026-09-19T20:00:00Z
@@ -367,20 +367,20 @@ Kickoff: 2026-09-19T20:00:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| spreads | Iowa Hawkeyes   |  -38.5 |   0.522 |     8 |    -38.5@betmgm |  1.0 |  +2.0 |
-| spreads | Northern Iowa P |   38.5 |   0.528 |     8 |     39.5@bovada |  1.0 |  -2.0 |
-| totals  | Over            |   49.0 |   0.524 |     8 |     48.5@bovada |  1.0 |  +0.0 |
-| totals  | Under           |   49.0 |   0.524 |     8 |     49.0@bovada |  1.0 |  +0.0 |
+| spreads | Iowa Hawkeyes   |  -38.5 |   0.522 |     9 | -38.5@williamhill_us |  1.0 |  +3.0 |
+| spreads | Northern Iowa P |   38.5 |   0.528 |     9 |     39.5@bovada |  1.0 |  -3.0 |
+| totals  | Over            |   49.5 |   0.524 |     9 |     48.5@bovada |  1.0 |  +1.0 |
+| totals  | Under           |   49.5 |   0.528 |     9 | 49.5@williamhill_us |  1.0 |  +1.0 |
 
 ## Western Kentucky Hilltoppers @ Indiana Hoosiers
 Kickoff: 2026-09-19T20:00:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| spreads | Indiana Hoosier |  -44.5 |   0.529 |     8 |    -44.5@betmgm |    0 |  +0.0 |
-| spreads | Western Kentuck |   44.5 |   0.512 |     8 |     44.5@betmgm |    0 |  +0.0 |
-| totals  | Over            |   60.5 |   0.519 |     8 | 60.0@betonlineag |  1.0 |  +1.0 |
-| totals  | Under           |   60.5 |   0.526 |     8 |     60.5@betmgm |  1.0 |  +1.0 |
+| spreads | Indiana Hoosier |  -44.5 |   0.528 |     9 | -44.5@williamhill_us |    0 |  +0.0 |
+| spreads | Western Kentuck |   44.5 |   0.512 |     9 | 44.5@williamhill_us |    0 |  +0.0 |
+| totals  | Over            |   60.5 |   0.524 |     9 |     59.5@betmgm |  2.0 |  +2.0 |
+| totals  | Under           |   60.5 |   0.528 |     9 | 60.5@williamhill_us |  2.0 |  +2.0 |
 
 ## Mississippi State Bulldogs @ South Carolina Gamecocks
 Kickoff: 2026-09-19T20:15:00Z
@@ -400,8 +400,8 @@ Kickoff: 2026-09-19T20:30:00Z
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Southeastern Lo |      — |   0.217 |     5 |               — |    0 |     — |
-| h2h     | UL Monroe Warha |      — |   0.818 |     5 |               — |    0 |     — |
-| spreads | Southeastern Lo |   10.5 |   0.534 |     8 |    11.5@fanduel |  1.0 |  -2.0 |
+| h2h     | UL Monroe Warha |      — |   0.821 |     5 |               — |    0 |     — |
+| spreads | Southeastern Lo |   10.5 |   0.532 |     8 |    11.5@fanduel |  1.0 |  -2.0 |
 | spreads | UL Monroe Warha |  -10.5 |   0.524 |     8 |    -10.5@bovada |  1.0 |  +2.0 |
 | totals  | Over            |   48.5 |   0.522 |     8 |  47.5@betrivers |  1.0 |  +0.5 |
 | totals  | Under           |   48.5 |   0.532 |     8 |     48.5@bovada |  1.0 |  +0.5 |
@@ -424,7 +424,7 @@ Kickoff: 2026-09-19T22:00:00Z
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | East Carolina P |      — |   0.455 |     8 |               — |    0 |     — |
-| h2h     | Old Dominion Mo |      — |   0.589 |     8 |               — |    0 |     — |
+| h2h     | Old Dominion Mo |      — |   0.593 |     8 |               — |    0 |     — |
 | spreads | East Carolina P |    3.0 |   0.526 |     9 |   3.0@betrivers |  0.5 |  +0.0 |
 | spreads | Old Dominion Mo |   -3.0 |   0.517 |     9 |     -2.5@bovada |  0.5 |  +0.0 |
 | totals  | Over            |   49.0 |   0.524 |     9 |     48.0@lowvig |  1.5 |  -0.5 |
@@ -447,10 +447,10 @@ Kickoff: 2026-09-19T22:30:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| h2h     | Marshall Thunde |      — |   0.649 |     8 |               — |    0 |     — |
-| h2h     | Missouri State  |      — |   0.389 |     8 |               — |    0 |     — |
-| spreads | Marshall Thunde |   -4.0 |   0.524 |     8 |     -3.5@betmgm |  1.0 |  +1.0 |
-| spreads | Missouri State  |    4.0 |   0.524 |     8 |    4.5@pinnacle |  1.0 |  -1.0 |
+| h2h     | Marshall Thunde |      — |   0.649 |     9 |               — |    0 |     — |
+| h2h     | Missouri State  |      — |   0.389 |     9 |               — |    0 |     — |
+| spreads | Marshall Thunde |   -4.0 |   0.524 |     9 |     -3.5@betmgm |  1.0 |  +1.0 |
+| spreads | Missouri State  |    4.0 |   0.524 |     9 |    4.5@pinnacle |  1.0 |  -1.0 |
 | totals  | Over            |   53.5 |   0.524 |     9 |  52.5@betrivers |  1.0 |  +0.0 |
 | totals  | Under           |   53.5 |   0.519 |     9 |     53.5@betmgm |  1.0 |  +0.0 |
 
@@ -496,11 +496,11 @@ Kickoff: 2026-09-19T23:00:00Z
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Middle Tennesse |      — |   0.402 |     9 |               — |    0 |     — |
-| h2h     | Nevada Wolf Pac |      — |   0.636 |     9 |               — |    0 |     — |
-| spreads | Middle Tennesse |    3.5 |   0.524 |     9 |      4.0@bovada |  0.5 |  -2.5 |
-| spreads | Nevada Wolf Pac |   -3.5 |   0.524 |     9 |  -3.5@betrivers |  0.5 |  +2.5 |
+| h2h     | Nevada Wolf Pac |      — |   0.638 |     9 |               — |    0 |     — |
+| spreads | Middle Tennesse |    3.5 |   0.524 |     9 |   4.5@betrivers |  1.0 |  -2.5 |
+| spreads | Nevada Wolf Pac |   -3.5 |   0.524 |     9 |    -3.5@fanduel |  1.0 |  +2.5 |
 | totals  | Over            |   50.5 |   0.519 |     9 |    49.5@fanduel |  1.0 |  +1.0 |
-| totals  | Under           |   50.5 |   0.526 |     9 |     50.5@bovada |  1.0 |  +1.0 |
+| totals  | Under           |   50.5 |   0.524 |     9 |     50.5@bovada |  1.0 |  +1.0 |
 
 ## Delaware State Hornets @ South Florida Bulls
 Kickoff: 2026-09-19T23:00:00Z
@@ -517,12 +517,12 @@ Kickoff: 2026-09-19T23:00:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| h2h     | Missouri Tigers |      — |   0.982 |     8 |               — |    0 |     — |
-| h2h     | Troy Trojans    |      — |   0.058 |     8 |               — |    0 |     — |
-| spreads | Missouri Tigers |  -27.0 |   0.528 |     8 | -26.5@betrivers |  1.0 |  +0.5 |
-| spreads | Troy Trojans    |   27.0 |   0.512 |     8 |     27.5@betmgm |  1.0 |  -0.5 |
-| totals  | Over            |   50.5 |   0.520 |     8 | 50.0@betonlineag |  0.5 |  +1.0 |
-| totals  | Under           |   50.5 |   0.526 |     8 |     50.5@bovada |  0.5 |  +1.0 |
+| h2h     | Missouri Tigers |      — |   0.984 |     9 |               — |    0 |     — |
+| h2h     | Troy Trojans    |      — |   0.057 |     9 |               — |    0 |     — |
+| spreads | Missouri Tigers |  -27.0 |   0.526 |     9 | -26.5@betrivers |  1.0 |  +0.0 |
+| spreads | Troy Trojans    |   27.0 |   0.512 |     9 | 27.5@williamhill_us |  1.0 |  +0.0 |
+| totals  | Over            |   50.5 |   0.519 |     9 | 50.0@betonlineag |  0.5 |  +1.0 |
+| totals  | Under           |   50.5 |   0.528 |     9 | 50.5@williamhill_us |  0.5 |  +1.0 |
 
 ## Georgia Southern Eagles @ Jacksonville State Gamecocks
 Kickoff: 2026-09-19T23:00:00Z
@@ -567,8 +567,8 @@ Kickoff: 2026-09-19T23:00:00Z
 |--------|------|-------|---------|-------|------|------|------|
 | spreads | Murray State Ra |   55.5 |   0.521 |     8 | 56.5@draftkings |  1.0 |  -2.0 |
 | spreads | Oklahoma State  |  -55.5 |   0.535 |     8 |    -55.5@bovada |  1.0 |  +2.0 |
-| totals  | Over            |   70.5 |   0.528 |     8 |     70.0@bovada |  0.5 |  +0.5 |
-| totals  | Under           |   70.5 |   0.529 |     8 |     70.5@bovada |  0.5 |  +0.5 |
+| totals  | Over            |   70.5 |   0.524 |     8 |     70.5@bovada |    0 |  +1.0 |
+| totals  | Under           |   70.5 |   0.528 |     8 |     70.5@bovada |    0 |  +1.0 |
 
 ## Western Michigan Broncos @ Rice Owls
 Kickoff: 2026-09-19T23:00:00Z
@@ -578,7 +578,7 @@ Kickoff: 2026-09-19T23:00:00Z
 | h2h     | Rice Owls       |      — |   0.256 |     9 |               — |    0 |     — |
 | h2h     | Western Michiga |      — |   0.785 |     9 |               — |    0 |     — |
 | spreads | Rice Owls       |    9.0 |   0.524 |     9 | 10.5@williamhill_us |  2.0 |  -1.5 |
-| spreads | Western Michiga |   -9.0 |   0.524 |     9 | -8.5@draftkings |  2.0 |  +1.5 |
+| spreads | Western Michiga |   -9.0 |   0.524 |     9 |     -8.5@betmgm |  2.0 |  +1.5 |
 | totals  | Over            |   43.5 |   0.533 |     9 |     43.5@bovada |  2.0 |  -5.0 |
 | totals  | Under           |   43.5 |   0.512 |     9 |     43.5@bovada |  2.0 |  -5.0 |
 
@@ -591,18 +591,18 @@ Kickoff: 2026-09-19T23:00:00Z
 | h2h     | UCF Knights     |      — |   0.917 |     8 |               — |    0 |     — |
 | spreads | Georgia State P |   17.5 |   0.533 |     9 | 20.5@williamhill_us |  3.5 |  -3.0 |
 | spreads | UCF Knights     |  -17.5 |   0.515 |     9 |    -17.0@betmgm |  3.5 |  +3.0 |
-| totals  | Over            |   50.5 |   0.524 |     9 |     50.0@bovada |  0.5 |  -0.5 |
-| totals  | Under           |   50.5 |   0.524 |     9 |     50.5@bovada |  0.5 |  -0.5 |
+| totals  | Over            |   50.0 |   0.524 |     9 |     49.5@betmgm |  1.0 |  -0.5 |
+| totals  | Under           |   50.0 |   0.522 |     9 |     50.0@bovada |  1.0 |  -0.5 |
 
 ## Eastern Washington Eagles @ Washington Huskies
 Kickoff: 2026-09-19T23:15:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| spreads | Eastern Washing |   42.5 |   0.524 |     8 |   42.5@pinnacle |  1.0 |  -2.0 |
-| spreads | Washington Husk |  -42.5 |   0.525 |     8 | -41.5@betonlineag |  1.0 |  +2.0 |
-| totals  | Over            |   57.5 |   0.527 |     8 |   57.5@pinnacle |  0.5 |  +1.0 |
-| totals  | Under           |   57.5 |   0.524 |     8 |   57.5@pinnacle |  0.5 |  +1.0 |
+| spreads | Eastern Washing |   42.5 |   0.524 |     9 | 42.5@williamhill_us |  1.0 |  -2.0 |
+| spreads | Washington Husk |  -42.5 |   0.526 |     9 | -41.5@betonlineag |  1.0 |  +2.0 |
+| totals  | Over            |   57.5 |   0.524 |     9 | 57.5@williamhill_us |  0.5 |  +1.0 |
+| totals  | Under           |   57.5 |   0.524 |     9 | 57.5@williamhill_us |  0.5 |  +1.0 |
 
 ## North Dakota Fighting Hawks @ Nebraska Cornhuskers
 Kickoff: 2026-09-19T23:15:00Z
@@ -637,8 +637,8 @@ Kickoff: 2026-09-19T23:30:00Z
 | h2h     | Oklahoma Sooner |      — |   0.955 |     9 |               — |    0 |     — |
 | spreads | New Mexico Lobo |   21.5 |   0.535 |     9 |     22.0@bovada |  0.5 |  +1.5 |
 | spreads | Oklahoma Sooner |  -21.5 |   0.512 |     9 | -21.5@betrivers |  0.5 |  -1.5 |
-| totals  | Over            |   45.5 |   0.522 |     9 | 44.5@betonlineag |  4.0 |  -4.0 |
-| totals  | Under           |   45.5 |   0.524 |     9 |     45.5@bovada |  4.0 |  -4.0 |
+| totals  | Over            |   45.5 |   0.522 |     9 | 44.5@betonlineag |  1.5 |  -4.0 |
+| totals  | Under           |   45.5 |   0.528 |     9 |     45.5@bovada |  1.5 |  -4.0 |
 
 ## BYU Cougars @ Colorado State Rams
 Kickoff: 2026-09-19T23:30:00Z
@@ -685,8 +685,8 @@ Kickoff: 2026-09-19T23:30:00Z
 | h2h     | West Virginia M |      — |   0.238 |     9 |               — |    0 |     — |
 | spreads | Virginia Cavali |  -10.5 |   0.519 |     9 |  -10.0@pinnacle |  1.0 |  -2.0 |
 | spreads | West Virginia M |   10.5 |   0.528 |     9 |     11.0@betmgm |  1.0 |  +2.0 |
-| totals  | Over            |   53.5 |   0.524 |     9 | 53.0@betonlineag |  1.0 |  +3.0 |
-| totals  | Under           |   53.5 |   0.526 |     9 |     53.5@bovada |  1.0 |  +3.0 |
+| totals  | Over            |   53.5 |   0.515 |     9 | 53.0@betonlineag |  1.0 |  +3.0 |
+| totals  | Under           |   53.5 |   0.528 |     9 |     53.5@bovada |  1.0 |  +3.0 |
 
 ## Michigan State Spartans @ Notre Dame Fighting Irish
 Kickoff: 2026-09-19T23:30:00Z
@@ -707,8 +707,8 @@ Kickoff: 2026-09-19T23:45:00Z
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Kennesaw State  |      — |   0.034 |     4 |               — |    0 |     — |
 | h2h     | Tennessee Volun |      — |   0.993 |     4 |               — |    0 |     — |
-| spreads | Kennesaw State  |   35.5 |   0.528 |     9 |     35.5@bovada |  0.5 |  +0.0 |
-| spreads | Tennessee Volun |  -35.5 |   0.519 |     9 | -35.0@betonlineag |  0.5 |  +0.0 |
+| spreads | Kennesaw State  |   35.5 |   0.524 |     9 |     35.5@bovada |  0.5 |  +0.0 |
+| spreads | Tennessee Volun |  -35.5 |   0.524 |     9 |    -35.0@betmgm |  0.5 |  +0.0 |
 | totals  | Over            |   60.5 |   0.528 |     9 |     60.0@bovada |  1.5 |  -0.5 |
 | totals  | Under           |   60.5 |   0.524 |     9 |     60.5@bovada |  1.5 |  -0.5 |
 
@@ -739,12 +739,12 @@ Kickoff: 2026-09-20T00:00:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| h2h     | Texas Longhorns |      — |   0.985 |     4 |               — |    0 |     — |
-| h2h     | UTSA Roadrunner |      — |   0.048 |     4 |               — |    0 |     — |
-| spreads | Texas Longhorns |  -30.0 |   0.522 |     8 |    -30.0@bovada |  0.5 |  -0.5 |
-| spreads | UTSA Roadrunner |   30.0 |   0.524 |     8 |  30.5@betrivers |  0.5 |  +0.5 |
-| totals  | Over            |   58.5 |   0.519 |     9 |     58.0@bovada |  1.0 |  +0.5 |
-| totals  | Under           |   58.5 |   0.533 |     9 |     58.5@bovada |  1.0 |  +0.5 |
+| h2h     | Texas Longhorns |      — |   0.990 |     5 |               — |    0 |     — |
+| h2h     | UTSA Roadrunner |      — |   0.053 |     5 |               — |    0 |     — |
+| spreads | Texas Longhorns |  -30.0 |   0.524 |     9 |    -29.5@betmgm |  1.0 |  -0.5 |
+| spreads | UTSA Roadrunner |   30.0 |   0.524 |     9 |  30.5@betrivers |  1.0 |  +0.5 |
+| totals  | Over            |   58.5 |   0.522 |     9 |     58.0@bovada |  1.0 |  +0.5 |
+| totals  | Under           |   58.5 |   0.528 |     9 |     58.5@bovada |  1.0 |  +0.5 |
 
 ## UAB Blazers @ Louisiana Ragin Cajuns
 Kickoff: 2026-09-20T00:00:00Z
@@ -765,22 +765,22 @@ Kickoff: 2026-09-20T00:00:00Z
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Arkansas State  |      — |   0.111 |     9 |               — |    0 |     — |
 | h2h     | TCU Horned Frog |      — |   0.929 |     9 |               — |    0 |     — |
-| spreads | Arkansas State  |   19.0 |   0.522 |     9 | 20.5@williamhill_us |  2.0 |  -1.5 |
-| spreads | TCU Horned Frog |  -19.0 |   0.524 |     9 | -18.5@betonlineag |  2.0 |  +1.5 |
-| totals  | Over            |   56.5 |   0.519 |     9 |     56.0@bovada |  1.5 |  +0.5 |
-| totals  | Under           |   56.5 |   0.524 |     9 |     56.5@bovada |  1.5 |  +0.5 |
+| spreads | Arkansas State  |   19.0 |   0.517 |     9 |  20.0@betrivers |  1.5 |  -1.5 |
+| spreads | TCU Horned Frog |  -19.0 |   0.524 |     9 | -18.5@williamhill_us |  1.5 |  +1.5 |
+| totals  | Over            |   56.0 |   0.524 |     9 | 55.5@williamhill_us |  1.0 |  +0.5 |
+| totals  | Under           |   56.0 |   0.524 |     9 |     56.0@bovada |  1.0 |  +0.5 |
 
 ## James Madison Dukes @ San Diego State Aztecs
 Kickoff: 2026-09-20T02:00:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| h2h     | James Madison D |      — |   0.499 |     8 |               — |    0 |     — |
-| h2h     | San Diego State |      — |   0.548 |     8 |               — |    0 |     — |
-| spreads | James Madison D |    1.5 |   0.519 |     8 |    2.0@pinnacle |  1.0 |  -0.5 |
-| spreads | San Diego State |   -1.5 |   0.526 |     8 |     -1.0@bovada |  1.0 |  +0.5 |
-| totals  | Over            |   46.5 |   0.518 |     8 |     46.0@lowvig |  1.5 |  +0.0 |
-| totals  | Under           |   46.5 |   0.525 |     8 |     46.5@bovada |  1.5 |  +0.0 |
+| h2h     | James Madison D |      — |   0.498 |     9 |               — |    0 |     — |
+| h2h     | San Diego State |      — |   0.550 |     9 |               — |    0 |     — |
+| spreads | James Madison D |    1.5 |   0.519 |     9 |    2.0@pinnacle |  1.0 |  -0.5 |
+| spreads | San Diego State |   -1.5 |   0.528 |     9 |     -1.0@bovada |  1.0 |  +0.5 |
+| totals  | Over            |   46.5 |   0.517 |     9 |     46.0@lowvig |  1.5 |  +0.0 |
+| totals  | Under           |   46.5 |   0.526 |     9 |     46.5@bovada |  1.5 |  +0.0 |
 
 ## South Dakota Coyotes @ Boise State Broncos
 Kickoff: 2026-09-20T02:00:00Z
@@ -788,23 +788,23 @@ Kickoff: 2026-09-20T02:00:00Z
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Boise State Bro |      — |   0.971 |     6 |               — |    0 |     — |
-| h2h     | South Dakota Co |      — |   0.075 |     6 |               — |    0 |     — |
+| h2h     | South Dakota Co |      — |   0.072 |     6 |               — |    0 |     — |
 | spreads | Boise State Bro |  -25.5 |   0.526 |     8 |    -24.5@lowvig |  1.5 |  -2.0 |
 | spreads | South Dakota Co |   25.5 |   0.526 |     8 |     26.0@bovada |  1.5 |  +2.0 |
-| totals  | Over            |   56.5 |   0.524 |     8 |  56.0@betrivers |  1.0 |  +0.5 |
-| totals  | Under           |   56.5 |   0.524 |     8 |     56.5@lowvig |  1.0 |  +0.5 |
+| totals  | Over            |   56.5 |   0.524 |     8 |   56.5@pinnacle |  0.5 |  +0.5 |
+| totals  | Under           |   56.5 |   0.524 |     8 |     56.5@lowvig |  0.5 |  +0.5 |
 
 ## North Dakota State Bison @ Sacramento State Hornets
 Kickoff: 2026-09-20T02:30:00Z
 
 | Market | Side | Point | Implied | Books | Best | Disp | Move |
 |--------|------|-------|---------|-------|------|------|------|
-| h2h     | North Dakota St |      — |   0.983 |     6 |               — |    0 |     — |
-| h2h     | Sacramento Stat |      — |   0.054 |     6 |               — |    0 |     — |
-| spreads | North Dakota St |  -27.0 |   0.523 |     8 |    -26.5@bovada |  1.0 |  -3.0 |
-| spreads | Sacramento Stat |   27.0 |   0.522 |     8 |  27.5@betrivers |  1.0 |  +3.0 |
-| totals  | Over            |   50.5 |   0.524 |     8 |     50.5@bovada |  0.5 |  -3.0 |
-| totals  | Under           |   50.5 |   0.518 |     8 |     50.5@bovada |  0.5 |  -3.0 |
+| h2h     | North Dakota St |      — |   0.985 |     7 |               — |    0 |     — |
+| h2h     | Sacramento Stat |      — |   0.053 |     7 |               — |    0 |     — |
+| spreads | North Dakota St |  -27.0 |   0.524 |     9 |    -26.5@bovada |  1.0 |  -3.5 |
+| spreads | Sacramento Stat |   27.0 |   0.524 |     9 |  27.5@betrivers |  1.0 |  +3.5 |
+| totals  | Over            |   50.5 |   0.524 |     9 | 50.5@williamhill_us |  0.5 |  -3.0 |
+| totals  | Under           |   50.5 |   0.517 |     9 | 50.5@williamhill_us |  0.5 |  -3.0 |
 
 ## Northern Illinois Huskies @ Arizona Wildcats
 Kickoff: 2026-09-20T02:30:00Z
@@ -849,10 +849,10 @@ Kickoff: 2026-09-20T03:00:00Z
 |--------|------|-------|---------|-------|------|------|------|
 | h2h     | Fresno State Bu |      — |   0.697 |     9 |               — |    0 |     — |
 | h2h     | San Jose State  |      — |   0.342 |     9 |               — |    0 |     — |
-| spreads | Fresno State Bu |   -6.5 |   0.517 |     9 |     -6.5@bovada |  1.0 |  +1.0 |
-| spreads | San Jose State  |    6.5 |   0.528 |     9 | 7.5@williamhill_us |  1.0 |  -1.0 |
-| totals  | Over            |   50.0 |   0.524 |     9 |  49.5@betrivers |  3.0 |  -2.5 |
-| totals  | Under           |   50.0 |   0.519 |     9 |     50.0@bovada |  3.0 |  -2.5 |
+| spreads | Fresno State Bu |   -6.5 |   0.517 |     9 |     -6.5@bovada |    0 |  +1.0 |
+| spreads | San Jose State  |    6.5 |   0.528 |     9 |      6.5@bovada |    0 |  -1.0 |
+| totals  | Over            |   49.5 |   0.524 |     9 |  49.5@betrivers |  0.5 |  -2.5 |
+| totals  | Under           |   49.5 |   0.519 |     9 |     49.5@bovada |  0.5 |  -2.5 |
 
 ## Illinois Fighting Illini @ Ohio State Buckeyes
 Kickoff: 2026-09-26T16:00:00Z

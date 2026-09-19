@@ -11,9 +11,7 @@
         "point": 24.5,
         "price": -110.0,
         "book": "betrivers",
-        "implied": 0.5121951219512195,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5121951219512195
       },
       {
         "market": "spreads",
@@ -21,9 +19,7 @@
         "point": -24.5,
         "price": -115.0,
         "book": "bovada",
-        "implied": 0.5305164319248826,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5305164319248826
       },
       {
         "market": "totals",
@@ -31,9 +27,7 @@
         "point": 54.5,
         "price": -115.0,
         "book": "betrivers",
-        "implied": 0.5327102803738317,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5327102803738317
       },
       {
         "market": "totals",
@@ -41,14 +35,125 @@
         "point": 54.5,
         "price": -115.0,
         "book": "bovada",
-        "implied": 0.5145631067961165,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5145631067961165
+      }
+    ],
+    "ai_flags": [
+      {
+        "flag": "key_injury",
+        "headline": "Dampier accounts for 4 touchdowns as No. 20 Utah dominates Arkansas",
+        "timestamp": "2026-09-13T05:15:53Z",
+        "note": "Arkansas' defensive struggles against Utah suggest potential personnel issues heading into Georgia matchup"
+      },
+      {
+        "flag": "coaching_change",
+        "headline": "Arkansas' Ryan Silverfield expands on dealing with outside noise",
+        "timestamp": "2026-09-14T19:22:28Z",
+        "note": "Silverfield addressing external pressure indicates potential instability in program management during critical SEC opener"
+      }
+    ],
+    "ai_rationale": "Georgia is heavily favored at -24.5 as a top-2 team opening SEC play against Arkansas, which just suffered a dominant 35+ point loss to Utah. The spread has moved 7 points in Georgia's favor from opening, and the moneyline reflects near 97% implied probability for Georgia. The totals market shows modest movement (2.5 points) with balanced implied probabilities around 53%, suggesting moderate confidence in scoring environment rather than consensus.",
+    "build_time": "2026-09-19T00:59:23.868173+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "08a2eb7afbd58ee7a8fb47bb4142eded",
+    "home_team": "Boston College Eagles",
+    "away_team": "Maine Black Bears",
+    "commence_time": "2026-09-19T18:00:00Z",
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Boston College Eagles",
+        "point": -38.5,
+        "price": -114.0,
+        "book": "fanduel",
+        "implied": 0.5215201465201466
+      },
+      {
+        "market": "spreads",
+        "side": "Maine Black Bears",
+        "point": 38.5,
+        "price": -110.0,
+        "book": "bovada",
+        "implied": 0.5315928038613427
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 53.5,
+        "price": -110.0,
+        "book": "bovada",
+        "implied": 0.5260557053009883
+      },
+      {
+        "market": "totals",
+        "side": "Under",
+        "point": 53.5,
+        "price": -110.0,
+        "book": "bovada",
+        "implied": 0.5249379372602121
+      }
+    ],
+    "ai_flags": [
+      {
+        "flag": "key_injury",
+        "headline": "Boston College's Kahoun has movement in 'all extremities' after scary injury",
+        "timestamp": "2026-09-12T12:46:44Z"
+      }
+    ],
+    "ai_rationale": "Boston College is heavily favored at -38.5 against FCS Maine, coming off a narrow 28-21 win over Rutgers in Week 2. The Eagles showed offensive competence with dual-threat QB Mason McKenzie (1 pass TD, 1 rush TD), but the market is pricing in a dominant home performance. Maine enters as an extreme underdog from a lower conference.",
+    "build_time": "2026-09-19T00:59:23.868173+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "089e1a60578160dd6828794656461ba5",
+    "home_team": "Liberty Flames",
+    "away_team": "Ball State Cardinals",
+    "commence_time": "2026-09-19T20:00:00Z",
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Ball State Cardinals",
+        "point": 14.5,
+        "price": -107.0,
+        "book": "lowvig",
+        "implied": 0.5215311004784688
+      },
+      {
+        "market": "spreads",
+        "side": "Liberty Flames",
+        "point": -14.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5192307692307693
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 49.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5238095238095238
+      },
+      {
+        "market": "totals",
+        "side": "Under",
+        "point": 49.5,
+        "price": -105.0,
+        "book": "bovada",
+        "implied": 0.5238095238095238
       }
     ],
     "ai_flags": [],
-    "ai_rationale": "AI error: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-s",
-    "build_time": "2026-09-19T00:05:49.435188+00:00",
+    "ai_rationale": "Liberty is heavily favored as a 14.5-point favorite with an implied win probability around 87%, reflecting their home-field advantage and superior program strength. Ball State showed offensive competence in a 41-17 win over Stony Brook with QB Keldric Luster throwing 3 early TDs, but faced a 56-3 blowout loss to No. 1 Ohio State in Week 1, suggesting significant quality-of-opponent variance. The totals market shows recent downward pressure (move of -7.5 from an initial 57.0), which may indicate adjusted offensive expectations given Liberty's defensive capabilities.",
+    "build_time": "2026-09-19T00:59:23.868173+00:00",
     "reference_only": true,
     "close_price": null,
     "clv": null,
@@ -66,9 +171,7 @@
         "point": 3.5,
         "price": -110.0,
         "book": "bovada",
-        "implied": 0.5283018867924528,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5283018867924528
       },
       {
         "market": "spreads",
@@ -76,9 +179,7 @@
         "point": -3.5,
         "price": -110.0,
         "book": "bovada",
-        "implied": 0.5121951219512195,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5121951219512195
       },
       {
         "market": "totals",
@@ -86,9 +187,7 @@
         "point": 48.0,
         "price": -115.0,
         "book": "betmgm",
-        "implied": 0.5238095238095238,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5238095238095238
       },
       {
         "market": "totals",
@@ -96,14 +195,19 @@
         "point": 48.0,
         "price": -110.0,
         "book": "bovada",
-        "implied": 0.5238095238095238,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5238095238095238
       }
     ],
-    "ai_flags": [],
-    "ai_rationale": "AI error: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-s",
-    "build_time": "2026-09-19T00:05:49.435188+00:00",
+    "ai_flags": [
+      {
+        "flag": "qb_status_uncertain",
+        "citation": "Julian Lewis throws 4 first-half TD passes, runs for another, as Colorado beats Weber State 52-21",
+        "timestamp": "2026-09-13T00:33:29Z",
+        "note": "Colorado QB Julian Lewis demonstrated elite performance in Week 2; no injury reported but status for road game should be confirmed"
+      }
+    ],
+    "ai_rationale": "Colorado is favored by 3.5 points on the road at Northwestern with momentum from a dominant 52-21 Week 2 win over Weber State. The spread has moved 2 points in Colorado's favor since opening, suggesting market confidence in the Buffaloes despite travel. Totals sit at 48 with balanced implied probabilities, suggesting no clear directional consensus on scoring environment.",
+    "build_time": "2026-09-19T00:59:23.868173+00:00",
     "reference_only": true,
     "close_price": null,
     "clv": null,
@@ -121,9 +225,7 @@
         "point": 5.5,
         "price": -110.0,
         "book": "draftkings",
-        "implied": 0.5238095238095238,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5238095238095238
       },
       {
         "market": "spreads",
@@ -131,9 +233,7 @@
         "point": -5.5,
         "price": -110.0,
         "book": "draftkings",
-        "implied": 0.5238095238095238,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5238095238095238
       },
       {
         "market": "totals",
@@ -141,9 +241,7 @@
         "point": 52.5,
         "price": -112.0,
         "book": "draftkings",
-        "implied": 0.5283018867924528,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5283018867924528
       },
       {
         "market": "totals",
@@ -151,14 +249,19 @@
         "point": 52.5,
         "price": -108.0,
         "book": "draftkings",
-        "implied": 0.5192307692307693,
-        "close_price": null,
-        "clv": null
+        "implied": 0.5192307692307693
       }
     ],
-    "ai_flags": [],
-    "ai_rationale": "AI error: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: claude-s",
-    "build_time": "2026-09-19T00:05:49.435188+00:00",
+    "ai_flags": [
+      {
+        "flag": "rivalry_game",
+        "headline": "No. 3 Notre Dame and Michigan St. ready to revive their historic rivalry after nearly a decade off",
+        "timestamp": "2026-09-17T16:33:39Z",
+        "note": "While this references Notre Dame-Michigan State, it confirms Michigan State is in a high-profile rivalry context this season"
+      }
+    ],
+    "ai_rationale": "Michigan State is favored by 5.5 points after a dominant 35-7 win over Eastern Michigan in Week 2, suggesting strong offensive execution. Nebraska is a -5.5 underdog with notably higher moneyline implied probability (0.672) than spread-derived probability, indicating potential value uncertainty in the market. The totals market is tightly balanced at 52.5 with minimal edge between over and under.",
+    "build_time": "2026-09-19T00:59:23.868173+00:00",
     "reference_only": true,
     "close_price": null,
     "clv": null,
