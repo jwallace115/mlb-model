@@ -1768,3 +1768,36 @@
   on CSV separators). Same lesson as D72: gate on what the thing is, not on a proxy that drifts.
   Also: soccer/data/cache/daily/ is still NOT gitignored.
   See research/ops/conflict_marker_commits_2026-09-18.md.
+
+## 2026-09-19T02:24Z  cowork (dt question CLOSED; three unowned inputs were 4.5 days stale, refreshed and owned)
+- THE OPEN dt QUESTION IS ANSWERED, favourably. nfl/data/pbp/depth_charts.parquet carries 399
+  (now 405) DISTINCT dt values, 28-31 capture days in every month from 2025-08 through 2026-08.
+  It is genuine near-daily capture, NOT one frozen snapshot, so D59's `_dt < first kickoff`
+  restriction has real week-by-week material and 2025/2026 depth_order is point-in-time in
+  substance, not merely in form. This had been open since the first 5D-1 verification.
+- FINDING: the feed had STOPPED. Latest dt was 2026-09-14 13:53, i.e. 4.5 days stale with Week 3
+  on Sunday — every usage role predated Week 2 being played. File mtimes show depth_charts
+  (09-14 18:41), injuries (09-14 18:41), rosters_weekly (09-14 18:35) and all historical pbp
+  (09-14 17:30) were one manual bulk pull. Only pbp_2026 is current (09-18), because
+  pull_pbp.pull_season(2026) is run by hand for grading.
+- ROOT CAUSE: no committed puller existed for depth_charts, injuries or rosters_weekly. grep
+  finds only usage.py and a test READING them. Same unowned-artifact pattern as K4 before D63,
+  the calibration stamp before D72, and reliability_deciles.parquet (still unowned).
+- REFRESHED (returned, not inferred): depth_charts 1,258,870 -> 1,272,085 rows, latest dt now
+  2026-09-18 12:12:55, 405 snapshot days; injuries 34,994 -> 35,224 (+230, this week's
+  designations); rosters_weekly 279,035 -> 281,560 (+2,525). No season shrank in any file.
+- VALIDATED BEFORE INSTALLING: the 2020-2024 season-populated depth block is byte-identical
+  (`.equals()` True) so 2021-24 usage is untouched; all 13 old-schema columns are empty in both
+  the existing and rebuilt new-schema blocks, so nothing was dropped; gsis_id/team/pos_abb/
+  pos_rank/dt/player_name all grew by exactly the new rows.
+- NEW: nfl/sim/pull_nflverse_inputs.py owns these three. It preserves the final 2020-2024 depth
+  block rather than rebuilding history from the current API, refuses to install if any season
+  shrinks, asserts the historical block is unchanged, and writes atomically (temp then replace).
+  Ran end-to-end twice; idempotent, identical counts on the second run.
+- NOT DONE, and it is the next decision: the USAGE TABLE is not rebuilt. Fresh inputs do not
+  reach the board or the hand-ticket usage roles until usage.py is re-run. Rebuilding changes
+  usage_file_sha256 and will fire the D72 gate — correct behaviour, and currently harmless
+  because the board is not pricing live.
+- OBSERVATION for later: the D72 gate hashes the WHOLE usage file, including 2026 rows, but the
+  calibration maps are fitted on 2021-24 only. A 2026-only data refresh therefore fires a gate
+  about a fit it cannot affect. Over-strict, not wrong; worth narrowing when convenient.
