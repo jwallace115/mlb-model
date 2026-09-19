@@ -67,10 +67,18 @@ def grade_tickets(season=2026):
         print("No closing prices available")
         return 0
 
+    now_utc = pd.Timestamp.now(tz="UTC")
+
     changed = 0
     for ticket in tickets:
         if ticket.get("graded"):
             continue  # UPDATE-ONLY: never re-grade
+
+        # N12: skip tickets whose commence_time is in the future.
+        # Grading is undefined before kickoff.
+        commence = pd.Timestamp(ticket.get("commence_time"), tz="UTC")
+        if commence > now_utc:
+            continue
 
         eid = ticket["event_id"]
         for leg in ticket.get("legs", []):
@@ -131,6 +139,23 @@ def grade_tickets(season=2026):
 
         ticket["graded"] = True
         changed += 1
+
+    # N12: assert that not all CLVs are identically zero.
+    # Twelve legs at exactly 0.000 is not a measurement — it means the
+    # closing price resolved to the decision price (likely a future game).
+    if changed > 0:
+        all_clvs = []
+        for t in tickets:
+            if t.get("graded"):
+                for leg in t.get("legs", []):
+                    if leg.get("clv") is not None:
+                        all_clvs.append(leg["clv"])
+        if all_clvs and all(c == 0.0 for c in all_clvs):
+            raise RuntimeError(
+                f"HALT: all {len(all_clvs)} graded CLVs are exactly 0.0. "
+                f"This means closing prices resolved to decision prices — "
+                f"likely a future-game grading defect."
+            )
 
     with open(TICKET_LOG, "w") as f:
         json.dump(tickets, f, indent=2)

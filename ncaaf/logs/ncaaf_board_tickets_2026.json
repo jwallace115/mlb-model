@@ -12,8 +12,8 @@
         "price": -110.0,
         "book": "betrivers",
         "implied": 0.5121951219512195,
-        "close_price": -110.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "spreads",
@@ -22,8 +22,8 @@
         "price": -115.0,
         "book": "bovada",
         "implied": 0.5305164319248826,
-        "close_price": -115.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "totals",
@@ -32,8 +32,8 @@
         "price": -115.0,
         "book": "betrivers",
         "implied": 0.5327102803738317,
-        "close_price": -115.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "totals",
@@ -42,8 +42,8 @@
         "price": -115.0,
         "book": "bovada",
         "implied": 0.5145631067961165,
-        "close_price": -115.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       }
     ],
     "ai_flags": [],
@@ -52,7 +52,7 @@
     "reference_only": true,
     "close_price": null,
     "clv": null,
-    "graded": true
+    "graded": false
   },
   {
     "event_id": "03297aa8a399c223aa1cc6aa923d9bc6",
@@ -67,8 +67,8 @@
         "price": -110.0,
         "book": "bovada",
         "implied": 0.5283018867924528,
-        "close_price": -110.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "spreads",
@@ -77,8 +77,8 @@
         "price": -110.0,
         "book": "bovada",
         "implied": 0.5121951219512195,
-        "close_price": -110.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "totals",
@@ -87,8 +87,8 @@
         "price": -115.0,
         "book": "betmgm",
         "implied": 0.5238095238095238,
-        "close_price": -115.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "totals",
@@ -97,8 +97,8 @@
         "price": -110.0,
         "book": "bovada",
         "implied": 0.5238095238095238,
-        "close_price": -110.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       }
     ],
     "ai_flags": [],
@@ -107,7 +107,7 @@
     "reference_only": true,
     "close_price": null,
     "clv": null,
-    "graded": true
+    "graded": false
   },
   {
     "event_id": "023386f1b92db2259c7d52b2f244182f",
@@ -122,8 +122,8 @@
         "price": -110.0,
         "book": "draftkings",
         "implied": 0.5238095238095238,
-        "close_price": -110.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "spreads",
@@ -132,8 +132,8 @@
         "price": -110.0,
         "book": "draftkings",
         "implied": 0.5238095238095238,
-        "close_price": -110.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "totals",
@@ -142,8 +142,8 @@
         "price": -112.0,
         "book": "draftkings",
         "implied": 0.5283018867924528,
-        "close_price": -112.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       },
       {
         "market": "totals",
@@ -152,8 +152,8 @@
         "price": -108.0,
         "book": "draftkings",
         "implied": 0.5192307692307693,
-        "close_price": -108.0,
-        "clv": 0.0
+        "close_price": null,
+        "clv": null
       }
     ],
     "ai_flags": [],
@@ -162,6 +162,6 @@
     "reference_only": true,
     "close_price": null,
     "clv": null,
-    "graded": true
+    "graded": false
   }
 ]

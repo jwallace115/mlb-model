@@ -181,3 +181,20 @@ grade_ncaaf_tickets: first run changed 3 tickets, second run changed 0.
   UPDATE-ONLY null control: PASS.
 
 Odds API credits: unchanged at 8976 (this order used zero Odds API credits).
+
+### N12 — Premature-grading defect: recovery + two guards (2026-09-19)
+Three unplayed tickets were graded with CLV=0.0 on all 12 legs. For a game
+that has not kicked off, every snapshot satisfies snapshot < commence, so
+"closing price" resolved to the current line = the decision price.
+UPDATE-ONLY then made them permanently ungradeable.
+
+Recovery: graded set back to False, close_price and clv cleared to null
+on all 12 legs. Decision prices (price, point, book, side) untouched.
+
+Guard 1: grade_ncaaf_tickets.py skips any ticket whose commence_time is
+in the future (compared to now UTC). Grading is undefined before kickoff.
+
+Guard 2: if all graded CLVs in a run are identically 0.0, the grader halts
+with a RuntimeError. Twelve legs at exactly 0.000 is a symptom, not data.
+
+Test: test_grader_5d4.py — future-kickoff ticket must not be graded.
