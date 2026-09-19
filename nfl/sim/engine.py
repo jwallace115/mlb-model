@@ -70,6 +70,9 @@ class _DriveLog(pd.DataFrame):
 _CACHE = {}
 _DEBUG_YDS = None  # 5A-6 diag: set to a list to collect per-play yards
 _DEBUG_4TH = None  # 5A-9 diag: set to a list to collect (yd_b, yl_b, score_b, clock_b, decision)
+_DIAG_5H = None       # 5H diag: set to a list to collect per-4th-down decision dicts
+_DIAG_5H_3RD = None   # 5H diag: set to a list to collect per-3rd-down snap dicts
+_DIAG_5H_LATE = None  # 5H diag: set to a list to collect per-snap late-game dicts
 
 
 def _load_tables():
@@ -723,6 +726,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         team_r, tend, sit, kicker, league = _load_ratings()
 
     rng = np.random.default_rng(seed)
+    _diag_game_key = f"{season}_{week}_{away}@{home}" if _DIAG_5H is not None else None
     ctx = _build_game_context(home, away, season, week, team_r, tend, sit, kicker, league)
 
     # D7 anchoring offsets: added to the D6 EPA shift channel (same mechanism)
@@ -1507,6 +1511,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # Effective kneels = kneels_available - 1.5 (rounded to 1 to be
         # conservative — ensures we don't kneel when the opponent can stop us).
         score_diff_poss = np.where(poss == 0, score_h - score_a, score_a - score_h)
+        # 5H late-game before-snapshot (partial — fgs_state captured after it's computed)
+        if _DIAG_5H_LATE is not None:
+            _late_qual = alive & (qtr == 4) & (clock <= 300.0) & (score_diff_poss >= -8) & (score_diff_poss <= 0)
+            _late_clock_before = clock.copy()
+            _late_yl_before = yl.copy()
+            _late_sd_before = score_diff_poss.copy()
+            _late_play_type = np.full(N, "", dtype=object)
+            _late_to_before = ev_to_off.copy() + ev_to_def.copy()
         # 5A-7: the 40-second / "opponent has ~1.5 timeouts" heuristic is replaced by the
         # empirical kneel table (qtr x seconds x DEFENCE TIMEOUTS REMAINING x down x
         # situation) and the empirical timeout policy. A kneel is a play: -1 yard, next
@@ -1520,6 +1532,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             in_ot = qtr >= 5
             fgs_state[in_ot & ~ot_first_poss_done] = ""
             fgs_state[in_ot & ot_first_poss_done & (yl <= 35) & (down <= 3) & alive] = "ot_sd"
+        if _DIAG_5H_LATE is not None:
+            _late_fgs_before = fgs_state.copy()
         if kneel_lookup is not None:
             fgs_m = alive & (clock > 0) & (fgs_state != "")
             kn_cand = alive & (down < 4) & (clock > 0) & (clock <= 180) & (
@@ -1549,6 +1563,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         pk = kneel_lookup.get((q, sb, "any", "any", sit), 0.0)
                 if u_kneel[i] < pk:
                     can_kneel[i] = True
+                    if _DIAG_5H_LATE is not None:
+                        _late_play_type[i] = "kneel"
             if can_kneel.any():
                 for i in np.where(can_kneel)[0]:
                     ev_kneels[i] += 1
@@ -1631,6 +1647,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         if u_spike[i] < p_sp:
                             spiked[i] = True
                             ev_spikes[i] += 1
+                            if _DIAG_5H_LATE is not None:
+                                _late_play_type[i] = "spike"
                             n_plays[i] += 1; _dl_plays[i] += 1
                             down[i] += 1
                             clock[i] -= np.float32(1.0); ev_clock_used[i] += np.float32(1.0)
@@ -1702,6 +1720,21 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     dec = "fg"
                 if _DEBUG_4TH is not None:
                     _DEBUG_4TH.append((yd_b, yl_b, sc_fine, qt_fine, dec))
+                if _DIAG_5H is not None:
+                    _DIAG_5H.append({
+                        "game_key": _diag_game_key,
+                        "sim_id": i,
+                        "qtr": qt,
+                        "clock": cl,
+                        "ydstogo": yd,
+                        "yardline_100": y,
+                        "score_diff": sd,
+                        "decision": dec,
+                        "ydstogo_b": yd_b,
+                        "yl_b": yl_b,
+                        "score_b": sc_fine,
+                        "qtr_b": qt_fine,
+                    })
 
             # Execute punts
             if punt_m.any():
@@ -1841,6 +1874,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # Defensive penalties are a real source of yards and first downs;
         # their absence would lower scoring by ~3 first downs/game.
         pen_nop = playing & (u_pen < p_penalty_nop)
+        if _DIAG_5H_LATE is not None and pen_nop.any():
+            _late_play_type[pen_nop] = "penalty"
         if pen_nop.any():
             if _pen_cats_enabled:
                 # 5A-4: Category-based penalty model
@@ -2073,6 +2108,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     ev_fgs_snaps[gi] += 1
 
         is_pass = u_call[live_idx] < p_pass
+        if _DIAG_5H_LATE is not None:
+            _late_play_type[live_idx[is_pass]] = "pass"
+            _late_play_type[live_idx[~is_pass]] = "rush"
 
         # Table lookup indices
         di_arr = _dist_idx(dist_live)
@@ -2343,6 +2381,18 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # 3rd-down conversions (pass)
             conv_3rd = is_3rd & (fd_comp | td_mask)
             ev_3rd_conv[g_idx[conv_3rd]] += 1
+            if _DIAG_5H_3RD is not None and is_3rd.any():
+                _3rd_idx = np.where(is_3rd)[0]
+                _3rd_dtg = dist_live[p_idx][_3rd_idx]
+                _3rd_yg = np.where(completed[_3rd_idx], yds[_3rd_idx],
+                           np.where(sacked[_3rd_idx], yds[_3rd_idx], 0.0))
+                _3rd_cv = (fd_comp | td_mask)[_3rd_idx]
+                for _j in range(len(_3rd_idx)):
+                    _DIAG_5H_3RD.append({
+                        "ydstogo": float(_3rd_dtg[_j]),
+                        "yards_gained": float(_3rd_yg[_j]),
+                        "converted": bool(_3rd_cv[_j]),
+                    })
             # 4th-down conversions (pass)
             conv_4th = is_4th_go_pass & (fd_comp | td_mask)
             ev_4th_conv[g_idx[conv_4th]] += 1
@@ -2605,6 +2655,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ev_fd_rush[g_idx_r[fd_rush | td_r]] += 1  # 5A-4
             conv_3rd_r = is_3rd_r & (fd_rush | td_r)
             ev_3rd_conv[g_idx_r[conv_3rd_r]] += 1
+            if _DIAG_5H_3RD is not None and is_3rd_r.any():
+                _3rd_idx_r = np.where(is_3rd_r)[0]
+                _3rd_dtg_r = dist_live[r_idx][_3rd_idx_r]
+                _3rd_yg_r = np.where(not_fum[_3rd_idx_r], yds_r[_3rd_idx_r], 0.0)
+                _3rd_cv_r = (fd_rush | td_r)[_3rd_idx_r]
+                for _j in range(len(_3rd_idx_r)):
+                    _DIAG_5H_3RD.append({
+                        "ydstogo": float(_3rd_dtg_r[_j]),
+                        "yards_gained": float(_3rd_yg_r[_j]),
+                        "converted": bool(_3rd_cv_r[_j]),
+                    })
             conv_4th_r = is_4th_go_rush & (fd_rush | td_r)
             ev_4th_conv[g_idx_r[conv_4th_r]] += 1
             # 5A-3: explosive rush (10+ yds)
@@ -2712,6 +2773,22 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 de_elapsed = np.maximum(u_rclock[gi_r[de_idx]] * 16.0, 3.0)
                 clock[gi_r[de_idx]] -= de_elapsed.astype(np.float32)
                 ev_clock_used[gi_r[de_idx]] += de_elapsed.astype(np.float32)
+
+        # 5H late-game after-snapshot
+        if _DIAG_5H_LATE is not None and _late_qual.any():
+            for _li in np.where(_late_qual)[0]:
+                if _late_play_type[_li] == "":
+                    continue  # sim didn't execute a play this step
+                _DIAG_5H_LATE.append({
+                    "clock_before": float(_late_clock_before[_li]),
+                    "clock_after": float(clock[_li]),
+                    "yardline_before": float(_late_yl_before[_li]),
+                    "yardline_after": float(yl[_li]),
+                    "play_type": str(_late_play_type[_li]),
+                    "fgs_state": str(_late_fgs_before[_li]),
+                    "timeout_called": bool((ev_to_off[_li] + ev_to_def[_li]) > _late_to_before[_li]),
+                    "sd_start": int(_late_sd_before[_li]),
+                })
 
         # --- Turnover on downs ---
         tod = ~game_over & (down > 4)
