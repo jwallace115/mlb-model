@@ -279,3 +279,14 @@ Invariant 1c: every leg must exist on the board (market, side, point). Raises.
 
 Tests: 4/4. both_sides_raises, single_side_passes, not_on_board_raises,
 favourite_derivation. RED shown: old code allowed both sides silently.
+
+### N20 — AI is the selection mechanism; abstain path (2026-09-19)
+The AI picks at most one side per market per game. Abstain is genuinely
+available. Selection and pricing are separate — the AI never chooses the
+book or the price.
+
+Spec updated: Layer 3 is "AI selection" not "AI reasoning". Unvalidated.
+No backtest. Prospective CLV (~125 obs needed) is the only grade.
+
+N17 guard UNCHANGED and confirmed passing (3/3) — protects a model that
+now has real influence over what gets bet.

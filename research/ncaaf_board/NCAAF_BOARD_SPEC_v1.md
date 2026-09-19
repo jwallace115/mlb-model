@@ -133,14 +133,23 @@ rate is **measured and reported**; anything under 100% of teams on the current b
 HALT, not a partial run. Team-code normalization has silently destroyed a result in this repo
 before (ops v9 §10, 2026-04-22).
 
-### Layer 3 — AI reasoning (Anthropic API, `ANTHROPIC_API_KEY` in `.env`)
-One call per game. Input: that game's Layer 1 rows and Layer 2 headlines, as stated facts.
+### Layer 3 — AI selection (Anthropic API, `ANTHROPIC_API_KEY` in `.env`)
+One call per game. Input: that game's Layer 1 rows and Layer 2 headlines, as stated facts,
+with the favourite/underdog derived in code from the spread sign (N19).
 
-**The AI layer's permitted outputs are exactly three:**
-1. structured flags (e.g. `qb_status_uncertain`, `weather_mentioned`, `travel_note`), each
-   with the `published` timestamp and headline it came from;
-2. a short prose rationale;
-3. a binary `veto` with a reason.
+**N20: The AI layer is the selection mechanism.** It picks at most one side per market per
+game. Its selections are **unvalidated** — no backtest exists for them, and prospective CLV
+(which needs ~125 observations) is the only thing that will ever grade them.
+
+**The AI layer's permitted outputs:**
+1. structured pick: `legs` with market, side (exact board outcome_name), point, and reason;
+2. structured flags, each citing a headline + timestamp;
+3. a short prose rationale;
+4. `abstain` (bool) with reason — **genuinely available**; a picker that never declines picks noise;
+5. ~~a binary `veto` with a reason~~ superseded by abstain (N20).
+
+**Selection and pricing are SEPARATE.** The AI picks market and side; the code takes the best
+number across the nine books. The AI never chooses the book or the price.
 
 **It may not output a number that enters pricing.** No probability, no projected total, no
 "fair line". If it emits one it is discarded. This boundary is the whole reason the build has
