@@ -1,3 +1,54 @@
+## 2026-09-19T15:23Z  claude-code (Phase 5F — three items: D84, D85, D86)
+
+### D84 — Props cron not firing
+- RAN: `crontab -l` on VM → props entries existed but were installed 2026-09-18T02:50 UTC
+  (Friday), AFTER all Tue/Thu/Sun slots. Zero CRON syslog lines for pull_hardrock_props.
+- FIXED: removed old entries (relative log path, --window-hours 4 on Thu close), added
+  corrected entries (absolute log path, --window-hours 12 on Thu close).
+- RAN: one-off dry-run cron at 15:06 UTC → syslog confirms execution, log file created,
+  16 events listed, key fingerprint ac6e89a0 (matches paid .env).
+- RAN: one-off real cron at 15:11 UTC → 973 rows landed in archive with tag='open',
+  pull_timestamp='2026-09-19T15:11:02'. Credits used: 150 (remaining: 8548).
+- REMOVED: both one-off entries after verification.
+- COMMITTED: 90daecb6b, pushed to origin.
+
+### D85 — PIT test for D59/D60/D61
+- WROTE: nfl/sim/tests/test_usage_pit_5f.py (3 tests, all green, 8.35s).
+  - D59 PIT: 2025 wk5 usage identical with/without 934k depth rows with dt >= kickoff.
+  - D59 negative: synthetic future depth row (ARI RB rank change) filtered out by D59.
+  - D60: McCaffrey SF wk7 2022 + Hockenson MIN wk9 2022 present with non-zero shares.
+  - D61: NOT directly tested (old code path no longer exists); covered structurally
+    by D59 PIT assertion. Stated plainly in D85.
+- COMMITTED: 7c5122d26, pushed to origin.
+
+### D86 — Three engine reds: defects or stale targets
+- WROTE: nfl/sim/tests/derive_engine_targets.py (committed derivation script).
+- RAN: derivation against pbp_2021..2024 (1087 games, 198513 plays).
+  - 4th-down go rate: 0.1980 (3085/15579) — matches hardcoded 0.198.
+  - Offense penalties/game: 5.513 (5993/1087) — matches hardcoded 5.51.
+  - Tied drives reaching 35 that expire: 0/329 — matches hardcoded 0.0.
+- CLASSIFICATION: all three are ENGINE DEFECT (category b). Targets correct,
+  engine values exceed them. All three left RED with recorded explanations.
+- COMMITTED: b4a916580, pushed to origin.
+
+### NOT DONE
+- Engine fixes for the three reds (out of scope per prompt — record and scope only).
+- D61 direct test (old prior formula no longer exists; cannot compare without it).
+- Tag cleanup for the four existing props captures with tag=None (pre-Sep-18 manual runs).
+- Verification that the negative control in test_d59 would actually FAIL if D59
+  filtering were removed — the test proves the filter makes builds identical, but
+  does not demonstrate the counterfactual by disabling the filter and re-building.
+  A true counterfactual would require modifying build_active_universe to skip the
+  dt filter, which is invasive.
+
+### UNVERIFIED
+- Whether the Thursday close --window-hours 12 is sufficient to cover the full
+  Sunday-through-Monday slate when running at Thu 22:00 UTC. The Sunday 1pm ET
+  games are ~43 hours later. This entry captures Thursday Night Football props
+  only; the Sunday close entry (15:00 UTC Sunday, --window-hours 12) covers the
+  rest. The two entries together may still miss MNF props if they're not posted
+  by Sunday 15:00 UTC.
+
 ## 2026-09-17T21:30Z  claude-code (Phase 5C-2 — fit runner + 2021-24 fit at N=5000)
 - EDITED: nfl/sim/params_v1.json — anchor block n_sims=5000, chunk_size=2500 (D51).
 - EDITED: nfl/sim/anchor.py — n_sims % chunk_size divisibility assertion.
