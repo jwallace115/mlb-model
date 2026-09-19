@@ -154,3 +154,18 @@ HELD.** The "extends further toward the middle" interpretation is withdrawn.
 Requirement: any bucketed test MUST report both conventions side by side.
 test_joint_correlation.py now requires --bins (left|right, no default) and
 always prints both. Bin edges are recorded in the output.
+
+### N10 — Joint table v2: spreadOpen, |spread| >= 21 only (2026-09-18)
+Rebuilt on spreadOpen (the line available at bet time, N05). |spread| 14-21
+excluded: t=1.32-1.64 on spreadOpen under both conventions (neither clears 2).
+
+v2: 4 cells (v1 had 8), all |spreadOpen| >= 21, keyed on total quartiles.
+N=565 total (v1 had 1119 with the 14-21 rows).
+21+ on spreadOpen: phi=0.220-0.247, t=5.23-5.62 under both conventions.
+
+Cell counts: OU<50 n=137, OU_50-54 n=129, OU_54-58 n=145, OU>58 n=154.
+All cells n >= 129. delta ranges +0.026 to +0.097.
+
+v1 preserved on disk. The table is a fitted object — Checks 1b, 2, 3 apply.
+Discovery (2022-24) and validation (2025) are pooled; cell values have no
+clean OOS estimate.
