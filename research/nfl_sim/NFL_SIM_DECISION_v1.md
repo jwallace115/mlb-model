@@ -1074,3 +1074,42 @@ frequencies: 0.1994 → 0.1962 (still within +0.18pp of target).
 `38e1d5bcd03e7781`. `_check_calibration_stamp()` returns False with mismatch
 `engine_fingerprint: cal=d929ad258504b275, live=38e1d5bcd03e7781`.
 `sim_pricing_enabled = False`. Board refuses to rank. Gate is functional.
+
+### D89 — Penalty rate denominator fix (2026-09-19)
+
+**Root cause.** `p_no_play_penalty` was computed as `penalties / resolved_scrimmage_plays`
+(9744 / 135336 = 0.07200). But the engine draws a penalty check on EVERY play attempt
+including replayed downs — a no-play penalty replays the down, and the replay gets its
+own penalty draw at the same rate. This geometric compounding inflates the effective
+per-game penalty count: at 124.5 resolved plays per game, the expected total is
+124.5 × 0.072 / (1 − 0.072) = 9.67 vs actual 8.96.
+
+The correct rate is `penalties / total_play_attempts` where total_play_attempts =
+resolved plays + penalty plays (9744 / (135336 + 9744) = 145080) = **0.06716**. With
+this rate, the geometric series reproduces the actual count: N × p / (1 − p) = N × 0.07200
+≈ 8.96 per game at 124.5 resolved plays.
+
+**Fix.** `tables.py` line 1074: changed denominator from `len(scrim)` to
+`len(scrim) + len(accepted_no_play)`.
+
+**Pre-fix breakdown (sim, 80 games × N=500):**
+  Offense: 6.19/game (target 5.51), delta +0.68 > spec 0.5
+  Defense: 3.87/game (target 3.45), delta +0.42 < spec 0.5
+  Total: 10.06/game (target 8.96)
+  Offense fraction: 0.6150 (exactly matches actual 5993/9744)
+
+**Post-fix results:**
+  `test_penalties_per_side`: **PASSED** (was FAILED)
+  `test_first_downs_by_penalty`: **NEWLY FAILED** (1.43 vs 1.73, diff 0.302 > 0.300)
+
+**The FD-by-penalty failure is a shared-path side effect.** The penalty rate is shared
+between offense and defense. Reducing it reduces defense penalty count, which reduces
+first downs by penalty. The test target (1.73/team) includes BOTH no-play penalty FDs
+(1.251/team from PBP) AND scrimmage-play penalty FDs (0.477/team). The engine only
+models the former. The old inflated rate produced ~1.53 FD/team (compensating for the
+missing 0.477 scrimmage mechanism); the correct rate produces ~1.43.
+
+The test was passing before only because the wrong penalty rate masked a missing
+mechanism (scrimmage-play penalty first downs). The correct fix is to add
+scrimmage-play penalty FDs to the engine, which is a separate item. The diff (0.302)
+is at the spec boundary (0.300) — this is flagged, not hidden.
