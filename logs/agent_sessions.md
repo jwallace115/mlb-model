@@ -1714,3 +1714,29 @@
 - x-requests-remaining: 8976 (zero Odds API credits used).
 - NOT DONE: grading (games not yet played). Full 90-game ticket build (only 5).
 - UNVERIFIED: 12 manual ESPN team map corrections (same as N11).
+
+## 2026-09-19T01:10Z  claude-code (NCAAF board work order #5 — N16-N18)
+- EDITED: ncaaf/pipeline/build_ncaaf_tickets.py — N16: write_ticket_log with
+  monotonicity guard (count non-decreasing, no key vanishes). N17: _call_ai_layer
+  returns 5th value (discarded dict); guard discards any field not in the allowed
+  set {flags, rationale, veto, veto_reason}.
+  Deletion path found (1c): N15 inline script filtered old_eids before extending.
+  Not in committed code. Guard prevents recurrence.
+- REWRITTEN: ncaaf/pipeline/tests/test_ai_guard_5d4.py — N17: feeds canned
+  response with fair_spread=-21.5, projected_total=52.0, win_probability=0.78.
+  Asserts all three are in discarded dict and NOT in returned structure.
+  RED shown: without guard, fair_spread stays. GREEN: guard removes it.
+  First real demonstration of this boundary.
+- CREATED: ncaaf/pipeline/tests/test_append_only_5d5.py — N16: append 2 to 3
+  gives 5. Guard prevents count decrease.
+- N18: grading deferred. Current time 01:09Z, games kick 16:00-23:30Z.
+  N12 guard will correctly skip all 5 tickets.
+- COMMITTED: e380e82ce (N16), 83b42a90c (N17), 0cd412648 (N18).
+- x-requests-remaining: 8976 (zero Odds API credits used).
+- NOT DONE: grading (games not yet played; earliest kick ~15h from now).
+  Nebraska @ Michigan State (Sep 26) must stay ungraded. First CLV data
+  arrives after games settle (~03:00Z 2026-09-20).
+- UNVERIFIED: the 5 existing tickets' AI rationales were produced by
+  claude-haiku-4-5-20251001, not the originally intended sonnet model.
+  Model constraint (only model the key reaches) is recorded in N13 but
+  not in the spec.
