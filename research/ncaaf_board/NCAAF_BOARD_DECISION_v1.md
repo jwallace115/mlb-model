@@ -290,3 +290,21 @@ No backtest. Prospective CLV (~125 obs needed) is the only grade.
 
 N17 guard UNCHANGED and confirmed passing (3/3) — protects a model that
 now has real influence over what gets bet.
+
+### N21 — First bettable slate: 3 tickets, 7 abstains, inversion fixed (2026-09-19)
+10 games tested. 3 tickets built, 7 abstains (70% abstain rate — the picker
+declines when it has no edge, as designed).
+
+Tickets:
+  Georgia -24.5 + Under 54.5 (fav: Georgia, correct)
+  Colorado +3.5 + Over 48.0  (fav: Northwestern, correct)
+  James Madison +1.5 + Over 46.5 (fav: San Diego State, correct)
+
+SPOT-CHECK:
+  Colorado @ Northwestern: favourite = Northwestern (-3.5). CORRECT.
+  Nebraska @ Michigan State: favourite = Nebraska (-5.5). CORRECT.
+  No inversions. Fix works.
+
+0 both-sides violations, 0 legs not on board, 0 pricing numbers discarded.
+All reference_only=True, all graded=False.
+Ticket log: 5 → 8 (+3). Append-only guard passed.

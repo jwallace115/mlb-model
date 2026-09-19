@@ -266,5 +266,123 @@
     "close_price": null,
     "clv": null,
     "graded": false
+  },
+  {
+    "event_id": "01e9c4d460a55375a75d025e2b1ddbf5",
+    "home_team": "Arkansas Razorbacks",
+    "away_team": "Georgia Bulldogs",
+    "commence_time": "2026-09-19T16:00:00Z",
+    "favourite": "Georgia Bulldogs",
+    "underdog": "Arkansas Razorbacks",
+    "spread_magnitude": 24.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Georgia Bulldogs",
+        "point": -24.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5283018867924528,
+        "ai_reason": "Second-ranked Georgia opens SEC play against struggling Arkansas, which just lost decisively to Utah with multiple defensive breakdowns."
+      },
+      {
+        "market": "totals",
+        "side": "Under",
+        "point": 54.5,
+        "price": -115.0,
+        "book": "bovada",
+        "implied": 0.5145631067961165,
+        "ai_reason": "Arkansas's recent defensive performance against Utah suggests limited offensive capability, and Georgia typically plays disciplined, ball-control football in SEC matchups."
+      }
+    ],
+    "ai_flags": [],
+    "ai_rationale": "Georgia enters as a dominant road favorite against an Arkansas team that showed significant defensive vulnerabilities in Week 2. The recent Utah game exposed Arkansas's weaknesses, making the large spread justified. The Under is supported by both teams' defensive profiles and Georgia's typical game management approach in SEC play.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T02:33:13.338001+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "03297aa8a399c223aa1cc6aa923d9bc6",
+    "home_team": "Northwestern Wildcats",
+    "away_team": "Colorado Buffaloes",
+    "commence_time": "2026-09-19T23:30:00Z",
+    "favourite": "Northwestern Wildcats",
+    "underdog": "Colorado Buffaloes",
+    "spread_magnitude": 3.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "Colorado Buffaloes",
+        "point": 3.5,
+        "price": -110.0,
+        "book": "bovada",
+        "implied": 0.5283018867924528,
+        "ai_reason": "Colorado's dominant 52-21 victory over Weber State with QB Julian Lewis throwing 5 TDs (4 passing, 1 rushing) demonstrates offensive firepower that should compete well against Northwestern in a revenge-game setup."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 48.0,
+        "price": -115.0,
+        "book": "betmgm",
+        "implied": 0.5238095238095238,
+        "ai_reason": "Colorado's explosive offensive performance (52 points against Weber State) combined with a modest 48-point total suggests the line undervalues the Buffaloes' scoring potential in this matchup."
+      }
+    ],
+    "ai_flags": [
+      "limited_northwestern_info",
+      "small_sample_size"
+    ],
+    "ai_rationale": "Colorado showed elite offensive efficiency in Week 2 with 5 TDs from their QB, providing concrete evidence of scoring capability. The 48-point total appears conservative given that performance, and the 3.5-point spread offers value on an underdog with demonstrated momentum and a talented QB.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T02:33:13.338001+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
+  },
+  {
+    "event_id": "0cdf27f150204b8512bca1e2d7cce051",
+    "home_team": "San Diego State Aztecs",
+    "away_team": "James Madison Dukes",
+    "commence_time": "2026-09-20T02:00:00Z",
+    "favourite": "San Diego State Aztecs",
+    "underdog": "James Madison Dukes",
+    "spread_magnitude": 1.5,
+    "legs": [
+      {
+        "market": "spreads",
+        "side": "James Madison Dukes",
+        "point": 1.5,
+        "price": -112.0,
+        "book": "pinnacle",
+        "implied": 0.5192307692307693,
+        "ai_reason": "JMU has demonstrated explosive offensive capability with a program-record 87-3 win and three punt return TDs, suggesting strong momentum and coaching impact under Billy Napier despite being an underdog."
+      },
+      {
+        "market": "totals",
+        "side": "Over",
+        "point": 46.5,
+        "price": -114.0,
+        "book": "lowvig",
+        "implied": 0.5192307692307693,
+        "ai_reason": "JMU's recent offensive output of 87 points combined with the matchup context suggests the combined scoring is likely to exceed a relatively modest 46.5 total."
+      }
+    ],
+    "ai_flags": [
+      "Small spread (1.5) suggests market uncertainty",
+      "Limited recent SDSU information available for comparison",
+      "JMU's dominant win was against Wagner (FCS level), not a reliable indicator against FBS competition"
+    ],
+    "ai_rationale": "JMU enters with strong recent momentum and coaching continuity under Napier, having won decisively in their last two games. The 1.5-point spread is tight enough that the underdog value combined with demonstrated offensive explosiveness warrants backing JMU. The over reflects JMU's high-scoring tendency, though this pick carries elevated variance given the limited data on SDSU's defensive capabilities.",
+    "ai_discarded": {},
+    "build_time": "2026-09-19T02:33:13.338001+00:00",
+    "reference_only": true,
+    "close_price": null,
+    "clv": null,
+    "graded": false
   }
 ]
