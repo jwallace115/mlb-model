@@ -885,6 +885,28 @@ def build_fourth_down_table(df):
             shr = (grid[f"{c}_{L}"] + kcol * grid[f"p{c}_{L+1}"]) / (grid[f"n_{L}"] + kcol)
             grid[f"p{c}_{L}"] = np.where(np.isinf(kcol), grid[f"p{c}_{L+1}"], shr)
 
+    # D88: additional regularisation for thin cells only. The hierarchical shrinkage
+    # fills empty cells from score-conditional parents, which inflates p_go for
+    # trailing states. Pull cells with raw count below REG_THRESHOLD back toward
+    # the score-FREE L5 (yd × zone4) estimate, using the cell's own count as
+    # evidence weight: p_final = (n * p_L0 + k_reg * p_L5) / (n + k_reg).
+    # k_reg is measured by method of moments on the thin cells' go indicator
+    # around L5 rates. Cells at or above REG_THRESHOLD keep their L0 estimate
+    # unchanged — those cells have enough data for the score/clock signal to be
+    # genuine, not shrinkage artifact.
+    REG_THRESHOLD = 10
+    thin_mask = grid["n"] < REG_THRESHOLD
+    thin_cells = grid[thin_mask & (grid["n"] > 0)]
+    k_reg = _mom_k(thin_cells["n"], thin_cells["go"], thin_cells.eval("pgo_5"))
+    k_reg = np.clip(k_reg, 1.0, 200.0)
+    k_by_level["reg"] = {"k": float(k_reg), "threshold": REG_THRESHOLD}
+    n_arr = grid["n"].to_numpy(dtype=float)
+    for c in ("go", "punt", "fg"):
+        p_L0 = grid[f"p{c}_0"].to_numpy(dtype=float)
+        p_L5 = grid[f"p{c}_5"].to_numpy(dtype=float)
+        p_reg = (n_arr * p_L0 + k_reg * p_L5) / (n_arr + k_reg)
+        grid[f"p{c}_0"] = np.where(thin_mask, p_reg, p_L0)
+
     tbl = pd.DataFrame({"ydstogo_b": grid["yd"], "yl_b": grid["yl10"], "score_b": grid["sc7"],
                         "qtr_b": grid["ck6"], "n": grid["n"].astype(int),
                         "p_go": grid["pgo_0"], "p_punt": grid["ppunt_0"], "p_fg": grid["pfg_0"]})

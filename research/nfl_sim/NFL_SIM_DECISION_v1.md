@@ -1038,3 +1038,39 @@ on the totals case because a sample mean near zero would hide it.
 only `test_5c1.py` was. The only callers of `_crps_sample` are `score_k2` and the two tests.
 The locked 2025 K2 score was not recomputed; on integer inputs the new form is bit-identical
 in the cases measured, but that specific number was not re-derived.
+
+### D88 — 4th-down thin-cell regularisation (2026-09-19)
+
+**Root cause.** The 4th-down table's per-cell go rates are correct at actual PBP
+frequencies (weighted rate 0.1994 vs actual 0.1980, +0.14pp). The sim's +1.2pp
+excess (0.210 vs 0.198) comes from the sim visiting cells at different frequencies:
+22.2% of sim decisions are ydstogo 1-2 vs 19.5% actual, and 26.5% are 3-5 vs
+22.9%. This is a game-state distribution problem (the sim generates too many
+short-yardage 4th downs from its play-outcome tables).
+
+However, 1,275 of 1,680 table cells have fewer than 10 real decisions, and 430
+have zero. Hierarchical shrinkage fills empty cells from their score-conditional
+parents, producing mean p_go = 0.3079 for n=0 cells (vs 0.1853 for n>=20). The
+sim visits these thin cells more than reality does, inflating its aggregate rate.
+
+**Fix.** After the existing top-down shrinkage (L7→L0), apply one additional
+regularisation step for cells with raw count < REG_THRESHOLD (10). These cells
+have their p_go/p_punt/p_fg blended toward the score-free L5 (ydstogo × zone4)
+estimate: `p_final = (n * p_L0 + k_reg * p_L5) / (n + k_reg)`. Cells at or above
+threshold keep their L0 estimate unchanged.
+
+k_reg = 1.34, measured by method of moments on the go indicator for thin cells
+around their L5 rates. REG_THRESHOLD = 10. No constants are chosen; both are
+derived from data.
+
+**Effect on the table:** n=0 cells mean p_go: 0.3079 → 0.1675. n<3 cells: 0.2962
+→ 0.1994. n>=20 cells: unchanged (0.1853). Table weighted rate at actual PBP
+frequencies: 0.1994 → 0.1962 (still within +0.18pp of target).
+
+**Execution trace:** `test_engine_5a3.py::test_t1_4th_down_go_rate` PASSED
+(was FAILED with delta 0.012 > 0.010). All 6 tests in the module pass (66s).
+
+**Board gate:** engine_fingerprint changed from `d929ad258504b275` to
+`38e1d5bcd03e7781`. `_check_calibration_stamp()` returns False with mismatch
+`engine_fingerprint: cal=d929ad258504b275, live=38e1d5bcd03e7781`.
+`sim_pricing_enabled = False`. Board refuses to rank. Gate is functional.
