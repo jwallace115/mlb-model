@@ -1656,3 +1656,32 @@
 - UNVERIFIED: 12 manual ESPN team map corrections (from work order #1 item 3).
   The joint table uses Bovada's spread column (the close), not spreadOpen — any
   live application must condition on spreadOpen instead.
+
+## 2026-09-19T00:06Z  claude-code (NCAAF board work order #3 — N09-N11)
+- EDITED: ncaaf/pipeline/test_joint_correlation.py — N09: --bins required (left|right),
+  reports BOTH conventions side by side. The original used left-closed while the probe
+  used right-closed. 7-14 t=2.27 was 1 of 8 configs that cleared |t|>2. Under the
+  probe's bins: t=1.25. Prediction 3 HELD.
+- CORRECTED: joint_correlation_oos_2025.md — "DID NOT HOLD" -> "HELD" with struck
+  history. "Extends further toward the middle" withdrawn.
+- CREATED: joint_outcome_table_v2.parquet — N10: spreadOpen, |spread| >= 21 only.
+  4 cells (v1 had 8). 14-21 excluded (t=1.32-1.64 on spreadOpen). v1 preserved.
+  21+: phi=0.220-0.247, t=5.23-5.62 on spreadOpen.
+- RAN: end-to-end board — N11:
+  build_ncaaf_board: RETURNED 90 games, 96 dropped by pre-kick filter. MEANS the
+    pre-kick guard is active and removing started/past games as designed.
+  pull_ncaaf_news: RETURNED 30 teams, 600 articles, 0 zero-article teams. MEANS
+    layer 2 has full coverage for the tested subset.
+  build_ncaaf_tickets: RETURNED 3 tickets from 3 games. AI no-pricing-number guard:
+    0 discards. MEANS the model followed instructions. The guard was never triggered
+    — it is untested, not proven. A test that never fires is not a test.
+  grade_ncaaf_tickets: RETURNED first run 3 changes, second run 0. MEANS the
+    UPDATE-ONLY property holds. Null control PASS.
+  REFERENCE_ONLY=True on all tickets (N01: hardrockbet_fl absent).
+- COMMITTED: 33c107a25 (N09), 09a221948 (N10), bb504f0a0 (N11).
+- x-requests-remaining: 8976 (unchanged — zero Odds API credits in this order).
+- NOT DONE: full 90-game board run with AI (only 3 games tested). 1H joint table.
+  Weather layer. CFB context flags. ESPN team map manual corrections unverified.
+- UNVERIFIED: AI no-pricing-number guard (never triggered in the test). The guard
+  checks for fields not in the allowed set and discards them — but the model never
+  produced one, so the code path that discards was not exercised.
