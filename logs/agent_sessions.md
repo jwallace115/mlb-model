@@ -1,3 +1,69 @@
+## 2026-09-19T20:16Z  claude-code (Phase 5G work order — D88, D89, D90)
+
+### Baseline
+- RAN: full nfl/sim/tests suite → 184 passed, 3 failed (go rate, penalties, tied expiry), 1 skipped
+  This matches the work order's verified baseline exactly.
+
+### D88 — 4th-down thin-cell regularisation
+- DIAGNOSED: table per-cell rates are correct (+0.14pp vs actual at actual frequencies);
+  sim excess (+1.2pp) comes from visiting cells at different frequencies (more short-yardage).
+  430 empty cells have p_go inflated to 0.31 by hierarchical shrinkage.
+- IMPLEMENTED: additional regularisation for thin cells (n<10) toward L5 (yd × zone4, score-free).
+  All cells: PASSED go rate test. BUT broke 2 trailing tests (trail p_go dropped to 0.17).
+- AMENDED: regularisation applied only to NON-TRAILING cells. Trailing tests restored.
+  Go rate test reverts to FAIL (delta 0.014 vs spec 0.010). Root cause is game-state
+  distribution, not per-cell error.
+- COMMITTED: 98243b9b4 (original), 1c0463916 (amended), pushed.
+- Board gate verified: engine_fingerprint mismatch → sim_pricing_enabled=False. FUNCTIONAL.
+
+### D89 — Penalty rate denominator
+- DIAGNOSED: p_no_play_penalty used penalties/resolved_plays (0.072) but engine replays
+  penalised downs with another draw, geometrically compounding the effective rate.
+  Correct denominator is penalties/(resolved+penalties) → 0.0672.
+- IMPLEMENTED: changed denominator in tables.py. Rebuilt scalars.json.
+- test_penalties_per_side: PASSED (was FAILED). Delta reduced from 0.69 to within spec.
+- test_first_downs_by_penalty: NEWLY FAILED (1.43 vs 1.73, diff 0.302 > 0.300).
+  Shared-path side effect: correct rate exposes missing scrimmage-play penalty FD mechanism.
+- COMMITTED: 27e900bb6, pushed.
+
+### D90 — Tied drives expiring
+- INSTRUMENTED: 43 expired drives of 289 that reached the 35 (14.9%). Two categories:
+  (a) 12 drives starting with clock ≤ 6s (plays=0 — game effectively over at drive start)
+  (b) 31 drives starting at 50-162s OUTSIDE the 35, reaching it during the drive.
+  Category (b) is the majority: drives consume clock under GENERAL Q4 management
+  (~25-35s/play) before reaching FG-setup activation threshold (yardline ≤ 35).
+- BUG 1 FIXED: _eoh_runoff only used FG-setup clock cells for 0-20/21-40 second buckets;
+  41+ fell through without clock advance. 19 FG-setup clock rows exist in data but were dead.
+- BUG 2 FIXED: FG-setup deactivation at clock < 5s to allow EOH FG mechanism.
+- EFFECT: none measured. Rate unchanged at ~14.9%. Category (b) drives consume clock
+  BEFORE reaching FG-setup — a hurry-up clock mechanism is needed (not in scope).
+- test_t3: STILL FAILED at 0.149 > 0.050.
+- COMMITTED: 3915f986d (rebased to f93f12755), pushed.
+
+### Item 4 — NOT DONE
+Work order requires all three tests green before re-fitting. Current state:
+- test_t1_4th_down_go_rate: FAIL (delta 0.014, was 0.012 — game-state distribution)
+- test_penalties_per_side: PASS (was FAIL)
+- test_t3_tied_drives: FAIL (0.149, was 0.111 — hurry-up clock missing)
+- test_first_downs_by_penalty: NEW FAIL (0.302 — shared-path from D89)
+
+Re-fit, re-stamp, K4 re-run cannot proceed. The gate preventing these is the work
+order's own sequencing rule, which is correct.
+
+### NOT DONE
+- Re-fit (run_fit.py) — blocked by non-green suite
+- Re-stamp (save_calibration) — blocked by re-fit
+- Board re-ranking — blocked by stamp mismatch
+- K4 re-run — blocked by re-fit
+- Hurry-up clock mechanism for tied Q4 drives approaching FG range
+
+### UNVERIFIED
+- Whether the D88 regularisation's non-trailing scope is the best possible compromise
+  (the go rate test might pass with a different k or anchor level)
+- Whether D89's FD-by-penalty red is exactly at the boundary or will drift with
+  different random samples (diff 0.302 vs spec 0.300)
+- Whether D90's FG-setup clock fix (bug 1) has any effect on other test metrics
+
 ## 2026-09-19T15:23Z  claude-code (Phase 5F — three items: D84, D85, D86)
 
 ### D84 — Props cron not firing
