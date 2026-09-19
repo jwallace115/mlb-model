@@ -29,13 +29,13 @@ TICKET_LOG = ROOT / "ncaaf" / "logs" / "ncaaf_board_tickets_2026.json"
 def _call_ai_layer(game_board_rows, news_articles, home, away):
     """Call Anthropic for one game. Returns (flags, rationale, veto, veto_reason)."""
     if not ANTHROPIC_KEY:
-        return [], "AI layer skipped — no ANTHROPIC_API_KEY", False, None
+        raise RuntimeError("HALT: ANTHROPIC_API_KEY not set — AI layer cannot run")
 
     try:
         import anthropic
         client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
     except ImportError:
-        return [], "anthropic package not installed", False, None
+        raise RuntimeError("HALT: anthropic package not installed")
 
     # Build prompt
     board_text = "\n".join(
@@ -73,7 +73,7 @@ Respond in JSON: {{"flags": [...], "rationale": "...", "veto": false, "veto_reas
 
     try:
         msg = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-haiku-4-5-20251001",  # N13: verified 2026-09-19
             max_tokens=500,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -99,7 +99,7 @@ Respond in JSON: {{"flags": [...], "rationale": "...", "veto": false, "veto_reas
         return flags, rationale, veto, veto_reason
 
     except Exception as e:
-        return [], f"AI error: {str(e)[:100]}", False, None
+        raise RuntimeError(f"HALT: AI layer failed for {away} @ {home}: {str(e)[:200]}")
 
 
 def build_tickets(board_df, news_articles, build_time):

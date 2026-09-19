@@ -198,3 +198,15 @@ Guard 2: if all graded CLVs in a run are identically 0.0, the grader halts
 with a RuntimeError. Twelve legs at exactly 0.000 is a symptom, not data.
 
 Test: test_grader_5d4.py — future-kickoff ticket must not be graded.
+
+### N13 — AI layer: verified model id, fail-closed, guard tested (2026-09-19)
+Model: claude-haiku-4-5-20251001. Verified 2026-09-19 — the only model the
+key can reach. claude-sonnet-4-20250514, claude-3-5-sonnet-20241022, and
+claude-sonnet-4-6-20250929 all return 404 not_found.
+
+Fail-closed: an API error now raises RuntimeError, not writes to ai_rationale.
+Missing ANTHROPIC_API_KEY also raises.
+
+No-pricing-number guard: tested with a canned response containing
+fair_spread=-21.5 and projected_total=52.0. Both discarded. Guard
+exercised and proven to work — no longer untested.
