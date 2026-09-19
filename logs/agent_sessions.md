@@ -1993,3 +1993,24 @@
       0.24190 -> 0.24560) while receptions and QB rush attempts improve. Needs family-level
       prospective evidence before any sim price is trusted.
   (e) FULL SUITE NOT RE-RUN at this state (~15 min). Only the two affected files were run.
+
+## 2026-09-19T12:27Z  cowork (full suite after D78-D81; I WAS WRONG about test_starting_qb_identity_2026)
+- FULL SUITE at this state: 3 failed, 171 passed of 174 collected, 912.43s. Previously 4 failed
+  / 157 passed of 161. ZERO regressions from D78/D79/D81 — the three remaining reds carry the
+  same values as the cca3e933d baseline (go-rate 0.210 vs 0.198; penalties 6.20 vs 5.51;
+  tied-drives 0.111 vs <=0.050).
+- CORRECTION, and it matters: test_starting_qb_identity_2026 NOW PASSES. I stated twice — to
+  Jeff, in the handoff, and in CLAUDE.md — that it was STRUCTURALLY incapable of going green
+  because the usage carry-forward invents week max_w+1. That was wrong. It went green as soon as
+  the depth-chart feed was refreshed: 2026 wk1/wk2/wk3 now each show 32/32 teams with a starting
+  QB flagged, including the carry-forward week.
+- WHAT IT WAS ACTUALLY DOING: correctly reporting that the depth data was STALE. It had been
+  logged as a known red ("wk3 unplayed") for three cycles while the depth feed sat dead from
+  2026-09-14 — 4.5 days into a live game week. The test was the canary and everyone annotated it
+  instead of reading it. I did the same, then escalated the annotation into a false structural
+  claim.
+- LESSON, corrected in CLAUDE.md: a standing red is an untested hypothesis, not a fact about the
+  suite. A red that keeps getting relabelled "known" across cycles is how a real signal dies.
+  Do not write "structurally impossible" without demonstrating it.
+- Remaining 3 reds are the genuine engine calibration drifts (4th-down go rate, penalties/side,
+  tied-drives-reaching-range). Unchanged for many cycles, values stable, and now the ONLY reds.

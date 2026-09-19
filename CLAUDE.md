@@ -194,11 +194,21 @@ pytest exits non-zero if anything genuinely fails. An exit 0 reported alongside
 red tests means a wrapper swallowed it, not that the reds are expected. Say which.
 
 **Known reds.** Before calling a red "pre-existing", check it fails at the parent
-commit with the same value. And check it CAN go green — `test_starting_qb_identity_2026`
-was carried as a known red for three cycles before anyone noticed the usage
-carry-forward invents a week `max_w+1` that no starter is ever assigned to, so it
-fails every week of the season forever. A permanently-red test trains people to
-ignore reds.
+commit with the same value — and then investigate it anyway. A red that keeps being
+relabelled "known" across cycles is how a real signal dies.
+
+`test_starting_qb_identity_2026` is the cautionary case, and it cuts the opposite
+way from what it looked like. It was logged as a known red — "wk3 unplayed" — for
+three cycles, and Cowork went further and claimed it was STRUCTURALLY incapable of
+passing because the usage carry-forward invents a week `max_w+1`. Both were wrong.
+It went green the moment the depth-chart feed was refreshed on 2026-09-19: all three
+2026 weeks then had 32/32 teams with a starting QB flagged. The test had been
+correctly reporting that the depth data was stale, and everyone — including the
+verifier — annotated it instead of reading it. The feed had been dead for 4.5 days
+in a live game week.
+
+So: a standing red is a hypothesis you have not tested, not a fact about the suite.
+Do not write "structurally impossible" without demonstrating it.
 
 **Measure, do not assume.** Constants about the world get derived from the data in
 this repo and the derivation stated. `start_yl100` sat at a hardcoded `75.0` with
