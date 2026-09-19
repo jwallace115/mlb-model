@@ -1801,3 +1801,61 @@
 - OBSERVATION for later: the D72 gate hashes the WHOLE usage file, including 2026 rows, but the
   calibration maps are fitted on 2021-24 only. A 2026-only data refresh therefore fires a gate
   about a fit it cannot affect. Over-strict, not wrong; worth narrowing when convenient.
+
+## 2026-09-19T02:30Z  cowork (usage rebuilt on the refreshed inputs — material Week 3 role changes)
+- CORRECTION to the previous entry: usage.py DOES contain a pull (load_roster_data, ~93-110),
+  but it fires ONLY when the three files are absent — `if r_path.exists() and d_path.exists()
+  and i_path.exists(): read else: pull+write`. Once they exist it reads from disk forever and
+  never checks their age. So it is a bootstrap that can never refresh, which is worse than no
+  puller because it looks like ownership. pull_nflverse_inputs.py remains the right fix; the
+  earlier "no committed puller existed" was imprecise.
+- RAN: python3 nfl/sim/usage.py — 7.8s, exit 0, "Usage build complete".
+- NULL CONTROL PASSED: 2021-2024 target_share is bit-identical old vs new, row counts unchanged
+  (9123/9139/9014/8997). The refresh touched 2026 only, as it must — historical depth and PBP
+  were preserved byte-for-byte.
+- D72 GATE FIRED, exactly as predicted and on exactly the right field:
+  `usage_sha: cal=12c89a3528c567d5, disk=3bf5fe1f915bdba8`. engine_fingerprint still MATCHES —
+  only the usage hash moved. Correct behaviour; harmless while the board is not pricing live.
+- WHAT THE REFRESH ACTUALLY BOUGHT, 2026 wk3 (this is the point of the exercise):
+    Aaron Jones       MIN RB  carry share 0.417 -> 0.722   (+30.5pp)
+    Javonte Williams  DAL RB  carry share 0.633 -> 0.729   (+9.6pp)
+    Demond Claiborne  MIN RB  carry share 0.129 -> 0.223   (+9.4pp)
+    Quinshon Judkins  CLE RB  carry share 0.649 -> 0.582   (-6.7pp)
+    DeMario Douglas    NE WR  target share 0.144 -> 0.187  (+4.3pp)
+  12 role shifts >4pp in total. 21 players dropped from wk3 (cut/inactive since 09-14, incl.
+  Dylan Sampson CLE RB, Israel Abanikanda DAL RB, Nick Mullens JAX QB); 4 added (Jaleel
+  McLaughlin CLE RB, Ben VanSumeren KC RB, Gary Jennings LAC WR, Brayden Willis SF TE).
+  The stale table priced Aaron Jones as a committee back. Any rush-attempt leg built on the
+  09-14 table for Week 3 was using a materially wrong role.
+- MINOR, unresolved: one row in the 2026 wk3 comparison has null player_name/team/position on
+  both sides. A null-team row in player_usage_weekly. Not chased; flagging it.
+
+## 2026-09-19T02:34Z  claude-code (NCAAF board work order #7 — N19-N21, AI picks sides)
+- REWRITTEN: ncaaf/pipeline/build_ncaaf_tickets.py — N19: favourite/underdog
+  derived in CODE from spread sign. AI told in words ("X is favoured by N").
+  Invariants: no both-sides (raises), every leg on board (raises).
+  N20: AI picks at most one side per market with abstain option.
+  N17 guard unchanged, returns discarded dict (5th value).
+- UPDATED: ncaaf/pipeline/tests/test_ai_guard_5d4.py — updated for new
+  _call_ai_layer signature (takes matchup dict). 3/3 pass.
+- CREATED: ncaaf/pipeline/tests/test_ticket_invariants_5d7.py — 4 tests:
+  both_sides_raises, single_side_passes, not_on_board_raises, favourite_derivation.
+  RED shown: old code allowed both sides. GREEN: invariant catches it.
+- UPDATED: NCAAF_BOARD_SPEC_v1.md — Layer 3 is "AI selection" (unvalidated,
+  no backtest, CLV the only grade).
+- RAN: 10-game dry run.
+  RETURNED: 3 tickets, 7 abstains (70% rate). Georgia -24.5+U54.5,
+    Colorado +3.5+O48.0, JMU +1.5+O46.5.
+  MEANS: the picker declines on mismatches and insufficient data (Maine 38.5pt,
+    Ball State, ETAMU, NDSU 27pt). The abstain path is genuinely available.
+  SPOT-CHECK: Colorado@NW fav=Northwestern (-3.5) CORRECT.
+    Nebraska@MSU fav=Nebraska (-5.5) CORRECT. Fix works.
+  0 both-sides, 0 off-board, 0 pricing discards. All ref_only, all ungraded.
+  Ticket log: 5→8 (+3). Append-only guard passed.
+- COMMITTED: 031c632aa (N19), bcd3b52d3 (N20), 5e5c46090 (N21).
+- x-requests-remaining: 8976 (zero Odds API credits used).
+- NOT DONE: grading (games not yet played). Full-slate build (only 10 of 89).
+  Nebraska@MSU ticket not built (game is Sep 26, a week out).
+- UNVERIFIED: the 70% abstain rate is a first-run observation, not validated.
+  A rate this high on a full slate needs monitoring — it could indicate the
+  AI is too conservative, or that the news layer provides insufficient signal.
