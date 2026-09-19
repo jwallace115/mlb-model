@@ -1896,3 +1896,62 @@
   ablation — one layer is absent, and the log would have a hole that gets explained away later.
   Recommend: Week 2 stays hand tickets; log MOVED-AGAINST explicitly as unavailable rather than
   silently null; start the scored ablation at Week 3 once open/close capture is verified firing.
+
+## 2026-09-19T11:05Z  cowork (ChatGPT audit #3 adjudication — three of my "verified" claims were wrong)
+- ALL THREE of the audit's CONFIRMED defects independently re-verified here. The audit is right.
+- (1) THE GATE IS DECORATIVE. run_week.py:388 `if not sim_pricing_enabled:` appends the text
+  "**SIM PRICES SUPPRESSED**" to the markdown board AND NOTHING ELSE. rankable is defined at
+  :579 as `has_book and converged` — it never consults the stamp. The cross-game top-20 at :700
+  filters on rankable. So a red stamp emits priced, calibrated, ranked legs exactly as a green
+  one does. A gate that announces protection while providing none is worse than no gate.
+- (2) D70's PRICER WIRING DOES NOT EXIST. run_week.py:28 imports price_game and
+  sgp_probability_raked; `grep -n "price_game(\|sgp_probability_raked("` returns NOTHING. The
+  board still computes its own marginals. This is the SAME defect ChatGPT audit #2 found
+  ("the raked function's only callers are tests") — D70 claimed to fix it and only added an
+  import line.
+- (3) D65's IPF STOPS AFTER ONE SWEEP. pricer.py: `err` is computed immediately after leg j is
+  set exactly, inside the per-leg loop, so err_j is ~0 by construction and max_err never sees
+  the damage later legs do to earlier ones. The loop breaks on the first pass every time.
+  Audit's fixture: requested 60%/70%, final marginals 68.18%/70%, returned joint 60%, correct
+  54.57%. The update ARITHMETIC I verified is right; the convergence CHECK placement is wrong.
+- HOW I MISSED ALL THREE — one pattern, worth naming: I verified that code was PRESENT, not that
+  it was REACHABLE or EFFECTIVE. (1) I confirmed _check_calibration_stamp() returns ok=False and
+  never checked what consumed the value. (2) I read the diff, saw the import added, and wrote
+  "pricer + raked SGP wired into the board" without grepping for a call site. (3) I read the IPF
+  update line and never read the loop structure around it. ChatGPT ran the board and instrumented
+  it. For any claim of the form "X is now wired / enforced / suppressed", a diff is not evidence
+  — an execution trace is.
+- D77 PARTIALLY UPHELD: the audit independently confirmed the 36,273 / 57,261 bit-identical
+  historical rows, that all 21 maps regenerate exactly from fit_5d2, and that it found no path
+  from 2026-only usage into the historical map build. It then showed the fingerprint OMITS the
+  active-universe and team-ratings artifacts (removing Kelce from a historical lineup, and
+  altering historical KC passing EPA, both left the gate green), and that save_calibration
+  stamps the CURRENT environment rather than the one that produced the checkpoints — so a
+  watched input can be changed, go red, and be re-stamped green without fitting anything. My
+  own re-stamp was legitimate on the evidence, but the mechanism permits an illegitimate one.
+- CALIBRATION TRANSFER IS NO LONGER JUST AN ASSUMPTION — it is tested and MIXED. Audit fit maps
+  on 2021-23 and applied to 2024: totals got WORSE (Brier 0.24190 -> 0.24560; calibration moved
+  mean prediction 47.85% -> 45.32% against an observed 53.24%; bootstrap 95% CI on the loss
+  increase +0.00115 to +0.00637), while WR receptions and QB rush attempts improved. Not clean
+  whole-system OOS (the engine was developed using 2024 and shipped maps include it), but it
+  demonstrates transfer can hurt one family while helping another.
+- MOVEMENT LAYER IS BROKEN BEYOND CAPTURE: missing movement is recorded as False rather than
+  null (:581), and the comparison still mixes opening RAW implied against current NO-VIG (:502).
+  Fixing the cron alone will not fix this layer.
+- SUNDAY: unchanged. Hand tickets. The sim does not price. It never was pricing; what changed is
+  that we now know the gate meant to enforce that was decorative.
+
+## 2026-09-19T11:11Z  claude-code (WO8 — NCAAF card assembler)
+- RAN: ncaaf/pipeline/pull_ncaaf_news.py -> 3,820 fresh ESPN articles (191 teams, 100% match)
+- RAN: python3 -m ncaaf.pipeline.build_ncaaf_tickets -> 19 tickets, 70 abstains (78.7%), ANTHROPIC fp=b4f4d3a6
+- CREATED: ncaaf/pipeline/build_ncaaf_cards.py (N22 card assembler)
+- RAN: python3 -m ncaaf.pipeline.build_ncaaf_cards -> Card A (5 legs, 24.2% hold), Card B (19 legs, 68.1% hold)
+- DROPPED: 2 WO7 tickets with both-sides-of-spreads bug (BC Eagles, Michigan State)
+- WROTE: ncaaf/data/board/week=2026_03/cards.md, ncaaf/logs/ncaaf_board_tickets_2026.json (27->29)
+- WROTE: research/ncaaf_board/NCAAF_BOARD_DECISION_v1.md (N22, N23)
+- COMMITTED+PUSHED: 526b7d365 -> origin/main
+- ZERO Odds API credits consumed
+- NOT DONE: grading — deferred to Sunday 13:00Z scheduled task
+- NOT DONE: CLAUDE.md diff audit changes (committed by another process, not touched)
+- UNVERIFIED: whether WO7's both-sides tickets (events 08a2eb7a, 023386f1) had downstream effects beyond the ticket log
+- UNVERIFIED: ESPN news article dedup across the 3 news files now on disk (7,340 total articles, likely many duplicates)
