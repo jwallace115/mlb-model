@@ -1067,13 +1067,23 @@ derived from data.
 → 0.1994. n>=20 cells: unchanged (0.1853). Table weighted rate at actual PBP
 frequencies: 0.1994 → 0.1962 (still within +0.18pp of target).
 
-**Execution trace:** `test_engine_5a3.py::test_t1_4th_down_go_rate` PASSED
-(was FAILED with delta 0.012 > 0.010). All 6 tests in the module pass (66s).
+**D88 AMENDED.** The initial version (all cells → L5, k=1.34) passed the go rate
+test but broke two other tests: `test_t1_late_trailing_offence_goes_and_tied_offence_kicks`
+(trail cell p_go dropped from 0.90 to 0.17) and `test_t4_trailing_offence_does_not_punt_late`
+(punt rate rose from ~5% to 16%). Root cause: L5 (score-free) pulls trailing/Q4 cells
+toward the low overall go rate, eliminating the urgency signal.
 
-**Board gate:** engine_fingerprint changed from `d929ad258504b275` to
-`38e1d5bcd03e7781`. `_check_calibration_stamp()` returns False with mismatch
-`engine_fingerprint: cal=d929ad258504b275, live=38e1d5bcd03e7781`.
-`sim_pricing_enabled = False`. Board refuses to rank. Gate is functional.
+Amended to apply regularisation only to NON-TRAILING cells (score_b not starting with
+"trail"). Trailing cells keep their L0 estimate unchanged. k_reg remains 1.34 (method
+of moments on all thin cells; non-trailing cells alone give k~12 which is too aggressive).
+
+**Consequence: the go rate test reverts to FAIL** (delta 0.014 > 0.010). The excess
+comes from the sim visiting cells at different frequencies than reality — a game-state
+distribution problem that the table regularisation cannot fix without also breaking
+trailing-team behaviour. The table's weighted rate at actual frequencies is 0.202
+(vs 0.198 target, +0.4pp). The remaining +1.0pp is from game-state frequency.
+
+**Board gate:** engine_fingerprint mismatch confirmed. Board refuses to rank.
 
 ### D89 — Penalty rate denominator fix (2026-09-19)
 
