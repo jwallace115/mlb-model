@@ -1113,3 +1113,50 @@ The test was passing before only because the wrong penalty rate masked a missing
 mechanism (scrimmage-play penalty first downs). The correct fix is to add
 scrimmage-play penalty FDs to the engine, which is a separate item. The diff (0.302)
 is at the spec boundary (0.300) — this is flagged, not hidden.
+
+### D90 — Tied-drive expiry: instrumented, two bugs fixed, test still red (2026-09-19)
+
+**Instrumentation results.** Of ~290 tied Q4 drives reaching FG range (yardline ≤ 35),
+~43 (14.9%) expire without a kick. Target: 0/329 = 0.0%. Tolerance: ≤ 5%.
+
+The expired drives fall into two categories:
+**(a) Zero-play drives (12/43):** drives starting with clock ≤ 6s. The previous drive
+ended and a new drive started with essentially no time. No play can happen. FG-setup
+state activates but the first snap's clock check sees clock ≤ 0.
+**(b) Multi-play drives (31/43):** drives starting at clock 50-162s, gaining yards across
+4-8 plays before the clock expires. Most start OUTSIDE the 35 (start_yardline = 54-88)
+and reach it during the drive. FG-setup only activates at yardline ≤ 35, so these
+drives consume clock under GENERAL Q4 clock management (~25-35s/play) before reaching
+the FG-setup activation threshold.
+
+**Bug 1 fixed: FG-setup clock advance for buckets > 40s.** The `_eoh_runoff` handler
+only used FG-setup clock cells for the 0-20 and 21-40 second buckets. For buckets 41+
+(which covers 91% of the FG-setup activation window), the clock advance fell through
+without a `continue`, and the general play-clock table was used instead. The FG-setup
+clock data for all 6 second buckets EXISTS in `clock_runoff.parquet` (19 rows) and IS
+loaded into `clock_q` (verified: 19 keys with `cp="fgs"`). Fixed: the engine now uses
+FG-setup clock cells for ALL buckets, using the "elapsed" approach for 41+ seconds
+(same as the kneel handler at line ~1569).
+
+**Bug 2 fixed: FG-setup deactivation at clock < 5s.** When clock < 5s, FG-setup is
+deactivated so the EOH FG mechanism can fire and kick immediately. Without this,
+the FG-setup kneel sequence attempted one more play at clock = 3s, consuming the
+remaining time.
+
+**Effect on the test: NONE MEASURED.** The rate remained at ~14.9%. Bug 1 was
+confirmed dead code (FG-setup clock cells were computed but never used), and fixing
+it did not change the result because category (b) drives — the majority — consume
+their clock BEFORE reaching FG-setup state (they start outside the 35).
+
+**Root cause of category (b): no hurry-up clock management for tied Q4 drives
+approaching FG range.** In real football, a tied team starting at their own 30 with
+80 seconds left uses hurry-up offense (~15-20s per play, more passes, no-huddle) to
+reach FG range quickly. The sim uses the general Q4 clock table (~25-35s/play),
+consuming all the clock before the ball reaches the 35. This is a fundamental engine
+gap: the clock table has no "approaching FG range while tied" conditioning. A fix
+requires either (a) a new clock table state for "hurry-up toward FG range" or (b)
+extending the FG-setup activation threshold beyond yardline ≤ 35.
+
+**Test status: RED.** The two bug fixes are correct and committed (dead code activated,
+low-clock deactivation). The remaining 14.9% requires a hurry-up clock mechanism that
+is not in scope for this work order. Left red with this recorded explanation.
