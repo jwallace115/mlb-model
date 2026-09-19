@@ -853,3 +853,46 @@ Tests: the stamp carries the FIT's fingerprints and not the live ones (with an
 assertion that the fixture still discriminates); `fit_dir` is required; a fit
 without `fit_meta.json` raises; and re-stamping cannot launder an environment
 mismatch.
+
+### D84 — Props cron was not firing: entries installed after all scheduled slots (2026-09-19)
+
+**What was wrong.** The three `pull_hardrock_props.py` cron entries were installed
+at `2026-09-18T02:50:32 UTC` (Friday). Every scheduled slot before that date
+(Tue 10:00, Thu 22:00, Sun 15:00) predates the install — no firing opportunity
+existed. Syslog confirms zero CRON lines matching `pull_hardrock_props` across
+all rotated logs back to Sep 6. The four existing 2026-09 pulls
+(Sep 13 11:28, Sep 14 18:10, Sep 17 12:50, Sep 18 02:50) were manual runs; only
+the last carried a snapshot_tag (`mid`), the earlier three had `tag=None`.
+
+**Secondary issues found.**
+(a) Log path was relative (`logs/props_capture.log`), which works after `cd` but
+every other cron entry uses absolute paths — inconsistency risk. Fixed to
+`/root/mlb-model/logs/props_capture.log`.
+(b) Thursday close used `--window-hours 4` (original crontab), but the documented
+schedule specifies 12. At 4h only TNF games are captured; Sunday slate is missed.
+Fixed to `--window-hours 12` to match the documented schedule.
+
+**Fix.** Removed the three old entries, added three corrected ones with absolute
+log paths and correct `--window-hours`. Interpreter path was already absolute
+(`/root/mlb-model/venv/bin/python3`) — correct per CLAUDE.md cron trap.
+
+**Execution trace.** Scheduled a one-off test entry at `6 15 19 9 *` (dry-run);
+syslog shows `2026-09-19T15:06:01 CRON ... pull_hardrock_props.py ... --dry-run`;
+log file created with 16 events listed, key fingerprint `ac6e89a0`, balance 8,698.
+Then scheduled a real pull at `11 15 19 9 *`; syslog shows
+`2026-09-19T15:11:01 CRON ... pull_hardrock_props.py --window-hours 168 --tag open`;
+log shows 16 events pulled (150 credits used, remaining 8,548); archive at
+`data/odds_archive/nfl/props/season=2026/month=09/data_2026_09.parquet` grew from
+4,737 to 5,710 rows, with 973 new rows carrying `snapshot_tag='open'` and
+`pull_timestamp='2026-09-19T15:11:02'`. Both one-off entries removed after
+verification.
+
+**Final crontab (UTC):**
+```
+0 10 * * 2  --window-hours 168 --tag open    # Tue 6am ET
+0 22 * * 4  --window-hours 12  --tag close   # Thu 6pm ET
+0 15 * * 0  --window-hours 12  --tag close   # Sun 11am ET
+```
+
+**Key fingerprint:** `ac6e89a0` (matches paid account `.env` on VM).
+**Credits:** 8,548 remaining after this verification (threshold 3,000).
