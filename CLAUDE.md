@@ -215,6 +215,24 @@ by an uncommitted `run_fit.py`.
 committed code. K4 had no generator until D63; the calibration stamp had no writer
 until D72. Both were hand-run scripts whose outputs could not be reproduced.
 
+**A diff is not evidence that code runs.** For any claim of the form "X is now
+wired / enforced / suppressed / gated", the evidence is an execution trace, not a
+diff and not a return value. ChatGPT audit #3 (2026-09-19) found three defects that
+Cowork had marked verified, all from the same mistake — checking that code was
+PRESENT rather than REACHABLE:
+  * D70 "wired the pricer into the board" added only an `import` line;
+    `grep -n 'price_game('` returns no call site. Verification had read the diff.
+  * The D72 metadata gate's "suppression" appends the text "SIM PRICES SUPPRESSED"
+    to the markdown and nothing else; `rankable` never consults the stamp, so a red
+    gate ships priced legs. Verification had confirmed the function's return value
+    and never checked what consumed it.
+  * D65's exact-IPF update is correct, but the convergence check sits INSIDE the
+    per-leg loop, measuring each leg's error right after setting it exactly — so it
+    always breaks on the first sweep. Verification had read the update arithmetic
+    and not the loop structure.
+So: grep for a call site, run the thing and instrument it, or assert on output — and
+a gate must be proven to change an outcome, not just to log one.
+
 **Pushing.** `git push` alone will usually be rejected: `push_daemon.sh` on the VM
 pushes every 30 min and the pipelines keep the tree dirty. Use
 `git pull --rebase --autostash && git push` (aliased as `git sync`).
