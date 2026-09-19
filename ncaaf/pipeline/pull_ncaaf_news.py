@@ -116,13 +116,16 @@ def main():
 
     bt = args.build_time or datetime.now(timezone.utc).isoformat()
 
-    # Get board teams from the latest tape
-    from ncaaf.pipeline.build_ncaaf_board import load_tape
-    tape = load_tape(args.season, build_time=bt)
-    if tape.empty:
-        print("No tape data"); sys.exit(0)
-    board_teams = sorted(set(tape["home_team"].unique()) | set(tape["away_team"].unique()))
-    print(f"Board teams: {len(board_teams)}")
+    # N14: read team list from the BOARD ARTIFACT, not the tape.
+    # Layers 1 and 2 must cover the same games by construction.
+    board_dir = ROOT / "ncaaf" / "data" / "board"
+    board_parquets = sorted(board_dir.rglob("ncaaf_board.parquet"))
+    if not board_parquets:
+        print("HALT: no board artifact found. Run build_ncaaf_board.py first.")
+        sys.exit(1)
+    board_df = pd.read_parquet(board_parquets[-1])
+    board_teams = sorted(set(board_df["home_team"].unique()) | set(board_df["away_team"].unique()))
+    print(f"Board teams (from artifact): {len(board_teams)}")
 
     # Build/load team map
     if TEAM_MAP_PATH.exists():

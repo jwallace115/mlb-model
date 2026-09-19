@@ -210,3 +210,12 @@ Missing ANTHROPIC_API_KEY also raises.
 No-pricing-number guard: tested with a canned response containing
 fair_spread=-21.5 and projected_total=52.0. Both discarded. Guard
 exercised and proven to work — no longer untested.
+
+### N14 — Board artifact as single source of truth for layer 2 (2026-09-19)
+pull_ncaaf_news.py now reads its team list from the board artifact
+(ncaaf/data/board/week=*/ncaaf_board.parquet), not from the latest tape
+snapshot. This is why N11 covered only 30 of 146 teams.
+
+Full run: 146 teams queried, 146 with news, 0 zero-article teams.
+2,920 articles. Board-news coverage: 146/146 = 100%.
+Runtime: ~146s (146 teams × 1s sleep).
