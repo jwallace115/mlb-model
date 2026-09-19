@@ -1300,3 +1300,34 @@ target the tied-drive test is still red. D86's go-rate and penalty targets repro
 measures, at tolerances inside the noise. Phase 5H (work order
 `research/nfl_sim/workorder_5H_2026-09-19.md`) measures the noise floor and the like-for-like
 state distributions before anyone touches the engine again.
+
+### D95 — Sim-side noise floor of the four test metrics (2026-09-19)
+
+`nfl/sim/run_metric_noise_5h.py`; data in `phase5h_metric_noise_rows.parquet`,
+report in `phase5h_metric_noise.md`. Mac, engine `d929ad258504b275`.
+
+**Replicate 0 reproduces pytest** to printed precision on all four metrics (go 0.21031,
+off_pen 6.197, fd_pen_pt 1.540, tied_expiry 0.111 = 35/315). Wall: go 57s, pen 86s,
+tied 14s; full run ~50 min (21 replicates).
+
+**Seed noise (11 salts, same games):**
+| Metric | SD | Signal / SD |
+|--------|-----|------------|
+| go_rate | 0.00052 | 23 |
+| off_pen | 0.018 | 38 |
+| fd_pen_pt | 0.0030 | 63 |
+| tied_expiry | 0.0098 | 6 |
+
+**Sample noise (10 game samples):**
+go_rate SD 0.00074 (sim barely moves); real go rate in those games SD 0.014 — 19x wider
+than the sim's sample sensitivity. off_pen SD 0.048, fd_pen_pt SD 0.011.
+
+**Predictions held / not held:**
+P1 (go seed SD < 0.002): held (0.00052). P1 (go sample SD 0.003-0.008): NOT held
+(0.00074, below range — sim go rate is nearly game-independent). P2 (tied SD 0.015-0.030):
+NOT held (0.0098, less noisy than predicted). P3 (off_pen seed SD < 0.05, +0.69 > 10 SD):
+held (SD 0.018, 38 SD). P4 (fd_pen_pt SD 0.005-0.03, 0.302 inside noise): NOT held
+(SD 0.003; the Mac's delta of 0.190 is 63 SD, not at the noise boundary).
+
+**Null control:** `engine_fingerprint()` = `d929ad258504b275` before and after.
+`git status --short` on engine files: empty. No engine files changed.
