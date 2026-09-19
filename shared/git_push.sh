@@ -23,7 +23,7 @@ else
 fi
 
 # Abort if git is in a conflicted state
-if [ -d .git ] && git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
+if [ -d .git ] && GIT_OPTIONAL_LOCKS=0 git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
     echo "ERROR: git merge conflict detected — skipping push"
     echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) CONFLICT — $MSG" >> "$ERR_LOG"
     exit 1

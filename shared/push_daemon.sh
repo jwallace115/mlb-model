@@ -12,7 +12,7 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 cd "$REPO" || exit 1
 
 # Abort if already in a conflicted state from a prior failed run
-if git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
+if GIT_OPTIONAL_LOCKS=0 git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
     git rebase --abort 2>/dev/null
     git merge --abort 2>/dev/null
     echo "$TIMESTAMP — cleaned up stale conflict state" >> "$LOG"
