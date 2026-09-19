@@ -169,3 +169,15 @@ All cells n >= 129. delta ranges +0.026 to +0.097.
 v1 preserved on disk. The table is a fitted object — Checks 1b, 2, 3 apply.
 Discovery (2022-24) and validation (2025) are pooled; cell values have no
 clean OOS estimate.
+
+### N11 — First end-to-end run (2026-09-18)
+build_ncaaf_board: 90 games covered, 96 dropped by pre-kick filter.
+pull_ncaaf_news: 30 teams pulled, 0 returned zero articles.
+build_ncaaf_tickets: 3 games tested, 3 tickets built.
+  REFERENCE_ONLY=True on all (N01).
+  AI no-pricing-number guard: 0 discards. Guard was never triggered
+  (model followed instructions) — untested, not proven.
+grade_ncaaf_tickets: first run changed 3 tickets, second run changed 0.
+  UPDATE-ONLY null control: PASS.
+
+Odds API credits: unchanged at 8976 (this order used zero Odds API credits).
