@@ -999,3 +999,42 @@ control that could not fail.
 
 Unchanged from D85 and correct: D60's traded-player assertions, and the plain
 statement that D61 is not directly tested.
+
+### D92 — CRPS pairwise term computed from the sorted sample, not an n x n matrix (2026-09-19)
+(Numbered D92 because D88–D91 are reserved by the Phase 5G work order.)
+
+`_crps_sample` built the explicit `|s_i - s_j|` matrix. At the n = 20,000 used by
+`test_crps_closed_form` that is ~6.4 GB at peak (two 3.2 GB float64 temporaries), and the test
+was OOM-killed (exit 137) on any host under ~8 GB — reproduced twice on the 3.9 GB Cowork
+bridge VM and once on a 7 GB cloud box. This is what took the bridge down during the 5F suite
+run. Production never hit it because the live/research N is 5,000 (~400 MB).
+
+Replaced with the sorted-sample identity
+`sum_{i,j} |s_i - s_j| = 2 * sum_i (2i - n - 1) * s_(i)`, i = 1..n — the same quantity
+(double-mean over all n^2 ordered pairs), O(n log n) time, O(n) memory. This is a
+vectorisation that leaves the result unchanged, not a speed-driven approximation: no N was
+reduced and nothing is subsampled.
+
+**Prediction written before running:** new and old agree to < 1e-10 on every case; the 20k
+closed-form test passes; `engine_fingerprint()` does not move (null control —
+`calibration.py` is not a fingerprint input).
+
+**Measured (bridge VM, Python 3.10):**
+- normal n=5,000: new 0.434319512337834 vs matrix 0.434319512337835 (diff -3.3e-16)
+- integer margins n=5,000 (the production shape, heavy ties): 6.015756839999998 both, diff 0
+- integer totals n=5,000: 3.670531080000000 both, diff 0
+- n=20,000 N(0,1), y=0.7: sample 0.421651 vs closed form 0.421569, diff 0.000082 (spec < 0.005)
+- `test_5c1.py`: 10 passed, peak RSS 0.84 GB (the peak is now the 5,000^2 reference matrix
+  inside the new test, not the implementation)
+- `engine_fingerprint()` d929ad258504b275 before and after. Prediction held on all three.
+
+New permanent test `test_5c1.py::test_crps_sorted_identity` keeps the old matrix
+implementation verbatim as the reference and asserts equality on continuous draws, integer
+margins/totals, all-equal, n=1, n=2 and unsorted input. Its null control is an off-by-one
+weight vector (`2i - n`), which differs from the truth by mean/n and must be detected — run
+on the totals case because a sample mean near zero would hide it.
+
+**Not done / unverified:** the full 188-test suite has not been re-run after this change;
+only `test_5c1.py` was. The only callers of `_crps_sample` are `score_k2` and the two tests.
+The locked 2025 K2 score was not recomputed; on integer inputs the new form is bit-identical
+in the cases measured, but that specific number was not re-derived.

@@ -94,12 +94,20 @@ def _crps_sample(samples, observed):
     """CRPS of a sample distribution vs a scalar observation.
 
     CRPS = E|S - y| - 0.5 * E|S_i - S_j|
-    The pairwise term np.mean(|S_i - S_j|) is already the double-mean
-    over all i,j pairs, so no additional /n.
+    E|S_i - S_j| is the double-mean over ALL n^2 ordered pairs (i == j
+    included), so no additional /n.
+
+    D92: the pairwise term is computed from the sorted sample,
+        sum_{i,j} |s_i - s_j| = 2 * sum_i (2i - n - 1) * s_(i),  i = 1..n
+    which is the same quantity as the explicit n x n matrix in O(n log n)
+    time and O(n) memory. The matrix form needed ~6.4 GB at n = 20,000.
+    Equivalence is asserted in test_5c1.py::test_crps_sorted_identity.
     """
-    s = np.sort(samples)
-    crps = np.mean(np.abs(s - observed)) - 0.5 * np.mean(np.abs(
-        s[:, None] - s[None, :]))
+    s = np.sort(np.asarray(samples, dtype=float))
+    n = s.size
+    w = 2.0 * np.arange(1, n + 1) - n - 1.0
+    pairwise_mean = 2.0 * np.dot(w, s) / (n * n)
+    crps = np.mean(np.abs(s - observed)) - 0.5 * pairwise_mean
     return crps
 
 

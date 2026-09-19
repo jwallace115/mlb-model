@@ -76,6 +76,47 @@ def test_crps_closed_form():
     )
 
 
+def _crps_pairwise_reference(samples, observed):
+    """The pre-D92 implementation, kept verbatim as the reference: explicit
+    n x n matrix. Only usable at small n (memory is 16 * n^2 bytes at peak)."""
+    s = np.sort(samples)
+    return np.mean(np.abs(s - observed)) - 0.5 * np.mean(np.abs(
+        s[:, None] - s[None, :]))
+
+
+def test_crps_sorted_identity():
+    """D92: the sorted-sample CRPS equals the explicit pairwise-matrix CRPS.
+
+    Cases cover what production feeds it (integer margins/totals with heavy
+    ties at N=5,000), continuous draws, unsorted input, and the n=1 / n=2 edges.
+    Null control: a deliberately wrong weight vector must NOT match.
+    """
+    from nfl.sim.calibration import _crps_sample
+
+    rng = np.random.default_rng(7)
+    cases = {
+        "normal_5000": (rng.standard_normal(5000), 0.7),
+        "int_margin_5000": (rng.integers(-35, 36, 5000).astype(float), 3.0),
+        "int_total_5000": (rng.poisson(45, 5000).astype(float), 51.0),
+        "all_equal": (np.full(500, 24.0), 17.0),
+        "n1": (np.array([3.0]), 1.0),
+        "n2": (np.array([10.0, -4.0]), 2.5),
+        "unsorted_desc": (np.sort(rng.standard_normal(3000))[::-1].copy(), -1.2),
+    }
+    for name, (x, y) in cases.items():
+        new = _crps_sample(x, y)
+        ref = _crps_pairwise_reference(x, y)
+        assert abs(new - ref) < 1e-10, f"{name}: new={new!r} ref={ref!r}"
+
+    # Null control: an off-by-one weight vector (2i - n instead of 2i - n - 1)
+    # is a different quantity and must be detected as such.
+    # (uses the totals case: the two differ by mean/n, so a mean near 0 would hide it)
+    x, y = cases["int_total_5000"]
+    s = np.sort(x); n = s.size
+    wrong = np.mean(np.abs(s - y)) - 0.5 * (2.0 * np.dot(2.0 * np.arange(1, n + 1) - n, s) / (n * n))
+    assert abs(wrong - _crps_pairwise_reference(x, y)) > 1e-6
+
+
 # ─── (c) TD label change count ──────────────────────────────────────────────
 
 def test_td_label_change_count():
