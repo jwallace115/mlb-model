@@ -1740,3 +1740,31 @@
   claude-haiku-4-5-20251001, not the originally intended sonnet model.
   Model constraint (only model the key reaches) is recorded in N13 but
   not in the spec.
+
+## 2026-09-19T01:19Z  cowork (verification after the conflict cleanup; root cause found)
+- VERIFIED my resolution survived: data/line_movement.csv row 289 (game 823727) is the COMPLETE
+  row (6.5,8.48,1.98,6.5,2026-04-07T17:01:17,0.0,1.61), not the half-written upstream one;
+  shared/last_updated.json carries the newer 21:22 timestamps and parses. Zero conflict markers
+  anywhere in the repo. The autostash is gone from the stash list (4 older WIP stashes remain,
+  oldest 2026-09-17).
+- df44e3eee removed 39 files, not the 25 its message claims: 25 with markers (5-line diffs) plus
+  14 healthy single-line cache files from the same date. Deleting the whole date is defensible;
+  the commit message just undercounts what it did.
+- ROOT CAUSE FOUND for both this incident and April's. shared/git_push.sh:26 and
+  shared/push_daemon.sh:15 both guard on `git status --porcelain | grep '^UU\|^AA\|^DD'` — an
+  INDEX-STATE check. Once a failed resolution leaves markers in a file git no longer considers
+  unmerged (rebase aborted, file staged, or the conflict came from a stash pop), the file reads
+  as ordinary `M` and both guards are blind to it. The `git add -A` two lines later commits it.
+  That is exactly tonight's line_movement.csv (status `M `, markers inside).
+- push_daemon.sh is worse: its cleanup runs `git rebase --abort; git merge --abort`, neither of
+  which does anything to a STASH-pop conflict, then logs "cleaned up stale conflict state"
+  without verifying, then proceeds to `git add -A`. It would have logged success while
+  committing markers.
+- git_push.sh:80 already lists the soccer daily cache as "high-frequency conflicts" in its
+  safe-file auto-resolve list, so this area was known to conflict constantly — and the
+  resolution path still leaked markers into a commit on 2026-04-11.
+- FIX (not yet applied): a CONTENT check after `git add -A` and before commit in both scripts,
+  matching `^<<<<<<< ` and `^>>>>>>> ` (7 chars plus a space — a bare `=======` false-positives
+  on CSV separators). Same lesson as D72: gate on what the thing is, not on a proxy that drifts.
+  Also: soccer/data/cache/daily/ is still NOT gitignored.
+  See research/ops/conflict_marker_commits_2026-09-18.md.

@@ -32,6 +32,27 @@ fi
 # Stage all signal files and output files
 git add -A
 
+# Refuse to commit conflict markers. The UU/AA/DD check above is an INDEX-STATE
+# check: once a failed resolution leaves markers in a file git no longer considers
+# unmerged (rebase aborted, file staged, or a stash-pop conflict), the file reads
+# as an ordinary M and that check is blind to it. This is a CONTENT check.
+# 2026-04-11 f9cc5b5f9 committed 25 unparseable soccer cache files this way.
+# Matches the 7-char marker plus a trailing space: a bare "=======" occurs
+# legitimately in data/line_movement.csv. -I skips binaries (parquet).
+MARKED=$(git diff --cached --name-only -z | while IFS= read -r -d '' f; do
+    if [ -f "$f" ] && grep -qIE '^(<<<<<<< |>>>>>>> )' "$f" 2>/dev/null; then
+        printf '%s\n' "$f"
+    fi
+done)
+if [ -n "$MARKED" ]; then
+    echo "ERROR: conflict markers in staged files — refusing to commit"
+    echo "$MARKED"
+    echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) MARKERS — $MSG" >> "$ERR_LOG"
+    echo "$MARKED" >> "$ERR_LOG"
+    git reset >/dev/null 2>&1
+    exit 1
+fi
+
 # Only commit if there are changes
 if git diff --cached --quiet; then
     echo "No changes to push"

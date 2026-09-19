@@ -224,5 +224,9 @@ pushes every 30 min and the pipelines keep the tree dirty. Use
 it.** The bridge VM has no delete permission, so every bare `git status` there
 leaves a 0-byte lock that blocks the Mac auto-committer until someone runs
 `rm -f .git/index.lock`. This killed the auto-committer for ~90 minutes on
-2026-09-18 and was misdiagnosed as a stale lock. From the bridge, always
-`GIT_OPTIONAL_LOCKS=0 git status` (verified to leave no lock).
+2026-09-18 and was misdiagnosed as a stale lock. From the bridge, prefix
+EVERY git command with `GIT_OPTIONAL_LOCKS=0` — not just `git status`. `git diff`,
+`git grep` and others refresh the index and take the same lock, and a command
+killed by the bridge's 180s timeout is the likeliest way to strand one (this
+happened twice on 2026-09-18, the second time from a timed-out `git diff --stat`).
+Prefer narrow, fast git commands from the bridge for the same reason.

@@ -15,11 +15,35 @@ cd "$REPO" || exit 1
 if GIT_OPTIONAL_LOCKS=0 git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
     git rebase --abort 2>/dev/null
     git merge --abort 2>/dev/null
+    if GIT_OPTIONAL_LOCKS=0 git status --porcelain | grep -q '^UU\|^AA\|^DD'; then
+        echo "$TIMESTAMP — STILL CONFLICTED after abort (stash-pop conflicts are not
+ cleared by rebase/merge --abort) — refusing to commit" >> "$LOG"
+        exit 1
+    fi
     echo "$TIMESTAMP — cleaned up stale conflict state" >> "$LOG"
 fi
 
 # Stage all changes
 git add -A
+
+# Refuse to commit conflict markers. The UU/AA/DD check above is an INDEX-STATE
+# check: once a failed resolution leaves markers in a file git no longer considers
+# unmerged (rebase aborted, file staged, or a stash-pop conflict), the file reads
+# as an ordinary M and that check is blind to it. This is a CONTENT check.
+# 2026-04-11 f9cc5b5f9 committed 25 unparseable soccer cache files this way.
+# Matches the 7-char marker plus a trailing space: a bare "=======" occurs
+# legitimately in data/line_movement.csv. -I skips binaries (parquet).
+MARKED=$(git diff --cached --name-only -z | while IFS= read -r -d '' f; do
+    if [ -f "$f" ] && grep -qIE '^(<<<<<<< |>>>>>>> )' "$f" 2>/dev/null; then
+        printf '%s\n' "$f"
+    fi
+done)
+if [ -n "$MARKED" ]; then
+    echo "$TIMESTAMP — REFUSED: conflict markers in staged files" >> "$LOG"
+    echo "$MARKED" >> "$LOG"
+    git reset >/dev/null 2>&1
+    exit 1
+fi
 
 # Nothing to push — exit cleanly
 if git diff --cached --quiet; then
