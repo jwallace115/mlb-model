@@ -1331,3 +1331,34 @@ held (SD 0.018, 38 SD). P4 (fd_pen_pt SD 0.005-0.03, 0.302 inside noise): NOT he
 
 **Null control:** `engine_fingerprint()` = `d929ad258504b275` before and after.
 `git status --short` on engine files: empty. No engine files changed.
+
+### D96 — Like-for-like decomposition: where the go-rate and tied-drive gaps come from (2026-09-19)
+
+Instrumented engine on `diag/5h` (`9b46510db`), 1,087 games x N=500. Byte-identity
+verified. Report: `phase5h_like_for_like.md`.
+
+**A: Go rate.** Real 0.198, sim 0.219, gap +0.021. Standardised decomposition:
+**state mix 69.8%** of the gap, within-cell 13.4%, interaction 16.8%. The sim visits
+short-yardage cells too often (+2.9pp at 1-2 ydstogo, +3.5pp at 3-5). The 3rd-down
+ydstogo distribution is shifted toward medium distances (-2.2pp at 1-2, +2.7pp at
+3-10), generating more 4th-and-short residuals. The P(4th-and-short | failed 3rd) is
+identical (0.205 both sides). The upstream cause is the 3rd-down ydstogo distribution.
+
+Prediction (mine and Cowork): state mix > 50%. **Held** (69.8%).
+
+**C: Tied-drive expiry.** 35/315 expired (11.1%). Split: (i) zero-play 31.4%,
+(ii) reached-on-final-play 62.9%, (iii) snap inside 35 5.7%. **(i)+(ii) = 94.3%.**
+Only 2 of 35 expired drives ever took a snap inside the 35. The sim's STRICT rate
+(snap at/inside 35) is 6/57 = 0.105 vs real 0/57. The dominant mechanism is drives
+starting outside the 35 consuming too much clock reaching it.
+
+Prediction (mine and Cowork): (i)+(ii) > 50%. **Held** (94.3%).
+
+**D: Two-minute drill.** Sim pass plays take 16.3s vs real 13.9s (+2.4s per pass).
+Rush plays match (24.4 vs 24.3). Over a 6-play drive, +14.4s of extra clock
+consumption. This is the single largest measured cause of tied-drive expiry: drives
+run out of time because each pass play takes 17% longer than reality.
+
+**Summary.** Go rate: state mix is the primary cause; the table is right, the engine
+generates the wrong 4th-down situations. Tied drives: the clock runs too slowly on
+pass plays in Q4 late; 94% of expired drives never took a snap inside the 35.
