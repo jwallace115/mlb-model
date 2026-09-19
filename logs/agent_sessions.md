@@ -2038,3 +2038,23 @@
 - NOTE: this is the third defect of the same family found in this project — D64 (CLV mixing
   raw and no-vig), D82 (movement mixing raw and no-vig). Any future comparison of two prices
   should state explicitly which scale each side is on.
+
+## 2026-09-19T13:16Z  cowork (D83 — the stamp can no longer be laundered)
+- run_fit.py now writes fit_meta.json at fit time (engine_fingerprint,
+  fit_inputs_fingerprint, fit_seasons, engine_commit, n_games). save_calibration REQUIRES
+  fit_dir and stamps FROM that file; a fit without it cannot be stamped from.
+- ATTACK REPRODUCED AND BLOCKED, end to end: perturbed kickoff.parquet -> gate red
+  (cal=d929ad258504b275, live=e93213a3319da); re-saved the unchanged maps -> STILL RED;
+  restored -> green, kickoff 2024 back to 70.0. Pre-D83 the re-save returned green.
+- fit_5d2 carries a BACKFILLED fit_meta.json — the only fit permitted to. Justified because
+  both fingerprints were VERIFIED unchanged between the fit commit 7f5a808c5 and now, not
+  assumed: git diff over engine.py/anchor.py/params_v1.json/tables/ is EMPTY, and
+  usage_fingerprint computed against the ratings files AS THEY WERE at 7f5a808c5 equals the
+  live 840412f7295a8323. Justification + verification recorded inside the file.
+- My own code had a brittleness the new tests caught: meta_path.relative_to(ROOT) raised when
+  the fit dir is outside the repo. Fixed rather than adjusting the test.
+- 53 pass across board + raking + clv + actuals. Real gate still green, now sourced from
+  nfl/data/sim/outputs/fit_5d2/fit_meta.json.
+- REMAINING from audit #3: calibration transfer (needs prospective family-level evidence);
+  props cron not firing (needs the VM); SGP board (D80); three engine calibration reds; and
+  the 5D-1 PIT test still does not exist.

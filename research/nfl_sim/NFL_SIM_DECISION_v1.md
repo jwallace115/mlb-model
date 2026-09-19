@@ -819,3 +819,37 @@ case and returns False, confirming the tests discriminate.
 **Consequence for the pre-registered design:** every `moved_against = False` already
 written to a layer log predates this fix and is uninterpretable — it may mean "not
 measured". Layer logs written before D82 should not be used to score this layer.
+
+### D83 — The stamp describes the fit run, not the moment of writing (2026-09-19)
+ChatGPT audit #3's sharpest finding: `save_calibration` computed the fingerprints
+live, so a watched input could be changed (reddening the gate) and the unchanged
+maps simply re-saved to get green again — without fitting anything. The audit
+demonstrated it. So did the D77 re-stamp in this project, which was legitimate on
+the evidence but used a mechanism that permits an illegitimate version.
+
+`run_fit.py` now writes `fit_meta.json` into the fit directory at fit time,
+recording `engine_fingerprint`, `fit_inputs_fingerprint`, `fit_seasons`,
+`engine_commit` and `n_games` for the environment that actually produced those
+checkpoints. `save_calibration` requires `fit_dir`, reads that file, and stamps
+from it. A fit with no `fit_meta.json` cannot be stamped from at all.
+
+The behavioural consequence, verified by reproducing the attack end to end:
+perturb `kickoff.parquet` (a watched engine input) → gate red
+(`cal=d929ad258504b275, live=e93213a3319da`); re-save the unchanged maps → **still
+red**, because the stamp carries the fit's fingerprint and re-saving cannot launder
+it; restore → green. Pre-D83, step two returned green.
+
+**`fit_5d2` carries a backfilled `fit_meta.json`**, and this is the only fit
+permitted to. It predates D83, so re-fitting was the alternative. The backfill is
+justified because both fingerprints were VERIFIED unchanged between the fit commit
+`7f5a808c5` and now, not assumed: `git diff 7f5a808c5..HEAD` over `engine.py`,
+`anchor.py`, `params_v1.json` and `nfl/data/sim/tables/` is empty, and
+`usage_fingerprint` computed against the ratings files as they were at that commit
+equals the live value `840412f7295a8323`. The justification and the verification are
+recorded inside the file itself under a `backfilled` key. Every fit from D83 onward
+writes its own at fit time.
+
+Tests: the stamp carries the FIT's fingerprints and not the live ones (with an
+assertion that the fixture still discriminates); `fit_dir` is required; a fit
+without `fit_meta.json` raises; and re-stamping cannot launder an environment
+mismatch.

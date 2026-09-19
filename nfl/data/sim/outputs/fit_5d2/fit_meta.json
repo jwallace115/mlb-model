@@ -1,0 +1,19 @@
+{
+  "engine_fingerprint": "d929ad258504b275",
+  "fit_inputs_fingerprint": "840412f7295a8323",
+  "fit_seasons": [
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "engine_commit": "7f5a808c5",
+  "fit_completed_utc": "2026-09-19T00:00:00Z",
+  "n_games": 1087,
+  "backfilled": {
+    "when_utc": "2026-09-19T12:55:00Z",
+    "why": "fit_5d2 predates D83, so run_fit.py did not write this file. Backfilled rather than re-fitting because both fingerprints were VERIFIED unchanged between the fit commit 7f5a808c5 and now.",
+    "verification": "git diff 7f5a808c5..HEAD over engine.py, anchor.py, params_v1.json and nfl/data/sim/tables/ is EMPTY. usage_fingerprint computed against the ratings files as they were at 7f5a808c5 equals the live value (840412f7295a8323). Both recomputed, not assumed.",
+    "note": "This is the only fit permitted to carry a backfilled meta. Every fit from D83 onward writes its own at fit time."
+  }
+}

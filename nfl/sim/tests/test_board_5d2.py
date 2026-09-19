@@ -433,3 +433,66 @@ def test_devig_side_matches_for_both_sides():
     o, _ = devig_side(R130, R100, "over")
     u, _ = devig_side(R130, R100, "under")
     assert abs(o + u - 1.0) < 1e-12, "de-vigged sides must sum to 1"
+
+
+# ── D83: the stamp describes the fit run, not the moment of writing ──
+
+def _fake_fit(tmp_path, monkeypatch, engine_fp="AAAA", inputs_fp="BBBB"):
+    import nfl.sim.calibration as cal
+    monkeypatch.setattr(cal, "OUT_DIR", tmp_path)
+    fd = tmp_path / "fit_test"; fd.mkdir()
+    (fd / "fit_meta.json").write_text(json.dumps({
+        "engine_fingerprint": engine_fp,
+        "fit_inputs_fingerprint": inputs_fp,
+        "fit_seasons": [2021, 2022, 2023, 2024],
+        "engine_commit": "abc1234",
+    }))
+    return "fit_test"
+
+
+def test_stamp_comes_from_the_fit_not_the_moment(tmp_path, monkeypatch):
+    """THE POINT OF D83. ChatGPT audit #3 changed a watched input, saw the gate go
+    red, then re-saved the unchanged maps and got green — without fitting anything.
+    The stamp must carry the FIT's fingerprints, so re-saving cannot launder it."""
+    import nfl.sim.calibration as cal
+    fd = _fake_fit(tmp_path, monkeypatch, engine_fp="FITENGINE", inputs_fp="FITINPUTS")
+    out = tmp_path / "cal.json"
+    cal.save_calibration({"fam": {"x": [0, 1], "y": [0, 1], "n": 2}},
+                         path=out, fit_dir=fd)
+    stamp = json.loads(out.read_text())
+    assert stamp["engine_fingerprint"] == "FITENGINE", "stamp sampled the live environment"
+    assert stamp["usage_file_sha256"] == "FITINPUTS", "stamp sampled the live environment"
+    assert cal.engine_fingerprint() != "FITENGINE", "fixture no longer discriminates"
+
+
+def test_save_calibration_requires_a_fit_dir(tmp_path, monkeypatch):
+    import nfl.sim.calibration as cal
+    monkeypatch.setattr(cal, "OUT_DIR", tmp_path)
+    with pytest.raises(ValueError, match="fit_dir"):
+        cal.save_calibration({}, path=tmp_path / "c.json")
+
+
+def test_save_calibration_refuses_a_fit_without_meta(tmp_path, monkeypatch):
+    """A fit that did not record its environment cannot be stamped from."""
+    import nfl.sim.calibration as cal
+    monkeypatch.setattr(cal, "OUT_DIR", tmp_path)
+    (tmp_path / "fit_nometa").mkdir()
+    with pytest.raises(FileNotFoundError, match="fit_meta.json"):
+        cal.save_calibration({}, path=tmp_path / "c.json", fit_dir="fit_nometa")
+
+
+def test_restamp_cannot_launder_an_environment_change(tmp_path, monkeypatch):
+    """Re-saving after the environment drifts must leave the gate red."""
+    import nfl.sim.calibration as cal
+    from nfl.sim.run_week import _check_calibration_stamp
+    fd = _fake_fit(tmp_path, monkeypatch, engine_fp="FITENGINE", inputs_fp="FITINPUTS")
+    out = tmp_path / "cal.json"
+    cal.save_calibration({"fam": {"x": [0, 1], "y": [0, 1], "n": 2}},
+                         path=out, fit_dir=fd)
+    ok, mismatches = _check_calibration_stamp(cal_path=out)
+    assert not ok, "a stamp from a different environment should not pass"
+    # and re-saving does not change that
+    cal.save_calibration({"fam": {"x": [0, 1], "y": [0, 1], "n": 2}},
+                         path=out, fit_dir=fd)
+    ok2, _ = _check_calibration_stamp(cal_path=out)
+    assert not ok2, "re-stamping laundered an environment mismatch"

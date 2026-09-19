@@ -1,5 +1,5 @@
 {
-  "engine_commit": "632f6e909",
+  "engine_commit": "7f5a808c5",
   "usage_file_sha256": "840412f7295a8323",
   "anchor": {
     "n_sims": 5000,
@@ -8592,5 +8592,6 @@
     2022,
     2023,
     2024
-  ]
+  ],
+  "fit_meta_source": "nfl/data/sim/outputs/fit_5d2/fit_meta.json"
 }

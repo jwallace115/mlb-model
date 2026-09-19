@@ -473,11 +473,33 @@ def save_calibration(cal_maps, path=None, fit_dir=None, fit_n_games=None,
     except Exception:
         sha = "unknown"
 
+    # D83: the stamp describes the FIT RUN, not the moment of writing.
+    # Previously these were computed live, so a watched input could be changed
+    # (reddening the gate) and the unchanged maps simply re-saved to get green
+    # again without fitting anything. ChatGPT audit #3 demonstrated exactly that.
+    # Now they are read from fit_meta.json, written by run_fit.py at fit time.
+    if fit_dir is None:
+        raise ValueError("save_calibration requires fit_dir — the stamp must "
+                         "describe the fit run that produced these maps")
+    meta_path = OUT_DIR / fit_dir / "fit_meta.json"
+    if not meta_path.exists():
+        raise FileNotFoundError(
+            f"{meta_path} not found. The stamp must come from the fit run, not "
+            f"from the current environment. Re-run run_fit.py (which writes it), "
+            f"or backfill it deliberately after verifying the fit-time inputs are "
+            f"unchanged — and record that verification.")
+    with open(meta_path) as f:
+        fit_meta = json.load(f)
+
     out = dict(existing)
-    out["engine_fingerprint"] = engine_fingerprint()
-    out["fit_seasons"] = list(FIT_SEASONS_DEFAULT)
-    out["usage_file_sha256"] = usage_fingerprint(out["fit_seasons"])
-    out["engine_commit"] = sha          # informational only — NOT gated on
+    out["engine_fingerprint"] = fit_meta["engine_fingerprint"]
+    out["fit_seasons"] = list(fit_meta.get("fit_seasons", FIT_SEASONS_DEFAULT))
+    out["usage_file_sha256"] = fit_meta["fit_inputs_fingerprint"]
+    out["engine_commit"] = fit_meta.get("engine_commit", sha)  # informational only
+    try:
+        out["fit_meta_source"] = str(meta_path.relative_to(ROOT))
+    except ValueError:                      # fit dir outside the repo (tests)
+        out["fit_meta_source"] = str(meta_path)
     out["fit_date"] = datetime.date.today().isoformat()
     if fit_dir is not None:
         out["fit_dir"] = fit_dir

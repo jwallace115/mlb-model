@@ -11,6 +11,7 @@ Worker count is MEASURED from peak RSS and available memory.
 """
 
 import argparse, gc, json, os, subprocess, sys, time
+from datetime import datetime, timezone
 from multiprocessing import Pool
 from pathlib import Path
 
@@ -228,6 +229,24 @@ def main():
     census = pd.DataFrame(census_rows)
     census.to_parquet(OUT_DIR / "fit_census.parquet", index=False)
     print(f"Census written: {OUT_DIR / 'fit_census.parquet'}")
+
+    # D83: record the environment that produced THESE checkpoints, at fit time.
+    # save_calibration reads this instead of sampling the present, so a stamp can
+    # no longer be refreshed to green without actually re-fitting.
+    from nfl.sim.calibration import engine_fingerprint, usage_fingerprint, FIT_SEASONS_DEFAULT
+    fit_meta = {
+        "engine_fingerprint": engine_fingerprint(),
+        "fit_inputs_fingerprint": usage_fingerprint(FIT_SEASONS_DEFAULT),
+        "fit_seasons": list(FIT_SEASONS_DEFAULT),
+        "engine_commit": engine_commit,
+        "fit_completed_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "n_games": int(len(census)),
+    }
+    with open(OUT_DIR / "fit_meta.json", "w") as f:
+        json.dump(fit_meta, f, indent=2)
+    print(f"Fit meta written: {OUT_DIR / 'fit_meta.json'} "
+          f"(engine={fit_meta['engine_fingerprint']}, "
+          f"inputs={fit_meta['fit_inputs_fingerprint']})")
 
     # Print convergence by season
     for s in sorted(census["season"].unique()):
