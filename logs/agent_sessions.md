@@ -2138,3 +2138,21 @@
   own commits landed 15:12-15:24 and it was 15:25 when checked. Re-check after ~15:45 UTC. If
   the rows are still absent then, the D84 evidence claim does not hold.
 - D61 correctly reported as not directly tested. Good.
+
+## 2026-09-19T15:35Z  cowork (D84 CONFIRMED; caveat on what Week 2's "open" actually means)
+- D84 VERIFIED from the artifact, not the report. After push_daemon's cycle delivered the VM's
+  commits, the archive shows pull_timestamp 2026-09-19T15:11:02.979726+00:00 with
+  snapshot_tag=open, 973 rows, 15 games, 10 markets. Exactly as claimed. Total month=09 rows
+  4,737 -> 5,710. The earlier absence was the 30-min push cycle, which is why it was reported
+  as "not yet verifiable" rather than false.
+- CAVEAT that matters for the pre-registered design: that capture is 26 HOURS before the Week 2
+  slate (first kickoff 2026-09-20 17:00Z). It is tagged 'open' and it IS the earliest available
+  reference, but it is NOT an opening line — the cron's open slot runs Tuesday on a 168h window,
+  i.e. ~5 days out. So for Week 2, MOVED-AGAINST will now COMPUTE, but against a 26h reference.
+  The 'open' column would therefore mean something different in Week 2 than in Week 3+.
+- RECOMMENDATION UNCHANGED: start the scored ablation at Week 3, where a genuine Tuesday open
+  should exist. Treat Week 2's 'open' as "earliest available", and if any Week 2 layer log is
+  kept, record that distinction in it rather than letting the column look uniform.
+- STILL UNVERIFIED: that the repaired crontab actually fires on schedule. The proof is a row
+  landing from the Tuesday 10:00 UTC slot without anyone triggering it. That is a future
+  observation; the one-off proved invocation works, not that the schedule does.
