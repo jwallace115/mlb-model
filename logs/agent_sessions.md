@@ -1,3 +1,26 @@
+## 2026-09-20T00:43Z  cowork (Phase 5H verification — D98; 5I work order written)
+
+### RETURNED
+- main engine files diff empty vs 3cfccad54; Mac fingerprint d929ad258504b275, stamp (True, []); nfl/sim/tests diff empty.
+- D95 tables rebuild exactly from the rows parquet. D96 gap +0.02051 and within-cell +0.00274 reproduce; state mix 84.9% (D96: 69.8%).
+- Go rate on the 5A-3 sample: decision log 0.21385 vs counters 0.21031 (ev_fg_att includes ev_fg_non4th).
+- Sim minus real go rate in the same games, 10 samples: +0.0147 (SE >= 0.0043). Tied expiry pooled 401/3428 = 0.117 vs real 2/64, p = 0.016.
+- Real offensive no-play penalties: ytg +6.75 on 99.8% of 5,911 replayed downs; engine never changes dist.
+- Scratch fix (cloud only): like-for-like go rate 0.21385 -> 0.19823; ydstogo shares match real; 4th downs/game 15.5 -> 16.5 (real 14.3).
+- Seconds per play Q4 121-300 s tied/trail1-8: pass real 16.85 vs sim 25.41; run 28.12 vs 33.64. Clock table has no period between 300 s and 120 s.
+
+### MEANS
+- 5H followed its rules; its uncommitted analysis code and id-less late log are the gaps.
+- Cowork's D94 claim that the go-rate red was indistinguishable from its target is WRONG; withdrawn in D98.
+- Two engine causes are now measured, not hypothesised: penalty distance, and the missing Q4 5:00-2:00 clock period.
+
+### NOT DONE
+- Nothing landed in the engine. Scratch fix is one seed, one sample, Linux, uncommitted.
+- D96 section C not reproducible; pass-share discrepancy unresolved.
+
+### UNVERIFIED
+- Whether the distance fix holds on the Mac and what it does to K1 (5I item 1).
+
 ## 2026-09-20T00:16Z  claude-code (Phase 5H — diagnostics only: D95, D96, D97)
 
 ### Baseline

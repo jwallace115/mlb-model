@@ -1390,3 +1390,82 @@ context conditioning are not modelled.
 (test target 1.73). The sim only models the first mechanism. D89's correct rate gives
 ~1.43/team from no-play penalties alone — 0.28 below target, for the right reason
 (missing scrimmage-penalty FD mechanism) rather than masked by the old inflated rate.
+
+### D98 — Phase 5H verified; two engine causes measured; part of D94 corrected (2026-09-20)
+Cowork. Every number below is rebuilt by committed code: `python3 nfl/sim/run_verify_5h.py
+--diag-dir <dir with diag_5h_4th/late.parquet from branch diag/5h>`. Run on Linux (cloud).
+
+**5H held to its rules.** `main`'s engine files diff empty against 3cfccad54; fingerprint
+d929ad258504b275 and stamp `(True, [])` on the Mac after the session; diff of `nfl/sim/tests`
+empty; instrumentation stayed on `diag/5h`. D95's tables rebuild exactly from
+`phase5h_metric_noise_rows.parquet`. D96's go-rate gap (+0.02051) and within-cell term
+(+0.00274, 13.4%) reproduce exactly; state mix is 84.9% by Cowork's handling of the 1.3% of sim
+mass in cells with no real observation (D96 reports 69.8%) — either way it dominates.
+
+**Gaps in 5H.** (1) The analysis code behind D96 sections A-D was never committed, and
+`diag_5h_late.parquet` carries no game/sim/drive id, so section C (11 / 22 / 2 of 35) cannot be
+reproduced; its "strict 6/57" contradicts its own table (2) and borrows the REAL denominator.
+(2) The ordered null control (instrumented values == item-1 replicate-0) was not reported.
+Cowork ran it: it does NOT hold for go rate — 0.21385 from the decision log vs 0.21031 from the
+counters on the same 50 games and seeds, 7 seed-SDs apart — because the 5A-3 test's denominator
+uses `ev_fg_att`, which includes FG attempts on downs 1-3 (`ev_fg_non4th`), while the real
+0.198 is down == 4 only. The test flatters the sim by ~0.35pp. (3) D96's report mislabels
+8,133,076 as the go count (it is the decision count; go = 1,777,366). (4) D96's pass-share
+direction (sim higher) is opposite to Cowork's recompute (real 74.6%, sim 71.9%); unresolved,
+definitions differ, no committed code to adjudicate. (5) Sim-side penalty breakdown by
+type/context not produced (stated in 5H's NOT DONE).
+
+**Cowork's predictions: 3 of 6 failed.** P1-sample, P2 and P4 all came in BELOW the predicted
+range — the sim's metrics are far more stable than Cowork assumed (go-rate game-sample SD
+0.00074 vs predicted 0.003-0.008). Consequence, stated plainly: **D94's suggestion that the
+go-rate red was not distinguishable from its target is wrong.** Sim minus real IN THE SAME
+GAMES over 10 samples is +0.0147 (SE >= 0.0043); like-for-like over all 1,087 games it is
++0.0205. D94's "0.2016 in the test's own games" was one draw from a real-side distribution with
+SD 0.014. The defect is real and larger than the test shows. Tied-drive expiry: pooled sim
+401/3,428 = 0.117 vs real 2/64; P(real <= 2 | sim rate) = 0.016. Real, at modest strength.
+D94's other findings stand (the derive script's label and kickoff bugs; the definition
+mismatch; matched target 0.031).
+
+**P4 / first downs by penalty.** D95 reads "63 SD, not at the boundary" — that is `main`'s
+value against the 1.73 target, which passes by 0.11. Under D89 (D97) the 11-salt mean is 1.429
+against a pass line of 1.430 with seed SD 0.003: a coin flip. Both statements are true; they
+are about different engines.
+
+**CAUSE 1 (measured): yards-to-go is never raised after an offensive penalty.**
+`engine.py`, both penalty branches: `yl[off_pen]` moves back, `dist` is untouched
+(`grep -n "dist\[off_pen" nfl/sim/engine.py` -> no match). Real, 2021-24: 5,914 offensive
+no-play penalties with a following snap (5.44/game); on the 5,911 replayed downs yards-to-go
+rises by 6.75 on average, in 99.8% of cases. This is upstream of D96's state mix: sim
+3rd-and-11+ 12.7% vs real 18.2%; per game the sim has +0.56 4th-and-1-2, +0.67 4th-and-3-5,
+-0.56 4th-and-11+, while go rates WITHIN each bucket match (0.551/0.559, 0.192/0.192,
+0.098/0.091, 0.068/0.061). **Scratch test (cloud copy only, not committed, one seed, the 5A-3
+sample):** adding the marched-off yards to `dist`: like-for-like go rate 0.21385 -> 0.19823
+(real 0.19802); 5A-3 test metric 0.21031 -> 0.19527; 4th-down ydstogo shares -> 0.195 / 0.242 /
+0.306 / 0.258 (real 0.195 / 0.229 / 0.323 / 0.252); pts/team 22.12 -> 21.96; punts 8.66 -> 9.41;
+4th-down decisions/game 15.5 -> 16.5 (real 14.3 — moves the wrong way; needs a K1 re-gate).
+The hypothesis came from reading the code after D96's 3rd-down table; the magnitude was not
+pre-registered. It is a lead with one confirming run, not a landed fix.
+
+**CAUSE 2 (measured): no Q4 5:00-2:00 clock period.** `build_clock_table` defines `Q4_late`
+as <= 120 s; from 300 s to 120 s a tied or one-score-trailing offence uses the `normal` cell
+(complete-in-bounds ~38-40 s, run ~37-38 s). Seconds per play, Q4, offence tied or trailing 1-8:
+
+| | real | sim | diff |
+|---|---|---|---|
+| pass, 121-300 s | 16.85 (n=1,576) | 25.41 | **+8.56** |
+| run, 121-300 s | 28.12 (n=801) | 33.64 | **+5.52** |
+| pass, 41-120 s | 11.82 | 11.10 | -0.72 |
+| run, 41-120 s | 17.22 | 14.62 | -2.61 |
+| pass, 0-40 s | 6.70 | 10.26 | +3.56 |
+| run, 0-40 s | 9.63 | 15.28 | +5.65 |
+
+D96's single "+2.4 s per pass" averages a window that is right (41-120 s) with two that are
+not. This is the measured form of the two-minute-drill gap open since 5A-9.
+
+**Provenance.** Both causes are read off real PBP 2021-24 vs the engine's own logs; no backtest
+metric, ROI or calibration claim is involved. Fixing either changes the engine fingerprint and
+therefore requires the single re-fit; neither goes to `main` before Cowork verifies it.
+
+**Next.** `research/nfl_sim/workorder_5I_2026-09-20.md`: both fixes + D89 on branch `eng/5i` in
+worktree `~/mlb-model-5i`, K1 before/after each, the owed board refuse-to-rank trace, one
+re-fit. `main` stays on d929ad258504b275 until Cowork merges.
