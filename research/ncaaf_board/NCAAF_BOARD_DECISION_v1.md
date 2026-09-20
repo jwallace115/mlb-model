@@ -1102,3 +1102,72 @@ file, own-team status, derived departures, no-ticket, `main()` -> `--final` end 
 tampered table); NCAAF `test_audit5_n44.py` 4 (writer on a copy of the REAL log, unreadable pull
 time, in-window coverage, C at -110/-110). A WO11 news fixture lacked the `pull_time` every real
 legacy article carries; corrected. One command: **83 passed**.
+
+### N45 — WO5 item 3 executed: 0 rows graded. The cohort it was written for is excluded by N37 (2026-09-20)
+Work order #5 item 3 ("first genuine grading run"), run at 2026-09-20T13:0xZ, one day
+after N18 deferred it. Ran from the Cowork bridge VM (python 3.10.12, pandas 2.3.3).
+
+**Decision number.** WO5 assigned this N18. N18 was already written on 2026-09-19 as
+"Grading deferred: games not yet played". The number is occupied by a real decision and
+is not reused; overwriting it would delete the deferral record. This entry continues the
+series at N45 and supersedes the *intent* of N18, not its text.
+
+**RETURNED.**
+  Run 1: `Graded: 0 tickets changed` / `No graded tickets (excluding pre_repair)`. exit 0.
+  Run 2: identical. exit 0.
+  Ticket log sha256 `9d982b81…a203f878` before run 1, after run 1 and after run 2 —
+  byte-identical. 31 entries, 0 graded, 0 keys lost, 0 keys added.
+
+**MEANS.** Nothing was graded, and not for the reason WO5 anticipated. Execution trace
+(sys.settrace on grade_ncaaf_tickets.py, real run, not a code reading):
+    line 245  `for ticket in tickets`        32 hits
+    line 246  `if ticket.get("pre_repair")`  31 hits
+    line 247  `continue`                     31 hits   <- all 31 exit here
+    line 263  future-kickoff guard            0 hits
+    line 402  `if changed > 0` (N12 gate)     1 hit, False
+All 31 entries carry `pre_repair: true` from N37. The guard at line 246 fires before the
+N12 future-kickoff guard is ever evaluated. Nebraska @ Michigan State did stay ungraded,
+but by the pre_repair skip, not by the future-kickoff guard.
+
+**The N12 future-kickoff guard is not defective — it is unreached.** Demonstrated on a
+scratch copy with the five WO5 tickets un-flagged (repo log untouched): line 263 evaluated
+5 times, line 264 skipped exactly 1 — Nebraska @ Michigan State, 2026-09-26T21:00Z. The
+guard works on its own. It has still never been exercised by a production run.
+
+**Why the cohort is not gradeable, ever.** N37 found `build_ncaaf_tickets.py` wrote
+consensus_point + best_price + best_book, a triple that did not exist in the tape 17 of 30
+times. Applied to these exact legs: **9 of the 16 settled-game legs exist in the tape;
+7 do not.** Those 7 carry an entry price no book offered. CLV against a price that was
+never available is not CLV. The pre_repair exclusion is correct and must not be lifted.
+
+**Diagnostic only — NOT a CLV result, NOT written to the log.** With pre_repair removed on
+a scratch copy the grader returns changed=4 and produces:
+  - Pre-kick rule HOLDS. Minutes from close snapshot to kickoff: -4.8, -29.9, -29.9, -4.9.
+    All negative. No in-play row was selected as a close on any of 16 legs.
+  - point_clv spread -1.0 .. +1.0, distinct {-1.0,-0.5,0,+0.5,+1.0}, 7 of 16 exactly zero.
+    Not all-zero, so the N12 assertion would not have fired.
+  - By market: spreads N=8 mean -0.125; totals N=8 mean -0.125.
+  - By book: bovada N=11 +0.045, betrivers N=2 -0.500, betmgm N=1 -0.500,
+    fanduel N=1 -1.000, lowvig N=1 0.000.
+  - **prob_clv: 0 of 16 computed.** 9 `line_moved_no_alt_quote`, 7 `entry_complement_missing`
+    (pre-N37 legs carry no `complement_price`). The economically meaningful CLV is absent.
+  - These are 8 mirrored both-sides pairs, not 16 observations. Per-ticket sums are 0.0,
+    0.0, -0.5, -1.5 — near-mechanically zero by construction. No aggregate here is
+    interpretable, and none is claimed.
+
+**Defect found, not fixed here.** `grade_ncaaf_tickets.py` writes the ticket log directly
+(`open(TICKET_LOG,"w"); json.dump`) and does not route through `build_ncaaf_tickets.
+write_ticket_log`. N16's claim that append-only is "enforced by assertion, not by
+convention" is not true of the grader — the one writer that now runs repeatedly. Separately
+`build_ncaaf_cards.log_cards` guards with `len(merged) < before_count` where
+`merged = existing + 2`, a condition that cannot be true; it is a guard that cannot fail.
+
+**Status of the first CLV data point: not obtained.** Zero observations, not four. The
+first genuine CLV run requires a post-N37 ticket build whose legs pass
+`validate_leg_against_tape`, on games that then settle. No such cohort exists yet — every
+entry in the log was built 2026-09-19T14:50Z or earlier. Against the ~125 observations CLV
+needs, the count is 0.
+
+**Credits.** Zero. `grade_ncaaf_tickets.py` makes no HTTP call (no requests/urllib import;
+tape and CFBD read from local parquet), so no `x-requests-remaining` header was returned by
+this run. Last known balance stands at 8976, unchanged and unconfirmed by this session.

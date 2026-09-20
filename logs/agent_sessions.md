@@ -2610,3 +2610,37 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - NOT DONE: usage.py layer-3 date guard; NFL prop grader/outcomes; stale quotes in board consensus.
 - UNVERIFIED: that the three T-10 props cron lines are installed on the VM (needs Jeff's ssh
   command) and fire; the 15:00Z scheduled props slot.
+
+## 2026-09-20T13:10Z  cowork-bridge
+- RAN: ncaaf/pipeline/grade_ncaaf_tickets.py twice (WO5 item 3, deferred by N18 on 09-19).
+  Run 1 -> "Graded: 0 tickets changed", exit 0. Run 2 -> identical, exit 0.
+  Ticket log sha256 9d982b81…a203f878 unchanged across both runs; 31 entries, 0 graded,
+  0 keys lost. Null control (count, key set, graded flags) passed.
+- PRE-REGISTERED before running: 0 changed on both runs, because all 31 entries are
+  pre_repair. Held.
+- RETURNED vs MEANS: 0 rows changed does NOT mean the four settled games were skipped by
+  the future-kickoff guard. sys.settrace on the real run: line 247 (pre_repair continue)
+  31 hits; line 263 (future-kickoff guard) 0 hits. Every entry exits at N37's pre_repair
+  skip before the N12 guard is reached.
+- MEASURED: 9 of 16 settled-game leg entry triples (book, market, side, point, price) exist
+  in the tape; 7 do not. N37's exclusion of this cohort is correct. Not lifted.
+- DIAGNOSTIC on a scratch copy only (repo log untouched), labelled not-a-result in N45:
+  changed=4; close-to-kickoff -4.8/-29.9/-29.9/-4.9 min, all negative (pre-kick rule holds,
+  no in-play row chosen); point_clv spread -1.0..+1.0, 7 of 16 zero, N12 all-zero assertion
+  would not fire; prob_clv 0 of 16 computed (9 line_moved_no_alt_quote, 7
+  entry_complement_missing). Future-kickoff guard skipped Nebraska @ Michigan State on its
+  own (line 263 x5, line 264 x1).
+- FOUND, NOT FIXED: grade_ncaaf_tickets.py writes the ticket log with a bare json.dump and
+  never calls write_ticket_log — N16's append-only assertion does not cover the grader.
+  build_ncaaf_cards.log_cards guards on `len(merged) < before_count` with merged = existing+2,
+  which cannot be true.
+- EDITED: research/ncaaf_board/NCAAF_BOARD_DECISION_v1.md (N45; N18 left intact).
+- NOT DONE: WO5 item 3's actual deliverable — there is no CLV data point. 0 observations,
+  not 4, against the ~125 CLV needs. No ticket rebuild, no pre_repair lift, no guard fix,
+  no test written. Decision written as N45, not N18 as WO5 specified: N18 is occupied by the
+  09-19 deferral and was not overwritten.
+- UNVERIFIED: that the grader behaves identically on the Mac (python 3.13) — this ran on the
+  bridge VM under python 3.10.12 / pandas 2.3.3 / pyarrow 25.0.1 installed into the VM.
+  Whether any post-N37 ticket build has been scheduled for next week's slate. Whether the
+  N12 future-kickoff guard has ever fired in a production run (it has not in any run I can
+  see). The 8976 credit balance — no API call was made, so nothing confirmed it.
