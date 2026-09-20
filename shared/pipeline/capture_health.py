@@ -57,8 +57,31 @@ def _newest_file_age(pattern_dir, glob_pattern, now):
     return age, best_path
 
 
+# N40: infer feed from `file` key for lines without explicit `feed`
+_FILE_TO_FEED = {
+    "depth_charts.parquet": "nflverse_depth",
+    "injuries.parquet": "nflverse_injuries",
+    "rosters_weekly.parquet": "nflverse_rosters",
+}
+
+
+def _infer_feed(entry):
+    """Return the feed name from an explicit field or from the file key."""
+    feed = entry.get("feed")
+    if feed:
+        return feed
+    fname = entry.get("file", "")
+    if fname in _FILE_TO_FEED:
+        return _FILE_TO_FEED[fname]
+    # Depth .json.gz files without explicit feed -> espn_depth
+    if fname.startswith("depth_") and fname.endswith(".json.gz"):
+        return "espn_depth"
+    return None
+
+
 def _newest_pulls_age(pulls_path, now):
-    """Get newest timestamp from _pulls.jsonl (for hash-skipped feeds)."""
+    """Get newest timestamp from _pulls.jsonl (for hash-skipped feeds).
+    DEPRECATED in favor of _newest_pulls_age_by_feed; kept for compatibility."""
     if not pulls_path.exists():
         return None
     last_line = None
@@ -77,12 +100,38 @@ def _newest_pulls_age(pulls_path, now):
     return (now - ts).total_seconds() / 3600
 
 
-def _newest_feed_age(pattern_dir, glob_pattern, now, pulls_jsonl_path=None):
+def _newest_pulls_age_by_feed(pulls_path, feed_name, now):
+    """N40: Get newest timestamp from _pulls.jsonl for a SPECIFIC feed only."""
+    if not pulls_path.exists():
+        return None
+    best_ts = None
+    with open(pulls_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            entry = json.loads(line)
+            if _infer_feed(entry) != feed_name:
+                continue
+            ts_str = entry.get("utc", "")
+            ts = _parse_filename_ts(ts_str)
+            if ts is not None and (best_ts is None or ts > best_ts):
+                best_ts = ts
+    if best_ts is None:
+        return None
+    return (now - best_ts).total_seconds() / 3600
+
+
+def _newest_feed_age(pattern_dir, glob_pattern, now, pulls_jsonl_path=None,
+                     feed_name=None):
     """Newest age from either filename timestamps or _pulls.jsonl, whichever is newer."""
     file_age, file_path = _newest_file_age(pattern_dir, glob_pattern, now)
     pulls_age = None
     if pulls_jsonl_path:
-        pulls_age = _newest_pulls_age(pulls_jsonl_path, now)
+        if feed_name:
+            pulls_age = _newest_pulls_age_by_feed(pulls_jsonl_path, feed_name, now)
+        else:
+            pulls_age = _newest_pulls_age(pulls_jsonl_path, now)
 
     if file_age is not None and pulls_age is not None:
         if pulls_age < file_age:
@@ -146,24 +195,26 @@ def check_feeds(data_root=None, now=None):
     injury_pulls = data_root / "data" / "injury_archive" / "nfl" / "season=2026" / "_pulls.jsonl"
     depth_pulls = data_root / "data" / "depth_archive" / "nfl" / "season=2026" / "_pulls.jsonl"
 
+    # N40: each feed has an optional feed_name to filter _pulls.jsonl
     feeds = [
-        ("nfl_lines", data_root / "data" / "odds_archive" / "nfl" / "line_history", "**/*.parquet", line_max, None),
-        ("ncaaf_lines", data_root / "data" / "odds_archive" / "ncaaf" / "line_history", "**/*.parquet", line_max, None),
-        ("kalshi_nfl", data_root / "data" / "odds_archive" / "kalshi" / "nfl", "**/*.parquet", kalshi_max, None),
-        ("kalshi_ncaaf", data_root / "data" / "odds_archive" / "kalshi" / "ncaaf", "**/*.parquet", kalshi_max, None),
-        ("nfl_news", data_root / "data" / "news_archive" / "nfl", "**/*.json*", news_max, None),
-        ("ncaaf_news", data_root / "data" / "news_archive" / "ncaaf", "**/*.json*", news_max, None),
-        ("nfl_injuries", data_root / "data" / "injury_archive" / "nfl", "**/*.json*", status_max, injury_pulls),
-        ("nfl_depth", data_root / "data" / "depth_archive" / "nfl", "**/depth_*.json*", status_max, depth_pulls),
-        ("nflverse_inputs", data_root / "data" / "depth_archive" / "nfl", "**/nflverse_*.parquet", nflverse_max, depth_pulls),
+        ("nfl_lines", data_root / "data" / "odds_archive" / "nfl" / "line_history", "**/*.parquet", line_max, None, None),
+        ("ncaaf_lines", data_root / "data" / "odds_archive" / "ncaaf" / "line_history", "**/*.parquet", line_max, None, None),
+        ("kalshi_nfl", data_root / "data" / "odds_archive" / "kalshi" / "nfl", "**/*.parquet", kalshi_max, None, None),
+        ("kalshi_ncaaf", data_root / "data" / "odds_archive" / "kalshi" / "ncaaf", "**/*.parquet", kalshi_max, None, None),
+        ("nfl_news", data_root / "data" / "news_archive" / "nfl", "**/*.json*", news_max, None, None),
+        ("ncaaf_news", data_root / "data" / "news_archive" / "ncaaf", "**/*.json*", news_max, None, None),
+        ("nfl_injuries", data_root / "data" / "injury_archive" / "nfl", "**/*.json*", status_max, injury_pulls, "espn_injuries"),
+        ("nfl_depth", data_root / "data" / "depth_archive" / "nfl", "**/depth_*.json*", status_max, depth_pulls, "espn_depth"),
+        ("nflverse_inputs", data_root / "data" / "depth_archive" / "nfl", "**/nflverse_*.parquet", nflverse_max, depth_pulls, "nflverse_depth"),
     ]
 
     # Props: check the props archive parquet
     props_dir = data_root / "data" / "odds_archive" / "nfl" / "props"
 
     stale = []
-    for name, fdir, pattern, max_age, pulls_path in feeds:
-        age, path = _newest_feed_age(fdir, pattern, now, pulls_jsonl_path=pulls_path)
+    for name, fdir, pattern, max_age, pulls_path, feed_name in feeds:
+        age, path = _newest_feed_age(fdir, pattern, now, pulls_jsonl_path=pulls_path,
+                                     feed_name=feed_name)
         if age is None:
             print(f"  STALE  {name}: no files found")
             stale.append(name)

@@ -62,3 +62,14 @@ OK: all feeds fresh
 ```
 
 Both agree to within push delay. nfl_props at 12.4h, not 4,226h.
+
+## WO11 Changes (2026-09-20)
+
+- **Feed health per-feed filtering (N40):** `_newest_pulls_age_by_feed` filters
+  `_pulls.jsonl` by `feed` field. ESPN depth and nflverse depth no longer share a
+  pulse. Lines without explicit `feed` get it inferred from `file` key. Lines without
+  both are ignored.
+- **`__init__.py` removed from all three test directories:** `pytest shared/pipeline/tests
+  nfl/pipeline/tests ncaaf/pipeline/tests` now collects and runs in ONE command (55 tests).
+- **Thresholds:** unchanged from WO10b. nfl_depth checks `espn_depth` feed only;
+  nflverse_inputs checks `nflverse_depth` feed only.

@@ -57,30 +57,37 @@ Using the measured 0.98 baseline rather than an assumed one:
 **Per-pair factor = 0.70**, from two independent cards with different leg counts, against a
 directly measured control. Each pair costs 30% of the payout.
 
-## 3. What it should cost
+## 3. What it should cost — WITHDRAWN (WO11, 2026-09-20)
 
-`joint_outcome_table_v2.parquet`, cell 21+/OU<50 (n=137):
+> **WITHDRAWN.** The "fair value 0.746" and "6.3% overcharge" claims rested on
+> `build_joint_table.py:50`, which measures HOME cover, not FAVOURITE cover.
+> A road favourite's blowout is scored as the home dog failing to cover. The
+> bootstrap interval spans 0.70-0.80. What survives is only what the LEDGER
+> measures: what Hard Rock CHARGES (0.699-0.755 per pair). One leg per game
+> stays as a simplicity rule, not an economic proof. See ChatGPT audit #4
+> adjudication (2026-09-20).
 
-    P(cover & over)  = 0.3796
-    independence     = 0.2831
-    ratio            = 1.341
+~~`joint_outcome_table_v2.parquet`, cell 21+/OU<50 (n=137):~~
 
-If the true joint is 1.341x independence, a fair book pays 1/1.341 = **0.746** of the
-independent price for that pair. Hard Rock pays **0.699**.
+~~    P(cover & over)  = 0.3796~~
+~~    independence     = 0.2831~~
+~~    ratio            = 1.341~~
 
-    0.699 / 0.746 = 0.937  ->  you receive 93.7% of fair value per pair
-                           ->  you LOSE 6.3% per pair
-    across 5 pairs: 0.937^5 = 0.722  ->  ~28% of fair value surrendered
+~~If the true joint is 1.341x independence, a fair book pays 1/1.341 = **0.746** of the~~
+~~independent price for that pair. Hard Rock pays **0.699**.~~
+
+~~    0.699 / 0.746 = 0.937  ->  you receive 93.7% of fair value per pair~~
+~~                           ->  you LOSE 6.3% per pair~~
+~~    across 5 pairs: 0.937^5 = 0.722  ->  ~28% of fair value surrendered~~
 
 ## 4. The decision this forces
 
-**Never stack cover+over pairs same-game at Hard Rock.** The correlation is real — the table
-measures it and it held on 4 of 6 forward pairs tonight — but Hard Rock charges more for it
-than it is worth. Taking the same reads as one leg per game in a cross-game parlay incurs no
-adjustment at all (measured: 0.98).
-
-This inverts the strategy the joint table originally suggested. The finding survives; the way
-to bet it does not.
+**One leg per game is a simplicity rule.** The correlation is real — the table
+measures SOMETHING and it held on 4 of 6 forward pairs tonight — but the table
+measures HOME cover, not FAVOURITE cover (build_joint_table.py:50), so the "fair
+value" is wrong. Taking the same reads as one leg per game in a cross-game parlay
+incurs no adjustment at all (measured: 1.000). The simplicity rule stands; the
+economic proof does not.
 
 ## 5. Caveats
 

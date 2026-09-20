@@ -863,3 +863,37 @@ fail. Measured normal failure rate: 0 of 3 observed pulls had any per-team HTTP 
 - `test_load_news_dedup_keeps_latest_version`: article 201 updated version kept
 - `test_load_news_respects_build_time`: article pulled after build_time excluded
 - `test_game_news_sorted_newest_first`: newest published first
+
+### N40 — Feed health per-feed filtering; pytest collection fix (2026-09-20)
+ChatGPT audit #4, adjudicated by Cowork. Item 4 of WO11.
+
+**Defect.** `data/depth_archive/nfl/season=2026/_pulls.jsonl` is written by three
+scripts: `pull_espn_nfl_status.py` (depth), `run_nflverse_with_archive.sh`, and
+`archive_nflverse_depth_delta.py`. `_newest_pulls_age` reads the LAST line whoever
+wrote it. A fresh ESPN depth write makes a stale nflverse feed read fresh.
+
+**Pre-registration.** A fixture with a fresh ESPN depth entry and a 100h-old nflverse
+entry should show nflverse_inputs as stale. Before fix: reported 0.2h (borrowed ESPN's
+pulse). After fix: detected as stale. Matched.
+
+**Fix.** New `_newest_pulls_age_by_feed(pulls_path, feed_name, now)` filters by `feed`
+field. Lines without explicit `feed` get it inferred from `file` key via `_FILE_TO_FEED`
+mapping (`depth_charts.parquet` -> `nflverse_depth`, etc.). Lines without both keys are
+ignored (0 of 8 current lines have neither). Each feed in `check_feeds` now passes its
+own `feed_name`. Thresholds unchanged.
+
+**Completeness thresholds:**
+- NFL teams: 32 (checked by ESPN status scripts)
+- News index: team count vs requested list (checked by `pull_espn_news.py`)
+- Kalshi/line snapshots: non-empty with >= 1 event (checked by puller halts)
+
+**Pytest collection fix.** Removed empty `__init__.py` from `nfl/pipeline/tests/`,
+`shared/pipeline/tests/`, `ncaaf/pipeline/tests/`. All three directories had the
+same package name `tests`, causing `ModuleNotFoundError` on `nfl/pipeline/tests/`.
+With rootdir-based discovery (no `__init__.py`), `pytest shared/pipeline/tests
+nfl/pipeline/tests ncaaf/pipeline/tests` collects and runs **55 tests** in one command.
+
+**Tests (3 new):**
+- `test_espn_depth_does_not_mask_stale_nflverse`: fresh ESPN + stale nflverse -> stale detected
+- `test_feed_field_filters_correctly`: two feeds in one file, checked independently
+- `test_infer_feed_from_file_key`: `depth_charts.parquet` inferred as `nflverse_depth`
