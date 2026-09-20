@@ -13,7 +13,7 @@ Output (raw JSON, append-only):
 Freshness check: newest article must be published within 72 hours, else HALT.
 """
 
-import argparse, json, sys, time
+import argparse, gzip, json, sys, time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -122,12 +122,12 @@ def pull_news(sport, team_ids, season):
         print(f"HALT: newest article is {age_hours:.1f}h old (threshold: {FRESHNESS_HOURS}h)")
         sys.exit(1)
 
-    # Save
+    # Save (gzipped to control storage — NCAAF is ~67 MB uncompressed per pull)
     out_dir = ROOT / "data" / "news_archive" / sport / f"season={season}"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"news_{ts_label}.json"
+    out_path = out_dir / f"news_{ts_label}.json.gz"
 
-    with open(out_path, "w") as f:
+    with gzip.open(out_path, "wt", encoding="utf-8") as f:
         json.dump(all_articles, f)
 
     size_kb = out_path.stat().st_size / 1024
