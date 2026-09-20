@@ -1,0 +1,16 @@
+K1 5A-5: 1087 games, N=500
+  Season 2021: 272 games, 305.2s (1.12s/game)
+  Season 2022: 271 games, 311.1s (1.15s/game)
+  Season 2023: 272 games, 320.0s (1.18s/game)
+  Season 2024: 272 games, 316.4s (1.16s/game)
+Total: 1252.9s (20.9min)
+Saved: /Users/jw115/mlb-model-5i/nfl/data/sim/outputs/k1_5a5.parquet (543500 rows)
+
+--- Non-Offensive Scoring ---
+  ev_int_ret_td/game: 0.1403
+  ev_fum_ret_td/game: 0.0600
+  ev_punt_ret_td/game: 0.0201
+  ev_ko_ret_td/game: 0.0203
+  ev_safeties/game: 0.0677
+  Non-off pts/game: 1.81 (0.90/team)
+  Pts/team: 22.9

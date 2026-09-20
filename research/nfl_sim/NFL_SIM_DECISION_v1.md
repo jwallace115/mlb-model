@@ -1469,3 +1469,72 @@ therefore requires the single re-fit; neither goes to `main` before Cowork verif
 **Next.** `research/nfl_sim/workorder_5I_2026-09-20.md`: both fixes + D89 on branch `eng/5i` in
 worktree `~/mlb-model-5i`, K1 before/after each, the owed board refuse-to-rank trace, one
 re-fit. `main` stays on d929ad258504b275 until Cowork merges.
+
+### D99 — Item 1: yards-to-go after offensive penalty (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**Fix.** `engine.py`, both penalty branches: after moving the ball back on an offensive
+penalty, `dist` now rises by the yards actually marched off (`yl_after - yl_before`,
+respecting the clip at 99). Also initialized `auto_1st = np.zeros(N, dtype=bool)` before
+the `if def_pen.any()` block to prevent a crash when all penalties in a snap are offensive.
+
+Added `ev_3rd_long` counter (3rd-down attempts at 11+ to go) in both pass and rush paths,
+emitted in the output dict.
+
+Half-the-distance is NOT modelled (the drawn yardage is applied in full, clipped at 99);
+unchanged from pre-fix. Noted per the work order.
+
+**Verify section 4 reproduction (Mac):**
+```
+offensive no-play penalties with a following snap: 5914 (5.44/game); down replayed: 5911
+  yards-to-go change on the replayed down: mean +6.75, increased in 0.998 of cases
+  real 3rd-down share at 11+ to go: 0.182
+  engine (main): grep -n 'dist\[off_pen' nfl/sim/engine.py -> no match
+```
+
+**Tests (test_engine_5i.py, all 3 FAIL on pre-fix engine, all 3 PASS on post-fix):**
+- (a) `test_offense_penalty_increases_ytg`: elevated penalty rate (0.20), drives with
+  end_dist > 15: pre-fix 0.0649, post-fix 0.1463. Threshold 0.10.
+- (b) `test_like_for_like_4th_go_rate`: like-for-like go rate 0.19823 vs 0.198
+  (diff 0.00023 < 0.010). Pre-fix: 0.21385 (diff 0.01585 > 0.010, FAIL).
+- (c) `test_3rd_down_long_share`: 3rd-and-11+ share 0.1961 vs 0.182
+  (diff 0.014 < 0.030). Pre-fix: KeyError (counter absent).
+
+**Cowork's pre-registered predictions vs Mac (5A-3 sample, 50 games, N=500):**
+| Prediction | Cowork | Mac | Held? |
+|---|---|---|---|
+| like-for-like go rate 0.2139 -> 0.198 | 0.198 | 0.198 | YES |
+| existing 5A-3 metric 0.2103 -> 0.195 (passes) | 0.195 | 0.195 | YES |
+| pts/team 22.12 -> 21.96 | 21.96 | 21.96 | YES |
+| punts/game 8.66 -> 9.41 | 9.41 | 9.41 | YES |
+
+All four predictions held exactly.
+
+**Watch item:** 4th-down decisions/game (like-for-like) went 15.5 -> 16.5 in Cowork's
+scratch run (real 14.3). Mac: 16.5 confirmed. This is a movement away from real; the fix
+produces more 4th-down situations (more punts, more FGs) because the ydstogo distribution
+is now correct, but the total count of 4th-down states increases because fewer drives
+convert on 3rd-and-short. Reported from K1 below; no K1 line moved out of tolerance.
+
+**Null control (penalties/game):**
+off_pen: 6.137 -> 6.130 (delta -0.007); def_pen: 3.843 -> 3.838 (delta -0.005). The fix
+changes distance, not the draw. Held.
+
+**K1 (1087 games x N=500):**
+| Metric | BEFORE | Item 1 | Actual | Delta |
+|---|---|---|---|---|
+| Pts/team | 22.9 | 22.7 | 22.4 | -0.2 |
+| Plays/game | 130.2 | 130.1 | 124.5 | -0.1 |
+| Drives/game | 22.9 | 23.8 | 21.9 | +0.9 |
+| Go rate | 0.215 | 0.199 | 0.198 | -0.016 |
+| Like-for-like | 0.219 | 0.202 | 0.198 | -0.017 |
+| Off pen/game | 6.14 | 6.13 | 5.51 | -0.01 |
+| Def pen/game | 3.84 | 3.84 | 3.45 | 0.00 |
+| FD pen/team | 1.530 | 1.510 | 1.730 | -0.020 |
+| Punts/game | 8.19 | 8.94 | 8.73 | +0.75 |
+| FG att/game | 3.77 | 4.01 | 3.92 | +0.24 |
+| Margin SD | 15.0 | 15.0 | 14.5 | +0.03 |
+| 3rd-and-11+ | n/a | 0.193 | 0.182 | n/a |
+
+No K1 line moved out of tolerance in either direction.

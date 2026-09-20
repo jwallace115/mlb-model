@@ -925,6 +925,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_pass_fumbles = np.zeros(N, dtype=np.int16)
     ev_rush_fumbles = np.zeros(N, dtype=np.int16)
     ev_3rd_att = np.zeros(N, dtype=np.int16)
+    ev_3rd_long = np.zeros(N, dtype=np.int16)  # 5I: 3rd-and-11+ counter
     ev_3rd_conv = np.zeros(N, dtype=np.int16)
     ev_4th_go = np.zeros(N, dtype=np.int16)
     ev_4th_conv = np.zeros(N, dtype=np.int16)
@@ -1876,9 +1877,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
                 # Offense penalty: move back by drawn yardage, replay down
                 if off_pen.any():
+                    yl_before = yl[off_pen].copy()
                     yl[off_pen] = np.clip(yl[off_pen] + pen_yds[off_pen], 1, 99)
+                    # Yards-to-go rises by the yards actually marched off (clipped at 99)
+                    dist[off_pen] = dist[off_pen] + (yl[off_pen] - yl_before)
 
                 # Defense penalty: advance by drawn yardage
+                auto_1st = np.zeros(N, dtype=bool)
                 if def_pen.any():
                     # Check for penalty reaching end zone
                     pen_td = def_pen.copy()
@@ -1919,7 +1924,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 # Legacy penalty model (pre-5A-4)
                 off_pen = pen_nop & (u_pen_side < p_off_pen)
                 def_pen = pen_nop & ~off_pen
+                yl_before_leg = yl[off_pen].copy()
                 yl[off_pen] = np.clip(yl[off_pen] + 7, 1, 99)
+                dist[off_pen] = dist[off_pen] + (yl[off_pen] - yl_before_leg)
                 pen_td = def_pen.copy()
                 pen_td[def_pen] = yl[def_pen] <= 9
                 pen_no_td = def_pen & ~pen_td
@@ -2235,6 +2242,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             is_3rd = down_live[p_idx] == 3
             is_4th_go_pass = down_live[p_idx] == 4
             ev_3rd_att[g_idx[is_3rd]] += 1
+            ev_3rd_long[g_idx[is_3rd & (dist_live[p_idx] >= 11)]] += 1
 
             # Normal completions (vectorised)
             nc_g = g_idx[normal_comp]
@@ -2599,6 +2607,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # Track rush play events (vectorised)
             ev_rush_plays[g_idx_r] += 1
             ev_3rd_att[g_idx_r[is_3rd_r]] += 1
+            ev_3rd_long[g_idx_r[is_3rd_r & (dist_live[r_idx] >= 11)]] += 1
             normal_rush = not_fum & ~td_r & ~safety_r
             fd_rush = normal_rush & (yds_r >= dist_live[r_idx])
             ev_first_downs[g_idx_r[fd_rush | td_r]] += 1
@@ -2783,6 +2792,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_penalties": ev_penalties,
         "ev_clock_used": ev_clock_used,
         "ev_3rd_att": ev_3rd_att,
+        "ev_3rd_long": ev_3rd_long,
         "ev_3rd_conv": ev_3rd_conv,
         "ev_4th_go": ev_4th_go,
         "ev_4th_conv": ev_4th_conv,
