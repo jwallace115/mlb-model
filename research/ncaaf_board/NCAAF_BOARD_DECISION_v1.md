@@ -1404,3 +1404,42 @@ own prices, not synthetic; 5 regime: all dogs/unders again — if opinion picks 
 unders, that is a bias to name, not a finding.
 NOT DONE: placements (waiting on Jeff); an NFL game-ticket logger/grader (three JSON records today are
 hand-built — this needs code before next Sunday). UNVERIFIED: injury statuses beyond the articles read.
+
+### N54 — STANDING RULE: every pick is the AI's opinion; every data layer is an input to it (2026-09-20)
+
+**Jeff (~17:10Z), verbatim:** "we need a stnading rule....all picks will always be based off your AI
+opinion....all the data layers, the engine sim (when its ready), the news, the lines, the stats, there all
+just there to help you form your opinion..."
+
+**What changes.** Until today the NFL ticket was DEALT BY CODE and the reader only filtered (N43-N48); the
+morning's placed tickets were rule-picked and AI-filtered (N50 said so). From now on, for every sport and
+every ticket in this project:
+1. THE PICK IS THE READER'S OPINION. Claude looks at everything available and chooses the side. No layer
+   picks on its own: not the rule deal, not the book's q, not price-vs-sharp, not the sim.
+2. EVERY LAYER IS AN INPUT, shown to the reader and recorded in the ticket's manifest: prices and their
+   movement (Hard Rock + the other nine books), candidate table (roles, shares, week volume), injuries/
+   inactives, news, weather, play-by-play stats, and the sim's numbers once it is ready. The sim never
+   gates or ranks a ticket; it is one more thing the reader reads. (Standing sim position unchanged: D103.)
+3. EVERY LEG CARRIES ITS REASON (N50), in the reader's words, brief, with the facts it rests on. Every
+   number in a reason comes from a table computed in that session (N53's error), and any price quoted is
+   from a snapshot < 10 minutes old or is labelled with its age (N52's error).
+4. THE READER MAY PASS. Fewer legs than asked, or no ticket, is a valid answer (audit #5). A leg the reader
+   does not believe in is never added to reach a count.
+
+**What does NOT change — the opinion is the pick, the discipline is the record.**
+- An opinion is not a finding. No AI pick is ever described as validated, as an edge, or as +EV. The
+  ticket sentence stays: calculated return per $1 at the book's own numbers, assumptions unvalidated.
+- Logged BEFORE kickoff, append-only, with inputs, model id and reasons; placements logged from the slip.
+- BASELINES ARE STILL LOGGED beside every AI ticket from the same pull — the rule deal (top book-q,
+  lead-role Overs) and, for game lines, the price-vs-sharp list — because "did the opinion beat the dumb
+  rule?" is the only honest test of the opinion. Graded on hit rate AND close (CLV), per kind of
+  reasoning, with family / side (Over-Under, dog-favourite) / week breakdowns (check 5). At 5-20 legs a
+  week this says nothing for at least a month; it will be reported as a log until then.
+- Known biases to watch from day one: today's opinion tickets were 14/15 Overs on props and all
+  underdogs/Unders on game lines; and the reader's football knowledge ends mid-2026.
+
+**To build before next Sunday (not built):** `kind: ai_ticket` in the NFL logger so an AI ticket is a
+first-class entry with its baselines attached (today it is logged as a FINAL that "departs" from a RULE
+ticket on almost every leg); an NFL game-line ticket logger + grader (today: three hand-built JSON
+records); the same reader-first path for NCAAF Saturday tickets (its builder already calls a model per
+game — the prompt must present ALL layers and ask for the opinion + reason, not a filter).

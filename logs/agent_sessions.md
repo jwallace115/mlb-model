@@ -2767,3 +2767,7 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - ERROR + FIX: four league ranks asserted without computing; computed over 32 teams and corrected to Jeff 16:54Z.
 - NOT DONE: placements for slate -20e; NFL game-ticket logger/grader (3 hand-built JSON records today).
 - UNVERIFIED: injury statuses beyond the articles read; 16:30Z/16:50Z scheduled props pulls.
+
+## 2026-09-20T17:16Z  cowork
+- RECORDED: Jeff standing rule - every pick is the AI opinion; all layers (sim, news, lines, stats) are inputs. N54 in NCAAF_BOARD_DECISION_v1.md; section appended to CLAUDE.md.
+- NOT DONE: ai_ticket kind in the NFL logger; NFL game-line logger/grader; NCAAF builder prompt changed to reader-first.
