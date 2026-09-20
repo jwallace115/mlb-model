@@ -1362,3 +1362,45 @@ CHECKS: 1a all quotes pre-kick, same snapshot. 4: sharp no-vig is a proxy for fa
 project's line-shopping result (+1.84% ex-stale) was best-of-10-books, not Hard Rock alone, so it is
 NOT evidence for this ticket. No NFL game-ticket logger/grader exists (NCAAF's is college-only); this
 JSON is the record. NOT DONE: placement entries for slate -20e (waiting for slips); NFL game grader.
+
+**N52 addendum (16:46Z) — Jeff caught stale game prices; the feed itself checked out.** Jeff: "your lines
+arent accurate on the hardrock site...jets plus 3 are -105 the steelers are -110 ... if your reasoning is
+becasue of the lines then there off." Treated as an audit of the tape. RETURNED: a fresh capture at
+16:43:52Z (3 credits) shows Hard Rock NYJ +3 -105 and PIT +5.5 -110 — identical to the app on both. MEANS:
+the `hardrockbet_fl` game-line feed matched the app 2 of 2 (first time it has been checked for game lines;
+n=2, not a validation); the ticket was built on a 16:00Z snapshot that was 35-40 minutes old in a moving
+market (NYJ had gone 3.5/-115 -> 3.0/+100 between 15:30Z and 16:00Z). ERROR CLASS: a price-based reason
+is only as good as the age of the price; the ticket message said "check each in the app" but did not
+refuse to reason from a 35-minute-old quote. RULE FROM NOW: a ticket whose reasons are PRICE reasons is
+built only from a snapshot < 10 minutes old (3 credits buys one), and says its age in the first line.
+`game_ticket_ai_20260920T1645Z_r1.json` supersedes the first: IND +6 -105, MIA +13.5 -105, PIT +5.5 -110
+(now merely fair), CLE@TB Over 41 -110, NYJ ML +150 (replaces NYJ +3); optional MIN leg gone (+5 -> +4.5).
+
+### N53 — AI OPINION game picks (football reasoning), logged beside the price-based ticket (2026-09-20)
+
+**Jeff (16:48Z):** asked whether the picks were "just reasoning around the lines" or news and projections.
+Answer given: the game ticket was price-only; the prop tickets were judgement over script/volume/role/
+news, not a numeric projection; no model here has evidence on NFL sides. **Jeff:** "yes i want those ai
+opinion based wagers...giving you data to look at then with ai reasoning pick a side."
+
+Sent 16:53Z (`game_ticket_ai_opinion_20260920T1653Z.json`), late games only (1pm games had kicked):
+ARI +4 (-110), WAS +4.5 (-110), NYG +7 (-115), LV@LAC Under 43.5 (-110), JAX +2.5 (-105); optional
+IND@KC Under 46 (-110). ~+2,440 for five, ~+4,750 for six. PASS on MIA@SF. Inputs: week-1 PBP
+efficiency, the week's line path, team injury reports (web), NWS forecasts (wind <= 10 mph everywhere),
+Hard Rock prices from the 16:43:52Z capture (9 min old when sent — inside the new < 10 min rule).
+
+**ERROR, caught by Cowork 2 minutes after sending:** four league RANKS in the reasons were asserted
+without being computed over all 32 teams (LAC offense "3rd-worst" -> 5th; LV "7th-worst" -> 13th, i.e.
+mid-pack; DAL defense "worst" -> 2nd-worst; JAX offense "best" -> 3rd). Correction sent 16:54Z; the
+Under 43.5 demoted from #2 to #4. Same class as the wrong-timestamp errors: a number written from
+impression. RULE: every number in an `ai_reason` comes from a computed table in the same session.
+
+**What this is for.** Three kinds of AI reasoning are now on record for slate -20e, all pre-kick, each leg
+with its reason: (a) props by script/volume/role, (b) game lines by price vs sharp no-vig, (c) game lines
+by football opinion. Plus the rule-dealt tickets Jeff placed. Comparison is by hit rate and close, per
+kind, over weeks; n per week is 5-15 legs, so nothing here can be called evidence for a month or more.
+CHECKS: 1a all inputs pre-kick; 2 n/a (no fitting); 3 the logged legs ARE the sent legs; 4 Hard Rock's
+own prices, not synthetic; 5 regime: all dogs/unders again — if opinion picks only ever land on dogs and
+unders, that is a bias to name, not a finding.
+NOT DONE: placements (waiting on Jeff); an NFL game-ticket logger/grader (three JSON records today are
+hand-built — this needs code before next Sunday). UNVERIFIED: injury statuses beyond the articles read.

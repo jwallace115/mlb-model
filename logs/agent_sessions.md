@@ -2757,3 +2757,13 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - SENT 16:34Z: AI game-lines 5-leg (NYJ +3, PIT +5.5, CLE@TB O41, MIA +13.5, IND +6; opt MIN +5), price-vs-sharp method, ~0.96 per $1. File game_ticket_ai_20260920T1635Z.json.
 - NOT DONE: placements for slate -20e; NFL game-ticket grader; fix for the 16:30Z pull reaching Cowork only at kickoff.
 - UNVERIFIED: the 16:30Z and 16:50Z scheduled pulls (visible on origin ~17:00Z / 17:30Z).
+
+## 2026-09-20T16:46Z  cowork
+- AUDIT (Jeff): app showed NYJ +3 -105 / PIT +5.5 -110 vs ticket +100 / -105. Fresh capture 16:43:52Z RETURNED the app numbers exactly. MEANS: feed accurate (2/2), ticket snapshot was 35-40 min stale. Revised ticket game_ticket_ai_20260920T1645Z_r1.json; N52 addendum.
+- NOT DONE: placements for slate -20e; NFL game-ticket logger/grader.
+
+## 2026-09-20T16:55Z  cowork
+- SENT 16:53Z: AI OPINION game picks (ARI +4, WAS +4.5, NYG +7, LV@LAC U43.5, JAX +2.5; opt IND@KC U46; pass MIA@SF). Record game_ticket_ai_opinion_20260920T1653Z.json, N53.
+- ERROR + FIX: four league ranks asserted without computing; computed over 32 teams and corrected to Jeff 16:54Z.
+- NOT DONE: placements for slate -20e; NFL game-ticket logger/grader (3 hand-built JSON records today).
+- UNVERIFIED: injury statuses beyond the articles read; 16:30Z/16:50Z scheduled props pulls.

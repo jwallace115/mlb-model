@@ -1,0 +1,95 @@
+{
+  "ticket_id": "AI_OPINION_GAMES",
+  "kind": "game_ticket_ai_opinion",
+  "slate": "2026-09-20e",
+  "sent_utc": "2026-09-20T16:53Z",
+  "correction_sent_utc": "2026-09-20T16:54Z",
+  "price_snapshot_utc": "2026-09-20T16:43:52.024626+00:00",
+  "reader": "claude-fable-5-1 (Cowork chat)",
+  "inputs": [
+    "pbp_2026 week 1: EPA/play, success, ypp, sacks, turnovers by team (all 32 ranked AFTER sending - ranks in the first message were not computed; corrected)",
+    "line_history tape: week's spread/total path (Pinnacle)",
+    "web: team injury reports 09-18..09-20 (Broncos, Raiders/Chargers, Seahawks/Cardinals, Chiefs/Colts, Dolphins/49ers, Giants/Rams storylines)",
+    "NWS stadium forecasts 15:00Z: wind <= 10 mph everywhere"
+  ],
+  "pass": [
+    {
+      "game": "Dolphins@49ers",
+      "why": "Opinion leans SF but -13.5 at -115 with the kicker out ill is not worth it."
+    }
+  ],
+  "known_weaknesses": [
+    "Common thread = 'week 1 says the line is too big' - the most common public opinion; no evidence of edge",
+    "Reader's football knowledge ends mid-2026; 2026 rosters differ",
+    "Conflicts with the price-based ticket on IND@KC (that ticket holds IND +6)",
+    "5 of 6 legs are underdogs/unders, as on the price ticket"
+  ],
+  "legs": [
+    {
+      "rank": 1,
+      "game": "Seahawks@Cardinals",
+      "event_id": "4dd8020192a544385db42374e5555303",
+      "commence_time": "2026-09-20T20:25:00Z",
+      "market": "spreads",
+      "outcome": "Arizona Cardinals",
+      "point": 4.0,
+      "american": -110.0,
+      "ai_reason": "SEA starts Drew Lock (Darnold out), missing a starting guard and a safety; ARI won by 12 at LAC with an efficient, turnover-free offense. Home team that looked better, +4 from a backup QB. Risk: both ARI guards questionable."
+    },
+    {
+      "rank": 4,
+      "game": "Raiders@Chargers",
+      "event_id": "71b3b83747589efdc5baef2c5cf811bf",
+      "commence_time": "2026-09-20T20:05:00Z",
+      "market": "totals",
+      "outcome": "Under",
+      "point": 43.5,
+      "american": -110.0,
+      "ai_reason": "LAC offense 5th-worst wk 1 with its starting tackle out and McConkey questionable; Bowers doubtful for LV (LV offense mid-pack, 13th-worst); both defenses strong wk 1. Total already 47 -> 43.5; Pinnacle 43. (First sent with wrong ranks: LAC '3rd', LV '7th' - corrected 16:54Z, leg demoted from #2 to #4.)"
+    },
+    {
+      "rank": 2,
+      "game": "Commanders@Cowboys",
+      "event_id": "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+      "commence_time": "2026-09-20T20:25:00Z",
+      "market": "spreads",
+      "outcome": "Washington Commanders",
+      "point": 4.5,
+      "american": -110.0,
+      "ai_reason": "DAL defense 2nd-worst wk 1 (60% success allowed; Dart 23/29); WAS lost by 2 at PHI. DAL should not lay more than 4; Pinnacle is 4, HR 4.5. Risk: Daniels 53% wk 1. (First sent as 'worst' - corrected.)"
+    },
+    {
+      "rank": 3,
+      "game": "Giants@Rams",
+      "event_id": "32367f882fac1a0c20a6335619922025",
+      "commence_time": "2026-09-22T00:15:00Z",
+      "market": "spreads",
+      "outcome": "New York Giants",
+      "point": 7.0,
+      "american": -115.0,
+      "ai_reason": "Rams scored 7 at home and lost Myles Garrett (knee surgery); Harbaugh's Giants controlled DAL with long drives. A TD is a lot for an offence that has not shown up. Caveat: NYG's numbers came vs that DAL defense, LA's vs an elite SF defense."
+    },
+    {
+      "rank": 5,
+      "game": "Jaguars@Broncos",
+      "event_id": "1fd6628c781f556a7a19638e97d7107f",
+      "commence_time": "2026-09-20T20:05:00Z",
+      "market": "spreads",
+      "outcome": "Jacksonville Jaguars",
+      "point": 2.5,
+      "american": -105.0,
+      "ai_reason": "JAX all 53 healthy, 3rd-best offense wk 1; DEN worst offense wk 1 (3.8 ypp, 4 sacks), Mims out, Harvey questionable. Points with the healthier team. Risk: DEN's bad day was at KC; altitude."
+    },
+    {
+      "rank": 6,
+      "game": "Colts@Chiefs",
+      "event_id": "50bc247030707d823b9c3581d7eb5760",
+      "commence_time": "2026-09-21T00:20:00Z",
+      "market": "totals",
+      "outcome": "Under",
+      "point": 46.0,
+      "american": -110.0,
+      "ai_reason": "OPTIONAL. KC won wk 1 on the ground and on defense (Mahomes 15/27), LT Simmons out; IND passing game 2nd-worst wk 1. Two run-leaning teams; total already 47 -> 46."
+    }
+  ]
+}
