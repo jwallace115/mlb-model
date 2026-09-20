@@ -210,6 +210,13 @@ def main():
         all_rows.extend(rows)
         time.sleep(0.2)
 
+    # ── In-play filter (1c): drop any row where pull_timestamp >= commence_time ──
+    pre_filter = len(all_rows)
+    all_rows = [r for r in all_rows if r["pull_timestamp"] < r["commence_time"]]
+    if len(all_rows) < pre_filter:
+        print(f"  in-play filter: dropped {pre_filter - len(all_rows)} rows "
+              f"where pull_timestamp >= commence_time")
+
     # ── Save ──
     if all_rows:
         season = int(game_date[:4])

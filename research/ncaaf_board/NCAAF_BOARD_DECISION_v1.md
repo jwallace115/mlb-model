@@ -341,3 +341,50 @@ Both cards logged to `ncaaf/logs/ncaaf_board_tickets_2026.json` as entries with:
 
 N16 append-only guard applies: ticket count must not decrease.
 Grading deferred to Sunday 13:00Z scheduled task.
+
+### N28 — NFL Hard Rock props schedule, measured cost, plan arithmetic (2026-09-20)
+
+**D84 entries status.** Installed 2026-09-18T02:50 UTC (Friday). No Tue 10:00 or
+Thu 22:00 slot occurred between then and now (Sat 02:09 UTC). The first scheduled
+slot is Sun 15:00 UTC today. Syslog shows zero scheduled firings; the two entries
+on Sep 19 (15:06 and 15:11) were one-off test entries from D84 verification, since
+removed. The three D84 entries are correctly formed and retained.
+
+**Schedule (UTC), 8 entries total (3 existing + 5 new):**
+```
+0 10 * * 2      --window-hours 168 --tag open     Tue 6am ET    (existing)
+0 16 * * 3-6    --window-hours 168 --tag mid      Wed-Sat noon ET (NEW)
+0 22 * * 4      --window-hours 12  --tag close    Thu 6pm ET    (existing)
+0 15 * * 0      --window-hours 12  --tag close    Sun 11am ET   (existing)
+30 16 * * 0     --window-hours 2   --tag close    Sun 12:30 ET  (NEW)
+45 19 * * 0     --window-hours 2   --tag close    Sun 3:45 ET   (NEW)
+50 23 * * 0     --window-hours 2   --tag close    Sun 7:50 ET   (NEW)
+45 23 * * 1     --window-hours 2   --tag close    Mon 7:45 ET   (NEW)
+```
+
+**Measured cost:** 16 events = 241 credits (168h window dry-run, 2026-09-20).
+~15.1 credits/event (15 per event + 1 for events list).
+Estimated weekly: ~1,090 credits. Combined with existing line cron (~290/day):
+~446/day = ~13,400/month.
+
+**Plan arithmetic:** x-requests-remaining = 8,250 as of 2026-09-20T02:09Z.
+x-requests-used not reported separately by the dry-run headers. 13,400/month
+fits the 20K plan with ~6,600 spare. The account plan is not visible from
+the API headers; stated as UNKNOWN. Do not upgrade.
+
+**What the fixed UTC slots miss:** Holiday games (Thanksgiving, Christmas),
+Saturday flex games, international games, and flexed Sunday/Monday times.
+The Wed-Sat mid pulls (168h window) and the Sunday 11am close (12h window)
+will still capture these games' props at non-optimal timing — just not
+their final pre-kick price. No schedule-aware dispatcher built in this order.
+
+**In-play filter (1c):** The events filter `now <= ct_dt` already excludes
+started games. Added explicit post-normalization filter: rows with
+`pull_timestamp >= commence_time` are dropped. The filter is a string
+comparison on ISO timestamps (both UTC, same format), which is correct
+because ISO8601 sorts lexicographically.
+
+**DST note:** After 2026-11-01, the same UTC slots land 1 hour earlier
+relative to kickoff. All 2-hour windows still contain their kickoffs
+(verified: 1pm ET = 18:00 UTC is inside 16:30+2h = 18:30 UTC). Not missed,
+just earlier capture (~90 min pre-kick instead of ~30).
