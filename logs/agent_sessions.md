@@ -2501,3 +2501,50 @@ Verified at end: `d929ad258504b275` and `(True, [])` on `~/mlb-model`.
   would be a comparison of different engines (not valid without controlling for the changes).
 - Calibration-transfer gate: totals may still get worse under calibration on the
   2021-23 -> 2024 audit. The re-fit re-asks that question but does not answer it.
+
+## 2026-09-20T16:45Z  claude-code
+Work order #11: repair what ChatGPT audit #4 found (contract identity, grader,
+news connection, feed health). 4 items, each committed and pushed before the next.
+
+### RETURNED
+- **Item 1 (N37):** 17/30 legs confirmed as mixed-source (consensus_point + best_price
+  from different books). Board now carries per-book `quotes` list. `select_best_quote()`
+  picks by written rule. `validate_leg_against_tape()` asserts at write time. All 31
+  existing entries marked `pre_repair: true`. 5 new tests, 4 updated. Commit 6466fd328.
+- **Item 2 (N38):** `grade_tickets(2026)` raised `KeyError: 'event_id'` on 4 card entries.
+  Grader rewritten: handles cards+events, skips pre_repair, 30-min close rule, point_clv
+  and prob_clv separate, outcomes from CFBD (89/95 legs matched, 93.7%). 3 new tests.
+  CFBD refreshed (0 Odds API credits). Commit ed6671675.
+- **Item 3 (N39):** 14,526 loaded -> 1,381 de-duped -> 1 with `team_name` (Wyoming).
+  Extracted `load_news()` accepting both `_team_name` and `team_name`. Build-time cutoff
+  (articles pulled after build excluded). Coverage: 191 teams (was 1). Coverage gate at
+  25%. `pull_espn_news.py` exits non-zero if >5% teams fail. 4 new tests. Commit 8d8209059.
+- **Item 4 (N40):** Fresh ESPN depth masked stale nflverse (shared `_pulls.jsonl`).
+  `_newest_pulls_age_by_feed()` filters by feed name. Legacy lines inferred from `file`
+  key. Removed 3 empty `__init__.py` (pytest collection fix). `hardrock_sgp_adjustment`
+  sections 3-4: "0.746 fair value / 6.3% overcharge" WITHDRAWN (home cover not favourite
+  cover). 3 new tests. Commit 31186b6db.
+- **pytest:** `pytest shared/pipeline/tests nfl/pipeline/tests ncaaf/pipeline/tests`
+  returned **55 passed in 7.73s**, exit 0. This means all tests pass; it does not mean
+  the pipeline as deployed is correct — the grader has not been run on production data,
+  and the news reader has not been tested in a live build.
+
+### What was NOT done
+- The grader was NOT run on the production ticket log (all 31 entries are pre_repair).
+- VM crontab was not touched (per work order restriction).
+- No rebuild of the joint table on favourite-cover with an untouched validation year.
+- No shadow comparison of AI selection against baselines (needs items 1-3 deployed first).
+- No 30-quote same-game pricing experiment or totals-vs-consensus check (needs Hard Rock
+  NCAAF quotes, which the Odds API has never served — order #9).
+- `build_joint_table.py:50` (home-cover bug) is documented as withdrawn but not fixed.
+
+### What remains UNVERIFIED
+- Whether the CFBD team-name mapping covers all teams that will appear in future builds
+  (54/56 mapped at the time of writing; 2 overrides added).
+- Whether the 30-minute close window produces enough graded legs to be useful (no
+  production run yet).
+- Whether `pull_espn_news.py`'s 5% failure threshold is appropriate (0 failures observed
+  in 3 pulls — the threshold has never been triggered).
+- The existing `test_ticket_reader.py` still tests a REPLICA of the reader (N35 noted);
+  the extracted `load_news()` is now the production function and is tested, but the old
+  replica test was not removed or updated.
