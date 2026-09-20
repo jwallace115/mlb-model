@@ -660,3 +660,46 @@ due to per-team `timestamp` fields; fixed with recursive strip).
    comparison, and there is no bare except.
 4. **No bare `except Exception: continue`.** An unreadable file is a failure:
    the file is named and the check exits non-zero.
+
+### N35 — Test inventory and correction of order #10 report (2026-09-20)
+
+**Test inventory (20 tests, all passing):**
+
+`nfl/pipeline/tests/test_props_inplay_filter.py` (6 tests):
+- pre_game_row_kept, in_play_row_dropped, exact_kickoff_dropped, mixed_rows,
+  filter_removed_fails (proves test can fail without filter), tz_format_comparison
+
+`shared/pipeline/tests/test_espn_news_halt.py` (4 tests):
+- stale_news_halts (100h-old article -> SystemExit(1), no file written)
+- fresh_news_passes (1h-old article -> no halt)
+- 31_teams_halts (31 teams -> SystemExit(1))
+- 32_teams_passes
+
+`shared/pipeline/tests/test_kalshi_halt.py` (2 tests):
+- non200_halts (HTTP 429 -> SystemExit(1))
+- empty_markets_no_file (all series return 0 -> SystemExit(1), no file)
+
+`shared/pipeline/tests/test_news_dedup.py` (1 test):
+- second pull with 1 changed + 1 new -> writes exactly those 2; index lists all 3
+
+`shared/pipeline/tests/test_capture_health.py` (4 tests):
+- stale_nfl_news_detected (one stale feed -> detected, only that one)
+- all_fresh_returns_empty
+- REGRESSION C(1): mixed_tz_props (tz-naive month=02 + tz-aware month=09 -> reports
+  month=09 age, not 4,226h)
+- REGRESSION C(2): mtime_does_not_affect_age (all files touched to now -> ages
+  unchanged from filename, not near 0)
+
+`shared/pipeline/tests/test_ticket_reader.py` (3 tests):
+- union_deduplication (1 .json + 1 .json.gz -> 3 unique articles, updated version kept)
+- stale_30h_halts (30h-old newest pull -> SystemExit)
+- fresh_does_not_halt
+
+**Explicit correction of order #10's report:**
+1. The 4,226h `nfl_props` reading was NOT "correctly identifies props feed dead."
+   It was a swallowed `except Exception: continue` in `_newest_props_age`: month=02
+   had tz-naive timestamps, month=09 had tz-aware; comparison threw TypeError,
+   September was silently skipped, and the check fell back to March's date. The
+   actual props age was ~12h. The bare except has been removed.
+2. The tests were listed as neither DONE nor NOT DONE in the report. They were not
+   written. `git diff --name-only 0529f52..3f42eb1` contains zero test files.
