@@ -24,9 +24,11 @@ def _make_news_fixture(tmp_path):
     # Legacy .json file: articles have `team_name` and `id` is present
     legacy = [
         {"id": "101", "team_name": "Ohio State Buckeyes",
+         "pull_time": "2026-09-04T00:04:53.453166+00:00",  # N44: real legacy articles always carry it
          "headline": "Buckeyes win opener", "published": "2026-09-01T12:00:00Z",
          "lastModified": "2026-09-01T12:00:00Z"},
         {"id": "102", "team_name": "Michigan Wolverines",
+         "pull_time": "2026-09-04T00:04:53.453166+00:00",  # N44: real legacy articles always carry it
          "headline": "Michigan prep begins", "published": "2026-09-02T12:00:00Z",
          "lastModified": "2026-09-02T12:00:00Z"},
     ]
@@ -36,6 +38,7 @@ def _make_news_fixture(tmp_path):
     # Legacy article with EMPTY id (should be keyed by sha1)
     no_id = [
         {"id": "", "team_name": "Alabama Crimson Tide",
+         "pull_time": "2026-09-04T00:04:53.453166+00:00",  # N44: real legacy articles always carry it
          "headline": "Bama rolls", "published": "2026-09-03T12:00:00Z",
          "lastModified": "2026-09-03T12:00:00Z"},
     ]

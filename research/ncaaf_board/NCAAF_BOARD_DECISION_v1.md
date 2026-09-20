@@ -1069,3 +1069,36 @@ stale pull -> nothing eligible; an Out player is never eligible; baselines repro
 per game; log append-only and a veto needs a source. Six mutations of the production file (raw
 implied as q, no build-time cutoff, status ignored, kicked games kept, stale pull allowed, many legs
 per game) each turn at least one test red. One command: **74 passed**.
+
+### N44 — ChatGPT audit #5 adjudicated: the final ticket is enforced by code; five defects fixed (2026-09-20)
+
+Full table: `research/cross_ai/chatgpt_audit5_adjudication_parlay_board_2026-09-20.md`. Every
+probe reproduced on production functions at `73bf63f`.
+
+1. **NFL final ticket (N43 was a description, not an enforcement).** `log_ticket(path, entry, cand)`
+   now checks every leg against the candidate table: exactly one row, same line / side / both
+   prices / pull, eligible, one leg per game. `log_final_ticket` builds the legs FROM candidate rows,
+   derives removed/added legs against BOTH baselines and halts unless each has a reason and a
+   source, requires an availability confirmation per final leg and the reader's model / inputs /
+   raw output, and accepts 0..5 legs (no ticket is a valid logged outcome). `main --final file`
+   reaches it and refuses a candidate table whose sha256 differs from the logged baselines'.
+2. **Injury feed.** File older than `MAX_INJURY_AGE_HOURS = 7` (the feed runs 6-hourly) -> nothing
+   eligible. Status is read from the player's own team only. No feed entry -> `feed_status_missing`
+   (28 of 263 eligible on the 09-19 pull, all healthy starters) — eligible, never final without an
+   availability source.
+3. **Roles.** Rank ties take the worst rank; `n_targets` / `n_carries` shown beside the shares.
+   The usage layer-3 QB fallback has no date guard (open); the committed week-2 rows were checked:
+   32 of 32 flagged starters are the week-1 leading passer.
+4. **NCAAF writer** keyed on `t["event_id"]` and raised KeyError on the committed log's card
+   entries — no ticket build could have been persisted. Key is now event_id or `card:<id>`.
+5. **NCAAF news:** coverage counts what the selector is shown (inside the 14-day window):
+   143/145 on 09-19. An article without a readable pull time does not enter.
+6. **`prob_clv_C`** uses the accepted decimal price: unchanged -110/-110 = -4.55%, not 0.
+7. **Close capture:** Sunday props pulls at 16:50Z, 19:55Z, 20:15Z (`--window-hours 1`), ~243
+   credits per Sunday, so every kickoff window has a Hard Rock quote inside 30 minutes.
+
+**Tests:** NFL file 6 -> 11 (invented leg refused, two legs in one game, ineligible leg, old injury
+file, own-team status, derived departures, no-ticket, `main()` -> `--final` end to end with a
+tampered table); NCAAF `test_audit5_n44.py` 4 (writer on a copy of the REAL log, unreadable pull
+time, in-window coverage, C at -110/-110). A WO11 news fixture lacked the `pull_time` every real
+legacy article carries; corrected. One command: **83 passed**.

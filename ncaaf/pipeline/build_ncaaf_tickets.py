@@ -114,6 +114,9 @@ def _article_pull_time(article):
     return article.get("_pull_time", article.get("pull_time", ""))
 
 
+LOAD_NEWS_STATS = {"dropped_bad_pull_time": 0}
+
+
 def load_news(news_dir, build_time):
     """N39: Load and de-dup news articles, respecting build_time.
 
@@ -133,6 +136,7 @@ def load_news(news_dir, build_time):
     if build_dt.tzinfo is None:
         build_dt = build_dt.replace(tzinfo=timezone.utc)
 
+    LOAD_NEWS_STATS["dropped_bad_pull_time"] = 0
     all_articles = []
     for f in sorted(news_dir.iterdir()):
         if f.name.startswith("_") or f.name.startswith("index_"):
@@ -151,17 +155,18 @@ def load_news(news_dir, build_time):
         key = _article_key(a)
         pull_str = _article_pull_time(a)
 
-        # Enforce build_time cutoff if pull_time is present
-        if pull_str:
-            try:
-                pull_dt = datetime.fromisoformat(
-                    pull_str.replace("Z", "+00:00") if "Z" in pull_str else pull_str)
-                if pull_dt.tzinfo is None:
-                    pull_dt = pull_dt.replace(tzinfo=timezone.utc)
-                if pull_dt > build_dt:
-                    continue  # pulled after build — must not enter
-            except (ValueError, TypeError):
-                pass
+        # N44: an article enters only with a READABLE pull time at or before the build. A missing
+        # or malformed pull time used to pass (`except: pass`) — i.e. an article of unknown
+        # acquisition time was treated as known-before-build.
+        try:
+            pull_dt = datetime.fromisoformat(str(pull_str).replace("Z", "+00:00"))
+        except (ValueError, TypeError):
+            LOAD_NEWS_STATS["dropped_bad_pull_time"] += 1
+            continue
+        if pull_dt.tzinfo is None:
+            pull_dt = pull_dt.replace(tzinfo=timezone.utc)
+        if pull_dt > build_dt:
+            continue  # pulled after build — must not enter
 
         lm = a.get("lastModified", a.get("published", ""))
         prev_lm = seen.get(key, ("", None))[0] if key in seen else ""
@@ -196,6 +201,15 @@ def game_news_for(articles, home_team, away_team, max_per_game=NEWS_PER_GAME,
     # Sort by published descending
     game_articles.sort(key=lambda a: a.get("published", ""), reverse=True)
     return game_articles[:max_per_game]
+
+
+def news_coverage(board_df, news_articles, build_time):
+    """N44: teams with >= 1 article THE SELECTOR WOULD BE SHOWN — i.e. after the recency window,
+    through game_news_for — not teams with any article ever archived."""
+    teams = set(board_df["home_team"].unique()) | set(board_df["away_team"].unique())
+    covered = {t for t in teams if game_news_for(news_articles, t, t, max_per_game=1,
+                                                 build_time=build_time)}
+    return len(covered), len(teams)
 
 
 def _derive_matchup(board_rows):
@@ -506,11 +520,19 @@ def write_ticket_log(new_tickets):
         with open(TICKET_LOG) as f:
             existing = json.load(f)
 
+    # N44: the log also holds CARD entries, which carry `card_id` and no top-level `event_id`.
+    # Keying on t["event_id"] raised KeyError against the real log — no ticket build since the
+    # first cards were logged (2026-09-19) could have been written.
+    def _log_key(t):
+        return (t.get("event_id") or f"card:{t.get('card_id')}", t["build_time"])
+
     before_count = len(existing)
-    before_keys = set((t["event_id"], t["build_time"]) for t in existing)
+    before_keys = set(_log_key(t) for t in existing)
 
     merged = existing + list(new_tickets)
-    after_keys = set((t["event_id"], t["build_time"]) for t in merged)
+    after_keys = set(_log_key(t) for t in merged)
+    if len(after_keys) != len(merged):
+        raise RuntimeError("HALT: duplicate (event/card, build_time) in the ticket log")
     lost = before_keys - after_keys
     if lost:
         raise RuntimeError(f"HALT: append-only violation — {len(lost)} tickets vanish")
@@ -542,16 +564,10 @@ def main():
     news_dir = ROOT / "data" / "news_archive" / "ncaaf" / f"season={args.season}"
     news_articles = load_news(news_dir, bt)
 
-    # Coverage check
-    board_teams = set(board_df["home_team"].unique()) | set(board_df["away_team"].unique())
-    teams_with_news = set()
-    for a in news_articles:
-        tn = a.get("_team_name", a.get("team_name", ""))
-        if tn in board_teams:
-            teams_with_news.add(tn)
-    coverage = len(teams_with_news)
-    total_teams = len(board_teams)
-    print(f"  News coverage: {coverage}/{total_teams} board teams have >= 1 article")
+    coverage, total_teams = news_coverage(board_df, news_articles, bt)
+    print(f"  News coverage: {coverage}/{total_teams} board teams have >= 1 article inside the "
+          f"{NEWS_RECENCY_DAYS}-day window; dropped for unreadable pull time: "
+          f"{LOAD_NEWS_STATS['dropped_bad_pull_time']}")
     if total_teams > 0 and coverage / total_teams < NEWS_COVERAGE_MIN:
         print(f"HALT: news coverage {coverage}/{total_teams} ({coverage/total_teams*100:.0f}%) "
               f"below the {NEWS_COVERAGE_MIN:.0%} threshold")

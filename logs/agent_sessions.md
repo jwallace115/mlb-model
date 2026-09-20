@@ -2596,3 +2596,17 @@ news connection, feed health). 4 items, each committed and pushed before the nex
   results_grader run on Mac AND VM — seen as an autostash conflict at 11:54Z).
 - UNVERIFIED: usage week-2 rows are point-in-time (taken from earlier verification, not re-checked
   today); the 15:00Z scheduled props slot.
+
+## 2026-09-20T12:55Z  cowork — N44: ChatGPT audit #5 adjudicated and repaired
+- REPRODUCED on production functions at 73bf63f: garbage final ticket accepted by log_ticket; Aug-1
+  injury file -> 50 eligible; 154/973 no status (28 eligible); write_ticket_log KeyError on the real
+  log; coverage before recency filter; malformed pull time passes; prob_clv_C = 0 at -110/-110.
+- EDITED: nfl/pipeline/build_nfl_candidates.py (+tests 6->11); ncaaf/pipeline/build_ncaaf_tickets.py,
+  grade_ncaaf_tickets.py, tests/test_audit5_n44.py (4), tests/test_news_reader_wo11.py (fixture);
+  decision N44; research/cross_ai/chatgpt_audit5_adjudication_parlay_board_2026-09-20.md.
+- RETURNED: one-command suite 83 passed. Week-2 flagged starting QBs == week-1 leading passers 32/32.
+- MEANS: the NFL final-ticket path is enforced in code and reachable from main(). It has still
+  never run on a live pull.
+- NOT DONE: usage.py layer-3 date guard; NFL prop grader/outcomes; stale quotes in board consensus.
+- UNVERIFIED: that the three T-10 props cron lines are installed on the VM (needs Jeff's ssh
+  command) and fire; the 15:00Z scheduled props slot.

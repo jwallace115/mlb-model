@@ -16,8 +16,9 @@ left to a reader (news, injuries to OTHER players, weather) is logged as a veto 
   6. ELIGIBLE = volume family AND two-way AND role matched AND not Out/Doubtful/IR AND the
      pull is fresh. The pick side is the side the book favours (de-vigged q >= 0.5).
   7. BASELINE TICKET = the top-K eligible legs by q, one per game. Pure rule, reproducible.
-     The final ticket = baseline with logged vetoes/swaps; both are stored, so the reader's
-     contribution can be scored against the rule it overrode.
+     The reader's final ticket (log_final_ticket / --final) is assembled by code from candidate
+     rows; its departures from both baselines are DERIVED and each needs a reason and a source;
+     every final leg needs its own availability confirmation. Fewer than K legs, or none, is valid.
 
 Outputs (paths relative to the repo root):
   nfl/data/board/week=<season>_<ww>/nfl_prop_candidates_<UTC>.parquet  + .md
@@ -56,6 +57,9 @@ UNAVAILABLE = ("Out", "Doubtful", "Injured Reserve", "Suspension", "Physically U
 # The Sunday slots are 15:00Z and 16:30Z; a 17:00Z-kick ticket built after inactives (15:30Z)
 # reads a pull up to ~1.75 h old. Older than this and the table is a record, not a board.
 MAX_PULL_AGE_HOURS = 3.0
+# N44: the ESPN injury feed runs every 6 h (health check allows 7). An older file says nothing
+# about today: on 2026-09-19 fixtures an August-1 file still admitted 50 legs.
+MAX_INJURY_AGE_HOURS = 7.0
 TOP_K = 5
 # NFL 2026 opened Thu 2026-09-10; weeks run Tuesday to Monday.
 SEASON_WEEK1_TUESDAY = {2026: "2026-09-08"}
@@ -112,12 +116,12 @@ def board_rows(props, build_time):
 def load_injuries(injury_dir, season, build_time):
     """{(team abbr, normalised name): status} from the newest file pulled <= build_time."""
     bt = _utc(build_time)
-    best = None
+    best, best_when = None, None
     for f in sorted(Path(injury_dir).glob(f"season={season}/injuries_*.json*")):
         stamp = f.name.split("_")[1].split(".")[0]
         when = pd.Timestamp(datetime.strptime(stamp, "%Y%m%dT%H%MZ"), tz="UTC")
         if when <= bt:
-            best = f
+            best, best_when = f, when
     if best is None:
         raise RuntimeError(f"HALT: no injury file at or before {build_time}")
     opener = gzip.open if best.suffix == ".gz" else open
@@ -135,11 +139,12 @@ def load_injuries(injury_dir, season, build_time):
             name = _normalise(item.get("athlete", {}).get("displayName", ""))
             if name:
                 status[(abbr, name)] = item.get("status", "")   # keyed by TEAM and name
-    return status, best.name
+    return status, best.name, best_when
 
 
 def build_candidates(props_dir=PROPS_DIR, usage_path=USAGE_PATH, injury_dir=INJURY_DIR,
-                     season=2026, build_time=None, max_pull_age_hours=MAX_PULL_AGE_HOURS):
+                     season=2026, build_time=None, max_pull_age_hours=MAX_PULL_AGE_HOURS,
+                     max_injury_age_hours=MAX_INJURY_AGE_HOURS):
     build_time = build_time or datetime.now(timezone.utc).isoformat()
     props = load_props(props_dir, season, build_time)
     board, first, newest = board_rows(props, build_time)
@@ -152,9 +157,11 @@ def build_candidates(props_dir=PROPS_DIR, usage_path=USAGE_PATH, injury_dir=INJU
         raise RuntimeError(f"HALT: usage has {usage['team'].nunique()} teams for {season} wk{week}")
     usage["_key"] = usage["player_name"].map(_normalise)
     # Rank within the team, from the usage table itself (not only players with a prop).
-    usage["target_rank"] = usage.groupby("team")["target_share"].rank(ascending=False, method="min")
-    usage["carry_rank"] = usage.groupby("team")["carry_share"].rank(ascending=False, method="min")
-    injuries, injury_file = load_injuries(injury_dir, season, build_time)
+    # N44: ties take the WORST rank — four players tied on a prior are not four lead receivers.
+    usage["target_rank"] = usage.groupby("team")["target_share"].rank(ascending=False, method="max")
+    usage["carry_rank"] = usage.groupby("team")["carry_share"].rank(ascending=False, method="max")
+    injuries, injury_file, injury_when = load_injuries(injury_dir, season, build_time)
+    injury_age_h = (_utc(build_time) - injury_when).total_seconds() / 3600
 
     first_key = first.set_index(["event_id", "player_name", "market_key"])
     out = []
@@ -178,7 +185,10 @@ def build_candidates(props_dir=PROPS_DIR, usage_path=USAGE_PATH, injury_dir=INJU
             "is_starting_qb": bool(role.iloc[0]["is_starting_qb"]) if len(role) == 1 else None,
             "target_rank": float(role.iloc[0]["target_rank"]) if len(role) == 1 else None,
             "carry_rank": float(role.iloc[0]["carry_rank"]) if len(role) == 1 else None,
-            "injury_status": next((injuries[(t, key)] for t in teams if (t, key) in injuries), None),
+            # N44: the player's OWN team only (it used to search the opponent too)
+            "injury_status": injuries.get((role.iloc[0]["team"], key)) if len(role) == 1 else None,
+            "n_targets": int(role.iloc[0]["n_targets"]) if len(role) == 1 else None,
+            "n_carries": int(role.iloc[0]["n_carries"]) if len(role) == 1 else None,
         }
         if two_way:
             io, iu = american_to_implied(r["over_price"]), american_to_implied(r["under_price"])
@@ -216,6 +226,12 @@ def build_candidates(props_dir=PROPS_DIR, usage_path=USAGE_PATH, injury_dir=INJU
             reasons.append(f"status_{row['injury_status']}")
         if pull_age_h > max_pull_age_hours:
             reasons.append("pull_stale")
+        if injury_age_h > max_injury_age_hours:
+            reasons.append("injury_feed_stale")
+        # No entry in ESPN's feed is NOT evidence of availability (healthy stars have none;
+        # so does a mis-spelt name). It stays eligible and is flagged: every final leg needs
+        # an availability source of its own (log_final_ticket).
+        row["feed_status_missing"] = row["injury_status"] is None
         row["ineligible_reasons"] = ";".join(reasons)
         row["eligible"] = not reasons
         out.append(row)
@@ -226,7 +242,8 @@ def build_candidates(props_dir=PROPS_DIR, usage_path=USAGE_PATH, injury_dir=INJU
         "props_pull_timestamp": newest.isoformat(), "props_pull_age_hours": round(pull_age_h, 3),
         "props_rows": int(len(board)), "events": int(board["event_id"].nunique()),
         "usage_sha256": hashlib.sha256(Path(usage_path).read_bytes()).hexdigest(),
-        "injury_file": injury_file,
+        "injury_file": injury_file, "injury_file_age_hours": round(injury_age_h, 3),
+        "devig_method": "proportional_same_row", "policy": "N44",
     }
     return cand, meta
 
@@ -258,7 +275,7 @@ def leg_record(r):
         "event_id", "commence_time", "home_team", "away_team", "player_name", "team",
         "market_key", "line", "pick_side", "pick_price", "complement_price", "q_pick",
         "hold", "pull_timestamp", "target_share", "carry_share", "target_rank", "carry_rank",
-        "injury_status", "moved_against")}
+        "n_targets", "n_carries", "injury_status", "feed_status_missing", "moved_against")}
 
 
 def ticket_price(legs):
@@ -273,25 +290,110 @@ def ticket_price(legs):
             "expected_return_per_1_at_book_q": round(dec * fair, 4)}
 
 
-def log_ticket(log_path, entry):
-    """Append-only. An entry is never edited; (build_time, ticket_id) must be new."""
+LEG_KEY = ("event_id", "player_name", "market_key")
+LEG_IDENTITY = ("event_id", "player_name", "market_key", "line", "pick_side", "pick_price",
+                "complement_price", "pull_timestamp")
+
+
+def _key(leg):
+    return tuple(leg[k] for k in LEG_KEY)
+
+
+def check_legs_against_candidates(legs, cand):
+    """N44: a logged leg IS a candidate row — same line, side, both prices, same pull — it is
+    eligible, and a ticket holds one leg per game. (N43's logger took two copies of one leg at
+    an invented 999.5 line and +9999.)"""
+    seen_events = set()
+    for leg in legs:
+        for field in LEG_IDENTITY:
+            if leg.get(field) is None:
+                raise RuntimeError(f"HALT: leg missing {field}: {leg}")
+        m = cand[(cand["event_id"] == leg["event_id"]) & (cand["player_name"] == leg["player_name"])
+                 & (cand["market_key"] == leg["market_key"])]
+        if len(m) != 1:
+            raise RuntimeError(f"HALT: leg is not exactly one candidate row: {_key(leg)}")
+        row = m.iloc[0]
+        for field in ("line", "pick_side", "pick_price", "complement_price", "pull_timestamp"):
+            if row[field] != leg[field]:
+                raise RuntimeError(f"HALT: leg {_key(leg)} {field}={leg[field]!r} but the "
+                                   f"candidate row has {row[field]!r}")
+        if not bool(row["eligible"]):
+            raise RuntimeError(f"HALT: leg {_key(leg)} is not eligible: {row['ineligible_reasons']}")
+        if leg["event_id"] in seen_events:
+            raise RuntimeError(f"HALT: two legs in one game: {leg['event_id']}")
+        seen_events.add(leg["event_id"])
+
+
+def log_ticket(log_path, entry, cand):
+    """Append-only. An entry is never edited; (build_time, ticket_id) must be new; every leg is
+    checked against the candidate table it came from."""
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
     existing = json.loads(log_path.read_text()) if log_path.exists() and log_path.stat().st_size else []
     key = (entry["build_time"], entry["ticket_id"])
     if key in {(e["build_time"], e["ticket_id"]) for e in existing}:
         raise RuntimeError(f"HALT: {key} already logged — append-only")
-    for leg in entry["legs"]:
-        for field in ("event_id", "player_name", "market_key", "line", "pick_side",
-                      "pick_price", "complement_price", "pull_timestamp"):
-            if leg.get(field) is None:
-                raise RuntimeError(f"HALT: leg missing {field}: {leg}")
-    for veto in entry.get("vetoes", []):
-        if not veto.get("reason") or not veto.get("source"):
-            raise RuntimeError(f"HALT: a veto needs a reason AND a source: {veto}")
+    check_legs_against_candidates(entry["legs"], cand)
     merged = existing + [entry]
     log_path.write_text(json.dumps(merged, indent=2, default=str))
     return len(merged)
+
+
+def log_final_ticket(log_path, cand, meta, final_keys, reasons, confirmations, reader,
+                     top_k=TOP_K):
+    """N44: the reader's ticket, built BY CODE from candidate rows and compared BY CODE with
+    both baselines.
+
+      final_keys     [(event_id, player_name, market_key), ...]  0..top_k legs; [] = no ticket
+      reasons        {key: {"reason", "source"}} — REQUIRED for every baseline leg left out
+                     and every final leg that is in neither baseline. Derived here, not
+                     volunteered: a missing explanation halts.
+      confirmations  {key: {"availability_source", "checked_at"}} — REQUIRED for every final
+                     leg: the feed's status (or its absence) is not an inactive list.
+      reader         {"model", "inputs", "raw_output"} — what was read and what was answered.
+    """
+    final_keys = [tuple(k) for k in final_keys]
+    if len(final_keys) > top_k:
+        raise RuntimeError(f"HALT: {len(final_keys)} legs > {top_k}")
+    if len(set(final_keys)) != len(final_keys):
+        raise RuntimeError("HALT: duplicate leg in the final ticket")
+    for field in ("model", "inputs", "raw_output"):
+        if not reader.get(field):
+            raise RuntimeError(f"HALT: reader record missing {field}")
+    legs = []
+    for k in final_keys:
+        m = cand[(cand["event_id"] == k[0]) & (cand["player_name"] == k[1]) & (cand["market_key"] == k[2])]
+        if len(m) != 1:
+            raise RuntimeError(f"HALT: {k} is not exactly one candidate row")
+        legs.append(leg_record(m.iloc[0].to_dict()))
+    check_legs_against_candidates(legs, cand)
+
+    baselines = {"BASELINE_TOPK_Q": baseline_ticket(cand, top_k),
+                 "BASELINE_ROLE_OVERS": role_overs_ticket(cand, top_k)}
+    in_baseline = {_key(leg) for b in baselines.values() for leg in b}
+    removed = sorted(in_baseline - set(final_keys))
+    added = sorted(set(final_keys) - in_baseline)
+    reasons = {tuple(k): v for k, v in reasons.items()}
+    confirmations = {tuple(k): v for k, v in confirmations.items()}
+    for k in removed + added:
+        r = reasons.get(k) or {}
+        if not r.get("reason") or not r.get("source"):
+            raise RuntimeError(f"HALT: {'removed' if k in removed else 'added'} leg {k} "
+                               "needs a reason AND a source")
+    for k in final_keys:
+        c = confirmations.get(k) or {}
+        if not c.get("availability_source") or not c.get("checked_at"):
+            raise RuntimeError(f"HALT: final leg {k} has no availability confirmation")
+    entry = {
+        "build_time": meta["build_time"], "ticket_id": "FINAL_READER", "kind": "reader_final",
+        "manifest": meta, "legs": legs, "price": ticket_price(legs) if legs else None,
+        "departures": {"removed_from_baselines": [list(k) for k in removed],
+                       "added_outside_baselines": [list(k) for k in added]},
+        "reasons": [{"leg": list(k), **v} for k, v in reasons.items()],
+        "confirmations": [{"leg": list(k), **v} for k, v in confirmations.items()],
+        "reader": reader, "placed": None, "graded": False,
+    }
+    return log_ticket(log_path, entry, cand), entry
 
 
 def to_markdown(cand, meta, base):
@@ -327,12 +429,36 @@ def to_markdown(cand, meta, base):
     return "\n".join(lines)
 
 
+def log_final_from_file(final_path, season=2026):
+    """The production entry for the reader's ticket: `--final reader_ticket.json`, holding
+    candidates_file, final_keys, reasons, confirmations, reader. The candidate table is re-read
+    from disk and its sha256 must equal the one the baselines were logged with."""
+    spec = json.loads(Path(final_path).read_text())
+    pq = ROOT / spec["candidates_file"]
+    sha = hashlib.sha256(pq.read_bytes()).hexdigest()
+    log_path = BOARD_DIR / f"nfl_prop_tickets_{season}.json"
+    logged = [e for e in json.loads(log_path.read_text())
+              if e["manifest"].get("candidates_file") == spec["candidates_file"]]
+    if not logged or logged[0]["manifest"]["candidates_sha256"] != sha:
+        raise RuntimeError(f"HALT: {spec['candidates_file']} has no logged baselines or its sha256 changed")
+    cand = pd.read_parquet(pq)
+    as_map = lambda items: {tuple(i["leg"]): {k: v for k, v in i.items() if k != "leg"} for i in items}  # noqa: E731
+    return log_final_ticket(log_path, cand, logged[0]["manifest"], spec["final_keys"],
+                            as_map(spec.get("reasons", [])), as_map(spec.get("confirmations", [])),
+                            spec.get("reader", {}))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--season", type=int, default=2026)
     ap.add_argument("--build-time", help="ISO8601 UTC; default now")
     ap.add_argument("--top-k", type=int, default=TOP_K)
+    ap.add_argument("--final", help="reader_ticket.json: log the reader's final ticket and exit")
     args = ap.parse_args()
+    if args.final:
+        n, entry = log_final_from_file(args.final, args.season)
+        print(f"FINAL_READER logged ({len(entry['legs'])} legs, price {entry['price']}); log entries {n}")
+        return
     bt = args.build_time or datetime.now(timezone.utc).isoformat()
     cand, meta = build_candidates(season=args.season, build_time=bt)
     base = baseline_ticket(cand, args.top_k)
@@ -351,8 +477,8 @@ def main():
     for ticket_id, legs in (("BASELINE_TOPK_Q", base), ("BASELINE_ROLE_OVERS", overs)):
         n = log_ticket(log_path, {
             "build_time": str(bt), "ticket_id": ticket_id, "kind": "baseline_rule",
-            "manifest": meta, "legs": legs, "price": ticket_price(legs), "vetoes": [],
-            "placed": None, "graded": False})
+            "manifest": meta, "legs": legs, "price": ticket_price(legs),
+            "placed": None, "graded": False}, cand)
     print(json.dumps(meta, indent=2))
     print(f"eligible {int(cand['eligible'].sum())}/{len(cand)}; baseline {len(base)} legs; log entries {n}")
     if meta["props_pull_age_hours"] > MAX_PULL_AGE_HOURS:

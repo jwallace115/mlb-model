@@ -366,10 +366,14 @@ def grade_tickets(season=2026):
                             comp_0 = american_to_implied(comp_entry_price)
                             if pd.notna(q_0) and pd.notna(comp_0) and (q_0 + comp_0) > 0:
                                 q_0_devig = q_0 / (q_0 + comp_0)
-                                d_0 = 1.0 / q_0_devig if q_0_devig > 0 else None
+                                # N44: d_0 is the ACCEPTED decimal price (1 / raw implied), not
+                                # 1 / de-vigged q. With the no-vig price an unchanged -110/-110
+                                # gave C = 0; at the accepted price it is 1.909 * 0.5 - 1 = -4.55%.
+                                d_0 = 1.0 / q_0 if q_0 > 0 else None
                                 if d_0 is not None:
                                     leg["prob_clv"] = round(q_c_devig - q_0_devig, 6)
                                     leg["prob_clv_C"] = round(d_0 * q_c_devig - 1, 6)
+                                    leg["entry_decimal"] = round(d_0, 6)
                                     leg["prob_clv_reason"] = None
                             else:
                                 leg["prob_clv_reason"] = "entry_complement_missing"
