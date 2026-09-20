@@ -528,11 +528,13 @@ def build_clock_table(df):
                            np.where(sd == 0, "tied",
                            np.where(sd <= 8, "lead1-8", "lead9+"))))
 
-    # 5A-3: Clock period (3-way)
+    # 5I: Clock period (4-way); Q4_mid added for 120 < gsr <= 300
     q2_late = (scrim["qtr"] == 2) & (scrim["half_seconds_remaining"] <= 120)
     q4_late = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] <= 120)
+    q4_mid = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] > 120) & (scrim["game_seconds_remaining"] <= 300)
     scrim["clock_period"] = "normal"
     scrim.loc[q2_late, "clock_period"] = "Q2_late"
+    scrim.loc[q4_mid, "clock_period"] = "Q4_mid"
     scrim.loc[q4_late, "clock_period"] = "Q4_late"
 
     # Legacy hurry flag (kept in table for backward compat / testing)
@@ -1044,7 +1046,13 @@ def build_special_teams_table(df):
     # These replay the down. Compute offense/defense split from actual data.
     no_plays = df[df["play_type"] == "no_play"]
     accepted_no_play = no_plays[no_plays["penalty"] == 1]
-    result["penalty"]["p_no_play_penalty"] = len(accepted_no_play) / len(scrim) if len(scrim) else 0.03
+    # D89: rate per play ATTEMPT (scrimmage + penalties), not per resolved play.
+    # A no-play penalty replays the down; the engine draws again on the replay.
+    # Using penalties/resolved_plays as the per-attempt rate double-counts the
+    # geometric compounding: effective rate = p/(1-p) > p. The correct rate is
+    # penalties/(resolved + penalties), giving exactly p penalties per attempt.
+    _denom = len(scrim) + len(accepted_no_play) if len(scrim) else 1
+    result["penalty"]["p_no_play_penalty"] = len(accepted_no_play) / _denom
     # Offense fraction of no-play penalties (from actual data)
     if len(accepted_no_play) > 0 and "penalty_team" in accepted_no_play.columns and "posteam" in accepted_no_play.columns:
         np_off = accepted_no_play[accepted_no_play["penalty_team"] == accepted_no_play["posteam"]]

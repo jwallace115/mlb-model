@@ -1469,3 +1469,222 @@ therefore requires the single re-fit; neither goes to `main` before Cowork verif
 **Next.** `research/nfl_sim/workorder_5I_2026-09-20.md`: both fixes + D89 on branch `eng/5i` in
 worktree `~/mlb-model-5i`, K1 before/after each, the owed board refuse-to-rank trace, one
 re-fit. `main` stays on d929ad258504b275 until Cowork merges.
+
+### D99 — Item 1: yards-to-go after offensive penalty (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**Fix.** `engine.py`, both penalty branches: after moving the ball back on an offensive
+penalty, `dist` now rises by the yards actually marched off (`yl_after - yl_before`,
+respecting the clip at 99). Also initialized `auto_1st = np.zeros(N, dtype=bool)` before
+the `if def_pen.any()` block to prevent a crash when all penalties in a snap are offensive.
+
+Added `ev_3rd_long` counter (3rd-down attempts at 11+ to go) in both pass and rush paths,
+emitted in the output dict.
+
+Half-the-distance is NOT modelled (the drawn yardage is applied in full, clipped at 99);
+unchanged from pre-fix. Noted per the work order.
+
+**Verify section 4 reproduction (Mac):**
+```
+offensive no-play penalties with a following snap: 5914 (5.44/game); down replayed: 5911
+  yards-to-go change on the replayed down: mean +6.75, increased in 0.998 of cases
+  real 3rd-down share at 11+ to go: 0.182
+  engine (main): grep -n 'dist\[off_pen' nfl/sim/engine.py -> no match
+```
+
+**Tests (test_engine_5i.py, all 3 FAIL on pre-fix engine, all 3 PASS on post-fix):**
+- (a) `test_offense_penalty_increases_ytg`: elevated penalty rate (0.20), drives with
+  end_dist > 15: pre-fix 0.0649, post-fix 0.1463. Threshold 0.10.
+- (b) `test_like_for_like_4th_go_rate`: like-for-like go rate 0.19823 vs 0.198
+  (diff 0.00023 < 0.010). Pre-fix: 0.21385 (diff 0.01585 > 0.010, FAIL).
+- (c) `test_3rd_down_long_share`: 3rd-and-11+ share 0.1961 vs 0.182
+  (diff 0.014 < 0.030). Pre-fix: KeyError (counter absent).
+
+**Cowork's pre-registered predictions vs Mac (5A-3 sample, 50 games, N=500):**
+| Prediction | Cowork | Mac | Held? |
+|---|---|---|---|
+| like-for-like go rate 0.2139 -> 0.198 | 0.198 | 0.198 | YES |
+| existing 5A-3 metric 0.2103 -> 0.195 (passes) | 0.195 | 0.195 | YES |
+| pts/team 22.12 -> 21.96 | 21.96 | 21.96 | YES |
+| punts/game 8.66 -> 9.41 | 9.41 | 9.41 | YES |
+
+All four predictions held exactly.
+
+**Watch item:** 4th-down decisions/game (like-for-like) went 15.5 -> 16.5 in Cowork's
+scratch run (real 14.3). Mac: 16.5 confirmed. This is a movement away from real; the fix
+produces more 4th-down situations (more punts, more FGs) because the ydstogo distribution
+is now correct, but the total count of 4th-down states increases because fewer drives
+convert on 3rd-and-short. Reported from K1 below; no K1 line moved out of tolerance.
+
+**Null control (penalties/game):**
+off_pen: 6.137 -> 6.130 (delta -0.007); def_pen: 3.843 -> 3.838 (delta -0.005). The fix
+changes distance, not the draw. Held.
+
+**K1 (1087 games x N=500):**
+| Metric | BEFORE | Item 1 | Actual | Delta |
+|---|---|---|---|---|
+| Pts/team | 22.9 | 22.7 | 22.4 | -0.2 |
+| Plays/game | 130.2 | 130.1 | 124.5 | -0.1 |
+| Drives/game | 22.9 | 23.8 | 21.9 | +0.9 |
+| Go rate | 0.215 | 0.199 | 0.198 | -0.016 |
+| Like-for-like | 0.219 | 0.202 | 0.198 | -0.017 |
+| Off pen/game | 6.14 | 6.13 | 5.51 | -0.01 |
+| Def pen/game | 3.84 | 3.84 | 3.45 | 0.00 |
+| FD pen/team | 1.530 | 1.510 | 1.730 | -0.020 |
+| Punts/game | 8.19 | 8.94 | 8.73 | +0.75 |
+| FG att/game | 3.77 | 4.01 | 3.92 | +0.24 |
+| Margin SD | 15.0 | 15.0 | 14.5 | +0.03 |
+| 3rd-and-11+ | n/a | 0.193 | 0.182 | n/a |
+
+No K1 line moved out of tolerance in either direction.
+
+### D100 — Item 2: Q4 5:00-2:00 clock period (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**Fix.** `tables.py::build_clock_table`: added `Q4_mid` clock period for `qtr == 4` and
+`120 < game_seconds_remaining <= 300`, same groupby, same MIN_CELL=100, same fallback chain
+(`p_<score_state>` / `all`). 17 level-0 rows created; combos with n < 100 fall back.
+`engine.py`: `Q4_mid` selection added in scalar path, vectorized pass path, and vectorized
+rush path. `clock_runoff.parquet` rebuilt with the committed builder.
+
+**BEFORE changing anything — real elapsed by outcome_type x score_state, Q4_mid vs normal:**
+Trailing offences in Q4 121-300s are 8-13s FASTER than normal per play, not slower. Leading
+offences are also faster (not slower as the work order hypothesized): lead1-8 22.6s vs
+normal 32.4s (-9.8s), lead9+ 25.4s vs normal 33.4s (-8.0s). Both make sense: the game is
+winding down and both sides adjust pace.
+
+**Null control (Q2_late and Q4_late byte-identical in rebuilt parquet):**
+Q2_late: n match True, mean match True (20 rows). Q4_late: n match True, mean match True
+(14 rows). Normal pool shrank from 118,965 to 110,505 plays (8,460 moved to Q4_mid) — expected.
+
+**Tied-drive expiry (5A-9, 12 games, 11 seed salts):**
+| | Mean | SD |
+|---|---|---|
+| Broad (test definition) | 0.099 | 0.012 |
+| Strict (snap at/inside 35) | 0.068 | 0.012 |
+| Real broad (D94) | 0.031 (2/64) | |
+| Real strict (D94) | 0.000 (0/57) | |
+
+0 of 11 salts below the matched broad threshold of 0.081.
+
+**Cowork's pre-registered predictions vs Mac:**
+- sim pass elapsed in 121-300s falls from 25.4s to within 3s of real 16.9s:
+  NOT CHECKED — the 5H late-snap instrumentation was not cherry-picked (would require a
+  throwaway branch + non-trivial diag infrastructure). The K1-level tied-drive expiry moved
+  from 0.117 (D95) to 0.099, which is improvement but less than predicted.
+- broad expiry falls below 0.081 but NOT to zero:
+  **NOT HELD.** Mean 0.099, 0 of 11 salts below 0.081.
+- 0-40s bucket NOT addressed: **Correct, confirmed by design — Q4_mid covers 121-300s only.**
+
+**Null control (Q1-Q3 plays per game):** plays/game 130.1 → 130.3 (delta +0.2).
+Effectively unchanged.
+
+**K1 (1087 games x N=500):**
+| Metric | Item 1 | Item 2 | Actual | Delta |
+|---|---|---|---|---|
+| Pts/team | 22.7 | 22.8 | 22.4 | +0.06 |
+| Plays/game | 130.1 | 130.3 | 124.5 | +0.2 |
+| Drives/game | 23.8 | 23.8 | 21.9 | +0.01 |
+| Go rate | 0.199 | 0.204 | 0.198 | +0.005 |
+| Like-for-like | 0.202 | 0.207 | 0.198 | +0.005 |
+| Off pen/game | 6.13 | 6.14 | 5.51 | +0.01 |
+| Def pen/game | 3.84 | 3.84 | 3.45 | +0.01 |
+| Punts/game | 8.94 | 8.88 | 8.73 | -0.07 |
+| FG att/game | 4.01 | 4.01 | 3.92 | 0.00 |
+| 3rd-and-11+ | 0.193 | 0.193 | 0.182 | 0.000 |
+
+No K1 line moved out of tolerance in either direction.
+
+### D101 — Item 3: re-land D89 penalty rate denominator (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**Fix.** Exactly commit 27e900bb6's change: `tables.py` denominator
+`len(scrim) + len(accepted_no_play)`. `scalars.json` rebuilt.
+`p_no_play_penalty` = **0.06716294458229942** (exact match to target).
+
+**Offense/defense penalties per game and FD per team (80 games, 11 seed salts):**
+| | Mean | SD | Actual | Pass? |
+|---|---|---|---|---|
+| off_pen | 5.746 | 0.016 | 5.51 | YES (< 0.5 spec) |
+| def_pen | 3.597 | 0.008 | 3.45 | YES (< 0.5 spec) |
+| fd_pen_pt | 1.414 | 0.004 | 1.73 | YES (all 11 salts < 1.430) |
+
+All 11 of 11 salts pass fd_pen_pt (pass line 1.430). D97 reported mean 1.429 with SD 0.003
+at the old engine (D89 only, no Item 1). With Item 1's penalty-distance fix, the mean dropped
+further to 1.414. The real target includes 0.477/team of scrimmage-play penalty first downs
+the engine does not model; that is a separate, known gap (D97).
+
+**K1 (1087 games x N=500):**
+| Metric | Item 2 | Item 3 | Actual | Delta |
+|---|---|---|---|---|
+| Pts/team | 22.8 | 22.7 | 22.4 | -0.01 |
+| Off pen/game | 6.14 | 5.70 | 5.51 | -0.44 |
+| Def pen/game | 3.84 | 3.57 | 3.45 | -0.28 |
+| FD pen/team | 1.51 | 1.40 | 1.73 | -0.11 |
+| Go rate | 0.204 | 0.205 | 0.198 | +0.001 |
+| Punts/game | 8.88 | 8.84 | 8.73 | -0.03 |
+| 3rd-and-11+ | 0.193 | 0.189 | 0.182 | -0.004 |
+
+No K1 line moved out of tolerance in either direction (item 3).
+
+### D102 — Item 4: suite, refuse-to-rank, re-fit, re-stamp, K4 (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**1. Full suite: 189 passed, 2 failed.**
+- `test_first_downs_by_penalty`: FD pen/team 1.41 vs 1.73 (diff 0.32 > 0.30).
+  Expected red: correct rate exposes missing scrimmage-play penalty FD mechanism (D97).
+- `test_t3_tied_drives_that_reach_range_get_the_kick_off`: expired 0.119 vs threshold
+  0.050. Against matched target 0.081: red by 0.038. Still red; Q4_mid improved it
+  from 0.117 to 0.099 (D100 11-salt mean) but not enough to cross the test threshold.
+- Expected greens that were green: `test_t1_4th_down_go_rate` (go rate, 5A-3) — PASSED.
+  `test_penalties_per_side` (offense penalties, 5A-4) — PASSED.
+- All 3 new `test_engine_5i.py` tests: PASSED.
+
+**2. K1 before vs after every item — see D99/D100/D101 tables.** No line crossed its
+tolerance in either direction across all three items.
+
+**3. Board refuse-to-rank trace — BEFORE re-fit:**
+```
+CALIBRATION STAMP MISMATCH — sim prices suppressed:
+  engine_fingerprint: cal=d929ad258504b275, live=7f3d96900218c014
+## Not rankable (990 legs: CALIBRATION STAMP INVALID — nothing is rankable this run)
+```
+No leg ranked. The gate reacted to a real engine change.
+
+**4. Re-fit:** `python3 nfl/sim/run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5i`.
+1087/1087 converged, 102.8 min, 7 workers.
+```json
+{
+  "engine_fingerprint": "7f3d96900218c014",
+  "fit_inputs_fingerprint": "840412f7295a8323",
+  "fit_seasons": [2021, 2022, 2023, 2024],
+  "engine_commit": "4c67b0ceb",
+  "fit_completed_utc": "2026-09-20T05:16:40Z",
+  "n_games": 1087
+}
+```
+
+**5. Calibration maps:** `run_cal_maps.py --fit-dir fit_5i`. 21 families.
+`save_calibration` read fingerprints from `fit_meta.json`:
+`engine_fingerprint=7f3d96900218c014, usage=840412f7295a8323`.
+
+**6. Board after re-fit — ranks:**
+```
+Generated: 2026-09-20T05:28:30Z
+(no SIM PRICES SUPPRESSED)
+## Not rankable (868 legs: no Hard Rock price or not converged)
+## Cross-game top 20 (trusted, over side, not BOOK-MORE-CONFIDENT)
+```
+`sim_pricing_enabled` = true. 868 not-rankable legs are price-absent, not stamp-invalid.
+Legs are ranked in the top-20 table.
+
+**7. K4 on fit_5i:** Brier 0.25356 (72,897 rows, 8 families). Reported as a measurement,
+not interpreted as validation per the work order.
+
+**Fingerprints:**
+- Engine: `7f3d96900218c014` (changed from `d929ad258504b275`)
+- Calibration stamp: `(True, [])` after re-stamp
