@@ -1474,3 +1474,44 @@ MONDAY grading (after the nflverse PBP refresh):
 then `python3 nfl/sim/score_week_vs_book.py --week 2 --out research/nfl_sim/wk2_sim_vs_book_2026-09-21.md`.
 NOT DONE: a grader for the two GAME tickets (hand-grade from final scores Monday/Tuesday; NYG@LA is Monday
 night); NFL close/CLV. UNVERIFIED: the 16:30Z / 16:50Z scheduled props pulls.
+
+### N56 — The fixed Sunday routine: one card, fixed menu, fixed stakes, one number per leg (2026-09-20)
+
+**Jeff (~17:40Z):** "if i kept the steelers thats my bad...i get confused so many different numbers. and
+played more then i would have normally...thats why i want to get the system down and consistent."
+CAUSE, Cowork's: between 16:19Z and 16:54Z it sent seven ticket messages (5, 10, 10-r2, game, game-r1,
+opinion, rank correction) plus conditional price advice, minutes before kickoff. $70 was staked against
+the $40 of the morning plan. The process produced the confusion and the extra volume.
+
+**Routine from Week 3 (Jeff's answers, verbatim where quoted):**
+1. ONE CARD, ONE TIME: a single message after inactives (target ~12:15pm ET) from a props pull and a line
+   snapshot < 10 minutes old (Jeff runs one command when asked). A late-games card only if he asks.
+2. FIXED MENU — "4 tickets": AI 5-leg props; AI 5-leg game lines; one 10-leg; one larger lottery ticket.
+   Fewer legs if the reader passes (N54) — never more tickets.
+3. FIXED STAKES, Jeff's ceilings: "$15 on 3 leg, 10 to 15 on 10 leg and no more then 10 on anything larger
+   then 10 leg". Read as: short tickets (the 5-legs) $15 each — HE WROTE "3 leg"; TO CONFIRM whether he
+   means the 5-leg tickets or wants 3-leg tickets; 10-leg $10-15; anything over 10 legs <= $10. Ceiling for
+   the four = $55. Cowork never suggests a stake above these and never suggests a fifth ticket.
+4. ONE NUMBER PER LEG: each leg carries a "play down to" price. App shows that or better -> bet; worse, or a
+   different line -> skip the leg. No either-or instructions.
+5. NO REVISIONS after the card unless Jeff asks; the play-down-to price already covers a moved line.
+6. AFTER: he pastes the slips, Cowork logs placements; Monday one results message by kind of pick.
+NOT BUILT: `play_down_to` field on a logged leg + its rendering in `final_ticket_markdown`; the card
+builder that emits all four tickets in one message. Both before next Sunday, with the ai_ticket logger.
+
+**N56 addendum (18:08Z) — the menu is a default, not a cage.** Jeff: "i may ask for a 4pm only slate, or a
+sunday night same game parlay...you never know...well probably do seperate monday night parlays and
+thursday same game parlays...same for college football, there no player props though....things are
+flexable." So: WHAT he asks for varies (a window slate, a same-game parlay, MNF/TNF tickets, NCAAF game
+lines only - no college props exist in the feed); HOW it is delivered does not: one card per ask, fresh
+pull, leg/game/reason, one play-down-to price per leg, his stake ceilings by ticket size, no unrequested
+revisions, slips logged. Same-game parlays: Hard Rock prices them BELOW the product of the legs (N49: pairs
+0.85-0.97, a 4-leg one-game ticket ~0.70), so a same-game card must quote the book's own SGP price from the
+slip builder, never the product.
+**Kalshi first look (capture began 2026-09-20 02:27Z; 18 NFL snapshots):** moneylines are liquid (30 Week-2
+sides, median $512k traded, 1c bid/ask) and track Pinnacle no-vig within 1.0 point on average. vs Hard
+Rock's moneyline at 16:35Z/16:43Z: Kalshi's ask was cheaper on 27 of 30 sides before fees; after a taker fee
+of ~0.07*p*(1-p) it is cheaper on 13 of 15 favourites (mean 1.0 pt) and 5 of 15 underdogs (mean -0.5 pt).
+One pre-kick snapshot pair, 8 minutes apart, one Sunday: a measurement, not a finding. Spread/total ladders
+are thin (median ~$2-3k per rung). Use: a second sharp reference for the reader, and a cheaper venue for a
+SINGLE favourite moneyline - Kalshi has no parlays.
