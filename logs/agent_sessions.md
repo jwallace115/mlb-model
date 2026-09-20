@@ -2580,3 +2580,19 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - UNVERIFIED: the VM crontab (grade job time, whether it exists); that the VM picks up the new
   pull-log writers (first proof = a `_pulls.jsonl` line with `feed` after the next 12:30Z/09:00Z
   pulls following the push); the first scheduled props pull (Sun 15:00Z).
+
+## 2026-09-20T12:10Z  cowork — N43: NFL candidate table + ticket log; ChatGPT audit brief #5
+- BUILT: nfl/pipeline/build_nfl_candidates.py (newest pre-kick Hard Rock pull <= build time, same-row
+  de-vig, roles from usage wk, ESPN injury status by (team, name), eligibility rules, two rule
+  baselines, append-only ticket log with sourced vetoes); tests/test_nfl_candidates_n43.py + 3
+  real-data fixtures; decision N43; research/cross_ai/chatgpt_audit_brief_parlay_board_v2_2026-09-20.md.
+- RETURNED: one-command suite 74 passed. Six mutations of the production file each turn a test red.
+  Real 09-19 15:11Z pull: 973 rows, 588 two-way, 263 eligible (with the age limit lifted), 0 volume
+  legs role-unmatched, hold 6.7-7.0%, top-5-by-q expected return 0.70 at the book's own q.
+- MEANS: the rule half of the NFL ticket now exists and is reproducible. It does NOT mean it has
+  run in production: its first real input is the 15:00Z pull today, which did not exist when written.
+- NOT DONE: NFL prop grader + outcomes join for the new log; rule for "app line differs from table";
+  stale quotes still inside build_ncaaf_board.py's consensus; the dual-writer (golf, mlb_confirm,
+  results_grader run on Mac AND VM — seen as an autostash conflict at 11:54Z).
+- UNVERIFIED: usage week-2 rows are point-in-time (taken from earlier verification, not re-checked
+  today); the 15:00Z scheduled props slot.

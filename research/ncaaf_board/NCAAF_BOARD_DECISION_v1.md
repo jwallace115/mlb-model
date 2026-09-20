@@ -1020,3 +1020,52 @@ One command: `pytest shared/pipeline/tests nfl/pipeline/tests ncaaf/pipeline/tes
 
 **Note for Saturday.** Line capture pauses 05:30-14:00Z, so an 11:00Z build prices every game off
 05:30Z quotes (median quote age 5.5 h). Build after the 14:00Z pull.
+
+### N43 — The NFL ticket gets a written half: candidate table, two rule baselines, a ticket log (2026-09-20)
+
+Audit #4 item 4: NFL selection was "an unlogged LLM in a chat window" — nothing in the repo. Built
+before the first scheduled Sunday props pull (15:00Z) and before anyone has seen it.
+
+`nfl/pipeline/build_nfl_candidates.py` (no simulation, no model, **no edge claimed**):
+1. Hard Rock props, the newest pull at or before `build_time`; pre-kick rows only (production
+   `drop_inplay_rows`); games that have not kicked. Nothing pulled after `build_time` is read.
+2. Two-way markets de-vigged FROM THE SAME ROW (same book, same pull). One-way markets (anytime
+   TD, 385 of 973 rows on the 09-19 pull) have no complement and are never eligible.
+3. Roles: `player_usage_weekly.parquet` (season, week), matched on normalised name within the
+   game's two teams; `role_unmatched` is a reason, never a silent drop (0 of 263 volume legs on
+   the 09-19 pull). Injury status: newest ESPN file at or before `build_time`; 32 teams or HALT.
+4. ELIGIBLE = volume family (receptions, rush attempts, pass attempts, completions — the families
+   whose role attribute passed the 2021-24 split-half audit, D11) AND two-way AND role matched AND
+   not Out/Doubtful/IR AND the pull is at most `MAX_PULL_AGE_HOURS = 3` old. The pick side is the
+   side the book favours. D58 MOVED-AGAINST (first pull of the week vs this one, same line only)
+   is displayed and never acted on.
+5. Two baselines, both pure rules, one leg per game, top 5 by de-vigged q:
+   `BASELINE_TOPK_Q` (any eligible leg) and `BASELINE_ROLE_OVERS` (Overs on a team's top-2 target
+   share / top carry share / flagged starting QB — ranks within team, no threshold to tune).
+6. `nfl/data/board/nfl_prop_tickets_2026.json`, append-only: each entry stores the manifest (pull
+   timestamp and age, usage sha256, injury file, candidates file + sha256), full legs (line, price,
+   SAME-ROW complement, q, pull timestamp), the price, and `vetoes`. **A veto without a reason AND
+   a source is refused.** The reader's final ticket is logged beside the baselines it departed from.
+
+**What the real 09-19 15:11Z pull says (measured, not a claim of edge).** Hard Rock's two-way hold
+is a flat ~6.7-7.0% in every family. The top-5-by-q ticket prices at 7.29 decimal against a
+product of the book's own de-vigged probabilities of 0.0957: **expected return 0.70 per 1 staked
+at the book's own numbers** — every leg costs ~6.5%, five legs ~30%, before any same-game charge.
+Top-q legs are low-line Unders (TE2 receptions U1.5 -230); lead-role Overs sit at q 0.58-0.59.
+
+**Pre-registered, for the prospective comparison (nothing tuned on 2026):** per week, hit rate and
+point/probability CLV of (a) each baseline, (b) the reader's final ticket, (c) the legs the reader
+vetoed. The reader layer earns its place only if (b) beats (a) on CLV and the vetoed legs do worse
+than the kept ones. No count of weeks is declared sufficient in advance; the log just accumulates.
+
+**NOT DONE.** No NFL prop grader for this log (close = last pre-kick Hard Rock pull within 30 min;
+the Sunday slots give 16:30Z for 17:00Z kicks and 19:45Z for 20:05Z, but 20:25Z kicks are 40 min
+out -> `close_unavailable` as the rule stands). No outcomes join (nflverse player stats). Alt lines
+are not in the pull. `nfl/sim/` untouched; the sim is not a layer in this log yet.
+
+**Tests (6, production functions, fixtures cut from the real props archive, the real week-2 usage
+rows and the real ESPN injuries pull):** same-row de-vig; nothing after build_time, nothing kicked;
+stale pull -> nothing eligible; an Out player is never eligible; baselines reproducible and one leg
+per game; log append-only and a veto needs a source. Six mutations of the production file (raw
+implied as q, no build-time cutoff, status ignored, kicked games kept, stale pull allowed, many legs
+per game) each turn at least one test red. One command: **74 passed**.
