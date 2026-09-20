@@ -1,3 +1,36 @@
+## 2026-09-20T03:36Z  claude-code (WO10b: Capture fixes — storage, news reader, health check, tests)
+
+### RETURNED
+- Item 1: Commented out 5 cron entries on VM (#WO10b_PAUSED#): ESPN news NFL/NCAAF (4x/day each), ESPN injuries+depth (4x/day + Sun extra), nflverse archive (daily). All 6 oversized files (68+10+6+9+7+7+4 = ~111 MB) already tracked and pushed by push_daemon. Nothing deleted.
+- Item 2: News de-dup via `_seen.json` (id->lastModified). NFL 2nd run: 0 new articles (100% skip). NCAAF 2nd run: 3 new (99.9% skip). Injuries/depth: gzipped + content-hash skip (recursive strip of `timestamp` fields). Both hash-skipped on 4th run. Nflverse: SHA-256 hash-skip. NCAAF Kalshi: 30-min Fri 14:00-Sun 05:30, 3h otherwise (6 lines replace 1). Total: ~154-200 MB/month (under 300).
+- Item 3: Ticket builder reads both .json and .json.gz, de-dups by article id, halts if newest pull >24h old. Health check: filename timestamps (not st_mtime), `_pulls.jsonl` for hash-skipped feeds, `pd.to_datetime(..., utc=True)`, no bare except. Regex handles both HHMMZ and HHMMSSZ.
+- Item 4: 20 tests across nfl/pipeline/tests/ and shared/pipeline/tests/. All pass. conftest.py added for importlib mode.
+
+### HEALTH CHECK (VM, 03:33Z)
+All 10 feeds OK. nfl_props: 12.4h (not 4,226h). nfl_lines: 0.1h. Kalshi: 0.2h.
+
+### HEALTH CHECK (fresh clone, 03:35Z)
+All 10 feeds OK. Same ages within push delay. nfl_props: 12.4h.
+
+### DECISIONS WRITTEN
+- N32: bleed stopped, already-pushed data quantified
+- N33: storage formats, de-dup key, single depth-chart writer, measured MB/month
+- N34: reader contract, health check clock
+- N35: test inventory, correction of WO10 report
+
+### NOT DONE
+- No scheduled ESPN/nflverse firings observed yet (first slots: 06:10/06:20/06:30/09:00 UTC)
+- No Sunday props firing observed (first: Sun 15:00 UTC)
+- The 68 MB uncompressed NCAAF news file already on origin cannot be removed without history rewrite
+- capture_status_2026-09-20.md updated but not the master doc (iamnotuncertain_operations_v9.md)
+- No alerting built for health check failures (out of scope per WO10)
+
+### UNVERIFIED
+- Whether the re-enabled ESPN/nflverse cron entries fire on their next scheduled slot
+- Whether the news de-dup `_seen.json` state persists correctly across push_daemon cycles (it's gitignored — if not, it won't sync to origin, which is correct but means the VM is the single state holder)
+- Whether the depth chart hash-skip holds across actual roster moves (tested with 3-minute gap, not multi-day)
+- Whether the NCAAF Kalshi 3h-outside-window schedule has any cron overlap or gap
+
 ## 2026-09-20T02:46Z  claude-code (WO10: Scheduled capture — props, ESPN, Kalshi, health)
 
 ### RETURNED
