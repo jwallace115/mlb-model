@@ -28,9 +28,19 @@ ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
 EXPECTED_TEAMS = 32
 
 
-def _content_hash(data, exclude_keys=("timestamp", "_pull_time")):
-    """SHA-256 of JSON with volatile fields removed."""
-    clean = {k: v for k, v in data.items() if k not in exclude_keys}
+def _strip_volatile(obj, exclude_keys=("timestamp", "_pull_time")):
+    """Recursively strip volatile keys from nested dicts/lists."""
+    if isinstance(obj, dict):
+        return {k: _strip_volatile(v, exclude_keys)
+                for k, v in obj.items() if k not in exclude_keys}
+    if isinstance(obj, list):
+        return [_strip_volatile(v, exclude_keys) for v in obj]
+    return obj
+
+
+def _content_hash(data):
+    """SHA-256 of JSON with volatile fields recursively removed."""
+    clean = _strip_volatile(data)
     return hashlib.sha256(json.dumps(clean, sort_keys=True).encode()).hexdigest()
 
 
