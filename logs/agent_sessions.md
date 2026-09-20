@@ -2737,3 +2737,41 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - OBSERVED: first scheduled props pull 15:00:10Z tag close, 878 rows. 1pm inactives: no placed-ticket player listed (FantasyPros; NFL.com page empty at 15:42Z).
 - NOT DONE: 5J/5K not run. NFL prop grader not built. Outcomes not joined.
 - UNVERIFIED: whether the inactives list read was the full official 90-minute list.
+
+## 2026-09-20T16:30Z  claude-code (Phase 5J execution)
+
+Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
+`engine_fingerprint()` = `7f3d96900218c014` after every item.
+
+### Commits (4, each pushed before the next)
+- `15ec21c73` D104: Item 1 — layer-3 starting-QB fallback gets D59 date rule
+- `46cc7e206` D105: Item 2 — pre-kick snapshot, Hard Rock only, --as-of
+- `9b1e09b7c` D106: Item 3 — board prices the line the book quotes
+- `3539b8cb6` D107: Item 4 — run_k1_table.py committed K1 generator
+
+### What was done
+- Item 1: usage.py layer 3 now filters rank-1 QB snapshots to dt < week's first kickoff.
+  P1 held: zero 2026 wk1-2 rows changed. 2021-2024 bit-identical. Test FAILS on main.
+- Item 2: get_lines_from_history() reads per-game pre-kick snapshots, Hard Rock only, no
+  fallback. --as-of flag added. P2 held: 14 games identical. P3 not testable (no post-kick
+  snapshots in tape). Tests (a) and (b) FAIL on main.
+- Item 3: RB rush attempts priced at each book-quoted line (not just 4 rungs). QB pass
+  completions/attempts: NOT in per-player sim output (reported, not fixed).
+  run_board_coverage.py committed.
+- Item 4: run_k1_table.py — committed generator with all tolerances from test suite.
+  21.8 min. Reproduces D102 K1 to printed precision. 3 FAIL (like-for-like go 0.0102,
+  fd_pen 0.324, tied_expiry 0.119).
+
+### What was NOT done
+- P4 not verified via full board run (requires ~10 min run_week.py invocation; the code
+  changes are committed and Cowork can verify).
+- D106's null control (existing legs have same sim_p): not verified (same reason — needs
+  a full board run).
+- No merge to main. Cowork verifies.
+- 5K work order not started per instructions.
+
+### What remains UNVERIFIED
+- Whether P4 (rush-attempt coverage >= 34/38) holds in practice. The code logic is clear:
+  every book-quoted line gets a sim number, but player-not-in-sim-universe is still a miss.
+- Whether the get_lines_from_history() per-game walk-back reads too many parquet files
+  under heavy use (709 files x 15 games, cached, but initial load could be slow).
