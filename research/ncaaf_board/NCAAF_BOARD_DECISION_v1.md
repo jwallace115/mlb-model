@@ -703,3 +703,48 @@ due to per-team `timestamp` fields; fixed with recursive strip).
    actual props age was ~12h. The bare except has been removed.
 2. The tests were listed as neither DONE nor NOT DONE in the report. They were not
    written. `git diff --name-only 0529f52..3f42eb1` contains zero test files.
+
+### N36 — Order #10b verified; nflverse depth archive becomes a delta; in-play filter tested for real (2026-09-20)
+Cowork, verified from a fresh clone of origin at 74223d6, then fixed directly (order "10c").
+
+**What held up in #10b.** Health check in a fresh clone: all 10 feeds OK, nfl_props 12.5 h —
+it agrees with the VM and no longer uses st_mtime or a bare except. De-dup works: second
+pulls wrote 6 KB (NFL) and 16 KB (NCAAF). Status feeds gzip to ~0.35-0.39 MB. 20 tests pass.
+The tests for the health check, ESPN halts, Kalshi halts and news de-dup import the real
+modules. Already on origin and permanent: ~115 MB from #10's one-off pulls (the 66.6 MB raw
+NCAAF news file is most of it).
+
+**What did not.**
+1. **N33's nflverse figure (46-92 MB/month) rests on "rosters/depth change 1-2x/week". Measured:
+   `depth_charts.parquet` carries a `dt` snapshot per row and has 253 distinct snapshot dates in
+   2026, one per day through 09-19.** It changes daily, so the sha256 hash-skip never skips:
+   a 7.2 MB full copy every day (~216 MB/month), of rows already in the previous copy. The file
+   is its own history. FIX: `shared/pipeline/archive_nflverse_depth_delta.py` archives only rows
+   with `dt` newer than the newest already archived (baseline = the 02:21Z full copy), logs every
+   pull with the full-file sha256 to `_pulls.jsonl`, refuses to overwrite, halts on a missing
+   file or a missing `dt` column. Run against the real file: `unchanged rows=0
+   max_dt=2026-09-19T11:56:08Z`. Stated limit: a retroactive nflverse edit to an archived
+   snapshot is detectable (hash) but not reconstructable. Injuries/rosters keep hash-skipped
+   full copies.
+2. **Two of #10b's tests guarded a replica, not the code.** `test_props_inplay_filter.py` and
+   `test_ticket_reader.py` each define a "Replica of…" function and test that; deleting the
+   real filter left every test green. FIXED for the props filter: `drop_inplay_rows()` is now a
+   function in the puller, compares parsed UTC datetimes, raises on an unparseable row, and the
+   test imports it. Mutation check: with the old string comparison restored, 3 of 9 tests fail —
+   including the puller's REAL timestamp shapes (`…17:00:00.000001+00:00` sorts before
+   `…17:00:00Z` as text, so a row pulled in the kickoff second was kept). NOT fixed: the
+   ticket-reader test is still a replica — the reader lives inline in `main()` of
+   `build_ncaaf_tickets.py` and needs extracting into a function first. The reader code itself
+   was read and is correct, with one nit: articles with an empty `id` collapse into one.
+3. `pytest shared/pipeline/tests nfl/pipeline/tests` in ONE command fails at collection (both
+   folders are a package named `tests`). Run them separately until one `__init__.py` goes.
+
+**Still open — the largest remaining item.** `nfl/data/pbp/depth_charts.parquet` is tracked and
+the VM now rewrites it daily: ~7.2 MB/day (~216 MB/month) of git history by itself. The clean fix
+is for `run_week.py` to refresh its own inputs so the file can be untracked like the rest of
+`nfl/data/pbp/`; that is in `nfl/sim/`, which Phase 5I has open — do it after `eng/5i` merges.
+Until then the measured total is roughly: Kalshi ~103 + news ~3 + ESPN status ~3 + nflverse
+rosters/injuries ~20 + tracked depth file ~216 = **~345 MB/month**, not the 154-200 reported.
+
+**Not verified:** any ESPN/nflverse/props SCHEDULED firing (first slots 06:10Z, 09:00Z,
+Sun 15:00Z); the delta script on the VM (it reaches the VM on the next push_daemon pull).

@@ -1,3 +1,22 @@
+## 2026-09-20T03:47Z  cowork (WO10b verification + direct fixes "10c" — N36)
+
+### RETURNED
+- Fresh clone of origin 74223d6: capture_health all 10 OK, nfl_props 12.5h. 14 + 6 tests pass (folders run separately; together = collection error, both packages named `tests`).
+- depth_charts.parquet: 1,276,485 rows, 253 distinct 2026 snapshot dates, daily through 09-19; full 7.2 MB, 2026-only 3.25 MB.
+- archive_nflverse_depth_delta.py on the real file with the 02:21Z baseline: unchanged, rows=0, max_dt 2026-09-19T11:56:08Z. 4 new tests pass.
+- drop_inplay_rows(): 9 tests pass; with the old string filter restored 3 fail.
+
+### MEANS
+- N33's nflverse estimate was wrong by ~3-5x: the depth file changes daily, hash-skip never skips. Now a delta.
+- The props in-play test was testing a replica; it now guards the real function. The ticket-reader test still does not.
+- Measured football capture is ~345 MB/month, dominated by the TRACKED depth_charts.parquet the VM rewrites daily.
+
+### NOT DONE
+- Ticket-reader test still a replica. tests/__init__.py name collision. Tracked depth file (needs nfl/sim, blocked on 5I).
+
+### UNVERIFIED
+- The delta script running on the VM; every ESPN/nflverse/props scheduled firing.
+
 ## 2026-09-20T03:36Z  claude-code (WO10b: Capture fixes — storage, news reader, health check, tests)
 
 ### RETURNED

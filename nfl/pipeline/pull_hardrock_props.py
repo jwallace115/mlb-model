@@ -41,6 +41,20 @@ PROPS_DIR = ARCHIVE_ROOT / "props"
 HALT_THRESHOLD = 3000
 
 
+def _utc(ts):
+    """ISO-8601 string -> tz-aware UTC datetime ("...Z" and "...+00:00" both accepted)."""
+    dt = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+    return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+
+
+def drop_inplay_rows(rows):
+    """WO10 1c / WO10c: keep only rows pulled strictly BEFORE kickoff. Compares parsed
+    datetimes, not strings — "…T17:00:00+00:00" and "…T17:00:00Z" are the same instant but
+    do not compare equal as text. A row whose timestamps cannot be parsed raises: an
+    unreadable row must not be written as if it were pre-game."""
+    return [r for r in rows if _utc(r["pull_timestamp"]) < _utc(r["commence_time"])]
+
+
 def american_to_implied(odds):
     if odds is None:
         return None
@@ -212,7 +226,7 @@ def main():
 
     # ── In-play filter (1c): drop any row where pull_timestamp >= commence_time ──
     pre_filter = len(all_rows)
-    all_rows = [r for r in all_rows if r["pull_timestamp"] < r["commence_time"]]
+    all_rows = drop_inplay_rows(all_rows)
     if len(all_rows) < pre_filter:
         print(f"  in-play filter: dropped {pre_filter - len(all_rows)} rows "
               f"where pull_timestamp >= commence_time")

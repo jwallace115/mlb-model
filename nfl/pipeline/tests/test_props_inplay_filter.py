@@ -8,9 +8,9 @@ import pytest
 from datetime import datetime, timezone
 
 
-def _apply_inplay_filter(rows):
-    """Replica of the in-play filter from pull_hardrock_props.py line 213-215."""
-    return [r for r in rows if r["pull_timestamp"] < r["commence_time"]]
+# WO10c: the first version of this file tested a REPLICA of the filter, so deleting the
+# filter from the puller left every test green. It now imports the puller's own function.
+from nfl.pipeline.pull_hardrock_props import drop_inplay_rows as _apply_inplay_filter
 
 
 def _make_row(pull_ts, commence_ts):
@@ -69,3 +69,21 @@ class TestInPlayFilter:
         rows = [_make_row("2026-09-21T17:00:00Z", "2026-09-21T17:00:00Z")]
         result = _apply_inplay_filter(rows)
         assert len(result) == 0
+
+
+    def test_same_instant_different_suffix_is_dropped(self):
+        """17:00:00+00:00 vs 17:00:00Z is the same instant -> not strictly before -> dropped.
+        As strings "+00:00" < "Z", so a string comparison KEEPS this in-play row."""
+        rows = [_make_row("2026-09-21T17:00:00+00:00", "2026-09-21T17:00:00Z")]
+        assert "2026-09-21T17:00:00+00:00" < "2026-09-21T17:00:00Z"   # what the old filter did
+        assert _apply_inplay_filter(rows) == []
+
+    def test_real_timestamp_shapes(self):
+        """The shapes the puller actually writes: microseconds + offset vs the API's Z form."""
+        pre = _make_row("2026-09-20T16:30:02.979726+00:00", "2026-09-20T17:00:00Z")
+        live = _make_row("2026-09-20T17:00:00.000001+00:00", "2026-09-20T17:00:00Z")
+        assert _apply_inplay_filter([pre, live]) == [pre]
+
+    def test_unparseable_row_raises(self):
+        with pytest.raises(ValueError):
+            _apply_inplay_filter([_make_row("not-a-time", "2026-09-20T17:00:00Z")])

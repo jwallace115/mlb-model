@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# WO10b Item 2c: Run nflverse puller then archive a timestamped copy.
+# WO10b Item 2c / WO10c: run the nflverse puller, then archive (delta for depth charts,
+# hash-skipped full copies for injuries and rosters).
 # The sim reads the overwritten parquets; this preserves point-in-time copies.
 # Hash-skip: only copy when sha256 differs from the last archived copy.
 set -euo pipefail
@@ -18,7 +19,12 @@ python3 nfl/sim/pull_nflverse_inputs.py
 
 # Archive timestamped copies with hash-skip
 mkdir -p "$ARCHIVE_DIR"
-for f in depth_charts.parquet injuries.parquet rosters_weekly.parquet; do
+# WO10c: depth_charts.parquet is its own history (every row carries `dt`, a new snapshot is
+# appended daily), so it changes every day and a full copy never hash-skips: ~7.2 MB/day.
+# Archive only the rows newer than what is already archived; every pull is logged.
+"$VENV" shared/pipeline/archive_nflverse_depth_delta.py
+
+for f in injuries.parquet rosters_weekly.parquet; do
     src="$PBP_DIR/$f"
     if [ -f "$src" ]; then
         name="${f%.parquet}"
