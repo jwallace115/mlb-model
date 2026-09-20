@@ -388,3 +388,73 @@ because ISO8601 sorts lexicographically.
 relative to kickoff. All 2-hour windows still contain their kickoffs
 (verified: 1pm ET = 18:00 UTC is inside 16:30+2h = 18:30 UTC). Not missed,
 just earlier capture (~90 min pre-kick instead of ~30).
+
+### N29 — ESPN news/injuries/depth, nflverse schedule, what college lacks (2026-09-20)
+
+**Sources verified from VM (root@142.93.242.4, 2026-09-20T02:17Z):**
+- `nfl/news?team={id}&limit=20`: 200 OK, articles with `published` timestamps
+- `college-football/news?team={id}&limit=20`: 200 OK (existing puller)
+- `nfl/injuries` (league endpoint): 200 OK, **32 teams in one response**
+  (no per-team looping needed), athlete-level: status, date, type, detail
+- `nfl/teams/{id}/depthcharts`: 200 OK, `depthchart` key (list of formations)
+- `college-football/teams/{id}/injuries`: returns `{}` (empty) — confirmed N03
+- `college-football/teams/{id}/depthcharts`: returns no `depthchart` key — confirmed
+
+**What college does NOT have:** ESPN provides no structured injury feed and no
+depth chart feed for NCAAF. For college football, news IS the injury layer (N03).
+CFBD has rosters and player game stats but no injuries and no depth charts.
+
+**Scripts:**
+- `shared/pipeline/pull_espn_news.py --sport nfl|ncaaf`: generalized puller,
+  72h freshness check, gzipped output (NCAAF is 67 MB uncompressed per pull)
+- `ncaaf/pipeline/pull_ncaaf_news.py`: thin wrapper calling the shared puller
+- `shared/pipeline/pull_espn_nfl_status.py`: injuries + depth charts, asserts
+  32 teams each
+- `shared/pipeline/run_nflverse_with_archive.sh`: runs pull_nflverse_inputs.py
+  then copies timestamped parquets to data/depth_archive/nfl/season=2026/
+
+**Paths:**
+```
+data/news_archive/nfl/season=2026/news_<UTC>.json.gz
+data/news_archive/ncaaf/season=2026/news_<UTC>.json.gz
+data/injury_archive/nfl/season=2026/injuries_<UTC>.json
+data/depth_archive/nfl/season=2026/depth_<UTC>.json
+data/depth_archive/nfl/season=2026/nflverse_<name>_<UTC>.parquet
+```
+
+**Measured sizes (one pull each, 2026-09-20):**
+| Feed           | Size      | Articles/Teams | Runtime |
+|----------------|-----------|----------------|---------|
+| NFL news (gz)  | ~1,100 KB | 640 / 32       | 21.4s   |
+| NCAAF news (gz)| 10,032 KB | 2,920 / 146    | 113.3s  |
+| NFL injuries   | 9,156 KB  | 800 / 32       | ~2s     |
+| NFL depth      | 6,970 KB  | 32 teams       | 23.2s   |
+| nflverse arch  | 12.0 MB   | 3 files        | ~15s    |
+
+**Storage projection:** News gzipped: NFL ~66 MB/mo + NCAAF ~1.2 GB/mo.
+Injuries + depth: ~480 MB/mo. Total ~1.7 GB/month in git. Large but the
+work order says gzip, not drop fields.
+
+**Freshness checks:**
+- News: newest article within 72h, else HALT. Measured: NFL 2.4h, NCAAF 1.6h.
+- Depth charts: ESPN timestamps may be stale (Cowork saw 2026-07-26 on KC);
+  capturing anyway — nflverse is primary, ESPN is cross-check.
+- Every file: valid JSON/parquet, non-empty, expected team count (32 for NFL).
+
+**Schedule (UTC):**
+```
+10 0,6,12,18 * * *    pull_espn_news.py --sport nfl
+20 0,6,12,18 * * *    pull_espn_news.py --sport ncaaf
+30 0,6,12,18 * * *    pull_espn_nfl_status.py
+40 16 * * 0            pull_espn_nfl_status.py (Sun 12:40 ET, after inactives)
+0 9 * * *              run_nflverse_with_archive.sh
+```
+
+**nflverse was NOT in any crontab.** This is how the feed died for 4.5 days.
+Now scheduled daily at 09:00 UTC (5am ET).
+
+**Depth chart staleness:** ESPN's KC depth chart `timestamp` field was
+2026-07-26 when Cowork checked. The depth chart IS populated (3 formations,
+30 positions), but the metadata timestamp is stale. This is an ESPN artifact,
+not an indication of empty data. Capturing anyway; nflverse is the primary
+source and this is the cross-check. The staleness is noted, not suppressed.
