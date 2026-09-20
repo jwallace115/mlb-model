@@ -2745,3 +2745,15 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - RAN: 97 passed (cloud).
 - NOT DONE: real grading (needs PBP refresh after the games); NFL close/CLV.
 - UNVERIFIED: suite on the Mac after sync.
+
+## 2026-09-20T16:21Z  cowork
+- RAN: build_nfl_slate.py --tickets LEAD_5,LEAD_10 --slate 2026-09-20e on the 15:00:10Z pull -> RULE tickets; then log_final_slate_ticket x2 + one revision (r1, wrong home/away in a reason). RETURNED: log 30 -> 35 entries. MEANS: first AI-picked tickets are on record with per-leg reasons before kickoff.
+- SENT: both tickets to Jeff 16:19Z (5-leg ~+1,974; 10-leg ~+39,200).
+- NOT DONE: placement entries; NFL close/CLV grader.
+- UNVERIFIED: whether Jeff placed them, and at what prices.
+
+## 2026-09-20T16:36Z  cowork
+- RAN (Jeff): manual props pull 16:23:40Z (940 rows, 130 credits) + ESPN status 16:23Z, scp to _cowork_patches/. RE-CHECK RETURNED: 14/15 AI legs unchanged; Cousins att 29.5->30.5. LOGGED LEAD_10_FINAL_r2 (Shough O34.5 att). Log 36 entries.
+- SENT 16:34Z: AI game-lines 5-leg (NYJ +3, PIT +5.5, CLE@TB O41, MIA +13.5, IND +6; opt MIN +5), price-vs-sharp method, ~0.96 per $1. File game_ticket_ai_20260920T1635Z.json.
+- NOT DONE: placements for slate -20e; NFL game-ticket grader; fix for the 16:30Z pull reaching Cowork only at kickoff.
+- UNVERIFIED: the 16:30Z and 16:50Z scheduled pulls (visible on origin ~17:00Z / 17:30Z).

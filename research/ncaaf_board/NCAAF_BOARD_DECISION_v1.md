@@ -1304,3 +1304,61 @@ on the pre-N50 logger — run). The N46 test's confirmations gained an `ai_reaso
 Suite: 97 passed (shared + nfl/pipeline + ncaaf/pipeline + the new sim scorer test).
 NOT DONE: close/CLV for NFL tickets; AI reasons for TODAY's legs (not written before the bet, so not
 written after it). UNVERIFIED: that tonight's PBP refresh contains all 15 games by morning.
+
+### N51 — First AI-PICKED tickets: slate 2026-09-20e, a 5 and a 10 (2026-09-20)
+
+**Jeff (~16:13Z):** "give me your take on a 5 and 10 leg parlay....look at all the data and make your
+picks independent of the 5-10-19 leg parlays already placed."
+
+Built 16:14Z from the Hard Rock pull of 15:00:10Z (1.2 h old; candidates `..._20260920T1614Z.parquet`,
+259 eligible). RULE tickets `LEAD_5_RULE` / `LEAD_10_RULE` logged first as the baseline; the reader's
+tickets `LEAD_5_FINAL` and `LEAD_10_FINAL` depart from them on almost every leg, each departure with a
+reason and a source, and every leg has an `ai_reason` (N50 — first production use). `LEAD_10_FINAL_r1`
+supersedes `LEAD_10_FINAL`: the Hubbard reason called CAR the home favourite; the game is CAR @ ATL
+(CAR -3 on the road). Legs unchanged. Log = 35 entries.
+
+**Method, stated so it can be judged later:** game script from Hard Rock's own spread/total (15:30Z
+snapshot) x week-1 volume from `pbp_2026` (team rushes, QB attempts/completions, final margin) x role
+share from the candidate table; prices kept to -115..-130; one leg per game per ticket; no player on
+both; NO sim input. Every leg is the side the book already favours (the candidate table offers no
+other), so this is a choice AMONG book-favoured legs, not against the book.
+5-leg (20.74, ~+1,974): Lamar U27.5 att, Hockenson O3.5 rec, Stroud O30.5 att, Hampton O16.5 rush,
+Diggs O4.5 rec. 10-leg (393.2, ~+39,200): Hubbard O13.5, Montgomery O15.5, Rodgers O34.5 att, Lloyd
+O13.5, Jeudy O2.5 rec, Lawrence O19.5 cmp, Cousins O29.5 att, Bourne O2.5 rec, Willis O26.5 att,
+K. Allen O3.5 rec. Return per $1 at the book's q: 0.716 / 0.518.
+
+**Known weaknesses, written before kickoff:** (1) one week of 2026 volume is thin evidence and the
+book has it too; (2) the legs share ONE idea — favourites run, underdogs throw — so they are
+positively correlated across games only through that idea failing generally, but within LV@LAC and
+CIN@HOU the two tickets hold related legs; (3) Willis and Cousins also sit on the placed 19-leg in
+other markets; (4) availability was checked against a list that may not be the full 90-minute
+inactives; (5) 14 of 15 legs are Overs. Comparison that this enables (N43/N44): AI-picked vs the
+RULE tickets of the same build vs the placed rule-dealt tickets, on hit rate and close. n = 15 legs.
+NOT DONE: placement entries (waiting for Jeff's slips). UNVERIFIED: prices at bet time.
+
+### N52 — Fresh-pull re-check of the AI tickets; first AI game-lines ticket (2026-09-20)
+
+**Jeff (16:20Z):** the 11am numbers were stale by the time the AI tickets went out — get the newest.
+CAUSE, not a fault: Sunday props pulls are 15:00Z (12 h window), 16:30Z (2 h), 16:50Z (1 h), and the VM
+pushes to GitHub on the half hour, so the 16:30Z pull reaches Cowork ~17:00Z = kickoff. Jeff ran a manual
+pull (16:23:40Z, 940 rows, 130 credits) + ESPN status (16:23Z, free) and scp'd both to `_cowork_patches/`.
+RESULT: 14 of 15 legs identical in line AND price; Kirk Cousins pass attempts 29.5 -> 30.5 = new quote,
+dropped. `LEAD_10_FINAL_r2` replaces him with Tyler Shough O34.5 att (-120), unchanged on both pulls.
+No leg's player Out/Doubtful at 16:23Z; Burrow and Olave went Questionable -> Active. 9 of 240 eligible
+rows moved line between 15:00Z and 16:23Z. Log = 36 entries.
+STRUCTURAL GAP: for a 1pm ticket built after inactives, Cowork cannot see any pull newer than ~11am
+without Jeff's manual scp. Fix candidates (not built): an extra push right after the 16:30Z pull, or
+a props pull at 16:05Z so the 16:30Z push carries it.
+
+**AI game-lines ticket (`game_ticket_ai_20260920T1635Z.json`), sent 16:34Z.** Jeff asked for 5+ legs of
+spreads/totals/winners with a short reason each. Method: Hard Rock's price vs the proportional no-vig of
+Pinnacle + LowVig at the same point (line_history snapshot 16:00:08Z, all books < 1 min old), and
+off-market points judged against the other nine books. Legs: NYJ +3 (+100), PIT +5.5 (-105), CLE@TB
+Over 41 (-110), MIA +13.5 (-105), IND +6 (-105); optional MIN +5 (-110). ~+2,740. Return per $1 at the
+sharp no-vig ~0.96 (vs ~0.72 for a 5-leg prop ticket) — still below 1: NO EDGE CLAIMED. Every leg is an
+underdog or an Over because Hard Rock shades favourites/Unders less generously; the prop tickets lean
+on favourites controlling games — told Jeff the two do not share a story.
+CHECKS: 1a all quotes pre-kick, same snapshot. 4: sharp no-vig is a proxy for fair, not truth; the
+project's line-shopping result (+1.84% ex-stale) was best-of-10-books, not Hard Rock alone, so it is
+NOT evidence for this ticket. No NFL game-ticket logger/grader exists (NCAAF's is college-only); this
+JSON is the record. NOT DONE: placement entries for slate -20e (waiting for slips); NFL game grader.

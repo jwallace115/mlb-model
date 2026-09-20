@@ -10092,5 +10092,3203 @@
     "legs": [],
     "graded": false,
     "logged_at": "2026-09-20T15:02:07.734284+00:00"
+  },
+  {
+    "build_time": "2026-09-20T16:14:19.251042+00:00",
+    "ticket_id": "LEAD_5_RULE",
+    "kind": "slate_rule",
+    "slate": "2026-09-20e",
+    "spec": {
+      "ticket_id": "LEAD_5",
+      "legs": 5,
+      "max_per_game": 1,
+      "window": "all",
+      "pool": "role_overs"
+    },
+    "deal": "sequential+balanced_families",
+    "manifest": {
+      "build_time": "2026-09-20T16:14:19.251042+00:00",
+      "season": 2026,
+      "week": 2,
+      "props_pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+      "props_pull_age_hours": 1.236,
+      "props_rows": 878,
+      "events": 13,
+      "usage_sha256": "3bf5fe1f915bdba82d8e866aa51973592147cc25f44678b12ed7feb28de83047",
+      "injury_file": "injuries_20260920T1230Z.json.gz",
+      "injury_file_age_hours": 3.739,
+      "devig_method": "proportional_same_row",
+      "policy": "N44",
+      "candidates_file": "nfl/data/board/week=2026_02/nfl_prop_candidates_20260920T1614Z.parquet",
+      "candidates_sha256": "9f91d3bad0b073f883613235f35514c2d30303d6758bd0cf64f112a052a3c7e5",
+      "first_kick": "2026-09-20T17:00:00+00:00"
+    },
+    "legs": [
+      {
+        "event_id": "68bc55903f50af4af4766adcc89fcc61",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "San Francisco 49ers",
+        "away_team": "Miami Dolphins",
+        "player_name": "Caleb Douglas",
+        "team": "MIA",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -165.0,
+        "complement_price": 125.0,
+        "q_pick": 0.5834970530451867,
+        "hold": 0.06708595387840677,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.20339135796033533,
+        "carry_share": 1.125723001471317e-08,
+        "target_rank": 2.0,
+        "carry_rank": 17.0,
+        "n_targets": 7.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "71b3b83747589efdc5baef2c5cf811bf",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Los Angeles Chargers",
+        "away_team": "Las Vegas Raiders",
+        "player_name": "Ashton Jeanty",
+        "team": "LV",
+        "market_key": "player_rush_attempts",
+        "line": 16.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.1655585848252493,
+        "carry_share": 0.6944480652196524,
+        "target_rank": 3.0,
+        "carry_rank": 1.0,
+        "n_targets": 6.0,
+        "n_carries": 23.0,
+        "injury_status": null,
+        "feed_status_missing": true,
+        "moved_against": false
+      },
+      {
+        "event_id": "50bc247030707d823b9c3581d7eb5760",
+        "commence_time": "2026-09-21T00:20:00Z",
+        "home_team": "Kansas City Chiefs",
+        "away_team": "Indianapolis Colts",
+        "player_name": "Daniel Jones",
+        "team": "IND",
+        "market_key": "player_pass_completions",
+        "line": 20.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 1.0015229153990869e-08,
+        "carry_share": 1.0250775885142413e-08,
+        "target_rank": 15.0,
+        "carry_rank": 15.0,
+        "n_targets": 0.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": null
+      },
+      {
+        "event_id": "4aeee070bb6ec60bdfae4dede61b9014",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New York Jets",
+        "away_team": "Green Bay Packers",
+        "player_name": "Christian Watson",
+        "team": "GB",
+        "market_key": "player_receptions",
+        "line": 3.5,
+        "pick_side": "Over",
+        "pick_price": -165.0,
+        "complement_price": 125.0,
+        "q_pick": 0.5834970530451867,
+        "hold": 0.06708595387840677,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.18964854144258514,
+        "carry_share": 1.3209498625619494e-08,
+        "target_rank": 2.0,
+        "carry_rank": 15.0,
+        "n_targets": 8.0,
+        "n_carries": 0.0,
+        "injury_status": null,
+        "feed_status_missing": true,
+        "moved_against": true
+      },
+      {
+        "event_id": "36ad2fa722f4915ef23d2c81351261de",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Houston Texans",
+        "away_team": "Cincinnati Bengals",
+        "player_name": "Chase Brown",
+        "team": "CIN",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.15645471829434385,
+        "carry_share": 0.6585803121201189,
+        "target_rank": 3.0,
+        "carry_rank": 1.0,
+        "n_targets": 6.0,
+        "n_carries": 16.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": null
+      }
+    ],
+    "short_of_spec": 0,
+    "price": {
+      "decimal": 14.285,
+      "product_of_devigged_q": 0.05086,
+      "expected_return_per_1_at_book_q": 0.7266
+    },
+    "placed": null,
+    "graded": false
+  },
+  {
+    "build_time": "2026-09-20T16:14:19.251042+00:00",
+    "ticket_id": "LEAD_10_RULE",
+    "kind": "slate_rule",
+    "slate": "2026-09-20e",
+    "spec": {
+      "ticket_id": "LEAD_10",
+      "legs": 10,
+      "max_per_game": 1,
+      "window": "all",
+      "pool": "role_overs"
+    },
+    "deal": "sequential+balanced_families",
+    "manifest": {
+      "build_time": "2026-09-20T16:14:19.251042+00:00",
+      "season": 2026,
+      "week": 2,
+      "props_pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+      "props_pull_age_hours": 1.236,
+      "props_rows": 878,
+      "events": 13,
+      "usage_sha256": "3bf5fe1f915bdba82d8e866aa51973592147cc25f44678b12ed7feb28de83047",
+      "injury_file": "injuries_20260920T1230Z.json.gz",
+      "injury_file_age_hours": 3.739,
+      "devig_method": "proportional_same_row",
+      "policy": "N44",
+      "candidates_file": "nfl/data/board/week=2026_02/nfl_prop_candidates_20260920T1614Z.parquet",
+      "candidates_sha256": "9f91d3bad0b073f883613235f35514c2d30303d6758bd0cf64f112a052a3c7e5",
+      "first_kick": "2026-09-20T17:00:00+00:00"
+    },
+    "legs": [
+      {
+        "event_id": "0636ebff776d43f8c829a36713c80b22",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Tampa Bay Buccaneers",
+        "away_team": "Cleveland Browns",
+        "player_name": "Emeka Egbuka",
+        "team": "TB",
+        "market_key": "player_receptions",
+        "line": 3.5,
+        "pick_side": "Over",
+        "pick_price": -165.0,
+        "complement_price": 125.0,
+        "q_pick": 0.5834970530451867,
+        "hold": 0.06708595387840677,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.20231881015410813,
+        "carry_share": 8.50197970260329e-09,
+        "target_rank": 1.0,
+        "carry_rank": 15.0,
+        "n_targets": 6.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "4aeee070bb6ec60bdfae4dede61b9014",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New York Jets",
+        "away_team": "Green Bay Packers",
+        "player_name": "Breece Hall",
+        "team": "NYJ",
+        "market_key": "player_rush_attempts",
+        "line": 15.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.08639138118841046,
+        "carry_share": 0.6301973876731665,
+        "target_rank": 4.0,
+        "carry_rank": 1.0,
+        "n_targets": 2.0,
+        "n_carries": 22.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "68bc55903f50af4af4766adcc89fcc61",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "San Francisco 49ers",
+        "away_team": "Miami Dolphins",
+        "player_name": "Brock Purdy",
+        "team": "SF",
+        "market_key": "player_pass_completions",
+        "line": 19.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.570657374739615e-09,
+        "carry_share": 0.07353539743717884,
+        "target_rank": 17.0,
+        "carry_rank": 3.0,
+        "n_targets": 0.0,
+        "n_carries": 3.0,
+        "injury_status": null,
+        "feed_status_missing": true,
+        "moved_against": null
+      },
+      {
+        "event_id": "71b3b83747589efdc5baef2c5cf811bf",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Los Angeles Chargers",
+        "away_team": "Las Vegas Raiders",
+        "player_name": "Quentin Johnston",
+        "team": "LAC",
+        "market_key": "player_receptions",
+        "line": 3.5,
+        "pick_side": "Over",
+        "pick_price": -165.0,
+        "complement_price": 125.0,
+        "q_pick": 0.5834970530451867,
+        "hold": 0.06708595387840677,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.21799444839915114,
+        "carry_share": 1.2097937395599963e-08,
+        "target_rank": 2.0,
+        "carry_rank": 15.0,
+        "n_targets": 6.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "aee7eae1849ebb103b9bf233e9741392",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Atlanta Falcons",
+        "away_team": "Carolina Panthers",
+        "player_name": "Bijan Robinson",
+        "team": "ATL",
+        "market_key": "player_rush_attempts",
+        "line": 18.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.34636800524476846,
+        "carry_share": 0.70748031451564,
+        "target_rank": 1.0,
+        "carry_rank": 1.0,
+        "n_targets": 10.0,
+        "n_carries": 21.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "Dallas Cowboys",
+        "away_team": "Washington Commanders",
+        "player_name": "Jayden Daniels",
+        "team": "WAS",
+        "market_key": "player_pass_completions",
+        "line": 19.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 8.591076296299518e-09,
+        "carry_share": 0.08190391603274774,
+        "target_rank": 17.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 2.0,
+        "injury_status": null,
+        "feed_status_missing": true,
+        "moved_against": true
+      },
+      {
+        "event_id": "50bc247030707d823b9c3581d7eb5760",
+        "commence_time": "2026-09-21T00:20:00Z",
+        "home_team": "Kansas City Chiefs",
+        "away_team": "Indianapolis Colts",
+        "player_name": "Alec Pierce",
+        "team": "IND",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -150.0,
+        "complement_price": 115.0,
+        "q_pick": 0.5633187772925765,
+        "hold": 0.06511627906976747,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.1958432989695439,
+        "carry_share": 1.0250775885142413e-08,
+        "target_rank": 2.0,
+        "carry_rank": 15.0,
+        "n_targets": 6.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "1fd6628c781f556a7a19638e97d7107f",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Denver Broncos",
+        "away_team": "Jacksonville Jaguars",
+        "player_name": "J.K. Dobbins",
+        "team": "DEN",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 8.806374902363235e-09,
+        "carry_share": 0.5655784195791944,
+        "target_rank": 17.0,
+        "carry_rank": 1.0,
+        "n_targets": 0.0,
+        "n_carries": 8.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "2143ade9684fd876b68a4e8cbf451f05",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Baltimore Ravens",
+        "away_team": "New Orleans Saints",
+        "player_name": "Tyler Shough",
+        "team": "NO",
+        "market_key": "player_pass_completions",
+        "line": 21.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.537074665148854e-09,
+        "carry_share": 0.046649886814627534,
+        "target_rank": 14.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 2.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "36ad2fa722f4915ef23d2c81351261de",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Houston Texans",
+        "away_team": "Cincinnati Bengals",
+        "player_name": "Dalton Schultz",
+        "team": "HOU",
+        "market_key": "player_receptions",
+        "line": 4.5,
+        "pick_side": "Over",
+        "pick_price": -135.0,
+        "complement_price": 105.0,
+        "q_pick": 0.5407914020517831,
+        "hold": 0.06227296315516351,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.18591001007494115,
+        "carry_share": 1.0535523446806387e-08,
+        "target_rank": 2.0,
+        "carry_rank": 15.0,
+        "n_targets": 8.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      }
+    ],
+    "short_of_spec": 0,
+    "price": {
+      "decimal": 237.569,
+      "product_of_devigged_q": 0.00223,
+      "expected_return_per_1_at_book_q": 0.5288
+    },
+    "placed": null,
+    "graded": false
+  },
+  {
+    "build_time": "2026-09-20T16:14:19.251042+00:00",
+    "ticket_id": "LEAD_5_FINAL",
+    "supersedes": null,
+    "revision_reason": null,
+    "kind": "slate_final",
+    "slate": "2026-09-20e",
+    "spec": {
+      "ticket_id": "LEAD_5",
+      "legs": 5,
+      "max_per_game": 1,
+      "window": "all",
+      "pool": "role_overs"
+    },
+    "manifest": {
+      "build_time": "2026-09-20T16:14:19.251042+00:00",
+      "season": 2026,
+      "week": 2,
+      "props_pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+      "props_pull_age_hours": 1.236,
+      "props_rows": 878,
+      "events": 13,
+      "usage_sha256": "3bf5fe1f915bdba82d8e866aa51973592147cc25f44678b12ed7feb28de83047",
+      "injury_file": "injuries_20260920T1230Z.json.gz",
+      "injury_file_age_hours": 3.739,
+      "devig_method": "proportional_same_row",
+      "policy": "N44",
+      "candidates_file": "nfl/data/board/week=2026_02/nfl_prop_candidates_20260920T1614Z.parquet",
+      "candidates_sha256": "9f91d3bad0b073f883613235f35514c2d30303d6758bd0cf64f112a052a3c7e5",
+      "first_kick": "2026-09-20T17:00:00+00:00"
+    },
+    "legs": [
+      {
+        "event_id": "2143ade9684fd876b68a4e8cbf451f05",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Baltimore Ravens",
+        "away_team": "New Orleans Saints",
+        "player_name": "Lamar Jackson",
+        "team": "BAL",
+        "market_key": "player_pass_attempts",
+        "line": 27.5,
+        "pick_side": "Under",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898785,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 1.0411432937759548e-08,
+        "carry_share": 0.059182150865314,
+        "target_rank": 16.0,
+        "carry_rank": 3.0,
+        "n_targets": 0.0,
+        "n_carries": 1.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "71b3b83747589efdc5baef2c5cf811bf",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Los Angeles Chargers",
+        "away_team": "Las Vegas Raiders",
+        "player_name": "Omarion Hampton",
+        "team": "LAC",
+        "market_key": "player_rush_attempts",
+        "line": 16.5,
+        "pick_side": "Over",
+        "pick_price": -115.0,
+        "complement_price": -115.0,
+        "q_pick": 0.5,
+        "hold": 0.06976744186046524,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 1.098386214334129e-08,
+        "carry_share": 0.7556352798814344,
+        "target_rank": 15.0,
+        "carry_rank": 1.0,
+        "n_targets": 0.0,
+        "n_carries": 12.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "Dallas Cowboys",
+        "away_team": "Washington Commanders",
+        "player_name": "Stefon Diggs",
+        "team": "WAS",
+        "market_key": "player_receptions",
+        "line": 4.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.21663886595831627,
+        "carry_share": 1.0086845908207596e-08,
+        "target_rank": 1.0,
+        "carry_rank": 17.0,
+        "n_targets": 9.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "36ad2fa722f4915ef23d2c81351261de",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Houston Texans",
+        "away_team": "Cincinnati Bengals",
+        "player_name": "C.J. Stroud",
+        "team": "HOU",
+        "market_key": "player_pass_attempts",
+        "line": 30.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.406583292606452e-09,
+        "carry_share": 0.034155548132538904,
+        "target_rank": 15.0,
+        "carry_rank": 3.0,
+        "n_targets": 0.0,
+        "n_carries": 1.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "0283a29e1b38ef78b29b904fd56a16dd",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Chicago Bears",
+        "away_team": "Minnesota Vikings",
+        "player_name": "T.J. Hockenson",
+        "team": "MIN",
+        "market_key": "player_receptions",
+        "line": 3.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.1735467782146993,
+        "carry_share": 1.5511515359353815e-08,
+        "target_rank": 2.0,
+        "carry_rank": 15.0,
+        "n_targets": 5.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      }
+    ],
+    "price": {
+      "decimal": 20.737,
+      "product_of_devigged_q": 0.03453,
+      "expected_return_per_1_at_book_q": 0.7161
+    },
+    "departures": {
+      "removed_from_rule": [
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Chase Brown",
+          "player_rush_attempts"
+        ],
+        [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Christian Watson",
+          "player_receptions"
+        ],
+        [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Daniel Jones",
+          "player_pass_completions"
+        ],
+        [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Caleb Douglas",
+          "player_receptions"
+        ],
+        [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Ashton Jeanty",
+          "player_rush_attempts"
+        ]
+      ],
+      "added_outside_rule": [
+        [
+          "0283a29e1b38ef78b29b904fd56a16dd",
+          "T.J. Hockenson",
+          "player_receptions"
+        ],
+        [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Lamar Jackson",
+          "player_pass_attempts"
+        ],
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "C.J. Stroud",
+          "player_pass_attempts"
+        ],
+        [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Omarion Hampton",
+          "player_rush_attempts"
+        ],
+        [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Stefon Diggs",
+          "player_receptions"
+        ]
+      ]
+    },
+    "reasons": [
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Christian Watson",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Caleb Douglas",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Ashton Jeanty",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Chase Brown",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Daniel Jones",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Lamar Jackson",
+          "player_pass_attempts"
+        ],
+        "reason": "BAL -8.5 and ran 37 times with only 24 passes in last week's 18-pt win; a big favourite with Henry closes games on the ground. Under 27.5 needs that script again.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Stefon Diggs",
+          "player_receptions"
+        ],
+        "reason": "Team-high 9 targets in wk 1; WAS is a 4-pt dog in the slate's highest total (51), the best pass-volume script on the board. 4.5 at -120 for a lead target.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Omarion Hampton",
+          "player_rush_attempts"
+        ],
+        "reason": "76% of LAC carries in wk 1 but only 12 because they trailed by 12; now a 7-pt home favourite vs LV, so team rush volume should rise. Price moved toward the Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "C.J. Stroud",
+          "player_pass_attempts"
+        ],
+        "reason": "Threw 38 in wk 1; line is 30.5, below a league-average game, in a 45.5 total vs Burrow (35.5 att line). Collins out is the risk; price moved toward the Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "0283a29e1b38ef78b29b904fd56a16dd",
+          "T.J. Hockenson",
+          "player_receptions"
+        ],
+        "reason": "MIN is a 5-pt dog with Wentz, so more passing than wk 1's 19 attempts; Jauan Jennings is inactive, which concentrates targets. 5 targets wk 1, price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      }
+    ],
+    "confirmations": [
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Lamar Jackson",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "BAL -8.5 and ran 37 times with only 24 passes in last week's 18-pt win; a big favourite with Henry closes games on the ground. Under 27.5 needs that script again."
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Omarion Hampton",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "76% of LAC carries in wk 1 but only 12 because they trailed by 12; now a 7-pt home favourite vs LV, so team rush volume should rise. Price moved toward the Over."
+      },
+      {
+        "leg": [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Stefon Diggs",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Team-high 9 targets in wk 1; WAS is a 4-pt dog in the slate's highest total (51), the best pass-volume script on the board. 4.5 at -120 for a lead target."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "C.J. Stroud",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Threw 38 in wk 1; line is 30.5, below a league-average game, in a 45.5 total vs Burrow (35.5 att line). Collins out is the risk; price moved toward the Over."
+      },
+      {
+        "leg": [
+          "0283a29e1b38ef78b29b904fd56a16dd",
+          "T.J. Hockenson",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "MIN is a 5-pt dog with Wentz, so more passing than wk 1's 19 attempts; Jauan Jennings is inactive, which concentrates targets. 5 targets wk 1, price moved toward Over."
+      }
+    ],
+    "leg_notes": [
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Lamar Jackson",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "BAL -8.5 and ran 37 times with only 24 passes in last week's 18-pt win; a big favourite with Henry closes games on the ground. Under 27.5 needs that script again."
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Omarion Hampton",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "76% of LAC carries in wk 1 but only 12 because they trailed by 12; now a 7-pt home favourite vs LV, so team rush volume should rise. Price moved toward the Over."
+      },
+      {
+        "leg": [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Stefon Diggs",
+          "player_receptions"
+        ],
+        "ai_reason": "Team-high 9 targets in wk 1; WAS is a 4-pt dog in the slate's highest total (51), the best pass-volume script on the board. 4.5 at -120 for a lead target."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "C.J. Stroud",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "Threw 38 in wk 1; line is 30.5, below a league-average game, in a 45.5 total vs Burrow (35.5 att line). Collins out is the risk; price moved toward the Over."
+      },
+      {
+        "leg": [
+          "0283a29e1b38ef78b29b904fd56a16dd",
+          "T.J. Hockenson",
+          "player_receptions"
+        ],
+        "ai_reason": "MIN is a 5-pt dog with Wentz, so more passing than wk 1's 19 attempts; Jauan Jennings is inactive, which concentrates targets. 5 targets wk 1, price moved toward Over."
+      }
+    ],
+    "reader": {
+      "model": "claude-fable-5-1 (Cowork chat)",
+      "inputs": [
+        "nfl_prop_candidates_20260920T1614Z.parquet",
+        "line_history snap 15:30Z",
+        "pbp_2026 week 1 team/QB volume",
+        "FantasyPros inactives 15:45Z",
+        "packers news 09-17 (Lloyd lead, Jacobs exempt)"
+      ],
+      "raw_output": "AI-picked ticket; per-leg reasons in leg_notes. Method: game script from spread/total x week-1 volume x role share; prefer prices -115..-130; one leg per game; no sim input."
+    },
+    "placed": null,
+    "graded": false
+  },
+  {
+    "build_time": "2026-09-20T16:14:19.251042+00:00",
+    "ticket_id": "LEAD_10_FINAL",
+    "supersedes": null,
+    "revision_reason": null,
+    "kind": "slate_final",
+    "slate": "2026-09-20e",
+    "spec": {
+      "ticket_id": "LEAD_10",
+      "legs": 10,
+      "max_per_game": 1,
+      "window": "all",
+      "pool": "role_overs"
+    },
+    "manifest": {
+      "build_time": "2026-09-20T16:14:19.251042+00:00",
+      "season": 2026,
+      "week": 2,
+      "props_pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+      "props_pull_age_hours": 1.236,
+      "props_rows": 878,
+      "events": 13,
+      "usage_sha256": "3bf5fe1f915bdba82d8e866aa51973592147cc25f44678b12ed7feb28de83047",
+      "injury_file": "injuries_20260920T1230Z.json.gz",
+      "injury_file_age_hours": 3.739,
+      "devig_method": "proportional_same_row",
+      "policy": "N44",
+      "candidates_file": "nfl/data/board/week=2026_02/nfl_prop_candidates_20260920T1614Z.parquet",
+      "candidates_sha256": "9f91d3bad0b073f883613235f35514c2d30303d6758bd0cf64f112a052a3c7e5",
+      "first_kick": "2026-09-20T17:00:00+00:00"
+    },
+    "legs": [
+      {
+        "event_id": "aee7eae1849ebb103b9bf233e9741392",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Atlanta Falcons",
+        "away_team": "Carolina Panthers",
+        "player_name": "Chuba Hubbard",
+        "team": "CAR",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -115.0,
+        "complement_price": -115.0,
+        "q_pick": 0.5,
+        "hold": 0.06976744186046524,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.0738025807905138,
+        "carry_share": 0.5365581660498554,
+        "target_rank": 7.0,
+        "carry_rank": 1.0,
+        "n_targets": 3.0,
+        "n_carries": 10.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "4aeee070bb6ec60bdfae4dede61b9014",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New York Jets",
+        "away_team": "Green Bay Packers",
+        "player_name": "MarShawn Lloyd",
+        "team": "GB",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.04962596507681731,
+        "carry_share": 0.6950042652262359,
+        "target_rank": 7.0,
+        "carry_rank": 1.0,
+        "n_targets": 1.0,
+        "n_carries": 13.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "9d14f87600f6edc74dbcb5c74edf6246",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New England Patriots",
+        "away_team": "Pittsburgh Steelers",
+        "player_name": "Aaron Rodgers",
+        "team": "PIT",
+        "market_key": "player_pass_attempts",
+        "line": 34.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 1.0632641011982298e-08,
+        "carry_share": 9.44225355028589e-09,
+        "target_rank": 17.0,
+        "carry_rank": 17.0,
+        "n_targets": 0.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "1fd6628c781f556a7a19638e97d7107f",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Denver Broncos",
+        "away_team": "Jacksonville Jaguars",
+        "player_name": "Trevor Lawrence",
+        "team": "JAX",
+        "market_key": "player_pass_completions",
+        "line": 19.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.01844182622703e-09,
+        "carry_share": 0.08220091734269029,
+        "target_rank": 16.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 2.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "71b3b83747589efdc5baef2c5cf811bf",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Los Angeles Chargers",
+        "away_team": "Las Vegas Raiders",
+        "player_name": "Kirk Cousins",
+        "team": "LV",
+        "market_key": "player_pass_attempts",
+        "line": 29.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.476234020687054e-09,
+        "carry_share": 0.0226522012486448,
+        "target_rank": 15.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 1.0,
+        "injury_status": null,
+        "feed_status_missing": true,
+        "moved_against": true
+      },
+      {
+        "event_id": "4dd8020192a544385db42374e5555303",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "Arizona Cardinals",
+        "away_team": "Seattle Seahawks",
+        "player_name": "Kendrick Bourne",
+        "team": "ARI",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.16565037417388132,
+        "carry_share": 1.0976066242676309e-08,
+        "target_rank": 3.0,
+        "carry_rank": 16.0,
+        "n_targets": 8.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "68bc55903f50af4af4766adcc89fcc61",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "San Francisco 49ers",
+        "away_team": "Miami Dolphins",
+        "player_name": "Malik Willis",
+        "team": "MIA",
+        "market_key": "player_pass_attempts",
+        "line": 26.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.653666530369957e-09,
+        "carry_share": 0.04430988210300375,
+        "target_rank": 17.0,
+        "carry_rank": 3.0,
+        "n_targets": 0.0,
+        "n_carries": 1.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "50bc247030707d823b9c3581d7eb5760",
+        "commence_time": "2026-09-21T00:20:00Z",
+        "home_team": "Kansas City Chiefs",
+        "away_team": "Indianapolis Colts",
+        "player_name": "Keenan Allen",
+        "team": "IND",
+        "market_key": "player_receptions",
+        "line": 3.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.20865454024327937,
+        "carry_share": 1.0250775885142413e-08,
+        "target_rank": 1.0,
+        "carry_rank": 15.0,
+        "n_targets": 6.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "36ad2fa722f4915ef23d2c81351261de",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Houston Texans",
+        "away_team": "Cincinnati Bengals",
+        "player_name": "David Montgomery",
+        "team": "HOU",
+        "market_key": "player_rush_attempts",
+        "line": 15.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.0669473886610089,
+        "carry_share": 0.5515072066964921,
+        "target_rank": 5.0,
+        "carry_rank": 1.0,
+        "n_targets": 3.0,
+        "n_carries": 20.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "0636ebff776d43f8c829a36713c80b22",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Tampa Bay Buccaneers",
+        "away_team": "Cleveland Browns",
+        "player_name": "Jerry Jeudy",
+        "team": "CLE",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -115.0,
+        "complement_price": -115.0,
+        "q_pick": 0.5,
+        "hold": 0.06976744186046524,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.21288719485554333,
+        "carry_share": 8.720299272350564e-09,
+        "target_rank": 1.0,
+        "carry_rank": 16.0,
+        "n_targets": 4.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      }
+    ],
+    "price": {
+      "decimal": 393.181,
+      "product_of_devigged_q": 0.00132,
+      "expected_return_per_1_at_book_q": 0.5175
+    },
+    "departures": {
+      "removed_from_rule": [
+        [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Emeka Egbuka",
+          "player_receptions"
+        ],
+        [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "J.K. Dobbins",
+          "player_rush_attempts"
+        ],
+        [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_completions"
+        ],
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Dalton Schultz",
+          "player_receptions"
+        ],
+        [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Breece Hall",
+          "player_rush_attempts"
+        ],
+        [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Alec Pierce",
+          "player_receptions"
+        ],
+        [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Brock Purdy",
+          "player_pass_completions"
+        ],
+        [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Quentin Johnston",
+          "player_receptions"
+        ],
+        [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Jayden Daniels",
+          "player_pass_completions"
+        ],
+        [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Bijan Robinson",
+          "player_rush_attempts"
+        ]
+      ],
+      "added_outside_rule": [
+        [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ]
+      ]
+    },
+    "reasons": [
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Emeka Egbuka",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Dalton Schultz",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Bijan Robinson",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Quentin Johnston",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "J.K. Dobbins",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Breece Hall",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Brock Purdy",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Alec Pierce",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Jayden Daniels",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        "reason": "30 attempts in a 14-pt WIN with 37 rushes; as a 7-pt dog at LAC the mix shifts to the pass. Overlaps your placed Cousins completions leg - same game story.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a home favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      }
+    ],
+    "confirmations": [
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a home favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk."
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk."
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120."
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "30 attempts in a 14-pt WIN with 37 rushes; as a 7-pt dog at LAC the mix shifts to the pass. Overlaps your placed Cousins completions leg - same game story."
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over."
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk."
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board."
+      }
+    ],
+    "leg_notes": [
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a home favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk."
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk."
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120."
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "ai_reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "30 attempts in a 14-pt WIN with 37 rushes; as a 7-pt dog at LAC the mix shifts to the pass. Overlaps your placed Cousins completions leg - same game story."
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "ai_reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over."
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk."
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "ai_reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "ai_reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board."
+      }
+    ],
+    "reader": {
+      "model": "claude-fable-5-1 (Cowork chat)",
+      "inputs": [
+        "nfl_prop_candidates_20260920T1614Z.parquet",
+        "line_history snap 15:30Z",
+        "pbp_2026 week 1 team/QB volume",
+        "FantasyPros inactives 15:45Z",
+        "packers news 09-17 (Lloyd lead, Jacobs exempt)"
+      ],
+      "raw_output": "AI-picked ticket; per-leg reasons in leg_notes. Method: game script from spread/total x week-1 volume x role share; prefer prices -115..-130; one leg per game; no sim input."
+    },
+    "placed": null,
+    "graded": false
+  },
+  {
+    "build_time": "2026-09-20T16:14:19.251042+00:00",
+    "ticket_id": "LEAD_10_FINAL_r1",
+    "supersedes": "LEAD_10_FINAL",
+    "revision_reason": "Hubbard ai_reason said CAR is the HOME favourite; the game is CAR @ ATL (CAR -3 on the road). Legs unchanged.",
+    "kind": "slate_final",
+    "slate": "2026-09-20e",
+    "spec": {
+      "ticket_id": "LEAD_10",
+      "legs": 10,
+      "max_per_game": 1,
+      "window": "all",
+      "pool": "role_overs"
+    },
+    "manifest": {
+      "build_time": "2026-09-20T16:14:19.251042+00:00",
+      "season": 2026,
+      "week": 2,
+      "props_pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+      "props_pull_age_hours": 1.236,
+      "props_rows": 878,
+      "events": 13,
+      "usage_sha256": "3bf5fe1f915bdba82d8e866aa51973592147cc25f44678b12ed7feb28de83047",
+      "injury_file": "injuries_20260920T1230Z.json.gz",
+      "injury_file_age_hours": 3.739,
+      "devig_method": "proportional_same_row",
+      "policy": "N44",
+      "candidates_file": "nfl/data/board/week=2026_02/nfl_prop_candidates_20260920T1614Z.parquet",
+      "candidates_sha256": "9f91d3bad0b073f883613235f35514c2d30303d6758bd0cf64f112a052a3c7e5",
+      "first_kick": "2026-09-20T17:00:00+00:00"
+    },
+    "legs": [
+      {
+        "event_id": "aee7eae1849ebb103b9bf233e9741392",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Atlanta Falcons",
+        "away_team": "Carolina Panthers",
+        "player_name": "Chuba Hubbard",
+        "team": "CAR",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -115.0,
+        "complement_price": -115.0,
+        "q_pick": 0.5,
+        "hold": 0.06976744186046524,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.0738025807905138,
+        "carry_share": 0.5365581660498554,
+        "target_rank": 7.0,
+        "carry_rank": 1.0,
+        "n_targets": 3.0,
+        "n_carries": 10.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "4aeee070bb6ec60bdfae4dede61b9014",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New York Jets",
+        "away_team": "Green Bay Packers",
+        "player_name": "MarShawn Lloyd",
+        "team": "GB",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.04962596507681731,
+        "carry_share": 0.6950042652262359,
+        "target_rank": 7.0,
+        "carry_rank": 1.0,
+        "n_targets": 1.0,
+        "n_carries": 13.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "9d14f87600f6edc74dbcb5c74edf6246",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New England Patriots",
+        "away_team": "Pittsburgh Steelers",
+        "player_name": "Aaron Rodgers",
+        "team": "PIT",
+        "market_key": "player_pass_attempts",
+        "line": 34.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 1.0632641011982298e-08,
+        "carry_share": 9.44225355028589e-09,
+        "target_rank": 17.0,
+        "carry_rank": 17.0,
+        "n_targets": 0.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "1fd6628c781f556a7a19638e97d7107f",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Denver Broncos",
+        "away_team": "Jacksonville Jaguars",
+        "player_name": "Trevor Lawrence",
+        "team": "JAX",
+        "market_key": "player_pass_completions",
+        "line": 19.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.01844182622703e-09,
+        "carry_share": 0.08220091734269029,
+        "target_rank": 16.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 2.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "71b3b83747589efdc5baef2c5cf811bf",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Los Angeles Chargers",
+        "away_team": "Las Vegas Raiders",
+        "player_name": "Kirk Cousins",
+        "team": "LV",
+        "market_key": "player_pass_attempts",
+        "line": 29.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.476234020687054e-09,
+        "carry_share": 0.0226522012486448,
+        "target_rank": 15.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 1.0,
+        "injury_status": null,
+        "feed_status_missing": true,
+        "moved_against": true
+      },
+      {
+        "event_id": "4dd8020192a544385db42374e5555303",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "Arizona Cardinals",
+        "away_team": "Seattle Seahawks",
+        "player_name": "Kendrick Bourne",
+        "team": "ARI",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.16565037417388132,
+        "carry_share": 1.0976066242676309e-08,
+        "target_rank": 3.0,
+        "carry_rank": 16.0,
+        "n_targets": 8.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "68bc55903f50af4af4766adcc89fcc61",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "San Francisco 49ers",
+        "away_team": "Miami Dolphins",
+        "player_name": "Malik Willis",
+        "team": "MIA",
+        "market_key": "player_pass_attempts",
+        "line": 26.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.653666530369957e-09,
+        "carry_share": 0.04430988210300375,
+        "target_rank": 17.0,
+        "carry_rank": 3.0,
+        "n_targets": 0.0,
+        "n_carries": 1.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "50bc247030707d823b9c3581d7eb5760",
+        "commence_time": "2026-09-21T00:20:00Z",
+        "home_team": "Kansas City Chiefs",
+        "away_team": "Indianapolis Colts",
+        "player_name": "Keenan Allen",
+        "team": "IND",
+        "market_key": "player_receptions",
+        "line": 3.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.20865454024327937,
+        "carry_share": 1.0250775885142413e-08,
+        "target_rank": 1.0,
+        "carry_rank": 15.0,
+        "n_targets": 6.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "36ad2fa722f4915ef23d2c81351261de",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Houston Texans",
+        "away_team": "Cincinnati Bengals",
+        "player_name": "David Montgomery",
+        "team": "HOU",
+        "market_key": "player_rush_attempts",
+        "line": 15.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.0669473886610089,
+        "carry_share": 0.5515072066964921,
+        "target_rank": 5.0,
+        "carry_rank": 1.0,
+        "n_targets": 3.0,
+        "n_carries": 20.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "0636ebff776d43f8c829a36713c80b22",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Tampa Bay Buccaneers",
+        "away_team": "Cleveland Browns",
+        "player_name": "Jerry Jeudy",
+        "team": "CLE",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -115.0,
+        "complement_price": -115.0,
+        "q_pick": 0.5,
+        "hold": 0.06976744186046524,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.21288719485554333,
+        "carry_share": 8.720299272350564e-09,
+        "target_rank": 1.0,
+        "carry_rank": 16.0,
+        "n_targets": 4.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      }
+    ],
+    "price": {
+      "decimal": 393.181,
+      "product_of_devigged_q": 0.00132,
+      "expected_return_per_1_at_book_q": 0.5175
+    },
+    "departures": {
+      "removed_from_rule": [
+        [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Emeka Egbuka",
+          "player_receptions"
+        ],
+        [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "J.K. Dobbins",
+          "player_rush_attempts"
+        ],
+        [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_completions"
+        ],
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Dalton Schultz",
+          "player_receptions"
+        ],
+        [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Breece Hall",
+          "player_rush_attempts"
+        ],
+        [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Alec Pierce",
+          "player_receptions"
+        ],
+        [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Brock Purdy",
+          "player_pass_completions"
+        ],
+        [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Quentin Johnston",
+          "player_receptions"
+        ],
+        [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Jayden Daniels",
+          "player_pass_completions"
+        ],
+        [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Bijan Robinson",
+          "player_rush_attempts"
+        ]
+      ],
+      "added_outside_rule": [
+        [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ]
+      ]
+    },
+    "reasons": [
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Brock Purdy",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Breece Hall",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Jayden Daniels",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Dalton Schultz",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Alec Pierce",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Emeka Egbuka",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "J.K. Dobbins",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Bijan Robinson",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Quentin Johnston",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a 3-pt road favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        "reason": "30 attempts in a 14-pt WIN with 37 rushes; as a 7-pt dog at LAC the mix shifts to the pass. Overlaps your placed Cousins completions leg - same game story.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      }
+    ],
+    "confirmations": [
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a 3-pt road favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk."
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk."
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120."
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "30 attempts in a 14-pt WIN with 37 rushes; as a 7-pt dog at LAC the mix shifts to the pass. Overlaps your placed Cousins completions leg - same game story."
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over."
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk."
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 12:30Z (none listed Out/Doubtful) + FantasyPros inactives read 15:45Z (none of these players listed)",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board."
+      }
+    ],
+    "leg_notes": [
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a 3-pt road favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk."
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk."
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120."
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "ai_reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Kirk Cousins",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "30 attempts in a 14-pt WIN with 37 rushes; as a 7-pt dog at LAC the mix shifts to the pass. Overlaps your placed Cousins completions leg - same game story."
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "ai_reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over."
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk."
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "ai_reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "ai_reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board."
+      }
+    ],
+    "reader": {
+      "model": "claude-fable-5-1 (Cowork chat)",
+      "inputs": [
+        "nfl_prop_candidates_20260920T1614Z.parquet",
+        "line_history snap 15:30Z",
+        "pbp_2026 week 1 team/QB volume",
+        "FantasyPros inactives 15:45Z",
+        "packers news 09-17 (Lloyd lead, Jacobs exempt)"
+      ],
+      "raw_output": "AI-picked ticket; per-leg reasons in leg_notes. Method: game script from spread/total x week-1 volume x role share; prefer prices -115..-130; one leg per game; no sim input."
+    },
+    "placed": null,
+    "graded": false
+  },
+  {
+    "build_time": "2026-09-20T16:14:19.251042+00:00",
+    "ticket_id": "LEAD_10_FINAL_r2",
+    "supersedes": "LEAD_10_FINAL_r1",
+    "revision_reason": "Fresh Hard Rock pull 16:23:40Z: Cousins pass attempts moved 29.5 -> 30.5 (Over now -110, book favours Under) = a new quote, dropped. Replaced by Shough O34.5 att, unchanged on both pulls. Other 9 legs and all 5 legs of LEAD_5_FINAL unchanged in line and price.",
+    "kind": "slate_final",
+    "slate": "2026-09-20e",
+    "spec": {
+      "ticket_id": "LEAD_10",
+      "legs": 10,
+      "max_per_game": 1,
+      "window": "all",
+      "pool": "role_overs"
+    },
+    "manifest": {
+      "build_time": "2026-09-20T16:14:19.251042+00:00",
+      "season": 2026,
+      "week": 2,
+      "props_pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+      "props_pull_age_hours": 1.236,
+      "props_rows": 878,
+      "events": 13,
+      "usage_sha256": "3bf5fe1f915bdba82d8e866aa51973592147cc25f44678b12ed7feb28de83047",
+      "injury_file": "injuries_20260920T1230Z.json.gz",
+      "injury_file_age_hours": 3.739,
+      "devig_method": "proportional_same_row",
+      "policy": "N44",
+      "candidates_file": "nfl/data/board/week=2026_02/nfl_prop_candidates_20260920T1614Z.parquet",
+      "candidates_sha256": "9f91d3bad0b073f883613235f35514c2d30303d6758bd0cf64f112a052a3c7e5",
+      "first_kick": "2026-09-20T17:00:00+00:00"
+    },
+    "legs": [
+      {
+        "event_id": "aee7eae1849ebb103b9bf233e9741392",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Atlanta Falcons",
+        "away_team": "Carolina Panthers",
+        "player_name": "Chuba Hubbard",
+        "team": "CAR",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -115.0,
+        "complement_price": -115.0,
+        "q_pick": 0.5,
+        "hold": 0.06976744186046524,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.0738025807905138,
+        "carry_share": 0.5365581660498554,
+        "target_rank": 7.0,
+        "carry_rank": 1.0,
+        "n_targets": 3.0,
+        "n_carries": 10.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "4aeee070bb6ec60bdfae4dede61b9014",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New York Jets",
+        "away_team": "Green Bay Packers",
+        "player_name": "MarShawn Lloyd",
+        "team": "GB",
+        "market_key": "player_rush_attempts",
+        "line": 13.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.04962596507681731,
+        "carry_share": 0.6950042652262359,
+        "target_rank": 7.0,
+        "carry_rank": 1.0,
+        "n_targets": 1.0,
+        "n_carries": 13.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "9d14f87600f6edc74dbcb5c74edf6246",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "New England Patriots",
+        "away_team": "Pittsburgh Steelers",
+        "player_name": "Aaron Rodgers",
+        "team": "PIT",
+        "market_key": "player_pass_attempts",
+        "line": 34.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 1.0632641011982298e-08,
+        "carry_share": 9.44225355028589e-09,
+        "target_rank": 17.0,
+        "carry_rank": 17.0,
+        "n_targets": 0.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "1fd6628c781f556a7a19638e97d7107f",
+        "commence_time": "2026-09-20T20:05:00Z",
+        "home_team": "Denver Broncos",
+        "away_team": "Jacksonville Jaguars",
+        "player_name": "Trevor Lawrence",
+        "team": "JAX",
+        "market_key": "player_pass_completions",
+        "line": 19.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.01844182622703e-09,
+        "carry_share": 0.08220091734269029,
+        "target_rank": 16.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 2.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "2143ade9684fd876b68a4e8cbf451f05",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Baltimore Ravens",
+        "away_team": "New Orleans Saints",
+        "player_name": "Tyler Shough",
+        "team": "NO",
+        "market_key": "player_pass_attempts",
+        "line": 34.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.537074665148854e-09,
+        "carry_share": 0.046649886814627534,
+        "target_rank": 14.0,
+        "carry_rank": 4.0,
+        "n_targets": 0.0,
+        "n_carries": 2.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "4dd8020192a544385db42374e5555303",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "Arizona Cardinals",
+        "away_team": "Seattle Seahawks",
+        "player_name": "Kendrick Bourne",
+        "team": "ARI",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -130.0,
+        "complement_price": 100.0,
+        "q_pick": 0.5306122448979592,
+        "hold": 0.0652173913043479,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.16565037417388132,
+        "carry_share": 1.0976066242676309e-08,
+        "target_rank": 3.0,
+        "carry_rank": 16.0,
+        "n_targets": 8.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "68bc55903f50af4af4766adcc89fcc61",
+        "commence_time": "2026-09-20T20:25:00Z",
+        "home_team": "San Francisco 49ers",
+        "away_team": "Miami Dolphins",
+        "player_name": "Malik Willis",
+        "team": "MIA",
+        "market_key": "player_pass_attempts",
+        "line": 26.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 9.653666530369957e-09,
+        "carry_share": 0.04430988210300375,
+        "target_rank": 17.0,
+        "carry_rank": 3.0,
+        "n_targets": 0.0,
+        "n_carries": 1.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "50bc247030707d823b9c3581d7eb5760",
+        "commence_time": "2026-09-21T00:20:00Z",
+        "home_team": "Kansas City Chiefs",
+        "away_team": "Indianapolis Colts",
+        "player_name": "Keenan Allen",
+        "team": "IND",
+        "market_key": "player_receptions",
+        "line": 3.5,
+        "pick_side": "Over",
+        "pick_price": -125.0,
+        "complement_price": -105.0,
+        "q_pick": 0.5203045685279188,
+        "hold": 0.0677506775067751,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.20865454024327937,
+        "carry_share": 1.0250775885142413e-08,
+        "target_rank": 1.0,
+        "carry_rank": 15.0,
+        "n_targets": 6.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      },
+      {
+        "event_id": "36ad2fa722f4915ef23d2c81351261de",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Houston Texans",
+        "away_team": "Cincinnati Bengals",
+        "player_name": "David Montgomery",
+        "team": "HOU",
+        "market_key": "player_rush_attempts",
+        "line": 15.5,
+        "pick_side": "Over",
+        "pick_price": -120.0,
+        "complement_price": -110.0,
+        "q_pick": 0.5101214574898786,
+        "hold": 0.06926406926406914,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.0669473886610089,
+        "carry_share": 0.5515072066964921,
+        "target_rank": 5.0,
+        "carry_rank": 1.0,
+        "n_targets": 3.0,
+        "n_carries": 20.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": true
+      },
+      {
+        "event_id": "0636ebff776d43f8c829a36713c80b22",
+        "commence_time": "2026-09-20T17:00:00Z",
+        "home_team": "Tampa Bay Buccaneers",
+        "away_team": "Cleveland Browns",
+        "player_name": "Jerry Jeudy",
+        "team": "CLE",
+        "market_key": "player_receptions",
+        "line": 2.5,
+        "pick_side": "Over",
+        "pick_price": -115.0,
+        "complement_price": -115.0,
+        "q_pick": 0.5,
+        "hold": 0.06976744186046524,
+        "pull_timestamp": "2026-09-20T15:00:10.017097+00:00",
+        "target_share": 0.21288719485554333,
+        "carry_share": 8.720299272350564e-09,
+        "target_rank": 1.0,
+        "carry_rank": 16.0,
+        "n_targets": 4.0,
+        "n_carries": 0.0,
+        "injury_status": "Active",
+        "feed_status_missing": false,
+        "moved_against": false
+      }
+    ],
+    "price": {
+      "decimal": 400.462,
+      "product_of_devigged_q": 0.00129,
+      "expected_return_per_1_at_book_q": 0.5167
+    },
+    "departures": {
+      "removed_from_rule": [
+        [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Emeka Egbuka",
+          "player_receptions"
+        ],
+        [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "J.K. Dobbins",
+          "player_rush_attempts"
+        ],
+        [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_completions"
+        ],
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Dalton Schultz",
+          "player_receptions"
+        ],
+        [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Breece Hall",
+          "player_rush_attempts"
+        ],
+        [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Alec Pierce",
+          "player_receptions"
+        ],
+        [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Brock Purdy",
+          "player_pass_completions"
+        ],
+        [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Quentin Johnston",
+          "player_receptions"
+        ],
+        [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Jayden Daniels",
+          "player_pass_completions"
+        ],
+        [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Bijan Robinson",
+          "player_rush_attempts"
+        ]
+      ],
+      "added_outside_rule": [
+        [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_attempts"
+        ],
+        [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ]
+      ]
+    },
+    "reasons": [
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "Breece Hall",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Brock Purdy",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Alec Pierce",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "71b3b83747589efdc5baef2c5cf811bf",
+          "Quentin Johnston",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Bijan Robinson",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "85ef85098ddd22fe4ecf45e7e3c0a9c0",
+          "Jayden Daniels",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_completions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "Dalton Schultz",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "J.K. Dobbins",
+          "player_rush_attempts"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Emeka Egbuka",
+          "player_receptions"
+        ],
+        "reason": "AI-picked ticket: Jeff asked for the reader's own picks, independent of the rule deal; leg not chosen",
+        "source": "Jeff, chat 2026-09-20 ~16:13Z"
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_attempts"
+        ],
+        "reason": "Replaces Cousins (his line moved to 30.5 at 12:23pm ET). Shough threw 55 times in wk 1's one-point game and NO is an 8.5-pt dog at BAL with Kamara hurt; 34.5 unchanged on the fresh pull.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a 3-pt road favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk.",
+        "source": "candidates 1614Z (Hard Rock 15:00Z pull), Hard Rock spread/total 15:30Z, 2026 wk-1 PBP, FantasyPros inactives 15:45Z"
+      }
+    ],
+    "confirmations": [
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a 3-pt road favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk."
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk."
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120."
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Replaces Cousins (his line moved to 30.5 at 12:23pm ET). Shough threw 55 times in wk 1's one-point game and NO is an 8.5-pt dog at BAL with Kamara hurt; 34.5 unchanged on the fresh pull."
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over."
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk."
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "availability_source": "ESPN injuries 16:23Z (none Out/Doubtful) + Hard Rock pull 16:23:40Z: line and price unchanged for every leg kept",
+        "checked_at": "2026-09-20T16:25Z",
+        "ai_reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board."
+      }
+    ],
+    "leg_notes": [
+      {
+        "leg": [
+          "aee7eae1849ebb103b9bf233e9741392",
+          "Chuba Hubbard",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "Only 10 carries wk 1 because CAR lost by 22; today CAR is a 3-pt road favourite vs a Cooper Rush offence. Lead back at 54% share, -115. Brooks split is the risk."
+      },
+      {
+        "leg": [
+          "4aeee070bb6ec60bdfae4dede61b9014",
+          "MarShawn Lloyd",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "Jacobs is on the exempt list and LaFleur named Lloyd the lead; 13 of GB's 21 carries in a 17-pt loss, now a 3.5-pt favourite. Kaleb Johnson getting work is the risk."
+      },
+      {
+        "leg": [
+          "9d14f87600f6edc74dbcb5c74edf6246",
+          "Aaron Rodgers",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "40 attempts vs 21 team rushes in a wk-1 WIN says PIT is pass-first regardless; now a 5.5-pt dog at NE. 34.5 is a high bar, which is why it pays -120."
+      },
+      {
+        "leg": [
+          "1fd6628c781f556a7a19638e97d7107f",
+          "Trevor Lawrence",
+          "player_pass_completions"
+        ],
+        "ai_reason": "18 of 23 in a 24-pt blowout win; in a near pick'em at DEN he throws for four quarters. 78% completion wk 1, 19.5 needs ~29 attempts. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "2143ade9684fd876b68a4e8cbf451f05",
+          "Tyler Shough",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "Replaces Cousins (his line moved to 30.5 at 12:23pm ET). Shough threw 55 times in wk 1's one-point game and NO is an 8.5-pt dog at BAL with Kamara hurt; 34.5 unchanged on the fresh pull."
+      },
+      {
+        "leg": [
+          "4dd8020192a544385db42374e5555303",
+          "Kendrick Bourne",
+          "player_receptions"
+        ],
+        "ai_reason": "8 targets in wk 1 from Brissett, who threw 37 times even while winning; ARI is a 4-pt dog today. 2.5 is a low bar for that usage; price moved toward Over."
+      },
+      {
+        "leg": [
+          "68bc55903f50af4af4766adcc89fcc61",
+          "Malik Willis",
+          "player_pass_attempts"
+        ],
+        "ai_reason": "13.5-pt dog at SF: MIA will be throwing from behind. 27 attempts in wk 1's 14-pt loss; the 26.5 line is low because of sacks and scrambles, which is the risk."
+      },
+      {
+        "leg": [
+          "50bc247030707d823b9c3581d7eb5760",
+          "Keenan Allen",
+          "player_receptions"
+        ],
+        "ai_reason": "Team-high 6 targets from Daniel Jones in wk 1; IND is a 6-pt dog at KC, a trailing script for the possession receiver. 3.5 at -125."
+      },
+      {
+        "leg": [
+          "36ad2fa722f4915ef23d2c81351261de",
+          "David Montgomery",
+          "player_rush_attempts"
+        ],
+        "ai_reason": "20 of HOU's 32 carries in wk 1 while losing; HOU is a home favourite and Nico Collins is out, which leans the offence to the run. Price moved toward Over."
+      },
+      {
+        "leg": [
+          "0636ebff776d43f8c829a36713c80b22",
+          "Jerry Jeudy",
+          "player_receptions"
+        ],
+        "ai_reason": "CLE's top target share and an 8-pt dog at TB, so Watson throws more than wk 1's 22 attempts. 2.5 at -115 is the cheapest lead-receiver line on the board."
+      }
+    ],
+    "reader": {
+      "model": "claude-fable-5-1 (Cowork chat)",
+      "inputs": [
+        "nfl_prop_candidates_20260920T1614Z.parquet",
+        "line_history snap 15:30Z",
+        "pbp_2026 week 1 team/QB volume",
+        "FantasyPros inactives 15:45Z",
+        "packers news 09-17 (Lloyd lead, Jacobs exempt)"
+      ],
+      "raw_output": "AI-picked ticket; per-leg reasons in leg_notes. Method: game script from spread/total x week-1 volume x role share; prefer prices -115..-130; one leg per game; no sim input."
+    },
+    "placed": null,
+    "graded": false
   }
 ]
