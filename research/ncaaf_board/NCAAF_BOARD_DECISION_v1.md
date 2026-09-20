@@ -616,4 +616,21 @@ pipeline pulls before reading). This resolves the dual-writer violation from N32
 16% of NCAAF markets are empty books; the slate is Saturday. Off-window pulls
 still capture any mid-week line moves but at 1/6th the frequency.
 
-**Measured MB/month:** to be filled after 2e measurement runs.
+**Measured MB/month (second runs, steady state):**
+| Feed | Steady-state KB/pull | Pulls/day | MB/month |
+|------|---------------------|-----------|----------|
+| NFL news (de-duped) | 6 KB | 4 | 0.7 |
+| NCAAF news (de-duped) | 16 KB | 4 | 1.9 |
+| NFL injuries (hash-skip) | 0 (353 KB when changed) | 4.14 | ~1.4 |
+| NFL depth (hash-skip) | 0 (386 KB when changed) | 4.14 | ~1.2 |
+| nflverse (hash-skip) | 0 (11.5 MB when changed) | 1 | ~46-92 |
+| Kalshi NFL | 55 KB | 32 | 53 |
+| Kalshi NCAAF (new sched) | 95 KB | ~17.4 avg | 50 |
+| **Total** | | | **~154-200** |
+
+Under the 300 MB/month target. Nflverse dominates and depends on how often
+rosters/depth actually change (1-2x/week typical in-season). NFL news de-dup
+achieved 100% skip on the second run (0 new articles). NCAAF news: 3 new
+articles out of 2900 (99.9% skip). Injuries: 100% hash-skip. Depth: 100%
+hash-skip after recursive timestamp strip (the first two runs hashed differently
+due to per-team `timestamp` fields; fixed with recursive strip).
