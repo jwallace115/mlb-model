@@ -786,3 +786,43 @@ was deleted or otherwise modified.
 
 **Null control.** `_validate_ticket`'s both-sides invariant still passes (unchanged).
 The 4 existing test_ticket_invariants tests still pass with updated fixtures.
+
+### N38 — A grader that runs, measures point_clv and prob_clv separately, 30-min close rule, CFBD outcomes (2026-09-20)
+ChatGPT audit #4, adjudicated by Cowork. Item 2 of WO11.
+
+**Defect.** `grade_tickets(2026)` crashed with `KeyError: 'event_id'` because 4 card
+entries carry event_id on their legs. Also: close had no maximum age (any pre-kick
+row accepted), `graded=True` was unconditional after the leg loop, CLV was a single
+no-vig-scale number that de-vigged the pick with the CLOSING complement, and the grader
+had no outcome source.
+
+**Pre-registration.** KeyError on the committed log. It raised `KeyError: 'event_id'`,
+0 of 31 graded. Matches.
+
+**CLV definitions (verbatim from the adjudication):**
+- `point_clv`: spread (same team): `entry_point - close_point`; Over: `close_point -
+  entry_point`; Under: `entry_point - close_point`.
+- `prob_clv`: ONLY if the close quotes the leg's ORIGINAL point at that book. `q_c` =
+  close price de-vigged with its own same-snapshot complement; `q_0` = entry price
+  de-vigged with the ENTRY complement stored in item 1c. Stores `q_c - q_0` and
+  `C = d_0 * q_c - 1`. Otherwise null with reason `line_moved_no_alt_quote`. Never
+  the new main line.
+
+**30-minute rule.** Close = last pre-kick row within 30 min of commence_time for the
+leg's book/market/outcome. Older: stored as `last_observed_*` with age. A leg with no
+close within 30 min stays `graded: false` with `grade_status: close_unavailable`.
+
+**Outcomes.** CFBD refresh: 4 HTTP calls to collegefootballdata.com (rate-limited, zero
+Odds API credits). 1,045 completed games. Outcome join on teams + date: **89/95 legs
+matched** (93.7%). Unmatched legs: `outcome_unavailable` with reason, never a loss.
+
+**Fix.** Full rewrite of `grade_ncaaf_tickets.py`. Legs graded wherever they live
+(event tickets or card entries). `pre_repair` entries skipped. Team-name mapping via
+strip-mascot with 2 overrides (San Jose State -> San José State, UMass -> Massachusetts).
+
+**Tests (3 new):**
+- `test_grader_handles_cards_and_events`: event + card + pre_repair fixture; 2 graded, pre_repair skipped
+- `test_30min_close_rule`: 60-min-old snapshot leaves ticket ungraded with `grade_status: close_unavailable`
+- `test_point_clv_spread`: entry -7.0, close -7.5 -> point_clv = +0.5
+
+**N12 all-zero-CLV assertion retained.**

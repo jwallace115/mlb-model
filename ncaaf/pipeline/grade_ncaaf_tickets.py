@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """
-N04: Grade NCAAF tickets — CLV from the last pre-kick snapshot.
+N04/N38: Grade NCAAF tickets — CLV from the last pre-kick snapshot.
 
-Closing price = last snapshot STRICTLY BEFORE commence_time.
-CLV on no-vig scale, game identity required, push = void (D64 convention).
-UPDATE-ONLY: never append a row, never re-grade a row already marked graded.
+WO11 rewrite:
+  - Grades LEGS wherever they live (event tickets and card entries).
+  - Skips pre_repair entries.
+  - Close = last pre-kick row within 30 minutes of commence_time.
+  - point_clv and prob_clv are separate, never blended.
+  - Outcomes from CFBD (homePoints/awayPoints, completed).
+  - UPDATE-ONLY: never append a row, never re-grade a row already marked graded.
 """
 
 import json, sys
@@ -20,6 +24,14 @@ sys.path.insert(0, str(ROOT))
 TAPE_DIR = ROOT / "data" / "odds_archive" / "ncaaf" / "line_history"
 TICKET_LOG = ROOT / "ncaaf" / "logs" / "ncaaf_board_tickets_2026.json"
 
+CLOSE_MAX_MINUTES = 30
+
+# Odds API -> CFBD team name overrides (where strip-mascot doesn't work)
+_TEAM_MAP = {
+    "San Jose State Spartans": "San Jos\u00e9 State",
+    "UMass Minutemen": "Massachusetts",
+}
+
 
 def american_to_implied(odds):
     if odds is None or (isinstance(odds, float) and np.isnan(odds)):
@@ -29,29 +41,149 @@ def american_to_implied(odds):
     return abs(odds) / (abs(odds) + 100)
 
 
-def _load_closing_prices(season):
-    """Load the last pre-kick snapshot per (event_id, market, outcome_name, bookmaker)."""
+def _odds_to_cfbd(odds_name, cfbd_teams):
+    """Map an Odds API team name to a CFBD team name."""
+    if odds_name in _TEAM_MAP:
+        return _TEAM_MAP[odds_name]
+    # Strip mascot: try progressively shorter prefixes
+    words = odds_name.split()
+    for i in range(len(words), 0, -1):
+        candidate = " ".join(words[:i])
+        if candidate in cfbd_teams:
+            return candidate
+    return None
+
+
+def _load_tape(season):
+    """Load all pre-kick snapshots with parsed timestamps."""
     tape_path = TAPE_DIR / f"season={season}"
     if not tape_path.exists():
         return pd.DataFrame()
-
     frames = []
     for f in sorted(tape_path.glob("*.parquet")):
         frames.append(pd.read_parquet(f))
     if not frames:
         return pd.DataFrame()
-
     df = pd.concat(frames, ignore_index=True)
     df["snapshot_dt"] = pd.to_datetime(df["snapshot_utc"], utc=True, errors="coerce")
     df["commence_dt"] = pd.to_datetime(df["commence_time"], utc=True, errors="coerce")
-
     # Pre-kick only
-    pre = df[df["snapshot_dt"] < df["commence_dt"]]
-    # Latest per (event_id, bookmaker, market, outcome_name)
-    close = (pre.sort_values("snapshot_dt", ascending=False)
-             .drop_duplicates(["event_id", "bookmaker", "market", "outcome_name"],
-                              keep="first"))
-    return close
+    return df[df["snapshot_dt"] < df["commence_dt"]].copy()
+
+
+def _load_cfbd_outcomes(season):
+    """Load CFBD game results. Returns dict of (home_cfbd, away_cfbd, date) -> (hPts, aPts)."""
+    cfbd_path = ROOT / "research" / "ncaaf" / f"cfbd_games_{season}.parquet"
+    if not cfbd_path.exists():
+        return {}, set()
+    gdf = pd.read_parquet(cfbd_path)
+    completed = gdf[gdf["completed"] == True]
+    cfbd_teams = set(gdf["homeTeam"].unique()) | set(gdf["awayTeam"].unique())
+    outcomes = {}
+    for _, row in completed.iterrows():
+        date_str = str(row["startDate"])[:10]
+        key = (row["homeTeam"], row["awayTeam"], date_str)
+        outcomes[key] = (row["homePoints"], row["awayPoints"])
+    return outcomes, cfbd_teams
+
+
+def _find_close(tape, eid, book, market, side, commence_dt):
+    """Find the last pre-kick row within 30 min of kickoff for this leg's book."""
+    match = tape[
+        (tape["event_id"] == eid)
+        & (tape["market"] == market)
+        & (tape["outcome_name"] == side)
+        & (tape["bookmaker"] == book)
+    ]
+    if match.empty:
+        return None, None
+
+    # Filter to within 30 minutes of kickoff
+    cutoff = commence_dt - pd.Timedelta(minutes=CLOSE_MAX_MINUTES)
+    within = match[match["snapshot_dt"] >= cutoff]
+    if within.empty:
+        # Have data but too old — return as last_observed
+        latest = match.sort_values("snapshot_dt", ascending=False).iloc[0]
+        age_min = (commence_dt - latest["snapshot_dt"]).total_seconds() / 60
+        return None, {"point": latest["point"], "price": latest["price"],
+                      "snapshot_utc": str(latest["snapshot_utc"]),
+                      "age_minutes": round(age_min, 1)}
+
+    latest = within.sort_values("snapshot_dt", ascending=False).iloc[0]
+    return latest, None
+
+
+def _find_complement(tape, eid, book, market, side, snapshot_utc):
+    """Find the complement side from the same book and snapshot."""
+    comp = tape[
+        (tape["event_id"] == eid)
+        & (tape["market"] == market)
+        & (tape["outcome_name"] != side)
+        & (tape["bookmaker"] == book)
+        & (tape["snapshot_utc"] == snapshot_utc)
+    ]
+    if comp.empty:
+        return None
+    return comp.iloc[0]
+
+
+def _compute_outcome(leg, home_team, away_team, outcomes, cfbd_teams):
+    """Compute win/loss/push for a leg from CFBD outcomes."""
+    if not outcomes:
+        return "outcome_unavailable", "no_cfbd_data"
+
+    # Map team names
+    home_cfbd = _odds_to_cfbd(home_team, cfbd_teams)
+    away_cfbd = _odds_to_cfbd(away_team, cfbd_teams)
+    if not home_cfbd or not away_cfbd:
+        return "outcome_unavailable", f"unmapped_teams:{home_team}/{away_team}"
+
+    # Try to find the game by teams + date
+    commence = leg.get("commence_time") or ""
+    date_str = commence[:10]
+    key = (home_cfbd, away_cfbd, date_str)
+    if key not in outcomes:
+        return "outcome_unavailable", f"no_match:{key}"
+
+    h_pts, a_pts = outcomes[key]
+    market = leg["market"]
+    side = leg["side"]
+    point = leg["point"]
+
+    if market == "spreads":
+        # Determine if this leg's side is home or away
+        side_cfbd = _odds_to_cfbd(side, cfbd_teams)
+        if side_cfbd == home_cfbd:
+            margin = h_pts - a_pts + point  # home + spread
+        elif side_cfbd == away_cfbd:
+            margin = a_pts - h_pts + point
+        else:
+            return "outcome_unavailable", f"side_unmapped:{side}"
+        if margin > 0:
+            return "win", None
+        elif margin < 0:
+            return "loss", None
+        else:
+            return "push", None
+
+    elif market == "totals":
+        total = h_pts + a_pts
+        if "Over" in str(side):
+            if total > point:
+                return "win", None
+            elif total < point:
+                return "loss", None
+            else:
+                return "push", None
+        else:  # Under
+            if total < point:
+                return "win", None
+            elif total > point:
+                return "loss", None
+            else:
+                return "push", None
+
+    return "outcome_unavailable", f"unknown_market:{market}"
 
 
 def grade_tickets(season=2026):
@@ -62,100 +194,153 @@ def grade_tickets(season=2026):
     with open(TICKET_LOG) as f:
         tickets = json.load(f)
 
-    close = _load_closing_prices(season)
-    if close.empty:
-        print("No closing prices available")
+    tape = _load_tape(season)
+    if tape.empty:
+        print("No tape data available")
         return 0
 
+    outcomes, cfbd_teams = _load_cfbd_outcomes(season)
     now_utc = pd.Timestamp.now(tz="UTC")
 
     changed = 0
     for ticket in tickets:
+        if ticket.get("pre_repair"):
+            continue
         if ticket.get("graded"):
-            continue  # UPDATE-ONLY: never re-grade
+            continue  # UPDATE-ONLY
 
-        # N12: skip tickets whose commence_time is in the future.
-        # Grading is undefined before kickoff.
-        commence = pd.Timestamp(ticket.get("commence_time"), tz="UTC")
+        # Get commence_time from ticket or first leg
+        ticket_commence = ticket.get("commence_time")
+        if not ticket_commence:
+            legs = ticket.get("legs", [])
+            if legs:
+                ticket_commence = legs[0].get("commence_time")
+        if not ticket_commence:
+            continue
+
+        commence = pd.Timestamp(ticket_commence, tz="UTC")
         if commence > now_utc:
             continue
 
-        eid = ticket["event_id"]
+        all_legs_closeable = True
         for leg in ticket.get("legs", []):
+            # Normalize: event_id and commence from leg or ticket
+            eid = leg.get("event_id") or ticket.get("event_id")
+            leg_commence = leg.get("commence_time") or ticket.get("commence_time")
+            home = leg.get("home_team") or ticket.get("home_team", "")
+            away = leg.get("away_team") or ticket.get("away_team", "")
+
+            if not eid:
+                leg["grade_status"] = "no_event_id"
+                all_legs_closeable = False
+                continue
+
             market = leg["market"]
             side = leg["side"]
             book = leg.get("book", "")
+            commence_dt = pd.Timestamp(leg_commence, tz="UTC")
 
-            # Match on game identity (event_id)
-            match = close[
-                (close["event_id"] == eid)
-                & (close["market"] == market)
-                & (close["outcome_name"] == side)
-                & (close["bookmaker"] == book)
-            ]
-
-            if match.empty:
-                # Try any book for this event/market/side
-                match = close[
-                    (close["event_id"] == eid)
-                    & (close["market"] == market)
-                    & (close["outcome_name"] == side)
-                ]
-
-            if match.empty:
-                leg["close_price"] = None
-                leg["clv"] = None
+            if not book:
+                leg["grade_status"] = "no_book"
+                all_legs_closeable = False
                 continue
 
-            cr = match.iloc[0]
-            close_price = cr["price"]
-            leg["close_price"] = float(close_price) if pd.notna(close_price) else None
+            # Find close within 30 minutes
+            close_row, last_obs = _find_close(tape, eid, book, market, side, commence_dt)
 
-            # CLV on no-vig scale
-            pick_imp = american_to_implied(leg.get("price"))
-            close_imp = american_to_implied(close_price)
+            if close_row is None:
+                if last_obs:
+                    leg["last_observed_point"] = float(last_obs["point"]) if pd.notna(last_obs["point"]) else None
+                    leg["last_observed_price"] = float(last_obs["price"]) if pd.notna(last_obs["price"]) else None
+                    leg["last_observed_age_min"] = last_obs["age_minutes"]
+                leg["point_clv"] = None
+                leg["prob_clv"] = None
+                all_legs_closeable = False
+                continue
 
-            if pd.notna(pick_imp) and pd.notna(close_imp):
-                # Devig: need both sides. Find the complement.
-                comp_side = close[
-                    (close["event_id"] == eid)
-                    & (close["market"] == market)
-                    & (close["outcome_name"] != side)
-                    & (close["bookmaker"] == cr["bookmaker"])
-                ]
-                if not comp_side.empty:
-                    comp_imp = american_to_implied(comp_side.iloc[0]["price"])
-                    if pd.notna(comp_imp):
-                        close_total = close_imp + comp_imp
-                        close_devig = close_imp / close_total
-                        pick_devig = pick_imp / (pick_imp + comp_imp)  # approx
-                        leg["clv"] = round(float(close_devig - pick_devig), 4)
-                    else:
-                        leg["clv"] = None
-                else:
-                    leg["clv"] = None
+            close_point = float(close_row["point"]) if pd.notna(close_row["point"]) else None
+            close_price = float(close_row["price"]) if pd.notna(close_row["price"]) else None
+            leg["close_point"] = close_point
+            leg["close_price"] = close_price
+            leg["close_book"] = str(close_row["bookmaker"])
+            leg["close_snapshot_utc"] = str(close_row["snapshot_utc"])
+
+            entry_point = leg.get("point")
+
+            # point_clv
+            if close_point is not None and entry_point is not None:
+                if market == "spreads":
+                    leg["point_clv"] = round(entry_point - close_point, 2)
+                elif "Over" in str(side):
+                    leg["point_clv"] = round(close_point - entry_point, 2)
+                else:  # Under
+                    leg["point_clv"] = round(entry_point - close_point, 2)
             else:
-                leg["clv"] = None
+                leg["point_clv"] = None
 
-        ticket["graded"] = True
-        changed += 1
+            # prob_clv: only if close quotes the ORIGINAL point at this book
+            leg["prob_clv"] = None
+            leg["prob_clv_reason"] = None
+            if close_point is not None and entry_point is not None and close_point == entry_point:
+                # Find close complement
+                close_comp = _find_complement(
+                    tape, eid, book, market, side,
+                    close_row["snapshot_utc"])
+                if close_comp is not None:
+                    q_c = american_to_implied(close_price)
+                    comp_c = american_to_implied(float(close_comp["price"]))
+                    if pd.notna(q_c) and pd.notna(comp_c) and (q_c + comp_c) > 0:
+                        q_c_devig = q_c / (q_c + comp_c)
 
-    # N12: assert that not all CLVs are identically zero.
-    # Twelve legs at exactly 0.000 is not a measurement — it means the
-    # closing price resolved to the decision price (likely a future game).
+                        # Entry de-vig uses the ENTRY complement
+                        entry_price = leg.get("price")
+                        comp_entry_price = leg.get("complement_price")
+                        if entry_price is not None and comp_entry_price is not None:
+                            q_0 = american_to_implied(entry_price)
+                            comp_0 = american_to_implied(comp_entry_price)
+                            if pd.notna(q_0) and pd.notna(comp_0) and (q_0 + comp_0) > 0:
+                                q_0_devig = q_0 / (q_0 + comp_0)
+                                d_0 = 1.0 / q_0_devig if q_0_devig > 0 else None
+                                if d_0 is not None:
+                                    leg["prob_clv"] = round(q_c_devig - q_0_devig, 6)
+                                    leg["prob_clv_C"] = round(d_0 * q_c_devig - 1, 6)
+                                    leg["prob_clv_reason"] = None
+                            else:
+                                leg["prob_clv_reason"] = "entry_complement_missing"
+                        else:
+                            leg["prob_clv_reason"] = "entry_complement_missing"
+                    else:
+                        leg["prob_clv_reason"] = "close_complement_invalid"
+                else:
+                    leg["prob_clv_reason"] = "close_complement_missing"
+            elif close_point != entry_point:
+                leg["prob_clv_reason"] = "line_moved_no_alt_quote"
+
+            # Outcome from CFBD
+            result, reason = _compute_outcome(leg, home, away, outcomes, cfbd_teams)
+            leg["outcome"] = result
+            if reason:
+                leg["outcome_reason"] = reason
+
+        if all_legs_closeable:
+            ticket["graded"] = True
+            changed += 1
+        else:
+            ticket["grade_status"] = "close_unavailable"
+
+    # N12: assert that not all CLVs are exactly zero
     if changed > 0:
         all_clvs = []
         for t in tickets:
-            if t.get("graded"):
+            if t.get("graded") and not t.get("pre_repair"):
                 for leg in t.get("legs", []):
-                    if leg.get("clv") is not None:
-                        all_clvs.append(leg["clv"])
+                    v = leg.get("point_clv")
+                    if v is not None:
+                        all_clvs.append(v)
         if all_clvs and all(c == 0.0 for c in all_clvs):
             raise RuntimeError(
-                f"HALT: all {len(all_clvs)} graded CLVs are exactly 0.0. "
-                f"This means closing prices resolved to decision prices — "
-                f"likely a future-game grading defect."
-            )
+                f"HALT: all {len(all_clvs)} graded point_clvs are exactly 0.0. "
+                f"Likely a future-game grading defect.")
 
     with open(TICKET_LOG, "w") as f:
         json.dump(tickets, f, indent=2)
@@ -171,37 +356,43 @@ def report(season=2026):
     with open(TICKET_LOG) as f:
         tickets = json.load(f)
 
-    graded = [t for t in tickets if t.get("graded")]
+    graded = [t for t in tickets if t.get("graded") and not t.get("pre_repair")]
     if not graded:
-        print("No graded tickets")
+        print("No graded tickets (excluding pre_repair)")
         return
 
-    # Flatten legs
     legs = []
     for t in graded:
         for leg in t.get("legs", []):
-            leg["event_id"] = t["event_id"]
-            leg["home_team"] = t["home_team"]
-            leg["away_team"] = t["away_team"]
-            leg["reference_only"] = t.get("reference_only", True)
+            leg["_event_id"] = leg.get("event_id") or t.get("event_id", "")
+            leg["_home"] = leg.get("home_team") or t.get("home_team", "")
+            leg["_away"] = leg.get("away_team") or t.get("away_team", "")
+            leg["_reference_only"] = t.get("reference_only", True)
             legs.append(leg)
 
     df = pd.DataFrame(legs)
-    valid = df[df["clv"].notna()]
 
-    print(f"\nCLV Report: {len(valid)}/{len(df)} legs with CLV")
-    if valid.empty:
-        return
+    # point_clv report
+    has_pt = df[df["point_clv"].notna()] if "point_clv" in df.columns else pd.DataFrame()
+    print(f"\nPoint CLV: {len(has_pt)}/{len(df)} legs")
+    if not has_pt.empty:
+        print("\n| Market | N | Mean pt_CLV |")
+        print("|--------|---|-------------|")
+        for mkt in sorted(has_pt["market"].unique()):
+            g = has_pt[has_pt["market"] == mkt]
+            print(f"| {mkt:10s} | {len(g):3d} | {g['point_clv'].mean():+.2f} |")
+        print(f"\nOverall: {has_pt['point_clv'].mean():+.2f} (N={len(has_pt)})")
 
-    # By market
-    print("\n| Market | N | Mean CLV |")
-    print("|--------|---|----------|")
-    for mkt in sorted(valid["market"].unique()):
-        g = valid[valid["market"] == mkt]
-        print(f"| {mkt:10s} | {len(g):3d} | {g['clv'].mean():+.4f} |")
+    # Outcome report
+    if "outcome" in df.columns:
+        print(f"\nOutcomes:")
+        for o in ["win", "loss", "push", "outcome_unavailable"]:
+            n = (df["outcome"] == o).sum()
+            if n > 0:
+                print(f"  {o}: {n}")
 
-    print(f"\nOverall: {valid['clv'].mean():+.4f} (N={len(valid)})")
-    print(f"REFERENCE_ONLY: {valid['reference_only'].all()}")
+    match_rate = (df["outcome"].isin(["win", "loss", "push"])).sum() if "outcome" in df.columns else 0
+    print(f"\nCFBD match rate: {match_rate}/{len(df)} legs")
 
 
 def main():
