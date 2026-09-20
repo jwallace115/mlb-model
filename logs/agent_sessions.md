@@ -2729,3 +2729,11 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - BUILT: `log_placement` (append-only; placed legs must be recommended legs at the same line and
   side; unplaced legs need a reason; accepted-price differences recorded) + test; suite 91 passed.
 - NOT DONE: NFL prop grader; inactives check (15:36Z task).
+
+## 2026-09-20T15:56Z  cowork
+- RAN (Jeff, Mac): `python3 nfl/sim/run_week.py --week 2` pre-kick -> 15 games, 15/15 converged, 580 s, board 15:50:02Z, 1,237 legs (priced 151). MEANS: Week 2 sim numbers are on record before the 17:00Z kickoffs, on `7f3d96900218c014`/`fit_5i`. Unscored.
+- MEASURED: sim number at the book's line for receptions 138/153, rush attempts 8/50, completions+attempts 0/56; 12 of 34 placed legs. cal_p - book q: SD 0.147 receptions. Note: `research/nfl_sim/wk2_prekick_sim_layer_2026-09-20.md`.
+- WROTE: `research/nfl_sim/workorder_5J_2026-09-20.md` (4 items, no fingerprint change: usage layer-3 date guard; run_week pre-kick line filter; book-line pricing + coverage script; full-K1 generator) and `workorder_5K_2026-09-20.md` (Q4_mid split + re-fit, queued behind 5J).
+- OBSERVED: first scheduled props pull 15:00:10Z tag close, 878 rows. 1pm inactives: no placed-ticket player listed (FantasyPros; NFL.com page empty at 15:42Z).
+- NOT DONE: 5J/5K not run. NFL prop grader not built. Outcomes not joined.
+- UNVERIFIED: whether the inactives list read was the full official 90-minute list.

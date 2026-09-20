@@ -1,0 +1,35 @@
+ticket,player_name,market_key,side,line,american,q_over,sim_p,cal_p,tier,q_pick,sim_pick,cal_pick
+LEAD_5,Caleb Douglas,player_receptions,Over,2.5,-165.0,0.5834970530451867,0.873,0.7489,TRUSTED,0.5834970530451867,0.873,0.7489
+LEAD_5,Breece Hall,player_rush_attempts,Over,15.5,-130.0,,,,,,,
+LEAD_5,Emeka Egbuka,player_receptions,Over,3.5,-165.0,0.5834970530451867,0.5482,0.4814,TRUSTED,0.5834970530451867,0.5482,0.4814
+LEAD_5,Chase Brown,player_rush_attempts,Over,13.5,-130.0,,,,,,,
+LEAD_5,Tyler Shough,player_pass_completions,Over,21.5,-130.0,,,,,,,
+LEAD_10,Christian Watson,player_receptions,Over,3.5,-165.0,0.5834970530451867,0.6808,0.5829,TRUSTED,0.5834970530451867,0.6808,0.5829
+LEAD_10,Aaron Jones,player_rush_attempts,Over,14.5,-110.0,0.5203045685279188,0.647,0.647,WATCH [yardage-family calibration not passed],0.5203045685279188,0.647,0.647
+LEAD_10,Brock Purdy,player_pass_completions,Over,19.5,-130.0,,,,,,,
+LEAD_10,Quentin Johnston,player_receptions,Over,3.5,-165.0,0.5834970530451867,0.6768,0.5829,TRUSTED,0.5834970530451867,0.6768,0.5829
+LEAD_10,Bijan Robinson,player_rush_attempts,Over,18.5,-125.0,,,,,,,
+LEAD_10,Daniel Jones,player_pass_completions,Over,20.5,-130.0,,,,,,,
+LEAD_10,Devaughn Vele,player_receptions,Over,3.5,-140.0,0.550561797752809,0.7412,0.6903,TRUSTED,0.550561797752809,0.7412,0.6903
+LEAD_10,J.K. Dobbins,player_rush_attempts,Over,13.5,-125.0,,,,,,,
+LEAD_10,Jalen Hurts,player_pass_completions,Over,17.5,-130.0,,,,,,,
+LEAD_10,CeeDee Lamb,player_receptions,Over,5.5,-135.0,0.5407914020517831,0.635,0.578,TRUSTED,0.5407914020517831,0.635,0.578
+ALLDAY_20,Derrick Henry,player_receptions,Under,1.5,,0.3373493975903614,0.393,0.4113,TRUSTED-FLAGGED [RB tail],0.6626506024096386,0.607,0.5887
+ALLDAY_20,Dak Prescott,player_rush_attempts,Under,3.5,,,,,,,,
+ALLDAY_20,Jordan Love,player_pass_completions,Over,20.5,-130.0,,,,,,,
+ALLDAY_20,Adam Trautman,player_receptions,Under,1.5,,,,,,,,
+ALLDAY_20,Patrick Mahomes,player_rush_attempts,Under,4.5,-145.0,,,,,,,
+ALLDAY_20,Justin Herbert,player_pass_completions,Under,20.5,,,,,,,,
+ALLDAY_20,Jonathon Brooks,player_receptions,Under,1.5,-210.0,,,,,,,
+ALLDAY_20,Drake Maye,player_rush_attempts,Under,5.5,,,,,,,,
+ALLDAY_20,Baker Mayfield,player_pass_attempts,Under,28.5,,,,,,,,
+ALLDAY_20,Foster Moreau,player_receptions,Under,1.5,-190.0,0.381753477838887,0.3936,0.4,TRUSTED-FLAGGED [TE],0.618246522161113,0.6064,0.6
+ALLDAY_20,Malik Willis,player_rush_attempts,Under,7.5,-135.0,,,,,,,
+ALLDAY_20,Saquon Barkley,player_receptions,Under,2.5,-170.0,0.40847201210287454,0.5408,0.4886,TRUSTED-FLAGGED [RB tail],0.5915279878971255,0.45920000000000005,0.5114000000000001
+ALLDAY_20,George Holani,player_rush_attempts,Over,7.5,-130.0,,,,,,,
+ALLDAY_20,Jayden Daniels,player_pass_completions,Over,19.5,,,,,,,,
+ALLDAY_20,Deshaun Watson,player_rush_attempts,Under,5.5,,,,,,,,
+ALLDAY_20,Kirk Cousins,player_pass_completions,Over,18.5,,,,,,,,
+ALLDAY_20,Jaylen Warren,player_receptions,Over,2.5,,0.5940959409594095,0.7376,0.598,TRUSTED-FLAGGED [RB tail],0.5940959409594095,0.7376,0.598
+ALLDAY_20,Bhayshul Tuten,player_rush_attempts,Under,12.5,,,,,,,,
+ALLDAY_20,Noah Fant,player_receptions,Over,1.5,,0.6017069701280228,0.7694,0.6957,TRUSTED-FLAGGED [TE],0.6017069701280228,0.7694,0.6957
