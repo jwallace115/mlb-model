@@ -42,8 +42,22 @@ SLATE_SPECS = [
     {"ticket_id": "EARLY_5", "legs": 5, "max_per_game": 1, "window": "early", "pool": "role_overs"},
     {"ticket_id": "ALLDAY_5", "legs": 5, "max_per_game": 1, "window": "all", "pool": "role_overs"},
     {"ticket_id": "LATE_5", "legs": 5, "max_per_game": 1, "window": "late", "pool": "role_overs"},
+    # N47 (Jeff, 2026-09-20 14:15Z): "give the 5 leg our most promising, then the 10 and then the 20".
+    {"ticket_id": "BEST_5", "legs": 5, "max_per_game": 1, "window": "all", "pool": "top_q"},
+    # N48: lead-role Overs (top-2 target share / lead back / starting QB) across all Sunday games.
+    {"ticket_id": "LEAD_5", "legs": 5, "max_per_game": 1, "window": "all", "pool": "role_overs"},
+    {"ticket_id": "LEAD_10", "legs": 10, "max_per_game": 1, "window": "all", "pool": "role_overs"},
 ]
 WINDOWS = {"early": (0.0, 1.0), "late": (2.5, 4.5), "all": (0.0, 9.0)}
+# N48: ranking every family on one q scale picks ONLY receptions. Reception lines are small integers
+# (1.5, 2.5) the book cannot balance, so their prices are lopsided (-160 to -250, q up to 0.66), while
+# attempts/completions lines sit at the median (-115 to -145, q <= 0.55): on the 2026-09-20 14:07Z
+# pull the top 60 legs by q were all receptions and 35 of 35 dealt legs were. A lopsided price is
+# not a better bet, and 35 legs of one kind is one bet made 35 times. With `balance_families` a
+# ticket takes its legs from the three groups in turn, best q WITHIN the group.
+FAMILY_GROUP = {"player_receptions": "REC", "player_rush_attempts": "RUSH",
+                "player_pass_attempts": "QB", "player_pass_completions": "QB"}
+FAMILY_CYCLE = ("REC", "RUSH", "QB")
 
 
 def _player(row):
@@ -68,8 +82,19 @@ def pool_rows(cand, spec, first_kick):
         ascending=[False, False, True, True])
 
 
-def deal_slate(cand, specs=SLATE_SPECS, used_players=(), first_kick=None):
-    """Deterministic round-robin deal. Returns {ticket_id: [candidate row dicts]}."""
+def deal_slate(cand, specs=SLATE_SPECS, used_players=(), first_kick=None, sequential=False,
+               balance_families=False):
+    """Deterministic deal. Returns {ticket_id: [candidate row dicts]}.
+
+    Round-robin by default (tickets share the strong legs evenly). `sequential=True` fills each
+    ticket COMPLETELY in spec order, so the first ticket gets the strongest legs outright."""
+    if sequential:
+        hands, used = {}, set(used_players)
+        for s in specs:
+            hands.update(deal_slate(cand, [s], used, first_kick or slate_first_kick(cand),
+                                    balance_families=balance_families))
+            used |= {_player(r) for r in hands[s["ticket_id"]]}
+        return hands
     first_kick = first_kick or slate_first_kick(cand)
     used = set(used_players)
     pools = {s["ticket_id"]: pool_rows(cand, s, first_kick).to_dict("records") for s in specs}
@@ -81,9 +106,13 @@ def deal_slate(cand, specs=SLATE_SPECS, used_players=(), first_kick=None):
                 continue
             # A game the ticket is not in yet comes first: a second leg in a game is what the
             # book prices down, so it is taken only when no legal leg in a NEW game is left.
-            for allow_second in (False, True):
+            k = len(hand) % len(FAMILY_CYCLE)
+            turn = FAMILY_CYCLE[k:] + FAMILY_CYCLE[:k] if balance_families else (None,)
+            for group, allow_second in [(g, a) for a in (False, True) for g in turn]:
                 pick = None
                 for row in pools[s["ticket_id"]]:
+                    if group is not None and FAMILY_GROUP[row["market_key"]] != group:
+                        continue
                     in_game = [h for h in hand if h["event_id"] == row["event_id"]]
                     if (_player(row) in used or len(in_game) >= s["max_per_game"]
                             or (in_game and not allow_second)
@@ -110,13 +139,15 @@ def slate_players_in_log(log_path, slate):
     return used
 
 
-def log_rule_tickets(log_path, cand, meta, slate, specs=SLATE_SPECS, used_players=(), first_kick=None):
-    hands = deal_slate(cand, specs, used_players, first_kick)
+def log_rule_tickets(log_path, cand, meta, slate, specs=SLATE_SPECS, used_players=(), first_kick=None,
+                     sequential=False, balance_families=False):
+    hands = deal_slate(cand, specs, used_players, first_kick, sequential, balance_families)
     for s in specs:
         legs = [C.leg_record(r) for r in hands[s["ticket_id"]]]
         C.log_ticket(log_path, {
             "build_time": meta["build_time"], "ticket_id": f"{s['ticket_id']}_RULE",
-            "kind": "slate_rule", "slate": slate, "spec": s, "manifest": meta, "legs": legs,
+            "kind": "slate_rule", "slate": slate, "spec": s, "deal": ("sequential" if sequential else "round_robin") + ("+balanced_families" if balance_families else ""),
+            "manifest": meta, "legs": legs,
             "short_of_spec": s["legs"] - len(legs),
             "price": C.ticket_price(legs) if legs else None, "placed": None, "graded": False,
         }, cand, max_per_game=s["max_per_game"])
@@ -124,8 +155,14 @@ def log_rule_tickets(log_path, cand, meta, slate, specs=SLATE_SPECS, used_player
 
 
 def log_final_slate_ticket(log_path, cand, meta, slate, spec, final_keys, reasons, confirmations,
-                           reader):
-    """The reader's version of ONE slate ticket, checked against its RULE ticket in the log."""
+                           reader, revision=None, revision_reason=None):
+    """The reader's version of ONE slate ticket, checked against its RULE ticket in the log.
+
+    The log is append-only, so a mistake in a FINAL ticket is not edited: a REVISION is appended
+    as `<ID>_FINAL_r<n>` with `supersedes` and a stated reason; the earlier entry stays."""
+    if revision is not None and not revision_reason:
+        raise RuntimeError("HALT: a revision needs a revision_reason")
+    final_id = f"{spec['ticket_id']}_FINAL" + (f"_r{revision}" if revision is not None else "")
     final_keys = [tuple(k) for k in final_keys]
     if len(final_keys) > spec["legs"] or len(set(final_keys)) != len(final_keys):
         raise RuntimeError(f"HALT: {spec['ticket_id']}: too many or duplicate legs")
@@ -147,7 +184,8 @@ def log_final_slate_ticket(log_path, cand, meta, slate, spec, final_keys, reason
     # no player on two FINAL tickets of the slate
     others = set()
     for e in log:
-        if e.get("slate") == slate and e.get("kind") == "slate_final" and e["ticket_id"] != f"{spec['ticket_id']}_FINAL":
+        if (e.get("slate") == slate and e.get("kind") == "slate_final"
+                and not e["ticket_id"].startswith(f"{spec['ticket_id']}_FINAL")):
             others |= {(leg["team"], leg["player_name"]) for leg in e["legs"]}
     clash = [leg["player_name"] for leg in legs if (leg["team"], leg["player_name"]) in others]
     if clash:
@@ -164,7 +202,10 @@ def log_final_slate_ticket(log_path, cand, meta, slate, spec, final_keys, reason
         if not c.get("availability_source") or not c.get("checked_at"):
             raise RuntimeError(f"HALT: final leg {k} has no availability confirmation")
     entry = {
-        "build_time": meta["build_time"], "ticket_id": f"{spec['ticket_id']}_FINAL",
+        "build_time": meta["build_time"], "ticket_id": final_id,
+        "supersedes": (f"{spec['ticket_id']}_FINAL" + (f"_r{revision - 1}" if revision and revision > 1 else "")
+                       if revision is not None else None),
+        "revision_reason": revision_reason,
         "kind": "slate_final", "slate": slate, "spec": spec, "manifest": meta, "legs": legs,
         "price": C.ticket_price(legs) if legs else None,
         "departures": {"removed_from_rule": [list(k) for k in removed],
@@ -174,6 +215,50 @@ def log_final_slate_ticket(log_path, cand, meta, slate, spec, final_keys, reason
         "reader": reader, "placed": None, "graded": False,
     }
     return C.log_ticket(log_path, entry, cand, max_per_game=spec["max_per_game"]), entry
+
+
+def log_placement(log_path, slate, ticket_id, refers_to, stake, quoted_american, legs_placed,
+                  source, dropped=(), same_game_quotes=(), note=None):
+    """N49: what was ACTUALLY placed, from the book's own slip. Appended, never merged into the
+    FINAL entry: the accepted contract can differ from the recommendation (a leg skipped, a price
+    moved), and the difference is the record. `legs_placed` = [{player_name, market_key, side, line,
+    american (None when the slip shows only the pair's price)}]."""
+    log_path = Path(log_path)
+    log = json.loads(log_path.read_text())
+    ref = [e for e in log if e.get("slate") == slate and e["ticket_id"] == refers_to]
+    if len(ref) != 1:
+        raise RuntimeError(f"HALT: {refers_to} is not exactly one entry of slate {slate}")
+    if any(e["ticket_id"] == ticket_id and e.get("slate") == slate for e in log):
+        raise RuntimeError(f"HALT: {ticket_id} already logged — append-only")
+    if not source or stake is None or quoted_american is None or not legs_placed:
+        raise RuntimeError("HALT: a placement needs a source, a stake, the quoted odds and its legs")
+    rec = {(l["player_name"], l["market_key"]): l for l in ref[0]["legs"]}
+    placed = {(l["player_name"], l["market_key"]) for l in legs_placed}
+    unknown = sorted(placed - set(rec))
+    if unknown:
+        raise RuntimeError(f"HALT: placed legs that were never recommended on {refers_to}: {unknown}")
+    not_placed = sorted(set(rec) - placed)
+    explained = {(d["player_name"], d["market_key"]) for d in dropped if d.get("reason")}
+    if set(not_placed) - explained:
+        raise RuntimeError(f"HALT: recommended legs not placed and not explained: {sorted(set(not_placed) - explained)}")
+    moved = []
+    for l in legs_placed:
+        r = rec[(l["player_name"], l["market_key"])]
+        if float(l["line"]) != float(r["line"]) or l["side"] != r["pick_side"]:
+            raise RuntimeError(f"HALT: {l['player_name']} placed at {l['side']} {l['line']}, recommended "
+                               f"{r['pick_side']} {r['line']} — a different contract is a new leg, not this one")
+        if l.get("american") is not None and float(l["american"]) != float(r["pick_price"]):
+            moved.append({"player_name": l["player_name"], "recommended": r["pick_price"], "accepted": l["american"]})
+    dec = C.american_to_decimal(quoted_american)
+    entry = {"build_time": ref[0]["build_time"], "ticket_id": ticket_id, "kind": "placement",
+             "slate": slate, "refers_to": refers_to, "stake": stake, "quoted_american": quoted_american,
+             "quoted_decimal": round(dec, 3), "legs_placed": list(legs_placed), "dropped": list(dropped),
+             "price_moved": moved, "same_game_quotes": list(same_game_quotes), "source": source,
+             "note": note, "legs": [], "graded": False,
+             "logged_at": datetime.now(timezone.utc).isoformat()}
+    log.append(entry)
+    log_path.write_text(json.dumps(log, indent=2, default=str))
+    return len(log), entry
 
 
 def slate_markdown(hands, specs, meta):
@@ -210,6 +295,10 @@ def main():
                     help="comma list of ticket ids to deal from THIS pull, in deal order")
     ap.add_argument("--slate", help="slate label; default = UTC date of the first kickoff")
     ap.add_argument("--first-kick", help="ISO time of the slate's first kickoff (needed for a late build)")
+    ap.add_argument("--balance-families", action="store_true",
+                    help="take legs from receptions / rush attempts / QB volume in turn (N48)")
+    ap.add_argument("--sequential", action="store_true",
+                    help="fill each ticket completely in the order given (first ticket gets the strongest legs)")
     args = ap.parse_args()
     bt = args.build_time or datetime.now(timezone.utc).isoformat()
     cand, meta = C.build_candidates(season=args.season, build_time=bt)
@@ -232,7 +321,8 @@ def main():
     log_path = C.BOARD_DIR / f"nfl_prop_tickets_{args.season}.json"
     used = slate_players_in_log(log_path, slate)
     # deal with the slate's true first kickoff so "late" means late even after the early games kicked
-    hands = log_rule_tickets(log_path, cand, meta, slate, specs, used, first_kick)
+    hands = log_rule_tickets(log_path, cand, meta, slate, specs, used, first_kick, args.sequential,
+                             args.balance_families)
     md = slate_markdown(hands, specs, meta)
     (out_dir / f"nfl_slate_{stamp}.md").write_text(md)
     print(md)

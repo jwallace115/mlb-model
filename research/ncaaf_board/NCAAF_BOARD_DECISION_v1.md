@@ -1208,3 +1208,58 @@ deterministic under row shuffling, disjoint players, 2-per-game on opposing team
 later ticket excludes used players; RULE/FINAL logging with derived departures and the cross-final
 clash; same-team pair refused; unchanged-pull pulse. Five mutations of the dealer/logger each turn
 a test red. One command: **88 passed**.
+
+### N47 — Sequential deal: the first ticket gets the strongest legs (2026-09-20)
+
+Jeff, 14:15Z, after the five-ticket slate was sent: one all-day 5-leg, one 10-leg, one 20-leg — "give
+the 5 leg our most promising, then the 10 and then the 20"; separate 4pm tickets only if he asks later.
+`deal_slate(sequential=True)` fills each ticket COMPLETELY in the order given (round-robin remains the
+default); spec `BEST_5` = 5 legs, one per game, `top_q` pool. "Most promising" is defined as the
+book's own de-vigged probability — nothing of ours ranks legs — so the 5-leg is low-line Unders
+(backup TE/RB receptions U1.5, -195 to -250) at ~+573, return per $1 0.70; the 10-leg 0.52; the
+20-leg 0.28. Logged under slate `2026-09-20b`; slate `2026-09-20` (five tickets) is superseded, not
+edited. Reader-pass rules added after a caught error (a Saints RB offered as Kamara's replacement):
+no replacement from a vetoed player's backfield, no Over on a player with zero week-1 targets.
+FINAL tickets can be revised only by an appended `_r<n>` entry with a stated reason. Test:
+`test_sequential_deal_gives_the_first_ticket_the_strongest_legs`. One command: **89 passed**.
+
+### N48 — One q scale picks only receptions: families are dealt in turn (2026-09-20)
+
+Jeff, 14:28Z: "why is every single leg reception based...that doesnt seem right at all." He was right.
+Measured on the 14:07Z pull: receptions 153 eligible legs, q up to 0.663 (45 at or above 0.575); rush
+attempts 50, max 0.554; pass attempts 28, max 0.520; completions 28, max 0.541. The top 60 legs by q
+were all receptions and so were 35 of 35 dealt legs. Cause: reception lines are small integers the
+book cannot balance, so they are priced lopsided (-160 to -250); attempts and completions lines sit
+at the median (-125 to -135). A lopsided price is market favouritism, not a better bet — ChatGPT
+audit #5 said so and N47 ranked on it anyway — and 35 legs of one kind is one bet made 35 times.
+
+`balance_families`: a ticket takes its legs from REC / RUSH / QB (attempts or completions) in turn,
+best q WITHIN the group, falling through to the next group only when none is legal. Specs `LEAD_5`
+and `LEAD_10` draw from the lead-role Overs pool (top-2 target share, lead back, flagged starting QB)
+— 90 legs all day: 40 QB, 28 REC, 22 RUSH. Slate `2026-09-20d`: LEAD_5 2/2/1, LEAD_10 4/3/3,
+ALLDAY_20 7/7/6; return per $1 at the book's own q 0.73 / 0.53 / 0.27 (unchanged in kind: hit
+probability fell, payout rose). Known residue: inside RUSH the top-q legs are QB rush-attempt Unders
+at 3.5-5.5 — the same small-line artifact, plus kneel-downs count as rush attempts. A line-band rule
+inside each family is the next refinement; not built today.
+Test: `test_balanced_families_stops_the_all_receptions_ticket` (reproduces the defect, then the
+cycle). One command: **90 passed**.
+
+### N49 — Placed tickets are logged from the slip; opposing-team pairs ARE priced down (2026-09-20)
+
+`log_placement`: an appended `placement` entry per ticket — stake, quoted odds, the legs actually
+placed (each must be a recommended leg at the same line and side; an unplaced leg needs a reason;
+an accepted price that differs is recorded), the book's same-game pair quotes, the source.
+
+Slate `2026-09-20d` as placed (Jeff's Hard Rock slips): 5-leg $15 +1328; 10-leg $15 +26267; 19-leg
+SGPMAX $10 +921621 (Wentz skipped: line moved). **Measured:**
+- Cross-game = product of the legs: 10-leg 263.67 vs 263.67, 5-leg 14.28 vs 14.285. Now 18 of 18 slips.
+- The six same-game pairs on the 19-leg were all OPPOSING-TEAM pairs, quoted at 0.970, 0.955,
+  0.925, 0.850, 0.949, 0.917 of the product of their singles (median 0.937; the 0.850 is two
+  quarterbacks' completions in one game). Singles are from the 14:07Z pull — the slip shows only the
+  pair price — so each ratio carries a few minutes of price drift. SGPMAX adds ~0.4% on top.
+  The whole 19-leg pays **0.631 of the straight product**.
+- N46 dealt second legs "only on the other team" on the strength of ONE ledger slip at 1.009. That
+  does not generalise and is withdrawn as a pricing claim; the different-team rule stays only as a
+  diversification rule. **Doubling six games cost ~37% of the payout** — a 14-leg one-per-game ticket
+  would have paid the full product. Next slate: offer that trade-off explicitly.
+Test: `test_placement_is_appended_and_must_match_the_recommendation`. One command: **91 passed**.

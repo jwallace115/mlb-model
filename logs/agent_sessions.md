@@ -2670,3 +2670,62 @@ news connection, feed health). 4 items, each committed and pushed before the nex
   a pipeline write between commit and pull makes the cycle fail and retry 30 min later).
 - NOT DONE: reader pass (news/inactives) — scheduled 15:36Z; late ticket from the 19:45Z pull.
 - UNVERIFIED: that Hard Rock accepts 20 legs / opposing-team pairs at the product price.
+
+## 2026-09-20T14:20Z  cowork — slate 2026-09-20 dealt, read and sent (5 tickets, 45 legs, 45 players)
+- RAN: build_nfl_slate.py --tickets ALLDAY_20,ALLDAY_10,EARLY_5,ALLDAY_5,LATE_5 at 14:08Z on the Hard
+  Rock pull of 14:07:17Z (Jeff ran it by hand, scp'd to _cowork_patches/props_now.parquet; pull age
+  1 min; injuries file 12:30Z). 943 rows, 5 RULE tickets logged.
+- READER: no dealt player carried a Questionable/Doubtful/Out tag. Vetoed Kamara (MCL return, 0 wk-1
+  touches, Jeff's instruction) and Hampton (Over 1.5 rec on 0 wk-1 targets). Replacements by rule.
+- MY ERROR, caught before sending: Kamara's first replacement was Travis Etienne Jr. (NO) Under 2.5
+  rec — a leg that hinges on the same Kamara uncertainty. The log is append-only, so it stands as
+  ALLDAY_10_FINAL and is superseded by ALLDAY_10_FINAL_r1 (LaJohntay Wester BAL Over 1.5). Added
+  `revision` / `revision_reason` to log_final_slate_ticket + test (suite 88 passed).
+- SENT 14:15Z: EARLY_5 ~+1,240, LATE_5 ~+1,425, ALLDAY_5 ~+1,130, ALLDAY_10 ~+8,500, ALLDAY_20
+  product ~+940,000. Return per $1 at book q: 0.73 / 0.73 / 0.72 / 0.51 / 0.27.
+- NOT DONE: inactives (15:30Z) — placed early at Jeff's instruction; the 15:36Z task checks them
+  against the sent tickets. What Jeff actually placed and at what quoted odds: unknown until the export.
+- UNVERIFIED: the ALLDAY_20 still holds one Saints leg (Noah Fant Over 1.5 rec) — left in.
+
+## 2026-09-20T14:25Z  cowork — slate re-dealt as 2026-09-20b: three all-day tickets, strongest legs first (N47)
+- JEFF 14:15Z (mid-run): "we only need one 5 leg for all day, 1 10 leg for all day and 1 20 leg...
+  give the 5 leg our most promising, then the 10 and then the 20". 4pm tickets only if he asks later.
+- BUILT: `deal_slate(sequential=True)` + `--sequential` + spec BEST_5 (top_q) + test; suite 89 passed.
+- RAN 14:13Z on the same 14:07:17Z pull: BEST_5 ~+573 (return/$1 0.70), ALLDAY_10 ~+8,970 (0.52),
+  ALLDAY_20 product ~+1,348,000 / ~+765,000 at 0.91 per doubled game (0.28). 35 legs, 35 players.
+  Vetoes: Kamara, Hampton; replacements Pat Bryant (DEN) U3.5, Quentin Johnston (LAC) O3.5; rule added
+  to the reader pass: no Saints RB, no Over on a player with 0 week-1 targets. FINAL entries logged
+  under slate `2026-09-20b`; the five-ticket slate `2026-09-20` (sent 14:15Z) is SUPERSEDED — Jeff was
+  told to ignore it. Log now 17 entries.
+- UNVERIFIED: which tickets Jeff actually places, at what quoted odds (tonight's export).
+
+## 2026-09-20T14:35Z  cowork — N48: Jeff caught it — every dealt leg was a receptions leg
+- JEFF 14:28Z: "why is every single leg reception based...that doesnt seem right at all". Treated as
+  an audit trigger. MEASURED on the 14:07Z pull: eligible legs by family — receptions 153 (q median
+  0.545, max 0.663, 45 legs >= 0.575), rush attempts 50 (max 0.554), pass attempts 28 (max 0.520),
+  completions 28 (max 0.541). Top 60 by q = 60 receptions; 35 of 35 legs on slate 2026-09-20b were.
+  Cause: one q scale across families. Small-integer reception lines cannot be balanced, so they are
+  priced lopsided; attempts/completions lines sit at the median. This is exactly what ChatGPT audit
+  #5 warned ("top-q measures market favouritism"; use family/line bands) and I ranked on it anyway.
+- BUILT: `balance_families` (REC, RUSH, QB taken in turn, best q within the group), specs LEAD_5 /
+  LEAD_10 (lead-role Overs, all day), test reproducing the all-receptions deal; suite 90 passed.
+- RAN 14:24Z, same pull (0.28 h old): slate `2026-09-20d` = LEAD_5 ~+1,306 (2 REC/2 RUSH/1 QB),
+  LEAD_10 ~+24,761 (4/3/3), ALLDAY_20 product ~+2,606,000 (7/7/6). 35 legs, 35 players. Veto Kamara
+  -> Noah Fant. Return per $1 at book q 0.73 / 0.53 / 0.27. Slates 2026-09-20, -20b, -20c (RULE only)
+  are superseded; all stay in the append-only log (26 entries). Sent 14:32Z.
+- NOT DONE: line-band ranking inside a family (QB rush-attempt Unders at 3.5-5.5 are the same
+  lopsided-small-line artifact inside RUSH; flagged to Jeff with the kneel-down risk).
+- UNVERIFIED: which slate Jeff actually places.
+
+## 2026-09-20T14:55Z  cowork — three tickets PLACED; opposing-team pairs ARE priced down (N49)
+- JEFF placed (slips pasted): 5-leg $15 at +1328 (= LEAD_5_FINAL_r1, Rodgers -> Shough after his
+  line moved to O21.5 +100); 10-leg $15 at +26267 (Aaron Jones accepted at -110, recommended -125);
+  19-leg SGPMAX $10 at +921621 (Wentz skipped — line moved; Moreau accepted -190 vs -195). $40 staked.
+- MEASURED from the slips: cross-game = product again (10-leg 263.67 vs 263.67; 5-leg 14.28 vs 14.285)
+  -> 18 of 18 slips. The six OPPOSING-TEAM same-game pairs were quoted at 0.970 / 0.955 / 0.925 /
+  0.850 / 0.949 / 0.917 of the product of their singles (median 0.937; singles from the 14:07Z pull,
+  the slip shows only pair prices). Whole 19-leg = 0.631 of the straight product. The ledger's one
+  opposing-team pair at 1.009 was n = 1 and does NOT generalise — withdrawn as a rule.
+- BUILT: `log_placement` (append-only; placed legs must be recommended legs at the same line and
+  side; unplaced legs need a reason; accepted-price differences recorded) + test; suite 91 passed.
+- NOT DONE: NFL prop grader; inactives check (15:36Z task).

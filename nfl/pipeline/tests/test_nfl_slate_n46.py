@@ -71,6 +71,17 @@ def test_rule_and_final_tickets_are_logged_and_cross_checked(tmp_path):
         log, cand, meta, "2026-09-20", spec, keys[:3],
         {keys[3]: {"reason": "inactive", "source": "team inactive list 15:32Z"}}, conf, reader)
     assert entry["ticket_id"] == "ALLDAY_20_FINAL" and len(entry["legs"]) == 3
+    # append-only: a correction is a logged REVISION, never an edit
+    with pytest.raises(RuntimeError, match="append-only"):
+        S.log_final_slate_ticket(log, cand, meta, "2026-09-20", spec, keys[:3],
+                                 {keys[3]: {"reason": "inactive", "source": "x"}}, conf, reader)
+    with pytest.raises(RuntimeError, match="revision_reason"):
+        S.log_final_slate_ticket(log, cand, meta, "2026-09-20", spec, keys[:2], {}, conf, reader, revision=1)
+    n2, rev = S.log_final_slate_ticket(
+        log, cand, meta, "2026-09-20", spec, keys[:2],
+        {k: {"reason": "inactive", "source": "list"} for k in keys[2:]}, conf, reader,
+        revision=1, revision_reason="second inactive")
+    assert rev["ticket_id"] == "ALLDAY_20_FINAL_r1" and rev["supersedes"] == "ALLDAY_20_FINAL" and n2 == n + 1
     # a player on one FINAL ticket cannot be added to another
     spec10 = SPECS[1]
     keys10 = [(r["event_id"], r["player_name"], r["market_key"]) for r in hands["ALLDAY_10"]]
@@ -112,3 +123,66 @@ def test_unchanged_injury_pull_counts_as_a_pulse(tmp_path):
         fh.write(json.dumps({"utc": "20260919T1500Z", "feed": "espn_injuries", "sha256": "B", "status": "written"}) + "\n")
     cand, meta = build_candidates(build_time=FRESH, **tree)
     assert meta["injury_file_age_hours"] == 12.0 and not cand.eligible.any()
+
+
+def test_sequential_deal_gives_the_first_ticket_the_strongest_legs(tmp_path):
+    """N47: 'give the 5 leg our most promising, then the 10 and then the 20'."""
+    from nfl.pipeline.build_nfl_slate import deal_slate
+    cand, _ = _build(tmp_path)
+    specs = [{"ticket_id": "BEST_5", "legs": 2, "max_per_game": 1, "window": "all", "pool": "top_q"},
+             {"ticket_id": "ALLDAY_10", "legs": 2, "max_per_game": 1, "window": "all", "pool": "top_q"}]
+    seq = deal_slate(cand, specs, sequential=True)
+    rr = deal_slate(cand, specs)
+    q = lambda rows: sorted(r["q_pick"] for r in rows)  # noqa: E731
+    assert min(q(seq["BEST_5"])) >= max(min(q(seq["ALLDAY_10"])), 0)       # first ticket is never weaker leg-for-leg
+    assert sum(q(seq["BEST_5"])) >= sum(q(rr["BEST_5"]))
+    sunday = cand[cand.eligible & (cand.home_team != "Los Angeles Rams")]          # Monday is outside the slate
+    best_per_game = sunday.sort_values("q_pick", ascending=False).drop_duplicates("event_id").head(2)
+    assert sorted(best_per_game.q_pick) == q(seq["BEST_5"])                # exactly the top leg of the top games
+    players = [(r["team"], r["player_name"]) for h in seq.values() for r in h]
+    assert len(players) == len(set(players))
+
+
+def test_balanced_families_stops_the_all_receptions_ticket(tmp_path):
+    """N48: on one q scale every dealt leg was a receptions leg (35 of 35 on 2026-09-20)."""
+    from nfl.pipeline.build_nfl_slate import deal_slate, FAMILY_GROUP
+    cand, _ = _build(tmp_path)
+    spec = [{"ticket_id": "T", "legs": 2, "max_per_game": 1, "window": "all", "pool": "top_q"}]
+    plain = deal_slate(cand, spec)["T"]
+    assert {FAMILY_GROUP[r["market_key"]] for r in plain} == {"REC"}            # the defect, reproduced
+    mixed = deal_slate(cand, spec, balance_families=True)["T"]
+    assert [FAMILY_GROUP[r["market_key"]] for r in mixed] == ["REC", "RUSH"]    # the cycle, in order
+    for r in mixed:                                                            # best q WITHIN its group, legal game
+        same = cand[cand.eligible & (cand.market_key.map(FAMILY_GROUP) == FAMILY_GROUP[r["market_key"]])
+                    & (cand.home_team != "Los Angeles Rams")]
+        assert r["q_pick"] <= same.q_pick.max() + 1e-12
+    assert mixed[0]["q_pick"] == cand[cand.eligible & (cand.market_key == "player_receptions")
+                                      & (cand.home_team != "Los Angeles Rams")].q_pick.max()
+    six = deal_slate(cand, [{**spec[0], "legs": 4, "max_per_game": 2}], balance_families=True)["T"]
+    assert [FAMILY_GROUP[r["market_key"]] for r in six][:3] == ["REC", "RUSH", "QB"]
+
+
+def test_placement_is_appended_and_must_match_the_recommendation(tmp_path):
+    """N49: the slip is the record of what was accepted; differences must be explicit."""
+    from nfl.pipeline import build_nfl_slate as S
+    cand, meta = _build(tmp_path)
+    log = tmp_path / "log.json"
+    hands = S.log_rule_tickets(log, cand, meta, "s", SPECS)
+    rule = json.loads(log.read_text())[0]
+    legs = [{"player_name": l["player_name"], "market_key": l["market_key"], "side": l["pick_side"],
+             "line": l["line"], "american": l["pick_price"]} for l in rule["legs"]]
+    kw = dict(stake=10, quoted_american=900, source="slip screenshot")
+    with pytest.raises(RuntimeError, match="not placed and not explained"):
+        S.log_placement(log, "s", "P", rule["ticket_id"], legs_placed=legs[1:], **kw)
+    with pytest.raises(RuntimeError, match="different contract"):
+        S.log_placement(log, "s", "P", rule["ticket_id"], legs_placed=[{**legs[0], "line": legs[0]["line"] + 1}] + legs[1:], **kw)
+    with pytest.raises(RuntimeError, match="never recommended"):
+        S.log_placement(log, "s", "P", rule["ticket_id"], legs_placed=legs + [{**legs[0], "player_name": "Nobody"}], **kw)
+    moved = [{**legs[0], "american": legs[0]["american"] - 15}] + legs[2:]
+    n, e = S.log_placement(log, "s", "P", rule["ticket_id"], legs_placed=moved,
+                           dropped=[{"player_name": legs[1]["player_name"], "market_key": legs[1]["market_key"],
+                                     "reason": "line went up"}], **kw)
+    assert e["price_moved"][0]["accepted"] == legs[0]["american"] - 15 and len(e["legs_placed"]) == len(legs) - 1
+    assert S.slate_players_in_log(log, "s") == {(r["team"], r["player_name"]) for h in hands.values() for r in h}
+    with pytest.raises(RuntimeError, match="append-only"):
+        S.log_placement(log, "s", "P", rule["ticket_id"], legs_placed=legs, **kw)
