@@ -1429,7 +1429,7 @@
     "reference_only": true,
     "picked_by": "cowork_chat",
     "basis": "joint table v2 cell 21+/OU<50 (delta +9.7pp); cover+over pairs",
-    "stake_usd": 10,
+    "stake_usd": 15.0,
     "result_reported_by_user": "WON",
     "legs": [
       {
@@ -1469,7 +1469,7 @@
       {
         "market": "spreads",
         "side": "Penn State Nittany Lions",
-        "point": -41.0,
+        "point": -40.5,
         "price": null,
         "price_source": "PENDING_HARDROCK",
         "book": null,
@@ -1481,7 +1481,9 @@
         "home_team": "Penn State Nittany Lions",
         "away_team": "Buffalo Bulls",
         "commence_time": "2026-09-19T16:05:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": -41.0,
+        "point_source": "HARDROCK_SLIP"
       },
       {
         "market": "totals",
@@ -1517,7 +1519,23 @@
         "commence_time": "2026-09-19T16:00:00Z",
         "leg_type": "CONVICTION"
       }
-    ]
+    ],
+    "book": "hardrockbet_fl",
+    "bet_id": "2473166698438590742",
+    "bet_type": "SGPMAX",
+    "offered_american": 1115,
+    "offered_decimal": 12.15,
+    "payout_usd": 182.28,
+    "profit_usd": 167.28,
+    "price_source": "HARDROCK_ACTUAL_SLIP",
+    "consensus_independent_decimal": 23.82,
+    "sgp_haircut_vs_independent": 0.4899,
+    "note": "Hard Rock SGPMax paid 12.15x vs 23.82x if the same 5 legs were priced independently at 9-book consensus. Single-leg price differences can explain at most ~18% of that; the remainder is same-game correlation repricing. Joint table v2 cell 21+/OU<50 puts the TRUE cover+over joint at 1.34x independence; backed out, Hard Rock prices it near 1.45x. Implication: the correlation is over-taxed same-game \u2014 take such legs separately or cross-game, not as an SGP pair. Single-leg HR prices still needed to separate juice from adjustment exactly.",
+    "sgp_factor_per_pair": 0.7,
+    "crossgame_baseline_measured": 0.98,
+    "fair_pair_factor_per_joint_table": 0.746,
+    "overpay_per_pair": 0.063,
+    "finding_doc": "research/ncaaf_board/hardrock_sgp_adjustment_2026-09-19.md"
   },
   {
     "card_id": "COWORK_B_10LEG_20260919",
@@ -1526,7 +1544,7 @@
     "reference_only": true,
     "picked_by": "cowork_chat",
     "basis": "same cell; 5 games cover+over, Arizona from 21+/OU_50-54 (+4.3pp)",
-    "stake_usd": 10,
+    "stake_usd": 10.0,
     "result_reported_by_user": "LOST",
     "legs": [
       {
@@ -1544,12 +1562,15 @@
         "home_team": "Minnesota Golden Gophers",
         "away_team": "Akron Zips",
         "commence_time": "2026-09-19T16:00:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": -23.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "WON"
       },
       {
         "market": "totals",
         "side": "Over",
-        "point": 49.5,
+        "point": 48.5,
         "price": null,
         "price_source": "PENDING_HARDROCK",
         "book": null,
@@ -1561,7 +1582,10 @@
         "home_team": "Minnesota Golden Gophers",
         "away_team": "Akron Zips",
         "commence_time": "2026-09-19T16:00:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": 49.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "LOST"
       },
       {
         "market": "spreads",
@@ -1578,7 +1602,10 @@
         "home_team": "Wisconsin Badgers",
         "away_team": "Eastern Michigan Eagles",
         "commence_time": "2026-09-19T16:30:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": -23.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "WON"
       },
       {
         "market": "totals",
@@ -1595,7 +1622,10 @@
         "home_team": "Wisconsin Badgers",
         "away_team": "Eastern Michigan Eagles",
         "commence_time": "2026-09-19T16:30:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": 44.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "WON"
       },
       {
         "market": "spreads",
@@ -1612,12 +1642,15 @@
         "home_team": "UMass Minutemen",
         "away_team": "Stonehill Skyhawks",
         "commence_time": "2026-09-19T19:30:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": -31.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "LOST"
       },
       {
         "market": "totals",
         "side": "Over",
-        "point": 49.75,
+        "point": 49.5,
         "price": null,
         "price_source": "PENDING_HARDROCK",
         "book": null,
@@ -1629,7 +1662,10 @@
         "home_team": "UMass Minutemen",
         "away_team": "Stonehill Skyhawks",
         "commence_time": "2026-09-19T19:30:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": 49.75,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "WON"
       },
       {
         "market": "spreads",
@@ -1646,12 +1682,15 @@
         "home_team": "Iowa Hawkeyes",
         "away_team": "Northern Iowa Panthers",
         "commence_time": "2026-09-19T20:07:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": -38.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "WON"
       },
       {
         "market": "totals",
         "side": "Over",
-        "point": 49.5,
+        "point": 48.5,
         "price": null,
         "price_source": "PENDING_HARDROCK",
         "book": null,
@@ -1663,12 +1702,15 @@
         "home_team": "Iowa Hawkeyes",
         "away_team": "Northern Iowa Panthers",
         "commence_time": "2026-09-19T20:07:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": 49.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "WON"
       },
       {
         "market": "spreads",
         "side": "Arizona Wildcats",
-        "point": -34.0,
+        "point": -33.5,
         "price": null,
         "price_source": "PENDING_HARDROCK",
         "book": null,
@@ -1680,12 +1722,15 @@
         "home_team": "Arizona Wildcats",
         "away_team": "Northern Illinois Huskies",
         "commence_time": "2026-09-20T02:30:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": -34.0,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "VOID_UNPLAYED"
       },
       {
         "market": "totals",
         "side": "Over",
-        "point": 50.5,
+        "point": 49.5,
         "price": null,
         "price_source": "PENDING_HARDROCK",
         "book": null,
@@ -1697,8 +1742,34 @@
         "home_team": "Arizona Wildcats",
         "away_team": "Northern Illinois Huskies",
         "commence_time": "2026-09-20T02:30:00Z",
-        "leg_type": "CONVICTION"
+        "leg_type": "CONVICTION",
+        "point_recommended": 50.5,
+        "point_source": "HARDROCK_SLIP",
+        "leg_result": "VOID_UNPLAYED"
       }
-    ]
+    ],
+    "book": "hardrockbet_fl",
+    "bet_type": "SGPMAX",
+    "offered_american": 15011,
+    "offered_decimal": 151.11,
+    "promo": "50% Profit Boost applied",
+    "base_american_backed_out": 10007,
+    "base_decimal_backed_out": 101.07,
+    "payout_usd": 0.0,
+    "profit_usd": -10.0,
+    "price_source": "HARDROCK_ACTUAL_SLIP",
+    "independent_decimal_at_minus110": 642.6,
+    "sgp_factor_per_pair": 0.7,
+    "finals": {
+      "Minnesota": "AKR 7 - MINN 41 (tot 48)",
+      "Wisconsin": "EMU 10 - WISC 54 (tot 64)",
+      "UMass": "STO 14 - UMASS 36 (tot 50)",
+      "Iowa": "UNI 0 - IOWA 55 (tot 55)"
+    },
+    "note": "5 cover+over SGP pairs. Base price (boost removed) 101.07x vs 642.6x independent at -110 = 15.7% -> per-pair factor 0.693. The 5-leg card independently gives 0.692 from 2 pairs + 1 single. Two cards, different leg counts, same factor: Hard Rock prices a blowout cover+over pair at ~1.445x independence. Joint table v2 (21+/OU<50) measures the TRUE joint at 1.341x. Overpay ~7.7% per pair, compounding. CONCLUSION: do not stack cover+over pairs same-game at Hard Rock.",
+    "crossgame_baseline_measured": 0.98,
+    "fair_pair_factor_per_joint_table": 0.746,
+    "overpay_per_pair": 0.063,
+    "finding_doc": "research/ncaaf_board/hardrock_sgp_adjustment_2026-09-19.md"
   }
 ]
