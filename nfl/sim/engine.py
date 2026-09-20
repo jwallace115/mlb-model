@@ -1572,8 +1572,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     sd_i = int(score_diff_poss[i])
                     ss_i = ("trail9+" if sd_i <= -9 else "trail1-8" if sd_i <= -1 else
                             "tied" if sd_i == 0 else "lead1-8" if sd_i <= 8 else "lead9+")
-                    cp_i = "Q2_late" if (qtr[i] == 2 and clock[i] <= 120) else (
-                        "Q4_late" if (qtr[i] >= 4 and clock[i] <= 120) else "normal")
+                    cp_i = ("Q2_late" if (qtr[i] == 2 and clock[i] <= 120) else
+                            "Q4_late" if (qtr[i] >= 4 and clock[i] <= 120) else
+                            "Q4_mid" if (qtr[i] == 4 and clock[i] <= 300) else "normal")
                     ot_name = "complete_inbounds"
                     # defence timeout after the kneel?
                     if to_lookup is not None and to_rem[1 - poss[i], i] > 0 and clock[i] <= 180:
@@ -2425,11 +2426,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                      np.where(sd_arr <= -1, "trail1-8",
                      np.where(sd_arr == 0, "tied",
                      np.where(sd_arr <= 8, "lead1-8", "lead9+"))))
-            # 5A-3: clock period (3-way)
+            # 5I: clock period (4-way); Q4_mid for 120 < gsr <= 300
             cp_arr = np.full(len(gi_arr), "normal", dtype=object)
             q2_late_m = (qtr[gi_arr] == 2) & (clock[gi_arr] <= 120)
+            q4_mid_m = (qtr[gi_arr] == 4) & (clock[gi_arr] > 120) & (clock[gi_arr] <= 300)
             q4_late_m = (qtr[gi_arr] >= 4) & (clock[gi_arr] <= 120)   # 5A-11 (D39): OT included
             cp_arr[q2_late_m] = "Q2_late"
+            cp_arr[q4_mid_m] = "Q4_mid"
             cp_arr[q4_late_m] = "Q4_late"
             ot_strs = ["incomplete", "first_down", "complete_inbounds"]
             xs101 = np.linspace(0, 1, 101)
@@ -2438,7 +2441,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for oi in range(3):
                 ot_name = ot_strs[oi]
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
-                    for cp_val in ["normal", "Q2_late", "Q4_late"]:
+                    for cp_val in ["normal", "Q2_late", "Q4_mid", "Q4_late"]:
                         mask = ((ot_idx == oi) & (ss_arr == ss_val) &
                                 (cp_arr == cp_val) & ~game_over[gi_arr] & ~eoh_p)
                         if not mask.any():
@@ -2687,8 +2690,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                        np.where(sd_r_arr <= 8, "lead1-8", "lead9+"))))
             cp_r_arr = np.full(len(gi_r), "normal", dtype=object)
             q2l_r = (qtr[gi_r] == 2) & (clock[gi_r] <= 120)
+            q4m_r = (qtr[gi_r] == 4) & (clock[gi_r] > 120) & (clock[gi_r] <= 300)
             q4l_r = (qtr[gi_r] >= 4) & (clock[gi_r] <= 120)   # 5A-11 (D39): OT included
             cp_r_arr[q2l_r] = "Q2_late"
+            cp_r_arr[q4m_r] = "Q4_mid"
             cp_r_arr[q4l_r] = "Q4_late"
             ot_strs_r = {0: "first_down", 1: "run", 3: "incomplete"}  # 3 = clock stopped by a timeout (5A-7)
             xs101 = np.linspace(0, 1, 101)
@@ -2697,7 +2702,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for oi in (0, 1, 3):
                 ot_name_r = ot_strs_r[oi]
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
-                    for cp_val in ["normal", "Q2_late", "Q4_late"]:
+                    for cp_val in ["normal", "Q2_late", "Q4_mid", "Q4_late"]:
                         mask = ((ot_idx_r == oi) & (ss_r_arr == ss_val) &
                                 (cp_r_arr == cp_val) & ~game_over[gi_r] & ~eoh_r)
                         if not mask.any():

@@ -1538,3 +1538,61 @@ changes distance, not the draw. Held.
 | 3rd-and-11+ | n/a | 0.193 | 0.182 | n/a |
 
 No K1 line moved out of tolerance in either direction.
+
+### D100 — Item 2: Q4 5:00-2:00 clock period (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**Fix.** `tables.py::build_clock_table`: added `Q4_mid` clock period for `qtr == 4` and
+`120 < game_seconds_remaining <= 300`, same groupby, same MIN_CELL=100, same fallback chain
+(`p_<score_state>` / `all`). 17 level-0 rows created; combos with n < 100 fall back.
+`engine.py`: `Q4_mid` selection added in scalar path, vectorized pass path, and vectorized
+rush path. `clock_runoff.parquet` rebuilt with the committed builder.
+
+**BEFORE changing anything — real elapsed by outcome_type x score_state, Q4_mid vs normal:**
+Trailing offences in Q4 121-300s are 8-13s FASTER than normal per play, not slower. Leading
+offences are also faster (not slower as the work order hypothesized): lead1-8 22.6s vs
+normal 32.4s (-9.8s), lead9+ 25.4s vs normal 33.4s (-8.0s). Both make sense: the game is
+winding down and both sides adjust pace.
+
+**Null control (Q2_late and Q4_late byte-identical in rebuilt parquet):**
+Q2_late: n match True, mean match True (20 rows). Q4_late: n match True, mean match True
+(14 rows). Normal pool shrank from 118,965 to 110,505 plays (8,460 moved to Q4_mid) — expected.
+
+**Tied-drive expiry (5A-9, 12 games, 11 seed salts):**
+| | Mean | SD |
+|---|---|---|
+| Broad (test definition) | 0.099 | 0.012 |
+| Strict (snap at/inside 35) | 0.068 | 0.012 |
+| Real broad (D94) | 0.031 (2/64) | |
+| Real strict (D94) | 0.000 (0/57) | |
+
+0 of 11 salts below the matched broad threshold of 0.081.
+
+**Cowork's pre-registered predictions vs Mac:**
+- sim pass elapsed in 121-300s falls from 25.4s to within 3s of real 16.9s:
+  NOT CHECKED — the 5H late-snap instrumentation was not cherry-picked (would require a
+  throwaway branch + non-trivial diag infrastructure). The K1-level tied-drive expiry moved
+  from 0.117 (D95) to 0.099, which is improvement but less than predicted.
+- broad expiry falls below 0.081 but NOT to zero:
+  **NOT HELD.** Mean 0.099, 0 of 11 salts below 0.081.
+- 0-40s bucket NOT addressed: **Correct, confirmed by design — Q4_mid covers 121-300s only.**
+
+**Null control (Q1-Q3 plays per game):** plays/game 130.1 → 130.3 (delta +0.2).
+Effectively unchanged.
+
+**K1 (1087 games x N=500):**
+| Metric | Item 1 | Item 2 | Actual | Delta |
+|---|---|---|---|---|
+| Pts/team | 22.7 | 22.8 | 22.4 | +0.06 |
+| Plays/game | 130.1 | 130.3 | 124.5 | +0.2 |
+| Drives/game | 23.8 | 23.8 | 21.9 | +0.01 |
+| Go rate | 0.199 | 0.204 | 0.198 | +0.005 |
+| Like-for-like | 0.202 | 0.207 | 0.198 | +0.005 |
+| Off pen/game | 6.13 | 6.14 | 5.51 | +0.01 |
+| Def pen/game | 3.84 | 3.84 | 3.45 | +0.01 |
+| Punts/game | 8.94 | 8.88 | 8.73 | -0.07 |
+| FG att/game | 4.01 | 4.01 | 3.92 | 0.00 |
+| 3rd-and-11+ | 0.193 | 0.193 | 0.182 | 0.000 |
+
+No K1 line moved out of tolerance in either direction.

@@ -528,11 +528,13 @@ def build_clock_table(df):
                            np.where(sd == 0, "tied",
                            np.where(sd <= 8, "lead1-8", "lead9+"))))
 
-    # 5A-3: Clock period (3-way)
+    # 5I: Clock period (4-way); Q4_mid added for 120 < gsr <= 300
     q2_late = (scrim["qtr"] == 2) & (scrim["half_seconds_remaining"] <= 120)
     q4_late = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] <= 120)
+    q4_mid = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] > 120) & (scrim["game_seconds_remaining"] <= 300)
     scrim["clock_period"] = "normal"
     scrim.loc[q2_late, "clock_period"] = "Q2_late"
+    scrim.loc[q4_mid, "clock_period"] = "Q4_mid"
     scrim.loc[q4_late, "clock_period"] = "Q4_late"
 
     # Legacy hurry flag (kept in table for backward compat / testing)
