@@ -2358,3 +2358,40 @@ order's own sequencing rule, which is correct.
 - STILL UNVERIFIED: that the repaired crontab actually fires on schedule. The proof is a row
   landing from the Tuesday 10:00 UTC slot without anyone triggering it. That is a future
   observation; the one-off proved invocation works, not that the schedule does.
+
+## 2026-09-20T06:00Z  claude-code (Phase 5I execution)
+
+Branch `eng/5i` in worktree `~/mlb-model-5i`. `main` untouched.
+Verified at end: `d929ad258504b275` and `(True, [])` on `~/mlb-model`.
+
+### Commits (4, each pushed before the next)
+- `a5ac92955` D99: Item 1 — yards-to-go after offensive penalty
+- `0676d1018` D100: Item 2 — Q4 5:00-2:00 clock period
+- `4c67b0ceb` D101: Item 3 — re-land D89 penalty rate denominator
+- `75181bcbc` D102: Item 4 — suite, refuse-to-rank, re-fit, re-stamp, K4
+
+### What was done
+- Item 1: engine.py penalty branches raise dist by marched-off yards; auto_1st init;
+  ev_3rd_long counter. 3 new tests in test_engine_5i.py, all fail on pre-fix.
+  K1 go rate 0.215->0.199 (actual 0.198). All Cowork predictions held.
+- Item 2: Q4_mid clock period (121-300s) in tables.py and engine.py. clock_runoff.parquet
+  rebuilt (118->135 rows). Q2_late/Q4_late byte-identical. Tied expiry improved to 0.099
+  but Cowork prediction (< 0.081) NOT HELD.
+- Item 3: D89 re-landed exactly. p_no_play_penalty = 0.06716294458229942 (exact).
+  scalars.json rebuilt. off_pen 6.14->5.70, all 11 salts pass fd_pen_pt.
+- Item 4: Suite 189 pass / 2 fail (fd_pen_pt, tied_expiry — both expected).
+  Board refuse-to-rank confirmed (CALIBRATION STAMP MISMATCH, 990 legs not rankable).
+  Re-fit 1087/1087 converged (engine 7f3d96900218c014), 102.8 min.
+  Re-stamp (True, []). Board ranks after. K4 Brier 0.25356.
+
+### What was NOT done
+- 5H late-snap instrumentation not cherry-picked; per-clock-bucket sim vs real seconds
+  not reproduced for Item 2 (the diag/5h branch infrastructure was not ported).
+- No merge to main (Cowork verifies first).
+- 0-40s clock excess, scrimmage-play penalty FDs, half-the-distance: not addressed (logged).
+
+### What remains UNVERIFIED
+- Whether the K4 Brier 0.25356 is better/worse than fit_5d2's K4 — not computed, and
+  would be a comparison of different engines (not valid without controlling for the changes).
+- Calibration-transfer gate: totals may still get worse under calibration on the
+  2021-23 -> 2024 audit. The re-fit re-asks that question but does not answer it.
