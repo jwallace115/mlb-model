@@ -458,3 +458,53 @@ Now scheduled daily at 09:00 UTC (5am ET).
 30 positions), but the metadata timestamp is stale. This is an ESPN artifact,
 not an indication of empty data. Capturing anyway; nflverse is the primary
 source and this is the cross-check. The staleness is noted, not suppressed.
+
+### N30 — Kalshi football markets: series, fields, price scale, pre-game filtering (2026-09-20)
+
+**Series captured (6):**
+| Series         | Open Markets | Zero Vol | Notes                  |
+|----------------|-------------|----------|------------------------|
+| KXNFLGAME      | 62          | 5%       | Active trading         |
+| KXNFLSPREAD    | 417         | 5%       | Active trading         |
+| KXNFLTOTAL     | 304         | 5%       | Active trading         |
+| KXNCAAFGAME    | 548         | 16%      | Mostly empty books     |
+| KXNCAAFSPREAD  | 1,089       | 16%      | Mostly empty books     |
+| KXNCAAFTOTAL   | 835         | 16%      | Mostly empty books     |
+
+**Player-prop series flagged, NOT captured:** KXNFLTD, KXNFLPASSTDS, etc.
+(see `kalshi_football_series_2026-09-20.md`). 0-1 open markets each,
+impractical to capture (hundreds of API calls for near-zero data).
+
+**Fields stored:** pull_timestamp, series_ticker, ticker, event_ticker, title,
+yes_sub_title, no_sub_title, yes_bid_dollars, yes_ask_dollars, no_bid_dollars,
+no_ask_dollars, last_price_dollars, previous_price_dollars, volume_fp,
+volume_24h_fp, open_interest_fp, liquidity_dollars, open_time, close_time,
+expected_expiration_time, occurrence_datetime, status, market_type.
+
+**Price scale: DOLLARS** (0.00 to 1.00). Field names include `_dollars` suffix.
+Consistent with WebSocket data in `kalshi_parse_to_parquet.py` (bid/ask 0-1).
+No scale conversion applied. Any comparison of Kalshi prices to sportsbook
+prices must convert (Kalshi 0.47 = implied 47% = about -113 American).
+
+**Pre-game filtering:** The API field `occurrence_datetime` appears to be a
+kickoff proxy (e.g. 2026-10-04T03:00Z). It is NOT explicitly labelled as
+kickoff. `close_time` and `expected_expiration_time` are also stored.
+Kalshi markets stay open during games (confirmed by work order).
+**Pre-game filtering will need the schedule joined on later.** The puller
+stores all three time fields to enable this. No kickoff is guessed.
+
+**Measured (VM, 2026-09-20):**
+- NFL: 3 series, 1 page each, 783 rows, 55 KB, 0.4-1.5s
+- NCAAF: 3 series (1 needed 2 pages), 2,472 rows, 140 KB, 0.8s
+- Total per cycle: ~6 requests, <2s
+- Storage: 32 snapshots/day × 195 KB = ~6 MB/day = ~180 MB/month
+
+**Schedule (UTC), aligned 5 min after line tape:**
+```
+5,35 0-5,14-23 * * *   pull_kalshi_football.py --sport nfl
+7,37 0-5,14-23 * * *   pull_kalshi_football.py --sport ncaaf
+```
+
+**Cron proof:** one-off entry at 02:30 UTC 2026-09-20. Syslog:
+`2026-09-20T02:30:01 CRON ... pull_kalshi_football.py --sport nfl`.
+Produced snap_20260920T0230Z.parquet, 783 rows, 55 KB. Removed after.
