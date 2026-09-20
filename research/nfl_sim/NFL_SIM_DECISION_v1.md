@@ -1772,3 +1772,37 @@ identical before and after.
   **FAILS on main** (fake QB accepted as starter — no date filter in old code).
 - `test_layer3_accepts_pre_kickoff_qb`: same fake QB with `dt` one day before game day.
   The fake QB IS chosen as starter. PASSES on both old and new code.
+
+### D105 — Item 2: get_lines_from_history() pre-kick, one named book, no fallback (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Fix.** `run_week.py::get_lines_from_history(as_of=None)` rewritten:
+- For each game, walks back through sorted snapshot files and uses the newest snapshot
+  whose timestamp < that game's `commence_time`. A game with no pre-kick snapshot gets
+  no line and is printed as SKIPPED with the reason.
+- Spread and total come from the SAME Hard Rock row set. If Hard Rock has no row, the
+  game is skipped — no silent fallback to `gdf.iloc[0]`.
+- `--as-of <UTC ISO>` added to CLI; caps which snapshots may be read.
+- Per-game `line_snapshot_utc` and `line_book` recorded in the output dict.
+
+**P2 (pre-registered): `--as-of 2026-09-20T15:30:00Z` yields the same spread/total for
+every week-2 game as the old function run on `snap_20260920T150009Z.parquet` alone.**
+HELD: 14 overlapping games, per-game diff empty, all lines identical.
+
+**P3 (pre-registered): with `--as-of 2026-09-20T18:30:00Z`, the old function returns
+in-play or missing lines for kicked games; the new one returns pre-kick lines.**
+NOT TESTABLE: no post-17:00Z snapshots exist in the tape (line capture stops before kick).
+The logic is correct by construction and tested by `test_in_play_snapshot_never_chosen` on
+synthetic fixtures.
+
+**NULL CONTROL:** `engine_fingerprint()` = `7f3d96900218c014` (unchanged). The sim results
+for a game given the same (spread, total, seed) are identical — this item changes which
+line is read, nothing else.
+
+**Tests (test_run_week_5j.py):**
+- `test_in_play_snapshot_never_chosen`: synthetic fixture with snapshot_utc 17:30Z for a
+  17:00Z game. **FAILS on main** (in-play snapshot chosen).
+- `test_no_hr_game_skipped`: fixture with DK only for ATL (DK has spreads + totals).
+  **FAILS on main** (game priced from DK, labelled "consensus").
+- `test_as_of_before_all_snapshots`: as_of before only snapshot → no lines. PASSES both.

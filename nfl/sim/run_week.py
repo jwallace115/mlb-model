@@ -110,34 +110,100 @@ def get_week_teams_from_schedule(season, week):
     return set(), set()
 
 
-def get_lines_from_history():
+def get_lines_from_history(as_of=None):
+    """Read Hard Rock lines from the line-history tape.
+
+    5J: for each game, use the newest snapshot whose snapshot_utc < commence_time
+    for THAT game (pre-kick only). If Hard Rock has no row for the game, the game
+    is skipped — no silent fallback to another book. ``as_of`` (UTC datetime) caps
+    which snapshots may be read, so a past board is reproducible.
+    """
     lh_dir = ROOT / "data" / "odds_archive" / "nfl" / "line_history" / f"season={SEASON}"
     if not lh_dir.exists():
         return {}
     files = sorted(lh_dir.glob("*.parquet"))
     if not files:
         return {}
-    df = pd.read_parquet(files[-1])
+
+    # Parse snapshot_utc from each file and filter by as_of
+    snap_meta = []
+    for f in files:
+        # Filename: snap_20260920T150009Z.parquet
+        stem = f.stem  # snap_20260920T150009Z
+        try:
+            ts_str = stem.replace("snap_", "").replace("Z", "+00:00")
+            ts = pd.Timestamp(ts_str[:4] + "-" + ts_str[4:6] + "-" + ts_str[6:8]
+                              + "T" + ts_str[9:11] + ":" + ts_str[11:13] + ":" + ts_str[13:15]
+                              + "+00:00")
+        except Exception:
+            continue
+        if as_of is not None and ts >= as_of:
+            continue
+        snap_meta.append((ts, f))
+
+    if not snap_meta:
+        return {}
+
+    # Sort by timestamp descending — we'll iterate from newest
+    snap_meta.sort(key=lambda x: x[0], reverse=True)
+
     lines = {}
-    for (home_full, away_full), gdf in df.groupby(["home_team", "away_team"]):
+    skipped = []
+
+    # Cache: read each parquet at most once
+    _snap_cache = {}
+    def _read_snap(path):
+        if path not in _snap_cache:
+            _snap_cache[path] = pd.read_parquet(path)
+        return _snap_cache[path]
+
+    # Collect all games from the newest snapshot to know the full game set
+    newest_df = _read_snap(snap_meta[0][1])
+    all_games = newest_df.groupby(["home_team", "away_team"]).first().reset_index()
+
+    for _, game_row in all_games.iterrows():
+        home_full = game_row["home_team"]
+        away_full = game_row["away_team"]
         home = TEAM_MAP.get(home_full, home_full)
         away = TEAM_MAP.get(away_full, away_full)
-        hr = gdf[gdf["bookmaker"].str.contains("hardrock", case=False, na=False)]
-        if hr.empty:
-            hr = gdf
-        spreads = hr[hr["market"] == "spreads"]
-        home_sp = spreads[spreads["outcome_name"].apply(
-            lambda x: home_full.split()[-1] in str(x) if x else False)]
-        spread = -float(home_sp["point"].iloc[0]) if not home_sp.empty else None
-        totals = hr[hr["market"] == "totals"]
-        over = totals[totals["outcome_name"] == "Over"]
-        total = float(over["point"].iloc[0]) if not over.empty else None
-        if spread is not None and total is not None:
-            source = "hardrockbet_fl" if "hardrock" in str(hr["bookmaker"].iloc[0]).lower() else "consensus"
-            lines[f"{away}@{home}"] = {
-                "home": home, "away": away, "spread": spread, "total": total,
-                "source": source,
-            }
+        game_key = f"{away}@{home}"
+
+        ct_str = game_row.get("commence_time", None)
+        if ct_str is None or pd.isna(ct_str):
+            skipped.append((game_key, "no commence_time"))
+            continue
+        commence = pd.Timestamp(ct_str)
+
+        found = False
+        for snap_ts, snap_path in snap_meta:
+            if snap_ts >= commence:
+                continue
+            sdf = _read_snap(snap_path)
+            gdf = sdf[(sdf["home_team"] == home_full) & (sdf["away_team"] == away_full)]
+            hr = gdf[gdf["bookmaker"].str.contains("hardrock", case=False, na=False)]
+            if hr.empty:
+                continue
+            spreads = hr[hr["market"] == "spreads"]
+            home_sp = spreads[spreads["outcome_name"].apply(
+                lambda x: home_full.split()[-1] in str(x) if x else False)]
+            spread = -float(home_sp["point"].iloc[0]) if not home_sp.empty else None
+            totals = hr[hr["market"] == "totals"]
+            over = totals[totals["outcome_name"] == "Over"]
+            total = float(over["point"].iloc[0]) if not over.empty else None
+            if spread is not None and total is not None:
+                lines[game_key] = {
+                    "home": home, "away": away, "spread": spread, "total": total,
+                    "source": "hardrockbet_fl",
+                    "line_snapshot_utc": str(snap_ts),
+                    "line_book": "hardrockbet_fl",
+                }
+                found = True
+                break
+        if not found:
+            skipped.append((game_key, "no pre-kick Hard Rock snapshot"))
+
+    for game_key, reason in skipped:
+        print(f"  SKIPPED {game_key}: {reason}")
     return lines
 
 
@@ -798,6 +864,8 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--week", type=int, default=None)
+    parser.add_argument("--as-of", type=str, default=None,
+                        help="UTC ISO timestamp cap for line snapshots (default: now)")
     args = parser.parse_args()
 
     t0 = time.time()
@@ -818,7 +886,8 @@ def main():
     if week_teams:
         print(f"Week {week} teams from schedule: {len(week_teams)}")
 
-    all_lines = get_lines_from_history()
+    as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
+    all_lines = get_lines_from_history(as_of=as_of_ts)
     if week_matchups:
         # Filter by exact matchups (away, home pairs)
         lines = {k: v for k, v in all_lines.items()
