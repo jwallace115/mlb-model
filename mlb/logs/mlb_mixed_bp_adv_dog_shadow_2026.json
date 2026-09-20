@@ -801,6 +801,38 @@
       "dog_bp_era": 4.308,
       "win_loss": "L",
       "final_score": "1-5"
+    },
+    {
+      "game_pk": 823329,
+      "game_date": "2026-09-20",
+      "matchup": "KCR @ PIT",
+      "fav_team": "KCR",
+      "dog_team": "PIT",
+      "fav_side": "away",
+      "fav_implied": 0.5242,
+      "dog_ml_price": 102,
+      "sp_fip_diff": 0.783,
+      "off_diff": -0.15,
+      "bp_era_diff": 0.3,
+      "fav_bp_era": 5.096,
+      "dog_bp_era": 4.796,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824546,
+      "game_date": "2026-09-20",
+      "matchup": "DET @ CHW",
+      "fav_team": "CHW",
+      "dog_team": "DET",
+      "fav_side": "home",
+      "fav_implied": 0.5218,
+      "dog_ml_price": 104,
+      "sp_fip_diff": 0.25,
+      "off_diff": 0.0,
+      "bp_era_diff": 0.494,
+      "fav_bp_era": 4.788,
+      "dog_bp_era": 4.294,
+      "win_loss": null
     }
   ]
 }
