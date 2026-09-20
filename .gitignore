@@ -114,3 +114,6 @@ data/odds_archive/nfl/props/raw_live/
 nfl/data/sim/outputs/fit_5c2/games/
 logs/props_capture.log
 nfl/data/sim/outputs/fit_*/games/
+
+# Personal wagering record (Hard Rock exports + ledger). The repo is public: never commit.
+bets/

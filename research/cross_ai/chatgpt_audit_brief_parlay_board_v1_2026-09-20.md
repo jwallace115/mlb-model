@@ -40,14 +40,26 @@ Decisions: `research/ncaaf_board/NCAAF_BOARD_DECISION_v1.md` (N01-N36). Spec:
 ## 2. What is claimed, and on what evidence
 
 1. **Cross-game parlays at Hard Rock pay exactly the product of the single-leg prices.**
-   Evidence: ONE slip with per-leg prices printed (-110, -115, -110, -110): product 13.0083x,
-   offered 13.0100x, paid $195.12 on $15. A second slip read 0.98 under an ASSUMED -110 per leg.
-2. **Same-game cover+over pairs are priced at ~0.70 of independent.** Evidence: two slips (2
-   pairs, 5 pairs) — per-pair 0.699 and 0.695. **Both denominators assume every leg is -110**
-   — the same assumption that produced the 0.98 error in claim 1 — and the 10-leg slip's base
-   price was backed out of a boosted price ("~+10007"). `hardrock_sgp_adjustment_2026-09-19.md`.
-   One NFL same-game slip since: +743 paid vs +1140 to +1275 from archived single-leg prices
-   = 0.61-0.68, prices 11 h stale and one line had moved.
+   NOW MEASURED from Hard Rock's own bet-history export (35 slips, 213 legs, 2026-08-22 ->
+   09-19; every leg carries its at-bet decimal price): **16 of 16 one-leg-per-game parlays have
+   quoted price / product of legs between 0.9994 and 1.0004**, 3 to 15 legs, four sports. A
+   Void or Push leg is repriced to 1.0 (two slips; both reconcile exactly). Replaces the
+   one-slip evidence this claim had yesterday.
+2. **Same-game legs are charged, and the charge depends on what is paired.** From the same
+   export, 17 parlays with same-game legs; ratio = quoted / product, per extra same-game leg:
+
+   | sport | slips | per-extra-leg factor (median; min-max) | whole-slip ratio (median) |
+   |---|---|---|---|
+   | NCAAF cover+over pairs | 2 | 0.734 (0.713 - 0.755) | 0.377 |
+   | NFL player-prop SGPs | 6 | 0.910 (0.882 - 1.009) | 0.701 |
+   | WNBA | 7 | 0.904 (0.695 - 0.986) | 0.686 |
+   | MLB | 2 | 0.927 (0.884 - 0.970) | 0.913 |
+
+   So the "0.70 per pair" in `hardrock_sgp_adjustment_2026-09-19.md` was computed against
+   ASSUMED -110 legs; with real leg prices the two college slips are 0.713 and 0.755 (the second
+   on a BOOSTED quote). A 4-leg one-game NFL prop ticket pays ~0.69-0.72 of the product in total.
+   The one slip with a same-game pair on OPPOSING teams (two receivers, TB@CIN) paid 1.009 — no
+   charge. The ledger itself is private (gitignored `bets/`); only these aggregates are shared.
 3. **Fair value for that pair is 0.746**, from ONE cell of `joint_outcome_table_v2.parquet`
    (|spread| >= 21, OU < 50, n = 137: P(cover & over) 0.3796 vs 0.2831 independent). Hence
    "Hard Rock over-charges 6.3% per pair" and the operating rule **never stack same-game legs.**
@@ -55,8 +67,13 @@ Decisions: `research/ncaaf_board/NCAAF_BOARD_DECISION_v1.md` (N01-N36). Spec:
    3.75-4.20 across 8 configurations (2 windows x 2 line keys x 2 bin conventions), and "held
    OOS on 2025". The 7-14 extension and the 14-21 bucket were withdrawn. N05-N10.
 5. **Hard Rock totals ran a point below consensus, 4 for 4.** Stated as unverified.
-6. **Record:** "3 for 6 across NCAA and NFL, up on the season." One NFL win +2864 (5 cross-game
-   volume props), one +743 (4-leg same-game), NCAAF 5-leg won $182.28, 4-leg won $195.12.
+6. **Record, from the export, settled slips only:** all 34: 6 won / 27 lost / 1 cashed out,
+   staked $495.51, returned $889.72. Slips built by this system (7, tagged by hand): 3 won / 4
+   lost, staked $105 (one a $20 bonus bet), returned $753.37 — of which $444.60 is one ticket.
+   The other 27 (group-chat and personal picks): -$254.16. 191 settled legs hit 63.9% against a
+   mean vig-inclusive implied 61.1%. None of this is a sample. **Correction:** this project's
+   notes said the 09-19 cross-game 4-leg "won $195.12". It LOST (1 of 4 legs); $195.12 was the
+   potential payout. The pricing identity from that slip stands; the result was misreported.
 7. **The capture is sound:** append-only, a failed pull halts and writes nothing, in-play rows
    dropped, health check agrees between the VM and a fresh clone. Verified from a fresh clone
    at `c78b3c8`; every new scheduled feed was then observed firing on its own overnight 09-20,
@@ -81,16 +98,19 @@ Decisions: `research/ncaaf_board/NCAAF_BOARD_DECISION_v1.md` (N01-N36). Spec:
 - **Every NCAAF ticket is `reference_only: true`.** `hardrockbet_fl` has been absent from the
   Odds API's NCAAF feed in every one of ~700 snapshots, so logged prices and CLV are at books
   that cannot be bet, and the card is priced off numbers the bettor never sees.
-- **There is no ledger of actual wagers.** Stakes, slips and results live in chat transcripts
-  and an assistant's memory file; the two tallies I can find disagree ("2 wins / 4 losses" NFL
-  vs "3 for 6 NFL+NCAAF"). Claims 1, 2 and 6 cannot be re-derived from the repo.
+- **There was no ledger of actual wagers until today.** Results lived in chat transcripts and
+  an assistant's memory file, and one was wrong (claim 6). Now: `shared/pipeline/
+  ingest_hardrock_bets.py` upserts Hard Rock's export by slip id into a private ledger, halts on
+  a changed header or row shape, and derives quoted-vs-product per slip. Still missing: which
+  slips this system built is a hand-kept tag; nothing links a slip to the board/ticket that
+  produced it; no closing price is attached to a bet leg.
 
 ## 4. What I most want attacked
 
 Ranked by how much is lost if I am wrong.
 
-1. **The 0.70 / 0.746 / "never stack same-game" chain.** Three soft links: slips priced
-   against assumed -110 legs; a fair value from one 137-game cell applied to pairs that were
+1. **The 0.746 / "never stack same-game" chain.** The price side is now measured (claim 2);
+   the soft links left: a fair value from one 137-game cell applied to pairs that were
    not all in that cell; and a rule generalised to NFL player props from college cover+over
    pairs. Is the rule still right if the true factor is 0.75-0.80? What is the minimum logging
    (per slip: every single-leg price at the moment of the quote, the quoted parlay price, the

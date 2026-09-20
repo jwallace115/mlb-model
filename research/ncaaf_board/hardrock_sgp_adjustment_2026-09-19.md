@@ -1,5 +1,18 @@
 # Hard Rock SGPMax correlation adjustment — MEASURED, 2026-09-19
 
+> **CORRECTED 2026-09-20 from Hard Rock's bet-history export (35 slips, 213 legs, every leg with
+> its at-bet decimal price; private ledger under gitignored `bets/`, parser
+> `shared/pipeline/ingest_hardrock_bets.py`).**
+> 1. **Cross-game = product of the legs: CONFIRMED, 16 of 16 slips**, ratio 0.9994-1.0004 (a Void
+>    or Push leg reprices to 1.0).
+> 2. **The 0.70 per pair below used ASSUMED -110 legs.** With the real leg prices the two college
+>    slips are **0.713** (5-leg) and **0.755** (10-leg, on the boosted quote) per pair.
+> 3. **The factor is not one number.** Per extra same-game leg: NFL player-prop SGPs 0.91 median
+>    (0.88-1.01; a 4-leg one-game ticket pays 0.69-0.72 of the product overall), WNBA 0.90,
+>    MLB 0.93. A same-game pair on OPPOSING teams paid 1.009 — no charge.
+> 4. **The 4-leg cross-game card did NOT win.** It lost (1 of 4 legs); $195.12 was the potential
+>    payout. Section 1's "paid $195.12 on $15" is wrong. The price identity it shows stands.
+
 **Finding: Hard Rock prices each same-game cover+over pair in a blowout at ~0.70 of its
 independent value. The joint table says a fair adjustment would be 0.746. You lose ~6.3% of
 fair value per pair, compounding.**
