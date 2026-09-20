@@ -3,3 +3,6 @@
 {"utc": "20260920T0323Z", "sha256": "c119b2047b21d775e69de0adf85f779de790cdf9b75f785b7e2f0f3f9396476f", "status": "written"}
 {"utc": "20260920T0324Z", "sha256": "c119b2047b21d775e69de0adf85f779de790cdf9b75f785b7e2f0f3f9396476f", "status": "unchanged"}
 {"utc": "20260920T0630Z", "sha256": "e00ed75fc47a42cdaee6bcbb33b2f9c49fcd0f8f0ec7df613ebc9d7ef59a6b7d", "status": "written"}
+{"utc": "20260920T0900Z", "file": "depth_charts.parquet", "sha256": "d23685857746fb7cc9ef2032fb8f0efece33e17fa0bf27fcec0e56193bd65ee0", "max_dt": "2026-09-20T06:02:02+00:00", "rows": 2243, "status": "delta"}
+{"utc":"20260920T0900Z","file":"injuries.parquet","sha256":"150ac873eee064521d069c356bbdc3b19d1d43de95e6fecc30bd5620e0aa6f15","status":"written"}
+{"utc":"20260920T0900Z","file":"rosters_weekly.parquet","sha256":"bc551ac1a5fe48cce601a1dc517b1dee0310ce8c3cc194360d457272415ab696","status":"written"}
