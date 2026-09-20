@@ -1837,3 +1837,53 @@ which takes ~10 min; the code is committed and the coverage script can verify it
 
 **NULL CONTROL:** `engine_fingerprint()` = `7f3d96900218c014` (unchanged). This item
 changes the board pricing layer only; no engine, table, or calibration file edited.
+
+### D107 — Item 4: run_k1_table.py — committed K1 table generator (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Script.** `nfl/sim/run_k1_table.py --out <path>.txt`: 1,087 games x N=500, seeds via
+`stable_seed` exactly as `run_k1_5a5.py`. Every "actual" computed from PBP in the same
+script. Every tolerance imported from the test suite (source listed below). Writes
+per-game means to `<name>_rows.parquet`.
+
+Runtime: 1.16 s/game on first 100; total 21.8 min (1,087 games).
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+**Tolerance sources:**
+| Line | Tolerance | Source |
+|---|---|---|
+| go_rate | 0.010 | test_engine_5a3.py:67 |
+| like_for_like_go | 0.010 | test_engine_5i.py:93 |
+| fg_att/game | 0.15 | test_engine_5a3.py:77 |
+| off_pen/game | 0.5 | test_engine_5a4.py:75 |
+| def_pen/game | 0.5 | test_engine_5a4.py:77 |
+| fd_pen/team | 0.3 | test_engine_5a4.py:89 |
+| nonoff_pts/team | — | test_engine_5a5.py:84 (0.3, but per-team target not in K1 format) |
+| tied_expiry_broad | 0.05 above 0.0 | test_engine_5a9.py:143 |
+| 3rd_11+_share | 0.03 | test_engine_5i.py:103 |
+| pts/team | none defined | |
+| plays/game | none defined | |
+| drives/game | none defined | |
+| punts/game | none defined | |
+| margin_sd | none defined | |
+
+**K1 output (engine `7f3d96900218c014`):**
+| Line | Sim | Actual | Diff | Tol | P/F |
+|---|---|---|---|---|---|
+| pts/team | 22.749 | 22.386 | +0.362 | — | — |
+| plays/game | 130.3 | 124.5 | +5.8 | — | — |
+| drives/game | 23.8 | 21.9 | +1.9 | — | — |
+| go_rate | 0.2049 | 0.1980 | +0.0069 | 0.010 | PASS |
+| like_for_like_go | 0.2082 | 0.1980 | +0.0102 | 0.010 | FAIL |
+| off_pen/game | 5.695 | 5.513 | +0.182 | 0.500 | PASS |
+| def_pen/game | 3.568 | 3.451 | +0.117 | 0.500 | PASS |
+| fd_pen/team | 1.404 | 1.728 | -0.324 | 0.300 | FAIL |
+| punts/game | 8.841 | 7.900 | +0.941 | — | — |
+| fg_att/game | 4.001 | 3.923 | +0.078 | 0.150 | PASS |
+| 3rd_11+_share | 0.189 | 0.182 | +0.007 | 0.030 | PASS |
+| tied_expiry_broad | 0.119 | 0.000 | +0.119 | 0.050 | FAIL |
+
+**CHECK vs D102:** pts/team 22.7(49) vs D102 "22.7" — matches. Go rate 0.205 matches.
+Off_pen 5.70 matches. Def_pen 3.57 matches. FD_pen 1.40 matches. Punts 8.84 matches.
+FG 4.00 matches. 3rd-11+ 0.189 matches. All reproduced to printed precision.
