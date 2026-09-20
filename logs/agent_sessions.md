@@ -1,3 +1,38 @@
+## 2026-09-20T02:46Z  claude-code (WO10: Scheduled capture — props, ESPN, Kalshi, health)
+
+### RETURNED
+- Item 1: pull_hardrock_props.py in-play filter added (rows where pull_timestamp >= commence_time dropped). 5 new cron entries installed (mid Wed-Sat + close Sun 12:30/3:45/7:50/Mon 7:45). 3 D84 entries retained. Dry-run: 16 events, 241 credits, x-requests-remaining=8,250. One-off cron proof fired at 02:15:01 UTC.
+- Item 2: shared/pipeline/pull_espn_news.py (--sport nfl|ncaaf, gzipped), shared/pipeline/pull_espn_nfl_status.py (injuries 32 teams in 1 response + depth charts per-team), ncaaf/pipeline/pull_ncaaf_news.py (thin wrapper), nfl/pipeline/espn_team_map.json (32 teams), shared/pipeline/run_nflverse_with_archive.sh. ESPN NFL injuries 200 OK 32 teams. ESPN depth chart structure: depthchart list (3 formations). NCAAF news 67MB uncompressed -> 10MB gzipped. nflverse was NOT in any crontab. Cron installed for all 5 feeds.
+- Item 3: shared/pipeline/pull_kalshi_football.py (6 per-game series: game/spread/total x NFL+NCAAF). Prices in dollars (0.00-1.00). NFL 783 markets (5% zero vol, 55 KB), NCAAF 2,472 markets (16% zero vol, 140 KB). occurrence_datetime present but not labelled as kickoff. Player-prop series flagged, not captured (0-1 open markets each). Cron installed 32/day each.
+- Item 4: shared/pipeline/capture_health.py (reads files only, no network). Exit 1 on stale fixture confirmed. On real repo: 9/10 OK, nfl_props STALE (4,226h — D84 first slot is Sun 15:00 UTC). Hourly cron installed.
+
+### OBSERVED SCHEDULED FIRINGS (syslog, not one-off)
+- 02:35:01 Kalshi NFL: 783 rows, 55 KB
+- 02:37:01 Kalshi NCAAF: 2,382 rows, 136 KB
+- 02:45:01 Health check: 9/10 OK, 1 STALE (nfl_props)
+
+### DECISIONS WRITTEN
+- N28: props schedule + cost + plan arithmetic
+- N29: ESPN sources + what college lacks + nflverse was unscheduled
+- N30: Kalshi series + price scale (dollars) + pre-game filtering needs schedule join
+- N31: health check thresholds + observed-firing table
+
+### NOT DONE
+- No Odds API credits spent (dry-runs only). Work order allowed one real pull for proof; not exercised because D84's one-off proof already validated the puller.
+- No ESPN scheduled firings observed (first slots: 06:10/06:20/06:30 UTC today)
+- No nflverse scheduled firing observed (first slot: 09:00 UTC today)
+- No NFL props scheduled firing observed (first slot: Sun 15:00 UTC today)
+- Player-prop Kalshi series not captured (0-1 open markets each, impractical)
+- No Odds API plan upgrade (account plan is UNKNOWN from headers)
+- NCAAF news storage ~1.2 GB/month gzipped — large but within work order scope
+
+### UNVERIFIED
+- Whether the 06:10/06:20/06:30 UTC ESPN slots actually fire and produce complete files
+- Whether the 09:00 UTC nflverse slot fires and produces archive copies
+- Whether the Sun 15:00 UTC D84 props entry fires on its first scheduled opportunity
+- Whether gzipped news files are readable by downstream consumers (board builder)
+- Whether the capture_health.py line path (line_history/**/*.parquet) covers all line archive variations across sports
+
 ## 2026-09-20T00:43Z  cowork (Phase 5H verification — D98; 5I work order written)
 
 ### RETURNED
