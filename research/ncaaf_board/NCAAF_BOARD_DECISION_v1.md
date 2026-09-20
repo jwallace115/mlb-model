@@ -1443,3 +1443,34 @@ first-class entry with its baselines attached (today it is logged as a FINAL tha
 ticket on almost every leg); an NFL game-line ticket logger + grader (today: three hand-built JSON
 records); the same reader-first path for NCAAF Saturday tickets (its builder already calls a model per
 game — the prompt must present ALL layers and ask for the opinion + reason, not a filter).
+
+### N55 — What Jeff placed from the AI tickets; two grading defects found while logging it (2026-09-20)
+
+From Jeff's paste of Hard Rock "My Bets" (~17:15Z; slip ids withheld, public repo):
+- **AI props 5-leg PLACED** $10 at +1974 = the recommended product to the unit -> `LEAD_5_PLACED`, slate
+  `2026-09-20e` (log = 37 entries). First AI-picked prop ticket with money on it.
+- **AI price-based game 5-leg PLACED** $10 at +3373: NYJ ML +150, PIT **+5** -110, CLE@TB Over 41 -110,
+  MIA +13.5 -105, IND +6 -105. The Steelers leg was placed at +5 -110 after Cowork said to drop it at that
+  price - Jeff's call; recorded as a departure, and that leg no longer has a price reason.
+- **AI opinion game 6-leg PLACED** $10 at +4749, all six as sent (incl. optional IND@KC Under 46).
+- NOT placed as of the paste: the AI 10-leg props (`LEAD_10_FINAL_r2`). A 20-leg SGPMAX on the paste is a
+  friend's and is not logged. Record: `nfl/data/board/week=2026_02/game_ticket_placements_20260920.json`.
+Today's stake on record: $40 (morning rule-dealt 5/10/19) + $30 (three AI tickets) = $70.
+
+**Defect 1 — ticket ids repeat across slates.** `LEAD_5_PLACED` now exists in slates -20d (rule-dealt) and
+-20e (AI-picked); the grade report groups by `ticket`, so the two would have been merged into one line.
+`export_placed_legs.py` now writes `<slate>:<ticket_id>`; both slates re-exported (34 + 5 legs, all ids
+resolved). It also searches every candidates file of the week, newest first - the 1614Z file came from a
+13-event pull and no longer held Hurts/Barkley, which HALTED the slate -20d re-export.
+**Defect 2 — the sim-vs-book scorer's universe silently depended on the newest candidates file.** With the
+1614Z file present the pre-registered 146 rows became 136. `score_week_vs_book.py` now pins the
+pre-registered file per week (`PREREGISTERED_CANDIDATES`, week 2 = the 1424Z table named in
+`wk2_prekick_sim_layer_2026-09-20.md`) and HALTS for a week with none. Changed at ~17:20Z, after the 1pm
+kickoffs but before any outcome exists in PBP (dry run: 1,276 legs, all void-pending); it restores the
+registered universe rather than altering it. Suite 97 passed.
+
+MONDAY grading (after the nflverse PBP refresh):
+`python3 nfl/sim/grade_week.py --season 2026 --week 2 --extra nfl/data/board/week=2026_02/placed_legs_2026-09-20d.parquet nfl/data/board/week=2026_02/placed_legs_2026-09-20e.parquet`
+then `python3 nfl/sim/score_week_vs_book.py --week 2 --out research/nfl_sim/wk2_sim_vs_book_2026-09-21.md`.
+NOT DONE: a grader for the two GAME tickets (hand-grade from final scores Monday/Tuesday; NYG@LA is Monday
+night); NFL close/CLV. UNVERIFIED: the 16:30Z / 16:50Z scheduled props pulls.

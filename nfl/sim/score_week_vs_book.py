@@ -6,7 +6,7 @@ and how is fixed before any outcome exists. It reads; it tunes nothing; it gates
 
 Inputs
   nfl/data/sim/outputs/week=<S>_<WW>/grades.parquet     (grade_week.py: hit / miss / void ...)
-  nfl/data/board/week=<S>_<WW>/nfl_prop_candidates_*.parquet  (newest; two-way Hard Rock rows,
+  nfl/data/board/week=<S>_<WW>/<the PRE-REGISTERED candidates file>  (two-way Hard Rock rows,
         q_over = proportional de-vig of the SAME row)
   placed legs: rows with tier == 'placed' in grades.parquet, i.e. grade_week.py was run with
         --extra nfl/data/board/week=<S>_<WW>/placed_legs_<slate>.parquet (export_placed_legs.py)
@@ -31,6 +31,10 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent.parent
 FAMILY = {"player_receptions": "receptions", "player_rush_attempts": "rush_attempts"}
 DIVERGE = 0.20
+# The candidates table is part of the pre-registration: the universe must not drift because a later,
+# narrower pull wrote a newer file (found 2026-09-20 17:20Z: the 1614Z file has 13 events and would
+# have cut the pre-registered 146 rows to 136). Weeks not listed here must pass --candidates.
+PREREGISTERED_CANDIDATES = {(2026, 2): "nfl_prop_candidates_20260920T1424Z.parquet"}
 EPS = 1e-6
 
 
@@ -129,10 +133,16 @@ def main():
     ap.add_argument("--season", type=int, default=2026)
     ap.add_argument("--week", type=int, required=True)
     ap.add_argument("--out", default=None)
+    ap.add_argument("--candidates", default=None, help="candidates parquet file name inside the week's board dir")
     a = ap.parse_args()
     wk = f"week={a.season}_{a.week:02d}"
     gpath = ROOT / "nfl" / "data" / "sim" / "outputs" / wk / "grades.parquet"
-    cands = sorted((ROOT / "nfl" / "data" / "board" / wk).glob("nfl_prop_candidates_*.parquet"))
+    cname = a.candidates or PREREGISTERED_CANDIDATES.get((a.season, a.week))
+    if not cname:
+        sys.exit("HALT: no pre-registered candidates file for this week - pass --candidates <file name>")
+    cands = [ROOT / "nfl" / "data" / "board" / wk / cname]
+    if not cands[0].exists():
+        sys.exit(f"HALT: {cands[0]} missing")
     if not gpath.exists():
         sys.exit(f"HALT: {gpath} missing - run grade_week.py --season {a.season} --week {a.week} first")
     if not cands:

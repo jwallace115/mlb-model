@@ -2771,3 +2771,8 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 ## 2026-09-20T17:16Z  cowork
 - RECORDED: Jeff standing rule - every pick is the AI opinion; all layers (sim, news, lines, stats) are inputs. N54 in NCAAF_BOARD_DECISION_v1.md; section appended to CLAUDE.md.
 - NOT DONE: ai_ticket kind in the NFL logger; NFL game-line logger/grader; NCAAF builder prompt changed to reader-first.
+
+## 2026-09-20T17:22Z  cowork
+- LOGGED from Jeff's slips: LEAD_5_PLACED (slate -20e, $10 +1974); game placements file (price 5-leg $10 +3373 with PIT +5 -110 placed against advice; opinion 6-leg $10 +4749). Slip ids withheld.
+- FIXED: export_placed_legs.py (slate-qualified ticket ids; searches all candidates files); score_week_vs_book.py pinned to the pre-registered candidates file (146 rows had silently become 136). 97 passed.
+- NOT DONE: game-ticket grader; NFL close/CLV; AI 10-leg not placed as of the paste.

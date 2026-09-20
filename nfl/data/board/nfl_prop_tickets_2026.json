@@ -13290,5 +13290,60 @@
     },
     "placed": null,
     "graded": false
+  },
+  {
+    "build_time": "2026-09-20T16:14:19.251042+00:00",
+    "ticket_id": "LEAD_5_PLACED",
+    "kind": "placement",
+    "slate": "2026-09-20e",
+    "refers_to": "LEAD_5_FINAL",
+    "stake": 10.0,
+    "quoted_american": 1974,
+    "quoted_decimal": 20.74,
+    "legs_placed": [
+      {
+        "player_name": "Lamar Jackson",
+        "market_key": "player_pass_attempts",
+        "side": "Under",
+        "line": 27.5,
+        "american": null
+      },
+      {
+        "player_name": "Omarion Hampton",
+        "market_key": "player_rush_attempts",
+        "side": "Over",
+        "line": 16.5,
+        "american": null
+      },
+      {
+        "player_name": "Stefon Diggs",
+        "market_key": "player_receptions",
+        "side": "Over",
+        "line": 4.5,
+        "american": null
+      },
+      {
+        "player_name": "C.J. Stroud",
+        "market_key": "player_pass_attempts",
+        "side": "Over",
+        "line": 30.5,
+        "american": null
+      },
+      {
+        "player_name": "T.J. Hockenson",
+        "market_key": "player_receptions",
+        "side": "Over",
+        "line": 3.5,
+        "american": null
+      }
+    ],
+    "dropped": [],
+    "price_moved": [],
+    "same_game_quotes": [],
+    "source": "Jeff pasted the Hard Rock 'My Bets' slip into the Cowork chat ~17:15Z (slip id withheld - public repo)",
+    "note": "Slip shows the five lines (O30.5, O3.5, U27.5, O16.5, O4.5) and +1974 = the product of the recommended prices to the unit, so no leg price moved; per-leg prices were collapsed on the slip and are logged as None. First AI-PICKED ticket placed (N51/N54).",
+    "legs": [],
+    "graded": false,
+    "logged_at": "2026-09-20T17:19:19.657582+00:00"
   }
 ]

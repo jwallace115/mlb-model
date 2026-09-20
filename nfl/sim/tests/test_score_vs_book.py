@@ -6,7 +6,8 @@ from nfl.sim.score_week_vs_book import build_universe, brier, divergent, norm_na
 
 ROOT = Path(__file__).resolve().parents[3]
 PICKS = ROOT / "nfl/data/sim/outputs/week=2026_02/picks_log.parquet"
-CANDS = sorted((ROOT / "nfl/data/board/week=2026_02").glob("nfl_prop_candidates_*.parquet"))
+from nfl.sim.score_week_vs_book import PREREGISTERED_CANDIDATES
+CANDS = [ROOT / "nfl/data/board/week=2026_02" / PREREGISTERED_CANDIDATES[(2026, 2)]]
 
 
 def _universe(truth_col, seed=7):

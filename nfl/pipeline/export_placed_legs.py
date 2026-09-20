@@ -30,23 +30,25 @@ def placed_rows(log_path, slate):
     for e in ents:
         if e.get("slate") == slate and "legs_placed" in e:
             for l in e["legs_placed"]:
-                rows.append({"ticket": e["ticket_id"], **l})
+                rows.append({"ticket": f"{slate}:{e['ticket_id']}", **l})   # slate-qualified: ids repeat across slates
     return pd.DataFrame(rows)
 
 
 def export(season, week, slate, log_path=None, cand_path=None, roster=None):
     wk_dir = ROOT / "nfl" / "data" / "board" / f"week={season}_{week:02d}"
     log_path = log_path or ROOT / "nfl" / "data" / "board" / "nfl_prop_tickets_2026.json"
-    cand_path = cand_path or sorted(wk_dir.glob("nfl_prop_candidates_*.parquet"))[-1]
     t = placed_rows(log_path, slate)
     if t.empty:
         raise SystemExit(f"HALT: no placement entries for slate {slate}")
     bad = sorted(set(t["market_key"]) - set(FAMILY))
     if bad:
         raise SystemExit(f"HALT: market with no grader family: {bad}")
-    c = pd.read_parquet(cand_path)[["player_name", "market_key", "team", "home_team", "away_team",
-                                    "position", "pull_timestamp"]].drop_duplicates(
-        ["player_name", "market_key"])
+    # a slate's players may be missing from a LATER candidates file (a narrower pull window), so
+    # look across every candidates file of the week, newest first
+    files = [cand_path] if cand_path else sorted(wk_dir.glob("nfl_prop_candidates_*.parquet"), reverse=True)
+    cols = ["player_name", "market_key", "team", "home_team", "away_team", "position", "pull_timestamp"]
+    c = pd.concat([pd.read_parquet(f)[cols] for f in files], ignore_index=True).drop_duplicates(
+        ["player_name", "market_key"], keep="first")
     t = t.merge(c, on=["player_name", "market_key"], how="left")
     if t["home_team"].isna().any():
         raise SystemExit(f"HALT: placed leg not in candidates: {t.loc[t.home_team.isna(), 'player_name'].tolist()}")
