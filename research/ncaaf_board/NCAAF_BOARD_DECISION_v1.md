@@ -748,3 +748,41 @@ rosters/injuries ~20 + tracked depth file ~216 = **~345 MB/month**, not the 154-
 
 **Not verified:** any ESPN/nflverse/props SCHEDULED firing (first slots 06:10Z, 09:00Z,
 Sun 15:00Z); the delta script on the VM (it reaches the VM on the next push_daemon pull).
+
+### N37 — A leg is one row of one book; pre_repair flag (2026-09-20)
+ChatGPT audit #4, adjudicated by Cowork. Item 1 of WO11.
+
+**Defect.** `build_ncaaf_tickets.py:226-228` wrote `point=consensus_point` (median of
+all books), `price=best_price` (from the book with the best point), `book=best_book`.
+The resulting triple (book, point, price) did not exist in the tape 17 of 30 times in
+the 2026-09-19T11 build. The Under/h2h branch in `build_ncaaf_board.py` was worse:
+median point plus the FIRST book's price.
+
+**Pre-registration.** Reproduction will show 17 of 30. It showed 17 of 30.
+
+**Fix.**
+1. `build_ncaaf_board.py`: each board row now carries a `quotes` list — one entry per
+   book with `{book, point, price, snapshot_utc}`, each a single tape row.
+2. `build_ncaaf_tickets.py`: new `select_best_quote(quotes, market, side)`:
+   - spreads: most positive point (max), ties -> best price (max), ties -> book name
+   - Over: lowest point (min), ties -> best price, ties -> book name
+   - Under: HIGHEST point (max), ties -> best price, ties -> book name
+3. Each leg stores `snapshot_utc` and the complement row from the same book/snapshot
+   (needed for entry de-vigging).
+4. `validate_leg_against_tape(leg, tape_df)`: asserts every leg's (book, market, side,
+   point, price) exists in the tape. Called at write time; raises on failure.
+5. `_validate_ticket` now checks against real book quotes, not consensus_point.
+6. News filter accepts both `_team_name` (new puller) and `team_name` (legacy).
+
+**Pre_repair flag.** All 31 existing ticket-log entries marked `pre_repair: true`.
+Entries with this flag are excluded from any future grade or count. No existing entry
+was deleted or otherwise modified.
+
+**Tests (5 new, 4 updated):**
+- `test_board_carries_quotes`: board_df must have a `quotes` column with per-book data
+- `test_select_best_quote_spreads/over/under`: selection rule produces the correct
+  (book, point, price) triple for each market type
+- `test_validate_leg_against_tape`: consensus-mixed leg raises; real tape row passes
+
+**Null control.** `_validate_ticket`'s both-sides invariant still passes (unchanged).
+The 4 existing test_ticket_invariants tests still pass with updated fixtures.

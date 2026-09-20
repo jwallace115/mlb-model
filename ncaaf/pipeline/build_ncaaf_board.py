@@ -149,6 +149,15 @@ def build_board(season, week=None, build_time=None):
                 # Newest snapshot age
                 newest_snap_age_min = (pd.Timestamp(build_time, tz="UTC") - latest["snapshot_dt"].max()).total_seconds() / 60
 
+                # N37: collect real per-book quotes for leg selection
+                quotes = []
+                for _, bk_row in latest.iterrows():
+                    q = {"book": bk_row["bookmaker"],
+                         "point": float(bk_row["point"]) if pd.notna(bk_row["point"]) else None,
+                         "price": float(bk_row["price"]) if pd.notna(bk_row["price"]) else None,
+                         "snapshot_utc": str(bk_row["snapshot_utc"]) if "snapshot_utc" in bk_row.index and pd.notna(bk_row["snapshot_utc"]) else None}
+                    quotes.append(q)
+
                 board_rows.append({
                     "event_id": eid, "home_team": home, "away_team": away,
                     "commence_time": commence, "market": market,
@@ -162,6 +171,7 @@ def build_board(season, week=None, build_time=None):
                     "hours_elapsed": hours_elapsed,
                     "key_number_proximity": kn_prox,
                     "newest_snap_age_min": newest_snap_age_min,
+                    "quotes": quotes,
                 })
 
     board_df = pd.DataFrame(board_rows)
@@ -213,7 +223,8 @@ def main():
     if not board_df.empty:
         out_dir = BOARD_DIR / f"week={args.season}_{args.week or 0:02d}"
         out_dir.mkdir(parents=True, exist_ok=True)
-        board_df.to_parquet(out_dir / "ncaaf_board.parquet", index=False)
+        board_df.drop(columns=["quotes"], errors="ignore").to_parquet(
+            out_dir / "ncaaf_board.parquet", index=False)
         with open(out_dir / "ncaaf_board.md", "w") as f:
             f.write(board_md)
         print(f"Board: {len(board_df)} rows, {board_df['event_id'].nunique()} events")

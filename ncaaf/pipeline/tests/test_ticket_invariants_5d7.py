@@ -37,13 +37,17 @@ def test_single_side_passes():
     from ncaaf.pipeline.build_ncaaf_tickets import _validate_ticket
 
     board_rows = [
-        {"market": "spreads", "outcome_name": "Team A", "consensus_point": -3.5},
-        {"market": "totals", "outcome_name": "Over", "consensus_point": 50.0},
+        {"market": "spreads", "outcome_name": "Team A", "consensus_point": -3.5,
+         "quotes": [{"book": "testbook", "point": -3.5, "price": -110}]},
+        {"market": "totals", "outcome_name": "Over", "consensus_point": 50.0,
+         "quotes": [{"book": "testbook", "point": 50.0, "price": -110}]},
     ]
     good_ticket = {
         "legs": [
-            {"market": "spreads", "side": "Team A", "point": -3.5},
-            {"market": "totals", "side": "Over", "point": 50.0},
+            {"market": "spreads", "side": "Team A", "point": -3.5,
+             "book": "testbook", "price": -110},
+            {"market": "totals", "side": "Over", "point": 50.0,
+             "book": "testbook", "price": -110},
         ]
     }
     _validate_ticket(good_ticket, board_rows)  # no raise
@@ -54,14 +58,16 @@ def test_leg_not_on_board_raises():
     from ncaaf.pipeline.build_ncaaf_tickets import _validate_ticket
 
     board_rows = [
-        {"market": "spreads", "outcome_name": "Team A", "consensus_point": -3.5},
+        {"market": "spreads", "outcome_name": "Team A", "consensus_point": -3.5,
+         "quotes": [{"book": "testbook", "point": -3.5, "price": -110}]},
     ]
     invented_ticket = {
         "legs": [
-            {"market": "spreads", "side": "Team A", "point": -7.0},  # wrong point
+            {"market": "spreads", "side": "Team A", "point": -7.0,
+             "book": "testbook", "price": -110},  # wrong point
         ]
     }
-    with pytest.raises(RuntimeError, match="not on board"):
+    with pytest.raises(RuntimeError, match="not in any book"):
         _validate_ticket(invented_ticket, board_rows)
 
 
