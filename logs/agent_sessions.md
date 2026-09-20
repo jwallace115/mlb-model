@@ -2658,3 +2658,15 @@ news connection, feed health). 4 items, each committed and pushed before the nex
   Whether any post-N37 ticket build has been scheduled for next week's slate. Whether the
   N12 future-kickoff guard has ever fired in a production run (it has not in any run I can
   see). The 8976 credit balance — no API call was made, so nothing confirmed it.
+
+## 2026-09-20T13:45Z  cowork — N46: slate dealer (1pm 5, 4pm 5, all-day 5/10/20), disjoint players
+- BUILT: nfl/pipeline/build_nfl_slate.py + tests/test_nfl_slate_n46.py; build_nfl_candidates.py
+  (declared per-game cap, different-team rule, deterministic tie-break, unchanged-pull pulse); N46 (N45 was taken by a parallel session).
+- RETURNED: suite 88 passed; 5 mutations caught. Real 13:12Z pull (Jeff ran it by hand, 140 credits,
+  remaining 7,946): 259 eligible, 45 legs / 45 distinct players; return per $1 at book q: 5-legs
+  0.73-0.74, 10-leg 0.51, 20-leg 0.27.
+- OBSERVED: `"feed": "espn_injuries"` on the VM's 12:30Z pull-log line — the N41 writers are live.
+  The VM's 13:00Z push did not reach origin until 13:30Z (push_daemon pulls without --autostash;
+  a pipeline write between commit and pull makes the cycle fail and retry 30 min later).
+- NOT DONE: reader pass (news/inactives) — scheduled 15:36Z; late ticket from the 19:45Z pull.
+- UNVERIFIED: that Hard Rock accepts 20 legs / opposing-team pairs at the product price.

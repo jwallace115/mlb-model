@@ -1171,3 +1171,40 @@ needs, the count is 0.
 **Credits.** Zero. `grade_ncaaf_tickets.py` makes no HTTP call (no requests/urllib import;
 tape and CFBD read from local parquet), so no `x-requests-remaining` header was returned by
 this run. Last known balance stands at 8976, unchanged and unconfirmed by this session.
+
+### N46 — A slate of NFL tickets dealt by rule, no player on two tickets (2026-09-20)
+
+(N45 was taken the same morning by a parallel Cowork session's WO5 grading run; this is N46.)
+
+**Jeff's ask (2026-09-20):** a 1pm 5-leg, a 4pm 5-leg (can run later), an all-day 5-leg, an all-day
+10-leg and an all-day 20-leg, with separate legs "so 1 miss doesn't sink them all". Delivery ~12:15pm
+ET off the 11am pull after inactives; he is not concerned with last-minute updates. 20-leg: two props
+in some games (his choice — a 14-game Sunday cannot give 20 one-per-game legs).
+
+`nfl/pipeline/build_nfl_slate.py`, on top of N43/N44's candidate table and log:
+- Windows in hours after the slate's first kickoff: early [0,1), late [2.5,4.5), all [0,9) (Monday
+  is not "all day"). Pools: `role_overs` (book-favoured Overs on a team's lead roles) for the three
+  5-leg tickets, `top_q` (any eligible leg by de-vigged q) for the 10 and the 20.
+- DEAL: tickets take turns in spec order (20, 10, early 5, all-day 5, late 5), one leg per round,
+  each taking its best remaining legal leg. Legal = player not used ANYWHERE on the slate; at most
+  `max_per_game` legs in a game; a new game before a second leg in a game; a second leg only on the
+  OTHER team (the one opposing-team pair in the ledger paid 1.009 of the product; n = 1).
+- Logged as `<ID>_RULE`; the reader's version as `<ID>_FINAL`, with departures derived against the
+  RULE ticket (reason + source each), an availability confirmation per final leg, and a refusal if a
+  player is already on another FINAL ticket of the slate. The 4pm ticket is dealt later from the
+  new pull with every player already on the slate excluded.
+- `check_legs_against_candidates(..., max_per_game)`: a declared cap, different teams, a player once.
+- Injury-feed age now counts a hash-skipped ("unchanged") pull as a pulse; a later line with a
+  different sha and no file does not.
+
+**Measured on the real 2026-09-20 13:12Z pull (943 rows, 259 eligible):** 45 legs, 45 distinct
+players. Calculated gross return per $1 at the book's own de-vigged q, independent games: early 5
+0.74, all-day 5 0.73, late 5 0.73, **10-leg 0.51, 20-leg 0.27** (product price ~9,268; ~5,263 if Hard
+Rock applies its measured ~0.91 per extra same-game leg to the 6 doubled games). The 5-leg tickets
+cost ~27 cents on the dollar in hold; the 20-leg ~73. Stated to Jeff before placement.
+
+**Tests (5, `test_nfl_slate_n46.py`, production functions on the N43 real-data fixtures):**
+deterministic under row shuffling, disjoint players, 2-per-game on opposing teams, Monday excluded;
+later ticket excludes used players; RULE/FINAL logging with derived departures and the cross-final
+clash; same-team pair refused; unchanged-pull pulse. Five mutations of the dealer/logger each turn
+a test red. One command: **88 passed**.

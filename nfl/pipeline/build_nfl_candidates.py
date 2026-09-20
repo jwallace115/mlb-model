@@ -139,7 +139,32 @@ def load_injuries(injury_dir, season, build_time):
             name = _normalise(item.get("athlete", {}).get("displayName", ""))
             if name:
                 status[(abbr, name)] = item.get("status", "")   # keyed by TEAM and name
-    return status, best.name, best_when
+    return status, best.name, max(best_when, _confirmed_unchanged_until(best.parent, bt, best_when))
+
+
+def _confirmed_unchanged_until(season_dir, bt, file_when):
+    """N46: the ESPN puller hash-skips — an unchanged feed writes a `_pulls.jsonl` line, not a
+    file. The newest file is current as of the last pull that logged the SAME sha256."""
+    pulls = season_dir / "_pulls.jsonl"
+    if not pulls.exists():
+        return file_when
+    lines = []
+    for raw in pulls.read_text().splitlines():
+        try:
+            e = json.loads(raw)
+            when = pd.Timestamp(datetime.strptime(e["utc"], "%Y%m%dT%H%MZ"), tz="UTC")
+        except (ValueError, KeyError, TypeError):
+            continue
+        if e.get("feed", "espn_injuries") == "espn_injuries" and "file" not in e and when <= bt:
+            lines.append((when, e.get("sha256"), e.get("status")))
+    written = [l for l in lines if l[2] == "written" and l[0] <= file_when + pd.Timedelta(minutes=5)]
+    if not written:
+        return file_when
+    sha = max(written)[1]
+    later = [l[0] for l in lines if l[1] == sha]
+    # any LATER line with a different sha means the content changed and its file should exist
+    changed_after = [l[0] for l in lines if l[1] != sha and l[0] > max(written)[0]]
+    return file_when if changed_after else max(later)
 
 
 def build_candidates(props_dir=PROPS_DIR, usage_path=USAGE_PATH, injury_dir=INJURY_DIR,
@@ -251,7 +276,8 @@ def build_candidates(props_dir=PROPS_DIR, usage_path=USAGE_PATH, injury_dir=INJU
 def baseline_ticket(cand, top_k=TOP_K):
     """Top-K eligible legs by de-vigged probability, ONE PER GAME. Ties: price, then name."""
     e = cand[cand["eligible"]].sort_values(
-        ["q_pick", "pick_price", "player_name"], ascending=[False, False, True])
+        ["q_pick", "pick_price", "player_name", "market_key"],
+        ascending=[False, False, True, True])
     e = e.drop_duplicates("event_id", keep="first").head(top_k)
     return [leg_record(r) for r in e.to_dict("records")]
 
@@ -265,7 +291,8 @@ def role_overs_ticket(cand, top_k=TOP_K):
             | ((e["market_key"] == "player_rush_attempts") & (e["carry_rank"] == 1))
             | (e["market_key"].isin(["player_pass_attempts", "player_pass_completions"])
                & (e["is_starting_qb"] == True)))  # noqa: E712
-    e = e[lead].sort_values(["q_pick", "pick_price", "player_name"], ascending=[False, False, True])
+    e = e[lead].sort_values(["q_pick", "pick_price", "player_name", "market_key"],
+        ascending=[False, False, True, True])
     e = e.drop_duplicates("event_id", keep="first").head(top_k)
     return [leg_record(r) for r in e.to_dict("records")]
 
@@ -299,11 +326,11 @@ def _key(leg):
     return tuple(leg[k] for k in LEG_KEY)
 
 
-def check_legs_against_candidates(legs, cand):
+def check_legs_against_candidates(legs, cand, max_per_game=1):
     """N44: a logged leg IS a candidate row — same line, side, both prices, same pull — it is
     eligible, and a ticket holds one leg per game. (N43's logger took two copies of one leg at
     an invented 999.5 line and +9999.)"""
-    seen_events = set()
+    seen_events, seen_players = {}, set()
     for leg in legs:
         for field in LEG_IDENTITY:
             if leg.get(field) is None:
@@ -319,12 +346,22 @@ def check_legs_against_candidates(legs, cand):
                                    f"candidate row has {row[field]!r}")
         if not bool(row["eligible"]):
             raise RuntimeError(f"HALT: leg {_key(leg)} is not eligible: {row['ineligible_reasons']}")
-        if leg["event_id"] in seen_events:
-            raise RuntimeError(f"HALT: two legs in one game: {leg['event_id']}")
-        seen_events.add(leg["event_id"])
+        # N46: a ticket may be declared with up to `max_per_game` legs per game (the 20-leg
+        # cannot be one per game on a 14-game Sunday). Extra legs in a game must be on
+        # DIFFERENT TEAMS and a player appears once per ticket.
+        teams = seen_events.setdefault(leg["event_id"], [])
+        if len(teams) >= max_per_game:
+            raise RuntimeError(f"HALT: {'two legs' if max_per_game == 1 else 'too many legs'} "
+                               f"in one game: {leg['event_id']}")
+        if row["team"] in teams:
+            raise RuntimeError(f"HALT: two legs on one team ({row['team']}) in {leg['event_id']}")
+        teams.append(row["team"])
+        if (row["team"], leg["player_name"]) in seen_players:
+            raise RuntimeError(f"HALT: {leg['player_name']} appears twice on one ticket")
+        seen_players.add((row["team"], leg["player_name"]))
 
 
-def log_ticket(log_path, entry, cand):
+def log_ticket(log_path, entry, cand, max_per_game=1):
     """Append-only. An entry is never edited; (build_time, ticket_id) must be new; every leg is
     checked against the candidate table it came from."""
     log_path = Path(log_path)
@@ -333,7 +370,7 @@ def log_ticket(log_path, entry, cand):
     key = (entry["build_time"], entry["ticket_id"])
     if key in {(e["build_time"], e["ticket_id"]) for e in existing}:
         raise RuntimeError(f"HALT: {key} already logged — append-only")
-    check_legs_against_candidates(entry["legs"], cand)
+    check_legs_against_candidates(entry["legs"], cand, max_per_game)
     merged = existing + [entry]
     log_path.write_text(json.dumps(merged, indent=2, default=str))
     return len(merged)
