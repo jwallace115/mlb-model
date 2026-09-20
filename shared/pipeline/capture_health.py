@@ -19,8 +19,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
-# Pattern: captures YYYYMMDDTHHMMZ from filenames like snap_20260920T0322Z.parquet
-TS_PATTERN = re.compile(r"(\d{8}T\d{4}Z)")
+# Pattern: captures YYYYMMDDTHHMMZ or YYYYMMDDTHHMMSSZ from filenames
+TS_PATTERN = re.compile(r"(\d{8}T\d{4,6}Z)")
 
 
 def _parse_filename_ts(filename):
@@ -28,7 +28,10 @@ def _parse_filename_ts(filename):
     m = TS_PATTERN.search(filename)
     if not m:
         return None
-    return datetime.strptime(m.group(1), "%Y%m%dT%H%MZ").replace(tzinfo=timezone.utc)
+    ts_str = m.group(1)
+    if len(ts_str) == 16:  # YYYYMMDDTHHMMSSZ
+        return datetime.strptime(ts_str, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+    return datetime.strptime(ts_str, "%Y%m%dT%H%MZ").replace(tzinfo=timezone.utc)
 
 
 def _newest_file_age(pattern_dir, glob_pattern, now):
