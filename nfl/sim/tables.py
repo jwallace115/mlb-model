@@ -1044,7 +1044,9 @@ def build_special_teams_table(df):
     # These replay the down. Compute offense/defense split from actual data.
     no_plays = df[df["play_type"] == "no_play"]
     accepted_no_play = no_plays[no_plays["penalty"] == 1]
-    result["penalty"]["p_no_play_penalty"] = len(accepted_no_play) / len(scrim) if len(scrim) else 0.03
+    # D89: rate per play ATTEMPT (scrimmage + penalties), not per resolved play.
+    _denom = len(scrim) + len(accepted_no_play) if len(scrim) else 1
+    result["penalty"]["p_no_play_penalty"] = len(accepted_no_play) / _denom
     # Offense fraction of no-play penalties (from actual data)
     if len(accepted_no_play) > 0 and "penalty_team" in accepted_no_play.columns and "posteam" in accepted_no_play.columns:
         np_off = accepted_no_play[accepted_no_play["penalty_team"] == accepted_no_play["posteam"]]
