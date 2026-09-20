@@ -1688,3 +1688,57 @@ not interpreted as validation per the work order.
 **Fingerprints:**
 - Engine: `7f3d96900218c014` (changed from `d929ad258504b275`)
 - Calibration stamp: `(True, [])` after re-stamp
+
+### D103 — Phase 5I verified and merged; main is 7f3d96900218c014 on fit_5i (2026-09-20)
+Cowork. Full record with tables: `research/nfl_sim/phase5i_verification_2026-09-20.md`.
+Merge commit f0f1221 (conflict-free); on origin/main from a fresh clone
+`engine_fingerprint()` = `7f3d96900218c014`, `_check_calibration_stamp()` = `(True, [])`.
+Week 2's board (2026-09-20) was built on `d929ad258504b275` / `fit_5d2`; scored weeks (3+) are
+all on this engine. `fit_5i/games/` is gitignored and lives in `~/mlb-model-5i` — keep it.
+
+**Reproduced on Linux, not read from the report:** the three new tests FAIL on the old engine
+(0.0649 < 0.10; like-for-like go rate 0.21385; `ev_3rd_long` KeyError) and pass on the new one;
+go-rate test PASS, penalties per side PASS, FD by penalty 1.41 FAIL, tied-drive expiry 0.119
+FAIL — identical to the Mac. No existing test, target or tolerance was edited. Board-level
+refuse-to-rank is on record (990 legs unranked on the fingerprint mismatch; ranks after
+re-fit + re-stamp).
+
+**The clock check 5I skipped, run by Cowork** (5H instrumentation on the 5I engine, scratch
+clone, 2023 x N=200, 249,004 snaps; offence tied or trailing 1-8, Q4): pass 121-300 s
+25.41 -> 18.01 s (real 16.85) — Cowork's prediction HELD; run 33.64 -> 26.49 (real 28.12).
+
+**Corrections to D99-D102.**
+- Cowork's prediction that broad tied-drive expiry falls below 0.081 FAILED (11-salt mean
+  0.117 -> 0.099). Measured why: one `Q4_mid` cell spans a pace change at 3:00 — sim pass
+  121-180 s 17.68 vs real 12.63 (+5.0), 181-300 s 18.18 vs 20.17 (-2.0); run +4.6 / -4.9. The
+  0-40 s bucket is still +3.6 s per pass. Candidate next fix: split `Q4_mid` at 180 s, cell
+  sizes permitting (tied cells are n = 117 / 138 already).
+- "Closed 94% of the go-rate gap" is the 50-game test sample. On 1,087 games like-for-like:
+  0.219 -> 0.202 (item 1) -> 0.207 (item 2) vs real 0.198 — about half.
+- The four item-1 predictions "held exactly" because it is the same sample, seeds and a
+  deterministic engine — a reproduction, not independent evidence. The 1,087-game K1 is.
+- Drives/game moved AWAY from real (22.9 -> 23.8 vs 21.9); it was already out of tolerance, so
+  "no K1 line moved out of tolerance" hides it. Punts, FG attempts, pts/team moved toward real.
+- D101's table says FD-by-penalty "passes on all 11 salts (< 1.430)"; the test needs x ABOVE
+  1.430, so 1.414 FAILS on all 11 (as D102's suite shows). Cause: no scrimmage-play penalty
+  first downs in the engine (0.477/team of the real 1.73).
+- The K1 tables in D99-D101 are not rebuildable from anything committed (the `phase5i_k1_*.txt`
+  files hold pts/team and non-offensive scoring only). Partly Cowork's error: the order named
+  `run_k1_5a5.py` as "K1" without checking its output. K4 rows for `fit_5i` were not committed
+  either, so 0.25356 is reported, not reproduced.
+
+**K4 in context** (recomputed from `k4_rows_fit_5d2.parquet`; 72,897 real prop legs 2023-24;
+Brier on over-hit): book de-vigged close **0.2316** | always 50% 0.2500 | calibrated sim
+0.2534 (fit_5d2), 0.2536 (fit_5i, reported) | raw sim 0.2642. Worse than the book in all 8
+families (receptions 0.2426 vs 0.2232; rush attempts 0.3034 vs 0.2466). Real closing prices;
+calibration maps fitted on seasons that include these games, i.e. in-sample in the sim's
+favour. Engine realism does not move prop accuracy; the usage/player layer is where it can.
+
+**Standing (Jeff, 2026-09-20):** the engine continues as a fun build and does not gate
+tickets; tickets are built from prices + roles + news; the sim is one logged layer, compared
+prospectively from Week 3 with nothing tuned on the scored season.
+
+**Next, in order:** `run_week.py` kickoff filter on the line tape; `run_week.py` refreshes its
+own nflverse inputs so `nfl/data/pbp/depth_charts.parquet` can be untracked (N36: ~216 MB/month
+of git history); a committed script that prints the full K1 table with tolerances; then the
+`Q4_mid` split and the 0-40 s clock.

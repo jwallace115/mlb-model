@@ -1,3 +1,22 @@
+## 2026-09-20T10:18Z  cowork (Phase 5I verification + merge — D103)
+
+### RETURNED
+- eng/5i 18f549d: new tests fail on old engine / pass on branch; suite values identical Mac vs Linux (FD pen 1.41, expiry 0.119).
+- Trial merge clean; Jeff merged as f0f1221; origin/main fingerprint 7f3d96900218c014, stamp (True, []).
+- Late clock, 5I engine: pass 121-300 s 18.01 (real 16.85, was 25.41); 121-180 s 17.68 vs 12.63; 181-300 s 18.18 vs 20.17.
+- K4 Brier from fit_5d2 rows: book 0.2316, coin 0.2500, calibrated sim 0.2534, raw 0.2642.
+- Overnight scheduled captures all landed (06:10/06:20/06:30/09:00Z); depth delta 72 KB.
+
+### MEANS
+- 5I's engine is better on what it targeted and is now main. Tied-drive expiry is still red for a measured reason (Q4_mid spans the 3:00 pace change; 0-40 s untouched).
+- The sim loses to the book on props in every family and engine fixes do not move that.
+
+### NOT DONE
+- Full K1 table script; K4 rows for fit_5i; kickoff filter; untracking depth_charts.parquet.
+
+### UNVERIFIED
+- Any scheduled props firing (first slot 2026-09-20 15:00Z).
+
 ## 2026-09-20T03:47Z  cowork (WO10b verification + direct fixes "10c" — N36)
 
 ### RETURNED
