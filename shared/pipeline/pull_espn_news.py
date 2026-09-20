@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 """
-WO10 Item 2a: Pull NFL or NCAAF news from ESPN (per-team endpoint).
+WO10b Item 2a: Pull NFL or NCAAF news from ESPN (per-team endpoint).
+De-duplicates across pulls using _seen.json state file.
 
 No API key. Zero credits.
   NFL:   site.api.espn.com/apis/site/v2/sports/football/nfl/news?team={id}&limit=20
   NCAAF: site.api.espn.com/apis/site/v2/sports/football/college-football/news?team={id}&limit=20
 
-Output (raw JSON, append-only):
-  data/news_archive/nfl/season=2026/news_<UTC>.json
-  data/news_archive/ncaaf/season=2026/news_<UTC>.json
+Output (raw JSON, append-only, de-duplicated):
+  data/news_archive/<sport>/season=YYYY/news_<UTC>.json.gz    (new/changed articles only)
+  data/news_archive/<sport>/season=YYYY/index_<UTC>.json.gz   (all article_id+team_id this pull)
+  data/news_archive/<sport>/season=YYYY/_seen.json            (state: id -> lastModified)
 
+First run after this change writes everything (no state).
 Freshness check: newest article must be published within 72 hours, else HALT.
 """
 
 import argparse, gzip, json, sys, time
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -64,12 +67,31 @@ def load_team_ids(sport):
         return team_ids
 
 
+def _load_seen(seen_path):
+    """Load _seen.json: {str(article_id): lastModified}."""
+    if seen_path.exists():
+        with open(seen_path) as f:
+            return json.load(f)
+    return {}
+
+
+def _save_seen(seen_path, seen):
+    with open(seen_path, "w") as f:
+        json.dump(seen, f, indent=0, sort_keys=True)
+
+
 def pull_news(sport, team_ids, season):
     now = datetime.now(timezone.utc)
     ts_label = now.strftime("%Y%m%dT%H%MZ")
     base = ESPN_BASES[sport]
 
+    out_dir = ROOT / "data" / "news_archive" / sport / f"season={season}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    seen_path = out_dir / "_seen.json"
+    seen = _load_seen(seen_path)
+
     all_articles = []
+    index_entries = []  # (team_id, article_id) for every article in this pull
     newest_pub = None
     errors = 0
 
@@ -98,6 +120,7 @@ def pull_news(sport, team_ids, season):
             a["_team_name"] = team_name
             a["_espn_id"] = espn_id
             a["_pull_time"] = now.isoformat()
+
             if pub:
                 try:
                     pub_dt = datetime.fromisoformat(pub.replace("Z", "+00:00"))
@@ -105,11 +128,22 @@ def pull_news(sport, team_ids, season):
                         newest_pub = pub_dt
                 except (ValueError, TypeError):
                     pass
-        all_articles.extend(articles)
+
+            aid = str(a.get("id", ""))
+            lm = a.get("lastModified", a.get("published", ""))
+            index_entries.append({"team_id": espn_id, "article_id": aid})
+
+            # De-duplicate: write only if new or lastModified changed
+            if aid and seen.get(aid) == lm:
+                continue  # already seen with same lastModified
+            all_articles.append(a)
+            if aid:
+                seen[aid] = lm
+
         time.sleep(0.5)
 
     print(f"  teams queried: {len(team_ids)}, errors: {errors}, "
-          f"articles: {len(all_articles)}")
+          f"total in pull: {len(index_entries)}, new/changed: {len(all_articles)}")
 
     # Freshness check
     if newest_pub is None:
@@ -122,17 +156,24 @@ def pull_news(sport, team_ids, season):
         print(f"HALT: newest article is {age_hours:.1f}h old (threshold: {FRESHNESS_HOURS}h)")
         sys.exit(1)
 
-    # Save (gzipped to control storage — NCAAF is ~67 MB uncompressed per pull)
-    out_dir = ROOT / "data" / "news_archive" / sport / f"season={season}"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"news_{ts_label}.json.gz"
+    # Write index (always — records what was visible at this pull)
+    index_path = out_dir / f"index_{ts_label}.json.gz"
+    with gzip.open(index_path, "wt", encoding="utf-8") as f:
+        json.dump(index_entries, f)
+    idx_kb = index_path.stat().st_size / 1024
+    print(f"  index: {len(index_entries)} entries -> {index_path.name} ({idx_kb:.0f} KB)")
 
-    with gzip.open(out_path, "wt", encoding="utf-8") as f:
+    # Write news (only new/changed articles)
+    news_path = out_dir / f"news_{ts_label}.json.gz"
+    with gzip.open(news_path, "wt", encoding="utf-8") as f:
         json.dump(all_articles, f)
+    news_kb = news_path.stat().st_size / 1024
+    print(f"  news: {len(all_articles)} articles -> {news_path.name} ({news_kb:.0f} KB)")
 
-    size_kb = out_path.stat().st_size / 1024
-    print(f"  saved {len(all_articles)} articles to {out_path} ({size_kb:.0f} KB)")
-    return out_path
+    # Update state
+    _save_seen(seen_path, seen)
+
+    return news_path, index_path
 
 
 def main():

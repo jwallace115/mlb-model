@@ -581,3 +581,39 @@ entries (line tape, push_daemon, etc.).
 **nfl/data/pbp/depth_charts.parquet:** 7.5 MB, tracked, now written by VM via
 run_nflverse_with_archive.sh. This is a dual-writer violation (Mac also writes it
 via pull_nflverse_inputs.py). Resolved in N33.
+
+### N33 — Storage: de-dup, gzip, hash-skip, single depth-chart writer (2026-09-20)
+
+**News de-duplication (2a).** ESPN articles carry `id` (int) and `lastModified`
+(ISO8601, present on 2920/2920 NCAAF articles). De-dup key: `str(id)` ->
+`lastModified`. State file `_seen.json` maps article id to lastModified. Each pull
+writes:
+- `news_<UTC>.json.gz` — only articles that are new or whose lastModified changed
+  (complete and unmodified, no field dropped)
+- `index_<UTC>.json.gz` — every (team_id, article_id) present in this pull
+
+First run writes everything (empty state). Subsequent runs write only deltas.
+Freshness halt unchanged (newest article within 72h).
+
+**Injuries and depth charts gzip + hash-skip (2b).** Output changed from `.json`
+to `.json.gz`. Content hash: SHA-256 of JSON with `timestamp` and `_pull_time`
+fields excluded (both are volatile). When the hash equals the previous capture's,
+no file is written; instead one line `{utc, sha256, "unchanged"}` is appended to
+`_pulls.jsonl`, proving the pull happened and what it saw.
+
+**nflverse hash-skip (2c).** SHA-256 of each archived parquet; skip the copy when
+it matches the last archived copy. Same `_pulls.jsonl` logging for skipped writes.
+
+**Single depth-chart writer:** VM is the sole writer of
+`nfl/data/pbp/depth_charts.parquet` via `run_nflverse_with_archive.sh` (daily
+09:00 UTC). The Mac does NOT run `pull_nflverse_inputs.py`. The Mac receives the
+updated file via `git pull` (push_daemon pushes every 30 min, the Mac's morning
+pipeline pulls before reading). This resolves the dual-writer violation from N32.
+
+**Kalshi NCAAF schedule (2d).** Changed from every-30-min-every-day to:
+- Fri 14:00 - Sun 05:30 UTC: every 30 min (game window, same as NFL)
+- Otherwise: every 3h
+16% of NCAAF markets are empty books; the slate is Saturday. Off-window pulls
+still capture any mid-week line moves but at 1/6th the frequency.
+
+**Measured MB/month:** to be filled after 2e measurement runs.

@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 """
-WO10 Item 2b: Pull NFL injuries (league endpoint) + depth charts (per-team) from ESPN.
+WO10b Item 2b: Pull NFL injuries (league endpoint) + depth charts (per-team) from ESPN.
+Gzipped output. Content-hash skip: if payload hash (minus ESPN's `timestamp` field)
+matches the previous capture, skip the write and log to _pulls.jsonl instead.
 
 No API key. Zero credits.
   injuries:    site.api.espn.com/apis/site/v2/sports/football/nfl/injuries
   depth chart: site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{id}/depthcharts
 
 Output (raw JSON, append-only):
-  data/injury_archive/nfl/season=2026/injuries_<UTC>.json
-  data/depth_archive/nfl/season=2026/depth_<UTC>.json
+  data/injury_archive/nfl/season=2026/injuries_<UTC>.json.gz
+  data/depth_archive/nfl/season=2026/depth_<UTC>.json.gz
+  (or _pulls.jsonl entry if content unchanged)
 
 Asserts 32 teams in each file. HALT on non-200, empty payload, or wrong team count.
 """
 
-import argparse, json, sys, time
+import argparse, gzip, hashlib, json, sys, time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -23,6 +26,37 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 NFL_TEAM_MAP = ROOT / "nfl" / "pipeline" / "espn_team_map.json"
 ESPN_BASE = "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
 EXPECTED_TEAMS = 32
+
+
+def _content_hash(data, exclude_keys=("timestamp", "_pull_time")):
+    """SHA-256 of JSON with volatile fields removed."""
+    clean = {k: v for k, v in data.items() if k not in exclude_keys}
+    return hashlib.sha256(json.dumps(clean, sort_keys=True).encode()).hexdigest()
+
+
+def _last_hash(pulls_path):
+    """Read the last content hash from _pulls.jsonl."""
+    if not pulls_path.exists():
+        return None
+    last_line = None
+    with open(pulls_path) as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                last_line = line
+    if last_line:
+        try:
+            return json.loads(last_line).get("sha256")
+        except json.JSONDecodeError:
+            pass
+    return None
+
+
+def _log_pull(pulls_path, utc, sha, status):
+    """Append a line to _pulls.jsonl."""
+    pulls_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(pulls_path, "a") as f:
+        f.write(json.dumps({"utc": utc, "sha256": sha, "status": status}) + "\n")
 
 
 def pull_injuries(season):
@@ -46,11 +80,21 @@ def pull_injuries(season):
 
     out_dir = ROOT / "data" / "injury_archive" / "nfl" / f"season={season}"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"injuries_{ts_label}.json"
+    pulls_path = out_dir / "_pulls.jsonl"
 
-    with open(out_path, "w") as f:
+    h = _content_hash(data)
+    prev = _last_hash(pulls_path)
+
+    if h == prev:
+        _log_pull(pulls_path, ts_label, h, "unchanged")
+        print(f"  injuries unchanged (hash={h[:12]}), logged to _pulls.jsonl")
+        return None
+
+    out_path = out_dir / f"injuries_{ts_label}.json.gz"
+    with gzip.open(out_path, "wt", encoding="utf-8") as f:
         json.dump(data, f)
 
+    _log_pull(pulls_path, ts_label, h, "written")
     size_kb = out_path.stat().st_size / 1024
     total_athletes = sum(len(t.get("injuries", [])) for t in teams)
     print(f"  saved {total_athletes} athlete entries to {out_path} ({size_kb:.0f} KB)")
@@ -102,11 +146,21 @@ def pull_depth_charts(season):
 
     out_dir = ROOT / "data" / "depth_archive" / "nfl" / f"season={season}"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"depth_{ts_label}.json"
+    pulls_path = out_dir / "_pulls.jsonl"
 
-    with open(out_path, "w") as f:
+    h = _content_hash(all_depth)
+    prev = _last_hash(pulls_path)
+
+    if h == prev:
+        _log_pull(pulls_path, ts_label, h, "unchanged")
+        print(f"  depth unchanged (hash={h[:12]}), logged to _pulls.jsonl")
+        return None
+
+    out_path = out_dir / f"depth_{ts_label}.json.gz"
+    with gzip.open(out_path, "wt", encoding="utf-8") as f:
         json.dump(all_depth, f)
 
+    _log_pull(pulls_path, ts_label, h, "written")
     size_kb = out_path.stat().st_size / 1024
     print(f"  saved to {out_path} ({size_kb:.0f} KB)")
     return out_path
