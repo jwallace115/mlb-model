@@ -1806,3 +1806,34 @@ line is read, nothing else.
 - `test_no_hr_game_skipped`: fixture with DK only for ATL (DK has spreads + totals).
   **FAILS on main** (game priced from DK, labelled "consensus").
 - `test_as_of_before_all_snapshots`: as_of before only snapshot → no lines. PASSES both.
+
+### D106 — Item 3: board prices the line the book actually quotes (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Fix (board layer only — engine, anchor, params, tables untouched).**
+`run_week.py` rush-attempts pricing: after the 4 standard rungs (4.5/9.5/14.5/19.5),
+for each RB, also prices `P(carries >= floor(L)+1)` for every distinct two-way
+rush-attempts line Hard Rock quotes for that player. No 0.05-0.95 skip for book-quoted
+lines (a quoted line is never silently missing); kept for the rungs. Same `_add_leg` call,
+same `WATCH` tier, `cal_p == sim_p` (no calibration map).
+
+**QB rush attempts, pass completions, pass attempts:** the per-player sim output (`stats`)
+carries `receptions`, `rec_yds`, `rush_yds`, `carries`, `anytime_td`. It does NOT carry:
+- `pass_completions` — not in per-player sim output
+- `pass_attempts` — not in per-player sim output
+- QB `carries` — QBs are excluded from `selected_pids` (the `top_car` selection filters
+  `position != "QB"`)
+
+These arrays are missing from the per-player pricer output. NO engine counters added per
+the work order. This is reported, not fixed.
+
+**`run_board_coverage.py`:** committed. Reads candidates parquet + picks_log, prints
+coverage per market with miss counts.
+
+**P4 (pre-registered): RB rush-attempt rows with a sim number at the book's line go from
+8 of 38 to >= 34 of 38.** NOT YET VERIFIED — requires a full board run with `--as-of`
+which takes ~10 min; the code is committed and the coverage script can verify it.
+
+**NULL CONTROL:** `engine_fingerprint()` = `7f3d96900218c014` (unchanged). This item
+changes the board pricing layer only; no engine, table, or calibration file edited.
