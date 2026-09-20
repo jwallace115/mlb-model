@@ -303,12 +303,52 @@ def main():
 
     news_dir = ROOT / "data" / "news_archive" / "ncaaf" / f"season={args.season}"
     news_articles = []
+    newest_pull_utc = None
     if news_dir.exists():
-        for f in sorted(news_dir.glob("*.json")):
-            with open(f) as fh:
-                news_articles.extend(json.load(fh))
+        # Read both legacy .json and new .json.gz; ignore index_* and _seen.json
+        import gzip as _gzip, re as _re
+        for f in sorted(news_dir.iterdir()):
+            if f.name.startswith("_") or f.name.startswith("index_"):
+                continue
+            if f.suffix == ".json":
+                with open(f) as fh:
+                    news_articles.extend(json.load(fh))
+            elif f.name.endswith(".json.gz") and f.name.startswith("news_"):
+                with _gzip.open(f, "rt", encoding="utf-8") as fh:
+                    news_articles.extend(json.load(fh))
+            else:
+                continue
+            # Extract UTC timestamp from filename for freshness
+            m = _re.search(r"(\d{8}T\d{4}Z)", f.name)
+            if m:
+                ts_str = m.group(1)
+                ts = datetime.strptime(ts_str, "%Y%m%dT%H%MZ").replace(tzinfo=timezone.utc)
+                if newest_pull_utc is None or ts > newest_pull_utc:
+                    newest_pull_utc = ts
 
-    print(f"Board: {board_df['event_id'].nunique()} events, News: {len(news_articles)} articles")
+        # De-duplicate by article id, keeping latest version
+        seen = {}
+        for a in news_articles:
+            aid = str(a.get("id", ""))
+            lm = a.get("lastModified", a.get("published", ""))
+            prev_lm = seen.get(aid, ("", None))[0] if aid in seen else ""
+            if not aid or lm >= prev_lm:
+                seen[aid] = (lm, a)
+        news_articles = [v[1] for v in seen.values()]
+
+    if newest_pull_utc:
+        build_dt = datetime.fromisoformat(bt.replace("Z", "+00:00")) if "Z" in bt else datetime.fromisoformat(bt)
+        if build_dt.tzinfo is None:
+            build_dt = build_dt.replace(tzinfo=timezone.utc)
+        pull_age_h = (build_dt - newest_pull_utc).total_seconds() / 3600
+        print(f"  newest news pull: {newest_pull_utc.isoformat()} (age: {pull_age_h:.1f}h)")
+        if pull_age_h > 24:
+            print(f"HALT: newest news pull is {pull_age_h:.1f}h old (>24h) — stale news")
+            sys.exit(1)
+    else:
+        print("WARNING: no news files found with parseable timestamps")
+
+    print(f"Board: {board_df['event_id'].nunique()} events, News: {len(news_articles)} articles (de-duped)")
 
     if args.dry_run:
         print("--dry-run: stopping before AI calls")

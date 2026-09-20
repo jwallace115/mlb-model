@@ -634,3 +634,29 @@ achieved 100% skip on the second run (0 new articles). NCAAF news: 3 new
 articles out of 2900 (99.9% skip). Injuries: 100% hash-skip. Depth: 100%
 hash-skip after recursive timestamp strip (the first two runs hashed differently
 due to per-team `timestamp` fields; fixed with recursive strip).
+
+### N34 — Reader contract and health check clock (2026-09-20)
+
+**Ticket builder reader (3a).** `build_ncaaf_tickets.py` now reads:
+- Legacy `*.json` files (3 existing from pre-WO10b)
+- New `news_*.json.gz` files (de-duplicated output from WO10b)
+- Ignores `index_*` and `_seen.json`
+- De-duplicates by article `id`, keeping the version with the latest `lastModified`
+- Reports newest pull's UTC timestamp and article count
+- HALT if newest pull is >24h older than build_time
+
+**Health check clock (3b).** `capture_health.py` rewritten:
+1. **Filename timestamps, not st_mtime.** Ages come from the UTC timestamp
+   embedded in the filename (regex `\d{8}T\d{4}Z`). This is immune to clone,
+   rebase, and checkout — the same file reports the same age on any host.
+2. **_pulls.jsonl for hash-skipped feeds.** For injuries, depth, and nflverse,
+   the newest evidence of a pull is whichever is more recent: the newest file's
+   filename timestamp OR the last line of `_pulls.jsonl` (which records
+   hash-skipped pulls that wrote no file).
+3. **tz-aware UTC throughout.** Props: `pd.to_datetime(..., utc=True)` forces
+   UTC on every partition. The C(1) bug was: month=02 had tz-naive timestamps,
+   month=09 had tz-aware; comparison threw TypeError, swallowed by bare except,
+   silently skipping the September file. Now: every timestamp is tz-aware before
+   comparison, and there is no bare except.
+4. **No bare `except Exception: continue`.** An unreadable file is a failure:
+   the file is named and the check exits non-zero.
