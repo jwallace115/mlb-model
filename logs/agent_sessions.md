@@ -1,3 +1,70 @@
+## 2026-09-20T00:16Z  claude-code (Phase 5H — diagnostics only: D95, D96, D97)
+
+### Baseline
+- RAN: `engine_fingerprint()` → `d929ad258504b275` ✓
+- RAN: full suite → 188 collected, 185 passed, 3 failed (go 0.210, off_pen 6.20, tied 0.111)
+  `test_first_downs_by_penalty` PASSED on this Mac (diff 0.190 < 0.300).
+  Matches work order baseline exactly.
+
+### D95 — Metric noise floor (Item 1)
+- WROTE: `nfl/sim/run_metric_noise_5h.py`
+- RAN: replicate 0 → go_rate 0.21031 (matches pytest 0.210), off_pen 6.197 (matches 6.20),
+  tied_expiry 0.111 (matches). Wall: go 57s, pen 86s, tied 14s.
+- RAN: 11 seed salts + 10 game samples → saved `phase5h_metric_noise_rows.parquet`
+- RETURNED: seed SDs: go 0.00052, off_pen 0.018, fd_pen_pt 0.003, tied 0.010
+  All four signals are real (6-63 SD above noise).
+- PREDICTIONS: P1 seed held, P1 sample NOT held (0.00074 < 0.003), P2 NOT held (0.010 < 0.015),
+  P3 held, P4 NOT held (0.003 < 0.005). Three of five not held — all below predicted range.
+- NULL CONTROL: fingerprint d929ad258504b275, engine files clean. MEANS: no engine was touched.
+- COMMITTED: 8704399bb (rebased to 2702868cf), pushed.
+
+### D96 — Like-for-like decomposition (Item 2)
+- SET UP: worktree ~/mlb-model-diag on branch diag/5h.
+- INSTRUMENTED: engine.py with 3 diagnostic flags. Byte-identity verified (3 games x N=2000).
+- RAN: 1087 games x N=500 (1.08 s/game, 19.5 min total).
+  RETURNED: 8.1M 4th-down decisions, 14.1M 3rd-down snaps, 2.4M late-game snaps.
+- A (go rate): state mix 69.8% of the +0.021 gap. Within-cell 13.4%.
+  Sim visits 1-2 ydstogo +2.9pp and 3-5 +3.5pp vs real. The table is right; the engine
+  generates the wrong 4th-down situations.
+  PREDICTION: state mix > 50%. HELD (69.8%). Cowork's also held.
+- B (upstream): 3rd-down ydstogo shifted toward medium distances. P(4th-and-short | failed 3rd)
+  identical (0.205 both sides). Upstream cause is 3rd-down ydstogo distribution.
+- C (tied expiry split): (i) zero-play 31%, (ii) reached-on-final-play 63%, (iii) snap inside 35 6%.
+  STRICT rate (iii): 6/57 = 0.105 vs real 0/57. BROAD (test definition): 35/315 = 0.111 vs 2/64.
+  PREDICTION: (i)+(ii) > 50%. HELD (94%).
+- D (two-minute drill): sim pass plays 16.3s vs real 13.9s (+2.4s). Rush matches.
+- COMMITTED: diag/5h 9b46510db (engine+data), main 5d0455525 (report+D96), pushed.
+
+### D97 — D89 on Mac + penalty breakdown (Item 3)
+- APPLIED: D89 on diag/5h. p_no_play_penalty = 0.06716294458229942 (exact match).
+- RAN: 11 salts with D89-on. off_pen 6.197→5.755 (FAIL→PASS). fd_pen_pt 1.540→1.431 (PASS→PASS
+  on Mac, delta 0.299 < 0.300). Go/tied null controls: <0.003 movement.
+- RAN: PBP penalty breakdown. Offense: false start 2.25/g, holding 1.55/g. Defense: DPI 1.01/g.
+  Q2 highest at 2.64/game. 1st-down 35.5% of penalties.
+- DERIVED: FD-by-penalty split from PBP. No-play: 1.251/team. Scrimmage-play: 0.477/team.
+  Total: 1.727/team (test target 1.73). Reproduced to 3 decimal places.
+- COMMITTED: diag/5h e3022020f, main 79e919aab (D97), pushed.
+
+### Closing checks (pasted)
+- `engine_fingerprint()`: d929ad258504b275
+- `_check_calibration_stamp()`: (True, [])
+- `git status --short` on engine files: (empty)
+
+### NOT DONE
+- Sim-side penalty breakdown by type and context (the sim draws a flat rate — there is no
+  per-type or per-context conditioning to measure, only the overall rate and off/def split).
+- Two-minute drill per-drive statistics on the sim side (would require drive-level reconstruction
+  from the snap-level late data; reported snap-level means instead).
+- Re-running the full suite after all items (not required by the work order; engine is unchanged).
+
+### UNVERIFIED
+- Whether the diag/5h instrumentation's byte-identity holds across ALL 1,087 games (verified
+  on 3 games x N=2000 only).
+- Whether the +2.4s per pass play in Q4 late is specific to the two-minute drill state or
+  present across all game contexts (only measured on the Q4/<=300s population).
+- Whether Cowork's Linux D89 values (D93 table) would exactly match this Mac's D89 values
+  (platform sensitivity exists per D93; D89 values here are close but not verified identical).
+
 ## 2026-09-19T20:44Z  cowork (D94 — target derivation audit; 5H work order written)
 
 ### RETURNED
