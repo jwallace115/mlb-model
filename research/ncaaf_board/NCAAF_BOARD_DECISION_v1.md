@@ -546,3 +546,38 @@ Not yet observed (scheduled but slot not reached):
 - NCAAF news (first: Sun 06:20 UTC)
 - NFL injuries/depth (first: Sun 06:30 UTC)
 - nflverse inputs (first: Sun 09:00 UTC)
+
+### N32 — Bleed stopped: ESPN/nflverse paused, already-pushed data quantified (2026-09-20)
+
+**Paused (commented out with `#WO10b_PAUSED#`, not deleted):**
+1. `10 0,6,12,18 * * *` — pull_espn_news.py --sport nfl (4x/day)
+2. `20 0,6,12,18 * * *` — pull_espn_news.py --sport ncaaf (4x/day)
+3. `30 0,6,12,18 * * *` — pull_espn_nfl_status.py (4x/day)
+4. `40 16 * * 0` — pull_espn_nfl_status.py (Sun extra)
+5. `0 9 * * *` — run_nflverse_with_archive.sh (daily)
+
+**Already pushed to origin (cannot delete without history rewrite):**
+| File | Size |
+|------|------|
+| news_20260920T0218Z.json (NCAAF, uncompressed) | 68 MB |
+| news_20260920T0221Z.json.gz (NCAAF, gzipped) | 10 MB |
+| news_20260920T0217Z.json (NFL, uncompressed) | 6 MB |
+| injuries_20260920T0220Z.json | 9 MB |
+| depth_20260920T0220Z.json | 7 MB |
+| nflverse_depth_charts_20260920T0221Z.parquet | 7 MB |
+| nflverse_rosters_weekly_20260920T0221Z.parquet | 4 MB |
+| **Total already on origin** | **~111 MB** |
+
+All were committed by push_daemon at 02:30Z before this order ran.
+At the installed cadence (~110 MB/day), one more day of unchecked capture would
+have added another ~110 MB permanently. The bleeding is stopped.
+
+**Removed:** Nothing. Every oversized file was already tracked and pushed.
+
+**Not paused (left running):** props (3 D84 + 5 WO10 entries), Kalshi NFL/NCAAF
+(every 30 min in capture window), capture_health.py (hourly), all pre-existing
+entries (line tape, push_daemon, etc.).
+
+**nfl/data/pbp/depth_charts.parquet:** 7.5 MB, tracked, now written by VM via
+run_nflverse_with_archive.sh. This is a dual-writer violation (Mac also writes it
+via pull_nflverse_inputs.py). Resolved in N33.
