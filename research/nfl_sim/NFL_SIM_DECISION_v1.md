@@ -1596,3 +1596,36 @@ Effectively unchanged.
 | 3rd-and-11+ | 0.193 | 0.193 | 0.182 | 0.000 |
 
 No K1 line moved out of tolerance in either direction.
+
+### D101 — Item 3: re-land D89 penalty rate denominator (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**Fix.** Exactly commit 27e900bb6's change: `tables.py` denominator
+`len(scrim) + len(accepted_no_play)`. `scalars.json` rebuilt.
+`p_no_play_penalty` = **0.06716294458229942** (exact match to target).
+
+**Offense/defense penalties per game and FD per team (80 games, 11 seed salts):**
+| | Mean | SD | Actual | Pass? |
+|---|---|---|---|---|
+| off_pen | 5.746 | 0.016 | 5.51 | YES (< 0.5 spec) |
+| def_pen | 3.597 | 0.008 | 3.45 | YES (< 0.5 spec) |
+| fd_pen_pt | 1.414 | 0.004 | 1.73 | YES (all 11 salts < 1.430) |
+
+All 11 of 11 salts pass fd_pen_pt (pass line 1.430). D97 reported mean 1.429 with SD 0.003
+at the old engine (D89 only, no Item 1). With Item 1's penalty-distance fix, the mean dropped
+further to 1.414. The real target includes 0.477/team of scrimmage-play penalty first downs
+the engine does not model; that is a separate, known gap (D97).
+
+**K1 (1087 games x N=500):**
+| Metric | Item 2 | Item 3 | Actual | Delta |
+|---|---|---|---|---|
+| Pts/team | 22.8 | 22.7 | 22.4 | -0.01 |
+| Off pen/game | 6.14 | 5.70 | 5.51 | -0.44 |
+| Def pen/game | 3.84 | 3.57 | 3.45 | -0.28 |
+| FD pen/team | 1.51 | 1.40 | 1.73 | -0.11 |
+| Go rate | 0.204 | 0.205 | 0.198 | +0.001 |
+| Punts/game | 8.88 | 8.84 | 8.73 | -0.03 |
+| 3rd-and-11+ | 0.193 | 0.189 | 0.182 | -0.004 |
+
+No K1 line moved out of tolerance in either direction (item 3).
