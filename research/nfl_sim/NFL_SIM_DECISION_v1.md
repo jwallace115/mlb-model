@@ -1629,3 +1629,62 @@ the engine does not model; that is a separate, known gap (D97).
 | 3rd-and-11+ | 0.193 | 0.189 | 0.182 | -0.004 |
 
 No K1 line moved out of tolerance in either direction (item 3).
+
+### D102 — Item 4: suite, refuse-to-rank, re-fit, re-stamp, K4 (2026-09-20)
+
+Branch `eng/5i`, Mac.
+
+**1. Full suite: 189 passed, 2 failed.**
+- `test_first_downs_by_penalty`: FD pen/team 1.41 vs 1.73 (diff 0.32 > 0.30).
+  Expected red: correct rate exposes missing scrimmage-play penalty FD mechanism (D97).
+- `test_t3_tied_drives_that_reach_range_get_the_kick_off`: expired 0.119 vs threshold
+  0.050. Against matched target 0.081: red by 0.038. Still red; Q4_mid improved it
+  from 0.117 to 0.099 (D100 11-salt mean) but not enough to cross the test threshold.
+- Expected greens that were green: `test_t1_4th_down_go_rate` (go rate, 5A-3) — PASSED.
+  `test_penalties_per_side` (offense penalties, 5A-4) — PASSED.
+- All 3 new `test_engine_5i.py` tests: PASSED.
+
+**2. K1 before vs after every item — see D99/D100/D101 tables.** No line crossed its
+tolerance in either direction across all three items.
+
+**3. Board refuse-to-rank trace — BEFORE re-fit:**
+```
+CALIBRATION STAMP MISMATCH — sim prices suppressed:
+  engine_fingerprint: cal=d929ad258504b275, live=7f3d96900218c014
+## Not rankable (990 legs: CALIBRATION STAMP INVALID — nothing is rankable this run)
+```
+No leg ranked. The gate reacted to a real engine change.
+
+**4. Re-fit:** `python3 nfl/sim/run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5i`.
+1087/1087 converged, 102.8 min, 7 workers.
+```json
+{
+  "engine_fingerprint": "7f3d96900218c014",
+  "fit_inputs_fingerprint": "840412f7295a8323",
+  "fit_seasons": [2021, 2022, 2023, 2024],
+  "engine_commit": "4c67b0ceb",
+  "fit_completed_utc": "2026-09-20T05:16:40Z",
+  "n_games": 1087
+}
+```
+
+**5. Calibration maps:** `run_cal_maps.py --fit-dir fit_5i`. 21 families.
+`save_calibration` read fingerprints from `fit_meta.json`:
+`engine_fingerprint=7f3d96900218c014, usage=840412f7295a8323`.
+
+**6. Board after re-fit — ranks:**
+```
+Generated: 2026-09-20T05:28:30Z
+(no SIM PRICES SUPPRESSED)
+## Not rankable (868 legs: no Hard Rock price or not converged)
+## Cross-game top 20 (trusted, over side, not BOOK-MORE-CONFIDENT)
+```
+`sim_pricing_enabled` = true. 868 not-rankable legs are price-absent, not stamp-invalid.
+Legs are ranked in the top-20 table.
+
+**7. K4 on fit_5i:** Brier 0.25356 (72,897 rows, 8 families). Reported as a measurement,
+not interpreted as validation per the work order.
+
+**Fingerprints:**
+- Engine: `7f3d96900218c014` (changed from `d929ad258504b275`)
+- Calibration stamp: `(True, [])` after re-stamp
