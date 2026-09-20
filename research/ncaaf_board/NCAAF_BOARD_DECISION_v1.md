@@ -508,3 +508,41 @@ stores all three time fields to enable this. No kickoff is guessed.
 **Cron proof:** one-off entry at 02:30 UTC 2026-09-20. Syslog:
 `2026-09-20T02:30:01 CRON ... pull_kalshi_football.py --sport nfl`.
 Produced snap_20260920T0230Z.parquet, 783 rows, 55 KB. Removed after.
+
+### N31 — Health check thresholds and observed-firing table (2026-09-20)
+
+**Health check:** `shared/pipeline/capture_health.py` — reads files only, no
+network. For each feed, finds newest file by mtime, computes age, compares
+with max age. Exits non-zero if ANY feed is stale, naming it.
+
+**Thresholds (capture_health.py):**
+| Feed             | Max Age (in capture window) | Max Age (outside) |
+|------------------|----------------------------|-------------------|
+| NFL/NCAAF lines  | 45 min                     | 9 h               |
+| Kalshi NFL/NCAAF | 45 min                     | 9 h               |
+| NFL props        | 26 h (Wed-Sun)             | 168 h (Mon-Tue)   |
+| NFL/NCAAF news   | 7 h                        | 7 h               |
+| NFL injuries     | 7 h                        | 7 h               |
+| NFL depth        | 7 h                        | 7 h               |
+| nflverse inputs  | 26 h                       | 26 h              |
+
+Capture window: 14:00-05:30 UTC (matching the line tape schedule).
+
+**Failure test:** Pointed at a fixture directory with one stale file. Exit 1,
+named all 10 feeds as stale (fixture had only the stale file). On the real
+repo, exit 1 naming nfl_props (4,225.8h old — D84 entries haven't fired a
+scheduled pull yet; first slot is Sun 15:00 UTC).
+
+**Observed scheduled firings (syslog, 2026-09-20):**
+| Feed          | Time (UTC)   | Output                                  |
+|---------------|-------------|------------------------------------------|
+| Kalshi NFL    | 02:35:01    | snap_20260920T0235Z.parquet, 783 rows    |
+| Kalshi NCAAF  | 02:37:01    | snap_20260920T0237Z.parquet, 2,382 rows  |
+| Health check  | 02:45:01    | 9/10 OK, 1 STALE (nfl_props)             |
+
+Not yet observed (scheduled but slot not reached):
+- NFL props (first: Sun 15:00 UTC)
+- NFL news (first: Sun 06:10 UTC)
+- NCAAF news (first: Sun 06:20 UTC)
+- NFL injuries/depth (first: Sun 06:30 UTC)
+- nflverse inputs (first: Sun 09:00 UTC)
