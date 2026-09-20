@@ -1742,3 +1742,33 @@ prospectively from Week 3 with nothing tuned on the scored season.
 own nflverse inputs so `nfl/data/pbp/depth_charts.parquet` can be untracked (N36: ~216 MB/month
 of git history); a committed script that prints the full K1 table with tolerances; then the
 `Q4_mid` split and the 0-40 s clock.
+
+### D104 — Item 1: layer-3 starting-QB fallback gets the D59 date rule (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Fix.** `usage.py` layer 3 (lines ~312-380): for each `(season, week)` it fills, the
+latest rank-1 QB snapshot per team is now filtered to `dt` STRICTLY BEFORE that week's
+first kickoff. Kickoff sources: PBP `game_date` (midnight UTC) for weeks with PBP data;
+`nflreadpy.load_schedules` `gameday + gametime` for weeks without PBP.
+
+2026 kickoff sources:
+- Weeks 1-2: PBP `game_date` (2026-09-09, 2026-09-17)
+- Weeks 3-18: nflverse schedule (earliest kickoff per week)
+
+A week with no eligible snapshot stays unset (counted and printed, not backfilled).
+
+**P1 (pre-registered): rebuilding usage changes `is_starting_qb` for ZERO team-weeks
+in 2026 weeks 1-2.** HELD: zero rows changed. 32 teams x 2 weeks = 64 starters, all
+identical before and after.
+
+**NULL CONTROL:** 2021-2024 block BIT-IDENTICAL (hash `781759a9d3de52c0` before and after).
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+`usage_fingerprint([2021,2022,2023,2024])` = `840412f7295a8323` (unchanged).
+
+**Tests (test_usage_pit_5j.py):**
+- `test_layer3_rejects_post_kickoff_qb`: removes all ARI QB depth rows, injects a fake
+  rank-1 QB with `dt` on game day (after PBP game_date cutoff). The slot stays empty.
+  **FAILS on main** (fake QB accepted as starter — no date filter in old code).
+- `test_layer3_accepts_pre_kickoff_qb`: same fake QB with `dt` one day before game day.
+  The fake QB IS chosen as starter. PASSES on both old and new code.
