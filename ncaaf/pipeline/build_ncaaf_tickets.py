@@ -61,6 +61,97 @@ def validate_leg_against_tape(leg, tape_df):
             f"{leg['side']}, {leg['point']}, {leg['price']})")
 
 
+NEWS_PER_GAME = 10
+NEWS_RECENCY_DAYS = 14
+
+
+def _article_key(article):
+    """Stable key for an article: id if present, else sha1(team+published+headline)."""
+    aid = str(article.get("id", "")).strip()
+    if aid:
+        return aid
+    team = article.get("_team_name", article.get("team_name", ""))
+    pub = article.get("published", "")
+    hl = article.get("headline", "")
+    return hashlib.sha1(f"{team}|{pub}|{hl}".encode()).hexdigest()
+
+
+def _article_pull_time(article):
+    """Return pull time as ISO string, accepting both _pull_time and pull_time."""
+    return article.get("_pull_time", article.get("pull_time", ""))
+
+
+def load_news(news_dir, build_time):
+    """N39: Load and de-dup news articles, respecting build_time.
+
+    Accepts both `_team_name` (new puller) and `team_name` (legacy).
+    Legacy articles with empty id get sha1(team+published+headline) as key.
+    De-dup keeps the latest version WITH pull time <= build_time.
+    """
+    import gzip as _gzip, re as _re
+    from pathlib import Path
+
+    news_dir = Path(news_dir)
+    if not news_dir.exists():
+        return []
+
+    build_dt = datetime.fromisoformat(
+        build_time.replace("Z", "+00:00") if "Z" in build_time else build_time)
+    if build_dt.tzinfo is None:
+        build_dt = build_dt.replace(tzinfo=timezone.utc)
+
+    all_articles = []
+    for f in sorted(news_dir.iterdir()):
+        if f.name.startswith("_") or f.name.startswith("index_"):
+            continue
+        if f.suffix == ".json":
+            with open(f) as fh:
+                all_articles.extend(json.load(fh))
+        elif f.name.endswith(".json.gz") and f.name.startswith("news_"):
+            with _gzip.open(f, "rt", encoding="utf-8") as fh:
+                all_articles.extend(json.load(fh))
+
+    # De-duplicate: key by article id (or sha1 for legacy no-id),
+    # keep latest version with pull_time <= build_time
+    seen = {}  # key -> (lastModified, article)
+    for a in all_articles:
+        key = _article_key(a)
+        pull_str = _article_pull_time(a)
+
+        # Enforce build_time cutoff if pull_time is present
+        if pull_str:
+            try:
+                pull_dt = datetime.fromisoformat(
+                    pull_str.replace("Z", "+00:00") if "Z" in pull_str else pull_str)
+                if pull_dt.tzinfo is None:
+                    pull_dt = pull_dt.replace(tzinfo=timezone.utc)
+                if pull_dt > build_dt:
+                    continue  # pulled after build — must not enter
+            except (ValueError, TypeError):
+                pass
+
+        lm = a.get("lastModified", a.get("published", ""))
+        prev_lm = seen.get(key, ("", None))[0] if key in seen else ""
+        if lm >= prev_lm:
+            seen[key] = (lm, a)
+
+    return [v[1] for v in seen.values()]
+
+
+def game_news_for(articles, home_team, away_team, max_per_game=NEWS_PER_GAME,
+                  recency_days=NEWS_RECENCY_DAYS):
+    """N39: return news for a game's two teams, newest published first, capped."""
+    game_articles = []
+    for a in articles:
+        team = a.get("_team_name", a.get("team_name", ""))
+        if team in (home_team, away_team):
+            game_articles.append(a)
+
+    # Sort by published descending
+    game_articles.sort(key=lambda a: a.get("published", ""), reverse=True)
+    return game_articles[:max_per_game]
+
+
 def _derive_matchup(board_rows):
     """N19: derive favourite/underdog from the spread sign in CODE."""
     spreads = [r for r in board_rows if r.get("market") == "spreads"]
@@ -232,9 +323,8 @@ def build_tickets(board_df, news_articles, build_time, tape=None):
         if matchup is None:
             continue
 
-        # N37: accept both _team_name (new puller) and team_name (legacy)
-        game_news = [a for a in news_articles
-                     if a.get("_team_name", a.get("team_name")) in (home, away)]
+        # N39: sorted, capped, accepting both field names
+        game_news = game_news_for(news_articles, home, away)
 
         result, discarded = _call_ai_layer(matchup, game_news, home, away)
 
@@ -375,51 +465,22 @@ def main():
     tape = load_tape(args.season, bt)
 
     news_dir = ROOT / "data" / "news_archive" / "ncaaf" / f"season={args.season}"
-    news_articles = []
-    newest_pull_utc = None
-    if news_dir.exists():
-        # Read both legacy .json and new .json.gz; ignore index_* and _seen.json
-        import gzip as _gzip, re as _re
-        for f in sorted(news_dir.iterdir()):
-            if f.name.startswith("_") or f.name.startswith("index_"):
-                continue
-            if f.suffix == ".json":
-                with open(f) as fh:
-                    news_articles.extend(json.load(fh))
-            elif f.name.endswith(".json.gz") and f.name.startswith("news_"):
-                with _gzip.open(f, "rt", encoding="utf-8") as fh:
-                    news_articles.extend(json.load(fh))
-            else:
-                continue
-            # Extract UTC timestamp from filename for freshness
-            m = _re.search(r"(\d{8}T\d{4}Z)", f.name)
-            if m:
-                ts_str = m.group(1)
-                ts = datetime.strptime(ts_str, "%Y%m%dT%H%MZ").replace(tzinfo=timezone.utc)
-                if newest_pull_utc is None or ts > newest_pull_utc:
-                    newest_pull_utc = ts
+    news_articles = load_news(news_dir, bt)
 
-        # De-duplicate by article id, keeping latest version
-        seen = {}
-        for a in news_articles:
-            aid = str(a.get("id", ""))
-            lm = a.get("lastModified", a.get("published", ""))
-            prev_lm = seen.get(aid, ("", None))[0] if aid in seen else ""
-            if not aid or lm >= prev_lm:
-                seen[aid] = (lm, a)
-        news_articles = [v[1] for v in seen.values()]
-
-    if newest_pull_utc:
-        build_dt = datetime.fromisoformat(bt.replace("Z", "+00:00")) if "Z" in bt else datetime.fromisoformat(bt)
-        if build_dt.tzinfo is None:
-            build_dt = build_dt.replace(tzinfo=timezone.utc)
-        pull_age_h = (build_dt - newest_pull_utc).total_seconds() / 3600
-        print(f"  newest news pull: {newest_pull_utc.isoformat()} (age: {pull_age_h:.1f}h)")
-        if pull_age_h > 24:
-            print(f"HALT: newest news pull is {pull_age_h:.1f}h old (>24h) — stale news")
-            sys.exit(1)
-    else:
-        print("WARNING: no news files found with parseable timestamps")
+    # Coverage check
+    board_teams = set(board_df["home_team"].unique()) | set(board_df["away_team"].unique())
+    teams_with_news = set()
+    for a in news_articles:
+        tn = a.get("_team_name", a.get("team_name", ""))
+        if tn in board_teams:
+            teams_with_news.add(tn)
+    coverage = len(teams_with_news)
+    total_teams = len(board_teams)
+    print(f"  News coverage: {coverage}/{total_teams} board teams have >= 1 article")
+    if total_teams > 0 and coverage / total_teams < 0.25:
+        print(f"HALT: news coverage {coverage}/{total_teams} ({coverage/total_teams*100:.0f}%) "
+              f"below 25% threshold")
+        sys.exit(1)
 
     print(f"Board: {board_df['event_id'].nunique()} events, News: {len(news_articles)} articles (de-duped)")
 

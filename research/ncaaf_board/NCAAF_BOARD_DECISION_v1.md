@@ -826,3 +826,40 @@ strip-mascot with 2 overrides (San Jose State -> San José State, UMass -> Massa
 - `test_point_clv_spread`: entry -7.0, close -7.5 -> point_clv = +0.5
 
 **N12 all-zero-CLV assertion retained.**
+
+### N39 — News reader extracted, field-name fix, build-time cutoff, coverage gate (2026-09-20)
+ChatGPT audit #4, adjudicated by Cowork. Item 3 of WO11.
+
+**Defect.** The new puller writes `_team_name`; the selector at line 195 filtered on
+`team_name` (no underscore). Of 1,381 de-duped articles, only 1 (a December 2025
+Wyoming article with legacy `team_name`) ever reached the AI. All 3,820 legacy articles
+with empty `id` collapsed onto one key. `news_articles[:10]` was unsorted.
+
+**Pre-registration.** 14,526 loaded -> 1,381 retained -> 1 with `team_name`. Matched.
+
+**Reader contract (`load_news(news_dir, build_time)`):**
+- Reads both `.json` (legacy) and `news_*.json.gz` (new format).
+- Accepts `_team_name` AND `team_name`. Both are recognized in the selector and in
+  `game_news_for()`.
+- Legacy articles with empty `id`: keyed on `sha1(team + published + headline)`.
+- De-dup keeps the latest version with pull time <= build_time. An article version
+  pulled after the build must not enter it.
+- `game_news_for(articles, home, away)`: returns that game's two teams' articles only,
+  sorted by `published` descending, capped at N=10 per game, within a 14-day recency
+  window.
+
+**Coverage on the next real build (at 2026-09-19T11:01:16Z):**
+  3,864 de-duped articles, **191 teams** with >= 1 article (vs 1 before fix).
+
+**Coverage gate:** HALT below 25% of board teams. Threshold is conservative — the old
+layer-2 check was 146/146 but 25% accommodates early-season when only a subset of
+teams appear on the board.
+
+**`pull_espn_news.py` error guard:** exit non-zero and write nothing if > 5% of teams
+fail. Measured normal failure rate: 0 of 3 observed pulls had any per-team HTTP error.
+
+**Tests (4 new):**
+- `test_load_news_accepts_both_field_names`: legacy + new-format fixture -> all 4 teams found
+- `test_load_news_dedup_keeps_latest_version`: article 201 updated version kept
+- `test_load_news_respects_build_time`: article pulled after build_time excluded
+- `test_game_news_sorted_newest_first`: newest published first

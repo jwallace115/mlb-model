@@ -145,6 +145,13 @@ def pull_news(sport, team_ids, season):
     print(f"  teams queried: {len(team_ids)}, errors: {errors}, "
           f"total in pull: {len(index_entries)}, new/changed: {len(all_articles)}")
 
+    # N39: if >5% of teams failed, write nothing and exit non-zero
+    if len(team_ids) > 0 and errors / len(team_ids) > 0.05:
+        pct = errors / len(team_ids) * 100
+        print(f"HALT: {errors}/{len(team_ids)} teams failed ({pct:.0f}% > 5%) — "
+              f"writing nothing")
+        sys.exit(1)
+
     # Freshness check
     if newest_pub is None:
         print(f"HALT: no article has a parseable published timestamp")
