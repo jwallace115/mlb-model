@@ -2737,3 +2737,11 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - OBSERVED: first scheduled props pull 15:00:10Z tag close, 878 rows. 1pm inactives: no placed-ticket player listed (FantasyPros; NFL.com page empty at 15:42Z).
 - NOT DONE: 5J/5K not run. NFL prop grader not built. Outcomes not joined.
 - UNVERIFIED: whether the inactives list read was the full official 90-minute list.
+
+## 2026-09-20T16:06Z  cowork
+- EDITED: nfl/pipeline/build_nfl_slate.py (N50: `ai_reason` required per final leg; `final_ticket_markdown`), tests test_ai_reason_n50.py (2, fail on old code — run), test_nfl_slate_n46.py (conf gains ai_reason).
+- ADDED: nfl/pipeline/export_placed_legs.py, nfl/sim/score_week_vs_book.py, nfl/sim/tests/test_score_vs_book.py (4), placed_legs_2026-09-20d.parquet (34 legs, 34 ids resolved).
+- RAN: grade_week --week 2 --extra placed legs -> 1,271 legs all void-pending (RETURNED). MEANS: chain works; no outcomes exist yet. Fake-outcome run exercised every table, then removed.
+- RAN: 97 passed (cloud).
+- NOT DONE: real grading (needs PBP refresh after the games); NFL close/CLV.
+- UNVERIFIED: suite on the Mac after sync.

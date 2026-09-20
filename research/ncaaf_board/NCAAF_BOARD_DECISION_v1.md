@@ -1263,3 +1263,44 @@ SGPMAX $10 +921621 (Wentz skipped: line moved). **Measured:**
   diversification rule. **Doubling six games cost ~37% of the payout** — a 14-leg one-per-game ticket
   would have paid the full product. Next slate: offer that trade-off explicitly.
 Test: `test_placement_is_appended_and_must_match_the_recommendation`. One command: **91 passed**.
+
+### N50 — Every final leg carries the AI's one-line reason; sim-vs-book scorer written pre-kick (2026-09-20)
+
+**Jeff (16:00Z):** "was there any AI reasoning involved in today parlays....id like for the future...
+the leg, game and ai reason its apart of the parlay ... not a book just a small brief reason so we
+know AI is apart of the pick." And: test the sim against today's games, NOT part of decision making.
+
+**What the AI actually did today (slate 2026-09-20d), stated plainly.** The legs were DEALT BY CODE:
+lead-role Overs (5- and 10-leg) and all eligible legs (20-leg), families in turn, best book q within
+a family. The reader (Claude in the Cowork chat) only FILTERED: vetoed Kamara (Jeff's instruction;
+MCL, 0 week-1 touches) and Hampton (Over 1.5 rec on 0 week-1 targets), caught its own bad Kamara
+replacement (Etienne, same backfield), checked availability, and re-dealt by rule when Rodgers' line
+moved (next QB leg: Shough). No leg was on a ticket because the AI argued FOR it, and no per-leg
+reason was written. So today's tickets were rule-picked and AI-filtered, not AI-picked.
+
+**Change.** `log_final_slate_ticket` refuses a FINAL ticket unless every leg's confirmation record
+has an `ai_reason`: 20-200 characters, not the same sentence on more than two legs, no sure-thing
+language ("lock", "guaranteed", ...). Stored as `leg_notes` on the entry. `final_ticket_markdown(entry)`
+renders what Jeff is sent: Leg | Game | Kick | Price | Book q | AI reason. The reason is a NOTE, not
+evidence of edge; its use is the comparison already pre-registered in N43/N44 (kept vs dealt vs
+vetoed), which now has text to read. Tests: `nfl/pipeline/tests/test_ai_reason_n50.py` (2; both FAIL
+on the pre-N50 logger — run). The N46 test's confirmations gained an `ai_reason`.
+
+**Sim vs today's games (no role in any pick).** Written ~16:05Z, before the 17:00Z kickoffs:
+- `nfl/pipeline/export_placed_legs.py` -> `nfl/data/board/week=2026_02/placed_legs_2026-09-20d.parquet`
+  (34 legs, 34/34 player ids resolved `exact_team`) in `grade_week.py --extra` format. The sim's grader
+  + `actuals.py` stay the single source of outcomes; this IS the NFL prop outcome grader for the
+  ticket log (receptions, rush attempts, completions, attempts, both sides). Close/CLV still not built.
+- `nfl/sim/score_week_vs_book.py`: on rows where the sim priced the book's exact line (146 today),
+  Brier/log-loss of book q vs sim cal_p vs raw sim_p, game-cluster bootstrap, by family/tier/game, the
+  |cal_p - q| > 0.20 rows, and W/L for every placed leg. PRE-REGISTERED: P1 book Brier < sim Brier;
+  P2 on the divergent rows the outcome sides with the book more often. Tests
+  (`nfl/sim/tests/test_score_vs_book.py`, 4): the scorer favours the BOOK when outcomes are drawn from
+  q and the SIM when drawn from cal_p (it can go either way); placed rows never enter the universe
+  (the first end-to-end run HALTED on exactly that duplicate — fixed, tested).
+- Dry run end-to-end at 16:04Z: 1,271 legs, all `void-pending` (no Week 2 game in PBP yet). Outcomes
+  arrive when nflverse PBP refreshes (overnight). One week: a log, not evidence.
+
+Suite: 97 passed (shared + nfl/pipeline + ncaaf/pipeline + the new sim scorer test).
+NOT DONE: close/CLV for NFL tickets; AI reasons for TODAY's legs (not written before the bet, so not
+written after it). UNVERIFIED: that tonight's PBP refresh contains all 15 games by morning.
