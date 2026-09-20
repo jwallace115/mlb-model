@@ -103,6 +103,9 @@ def test_infer_feed_from_file_key(tmp_path):
     assert nflv_age is not None and abs(nflv_age - 2.0) < 0.1, (
         f"Expected ~2h, got {nflv_age}")
 
-    # Lines without feed or file key should not count for any feed
+    # N41 (was: "should not count for any feed"). Every nflverse line carries `file`; the only
+    # writer of a bare line is the ESPN puller. Ignoring them meant an "unchanged" ESPN pull
+    # left no pulse. A bare line counts for an espn_* feed and never for an nflverse one.
     espn_age = _newest_pulls_age_by_feed(pulls_path, "espn_depth", now)
-    assert espn_age is None, f"Expected None for espn_depth, got {espn_age}"
+    assert espn_age is not None and abs(espn_age - 2.0) < 0.1, espn_age
+    assert _newest_pulls_age_by_feed(pulls_path, "nflverse_injuries", now) is None

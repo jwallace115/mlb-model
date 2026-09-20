@@ -63,7 +63,7 @@ def archive_delta(src, archive_dir, now=None):
     base = baseline_max_dt(archive_dir)
     new = df[dt > base] if base is not None else df[dt.notna()]
     new_max = dt.max()
-    rec = {"utc": ts, "file": "depth_charts.parquet", "sha256": sha,
+    rec = {"utc": ts, "feed": "nflverse_depth", "file": "depth_charts.parquet", "sha256": sha,
            "max_dt": new_max.isoformat(), "rows": int(len(new))}
     if len(new):
         out = archive_dir / f"nflverse_depth_delta_{ts}.parquet"

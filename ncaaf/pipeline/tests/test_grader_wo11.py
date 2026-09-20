@@ -67,7 +67,10 @@ def grader_fixture(tmp_path):
                complement_price=-105)
 
     # CFBD result
-    _make_cfbd(tmp_path, "Team H CFBD", "Team A CFBD", 35.0, 10.0, commence)
+    # N41: was "Team H CFBD"/"Team A CFBD" — names the grader could never map from the
+    # ticket's "Team H"/"Team A", so this fixture never resolved an outcome and nothing
+    # asserted one.
+    _make_cfbd(tmp_path, "Team H", "Team A", 35.0, 10.0, commence)
 
     # Ticket log: one event ticket + one card + one pre_repair
     tickets = [
@@ -127,6 +130,9 @@ def test_grader_handles_cards_and_events(grader_fixture):
 
     with open(log_path) as f:
         result = json.load(f)
+    # N41: Team H -7.0 won 35-10 — event ticket and card leg both resolve
+    assert result[0]["legs"][0]["outcome"] == "win"
+    assert result[1]["legs"][0]["outcome"] == "win"
     # pre_repair entry stays ungraded
     assert result[2]["graded"] == False
     assert result[2].get("pre_repair") == True

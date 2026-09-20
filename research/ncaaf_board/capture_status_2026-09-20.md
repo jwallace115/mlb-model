@@ -73,3 +73,22 @@ Both agree to within push delay. nfl_props at 12.4h, not 4,226h.
   nfl/pipeline/tests ncaaf/pipeline/tests` now collects and runs in ONE command (55 tests).
 - **Thresholds:** unchanged from WO10b. nfl_depth checks `espn_depth` feed only;
   nflverse_inputs checks `nflverse_depth` feed only.
+
+## Cowork verification of WO11 (2026-09-20T11:50Z) — N41, N42
+
+- The grader never resolved an outcome for an event ticket (commence_time read from the leg);
+  fixed, with neutral-site matching, explicit team names, `pending` for games CFBD has not
+  completed, outcome independent of close, and the tape's last pre-kick kickoff.
+  Real data: 71/71 kicked 09-19 events resolved, 284 legs, 0 disagreements.
+- **Run `python3 ncaaf/pipeline/pull_cfbd_season.py --year 2026` before grading** — nothing
+  refreshes the CFBD file on a schedule. Un-refreshed = `outcome_pending`, never a wrong grade.
+- Every `_pulls.jsonl` line now carries `feed`; the ESPN hash-skip reads only its own feed.
+  First proof on the VM: a line with `"feed"` after the next ESPN (:30 of 00/06/12/18Z) and
+  nflverse (09:00Z) pulls that follow the push.
+- Builder: abstains logged, input manifest per game, legs only from the event's newest
+  snapshot, tape validation keyed on event + snapshot, 14-day news window applied, coverage
+  halt 90%. Card builder repaired (fillers are real single-book rows; legs keep complements).
+- Kalshi cadence is every 30 min inside 14:00-05:30Z only (NFL), plus 3-hourly outside it for
+  NCAAF — not "every 30 min" round the clock.
+- Build the Saturday NCAAF tickets AFTER the 14:00Z line pull: capture pauses 05:30-14:00Z, so an
+  11:00Z build prices off 05:30Z quotes.

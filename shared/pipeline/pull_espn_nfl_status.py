@@ -44,29 +44,37 @@ def _content_hash(data):
     return hashlib.sha256(json.dumps(clean, sort_keys=True).encode()).hexdigest()
 
 
-def _last_hash(pulls_path):
-    """Read the last content hash from _pulls.jsonl."""
+def _last_hash(pulls_path, feed):
+    """Last content hash THIS FEED logged to _pulls.jsonl.
+
+    N41: the depth log is shared with the nflverse wrapper and the depth-delta script. Reading
+    the last line whoever wrote it compared ESPN's hash with a parquet's, so after every
+    09:00Z nflverse run "unchanged" could never fire. Lines from before N41 carry no `feed`;
+    a line with neither `feed` nor `file` can only be this script's.
+    """
     if not pulls_path.exists():
         return None
-    last_line = None
+    last = None
     with open(pulls_path) as f:
         for line in f:
             line = line.strip()
-            if line:
-                last_line = line
-    if last_line:
-        try:
-            return json.loads(last_line).get("sha256")
-        except json.JSONDecodeError:
-            pass
-    return None
+            if not line:
+                continue
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            entry_feed = entry.get("feed")
+            if entry_feed == feed or (entry_feed is None and "file" not in entry):
+                last = entry.get("sha256")
+    return last
 
 
-def _log_pull(pulls_path, utc, sha, status):
-    """Append a line to _pulls.jsonl."""
+def _log_pull(pulls_path, utc, sha, status, feed):
+    """Append a line to _pulls.jsonl. `feed` is what capture_health filters on."""
     pulls_path.parent.mkdir(parents=True, exist_ok=True)
     with open(pulls_path, "a") as f:
-        f.write(json.dumps({"utc": utc, "sha256": sha, "status": status}) + "\n")
+        f.write(json.dumps({"utc": utc, "feed": feed, "sha256": sha, "status": status}) + "\n")
 
 
 def pull_injuries(season):
@@ -93,10 +101,10 @@ def pull_injuries(season):
     pulls_path = out_dir / "_pulls.jsonl"
 
     h = _content_hash(data)
-    prev = _last_hash(pulls_path)
+    prev = _last_hash(pulls_path, "espn_injuries")
 
     if h == prev:
-        _log_pull(pulls_path, ts_label, h, "unchanged")
+        _log_pull(pulls_path, ts_label, h, "unchanged", "espn_injuries")
         print(f"  injuries unchanged (hash={h[:12]}), logged to _pulls.jsonl")
         return None
 
@@ -104,7 +112,7 @@ def pull_injuries(season):
     with gzip.open(out_path, "wt", encoding="utf-8") as f:
         json.dump(data, f)
 
-    _log_pull(pulls_path, ts_label, h, "written")
+    _log_pull(pulls_path, ts_label, h, "written", "espn_injuries")
     size_kb = out_path.stat().st_size / 1024
     total_athletes = sum(len(t.get("injuries", [])) for t in teams)
     print(f"  saved {total_athletes} athlete entries to {out_path} ({size_kb:.0f} KB)")
@@ -159,10 +167,10 @@ def pull_depth_charts(season):
     pulls_path = out_dir / "_pulls.jsonl"
 
     h = _content_hash(all_depth)
-    prev = _last_hash(pulls_path)
+    prev = _last_hash(pulls_path, "espn_depth")
 
     if h == prev:
-        _log_pull(pulls_path, ts_label, h, "unchanged")
+        _log_pull(pulls_path, ts_label, h, "unchanged", "espn_depth")
         print(f"  depth unchanged (hash={h[:12]}), logged to _pulls.jsonl")
         return None
 
@@ -170,7 +178,7 @@ def pull_depth_charts(season):
     with gzip.open(out_path, "wt", encoding="utf-8") as f:
         json.dump(all_depth, f)
 
-    _log_pull(pulls_path, ts_label, h, "written")
+    _log_pull(pulls_path, ts_label, h, "written", "espn_depth")
     size_kb = out_path.stat().st_size / 1024
     print(f"  saved to {out_path} ({size_kb:.0f} KB)")
     return out_path

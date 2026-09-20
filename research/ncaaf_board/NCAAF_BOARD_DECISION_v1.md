@@ -897,3 +897,126 @@ nfl/pipeline/tests ncaaf/pipeline/tests` collects and runs **55 tests** in one c
 - `test_espn_depth_does_not_mask_stale_nflverse`: fresh ESPN + stale nflverse -> stale detected
 - `test_feed_field_filters_correctly`: two feeds in one file, checked independently
 - `test_infer_feed_from_file_key`: `depth_charts.parquet` inferred as `nflverse_depth`
+
+### N41 — Order #11 verified by Cowork: the grader never computed an outcome for an event ticket; the pull log still had no `feed` (2026-09-20)
+
+Verified from a fresh clone of `80c675f` by RUNNING the production functions on the real tape,
+the real news archive and the real CFBD file — not by reading the report.
+
+**What held.** One-command suite: 55 passed. Contract identity on the real tape at two build
+times: 356 sides, 0 legs that are not one row of one book; Under takes the highest total.
+`point_clv` matched an independent formula on 263 of 263 legs. News reaches the selector:
+145 of 145 board teams (2026-09-19T11Z), 40 of 40 (09-20T11Z); 0 articles pulled after the
+build time entered. Health check in a fresh clone: all 10 feeds OK.
+
+**Defect 1 — no event ticket could get an outcome.** `_compute_outcome` read
+`leg["commence_time"]`. `build_tickets()` writes it on the TICKET; only card legs carry it. The
+date key was `''`, so every event-ticket leg returned `outcome_unavailable`: 263 of 263 on a
+real-tape run. No test read an outcome — the WO11 fixture's CFBD teams were named
+"Team H CFBD"/"Team A CFBD", which the grader could never map from "Team H"/"Team A", and
+nothing asserted on it. N38's "89/95 legs matched" was measured on card-shaped legs only.
+
+**Defect 2 — ordered (home, away, date) key.** CFBD and the Odds API disagree on home/away at
+neutral sites (Kansas-Arizona State, Virginia-West Virginia, 2026-09-19). Those games were
+silently `no_match`. Now keyed on the unordered pair, points held BY TEAM NAME, matched within
+`OUTCOME_MATCH_HOURS = 36` of kickoff (App State-Charlotte: CFBD 22:00Z, tape 01:32Z next day).
+Two games for one pair inside the window -> `ambiguous_match`, never a guess.
+
+**Defect 3 — the mascot-stripper can land on a different school.** "Southern Mississippi Golden
+Eagles" shortens to "Southern" (Southern University, a real CFBD team that played that day).
+The pair+date key turned it into a `no_match` rather than a wrong result, by luck of schedule.
+Explicit `_TEAM_MAP` entries added for every name that failed on the 2026 tape: Southern Miss,
+App State, Hawai'i, SE Louisiana. **Match rate after: 188 of 189 tape events; the one miss
+(Arkansas State v South Alabama 09-12) is a game the Odds API listed and nobody played.**
+
+**Defect 4 — `graded=True` froze a ticket before its result existed.** `graded` is terminal
+(UPDATE-ONLY skips it), and it was set as soon as every leg had a close. The 13:00Z grade can run
+before CFBD has the score, and nothing refreshes `cfbd_games_2026.parquet` on a schedule. Now a
+game CFBD has not completed returns `pending`; `graded` needs every close AND every result;
+otherwise `grade_status` = `close_unavailable` | `outcome_pending` and the ticket is re-read on
+the next run. **Still open: the CFBD refresh is not scheduled — until it is, run
+`ncaaf/pipeline/pull_cfbd_season.py --year 2026` before grading.**
+
+**Defect 5 — a leg with no close got no outcome.** The `continue` on a missing close skipped the
+CFBD lookup. A result does not depend on a captured close; outcome is now computed first.
+
+**Defect 6 — kickoff drift.** The Odds API moves `commence_time`: 127 of 189 events on the 2026
+tape (median 6 min, max 640). On 09-19 four games moved more than 30 min (Alabama 19:30 ->
+21:15; App State 22:00 -> 01:35). Measured from the ticket's kickoff, the "close" of a delayed
+game is a quote hours before kick. The grader now uses the `commence_time` on the event's last
+pre-kick tape row (`_tape_kickoffs`) and stores it as `kickoff_used_utc`. A card leg whose game
+has not started is `not_started` and is not closed early.
+
+**Defect 7 — N12's all-zero guard halted on one leg.** With a single graded leg whose line did
+not move (about half of them) the grader raised and wrote nothing. It now needs
+`N12_MIN_LEGS = 10` legs (chance of 10 unmoved lines ~0.1%). The defect it was written for —
+grading a game that has not kicked — is closed structurally by the 30-minute rule and the
+`not_started` guard.
+
+**Defect 8 — order #11 item 4b was not done.** "Every `_pulls.jsonl` line carries `feed`": no
+writer emitted it (0 of 8 lines). Worse, the ESPN hash-skip read the LAST line of the shared
+depth log, so after each 09:00Z nflverse run it compared ESPN's hash with a parquet's and
+"unchanged" could never fire; and because bare ESPN lines were ignored by the health reader, an
+unchanged ESPN pull left no pulse — a quiet Tuesday would read STALE. All three writers now emit
+`feed` (`espn_depth`, `espn_injuries`, `nflverse_depth`, `nflverse_injuries`,
+`nflverse_rosters`); `_last_hash(pulls_path, feed)` reads only its own feed; a legacy line with
+neither `feed` nor `file` is ESPN's (every nflverse line carries `file`: 8 of 8 checked).
+This reverses N40's "lines without both keys are ignored".
+
+**End to end, real data.** Every 2026-09-19 game on the 14:30Z tape, both sides of spread and
+total, best-quote rule, graded by production `grade_tickets` against the real CFBD file: 71 of 71
+kicked events got a result; 284 legs (145 win / 137 loss / 2 push); an independent re-derivation
+from CFBD disagreed on 0; 6 tickets `close_unavailable`.
+
+**Tests (9 new, production functions, fixtures cut from the real tape and the real CFBD file).**
+`test_grader_outcomes_n41.py` (6): event-shaped ticket; neutral-site flip; Southern Miss is not
+Southern; delayed kickoff closes at the real kick; CFBD-not-completed stays ungraded; no close
+still gets a result. `test_pull_log_feed_n41.py` (3): the four real log lines. All 9 fail on
+`80c675f`. The WO11 grader fixture's unmatchable CFBD names were corrected and now assert `win`.
+
+**UNVERIFIED.** Whether the VM's 13:00Z grade job exists and what it runs first (crontab not
+readable from Cowork). Point CLV is measured on the BEST quote across books, which is biased
+upward against any single book's close; the shadow comparison must use the same quote rule for
+the AI's picks and for both baselines, and report CLV against the entry consensus as well.
+
+### N42 — Builder: logged abstains and an input manifest; live quotes only; card legs are real rows (2026-09-20)
+
+Order #11 item 3e (manifest; abstains logged) was not done and was not listed under NOT DONE.
+Done here, with four defects found while reading the same path.
+
+1. **Manifest + abstains.** Every game the selector saw writes one log entry: a ticket, or
+   `abstain: true` with `legs: []` and the reason (`no_legs_returned` / `no_usable_legs` when the
+   model did not say). Each carries `manifest` = model id, prompt sha256, raw response, the keys of
+   the articles shown, the tape snapshots behind the quotes (~2 KB per entry). The grader and the
+   card builder skip abstain entries. Without the abstains a selection cannot be compared with a
+   baseline over the games it was offered.
+2. **Stale quotes.** The board keeps each book's LAST quote however old — up to 303 h on the
+   2026-09-19 14:35Z board — and "best point" seeks those out: 2.8% of quotes, **6.5% of
+   best-quote picks**. A 12-day-old number cannot be bet, and its "CLV" is free. A leg is now
+   chosen only from quotes in the event's newest snapshot (`event_newest_snapshot`).
+3. **`validate_leg_against_tape` did not check the event or the snapshot.** A leg passed if any
+   game at any time had quoted the same (book, side, point, price). Both keys added.
+4. **`recency_days` was accepted and never used.** 27 of 890 articles shown on the 09-19 build
+   were older than the stated 14 days. Applied when `build_time` is given; an article with no
+   parseable `published` is dropped.
+5. **The card builder was never repaired.** `build_ncaaf_cards.py` was untouched by order #11:
+   FILLER legs still wrote `consensus_point` + `best_price` + `best_book` (audit #4's defect), and
+   conviction legs dropped `snapshot_utc` and the entry complement, so no card leg could get a
+   probability CLV. The saved board parquet drops `quotes`, so the card builder now builds the
+   board in memory as of its build time. Fillers go through `select_best_quote` +
+   `complement_quote`. `load_conviction_tickets` skips `pre_repair`, abstain and card entries
+   (a second card run the same day would have raised `KeyError: 'event_id'` on the first run's cards).
+6. **Coverage halt 25% -> 90%.** 25% was unjustified. Measured 145/145 and 40/40; the puller
+   refuses to write above 5% team failures; under 90% means the name join broke.
+
+**Tests (4 new, `test_builder_manifest_n42.py`):** production `build_board` -> `build_tickets` ->
+`build_cards` on the real tape slice, only the Anthropic client mocked. At a 15:40Z build
+FanDuel's 40-minute-old Under 54.5 -106 beats DraftKings' live -108; the leg must be
+DraftKings'. All 4 fail on `80c675f`. **Real full-board run (09-19 14:35Z, 89 events, mocked
+model): 89 entries, 12 abstains, 154 legs, 154 with a same-book same-snapshot complement,
+0 halts; cards 5 + 12 legs, 4 fillers, all real rows.**
+
+One command: `pytest shared/pipeline/tests nfl/pipeline/tests ncaaf/pipeline/tests` -> **68 passed**.
+
+**Note for Saturday.** Line capture pauses 05:30-14:00Z, so an 11:00Z build prices every game off
+05:30Z quotes (median quote age 5.5 h). Build after the 14:00Z pull.

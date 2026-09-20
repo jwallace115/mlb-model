@@ -39,11 +39,11 @@ for f in injuries.parquet rosters_weekly.parquet; do
         fi
 
         if [ "$new_hash" = "$last_hash" ]; then
-            echo "{\"utc\":\"$TS\",\"file\":\"$f\",\"sha256\":\"$new_hash\",\"status\":\"unchanged\"}" >> "$PULLS_LOG"
+            echo "{\"utc\":\"$TS\",\"feed\":\"nflverse_${name%_weekly}\",\"file\":\"$f\",\"sha256\":\"$new_hash\",\"status\":\"unchanged\"}" >> "$PULLS_LOG"
             echo "skipped: nflverse_${name} unchanged (hash=${new_hash:0:12})"
         else
             cp "$src" "$dest"
-            echo "{\"utc\":\"$TS\",\"file\":\"$f\",\"sha256\":\"$new_hash\",\"status\":\"written\"}" >> "$PULLS_LOG"
+            echo "{\"utc\":\"$TS\",\"feed\":\"nflverse_${name%_weekly}\",\"file\":\"$f\",\"sha256\":\"$new_hash\",\"status\":\"written\"}" >> "$PULLS_LOG"
             echo "archived: nflverse_${name}_${TS}.parquet ($(stat -c%s "$src" 2>/dev/null || stat -f%z "$src") bytes)"
         fi
     fi

@@ -26,11 +26,24 @@ TICKET_LOG = ROOT / "ncaaf" / "logs" / "ncaaf_board_tickets_2026.json"
 
 CLOSE_MAX_MINUTES = 30
 
-# Odds API -> CFBD team name overrides (where strip-mascot doesn't work)
+# Odds API -> CFBD team name overrides (where strip-mascot doesn't work).
+# N41: the prefix fallback can land on a DIFFERENT school — "Southern Mississippi Golden
+# Eagles" shortens to "Southern" (Southern University). Every name that fails or mis-maps on
+# the 2026 tape is listed here; the pair+date key in _compute_outcome is the second guard.
 _TEAM_MAP = {
     "San Jose State Spartans": "San Jos\u00e9 State",
     "UMass Minutemen": "Massachusetts",
+    "Southern Mississippi Golden Eagles": "Southern Miss",
+    "Appalachian State Mountaineers": "App State",
+    "Hawaii Rainbow Warriors": "Hawai'i",
+    "Southeastern Louisiana Lions": "SE Louisiana",
 }
+
+# A tape commence_time can drift hours from CFBD's startDate (App State-Charlotte 2026-09-19:
+# tape 01:32Z next day, CFBD 22:00Z). Same two teams within this window = same game.
+OUTCOME_MATCH_HOURS = 36
+FINAL_OUTCOMES = ("win", "loss", "push")
+N12_MIN_LEGS = 10
 
 
 def american_to_implied(odds):
@@ -71,19 +84,44 @@ def _load_tape(season):
     return df[df["snapshot_dt"] < df["commence_dt"]].copy()
 
 
+def _tape_kickoffs(tape):
+    """event_id -> commence_time on the event's LAST pre-kick row.
+
+    N41: the Odds API moves commence_time (127 of 189 events on the 2026 tape; median 6 min,
+    max 640). App State-Charlotte 2026-09-19 was scheduled 22:00Z and kicked 01:32Z after
+    delays; measured from the ticket's 22:00Z the "close" would be a quote 3.5 h before kick.
+    """
+    if tape.empty:
+        return {}
+    last = tape.sort_values("snapshot_dt").groupby("event_id")["commence_dt"].last()
+    return last.to_dict()
+
+
 def _load_cfbd_outcomes(season):
-    """Load CFBD game results. Returns dict of (home_cfbd, away_cfbd, date) -> (hPts, aPts)."""
+    """Load CFBD games. Returns ({frozenset(team_a, team_b): [game, ...]}, cfbd_teams).
+
+    N41: keyed on the UNORDERED pair. CFBD and the Odds API disagree on home/away at neutral
+    sites (Kansas-Arizona State, Virginia-West Virginia 2026-09-19), so an ordered key
+    silently drops those games. Each game keeps its points BY TEAM NAME and its `completed`
+    flag, so a scheduled-but-unplayed game reads as pending, not as missing.
+    """
     cfbd_path = ROOT / "research" / "ncaaf" / f"cfbd_games_{season}.parquet"
     if not cfbd_path.exists():
         return {}, set()
     gdf = pd.read_parquet(cfbd_path)
-    completed = gdf[gdf["completed"] == True]
     cfbd_teams = set(gdf["homeTeam"].unique()) | set(gdf["awayTeam"].unique())
     outcomes = {}
-    for _, row in completed.iterrows():
-        date_str = str(row["startDate"])[:10]
-        key = (row["homeTeam"], row["awayTeam"], date_str)
-        outcomes[key] = (row["homePoints"], row["awayPoints"])
+    for _, row in gdf.iterrows():
+        start = pd.to_datetime(row["startDate"], utc=True, errors="coerce")
+        if pd.isna(start):
+            continue
+        done = bool(row["completed"]) and pd.notna(row["homePoints"]) and pd.notna(row["awayPoints"])
+        game = {
+            "start": start,
+            "completed": done,
+            "points": {row["homeTeam"]: row["homePoints"], row["awayTeam"]: row["awayPoints"]},
+        }
+        outcomes.setdefault(frozenset((row["homeTeam"], row["awayTeam"])), []).append(game)
     return outcomes, cfbd_teams
 
 
@@ -127,61 +165,61 @@ def _find_complement(tape, eid, book, market, side, snapshot_utc):
     return comp.iloc[0]
 
 
-def _compute_outcome(leg, home_team, away_team, outcomes, cfbd_teams):
-    """Compute win/loss/push for a leg from CFBD outcomes."""
+def _compute_outcome(leg, home_team, away_team, outcomes, cfbd_teams, commence_time=None):
+    """Compute win/loss/push for a leg from CFBD outcomes.
+
+    Returns (result, reason). result is one of FINAL_OUTCOMES, "pending" (game found, not
+    completed in the CFBD file yet) or "outcome_unavailable" (no such game / unmapped team).
+    Never a loss by default.
+    """
     if not outcomes:
         return "outcome_unavailable", "no_cfbd_data"
 
-    # Map team names
     home_cfbd = _odds_to_cfbd(home_team, cfbd_teams)
     away_cfbd = _odds_to_cfbd(away_team, cfbd_teams)
     if not home_cfbd or not away_cfbd:
         return "outcome_unavailable", f"unmapped_teams:{home_team}/{away_team}"
 
-    # Try to find the game by teams + date
-    commence = leg.get("commence_time") or ""
-    date_str = commence[:10]
-    key = (home_cfbd, away_cfbd, date_str)
-    if key not in outcomes:
-        return "outcome_unavailable", f"no_match:{key}"
+    # N41: event tickets carry commence_time on the TICKET, cards on the leg. Reading only
+    # the leg gave date '' -> no_match for every event-ticket leg.
+    commence = leg.get("commence_time") or commence_time
+    commence_dt = pd.to_datetime(commence, utc=True, errors="coerce") if commence else pd.NaT
+    if pd.isna(commence_dt):
+        return "outcome_unavailable", "no_commence_time"
 
-    h_pts, a_pts = outcomes[key]
+    window = pd.Timedelta(hours=OUTCOME_MATCH_HOURS)
+    games = [g for g in outcomes.get(frozenset((home_cfbd, away_cfbd)), [])
+             if abs(g["start"] - commence_dt) <= window]
+    if not games:
+        return "outcome_unavailable", f"no_match:{home_cfbd}/{away_cfbd}/{str(commence_dt)[:10]}"
+    if len(games) > 1:
+        return "outcome_unavailable", f"ambiguous_match:{home_cfbd}/{away_cfbd}"
+    game = games[0]
+    if not game["completed"]:
+        return "pending", "cfbd_not_completed"
+
     market = leg["market"]
     side = leg["side"]
     point = leg["point"]
 
     if market == "spreads":
-        # Determine if this leg's side is home or away
         side_cfbd = _odds_to_cfbd(side, cfbd_teams)
-        if side_cfbd == home_cfbd:
-            margin = h_pts - a_pts + point  # home + spread
-        elif side_cfbd == away_cfbd:
-            margin = a_pts - h_pts + point
-        else:
+        if side_cfbd not in game["points"]:
             return "outcome_unavailable", f"side_unmapped:{side}"
+        other = home_cfbd if side_cfbd == away_cfbd else away_cfbd
+        margin = game["points"][side_cfbd] - game["points"][other] + point
         if margin > 0:
             return "win", None
-        elif margin < 0:
+        if margin < 0:
             return "loss", None
-        else:
-            return "push", None
+        return "push", None
 
-    elif market == "totals":
-        total = h_pts + a_pts
-        if "Over" in str(side):
-            if total > point:
-                return "win", None
-            elif total < point:
-                return "loss", None
-            else:
-                return "push", None
-        else:  # Under
-            if total < point:
-                return "win", None
-            elif total > point:
-                return "loss", None
-            else:
-                return "push", None
+    if market == "totals":
+        total = game["points"][home_cfbd] + game["points"][away_cfbd]
+        if total == point:
+            return "push", None
+        over = "Over" in str(side)
+        return ("win" if (total > point) == over else "loss"), None
 
     return "outcome_unavailable", f"unknown_market:{market}"
 
@@ -201,11 +239,14 @@ def grade_tickets(season=2026):
 
     outcomes, cfbd_teams = _load_cfbd_outcomes(season)
     now_utc = pd.Timestamp.now(tz="UTC")
+    kickoffs = _tape_kickoffs(tape)
 
     changed = 0
     for ticket in tickets:
         if ticket.get("pre_repair"):
             continue
+        if ticket.get("abstain"):
+            continue  # N42: a logged abstain has no legs to grade
         if ticket.get("graded"):
             continue  # UPDATE-ONLY
 
@@ -223,6 +264,7 @@ def grade_tickets(season=2026):
             continue
 
         all_legs_closeable = True
+        all_outcomes_final = True
         for leg in ticket.get("legs", []):
             # Normalize: event_id and commence from leg or ticket
             eid = leg.get("event_id") or ticket.get("event_id")
@@ -238,12 +280,36 @@ def grade_tickets(season=2026):
             market = leg["market"]
             side = leg["side"]
             book = leg.get("book", "")
-            commence_dt = pd.Timestamp(leg_commence, tz="UTC")
+            # N41: the kickoff the books last quoted, not the one on the ticket (see
+            # _tape_kickoffs). Falls back to the ticket's when the event is not on the tape.
+            commence_dt = kickoffs.get(eid, pd.Timestamp(leg_commence, tz="UTC"))
+            leg["kickoff_used_utc"] = commence_dt.isoformat()
+
+            # N41: a card's later games may not have kicked when its first one has. Taking a
+            # "close" for them now would freeze a pre-close quote as the close.
+            if commence_dt > now_utc:
+                leg["grade_status"] = "not_started"
+                all_legs_closeable = False
+                all_outcomes_final = False
+                continue
+            leg.pop("grade_status", None)
 
             if not book:
                 leg["grade_status"] = "no_book"
                 all_legs_closeable = False
                 continue
+
+            # Outcome from CFBD — N41: BEFORE the close lookup. The result of a game does
+            # not depend on whether a close was captured; it used to be skipped with it.
+            result, reason = _compute_outcome(leg, home, away, outcomes, cfbd_teams,
+                                              commence_time=leg_commence)
+            leg["outcome"] = result
+            if reason:
+                leg["outcome_reason"] = reason
+            else:
+                leg.pop("outcome_reason", None)
+            if result not in FINAL_OUTCOMES:
+                all_outcomes_final = False
 
             # Find close within 30 minutes
             close_row, last_obs = _find_close(tape, eid, book, market, side, commence_dt)
@@ -316,17 +382,17 @@ def grade_tickets(season=2026):
             elif close_point != entry_point:
                 leg["prob_clv_reason"] = "line_moved_no_alt_quote"
 
-            # Outcome from CFBD
-            result, reason = _compute_outcome(leg, home, away, outcomes, cfbd_teams)
-            leg["outcome"] = result
-            if reason:
-                leg["outcome_reason"] = reason
-
-        if all_legs_closeable:
+        # N41: `graded` is terminal (UPDATE-ONLY skips it for ever), so it needs every leg's
+        # close AND a final result. A game CFBD has not completed yet stays ungraded and is
+        # picked up on a later run.
+        if all_legs_closeable and all_outcomes_final:
             ticket["graded"] = True
+            ticket.pop("grade_status", None)
             changed += 1
-        else:
+        elif not all_legs_closeable:
             ticket["grade_status"] = "close_unavailable"
+        else:
+            ticket["grade_status"] = "outcome_pending"
 
     # N12: assert that not all CLVs are exactly zero
     if changed > 0:
@@ -337,7 +403,9 @@ def grade_tickets(season=2026):
                     v = leg.get("point_clv")
                     if v is not None:
                         all_clvs.append(v)
-        if all_clvs and all(c == 0.0 for c in all_clvs):
+        # N41: only with enough legs to mean something. With one graded leg whose line did
+        # not move (about half of them), the old check halted the grader and wrote nothing.
+        if len(all_clvs) >= N12_MIN_LEGS and all(c == 0.0 for c in all_clvs):
             raise RuntimeError(
                 f"HALT: all {len(all_clvs)} graded point_clvs are exactly 0.0. "
                 f"Likely a future-game grading defect.")

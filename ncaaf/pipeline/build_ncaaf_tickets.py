@@ -24,7 +24,14 @@ KEY_FP = hashlib.sha256(ANTHROPIC_KEY.strip().encode()).hexdigest()[:8] if ANTHR
 TICKET_LOG = ROOT / "ncaaf" / "logs" / "ncaaf_board_tickets_2026.json"
 
 
-def select_best_quote(quotes, market, side):
+def event_newest_snapshot(game_rows):
+    """The newest snapshot_utc among all of an event's quotes (None if there are none)."""
+    snaps = [q["snapshot_utc"] for r in game_rows for q in (r.get("quotes") if r.get("quotes") is not None else [])
+             if q.get("snapshot_utc")]
+    return max(snaps) if snaps else None
+
+
+def select_best_quote(quotes, market, side, newest_snapshot=None):
     """N37: select the best quote for a leg from real per-book quotes.
 
     Rule: best point for the side, ties broken by best price, then book name.
@@ -35,6 +42,11 @@ def select_best_quote(quotes, market, side):
     """
     valid = [q for q in quotes
              if q.get("point") is not None and q.get("price") is not None]
+    # N42: only quotes from the event's newest snapshot can be bet. The board keeps each
+    # book's LAST quote however old (up to 303 h on the 2026-09-19 board), and "best point"
+    # seeks out exactly those: 2.8% of quotes, 6.5% of best-quote picks.
+    if newest_snapshot is not None:
+        valid = [q for q in valid if q.get("snapshot_utc") == newest_snapshot]
     if not valid:
         return None
 
@@ -46,23 +58,44 @@ def select_best_quote(quotes, market, side):
     return valid[0]
 
 
-def validate_leg_against_tape(leg, tape_df):
-    """N37 1d: assert that a leg's (book, market, side, point, price) exists in the tape."""
-    match = tape_df[
-        (tape_df["bookmaker"] == leg["book"])
-        & (tape_df["market"] == leg["market"])
-        & (tape_df["outcome_name"] == leg["side"])
-        & (tape_df["point"] == leg["point"])
-        & (tape_df["price"] == leg["price"])
-    ]
-    if match.empty:
+def validate_leg_against_tape(leg, tape_df, event_id=None):
+    """N37 1d: assert that a leg is ONE ROW of the tape.
+
+    N42: the row must be this event's, at the leg's own snapshot. Without those two keys a
+    leg passed if ANY game at ANY time had quoted the same (book, side, point, price).
+    """
+    mask = ((tape_df["bookmaker"] == leg["book"])
+            & (tape_df["market"] == leg["market"])
+            & (tape_df["outcome_name"] == leg["side"])
+            & (tape_df["point"] == leg["point"])
+            & (tape_df["price"] == leg["price"]))
+    event_id = event_id or leg.get("event_id")
+    if event_id is not None:
+        mask &= tape_df["event_id"] == event_id
+    if leg.get("snapshot_utc") is not None:
+        mask &= tape_df["snapshot_utc"] == leg["snapshot_utc"]
+    if not mask.any():
         raise RuntimeError(
-            f"HALT: leg not in tape — ({leg['book']}, {leg['market']}, "
-            f"{leg['side']}, {leg['point']}, {leg['price']})")
+            f"HALT: leg not in tape — ({event_id}, {leg['book']}, {leg['market']}, "
+            f"{leg['side']}, {leg['point']}, {leg['price']}, {leg.get('snapshot_utc')})")
+
+
+def complement_quote(other_rows, best_q):
+    """The other side's quote FROM THE SAME BOOK AND SNAPSHOT as best_q, with its side name."""
+    for orow in other_rows:
+        for oq in orow.get("quotes", []) or []:
+            if oq["book"] == best_q["book"] and oq["snapshot_utc"] == best_q["snapshot_utc"]:
+                return orow["outcome_name"], oq
+    return None, None
 
 
 NEWS_PER_GAME = 10
 NEWS_RECENCY_DAYS = 14
+# N42: was 0.25, unjustified. Measured on the two real builds: 145/145 and 40/40. The puller
+# already refuses to write when more than 5% of teams fail, so anything under 90% means the
+# team-name join broke — the N36 failure (1 of 146), which a 25% bar would also have caught
+# but a 30%-broken join would not.
+NEWS_COVERAGE_MIN = 0.90
 
 
 def _article_key(article):
@@ -139,13 +172,26 @@ def load_news(news_dir, build_time):
 
 
 def game_news_for(articles, home_team, away_team, max_per_game=NEWS_PER_GAME,
-                  recency_days=NEWS_RECENCY_DAYS):
-    """N39: return news for a game's two teams, newest published first, capped."""
+                  recency_days=NEWS_RECENCY_DAYS, build_time=None):
+    """N39: return news for a game's two teams, newest published first, capped.
+
+    N42: `recency_days` was accepted and never used (27 of 890 articles shown on the
+    2026-09-19 build were older than the stated 14 days). It is applied when build_time
+    is given; an article with no parseable `published` is dropped, not assumed recent.
+    """
+    cutoff = None
+    if build_time is not None:
+        cutoff = pd.to_datetime(build_time, utc=True) - pd.Timedelta(days=recency_days)
     game_articles = []
     for a in articles:
         team = a.get("_team_name", a.get("team_name", ""))
-        if team in (home_team, away_team):
-            game_articles.append(a)
+        if team not in (home_team, away_team):
+            continue
+        if cutoff is not None:
+            pub = pd.to_datetime(a.get("published"), utc=True, errors="coerce")
+            if pd.isna(pub) or pub < cutoff:
+                continue
+        game_articles.append(a)
 
     # Sort by published descending
     game_articles.sort(key=lambda a: a.get("published", ""), reverse=True)
@@ -176,8 +222,14 @@ def _derive_matchup(board_rows):
     }
 
 
-def _call_ai_layer(matchup, news_articles, home, away):
+AI_MODEL = "claude-haiku-4-5-20251001"
+
+
+def _call_ai_layer(matchup, news_articles, home, away, meta=None):
     """Call Anthropic for one game. Returns (pick, discarded).
+
+    N42: if `meta` is a dict it is filled with model, prompt_sha256 and raw_response —
+    the record of exactly what was asked and answered.
 
     pick = {"legs": [...], "abstain": bool, "abstain_reason": str|None,
             "flags": [...], "rationale": str}
@@ -252,13 +304,19 @@ no projected total, no "fair line", no "fair spread", no "win probability".
 If you produce one it will be discarded.
 """
 
+    if meta is not None:
+        meta["model"] = AI_MODEL
+        meta["prompt_sha256"] = hashlib.sha256(prompt.encode()).hexdigest()
+
     try:
         msg = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model=AI_MODEL,
             max_tokens=600,
             messages=[{"role": "user", "content": prompt}],
         )
         text = msg.content[0].text.strip()
+        if meta is not None:
+            meta["raw_response"] = text
         if text.startswith("```"):
             text = text.split("```")[1]
             if text.startswith("json"):
@@ -308,7 +366,13 @@ def _validate_ticket(ticket, board_rows):
 
 
 def build_tickets(board_df, news_articles, build_time, tape=None):
-    """Build tickets — AI selects sides."""
+    """Build tickets — AI selects sides.
+
+    N42: every game the selector SAW produces a log entry — a ticket, or an abstain entry
+    with `abstain: true` and no legs. Each carries `manifest`: what the model was shown
+    (article keys, tape snapshots), which model, the prompt's sha256 and the raw response.
+    A selection can only be compared with a baseline over the games it was offered.
+    """
     tickets = []
     abstain_count = 0
 
@@ -323,20 +387,52 @@ def build_tickets(board_df, news_articles, build_time, tape=None):
         if matchup is None:
             continue
 
-        # N39: sorted, capped, accepting both field names
-        game_news = game_news_for(news_articles, home, away)
+        # N39: sorted, capped, accepting both field names; N42: recency window applied
+        game_news = game_news_for(news_articles, home, away, build_time=build_time)
 
-        result, discarded = _call_ai_layer(matchup, game_news, home, away)
+        meta = {}
+        result, discarded = _call_ai_layer(matchup, game_news, home, away, meta=meta)
+
+        manifest = {
+            "model": meta.get("model"),
+            "prompt_sha256": meta.get("prompt_sha256"),
+            "raw_response": meta.get("raw_response"),
+            "article_keys": [_article_key(a) for a in game_news],
+            "tape_snapshots": sorted({q["snapshot_utc"] for r in game_rows
+                                      for q in (r.get("quotes") or [])
+                                      if q.get("snapshot_utc")}),
+        }
+        base = {
+            "event_id": eid,
+            "home_team": home, "away_team": away,
+            "commence_time": commence,
+            "favourite": matchup["favourite"],
+            "underdog": matchup["underdog"],
+            "spread_magnitude": matchup["spread_magnitude"],
+            "ai_flags": result.get("flags", []),
+            "ai_rationale": result.get("rationale", ""),
+            "ai_discarded": discarded,
+            "manifest": manifest,
+            "build_time": build_time,
+            "reference_only": True,
+            "close_price": None, "clv": None,
+            "graded": False,
+        }
+
+        def _abstain(reason):
+            tickets.append({**base, "legs": [], "abstain": True, "abstain_reason": reason})
 
         if result.get("abstain"):
             abstain_count += 1
             print(f"  {away} @ {home}: ABSTAIN — {result.get('abstain_reason', '?')}")
+            _abstain(result.get("abstain_reason") or "abstain")
             continue
 
         ai_legs = result.get("legs", [])
         if not ai_legs:
             abstain_count += 1
             print(f"  {away} @ {home}: no legs returned (implicit abstain)")
+            _abstain("no_legs_returned")
             continue
 
         # N37: Build legs from real per-book quotes, not consensus/best mix
@@ -352,25 +448,17 @@ def build_tickets(board_df, news_articles, build_time, tape=None):
                 continue
             br = board_match.iloc[0]
             quotes = br.get("quotes", [])
-            if not quotes:
+            if quotes is None or len(quotes) == 0:
                 print(f"  WARNING: no quotes for {mkt}/{side} — skipping")
                 continue
-            best_q = select_best_quote(quotes, mkt, side)
+            best_q = select_best_quote(list(quotes), mkt, side,
+                                       newest_snapshot=event_newest_snapshot(game_rows))
             if best_q is None:
                 continue
 
-            # Find complement from the other side, same book and snapshot
-            comp = None
-            other_rows = ev[(ev["market"] == mkt) & (ev["outcome_name"] != side)]
-            if not other_rows.empty:
-                for _, orow in other_rows.iterrows():
-                    for oq in orow.get("quotes", []):
-                        if (oq["book"] == best_q["book"]
-                                and oq["snapshot_utc"] == best_q["snapshot_utc"]):
-                            comp = oq
-                            break
-                    if comp:
-                        break
+            # Complement: the other side, same book and snapshot
+            other_rows = ev[(ev["market"] == mkt) & (ev["outcome_name"] != side)].to_dict("records")
+            comp_side, comp = complement_quote(other_rows, best_q)
 
             leg = {
                 "market": mkt, "side": side,
@@ -382,35 +470,22 @@ def build_tickets(board_df, news_articles, build_time, tape=None):
                 "ai_reason": al.get("reason", ""),
             }
             if comp:
-                leg["complement_side"] = other_rows.iloc[0]["outcome_name"]
+                leg["complement_side"] = comp_side
                 leg["complement_point"] = comp["point"]
                 leg["complement_price"] = comp["price"]
 
-            # N37 1d: assert leg exists in tape
+            # N37 1d / N42: the leg is one row of THIS event's tape at its own snapshot
             if tape is not None:
-                validate_leg_against_tape(leg, tape)
+                validate_leg_against_tape(leg, tape, event_id=eid)
 
             final_legs.append(leg)
 
         if not final_legs:
+            abstain_count += 1
+            _abstain("no_usable_legs")
             continue
 
-        ticket = {
-            "event_id": eid,
-            "home_team": home, "away_team": away,
-            "commence_time": commence,
-            "favourite": matchup["favourite"],
-            "underdog": matchup["underdog"],
-            "spread_magnitude": matchup["spread_magnitude"],
-            "legs": final_legs,
-            "ai_flags": result.get("flags", []),
-            "ai_rationale": result.get("rationale", ""),
-            "ai_discarded": discarded,
-            "build_time": build_time,
-            "reference_only": True,
-            "close_price": None, "clv": None,
-            "graded": False,
-        }
+        ticket = {**base, "legs": final_legs}
 
         # Validate before adding
         _validate_ticket(ticket, game_rows)
@@ -419,7 +494,7 @@ def build_tickets(board_df, news_articles, build_time, tape=None):
         sides = ", ".join(f"{l['market']}:{l['side']}" for l in final_legs)
         print(f"  {away} @ {home}: {len(final_legs)} legs [{sides}]")
 
-    print(f"\nTickets: {len(tickets)}, Abstains: {abstain_count}")
+    print(f"\nTickets: {len(tickets) - abstain_count}, Abstains logged: {abstain_count}")
     return tickets
 
 
@@ -477,9 +552,9 @@ def main():
     coverage = len(teams_with_news)
     total_teams = len(board_teams)
     print(f"  News coverage: {coverage}/{total_teams} board teams have >= 1 article")
-    if total_teams > 0 and coverage / total_teams < 0.25:
+    if total_teams > 0 and coverage / total_teams < NEWS_COVERAGE_MIN:
         print(f"HALT: news coverage {coverage}/{total_teams} ({coverage/total_teams*100:.0f}%) "
-              f"below 25% threshold")
+              f"below the {NEWS_COVERAGE_MIN:.0%} threshold")
         sys.exit(1)
 
     print(f"Board: {board_df['event_id'].nunique()} events, News: {len(news_articles)} articles (de-duped)")

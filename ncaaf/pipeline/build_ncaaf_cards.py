@@ -21,6 +21,9 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(ROOT))
 
+from ncaaf.pipeline.build_ncaaf_tickets import (select_best_quote, complement_quote,
+                                                event_newest_snapshot)
+
 TICKET_LOG = ROOT / "ncaaf" / "logs" / "ncaaf_board_tickets_2026.json"
 BOARD_DIR = ROOT / "ncaaf" / "data" / "board"
 JOINT_TABLE = ROOT / "research" / "ncaaf_board" / "joint_outcome_table_v2.parquet"
@@ -68,6 +71,8 @@ def load_conviction_tickets(build_date):
     today_tickets = []
     for t in all_tickets:
         bt = t.get("build_time", "")
+        if t.get("pre_repair") or t.get("abstain") or t.get("card_id"):
+            continue
         if bt.startswith(build_date) and t.get("legs"):
             today_tickets.append(t)
     return today_tickets
@@ -152,6 +157,12 @@ def build_cards(conviction_tickets, board_df, build_time):
                 "point": leg["point"],
                 "price": leg["price"],
                 "book": leg["book"],
+                # N42: a card leg keeps the quote's identity and its entry complement; they
+                # were dropped here, so no card leg could ever get a probability CLV.
+                "snapshot_utc": leg.get("snapshot_utc"),
+                "complement_side": leg.get("complement_side"),
+                "complement_point": leg.get("complement_point"),
+                "complement_price": leg.get("complement_price"),
                 "implied": leg.get("implied", american_to_implied(leg["price"])),
                 "ai_reason": leg.get("ai_reason", ""),
                 "leg_type": "CONVICTION",
@@ -250,6 +261,19 @@ def build_cards(conviction_tickets, board_df, build_time):
 
             fav_row = spreads.loc[spreads["consensus_point"].idxmin()]
             spread_mag = abs(fav_row["consensus_point"])
+            # N42: a FILLER leg is one row of one book too. This wrote consensus_point with
+            # best_price/best_book — the audit #4 defect, which WO11 fixed in the ticket
+            # builder and left here.
+            fq = fav_row.get("quotes")
+            best_q = select_best_quote(
+                list(fq), "spreads", fav_row["outcome_name"],
+                newest_snapshot=event_newest_snapshot(ev.to_dict("records"))) \
+                if fq is not None and len(fq) else None
+            if best_q is None:
+                continue
+            comp_side, comp = complement_quote(
+                spreads[spreads["outcome_name"] != fav_row["outcome_name"]].to_dict("records"),
+                best_q)
             filler_candidates.append({
                 "event_id": eid,
                 "home_team": ev.iloc[0]["home_team"],
@@ -260,9 +284,13 @@ def build_cards(conviction_tickets, board_df, build_time):
                 "underdog": "",
                 "market": "spreads",
                 "side": fav_row["outcome_name"],
-                "point": fav_row["consensus_point"],
-                "price": fav_row["best_price"],
-                "book": fav_row["best_book"],
+                "point": best_q["point"],
+                "price": best_q["price"],
+                "book": best_q["book"],
+                "snapshot_utc": best_q["snapshot_utc"],
+                "complement_side": comp_side,
+                "complement_point": comp["point"] if comp else None,
+                "complement_price": comp["price"] if comp else None,
                 "implied": fav_row["consensus_implied"],
                 "ai_reason": "FILLER -- favourite at posted spread",
                 "leg_type": "FILLER",
@@ -478,6 +506,10 @@ def log_cards(card_a, card_b, build_time):
                     "point": l["point"],
                     "price": l["price"],
                     "book": l["book"],
+                    "snapshot_utc": l.get("snapshot_utc"),
+                    "complement_side": l.get("complement_side"),
+                    "complement_point": l.get("complement_point"),
+                    "complement_price": l.get("complement_price"),
                     "snapshot_time": build_time,
                     "leg_type": l["leg_type"],
                     "ai_reason": l["ai_reason"],
@@ -522,8 +554,13 @@ def main():
         print("No conviction tickets for today. Cannot build cards.")
         sys.exit(0)
 
-    # Load board for filler candidates
-    board_df = load_board(build_date)
+    # Board for filler candidates. N42: built in memory as of build_time, because the saved
+    # parquet drops the per-book `quotes` a real leg is chosen from (and "the most recent
+    # board folder" need not be this build's board).
+    from ncaaf.pipeline.build_ncaaf_board import build_board
+    board_df, _ = build_board(2026, build_time=build_time)
+    if not board_df.empty:
+        board_df = board_df[board_df["commence_time"].str.startswith(build_date)]
     print(f"Board events today: {board_df['event_id'].nunique() if not board_df.empty else 0}")
 
     # Count total events and abstains from the ticket builder run

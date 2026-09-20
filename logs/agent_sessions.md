@@ -2548,3 +2548,35 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - The existing `test_ticket_reader.py` still tests a REPLICA of the reader (N35 noted);
   the extracted `load_news()` is now the production function and is tested, but the old
   replica test was not removed or updated.
+
+## 2026-09-20T11:50Z  cowork — order #11 verified; grader, pull log, builder and cards repaired (N41, N42)
+- RAN (cloud clone of 80c675f, production functions on the real tape / news archive / CFBD file):
+  suite 55 passed; contract identity 356 sides 0 mismatches; news coverage 145/145 and 40/40,
+  0 articles after build time; point_clv independent check 263/263; capture_health all 10 OK.
+- FOUND: every event-ticket leg graded `outcome_unavailable` (263/263) — `_compute_outcome` read
+  commence_time from the leg; no test read an outcome (fixture CFBD names could not match).
+  Also: ordered home/away key drops neutral-site games; "Southern Mississippi" -> "Southern";
+  graded=True before a result existed; no outcome without a close; kickoff drift (127/189 events);
+  N12 guard halts on one unmoved leg; item 4b not done (0 of 8 pull-log lines carry `feed`, ESPN
+  hash-skip read another feed's line); item 3e not done (no manifest, abstains not logged);
+  card builder never repaired (FILLER = consensus point + best price); stale quotes are 2.8% of
+  quotes and 6.5% of best-quote picks (oldest 303 h); recency_days unused; validate_leg ignored
+  event and snapshot.
+- EDITED: ncaaf/pipeline/{grade_ncaaf_tickets,build_ncaaf_tickets,build_ncaaf_cards}.py;
+  shared/pipeline/{pull_espn_nfl_status,capture_health,archive_nflverse_depth_delta}.py,
+  run_nflverse_with_archive.sh; 3 new test files + 2 real-data fixtures; 2 WO11 tests corrected;
+  NCAAF_BOARD_DECISION_v1.md N41, N42; capture_status_2026-09-20.md.
+- RETURNED: `pytest shared/pipeline/tests nfl/pipeline/tests ncaaf/pipeline/tests` -> 68 passed.
+  The 13 new tests all FAIL on 80c675f (some on a changed signature rather than on behaviour:
+  the 3 pull-log tests and test_tape_validation).
+  Real-data grade: 71/71 kicked events resolved, 284 legs, 0 disagreements with an independent
+  CFBD re-derivation. Real full-board build with a mocked model: 89 entries, 12 abstains, 154
+  legs, 154 complements, 0 halts.
+- MEANS: the grader and builder now run end to end on real data in the cloud clone. It does NOT
+  mean a live build works — no real model call was made, and nothing here ran on the VM.
+- NOT DONE: scheduled CFBD refresh before the grade job; stale-quote rule in
+  build_ncaaf_board.py's own consensus/dispersion (only leg selection is restricted);
+  `test_ticket_reader.py` is still a replica test; joint table rebuild; order #9.
+- UNVERIFIED: the VM crontab (grade job time, whether it exists); that the VM picks up the new
+  pull-log writers (first proof = a `_pulls.jsonl` line with `feed` after the next 12:30Z/09:00Z
+  pulls following the push); the first scheduled props pull (Sun 15:00Z).

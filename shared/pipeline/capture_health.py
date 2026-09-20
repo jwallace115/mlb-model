@@ -76,6 +76,11 @@ def _infer_feed(entry):
     # Depth .json.gz files without explicit feed -> espn_depth
     if fname.startswith("depth_") and fname.endswith(".json.gz"):
         return "espn_depth"
+    # N41: before N41 the ESPN puller logged {"utc","sha256","status"} — no `feed`, no `file` —
+    # and every nflverse line carries `file`. So a bare line is ESPN's, in whichever log it
+    # sits. Without this an "unchanged" ESPN pull left no pulse and a quiet day read STALE.
+    if not fname:
+        return "espn_legacy"
     return None
 
 
@@ -111,7 +116,10 @@ def _newest_pulls_age_by_feed(pulls_path, feed_name, now):
             if not line:
                 continue
             entry = json.loads(line)
-            if _infer_feed(entry) != feed_name:
+            entry_feed = _infer_feed(entry)
+            if entry_feed == "espn_legacy" and feed_name.startswith("espn_"):
+                entry_feed = feed_name
+            if entry_feed != feed_name:
                 continue
             ts_str = entry.get("utc", "")
             ts = _parse_filename_ts(ts_str)
