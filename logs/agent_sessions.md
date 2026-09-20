@@ -2639,6 +2639,20 @@ news connection, feed health). 4 items, each committed and pushed before the nex
   not 4, against the ~125 CLV needs. No ticket rebuild, no pre_repair lift, no guard fix,
   no test written. Decision written as N45, not N18 as WO5 specified: N18 is occupied by the
   09-19 deferral and was not overwritten.
+- BLOCKED: push. `git push` from the Cowork bridge fails with "could not read Username for
+  'https://github.com'" — the bridge VM has no credential helper and no GitHub identity.
+  Commit f421a737b (now amended) is LOCAL ONLY on the Mac repo; origin/main is still at
+  e671349d7. Per Rule 6 this work is not durable until someone pushes from the Mac.
+  Jeff: run `cd ~/mlb-model && git pull --rebase --autostash && git push`.
+  No PAT was embedded in the remote URL and no credential was written anywhere.
+- ALSO BLOCKED: `git pull --rebase --autostash` fails on the bridge. Git can CREATE
+  .git/index.lock here but cannot unlink it (bridge has no delete permission), so every
+  index-touching command strands a lock and the next one dies on "File exists". Delete
+  permission was requested and DENIED by the auto-mode classifier. The stranded lock was
+  moved aside instead, to `.git/STRANDED_index.lock_2026-09-20T1313Z` (plus one
+  `.git/STRANDED_<epoch>.lock`) — both are 0-byte and safe for Jeff to delete. Several
+  `.git/objects/*/tmp_obj_*` temp files are also stranded for the same reason.
+  Rebase was not needed: origin/main was 0 commits ahead, local 1 ahead.
 - UNVERIFIED: that the grader behaves identically on the Mac (python 3.13) — this ran on the
   bridge VM under python 3.10.12 / pandas 2.3.3 / pyarrow 25.0.1 installed into the VM.
   Whether any post-N37 ticket build has been scheduled for next week's slate. Whether the
