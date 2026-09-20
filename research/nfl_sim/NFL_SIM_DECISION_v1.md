@@ -1362,3 +1362,31 @@ run out of time because each pass play takes 17% longer than reality.
 **Summary.** Go rate: state mix is the primary cause; the table is right, the engine
 generates the wrong 4th-down situations. Tied drives: the clock runs too slowly on
 pass plays in Q4 late; 94% of expired drives never took a snap inside the 35.
+
+### D97 — D89 on this Mac; penalty breakdown by type/context (2026-09-19)
+
+D89 re-applied on `diag/5h` (`e3022020f`); `p_no_play_penalty` = 0.06716294458229942
+(exact match). Report: `phase5h_penalties.md`.
+
+**D89 effect (Mac, salt=0).** off_pen: 6.197→5.755 (FAIL→PASS, delta −0.442).
+def_pen: 3.879→3.599 (PASS→PASS). fd_pen_pt: 1.540→1.431 (PASS→PASS on Mac,
+delta 0.299 < 0.300 spec). Go rate and tied expiry null controls: moved < 0.003 —
+not affected. Consistent with Cowork's Linux measurement.
+
+**D89-on seed noise (11 salts).** off_pen SD 0.018 (gap 0.245 = 14 SD — real but
+within spec). fd_pen_pt SD 0.003 (gap 0.299 = 100 SD — the improvement is real,
+not noise, but on the spec boundary).
+
+**Penalty breakdown (from PBP, 1,087 games).** The sim draws a flat penalty rate
+per play attempt regardless of context. Real data: Q2 is 42% more penalised than
+Q1 (2.64 vs 1.86/game); 1st-down penalties are 35.5% of all no-play penalties.
+Offense: false start (2.25/game), holding (1.55), delay (0.59). Defense: DPI (1.01),
+offside (0.52), holding (0.49). The sim's per-type yardage tables match the data
+(5yd/10yd/DPI categories); the total RATE was wrong (D89 fix) but the type mix and
+context conditioning are not modelled.
+
+**FD-by-penalty split (PBP derivation).** No-play penalty FDs: 2,719/1,087 =
+1.251/team. Scrimmage-play penalty FDs: 1,036/1,087 = 0.477/team. Total: 1.727/team
+(test target 1.73). The sim only models the first mechanism. D89's correct rate gives
+~1.43/team from no-play penalties alone — 0.28 below target, for the right reason
+(missing scrimmage-penalty FD mechanism) rather than masked by the old inflated rate.
