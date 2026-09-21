@@ -6,6 +6,10 @@ Phase 5J-2 — board-layer tests.
     is still priced.  FAILS on 9b1e09b (the rung loop skips it for
     sim_p > 0.95, and the book-line loop skips it because
     bline in rung_lines).
+(b) Pre-kick snapshot selection: PIT@NE with a post-kick snapshot at
+    18:00Z and a pre-kick at 17:00Z — the pre-kick line (+5.0 / 41.0)
+    is chosen, not the in-play line (+13.5 / 36.5). Real-tape fixture.
+(c) --as-of props cap: props with pull_timestamp after as_of are excluded.
 """
 
 import sys
@@ -111,3 +115,84 @@ def test_book_quoted_rung_not_dropped(monkeypatch, tmp_path):
             expected = round(float((carries >= k).mean()), 4)
             assert leg["sim_p"] == expected, (
                 f"Line {leg['line']}: sim_p={leg['sim_p']} != expected {expected}")
+
+
+@pytest.fixture
+def pit_ne_line_dir(tmp_path):
+    """Two-snapshot tape: 170007Z (pre-kick) and 180009Z (post-kick)."""
+    import shutil
+    lh = tmp_path / "data" / "odds_archive" / "nfl" / "line_history" / "season=2026"
+    lh.mkdir(parents=True)
+    fix = Path(__file__).resolve().parent / "fixtures"
+    shutil.copy(fix / "snap_pit_ne_prekick.parquet", lh / "snap_20260920T170007Z.parquet")
+    shutil.copy(fix / "snap_pit_ne_postkick.parquet", lh / "snap_20260920T180009Z.parquet")
+    return lh
+
+
+def test_prekick_line_chosen_for_kicked_game(pit_ne_line_dir, monkeypatch):
+    """(b) PIT@NE kicked at ~17:02Z.  With as_of=18:30Z the 180009Z snapshot
+    has in-play lines (+13.5 / 36.5); get_lines_from_history must return the
+    170007Z pre-kick line (+5.0 / 41.0).  IND@KC (00:20Z kick) is unkicked
+    and gets 180009Z values.  Real-tape fixture."""
+    from nfl.sim import run_week
+
+    monkeypatch.setattr(run_week, "ROOT",
+                        pit_ne_line_dir.parent.parent.parent.parent.parent)
+    lines = run_week.get_lines_from_history(
+        as_of=pd.Timestamp("2026-09-20T18:30:00Z"))
+
+    # PIT@NE: pre-kick line from 170007Z
+    assert "PIT@NE" in lines, f"PIT@NE missing. keys={list(lines)}"
+    assert lines["PIT@NE"]["spread"] == 5.0, (
+        f"PIT@NE spread {lines['PIT@NE']['spread']} != 5.0 (pre-kick)")
+    assert lines["PIT@NE"]["total"] == 41.0, (
+        f"PIT@NE total {lines['PIT@NE']['total']} != 41.0 (pre-kick)")
+    assert "17:00:07" in lines["PIT@NE"]["line_snapshot_utc"], (
+        f"PIT@NE snapshot {lines['PIT@NE']['line_snapshot_utc']} not from 170007Z")
+
+    # IND@KC: unkicked, so 180009Z (newest pre-kick for that game)
+    assert "IND@KC" in lines, f"IND@KC missing. keys={list(lines)}"
+    assert lines["IND@KC"]["total"] == 46.0
+
+
+def test_as_of_caps_props(monkeypatch, tmp_path):
+    """(c) load_props_for_game with as_of excludes rows with
+    pull_timestamp > as_of."""
+    from nfl.sim import run_week
+
+    ts_early = "2026-09-20T09:00:00+00:00"
+    ts_late = "2026-09-20T16:00:00+00:00"
+    props = pd.DataFrame([
+        {"player_name": "A", "market_key": "player_receptions",
+         "line": 3.5, "over_price": -110, "under_price": -110,
+         "implied_over": 0.52, "implied_under": 0.52,
+         "pull_batch": "b1", "pull_timestamp": ts_early,
+         "bookmaker": "hardrockbet_fl", "home_team": "Dallas Cowboys",
+         "away_team": "Philadelphia Eagles", "snapshot_tag": "close"},
+        {"player_name": "B", "market_key": "player_receptions",
+         "line": 4.5, "over_price": -120, "under_price": 100,
+         "implied_over": 0.55, "implied_under": 0.50,
+         "pull_batch": "b2", "pull_timestamp": ts_late,
+         "bookmaker": "hardrockbet_fl", "home_team": "Dallas Cowboys",
+         "away_team": "Philadelphia Eagles", "snapshot_tag": "close"},
+    ])
+
+    # Write to props archive
+    props_dir = (tmp_path / "data" / "odds_archive" / "nfl" / "props"
+                 / "season=2026" / "week=02")
+    props_dir.mkdir(parents=True)
+    props.to_parquet(props_dir / "test_props.parquet", index=False)
+
+    monkeypatch.setattr(run_week, "ROOT", tmp_path)
+
+    # Without as_of: both rows
+    df_all, _, _ = run_week.load_props_for_game(
+        "Dallas Cowboys", "Philadelphia Eagles", 2026, 2)
+    assert len(df_all) == 2, f"Expected 2 rows without as_of, got {len(df_all)}"
+
+    # With as_of at 12:00Z: only the early row
+    df_capped, _, _ = run_week.load_props_for_game(
+        "Dallas Cowboys", "Philadelphia Eagles", 2026, 2,
+        as_of=pd.Timestamp("2026-09-20T12:00:00Z"))
+    assert len(df_capped) == 1, f"Expected 1 row with as_of=12:00Z, got {len(df_capped)}"
+    assert df_capped.iloc[0]["player_name"] == "A"

@@ -157,9 +157,16 @@ def get_lines_from_history(as_of=None):
             _snap_cache[path] = pd.read_parquet(path)
         return _snap_cache[path]
 
-    # Collect all games from the newest snapshot to know the full game set
-    newest_df = _read_snap(snap_meta[0][1])
-    all_games = newest_df.groupby(["home_team", "away_team"]).first().reset_index()
+    # 5J-2: collect all games from ALL snapshots (union, not just newest)
+    # so a game that has left the feed appears as SKIPPED instead of vanishing
+    _seen_games = {}
+    for _ts, _path in snap_meta:
+        sdf = _read_snap(_path)
+        for _, _row in sdf.groupby(["home_team", "away_team"]).first().reset_index().iterrows():
+            gk = (_row["home_team"], _row["away_team"])
+            if gk not in _seen_games:
+                _seen_games[gk] = _row
+    all_games = pd.DataFrame(_seen_games.values())
 
     for _, game_row in all_games.iterrows():
         home_full = game_row["home_team"]
@@ -324,12 +331,13 @@ def run_chunked_game(home, away, season, week, spread, total, n_sims,
     return pooled_td, pooled_pdf, dh, da, 8, False, raw_m, raw_t, m, t
 
 
-def load_props_for_game(home_full, away_full, season, week):
+def load_props_for_game(home_full, away_full, season, week, as_of=None):
     """D69: Load Hard Rock props, selecting by snapshot_tag precedence.
 
     Tag precedence: close > mid > open. Within a tag, latest pull_timestamp
-    wins. Returns (DataFrame, chosen_tag, chosen_timestamp). Raises on
-    unknown snapshot_tag rather than falling through.
+    wins. 5J-2: ``as_of`` (UTC Timestamp) caps props to rows with
+    ``pull_timestamp <= as_of``. Returns (DataFrame, chosen_tag,
+    chosen_timestamp). Raises on unknown snapshot_tag rather than falling through.
     """
     _TAG_PRECEDENCE = {"close": 3, "mid": 2, "open": 1}
 
@@ -350,6 +358,13 @@ def load_props_for_game(home_full, away_full, season, week):
     game_df = df[(df["home_team"] == home_full) & (df["away_team"] == away_full)]
     if game_df.empty:
         return pd.DataFrame(), None, None
+
+    # 5J-2: cap by pull_timestamp if as_of is specified
+    if as_of is not None and "pull_timestamp" in game_df.columns:
+        pts = pd.to_datetime(game_df["pull_timestamp"], errors="coerce", utc=True)
+        game_df = game_df[pts <= as_of].copy()
+        if game_df.empty:
+            return pd.DataFrame(), None, None
 
     # D69: select by snapshot_tag precedence
     if "snapshot_tag" in game_df.columns and game_df["snapshot_tag"].notna().any():
@@ -471,7 +486,7 @@ def _check_calibration_stamp(cal_path=None):
 
 
 def build_board(week, game_results, lines_used, team_game_counts, roster,
-                roster_lookups, pull_ts_str):
+                roster_lookups, pull_ts_str, as_of=None):
     """Build board, write picks_log.parquet and parlay_board.md."""
     out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -545,12 +560,15 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
         if not converged:
             flag += " [NOT ANCHORED]"
         board_lines.append(f"## {away} @ {home}{flag}")
-        board_lines.append(f"Hard Rock: spread {spread:+.1f} / total {total_line:.1f} ({gr['source']})")
+        line_snap_utc = gr.get("line_snapshot_utc", "")
+        line_book = gr.get("line_book", gr["source"])
+        board_lines.append(f"Hard Rock: spread {spread:+.1f} / total {total_line:.1f} ({line_book}, snap {line_snap_utc})")
         board_lines.append(f"Anchored: margin {margin.mean():.1f} / total {total_arr.mean():.1f}")
         board_lines.append("")
 
-        # D69: Load props with tag precedence
-        props, props_tag, props_chosen_ts = load_props_for_game(home_full, away_full, SEASON, week)
+        # D69: Load props with tag precedence; 5J-2: capped by as_of
+        props, props_tag, props_chosen_ts = load_props_for_game(
+            home_full, away_full, SEASON, week, as_of=as_of)
         props_pull_batch = None
         props_pull_ts = None
         if len(props) > 0:
@@ -977,8 +995,18 @@ def main():
             "source": ln["source"], "team_df": td, "player_df": pdf,
             "converged": conv, "n_iter": n_iter,
             "raw_m": raw_m, "raw_t": raw_t, "anch_m": anch_m, "anch_t": anch_t,
+            "line_snapshot_utc": ln.get("line_snapshot_utc"),
+            "line_book": ln.get("line_book"),
         })
         gc.collect()
+
+    # 5J-2: annotate anchoring_log rows with line_snapshot_utc / line_book
+    _line_meta = {f"{ln['away']}@{ln['home']}": (ln.get("line_snapshot_utc"), ln.get("line_book"))
+                  for ln in lines.values()}
+    for row in anchoring_log:
+        snap_utc, book = _line_meta.get(row["game"], (None, None))
+        row["line_snapshot_utc"] = snap_utc
+        row["line_book"] = book
 
     # Write anchoring log
     out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
@@ -1005,7 +1033,8 @@ def main():
 
     # Build board
     board_text, all_legs = build_board(week, game_results, lines, team_game_counts,
-                                        roster, roster_lookups, pull_ts_str)
+                                        roster, roster_lookups, pull_ts_str,
+                                        as_of=as_of_ts)
 
     total_time = time.time() - t0
     print(f"\nTotal runtime: {total_time:.0f}s ({total_time/60:.1f} min)")

@@ -1940,3 +1940,36 @@ requires item 2's `--as-of` props cap; results committed after item 2 in
 (same machine, same command). Verified after board run (with item 2's props cap).
 
 `engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+### D110 — Item 2: --as-of is complete and its record is written (2026-09-21)
+
+Branch `eng/5j`, Mac.
+
+**Changes (run_week.py):**
+1. `load_props_for_game(as_of=)`: when `as_of` is not None, rows with
+   `pull_timestamp > as_of` are excluded before D69 tag precedence selection.
+   Without this, a Week 2 re-run now prices Sunday-night pulls.
+2. `line_snapshot_utc` and `line_book` are **WRITTEN**: added to each
+   `anchoring_log.parquet` row (from the lines dict after the sim loop) and to
+   the board header per game (format: `(hardrockbet_fl, snap 2026-09-20 17:00:07+00:00)`).
+3. The game set is the **union** over all snapshots that pass the `as_of` filter,
+   not only the newest. A game that has left the feed now appears as SKIPPED with
+   a reason, instead of vanishing silently.
+4. `build_board(as_of=)`: passes `as_of` through to `load_props_for_game`.
+   `main()` passes `as_of_ts` to `build_board`.
+
+**P3 (pre-registered, now tested):** `--as-of 2026-09-20T18:30:00Z` -> 8 kicked
+games get their 17:00:07Z pre-kick line; PIT@NE +5.0 / 41.0, not the in-play
++13.5 / 36.5. HELD -- reproduced on the real tape.
+The feed's `commence_time` drifts to the actual kick (PIT@NE: 17:05:00Z in the
+170007Z snapshot -> 17:02:22Z in 180009Z). The pre-kick selection works because
+snap_ts 17:00:07Z < commence 17:02:22Z.
+
+**Tests (test_board_5j2.py):**
+- `test_prekick_line_chosen_for_kicked_game`: real-tape fixture with two
+  snapshots (170007Z pre-kick, 180009Z post-kick), PIT@NE + IND@KC. Asserts
+  PIT@NE gets the pre-kick line and IND@KC gets the newest.
+- `test_as_of_caps_props`: two props rows with different pull_timestamps;
+  as_of=12:00Z excludes the later row.
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
