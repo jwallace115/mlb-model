@@ -2795,3 +2795,9 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 ## 2026-09-21T12:25Z  cowork
 - RAN: ingest_hardrock_bets.py -> 42 slips/268 legs, 7 new; tagged 7 ours + 1 other. RETURNED all seven Week-2 tickets Lost. Legs: rule 18/34, AI props 6/10, AI game lines 3/10 (+1 pending). N58.
 - NOT DONE: PBP cross-check (pbp_2026 has 1 wk-2 game), CLV, sim-vs-book score.
+
+## 2026-09-21T13:24Z  cowork
+- VERIFIED eng/5j @59a686c from files in a cloud worktree; NOT merged. RAN: new tests vs main code (fail, as required); P3 on real post-kick tape (HOLDS; report said not testable); full board on branch and on main code (17 min each): P4 = 33/36 (MISSED >=34), null control 1239/1239 identical; K1 rebuilt from rows file.
+- FOUND: actual punts/game 7.90 not 8.73 (D99-D103 corrected in D108); Mac vs Linux board differs on 621/1237 legs up to 0.60 with identical inputs (Linux pandas 3.0.2).
+- WROTE: research/nfl_sim/phase5j_verification_2026-09-21.md, workorder_5J2_2026-09-21.md, D108.
+- NOT DONE: usage rebuild to re-check P1; cause of the cross-machine difference.

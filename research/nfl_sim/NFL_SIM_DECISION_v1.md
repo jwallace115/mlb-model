@@ -1742,3 +1742,24 @@ prospectively from Week 3 with nothing tuned on the scored season.
 own nflverse inputs so `nfl/data/pbp/depth_charts.parquet` can be untracked (N36: ~216 MB/month
 of git history); a committed script that prints the full K1 table with tolerances; then the
 `Q4_mid` split and the 0-40 s clock.
+
+### D108 — 5J verified by Cowork, NOT merged; a correction to D99-D103; the board is not reproducible across machines (2026-09-21)
+
+Full note: `research/nfl_sim/phase5j_verification_2026-09-21.md`. Fix order: `workorder_5J2_2026-09-21.md`.
+(Numbering: `eng/5j` holds D104-D107; this entry is on main and takes D108 — 5J-2 starts at D109.)
+- 5J's tests are real (each fails on main's code); item 3's null control holds on one machine (1,239/1,239
+  legs identical); P3 HOLDS on the real post-kick tape (Cowork ran it; the report's "not testable: line
+  capture stops before kick" was false). P4 MISSED by one (33/36 vs >= 34): a book line equal to a rung is
+  dropped. Item 3 has no test. `line_snapshot_utc` is never written. Schedule kickoffs are parsed as UTC
+  but are Eastern (4 h early, conservative). A failed schedule download is swallowed silently.
+- **CORRECTION to D99, D100, D101, D103 and to `phase5i_verification_2026-09-20.md`:** actual punts/game
+  2021-24 is **7.90** (PBP, 1,087 games, two definitions agree), not 8.73. The sim's 8.84 is +0.94 over, and
+  5I moved punts AWAY from real (8.19 -> 8.84), not toward it. Consistent with drives/game 23.8 vs 21.9.
+  The 8.73 came from uncommitted code; the committed generator (`run_k1_table.py`) is right.
+- **The weekly board is not reproducible across machines:** identical code, ratings, rosters, lines, props,
+  anchoring offsets equal to 3 dp in 15/15 games — 621 of 1,237 legs differ between the Mac's 2026-09-20
+  15:50Z board and a Linux re-run (Linux: py 3.11), max 0.60. Two Linux runs agree exactly. Cause not found;
+  5J-2 item 4 diagnoses it. Until then every sim player number is "this machine's", and the Week 2
+  sim-vs-book score (N50) scores the Mac's board only. Also measured: raw sim vs market at iteration 0 is
+  8-12 points off in several Week 2 games and anchoring offsets reach -2.05, under which player volume
+  shifts heavily (Linux: Jeanty 21.4 carries unanchored -> 12.3 anchored).
