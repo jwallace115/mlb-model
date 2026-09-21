@@ -2058,3 +2058,21 @@ check confirms Etienne's line 10.5 exists at sim_p=0.2198). Null control:
 1,237 matched legs, max sim_p diff = 0.0. Receptions 125/142 (unchanged).
 
 `engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+
+### D113 — 5J + 5J-2 verified and MERGED; the engine draws player shares once per chunk (2026-09-21)
+
+Full note `research/nfl_sim/phase5j2_verification_2026-09-21.md`; next order `workorder_5L_2026-09-21.md`.
+- `eng/5j` @ `57760d8` merged to main: D104-D107, D109-D112. Fingerprint unchanged `7f3d96900218c014`, so
+  the board still runs on `fit_5i`. Cowork ran the board itself (`--as-of 2026-09-20T15:30:00Z`): props cap
+  works (15:00:10Z pull used with pulls to 23:50Z on disk), `line_snapshot_utc` is written, P4 = 34/36 HELD,
+  null control 1,269/1,269 legs identical. Each fix's test fails on the pre-fix code.
+- Open from the merge: union game set simulates an already-played game (DET@BUF, +76 legs);
+  `test_usage_pit_5j.py` still hits the network; usage P1/bit-identity not re-run by Cowork.
+- **ENGINE DEFECT (supersedes D112's reading):** `_disperse` calls `rng_obj.beta(a, b)` without `size=N`, so a
+  player's target/carry share is ONE draw per `simulate_game` call, broadcast to every sim. Jeanty's carry
+  share: 1 unique value in 2,500 sims; mean carries 10.5-21.6 across six seeds (SD 4.2) with team carries
+  flat. The tie-order instability D112 found only changes WHICH single draw a player gets. Team level
+  unaffected. All player-level calibration/K4/tiers were fitted on this. **Work order 5L** fixes it with one
+  re-fit; 5K (Q4_mid) waits behind it. Cowork's 09-20 hypothesis (under-shrunk week-1 shares) is WITHDRAWN
+  as the first explanation of the sim-vs-book gap — untested either way until 5L.
