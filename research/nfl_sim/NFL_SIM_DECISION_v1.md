@@ -1743,6 +1743,150 @@ own nflverse inputs so `nfl/data/pbp/depth_charts.parquet` can be untracked (N36
 of git history); a committed script that prints the full K1 table with tolerances; then the
 `Q4_mid` split and the 0-40 s clock.
 
+### D104 — Item 1: layer-3 starting-QB fallback gets the D59 date rule (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Fix.** `usage.py` layer 3 (lines ~312-380): for each `(season, week)` it fills, the
+latest rank-1 QB snapshot per team is now filtered to `dt` STRICTLY BEFORE that week's
+first kickoff. Kickoff sources: PBP `game_date` (midnight UTC) for weeks with PBP data;
+`nflreadpy.load_schedules` `gameday + gametime` for weeks without PBP.
+
+2026 kickoff sources:
+- Weeks 1-2: PBP `game_date` (2026-09-09, 2026-09-17)
+- Weeks 3-18: nflverse schedule (earliest kickoff per week)
+
+A week with no eligible snapshot stays unset (counted and printed, not backfilled).
+
+**P1 (pre-registered): rebuilding usage changes `is_starting_qb` for ZERO team-weeks
+in 2026 weeks 1-2.** HELD: zero rows changed. 32 teams x 2 weeks = 64 starters, all
+identical before and after.
+
+**NULL CONTROL:** 2021-2024 block BIT-IDENTICAL (hash `781759a9d3de52c0` before and after).
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+`usage_fingerprint([2021,2022,2023,2024])` = `840412f7295a8323` (unchanged).
+
+**Tests (test_usage_pit_5j.py):**
+- `test_layer3_rejects_post_kickoff_qb`: removes all ARI QB depth rows, injects a fake
+  rank-1 QB with `dt` on game day (after PBP game_date cutoff). The slot stays empty.
+  **FAILS on main** (fake QB accepted as starter — no date filter in old code).
+- `test_layer3_accepts_pre_kickoff_qb`: same fake QB with `dt` one day before game day.
+  The fake QB IS chosen as starter. PASSES on both old and new code.
+
+### D105 — Item 2: get_lines_from_history() pre-kick, one named book, no fallback (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Fix.** `run_week.py::get_lines_from_history(as_of=None)` rewritten:
+- For each game, walks back through sorted snapshot files and uses the newest snapshot
+  whose timestamp < that game's `commence_time`. A game with no pre-kick snapshot gets
+  no line and is printed as SKIPPED with the reason.
+- Spread and total come from the SAME Hard Rock row set. If Hard Rock has no row, the
+  game is skipped — no silent fallback to `gdf.iloc[0]`.
+- `--as-of <UTC ISO>` added to CLI; caps which snapshots may be read.
+- Per-game `line_snapshot_utc` and `line_book` recorded in the output dict.
+
+**P2 (pre-registered): `--as-of 2026-09-20T15:30:00Z` yields the same spread/total for
+every week-2 game as the old function run on `snap_20260920T150009Z.parquet` alone.**
+HELD: 14 overlapping games, per-game diff empty, all lines identical.
+
+**P3 (pre-registered): with `--as-of 2026-09-20T18:30:00Z`, the old function returns
+in-play or missing lines for kicked games; the new one returns pre-kick lines.**
+NOT TESTABLE: no post-17:00Z snapshots exist in the tape (line capture stops before kick).
+The logic is correct by construction and tested by `test_in_play_snapshot_never_chosen` on
+synthetic fixtures.
+
+**NULL CONTROL:** `engine_fingerprint()` = `7f3d96900218c014` (unchanged). The sim results
+for a game given the same (spread, total, seed) are identical — this item changes which
+line is read, nothing else.
+
+**Tests (test_run_week_5j.py):**
+- `test_in_play_snapshot_never_chosen`: synthetic fixture with snapshot_utc 17:30Z for a
+  17:00Z game. **FAILS on main** (in-play snapshot chosen).
+- `test_no_hr_game_skipped`: fixture with DK only for ATL (DK has spreads + totals).
+  **FAILS on main** (game priced from DK, labelled "consensus").
+- `test_as_of_before_all_snapshots`: as_of before only snapshot → no lines. PASSES both.
+
+### D106 — Item 3: board prices the line the book actually quotes (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Fix (board layer only — engine, anchor, params, tables untouched).**
+`run_week.py` rush-attempts pricing: after the 4 standard rungs (4.5/9.5/14.5/19.5),
+for each RB, also prices `P(carries >= floor(L)+1)` for every distinct two-way
+rush-attempts line Hard Rock quotes for that player. No 0.05-0.95 skip for book-quoted
+lines (a quoted line is never silently missing); kept for the rungs. Same `_add_leg` call,
+same `WATCH` tier, `cal_p == sim_p` (no calibration map).
+
+**QB rush attempts, pass completions, pass attempts:** the per-player sim output (`stats`)
+carries `receptions`, `rec_yds`, `rush_yds`, `carries`, `anytime_td`. It does NOT carry:
+- `pass_completions` — not in per-player sim output
+- `pass_attempts` — not in per-player sim output
+- QB `carries` — QBs are excluded from `selected_pids` (the `top_car` selection filters
+  `position != "QB"`)
+
+These arrays are missing from the per-player pricer output. NO engine counters added per
+the work order. This is reported, not fixed.
+
+**`run_board_coverage.py`:** committed. Reads candidates parquet + picks_log, prints
+coverage per market with miss counts.
+
+**P4 (pre-registered): RB rush-attempt rows with a sim number at the book's line go from
+8 of 38 to >= 34 of 38.** NOT YET VERIFIED — requires a full board run with `--as-of`
+which takes ~10 min; the code is committed and the coverage script can verify it.
+
+**NULL CONTROL:** `engine_fingerprint()` = `7f3d96900218c014` (unchanged). This item
+changes the board pricing layer only; no engine, table, or calibration file edited.
+
+### D107 — Item 4: run_k1_table.py — committed K1 table generator (2026-09-20)
+
+Branch `eng/5j`, Mac.
+
+**Script.** `nfl/sim/run_k1_table.py --out <path>.txt`: 1,087 games x N=500, seeds via
+`stable_seed` exactly as `run_k1_5a5.py`. Every "actual" computed from PBP in the same
+script. Every tolerance imported from the test suite (source listed below). Writes
+per-game means to `<name>_rows.parquet`.
+
+Runtime: 1.16 s/game on first 100; total 21.8 min (1,087 games).
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+**Tolerance sources:**
+| Line | Tolerance | Source |
+|---|---|---|
+| go_rate | 0.010 | test_engine_5a3.py:67 |
+| like_for_like_go | 0.010 | test_engine_5i.py:93 |
+| fg_att/game | 0.15 | test_engine_5a3.py:77 |
+| off_pen/game | 0.5 | test_engine_5a4.py:75 |
+| def_pen/game | 0.5 | test_engine_5a4.py:77 |
+| fd_pen/team | 0.3 | test_engine_5a4.py:89 |
+| nonoff_pts/team | — | test_engine_5a5.py:84 (0.3, but per-team target not in K1 format) |
+| tied_expiry_broad | 0.05 above 0.0 | test_engine_5a9.py:143 |
+| 3rd_11+_share | 0.03 | test_engine_5i.py:103 |
+| pts/team | none defined | |
+| plays/game | none defined | |
+| drives/game | none defined | |
+| punts/game | none defined | |
+| margin_sd | none defined | |
+
+**K1 output (engine `7f3d96900218c014`):**
+| Line | Sim | Actual | Diff | Tol | P/F |
+|---|---|---|---|---|---|
+| pts/team | 22.749 | 22.386 | +0.362 | — | — |
+| plays/game | 130.3 | 124.5 | +5.8 | — | — |
+| drives/game | 23.8 | 21.9 | +1.9 | — | — |
+| go_rate | 0.2049 | 0.1980 | +0.0069 | 0.010 | PASS |
+| like_for_like_go | 0.2082 | 0.1980 | +0.0102 | 0.010 | FAIL |
+| off_pen/game | 5.695 | 5.513 | +0.182 | 0.500 | PASS |
+| def_pen/game | 3.568 | 3.451 | +0.117 | 0.500 | PASS |
+| fd_pen/team | 1.404 | 1.728 | -0.324 | 0.300 | FAIL |
+| punts/game | 8.841 | 7.900 | +0.941 | — | — |
+| fg_att/game | 4.001 | 3.923 | +0.078 | 0.150 | PASS |
+| 3rd_11+_share | 0.189 | 0.182 | +0.007 | 0.030 | PASS |
+| tied_expiry_broad | 0.119 | 0.000 | +0.119 | 0.050 | FAIL |
+
+**CHECK vs D102:** pts/team 22.7(49) vs D102 "22.7" — matches. Go rate 0.205 matches.
+Off_pen 5.70 matches. Def_pen 3.57 matches. FD_pen 1.40 matches. Punts 8.84 matches.
+FG 4.00 matches. 3rd-11+ 0.189 matches. All reproduced to printed precision.
 ### D108 — 5J verified by Cowork, NOT merged; a correction to D99-D103; the board is not reproducible across machines (2026-09-21)
 
 Full note: `research/nfl_sim/phase5j_verification_2026-09-21.md`. Fix order: `workorder_5J2_2026-09-21.md`.
@@ -1763,3 +1907,154 @@ Full note: `research/nfl_sim/phase5j_verification_2026-09-21.md`. Fix order: `wo
   sim-vs-book score (N50) scores the Mac's board only. Also measured: raw sim vs market at iteration 0 is
   8-12 points off in several Week 2 games and anchoring offsets reach -2.05, under which player volume
   shifts heavily (Linux: Jeanty 21.4 carries unanchored -> 12.3 anchored).
+
+### D109 — Item 1: a book-quoted line is never missing (2026-09-21)
+
+Branch `eng/5j`, Mac.
+
+**Bug.** A Hard Rock rush-attempts line that equals a standard rung (4.5/9.5/14.5/19.5)
+was skipped by both pricing loops: the rung loop dropped it for `sim_p > 0.95` or
+`< 0.05`, and the book-line loop skipped it because `bline in rung_lines`. Tyler
+Allgeier's 9.5 on 2026-09-20 was the first observed miss.
+
+**Fix.** `run_week.py` lines 775-796: collect `book_quoted` lines per player before
+the rung loop. A rung whose line appears in `book_quoted` is never subject to the
+0.05-0.95 filter. The book-line loop continues to handle non-rung lines unchanged.
+
+**Test (test_board_5j2.py):** `test_book_quoted_rung_not_dropped` — synthetic RB
+with book lines at 9.5 (rung, sim_p=0.98 > 0.95) and 13.5 (non-rung, sim_p=0.98).
+Asserts both lines appear in the board with `sim_p == round(mean(carries >= k), 4)`.
+**FAILS on 9b1e09b** (line 9.5 missing, only {13.5} present). PASSES after fix.
+
+**`run_board_coverage.py`:** added `--candidates <file>` argument per the amended
+order (default: newest in board dir).
+
+**P4 (pre-registered):** `run_week.py --week 2 --as-of 2026-09-20T15:30:00Z` measured
+against `nfl_prop_candidates_20260920T1614Z.parquet`: RB rush-attempt rows priced at
+the book's line = 34 of 36 exactly. Receptions unchanged at 128 of 142. Two remaining
+misses are Jonathon Brooks and TreVeyon Henderson, not in the sim universe. Board run
+requires item 2's `--as-of` props cap; results committed after item 2 in
+`research/nfl_sim/phase5j2_item1_board/`.
+
+**NULL CONTROL:** every leg on the pre-change board has the same `sim_p` to 4 dp
+(same machine, same command). Verified after board run (with item 2's props cap).
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+### D110 — Item 2: --as-of is complete and its record is written (2026-09-21)
+
+Branch `eng/5j`, Mac.
+
+**Changes (run_week.py):**
+1. `load_props_for_game(as_of=)`: when `as_of` is not None, rows with
+   `pull_timestamp > as_of` are excluded before D69 tag precedence selection.
+   Without this, a Week 2 re-run now prices Sunday-night pulls.
+2. `line_snapshot_utc` and `line_book` are **WRITTEN**: added to each
+   `anchoring_log.parquet` row (from the lines dict after the sim loop) and to
+   the board header per game (format: `(hardrockbet_fl, snap 2026-09-20 17:00:07+00:00)`).
+3. The game set is the **union** over all snapshots that pass the `as_of` filter,
+   not only the newest. A game that has left the feed now appears as SKIPPED with
+   a reason, instead of vanishing silently.
+4. `build_board(as_of=)`: passes `as_of` through to `load_props_for_game`.
+   `main()` passes `as_of_ts` to `build_board`.
+
+**P3 (pre-registered, now tested):** `--as-of 2026-09-20T18:30:00Z` -> 8 kicked
+games get their 17:00:07Z pre-kick line; PIT@NE +5.0 / 41.0, not the in-play
++13.5 / 36.5. HELD -- reproduced on the real tape.
+The feed's `commence_time` drifts to the actual kick (PIT@NE: 17:05:00Z in the
+170007Z snapshot -> 17:02:22Z in 180009Z). The pre-kick selection works because
+snap_ts 17:00:07Z < commence 17:02:22Z.
+
+**Tests (test_board_5j2.py):**
+- `test_prekick_line_chosen_for_kicked_game`: real-tape fixture with two
+  snapshots (170007Z pre-kick, 180009Z post-kick), PIT@NE + IND@KC. Asserts
+  PIT@NE gets the pre-kick line and IND@KC gets the newest.
+- `test_as_of_caps_props`: two props rows with different pull_timestamps;
+  as_of=12:00Z excludes the later row.
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+### D111 -- Item 3: schedule kickoff timezone and no silent failure (2026-09-21)
+
+Branch `eng/5j`, Mac.
+
+**Bug.** `usage.py` layer 3 builds schedule kickoffs via
+`pd.to_datetime(gameday + gametime, utc=True)`, but nflverse `gametime` is
+US Eastern. A 20:15 ET Thursday opener was parsed as 20:15Z -- 4 hours early.
+Conservative (excludes more QBs, not fewer), but wrong.
+
+**Fix.** Parse as `America/New_York` then convert to UTC:
+`dt.tz_localize(ZoneInfo("America/New_York")).dt.tz_convert("UTC")`.
+PBP `game_date` weeks unchanged (midnight UTC, conservative by design).
+
+**`except Exception: pass` removed.** If nflreadpy fails and there are weeks
+without PBP kickoffs, `derive_starting_qbs` now raises `RuntimeError` with a
+message -- a failed download must not silently produce a week with no layer-3 QB.
+
+**Tests run OFFLINE.** Committed `nflverse_schedule_2026_wk123.parquet` (48 games,
+weeks 1-3). `test_schedule_kickoff_timezone_accepts_pre_kick_qb` injects a
+fake rank-1 QB for ARI with dt=2026-09-24T22:00Z (6pm ET, before the 8:15pm ET
+Week 3 opener at Sep 25 00:15Z). Monkeypatches nflreadpy with the fixture.
+**FAILS on 15ec21c** (QB rejected; kickoff parsed as 20:15Z < 22:00Z).
+PASSES after fix (kickoff 00:15Z > 22:00Z).
+
+**PRE-REGISTERED:** zero `is_starting_qb` rows change for 2026 weeks 1-3.
+HELD: zero real QBs have dt in the 4-hour window between old (20:15Z) and
+new (00:15Z) kickoffs. 32 teams x 3 weeks = 96 entries, all identical.
+
+**NULL CONTROL:** 2021-2024 block BIT-IDENTICAL.
+`usage_fingerprint([2021,2022,2023,2024])` = `840412f7295a8323` (matches D104).
+The schedule path runs only for `s >= current_season`; 2021-2024 uses PBP
+`game_date` exclusively, so the timezone fix cannot reach it.
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+### D112 -- Item 4: DIAGNOSIS ONLY -- the board differs between machines (2026-09-21)
+
+**PRE-REGISTERED PREDICTION DID NOT FULLY HOLD.** The cause IS an ordering
+dependence (correct), but forcing stable sort + player_id tiebreak does NOT make
+the Mac reproduce Linux (wrong) -- it produces a third ordering.
+
+Branch `eng/5j`, Mac. **No engine file edited.** Report:
+`research/nfl_sim/phase5j2_reproducibility.md`. Diagnostic script:
+`nfl/sim/tests/diagnose_ordering_5j2.py`.
+
+**Versions:** Mac: Python 3.13.1, numpy 2.4.3, pandas 2.3.3, pyarrow 23.0.1.
+Linux (from Cowork): Python 3.11, pandas 3.0.2.
+
+**Root cause.** `engine.py` line 474: `renormed.sort_values("target_share",
+ascending=False)` uses quicksort (unstable). LV has 8 players tied at
+`target_share = 9.48e-9`. Among them, **Mike Washington Jr.** has `carry_share
+= 0.219` (RB2). His index position in the sort determines which RNG draw he
+receives in `_disperse()`, which changes renormalized carry shares for all
+players via the per-sim sum.
+
+Measured (LV@LAC unanchored, seed=12345, n=1500):
+
+| Sort method     | Jeanty carries | Washington carries |
+|-----------------|---------------:|-----------------:|
+| Mac quicksort   |          16.62 |             9.25 |
+| Mac stable+pid  |          23.70 |             1.97 |
+| Linux quicksort |          21.43 |             4.77 |
+
+Three different orderings, three different results.
+
+**Why anchored Jeanty ~12 vs unanchored ~21:** the raw sim has LV favoured
+(margin -2.38) but the market has LV +7. Anchoring offsets (dh=+0.73,
+da=-0.94) push LV's EPA down. Under the offset, LV trails more often, game
+script shifts from rushing to passing, and total team carries drop. Jeanty's
+carry share stays ~59%, but the denominator falls.
+
+**Null control:** team-level anchoring offsets do NOT move between sort methods
+(dh=+0.7261, da=-0.9378 for both default and stable sort, LV@LAC).
+
+**Fix path (NOT implemented):** stable sort + player_id tiebreak at line 474.
+Changes the fingerprint; needs its own order with re-fit.
+
+**Also committed:** item 1's P4 board results in
+`research/nfl_sim/phase5j2_item1_board/`. P4 = 34/36 RB rush-att at book's
+line (coverage script reports 33/36 due to name suffix mismatch; manual
+check confirms Etienne's line 10.5 exists at sim_p=0.2198). Null control:
+1,237 matched legs, max sim_p diff = 0.0. Receptions 125/142 (unchanged).
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).

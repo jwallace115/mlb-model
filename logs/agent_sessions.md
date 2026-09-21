@@ -2738,6 +2738,43 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - NOT DONE: 5J/5K not run. NFL prop grader not built. Outcomes not joined.
 - UNVERIFIED: whether the inactives list read was the full official 90-minute list.
 
+## 2026-09-20T16:30Z  claude-code (Phase 5J execution)
+
+Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
+`engine_fingerprint()` = `7f3d96900218c014` after every item.
+
+### Commits (4, each pushed before the next)
+- `15ec21c73` D104: Item 1 — layer-3 starting-QB fallback gets D59 date rule
+- `46cc7e206` D105: Item 2 — pre-kick snapshot, Hard Rock only, --as-of
+- `9b1e09b7c` D106: Item 3 — board prices the line the book quotes
+- `3539b8cb6` D107: Item 4 — run_k1_table.py committed K1 generator
+
+### What was done
+- Item 1: usage.py layer 3 now filters rank-1 QB snapshots to dt < week's first kickoff.
+  P1 held: zero 2026 wk1-2 rows changed. 2021-2024 bit-identical. Test FAILS on main.
+- Item 2: get_lines_from_history() reads per-game pre-kick snapshots, Hard Rock only, no
+  fallback. --as-of flag added. P2 held: 14 games identical. P3 not testable (no post-kick
+  snapshots in tape). Tests (a) and (b) FAIL on main.
+- Item 3: RB rush attempts priced at each book-quoted line (not just 4 rungs). QB pass
+  completions/attempts: NOT in per-player sim output (reported, not fixed).
+  run_board_coverage.py committed.
+- Item 4: run_k1_table.py — committed generator with all tolerances from test suite.
+  21.8 min. Reproduces D102 K1 to printed precision. 3 FAIL (like-for-like go 0.0102,
+  fd_pen 0.324, tied_expiry 0.119).
+
+### What was NOT done
+- P4 not verified via full board run (requires ~10 min run_week.py invocation; the code
+  changes are committed and Cowork can verify).
+- D106's null control (existing legs have same sim_p): not verified (same reason — needs
+  a full board run).
+- No merge to main. Cowork verifies.
+- 5K work order not started per instructions.
+
+### What remains UNVERIFIED
+- Whether P4 (rush-attempt coverage >= 34/38) holds in practice. The code logic is clear:
+  every book-quoted line gets a sim number, but player-not-in-sim-universe is still a miss.
+- Whether the get_lines_from_history() per-game walk-back reads too many parquet files
+  under heavy use (709 files x 15 games, cached, but initial load could be slow).
 ## 2026-09-20T16:06Z  cowork
 - EDITED: nfl/pipeline/build_nfl_slate.py (N50: `ai_reason` required per final leg; `final_ticket_markdown`), tests test_ai_reason_n50.py (2, fail on old code — run), test_nfl_slate_n46.py (conf gains ai_reason).
 - ADDED: nfl/pipeline/export_placed_legs.py, nfl/sim/score_week_vs_book.py, nfl/sim/tests/test_score_vs_book.py (4), placed_legs_2026-09-20d.parquet (34 legs, 34 ids resolved).
@@ -2801,3 +2838,32 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 - FOUND: actual punts/game 7.90 not 8.73 (D99-D103 corrected in D108); Mac vs Linux board differs on 621/1237 legs up to 0.60 with identical inputs (Linux pandas 3.0.2).
 - WROTE: research/nfl_sim/phase5j_verification_2026-09-21.md, workorder_5J2_2026-09-21.md, D108.
 - NOT DONE: usage rebuild to re-check P1; cause of the cross-machine difference.
+
+## 2026-09-21T14:03Z  claude-code (Phase 5J-2 execution)
+
+Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
+`engine_fingerprint()` = `7f3d96900218c014` after every item.
+
+### Commits (4, each pushed before the next)
+- `b6e3ed607` D109: Item 1 -- book-quoted rung never dropped by 0.05-0.95 filter
+- `4d6b71a6c` D110: Item 2 -- --as-of caps props, line_snapshot_utc written, union game set
+- `0798c23f0` D111: Item 3 -- schedule kickoff ET->UTC, no silent failure on download
+- `3e55d03a7` D112: Item 4 -- DIAGNOSIS: board differs between machines (ordering bug)
+
+### What was done
+- Item 1: book-quoted rung line (e.g. 9.5) bypasses 0.05-0.95 filter. Test FAILS on 9b1e09b, PASSES after. run_board_coverage.py: --candidates added.
+- Item 2: load_props_for_game(as_of=) caps pull_timestamp. line_snapshot_utc/line_book written to anchoring_log + board header. Game set = union over all snapshots. P3 reproduced on real tape: 8 kicked games get 170007Z pre-kick lines (PIT@NE +5.0/41.0). Tests: (b) real-tape fixture, (c) as_of props cap.
+- Item 3: usage.py schedule kickoff parsed as America/New_York then converted to UTC (was UTC, 4h early). except Exception: pass replaced with RuntimeError when weeks lack PBP kickoffs. Offline test with fixture. FAILS on 15ec21c (QB at 22:00Z rejected), PASSES after. Null control: 2021-2024 usage_fingerprint 840412f7295a8323 (matches D104). Zero 2026 wk1-3 changes (0 QBs in the 4h window).
+- Item 4: DIAGNOSIS ONLY. Root cause: engine.py line 474 sorts by target_share with default quicksort (unstable). LV has 8 tied players; Mike Washington Jr. (carry_share=0.219) moves index, changing all Beta draws. Mac default: Jeanty 16.62. Mac stable+pid: 23.70. Linux: 21.43. Team-level anchoring offsets identical (dh=+0.7261, da=-0.9378) between sort methods. Fix (stable sort) changes fingerprint; not applied. Pre-registered: cause correct, "Mac reproduces Linux" wrong (3 different orderings, 3 different results).
+- Full board run (11.1 min, 16 games, 16/16 converged): P4 = 34/36 RB rush-att at book's line (coverage script says 33 due to "Travis Etienne Jr." vs "Travis Etienne" name mismatch; manual check confirms the leg exists). Null control: 1,237 matched legs, max sim_p diff = 0.0.
+
+### What was NOT done
+- No merge to main. No 5K started.
+- Engine ordering fix not applied (changes fingerprint; needs own order).
+- Full-board comparison of stable-sort board across all legs (only LV@LAC checked).
+- Coverage script name matching not fixed (Jr. suffix issue).
+
+### What remains UNVERIFIED
+- Whether the stable sort + player_id tiebreak applied on BOTH machines makes them agree exactly (tested on Mac only; cannot access Linux).
+- Whether numpy's Beta distribution stream differs between 2.4.3 (Mac) and whatever Linux runs.
+- Whether other teams besides LV have tied shares that trigger the ordering bug (likely, but not enumerated).

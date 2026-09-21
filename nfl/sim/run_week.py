@@ -110,34 +110,107 @@ def get_week_teams_from_schedule(season, week):
     return set(), set()
 
 
-def get_lines_from_history():
+def get_lines_from_history(as_of=None):
+    """Read Hard Rock lines from the line-history tape.
+
+    5J: for each game, use the newest snapshot whose snapshot_utc < commence_time
+    for THAT game (pre-kick only). If Hard Rock has no row for the game, the game
+    is skipped — no silent fallback to another book. ``as_of`` (UTC datetime) caps
+    which snapshots may be read, so a past board is reproducible.
+    """
     lh_dir = ROOT / "data" / "odds_archive" / "nfl" / "line_history" / f"season={SEASON}"
     if not lh_dir.exists():
         return {}
     files = sorted(lh_dir.glob("*.parquet"))
     if not files:
         return {}
-    df = pd.read_parquet(files[-1])
+
+    # Parse snapshot_utc from each file and filter by as_of
+    snap_meta = []
+    for f in files:
+        # Filename: snap_20260920T150009Z.parquet
+        stem = f.stem  # snap_20260920T150009Z
+        try:
+            ts_str = stem.replace("snap_", "").replace("Z", "+00:00")
+            ts = pd.Timestamp(ts_str[:4] + "-" + ts_str[4:6] + "-" + ts_str[6:8]
+                              + "T" + ts_str[9:11] + ":" + ts_str[11:13] + ":" + ts_str[13:15]
+                              + "+00:00")
+        except Exception:
+            continue
+        if as_of is not None and ts >= as_of:
+            continue
+        snap_meta.append((ts, f))
+
+    if not snap_meta:
+        return {}
+
+    # Sort by timestamp descending — we'll iterate from newest
+    snap_meta.sort(key=lambda x: x[0], reverse=True)
+
     lines = {}
-    for (home_full, away_full), gdf in df.groupby(["home_team", "away_team"]):
+    skipped = []
+
+    # Cache: read each parquet at most once
+    _snap_cache = {}
+    def _read_snap(path):
+        if path not in _snap_cache:
+            _snap_cache[path] = pd.read_parquet(path)
+        return _snap_cache[path]
+
+    # 5J-2: collect all games from ALL snapshots (union, not just newest)
+    # so a game that has left the feed appears as SKIPPED instead of vanishing
+    _seen_games = {}
+    for _ts, _path in snap_meta:
+        sdf = _read_snap(_path)
+        for _, _row in sdf.groupby(["home_team", "away_team"]).first().reset_index().iterrows():
+            gk = (_row["home_team"], _row["away_team"])
+            if gk not in _seen_games:
+                _seen_games[gk] = _row
+    all_games = pd.DataFrame(_seen_games.values())
+
+    for _, game_row in all_games.iterrows():
+        home_full = game_row["home_team"]
+        away_full = game_row["away_team"]
         home = TEAM_MAP.get(home_full, home_full)
         away = TEAM_MAP.get(away_full, away_full)
-        hr = gdf[gdf["bookmaker"].str.contains("hardrock", case=False, na=False)]
-        if hr.empty:
-            hr = gdf
-        spreads = hr[hr["market"] == "spreads"]
-        home_sp = spreads[spreads["outcome_name"].apply(
-            lambda x: home_full.split()[-1] in str(x) if x else False)]
-        spread = -float(home_sp["point"].iloc[0]) if not home_sp.empty else None
-        totals = hr[hr["market"] == "totals"]
-        over = totals[totals["outcome_name"] == "Over"]
-        total = float(over["point"].iloc[0]) if not over.empty else None
-        if spread is not None and total is not None:
-            source = "hardrockbet_fl" if "hardrock" in str(hr["bookmaker"].iloc[0]).lower() else "consensus"
-            lines[f"{away}@{home}"] = {
-                "home": home, "away": away, "spread": spread, "total": total,
-                "source": source,
-            }
+        game_key = f"{away}@{home}"
+
+        ct_str = game_row.get("commence_time", None)
+        if ct_str is None or pd.isna(ct_str):
+            skipped.append((game_key, "no commence_time"))
+            continue
+        commence = pd.Timestamp(ct_str)
+
+        found = False
+        for snap_ts, snap_path in snap_meta:
+            if snap_ts >= commence:
+                continue
+            sdf = _read_snap(snap_path)
+            gdf = sdf[(sdf["home_team"] == home_full) & (sdf["away_team"] == away_full)]
+            hr = gdf[gdf["bookmaker"].str.contains("hardrock", case=False, na=False)]
+            if hr.empty:
+                continue
+            spreads = hr[hr["market"] == "spreads"]
+            home_sp = spreads[spreads["outcome_name"].apply(
+                lambda x: home_full.split()[-1] in str(x) if x else False)]
+            spread = -float(home_sp["point"].iloc[0]) if not home_sp.empty else None
+            totals = hr[hr["market"] == "totals"]
+            over = totals[totals["outcome_name"] == "Over"]
+            total = float(over["point"].iloc[0]) if not over.empty else None
+            if spread is not None and total is not None:
+                lines[game_key] = {
+                    "home": home, "away": away, "spread": spread, "total": total,
+                    "source": "hardrockbet_fl",
+                    "line_snapshot_utc": str(snap_ts),
+                    "line_book": "hardrockbet_fl",
+                }
+                found = True
+                break
+        if not found:
+            skipped.append((game_key, "no pre-kick Hard Rock snapshot"))
+
+    for game_key, reason in skipped:
+        print(f"  SKIPPED {game_key}: {reason}")
     return lines
 
 
@@ -258,12 +331,13 @@ def run_chunked_game(home, away, season, week, spread, total, n_sims,
     return pooled_td, pooled_pdf, dh, da, 8, False, raw_m, raw_t, m, t
 
 
-def load_props_for_game(home_full, away_full, season, week):
+def load_props_for_game(home_full, away_full, season, week, as_of=None):
     """D69: Load Hard Rock props, selecting by snapshot_tag precedence.
 
     Tag precedence: close > mid > open. Within a tag, latest pull_timestamp
-    wins. Returns (DataFrame, chosen_tag, chosen_timestamp). Raises on
-    unknown snapshot_tag rather than falling through.
+    wins. 5J-2: ``as_of`` (UTC Timestamp) caps props to rows with
+    ``pull_timestamp <= as_of``. Returns (DataFrame, chosen_tag,
+    chosen_timestamp). Raises on unknown snapshot_tag rather than falling through.
     """
     _TAG_PRECEDENCE = {"close": 3, "mid": 2, "open": 1}
 
@@ -284,6 +358,13 @@ def load_props_for_game(home_full, away_full, season, week):
     game_df = df[(df["home_team"] == home_full) & (df["away_team"] == away_full)]
     if game_df.empty:
         return pd.DataFrame(), None, None
+
+    # 5J-2: cap by pull_timestamp if as_of is specified
+    if as_of is not None and "pull_timestamp" in game_df.columns:
+        pts = pd.to_datetime(game_df["pull_timestamp"], errors="coerce", utc=True)
+        game_df = game_df[pts <= as_of].copy()
+        if game_df.empty:
+            return pd.DataFrame(), None, None
 
     # D69: select by snapshot_tag precedence
     if "snapshot_tag" in game_df.columns and game_df["snapshot_tag"].notna().any():
@@ -405,7 +486,7 @@ def _check_calibration_stamp(cal_path=None):
 
 
 def build_board(week, game_results, lines_used, team_game_counts, roster,
-                roster_lookups, pull_ts_str):
+                roster_lookups, pull_ts_str, as_of=None):
     """Build board, write picks_log.parquet and parlay_board.md."""
     out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -479,12 +560,15 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
         if not converged:
             flag += " [NOT ANCHORED]"
         board_lines.append(f"## {away} @ {home}{flag}")
-        board_lines.append(f"Hard Rock: spread {spread:+.1f} / total {total_line:.1f} ({gr['source']})")
+        line_snap_utc = gr.get("line_snapshot_utc", "")
+        line_book = gr.get("line_book", gr["source"])
+        board_lines.append(f"Hard Rock: spread {spread:+.1f} / total {total_line:.1f} ({line_book}, snap {line_snap_utc})")
         board_lines.append(f"Anchored: margin {margin.mean():.1f} / total {total_arr.mean():.1f}")
         board_lines.append("")
 
-        # D69: Load props with tag precedence
-        props, props_tag, props_chosen_ts = load_props_for_game(home_full, away_full, SEASON, week)
+        # D69: Load props with tag precedence; 5J-2: capped by as_of
+        props, props_tag, props_chosen_ts = load_props_for_game(
+            home_full, away_full, SEASON, week, as_of=as_of)
         props_pull_batch = None
         props_pull_ts = None
         if len(props) > 0:
@@ -707,12 +791,27 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
 
                     # Rush attempts (WATCH tier)
                     if pos == "RB":
+                        # 5J-2: collect book-quoted lines so a quoted rung
+                        # is never dropped by the 0.05-0.95 filter
+                        book_quoted = {bk[2] for bk in props_by_pid
+                                       if bk[0] == pid and bk[1] == "rush_attempts"}
+                        # Standard rungs (0.05-0.95 skip only if NOT book-quoted)
+                        rung_lines = {k - 0.5 for k in [5, 10, 15, 20]}
                         for k in [5, 10, 15, 20]:
+                            line = k - 0.5
                             sim_p = float((stats["carries"] >= k).mean())
-                            if sim_p < 0.05 or sim_p > 0.95:
+                            if line not in book_quoted and (sim_p < 0.05 or sim_p > 0.95):
                                 continue
-                            _add_leg("rush_attempts", "over", k - 0.5, sim_p,
+                            _add_leg("rush_attempts", "over", line, sim_p,
                                     f"prop_rush_att_{pos}", pos)
+                        # 5J: also price each distinct book-quoted non-rung line
+                        for bk, bv in props_by_pid.items():
+                            bpid, bfam, bline = bk
+                            if bpid == pid and bfam == "rush_attempts" and bline not in rung_lines:
+                                k = int(bline) + 1  # e.g. line 13.5 -> carries >= 14
+                                sim_p = float((stats["carries"] >= k).mean())
+                                _add_leg("rush_attempts", "over", bline, sim_p,
+                                        f"prop_rush_att_{pos}", pos)
 
             board_lines.append("")
 
@@ -798,6 +897,8 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--week", type=int, default=None)
+    parser.add_argument("--as-of", type=str, default=None,
+                        help="UTC ISO timestamp cap for line snapshots (default: now)")
     args = parser.parse_args()
 
     t0 = time.time()
@@ -818,7 +919,8 @@ def main():
     if week_teams:
         print(f"Week {week} teams from schedule: {len(week_teams)}")
 
-    all_lines = get_lines_from_history()
+    as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
+    all_lines = get_lines_from_history(as_of=as_of_ts)
     if week_matchups:
         # Filter by exact matchups (away, home pairs)
         lines = {k: v for k, v in all_lines.items()
@@ -893,8 +995,18 @@ def main():
             "source": ln["source"], "team_df": td, "player_df": pdf,
             "converged": conv, "n_iter": n_iter,
             "raw_m": raw_m, "raw_t": raw_t, "anch_m": anch_m, "anch_t": anch_t,
+            "line_snapshot_utc": ln.get("line_snapshot_utc"),
+            "line_book": ln.get("line_book"),
         })
         gc.collect()
+
+    # 5J-2: annotate anchoring_log rows with line_snapshot_utc / line_book
+    _line_meta = {f"{ln['away']}@{ln['home']}": (ln.get("line_snapshot_utc"), ln.get("line_book"))
+                  for ln in lines.values()}
+    for row in anchoring_log:
+        snap_utc, book = _line_meta.get(row["game"], (None, None))
+        row["line_snapshot_utc"] = snap_utc
+        row["line_book"] = book
 
     # Write anchoring log
     out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
@@ -921,7 +1033,8 @@ def main():
 
     # Build board
     board_text, all_legs = build_board(week, game_results, lines, team_game_counts,
-                                        roster, roster_lookups, pull_ts_str)
+                                        roster, roster_lookups, pull_ts_str,
+                                        as_of=as_of_ts)
 
     total_time = time.time() - t0
     print(f"\nTotal runtime: {total_time:.0f}s ({total_time/60:.1f} min)")

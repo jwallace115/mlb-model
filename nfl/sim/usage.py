@@ -310,6 +310,8 @@ def derive_starting_qbs(depth, plays, active_universe=None):
                             break
 
     # Layer 3: Static depth chart (new schema, prospective only: current season).
+    # D59/5J: use the latest rank-1 QB snapshot per team with dt STRICTLY
+    # BEFORE that week's first kickoff, same rule as depth_order layer.
     current_season = max(OUTPUT_SEASONS)
     for s in sorted(OUTPUT_SEASONS, reverse=True):
         if (PBP_DIR / f"pbp_{s}.parquet").exists():
@@ -317,7 +319,7 @@ def derive_starting_qbs(depth, plays, active_universe=None):
             break
 
     n_layer3_unset = 0
-    static_qb1 = {}
+    n_layer3_set = 0
     if "pos_rank" in depth.columns:
         new_qb = depth[
             (depth.get("pos_abb", pd.Series(dtype=str)) == "QB")
@@ -325,35 +327,103 @@ def derive_starting_qbs(depth, plays, active_universe=None):
         ].copy()
         if not new_qb.empty:
             new_qb["pos_rank"] = pd.to_numeric(new_qb["pos_rank"], errors="coerce")
-            qb1 = (
-                new_qb[new_qb["pos_rank"] == 1]
-                .sort_values("dt", ascending=False, na_position="last")
-                .drop_duplicates("team", keep="first")
-            )
-            static_qb1 = {r["team"]: r["gsis_id"] for _, r in qb1.iterrows()}
+            new_qb["_dt"] = pd.to_datetime(new_qb["dt"], errors="coerce", utc=True)
+            qb1_all = new_qb[new_qb["pos_rank"] == 1].copy()
+
+            # Build first-kickoff lookup: PBP game_date, then nflverse schedule
+            _l3_kickoff = {}
+            for s in OUTPUT_SEASONS:
+                if s < current_season:
+                    continue
+                pbp_path = PBP_DIR / f"pbp_{int(s)}.parquet"
+                if pbp_path.exists():
+                    gdf = pd.read_parquet(pbp_path, columns=["season", "week", "game_date"]).drop_duplicates(["season", "week", "game_date"])
+                    gdf["game_date"] = pd.to_datetime(gdf["game_date"], errors="coerce", utc=True)
+                    for w in gdf["week"].unique():
+                        wg = gdf[gdf["week"] == w]
+                        _l3_kickoff[(int(s), int(w))] = wg["game_date"].min()
+            # For weeks with no PBP (future), use nflverse schedule.
+            # 5J-2: gametime is US Eastern; parse as America/New_York then
+            # convert to UTC. Previously parsed as UTC, making kickoffs 4-5 h
+            # early (20:15 ET read as 20:15Z). PBP game_date is midnight UTC
+            # (conservative by design — excludes more, not fewer QBs).
+            from zoneinfo import ZoneInfo
+            _et = ZoneInfo("America/New_York")
+            try:
+                import nflreadpy
+                for s in OUTPUT_SEASONS:
+                    if s < current_season:
+                        continue
+                    sched = nflreadpy.load_schedules([s]).to_pandas()
+                    sched["_ko"] = (
+                        pd.to_datetime(
+                            sched["gameday"].astype(str) + " "
+                            + sched["gametime"].fillna("13:00"),
+                            errors="coerce",
+                        )
+                        .dt.tz_localize(_et)
+                        .dt.tz_convert("UTC")
+                    )
+                    for w in sched["week"].unique():
+                        key = (int(s), int(w))
+                        if key not in _l3_kickoff:
+                            wg = sched[sched["week"] == w]
+                            ko = wg["_ko"].min()
+                            if pd.notna(ko):
+                                _l3_kickoff[key] = ko
+            except Exception as _sched_err:
+                # If schedule unavailable, check whether every week being built
+                # already has a PBP kickoff. If not, halt — a failed download
+                # must not silently produce a week with no layer-3 QB.
+                _needs_sched = any(
+                    (int(s), w) not in _l3_kickoff
+                    for s in OUTPUT_SEASONS if s >= current_season
+                    for w in range(1, 23)
+                )
+                if _needs_sched:
+                    raise RuntimeError(
+                        f"nflverse schedule unavailable ({_sched_err}) and not "
+                        f"every week has a PBP kickoff — layer-3 QB assignment "
+                        f"would be incomplete"
+                    ) from _sched_err
+
             for s in OUTPUT_SEASONS:
                 if s < current_season:
                     continue
                 for w in range(1, 23):
-                    for team, gsis_id in static_qb1.items():
-                        key = (s, w, team)
+                    kickoff = _l3_kickoff.get((s, w))
+                    if kickoff is None or pd.isna(kickoff):
+                        continue
+                    # Latest rank-1 QB per team with dt < kickoff
+                    eligible = qb1_all[qb1_all["_dt"] < kickoff]
+                    if eligible.empty:
+                        continue
+                    week_qb1 = (
+                        eligible.sort_values("_dt", ascending=False, na_position="last")
+                        .drop_duplicates("team", keep="first")
+                    )
+                    for _, r in week_qb1.iterrows():
+                        key = (s, w, r["team"])
                         if key not in starting:
                             starting[key] = {
-                                "gsis_id": gsis_id,
+                                "gsis_id": r["gsis_id"],
                                 "source": "depth_chart",
                             }
+                            n_layer3_set += 1
 
-    # Count 2025 team-weeks left unset (no old-schema depth chart, no PBP fallback)
+    # Count team-weeks left unset (no eligible snapshot before kickoff)
     for s in OUTPUT_SEASONS:
-        if s != 2025:
+        if s < current_season:
             continue
         for w in range(1, 23):
-            for team in (static_qb1 if "pos_rank" in depth.columns and not new_qb.empty else {}):
+            for team in depth["team"].unique() if "team" in depth.columns else []:
                 if (s, w, team) not in starting:
                     n_layer3_unset += 1
     if n_layer3_unset:
-        print(f"  derive_starting_qbs: {n_layer3_unset} (2025, week, team) keys unset "
-              f"(no old-schema depth chart, no prev-game PBP)")
+        print(f"  derive_starting_qbs: {n_layer3_unset} team-weeks unset after layer 3 "
+              f"(no eligible snapshot before kickoff)")
+    if n_layer3_set:
+        print(f"  derive_starting_qbs: layer 3 set {n_layer3_set} team-weeks")
 
     return starting
 
