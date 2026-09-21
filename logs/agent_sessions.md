@@ -2783,3 +2783,11 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 
 ## 2026-09-20T18:08Z  cowork
 - RECORDED: N56 addendum (flexible asks, fixed delivery) + Kalshi first look (ML tracks Pinnacle within 1.0pt; cheaper than HR after fees on 13/15 favourites, 5/15 dogs; one snapshot pair).
+
+## 2026-09-20T23:30Z  cowork
+- ADDED nfl/pipeline/pull_hardrock_alt_lines.py (no test yet). RAN by Jeff on the VM: 641 alt rows, 9 markets.
+- SENT 23:29Z: AI same-game parlay IND@KC, 5 legs, play-down-to prices; record sgp_ticket_ai_20260920T2329Z.json; N57.
+- NOT DONE: test for the alt puller; placement (waiting on slip); NFL game/SGP ticket logger.
+
+## 2026-09-20T23:36Z  cowork
+- LOGGED placement of the IND@KC SGP from Jeff's slip: +799 vs product 11.77 (ratio 0.764), $25 BONUS bet, $0 cash at risk. Record updated in sgp_ticket_ai_20260920T2329Z.json.

@@ -1,0 +1,84 @@
+{
+  "ticket_id": "AI_SGP_IND_KC",
+  "kind": "sgp_ticket_ai_opinion",
+  "slate": "2026-09-20-SNF",
+  "sent_utc": "2026-09-20T23:29Z",
+  "kickoff": "2026-09-21T00:20:00Z",
+  "game": "Colts@Chiefs",
+  "reader": "claude-fable-5-1 (Cowork chat)",
+  "standing_rule": "N54 opinion pick; N56 format (one card, play-down-to price per leg)",
+  "pulls": {
+    "props": "2026-09-20T23:25:48Z",
+    "lines_10_books": "2026-09-20T23:25:50Z",
+    "alt_lines": "2026-09-20T23:26:18Z (641 rows, 9 markets)",
+    "espn_injuries": "2325Z"
+  },
+  "inputs": [
+    "pbp_2026 wk1: KC 38 rushes (Walker 23, Johnson 8, Mahomes 7 incl. kneels), Mahomes 15/27; IND 20 rushes (Taylor 19), Taylor 4 tgt/3 rec, K.Allen 6 tgt/6 rec; IND defense 8.48 ypp allowed, BAL 37 rushes",
+    "inactives (Yahoo 23:00Z): IND RB Giddens, WR Dulin; KC LT Simmons, S Conner; Chris Jones/Delane reported active",
+    "10-book lines: KC -5.5..-6.5, total 45.5-46.5",
+    "ESPN: all five players Active; K.Allen note - facing a possible suspension"
+  ],
+  "thesis": "KC controls on the ground as a home favourite; IND throws to keep up. Legs are positively correlated by design; Hard Rock prices SGPs below the product (N49).",
+  "legs": [
+    {
+      "leg": "Kansas City Chiefs -2.5 (alternate_spreads)",
+      "american": -240,
+      "play_down_to": -260
+    },
+    {
+      "leg": "Kenneth Walker III Over 17.5 rush attempts (alt)",
+      "american": -165,
+      "play_down_to": -185
+    },
+    {
+      "leg": "Patrick Mahomes Over 3.5 rush attempts (alt)",
+      "american": -160,
+      "play_down_to": -180
+    },
+    {
+      "leg": "Jonathan Taylor Over 2.5 receptions",
+      "american": -125,
+      "play_down_to": -140
+    },
+    {
+      "leg": "Keenan Allen Over 3.5 receptions",
+      "american": -130,
+      "play_down_to": -145
+    }
+  ],
+  "optional": [
+    {
+      "leg": "Daniel Jones Over 31.5 pass attempts",
+      "american": -120,
+      "play_down_to": -135,
+      "note": "overlaps the placed D.Jones O20.5 completions leg - advised to leave off"
+    }
+  ],
+  "product_decimal": 11.77,
+  "expected_sgp_quote": "+650 to +850 (guess from N49 ratios; the slip is the number)",
+  "passed_on": [
+    "totals (holds Under 46 already)",
+    "Taylor rushing",
+    "anytime TDs (Walker -220, Taylor -155)"
+  ],
+  "existing_exposure_same_game": [
+    "IND +6 (price ticket)",
+    "Under 46 (opinion ticket)",
+    "D.Jones O20.5 cmp (rule 10-leg)"
+  ],
+  "conflict": "KC -2.5 and IND +6 both win only if KC wins by 3-5.",
+  "placement": {
+    "logged_utc": "2026-09-20T23:36Z",
+    "source": "Jeff's Hard Rock bet-slip screenshot in the Cowork chat (no slip id shown)",
+    "legs_placed": "all five as sent, same lines (Walker O17.5 rush att, K.Allen O3.5 rec, Taylor O2.5 rec, Chiefs -2.5, Mahomes O3.5 rush att)",
+    "quoted_american": 799,
+    "quoted_decimal": 8.99,
+    "product_of_leg_prices_decimal": 11.77,
+    "sgp_ratio_to_product": 0.764,
+    "stake": 25.0,
+    "stake_type": "BONUS bet (free-bet credit): slip shows payout $199.67 = winnings only, the $25 is not returned and is not Jeff's cash",
+    "cash_at_risk": 0.0,
+    "note": "+799 sits inside the +650..+850 range given on the card. Ratio 0.764 for five positively-correlated legs in one game (N49 measured ~0.70 for a 4-leg one-game ticket and 0.85-0.97 for opposing-team pairs)."
+  }
+}

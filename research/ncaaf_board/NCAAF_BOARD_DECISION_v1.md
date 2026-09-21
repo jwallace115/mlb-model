@@ -1515,3 +1515,24 @@ of ~0.07*p*(1-p) it is cheaper on 13 of 15 favourites (mean 1.0 pt) and 5 of 15 
 One pre-kick snapshot pair, 8 minutes apart, one Sunday: a measurement, not a finding. Spread/total ladders
 are thin (median ~$2-3k per rung). Use: a second sharp reference for the reader, and a cheaper venue for a
 SINGLE favourite moneyline - Kalshi has no parlays.
+
+### N57 — First same-game parlay card (IND@KC, SNF) + on-demand alt-lines puller (2026-09-20)
+
+Jeff (~23:20Z): rerun the lines, alt lines welcome, an SGP for Sunday night, "5 leg plus"; then (23:27Z)
+"4 plus legs...id prefer 5 plus but if there not there lets not force them". One card sent 23:29Z under
+N54/N56: KC -2.5 alt (-240), Walker O17.5 rush att alt (-165), Mahomes O3.5 rush att alt (-160), Taylor O2.5
+rec (-125), K.Allen O3.5 rec (-130); each with a reason and a play-down-to price; optional D.Jones O31.5 att
+advised off (overlap). Product 11.77; Jeff told the slip's SGP price is the number (expected +650..+850, a
+guess from N49's ratios). Record: `nfl/data/board/week=2026_02/sgp_ticket_ai_20260920T2329Z.json`.
+NEW CODE: `nfl/pipeline/pull_hardrock_alt_lines.py` — one game, 12 alternate markets, refuses after kickoff
+or under 3,000 credits, writes only to gitignored `_cowork_patches/`. RETURNED on first run: 641 rows, 9
+markets (alt spreads/totals/team totals, alt receptions/rec yds/rush yds/rush att/pass yds/pass TDs). Not
+returned by Hard Rock: alt pass attempts/completions, team_totals. No test yet (written 55 min before
+kickoff) — NOT DONE. The thesis legs are deliberately correlated; a conflict is on record: KC -2.5 here and
+IND +6 on the price ticket both win only if KC wins by 3-5.
+
+**N57 addendum (23:36Z) — placed.** Jeff's slip: all five legs as sent, SGP **+799** (decimal 8.99) against a
+leg-price product of 11.77 -> ratio **0.764** for five positively-correlated legs in one game (card said
++650..+850). Stake is a **$25 BONUS bet** (free-bet credit): slip payout $199.67 is winnings only, $0 of his
+cash at risk, so it sits outside the N56 stake ceilings, which govern cash. For the pricing ledger: one more
+same-game data point - N49's 4-leg one-game ticket was ~0.70, opposing-team pairs 0.85-0.97.
