@@ -2008,3 +2008,53 @@ The schedule path runs only for `s >= current_season`; 2021-2024 uses PBP
 `game_date` exclusively, so the timezone fix cannot reach it.
 
 `engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+### D112 -- Item 4: DIAGNOSIS ONLY -- the board differs between machines (2026-09-21)
+
+**PRE-REGISTERED PREDICTION DID NOT FULLY HOLD.** The cause IS an ordering
+dependence (correct), but forcing stable sort + player_id tiebreak does NOT make
+the Mac reproduce Linux (wrong) -- it produces a third ordering.
+
+Branch `eng/5j`, Mac. **No engine file edited.** Report:
+`research/nfl_sim/phase5j2_reproducibility.md`. Diagnostic script:
+`nfl/sim/tests/diagnose_ordering_5j2.py`.
+
+**Versions:** Mac: Python 3.13.1, numpy 2.4.3, pandas 2.3.3, pyarrow 23.0.1.
+Linux (from Cowork): Python 3.11, pandas 3.0.2.
+
+**Root cause.** `engine.py` line 474: `renormed.sort_values("target_share",
+ascending=False)` uses quicksort (unstable). LV has 8 players tied at
+`target_share = 9.48e-9`. Among them, **Mike Washington Jr.** has `carry_share
+= 0.219` (RB2). His index position in the sort determines which RNG draw he
+receives in `_disperse()`, which changes renormalized carry shares for all
+players via the per-sim sum.
+
+Measured (LV@LAC unanchored, seed=12345, n=1500):
+
+| Sort method     | Jeanty carries | Washington carries |
+|-----------------|---------------:|-----------------:|
+| Mac quicksort   |          16.62 |             9.25 |
+| Mac stable+pid  |          23.70 |             1.97 |
+| Linux quicksort |          21.43 |             4.77 |
+
+Three different orderings, three different results.
+
+**Why anchored Jeanty ~12 vs unanchored ~21:** the raw sim has LV favoured
+(margin -2.38) but the market has LV +7. Anchoring offsets (dh=+0.73,
+da=-0.94) push LV's EPA down. Under the offset, LV trails more often, game
+script shifts from rushing to passing, and total team carries drop. Jeanty's
+carry share stays ~59%, but the denominator falls.
+
+**Null control:** team-level anchoring offsets do NOT move between sort methods
+(dh=+0.7261, da=-0.9378 for both default and stable sort, LV@LAC).
+
+**Fix path (NOT implemented):** stable sort + player_id tiebreak at line 474.
+Changes the fingerprint; needs its own order with re-fit.
+
+**Also committed:** item 1's P4 board results in
+`research/nfl_sim/phase5j2_item1_board/`. P4 = 34/36 RB rush-att at book's
+line (coverage script reports 33/36 due to name suffix mismatch; manual
+check confirms Etienne's line 10.5 exists at sim_p=0.2198). Null control:
+1,237 matched legs, max sim_p diff = 0.0. Receptions 125/142 (unchanged).
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
