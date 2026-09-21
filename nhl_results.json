@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-20T21:20:49.624335+00:00",
-  "last_updated": "2026-09-20 21:20 UTC",
+  "generated_at": "2026-09-21T21:19:31.546902+00:00",
+  "last_updated": "2026-09-21 21:19 UTC",
   "pipeline_run_date": "2026-05-09",
   "signals_source": "stale",
-  "game_date": "2026-09-20",
+  "game_date": "2026-09-21",
   "today_signals": [],
   "recent_results": [],
   "season_performance": {
@@ -79,11 +79,10 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-09-20T21:20:49.628834+00:00",
-    "date_reviewed": "2026-09-19",
+    "generated_at": "2026-09-21T21:19:31.551914+00:00",
+    "date_reviewed": "2026-09-20",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  },
-  "weekly_review": null
+  }
 }
