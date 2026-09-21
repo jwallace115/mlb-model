@@ -36,20 +36,28 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--week", type=int, required=True)
     parser.add_argument("--season", type=int, default=2026)
+    parser.add_argument("--candidates", type=str, default=None,
+                        help="Path to candidates parquet (default: newest in board dir)")
     args = parser.parse_args()
 
-    week_dir = BOARD_DIR / f"week={args.season}_{args.week:02d}"
-    if not week_dir.exists():
-        print(f"No board directory: {week_dir}")
-        return
-
-    # Newest candidates file
-    cand_files = sorted(week_dir.glob("nfl_prop_candidates_*.parquet"))
-    if not cand_files:
-        print(f"No candidates parquet in {week_dir}")
-        return
-    cands = pd.read_parquet(cand_files[-1])
-    print(f"Candidates: {cand_files[-1].name} ({len(cands)} rows)")
+    if args.candidates:
+        cand_path = Path(args.candidates)
+        if not cand_path.exists():
+            print(f"Candidates file not found: {cand_path}")
+            return
+        cands = pd.read_parquet(cand_path)
+        print(f"Candidates: {cand_path.name} ({len(cands)} rows)")
+    else:
+        week_dir = BOARD_DIR / f"week={args.season}_{args.week:02d}"
+        if not week_dir.exists():
+            print(f"No board directory: {week_dir}")
+            return
+        cand_files = sorted(week_dir.glob("nfl_prop_candidates_*.parquet"))
+        if not cand_files:
+            print(f"No candidates parquet in {week_dir}")
+            return
+        cands = pd.read_parquet(cand_files[-1])
+        print(f"Candidates: {cand_files[-1].name} ({len(cands)} rows)")
 
     # Two-way rows only
     two_way = cands[cands["two_way"] == True].copy()

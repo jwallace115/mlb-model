@@ -773,21 +773,25 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
 
                     # Rush attempts (WATCH tier)
                     if pos == "RB":
-                        # Standard rungs (0.05-0.95 skip)
-                        for k in [5, 10, 15, 20]:
-                            sim_p = float((stats["carries"] >= k).mean())
-                            if sim_p < 0.05 or sim_p > 0.95:
-                                continue
-                            _add_leg("rush_attempts", "over", k - 0.5, sim_p,
-                                    f"prop_rush_att_{pos}", pos)
-                        # 5J: also price each distinct book-quoted line
+                        # 5J-2: collect book-quoted lines so a quoted rung
+                        # is never dropped by the 0.05-0.95 filter
+                        book_quoted = {bk[2] for bk in props_by_pid
+                                       if bk[0] == pid and bk[1] == "rush_attempts"}
+                        # Standard rungs (0.05-0.95 skip only if NOT book-quoted)
                         rung_lines = {k - 0.5 for k in [5, 10, 15, 20]}
+                        for k in [5, 10, 15, 20]:
+                            line = k - 0.5
+                            sim_p = float((stats["carries"] >= k).mean())
+                            if line not in book_quoted and (sim_p < 0.05 or sim_p > 0.95):
+                                continue
+                            _add_leg("rush_attempts", "over", line, sim_p,
+                                    f"prop_rush_att_{pos}", pos)
+                        # 5J: also price each distinct book-quoted non-rung line
                         for bk, bv in props_by_pid.items():
                             bpid, bfam, bline = bk
                             if bpid == pid and bfam == "rush_attempts" and bline not in rung_lines:
                                 k = int(bline) + 1  # e.g. line 13.5 -> carries >= 14
                                 sim_p = float((stats["carries"] >= k).mean())
-                                # No 0.05-0.95 skip for book-quoted lines
                                 _add_leg("rush_attempts", "over", bline, sim_p,
                                         f"prop_rush_att_{pos}", pos)
 

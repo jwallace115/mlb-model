@@ -1907,3 +1907,36 @@ Full note: `research/nfl_sim/phase5j_verification_2026-09-21.md`. Fix order: `wo
   sim-vs-book score (N50) scores the Mac's board only. Also measured: raw sim vs market at iteration 0 is
   8-12 points off in several Week 2 games and anchoring offsets reach -2.05, under which player volume
   shifts heavily (Linux: Jeanty 21.4 carries unanchored -> 12.3 anchored).
+
+### D109 — Item 1: a book-quoted line is never missing (2026-09-21)
+
+Branch `eng/5j`, Mac.
+
+**Bug.** A Hard Rock rush-attempts line that equals a standard rung (4.5/9.5/14.5/19.5)
+was skipped by both pricing loops: the rung loop dropped it for `sim_p > 0.95` or
+`< 0.05`, and the book-line loop skipped it because `bline in rung_lines`. Tyler
+Allgeier's 9.5 on 2026-09-20 was the first observed miss.
+
+**Fix.** `run_week.py` lines 775-796: collect `book_quoted` lines per player before
+the rung loop. A rung whose line appears in `book_quoted` is never subject to the
+0.05-0.95 filter. The book-line loop continues to handle non-rung lines unchanged.
+
+**Test (test_board_5j2.py):** `test_book_quoted_rung_not_dropped` — synthetic RB
+with book lines at 9.5 (rung, sim_p=0.98 > 0.95) and 13.5 (non-rung, sim_p=0.98).
+Asserts both lines appear in the board with `sim_p == round(mean(carries >= k), 4)`.
+**FAILS on 9b1e09b** (line 9.5 missing, only {13.5} present). PASSES after fix.
+
+**`run_board_coverage.py`:** added `--candidates <file>` argument per the amended
+order (default: newest in board dir).
+
+**P4 (pre-registered):** `run_week.py --week 2 --as-of 2026-09-20T15:30:00Z` measured
+against `nfl_prop_candidates_20260920T1614Z.parquet`: RB rush-attempt rows priced at
+the book's line = 34 of 36 exactly. Receptions unchanged at 128 of 142. Two remaining
+misses are Jonathon Brooks and TreVeyon Henderson, not in the sim universe. Board run
+requires item 2's `--as-of` props cap; results committed after item 2 in
+`research/nfl_sim/phase5j2_item1_board/`.
+
+**NULL CONTROL:** every leg on the pre-change board has the same `sim_p` to 4 dp
+(same machine, same command). Verified after board run (with item 2's props cap).
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
