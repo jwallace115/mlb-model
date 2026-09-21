@@ -471,7 +471,9 @@ def _build_player_context(home, away, season, week, player_usage, active_uni,
         # FIX 2: measured redistribution
         renormed = _renormalize_measured(pu, active_ids)
         renormed = renormed[renormed["player_id"].isin(active_ids)].copy()
-        renormed = renormed.sort_values("target_share", ascending=False).reset_index(drop=True)
+        renormed = renormed.sort_values(
+            ["target_share", "player_id"], ascending=[False, True], kind="stable"
+        ).reset_index(drop=True)
 
         positions = renormed["position"].values
         is_receiver = np.isin(positions, ["WR", "TE", "RB"])
@@ -511,7 +513,7 @@ def _build_player_context(home, away, season, week, player_usage, active_uni,
                 b = (1 - p) * phi
                 a = max(a, 0.01)
                 b = max(b, 0.01)
-                out[:, j] = rng_obj.beta(a, b)
+                out[:, j] = rng_obj.beta(a, b, size=N)
             # Renormalize each sim
             row_sums = out.sum(axis=1, keepdims=True)
             row_sums[row_sums == 0] = 1.0

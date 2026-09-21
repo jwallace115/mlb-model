@@ -2076,3 +2076,42 @@ Full note `research/nfl_sim/phase5j2_verification_2026-09-21.md`; next order `wo
   unaffected. All player-level calibration/K4/tiers were fitted on this. **Work order 5L** fixes it with one
   re-fit; 5K (Q4_mid) waits behind it. Cowork's 09-20 hypothesis (under-shrunk week-1 shares) is WITHDRAWN
   as the first explanation of the sim-vs-book gap — untested either way until 5L.
+
+### D114 -- Item 0+1: per-sim share dispersion; total order on players (2026-09-21)
+
+Branch `eng/5l`, Mac.
+
+**Item 0 — PHI provenance.** `PHI_TARGET = {WR 42.9, TE 85.0, RB 71.3}` and
+`PHI_CARRY = {RB 7.9, QB 20.0}` were MLE-fitted from real game-to-game share
+dispersion in PBP 2021-2024. Source: `research/nfl_sim/phase2b_player_report.md`
+section "Beta-binomial overdispersion (phi), MLE-fitted 2021-2024", decision at
+D1 era (Phase 2B, 2026-09-14). N: WR targets 8,115; TE 3,923; RB 3,935; RB
+carries 4,801; QB carries 1,795. **Measured from PBP, not tuned against sim
+output.** They stand.
+
+**Item 1 fixes (engine.py):**
+1. `_disperse` line 514: `rng_obj.beta(a, b)` -> `rng_obj.beta(a, b, size=N)`.
+   Now draws N independent share values per player, as documented ("per-sim
+   Beta-dispersed shares"). Previously: 1 scalar broadcast to all N sims.
+2. `sort_values("target_share")` -> `sort_values(["target_share", "player_id"],
+   ascending=[False, True], kind="stable")`. Deterministic order on all machines.
+
+`engine_fingerprint()`: `7f3d96900218c014` -> `c01d2af899c7e9f8` (expected).
+
+**Tests (test_engine_5l.py), all FAIL on main, PASS after fix:**
+- (a) per-sim: Jeanty carry share over 2500 sims has > 100 unique values (main: 1)
+  and mean within 0.03 of renormalised carry_share. PASSED.
+- (b) seed stability: seeds 1-6, SD of Jeanty mean carries < 0.6.
+  Main: 4.41. After fix: PASSED (< 0.6).
+- (c) order invariance: 3 shuffles of usage rows -> every LV player's carries
+  and targets identical (exact equality). PASSED.
+
+**P1 (pre-registered):** (b) and (c) hold as stated. HELD.
+
+**P2 / NULL CONTROL (pre-registered):** K1 team-level lines do not move.
+`run_k1_table.py` -> `phase5l_k1_item1.txt` (21.7 min, 1,087 games, N=500).
+Every line IDENTICAL to `phase5j_k1_before.txt` to 4 decimal places:
+pts/team |d|=0.0000 (tol 0.10), plays/game 0.0000 (0.3), drives/game 0.0000
+(0.1), go_rate 0.0000 (0.002), off_pen 0.0000 (0.06), def_pen 0.0000 (0.03).
+**All PASS.** The per-sim share fix is team-level neutral by construction:
+the RNG stream for team-level drives/plays is seeded independently.
