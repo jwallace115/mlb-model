@@ -196,3 +196,51 @@ def test_as_of_caps_props(monkeypatch, tmp_path):
         as_of=pd.Timestamp("2026-09-20T12:00:00Z"))
     assert len(df_capped) == 1, f"Expected 1 row with as_of=12:00Z, got {len(df_capped)}"
     assert df_capped.iloc[0]["player_name"] == "A"
+
+
+def test_schedule_kickoff_timezone_accepts_pre_kick_qb(monkeypatch):
+    """(d) A rank-1 QB dated 2026-09-24T22:00Z (6pm ET) is before the
+    8:15pm ET Week 3 opener (= 00:15Z Sep 25).  The current code rejects it
+    because it parses 20:15 ET as 20:15Z (4 h early).  FAILS on 15ec21c."""
+    from nfl.sim import usage
+
+    # Load the real depth chart and remove all QB rows for a test team (ARI)
+    real_depth = pd.read_parquet(usage.PBP_DIR / "depth_charts.parquet")
+    mask = (real_depth["team"] == "ARI") & (real_depth.get("pos_abb", pd.Series(dtype=str)) == "QB")
+    depth_no_ari_qb = real_depth[~mask].copy()
+
+    # Inject a fake rank-1 QB for ARI with dt = 2026-09-24T22:00Z
+    fake_row = {
+        "team": "ARI", "gsis_id": "00-FAKEWK3", "pos_abb": "QB",
+        "pos_rank": 1, "dt": "2026-09-24T22:00:00+00:00",
+        "position": "QB", "season": 2026, "week": 0,
+        "club_code": "ARI", "depth_team": 1, "full_name": "Fake QB WK3",
+    }
+    depth = pd.concat([depth_no_ari_qb, pd.DataFrame([fake_row])], ignore_index=True)
+
+    # Monkeypatch nflreadpy to use the offline fixture
+    fixture_path = Path(__file__).resolve().parent / "fixtures" / "nflverse_schedule_2026_wk123.parquet"
+    fixture_df = pd.read_parquet(fixture_path)
+
+    class FakeNflreadpy:
+        @staticmethod
+        def load_schedules(seasons):
+            class _Wrapper:
+                def __init__(self, df):
+                    self._df = df
+                def to_pandas(self):
+                    return self._df
+            return _Wrapper(fixture_df[fixture_df["season"].isin(seasons)])
+
+    monkeypatch.setitem(sys.modules, "nflreadpy", FakeNflreadpy())
+
+    starting = usage.derive_starting_qbs(depth, plays=None)
+    wk3_ari = starting.get((2026, 3, "ARI"))
+
+    assert wk3_ari is not None, (
+        "No starter for (2026, 3, ARI) — fake QB at 22:00Z was rejected. "
+        "Schedule kickoff timezone is still wrong (20:15 ET read as 20:15Z)."
+    )
+    assert wk3_ari["gsis_id"] == "00-FAKEWK3", (
+        f"Wrong starter: {wk3_ari['gsis_id']}, expected 00-FAKEWK3"
+    )

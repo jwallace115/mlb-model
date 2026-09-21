@@ -342,15 +342,28 @@ def derive_starting_qbs(depth, plays, active_universe=None):
                     for w in gdf["week"].unique():
                         wg = gdf[gdf["week"] == w]
                         _l3_kickoff[(int(s), int(w))] = wg["game_date"].min()
-            # For weeks with no PBP (future), use nflverse schedule
+            # For weeks with no PBP (future), use nflverse schedule.
+            # 5J-2: gametime is US Eastern; parse as America/New_York then
+            # convert to UTC. Previously parsed as UTC, making kickoffs 4-5 h
+            # early (20:15 ET read as 20:15Z). PBP game_date is midnight UTC
+            # (conservative by design — excludes more, not fewer QBs).
+            from zoneinfo import ZoneInfo
+            _et = ZoneInfo("America/New_York")
             try:
                 import nflreadpy
                 for s in OUTPUT_SEASONS:
                     if s < current_season:
                         continue
                     sched = nflreadpy.load_schedules([s]).to_pandas()
-                    sched["_ko"] = pd.to_datetime(sched["gameday"].astype(str) + " " + sched["gametime"].fillna("13:00"),
-                                                  errors="coerce", utc=True)
+                    sched["_ko"] = (
+                        pd.to_datetime(
+                            sched["gameday"].astype(str) + " "
+                            + sched["gametime"].fillna("13:00"),
+                            errors="coerce",
+                        )
+                        .dt.tz_localize(_et)
+                        .dt.tz_convert("UTC")
+                    )
                     for w in sched["week"].unique():
                         key = (int(s), int(w))
                         if key not in _l3_kickoff:
@@ -358,8 +371,21 @@ def derive_starting_qbs(depth, plays, active_universe=None):
                             ko = wg["_ko"].min()
                             if pd.notna(ko):
                                 _l3_kickoff[key] = ko
-            except Exception:
-                pass  # nflreadpy not available; PBP-only kickoffs
+            except Exception as _sched_err:
+                # If schedule unavailable, check whether every week being built
+                # already has a PBP kickoff. If not, halt — a failed download
+                # must not silently produce a week with no layer-3 QB.
+                _needs_sched = any(
+                    (int(s), w) not in _l3_kickoff
+                    for s in OUTPUT_SEASONS if s >= current_season
+                    for w in range(1, 23)
+                )
+                if _needs_sched:
+                    raise RuntimeError(
+                        f"nflverse schedule unavailable ({_sched_err}) and not "
+                        f"every week has a PBP kickoff — layer-3 QB assignment "
+                        f"would be incomplete"
+                    ) from _sched_err
 
             for s in OUTPUT_SEASONS:
                 if s < current_season:

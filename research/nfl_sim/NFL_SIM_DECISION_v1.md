@@ -1973,3 +1973,38 @@ snap_ts 17:00:07Z < commence 17:02:22Z.
   as_of=12:00Z excludes the later row.
 
 `engine_fingerprint()` = `7f3d96900218c014` (unchanged).
+
+### D111 -- Item 3: schedule kickoff timezone and no silent failure (2026-09-21)
+
+Branch `eng/5j`, Mac.
+
+**Bug.** `usage.py` layer 3 builds schedule kickoffs via
+`pd.to_datetime(gameday + gametime, utc=True)`, but nflverse `gametime` is
+US Eastern. A 20:15 ET Thursday opener was parsed as 20:15Z -- 4 hours early.
+Conservative (excludes more QBs, not fewer), but wrong.
+
+**Fix.** Parse as `America/New_York` then convert to UTC:
+`dt.tz_localize(ZoneInfo("America/New_York")).dt.tz_convert("UTC")`.
+PBP `game_date` weeks unchanged (midnight UTC, conservative by design).
+
+**`except Exception: pass` removed.** If nflreadpy fails and there are weeks
+without PBP kickoffs, `derive_starting_qbs` now raises `RuntimeError` with a
+message -- a failed download must not silently produce a week with no layer-3 QB.
+
+**Tests run OFFLINE.** Committed `nflverse_schedule_2026_wk123.parquet` (48 games,
+weeks 1-3). `test_schedule_kickoff_timezone_accepts_pre_kick_qb` injects a
+fake rank-1 QB for ARI with dt=2026-09-24T22:00Z (6pm ET, before the 8:15pm ET
+Week 3 opener at Sep 25 00:15Z). Monkeypatches nflreadpy with the fixture.
+**FAILS on 15ec21c** (QB rejected; kickoff parsed as 20:15Z < 22:00Z).
+PASSES after fix (kickoff 00:15Z > 22:00Z).
+
+**PRE-REGISTERED:** zero `is_starting_qb` rows change for 2026 weeks 1-3.
+HELD: zero real QBs have dt in the 4-hour window between old (20:15Z) and
+new (00:15Z) kickoffs. 32 teams x 3 weeks = 96 entries, all identical.
+
+**NULL CONTROL:** 2021-2024 block BIT-IDENTICAL.
+`usage_fingerprint([2021,2022,2023,2024])` = `840412f7295a8323` (matches D104).
+The schedule path runs only for `s >= current_season`; 2021-2024 uses PBP
+`game_date` exclusively, so the timezone fix cannot reach it.
+
+`engine_fingerprint()` = `7f3d96900218c014` (unchanged).
