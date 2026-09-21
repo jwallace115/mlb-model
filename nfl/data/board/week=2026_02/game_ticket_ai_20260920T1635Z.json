@@ -1,0 +1,367 @@
+{
+  "ticket_id": "AI_GAMES_5",
+  "kind": "game_ticket_ai",
+  "slate": "2026-09-20e",
+  "built_utc": "2026-09-20T16:35:36.128190+00:00",
+  "snapshot_file": "data/odds_archive/nfl/line_history/season=2026/snap_20260920T160008Z.parquet",
+  "snapshot_utc": "2026-09-20T16:00:08.722062+00:00",
+  "method": "Hard Rock price vs Pinnacle/LowVig proportional no-vig at the same point; off-market points judged against all 9 other books. No football model, no sim.",
+  "reader": "claude-fable-5-1 (Cowork chat)",
+  "legs": [
+    {
+      "game": "Packers@Jets",
+      "event_id": "4aeee070bb6ec60bdfae4dede61b9014",
+      "commence_time": "2026-09-20T17:00:00Z",
+      "market": "spreads",
+      "outcome": "New York Jets",
+      "point": 3.0,
+      "american": 100.0,
+      "p_sharp_same_point": 0.4977,
+      "n_sharp": 2,
+      "other_books": [
+        {
+          "book": "draftkings",
+          "point": 3.5,
+          "american": -118.0
+        },
+        {
+          "book": "williamhill_us",
+          "point": 3.0,
+          "american": -103.0
+        },
+        {
+          "book": "lowvig",
+          "point": 3.0,
+          "american": -102.0
+        },
+        {
+          "book": "betonlineag",
+          "point": 3.0,
+          "american": -105.0
+        },
+        {
+          "book": "fanduel",
+          "point": 3.5,
+          "american": -118.0
+        },
+        {
+          "book": "betrivers",
+          "point": 3.5,
+          "american": -117.0
+        },
+        {
+          "book": "betmgm",
+          "point": 3.0,
+          "american": -102.0
+        },
+        {
+          "book": "pinnacle",
+          "point": 3.0,
+          "american": -106.0
+        },
+        {
+          "book": "bovada",
+          "point": 3.0,
+          "american": -110.0
+        }
+      ],
+      "ai_reason": "Even money on +3: every other book charges -102 to -110 for +3 and three need -117 for +3.5. Best price on the key number.",
+      "optional": false
+    },
+    {
+      "game": "Steelers@Patriots",
+      "event_id": "9d14f87600f6edc74dbcb5c74edf6246",
+      "commence_time": "2026-09-20T17:00:00Z",
+      "market": "spreads",
+      "outcome": "Pittsburgh Steelers",
+      "point": 5.5,
+      "american": -105.0,
+      "p_sharp_same_point": 0.5093,
+      "n_sharp": 2,
+      "other_books": [
+        {
+          "book": "draftkings",
+          "point": 5.5,
+          "american": -108.0
+        },
+        {
+          "book": "williamhill_us",
+          "point": 5.5,
+          "american": -109.0
+        },
+        {
+          "book": "lowvig",
+          "point": 5.5,
+          "american": -109.0
+        },
+        {
+          "book": "betonlineag",
+          "point": 5.5,
+          "american": -110.0
+        },
+        {
+          "book": "fanduel",
+          "point": 5.5,
+          "american": -115.0
+        },
+        {
+          "book": "betrivers",
+          "point": 5.0,
+          "american": -109.0
+        },
+        {
+          "book": "betmgm",
+          "point": 5.5,
+          "american": -105.0
+        },
+        {
+          "book": "pinnacle",
+          "point": 5.5,
+          "american": -109.0
+        },
+        {
+          "book": "bovada",
+          "point": 5.0,
+          "american": -110.0
+        }
+      ],
+      "ai_reason": "Market is -108 to -115 at +5.5; Hard Rock -105. Sharp no-vig 50.9%.",
+      "optional": false
+    },
+    {
+      "game": "Browns@Buccaneers",
+      "event_id": "0636ebff776d43f8c829a36713c80b22",
+      "commence_time": "2026-09-20T17:00:00Z",
+      "market": "totals",
+      "outcome": "Over",
+      "point": 41.0,
+      "american": -110.0,
+      "p_sharp_same_point": null,
+      "n_sharp": null,
+      "other_books": [
+        {
+          "book": "draftkings",
+          "point": 41.5,
+          "american": -108.0
+        },
+        {
+          "book": "williamhill_us",
+          "point": 41.5,
+          "american": -107.0
+        },
+        {
+          "book": "lowvig",
+          "point": 41.5,
+          "american": -107.0
+        },
+        {
+          "book": "betonlineag",
+          "point": 41.5,
+          "american": -110.0
+        },
+        {
+          "book": "fanduel",
+          "point": 41.5,
+          "american": -102.0
+        },
+        {
+          "book": "betrivers",
+          "point": 41.0,
+          "american": -113.0
+        },
+        {
+          "book": "betmgm",
+          "point": 41.5,
+          "american": -105.0
+        },
+        {
+          "book": "pinnacle",
+          "point": 42.0,
+          "american": 104.0
+        },
+        {
+          "book": "bovada",
+          "point": 41.5,
+          "american": -105.0
+        }
+      ],
+      "ai_reason": "All nine other books hang 41.5 or 42 (Pinnacle 42); Hard Rock 41 is a half to a full point low.",
+      "optional": false
+    },
+    {
+      "game": "Dolphins@49ers",
+      "event_id": "68bc55903f50af4af4766adcc89fcc61",
+      "commence_time": "2026-09-20T20:25:00Z",
+      "market": "spreads",
+      "outcome": "Miami Dolphins",
+      "point": 13.5,
+      "american": -105.0,
+      "p_sharp_same_point": 0.5116,
+      "n_sharp": 1,
+      "other_books": [
+        {
+          "book": "draftkings",
+          "point": 13.5,
+          "american": -110.0
+        },
+        {
+          "book": "williamhill_us",
+          "point": 13.5,
+          "american": -113.0
+        },
+        {
+          "book": "lowvig",
+          "point": 13.0,
+          "american": -101.0
+        },
+        {
+          "book": "betonlineag",
+          "point": 13.0,
+          "american": -105.0
+        },
+        {
+          "book": "fanduel",
+          "point": 13.5,
+          "american": -115.0
+        },
+        {
+          "book": "betrivers",
+          "point": 13.0,
+          "american": -112.0
+        },
+        {
+          "book": "betmgm",
+          "point": 13.5,
+          "american": -110.0
+        },
+        {
+          "book": "pinnacle",
+          "point": 13.5,
+          "american": -110.0
+        },
+        {
+          "book": "bovada",
+          "point": 13.0,
+          "american": -110.0
+        }
+      ],
+      "ai_reason": "Others -110 to -115 at +13.5 and four books already at +13; Hard Rock -105.",
+      "optional": false
+    },
+    {
+      "game": "Colts@Chiefs",
+      "event_id": "50bc247030707d823b9c3581d7eb5760",
+      "commence_time": "2026-09-21T00:20:00Z",
+      "market": "spreads",
+      "outcome": "Indianapolis Colts",
+      "point": 6.0,
+      "american": -105.0,
+      "p_sharp_same_point": 0.5133,
+      "n_sharp": 2,
+      "other_books": [
+        {
+          "book": "draftkings",
+          "point": 6.0,
+          "american": -112.0
+        },
+        {
+          "book": "williamhill_us",
+          "point": 6.0,
+          "american": -113.0
+        },
+        {
+          "book": "betonlineag",
+          "point": 6.0,
+          "american": -114.0
+        },
+        {
+          "book": "lowvig",
+          "point": 6.0,
+          "american": -109.0
+        },
+        {
+          "book": "fanduel",
+          "point": 6.5,
+          "american": -120.0
+        },
+        {
+          "book": "betrivers",
+          "point": 6.0,
+          "american": -107.0
+        },
+        {
+          "book": "bovada",
+          "point": 5.5,
+          "american": -110.0
+        },
+        {
+          "book": "pinnacle",
+          "point": 6.0,
+          "american": -113.0
+        }
+      ],
+      "ai_reason": "Best price of 10 books at +6 (others -107 to -114). Sharp no-vig 51.3%.",
+      "optional": false
+    },
+    {
+      "game": "Vikings@Bears",
+      "event_id": "0283a29e1b38ef78b29b904fd56a16dd",
+      "commence_time": "2026-09-20T17:00:00Z",
+      "market": "spreads",
+      "outcome": "Minnesota Vikings",
+      "point": 5.0,
+      "american": -110.0,
+      "p_sharp_same_point": null,
+      "n_sharp": null,
+      "other_books": [
+        {
+          "book": "draftkings",
+          "point": 4.5,
+          "american": -108.0
+        },
+        {
+          "book": "williamhill_us",
+          "point": 4.5,
+          "american": -110.0
+        },
+        {
+          "book": "lowvig",
+          "point": 4.5,
+          "american": -105.0
+        },
+        {
+          "book": "betonlineag",
+          "point": 4.5,
+          "american": -112.0
+        },
+        {
+          "book": "fanduel",
+          "point": 4.5,
+          "american": -110.0
+        },
+        {
+          "book": "betrivers",
+          "point": 5.0,
+          "american": -112.0
+        },
+        {
+          "book": "betmgm",
+          "point": 4.5,
+          "american": -105.0
+        },
+        {
+          "book": "pinnacle",
+          "point": 4.5,
+          "american": -107.0
+        },
+        {
+          "book": "bovada",
+          "point": 4.5,
+          "american": -110.0
+        }
+      ],
+      "ai_reason": "OPTIONAL 6th: seven of nine other books are at +4.5; Hard Rock +5 -110.",
+      "optional": true
+    }
+  ]
+}

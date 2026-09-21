@@ -14,7 +14,8 @@ all-day 20-leg. No edge is claimed; q is Hard Rock's own de-vigged probability.
     only on the OTHER team, and no player already used anywhere on the slate.
   * The dealt ticket is logged as `<ID>_RULE`. The reader's version is logged as `<ID>_FINAL`;
     every leg it drops or adds against the RULE ticket is derived by code and needs a reason and
-    a source; every final leg needs its own availability confirmation; fewer legs is valid.
+    a source; every final leg needs its own availability confirmation AND a one-line `ai_reason`
+    (N50); fewer legs is valid.
   * A later ticket (the 4pm one, built from a later pull) is dealt from the NEW candidate table
     with every player already logged on the slate's tickets excluded.
 
@@ -201,6 +202,7 @@ def log_final_slate_ticket(log_path, cand, meta, slate, spec, final_keys, reason
         c = confirmations.get(k) or {}
         if not c.get("availability_source") or not c.get("checked_at"):
             raise RuntimeError(f"HALT: final leg {k} has no availability confirmation")
+    leg_notes = check_ai_reasons(final_keys, confirmations)
     entry = {
         "build_time": meta["build_time"], "ticket_id": final_id,
         "supersedes": (f"{spec['ticket_id']}_FINAL" + (f"_r{revision - 1}" if revision and revision > 1 else "")
@@ -212,9 +214,54 @@ def log_final_slate_ticket(log_path, cand, meta, slate, spec, final_keys, reason
                        "added_outside_rule": [list(k) for k in added]},
         "reasons": [{"leg": list(k), **v} for k, v in reasons.items()],
         "confirmations": [{"leg": list(k), **v} for k, v in confirmations.items()],
+        "leg_notes": leg_notes,
         "reader": reader, "placed": None, "graded": False,
     }
     return C.log_ticket(log_path, entry, cand, max_per_game=spec["max_per_game"]), entry
+
+
+AI_REASON_MIN, AI_REASON_MAX, AI_REASON_MAX_REUSE = 20, 200, 2
+AI_REASON_BANNED = ("lock", "guaranteed", "sure thing", "can't lose", "cant lose", "free money")
+
+
+def check_ai_reasons(final_keys, confirmations):
+    """N50: every FINAL leg carries the reader's own one-line reason (`ai_reason`, in the leg's
+    confirmation record), so the ticket shows leg / game / why-the-AI-kept-it. It is a NOTE, not
+    evidence of an edge: it is logged so that kept-vs-dealt can be compared later, and so a ticket
+    is never 'AI-picked' in name only. Refused: missing, under 20 or over 200 characters, the same
+    sentence on more than two legs (boilerplate), or sure-thing language."""
+    notes, seen = [], {}
+    for k in final_keys:
+        r = str((confirmations.get(k) or {}).get("ai_reason") or "").strip()
+        if not (AI_REASON_MIN <= len(r) <= AI_REASON_MAX):
+            raise RuntimeError(f"HALT: final leg {k} needs an ai_reason of {AI_REASON_MIN}-{AI_REASON_MAX} "
+                               f"characters (got {len(r)})")
+        low = r.lower()
+        bad = [w for w in AI_REASON_BANNED if w in low]
+        if bad:
+            raise RuntimeError(f"HALT: ai_reason for {k} uses sure-thing language: {bad}")
+        seen[low] = seen.get(low, 0) + 1
+        if seen[low] > AI_REASON_MAX_REUSE:
+            raise RuntimeError(f"HALT: the same ai_reason is on more than {AI_REASON_MAX_REUSE} legs - "
+                               f"write one per leg: {r!r}")
+        notes.append({"leg": list(k), "ai_reason": r})
+    return notes
+
+
+def final_ticket_markdown(entry):
+    """What Jeff is sent: leg, game, kickoff, the book's number, and the AI's reason."""
+    why = {tuple(n["leg"]): n["ai_reason"] for n in entry.get("leg_notes", [])}
+    out = [f"### {entry['ticket_id']} - {len(entry['legs'])} legs"
+           + (f", product price {entry['price']['decimal']}" if entry.get("price") else ""), "",
+           "| Leg | Game | Kick (UTC) | Price | Book q | AI reason |", "|---|---|---|---|---|---|"]
+    for leg in sorted(entry["legs"], key=lambda x: (x["commence_time"], x["home_team"])):
+        k = (leg["event_id"], leg["player_name"], leg["market_key"])
+        out.append(f"| {leg['player_name']} ({leg['team']}) {leg['market_key'].replace('player_', '')} "
+                   f"{leg['pick_side']} {leg['line']} | {leg['away_team']} @ {leg['home_team']} | "
+                   f"{str(leg['commence_time'])[11:16]} | {leg['pick_price']:+.0f} | {leg['q_pick']:.3f} | "
+                   f"{why.get(k, 'NO REASON LOGGED')} |")
+    out += ["", "The reason is the reader's note on why the leg stayed on the ticket. It is not a claim of edge."]
+    return "\n".join(out)
 
 
 def log_placement(log_path, slate, ticket_id, refers_to, stake, quoted_american, legs_placed,

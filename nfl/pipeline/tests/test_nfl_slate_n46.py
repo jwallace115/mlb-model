@@ -62,7 +62,8 @@ def test_rule_and_final_tickets_are_logged_and_cross_checked(tmp_path):
     spec = SPECS[0]
     keys = [(r["event_id"], r["player_name"], r["market_key"]) for r in hands["ALLDAY_20"]]
     reader = {"model": "test", "inputs": ["x"], "raw_output": "y"}
-    conf = {k: {"availability_source": "inactives", "checked_at": "2026-09-20T15:40Z"} for k in keys}
+    conf = {k: {"availability_source": "inactives", "checked_at": "2026-09-20T15:40Z",
+                "ai_reason": f"{k[1]}: lead role in week 1, active, line unchanged since open"} for k in keys}
     with pytest.raises(RuntimeError, match="removed leg .* needs a reason AND a source"):
         S.log_final_slate_ticket(log, cand, meta, "2026-09-20", spec, keys[:3], {}, conf, reader)
     with pytest.raises(RuntimeError, match="no availability confirmation"):

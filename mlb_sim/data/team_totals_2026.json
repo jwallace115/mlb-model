@@ -209082,5 +209082,209 @@
       }
     ],
     "snapshot_time": "2026-09-20T11:05:03.257989+00:00"
+  },
+  {
+    "game_date": "2026-09-21",
+    "event_id": "198233ed5390fadb40e84cac794551ab",
+    "game_pk": 824787,
+    "home_team": "Baltimore Orioles",
+    "away_team": "Toronto Blue Jays",
+    "home_team_abbr": "BAL",
+    "away_team_abbr": "TOR",
+    "commence_time": "2026-09-21T22:36:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -122,
+        "under_price": -104
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -122,
+        "under_price": -108
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 240,
+        "under_price": -186
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -186
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 145,
+        "under_price": -186
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -128,
+        "under_price": 100
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -135,
+        "under_price": 105
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -130,
+        "under_price": 100
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -130,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 220,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 135,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -127,
+        "under_price": 100
+      }
+    ],
+    "snapshot_time": "2026-09-21T11:05:02.907493+00:00"
+  },
+  {
+    "game_date": "2026-09-21",
+    "event_id": "3e7090629723a062facffeca147d8c9d",
+    "game_pk": 824221,
+    "home_team": "Detroit Tigers",
+    "away_team": "Washington Nationals",
+    "home_team_abbr": "DET",
+    "away_team_abbr": "WSN",
+    "commence_time": "2026-09-21T22:41:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 108,
+        "under_price": -138
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": -109,
+        "under_price": -121
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -175,
+        "under_price": -215
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 102,
+        "under_price": -215
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 165,
+        "under_price": -215
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -122,
+        "under_price": -104
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -119,
+        "under_price": -111
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 235,
+        "under_price": -190
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -113,
+        "under_price": -190
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 148,
+        "under_price": -190
+      }
+    ],
+    "snapshot_time": "2026-09-21T11:05:02.907493+00:00"
   }
 ]

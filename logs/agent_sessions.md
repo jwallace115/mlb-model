@@ -2775,3 +2775,66 @@ Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
   every book-quoted line gets a sim number, but player-not-in-sim-universe is still a miss.
 - Whether the get_lines_from_history() per-game walk-back reads too many parquet files
   under heavy use (709 files x 15 games, cached, but initial load could be slow).
+## 2026-09-20T16:06Z  cowork
+- EDITED: nfl/pipeline/build_nfl_slate.py (N50: `ai_reason` required per final leg; `final_ticket_markdown`), tests test_ai_reason_n50.py (2, fail on old code — run), test_nfl_slate_n46.py (conf gains ai_reason).
+- ADDED: nfl/pipeline/export_placed_legs.py, nfl/sim/score_week_vs_book.py, nfl/sim/tests/test_score_vs_book.py (4), placed_legs_2026-09-20d.parquet (34 legs, 34 ids resolved).
+- RAN: grade_week --week 2 --extra placed legs -> 1,271 legs all void-pending (RETURNED). MEANS: chain works; no outcomes exist yet. Fake-outcome run exercised every table, then removed.
+- RAN: 97 passed (cloud).
+- NOT DONE: real grading (needs PBP refresh after the games); NFL close/CLV.
+- UNVERIFIED: suite on the Mac after sync.
+
+## 2026-09-20T16:21Z  cowork
+- RAN: build_nfl_slate.py --tickets LEAD_5,LEAD_10 --slate 2026-09-20e on the 15:00:10Z pull -> RULE tickets; then log_final_slate_ticket x2 + one revision (r1, wrong home/away in a reason). RETURNED: log 30 -> 35 entries. MEANS: first AI-picked tickets are on record with per-leg reasons before kickoff.
+- SENT: both tickets to Jeff 16:19Z (5-leg ~+1,974; 10-leg ~+39,200).
+- NOT DONE: placement entries; NFL close/CLV grader.
+- UNVERIFIED: whether Jeff placed them, and at what prices.
+
+## 2026-09-20T16:36Z  cowork
+- RAN (Jeff): manual props pull 16:23:40Z (940 rows, 130 credits) + ESPN status 16:23Z, scp to _cowork_patches/. RE-CHECK RETURNED: 14/15 AI legs unchanged; Cousins att 29.5->30.5. LOGGED LEAD_10_FINAL_r2 (Shough O34.5 att). Log 36 entries.
+- SENT 16:34Z: AI game-lines 5-leg (NYJ +3, PIT +5.5, CLE@TB O41, MIA +13.5, IND +6; opt MIN +5), price-vs-sharp method, ~0.96 per $1. File game_ticket_ai_20260920T1635Z.json.
+- NOT DONE: placements for slate -20e; NFL game-ticket grader; fix for the 16:30Z pull reaching Cowork only at kickoff.
+- UNVERIFIED: the 16:30Z and 16:50Z scheduled pulls (visible on origin ~17:00Z / 17:30Z).
+
+## 2026-09-20T16:46Z  cowork
+- AUDIT (Jeff): app showed NYJ +3 -105 / PIT +5.5 -110 vs ticket +100 / -105. Fresh capture 16:43:52Z RETURNED the app numbers exactly. MEANS: feed accurate (2/2), ticket snapshot was 35-40 min stale. Revised ticket game_ticket_ai_20260920T1645Z_r1.json; N52 addendum.
+- NOT DONE: placements for slate -20e; NFL game-ticket logger/grader.
+
+## 2026-09-20T16:55Z  cowork
+- SENT 16:53Z: AI OPINION game picks (ARI +4, WAS +4.5, NYG +7, LV@LAC U43.5, JAX +2.5; opt IND@KC U46; pass MIA@SF). Record game_ticket_ai_opinion_20260920T1653Z.json, N53.
+- ERROR + FIX: four league ranks asserted without computing; computed over 32 teams and corrected to Jeff 16:54Z.
+- NOT DONE: placements for slate -20e; NFL game-ticket logger/grader (3 hand-built JSON records today).
+- UNVERIFIED: injury statuses beyond the articles read; 16:30Z/16:50Z scheduled props pulls.
+
+## 2026-09-20T17:16Z  cowork
+- RECORDED: Jeff standing rule - every pick is the AI opinion; all layers (sim, news, lines, stats) are inputs. N54 in NCAAF_BOARD_DECISION_v1.md; section appended to CLAUDE.md.
+- NOT DONE: ai_ticket kind in the NFL logger; NFL game-line logger/grader; NCAAF builder prompt changed to reader-first.
+
+## 2026-09-20T17:22Z  cowork
+- LOGGED from Jeff's slips: LEAD_5_PLACED (slate -20e, $10 +1974); game placements file (price 5-leg $10 +3373 with PIT +5 -110 placed against advice; opinion 6-leg $10 +4749). Slip ids withheld.
+- FIXED: export_placed_legs.py (slate-qualified ticket ids; searches all candidates files); score_week_vs_book.py pinned to the pre-registered candidates file (146 rows had silently become 136). 97 passed.
+- NOT DONE: game-ticket grader; NFL close/CLV; AI 10-leg not placed as of the paste.
+
+## 2026-09-20T17:42Z  cowork
+- RECORDED N56: fixed Sunday routine (one card, 4-ticket menu, Jeff stake ceilings, play-down-to price per leg, no revisions). TO CONFIRM: he wrote "3 leg" for the $15 ticket.
+- NOT BUILT: play_down_to field + one-card builder.
+
+## 2026-09-20T18:08Z  cowork
+- RECORDED: N56 addendum (flexible asks, fixed delivery) + Kalshi first look (ML tracks Pinnacle within 1.0pt; cheaper than HR after fees on 13/15 favourites, 5/15 dogs; one snapshot pair).
+
+## 2026-09-20T23:30Z  cowork
+- ADDED nfl/pipeline/pull_hardrock_alt_lines.py (no test yet). RAN by Jeff on the VM: 641 alt rows, 9 markets.
+- SENT 23:29Z: AI same-game parlay IND@KC, 5 legs, play-down-to prices; record sgp_ticket_ai_20260920T2329Z.json; N57.
+- NOT DONE: test for the alt puller; placement (waiting on slip); NFL game/SGP ticket logger.
+
+## 2026-09-20T23:36Z  cowork
+- LOGGED placement of the IND@KC SGP from Jeff's slip: +799 vs product 11.77 (ratio 0.764), $25 BONUS bet, $0 cash at risk. Record updated in sgp_ticket_ai_20260920T2329Z.json.
+
+## 2026-09-21T12:25Z  cowork
+- RAN: ingest_hardrock_bets.py -> 42 slips/268 legs, 7 new; tagged 7 ours + 1 other. RETURNED all seven Week-2 tickets Lost. Legs: rule 18/34, AI props 6/10, AI game lines 3/10 (+1 pending). N58.
+- NOT DONE: PBP cross-check (pbp_2026 has 1 wk-2 game), CLV, sim-vs-book score.
+
+## 2026-09-21T13:24Z  cowork
+- VERIFIED eng/5j @59a686c from files in a cloud worktree; NOT merged. RAN: new tests vs main code (fail, as required); P3 on real post-kick tape (HOLDS; report said not testable); full board on branch and on main code (17 min each): P4 = 33/36 (MISSED >=34), null control 1239/1239 identical; K1 rebuilt from rows file.
+- FOUND: actual punts/game 7.90 not 8.73 (D99-D103 corrected in D108); Mac vs Linux board differs on 621/1237 legs up to 0.60 with identical inputs (Linux pandas 3.0.2).
+- WROTE: research/nfl_sim/phase5j_verification_2026-09-21.md, workorder_5J2_2026-09-21.md, D108.
+- NOT DONE: usage rebuild to re-check P1; cause of the cross-machine difference.

@@ -1263,3 +1263,304 @@ SGPMAX $10 +921621 (Wentz skipped: line moved). **Measured:**
   diversification rule. **Doubling six games cost ~37% of the payout** — a 14-leg one-per-game ticket
   would have paid the full product. Next slate: offer that trade-off explicitly.
 Test: `test_placement_is_appended_and_must_match_the_recommendation`. One command: **91 passed**.
+
+### N50 — Every final leg carries the AI's one-line reason; sim-vs-book scorer written pre-kick (2026-09-20)
+
+**Jeff (16:00Z):** "was there any AI reasoning involved in today parlays....id like for the future...
+the leg, game and ai reason its apart of the parlay ... not a book just a small brief reason so we
+know AI is apart of the pick." And: test the sim against today's games, NOT part of decision making.
+
+**What the AI actually did today (slate 2026-09-20d), stated plainly.** The legs were DEALT BY CODE:
+lead-role Overs (5- and 10-leg) and all eligible legs (20-leg), families in turn, best book q within
+a family. The reader (Claude in the Cowork chat) only FILTERED: vetoed Kamara (Jeff's instruction;
+MCL, 0 week-1 touches) and Hampton (Over 1.5 rec on 0 week-1 targets), caught its own bad Kamara
+replacement (Etienne, same backfield), checked availability, and re-dealt by rule when Rodgers' line
+moved (next QB leg: Shough). No leg was on a ticket because the AI argued FOR it, and no per-leg
+reason was written. So today's tickets were rule-picked and AI-filtered, not AI-picked.
+
+**Change.** `log_final_slate_ticket` refuses a FINAL ticket unless every leg's confirmation record
+has an `ai_reason`: 20-200 characters, not the same sentence on more than two legs, no sure-thing
+language ("lock", "guaranteed", ...). Stored as `leg_notes` on the entry. `final_ticket_markdown(entry)`
+renders what Jeff is sent: Leg | Game | Kick | Price | Book q | AI reason. The reason is a NOTE, not
+evidence of edge; its use is the comparison already pre-registered in N43/N44 (kept vs dealt vs
+vetoed), which now has text to read. Tests: `nfl/pipeline/tests/test_ai_reason_n50.py` (2; both FAIL
+on the pre-N50 logger — run). The N46 test's confirmations gained an `ai_reason`.
+
+**Sim vs today's games (no role in any pick).** Written ~16:05Z, before the 17:00Z kickoffs:
+- `nfl/pipeline/export_placed_legs.py` -> `nfl/data/board/week=2026_02/placed_legs_2026-09-20d.parquet`
+  (34 legs, 34/34 player ids resolved `exact_team`) in `grade_week.py --extra` format. The sim's grader
+  + `actuals.py` stay the single source of outcomes; this IS the NFL prop outcome grader for the
+  ticket log (receptions, rush attempts, completions, attempts, both sides). Close/CLV still not built.
+- `nfl/sim/score_week_vs_book.py`: on rows where the sim priced the book's exact line (146 today),
+  Brier/log-loss of book q vs sim cal_p vs raw sim_p, game-cluster bootstrap, by family/tier/game, the
+  |cal_p - q| > 0.20 rows, and W/L for every placed leg. PRE-REGISTERED: P1 book Brier < sim Brier;
+  P2 on the divergent rows the outcome sides with the book more often. Tests
+  (`nfl/sim/tests/test_score_vs_book.py`, 4): the scorer favours the BOOK when outcomes are drawn from
+  q and the SIM when drawn from cal_p (it can go either way); placed rows never enter the universe
+  (the first end-to-end run HALTED on exactly that duplicate — fixed, tested).
+- Dry run end-to-end at 16:04Z: 1,271 legs, all `void-pending` (no Week 2 game in PBP yet). Outcomes
+  arrive when nflverse PBP refreshes (overnight). One week: a log, not evidence.
+
+Suite: 97 passed (shared + nfl/pipeline + ncaaf/pipeline + the new sim scorer test).
+NOT DONE: close/CLV for NFL tickets; AI reasons for TODAY's legs (not written before the bet, so not
+written after it). UNVERIFIED: that tonight's PBP refresh contains all 15 games by morning.
+
+### N51 — First AI-PICKED tickets: slate 2026-09-20e, a 5 and a 10 (2026-09-20)
+
+**Jeff (~16:13Z):** "give me your take on a 5 and 10 leg parlay....look at all the data and make your
+picks independent of the 5-10-19 leg parlays already placed."
+
+Built 16:14Z from the Hard Rock pull of 15:00:10Z (1.2 h old; candidates `..._20260920T1614Z.parquet`,
+259 eligible). RULE tickets `LEAD_5_RULE` / `LEAD_10_RULE` logged first as the baseline; the reader's
+tickets `LEAD_5_FINAL` and `LEAD_10_FINAL` depart from them on almost every leg, each departure with a
+reason and a source, and every leg has an `ai_reason` (N50 — first production use). `LEAD_10_FINAL_r1`
+supersedes `LEAD_10_FINAL`: the Hubbard reason called CAR the home favourite; the game is CAR @ ATL
+(CAR -3 on the road). Legs unchanged. Log = 35 entries.
+
+**Method, stated so it can be judged later:** game script from Hard Rock's own spread/total (15:30Z
+snapshot) x week-1 volume from `pbp_2026` (team rushes, QB attempts/completions, final margin) x role
+share from the candidate table; prices kept to -115..-130; one leg per game per ticket; no player on
+both; NO sim input. Every leg is the side the book already favours (the candidate table offers no
+other), so this is a choice AMONG book-favoured legs, not against the book.
+5-leg (20.74, ~+1,974): Lamar U27.5 att, Hockenson O3.5 rec, Stroud O30.5 att, Hampton O16.5 rush,
+Diggs O4.5 rec. 10-leg (393.2, ~+39,200): Hubbard O13.5, Montgomery O15.5, Rodgers O34.5 att, Lloyd
+O13.5, Jeudy O2.5 rec, Lawrence O19.5 cmp, Cousins O29.5 att, Bourne O2.5 rec, Willis O26.5 att,
+K. Allen O3.5 rec. Return per $1 at the book's q: 0.716 / 0.518.
+
+**Known weaknesses, written before kickoff:** (1) one week of 2026 volume is thin evidence and the
+book has it too; (2) the legs share ONE idea — favourites run, underdogs throw — so they are
+positively correlated across games only through that idea failing generally, but within LV@LAC and
+CIN@HOU the two tickets hold related legs; (3) Willis and Cousins also sit on the placed 19-leg in
+other markets; (4) availability was checked against a list that may not be the full 90-minute
+inactives; (5) 14 of 15 legs are Overs. Comparison that this enables (N43/N44): AI-picked vs the
+RULE tickets of the same build vs the placed rule-dealt tickets, on hit rate and close. n = 15 legs.
+NOT DONE: placement entries (waiting for Jeff's slips). UNVERIFIED: prices at bet time.
+
+### N52 — Fresh-pull re-check of the AI tickets; first AI game-lines ticket (2026-09-20)
+
+**Jeff (16:20Z):** the 11am numbers were stale by the time the AI tickets went out — get the newest.
+CAUSE, not a fault: Sunday props pulls are 15:00Z (12 h window), 16:30Z (2 h), 16:50Z (1 h), and the VM
+pushes to GitHub on the half hour, so the 16:30Z pull reaches Cowork ~17:00Z = kickoff. Jeff ran a manual
+pull (16:23:40Z, 940 rows, 130 credits) + ESPN status (16:23Z, free) and scp'd both to `_cowork_patches/`.
+RESULT: 14 of 15 legs identical in line AND price; Kirk Cousins pass attempts 29.5 -> 30.5 = new quote,
+dropped. `LEAD_10_FINAL_r2` replaces him with Tyler Shough O34.5 att (-120), unchanged on both pulls.
+No leg's player Out/Doubtful at 16:23Z; Burrow and Olave went Questionable -> Active. 9 of 240 eligible
+rows moved line between 15:00Z and 16:23Z. Log = 36 entries.
+STRUCTURAL GAP: for a 1pm ticket built after inactives, Cowork cannot see any pull newer than ~11am
+without Jeff's manual scp. Fix candidates (not built): an extra push right after the 16:30Z pull, or
+a props pull at 16:05Z so the 16:30Z push carries it.
+
+**AI game-lines ticket (`game_ticket_ai_20260920T1635Z.json`), sent 16:34Z.** Jeff asked for 5+ legs of
+spreads/totals/winners with a short reason each. Method: Hard Rock's price vs the proportional no-vig of
+Pinnacle + LowVig at the same point (line_history snapshot 16:00:08Z, all books < 1 min old), and
+off-market points judged against the other nine books. Legs: NYJ +3 (+100), PIT +5.5 (-105), CLE@TB
+Over 41 (-110), MIA +13.5 (-105), IND +6 (-105); optional MIN +5 (-110). ~+2,740. Return per $1 at the
+sharp no-vig ~0.96 (vs ~0.72 for a 5-leg prop ticket) — still below 1: NO EDGE CLAIMED. Every leg is an
+underdog or an Over because Hard Rock shades favourites/Unders less generously; the prop tickets lean
+on favourites controlling games — told Jeff the two do not share a story.
+CHECKS: 1a all quotes pre-kick, same snapshot. 4: sharp no-vig is a proxy for fair, not truth; the
+project's line-shopping result (+1.84% ex-stale) was best-of-10-books, not Hard Rock alone, so it is
+NOT evidence for this ticket. No NFL game-ticket logger/grader exists (NCAAF's is college-only); this
+JSON is the record. NOT DONE: placement entries for slate -20e (waiting for slips); NFL game grader.
+
+**N52 addendum (16:46Z) — Jeff caught stale game prices; the feed itself checked out.** Jeff: "your lines
+arent accurate on the hardrock site...jets plus 3 are -105 the steelers are -110 ... if your reasoning is
+becasue of the lines then there off." Treated as an audit of the tape. RETURNED: a fresh capture at
+16:43:52Z (3 credits) shows Hard Rock NYJ +3 -105 and PIT +5.5 -110 — identical to the app on both. MEANS:
+the `hardrockbet_fl` game-line feed matched the app 2 of 2 (first time it has been checked for game lines;
+n=2, not a validation); the ticket was built on a 16:00Z snapshot that was 35-40 minutes old in a moving
+market (NYJ had gone 3.5/-115 -> 3.0/+100 between 15:30Z and 16:00Z). ERROR CLASS: a price-based reason
+is only as good as the age of the price; the ticket message said "check each in the app" but did not
+refuse to reason from a 35-minute-old quote. RULE FROM NOW: a ticket whose reasons are PRICE reasons is
+built only from a snapshot < 10 minutes old (3 credits buys one), and says its age in the first line.
+`game_ticket_ai_20260920T1645Z_r1.json` supersedes the first: IND +6 -105, MIA +13.5 -105, PIT +5.5 -110
+(now merely fair), CLE@TB Over 41 -110, NYJ ML +150 (replaces NYJ +3); optional MIN leg gone (+5 -> +4.5).
+
+### N53 — AI OPINION game picks (football reasoning), logged beside the price-based ticket (2026-09-20)
+
+**Jeff (16:48Z):** asked whether the picks were "just reasoning around the lines" or news and projections.
+Answer given: the game ticket was price-only; the prop tickets were judgement over script/volume/role/
+news, not a numeric projection; no model here has evidence on NFL sides. **Jeff:** "yes i want those ai
+opinion based wagers...giving you data to look at then with ai reasoning pick a side."
+
+Sent 16:53Z (`game_ticket_ai_opinion_20260920T1653Z.json`), late games only (1pm games had kicked):
+ARI +4 (-110), WAS +4.5 (-110), NYG +7 (-115), LV@LAC Under 43.5 (-110), JAX +2.5 (-105); optional
+IND@KC Under 46 (-110). ~+2,440 for five, ~+4,750 for six. PASS on MIA@SF. Inputs: week-1 PBP
+efficiency, the week's line path, team injury reports (web), NWS forecasts (wind <= 10 mph everywhere),
+Hard Rock prices from the 16:43:52Z capture (9 min old when sent — inside the new < 10 min rule).
+
+**ERROR, caught by Cowork 2 minutes after sending:** four league RANKS in the reasons were asserted
+without being computed over all 32 teams (LAC offense "3rd-worst" -> 5th; LV "7th-worst" -> 13th, i.e.
+mid-pack; DAL defense "worst" -> 2nd-worst; JAX offense "best" -> 3rd). Correction sent 16:54Z; the
+Under 43.5 demoted from #2 to #4. Same class as the wrong-timestamp errors: a number written from
+impression. RULE: every number in an `ai_reason` comes from a computed table in the same session.
+
+**What this is for.** Three kinds of AI reasoning are now on record for slate -20e, all pre-kick, each leg
+with its reason: (a) props by script/volume/role, (b) game lines by price vs sharp no-vig, (c) game lines
+by football opinion. Plus the rule-dealt tickets Jeff placed. Comparison is by hit rate and close, per
+kind, over weeks; n per week is 5-15 legs, so nothing here can be called evidence for a month or more.
+CHECKS: 1a all inputs pre-kick; 2 n/a (no fitting); 3 the logged legs ARE the sent legs; 4 Hard Rock's
+own prices, not synthetic; 5 regime: all dogs/unders again — if opinion picks only ever land on dogs and
+unders, that is a bias to name, not a finding.
+NOT DONE: placements (waiting on Jeff); an NFL game-ticket logger/grader (three JSON records today are
+hand-built — this needs code before next Sunday). UNVERIFIED: injury statuses beyond the articles read.
+
+### N54 — STANDING RULE: every pick is the AI's opinion; every data layer is an input to it (2026-09-20)
+
+**Jeff (~17:10Z), verbatim:** "we need a stnading rule....all picks will always be based off your AI
+opinion....all the data layers, the engine sim (when its ready), the news, the lines, the stats, there all
+just there to help you form your opinion..."
+
+**What changes.** Until today the NFL ticket was DEALT BY CODE and the reader only filtered (N43-N48); the
+morning's placed tickets were rule-picked and AI-filtered (N50 said so). From now on, for every sport and
+every ticket in this project:
+1. THE PICK IS THE READER'S OPINION. Claude looks at everything available and chooses the side. No layer
+   picks on its own: not the rule deal, not the book's q, not price-vs-sharp, not the sim.
+2. EVERY LAYER IS AN INPUT, shown to the reader and recorded in the ticket's manifest: prices and their
+   movement (Hard Rock + the other nine books), candidate table (roles, shares, week volume), injuries/
+   inactives, news, weather, play-by-play stats, and the sim's numbers once it is ready. The sim never
+   gates or ranks a ticket; it is one more thing the reader reads. (Standing sim position unchanged: D103.)
+3. EVERY LEG CARRIES ITS REASON (N50), in the reader's words, brief, with the facts it rests on. Every
+   number in a reason comes from a table computed in that session (N53's error), and any price quoted is
+   from a snapshot < 10 minutes old or is labelled with its age (N52's error).
+4. THE READER MAY PASS. Fewer legs than asked, or no ticket, is a valid answer (audit #5). A leg the reader
+   does not believe in is never added to reach a count.
+
+**What does NOT change — the opinion is the pick, the discipline is the record.**
+- An opinion is not a finding. No AI pick is ever described as validated, as an edge, or as +EV. The
+  ticket sentence stays: calculated return per $1 at the book's own numbers, assumptions unvalidated.
+- Logged BEFORE kickoff, append-only, with inputs, model id and reasons; placements logged from the slip.
+- BASELINES ARE STILL LOGGED beside every AI ticket from the same pull — the rule deal (top book-q,
+  lead-role Overs) and, for game lines, the price-vs-sharp list — because "did the opinion beat the dumb
+  rule?" is the only honest test of the opinion. Graded on hit rate AND close (CLV), per kind of
+  reasoning, with family / side (Over-Under, dog-favourite) / week breakdowns (check 5). At 5-20 legs a
+  week this says nothing for at least a month; it will be reported as a log until then.
+- Known biases to watch from day one: today's opinion tickets were 14/15 Overs on props and all
+  underdogs/Unders on game lines; and the reader's football knowledge ends mid-2026.
+
+**To build before next Sunday (not built):** `kind: ai_ticket` in the NFL logger so an AI ticket is a
+first-class entry with its baselines attached (today it is logged as a FINAL that "departs" from a RULE
+ticket on almost every leg); an NFL game-line ticket logger + grader (today: three hand-built JSON
+records); the same reader-first path for NCAAF Saturday tickets (its builder already calls a model per
+game — the prompt must present ALL layers and ask for the opinion + reason, not a filter).
+
+### N55 — What Jeff placed from the AI tickets; two grading defects found while logging it (2026-09-20)
+
+From Jeff's paste of Hard Rock "My Bets" (~17:15Z; slip ids withheld, public repo):
+- **AI props 5-leg PLACED** $10 at +1974 = the recommended product to the unit -> `LEAD_5_PLACED`, slate
+  `2026-09-20e` (log = 37 entries). First AI-picked prop ticket with money on it.
+- **AI price-based game 5-leg PLACED** $10 at +3373: NYJ ML +150, PIT **+5** -110, CLE@TB Over 41 -110,
+  MIA +13.5 -105, IND +6 -105. The Steelers leg was placed at +5 -110 after Cowork said to drop it at that
+  price - Jeff's call; recorded as a departure, and that leg no longer has a price reason.
+- **AI opinion game 6-leg PLACED** $10 at +4749, all six as sent (incl. optional IND@KC Under 46).
+- NOT placed as of the paste: the AI 10-leg props (`LEAD_10_FINAL_r2`). A 20-leg SGPMAX on the paste is a
+  friend's and is not logged. Record: `nfl/data/board/week=2026_02/game_ticket_placements_20260920.json`.
+Today's stake on record: $40 (morning rule-dealt 5/10/19) + $30 (three AI tickets) = $70.
+
+**Defect 1 — ticket ids repeat across slates.** `LEAD_5_PLACED` now exists in slates -20d (rule-dealt) and
+-20e (AI-picked); the grade report groups by `ticket`, so the two would have been merged into one line.
+`export_placed_legs.py` now writes `<slate>:<ticket_id>`; both slates re-exported (34 + 5 legs, all ids
+resolved). It also searches every candidates file of the week, newest first - the 1614Z file came from a
+13-event pull and no longer held Hurts/Barkley, which HALTED the slate -20d re-export.
+**Defect 2 — the sim-vs-book scorer's universe silently depended on the newest candidates file.** With the
+1614Z file present the pre-registered 146 rows became 136. `score_week_vs_book.py` now pins the
+pre-registered file per week (`PREREGISTERED_CANDIDATES`, week 2 = the 1424Z table named in
+`wk2_prekick_sim_layer_2026-09-20.md`) and HALTS for a week with none. Changed at ~17:20Z, after the 1pm
+kickoffs but before any outcome exists in PBP (dry run: 1,276 legs, all void-pending); it restores the
+registered universe rather than altering it. Suite 97 passed.
+
+MONDAY grading (after the nflverse PBP refresh):
+`python3 nfl/sim/grade_week.py --season 2026 --week 2 --extra nfl/data/board/week=2026_02/placed_legs_2026-09-20d.parquet nfl/data/board/week=2026_02/placed_legs_2026-09-20e.parquet`
+then `python3 nfl/sim/score_week_vs_book.py --week 2 --out research/nfl_sim/wk2_sim_vs_book_2026-09-21.md`.
+NOT DONE: a grader for the two GAME tickets (hand-grade from final scores Monday/Tuesday; NYG@LA is Monday
+night); NFL close/CLV. UNVERIFIED: the 16:30Z / 16:50Z scheduled props pulls.
+
+### N56 — The fixed Sunday routine: one card, fixed menu, fixed stakes, one number per leg (2026-09-20)
+
+**Jeff (~17:40Z):** "if i kept the steelers thats my bad...i get confused so many different numbers. and
+played more then i would have normally...thats why i want to get the system down and consistent."
+CAUSE, Cowork's: between 16:19Z and 16:54Z it sent seven ticket messages (5, 10, 10-r2, game, game-r1,
+opinion, rank correction) plus conditional price advice, minutes before kickoff. $70 was staked against
+the $40 of the morning plan. The process produced the confusion and the extra volume.
+
+**Routine from Week 3 (Jeff's answers, verbatim where quoted):**
+1. ONE CARD, ONE TIME: a single message after inactives (target ~12:15pm ET) from a props pull and a line
+   snapshot < 10 minutes old (Jeff runs one command when asked). A late-games card only if he asks.
+2. FIXED MENU — "4 tickets": AI 5-leg props; AI 5-leg game lines; one 10-leg; one larger lottery ticket.
+   Fewer legs if the reader passes (N54) — never more tickets.
+3. FIXED STAKES, Jeff's ceilings: "$15 on 3 leg, 10 to 15 on 10 leg and no more then 10 on anything larger
+   then 10 leg". Read as: short tickets (the 5-legs) $15 each — HE WROTE "3 leg"; TO CONFIRM whether he
+   means the 5-leg tickets or wants 3-leg tickets; 10-leg $10-15; anything over 10 legs <= $10. Ceiling for
+   the four = $55. Cowork never suggests a stake above these and never suggests a fifth ticket.
+4. ONE NUMBER PER LEG: each leg carries a "play down to" price. App shows that or better -> bet; worse, or a
+   different line -> skip the leg. No either-or instructions.
+5. NO REVISIONS after the card unless Jeff asks; the play-down-to price already covers a moved line.
+6. AFTER: he pastes the slips, Cowork logs placements; Monday one results message by kind of pick.
+NOT BUILT: `play_down_to` field on a logged leg + its rendering in `final_ticket_markdown`; the card
+builder that emits all four tickets in one message. Both before next Sunday, with the ai_ticket logger.
+
+**N56 addendum (18:08Z) — the menu is a default, not a cage.** Jeff: "i may ask for a 4pm only slate, or a
+sunday night same game parlay...you never know...well probably do seperate monday night parlays and
+thursday same game parlays...same for college football, there no player props though....things are
+flexable." So: WHAT he asks for varies (a window slate, a same-game parlay, MNF/TNF tickets, NCAAF game
+lines only - no college props exist in the feed); HOW it is delivered does not: one card per ask, fresh
+pull, leg/game/reason, one play-down-to price per leg, his stake ceilings by ticket size, no unrequested
+revisions, slips logged. Same-game parlays: Hard Rock prices them BELOW the product of the legs (N49: pairs
+0.85-0.97, a 4-leg one-game ticket ~0.70), so a same-game card must quote the book's own SGP price from the
+slip builder, never the product.
+**Kalshi first look (capture began 2026-09-20 02:27Z; 18 NFL snapshots):** moneylines are liquid (30 Week-2
+sides, median $512k traded, 1c bid/ask) and track Pinnacle no-vig within 1.0 point on average. vs Hard
+Rock's moneyline at 16:35Z/16:43Z: Kalshi's ask was cheaper on 27 of 30 sides before fees; after a taker fee
+of ~0.07*p*(1-p) it is cheaper on 13 of 15 favourites (mean 1.0 pt) and 5 of 15 underdogs (mean -0.5 pt).
+One pre-kick snapshot pair, 8 minutes apart, one Sunday: a measurement, not a finding. Spread/total ladders
+are thin (median ~$2-3k per rung). Use: a second sharp reference for the reader, and a cheaper venue for a
+SINGLE favourite moneyline - Kalshi has no parlays.
+
+### N57 — First same-game parlay card (IND@KC, SNF) + on-demand alt-lines puller (2026-09-20)
+
+Jeff (~23:20Z): rerun the lines, alt lines welcome, an SGP for Sunday night, "5 leg plus"; then (23:27Z)
+"4 plus legs...id prefer 5 plus but if there not there lets not force them". One card sent 23:29Z under
+N54/N56: KC -2.5 alt (-240), Walker O17.5 rush att alt (-165), Mahomes O3.5 rush att alt (-160), Taylor O2.5
+rec (-125), K.Allen O3.5 rec (-130); each with a reason and a play-down-to price; optional D.Jones O31.5 att
+advised off (overlap). Product 11.77; Jeff told the slip's SGP price is the number (expected +650..+850, a
+guess from N49's ratios). Record: `nfl/data/board/week=2026_02/sgp_ticket_ai_20260920T2329Z.json`.
+NEW CODE: `nfl/pipeline/pull_hardrock_alt_lines.py` — one game, 12 alternate markets, refuses after kickoff
+or under 3,000 credits, writes only to gitignored `_cowork_patches/`. RETURNED on first run: 641 rows, 9
+markets (alt spreads/totals/team totals, alt receptions/rec yds/rush yds/rush att/pass yds/pass TDs). Not
+returned by Hard Rock: alt pass attempts/completions, team_totals. No test yet (written 55 min before
+kickoff) — NOT DONE. The thesis legs are deliberately correlated; a conflict is on record: KC -2.5 here and
+IND +6 on the price ticket both win only if KC wins by 3-5.
+
+**N57 addendum (23:36Z) — placed.** Jeff's slip: all five legs as sent, SGP **+799** (decimal 8.99) against a
+leg-price product of 11.77 -> ratio **0.764** for five positively-correlated legs in one game (card said
++650..+850). Stake is a **$25 BONUS bet** (free-bet credit): slip payout $199.67 is winnings only, $0 of his
+cash at risk, so it sits outside the N56 stake ceilings, which govern cash. For the pricing ledger: one more
+same-game data point - N49's 4-leg one-game ticket was ~0.70, opposing-team pairs 0.85-0.97.
+
+### N58 — Week 2 results from Hard Rock's own export: every ticket lost (2026-09-21)
+
+Source: Jeff's `All_Bets_Export` dropped in `bets/inbox/` 2026-09-21 12:22Z -> `ingest_hardrock_bets.py`
+RETURNED 42 slips / 268 legs, 7 new, 1 status change; archived; 7 slips tagged `ours`, the friend's 20-leg
+tagged `other`. Leg results below are THE BOOK'S settlement, not yet cross-checked against PBP (the Mac's
+`pbp_2026` has 1 week-2 game; nflverse refresh pending). Aggregates only - slip ids stay in gitignored `bets/`.
+
+| Ticket | How picked | Stake | Legs won | Result |
+|---|---|---|---|---|
+| 5-leg props (-20d) | rule deal, AI-filtered | $15 | 3/5 | lost (Egbuka O3.5, Douglas O2.5) |
+| 10-leg props (-20d) | rule deal, AI-filtered | $15 | 7/10 | lost (Bijan O18.5, Q.Johnston O3.5, Dobbins O13.5) |
+| 19-leg props (-20d) | rule deal, AI-filtered | $10 | 8/19 | lost |
+| AI 5-leg props (-20e) | AI opinion | $10 | 3/5 | lost (Hockenson O3.5, Lamar U27.5 att) |
+| AI game 5-leg | AI, price vs sharp | $10 | 2/5 | lost (PIT +5, NYJ ML, MIA +13.5) |
+| AI game 6-leg | AI football opinion | $10 | 1/5, 1 pending | lost (JAX +2.5, ARI +4, WAS +4.5, IND@KC U46) |
+| SNF same-game parlay | AI opinion | $25 bonus | 3/5 | lost (Mahomes O3.5 rush att, K.Allen O3.5) |
+
+Cash staked $70, returned $0; the $25 bonus bet cost no cash. Legs: rule-dealt 18/34 (52.9%); AI prop legs
+6/10; AI game-line legs 3/10 with NYG +7 pending. By side on the rule tickets: Overs 11/21, Unders 7/13.
+WHAT IT MEANS: almost nothing statistically (54 legs, one Sunday, legs within a game are not independent),
+and parlays lose most weeks by construction (5-leg at ~53% per leg wins ~4% of the time). What it does NOT
+show: that AI picks beat the rule deal (6/10 vs 18/34 is noise). What deserves a hard look, not a
+conclusion: the football-OPINION game legs went 1/5 and the opinion was one idea five times ("week 1 says
+the line is too big" -> all underdogs) - the known-weakness N53 wrote down before kickoff. One idea repeated
+is one bet, not five. RULE FROM NOW: a ticket's legs may not all rest on the same single idea; the card says
+what the distinct ideas are. NOT DONE: PBP cross-check of the book's settlement; close/CLV for any NFL leg;
+sim-vs-book scoring (needs week-2 PBP).

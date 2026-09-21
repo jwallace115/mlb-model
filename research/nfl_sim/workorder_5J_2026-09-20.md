@@ -101,8 +101,11 @@ Change:
 - Spread and total come from the SAME Hard Rock row set of that snapshot. If Hard Rock has no
   row for the game, there is NO fallback to `gdf.iloc[0]`: the game is skipped and printed.
   (If you believe a real consensus fallback is needed, write the case in D105 — do not build it.)
-- Add `--as-of <UTC ISO>` to the CLI (default: now). It caps which snapshots may be read, so a
-  past board is reproducible. Record per game in `anchoring_log.parquet` / the board header:
+- Add `--as-of <UTC ISO>` to the CLI (default: now). It caps which line snapshots AND which props
+  pulls may be read (`load_props`: only rows with `pull_timestamp <= as_of`; D69 tag precedence
+  unchanged within that), so a past board is reproducible. (Amended 2026-09-21: by Sunday night the
+  props archive held eight later `close` pulls; without the props cap a re-run "as of 15:30Z" would
+  price Sunday-night lines and items 3's P4 could not be measured.) Record per game in `anchoring_log.parquet` / the board header:
   `line_snapshot_utc`, `line_book`.
 
 PRE-REGISTERED:
@@ -151,15 +154,18 @@ Change (board layer only — `engine.py`, `anchor.py`, `params_v1.json`, tables 
   `rankable = False`; if it does not, DO NOT add engine counters in this order — report exactly
   which arrays are missing. Either way nothing new is rankable.
 - New committed script `nfl/sim/run_board_coverage.py --week W`: prints the table above from the
-  newest candidates parquet for the week and `picks_log.parquet`, plus a miss reason per row
+  newest candidates parquet for the week and `picks_log.parquet`, plus a miss reason per row; takes `--candidates <file>` (default newest)
   (family not simulated / player not in sim universe / line not priced). Reads only; it may read
   `nfl/data/board/` but edits nothing there.
 
 PRE-REGISTERED:
-- P4. Re-running the board with `--week 2 --as-of 2026-09-20T15:30:00Z` (item 2's flag): RB
-  rush-attempt rows with a sim number at the book's line go from 8 of 38 to >= 34 of 38 (36 RBs
-  are in the sim universe; a player not in the universe stays a miss and is listed by name).
-  Receptions stays 138 of 153.
+- P4. Re-running the board with `--week 2 --as-of 2026-09-20T15:30:00Z` (item 2's flag; that selects
+  the 15:00:10Z props pull the 15:50Z board used), measured against
+  `nfl_prop_candidates_20260920T1614Z.parquet` (built from that same pull; pass it explicitly to the
+  coverage script): RB rush-attempt rows with a sim number at the book's line go from 8 of 36 to
+  >= 34 of 36 (34 RBs are in the sim universe; a player not in it stays a miss, listed by name).
+  Receptions stays 128 of 142. (Re-baselined 2026-09-21 by Cowork on the committed board; the table
+  above is against the 1424Z candidates from the 14:07Z pull: 8 of 38 and 138 of 153.)
 - NULL CONTROL. `engine_fingerprint()` unchanged (`7f3d96900218c014`), and every leg that exists
   on main's 15:50Z `picks_log.parquet` has the SAME `sim_p` to 4 dp when the run uses the same
   lines and seeds. If any differs, this item changed the simulation and that is a defect.

@@ -258,3 +258,16 @@ EVERY git command with `GIT_OPTIONAL_LOCKS=0` — not just `git status`. `git di
 killed by the bridge's 180s timeout is the likeliest way to strand one (this
 happened twice on 2026-09-18, the second time from a timed-out `git diff --stat`).
 Prefer narrow, fast git commands from the bridge for the same reason.
+
+## PICKS — STANDING RULE (Jeff, 2026-09-20; N54 in `research/ncaaf_board/NCAAF_BOARD_DECISION_v1.md`)
+
+"All picks will always be based off your AI opinion. All the data layers, the engine sim (when it's
+ready), the news, the lines, the stats — they are all just there to help you form your opinion."
+
+- The pick is the reader's (Claude's) reasoned opinion. No layer picks on its own: not a rule deal, not
+  the book's de-vigged q, not price-vs-sharp, not the sim. They are inputs, shown and recorded.
+- Every leg carries a brief reason in the reader's words. Every number in it is computed in-session;
+  every price is < 10 minutes old or labelled with its age. The reader may pass; never pad to a count.
+- The opinion is the pick; the discipline is the record: logged pre-kick, append-only, baselines (rule
+  deal, price list) logged beside it from the same pull, graded on hit rate AND close. An opinion is
+  never called validated, an edge, or +EV.
