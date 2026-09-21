@@ -1,0 +1,164 @@
+{
+ "ticket_id": "AI_MNF_NYG_LAR_2026-09-21",
+ "kind": "ai_opinion_card_from_blind_log",
+ "slate": "2026-09-21-MNF",
+ "sent_utc": "2026-09-21T22:48Z",
+ "placed_logged_utc": "2026-09-21T22:51Z",
+ "kickoff": "2026-09-22T00:15:00Z",
+ "game": "Giants@Rams",
+ "reader": "claude-fable-5-1 (Cowork chat)",
+ "standing_rule": "N54 opinion; N56 format; N58 distinct ideas; N59 blind log (PILOT - not pooled)",
+ "source_log": {
+  "file": "nfl/data/board/week=2026_02/ai_opinions/ai_opinions_20260921T224124Z.parquet",
+  "sha256": "5608e10f452689b665d11b2a4e41b87b8516873695f97cfa3d17d634692bb334",
+  "frozen_utc": "2026-09-21T22:41:24Z",
+  "lines": 78,
+  "with_view": 21
+ },
+ "pulls": {
+  "props": "2026-09-21T22:37Z",
+  "lines_10_books": "2026-09-21T22:36:51Z",
+  "alt_lines": "2026-09-21T22:37:41Z (689 rows, 9 markets)",
+  "espn_injuries": "2026-09-21T18:30Z (22:3xZ pull run on VM, not read)"
+ },
+ "card_sent": [
+  [
+   "Jaxson Dart anytime TD",
+   260,
+   "A"
+  ],
+  [
+   "Dart under 0.5 INT",
+   -140,
+   "B"
+  ],
+  [
+   "Davante Adams over 5.5 rec",
+   115,
+   "B"
+  ],
+  [
+   "Colby Parkinson anytime TD",
+   250,
+   "B"
+  ],
+  [
+   "Cam Skattebo under 1.5 rec",
+   100,
+   "B"
+  ],
+  [
+   "Stafford over 32.5 pass att",
+   -110,
+   "B"
+  ],
+  [
+   "Kyren Williams over 13.5 rush att",
+   -125,
+   "B"
+  ],
+  [
+   "Dart over 29.5 pass att",
+   -125,
+   "B"
+  ],
+  [
+   "Giants +7",
+   -115,
+   "C"
+  ],
+  [
+   "Blake Corum under 0.5 rec",
+   140,
+   "C"
+  ],
+  [
+   "Singletary under 11.5 rush yds",
+   -110,
+   "C"
+  ],
+  [
+   "Stafford under 241.5 pass yds",
+   -115,
+   "C"
+  ],
+  [
+   "Tyler Higbee anytime TD",
+   500,
+   "C"
+  ],
+  [
+   "OBJ under 3.5 rec yds",
+   -115,
+   "C"
+  ],
+  [
+   "Stafford under 0.5 INT",
+   -160,
+   "C"
+  ],
+  [
+   "Giants ML",
+   250,
+   "C"
+  ]
+ ],
+ "placed": [
+  {
+   "ticket": "MNF_5A",
+   "sgp_quote": 3816,
+   "stake": "$20 BONUS BET",
+   "payout_if_win": 763.28,
+   "legs": [
+    "Jaxson Dart anytime TD",
+    "Davante Adams over 5.5 rec",
+    "Kyren Williams over 13.5 rush att",
+    "Cam Skattebo under 1.5 rec",
+    "Dart under 0.5 INT"
+   ],
+   "ideas": [
+    "Dart goal-line",
+    "Nacua out",
+    "Rams control",
+    "Singletary passing back",
+    "Dart clean"
+   ],
+   "product_decimal": 47.76
+  },
+  {
+   "ticket": "MNF_5B",
+   "sgp_quote": 4275,
+   "stake": 10.0,
+   "payout_if_win": 437.54,
+   "legs": [
+    "Stafford over 32.5 pass att",
+    "Dart over 29.5 pass att",
+    "Blake Corum under 0.5 rec",
+    "Giants +7",
+    "Colby Parkinson anytime TD"
+   ],
+   "ideas": [
+    "Rams still throw",
+    "Dog throws",
+    "Corum no catch",
+    "Rams thin",
+    "Rams TE red zone"
+   ],
+   "product_decimal": 53.98
+  }
+ ],
+ "not_placed": [
+  "10-leg (sent, not placed)"
+ ],
+ "other_tickets_seen": [
+  {
+   "who": "friend",
+   "legs": 14,
+   "quote": 9982,
+   "stake": 10,
+   "note": "tagged other - not ours"
+  }
+ ],
+ "sgp_ratio_note": "MNF_5A quote 39.16 vs product ~47.7 (0.82); MNF_5B 43.75 vs ~28.0 (1.56?) - CHECK: Hard Rock's live prices at placement differed from the 22:37Z pull; recompute at grading from the slip, not from this product",
+ "grading": "book settlement + PBP; each leg also graded inside the blind log by revision 0"
+}
