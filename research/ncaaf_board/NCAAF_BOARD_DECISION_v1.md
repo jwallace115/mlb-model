@@ -1564,3 +1564,32 @@ the line is too big" -> all underdogs) - the known-weakness N53 wrote down befor
 is one bet, not five. RULE FROM NOW: a ticket's legs may not all rest on the same single idea; the card says
 what the distinct ideas are. NOT DONE: PBP cross-check of the book's settlement; close/CLV for any NFL leg;
 sim-vs-book scoring (needs week-2 PBP).
+
+### N59 — The blind opinion log: the reader's probability on every Hard Rock line, frozen pre-kick (2026-09-21)
+
+Jeff: "grade every single line the hard rock gives against our reasoning... pick a side, save it to a file,
+then we'll grade them." He does not look at it. A card, when he asks, is drawn FROM the log (largest gap to the
+book, distinct ideas per N58); the log is never drawn from a card.
+- `nfl/pipeline/log_ai_opinions.py` (`sheet` / `freeze` / `verify`), tests `test_ai_opinions_n59.py` (6). Zero
+  credits, seconds to run. Output `nfl/data/board/week=<S>_<WW>/ai_opinions/ai_opinions_<UTC>.parquet` +
+  `manifest.json` (sha256 per file).
+- Universe: every line in the newest pre-kick Hard Rock props pull per game (10 markets) + h2h/spread/total from
+  the newest game-line snapshot. Alt lines are NOT in it (same distribution at other rungs; on-demand pull only).
+- Each line: `p_first` (Over / Yes / Home), a tag from a fixed list, a 12-160 character reason. Side is DERIVED
+  (p above the book -> first side, below -> second; a one-way market has no second side). `no_view` must equal the
+  book's number and takes no side; its share is written to the manifest so it cannot hide.
+- `freeze` reads prices from the tape itself, never from the reader's CSV. It HALTS on: a quoted line with no
+  opinion, an opinion on an unquoted line, a game past kickoff, an existing file. A re-freeze of the same line is
+  revision 1+; ONLY revision 0 is ever scored. Traced on the real tape 16:30Z: 61-of-62 sheet -> HALT exit 1;
+  62-of-62 -> frozen; `verify` clean; an edited file fails `verify` (test).
+- PRE-REGISTERED scoring, written before any opinion existed (in the script docstring): Brier/log-loss vs the
+  book's de-vigged q on two-way lines, game-cluster bootstrap; one-way lines vs vig-inclusive implied, separate;
+  sides on hit rate AND units at the real Hard Rock price taken (no flat -110); breakouts by market, tag,
+  |p-q| bucket, week, game. P1: book Brier <= reader Brier. P2: sides with |p-q| > 0.08 lose units. Both expected
+  to hold. `--pilot` files are never pooled. The record starts Week 3 (Thu 09-24); tonight's NYG@LAR is a pilot.
+- Checks: provenance - opinions use only pre-kick information and the file hash is posted to the Claude Project
+  pre-kick (an external timestamp). Leakage - 2026 is past the reader's knowledge cutoff; any "lesson" later
+  drawn from weeks 3..N is a hypothesis until it holds on N+1 onward. Identity - the card is drawn from the same
+  frozen rows. Economics - real prices. Aggregates - the breakouts above.
+- NOT BUILT: the score step (must implement the docstring exactly); `pass_interceptions` has no grader family.
+  The reader is the same model that writes the reasons - this measures the opinion, it cannot make it independent.

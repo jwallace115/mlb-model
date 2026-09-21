@@ -2872,3 +2872,9 @@ Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
 - VERIFIED eng/5j @57760d8 (5J-2) from files: tests fail on pre-fix code; own full board run: props cap OK, line_snapshot_utc written, P4 34/36 HELD, null control 1269/1269. merge-tree clean. VERDICT merge.
 - FOUND: engine `_disperse` draws ONE Beta per player per call (no size=N): Jeanty share 1 unique value/2500 sims; mean carries SD 4.2 across seeds. D113; work order 5L written; 5K queued behind it.
 - NOT DONE: usage rebuild check; fix for played-game in union set (in 5L item 1).
+
+## 2026-09-21T16:30Z  cowork
+- BUILT: nfl/pipeline/log_ai_opinions.py + test_ai_opinions_n59.py (6 pass; pipeline tests 36 pass in the cloud clone). N59.
+- RETURNED on the real tape: sheet = 62 lines for NYG@LAR (36 two-way), props pull 2026-09-19T15:11Z (49 h old); short sheet -> HALT exit 1; full -> frozen; verify clean. Trial output deleted in the cloud clone, never on the Mac.
+- MEANS: the freezer works; tonight's pilot needs a fresh manual props pull.
+- NOT DONE: score step; no opinions logged yet.
