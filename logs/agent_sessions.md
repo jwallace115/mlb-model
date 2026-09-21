@@ -2838,3 +2838,32 @@ Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
 - FOUND: actual punts/game 7.90 not 8.73 (D99-D103 corrected in D108); Mac vs Linux board differs on 621/1237 legs up to 0.60 with identical inputs (Linux pandas 3.0.2).
 - WROTE: research/nfl_sim/phase5j_verification_2026-09-21.md, workorder_5J2_2026-09-21.md, D108.
 - NOT DONE: usage rebuild to re-check P1; cause of the cross-machine difference.
+
+## 2026-09-21T14:03Z  claude-code (Phase 5J-2 execution)
+
+Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
+`engine_fingerprint()` = `7f3d96900218c014` after every item.
+
+### Commits (4, each pushed before the next)
+- `b6e3ed607` D109: Item 1 -- book-quoted rung never dropped by 0.05-0.95 filter
+- `4d6b71a6c` D110: Item 2 -- --as-of caps props, line_snapshot_utc written, union game set
+- `0798c23f0` D111: Item 3 -- schedule kickoff ET->UTC, no silent failure on download
+- `3e55d03a7` D112: Item 4 -- DIAGNOSIS: board differs between machines (ordering bug)
+
+### What was done
+- Item 1: book-quoted rung line (e.g. 9.5) bypasses 0.05-0.95 filter. Test FAILS on 9b1e09b, PASSES after. run_board_coverage.py: --candidates added.
+- Item 2: load_props_for_game(as_of=) caps pull_timestamp. line_snapshot_utc/line_book written to anchoring_log + board header. Game set = union over all snapshots. P3 reproduced on real tape: 8 kicked games get 170007Z pre-kick lines (PIT@NE +5.0/41.0). Tests: (b) real-tape fixture, (c) as_of props cap.
+- Item 3: usage.py schedule kickoff parsed as America/New_York then converted to UTC (was UTC, 4h early). except Exception: pass replaced with RuntimeError when weeks lack PBP kickoffs. Offline test with fixture. FAILS on 15ec21c (QB at 22:00Z rejected), PASSES after. Null control: 2021-2024 usage_fingerprint 840412f7295a8323 (matches D104). Zero 2026 wk1-3 changes (0 QBs in the 4h window).
+- Item 4: DIAGNOSIS ONLY. Root cause: engine.py line 474 sorts by target_share with default quicksort (unstable). LV has 8 tied players; Mike Washington Jr. (carry_share=0.219) moves index, changing all Beta draws. Mac default: Jeanty 16.62. Mac stable+pid: 23.70. Linux: 21.43. Team-level anchoring offsets identical (dh=+0.7261, da=-0.9378) between sort methods. Fix (stable sort) changes fingerprint; not applied. Pre-registered: cause correct, "Mac reproduces Linux" wrong (3 different orderings, 3 different results).
+- Full board run (11.1 min, 16 games, 16/16 converged): P4 = 34/36 RB rush-att at book's line (coverage script says 33 due to "Travis Etienne Jr." vs "Travis Etienne" name mismatch; manual check confirms the leg exists). Null control: 1,237 matched legs, max sim_p diff = 0.0.
+
+### What was NOT done
+- No merge to main. No 5K started.
+- Engine ordering fix not applied (changes fingerprint; needs own order).
+- Full-board comparison of stable-sort board across all legs (only LV@LAC checked).
+- Coverage script name matching not fixed (Jr. suffix issue).
+
+### What remains UNVERIFIED
+- Whether the stable sort + player_id tiebreak applied on BOTH machines makes them agree exactly (tested on Mac only; cannot access Linux).
+- Whether numpy's Beta distribution stream differs between 2.4.3 (Mac) and whatever Linux runs.
+- Whether other teams besides LV have tied shares that trigger the ordering bug (likely, but not enumerated).
