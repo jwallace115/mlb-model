@@ -1536,3 +1536,31 @@ leg-price product of 11.77 -> ratio **0.764** for five positively-correlated leg
 +650..+850). Stake is a **$25 BONUS bet** (free-bet credit): slip payout $199.67 is winnings only, $0 of his
 cash at risk, so it sits outside the N56 stake ceilings, which govern cash. For the pricing ledger: one more
 same-game data point - N49's 4-leg one-game ticket was ~0.70, opposing-team pairs 0.85-0.97.
+
+### N58 — Week 2 results from Hard Rock's own export: every ticket lost (2026-09-21)
+
+Source: Jeff's `All_Bets_Export` dropped in `bets/inbox/` 2026-09-21 12:22Z -> `ingest_hardrock_bets.py`
+RETURNED 42 slips / 268 legs, 7 new, 1 status change; archived; 7 slips tagged `ours`, the friend's 20-leg
+tagged `other`. Leg results below are THE BOOK'S settlement, not yet cross-checked against PBP (the Mac's
+`pbp_2026` has 1 week-2 game; nflverse refresh pending). Aggregates only - slip ids stay in gitignored `bets/`.
+
+| Ticket | How picked | Stake | Legs won | Result |
+|---|---|---|---|---|
+| 5-leg props (-20d) | rule deal, AI-filtered | $15 | 3/5 | lost (Egbuka O3.5, Douglas O2.5) |
+| 10-leg props (-20d) | rule deal, AI-filtered | $15 | 7/10 | lost (Bijan O18.5, Q.Johnston O3.5, Dobbins O13.5) |
+| 19-leg props (-20d) | rule deal, AI-filtered | $10 | 8/19 | lost |
+| AI 5-leg props (-20e) | AI opinion | $10 | 3/5 | lost (Hockenson O3.5, Lamar U27.5 att) |
+| AI game 5-leg | AI, price vs sharp | $10 | 2/5 | lost (PIT +5, NYJ ML, MIA +13.5) |
+| AI game 6-leg | AI football opinion | $10 | 1/5, 1 pending | lost (JAX +2.5, ARI +4, WAS +4.5, IND@KC U46) |
+| SNF same-game parlay | AI opinion | $25 bonus | 3/5 | lost (Mahomes O3.5 rush att, K.Allen O3.5) |
+
+Cash staked $70, returned $0; the $25 bonus bet cost no cash. Legs: rule-dealt 18/34 (52.9%); AI prop legs
+6/10; AI game-line legs 3/10 with NYG +7 pending. By side on the rule tickets: Overs 11/21, Unders 7/13.
+WHAT IT MEANS: almost nothing statistically (54 legs, one Sunday, legs within a game are not independent),
+and parlays lose most weeks by construction (5-leg at ~53% per leg wins ~4% of the time). What it does NOT
+show: that AI picks beat the rule deal (6/10 vs 18/34 is noise). What deserves a hard look, not a
+conclusion: the football-OPINION game legs went 1/5 and the opinion was one idea five times ("week 1 says
+the line is too big" -> all underdogs) - the known-weakness N53 wrote down before kickoff. One idea repeated
+is one bet, not five. RULE FROM NOW: a ticket's legs may not all rest on the same single idea; the card says
+what the distinct ideas are. NOT DONE: PBP cross-check of the book's settlement; close/CLV for any NFL leg;
+sim-vs-book scoring (needs week-2 PBP).

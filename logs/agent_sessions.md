@@ -2791,3 +2791,7 @@ news connection, feed health). 4 items, each committed and pushed before the nex
 
 ## 2026-09-20T23:36Z  cowork
 - LOGGED placement of the IND@KC SGP from Jeff's slip: +799 vs product 11.77 (ratio 0.764), $25 BONUS bet, $0 cash at risk. Record updated in sgp_ticket_ai_20260920T2329Z.json.
+
+## 2026-09-21T12:25Z  cowork
+- RAN: ingest_hardrock_bets.py -> 42 slips/268 legs, 7 new; tagged 7 ours + 1 other. RETURNED all seven Week-2 tickets Lost. Legs: rule 18/34, AI props 6/10, AI game lines 3/10 (+1 pending). N58.
+- NOT DONE: PBP cross-check (pbp_2026 has 1 wk-2 game), CLV, sim-vs-book score.
