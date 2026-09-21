@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-21T07:02:43.684098",
+  "generated_at": "2026-09-21T08:04:36.661072",
   "sport": "golf",
   "event_name": "Biltmore Championship Asheville",
   "event_id": 557,
@@ -627,27 +627,19 @@
   ],
   "season_stats": {
     "make_cut": {
-      "n": 7213,
-      "hit_rate": 51.3,
-      "roi": 15.0,
-      "clv": -14.0
+      "n": 7771,
+      "hit_rate": 51.9,
+      "roi": 12.6,
+      "clv": -13.7
     },
     "top_20": {
-      "n": 4273,
-      "hit_rate": 40.5,
-      "roi": 30.0,
-      "clv": -9.2
+      "n": 4465,
+      "hit_rate": 40.3,
+      "roi": 29.4,
+      "clv": -9.4
     }
   },
   "recent_results": [
-    {
-      "event_name": "Rocket Classic",
-      "event_id": 524,
-      "year": 2026,
-      "n_candidates": 885,
-      "hit_rate": 48.2,
-      "roi": 16.9
-    },
     {
       "event_name": "3M Open",
       "event_id": 525,
@@ -679,6 +671,14 @@
       "n_candidates": 216,
       "hit_rate": 30.1,
       "roi": -16.3
+    },
+    {
+      "event_name": "Biltmore Championship Asheville",
+      "event_id": 557,
+      "year": 2026,
+      "n_candidates": 750,
+      "hit_rate": 53.1,
+      "roi": -9.3
     }
   ],
   "matchup_candidates": [
