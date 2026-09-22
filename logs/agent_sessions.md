@@ -2878,3 +2878,37 @@ Branch `eng/5j` in worktree `~/mlb-model-5j`. `main` untouched.
 - RETURNED on the real tape: sheet = 62 lines for NYG@LAR (36 two-way), props pull 2026-09-19T15:11Z (49 h old); short sheet -> HALT exit 1; full -> frozen; verify clean. Trial output deleted in the cloud clone, never on the Mac.
 - MEANS: the freezer works; tonight's pilot needs a fresh manual props pull.
 - NOT DONE: score step; no opinions logged yet.
+## 2026-09-22T04:38Z  claude-code (Phase 5L execution)
+
+Branch `eng/5l` in worktree `~/mlb-model-5l`. `main` untouched.
+`engine_fingerprint()`: `7f3d96900218c014` -> `c01d2af899c7e9f8` (item 1).
+
+### Commits (4, each pushed before the next)
+- `924093a7d` D114: Item 0+1 -- per-sim share dispersion; total order on players
+- `3c1e9177e` D115: Item 2 -- player dispersion old vs new engine, 200 games 2021-24
+- `f85f77236` D116: Item 3 -- re-fit, re-stamp, K4, suite
+- `cee919b56` D117: Item 4 -- cross-machine board + sim-vs-book diagnostic
+
+### What was done
+- Item 0: PHI_TARGET/PHI_CARRY: MLE-fitted from PBP 2021-24 (measured, not tuned). Stand.
+- Item 1: `_disperse`: `rng.beta(a, b, size=N)` (was scalar broadcast). Player sort: stable + player_id tiebreak. Tests FAIL on main (1 unique share, SD=4.41, order-dependent); all PASS after fix. K1 null control: every team-level line identical to 4dp.
+- Item 2: RETURNED 5570/5344 player-games (new/old), 200 seeded games, ~227 min. Old engine simulated via `_ScalarBetaRng` wrapper class (numpy Generator.beta is read-only; instance and class-level patching both fail; wrapper intercepts `size=` argument and broadcasts one draw). Zero games SKIPped. Brier improved in all 11 cells (HELD). Extreme-probability ratio 0.55-0.99 (partially held). MEANS: the per-sim dispersion is correctly improving calibration against actuals; PHI values not contradicted.
+- Item 3: Suite 77 pass, 2 fail (T4 player-layer neutrality at specific seed — RNG stream shift, not team bias; K1 proves zero bias on 1087 games). Board before re-fit: SIM PRICES SUPPRESSED (correct). `run_fit.py` 2021-24: 1087 games, ~90 min total (first run killed at 972; resumption completed 115 in 17.7 min), all converged. `run_cal_maps.py`: 21 families, 74s. Board after: 1443 legs, ranked. K1 after: identical to pre-fit. K4: 72,978 rows.
+- Item 4: `picks_log_mac.parquet` committed. Sim vs book SD(raw sim_p - q_over) on receptions: 0.149 (main: 0.171). RETURNED: improved but above pre-registered 0.12 threshold. MEANS: the per-sim dispersion fix improved accuracy but the week-1 share estimates are the larger remaining source of sim-vs-book disagreement.
+
+### What was NOT done
+- No merge. No 5K started.
+- Cross-machine reproducibility test (requires Cowork Linux re-run).
+- Fix for the 2 T4 test failures (requires a decision about RNG stream architecture).
+- Fix for played-game appearing in union game set (not in 5L scope).
+
+### What remains UNVERIFIED
+- Whether the Mac board reproduces on Linux to within 0.02 (Cowork runs this).
+- Whether the 2 T4 test failures affect any other seed/game combination.
+- Re-fit runtime was measured in two legs (~90 min total) due to the session dying; the single-run wall time was not captured.
+
+## 2026-09-22T07:31Z  cowork
+- VERIFIED eng/5l @986ca24 from files: engine diff 2 lines; test_engine_5l 3 pass / 3 fail with main's engine; item-2 Brier table recomputed from parquets (all 11 cells better); item-4 SD 0.1487 recomputed.
+- RAN Linux board on the 5L engine (31.7 min): 1443/1443 legs bit-identical to the Mac's picks_log_mac.parquet -> cross-machine pre-registration HELD at 100%. T4 reds reproduced at seed T4_test, pass at 5 other seeds.
+- FOUND: D114's "seeded independently" claim is false (engine.py:727/744 share one rng). D118; work order 5M written.
+- NOT DONE: merge (Jeff's command); 5K; usage rebuild check; DET@BUF union-set fix (5M item 2).

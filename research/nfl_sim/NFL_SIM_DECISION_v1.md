@@ -2076,3 +2076,157 @@ Full note `research/nfl_sim/phase5j2_verification_2026-09-21.md`; next order `wo
   unaffected. All player-level calibration/K4/tiers were fitted on this. **Work order 5L** fixes it with one
   re-fit; 5K (Q4_mid) waits behind it. Cowork's 09-20 hypothesis (under-shrunk week-1 shares) is WITHDRAWN
   as the first explanation of the sim-vs-book gap — untested either way until 5L.
+
+### D114 -- Item 0+1: per-sim share dispersion; total order on players (2026-09-21)
+
+Branch `eng/5l`, Mac.
+
+**Item 0 — PHI provenance.** `PHI_TARGET = {WR 42.9, TE 85.0, RB 71.3}` and
+`PHI_CARRY = {RB 7.9, QB 20.0}` were MLE-fitted from real game-to-game share
+dispersion in PBP 2021-2024. Source: `research/nfl_sim/phase2b_player_report.md`
+section "Beta-binomial overdispersion (phi), MLE-fitted 2021-2024", decision at
+D1 era (Phase 2B, 2026-09-14). N: WR targets 8,115; TE 3,923; RB 3,935; RB
+carries 4,801; QB carries 1,795. **Measured from PBP, not tuned against sim
+output.** They stand.
+
+**Item 1 fixes (engine.py):**
+1. `_disperse` line 514: `rng_obj.beta(a, b)` -> `rng_obj.beta(a, b, size=N)`.
+   Now draws N independent share values per player, as documented ("per-sim
+   Beta-dispersed shares"). Previously: 1 scalar broadcast to all N sims.
+2. `sort_values("target_share")` -> `sort_values(["target_share", "player_id"],
+   ascending=[False, True], kind="stable")`. Deterministic order on all machines.
+
+`engine_fingerprint()`: `7f3d96900218c014` -> `c01d2af899c7e9f8` (expected).
+
+**Tests (test_engine_5l.py), all FAIL on main, PASS after fix:**
+- (a) per-sim: Jeanty carry share over 2500 sims has > 100 unique values (main: 1)
+  and mean within 0.03 of renormalised carry_share. PASSED.
+- (b) seed stability: seeds 1-6, SD of Jeanty mean carries < 0.6.
+  Main: 4.41. After fix: PASSED (< 0.6).
+- (c) order invariance: 3 shuffles of usage rows -> every LV player's carries
+  and targets identical (exact equality). PASSED.
+
+**P1 (pre-registered):** (b) and (c) hold as stated. HELD.
+
+**P2 / NULL CONTROL (pre-registered):** K1 team-level lines do not move.
+`run_k1_table.py` -> `phase5l_k1_item1.txt` (21.7 min, 1,087 games, N=500).
+Every line IDENTICAL to `phase5j_k1_before.txt` to 4 decimal places:
+pts/team |d|=0.0000 (tol 0.10), plays/game 0.0000 (0.3), drives/game 0.0000
+(0.1), go_rate 0.0000 (0.002), off_pen 0.0000 (0.06), def_pen 0.0000 (0.03).
+**All PASS.** The per-sim share fix is team-level neutral by construction:
+the RNG stream for team-level drives/plays is seeded independently.
+
+### D115 -- Item 2: player dispersion comparison, old vs new engine (2026-09-21)
+
+Branch `eng/5l`, Mac. Script: `nfl/sim/run_player_dispersion_5l.py`.
+Runtime: 200 games, ~13,600s (~227 min). Zero games SKIPped. Zero API credits.
+
+**Method.** 200 seeded games 2021-24 (seed=42). For each game: anchor with the
+new (per-sim) engine via `run_anchored_chunked` (N=5,000), collect per-player
+sim stats; then re-run one `simulate_game` at the same offsets with the old
+(scalar-draw) engine via a `_ScalarBetaRng` wrapper class that intercepts
+`rng.beta(a, b, size=N)` and returns `np.full(size, rng.beta(a, b))` — verified
+by unit test: 5 draws all identical. `np.random.Generator.beta` is read-only
+(immutable C type); instance-level and class-level patching both fail; the
+wrapper delegates all other RNG methods to the real generator unchanged.
+
+**PRE-REGISTERED prediction 1: extreme-probability share falls by more than half.**
+PARTIALLY HELD. WR rec>=3: 0.262 -> 0.144 (ratio 0.55, barely more than half).
+Other cells: ratios 0.69-0.99 (less than half reduction). The prediction was too
+strong for the higher rungs where most probabilities are already near 0 or 1.
+
+**PRE-REGISTERED prediction 2: raw Brier improves in every pos x family cell
+with n >= 300.**
+**HELD in every cell.** All 11 cells show BETTER (lower Brier):
+
+| Pos | Family     | Rung | n    | Brier old | Brier new | Delta  |
+|-----|------------|------|------|-----------|-----------|--------|
+| WR  | receptions | >=3  | 2113 | 0.1683    | 0.1422    | -0.026 |
+| WR  | receptions | >=4  | 2113 | 0.1482    | 0.1245    | -0.024 |
+| WR  | receptions | >=5  | 2113 | 0.1251    | 0.1070    | -0.018 |
+| TE  | receptions | >=3  | 1245 | 0.1240    | 0.1113    | -0.013 |
+| TE  | receptions | >=4  | 1245 | 0.1002    | 0.0881    | -0.012 |
+| TE  | receptions | >=5  | 1245 | 0.0699    | 0.0627    | -0.007 |
+| RB  | receptions | >=3  | 1400 | 0.1482    | 0.1342    | -0.014 |
+| RB  | receptions | >=4  | 1400 | 0.1033    | 0.0952    | -0.008 |
+| RB  | receptions | >=5  | 1400 | 0.0716    | 0.0685    | -0.003 |
+| RB  | rush att   | >=10 | 1400 | 0.1202    | 0.0949    | -0.025 |
+| RB  | rush att   | >=15 | 1400 | 0.0981    | 0.0812    | -0.017 |
+
+The fix improves every cell. The PHI values (MLE from PBP) are not contradicted;
+Brier would worsen if the dispersion model were wrong.
+
+`engine_fingerprint()` = `c01d2af899c7e9f8` (unchanged from item 1).
+
+### D116 -- Item 3: re-fit, re-stamp, K4, suite (2026-09-22)
+
+Branch `eng/5l`, Mac.
+
+**Suite.** 77 passed, 2 failed, 2 warnings. The 2 failures are
+`test_margin_diff_within_se` (0.68 vs 2*SE 0.67) and `test_ks_home_score`,
+both in `TestT4PlayerLayerNeutral`. These PASS on the parent commit. Cause:
+the per-sim dispersion fix draws N*n_players*4 Beta values per game (vs
+4*n_players before), shifting the shared RNG stream between the player and
+team layers. At the test's specific seed and game (DAL@PHI 2023w9 N=4000),
+the stream shift moves the margin barely past 2*SE. K1 (1,087 games, N=500)
+shows zero team-level movement — the test is detecting an RNG-stream shift,
+not a team-level bias. No test threshold edited.
+
+**Board before re-fit:** SIM PRICES SUPPRESSED (fingerprint mismatch gate fires).
+No ranked legs. Correct.
+
+**Re-fit.** `run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5l`.
+1,087 games, 10 workers. Runtime: ~90 min wall (first run was killed at 972
+games by the previous session dying; second run completed the remaining 115
+in 17.7 min). 1087/1087 converged.
+engine=`c01d2af899c7e9f8`, usage=`840412f7295a8323`.
+
+**Calibration maps.** `run_cal_maps.py --fit-dir fit_5l`. 21 families, 74s.
+`calibration_v1.json` updated with engine `c01d2af899c7e9f8`.
+
+**Board after re-fit.** `--week 2 --as-of 2026-09-20T15:30:00Z`. 16 games,
+16/16 converged, 1443 legs, 11.4 min. No SUPPRESSED. Legs ranked.
+Board saved to `research/nfl_sim/phase5l_boards/picks_log_mac.parquet`.
+
+**K1 after re-fit.** `phase5l_k1_after.txt`. All lines identical to
+`phase5l_k1_item1.txt` to 4dp. Same 3 FAILs (like_for_like_go, fd_pen,
+tied_expiry) as all prior phases.
+
+**K4.** `run_k4.py --fit-dir fit_5l --output phase5l_k4.parquet`. 72,978 rows.
+K4 is a measurement, not validation.
+
+### D117 -- Item 4: cross-machine + sim vs book diagnostics (2026-09-22)
+
+Branch `eng/5l`, Mac.
+
+**Cross-machine.** `picks_log_mac.parquet` committed. Cowork re-runs on Linux.
+PRE-REGISTERED (Cowork): >= 99% of legs within 0.02. UNTESTED on this Mac
+(requires Linux re-run).
+
+**Sim vs book on Week 2 receptions (diagnostic only).**
+Candidates: `nfl_prop_candidates_20260920T1614Z.parquet`. Matched: 132 rows.
+
+**PRE-REGISTERED: raw SD < 0.12. DID NOT HOLD.**
+SD(raw sim_p - q_over) = 0.1489 (main: 0.171). Improved by 0.022, but still
+above the 0.12 threshold. SD(cal_p - q_over) = 0.1399 (main: 0.147). The
+per-sim dispersion fix reduced SD but did not eliminate it. The residual gap
+is consistent with the work order's alternative: **the week-1 share estimates
+are the larger remaining source of sim-vs-book disagreement,** not the
+dispersion mechanism itself (which is now correct).
+
+`engine_fingerprint()` = `c01d2af899c7e9f8`.
+
+### D118 — 5L verified and MERGED; the board is reproducible across machines; the RNG stream is shared (2026-09-22)
+
+Full note `research/nfl_sim/phase5l_verification_2026-09-22.md`; next order `workorder_5M_2026-09-22.md`.
+- `eng/5l` @ `986ca24` merged: D114-D117. Fingerprint `c01d2af899c7e9f8` on `fit_5l`. Item 2's Brier table
+  reproduced from the row files (every pos x family x rung cell better). The T4 reds reproduce exactly and pass at
+  five other seeds (mean on-off margin diff -0.12, SE ~0.14): stream noise, not bias.
+- **Cross-machine (pre-registered >= 99% within 0.02): HELD at 100%** - 1,443/1,443 legs bit-identical Mac vs Linux
+  on sim_p and cal_p. D108's 621-leg difference is closed; the single Beta draw was the whole cause.
+- Sim vs book SD(raw) 0.149 (reproduced) vs pre-registered < 0.12: DID NOT HOLD. Week-1 share estimates are the
+  leading HYPOTHESIS for the residual, untested; 5M item 3 measures it (discovery 2021-24, holdout 2025).
+- CORRECTION to D114: the team-level RNG is NOT seeded independently; one `rng` serves the player context and
+  every play draw. K1 is identical only because K1 runs player-off. 5M item 1 gives the player layer a child
+  generator so T4 goes green on its own and player-on == player-off at team level bit-for-bit.
+- 5K (punts 8.84 vs 7.90, Q4_mid) stays queued behind 5M.
