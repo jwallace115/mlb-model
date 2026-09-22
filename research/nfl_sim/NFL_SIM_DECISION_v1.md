@@ -2373,3 +2373,24 @@ Full note `research/nfl_sim/phase5m_verification_2026-09-22.md`; next order `wor
   where the extra drives come from before anything is changed.
 - Item 4's 22-47% is an UPPER BOUND: the >= 8-games sample condition is survivorship (Cowork's order wrote it)
   and the gain is vs week-1-only shares. Re-measure without the filter and at weeks 1..k before applying.
+
+
+### D124 -- Item 1: two test rewrites, full suite green except known 2 (2026-09-22)
+
+Branch `eng/5n`, Mac. No engine or usage change. Fingerprint `02fbcab6e6ed042e` unchanged.
+
+**1a. `test_player_off_hash_stable` rewritten.** The test now reads the expected
+hash from `nfl/sim/tests/fixtures/player_off_hash.json` keyed by `engine_fingerprint()`.
+If the fingerprint has no entry, the test FAILS with instructions to run
+`nfl/sim/tests/record_player_off_hash.py`. Entry for `02fbcab6e6ed042e` recorded
+(hash `10425a6562817ec2`). FAILS with file removed, PASSES with it.
+
+**1b. `test_prekick_line_chosen_for_kicked_game` rewritten.** The test now asserts
+PIT@NE is ABSENT (commence <= as_of -> excluded by 5M) and IND@KC still present.
+FAILS on 5L's code (PIT@NE present), PASSES at HEAD (PIT@NE absent).
+
+**1c. Full suite.** 207 passed, 2 failed, 18.7 min.
+Reds (2, both known since 5I, uninvestigated):
+- `test_first_downs_by_penalty` (fd_pen 1.40 vs tol 0.30, same as all prior K1s)
+- `test_t3_tied_drives_that_reach_range_get_the_kick_off` (tied_expiry 0.105 vs tol 0.050)
+No other reds.
