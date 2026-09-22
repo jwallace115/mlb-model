@@ -2332,3 +2332,30 @@ played-game exclusion). T4 `TestT4PlayerLayerNeutral` is fully green (5 pass).
 `picks_log_mac.parquet` saved for cross-machine check.
 
 **K4.** 72,978 rows. Measurement only.
+
+### D122 -- Item 4: share-shrinkage measurement (no engine change) (2026-09-22)
+
+Branch `eng/5m`, Mac. Script: `nfl/sim/run_share_shrinkage_5m.py`.
+1,478 player-seasons (1,184 discovery, 294 holdout).
+**No weight applied to the usage layer. Measurement only.**
+
+Discovery (2021-24): optimal shrinkage w toward prior season:
+- WR target: w=0.7 (70% prior, 30% wk1), 32.1% MAE reduction vs raw wk1
+- TE target: w=0.6, 33.0% reduction
+- RB target: w=0.7, 31.3% reduction
+- RB carry: w=0.4, 11.7% reduction
+
+**PRE-REGISTERED: 2025 holdout reduces MAE vs raw wk1 by > 15% for WR and RB
+target share. HELD.**
+- WR target: **47.3% reduction** (n=68). HELD.
+- RB target: **21.8% reduction** (n=36). HELD.
+- TE target: 30.6% (n=38). Not pre-registered but large.
+- RB carry: 15.0% (n=40). Marginal.
+
+The week-1 share hypothesis is strongly supported: shrinking toward the
+prior season with w=0.6-0.7 cuts prediction error by 22-47% on the
+untouched 2025 holdout. The sim's current week-1-only shares are measurably
+noisier than a blended estimate for players with a prior season.
+
+Week 2 2026 board: 503 players, 408 (81%) with 2025 data, 95 (19%) without.
+The decision to apply shrinkage is Jeff's/Cowork's, next order.
