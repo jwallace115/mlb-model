@@ -32,6 +32,7 @@ Usage:
   python3 nfl/pipeline/log_ai_opinions.py freeze --week 2 --filled _cowork_patches/ai_filled.csv [--pilot]
   (freeze re-reads the tape itself; add --props-file/--lines-file for a manual pull, --events "Rams")
   python3 nfl/pipeline/log_ai_opinions.py verify --week 2
+  python3 nfl/pipeline/log_ai_opinions.py score  --week 2 [--include-pilot] --out research/.../report.md
 """
 import argparse, hashlib, json, sys
 from datetime import datetime, timezone
@@ -225,9 +226,136 @@ def verify(season, week, d=None):
     return entries, bad, unlisted
 
 
+# ----------------------------------------------------------------------------- score
+STAT_OF = {"player_receptions": ("rec", "actual_rec"), "player_reception_yds": ("rec", "actual_rec_yds"),
+           "player_rush_attempts": ("rush", "actual_carries"), "player_rush_yds": ("rush", "actual_rush_yds"),
+           "player_anytime_td": ("td", "actual_atd"), "player_pass_attempts": ("pass", "actual_pass_att"),
+           "player_pass_completions": ("pass", "actual_completions"), "player_pass_yds": ("pass", "actual_pass_yds"),
+           "player_pass_tds": ("pass", "actual_pass_td")}
+GAP_BUCKETS = [(-1, 0.03, "<0.03"), (0.03, 0.08, "0.03-0.08"), (0.08, 9, ">0.08")]
+
+
+def _game_actuals(pbp, home, away):
+    """Actual per-player stats and the final score for one game, from the repo's own PBP reader."""
+    from nfl.sim.actuals import actual_player_game_stats
+    from nfl.sim.names import FULL_TO_ABBR
+    h, a = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
+    g = pbp[(pbp["home_team"] == h) & (pbp["away_team"] == a)]
+    if g.empty:
+        return None
+    rec, rush, td, pas = actual_player_game_stats(g)
+    tabs = {"rec": rec, "rush": rush, "td": td, "pass": pas}
+    ints = g[g["play_type"] == "pass"].groupby("passer_player_id")["interception"].sum()
+    return {"tabs": tabs, "ints": ints, "home_pts": float(g["home_score"].max()),
+            "away_pts": float(g["away_score"].max()), "home": h, "away": a, "n_plays": len(g)}
+
+
+def _first_side_won(row, act, pid):
+    """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved."""
+    mk, line = row["market_key"], float(row["line"])
+    if mk == "h2h":
+        return 1 if act["home_pts"] > act["away_pts"] else (0 if act["home_pts"] < act["away_pts"] else None)
+    if mk == "spreads":                      # first side = home team at `line`
+        m = act["home_pts"] + line - act["away_pts"]
+        return None if m == 0 else int(m > 0)
+    if mk == "totals":
+        t = act["home_pts"] + act["away_pts"]
+        return None if t == line else int(t > line)
+    if pid is None:
+        return None
+    if mk == "player_pass_interceptions":
+        v = float(act["ints"].get(pid, 0.0))
+    else:
+        tab, col = STAT_OF[mk]
+        t = act["tabs"][tab]
+        r = t[t["player_id"] == pid]
+        v = float(r[col].iloc[0]) if len(r) else 0.0
+    if mk == "player_anytime_td":
+        return int(v > 0)
+    return None if v == line else int(v > line)
+
+
+def score(season, week, d=None, include_pilot=False, pbp_path=None):
+    """The pre-registered scoring in the module docstring, applied to revision-0 rows."""
+    from nfl.sim.names import load_roster, _build_roster_lookup, resolve_player, FULL_TO_ABBR
+    d = d or out_dir(season, week)
+    files = sorted(d.glob("ai_opinions_*.parquet"))
+    if not files:
+        raise SystemExit("HALT: no frozen opinion files")
+    m = pd.concat([pd.read_parquet(f).assign(_file=f.name) for f in files], ignore_index=True)
+    m = m[m["revision"] == 0]
+    if not include_pilot:
+        m = m[~m["pilot"]]
+    if m.empty:
+        raise SystemExit("HALT: nothing to score (pilot files need --include-pilot)")
+    pbp = pd.read_parquet(pbp_path or ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
+    lk = _build_roster_lookup(load_roster(), season, week)
+    rows = []
+    for (home, away), s in m.groupby(["home_team", "away_team"]):
+        act = _game_actuals(pbp, home, away)
+        teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
+        for _, r in s.iterrows():
+            if act is None:
+                y, pid, method = None, None, "game not in PBP"
+            elif r["player_name"]:
+                pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
+                y = _first_side_won(r, act, pid)
+            else:
+                pid, method, y = None, "game", _first_side_won(r, act, None)
+            rows.append({**r.to_dict(), "player_id": pid, "resolve": method, "y_first": y})
+    out = pd.DataFrame(rows)
+    out["graded"] = out["y_first"].notna()
+    out["side_won"] = np.where(out["side"] == "first", out["y_first"] == 1,
+                               np.where(out["side"] == "second", out["y_first"] == 0, False))
+    dec = out["side_price"].map(lambda a: (a / 100 + 1) if pd.notna(a) and a > 0 else (100 / -a + 1) if pd.notna(a) else np.nan)
+    out["units"] = np.where(out["side"] == "none", 0.0, np.where(out["graded"], np.where(out["side_won"], dec - 1, -1.0), 0.0))
+    out["gap_bucket"] = pd.cut(out["gap"].abs(), [b[0] for b in GAP_BUCKETS] + [9], labels=[b[2] for b in GAP_BUCKETS], right=False)
+    return out
+
+
+def score_report(out, season, week):
+    g = out[out["graded"]].copy()
+    two = g[g["two_way"]]
+    one = g[~g["two_way"]]
+    L = [f"# Blind opinion log - score, {season} week {week}", "",
+         f"files: {sorted(out['_file'].unique())}; pilot rows included: {bool(out['pilot'].any())}",
+         f"rows {len(out)}, graded {len(g)} (pushes/unresolved {int((~out['graded']).sum())}), "
+         f"with a view {int((g['tag'] != 'no_view').sum())}, no_view share {(out['tag'] == 'no_view').mean():.1%}", "",
+         "**A pilot or a single game is a log, not evidence. Nothing is tuned on it.**", ""]
+    def bl(s):
+        return f"reader {brier_(s['p_first'], s['y_first']):.4f} / book {brier_(s['book_p_first'], s['y_first']):.4f}"
+    if len(two):
+        L += [f"## Two-way lines (n={len(two)}): Brier reader vs de-vigged book: {bl(two)} - "
+              f"P1 (book <= reader) {'HELD' if brier_(two['book_p_first'], two['y_first']) <= brier_(two['p_first'], two['y_first']) else 'DID NOT HOLD'}"]
+        v = two[two["tag"] != "no_view"]
+        if len(v):
+            L += [f"   lines with a view only (n={len(v)}): {bl(v)}"]
+    if len(one):
+        L += [f"## One-way lines (n={len(one)}): Brier reader vs vig-inclusive implied: {bl(one)}"]
+    sides = g[g["side"] != "none"]
+    if len(sides):
+        L += ["", f"## Sides taken (n={len(sides)}): {int(sides['side_won'].sum())} won, units at real price "
+              f"{sides['units'].sum():+.2f} ({sides['units'].sum() / len(sides):+.3f}/leg)"]
+        big = sides[sides["gap"].abs() > 0.08]
+        if len(big):
+            L += [f"   |p-q| > 0.08 (n={len(big)}): {int(big['side_won'].sum())} won, units {big['units'].sum():+.2f} - "
+                  f"P2 (lose units) {'HELD' if big['units'].sum() < 0 else 'DID NOT HOLD'}"]
+        for col in ["market_key", "tag", "gap_bucket"]:
+            t = sides.groupby(col, observed=True).agg(n=("units", "size"), won=("side_won", "sum"), units=("units", "sum")).round(2)
+            L += ["", f"### by {col}", "", t.to_markdown()]
+    L += ["", "## Every line with a view", "",
+          g[g["tag"] != "no_view"][["market_key", "player_name", "line", "side_name", "side_price", "book_p_first",
+                                    "p_first", "y_first", "side_won", "units", "tag"]].round(3).to_markdown(index=False)]
+    return "\n".join(L) + "\n"
+
+
+def brier_(p, y):
+    return float(np.mean((np.asarray(p, float) - np.asarray(y, float)) ** 2))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["sheet", "freeze", "verify"])
+    ap.add_argument("cmd", choices=["sheet", "freeze", "verify", "score"])
     ap.add_argument("--season", type=int, default=2026)
     ap.add_argument("--week", type=int, required=True)
     ap.add_argument("--out"), ap.add_argument("--filled")
@@ -235,6 +363,7 @@ def main():
     ap.add_argument("--events", help="comma list of team-name fragments; default every pre-kick game")
     ap.add_argument("--window-hours", type=float, help="only games kicking off within this many hours")
     ap.add_argument("--pilot", action="store_true")
+    ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
     a = ap.parse_args()
     now = datetime.now(timezone.utc)
     if a.cmd in ("sheet", "freeze"):
@@ -256,6 +385,16 @@ def main():
         dest, sha, m = freeze(sheet, pd.read_csv(a.filled), a.season, a.week, a.pilot, now)
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
+    elif a.cmd == "score":
+        entries, bad, unlisted = verify(a.season, a.week)
+        if bad or unlisted:
+            sys.exit(f"HALT: manifest check failed before scoring: {bad or unlisted}")
+        out = score(a.season, a.week, include_pilot=a.include_pilot, pbp_path=a.pbp)
+        text = score_report(out, a.season, a.week)
+        print(text)
+        if a.out:
+            Path(a.out).write_text(text)
+            out.to_parquet(Path(a.out).with_suffix(".parquet"), index=False)
     else:
         entries, bad, unlisted = verify(a.season, a.week)
         print(f"{len(entries)} frozen file(s); hash mismatch/missing: {bad or 'none'}; not in manifest: {unlisted or 'none'}")

@@ -2912,3 +2912,8 @@ Branch `eng/5l` in worktree `~/mlb-model-5l`. `main` untouched.
 - RAN Linux board on the 5L engine (31.7 min): 1443/1443 legs bit-identical to the Mac's picks_log_mac.parquet -> cross-machine pre-registration HELD at 100%. T4 reds reproduced at seed T4_test, pass at 5 other seeds.
 - FOUND: D114's "seeded independently" claim is false (engine.py:727/744 share one rng). D118; work order 5M written.
 - NOT DONE: merge (Jeff's command); 5K; usage rebuild check; DET@BUF union-set fix (5M item 2).
+
+## 2026-09-22T12:43Z  cowork
+- RAN: ingest_hardrock_bets.py (4 new slips, tagged); nflverse pbp_2026 refreshed (16 wk-2 games, cloud + copied to Mac); grade_week --extra (1276 legs; placed 8/19, 7/10, 3/5, 3/5 = book); score_week_vs_book (146 rows, P1 and P2 held, sim worse than coin); N59 score step BUILT + test (7 pass) and run on the MNF pilot (6/21 sides, -9.61 u). N60.
+- MEANS: grading chain is closed end to end; Week 2 fully graded; the pilot proved the log mechanics, nothing about the reader.
+- NOT DONE: 5M (running in Claude Code); play_down_to field / one-card builder; NFL game-ticket logger (game tickets are still hand-built JSON).

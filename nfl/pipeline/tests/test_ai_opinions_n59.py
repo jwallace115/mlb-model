@@ -107,3 +107,22 @@ def test_append_only_revisions_and_tamper_check(tmp_path):
     df.loc[0, "p_first"] = 0.9
     df.to_parquet(d1, index=False)                # an edit after the fact
     assert L.verify(2026, 2, d=tmp_path)[1] == [d1.name]
+
+
+def test_score_first_side_and_units():
+    """score(): sides, pushes and units from a tiny fake PBP; the reader's side is derived, never typed."""
+    s = L.build_sheet(_props(), _lines(), NOW)
+    f = _filled(s)
+    book = s["q_first"].where(s["two_way"], s["imp_first"])
+    f["p_first"] = book + 0.05                                    # reader takes the FIRST side everywhere
+    m = L.validate(s, f)
+    act = {"home_pts": 28.0, "away_pts": 6.0, "ints": pd.Series(dtype=float),
+           "tabs": {"rec": pd.DataFrame({"player_id": ["p1"], "actual_rec": [4], "actual_rec_yds": [40]}),
+                    "rush": pd.DataFrame(columns=["player_id", "actual_carries", "actual_rush_yds"]),
+                    "td": pd.DataFrame({"player_id": ["p1"], "actual_atd": [1]}),
+                    "pass": pd.DataFrame(columns=["player_id", "actual_pass_att"])}}
+    got = {r["market_key"]: L._first_side_won(r, act, "p1") for _, r in m.iterrows()}
+    assert got["spreads"] == 1 and got["totals"] == 0                # Rams -6.5 covered; 34 < 47
+    assert got["player_receptions"] == 0 and got["player_anytime_td"] == 1   # 4 rec is not over 4.5; scored
+    push = m[m.market_key == "totals"].iloc[0].copy(); push["line"] = 34.0
+    assert L._first_side_won(push, act, None) is None

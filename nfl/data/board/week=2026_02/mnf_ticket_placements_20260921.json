@@ -123,7 +123,16 @@
     "Singletary passing back",
     "Dart clean"
    ],
-   "product_decimal": 47.76
+   "product_decimal": 47.76,
+   "result": "LOST",
+   "legs_won": 2,
+   "leg_results": {
+    "Jaxson Dart anytime TD": "L (left Q1 11:28, 5 att)",
+    "Davante Adams over 5.5 rec": "W (8)",
+    "Kyren Williams over 13.5 rush att": "L (12)",
+    "Cam Skattebo under 1.5 rec": "L (4)",
+    "Dart under 0.5 INT": "W (0)"
+   }
   },
   {
    "ticket": "MNF_5B",
@@ -144,7 +153,31 @@
     "Rams thin",
     "Rams TE red zone"
    ],
-   "product_decimal": 53.98
+   "product_decimal": 53.98,
+   "result": "LOST",
+   "legs_won": 0,
+   "leg_results": {
+    "Stafford over 32.5 pass att": "L (31)",
+    "Dart over 29.5 pass att": "L (5; Winston 29)",
+    "Blake Corum under 0.5 rec": "L (1)",
+    "Giants +7": "L (LA 28-6)",
+    "Colby Parkinson anytime TD": "L (2 rec, 0 TD)"
+   }
+  },
+  {
+   "ticket": "MNF_EXTRA",
+   "note": "Jeff's own 5-leg, placed 19:29 ET, NOT from the card, not pre-logged",
+   "sgp_quote": 224,
+   "stake": 10.0,
+   "result": "LOST",
+   "legs_won": 3,
+   "legs": [
+    "Dart 150+ pass yds (L)",
+    "Kyren 40+ rush yds (W)",
+    "Stafford 200+ pass yds (W)",
+    "Rams ML (W)",
+    "Skattebo 40+ rush yds (L, 36)"
+   ]
   }
  ],
  "not_placed": [
@@ -160,5 +193,9 @@
   }
  ],
  "sgp_ratio_note": "MNF_5A quote 39.16 vs product ~47.7 (0.82); MNF_5B 43.75 vs ~28.0 (1.56?) - CHECK: Hard Rock's live prices at placement differed from the 22:37Z pull; recompute at grading from the slip, not from this product",
- "grading": "book settlement + PBP; each leg also graded inside the blind log by revision 0"
+ "grading": "book settlement + PBP; each leg also graded inside the blind log by revision 0",
+ "graded_utc": "2026-09-22T17:05Z",
+ "final": "NYG 6 @ LA 28",
+ "settlement_source": "Hard Rock export (bets/ledger) + nflverse PBP, cross-checked leg by leg: all agree",
+ "pilot_log_score": "research/nfl_sim/n59_pilot_score_2026-09-22.md: 21 sides, 6 won, -9.61 u at real prices; reader Brier 0.2418 vs book 0.2364 on 54 two-way lines (P1 held); pilot, not pooled"
 }

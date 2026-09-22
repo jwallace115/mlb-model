@@ -1,120 +1,148 @@
 {
-  "kind": "game_ticket_placements",
-  "slate": "2026-09-20e",
-  "logged_utc": "2026-09-20T17:22Z",
-  "source": "Jeff pasted Hard Rock 'My Bets' into the Cowork chat ~17:15Z. Slip ids withheld (public repo).",
-  "placements": [
+ "kind": "game_ticket_placements",
+ "slate": "2026-09-20e",
+ "logged_utc": "2026-09-20T17:22Z",
+ "source": "Jeff pasted Hard Rock 'My Bets' into the Cowork chat ~17:15Z. Slip ids withheld (public repo).",
+ "placements": [
+  {
+   "ticket_id": "AI_GAMES_5_r1_PLACED",
+   "refers_to": "game_ticket_ai_20260920T1645Z_r1.json",
+   "reasoning_kind": "price_vs_sharp",
+   "stake": 10.0,
+   "quoted_american": 3373,
+   "to_pay": 347.31,
+   "legs": [
     {
-      "ticket_id": "AI_GAMES_5_r1_PLACED",
-      "refers_to": "game_ticket_ai_20260920T1645Z_r1.json",
-      "reasoning_kind": "price_vs_sharp",
-      "stake": 10.0,
-      "quoted_american": 3373,
-      "to_pay": 347.31,
-      "legs": [
-        {
-          "game": "Packers@Jets",
-          "market": "h2h",
-          "outcome": "New York Jets",
-          "point": null,
-          "american": 150
-        },
-        {
-          "game": "Steelers@Patriots",
-          "market": "spreads",
-          "outcome": "Pittsburgh Steelers",
-          "point": 5.0,
-          "american": -110
-        },
-        {
-          "game": "Browns@Buccaneers",
-          "market": "totals",
-          "outcome": "Over",
-          "point": 41.0,
-          "american": -110
-        },
-        {
-          "game": "Dolphins@49ers",
-          "market": "spreads",
-          "outcome": "Miami Dolphins",
-          "point": 13.5,
-          "american": -105
-        },
-        {
-          "game": "Colts@Chiefs",
-          "market": "spreads",
-          "outcome": "Indianapolis Colts",
-          "point": 6.0,
-          "american": -105
-        }
-      ],
-      "departures": [
-        {
-          "leg": "Steelers",
-          "recommended": "+5.5 -110 (r1)",
-          "placed": "+5 -110",
-          "note": "Line moved to +5 before he bet. Cowork's advice at +5 was: keep at -105 or better, DROP at -110 (about 2% worse than sharp fair). Jeff placed it at -110 - his call; the price reason for this leg does not hold as placed."
-        }
-      ]
+     "game": "Packers@Jets",
+     "market": "h2h",
+     "outcome": "New York Jets",
+     "point": null,
+     "american": 150,
+     "result": "L",
+     "final": "GB 20 @ NYJ 17"
     },
     {
-      "ticket_id": "AI_OPINION_GAMES_PLACED",
-      "refers_to": "game_ticket_ai_opinion_20260920T1653Z.json",
-      "reasoning_kind": "football_opinion",
-      "stake": 10.0,
-      "quoted_american": 4749,
-      "to_pay": 484.85,
-      "legs": [
-        {
-          "game": "Raiders@Chargers",
-          "market": "totals",
-          "outcome": "Under",
-          "point": 43.5,
-          "american": -110
-        },
-        {
-          "game": "Jaguars@Broncos",
-          "market": "spreads",
-          "outcome": "Jacksonville Jaguars",
-          "point": 2.5,
-          "american": -105
-        },
-        {
-          "game": "Commanders@Cowboys",
-          "market": "spreads",
-          "outcome": "Washington Commanders",
-          "point": 4.5,
-          "american": -110
-        },
-        {
-          "game": "Seahawks@Cardinals",
-          "market": "spreads",
-          "outcome": "Arizona Cardinals",
-          "point": 4.0,
-          "american": -110
-        },
-        {
-          "game": "Colts@Chiefs",
-          "market": "totals",
-          "outcome": "Under",
-          "point": 46.0,
-          "american": -110
-        },
-        {
-          "game": "Giants@Rams",
-          "market": "spreads",
-          "outcome": "New York Giants",
-          "point": 7.0,
-          "american": null
-        }
-      ],
-      "departures": [],
-      "note": "All six legs as sent incl. the optional Under 46; +4749 equals the sent product with NYG +7 at -115 (its price was cut off in the paste)."
+     "game": "Steelers@Patriots",
+     "market": "spreads",
+     "outcome": "Pittsburgh Steelers",
+     "point": 5.0,
+     "american": -110,
+     "result": "L",
+     "final": "PIT 3 @ NE 20"
+    },
+    {
+     "game": "Browns@Buccaneers",
+     "market": "totals",
+     "outcome": "Over",
+     "point": 41.0,
+     "american": -110,
+     "result": "W",
+     "final": "CLE 23 @ TB 19"
+    },
+    {
+     "game": "Dolphins@49ers",
+     "market": "spreads",
+     "outcome": "Miami Dolphins",
+     "point": 13.5,
+     "american": -105,
+     "result": "L",
+     "final": "MIA 13 @ SF 35"
+    },
+    {
+     "game": "Colts@Chiefs",
+     "market": "spreads",
+     "outcome": "Indianapolis Colts",
+     "point": 6.0,
+     "american": -105,
+     "result": "W",
+     "final": "IND 30 @ KC 33"
     }
-  ],
-  "not_ours": "A 20-leg SGPMAX on the same paste is a friend's ticket - not logged.",
-  "not_placed_yet": [
-    "LEAD_10_FINAL_r2 (AI 10-leg props) - not on the paste as of ~17:15Z"
-  ],
-  "exposure_note": "Colts@Chiefs now carries IND +6 (price ticket) and Under 46 (opinion ticket), plus Daniel Jones O20.5 cmp and Mahomes U4.5 rush att on the morning tickets."
+   ],
+   "departures": [
+    {
+     "leg": "Steelers",
+     "recommended": "+5.5 -110 (r1)",
+     "placed": "+5 -110",
+     "note": "Line moved to +5 before he bet. Cowork's advice at +5 was: keep at -105 or better, DROP at -110 (about 2% worse than sharp fair). Jeff placed it at -110 - his call; the price reason for this leg does not hold as placed."
+    }
+   ],
+   "result": "LOST",
+   "legs_won": 2
+  },
+  {
+   "ticket_id": "AI_OPINION_GAMES_PLACED",
+   "refers_to": "game_ticket_ai_opinion_20260920T1653Z.json",
+   "reasoning_kind": "football_opinion",
+   "stake": 10.0,
+   "quoted_american": 4749,
+   "to_pay": 484.85,
+   "legs": [
+    {
+     "game": "Raiders@Chargers",
+     "market": "totals",
+     "outcome": "Under",
+     "point": 43.5,
+     "american": -110,
+     "result": "W",
+     "final": "LV 26 @ LAC 14"
+    },
+    {
+     "game": "Jaguars@Broncos",
+     "market": "spreads",
+     "outcome": "Jacksonville Jaguars",
+     "point": 2.5,
+     "american": -105,
+     "result": "L",
+     "final": "JAX 13 @ DEN 20"
+    },
+    {
+     "game": "Commanders@Cowboys",
+     "market": "spreads",
+     "outcome": "Washington Commanders",
+     "point": 4.5,
+     "american": -110,
+     "result": "L",
+     "final": "WAS 20 @ DAL 37"
+    },
+    {
+     "game": "Seahawks@Cardinals",
+     "market": "spreads",
+     "outcome": "Arizona Cardinals",
+     "point": 4.0,
+     "american": -110,
+     "result": "L",
+     "final": "SEA 31 @ ARI 7"
+    },
+    {
+     "game": "Colts@Chiefs",
+     "market": "totals",
+     "outcome": "Under",
+     "point": 46.0,
+     "american": -110,
+     "result": "L",
+     "final": "IND 30 @ KC 33"
+    },
+    {
+     "game": "Giants@Rams",
+     "market": "spreads",
+     "outcome": "New York Giants",
+     "point": 7.0,
+     "american": null,
+     "result": "L",
+     "final": "NYG 6 @ LA 28"
+    }
+   ],
+   "departures": [],
+   "note": "All six legs as sent incl. the optional Under 46; +4749 equals the sent product with NYG +7 at -115 (its price was cut off in the paste).",
+   "result": "LOST",
+   "legs_won": 1
+  }
+ ],
+ "not_ours": "A 20-leg SGPMAX on the same paste is a friend's ticket - not logged.",
+ "not_placed_yet": [
+  "LEAD_10_FINAL_r2 (AI 10-leg props) - not on the paste as of ~17:15Z"
+ ],
+ "exposure_note": "Colts@Chiefs now carries IND +6 (price ticket) and Under 46 (opinion ticket), plus Daniel Jones O20.5 cmp and Mahomes U4.5 rush att on the morning tickets.",
+ "graded_utc": "2026-09-22T17:10Z",
+ "grading_source": "nflverse PBP finals"
 }

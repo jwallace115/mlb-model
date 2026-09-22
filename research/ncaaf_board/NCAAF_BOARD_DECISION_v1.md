@@ -1593,3 +1593,31 @@ book, distinct ideas per N58); the log is never drawn from a card.
   frozen rows. Economics - real prices. Aggregates - the breakouts above.
 - NOT BUILT: the score step (must implement the docstring exactly); `pass_interceptions` has no grader family.
   The reader is the same model that writes the reasons - this measures the opinion, it cannot make it independent.
+
+### N60 — Week 2 closed: MNF pilot of the blind log scored; every ticket graded on PBP and matches the book (2026-09-22)
+
+Final NYG 6 @ LA 28. Dart left at 11:28 of Q1 after 5 attempts (Winston 29 att); Stafford 22/31 327 4 TD; Adams
+8-195-2 on 10 targets; Kyren 12 car 85; Corum 12-79; Skattebo 12-36 and 4 catches.
+- **N59 pilot score** (`nfl/pipeline/log_ai_opinions.py score`, now built exactly to the docstring; test added):
+  78 lines, all 78 resolved from PBP; 21 with a view. Sides: 6 of 21 won, **-9.61 units at real prices**
+  (-0.46/leg). Brier on the 54 two-way lines: reader 0.2418 vs book 0.2364 (P1 held); on the 18 with a view
+  0.2560 vs 0.2400. By tag: usage_trend 2/9 (-5.42 u), game_script 1/5 (-3.17), injury_news 2/6 (-1.94),
+  role_change 1/1. By gap: 0.03-0.08 bucket 3/15 (-9.07 u) carried the loss; >0.08 1/2. What won: Adams over
+  5.5 rec, Dart no INT, Kyren over 63.5 rush yds, Singletary under 11.5 rush yds, OBJ under 3.5 rec yds, total
+  under 47.5. Report `research/nfl_sim/n59_pilot_score_2026-09-22.md` (+ row parquet). PILOT: not pooled.
+  Reading, not a lesson: the Dart-dependent legs (5 of 21) all died with his injury, but 10 of the other 16 also
+  lost; the 0.03-0.08 "lean" bucket is where the reader was confidently wrong. One game says nothing about
+  the reader; it says the log works end to end (freeze -> PBP -> score) before Week 3 starts the record.
+- **MNF tickets** (`mnf_ticket_placements_20260921.json`): A 2/5 ($20 bonus, +3816), B 0/5 ($10, +4275). Jeff's
+  own extra 5-leg at 19:29 ET (not on the card, not pre-logged) 3/5 ($10, +224). Friend's 14-leg: other.
+- **Sunday game tickets graded on finals** (`game_ticket_placements_20260920.json`): price ticket 2/5 (CLE@TB
+  over 41 and IND +6 won); opinion ticket 1/6 (LV@LAC under 43.5; NYG +7 lost 6-28).
+- **PBP grading == book settlement** on every placed leg: 8/19, 7/10, 3/5, 3/5 (`grade_week.py --extra` on the
+  fresh nflverse file) and A 2/5, B 0/5 leg for leg. Settlement cross-check closed.
+- **Sim vs book, Week 2, pre-registered** (`research/nfl_sim/wk2_sim_vs_book_2026-09-22.md`; the Mac's PRE-KICK
+  fit_5i board of 15:50:02Z): 146 rows. Brier book 0.2519 / sim cal 0.2993 / raw 0.3194 / coin 0.2500.
+  P1 HELD (book better; bootstrap 95% +0.023..+0.072 excludes 0). P2 HELD: 30 divergent rows, book right 20,
+  sim 10. The sim was worse than a coin this week. That board ran on the one-draw engine (D113); it is the
+  baseline the fit_5l/5m boards get compared to from Week 3, not evidence about them.
+- Week 2 cash: $80 staked across 8 tickets ($70 Sun + $10 Mon) + $45 bonus bets, $0 returned.
+- Standing: the record starts Thursday (Week 3). Freeze before kickoff from the newest pull; post the hash.
