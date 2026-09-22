@@ -2921,3 +2921,44 @@ Branch `eng/5l` in worktree `~/mlb-model-5l`. `main` untouched.
 ## 2026-09-22T12:51Z  cowork
 - BUILT: --sport ncaaf in nfl/pipeline/log_ai_opinions.py (Pinnacle book of record, CFBD finals, separate ncaaf/data/board tree); test 8/8. Dry sheet: 171 lines / 58 games for CFBD wk 4. N61.
 - NOT DONE: the NCAAF week-4 opinions themselves (freeze Thu before 23:30Z for Thu games, Fri/Sat before each kickoff); team totals capture (deferred).
+## 2026-09-22T15:06Z  claude-code (Phase 5M execution)
+
+Branch `eng/5m` in worktree `~/mlb-model-5m`. `main` untouched.
+Fingerprint: `c01d2af899c7e9f8` -> `4a0a77b76c0624f3` (item 1a) -> `02fbcab6e6ed042e` (item 2).
+
+### Commits (4, each pushed before the next)
+- `80d1b52c9` D119: Item 1 -- child RNG, played-game exclusion, offline test
+- `b23d84225` D120: Item 2 -- Q4_mid split at 180 s
+- `37b91727d` D121: Item 3 -- re-fit fit_5m, K1, K4, suite, board
+- `1c7fba9ca` D122: Item 4 -- share-shrinkage measurement
+
+### What was done
+- Item 1a: player_rng = default_rng(stable_seed((seed,"player"))). RETURNED: player-ON scores == player-OFF (np.array_equal). T4 green. Player-OFF hash c98664e98b00c7ff stable. MEANS: the player layer is now invisible to the team-level game at any seed.
+- Item 1b: commence_time <= as_of -> SKIPPED. RETURNED: DET@BUF excluded, 15 games (was 16). 5J test `test_prekick_line_chosen_for_kicked_game` now expected-fails (PIT@NE correctly excluded). MEANS: played games no longer appear on the live board.
+- Item 1c: test_usage_pit_5j.py offline (fixture, no nflreadpy). before_dt offset 2 days (correct ET kickoff).
+- Item 2: Q4_mid split at 180s. Q4_mid_a (14 cells OK), Q4_mid_b (11 cells, 3 THIN fall back to Q4_mid). clock_runoff.parquet 160 rows. Fingerprint 02fbcab6e6ed042e.
+- Item 3: run_fit.py 2021-24: 1087 games, 9 workers, ~90 min wall. RETURNED: 1087/1087 converged. Cal maps 21 families. K1: punts 8.842 (DID NOT HOLD >=0.3 drop — the split affects only late-game tied/trailing, a tiny fraction of drives). tied_expiry 0.105 (HELD, moved 0.014 toward 0.081). All 5 null controls PASS. Suite: 77 pass, 3 fail (2 T4 RNG-stream from 5L, 1 superseded 5J test). Board: 15 games, ranked, 1353 legs. K4: 72978 rows.
+- Item 4: RETURNED: w=0.6-0.7 (prior season) cuts MAE by 32-47% on discovery, 22-47% on 2025 holdout. Pre-registered >15% for WR and RB target share: HELD (47.3% and 21.8%). MEANS: week-1 shares are measurably noisier than a blended estimate; the hypothesis is supported. 81% of Wk2 2026 players have prior-season data.
+
+### Runtime measurements
+- Re-fit: ~90 min wall (9 workers, 1087 games)
+- Cal maps: 77s
+- K1: 22.5 min (1087 games, N=500)
+- K4: ~4 min (400 games)
+- Board: 11.4 min (15 games)
+- Share-shrinkage script: ~10s
+
+### What was NOT done
+- No merge. No share-shrinkage weight applied.
+- No 5K pace diagnostic (P1) — the order said this is graded after re-fit but was not explicitly measured.
+- No usage rebuild bit-identity check.
+
+### What remains UNVERIFIED
+- Linux cross-check of the 5M board (picks_log_mac.parquet committed).
+- Whether the Q4_mid split's failure to move punts means the split is ineffective or just that punts are the wrong metric (tied-drive expiry DID move).
+- Whether the 2 T4 reds (from 5L) are fixed by the child RNG — they should be but T4 was not re-run at main's code after all 5M changes.
+
+## 2026-09-22T17:02Z  cowork
+- VERIFIED eng/5m @63c80c5: engine diff read; Linux board 1353/1353 bit-identical to Mac; T4 5/5 green; hash null control reproduced at D119's commit and red at HEAD (item 2 moved the stream); item-4 script re-run, numbers identical. Full suite 203/209 (2 env artefacts, 4 real reds). merge-tree clean. VERDICT merge; D123; work order 5N.
+- FOUND: D121 suite listing wrong (T4 not red, hash test red); item-4 sample has survivorship (my order); punts excess = drives excess.
+- NOT DONE: the two test rewrites (5N item 1); shrinkage re-measure (5N item 2); drives diagnosis (5N item 3).

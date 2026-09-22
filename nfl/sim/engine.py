@@ -735,13 +735,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         ctx["t1_pass_epa_shift"] += epa_away_offset
         ctx["t1_rush_epa_shift"] += epa_away_offset
 
-    # Player allocation context
+    # Player allocation context — 5M: child generator so the player layer
+    # cannot shift the team-level RNG stream.
     has_players = player_usage is not None and active_uni is not None
     player_ctx = None
     if has_players:
+        player_rng = np.random.default_rng(stable_seed((seed, "player")))
         player_ctx = _build_player_context(home, away, season, week,
                                             player_usage, active_uni, qb_ratings,
-                                            n_sims=n_sims, rng=rng)
+                                            n_sims=n_sims, rng=player_rng)
         if player_ctx[0] is None or player_ctx[1] is None:
             has_players = False
             player_ctx = None
@@ -1576,7 +1578,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             "tied" if sd_i == 0 else "lead1-8" if sd_i <= 8 else "lead9+")
                     cp_i = ("Q2_late" if (qtr[i] == 2 and clock[i] <= 120) else
                             "Q4_late" if (qtr[i] >= 4 and clock[i] <= 120) else
-                            "Q4_mid" if (qtr[i] == 4 and clock[i] <= 300) else "normal")
+                            "Q4_mid_b" if (qtr[i] == 4 and clock[i] <= 180) else
+                            "Q4_mid_a" if (qtr[i] == 4 and clock[i] <= 300) else "normal")
                     ot_name = "complete_inbounds"
                     # defence timeout after the kneel?
                     if to_lookup is not None and to_rem[1 - poss[i], i] > 0 and clock[i] <= 180:
@@ -1589,6 +1592,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             to_rem[1 - poss[i], i] -= 1; ev_to_def[i] += 1
                             ot_name = "incomplete"  # clock stopped
                     cq = clock_q.get((ot_name, ss_i, cp_i))
+                    # 5M: Q4_mid_a/Q4_mid_b fall back to unsplit Q4_mid
+                    if cq is None and cp_i in ("Q4_mid_a", "Q4_mid_b"):
+                        cq = clock_q.get((ot_name, ss_i, "Q4_mid"))
                     if cq is None:
                         cq = clock_q.get((ot_name, f"p_{ss_i}", "all"))
                     if cq is None:
@@ -2428,13 +2434,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                      np.where(sd_arr <= -1, "trail1-8",
                      np.where(sd_arr == 0, "tied",
                      np.where(sd_arr <= 8, "lead1-8", "lead9+"))))
-            # 5I: clock period (4-way); Q4_mid for 120 < gsr <= 300
+            # 5I/5M: clock period — Q4_mid split at 180 s
             cp_arr = np.full(len(gi_arr), "normal", dtype=object)
             q2_late_m = (qtr[gi_arr] == 2) & (clock[gi_arr] <= 120)
-            q4_mid_m = (qtr[gi_arr] == 4) & (clock[gi_arr] > 120) & (clock[gi_arr] <= 300)
+            q4_mid_b_m = (qtr[gi_arr] == 4) & (clock[gi_arr] > 120) & (clock[gi_arr] <= 180)
+            q4_mid_a_m = (qtr[gi_arr] == 4) & (clock[gi_arr] > 180) & (clock[gi_arr] <= 300)
             q4_late_m = (qtr[gi_arr] >= 4) & (clock[gi_arr] <= 120)   # 5A-11 (D39): OT included
             cp_arr[q2_late_m] = "Q2_late"
-            cp_arr[q4_mid_m] = "Q4_mid"
+            cp_arr[q4_mid_a_m] = "Q4_mid_a"
+            cp_arr[q4_mid_b_m] = "Q4_mid_b"
             cp_arr[q4_late_m] = "Q4_late"
             ot_strs = ["incomplete", "first_down", "complete_inbounds"]
             xs101 = np.linspace(0, 1, 101)
@@ -2443,13 +2451,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for oi in range(3):
                 ot_name = ot_strs[oi]
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
-                    for cp_val in ["normal", "Q2_late", "Q4_mid", "Q4_late"]:
+                    for cp_val in ["normal", "Q2_late", "Q4_mid_a", "Q4_mid_b", "Q4_late"]:
                         mask = ((ot_idx == oi) & (ss_arr == ss_val) &
                                 (cp_arr == cp_val) & ~game_over[gi_arr] & ~eoh_p)
                         if not mask.any():
                             continue
-                        # 3-level fallback: exact -> parent (p_score_state) -> legacy
+                        # 5M: 4-level fallback: split -> Q4_mid -> parent -> legacy
                         cq = clock_q.get((ot_name, ss_val, cp_val))
+                        if cq is None and cp_val in ("Q4_mid_a", "Q4_mid_b"):
+                            cq = clock_q.get((ot_name, ss_val, "Q4_mid"))
                         if cq is None:
                             cq = clock_q.get((ot_name, f"p_{ss_val}", "all"))
                         if cq is None:
@@ -2692,10 +2702,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                        np.where(sd_r_arr <= 8, "lead1-8", "lead9+"))))
             cp_r_arr = np.full(len(gi_r), "normal", dtype=object)
             q2l_r = (qtr[gi_r] == 2) & (clock[gi_r] <= 120)
-            q4m_r = (qtr[gi_r] == 4) & (clock[gi_r] > 120) & (clock[gi_r] <= 300)
+            q4mb_r = (qtr[gi_r] == 4) & (clock[gi_r] > 120) & (clock[gi_r] <= 180)
+            q4ma_r = (qtr[gi_r] == 4) & (clock[gi_r] > 180) & (clock[gi_r] <= 300)
             q4l_r = (qtr[gi_r] >= 4) & (clock[gi_r] <= 120)   # 5A-11 (D39): OT included
             cp_r_arr[q2l_r] = "Q2_late"
-            cp_r_arr[q4m_r] = "Q4_mid"
+            cp_r_arr[q4ma_r] = "Q4_mid_a"
+            cp_r_arr[q4mb_r] = "Q4_mid_b"
             cp_r_arr[q4l_r] = "Q4_late"
             ot_strs_r = {0: "first_down", 1: "run", 3: "incomplete"}  # 3 = clock stopped by a timeout (5A-7)
             xs101 = np.linspace(0, 1, 101)
@@ -2704,12 +2716,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for oi in (0, 1, 3):
                 ot_name_r = ot_strs_r[oi]
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
-                    for cp_val in ["normal", "Q2_late", "Q4_mid", "Q4_late"]:
+                    for cp_val in ["normal", "Q2_late", "Q4_mid_a", "Q4_mid_b", "Q4_late"]:
                         mask = ((ot_idx_r == oi) & (ss_r_arr == ss_val) &
                                 (cp_r_arr == cp_val) & ~game_over[gi_r] & ~eoh_r)
                         if not mask.any():
                             continue
                         cq = clock_q.get((ot_name_r, ss_val, cp_val))
+                        if cq is None and cp_val in ("Q4_mid_a", "Q4_mid_b"):
+                            cq = clock_q.get((ot_name_r, ss_val, "Q4_mid"))
                         if cq is None:
                             cq = clock_q.get((ot_name_r, f"p_{ss_val}", "all"))
                         if cq is None:

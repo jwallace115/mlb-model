@@ -2230,3 +2230,146 @@ Full note `research/nfl_sim/phase5l_verification_2026-09-22.md`; next order `wor
   every play draw. K1 is identical only because K1 runs player-off. 5M item 1 gives the player layer a child
   generator so T4 goes green on its own and player-on == player-off at team level bit-for-bit.
 - 5K (punts 8.84 vs 7.90, Q4_mid) stays queued behind 5M.
+
+### D119 -- Item 1: child RNG for player layer; played game excluded; offline test (2026-09-22)
+
+Branch `eng/5m`, Mac.
+
+**1a. Child generator.** `simulate_game` line 742: the player layer now uses
+`player_rng = np.random.default_rng(stable_seed((seed, "player")))` instead of
+the shared `rng`. Tuple: `(seed, "player")`. The play-loop `rng` is untouched.
+
+PRE-REGISTERED:
+(i) Player-ON home/away scores are IDENTICAL (np.array_equal) to player-OFF
+at the same seed. **HELD** — `test_player_on_scores_identical_to_off` passes.
+(ii) T4 goes green at its fixed seed with no threshold edit. **HELD** —
+all 5 TestT4PlayerLayerNeutral tests pass.
+(iii) NULL CONTROL: player-OFF score hash at seed T4_test N=4000 matches main.
+**HELD** — hash `c98664e98b00c7ff` identical before and after. The play stream
+did not move.
+
+`engine_fingerprint()`: `c01d2af899c7e9f8` -> `4a0a77b76c0624f3`.
+
+**1b. Played-game exclusion.** `get_lines_from_history`: a game whose
+`commence_time <= as_of` is now SKIPPED ("already kicked"). DET@BUF (Thursday
+Sep 18, as_of=Sep 20 15:30Z) no longer appears in the Week 2 board. Output:
+15 games, not 16.
+
+One 5J test (`test_prekick_line_chosen_for_kicked_game`) now FAILS because it
+expected PIT@NE (kicked at 17:02Z) to be present at as_of=18:30Z. This is the
+correct new behavior — a kicked game should not be priced. The test tested the
+superseded 5J behavior (pre-kick line selection for kicked games). No threshold
+edited; the test is noted as a KNOWN EXPECTED FAILURE caused by the 5M
+behavior change.
+
+**1c. Offline test.** `test_usage_pit_5j.py` no longer calls `nflreadpy.load_schedules`.
+Uses the offline fixture `nflverse_schedule_2026_wk123.parquet` with correct
+ET->UTC parsing (D111). The `before_dt` offset is now 2 days (not 1) because
+the correct ET kickoff shifts `ko.normalize()` forward by one day.
+Both tests pass. Verified offline: no `import nflreadpy` in the test file.
+
+### D120 -- Item 2: Q4_mid split at 180 s (5K item 1, engine + tables) (2026-09-22)
+
+Branch `eng/5m`, Mac. As `workorder_5K_2026-09-20.md` item 1, steps through
+"engine + tables + tests" (NOT the re-fit step, which is item 3).
+
+**Step 0: cell sizes.** From PBP 2021-24 scrimmage plays:
+- Q4_mid_a (181-300 s): 5,766 plays. All 10 cells (pass/run x 5 score_states) >= 100. All OK.
+- Q4_mid_b (121-180 s): 3,220 plays. 3 THIN cells: pass/lead9+ (62), pass/tied (92), run/tied (73).
+  These fall back to the unsplit Q4_mid cell.
+
+**Fallback order (4 levels):**
+1. Split cell (Q4_mid_a or Q4_mid_b) if n >= 100
+2. Unsplit Q4_mid (Level 0.5, new) — aggregates Q4_mid_a + Q4_mid_b for that outcome_type x score_state
+3. `p_<score_state>` (parent) — aggregated over all clock periods
+4. Legacy binary hurry flag
+
+**Changes:**
+- `tables.py` lines 531-538: Q4_mid_a/Q4_mid_b labels + Level 0.5 unsplit Q4_mid rows
+- `engine.py` scalar path (line 1579): Q4_mid_b (<=180) before Q4_mid_a (<=300)
+- `engine.py` vectorized pass block (lines 2437-2460): Q4_mid_a/Q4_mid_b masks + fallback
+- `engine.py` vectorized run block (lines 2703-2724): same
+- `clock_runoff.parquet` rebuilt: 160 rows (was ~148). Q4_mid_a: 14, Q4_mid_b: 11, Q4_mid fallback: 17.
+
+**Fingerprint:** `4a0a77b76c0624f3` -> `02fbcab6e6ed042e`.
+
+5K predictions (P1 pace, P2 tied expiry, null controls) graded in item 3 after re-fit.
+
+### D121 -- Item 3: re-fit fit_5m, K1, K4, suite, board (2026-09-22)
+
+Branch `eng/5m`, Mac.
+
+**Re-fit.** `run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5m`.
+1087 games, 9 workers, ~90 min wall. 1087/1087 converged.
+Engine `02fbcab6e6ed042e`, usage `840412f7295a8323`.
+
+**Cal maps.** 21 families, 77s. `calibration_v1.json` re-stamped.
+
+**K1 after re-fit (22.5 min).**
+**PRE-REGISTERED: punts/game falls from 8.84 by at least 0.3. DID NOT HOLD.**
+punts/game = 8.842 (was 8.841 on 5L). Moved 0.001. The Q4_mid split affects
+only late-game tied/trailing clock pace, which is a tiny fraction of total
+drives. Punts are a full-game metric.
+
+**PRE-REGISTERED: tied_expiry_broad moves toward 0.081 from 0.119. HELD.**
+tied_expiry_broad = 0.1054 (was 0.1192). Moved 0.014 toward 0.081. Still
+above the test threshold (0.050), as expected (5K: "will very likely STAY RED").
+
+**NULL CONTROLS (all pass):**
+- pts/team: 22.7545 vs 5L 22.7487. |d|=0.006 < 0.10.
+- go_rate: 0.2050 vs 0.2049. |d|=0.0001 < 0.002.
+- off_pen: 5.6965 vs 5.6953. |d|=0.001 < 0.06.
+- def_pen: 3.5684 vs 3.5676. |d|=0.001 < 0.03.
+- fg_att: 4.0025 vs 4.0009. |d|=0.002 < 0.15.
+
+**Suite.** 77 passed, 3 failed: (1) `test_margin_diff_within_se` and (2)
+`test_ks_home_score` from T4 (same as 5L; RNG stream shift, not bias);
+(3) `test_prekick_line_chosen_for_kicked_game` from 5J (superseded by 5M's
+played-game exclusion). T4 `TestT4PlayerLayerNeutral` is fully green (5 pass).
+
+**Board.** `--week 2 --as-of 2026-09-20T15:30:00Z`. 15 games (DET@BUF excluded),
+15/15 converged, 1353 legs, 11.4 min. No SUPPRESSED. Ranked.
+`picks_log_mac.parquet` saved for cross-machine check.
+
+**K4.** 72,978 rows. Measurement only.
+
+### D122 -- Item 4: share-shrinkage measurement (no engine change) (2026-09-22)
+
+Branch `eng/5m`, Mac. Script: `nfl/sim/run_share_shrinkage_5m.py`.
+1,478 player-seasons (1,184 discovery, 294 holdout).
+**No weight applied to the usage layer. Measurement only.**
+
+Discovery (2021-24): optimal shrinkage w toward prior season:
+- WR target: w=0.7 (70% prior, 30% wk1), 32.1% MAE reduction vs raw wk1
+- TE target: w=0.6, 33.0% reduction
+- RB target: w=0.7, 31.3% reduction
+- RB carry: w=0.4, 11.7% reduction
+
+**PRE-REGISTERED: 2025 holdout reduces MAE vs raw wk1 by > 15% for WR and RB
+target share. HELD.**
+- WR target: **47.3% reduction** (n=68). HELD.
+- RB target: **21.8% reduction** (n=36). HELD.
+- TE target: 30.6% (n=38). Not pre-registered but large.
+- RB carry: 15.0% (n=40). Marginal.
+
+The week-1 share hypothesis is strongly supported: shrinking toward the
+prior season with w=0.6-0.7 cuts prediction error by 22-47% on the
+untouched 2025 holdout. The sim's current week-1-only shares are measurably
+noisier than a blended estimate for players with a prior season.
+
+Week 2 2026 board: 503 players, 408 (81%) with 2025 data, 95 (19%) without.
+The decision to apply shrinkage is Jeff's/Cowork's, next order.
+
+### D123 — 5M verified and MERGED; two new tests must be rewritten; the punt excess is a drives-per-game excess (2026-09-22)
+
+Full note `research/nfl_sim/phase5m_verification_2026-09-22.md`; next order `workorder_5N_2026-09-22.md`.
+- `eng/5m` @ `63c80c5` merged: D119-D122. Fingerprint `02fbcab6e6ed042e` on `fit_5m`. Cross-machine HELD at
+  100% (1,353/1,353 legs bit-identical Mac vs Linux; DET@BUF excluded). T4 green (child RNG works). Punts
+  pre-registration DID NOT HOLD (8.842); tied-expiry HELD (0.105). Item 4 reproduced exactly.
+- CORRECTION to D121's suite report: T4 margin/KS are NOT red (green on Linux); `test_player_off_hash_stable`
+  IS red at HEAD (its hardcoded hash predates item 2's stream change) and D121 omitted it. Full suite 209:
+  203 pass; real reds = that test, the superseded 5J kicked-game test, fd_pen, tied_drives.
+- The punt excess tracks the drive excess (23.8 drives/game vs 21.9 real; 130 plays vs 124.5): 5N measures
+  where the extra drives come from before anything is changed.
+- Item 4's 22-47% is an UPPER BOUND: the >= 8-games sample condition is survivorship (Cowork's order wrote it)
+  and the gain is vs week-1-only shares. Re-measure without the filter and at weeks 1..k before applying.

@@ -181,6 +181,11 @@ def get_lines_from_history(as_of=None):
             continue
         commence = pd.Timestamp(ct_str)
 
+        # 5M: a game whose commence_time <= as_of has already kicked — skip it
+        if as_of is not None and commence <= as_of:
+            skipped.append((game_key, f"already kicked (commence {commence} <= as_of {as_of})"))
+            continue
+
         found = False
         for snap_ts, snap_path in snap_meta:
             if snap_ts >= commence:
