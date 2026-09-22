@@ -2230,3 +2230,40 @@ Full note `research/nfl_sim/phase5l_verification_2026-09-22.md`; next order `wor
   every play draw. K1 is identical only because K1 runs player-off. 5M item 1 gives the player layer a child
   generator so T4 goes green on its own and player-on == player-off at team level bit-for-bit.
 - 5K (punts 8.84 vs 7.90, Q4_mid) stays queued behind 5M.
+
+### D119 -- Item 1: child RNG for player layer; played game excluded; offline test (2026-09-22)
+
+Branch `eng/5m`, Mac.
+
+**1a. Child generator.** `simulate_game` line 742: the player layer now uses
+`player_rng = np.random.default_rng(stable_seed((seed, "player")))` instead of
+the shared `rng`. Tuple: `(seed, "player")`. The play-loop `rng` is untouched.
+
+PRE-REGISTERED:
+(i) Player-ON home/away scores are IDENTICAL (np.array_equal) to player-OFF
+at the same seed. **HELD** — `test_player_on_scores_identical_to_off` passes.
+(ii) T4 goes green at its fixed seed with no threshold edit. **HELD** —
+all 5 TestT4PlayerLayerNeutral tests pass.
+(iii) NULL CONTROL: player-OFF score hash at seed T4_test N=4000 matches main.
+**HELD** — hash `c98664e98b00c7ff` identical before and after. The play stream
+did not move.
+
+`engine_fingerprint()`: `c01d2af899c7e9f8` -> `4a0a77b76c0624f3`.
+
+**1b. Played-game exclusion.** `get_lines_from_history`: a game whose
+`commence_time <= as_of` is now SKIPPED ("already kicked"). DET@BUF (Thursday
+Sep 18, as_of=Sep 20 15:30Z) no longer appears in the Week 2 board. Output:
+15 games, not 16.
+
+One 5J test (`test_prekick_line_chosen_for_kicked_game`) now FAILS because it
+expected PIT@NE (kicked at 17:02Z) to be present at as_of=18:30Z. This is the
+correct new behavior — a kicked game should not be priced. The test tested the
+superseded 5J behavior (pre-kick line selection for kicked games). No threshold
+edited; the test is noted as a KNOWN EXPECTED FAILURE caused by the 5M
+behavior change.
+
+**1c. Offline test.** `test_usage_pit_5j.py` no longer calls `nflreadpy.load_schedules`.
+Uses the offline fixture `nflverse_schedule_2026_wk123.parquet` with correct
+ET->UTC parsing (D111). The `before_dt` offset is now 2 days (not 1) because
+the correct ET kickoff shifts `ko.normalize()` forward by one day.
+Both tests pass. Verified offline: no `import nflreadpy` in the test file.

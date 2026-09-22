@@ -7,6 +7,8 @@ depth-chart QB fallback) never got it. This test verifies the fix:
 a rank-1 QB snapshot with dt AFTER a week's first kickoff does NOT
 set the starting QB for that week, while the same row dated BEFORE
 kickoff DOES.
+
+5M: uses the offline schedule fixture — no network call.
 """
 
 import sys
@@ -21,14 +23,21 @@ sys.path.insert(0, str(ROOT))
 
 from nfl.sim.usage import derive_starting_qbs, PBP_DIR
 
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+
 
 def _get_kickoff_2026_wk1():
-    """Get the first kickoff time for 2026 week 1 from nflverse schedule."""
-    import nflreadpy
-    sched = nflreadpy.load_schedules([2026]).to_pandas()
-    sched["_ko"] = pd.to_datetime(
-        sched["gameday"].astype(str) + " " + sched["gametime"].fillna("13:00"),
-        errors="coerce", utc=True,
+    """Get the first kickoff time for 2026 week 1 from OFFLINE fixture."""
+    sched = pd.read_parquet(FIXTURES / "nflverse_schedule_2026_wk123.parquet")
+    from zoneinfo import ZoneInfo
+    _et = ZoneInfo("America/New_York")
+    sched["_ko"] = (
+        pd.to_datetime(
+            sched["gameday"].astype(str) + " " + sched["gametime"].fillna("13:00"),
+            errors="coerce",
+        )
+        .dt.tz_localize(_et)
+        .dt.tz_convert("UTC")
     )
     wk1 = sched[sched["week"] == 1]
     return wk1["_ko"].min()
@@ -90,8 +99,9 @@ def test_layer3_accepts_pre_kickoff_qb(kickoff_wk1, depth_no_team):
     """The same fake QB dated BEFORE the first game day IS chosen as starter."""
     ko = kickoff_wk1
     fake_gsis = "00-FAKEFAKE"
-    # One day before game day — clearly before any kickoff
-    before_dt = (ko.normalize() - pd.Timedelta(days=1)).isoformat()
+    # Two days before game day — clearly before any kickoff and before
+    # the PBP game_date (midnight UTC), which is the actual filter cutoff
+    before_dt = (ko.normalize() - pd.Timedelta(days=2)).isoformat()
     row = _make_depth_row("ARI", fake_gsis, before_dt)
     depth = pd.concat([depth_no_team, pd.DataFrame([row])], ignore_index=True)
 

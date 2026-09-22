@@ -735,13 +735,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         ctx["t1_pass_epa_shift"] += epa_away_offset
         ctx["t1_rush_epa_shift"] += epa_away_offset
 
-    # Player allocation context
+    # Player allocation context — 5M: child generator so the player layer
+    # cannot shift the team-level RNG stream.
     has_players = player_usage is not None and active_uni is not None
     player_ctx = None
     if has_players:
+        player_rng = np.random.default_rng(stable_seed((seed, "player")))
         player_ctx = _build_player_context(home, away, season, week,
                                             player_usage, active_uni, qb_ratings,
-                                            n_sims=n_sims, rng=rng)
+                                            n_sims=n_sims, rng=player_rng)
         if player_ctx[0] is None or player_ctx[1] is None:
             has_players = False
             player_ctx = None
