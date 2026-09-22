@@ -27,7 +27,8 @@ and must implement exactly this):
   * P1: Brier(book) <= Brier(reader) on two-way lines. P2: the reader's sides with |p-q| > 0.08 lose
     units at real prices. Both expected to HOLD; the log exists to find where, if anywhere, they fail.
 
-Usage:
+Usage (add --sport ncaaf for the college log: game lines only, Pinnacle as book of record, CFBD finals,
+separate output tree ncaaf/data/board/week=<S>_<WW>/ai_opinions/):
   python3 nfl/pipeline/log_ai_opinions.py sheet  --week 2 --out _cowork_patches/ai_sheet.csv
   python3 nfl/pipeline/log_ai_opinions.py freeze --week 2 --filled _cowork_patches/ai_filled.csv [--pilot]
   (freeze re-reads the tape itself; add --props-file/--lines-file for a manual pull, --events "Rams")
@@ -42,9 +43,29 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
-BOOK = "hardrockbet_fl"
-PROPS_DIR = ROOT / "data" / "odds_archive" / "nfl" / "props"
-LINES_DIR = ROOT / "data" / "odds_archive" / "nfl" / "line_history"
+# N61: one log per sport, tracked separately. NCAAF has no player props on the tape and Hard Rock is absent
+# from 100% of NCAAF snapshots (N01), so the NCAAF book of record is Pinnacle (the CLV benchmark) - its
+# de-vigged number is the reference; units are at PINNACLE's price and are labelled so. Jeff bets Hard Rock.
+SPORTS = {
+    "nfl": {"book": "hardrockbet_fl", "props": ROOT / "data" / "odds_archive" / "nfl" / "props",
+            "lines": ROOT / "data" / "odds_archive" / "nfl" / "line_history",
+            "out": ROOT / "nfl" / "data" / "board", "outcomes": "pbp"},
+    "ncaaf": {"book": "pinnacle", "props": None,
+              "lines": ROOT / "data" / "odds_archive" / "ncaaf" / "line_history",
+              "out": ROOT / "ncaaf" / "data" / "board", "outcomes": "cfbd"},
+}
+SPORT = "nfl"
+BOOK = SPORTS[SPORT]["book"]
+PROPS_DIR = SPORTS[SPORT]["props"]
+LINES_DIR = SPORTS[SPORT]["lines"]
+
+
+def set_sport(sport, book=None):
+    global SPORT, BOOK, PROPS_DIR, LINES_DIR
+    SPORT = sport
+    BOOK = book or SPORTS[sport]["book"]
+    PROPS_DIR = SPORTS[sport]["props"]
+    LINES_DIR = SPORTS[sport]["lines"]
 TAGS = ("injury_news", "role_change", "game_script", "matchup", "weather", "price_vs_sharp",
         "usage_trend", "line_move", "no_view")
 KEY = ["event_id", "market_key", "player_name", "line"]
@@ -64,7 +85,7 @@ def parse_utc(s):
 
 
 def out_dir(season, week):
-    return ROOT / "nfl" / "data" / "board" / f"week={season}_{week:02d}" / "ai_opinions"
+    return SPORTS[SPORT]["out"] / f"week={season}_{week:02d}" / "ai_opinions"
 
 
 def _finish(rows, now):
@@ -120,14 +141,18 @@ def build_sheet(props, lines, now):
 def newest_inputs(season, now, props_file=None, lines_file=None):
     """Newest pre-kick Hard Rock pull per event + the newest game-line snapshot, read from the tape.
     props_file / lines_file: a manual pull that has not reached the archive yet (_cowork_patches/)."""
-    pf = [Path(props_file)] if props_file else sorted((PROPS_DIR / f"season={season}").glob("month=*/data_*.parquet"))[-2:]
-    if not pf:
-        raise SystemExit("HALT: no props archive for the season")
-    props = pd.concat([pd.read_parquet(f) for f in pf], ignore_index=True)
-    props = props[props["bookmaker"] == BOOK]
-    props = props[props["pull_timestamp"].map(parse_utc) < props["commence_time"].map(parse_utc)]
-    newest = props.groupby("event_id")["pull_timestamp"].transform("max")
-    props = props[props["pull_timestamp"] == newest]
+    if PROPS_DIR is None and not props_file:
+        props = pd.DataFrame(columns=["event_id", "commence_time", "home_team", "away_team", "bookmaker",
+                                      "market_key", "player_name", "line", "over_price", "under_price", "pull_timestamp"])
+    else:
+        pf = [Path(props_file)] if props_file else sorted((PROPS_DIR / f"season={season}").glob("month=*/data_*.parquet"))[-2:]
+        if not pf:
+            raise SystemExit("HALT: no props archive for the season")
+        props = pd.concat([pd.read_parquet(f) for f in pf], ignore_index=True)
+        props = props[props["bookmaker"] == BOOK]
+        props = props[props["pull_timestamp"].map(parse_utc) < props["commence_time"].map(parse_utc)]
+        newest = props.groupby("event_id")["pull_timestamp"].transform("max")
+        props = props[props["pull_timestamp"] == newest]
     lf = [Path(lines_file)] if lines_file else sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))[-1:]
     if not lf:
         raise SystemExit("HALT: no game-line snapshots for the season")
@@ -198,6 +223,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None):
     m["revision"] = [seen.get((r.event_id, r.market_key, r.player_name, r.line), -1) + 1
                      for r in m.itertuples(index=False)]
     m["season"], m["week"], m["pilot"] = season, week, bool(pilot)
+    m["sport"], m["book"] = SPORT, BOOK
     m["logged_utc"] = now.isoformat()
     dest = d / f"ai_opinions_{now.strftime('%Y%m%dT%H%M%SZ')}.parquet"
     if dest.exists():
@@ -207,6 +233,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None):
     man = d / "manifest.json"
     entries = json.loads(man.read_text()) if man.exists() else []
     entries.append({"file": dest.name, "sha256": sha, "logged_utc": now.isoformat(), "rows": len(m),
+                    "sport": SPORT, "book": BOOK,
                     "pilot": bool(pilot), "games": int(m["event_id"].nunique()),
                     "no_view_share": round(float((m["tag"] == "no_view").mean()), 3),
                     "revised_rows": int((m["revision"] > 0).sum()),
@@ -250,6 +277,26 @@ def _game_actuals(pbp, home, away):
             "away_pts": float(g["away_score"].max()), "home": h, "away": a, "n_plays": len(g)}
 
 
+def _cfbd_actuals(season):
+    """NCAAF finals from the CFBD games file, via the ticket grader's own loader and name map (N41)."""
+    from ncaaf.pipeline.grade_ncaaf_tickets import _load_cfbd_outcomes, _odds_to_cfbd
+    outcomes, teams = _load_cfbd_outcomes(season)
+
+    def game(home, away, commence):
+        h, a = _odds_to_cfbd(home, teams), _odds_to_cfbd(away, teams)
+        if h is None or a is None:
+            return None
+        cands = [g for g in outcomes.get(frozenset((h, a)), []) if g["completed"]]
+        if not cands:
+            return None
+        k = parse_utc(commence)
+        g = min(cands, key=lambda g: abs((g["start"] - k).total_seconds()))
+        if abs((g["start"] - k).total_seconds()) > 36 * 3600:
+            return None
+        return {"home_pts": float(g["points"][h]), "away_pts": float(g["points"][a]), "tabs": {}, "ints": pd.Series(dtype=float)}
+    return game
+
+
 def _first_side_won(row, act, pid):
     """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved."""
     mk, line = row["market_key"], float(row["line"])
@@ -288,11 +335,18 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
         m = m[~m["pilot"]]
     if m.empty:
         raise SystemExit("HALT: nothing to score (pilot files need --include-pilot)")
-    pbp = pd.read_parquet(pbp_path or ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
-    lk = _build_roster_lookup(load_roster(), season, week)
+    if SPORTS[SPORT]["outcomes"] == "cfbd":
+        cfbd = _cfbd_actuals(season)
+        pbp, lk = None, None
+    else:
+        pbp = pd.read_parquet(pbp_path or ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
+        lk = _build_roster_lookup(load_roster(), season, week)
     rows = []
     for (home, away), s in m.groupby(["home_team", "away_team"]):
-        act = _game_actuals(pbp, home, away)
+        if pbp is None:
+            act = cfbd(home, away, s["commence_time"].iloc[0])
+        else:
+            act = _game_actuals(pbp, home, away)
         teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
         for _, r in s.iterrows():
             if act is None:
@@ -317,7 +371,7 @@ def score_report(out, season, week):
     g = out[out["graded"]].copy()
     two = g[g["two_way"]]
     one = g[~g["two_way"]]
-    L = [f"# Blind opinion log - score, {season} week {week}", "",
+    L = [f"# Blind opinion log - score, {SPORT.upper()} {season} week {week} (book of record: {BOOK})", "",
          f"files: {sorted(out['_file'].unique())}; pilot rows included: {bool(out['pilot'].any())}",
          f"rows {len(out)}, graded {len(g)} (pushes/unresolved {int((~out['graded']).sum())}), "
          f"with a view {int((g['tag'] != 'no_view').sum())}, no_view share {(out['tag'] == 'no_view').mean():.1%}", "",
@@ -356,6 +410,8 @@ def brier_(p, y):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["sheet", "freeze", "verify", "score"])
+    ap.add_argument("--sport", choices=list(SPORTS), default="nfl")
+    ap.add_argument("--book", default=None, help="override the sport's book of record")
     ap.add_argument("--season", type=int, default=2026)
     ap.add_argument("--week", type=int, required=True)
     ap.add_argument("--out"), ap.add_argument("--filled")
@@ -365,6 +421,7 @@ def main():
     ap.add_argument("--pilot", action="store_true")
     ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
     a = ap.parse_args()
+    set_sport(a.sport, a.book)
     now = datetime.now(timezone.utc)
     if a.cmd in ("sheet", "freeze"):
         sheet = build_sheet(*newest_inputs(a.season, now, a.props_file, a.lines_file), now)

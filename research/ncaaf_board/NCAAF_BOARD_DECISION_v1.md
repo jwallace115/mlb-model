@@ -1621,3 +1621,25 @@ Final NYG 6 @ LA 28. Dart left at 11:28 of Q1 after 5 attempts (Winston 29 att);
   baseline the fit_5l/5m boards get compared to from Week 3, not evidence about them.
 - Week 2 cash: $80 staked across 8 tickets ($70 Sun + $10 Mon) + $45 bonus bets, $0 returned.
 - Standing: the record starts Thursday (Week 3). Freeze before kickoff from the newest pull; post the hash.
+
+### N61 — The blind log gets NCAAF: every game line, in secret, tracked separately from the NFL (2026-09-22)
+
+Jeff: "add ncaa to the pilot program... pick in secret every single ncaa football wager with reasoning...
+make sure we can track it separate from the nfl."
+- `log_ai_opinions.py --sport ncaaf`: same freeze/verify/score, its own tree
+  `ncaaf/data/board/week=<S>_<WW>/ai_opinions/` (CFBD week numbering, as the NCAAF board), `sport` and `book`
+  stamped on every row and in the manifest; the NFL log is untouched. Test added (8 pass).
+- Universe: spread, total and moneyline for every game in the newest pre-kick snapshot. No player props on
+  the tape; team totals are NOT captured for NCAAF (a per-event pull would cost ~1 credit per game per pull
+  and Hard Rock would still be absent) - deferred, not refused.
+- **Book of record is Pinnacle, not Hard Rock.** Hard Rock is absent from 100% of NCAAF snapshots (N01), so
+  the reference probability is Pinnacle's de-vigged number and units are at Pinnacle's price, labelled.
+  Jeff's slips carry Hard Rock's price; placements are logged from the slip as before (N49).
+- Scoring: CFBD finals through the ticket grader's own loader and name map (N41 unordered-pair key), the
+  same pre-registration as N59. Pushes void. Only revision 0 scores; pilot files never pool.
+- Dry run on the live tape 2026-09-22: 171 lines, 58 games (spreads 58, totals 58, h2h 55), all two-way,
+  kickoffs Thu 09-24 23:30Z .. Sun 09-27 03:00Z. Zero API credits.
+- First NCAAF weekend (CFBD week 4) is the PILOT, like MNF was for the NFL; the record starts week 5.
+  Jeff may override to count week 4. Inputs the reader uses: the NCAAF board (10-book dispersion and
+  moves), CFBD SP+ and game data, the news pull, the portal signal, injuries as reported - all recorded
+  in the reason tags as for the NFL.

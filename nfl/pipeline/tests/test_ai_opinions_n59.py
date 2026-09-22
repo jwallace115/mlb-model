@@ -126,3 +126,37 @@ def test_score_first_side_and_units():
     assert got["player_receptions"] == 0 and got["player_anytime_td"] == 1   # 4 rec is not over 4.5; scored
     push = m[m.market_key == "totals"].iloc[0].copy(); push["line"] = 34.0
     assert L._first_side_won(push, act, None) is None
+
+
+def test_ncaaf_sport_is_separate_and_scores_from_cfbd(tmp_path, monkeypatch):
+    """N61: --sport ncaaf uses Pinnacle, no props, its own output tree, and CFBD finals for the score."""
+    L.set_sport("ncaaf")
+    try:
+        assert L.BOOK == "pinnacle" and L.PROPS_DIR is None
+        assert "ncaaf" in str(L.out_dir(2026, 4)) and "nfl/data" not in str(L.out_dir(2026, 4))
+        base = {"snapshot_utc": "2026-09-26T15:55:00+00:00", "event_id": "c1", "commence_time": "2026-09-26T16:00:00Z",
+                "home_team": "Georgia Bulldogs", "away_team": "Alabama Crimson Tide", "bookmaker": "pinnacle"}
+        lines = pd.DataFrame([
+            {**base, "market": "spreads", "outcome_name": "Georgia Bulldogs", "point": -3.5, "price": -108},
+            {**base, "market": "spreads", "outcome_name": "Alabama Crimson Tide", "point": 3.5, "price": -102},
+            {**base, "market": "totals", "outcome_name": "Over", "point": 51.5, "price": -105},
+            {**base, "market": "totals", "outcome_name": "Under", "point": 51.5, "price": -105},
+            {**base, "market": "h2h", "outcome_name": "Georgia Bulldogs", "point": None, "price": -170},
+            {**base, "market": "h2h", "outcome_name": "Alabama Crimson Tide", "point": None, "price": 150},
+        ])
+        now = datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc)
+        s = L.build_sheet(pd.DataFrame(columns=["bookmaker", "commence_time"]), lines, now)
+        assert len(s) == 3 and s.two_way.all()
+        f = s[L.KEY].copy(); f["p_first"] = s["q_first"] + 0.05; f["tag"] = "matchup"; f["reason"] = "a reason long enough to pass"
+        dest, sha, m = L.freeze(s, f, 2026, 4, True, now, d=tmp_path)
+        assert (m["sport"] == "ncaaf").all() and (m["book"] == "pinnacle").all()
+        # fake CFBD: Georgia 31, Alabama 24 -> home covers -3.5, total 55 over, home wins
+        fake = {frozenset(("Georgia", "Alabama")): [{"start": pd.Timestamp("2026-09-26T16:00:00Z"), "completed": True,
+                                                     "points": {"Georgia": 31, "Alabama": 24}}]}
+        import ncaaf.pipeline.grade_ncaaf_tickets as G
+        monkeypatch.setattr(G, "_load_cfbd_outcomes", lambda season: (fake, {"Georgia", "Alabama"}))
+        out = L.score(2026, 4, d=tmp_path, include_pilot=True)
+        assert out["graded"].all() and (out["y_first"] == 1).all() and out["side_won"].all()
+        assert out["units"].sum() > 0
+    finally:
+        L.set_sport("nfl")

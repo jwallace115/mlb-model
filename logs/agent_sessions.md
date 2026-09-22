@@ -2917,3 +2917,7 @@ Branch `eng/5l` in worktree `~/mlb-model-5l`. `main` untouched.
 - RAN: ingest_hardrock_bets.py (4 new slips, tagged); nflverse pbp_2026 refreshed (16 wk-2 games, cloud + copied to Mac); grade_week --extra (1276 legs; placed 8/19, 7/10, 3/5, 3/5 = book); score_week_vs_book (146 rows, P1 and P2 held, sim worse than coin); N59 score step BUILT + test (7 pass) and run on the MNF pilot (6/21 sides, -9.61 u). N60.
 - MEANS: grading chain is closed end to end; Week 2 fully graded; the pilot proved the log mechanics, nothing about the reader.
 - NOT DONE: 5M (running in Claude Code); play_down_to field / one-card builder; NFL game-ticket logger (game tickets are still hand-built JSON).
+
+## 2026-09-22T12:51Z  cowork
+- BUILT: --sport ncaaf in nfl/pipeline/log_ai_opinions.py (Pinnacle book of record, CFBD finals, separate ncaaf/data/board tree); test 8/8. Dry sheet: 171 lines / 58 games for CFBD wk 4. N61.
+- NOT DONE: the NCAAF week-4 opinions themselves (freeze Thu before 23:30Z for Thu games, Fri/Sat before each kickoff); team totals capture (deferred).
