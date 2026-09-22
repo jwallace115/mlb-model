@@ -2294,3 +2294,41 @@ Branch `eng/5m`, Mac. As `workorder_5K_2026-09-20.md` item 1, steps through
 **Fingerprint:** `4a0a77b76c0624f3` -> `02fbcab6e6ed042e`.
 
 5K predictions (P1 pace, P2 tied expiry, null controls) graded in item 3 after re-fit.
+
+### D121 -- Item 3: re-fit fit_5m, K1, K4, suite, board (2026-09-22)
+
+Branch `eng/5m`, Mac.
+
+**Re-fit.** `run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5m`.
+1087 games, 9 workers, ~90 min wall. 1087/1087 converged.
+Engine `02fbcab6e6ed042e`, usage `840412f7295a8323`.
+
+**Cal maps.** 21 families, 77s. `calibration_v1.json` re-stamped.
+
+**K1 after re-fit (22.5 min).**
+**PRE-REGISTERED: punts/game falls from 8.84 by at least 0.3. DID NOT HOLD.**
+punts/game = 8.842 (was 8.841 on 5L). Moved 0.001. The Q4_mid split affects
+only late-game tied/trailing clock pace, which is a tiny fraction of total
+drives. Punts are a full-game metric.
+
+**PRE-REGISTERED: tied_expiry_broad moves toward 0.081 from 0.119. HELD.**
+tied_expiry_broad = 0.1054 (was 0.1192). Moved 0.014 toward 0.081. Still
+above the test threshold (0.050), as expected (5K: "will very likely STAY RED").
+
+**NULL CONTROLS (all pass):**
+- pts/team: 22.7545 vs 5L 22.7487. |d|=0.006 < 0.10.
+- go_rate: 0.2050 vs 0.2049. |d|=0.0001 < 0.002.
+- off_pen: 5.6965 vs 5.6953. |d|=0.001 < 0.06.
+- def_pen: 3.5684 vs 3.5676. |d|=0.001 < 0.03.
+- fg_att: 4.0025 vs 4.0009. |d|=0.002 < 0.15.
+
+**Suite.** 77 passed, 3 failed: (1) `test_margin_diff_within_se` and (2)
+`test_ks_home_score` from T4 (same as 5L; RNG stream shift, not bias);
+(3) `test_prekick_line_chosen_for_kicked_game` from 5J (superseded by 5M's
+played-game exclusion). T4 `TestT4PlayerLayerNeutral` is fully green (5 pass).
+
+**Board.** `--week 2 --as-of 2026-09-20T15:30:00Z`. 15 games (DET@BUF excluded),
+15/15 converged, 1353 legs, 11.4 min. No SUPPRESSED. Ranked.
+`picks_log_mac.parquet` saved for cross-machine check.
+
+**K4.** 72,978 rows. Measurement only.
