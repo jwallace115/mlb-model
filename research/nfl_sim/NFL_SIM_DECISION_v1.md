@@ -2394,3 +2394,25 @@ Reds (2, both known since 5I, uninvestigated):
 - `test_first_downs_by_penalty` (fd_pen 1.40 vs tol 0.30, same as all prior K1s)
 - `test_t3_tied_drives_that_reach_range_get_the_kick_off` (tied_expiry 0.105 vs tol 0.050)
 No other reds.
+
+### D125 -- Item 2: share shrinkage re-measured without survivorship, at weeks 1..k (2026-09-22)
+
+Branch `eng/5n`, Mac. Script: `nfl/sim/run_share_shrinkage_5n.py`.
+No survivorship filter (any player with wk1 + at least one wk 2-8 row).
+s0 = prior season FULL-season share. Weighted by n_weeks in outcome.
+
+**PRE-REGISTERED (a): WR target holdout at k=1 below 5M's 47.3% but above 15%.
+HELD.** 37.2% (n=104). Down from 47.3% (survivorship removed) but still large.
+
+**PRE-REGISTERED (b): reduction falls with k and under 10% by k=4 for every pos.
+PARTIALLY HELD.** WR target: 37.2/16.0/12.8/6.3% — falls, under 10% at k=4.
+RB carry: 16.0/9.8/2.3/6.6% — under 10%. TE target: 33.1/26.5/17.8/18.0% —
+does NOT fall below 10% at k=4. RB target: 36.2/17.9/30.3/17.3% — non-monotone,
+not under 10%. Shrinkage toward the prior season remains valuable for TE and RB
+target share longer than predicted, possibly due to small n (n=52-65 on holdout).
+
+**PRE-REGISTERED (c): changed-team gain less than same-team.** Not broken out
+in the script output. UNVERIFIED.
+
+Week 3 2026 board: 525 players, 424 (81%) with prior season, 101 (19%) without.
+No weight applied. Measurement only.
