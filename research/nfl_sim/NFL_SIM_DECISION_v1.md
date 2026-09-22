@@ -2157,3 +2157,61 @@ The fix improves every cell. The PHI values (MLE from PBP) are not contradicted;
 Brier would worsen if the dispersion model were wrong.
 
 `engine_fingerprint()` = `c01d2af899c7e9f8` (unchanged from item 1).
+
+### D116 -- Item 3: re-fit, re-stamp, K4, suite (2026-09-22)
+
+Branch `eng/5l`, Mac.
+
+**Suite.** 77 passed, 2 failed, 2 warnings. The 2 failures are
+`test_margin_diff_within_se` (0.68 vs 2*SE 0.67) and `test_ks_home_score`,
+both in `TestT4PlayerLayerNeutral`. These PASS on the parent commit. Cause:
+the per-sim dispersion fix draws N*n_players*4 Beta values per game (vs
+4*n_players before), shifting the shared RNG stream between the player and
+team layers. At the test's specific seed and game (DAL@PHI 2023w9 N=4000),
+the stream shift moves the margin barely past 2*SE. K1 (1,087 games, N=500)
+shows zero team-level movement — the test is detecting an RNG-stream shift,
+not a team-level bias. No test threshold edited.
+
+**Board before re-fit:** SIM PRICES SUPPRESSED (fingerprint mismatch gate fires).
+No ranked legs. Correct.
+
+**Re-fit.** `run_fit.py --seasons 2021 2022 2023 2024 --out-dir fit_5l`.
+1,087 games, 10 workers. Runtime: ~90 min wall (first run was killed at 972
+games by the previous session dying; second run completed the remaining 115
+in 17.7 min). 1087/1087 converged.
+engine=`c01d2af899c7e9f8`, usage=`840412f7295a8323`.
+
+**Calibration maps.** `run_cal_maps.py --fit-dir fit_5l`. 21 families, 74s.
+`calibration_v1.json` updated with engine `c01d2af899c7e9f8`.
+
+**Board after re-fit.** `--week 2 --as-of 2026-09-20T15:30:00Z`. 16 games,
+16/16 converged, 1443 legs, 11.4 min. No SUPPRESSED. Legs ranked.
+Board saved to `research/nfl_sim/phase5l_boards/picks_log_mac.parquet`.
+
+**K1 after re-fit.** `phase5l_k1_after.txt`. All lines identical to
+`phase5l_k1_item1.txt` to 4dp. Same 3 FAILs (like_for_like_go, fd_pen,
+tied_expiry) as all prior phases.
+
+**K4.** `run_k4.py --fit-dir fit_5l --output phase5l_k4.parquet`. 72,978 rows.
+K4 is a measurement, not validation.
+
+### D117 -- Item 4: cross-machine + sim vs book diagnostics (2026-09-22)
+
+Branch `eng/5l`, Mac.
+
+**Cross-machine.** `picks_log_mac.parquet` committed. Cowork re-runs on Linux.
+PRE-REGISTERED (Cowork): >= 99% of legs within 0.02. UNTESTED on this Mac
+(requires Linux re-run).
+
+**Sim vs book on Week 2 receptions (diagnostic only).**
+Candidates: `nfl_prop_candidates_20260920T1614Z.parquet`. Matched: 132 rows.
+
+**PRE-REGISTERED: raw SD < 0.12. DID NOT HOLD.**
+SD(raw sim_p - q_over) = 0.1489 (main: 0.171). Improved by 0.022, but still
+above the 0.12 threshold. SD(cal_p - q_over) = 0.1399 (main: 0.147). The
+per-sim dispersion fix reduced SD but did not eliminate it. The residual gap
+is consistent with the work order's alternative: **the week-1 share estimates
+are the larger remaining source of sim-vs-book disagreement,** not the
+dispersion mechanism itself (which is now correct).
+
+`engine_fingerprint()` = `c01d2af899c7e9f8`.
