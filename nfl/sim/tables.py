@@ -528,13 +528,15 @@ def build_clock_table(df):
                            np.where(sd == 0, "tied",
                            np.where(sd <= 8, "lead1-8", "lead9+"))))
 
-    # 5I: Clock period (4-way); Q4_mid added for 120 < gsr <= 300
+    # 5I: Clock period; 5M: Q4_mid split at 180 s into Q4_mid_a (181-300) and Q4_mid_b (121-180)
     q2_late = (scrim["qtr"] == 2) & (scrim["half_seconds_remaining"] <= 120)
     q4_late = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] <= 120)
-    q4_mid = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] > 120) & (scrim["game_seconds_remaining"] <= 300)
+    q4_mid_a = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] > 180) & (scrim["game_seconds_remaining"] <= 300)
+    q4_mid_b = (scrim["qtr"] == 4) & (scrim["game_seconds_remaining"] > 120) & (scrim["game_seconds_remaining"] <= 180)
     scrim["clock_period"] = "normal"
     scrim.loc[q2_late, "clock_period"] = "Q2_late"
-    scrim.loc[q4_mid, "clock_period"] = "Q4_mid"
+    scrim.loc[q4_mid_a, "clock_period"] = "Q4_mid_a"
+    scrim.loc[q4_mid_b, "clock_period"] = "Q4_mid_b"
     scrim.loc[q4_late, "clock_period"] = "Q4_late"
 
     # Legacy hurry flag (kept in table for backward compat / testing)
@@ -556,6 +558,19 @@ def build_clock_table(df):
             "outcome_type": ot, "score_state": ss, "clock_period": cp,
             "hurry": False,  # unused; kept for schema compat
             "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean(),
+        })
+
+    # 5M: Level 0.5 — unsplit Q4_mid fallback for thin Q4_mid_a/Q4_mid_b cells
+    q4_mid_all = scrim[scrim["clock_period"].isin(["Q4_mid_a", "Q4_mid_b"])]
+    for (ot, ss), grp in q4_mid_all.groupby(["outcome_type", "score_state"], observed=True):
+        n = len(grp)
+        if n < MIN_CELL:
+            continue
+        q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+        rows.append({
+            "outcome_type": ot, "score_state": ss, "clock_period": "Q4_mid",
+            "hurry": False, "n": n, "elapsed_q": q.tolist(),
+            "mean": grp["elapsed"].mean(),
         })
 
     # Level 1 (parent): (outcome_type × score_state) — aggregated over clock

@@ -2267,3 +2267,30 @@ Uses the offline fixture `nflverse_schedule_2026_wk123.parquet` with correct
 ET->UTC parsing (D111). The `before_dt` offset is now 2 days (not 1) because
 the correct ET kickoff shifts `ko.normalize()` forward by one day.
 Both tests pass. Verified offline: no `import nflreadpy` in the test file.
+
+### D120 -- Item 2: Q4_mid split at 180 s (5K item 1, engine + tables) (2026-09-22)
+
+Branch `eng/5m`, Mac. As `workorder_5K_2026-09-20.md` item 1, steps through
+"engine + tables + tests" (NOT the re-fit step, which is item 3).
+
+**Step 0: cell sizes.** From PBP 2021-24 scrimmage plays:
+- Q4_mid_a (181-300 s): 5,766 plays. All 10 cells (pass/run x 5 score_states) >= 100. All OK.
+- Q4_mid_b (121-180 s): 3,220 plays. 3 THIN cells: pass/lead9+ (62), pass/tied (92), run/tied (73).
+  These fall back to the unsplit Q4_mid cell.
+
+**Fallback order (4 levels):**
+1. Split cell (Q4_mid_a or Q4_mid_b) if n >= 100
+2. Unsplit Q4_mid (Level 0.5, new) — aggregates Q4_mid_a + Q4_mid_b for that outcome_type x score_state
+3. `p_<score_state>` (parent) — aggregated over all clock periods
+4. Legacy binary hurry flag
+
+**Changes:**
+- `tables.py` lines 531-538: Q4_mid_a/Q4_mid_b labels + Level 0.5 unsplit Q4_mid rows
+- `engine.py` scalar path (line 1579): Q4_mid_b (<=180) before Q4_mid_a (<=300)
+- `engine.py` vectorized pass block (lines 2437-2460): Q4_mid_a/Q4_mid_b masks + fallback
+- `engine.py` vectorized run block (lines 2703-2724): same
+- `clock_runoff.parquet` rebuilt: 160 rows (was ~148). Q4_mid_a: 14, Q4_mid_b: 11, Q4_mid fallback: 17.
+
+**Fingerprint:** `4a0a77b76c0624f3` -> `02fbcab6e6ed042e`.
+
+5K predictions (P1 pace, P2 tied expiry, null controls) graded in item 3 after re-fit.
