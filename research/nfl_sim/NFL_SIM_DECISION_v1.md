@@ -2416,3 +2416,37 @@ in the script output. UNVERIFIED.
 
 Week 3 2026 board: 525 players, 424 (81%) with prior season, 101 (19%) without.
 No weight applied. Measurement only.
+
+### D126 -- Item 3: where do the extra 2 drives/game come from? DIAGNOSIS ONLY (2026-09-22)
+
+Branch `eng/5n`, Mac. Script: `nfl/sim/run_drive_diag_5n.py`. Runtime: 1.0s.
+No engine or usage change.
+
+**PRE-REGISTERED: the excess is in plays-per-drive being too LOW, specifically
+punt-ending drives have fewer plays in sim than real.
+PARTIALLY CORRECT.** Sim plays/drive (130.3/23.8 = 5.47) IS lower than real
+(5.71), confirming drives end faster. But this is a consequence, not the cause:
+the single largest contributor is that the sim FITS MORE DRIVES into the same
+3600s game clock.
+
+**Real vs sim (2021-24, 1,139 games):**
+| Metric            | Real  | Sim   | Diff  |
+|-------------------|-------|-------|-------|
+| drives/game       | 21.82 | 23.8  | +2.0  |
+| plays/game        | 124.5 | 130.3 | +5.8  |
+| plays/drive       | 5.71  | 5.47  | -0.24 |
+| punts/game        | 7.82  | 8.84  | +1.02 |
+
+**Drive endings (real, per game):**
+punt 7.82, TD 4.79, FG 3.34, turnover 2.24, end-of-half 1.54, downs 1.22.
+
+**Real plays per drive by ending:** punt 4.18, TD 7.85, FG 7.96, turnover 4.66,
+downs 7.45.
+
+**The single largest contributor:** the sim runs ~2 extra drives per game. At
+7.82 real punts/game and 8.84 sim, the ~1.0 extra punts account for about
+half the extra drives. The other half is likely extra short drives that end
+in turnovers or downs. Real punt drives consume 121s; if sim punt drives are
+shorter (fewer plays), more fit. A fix would target the engine's play-count
+per drive or its clock-consumption rate overall, not just Q4 pace.
+No fix in this order; the fix is 5O with a re-fit.
