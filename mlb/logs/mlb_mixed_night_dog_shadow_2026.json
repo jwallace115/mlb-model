@@ -1311,6 +1311,54 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "5-6"
+    },
+    {
+      "game_pk": 823494,
+      "game_date": "2026-09-22",
+      "matchup": "TBR @ NYY",
+      "fav_team": "NYY",
+      "dog_team": "TBR",
+      "fav_side": "home",
+      "fav_implied": 0.542,
+      "dog_ml_price": 113,
+      "sp_fip_diff": -0.245,
+      "off_diff": 0.7,
+      "bp_era_diff": -0.062,
+      "day_night": "night",
+      "local_start_hour": 19.083333333333332,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824785,
+      "game_date": "2026-09-22",
+      "matchup": "TOR @ BAL",
+      "fav_team": "BAL",
+      "dog_team": "TOR",
+      "fav_side": "home",
+      "fav_implied": 0.524,
+      "dog_ml_price": 105,
+      "sp_fip_diff": -0.112,
+      "off_diff": -0.5,
+      "bp_era_diff": 0.008,
+      "day_night": "night",
+      "local_start_hour": 18.583333333333332,
+      "win_loss": null
+    },
+    {
+      "game_pk": 824061,
+      "game_date": "2026-09-22",
+      "matchup": "CHW @ KCR",
+      "fav_team": "CHW",
+      "dog_team": "KCR",
+      "fav_side": "away",
+      "fav_implied": 0.5139,
+      "dog_ml_price": 101,
+      "sp_fip_diff": -0.418,
+      "off_diff": -0.6,
+      "bp_era_diff": -0.315,
+      "day_night": "night",
+      "local_start_hour": 18.666666666666668,
+      "win_loss": null
     }
   ]
 }
