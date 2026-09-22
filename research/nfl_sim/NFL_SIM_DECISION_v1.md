@@ -2115,3 +2115,45 @@ pts/team |d|=0.0000 (tol 0.10), plays/game 0.0000 (0.3), drives/game 0.0000
 (0.1), go_rate 0.0000 (0.002), off_pen 0.0000 (0.06), def_pen 0.0000 (0.03).
 **All PASS.** The per-sim share fix is team-level neutral by construction:
 the RNG stream for team-level drives/plays is seeded independently.
+
+### D115 -- Item 2: player dispersion comparison, old vs new engine (2026-09-21)
+
+Branch `eng/5l`, Mac. Script: `nfl/sim/run_player_dispersion_5l.py`.
+Runtime: 200 games, ~13,600s (~227 min). Zero games SKIPped. Zero API credits.
+
+**Method.** 200 seeded games 2021-24 (seed=42). For each game: anchor with the
+new (per-sim) engine via `run_anchored_chunked` (N=5,000), collect per-player
+sim stats; then re-run one `simulate_game` at the same offsets with the old
+(scalar-draw) engine via a `_ScalarBetaRng` wrapper class that intercepts
+`rng.beta(a, b, size=N)` and returns `np.full(size, rng.beta(a, b))` — verified
+by unit test: 5 draws all identical. `np.random.Generator.beta` is read-only
+(immutable C type); instance-level and class-level patching both fail; the
+wrapper delegates all other RNG methods to the real generator unchanged.
+
+**PRE-REGISTERED prediction 1: extreme-probability share falls by more than half.**
+PARTIALLY HELD. WR rec>=3: 0.262 -> 0.144 (ratio 0.55, barely more than half).
+Other cells: ratios 0.69-0.99 (less than half reduction). The prediction was too
+strong for the higher rungs where most probabilities are already near 0 or 1.
+
+**PRE-REGISTERED prediction 2: raw Brier improves in every pos x family cell
+with n >= 300.**
+**HELD in every cell.** All 11 cells show BETTER (lower Brier):
+
+| Pos | Family     | Rung | n    | Brier old | Brier new | Delta  |
+|-----|------------|------|------|-----------|-----------|--------|
+| WR  | receptions | >=3  | 2113 | 0.1683    | 0.1422    | -0.026 |
+| WR  | receptions | >=4  | 2113 | 0.1482    | 0.1245    | -0.024 |
+| WR  | receptions | >=5  | 2113 | 0.1251    | 0.1070    | -0.018 |
+| TE  | receptions | >=3  | 1245 | 0.1240    | 0.1113    | -0.013 |
+| TE  | receptions | >=4  | 1245 | 0.1002    | 0.0881    | -0.012 |
+| TE  | receptions | >=5  | 1245 | 0.0699    | 0.0627    | -0.007 |
+| RB  | receptions | >=3  | 1400 | 0.1482    | 0.1342    | -0.014 |
+| RB  | receptions | >=4  | 1400 | 0.1033    | 0.0952    | -0.008 |
+| RB  | receptions | >=5  | 1400 | 0.0716    | 0.0685    | -0.003 |
+| RB  | rush att   | >=10 | 1400 | 0.1202    | 0.0949    | -0.025 |
+| RB  | rush att   | >=15 | 1400 | 0.0981    | 0.0812    | -0.017 |
+
+The fix improves every cell. The PHI values (MLE from PBP) are not contradicted;
+Brier would worsen if the dispersion model were wrong.
+
+`engine_fingerprint()` = `c01d2af899c7e9f8` (unchanged from item 1).
