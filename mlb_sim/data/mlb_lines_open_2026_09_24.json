@@ -1,0 +1,72 @@
+[
+  {
+    "game_id": "6ae37d18d4a5fb4d9c92a8aee3f54186",
+    "game_date": "2026-09-24",
+    "sport": "MLB",
+    "home_team": "Texas Rangers",
+    "away_team": "New York Mets",
+    "commence_time": "2026-09-24T00:06:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": -112,
+    "under_price": -108,
+    "book": "draftkings",
+    "capture_timestamp": "2026-09-23T06:05:02.725922+00:00"
+  },
+  {
+    "game_id": "4e1d4c17ae27eeb2388a146c248b5fb6",
+    "game_date": "2026-09-24",
+    "sport": "MLB",
+    "home_team": "Colorado Rockies",
+    "away_team": "Arizona Diamondbacks",
+    "commence_time": "2026-09-24T00:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 11.0,
+    "over_price": -112,
+    "under_price": -102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-23T06:05:02.725922+00:00"
+  },
+  {
+    "game_id": "9537e2c00a118edc54c7b2b5ed0c6f55",
+    "game_date": "2026-09-24",
+    "sport": "MLB",
+    "home_team": "Athletics",
+    "away_team": "Los Angeles Angels",
+    "commence_time": "2026-09-24T01:41:00Z",
+    "snapshot_type": "open",
+    "total_line": 9.5,
+    "over_price": -105,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-23T06:05:02.725922+00:00"
+  },
+  {
+    "game_id": "7d11a20c7ec2247d0ce57f87cda008ca",
+    "game_date": "2026-09-24",
+    "sport": "MLB",
+    "home_team": "Seattle Mariners",
+    "away_team": "Houston Astros",
+    "commence_time": "2026-09-24T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.5,
+    "over_price": 108,
+    "under_price": -132,
+    "book": "fanduel",
+    "capture_timestamp": "2026-09-23T06:05:02.725922+00:00"
+  },
+  {
+    "game_id": "1cc251b3308daacf4f549c56ad233607",
+    "game_date": "2026-09-24",
+    "sport": "MLB",
+    "home_team": "Los Angeles Dodgers",
+    "away_team": "San Diego Padres",
+    "commence_time": "2026-09-24T02:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 8.0,
+    "over_price": -119,
+    "under_price": -101,
+    "book": "draftkings",
+    "capture_timestamp": "2026-09-23T06:05:02.725922+00:00"
+  }
+]
