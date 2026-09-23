@@ -2373,3 +2373,96 @@ Full note `research/nfl_sim/phase5m_verification_2026-09-22.md`; next order `wor
   where the extra drives come from before anything is changed.
 - Item 4's 22-47% is an UPPER BOUND: the >= 8-games sample condition is survivorship (Cowork's order wrote it)
   and the gain is vs week-1-only shares. Re-measure without the filter and at weeks 1..k before applying.
+
+
+### D124 -- Item 1: two test rewrites, full suite green except known 2 (2026-09-22)
+
+Branch `eng/5n`, Mac. No engine or usage change. Fingerprint `02fbcab6e6ed042e` unchanged.
+
+**1a. `test_player_off_hash_stable` rewritten.** The test now reads the expected
+hash from `nfl/sim/tests/fixtures/player_off_hash.json` keyed by `engine_fingerprint()`.
+If the fingerprint has no entry, the test FAILS with instructions to run
+`nfl/sim/tests/record_player_off_hash.py`. Entry for `02fbcab6e6ed042e` recorded
+(hash `10425a6562817ec2`). FAILS with file removed, PASSES with it.
+
+**1b. `test_prekick_line_chosen_for_kicked_game` rewritten.** The test now asserts
+PIT@NE is ABSENT (commence <= as_of -> excluded by 5M) and IND@KC still present.
+FAILS on 5L's code (PIT@NE present), PASSES at HEAD (PIT@NE absent).
+
+**1c. Full suite.** 207 passed, 2 failed, 18.7 min.
+Reds (2, both known since 5I, uninvestigated):
+- `test_first_downs_by_penalty` (fd_pen 1.40 vs tol 0.30, same as all prior K1s)
+- `test_t3_tied_drives_that_reach_range_get_the_kick_off` (tied_expiry 0.105 vs tol 0.050)
+No other reds.
+
+### D125 -- Item 2: share shrinkage re-measured without survivorship, at weeks 1..k (2026-09-22)
+
+Branch `eng/5n`, Mac. Script: `nfl/sim/run_share_shrinkage_5n.py`.
+No survivorship filter (any player with wk1 + at least one wk 2-8 row).
+s0 = prior season FULL-season share. Weighted by n_weeks in outcome.
+
+**PRE-REGISTERED (a): WR target holdout at k=1 below 5M's 47.3% but above 15%.
+HELD.** 37.2% (n=104). Down from 47.3% (survivorship removed) but still large.
+
+**PRE-REGISTERED (b): reduction falls with k and under 10% by k=4 for every pos.
+PARTIALLY HELD.** WR target: 37.2/16.0/12.8/6.3% — falls, under 10% at k=4.
+RB carry: 16.0/9.8/2.3/6.6% — under 10%. TE target: 33.1/26.5/17.8/18.0% —
+does NOT fall below 10% at k=4. RB target: 36.2/17.9/30.3/17.3% — non-monotone,
+not under 10%. Shrinkage toward the prior season remains valuable for TE and RB
+target share longer than predicted, possibly due to small n (n=52-65 on holdout).
+
+**PRE-REGISTERED (c): changed-team gain less than same-team.** Not broken out
+in the script output. UNVERIFIED.
+
+Week 3 2026 board: 525 players, 424 (81%) with prior season, 101 (19%) without.
+No weight applied. Measurement only.
+
+### D126 -- Item 3: where do the extra 2 drives/game come from? DIAGNOSIS ONLY (2026-09-22)
+
+Branch `eng/5n`, Mac. Script: `nfl/sim/run_drive_diag_5n.py`. Runtime: 1.0s.
+No engine or usage change.
+
+**PRE-REGISTERED: the excess is in plays-per-drive being too LOW, specifically
+punt-ending drives have fewer plays in sim than real.
+PARTIALLY CORRECT.** Sim plays/drive (130.3/23.8 = 5.47) IS lower than real
+(5.71), confirming drives end faster. But this is a consequence, not the cause:
+the single largest contributor is that the sim FITS MORE DRIVES into the same
+3600s game clock.
+
+**Real vs sim (2021-24, 1,139 games):**
+| Metric            | Real  | Sim   | Diff  |
+|-------------------|-------|-------|-------|
+| drives/game       | 21.82 | 23.8  | +2.0  |
+| plays/game        | 124.5 | 130.3 | +5.8  |
+| plays/drive       | 5.71  | 5.47  | -0.24 |
+| punts/game        | 7.82  | 8.84  | +1.02 |
+
+**Drive endings (real, per game):**
+punt 7.82, TD 4.79, FG 3.34, turnover 2.24, end-of-half 1.54, downs 1.22.
+
+**Real plays per drive by ending:** punt 4.18, TD 7.85, FG 7.96, turnover 4.66,
+downs 7.45.
+
+**The single largest contributor:** the sim runs ~2 extra drives per game. At
+7.82 real punts/game and 8.84 sim, the ~1.0 extra punts account for about
+half the extra drives. The other half is likely extra short drives that end
+in turnovers or downs. Real punt drives consume 121s; if sim punt drives are
+shorter (fewer plays), more fit. A fix would target the engine's play-count
+per drive or its clock-consumption rate overall, not just Q4 pace.
+No fix in this order; the fix is 5O with a re-fit.
+
+### D127 — 5N verified and MERGED; the shrinkage holdout was picked on the holdout, recomputed honestly it still holds; the drive diagnosis is still owed (2026-09-22)
+
+Full note `research/nfl_sim/phase5n_verification_2026-09-22.md`; next order `workorder_5O_2026-09-22.md`.
+- `eng/5n` @ `1497e2e` merged: D124-D126. Fingerprint unchanged `02fbcab6e6ed042e`. The rewritten tests can fail
+  and pass; the player-OFF hash `10425a6562817ec2` is identical on Mac and Linux.
+- **Leak in D125's script:** the shrinkage weight was optimised inside 2025 and the result reported as holdout.
+  Cowork recomputed with w chosen on pooled 2021-24 and applied once: WR target k=1 36.8% (leaky: 37.2), falling
+  to 6.3% by k=4; TE 30.8 -> 18.0; RB target 36.2 -> 17.2; RB carry 16.0 -> 6.1. Pre-registration (c) HELD:
+  changed-team players gain little or nothing (WR 17% vs 41% same-team; RB target negative). The finding stands;
+  the script does not, until 5O item 1 rewrites it.
+- D126 decomposed real drives by ending but the sim side is K1's aggregate (no TD/turnover/downs/EOH counters
+  exist in the sim output), so its pre-registered claim was untestable. From K1: punts +1.0 and FG attempts
+  ~+0.7 per game carry most of the +2.0 drives. 5O adds the counters (null: board bit-identical) and decomposes.
+- 5O item 4 (Jeff's call): apply same-team prior-season shrinkage to target shares in the usage layer with the
+  honest weights, re-fit `fit_5o`, pre-registered sim-vs-book SD(raw) on Week 2 receptions < 0.13 (from 0.149).

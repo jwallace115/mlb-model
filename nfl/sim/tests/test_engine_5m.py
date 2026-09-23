@@ -61,9 +61,12 @@ def test_player_on_scores_identical_to_off(engine_data):
 
 def test_player_off_hash_stable(engine_data):
     """(c) Player-OFF run at T4's seed produces the same score arrays as
-    before the child-RNG change. Hash computed on main and hardcoded."""
+    the recorded value for the current engine fingerprint. If no entry exists,
+    fail with instructions to run record_player_off_hash.py."""
     from nfl.sim.engine import simulate_game
     from nfl.sim.seed_util import stable_seed
+    from nfl.sim.calibration import engine_fingerprint
+    import json
 
     home, away, season, week = "DAL", "PHI", 2023, 9
     seed = stable_seed(("T4_test", 42))
@@ -77,12 +80,19 @@ def test_player_off_hash_stable(engine_data):
     h = hashlib.sha256(
         r["home_score"].values.tobytes() + r["away_score"].values.tobytes()
     ).hexdigest()[:16]
-    # This hash was computed on main's engine (c01d2af899c7e9f8) before the
-    # child-RNG change. If it changes, the play-level stream moved.
-    # PLACEHOLDER: will be filled after computing on main.
-    # For now, just print it so we can record it.
-    print(f"Player-OFF score hash: {h}")
-    assert h == "c98664e98b00c7ff", (
-        f"Player-OFF score hash {h} != main's c98664e98b00c7ff — "
-        f"the play-level RNG stream moved"
+
+    fp = engine_fingerprint()
+    hash_file = Path(__file__).resolve().parent / "fixtures" / "player_off_hash.json"
+    assert hash_file.exists(), (
+        f"player_off_hash.json not found. Run: "
+        f"python3 nfl/sim/tests/record_player_off_hash.py"
+    )
+    recorded = json.loads(hash_file.read_text())
+    assert fp in recorded, (
+        f"No hash recorded for fingerprint {fp}. Run: "
+        f"python3 nfl/sim/tests/record_player_off_hash.py"
+    )
+    assert h == recorded[fp], (
+        f"Player-OFF score hash {h} != recorded {recorded[fp]} for "
+        f"fingerprint {fp} — the play-level RNG stream moved"
     )

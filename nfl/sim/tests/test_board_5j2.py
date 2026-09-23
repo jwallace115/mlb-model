@@ -130,10 +130,9 @@ def pit_ne_line_dir(tmp_path):
 
 
 def test_prekick_line_chosen_for_kicked_game(pit_ne_line_dir, monkeypatch):
-    """(b) PIT@NE kicked at ~17:02Z.  With as_of=18:30Z the 180009Z snapshot
-    has in-play lines (+13.5 / 36.5); get_lines_from_history must return the
-    170007Z pre-kick line (+5.0 / 41.0).  IND@KC (00:20Z kick) is unkicked
-    and gets 180009Z values.  Real-tape fixture."""
+    """(b) 5N rewrite: PIT@NE kicked at ~17:02Z. With as_of=18:30Z the game
+    is ABSENT (commence <= as_of -> excluded by 5M). IND@KC (00:20Z, unkicked)
+    still gets the 180009Z snapshot values. Real-tape fixture."""
     from nfl.sim import run_week
 
     monkeypatch.setattr(run_week, "ROOT",
@@ -141,16 +140,11 @@ def test_prekick_line_chosen_for_kicked_game(pit_ne_line_dir, monkeypatch):
     lines = run_week.get_lines_from_history(
         as_of=pd.Timestamp("2026-09-20T18:30:00Z"))
 
-    # PIT@NE: pre-kick line from 170007Z
-    assert "PIT@NE" in lines, f"PIT@NE missing. keys={list(lines)}"
-    assert lines["PIT@NE"]["spread"] == 5.0, (
-        f"PIT@NE spread {lines['PIT@NE']['spread']} != 5.0 (pre-kick)")
-    assert lines["PIT@NE"]["total"] == 41.0, (
-        f"PIT@NE total {lines['PIT@NE']['total']} != 41.0 (pre-kick)")
-    assert "17:00:07" in lines["PIT@NE"]["line_snapshot_utc"], (
-        f"PIT@NE snapshot {lines['PIT@NE']['line_snapshot_utc']} not from 170007Z")
+    # PIT@NE: kicked before as_of -> ABSENT from the game set
+    assert "PIT@NE" not in lines, (
+        f"PIT@NE should be absent (kicked before as_of). Got: {lines.get('PIT@NE')}")
 
-    # IND@KC: unkicked, so 180009Z (newest pre-kick for that game)
+    # IND@KC: unkicked, so still present with 180009Z values
     assert "IND@KC" in lines, f"IND@KC missing. keys={list(lines)}"
     assert lines["IND@KC"]["total"] == 46.0
 

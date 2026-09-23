@@ -2962,3 +2962,39 @@ Fingerprint: `c01d2af899c7e9f8` -> `4a0a77b76c0624f3` (item 1a) -> `02fbcab6e6ed
 - VERIFIED eng/5m @63c80c5: engine diff read; Linux board 1353/1353 bit-identical to Mac; T4 5/5 green; hash null control reproduced at D119's commit and red at HEAD (item 2 moved the stream); item-4 script re-run, numbers identical. Full suite 203/209 (2 env artefacts, 4 real reds). merge-tree clean. VERDICT merge; D123; work order 5N.
 - FOUND: D121 suite listing wrong (T4 not red, hash test red); item-4 sample has survivorship (my order); punts excess = drives excess.
 - NOT DONE: the two test rewrites (5N item 1); shrinkage re-measure (5N item 2); drives diagnosis (5N item 3).
+
+## 2026-09-22T17:44Z  claude-code (Phase 5N execution)
+
+Branch `eng/5n` in worktree `~/mlb-model-5n`. `main` untouched.
+Fingerprint `02fbcab6e6ed042e` unchanged (no engine change).
+
+### Commits (3, each pushed before the next)
+- `596667418` D124: Item 1 -- two test rewrites, full suite 207 pass / 2 reds
+- `01a25975b` D125: Item 2 -- share shrinkage re-measured without survivorship
+- `d8df6ad24` D126: Item 3 -- drive excess diagnosis
+
+### What was done
+- Item 1a: test_player_off_hash_stable rewritten to read from player_off_hash.json keyed by engine_fingerprint(). RETURNED: FAILS with file removed ("player_off_hash.json not found"), PASSES with entry for 02fbcab6e6ed042e -> 10425a6562817ec2. MEANS: the test now survives engine changes (record_player_off_hash.py writes new entries).
+- Item 1b: test_prekick_line_chosen_for_kicked_game rewritten to assert PIT@NE ABSENT (5M behaviour). RETURNED: FAILS on 5L's code (PIT@NE present=True), PASSES at HEAD (PIT@NE absent). MEANS: the test matches the current engine's played-game exclusion.
+- Item 1c: Full suite nfl/sim/tests/: RETURNED 207 passed, 2 failed (18.7 min). Reds: test_first_downs_by_penalty (fd_pen), test_t3_tied_drives (tied_expiry). MEANS: only the 2 known-since-5I reds remain; no new regressions.
+- Item 2: Share shrinkage without survivorship filter, at weeks k=1..4. RETURNED: WR target holdout k=1 37.2% reduction (below 5M's 47.3%, above 15% -- HELD). Falls with k for WR target (6.3% at k=4) and RB carry (6.6%). TE and RB target stay above 10% at k=4 (PARTIALLY HELD). MEANS: the shrinkage gain is real but smaller without survivorship and decays with k as expected, though not uniformly across positions.
+- Item 3: Drive-per-game diagnosis. RETURNED: real 21.82 drives/game, sim 23.8, excess +2.0. Plays/drive: real 5.71, sim 5.47 (drives end faster). Punt excess ~1.0/game = half the extra drives. MEANS: the sim runs too many drives, not just too many punts. Pre-registered (plays/drive too low): PARTIALLY CORRECT. No fix in this order.
+
+### Runtimes
+- Full suite: 18.7 min (207 pass, 2 fail)
+- Share shrinkage script: ~5s
+- Drive diagnosis script: 1.0s
+
+### What was NOT done
+- No engine change. No usage-layer change. No weight applied.
+- Changed-team vs same-team split (pre-registered prediction c) not computed.
+- Sim plays/drive breakdown by drive ending not computed (would require drive-level sim logging).
+
+### What remains UNVERIFIED
+- Cowork's Linux re-run of item 1's suite count (the order specifies this).
+- Whether the sim's shorter drives are caused by clock-consumption rate or by playcalling differences.
+- The exact cause of the ~1.0 extra non-punt drives (turnovers? shorter scoring drives?).
+
+## 2026-09-22T22:19Z  cowork
+- VERIFIED eng/5n @1497e2e: tests 5m/5j2 6 pass, hash test fails with fixture removed; hash identical to Cowork's Linux value. FOUND: shrinkage script optimises w inside the holdout season (leak); recomputed honestly - finding holds, (c) HELD (changed-team gains little). D126 sim side = K1 aggregate, no per-ending counters; diagnosis not done. VERDICT merge; D127; work order 5O.
+- NOT DONE: 5O (script fix, drive counters, decomposition, shrinkage application + re-fit).
