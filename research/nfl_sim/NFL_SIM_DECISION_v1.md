@@ -2477,3 +2477,39 @@ to 0.1 point. Verified: WR target k=1 36.8%, TE target k=1 30.8%, RB target
 k=1 36.2%, RB carry k=1 16.0%, same-team/changed-team splits exact.
 
 The old leaky numbers are superseded. This table is the honest record.
+
+### D129 -- Item 3: drive decomposition from drive_log=True (2026-09-23)
+
+Branch `eng/5o`, Mac. Script: `nfl/sim/run_drive_diag_5o.py`. Runtime: 23.8 min.
+1,139 games, N=500, drive_log=True. Fingerprint 02fbcab6e6ed042e unchanged.
+
+**PRE-REGISTERED predictions (written before looking):**
+- Punt drives +0.9..+1.1 per game: **+1.01. HELD.**
+- FG drives +0.4..+0.8: **+0.66. HELD.**
+- TD drives within 0.3 of real: **+0.03. HELD.**
+- Sim punt drives < 4.18 plays: **4.21. DID NOT HOLD.** Sim punt drives have
+  slightly MORE plays than real, not fewer.
+
+**Drives per game by ending:**
+
+| Ending   | Real  | Sim   | Diff  |
+|----------|-------|-------|-------|
+| punt     | 7.82  | 8.84  | +1.01 |
+| TD       | 4.79  | 4.83  | +0.03 |
+| FG       | 3.34  | 4.00  | +0.66 |
+| turnover | 2.24  | 2.52  | +0.28 |
+| downs    | 1.22  | 1.53  | +0.31 |
+| end_half | 1.54  | 2.01  | +0.46 |
+| safety   | 0.05  | 0.07  | +0.02 |
+| TOTAL    | 21.82 | 23.79 | +1.97 |
+
+**Plays per drive by ending (sim vs real):** punt 4.21 vs 4.18 (+0.03),
+TD 7.22 vs 7.85 (-0.63), FG 7.55 vs 7.96 (-0.41), turnover 4.35 vs 4.66 (-0.30).
+
+**Clock consumed per drive:** sim drives consume about half the clock of real
+drives (punt: 62s vs 121s, TD: 91s vs 223s). This is how +2 extra drives fit.
+
+**Single largest contributor:** punt-ending drives (+1.01/game, 51% of the excess).
+The excess is spread across every ending type; the sim runs shorter drives overall
+(fewer plays per TD/FG/turnover drive) and the clock runs faster per play, fitting
+more drives into the same 3600s. No fix in this order.
