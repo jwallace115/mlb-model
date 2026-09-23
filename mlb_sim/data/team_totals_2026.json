@@ -210246,5 +210246,959 @@
       }
     ],
     "snapshot_time": "2026-09-22T11:05:02.966219+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "ad00c94ceb671349678549cf07c393d5",
+    "game_pk": 824223,
+    "home_team": "Detroit Tigers",
+    "away_team": "Washington Nationals",
+    "home_team_abbr": "DET",
+    "away_team_abbr": "WSN",
+    "commence_time": "2026-09-23T17:11:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -128
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 170,
+        "under_price": 128
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 106,
+        "under_price": 128
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -165,
+        "under_price": 128
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": -105,
+        "under_price": -125
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 106,
+        "under_price": -136
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -175,
+        "under_price": -136
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 180,
+        "under_price": -136
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 106,
+        "under_price": -136
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -105,
+        "under_price": -125
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "cc3886440708c8649f6f878183416628",
+    "game_pk": 824784,
+    "home_team": "Baltimore Orioles",
+    "away_team": "Toronto Blue Jays",
+    "home_team_abbr": "BAL",
+    "away_team_abbr": "TOR",
+    "commence_time": "2026-09-23T17:36:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 5,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -128,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 145,
+        "under_price": -335
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -335
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 240,
+        "under_price": -335
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -113,
+        "under_price": -113
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 175,
+        "under_price": 138
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 102,
+        "under_price": 138
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -180,
+        "under_price": 138
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -105,
+        "under_price": -125
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "fce8a3b6e5ec9490fc276cdafa8beed8",
+    "game_pk": 823168,
+    "home_team": "San Francisco Giants",
+    "away_team": "Minnesota Twins",
+    "home_team_abbr": "SFG",
+    "away_team_abbr": "MIN",
+    "commence_time": "2026-09-23T19:46:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 4.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 185,
+        "under_price": -134
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -177,
+        "under_price": -134
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 106,
+        "under_price": -134
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 100,
+        "under_price": -130
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 108,
+        "under_price": -138
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -135
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 102,
+        "under_price": -132
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -220
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -159,
+        "under_price": -220
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 165,
+        "under_price": -220
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -135
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "94d0c4d70e74a3ca8f70abe5a0859ea1",
+    "game_pk": 824784,
+    "home_team": "Baltimore Orioles",
+    "away_team": "Toronto Blue Jays",
+    "home_team_abbr": "BAL",
+    "away_team_abbr": "TOR",
+    "commence_time": "2026-09-23T22:36:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 2,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -146,
+        "under_price": 114
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -145,
+        "under_price": 114
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -140,
+        "under_price": 110
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -140,
+        "under_price": 110
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "6de7fdec72dbabadc09e788561c89a32",
+    "game_pk": 823410,
+    "home_team": "Philadelphia Phillies",
+    "away_team": "Milwaukee Brewers",
+    "home_team_abbr": "PHI",
+    "away_team_abbr": "MIL",
+    "commence_time": "2026-09-23T22:41:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 112,
+        "under_price": -142
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": 109,
+        "under_price": -140
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 105,
+        "under_price": -135
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -165,
+        "under_price": -148
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 200,
+        "under_price": -148
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 115,
+        "under_price": -148
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -140,
+        "under_price": 110
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -142,
+        "under_price": 111
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -145,
+        "under_price": 110
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 114,
+        "under_price": -145
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 112,
+        "under_price": -240
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -150,
+        "under_price": -240
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 180,
+        "under_price": -240
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "7a8ac2f452e72170b3aef83e4cb8e28b",
+    "game_pk": 823327,
+    "home_team": "Pittsburgh Pirates",
+    "away_team": "St. Louis Cardinals",
+    "home_team_abbr": "PIT",
+    "away_team_abbr": "STL",
+    "commence_time": "2026-09-23T22:41:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 5,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -122,
+        "under_price": -104
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 270,
+        "under_price": -117
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 163,
+        "under_price": -117
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -109,
+        "under_price": -117
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -122,
+        "under_price": -104
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 245,
+        "under_price": -200
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -109,
+        "under_price": -200
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 155,
+        "under_price": -200
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "8a7f796244408c6c830bfc2be2edb9a9",
+    "game_pk": 823492,
+    "home_team": "New York Yankees",
+    "away_team": "Tampa Bay Rays",
+    "home_team_abbr": "NYY",
+    "away_team_abbr": "TBR",
+    "commence_time": "2026-09-23T23:06:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -113,
+        "under_price": -113
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 143,
+        "under_price": -335
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -335
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 245,
+        "under_price": -335
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 2.5,
+        "over_price": -154,
+        "under_price": 120
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": 117,
+        "under_price": -150
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -160
+      },
+      {
+        "book": "draftkings",
+        "line": 2.5,
+        "over_price": -145,
+        "under_price": 114
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 205,
+        "under_price": 118
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": 118
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -150,
+        "under_price": 118
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "c2e9498aaeb076eb5c7ec70719c85b49",
+    "game_pk": 824710,
+    "home_team": "Boston Red Sox",
+    "away_team": "Cleveland Guardians",
+    "home_team_abbr": "BOS",
+    "away_team_abbr": "CLE",
+    "commence_time": "2026-09-23T23:11:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -115,
+        "under_price": -111
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -117,
+        "under_price": -113
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -124,
+        "under_price": -180
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 225,
+        "under_price": -180
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 140,
+        "under_price": -180
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 102,
+        "under_price": -130
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -110,
+        "under_price": -120
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -105,
+        "under_price": -125
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 105,
+        "under_price": -235
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -175,
+        "under_price": -235
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 175,
+        "under_price": -235
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "24e2844ddd06b300f6491b2912fa652c",
+    "game_pk": 824868,
+    "home_team": "Atlanta Braves",
+    "away_team": "Cincinnati Reds",
+    "home_team_abbr": "ATL",
+    "away_team_abbr": "CIN",
+    "commence_time": "2026-09-23T23:16:00Z",
+    "home_total_line": 4.5,
+    "away_total_line": 2.5,
+    "n_books": 4,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 102,
+        "under_price": -130
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": -105,
+        "under_price": -125
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": -105,
+        "under_price": -125
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 2.5,
+        "over_price": -122,
+        "under_price": -104
+      },
+      {
+        "book": "betonlineag",
+        "line": 2.5,
+        "over_price": -121,
+        "under_price": -109
+      },
+      {
+        "book": "bovada",
+        "line": 2.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "draftkings",
+        "line": 2.5,
+        "over_price": -125,
+        "under_price": -105
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "abd20077e0d7c1491fcc361d264cbc3d",
+    "game_pk": 824625,
+    "home_team": "Chicago Cubs",
+    "away_team": "Miami Marlins",
+    "home_team_abbr": "CHC",
+    "away_team_abbr": "MIA",
+    "commence_time": "2026-09-23T23:41:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 2.5,
+    "n_books": 5,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -102
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -130,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 240,
+        "under_price": -186
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -186
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 143,
+        "under_price": -186
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 2.5,
+        "over_price": -140,
+        "under_price": 110
+      },
+      {
+        "book": "draftkings",
+        "line": 2.5,
+        "over_price": -140,
+        "under_price": 110
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 235,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 140,
+        "under_price": 100
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -129,
+        "under_price": 100
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
+  },
+  {
+    "game_date": "2026-09-23",
+    "event_id": "67a95b403897bde4e3f38d5448f9c94c",
+    "game_pk": 824060,
+    "home_team": "Kansas City Royals",
+    "away_team": "Chicago White Sox",
+    "home_team_abbr": "KCR",
+    "away_team_abbr": "CHW",
+    "commence_time": "2026-09-23T23:41:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 4.5,
+    "n_books": 7,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -138,
+        "under_price": 108
+      },
+      {
+        "book": "betonlineag",
+        "line": 3.5,
+        "over_price": -135,
+        "under_price": 105
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -145,
+        "under_price": 110
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -140,
+        "under_price": 110
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 190,
+        "under_price": 115
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 118,
+        "under_price": 115
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -148,
+        "under_price": 115
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 4.5,
+        "over_price": 106,
+        "under_price": -136
+      },
+      {
+        "book": "betonlineag",
+        "line": 4.5,
+        "over_price": 102,
+        "under_price": -132
+      },
+      {
+        "book": "bovada",
+        "line": 4.5,
+        "over_price": 105,
+        "under_price": -135
+      },
+      {
+        "book": "draftkings",
+        "line": 4.5,
+        "over_price": 100,
+        "under_price": -130
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -155,
+        "under_price": -220
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 108,
+        "under_price": -220
+      },
+      {
+        "book": "betrivers",
+        "line": 5.5,
+        "over_price": 165,
+        "under_price": -220
+      }
+    ],
+    "snapshot_time": "2026-09-23T11:05:02.093186+00:00"
   }
 ]
