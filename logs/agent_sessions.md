@@ -3020,3 +3020,29 @@ Fingerprint `02fbcab6e6ed042e` unchanged (item 2 not completed).
 ### What remains UNVERIFIED
 - Whether a single-function approach (refactoring all drive-ending paths to call one `_end_drive(m, result_code)` function) would simplify the counter implementation.
 - Whether the drive_log infrastructure (which already tracks all endings) could be adapted to produce the counters without full-log overhead.
+
+## 2026-09-23T03:37Z  claude-code (Phase 5O resumed — items 3 + 4)
+
+Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by Cowork.
+
+### Commits (2 new, 3 total on branch)
+- `2419669b4` D129: Item 3 — drive decomposition from drive_log=True
+- `f44831732` D130: Item 4 — k_share=20 is already optimal, prediction failed, STOPPED
+
+### What was done
+- Item 3: RETURNED from run_drive_diag_5o.py (23.8 min, 1139 games, N=500, drive_log=True): punt drives +1.01/game (HELD +0.9..+1.1), FG +0.66 (HELD +0.4..+0.8), TD +0.03 (HELD within 0.3). Sim punt drives 4.21 plays (DID NOT HOLD < 4.18). Clock consumed per drive: sim ~half of real (punt 62s vs 121s). MEANS: the sim fits +2 extra drives because each drive consumes less clock; punt excess is the single largest contributor (51% of extra drives). Sim punt drives actually have slightly MORE plays than real, not fewer — the clock model, not the play model, is where the drives excess originates.
+- Item 4: RETURNED from run_kshare_5o.py (24s): overall best k_share on pooled 2021-24 discovery = 20 (the CURRENT value). Pre-registered >= 80 DID NOT HOLD. Per-position bests: WR target 40, TE/RB target 80, carries all 20. MEANS: the usage layer's existing formula already handles shrinkage near-optimally; increasing k_share does not improve MAE through the layer's own builder. Per the order: prediction failed → tune nothing → STOPPED before applying. No re-fit, no board, no K1.
+
+### Runtimes
+- Drive diagnosis: 23.8 min (1139 games x N=500 with drive_log=True)
+- k_share measurement: 24s (6 k_share values x ~4s each)
+
+### What was NOT done
+- Item 2: WITHDRAWN by Cowork (drive_log already captures everything needed).
+- Item 4 re-fit, cal maps, K1, K4, board: NOT DONE (prediction failed → STOPPED).
+- Week 2 sim-vs-book SD measurement: NOT DONE (depends on re-fit).
+
+### What remains UNVERIFIED
+- Cowork's Linux re-run of item 3's drive decomposition.
+- Whether the k_share=20 result means the sim-vs-book SD residual (0.149) has a different cause entirely, or whether a per-position k_share (not single number) would help.
+- Whether the clock model (seconds per play) is the root cause of the drives excess.
