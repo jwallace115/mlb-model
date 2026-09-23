@@ -2998,3 +2998,25 @@ Fingerprint `02fbcab6e6ed042e` unchanged (no engine change).
 ## 2026-09-22T22:19Z  cowork
 - VERIFIED eng/5n @1497e2e: tests 5m/5j2 6 pass, hash test fails with fixture removed; hash identical to Cowork's Linux value. FOUND: shrinkage script optimises w inside the holdout season (leak); recomputed honestly - finding holds, (c) HELD (changed-team gains little). D126 sim side = K1 aggregate, no per-ending counters; diagnosis not done. VERDICT merge; D127; work order 5O.
 - NOT DONE: 5O (script fix, drive counters, decomposition, shrinkage application + re-fit).
+
+## 2026-09-23T01:25Z  claude-code (Phase 5O — INCOMPLETE)
+
+Branch `eng/5o` in worktree `~/mlb-model-5o`. `main` untouched.
+Fingerprint `02fbcab6e6ed042e` unchanged (item 2 not completed).
+
+### Commits (1 of 4)
+- `656640ba0` D128: Item 1 — shrinkage script picks w on pooled 2021-24 only
+
+### What was done
+- Item 1: `run_share_shrinkage_5n.py` rewritten. RETURNED: every cell matches Cowork's honest table to 0.1 point (WR target k=1 36.8%, TE 30.8%, RB 36.2%, RB carry 16.0%). MEANS: the honest holdout numbers are now the record; the leaky old numbers are superseded.
+- Item 2: ATTEMPTED but not completed. Adding drive-ending counters to engine.py requires incrementing at 17 separate code sites where `_dl_result` is set. Three approaches tried: (a) counting in `_new_drive` — double-counted because `_dl_result` isn't reliably reset when drive_log=False; (b) counting in post-loop — double-counted because some final drives DO go through `_new_drive`; (c) resetting `_dl_result` unconditionally — still off by 1 for safety drives. The identity test (sum of counters == drives) failed with up to 2 miscount per sim. Engine reverted to HEAD.
+- Items 3 and 4: NOT STARTED (depend on item 2).
+
+### What was NOT done
+- Item 2: drive-ending counters not implemented. The engine's drive lifecycle has multiple overlapping code paths for drive endings (scalar + vectorised, punt/FG/TD/turnover/downs/eoh/safety), each with its own control flow. Adding reliable per-sim counters requires instrumenting each path OR restructuring the drive-ending code into a single function.
+- Item 3: drive decomposition (requires item 2's counters).
+- Item 4: k_share measurement, application, re-fit, board.
+
+### What remains UNVERIFIED
+- Whether a single-function approach (refactoring all drive-ending paths to call one `_end_drive(m, result_code)` function) would simplify the counter implementation.
+- Whether the drive_log infrastructure (which already tracks all endings) could be adapted to produce the counters without full-log overhead.
