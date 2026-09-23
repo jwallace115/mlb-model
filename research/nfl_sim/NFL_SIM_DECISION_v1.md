@@ -2466,3 +2466,14 @@ Full note `research/nfl_sim/phase5n_verification_2026-09-22.md`; next order `wor
   ~+0.7 per game carry most of the +2.0 drives. 5O adds the counters (null: board bit-identical) and decomposes.
 - 5O item 4 (Jeff's call): apply same-team prior-season shrinkage to target shares in the usage layer with the
   honest weights, re-fit `fit_5o`, pre-registered sim-vs-book SD(raw) on Week 2 receptions < 0.13 (from 0.149).
+
+### D128 -- Item 1: shrinkage script picks w on pooled 2021-24 only (2026-09-22)
+
+Branch `eng/5o`, Mac. `run_share_shrinkage_5n.py` rewritten in place.
+w picked on POOLED 2021-24, applied ONCE to 2025 holdout. Same data builders.
+
+NULL CONTROL: every cell matches Cowork's honest table (phase5n_verification)
+to 0.1 point. Verified: WR target k=1 36.8%, TE target k=1 30.8%, RB target
+k=1 36.2%, RB carry k=1 16.0%, same-team/changed-team splits exact.
+
+The old leaky numbers are superseded. This table is the honest record.
