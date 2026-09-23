@@ -2513,3 +2513,26 @@ drives (punt: 62s vs 121s, TD: 91s vs 223s). This is how +2 extra drives fit.
 The excess is spread across every ending type; the sim runs shorter drives overall
 (fewer plays per TD/FG/turnover drive) and the clock runs faster per play, fitting
 more drives into the same 3600s. No fix in this order.
+
+### D130 -- Item 4: k_share measured with the live formula — discovery picks k=20, PREDICTION FAILED, NOTHING APPLIED (2026-09-23)
+
+Branch `eng/5o`, Mac. Script: `nfl/sim/run_kshare_5o.py`. Runtime: 24s.
+k_share grid: {20, 40, 80, 120, 160, 240}. Discovery 2021-24, holdout 2025.
+Scored at weeks 2-9 against realised target/carry share per player per week.
+
+**PRE-REGISTERED: discovery pick >= 80. DID NOT HOLD.**
+Overall best (single number, pooled across all positions and weeks 2-5): **k_share = 20** —
+the CURRENT value. Per-position bests: WR target 40, TE target 80, RB target 80,
+but carries and overall favor 20.
+
+The usage layer's formula `(n_eff * obs + k_share * prior) / (n_eff + k_share)` already
+decays shrinkage weight with accumulated evidence (n_eff). With k_share=20 and ~35
+team targets in week 1, the layer already puts 20/55 = 0.36 on the prior. Increasing
+k_share would over-shrink relative to what the MAE says is optimal.
+
+**Per the order: prediction failed → tune nothing → STOPPED before applying.**
+No k_share changed. No re-fit. No board. No K1. Fingerprint 02fbcab6e6ed042e unchanged.
+
+The week-1 share excess in the sim-vs-book SD (0.149) is NOT explained by
+k_share being too low: the live formula's shrinkage is already near-optimal
+for the prediction task it was measured against.
