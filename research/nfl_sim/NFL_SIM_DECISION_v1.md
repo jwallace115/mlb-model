@@ -2670,3 +2670,15 @@ Full note `research/nfl_sim/phase5q_verification_2026-09-25.md`; next order `wor
   full-season pace is 34-35 s. K1 rows: 139.7 plays/game in weeks 1-2 vs 127-130 weeks 3+ (real 124.5).
   Every 2026 board has run on it; the 2021-24 fit absorbed it. 5R fixes the builder (prior-season prior +
   measured shrinkage), re-fits once, and logs post-anchoring pass volume on the board.
+
+### D138 — 5R Item 1: tendency defect measured (194 default team-weeks, +15.7 plays/game weeks 1-2, +6.1 pass att vs book); board team_volume LOG added (2026-09-25)
+
+Full report: `research/nfl_sim/phase5r_tendency_audit.md`.
+Audit script: `nfl/sim/run_tendency_audit_5r.py`. Team volume parquet: `nfl/data/sim/outputs/week=2026_02/team_volume.parquet`.
+
+**Pre-registered:** (1) all week-1 team-weeks on default — **HELD** (194 defaults); (2) K1 wk1-2
+plays exceed wk5+ by >= 8 — **HELD** (11.1); (3) anchored sim pass att exceed book QB lines by
+>= 5 — **HELD** (+6.1). Board re-run sim_p/cal_p **bit-identical** to picks_log_mac (1353/1353).
+
+LOG-ONLY addition to `run_week.py`: team_volume table (per-game pass att, completions, rushes,
+plays per team AFTER anchoring) saved beside picks_log. No behaviour change. Fingerprint unchanged.
