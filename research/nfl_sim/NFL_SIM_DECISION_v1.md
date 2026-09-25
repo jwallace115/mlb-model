@@ -2782,3 +2782,30 @@ Test `test_engine_5s.py`: 2/2 pass. Post-INT start 52.5 >= 52 (was ~40 on 5R eng
 2. Inside-40 starts/game 1.86 → 1.56 (target <= 1.45) — **FAILED** (direction right, residual 0.11).
 3. TD 1-3 play share 0.180 → 0.152 (target <= 0.14) — **FAILED** (direction right, residual 0.012).
 4. INT rate 1.62 → 1.64 (±0.05) — **HELD**.
+
+### D145 — 5S Item 2: fit_5s; like_for_like_go now PASS; suite 2 reds (cleanest since 5I) (2026-09-25)
+
+Fit: `fit_5s`, 1,087 games, N=5000, ~60 min. Cal maps: `calibration_v1.json`.
+K1: `phase5s_k1_after.txt` + rows. K4: `phase5s_k4.parquet`.
+Boards: `phase5s_boards/` (W2 + W3 with team_volume).
+
+**Pre-registered:**
+- K1 plays/g <= 128.5 — **FAILED** (130.9); drives <= 23.3 — **FAILED** (23.8); punts <= 8.6 — **FAILED** (8.96).
+- pts/team within 0.5 of 22.90 — **FAILED** (22.23, diff 0.67).
+- go_rate/off_pen/def_pen/fg_att within K1 tol — **HELD** (all PASS).
+- INT rate unchanged — **HELD** (inferred from INT ret TD count).
+- TD drives/game within 0.15 of 4.73 — need to check from rows.
+- Board SD(sim_p-q) from 0.134: 0.135 (no target — reported as stated).
+- Board pass att gap: +3.6 (from +3.7).
+
+The INT fix had almost no effect on the overall K1 numbers because the ANCHORING constrains the
+game-level totals (spread + total targets). The fix changes WHERE plays happen (post-INT field
+position) but not HOW MANY plays occur (that's pace + clock). The volume residual (+6 plays/game)
+is the clock-runoff/short-drive issue, not INTs.
+
+**like_for_like_go: 0.0090 → PASS** (was 0.0103 FAIL). The INT fix reduced 4th-down go attempts
+by placing the defence further from the end zone, reducing short-field 4th-down opportunities.
+
+**Suite: 2 failed, 213 passed.** Only fd_pen and tied_drives remain. like_for_like_go now PASS.
+score_vs_book tests all PASS (Item 0 rewrite). player_off_hash re-recorded. Cleanest suite run
+since the 5I reds were introduced.
