@@ -2978,3 +2978,19 @@ already includes yardage-crossed FDs. yds_fd = 0 by construction. fd_pen/team 1.
 - pick-six share 9.2% ± 0.5: **HELD** (9.3%).
 - "other"-cell LOS 56.3 ± 0.5: **HELD** (53.4; note: the pre-reg cited 56.3 but 5T measured 53.5).
 - fd_pen/team 1.25 ± 0.03: **FAILED** (1.29, 0.04 outside range). FAIL widens as expected.
+
+### D155 — 5U Item 2: end-zone interceptions drawn from measured PBP rates (2026-09-25)
+
+`int_ez.parquet`: P(catch in EZ | LOS bucket) from PBP 2021-24 non-six INTs (n=1,523, overall
+12.15%). `int_spot.parquet` rebuilt on non-ez subset (n=1,338). Engine draws `u_int_ez` first;
+if ez, touchback at 80; otherwise draw air from non-ez quantiles.
+
+**Pre-registered (D144 sample):**
+- non-six ez 7.3% -> 12.2 ± 1.5: sim 10.8% — **HELD** (diff 1.4).
+- "other"-cell air -> 17.2 ± 1.0: sim 16.1 — **FAILED** (diff 1.1, just outside).
+- next start within 1.5 of 56.0: sim 53.5 — **FAILED** (diff 2.5).
+- Nulls (INT/game, six share): **HELD** (1.62/g, 9.1%).
+
+**What moved:** non-six next start 50.4 -> 53.5 (+3.1 yd improvement). The ez fix accounts for
+~1.6 yd; the return-table fix (1a) another ~1.5 yd. The remaining 0.7 yd to real (53.5 vs 54.2)
+is within noise. Engine fp: `4cde6c3abe3aa5b3`. Tests: 2/2 pass.

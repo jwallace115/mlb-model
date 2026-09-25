@@ -1485,47 +1485,79 @@ def build_fg_setup_table(df):
     return out
 
 
-def build_int_spot_table(df):
-    """5S: INT air-yards distribution by LOS bucket from PBP 2021-24.
+def build_int_ez_table(df):
+    """5U: P(catch in end zone | LOS bucket) for non-pick-six INTs.
 
-    Derivation: plays with interception == 1, regular season. air_yards is the
-    distance of the throw downfield (catch point = LOS - air_yards). Bucketed by
-    yardline_100: 1-20, 21-40, 41-60, 61-80, 81-99. Quantiles (101 points) per
-    bucket for the engine to draw from. Rows with missing air_yards are counted
-    and excluded from the quantile computation.
+    Derivation: PBP 2021-24 REG, interception == 1, excluding pick-sixes
+    (touchdown == 1 & td_team == defteam). ez = (yardline_100 - clip(air_yards, 0)) <= 0.
+    Five LOS buckets (1-20, 21-40, 41-60, 61-80, 81-99).
     """
     ints = df[(df["interception"] == 1) & (df["season_type"] == "REG")].copy()
-    n_total = len(ints)
-    n_missing = ints["air_yards"].isna().sum()
-    print(f"  INT events: {n_total}, missing air_yards: {n_missing}")
+    # Exclude pick-sixes
+    six = (ints["touchdown"] == 1) & (ints["td_team"] == ints["defteam"])
+    non_six = ints[~six].copy()
+    non_six["air"] = non_six["air_yards"].clip(lower=0).fillna(0)
+    non_six["catch_yl"] = non_six["yardline_100"] - non_six["air"]
+    non_six["ez"] = non_six["catch_yl"] <= 0
 
-    ints_valid = ints[ints["air_yards"].notna()].copy()
-    # Clip negative air_yards to 0 (screen passes caught behind LOS)
-    ints_valid["air_yards_clipped"] = ints_valid["air_yards"].clip(lower=0)
-
-    # LOS buckets
     bins = [0, 20, 40, 60, 80, 100]
     labels = ["1-20", "21-40", "41-60", "61-80", "81-99"]
-    ints_valid["los_bucket"] = pd.cut(ints_valid["yardline_100"], bins=bins, labels=labels,
-                                       right=True, include_lowest=True)
+    non_six["los_bucket"] = pd.cut(non_six["yardline_100"], bins=bins, labels=labels,
+                                    right=True, include_lowest=True)
+    rows = []
+    for bucket in labels:
+        sub = non_six[non_six["los_bucket"] == bucket]
+        n = len(sub)
+        n_ez = int(sub["ez"].sum()) if n > 0 else 0
+        rate = n_ez / n if n > 0 else 0.0
+        rows.append({"los_bucket": bucket, "n": n, "n_ez": n_ez, "ez_rate": rate})
+
+    result = pd.DataFrame(rows)
+    overall = non_six["ez"].mean()
+    print(f"  Non-six INTs: {len(non_six)}, overall ez rate: {overall:.4f}")
+    return result
+
+
+def build_int_spot_table(df):
+    """5S/5U: INT air-yards distribution by LOS bucket from PBP 2021-24.
+
+    5U: built on NON-EZ non-pick-six INTs only (the engine draws ez separately).
+    Quantiles (101 points) per bucket for the engine to draw from.
+    """
+    ints = df[(df["interception"] == 1) & (df["season_type"] == "REG")].copy()
+    # Exclude pick-sixes
+    six = (ints["touchdown"] == 1) & (ints["td_team"] == ints["defteam"])
+    non_six = ints[~six].copy()
+    non_six["air"] = non_six["air_yards"].clip(lower=0).fillna(0)
+    non_six["catch_yl"] = non_six["yardline_100"] - non_six["air"]
+    non_six["ez"] = non_six["catch_yl"] <= 0
+
+    # 5U: filter to non-ez only
+    non_ez = non_six[~non_six["ez"]].copy()
+    n_total = len(non_six)
+    n_non_ez = len(non_ez)
+    print(f"  Non-six INTs: {n_total}, non-ez: {n_non_ez}")
+
+    bins = [0, 20, 40, 60, 80, 100]
+    labels = ["1-20", "21-40", "41-60", "61-80", "81-99"]
+    non_ez["los_bucket"] = pd.cut(non_ez["yardline_100"], bins=bins, labels=labels,
+                                   right=True, include_lowest=True)
 
     rows = []
-    overall_median = ints_valid["air_yards_clipped"].median()
     for bucket in labels:
-        sub = ints_valid[ints_valid["los_bucket"] == bucket]
+        sub = non_ez[non_ez["los_bucket"] == bucket]
         if len(sub) == 0:
             q = [0.0] * 101
         else:
-            q = np.quantile(sub["air_yards_clipped"].values, QUANTILE_POINTS).tolist()
+            q = np.quantile(sub["air"].values, QUANTILE_POINTS).tolist()
         rows.append({
             "los_bucket": bucket,
             "n": len(sub),
             "quantiles": q,
-            "median_air": float(np.median(sub["air_yards_clipped"])) if len(sub) > 0 else 0.0,
+            "median_air": float(np.median(sub["air"])) if len(sub) > 0 else 0.0,
         })
 
-    result = pd.DataFrame(rows)
-    return result
+    return pd.DataFrame(rows)
 
 
 def build_all():
