@@ -2719,3 +2719,18 @@ Boards: `phase5r_boards/picks_log_mac.parquet` (W2), `picks_log_w3.parquet` (W3)
 **Suite:** 5 failed, 206 passed. Pre-existing reds: fd_pen, tied_drives, like_for_like_go (was already FAIL). New: player_off_hash (re-recorded); score_vs_book universe 146->182 (expected: new cal maps change which legs qualify — not an engine bug). No genuinely new failures.
 
 Engine fingerprint: `5ee4b1009301783d`. Usage: `3638769c89030de0`.
+
+### D141 — 5R Item 4: INT spot is at the LOS, not the catch point; error = air yards (~15.5 yds) (2026-09-25)
+
+Report: `research/nfl_sim/phase5r_int_spot.md`. Parquet: `phase5r_int_spot.parquet` (32,485 sim INT events).
+200 K1 games (seed 42), N=100, drive_log=True, 214s. DIAGNOSIS ONLY.
+
+**Pre-registered:**
+1. Engine spots INT at LOS / sim air yards >= 4 higher → **HELD** (engine spots at LOS; real median air yards = 13.0).
+2. INT rate per attempt within 0.3pp of real → **HELD** (sim 1.62/game vs real 1.54, diff ~0.2pp per attempt).
+
+**Mechanism:** engine.py:2331-2332 computes `yl_new = 100 - (yl_at_LOS + return)`. Correct formula:
+`yl_new = 100 - (yl_at_LOS - air_yards + return)`. The engine treats the INT as occurring at the LOS,
+not at the catch point. Expected error = mean air_yards = 15.5 yards. Observed: sim post-INT drives
+start at 39.9 vs real 56.0 = -16.2 yards. This accounts for ~all of D135's 13-yard gap between sim
+and real INT-started drives. INT rate is close (+0.08 INTs/game). No fix applied.
