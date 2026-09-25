@@ -2682,3 +2682,23 @@ plays exceed wk5+ by >= 8 — **HELD** (11.1); (3) anchored sim pass att exceed 
 
 LOG-ONLY addition to `run_week.py`: team_volume table (per-game pass att, completions, rushes,
 plays per team AFTER anchoring) saved beside picks_log. No behaviour change. Fingerprint unchanged.
+
+### D139 — 5R Item 2: build_tendencies gets prior-season prior + measured shrinkage; k_pace=200, k_tendency=200 (both stay at 200) (2026-09-25)
+
+Report: `research/nfl_sim/phase5r_tendency_audit.md` (extended). K results: `phase5r_tendency_k_results.parquet`.
+Test: `nfl/sim/tests/test_ratings_5r.py` (2/2 pass). Builder: `nfl/sim/run_tendency_k_5r.py`.
+
+**Change to `ratings.py::build_tendencies`:** Week-1 (no prior data) uses the team's own prior-season
+full-season pace and PROE (league mean when no prior exists), not hardcoded 28.0 / 0.0. Pace is now
+shrunk as `(n * obs + k_pace * prior) / (n + k_pace)` where n = neutral-score diff count. PROE shrink
+target changed from 0.0 to the team's prior-season PROE. `k_pace = 200` added to `params_v1.json`.
+
+**Measured (run_tendency_k_5r.py):** k in {25, 50, 100, 200, 400, 800}, scored on 2021-24, 2025 holdout.
+Both curves are U-shaped with minimum at 200. Prior-season prior drops week-1 pace MAE by 69%
+(7.608 -> 2.333 on 2025 holdout). k_tendency=200 unchanged (already optimal).
+
+**Pre-registered:** (1) k_pace >= 100 — **HELD** (200); (2) week-1 MAE falls > 40% — **HELD** (69%);
+(3) k_tendency within 2x of 200 — **HELD** (200 exactly).
+
+Week-1 pace now 30.1-38.2 (was 28.0). n_plays still 0. New usage_fingerprint: `3638769c89030de0`.
+Board SUPPRESSED until Item 3 re-fit.
