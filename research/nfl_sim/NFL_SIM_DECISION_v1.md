@@ -2609,3 +2609,64 @@ Full note `research/nfl_sim/phase5p_verification_2026-09-25.md`; next order `wor
   the book's mean the sim is +0.25 and against Week 2 actuals +0.28 (book +0.03). "N=100 sampling noise" is not a
   candidate - the board runs N=5,000. Reading: the sim gives quoted players too large a share of team receptions
   (team volume explains ~11%); 5Q item 2 measures quoted-player share of team receptions sim vs real.
+
+### D135 — 5Q Item 1: short-field excess is 81% turnovers + 19% downs; return yardage is correct, INT field position is not (2026-09-25)
+
+Full report: `research/nfl_sim/phase5q_drive_starts.md`.
+Parquet: `research/nfl_sim/phase5q_drive_starts_by_game.parquet`.
+K1 sample, N=100, drive_log=True, 1,087 games, 724s. Fingerprint `02fbcab6e6ed042e`.
+
+**Pre-registered:**
+1. Kickoff not the source (sim inside-40 ~0) -> **HELD** (sim 0.000, real 0.7%).
+2. Excess in turnovers, sim >= 5 yd closer -> **HELD** (9.3 yd closer; turnovers +0.52 of +0.64).
+3. INT return quantiles higher than real at median -> **FAILED** (identical at every percentile).
+
+**Decomposition of +0.64 excess inside-40 starts/game:**
+- Turnovers: +0.52 (81%). Sim INT drives start at 39.9 yd; fumble at 49.1; real combined 52.7.
+  Return yardage tables match PBP exactly. The gap is WHERE INTs happen on the field, not how far
+  they're returned. Sim also has +0.41 more turnovers/game (2.52 vs 2.11): both frequency and
+  placement contribute.
+- Downs: +0.23 (36%, offset by negatives elsewhere). Sim post-downs starts at 58.6 vs real 63.4,
+  with +0.46 more downs per game (1.53 vs 1.07).
+- Kickoffs: -0.06 (sim MISSES real short-field kickoff returns due to fixed ko_start).
+No engine/parameter change.
+
+### D136 — 5Q Item 2: sim over-produces team receptions by +4 to +8/game; phantom receivers from active_uni breadth (2026-09-25)
+
+Full report: `research/nfl_sim/phase5q_reception_share.md`.
+Parquet: `research/nfl_sim/phase5q_reception_share.parquet` (264 team-game rows).
+Sample A: 2026 W1-2, 32 games, N=500, 52s. Sample B: 2024 100 K1 games, N=500, 147s.
+
+**Pre-registered:**
+1. Team receptions within 0.5 (volume not the problem) -> **FAILED** (+7.8 2026, +4.0 2024).
+2. Top-6 share >= 3pp higher in sim -> **FAILED OPPOSITE** (sim -4.1pp 2026, -6.3pp 2024).
+3. Gap largest at WR -> **N/A** (direction reversed).
+
+**Findings:** The sim over-projects team receptions by +7.8 (2026) and +4.0 (2024) per team.
+The excess is disproportionately at the BOTTOM of the roster: top-6 share sim 0.767 vs real
+0.808 (2026). ~13 active WR/TE/RB per team in active_uni vs ~7 who actually catch passes =
+5.7 phantom receivers, each generating ~1 sim reception = ~6 of the +7.8 excess.
+
+**Mechanism:** `_renormalize_measured` distributes ALL target share across ALL active skill
+players. Active_uni includes backup WRs, blocking TEs, and third-down RBs who are game-day
+active but don't participate in the passing game. The final renormalize-to-1 (line 428-433)
+guarantees these players get non-zero shares, creating phantom receptions.
+
+D134's "+0.25 over-projection for quoted players" was real but masked the larger problem: the
+team total is +4 to +8 high, with ~6 from phantom depth players and ~1.5 from named players.
+No engine/parameter change.
+
+### D137 — 5Q verified and MERGED; the reception excess is team pass VOLUME, and its cause is a hardcoded 28-second week-1 pace with no prior-season carry-forward (2026-09-25)
+
+Full note `research/nfl_sim/phase5q_verification_2026-09-25.md`; next order `workorder_5R_2026-09-25.md`.
+- `eng/5q` @ `5a7cac6` merged: D135-D136. Fingerprint `02fbcab6e6ed042e` (diagnosis only).
+- D135 accepted: short fields are 81% turnover-started drives (sim INT drives start 39.9 yds out vs 52.7 real;
+  return yardage tables match PBP), plus +0.41 turnovers and +0.46 downs per game.
+- **CORRECTION to D136:** the player layer's summed receptions equal team completions exactly (checked on 5
+  games); "phantom receivers" cannot create receptions, only lower the top-6 share. The +7.8 (2026) / +4.0
+  (2024) receptions per team are TEAM PASS VOLUME: raw sim 39-43 attempts per 2026 team-game vs 33.9 real.
+- **CAUSE:** `ratings.py::build_tendencies` gives a team with no prior week in the season `pace_sec = 28.0`,
+  `proe = 0.0` (hardcoded; no prior season), and never shrinks pace (week 2 = one game's raw mean). Real
+  full-season pace is 34-35 s. K1 rows: 139.7 plays/game in weeks 1-2 vs 127-130 weeks 3+ (real 124.5).
+  Every 2026 board has run on it; the 2021-24 fit absorbed it. 5R fixes the builder (prior-season prior +
+  measured shrinkage), re-fits once, and logs post-anchoring pass volume on the board.

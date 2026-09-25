@@ -3081,3 +3081,33 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 ## 2026-09-25T00:58Z  cowork
 - VERIFIED eng/5p @67e437b: item-1 tables rebuilt from phase5p_drives_by_game.parquet and PBP (match to 0.01); item-2 SD/replacement reproduced from phase5p_gap_rows.parquet. FOUND: D133's +0.41 is vs the book LINE (+0.25 vs book mean; +0.28 vs actual); N=100 candidate wrong (board N=5,000). VERDICT merge; D134; work order 5Q.
 - NOT DONE: 5Q (drive-start decomposition; quoted-player share of team receptions).
+
+## 2026-09-25T06:00Z  claude-code (Phase 5Q — D135, D136)
+
+### RETURNED
+- D135 (Item 1): `run_drive_starts_5q.py` ran 1,087 REG games x N=100 with drive_log=True in 724s (12.1 min). Classified each drive's start by the previous drive's result. Predictions: (1) HELD (kickoff not the source — sim 0.000 inside-40, real 0.7%); (2) HELD (turnovers +0.52 of +0.64 excess, sim 9.3 yd closer); (3) FAILED (INT return quantiles identical to PBP — the table was built from the same data). INT/fumble return yards: exact match at p10/25/50/75/90/95. The short-field excess comes from WHERE INTs happen on the field (sim INT drives start at 39.9 yd vs real 52.7) + more turnovers/game (2.52 vs 2.11). Downs contribute +0.23 (sim 58.6 vs real 63.4, +0.46 more/game).
+- D136 (Item 2): `run_reception_share_5q.py` ran 32 games (2026 W1-2, 52s) and 100 games (2024, 147s), both N=500 with player layer. Predictions: (1) FAILED (+7.8 2026 / +4.0 2024 — NOT within 0.5; volume IS the problem); (2) FAILED OPPOSITE (top-6 share sim 0.767 vs real 0.808 in 2026 = -4.1pp, not >= +3pp); (3) N/A (direction reversed). 13 active skill players per team in active_uni vs 7 actual receivers = 5.7 phantom receivers generating ~6 excess receptions/team. _renormalize_measured distributes target share to ALL active players including non-receivers.
+
+### MEANS
+- Item 1: The causal chain is now complete: short-field drives -> short scoring drives -> extra failed possessions. The short fields come from turnovers (81%) and downs (19%), not kickoffs. Return yardage is correct; the problem is WHERE interceptions happen (field position at INT time) and that the sim has +0.41 more turnovers/game. Downs contribute via +0.46 more TOD/game at closer yardlines. The next fix target is the INT field-position distribution and/or the overall turnover rate.
+- Item 2: D134's "+0.25 over-projection for quoted players" hid a much larger problem. The sim inflates team receptions by +4 to +8 per game. ~6 of this comes from phantom depth players (active in active_uni but never catch real passes). The renormalization mechanism guarantees every active player gets non-zero target share, but ~45% of active skill players don't participate in the real passing game. This is the single largest source of player-level projection error identified to date.
+
+### Runtimes
+- Item 1: 724s (12.1 min)
+- Item 2: 199s (3.3 min) — 52s for 2026, 147s for 2024
+
+### NOT DONE
+- No engine, usage, table, or parameter change (per the order: diagnosis only).
+- Week 1 board generation: the order asked to "run Week 1 the same way with --as-of"; no Week 1 board candidates file exists (no nfl/data/board/week=2026_01/). Ran the sim directly for Week 1 games instead to get player-level means. The resulting comparison is valid (sim means vs PBP actuals) but there is no Week 1 picks_log saved beside the Week 2 one.
+- Rush attempts were not separately analyzed (order focused on receptions).
+- Per-player position breakdown of the top-6 vs real was not computed (would require matching individual player sim means to PBP actuals by position within each team-game).
+
+### UNVERIFIED
+- Whether the +7.8 excess in 2026 vs +4.0 in 2024 reflects a real year-over-year difference or sample size (32 vs 100 games) or a 2026-specific data issue (early season).
+- Whether the phantom-receiver effect is the same when using a tighter active_uni (e.g., top-8 by target share instead of all active WR/TE/RB).
+- The INT field-position distribution: WHERE the sim's INTs happen vs real (not yet measured directly — only inferred from drive-start yardlines).
+- Fingerprint `02fbcab6e6ed042e` confirmed at start and end. main untouched.
+
+## 2026-09-25T03:39Z  cowork
+- VERIFIED eng/5q @5a7cac6: item-2 parquet reproduced; ran simulate_game on 5 games - player receptions == team completions (D136 mechanism refuted); raw 2026 sim 39-43 pass att/team vs 33.9 real. FOUND ratings.py build_tendencies week-1 default pace 28.0 / proe 0 / no prior season, pace unshrunk; K1 weeks 1-2 = 139.7 plays/game. VERDICT merge; D137; work order 5R.
+- NOT DONE: 5R (tendency prior + shrinkage, re-fit, board pass-volume logging, INT spot).
