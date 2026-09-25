@@ -1015,6 +1015,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     _DLR_NAMES = {1:"TD",2:"FG_made",3:"FG_missed",4:"punt",5:"turnover_int",
                   6:"turnover_fumble",7:"downs",8:"end_half",9:"end_game",10:"safety"}
     _dl_rows = []
+    _dl_int_rows = []  # 5T: per-INT chain log (LOS, air, catch_yl, ez, ret, six, next_start)
 
     def _dl_new_drive(m):
         """Record ending drive (if result set), then reset for next drive."""
@@ -2333,9 +2334,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             # Interceptions (per-sim — ~1-2/game)
             for j in np.where(intercepted)[0]:
                 gi = g_idx[j]
+                # 5T: record end_yl BEFORE the spot changes (fixes stale first-play INT)
+                _dl_end_yl[gi] = yl[gi]; _dl_end_down[gi] = down[gi]; _dl_end_dist[gi] = dist[gi]
                 turnovers[gi] += 1; n_plays[gi] += 1; _dl_plays[gi] += 1
                 _dl_result[gi] = _DLR_INT
                 if u_int_dtd[gi] < p_int_def_td:
+                    # 5T: log pick-six when drive_log on
+                    if drive_log:
+                        _dl_int_rows.append((gi, float(yl[gi]), 0, float(yl[gi]), False, 0, True, float("nan")))
                     m = np.zeros(N, dtype=bool); m[gi] = True
                     ev_int_ret_td[gi] += 1  # 5A-5
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
@@ -2354,11 +2360,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         if q_arr is not None:
                             air = int(np.interp(u_int_air[gi], np.linspace(0, 1, 101), q_arr))
                     catch_yl = yl[gi] - air  # catch point (yards to EZ)
-                    if catch_yl <= 0:
+                    ez_flag = catch_yl <= 0
+                    if ez_flag:
                         # Pick in the end zone → touchback at 80 (own 20)
                         yl[gi] = 80.0
                     else:
                         yl[gi] = float(np.clip(100 - (catch_yl + ret), 1, 99))
+                    # 5T: log INT chain when drive_log on
+                    if drive_log:
+                        _dl_int_rows.append((gi, float(_dl_end_yl[gi]), air, float(catch_yl), ez_flag, ret, False, float(yl[gi])))
                     poss[gi] = 1 - poss[gi]
                     m = np.zeros(N, dtype=bool); m[gi] = True; _new_drive(m)
 
@@ -2878,6 +2888,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "sd_start", "opp_points",
         ])
         team_df.attrs["drive_log"] = _DriveLog(dl_df)
+    # 5T: INT chain log
+    if drive_log and _dl_int_rows:
+        int_df = pd.DataFrame(_dl_int_rows, columns=[
+            "sim_id", "los", "air", "catch_yl", "ez", "ret", "six", "next_start",
+        ])
+        team_df.attrs["int_chain_log"] = int_df
 
     if not has_players:
         return team_df

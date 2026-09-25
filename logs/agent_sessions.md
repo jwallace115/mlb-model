@@ -3167,3 +3167,38 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: 5S accepted. D145's anchoring explanation wrong (pts moved 0.66 everywhere, plays did not); lfl_go pass is by 0.001; INT residual 3.3 yd unplaced because the drive log does not record the INT play's LOS.
 - NOT DONE: 5S merge (Jeff runs the command); TNF grading; NCAAF pilot scoring; credit-burn review.
 - UNVERIFIED: nothing material; the 5R board's own cross-machine identity was never run (superseded by 5S's 100%).
+
+## 2026-09-25T18:00Z  claude-code (Phase 5T — D148, D149, D150, D151)
+
+### RETURNED
+- D148 (Item 0): go_rate denominator fixed to 4th-down-only (matching like_for_like_go). like_for_like_go row deleted (redundant). test_t1_4th_down_go_rate updated. Value from 5S rows: 0.20703, PASS (tol 0.010). like_for_like_go investigated: correct metric, go_rate passed via denominator mismatch (non-4th FG dilution). Sim is 1% more aggressive on 4th down (0.0090, marginal).
+- D149 (Item 1): INT chain instrumented. _dl_end_yl now written on INT plays before spot change. INT chain log: LOS, air, catch_yl, ez, ret, six, next_start. 200 K1 games, N=100, 128s. Three-cell decomposition: six 9.2%/9.7%; ez 6.6%/10.1% (sim under-produces end-zone catches); other 84.2%/80.2% (sim 48.1 vs real 50.9). Gap: 50.4 vs 54.2 = -3.8 yd. 1.2 yd from missing ez, 2.6 yd from air/ret deficit. Pre-registered: ez<8% HELD; >=1.5yd FAILED (1.23); LOS within 2 HELD; NULL air/ret within 1 FAILED (-1.2/-1.7). Engine fp changed to 2b9666346a810f9f (source hash of drive_log instrumentation, not a simulation change).
+- D150 (Item 2): tied_drives diagnosed. 5A-9 sample, N=500, 14s. 340 reached, 33 expired (9.71%, real 0/56). 94% expired in FG range (mean yl 28.2). Drives reach FG range but clock expires before FG attempt. Pre-registered (>=60% final 10s): FAILED — mechanism broader (median start clock 31.6s). Not one-table fix; queued.
+- D151 (Item 3): fd_pen diagnosed. Real 1.728 = 77.5% auto-FD (DPI/holding/roughing) + 22.5% yardage-crossed. Sim 1.409, missing 0.32. The deficit is live-play auto-FD penalties the sim can't produce (engine fires penalties as no-play events only; no live-play mechanism). Pre-registered (concentrated in auto-FD at no-play rate): HELD.
+
+### MEANS
+- Item 0: The go_rate/like_for_like_go duplication was a long-standing denominator mismatch that made go_rate look better than it was. Fixed by merging into a single correct metric.
+- Item 1: The 3.8-yd post-INT residual decomposes into two sources: (1) missing end-zone catches (sim 6.6% vs real 10.1%) from the LOS-bucket air draw not producing enough deep throws, worth 1.2 yd; (2) the "other" cell starting 2.8 yd closer due to air/return deficits. The fix is to condition air_yards on the engine's own pass depth (queued).
+- Item 2: The tied_drives red (9.7% expire vs real 0%) is a FG-decision/clock-management deficiency. 94% of expired drives are in FG range (mean yl 28) but the engine doesn't switch to FG-attempt mode before time runs out. Requires deeper engine analysis.
+- Item 3: The fd_pen red (1.409 vs 1.728) is a structural limitation: the engine can only fire penalties as no-play events, but real auto-FD often comes from live-play penalties (DPI during a pass, holding during a run). Adding a live-play penalty mechanism is the fix.
+
+### Runtimes
+- Item 0: <1s (row computation from existing K1 rows). Item 1: 128s. Item 2: 14s. Item 3: <5s.
+
+### NOT DONE
+- INT air-draw conditioned on pass depth (the fix for the 3.8-yd residual).
+- FG-decision/clock-management fix (tied_drives red).
+- Live-play penalty mechanism (fd_pen red).
+
+### UNVERIFIED
+- Cowork's reproduction of the three-cell INT chain numbers from the parquet.
+- Whether the engine's eoh_fg_decision table triggers in the tied-drives scenarios.
+- Exact split of real FD-by-penalty into no-play vs live-play categories.
+- Engine fp 2b9666346a810f9f. Usage 3638769c89030de0. main untouched.
+
+## 2026-09-25T18:12Z  cowork (5T verification, D152, 5U order)
+- RAN (Linux worktree eng/5t @ 2e12979): 4 games x {drive_log off,on} on main vs 5t engines -> byte-identical team outputs; record_player_off_hash.py -> 2b9666346a810f9f = 31de7e75f17b878b (same as the Mac's 5S value); test_engine_5t 2 pass; test_engine_5m player_off_hash FAILED on the branch as pushed (fixture not re-recorded; fixed in this merge); run_tied_expiry_5t.py -> 340/33 reproduced; D149 cells recomputed from phase5t_int_chain.parquet; real-side INT cells rebuilt from PBP 2021-24.
+- WROTE: research/nfl_sim/phase5t_verification_2026-09-25.md, D152 (appended at merge), research/nfl_sim/workorder_5U_2026-09-25.md, nfl/sim/tests/fixtures/player_off_hash.json (+2b9666346a810f9f).
+- MEANS: 5T accepted; D149 return sign backwards (sim returns 2.6 yd too LONG: int_ret_q includes pick-sixes), air deficit −1.6 in the other cell (floor + marginal draw), ez deficit worth ~1.6 yd; D150 9/33 phantom zero-play drives (end fields never reset); D151 double count of yardage first downs, real deficit is live-play penalties. Claude Code did not run the suite.
+- NOT DONE: 5T merge (Jeff runs the command); TNF grading; NCAAF pilot scoring; credit-burn review.
+- UNVERIFIED: full suite on eng/5t (only 5t + 5m hash tests run here; the engine is output-identical to 5S, whose suite was 2 red / 213 pass).

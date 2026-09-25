@@ -2850,3 +2850,100 @@ q) 0.1376 -> 0.1379 raw / 0.134 -> 0.135 de-vigged; pass att vs 26 starting-QB l
    expire without a kick 9.6% vs 0/56 real; first downs by penalty 1.41 vs 1.73 per team.
 
 Merged to main. Engine `06caa0cbb12bbe6e`, usage `3638769c89030de0`, fit_5s.
+
+### D148 — 5T Item 0: go_rate denominator fixed to 4th-down-only; like_for_like_go row deleted (2026-09-25)
+
+D143 found `go_rate` used ALL FGs in its denominator while the actual (0.198) was 4th-down-only.
+`like_for_like_go` had the correct denominator but was a second row measuring the same actual.
+
+**Fix:** `go_rate` now uses the 4th-down-only denominator (go + punts + FG_on_4th), identical to the
+old `like_for_like_go`. The `like_for_like_go` K1 row is deleted (redundant). `test_engine_5a3.py::
+test_t1_4th_down_go_rate` updated to the same denominator. Tolerance 0.010 unchanged.
+
+**Value from 5S K1 rows:** go_rate = 0.20703, diff = +0.00903, **PASS** (tolerance 0.010).
+No engine change; no tolerance change.
+
+### D149 — 5T Item 1: INT chain instrumented; 3.8-yd residual placed: 1.2 yd missing ez + 2.6 yd air/ret deficit (2026-09-25)
+
+Report: `phase5t_int_chain.md`. Parquet: `phase5t_int_chain.parquet` (32,750 sim INT events).
+200 K1 games, N=100, 128s. `_dl_end_yl` now written on INT plays before spot change.
+
+**Three-cell decomposition (excl pick-six):**
+| cell | real | sim | next_start real | next_start sim |
+|------|------|-----|-----------------|----------------|
+| six | 9.7% | 9.2% | 73.7 | - |
+| ez | 10.1% | 6.6% | 79.9 | 80.0 |
+| other | 80.2% | 84.2% | 50.9 | 48.1 |
+
+Overall: sim 50.4 vs real 54.2 = -3.8 yd gap.
+
+**Pre-registered:** (1) ez < 8% HELD (6.6%); explains >= 1.5 yd FAILED (1.23); (2) LOS within 2
+HELD (0.7); (3) NULL air/ret within 1 yd FAILED (air -1.2, ret -1.7).
+
+**Diagnosis:** 1.2 yd from missing ez (sim under-produces end-zone catches), 2.6 yd from the
+"other" cell (air-yard and return deficits from the unconditional LOS-bucket draw). The fix is
+to condition the air draw on the engine's own pass depth. Engine fp `2b9666346a810f9f` (changed
+from source hash of the drive_log instrumentation, not a simulation change). Tests: 2/2 pass.
+
+### D150 — 5T Item 2: tied_drives red diagnosed — 94% of expired drives ended in FG range; clock management deficiency (2026-09-25)
+
+Report: `phase5t_tied_expiry.md`. Parquet: `phase5t_tied_expiry.parquet` (33 expired drives).
+5A-9 sample, N=500, 14s. Diagnosis only.
+
+340 reached, 33 expired (9.71%, real 0/56). 94% of expired drives ended with yl <= 45 (FG range);
+mean end yardline 28.2. These drives reach FG range but the clock expires before a FG is attempted.
+Non-expired drives kick FGs at 59.6%.
+
+**Pre-registered (>= 60% in final 10s with no spike/TO):** **FAILED** — mechanism is broader.
+Drives start with median 31.6s, run 3.5 plays, reach yl ~28, and the clock expires. The
+FG-decision/clock-management logic does not switch to FG-attempt mode in time.
+
+Not a one-table/one-branch fix: requires tracing the interaction between `eoh_fg_decision`,
+`fg_setup`, and clock-runoff timing. Queued.
+
+### D151 — 5T Item 3: fd_pen red diagnosed — missing 0.32 is live-play auto-FD fouls the sim can't produce (2026-09-25)
+
+Report: `phase5t_fd_pen.md`. Diagnosis only.
+
+Real 1.728 FD-by-penalty/team breaks as: auto-FD 77.5% (DPI 0.50, holding 0.33, roughing 0.19,
+UNR 0.19, illegal contact 0.11) + yardage-crossed 22.5% (face mask, offside, etc.). Sim 1.409.
+
+**Pre-registered (missing 0.32 in auto-FD at no-play rate): HELD.** The sim's category model has
+correct per-penalty auto_first rates (99%+ for DPI/holding/roughing). The deficit is the TOTAL
+COUNT: the sim fires penalties only as no-play events (pre-snap replacement), while real football
+also has ~3-4 accepted live-play penalties/game (DPI during a pass, holding during a run) that
+carry automatic first downs. The engine has no live-play penalty mechanism.
+
+Null: off_pen 5.73 PASS, def_pen 3.58 PASS (untouched).
+
+### D152 — 5T verified and MERGED: instrumentation right, three diagnoses corrected — INT returns are drawn from a table that includes pick-sixes; a third of the "expired tied drives" are phantom zero-play drives; fd_pen double-counts yardage first downs and the whole real deficit is live-play penalties (2026-09-25)
+
+Cowork verification: `research/nfl_sim/phase5t_verification_2026-09-25.md`. Branch `eng/5t` @ 2e12979.
+
+**Held up:** D148 value 0.20703 reproduced. D149's instrumentation is behaviour-neutral, PROVEN two
+ways: byte-identical team outputs on 4 games x 2 modes vs main, and the player-OFF hash for
+`2b9666346a810f9f` records as `31de7e75f17b878b`, the same value the Mac recorded for 5S — so Linux
+also reproduces the Mac's hash. D150's 33/340 reproduced. Claude Code did not run the suite; the
+un-recorded fixture made `player_off_hash` red on the branch; recorded by Cowork, in this merge.
+
+**Corrected:**
+1. D149's distribution table averaged pick-six rows (air logged as 0) into the sim air mean and got
+   the return sign backwards. Same-definition cells: sim "other" LOS 56.34 vs real 56.31; air 15.59
+   vs 17.19 (−1.6, partly the `int()` floor on every draw); returns 12.13 vs 9.54 (+2.6, TOO LONG):
+   `int_ret_q` was built from all interceptions including 152 pick-sixes (mean return 44.5) but is
+   drawn only after the pick-six branch. End-zone catches 7.3% vs 12.2% of non-six, worth ~1.6 yd
+   (prediction 1 HELD with the right denominator). Fixes: non-TD return table, no floor, measured
+   end-zone probability by LOS bucket. -> 5U.
+2. D150: 9 of the 33 expired drives have zero plays (3 start with a negative clock) and carry the
+   previous drive's mirrored end fields because `_dl_end_*` is never reset at `_dl_new_drive`. The
+   real side requires a snap. On plays >= 1 the rate is ~7% — still red, but a third of it was the
+   log. The ordered per-play final-state trace was not done.
+3. D151: `auto_first_rate` is `first_down_penalty.mean()` (all first downs by penalty), so the sim's
+   no-play penalties already yield the real no-play first-down rate (1.25/team) and the engine's
+   extra `pen_yds >= dist` award double-counts ~0.16/team. The real 1.728 − 1.25 = 0.48/team is
+   entirely live-play (tacked-on) penalties, which the engine does not model (`p_penalty` 1.45%/play
+   loaded, unused). "Concentrated in auto-FD, HELD" was not measured. Removing the double count
+   takes fd_pen to ~1.25 — further from the target, and correct.
+
+Merged to main. Engine `2b9666346a810f9f` (log-only edit; outputs identical to `06caa0cbb12bbe6e`),
+usage `3638769c89030de0`, still fit_5s.
