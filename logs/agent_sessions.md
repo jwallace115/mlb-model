@@ -3051,3 +3051,29 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - VERIFIED eng/5o @c05df0f: k_share script re-run (MAE table dumped: flat, targets 1-2% at k 40-80, carries worse); drive diag re-run N=100 after the N=500 run OOM'd at 8 GB - counts/plays match D129, clock line was a quarter-clock artefact (corrected: 3,570 s accounted, TD drives -0.64 plays/-26 s). VERDICT merge; D131; work order 5P.
 - FOUND: D129 clock claim false; D130 pooled pick dominated by carry MAE; item 3 report file not committed.
 - NOT DONE: 5P (why scoring drives are short; sim-vs-book decomposition).
+
+## 2026-09-25T06:00Z  claude-code (Phase 5P — D132, D133)
+
+### RETURNED
+- D132 (Item 1): `run_scoring_drives_5p.py` ran 1,087 REG games x N=100 with drive_log=True in 713s (11.9 min). Aggregated per game inside loop. start_clock converted to game seconds via `(4 - min(qtr,4)) * 900 + start_clock`. Saved `phase5p_drives_by_game.parquet` (8,694 rows). Predictions: (1) HELD (sim TD starts 3.6 yd closer, >= 3 threshold); (2) FAILED upward (+0.36 YPP, outside 0.3); (3) HELD (1-3 play bucket +6.2pp, >= 3pp). Null: punt ppd 4.21 vs 4.18 = 0.02, HOLDS. Both field position and YPP contribute; 0.84 short-field TD starts/game vs 0.54 real (+56%).
+- D133 (Item 2): `run_gap_decomp_5p.py` matched 131 receptions player-lines. Predictions: (1) FAILED (39.2% removed, not > 50% — not primarily a mean problem); (2) FAILED (no-2025 +0.20, changed-team +0.22, both < 0.5); (3) HELD (team pass error R² ~11%, < 1/3). Sim over-projects by +0.41 rec (WR +0.50). Sim/book SD ratio 0.984. Book MAE 1.57 vs sim 1.77.
+
+### MEANS
+- Item 1: The sim's scoring drives are short because of BOTH field position (primary: 3.6 yd closer starts, +56% short-field TDs) AND offensive efficiency (secondary: +0.36 YPP on TD drives). The freed time becomes ~1.57 extra failed possessions/game, matching the punt/turnover/downs excess. Root cause likely kickoff returns or turnover-created field position (punt starts are correct).
+- Item 2: The sim-vs-book gap (SD 0.147) has no single dominant cause. 39% is mean bias, 61% is player-level shape noise. The sim and book agree on aggregate dispersion (SD ratio 0.984). Team pass volume explains only 11%. No-2025 and team-change effects are real but modest. Book is a better point predictor (MAE 1.57 vs 1.77).
+
+### Runtimes
+- Item 1: 713s (11.9 min)
+- Item 2: < 30s (no sim run, analytics only)
+
+### NOT DONE
+- No engine, usage, table, or parameter change (per the order: diagnosis only).
+- No fix proposed for the field-position excess.
+- No fix proposed for the mean bias.
+- Rush attempts in Item 2: order mentioned "plus rush attempts" but the core analysis is receptions. Rush attempt lines are in the picks_log but were not decomposed separately.
+
+### UNVERIFIED
+- Whether the short-field excess comes from kickoff returns vs turnover field position (requires linking consecutive drives across possession changes).
+- Whether increasing N from 100 to 500 would change the sim's rung probabilities enough to close the 0.147 gap (sampling noise at N=100 is a candidate cause in D133).
+- The end-of-half drive count (real 0.78 vs sim 2.00): my real-side filter to `fixed_drive_result == "End of half"` may undercount game-end drives relative to the 5O verification table (1.62). This does not affect TD/FG/punt findings.
+- Fingerprint `02fbcab6e6ed042e` confirmed at start and end. main untouched.
