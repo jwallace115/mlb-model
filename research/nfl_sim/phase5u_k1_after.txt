@@ -1,0 +1,25 @@
+K1 Table: 4cde6c3abe3aa5b3 | 36f0a1383-dirty | 2026-09-25T20:22:11Z
+N=500, games=4*~272, seasons=[2021, 2022, 2023, 2024]
+
+--- K1 Table ---
+  pts/team                   sim= 22.0359  actual= 22.3864  diff= -0.3504  tolerance: none defined
+  plays/game                 sim=   130.9  actual=124.5     tolerance: none defined
+  drives/game                sim=    23.7  actual=21.9      tolerance: none defined
+  go_rate                    sim=  0.2072  actual=  0.1980  diff= +0.0092  tol=0.0100  PASS
+  off_pen/game               sim=  5.7189  actual=  5.5133  diff= +0.2056  tol=0.5000  PASS
+  def_pen/game               sim=  3.5804  actual=  3.4508  diff= +0.1296  tol=0.5000  PASS
+  fd_pen/team                sim=  1.3121  actual=  1.7282  diff= -0.4161  tol=0.3000  FAIL
+  punts/game                 sim=  8.9851  actual=  7.8997  diff= +1.0854  tolerance: none defined
+  fg_att/game                sim=  3.9629  actual=  3.9227  diff= +0.0402  tol=0.1500  PASS
+  3rd_11+_share              sim=  0.1884  actual=  0.1818  diff= +0.0065  tol=0.0300  PASS
+  nonoff_pts/team            sim=  0.9277  tolerance: none defined
+  margin_sd                  sim=   14.53  actual=   14.20  tolerance: none defined
+  tied_expiry_broad          sim=  0.1034  actual=  0.0000  diff= +0.1034  tol=0.0500  FAIL
+
+--- Non-Offensive Scoring ---
+  ev_int_ret_td/game: 0.1436
+  ev_fum_ret_td/game: 0.0599
+  ev_punt_ret_td/game: 0.0219
+  ev_ko_ret_td/game: 0.0202
+  ev_safeties/game: 0.0746
+  Non-off pts/game: 1.86 (0.93/team)

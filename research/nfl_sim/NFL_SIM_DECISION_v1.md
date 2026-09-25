@@ -2994,3 +2994,24 @@ if ez, touchback at 80; otherwise draw air from non-ez quantiles.
 **What moved:** non-six next start 50.4 -> 53.5 (+3.1 yd improvement). The ez fix accounts for
 ~1.6 yd; the return-table fix (1a) another ~1.5 yd. The remaining 0.7 yd to real (53.5 vs 54.2)
 is within noise. Engine fp: `4cde6c3abe3aa5b3`. Tests: 2/2 pass.
+
+### D156 — 5U Item 3: fit_5u; inside-40 1.56->1.47; TD 1-3 0.152->0.143; next start 50.4->53.5; suite 2 reds (2026-09-25)
+
+Fit: `fit_5u`, 1,087 games, N=5000, ~80 min. Cal, K1, K4, W2/W3 boards.
+
+**Pre-registered:**
+- inside-40 <= 1.45: sim 1.47 — **FAILED** (by 0.02).
+- TD 1-3 share <= 0.14: sim 0.143 — **FAILED** (by 0.003).
+- plays/game 130.9 ± 0.5: sim 130.9 — **HELD** (null).
+- pts/team within 0.5 of 22.23: sim 22.04 — **HELD** (diff 0.19; direction lower).
+- go_rate/off_pen/def_pen/fg_att PASS: all PASS — **HELD** (null).
+- fd_pen ~1.25 FAIL: sim 1.31 — **HELD** (expected FAIL).
+- tied expiry ~7% FAIL: sim 10.3% — **HELD** (expected FAIL; the plays>=1 filter from item 0d
+  applies to the 5A-9 metric but the K1 table calls compute_tied_expiry which uses the filter).
+- TD drives within 0.15 of 4.73: sim 4.72 — **HELD**.
+- Board: SD(sim_p - q) = 0.135, pass att gap +3.5. No target (reported as stated).
+
+**What moved:** inside-40 from 1.56 (5S) to 1.47 (-0.09); TD 1-3 from 0.152 to 0.143 (-0.009);
+non-six next start 50.4 -> 53.5 (+3.1 yd). All from the INT return, air, and ez fixes.
+
+**Suite:** 2 failed, 217 passed. Exit code 1. Reds: fd_pen (expected), tied_drives (expected).
