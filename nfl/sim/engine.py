@@ -95,6 +95,10 @@ def _load_tables():
     depth_path = TABLES_DIR / "pass_depth_outcomes.parquet"
     if depth_path.exists():
         _CACHE["pass_depth"] = pd.read_parquet(depth_path)
+    # 5S: INT air-yards spot table
+    int_spot_path = TABLES_DIR / "int_spot.parquet"
+    if int_spot_path.exists():
+        _CACHE["int_spot"] = pd.read_parquet(int_spot_path)
     # 5A-7: timeout policy and kneel decision tables
     for k, fn in (("timeout_policy", "timeout_policy.parquet"), ("kneel", "kneel_decision.parquet"),
                   ("fg_setup", "fg_setup.parquet"), ("fg_setup_rush", "fg_setup_rush.parquet"),
@@ -813,6 +817,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     p_int_def_td = to_ret["int_p_def_td"]
     p_fum_def_td = to_ret["fum_p_def_td"]
 
+    # 5S: INT air-yards spot table — quantiles by LOS bucket
+    _int_spot_tbl = _CACHE.get("int_spot")
+    _int_spot_q = {}  # los_bucket -> quantile array
+    if _int_spot_tbl is not None:
+        for _, row in _int_spot_tbl.iterrows():
+            _int_spot_q[row["los_bucket"]] = np.array(row["quantiles"])
+
     p_penalty_nop = scalars["penalty"]["p_no_play_penalty"]
     p_off_pen = scalars["penalty"].get("p_noplay_offense", 0.615)
     p_auto_first = scalars["penalty"].get("noplay_auto_first", 0.5)
@@ -1397,6 +1408,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_pfum = rng.random(N)
         u_int_dtd = rng.random(N)
         u_int_ret = rng.random(N)
+        u_int_air = rng.random(N)  # 5S: draw for INT air-yards (catch point)
         u_pfum_dtd = rng.random(N)
         u_pfum_ret = rng.random(N)
         u_pclock = rng.random(N)
@@ -2329,7 +2341,24 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     _handle_td(m, np.full(N, 1 - poss[gi], dtype=np.int8))
                 else:
                     ret = int(np.interp(u_int_ret[gi], np.linspace(0, 1, 101), int_ret_q))
-                    yl[gi] = float(np.clip(100 - (yl[gi] + ret), 1, 99))
+                    # 5S: spot the INT at the catch point, not the LOS
+                    air = 0
+                    if _int_spot_q:
+                        cur_yl = yl[gi]
+                        if cur_yl <= 20: bkt = "1-20"
+                        elif cur_yl <= 40: bkt = "21-40"
+                        elif cur_yl <= 60: bkt = "41-60"
+                        elif cur_yl <= 80: bkt = "61-80"
+                        else: bkt = "81-99"
+                        q_arr = _int_spot_q.get(bkt)
+                        if q_arr is not None:
+                            air = int(np.interp(u_int_air[gi], np.linspace(0, 1, 101), q_arr))
+                    catch_yl = yl[gi] - air  # catch point (yards to EZ)
+                    if catch_yl <= 0:
+                        # Pick in the end zone → touchback at 80 (own 20)
+                        yl[gi] = 80.0
+                    else:
+                        yl[gi] = float(np.clip(100 - (catch_yl + ret), 1, 99))
                     poss[gi] = 1 - poss[gi]
                     m = np.zeros(N, dtype=bool); m[gi] = True; _new_drive(m)
 

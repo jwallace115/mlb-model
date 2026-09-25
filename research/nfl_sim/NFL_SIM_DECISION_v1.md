@@ -2762,3 +2762,23 @@ passes (diff 0.007) because it includes non-4th-down FGs in the denominator, whi
 denominator mismatch that makes it LOOK closer. The sim genuinely goes for it 1% more than real on 4th
 down, which is a marginal fail (0.0003 over tolerance). Queue: fix `go_rate`'s denominator or relabel it.
 No threshold changed.
+
+### D144 — 5S Item 1: INT spotted at catch point; air-yards table from PBP; post-INT start 39.9 → 52.7 (2026-09-25)
+
+Table: `nfl/data/sim/tables/int_spot.parquet` built by `tables.py::build_int_spot_table` from PBP
+2021-24 REG `interception == 1`: 1,675 events, 0 missing air_yards. Quantiles (101 pts) by LOS bucket
+(1-20: n=214 median=8; 21-40: 287/15; 41-60: 475/16; 61-80: 551/14; 81-99: 148/17). Overall median
+14.0 (D141 reported 13.0 from a 1,561-event subset that dropped events without next_drive_start).
+
+Engine fix (engine.py ~line 2331): INT spot = `yl - air_yards` (catch point), not `yl` (LOS). Draw
+`u_int_air` from `rng.random(N)` alongside `u_int_ret` (same play-loop stream). LOS bucket → quantile
+lookup → air yards. Pick in end zone (catch_yl <= 0) → touchback at 80. Formula:
+`yl_new = 100 - (catch_yl + ret)`. Engine fingerprint: `06caa0cbb12bbe6e`.
+
+Test `test_engine_5s.py`: 2/2 pass. Post-INT start 52.5 >= 52 (was ~40 on 5R engine).
+
+**Pre-registered (200 K1 games, N=100):**
+1. Post-INT start 39.9 → 52.7 (within 3 of 56.0) — **HELD** (diff 3.3).
+2. Inside-40 starts/game 1.86 → 1.56 (target <= 1.45) — **FAILED** (direction right, residual 0.11).
+3. TD 1-3 play share 0.180 → 0.152 (target <= 0.14) — **FAILED** (direction right, residual 0.012).
+4. INT rate 1.62 → 1.64 (±0.05) — **HELD**.
