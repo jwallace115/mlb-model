@@ -2630,3 +2630,28 @@ K1 sample, N=100, drive_log=True, 1,087 games, 724s. Fingerprint `02fbcab6e6ed04
   with +0.46 more downs per game (1.53 vs 1.07).
 - Kickoffs: -0.06 (sim MISSES real short-field kickoff returns due to fixed ko_start).
 No engine/parameter change.
+
+### D136 — 5Q Item 2: sim over-produces team receptions by +4 to +8/game; phantom receivers from active_uni breadth (2026-09-25)
+
+Full report: `research/nfl_sim/phase5q_reception_share.md`.
+Parquet: `research/nfl_sim/phase5q_reception_share.parquet` (264 team-game rows).
+Sample A: 2026 W1-2, 32 games, N=500, 52s. Sample B: 2024 100 K1 games, N=500, 147s.
+
+**Pre-registered:**
+1. Team receptions within 0.5 (volume not the problem) -> **FAILED** (+7.8 2026, +4.0 2024).
+2. Top-6 share >= 3pp higher in sim -> **FAILED OPPOSITE** (sim -4.1pp 2026, -6.3pp 2024).
+3. Gap largest at WR -> **N/A** (direction reversed).
+
+**Findings:** The sim over-projects team receptions by +7.8 (2026) and +4.0 (2024) per team.
+The excess is disproportionately at the BOTTOM of the roster: top-6 share sim 0.767 vs real
+0.808 (2026). ~13 active WR/TE/RB per team in active_uni vs ~7 who actually catch passes =
+5.7 phantom receivers, each generating ~1 sim reception = ~6 of the +7.8 excess.
+
+**Mechanism:** `_renormalize_measured` distributes ALL target share across ALL active skill
+players. Active_uni includes backup WRs, blocking TEs, and third-down RBs who are game-day
+active but don't participate in the passing game. The final renormalize-to-1 (line 428-433)
+guarantees these players get non-zero shares, creating phantom receptions.
+
+D134's "+0.25 over-projection for quoted players" was real but masked the larger problem: the
+team total is +4 to +8 high, with ~6 from phantom depth players and ~1.5 from named players.
+No engine/parameter change.
