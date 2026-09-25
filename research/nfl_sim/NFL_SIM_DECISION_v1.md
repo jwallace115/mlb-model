@@ -2553,3 +2553,59 @@ Full note `research/nfl_sim/phase5o_verification_2026-09-23.md`; next order `wor
   on scoring drives) before any fix.
 - Also queued for 5P: decompose sim-vs-book on the Week 2 board into mean error vs dispersion error, by
   player category (no prior season / new team / position / team pass-volume error). Diagnosis only.
+
+### D132 — 5P Item 1: scoring drives are short because of field position AND yards per play (2026-09-25)
+
+Full report: `research/nfl_sim/phase5p_scoring_drives.md`.
+Parquet: `research/nfl_sim/phase5p_drives_by_game.parquet` (8,694 rows).
+
+K1 sample, N=100, `drive_log=True`, 1,087 REG games, 713s runtime. Fingerprint `02fbcab6e6ed042e`.
+
+**Pre-registered predictions:**
+1. Sim TD drives start >= 3 yards closer → **HELD** (62.7 vs 66.3 = -3.6 yards).
+2. Sim YPP on TD drives within 0.3 of real → **FAILED upward** (+0.36: 8.52 vs 8.17).
+3. 1-3-play TD bucket sim share >= 3pp higher → **HELD** (+6.2pp: 0.180 vs 0.118).
+
+**Null:** punt plays/drive 4.21 vs 4.18 = 0.02 diff. HOLDS (< 0.1).
+
+**Diagnosis:** BOTH causes contribute. Field position is primary: sim TD drives start 3.6 yards
+closer, sim generates 0.84 short-field (inside 40) TD starts/game vs 0.54 real (+56%).
+YPP is secondary: sim gains +0.36 YPP on TD drives (not on punt drives: 2.67 = 2.67).
+The short-field excess likely originates from kickoff returns or turnover-created field position
+(punt-drive start yardline is correct: 75.7 vs 75.8). No engine change, no parameter change.
+
+### D133 — 5P Item 2: sim-vs-book gap is 39% mean, 61% player-level shape; no single cause dominates (2026-09-25)
+
+Full report: `research/nfl_sim/phase5p_gap_decomp.md`.
+Parquet: `research/nfl_sim/phase5p_gap_rows.parquet` (131 rows, one per matched player-line).
+
+**Pre-registered predictions:**
+1. Gap is mostly a mean problem (>50% removed by mean replacement) → **FAILED** (39.2% removed).
+2. No-2025 / changed-team players carry >= 0.5 larger mean error → **FAILED** (0.20 / 0.22).
+3. Team pass-error explains < 1/3 of player mean error → **HELD** (~11%).
+
+**Decomposition:** SD(sim_p - book_q) = 0.147 on 131 matched receptions player-lines.
+- Mean bias: sim over-projects by +0.41 receptions on average (WR +0.50, RB +0.25, TE +0.38).
+  Replacing the mean removes 39% of the SD (0.147 → 0.090).
+- Dispersion: sim_sd / book_sd ratio = 0.984 (aggregate match). The remaining 61% is not a
+  global spread error.
+- Team pass volume: explains ~11% of player mean error variance (tercile R²). Most error is
+  player-specific.
+- Player-level shape: individual survival-function shapes diverge from Poisson at the quoted
+  line, explaining the residual. Candidates: sim sampling noise (N=100), game-state mixture
+  effects, book-side information the sim lacks.
+
+Book is a better point predictor (MAE 1.57 vs sim 1.77). No engine/parameter change.
+
+### D134 — 5P verified and MERGED: short fields (+0.64/game) make scoring drives short; the sim over-projects quoted players' receptions by ~0.25 (2026-09-25)
+
+Full note `research/nfl_sim/phase5p_verification_2026-09-25.md`; next order `workorder_5Q_2026-09-25.md`.
+- `eng/5p` @ `67e437b` merged: D132-D133. Diagnosis only; fingerprint `02fbcab6e6ed042e`.
+- Item 1 reproduced from the parquet against an independent PBP derivation: sim starts 1.86 drives/game inside
+  the opponent's 40 vs 1.22 real (+0.64); TD drives start 3.6 yards closer and 18% of them take 1-3 plays (real
+  12%). Punt-drive starts are correct, so the source is the events that create short fields (turnovers +0.27/game,
+  return spots, missed kicks). 5Q item 1 decomposes drive starts by preceding event.
+- Item 2 reproduced. CORRECTIONS: the "+0.41 receptions" is sim mean minus the book's LINE (its median); against
+  the book's mean the sim is +0.25 and against Week 2 actuals +0.28 (book +0.03). "N=100 sampling noise" is not a
+  candidate - the board runs N=5,000. Reading: the sim gives quoted players too large a share of team receptions
+  (team volume explains ~11%); 5Q item 2 measures quoted-player share of team receptions sim vs real.
