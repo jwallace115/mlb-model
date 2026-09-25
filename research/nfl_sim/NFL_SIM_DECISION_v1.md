@@ -2747,3 +2747,18 @@ Full note `research/nfl_sim/phase5r_verification_2026-09-25.md`; next order `wor
 - D141: interceptions are spotted at the line of scrimmage, ignoring air yards (engine.py:2331); error 15.5 yd
   expected, 16.2 observed. 5S item 1 fixes it with one re-fit. `test_score_vs_book` pins a row count that moves
   with every re-fit: 5S rewrites it. `like_for_like_go` has been red since 5L and is investigated in 5S.
+
+### D143 — 5S Item 0: test_score_vs_book rewritten for structure; like_for_like_go investigated (2026-09-25)
+
+**0a.** `test_score_vs_book.py` rewritten: 6 tests assert structure (required columns, no placed rows,
+broken-input detection, bootstrap runs) instead of pinning row count at 146. All 6 pass. The old tests
+that pinned `len(u) == 146` are replaced.
+
+**0b.** `like_for_like_go` investigation: the metric uses a 4th-down-only denominator (go + punts +
+FG_on_4th) while `go_rate` uses ALL plays (go + punts + ALL FGs). Both compare against `act["go_rate"]`
+= 0.198 (which IS the 4th-down-only actual from PBP: 3085/15579 = 0.1980). So `like_for_like_go` is the
+CORRECT apples-to-apples metric (both sides 4th-down denominator, diff 0.0103 vs tol 0.0100). `go_rate`
+passes (diff 0.007) because it includes non-4th-down FGs in the denominator, which dilutes the rate — a
+denominator mismatch that makes it LOOK closer. The sim genuinely goes for it 1% more than real on 4th
+down, which is a marginal fail (0.0003 over tolerance). Queue: fix `go_rate`'s denominator or relabel it.
+No threshold changed.
