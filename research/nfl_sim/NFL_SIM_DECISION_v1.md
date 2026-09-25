@@ -2884,3 +2884,19 @@ HELD (0.7); (3) NULL air/ret within 1 yd FAILED (air -1.2, ret -1.7).
 "other" cell (air-yard and return deficits from the unconditional LOS-bucket draw). The fix is
 to condition the air draw on the engine's own pass depth. Engine fp `2b9666346a810f9f` (changed
 from source hash of the drive_log instrumentation, not a simulation change). Tests: 2/2 pass.
+
+### D150 — 5T Item 2: tied_drives red diagnosed — 94% of expired drives ended in FG range; clock management deficiency (2026-09-25)
+
+Report: `phase5t_tied_expiry.md`. Parquet: `phase5t_tied_expiry.parquet` (33 expired drives).
+5A-9 sample, N=500, 14s. Diagnosis only.
+
+340 reached, 33 expired (9.71%, real 0/56). 94% of expired drives ended with yl <= 45 (FG range);
+mean end yardline 28.2. These drives reach FG range but the clock expires before a FG is attempted.
+Non-expired drives kick FGs at 59.6%.
+
+**Pre-registered (>= 60% in final 10s with no spike/TO):** **FAILED** — mechanism is broader.
+Drives start with median 31.6s, run 3.5 plays, reach yl ~28, and the clock expires. The
+FG-decision/clock-management logic does not switch to FG-attempt mode in time.
+
+Not a one-table/one-branch fix: requires tracing the interaction between `eoh_fg_decision`,
+`fg_setup`, and clock-runoff timing. Queued.
