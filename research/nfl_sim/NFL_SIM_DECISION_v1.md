@@ -2670,3 +2670,80 @@ Full note `research/nfl_sim/phase5q_verification_2026-09-25.md`; next order `wor
   full-season pace is 34-35 s. K1 rows: 139.7 plays/game in weeks 1-2 vs 127-130 weeks 3+ (real 124.5).
   Every 2026 board has run on it; the 2021-24 fit absorbed it. 5R fixes the builder (prior-season prior +
   measured shrinkage), re-fits once, and logs post-anchoring pass volume on the board.
+
+### D138 — 5R Item 1: tendency defect measured (194 default team-weeks, +15.7 plays/game weeks 1-2, +6.1 pass att vs book); board team_volume LOG added (2026-09-25)
+
+Full report: `research/nfl_sim/phase5r_tendency_audit.md`.
+Audit script: `nfl/sim/run_tendency_audit_5r.py`. Team volume parquet: `nfl/data/sim/outputs/week=2026_02/team_volume.parquet`.
+
+**Pre-registered:** (1) all week-1 team-weeks on default — **HELD** (194 defaults); (2) K1 wk1-2
+plays exceed wk5+ by >= 8 — **HELD** (11.1); (3) anchored sim pass att exceed book QB lines by
+>= 5 — **HELD** (+6.1). Board re-run sim_p/cal_p **bit-identical** to picks_log_mac (1353/1353).
+
+LOG-ONLY addition to `run_week.py`: team_volume table (per-game pass att, completions, rushes,
+plays per team AFTER anchoring) saved beside picks_log. No behaviour change. Fingerprint unchanged.
+
+### D139 — 5R Item 2: build_tendencies gets prior-season prior + measured shrinkage; k_pace=200, k_tendency=200 (both stay at 200) (2026-09-25)
+
+Report: `research/nfl_sim/phase5r_tendency_audit.md` (extended). K results: `phase5r_tendency_k_results.parquet`.
+Test: `nfl/sim/tests/test_ratings_5r.py` (2/2 pass). Builder: `nfl/sim/run_tendency_k_5r.py`.
+
+**Change to `ratings.py::build_tendencies`:** Week-1 (no prior data) uses the team's own prior-season
+full-season pace and PROE (league mean when no prior exists), not hardcoded 28.0 / 0.0. Pace is now
+shrunk as `(n * obs + k_pace * prior) / (n + k_pace)` where n = neutral-score diff count. PROE shrink
+target changed from 0.0 to the team's prior-season PROE. `k_pace = 200` added to `params_v1.json`.
+
+**Measured (run_tendency_k_5r.py):** k in {25, 50, 100, 200, 400, 800}, scored on 2021-24, 2025 holdout.
+Both curves are U-shaped with minimum at 200. Prior-season prior drops week-1 pace MAE by 69%
+(7.608 -> 2.333 on 2025 holdout). k_tendency=200 unchanged (already optimal).
+
+**Pre-registered:** (1) k_pace >= 100 — **HELD** (200); (2) week-1 MAE falls > 40% — **HELD** (69%);
+(3) k_tendency within 2x of 200 — **HELD** (200 exactly).
+
+Week-1 pace now 30.1-38.2 (was 28.0). n_plays still 0. New usage_fingerprint: `3638769c89030de0`.
+Board SUPPRESSED until Item 3 re-fit.
+
+### D140 — 5R Item 3: fit_5r re-fit; K1 wk1-2 plays 139.7->129.5; board pass att +6.1->+3.7; SD 0.149->0.134 (2026-09-25)
+
+Fit: `fit_5r`, 1,087 games, N=5000, ~60 min. Cal maps: `calibration_v1.json`.
+K1: `phase5r_k1_after.txt` + `phase5r_k1_after_rows.parquet`. K4: `phase5r_k4.parquet`.
+Boards: `phase5r_boards/picks_log_mac.parquet` (W2), `picks_log_w3.parquet` (W3).
+
+**Pre-registered:**
+(a) K1 plays/g <= 127 — **FAILED** (131.1); wk1-2 <= 131 — **HELD** (129.5); drives <= 23.0 — **FAILED** (23.9); punts <= 8.5 — **FAILED** (8.89).
+(b) pts/team within 0.5 of 22.75 — **HELD** (22.90); go_rate/off_pen/def_pen/fg_att within K1 tolerances — **HELD** (all PASS).
+(c) Board pass att within 2 of book — **FAILED** (+3.7, was +6.1); SD(sim_p-q) < 0.12 — **FAILED** (0.134, was 0.149).
+
+**Direction is right on all targets.** Weeks 1-2 plays: 139.7 -> 129.5 (-10.2). Board pass att gap: +6.1 -> +3.7 (-2.4). SD: 0.149 -> 0.134 (-0.015 = -10%). The residual is the unshrunk pace in weeks 2+ (one game's raw pace has n=~60, k=200, so it's 23% raw + 77% prior — substantial shrinkage but not enough to close the remaining gap alone; other factors like the INT spot contribute).
+
+**Suite:** 5 failed, 206 passed. Pre-existing reds: fd_pen, tied_drives, like_for_like_go (was already FAIL). New: player_off_hash (re-recorded); score_vs_book universe 146->182 (expected: new cal maps change which legs qualify — not an engine bug). No genuinely new failures.
+
+Engine fingerprint: `5ee4b1009301783d`. Usage: `3638769c89030de0`.
+
+### D141 — 5R Item 4: INT spot is at the LOS, not the catch point; error = air yards (~15.5 yds) (2026-09-25)
+
+Report: `research/nfl_sim/phase5r_int_spot.md`. Parquet: `phase5r_int_spot.parquet` (32,485 sim INT events).
+200 K1 games (seed 42), N=100, drive_log=True, 214s. DIAGNOSIS ONLY.
+
+**Pre-registered:**
+1. Engine spots INT at LOS / sim air yards >= 4 higher → **HELD** (engine spots at LOS; real median air yards = 13.0).
+2. INT rate per attempt within 0.3pp of real → **HELD** (sim 1.62/game vs real 1.54, diff ~0.2pp per attempt).
+
+**Mechanism:** engine.py:2331-2332 computes `yl_new = 100 - (yl_at_LOS + return)`. Correct formula:
+`yl_new = 100 - (yl_at_LOS - air_yards + return)`. The engine treats the INT as occurring at the LOS,
+not at the catch point. Expected error = mean air_yards = 15.5 yards. Observed: sim post-INT drives
+start at 39.9 vs real 56.0 = -16.2 yards. This accounts for ~all of D135's 13-yard gap between sim
+and real INT-started drives. INT rate is close (+0.08 INTs/game). No fix applied.
+
+### D142 — 5R verified and MERGED (fit_5r, engine `5ee4b1009301783d`); pace is a ratio so the tendency fix only moved weeks 1-2; the INT-spot bug is next (2026-09-25)
+
+Full note `research/nfl_sim/phase5r_verification_2026-09-25.md`; next order `workorder_5S_2026-09-25.md`.
+- `eng/5r` @ `43b380f` merged: D138-D141. Week-1 tendencies now carry the prior season; pace shrunk with
+  k_pace = 200 (measured; curve flat 100-200). K1 weeks 1-2 plays 139.7 -> 129.5; board pass attempts +6.1 -> +3.7
+  vs the book; SD(raw) 0.149 -> 0.134. Targets < 2 and < 0.12 FAILED and were reported.
+- **Not in D140:** overall K1 plays ROSE 130.3 -> 131.1 because the engine scales the clock by team_pace /
+  lg_pace and lg_pace rose once the 28.0 rows were gone; weeks 3+ run ~2% more plays. Absolute plays come from
+  the clock tables; pace only redistributes. The season-long +5-6 plays is the short-drive problem, not pace.
+- D141: interceptions are spotted at the line of scrimmage, ignoring air yards (engine.py:2331); error 15.5 yd
+  expected, 16.2 observed. 5S item 1 fixes it with one re-fit. `test_score_vs_book` pins a row count that moves
+  with every re-fit: 5S rewrites it. `like_for_like_go` has been red since 5L and is investigated in 5S.

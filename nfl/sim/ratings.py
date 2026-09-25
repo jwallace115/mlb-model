@@ -418,6 +418,41 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means,
             p = 0.15  # conservative fallback
         return p
 
+    k_pace = params.get("k_pace", 200)
+
+    # 5R: Pre-compute prior-season full-season values for each (season, team).
+    # The prior for week 1 is the team's own prior-season full-season pace/PROE.
+    # League mean is the fallback when the team has no prior season data.
+    prior_season_vals = {}  # (season, team) -> (proe, pace)
+    league_prior = {}       # season -> (lg_proe, lg_pace)
+    for season in OUTPUT_SEASONS:
+        prior_s = scrimmage_plays[scrimmage_plays["season"] == season - 1]
+        if prior_s.empty:
+            league_prior[season] = (0.0, 34.0)
+            continue
+        team_paces = []
+        team_proes = []
+        for team in prior_s["posteam"].unique():
+            tp = prior_s[prior_s["posteam"] == team]
+            # PROE: mean pass_oe
+            vp = tp[tp["pass_oe"].notna()]
+            t_proe = vp["pass_oe"].mean() if len(vp) else 0.0
+            # Pace: same neutral-score definition as the weekly builder
+            neutral = tp[(tp["score_differential"].abs() <= 8) &
+                         (tp["qtr"].isin([1, 2, 3]))]
+            t_pace = 34.0  # fallback
+            if len(neutral) > 10 and "game_seconds_remaining" in neutral.columns:
+                diffs = neutral.sort_values(["game_id", "game_seconds_remaining"],
+                                            ascending=[True, False]).groupby(
+                    "game_id")["game_seconds_remaining"].diff().abs()
+                vd = diffs[(diffs > 5) & (diffs < 60)]
+                if len(vd):
+                    t_pace = vd.mean()
+            prior_season_vals[(season, team)] = (t_proe, t_pace)
+            team_paces.append(t_pace)
+            team_proes.append(t_proe)
+        league_prior[season] = (np.mean(team_proes), np.mean(team_paces))
+
     rows = []
     for season in OUTPUT_SEASONS:
         ss = scrimmage_plays[scrimmage_plays["season"] == season]
@@ -433,22 +468,29 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means,
         ]
         lg_4th_go = fourth_all["play_type"].isin(["pass", "run"]).mean() if len(fourth_all) else 0.5
 
+        lg_proe_prior, lg_pace_prior = league_prior.get(season, (0.0, 34.0))
+
         for team in teams:
             tp_scrim = ss[ss["posteam"] == team]
+            # 5R: team's prior-season values (league mean if no prior season)
+            prior_proe, prior_pace = prior_season_vals.get(
+                (season, team), (lg_proe_prior, lg_pace_prior))
+
             for w in weeks:
                 avail = tp_scrim[tp_scrim["week"] < w]
                 if avail.empty:
+                    # 5R: week 1 uses the prior-season value, not hardcoded defaults
                     rows.append({"season": season, "week": w, "team": team,
-                                  "proe": 0.0, "pace_sec": 28.0,
+                                  "proe": prior_proe, "pace_sec": prior_pace,
                                   "fourth_down_go_rate": lg_4th_go,
                                   "fourth_down_goe": 0.0, "n_plays": 0})
                     continue
 
-                # Overall PROE
+                # Overall PROE — 5R: shrink toward prior-season PROE (was 0.0)
                 valid = avail[avail["pass_oe"].notna()]
-                proe = _shrink(valid["pass_oe"].mean(), len(valid), k_t, 0.0) if len(valid) else 0.0
+                proe = _shrink(valid["pass_oe"].mean(), len(valid), k_t, prior_proe) if len(valid) else prior_proe
 
-                # Pace
+                # Pace — 5R: shrink toward prior-season pace (was unshrunk)
                 neutral = avail[(avail["score_differential"].abs() <= 8) &
                                 (avail["qtr"].isin([1, 2, 3]))]
                 if len(neutral) > 10 and "game_seconds_remaining" in neutral.columns:
@@ -456,9 +498,9 @@ def build_tendencies(scrimmage_plays, all_plays, params, league_means,
                                                 ascending=[True, False]).groupby(
                         "game_id")["game_seconds_remaining"].diff().abs()
                     vd = diffs[(diffs > 5) & (diffs < 60)]
-                    pace = vd.mean() if len(vd) else 28.0
+                    pace = _shrink(vd.mean(), len(vd), k_pace, prior_pace) if len(vd) else prior_pace
                 else:
-                    pace = 28.0
+                    pace = prior_pace
 
                 # Legacy fourth_down_go_rate (narrow definition)
                 avail_all = all_s[(all_s["week"] < w) & (all_s["posteam"] == team)]
@@ -881,6 +923,7 @@ def main():
         "k_qb": best["k"],
         "k_kicker": 50,
         "k_tendency": 200,
+        "k_pace": 200,
         "tuned_on": "2021-2024",
         "holdout": "2025",
         "built_at_parent_commit": sha,

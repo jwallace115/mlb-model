@@ -1036,6 +1036,42 @@ def main():
         n_games = alog_df["game"].nunique()
         print(f"{'TOTAL':16s}      {n_m05:6d} {n_t10:5d} {n_2se:4d} / {n_games}")
 
+    # 5R: LOG team volume per game AFTER anchoring (no behaviour change)
+    tv_rows = []
+    for gr in game_results:
+        td = gr["team_df"]
+        home, away = gr["home"], gr["away"]
+        for team, is_home in [(home, True), (away, False)]:
+            # ev_pass_plays and ev_rush_plays are per-sim game totals (both teams)
+            # per-team breakdown not directly in team_df; use player_df
+            pdf = gr.get("player_df")
+            if pdf is not None and len(pdf) > 0:
+                tp = pdf[pdf["team"] == team]
+                sim_pass_att = tp.groupby("sim_id")["pass_att"].sum().mean()
+                sim_comp = tp.groupby("sim_id")["pass_cmp"].sum().mean()
+                sim_rushes = tp.groupby("sim_id")["carries"].sum().mean()
+                sim_rec = tp.groupby("sim_id")["receptions"].sum().mean()
+            else:
+                sim_pass_att = sim_comp = sim_rushes = sim_rec = float("nan")
+            sim_plays = sim_pass_att + sim_rushes
+            tv_rows.append({
+                "game": f"{away}@{home}", "team": team, "is_home": is_home,
+                "sim_pass_att": round(sim_pass_att, 1),
+                "sim_completions": round(sim_comp, 1),
+                "sim_rushes": round(sim_rushes, 1),
+                "sim_plays": round(sim_plays, 1),
+                "sim_receptions": round(sim_rec, 1),
+            })
+    if tv_rows:
+        tv_df = pd.DataFrame(tv_rows)
+        tv_path = out_dir / "team_volume.parquet"
+        tv_df.to_parquet(tv_path, index=False)
+        print(f"\nTeam volume log: {tv_path} ({len(tv_df)} rows)")
+        print(f"  Mean sim pass att/team: {tv_df['sim_pass_att'].mean():.1f}")
+        print(f"  Mean sim completions/team: {tv_df['sim_completions'].mean():.1f}")
+        print(f"  Mean sim rushes/team: {tv_df['sim_rushes'].mean():.1f}")
+        print(f"  Mean sim plays/team: {tv_df['sim_plays'].mean():.1f}")
+
     # Build board
     board_text, all_legs = build_board(week, game_results, lines, team_game_counts,
                                         roster, roster_lookups, pull_ts_str,
