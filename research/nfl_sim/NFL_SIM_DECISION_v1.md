@@ -2900,3 +2900,18 @@ FG-decision/clock-management logic does not switch to FG-attempt mode in time.
 
 Not a one-table/one-branch fix: requires tracing the interaction between `eoh_fg_decision`,
 `fg_setup`, and clock-runoff timing. Queued.
+
+### D151 — 5T Item 3: fd_pen red diagnosed — missing 0.32 is live-play auto-FD fouls the sim can't produce (2026-09-25)
+
+Report: `phase5t_fd_pen.md`. Diagnosis only.
+
+Real 1.728 FD-by-penalty/team breaks as: auto-FD 77.5% (DPI 0.50, holding 0.33, roughing 0.19,
+UNR 0.19, illegal contact 0.11) + yardage-crossed 22.5% (face mask, offside, etc.). Sim 1.409.
+
+**Pre-registered (missing 0.32 in auto-FD at no-play rate): HELD.** The sim's category model has
+correct per-penalty auto_first rates (99%+ for DPI/holding/roughing). The deficit is the TOTAL
+COUNT: the sim fires penalties only as no-play events (pre-snap replacement), while real football
+also has ~3-4 accepted live-play penalties/game (DPI during a pass, holding during a run) that
+carry automatic first downs. The engine has no live-play penalty mechanism.
+
+Null: off_pen 5.73 PASS, def_pen 3.58 PASS (untouched).
