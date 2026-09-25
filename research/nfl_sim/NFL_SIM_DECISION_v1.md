@@ -2553,3 +2553,23 @@ Full note `research/nfl_sim/phase5o_verification_2026-09-23.md`; next order `wor
   on scoring drives) before any fix.
 - Also queued for 5P: decompose sim-vs-book on the Week 2 board into mean error vs dispersion error, by
   player category (no prior season / new team / position / team pass-volume error). Diagnosis only.
+
+### D132 — 5P Item 1: scoring drives are short because of field position AND yards per play (2026-09-25)
+
+Full report: `research/nfl_sim/phase5p_scoring_drives.md`.
+Parquet: `research/nfl_sim/phase5p_drives_by_game.parquet` (8,694 rows).
+
+K1 sample, N=100, `drive_log=True`, 1,087 REG games, 713s runtime. Fingerprint `02fbcab6e6ed042e`.
+
+**Pre-registered predictions:**
+1. Sim TD drives start >= 3 yards closer → **HELD** (62.7 vs 66.3 = -3.6 yards).
+2. Sim YPP on TD drives within 0.3 of real → **FAILED upward** (+0.36: 8.52 vs 8.17).
+3. 1-3-play TD bucket sim share >= 3pp higher → **HELD** (+6.2pp: 0.180 vs 0.118).
+
+**Null:** punt plays/drive 4.21 vs 4.18 = 0.02 diff. HOLDS (< 0.1).
+
+**Diagnosis:** BOTH causes contribute. Field position is primary: sim TD drives start 3.6 yards
+closer, sim generates 0.84 short-field (inside 40) TD starts/game vs 0.54 real (+56%).
+YPP is secondary: sim gains +0.36 YPP on TD drives (not on punt drives: 2.67 = 2.67).
+The short-field excess likely originates from kickoff returns or turnover-created field position
+(punt-drive start yardline is correct: 75.7 vs 75.8). No engine change, no parameter change.
