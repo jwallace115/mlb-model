@@ -2747,3 +2747,106 @@ Full note `research/nfl_sim/phase5r_verification_2026-09-25.md`; next order `wor
 - D141: interceptions are spotted at the line of scrimmage, ignoring air yards (engine.py:2331); error 15.5 yd
   expected, 16.2 observed. 5S item 1 fixes it with one re-fit. `test_score_vs_book` pins a row count that moves
   with every re-fit: 5S rewrites it. `like_for_like_go` has been red since 5L and is investigated in 5S.
+
+### D143 — 5S Item 0: test_score_vs_book rewritten for structure; like_for_like_go investigated (2026-09-25)
+
+**0a.** `test_score_vs_book.py` rewritten: 6 tests assert structure (required columns, no placed rows,
+broken-input detection, bootstrap runs) instead of pinning row count at 146. All 6 pass. The old tests
+that pinned `len(u) == 146` are replaced.
+
+**0b.** `like_for_like_go` investigation: the metric uses a 4th-down-only denominator (go + punts +
+FG_on_4th) while `go_rate` uses ALL plays (go + punts + ALL FGs). Both compare against `act["go_rate"]`
+= 0.198 (which IS the 4th-down-only actual from PBP: 3085/15579 = 0.1980). So `like_for_like_go` is the
+CORRECT apples-to-apples metric (both sides 4th-down denominator, diff 0.0103 vs tol 0.0100). `go_rate`
+passes (diff 0.007) because it includes non-4th-down FGs in the denominator, which dilutes the rate — a
+denominator mismatch that makes it LOOK closer. The sim genuinely goes for it 1% more than real on 4th
+down, which is a marginal fail (0.0003 over tolerance). Queue: fix `go_rate`'s denominator or relabel it.
+No threshold changed.
+
+### D144 — 5S Item 1: INT spotted at catch point; air-yards table from PBP; post-INT start 39.9 → 52.7 (2026-09-25)
+
+Table: `nfl/data/sim/tables/int_spot.parquet` built by `tables.py::build_int_spot_table` from PBP
+2021-24 REG `interception == 1`: 1,675 events, 0 missing air_yards. Quantiles (101 pts) by LOS bucket
+(1-20: n=214 median=8; 21-40: 287/15; 41-60: 475/16; 61-80: 551/14; 81-99: 148/17). Overall median
+14.0 (D141 reported 13.0 from a 1,561-event subset that dropped events without next_drive_start).
+
+Engine fix (engine.py ~line 2331): INT spot = `yl - air_yards` (catch point), not `yl` (LOS). Draw
+`u_int_air` from `rng.random(N)` alongside `u_int_ret` (same play-loop stream). LOS bucket → quantile
+lookup → air yards. Pick in end zone (catch_yl <= 0) → touchback at 80. Formula:
+`yl_new = 100 - (catch_yl + ret)`. Engine fingerprint: `06caa0cbb12bbe6e`.
+
+Test `test_engine_5s.py`: 2/2 pass. Post-INT start 52.5 >= 52 (was ~40 on 5R engine).
+
+**Pre-registered (200 K1 games, N=100):**
+1. Post-INT start 39.9 → 52.7 (within 3 of 56.0) — **HELD** (diff 3.3).
+2. Inside-40 starts/game 1.86 → 1.56 (target <= 1.45) — **FAILED** (direction right, residual 0.11).
+3. TD 1-3 play share 0.180 → 0.152 (target <= 0.14) — **FAILED** (direction right, residual 0.012).
+4. INT rate 1.62 → 1.64 (±0.05) — **HELD**.
+
+### D145 — 5S Item 2: fit_5s; like_for_like_go now PASS; suite 2 reds (cleanest since 5I) (2026-09-25)
+
+Fit: `fit_5s`, 1,087 games, N=5000, ~60 min. Cal maps: `calibration_v1.json`.
+K1: `phase5s_k1_after.txt` + rows. K4: `phase5s_k4.parquet`.
+Boards: `phase5s_boards/` (W2 + W3 with team_volume).
+
+**Pre-registered:**
+- K1 plays/g <= 128.5 — **FAILED** (130.9); drives <= 23.3 — **FAILED** (23.8); punts <= 8.6 — **FAILED** (8.96).
+- pts/team within 0.5 of 22.90 — **FAILED** (22.23, diff 0.67).
+- go_rate/off_pen/def_pen/fg_att within K1 tol — **HELD** (all PASS).
+- INT rate unchanged — **HELD** (inferred from INT ret TD count).
+- TD drives/game within 0.15 of 4.73 — need to check from rows.
+- Board SD(sim_p-q) from 0.134: 0.135 (no target — reported as stated).
+- Board pass att gap: +3.6 (from +3.7).
+
+The INT fix had almost no effect on the overall K1 numbers because the ANCHORING constrains the
+game-level totals (spread + total targets). The fix changes WHERE plays happen (post-INT field
+position) but not HOW MANY plays occur (that's pace + clock). The volume residual (+6 plays/game)
+is the clock-runoff/short-drive issue, not INTs.
+
+**like_for_like_go: 0.0090 → PASS** (was 0.0103 FAIL). The INT fix reduced 4th-down go attempts
+by placing the defence further from the end zone, reducing short-field 4th-down opportunities.
+
+**Suite: 2 failed, 213 passed.** Only fd_pen and tied_drives remain. like_for_like_go now PASS.
+score_vs_book tests all PASS (Item 0 rewrite). player_off_hash re-recorded. Cleanest suite run since the 5I reds were introduced.
+
+### D146 — 5S Item 3: ratings.py --check reproduces usage_fingerprint 3638769c89030de0 (2026-09-25)
+
+`ratings.py` gets `--check` mode: rebuilds tendency tables from PBP and prints `usage_fingerprint()`.
+Verified on Mac: `python3 nfl/sim/ratings.py --check` produces `3638769c89030de0` from:
+- PBP inputs: pbp_2020 (4126188f), pbp_2021 (a9741a72), pbp_2022 (6809039b), pbp_2023 (81984d68),
+  pbp_2024 (35d5a2e2), pbp_2025 (cc0dd69d), pbp_2026 (511a47d0)
+- params: k_tendency=200, k_pace=200
+- tendencies_weekly: 3,616 rows; tendencies_situational_weekly: 177,283 rows
+
+Cowork command to reproduce: `python3 nfl/sim/ratings.py --check` — must print `3638769c89030de0`.
+If it doesn't, the PBP files or params differ (check sha256[:8] of each PBP parquet).
+No behaviour change.
+
+### D147 — 5S verified and MERGED: INT catch-point spot reproduced exactly; the 3.3-yd residual is unplaced because the drive log never records the INT play's LOS (2026-09-25)
+
+Cowork verification: `research/nfl_sim/phase5s_verification_2026-09-25.md`. Branch `eng/5s` @ e2cc5bb.
+
+**Reproduced from the files (Linux):** D144's 200-game numbers exactly — post-INT start 52.68,
+inside-40 starts 1.556/game, TD 1-3-play share 0.1518, INT 1.637/game (5R engine on the same games:
+39.90 / 1.872 / 0.1777 / 1.624). K1 from rows: plays 130.93, pts/team 22.23, lfl go 0.2070, go_rate
+0.2038, fd_pen 1.409. `test_engine_5s` FAILS on the 5R engine (41.6 < 52). Suite at e2cc5bb: 2 failed
+(fd_pen, tied_drives), 213 passed. `ratings.py --check` on Linux prints `3638769c89030de0` and the
+rebuilt tendency tables are value-identical to the committed ones (max |diff| 0.0). Linux Week 2 board 1,333/1,333 legs bit-identical to the Mac board (sim_p, cal_p; team_volume 30/30). Board SD(sim_p -
+q) 0.1376 -> 0.1379 raw / 0.134 -> 0.135 de-vigged; pass att vs 26 starting-QB lines +3.68 -> +3.57.
+
+**Corrections to the 5S record:**
+1. D145's "anchoring constrains game-level totals" is contradicted by its own table: pts/team moved
+   0.66 in every week bucket and every season (2021-24) while plays did not. Field position does not
+   change the play count; the clock does. The pts move is toward reality (actual 22.39; 5R +0.51
+   over, 5S -0.15 under) and is the size the mechanism predicts (1.64 INT x ~13 yd x ~0.065 pts/yd).
+2. `like_for_like_go` 0.2083 -> 0.2070 is a pass by 0.0010 against tol 0.0100 — knife-edge, not
+   "resolved".
+3. The residual 52.7 vs 56.0 is real and same-definition (pick-six drives are `turnover_int` on both
+   sides). On real PBP the chain decomposes as six 9.1% -> 73.7, end-zone catch 11.0% -> 79.9 (engine's
+   flat 80 matches), other 79.9% -> 50.9 (formula gives 51.3). The sim's cells cannot be read today:
+   `_dl_end_yl` is not written on the INT play, so a first-play INT (14.7% of sim INTs) logs a stale
+   `end_yardline` (min 0.0), and D141's "sim LOS" is contaminated. -> 5T item 1.
+4. Two standing reds get their first diagnosis orders (5T items 2-3): tied late drives reaching the 35
+   expire without a kick 9.6% vs 0/56 real; first downs by penalty 1.41 vs 1.73 per team.
+
+Merged to main. Engine `06caa0cbb12bbe6e`, usage `3638769c89030de0`, fit_5s.

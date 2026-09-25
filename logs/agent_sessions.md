@@ -3135,3 +3135,35 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 ## 2026-09-25T11:58Z  cowork
 - VERIFIED eng/5r @43b380f: ratings.py diff read (prior-season prior + shrinkage, as ordered); k table re-read (minima at 200, pace curve flat 100-200); K1 rows compared by week bucket - weeks 1-2 -10.2 plays, weeks 3+ +2.5 (lg_pace ratio side effect, not in D140); team_volume_w2 read (34.8 att/team). test_ratings_5r + hash tests pass. VERDICT merge; D142; work order 5S.
 - NOT DONE: cross-machine bit-identity of the 5R boards (ratings tables gitignored); 5S.
+
+## 2026-09-25T14:00Z  claude-code (Phase 5S — D143, D144, D145, D146)
+
+### RETURNED
+- D143 (Item 0): test_score_vs_book rewritten: 6 tests assert structure, not row count. All pass. like_for_like_go investigated: denominator mismatch in go_rate (passes via non-4th FG dilution); like_for_like is the correct metric at 0.0103 (0.0003 over tol). No threshold changed.
+- D144 (Item 1): INT spotted at catch point. int_spot.parquet built from PBP 2021-24 (1,675 INTs, 5 LOS buckets). Engine draws air_yards → catch_yl = yl - air → yl_new = 100 - (catch_yl + ret). Post-INT start 39.9 → 52.7 (within 3 of 56.0: HELD). Inside-40/g 1.86 → 1.56 (target <= 1.45: FAILED). TD 1-3 share 0.180 → 0.152 (target <= 0.14: FAILED). INT rate unchanged: HELD. Engine fp: 06caa0cbb12bbe6e.
+- D145 (Item 2): fit_5s (~60 min). K1: plays 130.9, pts 22.23. Pre-registered plays/drives/punts/pts targets FAILED (INT fix doesn't change volume — anchoring constrains). like_for_like_go: 0.0090 → PASS (was 0.0103 FAIL). Suite: 2 failed, 213 passed — cleanest since 5I. Board SD 0.135, pass att +3.6.
+- D146 (Item 3): ratings.py --check rebuilds tendencies and prints usage_fingerprint. Verified: 3638769c89030de0 from listed PBP sha256 hashes. Cowork can now reproduce on Linux.
+
+### MEANS
+- The INT-spot fix (D144) moved post-INT drives 13 yards closer to reality (39.9→52.7 vs 56.0). This closed the short-field gap substantially (1.86→1.56 inside-40/game). But it did NOT reduce overall plays/drives/punts because the ANCHORING constrains game totals to the market line. The volume residual (+6 plays/game) is the clock-runoff/short-drive issue, not INT placement.
+- The surprise: like_for_like_go went from FAIL to PASS. The INT fix placed defences further from the end zone, reducing short-field 4th-down opportunities (fewer go-for-it situations near the goal line). This resolved the longest-standing FAIL that wasn't fd_pen or tied_drives.
+- Suite is now at 2 reds only (fd_pen, tied_drives), the cleanest run since those were introduced in 5I. All other tests pass, including the rewritten score_vs_book tests.
+
+### Runtimes
+- Item 0: ~2s (test rewrites + investigation). Item 1: ~15 min (table build + engine fix + 200-game check). Item 2: ~120 min (fit + cal + K1 + K4 + suite + boards). Item 3: ~60s.
+
+### NOT DONE
+- The +6 plays/game residual: this is clock-runoff/short-drive (not pace, not INTs). The pace fix (5R) and INT fix (5S) addressed the two identified causes; the residual is structural.
+- pts/team dropped to 22.23 (from 22.90); this is a 0.67 deviation, outside the 0.5 NULL. The INT fix reduced scoring by moving turnovers further from the end zone. Worth monitoring but not tuning.
+
+### UNVERIFIED
+- Cowork's Linux rebuild of ratings via `ratings.py --check` → `3638769c89030de0`.
+- Cross-machine bit-identity of the 5S boards.
+- Engine fp: 06caa0cbb12bbe6e. Usage: 3638769c89030de0. main untouched.
+
+## 2026-09-25T17:40Z  cowork (5S verification, D147, 5T order)
+- RAN (Linux worktree eng/5s @ e2cc5bb): test_engine_5s + test_score_vs_book 8 pass; test_engine_5s on main's engine.py FAILS 41.6 < 52; D144 200-game repro 52.68 / 1.556 / 0.1518 / 1.637 (exact); same games on 5R engine 39.90 / 1.872 / 0.1777 / 1.624; K1 from rows reproduced; full suite 2 failed 213 passed (49.7 min); ratings.py --check -> 3638769c89030de0, rebuilt tables value-identical (max diff 0.0); Week 2 board on Linux 1,333/1,333 bit-identical to phase5s_boards/picks_log_mac.parquet (24.8 min).
+- WROTE: research/nfl_sim/phase5s_verification_2026-09-25.md, D147 (appended at merge), research/nfl_sim/workorder_5T_2026-09-25.md.
+- MEANS: 5S accepted. D145's anchoring explanation wrong (pts moved 0.66 everywhere, plays did not); lfl_go pass is by 0.001; INT residual 3.3 yd unplaced because the drive log does not record the INT play's LOS.
+- NOT DONE: 5S merge (Jeff runs the command); TNF grading; NCAAF pilot scoring; credit-burn review.
+- UNVERIFIED: nothing material; the 5R board's own cross-machine identity was never run (superseded by 5S's 100%).

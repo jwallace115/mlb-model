@@ -1075,5 +1075,60 @@ def main():
     print("\nPhase 1A-FIX complete.")
 
 
+def check_mode():
+    """5S: --check mode. Rebuilds tendency tables and prints usage_fingerprint.
+    Does NOT re-tune team rating parameters. Used for reproducibility verification."""
+    import hashlib
+    sys.path.insert(0, str(ROOT))
+    from nfl.sim.calibration import usage_fingerprint
+
+    print("ratings.py --check: rebuilding tendency tables and verifying fingerprint")
+    print("=" * 60)
+
+    print("\nLoading PBP (2020–2026)...")
+    all_plays = load_all_pbp()
+    scrimmage = filter_scrimmage(all_plays)
+    print(f"  {len(all_plays):,} total plays, {len(scrimmage):,} scrimmage")
+
+    # Print PBP file hashes
+    PBP_DIR = ROOT / "nfl" / "data" / "pbp"
+    for s in SEASONS:
+        p = PBP_DIR / f"pbp_{s}.parquet"
+        if p.exists():
+            h = hashlib.sha256(p.read_bytes()).hexdigest()[:8]
+            print(f"  pbp_{s}.parquet sha256[:8] = {h}")
+
+    print("\nLoading params...")
+    with open(PARAMS_PATH) as f:
+        params = json.load(f)
+    print(f"  k_tendency={params.get('k_tendency')}, k_pace={params.get('k_pace')}")
+
+    print("\nComputing league baselines...")
+    league_means = compute_league_means(scrimmage)
+
+    fd_path = ROOT / "nfl" / "data" / "sim" / "tables" / "fourth_down.parquet"
+    fd_table = pd.read_parquet(fd_path) if fd_path.exists() else None
+
+    print("Building tendencies_weekly...")
+    tend = build_tendencies(scrimmage, all_plays, params, league_means,
+                             fourth_down_table=fd_table)
+    OUT = ROOT / "nfl" / "data" / "sim" / "ratings"
+    tend.to_parquet(OUT / "tendencies_weekly.parquet", index=False)
+    print(f"  {len(tend)} rows")
+
+    print("Building tendencies_situational_weekly...")
+    sit = build_situational_proe(scrimmage, params, league_means)
+    sit.to_parquet(OUT / "tendencies_situational_weekly.parquet", index=False)
+    print(f"  {len(sit)} rows")
+
+    fp = usage_fingerprint()
+    print(f"\nusage_fingerprint: {fp}")
+    return fp
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    if "--check" in sys.argv:
+        check_mode()
+    else:
+        main()

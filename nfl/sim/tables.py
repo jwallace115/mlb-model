@@ -1482,6 +1482,49 @@ def build_fg_setup_table(df):
     return out
 
 
+def build_int_spot_table(df):
+    """5S: INT air-yards distribution by LOS bucket from PBP 2021-24.
+
+    Derivation: plays with interception == 1, regular season. air_yards is the
+    distance of the throw downfield (catch point = LOS - air_yards). Bucketed by
+    yardline_100: 1-20, 21-40, 41-60, 61-80, 81-99. Quantiles (101 points) per
+    bucket for the engine to draw from. Rows with missing air_yards are counted
+    and excluded from the quantile computation.
+    """
+    ints = df[(df["interception"] == 1) & (df["season_type"] == "REG")].copy()
+    n_total = len(ints)
+    n_missing = ints["air_yards"].isna().sum()
+    print(f"  INT events: {n_total}, missing air_yards: {n_missing}")
+
+    ints_valid = ints[ints["air_yards"].notna()].copy()
+    # Clip negative air_yards to 0 (screen passes caught behind LOS)
+    ints_valid["air_yards_clipped"] = ints_valid["air_yards"].clip(lower=0)
+
+    # LOS buckets
+    bins = [0, 20, 40, 60, 80, 100]
+    labels = ["1-20", "21-40", "41-60", "61-80", "81-99"]
+    ints_valid["los_bucket"] = pd.cut(ints_valid["yardline_100"], bins=bins, labels=labels,
+                                       right=True, include_lowest=True)
+
+    rows = []
+    overall_median = ints_valid["air_yards_clipped"].median()
+    for bucket in labels:
+        sub = ints_valid[ints_valid["los_bucket"] == bucket]
+        if len(sub) == 0:
+            q = [0.0] * 101
+        else:
+            q = np.quantile(sub["air_yards_clipped"].values, QUANTILE_POINTS).tolist()
+        rows.append({
+            "los_bucket": bucket,
+            "n": len(sub),
+            "quantiles": q,
+            "median_air": float(np.median(sub["air_yards_clipped"])) if len(sub) > 0 else 0.0,
+        })
+
+    result = pd.DataFrame(rows)
+    return result
+
+
 def build_all():
     print("Loading PBP data (2021-2024, regular season)...")
     df = load_pbp()
@@ -1585,6 +1628,12 @@ def build_all():
     with open(OUT_DIR / "scalars.json", "w") as f:
         json.dump(scalars, f, indent=2, default=float)
     print(f"  {lg_catch}")
+
+    print("Building INT air-yards spot table (5S)...")
+    int_spot_tbl = build_int_spot_table(df)
+    int_spot_tbl.to_parquet(OUT_DIR / "int_spot.parquet", index=False)
+    print(f"  {len(int_spot_tbl)} rows, overall median air_yards = "
+          f"{int_spot_tbl['median_air'].iloc[0] if len(int_spot_tbl) > 0 else '?'}")
 
     print("\nAll tables built successfully.")
     return {
