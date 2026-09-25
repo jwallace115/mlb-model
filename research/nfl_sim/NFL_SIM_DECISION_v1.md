@@ -2850,3 +2850,15 @@ q) 0.1376 -> 0.1379 raw / 0.134 -> 0.135 de-vigged; pass att vs 26 starting-QB l
    expire without a kick 9.6% vs 0/56 real; first downs by penalty 1.41 vs 1.73 per team.
 
 Merged to main. Engine `06caa0cbb12bbe6e`, usage `3638769c89030de0`, fit_5s.
+
+### D148 — 5T Item 0: go_rate denominator fixed to 4th-down-only; like_for_like_go row deleted (2026-09-25)
+
+D143 found `go_rate` used ALL FGs in its denominator while the actual (0.198) was 4th-down-only.
+`like_for_like_go` had the correct denominator but was a second row measuring the same actual.
+
+**Fix:** `go_rate` now uses the 4th-down-only denominator (go + punts + FG_on_4th), identical to the
+old `like_for_like_go`. The `like_for_like_go` K1 row is deleted (redundant). `test_engine_5a3.py::
+test_t1_4th_down_go_rate` updated to the same denominator. Tolerance 0.010 unchanged.
+
+**Value from 5S K1 rows:** go_rate = 0.20703, diff = +0.00903, **PASS** (tolerance 0.010).
+No engine change; no tolerance change.

@@ -35,8 +35,7 @@ N_SIMS = 500
 # test_engine_5a9.py: tied expiry <= 0.0 + 0.05
 # test_engine_5i.py: like-for-like go rate < 0.010, 3rd-and-11+ < 0.03
 TOLERANCES = {
-    "go_rate": 0.010,          # test_engine_5a3.py:67
-    "like_for_like_go": 0.010, # test_engine_5i.py:93
+    "go_rate": 0.010,          # test_engine_5a3.py:67 (D148: 4th-down-only denom)
     "fg_att_pg": 0.15,         # test_engine_5a3.py:77
     "off_pen_pg": 0.5,         # test_engine_5a4.py:75
     "def_pen_pg": 0.5,         # test_engine_5a4.py:77
@@ -180,9 +179,8 @@ def main():
     sim_plays = all_sims["plays"].mean()
     sim_drives = all_sims["drives"].mean()
 
-    total_4th = all_sims["ev_4th_go"].sum() + all_sims["ev_punts"].sum() + all_sims["ev_fg_att"].sum()
-    sim_go = all_sims["ev_4th_go"].sum() / max(total_4th, 1)
-    sim_like4 = all_sims["ev_4th_go"].sum() / (all_sims["ev_4th_go"].sum() + all_sims["ev_punts"].sum() +
+    # D148: single go_rate row with the 4th-down-only denominator (like-for-like)
+    sim_go = all_sims["ev_4th_go"].sum() / (all_sims["ev_4th_go"].sum() + all_sims["ev_punts"].sum() +
                 all_sims["ev_fg_att"].sum() - all_sims["ev_fg_non4th"].sum())
 
     sim_off_pen = all_sims["ev_pen_offense"].mean()
@@ -232,7 +230,6 @@ def main():
     lines.append(f"  {'plays/game':25s}  sim={sim_plays:8.1f}  actual=124.5     tolerance: none defined")
     lines.append(f"  {'drives/game':25s}  sim={sim_drives:8.1f}  actual=21.9      tolerance: none defined")
     lines.append(row("go_rate", sim_go, act["go_rate"], "go_rate"))
-    lines.append(row("like_for_like_go", sim_like4, act["go_rate"], "like_for_like_go"))
     lines.append(row("off_pen/game", sim_off_pen, act["off_pen_pg"], "off_pen_pg"))
     lines.append(row("def_pen/game", sim_def_pen, act["def_pen_pg"], "def_pen_pg"))
     lines.append(row("fd_pen/team", sim_fd_pen, act["fd_pen_pt"], "fd_pen_pt"))

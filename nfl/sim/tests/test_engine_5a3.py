@@ -57,15 +57,21 @@ def test_drive_log_byte_identity_5a3(ratings):
 
 
 def test_t1_4th_down_go_rate(k1_sample):
-    """T1: pooled sim 4th-down go rate within 1.0pp of actual (19.8%).
-    5A-3 spec tolerance: 1.0pp pooled. Widened to 3.0pp during 5A-3 to pass;
-    restored to spec in 5A-4 STEP 0."""
+    """T1: pooled sim 4th-down go rate, 4th-down-only denominator (D148).
+    Denominator = go + punts + FG_on_4th (ev_fg_att - ev_fg_non4th).
+    This matches the PBP actual (0.198 = 3085/15579, 4th-down plays only)
+    and aligns with the like_for_like_go metric from test_engine_5i.
+    5A-3 spec tolerance: 1.0pp."""
     sim = k1_sample
-    total_4th_decisions = sim["ev_4th_go"].sum() + sim["ev_punts"].sum() + sim["ev_fg_att"].sum()
-    sim_go_rate = sim["ev_4th_go"].sum() / max(total_4th_decisions, 1)
+    ev_4th_go = sim["ev_4th_go"].sum()
+    ev_punts = sim["ev_punts"].sum()
+    ev_fg_att = sim["ev_fg_att"].sum()
+    ev_fg_non4th = sim["ev_fg_non4th"].sum()
+    denom = ev_4th_go + ev_punts + ev_fg_att - ev_fg_non4th
+    sim_go_rate = ev_4th_go / max(denom, 1)
     actual_go_rate = 0.198
     assert abs(sim_go_rate - actual_go_rate) < 0.010, \
-        f"4th-down go rate {sim_go_rate:.3f} vs actual {actual_go_rate:.3f} (diff {abs(sim_go_rate-actual_go_rate):.3f} > 0.010)"
+        f"4th-down go rate {sim_go_rate:.5f} vs actual {actual_go_rate:.3f} (diff {abs(sim_go_rate-actual_go_rate):.5f} > 0.010)"
 
 
 def test_t2_fg_attempts_per_game(k1_sample):
