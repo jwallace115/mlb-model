@@ -2862,3 +2862,25 @@ test_t1_4th_down_go_rate` updated to the same denominator. Tolerance 0.010 uncha
 
 **Value from 5S K1 rows:** go_rate = 0.20703, diff = +0.00903, **PASS** (tolerance 0.010).
 No engine change; no tolerance change.
+
+### D149 — 5T Item 1: INT chain instrumented; 3.8-yd residual placed: 1.2 yd missing ez + 2.6 yd air/ret deficit (2026-09-25)
+
+Report: `phase5t_int_chain.md`. Parquet: `phase5t_int_chain.parquet` (32,750 sim INT events).
+200 K1 games, N=100, 128s. `_dl_end_yl` now written on INT plays before spot change.
+
+**Three-cell decomposition (excl pick-six):**
+| cell | real | sim | next_start real | next_start sim |
+|------|------|-----|-----------------|----------------|
+| six | 9.7% | 9.2% | 73.7 | - |
+| ez | 10.1% | 6.6% | 79.9 | 80.0 |
+| other | 80.2% | 84.2% | 50.9 | 48.1 |
+
+Overall: sim 50.4 vs real 54.2 = -3.8 yd gap.
+
+**Pre-registered:** (1) ez < 8% HELD (6.6%); explains >= 1.5 yd FAILED (1.23); (2) LOS within 2
+HELD (0.7); (3) NULL air/ret within 1 yd FAILED (air -1.2, ret -1.7).
+
+**Diagnosis:** 1.2 yd from missing ez (sim under-produces end-zone catches), 2.6 yd from the
+"other" cell (air-yard and return deficits from the unconditional LOS-bucket draw). The fix is
+to condition the air draw on the engine's own pass depth. Engine fp `2b9666346a810f9f` (changed
+from source hash of the drive_log instrumentation, not a simulation change). Tests: 2/2 pass.
