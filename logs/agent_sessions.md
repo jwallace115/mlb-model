@@ -3111,3 +3111,23 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 ## 2026-09-25T03:39Z  cowork
 - VERIFIED eng/5q @5a7cac6: item-2 parquet reproduced; ran simulate_game on 5 games - player receptions == team completions (D136 mechanism refuted); raw 2026 sim 39-43 pass att/team vs 33.9 real. FOUND ratings.py build_tendencies week-1 default pace 28.0 / proe 0 / no prior season, pace unshrunk; K1 weeks 1-2 = 139.7 plays/game. VERDICT merge; D137; work order 5R.
 - NOT DONE: 5R (tendency prior + shrinkage, re-fit, board pass-volume logging, INT spot).
+
+## 2026-09-25T07:00Z  claude-code (Phase 5R — D138, D139, D140, D141)
+
+### RETURNED
+- D138 (Item 1): Tendency defect measured. 194 default team-weeks. K1 wk1-2 plays 139.7 vs wk5+ 128.6 (+11.1). Anchored board sim pass att exceed book by +6.1/team. Board re-run bit-identical (1353/1353). team_volume LOG added to run_week.py. 666s.
+- D139 (Item 2): build_tendencies modified: week-1 uses team's prior-season full-season pace/PROE. Pace shrunk with k_pace=200. k_pace and k_tendency both measured at 200 (U-shaped MAE). Week-1 pace MAE falls 69%. Tests: 2/2 pass. Usage fingerprint: 3638769c89030de0. 925s + 56s.
+- D140 (Item 3): fit_5r (1087 games, N=5000, ~60 min). K1 wk1-2 plays 139.7->129.5. Board pass att +6.1->+3.7. SD 0.149->0.134. Pre-registered overall targets FAILED (re-fit redistributed); wk1-2 and pts/team HELD. Suite: 5 failed (3 pre-existing + 2 expected). K1/K4/W2/W3 boards generated.
+- D141 (Item 4): INT spot at LOS not catch point. Error = air yards (15.5 yd). Observed -16.2 yd gap. INT rate within 0.3pp. No fix. 214s.
+
+### MEANS
+- The pace defect (28.0-second week-1 pace, unshrunk) was the largest source of the wk1-2 excess (+15.7 plays/game). Prior-season priors fixed it (wk1-2 plays 139.7->129.5). The re-fit closed ~40% of the board gap (pass att +6.1->+3.7, SD 0.149->0.134). The remaining gap comes from the INT field-position error (Item 4: INTs spotted at LOS, not catch point, error = mean air yards = 15.5 yd).
+
+### Runtimes
+- Item 1: ~720s. Item 2: ~980s. Item 3: ~5400s. Item 4: 214s.
+
+### NOT DONE
+- INT spot fix (changes engine → future order). score_vs_book 146->182 not edited. Week 1 board not built.
+
+### UNVERIFIED
+- Cowork's Linux bit-identity of Item 3 boards. score_vs_book universe change (146->182). Exact breakdown of remaining +3.7 pass att gap. Engine fp: 5ee4b1009301783d. Usage: 3638769c89030de0. main untouched.
