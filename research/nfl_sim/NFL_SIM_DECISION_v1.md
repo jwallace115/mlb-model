@@ -2807,5 +2807,17 @@ is the clock-runoff/short-drive issue, not INTs.
 by placing the defence further from the end zone, reducing short-field 4th-down opportunities.
 
 **Suite: 2 failed, 213 passed.** Only fd_pen and tied_drives remain. like_for_like_go now PASS.
-score_vs_book tests all PASS (Item 0 rewrite). player_off_hash re-recorded. Cleanest suite run
-since the 5I reds were introduced.
+score_vs_book tests all PASS (Item 0 rewrite). player_off_hash re-recorded. Cleanest suite run since the 5I reds were introduced.
+
+### D146 — 5S Item 3: ratings.py --check reproduces usage_fingerprint 3638769c89030de0 (2026-09-25)
+
+`ratings.py` gets `--check` mode: rebuilds tendency tables from PBP and prints `usage_fingerprint()`.
+Verified on Mac: `python3 nfl/sim/ratings.py --check` produces `3638769c89030de0` from:
+- PBP inputs: pbp_2020 (4126188f), pbp_2021 (a9741a72), pbp_2022 (6809039b), pbp_2023 (81984d68),
+  pbp_2024 (35d5a2e2), pbp_2025 (cc0dd69d), pbp_2026 (511a47d0)
+- params: k_tendency=200, k_pace=200
+- tendencies_weekly: 3,616 rows; tendencies_situational_weekly: 177,283 rows
+
+Cowork command to reproduce: `python3 nfl/sim/ratings.py --check` — must print `3638769c89030de0`.
+If it doesn't, the PBP files or params differ (check sha256[:8] of each PBP parquet).
+No behaviour change.
