@@ -2573,3 +2573,26 @@ closer, sim generates 0.84 short-field (inside 40) TD starts/game vs 0.54 real (
 YPP is secondary: sim gains +0.36 YPP on TD drives (not on punt drives: 2.67 = 2.67).
 The short-field excess likely originates from kickoff returns or turnover-created field position
 (punt-drive start yardline is correct: 75.7 vs 75.8). No engine change, no parameter change.
+
+### D133 — 5P Item 2: sim-vs-book gap is 39% mean, 61% player-level shape; no single cause dominates (2026-09-25)
+
+Full report: `research/nfl_sim/phase5p_gap_decomp.md`.
+Parquet: `research/nfl_sim/phase5p_gap_rows.parquet` (131 rows, one per matched player-line).
+
+**Pre-registered predictions:**
+1. Gap is mostly a mean problem (>50% removed by mean replacement) → **FAILED** (39.2% removed).
+2. No-2025 / changed-team players carry >= 0.5 larger mean error → **FAILED** (0.20 / 0.22).
+3. Team pass-error explains < 1/3 of player mean error → **HELD** (~11%).
+
+**Decomposition:** SD(sim_p - book_q) = 0.147 on 131 matched receptions player-lines.
+- Mean bias: sim over-projects by +0.41 receptions on average (WR +0.50, RB +0.25, TE +0.38).
+  Replacing the mean removes 39% of the SD (0.147 → 0.090).
+- Dispersion: sim_sd / book_sd ratio = 0.984 (aggregate match). The remaining 61% is not a
+  global spread error.
+- Team pass volume: explains ~11% of player mean error variance (tercile R²). Most error is
+  player-specific.
+- Player-level shape: individual survival-function shapes diverge from Poisson at the quoted
+  line, explaining the residual. Candidates: sim sampling noise (N=100), game-state mixture
+  effects, book-side information the sim lacks.
+
+Book is a better point predictor (MAE 1.57 vs sim 1.77). No engine/parameter change.
