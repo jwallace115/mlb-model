@@ -1094,12 +1094,15 @@ def build_turnover_table(df):
     """INT and fumble return yards distributions + P(defensive TD) + ST return TD rates."""
     rows = {}
 
-    # INT returns
+    # INT returns — 5U-1a: exclude pick-six returns (engine draws return only
+    # after the pick-six branch, so the table must exclude pick-six returns)
     ints = df[df["interception"] == 1].copy()
-    int_ret_yds = ints["return_yards"].fillna(0).values
+    rows["int_p_def_td"] = ints["return_touchdown"].sum() / max(len(ints), 1) if "return_touchdown" in ints.columns else 0.05
+    non_six = ints[ints.get("return_touchdown", pd.Series(dtype=float)).fillna(0) == 0] if "return_touchdown" in ints.columns else ints
+    int_ret_yds = non_six["return_yards"].fillna(0).values
     rows["int_return_yds_q"] = np.quantile(int_ret_yds, QUANTILE_POINTS).tolist()
     rows["int_n"] = len(ints)
-    rows["int_p_def_td"] = ints["return_touchdown"].sum() / max(len(ints), 1) if "return_touchdown" in ints.columns else 0.05
+    rows["int_n_non_six"] = len(non_six)
 
     # Fumble returns (fumble_lost only)
     fum = df[df["fumble_lost"] == 1].copy()

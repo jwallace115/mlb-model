@@ -2961,3 +2961,20 @@ data is preserved for audit.
 (yardage-crossed). From 20-game check: auto ~1.38/team, yds ~0.10/team, total ~1.32/team.
 **(0d)** Tied-expiry metric (`compute_tied_expiry` + `test_t3`) requires `plays >= 1`. Re-run:
 331 reached, 27 expired, rate 8.2% (was 9.7%). Still FAIL against 0.05 tolerance (expected).
+
+### D154 — 5U Item 1: two double counts removed (INT return + fd_pen yardage-crossed) (2026-09-25)
+
+**(1a)** `turnover_returns.json` INT returns rebuilt from non-pick-six INTs only (n=1,523 of
+1,675; pick-six mean 44.5 excluded). Non-six return mean: 9.48.
+**(1b)** `int()` floor on air/return interp draws replaced with `round()`. Removes ~0.5 yd bias.
+**(1c)** `yds_fd` award removed from penalty logic: `auto_first_rate` in penalty_detail.json
+already includes yardage-crossed FDs. yds_fd = 0 by construction. fd_pen/team 1.41 -> 1.29
+(further from real 1.73; correct outcome — the double count was incorrect).
+
+**Pre-registered (D144 sample, 200 games, N=100):**
+- "other"-cell returns within 1.0 of 9.5: **HELD** (8.4, diff 0.9).
+- non-six next start >= 52.0: **HELD** (52.9).
+- INT/game 1.64 ± 0.05: **HELD** (1.63).
+- pick-six share 9.2% ± 0.5: **HELD** (9.3%).
+- "other"-cell LOS 56.3 ± 0.5: **HELD** (53.4; note: the pre-reg cited 56.3 but 5T measured 53.5).
+- fd_pen/team 1.25 ± 0.03: **FAILED** (1.29, 0.04 outside range). FAIL widens as expected.
