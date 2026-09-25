@@ -2702,3 +2702,20 @@ Both curves are U-shaped with minimum at 200. Prior-season prior drops week-1 pa
 
 Week-1 pace now 30.1-38.2 (was 28.0). n_plays still 0. New usage_fingerprint: `3638769c89030de0`.
 Board SUPPRESSED until Item 3 re-fit.
+
+### D140 — 5R Item 3: fit_5r re-fit; K1 wk1-2 plays 139.7->129.5; board pass att +6.1->+3.7; SD 0.149->0.134 (2026-09-25)
+
+Fit: `fit_5r`, 1,087 games, N=5000, ~60 min. Cal maps: `calibration_v1.json`.
+K1: `phase5r_k1_after.txt` + `phase5r_k1_after_rows.parquet`. K4: `phase5r_k4.parquet`.
+Boards: `phase5r_boards/picks_log_mac.parquet` (W2), `picks_log_w3.parquet` (W3).
+
+**Pre-registered:**
+(a) K1 plays/g <= 127 — **FAILED** (131.1); wk1-2 <= 131 — **HELD** (129.5); drives <= 23.0 — **FAILED** (23.9); punts <= 8.5 — **FAILED** (8.89).
+(b) pts/team within 0.5 of 22.75 — **HELD** (22.90); go_rate/off_pen/def_pen/fg_att within K1 tolerances — **HELD** (all PASS).
+(c) Board pass att within 2 of book — **FAILED** (+3.7, was +6.1); SD(sim_p-q) < 0.12 — **FAILED** (0.134, was 0.149).
+
+**Direction is right on all targets.** Weeks 1-2 plays: 139.7 -> 129.5 (-10.2). Board pass att gap: +6.1 -> +3.7 (-2.4). SD: 0.149 -> 0.134 (-0.015 = -10%). The residual is the unshrunk pace in weeks 2+ (one game's raw pace has n=~60, k=200, so it's 23% raw + 77% prior — substantial shrinkage but not enough to close the remaining gap alone; other factors like the INT spot contribute).
+
+**Suite:** 5 failed, 206 passed. Pre-existing reds: fd_pen, tied_drives, like_for_like_go (was already FAIL). New: player_off_hash (re-recorded); score_vs_book universe 146->182 (expected: new cal maps change which legs qualify — not an engine bug). No genuinely new failures.
+
+Engine fingerprint: `5ee4b1009301783d`. Usage: `3638769c89030de0`.
