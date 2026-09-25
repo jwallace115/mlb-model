@@ -136,7 +136,7 @@ def test_t3_kneels_and_late_snaps(sample):
 
 def test_t3_tied_drives_that_reach_range_get_the_kick_off(sample):
     _, d = sample
-    x = d[d.sd_start == 0]
+    x = d[(d.sd_start == 0) & (d.plays >= 1)]  # 5U-0d: exclude zero-play phantoms
     reached = (x.start_yardline - x.yards <= 35) | x.result.isin(["TD"]) | (x.end_yardline <= 35)
     xr = x[reached]
     expired = xr.result.isin(["end_game", "end_half"]).mean()

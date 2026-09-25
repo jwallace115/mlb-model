@@ -964,6 +964,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_fd_rush = np.zeros(N, dtype=np.int16)
     ev_fd_pass = np.zeros(N, dtype=np.int16)
     ev_fd_penalty = np.zeros(N, dtype=np.int16)
+    ev_fd_pen_auto = np.zeros(N, dtype=np.int16)  # 5U-0c: auto first-down award
+    ev_fd_pen_yds = np.zeros(N, dtype=np.int16)    # 5U-0c: yardage-crossed award
     ev_safeties = np.zeros(N, dtype=np.int16)
     # 5A-5: non-offensive scoring counters
     ev_int_ret_td = np.zeros(N, dtype=np.int16)
@@ -1064,6 +1066,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         _dl_reached_rz[m] = yl[m] <= 20
         _dl_reached_gl[m] = yl[m] <= 5
         _dl_result[m] = _DLR_NONE
+        # 5U-0a: reset end fields to new drive's start values so no drive
+        # carries the previous drive's end fields (stale phantom fix)
+        _dl_end_yl[m] = yl[m]
+        _dl_end_down[m] = down[m]
+        _dl_end_dist[m] = dist[m]
 
     # OT state: track first-possession-complete for OT rules
     ot_first_poss_team = np.full(N, -1, dtype=np.int8)
@@ -1918,10 +1925,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     for ci in range(len(_pen_cat_order)):
                         cm = pen_idx[cat_idx == ci]
                         auto_rate[cm] = _pen_auto_first[ci]
-                    auto_1st = pen_no_td & (u_pen_auto < auto_rate)
+                    auto_1st_draw = pen_no_td & (u_pen_auto < auto_rate)
                     # Non-auto-first: still award first down if yardage >= distance
-                    yds_fd = pen_no_td & ~auto_1st & (pen_yds >= dist)
-                    auto_1st = auto_1st | yds_fd
+                    yds_fd = pen_no_td & ~auto_1st_draw & (pen_yds >= dist)
+                    auto_1st = auto_1st_draw | yds_fd
                     down[auto_1st] = 1
                     dist[auto_1st] = np.minimum(10, yl[auto_1st])
                     ev_first_downs[auto_1st] += 1
@@ -1940,8 +1947,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 ev_pen_off_yds[off_pen] += pen_yds[off_pen]
                 ev_pen_def_yds[def_pen] += pen_yds[def_pen]
                 ev_fd_penalty[auto_1st] += 1
+                ev_fd_pen_auto[auto_1st_draw] += 1  # 5U-0c
+                ev_fd_pen_yds[yds_fd] += 1           # 5U-0c
                 if def_pen.any() and pen_td.any():
                     ev_fd_penalty[pen_td] += 1
+                    ev_fd_pen_auto[pen_td] += 1      # 5U-0c: pen_td is auto by definition
             else:
                 # Legacy penalty model (pre-5A-4)
                 off_pen = pen_nop & (u_pen_side < p_off_pen)
@@ -2866,6 +2876,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         "ev_fd_rush": ev_fd_rush,
         "ev_fd_pass": ev_fd_pass,
         "ev_fd_penalty": ev_fd_penalty,
+        "ev_fd_pen_auto": ev_fd_pen_auto,  # 5U-0c
+        "ev_fd_pen_yds": ev_fd_pen_yds,    # 5U-0c
         "ev_safeties": ev_safeties,
         "ev_int_ret_td": ev_int_ret_td,
         "ev_fum_ret_td": ev_fum_ret_td,
@@ -2887,6 +2899,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "end_yardline", "end_down", "end_dist", "score_state",
             "sd_start", "opp_points",
         ])
+        # 5U-0b: zero-play drives at game/half end are emitted but flagged;
+        # metrics exclude plays == 0 to match the real side's scrimmage-snap requirement.
         team_df.attrs["drive_log"] = _DriveLog(dl_df)
     # 5T: INT chain log
     if drive_log and _dl_int_rows:

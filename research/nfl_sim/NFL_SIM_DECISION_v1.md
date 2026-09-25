@@ -2947,3 +2947,17 @@ un-recorded fixture made `player_off_hash` red on the branch; recorded by Cowork
 
 Merged to main. Engine `2b9666346a810f9f` (log-only edit; outputs identical to `06caa0cbb12bbe6e`),
 usage `3638769c89030de0`, still fit_5s.
+
+### D153 — 5U Item 0: drive-log hygiene + fd counter split + tied plays>=1 (LOG-ONLY) (2026-09-25)
+
+Engine fp: `5a446b7aec4cc2d7`. Player-OFF hash: `31de7e75f17b878b` (matches required value).
+
+**(0a)** `_dl_new_drive` now resets `_dl_end_yl/_dl_end_down/_dl_end_dist` to the new drive's
+start values. No drive carries previous drive's end fields.
+**(0b)** Zero-play drives at game/half end are emitted in the drive log but metrics exclude
+`plays >= 1` (matching real side's scrimmage-snap requirement). No emission suppression — the
+data is preserved for audit.
+**(0c)** `ev_fd_penalty` split into `ev_fd_pen_auto` (auto-first-down draw) and `ev_fd_pen_yds`
+(yardage-crossed). From 20-game check: auto ~1.38/team, yds ~0.10/team, total ~1.32/team.
+**(0d)** Tied-expiry metric (`compute_tied_expiry` + `test_t3`) requires `plays >= 1`. Re-run:
+331 reached, 27 expired, rate 8.2% (was 9.7%). Still FAIL against 0.05 tolerance (expected).
