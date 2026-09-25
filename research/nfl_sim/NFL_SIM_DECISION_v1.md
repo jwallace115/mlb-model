@@ -2609,3 +2609,24 @@ Full note `research/nfl_sim/phase5p_verification_2026-09-25.md`; next order `wor
   the book's mean the sim is +0.25 and against Week 2 actuals +0.28 (book +0.03). "N=100 sampling noise" is not a
   candidate - the board runs N=5,000. Reading: the sim gives quoted players too large a share of team receptions
   (team volume explains ~11%); 5Q item 2 measures quoted-player share of team receptions sim vs real.
+
+### D135 — 5Q Item 1: short-field excess is 81% turnovers + 19% downs; return yardage is correct, INT field position is not (2026-09-25)
+
+Full report: `research/nfl_sim/phase5q_drive_starts.md`.
+Parquet: `research/nfl_sim/phase5q_drive_starts_by_game.parquet`.
+K1 sample, N=100, drive_log=True, 1,087 games, 724s. Fingerprint `02fbcab6e6ed042e`.
+
+**Pre-registered:**
+1. Kickoff not the source (sim inside-40 ~0) -> **HELD** (sim 0.000, real 0.7%).
+2. Excess in turnovers, sim >= 5 yd closer -> **HELD** (9.3 yd closer; turnovers +0.52 of +0.64).
+3. INT return quantiles higher than real at median -> **FAILED** (identical at every percentile).
+
+**Decomposition of +0.64 excess inside-40 starts/game:**
+- Turnovers: +0.52 (81%). Sim INT drives start at 39.9 yd; fumble at 49.1; real combined 52.7.
+  Return yardage tables match PBP exactly. The gap is WHERE INTs happen on the field, not how far
+  they're returned. Sim also has +0.41 more turnovers/game (2.52 vs 2.11): both frequency and
+  placement contribute.
+- Downs: +0.23 (36%, offset by negatives elsewhere). Sim post-downs starts at 58.6 vs real 63.4,
+  with +0.46 more downs per game (1.53 vs 1.07).
+- Kickoffs: -0.06 (sim MISSES real short-field kickoff returns due to fixed ko_start).
+No engine/parameter change.
