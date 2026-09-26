@@ -3240,3 +3240,29 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - RETURNED: merge 7831a76 (5U) left research/nfl_sim/NFL_SIM_DECISION_v1.md without D153-D156 and with D157 twice, and this log with the 5U cowork entry twice. Cause: an earlier attempt of the merge command hit a stale .git/index.lock left by a timed-out Cowork bridge git command (21:31Z); a `;` in the command let `cat _d157 >>` and `git add` run anyway, so D157 rode in on the pull's conflict-resolution commit; the 5U merge then conflicted on the doc and the command's resolver kept HEAD's copy.
 - FIXED: doc = origin/eng/5u's copy (through D156) + one D157 block (main-before-D157 was verified identical to branch-before-D153); duplicate log entry removed. Code and tables from 5U landed intact (no diff vs eng/5u outside the docs).
 - LESSON: merge commands must be && all the way through; resolve a conflicted decision doc by taking the BRANCH's copy (it carries the new D-entries), never HEAD's.
+
+## 2026-09-26T08:00Z  claude-code (Phase 5V — D158, D159, D160, D161)
+
+### RETURNED
+- D158 (Item 0): Table hygiene. build_all now calls build_int_ez_table (was dead code). Engine raises FileNotFoundError if int_spot/int_ez missing (was silent fallback). Player-OFF hash: afdb11999d5b12bf. Engine fp: 42ec87f8d47a8ac8. Test: 1/1 pass.
+- D159 (Item 1): Plays/drives targets derived from PBP. 14 n_plays events: pass+run+kneel+spike+safety+INT+fumble+TD. Like-for-like: 125.78 plays/g (not 124.5), 21.92 drives/g. K1 gap is +5.12 (not +6.4). Pre-registered 126.3±0.3: FAILED (125.78; 2pt included in estimate but excluded by engine). Replaced all hardcoded 124.5 and 21.9 in 4 files.
+- D160 (Item 2): Play-level clock log. Per snap: sim_id, qtr, clock_before, elapsed, score_diff. Exposed as team_df.attrs["play_log"]. Captures 95-100% of ev_clock_used. Player-OFF hash: afdb11999d5b12bf. Engine fp: ec1904e3d33e2896. Tests: 2/2 pass.
+- D161 (Item 3): Clock decomposition. Sim 27.95 s/snap vs real 28.96 (-1.02 s/snap). Sim 128.6 snaps/g vs real 123.7 (+4.9). Total clock sim 3594.9 vs real 3583.0 (+11.9). Pre-registered: (1) >=0.8s shorter HELD (1.02); (2) MIX>half PARTIALLY SCORED (play-type not in log); (3) NULL total within 5s FAILED (+11.9, plays excess). Suite: 3 failed (fd_pen, tied, player_off_hash transient), 218 passed. Exit code 1.
+
+### MEANS
+- The plays target was wrong. The hardcoded 124.5 was pass+run only (incl 2pt, excl kneel/spike). The correct like-for-like count is 125.78 (excl 2pt, incl kneel+spike). The K1 gap is +5.12 plays/game, not +6.4.
+- The sim runs 1.0 s faster per snap than real, consistently across all quarters and score states. This is a global clock-runoff bias from the quantile tables. The +5 extra snaps come from +1.8 extra drives (from short fields/turnovers), not from clock management. The extra snaps add more clock (+137s) than the per-snap deficit saves (-126s), netting +12s total.
+- The play log captures per-snap clock consumption but lacks play-type classification, which limits the MIX decomposition. Adding play type to the log is queued.
+
+### Runtimes
+- Item 0: <1s. Item 1: <5s. Item 2: ~1s (test only). Item 3: 130s + 18 min suite.
+
+### NOT DONE
+- Play-type classification in the sim play log (needed for incomplete-pass MIX analysis).
+- Clock-runoff table audit (compare quantile tables vs PBP inter-snap times by cell).
+- The 1.0 s/snap bias: whether it's in the table itself or in the pace scaling factor.
+
+### UNVERIFIED
+- The player_off_hash transient failure: the hash IS recorded for all fingerprints but the suite loaded a stale cache. Would pass on a clean clone.
+- Whether the 2pt exclusion is correct: the engine MAY count 2pt plays in some path (to be verified by tracing the PAT branch).
+- Engine fp: 559875bb4f8172ff (from actuals_k1 import in engine.py). Usage: 3638769c89030de0. main untouched.
