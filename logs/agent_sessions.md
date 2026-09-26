@@ -3202,3 +3202,10 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: 5T accepted; D149 return sign backwards (sim returns 2.6 yd too LONG: int_ret_q includes pick-sixes), air deficit −1.6 in the other cell (floor + marginal draw), ez deficit worth ~1.6 yd; D150 9/33 phantom zero-play drives (end fields never reset); D151 double count of yardage first downs, real deficit is live-play penalties. Claude Code did not run the suite.
 - NOT DONE: 5T merge (Jeff runs the command); TNF grading; NCAAF pilot scoring; credit-burn review.
 - UNVERIFIED: full suite on eng/5t (only 5t + 5m hash tests run here; the engine is output-identical to 5S, whose suite was 2 red / 213 pass).
+
+## 2026-09-26T22:50Z  cowork (5U verification, D157, 5V order)
+- RAN (Linux worktrees at 1ed1b49 and f761963): record_player_off_hash at 1ed1b49 -> 31de7e75f17b878b; test_engine_5u on the pre-fix engine FAILS (ez 0.046), passes at head; int_ez/int_spot rebuilt from the committed builders == committed; D144-sample repro (200 games N=100): INT 1.619/g, six 9.15%, non-six ez 10.80%, other LOS/air/ret/next 58.00/17.36/9.25/50.28, non-six next 53.48, all-INT next 55.45, inside-40 1.469, TD 1-3 0.1433; K1 from rows reproduced; full suite 2 failed 217 passed (40.4 min); W2 board on Linux: 1,339/1,339 legs bit-identical (sim_p, cal_p; team_volume 30/30).
+- WROTE: research/nfl_sim/phase5u_verification_2026-09-26.md, D157 (appended at merge), research/nfl_sim/workorder_5V_2026-09-26.md.
+- MEANS: 5U accepted; D155 under-reports (two HELDs scored FAILED); ez table not wired into build_all and both INT tables fall back silently; the K1 plays target is hardcoded with the wrong definition (~1.8 plays/game of the gap is counting).
+- NOT DONE: 5U merge (Jeff runs the command); Saturday grading (5-leg ticket + 182-line NCAAF pilot log); TNF grading; credit-burn review before Sunday (3,717 at 12:10Z Sat, ~590/day, halt 3,000).
+- UNVERIFIED: the like-for-like plays number (Cowork arithmetic 126.3, not yet derived by committed code).
