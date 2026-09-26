@@ -3236,9 +3236,7 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - Whether the tied-expiry K1 metric uses the plays>=1 filter correctly (10.3% vs expected ~7%).
 - Engine fp: 4cde6c3abe3aa5b3. Usage: 3638769c89030de0. main untouched.
 
-## 2026-09-26T22:50Z  cowork (5U verification, D157, 5V order)
-- RAN (Linux worktrees at 1ed1b49 and f761963): record_player_off_hash at 1ed1b49 -> 31de7e75f17b878b; test_engine_5u on the pre-fix engine FAILS (ez 0.046), passes at head; int_ez/int_spot rebuilt from the committed builders == committed; D144-sample repro (200 games N=100): INT 1.619/g, six 9.15%, non-six ez 10.80%, other LOS/air/ret/next 58.00/17.36/9.25/50.28, non-six next 53.48, all-INT next 55.45, inside-40 1.469, TD 1-3 0.1433; K1 from rows reproduced; full suite 2 failed 217 passed (40.4 min); W2 board on Linux: 1,339/1,339 legs bit-identical (sim_p, cal_p; team_volume 30/30).
-- WROTE: research/nfl_sim/phase5u_verification_2026-09-26.md, D157 (appended at merge), research/nfl_sim/workorder_5V_2026-09-26.md.
-- MEANS: 5U accepted; D155 under-reports (two HELDs scored FAILED); ez table not wired into build_all and both INT tables fall back silently; the K1 plays target is hardcoded with the wrong definition (~1.8 plays/game of the gap is counting).
-- NOT DONE: 5U merge (Jeff runs the command); Saturday grading (5-leg ticket + 182-line NCAAF pilot log); TNF grading; credit-burn review before Sunday (3,717 at 12:10Z Sat, ~590/day, halt 3,000).
-- UNVERIFIED: the like-for-like plays number (Cowork arithmetic 126.3, not yet derived by committed code).
+## 2026-09-26T23:30Z  cowork (repair of merge 7831a76)
+- RETURNED: merge 7831a76 (5U) left research/nfl_sim/NFL_SIM_DECISION_v1.md without D153-D156 and with D157 twice, and this log with the 5U cowork entry twice. Cause: an earlier attempt of the merge command hit a stale .git/index.lock left by a timed-out Cowork bridge git command (21:31Z); a `;` in the command let `cat _d157 >>` and `git add` run anyway, so D157 rode in on the pull's conflict-resolution commit; the 5U merge then conflicted on the doc and the command's resolver kept HEAD's copy.
+- FIXED: doc = origin/eng/5u's copy (through D156) + one D157 block (main-before-D157 was verified identical to branch-before-D153); duplicate log entry removed. Code and tables from 5U landed intact (no diff vs eng/5u outside the docs).
+- LESSON: merge commands must be && all the way through; resolve a conflicted decision doc by taking the BRANCH's copy (it carries the new D-entries), never HEAD's.

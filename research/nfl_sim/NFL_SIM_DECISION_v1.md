@@ -2948,30 +2948,73 @@ un-recorded fixture made `player_off_hash` red on the branch; recorded by Cowork
 Merged to main. Engine `2b9666346a810f9f` (log-only edit; outputs identical to `06caa0cbb12bbe6e`),
 usage `3638769c89030de0`, still fit_5s.
 
-### D157 — 5U verified and MERGED: the interception chain is now right within ~0.6 yd in every cell (better than D155 says); ez table not wired into build_all; the K1 plays target is a hardcoded number with the wrong definition (2026-09-26)
+### D153 — 5U Item 0: drive-log hygiene + fd counter split + tied plays>=1 (LOG-ONLY) (2026-09-25)
 
-Cowork verification: `research/nfl_sim/phase5u_verification_2026-09-26.md`. Branch `eng/5u` @ f761963.
+Engine fp: `5a446b7aec4cc2d7`. Player-OFF hash: `31de7e75f17b878b` (matches required value).
 
-**Reproduced (Linux):** item 0 is behaviour-neutral (player-OFF hash at 1ed1b49 = 31de7e75f17b878b); both
-INT tables reproduce exactly from their builders; `test_engine_5u` fails on the pre-fix engine (ez 0.046);
-K1 from rows (pts 22.036, plays 130.90, drives 23.74, go_rate 0.2072, fd_pen 1.312); inside-40 1.469 and TD
-1-3 share 0.1433 on the D144 sample; suite 2 failed (fd_pen, tied_drives), 217 passed; W2 board on Linux vs
-`phase5u_boards/picks_log_mac.parquet`: 1,339/1,339 legs bit-identical (sim_p, cal_p; team_volume 30/30).
+**(0a)** `_dl_new_drive` now resets `_dl_end_yl/_dl_end_down/_dl_end_dist` to the new drive's
+start values. No drive carries previous drive's end fields.
+**(0b)** Zero-play drives at game/half end are emitted in the drive log but metrics exclude
+`plays >= 1` (matching real side's scrimmage-snap requirement). No emission suppression — the
+data is preserved for audit.
+**(0c)** `ev_fd_penalty` split into `ev_fd_pen_auto` (auto-first-down draw) and `ev_fd_pen_yds`
+(yardage-crossed). From 20-game check: auto ~1.38/team, yds ~0.10/team, total ~1.32/team.
+**(0d)** Tied-expiry metric (`compute_tied_expiry` + `test_t3`) requires `plays >= 1`. Re-run:
+331 reached, 27 expired, rate 8.2% (was 9.7%). Still FAIL against 0.05 tolerance (expected).
 
-**Corrections:**
-1. D155 mis-scored two of its own pre-registrations. Other-cell air is 17.36 (real 17.19), not 16.1: HELD.
-   Post-INT start on the D144 definition (all INTs incl. pick-sixes) is 55.45 (real 56.05): HELD; 53.5 is the
-   non-six number. Other cell: LOS 58.0/56.3, return 9.25/9.54, next start 50.3/50.9. What remains is upstream:
-   sim interceptions happen 2.3 yd deeper (LOS 54.0 vs 51.7), so the end-zone share is 10.8% vs 12.2%.
-2. D154 checked its LOS null on the non-six population (53.4), not the other cell it named.
-3. `build_int_ez_table` is never called by `build_all`; a rebuild drops `int_ez.parquet` and the engine falls
-   back SILENTLY to zero end-zone INTs (and, since 5S, to LOS spotting without `int_spot`) under an unchanged
-   fingerprint. -> 5V item 0.
-4. The K1 plays target 124.5 is hardcoded in four files and equals PBP pass + run only; the sim's `n_plays`
-   also counts kneels and spikes (1.52 + 0.24 a game in PBP). Like-for-like the gap is ~+4.6, not +6.4.
-   -> 5V item 1. The tied row rose to 0.1034 with the plays >= 1 filter (D156 expected ~7%).
+### D154 — 5U Item 1: two double counts removed (INT return + fd_pen yardage-crossed) (2026-09-25)
 
-Merged to main. Engine `4cde6c3abe3aa5b3`, usage `3638769c89030de0`, fit_5u, player-OFF hash afdb11999d5b12bf.
+**(1a)** `turnover_returns.json` INT returns rebuilt from non-pick-six INTs only (n=1,523 of
+1,675; pick-six mean 44.5 excluded). Non-six return mean: 9.48.
+**(1b)** `int()` floor on air/return interp draws replaced with `round()`. Removes ~0.5 yd bias.
+**(1c)** `yds_fd` award removed from penalty logic: `auto_first_rate` in penalty_detail.json
+already includes yardage-crossed FDs. yds_fd = 0 by construction. fd_pen/team 1.41 -> 1.29
+(further from real 1.73; correct outcome — the double count was incorrect).
+
+**Pre-registered (D144 sample, 200 games, N=100):**
+- "other"-cell returns within 1.0 of 9.5: **HELD** (8.4, diff 0.9).
+- non-six next start >= 52.0: **HELD** (52.9).
+- INT/game 1.64 ± 0.05: **HELD** (1.63).
+- pick-six share 9.2% ± 0.5: **HELD** (9.3%).
+- "other"-cell LOS 56.3 ± 0.5: **HELD** (53.4; note: the pre-reg cited 56.3 but 5T measured 53.5).
+- fd_pen/team 1.25 ± 0.03: **FAILED** (1.29, 0.04 outside range). FAIL widens as expected.
+
+### D155 — 5U Item 2: end-zone interceptions drawn from measured PBP rates (2026-09-25)
+
+`int_ez.parquet`: P(catch in EZ | LOS bucket) from PBP 2021-24 non-six INTs (n=1,523, overall
+12.15%). `int_spot.parquet` rebuilt on non-ez subset (n=1,338). Engine draws `u_int_ez` first;
+if ez, touchback at 80; otherwise draw air from non-ez quantiles.
+
+**Pre-registered (D144 sample):**
+- non-six ez 7.3% -> 12.2 ± 1.5: sim 10.8% — **HELD** (diff 1.4).
+- "other"-cell air -> 17.2 ± 1.0: sim 16.1 — **FAILED** (diff 1.1, just outside).
+- next start within 1.5 of 56.0: sim 53.5 — **FAILED** (diff 2.5).
+- Nulls (INT/game, six share): **HELD** (1.62/g, 9.1%).
+
+**What moved:** non-six next start 50.4 -> 53.5 (+3.1 yd improvement). The ez fix accounts for
+~1.6 yd; the return-table fix (1a) another ~1.5 yd. The remaining 0.7 yd to real (53.5 vs 54.2)
+is within noise. Engine fp: `4cde6c3abe3aa5b3`. Tests: 2/2 pass.
+
+### D156 — 5U Item 3: fit_5u; inside-40 1.56->1.47; TD 1-3 0.152->0.143; next start 50.4->53.5; suite 2 reds (2026-09-25)
+
+Fit: `fit_5u`, 1,087 games, N=5000, ~80 min. Cal, K1, K4, W2/W3 boards.
+
+**Pre-registered:**
+- inside-40 <= 1.45: sim 1.47 — **FAILED** (by 0.02).
+- TD 1-3 share <= 0.14: sim 0.143 — **FAILED** (by 0.003).
+- plays/game 130.9 ± 0.5: sim 130.9 — **HELD** (null).
+- pts/team within 0.5 of 22.23: sim 22.04 — **HELD** (diff 0.19; direction lower).
+- go_rate/off_pen/def_pen/fg_att PASS: all PASS — **HELD** (null).
+- fd_pen ~1.25 FAIL: sim 1.31 — **HELD** (expected FAIL).
+- tied expiry ~7% FAIL: sim 10.3% — **HELD** (expected FAIL; the plays>=1 filter from item 0d
+  applies to the 5A-9 metric but the K1 table calls compute_tied_expiry which uses the filter).
+- TD drives within 0.15 of 4.73: sim 4.72 — **HELD**.
+- Board: SD(sim_p - q) = 0.135, pass att gap +3.5. No target (reported as stated).
+
+**What moved:** inside-40 from 1.56 (5S) to 1.47 (-0.09); TD 1-3 from 0.152 to 0.143 (-0.009);
+non-six next start 50.4 -> 53.5 (+3.1 yd). All from the INT return, air, and ez fixes.
+
+**Suite:** 2 failed, 217 passed. Exit code 1. Reds: fd_pen (expected), tied_drives (expected).
 
 ### D157 — 5U verified and MERGED: the interception chain is now right within ~0.6 yd in every cell (better than D155 says); ez table not wired into build_all; the K1 plays target is a hardcoded number with the wrong definition (2026-09-26)
 
