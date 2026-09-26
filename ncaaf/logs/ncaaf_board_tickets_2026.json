@@ -1806,7 +1806,7 @@
   {
     "card_id": "COWORK_FRI_4LEG_20260925",
     "build_time": "2026-09-25T22:54:00+00:00",
-    "graded": false,
+    "graded": true,
     "reference_only": false,
     "picked_by": "cowork_chat",
     "book": "hardrockbet_fl",
@@ -1841,7 +1841,11 @@
         "leg_type": "CONVICTION",
         "price_source": "HARDROCK_SLIP",
         "point_recommended": 50.5,
-        "price_recommended_ref": -110
+        "price_recommended_ref": -110,
+        "final": "NAVY 20 - UAB 24 = 44",
+        "leg_result": "WON",
+        "won_at_recommended_number": true,
+        "cushion_vs_taken_number": 9.5
       },
       {
         "market": "totals",
@@ -1855,7 +1859,11 @@
         "leg_type": "CONVICTION",
         "price_source": "HARDROCK_SLIP",
         "point_recommended": 57.5,
-        "price_recommended_ref": -115
+        "price_recommended_ref": -115,
+        "final": "HOW 7 - RUTG 58 = 65",
+        "leg_result": "WON",
+        "won_at_recommended_number": true,
+        "cushion_vs_taken_number": 10.5
       },
       {
         "market": "spreads",
@@ -1869,7 +1877,11 @@
         "leg_type": "CONVICTION",
         "price_source": "HARDROCK_SLIP",
         "point_recommended": 20.5,
-        "price_recommended_ref": -108
+        "price_recommended_ref": -108,
+        "final": "NW 23 - IND 29, margin 6",
+        "leg_result": "WON",
+        "won_at_recommended_number": true,
+        "cushion_vs_taken_number": 17.5
       },
       {
         "market": "spreads",
@@ -1883,9 +1895,26 @@
         "leg_type": "CONVICTION",
         "price_source": "HARDROCK_SLIP",
         "point_recommended": -2.5,
-        "price_recommended_ref": -110
+        "price_recommended_ref": -110,
+        "final": "CLEM 24 - CAL 10, margin 14",
+        "leg_result": "WON",
+        "won_at_recommended_number": true,
+        "cushion_vs_taken_number": 11.5
       }
     ],
-    "note": "Jeff bought 3 points on 3 legs vs the card's numbers. Measured post-hoc from repo data: the bought points were worth MORE than their price on both families (totals 7.5% vs 6.8% cost; spread 9.3% vs 6.4%). Cross-game price = exact product of legs (6th confirmation of the 1.000 baseline). Bonus stake: $0 cash at risk."
+    "note": "Jeff bought 3 points on 3 legs vs the card's numbers. Measured post-hoc from repo data: the bought points were worth MORE than their price on both families (totals 7.5% vs 6.8% cost; spread 9.3% vs 6.4%). Cross-game price = exact product of legs (6th confirmation of the 1.000 baseline). Bonus stake: $0 cash at risk.",
+    "result": "WON",
+    "payout_usd": 208.59,
+    "profit_usd": 208.59,
+    "point_buy_postmortem": {
+      "all_legs_won": true,
+      "would_have_won_at_recommended_numbers": true,
+      "points_bought_were_needed_on": 0,
+      "payout_at_recommended_numbers_decimal": 13.123,
+      "payout_taken_decimal": 9.343,
+      "upside_forgone_usd": 119.48,
+      "note": "All 4 legs cleared BOTH numbers. The 9 bought points were not needed on any leg, so the buy cost ~$120 of upside on this ticket. That is NOT evidence the buy was wrong: the pre-bet measurement (totals 3pts worth 7.5% vs 6.8% cost; spread 9.3% vs 6.4%) stands on n=3449 games. One ticket, 3 bought legs. Resulting, not evidence."
+    },
+    "confidence_calibration_note": "The leg graded WEAKEST pre-bet (Northwestern +23.5, 'no angle, just a large number') was the most comfortable winner \u2014 Indiana won by 6 on a -20.5. Confidence ordering was inverted on that leg. The two legs with real content (Clemson move + Cal's Wagner resume; Rutgers scoring vs Howard) both landed with margin."
   }
 ]
