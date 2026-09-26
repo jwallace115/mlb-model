@@ -3078,3 +3078,23 @@ score_diff. Exposed as `team_df.attrs["play_log"]`. Captures 95-100% of ev_clock
 sub-loops that run inside the main step may not be captured as separate rows).
 
 Engine fp: `ec1904e3d33e2896`. Player-OFF hash: `afdb11999d5b12bf` (matches). Tests: 2/2 pass.
+
+### D161 — 5V Item 3: clock decomposition — sim runs 1.0 s/snap faster, +4.9 snaps/game (2026-09-26)
+
+Report: `phase5v_clock_decomp.md`. Parquet: `phase5v_clock_decomp.parquet`. 200 K1 games, N=100, 130s.
+Diagnosis only. No engine change.
+
+Sim 128.6 snaps/game vs real 123.7 (+4.9). Sim 27.95 s/snap vs real 28.96 (-1.02 s/snap). Sim total
+clock 3594.9 vs real 3583.0 (+11.9). The +5 extra snaps at ~28 s each add +137 s; the -1.0 s/snap
+rate deficit saves -126 s; net +11 s.
+
+**Pre-registered:** (1) sim >= 0.8 s shorter — **HELD** (1.02 s). (2) MIX > half — **PARTIALLY SCORED**
+(play-type classification not in sim log; total MIX +137 s > RATE -126 s, but the prediction's
+incomplete-pass mechanism untested). (3) NULL total clock within 5 s — **FAILED** (+11.9 s; this is
+the plays excess, not a log error).
+
+**Diagnosis:** 1.0 s/snap global clock-runoff bias, consistent across all quarters (-1.08 to -1.27)
+and all score states (-0.92 to -1.28). The plays excess (+5.1) is a snap-count problem from +1.8
+extra drives (short fields → extra possessions → extra snaps).
+
+Suite: 3 failed (fd_pen, tied_drives, player_off_hash transient), 218 passed. Exit code 1.
