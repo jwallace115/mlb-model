@@ -1,0 +1,18 @@
+{
+ "slate": "NCAAF Sat 2026-09-26 (CFBD week 4, pilot weekend)",
+ "logged_utc": "2026-09-26T13:00:00Z",
+ "source": "Jeff screenshot of Hard Rock slip; placed before 16:00Z first kickoff",
+ "note": "Drawn from Cowork's 5-leg card (issued ~12:05Z) with points bought on every leg; Florida -3.5 swapped out for Texas/Tennessee Under (from the 10-leg extras). All 5 legs match the direction frozen in ai_opinions_20260926T121647Z.parquet. Book-of-record for the log is Pinnacle; this ticket is at Hard Rock prices.",
+ "tickets": [
+  {"ticket": "SAT_5_BOOST", "type": "parlay", "legs_n": 5, "stake": 25.00, "odds_american": 1443,
+   "boost": "50% profit boost", "payout_boosted": 566.09, "boost_added": 180.36,
+   "legs": [
+    {"game": "Texas @ Tennessee", "kick_utc": "2026-09-26T16:00:00Z", "market": "totals", "side": "Under", "line": 57.5, "price": -140, "card_line": 54.5},
+    {"game": "Virginia Tech @ Boston College", "kick_utc": "2026-09-26T16:00:00Z", "market": "totals", "side": "Under", "line": 46.5, "price": -110, "card_line": 46.5},
+    {"game": "Oklahoma @ Georgia", "kick_utc": "2026-09-26T19:30:00Z", "market": "spreads", "side": "Georgia", "line": -11.5, "price": -135, "card_line": -13.5},
+    {"game": "Utah @ Iowa State", "kick_utc": "2026-09-26T19:30:00Z", "market": "totals", "side": "Under", "line": 50.5, "price": -150, "card_line": 47.5},
+    {"game": "Iowa @ Michigan", "kick_utc": "2026-09-26T19:30:00Z", "market": "spreads", "side": "Iowa", "line": 7.5, "price": -160, "card_line": 5.5}
+   ],
+   "result": "pending"}
+ ]
+}

@@ -12,5 +12,19 @@
   "revised_rows": 0,
   "oldest_source_age_min": 34.8,
   "first_kickoff_utc": "2026-09-24T23:30:00Z"
+ },
+ {
+  "file": "ai_opinions_20260926T121647Z.parquet",
+  "sha256": "d329749b92c823bce4f64fc1e10b4abdacefcb73587c8663d7cf9dbb8983b80e",
+  "logged_utc": "2026-09-26T12:16:47.727667+00:00",
+  "rows": 182,
+  "sport": "ncaaf",
+  "book": "pinnacle",
+  "pilot": true,
+  "games": 65,
+  "no_view_share": 0.0,
+  "revised_rows": 0,
+  "oldest_source_age_min": 406.7,
+  "first_kickoff_utc": "2026-09-26T16:00:00Z"
  }
 ]
