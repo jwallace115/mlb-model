@@ -95,14 +95,16 @@ def _load_tables():
     depth_path = TABLES_DIR / "pass_depth_outcomes.parquet"
     if depth_path.exists():
         _CACHE["pass_depth"] = pd.read_parquet(depth_path)
-    # 5S: INT air-yards spot table
+    # 5S/5V: INT air-yards spot table (REQUIRED)
     int_spot_path = TABLES_DIR / "int_spot.parquet"
-    if int_spot_path.exists():
-        _CACHE["int_spot"] = pd.read_parquet(int_spot_path)
-    # 5U: INT end-zone probability table
+    if not int_spot_path.exists():
+        raise FileNotFoundError(f"int_spot.parquet missing: {int_spot_path}")
+    _CACHE["int_spot"] = pd.read_parquet(int_spot_path)
+    # 5U/5V: INT end-zone probability table (REQUIRED)
     int_ez_path = TABLES_DIR / "int_ez.parquet"
-    if int_ez_path.exists():
-        _CACHE["int_ez"] = pd.read_parquet(int_ez_path)
+    if not int_ez_path.exists():
+        raise FileNotFoundError(f"int_ez.parquet missing: {int_ez_path}")
+    _CACHE["int_ez"] = pd.read_parquet(int_ez_path)
     # 5A-7: timeout policy and kneel decision tables
     for k, fn in (("timeout_policy", "timeout_policy.parquet"), ("kneel", "kneel_decision.parquet"),
                   ("fg_setup", "fg_setup.parquet"), ("fg_setup_rush", "fg_setup_rush.parquet"),

@@ -3040,3 +3040,12 @@ K1 from rows (pts 22.036, plays 130.90, drives 23.74, go_rate 0.2072, fd_pen 1.3
    -> 5V item 1. The tied row rose to 0.1034 with the plays >= 1 filter (D156 expected ~7%).
 
 Merged to main. Engine `4cde6c3abe3aa5b3`, usage `3638769c89030de0`, fit_5u, player-OFF hash afdb11999d5b12bf.
+
+### D158 — 5V Item 0: table hygiene — build_all writes int_ez; engine raises on missing INT tables (2026-09-26)
+
+**(0a)** `tables.py::build_all` now calls `build_int_ez_table` and writes `int_ez.parquet`.
+Previously dead code — a table rebuild would leave the file missing.
+**(0b)** Engine raises `FileNotFoundError` if `int_spot.parquet` or `int_ez.parquet` is missing
+(was silent fallback). `turnover_returns.json` already raised via `open()`. Test passes.
+
+Engine fp: `42ec87f8d47a8ac8`. Player-OFF hash: `afdb11999d5b12bf` (matches). Behaviour-neutral.
