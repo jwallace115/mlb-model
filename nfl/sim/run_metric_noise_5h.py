@@ -113,7 +113,7 @@ def compute_tied_expiry(salt, ratings):
         dl = r.attrs["drive_log"]
         drives_list.append(dl[(dl.start_quarter == 4) & (dl.start_clock <= 300)])
     d = pd.concat(drives_list, ignore_index=True)
-    x = d[d.sd_start == 0]
+    x = d[(d.sd_start == 0) & (d.plays >= 1)]  # 5U-0d: exclude zero-play phantoms
     reached = (x.start_yardline - x.yards <= 35) | x.result.isin(["TD"]) | (x.end_yardline <= 35)
     xr = x[reached]
     n_reached = len(xr)

@@ -2972,3 +2972,28 @@ K1 from rows (pts 22.036, plays 130.90, drives 23.74, go_rate 0.2072, fd_pen 1.3
    -> 5V item 1. The tied row rose to 0.1034 with the plays >= 1 filter (D156 expected ~7%).
 
 Merged to main. Engine `4cde6c3abe3aa5b3`, usage `3638769c89030de0`, fit_5u, player-OFF hash afdb11999d5b12bf.
+
+### D157 — 5U verified and MERGED: the interception chain is now right within ~0.6 yd in every cell (better than D155 says); ez table not wired into build_all; the K1 plays target is a hardcoded number with the wrong definition (2026-09-26)
+
+Cowork verification: `research/nfl_sim/phase5u_verification_2026-09-26.md`. Branch `eng/5u` @ f761963.
+
+**Reproduced (Linux):** item 0 is behaviour-neutral (player-OFF hash at 1ed1b49 = 31de7e75f17b878b); both
+INT tables reproduce exactly from their builders; `test_engine_5u` fails on the pre-fix engine (ez 0.046);
+K1 from rows (pts 22.036, plays 130.90, drives 23.74, go_rate 0.2072, fd_pen 1.312); inside-40 1.469 and TD
+1-3 share 0.1433 on the D144 sample; suite 2 failed (fd_pen, tied_drives), 217 passed; W2 board on Linux vs
+`phase5u_boards/picks_log_mac.parquet`: 1,339/1,339 legs bit-identical (sim_p, cal_p; team_volume 30/30).
+
+**Corrections:**
+1. D155 mis-scored two of its own pre-registrations. Other-cell air is 17.36 (real 17.19), not 16.1: HELD.
+   Post-INT start on the D144 definition (all INTs incl. pick-sixes) is 55.45 (real 56.05): HELD; 53.5 is the
+   non-six number. Other cell: LOS 58.0/56.3, return 9.25/9.54, next start 50.3/50.9. What remains is upstream:
+   sim interceptions happen 2.3 yd deeper (LOS 54.0 vs 51.7), so the end-zone share is 10.8% vs 12.2%.
+2. D154 checked its LOS null on the non-six population (53.4), not the other cell it named.
+3. `build_int_ez_table` is never called by `build_all`; a rebuild drops `int_ez.parquet` and the engine falls
+   back SILENTLY to zero end-zone INTs (and, since 5S, to LOS spotting without `int_spot`) under an unchanged
+   fingerprint. -> 5V item 0.
+4. The K1 plays target 124.5 is hardcoded in four files and equals PBP pass + run only; the sim's `n_plays`
+   also counts kneels and spikes (1.52 + 0.24 a game in PBP). Like-for-like the gap is ~+4.6, not +6.4.
+   -> 5V item 1. The tied row rose to 0.1034 with the plays >= 1 filter (D156 expected ~7%).
+
+Merged to main. Engine `4cde6c3abe3aa5b3`, usage `3638769c89030de0`, fit_5u, player-OFF hash afdb11999d5b12bf.

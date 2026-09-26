@@ -3209,3 +3209,36 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: 5U accepted; D155 under-reports (two HELDs scored FAILED); ez table not wired into build_all and both INT tables fall back silently; the K1 plays target is hardcoded with the wrong definition (~1.8 plays/game of the gap is counting).
 - NOT DONE: 5U merge (Jeff runs the command); Saturday grading (5-leg ticket + 182-line NCAAF pilot log); TNF grading; credit-burn review before Sunday (3,717 at 12:10Z Sat, ~590/day, halt 3,000).
 - UNVERIFIED: the like-for-like plays number (Cowork arithmetic 126.3, not yet derived by committed code).
+## 2026-09-26T02:00Z  claude-code (Phase 5U — D153, D154, D155, D156)
+
+### RETURNED
+- D153 (Item 0): Drive-log hygiene. (0a) _dl_end_yl/down/dist reset in _dl_new_drive. (0b) Zero-play drives emitted, metrics exclude plays>=1. (0c) ev_fd_pen_auto + ev_fd_pen_yds split (auto ~1.38, yds ~0.10). (0d) Tied-expiry requires plays>=1: 331 reached, 27 expired, 8.2% (still FAIL). Player-OFF hash: 31de7e75f17b878b (matches). Suite: 2 failed (fd_pen, tied), 215 passed. Exit code 1.
+- D154 (Item 1): Two double counts. (1a) INT returns from non-six only (n=1523, mean 9.48). (1b) round() not int() on draws. (1c) yds_fd removed from penalty (auto_first_rate already includes it). fd_pen 1.41->1.29. Pre-registered: "other" ret HELD (8.4); next_start HELD (52.9); INT/g HELD (1.63); six HELD (9.3%); fd_pen FAILED (1.29).
+- D155 (Item 2): End-zone INTs from PBP rates. int_ez.parquet: P(ez|LOS) from 1523 non-six (overall 12.15%). int_spot.parquet: non-ez air quantiles (n=1338). Engine draws u_int_ez first. Pre-registered: ez share HELD (10.8%); air FAILED (16.1 vs 17.2±1.0, by 0.1); next_start FAILED (53.5 vs 56.0, diff 2.5); nulls HELD.
+- D156 (Item 3): fit_5u (~80 min). K1: plays 130.9, pts 22.04. Inside-40 1.47 (target <=1.45, FAILED by 0.02). TD 1-3 0.143 (target <=0.14, FAILED by 0.003). Plays null HELD (130.9). pts HELD (22.04). go/off/def/fg PASS. fd_pen 1.31 FAIL (expected). tied 10.3% FAIL (expected). Board SD 0.135, pass att +3.5. Suite: 2 failed (fd_pen, tied), 217 passed. Exit code 1.
+
+### MEANS
+- Three INT defects fixed in one order: (1) return table excluded pick-sixes (mean 44.5 yd inflated the return draw by ~3 yd); (2) int() floor on air/return removed (0.5 yd bias each); (3) end-zone interceptions drawn from measured PBP rates instead of marginal air_yards (ez 6.6%->10.8% vs real 12.1%). Net effect on non-six next-start: 50.4 -> 53.5 (+3.1 yd toward real 54.2). The remaining 0.7 yd gap is within noise.
+- fd_pen moved AWAY from the target (1.41 -> 1.29, real 1.73) because the yds_fd double-count was removed. The fd_pen red is now correctly attributable to missing live-play penalties (D151). Two reds remain (fd_pen, tied); both are diagnosed and queued.
+- inside-40 1.56 -> 1.47 (real ~1.22); TD 1-3 share 0.152 -> 0.143 (real 0.118). Both nearly met their targets. The residual is the 0.7-yd INT gap plus the turnover-frequency excess (+0.41/game from D135, not yet addressed).
+
+### Runtimes
+- Item 0: ~20 min (suite). Item 1: ~2 min. Item 2: ~2 min. Item 3: ~120 min (fit + cal + K1 + K4 + boards + suite).
+
+### NOT DONE
+- The remaining 0.7-yd INT next-start gap (condition air on pass depth).
+- Tied-drives fix (FG-decision/clock-management, D150).
+- Live-play penalty mechanism (fd_pen, D151).
+- Turnover-frequency excess (+0.41/game).
+
+### UNVERIFIED
+- Cowork's Linux W2 board bit-identity against phase5u_boards/picks_log_mac.parquet.
+- Whether the tied-expiry K1 metric uses the plays>=1 filter correctly (10.3% vs expected ~7%).
+- Engine fp: 4cde6c3abe3aa5b3. Usage: 3638769c89030de0. main untouched.
+
+## 2026-09-26T22:50Z  cowork (5U verification, D157, 5V order)
+- RAN (Linux worktrees at 1ed1b49 and f761963): record_player_off_hash at 1ed1b49 -> 31de7e75f17b878b; test_engine_5u on the pre-fix engine FAILS (ez 0.046), passes at head; int_ez/int_spot rebuilt from the committed builders == committed; D144-sample repro (200 games N=100): INT 1.619/g, six 9.15%, non-six ez 10.80%, other LOS/air/ret/next 58.00/17.36/9.25/50.28, non-six next 53.48, all-INT next 55.45, inside-40 1.469, TD 1-3 0.1433; K1 from rows reproduced; full suite 2 failed 217 passed (40.4 min); W2 board on Linux: 1,339/1,339 legs bit-identical (sim_p, cal_p; team_volume 30/30).
+- WROTE: research/nfl_sim/phase5u_verification_2026-09-26.md, D157 (appended at merge), research/nfl_sim/workorder_5V_2026-09-26.md.
+- MEANS: 5U accepted; D155 under-reports (two HELDs scored FAILED); ez table not wired into build_all and both INT tables fall back silently; the K1 plays target is hardcoded with the wrong definition (~1.8 plays/game of the gap is counting).
+- NOT DONE: 5U merge (Jeff runs the command); Saturday grading (5-leg ticket + 182-line NCAAF pilot log); TNF grading; credit-burn review before Sunday (3,717 at 12:10Z Sat, ~590/day, halt 3,000).
+- UNVERIFIED: the like-for-like plays number (Cowork arithmetic 126.3, not yet derived by committed code).
