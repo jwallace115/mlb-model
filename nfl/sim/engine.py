@@ -1030,6 +1030,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   6:"turnover_fumble",7:"downs",8:"end_half",9:"end_game",10:"safety"}
     _dl_rows = []
     _dl_int_rows = []  # 5T: per-INT chain log (LOS, air, catch_yl, ez, ret, six, next_start)
+    _pl_rows = []      # 5V: per-snap clock log (sim_id, qtr, clock_before, elapsed, play_class, ...)
 
     def _dl_new_drive(m):
         """Record ending drive (if result set), then reset for next drive."""
@@ -1397,6 +1398,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         alive = ~game_over
         if not alive.any():
             break
+        # 5V: snapshot clock-used before the step for play-log elapsed computation
+        if drive_log:
+            _pl_used_before = ev_clock_used.copy()
+            _pl_clock_snap = clock.copy()
+            _pl_qtr_before = qtr.copy()
+            _pl_sd_before = (score_h - score_a) * np.where(poss == 0, 1, -1)
 
         # RNG insensitivity: optionally insert a dummy draw to verify
         # that adding one extra draw cannot shift statistics
@@ -2827,6 +2834,19 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ot_tod = tod & (qtr >= 5) & ~ot_first_poss_done
             ot_first_poss_done[ot_tod] = True
 
+        # 5V: append play-log rows for active sims that consumed clock this step
+        if drive_log:
+            for gi in range(N):
+                if not alive[gi]:
+                    continue
+                el = float(ev_clock_used[gi] - _pl_used_before[gi])
+                if el < 0.01:
+                    continue  # no measurable clock consumed (penalty/game-over/etc.)
+                _pl_rows.append((
+                    gi, int(_pl_qtr_before[gi]), float(_pl_clock_snap[gi]),
+                    el, int(_pl_sd_before[gi]),
+                ))
+
     # FIX 1: safety cap check — hitting MAX_STEPS is an error
     if not game_over.all():
         n_unfinished = (~game_over).sum()
@@ -2933,6 +2953,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "sim_id", "los", "air", "catch_yl", "ez", "ret", "six", "next_start",
         ])
         team_df.attrs["int_chain_log"] = int_df
+    # 5V: play-level clock log
+    if drive_log and _pl_rows:
+        pl_df = pd.DataFrame(_pl_rows, columns=[
+            "sim_id", "qtr", "clock_before", "elapsed", "score_diff",
+        ])
+        team_df.attrs["play_log"] = pl_df
 
     if not has_players:
         return team_df

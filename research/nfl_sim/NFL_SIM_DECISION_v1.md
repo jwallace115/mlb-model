@@ -3070,3 +3070,11 @@ excluding kneels and spikes. The two errors partly cancelled: +0.49 (2pt) − 1.
 Replaced every hardcoded 124.5 and 21.9 in: `run_k1_table.py`, `diagnostics.py`,
 `k1_compare_5a4.py`, `engine.py`. All now call `actuals_k1.compute_k1_actuals()`.
 Null: K1 sim values unchanged (targets moved, not the engine).
+
+### D160 — 5V Item 2: play-level clock log (LOG-ONLY, drive_log-gated) (2026-09-26)
+
+Per snap the engine processes: sim_id, quarter, clock_before, elapsed (from ev_clock_used delta),
+score_diff. Exposed as `team_df.attrs["play_log"]`. Captures 95-100% of ev_clock_used (EOH/FG-setup
+sub-loops that run inside the main step may not be captured as separate rows).
+
+Engine fp: `ec1904e3d33e2896`. Player-OFF hash: `afdb11999d5b12bf` (matches). Tests: 2/2 pass.
