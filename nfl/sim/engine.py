@@ -3074,11 +3074,14 @@ def k1_report(all_sims, actuals):
 
     lines.append(f"| Mean pts/team | {sim_pts:.1f} | {act_pts:.1f} | ±1.5 of actual | {pf(abs(sim_pts-act_pts)<1.5)} |")
 
+    # 5V: plays/drives targets derived from PBP, not hardcoded
+    from nfl.sim.actuals_k1 import compute_k1_actuals as _k1a
+    _ka = _k1a()
     sim_ppg = game_means["sim_plays"].mean()
-    lines.append(f"| Plays/game | {sim_ppg:.1f} | 124.5 | ~125 | {pf(abs(sim_ppg-124.5)<20)} |")
+    lines.append(f"| Plays/game | {sim_ppg:.1f} | {_ka['plays_pg']} | ~{round(_ka['plays_pg'])} | {pf(abs(sim_ppg-_ka['plays_pg'])<20)} |")
 
     sim_dpg = game_means["sim_drives"].mean()
-    lines.append(f"| Drives/game | {sim_dpg:.1f} | 21.9 | ~22 | {pf(abs(sim_dpg-21.9)<5)} |")
+    lines.append(f"| Drives/game | {sim_dpg:.1f} | {_ka['drives_pg']} | ~{round(_ka['drives_pg'])} | {pf(abs(sim_dpg-_ka['drives_pg'])<5)} |")
 
     lines.append(f"| SD margin (pooled) | {pooled_sim_margin_sd:.2f} | {act_margin_sd:.2f} | ±1.0 of actual | {pf(abs(pooled_sim_margin_sd-act_margin_sd)<=1.0)} |")
     lines.append(f"| SD total (pooled) | {pooled_sim_total_sd:.2f} | {act_total_sd:.2f} | ±2.0 of actual | {pf(abs(pooled_sim_total_sd-act_total_sd)<=2.0)} |")

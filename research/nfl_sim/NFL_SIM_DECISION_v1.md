@@ -3049,3 +3049,24 @@ Previously dead code — a table rebuild would leave the file missing.
 (was silent fallback). `turnover_returns.json` already raised via `open()`. Test passes.
 
 Engine fp: `42ec87f8d47a8ac8`. Player-OFF hash: `afdb11999d5b12bf` (matches). Behaviour-neutral.
+
+### D159 — 5V Item 1: plays/drives targets derived from PBP; 124.5 is wrong (2026-09-26)
+
+Engine's `n_plays` counts 14 events: pass (incl sack), run, qb_kneel, qb_spike, pre-snap safety,
+INT, fumble (pass+rush), pass/rush TD, pass/rush safety. In PBP terms: play_type in
+{pass, run, qb_kneel, qb_spike}, EXCLUDING two-point attempts (engine handles 2pt via PAT).
+
+**Derived targets:** plays/game = **125.78** (71.67 pass + 52.35 run + 1.52 kneel + 0.24 spike).
+Drives/game = **21.92** (fixed_drive with >= 1 play of the above types). 1,087 games 2021-24 REG.
+
+**Why 124.5 was wrong:** it was pass + run ONLY (72.01 + 52.49), including 2pt attempts but
+excluding kneels and spikes. The two errors partly cancelled: +0.49 (2pt) − 1.76 (kneel+spike)
+= −1.27. Correct is 125.78, so the K1 gap is **+5.12** plays/game (not +6.4 as reported, nor
++4.6 as pre-registered by Cowork).
+
+**PRE-REGISTERED 126.3 ± 0.3: FAILED** (125.78, outside by 0.52). The pre-registration included
+2pt attempts (+0.49/game) which the engine does not count.
+
+Replaced every hardcoded 124.5 and 21.9 in: `run_k1_table.py`, `diagnostics.py`,
+`k1_compare_5a4.py`, `engine.py`. All now call `actuals_k1.compute_k1_actuals()`.
+Null: K1 sim values unchanged (targets moved, not the engine).

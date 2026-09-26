@@ -84,7 +84,9 @@ def print_diagnostics(label, act_df, sim_df):
 
     print(f"  {'Plays/drive':22s} {a_ppd:8.2f} {s_ppd:8.2f} {s_ppd-a_ppd:+8.2f}")
     print(f"  {'Drives/game':22s} {a_dpg:8.1f} {s_dpg:8.1f} {s_dpg-a_dpg:+8.1f}")
-    print(f"  {'Plays/game':22s} {'124.5':>8s} {s_ppg:8.1f}")
+    from nfl.sim.actuals_k1 import compute_k1_actuals as _k1a
+    _a = _k1a()
+    print(f"  {'Plays/game':22s} {_a['plays_pg']:8.1f} {s_ppg:8.1f}")
     print(f"  {'Pts/team':22s} {a_pts:8.1f} {pts:8.1f} {pts-a_pts:+8.1f}")
     print(f"  {'Pts/drive':22s} {a_pts_per_drive:8.2f} {s_pts_per_drive:8.2f}")
     print(f"  {'3-and-out rate':22s} {a_3ao:8.3f}")

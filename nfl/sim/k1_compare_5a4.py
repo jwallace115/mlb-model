@@ -74,8 +74,10 @@ def report(label, sims, actuals):
     print(f"  {label}")
     print(f"{'='*60}")
     print(f"  Mean pts/team:    {sim_pts:.1f}  (actual: {act_pts:.1f})")
-    print(f"  Plays/game:       {sim_plays:.1f}  (actual: 124.5)")
-    print(f"  Drives/game:      {sim_drives:.1f}  (actual: 21.9)")
+    from nfl.sim.actuals_k1 import compute_k1_actuals as _k1a
+    _a = _k1a()
+    print(f"  Plays/game:       {sim_plays:.1f}  (actual: {_a['plays_pg']})")
+    print(f"  Drives/game:      {sim_drives:.1f}  (actual: {_a['drives_pg']})")
     print(f"  SD margin:        {sim_margin_sd:.2f}  (actual: {act_margin_sd:.2f})")
     print(f"  Pass yds/team:    {sim_pass:.1f}  (actual: 221.0)")
     print(f"  Rush yds/team:    {sim_rush:.1f}  (actual: 118.2)")
@@ -158,8 +160,10 @@ def main():
                         "fd_total", "fd_pen_pg", "safety_pg"]:
             bv = b[metric]
             av = a[metric]
+            from nfl.sim.actuals_k1 import compute_k1_actuals as _k1a
+            _ka = _k1a()
             actual_vals = {
-                "pts_team": 22.4, "plays": 124.5, "drives": 21.9,
+                "pts_team": 22.4, "plays": _ka["plays_pg"], "drives": _ka["drives_pg"],
                 "pass_yds": 221.0, "rush_yds": 118.2, "go_rate": 0.198,
                 "fg_pg": 3.92, "pen_pg": 8.96, "off_pen_pg": 5.51,
                 "def_pen_pg": 3.45, "fd_total": 39.1, "fd_pen_pg": 3.45,

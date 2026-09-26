@@ -227,8 +227,11 @@ def main():
 
     lines.append("--- K1 Table ---")
     lines.append(row("pts/team", sim_pts, act["pts_team"]))
-    lines.append(f"  {'plays/game':25s}  sim={sim_plays:8.1f}  actual=124.5     tolerance: none defined")
-    lines.append(f"  {'drives/game':25s}  sim={sim_drives:8.1f}  actual=21.9      tolerance: none defined")
+    # 5V: plays and drives targets derived from PBP, not hardcoded
+    from nfl.sim.actuals_k1 import compute_k1_actuals
+    k1_act = compute_k1_actuals()
+    lines.append(f"  {'plays/game':25s}  sim={sim_plays:8.1f}  actual={k1_act['plays_pg']:.1f}     tolerance: none defined")
+    lines.append(f"  {'drives/game':25s}  sim={sim_drives:8.1f}  actual={k1_act['drives_pg']:.1f}      tolerance: none defined")
     lines.append(row("go_rate", sim_go, act["go_rate"], "go_rate"))
     lines.append(row("off_pen/game", sim_off_pen, act["off_pen_pg"], "off_pen_pg"))
     lines.append(row("def_pen/game", sim_def_pen, act["def_pen_pg"], "def_pen_pg"))
