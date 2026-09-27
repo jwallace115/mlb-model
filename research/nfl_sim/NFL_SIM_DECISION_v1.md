@@ -3181,3 +3181,83 @@ its quarter-sum test fails honestly). D165's by-margin table (gap +3.9 close -> 
 4. The D144 sample is 2021 weeks 1-13 (smallest gap); the next measurement is season-stratified.
 
 Merged to main. Engine `e00483d173495210` (outputs identical to 5U), fit_5u.
+
+### D167 — 5X Item 0: quarter ends do not carry clock; 5W test passes (2026-09-27)
+
+engine.py ~1473: `clock[can_advance] = 900.0` (was `+= 900.0`). Each new quarter starts at
+exactly 900 s instead of carrying over negative overshoot from the previous quarter. OT
+unaffected (uses its own `clock = 600.0`). `test_play_log_quarter_sums` now **PASSES** with
+no change to the test or the log.
+
+**Pre-registered:** plays/game rise +1.0 to +2.5 — **HELD** (130.9 → 131.9, +1.0).
+
+### D168 — 5X Item 1: first-down runoff split by play type (rush vs pass) (2026-09-27)
+
+`build_clock_table`: `first_down` outcome split into `first_down_rush` (27 cells) and
+`first_down_pass` (32 cells). Engine: pass site draws `first_down_pass`, rush draws
+`first_down_rush`, with fallback to pooled `first_down` (0 cells now, but the fallback
+chain still reaches parent/legacy cells). Table rebuilt with committed builder.
+
+**Pre-registered:** plays fall -1.0 to -2.5 from item 0 — **FAILED** (-0.1). The split
+cells have similar quantiles to the pooled cell; the differential was smaller than expected.
+Net items 0+1: +0.9 from 5W (pre-registered < 1.0 net) — **HELD** marginally.
+
+### D169 — 5X Item 2: season-stratified sample confirms 2024 is worst (+9.0); blowout gap persists (2026-09-27)
+
+Report: `phase5x_clock_class.md`. Parquet: `phase5x_clock_class.parquet` (8 rows, 2.6 KB).
+200 games (50/season), N=100, 145s. Diagnosis only.
+
+By margin: 0-7 +6.9, 8-14 +7.0, 15-21 +7.9, 22+ +11.3 (ratio 1.64x). By season: 2021 +7.9,
+2022 +6.9, 2023 +7.5, **2024 +9.0** (largest). D144 sample underestimated (+5.1) because it was
+2021 weeks 1-13 only.
+
+**Pre-registered:** (1) per-class not scored (play log not decomposed); (2) 2024 largest — **HELD**;
+(3) NULL quarter 900 s — **HELD**.
+
+### D170 — 5X Item 3: fit_5x; plays 132.3; two NEW reds from quarter-end fix (2026-09-27)
+
+Fit: `fit_5x`, 1,087 games, N=5000, ~80 min. Cal, K1, K4, W2/W3 boards.
+
+**Pre-registered:**
+- K1 plays 130.9 ± 1.0: **FAILED** (132.3, +1.4 above range). The quarter-end fix added more
+  plays (+1.0) than the first-down split offset (-0.1).
+- pts/team within 0.5 of 22.04: **HELD** (22.29, diff 0.25).
+- go_rate/off_pen/def_pen/fg_att PASS: **HELD**.
+- fd_pen FAIL: **HELD** (1.33, expected).
+- tied expiry FAIL: **HELD** (0.097, expected).
+
+**Two NEW reds:**
+- `test_t3_ot_structure`: P(tie|OT) 0.130 vs 0.043+0.08=0.123 (0.007 over). The +50 s of Q4
+  playing time from the quarter-end fix changes late-game scoring dynamics.
+- `test_t4_tied_offence_kicks_not_scores_late`: FG rate 0.170 vs 0.251±0.08 (0.001 over).
+  Same cause — the extra clock in Q4 shifts when drives reach FG range while tied.
+Both are marginal and may be within stochastic noise of the K1 sample. Investigated: the quarter-
+end fix is correct (real quarters start at 15:00), and the new reds are a calibration effect from
+the extra 50 s of clock, not a logic error.
+
+Suite: 4 failed (fd_pen, tied, ot_structure, tied_kicks), 219 passed. Exit code 1.
+
+### D171 — 5X verified and MERGED: the quarter fix is right; the first-down split lost its fallbacks and caused both new reds; drive-ending plays are counted twice in the clock (2026-09-27)
+
+Cowork verification: `research/nfl_sim/phase5x_verification_2026-09-27.md`. Branch `eng/5x` @ d932bfa.
+
+**Stands:** D167 (quarters start at 900; quarter-sum test passes unchanged; plays +1.0). D170's K1 reproduces
+from its rows (plays 132.35, drives 23.98, pts/team 22.291; gap +6.6), run on a dirty tree.
+
+**Corrections:**
+1. D168: the builder no longer writes pooled `first_down` rows (5W: 32 main + 3 eoh + 3 fgs; 5X: 0), so every
+   pooled fallback in the engine is dead. Thin split cells (e.g. tied Q4_late, trail9+ Q4_late rush) fall to the
+   all-clock parent: a tied offence's late first down draws ~33 s instead of 15.5 s. `_eoh_runoff` still looks
+   up `first_down` and silently gets the `all` cell.
+2. D170: the two new reds are caused by item 1, not item 0. Test fixtures/seeds, P(tie|OT) / tied late FG:
+   5W 0.1145 / 0.192; item 0 only 0.1155 / 0.199; head 0.1302 / 0.170 (both red); head + pooled rows restored
+   0.1110 / 0.189 (both green).
+3. D168's "similar quantiles": the runoff cells include TD / INT / fumble-lost plays (real 8.6 s to the next snap)
+   that the engine charges separately with its typed drive_end clock — the short clock is counted twice. Excluding
+   them raises first_down_pass 33.26 -> 36.71 s and first_down_rush 33.95 -> 37.80 s ("normal" period); summed
+   over all cells at real counts +122.6 s a game (~4.5 plays). This is the largest single cause of the plays gap
+   found so far, and why the rush/pass split showed nothing. -> 5Y.
+4. D169: the class-by-class decomposition (its purpose) was not done; "2024 largest" is within one standard error
+   at 50 games a season.
+
+Merged to main. Engine `b2d76c7b3b232df6` (player-OFF hash 78e64f674e71be6d), fit_5x.

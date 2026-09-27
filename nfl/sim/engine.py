@@ -1467,10 +1467,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # --- Quarter / half / game end ---
         time_up = alive & (clock <= 0)
         if time_up.any():
-            # Advance quarter — carry over negative clock so time isn't lost
+            # Advance quarter — start at exactly 900 (a real quarter restarts at 15:00;
+            # the runoff table's real elapsed is already capped by the time left in the quarter)
             can_advance = time_up & (qtr < 4)
             qtr[can_advance] += 1
-            clock[can_advance] += 900.0  # Add 900, preserving any negative overshoot
+            clock[can_advance] = 900.0  # 5X-0: no overshoot carry (was += 900)
 
             # Halftime (entering Q3)
             ht = time_up & (qtr == 3) & ~half_recorded
@@ -2535,7 +2536,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             cp_arr[q4_mid_a_m] = "Q4_mid_a"
             cp_arr[q4_mid_b_m] = "Q4_mid_b"
             cp_arr[q4_late_m] = "Q4_late"
-            ot_strs = ["incomplete", "first_down", "complete_inbounds"]
+            ot_strs = ["incomplete", "first_down_pass", "complete_inbounds"]  # 5X: split first_down
             xs101 = np.linspace(0, 1, 101)
             pace_arr = np.where(poss[gi_arr] == 0,
                                 ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
@@ -2547,16 +2548,26 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 (cp_arr == cp_val) & ~game_over[gi_arr] & ~eoh_p)
                         if not mask.any():
                             continue
-                        # 5M: 4-level fallback: split -> Q4_mid -> parent -> legacy
+                        # 5M/5X: 5-level fallback: split -> pooled -> Q4_mid -> parent -> legacy
                         cq = clock_q.get((ot_name, ss_val, cp_val))
+                        # 5X: if first_down_pass/rush cell missing, fall back to pooled first_down
+                        if cq is None and ot_name in ("first_down_pass", "first_down_rush"):
+                            cq = clock_q.get(("first_down", ss_val, cp_val))
                         if cq is None and cp_val in ("Q4_mid_a", "Q4_mid_b"):
                             cq = clock_q.get((ot_name, ss_val, "Q4_mid"))
+                            if cq is None and ot_name in ("first_down_pass", "first_down_rush"):
+                                cq = clock_q.get(("first_down", ss_val, "Q4_mid"))
                         if cq is None:
+                            fb_ot = "first_down" if ot_name in ("first_down_pass", "first_down_rush") else ot_name
                             cq = clock_q.get((ot_name, f"p_{ss_val}", "all"))
+                            if cq is None:
+                                cq = clock_q.get((fb_ot, f"p_{ss_val}", "all"))
                         if cq is None:
                             hurry_legacy = cp_val != "normal" and ss_val in ("trail9+", "trail1-8", "tied")
                             cq = clock_q.get((ot_name, hurry_legacy),
-                                              clock_q.get((ot_name, False), np.full(101, 30.0)))
+                                              clock_q.get((ot_name, False),
+                                              clock_q.get(("first_down", hurry_legacy),
+                                              clock_q.get(("first_down", False), np.full(101, 30.0)))))
                         m_idx = np.where(mask)[0]
                         elapsed = np.interp(u_pclock[gi_arr[m_idx]], xs101, cq) * pace_arr[m_idx]
                         elapsed = np.maximum(elapsed, 3.0)
@@ -2806,7 +2817,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             cp_r_arr[q4ma_r] = "Q4_mid_a"
             cp_r_arr[q4mb_r] = "Q4_mid_b"
             cp_r_arr[q4l_r] = "Q4_late"
-            ot_strs_r = {0: "first_down", 1: "run", 3: "incomplete"}  # 3 = clock stopped by a timeout (5A-7)
+            ot_strs_r = {0: "first_down_rush", 1: "run", 3: "incomplete"}  # 5X: split first_down
             xs101 = np.linspace(0, 1, 101)
             pace_r = np.where(poss[gi_r] == 0,
                               ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
@@ -2818,15 +2829,25 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 (cp_r_arr == cp_val) & ~game_over[gi_r] & ~eoh_r)
                         if not mask.any():
                             continue
+                        # 5X: first_down_rush fallback to pooled first_down
                         cq = clock_q.get((ot_name_r, ss_val, cp_val))
+                        if cq is None and ot_name_r in ("first_down_rush", "first_down_pass"):
+                            cq = clock_q.get(("first_down", ss_val, cp_val))
                         if cq is None and cp_val in ("Q4_mid_a", "Q4_mid_b"):
                             cq = clock_q.get((ot_name_r, ss_val, "Q4_mid"))
+                            if cq is None and ot_name_r in ("first_down_rush", "first_down_pass"):
+                                cq = clock_q.get(("first_down", ss_val, "Q4_mid"))
                         if cq is None:
+                            fb_ot = "first_down" if ot_name_r in ("first_down_rush", "first_down_pass") else ot_name_r
                             cq = clock_q.get((ot_name_r, f"p_{ss_val}", "all"))
+                            if cq is None:
+                                cq = clock_q.get((fb_ot, f"p_{ss_val}", "all"))
                         if cq is None:
                             hurry_legacy = cp_val != "normal" and ss_val in ("trail9+", "trail1-8", "tied")
                             cq = clock_q.get((ot_name_r, hurry_legacy),
-                                              clock_q.get((ot_name_r, False), np.full(101, 35.0)))
+                                              clock_q.get((ot_name_r, False),
+                                              clock_q.get(("first_down", hurry_legacy),
+                                              clock_q.get(("first_down", False), np.full(101, 35.0)))))
                         m_idx = np.where(mask)[0]
                         elapsed = np.interp(u_rclock[gi_r[m_idx]], xs101, cq) * pace_r[m_idx]
                         elapsed = np.maximum(elapsed, 3.0)
