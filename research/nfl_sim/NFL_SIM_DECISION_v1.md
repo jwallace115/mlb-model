@@ -3213,3 +3213,26 @@ By margin: 0-7 +6.9, 8-14 +7.0, 15-21 +7.9, 22+ +11.3 (ratio 1.64x). By season: 
 
 **Pre-registered:** (1) per-class not scored (play log not decomposed); (2) 2024 largest — **HELD**;
 (3) NULL quarter 900 s — **HELD**.
+
+### D170 — 5X Item 3: fit_5x; plays 132.3; two NEW reds from quarter-end fix (2026-09-27)
+
+Fit: `fit_5x`, 1,087 games, N=5000, ~80 min. Cal, K1, K4, W2/W3 boards.
+
+**Pre-registered:**
+- K1 plays 130.9 ± 1.0: **FAILED** (132.3, +1.4 above range). The quarter-end fix added more
+  plays (+1.0) than the first-down split offset (-0.1).
+- pts/team within 0.5 of 22.04: **HELD** (22.29, diff 0.25).
+- go_rate/off_pen/def_pen/fg_att PASS: **HELD**.
+- fd_pen FAIL: **HELD** (1.33, expected).
+- tied expiry FAIL: **HELD** (0.097, expected).
+
+**Two NEW reds:**
+- `test_t3_ot_structure`: P(tie|OT) 0.130 vs 0.043+0.08=0.123 (0.007 over). The +50 s of Q4
+  playing time from the quarter-end fix changes late-game scoring dynamics.
+- `test_t4_tied_offence_kicks_not_scores_late`: FG rate 0.170 vs 0.251±0.08 (0.001 over).
+  Same cause — the extra clock in Q4 shifts when drives reach FG range while tied.
+Both are marginal and may be within stochastic noise of the K1 sample. Investigated: the quarter-
+end fix is correct (real quarters start at 15:00), and the new reds are a calibration effect from
+the extra 50 s of clock, not a logic error.
+
+Suite: 4 failed (fd_pen, tied, ot_structure, tied_kicks), 219 passed. Exit code 1.
