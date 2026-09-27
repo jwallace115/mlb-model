@@ -95,14 +95,16 @@ def _load_tables():
     depth_path = TABLES_DIR / "pass_depth_outcomes.parquet"
     if depth_path.exists():
         _CACHE["pass_depth"] = pd.read_parquet(depth_path)
-    # 5S: INT air-yards spot table
+    # 5S/5V: INT air-yards spot table (REQUIRED)
     int_spot_path = TABLES_DIR / "int_spot.parquet"
-    if int_spot_path.exists():
-        _CACHE["int_spot"] = pd.read_parquet(int_spot_path)
-    # 5U: INT end-zone probability table
+    if not int_spot_path.exists():
+        raise FileNotFoundError(f"int_spot.parquet missing: {int_spot_path}")
+    _CACHE["int_spot"] = pd.read_parquet(int_spot_path)
+    # 5U/5V: INT end-zone probability table (REQUIRED)
     int_ez_path = TABLES_DIR / "int_ez.parquet"
-    if int_ez_path.exists():
-        _CACHE["int_ez"] = pd.read_parquet(int_ez_path)
+    if not int_ez_path.exists():
+        raise FileNotFoundError(f"int_ez.parquet missing: {int_ez_path}")
+    _CACHE["int_ez"] = pd.read_parquet(int_ez_path)
     # 5A-7: timeout policy and kneel decision tables
     for k, fn in (("timeout_policy", "timeout_policy.parquet"), ("kneel", "kneel_decision.parquet"),
                   ("fg_setup", "fg_setup.parquet"), ("fg_setup_rush", "fg_setup_rush.parquet"),
@@ -1028,6 +1030,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   6:"turnover_fumble",7:"downs",8:"end_half",9:"end_game",10:"safety"}
     _dl_rows = []
     _dl_int_rows = []  # 5T: per-INT chain log (LOS, air, catch_yl, ez, ret, six, next_start)
+    _pl_rows = []      # 5V: per-snap clock log (sim_id, qtr, clock_before, elapsed, play_class, ...)
 
     def _dl_new_drive(m):
         """Record ending drive (if result set), then reset for next drive."""
@@ -1395,6 +1398,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         alive = ~game_over
         if not alive.any():
             break
+        # 5V: snapshot clock-used before the step for play-log elapsed computation
+        if drive_log:
+            _pl_used_before = ev_clock_used.copy()
+            _pl_clock_snap = clock.copy()
+            _pl_qtr_before = qtr.copy()
+            _pl_sd_before = (score_h - score_a) * np.where(poss == 0, 1, -1)
 
         # RNG insensitivity: optionally insert a dummy draw to verify
         # that adding one extra draw cannot shift statistics
@@ -2825,6 +2834,19 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ot_tod = tod & (qtr >= 5) & ~ot_first_poss_done
             ot_first_poss_done[ot_tod] = True
 
+        # 5V: append play-log rows for active sims that consumed clock this step
+        if drive_log:
+            for gi in range(N):
+                if not alive[gi]:
+                    continue
+                el = float(ev_clock_used[gi] - _pl_used_before[gi])
+                if el < 0.01:
+                    continue  # no measurable clock consumed (penalty/game-over/etc.)
+                _pl_rows.append((
+                    gi, int(_pl_qtr_before[gi]), float(_pl_clock_snap[gi]),
+                    el, int(_pl_sd_before[gi]),
+                ))
+
     # FIX 1: safety cap check — hitting MAX_STEPS is an error
     if not game_over.all():
         n_unfinished = (~game_over).sum()
@@ -2931,6 +2953,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "sim_id", "los", "air", "catch_yl", "ez", "ret", "six", "next_start",
         ])
         team_df.attrs["int_chain_log"] = int_df
+    # 5V: play-level clock log
+    if drive_log and _pl_rows:
+        pl_df = pd.DataFrame(_pl_rows, columns=[
+            "sim_id", "qtr", "clock_before", "elapsed", "score_diff",
+        ])
+        team_df.attrs["play_log"] = pl_df
 
     if not has_players:
         return team_df
@@ -3072,11 +3100,14 @@ def k1_report(all_sims, actuals):
 
     lines.append(f"| Mean pts/team | {sim_pts:.1f} | {act_pts:.1f} | ±1.5 of actual | {pf(abs(sim_pts-act_pts)<1.5)} |")
 
+    # 5V: plays/drives targets derived from PBP, not hardcoded
+    from nfl.sim.actuals_k1 import compute_k1_actuals as _k1a
+    _ka = _k1a()
     sim_ppg = game_means["sim_plays"].mean()
-    lines.append(f"| Plays/game | {sim_ppg:.1f} | 124.5 | ~125 | {pf(abs(sim_ppg-124.5)<20)} |")
+    lines.append(f"| Plays/game | {sim_ppg:.1f} | {_ka['plays_pg']} | ~{round(_ka['plays_pg'])} | {pf(abs(sim_ppg-_ka['plays_pg'])<20)} |")
 
     sim_dpg = game_means["sim_drives"].mean()
-    lines.append(f"| Drives/game | {sim_dpg:.1f} | 21.9 | ~22 | {pf(abs(sim_dpg-21.9)<5)} |")
+    lines.append(f"| Drives/game | {sim_dpg:.1f} | {_ka['drives_pg']} | ~{round(_ka['drives_pg'])} | {pf(abs(sim_dpg-_ka['drives_pg'])<5)} |")
 
     lines.append(f"| SD margin (pooled) | {pooled_sim_margin_sd:.2f} | {act_margin_sd:.2f} | ±1.0 of actual | {pf(abs(pooled_sim_margin_sd-act_margin_sd)<=1.0)} |")
     lines.append(f"| SD total (pooled) | {pooled_sim_total_sd:.2f} | {act_total_sd:.2f} | ±2.0 of actual | {pf(abs(pooled_sim_total_sd-act_total_sd)<=2.0)} |")

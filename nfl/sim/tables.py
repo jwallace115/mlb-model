@@ -1670,6 +1670,13 @@ def build_all():
     print(f"  {len(int_spot_tbl)} rows, overall median air_yards = "
           f"{int_spot_tbl['median_air'].iloc[0] if len(int_spot_tbl) > 0 else '?'}")
 
+    # 5V-0a: build_int_ez_table was dead code; now called from build_all
+    print("Building INT end-zone probability table (5U)...")
+    int_ez_tbl = build_int_ez_table(df)
+    int_ez_tbl.to_parquet(OUT_DIR / "int_ez.parquet", index=False)
+    print(f"  {len(int_ez_tbl)} rows, overall ez rate = "
+          f"{int_ez_tbl['ez_rate'].mean():.4f}")
+
     print("\nAll tables built successfully.")
     return {
         "pass": pass_tbl, "rush": rush_tbl, "playcall": pc_tbl,
