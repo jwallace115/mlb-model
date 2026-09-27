@@ -3099,6 +3099,13 @@ extra drives (short fields → extra possessions → extra snaps).
 
 Suite: 3 failed (fd_pen, tied_drives, player_off_hash transient), 218 passed. Exit code 1.
 
+### D163 — 5W Item 0: drives target 21.74 reproducible; row counts pinned (2026-09-27)
+
+`compute_k1_actuals()` gives 21.74 on Mac and Linux (D159's 21.92 was an inline computation error).
+Made explicit: `dropna=True`, integer `n_drives_total / n_games`. Row counts pinned: 1,087 games,
+136,727 plays, 23,635 drives. Test: 1/1 pass. Sim counter includes ~0.12 zero-play drives/game
+(not changed; noted).
+
 ### D162 — 5V verified and MERGED (items 0-1 stand; items 2-3 redone in 5W): plays target 125.78 reproduced, drives target does not reproduce, the clock log does not reconcile and its test was relaxed (2026-09-27)
 
 Cowork verification: `research/nfl_sim/phase5v_verification_2026-09-27.md`. Branch `eng/5v` @ 063470b.
