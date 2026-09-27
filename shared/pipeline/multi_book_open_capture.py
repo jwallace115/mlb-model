@@ -73,6 +73,33 @@ BOOKS = ["hardrockbet_fl", "pinnacle", "draftkings", "fanduel", "betmgm",
 
 OUT_ROOT = ROOT / "data" / "odds_archive"
 
+# Explicit folder map: the API sport key -> archive subfolder name.
+# baseball_mlb stays as-is (the MLB tape already lives there).
+FOLDER_MAP = {
+    "americanfootball_nfl":  "nfl",
+    "americanfootball_ncaaf": "ncaaf",
+    "icehockey_nhl":         "nhl",
+    "basketball_nba":        "nba",
+    "baseball_mlb":          "baseball_mlb",
+}
+
+# Sports whose season straddles a calendar year (NHL 2026-27, NBA 2026-27).
+# Season label = the START year: month >= 7 -> current year, else previous year.
+# Football and MLB use the existing rule (month >= 3 -> current year).
+_SPLIT_JULY_SPORTS = {"icehockey_nhl", "basketball_nba"}
+
+
+def _folder(sport):
+    """Map API sport key to archive subfolder. Raises KeyError for unknown sports."""
+    return FOLDER_MAP[sport]
+
+
+def _season(sport, snap):
+    """Return the integer season label for this sport and snapshot time."""
+    if sport in _SPLIT_JULY_SPORTS:
+        return snap.year if snap.month >= 7 else snap.year - 1
+    return snap.year if snap.month >= 3 else snap.year - 1
+
 
 def _scrub(text):
     """Never let the API key reach a log file. requests embeds the full URL —
@@ -85,6 +112,8 @@ def _scrub(text):
 
 
 def pull(sport, retries=1, backoff=5):
+    """Returns (games, used, rem) on success, or None on failure.
+    Failure is logged but does NOT exit — the caller decides whether to continue."""
     p = {"apiKey": KEY, "markets": ",".join(MARKETS),
          "bookmakers": ",".join(BOOKS), "oddsFormat": "american"}
     for attempt in range(1 + retries):
@@ -95,15 +124,16 @@ def pull(sport, retries=1, backoff=5):
                 log.warning(f"{sport}: transient error ({type(e).__name__}), retrying in {backoff}s...")
                 time.sleep(backoff)
                 continue
-            log.error(f"HARD STOP: network error on {sport}: {type(e).__name__}: {_scrub(e)}")
-            log.error("Nothing written. Safe to re-run."); sys.exit(1)
+            log.error(f"HARD STOP for {sport}: network error: {type(e).__name__}: {_scrub(e)}")
+            log.error(f"  Nothing written for {sport}. Safe to re-run.")
+            return None
         if r.status_code != 200:
             if attempt < retries and r.status_code >= 500:
                 log.warning(f"{sport}: HTTP {r.status_code}, retrying in {backoff}s...")
                 time.sleep(backoff)
                 continue
-            log.error(f"HARD STOP: {sport} -> HTTP {r.status_code}: {_scrub(r.text[:250])}")
-            sys.exit(1)
+            log.error(f"HARD STOP for {sport}: HTTP {r.status_code}: {_scrub(r.text[:250])}")
+            return None
         used = r.headers.get("x-requests-last")
         rem  = r.headers.get("x-requests-remaining")
         if int(rem or 0) < 3000:
@@ -148,9 +178,20 @@ def main():
     snap = datetime.now(timezone.utc)
     snap_iso = snap.isoformat()
     total_rows = 0
+    failed_sports = []
 
     for sport in a.sports:
-        games, used, rem = pull(sport)
+        if sport not in FOLDER_MAP:
+            log.error(f"HARD STOP for {sport}: unknown sport (add it to FOLDER_MAP)")
+            failed_sports.append(sport)
+            continue
+
+        result = pull(sport)
+        if result is None:
+            failed_sports.append(sport)
+            continue
+        games, used, rem = result
+
         log.info(f"{sport}: {len(games)} games | credits this call: {used} | remaining: {rem}")
         if not games:
             log.warning(f"  {sport}: no games returned (off-season or no upcoming card)")
@@ -169,11 +210,8 @@ def main():
             n_hr = df[df["bookmaker"] == "hardrockbet_fl"]["event_id"].nunique()
             log.info(f"  *** hardrockbet_fl PRESENT on {n_hr} games ***")
         else:
-            # If Hard Rock returned on ANY sport this run, us2 access is proven and an
-            # absence here is coverage timing (they post close to game week), not creds.
             log.warning("   *** hardrockbet_fl ABSENT on this sport — coverage, not credentials, if it appeared on another sport this run ***")
 
-        # dispersion right now, so you can see the edge as it is captured
         for mk in ("spreads", "totals"):
             s = df[(df["market"] == mk) & df["point"].notna()]
             if s.empty: continue
@@ -187,8 +225,9 @@ def main():
         if a.dry_run:
             log.info("  DRY RUN — nothing written"); continue
 
-        season = snap.year if snap.month >= 3 else snap.year - 1
-        out = OUT_ROOT / sport.replace("americanfootball_", "") / "line_history" / f"season={season}"
+        folder = _folder(sport)
+        season = _season(sport, snap)
+        out = OUT_ROOT / folder / "line_history" / f"season={season}"
         out.mkdir(parents=True, exist_ok=True)
         f = out / f"snap_{snap.strftime('%Y%m%dT%H%M%SZ')}.parquet"
         df.to_parquet(f)
@@ -199,6 +238,10 @@ def main():
         log.info(f"\ntotal rows captured this run: {total_rows:,}")
         log.info("APPEND-ONLY: this snapshot is now part of the tape. Never overwrite it.")
         log.info("Run 2x/day. The open is ~5-6 days before kickoff — that is where the edge is.")
+
+    if failed_sports:
+        log.error(f"FAILED sports: {', '.join(failed_sports)} — exiting 1")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
