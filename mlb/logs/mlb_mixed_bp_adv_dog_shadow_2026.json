@@ -869,6 +869,38 @@
       "dog_bp_era": 4.402,
       "win_loss": "L",
       "final_score": "1-3"
+    },
+    {
+      "game_pk": 824217,
+      "game_date": "2026-09-27",
+      "matchup": "PIT @ DET",
+      "fav_team": "PIT",
+      "dog_team": "DET",
+      "fav_side": "away",
+      "fav_implied": 0.5528,
+      "dog_ml_price": 118,
+      "sp_fip_diff": 0.498,
+      "off_diff": 0.75,
+      "bp_era_diff": 0.476,
+      "fav_bp_era": 4.78,
+      "dog_bp_era": 4.304,
+      "win_loss": null
+    },
+    {
+      "game_pk": 823650,
+      "game_date": "2026-09-27",
+      "matchup": "TEX @ MIN",
+      "fav_team": "TEX",
+      "dog_team": "MIN",
+      "fav_side": "away",
+      "fav_implied": 0.5328,
+      "dog_ml_price": 106,
+      "sp_fip_diff": -0.333,
+      "off_diff": -0.4,
+      "bp_era_diff": 0.002,
+      "fav_bp_era": 4.73,
+      "dog_bp_era": 4.727,
+      "win_loss": null
     }
   ]
 }
