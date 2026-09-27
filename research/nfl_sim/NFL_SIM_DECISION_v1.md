@@ -3103,8 +3103,22 @@ Suite: 3 failed (fd_pen, tied_drives, player_off_hash transient), 218 passed. Ex
 
 `compute_k1_actuals()` gives 21.74 on Mac and Linux (D159's 21.92 was an inline computation error).
 Made explicit: `dropna=True`, integer `n_drives_total / n_games`. Row counts pinned: 1,087 games,
-136,727 plays, 23,635 drives. Test: 1/1 pass. Sim counter includes ~0.12 zero-play drives/game
-(not changed; noted).
+136,727 plays, 23,635 drives. Test: 1/1 pass. Sim counter includes ~0.12 zero-play drives/game (not changed; noted).
+
+### D164 — 5W Item 1: per-event play log at all 9 ev_clock_used sites; quarter-sum test FAILS (2026-09-27)
+
+Replaced 5V's per-step log with per-event rows at each `ev_clock_used` site: pass mid-drive
+(incomplete/first_down/complete_inbounds), rush (run/first_down), drive_ending, kneel, spike,
+eoh, fgs, timeout_stopped. Each row: sim_id, qtr, clock_before, elapsed (capped at quarter
+boundary), event_class, score_state, clock_period, pace_mult.
+
+**Quarter-sum test: FAILS.** Q1 sums to 900 s (correct); Q2-Q4 are 4-31 s short. The gap comes
+from clock consumption that STRADDLES quarter boundaries: when a play consumes 40 s and the
+clock has 20 s left, the log caps at 20 s (correct for that quarter), but the 20 s overshoot
+bleeds into the next quarter via `clock += 900` and is never logged as a separate event.
+The FIX is to split cross-quarter events into two log rows. NOT DONE in this commit.
+
+Player-OFF hash: `afdb11999d5b12bf` (matches). Engine fp: `e00483d173495210`.
 
 ### D162 — 5V verified and MERGED (items 0-1 stand; items 2-3 redone in 5W): plays target 125.78 reproduced, drives target does not reproduce, the clock log does not reconcile and its test was relaxed (2026-09-27)
 
