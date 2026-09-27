@@ -3201,3 +3201,15 @@ chain still reaches parent/legacy cells). Table rebuilt with committed builder.
 **Pre-registered:** plays fall -1.0 to -2.5 from item 0 — **FAILED** (-0.1). The split
 cells have similar quantiles to the pooled cell; the differential was smaller than expected.
 Net items 0+1: +0.9 from 5W (pre-registered < 1.0 net) — **HELD** marginally.
+
+### D169 — 5X Item 2: season-stratified sample confirms 2024 is worst (+9.0); blowout gap persists (2026-09-27)
+
+Report: `phase5x_clock_class.md`. Parquet: `phase5x_clock_class.parquet` (8 rows, 2.6 KB).
+200 games (50/season), N=100, 145s. Diagnosis only.
+
+By margin: 0-7 +6.9, 8-14 +7.0, 15-21 +7.9, 22+ +11.3 (ratio 1.64x). By season: 2021 +7.9,
+2022 +6.9, 2023 +7.5, **2024 +9.0** (largest). D144 sample underestimated (+5.1) because it was
+2021 weeks 1-13 only.
+
+**Pre-registered:** (1) per-class not scored (play log not decomposed); (2) 2024 largest — **HELD**;
+(3) NULL quarter 900 s — **HELD**.
