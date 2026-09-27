@@ -3346,3 +3346,32 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: one slate, ~0.7 SD above zero at Pinnacle freeze prices; the biggest disagreements with Pinnacle lost.
 - NOT DONE: CLV vs closing lines; Hard Rock-price version of the units.
 - UNVERIFIED: whether other FCS names are missing from _TEAM_MAP for future weeks (only this week's were checked).
+
+## 2026-09-27T14:00Z  claude-code (Phase 5Y — D172, D173, D174, D175)
+
+### RETURNED
+- D172 (Item 0): Pooled first_down fallback rows restored (38 cells, was 0 in 5X). EOH/FGS lookup: split -> pooled -> all. 5X reds (ot_structure, tied_kicks) PASS. Test: 1/1 pass.
+- D173 (Item 1): Drive-ending plays (7,559 TD/INT/fumble-lost, 5.6%) excluded from all clock table cells. Means increased (fd_pass +3.3s, fd_rush +3.5s). Plays on sample: 131.8 -> 129.0 (-2.8). Pre-reg -3.5-5.5: FAILED (-2.8).
+- D174 (Item 2): Plays gap on stratified sample +3.2 (from 5X's +7.4; items 0+1 closed 4.2). Pre-reg +1.5-4.0: HELD. Per-class breakdown not completed.
+- D175 (Item 3): fit_5y. K1: plays 128.3 (pre-reg 127.8±1.5: HELD). drives 23.3 (fall 0.68: HELD). pts 21.55 (fall 0.74: HELD). All nulls HELD. 5X reds PASS. NEW marginal red: safety_share 0.100pp (tolerance 0.10pp exactly). Suite: 3 failed (fd_pen, tied, safety_share), 221 passed. Exit 1.
+
+### MEANS
+- The two clock-table fixes (pooled fallback + drive-end exclusion) closed 4.1 plays from 5X's +6.6 gap, landing at K1 +2.5 plays/game (128.3 vs 125.8). This is the lowest plays gap since the sim was built.
+- The drive-end exclusion was the big mover (-2.8 plays on the sample). It worked because TD/INT/fumble plays' short elapsed was dragging every non-scoring cell's quantiles down, making the clock run ~2-3 s too fast on first downs.
+- The pooled fallback fix resolved the 5X reds (ot_structure, tied_kicks) by giving thin late-game cells the correct ~15 s runoff instead of ~33 s from the all-clock parent.
+- The remaining +2.5 plays is the structural base: ~1.8 extra drives/game from turnover frequency and the blowout clock-burning deficit.
+- pts/team fell to 21.55 (actual 22.39, diff -0.84): fewer plays means fewer scoring opportunities. This is an expected side effect of correcting the clock.
+
+### Runtimes
+- Item 0: ~2 min. Item 1: ~3 min. Item 2: ~3 min. Item 3: ~150 min.
+
+### NOT DONE
+- Per-class elapsed decomposition (Item 2's pre-reg (1)).
+- By-margin gap table for fit_5y.
+- Investigation of safety_share marginal red.
+- K1 on a fully clean tree (header shows -dirty).
+
+### UNVERIFIED
+- Cross-machine W2 board bit-identity.
+- Whether safety_share is stochastic (0.0001pp over, likely noise).
+- Engine fp: 67b8afa3e055e4e9. Usage: 3638769c89030de0. main untouched.
