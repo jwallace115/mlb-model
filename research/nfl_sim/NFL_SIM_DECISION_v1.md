@@ -3276,3 +3276,8 @@ Test: first-down fallback resolves to same clock_period — 1/1 pass.
 Excluded 7,559 drive-ending plays (5.6%) from every clock cell. Means increased (fd_pass +3.3,
 fd_rush +3.5, complete +0.5, run +0.2, incomplete -0.1). Plays/game on sample: 131.8 → 129.0 (-2.8).
 **Pre-registered -3.5 to -5.5: FAILED** (-2.8). Direction correct.
+
+### D174 — 5Y Item 2: plays gap +3.2 (from +7.4); per-class breakdown not completed (2026-09-27)
+
+Report: `phase5y_clock_class.md`. Sim 129.0 vs real ~125.8 = **gap +3.2** (items 0+1 closed 4.2).
+**Pre-registered:** (2) +1.5-4.0 — **HELD**; (3) NULL quarter — **HELD**; (1) per-class not scored.
