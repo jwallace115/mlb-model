@@ -40,6 +40,20 @@ L2 pull: -19 -> 99,952 (matches header: but actually 99,952 at start of L2 live)
 L3 live: -110 -> 99,842
 Ending: 99,842
 
+### L2 amendment — conf/conf_rank/edge in freeze, conf bands in score
+- EDITED: nfl/pipeline/log_ai_opinions.py
+  - validate(): conf (0-100) and conf_rank (1=best, unique, no gaps) required on new freezes
+  - edge computed: reader side prob minus book's de-vigged side prob
+  - NHL added to SPORTS dict (pinnacle, require_side=True, refuses side "none")
+  - NFL/NCAAF: require_side=False, old files without conf valid
+  - score(): conf_band breakouts (1-10, 11-25, 26-50, 51+), edge_rank comparison
+  - score(): postfreeze_<UTC>.csv read as reporting cut only (marks affected rows)
+- EDITED: nfl/pipeline/tests/test_ai_opinions_n59.py (added conf/conf_rank to _filled helper)
+- CREATED: nfl/pipeline/tests/test_ai_opinions_conf_l2.py (12 new tests)
+- ALL TESTS: 46/46 pass (10 existing + 12 new conf + 19 L1 + 5 L2)
+- COMMITTED: 6120751b2, PUSHED
+- CREDITS USED: 0 (no API calls)
+
 ### NOT DONE
 - Item 3 (L4): VM deploy. Blocked until Jeff says "deploy" after merge.
 - No NBA added (work order: "Do NOT add NBA").
