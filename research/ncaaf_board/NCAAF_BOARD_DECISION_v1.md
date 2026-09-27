@@ -1663,3 +1663,19 @@ claude-fable-5-1. The logs did not record this, so two different pickers would h
   that is a new version too, judged only on games after its date.
 - Tests: `test_n62_reader_model_required_and_recorded`, `test_n62_older_files_attributed_from_sidecar` (both fail
   on the pre-N62 code; the 8 existing tests pass with the new argument).
+
+### N63 — Week 4 NCAAF blind log graded: slightly ahead of Pinnacle, well inside noise; three FCS names added to the grader map (2026-09-27)
+
+Scored with `log_ai_opinions.py score --sport ncaaf --week 4 --include-pilot` on CFBD finals pulled 2026-09-27
+10:22Z (manifest verified before scoring). Report `research/ncaaf_board/n59_wk4_score_2026-09-27.md` + parquet.
+- The first run left 3 games (6 lines) ungraded: `_odds_to_cfbd` has no entry for William and Mary, LIU and Houston
+  Baptist (CFBD: William & Mary, Long Island University, Houston Christian). Added to `_TEAM_MAP`; the re-run
+  equals Cowork's hand-grade of those 6 lines exactly (3 won, -0.27 u). 5 lines pushed on Pinnacle's number.
+- Saturday record (claude-opus-5-5, 65 games): 177 sides, 99 won, **+8.96 u at the frozen Pinnacle prices**. SD of
+  the unit total is ~13.6, so this is ~0.7 SD — not evidence. Two-way Brier reader 0.2152 vs book 0.2173 (P1
+  "book <= reader" did not hold, by 0.002). Liberty @ CCU pilot (claude-fable-5-1): 1 side, lost.
+- What the slices say (a log, not findings; ~3 correlated lines per game, one slate): spreads +8.50, totals +0.58,
+  ML -1.13; the lines where the reader disagreed MOST with Pinnacle (gap 0.03-0.08, n=47) lost -2.59 while the
+  near-book lines won. Tag `injury_news` +16.22 on 75, `matchup` -3.18 on 73 — noted, not acted on.
+- Economics: prices are the 05:30Z Pinnacle tape at freeze, not Hard Rock and not the close; CLV is not measured
+  yet. Nothing is tuned on this.

@@ -37,6 +37,10 @@ _TEAM_MAP = {
     "Appalachian State Mountaineers": "App State",
     "Hawaii Rainbow Warriors": "Hawai'i",
     "Southeastern Louisiana Lions": "SE Louisiana",
+    # N63: FCS names the prefix match misses (week 4 blind log)
+    "William and Mary Tribe": "William & Mary",
+    "LIU Sharks": "Long Island University",
+    "Houston Baptist Huskies": "Houston Christian",
 }
 
 # A tape commence_time can drift hours from CFBD's startDate (App State-Charlotte 2026-09-19:

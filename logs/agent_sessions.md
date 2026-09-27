@@ -3339,3 +3339,10 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: item 0 right; item 1's split ships with dead fallbacks that cause both new reds; the clock table double-counts drive-ending plays, ~4.5 plays of the +6.6 gap.
 - NOT DONE: full suite on Linux (targeted tests only); the class-by-class decomposition (moved to 5Y); NCAAF grading (CFBD pull pending on Jeff's Mac).
 - UNVERIFIED: the -4.5 plays estimate (real counts used as a proxy for sim counts; 5Y measures it); whether 2024 differs from 2021-23 in any class.
+
+## 2026-09-27T10:25Z  cowork (NCAAF week 4 blind-log grading, N63)
+- RAN (Mac bridge): log_ai_opinions.py score --sport ncaaf --week 4 --include-pilot on CFBD 2026 finals (pulled 10:22Z by Jeff) -> 174 graded first run; 6 lines unresolved (3 FCS name-map misses); added 3 _TEAM_MAP entries; re-run -> 180 graded, 5 pushes, 178 sides 99 won +7.96 u (Sat Opus 177/99/+8.96; Liberty pilot Fable 1/0/-1); Brier reader 0.2152 vs book 0.2173.
+- WROTE: research/ncaaf_board/n59_wk4_score_2026-09-27.md + .parquet, N63, grade_ncaaf_tickets.py _TEAM_MAP (+3).
+- MEANS: one slate, ~0.7 SD above zero at Pinnacle freeze prices; the biggest disagreements with Pinnacle lost.
+- NOT DONE: CLV vs closing lines; Hard Rock-price version of the units.
+- UNVERIFIED: whether other FCS names are missing from _TEAM_MAP for future weeks (only this week's were checked).
