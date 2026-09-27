@@ -1,0 +1,50 @@
+{
+ "slate": "NFL 2026 wk4 Sun 2026-09-27",
+ "written_utc": "2026-09-27T16:33Z",
+ "reader_model": "claude-opus-5-5",
+ "supersedes": "sun_cards_20260927.json (props legs there were template-driven; Jeff asked for layered reasoning)",
+ "layers": {
+  "market": "15:00Z 10-book props pull (HR vs Pinnacle + 8-book consensus line); game lines HR vs Pinnacle 15:00Z tape + move since Sun-night open",
+  "news": "QB changes (Daniels out/Mariota; Dart out/Winston); 1pm inactives NOT confirmable from sources at 16:30Z - Jeff confirms each prop is still live in the HR app",
+  "history": "nflverse stats_player_week_2026 (weeks 1-2, week 3 only TNF) and 2026 scores",
+  "model": "skipped (sim not ready, Jeff)"
+ },
+ "note": "These cards are NOT the scored log (ai_opinions_20260927T155815Z stays the record). Card legs are graded as tickets.",
+ "cards": {
+  "LINES_5": {
+   "est": "+2557",
+   "legs": [
+    "SEA -8.5 -110",
+    "BUF -7 -110",
+    "PIT +3 +100",
+    "NYG -2 -110",
+    "CLE +2 -110"
+   ]
+  },
+  "PROPS_5": {
+   "est": "+1443",
+   "legs": [
+    "Amon-Ra St. Brown o6.5 rec -145",
+    "Cooper Kupp o1.5 rec -170",
+    "Dak Prescott o2.5 rush att -155",
+    "DK Metcalf u52.5 rec yds -115",
+    "Denzel Boston o45.5 rec yds -115"
+   ]
+  },
+  "PROPS_10": {
+   "est": "+46385",
+   "legs": [
+    "Michael Mayer o2.5 rec +110",
+    "Bucky Irving o2.5 rec -135",
+    "AJ Barner u2.5 rec -115",
+    "Brock Purdy o16.5 rush yds -120",
+    "Tony Pollard u7.5 rec yds -120",
+    "Malik Willis u6.5 rush att +100",
+    "Jakobi Meyers u3.5 rec -125",
+    "David Montgomery o9.5 rec yds -110",
+    "James Cook u12.5 rec yds -120",
+    "Terrance Ferguson u4.5 rec -165"
+   ]
+  }
+ }
+}

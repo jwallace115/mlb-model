@@ -1,0 +1,26 @@
+{"slate": "NFL 2026 week 4, Sun 2026-09-27", "drawn_from": "ai_opinions_20260927T155815Z.parquet (sha256 cc0eb467...)", "reader_model": "claude-opus-5-5",
+ "written_utc": "2026-09-27T16:10Z", "placed": "unknown - Jeff to confirm; prices are Hard Rock at freeze (lines 15:00Z tape, props 13:23Z pull)",
+ "cards": {
+  "LINES_5": {"est_price": "+2557", "legs": [
+    {"game": "SEA@WAS", "pick": "Seahawks -8.5", "price": -110, "conf_rank": 1},
+    {"game": "LAC@BUF", "pick": "Bills -7", "price": -110, "conf_rank": 2},
+    {"game": "CIN@PIT", "pick": "Steelers +3", "price": 100, "conf_rank": 3},
+    {"game": "TEN@NYG", "pick": "Giants -2", "price": -110, "conf_rank": 4},
+    {"game": "CAR@CLE", "pick": "Browns +2", "price": -110, "conf_rank": 5}]},
+  "PROPS_5": {"est_price": "+2282", "legs": [
+    {"game": "TEN@NYG", "pick": "Cam Ward over 30.5 pass attempts", "price": -110, "conf_rank": 40},
+    {"game": "KC@MIA", "pick": "Patrick Mahomes under 30.5 pass attempts", "price": -110, "conf_rank": 42},
+    {"game": "ARI@SF", "pick": "Brock Purdy under 235.5 pass yds", "price": -115, "conf_rank": 47},
+    {"game": "BAL@DAL", "pick": "Lamar Jackson under 241.5 pass yds", "price": -115, "conf_rank": 50},
+    {"game": "NYJ@DET", "pick": "Geno Smith over 227.5 pass yds", "price": -115, "conf_rank": 53}]},
+  "PROPS_10": {"est_price": "+81341", "legs": [
+    {"game": "SEA@WAS", "pick": "Sam Darnold under 18.5 completions", "price": -105, "conf_rank": 55},
+    {"game": "LAC@BUF", "pick": "Justin Herbert over 20.5 completions", "price": -105, "conf_rank": 114},
+    {"game": "HOU@IND", "pick": "C.J. Stroud under 239.5 pass yds", "price": -115, "conf_rank": 477},
+    {"game": "NE@JAX", "pick": "Trevor Lawrence over 20.5 completions", "price": 100, "conf_rank": 512},
+    {"game": "CAR@CLE", "pick": "Deshaun Watson over 18.5 completions", "price": -105, "conf_rank": 756},
+    {"game": "CIN@PIT", "pick": "Aaron Rodgers over 22.5 completions", "price": 100, "conf_rank": 174},
+    {"game": "MIN@TB", "pick": "Baker Mayfield over 216.5 pass yds", "price": -115, "conf_rank": 238},
+    {"game": "LV@NO", "pick": "Tyler Shough over 33.5 pass attempts", "price": -110, "conf_rank": 822},
+    {"game": "LAR@DEN", "pick": "Matthew Stafford under 20.5 completions", "price": 105, "conf_rank": 581},
+    {"game": "TEN@NYG", "pick": "Malik Nabers over 4.5 receptions", "price": 100, "conf_rank": 81}]}}}

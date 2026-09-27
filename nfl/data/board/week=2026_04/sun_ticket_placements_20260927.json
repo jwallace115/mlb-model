@@ -1,0 +1,20 @@
+{"slate": "NFL 2026 Sun 2026-09-27 (repo week=2026_04)", "source": "Jeff screenshots of Hard Rock slips, sent ~18:20Z; lines as placed (Jeff bought/moved some numbers)",
+ "drawn_from": ["sun_cards_v2_20260927.json (props 5/10, lines 5 mixed)", "late_games_layered_read_1800Z.md (SGPMAX)"],
+ "reader_model": "claude-opus-5-5", "total_staked": 75,
+ "tickets": [
+  {"id": "SUN_PROPS_5", "type": "parlay", "stake": 20, "price": "+1085", "to_pay": 237.02, "legs": [
+    "Denzel Boston over 44.5 receiving yards -115 (CAR@CLE)", "DK Metcalf under 52.5 receiving yards -115 (CIN@PIT)",
+    "Amon-Ra St. Brown over 6.5 receptions -150 (NYJ@DET)", "Cooper Kupp over 1.5 receptions -165 (SEA@WAS)",
+    "Dak Prescott 2+ rush attempts (over 1.5) -375 (BAL@DAL) [card had over 2.5 at -155]"]},
+  {"id": "SUN_PROPS_9", "type": "parlay", "stake": 15, "price": "+21895", "to_pay": 3299.24, "legs": [
+    "James Cook under 12.5 receiving yards -120 (LAC@BUF)", "Malik Willis under 6.5 rush attempts -130 (KC@MIA)",
+    "Jakobi Meyers under 3.5 receptions -125 (NE@JAX)", "AJ Barner under 2.5 receptions -120 (SEA@WAS)",
+    "David Montgomery over 9.5 receiving yards -110 (HOU@IND)", "Bucky Irving over 2.5 receptions -135 (MIN@TB)",
+    "Brock Purdy over 16.5 rush yards -120 (ARI@SF)", "Michael Mayer over 2.5 receptions +110 (LV@NO) [news layer later against: Bowers Q]",
+    "Terrance Ferguson under 4.5 receptions -165 (LAR@DEN) [news layer later against: Nacua D]"]},
+  {"id": "SUN_LINES_5", "type": "parlay", "stake": 15, "price": "+2001", "to_pay": 315.22, "legs": [
+    "Bills -7 -110", "TEN@NYG over 35.5 -160 [card 38]", "Browns ML +110", "Seahawks -8 -110 [card -8.5]", "ARI@SF under 50.5 -145 [card 48]"]},
+  {"id": "SUN_SGPMAX_5", "type": "sgpmax", "stake": 25, "price": "+1362 incl. 20% profit boost", "to_pay": 433.48, "legs": [
+    "SGP BAL@DAL: Dak Prescott over 2.5 rush attempts + Mark Andrews over 3.5 receptions (+144)",
+    "Emeka Egbuka under 49.5 receiving yards -115 (MIN@TB)", "Ashton Jeanty under 72.5 rush yards -140 (LV@NO)",
+    "Davante Adams over 71.5 receiving yards -115 (LAR@DEN)"]}]}
