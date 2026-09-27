@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Pull Hard Rock (hardrockbet_fl) NFL player props via the Odds API.
+Pull multi-book NFL player props via the Odds API.
 
-Canonical writer for Hard Rock prop captures. Runs on the VM only.
-Cost: 15 credits per event + 1 per run (events endpoint is free).
+Canonical writer for NFL prop captures. Runs on the VM only.
+10 books (1 region-equivalent). Cost = len(MARKETS) per event (measured).
 
 Usage:
   python3 nfl/pipeline/pull_hardrock_props.py --window-hours 168 --tag open
@@ -29,12 +29,17 @@ KEY = os.getenv("ODDS_API_KEY", "")
 KEY_FP = hashlib.sha256(KEY.strip().encode()).hexdigest()[:8] if KEY else "UNSET"
 BASE = "https://api.the-odds-api.com/v4"
 
-MARKETS = (
-    "player_pass_yds,player_pass_tds,player_pass_attempts,"
-    "player_pass_completions,player_pass_interceptions,"
-    "player_rush_yds,player_rush_attempts,"
-    "player_reception_yds,player_receptions,player_anytime_td"
-)
+MARKET_LIST = [
+    "player_pass_yds", "player_pass_tds", "player_pass_attempts",
+    "player_pass_completions", "player_pass_interceptions",
+    "player_rush_yds", "player_rush_attempts",
+    "player_reception_yds", "player_receptions", "player_anytime_td",
+]
+MARKETS = ",".join(MARKET_LIST)
+
+# Same 10-book list as the tape (1 region-equivalent).
+BOOKS = ["hardrockbet_fl", "pinnacle", "draftkings", "fanduel", "betmgm",
+         "betonlineag", "bovada", "betrivers", "williamhill_us", "lowvig"]
 
 ARCHIVE_ROOT = ROOT / "data" / "odds_archive" / "nfl"
 PROPS_DIR = ARCHIVE_ROOT / "props"
@@ -137,6 +142,10 @@ def main():
                         help="Snapshot tag written to snapshot_tag column")
     parser.add_argument("--dry-run", action="store_true",
                         help="List events and cost without pulling")
+    parser.add_argument("--floor", type=int, default=HALT_THRESHOLD,
+                        help=f"credit floor (default {HALT_THRESHOLD})")
+    parser.add_argument("--out-dir", type=str, default=None,
+                        help="override output dir (scratch path for testing)")
     args = parser.parse_args()
 
     print(f"key fingerprint {KEY_FP}")
@@ -173,13 +182,14 @@ def main():
         print("No events in window")
         sys.exit(0)
 
-    # ── Cost pre-check ──
-    cost = len(window) * 15 + 1
+    # ── Cost pre-check (cost = markets per event, measured) ──
+    cost_per_event = len(MARKET_LIST)
+    cost = len(window) * cost_per_event
     after = remaining - cost
-    print(f"cost pre-check: {len(window)} events x 15 + 1 = {cost} credits")
-    print(f"  remaining after: {after} (threshold: {HALT_THRESHOLD})")
-    if after < HALT_THRESHOLD:
-        print(f"HALT: remaining {remaining} - cost {cost} = {after} < {HALT_THRESHOLD}")
+    print(f"cost pre-check: {len(window)} events x {cost_per_event} markets = {cost} credits")
+    print(f"  remaining after: {after} (floor: {args.floor})")
+    if after < args.floor:
+        print(f"HALT: remaining {remaining} - cost {cost} = {after} < {args.floor}")
         sys.exit(1)
 
     if args.dry_run:
@@ -200,7 +210,7 @@ def main():
 
         resp = requests.get(
             f"{BASE}/sports/americanfootball_nfl/events/{eid}/odds",
-            params={"apiKey": KEY, "bookmakers": "hardrockbet_fl",
+            params={"apiKey": KEY, "bookmakers": ",".join(BOOKS),
                     "markets": MARKETS, "oddsFormat": "american"},
             timeout=30)
 
@@ -233,14 +243,31 @@ def main():
 
     # ── Save ──
     if all_rows:
-        season = int(game_date[:4])
-        month = int(game_date[5:7])
-        path = save_partition(all_rows, season, month)
+        if args.out_dir:
+            # Scratch path for testing (canonical-writer rule: Mac must not
+            # write to the monthly file the VM also writes).
+            from pathlib import Path as P
+            scratch = P(args.out_dir)
+            scratch.mkdir(parents=True, exist_ok=True)
+            df = pd.DataFrame(all_rows)
+            path = scratch / f"scratch_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.parquet"
+            df.to_parquet(path, index=False)
+        else:
+            season = int(game_date[:4])
+            month = int(game_date[5:7])
+            path = save_partition(all_rows, season, month)
         print(f"\nSaved {len(all_rows)} rows to {path}")
     else:
         print("\nNo rows to save")
 
-    print(f"credits used: {credits_used}  tag: {args.tag}  events: {len(window)}")
+    # Summary by book
+    if all_rows:
+        df_summary = pd.DataFrame(all_rows)
+        print("\nRows by bookmaker:")
+        for bk, cnt in df_summary.groupby("bookmaker").size().items():
+            print(f"  {bk:<20s}: {cnt}")
+
+    print(f"\ncredits used: {credits_used}  tag: {args.tag}  events: {len(window)}")
 
 
 if __name__ == "__main__":

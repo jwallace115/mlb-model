@@ -64,3 +64,30 @@ Per-book table in session log. NFL has full player prop coverage across all 10 b
   Hard Rock absent (preseason). Bovada 2nd (21 rows, 8 markets).
 
 **Cost model confirmed:** discovery = 1 credit/event, pull = markets/event.
+
+---
+
+### L3 — NFL props from 10 books (2026-09-27)
+
+**Changed:** `nfl/pipeline/pull_hardrock_props.py`
+
+1. **10-book list.** `bookmakers=` now uses the tape's 10-book list instead of
+   `hardrockbet_fl` only. The `bookmaker` column already existed in the schema.
+
+2. **Cost pre-check fix.** Was hardcoded `len(window) * 15 + 1`. Now computed from
+   `len(MARKET_LIST)` (= 10 markets = 10 credits/event). Matches Jeff's measured
+   `x-requests-last = 10` from 2026-09-27.
+
+3. **--floor and --out-dir args.** `--floor` replaces hardcoded HALT_THRESHOLD in the
+   check. `--out-dir` writes to a scratch path (canonical-writer rule: Mac must not
+   write to the monthly file the VM also writes).
+
+**PRE-REGISTRATION:** cost per event stays at 10 with 10 books.
+**RESULT:** CONFIRMED. Every event returned `x-requests-last=10`. Cost is driven by
+market count (10), not book count. Adding 9 books cost zero additional credits.
+
+**Live test (Mac, 11 events, scratch path, 110 credits):**
+- x-requests-last = 10 on all 11 events
+- 6,391 rows across 9 books (lowvig absent — no props)
+- hardrockbet_fl: 756 rows. bovada: 1,236. pinnacle: 557.
+- Written to /tmp/nfl_props_scratch/ (not the monthly file).
