@@ -3181,3 +3181,12 @@ its quarter-sum test fails honestly). D165's by-margin table (gap +3.9 close -> 
 4. The D144 sample is 2021 weeks 1-13 (smallest gap); the next measurement is season-stratified.
 
 Merged to main. Engine `e00483d173495210` (outputs identical to 5U), fit_5u.
+
+### D167 — 5X Item 0: quarter ends do not carry clock; 5W test passes (2026-09-27)
+
+engine.py ~1473: `clock[can_advance] = 900.0` (was `+= 900.0`). Each new quarter starts at
+exactly 900 s instead of carrying over negative overshoot from the previous quarter. OT
+unaffected (uses its own `clock = 600.0`). `test_play_log_quarter_sums` now **PASSES** with
+no change to the test or the log.
+
+**Pre-registered:** plays/game rise +1.0 to +2.5 — **HELD** (130.9 → 131.9, +1.0).

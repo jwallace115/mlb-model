@@ -1467,10 +1467,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         # --- Quarter / half / game end ---
         time_up = alive & (clock <= 0)
         if time_up.any():
-            # Advance quarter — carry over negative clock so time isn't lost
+            # Advance quarter — start at exactly 900 (a real quarter restarts at 15:00;
+            # the runoff table's real elapsed is already capped by the time left in the quarter)
             can_advance = time_up & (qtr < 4)
             qtr[can_advance] += 1
-            clock[can_advance] += 900.0  # Add 900, preserving any negative overshoot
+            clock[can_advance] = 900.0  # 5X-0: no overshoot carry (was += 900)
 
             # Halftime (entering Q3)
             ht = time_up & (qtr == 3) & ~half_recorded
