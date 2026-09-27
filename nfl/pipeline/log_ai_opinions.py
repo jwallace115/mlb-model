@@ -49,10 +49,16 @@ ROOT = Path(__file__).resolve().parents[2]
 SPORTS = {
     "nfl": {"book": "hardrockbet_fl", "props": ROOT / "data" / "odds_archive" / "nfl" / "props",
             "lines": ROOT / "data" / "odds_archive" / "nfl" / "line_history",
-            "out": ROOT / "nfl" / "data" / "board", "outcomes": "pbp"},
+            "out": ROOT / "nfl" / "data" / "board", "outcomes": "pbp",
+            "require_side": False},
     "ncaaf": {"book": "pinnacle", "props": None,
               "lines": ROOT / "data" / "odds_archive" / "ncaaf" / "line_history",
-              "out": ROOT / "ncaaf" / "data" / "board", "outcomes": "cfbd"},
+              "out": ROOT / "ncaaf" / "data" / "board", "outcomes": "cfbd",
+              "require_side": False},
+    "nhl": {"book": "pinnacle", "props": None,
+            "lines": ROOT / "data" / "odds_archive" / "nhl" / "line_history",
+            "out": ROOT / "nhl" / "data" / "board", "outcomes": None,
+            "require_side": True},
 }
 SPORT = "nfl"
 BOOK = SPORTS[SPORT]["book"]
@@ -166,11 +172,19 @@ def validate(sheet, filled):
     f["player_name"] = f["player_name"].fillna("")
     f["line"] = f["line"].astype(float)
     need = set(KEY) | {"p_first", "tag", "reason"}
+    # conf and conf_rank are required on all new freezes
+    has_conf = "conf" in f.columns and "conf_rank" in f.columns
+    if has_conf:
+        need |= {"conf", "conf_rank"}
+    else:
+        raise SystemExit("HALT: filled sheet is missing conf and conf_rank columns "
+                         "(required on all new freezes)")
     if need - set(f.columns):
         raise SystemExit(f"HALT: filled sheet is missing columns {sorted(need - set(f.columns))}")
     if f.duplicated(KEY).any():
         raise SystemExit("HALT: filled sheet has duplicate lines")
-    m = sheet.merge(f[KEY + ["p_first", "tag", "reason"]], on=KEY, how="outer", indicator=True)
+    merge_cols = KEY + ["p_first", "tag", "reason", "conf", "conf_rank"]
+    m = sheet.merge(f[merge_cols], on=KEY, how="outer", indicator=True)
     missing = m[m["_merge"] == "left_only"]
     extra = m[m["_merge"] == "right_only"]
     if len(missing):
@@ -183,6 +197,18 @@ def validate(sheet, filled):
     bad = sorted(set(m["tag"]) - set(TAGS))
     if bad:
         raise SystemExit(f"HALT: unknown tag(s) {bad}; allowed {TAGS}")
+    # ── conf / conf_rank validation ──
+    m["conf"] = pd.to_numeric(m["conf"], errors="coerce")
+    m["conf_rank"] = pd.to_numeric(m["conf_rank"], errors="coerce").astype("Int64")
+    if m["conf"].isna().any() or not m["conf"].between(0, 100).all():
+        raise SystemExit("HALT: conf must be a number in [0, 100] on every line")
+    if m["conf_rank"].isna().any():
+        raise SystemExit("HALT: conf_rank must be a positive integer on every line")
+    if m["conf_rank"].min() != 1 or m["conf_rank"].duplicated().any():
+        raise SystemExit("HALT: conf_rank must be unique positive integers starting from 1")
+    if set(m["conf_rank"]) != set(range(1, len(m) + 1)):
+        raise SystemExit(f"HALT: conf_rank must be 1..{len(m)} with no gaps")
+
     book = m["q_first"].where(m["two_way"], m["imp_first"])
     nv = m["tag"] == "no_view"
     if ((m["p_first"] - book).abs()[nv] > NO_VIEW_TOL).any():
@@ -199,6 +225,19 @@ def validate(sheet, filled):
                               np.where(m["side"] == "second", m["second_side"], ""))
     m["side_price"] = np.where(m["side"] == "first", m["price_first"],
                                np.where(m["side"] == "second", m["price_second"], np.nan))
+    # ── NHL (and any require_side sport): refuse side "none" ──
+    if SPORTS[SPORT].get("require_side", False):
+        nones = m[m["side"] == "none"]
+        if len(nones):
+            raise SystemExit(f"HALT: {SPORT} requires a side on every line; "
+                             f"{len(nones)} lines have side='none' "
+                             f"(no_view tag or gap==0 on a one-way market)")
+    # ── edge: reader probability of its side minus book's de-vigged probability ──
+    reader_side_p = np.where(m["side"] == "first", m["p_first"],
+                             np.where(m["side"] == "second", 1 - m["p_first"], np.nan))
+    book_side_p = np.where(m["side"] == "first", m["book_p_first"],
+                           np.where(m["side"] == "second", 1 - m["book_p_first"], np.nan))
+    m["edge"] = np.where(m["side"] == "none", 0.0, reader_side_p - book_side_p)
     return m
 
 
@@ -380,6 +419,25 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
     dec = out["side_price"].map(lambda a: (a / 100 + 1) if pd.notna(a) and a > 0 else (100 / -a + 1) if pd.notna(a) else np.nan)
     out["units"] = np.where(out["side"] == "none", 0.0, np.where(out["graded"], np.where(out["side_won"], dec - 1, -1.0), 0.0))
     out["gap_bucket"] = pd.cut(out["gap"].abs(), [b[0] for b in GAP_BUCKETS] + [9], labels=[b[2] for b in GAP_BUCKETS], right=False)
+    # ── conf band (for files that carry conf) ──
+    if "conf_rank" in out.columns and out["conf_rank"].notna().any():
+        out["conf_band"] = pd.cut(out["conf_rank"], bins=[0, 10, 25, 50, 9999],
+                                  labels=["1-10", "11-25", "26-50", "51+"], right=True)
+        # edge_rank: rank by descending edge (1 = largest edge)
+        if "edge" in out.columns and out["edge"].notna().any():
+            out["edge_rank"] = out["edge"].rank(ascending=False, method="first").astype("Int64")
+    # ── postfreeze CSV (reporting cut only — never changes a grade or removes a row) ──
+    pf_files = sorted(d.glob("postfreeze_*.csv")) if d else []
+    if pf_files:
+        pf = pd.concat([pd.read_csv(f) for f in pf_files], ignore_index=True)
+        # Match rows: postfreeze file has a "rows affected" column listing event_ids
+        # Mark rows that are touched by post-freeze news
+        affected_events = set()
+        if "game" in pf.columns:
+            affected_events = set(pf["game"].dropna().unique())
+        out["postfreeze_affected"] = out["event_id"].isin(affected_events) if affected_events else False
+    else:
+        out["postfreeze_affected"] = False
     return out
 
 
@@ -410,12 +468,45 @@ def score_report(out, season, week):
         if len(big):
             L += [f"   |p-q| > 0.08 (n={len(big)}): {int(big['side_won'].sum())} won, units {big['units'].sum():+.2f} - "
                   f"P2 (lose units) {'HELD' if big['units'].sum() < 0 else 'DID NOT HOLD'}"]
-        for col in ["reader_model", "market_key", "tag", "gap_bucket"]:
+        breakout_cols = ["reader_model", "market_key", "tag", "gap_bucket"]
+        if "conf_band" in sides.columns and sides["conf_band"].notna().any():
+            breakout_cols.append("conf_band")
+        for col in breakout_cols:
             t = sides.groupby(col, observed=True).agg(n=("units", "size"), won=("side_won", "sum"), units=("units", "sum")).round(2)
             L += ["", f"### by {col}", "", t.to_markdown()]
+        # ── conf_rank vs edge_rank comparison ──
+        if "conf_rank" in sides.columns and "edge_rank" in sides.columns and sides["conf_rank"].notna().any():
+            L += ["", "### conf_rank vs edge_rank"]
+            L += ["", "Do the reader's top-ranked picks (by conf) outperform a ranking by raw edge?"]
+            for band, lo, hi in [("1-10", 1, 10), ("11-25", 11, 25), ("26-50", 26, 50), ("51+", 51, 99999)]:
+                by_conf = sides[sides["conf_rank"].between(lo, hi)]
+                by_edge = sides[sides["edge_rank"].between(lo, hi)]
+                if len(by_conf) == 0 and len(by_edge) == 0:
+                    continue
+                conf_u = by_conf["units"].sum() if len(by_conf) else 0
+                edge_u = by_edge["units"].sum() if len(by_edge) else 0
+                L += [f"  band {band}: conf_rank n={len(by_conf)} units={conf_u:+.2f}  |  "
+                      f"edge_rank n={len(by_edge)} units={edge_u:+.2f}  |  "
+                      f"{'conf wins' if conf_u > edge_u else 'edge wins' if edge_u > conf_u else 'tie'}"]
+    # ── postfreeze reporting cut ──
+    if "postfreeze_affected" in g.columns and g["postfreeze_affected"].any():
+        touched = g[g["postfreeze_affected"]]
+        untouched = g[~g["postfreeze_affected"]]
+        L += ["", "## Post-freeze news cut (reporting only — no grades changed)",
+              f"  touched: {len(touched)} rows, {int(touched['side_won'].sum())} won, "
+              f"units {touched['units'].sum():+.2f}",
+              f"  untouched: {len(untouched)} rows, {int(untouched['side_won'].sum())} won, "
+              f"units {untouched['units'].sum():+.2f}"]
+    detail_cols = ["market_key", "player_name", "line", "side_name", "side_price", "book_p_first",
+                   "p_first", "y_first", "side_won", "units", "tag"]
+    if "conf" in g.columns:
+        detail_cols.insert(-1, "conf")
+    if "conf_rank" in g.columns:
+        detail_cols.insert(-1, "conf_rank")
+    if "edge" in g.columns:
+        detail_cols.insert(-1, "edge")
     L += ["", "## Every line with a view", "",
-          g[g["tag"] != "no_view"][["market_key", "player_name", "line", "side_name", "side_price", "book_p_first",
-                                    "p_first", "y_first", "side_won", "units", "tag"]].round(3).to_markdown(index=False)]
+          g[g["tag"] != "no_view"][[c for c in detail_cols if c in g.columns]].round(3).to_markdown(index=False)]
     return "\n".join(L) + "\n"
 
 

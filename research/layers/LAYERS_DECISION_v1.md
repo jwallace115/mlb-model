@@ -91,3 +91,32 @@ market count (10), not book count. Adding 9 books cost zero additional credits.
 - 6,391 rows across 9 books (lowvig absent — no props)
 - hardrockbet_fl: 756 rows. bovada: 1,236. pinnacle: 557.
 - Written to /tmp/nfl_props_scratch/ (not the monthly file).
+
+---
+
+### L2 amendment — conf, conf_rank, edge in freeze; conf bands in score (2026-09-27)
+
+**Amended:** `nfl/pipeline/log_ai_opinions.py` per Jeff's reader_method_v1.md.
+
+**Freeze changes:**
+1. `conf` (0-100) and `conf_rank` (1 = best bet, unique per file, no gaps) are REQUIRED
+   on every new freeze. Validation: conf in [0,100], conf_rank = 1..N with no duplicates
+   or gaps.
+2. `edge` computed by the tool: reader probability of its chosen side minus the book's
+   de-vigged probability of that same side. For side "first": edge = p_first - book_p_first.
+   For side "second": edge = (1 - p_first) - (1 - book_p_first). For side "none": edge = 0.
+3. NHL added to SPORTS dict (book: pinnacle, require_side: True). NHL rows refuse
+   side "none" — every line must have a side (no no_view tag allowed).
+4. Football/NCAAF: `require_side: False` — old files without conf stay valid; new files
+   carry conf/conf_rank/edge.
+
+**Score changes:**
+1. `conf_band` column: 1-10, 11-25, 26-50, 51+ — added to breakout tables.
+2. `edge_rank`: rank by descending edge. Report compares conf_rank vs edge_rank on
+   the same bands (pre-registered: band 1-10 should beat the rest on CLV/units).
+3. `postfreeze_<UTC>.csv` read as reporting cut only: marks `postfreeze_affected` on
+   rows whose `event_id` matches the CSV's `game` column. Never changes a grade or
+   removes a row. Reported as "touched vs untouched" in the score report.
+
+**Tests:** 12 new in `nfl/pipeline/tests/test_ai_opinions_conf_l2.py` + 10 existing
+pass unchanged (conf/conf_rank added to test helper `_filled()`). Total: 22/22 green.
