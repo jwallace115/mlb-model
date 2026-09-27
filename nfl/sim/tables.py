@@ -519,7 +519,12 @@ def build_clock_table(df):
         return "run"
 
     scrim["outcome_type"] = scrim.apply(_outcome_type, axis=1)
-    scrim.loc[scrim["first_down"] == 1, "outcome_type"] = "first_down"
+    # 5X: split first_down by play type (rush vs pass)
+    fd_mask = scrim["first_down"] == 1
+    fd_rush = fd_mask & (scrim["play_type"] == "run")
+    fd_pass = fd_mask & ~fd_rush  # includes pass completions, sacks with first down
+    scrim.loc[fd_rush, "outcome_type"] = "first_down_rush"
+    scrim.loc[fd_pass, "outcome_type"] = "first_down_pass"
 
     # 5A-3: Score state (5-way)
     sd = scrim["score_differential"]
@@ -622,7 +627,9 @@ def _fgs_runoff_rows(df):
     e["sec_b"] = pd.cut(e["half_seconds_remaining"], FGS_SEC_BINS, labels=FGS_SEC_LABELS).astype(str)
     e["outcome_type"] = np.where(e["play_type"] == "run", "run",
                         np.where((e["complete_pass"] == 1) | (e["sack"] == 1), "complete_inbounds", "incomplete"))
-    e.loc[e["first_down"] == 1, "outcome_type"] = "first_down"
+    fd_m2 = e["first_down"] == 1
+    e.loc[fd_m2 & (e["play_type"] == "run"), "outcome_type"] = "first_down_rush"
+    e.loc[fd_m2 & (e["play_type"] != "run"), "outcome_type"] = "first_down_pass"
     cens = e["next_sec"].isna()
     e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
     e = e[e["elapsed"] >= 0]
@@ -705,7 +712,9 @@ def _eoh_runoff_rows(df):
                           np.where(e["qtr"] == 2, "fg_useful_Q2", "fg_useful_Q4"), e["state"])
     e["outcome_type"] = np.where(e["play_type"] == "run", "run",
                         np.where((e["complete_pass"] == 1) | (e["sack"] == 1), "complete_inbounds", "incomplete"))
-    e.loc[e["first_down"] == 1, "outcome_type"] = "first_down"
+    fd_m2 = e["first_down"] == 1
+    e.loc[fd_m2 & (e["play_type"] == "run"), "outcome_type"] = "first_down_rush"
+    e.loc[fd_m2 & (e["play_type"] != "run"), "outcome_type"] = "first_down_pass"
     cens = e["next_sec"].isna()
     e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
     e = e[e["elapsed"] >= 0]

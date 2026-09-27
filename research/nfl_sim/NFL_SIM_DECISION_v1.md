@@ -3190,3 +3190,14 @@ unaffected (uses its own `clock = 600.0`). `test_play_log_quarter_sums` now **PA
 no change to the test or the log.
 
 **Pre-registered:** plays/game rise +1.0 to +2.5 — **HELD** (130.9 → 131.9, +1.0).
+
+### D168 — 5X Item 1: first-down runoff split by play type (rush vs pass) (2026-09-27)
+
+`build_clock_table`: `first_down` outcome split into `first_down_rush` (27 cells) and
+`first_down_pass` (32 cells). Engine: pass site draws `first_down_pass`, rush draws
+`first_down_rush`, with fallback to pooled `first_down` (0 cells now, but the fallback
+chain still reaches parent/legacy cells). Table rebuilt with committed builder.
+
+**Pre-registered:** plays fall -1.0 to -2.5 from item 0 — **FAILED** (-0.1). The split
+cells have similar quantiles to the pooled cell; the differential was smaller than expected.
+Net items 0+1: +0.9 from 5W (pre-registered < 1.0 net) — **HELD** marginally.
