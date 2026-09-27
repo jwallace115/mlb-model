@@ -37,6 +37,8 @@ def _filled(sheet, **over):
     f = sheet[L.KEY].copy()
     book = sheet["q_first"].where(sheet["two_way"], sheet["imp_first"])
     f["p_first"], f["tag"], f["reason"] = book + 0.05, "matchup", "a reason long enough to pass"
+    f["conf"] = [80 - i * 10 for i in range(len(f))]
+    f["conf_rank"] = list(range(1, len(f) + 1))
     for k, v in over.items():
         f[k] = v
     return f
@@ -148,6 +150,7 @@ def test_ncaaf_sport_is_separate_and_scores_from_cfbd(tmp_path, monkeypatch):
         s = L.build_sheet(pd.DataFrame(columns=["bookmaker", "commence_time"]), lines, now)
         assert len(s) == 3 and s.two_way.all()
         f = s[L.KEY].copy(); f["p_first"] = s["q_first"] + 0.05; f["tag"] = "matchup"; f["reason"] = "a reason long enough to pass"
+        f["conf"] = [80 - i * 10 for i in range(len(f))]; f["conf_rank"] = list(range(1, len(f) + 1))
         dest, sha, m = L.freeze(s, f, 2026, 4, True, now, d=tmp_path, reader_model="test-model")
         assert (m["sport"] == "ncaaf").all() and (m["book"] == "pinnacle").all()
         # fake CFBD: Georgia 31, Alabama 24 -> home covers -3.5, total 55 over, home wins
