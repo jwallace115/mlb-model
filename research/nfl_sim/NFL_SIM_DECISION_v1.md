@@ -3261,3 +3261,12 @@ from its rows (plays 132.35, drives 23.98, pts/team 22.291; gap +6.6), run on a 
    at 50 games a season.
 
 Merged to main. Engine `b2d76c7b3b232df6` (player-OFF hash 78e64f674e71be6d), fit_5x.
+
+### D172 — 5Y Item 0: pooled first_down fallback rows restored; 5X's two reds PASS (2026-09-27)
+
+Builder writes pooled `first_down` rows at all levels (38 cells) in addition to split rows (27 rush
++ 32 pass). EOH/FGS lookup: split → pooled `first_down` → `all`. Thin split cells now fall back to
+the pooled cell at the correct clock_period instead of the all-clock parent.
+
+`test_t3_ot_structure` and `test_t4_tied_offence_kicks_not_scores_late` **PASS** (were 5X reds).
+Test: first-down fallback resolves to same clock_period — 1/1 pass.

@@ -602,6 +602,43 @@ def build_clock_table(df):
             "mean": grp["elapsed"].mean(),
         })
 
+    # 5Y: pooled first_down rows at every level (fallback for thin split cells)
+    fd_pooled = scrim[scrim["outcome_type"].isin(["first_down_rush", "first_down_pass"])].copy()
+    if len(fd_pooled) > 0:
+        # Level 0
+        for (ss, cp), grp in fd_pooled.groupby(["score_state", "clock_period"], observed=True):
+            n = len(grp)
+            if n < MIN_CELL:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": ss, "clock_period": cp,
+                          "hurry": False, "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+        # Level 0.5: Q4_mid
+        fd_q4mid = fd_pooled[fd_pooled["clock_period"].isin(["Q4_mid_a", "Q4_mid_b"])]
+        for ss, grp in fd_q4mid.groupby("score_state", observed=True):
+            n = len(grp)
+            if n < MIN_CELL:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": ss, "clock_period": "Q4_mid",
+                          "hurry": False, "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+        # Level 1: parent
+        for ss, grp in fd_pooled.groupby("score_state", observed=True):
+            n = len(grp)
+            if n < MIN_CELL:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": f"p_{ss}", "clock_period": "all",
+                          "hurry": False, "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+        # Level 2: legacy
+        for hurry_val in [True, False]:
+            grp = fd_pooled[fd_pooled["hurry"] == hurry_val]
+            if len(grp) < 20:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": "all", "clock_period": "all",
+                          "hurry": hurry_val, "n": len(grp), "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+
     rows.extend(_eoh_runoff_rows(df))
     rows.extend(_fgs_runoff_rows(df))
     return pd.DataFrame(rows)
@@ -650,12 +687,19 @@ def _fgs_runoff_rows(df):
     for (sb, ot), g in e.groupby(["sec_b", "outcome_type"]):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, sb, ot))
+    # 5Y: pooled first_down rows for fgs
+    fd_fgs = e[e["outcome_type"].isin(["first_down_rush", "first_down_pass"])]
+    for sb, g in fd_fgs.groupby("sec_b"):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, sb, "first_down"))
     for sb, g in e.groupby("sec_b"):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, sb, "all"))
     for ot, g in e.groupby("outcome_type"):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, "all", ot))
+    if len(fd_fgs) >= EOH_RUNOFF_MIN:
+        rows.append(_row(fd_fgs, "all", "first_down"))
     rows.append(_row(e, "all", "all"))
     # Kneels in the state: the offence kneels TO THE KICK. Measured (every in-state kneel
     # 2021-2024): with <= 40 s left the next snap is the field goal with 1-4 s on the
@@ -729,6 +773,11 @@ def _eoh_runoff_rows(df):
     for (st, ot), g in e.groupby(["state", "outcome_type"]):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, f"eoh_{st}", ot))
+    # 5Y: pooled first_down rows for eoh
+    fd_eoh = e[e["outcome_type"].isin(["first_down_rush", "first_down_pass"])]
+    for st, g in fd_eoh.groupby("state"):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, f"eoh_{st}", "first_down"))
     for st, g in e.groupby("state"):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, f"eoh_{st}", "all"))

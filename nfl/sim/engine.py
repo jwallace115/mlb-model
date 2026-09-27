@@ -1340,10 +1340,15 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 sbf = _fgs_sec_bucket(float(clock[gi]))
                 sb = f"fgs_{sbf}"
                 cq = clock_q.get((ot_names[j], sb, "fgs"))
+                # 5Y: fallback split → pooled first_down → all
+                if cq is None and ot_names[j] in ("first_down_pass", "first_down_rush"):
+                    cq = clock_q.get(("first_down", sb, "fgs"))
                 if cq is None:
                     cq = clock_q.get(("all", sb, "fgs"))
                 if cq is None:
                     cq = clock_q.get((ot_names[j], "fgs_all", "fgs"))
+                if cq is None and ot_names[j] in ("first_down_pass", "first_down_rush"):
+                    cq = clock_q.get(("first_down", "fgs_all", "fgs"))
                 if cq is None:
                     cq = clock_q.get(("all", "fgs_all", "fgs"))
                 ev_fgs_runoff[gi] += 1
@@ -1357,6 +1362,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             else:
                 key_state = f"eoh_{s_}"
                 cq = clock_q.get((ot_names[j], key_state, "eoh"))
+                # 5Y: fallback split → pooled first_down → all
+                if cq is None and ot_names[j] in ("first_down_pass", "first_down_rush"):
+                    cq = clock_q.get(("first_down", key_state, "eoh"))
                 if cq is None:
                     cq = clock_q.get(("all", key_state, "eoh"))
                 if cq is None:
