@@ -3120,6 +3120,23 @@ The FIX is to split cross-quarter events into two log rows. NOT DONE in this com
 
 Player-OFF hash: `afdb11999d5b12bf` (matches). Engine fp: `e00483d173495210`.
 
+### D165 — 5W Item 2: plays gap is +3.9 close, +8.4 blowout (2.15x); sim doesn't burn clock when leading (2026-09-27)
+
+Report: `phase5w_clock_state.md`. Parquet: `phase5w_clock_state.parquet` (4 rows, 3.5 KB).
+200 K1 games, N=100, 144s. Diagnosis only.
+
+**By margin:** sim 131.3/129.1/129.5/131.2 vs real 127.4/125.1/124.5/122.7 (0-7/8-14/15-21/22+).
+Real drops 4.7 from close to blowout; sim is flat. Gap: +3.9 (close) → +8.4 (blowout), ratio 2.15x.
+
+**Pre-registered:** (1) sim within 1.5 across buckets — **FAILED** (range 2.2); real >= 4 — **HELD**;
+gap ratio >= 2x — **HELD**. (2) lead-9+ elapsed >= 2s shorter — **FAILED** (-1.13 s). (3) NULL
+quarter sum — **FAILED** (D164 cross-quarter bleedover).
+
+**What it means:** real teams burn clock when leading 9+ (55% run, 30.2 s/snap vs 44%/29.7 within 8).
+The sim doesn't adapt proportionally, so blowouts play +8.4 extra snaps instead of +3.9.
+
+Suite: 3 failed (fd_pen, tied_drives, play_log_quarter_sums D164), 220 passed. Exit code 1.
+
 ### D162 — 5V verified and MERGED (items 0-1 stand; items 2-3 redone in 5W): plays target 125.78 reproduced, drives target does not reproduce, the clock log does not reconcile and its test was relaxed (2026-09-27)
 
 Cowork verification: `research/nfl_sim/phase5v_verification_2026-09-27.md`. Branch `eng/5v` @ 063470b.
