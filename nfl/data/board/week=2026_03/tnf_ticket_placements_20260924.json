@@ -137,9 +137,53 @@
     "same idea as London (flagged on the card; Jeff took both)"
    ],
    "product_decimal": 26.56,
-   "sgp_ratio": 0.63
+   "sgp_ratio": 0.63,
+   "result": "LOST",
+   "legs_won": "4/5",
+   "leg_results": {
+    "Brian Robinson Jr. over 6.5 rush att": "WON (10)",
+    "Penix under 0.5 INT": "LOST (1 INT, first drive)",
+    "Kaleb Johnson under 10.5 rush att": "WON (4)",
+    "Drake London over 5.5 rec": "WON (9)",
+    "Jahan Dotson under 1.5 rec": "WON (1)"
+   }
+  },
+  {
+   "ticket": "TNF_8_BONUS",
+   "type": "sgp",
+   "stake": 25.0,
+   "stake_type": "bonus bet",
+   "odds_american": 13026,
+   "logged_utc": "2026-09-26T23:50Z",
+   "source": "Jeff screenshot 2026-09-24 ('added this one for fun'); not drawn from the card",
+   "legs": [
+    "Matthew Golden over 4.5 rec",
+    "Jordan Love over 32.5 pass att",
+    "Bijan Robinson over 18.5 rush att",
+    "Drake London 65+ rec yds",
+    "Michael Penix Jr. over 30.5 pass att",
+    "Jordan Love over 234.5 pass yds",
+    "Tucker Kraft anytime TD",
+    "Under 46.5 total"
+   ],
+   "result": "LOST",
+   "legs_won": "5/8",
+   "leg_results": {
+    "Matthew Golden over 4.5 rec": "WON (5)",
+    "Jordan Love over 32.5 pass att": "WON (53)",
+    "Bijan Robinson over 18.5 rush att": "WON (29)",
+    "Drake London 65+ rec yds": "WON (194)",
+    "Michael Penix Jr. over 30.5 pass att": "LOST (26)",
+    "Jordan Love over 234.5 pass yds": "WON (312)",
+    "Tucker Kraft anytime TD": "LOST (0)",
+    "Under 46.5 total": "LOST (49: ATL 35, GB 14)"
+   }
   }
  ],
  "known_artifact": "Nick Muse anytime TD +7500: book 1.3% is below the log's 2% floor; the floor made it a 0.007-gap 'side' at +7500. Exclude from side scoring; fix the tool so no_view can carry the floored value.",
- "grading": "book settlement + PBP; each leg also graded inside the blind log (revision 0)"
+ "grading": {
+  "graded_utc": "2026-09-26T23:50Z",
+  "source": "nflverse play_by_play_2026.parquet (173 rows, END GAME, ATL 35 GB 14); book settlement per Jeff",
+  "blind_log": "research/nfl_sim/n59_wk3_tnf_score_2026-09-26.md: 75 lines graded, 28 sides 18 won, +7.59 u at real price (+8.59 u excluding the Nick Muse floor artifact); two-way Brier reader 0.2519 vs book 0.2618; one game = a log, not evidence"
+ }
 }
