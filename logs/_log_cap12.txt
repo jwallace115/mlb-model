@@ -54,18 +54,48 @@ Ending: 99,842
 - COMMITTED: 6120751b2, PUSHED
 - CREDITS USED: 0 (no API calls)
 
+### Item 3 (L4) — VM deploy (2026-09-27T14:44Z)
+- RAN: ssh root@142.93.242.4, printed full crontab (first time Cowork sees it)
+- RAN: git pull on VM -> fast-forward to b326b10f5 (eng/cap12 merged into main)
+- SAVED: /root/crontab_backup_20260927.txt (old crontab)
+- INSTALLED: new crontab (160 lines). Changes:
+  - Tape: added icehockey_nhl to football line (same 30-min cadence)
+  - NFL props: replaced 11 old slots with 7 new (Tue-Sat 14:00+02:00, Sun 15:00+16:00,
+    kept Thu 22:00 TNF + Mon 23:45 MNF)
+  - NFL event markets: 7 new slots (same schedule as props, --exclude-prefix player_)
+  - NHL event markets: 4 daily slots (15:00 open, 20:00 mid, 22:15 close, 01:15 close)
+  - REMOVED: Sun 16:30/19:45/23:50 (2h) + Sun 16:50/19:55/20:15 (1h) props slots
+  - REMOVED: Tue 10:00 open (replaced by Tue 14:00)
+  - REMOVED: Wed-Sat 16:00 mid (replaced by 14:00)
+- VERIFIED FROM FILES: 15:00 UTC run fired automatically:
+  - Tape: NFL 29 games/1318 rows/10 books (HR on 15), NCAAF 43/848/6, NHL 33/770/9
+  - NHL snapshot: data/odds_archive/nhl/line_history/season=2026/snap_20260927T150011Z.parquet
+    770 rows, 9 books, 33 games, 13.8 KB. HR absent (preseason, expected).
+  - NHL event markets: 0 events in 16h window (first puck 2026-09-29), 0 credits. Correct.
+  - Tape cost: 9 credits (3 per sport x 3 sports)
+- CREDITS after deploy: 99,650 (x-requests-remaining from NHL tape call)
+
+### Credit budget projection (monthly)
+  MLB tape:           168/day (56 calls x 3)
+  Football+NHL tape:  288/day (32 calls x 9)
+  NFL props:          ~320/day (avg 2.4 runs x ~133 credits/run)
+  NFL event markets:  ~300/day (est, varies by discovered market count)
+  NHL event markets:  ~80/day (4 runs, ~20 credits each when games in window)
+  -------------------------------------------------------
+  Total:              ~1,156/day -> ~34,700/month
+  Against 100k plan:  34.7% utilization. Well under 60k target.
+
 ### NOT DONE
-- Item 3 (L4): VM deploy. Blocked until Jeff says "deploy" after merge.
 - No NBA added (work order: "Do NOT add NBA").
-- No existing tests were weakened or modified.
+- No existing tests weakened.
+- NFL event markets first real run not yet observed (next Tue 14:00 UTC).
+- NHL event markets first real run not yet observed (first puck 2026-09-29).
 
 ### UNVERIFIED
-- HR will post NHL markets after preseason starts (2026-09-29). Discovery returned 0 HR
-  markets for NHL — this is expected timing, not a credential issue, but unverified until
-  first puck.
-- The /markets endpoint cost is 1 credit (measured on 4 calls), but the documentation has
-  not been checked to confirm this is guaranteed.
-- pull_event_markets.py has not been tested end-to-end against the VM cron (Item 3).
-- The NFL props scratch file at /tmp/nfl_props_scratch/ was not diffed against the
-  monthly file to verify schema identity — the bookmaker column existed but 9 new book
-  values now appear.
+- HR will post NHL markets after preseason starts (2026-09-29). Tape returned 0 HR
+  markets for NHL — expected timing, not credentials (HR present on 15 NFL games same run).
+- NHL event markets: window was empty (no games within 16h). Will fire with data
+  starting 2026-09-29.
+- NFL props 10-book run has not fired from VM cron yet (next slot: Mon 23:45 MNF close,
+  or Tue 02:00 mid). The Mac live test confirmed x-requests-last=10 per event.
+- push_daemon.sh has not yet synced the NHL snapshot to origin (next push in <=30 min).

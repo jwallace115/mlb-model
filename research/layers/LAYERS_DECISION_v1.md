@@ -120,3 +120,25 @@ market count (10), not book count. Adding 9 books cost zero additional credits.
 
 **Tests:** 12 new in `nfl/pipeline/tests/test_ai_opinions_conf_l2.py` + 10 existing
 pass unchanged (conf/conf_rank added to test helper `_filled()`). Total: 22/22 green.
+
+---
+
+### L4 — VM deploy (2026-09-27)
+
+**Deployed to VM** (`root@142.93.242.4`). `git pull` to `b326b10f5` (eng/cap12 merged).
+
+**Crontab changes:**
+1. **Tape:** added `icehockey_nhl` to the football capture line. Same 30-min cadence
+   (`*/30 14-23,0-5`). Cost: +3 credits/call (one more sport).
+2. **NFL props (10 books):** consolidated from 11 slots to 7: Tue 14:00 (open),
+   Wed-Sat 14:00 (mid), Tue-Sat 02:00 (mid), Sun 15:00+16:00 (close), Thu 22:00 (TNF,
+   kept), Mon 23:45 (MNF, kept). Removed 6 old granular Sunday close slots.
+3. **NFL event markets (new):** 7 slots mirroring props, `--exclude-prefix player_`.
+4. **NHL event markets (new):** daily 15:00 (open), 20:00 (mid), 22:15 (close),
+   01:15 (close, late West). 16h window, props included.
+
+**First run verified (15:00 UTC):**
+- Tape: NHL 33 games, 770 rows, 9 books, season=2026. HR absent (preseason expected).
+- NHL event markets: 0 events in window (first puck 2026-09-29). 0 credits. Correct.
+
+**Projected budget:** ~34,700 credits/month (~35% of 100k plan). Under 60k target.
