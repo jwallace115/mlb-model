@@ -3346,3 +3346,82 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: one slate, ~0.7 SD above zero at Pinnacle freeze prices; the biggest disagreements with Pinnacle lost.
 - NOT DONE: CLV vs closing lines; Hard Rock-price version of the units.
 - UNVERIFIED: whether other FCS names are missing from _TEAM_MAP for future weeks (only this week's were checked).
+
+## 2026-09-27T14:05Z  cowork (NBA Layers chat: B1 + NBA work order 1)
+- READ: LAYERS_GAMEPLAN, capture_status, N59/N61/N62; nba/run_nba.py, nba/modules/*, nba/config.py, nba/scripts/pull_injury_reports.py, data/odds_archive/nba/*, nba/data/{games,box_stats,nba_signal_log,nba_results_log}.parquet, shared/pipeline/multi_book_open_capture.py, log_ai_opinions.py SPORTS.
+- RETURNED: NBA odds archive = 2026-03-27 backfill, no pinnacle/hardrockbet_fl; games/box_stats end 2025-04-13; injury_reports 2023-24 + 1 file 2026-03; signal log 92 rows 2026-03-24..05-30, 9 graded ROAD_WARRIOR; venue lists committed b448fbd36 2026-03-22; no nhl_layers doc, no shared/layers, no icehockey_nhl in capture script. Web: opening night BOS@DET 3pm ET, preseason from 10-03.
+- WROTE: research/nba_layers/NBA_LAYERS_DECISION_v1.md (B1), research/nba_layers/workorder_1_2026-09-27.md; project docs claude/nba_layers_handoff.md, claude/nba_layers_workorder1_2026-09-27.md.
+- MEANS: the NBA has no live tape, no point-in-time injury trail, and a stale stored history; the venue board's history is in-sample. WO1 is NBA-only so it cannot collide with NHL WO1.
+- NOT DONE: nothing run against any API (bridge has no network); WO1 not run; NBA WO2 not written; early-tip freeze rule awaits Jeff.
+- UNVERIFIED: preseason start date and tip times (one web source each); whether a 5:30pm ET official report exists; whether Hard Rock/Pinnacle return NBA lines via the Odds API.
+## 2026-09-27T14:12Z  claude-code  eng/cap12
+
+### Item 0 (L1) — tape takes any sport safely
+- EDITED: shared/pipeline/multi_book_open_capture.py
+  - FOLDER_MAP dict replaces sport.replace("americanfootball_", "")
+  - _season(): NHL/NBA use month>=7 split; football/MLB unchanged
+  - pull() returns None on failure; main() collects failures, continues, exits 1
+- CREATED: shared/pipeline/tests/test_multi_book_capture_l1.py (19 tests, all pass)
+- CREATED: research/layers/LAYERS_DECISION_v1.md (L1 entry)
+- RAN: --sports icehockey_nhl --dry-run -> 33 games, 9 books, HR absent, x-requests-last=3
+- COMMITTED: 996bab4bd, PUSHED to origin/eng/cap12
+- CREDITS USED: 3
+
+### Item 1 (L2) — multi-book event markets
+- CREATED: shared/pipeline/pull_event_markets.py
+  - --sport, --window-hours, --tag, --floor, --dry-run, --markets, --exclude-prefix
+  - Discovery via GET /events/{id}/markets (1 credit), pull via /events/{id}/odds
+- CREATED: shared/pipeline/tests/test_pull_event_markets_l2.py (5 tests, all pass)
+- RAN: discovery on 2 NHL events (FLA@CAR, MTL@TOR): Pinnacle 22 mkts, HR 0 (preseason)
+- RAN: discovery on 2 NFL events (LAC@BUF, CAR@CLE): HR 76, DK 102, Pinnacle 26
+- RAN: one real NHL pull (FLA@CAR, 19 mkts): 141 rows, x-requests-last=19
+- COMMITTED: 813ad7630, PUSHED
+- CREDITS USED: 4 (discovery) + 19 (pull) = 23
+
+### Item 2 (L3) — NFL props from 10 books
+- EDITED: nfl/pipeline/pull_hardrock_props.py
+  - bookmakers= now 10 books (was hardrockbet_fl only)
+  - cost pre-check: len(MARKET_LIST) not hardcoded 15
+  - added --floor, --out-dir (scratch path)
+- PRE-REGISTERED: cost per event stays 10. CONFIRMED on all 11 events.
+- RAN: 11 events to /tmp/nfl_props_scratch/: 6,391 rows, 9 books, HR 756 rows
+- COMMITTED: b96c5872f, PUSHED
+- CREDITS USED: 110
+
+### Credit accounting
+Starting: 99,980 (after L1 dry-run)
+L1 dry-run: -3 -> 99,977
+L2 discovery: -4 (events endpoints free, /markets 1 each x 4) -> 99,973
+L2 pull: -19 -> 99,952 (matches header: but actually 99,952 at start of L2 live)
+L3 live: -110 -> 99,842
+Ending: 99,842
+
+### L2 amendment — conf/conf_rank/edge in freeze, conf bands in score
+- EDITED: nfl/pipeline/log_ai_opinions.py
+  - validate(): conf (0-100) and conf_rank (1=best, unique, no gaps) required on new freezes
+  - edge computed: reader side prob minus book's de-vigged side prob
+  - NHL added to SPORTS dict (pinnacle, require_side=True, refuses side "none")
+  - NFL/NCAAF: require_side=False, old files without conf valid
+  - score(): conf_band breakouts (1-10, 11-25, 26-50, 51+), edge_rank comparison
+  - score(): postfreeze_<UTC>.csv read as reporting cut only (marks affected rows)
+- EDITED: nfl/pipeline/tests/test_ai_opinions_n59.py (added conf/conf_rank to _filled helper)
+- CREATED: nfl/pipeline/tests/test_ai_opinions_conf_l2.py (12 new tests)
+- ALL TESTS: 46/46 pass (10 existing + 12 new conf + 19 L1 + 5 L2)
+- COMMITTED: 6120751b2, PUSHED
+- CREDITS USED: 0 (no API calls)
+
+### NOT DONE
+- Item 3 (L4): VM deploy. Blocked until Jeff says "deploy" after merge.
+- No NBA added (work order: "Do NOT add NBA").
+- No existing tests were weakened or modified.
+
+### UNVERIFIED
+- HR will post NHL markets after preseason starts (2026-09-29). Discovery returned 0 HR
+  markets for NHL — this is expected timing, not a credential issue, but unverified until
+  first puck.
+- The /markets endpoint cost is 1 credit (measured on 4 calls), but the documentation has
+  not been checked to confirm this is guaranteed.
+- pull_event_markets.py has not been tested end-to-end against the VM cron (Item 3).
+- The NFL props scratch file at /tmp/nfl_props_scratch/ was not diffed against the
+  monthly file to verify schema identity — the bookmaker column existed but 9 new book
+  values now appear.
