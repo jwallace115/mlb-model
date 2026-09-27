@@ -1,0 +1,57 @@
+## 2026-09-27T14:12Z  claude-code  eng/cap12
+
+### Item 0 (L1) — tape takes any sport safely
+- EDITED: shared/pipeline/multi_book_open_capture.py
+  - FOLDER_MAP dict replaces sport.replace("americanfootball_", "")
+  - _season(): NHL/NBA use month>=7 split; football/MLB unchanged
+  - pull() returns None on failure; main() collects failures, continues, exits 1
+- CREATED: shared/pipeline/tests/test_multi_book_capture_l1.py (19 tests, all pass)
+- CREATED: research/layers/LAYERS_DECISION_v1.md (L1 entry)
+- RAN: --sports icehockey_nhl --dry-run -> 33 games, 9 books, HR absent, x-requests-last=3
+- COMMITTED: 996bab4bd, PUSHED to origin/eng/cap12
+- CREDITS USED: 3
+
+### Item 1 (L2) — multi-book event markets
+- CREATED: shared/pipeline/pull_event_markets.py
+  - --sport, --window-hours, --tag, --floor, --dry-run, --markets, --exclude-prefix
+  - Discovery via GET /events/{id}/markets (1 credit), pull via /events/{id}/odds
+- CREATED: shared/pipeline/tests/test_pull_event_markets_l2.py (5 tests, all pass)
+- RAN: discovery on 2 NHL events (FLA@CAR, MTL@TOR): Pinnacle 22 mkts, HR 0 (preseason)
+- RAN: discovery on 2 NFL events (LAC@BUF, CAR@CLE): HR 76, DK 102, Pinnacle 26
+- RAN: one real NHL pull (FLA@CAR, 19 mkts): 141 rows, x-requests-last=19
+- COMMITTED: 813ad7630, PUSHED
+- CREDITS USED: 4 (discovery) + 19 (pull) = 23
+
+### Item 2 (L3) — NFL props from 10 books
+- EDITED: nfl/pipeline/pull_hardrock_props.py
+  - bookmakers= now 10 books (was hardrockbet_fl only)
+  - cost pre-check: len(MARKET_LIST) not hardcoded 15
+  - added --floor, --out-dir (scratch path)
+- PRE-REGISTERED: cost per event stays 10. CONFIRMED on all 11 events.
+- RAN: 11 events to /tmp/nfl_props_scratch/: 6,391 rows, 9 books, HR 756 rows
+- COMMITTED: b96c5872f, PUSHED
+- CREDITS USED: 110
+
+### Credit accounting
+Starting: 99,980 (after L1 dry-run)
+L1 dry-run: -3 -> 99,977
+L2 discovery: -4 (events endpoints free, /markets 1 each x 4) -> 99,973
+L2 pull: -19 -> 99,952 (matches header: but actually 99,952 at start of L2 live)
+L3 live: -110 -> 99,842
+Ending: 99,842
+
+### NOT DONE
+- Item 3 (L4): VM deploy. Blocked until Jeff says "deploy" after merge.
+- No NBA added (work order: "Do NOT add NBA").
+- No existing tests were weakened or modified.
+
+### UNVERIFIED
+- HR will post NHL markets after preseason starts (2026-09-29). Discovery returned 0 HR
+  markets for NHL — this is expected timing, not a credential issue, but unverified until
+  first puck.
+- The /markets endpoint cost is 1 credit (measured on 4 calls), but the documentation has
+  not been checked to confirm this is guaranteed.
+- pull_event_markets.py has not been tested end-to-end against the VM cron (Item 3).
+- The NFL props scratch file at /tmp/nfl_props_scratch/ was not diffed against the
+  monthly file to verify schema identity — the bookmaker column existed but 9 new book
+  values now appear.
