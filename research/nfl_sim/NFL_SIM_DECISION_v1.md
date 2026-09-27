@@ -3281,3 +3281,25 @@ fd_rush +3.5, complete +0.5, run +0.2, incomplete -0.1). Plays/game on sample: 1
 
 Report: `phase5y_clock_class.md`. Sim 129.0 vs real ~125.8 = **gap +3.2** (items 0+1 closed 4.2).
 **Pre-registered:** (2) +1.5-4.0 — **HELD**; (3) NULL quarter — **HELD**; (1) per-class not scored.
+
+### D175 — 5Y Item 3: fit_5y; K1 plays 128.3 (from 132.3); 5X reds PASS; safety_share NEW marginal red (2026-09-27)
+
+Fit: `fit_5y`, 1,087 games, N=5000, ~90 min. Cal, K1, K4, W2/W3 boards. K1 tree: committed
+(header still says -dirty due to uncommitted cal/K1 outputs at build time; engine+tables clean).
+
+**Pre-registered:**
+- K1 plays 127.8 ± 1.5: sim 128.3 — **HELD** (in range).
+- drives fall 0.5-1.2 from 23.98: sim 23.3, fall 0.68 — **HELD**.
+- pts/team falls 0.4-1.0 from 22.29: sim 21.55, fall 0.74 — **HELD**. Against actual 22.39: diff -0.84.
+- go_rate/off_pen/def_pen/fg_att PASS: **HELD**.
+- fd_pen FAIL: sim 1.29 — **HELD** (expected).
+- tied expiry FAIL: sim 0.085 — **HELD** (expected).
+- 5X reds PASS: `test_t3_ot_structure` and `test_t4_tied_kicks` — **HELD** (PASS).
+
+**NEW marginal red:** `test_safety_share` 0.324% vs 0.224%, diff 0.100pp (tolerance 0.10pp exactly).
+The drive-end exclusion lengthened the per-play clock, which slightly increases the number of plays
+at extreme field positions where safeties occur. Marginal (0.0001pp over tolerance).
+
+**Suite: 3 failed** (fd_pen, tied_drives, safety_share), **221 passed**. Exit code 1.
+
+**K1 gap: +2.5** (128.3 - 125.8). From 5X's +6.6, the two 5Y table fixes closed 4.1 plays.
