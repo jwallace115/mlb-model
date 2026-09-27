@@ -3305,3 +3305,30 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: play calling by state is fine; clock per snap is short; two engine defects named (quarter carry-over, pooled first-down runoff) that roughly cancel.
 - NOT DONE: full suite on eng/5w (only targeted tests); NCAAF grading (CFBD pull pending on Jeff's Mac); credit-burn review.
 - UNVERIFIED: the class comparison on later seasons (5X item 2 does it stratified); whether timeout-followed plays match real (needs a timeout class on the real side).
+
+## 2026-09-27T10:00Z  claude-code (Phase 5X — D167, D168, D169, D170)
+
+### RETURNED
+- D167 (Item 0): Quarter ends start at exactly 900 s (was += 900 with overshoot carry). OT unaffected. test_play_log_quarter_sums PASSES. Pre-registered plays +1.0-2.5: HELD (+1.0).
+- D168 (Item 1): First-down runoff split into first_down_rush (27 cells) and first_down_pass (32 cells). Engine draws from split cells with fallback to pooled. Pre-registered plays -1.0-2.5: FAILED (-0.1). Net 0+1: +0.9.
+- D169 (Item 2): Season-stratified sample (50 games/season). Gap: 2021 +7.9, 2022 +6.9, 2023 +7.5, 2024 +9.0 (largest). Margin: 0-7 +6.9, 22+ +11.3 (ratio 1.64x). Pre-registered: 2024 largest HELD; quarter NULL HELD.
+- D170 (Item 3): fit_5x. K1: plays 132.3 (pre-reg 130.9±1.0 FAILED, +1.4 above). pts 22.29 (HELD). go_rate/off_pen/def_pen/fg_att PASS. fd_pen FAIL, tied FAIL (both expected). TWO NEW REDS: ot_structure (P(tie|OT) 0.130 vs 0.123, +0.007 over) and tied_kicks (FG 0.170 vs 0.251-0.08=0.171, +0.001 over). Both marginal, from +50s Q4 clock. Suite: 4 failed, 219 passed. Exit 1.
+
+### MEANS
+- The quarter-end fix (start at 900 instead of carry over overshoot) was correct: real quarters start at 15:00. But it added ~50 s/game of playing time, which increased plays by +1.0 and created two marginal new reds in OT/late-game tests. The first-down split was supposed to offset the plays increase but only moved -0.1 (the split cells had similar quantiles to the pooled cell).
+- The season-stratified measurement confirms the D144 sample underestimated the gap: +7.4 overall (stratified) vs +5.1 (D144, 2021 weeks 1-13 only). 2024 is the worst year (+9.0), consistent with the dynamic kickoff hypothesis.
+- The plays gap remains at +6.5 (132.3 - 125.8). The two clock fixes (quarter-end + first-down split) were supposed to roughly cancel but net +0.9 instead. The residual +6.5 is the structural extra drives (~1.8/game) from turnover frequency and remaining field-position effects.
+
+### Runtimes
+- Item 0: ~2 min (D144 check). Item 1: ~2 min + table rebuild. Item 2: 145s. Item 3: ~130 min (fit + cal + K1 + K4 + boards + suite).
+
+### NOT DONE
+- Per-class elapsed decomposition (event_class from play log, Item 2's pre-reg (1) not scored).
+- Kickoff-to-next-snap time by season.
+- Investigation of the two new reds beyond "marginal, from +50s clock."
+- The by-margin table comparison against 5W's numbers was not explicitly computed post-fit.
+
+### UNVERIFIED
+- Whether the two new reds are stochastic (would pass on a different K1 seed) or structural.
+- Cross-machine W2 board bit-identity.
+- Engine fp: b2d76c7b3b232df6. Usage: 3638769c89030de0. main untouched.
