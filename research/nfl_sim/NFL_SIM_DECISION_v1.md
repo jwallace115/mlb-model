@@ -3270,3 +3270,9 @@ the pooled cell at the correct clock_period instead of the all-clock parent.
 
 `test_t3_ot_structure` and `test_t4_tied_offence_kicks_not_scores_late` **PASS** (were 5X reds).
 Test: first-down fallback resolves to same clock_period — 1/1 pass.
+
+### D173 — 5Y Item 1: drive-ending plays excluded from clock table cells (2026-09-27)
+
+Excluded 7,559 drive-ending plays (5.6%) from every clock cell. Means increased (fd_pass +3.3,
+fd_rush +3.5, complete +0.5, run +0.2, incomplete -0.1). Plays/game on sample: 131.8 → 129.0 (-2.8).
+**Pre-registered -3.5 to -5.5: FAILED** (-2.8). Direction correct.

@@ -504,6 +504,14 @@ def build_clock_table(df):
     scrim["elapsed"] = scrim["game_seconds_remaining"] - scrim["next_gsr"]
     # Drop last play of game, half boundaries, and outliers
     scrim = scrim[scrim["elapsed"].notna() & (scrim["elapsed"] > 0) & (scrim["elapsed"] < 120)]
+    # 5Y: exclude drive-ending plays (TD/INT/fumble-lost) — the engine charges these with its
+    # own typed drive_end clock (max(16u,3)), so including them in the table double-counts
+    drive_end_mask = ((scrim.get("touchdown", pd.Series(0, index=scrim.index)).fillna(0) == 1) |
+                      (scrim.get("interception", pd.Series(0, index=scrim.index)).fillna(0) == 1) |
+                      (scrim.get("fumble_lost", pd.Series(0, index=scrim.index)).fillna(0) == 1))
+    n_de = drive_end_mask.sum()
+    scrim = scrim[~drive_end_mask]
+    print(f"  Clock table: excluded {n_de} drive-ending plays ({n_de / (n_de + len(scrim)) * 100:.1f}%)")
 
     # Outcome type — separate clock-stopping incompletes from inbounds plays
     def _outcome_type(row):
@@ -667,6 +675,11 @@ def _fgs_runoff_rows(df):
     fd_m2 = e["first_down"] == 1
     e.loc[fd_m2 & (e["play_type"] == "run"), "outcome_type"] = "first_down_rush"
     e.loc[fd_m2 & (e["play_type"] != "run"), "outcome_type"] = "first_down_pass"
+    # 5Y: exclude drive-ending plays
+    de_fgs = ((e.get("touchdown", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("interception", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("fumble_lost", pd.Series(0, index=e.index)).fillna(0) == 1))
+    e = e[~de_fgs]
     cens = e["next_sec"].isna()
     e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
     e = e[e["elapsed"] >= 0]
@@ -759,6 +772,11 @@ def _eoh_runoff_rows(df):
     fd_m2 = e["first_down"] == 1
     e.loc[fd_m2 & (e["play_type"] == "run"), "outcome_type"] = "first_down_rush"
     e.loc[fd_m2 & (e["play_type"] != "run"), "outcome_type"] = "first_down_pass"
+    # 5Y: exclude drive-ending plays
+    de_eoh = ((e.get("touchdown", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("interception", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("fumble_lost", pd.Series(0, index=e.index)).fillna(0) == 1))
+    e = e[~de_eoh]
     cens = e["next_sec"].isna()
     e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
     e = e[e["elapsed"] >= 0]
