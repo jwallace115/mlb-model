@@ -1643,3 +1643,23 @@ make sure we can track it separate from the nfl."
   Jeff may override to count week 4. Inputs the reader uses: the NCAAF board (10-book dispersion and
   moves), CFBD SP+ and game data, the news pull, the portal signal, injuries as reported - all recorded
   in the reason tags as for the NFL.
+
+### N62 — The picker is part of the record: every blind-log file names the model that made its picks (2026-09-27)
+
+Jeff, 2026-09-27: "lets just make sure we log which model made the picks." Context: Fable usage ran out on
+2026-09-26 and the Cowork session was switched to Opus (claude-opus-5-5) at ~11:50Z, before the Saturday NCAAF
+full-slate log was frozen; the Thursday NFL record entry and the Liberty@CCU pilot were made on
+claude-fable-5-1. The logs did not record this, so two different pickers would have been pooled unseen.
+
+- `log_ai_opinions.py freeze` now REQUIRES `--reader-model <model id>` and HALTS without it. The id is written
+  on every row (`reader_model`) and into the manifest entry.
+- Files frozen before N62 are never edited (their sha256 stands); `reader_attribution.json` beside each week's
+  manifest attributes them: NFL week 2 MNF pilot, NFL week 3 TNF record entry and NCAAF Liberty@CCU pilot =
+  claude-fable-5-1; NCAAF Saturday 2026-09-26 full slate = claude-opus-5-5. Unattributed files score as
+  `unknown`, never a guess. The id is the model configured for the session; the serving model can in principle
+  differ, which is noted, not assumed away.
+- Scoring breaks every result out by `reader_model` first. Different models are separate pickers: reported side
+  by side, never pooled into one record without saying so. If the reader's METHOD changes (not just the model),
+  that is a new version too, judged only on games after its date.
+- Tests: `test_n62_reader_model_required_and_recorded`, `test_n62_older_files_attributed_from_sidecar` (both fail
+  on the pre-N62 code; the 8 existing tests pass with the new argument).

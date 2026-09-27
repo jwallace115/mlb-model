@@ -30,7 +30,7 @@ and must implement exactly this):
 Usage (add --sport ncaaf for the college log: game lines only, Pinnacle as book of record, CFBD finals,
 separate output tree ncaaf/data/board/week=<S>_<WW>/ai_opinions/):
   python3 nfl/pipeline/log_ai_opinions.py sheet  --week 2 --out _cowork_patches/ai_sheet.csv
-  python3 nfl/pipeline/log_ai_opinions.py freeze --week 2 --filled _cowork_patches/ai_filled.csv [--pilot]
+  python3 nfl/pipeline/log_ai_opinions.py freeze --week 2 --filled _cowork_patches/ai_filled.csv --reader-model claude-fable-5-1 [--pilot]
   (freeze re-reads the tape itself; add --props-file/--lines-file for a manual pull, --events "Rams")
   python3 nfl/pipeline/log_ai_opinions.py verify --week 2
   python3 nfl/pipeline/log_ai_opinions.py score  --week 2 [--include-pilot] --out research/.../report.md
@@ -210,9 +210,13 @@ def prior_revisions(d):
     return seen
 
 
-def freeze(sheet, filled, season, week, pilot, now, d=None):
+def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
-    time, never from a CSV the reader could have touched."""
+    time, never from a CSV the reader could have touched.
+    N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
+    written on every row and into the manifest - the reader is part of the research object."""
+    if not reader_model or not str(reader_model).strip():
+        raise SystemExit("HALT: --reader-model is required (the model that made these picks)")
     d = d or out_dir(season, week)
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):
@@ -224,6 +228,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None):
                      for r in m.itertuples(index=False)]
     m["season"], m["week"], m["pilot"] = season, week, bool(pilot)
     m["sport"], m["book"] = SPORT, BOOK
+    m["reader_model"] = str(reader_model).strip()
     m["logged_utc"] = now.isoformat()
     dest = d / f"ai_opinions_{now.strftime('%Y%m%dT%H%M%SZ')}.parquet"
     if dest.exists():
@@ -233,7 +238,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None):
     man = d / "manifest.json"
     entries = json.loads(man.read_text()) if man.exists() else []
     entries.append({"file": dest.name, "sha256": sha, "logged_utc": now.isoformat(), "rows": len(m),
-                    "sport": SPORT, "book": BOOK,
+                    "sport": SPORT, "book": BOOK, "reader_model": str(reader_model).strip(),
                     "pilot": bool(pilot), "games": int(m["event_id"].nunique()),
                     "no_view_share": round(float((m["tag"] == "no_view").mean()), 3),
                     "revised_rows": int((m["revision"] > 0).sum()),
@@ -322,6 +327,16 @@ def _first_side_won(row, act, pid):
     return None if v == line else int(v > line)
 
 
+def _reader_models(m, d):
+    """N62: the model that made each file's picks. Files frozen after N62 carry a reader_model column;
+    earlier files are attributed in reader_attribution.json ({file: model}) beside the manifest -
+    frozen files are never edited. Anything unattributed reads 'unknown', never a guess."""
+    side = d / "reader_attribution.json"
+    att = json.loads(side.read_text()) if side.exists() else {}
+    col = m["reader_model"] if "reader_model" in m.columns else pd.Series(np.nan, index=m.index)
+    return col.where(col.notna() & (col.astype(str) != ""), m["_file"].map(att)).fillna("unknown")
+
+
 def score(season, week, d=None, include_pilot=False, pbp_path=None):
     """The pre-registered scoring in the module docstring, applied to revision-0 rows."""
     from nfl.sim.names import load_roster, _build_roster_lookup, resolve_player, FULL_TO_ABBR
@@ -330,6 +345,7 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
     if not files:
         raise SystemExit("HALT: no frozen opinion files")
     m = pd.concat([pd.read_parquet(f).assign(_file=f.name) for f in files], ignore_index=True)
+    m["reader_model"] = _reader_models(m, d)
     m = m[m["revision"] == 0]
     if not include_pilot:
         m = m[~m["pilot"]]
@@ -394,7 +410,7 @@ def score_report(out, season, week):
         if len(big):
             L += [f"   |p-q| > 0.08 (n={len(big)}): {int(big['side_won'].sum())} won, units {big['units'].sum():+.2f} - "
                   f"P2 (lose units) {'HELD' if big['units'].sum() < 0 else 'DID NOT HOLD'}"]
-        for col in ["market_key", "tag", "gap_bucket"]:
+        for col in ["reader_model", "market_key", "tag", "gap_bucket"]:
             t = sides.groupby(col, observed=True).agg(n=("units", "size"), won=("side_won", "sum"), units=("units", "sum")).round(2)
             L += ["", f"### by {col}", "", t.to_markdown()]
     L += ["", "## Every line with a view", "",
@@ -419,6 +435,7 @@ def main():
     ap.add_argument("--events", help="comma list of team-name fragments; default every pre-kick game")
     ap.add_argument("--window-hours", type=float, help="only games kicking off within this many hours")
     ap.add_argument("--pilot", action="store_true")
+    ap.add_argument("--reader-model", help="REQUIRED for freeze (N62): the model that made the picks, e.g. claude-fable-5-1")
     ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
     a = ap.parse_args()
     set_sport(a.sport, a.book)
@@ -439,7 +456,8 @@ def main():
         print(f"{len(sheet)} lines, {sheet.event_id.nunique()} game(s), two-way {int(sheet.two_way.sum())} -> {a.out}")
         print(sheet.groupby(["away_team", "home_team"])["source_age_min"].agg(["count", "min", "max"]).to_string())
     elif a.cmd == "freeze":
-        dest, sha, m = freeze(sheet, pd.read_csv(a.filled), a.season, a.week, a.pilot, now)
+        dest, sha, m = freeze(sheet, pd.read_csv(a.filled), a.season, a.week, a.pilot, now,
+                             reader_model=a.reader_model)
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":

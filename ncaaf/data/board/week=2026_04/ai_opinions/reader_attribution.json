@@ -1,0 +1,5 @@
+{
+ "ai_opinions_20260924T220451Z.parquet": "claude-fable-5-1",
+ "ai_opinions_20260926T121647Z.parquet": "claude-opus-5-5",
+ "_note": "N62 back-fill (Cowork, 2026-09-27): model configured for the Cowork session at freeze time. The session ran claude-fable-5-1 until Jeff switched it to claude-opus-5-5 at ~11:50Z 2026-09-26 (Fable usage exhausted). Frozen files are not edited; this sidecar attributes them."
+}
