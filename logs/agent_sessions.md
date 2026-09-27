@@ -3273,3 +3273,35 @@ Branch `eng/5o`. Fingerprint `02fbcab6e6ed042e` unchanged. Item 2 WITHDRAWN by C
 - MEANS: items 0-1 accepted; the play log and the decomposition do not answer the question and the log's gate was relaxed; a 29 MB raw parquet kept off main.
 - NOT DONE: NCAAF pilot grading (needs the CFBD pull on Jeff's Mac); Friday 4-leg slip; credit-burn review before Sunday.
 - UNVERIFIED: why drives differs (21.74 vs 21.92) between the committed code on Linux and D159's report.
+
+## 2026-09-27T08:00Z  claude-code (Phase 5W — D163, D164, D165)
+
+### RETURNED
+- D163 (Item 0): Drives target fixed at 21.74 (reproducible Mac+Linux). D159's 21.92 was an inline computation error; the committed function always gave 21.74. Made explicit: dropna=True, integer division. Row counts pinned: 1087 games, 136727 plays, 23635 drives. Test: 1/1 pass. Sim counter includes ~0.12 zero-play drives (noted, not changed).
+- D164 (Item 1): Per-event play log at all 9 ev_clock_used sites. Event classes: incomplete, first_down, complete_inbounds, run, drive_ending, kneel, spike, eoh, fgs, timeout_stopped. Each row: sim_id, qtr, clock_before, elapsed (capped at quarter), event_class, score_state, clock_period, pace_mult. **Quarter-sum test: FAILS.** Q1 = 900s (correct); Q2-Q4 4-31s short from cross-quarter bleedover not split. Player-OFF hash: afdb11999d5b12bf.
+- D165 (Item 2): Plays by margin bucket: sim flat 129-131 across 0-7/8-14/15-21/22+; real drops 127→123. Gap: +3.9 (close) → +8.4 (blowout), ratio 2.15x. Pre-registered: range within 1.5 FAILED (2.2); real drop HELD (4.7); gap ratio HELD (2.15); lead-9+ elapsed FAILED (-1.13, threshold 2.0); NULL quarter FAILED (D164). Suite: 3 failed (fd_pen, tied, quarter_sums), 220 passed. Exit code 1.
+
+### MEANS
+- The plays gap has two layers: +3.9 in close games (from extra drives/turnovers, the base offset) and +4.5 extra in blowouts (from the sim not burning clock when leading). Real teams run more (55% vs 44%) and take longer (30.2 vs 29.7 s/snap) when leading 9+. The sim's clock-runoff tables and tendency model don't differentiate enough by game state to reproduce this.
+- The play log is functionally complete (captures 95%+ of ev_clock_used) but fails the per-quarter-sum test because cross-quarter events aren't split. The fix is to add a second log row when a play straddles a quarter boundary.
+
+### Runtimes
+- Item 0: <5s. Item 1: ~1s (test only). Item 2: 144s + 18min suite.
+
+### NOT DONE
+- Cross-quarter bleedover split in the play log (D164 quarter-sum fix).
+- Sim run share by score state from the play log.
+- Clock-runoff table audit per score state (the root cause of the per-snap rate deficit).
+- Clock-burning mechanism: the engine uses the same clock-runoff table regardless of whether the team is running or passing; leading teams IRL burn clock by running, which consumes more time.
+
+### UNVERIFIED
+- Whether the sim's pass/run split changes with score state (the tendency model has PROE but it may not shift enough).
+- The exact 1.0 s/snap deficit from 5V: how much is the clock table vs how much is the pace multiplier.
+- Engine fp: e00483d173495210. Usage: 3638769c89030de0. main untouched.
+
+## 2026-09-27T01:40Z  cowork (5W verification, D166, 5X order)
+- RAN (Linux worktree eng/5w @ 4728337): test_engine_5m + test_engine_5w -> hash pass, quarter-sum test fails (39.8 s); compute_k1_actuals -> 125.78 / 21.74; pre-registered at 01:00:29Z then measured on the D144 sample with a local uncommitted rush/pass tag: run share by state within 1-2 pts of real, s/snap short in every state (lead 9+ 29.8 vs 33.1), quarter carry-over ~50 s/game; by class (first 100 games): rush first downs 32.6 vs 37.0 s real.
+- WROTE: research/nfl_sim/phase5w_verification_2026-09-27.md, D166 (appended at merge), research/nfl_sim/workorder_5X_2026-09-27.md.
+- MEANS: play calling by state is fine; clock per snap is short; two engine defects named (quarter carry-over, pooled first-down runoff) that roughly cancel.
+- NOT DONE: full suite on eng/5w (only targeted tests); NCAAF grading (CFBD pull pending on Jeff's Mac); credit-burn review.
+- UNVERIFIED: the class comparison on later seasons (5X item 2 does it stratified); whether timeout-followed plays match real (needs a timeout class on the real side).

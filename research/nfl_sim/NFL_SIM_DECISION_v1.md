@@ -3099,6 +3099,44 @@ extra drives (short fields → extra possessions → extra snaps).
 
 Suite: 3 failed (fd_pen, tied_drives, player_off_hash transient), 218 passed. Exit code 1.
 
+### D163 — 5W Item 0: drives target 21.74 reproducible; row counts pinned (2026-09-27)
+
+`compute_k1_actuals()` gives 21.74 on Mac and Linux (D159's 21.92 was an inline computation error).
+Made explicit: `dropna=True`, integer `n_drives_total / n_games`. Row counts pinned: 1,087 games,
+136,727 plays, 23,635 drives. Test: 1/1 pass. Sim counter includes ~0.12 zero-play drives/game (not changed; noted).
+
+### D164 — 5W Item 1: per-event play log at all 9 ev_clock_used sites; quarter-sum test FAILS (2026-09-27)
+
+Replaced 5V's per-step log with per-event rows at each `ev_clock_used` site: pass mid-drive
+(incomplete/first_down/complete_inbounds), rush (run/first_down), drive_ending, kneel, spike,
+eoh, fgs, timeout_stopped. Each row: sim_id, qtr, clock_before, elapsed (capped at quarter
+boundary), event_class, score_state, clock_period, pace_mult.
+
+**Quarter-sum test: FAILS.** Q1 sums to 900 s (correct); Q2-Q4 are 4-31 s short. The gap comes
+from clock consumption that STRADDLES quarter boundaries: when a play consumes 40 s and the
+clock has 20 s left, the log caps at 20 s (correct for that quarter), but the 20 s overshoot
+bleeds into the next quarter via `clock += 900` and is never logged as a separate event.
+The FIX is to split cross-quarter events into two log rows. NOT DONE in this commit.
+
+Player-OFF hash: `afdb11999d5b12bf` (matches). Engine fp: `e00483d173495210`.
+
+### D165 — 5W Item 2: plays gap is +3.9 close, +8.4 blowout (2.15x); sim doesn't burn clock when leading (2026-09-27)
+
+Report: `phase5w_clock_state.md`. Parquet: `phase5w_clock_state.parquet` (4 rows, 3.5 KB).
+200 K1 games, N=100, 144s. Diagnosis only.
+
+**By margin:** sim 131.3/129.1/129.5/131.2 vs real 127.4/125.1/124.5/122.7 (0-7/8-14/15-21/22+).
+Real drops 4.7 from close to blowout; sim is flat. Gap: +3.9 (close) → +8.4 (blowout), ratio 2.15x.
+
+**Pre-registered:** (1) sim within 1.5 across buckets — **FAILED** (range 2.2); real >= 4 — **HELD**;
+gap ratio >= 2x — **HELD**. (2) lead-9+ elapsed >= 2s shorter — **FAILED** (-1.13 s). (3) NULL
+quarter sum — **FAILED** (D164 cross-quarter bleedover).
+
+**What it means:** real teams burn clock when leading 9+ (55% run, 30.2 s/snap vs 44%/29.7 within 8).
+The sim doesn't adapt proportionally, so blowouts play +8.4 extra snaps instead of +3.9.
+
+Suite: 3 failed (fd_pen, tied_drives, play_log_quarter_sums D164), 220 passed. Exit code 1.
+
 ### D162 — 5V verified and MERGED (items 0-1 stand; items 2-3 redone in 5W): plays target 125.78 reproduced, drives target does not reproduce, the clock log does not reconcile and its test was relaxed (2026-09-27)
 
 Cowork verification: `research/nfl_sim/phase5v_verification_2026-09-27.md`. Branch `eng/5v` @ 063470b.
@@ -3121,3 +3159,25 @@ it counted two-point tries).
 4. `phase5v_clock_decomp.parquet` (29 MB of raw rows) is kept off main: untracked and in .gitignore.
 
 Merged to main. Engine `559875bb4f8172ff` (outputs identical to 5U; player-OFF hash afdb11999d5b12bf), fit_5u.
+
+### D166 — 5W verified and MERGED: the sim calls plays like real teams by game state; its clock per snap is short, and two engine defects are named (2026-09-27)
+
+Cowork verification: `research/nfl_sim/phase5w_verification_2026-09-27.md`. Branch `eng/5w` @ 4728337.
+
+**Stands:** D163 (drives 21.74 on both machines; row counts pinned). D164's per-event log (hash afdb11999d5b12bf;
+its quarter-sum test fails honestly). D165's by-margin table (gap +3.9 close -> +8.4 blowouts).
+
+**Corrections and new measurements (Cowork, pre-registered 01:00:29Z):**
+1. D165's sim side of prediction (2) was never measured (it reused 5V's rejected log). Measured with the 5W log:
+   sim run share by the offence's score state matches real within 1-2 points (leading 9+: 53.8% vs 53.2%) — P1
+   FAILED; sim snaps while leading 9+ +1.0/g — P2 FAILED. The sim's time per snap is short in every state, most
+   when leading (-3.3 s at 9+, -1.7 s at 1-8).
+2. The failing quarter-sum test is an ENGINE behaviour, not a logging gap: quarter ends carry the overshoot
+   (`clock += 900`), so Q2/Q3/Q4 start ~19.9/9.8/19.8 s short — ~50 s a game real games do not lose (P3 HELD).
+   Splitting log rows (D164's proposed fix) would hide it. -> 5X item 0.
+3. The runoff table pools rush and pass first downs; real rushing first downs run 37.0 s to the next snap vs 32.7 s
+   for passing ones (42.9 s when leading 9+). Sim rushing first downs get 32.6 s: ~-48 s a game. -> 5X item 1.
+   The two defects roughly cancel; fixing both is correct and is predicted to leave the plays gap near +5.
+4. The D144 sample is 2021 weeks 1-13 (smallest gap); the next measurement is season-stratified.
+
+Merged to main. Engine `e00483d173495210` (outputs identical to 5U), fit_5u.

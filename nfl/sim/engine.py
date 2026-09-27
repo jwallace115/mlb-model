@@ -1030,7 +1030,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                   6:"turnover_fumble",7:"downs",8:"end_half",9:"end_game",10:"safety"}
     _dl_rows = []
     _dl_int_rows = []  # 5T: per-INT chain log (LOS, air, catch_yl, ez, ret, six, next_start)
-    _pl_rows = []      # 5V: per-snap clock log (sim_id, qtr, clock_before, elapsed, play_class, ...)
+    _pl_rows = []      # 5W: per-event clock log
+
+    def _pl_log(gi_val, el_val, event_class, ss_val="", cp_val="", pace_val=1.0):
+        """5W: log one clock-consuming event, capping elapsed at the quarter boundary."""
+        if not drive_log:
+            return
+        q = int(qtr[gi_val])
+        clk_before = float(clock[gi_val] + el_val)  # clock BEFORE this consumption
+        capped = min(float(el_val), max(clk_before, 0.0))  # don't exceed quarter boundary
+        sd = int(score_h[gi_val] - score_a[gi_val]) if poss[gi_val] == 0 else int(score_a[gi_val] - score_h[gi_val])
+        _pl_rows.append((int(gi_val), q, clk_before, capped, event_class, ss_val, cp_val, round(pace_val, 3)))
 
     def _dl_new_drive(m):
         """Record ending drive (if result set), then reset for next drive."""
@@ -1342,6 +1352,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     nxt = float(np.interp(u_arr[gi], xs101_top, cq))
                     el = float(np.clip(float(clock[gi]) - nxt, 1.0, float(clock[gi])))
                     clock[gi] -= np.float32(el); ev_clock_used[gi] += np.float32(el)
+                    _pl_log(gi, el, "eoh")
                     continue
             else:
                 key_state = f"eoh_{s_}"
@@ -1355,6 +1366,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 raise RuntimeError("clock table has no EOH / FG-setup runoff cells")
             el = float(np.interp(u_arr[gi], xs101_top, cq))
             clock[gi] -= np.float32(el); ev_clock_used[gi] += np.float32(el)
+            _pl_log(gi, el, "timeout_stopped")
         return m
 
     def _apply_timeouts(gi_arr, ot_idx_arr, sd_arr, u_arr, running_codes=(1, 2), de_code=3, stop_code=0, skip=None):
@@ -1398,12 +1410,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         alive = ~game_over
         if not alive.any():
             break
-        # 5V: snapshot clock-used before the step for play-log elapsed computation
-        if drive_log:
-            _pl_used_before = ev_clock_used.copy()
-            _pl_clock_snap = clock.copy()
-            _pl_qtr_before = qtr.copy()
-            _pl_sd_before = (score_h - score_a) * np.where(poss == 0, 1, -1)
+        # (5V per-step log removed by 5W; replaced by per-event _pl_log calls)
 
         # RNG insensitivity: optionally insert a dummy draw to verify
         # that adding one extra draw cannot shift statistics
@@ -1610,6 +1617,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         else:
                             el = float(np.interp(u_pclock[i], xs101_top, fgs_kneel_q["elapsed"]))
                         clock[i] -= np.float32(el); ev_clock_used[i] += np.float32(el)
+                        _pl_log(i, el, "fgs")
                         ev_fgs_runoff[i] += 1
                         continue
                     # clock: running-clock runoff for this score state / period
@@ -1642,6 +1650,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     pace_i = (ctx["t0_pace"] if poss[i] == 0 else ctx["t1_pace"]) / ctx["lg_pace"]
                     el = max(float(np.interp(u_pclock[i], xs101_top, cq)) * pace_i, 3.0)
                     clock[i] -= np.float32(el); ev_clock_used[i] += np.float32(el)
+                    _pl_log(i, el, "kneel", ss_i, cp_i, pace_i)
 
         # --- 4th down decision ---
         # Exclude kneeling sims and sims with expired clock from play execution
@@ -1684,6 +1693,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             n_plays[i] += 1; _dl_plays[i] += 1
                             down[i] += 1
                             clock[i] -= np.float32(1.0); ev_clock_used[i] += np.float32(1.0)
+                            _pl_log(i, 1.0, "spike")
                             continue
                         p_fg_e = min(p_fg_e / (1.0 - p_sp), 1.0) if p_sp < 1.0 else p_fg_e
                     if u_eoh[i] < p_fg_e:
@@ -2552,6 +2562,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         elapsed = np.maximum(elapsed, 3.0)
                         clock[gi_arr[m_idx]] -= elapsed.astype(np.float32)
                         ev_clock_used[gi_arr[m_idx]] += elapsed.astype(np.float32)
+                        if drive_log:
+                            for _j, _mi in enumerate(m_idx):
+                                _pl_log(gi_arr[_mi], float(elapsed[_j]), ot_name, ss_val, cp_val, float(pace_arr[_mi]))
             # Drive-ending plays: short clock (game clock stops on scoring/turnovers)
             de_mask = (ot_idx == 3) & ~game_over[gi_arr]
             if de_mask.any():
@@ -2559,6 +2572,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 de_elapsed = np.maximum(u_pclock[gi_arr[de_idx]] * 16.0, 3.0)  # ~8s mean
                 clock[gi_arr[de_idx]] -= de_elapsed.astype(np.float32)
                 ev_clock_used[gi_arr[de_idx]] += de_elapsed.astype(np.float32)
+                if drive_log:
+                    for _j, _di in enumerate(de_idx):
+                        _pl_log(gi_arr[_di], float(de_elapsed[_j]), "drive_ending")
 
         # --- RUSH PLAYS (vectorised) ---
         rm = ~is_pass
@@ -2816,6 +2832,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         elapsed = np.maximum(elapsed, 3.0)
                         clock[gi_r[m_idx]] -= elapsed.astype(np.float32)
                         ev_clock_used[gi_r[m_idx]] += elapsed.astype(np.float32)
+                        if drive_log:
+                            for _j, _mi in enumerate(m_idx):
+                                _pl_log(gi_r[_mi], float(elapsed[_j]), ot_name_r, ss_val, cp_val, float(pace_r[_mi]))
             # Drive-ending rush plays (TDs, fumbles): short clock
             de_r = (ot_idx_r == 2) & ~game_over[gi_r]
             if de_r.any():
@@ -2823,6 +2842,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 de_elapsed = np.maximum(u_rclock[gi_r[de_idx]] * 16.0, 3.0)
                 clock[gi_r[de_idx]] -= de_elapsed.astype(np.float32)
                 ev_clock_used[gi_r[de_idx]] += de_elapsed.astype(np.float32)
+                if drive_log:
+                    for _j, _di in enumerate(de_idx):
+                        _pl_log(gi_r[_di], float(de_elapsed[_j]), "drive_ending")
 
         # --- Turnover on downs ---
         tod = ~game_over & (down > 4)
@@ -2835,17 +2857,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ot_first_poss_done[ot_tod] = True
 
         # 5V: append play-log rows for active sims that consumed clock this step
-        if drive_log:
-            for gi in range(N):
-                if not alive[gi]:
-                    continue
-                el = float(ev_clock_used[gi] - _pl_used_before[gi])
-                if el < 0.01:
-                    continue  # no measurable clock consumed (penalty/game-over/etc.)
-                _pl_rows.append((
-                    gi, int(_pl_qtr_before[gi]), float(_pl_clock_snap[gi]),
-                    el, int(_pl_sd_before[gi]),
-                ))
+        # (5V per-step append removed by 5W; now per-event via _pl_log)
 
     # FIX 1: safety cap check — hitting MAX_STEPS is an error
     if not game_over.all():
@@ -2953,10 +2965,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "sim_id", "los", "air", "catch_yl", "ez", "ret", "six", "next_start",
         ])
         team_df.attrs["int_chain_log"] = int_df
-    # 5V: play-level clock log
+    # 5W: play-level clock log (per clock-consuming event)
     if drive_log and _pl_rows:
         pl_df = pd.DataFrame(_pl_rows, columns=[
-            "sim_id", "qtr", "clock_before", "elapsed", "score_diff",
+            "sim_id", "qtr", "clock_before", "elapsed",
+            "event_class", "score_state", "clock_period", "pace_mult",
         ])
         team_df.attrs["play_log"] = pl_df
 

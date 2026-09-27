@@ -47,15 +47,19 @@ def compute_k1_actuals():
     plays_pg = total / n_games
 
     # Drives with >= 1 play (matching D153 plays>=1 filter)
-    plays_in_drives = regular[regular["play_type"].isin(PLAY_TYPES)]
-    drive_plays = plays_in_drives.groupby(["game_id", "fixed_drive"]).size().reset_index(name="n")
+    # 5W: explicit dropna=True on fixed_drive to ensure cross-platform reproducibility
+    plays_in_drives = regular[regular["play_type"].isin(PLAY_TYPES)].dropna(subset=["fixed_drive"])
+    drive_plays = plays_in_drives.groupby(["game_id", "fixed_drive"], dropna=True).size().reset_index(name="n")
     drives_with_plays = drive_plays[drive_plays["n"] >= 1]
-    drives_pg = drives_with_plays.groupby("game_id").size().mean()
+    n_drives_total = len(drives_with_plays)
+    drives_pg = n_drives_total / n_games
 
     return {
         "plays_pg": round(plays_pg, 2),
         "drives_pg": round(drives_pg, 2),
         "n_games": n_games,
+        "n_plays_total": total,
+        "n_drives_total": n_drives_total,
         "per_type": {pt: round(counts[pt] / n_games, 2) for pt in sorted(PLAY_TYPES)},
     }
 
