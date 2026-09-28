@@ -3391,3 +3391,9 @@ pass/run snaps only.**
 opp40-21 0.94, opp20-1 0.36. Sim: own21-40 +1.84 (the extra drives). Full START MIX /
 EFFICIENCY decomposition not completed (real pts/drive by bucket requires scoring-play
 attribution from PBP).
+
+### D184 — 6A Item 3: fit_6a; K1 plays 126.2 (+0.4 from real); pts 21.17 (2026-09-28)
+
+K1 plays 126.2 (pre-reg 127.2±1.0: **HELD**). drives 22.9 (fall 0.4: **HELD**). pts 21.17 (fall 1.12:
+**FAILED**). go_rate/off_pen/def_pen/fg_att PASS. fd_pen FAIL, tied FAIL (expected). safety_share 0.324%.
+K1 gap: **+0.4 plays/game** — the closest to real the sim has ever been.
