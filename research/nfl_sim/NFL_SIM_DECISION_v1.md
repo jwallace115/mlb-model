@@ -3371,3 +3371,10 @@ Merged to main. Player-OFF hash 80848eefb5a45062 (fingerprint 62320588f80d0593),
 `timeout_followed` outcome in clock table: 6,026 plays, 27 cells, mean 18.1 s (was 8.9 from
 incomplete cell). Engine: stop_code→idx 4 draws from `timeout_followed` with parent→incomplete
 fallback. Plays: 129.0 → 126.9 (-2.1). **Pre-reg -0.4-1.0: FAILED** (-2.1, larger than expected).
+
+### D182 — 6A Item 1: kneel runoff from measured table (2026-09-28)
+
+Kneels added to `build_clock_table` as "kneel" outcome (10 cells, non-hurry mean 32.4 s). Engine
+kneel draw changed from "complete_inbounds" to "kneel" with parent→complete_inbounds fallback.
+Was using the running-clock runoff for non-kneel plays (~20.3 s); now uses the measured kneel
+runoff which is longer because real kneels run the clock down to the next snap.

@@ -1641,7 +1641,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             "Q4_late" if (qtr[i] >= 4 and clock[i] <= 120) else
                             "Q4_mid_b" if (qtr[i] == 4 and clock[i] <= 180) else
                             "Q4_mid_a" if (qtr[i] == 4 and clock[i] <= 300) else "normal")
-                    ot_name = "complete_inbounds"
+                    ot_name = "kneel"  # 6A: draw from kneel cell (was complete_inbounds)
                     # defence timeout after the kneel?
                     if to_lookup is not None and to_rem[1 - poss[i], i] > 0 and clock[i] <= 180:
                         st_i = "trail" if sd_i < 0 else ("tied" if sd_i == 0 else "lead")
@@ -1653,6 +1653,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             to_rem[1 - poss[i], i] -= 1; ev_to_def[i] += 1
                             ot_name = "incomplete"  # clock stopped
                     cq = clock_q.get((ot_name, ss_i, cp_i))
+                    # 6A: kneel fallback to parent, then complete_inbounds
+                    if cq is None and ot_name == "kneel":
+                        cq = clock_q.get(("kneel", f"p_{ss_i}", "all"))
+                        if cq is None:
+                            cq = clock_q.get(("kneel", False))
+                        if cq is None:
+                            cq = clock_q.get(("complete_inbounds", ss_i, cp_i))
                     # 5M: Q4_mid_a/Q4_mid_b fall back to unsplit Q4_mid
                     if cq is None and cp_i in ("Q4_mid_a", "Q4_mid_b"):
                         cq = clock_q.get((ot_name, ss_i, "Q4_mid"))

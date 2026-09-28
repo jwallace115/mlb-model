@@ -496,7 +496,7 @@ def build_clock_table(df):
     The binary hurry flag is REMOVED."""
     MIN_CELL = 100
 
-    scrim = df[df["play_type"].isin(["pass", "run"])].copy()
+    scrim = df[df["play_type"].isin(["pass", "run", "qb_kneel"])].copy()  # 6A: include kneels
     scrim = scrim.sort_values(["game_id", "play_id"]).copy()
 
     # Next scrimmage play in the SAME GAME (including across drives)
@@ -515,6 +515,8 @@ def build_clock_table(df):
 
     # Outcome type — separate clock-stopping incompletes from inbounds plays
     def _outcome_type(row):
+        if row["play_type"] == "qb_kneel":
+            return "kneel"  # 6A
         if row["play_type"] == "pass":
             if row.get("complete_pass", 0) == 1:
                 return "complete_inbounds"
