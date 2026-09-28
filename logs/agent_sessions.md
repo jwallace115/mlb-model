@@ -3460,3 +3460,34 @@ Ending: 99,842
 - MEANS: plays gap +2.5; the new red is a denominator effect over a pre-existing ~60% safety excess; points per drive 1.85 vs 2.06.
 - NOT DONE: full suite on Linux; the per-class clock comparison (third time undone; 5Z item 0).
 - UNVERIFIED: the real safety count by type (5Z item 1 measures it from PBP).
+## 2026-09-28T10:00Z  claude-code (Phase 5Z — D177, D178, D179)
+
+### RETURNED
+- D177 (Item 0): Per-class clock comparison — 3 tables delivered. MIX +74.9s, RATE -77.0s (SUM -2.0). Timeout_followed -9.2s/snap and kneel -6.5s/snap are the largest rate gaps; run/complete_inbounds rates nearly matched (-0.3/-0.0). Pre-registered: (1) RATE>=60% FAILED (51%); (2) run/complete leading FAILED (timeout/kneel dominate). Null: sim 900/qtr HOLDS; real Q4 888 (structural scrimmage-to-scrimmage undercount).
+- D178 (Item 1): Safeties — ALL 0.072/game from pre-snap random rate; sack and rush safety mechanisms produce ZERO (code has safety_mask = zeros, safety_r = zeros). Real 0.049/game: sack 0.017, run 0.018, penalty 0.008, punt/kick 0.005. Pre-registered: excess in ONE type HELD (pre-snap 100%). Player-OFF hash: 80848eefb5a45062 (unchanged). Tests: 7/7 pass.
+- D179 (Item 2): Extra drives in own21-40 (+1.84/g, 15.29 vs 13.45), not own 1-20 (4.38 vs 4.45). Sim 23.20 drives/g vs real 21.74. Sim pts/drive 1.80. Pre-registered: own1-20 excess FAILED; START MIX 70% not fully scored (real pts/drive by bucket needed).
+
+### MEANS
+- The per-class clock tables (D177) show that the sim's RATE gap is now small for all scrimmage classes (-0.3 to -0.8 s for run/first_down, +0.2 for incomplete). The remaining clock issues are in timeout_followed (-9.2 s: the sim's timeout-followed clock is 8.9 vs real 18.0 — the sim resumes faster after a timeout) and kneel (-6.5 s: the sim's kneel clock is 20.3 vs real 26.8).
+- The MIX/RATE split is roughly 50/50, not the 60% RATE I predicted. The extra ~4 snaps/game of MIX come from +2.4 run, +3.8 complete_inbounds, +4.1 incomplete, offset by -3.2 timeout and -0.6 complete_inbounds.
+- Safeties (D178): the entire excess is the pre-snap random rate. The engine has mechanistic safety branches for sacks and runs in the end zone, but they're DISABLED (hardcoded to zeros). The fix: enable them and reduce the pre-snap rate.
+- The extra drives (D179) are concentrated in own21-40, not own1-20 as predicted. This is because extra punts land at ~25-35 yards, not in the end zone.
+
+### Runtimes
+- Items 0-2 shared one 130s sim pass. Clock class analysis: 136s. Safety analysis: 130s. Tests: 24s.
+
+### NOT DONE
+- Item 2: full START MIX / EFFICIENCY decomposition (real pts/drive by bucket needed).
+- Item 0: real-side Q4 last-play-of-game fix (structural limitation).
+- D179 was committed together with D178 (should have been separate commits).
+
+### UNVERIFIED
+- Whether timeout_followed -9.2 s gap explains the blowout excess (timeouts are more frequent in blowouts).
+- Whether enabling the mechanistic safety branches produces realistic rates.
+
+## 2026-09-28T13:40Z  cowork (5Z verification, D180, 6A order)
+- RAN (cloud, eng/5z @ cd160a3): read D177-D179, phase5z_clock_class.md, phase5z_summary.json, engine.py diff (log-only counters), engine safety code (5A-7 zone rates, zeroed masks by design) and constants.json safety_rate_by_zone; _apply_timeouts stop_code path.
+- WROTE: research/nfl_sim/phase5z_verification_2026-09-28.md, D180 (appended at merge), research/nfl_sim/workorder_6A_2026-09-28.md.
+- MEANS: remaining plays excess = timeout-followed runoff drawn from the incomplete cell (-49 s/game) + short kneels (-10 s); safety excess is 1.75x on measured zone rates (snap count or roll application), not disabled branches.
+- NOT DONE: re-running D177 myself (read from the committed report and parquet); the safety zone snap counts; the points-per-drive split.
+- UNVERIFIED: real timeout-followed elapsed by state/period (6A item 0 builds the table); why the sim calls fewer timeouts (2.2 vs 5.4 snaps a game).

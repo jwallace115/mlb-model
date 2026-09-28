@@ -3323,3 +3323,45 @@ K1 reproduces from its rows: plays 128.29, drives 23.29, pts/team 21.55; **K1 pl
 **Open, measured:** points per drive sim 1.85 vs real 2.06 with 1.55 extra drives a game. -> 5Z item 2.
 
 Merged to main. Engine fingerprint per the 5Y fixture, fit_5y.
+
+### D177 — 5Z Item 0: per-class clock comparison delivered (2026-09-28)
+
+Report: `phase5z_clock_class.md`. Parquet: `phase5z_clock_class.parquet`.
+
+Tables (a)(b)(c) delivered. MIX +74.9 s, RATE -77.0 s (SUM -2.0). Largest rate gaps:
+timeout_followed -9.2 s/snap and kneel -6.5 s/snap (not run/complete_inbounds as predicted).
+**Pre-registered:** (1) RATE >= 60% — **FAILED** (51%); (2) run/complete leading — **FAILED**.
+
+### D178 — 5Z Item 1: safeties — 100% from pre-snap rate; sack/rush mechanisms disabled (2026-09-28)
+
+Sim 0.072/game all from pre-snap random rate. Sack and rush safety sites produce ZERO (code has
+`safety_mask = np.zeros(…)` and `safety_r = np.zeros(…)`). Real 0.049/game: sack 0.017, run 0.018,
+penalty 0.008, punt/kick 0.005, other 0.002. **Pre-registered excess in ONE type: HELD** (pre-snap
+100%). **Fix:** reduce pre-snap to ~0.01 and enable mechanistic branches. Player-OFF hash unchanged.
+
+### D179 — 5Z Item 2: extra drives in own 21-40 (+1.84/g), not own 1-20 (2026-09-28)
+
+Sim 23.20 drives/g vs real 21.74. Excess +1.84 in own21-40 (15.29 vs 13.45). Sim pts/drive 1.80.
+**Pre-registered (1) own 1-20 excess: FAILED** (sim has fewer: 4.38 vs 4.45). **(2) 70% START MIX:
+not fully scored** (real pts/drive by bucket needed for full decomposition).
+
+### D180 — 5Z verified and MERGED: the plays excess is the timeout path and kneels; the safety "fix" is rejected; points-per-drive split still owed (2026-09-28)
+
+Cowork verification: `research/nfl_sim/phase5z_verification_2026-09-28.md`. Branch `eng/5z` @ cd160a3.
+
+**Stands:** D177's tables. The regulation clock is fixed at 3,600 s, so MIX and RATE cancel by construction; the
+information is where the rate shortfall sits: timeout_followed -49.1 s a game (sim 8.9 s per snap vs real 18.0; 2.2 vs
+5.4 such snaps a game), run -10.3, kneel -9.8 (20.3 vs 26.8 s), first_down_rush -8.4; run/complete/first-down-pass
+rates match within 1 s. Mechanism (engine `_apply_timeouts`): a timeout sets the play to `stop_code`, i.e. the
+INCOMPLETE runoff (~8 s). 77 s ~ 2.7 plays = the whole K1 gap (+2.5).
+
+**Corrections:**
+1. D178: the zeroed sack/run safety masks are the 5A-7 design (measured per-play rates by own-goal-line zone replaced
+   the mechanistic branches). The proposed fix (enable them, cut the zone rate) is rejected. The excess (0.072 a game vs
+   0.041 real on pass/run plays, 45 in 1,087) is either too many sim snaps inside own 10 or the roll firing on non-
+   scrimmage steps; the per-zone snap counts the order asked for were not delivered.
+2. D179: the points-per-drive start-mix vs efficiency split was not computed and not declared "ITEM NOT DONE".
+   Drives 23.20 vs 21.74, excess in own 21-40 (+1.84); own 1-20 prediction FAILED.
+3. Pre-registration (1) of D177 (RATE >= 60%) was Cowork's and ill-posed (total clock is fixed).
+
+Merged to main. Player-OFF hash 80848eefb5a45062 (fingerprint 62320588f80d0593), fit_5y.
