@@ -1391,7 +1391,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             return
         # 5A-11 (D39): overtime's last 3:00 is the same situation as Q4's (the period ends
         # the game); the policy table's Q4 rows are used for it
-        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 180) & \
+        # 6B: extend timeout window from 180 s (3:00) to 300 s (5:00)
+        # The table's 121-180 bucket serves as the proxy for 181-300
+        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 300) & \
                ~game_over[gi_arr] & (ot_idx_arr != de_code)
         if skip is not None:
             late &= ~skip

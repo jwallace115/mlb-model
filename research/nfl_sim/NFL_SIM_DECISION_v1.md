@@ -3437,3 +3437,9 @@ Pre-reg 3+ of 5 reds pass: **FAILED** (2 pass: tie_rate, off_TO). Kneel test: **
 **(3)** Normal-period null: **NOT SCORED** (6A comparison table not on this branch).
 **(4)** timeout_followed excludes OOB (tables.py:554-558). 4,446 plays, mean 29.1 s.
 **(5)** Kneel split: sim final 0.67/g at 6.7 s (real ~1.0/g at 22.1 s); non-final 0.79/g at 29.8 s (real 32.4). The gap is WHEN the sim kneels (less clock left), not the per-kneel elapsed.
+
+### D191 — Supersedes D187. Timeout window extended to 300 s; TO/game 3.4→4.19 (2026-09-28)
+
+`_apply_timeouts` (engine.py:1394): `clock <= 300` (was 180). Table's 121-180 bucket is proxy for
+181-300. Remaining gap (4.19 vs 7.7): Q1/Q3 and Q2/Q4 > 5:00 not in the table.
+**Pre-reg:** TO >= 5.5 **FAILED** (4.19). off TO within 0.4 of 1.78 **HELD** (1.48). plays +0.3-1.0 **HELD** (+0.37).
