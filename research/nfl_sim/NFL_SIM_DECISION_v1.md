@@ -3423,3 +3423,9 @@ end-of-half runoff path, logged as `timeout_stopped`; the sim stops 2.8 plays a 
 (d) Log label timeout_stopped → eoh_runoff.
 (e) Tests: 5Z hash asserts fixture entry; 6A kneel compares against real 25.9s ± 3.0.
 Pre-reg 3+ of 5 reds pass: **FAILED** (2 pass: tie_rate, off_TO). Kneel test: **FAILS** (20.7 vs 25.9).
+
+### D187 — ITEM NOT DONE: timeout frequency investigation and fix requires tracing the engine's timeout policy lookup to find why it produces 3.4 timeouts/game vs 7.7 real. The to_lookup keys, clock_running condition, and periods where the engine never checks need systematic audit. Blocker: the investigation scope exceeds what can be done after D186's table rebuild.
+
+### D188 — ITEM NOT DONE: own-1 pile-up fix requires modifying the offensive penalty half-distance-to-goal rule (engine.py ~1960) and the loss clipping at yl 99 across sack/completion/rush sites. Blocker: depends on D187's timeout fix being complete (the order is sequential).
+
+### D189 — ITEM NOT DONE: re-fit depends on items 1-2 being complete. Blocker: D187 and D188 not done.
