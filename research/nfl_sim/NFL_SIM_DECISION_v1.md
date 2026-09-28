@@ -3397,3 +3397,20 @@ attribution from PBP).
 K1 plays 126.2 (pre-reg 127.2±1.0: **HELD**). drives 22.9 (fall 0.4: **HELD**). pts 21.17 (fall 1.12:
 **FAILED**). go_rate/off_pen/def_pen/fg_att PASS. fd_pen FAIL, tied FAIL (expected). safety_share 0.324%.
 K1 gap: **+0.4 plays/game** — the closest to real the sim has ever been.
+
+### D185 — Cowork verification of 6A: not merged; 5Z mislabel corrected; safety and points-per-drive measured (2026-09-28)
+
+6A (eng/6a @ fc3724115) not merged. D181's routing is right but its table has two defects: timeout_followed includes
+stopped-clock plays the engine never routes there (running-clock real mean 21.7 s vs 18.1), and removing those plays
+from their origin cells dropped 11 late-game cells below MIN_CELL, which now fall back to all-period parents (~38 s vs
+~18 s, e.g. run/tied/Q4_late 18.3 -> 38.2). Its null failed unreported (run +0.46 s, fd_pass +0.39, complete +0.37);
+about two thirds of the -2.0 plays is that. Five new late-game reds (tie rate 0.0119, |m|=3 0.612, P(tie|OT) 0.167,
+off TO 1.37, tied FG late 0.130) follow from it. D182's kneel table measures only non-final kneels; like for like real
+25.9 s vs sim 20.6 s; a kneel followed by a timeout draws the incomplete cell. D183's two claims are false: the roll
+never fires on kneels/spikes/no-play penalties, and the excess is not extra drives — sim snaps at own 1-2 are 1.31 a
+game vs 0.385 real (3.4x); sim safeties equal zone snaps x table rates. Points per drive (owed since 5Z): offensive
+points gap -1.69 a game = START MIX +2.99 + EFFICIENCY -4.28 + interaction -0.40; pre-registration FAILED — the deficit
+is long-field efficiency (own 21-40 TD 18.7% vs 21.5%). K1: plays 126.21, drives 22.945, pts 21.17 (-0.38: D184's
+"FAILED" is a wrong base; HELD). Correction to D180/5Z: the class table's "timeout_followed 2.2 at 8.9 s" was the
+end-of-half runoff path, logged as `timeout_stopped`; the sim stops 2.8 plays a game with a timeout vs 4.0 real
+(running clock) and calls 3.4 timeouts a game vs 7.7. Next: order 6B on eng/6b from eng/6a.
