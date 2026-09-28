@@ -1,0 +1,59 @@
+{
+  "game": "PHI @ CHI, MNF 2026-09-29T00:15Z",
+  "built_utc": "2026-09-28T19:40Z",
+  "reader_model": "claude-opus-5-5",
+  "reader_session": "chat",
+  "book": "hardrockbet_fl",
+  "boost": "25% profit boost on SGP",
+  "supersedes": "mnf_sgp_v2_20260928.json",
+  "change_from_v1": "Dropped Keenum U170.5 pass yds: history layer (nflverse 2019-23, his 11 starts with 15+ attempts) shows only 4/11 at or under 170 yds (median ~200) \u2014 v1 was built without pulling his history. Reader p revised 0.55 -> 0.50, below HR breakeven 0.535. Added Monangai O9.5 rush att, Keenum U4.5 rush yds, Ertz U10.5 rec yds.",
+  "legs": [
+    {
+      "leg": "D'Andre Swift OVER 14.5 rush attempts",
+      "hr_price": -125,
+      "market_fair": 0.535,
+      "reader_p": 0.6,
+      "reason": "Backup QB -> run-first plan; 18 and 16 carries in weeks 1-2."
+    },
+    {
+      "leg": "Kyle Monangai OVER 9.5 rush attempts",
+      "hr_price": -120,
+      "market_fair": 0.525,
+      "reader_p": 0.57,
+      "reason": "10 and 10 carries in weeks 1-2 behind Swift; team run volume rises with Keenum; knee listed but full participant."
+    },
+    {
+      "leg": "Case Keenum UNDER 4.5 rush yards",
+      "hr_price": -110,
+      "market_fair": 0.5,
+      "reader_p": 0.62,
+      "reason": "8 of his last 11 starts at 4 yds or fewer (0 to 15); now 38; end-of-half kneels count negative."
+    },
+    {
+      "leg": "Saquon Barkley UNDER 17.5 rush attempts",
+      "hr_price": -120,
+      "market_fair": 0.515,
+      "reader_p": 0.58,
+      "reason": "Stinger in week 2 (4 carries; Bigsby took 13); 15 carries in week 1; full practice Saturday but a likely managed load with Bigsby/Shipley healthy. Also hits if the Bears keep it close, which the Swift/Monangai legs need anyway."
+    },
+    {
+      "leg": "Game UNDER 41.5",
+      "hr_price": -110,
+      "market_fair": 0.495,
+      "reader_p": 0.52,
+      "reason": "Weakest leg; market already moved 44 -> 41.5; two run-heavy plans shorten the game."
+    }
+  ],
+  "assumed_correlations": "small (0-0.10) between legs; reader assumption",
+  "joint": {
+    "5_leg_reader": 0.088,
+    "5_leg_market_fair": 0.054,
+    "4_leg_no_total_reader": 0.147,
+    "4_leg_market_fair": 0.091
+  },
+  "decision_rule": {
+    "5_leg": "HR shows >= +850 (reader breakeven +825; market-fair +1409)",
+    "4_leg_without_total": "HR shows >= +475 (reader breakeven +464; market-fair +795)"
+  },
+  "change_from_v2": "Hard Rock would not allow Zach Ertz in the SGP. Replaced with Saquon Barkley UNDER 17.5 rush attempts. Correction: Ertz signed 9/21 (a week, not days) and was expected to be elevated."
+}
