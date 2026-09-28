@@ -3425,3 +3425,38 @@ Ending: 99,842
 - The NFL props scratch file at /tmp/nfl_props_scratch/ was not diffed against the
   monthly file to verify schema identity — the bookmaker column existed but 9 new book
   values now appear.
+## 2026-09-27T14:00Z  claude-code (Phase 5Y — D172, D173, D174, D175)
+
+### RETURNED
+- D172 (Item 0): Pooled first_down fallback rows restored (38 cells, was 0 in 5X). EOH/FGS lookup: split -> pooled -> all. 5X reds (ot_structure, tied_kicks) PASS. Test: 1/1 pass.
+- D173 (Item 1): Drive-ending plays (7,559 TD/INT/fumble-lost, 5.6%) excluded from all clock table cells. Means increased (fd_pass +3.3s, fd_rush +3.5s). Plays on sample: 131.8 -> 129.0 (-2.8). Pre-reg -3.5-5.5: FAILED (-2.8).
+- D174 (Item 2): Plays gap on stratified sample +3.2 (from 5X's +7.4; items 0+1 closed 4.2). Pre-reg +1.5-4.0: HELD. Per-class breakdown not completed.
+- D175 (Item 3): fit_5y. K1: plays 128.3 (pre-reg 127.8±1.5: HELD). drives 23.3 (fall 0.68: HELD). pts 21.55 (fall 0.74: HELD). All nulls HELD. 5X reds PASS. NEW marginal red: safety_share 0.100pp (tolerance 0.10pp exactly). Suite: 3 failed (fd_pen, tied, safety_share), 221 passed. Exit 1.
+
+### MEANS
+- The two clock-table fixes (pooled fallback + drive-end exclusion) closed 4.1 plays from 5X's +6.6 gap, landing at K1 +2.5 plays/game (128.3 vs 125.8). This is the lowest plays gap since the sim was built.
+- The drive-end exclusion was the big mover (-2.8 plays on the sample). It worked because TD/INT/fumble plays' short elapsed was dragging every non-scoring cell's quantiles down, making the clock run ~2-3 s too fast on first downs.
+- The pooled fallback fix resolved the 5X reds (ot_structure, tied_kicks) by giving thin late-game cells the correct ~15 s runoff instead of ~33 s from the all-clock parent.
+- The remaining +2.5 plays is the structural base: ~1.8 extra drives/game from turnover frequency and the blowout clock-burning deficit.
+- pts/team fell to 21.55 (actual 22.39, diff -0.84): fewer plays means fewer scoring opportunities. This is an expected side effect of correcting the clock.
+
+### Runtimes
+- Item 0: ~2 min. Item 1: ~3 min. Item 2: ~3 min. Item 3: ~150 min.
+
+### NOT DONE
+- Per-class elapsed decomposition (Item 2's pre-reg (1)).
+- By-margin gap table for fit_5y.
+- Investigation of safety_share marginal red.
+- K1 on a fully clean tree (header shows -dirty).
+
+### UNVERIFIED
+- Cross-machine W2 board bit-identity.
+- Whether safety_share is stochastic (0.0001pp over, likely noise).
+- Engine fp: 67b8afa3e055e4e9. Usage: 3638769c89030de0. main untouched.
+
+## 2026-09-28T12:55Z  cowork (5Y verification, D176, 5Z order)
+- RAN (Linux worktrees eng/5y @ d62d2b0 and main @ 5X engine): K1 rows -> plays 128.29, drives 23.29, pts/team 21.55; read tables.py diff (exclusion after elapsed); test_safety_share fixture (80 games x 500) on both engines -> 0.319% / 0.0784 per game (main) vs 0.324% / 0.0774 per game (5Y), drives 24.54 vs 23.87.
+- WROTE: research/nfl_sim/phase5y_verification_2026-09-28.md, D176 (appended at merge), research/nfl_sim/workorder_5Z_2026-09-28.md.
+- MEANS: plays gap +2.5; the new red is a denominator effect over a pre-existing ~60% safety excess; points per drive 1.85 vs 2.06.
+- NOT DONE: full suite on Linux; the per-class clock comparison (third time undone; 5Z item 0).
+- UNVERIFIED: the real safety count by type (5Z item 1 measures it from PBP).

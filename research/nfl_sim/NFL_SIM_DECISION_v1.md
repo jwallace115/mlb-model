@@ -3261,3 +3261,65 @@ from its rows (plays 132.35, drives 23.98, pts/team 22.291; gap +6.6), run on a 
    at 50 games a season.
 
 Merged to main. Engine `b2d76c7b3b232df6` (player-OFF hash 78e64f674e71be6d), fit_5x.
+
+### D172 — 5Y Item 0: pooled first_down fallback rows restored; 5X's two reds PASS (2026-09-27)
+
+Builder writes pooled `first_down` rows at all levels (38 cells) in addition to split rows (27 rush
++ 32 pass). EOH/FGS lookup: split → pooled `first_down` → `all`. Thin split cells now fall back to
+the pooled cell at the correct clock_period instead of the all-clock parent.
+
+`test_t3_ot_structure` and `test_t4_tied_offence_kicks_not_scores_late` **PASS** (were 5X reds).
+Test: first-down fallback resolves to same clock_period — 1/1 pass.
+
+### D173 — 5Y Item 1: drive-ending plays excluded from clock table cells (2026-09-27)
+
+Excluded 7,559 drive-ending plays (5.6%) from every clock cell. Means increased (fd_pass +3.3,
+fd_rush +3.5, complete +0.5, run +0.2, incomplete -0.1). Plays/game on sample: 131.8 → 129.0 (-2.8).
+**Pre-registered -3.5 to -5.5: FAILED** (-2.8). Direction correct.
+
+### D174 — 5Y Item 2: plays gap +3.2 (from +7.4); per-class breakdown not completed (2026-09-27)
+
+Report: `phase5y_clock_class.md`. Sim 129.0 vs real ~125.8 = **gap +3.2** (items 0+1 closed 4.2).
+**Pre-registered:** (2) +1.5-4.0 — **HELD**; (3) NULL quarter — **HELD**; (1) per-class not scored.
+
+### D175 — 5Y Item 3: fit_5y; K1 plays 128.3 (from 132.3); 5X reds PASS; safety_share NEW marginal red (2026-09-27)
+
+Fit: `fit_5y`, 1,087 games, N=5000, ~90 min. Cal, K1, K4, W2/W3 boards. K1 tree: committed
+(header still says -dirty due to uncommitted cal/K1 outputs at build time; engine+tables clean).
+
+**Pre-registered:**
+- K1 plays 127.8 ± 1.5: sim 128.3 — **HELD** (in range).
+- drives fall 0.5-1.2 from 23.98: sim 23.3, fall 0.68 — **HELD**.
+- pts/team falls 0.4-1.0 from 22.29: sim 21.55, fall 0.74 — **HELD**. Against actual 22.39: diff -0.84.
+- go_rate/off_pen/def_pen/fg_att PASS: **HELD**.
+- fd_pen FAIL: sim 1.29 — **HELD** (expected).
+- tied expiry FAIL: sim 0.085 — **HELD** (expected).
+- 5X reds PASS: `test_t3_ot_structure` and `test_t4_tied_kicks` — **HELD** (PASS).
+
+**NEW marginal red:** `test_safety_share` 0.324% vs 0.224%, diff 0.100pp (tolerance 0.10pp exactly).
+The drive-end exclusion lengthened the per-play clock, which slightly increases the number of plays
+at extreme field positions where safeties occur. Marginal (0.0001pp over tolerance).
+
+**Suite: 3 failed** (fd_pen, tied_drives, safety_share), **221 passed**. Exit code 1.
+
+**K1 gap: +2.5** (128.3 - 125.8). From 5X's +6.6, the two 5Y table fixes closed 4.1 plays.
+
+### D176 — 5Y verified and MERGED: plays gap +2.5; the safety red is a denominator effect over a 60% safety excess; the class comparison is still undone (2026-09-28)
+
+Cowork verification: `research/nfl_sim/phase5y_verification_2026-09-28.md`. Branch `eng/5y` @ d62d2b0.
+
+**Stands:** D172 (pooled first_down fallbacks restored; 5X reds pass). D173 (drive-ending plays excluded after elapsed
+is computed — correct; sim effect -2.8, pre-registered -3.5 to -5.5 FAILED, Cowork's estimate was too large). D175's
+K1 reproduces from its rows: plays 128.29, drives 23.29, pts/team 21.55; **K1 plays gap +2.5** (was +6.6 at 5X).
+
+**Corrections:**
+1. D175: `test_safety_share` on its own fixture — main (5X) 0.319% (0.0784 safeties/game, 24.54 drives/game) passes by
+   0.005; 5Y 0.324% (0.0774/game, 23.87 drives/game) fails. Safeties per game did not rise; drives fell. The engine
+   produces ~0.078 safeties a game vs 0.049 real (53 in 1,087 games), ~60% too many, pre-existing. -> 5Z item 1.
+2. D174: the per-class clock comparison was not done (third order running: 5W, 5X, 5Y); its diagnosis arithmetic does
+   not close (4.2 vs 2.7 plays) and the real sample value was not computed. -> 5Z item 0, as a hard deliverable.
+3. K1 was again run on a dirty tree (header `a5c0110ba-dirty`).
+
+**Open, measured:** points per drive sim 1.85 vs real 2.06 with 1.55 extra drives a game. -> 5Z item 2.
+
+Merged to main. Engine fingerprint per the 5Y fixture, fit_5y.

@@ -504,6 +504,14 @@ def build_clock_table(df):
     scrim["elapsed"] = scrim["game_seconds_remaining"] - scrim["next_gsr"]
     # Drop last play of game, half boundaries, and outliers
     scrim = scrim[scrim["elapsed"].notna() & (scrim["elapsed"] > 0) & (scrim["elapsed"] < 120)]
+    # 5Y: exclude drive-ending plays (TD/INT/fumble-lost) — the engine charges these with its
+    # own typed drive_end clock (max(16u,3)), so including them in the table double-counts
+    drive_end_mask = ((scrim.get("touchdown", pd.Series(0, index=scrim.index)).fillna(0) == 1) |
+                      (scrim.get("interception", pd.Series(0, index=scrim.index)).fillna(0) == 1) |
+                      (scrim.get("fumble_lost", pd.Series(0, index=scrim.index)).fillna(0) == 1))
+    n_de = drive_end_mask.sum()
+    scrim = scrim[~drive_end_mask]
+    print(f"  Clock table: excluded {n_de} drive-ending plays ({n_de / (n_de + len(scrim)) * 100:.1f}%)")
 
     # Outcome type — separate clock-stopping incompletes from inbounds plays
     def _outcome_type(row):
@@ -602,6 +610,43 @@ def build_clock_table(df):
             "mean": grp["elapsed"].mean(),
         })
 
+    # 5Y: pooled first_down rows at every level (fallback for thin split cells)
+    fd_pooled = scrim[scrim["outcome_type"].isin(["first_down_rush", "first_down_pass"])].copy()
+    if len(fd_pooled) > 0:
+        # Level 0
+        for (ss, cp), grp in fd_pooled.groupby(["score_state", "clock_period"], observed=True):
+            n = len(grp)
+            if n < MIN_CELL:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": ss, "clock_period": cp,
+                          "hurry": False, "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+        # Level 0.5: Q4_mid
+        fd_q4mid = fd_pooled[fd_pooled["clock_period"].isin(["Q4_mid_a", "Q4_mid_b"])]
+        for ss, grp in fd_q4mid.groupby("score_state", observed=True):
+            n = len(grp)
+            if n < MIN_CELL:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": ss, "clock_period": "Q4_mid",
+                          "hurry": False, "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+        # Level 1: parent
+        for ss, grp in fd_pooled.groupby("score_state", observed=True):
+            n = len(grp)
+            if n < MIN_CELL:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": f"p_{ss}", "clock_period": "all",
+                          "hurry": False, "n": n, "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+        # Level 2: legacy
+        for hurry_val in [True, False]:
+            grp = fd_pooled[fd_pooled["hurry"] == hurry_val]
+            if len(grp) < 20:
+                continue
+            q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+            rows.append({"outcome_type": "first_down", "score_state": "all", "clock_period": "all",
+                          "hurry": hurry_val, "n": len(grp), "elapsed_q": q.tolist(), "mean": grp["elapsed"].mean()})
+
     rows.extend(_eoh_runoff_rows(df))
     rows.extend(_fgs_runoff_rows(df))
     return pd.DataFrame(rows)
@@ -630,6 +675,11 @@ def _fgs_runoff_rows(df):
     fd_m2 = e["first_down"] == 1
     e.loc[fd_m2 & (e["play_type"] == "run"), "outcome_type"] = "first_down_rush"
     e.loc[fd_m2 & (e["play_type"] != "run"), "outcome_type"] = "first_down_pass"
+    # 5Y: exclude drive-ending plays
+    de_fgs = ((e.get("touchdown", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("interception", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("fumble_lost", pd.Series(0, index=e.index)).fillna(0) == 1))
+    e = e[~de_fgs]
     cens = e["next_sec"].isna()
     e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
     e = e[e["elapsed"] >= 0]
@@ -650,12 +700,19 @@ def _fgs_runoff_rows(df):
     for (sb, ot), g in e.groupby(["sec_b", "outcome_type"]):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, sb, ot))
+    # 5Y: pooled first_down rows for fgs
+    fd_fgs = e[e["outcome_type"].isin(["first_down_rush", "first_down_pass"])]
+    for sb, g in fd_fgs.groupby("sec_b"):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, sb, "first_down"))
     for sb, g in e.groupby("sec_b"):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, sb, "all"))
     for ot, g in e.groupby("outcome_type"):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, "all", ot))
+    if len(fd_fgs) >= EOH_RUNOFF_MIN:
+        rows.append(_row(fd_fgs, "all", "first_down"))
     rows.append(_row(e, "all", "all"))
     # Kneels in the state: the offence kneels TO THE KICK. Measured (every in-state kneel
     # 2021-2024): with <= 40 s left the next snap is the field goal with 1-4 s on the
@@ -715,6 +772,11 @@ def _eoh_runoff_rows(df):
     fd_m2 = e["first_down"] == 1
     e.loc[fd_m2 & (e["play_type"] == "run"), "outcome_type"] = "first_down_rush"
     e.loc[fd_m2 & (e["play_type"] != "run"), "outcome_type"] = "first_down_pass"
+    # 5Y: exclude drive-ending plays
+    de_eoh = ((e.get("touchdown", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("interception", pd.Series(0, index=e.index)).fillna(0) == 1) |
+              (e.get("fumble_lost", pd.Series(0, index=e.index)).fillna(0) == 1))
+    e = e[~de_eoh]
     cens = e["next_sec"].isna()
     e["elapsed"] = np.where(cens, e["half_seconds_remaining"], e["half_seconds_remaining"] - e["next_sec"])
     e = e[e["elapsed"] >= 0]
@@ -729,6 +791,11 @@ def _eoh_runoff_rows(df):
     for (st, ot), g in e.groupby(["state", "outcome_type"]):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, f"eoh_{st}", ot))
+    # 5Y: pooled first_down rows for eoh
+    fd_eoh = e[e["outcome_type"].isin(["first_down_rush", "first_down_pass"])]
+    for st, g in fd_eoh.groupby("state"):
+        if len(g) >= EOH_RUNOFF_MIN:
+            rows.append(_row(g, f"eoh_{st}", "first_down"))
     for st, g in e.groupby("state"):
         if len(g) >= EOH_RUNOFF_MIN:
             rows.append(_row(g, f"eoh_{st}", "all"))
