@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "9de33ce1013f2a3375dbded2c9fbc7d6",
+    "game_date": "2026-09-28",
+    "sport": "NHL",
+    "home_team": "Carolina Hurricanes",
+    "away_team": "Florida Panthers",
+    "commence_time": "2026-09-29T21:00:47Z",
+    "snapshot_type": "closing",
+    "total_line": 6.5,
+    "over_price": 103,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-28T03:00:07.395042+00:00"
+  },
+  {
+    "game_id": "485b295347cb22f002e014cb87813ed7",
+    "game_date": "2026-09-28",
+    "sport": "NHL",
+    "home_team": "Toronto Maple Leafs",
+    "away_team": "Montr\u00e9al Canadiens",
+    "commence_time": "2026-09-29T23:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": -119,
+    "under_price": 104,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-28T03:00:07.395042+00:00"
+  }
+]
