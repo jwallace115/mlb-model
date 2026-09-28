@@ -979,6 +979,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     ev_fd_pen_auto = np.zeros(N, dtype=np.int16)  # 5U-0c: auto first-down award
     ev_fd_pen_yds = np.zeros(N, dtype=np.int16)    # 5U-0c: yardage-crossed award
     ev_safeties = np.zeros(N, dtype=np.int16)
+    # 5Z: per-type safety counters (LOG-ONLY, drive_log-gated output)
+    _saf_pre = np.zeros(N, dtype=np.int16)     # pre-snap (random rate)
+    _saf_sack = np.zeros(N, dtype=np.int16)    # sack in end zone
+    _saf_rush = np.zeros(N, dtype=np.int16)    # run in end zone
     # 5A-5: non-offensive scoring counters
     ev_int_ret_td = np.zeros(N, dtype=np.int16)
     ev_fum_ret_td = np.zeros(N, dtype=np.int16)
@@ -2043,7 +2047,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 for i in np.where(safety_pre)[0]:
                     n_plays[i] += 1; _dl_plays[i] += 1
                     _dl_result[i] = _DLR_SAFETY
-                    ev_safeties[i] += 1
+                    ev_safeties[i] += 1; _saf_pre[i] += 1  # 5Z
                     dt = 1 - poss[i]
                     score_h[i] += 2 * (dt == 0); score_a[i] += 2 * (dt == 1)
                     yl[i] = 75; poss[i] = 1 - poss[i]
@@ -2378,7 +2382,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 gi = g_idx[j]
                 n_plays[gi] += 1; _dl_plays[gi] += 1
                 _dl_result[gi] = _DLR_SAFETY
-                ev_safeties[gi] += 1  # 5A-4
+                ev_safeties[gi] += 1; _saf_sack[gi] += 1  # 5A-4 + 5Z
                 dt = 1 - poss[gi]
                 score_h[gi] += 2 * (dt == 0); score_a[gi] += 2 * (dt == 1)
                 yl[gi] = 75; poss[gi] = 1 - poss[gi]
@@ -2715,7 +2719,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             for j in np.where(safety_r)[0]:
                 gi = g_idx_r[j]; n_plays[gi] += 1; _dl_plays[gi] += 1
                 _dl_result[gi] = _DLR_SAFETY
-                ev_safeties[gi] += 1  # 5A-4
+                ev_safeties[gi] += 1; _saf_rush[gi] += 1  # 5A-4 + 5Z
                 dt = 1 - poss[gi]
                 score_h[gi] += 2 * (dt == 0); score_a[gi] += 2 * (dt == 1)
                 yl[gi] = 75; poss[gi] = 1 - poss[gi]
@@ -3001,6 +3005,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             "event_class", "score_state", "clock_period", "pace_mult",
         ])
         team_df.attrs["play_log"] = pl_df
+    # 5Z: safety type counters (LOG-ONLY)
+    if drive_log:
+        team_df.attrs["saf_pre"] = _saf_pre
+        team_df.attrs["saf_sack"] = _saf_sack
+        team_df.attrs["saf_rush"] = _saf_rush
 
     if not has_players:
         return team_df

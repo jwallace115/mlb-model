@@ -3331,3 +3331,16 @@ Report: `phase5z_clock_class.md`. Parquet: `phase5z_clock_class.parquet`.
 Tables (a)(b)(c) delivered. MIX +74.9 s, RATE -77.0 s (SUM -2.0). Largest rate gaps:
 timeout_followed -9.2 s/snap and kneel -6.5 s/snap (not run/complete_inbounds as predicted).
 **Pre-registered:** (1) RATE >= 60% — **FAILED** (51%); (2) run/complete leading — **FAILED**.
+
+### D178 — 5Z Item 1: safeties — 100% from pre-snap rate; sack/rush mechanisms disabled (2026-09-28)
+
+Sim 0.072/game all from pre-snap random rate. Sack and rush safety sites produce ZERO (code has
+`safety_mask = np.zeros(…)` and `safety_r = np.zeros(…)`). Real 0.049/game: sack 0.017, run 0.018,
+penalty 0.008, punt/kick 0.005, other 0.002. **Pre-registered excess in ONE type: HELD** (pre-snap
+100%). **Fix:** reduce pre-snap to ~0.01 and enable mechanistic branches. Player-OFF hash unchanged.
+
+### D179 — 5Z Item 2: extra drives in own 21-40 (+1.84/g), not own 1-20 (2026-09-28)
+
+Sim 23.20 drives/g vs real 21.74. Excess +1.84 in own21-40 (15.29 vs 13.45). Sim pts/drive 1.80.
+**Pre-registered (1) own 1-20 excess: FAILED** (sim has fewer: 4.38 vs 4.45). **(2) 70% START MIX:
+not fully scored** (real pts/drive by bucket needed for full decomposition).
