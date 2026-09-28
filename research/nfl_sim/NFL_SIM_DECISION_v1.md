@@ -3323,3 +3323,11 @@ K1 reproduces from its rows: plays 128.29, drives 23.29, pts/team 21.55; **K1 pl
 **Open, measured:** points per drive sim 1.85 vs real 2.06 with 1.55 extra drives a game. -> 5Z item 2.
 
 Merged to main. Engine fingerprint per the 5Y fixture, fit_5y.
+
+### D177 — 5Z Item 0: per-class clock comparison delivered (2026-09-28)
+
+Report: `phase5z_clock_class.md`. Parquet: `phase5z_clock_class.parquet`.
+
+Tables (a)(b)(c) delivered. MIX +74.9 s, RATE -77.0 s (SUM -2.0). Largest rate gaps:
+timeout_followed -9.2 s/snap and kneel -6.5 s/snap (not run/complete_inbounds as predicted).
+**Pre-registered:** (1) RATE >= 60% — **FAILED** (51%); (2) run/complete leading — **FAILED**.
