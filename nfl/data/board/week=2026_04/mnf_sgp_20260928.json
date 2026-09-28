@@ -1,0 +1,29 @@
+{
+  "game": "PHI @ CHI, MNF 2026-09-29T00:15Z (nflverse week 3)",
+  "built_utc": "2026-09-28T19:05Z",
+  "reader_model": "claude-opus-5-5",
+  "reader_session": "chat",
+  "book": "hardrockbet_fl",
+  "boost": "25% profit boost on SGP",
+  "layer_weights": {"market": 0.35, "news": 0.25, "history": 0.25, "weather": 0.15, "sim": "skipped (NFL sim not ready, Jeff)"},
+  "inputs": {
+    "props": "data/odds_archive/nfl/props/season=2026/manual/mac_mid_20260928T1850Z.parquet (10 books, pulled 18:50Z, 10 credits)",
+    "lines": "data/odds_archive/nfl/line_history/season=2026/ snaps 2026-09-21..2026-09-28T18:00Z",
+    "weather": "data/weather_archive/nws/forecasts/season=2026/snap_20260928T180009Z.parquet (Soldier Field 63-64F, wind 5 mph NE-E, precip 1%)",
+    "history": "nflverse stats_player_week_2026 weeks 1-2; schedules games.csv",
+    "news": ["NFL Network/Rapoport via CBS 9/28: Case Keenum expected to start; Bagent cleared protocol", "Eagles injury report 9/27: OUT Hollywood Brown, Dallas Goedert, T Fred Johnson; Q Greenard; Barkley (stinger) full"]
+  },
+  "legs": [
+    {"leg": "D'Andre Swift OVER 14.5 rush attempts", "hr_price": -125, "market_fair": 0.535, "reader_p": 0.60,
+     "reason": "Backup QB (Keenum, no start since Dec 2023) -> Ben Johnson leans on the league's top rushing offense (212 ypg); Swift had 18 and 16 carries in weeks 1-2 with Monangai healthy both games. Market 0.535; news and history push up."},
+    {"leg": "Case Keenum UNDER 170.5 pass yards", "hr_price": -115, "market_fair": 0.49, "reader_p": 0.55,
+     "reason": "Rusty 38-year-old backup (last start 11/17, 62 yds, 2 INT, benched) vs a Fangio defense; game plan built to hide him. Risk: trailing script adds volume. Bovada ladder puts fair under 170.5 at ~0.49."},
+    {"leg": "Game UNDER 41.5", "hr_price": -110, "market_fair": 0.495, "reader_p": 0.52,
+     "reason": "Market already moved 44 -> 41.5 on the QB news; Eagles missing Goedert, Hollywood Brown and a starting tackle; Bears run-heavy clock. Weather neutral (64F, 5 mph). Weakest leg: little edge alone, carries correlation."}
+  ],
+  "assumed_correlations": {"swift_att~keenum_under": 0.25, "keenum_under~game_under": 0.45, "swift_att~game_under": 0.10, "note": "reader's assumption, not measured"},
+  "joint": {"3_leg_reader": 0.243, "3_leg_market_fair": 0.197, "2_leg_reader": 0.369, "2_leg_market_fair": 0.302},
+  "decision_rule": {"3_leg": "play if HR shows >= +350 (positive even at market-fair probs); +250..+349 positive only on the reader's read; below +250 pass",
+                    "2_leg_swift_keenum": "play if HR shows >= +200; +140..+199 reader-only; below +140 pass"},
+  "prior_frozen_view": "wk4 blind log (frozen 2026-09-27T15:58Z) had CHI +3.5 and a slight under 42 for this game"
+}
