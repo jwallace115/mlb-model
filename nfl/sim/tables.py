@@ -550,9 +550,14 @@ def build_clock_table(df):
         to_map = all_sorted.set_index(["game_id", "play_id"])["next_timeout"]
         scrim_keys = list(zip(scrim["game_id"], scrim["play_id"]))
         timeout_next = pd.Series([to_map.get(k, 0) for k in scrim_keys], index=scrim.index).fillna(0) == 1
-        # 6B: only running-clock plays (engine only routes those; incomplete plays keep their class)
-        running_clock = scrim["outcome_type"] != "incomplete"
-        timeout_running = timeout_next & running_clock
+        # 6B: only running-clock plays (engine only routes those)
+        # Incomplete, out-of-bounds, spike, and kneel plays keep their own class
+        stopped_clock = (scrim["outcome_type"] == "incomplete") | (scrim["outcome_type"] == "kneel")
+        if "out_of_bounds" in scrim.columns:
+            stopped_clock = stopped_clock | (scrim["out_of_bounds"].fillna(0) == 1)
+        if "qb_spike" in scrim.columns:
+            stopped_clock = stopped_clock | (scrim["qb_spike"].fillna(0) == 1)
+        timeout_running = timeout_next & ~stopped_clock
         n_to = timeout_running.sum()
         scrim.loc[timeout_running, "outcome_type"] = "timeout_followed"
         print(f"  Clock table: {n_to} timeout-followed running-clock plays ({n_to/len(scrim)*100:.1f}%)")

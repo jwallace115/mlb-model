@@ -3429,3 +3429,11 @@ Pre-reg 3+ of 5 reds pass: **FAILED** (2 pass: tie_rate, off_TO). Kneel test: **
 ### D188 — ITEM NOT DONE: own-1 pile-up fix requires modifying the offensive penalty half-distance-to-goal rule (engine.py ~1960) and the loss clipping at yl 99 across sack/completion/rush sites. Blocker: depends on D187's timeout fix being complete (the order is sequential).
 
 ### D189 — ITEM NOT DONE: re-fit depends on items 1-2 being complete. Blocker: D187 and D188 not done.
+
+### D190 — Supersedes D186. 6B Item 0 report + OOB fix (2026-09-28)
+
+**(1)** 11-cell table: thin cells resolve to ap_all (run/tied/Q4_late 24.7, complete/tied/Q4_late 18.1, etc.; 6A was ~38 for all).
+**(2)** Sample plays: 127.34. Pre-reg 127.02±0.8: **HELD**.
+**(3)** Normal-period null: **NOT SCORED** (6A comparison table not on this branch).
+**(4)** timeout_followed excludes OOB (tables.py:554-558). 4,446 plays, mean 29.1 s.
+**(5)** Kneel split: sim final 0.67/g at 6.7 s (real ~1.0/g at 22.1 s); non-final 0.79/g at 29.8 s (real 32.4). The gap is WHEN the sim kneels (less clock left), not the per-kneel elapsed.
