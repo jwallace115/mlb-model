@@ -3453,3 +3453,17 @@ use `(100 - yl) / 2` instead of clipping at 99.
 
 test_engine_6b: penalty half-distance test PASSES; 98-100 snaps test at 0.81 (target <= 0.6, still
 over — drive starts at deep positions contribute the remaining pile-up).
+
+### D193 — Supersedes D189. fit_6b; K1 plays 126.9 (+1.1 from real); clean tree (2026-09-28)
+
+Fit: `fit_6b`, 1,087 games, N=5000. Cal committed before K1 (header: `3358be6a9`, clean).
+K1 plays 126.9 (pre-reg 125.8 ± 1.5: **HELD**). drives 23.0. pts/team 21.28.
+go_rate 0.0068 **PASS**. off_pen 0.028 **PASS**. def_pen 0.019 **PASS**. fg_att -0.088 **PASS**.
+fd_pen -0.457 **FAIL** (expected). tied 0.066 **FAIL** (expected).
+safeties/game: 0.071 (from 0.072 in 6A; the half-distance fix had minimal effect because the
+remaining pile-up comes from drive starts, not play-by-play losses).
+
+Suite: 8 failed, 222 passed. Exit code 1. Reds: fd_pen, tied_drives, dead_clock_runoff (table
+structure changed), ot_structure, timeouts_kneels, tied_FG_late, kneel_measured_table,
+98-100_snaps. The late-game reds and kneel test remain from D186; the dead_clock test fires
+because the table now has new outcome types (timeout_followed, kneel, ap_all) not in the dead test.
