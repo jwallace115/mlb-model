@@ -3378,3 +3378,16 @@ Kneels added to `build_clock_table` as "kneel" outcome (10 cells, non-hurry mean
 kneel draw changed from "complete_inbounds" to "kneel" with parent→complete_inbounds fallback.
 Was using the running-clock runoff for non-kneel plays (~20.3 s); now uses the measured kneel
 runoff which is longer because real kneels run the clock down to the next snap.
+
+### D183 — 6A Item 2: safety zones measured + points-per-drive (diagnosis) (2026-09-28)
+
+**(a) Safeties.** Per-zone rates match constants.json by construction (same PBP source). Real
+zone snaps/game: 90-94 2.31, 95-97 0.75, 98-100 0.40. Sim 0.069/game vs real 0.041. The
+excess is in zone snap counts (sim has more deep-zone snaps from extra drives). Additionally,
+the safety roll fires on kneels/penalties/spikes (non-pass/run steps). **Fix: restrict roll to
+pass/run snaps only.**
+
+**(b) Points per drive.** Real drives by bucket: own1-20 4.45, own21-40 13.45, mid 2.54,
+opp40-21 0.94, opp20-1 0.36. Sim: own21-40 +1.84 (the extra drives). Full START MIX /
+EFFICIENCY decomposition not completed (real pts/drive by bucket requires scoring-play
+attribution from PBP).
