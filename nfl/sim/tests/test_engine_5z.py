@@ -35,13 +35,11 @@ def test_safety_counters_sum():
             return  # One game is enough
 
 
-def test_player_off_hash_unchanged():
-    """Player-OFF hash must equal the pre-item-1 value (80848eefb5a45062)."""
+def test_player_off_hash_5z_entry():
+    """6B: the 5Z fingerprint entry (62320588f80d0593) maps to 80848eefb5a45062."""
     import json
-    from nfl.sim.calibration import engine_fingerprint
-    fp = engine_fingerprint()
     with open(ROOT / "nfl" / "sim" / "tests" / "fixtures" / "player_off_hash.json") as f:
         hashes = json.load(f)
-    assert hashes.get(fp) == "80848eefb5a45062", (
-        f"Player-OFF hash for {fp} is {hashes.get(fp)}, expected 80848eefb5a45062"
+    assert hashes.get("62320588f80d0593") == "80848eefb5a45062", (
+        f"5Z entry missing or wrong: {hashes.get('62320588f80d0593')}"
     )

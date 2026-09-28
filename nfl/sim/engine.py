@@ -1378,7 +1378,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 raise RuntimeError("clock table has no EOH / FG-setup runoff cells")
             el = float(np.interp(u_arr[gi], xs101_top, cq))
             clock[gi] -= np.float32(el); ev_clock_used[gi] += np.float32(el)
-            _pl_log(gi, el, "timeout_stopped")
+            _pl_log(gi, el, "eoh_runoff")  # 6B: was timeout_stopped
         return m
 
     def _apply_timeouts(gi_arr, ot_idx_arr, sd_arr, u_arr, running_codes=(1, 2), de_code=3, stop_code=0, skip=None):
@@ -1651,16 +1651,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                  or to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), "all", "any"), 0.0))
                         if u_to[i] < p_def:
                             to_rem[1 - poss[i], i] -= 1; ev_to_def[i] += 1
-                            ot_name = "incomplete"  # clock stopped
+                            ot_name = "timeout_followed"  # 6B: kneel+TO draws timeout_followed (was incomplete)
                     cq = clock_q.get((ot_name, ss_i, cp_i))
-                    # 6A: kneel fallback to parent, then complete_inbounds
-                    if cq is None and ot_name == "kneel":
-                        cq = clock_q.get(("kneel", f"p_{ss_i}", "all"))
+                    # 6B: kneel/timeout_followed -> ap_all same period -> parent -> legacy
+                    if cq is None:
+                        cq = clock_q.get((ot_name, "ap_all", cp_i))
+                    if cq is None and ot_name in ("kneel", "timeout_followed"):
+                        cq = clock_q.get((ot_name, f"p_{ss_i}", "all"))
                         if cq is None:
-                            cq = clock_q.get(("kneel", False))
+                            cq = clock_q.get((ot_name, False))
                         if cq is None:
                             cq = clock_q.get(("complete_inbounds", ss_i, cp_i))
-                    # 5M: Q4_mid_a/Q4_mid_b fall back to unsplit Q4_mid
                     if cq is None and cp_i in ("Q4_mid_a", "Q4_mid_b"):
                         cq = clock_q.get((ot_name, ss_i, "Q4_mid"))
                     if cq is None:
@@ -2586,6 +2587,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                             cq = clock_q.get((ot_name, ss_val, "Q4_mid"))
                             if cq is None and ot_name in ("first_down_pass", "first_down_rush"):
                                 cq = clock_q.get(("first_down", ss_val, "Q4_mid"))
+                        # 6B: all-states-pooled same-period fallback
+                        if cq is None:
+                            cq = clock_q.get((ot_name, "ap_all", cp_val))
+                            if cq is None and ot_name in ("first_down_pass", "first_down_rush"):
+                                cq = clock_q.get(("first_down", "ap_all", cp_val))
                         if cq is None:
                             fb_ot = "first_down" if ot_name in ("first_down_pass", "first_down_rush") else ot_name
                             cq = clock_q.get((ot_name, f"p_{ss_val}", "all"))

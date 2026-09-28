@@ -31,9 +31,8 @@ def test_timeout_followed_cell_used():
 
 
 def test_kneel_uses_measured_table():
-    """Kneel runoff should draw from the 'kneel' cell, not 'complete_inbounds'.
-    Verify by checking the play_log kneel events have elapsed > 25 s on average
-    (the measured kneel is ~32 s vs the old ~20 s)."""
+    """6B: Kneel mean elapsed within 3.0 s of like-for-like real (25.9 s).
+    Compares the sim's mean over ALL kneels (final ones capped) against real PBP."""
     _load_tables()
     team_r, tend, sit, kicker, league = _load_ratings()
     seed = stable_seed(("KC", "BUF", 2024, 11, 42))
@@ -43,8 +42,9 @@ def test_kneel_uses_measured_table():
     pl = r.attrs.get("play_log")
     assert pl is not None
     kneels = pl[pl["event_class"] == "kneel"]
+    real_mean = 25.9  # like-for-like all kneels, PBP 2021-24 REG
     if len(kneels) > 10:
         mean_el = kneels["elapsed"].mean()
-        assert mean_el > 25.0, (
-            f"Kneel mean elapsed {mean_el:.1f}s < 25: still using old complete_inbounds cell"
+        assert abs(mean_el - real_mean) < 3.0, (
+            f"Kneel mean elapsed {mean_el:.1f}s vs real {real_mean} (diff {abs(mean_el-real_mean):.1f} > 3.0)"
         )

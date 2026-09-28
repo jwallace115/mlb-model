@@ -3414,3 +3414,12 @@ is long-field efficiency (own 21-40 TD 18.7% vs 21.5%). K1: plays 126.21, drives
 "FAILED" is a wrong base; HELD). Correction to D180/5Z: the class table's "timeout_followed 2.2 at 8.9 s" was the
 end-of-half runoff path, logged as `timeout_stopped`; the sim stops 2.8 plays a game with a timeout vs 4.0 real
 (running clock) and calls 3.4 timeouts a game vs 7.7. Next: order 6B on eng/6b from eng/6a.
+
+### D186 — 6B Item 0: clock-table defects fixed; 2 of 5 6A reds now pass (2026-09-28)
+
+(a) ap_all fallback rows at every level; all engine lookups updated.
+(b) timeout_followed = running-clock plays only (5,054, was 6,026).
+(c) Kneels include final-of-half; kneel+TO draws timeout_followed.
+(d) Log label timeout_stopped → eoh_runoff.
+(e) Tests: 5Z hash asserts fixture entry; 6A kneel compares against real 25.9s ± 3.0.
+Pre-reg 3+ of 5 reds pass: **FAILED** (2 pass: tie_rate, off_TO). Kneel test: **FAILS** (20.7 vs 25.9).

@@ -502,8 +502,15 @@ def build_clock_table(df):
     # Next scrimmage play in the SAME GAME (including across drives)
     scrim["next_gsr"] = scrim.groupby("game_id")["game_seconds_remaining"].shift(-1)
     scrim["elapsed"] = scrim["game_seconds_remaining"] - scrim["next_gsr"]
-    # Drop last play of game, half boundaries, and outliers
-    scrim = scrim[scrim["elapsed"].notna() & (scrim["elapsed"] > 0) & (scrim["elapsed"] < 120)]
+    # 6B: for kneels with no next snap (last of half/game), elapsed = time left in the quarter
+    kneel_mask = scrim["play_type"] == "qb_kneel"
+    last_kneel = kneel_mask & scrim["elapsed"].isna()
+    qtr_end_gsr = (4 - scrim["qtr"].clip(upper=4)) * 900
+    scrim.loc[last_kneel, "elapsed"] = scrim.loc[last_kneel, "game_seconds_remaining"] - qtr_end_gsr[last_kneel]
+    scrim.loc[last_kneel, "elapsed"] = scrim.loc[last_kneel, "elapsed"].clip(lower=0)
+    # Drop non-kneel plays with NaN/invalid elapsed, and outliers
+    valid = (scrim["elapsed"].notna() & (scrim["elapsed"] >= 0) & (scrim["elapsed"] < 120)) | kneel_mask
+    scrim = scrim[valid & (scrim["elapsed"] >= 0)]
     # 5Y: exclude drive-ending plays (TD/INT/fumble-lost) — the engine charges these with its
     # own typed drive_end clock (max(16u,3)), so including them in the table double-counts
     drive_end_mask = ((scrim.get("touchdown", pd.Series(0, index=scrim.index)).fillna(0) == 1) |
@@ -543,10 +550,12 @@ def build_clock_table(df):
         to_map = all_sorted.set_index(["game_id", "play_id"])["next_timeout"]
         scrim_keys = list(zip(scrim["game_id"], scrim["play_id"]))
         timeout_next = pd.Series([to_map.get(k, 0) for k in scrim_keys], index=scrim.index).fillna(0) == 1
-        # Override outcome_type for timeout-followed plays (drive-ending already excluded)
-        n_to = timeout_next.sum()
-        scrim.loc[timeout_next, "outcome_type"] = "timeout_followed"
-        print(f"  Clock table: {n_to} timeout-followed plays ({n_to/len(scrim)*100:.1f}%)")
+        # 6B: only running-clock plays (engine only routes those; incomplete plays keep their class)
+        running_clock = scrim["outcome_type"] != "incomplete"
+        timeout_running = timeout_next & running_clock
+        n_to = timeout_running.sum()
+        scrim.loc[timeout_running, "outcome_type"] = "timeout_followed"
+        print(f"  Clock table: {n_to} timeout-followed running-clock plays ({n_to/len(scrim)*100:.1f}%)")
 
     # 5A-3: Score state (5-way)
     sd = scrim["score_differential"]
@@ -596,6 +605,18 @@ def build_clock_table(df):
         q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
         rows.append({
             "outcome_type": ot, "score_state": ss, "clock_period": "Q4_mid",
+            "hurry": False, "n": n, "elapsed_q": q.tolist(),
+            "mean": grp["elapsed"].mean(),
+        })
+
+    # 6B: Level 0.75: (outcome_type × clock_period) — all score states pooled, same period
+    for (ot, cp), grp in scrim.groupby(["outcome_type", "clock_period"], observed=True):
+        n = len(grp)
+        if n < MIN_CELL:
+            continue
+        q = np.quantile(grp["elapsed"].values, QUANTILE_POINTS)
+        rows.append({
+            "outcome_type": ot, "score_state": "ap_all", "clock_period": cp,
             "hurry": False, "n": n, "elapsed_q": q.tolist(),
             "mean": grp["elapsed"].mean(),
         })
