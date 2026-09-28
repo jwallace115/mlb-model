@@ -1,0 +1,62 @@
+==== smain: sim-games 20000  plays 129.04 drives 23.32 pts/team 21.81 saf/game 0.0721
+  zone snaps/game sim {'vz90': 2.04, 'vz95': 0.909, 'vz98': 1.31}
+   saf_pre 0.0721
+   saf_sack 0.0
+   saf_rush 0.0
+  timeouts/game off 1.49 def 2.18
+  [sample] real drives/g 21.94 sim 23.30 | off pts/game real 42.52 sim 41.83 gap -0.68
+    START MIX +3.14  EFFICIENCY -3.50  interaction -0.33  sum -0.68
+          real_dpg  sim_dpg  real_ppd  sim_ppd
+bucket                                        
+own1-20      5.640    4.611     1.377    1.196
+own21-40    12.680   15.147     1.903    1.693
+mid41-60     2.345    2.131     2.426    2.505
+opp40-21     0.875    1.054     3.366    3.448
+opp20-1      0.400    0.355     4.950    4.772
+  [all1087] real drives/g 21.74 sim 23.30 | off pts/game real 42.83 sim 41.83 gap -1.00
+    START MIX +3.71  EFFICIENCY -4.25  interaction -0.46  sum -1.00
+          real_dpg  sim_dpg  real_ppd  sim_ppd
+bucket                                        
+own1-20      5.592    4.611     1.396    1.196
+own21-40    12.597   15.147     1.941    1.693
+mid41-60     2.312    2.131     2.479    2.505
+opp40-21     0.878    1.054     3.541    3.448
+opp20-1      0.364    0.355     4.747    4.772
+result    FG_made  FG_missed     TD  downs  end_game  end_half   punt  safety  turnover_fumble  turnover_int
+bucket                                                                                                      
+own1-20     0.096      0.017  0.131  0.053     0.038     0.045  0.492   0.016            0.040         0.073
+own21-40    0.132      0.024  0.187  0.069     0.035     0.050  0.392   0.000            0.041         0.070
+mid41-60    0.219      0.040  0.266  0.064     0.058     0.031  0.230   0.000            0.037         0.055
+opp40-21    0.324      0.050  0.357  0.057     0.090     0.016  0.040   0.000            0.026         0.040
+opp20-1     0.227      0.013  0.589  0.036     0.074     0.012  0.008   0.000            0.017         0.024
+==== s6a: sim-games 20000  plays 127.02 drives 22.98 pts/team 21.45 saf/game 0.0692
+  zone snaps/game sim {'vz90': 2.022, 'vz95': 0.9, 'vz98': 1.293}
+   saf_pre 0.0692
+   saf_sack 0.0
+   saf_rush 0.0
+  timeouts/game off 1.37 def 2.02
+  [sample] real drives/g 21.94 sim 22.95 | off pts/game real 42.52 sim 41.14 gap -1.38
+    START MIX +2.43  EFFICIENCY -3.53  interaction -0.28  sum -1.38
+          real_dpg  sim_dpg  real_ppd  sim_ppd
+bucket                                        
+own1-20      5.640    4.550     1.377    1.195
+own21-40    12.680   14.938     1.903    1.690
+mid41-60     2.345    2.089     2.426    2.512
+opp40-21     0.875    1.028     3.366    3.459
+opp20-1      0.400    0.347     4.950    4.752
+  [all1087] real drives/g 21.74 sim 22.95 | off pts/game real 42.83 sim 41.14 gap -1.69
+    START MIX +2.99  EFFICIENCY -4.28  interaction -0.40  sum -1.69
+          real_dpg  sim_dpg  real_ppd  sim_ppd
+bucket                                        
+own1-20      5.592    4.550     1.396    1.195
+own21-40    12.597   14.938     1.941    1.690
+mid41-60     2.312    2.089     2.479    2.512
+opp40-21     0.878    1.028     3.541    3.459
+opp20-1      0.364    0.347     4.747    4.752
+result    FG_made  FG_missed     TD  downs  end_game  end_half   punt  safety  turnover_fumble  turnover_int
+bucket                                                                                                      
+own1-20     0.096      0.017  0.131  0.052     0.039     0.047  0.492   0.015            0.040         0.073
+own21-40    0.132      0.023  0.187  0.067     0.036     0.051  0.393   0.000            0.041         0.070
+mid41-60    0.218      0.040  0.268  0.064     0.057     0.030  0.231   0.000            0.037         0.056
+opp40-21    0.329      0.048  0.356  0.057     0.088     0.015  0.042   0.000            0.026         0.039
+opp20-1     0.232      0.014  0.584  0.037     0.070     0.011  0.009   0.000            0.018         0.024

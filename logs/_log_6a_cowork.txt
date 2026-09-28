@@ -1,0 +1,33 @@
+
+## 2026-09-28T18:20Z  cowork (verification of 6A — D185; order 6B)
+
+### RETURNED
+- eng/6a @ fc3724115: 5 commits (D181-D184 + log). No diagnostic script or report for items 0-2 was committed; D183 is text only.
+- K1 from phase6a_k1_after_rows.parquet: plays 126.21, drives 22.945, pts/team 21.17 (5Y: 128.29 / 23.29 / 21.55). Header a86ba74fc-dirty.
+- Full suite on Linux: main 4 red (fd_pen, safety_share, tied expiry, props clv_join_mnf [archive missing here]); 6A 10 red
+  (adds tie rate 0.0119, |m|=3 0.612, P(tie|OT) 0.167, off TO 1.37, tied FG late 0.130, 5Z hash test, 6A kneel test).
+- test_engine_6a on the 5Z engine: both fail; on 6A: timeout passes, kneel fails (20.6 s).
+- Clock table main vs 6A: 11 late cells dropped below MIN_CELL and fall back to all-period parents (~38 s vs ~18 s);
+  run/complete/first-down cells +0.4 to +0.9 s.
+- Sample (200 games, N=100) on both engines: plays 129.04 -> 127.02; 6A timeout_followed 2.81/game at 12.7 s;
+  EOH path (logged "timeout_stopped") 2.2/game at 8.8 s on both; timeouts 3.67 -> 3.39/game.
+- Zone snaps/game sim 2.04 / 0.91 / 1.31 (90-94 / 95-97 / 98-100) vs real 2.26 / 0.72 / 0.385; sim safeties 0.072 (5Z), 0.069 (6A).
+- Offensive points/game: real 42.83 (1,087 games), sim 41.14 (6A) / 41.83 (5Z); 6A split START MIX +2.99, EFFICIENCY -4.28, interaction -0.40.
+- Real timeouts: 7.7 team timeouts/game; 4.0/game after running-clock scrimmage plays. Real kneels all 25.9 s like for like.
+
+### MEANS
+- 6A's routing is right but its table has two defects (stopped-clock plays in timeout_followed; late cells lost to the
+  all-period fallback). The +0.4 K1 plays gap is partly compensating error; the 5 new reds are late-game dynamics.
+- D182's and D183's explanations are wrong (FGS path; roll on kneels/penalties; extra drives). The safety excess is
+  the own 1-2 zone (3.4x real snaps). The points deficit is long-field efficiency, not start mix.
+- My 5Z verification misread the EOH runoff (logged "timeout_stopped") as the timeout path; the 6A pre-registration inherited it.
+- Not merged. 6B branches from eng/6a; D185 is appended by 6B's first commit to keep the decision doc linear.
+
+### NOT DONE
+- Merge of eng/6a (deliberately). The sim zone counters were a temporary uncommitted patch, not engine code.
+- The cause of the own 1-2 pile-up is read from the code (clips at 99, full-yard offensive penalties), not measured — 6B item 2.
+- Why the timeout policy under-calls — 6B item 1. Long-field efficiency cause — after 6B.
+
+### UNVERIFIED
+- The Mac suite (Claude Code reported 9 red; cloud shows the same set plus the data-archive test).
+- Whether fixing the late cells alone restores the five late-game reds.
