@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "08d9219713246e3edff39b4f549085d8",
+    "game_date": "2026-09-28",
+    "sport": "MLB",
+    "home_team": "Atlanta Braves",
+    "away_team": "Philadelphia Phillies",
+    "commence_time": "2026-09-29T18:00:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 7.0,
+    "over_price": 102,
+    "under_price": -116,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-28T18:00:05.322109+00:00"
+  },
+  {
+    "game_id": "3a08d35ecf12b54dc25f5912ccecf222",
+    "game_date": "2026-09-28",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-09-29T21:00:00Z",
+    "snapshot_type": "afternoon",
+    "total_line": 8.5,
+    "over_price": -105,
+    "under_price": -109,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-28T18:00:05.322109+00:00"
+  }
+]
