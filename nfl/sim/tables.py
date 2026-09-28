@@ -534,6 +534,18 @@ def build_clock_table(df):
     scrim.loc[fd_rush, "outcome_type"] = "first_down_rush"
     scrim.loc[fd_pass, "outcome_type"] = "first_down_pass"
 
+    # 6A: timeout_followed — plays whose next PBP row is a timeout
+    if "timeout" in df.columns:
+        all_sorted = df.sort_values(["game_id", "play_id"]).copy()
+        all_sorted["next_timeout"] = all_sorted.groupby("game_id")["timeout"].shift(-1)
+        to_map = all_sorted.set_index(["game_id", "play_id"])["next_timeout"]
+        scrim_keys = list(zip(scrim["game_id"], scrim["play_id"]))
+        timeout_next = pd.Series([to_map.get(k, 0) for k in scrim_keys], index=scrim.index).fillna(0) == 1
+        # Override outcome_type for timeout-followed plays (drive-ending already excluded)
+        n_to = timeout_next.sum()
+        scrim.loc[timeout_next, "outcome_type"] = "timeout_followed"
+        print(f"  Clock table: {n_to} timeout-followed plays ({n_to/len(scrim)*100:.1f}%)")
+
     # 5A-3: Score state (5-way)
     sd = scrim["score_differential"]
     scrim["score_state"] = np.where(sd <= -9, "trail9+",

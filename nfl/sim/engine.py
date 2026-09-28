@@ -2532,7 +2532,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                               score_a[gi_arr] - score_h[gi_arr])
             ot_names_p = np.asarray(["incomplete", "first_down", "complete_inbounds", "drive_end"], dtype=object)[ot_idx]
             eoh_p = _eoh_runoff(gi_arr, sd_arr, yl_p, ot_names_p, u_pclock, exclude=(ot_idx == 3))   # 5A-9
+            # 6A: record which plays are running-clock BEFORE _apply_timeouts
+            _pre_to_ot_idx = ot_idx.copy()
             _apply_timeouts(gi_arr, ot_idx, sd_arr, u_to, skip=eoh_p)  # 5A-7
+            # 6A: plays that _apply_timeouts changed to stop_code (0) from a running code
+            _to_changed = (_pre_to_ot_idx != 0) & (ot_idx == 0) & ~eoh_p
+            ot_idx[_to_changed] = 4  # 6A: new index for timeout_followed
             # 5A-3: score state (5-way)
             ss_arr = np.where(sd_arr <= -9, "trail9+",
                      np.where(sd_arr <= -1, "trail1-8",
@@ -2548,11 +2553,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             cp_arr[q4_mid_a_m] = "Q4_mid_a"
             cp_arr[q4_mid_b_m] = "Q4_mid_b"
             cp_arr[q4_late_m] = "Q4_late"
-            ot_strs = ["incomplete", "first_down_pass", "complete_inbounds"]  # 5X: split first_down
+            ot_strs = ["incomplete", "first_down_pass", "complete_inbounds", None, "timeout_followed"]  # 6A: idx 4
             xs101 = np.linspace(0, 1, 101)
             pace_arr = np.where(poss[gi_arr] == 0,
                                 ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
-            for oi in range(3):
+            for oi in [0, 1, 2, 4]:  # 6A: 0=incomplete, 1=fd_pass, 2=complete, 4=timeout_followed
                 ot_name = ot_strs[oi]
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
                     for cp_val in ["normal", "Q2_late", "Q4_mid_a", "Q4_mid_b", "Q4_late"]:
@@ -2560,8 +2565,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 (cp_arr == cp_val) & ~game_over[gi_arr] & ~eoh_p)
                         if not mask.any():
                             continue
-                        # 5M/5X: 5-level fallback: split -> pooled -> Q4_mid -> parent -> legacy
+                        # 5M/5X/6A: fallback chain
                         cq = clock_q.get((ot_name, ss_val, cp_val))
+                        # 6A: timeout_followed -> parent -> incomplete
+                        if cq is None and ot_name == "timeout_followed":
+                            cq = clock_q.get(("timeout_followed", f"p_{ss_val}", "all"))
+                            if cq is None:
+                                cq = clock_q.get(("incomplete", ss_val, cp_val))
                         # 5X: if first_down_pass/rush cell missing, fall back to pooled first_down
                         if cq is None and ot_name in ("first_down_pass", "first_down_rush"):
                             cq = clock_q.get(("first_down", ss_val, cp_val))
@@ -2815,7 +2825,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 score_a[gi_r] - score_h[gi_r])
             ot_names_r = np.asarray(["first_down", "run", "drive_end", "incomplete"], dtype=object)[ot_idx_r]
             eoh_r = _eoh_runoff(gi_r, sd_r_arr, yl_r, ot_names_r, u_rclock, exclude=(ot_idx_r == 2))   # 5A-9
+            # 6A: record pre-timeout state for rush
+            _pre_to_ot_idx_r = ot_idx_r.copy()
             _apply_timeouts(gi_r, ot_idx_r, sd_r_arr, u_to, running_codes=(0, 1), de_code=2, stop_code=3, skip=eoh_r)  # 5A-7
+            # 6A: plays that _apply_timeouts changed to stop_code (3) from a running code
+            _to_changed_r = (_pre_to_ot_idx_r != 3) & (ot_idx_r == 3) & ~eoh_r
+            ot_idx_r[_to_changed_r] = 4  # 6A: timeout_followed
             ss_r_arr = np.where(sd_r_arr <= -9, "trail9+",
                        np.where(sd_r_arr <= -1, "trail1-8",
                        np.where(sd_r_arr == 0, "tied",
@@ -2829,11 +2844,11 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             cp_r_arr[q4ma_r] = "Q4_mid_a"
             cp_r_arr[q4mb_r] = "Q4_mid_b"
             cp_r_arr[q4l_r] = "Q4_late"
-            ot_strs_r = {0: "first_down_rush", 1: "run", 3: "incomplete"}  # 5X: split first_down
+            ot_strs_r = {0: "first_down_rush", 1: "run", 3: "incomplete", 4: "timeout_followed"}  # 6A
             xs101 = np.linspace(0, 1, 101)
             pace_r = np.where(poss[gi_r] == 0,
                               ctx["t0_pace"], ctx["t1_pace"]) / ctx["lg_pace"]
-            for oi in (0, 1, 3):
+            for oi in (0, 1, 3, 4):  # 6A: 4=timeout_followed
                 ot_name_r = ot_strs_r[oi]
                 for ss_val in ["trail9+", "trail1-8", "tied", "lead1-8", "lead9+"]:
                     for cp_val in ["normal", "Q2_late", "Q4_mid_a", "Q4_mid_b", "Q4_late"]:
@@ -2841,8 +2856,13 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                 (cp_r_arr == cp_val) & ~game_over[gi_r] & ~eoh_r)
                         if not mask.any():
                             continue
-                        # 5X: first_down_rush fallback to pooled first_down
+                        # 5X/6A: fallback chain
                         cq = clock_q.get((ot_name_r, ss_val, cp_val))
+                        # 6A: timeout_followed -> parent -> incomplete
+                        if cq is None and ot_name_r == "timeout_followed":
+                            cq = clock_q.get(("timeout_followed", f"p_{ss_val}", "all"))
+                            if cq is None:
+                                cq = clock_q.get(("incomplete", ss_val, cp_val))
                         if cq is None and ot_name_r in ("first_down_rush", "first_down_pass"):
                             cq = clock_q.get(("first_down", ss_val, cp_val))
                         if cq is None and cp_val in ("Q4_mid_a", "Q4_mid_b"):

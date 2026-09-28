@@ -3365,3 +3365,9 @@ INCOMPLETE runoff (~8 s). 77 s ~ 2.7 plays = the whole K1 gap (+2.5).
 3. Pre-registration (1) of D177 (RATE >= 60%) was Cowork's and ill-posed (total clock is fixed).
 
 Merged to main. Player-OFF hash 80848eefb5a45062 (fingerprint 62320588f80d0593), fit_5y.
+
+### D181 — 6A Item 0: timeout-followed runoff from measured table; plays -2.1 (2026-09-28)
+
+`timeout_followed` outcome in clock table: 6,026 plays, 27 cells, mean 18.1 s (was 8.9 from
+incomplete cell). Engine: stop_code→idx 4 draws from `timeout_followed` with parent→incomplete
+fallback. Plays: 129.0 → 126.9 (-2.1). **Pre-reg -0.4-1.0: FAILED** (-2.1, larger than expected).
