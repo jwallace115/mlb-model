@@ -1957,10 +1957,14 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                                                     yl[dpi_mask] - 1)
                     pen_yds[dpi_mask] = np.maximum(pen_yds[dpi_mask], 1)
 
-                # Offense penalty: move back by drawn yardage, replay down
+                # Offense penalty: move back by drawn yardage, half distance to goal
                 if off_pen.any():
                     yl_before = yl[off_pen].copy()
-                    yl[off_pen] = np.clip(yl[off_pen] + pen_yds[off_pen], 1, 99)
+                    # 6B: half the distance to the goal when penalty would exceed
+                    full_yl = yl[off_pen] + pen_yds[off_pen]
+                    half_dist = yl[off_pen] + (100 - yl[off_pen]) / 2  # halfway to own end zone
+                    yl[off_pen] = np.where(full_yl > 99, half_dist, full_yl)
+                    yl[off_pen] = np.clip(yl[off_pen], 1, 99)
                     # Yards-to-go rises by the yards actually marched off (clipped at 99)
                     dist[off_pen] = dist[off_pen] + (yl[off_pen] - yl_before)
 
@@ -2337,7 +2341,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             nc_g = g_idx[normal_comp]
             nc_yds = yds[normal_comp]
             if len(nc_g):
-                yl[nc_g] = np.clip(yl[nc_g] - nc_yds, 1, 99)
+                # 6B: half-distance for losses that would reach the goal line
+                new_yl = yl[nc_g] - nc_yds
+                would_exceed = new_yl >= 100
+                if would_exceed.any():
+                    new_yl[would_exceed] = yl[nc_g[would_exceed]] + (100 - yl[nc_g[would_exceed]]) / 2
+                yl[nc_g] = np.clip(new_yl, 1, 99)
                 nc_home = poss[nc_g] == 0
                 # FIX 6e: do NOT clip negative yards (sacks, losses are real)
                 h_pass_yds[nc_g[nc_home]] += nc_yds[nc_home]
@@ -2359,7 +2368,17 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             ns_g = g_idx[normal_sack]
             ns_yds = yds[normal_sack]
             if len(ns_g):
-                yl[ns_g] = np.clip(yl[ns_g] - ns_yds, 1, 99)
+                # 6B: a loss that would reach yl 100 (the end zone) is capped at half
+                # the distance to the goal line — the pre-snap safety rate already
+                # accounts for goal-line safeties, so piling up at 99 double-counts
+                new_yl = yl[ns_g] - ns_yds
+                would_exceed = new_yl >= 100
+                if would_exceed.any():
+                    max_loss = (100 - yl[ns_g[would_exceed]]) / 2
+                    ns_yds_copy = ns_yds.copy()
+                    ns_yds_copy[would_exceed] = -max_loss  # losses are negative
+                    new_yl[would_exceed] = yl[ns_g[would_exceed]] - ns_yds_copy[would_exceed]
+                yl[ns_g] = np.clip(new_yl, 1, 99)
                 dist[ns_g] = np.maximum(1, dist[ns_g] - ns_yds)
                 down[ns_g] += 1
                 n_plays[ns_g] += 1
@@ -2699,7 +2718,8 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             safety_r = np.zeros(n_r, dtype=bool)  # no mechanistic safeties
             capped_rush = would_be_safety_r & ~safety_r
             if capped_rush.any():
-                yds_r[capped_rush] = -(99 - yl_r[capped_rush])
+                # 6B: half the distance to the goal (was clip to 99, piling up at own 1)
+                yds_r[capped_rush] = -((100 - yl_r[capped_rush]) / 2)
             normal_r = not_fum & ~td_r & ~safety_r
 
             # 3rd/4th-down tracking (rush)

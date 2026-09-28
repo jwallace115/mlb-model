@@ -3443,3 +3443,13 @@ Pre-reg 3+ of 5 reds pass: **FAILED** (2 pass: tie_rate, off_TO). Kneel test: **
 `_apply_timeouts` (engine.py:1394): `clock <= 300` (was 180). Table's 121-180 bucket is proxy for
 181-300. Remaining gap (4.19 vs 7.7): Q1/Q3 and Q2/Q4 > 5:00 not in the table.
 **Pre-reg:** TO >= 5.5 **FAILED** (4.19). off TO within 0.4 of 1.78 **HELD** (1.48). plays +0.3-1.0 **HELD** (+0.37).
+
+### D192 — Supersedes D188. Own-1 pile-up: half-distance penalty + loss cap (2026-09-28)
+
+Offensive penalty (engine.py:1963): half the distance to the goal when `yl + pen_yds > 99` (was full
+yards clipped at 99). Sack losses (engine.py:2372): half-distance when `yl - yds >= 100`. Rush
+losses (engine.py:2716): same. Pass completion losses (engine.py:2344): same. All four sites now
+use `(100 - yl) / 2` instead of clipping at 99.
+
+test_engine_6b: penalty half-distance test PASSES; 98-100 snaps test at 0.81 (target <= 0.6, still
+over — drive starts at deep positions contribute the remaining pile-up).
