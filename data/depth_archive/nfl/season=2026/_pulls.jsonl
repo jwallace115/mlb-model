@@ -68,3 +68,4 @@
 {"utc": "20260928T0900Z", "feed": "nflverse_depth", "file": "depth_charts.parquet", "sha256": "d6b9e2fcf67083085a77043ea394b7a172148fbbe82ac9e7d7a5a306b4691b8b", "max_dt": "2026-09-28T06:01:42+00:00", "rows": 4587, "status": "delta"}
 {"utc":"20260928T0900Z","feed":"nflverse_injuries","file":"injuries.parquet","sha256":"69af0268d8799aba0092f55b2298ffc1f799bf7bc4225c3e1323ebc589bb6264","status":"unchanged"}
 {"utc":"20260928T0900Z","feed":"nflverse_rosters","file":"rosters_weekly.parquet","sha256":"e1a6e80e75105bdf63063fea3fb89251384895fa596ade970d6c2bf97f574e20","status":"written"}
+{"utc": "20260928T1230Z", "feed": "espn_depth", "sha256": "e78a8f7f4a5f44fc79cdef0958c94297d6b67a96a3833d57ee43d31cf8d72b7f", "status": "written"}
