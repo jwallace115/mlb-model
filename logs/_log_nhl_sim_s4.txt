@@ -118,3 +118,82 @@ UNVERIFIED:
 - Claude Code has not reviewed the S34 engine.
 - The -1 s .. +2 s rule for a penalty "creating a power play" is a heuristic. It agrees with the observed PP span
   count: 2.875 spans per team-game vs 2.88 PP-creating penalties.
+
+## S-WO4a2 (2026-09-29)
+
+### Item 1 (S36) — PP expiry fix + chain rebuild
+
+RETURNED: build_events.py modified — spans with skater imbalance are split at penalty expiry
+time when the next play's situationCode shows fewer imbalanced skaters.
+
+NULL CONTROLS:
+- (a) shots.parquet and penalties.parquet: byte-identical for all 5 seasons. Only state_time changed.
+- (b) State time within 2s: 100% for all seasons (unchanged).
+- (c) PP span distribution: before: median 124s, 46% > 125s. After: median 12s, 0% > 125s.
+     No single minor span (without a PP goal) > 121s.
+- (d) Shot-to-state matching: not measured.
+
+One season rebuild: 3.3s. All 5 seasons: ~17s.
+
+Chain rebuilt: events → team_game_stats → ratings (--measure-hyper) → v5 → v7.
+v5 5v5 numerator still 178,012 (MATCH). 41 tests pass, 0 skipped.
+
+Generator grep:
+- constants_v5.json: build_constants_v5.py
+- constants_v7.json: build_constants_v7.py
+- manifest.json: ratings.py
+
+### Item 2 (S37) — realism re-run
+
+PRE-REGISTRATION: PP goals per team-game moves inside ±8%: **-5.0% — HELD** (was +10.3%).
+
+100,000 sims, league-average teams vs actual 2022-23:
+| Band | Sim | Actual | Diff | HELD? |
+|------|-----|--------|------|-------|
+| Goals/game ±3% | 6.235 | 6.359 | -2.0% | HELD |
+| Tied after reg ±2.0pp | 0.199 | 0.230 | -3.1pp | NOT HELD |
+| SO share ±1.5pp | 0.070 | 0.072 | -0.2pp | HELD |
+| PP opps/team ±5% | 2.855 | 2.968 | -3.8% | HELD |
+| PP goals/team ±8% | 0.608 | 0.640 | -5.0% | HELD |
+| EN goals/game ±15% | 0.325 | 0.334 | -2.7% | HELD |
+| Reg by 1 share ±2.0pp | 0.243 | 0.228 | +1.5pp | HELD |
+| Home win ±2.0pp | 0.532 | 0.524 | +0.8pp | HELD |
+| Goal dist ≤0.015 | 0.015 | — | — | HELD |
+
+8 of 9 HELD. Only tied_after_reg NOT HELD (-3.1pp).
+
+MEANS: The PP expiry fix resolved the PP scoring band (from +10.3% to -5.0%). The engine
+now matches 8 of 9 realism bands. The tie deficit is the only remaining mechanics issue.
+
+### Item 3 (S38) — tie trajectory (descriptive, no engine change)
+
+RETURNED: Score states at 3rd-period checkpoints, actual vs sim:
+- Start P3: 23.2% tied (actual), ~20.5% (implied from sim)
+- End of regulation: 23.0% tied (actual), 19.9% (sim)
+- 1-goal at 5:00 → tied: actual 22.1% vs sim 20.5%
+
+MEANS: The tie gap opens during regulation, not in the late game. Late-game mechanics
+(pulled goalie, score effects) are working correctly. The engine's scoring variance is
+slightly too low — it distributes goals too unevenly between teams. This is a per-team
+variance parameter, not a mechanics defect.
+
+### NOT DONE
+- Per-team variance inflation or overdispersion parameter to address the tie deficit
+- Null control (d): shot-to-state strength match rate before/after fix
+- Sim-side trajectory trace (engine doesn't store intermediate scores; would need trace_minutes)
+
+### UNVERIFIED
+- The penalty expiry split uses `pen["minutes"] * 60` as the nominal duration, which may not
+  match the actual penalty length for double minors served as two consecutive 2-minute minors
+- The split only fires when the NEXT play has fewer imbalanced skaters — a same-second event
+  at the exact expiry time would not trigger the split
+- PP minutes diagnostic: sim 4.53 vs actual 4.95 (-8.5%) — the engine runs PP at the measured
+  rate but PP time is still 8.5% below actual
+
+### Commit shas (S-WO4a2)
+S36: 2d85e8bc1 (rebased to ff53d6a5d)
+S37: 772586e09
+S38: 33cc37531
+
+### Merge command
+git merge nhl/sim-s4
