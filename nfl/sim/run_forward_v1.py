@@ -19,12 +19,10 @@ READER_MODEL = "nfl_sim_v1_156cd057"
 SEASON = 2026
 ANCHOR_MISS_TOL = 1.0
 GAME_MARKETS = ("h2h", "spreads", "totals")
-# D215(a): explicit family -> sheet market_key map for scored props (receptions, rush_attempts).
-# anytime_td is also mapped (for the freeze sheet) but excluded from P1/P2 scoring.
+# D215(a)/D220: explicit family -> sheet market_key map; unlisted families are not matched.
 FAMILY_TO_MARKET = {
     "receptions": "player_receptions",
     "rush_attempts": "player_rush_attempts",
-    "anytime_td": "player_anytime_td",
 }
 
 
@@ -39,25 +37,14 @@ def fill_sheet(sheet_df, picks_log):
     More than one match for a key -> raises SystemExit (do not take the first).
     """
     filled = sheet_df.copy()
-    # p_first: for two-way no_view lines, p_first = q_first (book devig).
-    # For one-way lines: imp_first clipped to [0.02, 0.98]; tagged no_view only if
-    # the clipped value matches book within 0.005, else tagged sim_v1 with book_p reason
-    # (the p_first range [0.02, 0.98] constraint prevents matching book < 0.02 as no_view).
+    # D220: all no_view lines carry clip(book, 0.02, 0.98). The validator now accepts this.
     if "imp_first" in sheet_df.columns:
         book_p = np.where(filled["two_way"], filled["q_first"], filled["imp_first"])
     else:
         book_p = filled["q_first"].fillna(0.50)
-    clipped_p = np.clip(book_p, 0.02, 0.98)
-    filled["p_first"] = clipped_p
+    filled["p_first"] = np.clip(book_p, 0.02, 0.98)
     filled["tag"] = "no_view"
     filled["reason"] = ""
-    # One-way lines where book < P_MIN or > P_MAX can't be no_view (would fail validation).
-    # Mark them sim_v1 with reason explaining no sim signal.
-    if "imp_first" in sheet_df.columns:
-        ow_cant_nv = ~filled["two_way"] & (
-            (filled["imp_first"] < 0.02) | (filled["imp_first"] > 0.98))
-        filled.loc[ow_cant_nv, "tag"] = "sim_v1"
-        filled.loc[ow_cant_nv, "reason"] = "sim v1 no signal book_p"
 
     # Build a lookup from picks_log keyed by (player_name, market_key, line)
     pl_lookup = {}
@@ -106,6 +93,11 @@ def fill_sheet(sheet_df, picks_log):
         ).fillna(0).round(1).clip(0, 100)
     # conf_rank: 1-based rank by descending conf, ties broken by index
     filled["conf_rank"] = filled["conf"].rank(method="first", ascending=False).astype(int)
+
+    # D220: sim_v1 rows == matched two-way prop rows exactly
+    n_sim_v1 = (filled["tag"] == "sim_v1").sum()
+    assert n_sim_v1 == n_matched, (
+        f"sim_v1 count {n_sim_v1} != matched {n_matched}")
 
     return filled, n_matched
 

@@ -3995,3 +3995,20 @@ Tests (nfl/pipeline/tests/test_log_ai_opinions_fwd1c.py):
 (b) Reader B freezes it again -> revision 1.
 (c) Pilot of reader B, then live of reader B -> live row is revision 0.
 On 54efc5878: (a) FAIL, (c) FAIL (live got revision 1).
+
+### D220 — FWD1c Item 1: no_view at the floor (2026-09-29)
+
+log_ai_opinions.py:217: the no_view validator now checks |p_first - clip(book, P_MIN, P_MAX)|
+instead of |p_first - book|. A +7500 anytime-TD line (book 0.013) gets p_first=0.02 (clipped)
+and passes as no_view.
+
+run_forward_v1.py: deleted the sim_v1 fallback branch for one-way lines outside [0.02, 0.98].
+fill_sheet now tags ONLY matched two-way prop rows as sim_v1; all others are no_view.
+FAMILY_TO_MARKET reverted to receptions + rush_attempts only (anytime_td removed — it was
+a workaround for the old validation).
+
+Assert added (run_forward_v1.py:99): `n_sim_v1 == n_matched` — sim_v1 rows exactly equal
+matched two-way prop rows.
+
+Test: test_no_view_at_floor_accepted: a +7500 anytime-TD row gets no_view and freeze accepts.
+On 54efc5878: FAIL ("no_view line must carry book's own probability").
