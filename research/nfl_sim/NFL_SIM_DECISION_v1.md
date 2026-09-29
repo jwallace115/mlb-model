@@ -3777,3 +3777,16 @@ named blocker: no candidates file.
 
 The sim is market-anchored on sides and totals, so v1's forward test runs on player props (order FWD1). v2, which
 would fix the listed defects and restart the count, is not ordered.
+
+### D210 — FWD1 Item 0: pre-registration of the forward test (2026-09-29)
+
+Forward test of NFL sim FREEZE_v1 (engine 156cd057a3b39e48, fit_6e). Reader model string
+nfl_sim_v1_156cd057. Scored with log_ai_opinions.py score exactly as pre-registered there (2026-09-21): revision 0
+only, pilot files never pooled, game-cluster bootstrap. Scope: two-way player props on the Hard Rock tape. Game
+spreads, totals and moneylines are logged as no_view (the sim is anchored to the market on them, D7) and never
+scored for the sim. P1: Brier(book de-vig) <= Brier(sim) on two-way props — expected to HOLD. P2: the sim's sides
+with |p - q| > 0.08 lose units at the real Hard Rock price of the side — expected to HOLD. Checkpoints at 500 and
+1,500 scored two-way legs; nothing is concluded before 500. Breakouts every checkpoint: family, trust tier, week,
+|p - q| bucket, and anchor status (item 1). Anchor rule, fixed now: a game whose final anchored mean misses the
+market by more than 1.0 point on margin OR total is 'unanchored'; its props are frozen and scored but reported
+separately and excluded from P1/P2. No engine change during the test; a change is v2 and restarts the count.
