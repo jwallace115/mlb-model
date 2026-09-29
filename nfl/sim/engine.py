@@ -2273,6 +2273,9 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             lp_elapsed = np.full(len(lp_idx), 35.0, dtype=np.float32)
             clock[lp_idx] -= lp_elapsed
             ev_clock_used[lp_idx] += lp_elapsed
+            if drive_log:
+                for _j, _gi in enumerate(lp_idx):
+                    _pl_log(_gi, 35.0, "live_pen_fd")
             # These plays do NOT execute as pass/rush — exclude from play arrays
             is_pass[live_pen_m] = False  # will not enter pass block
             # Mark as handled so rush block also skips them
