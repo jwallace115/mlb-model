@@ -42,3 +42,11 @@ historical point-in-time test before it counts as a layer.
 - Realism gate BEFORE the holdout may be opened (validate season, bands written in the work order that builds the
   engine): goals/game, SD of total goals, P(OT), P(shootout), P(win by 2+), empty-net goals/game, power-play goals
   and opportunities/game, shots/game, each within its stated band of the actual.
+
+### S3 — Play-by-play pull (2026-09-29)
+
+Pulled: 6,560 games (5 seasons x 1,312) from api-web.nhle.com, gzipped JSON to `nhl/cache/pbp/`.
+All 6,560 returned HTTP 200 with gameState OFF/FINAL. Every play carries a situationCode (verified
+on sample: 349/349 = 100%). 0 credits (NHL API is free). Runtime: ~110 min on Mac.
+Host: Mac (VM also passes the NHL API test, HTTP 200). One-off backfill, no cron.
+Generator: `nhl/sim/pull_pbp.py`.
