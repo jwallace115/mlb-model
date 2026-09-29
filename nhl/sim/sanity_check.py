@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-S12: Ratings-only sanity check against Pinnacle and actual outcomes.
-Fit (2022-23) and validate (2023-24) seasons ONLY. No holdout.
+S15: Ratings sanity check with full implied-goals formula and Pinnacle join.
+Join by (ET date, home abbrev, away abbrev), as build_lines.py does.
 """
 import argparse, json, sys
 from pathlib import Path
@@ -13,215 +13,189 @@ ROOT = Path(__file__).resolve().parents[2]
 RATINGS_DIR = ROOT / "nhl" / "data" / "sim" / "ratings"
 LINES_DIR = ROOT / "data" / "odds_archive" / "nhl" / "history" / "lines"
 BOX_DIR = ROOT / "nhl" / "cache"
+CONST_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v2.json"
 GAMES_PER_SEASON = 1312
+
+NAME = {"Anaheim Ducks": "ANA", "Arizona Coyotes": "ARI", "Boston Bruins": "BOS", "Buffalo Sabres": "BUF",
+        "Calgary Flames": "CGY", "Carolina Hurricanes": "CAR", "Chicago Blackhawks": "CHI", "Colorado Avalanche": "COL",
+        "Columbus Blue Jackets": "CBJ", "Dallas Stars": "DAL", "Detroit Red Wings": "DET", "Edmonton Oilers": "EDM",
+        "Florida Panthers": "FLA", "Los Angeles Kings": "LAK", "Minnesota Wild": "MIN", "Montréal Canadiens": "MTL",
+        "Nashville Predators": "NSH", "New Jersey Devils": "NJD", "New York Islanders": "NYI", "New York Rangers": "NYR",
+        "Ottawa Senators": "OTT", "Philadelphia Flyers": "PHI", "Pittsburgh Penguins": "PIT", "San Jose Sharks": "SJS",
+        "Seattle Kraken": "SEA", "St Louis Blues": "STL", "Tampa Bay Lightning": "TBL", "Toronto Maple Leafs": "TOR",
+        "Utah Hockey Club": "UTA", "Utah Mammoth": "UTA", "Vancouver Canucks": "VAN", "Vegas Golden Knights": "VGK",
+        "Washington Capitals": "WSH", "Winnipeg Jets": "WPG"}
 
 
 def implied_prob(american):
-    """American odds to implied probability."""
     if american > 0:
         return 100 / (american + 100)
     return -american / (-american + 100)
 
 
-def load_pinnacle_lines(season):
-    """Load Pinnacle lines for a season, latest snapshot per game."""
+def load_pinnacle_for_season(season):
+    """Pinnacle de-vigged h2h and totals. Last snapshot strictly before puck, <= 6h."""
     season_dir = LINES_DIR / f"season={season}"
     if not season_dir.exists():
         return pd.DataFrame()
     files = sorted(season_dir.glob("snap_*.parquet"))
     if not files:
         return pd.DataFrame()
-    all_dfs = [pd.read_parquet(f) for f in files]
-    df = pd.concat(all_dfs, ignore_index=True)
-    # Keep only Pinnacle
-    df = df[df["bookmaker"] == "pinnacle"]
-    # Keep latest snapshot per game (by snapshot_utc)
-    df = df.sort_values("snapshot_utc")
-    df = df.drop_duplicates(["event_id", "market", "outcome_name"], keep="last")
-    return df
+    df = pd.concat([pd.read_parquet(f) for f in files], ignore_index=True)
+    df["snap_dt"] = pd.to_datetime(df["snapshot_utc"])
+    df["ct_dt"] = pd.to_datetime(df["commence_time"])
+    df = df[df["snap_dt"] < df["ct_dt"]]
+    df["lead_h"] = (df["ct_dt"] - df["snap_dt"]).dt.total_seconds() / 3600
+    df = df[df["lead_h"] <= 6]
+    last = df.groupby("event_id")["snap_dt"].transform("max")
+    df = df[df["snap_dt"] == last]
+    df["home"] = df["home_team"].map(NAME)
+    df["away"] = df["away_team"].map(NAME)
+    try:
+        df["et_date"] = df["ct_dt"].dt.tz_localize("UTC").dt.tz_convert("America/New_York").dt.strftime("%Y-%m-%d")
+    except TypeError:
+        df["et_date"] = pd.to_datetime(df["ct_dt"], utc=True).dt.tz_convert("America/New_York").dt.strftime("%Y-%m-%d")
 
-
-def get_pinnacle_probs(season):
-    """Get Pinnacle de-vigged home probability and total line per game."""
-    lines = load_pinnacle_lines(season)
-    if lines.empty:
-        return pd.DataFrame()
-
-    games = {}
-    for eid, g in lines.groupby("event_id"):
-        home = g.iloc[0].get("home_team", "")
-        away = g.iloc[0].get("away_team", "")
-
-        # h2h
+    pin = df[df["bookmaker"] == "pinnacle"]
+    results = []
+    for eid, g in pin.groupby("event_id"):
+        row = {"event_id": eid, "home": g.iloc[0]["home"], "away": g.iloc[0]["away"],
+               "et_date": g.iloc[0]["et_date"]}
         h2h = g[g["market"] == "h2h"]
-        home_h2h = h2h[h2h["outcome_name"] == home]
-        away_h2h = h2h[h2h["outcome_name"] == away]
-        if len(home_h2h) and len(away_h2h):
-            p_home = implied_prob(home_h2h.iloc[0]["price"])
-            p_away = implied_prob(away_h2h.iloc[0]["price"])
-            total_imp = p_home + p_away
-            devig_home = p_home / total_imp
-        else:
-            devig_home = np.nan
-
-        # totals
-        totals = g[g["market"] == "totals"]
-        over = totals[totals["outcome_name"] == "Over"]
-        total_line = over.iloc[0]["point"] if len(over) else np.nan
-
-        games[eid] = {
-            "event_id": eid, "home_team": home, "away_team": away,
-            "pinnacle_home_prob": devig_home,
-            "pinnacle_total_line": total_line,
-        }
-
-    return pd.DataFrame(games.values())
+        ht, at = g.iloc[0]["home_team"], g.iloc[0]["away_team"]
+        hh, ah = h2h[h2h["outcome_name"] == ht], h2h[h2h["outcome_name"] == at]
+        if len(hh) == 1 and len(ah) == 1:
+            ph, pa = implied_prob(hh.iloc[0]["price"]), implied_prob(ah.iloc[0]["price"])
+            row["pin_p_home"] = ph / (ph + pa)
+        tot = g[g["market"] == "totals"]
+        ov = tot[tot["outcome_name"] == "Over"]
+        if len(ov):
+            row["pin_total_line"] = ov.iloc[0]["point"]
+        results.append(row)
+    return pd.DataFrame(results)
 
 
 def load_actuals(season):
-    """Load actual game results from boxscores."""
     results = []
     for i in range(1, GAMES_PER_SEASON + 1):
         gid = f"{season}02{i:04d}"
         bp = BOX_DIR / f"boxscore_{gid}.json"
-        if not bp.exists():
-            continue
+        if not bp.exists(): continue
         with open(bp) as f:
             d = json.load(f)
-        home_score = d.get("homeTeam", {}).get("score", 0)
-        away_score = d.get("awayTeam", {}).get("score", 0)
+        hs, as_ = d["homeTeam"]["score"], d["awayTeam"]["score"]
         outcome = d.get("gameOutcome", {}).get("lastPeriodType", "REG")
-        # Remove shootout +1 for regulation goal diff
-        h = home_score
-        a = away_score
+        h, a = hs, as_
         if outcome == "SO":
             if h > a: h -= 1
             else: a -= 1
-        results.append({
-            "season": season, "game_id": gid,
-            "home": d.get("homeTeam", {}).get("abbrev", ""),
-            "away": d.get("awayTeam", {}).get("abbrev", ""),
-            "home_score": home_score, "away_score": away_score,
-            "reg_goal_diff": h - a,
-            "total_goals": home_score + away_score,
-            "date": d.get("gameDate", ""),
-        })
+        results.append({"game_id": gid, "season": season,
+                        "home": d["homeTeam"]["abbrev"], "away": d["awayTeam"]["abbrev"],
+                        "home_score": hs, "away_score": as_,
+                        "reg_goal_diff": h - a, "total_goals": hs + as_,
+                        "date": d.get("gameDate", "")})
     return pd.DataFrame(results)
 
 
-def compute_implied_goals(team_ratings, goalie_ratings, games_df, season):
-    """For each game, compute implied goals per team from ratings."""
-    tr = team_ratings[team_ratings["season"] == season].copy()
-    gr = goalie_ratings[goalie_ratings["season"] == season].copy()
+def compute_implied(tr, gr, actuals, constants):
+    c = constants.get("constants", constants)
+    lg_att = c.get("attempt_rate_per_60_per_team_5v5", {}).get("value", 42)
+    lg_xg = c.get("xg_per_attempt_5v5", {}).get("value", 0.062)
+    pp_att = c.get("attempt_rate_per_60_per_team_5v4", {}).get("value", 41)
+    pp_xg = c.get("xg_per_attempt_5v4", {}).get("value", 0.095)
+    avg_ev_min, avg_pp_min = 50, 3.8
 
-    implied = []
-    for _, g in games_df[games_df["season"] == season].iterrows():
-        gid = g["game_id"]
-        home = g["home"]
-        away = g["away"]
+    rows = []
+    for _, g in actuals.iterrows():
+        gid, home, away = g["game_id"], g["home"], g["away"]
+        h_tr = tr[(tr["game_id"] == gid) & (tr["team"] == home)]
+        a_tr = tr[(tr["game_id"] == gid) & (tr["team"] == away)]
+        a_gr = gr[(gr["game_id"] == gid) & (gr["team"] == away)]
+        h_gr = gr[(gr["game_id"] == gid) & (gr["team"] == home)]
+        if len(h_tr) == 0 or len(a_tr) == 0: continue
+        hr, ar = h_tr.iloc[0], a_tr.iloc[0]
 
-        # Get team ratings for this game
-        home_r = tr[(tr["game_id"] == gid) & (tr["team"] == home)]
-        away_r = tr[(tr["game_id"] == gid) & (tr["team"] == away)]
+        h_att = hr["ev_att_for_per60"] * ar["ev_att_against_per60"] / lg_att
+        a_att = ar["ev_att_for_per60"] * hr["ev_att_against_per60"] / lg_att
+        h_xg = hr["ev_xg_per_att_for"] * ar["ev_xg_per_att_against"] / lg_xg
+        a_xg = ar["ev_xg_per_att_for"] * hr["ev_xg_per_att_against"] / lg_xg
 
-        if len(home_r) == 0 or len(away_r) == 0:
-            continue
+        h_ev = h_att * h_xg * avg_ev_min / 60
+        a_ev = a_att * a_xg * avg_ev_min / 60
+        h_pp = pp_att * pp_xg * avg_pp_min / 60
+        a_pp = pp_att * pp_xg * avg_pp_min / 60
 
-        hr = home_r.iloc[0]
-        ar = away_r.iloc[0]
+        # Goalie factor
+        ag_f = 1.0 - (a_gr.iloc[0]["gsax_per_att_rating"] * 30 if len(a_gr) else 0)
+        hg_f = 1.0 - (h_gr.iloc[0]["gsax_per_att_rating"] * 30 if len(h_gr) else 0)
+        ag_f, hg_f = np.clip(ag_f, 0.8, 1.2), np.clip(hg_f, 0.8, 1.2)
 
-        # League averages
-        league_att = 42.0  # approximate
-        league_xg = 0.062
+        h_goals = (h_ev + h_pp) * ag_f + 0.35
+        a_goals = (a_ev + a_pp) * hg_f + 0.35
 
-        # Implied 5v5 goals per team (simplified)
-        # Home attempts = home_for * away_against / league * minutes
-        avg_5v5_min = 50  # approximate 5v5 minutes per game
-        home_att_rate = hr["ev_att_for_per60"] * ar["ev_att_against_per60"] / league_att
-        away_att_rate = ar["ev_att_for_per60"] * hr["ev_att_against_per60"] / league_att
-
-        home_xg_rate = hr["ev_xg_per_att_for"] * ar["ev_xg_per_att_against"] / league_xg
-        away_xg_rate = ar["ev_xg_per_att_for"] * hr["ev_xg_per_att_against"] / league_xg
-
-        home_ev_goals = home_att_rate * home_xg_rate * avg_5v5_min / 60
-        away_ev_goals = away_att_rate * away_xg_rate * avg_5v5_min / 60
-
-        # Add ~0.5 goals per team from special teams (rough)
-        home_goals = home_ev_goals + 0.5
-        away_goals = away_ev_goals + 0.5
-
-        implied.append({
-            "game_id": gid, "season": season, "date": g["date"],
-            "home": home, "away": away,
-            "implied_home_goals": home_goals,
-            "implied_away_goals": away_goals,
-            "implied_goal_diff": home_goals - away_goals,
-            "implied_total": home_goals + away_goals,
-        })
-
-    return pd.DataFrame(implied)
+        rows.append({"game_id": gid, "home": home, "away": away, "date": g["date"],
+                      "implied_diff": h_goals - a_goals, "implied_total": h_goals + a_goals})
+    return pd.DataFrame(rows)
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    args = ap.parse_args()
-
+    with open(CONST_PATH) as f:
+        constants = json.load(f)
     tr = pd.read_parquet(RATINGS_DIR / "team_ratings.parquet")
     gr = pd.read_parquet(RATINGS_DIR / "goalie_ratings.parquet")
 
     for season in [2022, 2023]:
-        season_name = f"{season}-{season+1}"
-        print(f"\n{'='*60}")
-        print(f"SANITY CHECK: {season_name}")
-        print(f"{'='*60}")
-
+        print(f"\n{'='*60}\nSANITY CHECK: {season}-{season+1}\n{'='*60}")
         actuals = load_actuals(season)
-        pinnacle = get_pinnacle_probs(season)
-        implied = compute_implied_goals(tr, gr, actuals, season)
+        implied = compute_implied(tr, gr, actuals, constants)
+        pinnacle = load_pinnacle_for_season(season)
 
-        if implied.empty:
-            print("  No implied goals computed"); continue
-
-        # Merge with actuals
-        merged = implied.merge(actuals[["game_id", "reg_goal_diff", "total_goals"]], on="game_id")
-        merged = merged.merge(pinnacle[["event_id", "pinnacle_home_prob", "pinnacle_total_line"]],
-                               left_on="game_id", right_on="event_id", how="left")
+        merged = implied.merge(actuals[["game_id", "reg_goal_diff", "total_goals", "date"]],
+                                on=["game_id"], suffixes=("", "_act"))
+        if not pinnacle.empty:
+            merged = merged.merge(pinnacle[["et_date", "home", "away", "pin_p_home", "pin_total_line"]],
+                                   left_on=["date", "home", "away"],
+                                   right_on=["et_date", "home", "away"], how="left")
+            n_pin = int(merged["pin_p_home"].notna().sum())
+        else:
+            n_pin = 0
+            merged["pin_p_home"] = np.nan
+            merged["pin_total_line"] = np.nan
 
         n = len(merged)
-        n_pin = merged["pinnacle_home_prob"].notna().sum()
         print(f"  Games: {n}, with Pinnacle: {n_pin}")
 
-        # Correlations
-        corr_gd = merged["implied_goal_diff"].corr(merged["reg_goal_diff"])
+        # Actual outcomes FIRST (per A1.1)
+        corr_gd = float(merged["implied_diff"].corr(merged["reg_goal_diff"]))
         print(f"  corr(implied goal diff, actual goal diff): {corr_gd:.3f}")
 
-        if n_pin > 0:
-            pin_logit = np.log(merged["pinnacle_home_prob"].clip(0.01, 0.99) /
-                               (1 - merged["pinnacle_home_prob"].clip(0.01, 0.99)))
-            corr_pin = merged["implied_goal_diff"].dropna().corr(pin_logit.dropna())
+        if n_pin > 10:
+            pv = merged["pin_p_home"].notna()
+            pin_logit = np.log(merged.loc[pv, "pin_p_home"].clip(0.01, 0.99) /
+                               (1 - merged.loc[pv, "pin_p_home"].clip(0.01, 0.99)))
+            corr_pin = float(merged.loc[pv, "implied_diff"].corr(pin_logit))
             print(f"  corr(implied goal diff, Pinnacle logit): {corr_pin:.3f}")
 
-            pin_total = merged["pinnacle_total_line"].dropna()
-            imp_total = merged.loc[pin_total.index, "implied_total"]
-            corr_total = imp_total.corr(pin_total)
-            print(f"  corr(implied total, Pinnacle total line): {corr_total:.3f}")
+            ptv = merged["pin_total_line"].notna()
+            corr_tot = float(merged.loc[ptv, "implied_total"].corr(merged.loc[ptv, "pin_total_line"]))
+            print(f"  corr(implied total, Pinnacle total): {corr_tot:.3f}")
 
-        mean_implied = merged["implied_total"].mean()
-        mean_actual = merged["total_goals"].mean()
-        pct_diff = (mean_implied - mean_actual) / mean_actual * 100
-        print(f"  mean implied total: {mean_implied:.2f}, actual: {mean_actual:.2f} ({pct_diff:+.1f}%)")
+        mean_i = float(merged["implied_total"].mean())
+        mean_a = float(merged["total_goals"].mean())
+        pct = (mean_i - mean_a) / mean_a * 100
+        print(f"  mean implied total: {mean_i:.2f}, actual: {mean_a:.2f} ({pct:+.1f}%)")
 
-        # NULL CONTROL: shuffle team labels within each date
+        # NULL CONTROL: shuffle within date
         rng = np.random.RandomState(42)
-        shuffled = merged.copy()
-        for date in shuffled["date"].unique():
-            mask = shuffled["date"] == date
-            idx = shuffled.loc[mask].index
-            shuffled_gd = shuffled.loc[mask, "implied_goal_diff"].values.copy()
-            rng.shuffle(shuffled_gd)
-            shuffled.loc[idx, "implied_goal_diff"] = shuffled_gd
-        null_corr_gd = shuffled["implied_goal_diff"].corr(shuffled["reg_goal_diff"])
-        print(f"  NULL (shuffled within date): corr(gd) = {null_corr_gd:.3f} (expected ~0)")
+        sh = merged.copy()
+        for dt in sh["date"].unique():
+            mask = sh["date"] == dt
+            idx = sh.loc[mask].index
+            v = sh.loc[mask, "implied_diff"].values.copy()
+            rng.shuffle(v)
+            sh.loc[idx, "implied_diff"] = v
+        null_c = float(sh["implied_diff"].corr(sh["reg_goal_diff"]))
+        print(f"  NULL (shuffled): corr = {null_c:.3f}")
 
 
 if __name__ == "__main__":

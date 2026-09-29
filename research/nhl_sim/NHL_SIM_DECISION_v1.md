@@ -245,3 +245,22 @@ Correction: S9's "Goals/xG 2025=1.068" was xG/goals. In 2025-26, goals came in ~
 (goals/xG = 0.91-0.97 monthly). The xG model OVERpredicts for that season.
 
 Finishing term reported with both labels: goals/xG AND xG/goals by month for all 5 seasons.
+
+### S15 — Sanity check with full formula and Pinnacle join (2026-09-29, S-WO3r Item 3)
+
+Implied goals: 5v5 (team ratings) + PP contribution + goalie factor + EN constant from v2.
+Pinnacle join by (ET date, home abbrev, away abbrev), last snapshot strictly before puck, <= 6h.
+Match count: 1,156 (2022-23), 1,138 (2023-24).
+
+Results (actual outcomes FIRST, per A1.1):
+- corr(implied goal diff, actual goal diff): 0.308 (fit), **0.263** (validate)
+- corr(implied goal diff, Pinnacle logit): 0.851 (fit), **0.810** (validate) — bar >0.60: **HELD**
+- corr(implied total, Pinnacle total): 0.480 (fit), **0.433** (validate) — bar >0.30: **HELD**
+- mean implied total: -8.2% (fit), **-9.3%** (validate) — bar +/-3%: **NOT HELD**
+- NULL CONTROL (shuffled): 0.049 (fit), 0.011 (validate) — **HELD** (near 0)
+
+The Pinnacle correlation bars both pass. The mean total is still 9% low — the simplified formula
+underestimates PP/PK contribution. This is the S12 check run once, as specified; no reweighting.
+
+Previous S12 (5v5-only) was: corr(gd) 0.287/0.225, total -14.6%/-11.8%, Pinnacle "not measurable".
+The full formula + Pinnacle join improved all metrics: Pinnacle logit corr 0.81, total corr 0.43.
