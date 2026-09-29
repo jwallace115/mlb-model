@@ -86,7 +86,9 @@ def process_game(game_id, data):
 
     plays = data.get("plays", [])
     prev_shot_time = {}  # team -> last shot second for rebound detection
-    prev_event_zone = {}  # for rush detection
+    prev_event_time = None
+    prev_event_zone = None
+    prev_event_team_is_home = None
 
     home_score, away_score = 0, 0
 
@@ -139,8 +141,15 @@ def process_game(game_id, data):
             rebound = prev_t is not None and (sec - prev_t) <= 3
             prev_shot_time[team_key] = sec
 
-            # Rush: simplified — previous event in other half of ice <= 4s
-            rush = False  # TODO: refine with zone tracking
+            # Rush: previous event was in neutral or defensive zone <= 4s earlier
+            rush = False
+            if prev_event_time is not None and (sec - prev_event_time) <= 4:
+                # Defensive/neutral zone for the shooting team
+                if prev_event_zone in ("N", "D"):
+                    rush = True
+                elif prev_event_zone == "O" and prev_event_team_is_home != is_home:
+                    # Previous event was in the OTHER team's offensive zone = our defensive
+                    rush = True
 
             shots.append({
                 "game_id": game_id,
@@ -171,8 +180,14 @@ def process_game(game_id, data):
                 else:
                     away_score += 1
 
+        # Track previous event for rush detection (all event types)
+        if details.get("zoneCode"):
+            prev_event_time = sec
+            prev_event_zone = details.get("zoneCode")
+            prev_event_team_is_home = is_home
+
         # ── Penalties ──
-        elif type_key == "penalty":
+        if type_key == "penalty":
             minutes = details.get("duration", 2)
             pen_type = details.get("descKey", "unknown")
             team = "home" if is_home else "away"
@@ -186,35 +201,89 @@ def process_game(game_id, data):
                 "score_diff_home": home_score - away_score,
             })
 
-    # ── State time (simplified: count seconds per situationCode) ──
-    # Walk through plays and compute time between consecutive events
-    for i in range(len(plays) - 1):
-        p1 = plays[i]
-        p2 = plays[i + 1]
-        per1 = p1.get("periodDescriptor", {}).get("number", 0)
-        per2 = p2.get("periodDescriptor", {}).get("number", 0)
-        pt1 = p1.get("periodDescriptor", {}).get("periodType", "REG")
-        if pt1 == "SO":
-            continue
-        t1_str = p1.get("timeInPeriod", "00:00")
-        t2_str = p2.get("timeInPeriod", "00:00")
-        sec1 = time_to_seconds(t1_str, per1)
-        sec2 = time_to_seconds(t2_str, per2)
-        duration = sec2 - sec1
-        if duration <= 0:
-            continue
-        sc = p1.get("situationCode", "1551")
-        s = str(sc).zfill(4)
-        state_spans.append({
-            "game_id": game_id,
-            "period": per1,
-            "away_goalie": int(s[0]),
-            "away_skaters": int(s[1]),
-            "home_skaters": int(s[2]),
-            "home_goalie": int(s[3]),
-            "score_diff_home": home_score - away_score,  # approximate at this point
-            "duration": duration,
-        })
+    # ── State timeline: proper running-score spans ──
+    # Walk plays in order, tracking running score. Spans end at the next play or
+    # period end. Shootout (periodType SO) contributes NO time.
+    running_home = 0
+    running_away = 0
+    # Group plays by period, process each period's spans
+    period_plays = {}
+    for play in plays:
+        pd_info = play.get("periodDescriptor", {})
+        per = pd_info.get("number", 0)
+        ptype = pd_info.get("periodType", "REG")
+        if ptype == "SO":
+            continue  # No shootout spans
+        period_plays.setdefault(per, []).append(play)
+
+    running_home = 0
+    running_away = 0
+
+    for per_num in sorted(period_plays.keys()):
+        per_plays = period_plays[per_num]
+        # Period duration: 1200s for regulation (1-3), 300s for OT (4)
+        if per_num <= 3:
+            period_max = 1200
+        else:
+            period_max = 300
+
+        for idx in range(len(per_plays)):
+            p = per_plays[idx]
+            time_str = p.get("timeInPeriod", "00:00")
+            parts = time_str.split(":")
+            elapsed_in_period = int(parts[0]) * 60 + int(parts[1])
+
+            # Span start = this play's time in period
+            span_start = elapsed_in_period
+
+            # Span end = next play's time in same period, or period end
+            if idx + 1 < len(per_plays):
+                next_time = per_plays[idx + 1].get("timeInPeriod", "00:00")
+                np_parts = next_time.split(":")
+                span_end = int(np_parts[0]) * 60 + int(np_parts[1])
+            else:
+                span_end = period_max
+
+            # In OT sudden death: if a goal just happened (this play IS the goal),
+            # the game ends here — no span after the winning goal
+            duration = span_end - span_start
+            if duration <= 0:
+                # Check if this is a goal and update score
+                if p.get("typeDescKey") == "goal":
+                    det = p.get("details", {})
+                    owner = det.get("eventOwnerTeamId")
+                    if owner == home_id:
+                        running_home += 1
+                    else:
+                        running_away += 1
+                continue
+
+            sc = p.get("situationCode", "1551")
+            s_code = str(sc).zfill(4)
+
+            # Game-seconds for start/end
+            period_base = (per_num - 1) * 1200
+            state_spans.append({
+                "game_id": game_id,
+                "period": per_num,
+                "start_sec": period_base + span_start,
+                "end_sec": period_base + span_end,
+                "away_goalie": int(s_code[0]),
+                "away_skaters": int(s_code[1]),
+                "home_skaters": int(s_code[2]),
+                "home_goalie": int(s_code[3]),
+                "score_diff_home": running_home - running_away,
+                "duration": duration,
+            })
+
+            # Update score if this play is a goal (AFTER recording the span)
+            if p.get("typeDescKey") == "goal":
+                det = p.get("details", {})
+                owner = det.get("eventOwnerTeamId")
+                if owner == home_id:
+                    running_home += 1
+                else:
+                    running_away += 1
 
     return shots, penalties, state_spans
 
@@ -346,10 +415,11 @@ def main():
             print(f"      mismatches: {len(sog_mismatches)} games; "
                   f"typical diff: home {np.mean([d[0] for d in diffs]):+.1f}, away {np.mean([d[1] for d in diffs]):+.1f}")
 
-        # (c) State seconds == regulation + OT
+        # (c) State seconds == regulation + OT, within 2s
         game_state_secs = state_df.groupby("game_id")["duration"].sum()
         state_match = 0
         state_total = 0
+        state_diffs = []
         for gid, box in boxes.items():
             if gid not in game_state_secs.index:
                 continue
@@ -358,10 +428,52 @@ def main():
             if box["outcome"] in ("OT", "SO"):
                 expected += 300  # 5 min OT
             actual = game_state_secs[gid]
-            if abs(actual - expected) <= 5:
+            diff = abs(actual - expected)
+            state_diffs.append(diff)
+            if diff <= 2:
                 state_match += 1
-        print(f"  (c) State time within 5s: {state_match}/{state_total} "
+        print(f"  (c) State time within 2s: {state_match}/{state_total} "
               f"({state_match/state_total:.1%})" if state_total else "  (c) No state data")
+        if state_diffs:
+            over2 = [d for d in state_diffs if d > 2]
+            if over2:
+                print(f"      > 2s mismatches: {len(over2)}, median diff: {np.median(over2):.0f}s")
+
+        # (b2) First span of every game has score_diff_home == 0
+        first_spans = state_df.groupby("game_id").first()
+        first_zero = (first_spans["score_diff_home"] == 0).sum()
+        print(f"  (b2) First span score_diff == 0: {first_zero}/{len(first_spans)} "
+              f"({first_zero/len(first_spans):.1%})" if len(first_spans) else "")
+
+        # (c2) Last span score_diff == final regulation+OT score diff
+        last_spans = state_df.groupby("game_id").last()
+        last_match = 0
+        last_total = 0
+        for gid, box in boxes.items():
+            if gid not in last_spans.index:
+                continue
+            last_total += 1
+            exp_diff = box["home_score"] - box["away_score"]
+            if box["outcome"] == "SO":
+                if exp_diff > 0:
+                    exp_diff -= 1
+                else:
+                    exp_diff += 1
+            actual_diff = last_spans.loc[gid, "score_diff_home"]
+            if actual_diff == exp_diff:
+                last_match += 1
+        print(f"  (c2) Last span score matches final (minus SO+1): {last_match}/{last_total} "
+              f"({last_match/last_total:.1%})" if last_total else "")
+
+        # (d2) Home goalie out while NOT trailing
+        if len(state_df):
+            goalie_out_not_trailing = state_df[
+                (state_df["home_goalie"] == 0) & (state_df["score_diff_home"] >= 0)
+            ]
+            if len(goalie_out_not_trailing):
+                print(f"  (d2) Home goalie out while not trailing: {len(goalie_out_not_trailing)} spans, "
+                      f"median duration: {goalie_out_not_trailing['duration'].median():.1f}s "
+                      f"(expected: small — delayed penalties)")
 
         # (d) Empty-net goals: situationCode vs play flag
         en_goals = shots_df[(shots_df["is_goal"]) & (shots_df["empty_net"])]

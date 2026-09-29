@@ -66,5 +66,54 @@ class TestTimeToSeconds:
         assert time_to_seconds("00:00", 4) == 3600
 
 
+# ── S7 tests: state timeline (must FAIL on 025494252) ──
+
+import gzip, json
+
+PBP_DIR = ROOT / "nhl" / "cache" / "pbp"
+
+
+def _process_game(game_id):
+    """Load and process a real game from cache."""
+    from nhl.sim.build_events import process_game
+    path = PBP_DIR / f"{game_id}.json.gz"
+    with gzip.open(path, "rt") as f:
+        data = json.load(f)
+    return process_game(game_id, data), data
+
+
+class TestS7StateTimeline:
+    def test_opening_span_score_zero(self):
+        """Game 2024020001: first state span must have score_diff_home == 0.
+        Fails on 025494252: the old code set score_diff_home to the FINAL score (-3)."""
+        (shots, pens, spans), data = _process_game("2024020001")
+        assert len(spans) > 0
+        first = spans[0]
+        assert first["score_diff_home"] == 0, (
+            f"First span score_diff_home={first['score_diff_home']}, expected 0"
+        )
+
+    def test_shootout_game_seconds(self):
+        """Game 2024020022 (PHI@VAN, SO): total seconds = 3900 (3600 reg + 300 OT).
+        Fails on 025494252: old code counted phantom spans into the shootout period."""
+        (shots, pens, spans), data = _process_game("2024020022")
+        total = sum(s["duration"] for s in spans)
+        # Full OT (5 min) + regulation = 3900. Allow 2s tolerance.
+        assert abs(total - 3900) <= 2, (
+            f"Shootout game total seconds={total}, expected ~3900"
+        )
+
+    def test_score_state_before_third_goal(self):
+        """Game 2024020001 (NJD 4 @ BUF 1): the third goal (P2 03:29) makes it 3-0.
+        Before it, there must be a span with score_diff_home == -2 (down 0-2 from home view).
+        Fails on 025494252: old code had final score on every span."""
+        (shots, pens, spans), data = _process_game("2024020001")
+        # Find spans before the third goal (which is at period 2, ~209 seconds into P2 = 1409 game-sec)
+        sd_values = [s["score_diff_home"] for s in spans if s["start_sec"] < 1409]
+        assert -2 in sd_values, (
+            f"No span with score_diff_home==-2 before third goal; values seen: {sorted(set(sd_values))}"
+        )
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

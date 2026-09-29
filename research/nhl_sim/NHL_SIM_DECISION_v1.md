@@ -98,3 +98,28 @@ Pre-registered checks:
 
 2023-24 validate_drift reported beside fit values (not used in engine).
 sha256: 32aa748bd643bb4593a62fb9fa83fef3673fd0cd0ed81301830e65f67a5db3d1.
+
+### S7 — State timeline rebuilt (2026-09-29, S-WO2 Item 1)
+
+**What S3-S6 got wrong** (per nhl_sim_s1_verification_2026-09-29.md):
+1. state_time score was the FINAL score on every span (defect #1) — now running score.
+2. Shootout games had phantom spans (4,800s instead of 3,900) — now SO excluded, period-end caps.
+3. penalties_per_60 was 225.9 (units error) — constants_v1 withdrawn, v2 in S8.
+4. Score effects were state frequencies, not rate multipliers — fixed in S8.
+5. pull_en_shots=0 at -1 (wrong sign) — fixed in S8.
+6. Rush was False everywhere — fixed: detects zone transitions from PBP.
+7. Shootout/pull/empty-net constants not measured — addressed in S8.
+
+**Rebuilt:** `nhl/sim/build_events.py` — state timeline now walks plays in order with running
+score, emits spans capped at period boundaries, excludes shootout. Rush feature reads zoneCode.
+
+**Null controls (all 6,560 games):**
+- (a) Goals == boxscore: 100.0% (6,218/6,218 with boxscores).
+- (b) SOG match: 95.6-98.9%.
+- (c) State time within 2s: **100.0%** (was 75-80% on S-WO1). FIXED.
+- (b2) First span score_diff == 0: **100.0%** (was the FINAL score on S-WO1). FIXED.
+- (c2) Last span score == final regulation diff: 99.7-100.0%.
+- (d2) Home goalie out while not trailing: 270-391 spans/season, median 4-7s (delayed penalties).
+
+**Tests:** 3 new (opening score=0, shootout seconds=3900, score_diff=-2 before third goal).
+All 3 FAIL on 025494252: old code gives score=-3, seconds=4800, and no -2 spans.
