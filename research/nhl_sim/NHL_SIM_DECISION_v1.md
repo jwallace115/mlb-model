@@ -589,3 +589,23 @@ That's a question for the engine's validate phase, not a change made now.
 
 **Tests:** 6 passed — determinism, start_state, OT logic, pulled goalie, blowout.
 **Runtime:** 3.05s per game at 10k sims. Using 2,000 sims for realism report (~13 min).
+
+### S33 — Realism report: league-average vs actual 2022-23 (2026-09-29, S-WO4a Item 2)
+
+1,312 games x 2,000 sims (3.05s/game at 10k; used 2k per the order's rule). Runtime: 1,077s.
+
+| Band | Sim | Actual | Bar | HELD? |
+|------|-----|--------|-----|-------|
+| Goals/game ±3% | 6.287 | 6.359 | ±3% | HELD |
+| Tied after reg ±2.0pp | 0.191 | 0.230 | ±2.0pp | NOT HELD (-3.9pp) |
+| SO share ±1.5pp | 0.068 | 0.072 | ±1.5pp | HELD |
+| PP opps/team-game ±5% | 3.770 | 3.835 | ±5% | HELD |
+| PP goals/team-game ±8% | 0.706 | 0.640 | ±8% | NOT HELD (+10.3%) |
+| EN goals/game ±15% | 0.320 | 0.334 | ±15% | HELD |
+| Reg by 1 share ±2.0pp | 0.307 | 0.228 | ±2.0pp | NOT HELD (+7.9pp) |
+| Home win % ±2.0pp | 0.543 | 0.524 | ±2.0pp | NOT HELD (+2.0pp) |
+| Goal dist max diff ≤0.015 | 0.024 | — | ≤0.015 | NOT HELD |
+
+4 HELD, 5 NOT HELD. Total goals are correct (-1.1%) but the distribution is wrong: too few
+ties, too many regulation 1-goal wins, home effect too strong, PP goals too high. These are
+the calibration targets for S-WO4b on 2023-24 only.
