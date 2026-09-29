@@ -1,0 +1,28 @@
+
+## 2026-09-29T19:10Z  cowork (verification of FWD1 — D213; order FWD1b)
+
+### RETURNED
+- eng/fwd1 @ 4c9802c93: D210, D211 (harness, 5 tests, tag + --as-of), D212 (pilot "blocked"), log. Not merged.
+- Mac, read-only: get_lines_from_history(as_of=2026-09-27T16:30Z) returned the 15 Sep 27-28 games (ARI@SF ... PHI@CHI).
+- pbp_2026 on the Mac: week 1 = 09-09 to 09-14; week 2 = 09-17 to 09-21. So Sep 27-28 is nflverse week 3.
+- The week=2026_04 manifest holds the Sep 27 blind log (1,006 rows, 15 games, first kick 09-27 17:00Z).
+- The committed week=2026_02 anchoring_log has columns game/iter/margin/total/se_m/se_t/err_m/err_t/converged.
+  15 of 15 games converged; best |err| <= 0.34.
+- Week-2 replay of the harness fill rule: 160 of 674 two-way HR prop rows matched; 5 of the 160 took another market's
+  probability (4 of them player_reception_yds).
+- test_forward_v1.py copies the fill logic in `_fill` and never imports run_forward_v1.
+
+### MEANS
+- The pilot "blocker" was the wrong week, plus the sheet step never receiving --pilot/--as-of.
+- The harness would raise KeyError at the anchor sidecar on its first live run.
+- The harness would freeze cross-market opinions, and would freeze the whole week at the Thursday run.
+- The project's week label is off by one from 09-27 on (Cowork's own error). nflverse weeks are canonical from now on.
+- My 6E concern about anchor non-convergence came from an old run log. The committed anchoring log converges.
+
+### NOT DONE
+- FWD1b (fixes, week relabel, week-3 pilot, week-4 runbook) is written and must be verified before 2026-10-02 00:15Z.
+- The ChatGPT audit #6 addendum.
+
+### UNVERIFIED
+- Whether the VM props cadence gives a fresh pull before each week-4 window (FWD1b item 3 prints it).
+- Scoring of the week-3 pilot. The Mac PBP stops at week 2.
