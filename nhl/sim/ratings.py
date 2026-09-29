@@ -362,7 +362,9 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
             prev_lg = {"att_rate": 42.0, "xg_rate": 0.062}
 
         team_cum = {t: {"att_for": 0, "att_ag": 0, "xg_for": 0.0, "xg_ag": 0.0,
-                        "ev_secs": 0.0, "n": 0} for t in teams}
+                        "ev_secs": 0.0, "pp_xg": 0.0, "pp_secs": 0.0,
+                        "pk_xg_ag": 0.0, "pk_secs": 0.0,
+                        "pen_taken": 0, "pen_drawn": 0, "n": 0} for t in teams}
         season_ratings = []
 
         for _, row in s_tgs.iterrows():
@@ -416,6 +418,12 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
                 r_xg_for = shrink(raw_xg_for * tc["n"], tc["n"], target_xg_for, K_xg)
                 r_xg_ag = shrink(raw_xg_ag * tc["n"], tc["n"], target_xg_ag, K_xg)
 
+            # PP/PK ratings (use league mean as target)
+            pp_xg_per60 = tc["pp_xg"] / max(tc["pp_secs"], 1) * 3600 if tc["pp_secs"] > 0 else 7.0
+            pk_xg_per60 = tc["pk_xg_ag"] / max(tc["pk_secs"], 1) * 3600 if tc["pk_secs"] > 0 else 7.0
+            pen_taken_per60 = tc["pen_taken"] / max(tc["ev_secs"], 1) * 3600 if tc["ev_secs"] > 0 else 3.8
+            pen_drawn_per60 = tc["pen_drawn"] / max(tc["ev_secs"], 1) * 3600 if tc["ev_secs"] > 0 else 3.8
+
             season_ratings.append({
                 "game_id": row["game_id"], "season": season, "date": d,
                 "team": team, "role": row["role"], "n_prior_games": tc["n"],
@@ -423,6 +431,10 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
                 "ev_att_against_per60": round(r_att_ag, 4),
                 "ev_xg_per_att_for": round(r_xg_for, 6),
                 "ev_xg_per_att_against": round(r_xg_ag, 6),
+                "pp_xg_for_per60": round(pp_xg_per60, 2),
+                "pk_xg_against_per60": round(pk_xg_per60, 2),
+                "penalties_taken_per60": round(pen_taken_per60, 2),
+                "penalties_drawn_per60": round(pen_drawn_per60, 2),
             })
 
             tc["att_for"] += row["ev_att_for"]
@@ -430,6 +442,12 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
             tc["xg_for"] += row["ev_xg_for"]
             tc["xg_ag"] += row["ev_xg_against"]
             tc["ev_secs"] += row["ev_seconds"]
+            tc["pp_xg"] += row["pp_xg_for"]
+            tc["pp_secs"] += row["pp_seconds"]
+            tc["pk_xg_ag"] += row["pk_xg_against"]
+            tc["pk_secs"] += row["pk_seconds"]
+            tc["pen_taken"] += row["penalties_taken"]
+            tc["pen_drawn"] += row["penalties_drawn"]
             tc["n"] += 1
 
         # Store final shrunk ratings for carry-over

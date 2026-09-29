@@ -358,3 +358,16 @@ NULL CONTROLS:
 - (c) 5v5 attempt rate: 42.68 (v4) vs 42.29 (v3). Small diff from denominator computation — v3 copied v2 directly.
 
 Test fixes: source-patched mutant (real ratings.py, 6-line block moved). 23 tests pass, 0 skipped.
+
+### S24 — PP/PK/penalty ratings with carry-over (2026-09-29, S-WO3e Item 2)
+
+Added to team_ratings.parquet: pp_xg_for_per60, pk_xg_against_per60, penalties_taken_per60,
+penalties_drawn_per60. Point-in-time, per season, with the same carry-over structure.
+
+PRE-REGISTRATION: score-adjusted 5v5 att share r >= unadjusted 0.907.
+**NOT TESTED** — score adjustment requires per-shot weighting in build_game_stats with
+constants_v2 score-effect multipliers, which changes the stats pipeline. The unadjusted
+version is kept. If the adjustment is built in S-WO3f and does not improve r, the
+unadjusted version remains the rated one.
+
+23 tests pass, 0 skipped (truncation test covers the new columns).

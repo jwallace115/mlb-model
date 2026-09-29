@@ -19,13 +19,19 @@ NUM_COLS_PATTERN = ("ev_", "pp_", "pk_", "pen")
 SEED = 20260929
 N_DATES = 20
 
-# The exact six-line block that accumulates team stats (must exist in ratings.py)
+# The accumulation block that updates team stats (must exist in ratings.py)
 ACCUM_BLOCK = (
     '            tc["att_for"] += row["ev_att_for"]\n'
     '            tc["att_ag"] += row["ev_att_against"]\n'
     '            tc["xg_for"] += row["ev_xg_for"]\n'
     '            tc["xg_ag"] += row["ev_xg_against"]\n'
     '            tc["ev_secs"] += row["ev_seconds"]\n'
+    '            tc["pp_xg"] += row["pp_xg_for"]\n'
+    '            tc["pp_secs"] += row["pp_seconds"]\n'
+    '            tc["pk_xg_ag"] += row["pk_xg_against"]\n'
+    '            tc["pk_secs"] += row["pk_seconds"]\n'
+    '            tc["pen_taken"] += row["penalties_taken"]\n'
+    '            tc["pen_drawn"] += row["penalties_drawn"]\n'
     '            tc["n"] += 1'
 )
 # The line AFTER which the block currently sits (used to detect the append)
