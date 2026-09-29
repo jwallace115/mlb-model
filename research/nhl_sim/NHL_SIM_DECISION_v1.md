@@ -481,3 +481,21 @@ tests below. Claude Code has not reviewed it.
 8. **team_ratings.parquet also stores `lg_<rating>`:** the point-in-time league mean each rating was shrunk toward.
    Consumers put team ratings on league-relative terms with these; that matters most for the score-adjusted 5v5
    scale.
+
+### S28 — Independent review of S27 code (2026-09-29, S-WO3g Item 1)
+
+**Tests:** `pytest nhl/sim/tests -q -rs` → 27 passed, 0 failed, 0 skipped.
+- Includes the e17ace021 old-code test (ran on Mac with git access).
+
+**Manifest:** `ratings.py --from-cache` produces team_ratings.parquet and goalie_ratings.parquet
+whose sha256 match manifest.json exactly.
+
+**Code review of build_pit_ratings, goalie_ratings_from_games, measure_hyper, measure_carryover:**
+- All ratings are recorded BEFORE the running totals are updated (point-in-time correct).
+- League mean uses `cumsum().shift(1)` — strictly before D within the season. Clean.
+- Carry-over target = w × prior_final[team] + (1-w) × league mean. Correct structure.
+- K = n_half × (1-r) / r where n_half is the mean games per half-season (was wrong at 82 before S27).
+- PP/PK/penalty use ratio-of-sums split-half (exposure-weighted). Appropriate for rates.
+- Goalie: same correct structure (record before update, carry-over from last_season_rate).
+- The lg_* columns are stored point-in-time for the formula consumer. Good.
+- No defect found that warrants a failing test. No changes made.
