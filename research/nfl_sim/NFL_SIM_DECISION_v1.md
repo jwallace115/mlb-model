@@ -3467,3 +3467,15 @@ Suite: 8 failed, 222 passed. Exit code 1. Reds: fd_pen, tied_drives, dead_clock_
 structure changed), ot_structure, timeouts_kneels, tied_FG_late, kneel_measured_table,
 98-100_snaps. The late-game reds and kneel test remain from D186; the dead_clock test fires
 because the table now has new outcome types (timeout_followed, kneel, ap_all) not in the dead test.
+
+### D194 — Cowork verification of 6B: not merged; own-1 pile-up traced to punts clipped at the 1 (2026-09-29)
+
+6B (eng/6b @ e432be7d6) not merged. K1 reproduces: plays 126.89 (+1.1, HELD), drives 23.047, pts/team 21.277, clean
+header. D192's and D185's cause for the own 1-2 pile-up are both wrong: 74% of the sim's 0.83 own-1/2 drive starts a
+game (real 0.255) follow punts from the opponent's 40-50 whose net-yard draw (pooled `midfield` zone) carries past the
+goal line and is clipped to 99 (engine.py:1809) instead of becoming a touchback (real touchback rate 14-26% from the
+opponent's 35-50). The half-distance penalty rule is coded only for penalties that would pass the 1 (engine.py:1963);
+the rule applies whenever the penalty exceeds half the distance. Half-distance on losses is an approximation, not a
+rule. test_offensive_penalty_half_distance never calls the engine. D191's 181-300 s timeouts reuse 121-180 s rates
+(unmeasured); TO/game 4.19 vs 7.7. D190's kneel finding stands: the sim's final kneel comes with 6.7 s left vs 22.1 s
+real. test_dead_clock_runoff fails because it now perturbs an ap_all fallback row. Next: order 6C on eng/6c from eng/6b.
