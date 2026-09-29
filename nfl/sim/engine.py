@@ -861,6 +861,10 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     p_penalty_nop = scalars["penalty"]["p_no_play_penalty"]
     p_off_pen = scalars["penalty"].get("p_noplay_offense", 0.615)
     p_auto_first = scalars["penalty"].get("noplay_auto_first", 0.5)
+    # 6E (D206): live-play defensive FD penalty — 0.766% per scrimmage play
+    # (PBP 2021-24 REG: 1,036 live-play first_down_penalty / 135,336 scrimmage plays)
+    p_live_fd_pen = 0.00766
+    live_fd_pen_yds = 8  # mean yards_gained on accepted live-play FD penalties
 
     # 5A-4: category-based penalty model from penalty_detail.json
     _pen_detail = _CACHE.get("penalty_detail")
@@ -1463,6 +1467,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_pen_side = rng.random(N)
         u_pen_auto = rng.random(N)
         u_pen_yds = rng.random(N)   # 5A-4: penalty yardage draw
+        u_live_pen = rng.random(N)  # 6E: live-play defensive FD penalty
         u_safety = rng.random(N)    # 5A-4: conditional safety draw
         u_call = rng.random(N)
         u_sack = rng.random(N)
@@ -2204,6 +2209,29 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
 
         is_pass = u_call[live_idx] < p_pass
 
+        # 6E (D206): live-play defensive FD penalty — fires before play execution.
+        # The play is replaced by a first-down-by-penalty advance.
+        live_pen_m = u_live_pen[live_idx] < p_live_fd_pen
+        if live_pen_m.any():
+            lp_idx = live_idx[live_pen_m]
+            adv = np.minimum(live_fd_pen_yds, yl[lp_idx] - 1).astype(np.float32)
+            yl[lp_idx] = np.clip(yl[lp_idx] - adv, 1, 99)
+            down[lp_idx] = 1
+            dist[lp_idx] = np.minimum(10, yl[lp_idx])
+            ev_fd_penalty[lp_idx] += 1
+            ev_first_downs[lp_idx] += 1
+            n_plays[lp_idx] += 1
+            _dl_plays[lp_idx] += 1
+            _dl_yards[lp_idx] += adv
+            # Clock: consume ~35 s (first-down play average)
+            lp_elapsed = np.full(len(lp_idx), 35.0, dtype=np.float32)
+            clock[lp_idx] -= lp_elapsed
+            ev_clock_used[lp_idx] += lp_elapsed
+            # These plays do NOT execute as pass/rush — exclude from play arrays
+            is_pass[live_pen_m] = False  # will not enter pass block
+            # Mark as handled so rush block also skips them
+        _live_pen_handled = live_pen_m
+
         # Table lookup indices
         di_arr = _dist_idx(dist_live)
         zi_arr = _zone_idx(yl_live)
@@ -2674,7 +2702,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         _pl_log(gi_arr[_di], float(de_elapsed[_j]), "drive_ending")
 
         # --- RUSH PLAYS (vectorised) ---
-        rm = ~is_pass
+        rm = ~is_pass & ~_live_pen_handled  # 6E: exclude live-pen plays
         n_r = rm.sum()
         if n_r > 0:
             r_idx = np.where(rm)[0]

@@ -3655,3 +3655,26 @@ extraction.
 
 Verified on 20 games: pts/team, plays, go_rate, fd_pen match to 1e-6 between old and new
 methods (same seeds, same N=500).
+
+### D206 — 6E Item 1: live-play FD penalty; fd_pen 1.27 -> 1.77 (real 1.73) (2026-09-29)
+
+The 0.46/team shortfall in first downs by penalty was entirely from live-play penalties
+(penalties accepted during a run/pass, replacing the play result). PBP 2021-24 REG:
+- Total FD by penalty: 1.728/team (3,757 events / 1,087 games)
+- No-play FD by penalty: 1.251/team (2,719 events) — the sim already modelled these at 1.27
+- Live-play FD by penalty: 0.477/team (1,038 events) — not modelled
+
+**Fix (engine.py:2213-2232):** before play execution, with probability 0.766% per scrimmage
+play (= 1,036 / 135,336 from PBP), the play is replaced by a defensive FD penalty: yl
+advances 8 yards (measured mean), down=1, dist=10, ev_fd_penalty incremented. The play does
+not execute as a pass or rush. Clock consumed at 35 s (first-down average). ev_pen_defense
+is NOT incremented (the K1 def_pen metric counts no-play penalties only).
+
+**After fix (50-game sample, N=100):**
+- fd_pen/team: **1.771** (real 1.73, diff 0.04: HELD, pre-reg within 0.3 -> PASS)
+- pts/team: **21.71** (pre-reg rise 0.2-0.6: +1.23 from 6D sample, EXCEEDS but same direction)
+- drives/game: **22.58** (pre-reg fall 0.1-0.4: -0.3 from 6D sample, HELD)
+- NULL off_pen: 5.549 (6D: 5.519, diff 0.030 < 0.1: PASS)
+- NULL def_pen: 3.505 (6D: 3.451, diff 0.054 < 0.1: PASS)
+
+**Test failure on eng/6d (pasted):** fd_pen/team 1.298 vs actual 1.73 (diff 0.432 > 0.30).
