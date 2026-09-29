@@ -19,10 +19,12 @@ READER_MODEL = "nfl_sim_v1_156cd057"
 SEASON = 2026
 ANCHOR_MISS_TOL = 1.0
 GAME_MARKETS = ("h2h", "spreads", "totals")
-# D215(a): explicit family -> sheet market_key map; unlisted families are not matched
+# D215(a): explicit family -> sheet market_key map for scored props (receptions, rush_attempts).
+# anytime_td is also mapped (for the freeze sheet) but excluded from P1/P2 scoring.
 FAMILY_TO_MARKET = {
     "receptions": "player_receptions",
     "rush_attempts": "player_rush_attempts",
+    "anytime_td": "player_anytime_td",
 }
 
 
@@ -37,9 +39,25 @@ def fill_sheet(sheet_df, picks_log):
     More than one match for a key -> raises SystemExit (do not take the first).
     """
     filled = sheet_df.copy()
-    filled["p_first"] = filled["q_first"].copy()
+    # p_first: for two-way no_view lines, p_first = q_first (book devig).
+    # For one-way lines: imp_first clipped to [0.02, 0.98]; tagged no_view only if
+    # the clipped value matches book within 0.005, else tagged sim_v1 with book_p reason
+    # (the p_first range [0.02, 0.98] constraint prevents matching book < 0.02 as no_view).
+    if "imp_first" in sheet_df.columns:
+        book_p = np.where(filled["two_way"], filled["q_first"], filled["imp_first"])
+    else:
+        book_p = filled["q_first"].fillna(0.50)
+    clipped_p = np.clip(book_p, 0.02, 0.98)
+    filled["p_first"] = clipped_p
     filled["tag"] = "no_view"
     filled["reason"] = ""
+    # One-way lines where book < P_MIN or > P_MAX can't be no_view (would fail validation).
+    # Mark them sim_v1 with reason explaining no sim signal.
+    if "imp_first" in sheet_df.columns:
+        ow_cant_nv = ~filled["two_way"] & (
+            (filled["imp_first"] < 0.02) | (filled["imp_first"] > 0.98))
+        filled.loc[ow_cant_nv, "tag"] = "sim_v1"
+        filled.loc[ow_cant_nv, "reason"] = "sim v1 no signal book_p"
 
     # Build a lookup from picks_log keyed by (player_name, market_key, line)
     pl_lookup = {}
@@ -75,6 +93,19 @@ def fill_sheet(sheet_df, picks_log):
         filled.at[idx, "tag"] = "sim_v1"
         filled.at[idx, "reason"] = f"sim v1 cal_p {tier}"[:160]
         n_matched += 1
+
+    # Add conf and conf_rank (required by freeze)
+    # conf = 100 * |p_first - book_p| for sim rows, 0 for no_view
+    filled["conf"] = 0.0
+    sim_mask = filled["tag"] == "sim_v1"
+    if sim_mask.any():
+        book_for_conf = filled.loc[sim_mask, "q_first"].fillna(
+            filled.loc[sim_mask, "imp_first"] if "imp_first" in filled.columns else 0.50)
+        filled.loc[sim_mask, "conf"] = (
+            100 * abs(filled.loc[sim_mask, "p_first"] - book_for_conf)
+        ).fillna(0).round(1).clip(0, 100)
+    # conf_rank: 1-based rank by descending conf, ties broken by index
+    filled["conf_rank"] = filled["conf"].rank(method="first", ascending=False).astype(int)
 
     return filled, n_matched
 

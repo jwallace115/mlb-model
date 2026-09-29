@@ -3912,3 +3912,28 @@ caps props at as-of so pilot runs exclude future pulls.
 8. freeze-mismatch halts
 
 On 4c9802c93: ImportError (fill_sheet and anchor_sidecar do not exist) -> collection FAIL.
+
+### D216 — FWD1b Item 2: week-3 pilot end to end (2026-09-29)
+
+**PBP refreshed:** nfl/sim/pull_pbp.py -> weeks 1-3, 48 games (16/week) in pbp_2026.
+
+**Pilot run:** `run_forward_v1.py --week 3 --pilot --as-of 2026-09-27T16:30:00+00:00`
+- 15 games simulated (ATL@GB excluded — TNF already kicked at as-of time)
+- All 15 converged, all anchored (max |miss_m|=0.34, max |miss_t|=0.34)
+- picks_log: 1,323 legs
+- Filled: 174 matched / 662 two-way prop rows (26.3% coverage)
+  - By market: player_receptions 112, player_rush_attempts 62
+- Frozen: 1,049 rows, reader_model nfl_sim_v1_156cd057, pilot=true
+
+**verify --week 3:** 3 frozen files, no mismatch, no unlisted.
+
+**score --week 3 --include-pilot:**
+- Total graded: 1,221; with view: 1,052; no_view: 17.1%
+- Sim rows (nfl_sim_v1_156cd057): **20 scored, 12 won, +2.68 units**
+- Two-way Brier (all readers): reader 0.2495 / book 0.2511
+- |p-q| > 0.08 (all readers): 16 legs, 11 won, +4.80 units
+- By reader_model: claude-opus-5-5 845 legs; sim 20 legs; claude-fable-5-1 28 legs
+
+**This is a PILOT: it is never pooled, and it is not evidence for or against P1/P2.**
+The pilot demonstrates the end-to-end pipeline works. The sim's 20 scored legs is well
+below the 500-leg checkpoint.
