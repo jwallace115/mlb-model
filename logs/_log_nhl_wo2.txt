@@ -1,0 +1,63 @@
+## 2026-09-29  claude-code  nhl/wo2
+
+### Item 1 — NHL game lines, 4 seasons (2022-23 .. 2025-26)
+
+RETURNED: 2,084 historical snapshot calls at 30 credits each. 2,005 parquet files written
+(79 snapshots returned 0 games — off-days, All-Star break, Christmas). Every call returned
+x-requests-last=30 (matches pre-registration exactly, 0% deviation).
+
+MEANS: Four seasons of h2h, spreads, and totals with correct team names on every outcome
+row. The old normalizer collapsed both teams in h2h/spreads into one row (proven in test).
+Schema: one row per outcome with outcome_name, description, point, price, bookmaker, market,
+event_id, commence_time, home_team, away_team, snapshot_utc, requested_utc.
+
+Books returned: pinnacle (always), draftkings, fanduel, betmgm, williamhill_us, betrivers,
+bovada, betonlineag, lowvig. hardrockbet_fl absent on NHL (not active in these seasons).
+
+Credits: 62,538 used.
+Balance: 96,269 before -> 33,731 after.
+
+Data: data/odds_archive/nhl/history/lines/season={2022,2023,2024,2025}/ (23MB total, not
+committed to git — research data for Cowork's analysis).
+
+Date format fix required: the historical API rejects +00:00 timezone suffix; Z suffix
+required. The initial run produced 0 files (HTTP 422 on every call) until _to_z() was added.
+
+### Item 2 — 60-minute 3-way, 2024-25 (partial)
+
+RETURNED: 170/265 game dates pulled before the reserve (20,000) halted the run. Events list
+costs 1 credit, each event's 3-way costs 10 (measured, matches pre-registration). 7 books
+offer h2h_3_way with 3 outcomes each (Home/Away/Draw). Pinnacle present on every game.
+
+MEANS: Coverage through approximately March 2025. April-June 2025 (playoffs) remains.
+The reserve correctly prevented the run from cutting into the daily capture budget.
+
+Credits: 13,724 used.
+Balance: 33,731 before -> 19,996 after (at reserve).
+
+Data: data/odds_archive/nhl/history/threeway/season=2024/ (170 files, not committed).
+
+### Item 3 — player props, 2024-25
+
+NOT RUN. Balance at reserve (19,996). Item 3 needs ~52,500 credits.
+
+### Credit summary
+  Starting balance:    96,269
+  Item 1 (lines):     -62,538  -> 33,731
+  Item 2 (3-way):     -13,724  -> 19,996  (at reserve)
+  Item 3 (props):          0   -> NOT RUN
+  Test/debug calls:       ~180  (included above)
+
+### NOT DONE (with credits needed)
+- Item 2 remainder: ~95 game dates (Apr-Jun 2025 playoffs). Est ~3,500 credits.
+- Item 3 (props 2024-25): ~1,312 events x 40 credits = ~52,500 credits. Full season.
+  Total NOT DONE: ~56,000 credits. Needs next monthly cycle.
+
+### UNVERIFIED
+- Game coverage completeness vs NHL schedule (need to count unique event_ids per season
+  vs the known 1,312 regular season + ~86 playoff games).
+- Whether any snapshot timestamps are more than 60 min from puck drop (the 22:45Z + 01:45Z
+  scheme targets most games but some 4pm and 10pm ET starts may be further away).
+- Parquet file integrity (no checksums computed; files read fine in pandas during the run).
+- The 0-game snapshots (79 calls) still cost 30 credits each — a future optimization could
+  skip known off-days (Christmas, All-Star week) but that requires a schedule lookup.
