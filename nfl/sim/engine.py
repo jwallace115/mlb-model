@@ -301,11 +301,23 @@ def _build_kneel_lookup():
 
 
 def _to_sec_bucket(cl):
-    return "0-30" if cl <= 30 else ("31-60" if cl <= 60 else ("61-120" if cl <= 120 else "121-180"))
+    # 6D: whole-quarter buckets (was capped at 121-180)
+    if cl <= 30: return "0-30"
+    if cl <= 60: return "31-60"
+    if cl <= 120: return "61-120"
+    if cl <= 180: return "121-180"
+    if cl <= 300: return "181-300"
+    if cl <= 600: return "301-600"
+    return "601-900"
 
 
 def _kneel_sec_bucket(cl):
-    return "0-40" if cl <= 40 else ("41-80" if cl <= 80 else ("81-120" if cl <= 120 else "121-180"))
+    # 6D: finer low-range bucket (0-15 vs 16-40) to prevent over-kneeling in Q2
+    if cl <= 15: return "0-15"
+    if cl <= 40: return "16-40"
+    if cl <= 80: return "41-80"
+    if cl <= 120: return "81-120"
+    return "121-180"
 
 
 def _build_eoh_lookup():
@@ -1392,24 +1404,18 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         return m
 
     def _apply_timeouts(gi_arr, ot_idx_arr, sd_arr, u_arr, running_codes=(1, 2), de_code=3, stop_code=0, skip=None):
-        """5A-7: after a scrimmage play in the last 3:00 of Q2/Q4, the offence or the
-        defence may call a timeout (empirical policy); a timeout makes the runoff to the
-        next snap the stopped-clock kind (`stop_code`). Pass encoding: 0 incomplete /
-        1 first down / 2 complete in bounds / 3 drive-ending. Rush encoding: 0 first down /
-        1 run / 2 drive-ending / 3 stopped (timeout)."""
+        """5A-7 / 6D: after any scrimmage play, the offence or defence may call a timeout
+        (empirical policy from the whole-game table, all quarters). A timeout makes the
+        runoff to the next snap the stopped-clock kind (`stop_code`)."""
         if to_lookup is None:
             return
-        # 6C: timeouts can be called at any snap (Q1-Q4 + OT). The table has Q2/Q4
-        # entries; the q=min(qtr,4) mapping at line 1410 sends Q1->Q2 proxy, Q3->Q4 proxy.
-        # The sec_bucket mapping at line 1410 caps at "121-180" for clock > 120.
         late = ~game_over[gi_arr] & (ot_idx_arr != de_code)
         if skip is not None:
             late &= ~skip
         for j in np.where(late)[0]:
             gi = gi_arr[j]
-            # 6C: Q1→2, Q2→2, Q3→4, Q4→4, OT→4 (table only has Q2 and Q4)
-            raw_q = int(qtr[gi])
-            q = 2 if raw_q <= 2 else 4
+            # 6D: look up real quarter (OT capped at 5)
+            q = min(int(qtr[gi]), 5)
             sb = _to_sec_bucket(float(clock[gi]))
             sd_j = int(sd_arr[j])
             st = "trail" if sd_j < 0 else ("tied" if sd_j == 0 else "lead")
@@ -1658,7 +1664,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                     # defence timeout after the kneel?
                     if to_lookup is not None and to_rem[1 - poss[i], i] > 0 and clock[i] <= 180:
                         st_i = "trail" if sd_i < 0 else ("tied" if sd_i == 0 else "lead")
-                        q_i = min(int(qtr[i]), 4)  # 5A-11 (D39): OT uses the Q4 rows
+                        q_i = min(int(qtr[i]), 5)  # 6D: real quarter (OT capped at 5)
                         p_def = (to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), st_i, "True"))
                                  or to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), st_i, "any"))
                                  or to_lookup.get(("def", q_i, _to_sec_bucket(float(clock[i])), "all", "any"), 0.0))
@@ -1811,23 +1817,24 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         zn = "midfield"
                     else:
                         zn = "own20"
-                    # 6C: draw receiving team's start yl from punt landing table
+                    # 6C/6D: draw receiving team's start yl from punt landing table
                     los_bkt = (int(yl[i]) // 5) * 5
                     landing_q = _punt_landing_q.get(los_bkt)
+                    if landing_q is None and _punt_landing_q:
+                        # 6D: snap to nearest available bucket (not touchback)
+                        nearest = min(_punt_landing_q.keys(), key=lambda k: abs(k - los_bkt))
+                        landing_q = _punt_landing_q[nearest]
                     if landing_q is not None:
                         recv_yl = float(np.interp(u_punt_net[i], np.linspace(0, 1, 101), landing_q))
                         yl[i] = float(np.clip(recv_yl, 1, 99))
                     else:
-                        # Fallback to old method for very short punts
+                        # Fallback to old method (only if landing table is entirely absent)
                         q = punt_lookup.get(zn)
                         if q is None:
                             q = punt_lookup.get("midfield", np.full(101, 42.0))
                         net = np.interp(u_punt_net[i], np.linspace(0, 1, 101), q)
                         recv_yl = 100 - (yl[i] - net)
-                        if recv_yl > 80:  # would be a touchback
-                            yl[i] = 80.0
-                        else:
-                            yl[i] = float(np.clip(recv_yl, 1, 99))
+                        yl[i] = float(np.clip(recv_yl, 1, 99))
                 # Punt return TD (empirical rate from table G)
                 punt_ret_td_m = punt_m.copy()
                 for i in np.where(punt_m)[0]:

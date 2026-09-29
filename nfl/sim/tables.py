@@ -1421,14 +1421,16 @@ def build_eoh_spike_table(df):
 # TABLES K/L (5A-7): timeout policy and kneel decision at the end of halves
 # ═══════════════════════════════════════════════════════════════════════════════
 
-TO_SEC_BINS = [-1, 30, 60, 120, 180]
-TO_SEC_LABELS = ["0-30", "31-60", "61-120", "121-180"]
-KNEEL_SEC_BINS = [-1, 40, 80, 120, 180]
-KNEEL_SEC_LABELS = ["0-40", "41-80", "81-120", "121-180"]
+TO_SEC_BINS = [-1, 30, 60, 120, 180, 300, 600, 900]
+TO_SEC_LABELS = ["0-30", "31-60", "61-120", "121-180", "181-300", "301-600", "601-900"]
+# 6D: finer kneel buckets — old 0-40 split into 0-15 and 16-40 to prevent
+# Q2 kneels starting at 16+ s when real kneels concentrate at 0-10 s
+KNEEL_SEC_BINS = [-1, 15, 40, 80, 120, 180]
+KNEEL_SEC_LABELS = ["0-15", "16-40", "41-80", "81-120", "121-180"]
 
 
-def _late_frame(df):
-    """Scrimmage snaps in the last 3:00 of Q2/Q4 with the next-event timeout flags."""
+def _snap_frame(df):
+    """Scrimmage snaps (all quarters) with next-event timeout flags and clock state."""
     d = df.sort_values(["game_id", "play_id"]).copy()
     d["next_timeout"] = d.groupby("game_id")["timeout"].shift(-1)
     d["next_to_team"] = d.groupby("game_id")["timeout_team"].shift(-1)
@@ -1441,30 +1443,40 @@ def _late_frame(df):
     sc["to_by_def"] = (sc["next_timeout"] == 1) & (sc["next_to_team"] == sc["defteam"])
     sc["off_state"] = np.where(sc["score_differential"] < 0, "trail",
                       np.where(sc["score_differential"] == 0, "tied", "lead"))
+    return sc
+
+
+def _late_frame(df):
+    """Scrimmage snaps in the last 3:00 of Q2/Q4 with the next-event timeout flags."""
+    sc = _snap_frame(df)
     return sc[(sc["half_seconds_remaining"] <= 180) & sc["qtr"].isin([2, 4])].copy()
 
 
 def build_timeout_policy(df):
-    """P(timeout called after a snap) by side, keyed (qtr, seconds-left bucket,
-    offense score state, clock running after the play). Measured only where the
+    """6D: P(timeout called after a snap) by side, keyed (qtr, seconds-left bucket,
+    offense score state, clock running). Covers EVERY quarter (1-4, OT) and seconds
+    buckets spanning the whole quarter (0-30 .. 601-900). Measured only where the
     calling side still has a timeout. Min cell 80; fallback rows pool clock_running
     (key 'any'), then off_state ('all'). 2021-2024 regular season."""
     MIN_N = 80
-    late = _late_frame(df)
-    late["sec_b"] = pd.cut(late["half_seconds_remaining"], TO_SEC_BINS, labels=TO_SEC_LABELS).astype(str)
+    sc = _snap_frame(df)
+    # Use quarter_seconds_remaining for all quarters
+    sc = sc[sc["qtr"].isin([1, 2, 3, 4, 5])].copy()
+    sc["qtr_i"] = sc["qtr"].clip(upper=5).astype(int)
+    sc["sec_b"] = pd.cut(sc["quarter_seconds_remaining"], TO_SEC_BINS, labels=TO_SEC_LABELS).astype(str)
     rows = []
     for side, col, rem in (("off", "to_by_off", "posteam_timeouts_remaining"),
                            ("def", "to_by_def", "defteam_timeouts_remaining")):
-        d = late[late[rem] > 0]
-        for (q, sb, st, cr), g in d.groupby(["qtr", "sec_b", "off_state", "clock_running"]):
+        d = sc[sc[rem] > 0]
+        for (q, sb, st, cr), g in d.groupby(["qtr_i", "sec_b", "off_state", "clock_running"]):
             if len(g) >= MIN_N:
                 rows.append({"side": side, "qtr": int(q), "sec_b": sb, "off_state": st,
                              "clock_running": str(bool(cr)), "n": len(g), "p_to": g[col].mean()})
-        for (q, sb, st), g in d.groupby(["qtr", "sec_b", "off_state"]):
+        for (q, sb, st), g in d.groupby(["qtr_i", "sec_b", "off_state"]):
             if len(g) >= MIN_N:
                 rows.append({"side": side, "qtr": int(q), "sec_b": sb, "off_state": st,
                              "clock_running": "any", "n": len(g), "p_to": g[col].mean()})
-        for (q, sb), g in d.groupby(["qtr", "sec_b"]):
+        for (q, sb), g in d.groupby(["qtr_i", "sec_b"]):
             if len(g) >= MIN_N:
                 rows.append({"side": side, "qtr": int(q), "sec_b": sb, "off_state": "all",
                              "clock_running": "any", "n": len(g), "p_to": g[col].mean()})

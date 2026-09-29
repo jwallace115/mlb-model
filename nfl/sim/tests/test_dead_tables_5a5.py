@@ -102,8 +102,10 @@ def test_dead_clock_runoff(baseline):
     null metric — at 5A-11 several perturbations moved it NEGATIVE on noise.
     """
     tbl = pd.read_parquet(TABLES_DIR / "clock_runoff.parquet").copy()
+    # 6D: exclude ap_all fallback rows from primary-cell selection
     l0 = tbl[(~tbl["score_state"].str.startswith("p_")) &
              (~tbl["score_state"].str.startswith("all")) &
+             (tbl["score_state"] != "ap_all") &
              (tbl["clock_period"] != "all")]
     if not l0.empty:
         biggest = l0.nlargest(1, "n")
@@ -171,22 +173,20 @@ def test_dead_fg_make_rate(baseline):
     assert diff > 0.01, f"FG make rate perturbation had no effect: fg_made diff={diff:.3f}"
 
 
-# --- Punt net yards table ---
-def test_dead_punt_net(baseline):
-    """Perturb punt net yards for midfield zone to all be 10 yds."""
-    tbl = pd.read_parquet(TABLES_DIR / "punt_net.parquet").copy()
-    mask = tbl["zone"] == "midfield"
-    if mask.any():
-        idx = tbl[mask].index[0]
-        q = [10.0] * 101  # very short punts
-        tbl.at[idx, "net_q"] = q
-    r = _run({"punt": tbl})
-    # Drives after punt should start deeper
-    # Can check via drive starts in drive log, but simpler: score should change
+# --- Punt landing table (6D: engine reads punt_landing, not punt_net) ---
+def test_dead_punt_landing(baseline):
+    """6D: Perturb punt_landing recv_yl quantiles for the most-used bucket to very
+    short punts (recv_yl ~20). The engine now reads punt_landing, so this is the
+    active table; punt_net is only the legacy fallback for absent LOS buckets."""
+    tbl = pd.read_parquet(TABLES_DIR / "punt_landing.parquet").copy()
+    biggest = tbl.nlargest(1, "n")
+    idx = biggest.index[0]
+    tbl.at[idx, "recv_yl_q"] = [20.0] * 101  # very short punts (receiving team at their 20)
+    r = _run({"punt_landing": tbl})
     base_pts = (baseline["home_score"].mean() + baseline["away_score"].mean())
     test_pts = (r["home_score"].mean() + r["away_score"].mean())
     diff = abs(test_pts - base_pts)
-    assert diff > 0.2, f"Punt net yards perturbation had no effect: pts diff={diff:.2f}"
+    assert diff > 0.2, f"Punt landing perturbation had no effect: pts diff={diff:.2f}"
 
 
 # --- Turnover returns (INT) ---

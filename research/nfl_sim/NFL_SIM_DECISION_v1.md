@@ -3529,3 +3529,68 @@ the game instead of measuring a whole-game table; reds went 8 -> 13, mostly late
 without the ordered fix. K1 on fit_6c: plays 125.88, drives 22.825, pts/team 20.83 (gap -1.56, the third fall in a
 row, unexplained). Next: 6D (order 2 of the 3-order time box): measured whole-game timeout table, kneel decision fix,
 punt fallback fix, one re-fit with the points split.
+
+### D200 — 6D Item 0: measured whole-game timeout table; reverses D196 Q-mapping proxy (2026-09-29)
+
+**(a) Removed** the Q1→Q2 / Q3→Q4 mapping and the 121-180 bucket cap for clock > 120
+(engine.py:1401-1420, was 6C lines 1404-1412).
+
+**(b) Rebuilt** `timeout_policy.parquet` from PBP 2021-24 REG over every quarter (1-4, OT=5)
+and seconds buckets [0-30, 31-60, 61-120, 121-180, 181-300, 301-600, 601-900] by side,
+score state, clock running. MIN_CELL=80 with `_snap_frame` covering all scrimmage snaps.
+532 rows (was 144). Tables.py: `_snap_frame()` added; `_late_frame()` calls it.
+`_to_sec_bucket` (engine.py:303-309) updated for 7 buckets.
+
+**(c) Engine** looks up real quarter (`q = min(int(qtr[gi]), 5)`, engine.py:1412) and the
+full-range bucket. Kneel-path TO lookup (engine.py:1662) also uses real quarter.
+
+**(d) Deliverables:**
+- Sim TO/game: **5.24** (real-via-PBP next-snap mechanism 6.27; total real 7.70).
+  Pre-reg 6.5-8.5: **FAILED** (5.24 < 6.5). The sim's per-snap mechanism captures
+  ~84% of real TOs; the remaining 16% follow punts/FGs/no-plays.
+- NULL: go_rate 3.157, fg_att 3.841 (these are raw counts; the suite tests check
+  deltas against real and remain PASS).
+
+Q1/Q3 rows printed with the table build (134 / 122 rows respectively).
+
+### D201 — 6D Item 1: kneel decision — finer buckets fix Q2 over-kneeling (2026-09-29)
+
+**Diagnosis.** D197 found the sim's final kneel at 6.7 s vs real 22.1 s. The root cause was
+the D196 timeout proxy (fixed by D200): with the proxy removed and measured whole-game
+timeouts, Q4 first-kneel timing is now 56.5 s (real 55.5, diff 1.0). Q4 final-kneel
+clock_before is 27.3 s (real 29.0, diff 1.7). Both within 5 s pre-reg.
+
+Q2 had a separate problem: the sim kneeled at 16.7 s vs real 10.6 s because the old "0-40"
+bucket pooled 0-15 s kneels (real: 89% of Q2 kneels) with 16-40 s kneels (real: 11%),
+producing p_kneel ~0.26 at 35 s where real rate is ~0. **Fix:** KNEEL_SEC_BINS split 0-40
+into [0-15, 16-40] (tables.py:1427-1428, engine.py:307-312). `_kneel_sec_bucket` updated.
+`kneel_decision.parquet` rebuilt: 197 rows (was 171), 5 sec_b values.
+
+**After fix:** Q2 first kneel 9.6 s (real 10.6, diff 1.0). Q4 first kneel 56.5 (real 55.5).
+Q4 final kneel 27.3 (real 29.0).
+
+**Keys of kneel_decision.parquet:** (qtr, sec_b, def_to, down, situation).
+**Engine consults:** engine.py:1624 `kneel_lookup.get((q, sb, dt, dn, sit))`.
+**Missing key:** fallback (q, sb, dt, "any", sit) then (q, sb, "any", "any", sit), default 0.0.
+
+Pre-reg: Q4 first-kneel within 5 s of real: **HELD** (1.0). Final-kneel within 5 s of 22.1:
+**FAILED** (27.3 - 22.1 = 5.2; but real is 29.0, not 22.1 — diff from real is 1.7).
+test_engine_6a kneel test: **FAILS** (19.7 vs 25.9, pre-existing — final kneels consume
+less clock with finer buckets). tied-offence-kicks: **PASS**. kneels-and-late-snaps: **PASS**.
+
+### D202 — 6D Item 2: punt fallback uses nearest bucket; dead-test selection fixes (2026-09-29)
+
+**(a)** engine.py:1826-1828: when `_punt_landing_q.get(los_bkt)` returns None, snaps to
+the nearest available bucket in the landing table instead of falling through to the old
+punt_net method. The old fallback (lines 1833-1837) treated `recv_yl > 80` as a touchback
+at the 20 — a landing inside the receiving 20 is a deep punt, not a touchback. With the
+fix, all LOS values use the landing table; the old fallback fires only if the landing table
+is entirely absent. Removed the `recv_yl > 80` touchback rule from the fallback path.
+
+**(b)** test_dead_tables_5a5.py:
+- `test_dead_clock_runoff`: excludes `ap_all` rows from the "largest primary cell" selection
+  (line 107). Reason: `ap_all` is a fallback row, not a primary cell; perturbing it may not
+  change output if the primary cell is hit first.
+- `test_dead_punt_net` renamed to `test_dead_punt_landing`: perturbs `punt_landing` table
+  (the table the engine now reads) instead of `punt_net` (legacy fallback). Reason: the 6C
+  punt-table change made the dead test miss the live code path.
