@@ -264,3 +264,24 @@ underestimates PP/PK contribution. This is the S12 check run once, as specified;
 
 Previous S12 (5v5-only) was: corr(gd) 0.287/0.225, total -14.6%/-11.8%, Pinnacle "not measurable".
 The full formula + Pinnacle join improved all metrics: Pinnacle logit corr 0.81, total corr 0.43.
+
+> S13 correction (S-WO3c): carry-over w was measured but hardcoded 0.5 and used only for game 1.
+> Fixed in S16: w read from carryover_w.json, used as shrink target for the entire season.
+
+> S14 correction (S-WO3c): finishing term was monthly, not point-in-time. Fixed in S19.
+
+### S16 — Carry-over that is actually used (2026-09-29, S-WO3c Item 1)
+
+Vectorised build_game_stats: 52s (was 320s). Cached to team_game_stats.parquet (12,850 rows).
+Carry-over w measured on 2021->2022 and saved to carryover_w.json (committed):
+- ev_att_for_per60: 0.784, ev_att_against_per60: 0.805
+- ev_xg_per_att_for: 0.363, ev_xg_per_att_against: 0.296
+- goalie_gsax_per_att: 0.300
+
+No literal w anywhere (`grep 'w = 0.5'` returns empty). Code reads carryover_w.json.
+
+The prior = w × last season's final shrunk rating + (1 - w) × league mean, and is the SHRINK
+TARGET for the whole season: rating(D) = (in-season total before D + K × prior) / (n + K).
+
+PRE-REGISTRATION (a): SD at n=1 >= 0.9 × SD at n=0 in 2023-24: **3.34 >= 2.75 — HELD** (ratio 1.095).
+(Was 0.69 with the old code; now 1.095 — carry-over is preserved across games.)
