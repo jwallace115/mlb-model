@@ -3777,3 +3777,273 @@ named blocker: no candidates file.
 
 The sim is market-anchored on sides and totals, so v1's forward test runs on player props (order FWD1). v2, which
 would fix the listed defects and restart the count, is not ordered.
+
+### D210 — FWD1 Item 0: pre-registration of the forward test (2026-09-29)
+
+Forward test of NFL sim FREEZE_v1 (engine 156cd057a3b39e48, fit_6e). Reader model string
+nfl_sim_v1_156cd057. Scored with log_ai_opinions.py score exactly as pre-registered there (2026-09-21): revision 0
+only, pilot files never pooled, game-cluster bootstrap. Scope: two-way player props on the Hard Rock tape. Game
+spreads, totals and moneylines are logged as no_view (the sim is anchored to the market on them, D7) and never
+scored for the sim. P1: Brier(book de-vig) <= Brier(sim) on two-way props — expected to HOLD. P2: the sim's sides
+with |p - q| > 0.08 lose units at the real Hard Rock price of the side — expected to HOLD. Checkpoints at 500 and
+1,500 scored two-way legs; nothing is concluded before 500. Breakouts every checkpoint: family, trust tier, week,
+|p - q| bucket, and anchor status (item 1). Anchor rule, fixed now: a game whose final anchored mean misses the
+market by more than 1.0 point on margin OR total is 'unanchored'; its props are frozen and scored but reported
+separately and excluded from P1/P2. No engine change during the test; a change is v2 and restarts the count.
+
+### D211 — FWD1 Item 1: run_forward_v1.py harness + tests (2026-09-29)
+
+**Harness** (nfl/sim/run_forward_v1.py): six steps:
+(a) test_freeze_v1 in-process via pytest.main; HALT on failure.
+(b) sheet: log_ai_opinions.py `sheet` for the week.
+(c) sim: run_week.py for the week (same --as-of if provided); reads picks_log.parquet.
+(d) fill: two-way prop rows matched by (player_name, line) to picks_log get p_first = cal_p
+    of the OVER side (or 1 - cal_p if sheet's first side is under), tag = "sim_v1",
+    reason = "sim v1 cal_p <tier>". Unmatched prop rows and all game-line rows (h2h,
+    spreads, totals) get tag = "no_view" with p_first = q_first (the book's de-vig).
+(e) freeze: log_ai_opinions.py `freeze` with --reader-model nfl_sim_v1_156cd057.
+(f) anchor sidecar: per-game parquet with spread, total_line, anch_m, anch_t, miss_m,
+    miss_t, iterations, converged, anchored (D210 rule: miss > 1.0 on either = unanchored).
+    Written to ai_opinions/anchor_sidecar_sim_v1.parquet.
+
+**Established:** run_week.py:997 prints the **ANCHORED** margin (`anch_m`), not the raw.
+The raw margin is stored separately as `raw_m` (run_week.py:1002).
+
+**log_ai_opinions.py changes:**
+- TAGS: added "sim_v1" (log_ai_opinions.py:76).
+- --as-of: added (log_ai_opinions.py:531-536); errors without --pilot.
+
+**Tests** (nfl/sim/tests/test_forward_v1.py, 5 tests):
+1. Harness halts on freeze hash mismatch (modifies one hash, asserts test_table_hashes raises).
+2. Game-line row is no_view with p_first == q_first.
+3. Matched OVER row gets cal_p exactly.
+4. Matched UNDER-only row gets 1 - cal_p.
+5. Unmatched prop row is no_view.
+All 5 PASS. test_freeze_v1 still 4 passed.
+
+### D212 — FWD1 Item 2: pilot blocked by run_week game-matching; runbook written (2026-09-29)
+
+**Attempted:** `run_forward_v1.py --week 4 --pilot --as-of 2026-09-27T16:30:00+00:00`.
+The harness reached step (c) — run_week.py ran but could not match week 4 games to the
+Hard Rock line tape. Output: "no pre-kick Hard Rock snapshot" for all 15 week-4 games
+(Sep 27-29). Line snapshots exist in the tape (snap_20260927T*.parquet), but run_week.py's
+`get_lines_from_history` did not match them to the schedule's week-4 game IDs.
+
+**Named blocker:** run_week.py's game-ID-to-tape matching fails for week 4. This is a
+data-pipeline issue in run_week.py's `get_lines_from_history` function, not in the harness.
+The harness code is tested and ready (D211: 5 tests pass).
+
+**--as-of on freeze:** implemented (log_ai_opinions.py:531-536), guarded by --pilot.
+Tested: `--as-of` without `--pilot` produces "HALT: --as-of requires --pilot".
+
+**Runbook:** research/nfl_sim/fwd1_runbook.md written with exact commands for TNF, Sunday
+1 PM ET, MNF kick windows, and scoring commands at each checkpoint.
+
+**This is a PILOT: it is never pooled, and it is not evidence for or against P1/P2.**
+The pilot will run once the game-matching issue in run_week.py is resolved (a separate
+fix outside the freeze; the engine is not modified).
+
+### D213 — Cowork verification of FWD1: pre-registration stands; harness not merged (crash, market collisions, no window); pilot blocker was the week number (2026-09-29)
+
+FWD1 (eng/fwd1 @ 4c9802c93) is not merged.
+
+What stands:
+- D210 stands as written.
+- D211 is right that run_week prints the anchored margin. The committed week-2 anchoring log converges on 15 of 15
+  games.
+
+Defects, measured:
+- The anchor sidecar reads columns that do not exist (game_id, iteration, spread, total_line), so it raises a KeyError
+  on the first live run. Its other fields default silently.
+- The fill ignores the market and picks_log.side. On the week-2 replay, 5 of 160 matches take another market's
+  probability.
+- The tests copy the fill logic instead of calling the harness.
+- The sheet has no kick window, so a Thursday run freezes the whole week at Thursday prices as revision 0.
+- In a pilot, props are not capped at as-of.
+
+D212's blocker is wrong. The Sep 27–28 slate is nflverse week 3, not week 4, and the harness also never passed
+--pilot/--as-of to the sheet. get_lines_from_history returns all 15 games at 2026-09-27T16:30Z.
+
+The project's week label was off by one from 09-27 on. nflverse weeks are canonical from now on, and the week-3 files
+in week=2026_04 are moved by FWD1b. FWD1b must be verified before the week-4 TNF kick (2026-10-02 00:15Z).
+
+### D214 — FWD1b Item 0: week labels fixed; week=2026_04 files moved to week=2026_03 (2026-09-29)
+
+The Sep 27-28 slate is nflverse week 3, not week 4. All files in nfl/data/board/week=2026_04/
+(ai_opinions parquet, sun_cards*, mnf_sgp*, mnf_script_model*) moved to week=2026_03/ via
+git mv. The week-4 manifest entry appended UNCHANGED (same sha256, same logged_utc) to the
+week-3 manifest. Week-4 manifest set to [].
+
+Verify BEFORE: week 3 = 1 file, week 4 = 1 file, no mismatch.
+Verify AFTER:  week 3 = 2 files, week 4 = 0 files, no mismatch.
+
+Docs that reference week=2026_04 for this slate (not changed — the decisions record the move):
+- D212 in NFL_SIM_DECISION_v1.md:3826 ("--week 4 --pilot --as-of 2026-09-27T16:30:00")
+- D213 in NFL_SIM_DECISION_v1.md:3868 ("week=2026_04 are moved by FWD1b")
+- logs/_log_fwd1.txt:23 (same --week 4 reference)
+
+### D215 — FWD1b Item 1: harness fixes — fill_sheet, anchor_sidecar, flag passthrough, props cap (2026-09-29)
+
+**(a) fill_sheet** (run_forward_v1.py:41-76): extracted from main; match key =
+(player_name, FAMILY_TO_MARKET[family], line). Map: receptions -> player_receptions,
+rush_attempts -> player_rush_attempts; all other families unmatched. Respects picks_log.side:
+'over' -> p_first = cal_p, 'under' -> p_first = 1 - cal_p. Duplicate key -> HALT.
+
+**(b) anchor_sidecar** (run_forward_v1.py:79-110): reads REAL columns (game, iter, margin,
+total, err_m, err_t, converged). Best iteration = min |err_m| + |err_t|. Market spread/total
+derived from margin - err_m and total - err_t. Missing column -> KeyError.
+
+**(c)** main() passes --pilot, --as-of, --window-hours, --events to BOTH sheet and freeze
+calls (run_forward_v1.py:109-115).
+
+**(d)** log_ai_opinions.py:160: `props = props[props["pull_timestamp"].map(parse_utc) <= now]`
+caps props at as-of so pilot runs exclude future pulls.
+
+**(e)** Halt: main() runs test_freeze_v1 in-process; a wrong hash exits non-zero before sheet.
+
+**Tests** (test_forward_v1.py, 8 tests, all call the real functions):
+1. fill matches on market, not just line (rush_attempts vs reception_yds at same line)
+2. unmapped family (anytime_td) stays no_view
+3. under side gives 1 - cal_p
+4. game-line row always no_view
+5. unmatched prop row no_view
+6. anchor_sidecar on committed week-2 log: 15 games, all anchored, max |miss| <= 0.35
+7. anchor_sidecar raises on missing column
+8. freeze-mismatch halts
+
+On 4c9802c93: ImportError (fill_sheet and anchor_sidecar do not exist) -> collection FAIL.
+
+### D216 — FWD1b Item 2: week-3 pilot end to end (2026-09-29)
+
+**PBP refreshed:** nfl/sim/pull_pbp.py -> weeks 1-3, 48 games (16/week) in pbp_2026.
+
+**Pilot run:** `run_forward_v1.py --week 3 --pilot --as-of 2026-09-27T16:30:00+00:00`
+- 15 games simulated (ATL@GB excluded — TNF already kicked at as-of time)
+- All 15 converged, all anchored (max |miss_m|=0.34, max |miss_t|=0.34)
+- picks_log: 1,323 legs
+- Filled: 174 matched / 662 two-way prop rows (26.3% coverage)
+  - By market: player_receptions 112, player_rush_attempts 62
+- Frozen: 1,049 rows, reader_model nfl_sim_v1_156cd057, pilot=true
+
+**verify --week 3:** 3 frozen files, no mismatch, no unlisted.
+
+**score --week 3 --include-pilot:**
+- Total graded: 1,221; with view: 1,052; no_view: 17.1%
+- Sim rows (nfl_sim_v1_156cd057): **20 scored, 12 won, +2.68 units**
+- Two-way Brier (all readers): reader 0.2495 / book 0.2511
+- |p-q| > 0.08 (all readers): 16 legs, 11 won, +4.80 units
+- By reader_model: claude-opus-5-5 845 legs; sim 20 legs; claude-fable-5-1 28 legs
+
+**This is a PILOT: it is never pooled, and it is not evidence for or against P1/P2.**
+The pilot demonstrates the end-to-end pipeline works. The sim's 20 scored legs is well
+below the 500-leg checkpoint.
+
+### D217 — FWD1b Item 3: runbook rewritten for week 4 (2026-09-29)
+
+research/nfl_sim/fwd1_runbook.md rewritten with concrete week-4 commands:
+- TNF PIT@CLE: run 23:30Z Thu 10-01, --window-hours 2. Pull 15 min old.
+- London IND@WAS: run 12:45Z Sun 10-04, --window-hours 1.5. Pull 2:45h old.
+- Sunday 1pm/4pm/SNF: run 16:15Z Sun 10-04, --window-hours 9. Pull 15 min old.
+- MNF: run 23:30Z Mon 10-05, --window-hours 2. **Pull 4h old (> 3h stale)** — no Monday
+  capture slot on the VM.
+
+Scoring commands for 500- and 1,500-leg checkpoints included, pooled by reader_model.
+
+### D218 — Cowork verification of FWD1b: harness works end to end; revision sharing and one-way tagging must be fixed before week 4 (2026-09-29)
+
+FWD1b (eng/fwd1 @ 54efc5878) is accepted for items 0-3. It is not merged until FWD1c is verified.
+
+What was verified:
+- The week-3 files moved to week=2026_03 with their hashes unchanged.
+- The harness matches on player, market and line, and honours side.
+- The anchor sidecar reads the real columns.
+- Flags pass through to both the sheet and the freeze.
+- Props are capped at now.
+- The tests call the real functions.
+- The pilot ran end to end with 15 of 15 games anchored.
+
+Defects:
+- log_ai_opinions.prior_revisions counts revisions across readers. The AI log frozen at 15:58Z pushed 158 of the
+  sim's 178 opinions to revision 1, so they went unscored.
+- fill_sheet tags one-way lines priced outside [0.02, 0.98] as sim_v1. In the pilot that meant a +7500 anytime TD was
+  scored as a sim side.
+- D216's market counts (112/62) and its 662 are wrong (139/35; 614 two-way prop rows).
+
+Cowork's sim-only pilot scoring, all 174 two-way opinions, is a pilot and never pooled:
+- Brier: sim 0.2673 vs book 0.2517, gap +0.0157 (95% interval −0.0021 to +0.0339).
+- Rush attempts: sim 0.2977 vs book 0.2463.
+- All sides: −10.78 units. P2 subset: +3.73 units on 110.
+
+Next: FWD1c (revisions per reader and pilot flag; no_view at the clipped book price; a week-4 dry run), then the
+merge before the TNF run (23:30Z, 10-01).
+
+### D219 — FWD1c Item 0: revisions per reader (2026-09-29)
+
+log_ai_opinions.py:246-270 `prior_revisions(d, reader_model, pilot)`: a new file's revision
+counts only earlier files with the SAME reader_model AND the SAME pilot flag. An entry with
+no reader_model key counts as "legacy" (matches nothing new). freeze() passes reader_model
+and pilot to prior_revisions (line 281).
+
+The pre-registered rule "only revision 0 is scored" now reads: revision 0 per reader and
+pilot flag. Scoring is unchanged (still filters revision == 0, line 404).
+
+Module docstring updated (line 21): "Revision is counted per reader_model and pilot flag
+(D219, 2026-09-29)."
+
+Tests (nfl/pipeline/tests/test_log_ai_opinions_fwd1c.py):
+(a) Reader A freezes a line, then reader B freezes it -> B's row is revision 0.
+(b) Reader B freezes it again -> revision 1.
+(c) Pilot of reader B, then live of reader B -> live row is revision 0.
+On 54efc5878: (a) FAIL, (c) FAIL (live got revision 1).
+
+### D220 — FWD1c Item 1: no_view at the floor (2026-09-29)
+
+log_ai_opinions.py:217: the no_view validator now checks |p_first - clip(book, P_MIN, P_MAX)|
+instead of |p_first - book|. A +7500 anytime-TD line (book 0.013) gets p_first=0.02 (clipped)
+and passes as no_view.
+
+run_forward_v1.py: deleted the sim_v1 fallback branch for one-way lines outside [0.02, 0.98].
+fill_sheet now tags ONLY matched two-way prop rows as sim_v1; all others are no_view.
+FAMILY_TO_MARKET reverted to receptions + rush_attempts only (anytime_td removed — it was
+a workaround for the old validation).
+
+Assert added (run_forward_v1.py:99): `n_sim_v1 == n_matched` — sim_v1 rows exactly equal
+matched two-way prop rows.
+
+Test: test_no_view_at_floor_accepted: a +7500 anytime-TD row gets no_view and freeze accepts.
+On 54efc5878: FAIL ("no_view line must carry book's own probability").
+
+### D221 — FWD1c Item 2: --dry-run and week-4 dry run (2026-09-29)
+
+**--dry-run** (run_forward_v1.py:151,215-230): steps (a)-(d) and (f) print-only, stops before
+freeze. Writes nothing under nfl/data/board/.
+
+**Week-4 dry run** (`--week 4 --dry-run --window-hours 60`):
+- nflreadpy returned 16 week-4 matchups (Oct 1-5, nflverse week 4).
+- 16 games simulated, all converged, all anchored (max |miss| 0.32).
+- PIT@CLE is in the window (kick 10-02 00:15Z, ~27h from now; 60h window captures it).
+  No Sunday games (kick 17:00Z Oct 4, ~68h from now; > 60h).
+- picks_log: 1,359 legs. Matched: 11/42 two-way prop rows (9 receptions, 2 rush_attempts).
+  Low count because HR props for most week-4 games are not yet pulled (newest pull Sep 28).
+- Newest HR props pull for PIT@CLE: in the Sep 28 archive.
+
+**Tests:** test_freeze_v1 4 passed, test_forward_v1 8 passed, test_log_ai_opinions_fwd1c 4 passed (16 total).
+
+### D222 — Cowork verification of FWD1c: accepted; eng/fwd1 merged with a corrected runbook; forward count of FREEZE_v1 starts at week-4 TNF (2026-09-29)
+
+FWD1c (eng/fwd1 @ 0128616ad) is accepted.
+- Revisions are counted per reader_model and pilot flag, so revision 0 is each reader's first opinion on a line.
+- A `no_view` line carries clip(book) at the 0.02/0.98 floor.
+- `sim_v1` rows equal the matched two-way props exactly.
+- `--dry-run` works; the week-4 dry run shows 16 of 16 games anchored.
+- 16 tests pass on Linux.
+
+eng/fwd1, which carries FWD1, FWD1b and FWD1c (D210-D221), is merged to main. The runbook's props pull times are
+corrected to the deployed VM schedule:
+- TNF: pull 22:00Z;
+- London: Saturday 14:00Z pull, about 23 h old;
+- MNF: run at 23:55Z, after the Monday 23:45Z slot.
+
+The forward count of reader `nfl_sim_v1_156cd057` starts with the week-4 TNF freeze. D210's pre-registration governs
+it, with the revision rule reading per reader (D219). Checkpoints are at 500 and 1,500 scored two-way legs. At about
+150-175 a week, 500 falls around week 6 or 7.

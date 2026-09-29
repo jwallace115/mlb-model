@@ -54,3 +54,21 @@
 
 ### UNVERIFIED
 - The runbook's pull-age figures for the TNF, London and Sunday windows. The dry run prints the TNF one.
+
+## 2026-09-29T22:40Z  cowork (verification of FWD1c — D222; merge of eng/fwd1)
+
+### RETURNED
+- eng/fwd1 @ 0128616ad: D218 append, D219-D221, log. Tests on Linux: 16 passed.
+- The prior_revisions diff was read: it filters on manifest reader_model (default "legacy") and on the pilot flag.
+- The props archive's newest pull is 2026-09-28T23:45:08Z, so the Monday MNF slot fires.
+
+### MEANS
+- The harness is ready. The runbook's pull times were wrong for TNF, London and MNF and are corrected (MNF run moves to
+  23:55Z).
+
+### NOT DONE
+- The first live freeze: TNF, 23:30Z Thu 10-01. Its sha256 goes into capture_status before the kick.
+- The ChatGPT audit #6 addendum.
+
+### UNVERIFIED
+- That the Thu 22:00Z props slot fires on 10-01. The sheet prints the source age at run time.

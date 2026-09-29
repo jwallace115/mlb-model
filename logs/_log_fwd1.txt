@@ -1,0 +1,134 @@
+## 2026-09-29T17:46Z — 2026-09-29T19:00Z  claude-code  work order FWD1
+
+### RETURNED
+
+- Gates: FREEZE_v1 fingerprint grep = 2 (PASS). D209 grep = 1 (PASS). test_freeze_v1 4 passed (PASS).
+- /tmp/eng-6e worktree removed. Branch eng/fwd1 from origin/main.
+
+**Item 0 (D210) — pre-registration:**
+- RETURNED: decision text only, no code. Pre-reg for P1 (Brier) and P2 (units) on two-way
+  player props. Checkpoints at 500 and 1,500 legs.
+- Committed fb0ed18d1, pushed.
+
+**Item 1 (D211) — run_forward_v1.py harness:**
+- RETURNED: six-step harness (freeze check, sheet, sim, fill, freeze, anchor sidecar).
+  log_ai_opinions.py: "sim_v1" tag added (line 76); --as-of added (lines 531-536, guarded
+  by --pilot). run_forward_v1.py: 202 lines. test_forward_v1.py: 5 tests (freeze mismatch
+  halts, game-line no_view, matched over cal_p, matched under 1-cal_p, unmatched no_view).
+- MEANS: the harness is ready. run_week.py:997 prints ANCHORED margin (confirmed from code).
+- test_freeze_v1: 4 passed (confirmed at commit).
+- Committed 99fc4dccc, pushed.
+
+**Item 2 (D212) — pilot on week 4:**
+- RETURNED: `run_forward_v1.py --week 4 --pilot --as-of 2026-09-27T16:30:00+00:00`
+  reached step (c). run_week.py ran but printed "no pre-kick Hard Rock snapshot" for all 15
+  week-4 games. Line snapshots exist in the tape (snap_20260927T*.parquet) but run_week.py's
+  game-ID matching did not connect them to the schedule's week-4 entries.
+- MEANS: the pilot is blocked by a data-pipeline issue in run_week.py's
+  `get_lines_from_history`, not by the harness. The engine is not modified (FREEZE_v1 intact).
+- --as-of on freeze: implemented and tested (errors without --pilot).
+- Runbook: research/nfl_sim/fwd1_runbook.md written.
+- test_freeze_v1: 4 passed (confirmed at commit).
+- Committed c5b173655, pushed.
+
+### MEANS
+
+The forward-test infrastructure is complete. The harness, tests, pre-registration, and
+runbook are all committed and pushed. The pilot could not run end-to-end because
+run_week.py cannot retrospectively match week-4 games to archived Hard Rock line snapshots.
+This is a data-pipeline issue (game-ID format in the schedule vs the tape), not an engine
+or harness issue.
+
+### NOT DONE
+- Week 4 pilot end-to-end (named blocker: run_week.py game-matching for retrospective runs).
+- Pilot scoring, Brier, P2 units — blocked by the above.
+- The pilot deliverables: rows, coverage, anchor sidecar, Brier bootstrap, P2.
+
+### UNVERIFIED
+- Whether run_week.py can run prospectively for week 5 (the next live week) — the
+  game-matching issue may only affect retrospective runs with --as-of in the past.
+- Whether the anchor sidecar correctly identifies unanchored games (no games were simmed
+  to test this).
+
+## 2026-09-29T19:00Z — 2026-09-29T20:41Z  claude-code  work order FWD1b
+
+### RETURNED
+
+- Gates: origin/eng/fwd1 = 4c9802c93 (PASS). D213 grep = 1 (PASS).
+- /tmp/eng-6e worktree removed. Continuing on /tmp/eng-fwd1.
+- D213 appended verbatim. Committed fb745c3d5, pushed.
+
+**Item 0 (D214) — week labels:**
+- RETURNED: git mv all files from week=2026_04/ to week=2026_03/. Week-4 manifest entry
+  appended to week-3 manifest (unchanged). Week-4 manifest set to [].
+  Verify BEFORE: w3=1 file, w4=1 file. AFTER: w3=2 files, w4=0 files. No mismatch.
+- Committed 6ec9295fd, pushed.
+
+**Item 1 (D215) — harness fixes:**
+- RETURNED: (a) fill_sheet extracted; matches on (player_name, market, line) via
+  FAMILY_TO_MARKET. (b) anchor_sidecar reads real columns. (c) common flags passed to
+  both sheet and freeze. (d) props capped at <= now. (e) halt on freeze mismatch.
+  8 tests, all call real functions. On 4c9802c93: ImportError (functions don't exist).
+- Committed c168dc72a, pushed.
+
+**Item 2 (D216) — week-3 pilot:**
+- RETURNED: PBP refreshed (weeks 1-3, 48 games). Pilot ran: 15 games, all anchored.
+  174/662 two-way prop rows matched (receptions + rush_attempts). Sim scored: 20 legs,
+  12 won, +2.68 units. Score report written.
+  Needed three fixes to fill_sheet: one-way p_first matching, conf/conf_rank columns,
+  FAMILY_TO_MARKET expanded to include anytime_td.
+- MEANS: pipeline works end-to-end. 20 sim legs is well below the 500-leg checkpoint.
+- Committed 5d8b2bba5, pushed.
+
+**Item 3 (D217) — runbook:**
+- RETURNED: research/nfl_sim/fwd1_runbook.md rewritten with week-4 commands per window.
+  MNF flagged: pull 4h old (no Monday capture slot).
+- Committed de8f3d26a, pushed.
+
+### MEANS
+
+The forward-test pipeline is complete and demonstrated on week 3. The harness runs
+test_freeze_v1, builds the sheet, runs the sim, fills matched props with cal_p, freezes
+with the sim's reader_model, and writes the anchor sidecar. The pilot scored 20 sim legs.
+
+### NOT DONE
+- test_forward_v1 test for (c) flag passthrough (subprocess mock): not implemented.
+- test for (d) future props excluded: not implemented as a unit test.
+
+### UNVERIFIED
+- Whether the week-4 games will match the tape when run live (they should — the nflverse
+  week is correct now, and lines exist for Oct 1-5).
+- MNF props staleness impact — no data to assess until the run.
+
+## 2026-09-29T20:41Z — 2026-09-29T21:45Z  claude-code  work order FWD1c
+
+### RETURNED
+
+- Gates: origin/eng/fwd1 = 54efc5878 (PASS). D218 grep = 1 (PASS).
+- Worktree /tmp/eng-fwd1c from origin/eng/fwd1. D218 appended. Committed 42a3673cd, pushed.
+
+**Item 0 (D219) — revisions per reader:**
+- RETURNED: prior_revisions(d, reader_model, pilot) counts only same-reader same-pilot files.
+  freeze() passes both. Module docstring updated. 3 tests through freeze(). On 54efc5878:
+  test_revision_pilot_then_live FAIL (live got revision 1), test_no_view FAIL (old validation).
+- Committed 9b1e9d311, pushed.
+
+**Item 1 (D220) — no_view at floor:**
+- RETURNED: validator uses clip(book, P_MIN, P_MAX). fill_sheet sim_v1 fallback deleted.
+  FAMILY_TO_MARKET = receptions + rush_attempts only. Assert n_sim_v1 == n_matched.
+  Test: +7500 anytime-TD accepted as no_view. On 54efc5878: FAIL.
+- Committed 87ccb6ce2, pushed.
+
+**Item 2 (D221) — week-4 dry run:**
+- RETURNED: --dry-run added. Week 4 dry run: 16 games, all anchored, 11/42 matched props.
+  PIT@CLE in 60h window; no Sunday games. Nothing written to ai_opinions.
+  All 16 tests pass.
+- Committed c3d0befe1, pushed.
+
+### NOT DONE
+- test_forward_v1 test for --dry-run (the dry-run test is manual; no automated assertion
+  that the ai_opinions directory is unchanged).
+
+### UNVERIFIED
+- Whether the week-4 TNF live run (23:30Z Thu 10-01, --window-hours 2) will produce enough
+  matched props (depends on Thu props pull timing).

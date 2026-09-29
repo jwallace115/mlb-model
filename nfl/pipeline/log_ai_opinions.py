@@ -18,6 +18,7 @@ Three steps, all offline (zero API credits; each runs in seconds):
 PRE-REGISTERED scoring (written 2026-09-21 before any opinion existed; score step is a later build
 and must implement exactly this):
   * Only revision 0 of a line is scored. Later revisions are kept and reported, never scored.
+    Revision is counted per reader_model and pilot flag (D219, 2026-09-29).
   * Files frozen with --pilot are never pooled into the record.
   * Two-way lines: Brier and log-loss of p_first vs the book's de-vigged q_first, game-cluster
     bootstrap. One-way lines (anytime TD): vs the vig-inclusive implied price, reported separately.
@@ -73,7 +74,7 @@ def set_sport(sport, book=None):
     PROPS_DIR = SPORTS[sport]["props"]
     LINES_DIR = SPORTS[sport]["lines"]
 TAGS = ("injury_news", "role_change", "game_script", "matchup", "weather", "price_vs_sharp",
-        "usage_trend", "line_move", "no_view")
+        "usage_trend", "line_move", "no_view", "sim_v1")
 KEY = ["event_id", "market_key", "player_name", "line"]
 P_MIN, P_MAX = 0.02, 0.98
 REASON_MIN, REASON_MAX = 12, 160
@@ -157,6 +158,8 @@ def newest_inputs(season, now, props_file=None, lines_file=None):
         props = pd.concat([pd.read_parquet(f) for f in pf], ignore_index=True)
         props = props[props["bookmaker"] == BOOK]
         props = props[props["pull_timestamp"].map(parse_utc) < props["commence_time"].map(parse_utc)]
+        # D215(d): cap at now so a pilot with --as-of excludes future pulls
+        props = props[props["pull_timestamp"].map(parse_utc) <= now]
         newest = props.groupby("event_id")["pull_timestamp"].transform("max")
         props = props[props["pull_timestamp"] == newest]
     lf = [Path(lines_file)] if lines_file else sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))[-1:]
@@ -211,8 +214,10 @@ def validate(sheet, filled):
 
     book = m["q_first"].where(m["two_way"], m["imp_first"])
     nv = m["tag"] == "no_view"
-    if ((m["p_first"] - book).abs()[nv] > NO_VIEW_TOL).any():
-        raise SystemExit("HALT: a 'no_view' line must carry the book's own probability")
+    # D220: no_view must carry clip(book, P_MIN, P_MAX) within NO_VIEW_TOL
+    book_clipped = book.clip(P_MIN, P_MAX)
+    if ((m["p_first"] - book_clipped).abs()[nv] > NO_VIEW_TOL).any():
+        raise SystemExit("HALT: a 'no_view' line must carry clip(book, P_MIN, P_MAX)")
     rl = m["reason"].fillna("").str.len()
     if (~nv & ~rl.between(REASON_MIN, REASON_MAX)).any():
         raise SystemExit(f"HALT: every line with a view needs a reason of {REASON_MIN}-{REASON_MAX} characters")
@@ -241,9 +246,26 @@ def validate(sheet, filled):
     return m
 
 
-def prior_revisions(d):
+def prior_revisions(d, reader_model=None, pilot=None):
+    """Count revisions from earlier files of the SAME reader_model AND pilot flag.
+
+    FWD1c (D219): a new file's revision counts only earlier files with the same
+    reader_model and the same pilot flag. An entry with no reader_model key counts
+    as reader "legacy", which matches nothing new. Scoring is unchanged: revision 0
+    means each reader's first opinion on a line (2026-09-29).
+    """
+    manifest_path = d / "manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
+    own_files = set()
+    for entry in manifest:
+        entry_rm = entry.get("reader_model", "legacy")
+        entry_pilot = entry.get("pilot", False)
+        if entry_rm == reader_model and entry_pilot == bool(pilot):
+            own_files.add(entry["file"])
     seen = {}
     for f in sorted(d.glob("ai_opinions_*.parquet")):
+        if f.name not in own_files:
+            continue
         for *k, rev in pd.read_parquet(f)[KEY + ["revision"]].itertuples(index=False, name=None):
             seen[tuple(k)] = max(seen.get(tuple(k), -1), int(rev))
     return seen
@@ -262,7 +284,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None):
         raise SystemExit(f"HALT: {late['event_id'].nunique()} game(s) in the sheet have kicked off - nothing is frozen")
     m = validate(sheet, filled)
     d.mkdir(parents=True, exist_ok=True)
-    seen = prior_revisions(d)
+    seen = prior_revisions(d, reader_model=reader_model, pilot=pilot)
     m["revision"] = [seen.get((r.event_id, r.market_key, r.player_name, r.line), -1) + 1
                      for r in m.itertuples(index=False)]
     m["season"], m["week"], m["pilot"] = season, week, bool(pilot)
@@ -528,9 +550,14 @@ def main():
     ap.add_argument("--pilot", action="store_true")
     ap.add_argument("--reader-model", help="REQUIRED for freeze (N62): the model that made the picks, e.g. claude-fable-5-1")
     ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
+    ap.add_argument("--as-of", help="UTC ISO timestamp (pilot only); errors without --pilot")
     a = ap.parse_args()
+    if a.as_of and not a.pilot:
+        sys.exit("HALT: --as-of requires --pilot")
     set_sport(a.sport, a.book)
-    now = datetime.now(timezone.utc)
+    now = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
     if a.cmd in ("sheet", "freeze"):
         sheet = build_sheet(*newest_inputs(a.season, now, a.props_file, a.lines_file), now)
         if a.events and len(sheet):
