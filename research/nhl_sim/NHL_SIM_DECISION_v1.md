@@ -341,3 +341,20 @@ NULL CONTROLS:
 - (b) Even states = v2: 0.00 — PASS.
 
 v2 kept. v3 adds side-specific rates for the engine.
+
+### S23 — Constants v4: goals vs xG named apart, pooled PP orientations (2026-09-29, S-WO3e Item 1)
+
+nhl/data/sim/constants_v4.json. Fit seasons [2021, 2022]. v3 superseded.
+- Every state now has: attempts_per_60, goals_per_attempt, xg_per_attempt (from xG v2), goals/xG ratio.
+- Uneven states POOL both orientations (home-5v4 + away-5v4).
+- PP minutes per team-game: 5.11 (pooled, both orientations).
+
+PRE-REGISTRATION (calibration): goals/xG between 0.95-1.05 in fit for 5v5 and pooled 5v4 PP.
+- 5v5: **1.0000 — HELD**
+- 5v4 PP: **0.9798 — HELD**
+
+NULL CONTROLS:
+- (b) Pooled numerator = home + away: exact for all 8 uneven sides.
+- (c) 5v5 attempt rate: 42.68 (v4) vs 42.29 (v3). Small diff from denominator computation — v3 copied v2 directly.
+
+Test fixes: source-patched mutant (real ratings.py, 6-line block moved). 23 tests pass, 0 skipped.

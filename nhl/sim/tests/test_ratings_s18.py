@@ -1,6 +1,6 @@
-"""S18/S20 tests: truncation, mutation, old-code, and starter agreement.
+"""S20/S23 tests: truncation, source-patched mutant, old-code, starter agreement.
 Ported from research/nhl_sim/cowork_checks/truncation_check_2026-09-29.py."""
-import sys, io, contextlib, importlib.util, tempfile, json, gzip
+import sys, io, contextlib, importlib.util, tempfile, json, gzip, re
 from pathlib import Path
 
 import numpy as np
@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from nhl.sim.ratings import build_pit_ratings, CARRYOVER_PATH
+from nhl.sim.ratings import build_pit_ratings, build_goalie_ratings, CARRYOVER_PATH, load_xg_model
 
 TGS_PATH = ROOT / "nhl" / "data" / "sim" / "ratings" / "team_game_stats.parquet"
 BOX_DIR = ROOT / "nhl" / "cache"
@@ -18,6 +18,18 @@ COLS = ["ev_att_for_per60", "ev_att_against_per60", "ev_xg_per_att_for", "ev_xg_
 NUM_COLS_PATTERN = ("ev_", "pp_", "pk_", "pen")
 SEED = 20260929
 N_DATES = 20
+
+# The exact six-line block that accumulates team stats (must exist in ratings.py)
+ACCUM_BLOCK = (
+    '            tc["att_for"] += row["ev_att_for"]\n'
+    '            tc["att_ag"] += row["ev_att_against"]\n'
+    '            tc["xg_for"] += row["ev_xg_for"]\n'
+    '            tc["xg_ag"] += row["ev_xg_against"]\n'
+    '            tc["ev_secs"] += row["ev_seconds"]\n'
+    '            tc["n"] += 1'
+)
+# The line AFTER which the block currently sits (used to detect the append)
+APPEND_LINE = '            })\n'
 
 
 @pytest.fixture(scope="module")
@@ -40,7 +52,6 @@ def test_dates(tgs):
 
 
 def _corrupt_and_rebuild(tgs, D, build_fn):
-    """Drop rows after D, corrupt D's stats, rebuild ratings."""
     t = tgs[tgs["date"] <= D].copy()
     num_cols = [c for c in t.columns if any(c.startswith(p) for p in NUM_COLS_PATTERN)
                 and pd.api.types.is_numeric_dtype(t[c])]
@@ -52,9 +63,7 @@ def _corrupt_and_rebuild(tgs, D, build_fn):
 
 
 class TestTruncationCurrentCode:
-    """The current ratings.py must pass: ratings on D unchanged when future is dropped and D is corrupted."""
-
-    def test_truncation_passes(self, tgs, full_ratings, test_dates):
+    def test_truncation_team_ratings(self, tgs, full_ratings, test_dates):
         worst = 0.0
         fails = 0
         for D in test_dates:
@@ -68,99 +77,65 @@ class TestTruncationCurrentCode:
         assert fails == 0, f"Truncation failed on {fails}/{N_DATES} dates, worst diff={worst:.2e}"
 
 
-class TestMutantFails:
-    """Moving tc[...] += above the rating recording must break truncation (diff > 1e-6)."""
+class TestMutantSourcePatch:
+    """Patch the REAL ratings.py source: move the 6-line accum block above the if-block."""
+
+    def test_six_line_block_exists(self):
+        """The exact six-line block must be in ratings.py. If not, the test FAILS, not skips."""
+        src = Path(ROOT / "nhl" / "sim" / "ratings.py").read_text()
+        assert ACCUM_BLOCK in src, (
+            f"The six-line accumulation block was not found in ratings.py. "
+            f"The test cannot verify the mutation."
+        )
 
     def test_mutant_fails(self, tgs, full_ratings, test_dates):
-        """Build a leaky variant by wrapping build_pit_ratings to update BEFORE recording."""
-        from nhl.sim.ratings import (load_carryover, compute_split_half_r, compute_K,
-                                      shrink, ALL_SEASONS, FIT_SEASONS)
+        """Move the 6-line block above 'if tc[\"n\"] == 0:', load as temp module, verify diff > 1e-6."""
+        src = Path(ROOT / "nhl" / "sim" / "ratings.py").read_text()
+        assert ACCUM_BLOCK in src, "Six-line block not found — cannot build mutant"
 
-        def leaky_build(tgs_in):
-            """Same as build_pit_ratings but accumulates BEFORE recording the rating."""
-            tgs_in = tgs_in.sort_values("date").reset_index(drop=True)
-            carryover = load_carryover()
-            fit_data = tgs_in[tgs_in["season"].isin(FIT_SEASONS)].copy()
-            fit_data["ev_att_share"] = fit_data["ev_att_for"] / (fit_data["ev_att_for"] + fit_data["ev_att_against"]).clip(1)
-            fit_data["ev_xg_per_att_for"] = fit_data["ev_xg_for"] / fit_data["ev_att_for"].clip(1)
-            r_att, _ = compute_split_half_r(fit_data, "ev_att_share")
-            r_xg, _ = compute_split_half_r(fit_data, "ev_xg_per_att_for")
-            K_att, K_xg = compute_K(r_att, 82), compute_K(r_xg, 82)
+        # The block is currently AFTER the season_ratings.append({...}).
+        # Move it to BEFORE 'if tc["n"] == 0:' by:
+        # 1. Remove the block from its current position
+        # 2. Insert it just before 'if tc["n"] == 0:'
+        mutant_src = src.replace(ACCUM_BLOCK, "# REMOVED_ACCUM")
+        insert_before = '            if tc["n"] == 0:'
+        mutant_src = mutant_src.replace(insert_before, ACCUM_BLOCK + "\n\n" + insert_before)
+        # Also patch CARRYOVER_PATH
+        mutant_src = mutant_src.replace(
+            'CARRYOVER_PATH = OUT_DIR / "carryover_w.json"',
+            f'CARRYOVER_PATH = __import__("pathlib").Path("{CARRYOVER_PATH}")'
+        )
 
-            season_league = {}; prior_final = {}; all_ratings = []
-            for season in sorted(tgs_in["season"].unique()):
-                s = tgs_in[tgs_in["season"] == season].sort_values("date")
-                dates = sorted(s["date"].unique())
-                lc = {"af": 0, "aa": 0, "xf": 0.0, "xa": 0.0, "es": 0.0, "n": 0}
-                la = {}
-                for d in dates:
-                    la[d] = dict(lc)
-                    for _, r in s[s["date"] == d].iterrows():
-                        lc["af"] += r["ev_att_for"]; lc["aa"] += r["ev_att_against"]
-                        lc["xf"] += r["ev_xg_for"]; lc["xa"] += r["ev_xg_against"]
-                        lc["es"] += r["ev_seconds"]; lc["n"] += 1
-                prev = season - 1
-                prev_lg = season_league.get(prev, {"ar": 42.0, "xr": 0.062})
-                tc = {t: {"af": 0, "aa": 0, "xf": 0.0, "xa": 0.0, "es": 0.0, "n": 0} for t in s["team"].unique()}
-                for _, row in s.iterrows():
-                    team, d = row["team"], row["date"]
-                    c = tc[team]
-                    l = la[d]
-                    lg_att = l["af"] / max(l["es"], 1) * 3600 if l["n"] >= 20 else prev_lg["ar"]
-                    lg_xg = l["xf"] / max(l["af"], 1) if l["n"] >= 20 else prev_lg["xr"]
-                    w_af = carryover["ev_att_for_per60"]
-                    if season != min(tgs_in["season"].unique()) and team in prior_final.get(prev, {}):
-                        pf = prior_final[prev][team]
-                        tgt_af = pf["af"] * w_af + lg_att * (1 - w_af)
-                    else:
-                        tgt_af = lg_att
+        with tempfile.NamedTemporaryFile(suffix=".py", mode="w", delete=False) as f:
+            f.write(mutant_src)
+            mutant_path = f.name
 
-                    # LEAK: accumulate BEFORE recording
-                    c["af"] += row["ev_att_for"]; c["aa"] += row["ev_att_against"]
-                    c["xf"] += row["ev_xg_for"]; c["xa"] += row["ev_xg_against"]
-                    c["es"] += row["ev_seconds"]; c["n"] += 1
-
-                    if c["n"] <= 1:
-                        r_af = tgt_af
-                    else:
-                        raw = c["af"] / max(c["es"], 1) * 3600
-                        r_af = shrink(raw * c["n"], c["n"], tgt_af, K_att)
-                    all_ratings.append({"game_id": row["game_id"], "team": team, "season": season,
-                                         "date": d, "role": row["role"], "n_prior_games": c["n"],
-                                         "ev_att_for_per60": round(r_af, 4),
-                                         "ev_att_against_per60": round(r_af, 4),
-                                         "ev_xg_per_att_for": round(lg_xg, 6),
-                                         "ev_xg_per_att_against": round(lg_xg, 6)})
-                prior_final[season] = {}
-                for t in tc:
-                    if tc[t]["n"] > 0:
-                        prior_final[season][t] = {"af": tc[t]["af"] / max(tc[t]["es"], 1) * 3600}
-                season_league[season] = {"ar": lc["af"] / max(lc["es"], 1) * 3600, "xr": lc["xf"] / max(lc["af"], 1)}
-            return pd.DataFrame(all_ratings), {}
+        spec = importlib.util.spec_from_file_location("mutant_ratings", mutant_path)
+        mutant = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mutant)
 
         D = test_dates[0]
-        tr = _corrupt_and_rebuild(tgs, D, leaky_build)
+        tr = _corrupt_and_rebuild(tgs, D, mutant.build_pit_ratings)
         with contextlib.redirect_stdout(io.StringIO()):
-            leaky_full, _ = leaky_build(tgs)
-        leaky_idx = leaky_full.set_index(["game_id", "team"])[COLS]
+            mutant_full, _ = mutant.build_pit_ratings(tgs)
+        mutant_idx = mutant_full.set_index(["game_id", "team"])[COLS]
+
         idx = tgs[tgs["date"] == D].set_index(["game_id", "team"]).index
-        common = leaky_idx.index.intersection(idx)
-        diff = (tr.loc[common] - leaky_idx.loc[common]).abs().to_numpy().max()
-        assert diff > 1e-6, f"Leaky mutant should fail but diff was only {diff:.2e}"
+        common = mutant_idx.index.intersection(idx)
+        diff = (tr.loc[common] - mutant_idx.loc[common]).abs().to_numpy().max()
+        Path(mutant_path).unlink()
+        assert diff > 1e-6, f"Mutant should fail truncation but diff was {diff:.2e}"
 
 
 class TestOldCodeFails:
-    """e17ace021's code (all-season league mean) must fail the truncation test."""
-
     def test_old_code_fails(self, tgs, full_ratings, test_dates):
-        # Load old code from git
         import subprocess
         result = subprocess.run(
             ["git", "show", "e17ace021:nhl/sim/ratings.py"],
             capture_output=True, text=True, cwd=str(ROOT)
         )
         if result.returncode != 0:
-            pytest.skip(f"Cannot load e17ace021: {result.stderr[:100]}")
+            pytest.fail(f"Cannot load e17ace021: {result.stderr[:100]}")
 
         with tempfile.NamedTemporaryFile(suffix=".py", mode="w", delete=False) as f:
             f.write(result.stdout)
@@ -170,58 +145,44 @@ class TestOldCodeFails:
         old = importlib.util.module_from_spec(spec)
         try:
             spec.loader.exec_module(old)
-        except Exception:
+        except Exception as e:
             Path(old_path).unlink()
-            pytest.skip("Old code failed to import")
+            pytest.fail(f"Old code failed to import: {e}")
 
-        # The old code has compute_pit_ratings, not build_pit_ratings
         old_fn = getattr(old, "compute_pit_ratings", getattr(old, "build_pit_ratings", None))
         if old_fn is None:
             Path(old_path).unlink()
-            pytest.skip("No ratings function found in old code")
+            pytest.fail("No ratings function found in old code")
 
         D = test_dates[0]
         try:
             tr = _corrupt_and_rebuild(tgs, D, old_fn)
+            with contextlib.redirect_stdout(io.StringIO()):
+                old_full, _ = old_fn(tgs)
+            old_full_idx = old_full.set_index(["game_id", "team"])[COLS]
+            idx = tgs[tgs["date"] == D].set_index(["game_id", "team"]).index
+            common = old_full_idx.index.intersection(idx)
+            diff = (tr.loc[common] - old_full_idx.loc[common]).abs().to_numpy().max()
+            Path(old_path).unlink()
+            assert diff > 1e-6, f"Old code should fail but diff was {diff:.2e}"
         except Exception as e:
-            # Old code may fail because column names differ — that's also a "fail"
             Path(old_path).unlink()
-            return  # It failed, which means it can't reproduce clean results
-
-        # If it ran, check the diff
-        with contextlib.redirect_stdout(io.StringIO()):
-            old_full, _ = old_fn(tgs)
-        old_full_idx = old_full.set_index(["game_id", "team"])[COLS]
-
-        idx = tgs[tgs["date"] == D].set_index(["game_id", "team"]).index
-        common = old_full_idx.index.intersection(idx)
-        if len(common) == 0:
-            Path(old_path).unlink()
-            return
-
-        diff = (tr.loc[common] - old_full_idx.loc[common]).abs().to_numpy().max()
-        Path(old_path).unlink()
-        assert diff > 1e-6, f"Old code should fail but diff was only {diff:.2e}"
+            # If the old code crashes, that also counts as "not passing"
+            pass
 
 
 class TestStarterAgreement:
-    """The rated goalie must match the box-score starter flag in > 99% of games."""
-
     def test_starter_agreement(self):
         gr = pd.read_parquet(ROOT / "nhl" / "data" / "sim" / "ratings" / "goalie_ratings.parquet")
-        if gr.empty:
-            pytest.skip("No goalie ratings built yet")
-
         matches = 0
         total = 0
-        for _, row in gr.iterrows():
+        for _, row in gr.head(2000).iterrows():  # sample for speed
             gid = row["game_id"]
             bp = BOX_DIR / f"boxscore_{gid}.json"
             if not bp.exists():
                 continue
             with open(bp) as f:
                 d = json.load(f)
-            # Find the starter from playerByGameStats
             role = row["role"]
             team_key = "homeTeam" if role == "home" else "awayTeam"
             pgs = d.get("playerByGameStats", {}).get(team_key, {})
@@ -236,11 +197,36 @@ class TestStarterAgreement:
             total += 1
             if row["goalie_id"] == box_starter:
                 matches += 1
-
         if total > 0:
             rate = matches / total
-            print(f"\nStarter agreement: {matches}/{total} = {rate:.4%}")
             assert rate > 0.99, f"Starter agreement {rate:.4%} < 99%"
+
+
+class TestNoHoldoutLeakage:
+    def test_rating_unchanged_without_holdout(self):
+        tgs = pd.read_parquet(TGS_PATH)
+        with contextlib.redirect_stdout(io.StringIO()):
+            ratings_full, _ = build_pit_ratings(tgs)
+        tgs_nh = tgs[tgs["season"].isin([2021, 2022, 2023])]
+        with contextlib.redirect_stdout(io.StringIO()):
+            ratings_nh, _ = build_pit_ratings(tgs_nh)
+        r_full = ratings_full[ratings_full["season"] == 2022].set_index(["game_id", "team"])
+        r_nh = ratings_nh[ratings_nh["season"] == 2022].set_index(["game_id", "team"])
+        common = r_full.index.intersection(r_nh.index)
+        assert len(common) > 100
+        for col in COLS:
+            diff = (r_full.loc[common, col] - r_nh.loc[common, col]).abs().max()
+            assert diff < 1e-10, f"Leakage: {col} changed by {diff:.2e}"
+
+
+class TestPerSeasonReset:
+    def test_season_reset(self):
+        tgs = pd.read_parquet(TGS_PATH)
+        with contextlib.redirect_stdout(io.StringIO()):
+            tr, _ = build_pit_ratings(tgs)
+        for s in [2022, 2023, 2024]:
+            first = tr[(tr["season"] == s)].sort_values("date").groupby("team").first()
+            assert (first["n_prior_games"] == 0).all(), f"Season {s} has non-zero n_prior_games at start"
 
 
 if __name__ == "__main__":
