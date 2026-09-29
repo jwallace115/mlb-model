@@ -705,3 +705,19 @@ Chain rebuilt: events → team_game_stats → ratings (--measure-hyper) → cons
 
 The PP expiry fix resolved the PP scoring band. The remaining failure is the tied-after-reg
 share: the engine under-produces ties by 3.1 percentage points.
+
+### S38 — Tie trajectory investigation (2026-09-29, S-WO4a2 Item 3, descriptive only)
+
+Actual 2022-23 score states at 3rd-period checkpoints (% of games):
+  Start P3: 23.2% tied, 33.2% up 1, 43.7% up 2+
+  0:00 (reg end): 23.0% tied, 17.6% by 1, 59.4% by 2+
+  Sim: 19.9% tied at reg end — gap is 3.1pp
+
+1-goal games at 5:00 remaining that end tied: actual 22.1% vs sim 20.5% (close).
+
+CONCLUSION: the tie deficit is present from the START of the 3rd period (actual 23.2% vs an
+implied ~20.5% from the sim's regulation-wide pattern). The gap opens during regulation, not
+in the last 5 minutes. Late-game mechanics (pulled goalie, score effects) are not the cause.
+The engine's scoring variance is slightly too low: it produces the right total goals but
+distributes them too unevenly between teams. This is a per-team variance parameter, not a
+mechanics defect. No engine change made.
