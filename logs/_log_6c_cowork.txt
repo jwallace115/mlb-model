@@ -1,0 +1,19 @@
+
+## 2026-09-29T08:00Z  cowork (verification of 6C — D199; order 6D)
+
+### RETURNED
+- eng/6c @ db2de2582: D194 append, D195-D198, fit_6c. K1 rows: plays 125.88, drives 22.825, pts/team 20.834,
+  punts 8.76, FG att 3.80; header 5978be457 (clean). Suite 13 red (from D198).
+- engine diff: punt landing table (engine.py ~1806) with a fallback that sets landings deeper than the receiving 20 to
+  the 20; half-distance rule correct; _apply_timeouts fires at every snap with Q1->Q2, Q3->Q4 and >2:00 -> 121-180.
+
+### MEANS
+- The punt fix is real (own-1/2 starts 0.199, safeties 0.031). The whole-game timeout change is an unmeasured proxy
+  and is the likely source of the new late-game reds; reversed in 6D. The kneel fix is still owed.
+- pts/team has fallen three orders running (21.55 -> 21.28 -> 20.83) with no explanation.
+
+### NOT DONE
+- Merge. Measured whole-game timeouts, kneel decision fix, points split — order 6D (time-box order 2 of 3).
+
+### UNVERIFIED
+- Timeouts per game on fit_6c (not reported). The Mac suite values per red.
