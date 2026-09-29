@@ -3491,3 +3491,14 @@ real. test_dead_clock_runoff fails because it now perturbs an ap_all fallback ro
 `_apply_timeouts` (engine.py:1404-1406): fires at every snap (was Q2/Q4 clock <= 300 only).
 Q mapping (engine.py:1411-1412): Q1→2, Q3→4 (table only has Q2/Q4). sec_bucket caps at "121-180"
 for clock > 120, giving early-quarter snaps the lowest-rate bucket.
+
+### D197 — 6C Item 2: kneel timing diagnosis (2026-09-29)
+
+Sim final-kneel clock 6.7 s vs real 22.1 s (D190). The kneel decision table (kneel_decision.parquet,
+engine.py:1583-1618 via kneel_lookup) determines WHEN the sim starts kneeling; the clock runoff table
+determines HOW LONG each kneel takes. The gap is in WHEN: the sim starts the kneel sequence with
+~7 s left instead of ~22 s. This is because the sim's kneel-decision probability at 20-40 s is too
+low — it keeps playing instead of kneeling out. The measured kneel table's per-snap elapsed is
+correct (non-final 29.8 vs real 32.4); the issue is the DECISION, not the execution. The late-game
+reds (OT structure, tied FG, timeout/kneel) depend on this timing. Fix deferred to kneel_decision
+table audit (not done in this commit).
