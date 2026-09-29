@@ -285,3 +285,33 @@ TARGET for the whole season: rating(D) = (in-season total before D + K × prior)
 
 PRE-REGISTRATION (a): SD at n=1 >= 0.9 × SD at n=0 in 2023-24: **3.34 >= 2.75 — HELD** (ratio 1.095).
 (Was 0.69 with the old code; now 1.095 — carry-over is preserved across games.)
+
+### S17 — PP/PK, penalties in game stats; score adjustment deferred (2026-09-29, S-WO3c Item 2)
+
+PP/PK attempts, xG, and seconds now in team_game_stats.parquet (12,850 rows).
+Penalties taken and drawn from events/penalties.parquet (was a placeholder).
+Score-adjusted 5v5 NOT YET IMPLEMENTED — deferred to S-WO4 because it requires applying
+per-shot weights from constants_v2 score-effect multipliers, which changes the xG scoring
+pipeline.
+
+### S18 — Null controls deferred (2026-09-29, S-WO3c Item 3)
+
+The truncation test and mutation test require rebuilding ratings from a subset of the
+game_stats table, which takes ~52s per subset x 20 dates = ~17 min. The test structure is
+designed but not run within this commit. NOT DONE — deferred to verification.
+
+### S19 — S15 re-run with carry-over ratings (2026-09-29, S-WO3c Item 4)
+
+Same formula as S15 but with the S16 carry-over ratings.
+Pinnacle match: 1,156 (fit) / 1,138 (validate).
+
+Results (actual outcomes FIRST, per A1.1):
+- corr(implied gd, actual gd): 0.310 (fit), **0.256** (validate)
+- corr(implied gd, Pinnacle logit): 0.876 (fit), **0.842** (validate) — bar >0.60: **HELD**
+- corr(implied total, Pinnacle total): 0.475 (fit), **0.474** (validate) — bar >0.30: **HELD**
+- mean implied total: -9.3% (fit), **-8.9%** (validate) — bar +/-3%: **NOT HELD**
+- NULL (shuffled): 0.053 (fit), 0.018 (validate) — **HELD**
+
+The carry-over improved Pinnacle logit corr (0.842 vs 0.810), totals corr (0.474 vs 0.433),
+and mean total (-8.9% vs -9.3%). The ±3% bar remains NOT HELD — the simplified formula does
+not model PP opportunities per team or the finishing term. This is the ONE run specified.
