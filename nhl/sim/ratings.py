@@ -93,13 +93,11 @@ def build_game_stats_vectorised(games_df, shots_all, state_all, penalties_all, m
     """Vectorised: group shots/state by game_id + strength, then pivot to per-team rows."""
     t0 = time.time()
 
-    # Score non-empty-net shots
-    non_en = shots_all[~shots_all["empty_net"]].copy()
-    non_en["xg"] = score_xg(non_en, model)
-    shots_all = shots_all.merge(
-        non_en[["game_id", "period", "seconds", "shooting_team", "xg"]].drop_duplicates(),
-        on=["game_id", "period", "seconds", "shooting_team"], how="left")
-    shots_all["xg"] = shots_all["xg"].fillna(0)
+    # Score non-empty-net shots (row-wise, no merge — avoids double-counting rebounds)
+    en = shots_all["empty_net"].astype(bool)
+    shots_all = shots_all.copy()
+    shots_all["xg"] = 0.0
+    shots_all.loc[~en, "xg"] = score_xg(shots_all.loc[~en], model)
 
     # Map game_id to home/away teams
     gmap = games_df.set_index("game_id")[["home", "away", "date", "season"]].to_dict("index")

@@ -235,5 +235,37 @@ class TestPerSeasonReset:
             assert (first["n_prior_games"] == 0).all(), f"Season {s} has non-zero n_prior_games at start"
 
 
+class TestEventCounts:
+    """team_game_stats attempt counts must exactly match the event tables."""
+
+    def test_attempt_counts_match(self):
+        """tgs attempt counts must exactly match the event tables (restricted to tgs games)."""
+        EVENTS_DIR = ROOT / "nhl" / "data" / "sim" / "events"
+        ALL = [2021, 2022, 2023, 2024, 2025]
+        EVEN = ["5v5"]
+        PP = ["5v4", "5v3", "4v3"]
+        tgs = pd.read_parquet(TGS_PATH)
+
+        for s in ALL:
+            shots = pd.read_parquet(EVENTS_DIR / f"season={s}" / "shots.parquet")
+            # Restrict to games that appear in tgs (handles incomplete seasons)
+            tgs_games = set(tgs[tgs["season"] == s]["game_id"].unique())
+            shots = shots[shots["game_id"].isin(tgs_games)]
+
+            ev = shots[shots["strength"].isin(EVEN)]
+            pp = shots[shots["strength"].isin(PP)]
+            s_tgs = tgs[tgs["season"] == s]
+
+            actual_ev_att = int(s_tgs["ev_att_for"].sum())
+            actual_ev_goals = int(s_tgs["ev_goals_for"].sum())
+            actual_pp_att = int(s_tgs["pp_att_for"].sum())
+            assert actual_ev_att == len(ev), (
+                f"Season {s}: ev_att_for sum={actual_ev_att} vs event table={len(ev)}")
+            assert actual_ev_goals == int(ev["is_goal"].sum()), (
+                f"Season {s}: ev_goals_for sum={actual_ev_goals} vs event table={int(ev['is_goal'].sum())}")
+            assert actual_pp_att == len(pp), (
+                f"Season {s}: pp_att_for sum={actual_pp_att} vs event table={len(pp)}")
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

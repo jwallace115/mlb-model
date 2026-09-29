@@ -371,3 +371,17 @@ version is kept. If the adjustment is built in S-WO3f and does not improve r, th
 unadjusted version remains the rated one.
 
 23 tests pass, 0 skipped (truncation test covers the new columns).
+
+### S25 — xG double-count fix, constants_v5 from committed generator (2026-09-29, S-WO3f Item 1)
+
+**Bug fixed:** build_game_stats merged xG on (game, period, second, team), double-counting
+rebounds that share a timestamp. Replaced with row-wise scoring (no merge). Before fix:
+2021 ev_att 89,990 vs truth 89,212 (+0.9%). After fix: exact match on all 5 seasons.
+
+**constants_v5** from committed generator `nhl/sim/build_constants_v5.py`.
+v3 and v4 SUPERSEDED (no generator; v4 double-counted).
+
+NULL CONTROLS:
+- (a) 5v5 numerator = 178,012 (matches v2 exactly).
+- (b) Every pooled numerator = home + away (exact).
+- (c) Byte-identical on second run.
