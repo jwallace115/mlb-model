@@ -3976,3 +3976,22 @@ Cowork's sim-only pilot scoring, all 174 two-way opinions, is a pilot and never 
 
 Next: FWD1c (revisions per reader and pilot flag; no_view at the clipped book price; a week-4 dry run), then the
 merge before the TNF run (23:30Z, 10-01).
+
+### D219 — FWD1c Item 0: revisions per reader (2026-09-29)
+
+log_ai_opinions.py:246-270 `prior_revisions(d, reader_model, pilot)`: a new file's revision
+counts only earlier files with the SAME reader_model AND the SAME pilot flag. An entry with
+no reader_model key counts as "legacy" (matches nothing new). freeze() passes reader_model
+and pilot to prior_revisions (line 281).
+
+The pre-registered rule "only revision 0 is scored" now reads: revision 0 per reader and
+pilot flag. Scoring is unchanged (still filters revision == 0, line 404).
+
+Module docstring updated (line 21): "Revision is counted per reader_model and pilot flag
+(D219, 2026-09-29)."
+
+Tests (nfl/pipeline/tests/test_log_ai_opinions_fwd1c.py):
+(a) Reader A freezes a line, then reader B freezes it -> B's row is revision 0.
+(b) Reader B freezes it again -> revision 1.
+(c) Pilot of reader B, then live of reader B -> live row is revision 0.
+On 54efc5878: (a) FAIL, (c) FAIL (live got revision 1).
