@@ -3842,3 +3842,27 @@ Tested: `--as-of` without `--pilot` produces "HALT: --as-of requires --pilot".
 **This is a PILOT: it is never pooled, and it is not evidence for or against P1/P2.**
 The pilot will run once the game-matching issue in run_week.py is resolved (a separate
 fix outside the freeze; the engine is not modified).
+
+### D213 — Cowork verification of FWD1: pre-registration stands; harness not merged (crash, market collisions, no window); pilot blocker was the week number (2026-09-29)
+
+FWD1 (eng/fwd1 @ 4c9802c93) is not merged.
+
+What stands:
+- D210 stands as written.
+- D211 is right that run_week prints the anchored margin. The committed week-2 anchoring log converges on 15 of 15
+  games.
+
+Defects, measured:
+- The anchor sidecar reads columns that do not exist (game_id, iteration, spread, total_line), so it raises a KeyError
+  on the first live run. Its other fields default silently.
+- The fill ignores the market and picks_log.side. On the week-2 replay, 5 of 160 matches take another market's
+  probability.
+- The tests copy the fill logic instead of calling the harness.
+- The sheet has no kick window, so a Thursday run freezes the whole week at Thursday prices as revision 0.
+- In a pilot, props are not capped at as-of.
+
+D212's blocker is wrong. The Sep 27–28 slate is nflverse week 3, not week 4, and the harness also never passed
+--pilot/--as-of to the sheet. get_lines_from_history returns all 15 games at 2026-09-27T16:30Z.
+
+The project's week label was off by one from 09-27 on. nflverse weeks are canonical from now on, and the week-3 files
+in week=2026_04 are moved by FWD1b. FWD1b must be verified before the week-4 TNF kick (2026-10-02 00:15Z).
