@@ -144,3 +144,25 @@ penalty formula gives 451.8 (outside any band). New data: first-span score = 0 o
 of games, penalty rate = 3.77 (within band).
 
 sha256: 188c0dec7022a39ecca645193c6a5f6ccfa8c8537ad8c05a3fb2ebff9c51c74b.
+
+### S9 — Rush feature, xG v2, SOG mismatches (2026-09-29, S-WO2 Item 3)
+
+**Rush feature:** detects zone transitions from PBP zoneCode. Rate: 9.4% of attempts.
+Rush goal rate 10.2% vs non-rush 6.9% (1.48x multiplier).
+
+**xG v2** (same model, now with real rush instead of all-False):
+- Calibration slope 0.9-1.1 on 2023-24: **0.949 — HELD**
+- sum(xG)/goals within +/-5% on 2023-24: **1.003 — HELD**
+- AUC above 0.72: **0.7462 OOS — HELD**
+- NULL CONTROL: shuffled AUC 0.50+/-0.01: **0.5057 — HELD**
+- Rush coefficient positive: **+0.416 — HELD**
+
+All 5 pre-registrations held. xg_v1 kept, marked superseded.
+sha256: 3ae7c91e4d5c2a14e72791038ac7315ca68590651ae49b6a76a28e07ded66250.
+
+**SOG mismatches:** 14-52 games per season (1.1-4.4%). ALL mismatches are exactly +1
+(table > boxscore) on one side. The PBP categorizes penalty shots as shot-on-goal or
+goal; the NHL boxscore SOG excludes them. Cannot be reconciled from available data.
+
+**Goals/xG by season:** 2021=0.981, 2022=1.018, 2023=1.003, 2024=1.012, 2025=1.068.
+2025-26 drift (1.068) is the largest — reported only, nothing refitted.

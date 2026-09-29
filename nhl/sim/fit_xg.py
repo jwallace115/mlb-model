@@ -17,7 +17,7 @@ from sklearn.metrics import roc_auc_score, log_loss
 
 ROOT = Path(__file__).resolve().parents[2]
 EVENTS_DIR = ROOT / "nhl" / "data" / "sim" / "events"
-OUT_PATH = ROOT / "nhl" / "data" / "sim" / "xg_v1.json"
+OUT_PATH = ROOT / "nhl" / "data" / "sim" / "xg_v2.json"
 
 FIT_SEASONS = [2021, 2022]  # 2021-22 + 2022-23
 VALIDATE_SEASON = 2023      # 2023-24
