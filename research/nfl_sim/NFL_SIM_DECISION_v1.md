@@ -3627,3 +3627,13 @@ What moved: START MIX improved (fewer excess drives: +2.09 vs +2.99, -0.90) beca
 the punt fallback fix (D202) removed the own-1 pile-up. EFFICIENCY also improved
 (-3.48 vs -4.28, +0.80) — the sim's own-half ppd rose from ~1.56 to 1.67. The
 total gap barely changed (-1.81 vs -1.69) because the improvements roughly cancel.
+
+### D204 — Cowork verification of 6D: measured timeouts and kneel timing accepted; points still short (2026-09-29)
+
+6D (eng/6d @ b480e0c25) accepted as the base of the final time-boxed order; not merged. D200's whole-game timeout
+table replaces the D196 proxy (5.24 timeouts a game vs 7.70 real; the remainder follows non-scrimmage events). D201
+found that 6C's proxy caused the late kneels; Q4 first kneel 56.5 s vs 55.5 real. K1 (text only; rows file missing;
+header `-dirty` despite D203): plays 126.6, drives 22.9, pts/team 21.04 (gap -1.35, first rise in four orders),
+safeties 0.031, 8 reds (6 late-game). Points gap on the sample -1.81 = START MIX +2.09 + EFFICIENCY -3.48 +
+interaction -0.42; first downs by penalty 1.27 vs 1.73 a team is the largest unaddressed efficiency input. Next: 6E,
+the last order before the freeze.
