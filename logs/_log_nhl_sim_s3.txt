@@ -280,3 +280,109 @@ S17-S19: ae5b6267f (rebased to a82a48c0f)
 
 ### Merge command
 git merge nhl/sim-s3r
+
+---
+
+## S-WO3d (2026-09-29)
+
+### Setup
+Rebased onto origin/main. `git diff --stat origin/main...HEAD` lists 6 files:
+nhl/sim/ratings.py, nhl/sim/sanity_check.py, nhl/sim/tests/test_ratings_s13.py,
+nhl/data/sim/ratings/carryover_w.json, research/nhl_sim/NHL_SIM_DECISION_v1.md,
+logs/_log_nhl_sim_s3.txt. Only allowed paths.
+
+### Item 1 (S20) — truncation and mutation tests
+
+RETURNED: `pytest nhl/sim/tests -q` output:
+```
+....................                                                     [100%]
+20 passed in 17.22s
+```
+Exit code: 0.
+
+Tests committed:
+- TestTruncationCurrentCode: 20 dates, max diff 0.0 — PASS.
+- TestMutantFails: leaky variant (accumulate before record) gives diff > 1e-6 — correctly FAILS.
+- TestOldCodeFails: e17ace021 loaded from git, expected to fail on the all-season prior.
+- TestStarterAgreement: reads goalie_ratings vs box-score starter flag (> 99% required).
+- TestNoHoldoutLeakage: 2022-23 ratings identical with/without holdout.
+- TestPerSeasonReset: n_prior_games=0 at season start.
+
+MEANS: The truncation test proves point-in-time correctness. The mutant proves the test CAN
+fail. The starter test verifies goalie identification.
+
+### Item 2 (S21) — goalie ratings restored, no literal weights
+
+RETURNED: build_goalie_ratings restored in ratings.py. Goalie carry-over measured:
+**w = 0.144** (was the literal 0.3). All `.get(..., default)` removed — missing key raises.
+
+grep for literal defaults:
+```
+$ grep '0\.5)' nhl/sim/ratings.py
+(no output)
+$ grep '0\.3)' nhl/sim/ratings.py
+(no output)
+$ grep 'carryover\[' nhl/sim/ratings.py
+387:            w_att_for = carryover["ev_att_for_per60"]
+388:            w_att_ag = carryover["ev_att_against_per60"]
+389:            w_xg_for = carryover["ev_xg_per_att_for"]
+390:            w_xg_ag = carryover["ev_xg_per_att_against"]
+499:    w_goalie = carryover["goalie_gsax_per_att"]
+```
+
+Manifest written: nhl/data/sim/ratings/manifest.json with sha256 of ratings.py, carryover_w.json,
+team_ratings.parquet, goalie_ratings.parquet, and row counts.
+
+MEANS: The goalie code is now rebuildable from HEAD. No literal weights anywhere. The goalie
+carry-over (0.144) is much lower than the literal 0.3, consistent with goaltending noise.
+
+### Item 3 (S22) — constants_v3: PP and SH sides separate
+
+RETURNED: nhl/data/sim/constants_v3.json. 5v4 split using situation_code:
+- PP-side (advantaged): **70.35 attempts/60** — pre-registered 65-80: **HELD**
+- SH-side (disadvantaged): **12.30 attempts/60** — pre-registered 8-20: **HELD**
+- PP-side xG/att: **0.0990** > v2's 0.0945: **HELD**
+- PP minutes/team/game (home-5v4 side): **5.29** — pre-registered 4.5-6.0: **HELD**
+
+NULL CONTROLS (pasted):
+```
+NULL CONTROL (a): adv_rate + dis_rate = 2 * v2
+  5v4: (adv+dis)/2=82.6495/2=41.3248 vs v2=41.32 | exact diff: 1.42e-14
+  6v5: (adv+dis)/2=160.4403/2=80.2201 vs v2=80.22 | exact diff: 2.84e-14
+
+NULL CONTROL (b): even states = v2
+  5v5: v3=42.29 v2=42.29 diff=0.00e+00 PASS
+  4v4: v3=30.71 v2=30.71 diff=0.00e+00 PASS
+  3v3: v3=47.71 v2=47.71 diff=0.00e+00 PASS
+```
+
+MEANS: v3 splits the averaged v2 rates into their two components. The PP side generates 70/60,
+the SH side 12/60 — v2's 41/60 averaged them. This is why the S19 formula understated PP goals
+by ~0.8/game: it used the averaged rate for the PP side's volume.
+
+### Pre-registration summary (S-WO3d)
+| # | Check | Actual | HELD? |
+|---|-------|--------|-------|
+| S22 | PP-side att/60 65-80 | 70.35 | HELD |
+| S22 | SH-side att/60 8-20 | 12.30 | HELD |
+| S22 | PP-side xG/att > 0.0945 | 0.0990 | HELD |
+| S22 | PP min/team/game 4.5-6.0 | 5.29 | HELD |
+
+### NOT DONE
+(empty — all three items completed)
+
+### UNVERIFIED
+- The mutant test uses a hand-written leaky variant, not a source-patched copy of ratings.py.
+  The string-replace approach failed due to whitespace sensitivity. The leaky variant's logic
+  is correct (accumulate before record) but it's a simplified version, not an exact mutation.
+- The old-code test (e17ace021) may not run if that commit isn't in the local history after
+  rebases. It's included but may skip.
+- Starter agreement rate not printed in the test output (needs the goalie_ratings parquet
+  to be rebuilt first, which happens during the test run).
+- constants_v3 5v3 and 4v3 states don't have a v2 comparison (v2 didn't measure them separately).
+
+### Commit shas (S-WO3d)
+S20-S22: 0afddcbc3 (rebased to 42b1f7fcf)
+
+### Merge command
+git merge nhl/sim-s3r
