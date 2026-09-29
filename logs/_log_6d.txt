@@ -1,0 +1,75 @@
+## 2026-09-29T08:00Z — 2026-09-29T13:39Z  claude-code  work order 6D
+
+### RETURNED
+
+- Gates: `git rev-parse --short=9 origin/eng/6c` = db2de2582 (PASS).
+  `git show origin/main:...phase6c_verification...| grep -c "^### D199"` = 1 (PASS).
+- Branch eng/6d created from origin/eng/6c in worktree /tmp/eng-6d.
+
+**D199 (verbatim):** appended to NFL_SIM_DECISION_v1.md. Committed b6826abaa, pushed.
+
+**Item 0 (D200) — whole-game timeout table:**
+- RETURNED: tables.py `_snap_frame` added (all-quarter scrimmage frame); `_late_frame` refactored
+  to call it. TO_SEC_BINS expanded to 7 buckets [0-30..601-900]. `build_timeout_policy` uses
+  `quarter_seconds_remaining` over Q1-Q5. timeout_policy.parquet: 532 rows (was 144).
+  Engine: `_to_sec_bucket` updated for 7 buckets; Q1->Q2/Q3->Q4 proxy REMOVED (engine.py:1401-1412);
+  kneel-path TO lookup uses real quarter (q_i = min(int(qtr[i]), 5)).
+- MEANS: sim TO/game 5.24 (real-via-next-snap 6.27, total real 7.70). Pre-reg 6.5-8.5: FAILED.
+  The sim's per-snap mechanism captures 84% of real TOs; 16% follow punts/FGs/no-plays (not modelled).
+  Q1/Q3 rows printed (134 / 122 rows). go_rate and fg_att nulls PASS.
+
+**Item 1 (D201) — kneel decision fix:**
+- RETURNED: KNEEL_SEC_BINS split 0-40 into [0-15, 16-40] (tables.py:1427-1428). `_kneel_sec_bucket`
+  updated (engine.py:307-312). kneel_decision.parquet rebuilt: 197 rows (was 171).
+- MEANS: Q4 first-kneel 56.5s (real 55.5, diff 1.0: HELD). Q4 final-kneel 27.3s (real 29.0,
+  diff 1.7). Q2 first-kneel 9.6s (real 10.6, diff 1.0 — was 16.7 before fix). The root cause
+  of D190/D197's 6.7s final-kneel was the D196 timeout proxy (fixed by D200), not the kneel table.
+  The kneel table's Q2 over-kneeling was a separate issue fixed by finer buckets.
+  Keys: (qtr, sec_b, def_to, down, situation). Fallback: -> (q,sb,dt,"any",sit) -> (q,sb,"any","any",sit) -> 0.0.
+
+**Item 2 (D202) — punt fallback + test fixes:**
+- RETURNED: engine.py:1826-1828: punt fallback snaps to nearest landing-table bucket (was: touchback
+  at 80.0 for recv_yl > 80). Old fallback fires only if landing table is entirely absent.
+  test_dead_tables_5a5: clock test excludes ap_all rows; punt test renamed to test_dead_punt_landing,
+  perturbs punt_landing (the live table).
+- MEANS: all LOS values now use the landing table; the old punt_net is dead code for any engine
+  with punt_landing.parquet present.
+
+**Suite after items 0-2:** 1 red (test_kneel_uses_measured_table, pre-existing from 6A: 19.7 vs 25.9),
+14 passed. Committed a0895aec4, pushed.
+
+**Item 3 (D203) — fit_6d:**
+- RETURNED: fit_6d, 1,087 games (1,079 converged, 1 unconverged in 2022), N=5000, 162 min.
+  Cal committed 6da3aa90e (header a0895aec4, clean) before K1.
+  K1: plays 126.6 (HELD, +0.8 from real). safeties 0.031 (HELD). pts/team 21.04 (+0.21 from 6C: HELD).
+  go_rate +0.006 PASS. off_pen +0.006 PASS. def_pen +0.004 PASS. fg_att -0.110 PASS.
+  fd_pen -0.462 FAIL (expected). tied_expiry 0.118 FAIL (expected).
+  K4: 72,978 rows saved.
+  Suite: 8 failed, 226 passed. Exit code 1.
+  Reds: fd_pen (-0.462), tied_drives, ot_structure, late_half_snaps, timeouts_kneels,
+  tied_offence_kicks, kneels_and_late_snaps, kneel_measured_table (19.7 vs 25.9).
+- MEANS: pts/team rose 20.83 -> 21.04 (+0.21). Still below real 22.39 (gap -1.35).
+  The 8 reds (down from 13 on 6C) are all late-game timing. Pre-reg allowed only fd_pen
+  and tied_expiry: FAILED (6 unexpected reds).
+
+**Points-per-drive decomposition:**
+  fit_6d (sample N=100): gap -1.81 = START MIX +2.09 + EFFICIENCY -3.48 + interaction -0.42
+  fit_6a (D185):         gap -1.69 = START MIX +2.99 + EFFICIENCY -4.28 + interaction -0.40
+  What moved: START MIX improved -0.90 (fewer excess drives from punt fix). EFFICIENCY
+  improved +0.80 (own-half ppd rose 1.56 -> 1.67). Total gap barely changed.
+
+### NOT DONE
+- W2/W3 boards with team_volume: run_week.py requires live-week schedule/lines data not
+  available in the worktree. Board generation is the live pipeline, not the refit path.
+- K1 rows parquet (phase6d_k1_after_rows.parquet): K1 script crashed during report-writing
+  phase after completing all 1,087 sims (likely OOM when processing the combined DataFrame).
+  The K1 text report was written successfully.
+- fit_6c points-per-drive split: cannot run the 6c engine from this branch. Used D185's
+  fit_6a split as the comparison baseline.
+
+### UNVERIFIED
+- Whether the 8 reds are all pre-existing from 6C or whether any are new regressions.
+  The reds are a subset of the 13 from 6C (5 resolved: dead_clock_runoff, dead_punt_net,
+  overall_tie_rate, ez_share_matches, timeout_policy_live), but the values may have shifted.
+- Whether the fit_6d census (fit_census.parquet) matches the K1 exactly (same 1,087 games).
+- The K4 grading accuracy (72,978 rows saved but not inspected).
