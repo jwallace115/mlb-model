@@ -3709,3 +3709,36 @@ Pre-reg at least 4/6 reds PASS: **FAILED** (0/6).
 
 All 6 reds relate to late-game timeout/kneel timing. The sim's 5.54 TOs/game vs 7.70 real
 means it under-stops the clock, which cascades into every late-game metric.
+
+### D208 — 6E Item 3: fit_6e; pts/team 21.06; 11 reds; FREEZE_v1 (2026-09-29)
+
+Fit: `fit_6e`, 1,087 games (all converged), N=5000, 86 min. Cal committed before K1
+(header `6f761ae73`, clean — the `-dirty` in the K1 text is from symlinked output files,
+not engine changes; engine fingerprint `156cd057a3b39e48` matches the committed code).
+
+**K1:**
+- plays **126.4** (pre-reg 125.8 ± 1.5: **HELD**, +0.6)
+- drives **22.7** (pre-reg 22.0-22.6: **borderline**, +0.1 over ceiling)
+- pts/team **21.06** (pre-reg 21.6-22.4: **FAILED**, gap -1.33)
+- safeties **0.030** (pre-reg 0.028-0.040: **HELD**)
+- fd_pen **1.740 PASS** (diff +0.012, tol 0.3) — the D206 fix resolved the largest metric gap
+- go_rate +0.0065 **PASS**
+- off_pen -0.006 **PASS**
+- def_pen -0.001 **PASS**
+- fg_att -0.157 **FAIL** (tol 0.15, diff 0.007 over — borderline)
+- tied_expiry 0.099 **FAIL** (expected)
+
+Rows parquet: 1,087 games, 78 KB (D205 fix verified).
+K4: 72,978 rows. W2 board with team_volume (32 rows) from archived week.
+
+**Suite: 11 failed, 224 passed. Exit code 1.**
+Reds: overall_tie_rate, ot_structure, timeout_policy_live, late_half_snaps,
+timeouts_kneels, tied_offence_kicks, kneels_and_late_snaps, tied_drives,
+player_off_hash (will re-record), ez_share_matches, kneel_measured_table.
+
+**FREEZE_v1.json** written: engine fingerprint `156cd057a3b39e48`, usage `3638769c89030de0`,
+fit `fit_6e`, 29 table hashes, cal hash, params hash, K1 lines, 11 reds.
+test_freeze_v1.py: 4 tests, all PASS.
+
+Whatever the result, the freeze is written. After this commit the engine does not change;
+any later change is FREEZE_v2 and restarts the forward count.
