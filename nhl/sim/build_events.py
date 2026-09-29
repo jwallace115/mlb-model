@@ -260,21 +260,60 @@ def process_game(game_id, data):
 
             sc = p.get("situationCode", "1551")
             s_code = str(sc).zfill(4)
-
-            # Game-seconds for start/end
             period_base = (per_num - 1) * 1200
-            state_spans.append({
-                "game_id": game_id,
-                "period": per_num,
-                "start_sec": period_base + span_start,
-                "end_sec": period_base + span_end,
-                "away_goalie": int(s_code[0]),
-                "away_skaters": int(s_code[1]),
-                "home_skaters": int(s_code[2]),
-                "home_goalie": int(s_code[3]),
-                "score_diff_home": running_home - running_away,
-                "duration": duration,
-            })
+
+            # PP expiry fix: if this span has a skater imbalance and the next play
+            # shows fewer imbalanced skaters, check if a penalty expires within the span.
+            # If so, split the span at the expiry time.
+            home_sk = int(s_code[2])
+            away_sk = int(s_code[1])
+            split_at = None
+            if idx + 1 < len(per_plays) and home_sk != away_sk:
+                next_sc = str(per_plays[idx + 1].get("situationCode", "1551")).zfill(4)
+                next_home_sk = int(next_sc[2])
+                next_away_sk = int(next_sc[1])
+                # Imbalance reduced or removed?
+                if abs(next_home_sk - next_away_sk) < abs(home_sk - away_sk):
+                    # Find the penalty that expired within this span
+                    for pen in penalties:
+                        pen_game_sec = pen["seconds"]
+                        pen_dur = pen["minutes"] * 60  # penalty duration in seconds
+                        expiry = pen_game_sec + pen_dur
+                        # Expiry in game-seconds; span is [period_base+span_start, period_base+span_end)
+                        exp_in_span = period_base + span_start < expiry <= period_base + span_end
+                        if exp_in_span:
+                            split_at = expiry - period_base  # period-relative
+                            break
+
+            if split_at is not None and span_start < split_at < span_end:
+                # First part: original skater counts
+                state_spans.append({
+                    "game_id": game_id, "period": per_num,
+                    "start_sec": period_base + span_start, "end_sec": period_base + split_at,
+                    "away_goalie": int(s_code[0]), "away_skaters": away_sk,
+                    "home_skaters": home_sk, "home_goalie": int(s_code[3]),
+                    "score_diff_home": running_home - running_away,
+                    "duration": split_at - span_start,
+                })
+                # Second part: next play's skater counts (penalty expired)
+                next_sc_str = str(per_plays[idx + 1].get("situationCode", "1551")).zfill(4)
+                state_spans.append({
+                    "game_id": game_id, "period": per_num,
+                    "start_sec": period_base + split_at, "end_sec": period_base + span_end,
+                    "away_goalie": int(next_sc_str[0]), "away_skaters": int(next_sc_str[1]),
+                    "home_skaters": int(next_sc_str[2]), "home_goalie": int(next_sc_str[3]),
+                    "score_diff_home": running_home - running_away,
+                    "duration": span_end - split_at,
+                })
+            else:
+                state_spans.append({
+                    "game_id": game_id, "period": per_num,
+                    "start_sec": period_base + span_start, "end_sec": period_base + span_end,
+                    "away_goalie": int(s_code[0]), "away_skaters": away_sk,
+                    "home_skaters": home_sk, "home_goalie": int(s_code[3]),
+                    "score_diff_home": running_home - running_away,
+                    "duration": duration,
+                })
 
             # Update score if this play is a goal (AFTER recording the span)
             if p.get("typeDescKey") == "goal":

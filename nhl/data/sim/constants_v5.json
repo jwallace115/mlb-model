@@ -7,9 +7,9 @@
   "n_games": 2624,
   "constants": {
     "attempt_rate_per_60_per_team_5v5": {
-      "value": 42.2894,
+      "value": 41.5078,
       "numerator": 178012,
-      "denominator": 7576874,
+      "denominator": 7719544,
       "units": "attempts / (seconds * 2) * 3600"
     },
     "goals_per_attempt_5v5": {
@@ -28,14 +28,14 @@
       "value": 0.997
     },
     "minutes_per_game_5v5": {
-      "value": 48.13,
-      "total_secs": 7576874,
+      "value": 49.03,
+      "total_secs": 7719544,
       "n_games": 2624
     },
     "attempt_rate_per_60_per_team_4v4": {
-      "value": 30.714,
+      "value": 30.3967,
       "numerator": 2568,
-      "denominator": 150498,
+      "denominator": 152069,
       "units": "attempts / (seconds * 2) * 3600"
     },
     "goals_per_attempt_4v4": {
@@ -54,8 +54,8 @@
       "value": 1.1594
     },
     "minutes_per_game_4v4": {
-      "value": 0.96,
-      "total_secs": 150498,
+      "value": 0.97,
+      "total_secs": 152069,
       "n_games": 2624
     },
     "attempt_rate_per_60_per_team_3v3": {
@@ -85,9 +85,9 @@
       "n_games": 2624
     },
     "attempt_rate_per_60_advantaged_5v4": {
-      "value": 68.9902,
+      "value": 75.4932,
       "numerator": 30834,
-      "denominator": 1608959,
+      "denominator": 1470363,
       "home_part": 16293,
       "away_part": 14541,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
@@ -106,9 +106,9 @@
       "value": 0.9765
     },
     "attempt_rate_per_60_disadvantaged_5v4": {
-      "value": 12.6149,
+      "value": 13.8039,
       "numerator": 5638,
-      "denominator": 1608959,
+      "denominator": 1470363,
       "home_part": 2848,
       "away_part": 2790,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
@@ -127,14 +127,14 @@
       "value": 1.0209
     },
     "minutes_per_team_game_5v4": {
-      "value": 5.11,
-      "total_secs": 1608959,
+      "value": 4.67,
+      "total_secs": 1470363,
       "n_games": 2624
     },
     "attempt_rate_per_60_advantaged_5v3": {
-      "value": 119.9876,
+      "value": 139.1908,
       "numerator": 969,
-      "denominator": 29073,
+      "denominator": 25062,
       "home_part": 515,
       "away_part": 454,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
@@ -153,9 +153,9 @@
       "value": 1.3822
     },
     "attempt_rate_per_60_disadvantaged_5v3": {
-      "value": 3.2195,
+      "value": 3.7347,
       "numerator": 26,
-      "denominator": 29073,
+      "denominator": 25062,
       "home_part": 14,
       "away_part": 12,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
@@ -174,14 +174,14 @@
       "value": 0.5535
     },
     "minutes_per_team_game_5v3": {
-      "value": 0.09,
-      "total_secs": 29073,
+      "value": 0.08,
+      "total_secs": 25062,
       "n_games": 2624
     },
     "attempt_rate_per_60_advantaged_4v3": {
-      "value": 94.7959,
+      "value": 101.684,
       "numerator": 634,
-      "denominator": 24077,
+      "denominator": 22446,
       "home_part": 374,
       "away_part": 260,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
@@ -200,9 +200,9 @@
       "value": 1.2483
     },
     "attempt_rate_per_60_disadvantaged_4v3": {
-      "value": 5.8313,
+      "value": 6.255,
       "numerator": 39,
-      "denominator": 24077,
+      "denominator": 22446,
       "home_part": 19,
       "away_part": 20,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
@@ -221,14 +221,14 @@
       "value": 1.1894
     },
     "minutes_per_team_game_4v3": {
-      "value": 0.08,
-      "total_secs": 24077,
+      "value": 0.07,
+      "total_secs": 22446,
       "n_games": 2624
     },
     "attempt_rate_per_60_advantaged_6v5": {
-      "value": 118.5815,
+      "value": 117.8761,
       "numerator": 4007,
-      "denominator": 121648,
+      "denominator": 122376,
       "home_part": 2056,
       "away_part": 1951,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
@@ -247,9 +247,9 @@
       "value": 1.1448
     },
     "attempt_rate_per_60_disadvantaged_6v5": {
-      "value": 39.6258,
+      "value": 39.3901,
       "numerator": 1339,
-      "denominator": 121648,
+      "denominator": 122376,
       "home_part": 673,
       "away_part": 666,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
@@ -269,7 +269,7 @@
     },
     "minutes_per_team_game_6v5": {
       "value": 0.39,
-      "total_secs": 121648,
+      "total_secs": 122376,
       "n_games": 2624
     }
   }
