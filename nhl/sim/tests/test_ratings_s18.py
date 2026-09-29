@@ -14,7 +14,8 @@ from nhl.sim.ratings import build_pit_ratings, build_goalie_ratings, CARRYOVER_P
 
 TGS_PATH = ROOT / "nhl" / "data" / "sim" / "ratings" / "team_game_stats.parquet"
 BOX_DIR = ROOT / "nhl" / "cache"
-COLS = ["ev_att_for_per60", "ev_att_against_per60", "ev_xg_per_att_for", "ev_xg_per_att_against"]
+COLS = ["ev_att_for_per60", "ev_att_against_per60", "ev_xg_per_att_for", "ev_xg_per_att_against",
+        "pp_xg_for_per60", "pk_xg_against_per60", "penalties_taken_per60", "penalties_drawn_per60"]
 NUM_COLS_PATTERN = ("ev_", "pp_", "pk_", "pen")
 SEED = 20260929
 N_DATES = 20
@@ -32,6 +33,7 @@ ACCUM_BLOCK = (
     '            tc["pk_secs"] += row["pk_seconds"]\n'
     '            tc["pen_taken"] += row["penalties_taken"]\n'
     '            tc["pen_drawn"] += row["penalties_drawn"]\n'
+    '            tc["total_secs"] += row.get("total_seconds", 0)\n'
     '            tc["n"] += 1'
 )
 # The line AFTER which the block currently sits (used to detect the append)

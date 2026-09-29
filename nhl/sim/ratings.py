@@ -117,17 +117,40 @@ def build_game_stats_vectorised(games_df, shots_all, state_all, penalties_all, m
         return team, opp
 
     shots_all["sg"] = shots_all["strength"].map(STRENGTH_GROUPS).fillna("other")
-    # We need per-game, per-team (not per-role) stats. Build from groupby.
+
+    # Score adjustment for 5v5: weight by 1/score_effect_mult
+    constants = load_constants()
+    c2 = constants.get("constants", constants)
+    ev_all = shots_all[shots_all["strength"].isin(EVEN_STATES)].copy()
+    sd = ev_all["score_diff"].clip(-3, 3).astype(int)
+    p = ev_all["period"].clip(upper=3).astype(int)
+
+    # Build lookup dicts for score-effect multipliers
+    att_mult = {}
+    xg_mult = {}
+    for s in range(-3, 4):
+        for pr in range(1, 4):
+            k_att = f"score_effect_attempt_mult_sd{s}_p{pr}"
+            k_xg = f"score_effect_xg_mult_sd{s}_p{pr}"
+            att_mult[(s, pr)] = c2.get(k_att, {}).get("value", 1.0)
+            xg_mult[(s, pr)] = c2.get(k_xg, {}).get("value", 1.0)
+
+    ev_all["w_att"] = [1.0 / att_mult.get((s, p), 1.0) for s, p in zip(sd, p)]
+    ev_all["w_xg"] = [1.0 / xg_mult.get((s, p), 1.0) for s, p in zip(sd, p)]
+    ev_all["xg_adj"] = ev_all["w_att"] * ev_all["w_xg"] * ev_all["xg"]
+
     # Split into EV/PP/PK groups
-    ev_shots = shots_all[shots_all["strength"].isin(EVEN_STATES)]
+    ev_shots = ev_all  # already filtered to EVEN_STATES
     pp_shots = shots_all[shots_all["strength"].isin(PP_STATES)]
 
-    # Per game, per shooting_team role
+    # Per game, per shooting_team role (including adjusted)
     ev_for = ev_shots.groupby(["game_id", "shooting_team"]).agg(
-        ev_att_for=("is_goal", "count"), ev_xg_for=("xg", "sum"), ev_goals_for=("is_goal", "sum")
+        ev_att_for=("is_goal", "count"), ev_xg_for=("xg", "sum"), ev_goals_for=("is_goal", "sum"),
+        ev_att_for_adj=("w_att", "sum"), ev_xg_for_adj=("xg_adj", "sum"),
     ).reset_index()
     ev_against = ev_shots.groupby(["game_id", "shooting_team"]).agg(
-        ev_att_against=("is_goal", "count"), ev_xg_against=("xg", "sum"), ev_goals_against=("is_goal", "sum")
+        ev_att_against=("is_goal", "count"), ev_xg_against=("xg", "sum"), ev_goals_against=("is_goal", "sum"),
+        ev_att_against_adj=("w_att", "sum"), ev_xg_against_adj=("xg_adj", "sum"),
     ).reset_index()
     # For against: home's against = away's for
     ev_against["opp_role"] = ev_against["shooting_team"].map({"home": "away", "away": "home"})
@@ -139,6 +162,9 @@ def build_game_stats_vectorised(games_df, shots_all, state_all, penalties_all, m
         pk_att_against=("is_goal", "count"), pk_xg_against=("xg", "sum")
     ).reset_index()
     pp_against["opp_role"] = pp_against["shooting_team"].map({"home": "away", "away": "home"})
+
+    # Total seconds per game (all states)
+    total_secs_per_game = state_all.groupby("game_id")["duration"].sum().rename("total_seconds")
 
     # State seconds per game per strength from home's perspective
     ev_state = state_all[state_all["strength_home"].isin(EVEN_STATES)]
@@ -162,19 +188,24 @@ def build_game_stats_vectorised(games_df, shots_all, state_all, penalties_all, m
         for team, role in [(g["home"], "home"), (g["away"], "away")]:
             opp_role = "away" if role == "home" else "home"
 
-            # EV for
+            # EV for (including adjusted)
             ef = ev_for[(ev_for["game_id"] == gid) & (ev_for["shooting_team"] == role)]
             eat_for = int(ef["ev_att_for"].iloc[0]) if len(ef) else 0
             exg_for = float(ef["ev_xg_for"].iloc[0]) if len(ef) else 0.0
             egl_for = int(ef["ev_goals_for"].iloc[0]) if len(ef) else 0
+            eat_for_adj = float(ef["ev_att_for_adj"].iloc[0]) if len(ef) else 0.0
+            exg_for_adj = float(ef["ev_xg_for_adj"].iloc[0]) if len(ef) else 0.0
 
-            # EV against
+            # EV against (including adjusted)
             ea = ev_against[(ev_against["game_id"] == gid) & (ev_against["opp_role"] == role)]
             eat_ag = int(ea["ev_att_against"].iloc[0]) if len(ea) else 0
             exg_ag = float(ea["ev_xg_against"].iloc[0]) if len(ea) else 0.0
             egl_ag = int(ea["ev_goals_against"].iloc[0]) if len(ea) else 0
+            eat_ag_adj = float(ea["ev_att_against_adj"].iloc[0]) if len(ea) else 0.0
+            exg_ag_adj = float(ea["ev_xg_against_adj"].iloc[0]) if len(ea) else 0.0
 
             ev_s = float(ev_secs.get(gid, 0))
+            tot_s = float(total_secs_per_game.get(gid, 0))
 
             # PP for
             pf = pp_for[(pp_for["game_id"] == gid) & (pp_for["shooting_team"] == role)]
@@ -206,7 +237,9 @@ def build_game_stats_vectorised(games_df, shots_all, state_all, penalties_all, m
                 "ev_att_for": eat_for, "ev_att_against": eat_ag,
                 "ev_xg_for": exg_for, "ev_xg_against": exg_ag,
                 "ev_goals_for": egl_for, "ev_goals_against": egl_ag,
-                "ev_seconds": ev_s,
+                "ev_att_for_adj": eat_for_adj, "ev_att_against_adj": eat_ag_adj,
+                "ev_xg_for_adj": exg_for_adj, "ev_xg_against_adj": exg_ag_adj,
+                "ev_seconds": ev_s, "total_seconds": tot_s,
                 "pp_att_for": ppat, "pp_xg_for": ppxg, "pp_seconds": pp_s,
                 "pk_att_against": pkat, "pk_xg_against": pkxg, "pk_seconds": pk_s,
                 "penalties_taken": pens_taken, "penalties_drawn": pens_drawn,
@@ -315,7 +348,26 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
     K_att = compute_K(r_att, 82)
     K_xg = compute_K(r_xg, 82)
 
+    # PP/PK/penalty reliabilities
+    fit_data["pp_xg_per60"] = fit_data["pp_xg_for"] / fit_data["pp_seconds"].clip(1) * 3600
+    fit_data["pk_xg_per60"] = fit_data["pk_xg_against"] / fit_data["pk_seconds"].clip(1) * 3600
+    fit_data["pen_taken_per60"] = fit_data["penalties_taken"] / fit_data["total_seconds"].clip(1) * 3600
+    fit_data["pen_drawn_per60"] = fit_data["penalties_drawn"] / fit_data["total_seconds"].clip(1) * 3600
+
+    r_pp, _ = compute_split_half_r(fit_data, "pp_xg_per60")
+    r_pk, _ = compute_split_half_r(fit_data, "pk_xg_per60")
+    r_pen, _ = compute_split_half_r(fit_data, "pen_taken_per60")
+    K_pp = compute_K(r_pp, 82)
+    K_pk = compute_K(r_pk, 82)
+    K_pen = compute_K(r_pen, 82)
+
+    # Global league means for PP/PK/penalty (from fit seasons)
+    lg_pp_xg_global = fit_data["pp_xg_for"].sum() / max(fit_data["pp_seconds"].sum(), 1) * 3600
+    lg_pk_xg_global = fit_data["pk_xg_against"].sum() / max(fit_data["pk_seconds"].sum(), 1) * 3600
+    lg_pen_global = fit_data["penalties_taken"].sum() / max(fit_data["total_seconds"].sum(), 1) * 3600
+
     print(f"\n  Split-half: att_share r={r_att:.3f} K={K_att:.1f}, xG/att r={r_xg:.3f} K={K_xg:.1f}")
+    print(f"  PP xG r={r_pp:.3f} K={K_pp:.1f}, PK xG r={r_pk:.3f} K={K_pk:.1f}, pen r={r_pen:.3f} K={K_pen:.1f}")
 
     # Prior-season final shrunk ratings and league means per season
     season_league = {}
@@ -362,7 +414,12 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
         team_cum = {t: {"att_for": 0, "att_ag": 0, "xg_for": 0.0, "xg_ag": 0.0,
                         "ev_secs": 0.0, "pp_xg": 0.0, "pp_secs": 0.0,
                         "pk_xg_ag": 0.0, "pk_secs": 0.0,
-                        "pen_taken": 0, "pen_drawn": 0, "n": 0} for t in teams}
+                        "pen_taken": 0, "pen_drawn": 0, "total_secs": 0.0, "n": 0} for t in teams}
+
+        # League means for PP/PK/penalty (use global until enough in-season data)
+        lg_pp_xg = lg_pp_xg_global
+        lg_pk_xg = lg_pk_xg_global
+        lg_pen = lg_pen_global
         season_ratings = []
 
         for _, row in s_tgs.iterrows():
@@ -416,11 +473,22 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
                 r_xg_for = shrink(raw_xg_for * tc["n"], tc["n"], target_xg_for, K_xg)
                 r_xg_ag = shrink(raw_xg_ag * tc["n"], tc["n"], target_xg_ag, K_xg)
 
-            # PP/PK ratings (use league mean as target)
-            pp_xg_per60 = tc["pp_xg"] / max(tc["pp_secs"], 1) * 3600 if tc["pp_secs"] > 0 else 7.0
-            pk_xg_per60 = tc["pk_xg_ag"] / max(tc["pk_secs"], 1) * 3600 if tc["pk_secs"] > 0 else 7.0
-            pen_taken_per60 = tc["pen_taken"] / max(tc["ev_secs"], 1) * 3600 if tc["ev_secs"] > 0 else 3.8
-            pen_drawn_per60 = tc["pen_drawn"] / max(tc["ev_secs"], 1) * 3600 if tc["ev_secs"] > 0 else 3.8
+            # PP/PK/penalty ratings: raw rates from in-season data, shrunk to league mean
+            # (K and targets computed from league mean strictly before D, same structure as 5v5)
+            if tc["n"] == 0:
+                pp_xg_per60 = lg_pp_xg
+                pk_xg_per60 = lg_pk_xg
+                pen_taken_per60 = lg_pen
+                pen_drawn_per60 = lg_pen
+            else:
+                raw_pp = tc["pp_xg"] / max(tc["pp_secs"], 1) * 3600
+                raw_pk = tc["pk_xg_ag"] / max(tc["pk_secs"], 1) * 3600
+                raw_pt = tc["pen_taken"] / max(tc["total_secs"], 1) * 3600
+                raw_pd = tc["pen_drawn"] / max(tc["total_secs"], 1) * 3600
+                pp_xg_per60 = shrink(raw_pp * tc["n"], tc["n"], lg_pp_xg, K_pp)
+                pk_xg_per60 = shrink(raw_pk * tc["n"], tc["n"], lg_pk_xg, K_pk)
+                pen_taken_per60 = shrink(raw_pt * tc["n"], tc["n"], lg_pen, K_pen)
+                pen_drawn_per60 = shrink(raw_pd * tc["n"], tc["n"], lg_pen, K_pen)
 
             season_ratings.append({
                 "game_id": row["game_id"], "season": season, "date": d,
@@ -446,6 +514,7 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
             tc["pk_secs"] += row["pk_seconds"]
             tc["pen_taken"] += row["penalties_taken"]
             tc["pen_drawn"] += row["penalties_drawn"]
+            tc["total_secs"] += row.get("total_seconds", 0)
             tc["n"] += 1
 
         # Store final shrunk ratings for carry-over

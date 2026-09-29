@@ -385,3 +385,22 @@ NULL CONTROLS:
 - (a) 5v5 numerator = 178,012 (matches v2 exactly).
 - (b) Every pooled numerator = home + away (exact).
 - (c) Byte-identical on second run.
+
+### S26 — PP/PK/penalty with shrinkage, score-adjusted 5v5, goalie test (2026-09-29, S-WO3f Item 2)
+
+**Score-adjusted 5v5:** weights each attempt by 1/score_effect_mult. Split-half r:
+- Adjusted: **0.925** vs unadjusted: **0.908** — pre-registered adjusted >= unadjusted: **HELD**.
+- Ratings now use the adjusted columns.
+
+**PP/PK/penalty ratings with shrinkage:**
+- PP xG for per60: r=0.482, K=88.0
+- PK xG against per60: r=0.272, K=219.0
+- Penalties taken per60: r=0.656, K=43.0
+- Penalty denominator: total_seconds (was ev_seconds). Literal 7.0/3.8 deleted.
+
+**Carry-over weights:**
+- ev_att_for: 0.786, ev_att_against: 0.789
+- ev_xg_for: 0.383, ev_xg_against: 0.292
+- goalie: 0.144
+
+**Tests:** 24 passed, 0 skipped. PP/PK/penalty columns in truncation test.
