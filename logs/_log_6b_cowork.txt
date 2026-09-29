@@ -1,0 +1,23 @@
+
+## 2026-09-29T01:45Z  cowork (verification of 6B — D194; order 6C)
+
+### RETURNED
+- eng/6b @ e432be7d6: D185 append, D186, D187-D189 (NOT DONE), D190-D193 superseding, fit_6b artefacts, log.
+- K1 rows: plays 126.89, drives 23.047, pts/team 21.277; header 3358be6a9 (clean).
+- 6A sample drive logs: own-1/2 drive starts 0.825/game sim vs 0.255 real (PBP 2021-24); 74% follow punts from the
+  opponent's 40-50 (median punt LOS yl 44). Real punt touchback rate by LOS: 35-40 25.9%, 40-45 18.9%, 45-50 14.5%.
+- engine.py:1809 clips the punt landing at 99; engine.py:1963 applies half-distance only when full_yl > 99.
+- test_offensive_penalty_half_distance does not call the engine. test_dead_clock_runoff perturbs an ap_all row.
+- timeout_followed main cells: last 2:00 ~12-18 s, normal 35-40 s; "29.1 s" is the legacy all/all row.
+
+### MEANS
+- The own-1 pile-up (and the safety excess) comes from punts clipped at the 1, not in-play losses; D185's hypothesis
+  and D192's fix were both off target (K1 safeties 0.071 vs 0.072).
+- Not merged: eng/6b still has 3 late-game reds, the kneel test and the 98-100 test beyond main's set.
+
+### NOT DONE
+- Merge. The punt fix, measured timeout table, kneel timing — order 6C.
+
+### UNVERIFIED
+- The Mac suite values for each red (read from the session log only).
+- Whether the punt fix alone brings safeties to 0.03-0.04 (pre-registered in 6C).
