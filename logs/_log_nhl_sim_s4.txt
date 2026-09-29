@@ -1,0 +1,94 @@
+## S-WO4a (2026-09-29)
+
+### Setup
+New worktree ~/mlb-model-nhlsim4 from origin/main.
+Manifest sha256 check: team_ratings, goalie_ratings, team_game_stats, goalie_games — all MATCH.
+
+### Runtime pre-check
+RETURNED: 20 games x 10,000 sims = 61.1s (3.05s per game).
+MEANS: Just over 3s per game, so using 2,000 sims per game for the realism report per the order.
+1,312 games x 2,000 sims estimate: ~13 min. Actual: 1,077s (~18 min).
+
+### Item 1 (S32) — engine + pull hazard
+
+RETURNED:
+- constants_v6.json: v5 + pull_hazard_per_second. 1,950 pulls measured in last 5 min of 3rd.
+  Null control: every v5 field identical in v6 — PASS.
+- engine.py: 398 lines. Vectorised over N sims, 1-second clock.
+  Features: strength state from penalty clocks, score effects, home effect, pulled goalie
+  hazard (from v6), OT 3v3 sudden death, shootout with round-by-round conversion,
+  start_state for mid-game entry.
+
+grep for literal rates:
+```
+54:    home_att_mult: float = 1.0      # dataclass default, overridden
+55:    home_xg_mult: float = 1.0       # dataclass default, overridden
+62:    so_conversion: float = 0.33     # dataclass default, overridden
+63:    so_past_r3_share: float = 0.30  # dataclass default, overridden
+375:   rng.random(N) < 0.5             # coin flip for remaining SO ties
+```
+All rates come from league_average_inputs() reading from constants files.
+
+pytest output:
+```
+nhl/sim/tests/test_engine.py::TestDeterminism::test_same_seed_identical PASSED
+nhl/sim/tests/test_engine.py::TestStartState::test_puck_drop_equals_none PASSED
+nhl/sim/tests/test_engine.py::TestOvertimeLogic::test_tied_after_60_gets_ot_or_so PASSED
+nhl/sim/tests/test_engine.py::TestOvertimeLogic::test_no_goals_after_sudden_death PASSED
+nhl/sim/tests/test_engine.py::TestPulledGoalie::test_trailing_pulled_loses_more PASSED
+nhl/sim/tests/test_engine.py::TestBlowout::test_home_3_up_last_minute PASSED
+6 passed in 4.99s
+```
+
+MEANS: The engine is deterministic, handles OT/SO correctly, pulled goalie changes win
+probability, and blowouts are decided correctly. start_state matches puck drop.
+
+### Item 2 (S33) — realism report
+
+RETURNED (1,312 games x 2,000 sims, league-average teams vs actual 2022-23):
+| Band | Sim | Actual | Diff | Bar | HELD? |
+|------|-----|--------|------|-----|-------|
+| Goals/game ±3% | 6.287 | 6.359 | -1.1% | ±3% | HELD |
+| Tied after reg ±2.0pp | 0.191 | 0.230 | -3.9pp | ±2.0pp | NOT HELD |
+| SO share ±1.5pp | 0.068 | 0.072 | -0.4pp | ±1.5pp | HELD |
+| PP opps/team-game ±5% | 3.770 | 3.835 | -1.7% | ±5% | HELD |
+| PP goals/team-game ±8% | 0.706 | 0.640 | +10.3% | ±8% | NOT HELD |
+| EN goals/game ±15% | 0.320 | 0.334 | -4.2% | ±15% | HELD |
+| Reg by 1 share ±2.0pp | 0.307 | 0.228 | +7.9pp | ±2.0pp | NOT HELD |
+| Home win % ±2.0pp | 0.543 | 0.524 | +2.0pp | ±2.0pp | NOT HELD |
+| Goal dist max diff ≤0.015 | 0.024 | — | — | ≤0.015 | NOT HELD |
+
+MEANS: The engine produces the right total goals (-1.1%) and the right PP opportunity rate,
+SO share, and EN goals. But the distribution is wrong:
+- Too few ties after regulation (19.1% vs 23.0%) → not enough variability
+- Too many 1-goal regulation wins (30.7% vs 22.8%) → games ending too decisively
+- PP goals too high (0.706 vs 0.640 per team) → PP conversion overestimated
+- Home effect too strong (54.3% vs 52.4%)
+- Goal distribution peaked: too many low totals (k=3: 10.9% vs 9.8%) and too few at k=7
+
+The variance is too low: the engine converges to the mean too quickly. This is a known issue
+with second-by-second constant-rate Poisson models — real hockey has more clustering (power plays
+create bursts, momentum shifts). The calibration in S-WO4b can address the PP conversion and
+home effect; the variance issue may need a variance inflation or overdispersion parameter.
+
+### NOT DONE
+- Away team goalie pull (only home team can pull currently)
+- Per-team inputs (the engine uses league averages; team-specific inputs are S-WO4b)
+- Pricing (ML, puck line, totals) from sim output
+- 2023-24 validation (S-WO4b)
+- OT penalty logic (4v3 on a penalty in OT)
+- The `so_past_r3_share` constant is not used in the current shootout logic
+
+### UNVERIFIED
+- The score-effect application in the engine may double-apply: it applies home and away effects
+  to the same 5v5 state, but the constants were measured on per-team rates
+- The penalty-ends-minor logic may not correctly identify which penalty to end
+- The shootout logic with 10-round cap and remaining tiebreak may not match real distributions
+- The 2,000-sim count introduces ~2% sampling noise on per-game metrics
+
+### Commit shas
+S32: e5bada048
+S33: c3f2b07be
+
+### Merge command
+git merge nhl/sim-s4
