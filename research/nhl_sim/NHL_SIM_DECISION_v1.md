@@ -509,3 +509,29 @@ Stored in nhl/data/sim/ratings/finishing_term.parquet (879 rows, date, F, n_game
 
 By season: 2021=0.97-1.06, 2022=0.94-1.02, 2023=0.95-1.01, 2024=0.94-1.02, 2025=0.90-0.97.
 2025-26 consistently below 1.0 (goals below xG), confirming the drift seen in S9.
+
+### S30 — ONE full-formula check run (2026-09-29, S-WO3g Item 3)
+
+sanity_check_v2.py using team_ratings (adjusted 5v5 + PP/PK/penalty with shrinkage),
+goalie_ratings, constants_v5, finishing term F(D).
+
+**2022-23 (fit):**
+- Engine gd vs actual: 0.327  |  Pinnacle: 0.333
+- Engine total vs actual: 0.041  |  Pinnacle: 0.104
+- corr(engine gd, Pinnacle logit): 0.910 (> 0.60: HELD)
+- corr(engine total, Pinnacle total): 0.426 (> 0.30: HELD)
+- mean total: 5.99 vs 6.29 (-4.7%)
+
+**2023-24 (validate):**
+- Engine gd vs actual: 0.274  |  Pinnacle: 0.287
+- Engine total vs actual: 0.032  |  Pinnacle: 0.116
+- corr(engine gd, Pinnacle logit): 0.898 (> 0.60: **HELD**)
+- corr(engine total, Pinnacle total): 0.295 (> 0.30: **NOT HELD** — misses by 0.005)
+- mean total: 6.12 vs 6.16 (-0.7%, consistency check, not blind)
+- null: 0.027
+
+CHECK 5 by n_prior_games: gd corr rises from 0.184 (0-10 games) to 0.315 (11-40) to 0.267 (41+).
+The ratings need ~10 games to differentiate teams, as expected from the carry-over and K values.
+
+The engine tracks Pinnacle strongly on moneylines (0.898) but trails on totals. The totals bar
+narrowly fails. The mean total is now within 1% (was -9% before the PP and finishing-term fixes).
