@@ -4012,3 +4012,19 @@ matched two-way prop rows.
 
 Test: test_no_view_at_floor_accepted: a +7500 anytime-TD row gets no_view and freeze accepts.
 On 54efc5878: FAIL ("no_view line must carry book's own probability").
+
+### D221 — FWD1c Item 2: --dry-run and week-4 dry run (2026-09-29)
+
+**--dry-run** (run_forward_v1.py:151,215-230): steps (a)-(d) and (f) print-only, stops before
+freeze. Writes nothing under nfl/data/board/.
+
+**Week-4 dry run** (`--week 4 --dry-run --window-hours 60`):
+- nflreadpy returned 16 week-4 matchups (Oct 1-5, nflverse week 4).
+- 16 games simulated, all converged, all anchored (max |miss| 0.32).
+- PIT@CLE is in the window (kick 10-02 00:15Z, ~27h from now; 60h window captures it).
+  No Sunday games (kick 17:00Z Oct 4, ~68h from now; > 60h).
+- picks_log: 1,359 legs. Matched: 11/42 two-way prop rows (9 receptions, 2 rush_attempts).
+  Low count because HR props for most week-4 games are not yet pulled (newest pull Sep 28).
+- Newest HR props pull for PIT@CLE: in the Sep 28 archive.
+
+**Tests:** test_freeze_v1 4 passed, test_forward_v1 8 passed, test_log_ai_opinions_fwd1c 4 passed (16 total).

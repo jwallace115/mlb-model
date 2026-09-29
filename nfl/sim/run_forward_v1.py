@@ -147,6 +147,7 @@ def main(freeze_json_path=None):
     ap.add_argument("--as-of", help="UTC ISO timestamp (pilot only)")
     ap.add_argument("--window-hours", type=float, help="limit to games kicking within N hours")
     ap.add_argument("--events", help="comma-separated team fragments")
+    ap.add_argument("--dry-run", action="store_true", help="D221: steps a-d and f, stop before freeze")
     a = ap.parse_args()
 
     if a.as_of and not a.pilot:
@@ -210,6 +211,23 @@ def main(freeze_json_path=None):
         filled, n_matched = fill_sheet(sheet_df, picks_log)
         n_two_way = int(filled["two_way"].sum()) if "two_way" in filled else 0
         print(f"    Matched {n_matched} / {n_two_way} two-way prop rows\n", flush=True)
+
+        # D221: dry-run prints summary and stops before freeze
+        if a.dry_run:
+            print("--- DRY RUN: matched rows by market ---")
+            sim_rows = filled[filled["tag"] == "sim_v1"]
+            if len(sim_rows) and "market_key" in sim_rows:
+                print(sim_rows.groupby("market_key").size().to_string())
+            print(f"\n--- Tag counts ---\n{filled['tag'].value_counts().to_string()}")
+            # (f) anchor sidecar (print only, don't write)
+            anch_log_path = sim_out / "anchoring_log.parquet"
+            if anch_log_path.exists():
+                anch_log = pd.read_parquet(anch_log_path)
+                sidecar_df = anchor_sidecar(anch_log, {})
+                print(f"\n--- Anchor sidecar ({len(sidecar_df)} games) ---")
+                print(sidecar_df.to_string(index=False))
+            print("\nDRY RUN complete — nothing written under nfl/data/board/.")
+            return
 
         # Write filled CSV for freeze
         filled_path = Path(td) / "filled.csv"
