@@ -3937,3 +3937,14 @@ On 4c9802c93: ImportError (fill_sheet and anchor_sidecar do not exist) -> collec
 **This is a PILOT: it is never pooled, and it is not evidence for or against P1/P2.**
 The pilot demonstrates the end-to-end pipeline works. The sim's 20 scored legs is well
 below the 500-leg checkpoint.
+
+### D217 — FWD1b Item 3: runbook rewritten for week 4 (2026-09-29)
+
+research/nfl_sim/fwd1_runbook.md rewritten with concrete week-4 commands:
+- TNF PIT@CLE: run 23:30Z Thu 10-01, --window-hours 2. Pull 15 min old.
+- London IND@WAS: run 12:45Z Sun 10-04, --window-hours 1.5. Pull 2:45h old.
+- Sunday 1pm/4pm/SNF: run 16:15Z Sun 10-04, --window-hours 9. Pull 15 min old.
+- MNF: run 23:30Z Mon 10-05, --window-hours 2. **Pull 4h old (> 3h stale)** — no Monday
+  capture slot on the VM.
+
+Scoring commands for 500- and 1,500-leg checkpoints included, pooled by reader_model.
