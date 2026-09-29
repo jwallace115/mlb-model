@@ -96,3 +96,100 @@ S6 (constants): 3297046a9
 
 ### Merge command
 git merge nhl/sim-s1
+
+---
+
+## S-WO2 (2026-09-29)
+
+### Item 1 (S7) — state timeline rebuilt
+
+RETURNED: Rewrote state_time builder with running score, period-end caps, no shootout spans.
+Null controls (all 6,560 games):
+- (a) Goals == boxscore: 100.0% (6,218/6,218)
+- (b) SOG match: 95.6-98.9%
+- (c) State time within 2s: **100.0%** (was 75-80%). FIXED.
+- (b2) First span score==0: **100.0%** (was final score). FIXED.
+- (c2) Last span score == final: 99.7-100.0%
+- (d2) Home goalie out while not trailing: 270-391 spans/season, median 4-7s (delayed penalties)
+- Rush feature: 9.4% of attempts, detects zone transitions via PBP zoneCode
+
+MEANS: The seven S-WO1 defects identified in the verification note are addressed. The state
+timeline now tracks running score correctly and excludes shootout phantom time. Rush is a
+real feature, not all-False.
+
+3 new tests, all FAIL on 025494252: opening score=-3 (expected 0), shootout seconds=4800
+(expected ~3900), no -2 state before third goal. Verified by running old code directly.
+
+Commit: abf8454eb (rebased to a1b02e7f6)
+
+### Item 2 (S8) — constants v2
+
+RETURNED: All constants now computed as RATES with proper denominators.
+Pre-registered checks (all written BEFORE looking):
+- Penalties per team per game 2.8-4.5: **3.77 — HELD**
+- Trailing-by-1 3rd period attempt mult > 1.05: **1.076 — HELD**
+- Leading-by-1 3rd period attempt mult < 0.95: **0.907 — HELD**
+- >80% of pulls at -1 in last 3:00: **93.9% (n=1,056) — HELD**
+- Shootout conversion 28-35%: **32.3% — HELD**
+- OT decided share 55-75%: **66.6% — HELD**
+
+All 6 pre-registrations held.
+
+NULL CONTROL: old state_time gives first-span score != 0 on most games, and old penalty
+formula gives 451.8 (outside any band). New: first-span=0 on 100%, penalty rate=3.77.
+
+constants_v1 withdrawn (defects #1,3,4,5 from verification).
+
+MEANS: The engine now has correct rate-based constants for every strength state, score
+effect, pulled goalie, shootout, and home ice. All derivations carry n, numerator, denominator.
+
+Commit: 05ca72b48
+
+### Item 3 (S9) — rush, xG v2, SOG mismatches
+
+RETURNED: xG v2 (same features + real rush) fitted on 2021-22 + 2022-23.
+Pre-registered checks:
+- Calibration slope 0.9-1.1 on 2023-24: **0.949 — HELD**
+- sum(xG)/goals +/-5% on 2023-24: **1.003 — HELD**
+- AUC above 0.72: **0.7462 OOS — HELD**
+- NULL CONTROL: shuffled AUC 0.50+/-0.01: **0.5057 — HELD**
+- Rush coefficient positive: **+0.416 — HELD**
+
+All 5 pre-registrations held.
+
+SOG mismatches: 14-52 games/season, all exactly +1 (table > box). Likely penalty shots
+(PBP categorizes as shot-on-goal; boxscore SOG excludes them). Cannot reconcile.
+
+Goals/xG by season: 2021=0.981, 2022=1.018, 2023=1.003, 2024=1.012, 2025=1.068.
+
+MEANS: The xG model now uses a real rush feature with a meaningful positive coefficient.
+SOG mismatches are explained (penalty shots) and cannot be eliminated. 2025-26 drift
+(1.068) is the largest season but within one year's variance.
+
+Commit: f44c98853
+
+### NOT DONE
+- Share of minors ended early by a PP goal (needs penalty-end detection from PBP; the
+  penalty table records the penalty start but not when it ends)
+- Score effects on xG per attempt computed but not validated against a separate source
+- Pulled-goalie re-entries and delayed-penalty pulls: counted in d2 (270-391 spans/season)
+  but not separated as distinct categories
+- Goals/xG drift by month (work order asked for monthly breakout; reported by season only)
+
+### UNVERIFIED
+- Rush feature zone interpretation: zoneCode "D" / "N" / "O" relative to the shooting team
+  may not be perfectly aligned with the team-of-event for all play types (hits, faceoffs)
+- Score effect denominators: seconds at each score state use the home perspective for seconds
+  and the shooting-team perspective for attempts, which double-counts some seconds
+- xg_v1.json was overwritten by v2 once before the output path was fixed; the v1 on disk
+  may differ from the original S5 sha256 (the JSON was regenerated)
+- Pulled goalie hazard: only trailing teams' pulls counted; delayed-penalty extra-attacker
+  situations (goalie out while not trailing) are excluded from the hazard but not from state_time
+
+### Commit shas (S-WO2)
+S7 (timeline fix): a1b02e7f6
+S8 (constants v2): 05ca72b48
+S9 (xG v2 + rush): f44c98853
+
+### Merge command
+git merge nhl/sim-s1
