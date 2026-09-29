@@ -800,3 +800,10 @@ q = 0.068513 (league xG per non-EN attempt) added to v8 via build_constants_v7.p
 Null: every v7 field unchanged in v8.
 
 Tests: (a) all-ones = league average (identical), (b) 1.1x attack wins more, (c) date matches.
+
+### S41 — price_games.py: 2022-23 and 2023-24 priced (2026-09-29, S-WO4b Item 2)
+
+2,624 games x 2,000 sims, seed = int(game_id). Runtime: ~50 min.
+Pinnacle matched: 1,156 (2022-23) and 1,138 (2023-24) — both match the required counts.
+Output: nhl/data/sim/prices/season={2022,2023}.parquet (gitignored, sha in manifest).
+Totals P(over) uses normal approximation from mean total and √mean.
