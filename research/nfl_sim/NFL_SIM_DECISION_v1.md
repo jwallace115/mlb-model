@@ -3881,3 +3881,34 @@ Docs that reference week=2026_04 for this slate (not changed — the decisions r
 - D212 in NFL_SIM_DECISION_v1.md:3826 ("--week 4 --pilot --as-of 2026-09-27T16:30:00")
 - D213 in NFL_SIM_DECISION_v1.md:3868 ("week=2026_04 are moved by FWD1b")
 - logs/_log_fwd1.txt:23 (same --week 4 reference)
+
+### D215 — FWD1b Item 1: harness fixes — fill_sheet, anchor_sidecar, flag passthrough, props cap (2026-09-29)
+
+**(a) fill_sheet** (run_forward_v1.py:41-76): extracted from main; match key =
+(player_name, FAMILY_TO_MARKET[family], line). Map: receptions -> player_receptions,
+rush_attempts -> player_rush_attempts; all other families unmatched. Respects picks_log.side:
+'over' -> p_first = cal_p, 'under' -> p_first = 1 - cal_p. Duplicate key -> HALT.
+
+**(b) anchor_sidecar** (run_forward_v1.py:79-110): reads REAL columns (game, iter, margin,
+total, err_m, err_t, converged). Best iteration = min |err_m| + |err_t|. Market spread/total
+derived from margin - err_m and total - err_t. Missing column -> KeyError.
+
+**(c)** main() passes --pilot, --as-of, --window-hours, --events to BOTH sheet and freeze
+calls (run_forward_v1.py:109-115).
+
+**(d)** log_ai_opinions.py:160: `props = props[props["pull_timestamp"].map(parse_utc) <= now]`
+caps props at as-of so pilot runs exclude future pulls.
+
+**(e)** Halt: main() runs test_freeze_v1 in-process; a wrong hash exits non-zero before sheet.
+
+**Tests** (test_forward_v1.py, 8 tests, all call the real functions):
+1. fill matches on market, not just line (rush_attempts vs reception_yds at same line)
+2. unmapped family (anytime_td) stays no_view
+3. under side gives 1 - cal_p
+4. game-line row always no_view
+5. unmatched prop row no_view
+6. anchor_sidecar on committed week-2 log: 15 games, all anchored, max |miss| <= 0.35
+7. anchor_sidecar raises on missing column
+8. freeze-mismatch halts
+
+On 4c9802c93: ImportError (fill_sheet and anchor_sidecar do not exist) -> collection FAIL.

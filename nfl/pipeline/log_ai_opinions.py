@@ -157,6 +157,8 @@ def newest_inputs(season, now, props_file=None, lines_file=None):
         props = pd.concat([pd.read_parquet(f) for f in pf], ignore_index=True)
         props = props[props["bookmaker"] == BOOK]
         props = props[props["pull_timestamp"].map(parse_utc) < props["commence_time"].map(parse_utc)]
+        # D215(d): cap at now so a pilot with --as-of excludes future pulls
+        props = props[props["pull_timestamp"].map(parse_utc) <= now]
         newest = props.groupby("event_id")["pull_timestamp"].transform("max")
         props = props[props["pull_timestamp"] == newest]
     lf = [Path(lines_file)] if lines_file else sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))[-1:]
