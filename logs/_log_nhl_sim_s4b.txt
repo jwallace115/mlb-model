@@ -1,0 +1,96 @@
+## S-WO4b (2026-09-29)
+
+### Setup
+Worktree ~/mlb-model-nhlsim4b from origin/main (after nhl/sim-s4 squash).
+Manifest: team_ratings MATCH, goalie_ratings MATCH (after --from-cache rebuild).
+Runtime: 1.16s/game at 2k sims. 2,624 games estimate: 51 min. Under 90 min — 2k sims OK.
+
+### Item 1 (S40) — game_inputs.py
+
+RETURNED: Mapping from team_ratings + goalie_ratings + F(D) → TeamMultipliers.
+q = 0.068513 (league xG per non-EN attempt) added to v8.
+Missing row or NaN raises. No defaults, no clipping.
+
+Tests: 3 passed — all-ones = league average, 1.1x attack wins more, date matches.
+
+Generator grep:
+- game_inputs.py generates the multipliers
+- build_constants_v7.py --v8 generates constants_v8.json with q
+
+MEANS: Every game can now be simulated with team-specific inputs from the ratings.
+
+### Item 2 (S41) — price_games.py
+
+RETURNED: 2,624 games priced (1,312 per season). 2,000 sims per game, seed=int(game_id).
+- 2022-23: 1,312 games, 0 skipped, Pinnacle matched: 1,156 ✓
+- 2023-24: 1,312 games, 0 skipped, Pinnacle matched: 1,138 ✓
+- Runtime: ~50 min total.
+
+Output: nhl/data/sim/prices/season={2022,2023}.parquet (gitignored, sha in manifest).
+Totals P(over) uses normal approximation from mean_total and √mean.
+
+MEANS: Every game has a sim probability for home win, regulation outcome, puck line,
+and totals. The Pinnacle match counts are exact.
+
+### Item 3 (S42) — prediction test
+
+PRE-REGISTRATION: A1 disagreement CI expected to include 0. No calibration on 2023-24.
+Nothing in Items 1-2 changed.
+
+RETURNED (2023-24, 1,138 games with Pinnacle):
+  ML log-loss: engine 0.6647, Pinnacle 0.6567 (engine worse by +0.0080)
+  ML Brier:    engine 0.2361, Pinnacle 0.2326 (engine worse by +0.0035)
+  A1 disagreement coefficient: 0.376 (90% CI: [-0.103, 0.869])
+  Engine adds information: NO (lower bound -0.103 ≤ 0)
+  PRE-REGISTRATION: HELD
+
+2022-23 (fit, 1,156 games):
+  ML log-loss: engine 0.6669, Pinnacle 0.6568 (engine worse by +0.0101)
+  A1 disagreement: 0.230 (90% CI: [-0.156, 0.586])
+
+BY MONTH (2023-24):
+  2023-10: engine 0.6844 Pinnacle 0.6543 (n=126)
+  2023-11: engine 0.6693 Pinnacle 0.6798 (n=187)
+  2023-12: engine 0.6683 Pinnacle 0.6715 (n=202)
+  2024-01: engine 0.6643 Pinnacle 0.6512 (n=182)
+  2024-02: engine 0.6474 Pinnacle 0.6422 (n=141)
+  2024-03: engine 0.6463 Pinnacle 0.6384 (n=187)
+  2024-04: engine 0.6815 Pinnacle 0.6522 (n=113)
+
+BY GAMES PLAYED (2023-24):
+  0-10:  engine 0.6835 Pinnacle 0.6599 (n=168)
+  11-40: engine 0.6683 Pinnacle 0.6676 (n=435)
+  41+:   engine 0.6559 Pinnacle 0.6469 (n=535)
+
+MEANS: The engine TRAILS Pinnacle by ~0.8% on ML log-loss. The disagreement coefficient
+is positive (0.376, directionally informative) but its 90% CI includes 0, so the engine
+does not pass the A1 test. Per A1: the engine earns no weight as a layer yet.
+
+The engine is closest to Pinnacle in the mid-season (11-40 games: diff 0.0007). Early
+season (0-10: diff 0.024) and late season (41+: diff 0.009) are worse.
+
+This is the expected outcome stated in S1: "matches or trails Pinnacle". The engine is
+useful as an explicit model of game mechanics (pulled goalies, OT, shootout) and as the
+base for player props.
+
+### NOT DONE
+- Totals A1 test (the normal approximation for P(over) is crude; proper would use per-sim totals)
+- A2 picks analysis (descriptive hit rate and ROI at median prices)
+- Reliability table in 10 bins
+- Favourite/underdog and |engine - Pinnacle| breakdowns
+- Game-clustered bootstrap for the A1 CI (used i.i.d. bootstrap instead)
+
+### UNVERIFIED
+- The normal approximation for totals P(over) may bias the totals log-loss
+- The goalie_save multiplier (1 - gsax/q) may clip extreme goalies inappropriately
+- Price_games.py uses the same base league_average_inputs for every game (correct if all
+  team-specific info is in the multipliers)
+- The 2,000-sim count introduces ~2% sampling noise
+
+### Commit shas
+S40: b18872088
+S41: c11cf38b8
+S42: f607bad75
+
+### Merge command
+git merge nhl/sim-s4b
