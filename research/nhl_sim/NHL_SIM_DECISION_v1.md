@@ -575,3 +575,17 @@ S30 formula component with actual total goals:
 
 Pinnacle's own line vs actual total: 0.104. The totals signal lives in 5v5; the power-play-minute spread adds noise.
 That's a question for the engine's validate phase, not a change made now.
+
+### S32 — Game engine + pull hazard (2026-09-29, S-WO4a Item 1)
+
+**constants_v6:** v5 + pull hazard per second by score diff (-1,-2,-3) and 30s bin.
+1,950 total pulls measured. Null control: every v5 field identical in v6.
+
+**engine.py:** vectorised over N sims, 1-second clock.
+- Strength state from penalty clocks. Score effects. Home effect. Pulled goalie hazard.
+- OT 3v3 sudden death. Shootout with round-by-round conversion.
+- start_state for mid-game entry.
+- No literal rates: grep returns only dataclass defaults (1.0, 0.5 coin flip).
+
+**Tests:** 6 passed — determinism, start_state, OT logic, pulled goalie, blowout.
+**Runtime:** 3.05s per game at 10k sims. Using 2,000 sims for realism report (~13 min).

@@ -1,0 +1,441 @@
+{
+  "version": 6,
+  "fit_seasons": [
+    2021,
+    2022
+  ],
+  "n_games": 2624,
+  "constants": {
+    "attempt_rate_per_60_per_team_5v5": {
+      "value": 42.2894,
+      "numerator": 178012,
+      "denominator": 7576874,
+      "units": "attempts / (seconds * 2) * 3600"
+    },
+    "goals_per_attempt_5v5": {
+      "value": 0.061507,
+      "numerator": 10949,
+      "denominator": 178012,
+      "derivation": "goals / unblocked attempts in 5v5"
+    },
+    "xg_per_attempt_5v5": {
+      "value": 0.061694,
+      "numerator": 10982.33,
+      "denominator": 178012,
+      "derivation": "sum(xg_v2) / unblocked attempts in 5v5"
+    },
+    "goals_over_xg_5v5": {
+      "value": 0.997
+    },
+    "minutes_per_game_5v5": {
+      "value": 48.13,
+      "total_secs": 7576874,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_per_team_4v4": {
+      "value": 30.714,
+      "numerator": 2568,
+      "denominator": 150498,
+      "units": "attempts / (seconds * 2) * 3600"
+    },
+    "goals_per_attempt_4v4": {
+      "value": 0.07905,
+      "numerator": 203,
+      "denominator": 2568,
+      "derivation": "goals / unblocked attempts in 4v4"
+    },
+    "xg_per_attempt_4v4": {
+      "value": 0.068181,
+      "numerator": 175.09,
+      "denominator": 2568,
+      "derivation": "sum(xg_v2) / unblocked attempts in 4v4"
+    },
+    "goals_over_xg_4v4": {
+      "value": 1.1594
+    },
+    "minutes_per_game_4v4": {
+      "value": 0.96,
+      "total_secs": 150498,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_per_team_3v3": {
+      "value": 47.7089,
+      "numerator": 2607,
+      "denominator": 98359,
+      "units": "attempts / (seconds * 2) * 3600"
+    },
+    "goals_per_attempt_3v3": {
+      "value": 0.129651,
+      "numerator": 338,
+      "denominator": 2607,
+      "derivation": "goals / unblocked attempts in 3v3"
+    },
+    "xg_per_attempt_3v3": {
+      "value": 0.135233,
+      "numerator": 352.55,
+      "denominator": 2607,
+      "derivation": "sum(xg_v2) / unblocked attempts in 3v3"
+    },
+    "goals_over_xg_3v3": {
+      "value": 0.9587
+    },
+    "minutes_per_game_3v3": {
+      "value": 0.62,
+      "total_secs": 98359,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_advantaged_5v4": {
+      "value": 68.9902,
+      "numerator": 30834,
+      "denominator": 1608959,
+      "home_part": 16293,
+      "away_part": 14541,
+      "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_5v4": {
+      "value": 0.096841,
+      "numerator": 2986,
+      "denominator": 30834
+    },
+    "xg_per_attempt_advantaged_5v4": {
+      "value": 0.099175,
+      "numerator": 3057.97,
+      "denominator": 30834
+    },
+    "goals_over_xg_advantaged_5v4": {
+      "value": 0.9765
+    },
+    "attempt_rate_per_60_disadvantaged_5v4": {
+      "value": 12.6149,
+      "numerator": 5638,
+      "denominator": 1608959,
+      "home_part": 2848,
+      "away_part": 2790,
+      "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_5v4": {
+      "value": 0.073253,
+      "numerator": 413,
+      "denominator": 5638
+    },
+    "xg_per_attempt_disadvantaged_5v4": {
+      "value": 0.071752,
+      "numerator": 404.54,
+      "denominator": 5638
+    },
+    "goals_over_xg_disadvantaged_5v4": {
+      "value": 1.0209
+    },
+    "minutes_per_team_game_5v4": {
+      "value": 5.11,
+      "total_secs": 1608959,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_advantaged_5v3": {
+      "value": 119.9876,
+      "numerator": 969,
+      "denominator": 29073,
+      "home_part": 515,
+      "away_part": 454,
+      "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_5v3": {
+      "value": 0.152735,
+      "numerator": 148,
+      "denominator": 969
+    },
+    "xg_per_attempt_advantaged_5v3": {
+      "value": 0.110498,
+      "numerator": 107.07,
+      "denominator": 969
+    },
+    "goals_over_xg_advantaged_5v3": {
+      "value": 1.3822
+    },
+    "attempt_rate_per_60_disadvantaged_5v3": {
+      "value": 3.2195,
+      "numerator": 26,
+      "denominator": 29073,
+      "home_part": 14,
+      "away_part": 12,
+      "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_5v3": {
+      "value": 0.038462,
+      "numerator": 1,
+      "denominator": 26
+    },
+    "xg_per_attempt_disadvantaged_5v3": {
+      "value": 0.06949,
+      "numerator": 1.81,
+      "denominator": 26
+    },
+    "goals_over_xg_disadvantaged_5v3": {
+      "value": 0.5535
+    },
+    "minutes_per_team_game_5v3": {
+      "value": 0.09,
+      "total_secs": 29073,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_advantaged_4v3": {
+      "value": 94.7959,
+      "numerator": 634,
+      "denominator": 24077,
+      "home_part": 374,
+      "away_part": 260,
+      "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_4v3": {
+      "value": 0.123028,
+      "numerator": 78,
+      "denominator": 634
+    },
+    "xg_per_attempt_advantaged_4v3": {
+      "value": 0.098553,
+      "numerator": 62.48,
+      "denominator": 634
+    },
+    "goals_over_xg_advantaged_4v3": {
+      "value": 1.2483
+    },
+    "attempt_rate_per_60_disadvantaged_4v3": {
+      "value": 5.8313,
+      "numerator": 39,
+      "denominator": 24077,
+      "home_part": 19,
+      "away_part": 20,
+      "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_4v3": {
+      "value": 0.076923,
+      "numerator": 3,
+      "denominator": 39
+    },
+    "xg_per_attempt_disadvantaged_4v3": {
+      "value": 0.064672,
+      "numerator": 2.52,
+      "denominator": 39
+    },
+    "goals_over_xg_disadvantaged_4v3": {
+      "value": 1.1894
+    },
+    "minutes_per_team_game_4v3": {
+      "value": 0.08,
+      "total_secs": 24077,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_advantaged_6v5": {
+      "value": 118.5815,
+      "numerator": 4007,
+      "denominator": 121648,
+      "home_part": 2056,
+      "away_part": 1951,
+      "derivation": "advantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_6v5": {
+      "value": 0.078113,
+      "numerator": 313,
+      "denominator": 4007
+    },
+    "xg_per_attempt_advantaged_6v5": {
+      "value": 0.068231,
+      "numerator": 273.4,
+      "denominator": 4007
+    },
+    "goals_over_xg_advantaged_6v5": {
+      "value": 1.1448
+    },
+    "attempt_rate_per_60_disadvantaged_6v5": {
+      "value": 39.6258,
+      "numerator": 1339,
+      "denominator": 121648,
+      "home_part": 673,
+      "away_part": 666,
+      "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_6v5": {
+      "value": 0.628827,
+      "numerator": 842,
+      "denominator": 1339
+    },
+    "xg_per_attempt_disadvantaged_6v5": {
+      "value": 0.0,
+      "numerator": 0.0,
+      "denominator": 1339
+    },
+    "goals_over_xg_disadvantaged_6v5": {
+      "value": 1.0
+    },
+    "minutes_per_team_game_6v5": {
+      "value": 0.39,
+      "total_secs": 121648,
+      "n_games": 2624
+    },
+    "pull_hazard_per_second": {
+      "derivation": "pulls / seconds at risk (goalie in, trailing, 5v5 or SH) per 30s bin of 3rd-period time remaining",
+      "fit_seasons": [
+        2021,
+        2022
+      ],
+      "data": {
+        "-1": {
+          "0": {
+            "hazard_per_sec": 0.05212059,
+            "pulls": 102,
+            "seconds_at_risk": 1957
+          },
+          "30": {
+            "hazard_per_sec": 0.03288344,
+            "pulls": 134,
+            "seconds_at_risk": 4075
+          },
+          "60": {
+            "hazard_per_sec": 0.02908639,
+            "pulls": 234,
+            "seconds_at_risk": 8045
+          },
+          "90": {
+            "hazard_per_sec": 0.01783181,
+            "pulls": 264,
+            "seconds_at_risk": 14805
+          },
+          "120": {
+            "hazard_per_sec": 0.00884656,
+            "pulls": 183,
+            "seconds_at_risk": 20686
+          },
+          "150": {
+            "hazard_per_sec": 0.00305926,
+            "pulls": 73,
+            "seconds_at_risk": 23862
+          },
+          "180": {
+            "hazard_per_sec": 0.00068027,
+            "pulls": 17,
+            "seconds_at_risk": 24990
+          },
+          "210": {
+            "hazard_per_sec": 0.00016076,
+            "pulls": 4,
+            "seconds_at_risk": 24882
+          },
+          "240": {
+            "hazard_per_sec": 4.002e-05,
+            "pulls": 1,
+            "seconds_at_risk": 24986
+          },
+          "270": {
+            "hazard_per_sec": 0.0,
+            "pulls": 0,
+            "seconds_at_risk": 25167
+          }
+        },
+        "-2": {
+          "0": {
+            "hazard_per_sec": 0.00617461,
+            "pulls": 43,
+            "seconds_at_risk": 6964
+          },
+          "30": {
+            "hazard_per_sec": 0.01791651,
+            "pulls": 97,
+            "seconds_at_risk": 5414
+          },
+          "60": {
+            "hazard_per_sec": 0.02,
+            "pulls": 92,
+            "seconds_at_risk": 4600
+          },
+          "90": {
+            "hazard_per_sec": 0.02034498,
+            "pulls": 92,
+            "seconds_at_risk": 4522
+          },
+          "120": {
+            "hazard_per_sec": 0.01850294,
+            "pulls": 110,
+            "seconds_at_risk": 5945
+          },
+          "150": {
+            "hazard_per_sec": 0.01486412,
+            "pulls": 134,
+            "seconds_at_risk": 9015
+          },
+          "180": {
+            "hazard_per_sec": 0.00750149,
+            "pulls": 88,
+            "seconds_at_risk": 11731
+          },
+          "210": {
+            "hazard_per_sec": 0.00538586,
+            "pulls": 73,
+            "seconds_at_risk": 13554
+          },
+          "240": {
+            "hazard_per_sec": 0.00221076,
+            "pulls": 33,
+            "seconds_at_risk": 14927
+          },
+          "270": {
+            "hazard_per_sec": 0.00120512,
+            "pulls": 19,
+            "seconds_at_risk": 15766
+          }
+        },
+        "-3": {
+          "0": {
+            "hazard_per_sec": 0.0,
+            "pulls": 0,
+            "seconds_at_risk": 17442
+          },
+          "30": {
+            "hazard_per_sec": 0.00013342,
+            "pulls": 2,
+            "seconds_at_risk": 14990
+          },
+          "60": {
+            "hazard_per_sec": 0.00052894,
+            "pulls": 7,
+            "seconds_at_risk": 13234
+          },
+          "90": {
+            "hazard_per_sec": 0.00117096,
+            "pulls": 14,
+            "seconds_at_risk": 11956
+          },
+          "120": {
+            "hazard_per_sec": 0.00192132,
+            "pulls": 21,
+            "seconds_at_risk": 10930
+          },
+          "150": {
+            "hazard_per_sec": 0.00180832,
+            "pulls": 18,
+            "seconds_at_risk": 9954
+          },
+          "180": {
+            "hazard_per_sec": 0.00208594,
+            "pulls": 20,
+            "seconds_at_risk": 9588
+          },
+          "210": {
+            "hazard_per_sec": 0.0024819,
+            "pulls": 24,
+            "seconds_at_risk": 9670
+          },
+          "240": {
+            "hazard_per_sec": 0.00175439,
+            "pulls": 17,
+            "seconds_at_risk": 9690
+          },
+          "270": {
+            "hazard_per_sec": 0.00212572,
+            "pulls": 21,
+            "seconds_at_risk": 9879
+          }
+        }
+      }
+    }
+  }
+}
