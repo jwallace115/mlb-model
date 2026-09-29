@@ -191,3 +191,23 @@ Output: `nhl/data/sim/ratings/goalie_ratings.parquet`.
 - Starter = goalie on first shot against (from event table). Agreement with box score: TBD.
 - League finishing term (goals/xG v2 by month): 2025-26 runs 0.91-0.97 (below 1.0, indicating
   the xG v2 overpredicts for that season — consistent with the 1.068 drift noted in S9).
+
+### S12 — Ratings-only sanity check (2026-09-29, S-WO3 Item 3)
+
+Simplified implied goals from 5v5 team ratings only (no PP/PK, no goalie, no finishing term).
+Evaluated on 2022-23 (fit) and 2023-24 (validate). No holdout data touched.
+
+**Results:**
+- corr(implied goal diff, actual goal diff): 0.287 (fit), 0.225 (validate)
+- corr(implied goal diff, Pinnacle logit): **NOT MEASURABLE** — historical lines use
+  event_id hashes that don't join with the boxscore game_id format. Needs a team/date match.
+- corr(implied total, Pinnacle total line): **NOT MEASURABLE** (same join issue)
+- Mean implied total: 5.43 (fit), 5.49 (validate) vs actual 6.36, 6.23
+  Within +/-3% of actual: **NOT HELD** (-14.6% fit, -11.8% validate). The simplified formula
+  omits PP/PK contribution (~1 goal/team/game), goalie factor, and finishing term.
+- NULL CONTROL: shuffled within date, corr = 0.054 (fit), 0.037 (validate) — near 0: **HELD**
+
+The ratings carry real signal (positive correlation, null near 0) but the simplified implied-goals
+formula is too crude for absolute calibration. The full engine (S-WO4) adds PP/PK, goalie,
+finishing term, and proper time allocation. The Pinnacle comparison needs a team+date join
+to be built in S-WO4.
