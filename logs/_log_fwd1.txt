@@ -1,0 +1,51 @@
+## 2026-09-29T17:46Z — 2026-09-29T19:00Z  claude-code  work order FWD1
+
+### RETURNED
+
+- Gates: FREEZE_v1 fingerprint grep = 2 (PASS). D209 grep = 1 (PASS). test_freeze_v1 4 passed (PASS).
+- /tmp/eng-6e worktree removed. Branch eng/fwd1 from origin/main.
+
+**Item 0 (D210) — pre-registration:**
+- RETURNED: decision text only, no code. Pre-reg for P1 (Brier) and P2 (units) on two-way
+  player props. Checkpoints at 500 and 1,500 legs.
+- Committed fb0ed18d1, pushed.
+
+**Item 1 (D211) — run_forward_v1.py harness:**
+- RETURNED: six-step harness (freeze check, sheet, sim, fill, freeze, anchor sidecar).
+  log_ai_opinions.py: "sim_v1" tag added (line 76); --as-of added (lines 531-536, guarded
+  by --pilot). run_forward_v1.py: 202 lines. test_forward_v1.py: 5 tests (freeze mismatch
+  halts, game-line no_view, matched over cal_p, matched under 1-cal_p, unmatched no_view).
+- MEANS: the harness is ready. run_week.py:997 prints ANCHORED margin (confirmed from code).
+- test_freeze_v1: 4 passed (confirmed at commit).
+- Committed 99fc4dccc, pushed.
+
+**Item 2 (D212) — pilot on week 4:**
+- RETURNED: `run_forward_v1.py --week 4 --pilot --as-of 2026-09-27T16:30:00+00:00`
+  reached step (c). run_week.py ran but printed "no pre-kick Hard Rock snapshot" for all 15
+  week-4 games. Line snapshots exist in the tape (snap_20260927T*.parquet) but run_week.py's
+  game-ID matching did not connect them to the schedule's week-4 entries.
+- MEANS: the pilot is blocked by a data-pipeline issue in run_week.py's
+  `get_lines_from_history`, not by the harness. The engine is not modified (FREEZE_v1 intact).
+- --as-of on freeze: implemented and tested (errors without --pilot).
+- Runbook: research/nfl_sim/fwd1_runbook.md written.
+- test_freeze_v1: 4 passed (confirmed at commit).
+- Committed c5b173655, pushed.
+
+### MEANS
+
+The forward-test infrastructure is complete. The harness, tests, pre-registration, and
+runbook are all committed and pushed. The pilot could not run end-to-end because
+run_week.py cannot retrospectively match week-4 games to archived Hard Rock line snapshots.
+This is a data-pipeline issue (game-ID format in the schedule vs the tape), not an engine
+or harness issue.
+
+### NOT DONE
+- Week 4 pilot end-to-end (named blocker: run_week.py game-matching for retrospective runs).
+- Pilot scoring, Brier, P2 units — blocked by the above.
+- The pilot deliverables: rows, coverage, anchor sidecar, Brier bootstrap, P2.
+
+### UNVERIFIED
+- Whether run_week.py can run prospectively for week 5 (the next live week) — the
+  game-matching issue may only affect retrospective runs with --as-of in the past.
+- Whether the anchor sidecar correctly identifies unanchored games (no games were simmed
+  to test this).
