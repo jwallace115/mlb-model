@@ -3485,3 +3485,9 @@ real. test_dead_clock_runoff fails because it now perturbs an ap_all fallback ro
 `punt_landing.parquet`: 15 LOS buckets, 8,422 punts. Engine draws recv_yl from bucket quantiles
 (engine.py:1806). Half-distance penalty: `pen > (100-yl)/2` (engine.py:1983). Own-1/2 starts:
 0.83 → 0.199 (**HELD** 0.20-0.35). Safeties: 0.069 → 0.030 (**HELD** 0.028-0.040).
+
+### D196 — 6C Item 1: timeouts at every snap; Q1/Q3 via Q2/Q4 proxy (2026-09-29)
+
+`_apply_timeouts` (engine.py:1404-1406): fires at every snap (was Q2/Q4 clock <= 300 only).
+Q mapping (engine.py:1411-1412): Q1→2, Q3→4 (table only has Q2/Q4). sec_bucket caps at "121-180"
+for clock > 120, giving early-quarter snaps the lowest-rate bucket.

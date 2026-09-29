@@ -1399,17 +1399,18 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         1 run / 2 drive-ending / 3 stopped (timeout)."""
         if to_lookup is None:
             return
-        # 5A-11 (D39): overtime's last 3:00 is the same situation as Q4's (the period ends
-        # the game); the policy table's Q4 rows are used for it
-        # 6B: extend timeout window from 180 s (3:00) to 300 s (5:00)
-        # The table's 121-180 bucket serves as the proxy for 181-300
-        late = ((qtr[gi_arr] == 2) | (qtr[gi_arr] >= 4)) & (clock[gi_arr] <= 300) & \
-               ~game_over[gi_arr] & (ot_idx_arr != de_code)
+        # 6C: timeouts can be called at any snap (Q1-Q4 + OT). The table has Q2/Q4
+        # entries; the q=min(qtr,4) mapping at line 1410 sends Q1->Q2 proxy, Q3->Q4 proxy.
+        # The sec_bucket mapping at line 1410 caps at "121-180" for clock > 120.
+        late = ~game_over[gi_arr] & (ot_idx_arr != de_code)
         if skip is not None:
             late &= ~skip
         for j in np.where(late)[0]:
             gi = gi_arr[j]
-            q = min(int(qtr[gi]), 4); sb = _to_sec_bucket(float(clock[gi]))
+            # 6C: Q1→2, Q2→2, Q3→4, Q4→4, OT→4 (table only has Q2 and Q4)
+            raw_q = int(qtr[gi])
+            q = 2 if raw_q <= 2 else 4
+            sb = _to_sec_bucket(float(clock[gi]))
             sd_j = int(sd_arr[j])
             st = "trail" if sd_j < 0 else ("tied" if sd_j == 0 else "lead")
             run_s = "True" if ot_idx_arr[j] in running_codes else "False"
