@@ -3678,3 +3678,34 @@ is NOT incremented (the K1 def_pen metric counts no-play penalties only).
 - NULL def_pen: 3.505 (6D: 3.451, diff 0.054 < 0.1: PASS)
 
 **Test failure on eng/6d (pasted):** fd_pen/team 1.298 vs actual 1.73 (diff 0.432 > 0.30).
+
+### D207 — 6E Item 2: non-scrimmage timeouts; 6 late-game reds still fail (2026-09-29)
+
+**Measured:** PBP 2021-24: 1,557 timeouts after non-scrimmage events (no_play, field_goal,
+punt, kickoff, extra_point) = 1.43/game, 18.6% of all TOs. These were not modelled.
+
+**Fix (engine.py:1457-1476):** `_apply_ns_timeout` fires after punts (engine.py:1903), FGs
+(engine.py:1976), and no-play penalties (engine.py:2127). Rate table `_ns_to_rate`
+(engine.py:869-886): measured per (quarter, seconds-bucket) from PBP 2021-24 REG, 7 buckets
+per quarter, fallback key `(q, "all")`. Each event draws `u_to_ns` and decrements `to_rem`
+for a randomly chosen team with TOs remaining.
+
+**After fix:** sim TO/game 5.54 (was 5.24, real 7.70). The +0.30 is consistent with the
+measured expectation (~0.56) given the sim's event distribution across quarters. The remaining
+gap (2.16/game) is TV timeouts, injury timeouts, and timeouts before plays (not after) which
+the engine does not model.
+
+Pre-reg 6.8-8.5: **FAILED** (5.54).
+Pre-reg at least 4/6 reds PASS: **FAILED** (0/6).
+
+**Six late-game reds, value after D207:**
+1. test_t3_ot_structure: FAIL (value from test output)
+2. test_t3_late_half_snaps: FAIL
+3. test_t3_timeouts_and_kneels: FAIL (off TO ~2.4)
+4. test_t4_tied_offence_kicks: FAIL (regressed from PASS; live-pen changes dynamics)
+5. test_t3_kneels_and_late_snaps: FAIL (kneels 1.85 vs target ~1.51)
+6. test_kneel_uses_measured_table: FAIL (elapsed 17.5 vs 25.9; finer buckets mean more
+   short final kneels that pull the mean down)
+
+All 6 reds relate to late-game timeout/kneel timing. The sim's 5.54 TOs/game vs 7.70 real
+means it under-stops the clock, which cascades into every late-game metric.

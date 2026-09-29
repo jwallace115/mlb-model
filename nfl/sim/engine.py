@@ -865,6 +865,24 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     # (PBP 2021-24 REG: 1,036 live-play first_down_penalty / 135,336 scrimmage plays)
     p_live_fd_pen = 0.00766
     live_fd_pen_yds = 8  # mean yards_gained on accepted live-play FD penalties
+    # 6E (D207): non-scrimmage timeout rates by (quarter, seconds bucket).
+    # PBP 2021-24 REG: 1,557 TOs after no_play/field_goal/punt/kickoff/extra_point.
+    _ns_to_rate = {
+        (1, "0-30"): 0.01623, (1, "31-60"): 0.00932, (1, "61-120"): 0.00509,
+        (1, "121-180"): 0.00620, (1, "181-300"): 0.00349, (1, "301-600"): 0.00746,
+        (1, "601-900"): 0.00343, (1, "all"): 0.00567,
+        (2, "0-30"): 0.12925, (2, "31-60"): 0.08713, (2, "61-120"): 0.08108,
+        (2, "121-180"): 0.01416, (2, "181-300"): 0.01254, (2, "301-600"): 0.00982,
+        (2, "601-900"): 0.00494, (2, "all"): 0.05020,
+        (3, "0-30"): 0.01629, (3, "31-60"): 0.00635, (3, "61-120"): 0.00000,
+        (3, "121-180"): 0.00672, (3, "181-300"): 0.00597, (3, "301-600"): 0.00654,
+        (3, "601-900"): 0.00503, (3, "all"): 0.00584,
+        (4, "0-30"): 0.16579, (4, "31-60"): 0.09958, (4, "61-120"): 0.08241,
+        (4, "121-180"): 0.07148, (4, "181-300"): 0.04757, (4, "301-600"): 0.01869,
+        (4, "601-900"): 0.00893, (4, "all"): 0.04993,
+        (5, "121-180"): 0.05556, (5, "181-300"): 0.07576, (5, "301-600"): 0.02778,
+        (5, "all"): 0.06299,
+    }
 
     # 5A-4: category-based penalty model from penalty_detail.json
     _pen_detail = _CACHE.get("penalty_detail")
@@ -1436,6 +1454,30 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
             elif u < p_off + p_def:
                 to_rem[1 - poss[gi], gi] -= 1; ev_to_def[gi] += 1; ot_idx_arr[j] = stop_code
 
+    # 6E (D207): non-scrimmage timeout — fires after punts, FGs, kickoffs, no-play penalties
+    def _apply_ns_timeout(gi_mask, u_arr):
+        """Fire a timeout at each game in gi_mask with the non-scrimmage rate."""
+        for i in np.where(gi_mask & ~game_over)[0]:
+            q = min(int(qtr[i]), 5)
+            sb = _to_sec_bucket(float(clock[i]))
+            p = _ns_to_rate.get((q, sb), _ns_to_rate.get((q, "all"), 0.0))
+            if p > 0 and u_arr[i] < p:
+                # Pick a team with TOs remaining; prefer the team that benefits
+                if to_rem[0, i] > 0 and to_rem[1, i] > 0:
+                    # Arbitrary: alternate by step parity
+                    side = int(u_arr[i] * 2) % 2
+                elif to_rem[0, i] > 0:
+                    side = 0
+                elif to_rem[1, i] > 0:
+                    side = 1
+                else:
+                    continue
+                to_rem[side, i] -= 1
+                if side == poss[i]:
+                    ev_to_off[i] += 1
+                else:
+                    ev_to_def[i] += 1
+
     # ═══════════════════════════════════════════════════════════════════════════
     # MAIN LOOP
     # ═══════════════════════════════════════════════════════════════════════════
@@ -1459,6 +1501,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
         u_4th = rng.random(N)
         u_eoh = rng.random(N)  # 5A-6: end-of-half FG decision on downs 1-3
         u_to = rng.random(N)     # 5A-7: timeout decision after the snap
+        u_to_ns = rng.random(N)  # 6E: non-scrimmage timeout
         u_kneel = rng.random(N)  # 5A-7: kneel decision
         u_spike = rng.random(N)  # 5A-9 (D34): spike decision
         u_punt_net = rng.random(N)
@@ -1857,6 +1900,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 poss[normal_punt] = 1 - poss[normal_punt]
                 _new_drive(normal_punt)
                 # Punt clock is captured in the cross-play elapsed table
+                _apply_ns_timeout(punt_m, u_to_ns)  # 6E: TO after punt
 
             # Execute FGs
             if fg_m.any():
@@ -1928,6 +1972,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 _do_kickoff(ko_eligible)
                 _check_ko_ret_td(ko_eligible & (qtr < 5))
                 # FG/kickoff clock captured in cross-play elapsed table
+                _apply_ns_timeout(fg_m, u_to_ns)  # 6E: TO after FG/kickoff
 
                 # Miss: opponent gets ball
                 if miss_full.any():
@@ -2078,6 +2123,7 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 ev_fd_penalty[auto_1st] += 1
                 ev_fd_penalty[pen_td] += 1
             playing = playing & ~pen_nop
+            _apply_ns_timeout(pen_nop, u_to_ns)  # 6E: TO after no-play penalty
 
         if not playing.any():
             continue
