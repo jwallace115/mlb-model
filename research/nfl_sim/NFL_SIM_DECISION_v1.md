@@ -3500,5 +3500,22 @@ determines HOW LONG each kneel takes. The gap is in WHEN: the sim starts the kne
 ~7 s left instead of ~22 s. This is because the sim's kneel-decision probability at 20-40 s is too
 low — it keeps playing instead of kneeling out. The measured kneel table's per-snap elapsed is
 correct (non-final 29.8 vs real 32.4); the issue is the DECISION, not the execution. The late-game
-reds (OT structure, tied FG, timeout/kneel) depend on this timing. Fix deferred to kneel_decision
-table audit (not done in this commit).
+reds (OT structure, tied FG, timeout/kneel) depend on this timing. Fix deferred to kneel_decision table audit (not done in this commit).
+
+### D198 — 6C Item 3: fit_6c; K1 plays 125.9 (+0.1 from real); safeties 0.031; 13 reds (2026-09-29)
+
+Fit: `fit_6c`, 1,087 games, N=5000. Cal committed before K1 (header `5978be457`, clean).
+K1 plays **125.9** (pre-reg 125.8 ± 1.5: **HELD**; gap **+0.1** from real — essentially zero).
+Safeties 0.031 (pre-reg 0.028-0.040: **HELD**). drives 22.8. pts/team 20.83.
+go_rate 0.0031 **PASS**. off_pen -0.043 **PASS**. def_pen -0.026 **PASS**. fg_att -0.122 **PASS**.
+fd_pen -0.473 **FAIL** (expected).
+
+Suite: 13 failed, 217 passed. Exit code 1. Reds: fd_pen (known), tied_drives (known),
+dead_clock_runoff (table structure), dead_punt_net (punt table changed), overall_tie_rate,
+ot_structure, timeout_policy_live (all-quarter TO), late_half_snaps (TO extension),
+timeouts_kneels (kneel timing), tied_offence_kicks, kneels_and_late_snaps, ez_share_matches,
+kneel_measured_table.
+
+The all-quarter timeout extension (D196) fires timeouts at every snap, which significantly
+changes late-game dynamics. Many of the new reds come from this — the measured rates in the table
+are calibrated for Q2/Q4 late-game situations and are too high for Q1/Q3 normal play.
