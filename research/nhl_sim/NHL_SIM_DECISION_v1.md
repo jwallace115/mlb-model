@@ -166,3 +166,28 @@ goal; the NHL boxscore SOG excludes them. Cannot be reconciled from available da
 
 **Goals/xG by season:** 2021=0.981, 2022=1.018, 2023=1.003, 2024=1.012, 2025=1.068.
 2025-26 drift (1.068) is the largest — reported only, nothing refitted.
+
+### S10 — Team ratings (2026-09-29, S-WO3 Item 1)
+
+Point-in-time team ratings for 6,425 games (5 seasons, 12,850 team-game rows).
+Generator: `nhl/sim/ratings.py`. Output: `nhl/data/sim/ratings/team_ratings.parquet`.
+
+Stats: 5v5 attempts FOR/AGAINST per 60, 5v5 xG per attempt FOR/AGAINST.
+Stabilised with split-half K on 2021-22 + 2022-23.
+
+Split-half reliabilities (fit seasons, 40 games/half):
+- 5v5 attempt share: **r=0.932, K=6.0** — pre-registered > 0.60: **HELD**
+- 5v5 xG per attempt FOR: **r=0.798, K=20.7** — pre-registered < attempt share's r: **HELD**
+- PP xG per attempt: **r=0.211** — pre-registered < 0.40: **HELD**
+
+Season carry-over: not yet implemented (first game of each season starts at league mean).
+
+### S11 — Goalie ratings and league finishing term (2026-09-29, S-WO3 Item 2)
+
+Goalie GSAx per attempt, point-in-time, shrunk. Generator: same `nhl/sim/ratings.py`.
+Output: `nhl/data/sim/ratings/goalie_ratings.parquet`.
+
+- GSAx/attempt split-half r: **0.207, K=229.3** — pre-registered < 0.30: **HELD**
+- Starter = goalie on first shot against (from event table). Agreement with box score: TBD.
+- League finishing term (goals/xG v2 by month): 2025-26 runs 0.91-0.97 (below 1.0, indicating
+  the xG v2 overpredicts for that season — consistent with the 1.068 drift noted in S9).
