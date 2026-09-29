@@ -26,3 +26,31 @@
 ### UNVERIFIED
 - Whether the VM props cadence gives a fresh pull before each week-4 window (FWD1b item 3 prints it).
 - Scoring of the week-3 pilot. The Mac PBP stops at week 2.
+
+## 2026-09-29T21:30Z  cowork (verification of FWD1b — D218; order FWD1c)
+
+### RETURNED
+- eng/fwd1 @ 54efc5878: D213 append, D214-D217, log. Not merged.
+- Frozen sim pilot file: 1,049 rows. By tag and revision: sim_v1 20 at rev 0 / 158 at rev 1; no_view 171 / 700.
+- The sim_v1 opinions are 139 receptions, 35 rush_attempts and 4 anytime_td (one-way "no signal" rows). There are 614
+  two-way prop rows.
+- The score output holds 191 sim rows (20 sim_v1). One of the 20 is Zavion Thomas anytime TD at +7500.
+- Sim-only rescoring of the 174 two-way sim opinions, with outcomes taken from the graded AI rows on the same keys:
+  - Brier: sim 0.2673 vs book 0.2517 (gap +0.0157, bootstrap 95% interval -0.0021 to +0.0339).
+  - Receptions: sim 0.2597 vs book 0.2530. Rush attempts: sim 0.2977 vs book 0.2463.
+  - All sides -10.78 units; sides with |gap| > 0.08: +3.73 units on 110.
+
+### MEANS
+- The harness works end to end.
+- The shared revision counter means the second reader to freeze a line is never scored. The live sim runs after the
+  AI log on Sunday, so without a fix it would lose most of its record.
+- The one-way floor workaround put the sim's label on lines the sim never priced.
+- The pilot's direction matches K4 (the book is better, rush attempts worst). It is a pilot, never pooled.
+
+### NOT DONE
+- FWD1c: revisions per reader, no_view at the floor, a week-4 dry run. Then the merge before 23:30Z 10-01.
+- The ChatGPT audit #6 addendum.
+- A Monday VM props slot (the MNF pull is 4 h stale). Workaround: a manual pull under manual/ with --props-file.
+
+### UNVERIFIED
+- The runbook's pull-age figures for the TNF, London and Sunday windows. The dry run prints the TNF one.
