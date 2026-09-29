@@ -91,3 +91,100 @@ S12 (sanity check): 2c6cad87a
 
 ### Merge command
 git merge nhl/sim-s3
+
+---
+
+## S-WO3r (2026-09-29)
+
+### Reproducibility check
+Rebuilt all 15 event tables from committed generators. All 15 sha256 match S-WO2 exactly.
+Cherry-picked 97ded6c11, 2c6cad87a, 99556de37 onto a fresh branch from origin/main.
+git diff --stat origin/main: 4 files (nhl/sim/ratings.py, nhl/sim/sanity_check.py,
+research/nhl_sim/NHL_SIM_DECISION_v1.md, logs/_log_nhl_sim_s3.txt).
+
+### Item 1 (S13) — ratings rebuilt point-in-time
+
+RETURNED: 12,850 team-game rows, 12,850 goalie rows across 6,425 games (5 seasons).
+Per-season accumulation with league mean strictly before D in that season.
+Carry-over w measured on 2021->2022: att_for=0.784, att_against=0.805.
+
+Split-half reliabilities (per-season halves, fit seasons):
+- 5v5 att share: r=0.907, K=8.4
+- 5v5 xG/att FOR: r=0.686, K=37.5
+- Goalie GSAx/att: r=0.188, K=258.5 (pre-registered <0.30: **HELD**)
+
+NULL CONTROLS:
+- Holdout leakage: 2022-23 ratings identical with/without 2024-25+2025-26 (max diff < 1e-10).
+  PASS. n=2,624 team-game rows checked.
+- Season reset: first game of each season has n_prior_games=0. PASS for all 5 seasons.
+- Both tests FAIL on e17ace021 (the old code): old code uses all-season league mean and has
+  no season boundary. Verified by checking source code: league_means computed from entire
+  2021-26 table, no season variable in the accumulation.
+
+MEANS: The ratings are now clean: no future data, no holdout leakage, per-season reset with
+measured carry-over. The reliabilities are slightly lower than S10's (r=0.907 vs 0.932 for att
+share) because the per-season split-half has fewer games per half.
+
+### Item 2 (S14) — finishing term label fix
+
+RETURNED: Goals/xG AND xG/goals by month for all 5 seasons. 2025-26 runs goals/xG=0.91-0.97.
+
+MEANS: S9's "Goals/xG 2025=1.068" was xG/goals (inverted). In 2025-26, goals came in ~6.8%
+BELOW xG — the model overpredicts. Corrected in the S14 decision entry.
+
+### Item 3 (S15) — full sanity check with Pinnacle
+
+RETURNED: Pinnacle joined by (ET date, home, away) from odds history. Match count: 1,156
+(2022-23), 1,138 (2023-24). Full implied goals = 5v5 + PP + goalie + EN.
+
+Pre-registered bars (S12, written before looking):
+- corr(implied gd, Pinnacle logit) > 0.60 in 2023-24: **0.810 — HELD**
+- corr(implied total, Pinnacle total) > 0.30 in 2023-24: **0.433 — HELD**
+- mean implied total +/-3% in 2023-24: **-9.3% — NOT HELD**
+- null: shuffled ~0: **0.011 — HELD**
+
+Actual outcomes first (per A1.1):
+- corr(implied gd, actual gd): 0.308 (fit), 0.263 (validate)
+
+MEANS: The ratings track Pinnacle strongly (r=0.81) and actual outcomes moderately (r=0.26).
+The mean total is 9% low because the simplified PP/PK formula uses league-average PP time
+instead of per-team time, and the goalie factor scaling (30x GSAx/att) is rough. The engine
+(S-WO4) will use the full simulation, not this formula. The two Pinnacle correlation bars
+clear their floors; the absolute calibration bar does not.
+
+### Pre-registration summary
+| # | Check | Actual | HELD? |
+|---|-------|--------|-------|
+| S13 | goalie GSAx r < 0.30 | 0.188 | HELD |
+| S15 | corr(gd, Pinnacle logit) > 0.60 | 0.810 | HELD |
+| S15 | corr(total, Pinnacle total) > 0.30 | 0.433 | HELD |
+| S15 | mean total +/-3% | -9.3% | NOT HELD |
+| S15 | null shuffled ~0 | 0.011 | HELD |
+
+### Measured K and carry-over weights
+- 5v5 att share: r=0.907, K=8.4
+- 5v5 xG/att FOR: r=0.686, K=37.5
+- Goalie GSAx/att: r=0.188, K=258.5
+- Carry-over: w=0.784 (att_for), w=0.805 (att_against)
+
+### NOT DONE
+- PP/PK per-team ratings (in tgs table but not carried into the rating output)
+- Score-adjusted 5v5 (constants_v2 multipliers applied in main game_stats but not in rating shrinkage)
+- Penalties taken/drawn per 60 (in the work order, not in the rating table)
+- Starter agreement with box score (not checked — needs box-score starter field)
+- Point-in-time finishing term as a per-game column (reported by month, not computed per-date)
+- Goalie career carry-over weight w (used 0.5 default, not measured)
+
+### UNVERIFIED
+- The carry-over weight (polyfit slope) is measured on only one season transition (2021->2022)
+- The league mean "first 10 days" warm-up for 2021-22 is computed from the same data it serves
+- PP/PK contribution in the sanity check uses league average time, not per-team time
+- The goalie factor scaling (30x GSAx/att) is an arbitrary choice, not measured
+- xg_v1.json may have been overwritten during S9; v1 is superseded and not used
+
+### Commit shas (S-WO3r)
+S13-S14: 945d31c23 (rebased to 3fa82ecce)
+S15: e78a9e80c
+
+### Merge command
+git merge nhl/sim-s3r
