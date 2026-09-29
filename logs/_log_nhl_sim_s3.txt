@@ -475,3 +475,75 @@ S24: 48da1fa9f
 
 ### Merge command
 git merge nhl/sim-s3e
+
+---
+
+## S-WO3f (2026-09-29)
+
+### Item 1 (S25) — xG double-count fix + constants_v5
+
+RETURNED: Event-count null test BEFORE fix:
+```
+Season 2021: ev_att_for sum=89990 vs event table=89212
+```
+FAILED as expected (double-counted rebounds). Applied row-wise xG fix.
+Event-count test AFTER fix: PASSED on all 5 seasons.
+
+grep for merge on xG: 0 hits (the merge was the only xG attachment path).
+
+constants_v5 from committed generator build_constants_v5.py. Null controls:
+- 5v5 numerator = 178,012 (matches v2).
+- Pooled numerator = home + away (all exact).
+- Byte-identical on second run.
+
+v3 and v4 SUPERSEDED (no generator; v4 double-counted).
+
+MEANS: The double-count inflated 5v5 attempts by ~0.9% and biased teams with more rebounds.
+The fix is row-wise xG scoring (no merge). constants_v5 has the same structure as v4 but
+from clean counts with a committed generator.
+
+### Item 2 (S26) — PP/PK/penalty shrinkage, score-adjusted 5v5
+
+PRE-REGISTRATION: score-adjusted att share r >= unadjusted (0.908).
+RESULT: **adjusted r = 0.925 >= 0.908 — HELD**. Ratings use adjusted columns.
+
+PP/PK/penalty ratings with shrinkage:
+- PP xG for/60: r=0.482, K=88.0
+- PK xG against/60: r=0.272, K=219.0
+- Penalties taken/60: r=0.656, K=43.0
+- Penalty denominator: total_seconds (was ev_seconds)
+- Literal 7.0/3.8 deleted: grep returns 0 hits.
+
+Carry-over weights:
+- ev_att_for: 0.786, ev_att_against: 0.789
+- ev_xg_for: 0.383, ev_xg_against: 0.292
+- goalie: 0.144
+
+pytest output:
+```
+........................                                                 [100%]
+24 passed in 13.05s
+```
+Exit code: 0. 0 skipped.
+
+### NOT DONE
+- Goalie truncation test (the goalie ratings are not in the COLS checked by the truncation test;
+  adding them requires splitting build_goalie_ratings into _build_goalie_games + goalie_ratings_from_games,
+  which was in the work order but not built)
+- Goalie mutant test
+- PP/PK carry-over weights not written to carryover_w.json (uses global league mean as target)
+- Score-adjusted xG per attempt (only attempt share is adjusted; xG weights are applied but not used in
+  the rated xG per attempt columns)
+
+### UNVERIFIED
+- The score-adjustment weight lookup uses score_diff from the shooter's view (verified by code review)
+- The penalty denominator total_seconds is the sum of all state durations per game, which should equal
+  regulation + OT time (verified by the S7 null control at 100%)
+- PP/PK K values are from split-half on per-game rates, not per-60 rates — the choice affects the scale
+
+### Commit shas (S-WO3f)
+S25: 187ed7c20 (rebased to 6d56f8a4b)
+S26: da0aa0bcf (rebased to a3a7bcecb)
+
+### Merge command
+git merge nhl/sim-s3e
