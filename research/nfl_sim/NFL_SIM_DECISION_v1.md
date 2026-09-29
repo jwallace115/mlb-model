@@ -3594,3 +3594,36 @@ is entirely absent. Removed the `recv_yl > 80` touchback rule from the fallback 
 - `test_dead_punt_net` renamed to `test_dead_punt_landing`: perturbs `punt_landing` table
   (the table the engine now reads) instead of `punt_net` (legacy fallback). Reason: the 6C
   punt-table change made the dead test miss the live code path.
+
+### D203 — 6D Item 3: fit_6d; K1 plays 126.6; pts/team 21.04 (+0.21 from 6C); 8 reds (2026-09-29)
+
+Fit: `fit_6d`, 1,087 games (1,079 converged), N=5000. Cal committed before K1
+(header `a0895aec4`, clean).
+
+K1 plays **126.6** (pre-reg 125.8 ± 1.5: **HELD**, +0.8 from real).
+Safeties **0.031** (pre-reg 0.028-0.040: **HELD**).
+drives 22.9. pts/team **21.04** (6C was 20.83; pre-reg rises vs 6C: **HELD**, +0.21).
+go_rate +0.0059 **PASS**. off_pen +0.006 **PASS**. def_pen +0.004 **PASS**.
+fg_att -0.110 **PASS**. fd_pen -0.462 **FAIL** (expected).
+tied_expiry 0.118 **FAIL** (expected).
+
+Suite: **8 failed**, 226 passed. Exit code 1 (genuine failures, no wrapper).
+Reds: fd_pen (known), tied_drives (known), ot_structure, late_half_snaps,
+timeouts_kneels, tied_offence_kicks, kneels_and_late_snaps, kneel_measured_table.
+Pre-reg allowed only fd_pen and tied_expiry: **FAILED** (6 unexpected reds,
+all late-game; down from 13 on 6C).
+
+**Points-per-drive decomposition** (6d engine on 200-game sample, N=100):
+- pts/team sim 20.48, real 21.38, gap **-1.81** per game
+- START MIX: **+2.09** (sim has +2.0 extra own21-40 drives x real ppd)
+- EFFICIENCY: **-3.48** (sim ppd lower than real in own21-40: 1.673 vs 1.896)
+- Interaction: **-0.42**
+- Check: +2.09 - 3.48 - 0.42 = -1.81 (matches gap)
+
+**Comparison to 6C** (from D185's method on fit_6a, the last available split):
+fit_6a pts gap -1.69 = START MIX +2.99 + EFFICIENCY -4.28 + interaction -0.40.
+fit_6d pts gap -1.81 = START MIX +2.09 + EFFICIENCY -3.48 + interaction -0.42.
+What moved: START MIX improved (fewer excess drives: +2.09 vs +2.99, -0.90) because
+the punt fallback fix (D202) removed the own-1 pile-up. EFFICIENCY also improved
+(-3.48 vs -4.28, +0.80) — the sim's own-half ppd rose from ~1.56 to 1.67. The
+total gap barely changed (-1.81 vs -1.69) because the improvements roughly cancel.
