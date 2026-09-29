@@ -792,3 +792,11 @@ Two gaps:
 - PK r 0.630 → 0.628, K 24.1 → 24.3;
 - carry-over w: PP 0.762 → 0.753, PK 0.607 → 0.612, 5v5 attempts against 0.824 → 0.819;
 - everything else unchanged.
+
+### S40 — game_inputs.py: team ratings → engine multipliers (2026-09-29, S-WO4b Item 1)
+
+Maps team_ratings + goalie_ratings + F(D) to TeamMultipliers. Missing row or NaN raises.
+q = 0.068513 (league xG per non-EN attempt) added to v8 via build_constants_v7.py --v8.
+Null: every v7 field unchanged in v8.
+
+Tests: (a) all-ones = league average (identical), (b) 1.1x attack wins more, (c) date matches.

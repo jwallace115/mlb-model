@@ -664,6 +664,12 @@
       ],
       "total_pulls": 1822
     },
+    "q_league_xg_per_non_en_attempt": {
+      "denominator": 225912,
+      "derivation": "sum(xG v2) / non-empty-net unblocked attempts, all states, fit seasons",
+      "numerator": 15478.02,
+      "value": 0.068513
+    },
     "xg_per_attempt_3v3": {
       "denominator": 2607,
       "derivation": "sum(xg_v2) / unblocked attempts in 3v3",
