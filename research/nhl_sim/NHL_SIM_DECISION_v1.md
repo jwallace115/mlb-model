@@ -807,3 +807,26 @@ Tests: (a) all-ones = league average (identical), (b) 1.1x attack wins more, (c)
 Pinnacle matched: 1,156 (2022-23) and 1,138 (2023-24) — both match the required counts.
 Output: nhl/data/sim/prices/season={2022,2023}.parquet (gitignored, sha in manifest).
 Totals P(over) uses normal approximation from mean total and √mean.
+
+### S42 — 2023-24 prediction test (2026-09-29, S-WO4b Item 3)
+
+PRE-REGISTERED: A1 disagreement CI expected to include 0.
+
+**2023-24 moneyline (1,138 games):**
+- Engine log-loss: 0.6647 vs Pinnacle: 0.6567 (engine worse by +0.0080)
+- Engine Brier: 0.2361 vs Pinnacle: 0.2326 (engine worse by +0.0035)
+- A1 disagreement coefficient: 0.376 (90% CI: [-0.103, 0.869])
+- **Engine adds information: NO** (lower bound ≤ 0) — **PRE-REGISTRATION HELD**
+
+**2022-23 moneyline (fit, 1,156 games):**
+- Engine log-loss: 0.6669 vs Pinnacle: 0.6568 (engine worse by +0.0101)
+- A1 disagreement: 0.230 (90% CI: [-0.156, 0.586]) — also includes 0
+
+The engine TRAILS Pinnacle by ~0.8% on log-loss (validation). The disagreement coefficient
+is positive (0.376) — directionally the engine adds something — but the CI includes 0, so
+it is not statistically significant. Per A1: the engine earns no weight as a layer yet.
+
+By games played: the engine is closest to Pinnacle in the 11-40 game range. At 0-10 games
+the engine is 2.4% worse (early-season uncertainty); at 41+ games it's 0.9% worse.
+
+No calibration fitted on 2023-24. Nothing in Items 1-2 changed.
