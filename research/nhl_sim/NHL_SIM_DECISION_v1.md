@@ -123,3 +123,24 @@ score, emits spans capped at period boundaries, excludes shootout. Rush feature 
 
 **Tests:** 3 new (opening score=0, shootout seconds=3900, score_diff=-2 before third goal).
 All 3 FAIL on 025494252: old code gives score=-3, seconds=4800, and no -2 spans.
+
+### S8 — Constants v2, as rates (2026-09-29, S-WO2 Item 2)
+
+Fitted on 2021-22 + 2022-23 (2,624 games). Output: `nhl/data/sim/constants_v2.json`.
+v1 withdrawn and marked in manifest. Generator: `nhl/sim/build_constants.py`.
+
+Pre-registered checks (all predictions written BEFORE looking at numbers):
+- Penalties per team per game 2.8-4.5: **3.77 — HELD**
+- Trailing-by-1 3rd period 5v5 attempt mult > 1.05: **1.076 — HELD**
+- Leading-by-1 3rd period 5v5 attempt mult < 0.95: **0.907 — HELD**
+- >80% of pulls at -1 in last 3:00: **93.9% (n=1,056) — HELD**
+- Shootout conversion 28-35%: **32.3% — HELD**
+- OT decided share 55-75%: **66.6% — HELD**
+
+All 6 pre-registrations held.
+
+NULL CONTROL: old state_time gives first-span score != 0 (the FINAL score), and the old
+penalty formula gives 451.8 (outside any band). New data: first-span score = 0 on 100%
+of games, penalty rate = 3.77 (within band).
+
+sha256: 188c0dec7022a39ecca645193c6a5f6ccfa8c8537ad8c05a3fb2ebff9c51c74b.
