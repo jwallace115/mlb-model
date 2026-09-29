@@ -547,3 +547,29 @@ S26: da0aa0bcf (rebased to a3a7bcecb)
 
 ### Merge command
 git merge nhl/sim-s3e
+
+
+## S27 — Cowork session (2026-09-29 17:58Z)
+Cowork implemented what S-WO3f left undone, directly in ~/mlb-model-nhlsim3e. See decision S27.
+
+RETURNED:
+- `python3 nhl/sim/ratings.py --measure-hyper`: 74 s total (stats build 63 s). Wrote shrinkage_K.json,
+  carryover_w.json, goalie_games.parquet, the ratings and manifest.json.
+- team_game_stats.parquet vs S-WO3f's: 12,850 rows, every numeric column diff 0.
+- pytest test_ratings_s18.py (excluding the git-dependent old-code test): 10 passed.
+- pytest test_ratings_s13.py: 2 passed.
+- a3a7bcecb ratings.py on 2022-23 fit-season truncation: 20 / 20 dates fail (worst 0.71).
+
+MEANS:
+- Every team and goalie rating is point-in-time, including within fit seasons.
+- Hyperparameters are frozen from fit seasons.
+- 5v5 is score-adjusted.
+- PP/PK/penalties are shrunk with measured K and carried over with measured w.
+
+NOT DONE:
+- the old-code (e17ace021) test was not re-run here (no git in the Cowork mount; it runs on the Mac);
+- the per-game point-in-time finishing term and the full-formula run (next order).
+
+UNVERIFIED:
+- Claude Code has not reviewed the S27 code.
+- test_build_events.py needs nhl/cache/pbp (not in this worktree), so it was not run.

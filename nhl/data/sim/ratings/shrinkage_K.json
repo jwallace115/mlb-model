@@ -1,0 +1,57 @@
+{
+  "_adjusted_5v5": true,
+  "_fit_seasons": [
+    2021,
+    2022
+  ],
+  "ev_att": {
+    "K": 3.344425511106945,
+    "method": "mean-of-games share ev_att_for_adj/(ev_att_for_adj+ev_att_against_adj)",
+    "n_half": 41.0,
+    "pairs": 64,
+    "r": 0.9245807004474719,
+    "r_unadjusted_for_record": 0.9081267134036218
+  },
+  "ev_xg": {
+    "K": 21.66182566943284,
+    "method": "mean-of-games ev_xg_for_adj/ev_att_for_adj",
+    "n_half": 41.0,
+    "pairs": 64,
+    "r": 0.6543058642480676
+  },
+  "goalie": {
+    "K": 87.118169231913,
+    "method": "ratio-of-sums gsax/attempts_faced, goalie-season halves (>=10 starts each)",
+    "n_half": 19.819383259911895,
+    "pairs": 112,
+    "r": 0.18533604704883289
+  },
+  "pen_drawn": {
+    "K": 40.40728255172767,
+    "method": "ratio-of-sums penalties_drawn/total_seconds",
+    "n_half": 41.0,
+    "pairs": 64,
+    "r": 0.5036404448698782
+  },
+  "pen_taken": {
+    "K": 21.323015905349973,
+    "method": "ratio-of-sums penalties_taken/total_seconds",
+    "n_half": 41.0,
+    "pairs": 64,
+    "r": 0.6578629003170633
+  },
+  "pk_xg": {
+    "K": 24.079339211006243,
+    "method": "ratio-of-sums pk_xg_against/pk_seconds",
+    "n_half": 41.0,
+    "pairs": 64,
+    "r": 0.6300002504184318
+  },
+  "pp_xg": {
+    "K": 17.34129430806745,
+    "method": "ratio-of-sums pp_xg_for/pp_seconds",
+    "n_half": 41.0,
+    "pairs": 64,
+    "r": 0.7027612343240474
+  }
+}

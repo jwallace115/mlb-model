@@ -404,3 +404,80 @@ NULL CONTROLS:
 - goalie: 0.144
 
 **Tests:** 24 passed, 0 skipped. PP/PK/penalty columns in truncation test.
+
+
+### S27 — Ratings engine completed by Cowork after S-WO3f stopped short (2026-09-29 17:58Z)
+
+Cowork wrote this directly into ratings.py, after four orders in a row left the same parts undone. Verified by the
+tests below. Claude Code has not reviewed it.
+
+**Corrects S26's claims.** S26 said "ratings use adjusted columns" and "goalie in test". Neither was true:
+- build_pit_ratings read the unadjusted columns;
+- the goalie ratings were not in any truncation test;
+- the PP/PK/penalty targets were a league mean taken over the whole of 2021-23 (including the dates being rated):
+  a within-fit-season leak;
+- penalties drawn reused the K for penalties taken.
+
+**Changes:**
+1. **One generic rating structure for all 8 team ratings.** The 8 ratings are:
+   - 5v5 attempts for / against per 60;
+   - 5v5 xG per attempt for / against;
+   - PP xG for per 60;
+   - PK xG against per 60;
+   - penalties taken / drawn per 60 of total time.
+
+   For each, on date D:
+   - league mean = ratio of sums over league rows before D in the same season, or the previous season's final
+     league mean until 20 team-games;
+   - target = w × the team's final raw rate last season + (1 - w) × league mean;
+   - rating = shrink(raw × n, n, target, K).
+
+   On 2021-22 opening night there is no prior data, so ratings are NaN (4 rows, warm-up season only). The old
+   warm-up used the first 5 dates for every early game; that leak is removed.
+2. **5v5 uses the score-adjusted columns** (the S26 pre-registration HELD: r 0.925 vs 0.908 unadjusted).
+3. **Hyperparameters are frozen.** `--measure-hyper` measures K and w once on fit seasons 2021-22 + 2022-23 and
+   writes shrinkage_K.json and carryover_w.json. The rating build only reads them. That's what makes the fit-season
+   truncation test possible.
+4. **K = n_half × (1 - r) / r**, with n_half the measured mean games per split half (41.0 for teams, 19.8 starts for
+   goalies). The old compute_K(r, 82) used a full season for a half-season reliability, which doubled K (over-shrank).
+5. **PP/PK/penalty r uses ratio-of-sums split halves**, because exposure varies by game. The 5v5 share keeps
+   mean-of-games, as pre-registered in S26.
+6. **Goalie:**
+   - build_goalie_games writes the per-start table (goalie_games.parquet);
+   - goalie_ratings_from_games holds the point-in-time part;
+   - the starter is the goalie facing the first attempt, sorted by (period, seconds) (was seconds only);
+   - K from ratio-of-sums split halves.
+7. **Manifest** adds shrinkage_K.json, team_game_stats.parquet and goalie_games.parquet.
+
+**Measured (fit seasons):**
+
+| rating | r | K | carry-over w |
+|---|---|---|---|
+| 5v5 attempt share (adjusted) | 0.925 (unadjusted 0.908) | 3.34 | for 0.797 / against 0.824 |
+| 5v5 xG per attempt (adjusted) | 0.654 | 21.7 | for 0.349 / against 0.232 |
+| PP xG / 60 | 0.703 | 17.3 | 0.762 |
+| PK xGA / 60 | 0.630 | 24.1 | 0.607 |
+| penalties taken / 60 | 0.658 | 21.3 | 0.839 |
+| penalties drawn / 60 | 0.504 | 40.4 | 0.762 |
+| goalie GSAx / attempt | 0.185 | 87.1 | 0.144 |
+
+**Tests (test_ratings_s18.py): 10 passed.** The e17ace021 old-code test needs git, so it runs on the Mac only.
+- Team truncation on 20 dates of 2023-24.
+- **NEW:** fit-season truncation on 20 dates of 2022-23. It FAILS on a3a7bcecb (20/20 dates, worst 0.71: the
+  global league-mean leak) and PASSES here.
+- **NEW:** goalie truncation on 20 dates.
+- **NEW:** goalie mutant (update before record): FAILS, as it should.
+- Team mutant patching the real source; holdout-deletion; season reset; starter agreement; event-count exactness.
+- test_ratings_s13: 2 passed. team_game_stats.parquet rebuilt byte-for-byte equal in content to S-WO3f's (every
+  numeric column diff = 0).
+
+**Effect on 2023-24 ratings vs S-WO3f:**
+- 5v5 attempts-for: corr 0.989.
+- PP xG / 60: corr 0.90, SD 0.35 → 0.97. PK: SD 0.16 → 0.64. The old K was 2-12× too large, so these were
+  over-shrunk.
+- Goalie: corr 0.875, SD 0.0015 → 0.0019.
+- 5v5 xG per attempt is now on the score-adjusted scale (mean 0.0588). Consumers must compare it with the adjusted
+  league mean, not constants_v5's raw 5v5 value.
+8. **team_ratings.parquet also stores `lg_<rating>`:** the point-in-time league mean each rating was shrunk toward.
+   Consumers put team ratings on league-relative terms with these; that matters most for the score-adjusted 5v5
+   scale.

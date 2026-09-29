@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from nhl.sim.ratings import build_pit_ratings, build_goalie_ratings, CARRYOVER_PATH, load_xg_model
+from nhl.sim.ratings import build_pit_ratings, goalie_ratings_from_games, CARRYOVER_PATH, GOALIE_GAMES_PATH
 
 TGS_PATH = ROOT / "nhl" / "data" / "sim" / "ratings" / "team_game_stats.parquet"
 BOX_DIR = ROOT / "nhl" / "cache"
@@ -22,21 +22,33 @@ N_DATES = 20
 
 # The accumulation block that updates team stats (must exist in ratings.py)
 ACCUM_BLOCK = (
-    '            tc["att_for"] += row["ev_att_for"]\n'
-    '            tc["att_ag"] += row["ev_att_against"]\n'
-    '            tc["xg_for"] += row["ev_xg_for"]\n'
-    '            tc["xg_ag"] += row["ev_xg_against"]\n'
-    '            tc["ev_secs"] += row["ev_seconds"]\n'
-    '            tc["pp_xg"] += row["pp_xg_for"]\n'
-    '            tc["pp_secs"] += row["pp_seconds"]\n'
-    '            tc["pk_xg_ag"] += row["pk_xg_against"]\n'
-    '            tc["pk_secs"] += row["pk_seconds"]\n'
-    '            tc["pen_taken"] += row["penalties_taken"]\n'
-    '            tc["pen_drawn"] += row["penalties_drawn"]\n'
-    '            tc["total_secs"] += row.get("total_seconds", 0)\n'
+    '            for c in acc_cols:\n'
+    '                tc[c] += r[c]\n'
     '            tc["n"] += 1'
 )
-# The line AFTER which the block currently sits (used to detect the append)
+INSERT_BEFORE = '            # --- rating going INTO this game ---'
+GOALIE_ACCUM_BLOCK = (
+    '            gs["gsax"] += gg.gsax\n'
+    '            gs["att"] += gg.attempts_faced\n'
+    '            gs["n"] += 1'
+)
+GOALIE_INSERT_BEFORE = '            # --- goalie rating going INTO this game ---'
+
+
+def _load_source_as_module(src, name):
+    """Exec patched ratings.py source as a temp module with ROOT pinned to the repo."""
+    src = src.replace("ROOT = Path(__file__).resolve().parents[2]", f'ROOT = Path("{ROOT}")')
+    assert f'ROOT = Path("{ROOT}")' in src, "could not pin ROOT in patched source"
+    with tempfile.NamedTemporaryFile(suffix=".py", mode="w", delete=False) as f:
+        f.write(src)
+        path = f.name
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    Path(path).unlink()
+    return mod
+
+
 APPEND_LINE = '            })\n'
 
 
@@ -105,22 +117,10 @@ class TestMutantSourcePatch:
         # Move it to BEFORE 'if tc["n"] == 0:' by:
         # 1. Remove the block from its current position
         # 2. Insert it just before 'if tc["n"] == 0:'
-        mutant_src = src.replace(ACCUM_BLOCK, "# REMOVED_ACCUM")
-        insert_before = '            if tc["n"] == 0:'
-        mutant_src = mutant_src.replace(insert_before, ACCUM_BLOCK + "\n\n" + insert_before)
-        # Also patch CARRYOVER_PATH
-        mutant_src = mutant_src.replace(
-            'CARRYOVER_PATH = OUT_DIR / "carryover_w.json"',
-            f'CARRYOVER_PATH = __import__("pathlib").Path("{CARRYOVER_PATH}")'
-        )
-
-        with tempfile.NamedTemporaryFile(suffix=".py", mode="w", delete=False) as f:
-            f.write(mutant_src)
-            mutant_path = f.name
-
-        spec = importlib.util.spec_from_file_location("mutant_ratings", mutant_path)
-        mutant = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mutant)
+        mutant_src = src.replace(ACCUM_BLOCK, "            pass  # REMOVED_ACCUM")
+        assert INSERT_BEFORE in mutant_src, "insertion marker not found — cannot build mutant"
+        mutant_src = mutant_src.replace(INSERT_BEFORE, ACCUM_BLOCK + "\n" + INSERT_BEFORE)
+        mutant = _load_source_as_module(mutant_src, "mutant_ratings")
 
         D = test_dates[0]
         tr = _corrupt_and_rebuild(tgs, D, mutant.build_pit_ratings)
@@ -131,7 +131,6 @@ class TestMutantSourcePatch:
         idx = tgs[tgs["date"] == D].set_index(["game_id", "team"]).index
         common = mutant_idx.index.intersection(idx)
         diff = (tr.loc[common] - mutant_idx.loc[common]).abs().to_numpy().max()
-        Path(mutant_path).unlink()
         assert diff > 1e-6, f"Mutant should fail truncation but diff was {diff:.2e}"
 
 
@@ -271,3 +270,64 @@ class TestEventCounts:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+# ---------------------------------------------------------------------------
+# S27 (Cowork): fit-season truncation and goalie point-in-time tests
+# ---------------------------------------------------------------------------
+class TestTruncationFitSeason:
+    """Same truncation test on 20 dates of 2022-23 (a FIT season). Hyperparameters are frozen in JSON,
+    so any rating that uses same-season future rows (e.g. a league mean computed over the whole fit
+    set) fails here. The a3a7bcecb code (global fit-season league mean for PP/PK/penalties) fails it."""
+
+    def test_truncation_fit_season(self, tgs, full_ratings):
+        rng = np.random.RandomState(SEED)
+        dates = sorted(tgs[tgs["season"] == 2022]["date"].unique())
+        worst, fails = 0.0, 0
+        for D in sorted(rng.choice(dates, N_DATES, replace=False)):
+            tr = _corrupt_and_rebuild(tgs, D, build_pit_ratings)
+            idx = tgs[tgs["date"] == D].set_index(["game_id", "team"]).index
+            diff = np.nanmax((tr.loc[idx] - full_ratings.loc[idx]).abs().to_numpy())
+            worst = max(worst, diff)
+            fails += diff > 1e-12
+        assert fails == 0, f"Fit-season truncation failed on {fails}/{N_DATES} dates, worst diff={worst:.2e}"
+
+
+@pytest.fixture(scope="module")
+def gdf():
+    return pd.read_parquet(GOALIE_GAMES_PATH)
+
+
+def _goalie_corrupt_and_rebuild(gdf, D, fn):
+    g = gdf[gdf["date"] <= D].copy()
+    m = g["date"] == D
+    g.loc[m, "gsax"] = g.loc[m, "gsax"] * 7 + 3
+    g.loc[m, "attempts_faced"] = g.loc[m, "attempts_faced"] * 7 + 3
+    return fn(g).set_index(["game_id", "role"])["gsax_per_att_rating"]
+
+
+class TestGoalieTruncation:
+    def test_goalie_truncation(self, gdf, test_dates):
+        full = goalie_ratings_from_games(gdf).set_index(["game_id", "role"])["gsax_per_att_rating"]
+        worst, fails = 0.0, 0
+        for D in test_dates:
+            tr = _goalie_corrupt_and_rebuild(gdf, D, goalie_ratings_from_games)
+            idx = gdf[gdf["date"] == D].set_index(["game_id", "role"]).index
+            diff = float((tr.loc[idx] - full.loc[idx]).abs().max())
+            worst = max(worst, diff)
+            fails += diff > 1e-12
+        assert fails == 0, f"Goalie truncation failed on {fails}/{N_DATES} dates, worst diff={worst:.2e}"
+
+    def test_goalie_mutant_fails(self, gdf, test_dates):
+        src = Path(ROOT / "nhl" / "sim" / "ratings.py").read_text()
+        assert GOALIE_ACCUM_BLOCK in src, "goalie accumulation block not found — test FAILS, not skips"
+        assert GOALIE_INSERT_BEFORE in src, "goalie insertion marker not found"
+        msrc = src.replace(GOALIE_ACCUM_BLOCK, "            pass  # REMOVED_GOALIE_ACCUM")
+        msrc = msrc.replace(GOALIE_INSERT_BEFORE, GOALIE_ACCUM_BLOCK + "\n" + GOALIE_INSERT_BEFORE)
+        mutant = _load_source_as_module(msrc, "mutant_goalie")
+        D = test_dates[0]
+        full = mutant.goalie_ratings_from_games(gdf).set_index(["game_id", "role"])["gsax_per_att_rating"]
+        tr = _goalie_corrupt_and_rebuild(gdf, D, mutant.goalie_ratings_from_games)
+        idx = gdf[gdf["date"] == D].set_index(["game_id", "role"]).index
+        diff = float((tr.loc[idx] - full.loc[idx]).abs().max())
+        assert diff > 1e-6, f"Goalie mutant should fail truncation but diff was {diff:.2e}"
