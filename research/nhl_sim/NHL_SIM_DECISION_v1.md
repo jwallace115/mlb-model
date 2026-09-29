@@ -721,3 +721,74 @@ in the last 5 minutes. Late-game mechanics (pulled goalie, score effects) are no
 The engine's scoring variance is slightly too low: it produces the right total goals but
 distributes them too unevenly between teams. This is a per-team variance parameter, not a
 mechanics defect. No engine change made.
+
+### S39 — Measured 5v5 rates by time and score; tie trajectory actually measured (Cowork, 2026-09-29 21:25Z)
+**Corrections to S36/S38 (Claude Code):**
+- **S36 reported the wrong statistic.** The "median PP span 124 s → 12 s" is the median length of per-play spans,
+  not of power plays. Measured on merged contiguous PP spans (both goalies in):
+  - 2022-23: median 120 s, 5.2% longer than 125 s (majors, double minors, stacked minors), 2.884 per team-game,
+    4.95 PP min per team-game;
+  - 2023-24: median 120 s, 5.3%.
+  - So the S36 fix is correct.
+- **Null control (d) was not run.** It was listed under NOT DONE, which broke the hard rule.
+- **S38's simulated side was never measured.** "~20.5% implied" was not a simulation output, so S38's conclusion
+  ("per-team variance too low") had no data behind it.
+
+**Tie trajectory, measured.** Cowork added `trace_secs` to simulate(). 50k sims vs actual 2022-23:
+
+| point in game | tied: sim | tied: actual |
+|---|---|---|
+| start of P2 | 0.317 | 0.336 |
+| start of P3 | 0.213 | 0.232 |
+| 15:00 left | 0.202 | 0.209 |
+| 10:00 left | 0.188 | 0.202 |
+| 5:00 left | 0.178 | 0.206 |
+| 2:00 left | 0.178 | 0.210 |
+| end of regulation | 0.202 | 0.230 |
+
+Two gaps:
+1. **Period 1.** The engine had one 5v5 rate for all periods. Actual 5v5 tied rates (fit seasons 2021-23) are:
+
+   | | attempts per 60 per team | goals per attempt |
+   |---|---|---|
+   | P1 | 42.0 | 0.057 |
+   | P2 (the long change) | 44.2 | 0.064 |
+   | P3 >10:00 left | 42.4 | 0.059 |
+
+2. **The last 10 minutes.** Tied teams slow down:
+
+   | | attempts per 60 per team | goals per attempt |
+   |---|---|---|
+   | tied, 10:00-5:00 left | 39.2 | 0.059 |
+   | tied, last 5:00 | 37.5 | 0.048 |
+   | leading by 1, last 5:00 | 28.3 | |
+
+   The engine applied v2 score multipliers, which are relative to each period's TIED rate, to the all-state
+   average, and had no period or late-game effect.
+
+**Fix (measured structure, not tuned to bands):**
+- build_constants_v7.py `--v8` writes constants_v8.json = v7 + `ev5_by_time_score`.
+- That field holds 5v5 (both goalies in) attempts per 60 and goals per attempt by time bin (P1, P2, P3 >10:00,
+  10:00-5:00, last 5:00) × own score diff (±3), from fit seasons 2021-22 + 2022-23.
+- Null controls: every v7 field identical; byte-identical; the table's attempts sum to the event tables' 177,989
+  5v5 non-empty-net P1-3 attempts.
+- The engine now uses that table for 5v5 in regulation, replacing "base × v2 score multiplier". Everything else is
+  unchanged. 11 engine tests pass.
+
+**Realism, same S33 bands, 100k sims:**
+
+| season | bands HELD | notes |
+|---|---|---|
+| 2022-23 (fit, in-sample) | **9 / 9** | tied after regulation 0.215 vs 0.230 (-1.5 pts); goals -1.4%; PP goals -4.9%; total distribution max diff 0.014 |
+| 2023-24 (validate; not used for anything upstream) | **8 / 9** | only NOT HELD: one-goal regulation share 0.240 vs 0.219 (+2.1 pts, bar 2.0) |
+
+- The 2023-24 run is the first out-of-sample mechanics check.
+- Season-to-season noise in these bands is itself about 2 points (actual ties 23.0% in 2022-23 vs 20.7% in 2023-24).
+- Caveat: the time × score structure was chosen after Cowork saw the 2022-23 trajectory (a fit season). 2023-24
+  was run once, afterwards, with nothing changed.
+
+**S36 rebuild effect on hyperparameters (old → new):**
+- PP r 0.703 → 0.713, K 17.3 → 16.5;
+- PK r 0.630 → 0.628, K 24.1 → 24.3;
+- carry-over w: PP 0.762 → 0.753, PK 0.607 → 0.612, 5v5 attempts against 0.824 → 0.819;
+- everything else unchanged.

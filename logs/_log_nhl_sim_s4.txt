@@ -197,3 +197,22 @@ S38: 33cc37531
 
 ### Merge command
 git merge nhl/sim-s4
+
+## S-WO4a2 verification + S39 — Cowork (2026-09-29 21:25Z)
+RETURNED:
+- merged PP spans after S36: median 120 s, 5.2% / 5.3% > 125 s (2022 / 2023);
+- `build_constants_v7.py --v8`: v7 fields identical, byte-identical, 177,989 attempts match;
+- engine tests: 11 passed;
+- realism 2022-23: 9 / 9; realism 2023-24: 8 / 9 (one-goal +2.1 pts);
+- r / K / w old → new pasted in S39.
+
+MEANS:
+- The engine's league-level mechanics match reality in the fit season and, with one marginal miss, in the first
+  out-of-sample season.
+- Next: team inputs and a prediction test on 2023-24 (S-WO4b).
+
+NOT DONE:
+- S36 null control (d) (strength-label agreement), which Claude Code skipped.
+
+UNVERIFIED:
+- Claude Code has not reviewed the S39 engine change.

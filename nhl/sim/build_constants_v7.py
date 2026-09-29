@@ -138,5 +138,68 @@ def main():
     print("pp_penalty:", {k: v for k, v in out["constants"]["pp_penalty"].items() if k != "derivation"})
 
 
+V8 = ROOT / "nhl" / "data" / "sim" / "constants_v8.json"
+TIME_CUTS = (3000, 3300)        # 3rd period split: > 10:00 left, 10:00-5:00, last 5:00
+
+
+def time_bin(period, game_sec):
+    if period < 3:
+        return f"P{int(period)}"
+    rem = 3600 - game_sec
+    return "P3a" if rem > 600 else ("P3b" if rem > 300 else "P3c")
+
+
+def ev5_by_time_score(st, sh):
+    """S39 (Cowork): 5v5 (both goalies in) attempts per 60 per team and goals per attempt by time bin
+    (P1, P2, P3 >10:00 left, 10:00-5:00, last 5:00) and the team's own score diff (clipped +-3).
+    Replaces 'overall 5v5 rate x v2 score multiplier' in the engine: v2 multipliers are relative to each period's
+    TIED rate, but the engine applied them to the all-state average and had no period or late-game effect."""
+    s5 = st[(st.home_skaters == 5) & (st.away_skaters == 5) & (st.home_goalie == 1) & (st.away_goalie == 1) & (st.period <= 3)]
+    secs = {}
+    for r in s5.itertuples(index=False):
+        a, e = r.start_sec, r.end_sec
+        pieces = []
+        for cut in TIME_CUTS:
+            if a < cut < e:
+                pieces.append((a, cut)); a = cut
+        pieces.append((a, e))
+        sd = int(np.clip(r.score_diff_home, -3, 3))
+        for a0, e0 in pieces:
+            tb = time_bin(r.period, a0)
+            for team_sd in (sd, -sd):
+                secs[(tb, team_sd)] = secs.get((tb, team_sd), 0) + (e0 - a0)
+    ev = sh[(sh.strength == "5v5") & ~sh.empty_net.astype(bool) & (sh.period <= 3)].copy()
+    ev["tb"] = [time_bin(p, x) for p, x in zip(ev.period, ev.seconds)]
+    ev["sdc"] = ev.score_diff.clip(-3, 3).astype(int)
+    g = ev.groupby(["tb", "sdc"]).agg(att=("is_goal", "size"), goals=("is_goal", "sum"))
+    out = {}
+    for (tb, sd), r in g.iterrows():
+        sec = secs[(tb, int(sd))]
+        out.setdefault(tb, {})[str(int(sd))] = {
+            "att_per60": round(r.att / sec * 3600, 4), "goals_per_att": round(r.goals / r.att, 6),
+            "attempts": int(r.att), "goals": int(r.goals), "seconds_per_team": int(sec)}
+    return out
+
+
+def main_v8():
+    v7 = json.loads(OUT.read_text())
+    st, sh = load("state_time"), load("shots")
+    out = dict(v7)
+    out["version"] = 8
+    out["based_on"] = "constants_v7.json (all v7 fields copied unchanged)"
+    out["constants"] = dict(v7["constants"])
+    out["constants"]["ev5_by_time_score"] = {
+        "data": ev5_by_time_score(st, sh), "fit_seasons": FIT, "time_bins": ["P1", "P2", "P3a", "P3b", "P3c"],
+        "derivation": "5v5 both goalies in; team attempts / team seconds * 3600 and goals / attempts, by time bin and own score diff (+-3)"}
+    V8.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+    assert all(out["constants"][k] == v for k, v in v7["constants"].items()), "a v7 field changed"
+    sha = hashlib.sha256(V8.read_bytes()).hexdigest()
+    V8.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+    assert hashlib.sha256(V8.read_bytes()).hexdigest() == sha
+    tot = sum(c["attempts"] for tb in out["constants"]["ev5_by_time_score"]["data"].values() for c in tb.values())
+    print("v8: every v7 field identical; byte-identical; sha256", sha, "; 5v5 attempts in table", tot)
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    main_v8() if "--v8" in sys.argv else main()

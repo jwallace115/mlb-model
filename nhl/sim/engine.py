@@ -20,7 +20,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 C2_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v2.json"
-C7_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v7.json"
+C7_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v8.json"   # v8 = v7 + ev5_by_time_score
 
 PERIOD_SECONDS = 1200
 REG_SECONDS = 3 * PERIOD_SECONDS
@@ -31,6 +31,16 @@ MAX_PEN = 4
 MINOR, DOUBLE, MAJOR = 120, 240, 300
 SO_ROUNDS = 3
 SO_MAX_EXTRA = 30          # sudden-death rounds before a coin flip (never reached in practice)
+TIME_BINS = ["P1", "P2", "P3a", "P3b", "P3c"]    # P3a: >10:00 left, P3b: 10:00-5:00, P3c: last 5:00 (constants_v8)
+
+
+def _time_bin(sec):
+    if sec < 2 * PERIOD_SECONDS:
+        return sec // PERIOD_SECONDS
+    rem = REG_SECONDS - sec
+    return 2 if rem > 600 else (3 if rem > 300 else 4)
+
+
 STATE_PAIRS = [(5, 5), (4, 4), (3, 3), (5, 4), (4, 5), (5, 3), (3, 5), (4, 3), (3, 4)]
 
 
@@ -59,7 +69,7 @@ class GameInputs:
     en_goal_per_att: float
     pp_pen_per_sec: float          # PP-creating penalties per team per second
     pen_len_shares: tuple          # (share 2-min, share 4-min, share 5-min) among PP-creating penalties
-    score_effects: dict            # (score diff clipped +-3, period 1..3) -> (attempt mult, goal-per-attempt mult)
+    ev5_table: dict                # (time bin, own score diff -3..3) -> (5v5 attempts per second, goals per attempt), both goalies in
     home_att_mult: float
     away_att_mult: float
     home_q_mult: float
@@ -84,8 +94,9 @@ def league_average_inputs():
         k = key(own, opp)
         att[(own, opp)] = c7[f"attempt_rate_per_60_{k}"]["value"] / 3600.0
         gpa[(own, opp)] = c7[f"goals_per_attempt_{k.replace('per_team_', '')}"]["value"]
-    se = {(sd, p): (c2[f"score_effect_attempt_mult_sd{sd}_p{p}"]["value"], c2[f"score_effect_xg_mult_sd{sd}_p{p}"]["value"])
-          for sd in range(-3, 4) for p in range(1, 4)}
+    ev5 = c7["ev5_by_time_score"]["data"]
+    se = {(tb, sd): (ev5[tb][str(sd)]["att_per60"] / 3600.0, ev5[tb][str(sd)]["goals_per_att"])
+          for tb in TIME_BINS for sd in range(-3, 4)}
     ph = {(-int(k), int(b)): v["hazard_per_sec"] for k, bins in c7["pull_hazard_per_second"]["data"].items() for b, v in bins.items()}
     pp = c7["pp_penalty"]
     share = c2["home_attempt_share"]["value"]
@@ -98,7 +109,7 @@ def league_average_inputs():
         en_goal_per_att=c7["goals_per_attempt_disadvantaged_6v5"]["value"],
         pp_pen_per_sec=pp["per_team_per_second"],
         pen_len_shares=(pp["nominal_share_2min"], pp["nominal_share_4min"], pp["nominal_share_5min"]),
-        score_effects=se,
+        ev5_table=se,
         home_att_mult=share / 0.5, away_att_mult=(1 - share) / 0.5,
         home_q_mult=float(np.sqrt(qm)), away_q_mult=float(1 / np.sqrt(qm)),
         pull_hazard=ph,
@@ -126,7 +137,8 @@ def _skaters(base, own_act, opp_act):
     return 3 + extra_own, 3 + extra_opp
 
 
-def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[StartState] = None):
+def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[StartState] = None, trace_secs=None):
+    """trace_secs: optional game seconds at which to record home-minus-away score (before that second is played)."""
     rng = np.random.default_rng(seed)
     N, inp = n_sims, inputs
     ss = start_state if start_state is not None else StartState()
@@ -136,6 +148,8 @@ def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[S
     for (o, p), v in inp.att_per_sec.items():
         ATT[o, p] = v
         GPA[o, p] = inp.goal_per_att[(o, p)]
+    EV_ATT = np.array([[inp.ev5_table[(tb, sd)][0] for sd in range(-3, 4)] for tb in TIME_BINS])
+    EV_GPA = np.array([[inp.ev5_table[(tb, sd)][1] for sd in range(-3, 4)] for tb in TIME_BINS])
     shares = np.cumsum(inp.pen_len_shares)
     shares = shares / shares[-1]
     HM, AM = inp.home, inp.away
@@ -156,7 +170,11 @@ def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[S
 
     start_sec = (ss.period - 1) * PERIOD_SECONDS + ss.second
     end_sec = REG_SECONDS + OT_SECONDS
+    trace = {}
+    trace_set = set(trace_secs or [])
     for sec in range(start_sec, end_sec):
+        if sec in trace_set:
+            trace[sec] = (score["h"] - score["a"]).copy()
         if sec == REG_SECONDS:                           # end of regulation
             reg = {t: score[t].copy() for t in ("h", "a")}
             live = score["h"] == score["a"]
@@ -178,14 +196,10 @@ def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[S
             gpa = GPA[own_sk, opp_sk].copy()
             ev = (own_sk == 5) & (opp_sk == 5) & ~pulled[t] & ~pulled[o] & ~in_ot
             if ev.any():
-                sd = np.clip(score[t] - score[o], -3, 3)
-                am = np.ones(N); qm = np.ones(N)
-                for s in range(-3, 4):
-                    m = ev & (sd == s)
-                    if m.any():
-                        a_, q_ = inp.score_effects[(s, period)]
-                        am[m] = a_; qm[m] = q_
-                att *= am; gpa *= qm
+                sd = np.clip(score[t] - score[o], -3, 3) + 3                    # 0..6
+                tb = _time_bin(sec)
+                att = np.where(ev, EV_ATT[tb][sd], att)                         # measured 5v5 rate by time bin x own score diff
+                gpa = np.where(ev, EV_GPA[tb][sd], gpa)
                 att = np.where(ev, att * me.ev_att_for * opp.ev_att_against, att)
                 gpa = np.where(ev, gpa * me.ev_q_for * opp.ev_q_against, gpa)
             pp = (own_sk > opp_sk) & ~pulled[t] & ~pulled[o]
@@ -296,4 +310,8 @@ def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[S
     for k in ("pp_goals", "en_goals", "attempts", "pp_opps", "pp_seconds"):
         res[f"home_{k}"] = out[f"{k}_h"]
         res[f"away_{k}"] = out[f"{k}_a"]
+    if trace_secs is not None:
+        if REG_SECONDS in trace_set and REG_SECONDS not in trace:
+            trace[REG_SECONDS] = reg["h"] - reg["a"]
+        res["trace"] = trace
     return res
