@@ -94,12 +94,13 @@ def compute_constants(seasons):
     # ── PP goal rate (goals per 60 of PP time) ──
     pp_shots = shots[shots["sg"] == "PP"]
     pp_goals = pp_shots["is_goal"].sum()
-    pp_seconds = state[state["sg"] == "PP"]["duration"].sum()
+    # PP time = both teams' PP: home PP (sg==PP) + away PP (sg==PK from home view)
+    pp_seconds = state[state["sg"] == "PP"]["duration"].sum() + state[state["sg"] == "PK"]["duration"].sum()
     pp_g_per_60 = pp_goals / pp_seconds * 3600 if pp_seconds > 0 else 0
     constants["pp_goals_per_60"] = {
         "value": round(pp_g_per_60, 2), "goals": int(pp_goals),
         "pp_seconds": round(pp_seconds),
-        "derivation": "PP goals / PP seconds * 3600"
+        "derivation": "PP goals (both teams) / total PP seconds (both teams) * 3600"
     }
 
     # ── Score effects on attempt rate ──

@@ -1,0 +1,296 @@
+{
+  "fit_seasons": [
+    2021,
+    2022
+  ],
+  "n_games": 2624,
+  "constants": {
+    "attempt_rate_per_60_even": {
+      "value": 84.8,
+      "n_shots": 180580,
+      "n_seconds": 7665805,
+      "n_games": 2624,
+      "derivation": "unblocked attempts in even / seconds in even * 3600"
+    },
+    "attempt_rate_per_60_PP": {
+      "value": 135.34,
+      "n_shots": 32437,
+      "n_seconds": 862790,
+      "n_games": 2624,
+      "derivation": "unblocked attempts in PP / seconds in PP * 3600"
+    },
+    "attempt_rate_per_60_PK": {
+      "value": 25.56,
+      "n_shots": 5703,
+      "n_seconds": 803128,
+      "n_games": 2624,
+      "derivation": "unblocked attempts in PK / seconds in PK * 3600"
+    },
+    "attempt_rate_per_60_3v3": {
+      "value": 93.21,
+      "n_shots": 2607,
+      "n_seconds": 100685,
+      "n_games": 2624,
+      "derivation": "unblocked attempts in 3v3 / seconds in 3v3 * 3600"
+    },
+    "goal_rate_even": {
+      "value": 0.0618,
+      "goals": 11152,
+      "shots": 180580,
+      "derivation": "goals / unblocked attempts in even"
+    },
+    "goal_rate_PP": {
+      "value": 0.099,
+      "goals": 3212,
+      "shots": 32437,
+      "derivation": "goals / unblocked attempts in PP"
+    },
+    "goal_rate_PK": {
+      "value": 0.0731,
+      "goals": 417,
+      "shots": 5703,
+      "derivation": "goals / unblocked attempts in PK"
+    },
+    "goal_rate_3v3": {
+      "value": 0.1297,
+      "goals": 338,
+      "shots": 2607,
+      "derivation": "goals / unblocked attempts in 3v3"
+    },
+    "penalties_per_60_per_team": {
+      "value": 225.9,
+      "n_penalties": 19759,
+      "n_games": 2624,
+      "derivation": "total penalties / (games * 60 min) / 2 teams"
+    },
+    "penalty_shares": {
+      "minor_2min": 0.894,
+      "double_minor_4min": 0.009,
+      "major_5min": 0.07,
+      "n": 19759,
+      "derivation": "count by duration / total penalties"
+    },
+    "pp_goals_per_60": {
+      "value": 6.94,
+      "goals": 3212,
+      "pp_seconds": 1665918,
+      "derivation": "PP goals (both teams) / total PP seconds (both teams) * 3600"
+    },
+    "score_effect_attempts_sd-3_p1": {
+      "value": 0.013,
+      "n": 450,
+      "n_base": 34822,
+      "derivation": "attempts at score_diff=-3 period 1 / attempts at tied"
+    },
+    "score_effect_attempts_sd-3_p2": {
+      "value": 0.161,
+      "n": 2710,
+      "n_base": 16870,
+      "derivation": "attempts at score_diff=-3 period 2 / attempts at tied"
+    },
+    "score_effect_attempts_sd-3_p3": {
+      "value": 0.336,
+      "n": 4275,
+      "n_base": 12735,
+      "derivation": "attempts at score_diff=-3 period 3 / attempts at tied"
+    },
+    "score_effect_attempts_sd-2_p1": {
+      "value": 0.068,
+      "n": 2379,
+      "n_base": 34822,
+      "derivation": "attempts at score_diff=-2 period 1 / attempts at tied"
+    },
+    "score_effect_attempts_sd-2_p2": {
+      "value": 0.411,
+      "n": 6938,
+      "n_base": 16870,
+      "derivation": "attempts at score_diff=-2 period 2 / attempts at tied"
+    },
+    "score_effect_attempts_sd-2_p3": {
+      "value": 0.514,
+      "n": 6549,
+      "n_base": 12735,
+      "derivation": "attempts at score_diff=-2 period 3 / attempts at tied"
+    },
+    "score_effect_attempts_sd-1_p1": {
+      "value": 0.302,
+      "n": 10522,
+      "n_base": 34822,
+      "derivation": "attempts at score_diff=-1 period 1 / attempts at tied"
+    },
+    "score_effect_attempts_sd-1_p2": {
+      "value": 0.744,
+      "n": 12553,
+      "n_base": 16870,
+      "derivation": "attempts at score_diff=-1 period 2 / attempts at tied"
+    },
+    "score_effect_attempts_sd-1_p3": {
+      "value": 0.774,
+      "n": 9854,
+      "n_base": 12735,
+      "derivation": "attempts at score_diff=-1 period 3 / attempts at tied"
+    },
+    "score_effect_attempts_sd0_p1": {
+      "value": 1.0,
+      "n": 34822,
+      "n_base": 34822,
+      "derivation": "attempts at score_diff=0 period 1 / attempts at tied"
+    },
+    "score_effect_attempts_sd0_p2": {
+      "value": 1.0,
+      "n": 16870,
+      "n_base": 16870,
+      "derivation": "attempts at score_diff=0 period 2 / attempts at tied"
+    },
+    "score_effect_attempts_sd0_p3": {
+      "value": 1.0,
+      "n": 12735,
+      "n_base": 12735,
+      "derivation": "attempts at score_diff=0 period 3 / attempts at tied"
+    },
+    "score_effect_attempts_sd1_p1": {
+      "value": 0.29,
+      "n": 10082,
+      "n_base": 34822,
+      "derivation": "attempts at score_diff=1 period 1 / attempts at tied"
+    },
+    "score_effect_attempts_sd1_p2": {
+      "value": 0.725,
+      "n": 12226,
+      "n_base": 16870,
+      "derivation": "attempts at score_diff=1 period 2 / attempts at tied"
+    },
+    "score_effect_attempts_sd1_p3": {
+      "value": 0.653,
+      "n": 8311,
+      "n_base": 12735,
+      "derivation": "attempts at score_diff=1 period 3 / attempts at tied"
+    },
+    "score_effect_attempts_sd2_p1": {
+      "value": 0.068,
+      "n": 2362,
+      "n_base": 34822,
+      "derivation": "attempts at score_diff=2 period 1 / attempts at tied"
+    },
+    "score_effect_attempts_sd2_p2": {
+      "value": 0.385,
+      "n": 6495,
+      "n_base": 16870,
+      "derivation": "attempts at score_diff=2 period 2 / attempts at tied"
+    },
+    "score_effect_attempts_sd2_p3": {
+      "value": 0.409,
+      "n": 5205,
+      "n_base": 12735,
+      "derivation": "attempts at score_diff=2 period 3 / attempts at tied"
+    },
+    "score_effect_attempts_sd3_p1": {
+      "value": 0.012,
+      "n": 429,
+      "n_base": 34822,
+      "derivation": "attempts at score_diff=3 period 1 / attempts at tied"
+    },
+    "score_effect_attempts_sd3_p2": {
+      "value": 0.149,
+      "n": 2506,
+      "n_base": 16870,
+      "derivation": "attempts at score_diff=3 period 2 / attempts at tied"
+    },
+    "score_effect_attempts_sd3_p3": {
+      "value": 0.274,
+      "n": 3487,
+      "n_base": 12735,
+      "derivation": "attempts at score_diff=3 period 3 / attempts at tied"
+    },
+    "pull_en_shots_sd-1": {
+      "value": 0,
+      "n": 0,
+      "n_games": 2624,
+      "derivation": "empty-net shots against at score_diff=-1 in 3rd period"
+    },
+    "pull_en_shots_sd-2": {
+      "value": 0,
+      "n": 0,
+      "n_games": 2624,
+      "derivation": "empty-net shots against at score_diff=-2 in 3rd period"
+    },
+    "pull_en_shots_sd-3": {
+      "value": 0,
+      "n": 0,
+      "n_games": 2624,
+      "derivation": "empty-net shots against at score_diff=-3 in 3rd period"
+    },
+    "home_attempt_share": {
+      "value": 0.5144,
+      "home": 116962,
+      "away": 110416,
+      "derivation": "home unblocked attempts / total"
+    },
+    "home_goal_rate_mult": {
+      "value": 1.0118,
+      "home_rate": 0.07253,
+      "away_rate": 0.07168,
+      "derivation": "home goal rate / away goal rate on unblocked attempts"
+    },
+    "ot_goal_rate": {
+      "value": 0.1245,
+      "goals": 393,
+      "shots": 3156,
+      "derivation": "OT goals / OT unblocked attempts"
+    },
+    "ot_share": {
+      "value": 0.2248,
+      "ot_games": 590,
+      "n_games": 2624,
+      "derivation": "games going to OT / total games"
+    },
+    "so_share_of_ot": {
+      "value": 0.3339,
+      "so_games": 197,
+      "ot_games": 590,
+      "derivation": "shootout games / OT games"
+    }
+  },
+  "validate_drift": {
+    "attempt_rate_per_60_even": 85.23,
+    "attempt_rate_per_60_PP": 139.11,
+    "attempt_rate_per_60_PK": 24.54,
+    "attempt_rate_per_60_3v3": 41.95,
+    "goal_rate_even": 0.06,
+    "goal_rate_PP": 0.0963,
+    "goal_rate_PK": 0.0769,
+    "goal_rate_3v3": 0.1422,
+    "penalties_per_60_per_team": 228.84,
+    "penalty_shares": null,
+    "pp_goals_per_60": 6.87,
+    "score_effect_attempts_sd-3_p1": 0.014,
+    "score_effect_attempts_sd-3_p2": 0.176,
+    "score_effect_attempts_sd-3_p3": 0.405,
+    "score_effect_attempts_sd-2_p1": 0.071,
+    "score_effect_attempts_sd-2_p2": 0.44,
+    "score_effect_attempts_sd-2_p3": 0.602,
+    "score_effect_attempts_sd-1_p1": 0.295,
+    "score_effect_attempts_sd-1_p2": 0.79,
+    "score_effect_attempts_sd-1_p3": 0.864,
+    "score_effect_attempts_sd0_p1": 1.0,
+    "score_effect_attempts_sd0_p2": 1.0,
+    "score_effect_attempts_sd0_p3": 1.0,
+    "score_effect_attempts_sd1_p1": 0.28,
+    "score_effect_attempts_sd1_p2": 0.763,
+    "score_effect_attempts_sd1_p3": 0.679,
+    "score_effect_attempts_sd2_p1": 0.062,
+    "score_effect_attempts_sd2_p2": 0.401,
+    "score_effect_attempts_sd2_p3": 0.486,
+    "score_effect_attempts_sd3_p1": 0.014,
+    "score_effect_attempts_sd3_p2": 0.15,
+    "score_effect_attempts_sd3_p3": 0.32,
+    "pull_en_shots_sd-1": 0,
+    "pull_en_shots_sd-2": 0,
+    "pull_en_shots_sd-3": 0,
+    "home_attempt_share": 0.5118,
+    "home_goal_rate_mult": 1.0252,
+    "ot_goal_rate": 0.1368,
+    "ot_share": 0.2073,
+    "so_share_of_ot": 0.3015
+  }
+}

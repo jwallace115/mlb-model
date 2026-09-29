@@ -80,3 +80,21 @@ Pre-registered checks (all predictions written BEFORE looking at numbers):
 sum(xG)/goals by season: 2021=0.983, 2022=1.018, 2023=0.998, 2024=1.013, 2025=1.068.
 2024-25 and 2025-26 are REPORTED only — nothing refitted on them.
 sha256: f18728ec7da3f4fe662e9c8334fd225816921fc42e6947491090f05cb142c539.
+
+### S6 — Measured league constants (2026-09-29)
+
+Fitted on 2021-22 + 2022-23 (2,624 games). Generator: `nhl/sim/build_constants.py`.
+Output: `nhl/data/sim/constants_v1.json`. Manifest: `research/nhl_sim/constants_v1_manifest.md`.
+
+Pre-registered checks:
+- PP goals per 60 of PP time: **6.94 — HELD** (expected 6-8). Bug found and fixed: initial
+  calculation counted only one team's PP time (13.4), corrected to include both teams' PP.
+- Home share of unblocked attempts: **51.44% — HELD** (expected 50.5-52.0%).
+- Shootout per-attempt conversion 28-35%: **NOT MEASURED** — shootout plays excluded from
+  the shots table (periodType SO filter). Needs a separate shootout parser in S-WO2.
+- Pull hazard at -1 in last 3:00 (>80%): **NOT MEASURED** — the empty-net detection from
+  situationCode captures shots against an empty net, not the moment of the pull. Needs
+  state-transition tracking in S-WO2.
+
+2023-24 validate_drift reported beside fit values (not used in engine).
+sha256: 32aa748bd643bb4593a62fb9fa83fef3673fd0cd0ed81301830e65f67a5db3d1.
