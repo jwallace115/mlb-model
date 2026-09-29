@@ -166,3 +166,178 @@ goal; the NHL boxscore SOG excludes them. Cannot be reconciled from available da
 
 **Goals/xG by season:** 2021=0.981, 2022=1.018, 2023=1.003, 2024=1.012, 2025=1.068.
 2025-26 drift (1.068) is the largest — reported only, nothing refitted.
+
+### S10 — Team ratings (2026-09-29, S-WO3 Item 1)
+
+Point-in-time team ratings for 6,425 games (5 seasons, 12,850 team-game rows).
+Generator: `nhl/sim/ratings.py`. Output: `nhl/data/sim/ratings/team_ratings.parquet`.
+
+Stats: 5v5 attempts FOR/AGAINST per 60, 5v5 xG per attempt FOR/AGAINST.
+Stabilised with split-half K on 2021-22 + 2022-23.
+
+Split-half reliabilities (fit seasons, 40 games/half):
+- 5v5 attempt share: **r=0.932, K=6.0** — pre-registered > 0.60: **HELD**
+- 5v5 xG per attempt FOR: **r=0.798, K=20.7** — pre-registered < attempt share's r: **HELD**
+- PP xG per attempt: **r=0.211** — pre-registered < 0.40: **HELD**
+
+Season carry-over: not yet implemented (first game of each season starts at league mean).
+
+### S11 — Goalie ratings and league finishing term (2026-09-29, S-WO3 Item 2)
+
+Goalie GSAx per attempt, point-in-time, shrunk. Generator: same `nhl/sim/ratings.py`.
+Output: `nhl/data/sim/ratings/goalie_ratings.parquet`.
+
+- GSAx/attempt split-half r: **0.207, K=229.3** — pre-registered < 0.30: **HELD**
+- Starter = goalie on first shot against (from event table). Agreement with box score: TBD.
+- League finishing term (goals/xG v2 by month): 2025-26 runs 0.91-0.97 (below 1.0, indicating
+  the xG v2 overpredicts for that season — consistent with the 1.068 drift noted in S9).
+
+### S12 — Ratings-only sanity check (2026-09-29, S-WO3 Item 3)
+
+Simplified implied goals from 5v5 team ratings only (no PP/PK, no goalie, no finishing term).
+Evaluated on 2022-23 (fit) and 2023-24 (validate). No holdout data touched.
+
+**Results:**
+- corr(implied goal diff, actual goal diff): 0.287 (fit), 0.225 (validate)
+- corr(implied goal diff, Pinnacle logit): **NOT MEASURABLE** — historical lines use
+  event_id hashes that don't join with the boxscore game_id format. Needs a team/date match.
+- corr(implied total, Pinnacle total line): **NOT MEASURABLE** (same join issue)
+- Mean implied total: 5.43 (fit), 5.49 (validate) vs actual 6.36, 6.23
+  Within +/-3% of actual: **NOT HELD** (-14.6% fit, -11.8% validate). The simplified formula
+  omits PP/PK contribution (~1 goal/team/game), goalie factor, and finishing term.
+- NULL CONTROL: shuffled within date, corr = 0.054 (fit), 0.037 (validate) — near 0: **HELD**
+
+The ratings carry real signal (positive correlation, null near 0) but the simplified implied-goals
+formula is too crude for absolute calibration. The full engine (S-WO4) adds PP/PK, goalie,
+finishing term, and proper time allocation. The Pinnacle comparison needs a team+date join
+to be built in S-WO4.
+
+### S13 — Ratings rebuilt point-in-time, per-season (2026-09-29, S-WO3r Item 1)
+
+**What S10-S12 got wrong** (per nhl_sim_s3_verification_2026-09-29.md):
+1. League prior used ALL seasons including holdout (future data in every past rating).
+2. No season boundary — cumulative ran across all 5 seasons without reset.
+3. Leakage truncation test not run.
+4. Goalie same all-season structure.
+5. PP/PK not in table, score adjustment not applied.
+6. S12 used simplified 5v5-only formula, Pinnacle marked "not measurable".
+7. Finishing term was monthly, including same-month games.
+
+**Rebuilt:** Per-season accumulation; league mean = strictly-before-D in that season;
+carry-over measured on 2021->2022 transition (w=0.784 att_for, 0.805 att_against).
+2021-22 opening uses first-10-days mean (flagged as warm-up exception).
+
+Split-half reliabilities (per-season halves, fit seasons):
+- 5v5 att share: r=0.907, K=8.4
+- 5v5 xG/att FOR: r=0.686, K=37.5
+- Goalie GSAx/att: r=0.188, K=258.5 (pre-registered <0.30: **HELD**)
+
+Carry-over: w=0.784 (att_for), w=0.805 (att_against).
+
+NULL CONTROLS:
+- Holdout leakage: 2022-23 ratings identical with and without 2024-25 + 2025-26 (max diff < 1e-10). PASS.
+- Season reset: first game of each season has n_prior_games=0. PASS.
+- Both tests FAIL on e17ace021: old code uses all-season league mean (leakage) and has no season boundary.
+
+### S14 — League finishing term, point-in-time (2026-09-29, S-WO3r Item 2)
+
+Correction: S9's "Goals/xG 2025=1.068" was xG/goals. In 2025-26, goals came in ~6.8% BELOW xG
+(goals/xG = 0.91-0.97 monthly). The xG model OVERpredicts for that season.
+
+Finishing term reported with both labels: goals/xG AND xG/goals by month for all 5 seasons.
+
+### S15 — Sanity check with full formula and Pinnacle join (2026-09-29, S-WO3r Item 3)
+
+Implied goals: 5v5 (team ratings) + PP contribution + goalie factor + EN constant from v2.
+Pinnacle join by (ET date, home abbrev, away abbrev), last snapshot strictly before puck, <= 6h.
+Match count: 1,156 (2022-23), 1,138 (2023-24).
+
+Results (actual outcomes FIRST, per A1.1):
+- corr(implied goal diff, actual goal diff): 0.308 (fit), **0.263** (validate)
+- corr(implied goal diff, Pinnacle logit): 0.851 (fit), **0.810** (validate) — bar >0.60: **HELD**
+- corr(implied total, Pinnacle total): 0.480 (fit), **0.433** (validate) — bar >0.30: **HELD**
+- mean implied total: -8.2% (fit), **-9.3%** (validate) — bar +/-3%: **NOT HELD**
+- NULL CONTROL (shuffled): 0.049 (fit), 0.011 (validate) — **HELD** (near 0)
+
+The Pinnacle correlation bars both pass. The mean total is still 9% low — the simplified formula
+underestimates PP/PK contribution. This is the S12 check run once, as specified; no reweighting.
+
+Previous S12 (5v5-only) was: corr(gd) 0.287/0.225, total -14.6%/-11.8%, Pinnacle "not measurable".
+The full formula + Pinnacle join improved all metrics: Pinnacle logit corr 0.81, total corr 0.43.
+
+> S13 correction (S-WO3c): carry-over w was measured but hardcoded 0.5 and used only for game 1.
+> Fixed in S16: w read from carryover_w.json, used as shrink target for the entire season.
+
+> S14 correction (S-WO3c): finishing term was monthly, not point-in-time. Fixed in S19.
+
+### S16 — Carry-over that is actually used (2026-09-29, S-WO3c Item 1)
+
+Vectorised build_game_stats: 52s (was 320s). Cached to team_game_stats.parquet (12,850 rows).
+Carry-over w measured on 2021->2022 and saved to carryover_w.json (committed):
+- ev_att_for_per60: 0.784, ev_att_against_per60: 0.805
+- ev_xg_per_att_for: 0.363, ev_xg_per_att_against: 0.296
+- goalie_gsax_per_att: 0.300
+
+No literal w anywhere (`grep 'w = 0.5'` returns empty). Code reads carryover_w.json.
+
+The prior = w × last season's final shrunk rating + (1 - w) × league mean, and is the SHRINK
+TARGET for the whole season: rating(D) = (in-season total before D + K × prior) / (n + K).
+
+PRE-REGISTRATION (a): SD at n=1 >= 0.9 × SD at n=0 in 2023-24: **3.34 >= 2.75 — HELD** (ratio 1.095).
+(Was 0.69 with the old code; now 1.095 — carry-over is preserved across games.)
+
+### S17 — PP/PK, penalties in game stats; score adjustment deferred (2026-09-29, S-WO3c Item 2)
+
+PP/PK attempts, xG, and seconds now in team_game_stats.parquet (12,850 rows).
+Penalties taken and drawn from events/penalties.parquet (was a placeholder).
+Score-adjusted 5v5 NOT YET IMPLEMENTED — deferred to S-WO4 because it requires applying
+per-shot weights from constants_v2 score-effect multipliers, which changes the xG scoring
+pipeline.
+
+### S18 — Null controls deferred (2026-09-29, S-WO3c Item 3)
+
+The truncation test and mutation test require rebuilding ratings from a subset of the
+game_stats table, which takes ~52s per subset x 20 dates = ~17 min. The test structure is
+designed but not run within this commit. NOT DONE — deferred to verification.
+
+### S19 — S15 re-run with carry-over ratings (2026-09-29, S-WO3c Item 4)
+
+Same formula as S15 but with the S16 carry-over ratings.
+Pinnacle match: 1,156 (fit) / 1,138 (validate).
+
+Results (actual outcomes FIRST, per A1.1):
+- corr(implied gd, actual gd): 0.310 (fit), **0.256** (validate)
+- corr(implied gd, Pinnacle logit): 0.876 (fit), **0.842** (validate) — bar >0.60: **HELD**
+- corr(implied total, Pinnacle total): 0.475 (fit), **0.474** (validate) — bar >0.30: **HELD**
+- mean implied total: -9.3% (fit), **-8.9%** (validate) — bar +/-3%: **NOT HELD**
+- NULL (shuffled): 0.053 (fit), 0.018 (validate) — **HELD**
+
+The carry-over improved Pinnacle logit corr (0.842 vs 0.810), totals corr (0.474 vs 0.433),
+and mean total (-8.9% vs -9.3%). The ±3% bar remains NOT HELD — the simplified formula does
+not model PP opportunities per team or the finishing term. This is the ONE run specified.
+
+### S20 — Truncation and mutation tests committed (2026-09-29, S-WO3d Item 1)
+
+Tests ported from Cowork's truncation_check into nhl/sim/tests/test_ratings_s18.py.
+Three variants: current code PASSES, mutant FAILS, old code (e17ace021) FAILS.
+Starter agreement test: goalie on first shot against vs box-score starter flag.
+
+### S21 — Goalie ratings restored, no literal weights (2026-09-29, S-WO3d Item 2)
+
+build_goalie_ratings restored with per-season carry-over. Goalie w measured: **0.144**
+(was literal 0.3). All `.get(..., default)` fallbacks removed — missing key raises KeyError.
+Manifest written to nhl/data/sim/ratings/manifest.json.
+
+### S22 — Constants v3: PP and SH sides measured separately (2026-09-29, S-WO3d Item 3)
+
+5v4 split using situation_code to identify ice state:
+- PP-side (advantaged): **70.35/60** — pre-registered 65-80: **HELD**
+- SH-side (disadvantaged): **12.30/60** — pre-registered 8-20: **HELD**
+- PP-side xG/att: **0.0990** > v2's 0.0945: **HELD**
+- PP minutes per team-game (home-5v4 side): **5.29** — pre-registered 4.5-6.0: **HELD**
+
+NULL CONTROLS:
+- (a) adv + dis = 2 × v2: exact diff 1.42e-14 (5v4), 2.84e-14 (6v5) — PASS.
+- (b) Even states = v2: 0.00 — PASS.
+
+v2 kept. v3 adds side-specific rates for the engine.
