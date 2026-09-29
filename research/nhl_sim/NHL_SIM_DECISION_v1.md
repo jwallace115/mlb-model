@@ -50,3 +50,17 @@ All 6,560 returned HTTP 200 with gameState OFF/FINAL. Every play carries a situa
 on sample: 349/349 = 100%). 0 credits (NHL API is free). Runtime: ~110 min on Mac.
 Host: Mac (VM also passes the NHL API test, HTTP 200). One-off backfill, no cron.
 Generator: `nhl/sim/pull_pbp.py`.
+
+### S4 — Event and strength-state tables (2026-09-29)
+
+Built from PBP for all 5 seasons. Generator: `nhl/sim/build_events.py`.
+Per season: shots.parquet (~113k rows), penalties.parquet (~10k), state_time.parquet (~320k).
+Null controls (all 6,560 games):
+- (a) Goals == boxscore minus SO+1: **100.0%** on all seasons (5,618/5,618 with boxscores). PASS.
+- (b) SOG == boxscore: 95.6-98.9%. Mismatches are +0.5/side avg — likely penalty-shot or edge-case
+  categorisation. Reported, not 100%.
+- (c) State time within 5s of reg+OT: 74.8-79.9%. BELOW the 100% target. The inter-play duration
+  accumulator does not handle period boundaries and stoppages cleanly. Does not block the sim
+  (engine uses its own clock), but the state_time table should not be trusted for per-game totals.
+- (d) Empty-net goals: 438-524/season (5.3-6.6% of goals). Consistent.
+Tests: 11 pass (parse_situation, time_to_seconds, mutation checks).
