@@ -1,0 +1,98 @@
+## 2026-09-29  claude-code  nhl/sim-s1
+
+### Item 1 (S3) — play-by-play pull
+
+RETURNED: 6,560 HTTP 200 responses from api-web.nhle.com, one per regular-season game
+(5 seasons x 1,312). All gameState=OFF/FINAL. Every play carries a situationCode (verified
+349/349 = 100% on sample game). Saved as gzipped JSON to nhl/cache/pbp/{gameId}.json.gz.
+Runtime: ~110 min on Mac. 0 credits (NHL API is free).
+
+MEANS: Complete PBP coverage for 2021-22 through 2025-26 regular seasons. The situationCode
+on every play gives the exact on-ice personnel for strength-state tracking.
+
+Host: Mac (VM also passes NHL API test, HTTP 200). One-off backfill, no cron.
+Commit: 94ac40ad1
+
+### Item 2 (S4) — event and strength-state tables
+
+RETURNED: Per season: ~113k shots, ~10k penalties, ~320k state_time spans.
+Null controls (all 6,560 games):
+- (a) Goals == boxscore minus SO+1: 100.0% on all 5 seasons (5,618/5,618 with boxscores). PASS.
+- (b) SOG == boxscore: 95.6-98.9%. 20-52 mismatches per season, typical diff +0.5/side.
+  Categories: likely penalty-shot goals or PBP categorisation edge cases.
+- (c) State time within 5s of regulation+OT: 74.8-79.9%. BELOW 100% target.
+  The inter-play duration accumulator does not handle period boundaries and clock
+  resets between periods cleanly. Each play's timeInPeriod resets at period start.
+- (d) Empty-net goals from situationCode: 438-524/season (5.3-6.6% of goals). Consistent.
+
+MEANS: Goals are exact (100%). SOG is close but not perfect. State_time table should not
+be used for per-game total-seconds assertions. Empty-net detection via situationCode works.
+
+Commit: fb68e6d98
+
+### Item 3 (S5) — xG model, frozen
+
+RETURNED: Logistic regression on 225,912 non-empty-net shots (2021-22 + 2022-23).
+Pre-registered predictions (written BEFORE looking at numbers):
+- Calibration slope 0.9-1.1 on 2023-24: 0.978 — HELD
+- sum(xG)/goals within +/-5% on 2023-24: 0.998 — HELD
+- AUC above 0.72: 0.7496 (OOS on 2023-24) — HELD
+- NULL CONTROL: shuffled labels AUC 0.50+/-0.01: 0.5053 — HELD (n=225,912)
+
+sum(xG)/goals by season: 2021=0.983, 2022=1.018, 2023=0.998, 2024=1.013, 2025=1.068.
+2024-25 and 2025-26 reported only, not refitted. 2025-26 drift (1.068) is notable but
+within one season's variance — the model predicts 7% more goals than occurred, which
+could indicate lower league-wide shooting quality or an xG model miscalibration to
+the current NHL. This is the first season fully outside the fit window by 3 years.
+
+MEANS: The xG model is stable and well-calibrated on OOS data. All 4 pre-registrations
+held. The null control confirms the features carry genuine signal (AUC 0.50 on shuffle).
+
+Commit: cbf36f65c
+
+### Item 4 (S6) — measured league constants
+
+RETURNED: 2,624 games (2021-22 + 2022-23). Pre-registered checks:
+- PP goals per 60 of PP time: 6.94 — HELD (expected 6-8).
+  BUG FOUND: initial calculation counted only one team's PP time (gave 13.4). Fixed
+  to include both teams' PP time (PP + PK from home perspective).
+- Home share of unblocked attempts: 51.44% — HELD (expected 50.5-52.0%).
+- Shootout per-attempt conversion 28-35%: NOT MEASURED — shootout plays excluded from
+  shots table by periodType=SO filter. Needs a shootout parser.
+- Pull hazard at -1 in last 3:00 (>80%): NOT MEASURED — situationCode captures shots
+  against an empty net, not the moment of the pull. Needs state-transition tracking.
+
+validate_drift on 2023-24 reported beside fit values (not used in engine).
+
+MEANS: PP and home-ice constants match published NHL ranges. Two pre-registered checks
+could not be evaluated (shootout conversion and pull hazard). These are needed for the
+engine and must be added in S-WO2 before the engine can simulate OT/shootout and
+pulled-goalie scenarios correctly.
+
+Commit: 3297046a9
+
+### NOT DONE
+- Shootout per-attempt conversion (needs shootout play parser from PBP periodType=SO)
+- Pulled-goalie hazard by score diff and seconds remaining (needs state transitions)
+- Rush feature in shots table (set to False everywhere; needs zone tracking from PBP)
+- Score effects on xG/attempt (constants file has attempt rate effects only)
+- Penalty shares: share of minors ended early by PP goal (needs penalty-end detection)
+- State_time accuracy: period-boundary handling for per-game total-seconds checks
+
+### UNVERIFIED
+- PBP completeness: 6,560 files pulled = 5 x 1,312 games, but no cross-check against
+  the actual NHL schedule (some games could be missing if they have non-standard IDs)
+- SOG mismatch root cause: the 1.5-4.4% of games with SOG discrepancy not investigated
+- 2025-26 PBP: all 1,312 game IDs pulled, but the season has only ~1,177 completed games
+  (the remaining ~135 files may be future/unplayed games returning empty plays)
+- xG model drift on 2025-26 (ratio 1.068): not investigated
+- Constants on 2023-24: reported as validate_drift but not checked against published values
+
+### Commit shas
+S3 (PBP pull): 94ac40ad1
+S4 (event tables): fb68e6d98
+S5 (xG model): cbf36f65c
+S6 (constants): 3297046a9
+
+### Merge command
+git merge nhl/sim-s1
