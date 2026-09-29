@@ -3637,3 +3637,21 @@ header `-dirty` despite D203): plays 126.6, drives 22.9, pts/team 21.04 (gap -1.
 safeties 0.031, 8 reds (6 late-game). Points gap on the sample -1.81 = START MIX +2.09 + EFFICIENCY -3.48 +
 interaction -0.42; first downs by penalty 1.27 vs 1.73 a team is the largest unaddressed efficiency input. Next: 6E,
 the last order before the freeze.
+
+### D205 — 6E Item 0: K1 rows parquet fix (2026-09-29)
+
+The 6D K1 (run_k1_table.py) wrote the .txt but not the _rows.parquet. Root cause: the
+script held all 1,087 game DataFrames in a list (`results`, line 145-161), then
+concatenated them into a single ~543K-row DataFrame (`all_sims`, line 169) before
+computing summary stats and saving per-game rows at the end (lines 260-284). With
+`drive_log=True` the per-game DataFrame carries the full drive log as an attribute; the
+combined memory exceeded available RAM and the process was killed.
+
+**Fix (run_k1_table.py:141-258):** compute per-game summary rows incrementally while each
+game's DataFrame is in memory. Accumulate only the column sums needed for K1 metrics
+(`col_sums` dict) and the margin values (for SD). Save the rows parquet immediately after
+the game loop, before the K1 table computation. Each game's DataFrame is `del`'d after
+extraction.
+
+Verified on 20 games: pts/team, plays, go_rate, fd_pen match to 1e-6 between old and new
+methods (same seeds, same N=500).
