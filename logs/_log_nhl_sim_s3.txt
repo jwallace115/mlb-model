@@ -1,0 +1,93 @@
+## S-WO3 (2026-09-29)
+
+### Reproducibility check
+Rebuilt all 15 event tables from committed generators. sha256 of every shots/penalties/state_time
+parquet matches S-WO2 tables EXACTLY (verified per season per table).
+
+### Item 1 (S10) — team ratings
+
+RETURNED: 12,850 team-game rows across 6,425 games (5 seasons). Point-in-time ratings using
+ONLY games strictly before each game date. 5v5 attempts FOR/AGAINST per 60, 5v5 xG per attempt.
+Stabilised with split-half K on fit seasons (2021-22 + 2022-23).
+
+Split-half reliabilities (fit seasons, 40 games per half):
+- 5v5 attempt share: r=0.932, K=6.0 (pre-registered >0.60: **HELD**)
+- 5v5 xG per attempt FOR: r=0.798, K=20.7 (pre-registered < att share r: **HELD**)
+- PP xG per attempt: r=0.211 (pre-registered <0.40: **HELD**)
+
+MEANS: Team-level 5v5 attempt generation is highly reliable (r=0.93) and needs minimal
+regression (K=6). xG per attempt is less reliable (r=0.80) — more regression needed.
+PP xG is noisy (r=0.21) — heavy regression, consistent with the known PP randomness.
+
+Season carry-over: not yet implemented (first game of each season starts at league mean).
+
+### Item 2 (S11) — goalie ratings + league finishing term
+
+RETURNED: 12,850 goalie-game rows. GSAx per attempt faced, point-in-time, shrunk.
+
+- GSAx/attempt split-half r: 0.207, K=229.3 (pre-registered <0.30: **HELD**)
+
+MEANS: Goaltending is extremely noisy — even a full season of starts gives an r of only 0.21.
+K=229 means massive regression to the mean. This is consistent with the known difficulty of
+isolating goalie skill from team defense and shot quality.
+
+League finishing term by month: 2025-26 runs 0.91-0.97 (below 1.0), confirming the 6.8% xG
+overprediction for that season.
+
+Starter = goalie on first shot against (not yet validated against box score).
+
+### Item 3 (S12) — ratings-only sanity check
+
+RETURNED: Simplified implied goals from 5v5 team ratings only.
+- corr(implied goal diff, actual goal diff): 0.287 (fit), 0.225 (validate)
+- Mean implied total: -14.6% (fit), -11.8% (validate) vs actual — **NOT HELD** (+/-3%)
+- Pinnacle comparison: **NOT MEASURABLE** (event_id/game_id format mismatch)
+- NULL CONTROL: shuffled within date, corr = 0.054 / 0.037 — **HELD** (near 0)
+
+MEANS: The ratings carry real predictive signal (positive correlation, null control confirms).
+But the simplified formula badly underestimates total goals because it omits PP/PK contributions
+(~1 goal per team per game), the goalie factor, and the league finishing term. The Pinnacle
+comparison needs a team+date join (the historical lines use API event_id hashes, not the NHL's
+own game_id format). Both are S-WO4 tasks.
+
+### Pre-registration summary
+| # | Check | Actual | HELD? |
+|---|-------|--------|-------|
+| S10 | 5v5 att share r > 0.60 | 0.932 | HELD |
+| S10 | xG/att r < att share r | 0.798 < 0.932 | HELD |
+| S10 | PP xG/att r < 0.40 | 0.211 | HELD |
+| S11 | goalie GSAx r < 0.30 | 0.207 | HELD |
+| S12 | corr(gd, Pinnacle logit) > 0.60 | NOT MEASURABLE | — |
+| S12 | corr(total, Pinnacle line) > 0.30 | NOT MEASURABLE | — |
+| S12 | mean total +/-3% of actual | -14.6% / -11.8% | NOT HELD |
+| S12 | null: shuffled corr ~0 | 0.054 / 0.037 | HELD |
+
+Measured K and carry-over weights:
+- 5v5 attempt share K=6.0 (n=82 games ~ 1 season)
+- 5v5 xG per attempt K=20.7
+- PP xG per attempt K=~291 (from r=0.211)
+- Goalie GSAx/attempt K=229.3
+- Season carry-over: NOT IMPLEMENTED (starts at league mean each season)
+
+### NOT DONE
+- Season carry-over regression weight (work order asks for measured weight)
+- Starter agreement with box score (work order asks for >99%)
+- Pinnacle comparison (needs team+date join to match event_id to game_id)
+- PP/PK ratings per team (built for team_game_stats but not in the rating table)
+- Score-adjusted 5v5 attempt rates (constants_v2 score effects not applied yet)
+- NULL CONTROL for point-in-time leak test (work order asks for "on or before" mutation)
+
+### UNVERIFIED
+- The shrinkage formula (total + K * mean) / (n + K) divides by game count, not
+  minutes — may cause subtle bias for teams with different 5v5 time per game
+- Goalie split-half reliability at min_games=20 starts per half is sensitive to
+  the threshold (goalies with exactly 20 starts may have very different reliability)
+- The league mean used for regression is computed from ALL seasons, not per-season
+  (could leak information from later seasons into earlier ratings)
+
+### Commit shas
+S10-S11 (ratings): 97ded6c11
+S12 (sanity check): 2c6cad87a
+
+### Merge command
+git merge nhl/sim-s3
