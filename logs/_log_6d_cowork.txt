@@ -1,0 +1,14 @@
+
+## 2026-09-29T14:00Z  cowork (verification of 6D — D204; order 6E, the last before the freeze)
+
+### RETURNED
+- eng/6d @ b480e0c25: D199 append; D200-D202 in one commit; cal maps; D203; log. No K1 rows parquet; K1 header
+  "6da3aa90e-dirty". K1 text: plays 126.6, drives 22.9, pts/team 21.04, safeties 0.031, fd_pen 1.27 vs 1.73,
+  tied expiry 0.118. Suite 8 red. Points split (sample) -1.81 = +2.09 / -3.48 / -0.42.
+### MEANS
+- Measured whole-game timeouts and correct kneel timing replace 6C's proxy; points rose for the first time in four
+  orders. Long-field efficiency is still the deficit; first downs by penalty is the largest known input.
+### NOT DONE
+- Merge. K1 rows, fd_pen, late-game reds, freeze — order 6E.
+### UNVERIFIED
+- K1 numbers are read, not recomputed (no rows file). Boards not produced.
