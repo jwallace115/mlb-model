@@ -3948,3 +3948,31 @@ research/nfl_sim/fwd1_runbook.md rewritten with concrete week-4 commands:
   capture slot on the VM.
 
 Scoring commands for 500- and 1,500-leg checkpoints included, pooled by reader_model.
+
+### D218 — Cowork verification of FWD1b: harness works end to end; revision sharing and one-way tagging must be fixed before week 4 (2026-09-29)
+
+FWD1b (eng/fwd1 @ 54efc5878) is accepted for items 0-3. It is not merged until FWD1c is verified.
+
+What was verified:
+- The week-3 files moved to week=2026_03 with their hashes unchanged.
+- The harness matches on player, market and line, and honours side.
+- The anchor sidecar reads the real columns.
+- Flags pass through to both the sheet and the freeze.
+- Props are capped at now.
+- The tests call the real functions.
+- The pilot ran end to end with 15 of 15 games anchored.
+
+Defects:
+- log_ai_opinions.prior_revisions counts revisions across readers. The AI log frozen at 15:58Z pushed 158 of the
+  sim's 178 opinions to revision 1, so they went unscored.
+- fill_sheet tags one-way lines priced outside [0.02, 0.98] as sim_v1. In the pilot that meant a +7500 anytime TD was
+  scored as a sim side.
+- D216's market counts (112/62) and its 662 are wrong (139/35; 614 two-way prop rows).
+
+Cowork's sim-only pilot scoring, all 174 two-way opinions, is a pilot and never pooled:
+- Brier: sim 0.2673 vs book 0.2517, gap +0.0157 (95% interval −0.0021 to +0.0339).
+- Rush attempts: sim 0.2977 vs book 0.2463.
+- All sides: −10.78 units. P2 subset: +3.73 units on 110.
+
+Next: FWD1c (revisions per reader and pilot flag; no_view at the clipped book price; a week-4 dry run), then the
+merge before the TNF run (23:30Z, 10-01).
