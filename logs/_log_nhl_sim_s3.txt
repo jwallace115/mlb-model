@@ -548,6 +548,50 @@ S26: da0aa0bcf (rebased to a3a7bcecb)
 ### Merge command
 git merge nhl/sim-s3e
 
+---
+
+## S-WO3g (2026-09-29)
+
+### Item 1 (S28) — review of S27
+
+RETURNED: 27 tests pass. Manifest sha256 match. Code review: no defects found.
+MEANS: The S27 ratings engine is correct and reproducible.
+
+### Item 2 (S29) — finishing term
+
+RETURNED: finishing_term.parquet (879 rows). F by month varies 0.90-1.06.
+MEANS: Point-in-time finishing term captures scoring trends. 2025-26 below 1.0.
+
+### Item 3 (S30) — full-formula check (ONE run)
+
+RETURNED:
+  2023-24 (validate): engine gd=0.274 (Pinnacle=0.287), engine total=0.032 (Pinnacle=0.116)
+  Pinnacle logit: 0.898 (>0.60 HELD). Total: 0.295 (>0.30 NOT HELD, misses by 0.005).
+  Mean total: -0.7% (was -9%). Null: 0.027.
+
+MEANS: Engine tracks moneylines well (0.898 vs Pinnacle). Totals are weak (0.032 vs 0.116).
+The mean total is calibrated (-0.7%) but the per-game total correlation is poor. This is
+the ONE run — the totals bar narrowly fails and is reported plainly.
+
+### NOT DONE
+- Finishing term truncation test and mutant
+- S29 as committed function in ratings.py
+- SH xG per-team, 4v4/3v3 per-team
+- Goalie clip justification
+
+### UNVERIFIED
+- FT window boundary (>= vs >)
+- q derivation uses denominator proxy
+- Pinnacle match counts not cross-checked
+
+### Commit shas (S-WO3g)
+S28: 45cc81125
+S29: ee48334b2
+S30: 548cd7a4c
+
+### Merge command (S-WO3g)
+git merge nhl/sim-s3e
+
 
 ## S27 — Cowork session (2026-09-29 17:58Z)
 Cowork implemented what S-WO3f left undone, directly in ~/mlb-model-nhlsim3e. See decision S27.
