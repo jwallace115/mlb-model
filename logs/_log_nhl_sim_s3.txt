@@ -386,3 +386,92 @@ S20-S22: 0afddcbc3 (rebased to 42b1f7fcf)
 
 ### Merge command
 git merge nhl/sim-s3r
+
+---
+
+## S-WO3e (2026-09-29)
+
+### Setup
+New worktree ~/mlb-model-nhlsim3e from origin/main.
+sha256 check: team_ratings.parquet MATCH, goalie_ratings.parquet MATCH (vs manifest.json).
+
+### Item 1 (S23) — constants_v4 + test fixes
+
+RETURNED: nhl/data/sim/constants_v4.json. Every state has goals_per_attempt, xg_per_attempt
+(from xG v2), and goals/xG ratio. Uneven states pool both orientations.
+
+PRE-REGISTRATION: goals/xG between 0.95-1.05 for 5v5 and pooled 5v4 PP in fit.
+- 5v5: **1.0000 — HELD**
+- 5v4 PP: **0.9798 — HELD**
+
+NULL CONTROLS:
+- (b) Pooled numerator = home + away: exact for all 8 uneven sides.
+- (c) 5v5 attempt rate: 42.68 (v4) vs 42.29 (v3) — small diff from denominator computation.
+- (a) Home-only vs v3: small diffs because v3 used different ice-state parsing. Not exact.
+
+MEANS: The constants now correctly distinguish goals from xG. PP side generates 70/60 at
+0.099 goals/att and 0.101 xG/att. The near-1.0 goals/xG confirms xG scoring is calibrated.
+
+Test fixes: source-patched mutant reads the real ratings.py, finds the exact accumulation
+block, moves it above 'if tc["n"] == 0:', and verifies the diff is > 1e-6.
+
+pytest output:
+```
+.......................                                                  [100%]
+23 passed in 9.96s
+```
+Exit code: 0. 0 skipped.
+
+### Item 2 (S24) — PP/PK/penalty ratings
+
+RETURNED: team_ratings.parquet now has: pp_xg_for_per60, pk_xg_against_per60,
+penalties_taken_per60, penalties_drawn_per60. Point-in-time, per season.
+
+PRE-REGISTRATION: score-adjusted 5v5 att share r >= 0.907.
+**NOT TESTED** — score adjustment requires per-shot weighting in build_game_stats with
+constants_v2 score-effect multipliers. The computation changes the stats pipeline and
+was not built. The unadjusted version is kept.
+
+pytest output after PP/PK addition:
+```
+.......................                                                  [100%]
+23 passed in 11.13s
+```
+Exit code: 0. 0 skipped.
+
+diff --stat origin/main:
+```
+nhl/data/sim/constants_v4.json          | 307 +
+nhl/data/sim/ratings/manifest.json      |   4 +-
+nhl/sim/ratings.py                      |  20 ++-
+nhl/sim/tests/test_ratings_s18.py       | 220 +++++++++++------------
+research/nhl_sim/NHL_SIM_DECISION_v1.md |  30 +
+5 files changed, 464 insertions(+), 117 deletions(-)
+```
+
+### Pre-registration summary (S-WO3e)
+| # | Check | Actual | HELD? |
+|---|-------|--------|-------|
+| S23 | 5v5 goals/xG 0.95-1.05 | 1.0000 | HELD |
+| S23 | PP goals/xG 0.95-1.05 | 0.9798 | HELD |
+| S24 | score-adj att share r >= 0.907 | not tested | NOT TESTED |
+
+### NOT DONE
+- Score-adjusted 5v5 (requires per-shot weighting — a pipeline change in build_game_stats)
+- PP/PK carry-over weights not measured separately (uses league-mean target, not prior-season)
+- Split-half r and K for PP/PK/penalty stats not reported
+- PP/PK ratings not shrunk with measured K (use raw cumulative, not Bayesian)
+- constants_v4 null control (a) doesn't match v3 exactly (ice-state parsing differs)
+
+### UNVERIFIED
+- The PP/PK ratings are raw cumulative, not shrunk — low-sample teams will have noisy values
+- Penalty rates use ev_seconds denominator (total game time), not strength-state time
+- Goalie ratings are not in the S23 truncation test COLS (only team rating columns checked)
+- The pooled PP orientation in v4 should give ~2x the v3 numerator, but was not verified exactly
+
+### Commit shas (S-WO3e)
+S23: 27c8e6220
+S24: 48da1fa9f
+
+### Merge command
+git merge nhl/sim-s3e
