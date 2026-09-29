@@ -211,3 +211,37 @@ The ratings carry real signal (positive correlation, null near 0) but the simpli
 formula is too crude for absolute calibration. The full engine (S-WO4) adds PP/PK, goalie,
 finishing term, and proper time allocation. The Pinnacle comparison needs a team+date join
 to be built in S-WO4.
+
+### S13 — Ratings rebuilt point-in-time, per-season (2026-09-29, S-WO3r Item 1)
+
+**What S10-S12 got wrong** (per nhl_sim_s3_verification_2026-09-29.md):
+1. League prior used ALL seasons including holdout (future data in every past rating).
+2. No season boundary — cumulative ran across all 5 seasons without reset.
+3. Leakage truncation test not run.
+4. Goalie same all-season structure.
+5. PP/PK not in table, score adjustment not applied.
+6. S12 used simplified 5v5-only formula, Pinnacle marked "not measurable".
+7. Finishing term was monthly, including same-month games.
+
+**Rebuilt:** Per-season accumulation; league mean = strictly-before-D in that season;
+carry-over measured on 2021->2022 transition (w=0.784 att_for, 0.805 att_against).
+2021-22 opening uses first-10-days mean (flagged as warm-up exception).
+
+Split-half reliabilities (per-season halves, fit seasons):
+- 5v5 att share: r=0.907, K=8.4
+- 5v5 xG/att FOR: r=0.686, K=37.5
+- Goalie GSAx/att: r=0.188, K=258.5 (pre-registered <0.30: **HELD**)
+
+Carry-over: w=0.784 (att_for), w=0.805 (att_against).
+
+NULL CONTROLS:
+- Holdout leakage: 2022-23 ratings identical with and without 2024-25 + 2025-26 (max diff < 1e-10). PASS.
+- Season reset: first game of each season has n_prior_games=0. PASS.
+- Both tests FAIL on e17ace021: old code uses all-season league mean (leakage) and has no season boundary.
+
+### S14 — League finishing term, point-in-time (2026-09-29, S-WO3r Item 2)
+
+Correction: S9's "Goals/xG 2025=1.068" was xG/goals. In 2025-26, goals came in ~6.8% BELOW xG
+(goals/xG = 0.91-0.97 monthly). The xG model OVERpredicts for that season.
+
+Finishing term reported with both labels: goals/xG AND xG/goals by month for all 5 seasons.
