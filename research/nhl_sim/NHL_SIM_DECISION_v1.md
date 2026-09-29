@@ -535,3 +535,43 @@ The ratings need ~10 games to differentiate teams, as expected from the carry-ov
 
 The engine tracks Pinnacle strongly on moneylines (0.898) but trails on totals. The totals bar
 narrowly fails. The mean total is now within 1% (was -9% before the PP and finishing-term fixes).
+
+### S31 — Finishing term rebuilt in committed code; corrects S29 (Cowork, 2026-09-29 18:53Z)
+**The S29 finishing_term.parquet had no generator.** No committed .py file produced it (grep: only
+sanity_check_v2.py reads it). It also did not follow the rule: it used "in_season" windows with as few as 38 games.
+Cowork's own S-WO3g threshold (300 games in 30 days) could never be met: a full 30-day window holds a median of
+210 games and at most 237 (2022-23 and 2023-24, measured). That was a spec error by Cowork, and Claude Code worked
+around it without saying so.
+
+**Now:**
+- `finishing_term_from_games(gdf)` is in ratings.py, built from goalie_games.parquet (every non-empty-net attempt
+  with its goals and xG).
+- F(D) = goals / xG over the same season's games in [D - 30 days, D - 1].
+- The in-season window needs >= 150 games (FINISHING_MIN_GAMES, set from schedule density, not from outcomes).
+  Otherwise F uses the previous season's last 30 days. 2021-22 opening weeks: NaN.
+- Written by `ratings.py` to finishing_term.parquet, with its sha in manifest.json.
+
+**Tests (test_ratings_s18.py, TestFinishingTerm):**
+- truncation on 20 dates of 2022-24, with D's own goals and xG corrupted: passes;
+- mutant with the window including D: fails, as it should;
+- in-season F never uses fewer than 150 games; no NaN after 2021-22.
+- Total: 15 passed, plus the Mac-only old-code test.
+
+**Versus CC's S29 file:** 125 of 879 dates differ by more than 0.001 (max 0.14), all early-season.
+
+**S30 stands as recorded.** It was run once, with the S29 F. It is not re-run to rescue the totals bar (0.295 vs
+0.30). The engine (S-WO4) uses the S31 F.
+
+**Cowork diagnostic on the 2022-23 fit season only (descriptive, no choice made from it).** Correlation of each
+S30 formula component with actual total goals:
+
+| component | corr with actual total | corr with Pinnacle total | notes |
+|---|---|---|---|
+| 5v5 xG | +0.076 | 0.351 | |
+| power-play xG | -0.013 | | |
+| power-play minutes | -0.036 | | SD 1.4 min across games |
+| goalie sum | -0.044 | -0.283 | |
+| S29 F | -0.035 | | |
+
+Pinnacle's own line vs actual total: 0.104. The totals signal lives in 5v5; the power-play-minute spread adds noise.
+That's a question for the engine's validate phase, not a change made now.

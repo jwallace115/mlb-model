@@ -514,6 +514,39 @@ def build_goalie_ratings(shots_all, games_df, model):
     return goalie_ratings_from_games(build_goalie_games(shots_all, games_df, model))
 
 
+FINISHING_PATH = OUT_DIR / "finishing_term.parquet"
+FINISHING_WINDOW_DAYS = 30
+FINISHING_MIN_GAMES = 150   # a full 30-day window holds ~200-240 games (measured); 300 was unreachable
+
+
+def finishing_term_from_games(gdf, window_days=FINISHING_WINDOW_DAYS, min_games=FINISHING_MIN_GAMES):
+    """S31 (Cowork): point-in-time league finishing term per game date.
+    F(D) = sum(non-EN goals) / sum(non-EN xG) over games with date in [D - window, D - 1] in the same season.
+    If that window holds fewer than min_games games, use the previous season's last `window_days` days of games.
+    With neither available, NaN (2021-22 opening weeks only). Inputs: the per-start goalie table, which carries
+    every non-empty-net attempt faced by each team (goals_against, xg_faced)."""
+    pg = gdf.groupby(["game_id", "season", "date"], as_index=False).agg(goals=("goals_against", "sum"), xg=("xg_faced", "sum"))
+    pg["d"] = pd.to_datetime(pg["date"])
+    rows = []
+    for season in sorted(pg["season"].unique()):
+        S = pg[pg["season"] == season]
+        P = pg[pg["season"] == season - 1]
+        if len(P):
+            last = P["d"].max()
+            Pw = P[P["d"] > last - pd.Timedelta(days=window_days)]
+            prev_F, prev_n = Pw["goals"].sum() / Pw["xg"].sum(), len(Pw)
+        for D in sorted(S["d"].unique()):
+            w = S[(S["d"] >= D - pd.Timedelta(days=window_days)) & (S["d"] < D)]
+            if len(w) >= min_games:
+                F, n, src = w["goals"].sum() / w["xg"].sum(), len(w), "in_season"
+            elif len(P):
+                F, n, src = prev_F, prev_n, "prev_season"
+            else:
+                F, n, src = np.nan, len(w), "none"
+            rows.append({"date": pd.Timestamp(D).strftime("%Y-%m-%d"), "season": season, "F": F, "n_games": n, "source": src})
+    return pd.DataFrame(rows)
+
+
 def _sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
@@ -566,6 +599,8 @@ def main():
     team_ratings.to_parquet(OUT_DIR / "team_ratings.parquet", index=False)
     goalie_ratings = goalie_ratings_from_games(gdf)
     goalie_ratings.to_parquet(OUT_DIR / "goalie_ratings.parquet", index=False)
+    finishing = finishing_term_from_games(gdf)
+    finishing.to_parquet(FINISHING_PATH, index=False)
     manifest = {
         "ratings_py_sha256": _sha(__file__),
         "carryover_w_sha256": _sha(CARRYOVER_PATH),
@@ -576,6 +611,8 @@ def main():
         "team_ratings_rows": len(team_ratings),
         "goalie_ratings_sha256": _sha(OUT_DIR / "goalie_ratings.parquet"),
         "goalie_ratings_rows": len(goalie_ratings),
+        "finishing_term_sha256": _sha(FINISHING_PATH),
+        "finishing_term_rows": len(finishing),
     }
     with open(OUT_DIR / "manifest.json", "w") as f:
         json.dump(manifest, f, indent=2)

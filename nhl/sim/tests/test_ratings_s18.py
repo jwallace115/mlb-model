@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from nhl.sim.ratings import build_pit_ratings, goalie_ratings_from_games, CARRYOVER_PATH, GOALIE_GAMES_PATH
+from nhl.sim.ratings import build_pit_ratings, goalie_ratings_from_games, finishing_term_from_games, CARRYOVER_PATH, GOALIE_GAMES_PATH
 
 TGS_PATH = ROOT / "nhl" / "data" / "sim" / "ratings" / "team_game_stats.parquet"
 BOX_DIR = ROOT / "nhl" / "cache"
@@ -331,3 +331,46 @@ class TestGoalieTruncation:
         idx = gdf[gdf["date"] == D].set_index(["game_id", "role"]).index
         diff = float((tr.loc[idx] - full.loc[idx]).abs().max())
         assert diff > 1e-6, f"Goalie mutant should fail truncation but diff was {diff:.2e}"
+
+
+# ---------------------------------------------------------------------------
+# S31 (Cowork): finishing term F(D) point-in-time tests
+# ---------------------------------------------------------------------------
+FT_WINDOW_LINE = '            w = S[(S["d"] >= D - pd.Timedelta(days=window_days)) & (S["d"] < D)]'
+
+
+def _ft_corrupt(gdf, D):
+    g = gdf[gdf["date"] <= D].copy()
+    m = g["date"] == D
+    g.loc[m, "goals_against"] = g.loc[m, "goals_against"] * 7 + 3
+    g.loc[m, "xg_faced"] = g.loc[m, "xg_faced"] * 7 + 3
+    return g
+
+
+class TestFinishingTerm:
+    def test_finishing_truncation(self, gdf):
+        full = finishing_term_from_games(gdf).set_index("date")["F"]
+        rng = np.random.RandomState(SEED)
+        dates = sorted(gdf[gdf["season"].isin([2022, 2023])]["date"].unique())
+        fails, worst = 0, 0.0
+        for D in sorted(rng.choice(dates, N_DATES, replace=False)):
+            tr = finishing_term_from_games(_ft_corrupt(gdf, D)).set_index("date")["F"]
+            diff = abs(float(tr.loc[D]) - float(full.loc[D]))
+            worst = max(worst, diff)
+            fails += diff > 1e-12
+        assert fails == 0, f"F(D) truncation failed on {fails}/{N_DATES} dates, worst {worst:.2e}"
+
+    def test_finishing_mutant_fails(self, gdf):
+        src = Path(ROOT / "nhl" / "sim" / "ratings.py").read_text()
+        assert FT_WINDOW_LINE in src, "finishing window line not found — test FAILS, not skips"
+        mutant = _load_source_as_module(src.replace(FT_WINDOW_LINE, FT_WINDOW_LINE.replace('(S["d"] < D)', '(S["d"] <= D)')), "mutant_ft")
+        dates = sorted(gdf[gdf["season"] == 2023]["date"].unique())
+        D = dates[len(dates) // 2]                       # mid-season: in-season window is used
+        full = mutant.finishing_term_from_games(gdf).set_index("date")["F"]
+        tr = mutant.finishing_term_from_games(_ft_corrupt(gdf, D)).set_index("date")["F"]
+        assert abs(float(tr.loc[D]) - float(full.loc[D])) > 1e-6, "F mutant (window includes D) should fail truncation"
+
+    def test_finishing_rules(self, gdf):
+        ft = finishing_term_from_games(gdf)
+        assert (ft.loc[ft["source"] == "in_season", "n_games"] >= 150).all(), "in-season F used with < 150 games"
+        assert ft.loc[ft["season"] >= 2022, "F"].notna().all(), "NaN F after the warm-up season"

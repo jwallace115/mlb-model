@@ -617,3 +617,20 @@ NOT DONE:
 UNVERIFIED:
 - Claude Code has not reviewed the S27 code.
 - test_build_events.py needs nhl/cache/pbp (not in this worktree), so it was not run.
+
+## S-WO3g verification + S31 — Cowork (2026-09-29 18:53Z)
+RETURNED:
+- All constants_v5 keys that sanity_check_v2.py reads exist, so none of its silent `.get(...)` defaults fired.
+- finishing_term.parquet (S29) has no generator in any committed file.
+- S29's F uses in-season windows of 38+ games.
+- Cowork re-implemented F in ratings.py (S31), with truncation, mutant and rules tests: 15 passed.
+- 30-day window sizes measured: median 210 games, max 237.
+
+MEANS:
+- The S30 numbers are the recorded one run (S29 F).
+- F is now reproducible and point-in-time.
+- CC's review in S28 ("no defects") did not include writing any test.
+
+NOT DONE:
+- sanity_check_v2.py is still full of `.get(..., default)`, and falls back to F = 1.0 on NaN (harmless for
+  2022-24 now, but not strict). To be fixed when the engine replaces it.
