@@ -3866,3 +3866,18 @@ D212's blocker is wrong. The Sep 27–28 slate is nflverse week 3, not week 4, a
 
 The project's week label was off by one from 09-27 on. nflverse weeks are canonical from now on, and the week-3 files
 in week=2026_04 are moved by FWD1b. FWD1b must be verified before the week-4 TNF kick (2026-10-02 00:15Z).
+
+### D214 — FWD1b Item 0: week labels fixed; week=2026_04 files moved to week=2026_03 (2026-09-29)
+
+The Sep 27-28 slate is nflverse week 3, not week 4. All files in nfl/data/board/week=2026_04/
+(ai_opinions parquet, sun_cards*, mnf_sgp*, mnf_script_model*) moved to week=2026_03/ via
+git mv. The week-4 manifest entry appended UNCHANGED (same sha256, same logged_utc) to the
+week-3 manifest. Week-4 manifest set to [].
+
+Verify BEFORE: week 3 = 1 file, week 4 = 1 file, no mismatch.
+Verify AFTER:  week 3 = 2 files, week 4 = 0 files, no mismatch.
+
+Docs that reference week=2026_04 for this slate (not changed — the decisions record the move):
+- D212 in NFL_SIM_DECISION_v1.md:3826 ("--week 4 --pilot --as-of 2026-09-27T16:30:00")
+- D213 in NFL_SIM_DECISION_v1.md:3868 ("week=2026_04 are moved by FWD1b")
+- logs/_log_fwd1.txt:23 (same --week 4 reference)
