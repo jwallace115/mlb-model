@@ -499,3 +499,13 @@ whose sha256 match manifest.json exactly.
 - Goalie: same correct structure (record before update, carry-over from last_season_rate).
 - The lg_* columns are stored point-in-time for the formula consumer. Good.
 - No defect found that warrants a failing test. No changes made.
+
+### S29 — Point-in-time finishing term (2026-09-29, S-WO3g Item 2)
+
+F(D) = goals/xG over non-EN attempts from games in [D-30, D-1] within the season.
+Before 30 game-dates in window: uses previous season's last 30 days. 2021-22 early: NaN.
+
+Stored in nhl/data/sim/ratings/finishing_term.parquet (879 rows, date, F, n_games, source).
+
+By season: 2021=0.97-1.06, 2022=0.94-1.02, 2023=0.95-1.01, 2024=0.94-1.02, 2025=0.90-0.97.
+2025-26 consistently below 1.0 (goals below xG), confirming the drift seen in S9.
