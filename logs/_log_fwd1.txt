@@ -49,3 +49,53 @@ or harness issue.
   game-matching issue may only affect retrospective runs with --as-of in the past.
 - Whether the anchor sidecar correctly identifies unanchored games (no games were simmed
   to test this).
+
+## 2026-09-29T19:00Z — 2026-09-29T20:41Z  claude-code  work order FWD1b
+
+### RETURNED
+
+- Gates: origin/eng/fwd1 = 4c9802c93 (PASS). D213 grep = 1 (PASS).
+- /tmp/eng-6e worktree removed. Continuing on /tmp/eng-fwd1.
+- D213 appended verbatim. Committed fb745c3d5, pushed.
+
+**Item 0 (D214) — week labels:**
+- RETURNED: git mv all files from week=2026_04/ to week=2026_03/. Week-4 manifest entry
+  appended to week-3 manifest (unchanged). Week-4 manifest set to [].
+  Verify BEFORE: w3=1 file, w4=1 file. AFTER: w3=2 files, w4=0 files. No mismatch.
+- Committed 6ec9295fd, pushed.
+
+**Item 1 (D215) — harness fixes:**
+- RETURNED: (a) fill_sheet extracted; matches on (player_name, market, line) via
+  FAMILY_TO_MARKET. (b) anchor_sidecar reads real columns. (c) common flags passed to
+  both sheet and freeze. (d) props capped at <= now. (e) halt on freeze mismatch.
+  8 tests, all call real functions. On 4c9802c93: ImportError (functions don't exist).
+- Committed c168dc72a, pushed.
+
+**Item 2 (D216) — week-3 pilot:**
+- RETURNED: PBP refreshed (weeks 1-3, 48 games). Pilot ran: 15 games, all anchored.
+  174/662 two-way prop rows matched (receptions + rush_attempts). Sim scored: 20 legs,
+  12 won, +2.68 units. Score report written.
+  Needed three fixes to fill_sheet: one-way p_first matching, conf/conf_rank columns,
+  FAMILY_TO_MARKET expanded to include anytime_td.
+- MEANS: pipeline works end-to-end. 20 sim legs is well below the 500-leg checkpoint.
+- Committed 5d8b2bba5, pushed.
+
+**Item 3 (D217) — runbook:**
+- RETURNED: research/nfl_sim/fwd1_runbook.md rewritten with week-4 commands per window.
+  MNF flagged: pull 4h old (no Monday capture slot).
+- Committed de8f3d26a, pushed.
+
+### MEANS
+
+The forward-test pipeline is complete and demonstrated on week 3. The harness runs
+test_freeze_v1, builds the sheet, runs the sim, fills matched props with cal_p, freezes
+with the sim's reader_model, and writes the anchor sidecar. The pilot scored 20 sim legs.
+
+### NOT DONE
+- test_forward_v1 test for (c) flag passthrough (subprocess mock): not implemented.
+- test for (d) future props excluded: not implemented as a unit test.
+
+### UNVERIFIED
+- Whether the week-4 games will match the tape when run live (they should — the nflverse
+  week is correct now, and lines exist for Oct 1-5).
+- MNF props staleness impact — no data to assess until the run.
