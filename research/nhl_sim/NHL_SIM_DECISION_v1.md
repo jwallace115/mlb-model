@@ -693,3 +693,15 @@ NULL CONTROLS:
 
 Chain rebuilt: events → team_game_stats → ratings (--measure-hyper) → constants v5 → v7.
 41 tests pass, 0 skipped.
+
+### S37 — Realism re-run after PP expiry fix (2026-09-29, S-WO4a2 Item 2)
+
+100,000 sims, league-average teams vs actual 2022-23:
+- **8 of 9 bands HELD.** Only tied_after_reg NOT HELD (-3.1pp vs ±2.0pp bar).
+- PP goals: -5.0% (was +10.3% before fix) — inside ±8%: **PRE-REGISTRATION HELD**.
+- Goals/game -2.0%, SO share -0.2pp, PP opps -3.8%, EN goals -2.7%, reg by 1 +1.5pp,
+  home win +0.8pp, goal dist max diff 0.015.
+- PP minutes: sim 4.53 vs actual 4.95 (-8.5%, diagnostic).
+
+The PP expiry fix resolved the PP scoring band. The remaining failure is the tied-after-reg
+share: the engine under-produces ties by 3.1 percentage points.
