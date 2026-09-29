@@ -1,0 +1,307 @@
+{
+  "version": 4,
+  "fit_seasons": [
+    2021,
+    2022
+  ],
+  "n_games": 2624,
+  "constants": {
+    "attempt_rate_per_60_per_team_5v5": {
+      "value": 42.6752,
+      "numerator": 179636,
+      "denominator": 7576874,
+      "units": "attempts / (seconds * 2) * 3600"
+    },
+    "goals_per_attempt_5v5": {
+      "value": 0.062204,
+      "numerator": 11174,
+      "denominator": 179636,
+      "derivation": "goals / unblocked attempts in 5v5"
+    },
+    "xg_per_attempt_5v5": {
+      "value": 0.062205,
+      "numerator": 11174.17,
+      "denominator": 179636,
+      "derivation": "sum(xg_v2) / unblocked attempts in 5v5"
+    },
+    "goals_over_xg_5v5": {
+      "value": 1.0,
+      "derivation": "goals / sum(xg_v2) in 5v5"
+    },
+    "minutes_per_game_5v5": {
+      "value": 48.13,
+      "total_secs": 7576874,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_per_team_4v4": {
+      "value": 30.8097,
+      "numerator": 2576,
+      "denominator": 150498,
+      "units": "attempts / (seconds * 2) * 3600"
+    },
+    "goals_per_attempt_4v4": {
+      "value": 0.079581,
+      "numerator": 205,
+      "denominator": 2576,
+      "derivation": "goals / unblocked attempts in 4v4"
+    },
+    "xg_per_attempt_4v4": {
+      "value": 0.068298,
+      "numerator": 175.94,
+      "denominator": 2576,
+      "derivation": "sum(xg_v2) / unblocked attempts in 4v4"
+    },
+    "goals_over_xg_4v4": {
+      "value": 1.1652,
+      "derivation": "goals / sum(xg_v2) in 4v4"
+    },
+    "minutes_per_game_4v4": {
+      "value": 0.96,
+      "total_secs": 150498,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_per_team_3v3": {
+      "value": 48.0749,
+      "numerator": 2627,
+      "denominator": 98359,
+      "units": "attempts / (seconds * 2) * 3600"
+    },
+    "goals_per_attempt_3v3": {
+      "value": 0.129806,
+      "numerator": 341,
+      "denominator": 2627,
+      "derivation": "goals / unblocked attempts in 3v3"
+    },
+    "xg_per_attempt_3v3": {
+      "value": 0.136096,
+      "numerator": 357.52,
+      "denominator": 2627,
+      "derivation": "sum(xg_v2) / unblocked attempts in 3v3"
+    },
+    "goals_over_xg_3v3": {
+      "value": 0.9538,
+      "derivation": "goals / sum(xg_v2) in 3v3"
+    },
+    "minutes_per_game_3v3": {
+      "value": 0.62,
+      "total_secs": 98359,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_advantaged_5v4": {
+      "value": 69.7957,
+      "numerator": 31194,
+      "denominator": 1608959,
+      "home_part": 16459,
+      "away_part": 14735,
+      "derivation": "PP side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_5v4": {
+      "value": 0.098096,
+      "numerator": 3060,
+      "denominator": 31194,
+      "derivation": "PP side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_advantaged_5v4": {
+      "value": 0.100119,
+      "numerator": 3123.11,
+      "denominator": 31194,
+      "derivation": "PP side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_advantaged_5v4": {
+      "value": 0.9798,
+      "derivation": "PP side goals / sum(xg_v2) (pooled)"
+    },
+    "attempt_rate_per_60_disadvantaged_5v4": {
+      "value": 12.6775,
+      "numerator": 5666,
+      "denominator": 1608959,
+      "home_part": 2866,
+      "away_part": 2800,
+      "derivation": "SH side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_5v4": {
+      "value": 0.07342,
+      "numerator": 416,
+      "denominator": 5666,
+      "derivation": "SH side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_disadvantaged_5v4": {
+      "value": 0.072105,
+      "numerator": 408.55,
+      "denominator": 5666,
+      "derivation": "SH side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_disadvantaged_5v4": {
+      "value": 1.0182,
+      "derivation": "SH side goals / sum(xg_v2) (pooled)"
+    },
+    "minutes_per_team_game_5v4": {
+      "value": 5.11,
+      "total_secs": 1608959,
+      "n_games": 2624,
+      "derivation": "total 5v4/4v5 seconds (both orientations) / games / 2 / 60"
+    },
+    "attempt_rate_per_60_advantaged_5v3": {
+      "value": 121.2259,
+      "numerator": 979,
+      "denominator": 29073,
+      "home_part": 521,
+      "away_part": 458,
+      "derivation": "PP side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_5v3": {
+      "value": 0.153218,
+      "numerator": 150,
+      "denominator": 979,
+      "derivation": "PP side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_advantaged_5v3": {
+      "value": 0.111256,
+      "numerator": 108.92,
+      "denominator": 979,
+      "derivation": "PP side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_advantaged_5v3": {
+      "value": 1.3772,
+      "derivation": "PP side goals / sum(xg_v2) (pooled)"
+    },
+    "attempt_rate_per_60_disadvantaged_5v3": {
+      "value": 3.4671,
+      "numerator": 28,
+      "denominator": 29073,
+      "home_part": 16,
+      "away_part": 12,
+      "derivation": "SH side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_5v3": {
+      "value": 0.035714,
+      "numerator": 1,
+      "denominator": 28,
+      "derivation": "SH side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_disadvantaged_5v3": {
+      "value": 0.077449,
+      "numerator": 2.17,
+      "denominator": 28,
+      "derivation": "SH side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_disadvantaged_5v3": {
+      "value": 0.4611,
+      "derivation": "SH side goals / sum(xg_v2) (pooled)"
+    },
+    "minutes_per_team_game_5v3": {
+      "value": 0.09,
+      "total_secs": 29073,
+      "n_games": 2624,
+      "derivation": "total 5v3/3v5 seconds (both orientations) / games / 2 / 60"
+    },
+    "attempt_rate_per_60_advantaged_4v3": {
+      "value": 95.693,
+      "numerator": 640,
+      "denominator": 24077,
+      "home_part": 374,
+      "away_part": 266,
+      "derivation": "PP side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_4v3": {
+      "value": 0.121875,
+      "numerator": 78,
+      "denominator": 640,
+      "derivation": "PP side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_advantaged_4v3": {
+      "value": 0.099087,
+      "numerator": 63.42,
+      "denominator": 640,
+      "derivation": "PP side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_advantaged_4v3": {
+      "value": 1.23,
+      "derivation": "PP side goals / sum(xg_v2) (pooled)"
+    },
+    "attempt_rate_per_60_disadvantaged_4v3": {
+      "value": 5.8313,
+      "numerator": 39,
+      "denominator": 24077,
+      "home_part": 19,
+      "away_part": 20,
+      "derivation": "SH side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_4v3": {
+      "value": 0.076923,
+      "numerator": 3,
+      "denominator": 39,
+      "derivation": "SH side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_disadvantaged_4v3": {
+      "value": 0.064672,
+      "numerator": 2.52,
+      "denominator": 39,
+      "derivation": "SH side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_disadvantaged_4v3": {
+      "value": 1.1894,
+      "derivation": "SH side goals / sum(xg_v2) (pooled)"
+    },
+    "minutes_per_team_game_4v3": {
+      "value": 0.08,
+      "total_secs": 24077,
+      "n_games": 2624,
+      "derivation": "total 4v3/3v4 seconds (both orientations) / games / 2 / 60"
+    },
+    "attempt_rate_per_60_advantaged_6v5": {
+      "value": 120.8306,
+      "numerator": 4083,
+      "denominator": 121648,
+      "home_part": 2100,
+      "away_part": 1983,
+      "derivation": "PP side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_advantaged_6v5": {
+      "value": 0.079108,
+      "numerator": 323,
+      "denominator": 4083,
+      "derivation": "PP side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_advantaged_6v5": {
+      "value": 0.06961,
+      "numerator": 284.22,
+      "denominator": 4083,
+      "derivation": "PP side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_advantaged_6v5": {
+      "value": 1.1365,
+      "derivation": "PP side goals / sum(xg_v2) (pooled)"
+    },
+    "attempt_rate_per_60_disadvantaged_6v5": {
+      "value": 39.6258,
+      "numerator": 1339,
+      "denominator": 121648,
+      "home_part": 673,
+      "away_part": 666,
+      "derivation": "SH side attempts (pooled home+away) / total seconds * 3600"
+    },
+    "goals_per_attempt_disadvantaged_6v5": {
+      "value": 0.628827,
+      "numerator": 842,
+      "denominator": 1339,
+      "derivation": "SH side goals / attempts (pooled)"
+    },
+    "xg_per_attempt_disadvantaged_6v5": {
+      "value": 0.0,
+      "numerator": 0.0,
+      "denominator": 1339,
+      "derivation": "SH side sum(xg_v2) / attempts (pooled)"
+    },
+    "goals_over_xg_disadvantaged_6v5": {
+      "value": 1.0,
+      "derivation": "SH side goals / sum(xg_v2) (pooled)"
+    },
+    "minutes_per_team_game_6v5": {
+      "value": 0.39,
+      "total_secs": 121648,
+      "n_games": 2624,
+      "derivation": "total 6v5/5v6 seconds (both orientations) / games / 2 / 60"
+    }
+  }
+}

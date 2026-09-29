@@ -1,8 +1,13 @@
 {
-  "ratings_py_sha256": "c319b3b6bcb54e1a0c13d2e76e9ed76659117404525567509cb6dceba0d7b811",
-  "carryover_w_sha256": "fe456696f016cfd9ac68717f805df30d051c0ef46ca529a86be3286660252097",
-  "team_ratings_sha256": "8dec4b796165d2aef8e5acf541872152ef9e39be8dad0e20a9bc6bd62aee2b74",
+  "ratings_py_sha256": "f1be7143027b9a53b28b1366c751d64b2c85adf3a2ca83a224630c136e25726e",
+  "carryover_w_sha256": "a3a52656fb554550739798a0b336a7cda030cda6e69069b95a8cac8fdd005bd2",
+  "shrinkage_K_sha256": "bccaae42283a9a14a60952353ec98fc2c2fb8bfc7356ff151315e1b20a9db8d4",
+  "team_game_stats_sha256": "3cf180e83e3c936444192c6b40742a2a5099307555ed8cb95c4e27376e3d3da1",
+  "goalie_games_sha256": "d3d6922077f6437bbcef2b71aef9c8f4eaf4789e4d5f349ae153940a4e7003b3",
+  "team_ratings_sha256": "b671f2ce10f8472965bbaff8302e1a5cb72c17dbb57bce987e510672aa38daaa",
   "team_ratings_rows": 12850,
-  "goalie_ratings_sha256": "2f8d9e51fd91ba8086a61f335e32ab06b60d6805624ab58d67fb079023a797e0",
-  "goalie_ratings_rows": 12850
+  "goalie_ratings_sha256": "5b4004a29e9f706cfae17c76cdf6a60116a1a1c21efd268db52ecd4e609ce5a9",
+  "goalie_ratings_rows": 12850,
+  "finishing_term_sha256": "f7cda74dd74da48112ebb1bbec1a1363151e2c2ffb79c76c49fff7d778cf70aa",
+  "finishing_term_rows": 879
 }

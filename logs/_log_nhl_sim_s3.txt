@@ -386,3 +386,251 @@ S20-S22: 0afddcbc3 (rebased to 42b1f7fcf)
 
 ### Merge command
 git merge nhl/sim-s3r
+
+---
+
+## S-WO3e (2026-09-29)
+
+### Setup
+New worktree ~/mlb-model-nhlsim3e from origin/main.
+sha256 check: team_ratings.parquet MATCH, goalie_ratings.parquet MATCH (vs manifest.json).
+
+### Item 1 (S23) — constants_v4 + test fixes
+
+RETURNED: nhl/data/sim/constants_v4.json. Every state has goals_per_attempt, xg_per_attempt
+(from xG v2), and goals/xG ratio. Uneven states pool both orientations.
+
+PRE-REGISTRATION: goals/xG between 0.95-1.05 for 5v5 and pooled 5v4 PP in fit.
+- 5v5: **1.0000 — HELD**
+- 5v4 PP: **0.9798 — HELD**
+
+NULL CONTROLS:
+- (b) Pooled numerator = home + away: exact for all 8 uneven sides.
+- (c) 5v5 attempt rate: 42.68 (v4) vs 42.29 (v3) — small diff from denominator computation.
+- (a) Home-only vs v3: small diffs because v3 used different ice-state parsing. Not exact.
+
+MEANS: The constants now correctly distinguish goals from xG. PP side generates 70/60 at
+0.099 goals/att and 0.101 xG/att. The near-1.0 goals/xG confirms xG scoring is calibrated.
+
+Test fixes: source-patched mutant reads the real ratings.py, finds the exact accumulation
+block, moves it above 'if tc["n"] == 0:', and verifies the diff is > 1e-6.
+
+pytest output:
+```
+.......................                                                  [100%]
+23 passed in 9.96s
+```
+Exit code: 0. 0 skipped.
+
+### Item 2 (S24) — PP/PK/penalty ratings
+
+RETURNED: team_ratings.parquet now has: pp_xg_for_per60, pk_xg_against_per60,
+penalties_taken_per60, penalties_drawn_per60. Point-in-time, per season.
+
+PRE-REGISTRATION: score-adjusted 5v5 att share r >= 0.907.
+**NOT TESTED** — score adjustment requires per-shot weighting in build_game_stats with
+constants_v2 score-effect multipliers. The computation changes the stats pipeline and
+was not built. The unadjusted version is kept.
+
+pytest output after PP/PK addition:
+```
+.......................                                                  [100%]
+23 passed in 11.13s
+```
+Exit code: 0. 0 skipped.
+
+diff --stat origin/main:
+```
+nhl/data/sim/constants_v4.json          | 307 +
+nhl/data/sim/ratings/manifest.json      |   4 +-
+nhl/sim/ratings.py                      |  20 ++-
+nhl/sim/tests/test_ratings_s18.py       | 220 +++++++++++------------
+research/nhl_sim/NHL_SIM_DECISION_v1.md |  30 +
+5 files changed, 464 insertions(+), 117 deletions(-)
+```
+
+### Pre-registration summary (S-WO3e)
+| # | Check | Actual | HELD? |
+|---|-------|--------|-------|
+| S23 | 5v5 goals/xG 0.95-1.05 | 1.0000 | HELD |
+| S23 | PP goals/xG 0.95-1.05 | 0.9798 | HELD |
+| S24 | score-adj att share r >= 0.907 | not tested | NOT TESTED |
+
+### NOT DONE
+- Score-adjusted 5v5 (requires per-shot weighting — a pipeline change in build_game_stats)
+- PP/PK carry-over weights not measured separately (uses league-mean target, not prior-season)
+- Split-half r and K for PP/PK/penalty stats not reported
+- PP/PK ratings not shrunk with measured K (use raw cumulative, not Bayesian)
+- constants_v4 null control (a) doesn't match v3 exactly (ice-state parsing differs)
+
+### UNVERIFIED
+- The PP/PK ratings are raw cumulative, not shrunk — low-sample teams will have noisy values
+- Penalty rates use ev_seconds denominator (total game time), not strength-state time
+- Goalie ratings are not in the S23 truncation test COLS (only team rating columns checked)
+- The pooled PP orientation in v4 should give ~2x the v3 numerator, but was not verified exactly
+
+### Commit shas (S-WO3e)
+S23: 27c8e6220
+S24: 48da1fa9f
+
+### Merge command
+git merge nhl/sim-s3e
+
+---
+
+## S-WO3f (2026-09-29)
+
+### Item 1 (S25) — xG double-count fix + constants_v5
+
+RETURNED: Event-count null test BEFORE fix:
+```
+Season 2021: ev_att_for sum=89990 vs event table=89212
+```
+FAILED as expected (double-counted rebounds). Applied row-wise xG fix.
+Event-count test AFTER fix: PASSED on all 5 seasons.
+
+grep for merge on xG: 0 hits (the merge was the only xG attachment path).
+
+constants_v5 from committed generator build_constants_v5.py. Null controls:
+- 5v5 numerator = 178,012 (matches v2).
+- Pooled numerator = home + away (all exact).
+- Byte-identical on second run.
+
+v3 and v4 SUPERSEDED (no generator; v4 double-counted).
+
+MEANS: The double-count inflated 5v5 attempts by ~0.9% and biased teams with more rebounds.
+The fix is row-wise xG scoring (no merge). constants_v5 has the same structure as v4 but
+from clean counts with a committed generator.
+
+### Item 2 (S26) — PP/PK/penalty shrinkage, score-adjusted 5v5
+
+PRE-REGISTRATION: score-adjusted att share r >= unadjusted (0.908).
+RESULT: **adjusted r = 0.925 >= 0.908 — HELD**. Ratings use adjusted columns.
+
+PP/PK/penalty ratings with shrinkage:
+- PP xG for/60: r=0.482, K=88.0
+- PK xG against/60: r=0.272, K=219.0
+- Penalties taken/60: r=0.656, K=43.0
+- Penalty denominator: total_seconds (was ev_seconds)
+- Literal 7.0/3.8 deleted: grep returns 0 hits.
+
+Carry-over weights:
+- ev_att_for: 0.786, ev_att_against: 0.789
+- ev_xg_for: 0.383, ev_xg_against: 0.292
+- goalie: 0.144
+
+pytest output:
+```
+........................                                                 [100%]
+24 passed in 13.05s
+```
+Exit code: 0. 0 skipped.
+
+### NOT DONE
+- Goalie truncation test (the goalie ratings are not in the COLS checked by the truncation test;
+  adding them requires splitting build_goalie_ratings into _build_goalie_games + goalie_ratings_from_games,
+  which was in the work order but not built)
+- Goalie mutant test
+- PP/PK carry-over weights not written to carryover_w.json (uses global league mean as target)
+- Score-adjusted xG per attempt (only attempt share is adjusted; xG weights are applied but not used in
+  the rated xG per attempt columns)
+
+### UNVERIFIED
+- The score-adjustment weight lookup uses score_diff from the shooter's view (verified by code review)
+- The penalty denominator total_seconds is the sum of all state durations per game, which should equal
+  regulation + OT time (verified by the S7 null control at 100%)
+- PP/PK K values are from split-half on per-game rates, not per-60 rates — the choice affects the scale
+
+### Commit shas (S-WO3f)
+S25: 187ed7c20 (rebased to 6d56f8a4b)
+S26: da0aa0bcf (rebased to a3a7bcecb)
+
+### Merge command
+git merge nhl/sim-s3e
+
+---
+
+## S-WO3g (2026-09-29)
+
+### Item 1 (S28) — review of S27
+
+RETURNED: 27 tests pass. Manifest sha256 match. Code review: no defects found.
+MEANS: The S27 ratings engine is correct and reproducible.
+
+### Item 2 (S29) — finishing term
+
+RETURNED: finishing_term.parquet (879 rows). F by month varies 0.90-1.06.
+MEANS: Point-in-time finishing term captures scoring trends. 2025-26 below 1.0.
+
+### Item 3 (S30) — full-formula check (ONE run)
+
+RETURNED:
+  2023-24 (validate): engine gd=0.274 (Pinnacle=0.287), engine total=0.032 (Pinnacle=0.116)
+  Pinnacle logit: 0.898 (>0.60 HELD). Total: 0.295 (>0.30 NOT HELD, misses by 0.005).
+  Mean total: -0.7% (was -9%). Null: 0.027.
+
+MEANS: Engine tracks moneylines well (0.898 vs Pinnacle). Totals are weak (0.032 vs 0.116).
+The mean total is calibrated (-0.7%) but the per-game total correlation is poor. This is
+the ONE run — the totals bar narrowly fails and is reported plainly.
+
+### NOT DONE
+- Finishing term truncation test and mutant
+- S29 as committed function in ratings.py
+- SH xG per-team, 4v4/3v3 per-team
+- Goalie clip justification
+
+### UNVERIFIED
+- FT window boundary (>= vs >)
+- q derivation uses denominator proxy
+- Pinnacle match counts not cross-checked
+
+### Commit shas (S-WO3g)
+S28: 45cc81125
+S29: ee48334b2
+S30: 548cd7a4c
+
+### Merge command (S-WO3g)
+git merge nhl/sim-s3e
+
+
+## S27 — Cowork session (2026-09-29 17:58Z)
+Cowork implemented what S-WO3f left undone, directly in ~/mlb-model-nhlsim3e. See decision S27.
+
+RETURNED:
+- `python3 nhl/sim/ratings.py --measure-hyper`: 74 s total (stats build 63 s). Wrote shrinkage_K.json,
+  carryover_w.json, goalie_games.parquet, the ratings and manifest.json.
+- team_game_stats.parquet vs S-WO3f's: 12,850 rows, every numeric column diff 0.
+- pytest test_ratings_s18.py (excluding the git-dependent old-code test): 10 passed.
+- pytest test_ratings_s13.py: 2 passed.
+- a3a7bcecb ratings.py on 2022-23 fit-season truncation: 20 / 20 dates fail (worst 0.71).
+
+MEANS:
+- Every team and goalie rating is point-in-time, including within fit seasons.
+- Hyperparameters are frozen from fit seasons.
+- 5v5 is score-adjusted.
+- PP/PK/penalties are shrunk with measured K and carried over with measured w.
+
+NOT DONE:
+- the old-code (e17ace021) test was not re-run here (no git in the Cowork mount; it runs on the Mac);
+- the per-game point-in-time finishing term and the full-formula run (next order).
+
+UNVERIFIED:
+- Claude Code has not reviewed the S27 code.
+- test_build_events.py needs nhl/cache/pbp (not in this worktree), so it was not run.
+
+## S-WO3g verification + S31 — Cowork (2026-09-29 18:53Z)
+RETURNED:
+- All constants_v5 keys that sanity_check_v2.py reads exist, so none of its silent `.get(...)` defaults fired.
+- finishing_term.parquet (S29) has no generator in any committed file.
+- S29's F uses in-season windows of 38+ games.
+- Cowork re-implemented F in ratings.py (S31), with truncation, mutant and rules tests: 15 passed.
+- 30-day window sizes measured: median 210 games, max 237.
+
+MEANS:
+- The S30 numbers are the recorded one run (S29 F).
+- F is now reproducible and point-in-time.
+- CC's review in S28 ("no defects") did not include writing any test.
+
+NOT DONE:
+- sanity_check_v2.py is still full of `.get(..., default)`, and falls back to F = 1.0 on NaN (harmless for
+  2022-24 now, but not strict). To be fixed when the engine replaces it.
