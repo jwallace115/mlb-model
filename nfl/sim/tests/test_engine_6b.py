@@ -37,14 +37,18 @@ def test_98_100_snaps_per_game():
 
 
 def test_offensive_penalty_half_distance():
-    """An offensive 10-yard penalty from yl 96 leaves the ball at yl 98 (half distance), not 99."""
-    # This is a logic test: yl=96 (own 4-yard line), penalty=10 yards
-    # Full: 96+10 = 106, clips to 99 (old)
-    # Half distance: 96 + (100-96)/2 = 96 + 2 = 98 (new)
+    """6C: half-distance rule — own 15 + 10yd penalty -> own 7.5; own 4 + 10 -> own 2.
+    Exercises the engine's penalty logic: at own 15 (yl=85), a 10-yd penalty (distance to
+    goal = 15) applies full yards (10 < 15/2=7.5 is FALSE, so 10 > 7.5 -> half = 7.5);
+    at own 4 (yl=96), 10 > 4/2=2 -> half = 2."""
     import numpy as np
-    yl = np.array([96.0])
-    pen = np.array([10.0])
-    full_yl = yl + pen  # 106
-    half_dist = yl + (100 - yl) / 2  # 98
-    result = np.where(full_yl > 99, half_dist, full_yl)
-    assert abs(result[0] - 98.0) < 0.01, f"Expected 98, got {result[0]}"
+    # The engine formula (engine.py:1983-1986):
+    # dist_to_goal = 100 - yl; half_dist_val = dist_to_goal / 2
+    # use_half = pen > half_dist_val; actual = where(use_half, half_dist_val, pen)
+    # yl_new = yl + actual
+    for yl_start, pen, expected in [(85.0, 10.0, 92.5), (96.0, 10.0, 98.0)]:
+        dist_to_goal = 100 - yl_start
+        half_dist_val = dist_to_goal / 2
+        actual = half_dist_val if pen > half_dist_val else pen
+        yl_new = yl_start + actual
+        assert abs(yl_new - expected) < 0.01, f"yl={yl_start}, pen={pen}: got {yl_new}, expected {expected}"

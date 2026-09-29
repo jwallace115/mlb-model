@@ -86,6 +86,10 @@ def _load_tables():
     _CACHE["4th"] = pd.read_parquet(TABLES_DIR / "fourth_down.parquet")
     _CACHE["fg"] = pd.read_parquet(TABLES_DIR / "fg_make_rate.parquet")
     _CACHE["punt"] = pd.read_parquet(TABLES_DIR / "punt_net.parquet")
+    # 6C: punt landing table (receiving team's start yardline by LOS bucket)
+    punt_landing_path = TABLES_DIR / "punt_landing.parquet"
+    if punt_landing_path.exists():
+        _CACHE["punt_landing"] = pd.read_parquet(punt_landing_path)
     with open(TABLES_DIR / "scalars.json") as f:
         _CACHE["scalars"] = json.load(f)
     with open(TABLES_DIR / "turnover_returns.json") as f:
@@ -787,6 +791,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
     xs101_top = np.linspace(0, 1, 101)
     fg_lookup = _build_fg_lookup()
     punt_lookup = _build_punt_lookup()
+    # 6C: punt landing table (receiving team's start yl by LOS bucket)
+    _punt_landing_tbl = _CACHE.get("punt_landing")
+    _punt_landing_q = {}  # los_bucket -> quantile array of receiving team's yardline
+    if _punt_landing_tbl is not None:
+        for _, row in _punt_landing_tbl.iterrows():
+            _punt_landing_q[int(row["los_bucket"])] = np.array(row["recv_yl_q"])
 
     pc_lookup = dict(zip(_CACHE["playcall"]["bucket"], _CACHE["playcall"]["pass_rate"]))
     pc_bucket_set = set(pc_lookup.keys())
@@ -1800,13 +1810,23 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                         zn = "midfield"
                     else:
                         zn = "own20"
-                    q = punt_lookup.get(zn)
-                    if q is None:
-                        q = punt_lookup.get("midfield", np.full(101, 42.0))
-                    net = np.interp(u_punt_net[i], np.linspace(0, 1, 101), q)
-                    # FIX 6f: removed unreachable touchback branch (clip already ensures >=1);
-                    # touchbacks are encoded in the punt net yards distribution from tables.py
-                    yl[i] = float(np.clip(100 - (yl[i] - net), 1, 99))
+                    # 6C: draw receiving team's start yl from punt landing table
+                    los_bkt = (int(yl[i]) // 5) * 5
+                    landing_q = _punt_landing_q.get(los_bkt)
+                    if landing_q is not None:
+                        recv_yl = float(np.interp(u_punt_net[i], np.linspace(0, 1, 101), landing_q))
+                        yl[i] = float(np.clip(recv_yl, 1, 99))
+                    else:
+                        # Fallback to old method for very short punts
+                        q = punt_lookup.get(zn)
+                        if q is None:
+                            q = punt_lookup.get("midfield", np.full(101, 42.0))
+                        net = np.interp(u_punt_net[i], np.linspace(0, 1, 101), q)
+                        recv_yl = 100 - (yl[i] - net)
+                        if recv_yl > 80:  # would be a touchback
+                            yl[i] = 80.0
+                        else:
+                            yl[i] = float(np.clip(recv_yl, 1, 99))
                 # Punt return TD (empirical rate from table G)
                 punt_ret_td_m = punt_m.copy()
                 for i in np.where(punt_m)[0]:
@@ -1960,10 +1980,12 @@ def simulate_game(home, away, season, week, n_sims=2000, seed=42,
                 # Offense penalty: move back by drawn yardage, half distance to goal
                 if off_pen.any():
                     yl_before = yl[off_pen].copy()
-                    # 6B: half the distance to the goal when penalty would exceed
-                    full_yl = yl[off_pen] + pen_yds[off_pen]
-                    half_dist = yl[off_pen] + (100 - yl[off_pen]) / 2  # halfway to own end zone
-                    yl[off_pen] = np.where(full_yl > 99, half_dist, full_yl)
+                    # 6C: half the distance when penalty exceeds half the distance to goal
+                    dist_to_goal = 100 - yl[off_pen]
+                    half_dist_val = dist_to_goal / 2
+                    use_half = pen_yds[off_pen] > half_dist_val
+                    actual_yds = np.where(use_half, half_dist_val, pen_yds[off_pen])
+                    yl[off_pen] = yl[off_pen] + actual_yds
                     yl[off_pen] = np.clip(yl[off_pen], 1, 99)
                     # Yards-to-go rises by the yards actually marched off (clipped at 99)
                     dist[off_pen] = dist[off_pen] + (yl[off_pen] - yl_before)

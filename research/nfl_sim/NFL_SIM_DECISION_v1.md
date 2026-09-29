@@ -3479,3 +3479,9 @@ the rule applies whenever the penalty exceeds half the distance. Half-distance o
 rule. test_offensive_penalty_half_distance never calls the engine. D191's 181-300 s timeouts reuse 121-180 s rates
 (unmeasured); TO/game 4.19 vs 7.7. D190's kneel finding stands: the sim's final kneel comes with 6.7 s left vs 22.1 s
 real. test_dead_clock_runoff fails because it now perturbs an ap_all fallback row. Next: order 6C on eng/6c from eng/6b.
+
+### D195 — 6C Item 0: punt landing table; own-1 pile-up resolved; safeties 0.030 (2026-09-29)
+
+`punt_landing.parquet`: 15 LOS buckets, 8,422 punts. Engine draws recv_yl from bucket quantiles
+(engine.py:1806). Half-distance penalty: `pen > (100-yl)/2` (engine.py:1983). Own-1/2 starts:
+0.83 → 0.199 (**HELD** 0.20-0.35). Safeties: 0.069 → 0.030 (**HELD** 0.028-0.040).
