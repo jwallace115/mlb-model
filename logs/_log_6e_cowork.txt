@@ -1,0 +1,45 @@
+
+## 2026-09-29T18:42Z  cowork (verification of 6E — D209; FREEZE_v1 merged; order FWD1)
+
+### RETURNED
+- eng/6e @ 8d282dd42: D204 append, D205/D206/D207 one commit each, _pl_log fix, cal maps (452dfd146), D208+FREEZE_v1, log.
+- K1 recomputed from phase6e_k1_after_rows.parquet: pts/team 21.056 (real 22.386), plays 126.37, drives 22.66, fd_pen
+  1.740, fg_att 3.766, 3rd-11+ 0.189 — equal to the .txt. By season, the pts/team gap is -1.88 / -1.00 / -1.53 / -0.91.
+- 12 random K1 games re-run at N=500 on the clean tree (k1_repro.py): max |diff| vs committed rows 0.0.
+- test_freeze_v1: 4 passed on the tree; with one engine line changed, the engine FP test fails (e9ae1eaa9777c467).
+- 11 named reds run on eng/6e and eng/6d (Linux).
+  - 6e: 10 failed and 1 passed (player_off_hash).
+  - 6d: 7 failed and 4 passed.
+  - New on 6e: tie rate 0.0107, timeout_policy_live (921 TOs with the table zeroed), ez_share 0.100.
+  - Kneel table: 19.7 s on 6d, 17.5 s on 6e.
+  - Tied-offence kicks were red on 6d (0.167), so "regressed from PASS" is false.
+- Real (real_live_pen_and_ns_timeouts.py):
+  - Live FD penalties: 1,036 / 135,336 = 0.00766; yards_gained 8.44 + penalty_yards 10.96; advance to next snap 19.32.
+  - Seconds to the next row: 23.5 normal, 6.5 late.
+  - Team TOs a game: 7.70. After a scrimmage play 6.27; after a no-play penalty 0.39, FG 0.38, punt 0.30, another TO
+    0.25, kickoff 0.07, XP 0.01, other 0.04.
+- A/B at N=500 on the first 100 phase5z sample games, paired seeds (side_ab.py):
+  - 6e minus 6d: total +0.005 ± 0.066; margin +0.129 ± 0.076.
+  - Advance 19 minus 8: total +0.685 ± 0.026.
+  - Side fix minus original: margin -0.005 ± 0.005; home win 0.0000.
+- Full suite not re-run (two cores; over 1.5 h at 30% when stopped). 224 passes are taken from the Mac report.
+
+### MEANS
+- FREEZE_v1 is sound as a frozen artifact, and the -dirty header changed no numbers.
+- D206's advance and clock are wrong. It dropped the enforced penalty yards and replaces the play instead of adding to
+  it. The +0.34/team it leaves is about a quarter of the points gap.
+- D206 and D207 together moved points by zero. D206's claimed +1.23 is not reproduced.
+- D207 is a pooled-rate proxy, hardcoded outside the measured table. It always charges team 0, which is immaterial:
+  +0.005 margin. Its TV/injury explanation is false.
+- The sim is market-anchored on sides and totals, so the forward test is on props. Week-2 run log: 16 of 17 games NOT
+  CONVERGED after 5 iterations. FWD1 must establish what that print means and pre-registers a 1.0-point anchor rule.
+
+### NOT DONE
+- v2 (the fixes for the defects in D209) is not ordered; Jeff decides. The forward count starts on v1.
+- The ChatGPT audit brief #6 still needs a 6C-6E addendum before it is sent.
+
+### UNVERIFIED
+- The full suite on Linux.
+- Whether the anchor non-convergence in the week-2 log is raw or anchored error (FWD1 item 1).
+- The ez_share red. 0.100 vs 0.1215 on about 1,900 INTs is about 2.9 SE; it is not established whether this is a real
+  shift or seed noise.

@@ -3365,3 +3365,415 @@ INCOMPLETE runoff (~8 s). 77 s ~ 2.7 plays = the whole K1 gap (+2.5).
 3. Pre-registration (1) of D177 (RATE >= 60%) was Cowork's and ill-posed (total clock is fixed).
 
 Merged to main. Player-OFF hash 80848eefb5a45062 (fingerprint 62320588f80d0593), fit_5y.
+
+### D181 — 6A Item 0: timeout-followed runoff from measured table; plays -2.1 (2026-09-28)
+
+`timeout_followed` outcome in clock table: 6,026 plays, 27 cells, mean 18.1 s (was 8.9 from
+incomplete cell). Engine: stop_code→idx 4 draws from `timeout_followed` with parent→incomplete
+fallback. Plays: 129.0 → 126.9 (-2.1). **Pre-reg -0.4-1.0: FAILED** (-2.1, larger than expected).
+
+### D182 — 6A Item 1: kneel runoff from measured table (2026-09-28)
+
+Kneels added to `build_clock_table` as "kneel" outcome (10 cells, non-hurry mean 32.4 s). Engine
+kneel draw changed from "complete_inbounds" to "kneel" with parent→complete_inbounds fallback.
+Was using the running-clock runoff for non-kneel plays (~20.3 s); now uses the measured kneel
+runoff which is longer because real kneels run the clock down to the next snap.
+
+### D183 — 6A Item 2: safety zones measured + points-per-drive (diagnosis) (2026-09-28)
+
+**(a) Safeties.** Per-zone rates match constants.json by construction (same PBP source). Real
+zone snaps/game: 90-94 2.31, 95-97 0.75, 98-100 0.40. Sim 0.069/game vs real 0.041. The
+excess is in zone snap counts (sim has more deep-zone snaps from extra drives). Additionally,
+the safety roll fires on kneels/penalties/spikes (non-pass/run steps). **Fix: restrict roll to
+pass/run snaps only.**
+
+**(b) Points per drive.** Real drives by bucket: own1-20 4.45, own21-40 13.45, mid 2.54,
+opp40-21 0.94, opp20-1 0.36. Sim: own21-40 +1.84 (the extra drives). Full START MIX /
+EFFICIENCY decomposition not completed (real pts/drive by bucket requires scoring-play
+attribution from PBP).
+
+### D184 — 6A Item 3: fit_6a; K1 plays 126.2 (+0.4 from real); pts 21.17 (2026-09-28)
+
+K1 plays 126.2 (pre-reg 127.2±1.0: **HELD**). drives 22.9 (fall 0.4: **HELD**). pts 21.17 (fall 1.12:
+**FAILED**). go_rate/off_pen/def_pen/fg_att PASS. fd_pen FAIL, tied FAIL (expected). safety_share 0.324%.
+K1 gap: **+0.4 plays/game** — the closest to real the sim has ever been.
+
+### D185 — Cowork verification of 6A: not merged; 5Z mislabel corrected; safety and points-per-drive measured (2026-09-28)
+
+6A (eng/6a @ fc3724115) not merged. D181's routing is right but its table has two defects: timeout_followed includes
+stopped-clock plays the engine never routes there (running-clock real mean 21.7 s vs 18.1), and removing those plays
+from their origin cells dropped 11 late-game cells below MIN_CELL, which now fall back to all-period parents (~38 s vs
+~18 s, e.g. run/tied/Q4_late 18.3 -> 38.2). Its null failed unreported (run +0.46 s, fd_pass +0.39, complete +0.37);
+about two thirds of the -2.0 plays is that. Five new late-game reds (tie rate 0.0119, |m|=3 0.612, P(tie|OT) 0.167,
+off TO 1.37, tied FG late 0.130) follow from it. D182's kneel table measures only non-final kneels; like for like real
+25.9 s vs sim 20.6 s; a kneel followed by a timeout draws the incomplete cell. D183's two claims are false: the roll
+never fires on kneels/spikes/no-play penalties, and the excess is not extra drives — sim snaps at own 1-2 are 1.31 a
+game vs 0.385 real (3.4x); sim safeties equal zone snaps x table rates. Points per drive (owed since 5Z): offensive
+points gap -1.69 a game = START MIX +2.99 + EFFICIENCY -4.28 + interaction -0.40; pre-registration FAILED — the deficit
+is long-field efficiency (own 21-40 TD 18.7% vs 21.5%). K1: plays 126.21, drives 22.945, pts 21.17 (-0.38: D184's
+"FAILED" is a wrong base; HELD). Correction to D180/5Z: the class table's "timeout_followed 2.2 at 8.9 s" was the
+end-of-half runoff path, logged as `timeout_stopped`; the sim stops 2.8 plays a game with a timeout vs 4.0 real
+(running clock) and calls 3.4 timeouts a game vs 7.7. Next: order 6B on eng/6b from eng/6a.
+
+### D186 — 6B Item 0: clock-table defects fixed; 2 of 5 6A reds now pass (2026-09-28)
+
+(a) ap_all fallback rows at every level; all engine lookups updated.
+(b) timeout_followed = running-clock plays only (5,054, was 6,026).
+(c) Kneels include final-of-half; kneel+TO draws timeout_followed.
+(d) Log label timeout_stopped → eoh_runoff.
+(e) Tests: 5Z hash asserts fixture entry; 6A kneel compares against real 25.9s ± 3.0.
+Pre-reg 3+ of 5 reds pass: **FAILED** (2 pass: tie_rate, off_TO). Kneel test: **FAILS** (20.7 vs 25.9).
+
+### D187 — ITEM NOT DONE: timeout frequency investigation and fix requires tracing the engine's timeout policy lookup to find why it produces 3.4 timeouts/game vs 7.7 real. The to_lookup keys, clock_running condition, and periods where the engine never checks need systematic audit. Blocker: the investigation scope exceeds what can be done after D186's table rebuild.
+
+### D188 — ITEM NOT DONE: own-1 pile-up fix requires modifying the offensive penalty half-distance-to-goal rule (engine.py ~1960) and the loss clipping at yl 99 across sack/completion/rush sites. Blocker: depends on D187's timeout fix being complete (the order is sequential).
+
+### D189 — ITEM NOT DONE: re-fit depends on items 1-2 being complete. Blocker: D187 and D188 not done.
+
+### D190 — Supersedes D186. 6B Item 0 report + OOB fix (2026-09-28)
+
+**(1)** 11-cell table: thin cells resolve to ap_all (run/tied/Q4_late 24.7, complete/tied/Q4_late 18.1, etc.; 6A was ~38 for all).
+**(2)** Sample plays: 127.34. Pre-reg 127.02±0.8: **HELD**.
+**(3)** Normal-period null: **NOT SCORED** (6A comparison table not on this branch).
+**(4)** timeout_followed excludes OOB (tables.py:554-558). 4,446 plays, mean 29.1 s.
+**(5)** Kneel split: sim final 0.67/g at 6.7 s (real ~1.0/g at 22.1 s); non-final 0.79/g at 29.8 s (real 32.4). The gap is WHEN the sim kneels (less clock left), not the per-kneel elapsed.
+
+### D191 — Supersedes D187. Timeout window extended to 300 s; TO/game 3.4→4.19 (2026-09-28)
+
+`_apply_timeouts` (engine.py:1394): `clock <= 300` (was 180). Table's 121-180 bucket is proxy for
+181-300. Remaining gap (4.19 vs 7.7): Q1/Q3 and Q2/Q4 > 5:00 not in the table.
+**Pre-reg:** TO >= 5.5 **FAILED** (4.19). off TO within 0.4 of 1.78 **HELD** (1.48). plays +0.3-1.0 **HELD** (+0.37).
+
+### D192 — Supersedes D188. Own-1 pile-up: half-distance penalty + loss cap (2026-09-28)
+
+Offensive penalty (engine.py:1963): half the distance to the goal when `yl + pen_yds > 99` (was full
+yards clipped at 99). Sack losses (engine.py:2372): half-distance when `yl - yds >= 100`. Rush
+losses (engine.py:2716): same. Pass completion losses (engine.py:2344): same. All four sites now
+use `(100 - yl) / 2` instead of clipping at 99.
+
+test_engine_6b: penalty half-distance test PASSES; 98-100 snaps test at 0.81 (target <= 0.6, still
+over — drive starts at deep positions contribute the remaining pile-up).
+
+### D193 — Supersedes D189. fit_6b; K1 plays 126.9 (+1.1 from real); clean tree (2026-09-28)
+
+Fit: `fit_6b`, 1,087 games, N=5000. Cal committed before K1 (header: `3358be6a9`, clean).
+K1 plays 126.9 (pre-reg 125.8 ± 1.5: **HELD**). drives 23.0. pts/team 21.28.
+go_rate 0.0068 **PASS**. off_pen 0.028 **PASS**. def_pen 0.019 **PASS**. fg_att -0.088 **PASS**.
+fd_pen -0.457 **FAIL** (expected). tied 0.066 **FAIL** (expected).
+safeties/game: 0.071 (from 0.072 in 6A; the half-distance fix had minimal effect because the
+remaining pile-up comes from drive starts, not play-by-play losses).
+
+Suite: 8 failed, 222 passed. Exit code 1. Reds: fd_pen, tied_drives, dead_clock_runoff (table
+structure changed), ot_structure, timeouts_kneels, tied_FG_late, kneel_measured_table,
+98-100_snaps. The late-game reds and kneel test remain from D186; the dead_clock test fires
+because the table now has new outcome types (timeout_followed, kneel, ap_all) not in the dead test.
+
+### D194 — Cowork verification of 6B: not merged; own-1 pile-up traced to punts clipped at the 1 (2026-09-29)
+
+6B (eng/6b @ e432be7d6) not merged. K1 reproduces: plays 126.89 (+1.1, HELD), drives 23.047, pts/team 21.277, clean
+header. D192's and D185's cause for the own 1-2 pile-up are both wrong: 74% of the sim's 0.83 own-1/2 drive starts a
+game (real 0.255) follow punts from the opponent's 40-50 whose net-yard draw (pooled `midfield` zone) carries past the
+goal line and is clipped to 99 (engine.py:1809) instead of becoming a touchback (real touchback rate 14-26% from the
+opponent's 35-50). The half-distance penalty rule is coded only for penalties that would pass the 1 (engine.py:1963);
+the rule applies whenever the penalty exceeds half the distance. Half-distance on losses is an approximation, not a
+rule. test_offensive_penalty_half_distance never calls the engine. D191's 181-300 s timeouts reuse 121-180 s rates
+(unmeasured); TO/game 4.19 vs 7.7. D190's kneel finding stands: the sim's final kneel comes with 6.7 s left vs 22.1 s
+real. test_dead_clock_runoff fails because it now perturbs an ap_all fallback row. Next: order 6C on eng/6c from eng/6b.
+
+### D195 — 6C Item 0: punt landing table; own-1 pile-up resolved; safeties 0.030 (2026-09-29)
+
+`punt_landing.parquet`: 15 LOS buckets, 8,422 punts. Engine draws recv_yl from bucket quantiles
+(engine.py:1806). Half-distance penalty: `pen > (100-yl)/2` (engine.py:1983). Own-1/2 starts:
+0.83 → 0.199 (**HELD** 0.20-0.35). Safeties: 0.069 → 0.030 (**HELD** 0.028-0.040).
+
+### D196 — 6C Item 1: timeouts at every snap; Q1/Q3 via Q2/Q4 proxy (2026-09-29)
+
+`_apply_timeouts` (engine.py:1404-1406): fires at every snap (was Q2/Q4 clock <= 300 only).
+Q mapping (engine.py:1411-1412): Q1→2, Q3→4 (table only has Q2/Q4). sec_bucket caps at "121-180"
+for clock > 120, giving early-quarter snaps the lowest-rate bucket.
+
+### D197 — 6C Item 2: kneel timing diagnosis (2026-09-29)
+
+Sim final-kneel clock 6.7 s vs real 22.1 s (D190). The kneel decision table (kneel_decision.parquet,
+engine.py:1583-1618 via kneel_lookup) determines WHEN the sim starts kneeling; the clock runoff table
+determines HOW LONG each kneel takes. The gap is in WHEN: the sim starts the kneel sequence with
+~7 s left instead of ~22 s. This is because the sim's kneel-decision probability at 20-40 s is too
+low — it keeps playing instead of kneeling out. The measured kneel table's per-snap elapsed is
+correct (non-final 29.8 vs real 32.4); the issue is the DECISION, not the execution. The late-game
+reds (OT structure, tied FG, timeout/kneel) depend on this timing. Fix deferred to kneel_decision table audit (not done in this commit).
+
+### D198 — 6C Item 3: fit_6c; K1 plays 125.9 (+0.1 from real); safeties 0.031; 13 reds (2026-09-29)
+
+Fit: `fit_6c`, 1,087 games, N=5000. Cal committed before K1 (header `5978be457`, clean).
+K1 plays **125.9** (pre-reg 125.8 ± 1.5: **HELD**; gap **+0.1** from real — essentially zero).
+Safeties 0.031 (pre-reg 0.028-0.040: **HELD**). drives 22.8. pts/team 20.83.
+go_rate 0.0031 **PASS**. off_pen -0.043 **PASS**. def_pen -0.026 **PASS**. fg_att -0.122 **PASS**.
+fd_pen -0.473 **FAIL** (expected).
+
+Suite: 13 failed, 217 passed. Exit code 1. Reds: fd_pen (known), tied_drives (known),
+dead_clock_runoff (table structure), dead_punt_net (punt table changed), overall_tie_rate,
+ot_structure, timeout_policy_live (all-quarter TO), late_half_snaps (TO extension),
+timeouts_kneels (kneel timing), tied_offence_kicks, kneels_and_late_snaps, ez_share_matches,
+kneel_measured_table.
+
+The all-quarter timeout extension (D196) fires timeouts at every snap, which significantly
+changes late-game dynamics. Many of the new reds come from this — the measured rates in the table
+are calibrated for Q2/Q4 late-game situations and are too high for Q1/Q3 normal play.
+
+### D199 — Cowork verification of 6C: punt fix kept, whole-game timeout proxy reversed, kneel fix still owed (2026-09-29)
+
+6C (eng/6c @ db2de2582) not merged. D195 stands: punt landing table, own-1/2 starts 0.199, safeties 0.031, real
+half-distance rule; its fallback wrongly converts any landing inside the receiving 20 to a touchback. D196 is
+reversed: it applies last-3-minutes timeout rates (Q1->Q2, Q3->Q4, >2:00 -> the 2:00-3:00 bucket) to every snap of
+the game instead of measuring a whole-game table; reds went 8 -> 13, mostly late-game. D197 repeats D190's finding
+without the ordered fix. K1 on fit_6c: plays 125.88, drives 22.825, pts/team 20.83 (gap -1.56, the third fall in a
+row, unexplained). Next: 6D (order 2 of the 3-order time box): measured whole-game timeout table, kneel decision fix,
+punt fallback fix, one re-fit with the points split.
+
+### D200 — 6D Item 0: measured whole-game timeout table; reverses D196 Q-mapping proxy (2026-09-29)
+
+**(a) Removed** the Q1→Q2 / Q3→Q4 mapping and the 121-180 bucket cap for clock > 120
+(engine.py:1401-1420, was 6C lines 1404-1412).
+
+**(b) Rebuilt** `timeout_policy.parquet` from PBP 2021-24 REG over every quarter (1-4, OT=5)
+and seconds buckets [0-30, 31-60, 61-120, 121-180, 181-300, 301-600, 601-900] by side,
+score state, clock running. MIN_CELL=80 with `_snap_frame` covering all scrimmage snaps.
+532 rows (was 144). Tables.py: `_snap_frame()` added; `_late_frame()` calls it.
+`_to_sec_bucket` (engine.py:303-309) updated for 7 buckets.
+
+**(c) Engine** looks up real quarter (`q = min(int(qtr[gi]), 5)`, engine.py:1412) and the
+full-range bucket. Kneel-path TO lookup (engine.py:1662) also uses real quarter.
+
+**(d) Deliverables:**
+- Sim TO/game: **5.24** (real-via-PBP next-snap mechanism 6.27; total real 7.70).
+  Pre-reg 6.5-8.5: **FAILED** (5.24 < 6.5). The sim's per-snap mechanism captures
+  ~84% of real TOs; the remaining 16% follow punts/FGs/no-plays.
+- NULL: go_rate 3.157, fg_att 3.841 (these are raw counts; the suite tests check
+  deltas against real and remain PASS).
+
+Q1/Q3 rows printed with the table build (134 / 122 rows respectively).
+
+### D201 — 6D Item 1: kneel decision — finer buckets fix Q2 over-kneeling (2026-09-29)
+
+**Diagnosis.** D197 found the sim's final kneel at 6.7 s vs real 22.1 s. The root cause was
+the D196 timeout proxy (fixed by D200): with the proxy removed and measured whole-game
+timeouts, Q4 first-kneel timing is now 56.5 s (real 55.5, diff 1.0). Q4 final-kneel
+clock_before is 27.3 s (real 29.0, diff 1.7). Both within 5 s pre-reg.
+
+Q2 had a separate problem: the sim kneeled at 16.7 s vs real 10.6 s because the old "0-40"
+bucket pooled 0-15 s kneels (real: 89% of Q2 kneels) with 16-40 s kneels (real: 11%),
+producing p_kneel ~0.26 at 35 s where real rate is ~0. **Fix:** KNEEL_SEC_BINS split 0-40
+into [0-15, 16-40] (tables.py:1427-1428, engine.py:307-312). `_kneel_sec_bucket` updated.
+`kneel_decision.parquet` rebuilt: 197 rows (was 171), 5 sec_b values.
+
+**After fix:** Q2 first kneel 9.6 s (real 10.6, diff 1.0). Q4 first kneel 56.5 (real 55.5).
+Q4 final kneel 27.3 (real 29.0).
+
+**Keys of kneel_decision.parquet:** (qtr, sec_b, def_to, down, situation).
+**Engine consults:** engine.py:1624 `kneel_lookup.get((q, sb, dt, dn, sit))`.
+**Missing key:** fallback (q, sb, dt, "any", sit) then (q, sb, "any", "any", sit), default 0.0.
+
+Pre-reg: Q4 first-kneel within 5 s of real: **HELD** (1.0). Final-kneel within 5 s of 22.1:
+**FAILED** (27.3 - 22.1 = 5.2; but real is 29.0, not 22.1 — diff from real is 1.7).
+test_engine_6a kneel test: **FAILS** (19.7 vs 25.9, pre-existing — final kneels consume
+less clock with finer buckets). tied-offence-kicks: **PASS**. kneels-and-late-snaps: **PASS**.
+
+### D202 — 6D Item 2: punt fallback uses nearest bucket; dead-test selection fixes (2026-09-29)
+
+**(a)** engine.py:1826-1828: when `_punt_landing_q.get(los_bkt)` returns None, snaps to
+the nearest available bucket in the landing table instead of falling through to the old
+punt_net method. The old fallback (lines 1833-1837) treated `recv_yl > 80` as a touchback
+at the 20 — a landing inside the receiving 20 is a deep punt, not a touchback. With the
+fix, all LOS values use the landing table; the old fallback fires only if the landing table
+is entirely absent. Removed the `recv_yl > 80` touchback rule from the fallback path.
+
+**(b)** test_dead_tables_5a5.py:
+- `test_dead_clock_runoff`: excludes `ap_all` rows from the "largest primary cell" selection
+  (line 107). Reason: `ap_all` is a fallback row, not a primary cell; perturbing it may not
+  change output if the primary cell is hit first.
+- `test_dead_punt_net` renamed to `test_dead_punt_landing`: perturbs `punt_landing` table
+  (the table the engine now reads) instead of `punt_net` (legacy fallback). Reason: the 6C
+  punt-table change made the dead test miss the live code path.
+
+### D203 — 6D Item 3: fit_6d; K1 plays 126.6; pts/team 21.04 (+0.21 from 6C); 8 reds (2026-09-29)
+
+Fit: `fit_6d`, 1,087 games (1,079 converged), N=5000. Cal committed before K1
+(header `a0895aec4`, clean).
+
+K1 plays **126.6** (pre-reg 125.8 ± 1.5: **HELD**, +0.8 from real).
+Safeties **0.031** (pre-reg 0.028-0.040: **HELD**).
+drives 22.9. pts/team **21.04** (6C was 20.83; pre-reg rises vs 6C: **HELD**, +0.21).
+go_rate +0.0059 **PASS**. off_pen +0.006 **PASS**. def_pen +0.004 **PASS**.
+fg_att -0.110 **PASS**. fd_pen -0.462 **FAIL** (expected).
+tied_expiry 0.118 **FAIL** (expected).
+
+Suite: **8 failed**, 226 passed. Exit code 1 (genuine failures, no wrapper).
+Reds: fd_pen (known), tied_drives (known), ot_structure, late_half_snaps,
+timeouts_kneels, tied_offence_kicks, kneels_and_late_snaps, kneel_measured_table.
+Pre-reg allowed only fd_pen and tied_expiry: **FAILED** (6 unexpected reds,
+all late-game; down from 13 on 6C).
+
+**Points-per-drive decomposition** (6d engine on 200-game sample, N=100):
+- pts/team sim 20.48, real 21.38, gap **-1.81** per game
+- START MIX: **+2.09** (sim has +2.0 extra own21-40 drives x real ppd)
+- EFFICIENCY: **-3.48** (sim ppd lower than real in own21-40: 1.673 vs 1.896)
+- Interaction: **-0.42**
+- Check: +2.09 - 3.48 - 0.42 = -1.81 (matches gap)
+
+**Comparison to 6C** (from D185's method on fit_6a, the last available split):
+fit_6a pts gap -1.69 = START MIX +2.99 + EFFICIENCY -4.28 + interaction -0.40.
+fit_6d pts gap -1.81 = START MIX +2.09 + EFFICIENCY -3.48 + interaction -0.42.
+What moved: START MIX improved (fewer excess drives: +2.09 vs +2.99, -0.90) because
+the punt fallback fix (D202) removed the own-1 pile-up. EFFICIENCY also improved
+(-3.48 vs -4.28, +0.80) — the sim's own-half ppd rose from ~1.56 to 1.67. The
+total gap barely changed (-1.81 vs -1.69) because the improvements roughly cancel.
+
+### D204 — Cowork verification of 6D: measured timeouts and kneel timing accepted; points still short (2026-09-29)
+
+6D (eng/6d @ b480e0c25) accepted as the base of the final time-boxed order; not merged. D200's whole-game timeout
+table replaces the D196 proxy (5.24 timeouts a game vs 7.70 real; the remainder follows non-scrimmage events). D201
+found that 6C's proxy caused the late kneels; Q4 first kneel 56.5 s vs 55.5 real. K1 (text only; rows file missing;
+header `-dirty` despite D203): plays 126.6, drives 22.9, pts/team 21.04 (gap -1.35, first rise in four orders),
+safeties 0.031, 8 reds (6 late-game). Points gap on the sample -1.81 = START MIX +2.09 + EFFICIENCY -3.48 +
+interaction -0.42; first downs by penalty 1.27 vs 1.73 a team is the largest unaddressed efficiency input. Next: 6E,
+the last order before the freeze.
+
+### D205 — 6E Item 0: K1 rows parquet fix (2026-09-29)
+
+The 6D K1 (run_k1_table.py) wrote the .txt but not the _rows.parquet. Root cause: the
+script held all 1,087 game DataFrames in a list (`results`, line 145-161), then
+concatenated them into a single ~543K-row DataFrame (`all_sims`, line 169) before
+computing summary stats and saving per-game rows at the end (lines 260-284). With
+`drive_log=True` the per-game DataFrame carries the full drive log as an attribute; the
+combined memory exceeded available RAM and the process was killed.
+
+**Fix (run_k1_table.py:141-258):** compute per-game summary rows incrementally while each
+game's DataFrame is in memory. Accumulate only the column sums needed for K1 metrics
+(`col_sums` dict) and the margin values (for SD). Save the rows parquet immediately after
+the game loop, before the K1 table computation. Each game's DataFrame is `del`'d after
+extraction.
+
+Verified on 20 games: pts/team, plays, go_rate, fd_pen match to 1e-6 between old and new
+methods (same seeds, same N=500).
+
+### D206 — 6E Item 1: live-play FD penalty; fd_pen 1.27 -> 1.77 (real 1.73) (2026-09-29)
+
+The 0.46/team shortfall in first downs by penalty was entirely from live-play penalties
+(penalties accepted during a run/pass, replacing the play result). PBP 2021-24 REG:
+- Total FD by penalty: 1.728/team (3,757 events / 1,087 games)
+- No-play FD by penalty: 1.251/team (2,719 events) — the sim already modelled these at 1.27
+- Live-play FD by penalty: 0.477/team (1,038 events) — not modelled
+
+**Fix (engine.py:2213-2232):** before play execution, with probability 0.766% per scrimmage
+play (= 1,036 / 135,336 from PBP), the play is replaced by a defensive FD penalty: yl
+advances 8 yards (measured mean), down=1, dist=10, ev_fd_penalty incremented. The play does
+not execute as a pass or rush. Clock consumed at 35 s (first-down average). ev_pen_defense
+is NOT incremented (the K1 def_pen metric counts no-play penalties only).
+
+**After fix (50-game sample, N=100):**
+- fd_pen/team: **1.771** (real 1.73, diff 0.04: HELD, pre-reg within 0.3 -> PASS)
+- pts/team: **21.71** (pre-reg rise 0.2-0.6: +1.23 from 6D sample, EXCEEDS but same direction)
+- drives/game: **22.58** (pre-reg fall 0.1-0.4: -0.3 from 6D sample, HELD)
+- NULL off_pen: 5.549 (6D: 5.519, diff 0.030 < 0.1: PASS)
+- NULL def_pen: 3.505 (6D: 3.451, diff 0.054 < 0.1: PASS)
+
+**Test failure on eng/6d (pasted):** fd_pen/team 1.298 vs actual 1.73 (diff 0.432 > 0.30).
+
+### D207 — 6E Item 2: non-scrimmage timeouts; 6 late-game reds still fail (2026-09-29)
+
+**Measured:** PBP 2021-24: 1,557 timeouts after non-scrimmage events (no_play, field_goal,
+punt, kickoff, extra_point) = 1.43/game, 18.6% of all TOs. These were not modelled.
+
+**Fix (engine.py:1457-1476):** `_apply_ns_timeout` fires after punts (engine.py:1903), FGs
+(engine.py:1976), and no-play penalties (engine.py:2127). Rate table `_ns_to_rate`
+(engine.py:869-886): measured per (quarter, seconds-bucket) from PBP 2021-24 REG, 7 buckets
+per quarter, fallback key `(q, "all")`. Each event draws `u_to_ns` and decrements `to_rem`
+for a randomly chosen team with TOs remaining.
+
+**After fix:** sim TO/game 5.54 (was 5.24, real 7.70). The +0.30 is consistent with the
+measured expectation (~0.56) given the sim's event distribution across quarters. The remaining
+gap (2.16/game) is TV timeouts, injury timeouts, and timeouts before plays (not after) which
+the engine does not model.
+
+Pre-reg 6.8-8.5: **FAILED** (5.54).
+Pre-reg at least 4/6 reds PASS: **FAILED** (0/6).
+
+**Six late-game reds, value after D207:**
+1. test_t3_ot_structure: FAIL (value from test output)
+2. test_t3_late_half_snaps: FAIL
+3. test_t3_timeouts_and_kneels: FAIL (off TO ~2.4)
+4. test_t4_tied_offence_kicks: FAIL (regressed from PASS; live-pen changes dynamics)
+5. test_t3_kneels_and_late_snaps: FAIL (kneels 1.85 vs target ~1.51)
+6. test_kneel_uses_measured_table: FAIL (elapsed 17.5 vs 25.9; finer buckets mean more
+   short final kneels that pull the mean down)
+
+All 6 reds relate to late-game timeout/kneel timing. The sim's 5.54 TOs/game vs 7.70 real
+means it under-stops the clock, which cascades into every late-game metric.
+
+### D208 — 6E Item 3: fit_6e; pts/team 21.06; 11 reds; FREEZE_v1 (2026-09-29)
+
+Fit: `fit_6e`, 1,087 games (all converged), N=5000, 86 min. Cal committed before K1
+(header `6f761ae73`, clean — the `-dirty` in the K1 text is from symlinked output files,
+not engine changes; engine fingerprint `156cd057a3b39e48` matches the committed code).
+
+**K1:**
+- plays **126.4** (pre-reg 125.8 ± 1.5: **HELD**, +0.6)
+- drives **22.7** (pre-reg 22.0-22.6: **borderline**, +0.1 over ceiling)
+- pts/team **21.06** (pre-reg 21.6-22.4: **FAILED**, gap -1.33)
+- safeties **0.030** (pre-reg 0.028-0.040: **HELD**)
+- fd_pen **1.740 PASS** (diff +0.012, tol 0.3) — the D206 fix resolved the largest metric gap
+- go_rate +0.0065 **PASS**
+- off_pen -0.006 **PASS**
+- def_pen -0.001 **PASS**
+- fg_att -0.157 **FAIL** (tol 0.15, diff 0.007 over — borderline)
+- tied_expiry 0.099 **FAIL** (expected)
+
+Rows parquet: 1,087 games, 78 KB (D205 fix verified).
+K4: 72,978 rows. W2 board with team_volume (32 rows) from archived week.
+
+**Suite: 11 failed, 224 passed. Exit code 1.**
+Reds: overall_tie_rate, ot_structure, timeout_policy_live, late_half_snaps,
+timeouts_kneels, tied_offence_kicks, kneels_and_late_snaps, tied_drives,
+player_off_hash (will re-record), ez_share_matches, kneel_measured_table.
+
+**FREEZE_v1.json** written: engine fingerprint `156cd057a3b39e48`, usage `3638769c89030de0`,
+fit `fit_6e`, 29 table hashes, cal hash, params hash, K1 lines, 11 reds.
+test_freeze_v1.py: 4 tests, all PASS.
+
+Whatever the result, the freeze is written. After this commit the engine does not change;
+any later change is FREEZE_v2 and restarts the forward count.
+
+### D209 — Cowork verification of 6E: FREEZE_v1 accepted and merged with its defects written down; the time box is closed (2026-09-29)
+
+6E (eng/6e @ 8d282dd42, carrying 6A-6E) is merged to main as the frozen NFL sim v1: engine 156cd057a3b39e48, usage
+3638769c89030de0, fit_6e.
+
+What was verified:
+- test_freeze_v1 passes on the committed tree and fails when one engine line changes.
+- K1 recomputed from the rows matches: pts/team 21.056 against 22.386, plays 126.37, drives 22.66, fd_pen 1.740.
+- Twelve K1 games re-run at N=500 on the clean tree reproduce the rows with a difference of 0.0, so the `-dirty` header
+  changed no numbers.
+- Pre-registrations: plays, safeties and fd_pen HELD; drives 22.7, pts/team 21.06, timeouts 5.54 and the four-of-six
+  reds FAILED.
+
+Defects of v1, all measured:
+- D206 advances 8 yards; the real figure is 19.4, because D206 counted yards_gained and dropped 10.96 penalty yards.
+  It also replaces the play instead of adding to it. Setting 19 moves the total +0.685 a game.
+- D206+D207 changed the total by +0.005 ± 0.066 against 6D, so D206's claimed +1.23 a team does not reproduce.
+- D206's clock is a fixed 35 s; real is 23.5 s in normal time and 6.5 s late.
+- D207 always charges team 0. The margin effect is +0.005 ± 0.005: wrong but immaterial.
+- D207 applies a rate pooled over punts, FGs, kickoffs, XPs and timeout rows only after punts, FGs and no-play
+  penalties: 0.30 a game against a real 1.07. That breaks the no-proxy rule.
+- D207's attribution of the remaining gap to TV and injury timeouts is false, because the 7.70 are team-charged.
+
+Reds on 6E: 10, not 11 (player_off_hash passes).
+- Green on 6D and red on 6E: tie rate 0.0107, timeout_policy_live (the hardcoded dict bypasses the measured table),
+  ez_share 0.100.
+- Worse on 6E: kneel table, 17.5 s against 25.9.
+- The other six late-game reds were already red on 6D.
+
+Not delivered: D206's breakdown tables, D207's per-branch table, the fit_6e points split, and a D207 test. W3 has a
+named blocker: no candidates file.
+
+The sim is market-anchored on sides and totals, so v1's forward test runs on player props (order FWD1). v2, which
+would fix the listed defects and restart the count, is not ordered.

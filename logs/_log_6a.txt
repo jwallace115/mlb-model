@@ -1,0 +1,26 @@
+## 2026-09-28T15:00Z  claude-code (Phase 6A — D181, D182, D183, D184)
+
+### RETURNED
+- D181 (Item 0): timeout_followed outcome in clock table (27 cells, mean 18.1 s; was 8.9 from incomplete). Engine stop_code draws from timeout_followed with fallback. Plays: 129.0 -> 126.9 (-2.1). Pre-reg -0.4-1.0: FAILED (-2.1, larger effect).
+- D182 (Item 1): kneel outcome in clock table (10 cells, non-hurry mean 32.4 s). Engine kneel draws from "kneel" with fallback. test_kneel_uses_measured_table: FAILS (mean 20.6 < 25; the kneel FGS path still draws from the old cell).
+- D183 (Item 2): Safety excess from zone snap counts + roll on non-pass/run steps. Fix: restrict roll. Points-per-drive full decomposition not completed (real pts/drive by bucket needed).
+- D184 (Item 3): fit_6a. K1 plays 126.2 (gap +0.4 from real 125.8 — closest ever). pts 21.17 (FAILED, -1.12 from 22.29). Suite: 9 failed, 219 passed. 5 new reds from the timeout fix changing late-game dynamics.
+
+### MEANS
+- The timeout_followed fix was the single largest clock correction (-2.1 plays). The K1 gap is now +0.4 plays/game (from +6.6 in 5X and +2.5 in 5Y). But the fix introduced 5 new reds: the longer timeout runoff changes Q4 tie-game dynamics (tie rate, OT structure, timeout/kneel patterns, late FG rate).
+- The kneel fix is partially working: the "kneel" cells exist and the lookup resolves, but the FGS kneel path still uses the old cell (mean 20.6 instead of 32.4). Needs further investigation.
+- pts/team fell to 21.17 (actual 22.39): the timeout fix consumed ~20 more seconds per game, reducing plays by ~2, which removes ~1.2 points per team.
+
+### Runtimes
+- Items 0-1: ~3 min each (table rebuild + sample check). Item 2: ~3 min. Item 3: ~150 min.
+
+### NOT DONE
+- Kneel FGS path fix (the kneel test_engine_6a.py::test_kneel_uses_measured_table fails).
+- The 5 new reds: all from the timeout fix changing late-game dynamics. Not investigated beyond naming them.
+- Full points-per-drive START MIX / EFFICIENCY decomposition.
+- K1 on clean tree (header says -dirty).
+
+### UNVERIFIED
+- Whether the 5 new reds are calibration effects (fixable by re-fitting with updated tolerances) or structural.
+- Cross-machine board bit-identity.
+- Engine fp: cdcebccde17388bc (item 0) / 554a8028dd14b3a1 (item 1+3). Usage: 3638769c89030de0.

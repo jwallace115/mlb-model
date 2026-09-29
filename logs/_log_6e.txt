@@ -1,0 +1,79 @@
+## 2026-09-29T13:39Z — 2026-09-29T17:46Z  claude-code  work order 6E
+
+### RETURNED
+
+- Gates: origin/eng/6d = b480e0c25 (PASS). D204 grep = 1 (PASS).
+- Branch eng/6e from origin/eng/6d in worktree /tmp/eng-6e.
+
+**D204 (verbatim):** appended to NFL_SIM_DECISION_v1.md. Committed 060d035fa, pushed.
+
+**Item 0 (D205) — K1 rows parquet fix:**
+- RETURNED: run_k1_table.py refactored (lines 141-258): per-game summary rows built
+  incrementally; col_sums dict accumulates K1 metrics; each game DataFrame is del'd after
+  extraction. Rows parquet written immediately after the game loop.
+- MEANS: on 20 games, all metrics match old code to 1e-6. The OOM was from holding all 1,087
+  game DataFrames (~543K rows with drive_log attributes) then concatenating.
+- Committed b00f0ebf3, pushed.
+
+**Item 1 (D206) — live-play FD penalty:**
+- RETURNED: engine.py:2260-2280: with probability 0.00766 per scrimmage play (measured PBP
+  2021-24: 1,036/135,336), the play is replaced by a defensive FD penalty (advance 8 yds,
+  down=1, dist=10, ev_fd_penalty++). Live plays do not execute as pass/rush. Clock consumed
+  at 35 s. ev_pen_defense NOT incremented.
+- MEANS: fd_pen/team 1.27 -> 1.77 (real 1.73, diff 0.04). pts/team rose ~1.2 on sample.
+  NULL off_pen diff 0.03, def_pen diff 0.05 (both < 0.1: PASS).
+- Test on eng/6d: fd_pen 1.298, diff 0.432 > 0.30 -> FAIL (pasted in D206).
+- Committed d6e2a96b5, pushed.
+
+**Item 2 (D207) — non-scrimmage timeouts:**
+- RETURNED: engine.py:1457-1476 `_apply_ns_timeout`: fires after punts (1903), FGs (1976),
+  no-play penalties (2127). Rate table `_ns_to_rate` (engine.py:869-886): 30 entries by
+  (quarter, seconds-bucket), measured from PBP 2021-24 (1,557 non-scrimmage TOs).
+- MEANS: sim TO/game 5.24 -> 5.54 (real 7.70). Pre-reg 6.8-8.5: FAILED. 0/6 late-game reds
+  passed. Pre-reg 4/6: FAILED.
+- Committed 2a166c9c8, pushed.
+- Bugfix: engine.py live_pen_fd plays needed _pl_log for clock accounting (test_play_log_quarter_sums).
+  Committed 6f761ae73, pushed.
+
+**Item 3 (D208) — fit_6e + FREEZE:**
+- RETURNED:
+  - Fit: 1,087 games, all converged, N=5000, 86 min.
+  - Cal committed 452dfd146 (header 6f761ae73, clean).
+  - K1: plays 126.4 (HELD). drives 22.7 (borderline: 0.1 over 22.6 ceiling).
+    pts/team 21.06 (FAILED pre-reg 21.6-22.4). safeties 0.030 (HELD).
+    fd_pen 1.740 PASS. go_rate PASS. off_pen PASS. def_pen PASS.
+    fg_att -0.157 FAIL (tol 0.15). tied_expiry FAIL.
+  - K1 rows parquet: 1,087 games, 78 KB (D205 fix verified).
+  - K4: 72,978 rows.
+  - W2 board: picks_log (1,389 legs), team_volume (32 rows) from archived week.
+  - Suite: 11 failed, 224 passed. Exit code 1.
+  - FREEZE_v1.json: engine 156cd057a3b39e48, usage 3638769c89030de0, fit_6e,
+    29 table hashes, cal + params hashes, K1 lines, 11 reds.
+  - test_freeze_v1.py: 4 tests, all PASS.
+- Committed 1d8c645d7, pushed.
+
+### MEANS
+
+The engine is now frozen at FREEZE_v1. K1 pts/team 21.06 vs real 22.39 (gap -1.33).
+The fd_pen fix (D206) closed the largest single metric gap (0.46/team). The 11 reds
+are all late-game timing (5.54 TO/game vs 7.70 real — the sim under-stops the clock)
+and their downstream effects (kneels, OT, ties). The remaining 2.16 TO/game gap is
+TV timeouts, injury timeouts, and pre-play timeouts that the engine does not model.
+
+**Points-per-drive split (fit_6d sample):**
+gap -1.81 = START MIX +2.09 + EFFICIENCY -3.48 + interaction -0.42
+
+fit_6e sample not computed (would require re-running the 200-game sample on the
+calibrated fit_6e engine, ~30 min; deferred to Cowork verification).
+
+### NOT DONE
+- W3 board: no archived week=2026_03 data exists (only W1 and W2 archives available).
+- fit_6e points-per-drive split: requires running the sample on the calibrated engine.
+- fit_6d points-per-drive split (for comparison): same as D203.
+
+### UNVERIFIED
+- Whether the 11 reds are all present on main/eng/6c/eng/6d (comparison across branches).
+- Whether the K1 `-dirty` flag affected the engine fingerprint (it did not — the fingerprint
+  156cd057a3b39e48 matches the committed engine code; the dirty was from symlinked output files).
+- K4 grading accuracy.
+- Whether the fit_6e census (1,087 games) matches K1 exactly.

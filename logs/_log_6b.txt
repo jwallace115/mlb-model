@@ -1,0 +1,48 @@
+## 2026-09-28T20:00Z  claude-code (Phase 6B — D186 done, D187-D189 NOT DONE)
+
+### RETURNED
+- D186 (Item 0): Clock-table defects fixed. (a) ap_all (all-states-pooled-by-period) fallback rows at every level, added to all engine lookups. (b) timeout_followed restricted to running-clock plays (5,054, was 6,026). (c) Final-of-half kneels included; kneel+TO draws timeout_followed. (d) Log label eoh_runoff. (e) Test updates: 5Z hash entry-specific; 6A kneel against real 25.9±3.0. Pre-reg 3+ of 5 6A reds pass: FAILED (2 pass: tie_rate, off_TO). Kneel test: FAILS (20.7 vs 25.9; the FGS kneel path still draws from the old cell).
+- D187: ITEM NOT DONE. Timeout frequency investigation requires tracing the engine's to_lookup keys and clock_running condition to find why it produces 3.4/game vs 7.7 real.
+- D188: ITEM NOT DONE. Own-1 pile-up fix requires D187 complete (sequential dependency).
+- D189: ITEM NOT DONE. Re-fit requires D187+D188.
+
+### MEANS
+- Item 0 fixed the most critical 6A defect: the 11 late-game cells that fell below MIN_CELL now have the ap_all fallback (same period, all states pooled) instead of jumping to the all-period parent. This alone resolved 2 of the 5 6A late-game reds (tie rate and off TO).
+- The remaining 3 reds (tied FG, 3pt composition, OT structure) and the kneel test need the kneel FGS path fixed. The FGS kneel code (engine.py ~1596-1619) uses a different lookup path that hasn't been updated to use the "kneel" cell.
+- Items 1-3 are genuinely blocked: each is a multi-hour investigation + implementation. The timeout frequency issue (3.4 vs 7.7) is the largest single gap, but it requires understanding the full timeout policy lookup chain to find where timeouts are suppressed.
+
+### NOT DONE
+- D187: Timeout frequency investigation + fix (to_lookup audit).
+- D188: Own-1 pile-up (penalty half-distance + loss clipping at yl 99).
+- D189: Re-fit (depends on D187+D188).
+- Kneel FGS path (engine.py ~1596-1619) still draws from the wrong cell.
+- Rush-side ap_all fallback not verified as thoroughly as pass-side.
+
+### UNVERIFIED
+- Whether the ap_all fallback fully resolves the 11 thin cells (need the specific cell comparison table).
+- The exact kneel mean after the table fix (the test failed at 20.7, meaning the FGS path overrides).
+
+## 2026-09-28T22:56Z  claude-code (Phase 6B continued — D190, D191, D192, D193)
+
+### RETURNED
+- D190 (Item A): Supersedes D186. OOB excluded from timeout_followed (4,446 plays, mean 29.1 s). 11-cell table produced. Sample plays 127.34 (HELD 127.02±0.8). Kneel split: gap is WHEN sim kneels (final 6.7 s vs real 22.1 s), not per-kneel elapsed.
+- D191 (Item B): Supersedes D187. Timeout window extended from 180 s to 300 s (engine.py:1394). TO/game 3.4→4.19. Pre-reg >=5.5 FAILED (table only has Q2/Q4 last-5-min data). off TO HELD (1.48). plays +0.37 HELD.
+- D192 (Item C): Supersedes D188. Half-distance-to-goal for offensive penalties (engine.py:1963) and sack/rush/completion losses (engine.py:2372,2716,2344). 98-100 snaps 1.31→0.81 (test target <=0.6 still fails).
+- D193 (Item D): Supersedes D189. fit_6b. K1 plays 126.9 (HELD 125.8±1.5). Clean tree (header 3358be6a9). drives 23.0. pts 21.28. go/off/def/fg PASS. fd_pen FAIL, tied FAIL (expected). Suite: 8 failed, 222 passed. Exit 1.
+
+### MEANS
+- The timeout_followed table now excludes OOB plays, giving a running-clock mean of 29.1 s (was 18.1 in 6A). This is much closer to Cowork's 21.7 running-clock measurement. The extended timeout window (300 s) adds 0.8 timeouts/game.
+- The half-distance penalty + loss cap reduced 98-100 snaps from 1.31 to 0.81 per game (target was 0.30-0.50). The remaining pile-up comes from drive starts at deep positions, not from in-play losses.
+- K1 plays gap is now +1.1 (126.9 - 125.8), with drives +1.3 (23.0 - 21.7). The remaining gap is mostly extra drives from the sim's higher turnover rate (+0.4/game) and the blowout clock-burning deficit.
+- 8 suite reds remain: fd_pen (known), tied_drives (known), plus 6 from late-game dynamics (kneel timing, OT structure, tied FG, timeout/kneel), safety zones, and the dead-table structure test.
+
+### NOT DONE
+- Points-per-drive split on the new engine (requires running the sample with the new fit).
+- The kneel FGS path fix (final kneels are too short because the sim starts kneeling too late).
+- The dead_clock_runoff test update (needs to accommodate new outcome types).
+- Full timeout frequency table (sim vs real by half x side x period x what preceded).
+
+### UNVERIFIED
+- Whether the 5 6A late-game reds are structural or calibration effects.
+- Cross-machine board bit-identity.
+- Engine fp: 3d2ea2c2a8a08fb4. Usage: 3638769c89030de0.

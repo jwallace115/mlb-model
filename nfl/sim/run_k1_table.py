@@ -141,8 +141,21 @@ def main():
     actuals_df = load_actuals()
     print(f"K1: {len(actuals_df)} games, N={N_SIMS}", flush=True)
 
-    # Time first 100 games
-    results = []
+    # 6E (D205): build per-game rows incrementally to avoid OOM.
+    # The old code held all 1,087 game DataFrames (~543K rows) in memory,
+    # then concatenated. Now we extract per-game means immediately and
+    # accumulate only the sums needed for the K1 table.
+    COLS = ["home_score", "away_score", "ev_4th_go", "ev_punts", "ev_fg_att",
+            "ev_fg_non4th", "ev_pen_offense", "ev_pen_defense", "ev_fd_penalty",
+            "ev_3rd_att", "ev_3rd_long", "ev_int_ret_td", "ev_fum_ret_td",
+            "ev_punt_ret_td", "ev_ko_ret_td", "ev_safeties"]
+    game_rows = []
+    col_sums = {c: 0.0 for c in COLS}
+    col_sums["plays"] = 0.0
+    col_sums["drives"] = 0.0
+    margin_vals = []  # for SD
+    total_sims = 0
+
     t_total = time.time()
     game_idx = 0
     for s in SEASONS:
@@ -153,12 +166,35 @@ def main():
             sim = simulate_game(game["home_team"], game["away_team"], s, int(game["week"]),
                                 n_sims=N_SIMS, seed=seed, team_r=tr, tend=tend, sit=sit,
                                 kicker=kicker, league=league, drive_log=True)
-            sim["game_id"] = game["game_id"]
-            sim["actual_home"] = game["home_score"]
-            sim["actual_away"] = game["away_score"]
-            sim["season"] = s
-            sim["week"] = game["week"]
-            results.append(sim)
+            n = len(sim)
+            # Accumulate sums for K1 metrics
+            for c in COLS:
+                col_sums[c] += float(sim[c].sum())
+            col_sums["plays"] += float(sim["plays"].sum()) if "plays" in sim else 0.0
+            col_sums["drives"] += float(sim["drives"].sum()) if "drives" in sim else 0.0
+            margin_vals.extend((sim["home_score"] - sim["away_score"]).tolist())
+            total_sims += n
+            # Build per-game row immediately and drop the frame
+            game_rows.append({
+                "game_id": game["game_id"],
+                "season": int(s), "week": int(game["week"]),
+                "sim_home": sim["home_score"].mean(),
+                "sim_away": sim["away_score"].mean(),
+                "actual_home": game["home_score"],
+                "actual_away": game["away_score"],
+                "ev_4th_go": sim["ev_4th_go"].mean(),
+                "ev_punts": sim["ev_punts"].mean(),
+                "ev_fg_att": sim["ev_fg_att"].mean(),
+                "ev_fg_non4th": sim["ev_fg_non4th"].mean(),
+                "ev_pen_offense": sim["ev_pen_offense"].mean(),
+                "ev_pen_defense": sim["ev_pen_defense"].mean(),
+                "ev_fd_penalty": sim["ev_fd_penalty"].mean(),
+                "ev_3rd_att": sim["ev_3rd_att"].mean(),
+                "ev_3rd_long": sim["ev_3rd_long"].mean(),
+                "plays": sim["plays"].mean() if "plays" in sim else 0.0,
+                "drives": sim["drives"].mean() if "drives" in sim else 0.0,
+            })
+            del sim
             game_idx += 1
             if game_idx == 100:
                 t100 = time.time() - t_total
@@ -166,43 +202,42 @@ def main():
         elapsed = time.time() - t0
         print(f"  Season {s}: {len(s_games)} games, {elapsed:.1f}s ({elapsed/len(s_games):.2f}s/game)", flush=True)
 
-    all_sims = pd.concat(results, ignore_index=True)
     total_time = time.time() - t_total
     print(f"Total: {total_time:.1f}s ({total_time/60:.1f}min)", flush=True)
+
+    # Save per-game rows immediately
+    pd.DataFrame(game_rows).to_parquet(rows_path, index=False)
+    print(f"Rows written to {rows_path} ({len(game_rows)} games)", flush=True)
 
     # Compute actuals from PBP
     act = compute_actuals_from_pbp()
 
-    # Sim metrics
+    # Sim metrics from accumulated sums
     n_games = len(actuals_df)
-    sim_pts = (all_sims["home_score"].mean() + all_sims["away_score"].mean()) / 2
-    sim_plays = all_sims["plays"].mean()
-    sim_drives = all_sims["drives"].mean()
-
-    # D148: single go_rate row with the 4th-down-only denominator (like-for-like)
-    sim_go = all_sims["ev_4th_go"].sum() / (all_sims["ev_4th_go"].sum() + all_sims["ev_punts"].sum() +
-                all_sims["ev_fg_att"].sum() - all_sims["ev_fg_non4th"].sum())
-
-    sim_off_pen = all_sims["ev_pen_offense"].mean()
-    sim_def_pen = all_sims["ev_pen_defense"].mean()
-    sim_fd_pen = all_sims["ev_fd_penalty"].mean() / 2
-    sim_punts = all_sims["ev_punts"].mean()
-    sim_fg = all_sims["ev_fg_att"].mean()
-    sim_3rd_11 = all_sims["ev_3rd_long"].sum() / all_sims["ev_3rd_att"].sum()
+    sim_pts = (col_sums["home_score"] + col_sums["away_score"]) / total_sims / 2
+    sim_plays = col_sums["plays"] / total_sims
+    sim_drives = col_sums["drives"] / total_sims
+    sim_go = col_sums["ev_4th_go"] / (col_sums["ev_4th_go"] + col_sums["ev_punts"] +
+                col_sums["ev_fg_att"] - col_sums["ev_fg_non4th"])
+    sim_off_pen = col_sums["ev_pen_offense"] / total_sims
+    sim_def_pen = col_sums["ev_pen_defense"] / total_sims
+    sim_fd_pen = col_sums["ev_fd_penalty"] / total_sims / 2
+    sim_punts = col_sums["ev_punts"] / total_sims
+    sim_fg = col_sums["ev_fg_att"] / total_sims
+    sim_3rd_11 = col_sums["ev_3rd_long"] / col_sums["ev_3rd_att"]
 
     # Non-offensive scoring
     xp = 0.948
-    nonoff_tds = (all_sims["ev_int_ret_td"] + all_sims["ev_fum_ret_td"] +
-                  all_sims["ev_punt_ret_td"] + all_sims["ev_ko_ret_td"]).mean()
-    nonoff_pts = nonoff_tds * (6 + xp) + all_sims["ev_safeties"].mean() * 2
+    nonoff_tds = (col_sums["ev_int_ret_td"] + col_sums["ev_fum_ret_td"] +
+                  col_sums["ev_punt_ret_td"] + col_sums["ev_ko_ret_td"]) / total_sims
+    nonoff_pts = nonoff_tds * (6 + xp) + col_sums["ev_safeties"] / total_sims * 2
     sim_nonoff_pt = nonoff_pts / 2
 
     # Margin SD
-    sim_margin_sd = (all_sims["home_score"] - all_sims["away_score"]).std()
+    sim_margin_sd = float(np.std(margin_vals, ddof=1))
     act_margin_sd = (actuals_df["home_score"] - actuals_df["away_score"]).std()
 
     # Tied-drive expiry (broad)
-    # Use the 5A-9 sample for consistency with the test
     from nfl.sim.run_metric_noise_5h import SAMPLE_GAMES, compute_tied_expiry
     ratings_dict = {"team_r": tr, "tend": tend, "sit": sit, "kicker": kicker, "league": league}
     tied = compute_tied_expiry(salt=0, ratings=ratings_dict)
@@ -227,7 +262,6 @@ def main():
 
     lines.append("--- K1 Table ---")
     lines.append(row("pts/team", sim_pts, act["pts_team"]))
-    # 5V: plays and drives targets derived from PBP, not hardcoded
     from nfl.sim.actuals_k1 import compute_k1_actuals
     k1_act = compute_k1_actuals()
     lines.append(f"  {'plays/game':25s}  sim={sim_plays:8.1f}  actual={k1_act['plays_pg']:.1f}     tolerance: none defined")
@@ -247,7 +281,7 @@ def main():
     lines.append("")
     lines.append("--- Non-Offensive Scoring ---")
     for c in ["ev_int_ret_td", "ev_fum_ret_td", "ev_punt_ret_td", "ev_ko_ret_td", "ev_safeties"]:
-        lines.append(f"  {c}/game: {all_sims[c].mean():.4f}")
+        lines.append(f"  {c}/game: {col_sums[c]/total_sims:.4f}")
     lines.append(f"  Non-off pts/game: {nonoff_pts:.2f} ({nonoff_pts/2:.2f}/team)")
 
     # Write
@@ -256,33 +290,6 @@ def main():
         f.write(text + "\n")
     print(f"\nTable written to {out_path}")
     print(text)
-
-    # Save per-game rows
-    game_rows = []
-    for sim_df in results:
-        gid = sim_df["game_id"].iloc[0]
-        game_rows.append({
-            "game_id": gid,
-            "season": int(sim_df["season"].iloc[0]),
-            "week": int(sim_df["week"].iloc[0]),
-            "sim_home": sim_df["home_score"].mean(),
-            "sim_away": sim_df["away_score"].mean(),
-            "actual_home": sim_df["actual_home"].iloc[0],
-            "actual_away": sim_df["actual_away"].iloc[0],
-            "ev_4th_go": sim_df["ev_4th_go"].mean(),
-            "ev_punts": sim_df["ev_punts"].mean(),
-            "ev_fg_att": sim_df["ev_fg_att"].mean(),
-            "ev_fg_non4th": sim_df["ev_fg_non4th"].mean(),
-            "ev_pen_offense": sim_df["ev_pen_offense"].mean(),
-            "ev_pen_defense": sim_df["ev_pen_defense"].mean(),
-            "ev_fd_penalty": sim_df["ev_fd_penalty"].mean(),
-            "ev_3rd_att": sim_df["ev_3rd_att"].mean(),
-            "ev_3rd_long": sim_df["ev_3rd_long"].mean(),
-            "plays": sim_df["plays"].mean(),
-            "drives": sim_df["drives"].mean(),
-        })
-    pd.DataFrame(game_rows).to_parquet(rows_path, index=False)
-    print(f"Rows written to {rows_path} ({len(game_rows)} games)")
 
 
 if __name__ == "__main__":
