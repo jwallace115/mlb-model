@@ -3820,3 +3820,25 @@ The raw margin is stored separately as `raw_m` (run_week.py:1002).
 4. Matched UNDER-only row gets 1 - cal_p.
 5. Unmatched prop row is no_view.
 All 5 PASS. test_freeze_v1 still 4 passed.
+
+### D212 — FWD1 Item 2: pilot blocked by run_week game-matching; runbook written (2026-09-29)
+
+**Attempted:** `run_forward_v1.py --week 4 --pilot --as-of 2026-09-27T16:30:00+00:00`.
+The harness reached step (c) — run_week.py ran but could not match week 4 games to the
+Hard Rock line tape. Output: "no pre-kick Hard Rock snapshot" for all 15 week-4 games
+(Sep 27-29). Line snapshots exist in the tape (snap_20260927T*.parquet), but run_week.py's
+`get_lines_from_history` did not match them to the schedule's week-4 game IDs.
+
+**Named blocker:** run_week.py's game-ID-to-tape matching fails for week 4. This is a
+data-pipeline issue in run_week.py's `get_lines_from_history` function, not in the harness.
+The harness code is tested and ready (D211: 5 tests pass).
+
+**--as-of on freeze:** implemented (log_ai_opinions.py:531-536), guarded by --pilot.
+Tested: `--as-of` without `--pilot` produces "HALT: --as-of requires --pilot".
+
+**Runbook:** research/nfl_sim/fwd1_runbook.md written with exact commands for TNF, Sunday
+1 PM ET, MNF kick windows, and scoring commands at each checkpoint.
+
+**This is a PILOT: it is never pooled, and it is not evidence for or against P1/P2.**
+The pilot will run once the game-matching issue in run_week.py is resolved (a separate
+fix outside the freeze; the engine is not modified).
