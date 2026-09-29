@@ -99,3 +99,36 @@ with the sim's reader_model, and writes the anchor sidecar. The pilot scored 20 
 - Whether the week-4 games will match the tape when run live (they should — the nflverse
   week is correct now, and lines exist for Oct 1-5).
 - MNF props staleness impact — no data to assess until the run.
+
+## 2026-09-29T20:41Z — 2026-09-29T21:45Z  claude-code  work order FWD1c
+
+### RETURNED
+
+- Gates: origin/eng/fwd1 = 54efc5878 (PASS). D218 grep = 1 (PASS).
+- Worktree /tmp/eng-fwd1c from origin/eng/fwd1. D218 appended. Committed 42a3673cd, pushed.
+
+**Item 0 (D219) — revisions per reader:**
+- RETURNED: prior_revisions(d, reader_model, pilot) counts only same-reader same-pilot files.
+  freeze() passes both. Module docstring updated. 3 tests through freeze(). On 54efc5878:
+  test_revision_pilot_then_live FAIL (live got revision 1), test_no_view FAIL (old validation).
+- Committed 9b1e9d311, pushed.
+
+**Item 1 (D220) — no_view at floor:**
+- RETURNED: validator uses clip(book, P_MIN, P_MAX). fill_sheet sim_v1 fallback deleted.
+  FAMILY_TO_MARKET = receptions + rush_attempts only. Assert n_sim_v1 == n_matched.
+  Test: +7500 anytime-TD accepted as no_view. On 54efc5878: FAIL.
+- Committed 87ccb6ce2, pushed.
+
+**Item 2 (D221) — week-4 dry run:**
+- RETURNED: --dry-run added. Week 4 dry run: 16 games, all anchored, 11/42 matched props.
+  PIT@CLE in 60h window; no Sunday games. Nothing written to ai_opinions.
+  All 16 tests pass.
+- Committed c3d0befe1, pushed.
+
+### NOT DONE
+- test_forward_v1 test for --dry-run (the dry-run test is manual; no automated assertion
+  that the ai_opinions directory is unchanged).
+
+### UNVERIFIED
+- Whether the week-4 TNF live run (23:30Z Thu 10-01, --window-hours 2) will produce enough
+  matched props (depends on Thu props pull timing).
