@@ -1,0 +1,25 @@
+## 2026-09-29T01:40Z  claude-code start (Phase 6C — D195, D196, D197, D198)
+## 2026-09-29T04:40Z  claude-code end
+
+### RETURNED
+- D195 (Item 0): Punt landing table (15 LOS buckets, 8,422 punts). Engine draws recv_yl from quantiles (touchbacks encoded). Half-distance penalty: pen > (100-yl)/2. Own-1/2 starts: 0.83 -> 0.199 (HELD 0.20-0.35). Safeties: 0.069 -> 0.030 (HELD 0.028-0.040).
+- D196 (Item 1): Timeouts at every snap (was Q2/Q4 clock <= 300 only). Q1->2, Q3->4 mapping. Many new reds from this — the Q2/Q4 measured rates are too high for Q1/Q3 normal play.
+- D197 (Item 2): Kneel timing diagnosis — sim starts kneeling too late (6.7 s vs real 22.1 s). The issue is the kneel DECISION table, not the per-kneel elapsed. Fix deferred.
+- D198 (Item 3): fit_6c. K1 plays 125.9 (gap +0.1 from real — essentially zero). Safeties 0.031. go/off/def/fg PASS. fd_pen FAIL (known). Suite: 13 failed, 217 passed. Exit 1.
+
+### MEANS
+- The punt landing table (D195) was the single most impactful fix. Own-1/2 drive starts dropped from 0.83 to 0.199 (real 0.255). Safeties dropped from 0.069 to 0.030 (real 0.041). This resolved the entire own-1 pile-up.
+- K1 plays 125.9 — the gap is +0.1, essentially ZERO. This is the culmination of 15 work orders of clock/field-position fixes: from +6.4 (5M) through +5.1 (5U), +2.5 (5Y), +1.1 (6A/6B), to +0.1 now.
+- The all-quarter timeout extension (D196) introduced too many new reds. The Q2/Q4 table rates are too aggressive for Q1/Q3 normal-game situations. A proper fix needs Q1/Q3-specific rates or a dampening factor.
+- pts/team 20.83 vs actual 22.39 — the -1.55 gap is from fewer drives (22.8 vs 21.7 real) combined with lower scoring per drive. This is the next major target.
+
+### NOT DONE
+- Timeout table with Q1-Q4 specific rates (D196 used Q2/Q4 as proxy).
+- Kneel decision table audit (D197 deferred).
+- Points-per-drive split on the new engine.
+- test_dead_tables_5a5 ap_all exclusion (Item 3a).
+- Several tests need investigation: ez_share, late_half_snaps, timeout_policy_live.
+
+### UNVERIFIED
+- Cross-machine board bit-identity.
+- Whether the 13 reds are from the timeout extension (D196) alone or also from the punt fix (D195).
