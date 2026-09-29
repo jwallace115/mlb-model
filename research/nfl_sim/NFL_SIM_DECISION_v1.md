@@ -3519,3 +3519,13 @@ kneel_measured_table.
 The all-quarter timeout extension (D196) fires timeouts at every snap, which significantly
 changes late-game dynamics. Many of the new reds come from this — the measured rates in the table
 are calibrated for Q2/Q4 late-game situations and are too high for Q1/Q3 normal play.
+
+### D199 — Cowork verification of 6C: punt fix kept, whole-game timeout proxy reversed, kneel fix still owed (2026-09-29)
+
+6C (eng/6c @ db2de2582) not merged. D195 stands: punt landing table, own-1/2 starts 0.199, safeties 0.031, real
+half-distance rule; its fallback wrongly converts any landing inside the receiving 20 to a touchback. D196 is
+reversed: it applies last-3-minutes timeout rates (Q1->Q2, Q3->Q4, >2:00 -> the 2:00-3:00 bucket) to every snap of
+the game instead of measuring a whole-game table; reds went 8 -> 13, mostly late-game. D197 repeats D190's finding
+without the ordered fix. K1 on fit_6c: plays 125.88, drives 22.825, pts/team 20.83 (gap -1.56, the third fall in a
+row, unexplained). Next: 6D (order 2 of the 3-order time box): measured whole-game timeout table, kneel decision fix,
+punt fallback fix, one re-fit with the points split.
