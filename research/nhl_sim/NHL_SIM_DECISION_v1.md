@@ -64,3 +64,19 @@ Null controls (all 6,560 games):
   (engine uses its own clock), but the state_time table should not be trusted for per-game totals.
 - (d) Empty-net goals: 438-524/season (5.3-6.6% of goals). Consistent.
 Tests: 11 pass (parse_situation, time_to_seconds, mutation checks).
+
+### S5 — Own expected-goals model, frozen (2026-09-29)
+
+Logistic regression on 225,912 non-empty-net unblocked attempts from 2021-22 + 2022-23.
+Features: distance, angle, shot type (8 one-hot), rebound, rush, strength group (PP/PK/3v3).
+Generator: `nhl/sim/fit_xg.py`. Output: `nhl/data/sim/xg_v1.json`.
+
+Pre-registered checks (all predictions written BEFORE looking at numbers):
+- Calibration slope 0.9-1.1 on 2023-24: **0.978 — HELD**
+- sum(xG)/goals within +/-5% on 2023-24: **0.998 — HELD**
+- AUC above 0.72: **0.7496 OOS — HELD**
+- NULL CONTROL: shuffled AUC 0.50 +/- 0.01: **0.5053 — HELD**
+
+sum(xG)/goals by season: 2021=0.983, 2022=1.018, 2023=0.998, 2024=1.013, 2025=1.068.
+2024-25 and 2025-26 are REPORTED only — nothing refitted on them.
+sha256: f18728ec7da3f4fe662e9c8334fd225816921fc42e6947491090f05cb142c539.

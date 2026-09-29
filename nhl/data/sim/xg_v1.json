@@ -1,0 +1,47 @@
+{
+  "model": "logistic_regression_xg_v1",
+  "fit_seasons": [
+    2021,
+    2022
+  ],
+  "features": [
+    "distance",
+    "angle",
+    "rebound",
+    "rush",
+    "st_wrist",
+    "st_slap",
+    "st_snap",
+    "st_backhand",
+    "st_tip-in",
+    "st_deflected",
+    "st_wrap-around",
+    "st_cradle",
+    "sg_PP",
+    "sg_PK",
+    "sg_3v3"
+  ],
+  "coefficients": {
+    "distance": -0.057130522841004894,
+    "angle": -0.013009524520033573,
+    "rebound": 0.4080608822659586,
+    "rush": 0.0,
+    "st_wrist": 0.0659423766012213,
+    "st_slap": 0.6600554595806144,
+    "st_snap": 0.5352791516468959,
+    "st_backhand": -0.3554719274151477,
+    "st_tip-in": -0.42790753985762087,
+    "st_deflected": -0.3583554354887031,
+    "st_wrap-around": -0.8090270664895618,
+    "st_cradle": 0.003612384336990176,
+    "sg_PP": 0.33023778191066533,
+    "sg_PK": 0.08478239341200468,
+    "sg_3v3": 0.4889191039368977
+  },
+  "intercept": -0.9033469342187411,
+  "training_table_sha256": "fdedc9501f084de2b6fd2c53a900be0dcc387dc01774aead42daa709a297753e",
+  "training_shots": 225912,
+  "training_goals": 15484,
+  "fit_auc": 0.7409,
+  "null_auc": 0.5053
+}
