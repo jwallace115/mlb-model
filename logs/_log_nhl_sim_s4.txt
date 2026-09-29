@@ -92,3 +92,29 @@ S33: c3f2b07be
 
 ### Merge command
 git merge nhl/sim-s4
+
+## S34 / S35 — Cowork (2026-09-29 19:37Z)
+RETURNED:
+- build_constants_v7.py → constants_v7.json:
+  - v5 fields identical; byte-identical on rewrite;
+  - pulls 1,821;
+  - PP-creating penalties 2.8765 per team-game (15,096 of 19,657 matched penalties);
+  - nominal shares 2-min 0.973 / 4-min 0.012 / 5-min 0.015.
+- engine.py rewritten. pytest test_engine.py: 11 passed (38.6 s).
+- S32 engine on the new pull test: away trailing → home EN goals 0.000 per game (FAILS); home trailing → away 0.438.
+- realism_report.py, 100k sims: 6 of 9 bands HELD (table in S35), 66 s.
+- 2022-23 actual PP spans (both goalies in): 2.875 per team-game, mean 113 s, median 124 s, 46% > 125 s.
+
+MEANS:
+- The engine's mechanics are right on everything except PP scoring (a data artifact; root cause found) and
+  regulation ties (unexplained).
+- S32's failures were defects.
+
+NOT DONE:
+- the state_time PP-expiry fix (S-WO4a2);
+- the tie investigation.
+
+UNVERIFIED:
+- Claude Code has not reviewed the S34 engine.
+- The -1 s .. +2 s rule for a penalty "creating a power play" is a heuristic. It agrees with the observed PP span
+  count: 2.875 spans per team-game vs 2.88 PP-creating penalties.

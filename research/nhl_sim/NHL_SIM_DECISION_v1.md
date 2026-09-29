@@ -609,3 +609,72 @@ That's a question for the engine's validate phase, not a change made now.
 4 HELD, 5 NOT HELD. Total goals are correct (-1.1%) but the distribution is wrong: too few
 ties, too many regulation 1-goal wins, home effect too strong, PP goals too high. These are
 the calibration targets for S-WO4b on 2023-24 only.
+
+### S34 — Engine rewritten by Cowork; S32 defects fixed (2026-09-29 19:37Z)
+S32's five failed bands were mostly engine defects, not "Poisson variance". Its explanation that the model needed
+a variance-inflation parameter is withdrawn. Defects found in S32, all fixed in the rewrite:
+1. **Only the home team could pull its goalie.** Away teams never pulled.
+   - Measured on S32's own engine: away trailing by 1 with 2:00 left → home empty-net goals 0.000 per game; home
+     trailing → away empty-net goals 0.438.
+   - This inflated home win % and one-goal regulation wins, and removed late tying goals.
+2. **Every penalty created a power play.** constants_v2 penalty_shares counts all penalties (3.77 per team per game,
+   including misconducts and fighting majors). S32 turned majors and misconducts into 5-minute power plays.
+   Measured (constants_v7): only 2.88 penalties per team-game create a power play (2-min 82% of the time, 5-min
+   17%, 10-min 47% when paired with a minor).
+3. **The home goal-per-attempt effect was applied twice** (x1.0118 to home and ÷1.0118 to away). It's now split as
+   the square root each way.
+4. **No overtime penalties** (the order required 4v3). Now: in overtime a penalty adds a skater to the other side.
+5. **`.get(..., literal)` defaults throughout league_average_inputs,** despite "no literal rates". Removed; a missing
+   key raises. A test checks it.
+6. **constants_v6.json had NO generator** (only engine.py references it), and the realism report script was not
+   committed. This is the fourth uncommitted generator (after v3, v4 and S29's F).
+
+**New committed generators:**
+- nhl/sim/build_constants_v7.py → constants_v7.json = v5 + pull hazard + PP-creating penalties.
+  - Pull hazard is re-measured: trailing by 3+ pooled; not on a power play; 1,821 pulls. v6 counted 1,950 with
+    slightly different at-risk rules.
+  - Null controls: every v5 field is identical; byte-identical on rewrite.
+- nhl/sim/realism_report.py. All league-average games are identical, so one matchup is simulated 100,000 times
+  (6.4 s per 10k).
+
+**Tests (test_engine.py): 11 pass.** The S32 tests are kept, plus:
+- overtime penalty gives 4v3;
+- OT/SO margin is exactly 1;
+- both teams pull (FAILS on S32);
+- neutral-site symmetry;
+- a power-play goal ends the minor;
+- no `.get` defaults.
+
+### S35 — Realism report re-run after the defect fixes (2026-09-29 19:37Z)
+Same pre-registered S33 bands; nothing was tuned. Only S34's defect fixes changed the result. 2022-23 (fit
+season, in-sample mechanics check), 100,000 sims:
+
+| band | sim | actual | result |
+|---|---|---|---|
+| goals per game | 6.206 | 6.359 | -2.4%, HELD |
+| tied after regulation | 0.200 | 0.230 | -3.0 pts, **NOT HELD** |
+| shootout share | 0.071 | 0.072 | HELD |
+| PP opportunities per team-game | 2.850 | 2.964 | -3.9%, HELD |
+| PP goals per team-game | 0.560 | 0.640 | -12.5%, **NOT HELD** |
+| empty-net goals per game | 0.327 | 0.334 | HELD |
+| one-goal regulation share | 0.242 | 0.228 | +1.4 pts, HELD |
+| home win | 0.533 | 0.524 | +1.0 pt, HELD |
+| total-goals distribution max diff | 0.017 (k=7) | | **NOT HELD** |
+
+- S33 counted "PP opportunities" as all penalties (3.84). The actual here uses the same "creates a PP" rule as
+  constants_v7.
+- **6 of 9 HELD** (S33: 4 of 9).
+
+**Root cause of the PP miss, found: a state_time data artifact** (build_events.py, since S-WO1).
+- A state span takes the situationCode of each play and holds it until the NEXT play. A penalty that expires
+  between plays therefore stays a power play until the next event.
+- Actual 2022-23 PP spans: median 124 s, 75th percentile 136 s. 46% last longer than 125 s, which is impossible
+  for a 2-minute minor.
+- So the actual PP seconds (5.42 min per team-game) are inflated, and every PP attempt / goal rate per 60 in
+  constants_v5/v7 is understated. The shots keep their own situationCode, so the numerators are right.
+- The engine plays the true 2-minute length at the understated rate, so its PP goals come out low.
+- The same artifact slightly inflates the ratings' pp_seconds / pk_seconds for every team. That mostly cancels in
+  league-relative ratings, but it must be fixed at the root.
+
+**Ties (-3.0 pts) and the total distribution (k = 7)** remain unexplained. They are investigated
+descriptively on the fit season in S-WO4a2 before any model change.

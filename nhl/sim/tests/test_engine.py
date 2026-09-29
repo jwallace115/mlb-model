@@ -1,5 +1,5 @@
-"""Tests for the NHL game simulation engine."""
-import sys
+"""Tests for the NHL game engine (S32 tests kept; S34 tests added by Cowork)."""
+import copy, re, sys
 from pathlib import Path
 import numpy as np
 import pytest
@@ -7,7 +7,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from nhl.sim.engine import simulate, league_average_inputs, StartState
+from nhl.sim.engine import simulate, league_average_inputs, StartState, MINOR
 
 
 @pytest.fixture(scope="module")
@@ -17,65 +17,86 @@ def inp():
 
 class TestDeterminism:
     def test_same_seed_identical(self, inp):
-        r1 = simulate(inp, 100, seed=42)
-        r2 = simulate(inp, 100, seed=42)
-        assert np.array_equal(r1["home_score"], r2["home_score"])
-        assert np.array_equal(r1["away_score"], r2["away_score"])
-        assert np.array_equal(r1["decided"], r2["decided"])
+        r1, r2 = simulate(inp, 200, seed=42), simulate(inp, 200, seed=42)
+        for k in r1:
+            assert np.array_equal(r1[k], r2[k]), k
 
 
 class TestStartState:
     def test_puck_drop_equals_none(self, inp):
-        r1 = simulate(inp, 100, seed=42, start_state=None)
-        r2 = simulate(inp, 100, seed=42, start_state=StartState())
-        assert np.array_equal(r1["home_score"], r2["home_score"])
-        assert np.array_equal(r1["decided"], r2["decided"])
+        r1 = simulate(inp, 200, seed=42, start_state=None)
+        r2 = simulate(inp, 200, seed=42, start_state=StartState())
+        for k in r1:
+            assert np.array_equal(r1[k], r2[k]), k
 
 
 class TestOvertimeLogic:
     def test_tied_after_60_gets_ot_or_so(self, inp):
-        """A game tied after regulation always goes to OT or SO."""
-        r = simulate(inp, 10000, seed=123)
-        reg_tied = r["reg_home_score"] == r["reg_away_score"]
-        if reg_tied.any():
-            decided = r["decided"][reg_tied]
-            assert all(d in ("OT", "SO") for d in decided), "Some tied games decided in REG"
+        r = simulate(inp, 5000, seed=123)
+        tied = r["reg_home_score"] == r["reg_away_score"]
+        assert tied.any() and np.isin(r["decided"][tied], ["OT", "SO"]).all()
+        assert (r["decided"][~tied] == "REG").all()
 
-    def test_no_goals_after_sudden_death(self, inp):
-        """No goals should be scored after a sudden-death OT goal."""
-        # This is structurally guaranteed by the engine's ot_mask logic
-        r = simulate(inp, 1000, seed=456)
-        ot_games = r["decided"] == "OT"
-        if ot_games.any():
-            # OT games should have exactly 1 goal difference in final score
-            diff = np.abs(r["home_score"][ot_games] - r["away_score"][ot_games])
-            assert (diff == 1).all(), f"OT games have score diff != 1: {diff[diff != 1]}"
+    def test_ot_and_so_margin_is_one(self, inp):
+        r = simulate(inp, 5000, seed=456)
+        m = r["decided"] != "REG"
+        assert (np.abs(r["home_score"] - r["away_score"])[m] == 1).all()
+
+    def test_ot_penalty_gives_4v3(self, inp):
+        """Start OT with an away minor: home is 4v3, so home scores first more often than away (and than 3v3)."""
+        base = simulate(inp, 20000, seed=7, start_state=StartState(period=4, second=0, home_score=2, away_score=2))
+        pp = simulate(inp, 20000, seed=7, start_state=StartState(period=4, second=0, home_score=2, away_score=2,
+                                                                 away_penalties=[(MINOR, MINOR)]))
+        ot_home = lambda r: ((r["decided"] == "OT") & (r["home_score"] > r["away_score"])).mean()
+        assert ot_home(pp) > ot_home(base) + 0.03
+        assert pp["home_pp_seconds"].mean() > 60
 
 
 class TestPulledGoalie:
     def test_trailing_pulled_loses_more(self, inp):
-        """Trailing by 1 with 30s left and goalie pulled wins less often than tied."""
-        N = 10000
-        # Tied with 30s left
-        ss_tied = StartState(period=3, second=1170, home_score=2, away_score=2)
-        r_tied = simulate(inp, N, seed=789, start_state=ss_tied)
-        # Trailing by 1 with 30s left, goalie pulled
-        ss_trail = StartState(period=3, second=1170, home_score=2, away_score=3, home_pulled=True)
-        r_trail = simulate(inp, N, seed=789, start_state=ss_trail)
+        tied = simulate(inp, 10000, seed=789, start_state=StartState(period=3, second=1170, home_score=2, away_score=2))
+        trail = simulate(inp, 10000, seed=789, start_state=StartState(period=3, second=1170, home_score=2, away_score=3, home_pulled=True))
+        assert (trail["home_score"] > trail["away_score"]).mean() < (tied["home_score"] > tied["away_score"]).mean()
 
-        tied_win = (r_tied["home_score"] > r_tied["away_score"]).mean()
-        trail_win = (r_trail["home_score"] > r_trail["away_score"]).mean()
-        assert trail_win < tied_win, f"Trailing+pulled should win less: {trail_win:.3f} vs tied {tied_win:.3f}"
+    def test_both_teams_pull(self, inp):
+        """S34: the AWAY team must also pull when trailing late (S32 only let the home team pull)."""
+        h = simulate(inp, 5000, seed=11, start_state=StartState(period=3, second=1080, home_score=1, away_score=2))
+        a = simulate(inp, 5000, seed=11, start_state=StartState(period=3, second=1080, home_score=2, away_score=1))
+        assert h["away_en_goals"].mean() > 0.05, "home trailing -> away should score empty-net goals"
+        assert a["home_en_goals"].mean() > 0.05, "away trailing -> home should score empty-net goals"
+        assert abs(h["away_en_goals"].mean() - a["home_en_goals"].mean()) < 0.04
 
 
 class TestBlowout:
     def test_home_3_up_last_minute(self, inp):
-        """Home ahead by 3 with 1:00 left wins > 99%."""
-        ss = StartState(period=3, second=1140, home_score=5, away_score=2)
-        r = simulate(inp, 10000, seed=321, start_state=ss)
-        win_pct = (r["home_score"] > r["away_score"]).mean()
-        assert win_pct > 0.99, f"Home +3 last minute should win >99%: {win_pct:.4f}"
+        r = simulate(inp, 10000, seed=321, start_state=StartState(period=3, second=1140, home_score=5, away_score=2))
+        assert (r["home_score"] > r["away_score"]).mean() > 0.99
 
 
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+class TestSymmetry:
+    def test_neutral_site_is_fair(self, inp):
+        """With the home effect removed the engine must be symmetric: home win 50% +- 1 pt (40k sims, SE 0.25 pt)."""
+        z = copy.deepcopy(inp)
+        z.home_att_mult = z.away_att_mult = z.home_q_mult = z.away_q_mult = 1.0
+        r = simulate(z, 40000, seed=5)
+        assert abs((r["home_score"] > r["away_score"]).mean() - 0.5) < 0.01
+
+
+class TestPowerPlay:
+    def test_pp_goal_ends_minor(self, inp):
+        """Home 5v4 with a fresh away minor and a forced goal chance: PP seconds must stop at the goal."""
+        z = copy.deepcopy(inp)
+        z.goal_per_att = {k: (1.0 if k == (5, 4) else 0.0) for k in z.goal_per_att}
+        z.att_per_sec = {k: (0.05 if k == (5, 4) else v) for k, v in z.att_per_sec.items()}   # ~100% shot within 120 s
+        z.ea_goal_per_att = z.en_goal_per_att = 0.0
+        z.pp_pen_per_sec = 0.0
+        r = simulate(z, 2000, seed=9, start_state=StartState(period=1, second=0, away_penalties=[(MINOR, MINOR)]))
+        assert (r["home_pp_goals"] >= 1).mean() > 0.99
+        assert (r["home_pp_goals"] <= 1).all(), "one minor -> at most one PP goal"
+        assert r["home_pp_seconds"].mean() < 0.5 * MINOR
+
+
+class TestNoLiteralRates:
+    def test_no_rate_literals(self):
+        src = (ROOT / "nhl" / "sim" / "engine.py").read_text()
+        assert ".get(" not in src.split("def league_average_inputs")[1].split("def ")[0], "league_average_inputs must not use .get defaults"

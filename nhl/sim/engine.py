@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """
-NHL game simulation engine. Vectorised over N sims (numpy), 1-second clock steps.
+NHL game simulation engine (S34, Cowork rewrite of S32 — see decision S34 for the defects fixed).
 
-Supports start_state for mid-game entry (situation hunter: live pulled-goalie / PP markets).
-No literal rates: everything comes from GameInputs built from constants.
+Vectorised over N sims (numpy), 1-second clock. Start from puck drop or from any mid-game StartState.
+Every rate comes from constants files through league_average_inputs(); the only numbers written here are
+structural (period length, skater counts, 2/4/5-minute penalty lengths, 3 shootout rounds).
+
+State per sim: period clock, score, each team's penalty slots (remaining seconds + nominal length),
+each team's goalie-pulled flag. Strength = skaters from penalties (+1 extra attacker if the goalie is pulled).
+Regulation: 5 skaters base, a penalty removes one (floor 3). Overtime: 3v3 base, a penalty ADDS a skater to
+the other side (4v3, 5v3), as NHL regular-season OT rules. Shootout: 3 rounds, then sudden-death rounds.
 """
 import json
 from dataclasses import dataclass, field
@@ -14,385 +20,280 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 C2_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v2.json"
-C5_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v5.json"
-C6_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v6.json"
+C7_PATH = ROOT / "nhl" / "data" / "sim" / "constants_v7.json"
 
-REG_SECONDS = 3600  # 3 x 20 min
-OT_SECONDS = 300    # 5 min OT
 PERIOD_SECONDS = 1200
+REG_SECONDS = 3 * PERIOD_SECONDS
+OT_SECONDS = 300
+PULL_WINDOW = 300          # pull hazard is measured over the last 300 s of the 3rd period
+PULL_BIN = 30
+MAX_PEN = 4
+MINOR, DOUBLE, MAJOR = 120, 240, 300
+SO_ROUNDS = 3
+SO_MAX_EXTRA = 30          # sudden-death rounds before a coin flip (never reached in practice)
+STATE_PAIRS = [(5, 5), (4, 4), (3, 3), (5, 4), (4, 5), (5, 3), (3, 5), (4, 3), (3, 4)]
+
+
+@dataclass
+class TeamMultipliers:
+    """Per-team multipliers on the league rates (1.0 = league average). S-WO4b fills these from ratings."""
+    ev_att_for: float = 1.0
+    ev_att_against: float = 1.0
+    ev_q_for: float = 1.0
+    ev_q_against: float = 1.0
+    pp_q_for: float = 1.0          # PP goals per attempt, own power play
+    pk_q_against: float = 1.0      # goals per attempt allowed on own penalty kill
+    pen_taken: float = 1.0
+    pen_drawn: float = 1.0
+    goalie_save: float = 1.0       # multiplier on goals allowed per attempt (<1 = better goalie)
+    finishing: float = 1.0         # league finishing term F(D), applied to non-empty-net goals
 
 
 @dataclass
 class GameInputs:
-    """Every rate the engine uses. No literal rates in the engine."""
-    # 5v5 per-team per second
-    ev_att_rate: float       # attempts per second per team at 5v5
-    ev_goal_prob: float      # goals per attempt at 5v5
-    # PP/PK rates
-    pp_att_rate: float       # advantaged-side attempts per second
-    pp_goal_prob: float      # advantaged-side goals per attempt
-    sh_att_rate: float       # disadvantaged-side attempts per second
-    sh_goal_prob: float      # disadvantaged-side goals per attempt
-    # 4v4, 3v3
-    ev44_att_rate: float
-    ev44_goal_prob: float
-    ev33_att_rate: float
-    ev33_goal_prob: float
-    # Empty net / extra attacker (6v5)
-    en_att_rate: float       # advantaged side (6 skaters)
-    en_goal_prob: float
-    en_against_att_rate: float  # disadvantaged side (shooting at empty net)
-    en_against_goal_prob: float
-    # Penalties
-    penalty_rate_per_sec: float   # per team per second
-    minor_share: float
-    double_minor_share: float
-    major_share: float
-    # Score effects (dict: (sd, period) -> (att_mult, xg_mult))
-    score_effects: dict = field(default_factory=dict)
-    # Home effects
-    home_att_mult: float = 1.0
-    home_xg_mult: float = 1.0
-    # Pull hazard (dict: (sd, bin) -> hazard_per_sec)
-    pull_hazard: dict = field(default_factory=dict)
-    # OT
-    ot_att_rate: float = 0.0
-    ot_goal_prob: float = 0.0
-    # Shootout
-    so_conversion: float = 0.33
-    so_past_r3_share: float = 0.30
+    att_per_sec: dict              # (own_skaters, opp_skaters) -> attempts per second, both goalies in
+    goal_per_att: dict             # (own_skaters, opp_skaters) -> goals per attempt, both goalies in
+    ea_att_per_sec: float          # extra attacker side (own goalie pulled)
+    ea_goal_per_att: float
+    en_att_per_sec: float          # shooting at an empty net
+    en_goal_per_att: float
+    pp_pen_per_sec: float          # PP-creating penalties per team per second
+    pen_len_shares: tuple          # (share 2-min, share 4-min, share 5-min) among PP-creating penalties
+    score_effects: dict            # (score diff clipped +-3, period 1..3) -> (attempt mult, goal-per-attempt mult)
+    home_att_mult: float
+    away_att_mult: float
+    home_q_mult: float
+    away_q_mult: float
+    pull_hazard: dict              # (k = 1..3 behind, bin of seconds remaining) -> hazard per second
+    so_conversion: float
+    home: TeamMultipliers = field(default_factory=TeamMultipliers)
+    away: TeamMultipliers = field(default_factory=TeamMultipliers)
 
 
 def league_average_inputs():
-    """Build GameInputs from constants v5/v6/v2."""
-    with open(C5_PATH) as f:
-        c5 = json.load(f)["constants"]
-    with open(C6_PATH) as f:
-        c6 = json.load(f)["constants"]
-    with open(C2_PATH) as f:
-        c2 = json.load(f)["constants"]
+    c7 = json.loads(C7_PATH.read_text())["constants"]
+    c2 = json.loads(C2_PATH.read_text())["constants"]
 
-    # Score effects
-    se = {}
-    for sd in range(-3, 4):
-        for p in range(1, 4):
-            ka = f"score_effect_attempt_mult_sd{sd}_p{p}"
-            kx = f"score_effect_xg_mult_sd{sd}_p{p}"
-            se[(sd, p)] = (c2.get(ka, {}).get("value", 1.0), c2.get(kx, {}).get("value", 1.0))
+    def key(own, opp):
+        if own == opp:
+            return f"per_team_{own}v{opp}"
+        return (f"advantaged_{own}v{opp}" if own > opp else f"disadvantaged_{opp}v{own}")
 
-    # Pull hazard
-    ph = {}
-    hazard_data = c6.get("pull_hazard_per_second", {}).get("data", {})
-    for sd_str, bins in hazard_data.items():
-        for bin_str, v in bins.items():
-            ph[(int(sd_str), int(bin_str))] = v["hazard_per_sec"]
-
+    att, gpa = {}, {}
+    for own, opp in STATE_PAIRS:
+        k = key(own, opp)
+        att[(own, opp)] = c7[f"attempt_rate_per_60_{k}"]["value"] / 3600.0
+        gpa[(own, opp)] = c7[f"goals_per_attempt_{k.replace('per_team_', '')}"]["value"]
+    se = {(sd, p): (c2[f"score_effect_attempt_mult_sd{sd}_p{p}"]["value"], c2[f"score_effect_xg_mult_sd{sd}_p{p}"]["value"])
+          for sd in range(-3, 4) for p in range(1, 4)}
+    ph = {(-int(k), int(b)): v["hazard_per_sec"] for k, bins in c7["pull_hazard_per_second"]["data"].items() for b, v in bins.items()}
+    pp = c7["pp_penalty"]
+    share = c2["home_attempt_share"]["value"]
+    qm = c2["home_xg_per_attempt_mult"]["value"]
     return GameInputs(
-        ev_att_rate=c5["attempt_rate_per_60_per_team_5v5"]["value"] / 3600,
-        ev_goal_prob=c5["goals_per_attempt_5v5"]["value"],
-        pp_att_rate=c5.get("attempt_rate_per_60_advantaged_5v4", {}).get("value", 70) / 3600,
-        pp_goal_prob=c5.get("goals_per_attempt_advantaged_5v4", {}).get("value", 0.10),
-        sh_att_rate=c5.get("attempt_rate_per_60_disadvantaged_5v4", {}).get("value", 12) / 3600,
-        sh_goal_prob=c5.get("goals_per_attempt_disadvantaged_5v4", {}).get("value", 0.07),
-        ev44_att_rate=c5["attempt_rate_per_60_per_team_4v4"]["value"] / 3600,
-        ev44_goal_prob=c5["goals_per_attempt_4v4"]["value"],
-        ev33_att_rate=c5["attempt_rate_per_60_per_team_3v3"]["value"] / 3600,
-        ev33_goal_prob=c5["goals_per_attempt_3v3"]["value"],
-        en_att_rate=c5.get("attempt_rate_per_60_advantaged_6v5", {}).get("value", 100) / 3600,
-        en_goal_prob=c5.get("goals_per_attempt_advantaged_6v5", {}).get("value", 0.22),
-        en_against_att_rate=c5.get("attempt_rate_per_60_disadvantaged_6v5", {}).get("value", 40) / 3600,
-        en_against_goal_prob=c5.get("goals_per_attempt_disadvantaged_6v5", {}).get("value", 0.63),
-        penalty_rate_per_sec=c2.get("penalties_per_team_per_game", {}).get("value", 3.8) / 3600,
-        minor_share=c2.get("penalty_shares", {}).get("minor_2min", 0.85),
-        double_minor_share=c2.get("penalty_shares", {}).get("double_minor_4min", 0.05),
-        major_share=c2.get("penalty_shares", {}).get("major_5min", 0.10),
+        att_per_sec=att, goal_per_att=gpa,
+        ea_att_per_sec=c7["attempt_rate_per_60_advantaged_6v5"]["value"] / 3600.0,
+        ea_goal_per_att=c7["goals_per_attempt_advantaged_6v5"]["value"],
+        en_att_per_sec=c7["attempt_rate_per_60_disadvantaged_6v5"]["value"] / 3600.0,
+        en_goal_per_att=c7["goals_per_attempt_disadvantaged_6v5"]["value"],
+        pp_pen_per_sec=pp["per_team_per_second"],
+        pen_len_shares=(pp["nominal_share_2min"], pp["nominal_share_4min"], pp["nominal_share_5min"]),
         score_effects=se,
-        home_att_mult=c2.get("home_attempt_share", {}).get("value", 0.514) / 0.5,
-        home_xg_mult=c2.get("home_xg_per_attempt_mult", {}).get("value", 1.01),
+        home_att_mult=share / 0.5, away_att_mult=(1 - share) / 0.5,
+        home_q_mult=float(np.sqrt(qm)), away_q_mult=float(1 / np.sqrt(qm)),
         pull_hazard=ph,
-        ot_att_rate=c5["attempt_rate_per_60_per_team_3v3"]["value"] / 3600,
-        ot_goal_prob=c5["goals_per_attempt_3v3"]["value"],
-        so_conversion=c2.get("shootout_conversion", {}).get("value", 0.33),
-        so_past_r3_share=c2.get("shootout_past_r3_share", {}).get("value", 0.30),
+        so_conversion=c2["shootout_conversion"]["value"],
     )
 
 
 @dataclass
 class StartState:
-    """Optional mid-game start state."""
-    period: int = 1
-    second: int = 0
+    period: int = 1                 # 1-3 regulation, 4 = overtime
+    second: int = 0                 # seconds elapsed in the period
     home_score: int = 0
     away_score: int = 0
-    home_penalties: list = field(default_factory=list)  # list of remaining seconds per penalty
+    home_penalties: list = field(default_factory=list)   # [(seconds remaining, nominal seconds 120/240/300), ...]
     away_penalties: list = field(default_factory=list)
     home_pulled: bool = False
     away_pulled: bool = False
 
 
+def _skaters(base, own_act, opp_act):
+    if base == 5:
+        return np.clip(5 - own_act, 3, 5), np.clip(5 - opp_act, 3, 5)
+    extra_opp = np.clip(own_act - opp_act, 0, 2)          # OT: my penalty gives the opponent an extra skater
+    extra_own = np.clip(opp_act - own_act, 0, 2)
+    return 3 + extra_own, 3 + extra_opp
+
+
 def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[StartState] = None):
-    """Simulate n_sims games. Returns dict of arrays."""
-    rng = np.random.RandomState(seed)
-    N = n_sims
-    inp = inputs
+    rng = np.random.default_rng(seed)
+    N, inp = n_sims, inputs
+    ss = start_state if start_state is not None else StartState()
 
-    # State arrays
-    home_score = np.zeros(N, dtype=np.int32)
-    away_score = np.zeros(N, dtype=np.int32)
-    home_pp_goals = np.zeros(N, dtype=np.int32)
-    away_pp_goals = np.zeros(N, dtype=np.int32)
-    home_en_goals = np.zeros(N, dtype=np.int32)
-    away_en_goals = np.zeros(N, dtype=np.int32)
-    home_attempts = np.zeros(N, dtype=np.int32)
-    away_attempts = np.zeros(N, dtype=np.int32)
-    home_pp_opps = np.zeros(N, dtype=np.int32)
-    away_pp_opps = np.zeros(N, dtype=np.int32)
-    decided = np.full(N, 0, dtype=np.int8)  # 0=REG, 1=OT, 2=SO
-    home_pulled = np.zeros(N, dtype=bool)
-    pull_time = np.zeros(N, dtype=np.float32)
+    # rate tables indexed [own_skaters, opp_skaters]
+    ATT = np.zeros((6, 6)); GPA = np.zeros((6, 6))
+    for (o, p), v in inp.att_per_sec.items():
+        ATT[o, p] = v
+        GPA[o, p] = inp.goal_per_att[(o, p)]
+    shares = np.cumsum(inp.pen_len_shares)
+    shares = shares / shares[-1]
+    HM, AM = inp.home, inp.away
 
-    # Penalty clocks: max 4 concurrent penalties per team
-    MAX_PEN = 4
-    home_pen = np.zeros((N, MAX_PEN), dtype=np.int32)  # seconds remaining per penalty slot
-    away_pen = np.zeros((N, MAX_PEN), dtype=np.int32)
+    score = {"h": np.full(N, ss.home_score, np.int32), "a": np.full(N, ss.away_score, np.int32)}
+    pen_rem = {"h": np.zeros((N, MAX_PEN), np.int32), "a": np.zeros((N, MAX_PEN), np.int32)}
+    pen_nom = {"h": np.zeros((N, MAX_PEN), np.int32), "a": np.zeros((N, MAX_PEN), np.int32)}
+    for t, lst in (("h", ss.home_penalties), ("a", ss.away_penalties)):
+        for i, (rem, nom) in enumerate(lst[:MAX_PEN]):
+            pen_rem[t][:, i] = rem
+            pen_nom[t][:, i] = nom
+    pulled = {"h": np.full(N, ss.home_pulled), "a": np.full(N, ss.away_pulled)}
+    out = {f"{k}_{t}": np.zeros(N, np.int32) for k in ("pp_goals", "en_goals", "attempts", "pp_opps", "pp_seconds") for t in ("h", "a")}
+    decided = np.zeros(N, np.int8)                       # 0 REG, 1 OT, 2 SO
+    live = np.ones(N, bool)
+    reg = {}
+    mult = {"h": (HM, AM, inp.home_att_mult, inp.home_q_mult), "a": (AM, HM, inp.away_att_mult, inp.away_q_mult)}
 
-    if start_state is not None:
-        ss = start_state
-        home_score[:] = ss.home_score
-        away_score[:] = ss.away_score
-        home_pulled[:] = ss.home_pulled
-        for i, p in enumerate(ss.home_penalties[:MAX_PEN]):
-            home_pen[:, i] = p
-        for i, p in enumerate(ss.away_penalties[:MAX_PEN]):
-            away_pen[:, i] = p
-        start_sec = (ss.period - 1) * PERIOD_SECONDS + ss.second
-    else:
-        start_sec = 0
-
-    reg_home = np.zeros(N, dtype=np.int32)
-    reg_away = np.zeros(N, dtype=np.int32)
-
-    # --- REGULATION (3 periods) ---
-    for sec in range(start_sec, REG_SECONDS):
-        period = sec // PERIOD_SECONDS + 1
-        sec_in_period = sec % PERIOD_SECONDS
-
-        # Strength state: count active penalties
-        home_active = (home_pen > 0).sum(axis=1)  # N array
-        away_active = (away_pen > 0).sum(axis=1)
-        home_sk = np.clip(5 - home_active, 3, 5)
-        away_sk = np.clip(5 - away_active, 3, 5)
-
-        # Extra attacker if pulled
-        home_sk_eff = np.where(home_pulled, home_sk + 1, home_sk)
-        away_sk_eff = away_sk  # only home can pull for now (trailing)
-
-        sd = home_score - away_score  # from home view
-
-        # Determine rates based on strength
-        is_5v5 = (home_sk == 5) & (away_sk == 5) & ~home_pulled
-        is_pp_home = (home_sk > away_sk) & ~home_pulled  # home has more skaters
-        is_pp_away = (away_sk > home_sk) & ~home_pulled
-        is_4v4 = (home_sk == 4) & (away_sk == 4)
-        is_en = home_pulled
-
-        # Base attempt rates per second (per team)
-        home_att = np.where(is_5v5, inp.ev_att_rate,
-                   np.where(is_pp_home, inp.pp_att_rate,
-                   np.where(is_pp_away, inp.sh_att_rate,
-                   np.where(is_4v4, inp.ev44_att_rate,
-                   np.where(is_en, inp.en_att_rate,
-                   inp.ev_att_rate)))))
-
-        away_att = np.where(is_5v5, inp.ev_att_rate,
-                   np.where(is_pp_away, inp.pp_att_rate,
-                   np.where(is_pp_home, inp.sh_att_rate,
-                   np.where(is_4v4, inp.ev44_att_rate,
-                   np.where(is_en, inp.en_against_att_rate,
-                   inp.ev_att_rate)))))
-
-        # Goal probability
-        home_gp = np.where(is_5v5, inp.ev_goal_prob,
-                  np.where(is_pp_home, inp.pp_goal_prob,
-                  np.where(is_pp_away, inp.sh_goal_prob,
-                  np.where(is_4v4, inp.ev44_goal_prob,
-                  np.where(is_en, inp.en_goal_prob,
-                  inp.ev_goal_prob)))))
-
-        away_gp = np.where(is_5v5, inp.ev_goal_prob,
-                  np.where(is_pp_away, inp.pp_goal_prob,
-                  np.where(is_pp_home, inp.sh_goal_prob,
-                  np.where(is_4v4, inp.ev44_goal_prob,
-                  np.where(is_en, inp.en_against_goal_prob,
-                  inp.ev_goal_prob)))))
-
-        # Score effects (5v5 only)
-        sd_clipped = np.clip(sd, -3, 3)
-        for s in range(-3, 4):
-            for p in range(1, 4):
-                if p != period:
-                    continue
-                mask_s = (sd_clipped == s) & is_5v5
-                if mask_s.any():
-                    am, xm = inp.score_effects.get((s, p), (1.0, 1.0))
-                    home_att = np.where(mask_s, home_att * am, home_att)
-                    home_gp = np.where(mask_s, home_gp * xm, home_gp)
-                    # Away gets the mirror
-                    am_a, xm_a = inp.score_effects.get((-s, p), (1.0, 1.0))
-                    away_att = np.where(mask_s, away_att * am_a, away_att)
-                    away_gp = np.where(mask_s, away_gp * xm_a, away_gp)
-
-        # Home effect
-        home_att = home_att * inp.home_att_mult
-        home_gp = home_gp * inp.home_xg_mult
-        away_att = away_att * (2 - inp.home_att_mult)
-        away_gp = away_gp * (1 / inp.home_xg_mult)
-
-        # Attempt + goal events
-        h_shot = rng.random(N) < home_att
-        a_shot = rng.random(N) < away_att
-        h_goal = h_shot & (rng.random(N) < home_gp)
-        a_goal = a_shot & (rng.random(N) < away_gp)
-
-        home_score += h_goal.astype(np.int32)
-        away_score += a_goal.astype(np.int32)
-        home_attempts += h_shot.astype(np.int32)
-        away_attempts += a_shot.astype(np.int32)
-
-        # PP goals
-        home_pp_goals += (h_goal & is_pp_home).astype(np.int32)
-        away_pp_goals += (a_goal & is_pp_away).astype(np.int32)
-
-        # EN goals
-        home_en_goals += (h_goal & is_en).astype(np.int32)
-        away_en_goals += (a_goal & is_en & (away_gp > 0.5)).astype(np.int32)  # empty-net goals by away
-
-        # PP goal ends a minor
-        for pen_arr, opp_goal, is_pp in [(home_pen, a_goal, is_pp_away), (away_pen, h_goal, is_pp_home)]:
-            end_mask = opp_goal & is_pp
-            if end_mask.any():
-                for slot in range(MAX_PEN):
-                    can_end = end_mask & (pen_arr[:, slot] > 0) & (pen_arr[:, slot] <= 120)
-                    pen_arr[:, slot] = np.where(can_end, 0, pen_arr[:, slot])
-                    end_mask = end_mask & ~can_end
-
-        # Penalties
-        h_pen = rng.random(N) < inp.penalty_rate_per_sec
-        a_pen = rng.random(N) < inp.penalty_rate_per_sec
-        for pen_event, pen_arr, opp_pp_opps in [(h_pen, home_pen, away_pp_opps), (a_pen, away_pen, home_pp_opps)]:
-            if pen_event.any():
-                # Draw type
-                pen_type = rng.random(pen_event.sum())
-                dur = np.where(pen_type < inp.minor_share, 120,
-                      np.where(pen_type < inp.minor_share + inp.double_minor_share, 240, 300))
-                # Find first empty slot
-                for slot in range(MAX_PEN):
-                    can_add = pen_event & (pen_arr[:, slot] == 0)
-                    if can_add.any():
-                        idx = np.where(can_add)[0]
-                        n_add = min(len(idx), len(dur))
-                        pen_arr[idx[:n_add], slot] = dur[:n_add]
-                        dur = dur[n_add:]
-                        opp_pp_opps[idx[:n_add]] += 1
-                        pen_event[idx[:n_add]] = False
-                        if len(dur) == 0:
-                            break
-
-        # Tick penalty clocks
-        home_pen = np.maximum(home_pen - 1, 0)
-        away_pen = np.maximum(away_pen - 1, 0)
-
-        # Pulled goalie (home team only, trailing, 3rd period, last 5 min)
-        if period == 3 and sec_in_period >= 900:
-            sec_remaining = PERIOD_SECONDS - sec_in_period
-            can_pull = ~home_pulled & (sd < 0) & (home_active == 0)
-            sd_for_pull = np.clip(sd, -3, -1)
-            for s in [-1, -2, -3]:
-                b = (sec_remaining // 30) * 30
-                h = inp.pull_hazard.get((s, min(b, 270)), 0.0)
-                pull_now = can_pull & (sd_for_pull == s) & (rng.random(N) < h)
-                home_pulled = home_pulled | pull_now
-
-        # Goalie back after goal or end of period
-        home_pulled = home_pulled & (sd < 0)  # goalie comes back if scored
-        pull_time += home_pulled.astype(np.float32)
-
-    reg_home[:] = home_score
-    reg_away[:] = away_score
-    tied = home_score == away_score
-
-    # --- OVERTIME (5 min, 3v3, sudden death) ---
-    ot_mask = tied.copy()
-    for sec in range(OT_SECONDS):
-        if not ot_mask.any():
-            break
-        h_shot = ot_mask & (rng.random(N) < inp.ot_att_rate)
-        a_shot = ot_mask & (rng.random(N) < inp.ot_att_rate)
-        h_goal = h_shot & (rng.random(N) < inp.ot_goal_prob)
-        a_goal = a_shot & (rng.random(N) < inp.ot_goal_prob)
-
-        # Sudden death: only first goal counts
-        both = h_goal & a_goal
-        # If both score in same second, home wins (arbitrary tiebreak)
-        a_goal = a_goal & ~both
-
-        home_score += (h_goal & ot_mask).astype(np.int32)
-        away_score += (a_goal & ot_mask).astype(np.int32)
-        home_attempts += (h_shot & ot_mask).astype(np.int32)
-        away_attempts += (a_shot & ot_mask).astype(np.int32)
-
-        # Game over for sims where a goal was scored
-        scored = (h_goal | a_goal) & ot_mask
-        decided[scored] = 1  # OT
-        ot_mask = ot_mask & ~scored
-
-    # --- SHOOTOUT (remaining tied games) ---
-    so_mask = ot_mask.copy()
-    if so_mask.any():
-        # 3 rounds, then sudden death
-        h_so = np.zeros(N, dtype=np.int32)
-        a_so = np.zeros(N, dtype=np.int32)
-        for rd in range(10):  # max 10 rounds (3 regular + 7 sudden death)
-            if not so_mask.any():
+    start_sec = (ss.period - 1) * PERIOD_SECONDS + ss.second
+    end_sec = REG_SECONDS + OT_SECONDS
+    for sec in range(start_sec, end_sec):
+        if sec == REG_SECONDS:                           # end of regulation
+            reg = {t: score[t].copy() for t in ("h", "a")}
+            live = score["h"] == score["a"]
+            pulled["h"][:] = False
+            pulled["a"][:] = False
+            if not live.any():
                 break
-            h_conv = so_mask & (rng.random(N) < inp.so_conversion)
-            a_conv = so_mask & (rng.random(N) < inp.so_conversion)
-            h_so += h_conv.astype(np.int32)
-            a_so += a_conv.astype(np.int32)
-
-            if rd >= 2:  # After round 3, sudden death
-                h_ahead = so_mask & (h_so > a_so)
-                a_ahead = so_mask & (a_so > h_so)
-                decided[h_ahead] = 2
-                home_score[h_ahead] += 1
-                so_mask = so_mask & ~h_ahead
-                decided[a_ahead] = 2
-                away_score[a_ahead] += 1
-                so_mask = so_mask & ~a_ahead
-
-        # Any remaining: random winner
-        if so_mask.any():
-            h_wins = so_mask & (rng.random(N) < 0.5)
-            decided[h_wins] = 2
-            home_score[h_wins] += 1
-            decided[so_mask & ~h_wins] = 2
-            away_score[so_mask & ~h_wins] += 1
-
-    decided_str = np.where(decided == 0, "REG", np.where(decided == 1, "OT", "SO"))
-
-    return {
-        "home_score": home_score,
-        "away_score": away_score,
-        "reg_home_score": reg_home,
-        "reg_away_score": reg_away,
-        "decided": decided_str,
-        "home_pp_goals": home_pp_goals,
-        "away_pp_goals": away_pp_goals,
-        "home_pp_opps": home_pp_opps,
-        "away_pp_opps": away_pp_opps,
-        "home_en_goals": home_en_goals,
-        "away_en_goals": away_en_goals,
-        "home_attempts": home_attempts,
-        "away_attempts": away_attempts,
-        "pull_time": pull_time,
-    }
+        in_ot = sec >= REG_SECONDS
+        period = min(sec // PERIOD_SECONDS + 1, 3)
+        base = 3 if in_ot else 5
+        act = {t: (pen_rem[t] > 0).sum(axis=1) for t in ("h", "a")}
+        sk = {}
+        sk["h"], sk["a"] = _skaters(base, act["h"], act["a"])
+        goals = {}
+        for t, o in (("h", "a"), ("a", "h")):
+            me, opp, side_att, side_q = mult[t]
+            own_sk, opp_sk = sk[t], sk[o]
+            att = ATT[own_sk, opp_sk].copy()
+            gpa = GPA[own_sk, opp_sk].copy()
+            ev = (own_sk == 5) & (opp_sk == 5) & ~pulled[t] & ~pulled[o] & ~in_ot
+            if ev.any():
+                sd = np.clip(score[t] - score[o], -3, 3)
+                am = np.ones(N); qm = np.ones(N)
+                for s in range(-3, 4):
+                    m = ev & (sd == s)
+                    if m.any():
+                        a_, q_ = inp.score_effects[(s, period)]
+                        am[m] = a_; qm[m] = q_
+                att *= am; gpa *= qm
+                att = np.where(ev, att * me.ev_att_for * opp.ev_att_against, att)
+                gpa = np.where(ev, gpa * me.ev_q_for * opp.ev_q_against, gpa)
+            pp = (own_sk > opp_sk) & ~pulled[t] & ~pulled[o]
+            gpa = np.where(pp, gpa * me.pp_q_for * opp.pk_q_against, gpa)
+            gpa = gpa * opp.goalie_save * me.finishing
+            att = np.where(pulled[t], inp.ea_att_per_sec, att)
+            gpa = np.where(pulled[t], inp.ea_goal_per_att * opp.goalie_save * me.finishing, gpa)
+            att = np.where(pulled[o], inp.en_att_per_sec, att)
+            gpa = np.where(pulled[o], inp.en_goal_per_att, gpa)
+            att = att * side_att
+            gpa = np.where(pulled[o], gpa, gpa * side_q)
+            shot = live & (rng.random(N) < att)
+            g = shot & (rng.random(N) < gpa)
+            out[f"attempts_{t}"] += shot
+            out[f"pp_seconds_{t}"] += (live & (own_sk > opp_sk)).astype(np.int32)
+            goals[t] = (g, own_sk > opp_sk, pulled[o].copy())
+        if in_ot:                                        # sudden death: one goal per sim
+            both = goals["h"][0] & goals["a"][0]
+            coin = rng.random(N) < 0.5
+            goals["h"] = (goals["h"][0] & (~both | coin),) + goals["h"][1:]
+            goals["a"] = (goals["a"][0] & (~both | ~coin),) + goals["a"][1:]
+        for t, o in (("h", "a"), ("a", "h")):
+            g, was_pp, empty = goals[t]
+            score[t] += g
+            out[f"pp_goals_{t}"] += g & was_pp
+            out[f"en_goals_{t}"] += g & empty
+            # a power-play goal ends the opponent's shortest minor, or the current half of a double minor
+            end = g & was_pp
+            if end.any():
+                rem, nom = pen_rem[o], pen_nom[o]
+                ends_minor = (rem > 0) & (nom == MINOR)
+                cand = np.where(ends_minor, rem, 10**6)
+                j = cand.argmin(axis=1)
+                has_minor = ends_minor.any(axis=1)
+                rows = np.where(end & has_minor)[0]
+                rem[rows, j[rows]] = 0
+                dbl = end & ~has_minor & ((rem > 0) & (nom == DOUBLE)).any(axis=1)
+                if dbl.any():
+                    cand = np.where((rem > 0) & (nom == DOUBLE), rem, 10**6)
+                    jd = cand.argmin(axis=1)
+                    rows = np.where(dbl)[0]
+                    r_ = rem[rows, jd[rows]]
+                    rem[rows, jd[rows]] = np.where(r_ > MINOR, r_ - (r_ - MINOR), 0)  # first half ends -> 120 left; second half ends -> 0
+        any_goal = goals["h"][0] | goals["a"][0]
+        pulled["h"] &= ~any_goal
+        pulled["a"] &= ~any_goal
+        if in_ot:
+            won = live & any_goal
+            decided[won] = 1
+            live &= ~any_goal
+        # PP-creating penalties (not during a sim that is already decided)
+        for t, o in (("h", "a"), ("a", "h")):
+            me, opp = mult[t][0], mult[t][1]
+            p = inp.pp_pen_per_sec * me.pen_taken * opp.pen_drawn
+            ev_ = live & (rng.random(N) < p)
+            if ev_.any():
+                u = rng.random(N)
+                nom = np.where(u < shares[0], MINOR, np.where(u < shares[1], DOUBLE, MAJOR)).astype(np.int32)
+                free = pen_rem[t] == 0
+                slot = free.argmax(axis=1)
+                ok = ev_ & free.any(axis=1)
+                rows = np.where(ok)[0]
+                pen_rem[t][rows, slot[rows]] = nom[rows]
+                pen_nom[t][rows, slot[rows]] = nom[rows]
+                out[f"pp_opps_{o}"] += ok
+        for t in ("h", "a"):
+            pen_rem[t] = np.maximum(pen_rem[t] - 1, 0)
+        # pulled goalie: last 300 s of the 3rd period, trailing, goalie in, not on a PP, opponent's goalie in
+        if (not in_ot) and period == 3 and sec >= REG_SECONDS - PULL_WINDOW:
+            rem_s = REG_SECONDS - sec - 1
+            b = (rem_s // PULL_BIN) * PULL_BIN
+            for t, o in (("h", "a"), ("a", "h")):
+                behind = np.clip(score[o] - score[t], 0, 3)
+                can = live & ~pulled[t] & ~pulled[o] & (behind >= 1) & (sk[t] <= sk[o])
+                if can.any():
+                    hz = np.zeros(N)
+                    for k in (1, 2, 3):
+                        hz[behind == k] = inp.pull_hazard.get((k, b), 0.0)
+                    pulled[t] |= can & (rng.random(N) < hz)
+    if not reg:                                          # started in OT
+        reg = {"h": score["h"].copy() - 0, "a": score["a"].copy() - 0}
+        live = score["h"] == score["a"]
+    # shootout
+    so = (score["h"] == score["a"])
+    if so.any():
+        idx = np.where(so)[0]
+        n = len(idx)
+        hs = (rng.random((n, SO_ROUNDS)) < inp.so_conversion).sum(axis=1)
+        as_ = (rng.random((n, SO_ROUNDS)) < inp.so_conversion).sum(axis=1)
+        tied = hs == as_
+        for _ in range(SO_MAX_EXTRA):
+            if not tied.any():
+                break
+            h1 = rng.random(n) < inp.so_conversion
+            a1 = rng.random(n) < inp.so_conversion
+            hs = hs + (tied & h1)
+            as_ = as_ + (tied & a1)
+            tied = tied & (h1 == a1)
+        coin = rng.random(n) < 0.5
+        home_wins = (hs > as_) | (tied & coin)
+        score["h"][idx[home_wins]] += 1
+        score["a"][idx[~home_wins]] += 1
+        decided[idx] = 2
+    names = {"REG": 0, "OT": 1, "SO": 2}
+    res = {"home_score": score["h"], "away_score": score["a"],
+           "reg_home_score": reg["h"], "reg_away_score": reg["a"],
+           "decided": np.array(["REG", "OT", "SO"])[decided]}
+    for k in ("pp_goals", "en_goals", "attempts", "pp_opps", "pp_seconds"):
+        res[f"home_{k}"] = out[f"{k}_h"]
+        res[f"away_{k}"] = out[f"{k}_a"]
+    return res
