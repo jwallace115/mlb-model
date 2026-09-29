@@ -73,7 +73,7 @@ def set_sport(sport, book=None):
     PROPS_DIR = SPORTS[sport]["props"]
     LINES_DIR = SPORTS[sport]["lines"]
 TAGS = ("injury_news", "role_change", "game_script", "matchup", "weather", "price_vs_sharp",
-        "usage_trend", "line_move", "no_view")
+        "usage_trend", "line_move", "no_view", "sim_v1")
 KEY = ["event_id", "market_key", "player_name", "line"]
 P_MIN, P_MAX = 0.02, 0.98
 REASON_MIN, REASON_MAX = 12, 160
@@ -528,9 +528,14 @@ def main():
     ap.add_argument("--pilot", action="store_true")
     ap.add_argument("--reader-model", help="REQUIRED for freeze (N62): the model that made the picks, e.g. claude-fable-5-1")
     ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
+    ap.add_argument("--as-of", help="UTC ISO timestamp (pilot only); errors without --pilot")
     a = ap.parse_args()
+    if a.as_of and not a.pilot:
+        sys.exit("HALT: --as-of requires --pilot")
     set_sport(a.sport, a.book)
-    now = datetime.now(timezone.utc)
+    now = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
     if a.cmd in ("sheet", "freeze"):
         sheet = build_sheet(*newest_inputs(a.season, now, a.props_file, a.lines_file), now)
         if a.events and len(sheet):

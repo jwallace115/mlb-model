@@ -3790,3 +3790,33 @@ with |p - q| > 0.08 lose units at the real Hard Rock price of the side — expec
 |p - q| bucket, and anchor status (item 1). Anchor rule, fixed now: a game whose final anchored mean misses the
 market by more than 1.0 point on margin OR total is 'unanchored'; its props are frozen and scored but reported
 separately and excluded from P1/P2. No engine change during the test; a change is v2 and restarts the count.
+
+### D211 — FWD1 Item 1: run_forward_v1.py harness + tests (2026-09-29)
+
+**Harness** (nfl/sim/run_forward_v1.py): six steps:
+(a) test_freeze_v1 in-process via pytest.main; HALT on failure.
+(b) sheet: log_ai_opinions.py `sheet` for the week.
+(c) sim: run_week.py for the week (same --as-of if provided); reads picks_log.parquet.
+(d) fill: two-way prop rows matched by (player_name, line) to picks_log get p_first = cal_p
+    of the OVER side (or 1 - cal_p if sheet's first side is under), tag = "sim_v1",
+    reason = "sim v1 cal_p <tier>". Unmatched prop rows and all game-line rows (h2h,
+    spreads, totals) get tag = "no_view" with p_first = q_first (the book's de-vig).
+(e) freeze: log_ai_opinions.py `freeze` with --reader-model nfl_sim_v1_156cd057.
+(f) anchor sidecar: per-game parquet with spread, total_line, anch_m, anch_t, miss_m,
+    miss_t, iterations, converged, anchored (D210 rule: miss > 1.0 on either = unanchored).
+    Written to ai_opinions/anchor_sidecar_sim_v1.parquet.
+
+**Established:** run_week.py:997 prints the **ANCHORED** margin (`anch_m`), not the raw.
+The raw margin is stored separately as `raw_m` (run_week.py:1002).
+
+**log_ai_opinions.py changes:**
+- TAGS: added "sim_v1" (log_ai_opinions.py:76).
+- --as-of: added (log_ai_opinions.py:531-536); errors without --pilot.
+
+**Tests** (nfl/sim/tests/test_forward_v1.py, 5 tests):
+1. Harness halts on freeze hash mismatch (modifies one hash, asserts test_table_hashes raises).
+2. Game-line row is no_view with p_first == q_first.
+3. Matched OVER row gets cal_p exactly.
+4. Matched UNDER-only row gets 1 - cal_p.
+5. Unmatched prop row is no_view.
+All 5 PASS. test_freeze_v1 still 4 passed.
