@@ -46,10 +46,11 @@ def load_constants():
 
 
 def load_carryover():
-    if CARRYOVER_PATH.exists():
-        with open(CARRYOVER_PATH) as f:
-            return json.load(f)
-    return {}
+    """Load carry-over weights. A missing key raises KeyError — no fallback defaults."""
+    if not CARRYOVER_PATH.exists():
+        raise FileNotFoundError(f"carryover_w.json not found at {CARRYOVER_PATH}")
+    with open(CARRYOVER_PATH) as f:
+        return json.load(f)
 
 
 def score_xg(shots_df, model):
@@ -265,6 +266,27 @@ def measure_carryover(tgs):
     return weights
 
 
+def _build_goalie_games(shots_all, games_df, model):
+    """Build per-start goalie stats (for measuring carry-over)."""
+    non_en = shots_all[~shots_all["empty_net"]].copy()
+    non_en["xg"] = score_xg(non_en, model)
+    rows = []
+    for _, g in games_df.iterrows():
+        gid = g["game_id"]
+        g_shots = non_en[non_en["game_id"] == gid]
+        for role, opp_role in [("home", "away"), ("away", "home")]:
+            opp_shots = g_shots[g_shots["shooting_team"] == opp_role].sort_values("seconds")
+            if len(opp_shots) == 0: continue
+            goalie_id = opp_shots.iloc[0].get("goalie_id")
+            if goalie_id is None or pd.isna(goalie_id): continue
+            faced = g_shots[g_shots["shooting_team"] == opp_role]
+            rows.append({
+                "game_id": gid, "season": g["season"], "goalie_id": int(goalie_id),
+                "attempts_faced": len(faced), "gsax": float(faced["xg"].sum()) - int(faced["is_goal"].sum()),
+            })
+    return pd.DataFrame(rows)
+
+
 def measure_goalie_carryover(goalie_games):
     """Measure goalie carry-over: slope of 2022-23 GSAx/att on 2021-22 GSAx/att."""
     prev = goalie_games[goalie_games["season"] == 2021].groupby("goalie_id").agg(
@@ -277,7 +299,7 @@ def measure_goalie_carryover(goalie_games):
     if len(both) >= 10:
         c = np.polyfit(both["rate_p"], both["rate_c"], 1)
         return float(np.clip(c[0], 0, 1))
-    return 0.3
+    raise ValueError(f"Too few goalies ({len(both)}) for carry-over measurement")
 
 
 def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
@@ -361,10 +383,11 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
                 lg_xg = prev_lg["xg_rate"]
 
             # Carry-over prior = shrink target for the entire season
-            w_att_for = carryover.get("ev_att_for_per60", 0.5)
-            w_att_ag = carryover.get("ev_att_against_per60", 0.5)
-            w_xg_for = carryover.get("ev_xg_per_att_for", 0.5)
-            w_xg_ag = carryover.get("ev_xg_per_att_against", 0.5)
+            # No fallback defaults: a missing key raises KeyError
+            w_att_for = carryover["ev_att_for_per60"]
+            w_att_ag = carryover["ev_att_against_per60"]
+            w_xg_for = carryover["ev_xg_per_att_for"]
+            w_xg_ag = carryover["ev_xg_per_att_against"]
 
             if season != 2021 and team in (prior_team_final.get(prev_season, {})):
                 pf = prior_team_final[prev_season][team]
@@ -433,6 +456,94 @@ def build_pit_ratings(tgs, fit_seasons=FIT_SEASONS):
     return pd.DataFrame(all_ratings), {"r_att": r_att, "K_att": K_att, "r_xg": r_xg, "K_xg": K_xg}
 
 
+def build_goalie_ratings(shots_all, games_df, model):
+    """Goalie ratings: GSAx per attempt, per-season, career carry-over as shrink target."""
+    non_en = shots_all[~shots_all["empty_net"]].copy()
+    non_en["xg"] = score_xg(non_en, model)
+
+    goalie_games = []
+    for _, g in games_df.iterrows():
+        gid = g["game_id"]
+        g_shots = non_en[non_en["game_id"] == gid]
+        for role, opp_role in [("home", "away"), ("away", "home")]:
+            opp_shots = g_shots[g_shots["shooting_team"] == opp_role].sort_values("seconds")
+            if len(opp_shots) == 0:
+                continue
+            goalie_id = opp_shots.iloc[0].get("goalie_id")
+            if goalie_id is None or pd.isna(goalie_id):
+                continue
+            goalie_id = int(goalie_id)
+            faced = g_shots[g_shots["shooting_team"] == opp_role]
+            goalie_games.append({
+                "game_id": gid, "season": g["season"], "date": g["date"],
+                "goalie_id": goalie_id,
+                "team": g["home"] if role == "home" else g["away"],
+                "role": role,
+                "attempts_faced": len(faced),
+                "xg_faced": float(faced["xg"].sum()),
+                "goals_against": int(faced["is_goal"].sum()),
+                "gsax": float(faced["xg"].sum()) - int(faced["is_goal"].sum()),
+            })
+    gdf = pd.DataFrame(goalie_games).sort_values("date")
+    gdf["gsax_per_att"] = gdf["gsax"] / gdf["attempts_faced"].clip(1)
+
+    # Split-half reliability on fit seasons
+    fit_sh = gdf[gdf["season"].isin(FIT_SEASONS)][["goalie_id", "season", "gsax_per_att"]].copy()
+    fit_sh = fit_sh.rename(columns={"goalie_id": "team"})
+    r_goalie, n_goalies = compute_split_half_r(fit_sh, "gsax_per_att", min_games=20)
+    K_goalie = compute_K(r_goalie, 60)
+    print(f"\n  Goalie GSAx/att: r={r_goalie:.3f}, K={K_goalie:.1f}")
+
+    # Carry-over weight from carryover_w.json
+    carryover = load_carryover()
+    w_goalie = carryover["goalie_gsax_per_att"]
+
+    # Point-in-time per-season ratings
+    goalie_ratings = []
+    goalie_career = {}  # goalie_id -> final rate from prev season
+
+    for season in ALL_SEASONS:
+        s_gdf = gdf[gdf["season"] == season].sort_values("date")
+        goalie_season = {}
+
+        for _, gg in s_gdf.iterrows():
+            gid_g = gg["goalie_id"]
+            if gid_g not in goalie_season:
+                goalie_season[gid_g] = {"gsax": 0.0, "att": 0, "n": 0}
+            gs = goalie_season[gid_g]
+
+            # Shrink target: carry-over from previous season
+            if gid_g in goalie_career and season != 2021:
+                career_rate = goalie_career[gid_g]
+                target = career_rate * w_goalie + 0.0 * (1 - w_goalie)
+            else:
+                target = 0.0
+
+            if gs["n"] == 0:
+                rating = target
+            else:
+                raw = gs["gsax"] / max(gs["att"], 1)
+                rating = shrink(raw * gs["n"], gs["n"], target, K_goalie)
+
+            goalie_ratings.append({
+                "game_id": gg["game_id"], "season": season, "date": gg["date"],
+                "goalie_id": gid_g, "team": gg["team"], "role": gg["role"],
+                "n_prior_starts": gs["n"],
+                "gsax_per_att_rating": round(rating, 6),
+            })
+
+            gs["gsax"] += gg["gsax"]
+            gs["att"] += gg["attempts_faced"]
+            gs["n"] += 1
+
+        # Store career rates for carry-over
+        for gid_g, gs in goalie_season.items():
+            if gs["n"] > 0:
+                goalie_career[gid_g] = gs["gsax"] / max(gs["att"], 1)
+
+    return pd.DataFrame(goalie_ratings), r_goalie, K_goalie
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
@@ -466,25 +577,44 @@ def main():
     if args.measure_carryover:
         print("\nMeasuring carry-over weights...")
         w = measure_carryover(tgs)
-        # Add goalie
-        # (simplified — not built yet)
-        w["goalie_gsax_per_att"] = 0.3
+        # Goalie carry-over: measured from 2021->2022 goalie data
+        goalie_games_df = _build_goalie_games(shots_all, games_df, model)
+        w["goalie_gsax_per_att"] = measure_goalie_carryover(goalie_games_df)
+        w["_derivation"] = "slope of 2022-23 full-season rate on 2021-22, per stat"
         CARRYOVER_PATH.parent.mkdir(parents=True, exist_ok=True)
         with open(CARRYOVER_PATH, "w") as f:
             json.dump(w, f, indent=2)
         print(f"  Saved: {CARRYOVER_PATH}")
         for k, v in w.items():
-            print(f"  {k}: {v:.3f}")
+            if isinstance(v, float):
+                print(f"  {k}: {v:.3f}")
         return
 
     if args.dry_run:
         return
 
-    print("\nBuilding ratings...")
+    print("\nBuilding team ratings...")
     team_ratings, reliabilities = build_pit_ratings(tgs)
-    if team_ratings is not None:
-        team_ratings.to_parquet(OUT_DIR / "team_ratings.parquet", index=False)
-        print(f"  Saved {len(team_ratings)} rows")
+    team_ratings.to_parquet(OUT_DIR / "team_ratings.parquet", index=False)
+    print(f"  Saved {len(team_ratings)} team rows")
+
+    print("\nBuilding goalie ratings...")
+    goalie_ratings, r_g, K_g = build_goalie_ratings(shots_all, games_df, model)
+    goalie_ratings.to_parquet(OUT_DIR / "goalie_ratings.parquet", index=False)
+    print(f"  Saved {len(goalie_ratings)} goalie rows")
+
+    # Manifest
+    manifest = {
+        "ratings_py_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "carryover_w_sha256": hashlib.sha256(CARRYOVER_PATH.read_bytes()).hexdigest(),
+        "team_ratings_sha256": hashlib.sha256((OUT_DIR / "team_ratings.parquet").read_bytes()).hexdigest(),
+        "team_ratings_rows": len(team_ratings),
+        "goalie_ratings_sha256": hashlib.sha256((OUT_DIR / "goalie_ratings.parquet").read_bytes()).hexdigest(),
+        "goalie_ratings_rows": len(goalie_ratings),
+    }
+    with open(OUT_DIR / "manifest.json", "w") as f:
+        json.dump(manifest, f, indent=2)
+    print(f"  Manifest: {OUT_DIR / 'manifest.json'}")
 
 
 if __name__ == "__main__":

@@ -16,27 +16,20 @@ class TestNoHoldoutLeakage:
 
     def test_rating_unchanged_without_holdout(self):
         """Build ratings with and without holdout seasons; 2022-23 values must match."""
-        from nhl.sim.ratings import (get_game_info, build_game_stats, build_pit_ratings,
+        from nhl.sim.ratings import (get_game_info, build_game_stats_vectorised as build_game_stats, build_pit_ratings,
                                       load_xg_model, ALL_SEASONS, EVENTS_DIR, FIT_SEASONS)
 
-        # Load data
-        games = get_game_info(ALL_SEASONS)
-        shots = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "shots.parquet") for s in ALL_SEASONS], ignore_index=True)
-        state = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "state_time.parquet") for s in ALL_SEASONS], ignore_index=True)
-        shots = shots.merge(games[["game_id", "date", "season"]].drop_duplicates("game_id"), on="game_id", how="left")
-        state = state.merge(games[["game_id", "date", "season"]].drop_duplicates("game_id"), on="game_id", how="left")
-
-        model = load_xg_model()
-        tgs_full = build_game_stats(games, shots, state, model)
-        ratings_full, _ = build_pit_ratings(tgs_full)
+        # Use cached team_game_stats instead of rebuilding (takes 90s)
+        tgs_full = pd.read_parquet(ROOT / "nhl" / "data" / "sim" / "ratings" / "team_game_stats.parquet")
+        import io, contextlib
+        with contextlib.redirect_stdout(io.StringIO()):
+            ratings_full, _ = build_pit_ratings(tgs_full)
 
         # Now without holdout
         no_holdout = [2021, 2022, 2023]
-        games_nh = games[games["season"].isin(no_holdout)]
-        shots_nh = shots[shots["season"].isin(no_holdout)]
-        state_nh = state[state["season"].isin(no_holdout)]
-        tgs_nh = build_game_stats(games_nh, shots_nh, state_nh, model)
-        ratings_nh, _ = build_pit_ratings(tgs_nh)
+        tgs_nh = tgs_full[tgs_full["season"].isin(no_holdout)]
+        with contextlib.redirect_stdout(io.StringIO()):
+            ratings_nh, _ = build_pit_ratings(tgs_nh)
 
         # 2022-23 ratings must be identical
         r_full = ratings_full[ratings_full["season"] == 2022].set_index(["game_id", "team"])

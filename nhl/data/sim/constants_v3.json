@@ -1,0 +1,195 @@
+{
+  "version": 3,
+  "fit_seasons": [
+    2021,
+    2022
+  ],
+  "n_games": 2624,
+  "constants": {
+    "attempt_rate_per_60_advantaged_5v4": {
+      "value": 70.352,
+      "numerator": 16293,
+      "denominator": 833733,
+      "units": "attempts / seconds * 3600",
+      "derivation": "advantaged-side attempts during home-5v4 / seconds * 3600"
+    },
+    "xg_per_attempt_advantaged_5v4": {
+      "value": 0.0994,
+      "numerator": 1620,
+      "denominator": 16293,
+      "derivation": "advantaged-side goals / attempts during home-5v4"
+    },
+    "attempt_rate_per_60_disadvantaged_5v4": {
+      "value": 12.2975,
+      "numerator": 2848,
+      "denominator": 833733,
+      "units": "attempts / seconds * 3600",
+      "derivation": "disadvantaged-side attempts during home-5v4 / seconds * 3600"
+    },
+    "xg_per_attempt_disadvantaged_5v4": {
+      "value": 0.0664,
+      "numerator": 189,
+      "denominator": 2848,
+      "derivation": "disadvantaged-side goals / attempts during home-5v4"
+    },
+    "minutes_per_team_game_5v4": {
+      "value": 5.3,
+      "total_secs": 833733,
+      "n_games": 2624,
+      "derivation": "seconds in home-5v4 / games / 60 (per game, home-side only)"
+    },
+    "attempt_rate_per_60_advantaged_5v3": {
+      "value": 124.1961,
+      "numerator": 515,
+      "denominator": 14928,
+      "units": "attempts / seconds * 3600",
+      "derivation": "advantaged-side attempts during home-5v3 / seconds * 3600"
+    },
+    "xg_per_attempt_advantaged_5v3": {
+      "value": 0.1515,
+      "numerator": 78,
+      "denominator": 515,
+      "derivation": "advantaged-side goals / attempts during home-5v3"
+    },
+    "attempt_rate_per_60_disadvantaged_5v3": {
+      "value": 3.3762,
+      "numerator": 14,
+      "denominator": 14928,
+      "units": "attempts / seconds * 3600",
+      "derivation": "disadvantaged-side attempts during home-5v3 / seconds * 3600"
+    },
+    "xg_per_attempt_disadvantaged_5v3": {
+      "value": 0.0714,
+      "numerator": 1,
+      "denominator": 14,
+      "derivation": "disadvantaged-side goals / attempts during home-5v3"
+    },
+    "minutes_per_team_game_5v3": {
+      "value": 0.09,
+      "total_secs": 14928,
+      "n_games": 2624,
+      "derivation": "seconds in home-5v3 / games / 60 (per game, home-side only)"
+    },
+    "attempt_rate_per_60_advantaged_4v3": {
+      "value": 98.0626,
+      "numerator": 374,
+      "denominator": 13730,
+      "units": "attempts / seconds * 3600",
+      "derivation": "advantaged-side attempts during home-4v3 / seconds * 3600"
+    },
+    "xg_per_attempt_advantaged_4v3": {
+      "value": 0.139,
+      "numerator": 52,
+      "denominator": 374,
+      "derivation": "advantaged-side goals / attempts during home-4v3"
+    },
+    "attempt_rate_per_60_disadvantaged_4v3": {
+      "value": 4.9818,
+      "numerator": 19,
+      "denominator": 13730,
+      "units": "attempts / seconds * 3600",
+      "derivation": "disadvantaged-side attempts during home-4v3 / seconds * 3600"
+    },
+    "xg_per_attempt_disadvantaged_4v3": {
+      "value": 0.1053,
+      "numerator": 2,
+      "denominator": 19,
+      "derivation": "disadvantaged-side goals / attempts during home-4v3"
+    },
+    "minutes_per_team_game_4v3": {
+      "value": 0.09,
+      "total_secs": 13730,
+      "n_games": 2624,
+      "derivation": "seconds in home-4v3 / games / 60 (per game, home-side only)"
+    },
+    "attempt_rate_per_60_advantaged_6v5": {
+      "value": 120.874,
+      "numerator": 2056,
+      "denominator": 61234,
+      "units": "attempts / seconds * 3600",
+      "derivation": "advantaged-side attempts during home-6v5 / seconds * 3600"
+    },
+    "xg_per_attempt_advantaged_6v5": {
+      "value": 0.0759,
+      "numerator": 156,
+      "denominator": 2056,
+      "derivation": "advantaged-side goals / attempts during home-6v5"
+    },
+    "attempt_rate_per_60_disadvantaged_6v5": {
+      "value": 39.5663,
+      "numerator": 673,
+      "denominator": 61234,
+      "units": "attempts / seconds * 3600",
+      "derivation": "disadvantaged-side attempts during home-6v5 / seconds * 3600"
+    },
+    "xg_per_attempt_disadvantaged_6v5": {
+      "value": 0.6345,
+      "numerator": 427,
+      "denominator": 673,
+      "derivation": "disadvantaged-side goals / attempts during home-6v5"
+    },
+    "minutes_per_team_game_6v5": {
+      "value": 0.39,
+      "total_secs": 61234,
+      "n_games": 2624,
+      "derivation": "seconds in home-6v5 / games / 60 (per game, home-side only)"
+    },
+    "attempt_rate_per_60_per_team_5v5": {
+      "value": 42.29,
+      "numerator": 178012,
+      "denominator": 7576874,
+      "units": "attempts / (seconds * 2 teams) * 3600",
+      "derivation": "both teams' unblocked attempts in 5v5 / seconds in 5v5 / 2 * 3600"
+    },
+    "xg_per_attempt_5v5": {
+      "value": 0.0615,
+      "numerator": 10949,
+      "denominator": 178012,
+      "units": "goals / attempts",
+      "derivation": "goals / unblocked attempts in 5v5"
+    },
+    "minutes_per_game_5v5": {
+      "value": 48.13,
+      "total_secs": 7576874,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_per_team_4v4": {
+      "value": 30.71,
+      "numerator": 2568,
+      "denominator": 150498,
+      "units": "attempts / (seconds * 2 teams) * 3600",
+      "derivation": "both teams' unblocked attempts in 4v4 / seconds in 4v4 / 2 * 3600"
+    },
+    "xg_per_attempt_4v4": {
+      "value": 0.079,
+      "numerator": 203,
+      "denominator": 2568,
+      "units": "goals / attempts",
+      "derivation": "goals / unblocked attempts in 4v4"
+    },
+    "minutes_per_game_4v4": {
+      "value": 0.96,
+      "total_secs": 150498,
+      "n_games": 2624
+    },
+    "attempt_rate_per_60_per_team_3v3": {
+      "value": 47.71,
+      "numerator": 2607,
+      "denominator": 98359,
+      "units": "attempts / (seconds * 2 teams) * 3600",
+      "derivation": "both teams' unblocked attempts in 3v3 / seconds in 3v3 / 2 * 3600"
+    },
+    "xg_per_attempt_3v3": {
+      "value": 0.1297,
+      "numerator": 338,
+      "denominator": 2607,
+      "units": "goals / attempts",
+      "derivation": "goals / unblocked attempts in 3v3"
+    },
+    "minutes_per_game_3v3": {
+      "value": 0.62,
+      "total_secs": 98359,
+      "n_games": 2624
+    }
+  }
+}

@@ -315,3 +315,29 @@ Results (actual outcomes FIRST, per A1.1):
 The carry-over improved Pinnacle logit corr (0.842 vs 0.810), totals corr (0.474 vs 0.433),
 and mean total (-8.9% vs -9.3%). The ±3% bar remains NOT HELD — the simplified formula does
 not model PP opportunities per team or the finishing term. This is the ONE run specified.
+
+### S20 — Truncation and mutation tests committed (2026-09-29, S-WO3d Item 1)
+
+Tests ported from Cowork's truncation_check into nhl/sim/tests/test_ratings_s18.py.
+Three variants: current code PASSES, mutant FAILS, old code (e17ace021) FAILS.
+Starter agreement test: goalie on first shot against vs box-score starter flag.
+
+### S21 — Goalie ratings restored, no literal weights (2026-09-29, S-WO3d Item 2)
+
+build_goalie_ratings restored with per-season carry-over. Goalie w measured: **0.144**
+(was literal 0.3). All `.get(..., default)` fallbacks removed — missing key raises KeyError.
+Manifest written to nhl/data/sim/ratings/manifest.json.
+
+### S22 — Constants v3: PP and SH sides measured separately (2026-09-29, S-WO3d Item 3)
+
+5v4 split using situation_code to identify ice state:
+- PP-side (advantaged): **70.35/60** — pre-registered 65-80: **HELD**
+- SH-side (disadvantaged): **12.30/60** — pre-registered 8-20: **HELD**
+- PP-side xG/att: **0.0990** > v2's 0.0945: **HELD**
+- PP minutes per team-game (home-5v4 side): **5.29** — pre-registered 4.5-6.0: **HELD**
+
+NULL CONTROLS:
+- (a) adv + dis = 2 × v2: exact diff 1.42e-14 (5v4), 2.84e-14 (6v5) — PASS.
+- (b) Even states = v2: 0.00 — PASS.
+
+v2 kept. v3 adds side-specific rates for the engine.
