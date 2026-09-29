@@ -3,67 +3,67 @@
   "constants": {
     "attempt_rate_per_60_advantaged_4v3": {
       "away_part": 260,
-      "denominator": 24077,
+      "denominator": 22446,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 374,
       "numerator": 634,
-      "value": 94.7959
+      "value": 101.684
     },
     "attempt_rate_per_60_advantaged_5v3": {
       "away_part": 454,
-      "denominator": 29073,
+      "denominator": 25062,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 515,
       "numerator": 969,
-      "value": 119.9876
+      "value": 139.1908
     },
     "attempt_rate_per_60_advantaged_5v4": {
       "away_part": 14541,
-      "denominator": 1608959,
+      "denominator": 1470363,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 16293,
       "numerator": 30834,
-      "value": 68.9902
+      "value": 75.4932
     },
     "attempt_rate_per_60_advantaged_6v5": {
       "away_part": 1951,
-      "denominator": 121648,
+      "denominator": 122376,
       "derivation": "advantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 2056,
       "numerator": 4007,
-      "value": 118.5815
+      "value": 117.8761
     },
     "attempt_rate_per_60_disadvantaged_4v3": {
       "away_part": 20,
-      "denominator": 24077,
+      "denominator": 22446,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 19,
       "numerator": 39,
-      "value": 5.8313
+      "value": 6.255
     },
     "attempt_rate_per_60_disadvantaged_5v3": {
       "away_part": 12,
-      "denominator": 29073,
+      "denominator": 25062,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 14,
       "numerator": 26,
-      "value": 3.2195
+      "value": 3.7347
     },
     "attempt_rate_per_60_disadvantaged_5v4": {
       "away_part": 2790,
-      "denominator": 1608959,
+      "denominator": 1470363,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 2848,
       "numerator": 5638,
-      "value": 12.6149
+      "value": 13.8039
     },
     "attempt_rate_per_60_disadvantaged_6v5": {
       "away_part": 666,
-      "denominator": 121648,
+      "denominator": 122376,
       "derivation": "disadvantaged-side attempts (pooled) / total seconds * 3600",
       "home_part": 673,
       "numerator": 1339,
-      "value": 39.6258
+      "value": 39.3901
     },
     "attempt_rate_per_60_per_team_3v3": {
       "denominator": 98359,
@@ -72,16 +72,16 @@
       "value": 47.7089
     },
     "attempt_rate_per_60_per_team_4v4": {
-      "denominator": 150498,
+      "denominator": 152069,
       "numerator": 2568,
       "units": "attempts / (seconds * 2) * 3600",
-      "value": 30.714
+      "value": 30.3967
     },
     "attempt_rate_per_60_per_team_5v5": {
-      "denominator": 7576874,
+      "denominator": 7719544,
       "numerator": 178012,
       "units": "attempts / (seconds * 2) * 3600",
-      "value": 42.2894
+      "value": 41.5078
     },
     "goals_over_xg_3v3": {
       "value": 0.9587
@@ -181,51 +181,51 @@
     },
     "minutes_per_game_4v4": {
       "n_games": 2624,
-      "total_secs": 150498,
-      "value": 0.96
+      "total_secs": 152069,
+      "value": 0.97
     },
     "minutes_per_game_5v5": {
       "n_games": 2624,
-      "total_secs": 7576874,
-      "value": 48.13
+      "total_secs": 7719544,
+      "value": 49.03
     },
     "minutes_per_team_game_4v3": {
       "n_games": 2624,
-      "total_secs": 24077,
-      "value": 0.08
+      "total_secs": 22446,
+      "value": 0.07
     },
     "minutes_per_team_game_5v3": {
       "n_games": 2624,
-      "total_secs": 29073,
-      "value": 0.09
+      "total_secs": 25062,
+      "value": 0.08
     },
     "minutes_per_team_game_5v4": {
       "n_games": 2624,
-      "total_secs": 1608959,
-      "value": 5.11
+      "total_secs": 1470363,
+      "value": 4.67
     },
     "minutes_per_team_game_6v5": {
       "n_games": 2624,
-      "total_secs": 121648,
+      "total_secs": 122376,
       "value": 0.39
     },
     "pp_penalty": {
       "creates_pp_rate_by_minutes": {
-        "0": 0.0659,
-        "10": 0.4716,
-        "2": 0.8236,
-        "4": 0.957,
-        "5": 0.1651
+        "0": 0.0549,
+        "10": 0.4692,
+        "2": 0.8254,
+        "4": 0.9624,
+        "5": 0.1629
       },
       "derivation": "penalty creates a PP if the opponent's skater advantage is higher at t+2 s than at t-1 s; per_team_per_second = PP-creating penalties / team-games / mean game seconds",
       "n_penalties_matched": 19657,
-      "n_pp_creating": 15096,
+      "n_pp_creating": 15123,
       "n_team_games": 5248,
-      "nominal_share_2min": 0.9732,
+      "nominal_share_2min": 0.9734,
       "nominal_share_4min": 0.0118,
-      "nominal_share_5min": 0.015,
-      "per_team_game": 2.8765,
-      "per_team_per_second": 0.0007843381756967392
+      "nominal_share_5min": 0.0147,
+      "per_team_game": 2.8817,
+      "per_team_per_second": 0.0007857410062971507
     },
     "pull_hazard_per_second": {
       "data": {
@@ -236,34 +236,34 @@
             "seconds_at_risk": 1963
           },
           "120": {
-            "hazard_per_sec": 0.00861849,
+            "hazard_per_sec": 0.00858783,
             "pulls": 169,
-            "seconds_at_risk": 19609
+            "seconds_at_risk": 19679
           },
           "150": {
-            "hazard_per_sec": 0.00292488,
+            "hazard_per_sec": 0.00290225,
             "pulls": 66,
-            "seconds_at_risk": 22565
+            "seconds_at_risk": 22741
           },
           "180": {
-            "hazard_per_sec": 0.00055171,
+            "hazard_per_sec": 0.00054866,
             "pulls": 13,
-            "seconds_at_risk": 23563
+            "seconds_at_risk": 23694
           },
           "210": {
-            "hazard_per_sec": 0.0001703,
+            "hazard_per_sec": 0.00016925,
             "pulls": 4,
-            "seconds_at_risk": 23488
+            "seconds_at_risk": 23634
           },
           "240": {
-            "hazard_per_sec": 4.271e-05,
+            "hazard_per_sec": 4.237e-05,
             "pulls": 1,
-            "seconds_at_risk": 23413
+            "seconds_at_risk": 23600
           },
           "270": {
             "hazard_per_sec": 0.0,
             "pulls": 0,
-            "seconds_at_risk": 23422
+            "seconds_at_risk": 23600
           },
           "30": {
             "hazard_per_sec": 0.03414756,
@@ -271,56 +271,56 @@
             "seconds_at_risk": 4012
           },
           "60": {
-            "hazard_per_sec": 0.02898551,
+            "hazard_per_sec": 0.02894805,
             "pulls": 224,
-            "seconds_at_risk": 7728
+            "seconds_at_risk": 7738
           },
           "90": {
-            "hazard_per_sec": 0.01762146,
+            "hazard_per_sec": 0.01758007,
             "pulls": 247,
-            "seconds_at_risk": 14017
+            "seconds_at_risk": 14050
           }
         },
         "-2": {
           "0": {
-            "hazard_per_sec": 0.00685331,
-            "pulls": 47,
-            "seconds_at_risk": 6858
+            "hazard_per_sec": 0.00673598,
+            "pulls": 46,
+            "seconds_at_risk": 6829
           },
           "120": {
-            "hazard_per_sec": 0.01903736,
+            "hazard_per_sec": 0.01880433,
             "pulls": 106,
-            "seconds_at_risk": 5568
+            "seconds_at_risk": 5637
           },
           "150": {
-            "hazard_per_sec": 0.01450665,
+            "hazard_per_sec": 0.01437055,
             "pulls": 121,
-            "seconds_at_risk": 8341
+            "seconds_at_risk": 8420
           },
           "180": {
-            "hazard_per_sec": 0.00743494,
-            "pulls": 80,
-            "seconds_at_risk": 10760
+            "hazard_per_sec": 0.00746681,
+            "pulls": 81,
+            "seconds_at_risk": 10848
           },
           "210": {
-            "hazard_per_sec": 0.00531572,
+            "hazard_per_sec": 0.00528127,
             "pulls": 66,
-            "seconds_at_risk": 12416
+            "seconds_at_risk": 12497
           },
           "240": {
-            "hazard_per_sec": 0.00226426,
+            "hazard_per_sec": 0.00225422,
             "pulls": 31,
-            "seconds_at_risk": 13691
+            "seconds_at_risk": 13752
           },
           "270": {
-            "hazard_per_sec": 0.00110056,
+            "hazard_per_sec": 0.00109402,
             "pulls": 16,
-            "seconds_at_risk": 14538
+            "seconds_at_risk": 14625
           },
           "30": {
-            "hazard_per_sec": 0.01780085,
-            "pulls": 96,
-            "seconds_at_risk": 5393
+            "hazard_per_sec": 0.01808015,
+            "pulls": 97,
+            "seconds_at_risk": 5365
           },
           "60": {
             "hazard_per_sec": 0.01738174,
@@ -337,52 +337,52 @@
           "0": {
             "hazard_per_sec": 0.0,
             "pulls": 0,
-            "seconds_at_risk": 28607
+            "seconds_at_risk": 28866
           },
           "120": {
-            "hazard_per_sec": 0.00094976,
+            "hazard_per_sec": 0.0009446,
             "pulls": 20,
-            "seconds_at_risk": 21058
+            "seconds_at_risk": 21173
           },
           "150": {
-            "hazard_per_sec": 0.00091375,
+            "hazard_per_sec": 0.00089951,
             "pulls": 18,
-            "seconds_at_risk": 19699
+            "seconds_at_risk": 20011
           },
           "180": {
-            "hazard_per_sec": 0.00105081,
+            "hazard_per_sec": 0.00103654,
             "pulls": 20,
-            "seconds_at_risk": 19033
+            "seconds_at_risk": 19295
           },
           "210": {
-            "hazard_per_sec": 0.00133227,
+            "hazard_per_sec": 0.00131704,
             "pulls": 25,
-            "seconds_at_risk": 18765
+            "seconds_at_risk": 18982
           },
           "240": {
-            "hazard_per_sec": 0.00097418,
+            "hazard_per_sec": 0.00096603,
             "pulls": 18,
-            "seconds_at_risk": 18477
+            "seconds_at_risk": 18633
           },
           "270": {
-            "hazard_per_sec": 0.00115385,
+            "hazard_per_sec": 0.00114317,
             "pulls": 21,
-            "seconds_at_risk": 18200
+            "seconds_at_risk": 18370
           },
           "30": {
-            "hazard_per_sec": 7.645e-05,
+            "hazard_per_sec": 7.575e-05,
             "pulls": 2,
-            "seconds_at_risk": 26161
+            "seconds_at_risk": 26403
           },
           "60": {
-            "hazard_per_sec": 0.00024811,
+            "hazard_per_sec": 0.00024499,
             "pulls": 6,
-            "seconds_at_risk": 24183
+            "seconds_at_risk": 24491
           },
           "90": {
-            "hazard_per_sec": 0.00057832,
+            "hazard_per_sec": 0.00057274,
             "pulls": 13,
-            "seconds_at_risk": 22479
+            "seconds_at_risk": 22698
           }
         }
       },
@@ -391,7 +391,7 @@
         2021,
         2022
       ],
-      "total_pulls": 1821
+      "total_pulls": 1822
     },
     "xg_per_attempt_3v3": {
       "denominator": 2607,

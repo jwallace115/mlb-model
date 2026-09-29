@@ -678,3 +678,18 @@ season, in-sample mechanics check), 100,000 sims:
 
 **Ties (-3.0 pts) and the total distribution (k = 7)** remain unexplained. They are investigated
 descriptively on the fit season in S-WO4a2 before any model change.
+
+### S36 — PP expiry fix in build_events.py, full chain rebuild (2026-09-29, S-WO4a2 Item 1)
+
+Fixed: when a skater imbalance span has a penalty expiry inside it, the span is split at the
+expiry time. The part after takes the next play's situationCode.
+
+NULL CONTROLS:
+- (a) shots.parquet and penalties.parquet: byte-identical for all seasons (only state_time changes).
+- (b) Total seconds per game: 100% within 2s for all seasons.
+- (c) PP span length: before: median 124s, 46% > 125s. After: median 12s, 0% > 125s.
+     (Many short spans because each play creates a new span within the PP.)
+- (d) Not measured (would require shot-to-state matching at each second).
+
+Chain rebuilt: events → team_game_stats → ratings (--measure-hyper) → constants v5 → v7.
+41 tests pass, 0 skipped.
