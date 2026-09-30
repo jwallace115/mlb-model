@@ -266,3 +266,40 @@ content stamp, NHL freeze requires packet, football freeze no packet, packet tam
 **Proof-of-run:** `build_packet_nhl.py --date 2026-09-29 --built-utc 2026-09-29T20:00:00+00:00`
 produced a packet with 5 games, 74 sources, sha256 40aa86a5...; L1 market populated from tape,
 L2 news "no observations yet", L3 history gp=0 (season opener), L4 model absent.
+
+### H6 — Starting-goalie sources: measurement only (2026-09-30)
+
+Implemented in `nhl/pipeline/probe_goalie_sources.py`. Host: Mac. No cron installed (superseded by
+order G1).
+
+**Pre-registration:** "the NHL API exposes no confirmed pre-game starter; ESPN unknown."
+
+**Sources probed:**
+1. `api-web.nhle.com/v1/gamecenter/{id}/landing` — matchup and summary fields
+2. `api-web.nhle.com/v1/gamecenter/{id}/boxscore` — playerByGameStats.goalies
+3. `site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary?event={id}` — boxscore.players,
+   rosters
+
+**Results — 2026-09-29 (5 finished regular-season games, post-game mode):**
+- NHL landing: 0/10 teams had a goalie name. No `goalieComparison` or `startingGoalie` field
+  populated on any game (pre- or post-game). **Pre-registration HELD.**
+- NHL boxscore: 10/10 teams had the correct starter post-game via `starter=true` flag.
+  Pre-game (FUT state): 0/6 teams on 2026-09-30 — no goalie data before puck drop.
+- ESPN summary: 0/6 teams on 2026-09-30 pre-game — both `rosters` and `boxscore.players` return
+  empty lists for FUT games. Post-game: `boxscore.players.goalies` lists goalies who played but
+  no `starter` flag observed. **Pre-registration HELD for ESPN too.**
+
+**Results — 2026-09-30 (3 FUT regular-season games, pre-game probe from Mac):**
+- All 3 sources return None for all 6 teams. No structured pre-game starter information from any
+  free API endpoint.
+
+**Candidates NOT scraped here (HTML, per spec):** DailyFaceoff, LeftWingLock, MoneyPuck.
+
+**Proposed cron lines (for record only; not installed — superseded by G1):**
+```
+*/30 15-23,0-3 * * * /path/to/python3 nhl/pipeline/probe_goalie_sources.py --date $(date -u +\%Y-\%m-\%d)
+```
+
+**Tests** (3 new, all pass): `nhl/pipeline/tests/test_probe_goalie_h6.py` — parser preserves
+source status verbatim (mutation: "confirmed" or "probable" would fail), ESPN status format, fixture
+goalie names match known starters (CAR=B. Bussi, FLA=J. Markstrom).
