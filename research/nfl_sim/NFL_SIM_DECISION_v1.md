@@ -4670,3 +4670,19 @@ FWD5 pins the experiment's logger instead:
 - the manifest hashes it in place of the shared file, which returns to the NHL/NFL-AI sessions unhashed.
 
 The TNF gate is unchanged: FWD5 must be verified and merged by Thu 10-01 15:00Z, or TNF runs `--pilot`.
+
+### D251 — pin the experiment's logger before merging (2026-09-30)
+
+(a) `git show ffc3e67dc:nfl/pipeline/log_ai_opinions.py > nfl/sim/fwd_v1_logger.py`
+sha256: cf100675bd385ca5db3c36b25ff9c890e20aae0457f674fc9a2205c7b0557cbc — matches manifest.
+
+(b) run_forward_v1.py :663 and :759 now import from nfl.sim.fwd_v1_logger. grep of all experiment-hashed
+files for "log_ai_opinions": 0 matches (only fwd_v1_logger.py itself contains the string, as its own source).
+
+(c) nfl/sim/tests/: 30 references before, 0 after. All 8 affected test files switched.
+
+(d) FWD_EXPERIMENT_v1.json: key renamed from "nfl/pipeline/log_ai_opinions.py" to "nfl/sim/fwd_v1_logger.py"
+(hash cf100675bd385ca5 unchanged).
+
+Forward list: 87 passed, 1 failed (test_experiment_file_hashes — run_forward_v1.py hash stale; re-stamped in D253).
+test_freeze_v1: 4 passed.

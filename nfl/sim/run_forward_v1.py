@@ -660,7 +660,7 @@ def main(argv=None, root=None, run_week_fn=None):
 
     # (c) D229: build sheet IN-PROCESS from the bundle's props and lines
     print("(c) Building sheet from bundle...", flush=True)
-    from nfl.pipeline.log_ai_opinions import build_sheet, set_sport
+    from nfl.sim.fwd_v1_logger import build_sheet, set_sport
     set_sport("nfl")
     bundle_props = pd.read_parquet(bundle_dir / "props.parquet")
     bundle_lines_df = pd.read_parquet(bundle_dir / "lines.parquet")
@@ -756,7 +756,7 @@ def main(argv=None, root=None, run_week_fn=None):
 
     # (g) D241(e)/D246(b): publication is atomic inside freeze()
     print("(g) Freezing...", flush=True)
-    from nfl.pipeline.log_ai_opinions import freeze as do_freeze
+    from nfl.sim.fwd_v1_logger import freeze as do_freeze
     board_root = root / "nfl" / "data" / "board"
     opinions_dir = board_root / f"week={SEASON}_{a.week:02d}" / "ai_opinions"
 

@@ -28,7 +28,7 @@ from nfl.sim.tests.test_fwd3_item0 import (
 def test_run_b_unanchored_excluded(tmp_path):
     """Run A is anchored, run B is unanchored. A run-B row -> excluded from cohort.
     On 735374bf1 primary_cohort pools game names across runs, so both are included."""
-    from nfl.pipeline.log_ai_opinions import primary_cohort
+    from nfl.sim.fwd_v1_logger import primary_cohort
 
     # Sidecar: run A anchored, run B unanchored
     sidecar = pd.DataFrame([
@@ -61,7 +61,7 @@ def test_run_b_unanchored_excluded(tmp_path):
 def test_no_sidecar_excludes_row(tmp_path):
     """No sidecar match -> row excluded, never silently kept.
     On 735374bf1 missing sidecar is silently skipped (no exclusion)."""
-    from nfl.pipeline.log_ai_opinions import primary_cohort
+    from nfl.sim.fwd_v1_logger import primary_cohort
 
     sidecar = pd.DataFrame(columns=["run_id", "event_id", "game", "anchored"])
 
@@ -82,7 +82,7 @@ def test_no_sidecar_excludes_row(tmp_path):
 def test_duplicate_sidecar_halts(tmp_path):
     """Duplicate sidecar row on (run_id, event_id) -> HALT.
     On 735374bf1 duplicates are silently kept."""
-    from nfl.pipeline.log_ai_opinions import primary_cohort
+    from nfl.sim.fwd_v1_logger import primary_cohort
 
     sidecar = pd.DataFrame([
         {"run_id": "runA", "event_id": "evt1", "game": "CAR@KC", "anchored": True},
@@ -227,7 +227,7 @@ def test_altered_frozen_file_halts_in_week_dir(tmp_path):
     (non --file path). On 735374bf1 verify() exists but is not called
     for every week directory in score_experiment; D246 adds verify_bundle
     per sidecar run, so this test confirms the end-to-end detection."""
-    from nfl.pipeline.log_ai_opinions import verify
+    from nfl.sim.fwd_v1_logger import verify
 
     d = tmp_path / "ai_opinions"
     d.mkdir()

@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT))
 def test_unregistered_experiment_halts():
     """Audit #7 A1: an unregistered experiment name must HALT.
     On 0792fd122 the experiment argument is never checked."""
-    from nfl.pipeline.log_ai_opinions import score_experiment
+    from nfl.sim.fwd_v1_logger import score_experiment
 
     with pytest.raises(SystemExit, match="unregistered experiment"):
         score_experiment("nonexistent_experiment", "nfl_sim_v1_156cd057")
@@ -32,7 +32,7 @@ def test_same_pair_different_week_unresolved():
     """Audit #7 A4: a week-4 opinion with a week-3 same-pair final ->
     unresolved (not graded). On 0792fd122 grading selects by team pair,
     so a completed week-3 game would grade the week-4 opinion."""
-    from nfl.pipeline.log_ai_opinions import _event_to_game_id
+    from nfl.sim.fwd_v1_logger import _event_to_game_id
 
     # A schedule with KC vs CAR only in week 3, NOT week 4
     schedule = pd.DataFrame([{
@@ -52,7 +52,7 @@ def test_same_pair_different_week_unresolved():
 def test_crosswalk_missing_unresolved_not_void():
     """Audit #7 A4: remove the crosswalk entry for a player present in the snaps
     -> unresolved. On 0792fd122 a crosswalk miss becomes VOID."""
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
 
     row = pd.Series({
         "market_key": "player_receptions",
@@ -84,7 +84,7 @@ def test_crosswalk_missing_unresolved_not_void():
 def test_one_leg_no_verdict():
     """Audit #7 A1: one leg produces 'descriptive only', not a verdict.
     On 0792fd122 'inferior' was issued on one leg from one game."""
-    from nfl.pipeline.log_ai_opinions import primary_statistic
+    from nfl.sim.fwd_v1_logger import primary_statistic
 
     df = pd.DataFrame([{
         "event_id": "evt1",
@@ -108,7 +108,7 @@ def test_bootstrap_clusters_by_event_id():
     """D243(e): the bootstrap must cluster by event_id, not by team pair.
     On 0792fd122 two event_ids with the same team pair were clustered as
     one game."""
-    from nfl.pipeline.log_ai_opinions import primary_statistic
+    from nfl.sim.fwd_v1_logger import primary_statistic
 
     # Two different events (different weeks) with the same team pair
     rows = []
@@ -169,7 +169,7 @@ def test_score_experiment_cli_import():
     On 0792fd122 the package import fails."""
     import subprocess
     result = subprocess.run(
-        [sys.executable, "nfl/pipeline/log_ai_opinions.py",
+        [sys.executable, "nfl/sim/fwd_v1_logger.py",
          "score-experiment", "--experiment", "nfl_fwd_v1"],
         capture_output=True, text=True, cwd=str(ROOT), timeout=60)
     # Should not fail on import — may fail on "no scored data" or similar,

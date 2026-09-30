@@ -18,7 +18,7 @@ def test_inactive_player_void():
 
     D230: uses snap_played=False (snap counts show player did not play).
     """
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
 
     row = pd.Series({
         "market_key": "player_receptions",
@@ -44,7 +44,7 @@ def test_inactive_player_void():
 def test_active_player_zero_receptions():
     """An active player with 0 receptions is scored normally (Under wins).
     D230: uses snap_played=True (snap counts show player played)."""
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
 
     row = pd.Series({
         "market_key": "player_receptions",
@@ -70,7 +70,7 @@ def test_active_player_zero_receptions():
 def test_cohort_excludes_wrong_reader():
     """A7: another reader must NOT enter the primary cohort.
     D249: updated to (run_id, event_id) sidecar join."""
-    from nfl.pipeline.log_ai_opinions import primary_cohort
+    from nfl.sim.fwd_v1_logger import primary_cohort
 
     df = pd.DataFrame([{
         "reader_model": "some_other_model",
@@ -100,7 +100,7 @@ def test_cohort_excludes_unanchored_game():
     """A7: an unanchored game must NOT enter the primary cohort.
     D249: updated to (run_id, event_id) sidecar join.
     Also verifies another run's anchored=True for the same event_id does NOT leak in."""
-    from nfl.pipeline.log_ai_opinions import primary_cohort
+    from nfl.sim.fwd_v1_logger import primary_cohort
 
     df = pd.DataFrame([{
         "reader_model": "nfl_sim_v1_156cd057",
@@ -139,7 +139,7 @@ def test_cohort_excludes_unanchored_game():
 def test_settlement_column_exists():
     """D227: score() must produce a settlement column.
     D229: replaced inspect.getsource with execution test."""
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
     # Verify _first_side_won returns None for inactive player (the VOID path
     # that feeds the settlement column)
     row = pd.Series({"market_key": "player_receptions", "line": 5.5})
@@ -156,7 +156,7 @@ def test_settlement_column_exists():
 def test_snap_participants_loaded():
     """D230: _load_snap_participants loads from nflreadpy and returns {game_id: {player_names}}.
     Replaces the D227 PBP participants test."""
-    from nfl.pipeline.log_ai_opinions import _load_snap_participants
+    from nfl.sim.fwd_v1_logger import _load_snap_participants
     result = _load_snap_participants(2026)
     if result is None:
         pytest.skip("snap count data unavailable for 2026")
@@ -174,7 +174,7 @@ def test_snap_participants_loaded():
 
 def test_wr_with_snaps_zero_targets_settled_win():
     """D230: a WR with snaps and 0 targets has his Under SETTLED as a win."""
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
     row = pd.Series({"market_key": "player_receptions", "line": 3.5})
     act = {
         "tabs": {"rec": pd.DataFrame(columns=["player_id", "actual_rec"])},
@@ -190,7 +190,7 @@ def test_wr_with_snaps_zero_targets_settled_win():
 
 def test_player_absent_from_snaps_void():
     """D230: a player absent from snap counts is VOID."""
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
     row = pd.Series({"market_key": "player_rush_attempts", "line": 10.5})
     act = {
         "tabs": {"rush": pd.DataFrame(columns=["player_id", "actual_carries"])},
@@ -204,7 +204,7 @@ def test_player_absent_from_snaps_void():
 
 def test_game_no_snap_data_unresolved():
     """D236(a): a game with no snap data -> snap_played=None -> UNRESOLVED, no stat scored."""
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
     row = pd.Series({"market_key": "player_receptions", "line": 4.5})
     act = {
         "tabs": {"rec": pd.DataFrame(columns=["player_id", "actual_rec"])},
@@ -221,7 +221,7 @@ def test_game_no_snap_data_unresolved():
 
 def test_inactive_no_snap_data_unresolved():
     """D236: inactive player with no snap data for the game -> UNRESOLVED (not VOID)."""
-    from nfl.pipeline.log_ai_opinions import _first_side_won
+    from nfl.sim.fwd_v1_logger import _first_side_won
     row = pd.Series({"market_key": "player_receptions", "line": 3.5})
     act = {
         "tabs": {"rec": pd.DataFrame(columns=["player_id", "actual_rec"])},
@@ -236,7 +236,7 @@ def test_inactive_no_snap_data_unresolved():
 
 def test_suffix_name_settles_by_id():
     """D236(b): a player with a suffix (Jr., III) settles by PFR ID, not name match."""
-    from nfl.pipeline.log_ai_opinions import _build_gsis_to_pfr, _load_snap_participants
+    from nfl.sim.fwd_v1_logger import _build_gsis_to_pfr, _load_snap_participants
     # Just verify the crosswalk works for real data
     gsis_to_pfr = _build_gsis_to_pfr(2026)
     if not gsis_to_pfr:
@@ -276,7 +276,7 @@ def test_suffix_name_settles_by_id():
 
 def test_incomplete_game_unresolved():
     """D236(c): an incomplete game (no END GAME in PBP) -> unresolved."""
-    from nfl.pipeline.log_ai_opinions import _game_actuals
+    from nfl.sim.fwd_v1_logger import _game_actuals
     # Build a minimal PBP without END GAME
     pbp = pd.DataFrame([{
         "game_id": "2026_99_CAR_KC",

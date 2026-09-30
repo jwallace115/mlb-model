@@ -83,7 +83,7 @@ def _build_fixture_root(tmp_path, kick=None, pull_age_minutes=30):
     for rel in ("nfl/sim/calibration.py", "nfl/sim/anchor.py",
                 "nfl/sim/names.py", "nfl/sim/__init__.py",
                 "nfl/__init__.py", "nfl/pipeline/__init__.py",
-                "nfl/pipeline/log_ai_opinions.py",
+                "nfl/sim/fwd_v1_logger.py",
                 "nfl/sim/run_forward_v1.py", "nfl/sim/run_week.py"):
         src = ROOT / rel
         if src.exists():

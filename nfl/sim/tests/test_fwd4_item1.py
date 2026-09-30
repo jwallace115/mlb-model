@@ -175,7 +175,7 @@ def test_bootstrap_whole_game_resampling():
     This is achieved by making within-game legs perfectly correlated
     (same delta) but across-game deltas mixed-sign.
     """
-    from nfl.pipeline.log_ai_opinions import primary_statistic
+    from nfl.sim.fwd_v1_logger import primary_statistic
 
     rows = []
     # Game 1: model much better (delta < 0)
