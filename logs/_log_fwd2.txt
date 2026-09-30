@@ -1,0 +1,52 @@
+## 2026-09-29T21:45Z — 2026-09-30T00:21Z  claude-code  work order FWD2 (partial)
+
+### RETURNED
+
+- Gates: D223 grep = 1 (PASS). test_freeze_v1 4 passed (PASS).
+- Worktree /tmp/eng-fwd2 from origin/main. D223 appended verbatim.
+  Committed e615ab075, pushed.
+- Data linked via symlinks (PBP, board, sim outputs, odds archive).
+
+**Item 0 (D224) — experiment identity:**
+- RETURNED:
+  (a) FWD_EXPERIMENT_v1.json: 42 file hashes, usage_fingerprint, eligibility/settlement/
+      scoring rules, eligible markets, versions.
+  (b) Harness HALTs: check_experiment_manifest (run_forward_v1.py:36-44) verifies every
+      file hash before freeze. Cal-stamp via test_freeze_v1. Zero matches via fill_sheet
+      assert.
+  (c) Reader canonicalization: log_ai_opinions.py:282 strips whitespace.
+      Cross-week dedup: run_forward_v1.py:53-79 cross_week_check scans all other week
+      directories for the same reader's non-pilot contracts; duplicates refused.
+  6 tests in test_fwd2_experiment.py. On 145a1fee0: FileNotFoundError / ImportError.
+- Committed 50131ec39, pushed.
+
+### NOT DONE (remaining items)
+
+**Item 1 (D225) — immutable run bundle:**
+- Build a per-run bundle directory with sha256 manifest
+- Event list, HR props (newest <= T from archive + manual/), HR game lines (newest <= T)
+- Input freshness table (run ratings/usage builders, check max week >= W-1)
+- fill_sheet match on (event, player_id, market, line)
+- Quote-age HALT if any prop > 3h old at T
+- validate() compares filled sheet prices to bundle prices
+- Publication time != T; HALT if publication >= first kick
+- Test: week-2-into-week-4 cross-event counterexample
+
+**Item 2 (D226) — anchor record:**
+- Fix sidecar sign (targets from lines, not reconstructed)
+- Bundle must contain sidecar BEFORE freeze
+- Test: CAR@ATL targets == -3.0/43.5 exactly
+
+**Item 3 (D227) — eligibility, settlement, scoring:**
+- Settlement: event_id -> game_id, completed game, player participation (VOID for inactive)
+- Primary cohort predicate
+- Brier difference with 50,000-resample whole-game bootstrap
+- Secondary P2
+- Re-grade AI blind-log weeks 2-3
+- Rewrite runbook for weeks 4-5
+- Dry run --week 4
+
+### UNVERIFIED
+- Whether the experiment manifest hashes are stable across the remaining edits (they will
+  change as items 1-3 modify run_forward_v1.py and log_ai_opinions.py — the manifest must
+  be rebuilt as the LAST step of the final item).
