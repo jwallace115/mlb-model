@@ -3584,3 +3584,15 @@ Ending: 99,842
 - MEANS: D1 is usable for closes/CLV (Pinnacle + Hard Rock from late 2023) and in-play; props are one snapshot per game (T-1h); B-D1/B-D2's "Hard Rock absent 2023" was wrong.
 - NOT DONE: header-cost recheck; item-0 schedule vs external source; staleness (book_last_update) of close quotes; 2023-24 in-play Feb-Apr (~186k credits).
 - UNVERIFIED: null control (a) not re-run by Cowork.
+
+## 2026-09-30T19:20Z  claude-code (FWD5)
+- COMMITTED + PUSHED: 695135934 — D250 verbatim from fwd4b_verification appended to NFL_SIM_DECISION_v1.md
+- COMMITTED + PUSHED: dc900458e — D251: nfl/sim/fwd_v1_logger.py created (sha256 cf100675bd385ca5); run_forward_v1.py and 8 test files switched from nfl.pipeline.log_ai_opinions to nfl.sim.fwd_v1_logger; manifest key renamed
+- COMMITTED + PUSHED: 8a909fd6e → b8de67abf (rebased) — D252: merge origin/main into eng/fwd3; 2 conflicts resolved; 4 new decoupling tests (test_fwd5_pin.py) all pass
+- COMMITTED + PUSHED: 2d44e38a2 — D253: FWD_EXPERIMENT_v1.json re-stamped (run_forward_v1.py hash b5e75d86); 88 forward tests pass; pipeline tests match origin/main (1 failed, 86 passed, 2 skipped on both)
+- REAL DRY RUN: PIT@CLE week 4, 70 lines, 43 two-way, 11 matched sim_v1, anchored (3 iter). Dir left untracked.
+- REAL SCORE: 0 eligible legs, no verdict
+- WORKTREE /tmp/eng-fwd3 created and removed
+- NOT DONE: merge of eng/fwd3 to main (user decision)
+- UNVERIFIED: test_score_first_side_and_units failure is pre-existing on both branches; not investigated
+- UNVERIFIED: score-experiment HALT on week 3 sim_runs/20260927T170000Z (incomplete bundle from prior dry run — missing input files); moved aside for the score-experiment test, restored after
