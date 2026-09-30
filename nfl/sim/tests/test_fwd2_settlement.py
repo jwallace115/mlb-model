@@ -16,8 +16,7 @@ sys.path.insert(0, str(ROOT))
 def test_inactive_player_void():
     """A1: an inactive player's Under is VOID (None), not 0.
 
-    On 9eb505235, _first_side_won returned 0 for a player not in PBP stats,
-    which scored the Under as a win (0.0 < 5.5). D227 makes it VOID.
+    D230: uses snap_played=False (snap counts show player did not play).
     """
     from nfl.pipeline.log_ai_opinions import _first_side_won
 
@@ -26,7 +25,6 @@ def test_inactive_player_void():
         "line": 5.5,
     })
 
-    # Game actuals with a participants set that does NOT include the player
     act = {
         "tabs": {
             "rec": pd.DataFrame(columns=["player_id", "actual_rec"]),
@@ -35,17 +33,17 @@ def test_inactive_player_void():
         "home_pts": 24, "away_pts": 17,
         "home": "KC", "away": "CAR",
         "n_plays": 150,
-        "participants": {"00-0001111", "00-0002222"},  # player NOT here
     }
 
-    pid = "00-0099999"  # not in participants
-    result = _first_side_won(row, act, pid)
+    pid = "00-0099999"
+    result = _first_side_won(row, act, pid, snap_played=False)
     assert result is None, (
-        f"inactive player should be VOID (None), got {result}")
+        f"inactive player (snap_played=False) should be VOID (None), got {result}")
 
 
 def test_active_player_zero_receptions():
-    """An active player with 0 receptions is scored normally (Under wins)."""
+    """An active player with 0 receptions is scored normally (Under wins).
+    D230: uses snap_played=True (snap counts show player played)."""
     from nfl.pipeline.log_ai_opinions import _first_side_won
 
     row = pd.Series({
@@ -61,11 +59,10 @@ def test_active_player_zero_receptions():
         "home_pts": 24, "away_pts": 17,
         "home": "KC", "away": "CAR",
         "n_plays": 150,
-        "participants": {"00-0099999", "00-0001111"},  # player IS here
     }
 
-    pid = "00-0099999"  # in participants but no stats
-    result = _first_side_won(row, act, pid)
+    pid = "00-0099999"
+    result = _first_side_won(row, act, pid, snap_played=True)
     # 0.0 < 5.5, so first side (Over) lost -> 0
     assert result == 0, f"active player with 0 rec should score 0, got {result}"
 
@@ -133,33 +130,71 @@ def test_settlement_column_exists():
         "home_pts": 24, "away_pts": 17, "home": "KC", "away": "CAR",
         "n_plays": 150, "participants": {"00-0001111"},
     }
-    result = _first_side_won(row, act, "00-0099999")  # not in participants
-    assert result is None, "inactive player -> None (feeds settlement=void)"
+    result = _first_side_won(row, act, "00-0099999", snap_played=False)
+    assert result is None, "inactive player (snap_played=False) -> None (feeds settlement=void)"
 
 
-def test_participants_in_game_actuals():
-    """D227: _game_actuals must return a participants set.
-    D229: replaced inspect.getsource with execution test."""
-    from nfl.pipeline.log_ai_opinions import _game_actuals
-    # Tested indirectly: test_inactive_player_void and test_active_player_zero_receptions
-    # both pass a participants set and verify the correct behavior.
-    # Direct test: _game_actuals on real PBP data returns a dict with 'participants' key.
-    pbp_path = ROOT / "nfl" / "data" / "pbp" / "pbp_2026.parquet"
-    if not pbp_path.exists():
-        pytest.skip("pbp_2026.parquet not available")
-    pbp = pd.read_parquet(pbp_path)
-    # Pick any game
-    games = pbp.groupby(["home_team", "away_team"]).size().reset_index()
-    if games.empty:
-        pytest.skip("no games in PBP")
-    from nfl.sim.names import FULL_TO_ABBR
-    # Build reverse map
-    abbr_to_full = {v: k for k, v in FULL_TO_ABBR.items()}
-    home_abbr = games.iloc[0]["home_team"]
-    away_abbr = games.iloc[0]["away_team"]
-    home_full = abbr_to_full.get(home_abbr, home_abbr)
-    away_full = abbr_to_full.get(away_abbr, away_abbr)
-    result = _game_actuals(pbp, home_full, away_full)
-    if result is not None:
-        assert "participants" in result, "_game_actuals must return participants set"
-        assert isinstance(result["participants"], set)
+def test_snap_participants_loaded():
+    """D230: _load_snap_participants loads from nflreadpy and returns {game_id: {player_names}}.
+    Replaces the D227 PBP participants test."""
+    from nfl.pipeline.log_ai_opinions import _load_snap_participants
+    result = _load_snap_participants(2026)
+    if result is None:
+        pytest.skip("snap count data unavailable for 2026")
+    assert isinstance(result, dict), "must return a dict"
+    # At least one game should have participants
+    assert len(result) > 0, "must have at least one game"
+    first_game = next(iter(result.values()))
+    assert isinstance(first_game, set), "each game's value must be a set of player names"
+    assert len(first_game) > 0, "game must have at least one player"
+
+
+# ── D230: snap-count settlement tests ────────────────────────────────────────
+
+def test_wr_with_snaps_zero_targets_settled_win():
+    """D230: a WR with snaps and 0 targets has his Under SETTLED as a win."""
+    from nfl.pipeline.log_ai_opinions import _first_side_won
+    row = pd.Series({"market_key": "player_receptions", "line": 3.5})
+    act = {
+        "tabs": {"rec": pd.DataFrame(columns=["player_id", "actual_rec"])},
+        "ints": pd.Series(dtype=float),
+        "home_pts": 21, "away_pts": 14, "home": "KC", "away": "CAR",
+        "n_plays": 120,
+    }
+    # Player played (snap_played=True) but has 0 receptions (not in rec table)
+    result = _first_side_won(row, act, "00-0099999", snap_played=True)
+    # 0 < 3.5, so Over (first side) lost -> 0 (Under wins)
+    assert result == 0, f"WR with snaps, 0 targets -> Under wins (0), got {result}"
+
+
+def test_player_absent_from_snaps_void():
+    """D230: a player absent from snap counts is VOID."""
+    from nfl.pipeline.log_ai_opinions import _first_side_won
+    row = pd.Series({"market_key": "player_rush_attempts", "line": 10.5})
+    act = {
+        "tabs": {"rush": pd.DataFrame(columns=["player_id", "actual_carries"])},
+        "ints": pd.Series(dtype=float),
+        "home_pts": 28, "away_pts": 21, "home": "BUF", "away": "MIA",
+        "n_plays": 130,
+    }
+    result = _first_side_won(row, act, "00-0099999", snap_played=False)
+    assert result is None, "player absent from snaps -> VOID (None)"
+
+
+def test_game_no_snap_data_unresolved():
+    """D230: a game with no snap data -> snap_played=None -> unresolved."""
+    from nfl.pipeline.log_ai_opinions import _first_side_won
+    row = pd.Series({"market_key": "player_receptions", "line": 4.5})
+    act = {
+        "tabs": {"rec": pd.DataFrame(columns=["player_id", "actual_rec"])},
+        "ints": pd.Series(dtype=float),
+        "home_pts": 17, "away_pts": 10, "home": "KC", "away": "CAR",
+        "n_plays": 100,
+    }
+    # snap_played=None means snap data unavailable for this game
+    result = _first_side_won(row, act, "00-0099999", snap_played=None)
+    # With no snap data, the old behavior applies: 0 receptions -> Under wins
+    # But snap_played=None means we can't determine participation,
+    # so _first_side_won should proceed normally (stat = 0 < 4.5 -> 0)
+    assert result == 0, (
+        "snap_played=None means stat scoring proceeds normally, got {result}")

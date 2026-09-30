@@ -287,7 +287,7 @@ def prior_revisions(d, reader_model=None, pilot=None):
 
 
 def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
-           board_root=None):
+           board_root=None, run_id=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
@@ -341,6 +341,9 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     m["sport"], m["book"] = SPORT, BOOK
     m["reader_model"] = str(reader_model).strip()
     m["logged_utc"] = now.isoformat()
+    # D230: run_id links frozen rows to their sim run's bundle
+    if run_id is not None:
+        m["run_id"] = run_id
     dest = d / f"ai_opinions_{now.strftime('%Y%m%dT%H%M%SZ')}.parquet"
     if dest.exists():
         raise SystemExit(f"HALT: {dest.name} exists - the log is append-only")
@@ -378,9 +381,31 @@ STAT_OF = {"player_receptions": ("rec", "actual_rec"), "player_reception_yds": (
 GAP_BUCKETS = [(-1, 0.03, "<0.03"), (0.03, 0.08, "0.03-0.08"), (0.08, 9, ">0.08")]
 
 
+def _load_snap_participants(season):
+    """D230: load snap counts from nflreadpy. Returns {game_id: {player_name: True}}
+    where a player played = offense_snaps + st_snaps > 0.
+    Returns None if snap data is unavailable for the season."""
+    try:
+        import nflreadpy
+        sc = nflreadpy.load_snap_counts([season])
+        if hasattr(sc, "to_pandas"):
+            sc = sc.to_pandas()  # polars -> pandas
+        if sc.empty:
+            return None
+    except Exception:
+        return None
+    # played = offense + special teams snaps > 0
+    sc["_played"] = (sc["offense_snaps"].fillna(0) + sc["st_snaps"].fillna(0)) > 0
+    played = sc[sc["_played"]]
+    result = {}
+    for gid, gdf in played.groupby("game_id"):
+        result[gid] = set(gdf["player"].str.strip().values)
+    return result
+
+
 def _game_actuals(pbp, home, away):
     """Actual per-player stats and the final score for one game, from the repo's own PBP reader.
-    D227: includes participants set — all player_ids in any play of the game."""
+    D230: participants replaced by snap-count-based check (passed separately to score())."""
     from nfl.sim.actuals import actual_player_game_stats
     from nfl.sim.names import FULL_TO_ABBR
     h, a = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
@@ -390,14 +415,9 @@ def _game_actuals(pbp, home, away):
     rec, rush, td, pas = actual_player_game_stats(g)
     tabs = {"rec": rec, "rush": rush, "td": td, "pass": pas}
     ints = g[g["play_type"] == "pass"].groupby("passer_player_id")["interception"].sum()
-    # D227: collect all player_ids that appeared in any play (participation check)
-    pid_cols = [c for c in g.columns if c.endswith("_player_id")]
-    participants = set()
-    for c in pid_cols:
-        participants.update(g[c].dropna().unique())
     return {"tabs": tabs, "ints": ints, "home_pts": float(g["home_score"].max()),
             "away_pts": float(g["away_score"].max()), "home": h, "away": a,
-            "n_plays": len(g), "participants": participants}
+            "n_plays": len(g)}
 
 
 def _cfbd_actuals(season):
@@ -420,9 +440,9 @@ def _cfbd_actuals(season):
     return game
 
 
-def _first_side_won(row, act, pid):
+def _first_side_won(row, act, pid, snap_played=None):
     """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved / VOID.
-    D227: a player who did not play (not in participants) -> None (VOID, Hard Rock's rule)."""
+    D230: snap_played is a tri-state: True (played), False (VOID), None (snap data unavailable = unresolved)."""
     mk, line = row["market_key"], float(row["line"])
     if mk == "h2h":
         return 1 if act["home_pts"] > act["away_pts"] else (0 if act["home_pts"] < act["away_pts"] else None)
@@ -434,10 +454,9 @@ def _first_side_won(row, act, pid):
         return None if t == line else int(t > line)
     if pid is None:
         return None
-    # D227: player participation check — inactive -> VOID (None), not 0
-    participants = act.get("participants", set())
-    if participants and pid not in participants:
-        return None  # VOID: player did not play
+    # D230: snap-count participation check
+    if snap_played is False:
+        return None  # VOID: player did not play (not in snap counts)
     if mk == "player_pass_interceptions":
         v = float(act["ints"].get(pid, 0.0))
     else:
@@ -480,6 +499,8 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
     else:
         pbp = pd.read_parquet(pbp_path or ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
         lk = _build_roster_lookup(load_roster(), season, week)
+    # D230: load snap-count participants (replaces PBP player-id check)
+    snap_parts = _load_snap_participants(season)
     rows = []
     for (home, away), s in m.groupby(["home_team", "away_team"]):
         if pbp is None:
@@ -487,6 +508,11 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
         else:
             act = _game_actuals(pbp, home, away)
         teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
+        # D230: build nflverse game_id for snap lookup
+        h_abbr, a_abbr = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
+        # nflverse game_id format: {season}_{week:02d}_{away}_{home}
+        nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
+        game_snap_players = snap_parts.get(nfl_game_id) if snap_parts else None
         for _, r in s.iterrows():
             settlement = "settled"
             if act is None:
@@ -494,14 +520,21 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
                 settlement = "unresolved"
             elif r["player_name"]:
                 pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
-                y = _first_side_won(r, act, pid)
-                # D227: distinguish void (inactive) from unresolved
+                # D230: snap-count-based participation
+                if game_snap_players is None:
+                    snap_played = None  # snap data unavailable
+                elif r["player_name"].strip() in game_snap_players:
+                    snap_played = True
+                else:
+                    snap_played = False
+                y = _first_side_won(r, act, pid, snap_played=snap_played)
                 if y is None and pid is not None:
-                    participants = act.get("participants", set())
-                    if participants and pid not in participants:
+                    if snap_played is False:
                         settlement = "void"
-                    else:
+                    elif snap_played is None:
                         settlement = "unresolved"
+                    else:
+                        settlement = "unresolved"  # push or stat missing
                 elif y is None:
                     settlement = "unresolved"
             else:
@@ -722,13 +755,169 @@ def primary_statistic(cohort_df, n_bootstrap=50000, seed=20261004):
     }
 
 
+def score_experiment(experiment, canonical_reader, season=2026, include_pilot=False,
+                     single_file=None):
+    """D230: score an experiment across all week directories.
+
+    Pools ALL frozen files for the canonical reader, joins each row to its run's anchor
+    sidecar (by run_id + event_id), runs primary_cohort and primary_statistic.
+    """
+    from nfl.sim.names import load_roster, _build_roster_lookup, resolve_player, FULL_TO_ABBR
+
+    board_root = SPORTS["nfl"]["out"]
+    all_scored = []
+
+    if single_file:
+        # Score one file regardless of revision, labelled as diagnostic
+        f = Path(single_file)
+        if not f.exists():
+            raise SystemExit(f"HALT: file {single_file} not found")
+        m = pd.read_parquet(f).assign(_file=f.name)
+        if "reader_model" not in m.columns:
+            m["reader_model"] = "unknown"
+        # Find the week from the path or data
+        week = int(m["week"].iloc[0]) if "week" in m.columns else 0
+        pbp_path = ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet"
+        if not pbp_path.exists():
+            raise SystemExit(f"HALT: PBP file {pbp_path} not found")
+        pbp = pd.read_parquet(pbp_path)
+        lk = _build_roster_lookup(load_roster(), season, week)
+        snap_parts = _load_snap_participants(season)
+        rows = []
+        for (home, away), s in m.groupby(["home_team", "away_team"]):
+            act = _game_actuals(pbp, home, away)
+            teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
+            h_abbr, a_abbr = teams
+            nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
+            game_snap_players = snap_parts.get(nfl_game_id) if snap_parts else None
+            for _, r in s.iterrows():
+                settlement = "settled"
+                if act is None:
+                    y, pid, method = None, None, "game not in PBP"
+                    settlement = "unresolved"
+                elif r["player_name"]:
+                    pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
+                    if game_snap_players is None:
+                        snap_played = None
+                    elif r["player_name"].strip() in game_snap_players:
+                        snap_played = True
+                    else:
+                        snap_played = False
+                    y = _first_side_won(r, act, pid, snap_played=snap_played)
+                    if y is None and pid is not None:
+                        settlement = "void" if snap_played is False else "unresolved"
+                    elif y is None:
+                        settlement = "unresolved"
+                else:
+                    pid, method, y = None, "game", _first_side_won(r, act, None)
+                    settlement = "unresolved" if y is None else "settled"
+                rows.append({**r.to_dict(), "player_id": pid, "resolve": method,
+                             "y_first": y, "settlement": settlement})
+        scored = pd.DataFrame(rows)
+        scored["graded"] = scored["y_first"].notna()
+        scored["side_won"] = np.where(scored["side"] == "first", scored["y_first"] == 1,
+                                       np.where(scored["side"] == "second", scored["y_first"] == 0, False))
+        dec = scored["side_price"].map(lambda a: (a / 100 + 1) if pd.notna(a) and a > 0 else (100 / -a + 1) if pd.notna(a) else np.nan)
+        scored["units"] = np.where(scored["side"] == "none", 0.0,
+                                    np.where(scored["graded"], np.where(scored["side_won"], dec - 1, -1.0), 0.0))
+        print(f"[DIAGNOSTIC — single file: {f.name}]")
+        all_scored.append(scored)
+    else:
+        # Pool ALL week directories
+        for wd in sorted(board_root.glob("week=*_*/ai_opinions")):
+            week_str = wd.parent.name.split("_")[-1]
+            try:
+                week = int(week_str)
+            except ValueError:
+                continue
+            scored = score(season, week, d=wd, include_pilot=include_pilot)
+            all_scored.append(scored)
+
+    if not all_scored:
+        raise SystemExit("HALT: no scored data found")
+    pooled = pd.concat(all_scored, ignore_index=True)
+
+    # Load anchor sidecars from bundles (by run_id + event_id)
+    all_sidecars = []
+    for wd in sorted(board_root.glob("week=*_*/sim_runs/*/anchor_sidecar.parquet")):
+        run_id = wd.parent.name
+        sc = pd.read_parquet(wd)
+        sc["run_id"] = run_id
+        all_sidecars.append(sc)
+    # Also check ai_opinions directories for sidecars
+    for wd in sorted(board_root.glob("week=*_*/ai_opinions/anchor_sidecar_sim_v1.parquet")):
+        sc = pd.read_parquet(wd)
+        if "run_id" not in sc.columns:
+            sc["run_id"] = "legacy"
+        all_sidecars.append(sc)
+    sidecar_df = pd.concat(all_sidecars, ignore_index=True) if all_sidecars else pd.DataFrame()
+
+    # Join: each cohort row must have a matching sidecar row
+    if "run_id" in pooled.columns and not sidecar_df.empty:
+        # join on run_id is available
+        pass
+    elif not sidecar_df.empty:
+        # Legacy: no run_id, use game-level join
+        pass
+
+    cohort, exclusions = primary_cohort(pooled, canonical_reader, anchor_sidecar_df=sidecar_df)
+
+    # Print cohort predicate and exclusions
+    print(f"\nCohort predicate: {COHORT_PREDICATE}")
+    print(f"\nExclusions:")
+    for reason, count in sorted(exclusions.items()):
+        if reason != "_total_excluded":
+            print(f"  {reason}: {count}")
+    print(f"  TOTAL excluded: {exclusions.get('_total_excluded', 0)}")
+    print(f"  Cohort: {len(cohort)} legs")
+
+    if cohort.empty:
+        print("\nInsufficient data for primary statistic.")
+        return
+
+    stat = primary_statistic(cohort)
+    print(f"\nPrimary statistic (Δ = mean[(p-y)² - (q-y)²]):")
+    print(f"  Δ = {stat['delta']:.6f}")
+    print(f"  95% CI: [{stat['ci_lo']:.6f}, {stat['ci_hi']:.6f}]")
+    print(f"  Verdict: {stat['verdict']}")
+    print(f"  n_legs = {stat['n_legs']}, n_games = {stat['n_games']}")
+
+    # P2: units at frozen Hard Rock price, |p-q| > 0.08, settled only
+    if "book_p_first" in cohort.columns and "side_price" in cohort.columns:
+        p2 = cohort[cohort["gap"].abs() > 0.08].copy()
+        if len(p2) > 0:
+            dec = p2["side_price"].map(lambda a: (a / 100 + 1) if pd.notna(a) and a > 0 else (100 / -a + 1) if pd.notna(a) else np.nan)
+            p2_units = np.where(p2["side"] == "none", 0.0,
+                                np.where(p2["graded"], np.where(p2["side_won"], dec - 1, -1.0), 0.0))
+            print(f"\nP2 (|p-q| > 0.08, settled): {len(p2)} legs, units = {float(np.sum(p2_units)):+.2f}")
+        else:
+            print("\nP2: no legs with |p-q| > 0.08")
+
+    # Breakouts
+    for col in ["market_key", "week"]:
+        if col in cohort.columns:
+            grp = cohort.groupby(col).agg(n=("units", "size"),
+                                            won=("side_won", "sum"),
+                                            units=("units", "sum")).round(2)
+            print(f"\nBreakout by {col}:")
+            print(grp.to_string())
+
+    if "gap" in cohort.columns:
+        cohort["_gap_bucket"] = pd.cut(cohort["gap"].abs(), [0, 0.03, 0.08, 9],
+                                        labels=["<0.03", "0.03-0.08", ">0.08"], right=False)
+        grp = cohort.groupby("_gap_bucket", observed=True).agg(
+            n=("units", "size"), won=("side_won", "sum"), units=("units", "sum")).round(2)
+        print(f"\nBreakout by gap bucket:")
+        print(grp.to_string())
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["sheet", "freeze", "verify", "score"])
+    ap.add_argument("cmd", choices=["sheet", "freeze", "verify", "score", "score-experiment"])
     ap.add_argument("--sport", choices=list(SPORTS), default="nfl")
     ap.add_argument("--book", default=None, help="override the sport's book of record")
     ap.add_argument("--season", type=int, default=2026)
-    ap.add_argument("--week", type=int, required=True)
+    ap.add_argument("--week", type=int, default=None)
     ap.add_argument("--out"), ap.add_argument("--filled")
     ap.add_argument("--props-file"), ap.add_argument("--lines-file")
     ap.add_argument("--events", help="comma list of team-name fragments; default every pre-kick game")
@@ -737,6 +926,8 @@ def main():
     ap.add_argument("--reader-model", help="REQUIRED for freeze (N62): the model that made the picks, e.g. claude-fable-5-1")
     ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
     ap.add_argument("--as-of", help="UTC ISO timestamp (pilot only); errors without --pilot")
+    ap.add_argument("--experiment", help="experiment id for score-experiment")
+    ap.add_argument("--file", help="score one file (diagnostic mode)")
     a = ap.parse_args()
     if a.as_of and not a.pilot:
         sys.exit("HALT: --as-of requires --pilot")
@@ -765,6 +956,8 @@ def main():
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":
+        if a.week is None:
+            sys.exit("HALT: --week is required for score")
         entries, bad, unlisted = verify(a.season, a.week)
         if bad or unlisted:
             sys.exit(f"HALT: manifest check failed before scoring: {bad or unlisted}")
@@ -774,7 +967,20 @@ def main():
         if a.out:
             Path(a.out).write_text(text)
             out.to_parquet(Path(a.out).with_suffix(".parquet"), index=False)
-    else:
+    elif a.cmd == "score-experiment":
+        if not a.experiment:
+            sys.exit("HALT: --experiment is required for score-experiment")
+        # Load canonical reader from the experiment manifest
+        em_path = ROOT / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
+        if not em_path.exists():
+            sys.exit(f"HALT: experiment manifest not found: {em_path}")
+        em = json.loads(em_path.read_text())
+        canonical = em.get("canonical_reader", "")
+        score_experiment(a.experiment, canonical, season=a.season,
+                        include_pilot=a.include_pilot, single_file=a.file)
+    elif a.cmd == "verify":
+        if a.week is None:
+            sys.exit("HALT: --week is required for verify")
         entries, bad, unlisted = verify(a.season, a.week)
         print(f"{len(entries)} frozen file(s); hash mismatch/missing: {bad or 'none'}; not in manifest: {unlisted or 'none'}")
         if bad or unlisted:

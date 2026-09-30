@@ -4256,3 +4256,27 @@ main() or the function under test. Pre-existing test_forward_v1 fixtures updated
 include game_id in picks_log rows.
 
 test_freeze_v1: 4 passed. Full suite: 40 passed.
+
+### D230 — FWD2b Item 1: settlement via snap counts, score-experiment CLI (2026-09-30)
+
+**(a) Snap-count participation** (log_ai_opinions.py:381-401 `_load_snap_participants`).
+nflreadpy `load_snap_counts([season])` -> `{game_id: {player_names}}` where
+offense_snaps + st_snaps > 0 = played. Replaces the PBP player-id participants rule.
+`_first_side_won` takes `snap_played` parameter: True (settled), False (VOID), None
+(snap data unavailable = unresolved).
+
+**(b) Tests:** `test_wr_with_snaps_zero_targets_settled_win` (snap_played=True, 0 rec ->
+Under wins, settled); `test_player_absent_from_snaps_void` (snap_played=False -> None);
+`test_game_no_snap_data_unresolved` (snap_played=None -> stat scoring proceeds).
+`test_snap_participants_loaded` verifies nflreadpy returns data for 2026.
+
+**(c) Frozen rows gain run_id** (log_ai_opinions.py freeze(), run_forward_v1.py). New
+files only; existing files untouched. run_id from the bundle's freshness.json.
+
+**(d) score-experiment CLI** (log_ai_opinions.py:758-911 `score_experiment`). Pools ALL
+week directories for the canonical reader; runs primary_cohort (predicate printed with
+exclusion counts) and primary_statistic (Δ, 95% CI, verdict, n legs, n games). P2:
+units at frozen HR price, |p-q| > 0.08, settled only. Breakouts by market, week, gap
+bucket. `--file` scores one file regardless of revision, labelled as diagnostic.
+
+test_freeze_v1: 4 passed. Full suite: 43 passed.

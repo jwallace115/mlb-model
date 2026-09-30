@@ -617,9 +617,12 @@ def main(argv=None, root=None, run_week_fn=None):
     from nfl.pipeline.log_ai_opinions import freeze as do_freeze
     board_root = root / "nfl" / "data" / "board"
     opinions_dir = board_root / f"week={SEASON}_{a.week:02d}" / "ai_opinions"
+    # D230: pass run_id from bundle to frozen rows
+    bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
     dest, sha, m = do_freeze(
         sheet_df, filled, SEASON, a.week, a.pilot, T,
-        d=opinions_dir, reader_model=READER_MODEL, board_root=board_root)
+        d=opinions_dir, reader_model=READER_MODEL, board_root=board_root,
+        run_id=bundle_run_id)
     print(f"    FROZEN {len(m)} lines -> {dest.relative_to(root)}\n"
           f"    sha256 {sha}\n", flush=True)
 
