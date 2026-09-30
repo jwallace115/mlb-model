@@ -4541,3 +4541,30 @@ Real runs:
   Delta=+0.012, CI [-0.019, +0.051], inconclusive, P2 units=-1.22. NOT evidence.
 
 See research/nfl_sim/fwd3_acceptance_2026-09-30.md.
+
+### D245 — Cowork verification of FWD3: freeze side accepted; the scoring anchor join is still unimplemented; four surviving mutations; not merged (2026-09-30)
+
+FWD3 (eng/fwd3 @ 735374bf1) is not merged.
+
+Accepted, freeze side:
+- the run directory cannot be reused;
+- inputs are copied and hashed into it, and outputs are confined to it;
+- stale lines HALT;
+- a write after the kick is quarantined;
+- the sidecar reads the solver's returned state.
+
+Accepted, scoring side:
+- an unregistered experiment HALTs;
+- grading uses the exact event;
+- a crosswalk miss is unresolved;
+- the checkpoint policy applies;
+- actuals.py is hashed.
+
+Not accepted:
+- primary_cohort still pools anchored game names across runs and skips the check when no sidecar exists. Both audit
+  counterexamples still pass, reproduced by Cowork.
+- Four mutations survive the 79 tests: the line cutoff, the pre-write publication halt, the run_week --lines-json
+  call, and bootstrap resampling.
+- The frozen file and bundle manifest are rewritten after the freeze, and no digest is on the rows.
+
+Next: FWD4. TNF is primary only if FWD4 is verified by Thu 15:00Z.
