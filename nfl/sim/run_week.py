@@ -911,6 +911,7 @@ def main():
     args = parser.parse_args()
 
     t0 = time.time()
+    as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
 
     week, week_games, completed = detect_week(override=args.week)
     print(f"Detected upcoming week: {week}")
@@ -942,7 +943,6 @@ def main():
         if week_teams:
             print(f"Week {week} teams from schedule: {len(week_teams)}")
 
-        as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
         all_lines = get_lines_from_history(as_of=as_of_ts)
     # D229: --games restricts to specific game_ids
     if args.games:

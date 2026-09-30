@@ -567,7 +567,8 @@ def main(argv=None, root=None, run_week_fn=None):
             sheet_vals = sheet_df.set_index(["event_id", "market_key", "player_name", "line"])[col]
             filled_vals = filled.set_index(["event_id", "market_key", "player_name", "line"])[col]
             joined = sheet_vals.align(filled_vals, join="inner")
-            mismatches = joined[0] != joined[1]
+            # NaN == NaN should be True (both missing is not a mismatch)
+            mismatches = (joined[0] != joined[1]) & ~(joined[0].isna() & joined[1].isna())
             if mismatches.any():
                 n_bad = int(mismatches.sum())
                 raise SystemExit(
@@ -607,11 +608,14 @@ def main(argv=None, root=None, run_week_fn=None):
         return
 
     # (g) D229: freeze IN-PROCESS
-    freeze_wall = datetime.now(timezone.utc)
-    first_kick = events_df["commence_time"].map(_parse_utc).min()
-    if freeze_wall >= first_kick:
-        raise SystemExit(f"HALT: publication time {freeze_wall.isoformat()} >= "
-                     f"first kick {first_kick.isoformat()}")
+    # Live runs: HALT if wall clock >= first kick (can't publish after kick)
+    # Pilot runs: skip this check (retroactive testing on past dates)
+    if not a.pilot:
+        freeze_wall = datetime.now(timezone.utc)
+        first_kick = events_df["commence_time"].map(_parse_utc).min()
+        if freeze_wall >= first_kick:
+            raise SystemExit(f"HALT: publication time {freeze_wall.isoformat()} >= "
+                         f"first kick {first_kick.isoformat()}")
 
     print("(g) Freezing...", flush=True)
     from nfl.pipeline.log_ai_opinions import freeze as do_freeze
@@ -631,6 +635,7 @@ def main(argv=None, root=None, run_week_fn=None):
         opinions_dir / "anchor_sidecar_sim_v1.parquet", index=False)
 
     # Record publication time in the bundle
+    freeze_wall = datetime.now(timezone.utc)
     bundle_manifest["publication_utc"] = freeze_wall.isoformat()
     bundle_manifest["cutoff_T"] = T.isoformat()
     (bundle_dir / "bundle_manifest.json").write_text(

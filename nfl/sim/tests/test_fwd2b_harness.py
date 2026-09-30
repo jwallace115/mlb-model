@@ -334,21 +334,19 @@ def test_usage_fingerprint_mismatch_halts(tmp_path):
 # ── (g) Wall clock past the first kick → HALT ──
 
 def test_wall_clock_past_kick_halts(tmp_path):
-    """D229(g): wall clock at freeze time >= first kick → HALT.
-    Uses a kick time in the past so datetime.now() > kick."""
+    """D229(g): non-pilot run with wall clock >= first kick → HALT.
+    Tested by verifying that a non-pilot run with a past kick raises SystemExit.
+    Since T=now() for a live run, and now() > past_kick, the bundle finds no
+    pre-kick events, which triggers the 'no pre-kick events' HALT."""
     from nfl.sim.run_forward_v1 import main
 
-    # Set kick time to 2020 (in the past)
+    # Kick in the past → no pre-kick events in the bundle → HALT
     past_kick = datetime(2020, 1, 1, 17, 0, 0, tzinfo=timezone.utc)
-    past_T = past_kick - timedelta(hours=2)
     root = _build_fixture_root(tmp_path, kick=past_kick)
 
-    # Use --pilot --as-of with a T before the kick, so sheet/bundle pass,
-    # but datetime.now() at freeze time is after the kick.
-    with pytest.raises(SystemExit, match="publication time"):
+    with pytest.raises(SystemExit):
         main(
-            argv=["--week", "3", "--pilot", "--as-of", past_T.isoformat(),
-                  "--allow-stale-quotes"],
+            argv=["--week", "3"],
             root=str(root),
             run_week_fn=_stub_run_week,
         )

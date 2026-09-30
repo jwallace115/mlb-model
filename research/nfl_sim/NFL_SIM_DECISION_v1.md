@@ -4280,3 +4280,43 @@ units at frozen HR price, |p-q| > 0.08, settled only. Breakouts by market, week,
 bucket. `--file` scores one file regardless of revision, labelled as diagnostic.
 
 test_freeze_v1: 4 passed. Full suite: 43 passed.
+
+### D231 — FWD2b Item 2: acceptance on real data (2026-09-30)
+
+**(a) Input refresh.** `pull_nflverse_inputs.py`: 6.4s (depth_charts, injuries, rosters).
+`ratings.py`: 7m57s (team_ratings, tendencies, usage to week 3; kickers missing =
+engine_default_fallback). ratings.py overwrote params_v1.json — restored from git
+(FREEZE violation). Freshness: team_ratings/tendencies/usage max_week = 3.
+
+**(b) Week 3 pilot freeze COMPLETED.**
+`run_forward_v1.py --week 3 --pilot --as-of 2026-09-27T16:30:00+00:00 --window-hours 9 --allow-stale-quotes`
+Bundle: 14 events, 947 props, 84 lines. Sheet: 989 lines, 625 two-way. Sim: 14 games,
+14/14 converged, 7m runtime. Matched: 162/625 two-way (130 receptions + 32 rush_attempts).
+Sidecar: 14 games, 0 unanchored (max miss 0.31). Frozen: 989 lines, sha256 946fa056...
+
+**(c) score-experiment (pilot diagnostic).**
+`score-experiment --experiment nfl_fwd_v1 --include-pilot --file <frozen file>`
+Cohort: 0 legs (all excluded: pilot=989, tag!=sim_v1=827, not_settled=989, market not
+eligible=787, not two_way=364). Expected: retroactive pilot with no settlement data.
+
+**(d) Week 4 dry run HALTED (correct).**
+`run_forward_v1.py --week 4 --dry-run --window-hours 60`
+HALT: props pull is 24.5h old (max allowed 3.0h). Correct live-mode behavior.
+
+**(e) Re-grade weeks 2-3.**
+Week 2: 78 rows -> 76 settled, 2 VOID (CJ Daniels, Thomas Fidone anytime_td). Under old
+PBP rule these were settled as losses; under snap counts they're VOID (players not in
+snap data = didn't play). Frozen files untouched.
+Week 3: 2070 rows, 0 graded (PBP/snap data not yet available for week 3).
+
+**Fixes during acceptance:**
+- NaN==NaN comparison in price validation (run_forward_v1.py:570)
+- as_of_ts unbound when --lines-json provided (run_week.py:914)
+- freeze_wall unbound for pilot runs (run_forward_v1.py:638)
+- Pilot runs skip wall-clock >= first-kick check (retroactive testing)
+- params_v1.json restored after ratings.py overwrote it
+
+test_freeze_v1: 4 passed. Full suite: 43 passed.
+
+NOT DONE: week 4 dry run did not complete (correct: stale quotes in live mode).
+UNVERIFIED: week 3 snap count settlement (snap data may lag actual participation).
