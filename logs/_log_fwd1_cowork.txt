@@ -206,3 +206,23 @@
 
 ### UNVERIFIED
 - The auditor's executed counterexamples were accepted as evidence, not re-run by Cowork.
+
+## 2026-09-30T15:35Z  cowork (verification of FWD4 — D248; FWD4b test fix)
+
+### RETURNED
+- eng/fwd3 @ 0b6d94a58. Full forward suite: 88 passed, 2 failed. Both failures are in test_fwd2_settlement cohort
+  tests, which use the old primary_cohort signature.
+- Cohort cases: cross-run leak -> excluded; empty sidecar -> excluded ("no sidecar match"); duplicate -> HALT.
+- All ten Cowork mutations are caught, each by a specific test.
+- freeze() writes the frozen file once. Digests are on the rows. publication.json is written in the run directory.
+
+### MEANS
+- The experiment is ready once the two stale tests are updated.
+
+### NOT DONE
+- FWD4b.
+- The merge.
+- FWD2d (the Sunday runbook).
+
+### UNVERIFIED
+- The session's real dry-run output is taken from its report (bundle digest d7246f19…).
