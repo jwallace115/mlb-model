@@ -4124,3 +4124,32 @@ Tests: `test_cal_stamp_check_in_harness`, `test_cal_stamp_tampered_usage`.
 calls freeze() with `" nfl_sim_v1_156cd057 "` after a canonical freeze of the same
 contract; the strip makes it a duplicate, and the cross-week dedup refuses it.
 Test: `test_whitespace_reader_refused_by_freeze`.
+
+### D225 — FWD2 Item 1: immutable run bundle at cutoff T (A2, A5, Q2, Q7) (2026-09-30)
+
+**(a) build_bundle()** (run_forward_v1.py:43-229). At the start of each run, fixes
+T = now (or --as-of in a pilot) and a run_id = T formatted as ISO. Writes to
+`week=2026_WW/sim_runs/<run_id>/`:
+- `events.parquet`: event list with event_id, team names, game_id (away_abbr@home_abbr)
+- `props.parquet`: Hard Rock props, newest pull <= T per event, from archive + manual/
+- `lines.parquet`: Hard Rock game lines, newest snapshot <= T
+- `freshness.json`: cutoff_T, max week of team_ratings/tendencies/usage, kicker status
+- `bundle_manifest.json`: sha256 of each file, pilot flag, publication_utc (added after freeze)
+
+**(b) Fixed newest_inputs** (log_ai_opinions.py:165-181). Previously took the newest
+lines file regardless of `now`; now filters `snap_t <= now` to respect cutoff T.
+
+**(c) Event-scoped matching in fill_sheet** (run_forward_v1.py:283-360). Match key changed
+from `(player_name, market_key, line)` to `(game_id, player_name, market_key, line)`.
+game_id comes from the bundle's event_game_map (event_id -> `away_abbr@home_abbr`).
+A probability from one event can never match another.
+Test: `test_fill_sheet_cross_event_refused` — the A5 counterexample (week-2-into-week-4).
+
+**(d) Quote-age rule** (run_forward_v1.py:167-172). HALT if any event's newest props pull
+is older than 3h at T. Pilot may override with --allow-stale-quotes (recorded in bundle).
+
+**(e) Publication-time guard** (run_forward_v1.py main). HALT if freeze wall-clock >=
+first kick in the window. Publication time recorded in bundle_manifest separately from T.
+
+**(f) main() restructured** around the bundle: build bundle -> build sheet from bundle's
+props+lines -> sim with --as-of T -> fill_sheet with event_game_map -> freeze.

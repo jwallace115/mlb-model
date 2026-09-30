@@ -162,11 +162,26 @@ def newest_inputs(season, now, props_file=None, lines_file=None):
         props = props[props["pull_timestamp"].map(parse_utc) <= now]
         newest = props.groupby("event_id")["pull_timestamp"].transform("max")
         props = props[props["pull_timestamp"] == newest]
-    lf = [Path(lines_file)] if lines_file else sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))[-1:]
+    lf = [Path(lines_file)] if lines_file else sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))
     if not lf:
         raise SystemExit("HALT: no game-line snapshots for the season")
-    lines = pd.read_parquet(lf[0])
-    return props, lines[lines["snapshot_utc"] == lines["snapshot_utc"].max()]
+    if lines_file:
+        # D225: bundle already filtered to newest snapshot ≤ T
+        lines = pd.read_parquet(lf[0])
+        return props, lines[lines["snapshot_utc"] == lines["snapshot_utc"].max()]
+    # D225: filter to newest snapshot ≤ T (was: newest regardless of now)
+    best_lines = None
+    for f in reversed(lf):
+        df = pd.read_parquet(f)
+        if df.empty:
+            continue
+        snap_t = parse_utc(df["snapshot_utc"].iloc[0])
+        if snap_t <= now:
+            best_lines = df
+            break
+    if best_lines is None:
+        raise SystemExit("HALT: no game-line snapshot ≤ now")
+    return props, best_lines[best_lines["snapshot_utc"] == best_lines["snapshot_utc"].max()]
 
 
 def validate(sheet, filled):

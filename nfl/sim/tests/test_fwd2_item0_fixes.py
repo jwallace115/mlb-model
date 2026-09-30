@@ -109,8 +109,10 @@ def test_zero_matches_halt():
         "event_id": "e1", "market_key": "player_receptions",
         "player_name": "T.Kelce", "line": 5.5,
         "two_way": True, "q_first": 0.50, "imp_first": 0.50,
+        "home_team": "Kansas City Chiefs", "away_team": "Carolina Panthers",
     }])
-    picks_log = pd.DataFrame(columns=["player_name", "family", "line", "cal_p", "side", "tier"])
+    picks_log = pd.DataFrame(columns=["player_name", "family", "line", "cal_p",
+                                       "side", "tier", "game_id"])
     filled, n_matched = fill_sheet(sheet_df, picks_log)
     assert n_matched == 0, "fixture should produce zero matches (the bug scenario)"
 
