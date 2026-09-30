@@ -224,3 +224,32 @@ Data facts only; details in `research/nba_layers/nbaD1_verification_2026-09-30.m
 - T-24h props empty on 58-72% of events; T-24h derivative markets 38-49%; T-1h under 3%. D1 holds one props
   snapshot per game (T-1h); no props opening line or movement.
 - Events include 8-10 play-in/playoff games per season inside the date range; in-play 2023-24 covers Oct-Jan only.
+
+### B2 — Source probe: what each NBA source returns and from which host (2026-09-30)
+
+Probe script: `nba/pipeline/probe_nba_sources.py`. Report: `research/nba_layers/b2_sources_2026-09-30.md`.
+Run on Mac and VM. Pre-registered 6 predictions; 2 held, 2 partially held, 2 did not hold.
+
+**Odds API (LIVE).** `basketball_nba` active, 44 events (opening night 2026-10-20T19:00Z = 3pm ET).
+`basketball_nba_preseason` is a **separate key**, currently inactive. Books returned: 9 —
+betmgm, betonlineag, betrivers, bovada, draftkings, fanduel, lowvig, **pinnacle**, williamhill_us.
+**`hardrockbet_fl` absent** for basketball_nba (historical key is `hardrockbet`; live key `_fl` not
+returned). Dry-run cost: 3 credits (confirmed). Null control: passed.
+
+**Official injury reports.** Published 10:00 AM - 12:45 PM ET, every 15 min, new format only
+(`_HH_MMAM/PM`). **No 5:30 PM ET report exists** — the freeze assumption in B1 is wrong; the last
+published report is 12:45 PM ET. No preseason reports. CDN **blocks the VM** (404); Mac only.
+3 fixture PDFs downloaded. nbainjuries requires Java (Mac JRE at `/Users/jw115/jre21`, not in PATH).
+
+**ESPN.** Injuries: per-item `date` field EXISTS (e.g. `"2026-09-21T19:50Z"`) — pre-registration wrong.
+Off-season: 66 items (Out=14, Day-To-Day=52). Scoreboard: 8 games on 2026-03-16, STATUS_FINAL,
+period count available. Both work from Mac and VM.
+
+**stats.nba.com.** Mac: works (nba_api scoreboardv2). VM: blocked (JSONDecodeError).
+
+**Host decisions.** Tape: VM. Official reports: Mac only. ESPN: VM. Outcomes (ESPN scoreboard): VM.
+stats.nba.com cross-check: Mac only. Pinnacle is the CLV reference book. Hard Rock unavailable
+on the live tape.
+
+**Report cadence for capture (item 2).** Poll 10:00-13:00 ET every 15 min for official reports.
+ESPN: once per capture run (content-hash dedup).
