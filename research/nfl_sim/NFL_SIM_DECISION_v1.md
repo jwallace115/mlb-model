@@ -4528,3 +4528,16 @@ anchored=True (miss_m=0.7, miss_t=0.7, both <= 1.0).
 (f) actuals.py added to FWD_EXPERIMENT_v1.json file_hashes and grading section. Seed description corrected
     to match anchor.py:175: stable_seed((home, away, season, week, 42)).
 (g) CLI works from repo root: sys.path.insert at module top (log_ai_opinions.py:47).
+
+### D244 — tests, stamp, and real acceptance (2026-09-30)
+
+75 tests pass (0 fail). FWD_EXPERIMENT_v1.json re-stamped once with all current hashes.
+
+Real runs:
+- (i) Week-4 dry run completed (PIT@CLE, 11 sim_v1, anchored).
+- (ii) Week-3 pilot froze 357 lines (14 games, all anchored, 162 matched). Same command refused
+  (run directory exists). inputs/ not committed (3 files > 2MB).
+- (iii) score-experiment: 0 eligible legs (all pilot), no verdict. Diagnostic on the pilot:
+  Delta=+0.012, CI [-0.019, +0.051], inconclusive, P2 units=-1.22. NOT evidence.
+
+See research/nfl_sim/fwd3_acceptance_2026-09-30.md.
