@@ -374,3 +374,41 @@ pred_total - actual: mean=-8.1, SD=21.4. Line - actual: mean=-3.0, SD=18.9.
   no historical file stores them yet.
 - **L4:** direction votes only, with n stated (max 9 graded forward rows for ROAD_WARRIOR).
   No signal type has evidence for a probability; the venue board is not baseline (b).
+
+### B6 — Corrected report URL and re-measured cadence (2026-09-30)
+
+**Bug.** B2's "no 5:30 PM report" was a URL bug, not a fact about the NBA. The probe built URLs
+with a 24-hour hour (`17_30PM`); the real CDN format is 12-hour (`05_30PM`). The 10:00-12:45
+window is exactly where 24-hour and 12-hour agree, so every afternoon/evening report was requested
+at a URL that cannot exist. See `wo1_verification_2026-09-30.md` for the full verification.
+
+**Fix.** New function `official_report_url(date, hour24, minute)` in `capture_nba_availability.py`,
+using 12-hour format. `probe_nba_sources.py` imports it (no second copy). `nbainjuries.gen_url`
+agrees on all 5 test cases (10:00, 12:45, 13:00, 17:30, 19:15). Test `test_report_url_b6.py`:
+4 assertions (13:00→`_01_00PM`, 17:30→`_05_30PM`, 12:45→`_12_45PM`, 10:15→`_10_15AM`); FAILS on
+c715f643a (function does not exist there).
+
+**Re-measured cadence (Mac, corrected URLs).**
+
+| Date | Reports | Range | Cadence | 5:30pm? | Latest |
+|------|---------|-------|---------|---------|--------|
+| 2025-10-10 (preseason) | 0 | — | — | — | — |
+| 2025-12-25 (Christmas) | 56 | 10:00-23:45 | q15 | **Yes** | 23:45 |
+| 2026-01-14 (mid-season) | 56 | 10:00-23:45 | q15 | **Yes** | 23:45 |
+| 2026-03-16 (late season) | 56 | 10:00-23:45 | q15 | **Yes** | 23:45 |
+
+Reports are published 10:00 AM - 23:45 PM ET, every 15 minutes — the FULL day, not 10-12:45.
+**5:30 PM report exists** on all three regular-season dates. B1's freeze rule stands.
+
+**Pre-registration verdicts.**
+- "Reports exist after 12:45 pm, including one at or near 5:00-5:30 pm" — **HELD** (56 per date, 5:30 present).
+- "2025-12-25 has reports before its noon tip" — **HELD** (10:00-11:45 AM all present).
+- "Preseason date has none" — **HELD**.
+- **NULL CONTROL:** 10:00-12:45 count = 12 per date, matching WO1 exactly.
+
+**VM re-probe.** All URLs return **403** (Forbidden), all 4 dates, all 56 slots. This is a genuine
+CDN block (403, not 404). B2 "CDN blocks the VM" is now CONFIRMED with correct URLs.
+
+**B6 records:** B2's "no 5:30 PM report" is WITHDRAWN — it was a URL bug. The corrected cadence is
+10:00-23:45 ET q15 on game days (56 reports/day). Official reports: Mac only (VM blocked, 403).
+B1's 5:30 PM freeze rule stands.

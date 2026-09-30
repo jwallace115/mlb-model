@@ -71,23 +71,56 @@ def _last_sha(feed):
 
 # ─── Official injury reports ──────────────────────────────────────────
 
+def official_report_url(d, hour24, minute):
+    """Build the CDN URL for an official NBA injury report.
+
+    Uses 12-hour format: 13:00 -> _01_00PM, 17:30 -> _05_30PM, 12:45 -> _12_45PM.
+    """
+    ds = d.strftime("%Y-%m-%d") if hasattr(d, "strftime") else str(d)
+    ampm = "AM" if hour24 < 12 else "PM"
+    h12 = hour24 % 12
+    if h12 == 0:
+        h12 = 12
+    tag = f"{h12:02d}_{minute:02d}{ampm}"
+    return f"{CDN}/Injury-Report_{ds}_{tag}.pdf"
+
+
 def _report_urls_for_now():
-    """Generate all report URLs for today that might exist (10:00-12:45 ET, q15)."""
+    """Generate report URLs for today, every q15 from 10:00 ET through
+    the day's last tip (from ESPN scoreboard), or 23:45 as fallback."""
     from zoneinfo import ZoneInfo
     now_et = _utcnow().astimezone(ZoneInfo("America/New_York"))
     today = now_et.date()
+
+    # Determine end hour: try ESPN scoreboard for today's last tip
+    last_hour_et = 23  # fallback: poll through 23:45
+    try:
+        ds_espn = today.strftime("%Y%m%d")
+        r = requests.get(
+            f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={ds_espn}",
+            timeout=10)
+        if r.status_code == 200:
+            events = r.json().get("events", [])
+            if events:
+                from zoneinfo import ZoneInfo as ZI
+                tip_hours = []
+                for ev in events:
+                    tip_str = ev.get("date", "")
+                    if tip_str:
+                        from datetime import datetime as DT
+                        tip_utc = DT.fromisoformat(tip_str.replace("Z", "+00:00"))
+                        tip_et = tip_utc.astimezone(ZI("America/New_York"))
+                        tip_hours.append(tip_et.hour)
+                if tip_hours:
+                    last_hour_et = max(tip_hours)
+    except Exception:
+        pass
+
     urls = []
-    for hour in range(10, 13):
+    for hour in range(10, last_hour_et + 1):
         for minute in (0, 15, 30, 45):
-            if hour == 13 and minute > 0:
-                break
-            ampm = "AM" if hour < 12 else "PM"
-            h12 = hour if hour <= 12 else hour - 12
-            if h12 == 0:
-                h12 = 12
-            tag = f"{hour:02d}_{minute:02d}{ampm}"
             ds = today.strftime("%Y-%m-%d")
-            url = f"{CDN}/Injury-Report_{ds}_{tag}.pdf"
+            url = official_report_url(today, hour, minute)
             urls.append((url, ds, f"{hour:02d}:{minute:02d}"))
     return urls
 
