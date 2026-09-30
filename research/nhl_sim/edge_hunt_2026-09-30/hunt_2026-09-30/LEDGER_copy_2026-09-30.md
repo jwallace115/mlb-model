@@ -274,3 +274,142 @@ NEXT (pre-registered where testable):
    Proposed probe: VM poller for games in the last 6 minutes of the 3rd period with a 1-goal margin — NHL live pbp
    (free) + Odds API event odds (h2h + totals, us region) every 30 s → ~24 credits/game, ~250/night, ~7.5k/month.
    Not before the credit cycle resets (balance ~20k, unverifiable from Cowork: the bridge gets 403 from the API).
+
+## Branch E — historical in-play prices (E-WO1 ran 2026-09-30 ~06:30Z; Cowork verification + tests below)
+### E-01 — Data: in-play NHL prices 2023-24 (DEV season for branch E)
+- E-WO1 pulled 800 sport-level historical snapshots (80 nights, seed 20260930, evening slate T0 + 2:00 .. +2:45 at
+  5-min steps), h2h + totals, us region, 20 credits each = 16,000; balance 18,128 → 2,088. Verified from files:
+  **800 DISTINCT returned timestamps, 5-min spacing** (CC's log said "~15-min granularity, likely ~3 distinct per
+  night" — wrong; no duplicates, nothing wasted). 7 US books on started events (Pinnacle among them).
+- ESPN play-by-play for 732 games on those nights, free: `wallclock` on 228,724 / 228,724 plays; `strength`
+  (Even / Power Play / Shorthanded) on plays. ESPN → NHL game match by (home, away, ±12 h) against games_lines:
+  620 matched; 112 unmatched = games absent from games_lines (no Pinnacle close in WO2's pull / afternoon and
+  neutral-site starts) — they carry no pre-game conditioning input and are excluded.
+- CC's E3 decision entry says the state table was "Built"; its log's NOT DONE says it was not. The log is right:
+  Cowork built it (`e/build_state_table.py` → `state_at_snapshot_2023.parquet`): game seconds at the snapshot =
+  last ESPN play's clock + min(wall gap, clock to next play); strength / goalie flags from the repo's
+  state_time table at that second; active 2/4/5-min penalties from penalties.parquet (remaining, nominal); every
+  book's live h2h / totals. Sanity checks (a)-(d) as pre-registered in E-WO1, results appended below.
+- CONFIRM season for branch E = 2024-25, to be pulled from October's credits (~16k for the same design). FINAL =
+  2025-26 (not pulled). Forward = the VM live poller (not built).
+
+### E-02 — Live engine (StartState) vs live Pinnacle, 2023-24 — pre-registered BEFORE any engine price was computed
+- Engine object: league-average constants_v8 engine (the committed simulate(), traced copy identical on finals),
+  conditioned on the PRE-GAME Pinnacle close (strength s, pace m from games_lines pin_p_h / tl_pin / pin_p_over via
+  the grid-v1 solve) — no team ratings, no goalie ratings (so no C-01 dependence) — started from the snapshot's
+  StartState (period, second, score, penalty clocks, pulled flags). 2,000 sims per row, seed = hash(game_id, ts).
+  Intermission rows start at the next period's 0:00. Rows: live or intermission, Pinnacle live h2h present.
+- E-02a (structure, descriptive): ML log-loss engine vs Pinnacle live (multiplicative de-vig) on the row set;
+  totals log-loss at Pinnacle's live point (pushes excluded). By time bucket: P3 > 10:00 left, 10:00-5:00,
+  < 5:00, OT. Pre-registered expectation: engine within 0.02 of Pinnacle on ML overall.
+- E-02b (information): A1 logistic (outcome ~ logit Pinnacle live + disagreement) for ML and for totals; CIs by
+  game-clustered bootstrap (1,000 resamples of games); one-sided p for coef > 0.
+- E-02c (situations, each needs ≥ 60 distinct games to count): S1 a goalie is pulled at the snapshot; S2 a power
+  play is on (skaters unequal, both goalies in); S3 one-goal game, 5v5, < 5:00 left in P3; S4 tied, < 5:00 left;
+  S5 overtime. Each × ML and totals: A1 coef (clustered) and A2 picks = engine prob − 1/best live decimal ≥ 0.05
+  (live vig is wide) → ROI with game-clustered SE, graded on the final result. No CLV exists live; ROI is the
+  economic metric (CHECK 4), reported by book and by month.
+- Family: 2 (a, descriptive, no p) + 2 (b) + 10 (c) = 12 p-values added to the ledger family.
+- Null controls: (i) pre-match rows at the same snapshots: engine conditioned pre-game vs Pinnacle's pre-match
+  price, mean |diff| < 1 pt (proves the conditioning); (ii) sanity (a) totals point ≥ score + 0.5 in ≥ 99% of
+  live rows; (iii) ESPN score diff == state_time score diff at the mapped second in ≥ 97% (proves the wall-clock
+  → game-clock mapping); (iv) a state-blind engine (pre-game, no StartState) must be far worse than Pinnacle live
+  (log-loss gap > 0.10) — the state has to matter or the table is wrong.
+- Expected (prior): E-02a engine 0.00-0.02 worse than Pinnacle live; E-02b no significant information; E-02c
+  the only plausible positive is S1 (pulled goalie) totals, where books price by rule of thumb — prior ~40% that
+  A1 > 0 there, and ROI at live vig negative even so. If S1 passes dev + BH, CONFIRM on 2024-25 in October.
+- Runtime: ~8,000 live rows × ~500 remaining game-seconds × 2,000 sims ≈ 1 s per row in the container → ~1.2 h on
+  2 cores. Cost 0.
+- **E-01 VERIFICATION RESULT (Cowork, from the files, before any engine run):**
+  - **NO PINNACLE in the in-play data.** E-WO1 (Cowork's order) specified `regions=us`; Pinnacle is reached in this
+    project only through the `bookmakers=` list spanning us + us2 (CLAUDE.md cost model). Cowork's error, not
+    CC's. The in-play books are 15 US soft keys (DK, FanDuel, BetMGM, Caesars/williamhill_us, BetRivers, Bovada,
+    PointsBet, Unibet, TwinSpires, Barstool, BetOnline, LowVig, SuperBook, WynnBET, BetUS). Consequence: the
+    live benchmark is the MEDIAN de-vigged live price across books (and the best price for economics), not
+    Pinnacle. E-02 is amended below BEFORE any engine price was computed.
+  - Coverage is thinner than planned: started games per snapshot-date mean 3.9 (not ~6); live rows 1,260 +
+    intermission 370 over **181 games** with ESPN mapping (702 'no_espn' rows = 112 games absent from
+    games_lines, excluded), 7 live rows per game on average. Period of live rows: P1 145, P2 308, P3 795, OT 10.
+  - Sanity: (d) ESPN score diff == state_time score diff at the mapped second **99.7%** (n 1,260) → the wall-clock
+    → game-clock mapping HOLDS; (c) goalie-pulled share 3.4% HELD; (a) live total ≥ score + 0.5: FanDuel 99.3%,
+    BetMGM 99.1%, DraftKings 98.1%, Bovada 96.7% — Pinnacle bar (≥ 99%) not applicable; the misses are books
+    whose live total lagged a goal (stale quotes), consistent with (d). Wall gap since the last play: median 16 s.
+- **E-02 AMENDMENT (before running; reason: no Pinnacle in the data):** every "Pinnacle live" in E-02 becomes the
+  live MEDIAN across books with a quote (multiplicative de-vig per book, median of fair probs; totals: median
+  point's most common value, median P(over) among books at that point). A2 picks use the BEST live decimal.
+  Situation floors: S1 (pulled) has only ~43 rows ≈ 43 games in this sample → below the 60-game floor; it is
+  reported but cannot count for FOUND this season. Row filter: live or intermission, ≥ 3 books with h2h.
+- **E-02 FIRST RUN (2026-09-30 ~08:30Z) — numbers that are almost certainly an ARTIFACT, recorded as such:**
+  1,450 rows / 174 games. ML log-loss engine 0.4634 vs live median 0.4762; totals 0.6286 vs 0.6584; A1 ML coef
+  +1.00 [+0.73, +1.40], totals +0.89 [+0.67, +1.19]; A2 at best live price: 360 picks, **ROI +64%** (clustered SE
+  11%), rising to +119% in the last 5:00 and +248% in OT. Null (iv) held (state-blind 0.6871); null (i) 1.6 pts.
+  **Cowork's reading BEFORE the diagnostic: a +64% live ROI at soft books is not an edge, it is stale quotes.**
+  Quote ages at the snapshot (from the raw JSON last_update): median 35 s, 90th pct 131 s, 95th 297 s; betrivers /
+  superbook / betus / lowvig / betonline 3-11 min stale on median. The engine sees the state at the snapshot
+  second (ESPN wallclock, verified 99.7%); a book whose quote predates a goal is "wrong" by the whole goal, and
+  "best price" selects exactly the stalest book. A second artefact: multiplicative de-vig understates the favourite
+  at extreme live prices (−2800 / +1200 → 0.926 vs a true ~0.97), which inflates the engine's log-loss margin and
+  the A1 coefficient. Neither is bettable.
+- **E-02 DIAGNOSTIC (pre-registered before running):** (D1) fresh-quote rule: only quotes with age ≤ 30 s enter
+  the median / best price, AND rows are dropped if any ESPN Goal or Penalty play, or any strength/goalie change
+  in state_time, occurred in the 120 s before the snapshot; (D2) power de-vig instead of multiplicative for the
+  median. Prediction: ROI on D1 falls below +5% and A1 coefficients shrink toward 0; if ROI stays ≥ +10% with a
+  clustered 90% lower bound > 0 on ≥ 60 games, the finding survives this attack and gets the next one (per-book
+  re-pricing at each book's own last_update second). Situations S1/S3/S4 have 20-25 games — below the floor
+  regardless; S2 (power play, 117 games) is the only situation with enough games.
+- **E-02 DIAGNOSTIC RESULT — the +64% was an artefact, as predicted.** Fresh quotes only (≤ 30 s) AND no goal /
+  penalty in the prior 120 s: ML n = 735 rows / 161 games, log-loss engine 0.4998 vs live median 0.5007, A1 +0.60
+  [−1.11, +2.43] p = 0.28 → the information advantage vanishes. Rows WITH a recent event keep it (A1 +1.31, LL
+  0.4154 vs 0.4642) — that is the stale-quote mechanism, exactly. The residual "ROI +61%" on 66 picks came from
+  ONE book: **mybookieag, 45 of 66 picks** — its Odds API live feed re-stamps off-market prices as fresh (e.g. DAL
+  3-1 up mid-P2 quoted at 1.53 while every other book had 0.92 fair). Also barstool (a 16.0 on a team down one
+  with the goalie pulled). Both feeds are excluded from anything live from here on; neither is bettable by Jeff.
+  With those removed: ML n = 712 / 160 games, engine 0.5110 vs median 0.5118, A1 +0.59 [−1.53, +2.33] p = 0.31;
+  21 picks (noise). **Ledger p (E-02b ML) = 0.31; E-02c S2 ML 0.25, S2 TOT 0.23; S1/S3/S4/S5 below the game floor.**
+  Meaning: the live engine, fed only the pre-game Pinnacle close and the game state, prices live moneylines AT the
+  soft-book consensus. Structure Pinnacle-grade, fourth time; no information beyond the live market.
+- **Live totals (same clean cut, no mybookie/barstool): the one thing left standing, NOT pre-registered in this
+  form — recorded as a LEAD, not a result.** n = 675 rows / 161 games: engine log-loss 0.6507 vs live median 0.6612,
+  A1 +1.48 [−0.01, +3.21] p = 0.072; A2 picks at the best fresh price (edge ≥ 5 pts): 111 picks / 71 games, **ROI
+  +21% (clustered SE 11%), 96% UNDERS.** One-sided by construction (S44 lesson). Market context measured: at every
+  major book the live UNDER hit 56-59% against a de-vigged fair of 52-54% (books already juice the under); blind
+  live-under ROI per game −1.2% (SE 5.9%) → the market as a whole is not exploitable blind; the engine's selection
+  of WHICH unders is what carried +21%, on 71 games, after three cuts of the same data. p ≈ 0.03 one-sided from the
+  ROI t; it does NOT survive BH across the ledger (rank ~10 of ~60, threshold ~0.017) and it is post-hoc. So it
+  cannot go to CONFIRM under the ledger's rules. It goes forward as a NEW pre-registered hypothesis on NEW data:
+
+### E-03 — Engine live UNDER at fresh soft-book totals, late game — pre-registered for the 2024-25 in-play pull (October credits)
+- Rule (frozen now): rows = live or intermission snapshots, quote age ≤ 30 s, no goal / penalty in the prior
+  120 s, books = DK / FanDuel / BetMGM / Caesars / BetRivers / Bovada / PointsBet / Unibet / TwinSpires (never
+  mybookieag, barstool, betonline, lowvig, betus, superbook, wynnbet); engine = market-conditioned league-average
+  engine from StartState, 2,000 sims, seed = sha256(game_id | ts); pick UNDER at the book's live point when
+  engine P(under | no push) − 1/dec ≥ 0.05, one pick per game-snapshot at the best such price. OVER picks are
+  recorded separately and are NOT part of the rule (they were 4% of dev picks).
+- Metric: ROI at the quoted price, game-clustered 90% lower bound > 0, on ≥ 60 distinct games in 2024-25; A1 on
+  totals reported alongside. Data: the same E-WO1 design on 2024-25 with `regions=us` (Pinnacle absent anyway
+  live) — ~16k credits; the sample must be drawn by the same seed rule on 2024-25 dates.
+- Caveats that stay attached: (1) a 30-s-old quote at a soft book is not a guaranteed fill — books suspend on
+  events; forward capture must record whether the market was open; (2) Hard Rock's live totals are not in any
+  feed — the final object is a price-to-beat in the app; (3) the under hit-rate excess (57% vs 53% fair) may be a
+  2023-24 season effect (scoring drift, S-WO2 found 2025-26 goals 6.8% below xG) — the confirmation season decides.
+- Expected (Cowork's prior): ROI between −5% and +8%; a +21% repeat would be surprising. If it fails, E-03 dies and
+  no re-thresholding follows.
+
+## STATUS 2026-09-30 ~09:40Z (after branch E) — still nothing FOUND; what changed
+- Whole-ledger BH (51 p-values): survivors unchanged in substance — the EV/EV2 price rule, A-01/A-03 information
+  (unmonetisable), the swapped-R6 dev result (dead at confirmation), fixed-R6 (does not meet both-season DEV).
+  The live-under lead (E-02-lead, p 0.028) sits at rank 10 vs threshold 0.020: NOT a survivor; E-03 is its
+  pre-registered forward test on 2024-25.
+- Branch E facts worth keeping: (1) historical in-play prices exist at 5-min granularity from Sept 2022, no
+  Pinnacle in `regions=us`; (2) ESPN wallclock → NHL game clock mapping validated at 99.7%; (3) the engine from
+  StartState reproduces the live soft-book consensus ML (log-loss 0.511 vs 0.512) with no team inputs at all —
+  a live fair-price reference for Hard Rock's in-app live lines exists NOW (situation F), Pinnacle or not;
+  (4) mybookieag and barstool live feeds are garbage and must be excluded from any live rule; (5) the live
+  UNDER hit 56-59% at the majors in 2023-24 against 52-54% fair (per-game blind ROI −1.2%, so not a bet).
+- Files: `research/nhl_sim/edge_hunt_2026-09-30/hunt_2026-09-30/e/` on the Mac (build_state_table.py,
+  state_at_snapshot_2023.parquet, e02_live.py, e02_engine_live_2023.parquet, e02_report.py + log, e02_diag.py +
+  log, e02_rows.parquet, e02_situations.csv, inplay_last_update.parquet).
+- NEXT: (1) C-WO1 and D-WO1 in Claude Code (unchanged); (2) October credits: E-WO2 = the same in-play design on
+  2024-25 (~16k) → E-03 one-shot; (3) forward: NHL-L1 amendment to log the engine's live fair vs the tape is NOT
+  possible (the 30-min tape is pre-match only) — a VM live poller (last 10 min of P3, 30-s cadence, ~24
+  credits/game) is the forward object for E-03 and for situation F, after E-03 passes.

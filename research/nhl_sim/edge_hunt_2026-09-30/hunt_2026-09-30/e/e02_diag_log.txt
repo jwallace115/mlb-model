@@ -1,0 +1,43 @@
+  D["med_m_fresh"] = np.nanmedian(FM, axis=1); D["med_p_fresh"] = np.nanmedian(FP, axis=1)
+  D["n_fresh"] = np.isfinite(FM).sum(axis=1); D["best_h_fresh"] = np.nanmax(BH, axis=1); D["best_a_fresh"] = np.nanmax(BA, axis=1)
+  D["n_fresh"] = np.isfinite(FM).sum(axis=1); D["best_h_fresh"] = np.nanmax(BH, axis=1); D["best_a_fresh"] = np.nanmax(BA, axis=1)
+rows 1450; rows with >=3 fresh (<=30 s) h2h quotes: 872; with a goal/penalty in prior 120 s: 241
+FRESH<=30s, any events [mult] n=872 games=165 LL engine 0.4866 median 0.4949 | A1 +1.016 [+0.505, +1.648] p=0.0029
+FRESH<=30s, any events [power] n=872 games=165 LL engine 0.4866 median 0.4944 | A1 +1.042 [+0.552, +1.747] p=0.0024
+   A2 picks 142 games 85 ROI +0.6515 (clustered SE 0.1457, 90% lo +0.4118)
+          size   mean
+bucket               
+10-20 P3    42  0.585
+5-10 P3     21  0.493
+<5:00 P3    11  2.196
+OT           3  0.876
+P1          15  0.321
+P2          50  0.519
+FRESH<=30s + NO goal/penalty in prior 120 s [mult] n=735 games=161 LL engine 0.4998 median 0.5007 | A1 +0.604 [-1.112, +2.429] p=0.2791
+FRESH<=30s + NO goal/penalty in prior 120 s [power] n=735 games=161 LL engine 0.4998 median 0.5012 | A1 +0.859 [-0.990, +2.653] p=0.2163
+   A2 picks 66 games 47 ROI +0.6139 (clustered SE 0.2595, 90% lo +0.1870)
+          size   mean
+bucket               
+10-20 P3    20  0.710
+5-10 P3      9 -0.109
+<5:00 P3     8  1.973
+P1           6  0.189
+P2          23  0.452
+FRESH<=30s + event in prior 120 s (should hold the artefact) [mult] n=137 games=97 LL engine 0.4154 median 0.4642 | A1 +1.311 [+0.794, +2.240] p=0.0017
+FRESH<=30s + event in prior 120 s (should hold the artefact) [power] n=137 games=97 LL engine 0.4154 median 0.4582 | A1 +1.285 [+0.720, +2.197] p=0.0060
+   A2 picks 76 games 62 ROI +0.6841 (clustered SE 0.1802, 90% lo +0.3878)
+          size   mean
+bucket               
+10-20 P3    22  0.472
+5-10 P3     12  0.944
+<5:00 P3     3  2.793
+OT           3  0.876
+P1           9  0.409
+P2          27  0.577
+S2 power play, fresh, no recent event [mult] n=63 games=53 LL engine 0.4311 median 0.4422 | A1 +1.545 [-2.278, +4.648] p=0.2455
+S2 power play, fresh, no recent event [power] n=63 games=53 LL engine 0.4311 median 0.4352 | A1 +1.919 [-2.750, +5.211] p=0.2257
+   A2 picks 3 games 3 ROI +0.4751 (clustered SE 0.0515, 90% lo +0.3904)
+          size   mean
+bucket               
+10-20 P3     1  0.350
+P2           2  0.538
