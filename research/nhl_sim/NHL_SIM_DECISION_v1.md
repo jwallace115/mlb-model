@@ -792,3 +792,24 @@ Two gaps:
 - PK r 0.630 → 0.628, K 24.1 → 24.3;
 - carry-over w: PP 0.762 → 0.753, PK 0.607 → 0.612, 5v5 attempts against 0.824 → 0.819;
 - everything else unchanged.
+
+### D1 — Probe: NHL API field availability for 2010-2020 (2026-09-30, D-WO1 Item 1)
+
+Probed 6 games across 2010-11..2020-21 (play-by-play and boxscore).
+
+**situationCode:** present on >97% of plays in all 6 probed games (2010-2020).
+Missing only on period-start/game-end events — same as 2021+ seasons.
+
+**Shot coordinates (xCoord, yCoord):** 100% of shot-type plays in all probed games.
+shootingPlayerId ~95% (some blocked shots missing). goalieInNetId ~75% (empty-net expected).
+
+**Boxscore starter flag:** present in all seasons including 2010-11. The starter is
+not always the first-listed goalie — filter by starter=True.
+
+**Game counts (measured via binary search on last valid game ID):**
+2010: 1230, 2011: 1230, 2012: 720 (lockout), 2013-2016: 1230 each, 2017-2018: 1271 each,
+2019: 1082 (COVID), 2020: 868 (56-game). Total: 12,502 games.
+
+**GATE: PASS.** All required fields present. Proceed with pull.
+
+Probe script: nhl/sim/probe_old_seasons.py. Full report: d1_probe_2026-09-30.md.
