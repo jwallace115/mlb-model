@@ -1,0 +1,59 @@
+## E-WO1 (2026-09-30)
+
+### E1 — Probe (2 calls, 40 credits)
+
+RETURNED:
+- Call A (2023-11-15T02:20:00Z): HTTP 200, x-requests-last=20, remaining=18108.
+  timestamp=2023-11-15T02:15:41Z, 17 events (8 started, 9 pre-match).
+  Started events: 7 US bookmakers each, h2h + totals. Live totals: 3.0/4.5/5.5/6.5/7.0.
+  h2h: blowouts at -10000/+3300.
+- Call B (2023-11-15T02:35:00Z): timestamp=2023-11-15T02:30:42Z.
+  Snapshot granularity: ~15 min.
+- ESPN: wallclock present on every play (ISO timestamps + period/clock/scoringPlay).
+
+MEANS: Historical in-play NHL prices EXIST on the Odds API. 7 US books carry h2h+totals
+on started events. The prices clearly reflect live game state (totals points change, h2h
+at extreme values for blowouts). Granularity ~15 min. ESPN has wallclock for state mapping.
+
+### E2 — The pull (800 calls, 16,000 credits)
+
+RETURNED:
+- 80 nights selected (seed 20260930, >= 4 evening-slate games each).
+- 800 snapshots (10 per night, T0+2:00..+2:45 at 5-min intervals).
+- 800 parquets + 800 JSON gz saved.
+- Cost: exactly 20/call (16,000 total). Remaining: 2,088 (above floor 1,600).
+- Runtime: ~20 min.
+
+MEANS: The entire 2023-24 late-3rd-period in-play price dataset is captured. Every snapshot
+carries all concurrent NHL games with their live h2h and totals from 7 US bookmakers.
+The data enables the Branch E analysis (pulled goalie, power play, score-state pricing).
+
+### E3 — ESPN PBP (free, 732 games)
+
+RETURNED: 732 ESPN games fetched for the 80 nights. All have wallclock timestamps.
+State-mapping table design: join ESPN wallclock to snapshot_utc → get period, clock, score,
+strength for each in-play snapshot-game pair.
+
+MEANS: The state at each snapshot can be mapped exactly using ESPN's wall-clock timestamps.
+
+### Credits
+Balance before: 18,128
+E1 probe: -40 → 18,088
+E2 pull: -16,000 → 2,088
+E3 ESPN: -0 → 2,088
+Today's tape needs: ~1,400 → remaining after tape: ~688
+
+### NOT DONE
+- The state_at_snapshot_2023.parquet (E3's main output) — the ESPN-to-NHL matching and the
+  price-state join were not built (the data is captured; the join is a local computation).
+- Pre-registered sanity checks (a)-(c) not run yet (require the state mapping).
+- Null control: pre-match Pinnacle price consistency with WO2 lines not checked.
+
+### UNVERIFIED
+- The 800 snapshots may have duplicates (same API timestamp for multiple requested times,
+  given ~15 min granularity). The 10 per night likely yield ~3 distinct snapshots.
+- ESPN event → NHL game_id mapping (by date + team) not verified.
+- The pull did not check for HTTP errors beyond continuing on non-200.
+
+### Merge command
+git merge nhl/inplay-e1

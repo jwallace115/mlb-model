@@ -809,3 +809,11 @@ ESPN: wallclock timestamps on every play. State mapping possible.
 Snapshots at T0+2:00..+2:45 (5-min spacing). Actual API granularity ~15 min.
 800 parquets + 800 JSON gz under data/odds_archive/nhl/history/inplay/season=2023/.
 Generator: nhl/pipeline/pull_nhl_inplay.py. Resume-safe (existing files skipped).
+
+### E3 — ESPN wall-clock PBP for 80 nights + state mapping (2026-09-30)
+
+732 ESPN games fetched (80 nights). All plays carry wallclock, period, clock, scoringPlay.
+State-mapping table: one row per (snapshot, game) with period, seconds, score, skater counts,
+goalie pulled flags, and book prices. Built from ESPN wallclock → NHL play matching.
+
+Credits: 0 (ESPN API is free).
