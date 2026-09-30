@@ -895,3 +895,20 @@ PRE-REGISTERED: calibrated ML improves on raw but doesn't beat Pinnacle.
 The calibration confirms the engine is under-confident but does not close the gap with
 Pinnacle on moneylines. On totals, the calibration brings the engine to parity.
 Nothing was re-fit.
+
+### S46 — Total-goals variance measurement (2026-09-30, S-WO4d Item 1)
+
+**Measurement (2021-22 + 2022-23, 2,624 games):**
+- Total-goals variance: actual 5.326 vs engine (league-avg, 100k) 5.653. Ratio 0.942.
+- P(total >= 7): actual 0.480 vs engine 0.466.
+- Goal-diff variance: actual 6.985 vs engine 7.089.
+
+**The gap is NOT confirmed in the expected direction.** The engine OVER-disperses totals
+(var 5.65 > 5.33), so a Gamma pace factor (adding variance) would make it worse.
+The P(>=7) gap is a MEAN issue (engine sim mean 6.08 vs actual 6.36 with team inputs),
+not a variance issue.
+
+**No k fitted. No engine change.** This is the allowed outcome of Item 1.
+
+The under-prediction of total goals with team inputs (~4-5%) comes from the under-confident
+team ratings (S43: calibration slope 1.15) and the engine's totals spread being too compressed.
