@@ -4153,3 +4153,23 @@ first kick in the window. Publication time recorded in bundle_manifest separatel
 
 **(f) main() restructured** around the bundle: build bundle -> build sheet from bundle's
 props+lines -> sim with --as-of T -> fill_sheet with event_game_map -> freeze.
+
+### D226 — FWD2 Item 2: the anchor record (A6) (2026-09-30)
+
+**(a) anchor_sidecar with actual market targets** (run_forward_v1.py:371-410).
+The previous version accepted `lines={}` and used the fallback `anch_m - err_m` to
+reconstruct the target spread/total. This gave wrong values: CAR@ATL -3.0/43.5 came
+out -3.2572/43.9996. Now `anchor_sidecar` requires the actual `lines` dict and HALTs
+(SystemExit) if a game has no entry. Columns renamed: `spread` -> `target_spread`,
+`total_line` -> `target_total`.
+Test: `test_anchor_sidecar_actual_targets` — CAR@ATL targets = -3.0/43.5 exactly.
+Test: `test_anchor_sidecar_halts_without_lines` — empty dict raises SystemExit.
+
+**(b) lines_dict_from_bundle()** (run_forward_v1.py:232-252). Extracts
+`{game_id: {"spread": ..., "total": ...}}` from the bundle's `lines.parquet` +
+`events.parquet` for the actual market values used.
+
+**(c) Sidecar mandatory, written to bundle before freeze** (run_forward_v1.py main).
+The anchoring log must exist; main() HALTs without it. The sidecar is written to
+`bundle_dir/anchor_sidecar.parquet` before the freeze, then also copied to the
+opinions dir for backward compat.

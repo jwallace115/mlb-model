@@ -229,6 +229,33 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     return bundle_dir, manifest
 
 
+def lines_dict_from_bundle(bundle_dir):
+    """D226: build {game_id: {"spread": ..., "total": ...}} from the bundle's lines."""
+    from nfl.sim.names import FULL_TO_ABBR
+    lines = pd.read_parquet(bundle_dir / "lines.parquet")
+    events = pd.read_parquet(bundle_dir / "events.parquet")
+    eid_to_gid = dict(zip(events["event_id"], events["game_id"]))
+    result = {}
+    for eid, gdf in lines.groupby("event_id"):
+        gid = eid_to_gid.get(eid)
+        if not gid:
+            continue
+        spreads = gdf[gdf["market"] == "spreads"]
+        totals = gdf[gdf["market"] == "totals"]
+        if spreads.empty or totals.empty:
+            continue
+        # Home team spread: the point for the home team's outcome
+        home_full = gdf["home_team"].iloc[0]
+        home_sp = spreads[spreads["outcome_name"].apply(
+            lambda x: home_full.split()[-1] in str(x) if x else False)]
+        spread = -float(home_sp["point"].iloc[0]) if not home_sp.empty else None
+        over = totals[totals["outcome_name"] == "Over"]
+        total = float(over["point"].iloc[0]) if not over.empty else None
+        if spread is not None and total is not None:
+            result[gid] = {"spread": spread, "total": total}
+    return result
+
+
 def check_experiment_manifest():
     """D224(b): HALT if any file hash in the experiment manifest has changed."""
     import hashlib
@@ -369,11 +396,13 @@ def fill_sheet(sheet_df, picks_log, event_game_map=None):
 
 
 def anchor_sidecar(anchoring_log_df, lines):
-    """D215(b): per-game anchor sidecar from the anchoring log.
+    """D215(b)/D226: per-game anchor sidecar from the anchoring log.
 
     Best iteration = min |err_m| + |err_t| (same rule as run_week).
-    Market spread/total come from the run's lines dict, not from defaults.
-    Raises KeyError if required columns are missing.
+    Market spread/total MUST come from the actual lines dict used by the sim
+    (D226: not reconstructed from err fields; CAR@ATL -3.0/43.5 came out
+    -3.2572/43.9996 when using the fallback). The lines dict is keyed by
+    game_id (away@home) with keys 'spread' and 'total'.
     """
     required = {"game", "iter", "margin", "total", "err_m", "err_t", "converged"}
     missing = required - set(anchoring_log_df.columns)
@@ -386,17 +415,21 @@ def anchor_sidecar(anchoring_log_df, lines):
         best = g.loc[(abs(g["err_m"]) + abs(g["err_t"])).idxmin()]
         anch_m = float(best["margin"])
         anch_t = float(best["total"])
-        # Market values from lines dict (away@home -> spread, total)
-        ln = lines.get(gname, {})
-        spread = float(ln.get("spread", anch_m - float(best["err_m"])))
-        total_line = float(ln.get("total_line", anch_t - float(best["err_t"])))
+        # D226: actual market targets from lines — never reconstructed
+        ln = lines.get(gname)
+        if ln is None:
+            raise SystemExit(
+                f"HALT: no lines entry for {gname} — anchor sidecar requires "
+                f"actual market targets, not reconstructed values")
+        spread = float(ln["spread"])
+        total_line = float(ln["total"])
         miss_m = abs(anch_m - spread)
         miss_t = abs(anch_t - total_line)
         rows.append({
             "game": gname,
-            "spread": spread, "total_line": total_line,
-            "anch_m": round(anch_m, 2), "anch_t": round(anch_t, 2),
-            "miss_m": round(miss_m, 2), "miss_t": round(miss_t, 2),
+            "target_spread": spread, "target_total": total_line,
+            "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
+            "miss_m": round(miss_m, 4), "miss_t": round(miss_t, 4),
             "iterations": int(best["iter"]) + 1,
             "converged": bool(best["converged"]),
             "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
@@ -520,16 +553,25 @@ def main(freeze_json_path=None):
         if n_matched == 0:
             sys.exit("HALT: zero sim matches — nothing to freeze")
 
+        # D226: anchor sidecar with actual market targets, BEFORE the freeze
+        print("(f) Building anchor sidecar...", flush=True)
+        anch_log_path = sim_out / "anchoring_log.parquet"
+        if not anch_log_path.exists():
+            sys.exit("HALT: anchoring_log.parquet missing — sidecar is mandatory (D226)")
+        anch_log = pd.read_parquet(anch_log_path)
+        bundle_lines = lines_dict_from_bundle(bundle_dir)
+        sidecar_df = anchor_sidecar(anch_log, bundle_lines)
+        # Write sidecar to the bundle (immutable, before freeze)
+        sidecar_path = bundle_dir / "anchor_sidecar.parquet"
+        sidecar_df.to_parquet(sidecar_path, index=False)
+        n_unanch = int((~sidecar_df["anchored"]).sum())
+        print(f"    {len(sidecar_df)} games, {n_unanch} unanchored", flush=True)
+        print(sidecar_df.to_string(index=False))
+
         # D221: dry-run prints summary and stops before freeze
         if a.dry_run:
             print("\n--- DRY RUN ---")
             print(f"Tag counts:\n{filled['tag'].value_counts().to_string()}")
-            anch_log_path = sim_out / "anchoring_log.parquet"
-            if anch_log_path.exists():
-                anch_log = pd.read_parquet(anch_log_path)
-                sidecar_df = anchor_sidecar(anch_log, {})
-                print(f"\n--- Anchor sidecar ({len(sidecar_df)} games) ---")
-                print(sidecar_df.to_string(index=False))
             print(f"\nBundle manifest: {bundle_dir.relative_to(ROOT)}/bundle_manifest.json")
             print(json.dumps(bundle_manifest, indent=1))
             print("\nDRY RUN complete — nothing frozen.")
@@ -539,7 +581,7 @@ def main(freeze_json_path=None):
         filled_path = Path(td) / "filled.csv"
         filled.to_csv(filled_path, index=False)
 
-        # (f) freeze
+        # (g) freeze
         freeze_wall = datetime.now(timezone.utc)
         # D225: HALT if publication >= first kick in the window
         first_kick = events_df["commence_time"].map(_parse_utc).min()
@@ -547,7 +589,7 @@ def main(freeze_json_path=None):
             sys.exit(f"HALT: publication time {freeze_wall.isoformat()} >= "
                      f"first kick {first_kick.isoformat()}")
 
-        print("(f) Freezing...", flush=True)
+        print("(g) Freezing...", flush=True)
         freeze_cmd = [sys.executable, str(ROOT / "nfl" / "pipeline" / "log_ai_opinions.py"),
                       "freeze", "--week", str(a.week), "--filled", str(filled_path),
                       "--reader-model", READER_MODEL, "--as-of", T.isoformat()]
@@ -558,25 +600,18 @@ def main(freeze_json_path=None):
             sys.exit(f"HALT: freeze failed:\n{r_freeze.stderr}\n{r_freeze.stdout}")
         print(f"    {r_freeze.stdout.strip()}\n", flush=True)
 
+        # Also write sidecar to the opinions dir for backward compat
+        opinions_dir = (ROOT / "nfl" / "data" / "board" /
+                        f"week={SEASON}_{a.week:02d}" / "ai_opinions")
+        opinions_dir.mkdir(parents=True, exist_ok=True)
+        sidecar_df.to_parquet(
+            opinions_dir / "anchor_sidecar_sim_v1.parquet", index=False)
+
         # Record publication time in the bundle
         bundle_manifest["publication_utc"] = freeze_wall.isoformat()
         bundle_manifest["cutoff_T"] = T.isoformat()
         (bundle_dir / "bundle_manifest.json").write_text(
             json.dumps(bundle_manifest, indent=1) + "\n")
-
-    # (g) anchor sidecar
-    anch_log_path = sim_out / "anchoring_log.parquet"
-    if anch_log_path.exists():
-        anch_log = pd.read_parquet(anch_log_path)
-        sidecar_df = anchor_sidecar(anch_log, {})
-        opinions_dir = (ROOT / "nfl" / "data" / "board" /
-                        f"week={SEASON}_{a.week:02d}" / "ai_opinions")
-        sidecar_path = opinions_dir / "anchor_sidecar_sim_v1.parquet"
-        sidecar_df.to_parquet(sidecar_path, index=False)
-        n_unanch = int((~sidecar_df["anchored"]).sum())
-        print(f"(g) Anchor sidecar: {len(sidecar_df)} games, "
-              f"{n_unanch} unanchored -> {sidecar_path.relative_to(ROOT)}", flush=True)
-        print(sidecar_df.to_string(index=False))
 
     print("\nDone.")
 
