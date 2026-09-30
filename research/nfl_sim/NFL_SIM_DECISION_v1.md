@@ -4589,3 +4589,21 @@ Next: FWD4. TNF is primary only if FWD4 is verified by Thu 15:00Z.
 - `validate()` carries digest columns through the merge.
 
 7 new tests (test_fwd4_item0.py), all fail on 735374bf1. 42 total pass, 0 regressions.
+
+### D247 — the surviving mutations must die (2026-09-30)
+
+Four mutation tests (test_fwd4_item1.py), each kills its named mutation:
+
+1. **Line cutoff** (`if snap_utc <= T` -> `if True`): `test_line_cutoff_rejects_post_T_snapshot` — a
+   fixture adds a post-T snapshot; the mutant loads it, the real code does not.
+2. **Pre-write publication halt** (remove the `pre_write_wall >= first_kick` check):
+   `test_pre_write_publication_halt` — controlled clock (FakeDatetime) returns kick-5min for T,
+   kick+1s at the pre-write check. Only the pre-write check catches this (freeze uses T < kick).
+3. **run_week --lines-json** (drop `--lines-json` from `_default_run_week` argv):
+   `test_run_week_includes_lines_json_games_run_dir` — monkeypatch subprocess.run, assert argv
+   contains --lines-json, --games, --run-dir.
+4. **Bootstrap resampling** (independent-leg instead of whole-game):
+   `test_bootstrap_whole_game_resampling` — 4 games x 3 legs, within-game perfectly correlated,
+   across-game mixed-sign. Whole-game CI is wide (inconclusive); independent-leg CI is narrower.
+
+46 total tests pass (42 prior + 4 new), 0 regressions.
