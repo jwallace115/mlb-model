@@ -4199,3 +4199,28 @@ seed 20261004. Verdict: superior (ci_hi < 0), inferior (ci_lo > 0), inconclusive
 **(d) FWD_EXPERIMENT_v1.json re-stamped** (last step). Updated file hashes for
 run_forward_v1.py and log_ai_opinions.py. All 31 tests pass including
 test_experiment_file_hashes.
+
+### D228 — Cowork verification of FWD2: not merged; the live path HALTs, the main() tests read source text, participation voids real Unders (2026-09-30)
+
+FWD2 (eng/fwd2 @ fd0a2a5c6) is not merged.
+
+What stands:
+- cross-week refusal inside freeze();
+- the zero-match and calibration-stamp/usage HALTs;
+- the run bundle at T;
+- game-keyed matching;
+- sidecar targets from the lines used;
+- the cohort and statistic functions.
+
+Defects:
+- A live run HALTs at the sheet step (`--as-of` without `--pilot`, reproduced).
+- freeze() rebuilds its sheet from the tape instead of the bundle, with no window, and no price comparison.
+- The main() tests are `inspect.getsource` string checks.
+- Participation comes from the PBP player-id columns, so an active player with no touches is VOID.
+- The cohort and statistic are not wired into scoring, and the anchor join passes silently without a sidecar.
+- Freshness only warns.
+- run_week is not event-restricted.
+- The re-grade, the runbook and the dry run were not done.
+
+Next: FWD2b. Acceptance is on real data: a completed week-3 pilot freeze through main(), and a completed week-4 live
+dry run. The TNF start window holds only if FWD2b is verified by Thu 10-01 20:00Z.
