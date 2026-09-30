@@ -3491,3 +3491,72 @@ Ending: 99,842
 - MEANS: remaining plays excess = timeout-followed runoff drawn from the incomplete cell (-49 s/game) + short kneels (-10 s); safety excess is 1.75x on measured zone rates (snap count or roll application), not disabled branches.
 - NOT DONE: re-running D177 myself (read from the committed report and parquet); the safety zone snap counts; the points-per-drive split.
 - UNVERIFIED: real timeout-followed elapsed by state/period (6A item 0 builds the table); why the sim calls fewer timeouts (2.2 vs 5.4 snaps a game).
+
+## 2026-09-30T14:45Z  claude-code
+- RAN: FWD3 work order (4 items, D241-D244) on branch eng/fwd3 from origin/main
+- COMMITTED+PUSHED: D240 (verbatim decision entry), D241 (run record integrity), D242 (anchor returned), D243 (scoring integrity), D244 (tests+stamp+acceptance)
+- RAN: 75 tests passed, 0 failed (test_freeze_v1 + all FWD test files)
+- RAN: week-4 dry run (PIT@CLE, 11 sim_v1, anchored)
+- RAN: week-3 pilot freeze (14 games, 357 lines, 162 matched). Same command refused (run dir exists)
+- RAN: score-experiment -> 0 eligible legs (all pilot), no verdict
+- RAN: diagnostic --file on pilot -> Delta=+0.012, CI [-0.019,+0.051], inconclusive
+- NOT DONE: committing inputs/ (3 files > 2MB: depth_charts 7.4M, player_usage 2.9M, rosters 3.9M)
+- NOT DONE: verifying each mutation from section D survives on 0792fd122 (would require checking out that commit and running each mutated test)
+- UNVERIFIED: whether the week-4 dry run dir cleanup is needed before TNF
+- UNVERIFIED: the week-3 stale run dir (20260927T163000Z from a partial run) should be cleaned up
+
+## 2026-09-30T15:14Z  claude-code (FWD4 D245-D247)
+- PUSHED: D245 verbatim (e13d11246) — Cowork verification of FWD3
+- PUSHED: D246 (9c1a272e7) — anchor join on (run_id, event_id); record written once
+  - anchor_sidecar now carries event_id + run_id
+  - primary_cohort joins on (run_id, event_id), missing=excluded, duplicate=HALT
+  - frozen parquet written ONCE (no post-freeze rewrite)
+  - publication.json in run-dir; bundle_manifest never rewritten after freeze
+  - every frozen row carries bundle_digest + experiment_digest
+  - 7 new tests, all fail on 735374bf1
+- PUSHED: D247 (0b6d94a58) — 4 mutation tests, FWD_EXPERIMENT_v1.json re-stamped
+  - Mutation 1 (if snap_utc<=T -> if True): test_line_cutoff_rejects_post_T_snapshot fails
+  - Mutation 2 (remove pre-write check): test_pre_write_publication_halt fails
+  - Mutation 3 (drop --lines-json): test_run_week_includes_lines_json_games_run_dir fails
+  - Mutation 4 (independent-leg bootstrap): test_bootstrap_whole_game_resampling fails
+  - FWD_EXPERIMENT_v1.json re-stamped: run_forward_v1.py da9832->7dc245, log_ai_opinions.py 6a4fc1->a7a209
+- RAN: real week-4 dry run (PIT@CLE, 11 sim_v1, anchored miss 0.092/0.137, 1 game converged in 3 iter)
+  - bundle_digest: d7246f19dcb144ec, experiment_digest: 7f98fb140ef859c2
+  - sidecar has event_id + run_id columns
+- 46 tests pass (4 freeze + 38 forward/fwd2/fwd3 + 4 fwd4_item1), 0 regressions
+- NOT DONE: week-4 dry run dir (20260930T151418Z) left in place (not committed)
+- NOT DONE: cleanup of stale week-4 dir 20260930T142206Z from earlier session
+
+## 2026-09-30T16:03Z  claude-code (FWD4 audit + fixup)
+- AUDITED: prior session's D245-D247 commits against every work order requirement
+- FOUND 3 GAPS:
+  1. Missing test: "altered frozen file in week directory -> HALT"
+  2. Missing runtime check: verify() checking frozen row's bundle_digest against actual bundle
+  3. score_experiment loaded sidecar BEFORE verify_bundle (order wrong)
+- PUSHED: fixup (c34c1dc01) on eng/fwd3
+  - score_experiment: verify_bundle BEFORE sidecar load; bundle_digest check at grading time
+  - Added test_altered_frozen_file_halts_in_week_dir (tests verify() detection of tampered frozen file)
+  - Added test_bundle_digest_mismatch_halts (tampered bundle_manifest.json detected via row digest)
+  - Renamed test_no_sidecar_halts -> test_no_sidecar_excludes_row (accuracy)
+  - Re-stamped FWD_EXPERIMENT_v1.json: log_ai_opinions.py a7a209->cf1006
+- VERIFIED all 4 mutations killed (fresh run, not stale cache):
+  - Mutation 1 (if True): test_line_cutoff_rejects_post_T_snapshot FAILED
+  - Mutation 2 (remove pre-write): test_pre_write_publication_halt FAILED
+  - Mutation 3 (drop --lines-json): test_run_week_includes_lines_json_games_run_dir FAILED
+  - Mutation 4 (independent-leg): test_bootstrap_whole_game_resampling FAILED
+- RAN: real week-4 dry run (20260930T160343Z)
+  - PIT@CLE, 11 sim_v1, 0 unanchored, converged in 3 iter (miss 0.092/0.137)
+  - bundle_digest: 3d7cd1bdaef048bc, experiment_digest: cf02b41d423c246f
+  - sidecar columns: game, target_spread, target_total, anch_m, anch_t, miss_m, miss_t, iterations, converged, anchored, event_id, run_id
+- 48 tests pass (4 freeze + 38 forward/fwd2/fwd3 + 9 fwd4_item0 + 4 fwd4_item1), 0 regressions
+- NOT DONE: cleanup of stale dry run dirs (20260930T142206Z, 20260930T151418Z, 20260930T160343Z)
+
+## 2026-09-30T17:15Z  claude-code
+- COMMITTED + PUSHED: 5e2db479b — D248 verbatim from fwd4_verification_2026-09-30.md appended to NFL_SIM_DECISION_v1.md
+- COMMITTED + PUSHED: ffc3e67dc — FWD4b (D249): test_cohort_excludes_wrong_reader and test_cohort_excludes_unanchored_game updated to primary_cohort(df, reader, sidecar) with (run_id, event_id) fixtures
+- PROOF (a): mutant (event_id-only join) → test_cohort_excludes_unanchored_game FAILED ("assert 1 == 0"); reverted
+- PROOF (b): test_freeze_v1 — 4 passed
+- PROOF (c): 13 files, 88 passed, 0 failed, 0 skipped
+- WORKTREE /tmp/eng-fwd3 created and removed
+- NOT DONE: merge of eng/fwd3 to main (user decision)
+- UNVERIFIED: whether the 88-test count matches the expected 92 from the prompt (prompt said "expect 92"; suite returned 88 — possibly 4 tests were added between the prompt's count and the actual HEAD)
