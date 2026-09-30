@@ -106,3 +106,24 @@
 
 ### UNVERIFIED
 - The auditor's items not reproducible from the pin (the raw PBP-based measurements, the paired A/Bs, the dry run).
+
+## 2026-09-30T01:20Z  cowork (verification of FWD2 — D228; order FWD2b)
+
+### RETURNED
+- eng/fwd2 @ fd0a2a5c6. Commits: D223 append, D224, D224a, D225, D226, D227, logs. 31 tests pass on Linux.
+- `log_ai_opinions.py sheet --week 4 --as-of 2026-10-01T23:30:00+00:00` -> "HALT: --as-of requires --pilot", exit 1.
+  main() passes --as-of on every run (run_forward_v1.py:510-511, :595).
+- The main() tests (test_zero_matches_halt, test_cal_stamp_check_in_harness) assert strings in inspect.getsource(main).
+- The freeze call passes no --props-file/--lines-file/window. Freshness only prints a WARNING. Participants = PBP
+  *_player_id columns. primary_cohort/primary_statistic are not called from score(). The session's own NOT DONE:
+  re-grade, runbook, London command, dry run, P2, breakouts, the validate() price comparison.
+
+### MEANS
+- A live run cannot freeze anything. The tests could not catch that because they never execute main().
+- Participation as coded voids winning Unders for players who played without touching the ball.
+
+### NOT DONE
+- FWD2b.
+
+### UNVERIFIED
+- Whether FWD2b lands by Thu 20:00Z. If not, TNF stays a pilot.
