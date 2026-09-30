@@ -283,3 +283,39 @@ with flag forced False.
 
 **Live run (Mac):** official reports = 0 (off-season). ESPN injuries = 66 items (Out=14, Day-To-Day=52).
 One line written to `_pulls.jsonl`.
+
+### B4 — Outcomes loader and settlement rules (2026-09-30)
+
+Loader: `nba/pipeline/nba_outcomes.py`. Tests: `nba/pipeline/tests/test_outcomes_b4.py`.
+Shape follows `nhl/pipeline/nhl_outcomes.py`: home, away, home_score, away_score, periods, went_to_ot, status.
+Source: ESPN scoreboard (VM-reachable per B2). nba_api is Mac-only cross-check.
+
+**Team map.** 30 Odds API full names -> internal abbreviations (matches results log, games.parquet).
+ESPN displayName -> same abbreviations. One divergence: ESPN uses "LA Clippers", Odds API uses
+"Los Angeles Clippers". Both map to LAC. All 30 names verified mapped (test_all_30_odds_api_names_map).
+
+**Grading vs nba_results_log.parquet (194 rows, 2026-03-14..2026-04-12).**
+PRE-REGISTERED: 194/194 totals agree, every went_to_ot row has periods > 4.
+**RESULT: 191/194 agree. 3 mismatches (DID NOT HOLD):**
+
+| Date | Game | Issue | Investigation |
+|------|------|-------|---------------|
+| 2026-03-30 | DET vs OKC | ESPN=OT, log went_to_ot=0.0 | Log failed to record OT |
+| 2026-04-06 | DEN vs POR | ESPN periods=5 (OT), log went_to_ot=0.0 | Log total=269 (correct incl OT), went_to_ot flag wrong |
+| 2026-04-07 | PHX vs HOU | ESPN total=224, log total=220 | ESPN linescores sum 224 (PHX 105+HOU 119). Log 4 pts short |
+
+Root cause: the results log's went_to_ot flag came from nba_api (stats.nba.com), which may have
+different OT tracking. The PHX vs HOU 4-point discrepancy is unexplained. All 3 are in the results
+log, not in the ESPN source. The loader is correct for these games.
+
+**Null control (OT).** DEN vs POR 2026-04-06: regulation linescores [31,27,29,38] + [35,37,29,24] = 250.
+Full game (5 periods) = 269. Loader returns 269 (correct: OT included). A regulation-only sum
+would give 250 — test_ot_game_total_includes_ot catches this (asserts total=269 and total != 250).
+
+**Tests (2 tests, both pass, mutation stated):**
+(i) All 30 Odds API names map to abbreviations.
+(ii) OT game total includes OT — FAILS if loader sums only periods 1-4 (would get 250 not 269).
+
+**Settlement rules.** Pinnacle (`pinnacle.com/en/betting-rules/basketball`) and Hard Rock
+(`hardrockbet.com/sports/rules`) both return HTTP 404/403 from Mac and VM. **NOT VERIFIED** —
+settlement rules could not be fetched programmatically from any host. Do not state a rule from memory.
