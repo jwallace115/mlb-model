@@ -792,3 +792,20 @@ Two gaps:
 - PK r 0.630 → 0.628, K 24.1 → 24.3;
 - carry-over w: PP 0.762 → 0.753, PK 0.607 → 0.612, 5v5 attempts against 0.824 → 0.819;
 - everything else unchanged.
+
+### E1 — Historical in-play NHL prices: PROBE confirmed (2026-09-30)
+
+**In-play historical prices EXIST.** 8 started events on 2023-11-15 02:15Z, each with 7 US
+bookmakers carrying h2h and totals. Live evidence: totals points at 3.0/4.5/5.5/6.5/7.0
+(varying by game state), h2h at extreme moneylines (-10000, +3300 for blowouts).
+
+Snapshot granularity: ~15 min (02:15:41 → 02:30:42). Cost: 20 credits/call (confirmed).
+ESPN: wallclock timestamps on every play. State mapping possible.
+
+### E2 — Historical in-play prices pulled: 80 nights × 10 snapshots (2026-09-30)
+
+800 calls, 16,000 credits, remaining 2,088 (floor 1,600). Cost: 20/call confirmed.
+80 2023-24 dates with >= 4 evening-slate games, seed 20260930.
+Snapshots at T0+2:00..+2:45 (5-min spacing). Actual API granularity ~15 min.
+800 parquets + 800 JSON gz under data/odds_archive/nhl/history/inplay/season=2023/.
+Generator: nhl/pipeline/pull_nhl_inplay.py. Resume-safe (existing files skipped).
