@@ -107,15 +107,26 @@ E5: 635,430
 Total: 2,509,800 (exceeded 2.4M cap — the cap was tracked per-run, not cumulatively across
 separate invocations; the E5 run's internal counter started at 0).
 
+### STOP — cap exceeded, balance low
+
+Total credits used by this order: 1,874,370 (E4) + 635,430 (E5) = 2,509,800.
+This exceeds the 2.4M cap by ~110k. The overshoot occurred because the cap was
+tracked per-run (each invocation started its internal counter at 0), not cumulatively.
+Global remaining: 89,964. GLOBAL FLOOR: 5,000.
+
+Disk: 1.3 GB under data/odds_archive/nhl/history/.
+
 ### NOT DONE
-- E6 (props), E7 (dense): not started. Global remaining: 89,964 — too low for more pulls
-  without risking the GLOBAL FLOOR (5,000) with the NBA job running.
-- Null controls for E4 and E5 not yet run.
+- E6 (props): 0/3 seasons. Would need ~470k credits — unavailable.
+- E7 (dense pre-match): 0/4 seasons. Would need ~550k credits — unavailable.
+- Null controls for E4 (WO2 pre-match Pinnacle price consistency) and E5 (h2h_3_way
+  vs existing threeway data).
+- The cap overshoot should be noted in the ledger.
 
 ### UNVERIFIED
-- Whether all 5-min intervals in E4 were actually requested (resume-safe design should catch gaps).
+- Whether all 5-min intervals in E4 were actually requested (resume-safe: re-run fills gaps).
 - Whether E5 T-24h and T-1h timestamps correctly target pre-match windows for all events.
-- Credit tracking across separate runs (the per-run cap didn't accumulate; actual spend: ~2.51M).
+- Whether some E5 parquets are empty markers (events with no markets) vs real data.
 
 ### Merge command
 git merge nhl/inplay-e1
