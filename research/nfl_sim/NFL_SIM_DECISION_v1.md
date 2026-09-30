@@ -4320,3 +4320,21 @@ test_freeze_v1: 4 passed. Full suite: 43 passed.
 
 NOT DONE: week 4 dry run did not complete (correct: stale quotes in live mode).
 UNVERIFIED: week 3 snap count settlement (snap data may lag actual participation).
+
+### D232 — FWD2b Item 3: runbook and stamp (2026-09-30)
+
+**(a) Runbook rewritten** (research/nfl_sim/fwd1_runbook.md) for weeks 4-5.
+Weekday labels in UTC: TNF Fri 10-02 00:15Z; London Sun 10-05 13:30Z; SNF Mon 10-05
+00:20Z; MNF Tue 10-07 00:15Z. Each window has input-refresh commands (pull_nflverse 6s,
+ratings.py ~8min), run command, and latest safe start time (measured: 30s/game).
+London: Jeff's manual props pull command writing to manual/ dir, 10 credits cost.
+
+**(b) FWD_EXPERIMENT_v1.json re-stamped** (last step). File hashes updated for
+run_forward_v1.py, run_week.py, log_ai_opinions.py. All 43 tests pass:
+- test_fwd2b_harness: 7 passed
+- test_fwd2_settlement: 9 passed
+- test_forward_v1: 8 passed
+- test_fwd2_item0_fixes: 7 passed
+- test_fwd2_bundle: 5 passed
+- test_fwd2_anchor: 3 passed
+- test_freeze_v1: 4 passed
