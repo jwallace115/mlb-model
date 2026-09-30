@@ -4610,3 +4610,21 @@ Four mutation tests (test_fwd4_item1.py), each kills its named mutation:
    across-game mixed-sign. Whole-game CI is wide (inconclusive); independent-leg CI is narrower.
 
 46 total tests pass (42 prior + 4 new), 0 regressions.
+
+### D248 — Cowork verification of FWD4: accepted pending a test-only fix; the (run_id, event_id) anchor join works; every named mutation is caught (2026-09-30)
+
+FWD4 (eng/fwd3 @ 0b6d94a58) is accepted, conditional on FWD4b.
+
+Verified:
+- primary_cohort joins on (run_id, event_id): a cross-run leak is excluded, a missing sidecar is excluded and counted
+  (accepted in place of HALT), and a duplicate HALTs.
+- The frozen file is written once.
+- The bundle manifest is finalized before the freeze.
+- bundle_digest and experiment_digest are on the rows.
+- Publication is in publication.json.
+- All ten Cowork mutations are caught.
+
+Defect: two older cohort tests call the old signature. 88 of 90 pass, not "0 regressions" as reported.
+
+After FWD4b and a green full suite, eng/fwd3 (D240-D249) merges. The primary count of nfl_fwd_v1 starts at the
+week-4 TNF window (run 23:30Z Thu 10-01), provided the merge is on main by Thu 15:00Z.
