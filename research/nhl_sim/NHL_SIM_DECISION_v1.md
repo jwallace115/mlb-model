@@ -874,3 +874,24 @@ Total-goals distribution (p_tot_0..p_tot_15) stored per game. Over/under exact.
 - |diff| >5 pts: engine 0.6703 vs Pinnacle 0.6552 (deficit in high-disagreement games).
 - A2 picks: 676 at edge >= 0.04, hit 41.1%. No edge.
 - Totals reliability: engine under-confident (pred 0.36-0.57, actual 0.44-0.54).
+
+### S45 — Calibration on 2022-23, applied to 2023-24 (2026-09-29, S-WO4c Item 2)
+
+PRE-REGISTERED: calibrated ML improves on raw but doesn't beat Pinnacle.
+
+**Moneyline:**
+- Calibration slope: 1.150 (engine under-confident)
+- Raw 0.6647 → calibrated 0.6642 → Pinnacle 0.6567
+- Improvement: +0.0005 (tiny). Cal vs Pinnacle: +0.0075.
+- PRE-REGISTRATION: raw→cal improves: **HELD**. Cal doesn't beat Pinnacle: **HELD**.
+- A1 calibrated: 0.326 CI [-0.089, 0.755]: still no info.
+
+**Totals:**
+- Calibration slope: 0.162 (totals extremely compressed)
+- Raw 0.7047 → calibrated 0.6935 → Pinnacle 0.6942
+- Calibrated totals narrowly beat Pinnacle by 0.0007 log-loss.
+- A1 calibrated: -0.085 CI [-2.624, 2.503]: wide CI, no info.
+
+The calibration confirms the engine is under-confident but does not close the gap with
+Pinnacle on moneylines. On totals, the calibration brings the engine to parity.
+Nothing was re-fit.
