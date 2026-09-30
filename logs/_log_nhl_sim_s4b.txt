@@ -94,3 +94,57 @@ S42: f607bad75
 
 ### Merge command
 git merge nhl/sim-s4b
+
+---
+
+## S-WO4c (2026-09-29)
+
+### Item 1 (S44) — totals from sims + S42 completed
+
+RETURNED: price_games.py stores p_tot_0..p_tot_15 per game. Over/under/push exact from distribution.
+Normal approximation deleted.
+
+Null control: max diff = 0 on p_home_win, p_reg_*, p_home_m15, p_away_p15, mean_total for all 2,624 games.
+
+2023-24 (validate, 1,138 games):
+  ML: engine 0.6647 vs Pinnacle 0.6567. A1 CI [-0.103, 0.869]. No info.
+  Totals: engine 0.7001 vs Pinnacle 0.6942. A1 CI [-0.439, 0.458]. No info.
+  |diff| >5 pts: engine 0.6703 vs Pinnacle 0.6552.
+  A2 ML picks: 676 at edge >= 0.04, hit 41.1%.
+
+Generator grep:
+  price_games.py → prices/season={2022,2023}.parquet
+  prediction_report.py → report output (stdout)
+
+### Item 2 (S45) — calibration
+
+PRE-REGISTERED: cal ML improves on raw 0.6647 but doesn't beat Pinnacle 0.6567.
+
+RETURNED:
+  ML: slope=1.150. Raw 0.6647 → cal 0.6642 → Pinnacle 0.6567.
+    Pre-reg HELD (cal < raw, cal > Pinnacle).
+    A1 calibrated: 0.326 CI [-0.089, 0.755]. No info.
+  Totals: slope=0.162. Raw 0.7047 → cal 0.6935 → Pinnacle 0.6942.
+    Cal narrowly beats Pinnacle by 0.0007.
+    A1 calibrated: -0.085 CI [-2.624, 2.503]. No info.
+
+MEANS: The engine is under-confident (ML slope 1.15, totals slope 0.16). Calibration
+barely helps ML (+0.0005) but significantly helps totals (+0.011). After calibration,
+totals are at parity with Pinnacle. ML still trails by 0.0075.
+
+### NOT DONE
+(empty — all required outputs delivered)
+
+### UNVERIFIED
+- The calibration uses logistic regression with C=1e9 (effectively unpenalised) — may
+  overfit slightly on the 1,156-game fit set
+- The totals slope of 0.162 implies the engine's totals spread has almost no information
+  beyond the mean — the calibration essentially flattens the probabilities toward 50/50
+- Game-clustered bootstrap would be more appropriate than i.i.d. for the A1 CIs
+
+### Commit shas (S-WO4c)
+S44: 187936819
+S45: 0e5d4cd78
+
+### Merge command
+git merge nhl/sim-s4b
