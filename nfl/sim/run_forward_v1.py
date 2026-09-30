@@ -474,14 +474,22 @@ def fill_sheet(sheet_df, picks_log, event_game_map=None):
     return filled, n_matched
 
 
-def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None):
-    """D215(b)/D226/D242: per-game anchor sidecar.
+def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
+                   event_game_map=None, run_id=None):
+    """D215(b)/D226/D242/D246: per-game anchor sidecar.
 
     D242: if anchor_returned_df is provided, use the solver's RETURNED values
     (iterations, converged, anch_m, anch_t) instead of minimizing over the log.
     Market spread/total MUST come from the actual lines dict used by the sim
     (D226: not reconstructed from err fields).
+    D246(a): sidecar rows carry event_id (from bundle events) and run_id.
     """
+    # D246(a): build game -> event_id map (inverted)
+    game_to_event = {}
+    if event_game_map:
+        for eid, gid in event_game_map.items():
+            game_to_event[gid] = eid
+
     if anchor_returned_df is not None:
         # D242: use the solver's returned values directly
         rows = []
@@ -498,7 +506,7 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None):
             anch_t = float(r["anch_t"])
             miss_m = abs(anch_m - spread)
             miss_t = abs(anch_t - total_line)
-            rows.append({
+            row = {
                 "game": gname,
                 "target_spread": spread, "target_total": total_line,
                 "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
@@ -506,7 +514,12 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None):
                 "iterations": int(r["iterations"]),
                 "converged": bool(r["converged"]),
                 "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
-            })
+            }
+            if game_to_event:
+                row["event_id"] = game_to_event.get(gname, "")
+            if run_id is not None:
+                row["run_id"] = run_id
+            rows.append(row)
         return pd.DataFrame(rows)
 
     # Legacy path: minimize over the anchoring log
@@ -530,7 +543,7 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None):
         total_line = float(ln["total"])
         miss_m = abs(anch_m - spread)
         miss_t = abs(anch_t - total_line)
-        rows.append({
+        row = {
             "game": gname,
             "target_spread": spread, "target_total": total_line,
             "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
@@ -538,7 +551,12 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None):
             "iterations": int(best["iter"]) + 1,
             "converged": bool(best["converged"]),
             "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
-        })
+        }
+        if game_to_event:
+            row["event_id"] = game_to_event.get(gname, "")
+        if run_id is not None:
+            row["run_id"] = run_id
+        rows.append(row)
     return pd.DataFrame(rows)
 
 
@@ -695,7 +713,7 @@ def main(argv=None, root=None, run_week_fn=None):
     if n_matched == 0:
         raise SystemExit("HALT: zero sim matches — nothing to freeze")
 
-    # (f) anchor sidecar — D241(d)/D242: use solver's returned values
+    # (f) anchor sidecar — D241(d)/D242/D246(a): use solver's returned values
     print("(f) Building anchor sidecar...", flush=True)
     anch_log_path = run_out / "anchoring_log.parquet"
     if not anch_log_path.exists():
@@ -704,16 +722,28 @@ def main(argv=None, root=None, run_week_fn=None):
     # D242: prefer anchor_returned.parquet (solver's actual returns)
     anch_ret_path = run_out / "anchor_returned.parquet"
     anch_ret = pd.read_parquet(anch_ret_path) if anch_ret_path.exists() else None
-    sidecar_df = anchor_sidecar(anch_log, bundle_lines, anchor_returned_df=anch_ret)
+    bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
+    sidecar_df = anchor_sidecar(anch_log, bundle_lines, anchor_returned_df=anch_ret,
+                                event_game_map=event_game_map, run_id=bundle_run_id)
     sidecar_path = bundle_dir / "anchor_sidecar.parquet"
     sidecar_df.to_parquet(sidecar_path, index=False)
     n_unanch = int((~sidecar_df["anchored"]).sum())
     print(f"    {len(sidecar_df)} games, {n_unanch} unanchored", flush=True)
     print(sidecar_df.to_string(index=False))
 
-    # D241(f): finalize bundle manifest BEFORE the freeze — hash every file
+    # D241(f)/D246(b): finalize bundle manifest BEFORE the freeze — hash every file
     _finalize_bundle_manifest(bundle_dir)
     bundle_manifest = json.loads((bundle_dir / "bundle_manifest.json").read_text())
+
+    # D246(b): compute digests BEFORE the freeze, add to filled rows
+    experiment_digest = hashlib.sha256(
+        (root / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json").read_bytes()
+    ).hexdigest()
+    bundle_digest = hashlib.sha256(
+        (bundle_dir / "bundle_manifest.json").read_bytes()
+    ).hexdigest()
+    filled["bundle_digest"] = bundle_digest
+    filled["experiment_digest"] = experiment_digest
 
     # dry-run
     if a.dry_run:
@@ -724,12 +754,11 @@ def main(argv=None, root=None, run_week_fn=None):
         print("\nDRY RUN complete — nothing frozen.")
         return
 
-    # (g) D241(e): publication is atomic inside freeze()
+    # (g) D241(e)/D246(b): publication is atomic inside freeze()
     print("(g) Freezing...", flush=True)
     from nfl.pipeline.log_ai_opinions import freeze as do_freeze
     board_root = root / "nfl" / "data" / "board"
     opinions_dir = board_root / f"week={SEASON}_{a.week:02d}" / "ai_opinions"
-    bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
 
     # D241(e): take wall clock immediately before the write
     first_kick = events_df["commence_time"].map(_parse_utc).min()
@@ -739,12 +768,13 @@ def main(argv=None, root=None, run_week_fn=None):
             raise SystemExit(f"HALT: publication time {pre_write_wall.isoformat()} >= "
                          f"first kick {first_kick.isoformat()}")
 
+    # D246(b): frozen parquet written ONCE by freeze() — not rewritten after
     dest, sha, m = do_freeze(
         sheet_df, filled, SEASON, a.week, a.pilot, T,
         d=opinions_dir, reader_model=READER_MODEL, board_root=board_root,
         run_id=bundle_run_id)
 
-    # D241(e): record publication_utc on every frozen row and in the manifest
+    # D241(e)/D246(b): record publication_utc
     publication_utc = datetime.now(timezone.utc)
 
     # D241(e): quarantine if write completed after kick (live only)
@@ -753,7 +783,6 @@ def main(argv=None, root=None, run_week_fn=None):
         quarantine_dir.mkdir(parents=True, exist_ok=True)
         quarantine_dest = quarantine_dir / dest.name
         dest.rename(quarantine_dest)
-        # Mark excluded in manifest
         man_path = opinions_dir / "manifest.json"
         entries = json.loads(man_path.read_text()) if man_path.exists() else []
         for e in entries:
@@ -767,34 +796,25 @@ def main(argv=None, root=None, run_week_fn=None):
             f"QUARANTINED: publication at {publication_utc.isoformat()} >= "
             f"first kick {first_kick.isoformat()} — moved to {quarantine_dest}")
 
-    # Write publication_utc into the frozen file
-    m["publication_utc"] = publication_utc.isoformat()
-    m.to_parquet(dest, index=False)
-    # Re-hash
-    sha = hashlib.sha256(dest.read_bytes()).hexdigest()
+    # D246(b): publication.json — written AFTER the freeze, in the run directory
+    pub_record = {
+        "publication_utc": publication_utc.isoformat(),
+        "frozen_file": dest.name,
+        "frozen_sha256": sha,
+    }
+    (bundle_dir / "publication.json").write_text(json.dumps(pub_record, indent=1) + "\n")
+
+    # D246(b): update the ai_opinions manifest entry with publication_utc
     man_path = opinions_dir / "manifest.json"
     entries = json.loads(man_path.read_text()) if man_path.exists() else []
     for e in entries:
         if e["file"] == dest.name:
-            e["sha256"] = sha
             e["publication_utc"] = publication_utc.isoformat()
     man_path.write_text(json.dumps(entries, indent=1) + "\n")
 
     print(f"    FROZEN {len(m)} lines -> {dest.relative_to(root)}\n"
           f"    sha256 {sha}\n"
           f"    publication_utc {publication_utc.isoformat()}", flush=True)
-
-    # D241(e): write publication_utc into bundle manifest (the manifest entry)
-    bundle_manifest["publication_utc"] = publication_utc.isoformat()
-    bundle_manifest["cutoff_T"] = T.isoformat()
-    bundle_manifest["experiment_digest"] = hashlib.sha256(
-        (root / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json").read_bytes()
-    ).hexdigest()
-    bundle_manifest["bundle_digest"] = hashlib.sha256(
-        (bundle_dir / "bundle_manifest.json").read_bytes()
-    ).hexdigest()
-    (bundle_dir / "bundle_manifest.json").write_text(
-        json.dumps(bundle_manifest, indent=1) + "\n")
 
     print("\nDone.")
     return dest

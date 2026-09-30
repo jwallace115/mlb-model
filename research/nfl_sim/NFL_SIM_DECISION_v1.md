@@ -4568,3 +4568,24 @@ Not accepted:
 - The frozen file and bundle manifest are rewritten after the freeze, and no digest is on the rows.
 
 Next: FWD4. TNF is primary only if FWD4 is verified by Thu 15:00Z.
+
+### D246 — the anchor join and the record written once (2026-09-30)
+
+(a) Anchor join on (run_id, event_id):
+- `anchor_sidecar()` now carries `event_id` (from the bundle's events) and `run_id` on every row.
+- `primary_cohort()` joins each candidate row on (run_id, event_id) — exactly one sidecar row per
+  pair. Missing -> excluded ("no sidecar match"); duplicate -> HALT (SystemExit). `anchored` comes
+  only from the joined row; no pooling across runs.
+- `score_experiment()` calls `verify_bundle()` on every sidecar's run directory before joining.
+
+(b) Written once:
+- The frozen parquet is written ONCE by `freeze()`. No rewrite after.
+- `publication.json` in `<run-dir>/` records `{publication_utc, frozen_file, frozen_sha256}`, written
+  after the freeze. The ai_opinions manifest entry gets `publication_utc` without rewriting the
+  frozen file.
+- `bundle_manifest.json` is finalized BEFORE the freeze and never rewritten (no publication_utc in it).
+- Every frozen row carries `bundle_digest` = sha256(final bundle_manifest.json) and
+  `experiment_digest` = sha256(FWD_EXPERIMENT_v1.json), computed before the freeze.
+- `validate()` carries digest columns through the merge.
+
+7 new tests (test_fwd4_item0.py), all fail on 735374bf1. 42 total pass, 0 regressions.

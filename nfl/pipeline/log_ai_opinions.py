@@ -204,6 +204,10 @@ def validate(sheet, filled):
     if f.duplicated(KEY).any():
         raise SystemExit("HALT: filled sheet has duplicate lines")
     merge_cols = KEY + ["p_first", "tag", "reason", "conf", "conf_rank"]
+    # D246(b): carry digests through if present
+    for dcol in ("bundle_digest", "experiment_digest"):
+        if dcol in f.columns:
+            merge_cols.append(dcol)
     m = sheet.merge(f[merge_cols], on=KEY, how="outer", indicator=True)
     missing = m[m["_merge"] == "left_only"]
     extra = m[m["_merge"] == "right_only"]
@@ -746,8 +750,12 @@ COHORT_PREDICATE = (
 )
 
 
-def primary_cohort(scored_df, canonical_reader, anchor_sidecar_df=None):
-    """D227: filter scored rows to the primary experiment cohort.
+def primary_cohort(scored_df, canonical_reader, sidecar):
+    """D227/D246(a): filter scored rows to the primary experiment cohort.
+
+    D246(a): sidecar is a DataFrame with (run_id, event_id, anchored). Each
+    candidate row is joined on (run_id, event_id) — exactly one sidecar row
+    per pair. Missing or duplicate -> HALT (SystemExit).
 
     Returns (cohort_df, exclusions) where exclusions is a dict of reason -> count.
     """
@@ -772,17 +780,38 @@ def primary_cohort(scored_df, canonical_reader, anchor_sidecar_df=None):
     keep &= _exclude(~df["two_way"].astype(bool), "not two_way")
     # Market in eligible set
     keep &= _exclude(~df["market_key"].isin(ELIGIBLE_MARKETS), "market not eligible")
-    # Game anchored per bundle
-    if anchor_sidecar_df is not None and not anchor_sidecar_df.empty:
-        anchored_games = set(
-            anchor_sidecar_df[anchor_sidecar_df["anchored"]]["game"])
-        # Build game_id from the scored rows
-        from nfl.sim.names import FULL_TO_ABBR
-        df["_game_id"] = df.apply(
-            lambda r: f"{FULL_TO_ABBR.get(r['away_team'], r['away_team'])}@"
-                      f"{FULL_TO_ABBR.get(r['home_team'], r['home_team'])}", axis=1)
-        keep &= _exclude(~df["_game_id"].isin(anchored_games), "game not anchored")
-        df = df.drop(columns=["_game_id"], errors="ignore")
+
+    # D246(a): anchor join on (run_id, event_id) — exactly one sidecar row per pair
+    if "run_id" not in df.columns or "event_id" not in df.columns:
+        raise SystemExit("HALT: scored rows missing run_id or event_id — cannot join sidecar")
+    if not sidecar.empty and ("run_id" not in sidecar.columns or "event_id" not in sidecar.columns):
+        raise SystemExit("HALT: sidecar missing run_id or event_id columns")
+    if sidecar.empty:
+        # All rows excluded — no sidecar data at all
+        keep &= _exclude(pd.Series(True, index=df.index), "no sidecar match")
+    else:
+        # Check for duplicates in sidecar
+        sc_key = sidecar[["run_id", "event_id"]]
+        dupes = sc_key.duplicated(keep=False)
+        if dupes.any():
+            raise SystemExit(
+                f"HALT: {int(dupes.sum())} duplicate sidecar rows on (run_id, event_id)")
+        # Join
+        sc_lookup = sidecar.set_index(["run_id", "event_id"])["anchored"]
+        candidate_keys = list(zip(df["run_id"].values, df["event_id"].values))
+        anchored_flags = []
+        for rid, eid in candidate_keys:
+            key = (rid, eid)
+            if key not in sc_lookup.index:
+                anchored_flags.append(None)
+            else:
+                anchored_flags.append(bool(sc_lookup.loc[key]))
+        df["_anchored"] = anchored_flags
+        missing_sidecar = df["_anchored"].isna()
+        keep &= _exclude(missing_sidecar, "no sidecar match")
+        keep &= _exclude(df["_anchored"] == False, "game not anchored")
+        df = df.drop(columns=["_anchored"], errors="ignore")
+
     # Settled (not void or unresolved)
     if "settlement" in df.columns:
         keep &= _exclude(df["settlement"] != "settled", "not settled")
@@ -1036,12 +1065,17 @@ def score_experiment(experiment, canonical_reader, season=2026, include_pilot=Fa
         pooled = pd.concat(all_scored, ignore_index=True)
         n_eligible = len(pooled)
 
-    # D243(b): Load anchor sidecars from bundles (by run_id)
+    # D246(a): Load anchor sidecars from bundles — each carries (run_id, event_id)
     all_sidecars = []
     for wd in sorted(board_root.glob(f"week={season}_*/sim_runs/*/anchor_sidecar.parquet")):
         run_id = wd.parent.name
         sc = pd.read_parquet(wd)
-        sc["run_id"] = run_id
+        if "run_id" not in sc.columns:
+            sc["run_id"] = run_id
+        # D246(a): verify the bundle for each sidecar's run
+        vbad = verify_bundle(wd.parent)
+        if vbad:
+            raise SystemExit(f"HALT: bundle verify failed for {wd.parent.name}: {vbad}")
         all_sidecars.append(sc)
     sidecar_df = pd.concat(all_sidecars, ignore_index=True) if all_sidecars else pd.DataFrame()
 
@@ -1050,7 +1084,7 @@ def score_experiment(experiment, canonical_reader, season=2026, include_pilot=Fa
         print(f"\n0 eligible legs — descriptive only, no verdict.")
         return
 
-    cohort, exclusions = primary_cohort(pooled, canonical_reader, anchor_sidecar_df=sidecar_df)
+    cohort, exclusions = primary_cohort(pooled, canonical_reader, sidecar=sidecar_df)
 
     print(f"\nCohort predicate: {COHORT_PREDICATE}")
     print(f"\nExclusions:")
