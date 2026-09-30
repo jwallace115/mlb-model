@@ -412,3 +412,43 @@ CDN block (403, not 404). B2 "CDN blocks the VM" is now CONFIRMED with correct U
 **B6 records:** B2's "no 5:30 PM report" is WITHDRAWN — it was a URL bug. The corrected cadence is
 10:00-23:45 ET q15 on game days (56 reports/day). Official reports: Mac only (VM blocked, 403).
 B1's 5:30 PM freeze rule stands.
+
+### B7 — Capture cadence, live Hard Rock key, PHX-HOU answer (2026-09-30)
+
+**Capture cadence.** `_report_urls_for_now` now polls 10:00 ET through the day's last tip
+(from ESPN scoreboard), not just 10:00-12:45. Uses `official_report_url` (12-hour format).
+Test `test_capture_cadence_b7.py`: on a day with a 22:00 ET tip, the list includes 17:30 and
+21:45 — FAILS on c715f643a (old code stopped at 12:45).
+
+**Proposed cron (NOT installed):**
+```
+# Mac: official reports + ESPN, 10:00 ET to last tip, q15 (game days checked by script)
+# For a typical 7pm-10pm ET slate, poll 10:00-23:00 ET = runs 10:00..23:00 q15
+*/15 10-23 * * * /path/to/python3 /Users/jw115/mlb-model/nba/pipeline/capture_nba_availability.py >> /Users/jw115/mlb-model/logs/nba_availability.log 2>&1
+```
+
+**Live Hard Rock key probe** (4 calls, 3 credits each = 12 credits total).
+
+| Sport | bookmakers= | Events | With Hard Rock | Result |
+|-------|-------------|--------|----------------|--------|
+| basketball_nba | hardrockbet | 44 | 0 | Not posting NBA lines yet |
+| basketball_nba | hardrockbet_fl | 44 | 0 | Not posting NBA lines yet |
+| americanfootball_nfl | hardrockbet | 31 | 16 | **Present** under `hardrockbet` |
+| americanfootball_nfl | hardrockbet_fl | 31 | 16 | **Present** under `hardrockbet_fl` |
+
+NFL returns Hard Rock under BOTH keys (`hardrockbet` and `hardrockbet_fl`). NBA returns neither —
+Hard Rock has not posted NBA regular-season lines yet (first tip is 2026-10-20, 20 days away).
+Pre-registration "NBA returns Hard Rock under at least one key once regular-season lines are posted"
+— CANNOT BE TESTED TODAY. What would change it: Hard Rock posts NBA lines closer to opening night.
+The capture script already requests `hardrockbet_fl` via `multi_book_open_capture.py`; when Hard
+Rock posts NBA lines, it will appear automatically if the key matches.
+
+**PHX-HOU 2026-04-07 settled.** nba_api (stats.nba.com) returns HOU 119 + PHX 105 = 224. ESPN
+also returns 224. The results log says 220. **The results log is wrong** (4 pts short). Both
+independent sources agree on 224. Root cause: unknown (likely a grading bug in the results tracker).
+
+**B7 records:**
+- Capture cadence: 10:00 ET through last tip, q15 (not 10:00-12:45). Proposed cron: `*/15 10-23`.
+- Hard Rock live key: NFL uses both `hardrockbet` and `hardrockbet_fl`. NBA: neither today (not
+  posted yet; check again closer to opening night).
+- PHX-HOU: ESPN 224, nba_api 224, results log 220. The log is wrong.
