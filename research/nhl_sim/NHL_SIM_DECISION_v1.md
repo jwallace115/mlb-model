@@ -945,3 +945,19 @@ BH at 10%: **NO SURVIVORS.** Lowest p=0.104, threshold=0.020 (rank 1 of 5 tested
 tested regime.** This is the pre-registered expected outcome. No candidate goes to
 the holdout. The engine is useful as a mechanics model (pulled goalie, OT, shootout
 pricing) but does not add predictive information to the market on pre-game outcomes.
+
+### S49 — Fix swapped goalie ratings in game_inputs.py (2026-09-30, C-WO1 Item 1)
+
+**Bug:** game_inputs.py (S40) set `h_mult.goalie_save = 1 - a_gsax / q` and
+`a_mult.goalie_save = 1 - h_gsax / q`. The engine applies `opp.goalie_save` when the OTHER
+team attacks, so `home.goalie_save` must reflect the HOME goalie. As committed, each team's
+scoring was scaled by its OWN goalie — swapped.
+
+**Fix:** one-line swap: `h_mult.goalie_save = 1.0 - h_gsax / q`, `a_mult.goalie_save = 1.0 - a_gsax / q`.
+
+**Test** (nhl/sim/tests/test_game_inputs.py `TestGoalieSaveDirection`): build inputs for game
+2022020100 with home goalie +0.02 gsax/att, away goalie 0.00, 20,000 sims. Control: same game
+with both goalies at 0.00.
+- On BUGGY code: away goals fell −2.3% (actually rose; FAILED).
+- On FIXED code: away goals fell 13.0%, home goals changed <1% (PASSED).
+- Null control: all-ones multipliers reproduce league_average_inputs exactly (existing test PASSED).

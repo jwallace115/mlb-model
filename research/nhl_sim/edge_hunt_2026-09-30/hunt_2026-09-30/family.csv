@@ -1,0 +1,52 @@
+id,test,p
+L-001,PREREG_CLV clean slope 2023-24,0.59
+L-002,PREREG_EV close ROI,0.94
+L-003,PREREG_EV early CLV (dev),0.0004
+L-004,PREREG_EV2 early CLV (confirm 2024-26),0.0002
+L-005,PREREG_ALT off-point totals CLV,0.14
+L-006,S48 swapped ML R6 goalies,0.0024029048326634
+L-007,S48 swapped ML R5 engine pick = underdog,0.0181807333613071
+L-008,S48 swapped TOT R5 engine pick = underdog,0.1000806782478568
+L-009,S48 swapped ML R2 either B2B,0.1434516067013634
+L-010,S48 swapped ML R3 either backup,0.2313266706299152
+L-011,S48 swapped ML R4 |eng-pin|>5pt,0.4503915998861871
+L-012,S48 swapped TOT R6 goalies,0.5465684390656396
+L-013,S48 swapped TOT R3 either backup,0.6528905847254086
+L-014,S48 swapped TOT R4 |eng-pin|>5pt,0.6831923288899782
+L-015,S48 swapped TOT R2 either B2B,0.7493620283014282
+L-016,S48 swapped TOT R1 early (<=10 GP either),0.837775895626429
+L-017,S48 swapped ML R1 early (<=10 GP either),0.9146114909402904
+L-018,S48-ML-R6 confirmation 2024-25 A1,0.7668
+A-01a,goalie-news slope 2022-23,0.0035
+A-01b,goalie-news slope 2023-24,0.002
+A-01c,goalie-news H2 CLV 2022 (neg),0.9999978875452976
+A-01d,goalie-news H2 CLV 2023 (neg),0.9999454851929772
+A-03a,totals move slope 2022-23,1e-05
+A-03b,totals move slope 2023-24,0.0017
+A-02.1,fixed ML R1 early 2023-24,0.955478614666163
+A-02.2,fixed ML R2 B2B 2023-24,0.6101122968240613
+A-02.3,fixed ML R3 backup(strict) 2023-24,0.0463567429653527
+A-02.4,fixed ML R4 |diff|>5 2023-24,0.6215650684123908
+A-02.5,fixed ML R5 eng=dog 2023-24,0.1801961884127261
+A-02.6,fixed ML R6 goalies 2023-24,0.006385044578304
+A-02.7,fixed ML R7 both high pace 2023-24,0.3190552377538667
+A-02.8,fixed ML R8 both high pen 2023-24,0.0721051108699502
+A-02.9,fixed TOT R1 early 2023-24,0.8274357692523906
+A-02.10,fixed TOT R2 B2B 2023-24,0.7861793808034225
+A-02.11,fixed TOT R3 backup(strict) 2023-24,0.8443317760346234
+A-02.12,fixed TOT R4 |diff|>5 2023-24,0.5942354047547921
+A-02.13,fixed TOT R5 eng=dog 2023-24,0.0968161792478434
+A-02.14,fixed TOT R6 goalies 2023-24,0.5387310763297548
+A-02.15,fixed TOT R7 both high pace 2023-24,0.4741800241333694
+A-02.16,fixed TOT R8 both high pen 2023-24,0.0740872469543445
+A-05a,early best price + engine ML CLV 2022,0.9999999962153155
+A-05b,same 2023,0.9999999981824922
+A-06a,early best totals + engine pmf CLV 2022,0.9999999892824096
+A-06b,same 2023,1.0
+B-01a,3-way draw A1 2024-25 (exploratory),0.655
+B-01b,3-way reg-home A1,0.98
+E-02b-ML,live ML A1 fresh/no-event/no bad feeds,0.313
+E-02c-S2-ML,live PP ML A1 clean,0.2455
+E-02c-S2-TOT,live PP TOT A1 clean,0.23
+E-02b-TOT,live TOT A1 fresh/no-event/no bad feeds (post-hoc cut),0.0722
+E-02-lead,"live under picks ROI t (post-hoc, lead only)",0.028

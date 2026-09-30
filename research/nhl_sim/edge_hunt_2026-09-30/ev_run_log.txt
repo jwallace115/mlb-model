@@ -1,0 +1,71 @@
+events: 2296  close-snapshot lead median 1.32 h
+
+===== CLOSE snapshot: candidate sides 13580, share with EV>=2% 0.010 =====
+POOLED: bets 131  games 121  ROI -0.1660  SE 0.1080  90% lower -0.3437  mean EV +0.0306  mean CLV +0.0306 (n with close 131)
+  season=2022: bets 74 ROI -0.2800 (SE 0.1407) EV +0.0312 CLV +0.0312
+  season=2023: bets 57 ROI -0.0182 (SE 0.1657) EV +0.0298 CLV +0.0298
+  market=h2h: bets 32 ROI -0.2206 (SE 0.2330) EV +0.0320 CLV +0.0320
+  market=spreads: bets 57 ROI -0.1085 (SE 0.1710) EV +0.0292 CLV +0.0292
+  market=totals: bets 42 ROI -0.2025 (SE 0.1454) EV +0.0315 CLV +0.0315
+  bookmaker=betmgm: bets 10 ROI -0.0748 (SE 0.4960) EV +0.0275 CLV +0.0275
+  bookmaker=betonlineag: bets 18 ROI -0.3211 (SE 0.2456) EV +0.0353 CLV +0.0353
+  bookmaker=betrivers: bets 13 ROI -0.3977 (SE 0.3266) EV +0.0334 CLV +0.0334
+  bookmaker=bovada: bets 5 ROI +0.6100 (SE 0.4895) EV +0.0291 CLV +0.0291
+  bookmaker=draftkings: bets 15 ROI +0.0768 (SE 0.3498) EV +0.0291 CLV +0.0291
+  bookmaker=fanduel: bets 4 ROI +1.1350 (SE 0.7136) EV +0.0240 CLV +0.0240
+  bookmaker=lowvig: bets 52 ROI -0.2648 (SE 0.1703) EV +0.0298 CLV +0.0298
+  bookmaker=williamhill_us: bets 14 ROI -0.3591 (SE 0.2574) EV +0.0310 CLV +0.0310
+  EV (0.02, 0.03]: bets 89 ROI -0.0275 (SE 0.1333) CLV +0.0243
+  EV (0.03, 0.05]: bets 32 ROI -0.3526 (SE 0.1925) CLV +0.0365
+  EV (0.05, 0.1]: bets 10 ROI -0.8020 (SE 0.1980) CLV +0.0681
+         bets     roi     clv
+month                        
+2022-10  12.0 -0.4358  0.0328
+2022-11   8.0 -0.6438  0.0271
+2022-12  11.0  0.4418  0.0248
+2023-01   9.0 -0.3856  0.0332
+2023-02   6.0 -0.2233  0.0268
+2023-03  18.0 -0.3643  0.0341
+2023-04  10.0 -0.3830  0.0351
+2023-10   7.0 -0.2357  0.0310
+2023-11  10.0  0.2260  0.0259
+2023-12   8.0 -0.3735  0.0265
+2024-01   6.0  0.7421  0.0284
+2024-02   2.0 -1.0000  0.0376
+2024-03  10.0 -0.0930  0.0350
+2024-04  14.0 -0.0128  0.0297
+
+===== EARLY snapshot: candidate sides 9466, share with EV>=2% 0.017 =====
+POOLED: bets 157  games 147  ROI +0.0250  SE 0.0996  90% lower -0.1388  mean EV +0.0275  mean CLV +0.0128 (n with close 149)
+  season=2022: bets 109 ROI +0.0564 (SE 0.1224) EV +0.0278 CLV +0.0123
+  season=2023: bets 48 ROI -0.0465 (SE 0.1706) EV +0.0269 CLV +0.0139
+  market=h2h: bets 56 ROI -0.0655 (SE 0.1746) EV +0.0294 CLV +0.0036
+  market=spreads: bets 58 ROI +0.1357 (SE 0.1681) EV +0.0270 CLV +0.0254
+  market=totals: bets 43 ROI -0.0066 (SE 0.1535) EV +0.0256 CLV +0.0065
+  bookmaker=betmgm: bets 9 ROI +0.2275 (SE 0.4967) EV +0.0233 CLV +0.0317
+  bookmaker=betonlineag: bets 29 ROI -0.0624 (SE 0.2425) EV +0.0292 CLV -0.0112
+  bookmaker=betrivers: bets 16 ROI +0.1207 (SE 0.3187) EV +0.0256 CLV +0.0297
+  bookmaker=bovada: bets 9 ROI -0.4667 (SE 0.3576) EV +0.0259 CLV +0.0163
+  bookmaker=draftkings: bets 30 ROI +0.0630 (SE 0.2109) EV +0.0282 CLV +0.0203
+  bookmaker=fanduel: bets 8 ROI -0.1375 (SE 0.4243) EV +0.0265 CLV -0.0146
+  bookmaker=lowvig: bets 52 ROI +0.0387 (SE 0.1728) EV +0.0279 CLV +0.0127
+  bookmaker=williamhill_us: bets 4 ROI +0.7875 (SE 0.6070) EV +0.0278 CLV +0.0564
+  EV (0.02, 0.03]: bets 113 ROI +0.0649 (SE 0.1146) CLV +0.0135
+  EV (0.03, 0.05]: bets 40 ROI -0.0590 (SE 0.2103) CLV +0.0066
+  EV (0.05, 0.1]: bets 4 ROI -0.2625 (SE 0.7375) CLV +0.0562
+         bets     roi     clv
+month                        
+2022-10  20.0  0.3453  0.0194
+2022-11  26.0  0.1149  0.0107
+2022-12  21.0 -0.5824  0.0137
+2023-01  22.0  0.1191  0.0115
+2023-02   4.0  0.3025  0.0115
+2023-03  10.0  0.2377  0.0100
+2023-04   6.0  0.3800 -0.0044
+2023-10   9.0 -0.6611  0.0169
+2023-11  10.0  0.1452 -0.0097
+2023-12  12.0  0.0523  0.0341
+2024-01   7.0 -0.1600  0.0263
+2024-02   2.0  2.1050  0.0132
+2024-03   6.0 -0.2583 -0.0162
+2024-04   2.0  0.0500  0.0564

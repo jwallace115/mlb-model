@@ -72,8 +72,8 @@ def game_inputs_for(game_id, tr, gr, ft, q, base_inputs=None):
 
     h_gsax = h_gr.iloc[0]["gsax_per_att_rating"]
     a_gsax = a_gr.iloc[0]["gsax_per_att_rating"]
-    h_mult.goalie_save = 1.0 - a_gsax / q  # opponent's goalie
-    a_mult.goalie_save = 1.0 - h_gsax / q
+    h_mult.goalie_save = 1.0 - h_gsax / q  # home goalie
+    a_mult.goalie_save = 1.0 - a_gsax / q  # away goalie
 
     # Finishing term
     date = h_row["date"]

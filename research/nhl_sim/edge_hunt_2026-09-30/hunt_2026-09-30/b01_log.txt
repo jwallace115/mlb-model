@@ -1,0 +1,39 @@
+events with 3-way: 1226; with a prior Pinnacle 2-way snapshot: 1172; gap hours median 1.08, 90th pct 15.08
+conditioning converged: 1172/1172
+events with outcome: 1041; actual draw rate 0.2037; engine mean draw 0.2083
+Pinnacle 3-way overround mean 1.0438; fair draw: multiplicative 0.2175, power 0.2129
+3-class log-loss: engine 1.0186 | Pinnacle mult 1.0186 | Pinnacle power 1.0179
+                  n     eng  pin_mult  pin_pow  actual
+bin                                                   
+(0.145, 0.2]    209  0.1872    0.2002   0.1943  0.2392
+(0.2, 0.209]    208  0.2053    0.2153   0.2106  0.1587
+(0.209, 0.215]  208  0.2125    0.2211   0.2168  0.1971
+(0.215, 0.217]  208  0.2165    0.2236   0.2195  0.1779
+(0.217, 0.226]  208  0.2204    0.2273   0.2234  0.2452
+H-B01a DRAW: n=1041 disagreement coef -1.132 90% CI [-5.786, +3.523] one-sided p 0.6554 | mean |eng-pin| 0.0052
+H-B01b REG HOME: n=1041 disagreement coef -4.004 90% CI [-7.219, -0.788] one-sided p 0.9797 | mean |eng-pin| 0.0052
+H-B01c: quotes 20820, flags (engine - implied >= 0.03) 2; book overrounds: betmgm:1.150, betrivers:1.121, bovada:1.243, draftkings:1.151, fanduel:1.139, pinnacle:1.111, williamhill_us:1.190
+  ROI -1.0000 (SE 0.0000, 90% lo -1.0000); mean edge 0.0339
+      n  roi    edge
+side                
+away  1 -1.0  0.0326
+home  1 -1.0  0.0351
+           n  roi
+bookmaker        
+fanduel    1 -1.0
+pinnacle   1 -1.0
+/home/claude/hunt/work/b01_threeway.py:117: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+  flags["month"] = pd.to_datetime(flags.commence_time).dt.to_period("M")
+         n  roi
+month          
+2024-12  1 -1.0
+2025-01  1 -1.0
+descriptive, all quotes by edge band:
+                     n     roi
+band                         
+(-1.0, -0.05]    1414 -0.0283
+(-0.05, -0.02]  11005 -0.0993
+(-0.02, 0.0]     7972 -0.0686
+(0.0, 0.02]       418 -0.0988
+(0.02, 0.03]        9 -0.1083
+(0.03, 0.05]        2 -1.0000
