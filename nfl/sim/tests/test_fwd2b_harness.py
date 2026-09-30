@@ -184,6 +184,17 @@ def _stub_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
         "converged": True,
     }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
 
+    # D242: write anchor_returned.parquet (solver's actual returns)
+    pd.DataFrame([{
+        "game": GAME_ID,
+        "iterations": 1,
+        "converged": True,
+        "anch_m": -3.1,
+        "anch_t": 45.6,
+        "target_spread": -3.0,
+        "target_total": 45.5,
+    }]).to_parquet(out_dir / "anchor_returned.parquet", index=False)
+
 
 # ── (a) D234: renamed from test_live_freeze_completes ──
 
@@ -343,6 +354,11 @@ def test_zero_matches_halts(tmp_path):
             "game": GAME_ID, "iter": 0, "margin": -3.1,
             "total": 45.6, "err_m": -0.1, "err_t": 0.1, "converged": True,
         }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
+        pd.DataFrame([{
+            "game": GAME_ID, "iterations": 1, "converged": True,
+            "anch_m": -3.1, "anch_t": 45.6,
+            "target_spread": -3.0, "target_total": 45.5,
+        }]).to_parquet(out_dir / "anchor_returned.parquet", index=False)
 
     opinions_dir = root / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
     with pytest.raises(SystemExit, match="zero sim matches"):

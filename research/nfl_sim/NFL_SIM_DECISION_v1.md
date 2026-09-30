@@ -4502,3 +4502,13 @@ Thu 15:00Z, otherwise Sunday or week 5.
     completes after the kick is quarantined (run_forward_v1.py:680-693).
 (f) The bundle manifest hashes every file in the run directory (run_forward_v1.py:257-266). verify_bundle()
     detects any tampering (run_forward_v1.py:302-320).
+
+### D242 — the anchor state the solver returned (2026-09-30)
+
+run_week writes anchor_returned.parquet (run_week.py:1043-1055): per game, the values run_anchored_chunked
+RETURNS — iterations, converged, anch_m, anch_t — plus target_spread and target_total. The sidecar reads
+that file (run_forward_v1.py:700-704). Never minimise over the log.
+
+Audit #7 A5 counterexample: solver returns iteration 2, converged, -0.7/39.3 against 0/40. The old sidecar
+picked iteration 1 (-1.1/40, min |err_m|+|err_t|) and classified the game unanchored. Now records iteration 2,
+anchored=True (miss_m=0.7, miss_t=0.7, both <= 1.0).

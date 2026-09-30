@@ -474,15 +474,42 @@ def fill_sheet(sheet_df, picks_log, event_game_map=None):
     return filled, n_matched
 
 
-def anchor_sidecar(anchoring_log_df, lines):
-    """D215(b)/D226: per-game anchor sidecar from the anchoring log.
+def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None):
+    """D215(b)/D226/D242: per-game anchor sidecar.
 
-    Best iteration = min |err_m| + |err_t| (same rule as run_week).
+    D242: if anchor_returned_df is provided, use the solver's RETURNED values
+    (iterations, converged, anch_m, anch_t) instead of minimizing over the log.
     Market spread/total MUST come from the actual lines dict used by the sim
-    (D226: not reconstructed from err fields; CAR@ATL -3.0/43.5 came out
-    -3.2572/43.9996 when using the fallback). The lines dict is keyed by
-    game_id (away@home) with keys 'spread' and 'total'.
+    (D226: not reconstructed from err fields).
     """
+    if anchor_returned_df is not None:
+        # D242: use the solver's returned values directly
+        rows = []
+        for _, r in anchor_returned_df.iterrows():
+            gname = r["game"]
+            ln = lines.get(gname)
+            if ln is None:
+                raise SystemExit(
+                    f"HALT: no lines entry for {gname} — anchor sidecar requires "
+                    f"actual market targets, not reconstructed values")
+            spread = float(ln["spread"])
+            total_line = float(ln["total"])
+            anch_m = float(r["anch_m"])
+            anch_t = float(r["anch_t"])
+            miss_m = abs(anch_m - spread)
+            miss_t = abs(anch_t - total_line)
+            rows.append({
+                "game": gname,
+                "target_spread": spread, "target_total": total_line,
+                "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
+                "miss_m": round(miss_m, 4), "miss_t": round(miss_t, 4),
+                "iterations": int(r["iterations"]),
+                "converged": bool(r["converged"]),
+                "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
+            })
+        return pd.DataFrame(rows)
+
+    # Legacy path: minimize over the anchoring log
     required = {"game", "iter", "margin", "total", "err_m", "err_t", "converged"}
     missing = required - set(anchoring_log_df.columns)
     if missing:
@@ -494,7 +521,6 @@ def anchor_sidecar(anchoring_log_df, lines):
         best = g.loc[(abs(g["err_m"]) + abs(g["err_t"])).idxmin()]
         anch_m = float(best["margin"])
         anch_t = float(best["total"])
-        # D226: actual market targets from lines — never reconstructed
         ln = lines.get(gname)
         if ln is None:
             raise SystemExit(
@@ -669,13 +695,16 @@ def main(argv=None, root=None, run_week_fn=None):
     if n_matched == 0:
         raise SystemExit("HALT: zero sim matches — nothing to freeze")
 
-    # (f) anchor sidecar — D241(d): written into run directory, hashed
+    # (f) anchor sidecar — D241(d)/D242: use solver's returned values
     print("(f) Building anchor sidecar...", flush=True)
     anch_log_path = run_out / "anchoring_log.parquet"
     if not anch_log_path.exists():
         raise SystemExit("HALT: anchoring_log.parquet missing — sidecar is mandatory (D226)")
     anch_log = pd.read_parquet(anch_log_path)
-    sidecar_df = anchor_sidecar(anch_log, bundle_lines)
+    # D242: prefer anchor_returned.parquet (solver's actual returns)
+    anch_ret_path = run_out / "anchor_returned.parquet"
+    anch_ret = pd.read_parquet(anch_ret_path) if anch_ret_path.exists() else None
+    sidecar_df = anchor_sidecar(anch_log, bundle_lines, anchor_returned_df=anch_ret)
     sidecar_path = bundle_dir / "anchor_sidecar.parquet"
     sidecar_df.to_parquet(sidecar_path, index=False)
     n_unanch = int((~sidecar_df["anchored"]).sum())

@@ -183,6 +183,16 @@ def _stub_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
         "converged": True,
     }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
 
+    pd.DataFrame([{
+        "game": GAME_ID,
+        "iterations": 1,
+        "converged": True,
+        "anch_m": -3.1,
+        "anch_t": 45.6,
+        "target_spread": -3.0,
+        "target_total": 45.5,
+    }]).to_parquet(out_dir / "anchor_returned.parquet", index=False)
+
 
 # ── D241(a): build_bundle REFUSES an existing run directory ──
 
