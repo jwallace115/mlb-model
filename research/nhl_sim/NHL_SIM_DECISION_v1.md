@@ -926,3 +926,22 @@ Per A1.3: each modifier is kept only if it improves 2023-24 ML log-loss.
 The validation requires a re-price (~50 min). Backup modifiers dropped (p > 0.10).
 
 mean_home_goals and mean_away_goals added to price_games.py.
+
+### S48 — Pre-registered regime family (2026-09-30, S-WO4d Item 3)
+
+12-test family (6 regimes × 2 markets), BH at 10%. Pre-registered before computing.
+
+2023-24 moneyline regimes (A1 disagreement):
+- R1 early (0-10 games): n=168, coef=-1.029, p=0.908
+- R4 |diff| > 5 pts: n=575, coef=0.046, p=0.451
+- R5 engine underdog: n=400, coef=0.127, p=0.428
+- ALL: n=1,138, coef=0.376, p=0.104
+
+2023-24 totals: ALL n=1,079, coef=-0.015, p=0.527
+
+BH at 10%: **NO SURVIVORS.** Lowest p=0.104, threshold=0.020 (rank 1 of 5 tested).
+
+**The engine carries no statistically significant information beyond Pinnacle in any
+tested regime.** This is the pre-registered expected outcome. No candidate goes to
+the holdout. The engine is useful as a mechanics model (pulled goalie, OT, shootout
+pricing) but does not add predictive information to the market on pre-game outcomes.
