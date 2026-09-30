@@ -122,3 +122,6 @@ research/nfl_sim/phase5v_clock_decomp.parquet
 
 # NHL sim ratings outputs are regenerable (hashes in nhl/data/sim/ratings/manifest.json)
 nhl/data/sim/ratings/*.parquet
+
+# NBA historical odds (bulk pull, multi-GB)
+data/odds_archive/nba/history/

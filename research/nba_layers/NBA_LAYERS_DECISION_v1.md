@@ -69,3 +69,145 @@ and `icehockey_nhl` is not in the capture script — NHL work order 1 has not la
 the tools, not yet built. 1b: no NBA history layer is yet known point-in-time for 2025-26 (measured in WO1).
 2: the reader is judged forward only; the venue board fails CHECK 2 historically (above). 3: the packet is hashed
 with the picks (gameplan). 4: real frozen prices, Pinnacle close for CLV. 5: breakouts per gameplan §4.
+
+### B-D1 — Item 1 data: dense pre-match + close NBA historical odds, 4 seasons (2026-09-30)
+
+Data-facts entry from NBA-D1 work order item 1. No interpretation.
+
+**What was pulled.** Sport-level historical odds (h2h, spreads, totals) for basketball_nba,
+seasons 2022-23 through 2025-26. Hourly snapshots (00:00Z-23:00Z) on every game date, plus
+close snapshots at each distinct tip time minus 5 minutes. All snapshots saved as parquet +
+json.gz in `data/odds_archive/nba/history/lines_hourly/season=<yr>/`.
+
+**Bookmakers (10).** pinnacle, draftkings, fanduel, betmgm, williamhill_us, betrivers, bovada,
+betonlineag, lowvig, hardrockbet. Cost = 30 credits per call (10 x 3 markets x 1 region-equiv).
+
+**A10 Hard Rock discovery.** The NHL puller used key `hardrockbet_fl` and got 0 rows. NBA probe
+found the key is `hardrockbet` (no `_fl` suffix), in the `us2` region, present for 2024-25 and
+2025-26 only (Hard Rock launched ~2024). Not found in 2022-23 or 2023-24 (expected).
+
+**Pinnacle discovery.** Pinnacle is NOT in `us` or `us2` regions. It is in the `eu` region. The
+`bookmakers=pinnacle` parameter fetches it cross-region at no extra cost (still 1 region-equiv
+with <=10 books). Verified: 10-book call costs exactly 30. All 10 books returned in 2024-25 data.
+This is the first Pinnacle NBA history the repo holds.
+
+**Volume.**
+
+| Season | Hourly | Close | Total snaps | Events | Credits | Hard Rock |
+|--------|--------|-------|-------------|--------|---------|-----------|
+| 2024   | 3,912  | 831   | 4,743       | 1,247  | ~142k   | Present   |
+| 2025   | 3,960  | 825   | 4,785       | 1,234  | 143,550 | Present   |
+| 2023   | 3,840  | 786   | 4,626       | 1,274  | 138,780 | Absent    |
+| 2022   | 3,936  | 839   | 4,775       | 1,254  | 143,250 | Absent    |
+| **Total** | **15,648** | **3,281** | **18,929** | **5,009** | **~568k** | |
+
+Events parquets: `data/odds_archive/nba/history/events/events_<season>.parquet` — event_id,
+commence_time, home_team, away_team. These feed items 2, 3, 4.
+
+**A7 null control.** Matched March 2026 backfill (DraftKings, game_markets) against hourly data
+on (event_id, market, last_update). 30 matches found. Price identical in 30/30. Max difference = 0.
+The backfill stores no snapshot time; the match relies on bookmaker last_update timestamps.
+
+**A5 cost check.** First call of each season: x-requests-last = 30, as expected.
+
+**Gaps.** Hard Rock absent in 2022-23 and 2023-24 (not yet launched). All other 9 books present
+in all seasons. Event counts (1,234-1,274) include some playoff games whose commence_time falls
+in the date range. Rate achieved: 5.6-7.6 calls/s with 4 workers.
+
+### B-D2 — Item 2 data: player props at T-24h and T-1h, 3 seasons (2026-09-30)
+
+Data-facts entry from NBA-D1 work order item 2. No interpretation.
+
+**What was pulled.** Historical event-level odds for 8 player prop markets at two pre-match
+snapshots (T-24h and T-1h before commence_time) per event. Seasons 2024-25, 2025-26, 2023-24.
+Output: `data/odds_archive/nba/history/props/season=<yr>/<event_id>_<T-24h|T-1h>.parquet`.
+
+**Markets (8).** player_points, player_rebounds, player_assists, player_threes,
+player_points_rebounds_assists, player_double_double, player_blocks, player_steals.
+Expected cost = 10 x 8 = 80 per event-snapshot.
+
+**Volume.**
+
+| Season | Events | Calls | Credits (run) | Notes |
+|--------|--------|-------|---------------|-------|
+| 2024   | 1,247  | 2,494 | 127,390       | 9 books in sample (lowvig absent for props) |
+| 2025   | 1,234  | 2,468 | 125,720       | |
+| 2023   | 1,274  | 2,548 | 138,470       | |
+| **Total** | **3,755** | **7,510** | **~391k** | |
+
+**A5 cost check.** First call per season: x-requests-last = 80, as expected. No call exceeded
+10 x 8 = 80 (0 cost violations). Actual per-call average ~51-54 credits — lower than 80, likely
+because not all 8 prop markets are available for every event at every book. Empty-but-charged = 0.
+
+**Gaps.** lowvig absent from props data (not a props book). Hard Rock absent for season 2023 (pre-launch).
+
+### B-D4 — Item 4 data: derivative markets at T-24h and T-1h, 3 seasons (2026-09-30)
+
+Data-facts entry from NBA-D1 work order item 4. No interpretation.
+
+**What was pulled.** Historical event-level odds for 8 derivative markets at T-24h and T-1h
+per event. Seasons 2024-25, 2025-26, 2023-24.
+Output: `data/odds_archive/nba/history/event_markets/season=<yr>/<event_id>_<T-24h|T-1h>.parquet`.
+
+**Markets (8).** h2h_h1, spreads_h1, totals_h1, h2h_q1, spreads_q1, totals_q1, team_totals,
+alternate_spreads. Expected cost = 10 x 8 = 80 per event-snapshot.
+
+**Volume.**
+
+| Season | Events | Calls | Credits (run) | First call cost |
+|--------|--------|-------|---------------|-----------------|
+| 2024   | 1,247  | 2,494 | 135,300       | 80              |
+| 2025   | 1,234  | 2,468 | 119,600       | 40              |
+| 2023   | 1,274  | 2,548 | 126,240       | 70              |
+| **Total** | **3,755** | **7,510** | **~381k** | |
+
+**A5 cost check.** First call per season: 2024=80, 2025=40, 2023=70. All below 10 x 8 = 80
+(no violations). Variable cost per season: not all 8 derivative markets available for every
+event historically. Alternate spreads and Q1 markets less available in earlier seasons.
+Empty-but-charged = 0.
+
+**Gaps.** Same as item 2 — lowvig absent, Hard Rock absent for 2023.
+
+### B-D3 — Item 3 data: in-play 5-min snapshots, 3 seasons (2026-09-30)
+
+Data-facts entry from NBA-D1 work order item 3. No interpretation.
+
+**What was pulled.** Sport-level historical odds (h2h, spreads, totals) at 5-minute intervals
+from (first tip - 5 min) to (last tip + 3 h) on each game night. Keep in-play events (unlike
+item 1 which filters them). Output: `data/odds_archive/nba/history/inplay/season=<yr>/`.
+
+**A6 credit projection (computed before item 3 started).**
+
+| Season | Nights | Snapshots needed | Credits needed |
+|--------|--------|------------------|----------------|
+| 2024   | 167    | 13,768           | 413,040        |
+| 2025   | 165    | 14,171           | 425,130        |
+| 2023   | 164    | 13,590           | 407,700        |
+| **Total** | | **41,529** | **1,245,870** |
+
+**Actual.**
+
+| Season | Snapshots pulled | Credits | Status |
+|--------|-----------------|---------|--------|
+| 2024   | 13,768          | 413,040 | Complete |
+| 2025   | 14,171          | 425,130 | Complete |
+| 2023   | 7,370           | 221,100 | Partial (54%, capped at spend limit) |
+| **Total** | **35,309** | **1,059,270** | |
+
+Season 2023 stopped at 7,370/13,590 snapshots when the order-level spend cap (2.4M) was reached.
+The remaining 6,220 season-2023 inplay snapshots (~186k credits) are resume-safe — rerunning
+with budget will pick up from where it stopped.
+
+### Grand total — NBA-D1 order
+
+| Item | Calls | Credits | Files |
+|------|-------|---------|-------|
+| Probe | ~9 | 270 | 1 JSON |
+| 1 — Lines (4 seasons) | 18,929 | 567,580 | 18,929 parquet + json.gz |
+| 2 — Props (3 seasons) | 7,510 | 391,580 | 7,510 parquet |
+| 4 — Markets (3 seasons) | 7,510 | 381,140 | 7,510 parquet |
+| 3 — Inplay (2.54 seasons) | 35,309 | 1,059,270 | 35,309 parquet + json.gz |
+| **Total** | **69,267** | **2,399,840** | 1.2 GB |
+
+Account x-requests-remaining at end: ~876,102. Global floor (5,000) not breached.
+Disk: 1.2 GB (lines 334M, inplay 682M, props 90M, markets 82M, events 224K).

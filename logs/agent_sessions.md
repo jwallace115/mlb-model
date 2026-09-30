@@ -3551,6 +3551,22 @@ Ending: 99,842
 - 48 tests pass (4 freeze + 38 forward/fwd2/fwd3 + 9 fwd4_item0 + 4 fwd4_item1), 0 regressions
 - NOT DONE: cleanup of stale dry run dirs (20260930T142206Z, 20260930T151418Z, 20260930T160343Z)
 
+## 2026-09-30T16:30Z  claude-code  NBA-D1
+
+- RAN: A10 Hard Rock probe — key is `hardrockbet` (not `hardrockbet_fl`); us2 region; 2024-25 and 2025-26 only. Pinnacle is eu region, cross-region via bookmakers= param. 150 credits.
+- RAN: Item 0 schedule — 652 dates across 4 seasons from games.parquet + manifest.
+- RAN: Item 1 lines — 18,929 snapshots (15,648 hourly + 3,281 close), 5,009 events, ~568k credits. All 10 books present in 2024-25 and 2025-26; hardrockbet absent in 2022-23 and 2023-24 (expected).
+- RAN: A7 null control — 30/30 exact matches vs March 2026 DraftKings backfill. Max diff = 0.
+- COMMITTED: item 0 (probe, schedule, script, .gitignore) pushed to origin/nba/data-d1.
+- RAN: Item 2 props — 7,510 calls, 3 seasons, ~392k credits. 8 prop markets. Avg ~52/call.
+- RAN: Item 4 markets — 7,510 calls, 3 seasons, ~381k credits. 8 derivative markets. Variable cost 40-80.
+- RAN: Item 3 inplay — 35,309 calls, ~1,059k credits. 2024 complete, 2025 complete, 2023 partial (54%).
+- TOTAL: 69,267 calls, 2,399,840 credits (160 under 2.4M cap). Account rem ~876k. Disk 1.2 GB.
+- A7 null control: 30/30 exact matches. A5: all first-call costs correct. A10: hardrockbet (not _fl), Pinnacle via eu.
+- B-D1 through B-D4 written.
+- NOT DONE: season 2023 inplay completion (~186k credits, resume-safe).
+- UNVERIFIED: event counts may include some playoff games (date range extends into post-season).
+
 ## 2026-09-30T17:15Z  claude-code
 - COMMITTED + PUSHED: 5e2db479b — D248 verbatim from fwd4_verification_2026-09-30.md appended to NFL_SIM_DECISION_v1.md
 - COMMITTED + PUSHED: ffc3e67dc — FWD4b (D249): test_cohort_excludes_wrong_reader and test_cohort_excludes_unanchored_game updated to primary_cohort(df, reader, sidecar) with (run_id, event_id) fixtures
