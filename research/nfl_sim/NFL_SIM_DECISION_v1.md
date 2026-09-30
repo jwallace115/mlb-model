@@ -4747,3 +4747,68 @@ The first primary window is week-4 TNF:
 - PIT@CLE;
 - run at 23:30Z Thu 10-01: `python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2`;
 - no --pilot.
+
+### D255 — ChatGPT audit #8 adjudicated: the freeze side is still not valid (run_week does not consume the bundle); FWD6 fixes the freeze side; scoring amendments S1-S4 are declared now, before any primary outcome; TNF runs as a pilot unless FWD6 is verified by Thu 15:00Z (2026-09-30)
+
+**Confirmed at e0fc3d2d6:**
+- run_week reads shared ratings, usage, active universe and rosters, and the shared props archive. The bundle copies are
+  not what the prediction consumed.
+- The committed week-3 bundle cannot be restored: rosters and injuries exist nowhere else.
+- Canonical-reader rows can be written through the shared logger. `publication.json` can be deleted without detection.
+- Line freshness is judged from a snapshot's first row.
+- A missing anchor_returned silently falls back.
+- The prediction output's season, week and run are not checked against the bundle.
+- Ordinary scoring grades by team pair.
+- The 1,500 verdict is not frozen.
+- A missing sidecar biases the result by exclusion.
+- Unlisted files, null digests and all-zero experiment digests are accepted.
+- Unrelated readers' rows can crash scoring.
+- Thirteen mutations survive, one per test file.
+
+**Freeze side: fixed by FWD6 before any primary freeze.**
+- run_week consumes `<run-dir>/inputs` and the bundle's props, and never fetches.
+- Freshness is checked per participating team, on the consumed files.
+- Inputs are archived with a demonstrated restore.
+- Line and prop timestamps are checked on every row.
+- anchor_returned is mandatory, with one record per simulated event.
+- Output identity is validated.
+- The canonical reader is reserved against the shared logger.
+- A publication receipt registry.
+- The FWD5 tests; tests that kill the freeze-side survivors; hashes for the unhashed import files.
+
+**Scoring side: declared now, as scoring amendment S1-S4.**
+- The prediction manifest and frozen records are unchanged.
+- FWD7 implements it in a separate, separately hashed scorer, before the first primary grading.
+- The rules are fixed here, before any primary outcome exists:
+  - **S1 — scoring set.**
+    - The experiment scores only rows in files named by a publication receipt.
+    - Each row must have: a listed file; non-null digests matching its run's bundle and the experiment; a unique
+      contract; exactly one (run_id, event_id) sidecar row.
+    - A canonical, non-pilot, revision-0 row that fails any of these BLOCKS scoring (HALT) until it is resolved. It is
+      never quietly excluded.
+    - Other readers' files are never read.
+  - **S2 — exact event.**
+    - Each frozen event_id maps to the nflverse game_id through the schedule for its season and week, recorded in the
+      bundle at freeze time. Only that game_id's PBP and snap rows grade it.
+    - Participation: the GSIS→PFR id has offense + special-teams snaps > 0.
+    - No name fallback: an id that is missing or ambiguous → unresolved.
+    - A push → unresolved.
+    - Every grading run archives the hashes of its PBP, roster, crosswalk and snap inputs.
+  - **S3 — one confirmatory checkpoint.**
+    - Windows are ordered by first kick. The confirmatory dataset is every eligible leg from the windows up to and
+      including the first window whose cumulative settled eligible count reaches 1,500.
+    - It is computed once, when every leg in those windows is settled or 14 days have passed since the last kick (then
+      still-unresolved legs are reported as unresolved).
+    - It is saved to `research/nfl_sim/fwd_v1_confirmatory.json`: contract ids, source hashes, exclusions, scorer
+      version and hash, seed, Δ, CI and verdict.
+    - It is never recomputed on more data. A correction is a versioned correction record.
+    - The 500 descriptive report is frozen the same way, at 500.
+  - **S4 — accounting.** Every report shows, by run and event: frozen candidates, anchored, settled, VOID, unresolved and
+    excluded (with reasons). P2 units are reported descriptively at every report.
+
+**Start window.** It stays the first window after FWD6 is verified and merged.
+- TNF (run 23:30Z Thu) is primary only if that happens by **Thu 10-01 15:00Z**. Otherwise TNF runs `--pilot`.
+- Cowork's recommendation is to run TNF as a pilot regardless. It is one game, about 11 legs, and a real rehearsal of the
+  new live path.
+- The Sunday windows also need FWD2d, the runbook.
+- v1's physics (FREEZE_v1) are unchanged throughout.
