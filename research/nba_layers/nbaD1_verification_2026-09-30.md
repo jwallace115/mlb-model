@@ -39,3 +39,24 @@ recomputed here.
 - Cost per call from headers (the log's numbers are taken as reported; ~876k remaining at end, not re-read).
 - Item 0 schedule files against an external schedule.
 - Whether the pinnacle rows at close are fresh (book_last_update) or stale quotes carried in the snapshot.
+
+## Addendum 2026-09-30 ~19:45Z — duplicated calls (Jeff asked)
+Method: same requested timestamp in two folders = same API snapshot (checked: 20/20 sampled pairs have identical
+raw json, timestamp and data). Counted from file names, season by season.
+
+| season | close == hourly | in-play == hourly | in-play == close | duplicate calls | credits (x30) |
+|---|---|---|---|---|---|
+| 2022-23 | 0 | — | — | 0 | 0 |
+| 2023-24 | 2 | 600 | 427 | 1,027 | 30,810 |
+| 2024-25 | 0 | 1,071 | 831 | 1,902 | 57,060 |
+| 2025-26 | 0 | 1,121 | 821 | 1,942 | 58,260 |
+| total | | | | **4,871** | **~146,000 (~6% of 2.4M)** |
+
+Cause: item 3's 5-minute in-play grid runs from first tip - 5 min, so it lands on every hourly slot and every close
+slot inside the game window. The parquets differ (item 1 drops games already started, in-play keeps them); the raw
+json.gz files are byte-for-byte the same responses. Any loader must de-duplicate on snapshot_utc across
+lines_hourly/ and inplay/. Fix for any future pull: in-play skips request times already on disk in lines_hourly/.
+Not a duplicate: overlap with the March-2026 backfill (`data/odds_archive/nba/{game_markets,props}`, 2025-26,
+8 shared books) — Pinnacle and Hard Rock are new, and extra books inside the 10-book slot cost nothing.
+Not checked: requests at different times that resolve to the same 5-minute snapshot (all D1 requests sit on the
+5-minute grid, so this should be rare).

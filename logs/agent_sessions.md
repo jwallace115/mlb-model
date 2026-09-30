@@ -3596,3 +3596,46 @@ Ending: 99,842
 - NOT DONE: merge of eng/fwd3 to main (user decision)
 - UNVERIFIED: test_score_first_side_and_units failure is pre-existing on both branches; not investigated
 - UNVERIFIED: score-experiment HALT on week 3 sim_runs/20260927T170000Z (incomplete bundle from prior dry run — missing input files); moved aside for the score-experiment test, restored after
+
+## 2026-09-30T19:35Z  claude-code  NBA WO1 (items 1-4)
+
+- RAN: probe_nba_sources.py on Mac and VM
+  - RETURNED: Odds API basketball_nba active (44 events, first tip 2026-10-20T19:00Z). preseason is separate key, inactive. 9 books returned LIVE: betmgm, betonlineag, betrivers, bovada, draftkings, fanduel, lowvig, pinnacle, williamhill_us. hardrockbet_fl NOT returned. Dry-run cost: 3 credits. Null control passed.
+  - RETURNED: Official reports 10:00-12:45 PM ET q15min, new format only. No 5:30pm report. No preseason reports. CDN blocks VM (all 404). Mac: 12 reports per date for Dec 25, Jan 14, Mar 16.
+  - RETURNED: ESPN injuries: per-item date field exists. 66 items off-season (Out=14, Day-To-Day=52). Works both hosts.
+  - RETURNED: ESPN scoreboard: 8 games 2026-03-16, STATUS_FINAL, period count. Works both hosts.
+  - RETURNED: nba_api scoreboardv2: Mac works, VM blocked (JSONDecodeError).
+  - MEANS: Pinnacle is CLV reference (returned live). Hard Rock not on live tape (hardrockbet_fl absent for NBA). Freeze at 5:30pm is wrong — last report is 12:45pm. Tape runs on VM. Reports: Mac only.
+- RAN: capture_nba_availability.py live on Mac
+  - RETURNED: 0 official reports (off-season), 66 ESPN items, 1 line in _pulls.jsonl
+  - MEANS: script works; cadence derived from probe: q15 10:00-13:00 ET
+- RAN: nba_outcomes.py grading (194 rows)
+  - RETURNED: 191/194 agree. 3 mismatches: DET-OKC OT flag (log wrong), DEN-POR OT flag (log wrong), PHX-HOU total 224 vs 220 (unexplained).
+  - MEANS: loader is correct for all 3 disagreements. Results log has OT tracking bugs.
+- RAN: L3/L4 audit
+  - RETURNED: 2025-26 not in games/box_stats parquets. Features use rolling 15-game window. Prior-season baselines use full prior-season means (point-in-time safe). Signal log: max 23 graded forward rows (REF_UNDER). pred_total - line: mean=-5.1, SD=9.4.
+  - MEANS: CHECK 1b passes for rolling pipeline. No signal type has defensible probability. Model bias -5 pts vs line.
+- RAN: 3 B3 tests pass; mutations verified killed. 2 B4 tests pass.
+- COMMITTED+PUSHED: 4 commits on nba/wo1 (items 1-4), each with B2-B5 appended.
+- NOT DONE: settlement rules (Pinnacle 404, Hard Rock 403 — written NOT VERIFIED). cron not installed (per order). merge (Cowork verifies first). VM capture test (ESPN only, no reports). nbainjuries PDF parsing (Java not in PATH).
+- UNVERIFIED: whether predictions_4b.parquet (994 rows, 2025-26) is point-in-time. ESPN field list with in-season data (0 items currently). Pre-registration #5 marked wrong but only based on off-season structure.
+
+## 2026-09-30T20:30Z  claude-code  NBA WO1b (items 1-2)
+
+- RAN: official_report_url tests (4 assertions: 13:00->01_00PM, 17:30->05_30PM, 12:45->12_45PM, 10:15->10_15AM) — pass on new code; FAIL on c715f643a (function absent). nbainjuries gen_url agrees on 5/5 test cases.
+- RAN: re-probe official reports on Mac with corrected 12-hour URLs
+  - RETURNED: 56 reports per regular-season date (10:00-23:45 ET q15). 5:30pm EXISTS on 2025-12-25, 2026-01-14, 2026-03-16. Preseason 2025-10-10: 0 reports. NULL CONTROL: 10:00-12:45 = 12 reports per date (matches WO1).
+  - MEANS: B2's "no 5:30 PM report" was a URL bug — the probe used 24-hour hour (17_30PM) but the CDN uses 12-hour (05_30PM). B1's freeze rule stands. The capture cadence must cover 10:00-23:45, not 10:00-12:45.
+- RAN: re-probe on VM with corrected URLs
+  - RETURNED: all 403 (Forbidden), all 4 dates, all 56 slots.
+  - MEANS: CDN block CONFIRMED (403 = genuine block, not nonexistent URL). B2 "CDN blocks the VM" was correct but unproven until now.
+- RAN: live Hard Rock key probe (4 Odds API calls, 12 credits)
+  - RETURNED: NFL returns Hard Rock under both `hardrockbet` and `hardrockbet_fl` (16/31 events). NBA returns neither key (0/44 events).
+  - MEANS: Hard Rock has not posted NBA lines yet (first game Oct 20, 20 days away). Pre-registration "NBA returns Hard Rock once lines are posted" cannot be tested today.
+- RAN: PHX-HOU 2026-04-07 cross-check via nba_api on Mac
+  - RETURNED: HOU 119 + PHX 105 = 224. Matches ESPN 224. Results log says 220.
+  - MEANS: results log is wrong (4 pts short). Both independent sources agree on 224.
+- RAN: test_capture_cadence_b7 — on a day with 22:00 ET tip, URL list includes 17:30 and 21:45. FAILS on c715f643a (old code stopped at 12:45).
+- COMMITTED+PUSHED: 2 commits on nba/wo1 (B6, B7 appended to decision doc).
+- NOT DONE: cron installation (per order). merge (Cowork verifies). Hard Rock NBA key re-check closer to opening night.
+- UNVERIFIED: whether Hard Rock posts NBA lines under `hardrockbet` or `hardrockbet_fl` (no NBA lines posted today). VM ESPN capture test not re-run (capture script unchanged for ESPN).

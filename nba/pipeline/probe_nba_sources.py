@@ -124,12 +124,13 @@ def section_a():
 
 
 def section_b():
-    """Official injury report HEAD probe."""
+    """Official injury report HEAD probe (corrected 12-hour URLs)."""
     print("\n" + "=" * 60)
     print("SECTION B: Official NBA injury reports")
     print("=" * 60)
 
-    CDN = "https://ak-static.cms.nba.com/referee/injury"
+    from nba.pipeline.capture_nba_availability import official_report_url
+
     FIXTURE_DIR = ROOT / "data" / "injury_archive" / "nba" / "season=2026" / "fixtures"
     FIXTURE_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -138,40 +139,26 @@ def section_b():
         found = []
         ds = probe_date.strftime("%Y-%m-%d")
 
-        # Quarter-hour slots 10:00-23:45 ET
+        # Quarter-hour slots 10:00-23:45 ET, new 12-hour format only
         for hour in range(10, 24):
             for minute in (0, 15, 30, 45):
-                ampm = "AM" if hour < 12 else "PM"
-                h12 = hour if hour <= 12 else hour - 12
-                if h12 == 0:
-                    h12 = 12
-
-                # Legacy format: Injury-Report_2025-10-10_05PM.pdf
-                legacy_tag = f"{h12:02d}{ampm}"
-                legacy_url = f"{CDN}/Injury-Report_{ds}_{legacy_tag}.pdf"
-
-                # New format: Injury-Report_2025-10-10_17_00PM.pdf
-                new_tag = f"{hour:02d}_{minute:02d}{ampm}"
-                new_url = f"{CDN}/Injury-Report_{ds}_{new_tag}.pdf"
-
-                for label, url in [("legacy", legacy_url), ("new", new_url)]:
-                    try:
-                        resp = requests.head(url, timeout=10, allow_redirects=True)
-                        if resp.status_code == 200:
-                            found.append({
-                                "hour_et": f"{hour:02d}:{minute:02d}",
-                                "format": label,
-                                "url": url,
-                                "status": 200,
-                            })
-                    except requests.RequestException:
-                        pass
-                    time.sleep(0.5)
+                url = official_report_url(probe_date, hour, minute)
+                try:
+                    resp = requests.head(url, timeout=10, allow_redirects=True)
+                    if resp.status_code == 200:
+                        found.append({
+                            "hour_et": f"{hour:02d}:{minute:02d}",
+                            "url": url,
+                            "status": 200,
+                        })
+                except requests.RequestException:
+                    pass
+                time.sleep(0.5)
 
         if found:
             print(f"  Found {len(found)} reports:")
             for f in found:
-                print(f"    {f['hour_et']} ET  [{f['format']}]  {f['url']}")
+                print(f"    {f['hour_et']} ET  {f['url']}")
 
             # Check 5:30pm
             has_530 = any(f["hour_et"] == "17:30" for f in found)
