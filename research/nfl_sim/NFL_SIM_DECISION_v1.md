@@ -4338,3 +4338,26 @@ run_forward_v1.py, run_week.py, log_ai_opinions.py. All 43 tests pass:
 - test_fwd2_bundle: 5 passed
 - test_fwd2_anchor: 3 passed
 - test_freeze_v1: 4 passed
+
+### D233 — Cowork verification of FWD2b: bundle harness accepted; live mode never executed, runbook facts wrong, settlement still scores missing data (2026-09-30)
+
+FWD2b (eng/fwd2 @ 3beed7970) is not merged.
+
+What stands:
+- the in-process bundle harness, with price validation, freshness HALTs and event-restricted run_week;
+- execution tests through main();
+- snap-count participation, run_id and score-experiment;
+- a completed real week-3 pilot freeze (14 games, 162 matched, 0 unanchored);
+- measured builder runtimes (6 s / 8 min).
+
+Defects:
+- The "live" test runs --pilot, and no live run has executed.
+- Runbook dates, the London game and the pull command are wrong.
+- ratings.py overwrites params_v1.json.
+- Settlement scores stats when snap data is missing.
+- Participation is matched by name.
+- There is no completed-game check.
+- The week-3 re-grade graded 0 rows, a regression from FWD1b.
+- The pilot diagnostic never produced a Δ.
+
+Next: FWD2c. The TNF gate is Thu 20:00Z.
