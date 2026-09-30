@@ -136,3 +136,42 @@ Verify returns bad=[], unlisted=[] on all. Football tags and behavior are identi
 (+mutation), drivers validation (missing/empty/unknown/valid), tag scoping (no_view/weather rejected,
 goalie accepted), NHL without --date HALT, season rule (4 cases), freeze writes slate_date not week,
 football verify null control (6 sha256 assertions), football tags/drivers unchanged.
+
+### H4 — NHL outcomes loader + score (2026-09-30)
+
+Implemented in `nhl/pipeline/nhl_outcomes.py` and `nfl/pipeline/log_ai_opinions.py` (branch `nhl/wo1`).
+
+**Outcomes loader** (`nhl/pipeline/nhl_outcomes.py`):
+- Finals and player stats from `api-web.nhle.com` boxscores, cached in `nhl/cache/boxscore_<id>.json`
+  (ONLY when gameState is OFF/FINAL).
+- Team map: 32 Odds API full names -> NHL abbreviations, built from the API's own placeName + commonName.
+  Handles "St Louis Blues" (no period, Odds API) vs "St. Louis Blues" (NHL API), "Montréal Canadiens"
+  (accent preserved in both). "Utah Mammoth" and "Utah Hockey Club" both map to UTA. HALT on unmapped.
+- Match = unordered team pair + nearest start within 12 h (N41 lesson).
+- Settlement: h2h / spreads / totals on the API final (OT and shootout +1 included), per H2.
+
+**Agreement check, pre-registered "100% agreement":** 1,177 cached games checked against
+`nhl/nhl_games_canonical.csv` — **0 mismatches** on scores, OT flags, and SO flags. 135 games not in
+cache (season end). H2 counts: 1,312 games / 326 OT / 119 SO.
+
+**End-to-end test on real finished games:**
+- REG: 2025020001 CHI@FLA, final 2-3. h2h home wins=1, total 5 < 6.5 Under=0.
+- OT: 2025020008 CHI@BOS, final 3-4. h2h home wins=1, total 7 > 6.5 Over=1.
+- SO: 2025020006 CGY@EDM, final 4-3 (CGY wins SO), reg 3-3. h2h away wins=0, total 7 > 6.5 Over=1.
+  **The SO rule changes the totals grade:** final total 7 -> Over, regulation total 6 -> would be Under.
+  Tested: freeze + score in a tmp dir with synthetic tape, all 6 grades asserted against hand derivation.
+
+**SPORTS['nhl']['outcomes'] set to 'nhle'** — `score()` dispatches to `_nhle_actuals()` for NHL.
+
+**edge_rank fix (amendment):** `edge_rank` now ranked within each freeze file (`_file`), not across
+all scored rows. `conf_rank` was already per-file. Both are now 1..n within their freeze.
+
+**NULL CONTROL — football score unchanged:**
+- NCAAF wk4 Opus file: 177 graded sides, 99 won, +8.96 u (exact match to N63).
+- NFL wk3 TNF file: 28 sides, 18 won, +7.59 u, Brier 0.2519 vs 0.2618 (exact match).
+- Football reports gain no new sections.
+
+**Tests** (12 new, all pass): `nfl/pipeline/tests/test_ai_opinions_nhl_h4.py` — agreement check
+(0 mismatches on 1,177 games), REG/OT/SO settlement, SO grade change, team map (all names, accent,
+St Louis, unmapped HALT), end-to-end freeze+score on 3 real games, edge_rank per-file, NCAAF wk4 +
+NFL wk3 TNF score null controls.
