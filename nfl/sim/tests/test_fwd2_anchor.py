@@ -60,9 +60,17 @@ def test_anchor_sidecar_halts_without_lines():
 
 
 def test_anchor_sidecar_column_names():
-    """D226: sidecar uses target_spread/target_total (not spread/total_line)."""
-    import inspect
+    """D226: sidecar uses target_spread/target_total (not spread/total_line).
+    D229: replaced inspect.getsource with execution test."""
     from nfl.sim.run_forward_v1 import anchor_sidecar
-    src = inspect.getsource(anchor_sidecar)
-    assert "target_spread" in src, "sidecar must use target_spread column"
-    assert "target_total" in src, "sidecar must use target_total column"
+
+    anch_log = pd.DataFrame([{
+        "game": "CAR@KC", "iter": 0, "margin": -3.1,
+        "total": 45.6, "err_m": -0.1, "err_t": 0.1, "converged": True,
+    }])
+    lines = {"CAR@KC": {"spread": -3.0, "total": 45.5}}
+    sidecar = anchor_sidecar(anch_log, lines)
+    assert "target_spread" in sidecar.columns, "sidecar must have target_spread column"
+    assert "target_total" in sidecar.columns, "sidecar must have target_total column"
+    assert sidecar.iloc[0]["target_spread"] == -3.0
+    assert sidecar.iloc[0]["target_total"] == 45.5

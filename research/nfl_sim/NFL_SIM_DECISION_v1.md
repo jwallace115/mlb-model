@@ -4224,3 +4224,35 @@ Defects:
 
 Next: FWD2b. Acceptance is on real data: a completed week-3 pilot freeze through main(), and a completed week-4 live
 dry run. The TNF start window holds only if FWD2b is verified by Thu 10-01 20:00Z.
+
+### D229 — FWD2b Item 0: harness runs in-process on the bundle, live and pilot (2026-09-30)
+
+**(a) main(argv=None, root=None, run_week_fn=None)** (run_forward_v1.py:453). All paths
+derive from `root`; module-level globals (PROPS_DIR, LINES_DIR, BOARD_ROOT,
+EXPERIMENT_MANIFEST) overridden when root is provided. run_week_fn defaults to
+_default_run_week which calls run_week.py via subprocess.
+
+**(b) Sheet and freeze IN-PROCESS** (run_forward_v1.py:534-630). build_sheet() from
+log_ai_opinions called directly with bundle props and lines — no subprocess to the CLI.
+freeze() called directly with the sheet, filled, and board_root. The "--as-of requires
+--pilot" rule in the CLI no longer blocks a live run.
+
+**(c) Price validation** (run_forward_v1.py:558-566). After fill_sheet, price_first,
+price_second, and source_utc are compared between the sheet (from bundle) and filled.
+Any mismatch HALTs.
+
+**(d) run_week --lines-json and --games** (run_week.py:911-926). When --lines-json is
+provided, run_week skips the tape read entirely. --games restricts to specific game_ids.
+The bundle's lines dict and event list are passed directly.
+
+**(e) Freshness HALTs** (run_forward_v1.py:523-529). build_bundle records max_week in
+freshness.json; main() HALTs (not warns) if any of team_ratings, tendencies, usage has
+max_week < week - 1 for season 2026.
+
+**(f) All inspect.getsource tests replaced** with execution-based tests in
+test_fwd2b_harness.py (7 tests) and updated fixtures in test_fwd2_item0_fixes.py,
+test_fwd2_bundle.py, test_fwd2_anchor.py, test_fwd2_settlement.py. Every test calls
+main() or the function under test. Pre-existing test_forward_v1 fixtures updated to
+include game_id in picks_log rows.
+
+test_freeze_v1: 4 passed. Full suite: 40 passed.

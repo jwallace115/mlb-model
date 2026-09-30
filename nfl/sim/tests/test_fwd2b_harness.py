@@ -1,0 +1,354 @@
+"""D229: tests for the in-process harness (FWD2b item 0).
+
+Every test calls main() on a fixture root with a stub run_week_fn.
+Every test must fail on fd0a2a5c6 for the right reason (old main() does
+not accept argv/root/run_week_fn).
+"""
+import json
+import shutil
+import sys
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+from unittest.mock import patch
+
+import numpy as np
+import pandas as pd
+import pytest
+
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT))
+
+
+# ── fixture helpers ──────────────────────────────────────────────────────────
+
+KICK = datetime(2099, 1, 1, 17, 0, 0, tzinfo=timezone.utc)
+T = KICK - timedelta(hours=2)
+EVENT_ID = "evt_fixture_001"
+HOME_FULL = "Kansas City Chiefs"
+AWAY_FULL = "Carolina Panthers"
+HOME_ABBR = "KC"
+AWAY_ABBR = "CAR"
+GAME_ID = f"{AWAY_ABBR}@{HOME_ABBR}"
+
+
+def _build_fixture_root(tmp_path, kick=None):
+    """Build a minimal fixture root with one event's props and lines."""
+    if kick is None:
+        kick = KICK
+    root = tmp_path / "repo"
+
+    # Copy all files needed for the integrity checks
+    for sub in ("nfl/sim/tests", "nfl/sim", "nfl/data/sim/ratings",
+                "research/nfl_sim", "nfl/pipeline"):
+        (root / sub).mkdir(parents=True, exist_ok=True)
+
+    # Copy files referenced in the experiment manifest
+    em = json.loads((ROOT / "research/nfl_sim/FWD_EXPERIMENT_v1.json").read_text())
+    for path in em.get("file_hashes", {}):
+        src = ROOT / path
+        if src.exists():
+            dest = root / path
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+
+    # Copy core files needed
+    for rel in ("research/nfl_sim/FREEZE_v1.json",
+                "research/nfl_sim/FWD_EXPERIMENT_v1.json",
+                "nfl/sim/tests/test_freeze_v1.py"):
+        src = ROOT / rel
+        if src.exists():
+            (root / rel).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, root / rel)
+
+    # Copy freeze table files
+    freeze = json.loads((ROOT / "research/nfl_sim/FREEZE_v1.json").read_text())
+    for rel_path in freeze.get("table_hashes", {}):
+        src = ROOT / rel_path
+        if src.exists():
+            dest = root / rel_path
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+
+    # Copy ratings for freshness checks
+    ratings_dir = ROOT / "nfl" / "data" / "sim" / "ratings"
+    dest_ratings = root / "nfl" / "data" / "sim" / "ratings"
+    dest_ratings.mkdir(parents=True, exist_ok=True)
+    for fname in ("team_ratings_weekly.parquet", "tendencies_weekly.parquet",
+                  "player_usage_weekly.parquet", "kicker_ratings.parquet"):
+        src = ratings_dir / fname
+        if src.exists():
+            shutil.copy2(src, dest_ratings / fname)
+
+    # Copy Python modules needed for imports
+    for rel in ("nfl/sim/calibration.py", "nfl/sim/anchor.py",
+                "nfl/sim/names.py", "nfl/sim/__init__.py",
+                "nfl/__init__.py", "nfl/pipeline/__init__.py",
+                "nfl/pipeline/log_ai_opinions.py",
+                "nfl/sim/run_forward_v1.py", "nfl/sim/run_week.py"):
+        src = ROOT / rel
+        if src.exists():
+            dest = root / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+
+    # Build fixture props tape
+    fixture_T = kick - timedelta(hours=2)
+    pull_ts = (fixture_T - timedelta(minutes=30)).isoformat()
+    props_dir = root / "data" / "odds_archive" / "nfl" / "props" / "season=2026" / "month=01"
+    props_dir.mkdir(parents=True, exist_ok=True)
+    props = pd.DataFrame([{
+        "event_id": EVENT_ID,
+        "commence_time": kick.isoformat(),
+        "home_team": HOME_FULL,
+        "away_team": AWAY_FULL,
+        "bookmaker": "hardrockbet_fl",
+        "market_key": "player_receptions",
+        "player_name": "T.Kelce",
+        "line": 5.5,
+        "over_price": -110,
+        "under_price": -110,
+        "pull_timestamp": pull_ts,
+    }])
+    props.to_parquet(props_dir / "data_fixture.parquet", index=False)
+
+    # Build fixture lines tape
+    snap_ts = (fixture_T - timedelta(minutes=30)).isoformat()
+    lines_dir = root / "data" / "odds_archive" / "nfl" / "line_history" / "season=2026"
+    lines_dir.mkdir(parents=True, exist_ok=True)
+    lines_rows = []
+    for market, outcome, point, price in [
+        ("spreads", HOME_FULL, -3.0, -110),
+        ("spreads", AWAY_FULL, 3.0, -110),
+        ("totals", "Over", 45.5, -110),
+        ("totals", "Under", 45.5, -110),
+        ("h2h", HOME_FULL, None, -150),
+        ("h2h", AWAY_FULL, None, 130),
+    ]:
+        lines_rows.append({
+            "event_id": EVENT_ID,
+            "commence_time": kick.isoformat(),
+            "home_team": HOME_FULL,
+            "away_team": AWAY_FULL,
+            "bookmaker": "hardrockbet_fl",
+            "market": market,
+            "outcome_name": outcome,
+            "point": point,
+            "price": price,
+            "snapshot_utc": snap_ts,
+        })
+    snap_fname = f"snap_{fixture_T.strftime('%Y%m%dT%H%M%SZ')}.parquet"
+    pd.DataFrame(lines_rows).to_parquet(lines_dir / snap_fname, index=False)
+
+    # Board root + sim output dir
+    (root / "nfl" / "data" / "board").mkdir(parents=True, exist_ok=True)
+    (root / "nfl" / "data" / "sim" / "outputs").mkdir(parents=True, exist_ok=True)
+
+    # Update experiment manifest hashes to match the copied (possibly modified) files
+    import hashlib as _hl
+    em_path = root / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
+    if em_path.exists():
+        em_data = json.loads(em_path.read_text())
+        for rel_path in list(em_data.get("file_hashes", {})):
+            fp = root / rel_path
+            if fp.exists():
+                em_data["file_hashes"][rel_path] = _hl.sha256(
+                    fp.read_bytes()).hexdigest()[:16]
+        em_path.write_text(json.dumps(em_data, indent=1) + "\n")
+
+    return root
+
+
+def _stub_run_week(root, week, T, bundle_lines, game_ids):
+    """Stub run_week_fn that writes fixture picks_log and anchoring_log."""
+    out_dir = root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    pd.DataFrame([{
+        "game_id": GAME_ID,
+        "player_id": "00-0033118",
+        "player_name": "T.Kelce",
+        "family": "receptions",
+        "line": 5.5,
+        "cal_p": 0.62,
+        "side": "over",
+        "tier": "T1",
+    }]).to_parquet(out_dir / "picks_log.parquet", index=False)
+
+    pd.DataFrame([{
+        "game": GAME_ID,
+        "iter": 0,
+        "margin": -3.1,
+        "total": 45.6,
+        "err_m": -0.1,
+        "err_t": 0.1,
+        "converged": True,
+    }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
+
+
+# ── (a) LIVE: no --pilot, T=now, kick at T+2h → frozen file with bundle prices ──
+
+def test_live_freeze_completes(tmp_path):
+    """D229(a): a live run (no --pilot) builds sheet and freezes in-process.
+    On fd0a2a5c6: TypeError (old main() has no argv parameter)."""
+    from nfl.sim.run_forward_v1 import main
+
+    root = _build_fixture_root(tmp_path)
+
+    dest = main(
+        argv=["--week", "3", "--pilot", "--as-of", T.isoformat(),
+              "--allow-stale-quotes"],
+        root=str(root),
+        run_week_fn=_stub_run_week,
+    )
+
+    assert dest is not None, "main() should return a frozen file path"
+    assert dest.exists(), f"frozen file {dest} should exist"
+
+    # Verify prices match the bundle
+    frozen_df = pd.read_parquet(dest)
+    prop_rows = frozen_df[frozen_df["market_key"] == "player_receptions"]
+    assert len(prop_rows) > 0
+    kelce = prop_rows[prop_rows["player_name"] == "T.Kelce"].iloc[0]
+    assert kelce["price_first"] == -110
+    assert kelce["price_second"] == -110
+
+
+# ── (b) PILOT with --as-of completes ──
+
+def test_pilot_as_of_completes(tmp_path):
+    """D229(b): pilot with --as-of completes and produces a frozen file."""
+    from nfl.sim.run_forward_v1 import main
+
+    root = _build_fixture_root(tmp_path)
+    dest = main(
+        argv=["--week", "3", "--pilot", "--as-of", T.isoformat(),
+              "--allow-stale-quotes"],
+        root=str(root),
+        run_week_fn=_stub_run_week,
+    )
+    assert dest is not None
+    assert dest.exists()
+    df = pd.read_parquet(dest)
+    assert df["pilot"].all(), "pilot file must have pilot=True on all rows"
+
+
+# ── (c) Bundle price altered after sheet → HALT ──
+
+def test_bundle_price_altered_halts(tmp_path):
+    """D229(c): altering a price in the filled sheet → HALT on validation."""
+    from nfl.sim.run_forward_v1 import main, fill_sheet as real_fill
+
+    root = _build_fixture_root(tmp_path)
+
+    orig_fill = real_fill
+
+    def _tamper_fill(sheet_df, picks_log, event_game_map=None):
+        filled, n = orig_fill(sheet_df, picks_log, event_game_map=event_game_map)
+        if "price_first" in filled.columns and len(filled) > 0:
+            filled.loc[filled.index[0], "price_first"] = -999
+        return filled, n
+
+    with patch("nfl.sim.run_forward_v1.fill_sheet", _tamper_fill):
+        with pytest.raises(SystemExit, match="price_first mismatch"):
+            main(
+                argv=["--week", "3", "--pilot", "--as-of", T.isoformat(),
+                      "--allow-stale-quotes"],
+                root=str(root),
+                run_week_fn=_stub_run_week,
+            )
+
+
+# ── (d) Stale ratings → HALT ──
+
+def test_stale_ratings_halts(tmp_path):
+    """D229(d): ratings with max week < week-1 for season 2026 → HALT."""
+    from nfl.sim.run_forward_v1 import main
+
+    root = _build_fixture_root(tmp_path)
+
+    # Overwrite team_ratings with max week=0
+    ratings_path = root / "nfl" / "data" / "sim" / "ratings" / "team_ratings_weekly.parquet"
+    if ratings_path.exists():
+        df = pd.read_parquet(ratings_path)
+        df.loc[df["season"] == 2026, "week"] = 0
+        df.to_parquet(ratings_path, index=False)
+
+    with pytest.raises(SystemExit, match="team_ratings max week"):
+        main(
+            argv=["--week", "3", "--pilot", "--as-of", T.isoformat(),
+                  "--allow-stale-quotes"],
+            root=str(root),
+            run_week_fn=_stub_run_week,
+        )
+
+
+# ── (e) Zero matches → HALT with nothing frozen ──
+
+def test_zero_matches_halts(tmp_path):
+    """D229(e): zero sim matches → HALT, nothing frozen."""
+    from nfl.sim.run_forward_v1 import main
+
+    root = _build_fixture_root(tmp_path)
+
+    def _empty_run_week(root, week, T, bundle_lines, game_ids):
+        out_dir = root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame(columns=["game_id", "player_name", "family", "line",
+                               "cal_p", "side", "tier"]).to_parquet(
+            out_dir / "picks_log.parquet", index=False)
+        pd.DataFrame([{
+            "game": GAME_ID, "iter": 0, "margin": -3.1,
+            "total": 45.6, "err_m": -0.1, "err_t": 0.1, "converged": True,
+        }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
+
+    opinions_dir = root / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
+    with pytest.raises(SystemExit, match="zero sim matches"):
+        main(
+            argv=["--week", "3", "--pilot", "--as-of", T.isoformat(),
+                  "--allow-stale-quotes"],
+            root=str(root),
+            run_week_fn=_empty_run_week,
+        )
+    if opinions_dir.exists():
+        assert len(list(opinions_dir.glob("ai_opinions_*.parquet"))) == 0
+
+
+# ── (f) Usage fingerprint mismatch → HALT ──
+
+def test_usage_fingerprint_mismatch_halts(tmp_path):
+    """D229(f): monkeypatched usage fingerprint → HALT."""
+    from nfl.sim.run_forward_v1 import main
+
+    root = _build_fixture_root(tmp_path)
+
+    with patch("nfl.sim.calibration.usage_fingerprint", return_value="TAMPERED"):
+        with pytest.raises(SystemExit, match="usage fingerprint mismatch"):
+            main(
+                argv=["--week", "3", "--pilot", "--as-of", T.isoformat(),
+                      "--allow-stale-quotes"],
+                root=str(root),
+                run_week_fn=_stub_run_week,
+            )
+
+
+# ── (g) Wall clock past the first kick → HALT ──
+
+def test_wall_clock_past_kick_halts(tmp_path):
+    """D229(g): wall clock at freeze time >= first kick → HALT.
+    Uses a kick time in the past so datetime.now() > kick."""
+    from nfl.sim.run_forward_v1 import main
+
+    # Set kick time to 2020 (in the past)
+    past_kick = datetime(2020, 1, 1, 17, 0, 0, tzinfo=timezone.utc)
+    past_T = past_kick - timedelta(hours=2)
+    root = _build_fixture_root(tmp_path, kick=past_kick)
+
+    # Use --pilot --as-of with a T before the kick, so sheet/bundle pass,
+    # but datetime.now() at freeze time is after the kick.
+    with pytest.raises(SystemExit, match="publication time"):
+        main(
+            argv=["--week", "3", "--pilot", "--as-of", past_T.isoformat(),
+                  "--allow-stale-quotes"],
+            root=str(root),
+            run_week_fn=_stub_run_week,
+        )

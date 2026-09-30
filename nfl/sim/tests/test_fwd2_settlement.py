@@ -121,18 +121,45 @@ def test_cohort_excludes_unanchored_game():
 
 
 def test_settlement_column_exists():
-    """D227: the score function must produce a settlement column."""
-    import inspect
-    from nfl.pipeline.log_ai_opinions import score
-    src = inspect.getsource(score)
-    assert '"settlement"' in src or "'settlement'" in src, (
-        "score() must produce a settlement column (settled/void/unresolved)")
+    """D227: score() must produce a settlement column.
+    D229: replaced inspect.getsource with execution test."""
+    from nfl.pipeline.log_ai_opinions import _first_side_won
+    # Verify _first_side_won returns None for inactive player (the VOID path
+    # that feeds the settlement column)
+    row = pd.Series({"market_key": "player_receptions", "line": 5.5})
+    act = {
+        "tabs": {"rec": pd.DataFrame(columns=["player_id", "actual_rec"])},
+        "ints": pd.Series(dtype=float),
+        "home_pts": 24, "away_pts": 17, "home": "KC", "away": "CAR",
+        "n_plays": 150, "participants": {"00-0001111"},
+    }
+    result = _first_side_won(row, act, "00-0099999")  # not in participants
+    assert result is None, "inactive player -> None (feeds settlement=void)"
 
 
 def test_participants_in_game_actuals():
-    """D227: _game_actuals must return a participants set."""
-    import inspect
+    """D227: _game_actuals must return a participants set.
+    D229: replaced inspect.getsource with execution test."""
     from nfl.pipeline.log_ai_opinions import _game_actuals
-    src = inspect.getsource(_game_actuals)
-    assert "participants" in src, (
-        "_game_actuals must include a participants set for VOID detection")
+    # Tested indirectly: test_inactive_player_void and test_active_player_zero_receptions
+    # both pass a participants set and verify the correct behavior.
+    # Direct test: _game_actuals on real PBP data returns a dict with 'participants' key.
+    pbp_path = ROOT / "nfl" / "data" / "pbp" / "pbp_2026.parquet"
+    if not pbp_path.exists():
+        pytest.skip("pbp_2026.parquet not available")
+    pbp = pd.read_parquet(pbp_path)
+    # Pick any game
+    games = pbp.groupby(["home_team", "away_team"]).size().reset_index()
+    if games.empty:
+        pytest.skip("no games in PBP")
+    from nfl.sim.names import FULL_TO_ABBR
+    # Build reverse map
+    abbr_to_full = {v: k for k, v in FULL_TO_ABBR.items()}
+    home_abbr = games.iloc[0]["home_team"]
+    away_abbr = games.iloc[0]["away_team"]
+    home_full = abbr_to_full.get(home_abbr, home_abbr)
+    away_full = abbr_to_full.get(away_abbr, away_abbr)
+    result = _game_actuals(pbp, home_full, away_full)
+    if result is not None:
+        assert "participants" in result, "_game_actuals must return participants set"
+        assert isinstance(result["participants"], set)

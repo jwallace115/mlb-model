@@ -6,7 +6,7 @@ Usage:
   python3 nfl/sim/run_forward_v1.py --week 3 [--pilot] [--as-of ...] [--window-hours 9] [--events pit,cle]
 """
 
-import argparse, hashlib, json, os, subprocess, sys, tempfile, time
+import argparse, hashlib, json, os, subprocess, sys, time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -90,7 +90,7 @@ def _load_lines_at_T(season, T):
 
 
 def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
-                 window_hours=None, event_filter=None):
+                 window_hours=None, event_filter=None, _root=None):
     """D225: build an immutable run bundle at cutoff T.
 
     Returns (bundle_dir, bundle_manifest) and writes:
@@ -181,7 +181,8 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     # ── freshness ──
     freshness = {"cutoff_T": T.isoformat(), "run_id": run_id}
     # Check ratings max week
-    ratings_dir = ROOT / "nfl" / "data" / "sim" / "ratings"
+    _r = _root or ROOT
+    ratings_dir = _r / "nfl" / "data" / "sim" / "ratings"
     for fname, label in [("team_ratings_weekly.parquet", "team_ratings"),
                          ("tendencies_weekly.parquet", "tendencies"),
                          ("player_usage_weekly.parquet", "usage")]:
@@ -190,8 +191,6 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
             rdf = pd.read_parquet(fpath, columns=["season", "week"])
             max_w = int(rdf[rdf["season"] == season]["week"].max()) if len(rdf[rdf["season"] == season]) else 0
             freshness[f"{label}_max_week"] = max_w
-            if max_w < week - 1:
-                print(f"  WARNING: {label} max week = {max_w} (need >= {week - 1})")
         else:
             freshness[f"{label}_max_week"] = None
     # Kickers: documented fallback if no 2026 rows
@@ -220,7 +219,7 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     manifest["allow_stale_quotes"] = allow_stale_quotes
     (bundle_dir / "bundle_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
 
-    print(f"  Bundle: {bundle_dir.relative_to(ROOT)}")
+    print(f"  Bundle: {bundle_dir.relative_to(_r)}")
     print(f"  Events: {len(events)}, Props: {len(props)}, Lines: {len(lines)}")
     for k, v in freshness.items():
         if k not in ("cutoff_T", "run_id"):
@@ -256,12 +255,13 @@ def lines_dict_from_bundle(bundle_dir):
     return result
 
 
-def check_experiment_manifest():
+def check_experiment_manifest(_root=None):
     """D224(b): HALT if any file hash in the experiment manifest has changed."""
     import hashlib
+    _r = _root or ROOT
     m = json.loads(EXPERIMENT_MANIFEST.read_text())
     for path, expected in m["file_hashes"].items():
-        p = ROOT / path
+        p = _r / path
         if not p.exists():
             raise SystemExit(f"HALT: experiment manifest file missing: {path}")
         got = hashlib.sha256(p.read_bytes()).hexdigest()[:16]
@@ -439,7 +439,20 @@ def anchor_sidecar(anchoring_log_df, lines):
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
-def main(freeze_json_path=None):
+def _default_run_week(root, week, T, bundle_lines, game_ids):
+    """Default run_week_fn: call run_week.py via subprocess with --lines-json and --games."""
+    lines_json = json.dumps(bundle_lines)
+    games_str = ",".join(game_ids)
+    cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"),
+           "--week", str(week), "--as-of", T.isoformat(),
+           "--lines-json", lines_json, "--games", games_str]
+    r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(root), timeout=7200)
+    if r.returncode != 0:
+        raise SystemExit(f"HALT: run_week.py failed:\n{r.stderr}\n{r.stdout}")
+    print(f"    Sim complete.\n{r.stdout[-500:]}\n", flush=True)
+
+
+def main(argv=None, root=None, run_week_fn=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--week", type=int, required=True)
     ap.add_argument("--pilot", action="store_true")
@@ -449,12 +462,23 @@ def main(freeze_json_path=None):
     ap.add_argument("--dry-run", action="store_true", help="D221: steps a-d and f, stop before freeze")
     ap.add_argument("--allow-stale-quotes", action="store_true",
                     help="pilot only: override the quote-age HALT")
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
+
+    root = Path(root) if root else ROOT
+    if run_week_fn is None:
+        run_week_fn = _default_run_week
+
+    # D229: override module-level paths when root is provided
+    global PROPS_DIR, LINES_DIR, BOARD_ROOT, EXPERIMENT_MANIFEST
+    PROPS_DIR = root / "data" / "odds_archive" / "nfl" / "props"
+    LINES_DIR = root / "data" / "odds_archive" / "nfl" / "line_history"
+    BOARD_ROOT = root / "nfl" / "data" / "board"
+    EXPERIMENT_MANIFEST = root / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
 
     if a.as_of and not a.pilot:
-        sys.exit("HALT: --as-of requires --pilot")
+        raise SystemExit("HALT: --as-of requires --pilot")
     if a.allow_stale_quotes and not a.pilot:
-        sys.exit("HALT: --allow-stale-quotes requires --pilot")
+        raise SystemExit("HALT: --allow-stale-quotes requires --pilot")
 
     T = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
     if T.tzinfo is None:
@@ -463,29 +487,25 @@ def main(freeze_json_path=None):
     # (a) test_freeze_v1 + experiment manifest check
     print("(a) Running test_freeze_v1...", flush=True)
     import pytest
-    test_args = ["-q", str(ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py")]
-    if freeze_json_path:
-        import nfl.sim.tests.test_freeze_v1 as ft
-        ft.FREEZE_PATH = Path(freeze_json_path)
+    test_args = ["-q", "-p", "no:cacheprovider",
+                 str(ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py")]
     ret = pytest.main(test_args, plugins=[])
     if ret != 0:
-        sys.exit(f"HALT: test_freeze_v1 failed (exit {ret})")
+        raise SystemExit(f"HALT: test_freeze_v1 failed (exit {ret})")
     print("    PASS", flush=True)
-    # D224(b): experiment manifest check
-    check_experiment_manifest()
+    check_experiment_manifest(_root=root)
     print("    Experiment manifest: OK", flush=True)
-    # D224a: calibration stamp + usage fingerprint check
     from nfl.sim.run_week import _check_calibration_stamp
     from nfl.sim.calibration import usage_fingerprint
     stamp_ok, stamp_mismatches = _check_calibration_stamp()
     if not stamp_ok:
-        sys.exit("HALT: calibration stamp mismatch:\n" +
+        raise SystemExit("HALT: calibration stamp mismatch:\n" +
                  "\n".join(f"  {m}" for m in stamp_mismatches))
     print("    Calibration stamp: OK", flush=True)
     em = json.loads(EXPERIMENT_MANIFEST.read_text())
     live_usage = usage_fingerprint()
     if live_usage != em.get("usage_fingerprint"):
-        sys.exit(f"HALT: usage fingerprint mismatch: live={live_usage}, "
+        raise SystemExit(f"HALT: usage fingerprint mismatch: live={live_usage}, "
                  f"manifest={em.get('usage_fingerprint')}")
     print("    Usage fingerprint: OK\n", flush=True)
 
@@ -494,126 +514,127 @@ def main(freeze_json_path=None):
     bundle_dir, bundle_manifest = build_bundle(
         SEASON, a.week, T, pilot=a.pilot,
         allow_stale_quotes=a.allow_stale_quotes,
-        window_hours=a.window_hours, event_filter=a.events)
+        window_hours=a.window_hours, event_filter=a.events, _root=root)
     print(flush=True)
 
-    # Build event_game_map from bundle
     events_df = pd.read_parquet(bundle_dir / "events.parquet")
     event_game_map = dict(zip(events_df["event_id"], events_df["game_id"]))
 
-    # Build sheet from bundle's props and lines
-    print("(c) Building sheet from bundle...", flush=True)
-    with tempfile.TemporaryDirectory() as td:
-        props_path = str(bundle_dir / "props.parquet")
-        lines_path = str(bundle_dir / "lines.parquet")
-        sheet_path = Path(td) / "sheet.csv"
-        common_flags = ["--pilot"] if a.pilot else []
-        common_flags += ["--as-of", T.isoformat()]
-        sheet_cmd = [sys.executable, str(ROOT / "nfl" / "pipeline" / "log_ai_opinions.py"),
-                     "sheet", "--week", str(a.week), "--out", str(sheet_path),
-                     "--props-file", props_path, "--lines-file", lines_path
-                     ] + common_flags
-        r = subprocess.run(sheet_cmd, capture_output=True, text=True, cwd=str(ROOT))
-        if r.returncode != 0:
-            sys.exit(f"HALT: sheet failed:\n{r.stderr}\n{r.stdout}")
-        sheet_df = pd.read_csv(sheet_path)
-        n_two_way = int(sheet_df["two_way"].sum()) if "two_way" in sheet_df.columns else 0
-        print(f"    {len(sheet_df)} lines, {n_two_way} two-way\n{r.stdout.strip()}\n",
+    # D229: freshness HALTs (not warns)
+    freshness = json.loads((bundle_dir / "freshness.json").read_text())
+    for label in ("team_ratings", "tendencies", "usage"):
+        mw = freshness.get(f"{label}_max_week")
+        if mw is None or mw < a.week - 1:
+            raise SystemExit(
+                f"HALT: {label} max week = {mw} (need >= {a.week - 1} for season {SEASON})")
+    kickers = freshness.get("kickers", "missing")
+    if kickers == "engine_default_fallback":
+        print(f"  kickers: fallback (no {SEASON} rows) — declared, recorded in bundle",
               flush=True)
 
-        # (d) sim — only the bundle's events
-        print("(d) Running sim...", flush=True)
-        sim_cmd = [sys.executable, str(ROOT / "nfl" / "sim" / "run_week.py"),
-                   "--week", str(a.week), "--as-of", T.isoformat()]
-        r_sim = subprocess.run(sim_cmd, capture_output=True, text=True, cwd=str(ROOT),
-                               timeout=7200)
-        if r_sim.returncode != 0:
-            sys.exit(f"HALT: run_week.py failed:\n{r_sim.stderr}\n{r_sim.stdout}")
-        print(f"    Sim complete.\n{r_sim.stdout[-500:]}\n", flush=True)
+    # (c) D229: build sheet IN-PROCESS from the bundle's props and lines
+    print("(c) Building sheet from bundle...", flush=True)
+    from nfl.pipeline.log_ai_opinions import build_sheet, set_sport
+    set_sport("nfl")
+    bundle_props = pd.read_parquet(bundle_dir / "props.parquet")
+    bundle_lines_df = pd.read_parquet(bundle_dir / "lines.parquet")
+    sheet_df = build_sheet(bundle_props, bundle_lines_df, T)
+    # Restrict to the bundle's event_ids
+    bundle_eids = set(events_df["event_id"])
+    sheet_df = sheet_df[sheet_df["event_id"].isin(bundle_eids)].reset_index(drop=True)
+    n_two_way = int(sheet_df["two_way"].sum()) if "two_way" in sheet_df.columns else 0
+    print(f"    {len(sheet_df)} lines, {n_two_way} two-way\n", flush=True)
 
-        # Read picks_log
-        sim_out = ROOT / "nfl" / "data" / "sim" / "outputs" / f"week={SEASON}_{a.week:02d}"
-        picks_log = pd.read_parquet(sim_out / "picks_log.parquet")
-        print(f"    picks_log: {len(picks_log)} legs", flush=True)
+    # (d) sim — only the bundle's events
+    print("(d) Running sim...", flush=True)
+    bundle_lines = lines_dict_from_bundle(bundle_dir)
+    game_ids = sorted(bundle_lines.keys())
+    sim_out = root / "nfl" / "data" / "sim" / "outputs" / f"week={SEASON}_{a.week:02d}"
+    run_week_fn(root, a.week, T, bundle_lines, game_ids)
 
-        # (e) fill
-        print("(e) Filling opinions...", flush=True)
-        filled, n_matched = fill_sheet(sheet_df, picks_log, event_game_map=event_game_map)
-        print(f"    Matched {n_matched} / {n_two_way} two-way prop rows\n", flush=True)
+    # Read picks_log
+    picks_log = pd.read_parquet(sim_out / "picks_log.parquet")
+    print(f"    picks_log: {len(picks_log)} legs", flush=True)
 
-        # Print coverage
-        sim_rows = filled[filled["tag"] == "sim_v1"]
-        print(f"    Coverage: {len(sheet_df)} sheet / {n_two_way} two-way / "
-              f"{n_matched} matched", flush=True)
-        if len(sim_rows) and "market_key" in sim_rows.columns:
-            print("    By market:")
-            print(sim_rows.groupby("market_key").size().to_string(header=False))
+    # (e) fill
+    print("(e) Filling opinions...", flush=True)
+    filled, n_matched = fill_sheet(sheet_df, picks_log, event_game_map=event_game_map)
+    print(f"    Matched {n_matched} / {n_two_way} two-way prop rows\n", flush=True)
 
-        # D224a: HALT on zero sim matches — 0 == 0 passes the fill_sheet assert
-        if n_matched == 0:
-            sys.exit("HALT: zero sim matches — nothing to freeze")
+    # D229: validate filled prices against bundle's sheet
+    for col in ("price_first", "price_second", "source_utc"):
+        if col in sheet_df.columns and col in filled.columns:
+            sheet_vals = sheet_df.set_index(["event_id", "market_key", "player_name", "line"])[col]
+            filled_vals = filled.set_index(["event_id", "market_key", "player_name", "line"])[col]
+            joined = sheet_vals.align(filled_vals, join="inner")
+            mismatches = joined[0] != joined[1]
+            if mismatches.any():
+                n_bad = int(mismatches.sum())
+                raise SystemExit(
+                    f"HALT: {n_bad} {col} mismatch(es) between sheet and filled — "
+                    f"bundle prices must be used verbatim")
 
-        # D226: anchor sidecar with actual market targets, BEFORE the freeze
-        print("(f) Building anchor sidecar...", flush=True)
-        anch_log_path = sim_out / "anchoring_log.parquet"
-        if not anch_log_path.exists():
-            sys.exit("HALT: anchoring_log.parquet missing — sidecar is mandatory (D226)")
-        anch_log = pd.read_parquet(anch_log_path)
-        bundle_lines = lines_dict_from_bundle(bundle_dir)
-        sidecar_df = anchor_sidecar(anch_log, bundle_lines)
-        # Write sidecar to the bundle (immutable, before freeze)
-        sidecar_path = bundle_dir / "anchor_sidecar.parquet"
-        sidecar_df.to_parquet(sidecar_path, index=False)
-        n_unanch = int((~sidecar_df["anchored"]).sum())
-        print(f"    {len(sidecar_df)} games, {n_unanch} unanchored", flush=True)
-        print(sidecar_df.to_string(index=False))
+    sim_rows = filled[filled["tag"] == "sim_v1"]
+    print(f"    Coverage: {len(sheet_df)} sheet / {n_two_way} two-way / "
+          f"{n_matched} matched", flush=True)
+    if len(sim_rows) and "market_key" in sim_rows.columns:
+        print("    By market:")
+        print(sim_rows.groupby("market_key").size().to_string(header=False))
 
-        # D221: dry-run prints summary and stops before freeze
-        if a.dry_run:
-            print("\n--- DRY RUN ---")
-            print(f"Tag counts:\n{filled['tag'].value_counts().to_string()}")
-            print(f"\nBundle manifest: {bundle_dir.relative_to(ROOT)}/bundle_manifest.json")
-            print(json.dumps(bundle_manifest, indent=1))
-            print("\nDRY RUN complete — nothing frozen.")
-            return
+    if n_matched == 0:
+        raise SystemExit("HALT: zero sim matches — nothing to freeze")
 
-        # Write filled CSV for freeze
-        filled_path = Path(td) / "filled.csv"
-        filled.to_csv(filled_path, index=False)
+    # (f) anchor sidecar
+    print("(f) Building anchor sidecar...", flush=True)
+    anch_log_path = sim_out / "anchoring_log.parquet"
+    if not anch_log_path.exists():
+        raise SystemExit("HALT: anchoring_log.parquet missing — sidecar is mandatory (D226)")
+    anch_log = pd.read_parquet(anch_log_path)
+    sidecar_df = anchor_sidecar(anch_log, bundle_lines)
+    sidecar_path = bundle_dir / "anchor_sidecar.parquet"
+    sidecar_df.to_parquet(sidecar_path, index=False)
+    n_unanch = int((~sidecar_df["anchored"]).sum())
+    print(f"    {len(sidecar_df)} games, {n_unanch} unanchored", flush=True)
+    print(sidecar_df.to_string(index=False))
 
-        # (g) freeze
-        freeze_wall = datetime.now(timezone.utc)
-        # D225: HALT if publication >= first kick in the window
-        first_kick = events_df["commence_time"].map(_parse_utc).min()
-        if freeze_wall >= first_kick:
-            sys.exit(f"HALT: publication time {freeze_wall.isoformat()} >= "
+    # dry-run
+    if a.dry_run:
+        print("\n--- DRY RUN ---")
+        print(f"Tag counts:\n{filled['tag'].value_counts().to_string()}")
+        print(f"\nBundle manifest: {bundle_dir.relative_to(root)}/bundle_manifest.json")
+        print(json.dumps(bundle_manifest, indent=1))
+        print("\nDRY RUN complete — nothing frozen.")
+        return
+
+    # (g) D229: freeze IN-PROCESS
+    freeze_wall = datetime.now(timezone.utc)
+    first_kick = events_df["commence_time"].map(_parse_utc).min()
+    if freeze_wall >= first_kick:
+        raise SystemExit(f"HALT: publication time {freeze_wall.isoformat()} >= "
                      f"first kick {first_kick.isoformat()}")
 
-        print("(g) Freezing...", flush=True)
-        freeze_cmd = [sys.executable, str(ROOT / "nfl" / "pipeline" / "log_ai_opinions.py"),
-                      "freeze", "--week", str(a.week), "--filled", str(filled_path),
-                      "--reader-model", READER_MODEL, "--as-of", T.isoformat()]
-        if a.pilot:
-            freeze_cmd.append("--pilot")
-        r_freeze = subprocess.run(freeze_cmd, capture_output=True, text=True, cwd=str(ROOT))
-        if r_freeze.returncode != 0:
-            sys.exit(f"HALT: freeze failed:\n{r_freeze.stderr}\n{r_freeze.stdout}")
-        print(f"    {r_freeze.stdout.strip()}\n", flush=True)
+    print("(g) Freezing...", flush=True)
+    from nfl.pipeline.log_ai_opinions import freeze as do_freeze
+    board_root = root / "nfl" / "data" / "board"
+    opinions_dir = board_root / f"week={SEASON}_{a.week:02d}" / "ai_opinions"
+    dest, sha, m = do_freeze(
+        sheet_df, filled, SEASON, a.week, a.pilot, T,
+        d=opinions_dir, reader_model=READER_MODEL, board_root=board_root)
+    print(f"    FROZEN {len(m)} lines -> {dest.relative_to(root)}\n"
+          f"    sha256 {sha}\n", flush=True)
 
-        # Also write sidecar to the opinions dir for backward compat
-        opinions_dir = (ROOT / "nfl" / "data" / "board" /
-                        f"week={SEASON}_{a.week:02d}" / "ai_opinions")
-        opinions_dir.mkdir(parents=True, exist_ok=True)
-        sidecar_df.to_parquet(
-            opinions_dir / "anchor_sidecar_sim_v1.parquet", index=False)
+    # Write sidecar to opinions dir
+    sidecar_df.to_parquet(
+        opinions_dir / "anchor_sidecar_sim_v1.parquet", index=False)
 
-        # Record publication time in the bundle
-        bundle_manifest["publication_utc"] = freeze_wall.isoformat()
-        bundle_manifest["cutoff_T"] = T.isoformat()
-        (bundle_dir / "bundle_manifest.json").write_text(
-            json.dumps(bundle_manifest, indent=1) + "\n")
+    # Record publication time in the bundle
+    bundle_manifest["publication_utc"] = freeze_wall.isoformat()
+    bundle_manifest["cutoff_T"] = T.isoformat()
+    (bundle_dir / "bundle_manifest.json").write_text(
+        json.dumps(bundle_manifest, indent=1) + "\n")
 
     print("\nDone.")
+    return dest
 
 
 if __name__ == "__main__":
