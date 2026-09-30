@@ -216,3 +216,53 @@ the same `None == 0`. **What it reports:** the D236(a) snap-count participation 
 `_first_side_won` contract so that player props require `snap_played=True` to proceed; the test
 calls it without `snap_played` (defaults to None = unresolved), so all player props return None
 instead of 0/1. The test correctly caught a behavior change but was never updated.
+
+### H5 — The packet: hashed beside every NHL frozen file (2026-09-30)
+
+Implemented in `shared/layers/packet.py` (sport-agnostic core) and `nhl/layers/build_packet_nhl.py`
+(NHL builder). Freeze integration in `nfl/pipeline/log_ai_opinions.py`.
+
+**shared/layers/packet.py** — sport-agnostic packet core:
+- Header: `{sport, slate_date, built_utc, builder_sha256, sources: [{path, sha256, source_utc}]}`
+- Games: `[{event_id, home, away, commence_time, layers: {market, news, history, model}}]`
+- Canonical JSON: sorted keys, 6-decimal floats — same inputs always produce the same hash (tested).
+- HALT if any source_utc >= built_utc, or built_utc >= the slate's first commence_time.
+- `builder_sha256` = sha256 of builder source files (content stamp, NEVER git HEAD).
+
+**nhl/layers/build_packet_nhl.py --date D** — NHL packet builder:
+- L1 market: per game × market, Pinnacle open/current/move, min/max across all books, event_markets
+  summary (WO12's files when present).
+- L2 news: goalie-probe observations (from item 4, when they exist) + --news-file CSV. A row missing
+  url or retrieved_utc -> HALT.
+- L3 history: point-in-time season-to-date GP, W-L-OTL, GF, GA, last-10, rest days, back-to-back
+  from cached boxscores strictly BEFORE the slate date. The 2025-26 final record included.
+- L4 model: pre-game probability from `nhl/nhl_model_outputs.parquet` (ends 2025-04-17); absent for
+  2026-27 games — `{"absent": "no model output for ... outputs end 2025-04-17"}`.
+
+**Freeze integration (NHL only):**
+- `--packet PATH` required for NHL (any drivers_required sport). HALT without it.
+- Validates: packet sport/date match freeze; built_utc <= freeze time and < first puck; packet games
+  include every sheet game; every row's drivers name only layers present in its game ('model' while
+  absent -> HALT, tested).
+- Copies the packet into the ai_opinions dir as `packet_<freezeUTC>.json`.
+- Manifest entry gains `packet_file` + `packet_sha256`.
+- `verify` rechecks the packet hash — an edited packet fails (tested).
+
+**NULL CONTROL — football unchanged:**
+- Football freeze needs no packet, its manifest entries gain no keys (verified: NFL wk3 manifest
+  has no packet_file/packet_sha256 on any entry).
+- NCAAF wk4 score: sha256 d98b273d92b2bde9 (unchanged).
+- NFL wk3 score: sha256 38d4ca6625105c6e (unchanged).
+
+**Tests** (13 new, all pass): `shared/layers/tests/test_packet_h5.py` — canonical JSON determinism,
+float precision, source_utc >= built_utc HALT, built_utc >= first puck HALT, sport mismatch HALT,
+missing events HALT, absent model driver HALT, present layers pass, missing layer HALT, builder
+content stamp, NHL freeze requires packet, football freeze no packet, packet tamper detected.
+
+**L4 model status for 2026-27:** `nhl/nhl_model_outputs.parquet` ends 2025-04-17 (5,248 rows,
+2021-10-12 to 2025-04-17). No file produces 2026-27 pre-game probabilities. Baseline (b) is
+`absent` until the NHL model runs for the new season.
+
+**Proof-of-run:** `build_packet_nhl.py --date 2026-09-29 --built-utc 2026-09-29T20:00:00+00:00`
+produced a packet with 5 games, 74 sources, sha256 40aa86a5...; L1 market populated from tape,
+L2 news "no observations yet", L3 history gp=0 (season opener), L4 model absent.

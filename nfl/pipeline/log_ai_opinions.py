@@ -342,11 +342,12 @@ def prior_revisions(d, reader_model=None, pilot=None):
 
 
 def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
-           board_root=None, run_id=None, slate_date=None):
+           board_root=None, run_id=None, slate_date=None, packet_path=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
-    written on every row and into the manifest - the reader is part of the research object."""
+    written on every row and into the manifest - the reader is part of the research object.
+    H5: packet_path required for NHL (date-keyed sports with drivers_required)."""
     if not reader_model or not str(reader_model).strip():
         raise SystemExit("HALT: --reader-model is required (the model that made these picks)")
     # D224(c): canonicalize reader string (strip whitespace)
@@ -410,17 +411,45 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     dest = d / f"ai_opinions_{now.strftime('%Y%m%dT%H%M%SZ')}.parquet"
     if dest.exists():
         raise SystemExit(f"HALT: {dest.name} exists - the log is append-only")
+    # ── H5: packet validation for NHL (and any drivers_required sport) ──
+    packet = None
+    packet_file = None
+    packet_sha = None
+    if SPORTS[SPORT].get("drivers_required", False):
+        if packet_path is None:
+            raise SystemExit(f"HALT: --packet is required for {SPORT}")
+        pp = Path(packet_path)
+        if not pp.exists():
+            raise SystemExit(f"HALT: packet file not found: {packet_path}")
+        from shared.layers.packet import validate_packet_for_freeze, validate_drivers_vs_packet
+        packet = json.loads(pp.read_text())
+        sheet_events = set(m["event_id"].unique())
+        validate_packet_for_freeze(packet, SPORT, slate_date, now.isoformat(), sheet_events)
+        # Check drivers vs packet layers
+        for _, row in m.iterrows():
+            if "drivers" in row and pd.notna(row["drivers"]) and row["drivers"]:
+                validate_drivers_vs_packet(row["drivers"], row["event_id"], packet)
+        # Copy packet into ai_opinions dir
+        packet_file = f"packet_{now.strftime('%Y%m%dT%H%M%SZ')}.json"
+        packet_dest = d / packet_file
+        packet_text = pp.read_text()
+        packet_dest.write_text(packet_text)
+        packet_sha = hashlib.sha256(packet_text.encode()).hexdigest()
     m.to_parquet(dest, index=False)
     sha = hashlib.sha256(dest.read_bytes()).hexdigest()
     man = d / "manifest.json"
     entries = json.loads(man.read_text()) if man.exists() else []
-    entries.append({"file": dest.name, "sha256": sha, "logged_utc": now.isoformat(), "rows": len(m),
+    entry = {"file": dest.name, "sha256": sha, "logged_utc": now.isoformat(), "rows": len(m),
                     "sport": SPORT, "book": BOOK, "reader_model": str(reader_model).strip(),
                     "pilot": bool(pilot), "games": int(m["event_id"].nunique()),
                     "no_view_share": round(float((m["tag"] == "no_view").mean()), 3),
                     "revised_rows": int((m["revision"] > 0).sum()),
                     "oldest_source_age_min": float(m["source_age_min"].max()),
-                    "first_kickoff_utc": str(m["commence_time"].min())})
+                    "first_kickoff_utc": str(m["commence_time"].min())}
+    if packet_file:
+        entry["packet_file"] = packet_file
+        entry["packet_sha256"] = packet_sha
+    entries.append(entry)
     man.write_text(json.dumps(entries, indent=1) + "\n")
     return dest, sha, m
 
@@ -435,6 +464,16 @@ def verify(season=None, week=None, d=None, slate_date=None):
     entries = json.loads(man.read_text()) if man.exists() else []
     bad = [e["file"] for e in entries
            if not (d / e["file"]).exists() or hashlib.sha256((d / e["file"]).read_bytes()).hexdigest() != e["sha256"]]
+    # H5: verify packet hashes
+    for e in entries:
+        pf = e.get("packet_file")
+        ps = e.get("packet_sha256")
+        if pf and ps:
+            pp = d / pf
+            if not pp.exists():
+                bad.append(pf)
+            elif hashlib.sha256(pp.read_text().encode()).hexdigest() != ps:
+                bad.append(pf)
     unlisted = sorted({f.name for f in d.glob("ai_opinions_*.parquet")} - {e["file"] for e in entries})
     return entries, bad, unlisted
 
@@ -1517,6 +1556,7 @@ def main():
     ap.add_argument("--file", help="score one file (diagnostic mode)")
     ap.add_argument("--from", dest="from_date", default=None, help="start date (inclusive) for date-range scoring")
     ap.add_argument("--to", dest="to_date", default=None, help="end date (inclusive) for date-range scoring")
+    ap.add_argument("--packet", default=None, help="packet JSON file (required for NHL freeze)")
     a = ap.parse_args()
     if a.as_of and not a.pilot:
         sys.exit("HALT: --as-of requires --pilot")
@@ -1549,7 +1589,8 @@ def main():
         print(sheet.groupby(["away_team", "home_team"])["source_age_min"].agg(["count", "min", "max"]).to_string())
     elif a.cmd == "freeze":
         dest, sha, m = freeze(sheet, pd.read_csv(a.filled), season, a.week, a.pilot, now,
-                             reader_model=a.reader_model, slate_date=a.date)
+                             reader_model=a.reader_model, slate_date=a.date,
+                             packet_path=a.packet)
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":

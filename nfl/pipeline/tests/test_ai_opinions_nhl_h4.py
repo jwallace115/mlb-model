@@ -168,10 +168,24 @@ class TestEndToEnd:
         filled["conf_rank"] = list(range(1, len(filled) + 1))
         filled["drivers"] = "market,history"
 
+        # Build a minimal packet for freeze
+        packet = {"header": {"sport": "nhl", "slate_date": "2025-10-07",
+                             "built_utc": "2025-10-07T19:59:00+00:00", "builder_sha256": "test",
+                             "sources": []}, "games": []}
+        for g in games:
+            packet["games"].append({
+                "event_id": g["event_id"], "home": g["home_team"], "away": g["away_team"],
+                "commence_time": g["commence_time"],
+                "layers": {"market": {"h2h": {}}, "news": {"status": "no obs"},
+                           "history": {}, "model": {"absent": "test"}}
+            })
+        packet_path = self.tmpdir / "packet.json"
+        packet_path.write_text(json.dumps(packet))
         # Freeze
         d = self.tmpdir / "date=2025-10-07" / "ai_opinions"
         dest, sha, m = L.freeze(sheet, filled, 2025, None, True, now, d=d,
-                                reader_model="test-h4", slate_date="2025-10-07")
+                                reader_model="test-h4", slate_date="2025-10-07",
+                                packet_path=str(packet_path))
         assert len(m) == 6
 
         # Score

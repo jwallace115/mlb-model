@@ -40,6 +40,31 @@ def _filled(sheet, tag="matchup", drivers="market,history"):
     return f
 
 
+def _minimal_packet(sheet, slate_date="2026-09-29", built_utc="2026-09-29T20:00:00+00:00"):
+    """Create a minimal valid packet for test freezes."""
+    import json
+    packet = {"header": {"sport": "nhl", "slate_date": slate_date,
+                         "built_utc": built_utc, "builder_sha256": "test",
+                         "sources": []},
+              "games": []}
+    for eid in sheet["event_id"].unique():
+        ev = sheet[sheet["event_id"] == eid].iloc[0]
+        packet["games"].append({
+            "event_id": eid, "home": ev["home_team"], "away": ev["away_team"],
+            "commence_time": ev["commence_time"],
+            "layers": {"market": {"h2h": {}}, "news": {"status": "no obs"},
+                       "history": {}, "model": {"absent": "test"}}
+        })
+    return packet
+
+
+def _write_packet(packet, d):
+    """Write a packet file and return its path."""
+    pp = d / "test_packet.json"
+    pp.write_text(json.dumps(packet))
+    return str(pp)
+
+
 class TestDateSlate:
     def setup_method(self):
         L.set_sport("nhl")
@@ -178,8 +203,11 @@ class TestNHLFreeze:
         s = _nhl_sheet("2026-09-29")
         f = _filled(s)
         d = self.tmpdir / "date=2026-09-29" / "ai_opinions"
+        packet = _minimal_packet(s)
+        pp = _write_packet(packet, self.tmpdir)
         dest, sha, m = L.freeze(s, f, 2026, None, True, NOW, d=d,
-                                reader_model="test-model", slate_date="2026-09-29")
+                                reader_model="test-model", slate_date="2026-09-29",
+                                packet_path=pp)
         assert "slate_date" in m.columns
         assert (m["slate_date"] == "2026-09-29").all()
         assert "week" not in m.columns
@@ -188,8 +216,11 @@ class TestNHLFreeze:
         s = _nhl_sheet("2026-09-29")
         f = _filled(s)
         d = self.tmpdir / "date=2026-09-29" / "ai_opinions"
+        packet = _minimal_packet(s)
+        pp = _write_packet(packet, self.tmpdir)
         dest, sha, m = L.freeze(s, f, 2026, None, True, NOW, d=d,
-                                reader_model="test-model", slate_date="2026-09-29")
+                                reader_model="test-model", slate_date="2026-09-29",
+                                packet_path=pp)
         assert (m["season"] == 2026).all()
 
 
