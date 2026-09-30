@@ -305,3 +305,26 @@
 
 ### UNVERIFIED
 - The TNF live run itself (23:30Z Thu).
+
+## 2026-09-30T20:35Z — Cowork: ChatGPT audit #8 brief (v7) written, pinned to main @ e0fc3d2d6
+
+### RETURNED
+- eng/fwd3 is merged (e0fc3d2d6); D254 is on main.
+- Cowork's pre-audit scan of the pinned logger and the harness:
+  - score_experiment issues the "confirmatory" verdict whenever n >= 1500 on all data (~:1124-1139), with no frozen,
+    saved checkpoint;
+  - the static import closure reaches nfl/sim/pricer.py (run_week.py:28, import only) and nfl/sim/actuals_k1.py
+    (engine.py K1 report), neither of them hashed.
+
+### MEANS
+- D245 wrongly accepted the checkpoint policy. The FWD3 requirement of a named checkpoint file at the crossing window was
+  never implemented. It is self-flagged in the brief §3.1.
+- Whether any unhashed module executes on the live path is unverified. Brief §3.4.
+
+### NOT DONE
+- Audit #8, pending Jeff sending it.
+- FWD2d.
+- test_fwd5_pin.py.
+
+### UNVERIFIED
+- Whether §3.1 must be fixed before TNF or can be a declared pre-outcome amendment.
