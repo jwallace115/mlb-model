@@ -382,7 +382,7 @@ def _pull_one_deriv(eid, req_str, pq_path):
     gz_path = pq_path.with_suffix(".json.gz")
     if pq_path.exists():
         return True, 0
-    if not _budget_ok(DERIV_COST):
+    if not _budget_ok(30):  # min possible event cost (10 × 3 common markets)
         return False, 0
     result = _request_with_backoff(
         f"{BASE}/historical/sports/icehockey_nhl/events/{eid}/odds",
@@ -425,11 +425,11 @@ def cmd_deriv(seasons, dry_run):
         if _call_count == 0 and todo:
             eid, ct, lbl, req, pq = todo[0]
             ok, used = _pull_one_deriv(eid, req, pq)
-            if used > 0 and used != DERIV_COST:
-                print(f"  STOP: first call x-requests-last={used}, expected {DERIV_COST}")
+            if used > 0 and used % 10 != 0:
+                print(f"  STOP: first call x-requests-last={used}, not a multiple of 10 (expected 10 × markets)")
                 return
-            if used == DERIV_COST:
-                print(f"  First call OK: x-requests-last={DERIV_COST}")
+            if used > 0:
+                print(f"  First call OK: x-requests-last={used} (10 × {used//10} markets present)")
             todo = [(e, c, l, r, p) for e, c, l, r, p in todo if not p.exists()]
         cc, cu, rem, rate = _status()
         if rate > 0 and todo:
@@ -488,7 +488,7 @@ def _pull_one_props(eid, req_str, pq_path):
     gz_path = pq_path.with_suffix(".json.gz")
     if pq_path.exists():
         return True, 0
-    if not _budget_ok(PROP_COST):
+    if not _budget_ok(30):  # min possible event cost
         return False, 0
     result = _request_with_backoff(
         f"{BASE}/historical/sports/icehockey_nhl/events/{eid}/odds",
@@ -525,11 +525,11 @@ def cmd_props(seasons, dry_run):
         if _call_count == 0 and todo:
             eid, ct, lbl, req, pq = todo[0]
             ok, used = _pull_one_props(eid, req, pq)
-            if used > 0 and used != PROP_COST:
-                print(f"  STOP: first call x-requests-last={used}, expected {PROP_COST}")
+            if used > 0 and used % 10 != 0:
+                print(f"  STOP: first call x-requests-last={used}, not a multiple of 10")
                 return
-            if used == PROP_COST:
-                print(f"  First call OK: x-requests-last={PROP_COST}")
+            if used > 0:
+                print(f"  First call OK: x-requests-last={used} (10 × {used//10} markets present)")
             todo = [(e, c, l, r, p) for e, c, l, r, p in todo if not p.exists()]
         cc, cu, rem, rate = _status()
         if rate > 0 and todo:

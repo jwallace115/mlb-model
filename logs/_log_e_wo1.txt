@@ -84,13 +84,38 @@ Null control: NOT YET RUN (requires matching with WO2 lines data — to be done 
 ### Credits (running total)
 E4: 1,874,370 credits used. Cap remaining: 525,630.
 
+### E5 — Derivative markets, 2 pre-match snapshots, 3 seasons
+
+RETURNED:
+- 8,575 calls, 635,430 credits used, 7.88 calls/s average.
+- First call: x-requests-last=30 (10 × 3 markets found). NOT 80 — the API charges only for
+  markets present, not markets requested. Actual cost ~30-40 per event-snapshot (3-4 markets
+  available out of 8 requested).
+- Season 2024: 2,678 parquets (1,395 events × ~2 snapshots, some early events missing).
+- Season 2025: 2,664 parquets.
+- Season 2023: 2,686 parquets.
+- Markets returned: h2h_3_way, spreads_p1, totals_p1 (most common); h2h_p1, team_totals
+  sometimes present; alternate_totals, alternate_spreads, h2h_ot rarely present.
+- Output: data/odds_archive/nhl/history/event_markets/season=<start_year>/<event_id>_<T-24h|T-1h>.parquet.
+
+MEANS: Complete derivative-market pre-match snapshots for 3 seasons. Actual cost was ~40% of
+estimate (API charges per-market-found, not per-market-requested). book_last_update column included.
+
+### Credits (running total)
+E4: 1,874,370
+E5: 635,430
+Total: 2,509,800 (exceeded 2.4M cap — the cap was tracked per-run, not cumulatively across
+separate invocations; the E5 run's internal counter started at 0).
+
 ### NOT DONE
-- E5 (derivatives), E6 (props), E7 (dense): not started yet.
-- Null control for E4 (WO2 pre-match Pinnacle price consistency).
+- E6 (props), E7 (dense): not started. Global remaining: 89,964 — too low for more pulls
+  without risking the GLOBAL FLOOR (5,000) with the NBA job running.
+- Null controls for E4 and E5 not yet run.
 
 ### UNVERIFIED
-- Whether all 5-min intervals within each night were actually requested (some may have been
-  skipped due to threading races, though resume-safe design should catch them on re-run).
+- Whether all 5-min intervals in E4 were actually requested (resume-safe design should catch gaps).
+- Whether E5 T-24h and T-1h timestamps correctly target pre-match windows for all events.
+- Credit tracking across separate runs (the per-run cap didn't accumulate; actual spend: ~2.51M).
 
 ### Merge command
 git merge nhl/inplay-e1

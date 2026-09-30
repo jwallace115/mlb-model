@@ -833,3 +833,17 @@ Total: 63,279 snapshot files, 1.1 GB on disk.
 Output: data/odds_archive/nhl/history/inplay/season=<start_year>/snap_<UTC>.parquet + .json.gz.
 Generator: nhl/pipeline/pull_nhl_bulk_history.py inplay.
 Resume-safe: existing files skipped. 4 concurrent workers with exponential backoff.
+
+### E5 — Derivative markets: 3 seasons, 2 pre-match snapshots per event (2026-09-30, E-WO2 Item 2)
+
+8,575 calls, 635,430 credits, 7.88 calls/s. 10 books incl. Pinnacle.
+Markets requested: h2h_3_way,totals_p1,h2h_p1,spreads_p1,team_totals,alternate_totals,alternate_spreads,h2h_ot.
+Actual cost ~30-40/call (API charges per-market-found, not per-market-requested).
+Two snapshots per event: T-24h and T-1h.
+
+- Season 2024: 2,678 parquets (1,395 events).
+- Season 2025: 2,664 parquets (1,677 events — some missing at T-24h).
+- Season 2023: 2,686 parquets (1,394 events).
+
+Output: data/odds_archive/nhl/history/event_markets/season=<start_year>/<event_id>_<T-24h|T-1h>.parquet + .json.gz.
+Generator: nhl/pipeline/pull_nhl_bulk_history.py deriv. Resume-safe.
