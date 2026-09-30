@@ -68,7 +68,8 @@ def test_active_player_zero_receptions():
 
 
 def test_cohort_excludes_wrong_reader():
-    """A7: another reader must NOT enter the primary cohort."""
+    """A7: another reader must NOT enter the primary cohort.
+    D249: updated to (run_id, event_id) sidecar join."""
     from nfl.pipeline.log_ai_opinions import primary_cohort
 
     df = pd.DataFrame([{
@@ -81,15 +82,24 @@ def test_cohort_excludes_wrong_reader():
         "home_team": "Kansas City Chiefs",
         "away_team": "Carolina Panthers",
         "p_first": 0.55, "book_p_first": 0.50, "y_first": 1,
+        "run_id": "run_A", "event_id": "evt_1",
     }])
 
-    cohort, exclusions = primary_cohort(df, "nfl_sim_v1_156cd057")
+    sidecar = pd.DataFrame([{
+        "run_id": "run_A", "event_id": "evt_1",
+        "anchored": True,
+        "target_spread": -3.0, "target_total": 43.5,
+    }])
+
+    cohort, exclusions = primary_cohort(df, "nfl_sim_v1_156cd057", sidecar)
     assert len(cohort) == 0, "wrong reader should be excluded from cohort"
     assert "reader != canonical" in exclusions
 
 
 def test_cohort_excludes_unanchored_game():
-    """A7: an unanchored game must NOT enter the primary cohort."""
+    """A7: an unanchored game must NOT enter the primary cohort.
+    D249: updated to (run_id, event_id) sidecar join.
+    Also verifies another run's anchored=True for the same event_id does NOT leak in."""
     from nfl.pipeline.log_ai_opinions import primary_cohort
 
     df = pd.DataFrame([{
@@ -102,17 +112,26 @@ def test_cohort_excludes_unanchored_game():
         "home_team": "Kansas City Chiefs",
         "away_team": "Carolina Panthers",
         "p_first": 0.55, "book_p_first": 0.50, "y_first": 1,
+        "run_id": "run_A", "event_id": "evt_1",
     }])
 
-    # Sidecar says CAR@KC is NOT anchored
-    sidecar = pd.DataFrame([{
-        "game": "CAR@KC",
-        "anchored": False,
-        "target_spread": -3.0, "target_total": 43.5,
-    }])
+    # Sidecar: run_B/evt_1 IS anchored (listed first to catch event_id-only join);
+    # run_A/evt_1 is NOT anchored. The row belongs to run_A — run_B's status must
+    # not rescue it.
+    sidecar = pd.DataFrame([
+        {
+            "run_id": "run_B", "event_id": "evt_1",
+            "anchored": True,
+            "target_spread": -3.0, "target_total": 43.5,
+        },
+        {
+            "run_id": "run_A", "event_id": "evt_1",
+            "anchored": False,
+            "target_spread": -3.0, "target_total": 43.5,
+        },
+    ])
 
-    cohort, exclusions = primary_cohort(df, "nfl_sim_v1_156cd057",
-                                         anchor_sidecar_df=sidecar)
+    cohort, exclusions = primary_cohort(df, "nfl_sim_v1_156cd057", sidecar)
     assert len(cohort) == 0, "unanchored game should be excluded"
     assert "game not anchored" in exclusions
 

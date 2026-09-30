@@ -4628,3 +4628,25 @@ Defect: two older cohort tests call the old signature. 88 of 90 pass, not "0 reg
 
 After FWD4b and a green full suite, eng/fwd3 (D240-D249) merges. The primary count of nfl_fwd_v1 starts at the
 week-4 TNF window (run 23:30Z Thu 10-01), provided the merge is on main by Thu 15:00Z.
+
+### D249 — stale cohort tests updated to the (run_id, event_id) join (2026-09-30)
+
+Two tests in test_fwd2_settlement.py called `primary_cohort(df, reader)` with the old signature
+(no sidecar). Updated to `primary_cohort(df, reader, sidecar)` with (run_id, event_id) on both
+opinion rows and sidecar rows.
+
+test_cohort_excludes_wrong_reader: sidecar has matching (run_id, event_id) with anchored=True;
+the row is still excluded because its reader_model is wrong.
+
+test_cohort_excludes_unanchored_game: sidecar has TWO rows for the same event_id under different
+run_ids — run_B anchored=True (listed first), run_A anchored=False. The opinion row belongs to
+run_A. Asserts the row is excluded (run_B's status does not leak). With a mutant that joins on
+event_id only, the test fails (run_B's True leaks through drop_duplicates).
+
+Proof:
+(a) Mutant (event_id-only join): test_cohort_excludes_unanchored_game FAILED —
+    "assert 1 == 0 … unanchored game should be excluded". Reverted.
+(b) test_freeze_v1: 4 passed.
+(c) Full forward suite (13 files): 88 passed, 0 failed, 0 skipped.
+
+No non-test files changed. FWD_EXPERIMENT_v1.json not re-stamped (0 "tests/" entries hashed).
