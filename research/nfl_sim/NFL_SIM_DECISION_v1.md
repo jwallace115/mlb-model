@@ -4378,3 +4378,19 @@ Bundle: 1 event (PIT@CLE), 64 props, 6 lines. Sheet: 67/42 two-way. Sim: 1/1 con
 21s. Matched: 11/42 (9 rec + 2 rush). Sidecar: 0 unanchored. Tags: no_view 56, sim_v1 11.
 
 test_freeze_v1: 4 passed.
+
+### D235 — FWD2c Item 1: params safety and runbook from the tape (2026-09-30)
+
+**(a) ratings.py --write-params** (ratings.py:936-938). Default run skips params write.
+Only `--write-params` overwrites params_v1.json.
+
+**(b) make_runbook.py** (research/nfl_sim/make_runbook.py). Reads nflverse schedule for
+weeks 4-5. Prints every kick window with UTC/ET times, games from the schedule, run
+command, latest safe start (measured runtime), VM props slot age, and manual pull command
+when the slot is > 3h old. Input refresh is once a week (Wednesday). The runbook is the
+script's output.
+
+**(c) build_bundle reads manual/scratch_*.parquet** (test_bundle_reads_manual_scratch).
+_load_props_at_T globs `manual/*.parquet`; a scratch file newer than the archive is taken.
+
+test_freeze_v1: 4 passed.

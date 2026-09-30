@@ -1,138 +1,113 @@
 # FWD1 Runbook — NFL sim v1 forward test, weeks 4-5
 
 Reader model: `nfl_sim_v1_156cd057`
+Generated: 2026-09-30T09:32:19Z
 
-## Measured runtimes (D231, week 3 pilot, 2026-09-30)
+## Measured runtimes (D231)
+- Sim: ~30s per game
+- Input refresh: ~9 min (pull_nflverse 6s + ratings.py ~8min)
+- IMPORTANT: ratings.py overwrites params_v1.json — always `git checkout nfl/sim/params_v1.json` after
 
-- `pull_nflverse_inputs.py`: 6s
-- `ratings.py`: ~8 min (full rebuild; incremental would be faster)
-- Sim: ~30s per game (14 games = 7 min; 16 games ≈ 8 min)
-- Total pipeline for 14 games: ~16 min
-
-## Input refresh commands
-
+## Input refresh (ONCE per week, Wednesday)
 ```bash
-cd /tmp/eng-fwd2
-python3 nfl/sim/pull_nflverse_inputs.py    # ~6s, refreshes depth_charts/injuries/rosters
-python3 nfl/sim/ratings.py                 # ~8 min, rebuilds team/usage/tendency ratings
-# IMPORTANT: ratings.py overwrites params_v1.json — restore immediately:
+cd ~/mlb-model
+python3 nfl/sim/pull_nflverse_inputs.py
+python3 nfl/sim/ratings.py
 git checkout nfl/sim/params_v1.json
+python3 -m pytest nfl/sim/tests/test_freeze_v1.py -q  # must pass
 ```
 
-## Week 4 kick windows
+## Week 4
 
-### TNF PIT@CLE — Fri 2026-10-02 00:15Z (Thu 8:15 PM ET)
+### PIT@CLE — Fri 2026-10-02 00:15Z (Thu 8:15 PM ET)
+Games: PIT@CLE
 
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2
+python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2.0
 ```
 
-Latest safe start: **23:55Z Thu 10-01** (7:55 PM ET).
-Budget: 2h window captures only TNF. 1 game × 30s ≈ 0.5 min + 8 min refresh = 9 min total.
-Newest HR props pull: the VM's Thu 22:00Z slot (~2 h old). OK.
+Latest safe start: **Fri 2026-10-02 00:02Z** (Thu 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Thu (~0.3h old at run time)
 
-### London JAX@IND — Sun 2026-10-05 13:30Z (Sun 9:30 AM ET)
+### Sunday main + SNF (14 games) — Sun 2026-10-04 [13:30Z, 17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 9:30 AM ET+)
+Games: IND@WAS, TEN@BAL, NE@BUF, NYJ@CHI, JAX@CIN, DAL@HOU, ARI@NYG, LA@PHI, GB@TB, MIA@MIN, KC@LV, LAC@SEA, DEN@SF, DET@CAR
 
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 1.5
+python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 12.0
 ```
 
-Latest safe start: **12:55Z Sun 10-05** (8:55 AM ET).
-Budget: 1 game × 30s + 8 min refresh = 9 min total.
-Newest HR props pull: VM's Sat 14:00Z slot (~23 h old). No Sunday slot before 15:00Z.
-Jeff's manual props pull command:
+Latest safe start: **Sun 2026-10-04 13:11Z** (Sun 9:11 AM ET)
+Runtime: 14 games × 30s = 7 min + 9 min refresh + 3 min margin
+VM props slot: 02:00Z Sun (~11.2h old at run time)
+**STALE**: VM slot is 11.2h old (> 3.0h). Manual pull required:
+```bash
+python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
+  --out-dir data/odds_archive/nfl/props/season=2026/manual
+```
+Credit cost: ~10 per event × 1 region = 10 credits
+
+### ATL@NO — Tue 2026-10-06 00:15Z (Mon 8:15 PM ET)
+Games: ATL@NO
 
 ```bash
-# Write manual props for London game — credit cost: 1 × 10 × 1 = 10 credits (historical, 1 market, 1 region)
-python3 nfl/pipeline/pull_odds.py --sport americanfootball_nfl \
-  --markets player_receptions,player_rush_attempts \
-  --bookmakers hardrockbet_fl \
-  --out data/odds_archive/nfl/props/season=2026/manual/london_wk4_$(date +%Y%m%dT%H%M%SZ).parquet
+python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2.0
 ```
 
-### Sunday 1 PM + 4 PM + SNF — Sun 2026-10-05 17:00Z / 20:05Z / 20:25Z / Mon 00:20Z
+Latest safe start: **Tue 2026-10-06 00:02Z** (Mon 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Mon (~0.3h old at run time)
+
+## Week 5
+
+### TB@DAL — Fri 2026-10-09 00:15Z (Thu 8:15 PM ET)
+Games: TB@DAL
 
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 9
+python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2.0
 ```
 
-Latest safe start: **16:40Z Sun 10-05** (12:40 PM ET).
-Budget: ~12 games × 30s = 6 min + 8 min refresh = 14 min total. 9h window: 17:00Z–02:00Z.
-Newest HR props pull: VM's 16:00Z slot (~40 min old). OK.
+Latest safe start: **Fri 2026-10-09 00:02Z** (Thu 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Thu (~0.3h old at run time)
 
-### MNF — Tue 2026-10-07 00:15Z (Mon 8:15 PM ET)
+### Sunday main + SNF (13 games) — Sun 2026-10-11 [13:30Z, 17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 9:30 AM ET+)
+Games: PHI@JAX, CIN@MIA, LV@NE, MIN@NO, CLE@NYJ, IND@PIT, HOU@TEN, NYG@WAS, CHI@GB, DEN@LAC, DET@ARI, SF@SEA, BAL@ATL
 
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2
+python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 12.0
 ```
 
-Latest safe start: **23:55Z Mon 10-06** (7:55 PM ET).
-Budget: 1–2 games × 30s + 8 min refresh = 9 min total.
-Newest HR props pull: VM's Mon 23:45Z MNF slot (~10 min old). If it hasn't landed,
-the newest is Sunday 16:00Z (~32 h old → HALT on stale quotes). Check the sheet's
-printed source age.
+Latest safe start: **Sun 2026-10-11 13:11Z** (Sun 9:11 AM ET)
+Runtime: 13 games × 30s = 6 min + 9 min refresh + 3 min margin
+VM props slot: 02:00Z Sun (~11.2h old at run time)
+**STALE**: VM slot is 11.2h old (> 3.0h). Manual pull required:
+```bash
+python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
+  --out-dir data/odds_archive/nfl/props/season=2026/manual
+```
+Credit cost: ~10 per event × 1 region = 10 credits
 
-## Week 5 kick windows
-
-### TNF — Fri 2026-10-10 00:15Z (Thu 8:15 PM ET)
+### BUF@LA — Tue 2026-10-13 00:15Z (Mon 8:15 PM ET)
+Games: BUF@LA
 
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2
+python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2.0
 ```
 
-Latest safe start: **23:55Z Thu 10-09**.
-
-### Sunday main + SNF — Sun 2026-10-12 17:00Z / Mon 00:20Z
-
-```bash
-python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 9
-```
-
-Latest safe start: **16:40Z Sun 10-12**.
-
-### MNF — Tue 2026-10-14 00:15Z (Mon 8:15 PM ET)
-
-```bash
-python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2
-```
-
-Latest safe start: **23:55Z Mon 10-13**.
+Latest safe start: **Tue 2026-10-13 00:02Z** (Mon 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Mon (~0.3h old at run time)
 
 ## Scoring
 
-### score-experiment (canonical reader, cross-week)
-
 ```bash
-PYTHONPATH=/tmp/eng-fwd2 python3 nfl/pipeline/log_ai_opinions.py \
-  score-experiment --experiment nfl_fwd_v1
-```
-
-### At 500 scored two-way legs (estimated: ~week 7-8)
-
-```bash
-PYTHONPATH=/tmp/eng-fwd2 python3 nfl/pipeline/log_ai_opinions.py \
-  score-experiment --experiment nfl_fwd_v1
-```
-
-The primary statistic is descriptive at <500 legs, confirmatory at >1,500.
-
-### Per-week scoring
-
-```bash
-for w in 3 4 5; do
-  PYTHONPATH=/tmp/eng-fwd2 python3 nfl/pipeline/log_ai_opinions.py score --week $w \
-    --out research/nfl_sim/fwd1_score_w${w}.md
-done
+python3 nfl/pipeline/log_ai_opinions.py score-experiment --experiment nfl_fwd_v1
 ```
 
 ## Notes
 
-- **Anchor rule (D210):** a game whose final anchored mean misses the market by > 1.0
-  point on margin OR total is "unanchored"; its props are scored but reported separately.
-- **Game lines (h2h, spreads, totals):** always no_view (the sim is market-anchored).
-- **Pilot files:** never pooled; only included with `--include-pilot`.
-- **Props slots (VM, WO12 deploy):** Tue 14:00 open; Wed-Sat 14:00 and Tue-Sat 02:00 mid;
-  Thu 22:00 (TNF); Sun 15:00 and 16:00 close; Mon 23:45 (MNF).
-- **ratings.py overwrites params_v1.json** — always `git checkout nfl/sim/params_v1.json`
-  after running it, or test_freeze_v1 will fail.
-- **London manual pull:** costs 10 credits per call (1 market × 10 historical factor × 1 region).
+- **Anchor rule (D210):** game whose anchored mean misses market by > 1.0 pt = unanchored, reported separately.
+- **Game lines (h2h, spreads, totals):** always no_view (sim is market-anchored).
+- **Pilot files:** never pooled; only with `--include-pilot`.
+- **500 legs = descriptive; 1,500 legs = confirmatory.**

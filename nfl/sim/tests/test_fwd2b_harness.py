@@ -393,3 +393,54 @@ def test_wall_clock_past_kick_halts(tmp_path):
             root=str(root),
             run_week_fn=_stub_run_week,
         )
+
+
+# ── D235(c): build_bundle reads manual/scratch_*.parquet ──
+
+def test_bundle_reads_manual_scratch(tmp_path):
+    """D235(c): build_bundle reads manual/scratch_*.parquet and takes the
+    newest pull when it is newer than the archive."""
+    from nfl.sim.run_forward_v1 import _load_props_at_T, BOOK
+
+    now = datetime.now(timezone.utc)
+    kick = now + timedelta(hours=2)
+
+    root = tmp_path / "repo"
+    # Write an older archive pull
+    archive_dir = root / "data" / "odds_archive" / "nfl" / "props" / "season=2026" / "month=01"
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    old_pull = (now - timedelta(hours=5)).isoformat()
+    pd.DataFrame([{
+        "event_id": EVENT_ID, "commence_time": kick.isoformat(),
+        "home_team": HOME_FULL, "away_team": AWAY_FULL,
+        "bookmaker": "hardrockbet_fl", "market_key": "player_receptions",
+        "player_name": "T.Kelce", "line": 5.5,
+        "over_price": -110, "under_price": -110,
+        "pull_timestamp": old_pull,
+    }]).to_parquet(archive_dir / "data_old.parquet", index=False)
+
+    # Write a newer manual/scratch pull
+    manual_dir = root / "data" / "odds_archive" / "nfl" / "props" / "season=2026" / "manual"
+    manual_dir.mkdir(parents=True, exist_ok=True)
+    new_pull = (now - timedelta(minutes=15)).isoformat()
+    pd.DataFrame([{
+        "event_id": EVENT_ID, "commence_time": kick.isoformat(),
+        "home_team": HOME_FULL, "away_team": AWAY_FULL,
+        "bookmaker": "hardrockbet_fl", "market_key": "player_receptions",
+        "player_name": "T.Kelce", "line": 5.5,
+        "over_price": -120, "under_price": +100,
+        "pull_timestamp": new_pull,
+    }]).to_parquet(manual_dir / "scratch_20261001T120000Z.parquet", index=False)
+
+    # Override module globals
+    import nfl.sim.run_forward_v1 as fwd
+    old_props = fwd.PROPS_DIR
+    fwd.PROPS_DIR = root / "data" / "odds_archive" / "nfl" / "props"
+    try:
+        props = _load_props_at_T(2026, now)
+        assert len(props) == 1, f"Expected 1 row, got {len(props)}"
+        # The newest pull should be the manual one (-120, not -110)
+        assert props.iloc[0]["over_price"] == -120, (
+            f"Expected -120 from manual pull, got {props.iloc[0]['over_price']}")
+    finally:
+        fwd.PROPS_DIR = old_props
