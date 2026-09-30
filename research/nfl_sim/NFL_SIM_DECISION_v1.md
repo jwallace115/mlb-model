@@ -4512,3 +4512,19 @@ that file (run_forward_v1.py:700-704). Never minimise over the log.
 Audit #7 A5 counterexample: solver returns iteration 2, converged, -0.7/39.3 against 0/40. The old sidecar
 picked iteration 1 (-1.1/40, min |err_m|+|err_t|) and classified the game unanchored. Now records iteration 2,
 anchored=True (miss_m=0.7, miss_t=0.7, both <= 1.0).
+
+### D243 — scoring integrity (2026-09-30)
+
+(a) score_experiment validates experiment name against FWD_EXPERIMENT_v1.json (log_ai_opinions.py:854-857).
+    Verifies every frozen file and bundle hash before grading. Selects canonical, non-pilot, revision-0 rows
+    for the season BEFORE grading. Skips weeks with no eligible rows.
+(b) Anchor join: sidecar loaded by run_id from bundle directories only (no legacy weekly sidecar).
+(c) Exact-event grading: _event_to_game_id maps event_id to game_id via nflverse schedule for the specific
+    (season, week). A week-3 game with the same pair does NOT match a week-4 opinion.
+(d) Crosswalk missing or ambiguous identity -> UNRESOLVED, never VOID (log_ai_opinions.py:609-612).
+    Only "id resolved AND absent from snap counts" is VOID.
+(e) Bootstrap clusters by event_id (log_ai_opinions.py:808-814). Checkpoint policy: <500 -> descriptive
+    only; 500 -> descriptive report; 1500 -> one confirmatory verdict.
+(f) actuals.py added to FWD_EXPERIMENT_v1.json file_hashes and grading section. Seed description corrected
+    to match anchor.py:175: stable_seed((home, away, season, week, 42)).
+(g) CLI works from repo root: sys.path.insert at module top (log_ai_opinions.py:47).
