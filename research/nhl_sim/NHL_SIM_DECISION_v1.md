@@ -961,3 +961,18 @@ with both goalies at 0.00.
 - On BUGGY code: away goals fell −2.3% (actually rose; FAILED).
 - On FIXED code: away goals fell 13.0%, home goals changed <1% (PASSED).
 - Null control: all-ones multipliers reproduce league_average_inputs exactly (existing test PASSED).
+
+### S50 — Re-price 2022-23 + 2023-24 with fixed goalie ratings (2026-09-30, C-WO1 Item 2)
+
+Re-priced both seasons with the S49 goalie fix (2,000 sims, seed=game_id, ~49 min).
+Old parquets saved as `season={2022,2023}_swapped.parquet` (gitignored).
+
+**Cowork match:** p_home_win matches `prices_fixed_goalie_2022_2023_cowork.parquet`
+(sha256 3bbf36f5) to max |diff| = 0.0000 on all 2,624 games. Same seeds → identical output.
+
+**Cowork's pre-registration (ledger C-01):**
+- 2022-23 (fit): HELD on all three (log-loss improved, goalie |t| < 1.64, A1 > 0.376).
+- 2023-24 (validate): HELD on NONE — log-loss 0.6646 (was 0.6647, improvement < 0.002),
+  goalie t −1.76 (|t| > 1.64), A1 −0.05 (below 0.376). Report it that way; nothing tuned.
+
+**Fix impact:** prices changed on 1,297 of 1,312 games in 2022-23 (mean |Δ| 4.1 pp, max 20 pp).
