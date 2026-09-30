@@ -64,7 +64,7 @@ SPORTS = {
                        "price_vs_sharp", "usage_trend", "line_move", "no_view", "sim_v1")},
     "nhl": {"book": "pinnacle", "props": None,
             "lines": ROOT / "data" / "odds_archive" / "nhl" / "line_history",
-            "out": ROOT / "nhl" / "data" / "board", "outcomes": None,
+            "out": ROOT / "nhl" / "data" / "board", "outcomes": "nhle",
             "require_side": True, "slate": "date", "drivers_required": True,
             "tags": ("goalie", "injury_news", "lineup", "schedule_spot", "matchup", "form",
                      "price_vs_sharp", "line_move", "model_layer")},
@@ -584,6 +584,21 @@ def _cfbd_actuals(season):
     return game
 
 
+def _nhle_actuals():
+    """NHL finals from cached boxscores via nhl_outcomes loader."""
+    from nhl.pipeline.nhl_outcomes import load_all_results, match_game, odds_to_nhl
+    results_2025 = load_all_results(2025)
+    results_2026 = load_all_results(2026)
+    all_results = results_2025 + results_2026
+
+    def game(home, away, commence):
+        r = match_game(home, away, commence, all_results)
+        if r is None:
+            return None
+        return {"home_pts": float(r["home_score"]), "away_pts": float(r["away_score"])}
+    return game
+
+
 def _first_side_won(row, act, pid, snap_played=None):
     """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved / VOID.
     D230: snap_played is a tri-state: True (played), False (VOID), None (snap data unavailable = unresolved)."""
@@ -625,10 +640,14 @@ def _reader_models(m, d):
     return col.where(col.notna() & (col.astype(str) != ""), m["_file"].map(att)).fillna("unknown")
 
 
-def score(season, week, d=None, include_pilot=False, pbp_path=None):
+def score(season, week, d=None, include_pilot=False, pbp_path=None, slate_date=None):
     """The pre-registered scoring in the module docstring, applied to revision-0 rows."""
-    from nfl.sim.names import load_roster, _build_roster_lookup, resolve_player, FULL_TO_ABBR
-    d = d or out_dir(season, week)
+    outcomes_type = SPORTS[SPORT]["outcomes"]
+    if d is None:
+        if slate_date:
+            d = out_dir_date(slate_date)
+        else:
+            d = out_dir(season, week)
     files = sorted(d.glob("ai_opinions_*.parquet"))
     if not files:
         raise SystemExit("HALT: no frozen opinion files")
@@ -639,34 +658,42 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
         m = m[~m["pilot"]]
     if m.empty:
         raise SystemExit("HALT: nothing to score (pilot files need --include-pilot)")
-    if SPORTS[SPORT]["outcomes"] == "cfbd":
+    if outcomes_type == "nhle":
+        nhle = _nhle_actuals()
+        pbp, lk, snap_parts, gsis_to_pfr = None, None, None, None
+    elif outcomes_type == "cfbd":
         cfbd = _cfbd_actuals(season)
-        pbp, lk = None, None
+        pbp, lk, snap_parts, gsis_to_pfr = None, None, None, None
     else:
+        from nfl.sim.names import load_roster, _build_roster_lookup, resolve_player, FULL_TO_ABBR
         pbp = pd.read_parquet(pbp_path or ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
         lk = _build_roster_lookup(load_roster(), season, week)
-    # D236: load snap-count participants and GSIS->PFR crosswalk
-    snap_parts = _load_snap_participants(season)
-    gsis_to_pfr = _build_gsis_to_pfr(season)
+        snap_parts = _load_snap_participants(season)
+        gsis_to_pfr = _build_gsis_to_pfr(season)
     n_id_match = n_name_match = 0
     rows = []
     for (home, away), s in m.groupby(["home_team", "away_team"]):
-        if pbp is None:
+        if outcomes_type == "nhle":
+            act = nhle(home, away, s["commence_time"].iloc[0])
+        elif outcomes_type == "cfbd":
             act = cfbd(home, away, s["commence_time"].iloc[0])
         else:
+            from nfl.sim.names import FULL_TO_ABBR
             act = _game_actuals(pbp, home, away)
-        teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
-        h_abbr, a_abbr = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
-        nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
-        game_snap = snap_parts.get(nfl_game_id) if snap_parts else None
+        if outcomes_type == "pbp":
+            from nfl.sim.names import resolve_player, FULL_TO_ABBR
+            teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
+            h_abbr, a_abbr = teams
+            nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
+            game_snap = snap_parts.get(nfl_game_id) if snap_parts else None
         for _, r in s.iterrows():
             settlement = "settled"
             if act is None:
-                y, pid, method = None, None, "game not in PBP"
+                y, pid, method = None, None, "game not found"
                 settlement = "unresolved"
-            elif r["player_name"]:
+            elif r["player_name"] and outcomes_type == "pbp":
+                from nfl.sim.names import resolve_player, FULL_TO_ABBR
                 pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
-                # D236(b): match by player ID (GSIS -> PFR), fall back to name
                 if game_snap is None:
                     snap_played = None
                 else:
@@ -690,7 +717,7 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
                     elif snap_played is None:
                         settlement = "unresolved"
                     else:
-                        settlement = "unresolved"  # push or stat missing
+                        settlement = "unresolved"
                 elif y is None:
                     settlement = "unresolved"
             else:
@@ -710,9 +737,11 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
     if "conf_rank" in out.columns and out["conf_rank"].notna().any():
         out["conf_band"] = pd.cut(out["conf_rank"], bins=[0, 10, 25, 50, 9999],
                                   labels=["1-10", "11-25", "26-50", "51+"], right=True)
-        # edge_rank: rank by descending edge (1 = largest edge)
+        # edge_rank: rank by descending edge WITHIN each freeze file (1 = largest edge)
         if "edge" in out.columns and out["edge"].notna().any():
-            out["edge_rank"] = out["edge"].rank(ascending=False, method="first").astype("Int64")
+            out["edge_rank"] = (out.groupby("_file")["edge"]
+                                .rank(ascending=False, method="first")
+                                .astype("Int64"))
     # ── postfreeze CSV (reporting cut only — never changes a grade or removes a row) ──
     pf_files = sorted(d.glob("postfreeze_*.csv")) if d else []
     if pf_files:
