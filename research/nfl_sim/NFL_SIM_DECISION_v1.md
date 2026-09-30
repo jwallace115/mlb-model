@@ -4686,3 +4686,39 @@ files for "log_ai_opinions": 0 matches (only fwd_v1_logger.py itself contains th
 
 Forward list: 87 passed, 1 failed (test_experiment_file_hashes — run_forward_v1.py hash stale; re-stamped in D253).
 test_freeze_v1: 4 passed.
+
+### D253 — proof, stamp, real run (2026-09-30)
+
+(a) Mutations on the PINNED module (nfl/sim/fwd_v1_logger.py), each applied then reverted.
+Behavioural tests that fail (beyond test_experiment_file_hashes):
+- event_id-only anchor join: test_cohort_excludes_unanchored_game, test_run_b_unanchored_excluded,
+  test_duplicate_sidecar_halts.
+- reader filter removed: test_cohort_excludes_wrong_reader, test_run_b_unanchored_excluded.
+- cross-week dedup removed from freeze: test_cross_week_dedup_freeze_different_week,
+  test_cross_week_dedup_freeze_same_week, test_whitespace_reader_refused_by_freeze.
+Dedup removal applied to the SHARED module only: forward list passes (87 passed, 1 hash-only
+failure from pre-stamp state). The pinned tests are fully decoupled from the shared module.
+
+(b) FWD_EXPERIMENT_v1.json re-stamped once. Changed lines:
+- nfl/sim/run_forward_v1.py: 7dc245d9 -> b5e75d86 (import paths changed to fwd_v1_logger)
+- nfl/sim/run_week.py: 9ff6639e -> 1f4e9e0a (code changed on eng/fwd3)
+- nfl/pipeline/log_ai_opinions.py removed, nfl/sim/fwd_v1_logger.py added (same hash cf100675bd385ca5)
+- nfl/sim/actuals.py added (new file on eng/fwd3)
+- seed_rule, grading block, scoring trailing comma: structural additions from FWD3/FWD4
+
+(c) Suites:
+- Forward list: 88 passed, 0 failed (13 files).
+- test_freeze_v1: 4 passed.
+- nfl/pipeline/tests on eng/fwd3: 1 failed, 86 passed, 2 skipped.
+- nfl/pipeline/tests on origin/main: 1 failed, 86 passed, 2 skipped. They match.
+  Common failure: test_score_first_side_and_units (pre-existing).
+
+(d) REAL:
+- Dry run: `python3 nfl/sim/run_forward_v1.py --week 4 --dry-run --window-hours 40 --allow-stale-quotes`
+  completed. PIT@CLE, 70 lines, 43 two-way, 11 matched sim_v1, 1 game anchored (converged in 3 iterations).
+  Run directory: nfl/data/board/week=2026_04/sim_runs/20260930T191349Z (left untracked).
+- Score: `python3 nfl/sim/fwd_v1_logger.py score-experiment --experiment nfl_fwd_v1` returned
+  "0 eligible legs — descriptive only, no verdict." (weeks 2-3 all pilot, week 4 not frozen).
+
+NOT DONE: nothing.
+UNVERIFIED: test_score_first_side_and_units failure is pre-existing on both branches; not investigated here.
