@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "4cb76cceb16eb603c683038d132f4642",
+    "game_date": "2026-09-30",
+    "sport": "MLB",
+    "home_team": "New York Yankees",
+    "away_team": "Boston Red Sox",
+    "commence_time": "2026-09-30T00:15:08Z",
+    "snapshot_type": "closing",
+    "total_line": 5.5,
+    "over_price": -102,
+    "under_price": -125,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-30T03:00:05.655535+00:00"
+  },
+  {
+    "game_id": "98adc841e3aababc93878e3cf743a2d4",
+    "game_date": "2026-09-30",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Chicago Cubs",
+    "commence_time": "2026-09-30T02:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 7.5,
+    "over_price": -108,
+    "under_price": -108,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-30T03:00:05.655535+00:00"
+  },
+  {
+    "game_id": "9e23239e0075a017225697fa3bcd88b3",
+    "game_date": "2026-09-30",
+    "sport": "MLB",
+    "home_team": "Atlanta Braves",
+    "away_team": "Philadelphia Phillies",
+    "commence_time": "2026-09-30T18:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 7.0,
+    "over_price": -116,
+    "under_price": 101,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-30T03:00:05.655535+00:00"
+  },
+  {
+    "game_id": "766096a9312f4528ba2e8b59fe9550fd",
+    "game_date": "2026-09-30",
+    "sport": "MLB",
+    "home_team": "Houston Astros",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-09-30T21:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 7.5,
+    "over_price": -104,
+    "under_price": -110,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-09-30T03:00:05.655535+00:00"
+  }
+]
