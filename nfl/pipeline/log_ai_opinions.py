@@ -538,6 +538,95 @@ def _nhle_actuals():
     return game
 
 
+def _load_pinnacle_tape(season):
+    """Load all Pinnacle game-line tape snapshots for a season, sorted by snapshot_utc.
+    Returns list of (snapshot_utc_str, DataFrame_of_pinnacle_rows)."""
+    tape_dir = SPORTS[SPORT]["lines"] / f"season={season}"
+    if not tape_dir.exists():
+        return []
+    snaps = sorted(tape_dir.glob("snap_*.parquet"))
+    result = []
+    for f in snaps:
+        df = pd.read_parquet(f)
+        pin = df[df["bookmaker"] == "pinnacle"]
+        if pin.empty:
+            continue
+        snap_utc = str(pin["snapshot_utc"].iloc[0])
+        result.append((snap_utc, pin))
+    return result
+
+
+def _pinnacle_close_prices(scored_df, season):
+    """For each scored row, find Pinnacle's close price (last snapshot before commence_time).
+    Returns a dict keyed by (event_id, market_key, line) -> {close_snap, close_q_first, first_snap, first_q_first}."""
+    tape = _load_pinnacle_tape(season)
+    if not tape:
+        return {}
+    # Group scored rows by event_id to get commence times
+    events = {}
+    for _, r in scored_df.iterrows():
+        eid = r["event_id"]
+        if eid not in events:
+            events[eid] = parse_utc(r["commence_time"])
+    # For each event, find the last snapshot before commence and the first snapshot
+    result = {}
+    for eid, ct in events.items():
+        first_snap_data = None
+        close_snap_data = None
+        first_snap_utc = None
+        close_snap_utc = None
+        for snap_utc_str, pin in tape:
+            snap_t = parse_utc(snap_utc_str)
+            ev = pin[pin["event_id"] == eid]
+            if ev.empty:
+                continue
+            if first_snap_data is None:
+                first_snap_data = ev
+                first_snap_utc = snap_utc_str
+            if snap_t < ct:
+                close_snap_data = ev
+                close_snap_utc = snap_utc_str
+        if close_snap_data is None:
+            continue
+        # De-vig Pinnacle prices per market for close and first snapshots
+        for mk in GAME_MARKETS:
+            mkt = close_snap_data[close_snap_data["market"] == mk]
+            if len(mkt) != 2:
+                continue
+            home = scored_df[(scored_df["event_id"] == eid) & (scored_df["market_key"] == mk)]
+            if home.empty:
+                continue
+            first_side = home.iloc[0]["first_side"]
+            a = mkt[mkt["outcome_name"] == first_side]
+            b = mkt[mkt["outcome_name"] != first_side]
+            if len(a) != 1 or len(b) != 1:
+                continue
+            line_val = float(a.iloc[0]["point"]) if pd.notna(a.iloc[0]["point"]) else 0.0
+            imp_a = implied(a.iloc[0]["price"])
+            imp_b = implied(b.iloc[0]["price"])
+            close_q = imp_a / (imp_a + imp_b)
+            # First snapshot
+            first_q = None
+            if first_snap_data is not None:
+                fmkt = first_snap_data[first_snap_data["market"] == mk]
+                if len(fmkt) == 2:
+                    fa = fmkt[fmkt["outcome_name"] == first_side]
+                    fb = fmkt[fmkt["outcome_name"] != first_side]
+                    if len(fa) == 1 and len(fb) == 1:
+                        first_line = float(fa.iloc[0]["point"]) if pd.notna(fa.iloc[0]["point"]) else 0.0
+                        if first_line == line_val:
+                            fimp_a = implied(fa.iloc[0]["price"])
+                            fimp_b = implied(fb.iloc[0]["price"])
+                            first_q = fimp_a / (fimp_a + fimp_b)
+            result[(eid, mk, line_val)] = {
+                "close_snap": close_snap_utc,
+                "close_q_first": close_q,
+                "first_snap": first_snap_utc,
+                "first_q_first": first_q,
+            }
+    return result
+
+
 def _first_side_won(row, act, pid, snap_played=None):
     """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved / VOID.
     D230: snap_played is a tri-state: True (played), False (VOID), None (snap data unavailable = unresolved)."""
@@ -689,15 +778,100 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None, slate_date=N
         out["postfreeze_affected"] = out["event_id"].isin(affected_events) if affected_events else False
     else:
         out["postfreeze_affected"] = False
+    # ── CLV vs Pinnacle close (NHL and other date sports with Pinnacle as book) ──
+    if outcomes_type == "nhle" and BOOK == "pinnacle":
+        close_prices = _pinnacle_close_prices(out, season)
+        clv_vals, close_snaps, close_qs = [], [], []
+        first_snaps, first_qs, ftm_sides, ftm_units, ftm_clvs = [], [], [], [], []
+        for _, r in out.iterrows():
+            line_val = float(r["line"])
+            key = (r["event_id"], r["market_key"], line_val)
+            cp = close_prices.get(key)
+            if cp is None:
+                clv_vals.append(np.nan)
+                close_snaps.append("")
+                close_qs.append(np.nan)
+                first_snaps.append("")
+                first_qs.append(np.nan)
+                ftm_sides.append("none")
+                ftm_units.append(0.0)
+                ftm_clvs.append(np.nan)
+                continue
+            close_snaps.append(cp["close_snap"])
+            close_qs.append(cp["close_q_first"])
+            first_snaps.append(cp["first_snap"] or "")
+            first_qs.append(cp["first_q_first"] if cp["first_q_first"] is not None else np.nan)
+            # CLV = Pinnacle de-vigged close prob of frozen side - frozen price break-even
+            # frozen price break-even = implied(side_price)
+            if r["side"] == "first":
+                close_side_p = cp["close_q_first"]
+            elif r["side"] == "second":
+                close_side_p = 1 - cp["close_q_first"]
+            else:
+                clv_vals.append(np.nan)
+                ftm_sides.append("none")
+                ftm_units.append(0.0)
+                ftm_clvs.append(np.nan)
+                continue
+            breakeven = implied(r["side_price"]) if pd.notna(r["side_price"]) else np.nan
+            clv_vals.append(close_side_p - breakeven if pd.notna(breakeven) else np.nan)
+            # Baseline (c): follow-the-move
+            fq = cp["first_q_first"]
+            freeze_q = r["book_p_first"]  # de-vigged at freeze (= q_first from the sheet)
+            if fq is not None and not np.isnan(fq):
+                move = freeze_q - fq  # positive = first side probability rose
+                if abs(move) < 1e-6:
+                    ftm_sides.append("none")
+                    ftm_units.append(0.0)
+                    ftm_clvs.append(np.nan)
+                else:
+                    ftm_side = "first" if move > 0 else "second"
+                    ftm_sides.append(ftm_side)
+                    # Units at the same real price the reader's side would get
+                    if ftm_side == "first":
+                        ftm_price = r["price_first"]
+                        ftm_close_p = cp["close_q_first"]
+                    else:
+                        ftm_price = r["price_second"]
+                        ftm_close_p = 1 - cp["close_q_first"]
+                    ftm_be = implied(ftm_price) if pd.notna(ftm_price) else np.nan
+                    ftm_clvs.append(ftm_close_p - ftm_be if pd.notna(ftm_be) else np.nan)
+                    # Units: need the actual outcome
+                    if pd.notna(r["y_first"]):
+                        ftm_won = (r["y_first"] == 1) if ftm_side == "first" else (r["y_first"] == 0)
+                        ftm_dec = (ftm_price / 100 + 1) if pd.notna(ftm_price) and ftm_price > 0 else (100 / -ftm_price + 1) if pd.notna(ftm_price) else np.nan
+                        ftm_units.append(float(ftm_dec - 1) if ftm_won else -1.0)
+                    else:
+                        ftm_units.append(0.0)
+            else:
+                ftm_sides.append("none")
+                ftm_units.append(0.0)
+                ftm_clvs.append(np.nan)
+        out["clv"] = clv_vals
+        out["close_snap"] = close_snaps
+        out["close_q_first"] = close_qs
+        out["first_snap"] = first_snaps
+        out["first_q_first"] = first_qs
+        out["ftm_side"] = ftm_sides
+        out["ftm_units"] = ftm_units
+        out["ftm_clv"] = ftm_clvs
     return out
 
 
-def score_report(out, season, week):
+def score_report(out, season, week, slate_dates=None):
     g = out[out["graded"]].copy()
     two = g[g["two_way"]]
     one = g[~g["two_way"]]
-    L = [f"# Blind opinion log - score, {SPORT.upper()} {season} week {week} (book of record: {BOOK})", "",
-         f"files: {sorted(out['_file'].unique())}; pilot rows included: {bool(out['pilot'].any())}",
+    is_date = SPORTS[SPORT].get("slate") == "date"
+    if is_date and slate_dates:
+        header_range = f"dates {slate_dates[0]}..{slate_dates[-1]}" if len(slate_dates) > 1 else f"date {slate_dates[0]}"
+        L = [f"# Blind opinion log - score, {SPORT.upper()} {season} {header_range} (book of record: {BOOK})", ""]
+    elif is_date:
+        date_str = out["slate_date"].iloc[0] if "slate_date" in out.columns and len(out) else "?"
+        L = [f"# Blind opinion log - score, {SPORT.upper()} {season} date {date_str} (book of record: {BOOK})", ""]
+    else:
+        L = [f"# Blind opinion log - score, {SPORT.upper()} {season} week {week} (book of record: {BOOK})", ""]
+    L += [f"files: {sorted(out['_file'].unique())}; pilot rows included: {bool(out['pilot'].any())}",
          f"rows {len(out)}, graded {len(g)} (pushes/unresolved {int((~out['graded']).sum())}), "
          f"with a view {int((g['tag'] != 'no_view').sum())}, no_view share {(out['tag'] == 'no_view').mean():.1%}", "",
          "**A pilot or a single game is a log, not evidence. Nothing is tuned on it.**", ""]
@@ -748,6 +922,68 @@ def score_report(out, season, week):
               f"units {touched['units'].sum():+.2f}",
               f"  untouched: {len(untouched)} rows, {int(untouched['side_won'].sum())} won, "
               f"units {untouched['units'].sum():+.2f}"]
+    # ── NHL CLV, baselines (a) and (c), drivers, October-vs-later ──
+    if "clv" in g.columns and g["clv"].notna().any():
+        clv_rows = g[g["clv"].notna()]
+        L += ["", f"## CLV vs Pinnacle close (n={len(clv_rows)}): mean {clv_rows['clv'].mean():+.4f}",
+              f"   P3 (mean CLV <= 0) {'HELD' if clv_rows['clv'].mean() <= 0 else 'DID NOT HOLD'}"]
+        # Baseline (a): Brier — book at freeze vs Pinnacle at close
+        if "close_q_first" in g.columns and g["close_q_first"].notna().any():
+            ba = g[g["close_q_first"].notna() & g["y_first"].notna()]
+            if len(ba):
+                brier_freeze = brier_(ba["book_p_first"], ba["y_first"])
+                brier_close = brier_(ba["close_q_first"], ba["y_first"])
+                L += ["", f"## Baseline (a): Brier — book at freeze {brier_freeze:.4f} / Pinnacle at close {brier_close:.4f}"]
+        # Baseline (c): follow-the-move
+        if "ftm_side" in g.columns:
+            ftm = g[(g["ftm_side"] != "none") & g["y_first"].notna()]
+            if len(ftm):
+                ftm_won = ((ftm["ftm_side"] == "first") & (ftm["y_first"] == 1)) | \
+                          ((ftm["ftm_side"] == "second") & (ftm["y_first"] == 0))
+                L += ["", f"## Baseline (c): follow-the-move (n={len(ftm)}): "
+                      f"{int(ftm_won.sum())} won ({ftm_won.mean():.1%}), "
+                      f"units {ftm['ftm_units'].sum():+.2f}, "
+                      f"CLV {ftm['ftm_clv'].mean():+.4f}"]
+            no_move = g[g["ftm_side"] == "none"]
+            if len(no_move):
+                L += [f"   no-move (no side): {len(no_move)}"]
+        # Breakout by reader_model FIRST (H1)
+        if "reader_model" in g.columns and g["reader_model"].nunique() > 1:
+            L += ["", "### CLV by reader_model"]
+            for rm, rmg in g.groupby("reader_model"):
+                clv_rm = rmg[rmg["clv"].notna()]
+                if len(clv_rm):
+                    L += [f"  {rm}: n={len(clv_rm)}, mean CLV {clv_rm['clv'].mean():+.4f}, "
+                          f"units {rmg['units'].sum():+.2f}"]
+        # Breakout by drivers
+        if "drivers" in g.columns and g["drivers"].notna().any():
+            L += ["", "### by drivers"]
+            t = g.groupby("drivers", observed=True).agg(
+                n=("units", "size"), won=("side_won", "sum"), units=("units", "sum"),
+                clv_mean=("clv", "mean")).round(4)
+            L += ["", t.to_markdown()]
+        # October vs later
+        if "slate_date" in g.columns and g["slate_date"].notna().any():
+            g["_month"] = g["slate_date"].str[:7]
+            oct_mask = g["_month"].str.endswith("-10")
+            g_oct = g[oct_mask]
+            g_later = g[~oct_mask]
+            L += ["", "### October vs later"]
+            if len(g_oct):
+                oct_clv = g_oct[g_oct["clv"].notna()]
+                L += [f"  October: n={len(g_oct)}, won {int(g_oct['side_won'].sum())}, "
+                      f"units {g_oct['units'].sum():+.2f}"
+                      + (f", CLV {oct_clv['clv'].mean():+.4f}" if len(oct_clv) else "")]
+            else:
+                L += ["  October: n=0"]
+            if len(g_later):
+                lat_clv = g_later[g_later["clv"].notna()]
+                L += [f"  later: n={len(g_later)}, won {int(g_later['side_won'].sum())}, "
+                      f"units {g_later['units'].sum():+.2f}"
+                      + (f", CLV {lat_clv['clv'].mean():+.4f}" if len(lat_clv) else "")]
+            else:
+                L += ["  later: n=0"]
+            g.drop(columns=["_month"], inplace=True)
     detail_cols = ["market_key", "player_name", "line", "side_name", "side_price", "book_p_first",
                    "p_first", "y_first", "side_won", "units", "tag"]
     if "conf" in g.columns:
@@ -756,6 +992,9 @@ def score_report(out, season, week):
         detail_cols.insert(-1, "conf_rank")
     if "edge" in g.columns:
         detail_cols.insert(-1, "edge")
+    if "clv" in g.columns:
+        detail_cols.append("clv")
+        detail_cols.append("close_snap")
     L += ["", "## Every line with a view", "",
           g[g["tag"] != "no_view"][[c for c in detail_cols if c in g.columns]].round(3).to_markdown(index=False)]
     return "\n".join(L) + "\n"
@@ -1069,6 +1308,8 @@ def main():
     ap.add_argument("--as-of", help="UTC ISO timestamp (pilot only); errors without --pilot")
     ap.add_argument("--experiment", help="experiment id for score-experiment")
     ap.add_argument("--file", help="score one file (diagnostic mode)")
+    ap.add_argument("--from", dest="from_date", default=None, help="start date (inclusive) for date-range scoring")
+    ap.add_argument("--to", dest="to_date", default=None, help="end date (inclusive) for date-range scoring")
     a = ap.parse_args()
     if a.as_of and not a.pilot:
         sys.exit("HALT: --as-of requires --pilot")
@@ -1107,18 +1348,58 @@ def main():
     elif a.cmd == "score":
         if not is_date_sport and a.week is None:
             sys.exit("HALT: --week is required for score")
-        if is_date_sport:
-            entries, bad, unlisted = verify(slate_date=a.date)
+        if is_date_sport and (a.from_date or a.to_date):
+            # Date-range scoring: pool all date dirs in range
+            from datetime import date as _date, timedelta as _td
+            board_root = SPORTS[SPORT]["out"]
+            d_from = _date.fromisoformat(a.from_date) if a.from_date else _date(2020, 1, 1)
+            d_to = _date.fromisoformat(a.to_date) if a.to_date else _date(2099, 12, 31)
+            date_dirs = sorted(board_root.glob("date=*/ai_opinions"))
+            all_scored = []
+            slate_dates = []
+            for dd in date_dirs:
+                ds = dd.parent.name.replace("date=", "")
+                try:
+                    dd_date = _date.fromisoformat(ds)
+                except ValueError:
+                    continue
+                if dd_date < d_from or dd_date > d_to:
+                    continue
+                entries, bad, unlisted = verify(slate_date=ds)
+                if bad or unlisted:
+                    sys.exit(f"HALT: manifest check failed for {ds}: {bad or unlisted}")
+                try:
+                    out_d = score(season, None, include_pilot=a.include_pilot, slate_date=ds)
+                    all_scored.append(out_d)
+                    slate_dates.append(ds)
+                except SystemExit:
+                    continue
+            if not all_scored:
+                sys.exit("HALT: no scored dates in range")
+            out = pd.concat(all_scored, ignore_index=True)
+            text = score_report(out, season, None, slate_dates=slate_dates)
+            print(text)
+            if a.out:
+                Path(a.out).write_text(text)
+                out.to_parquet(Path(a.out).with_suffix(".parquet"), index=False)
         else:
-            entries, bad, unlisted = verify(season, a.week)
-        if bad or unlisted:
-            sys.exit(f"HALT: manifest check failed before scoring: {bad or unlisted}")
-        out = score(season, a.week, include_pilot=a.include_pilot, pbp_path=a.pbp)
-        text = score_report(out, season, a.week)
-        print(text)
-        if a.out:
-            Path(a.out).write_text(text)
-            out.to_parquet(Path(a.out).with_suffix(".parquet"), index=False)
+            if is_date_sport:
+                if not a.date:
+                    sys.exit("HALT: --date (or --from/--to) is required for score")
+                entries, bad, unlisted = verify(slate_date=a.date)
+            else:
+                entries, bad, unlisted = verify(season, a.week)
+            if bad or unlisted:
+                sys.exit(f"HALT: manifest check failed before scoring: {bad or unlisted}")
+            if is_date_sport:
+                out = score(season, None, include_pilot=a.include_pilot, slate_date=a.date)
+            else:
+                out = score(season, a.week, include_pilot=a.include_pilot, pbp_path=a.pbp)
+            text = score_report(out, season, a.week, slate_dates=[a.date] if is_date_sport else None)
+            print(text)
+            if a.out:
+                Path(a.out).write_text(text)
+                out.to_parquet(Path(a.out).with_suffix(".parquet"), index=False)
     elif a.cmd == "score-experiment":
         if not a.experiment:
             sys.exit("HALT: --experiment is required for score-experiment")

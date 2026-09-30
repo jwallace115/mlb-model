@@ -175,3 +175,44 @@ all scored rows. `conf_rank` was already per-file. Both are now 1..n within thei
 (0 mismatches on 1,177 games), REG/OT/SO settlement, SO grade change, team map (all names, accent,
 St Louis, unmapped HALT), end-to-end freeze+score on 3 real games, edge_rank per-file, NCAAF wk4 +
 NFL wk3 TNF score null controls.
+
+### H4b — CLV vs Pinnacle close, baselines (a)/(c), date-range scoring (2026-09-30)
+
+Addendum to H4. Implemented in `nfl/pipeline/log_ai_opinions.py` (branch `nhl/wo1`).
+
+**CLV vs Pinnacle close** in `score()` for sport=nhl:
+- For each scored line, finds the last Pinnacle tape snapshot with `snapshot_utc < commence_time`
+  (the "close"). De-vigs Pinnacle's close price for the frozen side. CLV = close_side_probability
+  minus the frozen price's break-even (implied of side_price).
+- A line whose point value at close differs from the frozen line value → CLV = NaN ("a moved line
+  is counted separately, never imputed" per H1).
+- The close snapshot chosen per game is stated in the output (close_snap column on every row).
+
+**Baselines (a) and (c)** logged in score_report on the same lines as the opinion:
+- (a) Brier: book-at-freeze probability vs Pinnacle-at-close probability, both against actual outcome.
+- (c) Follow-the-move: side = direction of Pinnacle's de-vigged move from the event's first tape
+  snapshot to the freeze snapshot, same line only. No move → no side. Hit rate, units at the same
+  real price, CLV — all reported. A line that moved between first and freeze → first_q_first = NaN,
+  counted in "no-move."
+
+**--from/--to ET date range** for `score --sport nhl`: pools all date dirs in the range, verifies
+each manifest, scores each date, concatenates, and reports. `--date D` still works for a single date.
+
+**Proof-of-run** on real 2026-09-29 slate (3 games: FLA@CAR, MTL@TOR, NYR@BOS):
+- Frozen synthetic filled sheet (9 lines) from the fixture tape at T2000Z.
+- Scored with CLV: 8 of 9 lines have CLV (mean −0.0138); 1 line (TOR spreads) has CLV=NaN because
+  the puck line flipped sides between first snapshot and close (TOR −1.5 → MTL −1.5).
+- Close snapshots: CAR game snap_20260929T2100Z, TOR game snap_20260929T2300Z, BOS game snap_20260930T0000Z.
+- Baseline (a): Brier freeze 0.2711 / close 0.2687.
+- Baseline (c): follow-the-move n=7, 4 won (57.1%), units +0.38, CLV −0.0173.
+
+**NULL CONTROL — football score byte-identical:**
+- NCAAF wk4: sha256 d98b273d92b2bde9..., 31891 bytes (before and after).
+- NFL wk3: sha256 38d4ca6625105c6e..., 226552 bytes (before and after).
+- Football reports gain no new sections; no CLV columns appear for non-NHL sports.
+
+**Pre-existing red** `test_score_first_side_and_units`: confirmed fails at parent (ee2b0ffd0) with
+the same `None == 0`. **What it reports:** the D236(a) snap-count participation check changed the
+`_first_side_won` contract so that player props require `snap_played=True` to proceed; the test
+calls it without `snap_played` (defaults to None = unresolved), so all player props return None
+instead of 0/1. The test correctly caught a behavior change but was never updated.
