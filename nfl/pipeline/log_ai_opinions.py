@@ -53,15 +53,21 @@ SPORTS = {
     "nfl": {"book": "hardrockbet_fl", "props": ROOT / "data" / "odds_archive" / "nfl" / "props",
             "lines": ROOT / "data" / "odds_archive" / "nfl" / "line_history",
             "out": ROOT / "nfl" / "data" / "board", "outcomes": "pbp",
-            "require_side": False},
+            "require_side": False, "slate": "week", "drivers_required": False,
+            "tags": ("injury_news", "role_change", "game_script", "matchup", "weather",
+                     "price_vs_sharp", "usage_trend", "line_move", "no_view", "sim_v1")},
     "ncaaf": {"book": "pinnacle", "props": None,
               "lines": ROOT / "data" / "odds_archive" / "ncaaf" / "line_history",
               "out": ROOT / "ncaaf" / "data" / "board", "outcomes": "cfbd",
-              "require_side": False},
+              "require_side": False, "slate": "week", "drivers_required": False,
+              "tags": ("injury_news", "role_change", "game_script", "matchup", "weather",
+                       "price_vs_sharp", "usage_trend", "line_move", "no_view", "sim_v1")},
     "nhl": {"book": "pinnacle", "props": None,
             "lines": ROOT / "data" / "odds_archive" / "nhl" / "line_history",
             "out": ROOT / "nhl" / "data" / "board", "outcomes": None,
-            "require_side": True},
+            "require_side": True, "slate": "date", "drivers_required": True,
+            "tags": ("goalie", "injury_news", "lineup", "schedule_spot", "matchup", "form",
+                     "price_vs_sharp", "line_move", "model_layer")},
 }
 SPORT = "nfl"
 BOOK = SPORTS[SPORT]["book"]
@@ -75,8 +81,8 @@ def set_sport(sport, book=None):
     BOOK = book or SPORTS[sport]["book"]
     PROPS_DIR = SPORTS[sport]["props"]
     LINES_DIR = SPORTS[sport]["lines"]
-TAGS = ("injury_news", "role_change", "game_script", "matchup", "weather", "price_vs_sharp",
-        "usage_trend", "line_move", "no_view", "sim_v1")
+VALID_DRIVERS = {"market", "news", "history", "model"}
+TAGS = SPORTS["nfl"]["tags"]  # backward compat; use _sport_tags() for the current sport
 KEY = ["event_id", "market_key", "player_name", "line"]
 P_MIN, P_MAX = 0.02, 0.98
 REASON_MIN, REASON_MAX = 12, 160
@@ -93,8 +99,23 @@ def parse_utc(s):
     return datetime.fromisoformat(str(s).replace("Z", "+00:00"))
 
 
+def _sport_tags(sport=None):
+    return SPORTS[sport or SPORT]["tags"]
+
+
+def nhl_season(date_str):
+    """NHL season = start year: month >= 7 -> year, else year - 1."""
+    from datetime import date as _date
+    d = _date.fromisoformat(str(date_str)[:10])
+    return d.year if d.month >= 7 else d.year - 1
+
+
 def out_dir(season, week):
     return SPORTS[SPORT]["out"] / f"week={season}_{week:02d}" / "ai_opinions"
+
+
+def out_dir_date(slate_date):
+    return SPORTS[SPORT]["out"] / f"date={slate_date}" / "ai_opinions"
 
 
 def _finish(rows, now):
@@ -114,8 +135,15 @@ def _finish(rows, now):
     return df.sort_values(["commence_time", "event_id", "market_key", "player_name", "line"]).reset_index(drop=True)
 
 
-def build_sheet(props, lines, now):
-    """props: rows of ONE pull per event (the newest); lines: rows of ONE snapshot. Pre-kick only."""
+def _et_date(utc_str):
+    """America/New_York calendar date of a UTC timestamp."""
+    from zoneinfo import ZoneInfo
+    return parse_utc(utc_str).astimezone(ZoneInfo("America/New_York")).date()
+
+
+def build_sheet(props, lines, now, slate_date=None):
+    """props: rows of ONE pull per event (the newest); lines: rows of ONE snapshot. Pre-kick only.
+    slate_date: for date-keyed sports, only games whose commence_time falls on this ET date."""
     rows = []
     p = props[(props["bookmaker"] == BOOK) & (props["commence_time"].map(parse_utc) > now)]
     for _, r in p.iterrows():
@@ -144,7 +172,13 @@ def build_sheet(props, lines, now):
                      "first_side": first, "second_side": b["outcome_name"],
                      "price_first": a["price"], "price_second": b["price"],
                      "source_utc": h["snapshot_utc"]})
-    return _finish(rows, now)
+    df = _finish(rows, now)
+    if slate_date and not df.empty:
+        from datetime import date as _date
+        target = _date.fromisoformat(str(slate_date))
+        mask = df["commence_time"].map(lambda c: _et_date(c) == target)
+        df = df[mask].reset_index(drop=True)
+    return df
 
 
 def newest_inputs(season, now, props_file=None, lines_file=None):
@@ -218,9 +252,10 @@ def validate(sheet, filled):
     m = m.drop(columns="_merge")
     if m["p_first"].isna().any() or not m["p_first"].between(P_MIN, P_MAX).all():
         raise SystemExit(f"HALT: p_first must be a number in [{P_MIN}, {P_MAX}] on every line")
-    bad = sorted(set(m["tag"]) - set(TAGS))
+    tags = _sport_tags()
+    bad = sorted(set(m["tag"]) - set(tags))
     if bad:
-        raise SystemExit(f"HALT: unknown tag(s) {bad}; allowed {TAGS}")
+        raise SystemExit(f"HALT: unknown tag(s) {bad}; allowed {tags}")
     # ── conf / conf_rank validation ──
     m["conf"] = pd.to_numeric(m["conf"], errors="coerce")
     m["conf_rank"] = pd.to_numeric(m["conf_rank"], errors="coerce").astype("Int64")
@@ -264,6 +299,20 @@ def validate(sheet, filled):
     book_side_p = np.where(m["side"] == "first", m["book_p_first"],
                            np.where(m["side"] == "second", 1 - m["book_p_first"], np.nan))
     m["edge"] = np.where(m["side"] == "none", 0.0, reader_side_p - book_side_p)
+    # ── drivers (required for date-keyed sports like NHL) ──
+    if SPORTS[SPORT].get("drivers_required", False):
+        if "drivers" not in f.columns:
+            raise SystemExit("HALT: filled sheet is missing 'drivers' column (required for " + SPORT + ")")
+        m = m.merge(f[KEY + ["drivers"]], on=KEY, how="left")
+        for i, row in m.iterrows():
+            d_raw = str(row.get("drivers", "")).strip()
+            if not d_raw:
+                raise SystemExit(f"HALT: empty drivers on row {i} ({row['event_id']}, {row['market_key']})")
+            parts = sorted(set(x.strip() for x in d_raw.split(",")))
+            bad_d = sorted(set(parts) - VALID_DRIVERS)
+            if bad_d:
+                raise SystemExit(f"HALT: unknown driver(s) {bad_d} on row {i}; allowed {sorted(VALID_DRIVERS)}")
+            m.at[i, "drivers"] = ",".join(parts)
     return m
 
 
@@ -293,7 +342,7 @@ def prior_revisions(d, reader_model=None, pilot=None):
 
 
 def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
-           board_root=None, run_id=None):
+           board_root=None, run_id=None, slate_date=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
@@ -302,16 +351,20 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
         raise SystemExit("HALT: --reader-model is required (the model that made these picks)")
     # D224(c): canonicalize reader string (strip whitespace)
     reader_model = str(reader_model).strip()
-    d = d or out_dir(season, week)
-    # D224a: cross-week dedup for canonical (non-pilot) reader.
-    # A contract already frozen in ANY week directory (including current) is refused.
+    is_date_sport = SPORTS[SPORT].get("slate") == "date"
+    if is_date_sport:
+        d = d or out_dir_date(slate_date)
+    else:
+        d = d or out_dir(season, week)
+    # Cross-dedup for canonical (non-pilot) reader.
     if not pilot:
         board_root = board_root or SPORTS[SPORT]["out"]
         contracts = [(r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
                      for _, r in filled.iterrows()]
         dupes = []
         contract_set = set(contracts)
-        for wd in sorted(board_root.glob(f"week={season}_*/ai_opinions")):
+        glob_pat = "date=*/ai_opinions" if is_date_sport else f"week={season}_*/ai_opinions"
+        for wd in sorted(board_root.glob(glob_pat)):
             manifest_path = wd / "manifest.json"
             if not manifest_path.exists():
                 continue
@@ -333,7 +386,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
                         dupes.append((key, wd.parent.name))
         if dupes:
             raise SystemExit(
-                f"HALT: {len(dupes)} contract(s) already frozen (cross-week dedup):\n"
+                f"HALT: {len(dupes)} contract(s) already frozen (cross-dedup):\n"
                 + "\n".join(f"  {c} in {w}" for c, w in dupes[:10]))
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):
@@ -343,7 +396,11 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     seen = prior_revisions(d, reader_model=reader_model, pilot=pilot)
     m["revision"] = [seen.get((r.event_id, r.market_key, r.player_name, r.line), -1) + 1
                      for r in m.itertuples(index=False)]
-    m["season"], m["week"], m["pilot"] = season, week, bool(pilot)
+    m["season"], m["pilot"] = season, bool(pilot)
+    if is_date_sport:
+        m["slate_date"] = str(slate_date)
+    else:
+        m["week"] = week
     m["sport"], m["book"] = SPORT, BOOK
     m["reader_model"] = str(reader_model).strip()
     m["logged_utc"] = now.isoformat()
@@ -368,8 +425,12 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     return dest, sha, m
 
 
-def verify(season, week, d=None):
-    d = d or out_dir(season, week)
+def verify(season=None, week=None, d=None, slate_date=None):
+    if d is None:
+        if slate_date:
+            d = out_dir_date(slate_date)
+        else:
+            d = out_dir(season, week)
     man = d / "manifest.json"
     entries = json.loads(man.read_text()) if man.exists() else []
     bad = [e["file"] for e in entries
@@ -1173,8 +1234,9 @@ def main():
     ap.add_argument("cmd", choices=["sheet", "freeze", "verify", "score", "score-experiment"])
     ap.add_argument("--sport", choices=list(SPORTS), default="nfl")
     ap.add_argument("--book", default=None, help="override the sport's book of record")
-    ap.add_argument("--season", type=int, default=2026)
+    ap.add_argument("--season", type=int, default=None)
     ap.add_argument("--week", type=int, default=None)
+    ap.add_argument("--date", default=None, help="YYYY-MM-DD slate date (required for date-keyed sports like NHL)")
     ap.add_argument("--out"), ap.add_argument("--filled")
     ap.add_argument("--props-file"), ap.add_argument("--lines-file")
     ap.add_argument("--events", help="comma list of team-name fragments; default every pre-kick game")
@@ -1189,11 +1251,19 @@ def main():
     if a.as_of and not a.pilot:
         sys.exit("HALT: --as-of requires --pilot")
     set_sport(a.sport, a.book)
+    is_date_sport = SPORTS[SPORT].get("slate") == "date"
+    if is_date_sport and a.cmd in ("sheet", "freeze") and not a.date:
+        sys.exit(f"HALT: --date YYYY-MM-DD is required for {SPORT}")
+    if is_date_sport and a.date:
+        season = a.season or nhl_season(a.date)
+    else:
+        season = a.season or 2026
     now = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
     if a.cmd in ("sheet", "freeze"):
-        sheet = build_sheet(*newest_inputs(a.season, now, a.props_file, a.lines_file), now)
+        sheet = build_sheet(*newest_inputs(season, now, a.props_file, a.lines_file), now,
+                            slate_date=a.date)
         if a.events and len(sheet):
             fr = [x.strip().lower() for x in a.events.split(",")]
             sheet = sheet[(sheet.home_team + " " + sheet.away_team).str.lower().map(lambda t: any(x in t for x in fr))]
@@ -1201,25 +1271,28 @@ def main():
             hrs = sheet["commence_time"].map(lambda c: (parse_utc(c) - now).total_seconds() / 3600)
             sheet = sheet[hrs <= a.window_hours]
         if sheet.empty:
-            sys.exit("HALT: no pre-kick Hard Rock lines found")
+            sys.exit(f"HALT: no pre-kick {BOOK} lines found")
     if a.cmd == "sheet":
         Path(a.out).parent.mkdir(parents=True, exist_ok=True)
         sheet.to_csv(a.out, index=False)
         print(f"{len(sheet)} lines, {sheet.event_id.nunique()} game(s), two-way {int(sheet.two_way.sum())} -> {a.out}")
         print(sheet.groupby(["away_team", "home_team"])["source_age_min"].agg(["count", "min", "max"]).to_string())
     elif a.cmd == "freeze":
-        dest, sha, m = freeze(sheet, pd.read_csv(a.filled), a.season, a.week, a.pilot, now,
-                             reader_model=a.reader_model)
+        dest, sha, m = freeze(sheet, pd.read_csv(a.filled), season, a.week, a.pilot, now,
+                             reader_model=a.reader_model, slate_date=a.date)
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":
-        if a.week is None:
+        if not is_date_sport and a.week is None:
             sys.exit("HALT: --week is required for score")
-        entries, bad, unlisted = verify(a.season, a.week)
+        if is_date_sport:
+            entries, bad, unlisted = verify(slate_date=a.date)
+        else:
+            entries, bad, unlisted = verify(season, a.week)
         if bad or unlisted:
             sys.exit(f"HALT: manifest check failed before scoring: {bad or unlisted}")
-        out = score(a.season, a.week, include_pilot=a.include_pilot, pbp_path=a.pbp)
-        text = score_report(out, a.season, a.week)
+        out = score(season, a.week, include_pilot=a.include_pilot, pbp_path=a.pbp)
+        text = score_report(out, season, a.week)
         print(text)
         if a.out:
             Path(a.out).write_text(text)
@@ -1227,18 +1300,22 @@ def main():
     elif a.cmd == "score-experiment":
         if not a.experiment:
             sys.exit("HALT: --experiment is required for score-experiment")
-        # Load canonical reader from the experiment manifest
         em_path = ROOT / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
         if not em_path.exists():
             sys.exit(f"HALT: experiment manifest not found: {em_path}")
         em = json.loads(em_path.read_text())
         canonical = em.get("canonical_reader", "")
-        score_experiment(a.experiment, canonical, season=a.season,
+        score_experiment(a.experiment, canonical, season=season,
                         include_pilot=a.include_pilot, single_file=a.file)
     elif a.cmd == "verify":
-        if a.week is None:
-            sys.exit("HALT: --week is required for verify")
-        entries, bad, unlisted = verify(a.season, a.week)
+        if is_date_sport:
+            if not a.date:
+                sys.exit("HALT: --date is required for verify")
+            entries, bad, unlisted = verify(slate_date=a.date)
+        else:
+            if a.week is None:
+                sys.exit("HALT: --week is required for verify")
+            entries, bad, unlisted = verify(season, a.week)
         print(f"{len(entries)} frozen file(s); hash mismatch/missing: {bad or 'none'}; not in manifest: {unlisted or 'none'}")
         if bad or unlisted:
             sys.exit(1)

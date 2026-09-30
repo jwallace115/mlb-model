@@ -98,3 +98,41 @@ below were found independently by the main Layers chat and are fixed by its capt
   documented trap). `nfl/pipeline/pull_hardrock_props.py` saves every row of a run into the month of the LAST
   event in its loop and hardcodes 15 credits/event. `log_ai_opinions.py score` grades a player absent from PBP
   as 0 — for NHL a scratched player must be void.
+
+### H3 — Freeze tool: NHL entry, date-keyed slates, drivers field, book of record (2026-09-30)
+
+Implemented in `nfl/pipeline/log_ai_opinions.py` (branch `nhl/wo1`).
+
+**SPORTS['nhl'] extended** (L2 amendment created the entry with book/lines/require_side):
+- `slate: "date"` — slates are ET dates, not weeks; `--date YYYY-MM-DD` required
+- `season` rule: `nhl_season(date)` — month >= 7 -> year, else year - 1 (2027-03-15 -> season=2026)
+- `drivers_required: True` — every NHL row must have a non-empty `drivers` column (comma-separated,
+  sorted, unique subset of {market, news, history, model}); HALT on empty or unknown
+- `outcomes: None` — set to `'nhle'` in H4
+- `tags: (goalie, injury_news, lineup, schedule_spot, matchup, form, price_vs_sharp, line_move,
+  model_layer)` — `no_view`, `weather`, `game_script`, `role_change`, `usage_trend`, `sim_v1` are
+  football-only and rejected for NHL
+- `props: None` (H1: not in pilot universe)
+
+**NFL and NCAAF** gained explicit `slate: "week"`, `drivers_required: False`, `tags: (...)` matching
+their prior behavior. `TAGS` module-level constant preserved for backward compatibility.
+
+**Date-keyed sheet:** `build_sheet(slate_date=D)` filters to games whose `commence_time` falls on ET
+date D — never the next day's games. Output dir: `nhl/data/board/date=YYYY-MM-DD/ai_opinions/`.
+Frozen rows carry `slate_date` instead of `week`.
+
+**Book of record: pinnacle** (confirmed H2 addendum). Measured from fixture snap_20260929T2000Z:
+- Pinnacle: 7 games, all 3 markets on every game
+- Hard Rock: ABSENT from every game (0 games, 0 markets)
+- h2h outcomes per game: exactly 2 on all 138 (event, bookmaker) pairs — no 3-way/draw
+
+**Cross-dedup** for date sports uses `date=*/ai_opinions` glob instead of `week=*_*/ai_opinions`.
+
+**NULL CONTROL:** all existing NFL (wk2, wk3) and NCAAF (wk4) frozen file hashes unchanged:
+NFL wk2 5608e10f..., wk3 4e597ba0.../cc0eb467.../c7f59a14...; NCAAF wk4 504e1fb6.../d329749b...
+Verify returns bad=[], unlisted=[] on all. Football tags and behavior are identical.
+
+**Tests** (21 new, all pass): `nfl/pipeline/tests/test_ai_opinions_nhl_h3.py` — date slate filtering
+(+mutation), drivers validation (missing/empty/unknown/valid), tag scoping (no_view/weather rejected,
+goalie accepted), NHL without --date HALT, season rule (4 cases), freeze writes slate_date not week,
+football verify null control (6 sha256 assertions), football tags/drivers unchanged.
