@@ -4934,3 +4934,52 @@ first canonical freeze that would block the harness.
   - decoupling;
   - the live path in a subprocess never loads the shared logger;
   - interop in both orders.
+
+### D259 — FWD6 item 3: every freeze-side survivor of audit #8 is caught; the import-path files are hashed; manifest re-stamped once (2026-09-30)
+
+**Mutations.** Each was applied alone to a copy of the tree, the full forward list was run (131 tests), and the tree was
+restored. None of these rows counts the manifest-hash test.
+
+The freeze-side survivors from audit #8 (D):
+
+| Mutation | Caught by |
+|---|---|
+| H anchor tolerance 1.0 → 1.05 | test_anchor_tolerance_is_exactly_one_point |
+| H props `pull_timestamp <= T` filter removed | test_props_after_T_never_consumed |
+| H experiment digest written as 64 zeros | test_frozen_rows_carry_the_real_experiment_digest |
+| L freeze() already-kicked rejection removed | test_pinned_freeze_rejects_kicked_games |
+| H post-write quarantine disabled | test_write_finishing_after_kick_is_quarantined |
+| H rosters, depth charts and injuries not copied | 39 tests |
+| H returned sidecar converged forced True | test_sidecar_records_returned_convergence |
+| H duplicate prediction-key rejection removed | test_duplicate_prediction_key_halts |
+| H live manifest check removed from main() | test_live_experiment_manifest_check_halts_in_main |
+
+Mutations of the new protections:
+
+| Mutation | Caught by |
+|---|---|
+| read-set proof skipped | 3 tests |
+| run_week input routing skipped | 3 tests, including the CLE solver test |
+| lines judged by first row again | test_future_line_row_behind_valid_first_row_is_never_used |
+| output identity check skipped | 3 tests |
+| shared-logger reserved-reader guard removed | 2 tests |
+| receipt check removed from verify_bundle | 2 tests |
+| per-team freshness skipped | 2 tests |
+| anchor_returned optional again | test_missing_anchor_returned_halts |
+
+The scoring-side survivors (game_snap None, the below-500 branch, the bundle-digest rejection, the bootstrap seed) are
+FWD7. They are NOT done here.
+
+**Manifest.** FWD_EXPERIMENT_v1.json was re-stamped once and now hashes 51 files. Added: conftest.py, nfl/__init__.py,
+nfl/sim/__init__.py, nfl/sim/pricer.py, nfl/sim/tests/__init__.py, nfl/sim/tests/test_freeze_v1.py,
+nfl/sim/read_set.py, nfl/sim/restore_run.py. Changed: names.py, run_forward_v1.py, run_week.py. FREEZE_v1 files and
+fwd_v1_logger.py (cf100675bd385ca5) are byte-identical. Keys are now sorted.
+
+**Suites (Linux).** The forward list gives 131 passed, 0 failed (88 before + 43 new); test_freeze_v1 gives 4 passed.
+
+**Not done.**
+- The real Mac runs (a week-4 dry run, a week-3 pilot freeze with re-run refusal, a restore demonstration) are Jeff's,
+  recorded in fwd6_acceptance_2026-10-01.md.
+- ChatGPT audit #9 of this implementation.
+- FWD7, the scoring amendment S1-S4.
+- FWD2d, the Sunday runbook.
