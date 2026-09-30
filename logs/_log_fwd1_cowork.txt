@@ -72,3 +72,37 @@
 
 ### UNVERIFIED
 - That the Thu 22:00Z props slot fires on 10-01. The sheet prints the source age at run time.
+
+## 2026-09-29T23:30Z  cowork (ChatGPT audit #6 adjudicated — D223; order FWD2)
+
+### RETURNED
+- ChatGPT audit #6 on main @ 145a1fee0. Each of A1-A7 was checked by Cowork in the code at that commit:
+  - A1: score() pools readers and no_view rows;
+  - A2: newest_inputs takes the newest line file regardless of now;
+  - A3: no usage-fingerprint test; run_week.py:502-507 only suppresses ranking;
+  - A4: reader string not stripped before the lookup;
+  - A5: no event/player key in fill_sheet;
+  - A6: sidecar target sign;
+  - A7: a missing player row counts as 0 -> Under win.
+  All seven hold.
+- The auditor recomputed and confirmed: K1, the pilot population and Brier/CI/units, week-2 anchoring, 10 reds, and
+  the 16 tests. It also read the 6E K4: the sim is worse than the book in all 8 families.
+
+### MEANS
+- The forward experiment as merged is not a valid test. Thursday TNF runs as a pilot. The primary count starts after
+  FWD2 is verified (target London, 12:45Z 10-04; otherwise week 5).
+- Cowork's own misses:
+  - accepted the sidecar with the sign wrong;
+  - never read score() before accepting the runbook's reader-filter claim;
+  - missed the game-line cutoff;
+  - stated "anchored ⇒ book probability" (false);
+  - called the London stale quote fair.
+- The AI blind-log grades for weeks 2-3 may count inactive players' Unders as wins. They get re-graded in FWD2.
+
+### NOT DONE
+- FWD2 (written).
+- The re-grade of the AI blind log.
+- The Sunday pre-London props pull (Jeff, about 10 credits).
+
+### UNVERIFIED
+- The auditor's items not reproducible from the pin (the raw PBP-based measurements, the paired A/Bs, the dry run).
