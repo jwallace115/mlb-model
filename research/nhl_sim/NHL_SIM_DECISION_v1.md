@@ -830,3 +830,35 @@ By games played: the engine is closest to Pinnacle in the 11-40 game range. At 0
 the engine is 2.4% worse (early-season uncertainty); at 41+ games it's 0.9% worse.
 
 No calibration fitted on 2023-24. Nothing in Items 1-2 changed.
+
+### S43 — S-WO4b verified; engine probabilities are too compressed (Cowork, 2026-09-29 23:53Z)
+**The moneyline A1 result reproduces** (Cowork recomputed it with statsmodels on the committed prices + build_lines
+Pinnacle, same games):
+
+| | 2023-24 (validate, n = 1,138) | 2022-23 (fit, n = 1,156) |
+|---|---|---|
+| log-loss, engine / Pinnacle | 0.6647 / 0.6567 | 0.6669 / 0.6568 |
+| Brier, engine / Pinnacle | 0.2361 / 0.2326 | |
+| A1 disagreement coefficient | 0.375, 90% CI [-0.105, 0.854] (Wald; CC's bootstrap [-0.103, 0.869]) | 0.231, CI [-0.163, 0.624] |
+
+**The engine does NOT pass A1. No layer weight.**
+
+**Main finding (not in CC's report): the engine is under-confident.**
+- SD of the moneyline logit: engine 0.363 vs Pinnacle 0.514 (2023-24); 0.414 vs 0.560 (2022-23).
+- Calibration slope of the engine alone: **1.32** on 2023-24 and **1.15** on 2022-23. It sees teams as more alike
+  than they are.
+- By |engine - Pinnacle|: where they agree to within 2 pts, log-loss is equal (0.6457 vs 0.6441). The whole deficit
+  sits in the games where they disagree by more than 5 pts (0.6703 vs 0.6552, n = 575).
+
+**A2 moneyline picks, descriptive, at real median prices:**
+- 2023-24: 488 picks, hit 38.3%, ROI **-3.7%** (SE 5.8%). Month-to-month swings run from -26% to +19%.
+- 2022-23: 587 picks, ROI -1.0% (SE 5.3%).
+- Confident picks (engine >= 0.70): 5 and 13 games. Too few to read.
+- There is no moneyline edge; this is consistent with A1.
+
+**Not done by S-WO4b, and wrong** (the hard rule was broken again):
+- Totals P(over) came from a normal approximation (sd = sqrt(mean)), not from the simulations.
+  `p_push_total` is ~0.16 even on x.5 lines, which is impossible.
+- So the totals half of S42 is invalid, and the totals A1 test was not run.
+- Also NOT DONE: the reliability table, the favourite / underdog and |engine - Pinnacle| breakdowns, and the A2
+  picks.
