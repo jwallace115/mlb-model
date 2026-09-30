@@ -1,0 +1,65 @@
+CLOSE: pinnacle refs 2294, solved 2289, dropped 5
+EARLY: pinnacle refs 1593, solved 1592, dropped 1
+
+PUCK LINE structure check (CLOSE, n=2283): mean Pinnacle 0.4809 engine 0.4815 actual 0.4656; mean |diff| 0.0068; log-loss Pinnacle 0.6606 engine 0.6605
+
+===== EARLY: candidate quotes 1620, share EV>=2% 0.022, bets 35 =====
+  POOLED: bets 35 ROI +0.1999 (SE 0.1508)  EV +0.0275  CLV +0.0090 (SE 0.0083, 90% lo -0.0046)
+  season=2022: bets 27 ROI +0.1390 (SE 0.1744)  EV +0.0282  CLV +0.0062 (SE 0.0106, 90% lo -0.0112)
+  season=2023: bets 8 ROI +0.4057 (SE 0.3069)  EV +0.0253  CLV +0.0186 (SE 0.0065, 90% lo +0.0079)
+  point=6.0/pin=5.5: bets 5 ROI +0.1539 (SE 0.4711)  EV +0.0284  CLV +0.0052 (SE 0.0058, 90% lo -0.0043)
+  point=6.0/pin=6.5: bets 8 ROI +0.0570 (SE 0.3263)  EV +0.0257  CLV +0.0032 (SE 0.0268, 90% lo -0.0408)
+  point=6.5/pin=6.0: bets 14 ROI +0.2132 (SE 0.2509)  EV +0.0285  CLV +0.0126 (SE 0.0135, 90% lo -0.0096)
+  point=6.5/pin=7.0: bets 3 ROI +0.2022 (SE 0.6011)  EV +0.0244  CLV -0.0060 (SE 0.0129, 90% lo -0.0272)
+  point=7.0/pin=6.5: bets 5 ROI +0.4361 (SE 0.3593)  EV +0.0286  CLV +0.0212 (SE 0.0162, 90% lo -0.0054)
+  side=Over: bets 11 ROI +0.0966 (SE 0.2726)  EV +0.0253  CLV +0.0007 (SE 0.0194, 90% lo -0.0312)
+  side=Under: bets 24 ROI +0.2473 (SE 0.1842)  EV +0.0285  CLV +0.0129 (SE 0.0085, 90% lo -0.0011)
+  book=betmgm: bets 5 ROI +0.1224 (SE 0.4584)  EV +0.0264  CLV +0.0149 (SE 0.0327, 90% lo -0.0389)
+  book=betonlineag: bets 3 ROI -0.3793 (SE 0.6207)  EV +0.0289  CLV -0.0342 (SE 0.0282, 90% lo -0.0806)
+  book=betrivers: bets 3 ROI +0.2578 (SE 0.6293)  EV +0.0244  CLV +0.0346 (SE 0.0378, 90% lo -0.0275)
+  book=bovada: bets 6 ROI +0.5503 (SE 0.3113)  EV +0.0371  CLV -0.0114 (SE 0.0259, 90% lo -0.0541)
+  book=draftkings: bets 5 ROI +0.1085 (SE 0.4529)  EV +0.0235  CLV +0.0189 (SE 0.0013, 90% lo +0.0168)
+  book=fanduel: bets 4 ROI +0.3651 (SE 0.4551)  EV +0.0255  CLV +0.0059 (SE 0.0152, 90% lo -0.0190)
+  book=lowvig: bets 7 ROI -0.0376 (SE 0.3615)  EV +0.0251  CLV +0.0168 (SE 0.0162, 90% lo -0.0098)
+  book=williamhill_us: bets 2 ROI +0.8545 (SE 0.0545)  EV +0.0266  CLV +0.0371 (SE 0.0214, 90% lo +0.0019)
+         bets     roi     clv
+month                        
+2022-10     4  0.3749 -0.0019
+2022-11     8 -0.2929 -0.0324
+2022-12     5  0.3147  0.0511
+2023-01     6  0.2462  0.0131
+2023-02     2  0.8380  0.0320
+2023-03     2 -0.0652  0.0183
+2023-10     2 -0.0833  0.0409
+2023-11     4  0.8913  0.0086
+2024-02     1  0.8475  0.0158
+2024-03     1 -1.0000  0.0165
+
+===== CLOSE: candidate quotes 2256, share EV>=2% 0.008, bets 17 =====
+  POOLED: bets 17 ROI -0.2925 (SE 0.2413)  EV +0.0322  CLV +0.0322 (SE 0.0035, 90% lo +0.0265)
+  season=2022: bets 13 ROI -0.4256 (SE 0.2487)  EV +0.0307  CLV +0.0307 (SE 0.0042, 90% lo +0.0237)
+  season=2023: bets 4 ROI +0.1400 (SE 0.6590)  EV +0.0372  CLV +0.0372 (SE 0.0053, 90% lo +0.0285)
+  point=5.5/pin=6.0: bets 1 ROI -1.0000 (SE nan)  EV +0.0339  CLV +0.0339 (SE nan, 90% lo +nan)
+  point=6.0/pin=5.5: bets 3 ROI +0.2596 (SE 0.6299)  EV +0.0218  CLV +0.0218 (SE 0.0007, 90% lo +0.0206)
+  point=6.0/pin=6.5: bets 9 ROI -0.5519 (SE 0.2980)  EV +0.0318  CLV +0.0318 (SE 0.0056, 90% lo +0.0225)
+  point=6.5/pin=6.0: bets 2 ROI -1.0000 (SE 0.0000)  EV +0.0319  CLV +0.0319 (SE 0.0045, 90% lo +0.0245)
+  point=6.5/pin=7.0: bets 2 ROI +1.1074 (SE 0.2526)  EV +0.0495  CLV +0.0495 (SE 0.0027, 90% lo +0.0450)
+  side=Over: bets 9 ROI -0.5902 (SE 0.2711)  EV +0.0348  CLV +0.0348 (SE 0.0057, 90% lo +0.0255)
+  side=Under: bets 8 ROI +0.0423 (SE 0.3977)  EV +0.0294  CLV +0.0294 (SE 0.0039, 90% lo +0.0230)
+  book=betmgm: bets 2 ROI -1.0000 (SE 0.0000)  EV +0.0215  CLV +0.0215 (SE 0.0009, 90% lo +0.0200)
+  book=betonlineag: bets 3 ROI -1.0000 (SE 0.0000)  EV +0.0432  CLV +0.0432 (SE 0.0153, 90% lo +0.0180)
+  book=bovada: bets 1 ROI -1.0000 (SE nan)  EV +0.0387  CLV +0.0387 (SE nan, 90% lo +nan)
+  book=draftkings: bets 2 ROI +1.2800 (SE 0.0800)  EV +0.0398  CLV +0.0398 (SE 0.0124, 90% lo +0.0195)
+  book=lowvig: bets 6 ROI -0.3793 (SE 0.3926)  EV +0.0302  CLV +0.0302 (SE 0.0043, 90% lo +0.0231)
+  book=williamhill_us: bets 3 ROI +0.2475 (SE 0.6241)  EV +0.0253  CLV +0.0253 (SE 0.0039, 90% lo +0.0190)
+         bets     roi     clv
+month                        
+2022-10     1 -1.0000  0.0224
+2022-11     3 -0.3889  0.0265
+2022-12     2 -0.0455  0.0252
+2023-01     2 -0.0726  0.0343
+2023-02     1 -1.0000  0.0339
+2023-03     4 -0.5326  0.0361
+2023-12     1  1.3600  0.0522
+2024-01     2  0.1000  0.0301
+2024-03     1 -1.0000  0.0365
