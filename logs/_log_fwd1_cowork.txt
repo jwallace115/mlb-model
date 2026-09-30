@@ -181,3 +181,28 @@
 
 ### UNVERIFIED
 - Whether the Thu 22:00Z VM props slot fires on 10-01. The TNF dry run and the live run print the source age.
+
+## 2026-09-30T13:15Z  cowork (ChatGPT audit #7 adjudicated — D240; order FWD3)
+
+### RETURNED
+- Audit #7 on 0792fd122: six must-fix items. A4 FIXED; A1, A2, A3, A5, A6 and A7 PARTIAL. Eight surviving mutations.
+- Cowork spot-checked the code:
+  - run_forward_v1.py:108 uses mkdir(exist_ok=True);
+  - :413 picks the minimum-error iteration;
+  - :170-178 checks props age only;
+  - :614-642 checks publication before the freeze and records it after;
+  - the manifest has 0 matches for actuals.py;
+  - score_experiment's run_id join is `pass`.
+
+### MEANS
+- D238's acceptance was wrong on six of the seven items. Cowork did not exercise the scorer or the bundle adversarially.
+- The freeze side must be fixed before the first primary freeze, and the scoring side before any scoring. FWD3 does
+  both.
+
+### NOT DONE
+- FWD3 (written).
+- FWD2d (the Sunday runbook) is still pending.
+- The TNF start depends on FWD3 being verified by Thu 15:00Z.
+
+### UNVERIFIED
+- The auditor's executed counterexamples were accepted as evidence, not re-run by Cowork.
