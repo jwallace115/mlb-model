@@ -1066,18 +1066,39 @@ def score_experiment(experiment, canonical_reader, season=2026, include_pilot=Fa
         n_eligible = len(pooled)
 
     # D246(a): Load anchor sidecars from bundles — each carries (run_id, event_id)
+    # D246(b): verify bundle BEFORE loading sidecar; check bundle_digest of frozen rows
     all_sidecars = []
+    bundle_digests = {}  # run_id -> sha256(bundle_manifest.json)
     for wd in sorted(board_root.glob(f"week={season}_*/sim_runs/*/anchor_sidecar.parquet")):
         run_id = wd.parent.name
-        sc = pd.read_parquet(wd)
-        if "run_id" not in sc.columns:
-            sc["run_id"] = run_id
-        # D246(a): verify the bundle for each sidecar's run
+        # D246(a): verify the bundle BEFORE loading sidecar
         vbad = verify_bundle(wd.parent)
         if vbad:
             raise SystemExit(f"HALT: bundle verify failed for {wd.parent.name}: {vbad}")
+        sc = pd.read_parquet(wd)
+        if "run_id" not in sc.columns:
+            sc["run_id"] = run_id
         all_sidecars.append(sc)
+        # D246(b): record bundle_digest for row-level verification
+        man_path = wd.parent / "bundle_manifest.json"
+        if man_path.exists():
+            bundle_digests[run_id] = hashlib.sha256(man_path.read_bytes()).hexdigest()
     sidecar_df = pd.concat(all_sidecars, ignore_index=True) if all_sidecars else pd.DataFrame()
+
+    # D246(b): verify frozen rows' bundle_digest against actual bundle
+    if all_scored and bundle_digests:
+        pooled_check = pd.concat(all_scored, ignore_index=True) if len(all_scored) > 1 else all_scored[0]
+        if "bundle_digest" in pooled_check.columns and "run_id" in pooled_check.columns:
+            for rid, expected_bd in bundle_digests.items():
+                rows_for_run = pooled_check[pooled_check["run_id"] == rid]
+                if rows_for_run.empty:
+                    continue
+                row_bd = rows_for_run["bundle_digest"].dropna().unique()
+                for bd_val in row_bd:
+                    if bd_val != expected_bd:
+                        raise SystemExit(
+                            f"HALT: frozen row bundle_digest {str(bd_val)[:16]} != "
+                            f"actual bundle {expected_bd[:16]} for run {rid}")
 
     if n_eligible == 0:
         # D243(e): checkpoint policy — below 500 eligible legs -> descriptive only

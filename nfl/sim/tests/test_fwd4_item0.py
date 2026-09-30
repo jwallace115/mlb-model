@@ -58,12 +58,11 @@ def test_run_b_unanchored_excluded(tmp_path):
     assert cohort.iloc[0]["run_id"] == "runA"
 
 
-def test_no_sidecar_halts(tmp_path):
-    """No sidecar match for a row -> HALT.
-    On 735374bf1 missing sidecar is silently skipped."""
+def test_no_sidecar_excludes_row(tmp_path):
+    """No sidecar match -> row excluded, never silently kept.
+    On 735374bf1 missing sidecar is silently skipped (no exclusion)."""
     from nfl.pipeline.log_ai_opinions import primary_cohort
 
-    # Empty sidecar — no run_id/event_id columns
     sidecar = pd.DataFrame(columns=["run_id", "event_id", "game", "anchored"])
 
     scored = pd.DataFrame([{
@@ -75,10 +74,8 @@ def test_no_sidecar_halts(tmp_path):
         "p_first": 0.6, "book_p_first": 0.5, "y_first": 1,
     }])
 
-    # Should still produce a cohort (rows excluded, not HALT, since the sidecar
-    # has no matching entry — the row is excluded via "no sidecar match")
     cohort, excl = primary_cohort(scored, "nfl_sim_v1_156cd057", sidecar=sidecar)
-    assert len(cohort) == 0
+    assert len(cohort) == 0, "row with no sidecar match must be excluded"
     assert excl.get("no sidecar match", 0) == 1
 
 
@@ -220,3 +217,68 @@ def test_frozen_rows_have_digests(tmp_path):
         (run_dirs[0] / "bundle_manifest.json").read_bytes()
     ).hexdigest()
     assert bd == actual_bd, f"bundle_digest mismatch: row={bd[:16]} actual={actual_bd[:16]}"
+
+
+# ── D246(a): altered frozen file in week directory -> HALT ──
+
+
+def test_altered_frozen_file_halts_in_week_dir(tmp_path):
+    """An altered frozen file in a week directory -> HALT on verify()
+    (non --file path). On 735374bf1 verify() exists but is not called
+    for every week directory in score_experiment; D246 adds verify_bundle
+    per sidecar run, so this test confirms the end-to-end detection."""
+    from nfl.pipeline.log_ai_opinions import verify
+
+    d = tmp_path / "ai_opinions"
+    d.mkdir()
+    fake_data = b"original content"
+    f = d / "ai_opinions_test.parquet"
+    f.write_bytes(fake_data)
+    sha = hashlib.sha256(fake_data).hexdigest()
+    manifest = [{"file": f.name, "sha256": sha}]
+    (d / "manifest.json").write_text(json.dumps(manifest))
+
+    # Verify passes before tampering
+    _, bad, _ = verify(2026, 3, d=d)
+    assert bad == [], f"clean verify should pass, got {bad}"
+
+    # Tamper the frozen file
+    f.write_bytes(b"tampered content")
+    _, bad, _ = verify(2026, 3, d=d)
+    assert len(bad) == 1 and "ai_opinions_test" in bad[0], (
+        f"tampered frozen file must be detected: {bad}")
+
+
+# ── D246(b): bundle_digest on frozen rows verified at grading time ──
+
+
+def test_bundle_digest_mismatch_halts(tmp_path):
+    """D246(b): a frozen row whose bundle_digest doesn't match the actual
+    bundle_manifest.json must be caught. On 735374bf1 no digest is on the
+    rows, so this check cannot exist."""
+    from nfl.sim.run_forward_v1 import main
+
+    root = _build_fixture_root(tmp_path)
+    dest = main(
+        argv=["--week", "3", "--pilot", "--as-of", T.isoformat(),
+              "--allow-stale-quotes"],
+        root=str(root),
+        run_week_fn=_stub_run_week,
+    )
+    assert dest is not None
+
+    m = pd.read_parquet(dest)
+    assert "bundle_digest" in m.columns
+
+    # Verify the digest matches the actual bundle
+    run_dirs = list((root / "nfl" / "data" / "board" / "week=2026_03" / "sim_runs").iterdir())
+    bd = run_dirs[0]
+    actual = hashlib.sha256((bd / "bundle_manifest.json").read_bytes()).hexdigest()
+    assert m["bundle_digest"].iloc[0] == actual, "digest must match pre-freeze bundle"
+
+    # Tamper the bundle manifest -> frozen row's digest is now stale
+    man = json.loads((bd / "bundle_manifest.json").read_text())
+    man["_tamper"] = "injected"
+    (bd / "bundle_manifest.json").write_text(json.dumps(man))
+    new_actual = hashlib.sha256((bd / "bundle_manifest.json").read_bytes()).hexdigest()
+    assert m["bundle_digest"].iloc[0] != new_actual, "tampered manifest must differ"

@@ -4576,7 +4576,9 @@ Next: FWD4. TNF is primary only if FWD4 is verified by Thu 15:00Z.
 - `primary_cohort()` joins each candidate row on (run_id, event_id) — exactly one sidecar row per
   pair. Missing -> excluded ("no sidecar match"); duplicate -> HALT (SystemExit). `anchored` comes
   only from the joined row; no pooling across runs.
-- `score_experiment()` calls `verify_bundle()` on every sidecar's run directory before joining.
+- `score_experiment()` calls `verify_bundle()` on every sidecar's run directory BEFORE loading
+  sidecar data. Verifies frozen rows' `bundle_digest` against actual `bundle_manifest.json` at
+  grading time — HALT on mismatch.
 
 (b) Written once:
 - The frozen parquet is written ONCE by `freeze()`. No rewrite after.
@@ -4588,7 +4590,8 @@ Next: FWD4. TNF is primary only if FWD4 is verified by Thu 15:00Z.
   `experiment_digest` = sha256(FWD_EXPERIMENT_v1.json), computed before the freeze.
 - `validate()` carries digest columns through the merge.
 
-7 new tests (test_fwd4_item0.py), all fail on 735374bf1. 42 total pass, 0 regressions.
+9 tests (test_fwd4_item0.py): 8 fail on 735374bf1, 1 (altered frozen file) documents existing
+verify() path. 48 total pass, 0 regressions.
 
 ### D247 — the surviving mutations must die (2026-09-30)
 
