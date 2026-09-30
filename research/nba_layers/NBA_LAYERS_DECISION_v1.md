@@ -113,3 +113,30 @@ The backfill stores no snapshot time; the match relies on bookmaker last_update 
 **Gaps.** Hard Rock absent in 2022-23 and 2023-24 (not yet launched). All other 9 books present
 in all seasons. Event counts (1,234-1,274) include some playoff games whose commence_time falls
 in the date range. Rate achieved: 5.6-7.6 calls/s with 4 workers.
+
+### B-D2 — Item 2 data: player props at T-24h and T-1h, 3 seasons (2026-09-30)
+
+Data-facts entry from NBA-D1 work order item 2. No interpretation.
+
+**What was pulled.** Historical event-level odds for 8 player prop markets at two pre-match
+snapshots (T-24h and T-1h before commence_time) per event. Seasons 2024-25, 2025-26, 2023-24.
+Output: `data/odds_archive/nba/history/props/season=<yr>/<event_id>_<T-24h|T-1h>.parquet`.
+
+**Markets (8).** player_points, player_rebounds, player_assists, player_threes,
+player_points_rebounds_assists, player_double_double, player_blocks, player_steals.
+Expected cost = 10 x 8 = 80 per event-snapshot.
+
+**Volume.**
+
+| Season | Events | Calls | Credits (run) | Notes |
+|--------|--------|-------|---------------|-------|
+| 2024   | 1,247  | 2,494 | 127,390       | 9 books in sample (lowvig absent for props) |
+| 2025   | 1,234  | 2,468 | 125,720       | |
+| 2023   | 1,274  | 2,548 | 138,470       | |
+| **Total** | **3,755** | **7,510** | **~391k** | |
+
+**A5 cost check.** First call per season: x-requests-last = 80, as expected. No call exceeded
+10 x 8 = 80 (0 cost violations). Actual per-call average ~51-54 credits — lower than 80, likely
+because not all 8 prop markets are available for every event at every book. Empty-but-charged = 0.
+
+**Gaps.** lowvig absent from props data (not a props book). Hard Rock absent for season 2023 (pre-launch).
