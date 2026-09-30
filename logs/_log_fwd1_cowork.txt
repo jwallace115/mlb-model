@@ -207,6 +207,30 @@
 ### UNVERIFIED
 - The auditor's executed counterexamples were accepted as evidence, not re-run by Cowork.
 
+## 2026-09-30T15:10Z  cowork (verification of FWD3 — D245; order FWD4)
+
+### RETURNED
+- eng/fwd3 @ 735374bf1: 79 tests pass on Linux.
+- Mutations applied by Cowork, with the manifest re-stamped in a temp copy:
+  - caught: sidecar forced anchored; zero-match halt; cross-week dedup; cohort forced all-anchored; no snap
+    participation;
+  - survived: the line cutoff; the pre-write publication halt; run_week --lines-json dropped; the bootstrap made
+    non-resampling.
+- primary_cohort, called directly: cross-run leak -> cohort 1 (should be 0); empty sidecar -> cohort 1 (should HALT).
+- run_forward_v1.py rewrites the frozen parquet after the freeze (adds publication_utc) and rewrites the bundle
+  manifest after the freeze.
+
+### MEANS
+- The freeze side is sound.
+- The scoring anchor join (audit #7 A1) is still broken, even though D243 says otherwise.
+
+### NOT DONE
+- FWD4.
+- FWD2d (the Sunday runbook).
+
+### UNVERIFIED
+- Whether FWD4 is verified by Thu 15:00Z.
+
 ## 2026-09-30T15:35Z  cowork (verification of FWD4 — D248; FWD4b test fix)
 
 ### RETURNED
