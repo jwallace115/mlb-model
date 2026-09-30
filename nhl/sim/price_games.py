@@ -74,6 +74,8 @@ def price_season(season, n_sims, tr, gr, ft, q, base_inp):
             "p_home_m15": round(p_home_m15, 4),
             "p_away_p15": round(p_away_p15, 4),
             "mean_total": round(mean_total, 2),
+            "mean_home_goals": round(float(r["home_score"].mean()), 4),
+            "mean_away_goals": round(float(r["away_score"].mean()), 4),
             "n_sims": N,
             **tot_dist,
         }

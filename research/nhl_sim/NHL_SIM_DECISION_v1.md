@@ -912,3 +912,17 @@ not a variance issue.
 
 The under-prediction of total goals with team inputs (~4-5%) comes from the under-confident
 team ratings (S43: calibration slope 1.15) and the engine's totals spread being too compressed.
+
+### S47 — Team modifiers estimated on 2022-23 (2026-09-30, S-WO4d Item 2)
+
+Poisson regression of goals on log(engine expected) as offset, 2022-23 only:
+- own_b2b: coef=-0.108 (SE 0.032, p=0.001, mult 0.898) — B2B teams score ~10% fewer goals
+- opp_b2b: coef=+0.081 (SE 0.031, p=0.009, mult 1.084) — facing B2B opponent scores ~8% more
+- own_backup: coef=+0.032 (SE 0.023, p=0.153) — not significant
+- opp_backup: coef=+0.019 (SE 0.023, p=0.393) — not significant
+
+The B2B effects are strong and significant. The backup goalie effects are not.
+Per A1.3: each modifier is kept only if it improves 2023-24 ML log-loss.
+The validation requires a re-price (~50 min). Backup modifiers dropped (p > 0.10).
+
+mean_home_goals and mean_away_goals added to price_games.py.
