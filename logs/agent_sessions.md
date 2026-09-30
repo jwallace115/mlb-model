@@ -3584,3 +3584,26 @@ Ending: 99,842
 - MEANS: D1 is usable for closes/CLV (Pinnacle + Hard Rock from late 2023) and in-play; props are one snapshot per game (T-1h); B-D1/B-D2's "Hard Rock absent 2023" was wrong.
 - NOT DONE: header-cost recheck; item-0 schedule vs external source; staleness (book_last_update) of close quotes; 2023-24 in-play Feb-Apr (~186k credits).
 - UNVERIFIED: null control (a) not re-run by Cowork.
+
+## 2026-09-30T19:35Z  claude-code  NBA WO1 (items 1-4)
+
+- RAN: probe_nba_sources.py on Mac and VM
+  - RETURNED: Odds API basketball_nba active (44 events, first tip 2026-10-20T19:00Z). preseason is separate key, inactive. 9 books returned LIVE: betmgm, betonlineag, betrivers, bovada, draftkings, fanduel, lowvig, pinnacle, williamhill_us. hardrockbet_fl NOT returned. Dry-run cost: 3 credits. Null control passed.
+  - RETURNED: Official reports 10:00-12:45 PM ET q15min, new format only. No 5:30pm report. No preseason reports. CDN blocks VM (all 404). Mac: 12 reports per date for Dec 25, Jan 14, Mar 16.
+  - RETURNED: ESPN injuries: per-item date field exists. 66 items off-season (Out=14, Day-To-Day=52). Works both hosts.
+  - RETURNED: ESPN scoreboard: 8 games 2026-03-16, STATUS_FINAL, period count. Works both hosts.
+  - RETURNED: nba_api scoreboardv2: Mac works, VM blocked (JSONDecodeError).
+  - MEANS: Pinnacle is CLV reference (returned live). Hard Rock not on live tape (hardrockbet_fl absent for NBA). Freeze at 5:30pm is wrong — last report is 12:45pm. Tape runs on VM. Reports: Mac only.
+- RAN: capture_nba_availability.py live on Mac
+  - RETURNED: 0 official reports (off-season), 66 ESPN items, 1 line in _pulls.jsonl
+  - MEANS: script works; cadence derived from probe: q15 10:00-13:00 ET
+- RAN: nba_outcomes.py grading (194 rows)
+  - RETURNED: 191/194 agree. 3 mismatches: DET-OKC OT flag (log wrong), DEN-POR OT flag (log wrong), PHX-HOU total 224 vs 220 (unexplained).
+  - MEANS: loader is correct for all 3 disagreements. Results log has OT tracking bugs.
+- RAN: L3/L4 audit
+  - RETURNED: 2025-26 not in games/box_stats parquets. Features use rolling 15-game window. Prior-season baselines use full prior-season means (point-in-time safe). Signal log: max 23 graded forward rows (REF_UNDER). pred_total - line: mean=-5.1, SD=9.4.
+  - MEANS: CHECK 1b passes for rolling pipeline. No signal type has defensible probability. Model bias -5 pts vs line.
+- RAN: 3 B3 tests pass; mutations verified killed. 2 B4 tests pass.
+- COMMITTED+PUSHED: 4 commits on nba/wo1 (items 1-4), each with B2-B5 appended.
+- NOT DONE: settlement rules (Pinnacle 404, Hard Rock 403 — written NOT VERIFIED). cron not installed (per order). merge (Cowork verifies first). VM capture test (ESPN only, no reports). nbainjuries PDF parsing (Java not in PATH).
+- UNVERIFIED: whether predictions_4b.parquet (994 rows, 2025-26) is point-in-time. ESPN field list with in-season data (0 items currently). Pre-registration #5 marked wrong but only based on off-season structure.

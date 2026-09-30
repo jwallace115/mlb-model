@@ -319,3 +319,58 @@ would give 250 — test_ot_game_total_includes_ot catches this (asserts total=26
 **Settlement rules.** Pinnacle (`pinnacle.com/en/betting-rules/basketball`) and Hard Rock
 (`hardrockbet.com/sports/rules`) both return HTTP 404/403 from Mac and VM. **NOT VERIFIED** —
 settlement rules could not be fetched programmatically from any host. Do not state a rule from memory.
+
+### B5 — L3 and L4 as they stand (2026-09-30)
+
+Audit only; no code change to the live pipeline.
+
+**L3 (a): data coverage.**
+
+| File | Rows | Cols | Date range | Seasons |
+|------|------|------|-----------|---------|
+| games.parquet | 3,690 | 9 | 2022-10-18 to 2025-04-13 | 2022-23, 2023-24, 2024-25 |
+| box_stats.parquet | 7,380 | 17 | same | same |
+| features.parquet | 3,690 | 48 | same | same |
+| h1_features.parquet | 3,690 | 53 | same | same |
+| predictions_4b.parquet | 994 | 44 | 2025-10-21 to 2026-03-13 | 2025-26 |
+| sim_results_4b.parquet | 994 | 54 | same | 2025-26 |
+| nba_daily_projections.parquet | 279 | 90 | 2026-03-14 to 2026-06-19 | — |
+| nba_results_log.parquet | 194 | 40 | 2026-03-14 to 2026-04-12 | — |
+| nba_signal_log.parquet | 92 | 18 | 2026-03-24 to 2026-05-30 | — |
+
+**2025-26 regular season NOT stored** in games.parquet or box_stats.parquet. Pre-registration HELD.
+`run_nba.py:_build_current_team_states` fetches 2025-26 box stats live via `fetch_box_stats()` and
+merges with historical box_stats.parquet. Features are rolling (15-game window, `.shift(1)`), not
+full-season. Prior-season baselines use full 2024-25 means (complete by season start, so point-in-time
+safe). `nba/modules/features.py:75:_build_prior_season_baselines` — `.groupby(["team","season"]).mean()`.
+No full-season aggregate for the current season found; CHECK 1b passes for the rolling pipeline.
+
+However: `predictions_4b.parquet` and `sim_results_4b.parquet` contain 994 rows of 2025-26 predictions
+(Oct 21 - Mar 13). These were computed by `phase4b.py`, which uses the same rolling features.
+Whether these are point-in-time depends on when they were built; if rebuilt after the season,
+they would incorporate data not available at prediction time. Not verified here.
+
+**L4 (b): signal log forward analysis** (all 92 rows are after commit date 2026-03-22).
+
+| Signal type | n | Graded | Units |
+|-------------|---|--------|-------|
+| OREB_CONFIRMS | 35 | 7 | +1.91 |
+| REF_UNDER | 31 | 23 | +0.68 |
+| BALANCED_vs_PASSIVE | 12 | 2 | -1.50 |
+| ROAD_WARRIOR_at_STRONG_HOME | 9 | 9 | +2.32 |
+| NO_SIGNAL | 5 | 0 | — |
+
+Every signal type has fewer than 30 graded forward rows. Pre-registration HELD.
+None has a defensible probability from 9 or fewer graded observations.
+
+**Projection residuals** (forward, pred_total vs recorded line, n=131):
+pred_total - line: mean=-5.1, SD=9.4 (model systematically 5 pts below line).
+pred_total - actual: mean=-8.1, SD=21.4. Line - actual: mean=-3.0, SD=18.9.
+
+**B5 records:** on 2026-10-20, each layer honestly contributes:
+- **L3:** source = ESPN scoreboard (VM) + nba_api cross-check (Mac). The as-of rule for rolling
+  features is games completed before the prediction date; `_build_current_team_states` enforces
+  this by filtering `date < game_date`. For the 2025-26 season, live API provides box stats;
+  no historical file stores them yet.
+- **L4:** direction votes only, with n stated (max 9 graded forward rows for ROAD_WARRIOR).
+  No signal type has evidence for a probability; the venue board is not baseline (b).
