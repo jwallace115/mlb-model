@@ -158,3 +158,26 @@
 
 ### UNVERIFIED
 - The MNF week-4 game and kick time (FWD2c derives it from the tape).
+
+## 2026-09-30T10:30Z  cowork (verification of FWD2c — D238; merge of eng/fwd2; primary count starts at week-4 TNF)
+
+### RETURNED
+- eng/fwd2 @ bcbd8f494. 55 tests pass on Linux. The dry merge into main is clean.
+- test_live_freeze_no_pilot runs main(["--week","3"]) with no pilot and no as-of. The rows are canonical, pilot False,
+  with bundle prices.
+- ratings.py writes params only with --write-params.
+- Settlement: GSIS->PFR id, END GAME check, unresolved when there are no snaps. The week-3 re-grade settles 2,025
+  rows (40 VOID).
+- The week-3 pilot diagnostic: Δ +0.0148, n=162, CI -0.0039 to +0.0341.
+- make_runbook.py: VM_SLOTS apply every day, and Sunday is one 12 h window run at 13:11Z.
+
+### MEANS
+- The forward path is sound for TNF.
+- The Sunday runbook would HALT the main slate, or freeze it before inactives. It is fixed before Sunday (FWD2d).
+
+### NOT DONE
+- FWD2d (Sunday runbook).
+- The capture_status sha log at the first freeze.
+
+### UNVERIFIED
+- Whether the Thu 22:00Z VM props slot fires on 10-01. The TNF dry run and the live run print the source age.

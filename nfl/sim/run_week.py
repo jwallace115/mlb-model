@@ -904,29 +904,54 @@ def main():
     parser.add_argument("--week", type=int, default=None)
     parser.add_argument("--as-of", type=str, default=None,
                         help="UTC ISO timestamp cap for line snapshots (default: now)")
+    parser.add_argument("--lines-json", type=str, default=None,
+                        help="D229: JSON dict of {game_id: {spread, total}} — skip tape read")
+    parser.add_argument("--games", type=str, default=None,
+                        help="D229: comma-separated game_ids to simulate (e.g. CAR@KC,DEN@BUF)")
     args = parser.parse_args()
 
     t0 = time.time()
+    as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
 
     week, week_games, completed = detect_week(override=args.week)
     print(f"Detected upcoming week: {week}")
     print(f"Completed games: {len(completed)}")
 
-    week_teams = set()
-    week_matchups = set()
-    if len(week_games) > 0:
-        week_teams = set(week_games["home_team"]) | set(week_games["away_team"])
+    # D229: if --lines-json provided, use it directly instead of reading the tape
+    if args.lines_json:
+        raw_lines = json.loads(args.lines_json)
+        all_lines = {}
+        for gid, ln in raw_lines.items():
+            parts = gid.split("@")
+            all_lines[gid] = {
+                "home": parts[1] if len(parts) == 2 else gid,
+                "away": parts[0] if len(parts) == 2 else gid,
+                "spread": float(ln["spread"]),
+                "total": float(ln["total"]),
+                "source": ln.get("source", "bundle"),
+            }
+    else:
+        week_teams = set()
+        week_matchups = set()
+        if len(week_games) > 0:
+            week_teams = set(week_games["home_team"]) | set(week_games["away_team"])
 
-    # If PBP doesn't have the week's games, use nflverse schedule
-    if not week_teams:
-        week_teams, week_matchups = get_week_teams_from_schedule(SEASON, week)
+        # If PBP doesn't have the week's games, use nflverse schedule
+        if not week_teams:
+            week_teams, week_matchups = get_week_teams_from_schedule(SEASON, week)
 
-    if week_teams:
-        print(f"Week {week} teams from schedule: {len(week_teams)}")
+        if week_teams:
+            print(f"Week {week} teams from schedule: {len(week_teams)}")
 
-    as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
-    all_lines = get_lines_from_history(as_of=as_of_ts)
-    if week_matchups:
+        all_lines = get_lines_from_history(as_of=as_of_ts)
+    # D229: --games restricts to specific game_ids
+    if args.games:
+        game_filter = set(g.strip() for g in args.games.split(","))
+        lines = {k: v for k, v in all_lines.items() if k in game_filter}
+    elif args.lines_json:
+        # --lines-json already contains exactly the games to sim
+        lines = all_lines
+    elif week_matchups:
         # Filter by exact matchups (away, home pairs)
         lines = {k: v for k, v in all_lines.items()
                  if (v["away"], v["home"]) in week_matchups}

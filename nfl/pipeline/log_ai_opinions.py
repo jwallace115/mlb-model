@@ -162,11 +162,26 @@ def newest_inputs(season, now, props_file=None, lines_file=None):
         props = props[props["pull_timestamp"].map(parse_utc) <= now]
         newest = props.groupby("event_id")["pull_timestamp"].transform("max")
         props = props[props["pull_timestamp"] == newest]
-    lf = [Path(lines_file)] if lines_file else sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))[-1:]
+    lf = [Path(lines_file)] if lines_file else sorted((LINES_DIR / f"season={season}").glob("snap_*.parquet"))
     if not lf:
         raise SystemExit("HALT: no game-line snapshots for the season")
-    lines = pd.read_parquet(lf[0])
-    return props, lines[lines["snapshot_utc"] == lines["snapshot_utc"].max()]
+    if lines_file:
+        # D225: bundle already filtered to newest snapshot ≤ T
+        lines = pd.read_parquet(lf[0])
+        return props, lines[lines["snapshot_utc"] == lines["snapshot_utc"].max()]
+    # D225: filter to newest snapshot ≤ T (was: newest regardless of now)
+    best_lines = None
+    for f in reversed(lf):
+        df = pd.read_parquet(f)
+        if df.empty:
+            continue
+        snap_t = parse_utc(df["snapshot_utc"].iloc[0])
+        if snap_t <= now:
+            best_lines = df
+            break
+    if best_lines is None:
+        raise SystemExit("HALT: no game-line snapshot ≤ now")
+    return props, best_lines[best_lines["snapshot_utc"] == best_lines["snapshot_utc"].max()]
 
 
 def validate(sheet, filled):
@@ -271,14 +286,49 @@ def prior_revisions(d, reader_model=None, pilot=None):
     return seen
 
 
-def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None):
+def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
+           board_root=None, run_id=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
     written on every row and into the manifest - the reader is part of the research object."""
     if not reader_model or not str(reader_model).strip():
         raise SystemExit("HALT: --reader-model is required (the model that made these picks)")
+    # D224(c): canonicalize reader string (strip whitespace)
+    reader_model = str(reader_model).strip()
     d = d or out_dir(season, week)
+    # D224a: cross-week dedup for canonical (non-pilot) reader.
+    # A contract already frozen in ANY week directory (including current) is refused.
+    if not pilot:
+        board_root = board_root or SPORTS[SPORT]["out"]
+        contracts = [(r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                     for _, r in filled.iterrows()]
+        dupes = []
+        contract_set = set(contracts)
+        for wd in sorted(board_root.glob(f"week={season}_*/ai_opinions")):
+            manifest_path = wd / "manifest.json"
+            if not manifest_path.exists():
+                continue
+            manifest = json.loads(manifest_path.read_text())
+            for entry in manifest:
+                rm = entry.get("reader_model", "legacy")
+                if rm != reader_model or entry.get("pilot", False):
+                    continue
+                f = wd / entry["file"]
+                if not f.exists():
+                    continue
+                try:
+                    edf = pd.read_parquet(f, columns=KEY)
+                except Exception:
+                    continue
+                for _, r in edf.iterrows():
+                    key = (r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                    if key in contract_set:
+                        dupes.append((key, wd.parent.name))
+        if dupes:
+            raise SystemExit(
+                f"HALT: {len(dupes)} contract(s) already frozen (cross-week dedup):\n"
+                + "\n".join(f"  {c} in {w}" for c, w in dupes[:10]))
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):
         raise SystemExit(f"HALT: {late['event_id'].nunique()} game(s) in the sheet have kicked off - nothing is frozen")
@@ -291,6 +341,9 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None):
     m["sport"], m["book"] = SPORT, BOOK
     m["reader_model"] = str(reader_model).strip()
     m["logged_utc"] = now.isoformat()
+    # D230: run_id links frozen rows to their sim run's bundle
+    if run_id is not None:
+        m["run_id"] = run_id
     dest = d / f"ai_opinions_{now.strftime('%Y%m%dT%H%M%SZ')}.parquet"
     if dest.exists():
         raise SystemExit(f"HALT: {dest.name} exists - the log is append-only")
@@ -328,19 +381,65 @@ STAT_OF = {"player_receptions": ("rec", "actual_rec"), "player_reception_yds": (
 GAP_BUCKETS = [(-1, 0.03, "<0.03"), (0.03, 0.08, "0.03-0.08"), (0.08, 9, ">0.08")]
 
 
+def _load_snap_participants(season):
+    """D236: load snap counts from nflreadpy. Returns {game_id: {"pfr_ids": set, "names": set}}
+    where a player played = offense_snaps + st_snaps > 0.
+    Returns None if snap data is unavailable for the season."""
+    try:
+        import nflreadpy
+        sc = nflreadpy.load_snap_counts([season])
+        if hasattr(sc, "to_pandas"):
+            sc = sc.to_pandas()  # polars -> pandas
+        if sc.empty:
+            return None
+    except Exception:
+        return None
+    # played = offense + special teams snaps > 0
+    sc["_played"] = (sc["offense_snaps"].fillna(0) + sc["st_snaps"].fillna(0)) > 0
+    played = sc[sc["_played"]]
+    result = {}
+    for gid, gdf in played.groupby("game_id"):
+        result[gid] = {
+            "pfr_ids": set(gdf["pfr_player_id"].dropna().str.strip().values),
+            "names": set(gdf["player"].str.strip().values),
+        }
+    return result
+
+
+def _build_gsis_to_pfr(season):
+    """D236(b): GSIS ID -> PFR ID crosswalk from nflverse roster."""
+    try:
+        import nflreadpy
+        roster = nflreadpy.load_rosters([season])
+        if hasattr(roster, "to_pandas"):
+            roster = roster.to_pandas()
+        if roster.empty:
+            return {}
+    except Exception:
+        return {}
+    valid = roster[roster["gsis_id"].notna() & roster["pfr_id"].notna()]
+    return dict(zip(valid["gsis_id"].str.strip(), valid["pfr_id"].str.strip()))
+
+
 def _game_actuals(pbp, home, away):
-    """Actual per-player stats and the final score for one game, from the repo's own PBP reader."""
+    """Actual per-player stats and the final score for one game, from the repo's own PBP reader.
+    D236(c): returns None for incomplete games (no END GAME row)."""
     from nfl.sim.actuals import actual_player_game_stats
     from nfl.sim.names import FULL_TO_ABBR
     h, a = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
     g = pbp[(pbp["home_team"] == h) & (pbp["away_team"] == a)]
     if g.empty:
         return None
+    # D236(c): completed-game check
+    completed = g["desc"].str.contains("END GAME", case=False, na=False).any()
+    if not completed:
+        return None
     rec, rush, td, pas = actual_player_game_stats(g)
     tabs = {"rec": rec, "rush": rush, "td": td, "pass": pas}
     ints = g[g["play_type"] == "pass"].groupby("passer_player_id")["interception"].sum()
     return {"tabs": tabs, "ints": ints, "home_pts": float(g["home_score"].max()),
-            "away_pts": float(g["away_score"].max()), "home": h, "away": a, "n_plays": len(g)}
+            "away_pts": float(g["away_score"].max()), "home": h, "away": a,
+            "n_plays": len(g)}
 
 
 def _cfbd_actuals(season):
@@ -363,8 +462,9 @@ def _cfbd_actuals(season):
     return game
 
 
-def _first_side_won(row, act, pid):
-    """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved."""
+def _first_side_won(row, act, pid, snap_played=None):
+    """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved / VOID.
+    D230: snap_played is a tri-state: True (played), False (VOID), None (snap data unavailable = unresolved)."""
     mk, line = row["market_key"], float(row["line"])
     if mk == "h2h":
         return 1 if act["home_pts"] > act["away_pts"] else (0 if act["home_pts"] < act["away_pts"] else None)
@@ -376,6 +476,11 @@ def _first_side_won(row, act, pid):
         return None if t == line else int(t > line)
     if pid is None:
         return None
+    # D236(a): snap-count participation check
+    if snap_played is False:
+        return None  # VOID: player did not play (not in snap counts)
+    if snap_played is None:
+        return None  # UNRESOLVED: no snap data for this game
     if mk == "player_pass_interceptions":
         v = float(act["ints"].get(pid, 0.0))
     else:
@@ -418,6 +523,10 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
     else:
         pbp = pd.read_parquet(pbp_path or ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
         lk = _build_roster_lookup(load_roster(), season, week)
+    # D236: load snap-count participants and GSIS->PFR crosswalk
+    snap_parts = _load_snap_participants(season)
+    gsis_to_pfr = _build_gsis_to_pfr(season)
+    n_id_match = n_name_match = 0
     rows = []
     for (home, away), s in m.groupby(["home_team", "away_team"]):
         if pbp is None:
@@ -425,15 +534,45 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
         else:
             act = _game_actuals(pbp, home, away)
         teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
+        h_abbr, a_abbr = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
+        nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
+        game_snap = snap_parts.get(nfl_game_id) if snap_parts else None
         for _, r in s.iterrows():
+            settlement = "settled"
             if act is None:
                 y, pid, method = None, None, "game not in PBP"
+                settlement = "unresolved"
             elif r["player_name"]:
                 pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
-                y = _first_side_won(r, act, pid)
+                # D236(b): match by player ID (GSIS -> PFR), fall back to name
+                if game_snap is None:
+                    snap_played = None
+                else:
+                    pfr_id = gsis_to_pfr.get(pid) if pid else None
+                    if pfr_id and pfr_id in game_snap["pfr_ids"]:
+                        snap_played = True
+                        n_id_match += 1
+                    elif r["player_name"].strip() in game_snap["names"]:
+                        snap_played = True
+                        n_name_match += 1
+                    else:
+                        snap_played = False
+                y = _first_side_won(r, act, pid, snap_played=snap_played)
+                if y is None and pid is not None:
+                    if snap_played is False:
+                        settlement = "void"
+                    elif snap_played is None:
+                        settlement = "unresolved"
+                    else:
+                        settlement = "unresolved"  # push or stat missing
+                elif y is None:
+                    settlement = "unresolved"
             else:
                 pid, method, y = None, "game", _first_side_won(r, act, None)
-            rows.append({**r.to_dict(), "player_id": pid, "resolve": method, "y_first": y})
+                if y is None:
+                    settlement = "unresolved"
+            rows.append({**r.to_dict(), "player_id": pid, "resolve": method,
+                         "y_first": y, "settlement": settlement})
     out = pd.DataFrame(rows)
     out["graded"] = out["y_first"].notna()
     out["side_won"] = np.where(out["side"] == "first", out["y_first"] == 1,
@@ -536,13 +675,299 @@ def brier_(p, y):
     return float(np.mean((np.asarray(p, float) - np.asarray(y, float)) ** 2))
 
 
+# ── D227: primary cohort and scoring ─────────────────────────────────────────
+
+ELIGIBLE_MARKETS = {"player_receptions", "player_rush_attempts"}
+COHORT_PREDICATE = (
+    "reader == canonical, non-pilot, first freeze of contract (revision 0), "
+    "tag sim_v1, two_way, market in {player_receptions, player_rush_attempts}, "
+    "game anchored per bundle, settled (not void or unresolved)"
+)
+
+
+def primary_cohort(scored_df, canonical_reader, anchor_sidecar_df=None):
+    """D227: filter scored rows to the primary experiment cohort.
+
+    Returns (cohort_df, exclusions) where exclusions is a dict of reason -> count.
+    """
+    df = scored_df.copy()
+    n_start = len(df)
+    exclusions = {}
+
+    def _exclude(mask, reason):
+        n = int(mask.sum())
+        if n > 0:
+            exclusions[reason] = n
+        return ~mask
+
+    # Reader == canonical, non-pilot
+    keep = _exclude(df["reader_model"] != canonical_reader, "reader != canonical")
+    keep &= _exclude(df["pilot"].astype(bool), "pilot")
+    # First freeze (revision 0)
+    keep &= _exclude(df["revision"] != 0, "revision > 0")
+    # Tag sim_v1
+    keep &= _exclude(df["tag"] != "sim_v1", "tag != sim_v1")
+    # Two-way
+    keep &= _exclude(~df["two_way"].astype(bool), "not two_way")
+    # Market in eligible set
+    keep &= _exclude(~df["market_key"].isin(ELIGIBLE_MARKETS), "market not eligible")
+    # Game anchored per bundle
+    if anchor_sidecar_df is not None and not anchor_sidecar_df.empty:
+        anchored_games = set(
+            anchor_sidecar_df[anchor_sidecar_df["anchored"]]["game"])
+        # Build game_id from the scored rows
+        from nfl.sim.names import FULL_TO_ABBR
+        df["_game_id"] = df.apply(
+            lambda r: f"{FULL_TO_ABBR.get(r['away_team'], r['away_team'])}@"
+                      f"{FULL_TO_ABBR.get(r['home_team'], r['home_team'])}", axis=1)
+        keep &= _exclude(~df["_game_id"].isin(anchored_games), "game not anchored")
+        df = df.drop(columns=["_game_id"], errors="ignore")
+    # Settled (not void or unresolved)
+    if "settlement" in df.columns:
+        keep &= _exclude(df["settlement"] != "settled", "not settled")
+    else:
+        keep &= _exclude(~df["graded"], "not graded")
+
+    cohort = df[keep].copy()
+    exclusions["_total_excluded"] = n_start - len(cohort)
+    return cohort, exclusions
+
+
+def primary_statistic(cohort_df, n_bootstrap=50000, seed=20261004):
+    """D227: Δ = mean[(p-y)^2 - (q-y)^2], whole-game bootstrap.
+
+    Returns dict with n_legs, n_games, delta, ci_lo, ci_hi, verdict.
+    """
+    if cohort_df.empty:
+        return {"n_legs": 0, "n_games": 0, "delta": None,
+                "ci_lo": None, "ci_hi": None, "verdict": "insufficient data"}
+
+    from nfl.sim.names import FULL_TO_ABBR
+    df = cohort_df.copy()
+    df["_game_id"] = df.apply(
+        lambda r: f"{FULL_TO_ABBR.get(r['away_team'], r['away_team'])}@"
+                  f"{FULL_TO_ABBR.get(r['home_team'], r['home_team'])}", axis=1)
+
+    p = df["p_first"].values.astype(float)
+    q = df["book_p_first"].values.astype(float)
+    y = df["y_first"].values.astype(float)
+    games = df["_game_id"].values
+
+    # Point estimate
+    delta_leg = (p - y) ** 2 - (q - y) ** 2
+    delta = float(np.mean(delta_leg))
+
+    # Whole-game bootstrap
+    unique_games = np.unique(games)
+    n_games = len(unique_games)
+    rng = np.random.RandomState(seed)
+    deltas = np.empty(n_bootstrap)
+    game_indices = {g: np.where(games == g)[0] for g in unique_games}
+
+    for b in range(n_bootstrap):
+        sampled_games = rng.choice(unique_games, size=n_games, replace=True)
+        idx = np.concatenate([game_indices[g] for g in sampled_games])
+        deltas[b] = np.mean(delta_leg[idx])
+
+    ci_lo, ci_hi = float(np.percentile(deltas, 2.5)), float(np.percentile(deltas, 97.5))
+
+    if ci_hi < 0:
+        verdict = "superior"  # model Brier < book Brier
+    elif ci_lo > 0:
+        verdict = "inferior"
+    else:
+        verdict = "inconclusive"
+
+    return {
+        "n_legs": len(df), "n_games": n_games,
+        "delta": round(delta, 6), "ci_lo": round(ci_lo, 6), "ci_hi": round(ci_hi, 6),
+        "verdict": verdict,
+    }
+
+
+def score_experiment(experiment, canonical_reader, season=2026, include_pilot=False,
+                     single_file=None):
+    """D230: score an experiment across all week directories.
+
+    Pools ALL frozen files for the canonical reader, joins each row to its run's anchor
+    sidecar (by run_id + event_id), runs primary_cohort and primary_statistic.
+    """
+    from nfl.sim.names import load_roster, _build_roster_lookup, resolve_player, FULL_TO_ABBR
+
+    board_root = SPORTS["nfl"]["out"]
+    all_scored = []
+
+    if single_file:
+        # Score one file regardless of revision, labelled as diagnostic
+        f = Path(single_file)
+        if not f.exists():
+            raise SystemExit(f"HALT: file {single_file} not found")
+        m = pd.read_parquet(f).assign(_file=f.name)
+        if "reader_model" not in m.columns:
+            m["reader_model"] = "unknown"
+        # Find the week from the path or data
+        week = int(m["week"].iloc[0]) if "week" in m.columns else 0
+        pbp_path = ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet"
+        if not pbp_path.exists():
+            raise SystemExit(f"HALT: PBP file {pbp_path} not found")
+        pbp = pd.read_parquet(pbp_path)
+        lk = _build_roster_lookup(load_roster(), season, week)
+        snap_parts = _load_snap_participants(season)
+        gsis_to_pfr = _build_gsis_to_pfr(season)
+        rows = []
+        for (home, away), s in m.groupby(["home_team", "away_team"]):
+            act = _game_actuals(pbp, home, away)
+            teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
+            h_abbr, a_abbr = teams
+            nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
+            game_snap = snap_parts.get(nfl_game_id) if snap_parts else None
+            for _, r in s.iterrows():
+                settlement = "settled"
+                if act is None:
+                    y, pid, method = None, None, "game not in PBP"
+                    settlement = "unresolved"
+                elif r["player_name"]:
+                    pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
+                    if game_snap is None:
+                        snap_played = None
+                    else:
+                        pfr_id = gsis_to_pfr.get(pid) if pid else None
+                        if pfr_id and pfr_id in game_snap["pfr_ids"]:
+                            snap_played = True
+                        elif r["player_name"].strip() in game_snap["names"]:
+                            snap_played = True
+                        else:
+                            snap_played = False
+                    y = _first_side_won(r, act, pid, snap_played=snap_played)
+                    if y is None and pid is not None:
+                        settlement = "void" if snap_played is False else "unresolved"
+                    elif y is None:
+                        settlement = "unresolved"
+                else:
+                    pid, method, y = None, "game", _first_side_won(r, act, None)
+                    settlement = "unresolved" if y is None else "settled"
+                rows.append({**r.to_dict(), "player_id": pid, "resolve": method,
+                             "y_first": y, "settlement": settlement})
+        scored = pd.DataFrame(rows)
+        scored["graded"] = scored["y_first"].notna()
+        scored["side_won"] = np.where(scored["side"] == "first", scored["y_first"] == 1,
+                                       np.where(scored["side"] == "second", scored["y_first"] == 0, False))
+        dec = scored["side_price"].map(lambda a: (a / 100 + 1) if pd.notna(a) and a > 0 else (100 / -a + 1) if pd.notna(a) else np.nan)
+        scored["units"] = np.where(scored["side"] == "none", 0.0,
+                                    np.where(scored["graded"], np.where(scored["side_won"], dec - 1, -1.0), 0.0))
+        print(f"[DIAGNOSTIC — NOT THE RECORD: {f.name}]")
+        print(f"  Total rows: {len(scored)}, graded: {scored['graded'].sum()}")
+        # D236(e): compute Δ for sim_v1 rows directly (ignore pilot/revision)
+        sim_rows = scored[(scored["tag"] == "sim_v1") & scored["graded"]]
+        if "book_p_first" in sim_rows.columns and len(sim_rows) > 0:
+            diag_stat = primary_statistic(sim_rows)
+            print(f"  sim_v1 settled: {len(sim_rows)} legs, {diag_stat['n_games']} games")
+            print(f"  Δ = {diag_stat['delta']:.6f}" if diag_stat['delta'] is not None else "  Δ = n/a")
+            if diag_stat['ci_lo'] is not None:
+                print(f"  95% CI: [{diag_stat['ci_lo']:.6f}, {diag_stat['ci_hi']:.6f}]")
+            print(f"  Verdict: {diag_stat['verdict']}")
+            # P2
+            big = sim_rows[sim_rows["gap"].abs() > 0.08]
+            if len(big) > 0:
+                p2_units = big["units"].sum()
+                print(f"  P2 (|p-q|>0.08): {len(big)} legs, units = {p2_units:+.2f}")
+        all_scored.append(scored)
+    else:
+        # Pool ALL week directories
+        for wd in sorted(board_root.glob("week=*_*/ai_opinions")):
+            week_str = wd.parent.name.split("_")[-1]
+            try:
+                week = int(week_str)
+            except ValueError:
+                continue
+            scored = score(season, week, d=wd, include_pilot=include_pilot)
+            all_scored.append(scored)
+
+    if not all_scored:
+        raise SystemExit("HALT: no scored data found")
+    pooled = pd.concat(all_scored, ignore_index=True)
+
+    # Load anchor sidecars from bundles (by run_id + event_id)
+    all_sidecars = []
+    for wd in sorted(board_root.glob("week=*_*/sim_runs/*/anchor_sidecar.parquet")):
+        run_id = wd.parent.name
+        sc = pd.read_parquet(wd)
+        sc["run_id"] = run_id
+        all_sidecars.append(sc)
+    # Also check ai_opinions directories for sidecars
+    for wd in sorted(board_root.glob("week=*_*/ai_opinions/anchor_sidecar_sim_v1.parquet")):
+        sc = pd.read_parquet(wd)
+        if "run_id" not in sc.columns:
+            sc["run_id"] = "legacy"
+        all_sidecars.append(sc)
+    sidecar_df = pd.concat(all_sidecars, ignore_index=True) if all_sidecars else pd.DataFrame()
+
+    # Join: each cohort row must have a matching sidecar row
+    if "run_id" in pooled.columns and not sidecar_df.empty:
+        # join on run_id is available
+        pass
+    elif not sidecar_df.empty:
+        # Legacy: no run_id, use game-level join
+        pass
+
+    cohort, exclusions = primary_cohort(pooled, canonical_reader, anchor_sidecar_df=sidecar_df)
+
+    # Print cohort predicate and exclusions
+    print(f"\nCohort predicate: {COHORT_PREDICATE}")
+    print(f"\nExclusions:")
+    for reason, count in sorted(exclusions.items()):
+        if reason != "_total_excluded":
+            print(f"  {reason}: {count}")
+    print(f"  TOTAL excluded: {exclusions.get('_total_excluded', 0)}")
+    print(f"  Cohort: {len(cohort)} legs")
+
+    if cohort.empty:
+        print("\nInsufficient data for primary statistic.")
+        return
+
+    stat = primary_statistic(cohort)
+    print(f"\nPrimary statistic (Δ = mean[(p-y)² - (q-y)²]):")
+    print(f"  Δ = {stat['delta']:.6f}")
+    print(f"  95% CI: [{stat['ci_lo']:.6f}, {stat['ci_hi']:.6f}]")
+    print(f"  Verdict: {stat['verdict']}")
+    print(f"  n_legs = {stat['n_legs']}, n_games = {stat['n_games']}")
+
+    # P2: units at frozen Hard Rock price, |p-q| > 0.08, settled only
+    if "book_p_first" in cohort.columns and "side_price" in cohort.columns:
+        p2 = cohort[cohort["gap"].abs() > 0.08].copy()
+        if len(p2) > 0:
+            dec = p2["side_price"].map(lambda a: (a / 100 + 1) if pd.notna(a) and a > 0 else (100 / -a + 1) if pd.notna(a) else np.nan)
+            p2_units = np.where(p2["side"] == "none", 0.0,
+                                np.where(p2["graded"], np.where(p2["side_won"], dec - 1, -1.0), 0.0))
+            print(f"\nP2 (|p-q| > 0.08, settled): {len(p2)} legs, units = {float(np.sum(p2_units)):+.2f}")
+        else:
+            print("\nP2: no legs with |p-q| > 0.08")
+
+    # Breakouts
+    for col in ["market_key", "week"]:
+        if col in cohort.columns:
+            grp = cohort.groupby(col).agg(n=("units", "size"),
+                                            won=("side_won", "sum"),
+                                            units=("units", "sum")).round(2)
+            print(f"\nBreakout by {col}:")
+            print(grp.to_string())
+
+    if "gap" in cohort.columns:
+        cohort["_gap_bucket"] = pd.cut(cohort["gap"].abs(), [0, 0.03, 0.08, 9],
+                                        labels=["<0.03", "0.03-0.08", ">0.08"], right=False)
+        grp = cohort.groupby("_gap_bucket", observed=True).agg(
+            n=("units", "size"), won=("side_won", "sum"), units=("units", "sum")).round(2)
+        print(f"\nBreakout by gap bucket:")
+        print(grp.to_string())
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["sheet", "freeze", "verify", "score"])
+    ap.add_argument("cmd", choices=["sheet", "freeze", "verify", "score", "score-experiment"])
     ap.add_argument("--sport", choices=list(SPORTS), default="nfl")
     ap.add_argument("--book", default=None, help="override the sport's book of record")
     ap.add_argument("--season", type=int, default=2026)
-    ap.add_argument("--week", type=int, required=True)
+    ap.add_argument("--week", type=int, default=None)
     ap.add_argument("--out"), ap.add_argument("--filled")
     ap.add_argument("--props-file"), ap.add_argument("--lines-file")
     ap.add_argument("--events", help="comma list of team-name fragments; default every pre-kick game")
@@ -551,6 +976,8 @@ def main():
     ap.add_argument("--reader-model", help="REQUIRED for freeze (N62): the model that made the picks, e.g. claude-fable-5-1")
     ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
     ap.add_argument("--as-of", help="UTC ISO timestamp (pilot only); errors without --pilot")
+    ap.add_argument("--experiment", help="experiment id for score-experiment")
+    ap.add_argument("--file", help="score one file (diagnostic mode)")
     a = ap.parse_args()
     if a.as_of and not a.pilot:
         sys.exit("HALT: --as-of requires --pilot")
@@ -579,6 +1006,8 @@ def main():
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":
+        if a.week is None:
+            sys.exit("HALT: --week is required for score")
         entries, bad, unlisted = verify(a.season, a.week)
         if bad or unlisted:
             sys.exit(f"HALT: manifest check failed before scoring: {bad or unlisted}")
@@ -588,7 +1017,20 @@ def main():
         if a.out:
             Path(a.out).write_text(text)
             out.to_parquet(Path(a.out).with_suffix(".parquet"), index=False)
-    else:
+    elif a.cmd == "score-experiment":
+        if not a.experiment:
+            sys.exit("HALT: --experiment is required for score-experiment")
+        # Load canonical reader from the experiment manifest
+        em_path = ROOT / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
+        if not em_path.exists():
+            sys.exit(f"HALT: experiment manifest not found: {em_path}")
+        em = json.loads(em_path.read_text())
+        canonical = em.get("canonical_reader", "")
+        score_experiment(a.experiment, canonical, season=a.season,
+                        include_pilot=a.include_pilot, single_file=a.file)
+    elif a.cmd == "verify":
+        if a.week is None:
+            sys.exit("HALT: --week is required for verify")
         entries, bad, unlisted = verify(a.season, a.week)
         print(f"{len(entries)} frozen file(s); hash mismatch/missing: {bad or 'none'}; not in manifest: {unlisted or 'none'}")
         if bad or unlisted:

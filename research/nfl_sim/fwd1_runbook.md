@@ -1,74 +1,113 @@
-# FWD1 Runbook — NFL sim v1 forward test, week 4 commands
+# FWD1 Runbook — NFL sim v1 forward test, weeks 4-5
 
 Reader model: `nfl_sim_v1_156cd057`
+Generated: 2026-09-30T09:32:19Z
 
-## Week 4 kick windows
+## Measured runtimes (D231)
+- Sim: ~30s per game
+- Input refresh: ~9 min (pull_nflverse 6s + ratings.py ~8min)
+- IMPORTANT: ratings.py overwrites params_v1.json — always `git checkout nfl/sim/params_v1.json` after
 
-### TNF PIT@CLE — Thu 2026-10-02 00:15Z (Thu 8:15 PM ET)
-
+## Input refresh (ONCE per week, Wednesday)
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2
+cd ~/mlb-model
+python3 nfl/sim/pull_nflverse_inputs.py
+python3 nfl/sim/ratings.py
+git checkout nfl/sim/params_v1.json
+python3 -m pytest nfl/sim/tests/test_freeze_v1.py -q  # must pass
 ```
 
-Run at **23:30Z Thu 10-01** (7:30 PM ET).
-Newest HR props pull: the VM's Thu 22:00Z slot (~1.5 h old). OK.
+## Week 4
 
-### London IND@WAS — Sun 2026-10-04 13:30Z (9:30 AM ET)
-
-```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 1.5
-```
-
-Run at **12:45Z Sun 10-04** (8:45 AM ET).
-Newest HR props pull: the VM's Sat 14:00Z mid slot (~23 h old) — there is no Sunday slot before 15:00Z.
-The sim and the book are compared at the same (stale) price, so the forward test stays fair; the prices are
-not what Hard Rock shows at kick. The file records `source_age_min`.
-
-### Sunday 1 PM + 4 PM + SNF — Sun 2026-10-04 17:00Z / 20:05Z / 20:25Z / Mon 00:20Z
+### PIT@CLE — Fri 2026-10-02 00:15Z (Thu 8:15 PM ET)
+Games: PIT@CLE
 
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 9
+python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2.0
 ```
 
-Run at **16:15Z Sun 10-04** (12:15 PM ET).
-Newest HR props pull: ~16:00Z (15 min old). OK.
-The 9-hour window covers 17:00Z through 01:15Z, capturing all Sunday and SNF games.
+Latest safe start: **Fri 2026-10-02 00:02Z** (Thu 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Thu (~0.3h old at run time)
 
-### MNF — Mon 2026-10-06 00:15Z+ (Mon 8:15 PM ET)
+### Sunday main + SNF (14 games) — Sun 2026-10-04 [13:30Z, 17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 9:30 AM ET+)
+Games: IND@WAS, TEN@BAL, NE@BUF, NYJ@CHI, JAX@CIN, DAL@HOU, ARI@NYG, LA@PHI, GB@TB, MIA@MIN, KC@LV, LAC@SEA, DEN@SF, DET@CAR
 
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2
+python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 12.0
 ```
 
-Run at **23:55Z Mon 10-05** (7:55 PM ET) — AFTER the VM's Mon 23:45Z MNF props slot lands (it fired on 09-28:
-newest pull 2026-09-28T23:45:08Z). Run at 23:30Z instead and the newest pull is Sunday 16:00Z (~31 h old).
-Check the sheet's printed source age before trusting the run; if it is over 3 h, the 23:45Z pull has not landed.
+Latest safe start: **Sun 2026-10-04 13:11Z** (Sun 9:11 AM ET)
+Runtime: 14 games × 30s = 7 min + 9 min refresh + 3 min margin
+VM props slot: 02:00Z Sun (~11.2h old at run time)
+**STALE**: VM slot is 11.2h old (> 3.0h). Manual pull required:
+```bash
+python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
+  --out-dir data/odds_archive/nfl/props/season=2026/manual
+```
+Credit cost: ~10 per event × 1 region = 10 credits
+
+### ATL@NO — Tue 2026-10-06 00:15Z (Mon 8:15 PM ET)
+Games: ATL@NO
+
+```bash
+python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2.0
+```
+
+Latest safe start: **Tue 2026-10-06 00:02Z** (Mon 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Mon (~0.3h old at run time)
+
+## Week 5
+
+### TB@DAL — Fri 2026-10-09 00:15Z (Thu 8:15 PM ET)
+Games: TB@DAL
+
+```bash
+python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2.0
+```
+
+Latest safe start: **Fri 2026-10-09 00:02Z** (Thu 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Thu (~0.3h old at run time)
+
+### Sunday main + SNF (13 games) — Sun 2026-10-11 [13:30Z, 17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 9:30 AM ET+)
+Games: PHI@JAX, CIN@MIA, LV@NE, MIN@NO, CLE@NYJ, IND@PIT, HOU@TEN, NYG@WAS, CHI@GB, DEN@LAC, DET@ARI, SF@SEA, BAL@ATL
+
+```bash
+python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 12.0
+```
+
+Latest safe start: **Sun 2026-10-11 13:11Z** (Sun 9:11 AM ET)
+Runtime: 13 games × 30s = 6 min + 9 min refresh + 3 min margin
+VM props slot: 02:00Z Sun (~11.2h old at run time)
+**STALE**: VM slot is 11.2h old (> 3.0h). Manual pull required:
+```bash
+python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
+  --out-dir data/odds_archive/nfl/props/season=2026/manual
+```
+Credit cost: ~10 per event × 1 region = 10 credits
+
+### BUF@LA — Tue 2026-10-13 00:15Z (Mon 8:15 PM ET)
+Games: BUF@LA
+
+```bash
+python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2.0
+```
+
+Latest safe start: **Tue 2026-10-13 00:02Z** (Mon 8:02 PM ET)
+Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
+VM props slot: 23:45Z Mon (~0.3h old at run time)
 
 ## Scoring
 
-### At 500 scored two-way legs (estimated: ~week 7-8)
-
 ```bash
-# Score each week individually
-for w in 3 4 5 6 7; do
-  python3 nfl/pipeline/log_ai_opinions.py score --week $w \
-    --out research/nfl_sim/fwd1_score_w${w}.md
-done
+python3 nfl/pipeline/log_ai_opinions.py score-experiment --experiment nfl_fwd_v1
 ```
-
-The report filters by reader_model; cumulative P1/P2 is the sim's Brier and units
-across all weeks at reader_model = nfl_sim_v1_156cd057.
-
-### At 1,500 scored two-way legs (estimated: ~week 12-13)
-
-Same commands with extended week range.
 
 ## Notes
 
-- **Anchor rule (D210):** a game whose final anchored mean misses the market by > 1.0
-  point on margin OR total is "unanchored"; its props are scored but reported separately.
-- **Game lines (h2h, spreads, totals):** always no_view (the sim is market-anchored).
-- **Pilot files:** never pooled; only included with `--include-pilot`.
-- **Props slots (VM, WO12 deploy):** Tue 14:00 open; Wed-Sat 14:00 and Tue-Sat 02:00 mid; Thu 22:00 (TNF);
-  Sun 15:00 and 16:00 close; Mon 23:45 (MNF). Corrected by Cowork (D222): the FWD1b runbook's pull times for
-  TNF, London and MNF were wrong.
+- **Anchor rule (D210):** game whose anchored mean misses market by > 1.0 pt = unanchored, reported separately.
+- **Game lines (h2h, spreads, totals):** always no_view (sim is market-anchored).
+- **Pilot files:** never pooled; only with `--include-pilot`.
+- **500 legs = descriptive; 1,500 legs = confirmatory.**
