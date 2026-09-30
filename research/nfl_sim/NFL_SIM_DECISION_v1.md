@@ -4173,3 +4173,29 @@ Test: `test_anchor_sidecar_halts_without_lines` — empty dict raises SystemExit
 The anchoring log must exist; main() HALTs without it. The sidecar is written to
 `bundle_dir/anchor_sidecar.parquet` before the freeze, then also copied to the
 opinions dir for backward compat.
+
+### D227 — FWD2 Item 3: eligibility, settlement, scoring (A1, A7, Q3) (2026-09-30)
+
+**(a) Settlement — player participation check** (log_ai_opinions.py:416-445).
+`_game_actuals` now returns a `participants` set of all player_ids appearing in
+any play of the game. `_first_side_won` checks whether the resolved player_id is
+in the set; if not, returns None (VOID, Hard Rock's rule) instead of treating as 0.
+`score()` now produces a `settlement` column: settled / void / unresolved.
+Test: `test_inactive_player_void` — inactive player's Under is VOID, not a win.
+Test: `test_active_player_zero_receptions` — active player with 0 rec scores normally.
+
+**(b) Primary cohort predicate** (log_ai_opinions.py:618-663 `primary_cohort`).
+One predicate, one function. Filters: reader == canonical, non-pilot, revision 0,
+tag sim_v1, two_way, market in {player_receptions, player_rush_attempts}, game
+anchored per bundle sidecar, settled (not void/unresolved). Reports every exclusion
+by reason.
+Test: `test_cohort_excludes_wrong_reader`, `test_cohort_excludes_unanchored_game`.
+
+**(c) Primary statistic** (log_ai_opinions.py:666-706 `primary_statistic`).
+Δ = mean[(p-y)² - (q-y)²] with q = de-vig. Whole-game bootstrap, 50,000 resamples,
+seed 20261004. Verdict: superior (ci_hi < 0), inferior (ci_lo > 0), inconclusive.
+500 legs descriptive, 1,500 confirmatory.
+
+**(d) FWD_EXPERIMENT_v1.json re-stamped** (last step). Updated file hashes for
+run_forward_v1.py and log_ai_opinions.py. All 31 tests pass including
+test_experiment_file_hashes.

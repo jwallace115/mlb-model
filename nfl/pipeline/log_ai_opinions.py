@@ -379,7 +379,8 @@ GAP_BUCKETS = [(-1, 0.03, "<0.03"), (0.03, 0.08, "0.03-0.08"), (0.08, 9, ">0.08"
 
 
 def _game_actuals(pbp, home, away):
-    """Actual per-player stats and the final score for one game, from the repo's own PBP reader."""
+    """Actual per-player stats and the final score for one game, from the repo's own PBP reader.
+    D227: includes participants set — all player_ids in any play of the game."""
     from nfl.sim.actuals import actual_player_game_stats
     from nfl.sim.names import FULL_TO_ABBR
     h, a = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
@@ -389,8 +390,14 @@ def _game_actuals(pbp, home, away):
     rec, rush, td, pas = actual_player_game_stats(g)
     tabs = {"rec": rec, "rush": rush, "td": td, "pass": pas}
     ints = g[g["play_type"] == "pass"].groupby("passer_player_id")["interception"].sum()
+    # D227: collect all player_ids that appeared in any play (participation check)
+    pid_cols = [c for c in g.columns if c.endswith("_player_id")]
+    participants = set()
+    for c in pid_cols:
+        participants.update(g[c].dropna().unique())
     return {"tabs": tabs, "ints": ints, "home_pts": float(g["home_score"].max()),
-            "away_pts": float(g["away_score"].max()), "home": h, "away": a, "n_plays": len(g)}
+            "away_pts": float(g["away_score"].max()), "home": h, "away": a,
+            "n_plays": len(g), "participants": participants}
 
 
 def _cfbd_actuals(season):
@@ -414,7 +421,8 @@ def _cfbd_actuals(season):
 
 
 def _first_side_won(row, act, pid):
-    """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved."""
+    """1 if the FIRST side of the line happened, 0 if not, None for a push / unresolved / VOID.
+    D227: a player who did not play (not in participants) -> None (VOID, Hard Rock's rule)."""
     mk, line = row["market_key"], float(row["line"])
     if mk == "h2h":
         return 1 if act["home_pts"] > act["away_pts"] else (0 if act["home_pts"] < act["away_pts"] else None)
@@ -426,6 +434,10 @@ def _first_side_won(row, act, pid):
         return None if t == line else int(t > line)
     if pid is None:
         return None
+    # D227: player participation check — inactive -> VOID (None), not 0
+    participants = act.get("participants", set())
+    if participants and pid not in participants:
+        return None  # VOID: player did not play
     if mk == "player_pass_interceptions":
         v = float(act["ints"].get(pid, 0.0))
     else:
@@ -476,14 +488,28 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
             act = _game_actuals(pbp, home, away)
         teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
         for _, r in s.iterrows():
+            settlement = "settled"
             if act is None:
                 y, pid, method = None, None, "game not in PBP"
+                settlement = "unresolved"
             elif r["player_name"]:
                 pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
                 y = _first_side_won(r, act, pid)
+                # D227: distinguish void (inactive) from unresolved
+                if y is None and pid is not None:
+                    participants = act.get("participants", set())
+                    if participants and pid not in participants:
+                        settlement = "void"
+                    else:
+                        settlement = "unresolved"
+                elif y is None:
+                    settlement = "unresolved"
             else:
                 pid, method, y = None, "game", _first_side_won(r, act, None)
-            rows.append({**r.to_dict(), "player_id": pid, "resolve": method, "y_first": y})
+                if y is None:
+                    settlement = "unresolved"
+            rows.append({**r.to_dict(), "player_id": pid, "resolve": method,
+                         "y_first": y, "settlement": settlement})
     out = pd.DataFrame(rows)
     out["graded"] = out["y_first"].notna()
     out["side_won"] = np.where(out["side"] == "first", out["y_first"] == 1,
@@ -584,6 +610,116 @@ def score_report(out, season, week):
 
 def brier_(p, y):
     return float(np.mean((np.asarray(p, float) - np.asarray(y, float)) ** 2))
+
+
+# ── D227: primary cohort and scoring ─────────────────────────────────────────
+
+ELIGIBLE_MARKETS = {"player_receptions", "player_rush_attempts"}
+COHORT_PREDICATE = (
+    "reader == canonical, non-pilot, first freeze of contract (revision 0), "
+    "tag sim_v1, two_way, market in {player_receptions, player_rush_attempts}, "
+    "game anchored per bundle, settled (not void or unresolved)"
+)
+
+
+def primary_cohort(scored_df, canonical_reader, anchor_sidecar_df=None):
+    """D227: filter scored rows to the primary experiment cohort.
+
+    Returns (cohort_df, exclusions) where exclusions is a dict of reason -> count.
+    """
+    df = scored_df.copy()
+    n_start = len(df)
+    exclusions = {}
+
+    def _exclude(mask, reason):
+        n = int(mask.sum())
+        if n > 0:
+            exclusions[reason] = n
+        return ~mask
+
+    # Reader == canonical, non-pilot
+    keep = _exclude(df["reader_model"] != canonical_reader, "reader != canonical")
+    keep &= _exclude(df["pilot"].astype(bool), "pilot")
+    # First freeze (revision 0)
+    keep &= _exclude(df["revision"] != 0, "revision > 0")
+    # Tag sim_v1
+    keep &= _exclude(df["tag"] != "sim_v1", "tag != sim_v1")
+    # Two-way
+    keep &= _exclude(~df["two_way"].astype(bool), "not two_way")
+    # Market in eligible set
+    keep &= _exclude(~df["market_key"].isin(ELIGIBLE_MARKETS), "market not eligible")
+    # Game anchored per bundle
+    if anchor_sidecar_df is not None and not anchor_sidecar_df.empty:
+        anchored_games = set(
+            anchor_sidecar_df[anchor_sidecar_df["anchored"]]["game"])
+        # Build game_id from the scored rows
+        from nfl.sim.names import FULL_TO_ABBR
+        df["_game_id"] = df.apply(
+            lambda r: f"{FULL_TO_ABBR.get(r['away_team'], r['away_team'])}@"
+                      f"{FULL_TO_ABBR.get(r['home_team'], r['home_team'])}", axis=1)
+        keep &= _exclude(~df["_game_id"].isin(anchored_games), "game not anchored")
+        df = df.drop(columns=["_game_id"], errors="ignore")
+    # Settled (not void or unresolved)
+    if "settlement" in df.columns:
+        keep &= _exclude(df["settlement"] != "settled", "not settled")
+    else:
+        keep &= _exclude(~df["graded"], "not graded")
+
+    cohort = df[keep].copy()
+    exclusions["_total_excluded"] = n_start - len(cohort)
+    return cohort, exclusions
+
+
+def primary_statistic(cohort_df, n_bootstrap=50000, seed=20261004):
+    """D227: Δ = mean[(p-y)^2 - (q-y)^2], whole-game bootstrap.
+
+    Returns dict with n_legs, n_games, delta, ci_lo, ci_hi, verdict.
+    """
+    if cohort_df.empty:
+        return {"n_legs": 0, "n_games": 0, "delta": None,
+                "ci_lo": None, "ci_hi": None, "verdict": "insufficient data"}
+
+    from nfl.sim.names import FULL_TO_ABBR
+    df = cohort_df.copy()
+    df["_game_id"] = df.apply(
+        lambda r: f"{FULL_TO_ABBR.get(r['away_team'], r['away_team'])}@"
+                  f"{FULL_TO_ABBR.get(r['home_team'], r['home_team'])}", axis=1)
+
+    p = df["p_first"].values.astype(float)
+    q = df["book_p_first"].values.astype(float)
+    y = df["y_first"].values.astype(float)
+    games = df["_game_id"].values
+
+    # Point estimate
+    delta_leg = (p - y) ** 2 - (q - y) ** 2
+    delta = float(np.mean(delta_leg))
+
+    # Whole-game bootstrap
+    unique_games = np.unique(games)
+    n_games = len(unique_games)
+    rng = np.random.RandomState(seed)
+    deltas = np.empty(n_bootstrap)
+    game_indices = {g: np.where(games == g)[0] for g in unique_games}
+
+    for b in range(n_bootstrap):
+        sampled_games = rng.choice(unique_games, size=n_games, replace=True)
+        idx = np.concatenate([game_indices[g] for g in sampled_games])
+        deltas[b] = np.mean(delta_leg[idx])
+
+    ci_lo, ci_hi = float(np.percentile(deltas, 2.5)), float(np.percentile(deltas, 97.5))
+
+    if ci_hi < 0:
+        verdict = "superior"  # model Brier < book Brier
+    elif ci_lo > 0:
+        verdict = "inferior"
+    else:
+        verdict = "inconclusive"
+
+    return {
+        "n_legs": len(df), "n_games": n_games,
+        "delta": round(delta, 6), "ci_lo": round(ci_lo, 6), "ci_hi": round(ci_hi, 6),
+        "verdict": verdict,
+    }
 
 
 def main():
