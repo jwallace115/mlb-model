@@ -1,0 +1,8 @@
+{
+ "events.parquet": "f435a3facd3f51f8502a407286f17ad9f5615791a4dfb9e6599400c8bed06b52",
+ "props.parquet": "24e79e1d2d10a1caf93ca7e7b1d05aa6c9c678dc5d75ab7cdd71be473ddb4ca9",
+ "lines.parquet": "c7b2370ea20e6065e1811d01dca7359ab83d83396af8fc4aeefebb5f0cdb61e1",
+ "freshness.json": "59c85170e8d0189d9ce4d51d4b7318d988514312e8890470d7f55cb483bb4032",
+ "pilot": false,
+ "allow_stale_quotes": true
+}
