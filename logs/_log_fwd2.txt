@@ -20,33 +20,63 @@
   6 tests in test_fwd2_experiment.py. On 145a1fee0: FileNotFoundError / ImportError.
 - Committed 50131ec39, pushed.
 
-### NOT DONE (remaining items)
+---
+
+## 2026-09-30T00:25Z — 2026-09-30T00:49Z  claude-code  FWD2 items 0-fix, 1, 2, 3
+
+### RETURNED
+
+**Item 0 fixes (D224a) — 4 gaps from Cowork check:**
+- e0ccb441b pushed. 7 tests in test_fwd2_item0_fixes.py, 6/7 fail on 9eb505235.
+  (1) Cross-week dedup enforced inside freeze() (log_ai_opinions.py:285-316), all weeks.
+  (2) Zero sim matches: explicit HALT (run_forward_v1.py:269-270).
+  (3) Cal-stamp + usage fingerprint check added to main() (run_forward_v1.py:222-232).
+  (4) Whitespace reader test rewritten to call freeze() (was a tautology).
 
 **Item 1 (D225) — immutable run bundle:**
-- Build a per-run bundle directory with sha256 manifest
-- Event list, HR props (newest <= T from archive + manual/), HR game lines (newest <= T)
-- Input freshness table (run ratings/usage builders, check max week >= W-1)
-- fill_sheet match on (event, player_id, market, line)
-- Quote-age HALT if any prop > 3h old at T
-- validate() compares filled sheet prices to bundle prices
-- Publication time != T; HALT if publication >= first kick
-- Test: week-2-into-week-4 cross-event counterexample
+- dfc8d44af pushed. 5 tests in test_fwd2_bundle.py, 4/5 fail on 9eb505235.
+  build_bundle(): events, props, lines, freshness at cutoff T in sim_runs/<run_id>/.
+  Props: archive + manual/, HR only, newest pull <= T. Lines: newest snapshot <= T.
+  fill_sheet: match key now (game_id, player_name, market_key, line).
+  newest_inputs: lines filtered by snap_t <= now (was: newest regardless).
+  Quote-age HALT > 3h. Publication-time guard. main() restructured.
 
 **Item 2 (D226) — anchor record:**
-- Fix sidecar sign (targets from lines, not reconstructed)
-- Bundle must contain sidecar BEFORE freeze
-- Test: CAR@ATL targets == -3.0/43.5 exactly
+- 9315ba6d4 pushed. 3 tests in test_fwd2_anchor.py, 3/3 fail on 9eb505235.
+  anchor_sidecar: requires actual lines dict, HALTs without. Columns renamed to
+  target_spread/target_total. CAR@ATL targets = -3.0/43.5 (was -3.2572/43.9996).
+  lines_dict_from_bundle(). Sidecar mandatory, written to bundle before freeze.
 
 **Item 3 (D227) — eligibility, settlement, scoring:**
-- Settlement: event_id -> game_id, completed game, player participation (VOID for inactive)
-- Primary cohort predicate
-- Brier difference with 50,000-resample whole-game bootstrap
-- Secondary P2
-- Re-grade AI blind-log weeks 2-3
-- Rewrite runbook for weeks 4-5
-- Dry run --week 4
+- a7f1cd66f pushed. 6 tests in test_fwd2_settlement.py, 5/6 fail on 9eb505235.
+  _game_actuals: participants set from PBP player_id columns.
+  _first_side_won: inactive player -> VOID (None), not 0. score(): settlement column.
+  primary_cohort(): one predicate, one function, reports exclusions.
+  primary_statistic(): delta_brier, 50k game bootstrap, seed 20261004.
+  FWD_EXPERIMENT_v1.json re-stamped (2 file hashes updated).
+
+All 31 tests pass: test_freeze_v1 (4) + test_fwd2_experiment (6) +
+test_fwd2_item0_fixes (7) + test_fwd2_bundle (5) + test_fwd2_anchor (3) +
+test_fwd2_settlement (6).
+
+### NOT DONE
+
+- Re-grade AI blind-log weeks 2-3 under new settlement rule (reporting only)
+- Rewrite fwd1_runbook.md for weeks 4-5 with correct weekday labels
+- London Sunday pull command and credit cost
+- --dry-run --week 4 end to end on new path
+- Secondary P2 (units at frozen HR price on |p-q| > 0.08)
+- Breakouts by family, week, gap bucket, anchor status
+- Input freshness builders: ratings/usage/tendency runtime not measured
+- validate() comparison of filled sheet prices to bundle not implemented
 
 ### UNVERIFIED
-- Whether the experiment manifest hashes are stable across the remaining edits (they will
-  change as items 1-3 modify run_forward_v1.py and log_ai_opinions.py — the manifest must
-  be rebuilt as the LAST step of the final item).
+
+- Whether build_bundle correctly reads from both archive and manual/ directories
+  (tested by inspection, not by a fixture with both sources)
+- Whether the 3h quote-age HALT fires correctly on real data
+- Whether the anchor sidecar's lines_dict_from_bundle correctly parses spread sign
+  for all team name formats (tested only on CAR@ATL)
+- Whether the settlement void check correctly identifies inactive players via PBP
+  participation (the participants set is all _player_id columns, which may include
+  non-participants in certain play types)
