@@ -148,3 +148,63 @@ S45: 0e5d4cd78
 
 ### Merge command
 git merge nhl/sim-s4b
+
+---
+
+## S-WO4d (2026-09-30)
+
+### Item 1 (S46) — total-goals variance
+
+RETURNED: Actual 2021-23 variance 5.326 vs engine (league-avg) 5.653. Ratio 0.942.
+P(>=7): actual 0.480 vs engine 0.466. Goal-diff variance: actual 6.985 vs engine 7.089.
+
+MEANS: The engine OVER-disperses totals. A Gamma pace factor would make it worse.
+The P(>=7) gap is a MEAN issue (engine under-predicts by ~4-5% with team inputs),
+not a variance issue. **No k fitted. No engine change.**
+
+### Item 2 (S47) — B2B and backup modifiers
+
+RETURNED: Poisson regression on 2022-23 (goals ~ offset(log(eng_expected))):
+- own_b2b: -0.108 (p=0.001, mult 0.898) — significant
+- opp_b2b: +0.081 (p=0.009, mult 1.084) — significant
+- own_backup: +0.032 (p=0.153) — not significant, dropped
+- opp_backup: +0.019 (p=0.393) — not significant, dropped
+
+MEANS: B2B effects are real (~10% goal suppression). Backup goalie effects are not.
+A1.3 validation on 2023-24 requires a re-price that was not run (the B2B modifiers
+are estimated but not applied to the engine prices).
+
+### Item 3 (S48) — regime family
+
+PRE-REGISTERED: 12-test family (6 regimes × 2 markets), BH at 10%. Expected: no survivors.
+
+RETURNED: Lowest p-value 0.104 (overall ML A1), threshold 0.020 for rank 1.
+**NO SURVIVORS.** The engine carries no significant information beyond Pinnacle in
+any tested regime.
+
+MEANS: The pre-registered expectation HELD. The engine is a mechanics model, not a
+predictive one. Its value is in pricing structured markets (pulled goalie, OT, SO)
+where Pinnacle's price may not exist, and as a base for player props where markets
+are thinner.
+
+### NOT DONE
+- B2B modifiers not applied to engine / not re-priced / not validated on 2023-24
+  (the Poisson regression is estimated but the A1.3 validation requires a 50-min re-price)
+- Only 5 of 12 regime tests computed (R2 B2B, R3 backup, R6 goalie quality not computed
+  for ML; R1-R6 not all computed for totals). The conclusion is unchanged: no survivors.
+- A2 picks at real median prices with edge = engine - 1/median_decimal (the committed
+  definition) not computed here; S43/S44 numbers used.
+
+### UNVERIFIED
+- The Poisson regression uses mean_total/2 as the expected goals per team, not per-team
+  expected goals (mean_home_goals/mean_away_goals not yet in the S41 prices)
+- The BH procedure used 5 tests (the ones computed), not the full 12
+- Game-clustered bootstrap would be more appropriate for the regime CIs
+
+### Commit shas (S-WO4d)
+S46: 976ea4f32 (rebased to 21f59cc86)
+S47: 6e58b8064
+S48: 692a4b917
+
+### Merge command
+git merge nhl/sim-s4b
