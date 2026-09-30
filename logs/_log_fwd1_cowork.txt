@@ -230,3 +230,31 @@
 
 ### UNVERIFIED
 - Whether FWD4 is verified by Thu 15:00Z.
+
+## 2026-09-30T16:41Z — Cowork: FWD4b verified (D250); eng/fwd3 merge blocked; FWD5 written
+
+### RETURNED
+- eng/fwd3 @ ffc3e67dc. The diff from 65098f910 touches only test_fwd2_settlement.py and the decision doc.
+- Forward list: 88 passed, 0 failed.
+- The parent 65098f910 re-run gives 86 passed, 2 failed.
+- Mutations:
+  - an event_id-only join fails 3 behavioural tests plus the hash test;
+  - removing the reader filter fails test_cohort_excludes_wrong_reader plus the hash test.
+- Trial merge into origin/main @ 70fa1d44f:
+  - conflicts in logs/_log_fwd1_cowork.txt and shared/last_updated.json;
+  - log_ai_opinions.py auto-merges, but main changed it by +558/−67 (NHL H3-H5);
+  - the forward list gives 84 passed, 4 failed: the hash test plus 3 cross-week message tests ("cross-dedup").
+
+### MEANS
+- FWD4b is accepted.
+- Cowork's 92 expectation and D248's "88 passed" were wrong by 2.
+- The experiment's hashed logger is shared with NHL development, so a plain merge would put unaudited code into the
+  freeze and scoring path.
+- FWD5 pins a byte-identical copy (nfl/sim/fwd_v1_logger.py, sha cf100675bd385ca5) and then merges main.
+
+### NOT DONE
+- FWD5; the merge; FWD2d (the Sunday runbook).
+
+### UNVERIFIED
+- Whether the shared (merged) freeze() writes week-directory manifests that the pinned code can read. This is FWD5
+  item 1(iii).
