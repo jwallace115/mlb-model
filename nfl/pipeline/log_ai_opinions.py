@@ -271,7 +271,8 @@ def prior_revisions(d, reader_model=None, pilot=None):
     return seen
 
 
-def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None):
+def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
+           board_root=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
@@ -281,6 +282,38 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None):
     # D224(c): canonicalize reader string (strip whitespace)
     reader_model = str(reader_model).strip()
     d = d or out_dir(season, week)
+    # D224a: cross-week dedup for canonical (non-pilot) reader.
+    # A contract already frozen in ANY week directory (including current) is refused.
+    if not pilot:
+        board_root = board_root or SPORTS[SPORT]["out"]
+        contracts = [(r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                     for _, r in filled.iterrows()]
+        dupes = []
+        contract_set = set(contracts)
+        for wd in sorted(board_root.glob(f"week={season}_*/ai_opinions")):
+            manifest_path = wd / "manifest.json"
+            if not manifest_path.exists():
+                continue
+            manifest = json.loads(manifest_path.read_text())
+            for entry in manifest:
+                rm = entry.get("reader_model", "legacy")
+                if rm != reader_model or entry.get("pilot", False):
+                    continue
+                f = wd / entry["file"]
+                if not f.exists():
+                    continue
+                try:
+                    edf = pd.read_parquet(f, columns=KEY)
+                except Exception:
+                    continue
+                for _, r in edf.iterrows():
+                    key = (r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                    if key in contract_set:
+                        dupes.append((key, wd.parent.name))
+        if dupes:
+            raise SystemExit(
+                f"HALT: {len(dupes)} contract(s) already frozen (cross-week dedup):\n"
+                + "\n".join(f"  {c} in {w}" for c, w in dupes[:10]))
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):
         raise SystemExit(f"HALT: {late['event_id'].nunique()} game(s) in the sheet have kicked off - nothing is frozen")

@@ -4093,3 +4093,34 @@ halts via test_freeze_v1. Zero sim matches: existing fill_sheet assert (line 99)
 before the revision lookup. Cross-week dedup (run_forward_v1.py:53-79 cross_week_check):
 for reader nfl_sim_v1_156cd057, non-pilot, a contract already frozen in ANY week directory
 is refused. Test: test_cross_week_dedup.
+
+### D224a — FWD2 Item 0 fixes: four gaps from Cowork check (2026-09-30)
+
+Cowork check (fwd2_item0_check_2026-09-30.md) found four gaps in D224. All four fixed
+with tests that fail on 9eb505235.
+
+**(1) Cross-week dedup enforced in freeze()** (log_ai_opinions.py:285-316). D224 defined
+`cross_week_check` in run_forward_v1.py but never called it. The check is now inside
+`freeze()` itself, for non-pilot readers, scanning ALL week directories including the
+current one. A duplicate contract raises SystemExit before anything is written.
+`board_root` parameter added to `freeze()` for testability.
+Tests: `test_cross_week_dedup_freeze_different_week`, `test_cross_week_dedup_freeze_same_week`.
+
+**(2) Zero sim matches HALT** (run_forward_v1.py:269-270). D224's claim that `assert
+n_sim_v1 == n_matched` catches zero matches was wrong: 0 == 0 passes. Explicit
+`if n_matched == 0: sys.exit(...)` added after fill_sheet, before dry-run exit.
+Test: `test_zero_matches_halt` (inspect.getsource check + fill_sheet verification).
+
+**(3) Cal-stamp + usage fingerprint check in harness** (run_forward_v1.py:222-232).
+D224 claimed cal-stamp was covered by test_freeze_v1, but test_freeze_v1 checks the
+calibration FILE hash, not the calibration STAMP (_check_calibration_stamp, which
+compares engine+usage fingerprints). Harness now imports and calls both, HALTs on
+mismatch.
+Tests: `test_cal_stamp_check_in_harness`, `test_cal_stamp_tampered_usage`.
+
+**(4) Whitespace reader refused by freeze()** (log_ai_opinions.py:282-283 strip +
+285-316 dedup). D224's test_reader_whitespace_refused asserted
+`padded.strip() == canonical` — a tautology that never called freeze(). The new test
+calls freeze() with `" nfl_sim_v1_156cd057 "` after a canonical freeze of the same
+contract; the strip makes it a duplicate, and the cross-week dedup refuses it.
+Test: `test_whitespace_reader_refused_by_freeze`.

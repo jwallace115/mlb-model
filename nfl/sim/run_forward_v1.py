@@ -218,7 +218,21 @@ def main(freeze_json_path=None):
     print("    PASS", flush=True)
     # D224(b): experiment manifest check
     check_experiment_manifest()
-    print("    Experiment manifest: OK\n", flush=True)
+    print("    Experiment manifest: OK", flush=True)
+    # D224a: calibration stamp + usage fingerprint check
+    from nfl.sim.run_week import _check_calibration_stamp
+    from nfl.sim.calibration import usage_fingerprint
+    stamp_ok, stamp_mismatches = _check_calibration_stamp()
+    if not stamp_ok:
+        sys.exit("HALT: calibration stamp mismatch:\n" +
+                 "\n".join(f"  {m}" for m in stamp_mismatches))
+    print("    Calibration stamp: OK", flush=True)
+    m = json.loads(EXPERIMENT_MANIFEST.read_text())
+    live_usage = usage_fingerprint()
+    if live_usage != m.get("usage_fingerprint"):
+        sys.exit(f"HALT: usage fingerprint mismatch: live={live_usage}, "
+                 f"manifest={m.get('usage_fingerprint')}")
+    print("    Usage fingerprint: OK\n", flush=True)
 
     # D215(c): common flags for sheet and freeze
     common_flags = []
@@ -265,6 +279,10 @@ def main(freeze_json_path=None):
         filled, n_matched = fill_sheet(sheet_df, picks_log)
         n_two_way = int(filled["two_way"].sum()) if "two_way" in filled else 0
         print(f"    Matched {n_matched} / {n_two_way} two-way prop rows\n", flush=True)
+
+        # D224a: HALT on zero sim matches — 0 == 0 passes the fill_sheet assert
+        if n_matched == 0:
+            sys.exit("HALT: zero sim matches — nothing to freeze")
 
         # D221: dry-run prints summary and stops before freeze
         if a.dry_run:
