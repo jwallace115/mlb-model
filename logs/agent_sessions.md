@@ -3639,3 +3639,17 @@ Ending: 99,842
 - COMMITTED+PUSHED: 2 commits on nba/wo1 (B6, B7 appended to decision doc).
 - NOT DONE: cron installation (per order). merge (Cowork verifies). Hard Rock NBA key re-check closer to opening night.
 - UNVERIFIED: whether Hard Rock posts NBA lines under `hardrockbet` or `hardrockbet_fl` (no NBA lines posted today). VM ESPN capture test not re-run (capture script unchanged for ESPN).
+
+## 2026-09-30T20:30Z  claude-code  NBA WO1+1b merge + cron prep
+
+- RAN: pre-merge PDF check — downloaded Injury-Report_2026-03-16_05_30PM.pdf (85,478 bytes, sha256=6e99dbd3...) and _11_45PM.pdf (91,570 bytes, sha256=1c163890...). pdftotext confirms timestamps "05:30 PM" and "11:45 PM" — valid PDFs, different timestamps.
+  - RETURNED: both valid, different sizes and sha256, different timestamps inside.
+  - MEANS: B6's corrected URL format produces real distinct reports at afternoon/evening times.
+- RAN: git merge --no-ff origin/nba/wo1 into main. Two conflicts resolved: logs/agent_sessions.md (both sides kept in time order), probe_nba_sources.py (kept branch version with corrected 12-hour URLs). research/nba_layers/ staged including legacy_review_2026-09-30/ and wo1_verification addendum.
+- PUSHED: merge to main (8 commits rebased, preserving merge).
+- RAN: capture_nba_availability.py once by hand.
+  - RETURNED: 0 official reports (off-season, no game today), 66 ESPN injury items. One line written to _pulls.jsonl: feed=espn_injuries, rows=66, sha256=295da73e..., status=ok.
+  - MEANS: capture script works end-to-end on the Mac.
+- CRON LINE (NOT installed): `*/15 10-23 * * * /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /Users/jw115/mlb-model/nba/pipeline/capture_nba_availability.py >> /Users/jw115/mlb-model/logs/nba_availability.log 2>&1`
+- NOT DONE: cron installation (Jeff installs). VM capture run (official reports Mac-only; ESPN unchanged). Hard Rock NBA key re-check closer to Oct 20.
+- UNVERIFIED: whether the capture script's ESPN dedup hash correctly skips identical content on a second run within the same cron window (tested in unit test but not in this live run — only one run executed).
