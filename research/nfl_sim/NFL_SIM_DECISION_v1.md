@@ -4361,3 +4361,20 @@ Defects:
 - The pilot diagnostic never produced a Δ.
 
 Next: FWD2c. The TNF gate is Thu 20:00Z.
+
+### D234 — FWD2c Item 0: live mode, proven (2026-09-30)
+
+**(a) Live tests.** test_pilot_fixture_freeze (renamed from test_live_freeze_completes).
+test_live_freeze_no_pilot: main() with NO --pilot, NO --as-of, kick = now + 2h, pull =
+now − 30 min. Frozen rows have pilot==False and canonical reader. Prices match bundle.
+test_live_stale_quotes_halt: 4h-old quotes HALT on quote age, nothing frozen.
+
+**(b) --allow-stale-quotes with --dry-run** (run_forward_v1.py:480). Allowed with
+--pilot OR --dry-run, never a live freeze. build_bundle quote-age check updated.
+
+**(c) Week 4 dry run COMPLETED** (live mode, no --pilot).
+`run_forward_v1.py --week 4 --dry-run --window-hours 60 --allow-stale-quotes`
+Bundle: 1 event (PIT@CLE), 64 props, 6 lines. Sheet: 67/42 two-way. Sim: 1/1 converged,
+21s. Matched: 11/42 (9 rec + 2 rush). Sidecar: 0 unanchored. Tags: no_view 56, sim_v1 11.
+
+test_freeze_v1: 4 passed.

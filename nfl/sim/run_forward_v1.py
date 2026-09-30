@@ -172,11 +172,11 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
         props_age = props.groupby("event_id")["pull_timestamp"].first().map(
             lambda t: (T - _parse_utc(t)).total_seconds() / 3600)
         oldest = props_age.max()
-        if oldest > QUOTE_MAX_AGE_H and not (pilot and allow_stale_quotes):
+        if oldest > QUOTE_MAX_AGE_H and not allow_stale_quotes:
             raise SystemExit(
                 f"HALT: props pull is {oldest:.1f}h old for event "
                 f"{props_age.idxmax()} (max allowed: {QUOTE_MAX_AGE_H}h). "
-                f"Pilot may override with --allow-stale-quotes.")
+                f"Use --allow-stale-quotes with --pilot or --dry-run.")
 
     # ── freshness ──
     freshness = {"cutoff_T": T.isoformat(), "run_id": run_id}
@@ -477,8 +477,9 @@ def main(argv=None, root=None, run_week_fn=None):
 
     if a.as_of and not a.pilot:
         raise SystemExit("HALT: --as-of requires --pilot")
-    if a.allow_stale_quotes and not a.pilot:
-        raise SystemExit("HALT: --allow-stale-quotes requires --pilot")
+    # D234: --allow-stale-quotes allowed with --pilot OR --dry-run (never a live freeze)
+    if a.allow_stale_quotes and not (a.pilot or a.dry_run):
+        raise SystemExit("HALT: --allow-stale-quotes requires --pilot or --dry-run")
 
     T = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
     if T.tzinfo is None:

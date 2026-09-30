@@ -31,7 +31,7 @@ AWAY_ABBR = "CAR"
 GAME_ID = f"{AWAY_ABBR}@{HOME_ABBR}"
 
 
-def _build_fixture_root(tmp_path, kick=None):
+def _build_fixture_root(tmp_path, kick=None, pull_age_minutes=30):
     """Build a minimal fixture root with one event's props and lines."""
     if kick is None:
         kick = KICK
@@ -93,7 +93,7 @@ def _build_fixture_root(tmp_path, kick=None):
 
     # Build fixture props tape
     fixture_T = kick - timedelta(hours=2)
-    pull_ts = (fixture_T - timedelta(minutes=30)).isoformat()
+    pull_ts = (fixture_T - timedelta(minutes=pull_age_minutes)).isoformat()
     props_dir = root / "data" / "odds_archive" / "nfl" / "props" / "season=2026" / "month=01"
     props_dir.mkdir(parents=True, exist_ok=True)
     props = pd.DataFrame([{
@@ -185,11 +185,10 @@ def _stub_run_week(root, week, T, bundle_lines, game_ids):
     }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
 
 
-# ── (a) LIVE: no --pilot, T=now, kick at T+2h → frozen file with bundle prices ──
+# ── (a) D234: renamed from test_live_freeze_completes ──
 
-def test_live_freeze_completes(tmp_path):
-    """D229(a): a live run (no --pilot) builds sheet and freezes in-process.
-    On fd0a2a5c6: TypeError (old main() has no argv parameter)."""
+def test_pilot_fixture_freeze(tmp_path):
+    """D229→D234: pilot with --as-of on fixture root completes a freeze."""
     from nfl.sim.run_forward_v1 import main
 
     root = _build_fixture_root(tmp_path)
@@ -203,14 +202,58 @@ def test_live_freeze_completes(tmp_path):
 
     assert dest is not None, "main() should return a frozen file path"
     assert dest.exists(), f"frozen file {dest} should exist"
+    df = pd.read_parquet(dest)
+    assert df["pilot"].all(), "pilot file must have pilot=True on all rows"
 
-    # Verify prices match the bundle
-    frozen_df = pd.read_parquet(dest)
-    prop_rows = frozen_df[frozen_df["market_key"] == "player_receptions"]
+
+# ── D234(a): TRUE live test — no --pilot, no --as-of ──
+
+def test_live_freeze_no_pilot(tmp_path):
+    """D234(a): main() with NO --pilot and NO --as-of, kick = now + 2h,
+    pull = now - 30 min. Completes a freeze with pilot==False and canonical reader.
+    On 3beed7970: test_live_freeze_completes used --pilot."""
+    from nfl.sim.run_forward_v1 import main, READER_MODEL
+
+    now = datetime.now(timezone.utc)
+    live_kick = now + timedelta(hours=2)
+    root = _build_fixture_root(tmp_path, kick=live_kick, pull_age_minutes=30)
+
+    dest = main(
+        argv=["--week", "3"],
+        root=str(root),
+        run_week_fn=_stub_run_week,
+    )
+
+    assert dest is not None, "live freeze should produce a file"
+    assert dest.exists()
+    df = pd.read_parquet(dest)
+    assert not df["pilot"].any(), "live run must have pilot=False on all rows"
+    assert (df["reader_model"] == READER_MODEL).all(), "reader must be canonical"
+    # Prices match bundle
+    prop_rows = df[df["market_key"] == "player_receptions"]
     assert len(prop_rows) > 0
     kelce = prop_rows[prop_rows["player_name"] == "T.Kelce"].iloc[0]
     assert kelce["price_first"] == -110
     assert kelce["price_second"] == -110
+
+
+def test_live_stale_quotes_halt(tmp_path):
+    """D234(a): live run with 4h-old quotes HALTs on quote age, nothing frozen."""
+    from nfl.sim.run_forward_v1 import main
+
+    now = datetime.now(timezone.utc)
+    live_kick = now + timedelta(hours=2)
+    root = _build_fixture_root(tmp_path, kick=live_kick, pull_age_minutes=240)
+
+    opinions_dir = root / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
+    with pytest.raises(SystemExit, match="props pull is"):
+        main(
+            argv=["--week", "3"],
+            root=str(root),
+            run_week_fn=_stub_run_week,
+        )
+    if opinions_dir.exists():
+        assert len(list(opinions_dir.glob("ai_opinions_*.parquet"))) == 0
 
 
 # ── (b) PILOT with --as-of completes ──
