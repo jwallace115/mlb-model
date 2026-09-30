@@ -4462,3 +4462,27 @@ Open before Sunday (FWD2d):
 - the stale refresh note.
 
 run_week's tag-precedence props loader affects coverage only.
+
+### D240 — ChatGPT audit #7 adjudicated: D238's acceptance of A1-A7 was wrong; FWD3 fixes the freeze-side and scoring-side defects before the first primary freeze (2026-09-30)
+
+At 0792fd122, A4 is FIXED, and A1, A2, A3, A5, A6 and A7 are PARTIAL.
+
+Confirmed defects:
+- `score_experiment` accepts an altered frozen file and an unregistered experiment name, has a no-op run_id join, lets
+  another run's anchor status leak in, aborts on pilot-only weeks, and gives a verdict on one leg;
+- the bundle can be replaced, does not preserve the ratings, usage or roster inputs, and leaves the sidecar unhashed;
+- run_week writes to a shared weekly directory;
+- actuals.py, which grading uses, is not hashed;
+- grading selects games by team pair;
+- a crosswalk miss becomes VOID;
+- the sidecar picks the minimum-error iteration instead of the solver's returned one;
+- game-line freshness is not checked;
+- the publication check runs before the write.
+
+Tests: eight mutations survived, one per test file.
+
+Cowork's D238 acceptance is withdrawn.
+
+Freeze-side defects must be fixed before the first primary freeze, and scoring-side defects before the first scoring.
+FWD3 does both. The primary count starts at the first window after FWD3 is verified: TNF only if that is by
+Thu 15:00Z, otherwise Sunday or week 5.
