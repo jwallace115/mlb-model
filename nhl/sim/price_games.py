@@ -56,6 +56,15 @@ def price_season(season, n_sims, tr, gr, ft, q, base_inp):
         p_away_p15 = 1.0 - p_home_m15  # complementary
         mean_total = (r["home_score"] + r["away_score"]).mean()
 
+        # Total-goals distribution from simulations
+        totals = r["home_score"] + r["away_score"]
+        tot_dist = {}
+        for k in range(16):
+            if k < 15:
+                tot_dist[f"p_tot_{k}"] = round(float((totals == k).mean()), 6)
+            else:
+                tot_dist[f"p_tot_{k}"] = round(float((totals >= k).mean()), 6)
+
         row = {
             "game_id": gid, "season": season, "date": date, "home": home, "away": away,
             "p_home_win": round(p_home_win, 4),
@@ -66,6 +75,7 @@ def price_season(season, n_sims, tr, gr, ft, q, base_inp):
             "p_away_p15": round(p_away_p15, 4),
             "mean_total": round(mean_total, 2),
             "n_sims": N,
+            **tot_dist,
         }
         rows.append(row)
 
@@ -105,19 +115,28 @@ def main():
         df = price_season(season, args.n_sims, tr, gr, ft, q, base_inp)
         df = add_pinnacle_lines(df, season)
 
-        # Totals over/under at Pinnacle's line
+        # Totals over/under/push at Pinnacle's line — EXACT from the total-goals distribution
         has_line = df["pin_total_line"].notna()
-        df.loc[has_line, "p_over"] = df.loc[has_line].apply(
-            lambda r: ((r["mean_total"] * np.ones(1)) > r["pin_total_line"]).mean(), axis=1)
-        # Actually we need sim-level totals, not mean. Use the probability from the mean approximation:
-        # p_over ≈ share of sims with total > line. We don't have per-sim data anymore.
-        # Let's use a normal approximation: p_over = P(total > line) ≈ Φ((mean - line) / σ)
-        # σ ≈ sqrt(mean) for Poisson-like totals
-        from scipy.stats import norm
-        df.loc[has_line, "p_over"] = df.loc[has_line].apply(
-            lambda r: float(norm.sf(r["pin_total_line"], loc=r["mean_total"], scale=np.sqrt(max(r["mean_total"], 1)))), axis=1)
-        df.loc[has_line, "p_push_total"] = df.loc[has_line].apply(
-            lambda r: float(norm.pdf(r["pin_total_line"], loc=r["mean_total"], scale=np.sqrt(max(r["mean_total"], 1)))), axis=1)
+        def exact_over_under(row):
+            line = row["pin_total_line"]
+            line_int = int(line)
+            is_half = (line % 1) != 0
+            p_over = sum(row.get(f"p_tot_{k}", 0) for k in range(line_int + 1, 16))
+            if not is_half:
+                p_push = row.get(f"p_tot_{line_int}", 0)
+            else:
+                p_push = 0.0
+                p_over += row.get(f"p_tot_{line_int + 1}", 0) if line_int + 1 <= 14 else 0
+                # For half lines: over = total > line = total >= line_int + 1
+                p_over = sum(row.get(f"p_tot_{k}", 0) for k in range(line_int + 1, 16))
+            p_under = 1.0 - p_over - p_push
+            return pd.Series({"p_over": round(p_over, 6), "p_under": round(p_under, 6), "p_push_total": round(p_push, 6)})
+
+        if has_line.any():
+            ou = df.loc[has_line].apply(exact_over_under, axis=1)
+            df.loc[has_line, "p_over"] = ou["p_over"].values
+            df.loc[has_line, "p_under"] = ou["p_under"].values
+            df.loc[has_line, "p_push_total"] = ou["p_push_total"].values
 
         out_path = OUT_DIR / f"season={season}.parquet"
         df.to_parquet(out_path, index=False)

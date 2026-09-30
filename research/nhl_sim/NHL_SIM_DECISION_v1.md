@@ -862,3 +862,15 @@ Pinnacle, same games):
 - So the totals half of S42 is invalid, and the totals A1 test was not run.
 - Also NOT DONE: the reliability table, the favourite / underdog and |engine - Pinnacle| breakdowns, and the A2
   picks.
+
+### S44 — Totals from simulations + S42 completed (2026-09-29, S-WO4c Item 1)
+
+Null control: all ML/puck-line columns max diff = 0 vs S41 parquets.
+Total-goals distribution (p_tot_0..p_tot_15) stored per game. Over/under exact.
+
+2023-24 (validate):
+- ML: engine 0.6647 vs Pinnacle 0.6567. A1 CI [-0.103, 0.869]. No info.
+- Totals: engine 0.7001 vs Pinnacle 0.6942. A1 CI [-0.439, 0.458]. No info.
+- |diff| >5 pts: engine 0.6703 vs Pinnacle 0.6552 (deficit in high-disagreement games).
+- A2 picks: 676 at edge >= 0.04, hit 41.1%. No edge.
+- Totals reliability: engine under-confident (pred 0.36-0.57, actual 0.44-0.54).
