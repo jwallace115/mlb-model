@@ -1,0 +1,102 @@
+## 2026-09-30T~09:40Z  claude-code (nhl/wo1 branch)
+
+### Setup
+- Worktree ~/mlb-model-nhl1 on branch nhl/wo1 already existed (off origin/main ee2b0ffd0)
+- Parent test baseline: 55 passed, 1 failed (test_score_first_side_and_units — pre-existing,
+  confirmed fails at parent with same value: None == 0 assertion)
+
+### Item 1 (H3) — Freeze tool: NHL entry, date-keyed slates, drivers, book of record
+  Commit: 1075895bb
+
+- RETURNED: SPORTS['nhl'] extended with slate='date', drivers_required=True, outcomes=None (set
+  in H4), require_side=True (from L2), tags=(goalie, injury_news, lineup, schedule_spot, matchup,
+  form, price_vs_sharp, line_move, model_layer). NFL/NCAAF gained explicit slate='week',
+  drivers_required=False, tags matching prior behavior.
+- MEANS: NHL slates are ET dates; --date YYYY-MM-DD required. Football behavior unchanged.
+
+- RETURNED: Fixture nhl_tape_20260929T2000Z.parquet created from real snap on main tree.
+  Pinnacle: 7 games, all 3 markets on every game.
+  Hard Rock: ABSENT from every game (0 games, 0 markets).
+  h2h outcomes per game: exactly 2 on all 138 (event, bookmaker) pairs.
+- MEANS: Book of record confirmed as pinnacle (H2 addendum). No 3-way/draw in h2h.
+
+- RETURNED: build_sheet(slate_date="2026-09-29") returns 5 games (15 lines) from Pinnacle;
+  slate_date="2026-09-30" returns 2 games (6 lines). No overlap.
+- MEANS: Date filter correctly separates games by ET date.
+
+- RETURNED: validate() HALTS on missing/empty/unknown drivers for NHL, passes for valid.
+  validate() HALTS on football-only tags (weather, no_view) for NHL.
+- MEANS: NHL-specific guards work. Football validate unchanged (no drivers column needed).
+
+- RETURNED: NFL verify: wk2 bad=[], unlisted=[]; wk3 bad=[], unlisted=[].
+  NCAAF verify: wk4 bad=[], unlisted=[].
+  All sha256 prefixes match baseline:
+    NFL wk2: 5608e10f..., wk3: 4e597ba0.../cc0eb467.../c7f59a14...
+    NCAAF wk4: 504e1fb6.../d329749b...
+- MEANS: NULL CONTROL PASSES. Existing frozen files unchanged.
+
+- RETURNED: 76 passed, 1 failed (pre-existing). 21 new H3 tests.
+- MEANS: All new tests pass; no regression.
+
+- Credits spent: 0 (fixture cut from existing tape on main tree)
+- Pushed to origin/nhl/wo1
+
+### Item 2 (H4) — NHL outcomes loader + score
+  Commit: c609718d3
+
+- RETURNED: agreement_check(2025) -> n_checked=1177, mismatches=0 (135 not in cache).
+- MEANS: 100% agreement pre-registration HELD on all 1,177 cached 2025-26 games.
+  Score, OT flag, and SO flag all match nhl_games_canonical.csv.
+  135 games not in cache (end of season) — not a mismatch, just incomplete cache.
+
+- RETURNED: nhl_outcomes.py game_result() for 3 real games:
+    REG 2025020001: FLA 3, CHI 2, ot=False, so=False
+    OT  2025020008: BOS 4, CHI 3, ot=True, so=False
+    SO  2025020006: EDM 3, CGY 4, ot=True, so=True, reg 3-3
+- MEANS: Loader correctly extracts scores and OT/SO flags.
+
+- RETURNED: settle_game_markets on SO game 2025020006:
+    totals 6.5 -> 1 (Over, final total=7)
+    h2h -> 0 (away CGY wins)
+  Regulation total would be 6 -> Under (0).
+- MEANS: SO rule changes the totals grade (from Under to Over). Confirmed by test.
+
+- RETURNED: SPORTS['nhl']['outcomes'] = 'nhle'. score() dispatches to _nhle_actuals().
+  End-to-end: freeze + score on 3 real games in tmp dir, all 6 grades match hand derivation.
+- MEANS: NHL scoring pipeline works end-to-end.
+
+- RETURNED: edge_rank fix: now ranked per _file (groupby), not across all rows.
+  NFL wk3 with 3 files: each file's edge_rank starts at 1 and goes to n.
+- MEANS: Both conf_rank (already per-file from freeze) and edge_rank are now 1..n within each freeze.
+
+- RETURNED (null controls):
+    NCAAF wk4 Opus file: 177 graded sides, 99 won, +8.96u
+    NFL wk3 TNF file: 28 sides, 18 won, +7.59u, Brier 0.2519 vs 0.2618
+- MEANS: Football score NULL CONTROL PASSES. N63 numbers reproduced exactly.
+
+- RETURNED: 88 passed, 1 failed (pre-existing). 12 new H4 tests.
+- MEANS: All new tests pass; no regression.
+
+- Credits spent: 0 (all offline — boxscore cache + canonical CSV)
+- Pushed to origin/nhl/wo1
+
+### NOT DONE
+- Items 3-4 of WO1 (not requested in this session)
+- CLV vs Pinnacle close computation in score (H4 spec includes it but it requires tape snapshots
+  to exist for scored games — no frozen NHL opinions exist yet to score with CLV)
+- Baselines (a)/(c) in score report (same reason: no NHL opinions to score yet)
+- Baseline (b) model layer (item 3 dependency)
+- score_report NHL variant (drivers/October-vs-later breakouts)
+- --from/--to date range for score --sport nhl
+
+### UNVERIFIED
+- Whether the 135 missing cache files (games 2025021178..2025021312) affect any downstream use
+- Whether NHL API boxscore stat counts (goals, assists etc.) correctly exclude shootout
+  (assumed by construction per H2; no counter-example found, but not independently verified)
+- Whether the existing L2 test update (test_nhl_refuses_side_none now checks "unknown tag"
+  instead of "requires a side") correctly captures the intended behavior — the no_view tag is
+  now rejected by tag validation before require_side is reached, which is functionally correct
+  but tests a different code path
+
+### Merge command for Jeff
+  git checkout main && git merge --no-ff nhl/wo1 -m "Merge nhl/wo1: H3+H4 freeze tool + outcomes"
