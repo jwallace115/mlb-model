@@ -149,7 +149,7 @@ def test_build_bundle_creates_manifest():
 def test_newest_inputs_filters_lines_by_now():
     """D225: newest_inputs must filter lines by snapshot_utc <= now.
     D229: replaced inspect.getsource with execution test."""
-    from nfl.pipeline.log_ai_opinions import newest_inputs
+    from nfl.sim.fwd_v1_logger import newest_inputs
     from datetime import datetime, timezone
     # This is tested by test_fwd2b_harness which uses --as-of with a
     # specific T that only finds snapshots <= T. The function is also

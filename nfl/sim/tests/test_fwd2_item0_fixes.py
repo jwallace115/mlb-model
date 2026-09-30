@@ -45,7 +45,7 @@ def _minimal_filled(contracts):
 
 def test_cross_week_dedup_freeze_different_week():
     """A contract frozen in week 3 is refused when freeze() is called for week 4."""
-    from nfl.pipeline.log_ai_opinions import freeze
+    from nfl.sim.fwd_v1_logger import freeze
 
     contract = [("e1", "player_receptions", "T.Kelce", 5.5)]
 
@@ -68,7 +68,7 @@ def test_cross_week_dedup_freeze_different_week():
 
 def test_cross_week_dedup_freeze_same_week():
     """A contract frozen once in week 4, then freeze() called again in week 4, is refused."""
-    from nfl.pipeline.log_ai_opinions import freeze
+    from nfl.sim.fwd_v1_logger import freeze
 
     contract = [("e2", "player_rush_attempts", "D.Henry", 14.5)]
 
@@ -180,7 +180,7 @@ def test_cal_stamp_tampered_usage():
 def test_whitespace_reader_refused_by_freeze():
     """A4: freeze() with ' nfl_sim_v1_156cd057 ' after a canonical freeze of the same
     contract must be refused (the strip makes it a duplicate)."""
-    from nfl.pipeline.log_ai_opinions import freeze
+    from nfl.sim.fwd_v1_logger import freeze
 
     contract = [("e3", "player_receptions", "J.Chase", 6.5)]
 
@@ -202,7 +202,7 @@ def test_whitespace_reader_refused_by_freeze():
 
 def test_non_canonical_reader_refused():
     """A non-canonical reader string for this experiment is refused."""
-    from nfl.pipeline.log_ai_opinions import freeze
+    from nfl.sim.fwd_v1_logger import freeze
 
     contract = [("e4", "player_receptions", "A.Brown", 4.5)]
 

@@ -231,6 +231,26 @@
 ### UNVERIFIED
 - Whether FWD4 is verified by Thu 15:00Z.
 
+## 2026-09-30T15:35Z  cowork (verification of FWD4 — D248; FWD4b test fix)
+
+### RETURNED
+- eng/fwd3 @ 0b6d94a58. Full forward suite: 88 passed, 2 failed. Both failures are in test_fwd2_settlement cohort
+  tests, which use the old primary_cohort signature.
+- Cohort cases: cross-run leak -> excluded; empty sidecar -> excluded ("no sidecar match"); duplicate -> HALT.
+- All ten Cowork mutations are caught, each by a specific test.
+- freeze() writes the frozen file once. Digests are on the rows. publication.json is written in the run directory.
+
+### MEANS
+- The experiment is ready once the two stale tests are updated.
+
+### NOT DONE
+- FWD4b.
+- The merge.
+- FWD2d (the Sunday runbook).
+
+### UNVERIFIED
+- The session's real dry-run output is taken from its report (bundle digest d7246f19…).
+
 ## 2026-09-30T16:41Z — Cowork: FWD4b verified (D250); eng/fwd3 merge blocked; FWD5 written
 
 ### RETURNED
@@ -258,3 +278,30 @@
 ### UNVERIFIED
 - Whether the shared (merged) freeze() writes week-directory manifests that the pinned code can read. This is FWD5
   item 1(iii).
+
+## 2026-09-30T19:42Z — Cowork: FWD5 verified (D254); eng/fwd3 merges; TNF is the first primary window
+
+### RETURNED
+- eng/fwd3 @ 2d44e38a2:
+  - fwd_v1_logger.py sha cf100675bd385ca5;
+  - the forward list gives 88 passed / 0 failed, on the branch and on a trial merge with main @ 8512ca13e;
+  - test_freeze_v1: 4 passed.
+- A subprocess run of the harness tests (live test included) never loads nfl.pipeline.log_ai_opinions.
+- Interop script: shared and pinned freezes in one week directory; both verifies clean; canonical dedup HALTs through
+  either logger.
+- Shared-logger suite: 76 passed / 1 failed on both main and the merge (test_score_first_side_and_units; that test
+  also fails at 82c38aef8).
+- The trial merge has one conflict, logs/_log_fwd1_cowork.txt; the branch copy is a superset.
+
+### MEANS
+- The experiment's freeze and scoring code is the verified object and is decoupled from NHL work.
+- Item 1's test file and D252 were not delivered, and "NOT DONE: nothing" was false. Cowork's executed checks cover it.
+- Main's commits were replayed onto the branch (duplicate SHAs); nothing was lost.
+
+### NOT DONE
+- test_fwd5_pin.py (after TNF; not hashed).
+- FWD2d (the Sunday runbook).
+- The stale AI-log test.
+
+### UNVERIFIED
+- The TNF live run itself (23:30Z Thu).

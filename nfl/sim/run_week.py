@@ -491,9 +491,9 @@ def _check_calibration_stamp(cal_path=None):
 
 
 def build_board(week, game_results, lines_used, team_game_counts, roster,
-                roster_lookups, pull_ts_str, as_of=None):
+                roster_lookups, pull_ts_str, as_of=None, out_dir_override=None):
     """Build board, write picks_log.parquet and parlay_board.md."""
-    out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
+    out_dir = out_dir_override or (OUT_BASE / f"week={SEASON}_{week:02d}")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     cal_maps = load_calibration()
@@ -908,6 +908,8 @@ def main():
                         help="D229: JSON dict of {game_id: {spread, total}} — skip tape read")
     parser.add_argument("--games", type=str, default=None,
                         help="D229: comma-separated game_ids to simulate (e.g. CAR@KC,DEN@BUF)")
+    parser.add_argument("--run-dir", type=str, default=None,
+                        help="D241: write outputs here instead of the shared weekly directory")
     args = parser.parse_args()
 
     t0 = time.time()
@@ -1038,9 +1040,30 @@ def main():
         row["line_snapshot_utc"] = snap_utc
         row["line_book"] = book
 
+    # D242: write anchor_returned.parquet — the values run_anchored_chunked RETURNED
+    anchor_returned_rows = []
+    for gr in game_results:
+        home, away = gr["home"], gr["away"]
+        anchor_returned_rows.append({
+            "game": f"{away}@{home}",
+            "iterations": gr["n_iter"],
+            "converged": gr["converged"],
+            "anch_m": round(gr["anch_m"], 4),
+            "anch_t": round(gr["anch_t"], 4),
+            "target_spread": gr["spread"],
+            "target_total": gr["total"],
+        })
+
     # Write anchoring log
-    out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
+    # D241: --run-dir overrides the output directory
+    if args.run_dir:
+        out_dir = Path(args.run_dir)
+    else:
+        out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
     out_dir.mkdir(parents=True, exist_ok=True)
+    if anchor_returned_rows:
+        pd.DataFrame(anchor_returned_rows).to_parquet(
+            out_dir / "anchor_returned.parquet", index=False)
     if anchoring_log:
         alog_df = pd.DataFrame(anchoring_log)
         alog_df.to_parquet(out_dir / "anchoring_log.parquet", index=False)
@@ -1098,8 +1121,10 @@ def main():
         print(f"  Mean sim plays/team: {tv_df['sim_plays'].mean():.1f}")
 
     # Build board
+    _board_out = Path(args.run_dir) if args.run_dir else None
     board_text, all_legs = build_board(week, game_results, lines, team_game_counts,
                                         roster, roster_lookups, pull_ts_str,
+                                        out_dir_override=_board_out,
                                         as_of=as_of_ts)
 
     total_time = time.time() - t0
