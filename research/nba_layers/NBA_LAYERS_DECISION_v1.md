@@ -253,3 +253,33 @@ on the live tape.
 
 **Report cadence for capture (item 2).** Poll 10:00-13:00 ET every 15 min for official reports.
 ESPN: once per capture run (content-hash dedup).
+
+### B3 — Availability trail (L2): capture script, cadence, tests (2026-09-30)
+
+Script: `nba/pipeline/capture_nba_availability.py`. Tests: `nba/pipeline/tests/test_availability_b3.py`.
+
+**What it captures** per run, into `data/injury_archive/nba/season=2026/`:
+- Every new official report PDF published since last run + parsed parquet (all statuses).
+  Parse failure logged, never blocks archiving the raw PDF.
+- ESPN injuries JSON (gzip, ALL statuses kept — fetch_injuries.py drops Questionable; the reader
+  needs it). Skipped when content hash equals previous pull.
+- One line per feed in `_pulls.jsonl` (N41 convention: feed, retrieval_utc, source URL, rows, sha256, status).
+
+**Cadence derivation.** B2 measured reports at 10:00-12:45 ET, every 15 min, game days only.
+Proposed cron: on game days, 13 runs at 10:00-13:00 ET q15 for official reports (Mac only);
+one ESPN run per capture for the VM. **Proposed cron lines (NOT installed):**
+```
+# Mac: official reports + ESPN, 10:00-13:00 ET q15 (game days checked by script)
+*/15 10-13 * * * /path/to/python3 /Users/jw115/mlb-model/nba/pipeline/capture_nba_availability.py >> /Users/jw115/mlb-model/logs/nba_availability.log 2>&1
+```
+
+**Tests (3 tests, all pass, each killed by stated mutation):**
+(i) Questionable player in ESPN fixture appears in output — FAILS with Out/Doubtful-only filter.
+(ii) Second run on identical ESPN content writes no new file — FAILS with hash check removed.
+(iii) Parsed official row carries report timestamp; post_tip=True when report > game tip — FAILS
+with flag forced False.
+
+**Null control:** `git diff origin/main -- nba/modules nba/run_nba.py` is empty.
+
+**Live run (Mac):** official reports = 0 (off-season). ESPN injuries = 66 items (Out=14, Day-To-Day=52).
+One line written to `_pulls.jsonl`.
