@@ -4047,3 +4047,27 @@ corrected to the deployed VM schedule:
 The forward count of reader `nfl_sim_v1_156cd057` starts with the week-4 TNF freeze. D210's pre-registration governs
 it, with the revision rule reading per reader (D219). Checkpoints are at 500 and 1,500 scored two-way legs. At about
 150-175 a week, 500 falls around week 6 or 7.
+
+### D223 — ChatGPT audit #6 adjudicated: the forward experiment is not yet valid; Thursday is a pilot; primary count starts after FWD2 (2026-09-29)
+
+Every one of A1-A7 is confirmed against the code at 145a1fee0:
+- scoring pools readers, no_view rows and game lines, and has no anchor join or bootstrap;
+- the sheet, sim and freeze read inputs separately, and game lines are not capped at the freeze time;
+- the freeze does not compare the usage fingerprint, and a calibration-stamp mismatch does not halt;
+- the reader string is not canonicalized before the revision lookup;
+- matching has no event or player id;
+- the sidecar targets have the wrong sign and it picks the wrong iteration;
+- an inactive player's Under is scored a win.
+
+Cowork's own claims withdrawn:
+- "anchored ⇒ the book's probability" (D209);
+- the London fairness claim (D222);
+- the sidecar and reader-filter acceptance (D218, D222).
+
+Decisions:
+- The week-4 TNF run is `--pilot`.
+- The primary count of reader nfl_sim_v1_156cd057 starts at the first window after FWD2 is verified.
+- v1's physics stay frozen.
+- The primary statistic is the Brier difference on the eligible cohort, with a 50,000-resample whole-game bootstrap;
+  1,500 legs is confirmatory and 500 descriptive.
+- Earlier AI blind-log grades are re-graded under the FWD2 settlement rule.
