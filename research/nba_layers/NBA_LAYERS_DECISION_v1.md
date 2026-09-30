@@ -140,3 +140,30 @@ Expected cost = 10 x 8 = 80 per event-snapshot.
 because not all 8 prop markets are available for every event at every book. Empty-but-charged = 0.
 
 **Gaps.** lowvig absent from props data (not a props book). Hard Rock absent for season 2023 (pre-launch).
+
+### B-D4 — Item 4 data: derivative markets at T-24h and T-1h, 3 seasons (2026-09-30)
+
+Data-facts entry from NBA-D1 work order item 4. No interpretation.
+
+**What was pulled.** Historical event-level odds for 8 derivative markets at T-24h and T-1h
+per event. Seasons 2024-25, 2025-26, 2023-24.
+Output: `data/odds_archive/nba/history/event_markets/season=<yr>/<event_id>_<T-24h|T-1h>.parquet`.
+
+**Markets (8).** h2h_h1, spreads_h1, totals_h1, h2h_q1, spreads_q1, totals_q1, team_totals,
+alternate_spreads. Expected cost = 10 x 8 = 80 per event-snapshot.
+
+**Volume.**
+
+| Season | Events | Calls | Credits (run) | First call cost |
+|--------|--------|-------|---------------|-----------------|
+| 2024   | 1,247  | 2,494 | 135,300       | 80              |
+| 2025   | 1,234  | 2,468 | 119,600       | 40              |
+| 2023   | 1,274  | 2,548 | 126,240       | 70              |
+| **Total** | **3,755** | **7,510** | **~381k** | |
+
+**A5 cost check.** First call per season: 2024=80, 2025=40, 2023=70. All below 10 x 8 = 80
+(no violations). Variable cost per season: not all 8 derivative markets available for every
+event historically. Alternate spreads and Q1 markets less available in earlier seasons.
+Empty-but-charged = 0.
+
+**Gaps.** Same as item 2 — lowvig absent, Hard Rock absent for 2023.
