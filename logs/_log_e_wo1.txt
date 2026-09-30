@@ -55,5 +55,42 @@ Today's tape needs: ~1,400 → remaining after tape: ~688
 - ESPN event → NHL game_id mapping (by date + team) not verified.
 - The pull did not check for HTTP errors beyond continuing on non-200.
 
+---
+
+## E-WO2 (2026-09-30)
+
+### E4 — In-play, 5-min cadence, 4 seasons
+
+RETURNED:
+- 62,479 calls, 1,874,370 credits used (62,479 × 30), 6.93 calls/s average.
+- x-requests-remaining BEFORE: 4,510,507. AFTER: 725,439.
+- Season 2024: 178 nights, 16,466 snapshots saved.
+- Season 2025: 151 nights, 14,234 snapshots saved.
+- Season 2023: 183 nights, 16,593 snapshots saved (incl. 800 from E-WO1, 15,793 new).
+- Season 2022: 178 nights, 15,986 snapshots saved.
+- Total: 63,279 parquets + 63,279 JSON gz. Disk: 1.1 GB.
+- First call: x-requests-last=30 (10 books × 3 markets). CONFIRMED.
+- Rate after 200 calls: 6.42/s. Projected finish from first 200: 16:35Z. Actual finish: ~18:54Z.
+- Schema: snapshot_utc, requested_utc, event_id, commence_time, home_team, away_team,
+  bookmaker, book_last_update, market, outcome_name, description, point, price.
+- Books: pinnacle,draftkings,fanduel,betmgm,williamhill_us,betrivers,bovada,pointsbetus,unibet_us,betonlineag.
+
+MEANS: Complete in-play price history for all 4 regular seasons captured. Every game night
+from earliest puck − 5 min to latest puck + 3h15m at 5-min resolution. 10 books including
+Pinnacle. book_last_update column included (E-02 lesson).
+
+Null control: NOT YET RUN (requires matching with WO2 lines data — to be done post-pull).
+
+### Credits (running total)
+E4: 1,874,370 credits used. Cap remaining: 525,630.
+
+### NOT DONE
+- E5 (derivatives), E6 (props), E7 (dense): not started yet.
+- Null control for E4 (WO2 pre-match Pinnacle price consistency).
+
+### UNVERIFIED
+- Whether all 5-min intervals within each night were actually requested (some may have been
+  skipped due to threading races, though resume-safe design should catch them on re-run).
+
 ### Merge command
 git merge nhl/inplay-e1

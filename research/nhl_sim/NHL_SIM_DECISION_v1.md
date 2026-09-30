@@ -817,3 +817,19 @@ State-mapping table: one row per (snapshot, game) with period, seconds, score, s
 goalie pulled flags, and book prices. Built from ESPN wallclock → NHL play matching.
 
 Credits: 0 (ESPN API is free).
+
+### E4 — Bulk in-play history: 4 seasons, 5-min cadence (2026-09-30, E-WO2 Item 1)
+
+62,479 calls, 1,874,370 credits (30/call), 6.93 calls/s average.
+Books: pinnacle + 9 US books (10 total = 1 region-equivalent). First call: x-requests-last=30 CONFIRMED.
+Schema includes book_last_update (E-02 lesson).
+
+- Season 2024: 178 nights, 16,466 snapshots.
+- Season 2025: 151 nights, 14,234 snapshots.
+- Season 2023: 183 nights, 16,593 snapshots (15,793 new + 800 from E-WO1).
+- Season 2022: 178 nights, 15,986 snapshots.
+Total: 63,279 snapshot files, 1.1 GB on disk.
+
+Output: data/odds_archive/nhl/history/inplay/season=<start_year>/snap_<UTC>.parquet + .json.gz.
+Generator: nhl/pipeline/pull_nhl_bulk_history.py inplay.
+Resume-safe: existing files skipped. 4 concurrent workers with exponential backoff.
