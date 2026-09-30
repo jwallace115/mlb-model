@@ -278,6 +278,8 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None):
     written on every row and into the manifest - the reader is part of the research object."""
     if not reader_model or not str(reader_model).strip():
         raise SystemExit("HALT: --reader-model is required (the model that made these picks)")
+    # D224(c): canonicalize reader string (strip whitespace)
+    reader_model = str(reader_model).strip()
     d = d or out_dir(season, week)
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):

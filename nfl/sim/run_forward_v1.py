@@ -26,6 +26,58 @@ FAMILY_TO_MARKET = {
 }
 
 
+EXPERIMENT_MANIFEST = ROOT / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
+
+
+def check_experiment_manifest():
+    """D224(b): HALT if any file hash in the experiment manifest has changed."""
+    import hashlib
+    m = json.loads(EXPERIMENT_MANIFEST.read_text())
+    for path, expected in m["file_hashes"].items():
+        p = ROOT / path
+        if not p.exists():
+            raise SystemExit(f"HALT: experiment manifest file missing: {path}")
+        got = hashlib.sha256(p.read_bytes()).hexdigest()[:16]
+        if got != expected:
+            raise SystemExit(f"HALT: experiment manifest hash mismatch: {path} "
+                             f"({got} != {expected}). This is a different experiment.")
+
+
+def cross_week_check(board_root, season, week, reader_model, contracts):
+    """D224(c): refuse a contract already frozen in ANY other week directory.
+
+    contracts: list of (event_id, market_key, player_name, line) tuples.
+    Returns list of (contract, week) for duplicates found.
+    """
+    dupes = []
+    contract_set = set(contracts)
+    for d in sorted(board_root.glob(f"week={season}_*/ai_opinions")):
+        # Skip the current week
+        dir_week = d.parent.name.split("_")[-1]
+        if dir_week == f"{week:02d}":
+            continue
+        manifest_path = d / "manifest.json"
+        if not manifest_path.exists():
+            continue
+        manifest = json.loads(manifest_path.read_text())
+        for entry in manifest:
+            rm = entry.get("reader_model", "legacy")
+            if rm != reader_model or entry.get("pilot", False):
+                continue
+            f = d / entry["file"]
+            if not f.exists():
+                continue
+            try:
+                df = pd.read_parquet(f, columns=["event_id", "market_key", "player_name", "line"])
+            except Exception:
+                continue
+            for _, r in df.iterrows():
+                key = (r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                if key in contract_set:
+                    dupes.append((key, d.parent.name))
+    return dupes
+
+
 # ── public helpers (tested directly) ──────────────────────────────────────────
 
 def fill_sheet(sheet_df, picks_log):
@@ -153,18 +205,20 @@ def main(freeze_json_path=None):
     if a.as_of and not a.pilot:
         sys.exit("HALT: --as-of requires --pilot")
 
-    # (a) test_freeze_v1 in-process
+    # (a) test_freeze_v1 + experiment manifest check
     print("(a) Running test_freeze_v1...", flush=True)
     import pytest
     test_args = ["-q", str(ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py")]
     if freeze_json_path:
-        # Allow overriding FREEZE_PATH for testing
         import nfl.sim.tests.test_freeze_v1 as ft
         ft.FREEZE_PATH = Path(freeze_json_path)
     ret = pytest.main(test_args, plugins=[])
     if ret != 0:
         sys.exit(f"HALT: test_freeze_v1 failed (exit {ret})")
-    print("    PASS\n", flush=True)
+    print("    PASS", flush=True)
+    # D224(b): experiment manifest check
+    check_experiment_manifest()
+    print("    Experiment manifest: OK\n", flush=True)
 
     # D215(c): common flags for sheet and freeze
     common_flags = []

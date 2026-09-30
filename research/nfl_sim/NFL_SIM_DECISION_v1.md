@@ -4071,3 +4071,25 @@ Decisions:
 - The primary statistic is the Brier difference on the eligible cohort, with a 50,000-resample whole-game bootstrap;
   1,500 legs is confirmatory and 500 descriptive.
 - Earlier AI blind-log grades are re-graded under the FWD2 settlement rule.
+
+### D224 — FWD2 Item 0: experiment identity (A3, A4) (2026-09-30)
+
+**(a) FWD_EXPERIMENT_v1.json** (research/nfl_sim/FWD_EXPERIMENT_v1.json): experiment id
+"nfl_fwd_v1", canonical reader "nfl_sim_v1_156cd057", sha256[:16] of 42 files on the
+prediction path (engine.py, anchor.py, params, cal, tables, run_week, names, calibration,
+tables.py, seed_util, usage, ratings, run_forward_v1, log_ai_opinions, all table files).
+Plus usage_fingerprint, python/numpy/pandas versions, N=10000, seed rule, eligible markets,
+eligibility/settlement/scoring rules as text.
+
+Test (test_fwd2_experiment.py:test_experiment_file_hashes): recomputes every hash, fails on
+any change. test_experiment_usage_fingerprint: verifies live == manifest. On 145a1fee0:
+FileNotFoundError (manifest doesn't exist).
+
+**(b) Harness HALTs** (run_forward_v1.py:210-213 check_experiment_manifest): before
+anything is frozen, verifies every file hash in the manifest. Cal-stamp mismatch already
+halts via test_freeze_v1. Zero sim matches: existing fill_sheet assert (line 99).
+
+**(c) Reader canonicalization** (log_ai_opinions.py:282): `reader_model = str(reader_model).strip()`
+before the revision lookup. Cross-week dedup (run_forward_v1.py:53-79 cross_week_check):
+for reader nfl_sim_v1_156cd057, non-pilot, a contract already frozen in ANY week directory
+is refused. Test: test_cross_week_dedup.
