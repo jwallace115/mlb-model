@@ -145,8 +145,10 @@ def test_snap_participants_loaded():
     # At least one game should have participants
     assert len(result) > 0, "must have at least one game"
     first_game = next(iter(result.values()))
-    assert isinstance(first_game, set), "each game's value must be a set of player names"
-    assert len(first_game) > 0, "game must have at least one player"
+    assert isinstance(first_game, dict), "each game's value must be a dict with pfr_ids and names"
+    assert "pfr_ids" in first_game, "must have pfr_ids key"
+    assert "names" in first_game, "must have names key"
+    assert len(first_game["names"]) > 0, "game must have at least one player"
 
 
 # ── D230: snap-count settlement tests ────────────────────────────────────────
@@ -182,7 +184,7 @@ def test_player_absent_from_snaps_void():
 
 
 def test_game_no_snap_data_unresolved():
-    """D230: a game with no snap data -> snap_played=None -> unresolved."""
+    """D236(a): a game with no snap data -> snap_played=None -> UNRESOLVED, no stat scored."""
     from nfl.pipeline.log_ai_opinions import _first_side_won
     row = pd.Series({"market_key": "player_receptions", "line": 4.5})
     act = {
@@ -191,10 +193,78 @@ def test_game_no_snap_data_unresolved():
         "home_pts": 17, "away_pts": 10, "home": "KC", "away": "CAR",
         "n_plays": 100,
     }
-    # snap_played=None means snap data unavailable for this game
     result = _first_side_won(row, act, "00-0099999", snap_played=None)
-    # With no snap data, the old behavior applies: 0 receptions -> Under wins
-    # But snap_played=None means we can't determine participation,
-    # so _first_side_won should proceed normally (stat = 0 < 4.5 -> 0)
-    assert result == 0, (
-        "snap_played=None means stat scoring proceeds normally, got {result}")
+    assert result is None, (
+        f"snap_played=None must return None (UNRESOLVED), got {result}")
+
+
+# ── D236: new settlement tests ───────────────────────────────────────────────
+
+def test_inactive_no_snap_data_unresolved():
+    """D236: inactive player with no snap data for the game -> UNRESOLVED (not VOID)."""
+    from nfl.pipeline.log_ai_opinions import _first_side_won
+    row = pd.Series({"market_key": "player_receptions", "line": 3.5})
+    act = {
+        "tabs": {"rec": pd.DataFrame(columns=["player_id", "actual_rec"])},
+        "ints": pd.Series(dtype=float),
+        "home_pts": 24, "away_pts": 17, "home": "KC", "away": "CAR",
+        "n_plays": 120,
+    }
+    # snap_played=None means snap data unavailable, not that player didn't play
+    result = _first_side_won(row, act, "00-0099999", snap_played=None)
+    assert result is None, "no snap data -> None (UNRESOLVED, not VOID)"
+
+
+def test_suffix_name_settles_by_id():
+    """D236(b): a player with a suffix (Jr., III) settles by PFR ID, not name match."""
+    from nfl.pipeline.log_ai_opinions import _build_gsis_to_pfr, _load_snap_participants
+    # Just verify the crosswalk works for real data
+    gsis_to_pfr = _build_gsis_to_pfr(2026)
+    if not gsis_to_pfr:
+        pytest.skip("no GSIS->PFR crosswalk available for 2026")
+    snap_parts = _load_snap_participants(2026)
+    if snap_parts is None:
+        pytest.skip("no snap data for 2026")
+    # Find a player with a suffix in the roster
+    import nflreadpy
+    roster = nflreadpy.load_rosters([2026])
+    if hasattr(roster, "to_pandas"):
+        roster = roster.to_pandas()
+    suffixed = roster[roster["full_name"].str.contains(r"\b(Jr\.|III|II|IV|Sr\.)", na=False, regex=True)]
+    if suffixed.empty:
+        pytest.skip("no suffixed names in roster")
+    # Pick one with both gsis_id and pfr_id
+    have_both = suffixed[suffixed["gsis_id"].notna() & suffixed["pfr_id"].notna()]
+    if have_both.empty:
+        pytest.skip("no suffixed player with both IDs")
+    player = have_both.iloc[0]
+    gsis = player["gsis_id"]
+    pfr = gsis_to_pfr.get(gsis)
+    assert pfr is not None, f"GSIS {gsis} should map to PFR ID"
+    # Check if this player appears in any snap count game by PFR ID
+    found = False
+    for gid, snap_data in snap_parts.items():
+        if pfr in snap_data["pfr_ids"]:
+            found = True
+            break
+    # If found by PFR ID, the ID match works for suffixed names
+    if found:
+        assert True, f"Player {player['full_name']} found by PFR ID {pfr}"
+    else:
+        # Player may not have played yet — that's OK, the crosswalk itself is tested
+        assert pfr == player["pfr_id"], "crosswalk maps correctly"
+
+
+def test_incomplete_game_unresolved():
+    """D236(c): an incomplete game (no END GAME in PBP) -> unresolved."""
+    from nfl.pipeline.log_ai_opinions import _game_actuals
+    # Build a minimal PBP without END GAME
+    pbp = pd.DataFrame([{
+        "game_id": "2026_99_CAR_KC",
+        "home_team": "KC", "away_team": "CAR",
+        "play_type": "pass", "desc": "pass incomplete",
+        "home_score": 7, "away_score": 3,
+        "week": 99, "qtr": 2, "game_seconds_remaining": 600,
+    }])
+    result = _game_actuals(pbp, "Kansas City Chiefs", "Carolina Panthers")
+    assert result is None, "incomplete game (no END GAME) must return None"

@@ -4394,3 +4394,28 @@ script's output.
 _load_props_at_T globs `manual/*.parquet`; a scratch file newer than the archive is taken.
 
 test_freeze_v1: 4 passed.
+
+### D236 — FWD2c Item 2: settlement for every reader (2026-09-30)
+
+**(a) snap_played=None → UNRESOLVED** (log_ai_opinions.py:478). No stat scored when
+snap data is unavailable for the game.
+
+**(b) ID-based participation** (log_ai_opinions.py:537-549). GSIS ID → PFR ID via
+nflverse roster crosswalk (_build_gsis_to_pfr). Name match only when no ID available.
+
+**(c) Completed-game check** (log_ai_opinions.py:401). _game_actuals returns None for
+games without "END GAME" in PBP desc.
+
+**(d) Week 3 re-grade fix.** PBP file was stale (weeks 1-2 only). Refreshed from
+nflreadpy (now weeks 1-3). Week 3: 2025 settled, 40 VOID, 5 unresolved.
+Week 2: 76 settled, 2 VOID.
+
+**(e) score-experiment --file diagnostic.** Δ = +0.0148, 162 legs, 14 games,
+95% CI [-0.0039, +0.0341], verdict inconclusive. P2 (|p-q|>0.08): 103 legs,
+units = +2.26. (Cowork's FWD1b: Δ +0.0157, n=174.)
+
+Tests: test_inactive_no_snap_data_unresolved (snap_played=None → UNRESOLVED);
+test_suffix_name_settles_by_id (GSIS→PFR crosswalk for suffixed names);
+test_incomplete_game_unresolved (no END GAME → None).
+
+test_freeze_v1: 4 passed. Full suite: 49 passed.

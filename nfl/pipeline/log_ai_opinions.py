@@ -382,7 +382,7 @@ GAP_BUCKETS = [(-1, 0.03, "<0.03"), (0.03, 0.08, "0.03-0.08"), (0.08, 9, ">0.08"
 
 
 def _load_snap_participants(season):
-    """D230: load snap counts from nflreadpy. Returns {game_id: {player_name: True}}
+    """D236: load snap counts from nflreadpy. Returns {game_id: {"pfr_ids": set, "names": set}}
     where a player played = offense_snaps + st_snaps > 0.
     Returns None if snap data is unavailable for the season."""
     try:
@@ -399,18 +399,40 @@ def _load_snap_participants(season):
     played = sc[sc["_played"]]
     result = {}
     for gid, gdf in played.groupby("game_id"):
-        result[gid] = set(gdf["player"].str.strip().values)
+        result[gid] = {
+            "pfr_ids": set(gdf["pfr_player_id"].dropna().str.strip().values),
+            "names": set(gdf["player"].str.strip().values),
+        }
     return result
+
+
+def _build_gsis_to_pfr(season):
+    """D236(b): GSIS ID -> PFR ID crosswalk from nflverse roster."""
+    try:
+        import nflreadpy
+        roster = nflreadpy.load_rosters([season])
+        if hasattr(roster, "to_pandas"):
+            roster = roster.to_pandas()
+        if roster.empty:
+            return {}
+    except Exception:
+        return {}
+    valid = roster[roster["gsis_id"].notna() & roster["pfr_id"].notna()]
+    return dict(zip(valid["gsis_id"].str.strip(), valid["pfr_id"].str.strip()))
 
 
 def _game_actuals(pbp, home, away):
     """Actual per-player stats and the final score for one game, from the repo's own PBP reader.
-    D230: participants replaced by snap-count-based check (passed separately to score())."""
+    D236(c): returns None for incomplete games (no END GAME row)."""
     from nfl.sim.actuals import actual_player_game_stats
     from nfl.sim.names import FULL_TO_ABBR
     h, a = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
     g = pbp[(pbp["home_team"] == h) & (pbp["away_team"] == a)]
     if g.empty:
+        return None
+    # D236(c): completed-game check
+    completed = g["desc"].str.contains("END GAME", case=False, na=False).any()
+    if not completed:
         return None
     rec, rush, td, pas = actual_player_game_stats(g)
     tabs = {"rec": rec, "rush": rush, "td": td, "pass": pas}
@@ -454,9 +476,11 @@ def _first_side_won(row, act, pid, snap_played=None):
         return None if t == line else int(t > line)
     if pid is None:
         return None
-    # D230: snap-count participation check
+    # D236(a): snap-count participation check
     if snap_played is False:
         return None  # VOID: player did not play (not in snap counts)
+    if snap_played is None:
+        return None  # UNRESOLVED: no snap data for this game
     if mk == "player_pass_interceptions":
         v = float(act["ints"].get(pid, 0.0))
     else:
@@ -499,8 +523,10 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
     else:
         pbp = pd.read_parquet(pbp_path or ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
         lk = _build_roster_lookup(load_roster(), season, week)
-    # D230: load snap-count participants (replaces PBP player-id check)
+    # D236: load snap-count participants and GSIS->PFR crosswalk
     snap_parts = _load_snap_participants(season)
+    gsis_to_pfr = _build_gsis_to_pfr(season)
+    n_id_match = n_name_match = 0
     rows = []
     for (home, away), s in m.groupby(["home_team", "away_team"]):
         if pbp is None:
@@ -508,11 +534,9 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
         else:
             act = _game_actuals(pbp, home, away)
         teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
-        # D230: build nflverse game_id for snap lookup
         h_abbr, a_abbr = FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)
-        # nflverse game_id format: {season}_{week:02d}_{away}_{home}
         nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
-        game_snap_players = snap_parts.get(nfl_game_id) if snap_parts else None
+        game_snap = snap_parts.get(nfl_game_id) if snap_parts else None
         for _, r in s.iterrows():
             settlement = "settled"
             if act is None:
@@ -520,13 +544,19 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None):
                 settlement = "unresolved"
             elif r["player_name"]:
                 pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
-                # D230: snap-count-based participation
-                if game_snap_players is None:
-                    snap_played = None  # snap data unavailable
-                elif r["player_name"].strip() in game_snap_players:
-                    snap_played = True
+                # D236(b): match by player ID (GSIS -> PFR), fall back to name
+                if game_snap is None:
+                    snap_played = None
                 else:
-                    snap_played = False
+                    pfr_id = gsis_to_pfr.get(pid) if pid else None
+                    if pfr_id and pfr_id in game_snap["pfr_ids"]:
+                        snap_played = True
+                        n_id_match += 1
+                    elif r["player_name"].strip() in game_snap["names"]:
+                        snap_played = True
+                        n_name_match += 1
+                    else:
+                        snap_played = False
                 y = _first_side_won(r, act, pid, snap_played=snap_played)
                 if y is None and pid is not None:
                     if snap_played is False:
@@ -783,13 +813,14 @@ def score_experiment(experiment, canonical_reader, season=2026, include_pilot=Fa
         pbp = pd.read_parquet(pbp_path)
         lk = _build_roster_lookup(load_roster(), season, week)
         snap_parts = _load_snap_participants(season)
+        gsis_to_pfr = _build_gsis_to_pfr(season)
         rows = []
         for (home, away), s in m.groupby(["home_team", "away_team"]):
             act = _game_actuals(pbp, home, away)
             teams = [FULL_TO_ABBR.get(home, home), FULL_TO_ABBR.get(away, away)]
             h_abbr, a_abbr = teams
             nfl_game_id = f"{season}_{week:02d}_{a_abbr}_{h_abbr}"
-            game_snap_players = snap_parts.get(nfl_game_id) if snap_parts else None
+            game_snap = snap_parts.get(nfl_game_id) if snap_parts else None
             for _, r in s.iterrows():
                 settlement = "settled"
                 if act is None:
@@ -797,12 +828,16 @@ def score_experiment(experiment, canonical_reader, season=2026, include_pilot=Fa
                     settlement = "unresolved"
                 elif r["player_name"]:
                     pid, method = resolve_player(r["player_name"], season, week, teams, *lk)
-                    if game_snap_players is None:
+                    if game_snap is None:
                         snap_played = None
-                    elif r["player_name"].strip() in game_snap_players:
-                        snap_played = True
                     else:
-                        snap_played = False
+                        pfr_id = gsis_to_pfr.get(pid) if pid else None
+                        if pfr_id and pfr_id in game_snap["pfr_ids"]:
+                            snap_played = True
+                        elif r["player_name"].strip() in game_snap["names"]:
+                            snap_played = True
+                        else:
+                            snap_played = False
                     y = _first_side_won(r, act, pid, snap_played=snap_played)
                     if y is None and pid is not None:
                         settlement = "void" if snap_played is False else "unresolved"
@@ -820,7 +855,22 @@ def score_experiment(experiment, canonical_reader, season=2026, include_pilot=Fa
         dec = scored["side_price"].map(lambda a: (a / 100 + 1) if pd.notna(a) and a > 0 else (100 / -a + 1) if pd.notna(a) else np.nan)
         scored["units"] = np.where(scored["side"] == "none", 0.0,
                                     np.where(scored["graded"], np.where(scored["side_won"], dec - 1, -1.0), 0.0))
-        print(f"[DIAGNOSTIC — single file: {f.name}]")
+        print(f"[DIAGNOSTIC — NOT THE RECORD: {f.name}]")
+        print(f"  Total rows: {len(scored)}, graded: {scored['graded'].sum()}")
+        # D236(e): compute Δ for sim_v1 rows directly (ignore pilot/revision)
+        sim_rows = scored[(scored["tag"] == "sim_v1") & scored["graded"]]
+        if "book_p_first" in sim_rows.columns and len(sim_rows) > 0:
+            diag_stat = primary_statistic(sim_rows)
+            print(f"  sim_v1 settled: {len(sim_rows)} legs, {diag_stat['n_games']} games")
+            print(f"  Δ = {diag_stat['delta']:.6f}" if diag_stat['delta'] is not None else "  Δ = n/a")
+            if diag_stat['ci_lo'] is not None:
+                print(f"  95% CI: [{diag_stat['ci_lo']:.6f}, {diag_stat['ci_hi']:.6f}]")
+            print(f"  Verdict: {diag_stat['verdict']}")
+            # P2
+            big = sim_rows[sim_rows["gap"].abs() > 0.08]
+            if len(big) > 0:
+                p2_units = big["units"].sum()
+                print(f"  P2 (|p-q|>0.08): {len(big)} legs, units = {p2_units:+.2f}")
         all_scored.append(scored)
     else:
         # Pool ALL week directories
