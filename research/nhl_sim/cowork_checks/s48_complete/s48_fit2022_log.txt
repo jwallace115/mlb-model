@@ -1,0 +1,14 @@
+games 1156; backup flag missing 0; goalie rating missing 0
+   market                     regime    n    coef    lo90    hi90       p  a2_n  a2_roi   a2_se  bh_thresh  BH_survivor
+0      ML           R3 either backup  773  0.4439 -0.0259  0.9137  0.0601   403  0.0012  0.0633     0.0083        False
+1      ML           R4 |eng-pin|>5pt  645  0.3662 -0.1065  0.8389  0.1013   583 -0.0074  0.0532     0.0167        False
+2      ML  R1 early (<=10 GP either)  163  0.6316 -0.2462  1.5093  0.1183    81  0.1600  0.1413     0.0250        False
+3      ML              R2 either B2B  299  0.4260 -0.3316  1.1836  0.1775   157  0.0045  0.1047     0.0333        False
+4      ML  R5 engine pick = underdog  866  0.2363 -0.2963  0.7688  0.2328   513 -0.0163  0.0589     0.0417        False
+5     TOT              R2 either B2B  285  0.2790 -0.6234  1.1814  0.3055   131 -0.0153  0.0846     0.0500        False
+6     TOT                 R6 goalies  353  0.1916 -0.6199  1.0031  0.3489   153  0.0672  0.0776     0.0583        False
+7     TOT  R1 early (<=10 GP either)  156  0.2283 -0.9707  1.4272  0.3771    49 -0.0966  0.1392     0.0667        False
+8      ML                 R6 goalies  212 -0.0495 -0.9928  0.8937  0.5344    98 -0.1229  0.1254     0.0750        False
+9     TOT  R5 engine pick = underdog  541 -0.2166 -1.0121  0.5790  0.6728   244 -0.1291  0.0638     0.0833        False
+10    TOT           R3 either backup  733 -0.1840 -0.7499  0.3819  0.7036   344 -0.0783  0.0520     0.0917        False
+11    TOT           R4 |eng-pin|>5pt  604 -0.5228 -1.2183  0.1727  0.8919   489 -0.0546  0.0435     0.1000        False

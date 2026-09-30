@@ -976,3 +976,22 @@ Old parquets saved as `season={2022,2023}_swapped.parquet` (gitignored).
   goalie t −1.76 (|t| > 1.64), A1 −0.05 (below 0.376). Report it that way; nothing tuned.
 
 **Fix impact:** prices changed on 1,297 of 1,312 games in 2022-23 (mean |Δ| 4.1 pp, max 20 pp).
+
+### S51 — Prediction report on fixed engine + generators committed (2026-09-30, C-WO1 Item 3)
+
+**Prediction report (fixed engine):**
+- 2022-23 (fit): ML log-loss 0.6594 (Pin 0.6568), A1 0.448 [−0.048, 0.977] (not significant).
+- 2023-24 (validate): ML log-loss 0.6646 (Pin 0.6567), A1 −0.051 [−0.652, 0.555] (not significant).
+- Totals 2023-24: log-loss 0.7004 (Pin 0.6942), A1 −0.022 [−0.450, 0.434].
+
+**Generators committed as code:**
+- `nhl/sim/measure_total_variance.py` (S46): total-goals variance = 5.328 actual vs 5.653 engine
+  (100k sims). Ratio 0.942. Engine OVER-disperses.
+- `nhl/sim/measure_b2b_modifiers.py` (S47): on fixed 2022-23 prices: own_b2b coef=-0.092 (SE 0.032,
+  p=0.005), opp_b2b coef=+0.065 (SE 0.031, p=0.035). Backup not significant (own p=0.045 marginal,
+  opp p=0.789). Note: S47 decision entry was computed on swapped prices (own_b2b -0.108, opp_b2b +0.081);
+  swapped prices lack mean_home/away_goals columns so cannot be directly reproduced by this generator.
+- `research/nhl_sim/cowork_checks/s48_complete/s48_complete.py` (S48): unchanged from Cowork.
+
+**S47 A1.3 rule stays pre-registered:** a B2B modifier is kept only if 2023-24 ML log-loss improves.
+The coefficients on the fixed engine are reported; they are NOT applied in this order.
