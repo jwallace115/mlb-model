@@ -4419,3 +4419,18 @@ test_suffix_name_settles_by_id (GSIS→PFR crosswalk for suffixed names);
 test_incomplete_game_unresolved (no END GAME → None).
 
 test_freeze_v1: 4 passed. Full suite: 49 passed.
+
+### D237 — FWD2c Item 3: stamp and summary (2026-09-30)
+
+FWD_EXPERIMENT_v1.json re-stamped. No hash changes needed (already current).
+
+**49 tests pass** across 7 test files:
+- test_freeze_v1: 4 (engine_fp, table_hashes, calibration, params)
+- test_fwd2b_harness: 10 (pilot_fixture, live_no_pilot, stale_quotes, pilot_as_of, price_altered, stale_ratings, zero_matches, usage_fp, wall_clock, manual_scratch)
+- test_fwd2_settlement: 12 (inactive_void, active_zero, cohort_wrong_reader, cohort_unanchored, settlement_exists, snap_loaded, wr_snaps, absent_void, no_snap_unresolved, inactive_no_snap, suffix_by_id, incomplete_game)
+- test_forward_v1: 8
+- test_fwd2_item0_fixes: 7
+- test_fwd2_bundle: 5
+- test_fwd2_anchor: 3
+
+`git diff --stat origin/main...HEAD`: 16 files, +3,095 −192.
