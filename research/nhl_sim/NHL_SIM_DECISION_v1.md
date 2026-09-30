@@ -995,3 +995,14 @@ Old parquets saved as `season={2022,2023}_swapped.parquet` (gitignored).
 
 **S47 A1.3 rule stays pre-registered:** a B2B modifier is kept only if 2023-24 ML log-loss improves.
 The coefficients on the fixed engine are reported; they are NOT applied in this order.
+
+### S52 — 16-regime family on fixed engine (2026-09-30, C-WO1 Item 4)
+
+16-test family: 8 regimes (R1-R8) × 2 markets (ML, TOT), BH 10% within the family.
+R7 = both teams' 5v5 attempt rate > 1.02 × league. R8 = both teams' penalties taken > 1.05 × league.
+
+**2023-24 BH 10%: NO SURVIVORS.** Min p = 0.0064 (ML R6 goalies), threshold at rank 1 = 0.0063.
+Matches Cowork's `a02_regimes_fixed.csv` to max |diff| = 0.000000 on coef, p, and n for all 32 rows.
+
+The engine carries no statistically significant information beyond Pinnacle in any tested regime
+on the fixed engine. No survivors are carried to 2024-25. This is the expected outcome.
