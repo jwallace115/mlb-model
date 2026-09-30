@@ -4812,3 +4812,125 @@ The first primary window is week-4 TNF:
   new live path.
 - The Sunday windows also need FWD2d, the runbook.
 - v1's physics (FREEZE_v1) are unchanged throughout.
+
+### D256 — FWD6 item 0: the prediction consumes exactly its bundle, proven by a read set; per-team freshness; inputs archived and restorable (2026-09-30)
+
+FWD6 was implemented by Cowork directly. Jeff asked for it fixed properly, and the implementation is to be audited
+independently (ChatGPT audit #9).
+
+**Routing** (`nfl/sim/read_set.py:route_inputs`). run_week gets `--input-dir`, `--props-file` and `--run-id`, and
+`--run-dir` without them HALTs. Before any load, `route_inputs` points these at `<run-dir>/inputs`, by setting module
+constants:
+- `engine.RATINGS_DIR`;
+- `calibration.RATINGS_DIR`;
+- `calibration.USAGE_PATH`;
+- `names.ROSTER_PATH` (a new constant; `load_roster` reads it);
+- `usage.PBP_DIR`.
+
+No FREEZE_v1 byte changes. A missing input HALTs; nothing falls back to a shared file or the network.
+- player_usage and active_universe are read from the input dir.
+- Props come only from the bundle's props.parquet, never the archive. MOVED-AGAINST is then not measured; it is a layer
+  flag and never enters p.
+- Completed-game counts come from `inputs/team_game_counts.json`, written at bundle time by the same
+  `count_team_completed_games` from the shared PBP (with the source sha256).
+
+**Read-set proof** (`ReadSetRecorder`, `classify_read_set`).
+- In forward-run mode, run_week wraps `pandas.read_parquet`, `read_csv`, `read_json`, `pyarrow.parquet.read_table` and
+  `open` (read modes).
+- Each data file is read once and hashed, and the parser gets those exact bytes, so the recorded hash is the hash of
+  what was consumed.
+- An audit hook refuses socket connect and getaddrinfo.
+- `<run-dir>/outputs/read_set.json` is written in a `finally`.
+- Before filling opinions, the harness requires every entry to be one of:
+  - a run-directory file whose sha256 equals the bundle manifest's;
+  - an outputs/ file;
+  - a repo file hashed by FWD_EXPERIMENT_v1.json with a matching hash.
+  Anything else HALTs.
+- Every required input (the 8 ratings/usage files, rosters, team_game_counts.json) must appear as a read FROM the run
+  directory.
+- A cloud trace of the real run_week (PIT@CLE, 10,000 sims, 79 s) found these reads at e0fc3d2d6:
+  - 8 shared ratings files;
+  - shared rosters;
+  - pbp_2026;
+  - 6 props-archive files;
+  - calibration_v1.json and params_v1.json;
+  - the engine tables.
+
+  After the fix the read set holds only the run directory plus manifest-hashed files.
+
+**Freshness** (`_team_freshness`, `_last_played_weeks`). Per participating team, on the consumed copies:
+- team ratings and both tendency tables: max week >= W−1;
+- usage, active universe, kickers and QB ratings: max week >= the team's last completed game week. A game counts as
+  completed when it has an END GAME row in PBP.
+- A team's last played week must be >= W−2.
+- The PBP must contain a completed week W−1 game.
+
+The table is written into freshness.json and printed.
+
+**Archive and restore.**
+- Every run-directory file is copied to `<repo parent>/mlb-model-archive/nfl_fwd_v1/sha256/<hash>`
+  (`NFL_FWD_ARCHIVE` overrides) at bundle time, at manifest finalisation and at publication.
+- `nfl/sim/restore_run.py --run-dir X` rebuilds missing files from the archive and runs verify_bundle.
+- verify_bundle now also flags files in the run directory that are not in the manifest (publication.json excepted).
+
+**Tests** (`test_fwd6_item0.py`, 13). They include the auditor's A1 counterexample through the real `run_week.main()`:
+the shared CLE week-4 pass_off success is set to 0.99, and the solver now receives the bundle's 0.4334993874. The same
+script against e0fc3d2d6's run_week printed "solver received CLE pass_off success = 0.99". 12 of 13 fail on e0fc3d2d6;
+the network-block unit test is new-module-only.
+
+### D257 — FWD6 item 1: quotes judged row by row; the solver's returned anchor is mandatory; outputs carry and are checked for this run's identity (2026-09-30)
+
+**Lines** (`_load_lines_at_T`).
+- A snapshot file is usable only if EVERY row's snapshot_utc <= T; the newest such file is used.
+- A chosen file with more than one snapshot_utc HALTs ("inconsistent game-line snapshot").
+
+**Props.** `_load_props_at_T` keeps its per-row `pull_timestamp <= T` filter. build_bundle then re-checks every consumed
+props and line row: timestamped after T → HALT; older than 3 h (unless --allow-stale-quotes) → HALT.
+
+**Event metadata.** Teams and kickoff must agree across the props and lines rows of each event; two events may not map to
+one game_id.
+
+**Returned anchor.**
+- `anchor_sidecar` requires `anchor_returned_df`; the minimum-error fallback over the log is removed.
+- The harness HALTs if anchor_returned.parquet is missing, has duplicate games, or its games differ from the simulated
+  games.
+
+**Output identity.**
+- run_week writes season, week and run_id on picks_log, anchoring_log and anchor_returned.
+- `_validate_outputs` HALTs unless every row equals this run's values, and every pick's game is a bundle game.
+
+**Tests** (`test_fwd6_item1.py`, 12). They include:
+- the auditor's A3 case: a totals row at T+10 min behind valid first rows. At e0fc3d2d6 total 99.0 was consumed; now the
+  older snapshot's 45.5 is used.
+- the A4 cases: a missing anchor_returned; outputs labelled 2025 / week 2 / previous-experiment.
+
+9 of 12 fail on e0fc3d2d6. The other 3 are mutation guards for behaviour that was already correct: the props filter, the
+convergence flag, the 1.0 tolerance.
+
+The existing anchor tests that exercised the removed fallback were rewritten to pass returned state:
+- test_fwd2_anchor ×3;
+- test_forward_v1 ×2;
+- test_fwd3_item1's legacy test, which now asserts the HALT.
+
+### D258 — FWD6 item 2: the canonical reader is reserved; every publication gets a receipt; the FWD5 tests exist (2026-09-30)
+
+**Reserved reader** (shared `nfl/pipeline/log_ai_opinions.py`). `freeze()` HALTs for any reader_model equal, after strip
+and casefold, to a `canonical_reader` in `research/nfl_sim/FWD_EXPERIMENT_*.json` (`reserved_readers()`). This is a guard
+only; nothing else in the shared file changed. The shared logger can neither write a scorable canonical row nor make the
+first canonical freeze that would block the harness.
+
+**Receipts.**
+- After a successful, non-quarantined freeze, the harness appends one line to `research/nfl_sim/fwd_v1_receipts.jsonl`:
+  experiment id and digest, run_id, bundle_digest, frozen file and sha256, rows, publication_utc, first kick, pilot, and
+  publication.json's sha256.
+- verify_bundle fails when a receipt names the run and publication.json is missing or differs.
+- `receipt_status(run_id, root)` returns "complete", "no receipt" or "mismatch".
+- A quarantined write gets no receipt.
+- Enforcing receipts at scoring time is S1 (FWD7).
+
+**Tests.**
+- `test_fwd6_item2.py` (9): 7 fail on e0fc3d2d6. The other 2 (other readers still freeze; the real experiment digest) are guards.
+- `test_fwd5_pin.py` (4), the FWD5 item-1 tests never delivered:
+  - decoupling;
+  - the live path in a subprocess never loads the shared logger;
+  - interop in both orders.

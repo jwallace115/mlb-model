@@ -341,6 +341,20 @@ def prior_revisions(d, reader_model=None, pilot=None):
     return seen
 
 
+def reserved_readers(root=None):
+    """D258(a): canonical readers declared by research/nfl_sim/FWD_EXPERIMENT_*.json."""
+    base = Path(root) if root else ROOT
+    out = set()
+    for f in sorted((base / "research" / "nfl_sim").glob("FWD_EXPERIMENT_*.json")):
+        try:
+            r = json.loads(f.read_text()).get("canonical_reader")
+        except Exception:
+            raise SystemExit(f"HALT: cannot read {f} to check reserved readers")
+        if r:
+            out.add(str(r).strip())
+    return out
+
+
 def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
            board_root=None, run_id=None, slate_date=None, packet_path=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
@@ -352,6 +366,11 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
         raise SystemExit("HALT: --reader-model is required (the model that made these picks)")
     # D224(c): canonicalize reader string (strip whitespace)
     reader_model = str(reader_model).strip()
+    # D258(a): a forward experiment's canonical reader is reserved — its opinions are
+    # written only by that experiment's harness (nfl/sim/run_forward_v1.py), never here.
+    if reader_model.casefold() in {r.casefold() for r in reserved_readers()}:
+        raise SystemExit(f"HALT: reader '{reader_model}' is reserved for a forward experiment; "
+                         f"only its harness may freeze under it")
     is_date_sport = SPORTS[SPORT].get("slate") == "date"
     if is_date_sport:
         d = d or out_dir_date(slate_date)

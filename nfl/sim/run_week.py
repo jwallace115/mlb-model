@@ -39,6 +39,13 @@ TIER_TRUSTED = {"receptions_WR", "anytime_td_WR"}
 TIER_TRUSTED_FLAGGED = {"receptions_TE", "receptions_RB"}
 TIER_WATCH = {"rush_attempts_RB"}
 
+# D256: forward-run mode. When the harness passes --input-dir / --props-file / --run-id,
+# every prediction input comes from the run directory and every output carries the run's
+# identity (season, week, run_id). Left None for an ordinary weekly board.
+INPUT_DIR = None
+PROPS_FILE = None
+RUN_IDENTITY = None
+
 
 def detect_week(override=None):
     """D68: detect current week from schedule (not PBP alone).
@@ -219,9 +226,15 @@ def get_lines_from_history(as_of=None):
     return lines
 
 
-def count_team_completed_games(season):
-    """Count completed games per team in the season."""
-    pbp_path = ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet"
+def count_team_completed_games(season, pbp_path=None):
+    """Count completed games per team in the season.
+
+    D256: in forward-run mode the counts come from <run-dir>/inputs/team_game_counts.json,
+    written at bundle time from this same function, never from the shared PBP file."""
+    if pbp_path is None and INPUT_DIR is not None:
+        with open(Path(INPUT_DIR) / "team_game_counts.json") as fh:
+            return json.load(fh)["counts"]
+    pbp_path = pbp_path or (ROOT / "nfl" / "data" / "pbp" / f"pbp_{season}.parquet")
     if not pbp_path.exists():
         return {}
     df = pd.read_parquet(pbp_path, columns=["game_id", "home_team", "away_team",
@@ -346,6 +359,12 @@ def load_props_for_game(home_full, away_full, season, week, as_of=None):
     """
     _TAG_PRECEDENCE = {"close": 3, "mid": 2, "open": 1}
 
+    if PROPS_FILE is not None:
+        # D256: forward-run mode reads ONLY the bundle's props (never the archive)
+        frames = [pd.read_parquet(PROPS_FILE)]
+        df = pd.concat(frames, ignore_index=True)
+        game_df = df[(df["home_team"] == home_full) & (df["away_team"] == away_full)]
+        return _select_props_rows(game_df, as_of)
     props_dir = ROOT / "data" / "odds_archive" / "nfl" / "props" / f"season={season}"
     if not props_dir.exists():
         return pd.DataFrame(), None, None
@@ -361,6 +380,12 @@ def load_props_for_game(home_full, away_full, season, week, as_of=None):
         return pd.DataFrame(), None, None
     df = pd.concat(frames, ignore_index=True)
     game_df = df[(df["home_team"] == home_full) & (df["away_team"] == away_full)]
+    return _select_props_rows(game_df, as_of)
+
+
+def _select_props_rows(game_df, as_of):
+    """D69/5J-2 selection (as_of cap, tag precedence, newest pull), shared by both sources."""
+    _TAG_PRECEDENCE = {"close": 3, "mid": 2, "open": 1}
     if game_df.empty:
         return pd.DataFrame(), None, None
 
@@ -607,7 +632,8 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
 
         # D58: Load open snapshot for MOVED-AGAINST flag
         open_snapshot = None  # {(player_name, family, line): implied_p}
-        if len(props) > 0:
+        # D256: forward-run mode reads no archive; MOVED-AGAINST is not measured (None)
+        if len(props) > 0 and PROPS_FILE is None:
             # Look for snapshot_tag == "open" in the props archive
             props_dir = ROOT / "data" / "odds_archive" / "nfl" / "props"
             open_frames = []
@@ -876,6 +902,10 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
     # Write picks_log.parquet
     if all_legs:
         picks_df = pd.DataFrame(all_legs)
+        if RUN_IDENTITY is not None:
+            # D257(c): every output row carries the run's identity
+            for k, v in RUN_IDENTITY.items():
+                picks_df[k] = v
         log_path = out_dir / "picks_log.parquet"
         if log_path.exists():
             prev_path = out_dir / "picks_log_prev.parquet"
@@ -898,7 +928,7 @@ def build_board(week, game_results, lines_used, team_game_counts, roster,
     return board_text, all_legs
 
 
-def main():
+def main(argv=None):
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--week", type=int, default=None)
@@ -910,8 +940,44 @@ def main():
                         help="D229: comma-separated game_ids to simulate (e.g. CAR@KC,DEN@BUF)")
     parser.add_argument("--run-dir", type=str, default=None,
                         help="D241: write outputs here instead of the shared weekly directory")
-    args = parser.parse_args()
+    parser.add_argument("--input-dir", type=str, default=None,
+                        help="D256: read every prediction input from here (<run-dir>/inputs)")
+    parser.add_argument("--props-file", type=str, default=None,
+                        help="D256: the bundle's props.parquet (the only props source)")
+    parser.add_argument("--run-id", type=str, default=None,
+                        help="D257: the forward run's id, written on every output row")
+    args = parser.parse_args(argv)
 
+    if not args.run_dir:
+        return _main_body(args)
+
+    # D256: forward-run mode. Every input comes from the run directory; every data file
+    # read is recorded with the hash of the bytes parsed; any network access HALTs.
+    if not (args.input_dir and args.props_file and args.run_id and args.week):
+        raise SystemExit("HALT: --run-dir requires --input-dir, --props-file, --run-id and --week "
+                         "(a forward run never reads shared inputs)")
+    global INPUT_DIR, PROPS_FILE, RUN_IDENTITY
+    from nfl.sim.read_set import ReadSetRecorder, route_inputs
+    run_dir = Path(args.run_dir)
+    run_dir.mkdir(parents=True, exist_ok=True)
+    recorder = ReadSetRecorder().install()
+    restore = None
+    saved = (INPUT_DIR, PROPS_FILE, RUN_IDENTITY)
+    try:
+        restore = route_inputs(args.input_dir)
+        INPUT_DIR = Path(args.input_dir)
+        PROPS_FILE = Path(args.props_file)
+        RUN_IDENTITY = {"season": SEASON, "week": int(args.week), "run_id": args.run_id}
+        return _main_body(args)
+    finally:
+        recorder.write(run_dir / "read_set.json")
+        recorder.uninstall()
+        if restore is not None:
+            restore()
+        INPUT_DIR, PROPS_FILE, RUN_IDENTITY = saved
+
+
+def _main_body(args):
     t0 = time.time()
     as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
 
@@ -977,8 +1043,9 @@ def main():
     # Load engine data
     _load_tables()
     team_r, tend, sit, kicker, league = _load_ratings()
-    pu = pd.read_parquet(ROOT / "nfl" / "data" / "sim" / "ratings" / "player_usage_weekly.parquet")
-    au = pd.read_parquet(ROOT / "nfl" / "data" / "sim" / "ratings" / "active_universe_weekly.parquet")
+    _rdir = Path(INPUT_DIR) if INPUT_DIR is not None else ROOT / "nfl" / "data" / "sim" / "ratings"
+    pu = pd.read_parquet(_rdir / "player_usage_weekly.parquet")
+    au = pd.read_parquet(_rdir / "active_universe_weekly.parquet")
     kw = dict(team_r=team_r, tend=tend, sit=sit, kicker=kicker, league=league,
               player_usage=pu, active_uni=au)
 
@@ -992,7 +1059,11 @@ def main():
     # Get props pull timestamp for header
     pull_ts_str = None
     props_dir = ROOT / "data" / "odds_archive" / "nfl" / "props" / f"season={SEASON}"
-    if props_dir.exists():
+    if PROPS_FILE is not None:
+        _bp = pd.read_parquet(PROPS_FILE)
+        if len(_bp) > 0 and "pull_timestamp" in _bp.columns:
+            pull_ts_str = str(_bp["pull_timestamp"].max())
+    elif props_dir.exists():
         for root, dirs, files in os.walk(props_dir):
             for f in files:
                 if f.endswith('.parquet'):
@@ -1045,6 +1116,7 @@ def main():
     for gr in game_results:
         home, away = gr["home"], gr["away"]
         anchor_returned_rows.append({
+            **(RUN_IDENTITY or {}),
             "game": f"{away}@{home}",
             "iterations": gr["n_iter"],
             "converged": gr["converged"],
@@ -1066,6 +1138,8 @@ def main():
             out_dir / "anchor_returned.parquet", index=False)
     if anchoring_log:
         alog_df = pd.DataFrame(anchoring_log)
+        for k, v in (RUN_IDENTITY or {}).items():
+            alog_df[k] = v
         alog_df.to_parquet(out_dir / "anchoring_log.parquet", index=False)
         # Print per-game summary: show the BEST iteration (min |err_m|+|err_t|)
         print(f"\n{'Game':16s} {'Iter':>4s} {'err_m':>6s} {'err_t':>6s} {'|m|<.5':>6s} {'|t|<1':>5s} {'2SE':>4s}")

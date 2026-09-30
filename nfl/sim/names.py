@@ -198,6 +198,10 @@ def get_team_candidates(home_team_full, away_team_full):
     return teams
 
 
+# D256: module constant so a forward run can point name resolution at its bundle copy
+ROSTER_PATH = ROOT / "nfl" / "data" / "pbp" / "rosters_weekly.parquet"
+
+
 def load_roster():
-    """Load rosters_weekly from disk."""
-    return pd.read_parquet(ROOT / "nfl" / "data" / "pbp" / "rosters_weekly.parquet")
+    """Load rosters_weekly from disk (ROSTER_PATH; a forward run points it at <run-dir>/inputs)."""
+    return pd.read_parquet(ROSTER_PATH)

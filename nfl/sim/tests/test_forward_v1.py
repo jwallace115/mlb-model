@@ -101,7 +101,16 @@ def test_anchor_sidecar_week2():
             "spread": round(float(best["margin"]) - float(best["err_m"]), 4),
             "total": round(float(best["total"]) - float(best["err_t"]), 4),
         }
-    sidecar = anchor_sidecar(al, lines)
+    # D257(b): the solver's returned state — here each game's best logged iteration,
+    # which is what the week-2 run returned for its converged games
+    ret_rows = []
+    for gname in al["game"].unique():
+        g = al[al["game"] == gname]
+        best = g.loc[(abs(g["err_m"]) + abs(g["err_t"])).idxmin()]
+        ret_rows.append({"game": gname, "iterations": int(best["iter"]) + 1,
+                         "converged": bool(best["converged"]),
+                         "anch_m": float(best["margin"]), "anch_t": float(best["total"])})
+    sidecar = anchor_sidecar(al, lines, anchor_returned_df=pd.DataFrame(ret_rows))
     assert len(sidecar) == 15, f"Expected 15 games, got {len(sidecar)}"
     assert sidecar["anchored"].all(), f"Unanchored games: {sidecar[~sidecar['anchored']]}"
     max_miss = max(sidecar["miss_m"].max(), sidecar["miss_t"].max())
@@ -109,9 +118,9 @@ def test_anchor_sidecar_week2():
 
 
 def test_anchor_sidecar_missing_column():
-    """D215(b): a missing column raises KeyError."""
+    """D215(b)/D257(b): no returned anchor state -> HALT (no reconstruction from the log)."""
     df = pd.DataFrame({"game": ["A"], "iter": [0], "margin": [0]})
-    with pytest.raises(KeyError, match="missing"):
+    with pytest.raises(SystemExit, match="anchor_returned.parquet is required"):
         anchor_sidecar(df, {})
 
 

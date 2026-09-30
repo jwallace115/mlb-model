@@ -32,6 +32,40 @@ LINES_DIR = ROOT / "data" / "odds_archive" / "nfl" / "line_history"
 BOARD_ROOT = ROOT / "nfl" / "data" / "board"
 BOOK = "hardrockbet_fl"
 QUOTE_MAX_AGE_H = 3.0  # HALT if any event's newest props pull is older than this at T
+RECEIPTS_REL = Path("research") / "nfl_sim" / "fwd_v1_receipts.jsonl"
+
+# D256: files copied into <run-dir>/inputs. The first group is read by the prediction
+# (read_set.REQUIRED_INPUTS); depth charts and injuries are kept as record only.
+RATINGS_FILES = [
+    "team_ratings_weekly.parquet", "tendencies_weekly.parquet",
+    "tendencies_situational_weekly.parquet", "qb_ratings_weekly.parquet",
+    "kicker_weekly.parquet", "league_baselines.parquet",
+    "player_usage_weekly.parquet", "active_universe_weekly.parquet",
+]
+PBP_DIR_FILES = ["rosters_weekly.parquet"]
+RECORD_ONLY_FILES = ["depth_charts.parquet", "injuries.parquet"]
+
+
+def archive_root_for(repo_root):
+    """D256(d): content-addressed archive OUTSIDE git, beside the repo
+    (~/mlb-model -> ~/mlb-model-archive/nfl_fwd_v1). NFL_FWD_ARCHIVE overrides."""
+    env = os.environ.get("NFL_FWD_ARCHIVE")
+    return Path(env) if env else Path(repo_root).resolve().parent / "mlb-model-archive" / "nfl_fwd_v1"
+
+
+def archive_file(fpath, archive_root):
+    """Copy fpath into archive_root/sha256/<hash> (once) and verify the stored copy."""
+    data = Path(fpath).read_bytes()
+    h = hashlib.sha256(data).hexdigest()
+    dest = Path(archive_root) / "sha256" / h
+    if not dest.exists():
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        tmp = dest.with_name(dest.name + ".tmp")
+        tmp.write_bytes(data)
+        tmp.rename(dest)
+    if hashlib.sha256(dest.read_bytes()).hexdigest() != h:
+        raise SystemExit(f"HALT: archive copy of {fpath} is corrupt ({dest})")
+    return h
 
 
 # ── D225: immutable run bundle ───────────────────────────────────────────────
@@ -78,15 +112,82 @@ def _load_lines_at_T(season, T):
         df = pd.read_parquet(s)
         if df.empty:
             continue
-        snap_utc = _parse_utc(df["snapshot_utc"].iloc[0])
-        if snap_utc <= T:
-            candidates.append((snap_utc, df))
+        # D257(a): a snapshot is usable only if EVERY row existed at T (not just its first row)
+        row_ts = df["snapshot_utc"].map(_parse_utc)
+        if row_ts.max() <= T:
+            candidates.append((row_ts.max(), s, df))
     if not candidates:
         raise SystemExit("HALT: no game-line snapshot ≤ T")
     # Take the newest snapshot ≤ T
     candidates.sort(key=lambda x: x[0])
-    _, lines = candidates[-1]
+    _, spath, lines = candidates[-1]
+    if lines["snapshot_utc"].map(_parse_utc).nunique() > 1:
+        raise SystemExit(f"HALT: inconsistent game-line snapshot {spath.name}: "
+                         f"rows carry more than one snapshot_utc")
     return lines[lines["bookmaker"] == BOOK].copy()
+
+
+def _last_played_weeks(pbp_path, week):
+    """D256(c): each team's last COMPLETED game week before `week`, from the PBP file.
+    A game counts as completed when it has an END GAME row. HALTs if the PBP file has no
+    completed game in week-1 (the PBP is stale, so 'last played' cannot be trusted)."""
+    from nfl.sim.names import FULL_TO_ABBR  # noqa: F401 (PBP already uses abbreviations)
+    cols = ["game_id", "week", "home_team", "away_team", "desc"]
+    pbp = pd.read_parquet(pbp_path, columns=cols)
+    pbp = pbp[pbp["week"] < week]
+    done = pbp.groupby("game_id")["desc"].apply(
+        lambda d: d.astype(str).str.contains("END GAME", case=False).any())
+    games = pbp.drop_duplicates("game_id").set_index("game_id")
+    games = games[done.reindex(games.index).fillna(False).astype(bool)]
+    if week > 1 and not (games["week"] == week - 1).any():
+        raise SystemExit(f"HALT: {Path(pbp_path).name} has no completed week-{week - 1} game; "
+                         f"per-team freshness cannot be established")
+    last = {}
+    for _, g in games.iterrows():
+        for t in (g["home_team"], g["away_team"]):
+            last[t] = max(last.get(t, 0), int(g["week"]))
+    return last
+
+
+def _team_freshness(inputs_dir, season, week, teams, last_week):
+    """D256(c): per participating team, on the consumed copies.
+    - team ratings, tendencies, situational tendencies: max week >= week-1;
+    - usage, active universe, kickers, QB ratings: max week >= the team's last played week;
+    - a team's last played week must be >= week-2 (no team is idle two weeks running).
+    Returns the table; HALTs on any failure."""
+    per_game = {"team_ratings": "team_ratings_weekly.parquet",
+                "tendencies": "tendencies_weekly.parquet",
+                "tendencies_situational": "tendencies_situational_weekly.parquet"}
+    per_played = {"usage": "player_usage_weekly.parquet",
+                  "active_universe": "active_universe_weekly.parquet",
+                  "kickers": "kicker_weekly.parquet",
+                  "qb_ratings": "qb_ratings_weekly.parquet"}
+    maxw = {}
+    for label, fname in {**per_game, **per_played}.items():
+        df = pd.read_parquet(inputs_dir / fname, columns=["season", "week", "team"])
+        df = df[df["season"] == season]
+        maxw[label] = df.groupby("team")["week"].max().to_dict()
+    table, bad = {}, []
+    for t in teams:
+        lp = last_week.get(t)
+        row = {"last_played_week": lp}
+        if week > 1 and (lp is None or lp < week - 2):
+            bad.append(f"{t}: last played week {lp} (< {week - 2})")
+        for label in per_game:
+            w = maxw[label].get(t)
+            row[label] = None if w is None else int(w)
+            if w is None or w < week - 1:
+                bad.append(f"{t}: {label} max week {w} (need >= {week - 1})")
+        for label in per_played:
+            w = maxw[label].get(t)
+            row[label] = None if w is None else int(w)
+            if week > 1 and (w is None or lp is None or w < lp):
+                bad.append(f"{t}: {label} max week {w} (need >= last played {lp})")
+        table[t] = row
+    if bad:
+        raise SystemExit("HALT: per-team input freshness failed:\n" +
+                         "\n".join(f"  {b}" for b in bad))
+    return table
 
 
 def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
@@ -171,79 +272,84 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     if events.empty:
         raise SystemExit("HALT: no pre-kick events in the window")
 
-    # ── quote-age check (props AND lines) ──
-    if not props.empty:
-        props_age = props.groupby("event_id")["pull_timestamp"].first().map(
-            lambda t: (T - _parse_utc(t)).total_seconds() / 3600)
-        oldest = props_age.max()
-        if oldest > QUOTE_MAX_AGE_H and not allow_stale_quotes:
+    # ── D257(a): per-row quote checks (props AND lines) ──
+    # Every consumed row must have existed at T and be at most QUOTE_MAX_AGE_H old —
+    # judged on each row's own timestamp, never on a first row per event or file.
+    def _ages_h(df, col):
+        ts = df[col].map(_parse_utc)
+        return ts, ts.map(lambda t: (T - t).total_seconds() / 3600)
+
+    for df, col, label in [(props, "pull_timestamp", "props pull"),
+                           (lines, "snapshot_utc", "game-line snapshot")]:
+        if df.empty:
+            continue
+        if col not in df.columns:
+            raise SystemExit(f"HALT: {label} rows have no {col}")
+        ts, age = _ages_h(df, col)
+        if (ts > T).any():
+            raise SystemExit(f"HALT: {int((ts > T).sum())} {label} row(s) timestamped after "
+                             f"T={T.isoformat()} (latest {ts.max().isoformat()})")
+        if age.max() > QUOTE_MAX_AGE_H and not allow_stale_quotes:
+            worst = df.loc[age.idxmax(), "event_id"]
             raise SystemExit(
-                f"HALT: props pull is {oldest:.1f}h old for event "
-                f"{props_age.idxmax()} (max allowed: {QUOTE_MAX_AGE_H}h). "
+                f"HALT: {label} is {age.max():.1f}h old for event {worst} "
+                f"(max allowed: {QUOTE_MAX_AGE_H}h). "
                 f"Use --allow-stale-quotes with --pilot or --dry-run.")
 
-    # D241(c): game-line freshness — same 3h rule as props
-    if not lines.empty and "snapshot_utc" in lines.columns:
-        line_age_h = lines.groupby("event_id")["snapshot_utc"].first().map(
-            lambda t: (T - _parse_utc(t)).total_seconds() / 3600)
-        oldest_line = line_age_h.max()
-        if oldest_line > QUOTE_MAX_AGE_H and not allow_stale_quotes:
-            raise SystemExit(
-                f"HALT: game-line snapshot is {oldest_line:.1f}h old for event "
-                f"{line_age_h.idxmax()} (max allowed: {QUOTE_MAX_AGE_H}h). "
-                f"Use --allow-stale-quotes with --pilot or --dry-run.")
+    # D257(a): every event's rows agree on teams and kickoff across props and lines
+    meta = pd.concat([d[["event_id", "home_team", "away_team", "commence_time"]]
+                      for d in (props, lines) if not d.empty], ignore_index=True)
+    meta["commence_time"] = meta["commence_time"].map(lambda c: _parse_utc(c).isoformat())
+    inconsistent = meta.drop_duplicates().groupby("event_id").size()
+    inconsistent = inconsistent[inconsistent > 1]
+    if len(inconsistent):
+        raise SystemExit(f"HALT: inconsistent teams/kickoff within event(s) "
+                         f"{list(inconsistent.index)[:5]} across props and lines")
+    if events["game_id"].duplicated().any():
+        raise SystemExit("HALT: two events map to the same game_id in the window")
 
-    # ── freshness ──
-    freshness = {"cutoff_T": T.isoformat(), "run_id": run_id}
-    # Check ratings max week
     _r = _root or ROOT
-    ratings_dir = _r / "nfl" / "data" / "sim" / "ratings"
-    for fname, label in [("team_ratings_weekly.parquet", "team_ratings"),
-                         ("tendencies_weekly.parquet", "tendencies"),
-                         ("player_usage_weekly.parquet", "usage")]:
-        fpath = ratings_dir / fname
-        if fpath.exists():
-            rdf = pd.read_parquet(fpath, columns=["season", "week"])
-            max_w = int(rdf[rdf["season"] == season]["week"].max()) if len(rdf[rdf["season"] == season]) else 0
-            freshness[f"{label}_max_week"] = max_w
-        else:
-            freshness[f"{label}_max_week"] = None
-    # Kickers: documented fallback if no 2026 rows
-    kicker_path = ratings_dir / "kicker_weekly.parquet"
-    if kicker_path.exists():
-        kdf = pd.read_parquet(kicker_path, columns=["season"])
-        if season in kdf["season"].values:
-            freshness["kickers"] = "current_season"
-        else:
-            freshness["kickers"] = "engine_default_fallback"
-    else:
-        freshness["kickers"] = "missing"
 
     # ── write ──
     events.to_parquet(bundle_dir / "events.parquet", index=False)
     props.to_parquet(bundle_dir / "props.parquet", index=False)
     lines.to_parquet(bundle_dir / "lines.parquet", index=False)
-    (bundle_dir / "freshness.json").write_text(json.dumps(freshness, indent=1) + "\n")
 
-    # D241(b): copy and hash every prediction input the sim reads
+    # D241(b)/D256: copy every prediction input into the run directory; the prediction
+    # reads ONLY these copies (run_week --input-dir; proven by the read set).
     inputs_dir = bundle_dir / "inputs"
     inputs_dir.mkdir()
-    RATINGS_FILES = [
-        "team_ratings_weekly.parquet", "tendencies_weekly.parquet",
-        "tendencies_situational_weekly.parquet", "qb_ratings_weekly.parquet",
-        "kicker_weekly.parquet", "league_baselines.parquet",
-        "player_usage_weekly.parquet", "active_universe_weekly.parquet",
-    ]
-    for fname in RATINGS_FILES:
-        src = ratings_dir / fname
-        if src.exists():
-            shutil.copy2(src, inputs_dir / fname)
-    # Rosters (run_week.py:984 via names.load_roster)
+    ratings_dir = _r / "nfl" / "data" / "sim" / "ratings"
     pbp_dir = _r / "nfl" / "data" / "pbp"
-    for fname in ["rosters_weekly.parquet", "depth_charts.parquet", "injuries.parquet"]:
-        src = pbp_dir / fname
-        if src.exists():
-            shutil.copy2(src, inputs_dir / fname)
+    for src_dir, names, required in [(ratings_dir, RATINGS_FILES, True),
+                                     (pbp_dir, PBP_DIR_FILES, True),
+                                     (pbp_dir, RECORD_ONLY_FILES, False)]:
+        for fname in names:
+            src = src_dir / fname
+            if src.exists():
+                shutil.copy2(src, inputs_dir / fname)
+            elif required:
+                raise SystemExit(f"HALT: prediction input missing: {src}")
+
+    # D256(a): completed-game counts (the board's stale flag) and each team's last played
+    # week, computed ONCE here from the shared PBP and frozen into the run directory.
+    pbp_path = pbp_dir / f"pbp_{season}.parquet"
+    if not pbp_path.exists():
+        raise SystemExit(f"HALT: {pbp_path} missing — needed for per-team freshness")
+    from nfl.sim.run_week import count_team_completed_games
+    counts = count_team_completed_games(season, pbp_path=pbp_path)
+    last_week = _last_played_weeks(pbp_path, week)
+    (inputs_dir / "team_game_counts.json").write_text(
+        json.dumps({"counts": counts, "last_played_week": last_week,
+                    "source": pbp_path.name,
+                    "source_sha256": hashlib.sha256(pbp_path.read_bytes()).hexdigest()},
+                   indent=1, sort_keys=True) + "\n")
+
+    # D256(c): freshness judged on the CONSUMED copies, for each participating team
+    teams = sorted(set(events["home_abbr"]) | set(events["away_abbr"]))
+    freshness = {"cutoff_T": T.isoformat(), "run_id": run_id,
+                 "per_team": _team_freshness(inputs_dir, season, week, teams, last_week)}
+    (bundle_dir / "freshness.json").write_text(json.dumps(freshness, indent=1) + "\n")
 
     # ── sha256 manifest — hashes EVERY file in the run directory ──
     manifest = {}
@@ -254,12 +360,18 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     manifest["pilot"] = pilot
     manifest["allow_stale_quotes"] = allow_stale_quotes
     (bundle_dir / "bundle_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
+    # D256(d): archive every file now, so the inputs survive even if the run stops later
+    arch = archive_root_for(_r)
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if fpath.is_file():
+            archive_file(fpath, arch)
 
     print(f"  Bundle: {bundle_dir.relative_to(_r)}")
     print(f"  Events: {len(events)}, Props: {len(props)}, Lines: {len(lines)}")
-    for k, v in freshness.items():
-        if k not in ("cutoff_T", "run_id"):
-            print(f"  {k}: {v}")
+    print(f"  Archive: {arch}")
+    print("  Per-team freshness (consumed copies):")
+    for t, row in freshness["per_team"].items():
+        print(f"    {t}: " + ", ".join(f"{k}={v}" for k, v in row.items()))
 
     return bundle_dir, manifest
 
@@ -306,10 +418,55 @@ def _finalize_bundle_manifest(bundle_dir):
             if k in prev:
                 manifest[k] = prev[k]
     old.write_text(json.dumps(manifest, indent=1) + "\n")
+    # D256(d): every run-directory file also goes to the content-addressed archive
+    arch = archive_root_for(bundle_dir.parents[5])
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if fpath.is_file():
+            archive_file(fpath, arch)
+
+
+def append_receipt(root, receipt):
+    """D258(b): append one publication receipt (one JSON line) to the registry."""
+    path = Path(root) / RECEIPTS_REL
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a") as fh:
+        fh.write(json.dumps(receipt, sort_keys=True) + "\n")
+
+
+def load_receipts(root):
+    path = Path(root) / RECEIPTS_REL
+    if not path.exists():
+        return []
+    return [json.loads(l) for l in path.read_text().splitlines() if l.strip()]
+
+
+def receipt_status(run_id, root):
+    """D258(b): 'complete' | 'no receipt' | 'mismatch' for one run_id."""
+    root = Path(root)
+    recs = [r for r in load_receipts(root) if r.get("run_id") == run_id]
+    if not recs:
+        return "no receipt"
+    if len(recs) > 1:
+        return "mismatch"
+    r = recs[0]
+    runs = list((root / "nfl" / "data" / "board").glob(f"week=*/sim_runs/{run_id}"))
+    if len(runs) != 1:
+        return "mismatch"
+    pub = runs[0] / "publication.json"
+    frozen = root / r["frozen_file"]
+    if not pub.exists() or hashlib.sha256(pub.read_bytes()).hexdigest() != r["publication_json_sha256"]:
+        return "mismatch"
+    if not frozen.exists() or hashlib.sha256(frozen.read_bytes()).hexdigest() != r["frozen_sha256"]:
+        return "mismatch"
+    if hashlib.sha256((runs[0] / "bundle_manifest.json").read_bytes()).hexdigest() != r["bundle_digest"]:
+        return "mismatch"
+    return "complete"
 
 
 def verify_bundle(bundle_dir):
     """D241(f): verify every file in the run directory against the manifest.
+    D258(b): a file not in the manifest (other than publication.json) is a mismatch, and
+    when a receipt names this run, publication.json must exist with the receipt's hash.
     Returns list of mismatches (empty = OK)."""
     # Metadata keys that are NOT file hashes
     META_KEYS = {"pilot", "allow_stale_quotes", "publication_utc", "cutoff_T",
@@ -331,6 +488,22 @@ def verify_bundle(bundle_dir):
         got = hashlib.sha256(fpath.read_bytes()).hexdigest()
         if got != expected:
             bad.append(f"hash mismatch: {rel} ({got[:16]} != {expected[:16]})")
+    listed = {k for k, v in manifest.items() if isinstance(v, str) and len(v) >= 32}
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if fpath.is_file():
+            rel = str(fpath.relative_to(bundle_dir))
+            if rel not in listed and rel not in ("bundle_manifest.json", "publication.json"):
+                bad.append(f"unlisted file: {rel}")
+    # D258(b): publication record must match its receipt
+    if len(bundle_dir.parents) > 5:
+        root = bundle_dir.parents[5]
+        recs = [r for r in load_receipts(root) if r.get("run_id") == bundle_dir.name]
+        pub = bundle_dir / "publication.json"
+        for r in recs:
+            if not pub.exists():
+                bad.append("publication.json missing (a receipt names this run)")
+            elif hashlib.sha256(pub.read_bytes()).hexdigest() != r.get("publication_json_sha256"):
+                bad.append("publication.json differs from its receipt")
     return bad
 
 
@@ -490,50 +663,14 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
         for eid, gid in event_game_map.items():
             game_to_event[gid] = eid
 
-    if anchor_returned_df is not None:
-        # D242: use the solver's returned values directly
-        rows = []
-        for _, r in anchor_returned_df.iterrows():
-            gname = r["game"]
-            ln = lines.get(gname)
-            if ln is None:
-                raise SystemExit(
-                    f"HALT: no lines entry for {gname} — anchor sidecar requires "
-                    f"actual market targets, not reconstructed values")
-            spread = float(ln["spread"])
-            total_line = float(ln["total"])
-            anch_m = float(r["anch_m"])
-            anch_t = float(r["anch_t"])
-            miss_m = abs(anch_m - spread)
-            miss_t = abs(anch_t - total_line)
-            row = {
-                "game": gname,
-                "target_spread": spread, "target_total": total_line,
-                "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
-                "miss_m": round(miss_m, 4), "miss_t": round(miss_t, 4),
-                "iterations": int(r["iterations"]),
-                "converged": bool(r["converged"]),
-                "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
-            }
-            if game_to_event:
-                row["event_id"] = game_to_event.get(gname, "")
-            if run_id is not None:
-                row["run_id"] = run_id
-            rows.append(row)
-        return pd.DataFrame(rows)
-
-    # Legacy path: minimize over the anchoring log
-    required = {"game", "iter", "margin", "total", "err_m", "err_t", "converged"}
-    missing = required - set(anchoring_log_df.columns)
-    if missing:
-        raise KeyError(f"anchoring_log missing columns: {missing}")
-
+    # D257(b): the solver's RETURNED state is mandatory; there is no fallback that
+    # minimises over the anchoring log.
+    if anchor_returned_df is None:
+        raise SystemExit("HALT: anchor_returned.parquet is required — the anchor sidecar "
+                         "records what the solver returned, never a reconstruction")
     rows = []
-    for gname in anchoring_log_df["game"].unique():
-        g = anchoring_log_df[anchoring_log_df["game"] == gname]
-        best = g.loc[(abs(g["err_m"]) + abs(g["err_t"])).idxmin()]
-        anch_m = float(best["margin"])
-        anch_t = float(best["total"])
+    for _, r in anchor_returned_df.iterrows():
+        gname = r["game"]
         ln = lines.get(gname)
         if ln is None:
             raise SystemExit(
@@ -541,6 +678,8 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
                 f"actual market targets, not reconstructed values")
         spread = float(ln["spread"])
         total_line = float(ln["total"])
+        anch_m = float(r["anch_m"])
+        anch_t = float(r["anch_t"])
         miss_m = abs(anch_m - spread)
         miss_t = abs(anch_t - total_line)
         row = {
@@ -548,8 +687,8 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
             "target_spread": spread, "target_total": total_line,
             "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
             "miss_m": round(miss_m, 4), "miss_t": round(miss_t, 4),
-            "iterations": int(best["iter"]) + 1,
-            "converged": bool(best["converged"]),
+            "iterations": int(r["iterations"]),
+            "converged": bool(r["converged"]),
             "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
         }
         if game_to_event:
@@ -560,17 +699,58 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
     return pd.DataFrame(rows)
 
 
+def _validate_outputs(run_out, week, run_id, game_ids):
+    """D257(b,c): the prediction outputs must belong to THIS run.
+
+    picks_log and anchor_returned must carry season == SEASON, week == week and
+    run_id == this run's id on every row; every pick's game must be a bundle game;
+    anchor_returned must hold exactly one row per simulated game. Returns
+    (picks_log, anchor_returned)."""
+    ar_path = run_out / "anchor_returned.parquet"
+    if not ar_path.exists():
+        raise SystemExit("HALT: anchor_returned.parquet missing — the solver's returned "
+                         "anchor state is mandatory (no fallback)")
+    picks = pd.read_parquet(run_out / "picks_log.parquet")
+    ar = pd.read_parquet(ar_path)
+    want = {"season": SEASON, "week": int(week), "run_id": run_id}
+    for name, df in (("picks_log", picks), ("anchor_returned", ar)):
+        if len(df) == 0:
+            continue
+        for col, val in want.items():
+            if col not in df.columns:
+                raise SystemExit(f"HALT: {name} has no {col} column — output identity unproven")
+            vals = set(df[col].tolist())
+            if vals != {val}:
+                raise SystemExit(f"HALT: {name} {col} = {sorted(map(str, vals))} "
+                                 f"but this run is {col} = {val}")
+    gids = set(game_ids)
+    if len(picks) and not set(picks["game_id"]).issubset(gids):
+        raise SystemExit(f"HALT: picks_log has games outside the bundle: "
+                         f"{sorted(set(picks['game_id']) - gids)}")
+    if ar["game"].duplicated().any():
+        raise SystemExit(f"HALT: anchor_returned has duplicate games: "
+                         f"{sorted(ar.loc[ar['game'].duplicated(), 'game'])}")
+    if set(ar["game"]) != gids:
+        raise SystemExit(f"HALT: anchor_returned games {sorted(set(ar['game']))} != "
+                         f"simulated games {sorted(gids)}")
+    return picks, ar
+
+
 # ── main ──────────────────────────────────────────────────────────────────────
 
-def _default_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
-    """Default run_week_fn: call run_week.py via subprocess with --lines-json and --games."""
+def _default_run_week(root, week, T, bundle_lines, game_ids, run_dir=None,
+                      input_dir=None, props_file=None, run_id=None):
+    """Default run_week_fn: call run_week.py via subprocess with --lines-json and --games.
+    D256: in a forward run it also passes --input-dir / --props-file / --run-id, so every
+    prediction input comes from the run directory."""
     lines_json = json.dumps(bundle_lines)
     games_str = ",".join(game_ids)
     cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"),
            "--week", str(week), "--as-of", T.isoformat(),
            "--lines-json", lines_json, "--games", games_str]
     if run_dir is not None:
-        cmd += ["--run-dir", str(run_dir)]
+        cmd += ["--run-dir", str(run_dir), "--input-dir", str(input_dir),
+                "--props-file", str(props_file), "--run-id", str(run_id)]
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(root), timeout=7200)
     if r.returncode != 0:
         raise SystemExit(f"HALT: run_week.py failed:\n{r.stderr}\n{r.stdout}")
@@ -646,17 +826,23 @@ def main(argv=None, root=None, run_week_fn=None):
     events_df = pd.read_parquet(bundle_dir / "events.parquet")
     event_game_map = dict(zip(events_df["event_id"], events_df["game_id"]))
 
-    # D229: freshness HALTs (not warns)
-    freshness = json.loads((bundle_dir / "freshness.json").read_text())
-    for label in ("team_ratings", "tendencies", "usage"):
-        mw = freshness.get(f"{label}_max_week")
-        if mw is None or mw < a.week - 1:
-            raise SystemExit(
-                f"HALT: {label} max week = {mw} (need >= {a.week - 1} for season {SEASON})")
-    kickers = freshness.get("kickers", "missing")
-    if kickers == "engine_default_fallback":
-        print(f"  kickers: fallback (no {SEASON} rows) — declared, recorded in bundle",
-              flush=True)
+    # D256(c): per-team freshness already HALTed inside build_bundle, on the copies.
+    # D256: the calibration stamp and usage fingerprint are checked on the COPIES the
+    # prediction will consume, not on the shared files.
+    from nfl.sim.read_set import route_inputs
+    _restore = route_inputs(bundle_dir / "inputs")
+    try:
+        stamp_ok, stamp_mismatches = _check_calibration_stamp()
+        copy_usage = usage_fingerprint()
+    finally:
+        _restore()
+    if not stamp_ok:
+        raise SystemExit("HALT: calibration stamp mismatch on the run's inputs:\n" +
+                         "\n".join(f"  {m}" for m in stamp_mismatches))
+    if copy_usage != em.get("usage_fingerprint"):
+        raise SystemExit(f"HALT: usage fingerprint mismatch on the run's inputs: "
+                         f"{copy_usage} != {em.get('usage_fingerprint')}")
+    build_manifest = json.loads((bundle_dir / "bundle_manifest.json").read_text())
 
     # (c) D229: build sheet IN-PROCESS from the bundle's props and lines
     print("(c) Building sheet from bundle...", flush=True)
@@ -679,10 +865,26 @@ def main(argv=None, root=None, run_week_fn=None):
     print("(d) Running sim...", flush=True)
     bundle_lines = lines_dict_from_bundle(bundle_dir)
     game_ids = sorted(bundle_lines.keys())
-    run_week_fn(root, a.week, T, bundle_lines, game_ids, run_dir=run_out)
+    bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
+    run_week_fn(root, a.week, T, bundle_lines, game_ids, run_dir=run_out,
+                input_dir=bundle_dir / "inputs", props_file=bundle_dir / "props.parquet",
+                run_id=bundle_run_id)
 
-    # Read picks_log from run directory
-    picks_log = pd.read_parquet(run_out / "picks_log.parquet")
+    # D256(b): read-set proof — every data file the prediction read is in the run
+    # directory with the bundle's hash, or a repo file hashed by the experiment manifest
+    rs_path = run_out / "read_set.json"
+    if not rs_path.exists():
+        raise SystemExit("HALT: read_set.json missing — the prediction's inputs are unproven")
+    from nfl.sim.read_set import classify_read_set
+    rs_summary = classify_read_set(json.loads(rs_path.read_text()), bundle_dir, root,
+                                   em["file_hashes"], build_manifest)
+    n_i = sum(1 for _, c in rs_summary if c == "i")
+    n_ii = sum(1 for _, c in rs_summary if c == "ii")
+    print(f"    Read set: {len(rs_summary)} files — {n_i} from the run directory, "
+          f"{n_ii} manifest-hashed repo files, 0 unproven", flush=True)
+
+    # D257(b,c): output identity and the solver's returned anchor state
+    picks_log, anch_ret = _validate_outputs(run_out, a.week, bundle_run_id, game_ids)
     print(f"    picks_log: {len(picks_log)} legs", flush=True)
 
     # (e) fill
@@ -719,10 +921,7 @@ def main(argv=None, root=None, run_week_fn=None):
     if not anch_log_path.exists():
         raise SystemExit("HALT: anchoring_log.parquet missing — sidecar is mandatory (D226)")
     anch_log = pd.read_parquet(anch_log_path)
-    # D242: prefer anchor_returned.parquet (solver's actual returns)
-    anch_ret_path = run_out / "anchor_returned.parquet"
-    anch_ret = pd.read_parquet(anch_ret_path) if anch_ret_path.exists() else None
-    bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
+    # D257(b): anchor_returned (validated above) is the only source of anchor state
     sidecar_df = anchor_sidecar(anch_log, bundle_lines, anchor_returned_df=anch_ret,
                                 event_game_map=event_game_map, run_id=bundle_run_id)
     sidecar_path = bundle_dir / "anchor_sidecar.parquet"
@@ -802,7 +1001,26 @@ def main(argv=None, root=None, run_week_fn=None):
         "frozen_file": dest.name,
         "frozen_sha256": sha,
     }
-    (bundle_dir / "publication.json").write_text(json.dumps(pub_record, indent=1) + "\n")
+    pub_path = bundle_dir / "publication.json"
+    pub_path.write_text(json.dumps(pub_record, indent=1) + "\n")
+    archive_file(pub_path, archive_root_for(root))
+
+    # D258(b): the publication receipt — the experiment's own, append-only registry. A
+    # frozen file without a receipt is NOT a completed primary freeze.
+    receipt = {
+        "experiment_id": em.get("experiment_id"),
+        "experiment_digest": experiment_digest,
+        "run_id": bundle_run_id,
+        "bundle_digest": bundle_digest,
+        "frozen_file": str(dest.relative_to(root)),
+        "frozen_sha256": sha,
+        "rows": int(len(m)),
+        "publication_utc": publication_utc.isoformat(),
+        "first_kick_utc": first_kick.isoformat(),
+        "pilot": bool(a.pilot),
+        "publication_json_sha256": hashlib.sha256(pub_path.read_bytes()).hexdigest(),
+    }
+    append_receipt(root, receipt)
 
     # D246(b): update the ai_opinions manifest entry with publication_utc
     man_path = opinions_dir / "manifest.json"

@@ -69,9 +69,8 @@ def test_sidecar_uses_solver_return_not_min_error():
 
 
 def test_old_sidecar_picks_wrong_iteration():
-    """Verify that the OLD (legacy) sidecar path picks the WRONG iteration
-    for the controlled-batch counterexample. This proves the test catches
-    the 0792fd122 behaviour."""
+    """D257(b): the legacy minimum-error path (which picked iteration 1 for the audit-#7
+    counterexample) is removed — without the solver's returned state the sidecar HALTs."""
     from nfl.sim.run_forward_v1 import anchor_sidecar
 
     anch_log = pd.DataFrame([
@@ -83,16 +82,8 @@ def test_old_sidecar_picks_wrong_iteration():
          "err_m": 0.7, "err_t": 0.7, "converged": True},
     ])
     lines = {"A@B": {"spread": 0.0, "total": 40.0}}
-
-    # Legacy path: no anchor_returned_df
-    sidecar = anchor_sidecar(anch_log, lines, anchor_returned_df=None)
-    row = sidecar.iloc[0]
-
-    # The legacy path picks min |err_m|+|err_t| = iter 1
-    assert row["iterations"] == 2, f"legacy picks iter 1 (iterations=2), got {row['iterations']}"
-    # miss_m = |-1.1 - 0| = 1.1 > 1.0, so anchored = False
-    assert row["anchored"] == False, (
-        f"legacy should classify as unanchored, got anchored={row['anchored']}")
+    with pytest.raises(SystemExit, match="anchor_returned.parquet is required"):
+        anchor_sidecar(anch_log, lines, anchor_returned_df=None)
 
 
 def test_sidecar_forced_anchored_mutation_caught():

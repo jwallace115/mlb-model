@@ -35,7 +35,12 @@ def test_anchor_sidecar_actual_targets():
     if car_log.empty:
         pytest.skip("CAR@ATL not in anchoring log")
 
-    sidecar = anchor_sidecar(car_log, lines)
+    # D257(b): the sidecar reads the solver's returned state (last logged iteration here)
+    last = car_log.sort_values("iter").iloc[-1]
+    ret = pd.DataFrame([{"game": "CAR@ATL", "iterations": int(last["iter"]) + 1,
+                         "converged": bool(last["converged"]),
+                         "anch_m": float(last["margin"]), "anch_t": float(last["total"])}])
+    sidecar = anchor_sidecar(car_log, lines, anchor_returned_df=ret)
     row = sidecar[sidecar["game"] == "CAR@ATL"].iloc[0]
 
     assert row["target_spread"] == -3.0, (
@@ -54,9 +59,11 @@ def test_anchor_sidecar_halts_without_lines():
         "converged": False,
     }])
 
+    ret = pd.DataFrame([{"game": "CAR@ATL", "iterations": 1, "converged": False,
+                         "anch_m": 1.5, "anch_t": 50.0}])
     # Empty lines dict must raise, not silently reconstruct
     with pytest.raises(SystemExit, match="no lines entry"):
-        anchor_sidecar(anch_log, {})
+        anchor_sidecar(anch_log, {}, anchor_returned_df=ret)
 
 
 def test_anchor_sidecar_column_names():
@@ -69,7 +76,9 @@ def test_anchor_sidecar_column_names():
         "total": 45.6, "err_m": -0.1, "err_t": 0.1, "converged": True,
     }])
     lines = {"CAR@KC": {"spread": -3.0, "total": 45.5}}
-    sidecar = anchor_sidecar(anch_log, lines)
+    ret = pd.DataFrame([{"game": "CAR@KC", "iterations": 1, "converged": True,
+                         "anch_m": -3.1, "anch_t": 45.6}])
+    sidecar = anchor_sidecar(anch_log, lines, anchor_returned_df=ret)
     assert "target_spread" in sidecar.columns, "sidecar must have target_spread column"
     assert "target_total" in sidecar.columns, "sidecar must have target_total column"
     assert sidecar.iloc[0]["target_spread"] == -3.0
