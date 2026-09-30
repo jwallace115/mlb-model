@@ -4486,3 +4486,19 @@ Cowork's D238 acceptance is withdrawn.
 Freeze-side defects must be fixed before the first primary freeze, and scoring-side defects before the first scoring.
 FWD3 does both. The primary count starts at the first window after FWD3 is verified: TNF only if that is by
 Thu 15:00Z, otherwise Sunday or week 5.
+
+### D241 — the run record is complete, exclusive and immutable (freeze side) (2026-09-30)
+
+(a) build_bundle REFUSES an existing run directory (no exist_ok): run_forward_v1.py:110.
+(b) Prediction inputs (8 ratings files + 3 pbp files) are copied into `<run-dir>/inputs/` and hashed:
+    run_forward_v1.py:232-251. run_week writes outputs into `<run-dir>/outputs/` via --run-dir, never into
+    the shared weekly directory.
+(c) Game-line freshness: the anchoring line snapshot must be at most 3h old at T (same rule as props):
+    run_forward_v1.py:184-191.
+(d) The sidecar is written into the run directory and hashed. The weekly anchor_sidecar_sim_v1.parquet is
+    no longer written: run_forward_v1.py:641-646.
+(e) Publication is atomic: take wall clock immediately before write (run_forward_v1.py:656-660), write
+    publication_utc into every frozen row and the manifest (run_forward_v1.py:672-678). A write that
+    completes after the kick is quarantined (run_forward_v1.py:680-693).
+(f) The bundle manifest hashes every file in the run directory (run_forward_v1.py:257-266). verify_bundle()
+    detects any tampering (run_forward_v1.py:302-320).

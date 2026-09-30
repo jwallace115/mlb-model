@@ -158,9 +158,9 @@ def _build_fixture_root(tmp_path, kick=None, pull_age_minutes=30):
     return root
 
 
-def _stub_run_week(root, week, T, bundle_lines, game_ids):
+def _stub_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
     """Stub run_week_fn that writes fixture picks_log and anchoring_log."""
-    out_dir = root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}"
+    out_dir = run_dir or (root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     pd.DataFrame([{
@@ -333,8 +333,8 @@ def test_zero_matches_halts(tmp_path):
 
     root = _build_fixture_root(tmp_path)
 
-    def _empty_run_week(root, week, T, bundle_lines, game_ids):
-        out_dir = root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}"
+    def _empty_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
+        out_dir = run_dir or (root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}")
         out_dir.mkdir(parents=True, exist_ok=True)
         pd.DataFrame(columns=["game_id", "player_name", "family", "line",
                                "cal_p", "side", "tier"]).to_parquet(

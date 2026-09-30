@@ -6,7 +6,7 @@ Usage:
   python3 nfl/sim/run_forward_v1.py --week 3 [--pilot] [--as-of ...] [--window-hours 9] [--events pit,cle]
 """
 
-import argparse, hashlib, json, os, subprocess, sys, time
+import argparse, hashlib, json, os, shutil, subprocess, sys, time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -105,7 +105,11 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     run_id = T.strftime("%Y%m%dT%H%M%SZ")
     bundle_dir = (BOARD_ROOT / f"week={season}_{week:02d}" /
                   "sim_runs" / run_id)
-    bundle_dir.mkdir(parents=True, exist_ok=True)
+    # D241(a): REFUSE an existing run directory — no exist_ok
+    if bundle_dir.exists():
+        raise SystemExit(f"HALT: run directory already exists: {bundle_dir}\n"
+                         f"A run_id can only be used once.")
+    bundle_dir.mkdir(parents=True, exist_ok=False)
 
     # ── props ──
     props = _load_props_at_T(season, T)
@@ -167,7 +171,7 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     if events.empty:
         raise SystemExit("HALT: no pre-kick events in the window")
 
-    # ── quote-age check ──
+    # ── quote-age check (props AND lines) ──
     if not props.empty:
         props_age = props.groupby("event_id")["pull_timestamp"].first().map(
             lambda t: (T - _parse_utc(t)).total_seconds() / 3600)
@@ -176,6 +180,17 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
             raise SystemExit(
                 f"HALT: props pull is {oldest:.1f}h old for event "
                 f"{props_age.idxmax()} (max allowed: {QUOTE_MAX_AGE_H}h). "
+                f"Use --allow-stale-quotes with --pilot or --dry-run.")
+
+    # D241(c): game-line freshness — same 3h rule as props
+    if not lines.empty and "snapshot_utc" in lines.columns:
+        line_age_h = lines.groupby("event_id")["snapshot_utc"].first().map(
+            lambda t: (T - _parse_utc(t)).total_seconds() / 3600)
+        oldest_line = line_age_h.max()
+        if oldest_line > QUOTE_MAX_AGE_H and not allow_stale_quotes:
+            raise SystemExit(
+                f"HALT: game-line snapshot is {oldest_line:.1f}h old for event "
+                f"{line_age_h.idxmax()} (max allowed: {QUOTE_MAX_AGE_H}h). "
                 f"Use --allow-stale-quotes with --pilot or --dry-run.")
 
     # ── freshness ──
@@ -194,7 +209,7 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
         else:
             freshness[f"{label}_max_week"] = None
     # Kickers: documented fallback if no 2026 rows
-    kicker_path = ratings_dir / "kicker_ratings.parquet"
+    kicker_path = ratings_dir / "kicker_weekly.parquet"
     if kicker_path.exists():
         kdf = pd.read_parquet(kicker_path, columns=["season"])
         if season in kdf["season"].values:
@@ -210,11 +225,32 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     lines.to_parquet(bundle_dir / "lines.parquet", index=False)
     (bundle_dir / "freshness.json").write_text(json.dumps(freshness, indent=1) + "\n")
 
-    # ── sha256 manifest ──
+    # D241(b): copy and hash every prediction input the sim reads
+    inputs_dir = bundle_dir / "inputs"
+    inputs_dir.mkdir()
+    RATINGS_FILES = [
+        "team_ratings_weekly.parquet", "tendencies_weekly.parquet",
+        "tendencies_situational_weekly.parquet", "qb_ratings_weekly.parquet",
+        "kicker_weekly.parquet", "league_baselines.parquet",
+        "player_usage_weekly.parquet", "active_universe_weekly.parquet",
+    ]
+    for fname in RATINGS_FILES:
+        src = ratings_dir / fname
+        if src.exists():
+            shutil.copy2(src, inputs_dir / fname)
+    # Rosters (run_week.py:984 via names.load_roster)
+    pbp_dir = _r / "nfl" / "data" / "pbp"
+    for fname in ["rosters_weekly.parquet", "depth_charts.parquet", "injuries.parquet"]:
+        src = pbp_dir / fname
+        if src.exists():
+            shutil.copy2(src, inputs_dir / fname)
+
+    # ── sha256 manifest — hashes EVERY file in the run directory ──
     manifest = {}
-    for fname in ["events.parquet", "props.parquet", "lines.parquet", "freshness.json"]:
-        fpath = bundle_dir / fname
-        manifest[fname] = hashlib.sha256(fpath.read_bytes()).hexdigest()
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if fpath.is_file() and fpath.name != "bundle_manifest.json":
+            rel = str(fpath.relative_to(bundle_dir))
+            manifest[rel] = hashlib.sha256(fpath.read_bytes()).hexdigest()
     manifest["pilot"] = pilot
     manifest["allow_stale_quotes"] = allow_stale_quotes
     (bundle_dir / "bundle_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
@@ -253,6 +289,49 @@ def lines_dict_from_bundle(bundle_dir):
         if spread is not None and total is not None:
             result[gid] = {"spread": spread, "total": total}
     return result
+
+
+def _finalize_bundle_manifest(bundle_dir):
+    """D241(f): re-hash every file in the run directory into the manifest."""
+    manifest = {}
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if fpath.is_file() and fpath.name != "bundle_manifest.json":
+            rel = str(fpath.relative_to(bundle_dir))
+            manifest[rel] = hashlib.sha256(fpath.read_bytes()).hexdigest()
+    # Preserve metadata keys
+    old = bundle_dir / "bundle_manifest.json"
+    if old.exists():
+        prev = json.loads(old.read_text())
+        for k in ("pilot", "allow_stale_quotes"):
+            if k in prev:
+                manifest[k] = prev[k]
+    old.write_text(json.dumps(manifest, indent=1) + "\n")
+
+
+def verify_bundle(bundle_dir):
+    """D241(f): verify every file in the run directory against the manifest.
+    Returns list of mismatches (empty = OK)."""
+    # Metadata keys that are NOT file hashes
+    META_KEYS = {"pilot", "allow_stale_quotes", "publication_utc", "cutoff_T",
+                 "experiment_digest", "bundle_digest"}
+    man_path = bundle_dir / "bundle_manifest.json"
+    if not man_path.exists():
+        return ["bundle_manifest.json missing"]
+    manifest = json.loads(man_path.read_text())
+    bad = []
+    for rel, expected in manifest.items():
+        if rel in META_KEYS:
+            continue
+        if not isinstance(expected, str) or len(expected) < 32:
+            continue  # metadata key, not a hash
+        fpath = bundle_dir / rel
+        if not fpath.exists():
+            bad.append(f"missing: {rel}")
+            continue
+        got = hashlib.sha256(fpath.read_bytes()).hexdigest()
+        if got != expected:
+            bad.append(f"hash mismatch: {rel} ({got[:16]} != {expected[:16]})")
+    return bad
 
 
 def check_experiment_manifest(_root=None):
@@ -439,13 +518,15 @@ def anchor_sidecar(anchoring_log_df, lines):
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
-def _default_run_week(root, week, T, bundle_lines, game_ids):
+def _default_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
     """Default run_week_fn: call run_week.py via subprocess with --lines-json and --games."""
     lines_json = json.dumps(bundle_lines)
     games_str = ",".join(game_ids)
     cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"),
            "--week", str(week), "--as-of", T.isoformat(),
            "--lines-json", lines_json, "--games", games_str]
+    if run_dir is not None:
+        cmd += ["--run-dir", str(run_dir)]
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(root), timeout=7200)
     if r.returncode != 0:
         raise SystemExit(f"HALT: run_week.py failed:\n{r.stderr}\n{r.stdout}")
@@ -546,15 +627,18 @@ def main(argv=None, root=None, run_week_fn=None):
     n_two_way = int(sheet_df["two_way"].sum()) if "two_way" in sheet_df.columns else 0
     print(f"    {len(sheet_df)} lines, {n_two_way} two-way\n", flush=True)
 
+    # D241(b): run_week writes outputs into <run-dir>/outputs/
+    run_out = bundle_dir / "outputs"
+    run_out.mkdir(exist_ok=True)
+
     # (d) sim — only the bundle's events
     print("(d) Running sim...", flush=True)
     bundle_lines = lines_dict_from_bundle(bundle_dir)
     game_ids = sorted(bundle_lines.keys())
-    sim_out = root / "nfl" / "data" / "sim" / "outputs" / f"week={SEASON}_{a.week:02d}"
-    run_week_fn(root, a.week, T, bundle_lines, game_ids)
+    run_week_fn(root, a.week, T, bundle_lines, game_ids, run_dir=run_out)
 
-    # Read picks_log
-    picks_log = pd.read_parquet(sim_out / "picks_log.parquet")
+    # Read picks_log from run directory
+    picks_log = pd.read_parquet(run_out / "picks_log.parquet")
     print(f"    picks_log: {len(picks_log)} legs", flush=True)
 
     # (e) fill
@@ -568,7 +652,6 @@ def main(argv=None, root=None, run_week_fn=None):
             sheet_vals = sheet_df.set_index(["event_id", "market_key", "player_name", "line"])[col]
             filled_vals = filled.set_index(["event_id", "market_key", "player_name", "line"])[col]
             joined = sheet_vals.align(filled_vals, join="inner")
-            # NaN == NaN should be True (both missing is not a mismatch)
             mismatches = (joined[0] != joined[1]) & ~(joined[0].isna() & joined[1].isna())
             if mismatches.any():
                 n_bad = int(mismatches.sum())
@@ -586,9 +669,9 @@ def main(argv=None, root=None, run_week_fn=None):
     if n_matched == 0:
         raise SystemExit("HALT: zero sim matches — nothing to freeze")
 
-    # (f) anchor sidecar
+    # (f) anchor sidecar — D241(d): written into run directory, hashed
     print("(f) Building anchor sidecar...", flush=True)
-    anch_log_path = sim_out / "anchoring_log.parquet"
+    anch_log_path = run_out / "anchoring_log.parquet"
     if not anch_log_path.exists():
         raise SystemExit("HALT: anchoring_log.parquet missing — sidecar is mandatory (D226)")
     anch_log = pd.read_parquet(anch_log_path)
@@ -599,6 +682,10 @@ def main(argv=None, root=None, run_week_fn=None):
     print(f"    {len(sidecar_df)} games, {n_unanch} unanchored", flush=True)
     print(sidecar_df.to_string(index=False))
 
+    # D241(f): finalize bundle manifest BEFORE the freeze — hash every file
+    _finalize_bundle_manifest(bundle_dir)
+    bundle_manifest = json.loads((bundle_dir / "bundle_manifest.json").read_text())
+
     # dry-run
     if a.dry_run:
         print("\n--- DRY RUN ---")
@@ -608,37 +695,75 @@ def main(argv=None, root=None, run_week_fn=None):
         print("\nDRY RUN complete — nothing frozen.")
         return
 
-    # (g) D229: freeze IN-PROCESS
-    # Live runs: HALT if wall clock >= first kick (can't publish after kick)
-    # Pilot runs: skip this check (retroactive testing on past dates)
-    if not a.pilot:
-        freeze_wall = datetime.now(timezone.utc)
-        first_kick = events_df["commence_time"].map(_parse_utc).min()
-        if freeze_wall >= first_kick:
-            raise SystemExit(f"HALT: publication time {freeze_wall.isoformat()} >= "
-                         f"first kick {first_kick.isoformat()}")
-
+    # (g) D241(e): publication is atomic inside freeze()
     print("(g) Freezing...", flush=True)
     from nfl.pipeline.log_ai_opinions import freeze as do_freeze
     board_root = root / "nfl" / "data" / "board"
     opinions_dir = board_root / f"week={SEASON}_{a.week:02d}" / "ai_opinions"
-    # D230: pass run_id from bundle to frozen rows
     bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
+
+    # D241(e): take wall clock immediately before the write
+    first_kick = events_df["commence_time"].map(_parse_utc).min()
+    if not a.pilot:
+        pre_write_wall = datetime.now(timezone.utc)
+        if pre_write_wall >= first_kick:
+            raise SystemExit(f"HALT: publication time {pre_write_wall.isoformat()} >= "
+                         f"first kick {first_kick.isoformat()}")
+
     dest, sha, m = do_freeze(
         sheet_df, filled, SEASON, a.week, a.pilot, T,
         d=opinions_dir, reader_model=READER_MODEL, board_root=board_root,
         run_id=bundle_run_id)
+
+    # D241(e): record publication_utc on every frozen row and in the manifest
+    publication_utc = datetime.now(timezone.utc)
+
+    # D241(e): quarantine if write completed after kick (live only)
+    if not a.pilot and publication_utc >= first_kick:
+        quarantine_dir = opinions_dir / "quarantine"
+        quarantine_dir.mkdir(parents=True, exist_ok=True)
+        quarantine_dest = quarantine_dir / dest.name
+        dest.rename(quarantine_dest)
+        # Mark excluded in manifest
+        man_path = opinions_dir / "manifest.json"
+        entries = json.loads(man_path.read_text()) if man_path.exists() else []
+        for e in entries:
+            if e["file"] == dest.name:
+                e["excluded"] = True
+                e["quarantine_reason"] = (
+                    f"publication_utc {publication_utc.isoformat()} >= "
+                    f"first_kick {first_kick.isoformat()}")
+        man_path.write_text(json.dumps(entries, indent=1) + "\n")
+        raise SystemExit(
+            f"QUARANTINED: publication at {publication_utc.isoformat()} >= "
+            f"first kick {first_kick.isoformat()} — moved to {quarantine_dest}")
+
+    # Write publication_utc into the frozen file
+    m["publication_utc"] = publication_utc.isoformat()
+    m.to_parquet(dest, index=False)
+    # Re-hash
+    sha = hashlib.sha256(dest.read_bytes()).hexdigest()
+    man_path = opinions_dir / "manifest.json"
+    entries = json.loads(man_path.read_text()) if man_path.exists() else []
+    for e in entries:
+        if e["file"] == dest.name:
+            e["sha256"] = sha
+            e["publication_utc"] = publication_utc.isoformat()
+    man_path.write_text(json.dumps(entries, indent=1) + "\n")
+
     print(f"    FROZEN {len(m)} lines -> {dest.relative_to(root)}\n"
-          f"    sha256 {sha}\n", flush=True)
+          f"    sha256 {sha}\n"
+          f"    publication_utc {publication_utc.isoformat()}", flush=True)
 
-    # Write sidecar to opinions dir
-    sidecar_df.to_parquet(
-        opinions_dir / "anchor_sidecar_sim_v1.parquet", index=False)
-
-    # Record publication time in the bundle
-    freeze_wall = datetime.now(timezone.utc)
-    bundle_manifest["publication_utc"] = freeze_wall.isoformat()
+    # D241(e): write publication_utc into bundle manifest (the manifest entry)
+    bundle_manifest["publication_utc"] = publication_utc.isoformat()
     bundle_manifest["cutoff_T"] = T.isoformat()
+    bundle_manifest["experiment_digest"] = hashlib.sha256(
+        (root / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json").read_bytes()
+    ).hexdigest()
+    bundle_manifest["bundle_digest"] = hashlib.sha256(
+        (bundle_dir / "bundle_manifest.json").read_bytes()
+    ).hexdigest()
     (bundle_dir / "bundle_manifest.json").write_text(
         json.dumps(bundle_manifest, indent=1) + "\n")
 
