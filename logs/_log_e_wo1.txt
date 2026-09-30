@@ -128,5 +128,19 @@ Disk: 1.3 GB under data/odds_archive/nhl/history/.
 - Whether E5 T-24h and T-1h timestamps correctly target pre-match windows for all events.
 - Whether some E5 parquets are empty markers (events with no markets) vs real data.
 
+### E4 gap-fill — season=2023 (2026-09-30)
+
+Cowork quarantined 800 E-WO1 snapshots (regions=us, no Pinnacle, old schema) from
+season=2023 into _quarantine_e1_regions_us/. Re-ran the same puller (10-book list)
+for season=2023 only — resume-safe, filled exactly the 752 missing snapshots.
+
+RETURNED: 752 calls, 22,560 credits (752 × 30), 7.29 calls/s.
+x-requests-remaining BEFORE: 89,949. AFTER: 67,386.
+First call: x-requests-last=30 CONFIRMED.
+
+VERIFIED: season=2023 now has 16,545 parquets (= plan count, 0 missing).
+book_last_update column present in all 20 randomly sampled files (20/20 OK).
+The earlier log's "16,593" was a miscount; the correct plan total is 16,545.
+
 ### Merge command
 git merge nhl/inplay-e1
