@@ -1,0 +1,205 @@
+## 2026-09-30T~09:40Z  claude-code (nhl/wo1 branch)
+
+### Setup
+- Worktree ~/mlb-model-nhl1 on branch nhl/wo1 already existed (off origin/main ee2b0ffd0)
+- Parent test baseline: 55 passed, 1 failed (test_score_first_side_and_units — pre-existing,
+  confirmed fails at parent with same value: None == 0 assertion)
+
+### Item 1 (H3) — Freeze tool: NHL entry, date-keyed slates, drivers, book of record
+  Commit: 1075895bb
+
+- RETURNED: SPORTS['nhl'] extended with slate='date', drivers_required=True, outcomes=None (set
+  in H4), require_side=True (from L2), tags=(goalie, injury_news, lineup, schedule_spot, matchup,
+  form, price_vs_sharp, line_move, model_layer). NFL/NCAAF gained explicit slate='week',
+  drivers_required=False, tags matching prior behavior.
+- MEANS: NHL slates are ET dates; --date YYYY-MM-DD required. Football behavior unchanged.
+
+- RETURNED: Fixture nhl_tape_20260929T2000Z.parquet created from real snap on main tree.
+  Pinnacle: 7 games, all 3 markets on every game.
+  Hard Rock: ABSENT from every game (0 games, 0 markets).
+  h2h outcomes per game: exactly 2 on all 138 (event, bookmaker) pairs.
+- MEANS: Book of record confirmed as pinnacle (H2 addendum). No 3-way/draw in h2h.
+
+- RETURNED: build_sheet(slate_date="2026-09-29") returns 5 games (15 lines) from Pinnacle;
+  slate_date="2026-09-30" returns 2 games (6 lines). No overlap.
+- MEANS: Date filter correctly separates games by ET date.
+
+- RETURNED: validate() HALTS on missing/empty/unknown drivers for NHL, passes for valid.
+  validate() HALTS on football-only tags (weather, no_view) for NHL.
+- MEANS: NHL-specific guards work. Football validate unchanged (no drivers column needed).
+
+- RETURNED: NFL verify: wk2 bad=[], unlisted=[]; wk3 bad=[], unlisted=[].
+  NCAAF verify: wk4 bad=[], unlisted=[].
+  All sha256 prefixes match baseline:
+    NFL wk2: 5608e10f..., wk3: 4e597ba0.../cc0eb467.../c7f59a14...
+    NCAAF wk4: 504e1fb6.../d329749b...
+- MEANS: NULL CONTROL PASSES. Existing frozen files unchanged.
+
+- RETURNED: 76 passed, 1 failed (pre-existing). 21 new H3 tests.
+- MEANS: All new tests pass; no regression.
+
+- Credits spent: 0 (fixture cut from existing tape on main tree)
+- Pushed to origin/nhl/wo1
+
+### Item 2 (H4) — NHL outcomes loader + score
+  Commit: c609718d3
+
+- RETURNED: agreement_check(2025) -> n_checked=1177, mismatches=0 (135 not in cache).
+- MEANS: 100% agreement pre-registration HELD on all 1,177 cached 2025-26 games.
+  Score, OT flag, and SO flag all match nhl_games_canonical.csv.
+  135 games not in cache (end of season) — not a mismatch, just incomplete cache.
+
+- RETURNED: nhl_outcomes.py game_result() for 3 real games:
+    REG 2025020001: FLA 3, CHI 2, ot=False, so=False
+    OT  2025020008: BOS 4, CHI 3, ot=True, so=False
+    SO  2025020006: EDM 3, CGY 4, ot=True, so=True, reg 3-3
+- MEANS: Loader correctly extracts scores and OT/SO flags.
+
+- RETURNED: settle_game_markets on SO game 2025020006:
+    totals 6.5 -> 1 (Over, final total=7)
+    h2h -> 0 (away CGY wins)
+  Regulation total would be 6 -> Under (0).
+- MEANS: SO rule changes the totals grade (from Under to Over). Confirmed by test.
+
+- RETURNED: SPORTS['nhl']['outcomes'] = 'nhle'. score() dispatches to _nhle_actuals().
+  End-to-end: freeze + score on 3 real games in tmp dir, all 6 grades match hand derivation.
+- MEANS: NHL scoring pipeline works end-to-end.
+
+- RETURNED: edge_rank fix: now ranked per _file (groupby), not across all rows.
+  NFL wk3 with 3 files: each file's edge_rank starts at 1 and goes to n.
+- MEANS: Both conf_rank (already per-file from freeze) and edge_rank are now 1..n within each freeze.
+
+- RETURNED (null controls):
+    NCAAF wk4 Opus file: 177 graded sides, 99 won, +8.96u
+    NFL wk3 TNF file: 28 sides, 18 won, +7.59u, Brier 0.2519 vs 0.2618
+- MEANS: Football score NULL CONTROL PASSES. N63 numbers reproduced exactly.
+
+- RETURNED: 88 passed, 1 failed (pre-existing). 12 new H4 tests.
+- MEANS: All new tests pass; no regression.
+
+- Credits spent: 0 (all offline — boxscore cache + canonical CSV)
+- Pushed to origin/nhl/wo1
+
+### Item 2 completion (H4b) — CLV vs Pinnacle close, baselines (a)/(c), date-range scoring
+  Commit: 8d37ad49f
+
+- RETURNED: CLV computation in score() for NHL: last Pinnacle tape snapshot before commence_time;
+  de-vigged close probability of frozen side minus break-even. Moved lines -> CLV=NaN (never imputed).
+- MEANS: CLV is the primary metric per H1. Same-line only; moved lines counted separately.
+
+- RETURNED: proof-of-run on 2026-09-29 (3 games, 9 lines):
+  8 of 9 lines have CLV (mean −0.0138); 1 NaN (TOR spreads, line flipped sides).
+  Close snapshots: CAR snap_20260929T2100Z, TOR snap_20260929T2300Z, BOS snap_20260930T0000Z.
+  Baseline (a): Brier freeze 0.2711 / close 0.2687.
+  Baseline (c): follow-the-move n=7, 4 won (57.1%), units +0.38, CLV −0.0173.
+- MEANS: CLV pipeline end-to-end works with real tape data.
+
+- RETURNED (null controls):
+    NCAAF wk4: sha256 d98b273d92b2bde9, 31891 bytes (byte-identical before and after).
+    NFL wk3: sha256 38d4ca6625105c6e, 226552 bytes (byte-identical before and after).
+- MEANS: Football score NULL CONTROL PASSES. No CLV columns appear for non-NHL sports.
+
+- RETURNED: --from/--to date-range scoring added for date-keyed sports.
+- MEANS: Can pool multiple date dirs for aggregate NHL scoring.
+
+- Credits spent: 0 (all offline)
+- Pushed to origin/nhl/wo1
+
+### Item 3 (H5) — The packet: hashed beside every NHL frozen file
+  Commit: 4bb1cf17f
+
+- RETURNED: shared/layers/packet.py created — canonical JSON (sorted keys, 6-decimal floats).
+  Same inputs -> same hash. builder_sha256 = content stamp of source files (never git HEAD).
+  HALTs: source_utc >= built_utc, built_utc >= first commence_time.
+- MEANS: Packet format is deterministic and sport-agnostic.
+
+- RETURNED: nhl/layers/build_packet_nhl.py --date 2026-09-29 --built-utc 2026-09-29T20:00:00+00:00
+  produced 5 games, 74 sources, sha256 40aa86a5.
+  L1 market: Pinnacle open/current/move + min/max across books + event_markets summary.
+  L2 news: "no observations yet" (goalie probes not yet run for that date).
+  L3 history: gp=0 on all teams (season opener, no games strictly before 2026-09-29).
+  L4 model: absent on all games ("outputs end 2025-04-17").
+- MEANS: All 4 layers built; model is correctly absent for 2026-27.
+
+- RETURNED: freeze integration — --packet required for NHL. Validates sport/date match,
+  built_utc <= freeze <= first puck, packet games cover sheet events, drivers vs layers
+  ('model' while absent -> HALT — tested and confirmed).
+  Packet copied into ai_opinions dir as packet_<freezeUTC>.json.
+  Manifest gains packet_file + packet_sha256. Verify rechecks packet hash.
+  Tamper detected: edited packet -> verify returns it in bad list.
+- MEANS: Packet is immutable and verified on every verify call.
+
+- RETURNED (null controls):
+    NCAAF wk4 sha256 d98b273d92b2bde9 (unchanged).
+    NFL wk3 sha256 38d4ca6625105c6e (unchanged).
+    NFL wk3 manifest: no packet_file/packet_sha256 keys on any entry.
+- MEANS: Football freeze NULL CONTROL PASSES. No packet required for football.
+
+- RETURNED: 101 passed (13 new H5 + prior), 1 failed (pre-existing).
+- MEANS: All new tests pass; no regression.
+
+- Credits spent: 0
+- Pushed to origin/nhl/wo1
+
+### Item 4 (H6) — Starting-goalie sources: measurement only
+  Commit: 055957516
+
+- PRE-REGISTERED: "the NHL API exposes no confirmed pre-game starter; ESPN unknown."
+
+- RETURNED: probe_goalie_sources.py --date 2026-09-29 --post-game (Mac, 5 OFF games):
+    NHL landing: 0/10 teams had a goalie name (None on all). No goalieComparison or startingGoalie.
+    NHL boxscore: 10/10 correct starters post-game (starter=true flag).
+    ESPN summary: rosters=0, boxscore.players=0 for post-game (no goalie data returned).
+- MEANS: Pre-registration HELD for NHL API. ESPN also provides no pre-game starter.
+
+- RETURNED: probe_goalie_sources.py --date 2026-09-30 (Mac, 3 FUT games):
+    NHL landing: 0/6 (None on all).
+    NHL boxscore: 0/6 (None on all — no data before puck drop).
+    ESPN summary: 0/6 (rosters empty, boxscore.players empty for FUT games).
+    ESPN event not found for LAK@COL (ESPN uses "LA" not "LAK").
+- MEANS: No free structured API provides pre-game goalie info.
+
+- NOT DONE: VM run (2026-09-30 has no preseason games; regular season games are FUT).
+  The API endpoints are NHL/ESPN public APIs; no IP restriction expected.
+  VM-default decision test should be run on a game day with more lead time.
+- NOT DONE: cron installation (superseded by order G1, per prompt).
+
+- Candidates for HTML scraping (not in this order): DailyFaceoff, LeftWingLock, MoneyPuck.
+
+- RETURNED: 104 passed (3 new H6), 1 failed (pre-existing).
+- MEANS: All new tests pass; no regression.
+
+- Credits spent: 0 (NHL API and ESPN are free)
+- Pushed to origin/nhl/wo1
+
+### Pre-existing red: test_score_first_side_and_units
+Confirmed fails at parent ee2b0ffd0 with same value: `None == 0`.
+What it reports: the D236(a) snap-count participation check changed the `_first_side_won` contract
+so that player props require `snap_played=True` to proceed. The test calls `_first_side_won` without
+`snap_played` (defaults to None = unresolved), so all player props return None instead of 0/1.
+The test correctly caught a behavior change but was never updated to reflect the new D236 contract.
+
+### Test counts vs parent baseline
+- Parent (ee2b0ffd0): 55 passed, 1 failed
+- After H3 (1075895bb): 76 passed, 1 failed (+21 new)
+- After H4 (c609718d3): 88 passed, 1 failed (+12 new)
+- After H4b (8d37ad49f): 88 passed, 1 failed (+0 new tests, code changes only)
+- After H5 (4bb1cf17f): 101 passed, 1 failed (+13 new)
+- After H6 (055957516): 104 passed, 1 failed (+3 new)
+
+### NOT DONE
+- VM run of probe_goalie_sources.py (no preseason games available on 2026-09-30; the API
+  endpoints are public — no IP restriction expected but not verified from the droplet)
+- Cron installation for goalie probe (superseded by G1)
+- Baseline (b) — model layer in score report (L4 is absent for 2026-27)
+- ESPN team abbreviation mapping (ESPN uses "LA" for Kings, NHL uses "LAK")
+
+### UNVERIFIED
+- Whether the 135 missing cache files (games 2025021178..2025021312) affect any downstream use
+- Whether NHL API boxscore stat counts correctly exclude shootout (assumed per H2; no counter-example)
+- Whether the ESPN abbreviation mismatch (LA vs LAK) affects other teams
+- Whether the packet builder's source enumeration (74 snaps for 5 games) is efficient enough for
+  production use — it reads every parquet file to match snapshot_utc strings
+
+### Merge command for Jeff
+  git checkout main && git merge --no-ff nhl/wo1 -m "Merge nhl/wo1: H3-H6 freeze tool + outcomes + CLV + packet + goalie probe"
