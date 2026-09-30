@@ -167,3 +167,47 @@ event historically. Alternate spreads and Q1 markets less available in earlier s
 Empty-but-charged = 0.
 
 **Gaps.** Same as item 2 — lowvig absent, Hard Rock absent for 2023.
+
+### B-D3 — Item 3 data: in-play 5-min snapshots, 3 seasons (2026-09-30)
+
+Data-facts entry from NBA-D1 work order item 3. No interpretation.
+
+**What was pulled.** Sport-level historical odds (h2h, spreads, totals) at 5-minute intervals
+from (first tip - 5 min) to (last tip + 3 h) on each game night. Keep in-play events (unlike
+item 1 which filters them). Output: `data/odds_archive/nba/history/inplay/season=<yr>/`.
+
+**A6 credit projection (computed before item 3 started).**
+
+| Season | Nights | Snapshots needed | Credits needed |
+|--------|--------|------------------|----------------|
+| 2024   | 167    | 13,768           | 413,040        |
+| 2025   | 165    | 14,171           | 425,130        |
+| 2023   | 164    | 13,590           | 407,700        |
+| **Total** | | **41,529** | **1,245,870** |
+
+**Actual.**
+
+| Season | Snapshots pulled | Credits | Status |
+|--------|-----------------|---------|--------|
+| 2024   | 13,768          | 413,040 | Complete |
+| 2025   | 14,171          | 425,130 | Complete |
+| 2023   | 7,370           | 221,100 | Partial (54%, capped at spend limit) |
+| **Total** | **35,309** | **1,059,270** | |
+
+Season 2023 stopped at 7,370/13,590 snapshots when the order-level spend cap (2.4M) was reached.
+The remaining 6,220 season-2023 inplay snapshots (~186k credits) are resume-safe — rerunning
+with budget will pick up from where it stopped.
+
+### Grand total — NBA-D1 order
+
+| Item | Calls | Credits | Files |
+|------|-------|---------|-------|
+| Probe | ~9 | 270 | 1 JSON |
+| 1 — Lines (4 seasons) | 18,929 | 567,580 | 18,929 parquet + json.gz |
+| 2 — Props (3 seasons) | 7,510 | 391,580 | 7,510 parquet |
+| 4 — Markets (3 seasons) | 7,510 | 381,140 | 7,510 parquet |
+| 3 — Inplay (2.54 seasons) | 35,309 | 1,059,270 | 35,309 parquet + json.gz |
+| **Total** | **69,267** | **2,399,840** | 1.2 GB |
+
+Account x-requests-remaining at end: ~876,102. Global floor (5,000) not breached.
+Disk: 1.2 GB (lines 334M, inplay 682M, props 90M, markets 82M, events 224K).

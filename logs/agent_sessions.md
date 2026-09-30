@@ -3499,6 +3499,11 @@ Ending: 99,842
 - RAN: Item 1 lines — 18,929 snapshots (15,648 hourly + 3,281 close), 5,009 events, ~568k credits. All 10 books present in 2024-25 and 2025-26; hardrockbet absent in 2022-23 and 2023-24 (expected).
 - RAN: A7 null control — 30/30 exact matches vs March 2026 DraftKings backfill. Max diff = 0.
 - COMMITTED: item 0 (probe, schedule, script, .gitignore) pushed to origin/nba/data-d1.
-- NOT DONE: items 2, 4, 3 (props, derivative markets, inplay). Session continuing.
-- NOT DONE: session log final entry, du -sh of data root.
-- UNVERIFIED: whether event counts (1,234-1,274) correctly exclude playoffs (date range extends into Apr 14-19). Events are collected from API responses and include whatever the API returns for each snapshot, which may include upcoming playoff games.
+- RAN: Item 2 props — 7,510 calls, 3 seasons, ~392k credits. 8 prop markets. Avg ~52/call.
+- RAN: Item 4 markets — 7,510 calls, 3 seasons, ~381k credits. 8 derivative markets. Variable cost 40-80.
+- RAN: Item 3 inplay — 35,309 calls, ~1,059k credits. 2024 complete, 2025 complete, 2023 partial (54%).
+- TOTAL: 69,267 calls, 2,399,840 credits (160 under 2.4M cap). Account rem ~876k. Disk 1.2 GB.
+- A7 null control: 30/30 exact matches. A5: all first-call costs correct. A10: hardrockbet (not _fl), Pinnacle via eu.
+- B-D1 through B-D4 written.
+- NOT DONE: season 2023 inplay completion (~186k credits, resume-safe).
+- UNVERIFIED: event counts may include some playoff games (date range extends into post-season).

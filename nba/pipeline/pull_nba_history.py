@@ -122,7 +122,7 @@ def load_events(season):
 
 
 class State:
-    def __init__(self):
+    def __init__(self, cap=None):
         self.lock = threading.Lock()
         self.credits_used = 0
         self.remaining = None
@@ -133,15 +133,16 @@ class State:
         self.empty_charged = 0
         self.empty_free = 0
         self.books_by_season = defaultdict(set)
+        self.cap = cap or SPEND_CAP
 
     def update(self, used, rem):
         with self.lock:
             self.credits_used += used
             self.remaining = rem
             self.calls += 1
-            if self.credits_used >= SPEND_CAP:
+            if self.credits_used >= self.cap:
                 self.stop = True
-                print(f"\nSPEND CAP: {self.credits_used} >= {SPEND_CAP}")
+                print(f"\nSPEND CAP: {self.credits_used} >= {self.cap}")
             if rem < GLOBAL_FLOOR:
                 self.stop = True
                 print(f"\nFLOOR: remaining={rem} < {GLOBAL_FLOOR}")
@@ -807,11 +808,13 @@ def cmd_inplay(args):
     print(f"BOOKS ({len(books)}): {books}")
 
     seasons = [int(s) for s in args.season.split(",")]
-    state = State()
+    run_cap = int(args.cap) if hasattr(args, 'cap') and args.cap else SPEND_CAP
+    state = State(cap=run_cap)
 
     r0, h0 = api_get(f"{BASE}/sports", {"apiKey": KEY})
     if r0:
         print(f"x-requests-remaining: {int(r0.headers.get('x-requests-remaining', 0))}")
+    print(f"Run credit cap: {run_cap}")
 
     for season in seasons:
         events_df = load_events(season)
@@ -991,6 +994,7 @@ def main():
 
     p_inp = sub.add_parser("inplay", help="Item 3: in-play snapshots")
     p_inp.add_argument("--season", required=True)
+    p_inp.add_argument("--cap", type=int, default=None, help="Credit cap for this run")
 
     sub.add_parser("null", help="A7 null control")
 
