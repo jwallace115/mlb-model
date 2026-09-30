@@ -4650,3 +4650,23 @@ Proof:
 (c) Full forward suite (13 files): 88 passed, 0 failed, 0 skipped.
 
 No non-test files changed. FWD_EXPERIMENT_v1.json not re-stamped (0 "tests/" entries hashed).
+
+### D250 — FWD4b accepted; merging eng/fwd3 is blocked until the experiment's logger is decoupled from the shared NHL/NFL logger (2026-09-30)
+
+FWD4b is accepted:
+- test-only;
+- 88 passed, 0 failed, reproduced;
+- the run_id and reader mutations are caught.
+
+Cowork's "92" expectation and D248's "88 passed, 2 failed" were wrong. The parent was 86 passed, 2 failed.
+
+eng/fwd3 is NOT merged as-is. Main's NHL work (H3-H5) changed the experiment-hashed `nfl/pipeline/log_ai_opinions.py`
+by +558/−67. A merge would put unaudited code into the experiment's freeze and scoring path. It fails the hash test and
+three freeze-message tests.
+
+FWD5 pins the experiment's logger instead:
+- `nfl/sim/fwd_v1_logger.py` becomes a byte-identical copy of the verified eng/fwd3 version (sha256 cf100675bd385ca5);
+- the harness and the forward tests import it;
+- the manifest hashes it in place of the shared file, which returns to the NHL/NFL-AI sessions unhashed.
+
+The TNF gate is unchanged: FWD5 must be verified and merged by Thu 10-01 15:00Z, or TNF runs `--pilot`.
