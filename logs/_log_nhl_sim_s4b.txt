@@ -206,5 +206,69 @@ S46: 976ea4f32 (rebased to 21f59cc86)
 S47: 6e58b8064
 S48: 692a4b917
 
-### Merge command
+### Merge command (S-WO4d)
 git merge nhl/sim-s4b
+
+---
+
+## C-WO1 (2026-09-30)
+
+### Setup
+Branch nhl/sim-s4b, worktree ~/mlb-model-nhlsim4b. Parent baseline: 44 passed, 0 failed.
+edge_hunt_2026-09-30/ copied from main (scripts, logs, PREREG, work orders — not .parquet/.npz).
+
+### Item 1 (S49) — Fix swapped goalie ratings + test
+Commit: 56d006f1a
+
+- RETURNED (test on BUGGY code): TestGoalieSaveDirection FAILED.
+  away goals fell −2.3% (ctrl=2.770, test=2.833) — goalie applied to wrong team.
+- MEANS: Confirms the bug. A good home goalie should reduce AWAY goals, not raise them.
+
+- RETURNED (test on FIXED code): TestGoalieSaveDirection PASSED.
+  away goals fell 13.0%, home goals changed <1%.
+- MEANS: Fix is correct. The goalie_save multiplier now routes to the correct team.
+
+- RETURNED (null control): TestAllOnesIsLeagueAverage PASSED — all-ones still reproduces league_average_inputs.
+- MEANS: NULL CONTROL PASSES.
+
+- RETURNED: 4 passed, 0 failed (1 new test).
+
+### Item 2 (S50) — Re-price 2022-24 with fix
+Commit: 28e9f834a
+
+- Runtime estimate: ~50 min (S41 measured). Actual: 49 min.
+- RETURNED: price_games.py completed. 1312 games/season, 0 skipped.
+- RETURNED: p_home_win match vs Cowork parquet (sha256 3bbf36f5): max |diff| = 0.0000 on 2,624 games.
+- MEANS: Cowork match CONFIRMED. Same seeds → identical output.
+- RETURNED: Fixed vs swapped differ on 1,297/1,312 games, mean |Δ| 4.1 pp, max 20 pp.
+
+- Cowork pre-registration (C-01):
+  2022-23: HELD. 2023-24: NOT HELD (0.6646, t −1.76, A1 −0.05). Nothing tuned.
+
+### Item 3 (S51) — Prediction report + generators
+Commit: 79ba839c6
+
+- RETURNED: 2023-24 ML log-loss 0.6646 (Pin 0.6567), A1 −0.051. Totals A1 −0.022.
+- RETURNED: S46 generator: actual var 5.328 vs engine 5.653, ratio 0.942.
+- RETURNED: S47 generator on fixed prices: own_b2b −0.092 (p=0.005), opp_b2b +0.065 (p=0.035).
+  Note: S47 decision entry (−0.108/+0.081) used swapped prices; cannot reproduce exactly.
+- RETURNED: s48_complete.py committed unchanged.
+
+### Item 4 (S52) — 16-regime family
+Commit: 1583dedfc
+
+- RETURNED: 16 tests, BH 10%. NO SURVIVORS. Min p 0.0064, threshold 0.0063.
+- RETURNED: Match vs Cowork a02_regimes_fixed.csv: max |diff| = 0.000000 on all 32 rows.
+- MEANS: Engine adds no info beyond Pinnacle. Nothing carried to 2024-25.
+
+### Pre-registrations
+S49 test: HELD. C-01 2022-23: HELD. C-01 2023-24: NOT HELD. S52 regimes: NO SURVIVORS (expected).
+
+### NOT DONE
+- S47 reproduction on swapped prices (lack mean_home/away_goals).
+- B2B modifiers not applied as engine multipliers (separate re-price).
+- S50 null control via re-price revert (verified via Cowork exact match instead).
+
+### UNVERIFIED
+- Whether swapped prices can be reproduced from committed code (predate mean_home/away_goals).
+- Whether S47 B2B coefficients on swapped prices match what the generator would produce.
