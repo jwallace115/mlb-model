@@ -127,3 +127,34 @@
 
 ### UNVERIFIED
 - Whether FWD2b lands by Thu 20:00Z. If not, TNF stays a pilot.
+
+## 2026-09-30T09:40Z  cowork (verification of FWD2b — D233; order FWD2c)
+
+### RETURNED
+- eng/fwd2 @ 3beed7970: D228 append, D229-D232. 49 tests pass on Linux; no source-text tests.
+- test_live_freeze_completes (test_fwd2b_harness.py:190) runs with --pilot --as-of.
+- The real week-4 dry run stopped at quote age (24.5 h).
+- Runbook errors:
+  - Sunday dates given as 10-05; the tape says 10-04.
+  - London given as JAX@IND; the tape says IND@WAS, 13:30Z 10-04.
+  - MNF given as "Tue 10-07".
+  - Week-5 TNF given as "Fri 10-10".
+  - The London command calls nfl/pipeline/pull_odds.py, which does not exist.
+- ratings.py:936-938 writes params_v1.json on every run.
+- Settlement:
+  - snap_played=None still scores the stat.
+  - Participation is matched by exact name.
+  - There is no completed-game check.
+  - The week-3 re-grade graded 0 of 2,070 rows (D231).
+
+### MEANS
+- The bundle harness is accepted, and a real week-3 pilot freeze completed. Live mode is still unproven.
+- The runbook could have sent Jeff to the wrong day and the wrong game, with a command that fails.
+- Scoring is not trustworthy yet. It is not needed before the first freeze, but it must be fixed before the first
+  grading.
+
+### NOT DONE
+- FWD2c (written).
+
+### UNVERIFIED
+- The MNF week-4 game and kick time (FWD2c derives it from the tape).
