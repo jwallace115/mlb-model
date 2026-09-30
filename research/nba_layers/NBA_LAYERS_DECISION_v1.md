@@ -211,3 +211,16 @@ with budget will pick up from where it stopped.
 
 Account x-requests-remaining at end: ~876,102. Global floor (5,000) not breached.
 Disk: 1.2 GB (lines 334M, inplay 682M, props 90M, markets 82M, events 224K).
+
+### B-D5 — Corrections to B-D1..B-D4 after Cowork verification (2026-09-30)
+
+Data facts only; details in `research/nba_layers/nbaD1_verification_2026-09-30.md`.
+- Hard Rock (`hardrockbet`) IS in season 2023-24: first seen 2023-11-28, on 74.1% of events' last pre-tip snapshot
+  (98.8% 2024-25, 97.7% 2025-26), and in 2023 props. B-D1/B-D2 "Absent for 2023" is wrong. 2022-23: none.
+- Close (A4): 99%+ of events have a pre-tip close row; median 9.4 min, p90 19.4 min before the actual tip;
+  Pinnacle in it on 95.5-99.7% of events by season.
+- Null control (b): item-1 parquet = json minus games already started (8/50 sampled files differ, every difference
+  equals the live games' outcomes). In-play files match exactly. Not data loss.
+- T-24h props empty on 58-72% of events; T-24h derivative markets 38-49%; T-1h under 3%. D1 holds one props
+  snapshot per game (T-1h); no props opening line or movement.
+- Events include 8-10 play-in/playoff games per season inside the date range; in-play 2023-24 covers Oct-Jan only.

@@ -3576,3 +3576,11 @@ Ending: 99,842
 - WORKTREE /tmp/eng-fwd3 created and removed
 - NOT DONE: merge of eng/fwd3 to main (user decision)
 - UNVERIFIED: whether the 88-test count matches the expected 92 from the prompt (prompt said "expect 92"; suite returned 88 — possibly 4 tests were added between the prompt's count and the actual HEAD)
+
+## 2026-09-30T19:15Z  cowork (NBA chat: NBA-D1 verification, B-D5)
+- RAN (Mac bridge, read-only on data): file counts per item/season; close coverage + gap to actual tip from close files; Hard Rock presence by month (2023 close files); in-play live share (60-file sample); props/event_markets empty share (150 files per season x tag); parquet vs json.gz row counts (50 files); merge-base overlap check main vs nba/data-d1.
+- RETURNED: counts equal the report; close rows for 99%+ of events, median 9.4 min pre-tip; Hard Rock in 2023-24 from 2023-11-28 (74.1% of events); 8/50 lines files parquet < json, each difference = live games; T-24h props empty 58-72%; 8-10 postseason games per season in events; no file overlap between branch and main since merge base.
+- WROTE: research/nba_layers/nbaD1_verification_2026-09-30.md; B-D5 (corrections).
+- MEANS: D1 is usable for closes/CLV (Pinnacle + Hard Rock from late 2023) and in-play; props are one snapshot per game (T-1h); B-D1/B-D2's "Hard Rock absent 2023" was wrong.
+- NOT DONE: header-cost recheck; item-0 schedule vs external source; staleness (book_last_update) of close quotes; 2023-24 in-play Feb-Apr (~186k credits).
+- UNVERIFIED: null control (a) not re-run by Cowork.
