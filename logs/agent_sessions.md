@@ -3584,3 +3584,61 @@ Ending: 99,842
 - MEANS: D1 is usable for closes/CLV (Pinnacle + Hard Rock from late 2023) and in-play; props are one snapshot per game (T-1h); B-D1/B-D2's "Hard Rock absent 2023" was wrong.
 - NOT DONE: header-cost recheck; item-0 schedule vs external source; staleness (book_last_update) of close quotes; 2023-24 in-play Feb-Apr (~186k credits).
 - UNVERIFIED: null control (a) not re-run by Cowork.
+
+## 2026-09-30T~20:00Z  claude-code (D-WO1, branch nhl/sim-d1)
+
+### D1 — Probe (6 games, 11 season counts)
+
+RETURNED: 6 games probed (2010020001..2020020001).
+- situationCode: present >97% of plays in all 6 games (missing on period-start/end only).
+- Shot coordinates (xCoord, yCoord): 100% of shot-type plays in all games.
+- shootingPlayerId: ~95%, goalieInNetId: ~75% (empty-net shots expected to lack it).
+- Boxscore starter flag: present in all eras incl. 2010. Not always first-listed goalie.
+- Game counts (binary search): 2010: 1230, 2011: 1230, 2012: 720, 2013-2016: 1230 each,
+  2017-2018: 1271, 2019: 1082, 2020: 868. Total: 12,502.
+
+MEANS: GATE PASS. All required fields present for 2010-2020. Proceed with pull.
+
+### D2 — Pull PBP + boxscores (12,592 games each)
+
+RETURNED:
+- PBP: 12,592 files pulled at 1.7 req/s (~2.1h). 0 404s, 0 skipped.
+  2016 had 345 transient errors; gap-filled on retry (all 1,230 files present after).
+- Boxscores: 12,592 files pulled at 1.5 req/s (~2.1h). 0 errors.
+- PBP cache: symlinked to ~/mlb-model-nhlsim1/nhl/cache/pbp/ (shared with S-WO1).
+- Null control: 2021 re-run downloaded 0 files, 1312 cached, no bytes changed. PASS.
+
+MEANS: Complete PBP + boxscore archive for 2010-2020. All counts match D1 probe.
+
+### D3 — Event tables for 2010-2020
+
+RETURNED:
+- build_events.py updated with per-season game counts. 0 process failures on all 11 seasons.
+- Goals match boxscore (minus SO +1): 100.0% on all 11 seasons. CRITICAL CONTROL PASS.
+- SOG match: 98-99.7% (known: PBP includes attempts boxscore excludes).
+- State time within 2s: FAILS for 2010-2018 (1-3% pass rate, median diff 37s).
+  Passes 100% for 2019-2020. Structural: older PBP period transition events differ.
+
+MEANS: Goal-level accuracy confirmed. State time issue affects 5v5/PP seconds derivation
+for pre-2019 but does NOT affect goals, shots, or penalties.
+
+### D4 — xG v2 calibration + walk-forward plan
+
+RETURNED:
+- Frozen xg_v2.json applied to all 11 old seasons' shots.
+- AUC: 0.7439 (2018) to 0.7616 (2020), mean 0.7525. All above 0.70.
+- Mean AUC 2010-2020: 0.7525 vs 2021+: 0.7467 (model slightly better on old data).
+
+MEANS: One xG model serves 2010-2020 without refitting. Walk-forward plan written
+for D-WO2: 9 target seasons with 2-season fit windows.
+
+### NOT DONE
+- 2021-2025 event table null control (byte-identical after code changes): event tables
+  were not present in this worktree at session start; 2021 was regenerated as test but
+  a full byte-identical comparison across 2021-2025 was not performed.
+- State-time fix for pre-2019 PBP (period transition encoding differences).
+
+### UNVERIFIED
+- Whether the 2016 retry filled ALL 345 gaps (the count matches but file-level diff not done).
+- Whether state_time for pre-2019 data is usable for constants derivation (5v5/PP seconds).
+- Whether the walk-forward commands in d_walkforward_plan.md run without modification.
