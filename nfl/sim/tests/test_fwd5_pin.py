@@ -49,6 +49,8 @@ def test_live_path_never_imports_shared_logger(tmp_path):
         from pathlib import Path
         from nfl.sim.tests.test_fwd3_item0 import _build_fixture_root, _stub_run_week
         from nfl.sim.run_forward_v1 import main
+        import nfl.sim.run_forward_v1 as _fwd
+        _fwd.REQUIRE_LAUNCHER = False   # D266: in-process live freeze (test only)
         kick = datetime.now(timezone.utc).replace(microsecond=0) + timedelta(hours=2)
         root = _build_fixture_root(Path({str(tmp_path)!r}), kick=kick)
         dest = main(argv=["--week", "3", "--window-hours", "4"], root=str(root),

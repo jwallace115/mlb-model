@@ -564,6 +564,13 @@ def receipt_status(run_id, root):
         return "mismatch"
     if hashlib.sha256((runs[0] / "bundle_manifest.json").read_bytes()).hexdigest() != r["bundle_digest"]:
         return "mismatch"
+    # D266 (audit #11 B): the ai_opinions manifest entry must be the receipt's, exactly
+    entry = r.get("opinions_manifest_entry")
+    if entry is not None:
+        om = frozen.parent / "manifest.json"
+        entries = json.loads(om.read_text()) if om.exists() else []
+        if [e for e in entries if e.get("file") == entry.get("file")] != [entry]:
+            return "mismatch"
     return "complete"
 
 
@@ -879,6 +886,12 @@ def _validate_outputs(run_out, week, run_id, game_ids, bundle_lines=None, bundle
 
 # ── D263: the freeze gate runs OUTSIDE the process that builds and freezes ────────
 
+GATE_TIMEOUT_S = 600
+# D266: a primary (non-pilot, non-dry-run) freeze must run in a process started through
+# nfl/sim/fwd_bootstrap.py (python3 -I -S -B). Tests that exercise live freezes in-process
+# set this False; production code never does.
+REQUIRE_LAUNCHER = True
+
 FREEZE_GATE_TESTS = ("test_engine_fingerprint", "test_table_hashes",
                      "test_calibration_hash", "test_params_hash")
 
@@ -914,13 +927,15 @@ def run_freeze_gate():
     sim said 0.62). The gate runs in a fresh subprocess with plugin autoload disabled, and
     its JUnit report must show the four named tests passed."""
     import tempfile
-    test_file = ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py"
+    from nfl.sim import fwd_bootstrap as FB
     with tempfile.TemporaryDirectory() as td:
         xml_path = Path(td) / "gate.xml"
-        cmd = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
-               f"--junitxml={xml_path}", str(test_file)]
+        # D266: the gate child is a bootstrapped process (python3 -I -S -B): no site, no
+        # PYTHONPATH, no .pth, no sitecustomize, no stale bytecode; pytest itself and every
+        # module it loads are verified against their distribution RECORDs.
+        cmd = FB.child_cmd("gate", xml_path)
         r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(ROOT),
-                           env=freeze_gate_env(), timeout=600)
+                           env=freeze_gate_env(), timeout=GATE_TIMEOUT_S)
         if r.returncode != 0 or not xml_path.exists():
             raise SystemExit(f"HALT: test_freeze_v1 failed (exit {r.returncode}):\n"
                              f"{r.stdout[-2000:]}\n{r.stderr[-2000:]}")
@@ -935,14 +950,17 @@ def _default_run_week(root, week, T, bundle_lines, game_ids, run_dir=None,
     D256/D260: a forward run passes ONLY paths and identity: --bundle-dir (the worker reads
     lines, games and the cutoff from the bundle files, so they enter its read set),
     --input-dir, --props-file, --run-id. No numerical value travels on the command line."""
-    cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"), "--week", str(week)]
     if run_dir is not None:
-        cmd += ["--run-dir", str(run_dir), "--input-dir", str(input_dir),
-                "--props-file", str(props_file), "--run-id", str(run_id),
-                "--bundle-dir", str(bundle_dir)]
+        # D266: the worker is a bootstrapped process (python3 -I -S -B), so its code is
+        # executed only from manifest-verified source and its dependencies are verified
+        from nfl.sim import fwd_bootstrap as FB
+        cmd = FB.child_cmd("worker", "--week", week, "--run-dir", run_dir,
+                           "--input-dir", input_dir, "--props-file", props_file,
+                           "--run-id", run_id, "--bundle-dir", bundle_dir)
     else:
-        cmd += ["--as-of", T.isoformat(), "--lines-json", json.dumps(bundle_lines),
-                "--games", ",".join(game_ids)]
+        cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"), "--week", str(week),
+               "--as-of", T.isoformat(), "--lines-json", json.dumps(bundle_lines),
+               "--games", ",".join(game_ids)]
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(root), timeout=7200)
     if r.returncode != 0:
         raise SystemExit(f"HALT: run_week.py failed:\n{r.stderr}\n{r.stdout}")
@@ -977,6 +995,13 @@ def main(argv=None, root=None, run_week_fn=None):
     # D234: --allow-stale-quotes allowed with --pilot OR --dry-run (never a live freeze)
     if a.allow_stale_quotes and not (a.pilot or a.dry_run):
         raise SystemExit("HALT: --allow-stale-quotes requires --pilot or --dry-run")
+
+    from nfl.sim import fwd_bootstrap as FB
+    if REQUIRE_LAUNCHER and not (a.pilot or a.dry_run) and not FB.ACTIVE:
+        raise SystemExit("HALT: a primary freeze must be launched as\n"
+                         "  python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week W ...\n"
+                         "(D266: no site/.pth/sitecustomize, no PYTHON* env, no stale "
+                         "bytecode; repository code only from manifest-verified source)")
 
     T = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
     if T.tzinfo is None:
@@ -1158,6 +1183,9 @@ def main(argv=None, root=None, run_week_fn=None):
             raise SystemExit(f"HALT: publication time {pre_write_wall.isoformat()} >= "
                          f"first kick {first_kick.isoformat()}")
 
+    # D266: every module loaded in THIS process is verified before it writes the record
+    runtime = FB.verify_loaded_modules() if FB.ACTIVE else None
+
     # D260: the run directory must still be exactly the finalised manifest at the freeze
     vb = verify_bundle(bundle_dir)
     if vb:
@@ -1216,6 +1244,10 @@ def main(argv=None, root=None, run_week_fn=None):
         "pilot": bool(a.pilot),
         "publication_json_sha256": hashlib.sha256(pub_path.read_bytes()).hexdigest(),
         "run_dir": str(bundle_dir.relative_to(root)),
+        # D266: the verified runtime (None = not launched through fwd_bootstrap; only a
+        # pilot can be)
+        "runtime": FB.verify_loaded_modules() if FB.ACTIVE else None,
+        "runtime_before_freeze": runtime,
     }
 
     # D246(b): update the ai_opinions manifest entry with publication_utc

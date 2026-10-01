@@ -5225,3 +5225,96 @@ Recovery, as given to Jeff:
 - `git branch -f eng/fwd6 origin/eng/fwd6`.
 
 From now on the Mac stays on main, and fixes are applied in a separate worktree.
+
+### D266 — ChatGPT audit #11 adjudicated (NO-GO on aba96dfc3 accepted); Jeff: fix everything it found; FWD6d: every forward-run process is started through a verified bootstrap (2026-10-01)
+
+Audit #11 (`research/cross_ai/chatgpt_audit11_reply_2026-10-01.md`, saved verbatim by ChatGPT) found three must-fix
+items. All three need code planted on the Mac. Cowork offered three options: set a scope and harden; fix everything;
+or run TNF as a pilot. **Jeff chose "fix everything it found".** Jeff also dropped Cowork's self-imposed 15:00Z
+merge deadline. The only real constraint is that the code is merged before the 23:30Z run starts.
+
+**A1 + A2 — `nfl/sim/fwd_bootstrap.py` (new, hashed).** Every process of a forward run is started as
+`python3 -I -S -B nfl/sim/fwd_bootstrap.py {harness|gate|worker} …`:
+- `-I`: no PYTHON* environment (PYTHONPATH, PYTHONSTARTUP), and no cwd or script directory on sys.path.
+- `-S`: no `site`, so no sitecustomize, usercustomize or `.pth` is ever executed.
+- `-B`: no bytecode writes.
+- `sys.pycache_prefix` is set to a fresh, empty, private directory before any project import, so no existing `.pyc` can
+  be selected for any module.
+- The dependency directories (`site.getsitepackages()` and the user site) are appended without processing `.pth`.
+- A meta-path finder in front of all others executes repository modules ONLY from source bytes whose sha256 matches the
+  experiment manifest. The bytes hashed are the bytes compiled. An unlisted or altered repository module cannot be
+  imported, and the bootstrap checks its own hash.
+- `verify_loaded_modules()` checks every loaded module file:
+  - repository files must have come through the verifier;
+  - standard-library files must lie under the interpreter's own library directories;
+  - every other file must match the sha256 in its distribution's RECORD.
+- Wiring:
+  - the gate child (`run_freeze_gate`) and the worker (`_default_run_week`) are started through it;
+  - the gate runs pytest with `--assert=plain --noconftest -c /dev/null`, plugin autoload off, and verifies its own
+    loaded modules;
+  - the harness verifies its loaded modules immediately before the freeze and again before the receipt, and records the
+    runtime fingerprint in the receipt (`runtime`, `runtime_before_freeze`).
+- A primary (non-pilot, non-dry-run) freeze HALTs unless the harness itself was started through the bootstrap
+  (`REQUIRE_LAUNCHER`).
+- **The TNF command is now:** `python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 2`.
+
+**A3 — the recorder.**
+- A source given to a wrapped reader is served from recorded bytes only if it is an existing regular file. The forms
+  covered are str, bytes and PathLike, positional or keyword (`source`, `path`, `where`, `path_or_paths`, `filename`,
+  `uri`, `filepath_or_buffer`).
+- These sources are refused with a persisted violation:
+  - a URI;
+  - a path that is not an existing regular file;
+  - an opaque pyarrow NativeFile.
+- Native readers are refused for any path-like or URI source in any argument form.
+- `pyarrow.fs.LocalFileSystem.open_input_file/open_input_stream` and `pyarrow.fs.FileSystem.from_uri` are refused
+  through guarded subclasses.
+- An update-mode `os.open` is refused at the open itself.
+- A repository `.pyc` is data, never code (the `.pyc` → source mapping is retired).
+- An AST scan of EVERY hashed module, `read_set.py` and `fwd_bootstrap.py` included, bans calls to unrecordable readers
+  and dynamic code. The two documented exceptions are the bootstrap's compile/exec of verified source and read_set's
+  reflection over the APIs it guards.
+- Still unrecordable at the Python level: `pa.OSFile` and aliases captured before install. They can only appear in code
+  that runs, and code that runs is now only manifest-verified repository source or RECORD-verified dependencies.
+
+**Recovery.** `receipt_status` now also requires the ai_opinions manifest entry to equal the receipt's.
+
+### D267 — FWD6d: the audit-#11 survivors are killed; manifest re-stamped (2026-10-01)
+
+**Tests (`test_fwd6d.py`)** run bootstrapped processes as real subprocesses. Each of the following is a counterexample
+that must not run or must HALT:
+- hostile sitecustomize, usercustomize and PYTHONSTARTUP, and a fake pytest on PYTHONPATH;
+- a `.pth` in the user site;
+- a fake pytest that writes a perfect report, against the real gate;
+- a timestamp-valid doctored `.pyc` (control: plain python3 runs it; the bootstrap does not);
+- an unlisted or altered module, and an altered bootstrap;
+- an unrecorded or RECORD-mismatched loaded file;
+- URI, bytes and keyword sources;
+- pyarrow.fs and native handles;
+- a swallowed refusal;
+- an O_RDWR open;
+- the mechanism union.
+
+The real worker in a fresh bootstrapped process reads 45/45 wrapper bytes, and the classifier passes.
+
+**Survivors killed, from audit #10:**
+- user-site prefix;
+- CSV parsed under the recorder;
+- restore hashing of objects over 16 MiB;
+- `find_receipt` duplicates;
+- the CLI status mismatch.
+
+**Survivors killed, from audit #11, N1-N10:**
+- the allow-list equals the manifest;
+- `.pyc` retired;
+- `via` union;
+- keyword forms;
+- duplicate gate name;
+- gate timeout 600;
+- nonzero gate exit with a valid report;
+- same-day cutoff;
+- same-basename bundle;
+- last-played weeks from the snapshot.
+
+**Manifest:** fwd_bootstrap.py added (52 files). read_set.py and run_forward_v1.py are re-stamped. FREEZE_v1 files,
+run_week.py and fwd_v1_logger.py (cf100675bd385ca5) are unchanged.

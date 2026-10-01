@@ -128,7 +128,8 @@ def test_real_gate_runs_in_a_subprocess_and_passes():
         fwd.run_freeze_gate()
     assert len(calls) == 1
     cmd, env = calls[0]
-    assert cmd[1:3] == ["-m", "pytest"] and any(c.startswith("--junitxml=") for c in cmd)
+    # D266: the gate child is a bootstrapped process
+    assert cmd[1:4] == ["-I", "-S", "-B"] and cmd[4].endswith("fwd_bootstrap.py") and cmd[5] == "gate"
     assert env.get("PYTEST_DISABLE_PLUGIN_AUTOLOAD") == "1"
 
 
@@ -397,6 +398,9 @@ def test_real_worker_outputs_pass_parent_validation(tmp_path):
     """End to end: the REAL worker's outputs (identity, invocation cutoff and bundle) pass
     the parent's checks. Kills 'worker emits week+1' and 'worker writes cutoff 1900'."""
     import nfl.sim.run_week as rw
+    import nfl.sim.usage  # noqa: F401 — in-process (not bootstrapped): import before the
+    # recorder, as a bootstrapped worker would through its verified-source loader; the
+    # fresh bootstrapped process is test_bootstrapped_worker_reads_only_wrapper_bytes
     from nfl.sim.run_forward_v1 import _validate_outputs, lines_dict_from_bundle
     from nfl.sim.tests.test_fwd6_item0 import _make_inputs
     input_dir, props_file = _make_inputs(tmp_path)

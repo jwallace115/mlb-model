@@ -616,6 +616,7 @@ def test_real_default_worker_path_never_imports_shared_logger(tmp_path):
         from unittest.mock import patch
         from nfl.sim.tests.test_fwd3_item0 import _build_fixture_root, _stub_run_week
         import nfl.sim.run_forward_v1 as fwd
+        fwd.REQUIRE_LAUNCHER = False   # D266: in-process live freeze (test only)
         kick = datetime.now(timezone.utc).replace(microsecond=0) + timedelta(hours=2)
         root = _build_fixture_root(Path({str(tmp_path)!r}), kick=kick)
 

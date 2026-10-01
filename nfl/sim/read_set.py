@@ -142,13 +142,11 @@ _CODE_ALLOW = set()
 
 
 def _code_source(p):
-    """The .py source a code path stands for (x.py itself, or __pycache__/x.<tag>.pyc)."""
+    """The .py source a code path stands for. D266: a .pyc never stands for repository
+    code — forward-run processes compile repository modules from verified source
+    (fwd_bootstrap), so a read of a repository .pyc is recorded and rejected as data."""
     pp = Path(p)
-    if pp.suffix == ".py":
-        return str(pp)
-    if pp.suffix == ".pyc" and pp.parent.name == "__pycache__":
-        return str(pp.parent.parent / (pp.name.split(".")[0] + ".py"))
-    return None
+    return str(pp) if pp.suffix == ".py" else None
 
 
 def _excluded(path_str):
@@ -199,12 +197,33 @@ def _audit_open(event, args):
     if (isinstance(mode, str) and "+" in mode) or \
             (mode is None and flags is not None and (flags & 3) == os.O_RDWR):
         rec.violations.append(f"update-mode open of an input: {path}")
+        # D266 (audit #11): refused at the open itself, not only at classification
+        raise PermissionError(f"HALT: update-mode open of {path} is not permitted in a "
+                              f"forward run")
     _GUARD.busy = True
     try:
         with rec._orig["open"](path, "rb") as fh:
             rec._record(path, fh.read(), via="audit")
     finally:
         _GUARD.busy = False
+
+
+_SOURCE_KW = ("source", "path", "where", "path_or_paths", "filename", "uri", "filepath_or_buffer")
+
+
+def _as_local_path(src):
+    """D266 (audit #11 A3): a str/bytes/PathLike source as a local path string, or None for
+    anything that is not a path (an in-memory buffer). A URI ('scheme://…', 'file:…') is
+    returned as-is so the caller can refuse it."""
+    if isinstance(src, (bytes, bytearray)):
+        return os.fsdecode(bytes(src))
+    if isinstance(src, (str, os.PathLike)):
+        return os.fspath(src) if not isinstance(src, str) else src
+    return None
+
+
+def _is_uri(s):
+    return "://" in s or s.lower().startswith("file:")
 
 
 class ReadSetRecorder:
@@ -255,6 +274,10 @@ class ReadSetRecorder:
         # pq.ParquetDataset (a class) is replaced by a guarded SUBCLASS so isinstance
         # checks still hold; pa.OSFile (a final extension type) cannot be, and is covered
         # by the static scan of the hashed code (test_fwd6c).
+        import pyarrow.fs as pafs
+        self._fs = pafs
+        self._orig[("pyarrow.fs", "LocalFileSystem")] = pafs.LocalFileSystem
+        self._orig[("pyarrow.fs", "FileSystem")] = pafs.FileSystem
         self._native = [(pa, "memory_map"), (pa, "input_stream"), (pq, "ParquetDataset"),
                         (pads, "dataset"), (pq, "read_pandas"),
                         (pq, "read_metadata"), (pq, "read_schema"),
@@ -263,18 +286,43 @@ class ReadSetRecorder:
         for mod, attr in self._native:
             self._orig[(mod.__name__, attr)] = getattr(mod, attr)
 
-        def _is_path(x):
-            return isinstance(x, (str, os.PathLike)) and os.path.isfile(x)
+        def _serve(name, src):
+            """D266: the bytes to hand a parser for `src`, or None to pass `src` through
+            untouched (an in-memory buffer, or an installation/OS file). Every other source
+            form — a URI, a bytes path, a path that is not an existing regular file, an
+            opaque native pyarrow file — is REFUSED, never passed to native code."""
+            import pyarrow as pa
+            if isinstance(src, pa.NativeFile) and not isinstance(src, pa.BufferReader):
+                rec.violations.append(f"{name}: opaque native file source")
+                raise PermissionError(f"HALT: {name} given a native file handle; only "
+                                      f"recorded bytes may be parsed in a forward run")
+            lp = _as_local_path(src)
+            if lp is None:
+                return None
+            if _is_uri(lp):
+                rec.violations.append(f"{name}: URI source {lp}")
+                raise PermissionError(f"HALT: {name}({lp}) — URI sources are refused")
+            if os.path.isfile(lp):
+                if _excluded(str(Path(lp).resolve())):
+                    return None
+                data = rec._load(lp)
+                rec._record(lp, data)
+                return data
+            rec.violations.append(f"{name}: unsupported source {lp!r}")
+            raise PermissionError(f"HALT: {name}({lp!r}) is not an existing regular file")
 
         def _wrap_pd(name):
             orig = rec._orig[name]
 
-            def wrapper(src, *a, **k):
-                if _is_path(src) and not _excluded(str(Path(src).resolve())):
-                    data = rec._load(src)
-                    rec._record(src, data)
-                    return orig(io.BytesIO(data), *a, **k)
-                return orig(src, *a, **k)
+            def wrapper(*a, **k):
+                key = next((kk for kk in _SOURCE_KW if kk in k), None)
+                src = k[key] if key else (a[0] if a else None)
+                data = _serve(name, src)
+                if data is None:
+                    return orig(*a, **k)
+                if key:
+                    return orig(*a, **{**k, key: io.BytesIO(data)})
+                return orig(io.BytesIO(data), *a[1:], **k)
             return wrapper
 
         def open_wrapper(file, mode="r", *a, **k):
@@ -295,24 +343,36 @@ class ReadSetRecorder:
                 return _text_like_open(data, a, k)
             return rec._orig["open"](file, mode, *a, **k)
 
-        def parquetfile_wrapper(src, *a, **k):
-            if _is_path(src) and not _excluded(str(Path(src).resolve())):
-                data = rec._load(src)
-                rec._record(src, data)
-                return rec._orig["ParquetFile"](io.BytesIO(data), *a, **k)
-            return rec._orig["ParquetFile"](src, *a, **k)
+        def parquetfile_wrapper(*a, **k):
+            key = next((kk for kk in _SOURCE_KW if kk in k), None)
+            src = k[key] if key else (a[0] if a else None)
+            data = _serve("pyarrow.parquet.ParquetFile", src)
+            if data is None:
+                return rec._orig["ParquetFile"](*a, **k)
+            if key:
+                return rec._orig["ParquetFile"](*a, **{**k, key: io.BytesIO(data)})
+            return rec._orig["ParquetFile"](io.BytesIO(data), *a[1:], **k)
 
         def _refuse_paths(name, a, k):
-            srcs = a[:1] + tuple(v for kk, v in k.items()
-                                 if kk in ("source", "path", "where", "path_or_paths"))
+            """D266: a native reader is refused for ANY path-like source — str, bytes,
+            PathLike or URI, positional or keyword, existing or not — unless it is an
+            installation/OS file."""
+            import pyarrow as pa
+            srcs = a[:1] + tuple(v for kk, v in k.items() if kk in _SOURCE_KW)
             for src in srcs:
                 items = src if isinstance(src, (list, tuple)) else [src]
                 for it in items:
-                    if isinstance(it, (str, os.PathLike)) and os.path.exists(it) \
-                            and not _excluded(str(Path(it).resolve())):
-                        rec.violations.append(f"native reader {name} on {it}")
-                        raise PermissionError(f"HALT: {name}({it}) reads natively, "
-                                              f"outside the read-set recorder")
+                    if isinstance(it, pa.NativeFile) and not isinstance(it, pa.BufferReader):
+                        rec.violations.append(f"native reader {name} on a native file")
+                        raise PermissionError(f"HALT: {name}(<native file>) is refused")
+                    lp = _as_local_path(it)
+                    if lp is None:
+                        continue
+                    if not _is_uri(lp) and os.path.exists(lp) and _excluded(str(Path(lp).resolve())):
+                        continue
+                    rec.violations.append(f"native reader {name} on {lp}")
+                    raise PermissionError(f"HALT: {name}({lp}) reads natively, "
+                                          f"outside the read-set recorder")
 
         def _forbid(name, orig):
             if isinstance(orig, type):
@@ -330,6 +390,28 @@ class ReadSetRecorder:
 
         for mod, attr in self._native:
             setattr(mod, attr, _forbid(f"{mod.__name__}.{attr}", self._orig[(mod.__name__, attr)]))
+
+        # D266 (audit #11 C): pyarrow's native local filesystem opens files without
+        # Python's open(); its input-opening methods and FileSystem.from_uri are refused.
+        def _fs_refuse(name):
+            def refused(self_or_cls, *a, **k):
+                rec.violations.append(f"pyarrow.fs {name}")
+                raise PermissionError(f"HALT: pyarrow.fs {name} reads natively, outside "
+                                      f"the read-set recorder")
+            return refused
+
+        class GuardedLocalFileSystem(self._orig[("pyarrow.fs", "LocalFileSystem")]):
+            open_input_file = _fs_refuse("LocalFileSystem.open_input_file")
+            open_input_stream = _fs_refuse("LocalFileSystem.open_input_stream")
+
+        class GuardedFileSystem(self._orig[("pyarrow.fs", "FileSystem")]):
+            @staticmethod
+            def from_uri(*a, **k):
+                rec.violations.append("pyarrow.fs FileSystem.from_uri")
+                raise PermissionError("HALT: pyarrow.fs FileSystem.from_uri is refused")
+
+        pafs.LocalFileSystem = GuardedLocalFileSystem
+        pafs.FileSystem = GuardedFileSystem
         pd.read_parquet = _wrap_pd("read_parquet")
         pd.read_csv = _wrap_pd("read_csv")
         pd.read_json = _wrap_pd("read_json")
@@ -361,6 +443,9 @@ class ReadSetRecorder:
         pq.read_table = self._orig["read_table"]
         for mod, attr in getattr(self, "_native", []):
             setattr(mod, attr, self._orig[(mod.__name__, attr)])
+        if getattr(self, "_fs", None) is not None:
+            self._fs.LocalFileSystem = self._orig[("pyarrow.fs", "LocalFileSystem")]
+            self._fs.FileSystem = self._orig[("pyarrow.fs", "FileSystem")]
         _CODE_ALLOW.clear()
         _NET["block"] = False
 
