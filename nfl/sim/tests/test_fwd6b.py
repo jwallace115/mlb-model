@@ -633,13 +633,22 @@ def test_real_default_worker_path_never_imports_shared_logger(tmp_path):
             _stub_run_week(root, int(a["--week"]), None, lines, sorted(lines),
                            run_dir=Path(a["--run-dir"]), input_dir=Path(a["--input-dir"]),
                            props_file=Path(a["--props-file"]), run_id=a["--run-id"], bundle_dir=bd)
+            # D269: a bootstrapped worker leaves its verified runtime
+            (Path(a["--run-dir"]) / "runtime_worker.json").write_text(json.dumps(
+                {{"flags": "-I -S -B", "pycache_prefix_fresh": True, "n_repo_modules": 12,
+                  "n_dependency_files": 400, "dependency_distributions": {{"pandas": {{}}}},
+                  "marker": "STUB_WORKER_RUNTIME"}}))
             class R: returncode = 0; stdout = "ok"; stderr = ""
             return R()
         with patch.object(fwd.subprocess, "run", side_effect=fake_run):
             dest = fwd.main(argv=["--week", "3", "--window-hours", "4"], root=str(root))
         print("FROZEN", dest is not None)
         print("SHARED_LOADED", "nfl.pipeline.log_ai_opinions" in sys.modules)
+        recs = [json.loads(l) for l in open(root / "research" / "nfl_sim" / "fwd_v1_receipts.jsonl")]
+        print("WORKER_RUNTIME", (recs[-1].get("runtime_worker") or {{}}).get("marker"))
     """)
     r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=300)
     assert "FROZEN True" in r.stdout, r.stdout[-2000:] + r.stderr[-2000:]
     assert "SHARED_LOADED False" in r.stdout
+    # D269: the harness required the worker's runtime and put it in the receipt
+    assert "WORKER_RUNTIME STUB_WORKER_RUNTIME" in r.stdout, r.stdout[-2000:]

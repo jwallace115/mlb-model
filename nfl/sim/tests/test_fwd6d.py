@@ -198,6 +198,11 @@ def test_bootstrapped_worker_reads_only_wrapper_bytes(tmp_path):
     man = {str(p.relative_to(bundle)): _sha(p) for p in bundle.rglob("*") if p.is_file()}
     hashes = json.loads((ROOT / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json").read_text())["file_hashes"]
     classify_read_set(rs, bundle, ROOT, hashes, man)
+    # D269 (audit #12): the worker left its own verified runtime, which the harness requires
+    from nfl.sim.run_forward_v1 import check_worker_runtime
+    rt = check_worker_runtime(run_dir)
+    assert rt["flags"] == "-I -S -B" and "nfl/sim/run_week.py" in rt["repo_modules"]
+    assert rt["n_dependency_files"] > 0 and "pandas" in rt["dependency_distributions"]
 
 
 # ── A2: executed repository code is the hashed source ───────────────────────────

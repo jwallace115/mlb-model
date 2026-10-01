@@ -5341,3 +5341,95 @@ Mutation-checked: reverting either fix fails a test.
 
 **Reproduced off the Mac.** On a standalone CPython 3.13.7 with the macOS-style layout, the old bootstrap reported 0
 dependency files and the fixed one 787. The full forward suite was run on that interpreter and on the system Python.
+
+### D269 — ChatGPT audit #12 (INCOMPLETE, no GO) adjudicated; FWD6e closes its survivors and pins what ran; dependency-environment rule pre-registered (2026-10-01)
+
+**The audit.** ChatGPT's audit #12 of `876e61463` stopped before finishing and issued no GO. Its reply,
+`research/cross_ai/chatgpt_audit12_reply_2026-10-01.md`, is saved verbatim and marked incomplete.
+
+What it completed on the Mac (macOS, Python 3.13.1):
+- **Suite:** 233 passed and 2 skipped (the external-data settlement tests) in each UTF-8 mode.
+- **Two synthetic primary freezes through the production command:**
+  - pilot=False, 45 wrapper reads, worker = frozen (max |Δ| 0);
+  - with sitecustomize, usercustomize, a fake pytest, a user-site `.pth` and a timestamp-valid logger `.pyc` planted,
+    none executed.
+- **Mutations:** all 15 audit-#11 survivors are killed.
+- **Committed pilot recomputed:** 52/52 stamps; inputs 15/15; 989 rows; p_first max |Δ| 0; restore of 31 components.
+- **Mac dependency checking is active:** 430 dependency files in the selftest.
+
+It found 5 new surviving mutations:
+1. the worker's final verification removed;
+2. `.so`/`.dylib` files skipped;
+3. repository hashes recorded as zeros;
+4. bytearray normalisation removed;
+5. `file:` without `//` not recognised as a URI.
+
+It confirmed the stated limits L1-L4 from source. It did not finish:
+- the native-alias and OSFile probes through the launcher;
+- an altered-dependency or HOME experiment;
+- the platform-path probes;
+- a scorer null-runtime check;
+- an untouched check of tonight's schedule.
+
+**FWD6e (code; fwd_bootstrap.py and run_forward_v1.py re-stamped):**
+- **(a) Every file of every loaded distribution is verified.** For each distribution owning a loaded module file,
+  every RECORD-listed file with a sha256 must exist and match. That covers vendored shared libraries
+  (`.so`/`.dylib`) loaded by the dynamic linker and data files. Compiled `.pyc` are skipped: the interpreter
+  rewrites them, and none is ever executed under the fresh pycache prefix. (A first version did not skip them, and
+  it HALTed on a numpy `.pyc` rewritten in place. That is the reason for the skip.)
+- **(b) The runtime pins what ran.** It now records:
+  - the full sha256 of every repository module compiled (`repo_modules`, recomputable from the files);
+  - `dependency_paths`;
+  - `dependency_distributions`: name → version, location and sha256 of its RECORD;
+  - `dependency_identity_sha256`.
+- **(c) The worker writes `outputs/runtime_worker.json`** from its own `verify_loaded_modules()`.
+  `check_worker_runtime` makes the harness HALT unless that file exists, shows `-I -S -B`, a fresh pycache prefix,
+  repository modules, dependency files and distributions. In a bootstrapped harness, it also HALTs unless the worker
+  ran the same interpreter and, for every distribution both processes loaded, the same version, location and RECORD.
+  The receipt carries `runtime_worker`.
+
+**Tests (`test_fwd6e.py`, plus the existing worker and end-to-end tests):**
+- full repository hashes recomputed;
+- dependency identity recomputed from each RECORD;
+- a loaded extension module with a bad hash HALTs;
+- a non-module distribution file with a bad hash HALTs, and a missing one HALTs;
+- the worker runtime is required and checked;
+- interpreter and dependency mismatch between worker and harness;
+- bytearray and `file:`-scheme sources are refused;
+- the end-to-end default-worker test asserts the receipt's `runtime_worker`.
+
+Mutations M1-M10 are all killed, except as noted in the acceptance (M2 alone is masked by (a), and is killed when
+both checks are removed).
+
+**Rulings on L1-L6:**
+- **L1 (RECORD attests itself).** The forward experiment's threat model is accidental contamination and
+  environment drift, not a hostile user on Jeff's own Mac. The installed environment is TRUSTED, and the receipt is
+  NOT described as an independent attestation of dependency behaviour. Drift is now detectable, because each
+  process's dependency identity is in the receipt.
+  **PRE-REGISTERED RULE (before any primary outcome):**
+  - The dependency identity of the experiment is the one in the first primary receipt: harness, worker and
+    before-freeze runtimes.
+  - A later primary run counts in the primary count only if, for every distribution in that identity that it
+    loads, version, location and RECORD sha256 are equal, and the python version and executable are equal.
+  - A run that differs is excluded from the primary count, unless a decision recorded before that run's first kick
+    accepts the change.
+- **L2 (HOME selects the user site).** Not changed. Each distribution's location and the dependency paths are in
+  the identity, so a different user site is a different identity under the L1 rule.
+- **L3 (16-hex manifest prefixes).** Kept for the manifest. The receipt now carries the full sha256 of every
+  repository module compiled.
+- **L4 (native code).** Shared libraries inside loaded distributions are now verified. A RECORD-matched native
+  extension remains trusted code.
+  - `pa.OSFile` and pre-captured native aliases stay outside runtime interception.
+  - Only verified repository code runs, and the static scan bans those APIs there.
+  - System libraries (libc and the OS) are outside scope.
+- **L5 (null runtime).** Pre-registered scoring eligibility, implemented with FWD7 before any scoring. A primary row
+  counts only if its receipt has:
+  - `pilot` false;
+  - `runtime`, `runtime_before_freeze` and `runtime_worker` all present, with flags `-I -S -B`;
+  - a frozen sha matching the publication record;
+  - the L1 identity rule satisfied.
+- **L6 (test conftest).** Accepted as ChatGPT found it: gate `--noconftest`, unlisted repository imports refused,
+  and no production route to the conftest.
+
+**Next.** A narrower audit #13 of the FWD6e pin finishes audit #12's open checks. If it is not GO by about 22:45Z,
+TNF runs `--pilot` and the same code goes primary on Sunday.

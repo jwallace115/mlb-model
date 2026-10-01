@@ -944,6 +944,31 @@ def run_freeze_gate():
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
+def check_worker_runtime(run_out):
+    """D269 (audit #12): the real worker is a bootstrapped process and must leave its own
+    verified runtime. HALT if it is missing or not a verified, isolated runtime, or if a
+    dependency it shares with this process differs (version, location or RECORD)."""
+    p = Path(run_out) / "runtime_worker.json"
+    if not p.exists():
+        raise SystemExit("HALT: runtime_worker.json missing — the worker's code is unverified")
+    rt = json.loads(p.read_text())
+    if (rt.get("flags") != "-I -S -B" or not rt.get("pycache_prefix_fresh")
+            or not rt.get("n_repo_modules") or not rt.get("n_dependency_files")
+            or not rt.get("dependency_distributions")):
+        raise SystemExit(f"HALT: the worker's runtime is not a verified isolated runtime: "
+                         f"{ {k: rt.get(k) for k in ('flags', 'n_repo_modules', 'n_dependency_files')} }")
+    from nfl.sim import fwd_bootstrap as FB
+    if FB.ACTIVE:
+        mine = FB.verify_loaded_modules()
+        if rt.get("python") != mine["python"] or rt.get("executable") != mine["executable"]:
+            raise SystemExit("HALT: the worker ran a different interpreter")
+        for name, ident in mine["dependency_distributions"].items():
+            other = rt["dependency_distributions"].get(name)
+            if other is not None and other != ident:
+                raise SystemExit(f"HALT: dependency {name} differs between harness and worker")
+    return rt
+
+
 def _default_run_week(root, week, T, bundle_lines, game_ids, run_dir=None,
                       input_dir=None, props_file=None, run_id=None, bundle_dir=None):
     """Default run_week_fn: call run_week.py via subprocess.
@@ -1081,6 +1106,9 @@ def main(argv=None, root=None, run_week_fn=None):
     run_week_fn(root, a.week, T, bundle_lines, game_ids, run_dir=run_out,
                 input_dir=bundle_dir / "inputs", props_file=bundle_dir / "props.parquet",
                 run_id=bundle_run_id, bundle_dir=bundle_dir)
+    runtime_worker = None
+    if run_week_fn is _default_run_week:
+        runtime_worker = check_worker_runtime(run_out)
 
     # D256(b): read-set proof — every data file the prediction read is in the run
     # directory with the bundle's hash, or a repo file hashed by the experiment manifest
@@ -1248,6 +1276,7 @@ def main(argv=None, root=None, run_week_fn=None):
         # pilot can be)
         "runtime": FB.verify_loaded_modules() if FB.ACTIVE else None,
         "runtime_before_freeze": runtime,
+        "runtime_worker": runtime_worker,
     }
 
     # D246(b): update the ai_opinions manifest entry with publication_utc

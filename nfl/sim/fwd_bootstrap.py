@@ -104,6 +104,47 @@ class VerifiedSourceFinder(importlib.abc.MetaPathFinder):
         return spec
 
 
+_HASH_CACHE = {}
+
+
+def _sha256_file(p):
+    """sha256 of a file's current bytes (cached per process by path, size, mtime, inode)."""
+    st = os.stat(p)
+    key = (p, st.st_size, st.st_mtime_ns, st.st_ino)
+    h = _HASH_CACHE.get(key)
+    if h is None:
+        hh = hashlib.sha256()
+        with open(p, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                hh.update(chunk)
+        h = _HASH_CACHE[key] = hh.hexdigest()
+    return h
+
+
+def _dist_index(paths):
+    """D269: ({absolute file path: distribution key}, {key: identity}) for every installed
+    distribution under `paths`. The identity is name, version, location and the sha256 of
+    the RECORD file itself."""
+    import importlib.metadata as md
+    owners, dists = {}, {}
+    for dist in md.distributions(path=list(paths)):
+        name = (dist.metadata["Name"] or "?").lower()
+        loc = str(Path(dist.locate_file("")).resolve())
+        key = f"{name}@{loc}"
+        rec = dist.read_text("RECORD") or ""
+        files = []
+        for f in dist.files or ():
+            if not f.hash or f.hash.mode != "sha256":
+                continue
+            fp = str(Path(dist.locate_file(f)).resolve())
+            owners[fp] = key
+            files.append(fp)
+        dists[key] = {"name": name, "version": dist.version, "location": loc,
+                      "record_sha256": hashlib.sha256(rec.encode()).hexdigest(),
+                      "files": files}
+    return owners, dists
+
+
 def _record_index(paths):
     """{absolute file path: sha256 hex} from every distribution RECORD under `paths`."""
     import importlib.metadata as md
@@ -124,7 +165,8 @@ def verify_loaded_modules():
     if not ACTIVE:
         raise SystemExit("HALT: verify_loaded_modules outside a bootstrapped process")
     idx = _record_index(_STATE["trusted_paths"])
-    bad, deps = [], {}
+    owners, dists = _dist_index(_STATE["trusted_paths"])
+    bad, deps, loaded_dists = [], {}, set()
     for name, mod in sorted(sys.modules.items()):
         f = getattr(mod, "__file__", None)
         if not f:
@@ -147,20 +189,50 @@ def verify_loaded_modules():
         if want is None:
             bad.append(f"{name}: {p} is neither standard library nor in a distribution RECORD")
             continue
-        with open(p, "rb") as fh:
-            got = hashlib.sha256(fh.read()).hexdigest()
+        got = _sha256_file(p)
         if got != want:
             bad.append(f"{name}: {p} differs from its distribution RECORD")
         deps[p] = got
+        if p in owners:
+            loaded_dists.add(owners[p])
+    # D269 (audit #12 L4): every file of every distribution a loaded module belongs to —
+    # shared libraries (.so/.dylib) loaded by the dynamic linker, data files — must match
+    # RECORD too, not only files with a module __file__
+    n_dist_files = 0
+    for key in sorted(loaded_dists):
+        for fp in dists[key]["files"]:
+            want = idx.get(fp)
+            # compiled bytecode is a cache the interpreter may rewrite; under the fresh
+            # pycache prefix no existing .pyc is ever executed, so it is not verified
+            if want is None or fp.endswith((".pyc", ".pyo")):
+                continue
+            if not os.path.isfile(fp):
+                bad.append(f"{dists[key]['name']}: {fp} is in RECORD but missing")
+                continue
+            if _sha256_file(fp) != want:
+                bad.append(f"{dists[key]['name']}: {fp} differs from its distribution RECORD")
+            n_dist_files += 1
     if bad:
         raise SystemExit("HALT: unverified code in the process:\n" +
                          "\n".join(f"  {b}" for b in bad[:50]))
     digest = hashlib.sha256(json.dumps(sorted({**deps, **_STATE["verified"]}.items()))
                             .encode()).hexdigest()
+    ident = {dists[k]["name"]: {x: dists[k][x] for x in ("version", "location", "record_sha256")}
+             for k in sorted(loaded_dists)}
+    repo = {str(Path(a).relative_to(ROOT).as_posix()): h for a, h in _STATE["verified"].items()}
     return {"python": sys.version.split()[0], "executable": sys.executable,
             "flags": "-I -S -B", "pycache_prefix_fresh": True,
             "n_repo_modules": len(_STATE["verified"]), "n_dependency_files": len(deps),
-            "loaded_code_sha256": digest}
+            "n_distribution_files_verified": n_dist_files,
+            "loaded_code_sha256": digest,
+            # D269: what actually ran, pinned per run (audit #12 L1/L3): the full sha256 of
+            # every repository module compiled, and the identity of every dependency
+            # distribution loaded (version, location, sha256 of its RECORD)
+            "repo_modules": repo,
+            "dependency_paths": list(_STATE["trusted_paths"]),
+            "dependency_distributions": ident,
+            "dependency_identity_sha256": hashlib.sha256(
+                json.dumps(ident, sort_keys=True).encode()).hexdigest()}
 
 
 def bootstrap():
@@ -229,7 +301,12 @@ def _gate(xml_path):
 def _worker(argv):
     import nfl.sim.run_week as rw
     rw.main(argv)
-    verify_loaded_modules()
+    rt = verify_loaded_modules()
+    # D269 (audit #12): the worker's own verification is a required output; the parent
+    # HALTs without it, so a worker that skipped verification cannot be frozen
+    if "--run-dir" in argv:
+        out = Path(argv[argv.index("--run-dir") + 1]) / "runtime_worker.json"
+        out.write_text(json.dumps(rt, indent=1, sort_keys=True) + "\n")
     return 0
 
 
