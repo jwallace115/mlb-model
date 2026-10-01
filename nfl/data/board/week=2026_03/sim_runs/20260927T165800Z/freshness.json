@@ -1,0 +1,287 @@
+{
+ "cutoff_T": "2026-09-27T16:58:00+00:00",
+ "run_id": "20260927T165800Z",
+ "schedule_source": "nflreadpy",
+ "per_team": {
+  "ARI": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "BAL": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "BUF": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "CAR": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "CIN": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "CLE": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "DAL": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "DEN": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "DET": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "HOU": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "IND": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "JAX": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "KC": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "LA": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "LAC": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "LV": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "MIA": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "MIN": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "NE": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "NO": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "NYG": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "NYJ": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "PIT": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "SEA": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "SF": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "TB": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "TEN": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  },
+  "WAS": {
+   "last_played_week": 2,
+   "team_ratings": 3,
+   "tendencies": 3,
+   "tendencies_situational": 3,
+   "usage": 3,
+   "active_universe": 3,
+   "kickers": 3,
+   "qb_ratings": 3
+  }
+ }
+}
