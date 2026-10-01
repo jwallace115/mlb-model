@@ -813,3 +813,22 @@ not always the first-listed goalie — filter by starter=True.
 **GATE: PASS.** All required fields present. Proceed with pull.
 
 Probe script: nhl/sim/probe_old_seasons.py. Full report: d1_probe_2026-09-30.md.
+
+### D2 — Pull play-by-play + boxscores, 2010-2020 (2026-09-30, D-WO1 Item 2)
+
+12,592 PBP + 12,592 boxscores pulled from api-web.nhle.com (0 credits).
+PBP cache: symlinked to ~/mlb-model-nhlsim1/nhl/cache/pbp/ (shared with S-WO1).
+Boxscores: nhl/cache/boxscore_{gid}.json (same layout as 2021-25).
+Rate: 1.7 req/s PBP, 1.5 req/s boxscores. Sleep: 0.25s.
+
+Per-season counts (all match D1 probe):
+2010: 1230, 2011: 1230, 2012: 720, 2013: 1230, 2014: 1230, 2015: 1230,
+2016: 1230 (345 gap-filled on retry), 2017: 1271, 2018: 1271, 2019: 1082, 2020: 868.
+
+Runtime: PBP ~2.1h, boxscores ~2.1h. Both under 2.5h.
+0 404s, 0 skipped_state, 0 errors (after 2016 retry).
+
+Null control: 2021 re-run downloaded 0 files, 1312 cached, no bytes changed.
+
+Generator: nhl/sim/pull_pbp.py with per-season game counts from GAMES_PER_SEASON dict,
+--boxscore mode, 404-stops-season, runtime pre-check.
