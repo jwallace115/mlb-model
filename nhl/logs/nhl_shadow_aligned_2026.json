@@ -450,6 +450,30 @@
       "drift_applied": 0.0,
       "result": "LOSS",
       "actual_total": 5
+    },
+    {
+      "game_id": 2026020015,
+      "game_date": "2026-10-01",
+      "home_team": "VAN",
+      "away_team": "EDM",
+      "signal_side": "UNDER",
+      "edge": 0.1569,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.742,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020016,
+      "game_date": "2026-10-01",
+      "home_team": "SJS",
+      "away_team": "FLA",
+      "signal_side": "UNDER",
+      "edge": 0.1244,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.742,
+      "drift_applied": 0.0
     }
   ]
 }
