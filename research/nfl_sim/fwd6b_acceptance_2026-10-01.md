@@ -142,3 +142,74 @@ the worker invocation (a command containing `--bundle-dir`) and passes every oth
 **For audit #10.** The live freeze gate runs `test_freeze_v1` with whatever pytest plugins are installed on the Mac
 (`plugins=[]` does not stop entry-point autoload). It worked in every Mac run so far. It is noted as a robustness
 question, not changed: run_forward_v1.py is hashed, and this is not a correctness defect.
+
+### 2b. Forward list again after the test fix (eng/fwd6 @ b7d482a57)
+
+**RETURNED:** 170 passed, 0 failed (43 s, macOS, Python 3.13, with the seleniumbase plugin loaded).
+
+### 2c. Real runs on the Mac (2026-10-01 02:48Z-03:00Z); Cowork read the run directories through the bridge
+
+**Week-4 dry run** (`--week 4 --dry-run --window-hours 40 --allow-stale-quotes`), run `20261001T024812Z`, PIT@CLE.
+- Bundle: events 1, props 67, lines 6. Sheet: 70 lines, 43 two-way, 11 `sim_v1` matches (9 receptions, 2 rush
+  attempts).
+- Anchor: target −3.0 / 38.0, anchored −2.8602 / 38.065. The solver took 3 iterations and converged.
+- Read set: 45 files, 14 from the run directory, 31 manifest-hashed repo files, 0 unproven.
+- Freshness: CLE and PIT both last played week 3. Ratings units are at week 4; usage, active universe, kickers and QB
+  ratings are at week 3.
+- The manifest lists `inputs/schedule.parquet` and `outputs/invocation.json`. Nothing was frozen.
+
+**Week-3 pilot freeze** (`--week 3 --pilot --as-of 2026-09-27T16:50:00+00:00 --window-hours 9 --allow-stale-quotes`),
+run `20260927T165000Z`.
+- Bundle: 14 events, 947 props, 84 lines. Sheet: 989 lines, 625 two-way, 162 matched (130 receptions, 32 rush
+  attempts).
+- All 14 games are anchored; the largest miss is 0.37 and every solver converged in 2-5 iterations.
+- Frozen file `ai_opinions_20260927T165000Z.parquet`:
+  - sha256 `a05a81fa9448aeada9e2252cadb70fbeb48f365a9ec65573765e06ddf38a1307`;
+  - publication 2026-10-01T02:55:51Z;
+  - 989 rows, `reader_model` nfl_sim_v1_156cd057, `pilot` True.
+- Read set:
+  - 45 entries, 0 conflicts, 0 network attempts.
+  - Run directory: all 10 `inputs/` files, plus props, lines, events and freshness.json.
+  - Hashed repo files (31): 29 engine tables, `calibration_v1.json` and `params_v1.json`. Four of the tables (the
+    three `actual_*_2021_2024` tables and `fourth_down_meta.json`) are absent from the e826a30ae pilot's read set
+    (25 tables): the old recorder did not see those reads.
+  - Nothing shared: no ratings, rosters, PBP, props archive or line tape.
+- invocation.json lists all 14 games, their lines and the cutoff, read from the bundle. `schedule_source`: nflreadpy.
+- Every event mapped to exactly one nflverse game. Example: `2026_03_LAC_BUF`; LA@DEN maps to `2026_03_LA_DEN` at
+  00:20Z.
+- **The same command again:** `HALT: run directory already exists … A run_id can only be used once.`
+
+**Restore by run_id.** The run directory and the frozen file were moved out of the repo, then
+`restore_run.py --run-id 20260927T165000Z` was run.
+- The receipt was found in the registry, and 29 files were restored from `/Users/jw115/mlb-model-archive/nfl_fwd_v1`:
+  the manifest bootstrapped from the receipt, 26 listed files, publication.json and the frozen file.
+- `verify_bundle: clean`, `receipt_status: complete`.
+- `cmp` against the moved-aside original gives FROZEN-IDENTICAL.
+
+**Same inputs, same prediction.** Cowork compared this run with last night's e826a30ae pilot (`20260927T164500Z`).
+- Every input file and the lines, props and team_game_counts hash identically. Only events, freshness, sidecar and
+  schedule differ; they carry the new id and mapping fields.
+- picks_log: 1,218 = 1,218 legs, all joined. The maximum |Δ cal_p| is 0.0.
+- Frozen opinions: 989 = 989 rows. The maximum |Δ p_first| is 0.0, with 0 tag mismatches and 0 side mismatches.
+
+### MEANS (part 2)
+
+- On real macOS, with the real data, the FWD6b prediction reads only its bundle plus hashed repo files. Its numbers
+  come from the bundle (invocation and returned targets checked), and a run can be rebuilt by run_id from the archive
+  alone and verified.
+- FWD6b changed the plumbing and not the prediction: identical inputs give bit-identical outputs under e826a30ae and
+  FWD6b.
+- The week-3 pilot is plumbing evidence only, not out-of-sample (today's inputs, which include week-3 usage). Its rows
+  are `pilot` and are never pooled.
+
+### NOT DONE / UNVERIFIED (updated)
+
+- ChatGPT audit #10, then the merge of eng/fwd6 to main (MERGE, not rebase) by Thu 15:00Z, or TNF runs as a pilot.
+- **The real TNF window.** The 22:00Z VM props pull must exist and be at most 3 h old at 23:30Z, and the line snapshots
+  must be at most 3 h old. The dry run used `--allow-stale-quotes`, which the live run cannot.
+- `read_set.json` entries do not carry the `via` field (wrapper vs audit) on disk; it exists only in memory. This is
+  cosmetic for the proof (hash and path are recorded) and is noted for audit #10.
+- **Not committed (over 2 MB):** `inputs/player_usage_weekly.parquet` (3.1 MB), `depth_charts.parquet` (7.8 MB) and
+  `rosters_weekly.parquet` (4.1 MB). They live in the content-addressed archive on the Mac only, and the Mac is the
+  single copy.
+- FWD7 (S1-S4 and the scoring-side survivors) and FWD2d (the Sunday runbook).
