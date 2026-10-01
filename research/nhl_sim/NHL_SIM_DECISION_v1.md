@@ -854,3 +854,22 @@ Known structural breaks visible in the data:
 
 Null control (2021-2025): NOT YET RUN (event tables not present in this worktree
 at session start; generated for 2021 as test — matches S-WO1 output).
+
+### D4 — xG v2 calibration on 2010-2020 + walk-forward plan (2026-09-30, D-WO1 Item 4)
+
+Applied frozen xg_v2.json (fit on 2021-22 + 2022-23) to shots from all 11 new seasons.
+
+AUC by season: 2010 0.7517, 2011 0.7583, 2012 0.7516, 2013 0.7524, 2014 0.7485,
+2015 0.7532, 2016 0.7495, 2017 0.7461, 2018 0.7439, 2019 0.7604, 2020 0.7616.
+Mean AUC 2010-2020: 0.7525, vs 2021+: 0.7467 (model slightly better on old data).
+All seasons above 0.70.
+
+**Verdict: one xG model serves 2010-2020. No per-window refit needed.**
+Calibration shows the model over-predicts by ~0.002-0.004 in the middle deciles
+(goal rates were slightly lower in pre-2019 hockey) but the ranking power (AUC) is
+stable across eras.
+
+Walk-forward plan: d_walkforward_plan.md. 9 target seasons (2012-2020), each with
+a 2-season fit window for constants and ratings. D-WO2 runs the commands.
+
+Generator: nhl/sim/calibrate_xg_old_seasons.py.
