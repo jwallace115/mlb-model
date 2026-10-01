@@ -68,6 +68,12 @@ SPORTS = {
             "require_side": True, "slate": "date", "drivers_required": True,
             "tags": ("goalie", "injury_news", "lineup", "schedule_spot", "matchup", "form",
                      "price_vs_sharp", "line_move", "model_layer")},
+    "nba": {"book": "pinnacle", "props": None,
+            "lines": ROOT / "data" / "odds_archive" / "nba" / "line_history",
+            "out": ROOT / "nba" / "data" / "board", "outcomes": "espn_nba",
+            "require_side": True, "slate": "date", "drivers_required": True,
+            "tags": ("injury_news", "rest_b2b", "lineup", "schedule_spot", "matchup", "form",
+                     "price_vs_sharp", "line_move", "model_layer")},
 }
 SPORT = "nfl"
 BOOK = SPORTS[SPORT]["book"]
@@ -103,11 +109,14 @@ def _sport_tags(sport=None):
     return SPORTS[sport or SPORT]["tags"]
 
 
-def nhl_season(date_str):
-    """NHL season = start year: month >= 7 -> year, else year - 1."""
+def date_season(date_str):
+    """Season = start year for date-keyed sports: month >= 7 -> year, else year - 1."""
     from datetime import date as _date
     d = _date.fromisoformat(str(date_str)[:10])
     return d.year if d.month >= 7 else d.year - 1
+
+
+nhl_season = date_season  # backward compat
 
 
 def out_dir(season, week):
@@ -166,12 +175,15 @@ def build_sheet(props, lines, now, slate_date=None):
         if len(a) != 1 or len(b) != 1:
             raise SystemExit(f"HALT: {mk} for {h['away_team']} @ {h['home_team']} is not a two-outcome market")
         a, b = a.iloc[0], b.iloc[0]
-        rows.append({"event_id": eid, "commence_time": h["commence_time"], "home_team": h["home_team"],
-                     "away_team": h["away_team"], "market_key": mk, "player_name": "",
-                     "line": 0.0 if pd.isna(a["point"]) else a["point"],
-                     "first_side": first, "second_side": b["outcome_name"],
-                     "price_first": a["price"], "price_second": b["price"],
-                     "source_utc": h["snapshot_utc"]})
+        row_d = {"event_id": eid, "commence_time": h["commence_time"], "home_team": h["home_team"],
+                 "away_team": h["away_team"], "market_key": mk, "player_name": "",
+                 "line": 0.0 if pd.isna(a["point"]) else a["point"],
+                 "first_side": first, "second_side": b["outcome_name"],
+                 "price_first": a["price"], "price_second": b["price"],
+                 "source_utc": h["snapshot_utc"]}
+        if "sport" in h.index:
+            row_d["sport"] = h["sport"]
+        rows.append(row_d)
     df = _finish(rows, now)
     if slate_date and not df.empty:
         from datetime import date as _date
@@ -392,6 +404,11 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):
         raise SystemExit(f"HALT: {late['event_id'].nunique()} game(s) in the sheet have kicked off - nothing is frozen")
+    # B9: NBA preseason rows require --pilot
+    if SPORT == "nba" and "sport" in sheet.columns:
+        preseason = sheet["sport"] == "basketball_nba_preseason"
+        if preseason.any() and not pilot:
+            raise SystemExit("HALT: preseason rows found without --pilot — preseason lines are never scored into a record")
     m = validate(sheet, filled)
     d.mkdir(parents=True, exist_ok=True)
     seen = prior_revisions(d, reader_model=reader_model, pilot=pilot)
@@ -638,6 +655,38 @@ def _nhle_actuals():
     return game
 
 
+def _espn_nba_actuals():
+    """NBA finals from ESPN scoreboard via nba.pipeline.nba_outcomes, with on-disk cache."""
+    import json as _json
+    from nba.pipeline.nba_outcomes import fetch_scoreboard, _ODDS_TO_ABBR
+    _cache_dir = ROOT / "nba" / "data" / "outcomes_cache"
+    _cache_dir.mkdir(parents=True, exist_ok=True)
+    _mem = {}
+
+    def _to_abbr(name):
+        return _ODDS_TO_ABBR.get(name, name)
+
+    def game(home, away, commence):
+        d_str = _et_date(commence).isoformat()
+        if d_str not in _mem:
+            cache_file = _cache_dir / f"{d_str}.json"
+            if cache_file.exists():
+                _mem[d_str] = _json.loads(cache_file.read_text())
+            else:
+                results = fetch_scoreboard(d_str)
+                finals = [g for g in results if g["status"] == "STATUS_FINAL"]
+                _mem[d_str] = finals
+                cache_file.write_text(_json.dumps(finals))
+        h_abbr = _to_abbr(home)
+        a_abbr = _to_abbr(away)
+        pair = frozenset((h_abbr, a_abbr))
+        for g in _mem[d_str]:
+            if frozenset((g["home"], g["away"])) == pair:
+                return {"home_pts": float(g["home_score"]), "away_pts": float(g["away_score"])}
+        return None
+    return game
+
+
 def _load_pinnacle_tape(season):
     """Load all Pinnacle game-line tape snapshots for a season, sorted by snapshot_utc.
     Returns list of (snapshot_utc_str, DataFrame_of_pinnacle_rows)."""
@@ -786,8 +835,12 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None, slate_date=N
         m = m[~m["pilot"]]
     if m.empty:
         raise SystemExit("HALT: nothing to score (pilot files need --include-pilot)")
+    _actuals_fn = None
     if outcomes_type == "nhle":
-        nhle = _nhle_actuals()
+        _actuals_fn = _nhle_actuals()
+        pbp, lk, snap_parts, gsis_to_pfr = None, None, None, None
+    elif outcomes_type == "espn_nba":
+        _actuals_fn = _espn_nba_actuals()
         pbp, lk, snap_parts, gsis_to_pfr = None, None, None, None
     elif outcomes_type == "cfbd":
         cfbd = _cfbd_actuals(season)
@@ -801,8 +854,8 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None, slate_date=N
     n_id_match = n_name_match = 0
     rows = []
     for (home, away), s in m.groupby(["home_team", "away_team"]):
-        if outcomes_type == "nhle":
-            act = nhle(home, away, s["commence_time"].iloc[0])
+        if outcomes_type in ("nhle", "espn_nba"):
+            act = _actuals_fn(home, away, s["commence_time"].iloc[0])
         elif outcomes_type == "cfbd":
             act = cfbd(home, away, s["commence_time"].iloc[0])
         else:
@@ -883,7 +936,7 @@ def score(season, week, d=None, include_pilot=False, pbp_path=None, slate_date=N
     else:
         out["postfreeze_affected"] = False
     # ── CLV vs Pinnacle close (NHL and other date sports with Pinnacle as book) ──
-    if outcomes_type == "nhle" and BOOK == "pinnacle":
+    if outcomes_type in ("nhle", "espn_nba") and BOOK == "pinnacle":
         close_prices = _pinnacle_close_prices(out, season)
         clv_vals, close_snaps, close_qs = [], [], []
         first_snaps, first_qs, ftm_sides, ftm_units, ftm_clvs = [], [], [], [], []

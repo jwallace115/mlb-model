@@ -495,3 +495,34 @@ Cost per event: x-requests-last = 3 (1 per market). Cost per real pull of 1 even
 - Total: ~348/day = ~10,440/month. Well inside 5M/month.
 
 **Null control:** all 19 existing `test_multi_book_capture_l1.py` tests pass unchanged.
+
+### B9 — NBA in the freeze/score tool (2026-09-30)
+
+`SPORTS["nba"]` added to `nfl/pipeline/log_ai_opinions.py`:
+- book: `"pinnacle"` (CLV reference; Hard Rock not posting NBA yet)
+- props: `None` (not in the scored universe for the pilot)
+- lines: `data/odds_archive/nba/line_history`
+- out: `nba/data/board`
+- outcomes: `"espn_nba"` (ESPN scoreboard via `nba.pipeline.nba_outcomes`)
+- require_side: `True`, drivers_required: `True`, slate: `"date"`
+- tags: `("injury_news", "rest_b2b", "lineup", "schedule_spot", "matchup", "form", "price_vs_sharp", "line_move", "model_layer")`
+
+**Changes to shared code:**
+- `nhl_season` renamed to `date_season` (same logic); `nhl_season = date_season` alias kept.
+- `_espn_nba_actuals()`: ESPN scoreboard loader with on-disk per-date cache
+  (`nba/data/outcomes_cache/`, gitignored). Finals only, OT included. Accepts both Odds API full
+  names and abbreviations via `_ODDS_TO_ABBR` map.
+- Score dispatch extended: `outcomes_type in ("nhle", "espn_nba")` uses the same actuals closure.
+- CLV block extended: `outcomes_type in ("nhle", "espn_nba") and BOOK == "pinnacle"`.
+- Preseason gate: `sport == "basketball_nba_preseason"` rows in the sheet halt freeze unless
+  `--pilot` is set. Preseason rows are never scored into a record.
+- `build_sheet` passes `sport` column from tape through to the sheet for gate enforcement.
+
+**Tests (10 tests, all pass):**
+- set_sport("nba"), date_season, sheet from tape, freeze requires reader-model, freeze refuses
+  started game, freeze refuses preseason without --pilot, freeze requires --packet,
+  ESPN actuals (ATL 124 vs ORL 112), OT total (DEN 137 + POR 132 = 269), CLV branch exists.
+- Each FAILS on origin/main (KeyError: "nba" not in SPORTS).
+
+**Null control:** 56 passed, 2 skipped across existing n59/conf_l2/nhl_h3/nhl_h4/fwd1c tests.
+1 pre-existing failure (test_score_first_side_and_units, same on origin/main). No regressions.

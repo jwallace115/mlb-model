@@ -125,3 +125,6 @@ nhl/data/sim/ratings/*.parquet
 
 # NBA historical odds (bulk pull, multi-GB)
 data/odds_archive/nba/history/
+
+# NBA outcomes cache (on-disk per-date ESPN scoreboard cache)
+nba/data/outcomes_cache/
