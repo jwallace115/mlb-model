@@ -229,7 +229,15 @@ def test_doctored_dependency_bytecode_is_never_executed(tmp_path):
     other code. The bootstrap's fresh, empty pycache prefix means no existing .pyc is ever
     selected (control: plain python3 runs the planted .pyc)."""
     home = tmp_path / "home"
-    usersite = home / ".local" / "lib" / f"python{sys.version_info.major}.{sys.version_info.minor}" / "site-packages"
+    home.mkdir()
+    env0 = {k: v for k, v in os.environ.items() if k != "PYTHONUSERBASE"}
+    # the interpreter's own user-site layout for this HOME (Linux ~/.local/lib/pythonX.Y/…,
+    # macOS framework ~/Library/Python/X.Y/lib/python/…)
+    usersite = Path(subprocess.run(
+        [sys.executable, "-I", "-S", "-c", "import site; print(site.getusersitepackages())"],
+        capture_output=True, text=True, env={**env0, "HOME": str(home)}, timeout=60,
+        check=True).stdout.strip())
+    assert home in usersite.parents, usersite
     pkg = usersite / "fwdprobe_dep"
     pkg.mkdir(parents=True)
     src = pkg / "__init__.py"
@@ -247,7 +255,7 @@ def test_doctored_dependency_bytecode_is_never_executed(tmp_path):
     digest = base64.urlsafe_b64encode(hashlib.sha256(src.read_bytes()).digest()).rstrip(b"=").decode()
     (dist / "RECORD").write_text(f"fwdprobe_dep/__init__.py,sha256={digest},{len(src.read_bytes())}\n"
                                  "fwdprobe_dep-1.0.dist-info/METADATA,,\nfwdprobe_dep-1.0.dist-info/RECORD,,\n")
-    env = {**os.environ, "HOME": str(home)}
+    env = {**env0, "HOME": str(home)}
     ctl = subprocess.run([sys.executable, "-c",
                           "import fwdprobe_dep as m; print(getattr(m, 'PLANTED', None))"],
                          capture_output=True, text=True, env={**env, "PYTHONPATH": str(usersite)},
@@ -304,6 +312,63 @@ def test_loaded_module_verification_rejects_unrecorded_and_altered_files(tmp_pat
     monkeypatch.setattr(FB, "_record_index", lambda paths: {**real(paths), pd_file: "0" * 64})
     with pytest.raises(SystemExit, match="differs from its distribution RECORD"):
         FB.verify_loaded_modules()
+
+
+def test_dependency_inside_the_interpreter_library_dir_is_still_verified(monkeypatch):
+    """D268 (found on the Mac): python.org/standalone builds put site-packages INSIDE the
+    standard-library dir (<prefix>/lib/python3.X/site-packages). Dependencies there must
+    still be checked against RECORD, never waved through as standard library."""
+    import nfl.sim.fwd_bootstrap as FB
+    import site
+    monkeypatch.setattr(FB, "ACTIVE", True)
+    pd_file = str(Path(pd.__file__).resolve())
+    sp = Path(pd_file).parents[1]                       # …/site-packages (or dist-packages)
+    std = {str(Path(p).resolve()) + os.sep for p in sys.path if p and "packages" not in p}
+    std.add(str(sp.parent) + os.sep)                    # the macOS layout: site-packages under stdlib
+    trusted = [str(Path(p).resolve()) for p in site.getsitepackages() + [site.getusersitepackages()]
+               if os.path.isdir(p)]
+    assert str(sp) in trusted
+    monkeypatch.setitem(FB._STATE, "stdlib", sorted(std))
+    monkeypatch.setitem(FB._STATE, "trusted_paths", trusted)
+    monkeypatch.setitem(FB._STATE, "verified",
+                        {str(Path(m.__file__).resolve()): "x" for m in list(sys.modules.values())
+                         if getattr(m, "__file__", None) and ROOT in Path(m.__file__).resolve().parents})
+    # this pytest process ran site (sitecustomize, _distutils_hack …); set those aside
+    recorded = FB._record_index(trusted)
+    for name, m in list(sys.modules.items()):
+        f = getattr(m, "__file__", None)
+        if not f:
+            continue
+        rf = str(Path(f).resolve())
+        if rf in recorded or ROOT in Path(rf).parents:
+            continue
+        if rf.startswith(tuple(std)) and not {"site-packages", "dist-packages"} & set(Path(rf).parts):
+            continue
+        monkeypatch.delitem(sys.modules, name)
+    assert "pandas" in sys.modules
+    rt = FB.verify_loaded_modules()
+    assert rt["n_dependency_files"] > 0
+    real = FB._record_index
+    monkeypatch.setattr(FB, "_record_index", lambda paths: {**real(paths), pd_file: "0" * 64})
+    with pytest.raises(SystemExit, match="differs from its distribution RECORD"):
+        FB.verify_loaded_modules()
+    # and a site-packages file is never standard library even if no trusted path lists it
+    monkeypatch.setitem(FB._STATE, "trusted_paths", [])
+    monkeypatch.setattr(FB, "_record_index", lambda paths: {})
+    with pytest.raises(SystemExit, match="neither standard library nor in a distribution RECORD"):
+        FB.verify_loaded_modules()
+
+
+def test_bootstrapped_selftest_verifies_dependencies_and_refuses_userbase():
+    """The real bootstrap must report verified dependency files when pandas is loaded
+    (the Mac selftest reported 0), and must refuse PYTHONUSERBASE (honoured by site even
+    under -I)."""
+    r = _boot(["selftest", "pandas", "pyarrow.parquet"])
+    assert r.returncode == 0, r.stderr[-2000:]
+    rt = json.loads(r.stdout.strip().splitlines()[-1])["runtime"]
+    assert rt["n_dependency_files"] > 0
+    r = _boot(["selftest", "pandas"], env={**os.environ, "PYTHONUSERBASE": "/nonexistent"})
+    assert r.returncode != 0 and "PYTHONUSERBASE" in (r.stderr + r.stdout)
 
 
 def test_hashed_code_paths_is_exactly_the_manifest_py_set():

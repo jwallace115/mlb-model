@@ -5318,3 +5318,26 @@ The real worker in a fresh bootstrapped process reads 45/45 wrapper bytes, and t
 
 **Manifest:** fwd_bootstrap.py added (52 files). read_set.py and run_forward_v1.py are re-stamped. FREEZE_v1 files,
 run_week.py and fwd_v1_logger.py (cf100675bd385ca5) are unchanged.
+
+### D268 — FWD6d Mac verification found dependency checking was OFF on macOS; fixed (2026-10-01)
+
+**What the Mac run showed.** Step 3 of the FWD6d Mac run failed two tests, and the step-2 self-test reported
+`n_dependency_files: 0` with pandas, pyarrow and nflreadpy loaded.
+
+**Cause.** On python.org (framework) and standalone Python builds, site-packages sits inside the standard-library
+directory (`<prefix>/lib/python3.X/site-packages`). `verify_loaded_modules` checked "under a standard-library dir"
+before "under a dependency dir", so every dependency file was waved through as standard library and none was checked
+against its RECORD. On the Linux test machine the two directories do not overlap, so nothing there exposed it.
+
+**Fix (fwd_bootstrap.py, re-stamped):**
+- a file under any dependency directory, or with a `site-packages`/`dist-packages` path component, is a dependency
+  and must match its RECORD, whatever directory contains it;
+- `PYTHONUSERBASE` set → HALT (`site.getusersitepackages()` honours it even under `-I`).
+
+**Tests:** the user-site test now asks the interpreter for its own user-site layout instead of assuming the Linux
+one. New tests cover a dependency inside the library dir (RECORD still enforced; site-packages never standard
+library) and a real bootstrapped selftest that must report >0 dependency files and refuse `PYTHONUSERBASE`.
+Mutation-checked: reverting either fix fails a test.
+
+**Reproduced off the Mac.** On a standalone CPython 3.13.7 with the macOS-style layout, the old bootstrap reported 0
+dependency files and the fixed one 787. The full forward suite was run on that interpreter and on the system Python.

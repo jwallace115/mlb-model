@@ -136,7 +136,12 @@ def verify_loaded_modules():
             if p not in _STATE["verified"]:
                 bad.append(f"repository module {name} ({p}) did not load through the verifier")
             continue
-        if p.startswith(tuple(_STATE["stdlib"])):
+        # D268: a file under a dependency directory is a dependency even when that
+        # directory sits inside the interpreter's library dir (macOS python.org and
+        # standalone builds: <prefix>/lib/python3.X/site-packages); it must match RECORD
+        in_dep_dir = (p.startswith(tuple(t.rstrip(os.sep) + os.sep for t in _STATE["trusted_paths"]))
+                      or bool({"site-packages", "dist-packages"} & set(Path(p).parts)))
+        if not in_dep_dir and p.startswith(tuple(_STATE["stdlib"])):
             continue
         want = idx.get(p)
         if want is None:
@@ -167,6 +172,9 @@ def bootstrap():
         raise SystemExit("HALT: a forward-run process must be started with python3 -I -S -B "
                          "nfl/sim/fwd_bootstrap.py … (no site, no PYTHON* environment, no "
                          "bytecode writes)")
+    if os.environ.get("PYTHONUSERBASE"):
+        # site.getusersitepackages() honours PYTHONUSERBASE even under -I (D268)
+        raise SystemExit("HALT: PYTHONUSERBASE is set; a forward run takes no PYTHON* environment")
     import site
     import sysconfig
     import tempfile
