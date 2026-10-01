@@ -526,3 +526,36 @@ Cost per event: x-requests-last = 3 (1 per market). Cost per real pull of 1 even
 
 **Null control:** 56 passed, 2 skipped across existing n59/conf_l2/nhl_h3/nhl_h4/fwd1c tests.
 1 pre-existing failure (test_score_first_side_and_units, same on origin/main). No regressions.
+
+### B10 — NBA packet builder (2026-09-30)
+
+`nba/layers/build_packet_nba.py` following `nhl/layers/build_packet_nhl.py` pattern. Uses
+`shared/layers/packet.py` (header, canonical hash, validation).
+
+**Layers:**
+- **L1 market:** Pinnacle open/current/move, cross-book min/max, Hard Rock price if present,
+  event-market summary if captured. Every value carries its snapshot_utc.
+- **L2 news:** newest official report whose report_timestamp ≤ built_utc (rows for the two teams,
+  all statuses) and newest ESPN injuries pull ≤ built_utc; plus optional `--news-file` CSV.
+  Anything timestamped after built_utc is excluded.
+- **L3 history:** season-to-date from ESPN finals strictly before the slate date (via
+  `nba_outcomes.fetch_scoreboard`): gp, w, l, pts_for, pts_against, last_10, rest_days,
+  back_to_back. Early season: says "n games". Unmapped teams (All-Star, Rising Stars) skipped.
+- **L4 model:** `rw_sh` signal using the EXACT `_ROAD_WARRIOR` and `_STRONG_HOME` sets imported
+  from `nba/run_nba.py` (not copied). `{"fires": bool, "direction": "OVER", "evidence": "2025-26
+  prereg n101 60.4% ROI +16.3% SE 9.4 at Pinnacle close; list frozen 7868c748e",
+  "probability": null}`. `sim: {"absent": "not built"}`.
+
+**Real build (2026-03-16, built_utc 23:05Z, from D1 history reshaped as tape):**
+- 8 games, sha256 7a36348c...
+- First game: ORL @ ATL. h2h q_first=0.587, spreads point=-3.5, totals point=232.5, 10 books.
+  L3: ATL 68gp 36-32 rest=2d; ORL 67gp 39-28 rest=2d. L4: rw_sh fires=False.
+
+**nba_outcomes.py fix:** `fetch_scoreboard` now skips unmapped ESPN team names (All-Star, Rising
+Stars) via try/except on `espn_to_abbr` SystemExit, instead of HALTing the caller.
+
+**Tests (4, all pass; FAIL on origin/main: ImportError):**
+(i) Official report after built_utc excluded — FAILS with filter removed.
+(ii) Packet sha deterministic on same inputs.
+(iii) rw_sh fires for DAL @ OKC, not for OKC @ DAL.
+(iv) Signal lists are the objects imported from run_nba.py (identity test).

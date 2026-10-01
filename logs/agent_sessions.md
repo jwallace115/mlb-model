@@ -3653,3 +3653,18 @@ Ending: 99,842
 - CRON LINE (NOT installed): `*/15 10-23 * * * /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /Users/jw115/mlb-model/nba/pipeline/capture_nba_availability.py >> /Users/jw115/mlb-model/logs/nba_availability.log 2>&1`
 - NOT DONE: cron installation (Jeff installs). VM capture run (official reports Mac-only; ESPN unchanged). Hard Rock NBA key re-check closer to Oct 20.
 - UNVERIFIED: whether the capture script's ESPN dedup hash correctly skips identical content on a second run within the same cron window (tested in unit test but not in this live run — only one run executed).
+
+## 2026-10-01T01:00Z  claude-code  NBA WO2 (items 1-3)
+
+- RAN: Item 1 (B8) — basketball_nba_preseason added to FOLDER_MAP + _SPLIT_JULY_SPORTS
+  - RETURNED: dry-run basketball_nba: 44 events, 9 books (Pinnacle present, hardrockbet_fl absent, cost=3). Preseason: 0 events (inactive). bookmakers=hardrockbet: 0 with HR for both keys. Event markets discovery: 3 non-tape markets (alt spreads/totals/team_totals), 3 credits per event pull.
+  - MEANS: NBA tape ready for both keys. Hard Rock still not posting NBA. Event markets cost ~3 credits/event.
+- RAN: Item 2 (B9) — SPORTS["nba"] added to log_ai_opinions.py
+  - RETURNED: 10 tests pass. date_season() renamed from nhl_season (alias kept). _espn_nba_actuals works for ATL-ORL (124-112) and DEN-POR OT (269). CLV block extended. Preseason gate works. 56 existing tests pass (1 pre-existing failure unchanged).
+  - MEANS: NBA freeze/score tool ready. Pinnacle as CLV reference. ESPN scoreboard with on-disk cache for outcomes.
+- RAN: Item 3 (B10) — nba/layers/build_packet_nba.py
+  - RETURNED: 4 tests pass. Real build for 2026-03-16 (from D1 history): 8 games, sha 7a36348c. ORL @ ATL: h2h q_first=0.587, 10 books. L3 history: ATL 68gp 36-32, ORL 67gp 39-28. L4: rw_sh fires correctly for DAL@OKC.
+  - MEANS: packet builder works end-to-end. L1-L4 layers all populate. nba_outcomes skips unmapped All-Star teams.
+- COMMITTED+PUSHED: 3 commits on nba/wo2 (B8, B9, B10 appended to decision doc).
+- NOT DONE: VM deploy. Cron installation. Preseason pipe test. merge (Cowork verifies). Hard Rock NBA key re-check.
+- UNVERIFIED: event_markets_summary in packet (no event-market files in the tape fixture). L2 news in real packet (no injury archive data for 2026-03-16 in test). L3 history computed from ~150 ESPN API calls (not verified against a canonical source). Whether the packet passes validate_packet_for_freeze end-to-end with freeze (tested gates individually but not the full flow).

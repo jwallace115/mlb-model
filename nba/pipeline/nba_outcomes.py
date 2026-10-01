@@ -89,8 +89,11 @@ def fetch_scoreboard(game_date):
             continue
         home_espn = home_c.get("team", {}).get("displayName", "")
         away_espn = away_c.get("team", {}).get("displayName", "")
-        home_abbr = espn_to_abbr(home_espn)
-        away_abbr = espn_to_abbr(away_espn)
+        try:
+            home_abbr = espn_to_abbr(home_espn)
+            away_abbr = espn_to_abbr(away_espn)
+        except SystemExit:
+            continue  # skip unmapped teams (All-Star, Rising Stars, etc.)
         home_score = int(home_c.get("score", 0))
         away_score = int(away_c.get("score", 0))
         results.append({
