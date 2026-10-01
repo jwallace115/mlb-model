@@ -224,6 +224,41 @@ def test_doctored_bytecode_is_never_executed(tmp_path):
     assert out["markers"]["nfl.sim.seed_util"] is None
 
 
+def test_doctored_dependency_bytecode_is_never_executed(tmp_path):
+    """A dependency's .py can match its RECORD while a timestamp-valid .pyc beside it holds
+    other code. The bootstrap's fresh, empty pycache prefix means no existing .pyc is ever
+    selected (control: plain python3 runs the planted .pyc)."""
+    home = tmp_path / "home"
+    usersite = home / ".local" / "lib" / f"python{sys.version_info.major}.{sys.version_info.minor}" / "site-packages"
+    pkg = usersite / "fwdprobe_dep"
+    pkg.mkdir(parents=True)
+    src = pkg / "__init__.py"
+    src.write_text("VALUE = 0.62\n")
+    st = src.stat()
+    import base64
+    import importlib._bootstrap_external as be
+    planted = compile("VALUE = 0.62\nPLANTED = 1\n", str(src), "exec")
+    pyc = Path(importlib.util.cache_from_source(str(src)))
+    pyc.parent.mkdir(parents=True, exist_ok=True)
+    pyc.write_bytes(be._code_to_timestamp_pyc(planted, int(st.st_mtime), st.st_size))
+    dist = usersite / "fwdprobe_dep-1.0.dist-info"
+    dist.mkdir()
+    (dist / "METADATA").write_text("Metadata-Version: 2.1\nName: fwdprobe-dep\nVersion: 1.0\n")
+    digest = base64.urlsafe_b64encode(hashlib.sha256(src.read_bytes()).digest()).rstrip(b"=").decode()
+    (dist / "RECORD").write_text(f"fwdprobe_dep/__init__.py,sha256={digest},{len(src.read_bytes())}\n"
+                                 "fwdprobe_dep-1.0.dist-info/METADATA,,\nfwdprobe_dep-1.0.dist-info/RECORD,,\n")
+    env = {**os.environ, "HOME": str(home)}
+    ctl = subprocess.run([sys.executable, "-c",
+                          "import fwdprobe_dep as m; print(getattr(m, 'PLANTED', None))"],
+                         capture_output=True, text=True, env={**env, "PYTHONPATH": str(usersite)},
+                         timeout=120)
+    assert ctl.stdout.strip() == "1", "control: plain python should load the planted .pyc"
+    r = _boot(["selftest", "fwdprobe_dep"], env=env)
+    assert r.returncode == 0, r.stderr[-2000:]
+    out = json.loads(r.stdout.strip().splitlines()[-1])
+    assert out["markers"]["fwdprobe_dep"] is None
+
+
 def test_unlisted_or_modified_repository_module_cannot_run(tmp_path):
     repo = _repo_copy(tmp_path / "repo")
     boot = repo / "nfl" / "sim" / "fwd_bootstrap.py"
@@ -313,6 +348,8 @@ def test_uri_bytes_and_keyword_sources_are_refused(tmp_path):
         rec, err = _recorded(go)
         assert isinstance(err, PermissionError), f"{name}: not refused ({err!r})"
         assert rec.violations, name
+        if "uri" in name and name.split()[0] in ("ParquetFile", "read_parquet", "read_table"):
+            assert "URI sources are refused" in str(err), f"{name}: {err}"
     # a bytes path to a WRAPPED reader is normalised into the byte-serving path instead:
     # served from recorded bytes, hash equal to the file's
     served = {"ParquetFile bytes": lambda: pq.ParquetFile(os.fsencode(str(f))).read(),
