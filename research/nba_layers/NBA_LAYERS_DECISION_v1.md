@@ -452,3 +452,46 @@ independent sources agree on 224. Root cause: unknown (likely a grading bug in t
 - Hard Rock live key: NFL uses both `hardrockbet` and `hardrockbet_fl`. NBA: neither today (not
   posted yet; check again closer to opening night).
 - PHX-HOU: ESPN 224, nba_api 224, results log 220. The log is wrong.
+
+### B8 — NBA on the tape and event markets (2026-09-30)
+
+**Capture script.** `basketball_nba_preseason` added to FOLDER_MAP (-> `"nba"`) and
+`_SPLIT_JULY_SPORTS`. Rows keep their `sport` column, so preseason snapshots are always
+distinguishable. Test `test_nba_capture_b8.py`: 12 tests (folder, season for both keys +
+6 null-control for existing sports). FAILS on origin/main: KeyError for `basketball_nba_preseason`.
+
+**Dry-run capture (Mac).**
+
+| Key | Events | Books | hardrockbet_fl | Pinnacle | x-req-last | x-req-remaining |
+|-----|--------|-------|----------------|----------|------------|-----------------|
+| basketball_nba | 44 | 9 | Absent | Present | 3 | 4,999,994 |
+| basketball_nba_preseason | 0 | — | — | — | 0 | 4,999,994 |
+
+`hardrockbet_fl` absent for NBA (B7: Hard Rock not posting yet). Pinnacle present. Preseason has
+0 events (not posted as of 2026-09-30T20:26Z). PRE-REGISTRATION: "preseason events exist for
+10-03..10-16" — DID NOT HOLD (0 events; preseason key inactive per B2).
+
+**Hard Rock extra probe** (bookmakers=hardrockbet, 3 credits each):
+- basketball_nba: 44 events, 0 with hardrockbet → still not posting
+- basketball_nba_preseason: 0 events → not posted
+
+**Event markets (basketball_nba, dry-run discovery on 9 events in next 504h).**
+Discovered non-tape markets: alternate_spreads, alternate_totals, team_totals (3 markets).
+Pinnacle offers all 3; FanDuel offers extensive player props (separate from event-market pull).
+Cost per event: x-requests-last = 3 (1 per market). Cost per real pull of 1 event: 3 credits.
+
+**Proposed VM cron lines (NOT installed):**
+```
+# Tape: both NBA keys added to existing */30 line
+*/30 * * * * ... multi_book_open_capture.py --sports basketball_nba basketball_nba_preseason ...
+# Event markets: 16:00Z (open, after 5:30pm ET report) and 21:40Z (close)
+0 16 * * * ... pull_event_markets.py --sport basketball_nba --window-hours 24 --tag open
+40 21 * * * ... pull_event_markets.py --sport basketball_nba --window-hours 8 --tag close
+```
+
+**Daily credit estimate (steady state, measured):**
+- Tape: 3 credits x 2 keys x 48 calls/day = 288/day
+- Event markets: 3 credits x ~10 games x 2 tags = 60/day
+- Total: ~348/day = ~10,440/month. Well inside 5M/month.
+
+**Null control:** all 19 existing `test_multi_book_capture_l1.py` tests pass unchanged.

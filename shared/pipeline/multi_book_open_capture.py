@@ -80,13 +80,14 @@ FOLDER_MAP = {
     "americanfootball_ncaaf": "ncaaf",
     "icehockey_nhl":         "nhl",
     "basketball_nba":        "nba",
+    "basketball_nba_preseason": "nba",
     "baseball_mlb":          "baseball_mlb",
 }
 
 # Sports whose season straddles a calendar year (NHL 2026-27, NBA 2026-27).
 # Season label = the START year: month >= 7 -> current year, else previous year.
 # Football and MLB use the existing rule (month >= 3 -> current year).
-_SPLIT_JULY_SPORTS = {"icehockey_nhl", "basketball_nba"}
+_SPLIT_JULY_SPORTS = {"icehockey_nhl", "basketball_nba", "basketball_nba_preseason"}
 
 
 def _folder(sport):
