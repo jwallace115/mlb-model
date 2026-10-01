@@ -149,6 +149,9 @@ def _last_played_weeks(pbp_path, week):
     return last
 
 
+REQUIRED_RATING_UNITS = ("pass_off", "pass_def", "rush_off", "rush_def")
+
+
 def _team_freshness(inputs_dir, season, week, teams, last_week):
     """D256(c): per participating team, on the consumed copies.
     - team ratings, tendencies, situational tendencies: max week >= week-1;
@@ -172,11 +175,14 @@ def _team_freshness(inputs_dir, season, week, teams, last_week):
         df = pd.read_parquet(inputs_dir / fname, columns=cols)
         df = df[(df["season"] == season) & (df["week"] <= week)]
         if label == "team_ratings":
-            per_unit = df.groupby(["team", "unit"])["week"].max().reset_index()
-            units = per_unit.groupby("team")["unit"].nunique()
-            sel = per_unit.groupby("team")["week"].min()
-            sel[units < 4] = -1          # a missing unit is never fresh
-            maxw[label] = sel.to_dict()
+            # D263 (audit #10 A5): each REQUIRED unit by name; an unknown label never
+            # substitutes for a required one, and extra labels are ignored.
+            per_unit = df.groupby(["team", "unit"])["week"].max()
+            sel = {}
+            for t in df["team"].unique():
+                ws = [per_unit.get((t, u)) for u in REQUIRED_RATING_UNITS]
+                sel[t] = -1 if any(w is None for w in ws) else int(min(ws))
+            maxw[label] = sel
         else:
             maxw[label] = df.groupby("team")["week"].max().to_dict()
     table, bad = {}, []
@@ -407,12 +413,18 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     if not pbp_path.exists():
         raise SystemExit(f"HALT: {pbp_path} missing — needed for per-team freshness")
     from nfl.sim.run_week import count_team_completed_games
-    counts = count_team_completed_games(season, pbp_path=pbp_path)
-    last_week = _last_played_weeks(pbp_path, week)
+    # D263 (audit #10 A3): read the shared PBP ONCE into the content-addressed archive and
+    # derive the counts, the last-played weeks and the recorded hash all from that one
+    # immutable snapshot (a refresh of the shared file mid-build can no longer mix versions).
+    pbp_sha = archive_file(pbp_path, archive_root_for(_r))
+    pbp_snap = archive_root_for(_r) / "sha256" / pbp_sha
+    counts = count_team_completed_games(season, pbp_path=pbp_snap)
+    last_week = _last_played_weeks(pbp_snap, week)
+    if hashlib.sha256(pbp_snap.read_bytes()).hexdigest() != pbp_sha:
+        raise SystemExit("HALT: the archived PBP snapshot changed while it was being read")
     (inputs_dir / "team_game_counts.json").write_text(
         json.dumps({"counts": counts, "last_played_week": last_week,
-                    "source": pbp_path.name,
-                    "source_sha256": hashlib.sha256(pbp_path.read_bytes()).hexdigest()},
+                    "source": pbp_path.name, "source_sha256": pbp_sha},
                    indent=1, sort_keys=True) + "\n")
 
     # D256(c): freshness judged on the CONSUMED copies, for each participating team
@@ -791,7 +803,7 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
     return pd.DataFrame(rows)
 
 
-def _validate_outputs(run_out, week, run_id, game_ids, bundle_lines=None):
+def _validate_outputs(run_out, week, run_id, game_ids, bundle_lines=None, bundle_dir=None):
     """D257(b,c): the prediction outputs must belong to THIS run.
 
     picks_log and anchor_returned must carry season == SEASON, week == week and
@@ -840,6 +852,20 @@ def _validate_outputs(run_out, week, run_id, game_ids, bundle_lines=None):
                 or inv.get("season") != SEASON:
             raise SystemExit("HALT: the worker's invocation.json does not match the bundle "
                              "(lines, games or identity)")
+        if bundle_dir is not None:
+            # D263 (audit #10 A4): the cutoff the worker claims must be the bundle's, and
+            # it must have run against THIS bundle (checked at execution time)
+            fr = json.loads((Path(bundle_dir) / "freshness.json").read_text())
+            try:
+                claimed = _parse_utc(inv.get("cutoff_T"))
+            except Exception:
+                claimed = None
+            if claimed is None or claimed != _parse_utc(fr["cutoff_T"]):
+                raise SystemExit(f"HALT: the worker claims cutoff {inv.get('cutoff_T')} but "
+                                 f"the bundle's cutoff is {fr['cutoff_T']}")
+            if Path(str(inv.get("bundle_dir"))).resolve() != Path(bundle_dir).resolve():
+                raise SystemExit(f"HALT: the worker ran against bundle {inv.get('bundle_dir')}, "
+                                 f"not {bundle_dir}")
         # D260: the targets the solver RETURNED must be the bundle's targets
         for _, r in ar.iterrows():
             ln = bundle_lines[r["game"]]
@@ -849,6 +875,56 @@ def _validate_outputs(run_out, week, run_id, game_ids, bundle_lines=None):
                         f"HALT: {r['game']} solver target {col} = "
                         f"{r.get(col)} but the bundle's {key} is {ln[key]}")
     return picks, ar
+
+
+# ── D263: the freeze gate runs OUTSIDE the process that builds and freezes ────────
+
+FREEZE_GATE_TESTS = ("test_engine_fingerprint", "test_table_hashes",
+                     "test_calibration_hash", "test_params_hash")
+
+
+def freeze_gate_env(environ=None):
+    """The gate's environment: no pytest plugin autoload, no injected plugins/options."""
+    env = dict(os.environ if environ is None else environ)
+    for k in ("PYTEST_PLUGINS", "PYTEST_ADDOPTS"):
+        env.pop(k, None)
+    env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
+    return env
+
+
+def check_gate_report(xml_text):
+    """Exactly the four named freeze tests ran and passed (none failed, errored or
+    skipped). An exit code of 0 alone also describes skipped or deselected tests."""
+    import xml.etree.ElementTree as ET
+    cases = ET.fromstring(xml_text).iter("testcase")
+    seen, bad = [], []
+    for c in cases:
+        name = c.get("name")
+        seen.append(name)
+        if any(c.find(t) is not None for t in ("failure", "error", "skipped")):
+            bad.append(name)
+    if sorted(seen) != sorted(FREEZE_GATE_TESTS) or bad:
+        raise SystemExit(f"HALT: freeze gate did not pass all four tests: ran={sorted(seen)} "
+                         f"not passed={bad}")
+
+
+def run_freeze_gate():
+    """D263 (audit #10 A1): pytest is never imported into this process. A plugin loaded
+    in-process could replace harness functions in memory (audit #10 froze 0.97 where the
+    sim said 0.62). The gate runs in a fresh subprocess with plugin autoload disabled, and
+    its JUnit report must show the four named tests passed."""
+    import tempfile
+    test_file = ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py"
+    with tempfile.TemporaryDirectory() as td:
+        xml_path = Path(td) / "gate.xml"
+        cmd = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider",
+               f"--junitxml={xml_path}", str(test_file)]
+        r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(ROOT),
+                           env=freeze_gate_env(), timeout=600)
+        if r.returncode != 0 or not xml_path.exists():
+            raise SystemExit(f"HALT: test_freeze_v1 failed (exit {r.returncode}):\n"
+                             f"{r.stdout[-2000:]}\n{r.stderr[-2000:]}")
+        check_gate_report(xml_path.read_text())
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
@@ -908,12 +984,7 @@ def main(argv=None, root=None, run_week_fn=None):
 
     # (a) test_freeze_v1 + experiment manifest check
     print("(a) Running test_freeze_v1...", flush=True)
-    import pytest
-    test_args = ["-q", "-p", "no:cacheprovider",
-                 str(ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py")]
-    ret = pytest.main(test_args, plugins=[])
-    if ret != 0:
-        raise SystemExit(f"HALT: test_freeze_v1 failed (exit {ret})")
+    run_freeze_gate()
     print("    PASS", flush=True)
     check_experiment_manifest(_root=root)
     print("    Experiment manifest: OK", flush=True)
@@ -1001,7 +1072,7 @@ def main(argv=None, root=None, run_week_fn=None):
 
     # D257(b,c): output identity and the solver's returned anchor state
     picks_log, anch_ret = _validate_outputs(run_out, a.week, bundle_run_id, game_ids,
-                                            bundle_lines=bundle_lines)
+                                            bundle_lines=bundle_lines, bundle_dir=bundle_dir)
     print(f"    picks_log: {len(picks_log)} legs", flush=True)
 
     # (e) fill

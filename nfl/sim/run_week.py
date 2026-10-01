@@ -962,10 +962,11 @@ def main(argv=None):
         raise SystemExit("HALT: a forward run takes its lines and games from --bundle-dir, never "
                          "from --lines-json/--games")
     global INPUT_DIR, PROPS_FILE, RUN_IDENTITY
-    from nfl.sim.read_set import ReadSetRecorder, route_inputs
+    from nfl.sim.read_set import ReadSetRecorder, route_inputs, hashed_code_paths
     run_dir = Path(args.run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
-    recorder = ReadSetRecorder().install()
+    # D263: only the experiment-hashed .py files count as code; any other file is data
+    recorder = ReadSetRecorder().install(code_allow=hashed_code_paths(ROOT))
     restore = None
     saved = (INPUT_DIR, PROPS_FILE, RUN_IDENTITY)
     try:

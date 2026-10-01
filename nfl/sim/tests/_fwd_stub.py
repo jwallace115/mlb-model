@@ -74,12 +74,12 @@ def write_read_set(out_dir, input_dir, props_file, extra=(), bundle_dir=None):
     """A read set listing every required input and bundle file with real hashes."""
     from nfl.sim.read_set import MUST_READ, MUST_READ_BUNDLE
     entries = [{"path": str((Path(input_dir) / f).resolve()), "sha256": _sha(Path(input_dir) / f),
-                "reads": 1} for f in MUST_READ]
+                "reads": 1, "via": ["wrapper"]} for f in MUST_READ]
     bdir = Path(bundle_dir) if bundle_dir is not None else Path(props_file).parent
-    entries += [{"path": str((bdir / f).resolve()), "sha256": _sha(bdir / f), "reads": 1}
+    entries += [{"path": str((bdir / f).resolve()), "sha256": _sha(bdir / f), "reads": 1, "via": ["wrapper"]}
                 for f in MUST_READ_BUNDLE]
     entries += list(extra)
-    doc = {"entries": entries, "conflicts": [], "network_attempts": []}
+    doc = {"entries": entries, "conflicts": [], "network_attempts": [], "violations": []}
     (Path(out_dir) / "read_set.json").write_text(json.dumps(doc, indent=1) + "\n")
 
 

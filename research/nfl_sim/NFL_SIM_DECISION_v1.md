@@ -5116,3 +5116,112 @@ fwd_v1_logger.py (cf100675bd385ca5) are byte-identical.
 - ChatGPT audit #10.
 - FWD7 (S1-S4 and the scoring-side survivors).
 - FWD2d (the Sunday runbook).
+
+### D263 — ChatGPT audit #10 adjudicated: NO-GO on cf7c89909 accepted; FWD6c: the freeze gate leaves the freezing process, and the read set certifies only bytes it served (2026-10-01)
+
+Audit #10 (`research/cross_ai/chatgpt_audit10_reply_2026-10-01.md`, saved verbatim by ChatGPT into the repo) ran on
+cf7c89909. Its verdict was NO-GO for a primary TNF on that pin. Cowork read the code at each cited line and accepts all
+five (A) items and the recovery findings.
+
+Cowork's own errors that it exposed:
+- The acceptance note called the in-process pytest gate "not a correctness defect".
+- The brief claimed "unless the invocation matches the bundle", but cutoff and bundle location were never compared.
+- The `r+` test checked presence and the `via` label, not byte identity.
+- `via` was dropped from read_set.json and called cosmetic.
+
+**A1 — the gate is isolated.** `run_forward_v1.main` never imports pytest.
+- `run_freeze_gate()` runs `python -m pytest --junitxml=…` on test_freeze_v1 in a fresh subprocess.
+- The environment has `PYTEST_PLUGINS` and `PYTEST_ADDOPTS` removed and `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1`.
+- `check_gate_report` requires exactly the four named tests to have run and passed. A skipped, failed, errored,
+  missing or extra test HALTs.
+- Counterexample test: a hostile plugin set through `PYTEST_PLUGINS` (it patches `fill_sheet` to write 0.97) is never
+  loaded, and the frozen `p_first` is the worker's 0.62.
+
+**A2 — the recorder.**
+- Update-mode opens ('+' in mode, or `os.open` with O_RDWR) of an input are refused and recorded as violations.
+- Entries persist `via` as the set of mechanisms. The classifier rejects any entry whose `via` is not exactly
+  `{"wrapper"}`, including a pre-D263 entry with no `via`: an audit-hook open-time snapshot does not bind the bytes read
+  later.
+- Native pyarrow path readers are refused while recording: `memory_map`, `input_stream`, `pyarrow.dataset.dataset`,
+  `ParquetDataset` (via a guarded subclass), `read_pandas`, `read_metadata`, `read_schema`, feather, and pandas
+  `read_feather`/`read_orc`.
+- `pa.OSFile` (a final extension type) cannot be wrapped. A static scan over EVERY hashed non-test module bans it, along
+  with the other unrecordable APIs.
+- A `.py` suffix is no longer an exemption. Only the experiment-hashed .py files (and their `__pycache__` .pyc) are code
+  (`hashed_code_paths`); any other file is data.
+- `violations` are persisted and rejected.
+
+**Limit, stated plainly.** The recorder is a Python-level interception layer, not a sandbox. Arbitrary native code
+reading files outside these APIs is not seen. The defence for that is the code manifest plus the static scan.
+- Real worker as a subprocess on the fixture: 45 entries, all `via=["wrapper"]`, 0 violations, and the classifier passes.
+
+### D264 — FWD6c: PBP metadata from one snapshot; the claimed cutoff and bundle are checked; rating units are required by name (2026-10-01)
+
+**A3.** `build_bundle` reads the shared PBP ONCE into the content-addressed archive (`archive_file`). The counts, the
+last-played weeks and `source_sha256` are all derived from that archived snapshot, and its hash is re-checked after the
+reads. Recovery can retrieve it by `source_sha256`. Test: the shared PBP is replaced right after the counts are computed,
+and every field still reproduces from the snapshot.
+
+**A4.** `freshness.json` is in `MUST_READ_BUNDLE`. `_validate_outputs(..., bundle_dir=)` HALTs unless:
+- the invocation's `cutoff_T` equals the bundle cutoff (both parsed as UTC instants);
+- its `bundle_dir` resolves to the bundle being validated (an execution-time check; a historical record restored
+  elsewhere is not re-judged on its path);
+- its season and the rest of its identity match, as before.
+
+Test: the REAL worker's outputs pass the parent validation end to end, which kills both "emit week+1" and "write cutoff
+1900".
+
+**A5.** `REQUIRED_RATING_UNITS = (pass_off, pass_def, rush_off, rush_def)`.
+- Each team's team-ratings week is the minimum over the four required units, each taken at its latest week ≤ W.
+- A missing required unit gives −1, and extra labels are ignored.
+- Tests rename each required unit in turn, and run three fresh units with one stale one. Every case HALTs.
+
+### D265 — FWD6c: recovery reports what it cannot vouch for; audit-#10 survivors killed; manifest re-stamped; the Mac's branch was rebased by an auto job (2026-10-01)
+
+**Recovery.**
+- `find_receipt` HALTs when an archive index's payload is a different run.
+- `restore` reports an existing ai_opinions manifest entry that differs from the receipt's authoritative entry as
+  unavailable, so the CLI exits 1; it never keeps or overwrites the entry silently.
+- Tests:
+  - a tampered entry gives exit 1;
+  - the rebuilt entry is exact;
+  - a duplicate receipt is refused by the CLI;
+  - a corrupt archive object is not installed.
+
+**Survivors** (audit #10 D, freeze side), each now failing a test:
+- in the recorder:
+  - `_text_like_open` errors default;
+  - `.csv` exclusion;
+  - `_record` conflict;
+  - `_load` beyond 16 MiB;
+  - ParquetFile hash;
+  - `r+` hash;
+  - `uninstall` and `route_inputs` restore;
+  - classifier network attempts;
+- in the harness:
+  - schedule 60 vs 61 minutes;
+  - schedule season filter;
+  - completed-game counts;
+  - finalisation of a vanished file;
+  - archived-receipt conflict;
+  - invocation season;
+  - worker timeout;
+  - live receipt `pilot` False;
+- in run_week: week+1 and cutoff 1900, both via the real worker.
+
+Not separately tested: `_install_prefixes`' user-site entry (dormant on these machines). The scoring-side items remain
+FWD7.
+
+**Manifest re-stamped:** read_set.py, run_forward_v1.py, restore_run.py, run_week.py. FREEZE_v1 files and
+fwd_v1_logger.py (cf100675bd385ca5) are unchanged.
+
+**Incident.** At 08:45Z the Mac's "prelim" auto job ran `git pull --rebase origin main` while the Mac was checked out on
+eng/fwd6. That rebased every eng/fwd6 commit onto main locally and committed the prelim signals and the Statcast refresh
+onto eng/fwd6. Nothing was pushed: origin/eng/fwd6 stayed at cf7c89909.
+
+Recovery, as given to Jeff:
+- check out main;
+- cherry-pick the two auto commits to main;
+- `git branch -f eng/fwd6 origin/eng/fwd6`.
+
+From now on the Mac stays on main, and fixes are applied in a separate worktree.

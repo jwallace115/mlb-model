@@ -425,7 +425,9 @@ def test_reads_through_other_apis_are_recorded(tmp_path):
     """Audit #9 (C): Path.read_text/read_bytes, io.open, os.open, 'r+', ParquetFile and a
     'site-packages-lookalike' directory all bypassed the e826a30ae recorder."""
     import pyarrow.parquet as pq
-    for how in ("read_text", "read_bytes", "io_open", "os_open", "r_plus", "parquetfile",
+    # D263: 'r_plus' is no longer recorded — update-mode opens of inputs are refused
+    # (test_fwd6c.test_update_mode_open_is_refused_and_rejected)
+    for how in ("read_text", "read_bytes", "io_open", "os_open", "parquetfile",
                 "lookalike_dir"):
         d = tmp_path / how / ("site-packages-lookalike" if how == "lookalike_dir" else "data")
         d.mkdir(parents=True)
@@ -461,7 +463,7 @@ def test_reads_through_other_apis_are_recorded(tmp_path):
         # os.open falls through to the audit-hook backstop, which hashes the file at open
         # time ('audit'). Kills "io.open not wrapped", which the backstop alone would mask.
         want_via = "audit" if how == "os_open" else "wrapper"
-        assert seen[name]["via"] == want_via, f"{how}: recorded via {seen[name]['via']}"
+        assert seen[name]["via"] == {want_via}, f"{how}: recorded via {seen[name]['via']}"
 
 
 def test_engine_cache_is_cleared_so_tables_are_recorded_every_run(tmp_path):
@@ -498,7 +500,7 @@ def test_output_entry_with_wrong_hash_halts(tmp_path):
         (run_dir / "planted.json").write_text("{}")
         rs = json.loads((run_dir / "read_set.json").read_text())
         rs["entries"].append({"path": str((run_dir / "planted.json").resolve()),
-                              "sha256": "0" * 64, "reads": 1})
+                              "sha256": "0" * 64, "reads": 1, "via": ["wrapper"]})
         (run_dir / "read_set.json").write_text(json.dumps(rs))
     with pytest.raises(SystemExit, match="read an output whose bytes are not the run's"):
         _harness(root, _stub(after=add_fake_output))

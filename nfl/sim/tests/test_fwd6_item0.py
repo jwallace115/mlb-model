@@ -187,7 +187,8 @@ def test_harness_halts_on_shared_file_read(tmp_path):
     def add_shared(rs, root, input_dir):
         p = root / "nfl" / "data" / "sim" / "ratings" / "team_ratings_weekly.parquet"
         rs["entries"].append({"path": str(p.resolve()),
-                              "sha256": hashlib.sha256(p.read_bytes()).hexdigest(), "reads": 1})
+                              "sha256": hashlib.sha256(p.read_bytes()).hexdigest(), "reads": 1,
+                              "via": ["wrapper"]})
     with pytest.raises(SystemExit, match="unlisted shared file"):
         _harness(root, _stub_with_read_set(add_shared))
 

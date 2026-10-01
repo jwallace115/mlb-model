@@ -55,7 +55,13 @@ def find_receipt(run_id, root, archive_root):
         return recs[0], "registry"
     f = Path(archive_root) / "receipts" / f"{run_id}.json"
     if f.exists():
-        return json.loads(f.read_text()), "archive"
+        rec = json.loads(f.read_text())
+        # D263 (audit #10 R5): the index name is not the identity — the payload must be
+        # the requested run's
+        if rec.get("run_id") != run_id:
+            raise SystemExit(f"HALT: archive receipt {f.name} holds run {rec.get('run_id')}, "
+                             f"not {run_id}")
+        return rec, "archive"
     return None, None
 
 
@@ -85,7 +91,13 @@ def restore(run_dir, archive_root, receipt=None, root=ROOT):
         if entry is not None:
             om = (Path(root) / receipt["frozen_file"]).parent / "manifest.json"
             entries = json.loads(om.read_text()) if om.exists() else []
-            if not any(e.get("file") == entry["file"] for e in entries):
+            existing = [e for e in entries if e.get("file") == entry["file"]]
+            if any(e != entry for e in existing):
+                # D263 (audit #10 R5): an existing entry that differs from the receipt's
+                # authoritative one is reported, never silently kept or overwritten
+                bad_entry = f"{om.relative_to(root)}: entry for {entry['file']} differs from the receipt"
+                unavailable.append(bad_entry)
+            if not existing:
                 entries.append(entry)
                 om.parent.mkdir(parents=True, exist_ok=True)
                 om.write_text(json.dumps(entries, indent=1) + "\n")
