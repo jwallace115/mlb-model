@@ -328,3 +328,56 @@
 
 ### UNVERIFIED
 - Whether §3.1 must be fixed before TNF or can be a declared pre-outcome amendment.
+
+## 2026-09-30T21:55Z — Cowork: ChatGPT audit #8 adjudicated (D255); FWD6 written
+
+### RETURNED
+Cowork spot-checked the pin e0fc3d2d6:
+- run_week.py:979-981 reads the shared ratings, usage and active universe; --run-dir only redirects outputs
+  (:1058-1060);
+- usage.py:95-110 reads rosters, depth charts and injuries from PBP_DIR, and fetches them from nflreadpy when missing;
+- run_forward_v1.py:81 judges a line snapshot by its first row;
+- anchor_returned is optional (:722-726);
+- fwd_v1_logger.score() grades by team pair (:596); the game_id path exists only in the --file branch (:960);
+- the committed week-3 run directory has no inputs/.
+
+### MEANS
+- The audit holds. The bundle's inputs are not provably what the prediction consumed.
+- Cowork's D245 accepted input consumption, exact-event grading and the checkpoint policy without checking them, and
+  D254 overstated its own FWD5 checks.
+- The freeze side needs FWD6. The scoring amendment S1-S4 is declared in D255 before any primary outcome, and FWD7
+  implements it.
+
+### NOT DONE
+- FWD6, FWD7, FWD2d.
+
+### UNVERIFIED
+- The auditor's executed counterexamples; Cowork did not re-run them.
+- Whether FWD6 can be verified by Thu 15:00Z. Cowork recommends TNF as a pilot.
+
+## 2026-10-01T00:21Z — Cowork: FWD6 implemented by Cowork (D256-D259); eng/fwd6 @ e826a30ae; Mac acceptance runs pass
+
+### RETURNED
+- Linux, branch tree at e826a30ae: the forward list gives 131 passed / 0 failed.
+- 17 mutations each caught by a behavioural test: the 9 freeze-side survivors from audit #8, plus 8 mutations of the new
+  protections.
+- The auditor's CLE counterexample at e0fc3d2d6: the solver got 0.99. With FWD6: 0.4334993874.
+- Mac (i) week-4 dry run: PIT@CLE, 11 matched, anchored. Read set: 11 run-dir + 25 tables + 2 configs, no shared files,
+  no network. Per-team freshness for CLE and PIT on the copies is OK.
+- Mac (ii) week-3 pilot: 14 games, 162 matched, 0 unanchored; frozen sha 59b840f2…; pilot receipt written. The re-run was
+  refused.
+- Mac (iii) restore from `~/mlb-model-archive`: 12 files restored; verify_bundle clean.
+
+### MEANS
+- The freeze side of audit #8's (A) list is implemented and exercised on real data.
+- Cowork wrote this code, so it is not independently verified until audit #9.
+
+### NOT DONE
+- Audit #9.
+- The merge.
+- FWD7 (S1–S4).
+- FWD2d.
+
+### UNVERIFIED
+- Audit #9's findings.
+- The TNF live run.
