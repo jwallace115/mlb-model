@@ -617,7 +617,13 @@ def test_real_default_worker_path_never_imports_shared_logger(tmp_path):
         kick = datetime.now(timezone.utc).replace(microsecond=0) + timedelta(hours=2)
         root = _build_fixture_root(Path({str(tmp_path)!r}), kick=kick)
 
-        def fake_run(cmd, **kw):
+        real_run = fwd.subprocess.run
+
+        def fake_run(cmd, *args, **kw):
+            # only the worker invocation is stubbed; anything else (e.g. a pytest plugin
+            # shelling out while the harness runs test_freeze_v1) runs for real
+            if not (isinstance(cmd, (list, tuple)) and "--bundle-dir" in cmd):
+                return real_run(cmd, *args, **kw)
             a = {{cmd[i]: cmd[i + 1] for i in range(2, len(cmd) - 1) if str(cmd[i]).startswith("--")}}
             bd = Path(a["--bundle-dir"])
             lines = fwd.lines_dict_from_bundle(bd)

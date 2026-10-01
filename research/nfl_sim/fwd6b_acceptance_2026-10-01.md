@@ -114,3 +114,31 @@ All 51 manifest hashes match the files.
 - ChatGPT audit #10.
 - FWD7 (S1-S4 and the scoring-side survivors).
 - FWD2d (the Sunday runbook).
+
+## Part 2 — Jeff's Mac (in progress)
+
+### 2a. Forward list on the Mac (eng/fwd6 @ f84bcbbd2; macOS, Python 3.13, UTF-8 mode off)
+
+**RETURNED:** 169 passed, 1 failed (45 s). The failure was
+`test_real_default_worker_path_never_imports_shared_logger`, with `KeyError: '--bundle-dir'` inside the test's fake
+`subprocess.run`.
+
+**MEANS: a defect in the test, not in the hashed code.**
+- The test patched `subprocess.run` for the whole child process. The harness runs `test_freeze_v1` in-process via
+  `pytest.main`, and on the Mac that loads the installed `seleniumbase` pytest plugin.
+- At import, that plugin calls `platform.architecture()`, which shells out to `file`. That call reached the fake,
+  which assumed every call was the worker.
+- The cloud has no such plugin, which is why it passed there.
+
+**Fix (test only; tests other than test_freeze_v1 are unhashed, so the manifest is unchanged).** The fake stubs only
+the worker invocation (a command containing `--bundle-dir`) and passes every other call to the real
+`subprocess.run`.
+- Reproduced in the cloud with a stand-in plugin (`PYTEST_PLUGINS`, a module that shells out at import): it failed
+  identically before the fix and passes after.
+- The test still catches its mutation (an import of the shared logger inside `_default_run_week` gives
+  `SHARED_LOADED True`, and the test fails).
+- Full forward list with the stand-in plugin and UTF-8 mode off: 170 passed, 0 failed.
+
+**For audit #10.** The live freeze gate runs `test_freeze_v1` with whatever pytest plugins are installed on the Mac
+(`plugins=[]` does not stop entry-point autoload). It worked in every Mac run so far. It is noted as a robustness
+question, not changed: run_forward_v1.py is hashed, and this is not a correctness defect.
