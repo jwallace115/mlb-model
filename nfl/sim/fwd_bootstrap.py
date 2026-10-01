@@ -276,8 +276,11 @@ def bootstrap():
     hashes = _manifest_hashes()
     me = Path(__file__).resolve().relative_to(ROOT).as_posix()
     with open(Path(__file__).resolve(), "rb") as fh:
-        if hashlib.sha256(fh.read()).hexdigest()[:len(hashes.get(me, "x"))] != hashes.get(me):
-            raise SystemExit(f"HALT: {me} differs from the experiment manifest")
+        me_bytes = fh.read()
+    if hashlib.sha256(me_bytes).hexdigest()[:len(hashes.get(me, "x"))] != hashes.get(me):
+        raise SystemExit(f"HALT: {me} differs from the experiment manifest")
+    # D270 (audit #13): the launcher itself is in the runtime's repo_modules (full sha256)
+    _STATE["verified"][str(Path(__file__).resolve())] = hashlib.sha256(me_bytes).hexdigest()
     sys.meta_path.insert(0, VerifiedSourceFinder(ROOT, hashes))
     sys.path.insert(0, str(ROOT))
     ACTIVE = True

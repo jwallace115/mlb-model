@@ -5433,3 +5433,68 @@ both checks are removed).
 
 **Next.** A narrower audit #13 of the FWD6e pin finishes audit #12's open checks. If it is not GO by about 22:45Z,
 TNF runs `--pilot` and the same code goes primary on Sunday.
+
+### D270 — ChatGPT audit #13 (NO-GO for a primary TNF) accepted; TNF week 4 runs as a PILOT; FWD6f amends the dependency rule (D269 L1) into one predicate before any primary; audit #13 survivors killed (2026-10-01)
+
+**Audit #13** of `5fabce877` (reply: `research/cross_ai/chatgpt_audit13_reply_2026-10-01.md`). Verdict NO-GO for a primary
+TNF, accepted. **Thursday 2026-10-01 TNF (PIT@CLE) runs as a PILOT.** The first primary window is now Sunday week 4,
+subject to audit #14.
+
+Its two grounds:
+- **A1, the rule.** D269's operative predicate compared only distributions already in the first identity. A run that
+  loaded a distribution new to the baseline passed it. ChatGPT executed this: a `bottleneck` fixture loaded from a
+  temporary user site, with all 12 baseline identities equal.
+- **A2, evidence.** ChatGPT's own full-suite run timed out at 560 s and kept no counts. It was its runner, not a
+  located defect.
+
+Executed and passing at the pin:
+- the production-command synthetic primary, with planted startup files absent and worker = frozen;
+- the altered dependency: a 1-byte `.py` change and a 1-byte copied `.dylib` change each HALT, and a rewritten RECORD
+  changes the identity;
+- tonight's schedule identity, quote ages and gate time;
+- the recomputed pilot record;
+- all 11 requested mutations killed.
+
+New:
+- 6 focused-suite survivors;
+- the launcher absent from `repo_modules`;
+- the static scan missing a saved alias (`r = pa.OSFile`).
+
+**Rule amendment (supersedes the D269 L1 wording; made before any primary outcome exists, since no primary run has
+happened):**
+- The dependency **baseline** is the UNION of `dependency_distributions` over the three runtimes of the first
+  primary receipt (`runtime`, `runtime_before_freeze`, `runtime_worker`). They must agree on every shared name and
+  share one (python, executable).
+- A later primary run is dependency-consistent only if:
+  - every distribution that ANY of its three runtimes loaded is IN the baseline, with identical version, location
+    and RECORD sha256;
+  - each runtime ran the baseline's python and executable.
+- A distribution absent from the baseline is drift, and so is a missing runtime.
+- A run with drift is excluded from the primary count, unless a decision recorded before its first kick accepts the
+  change and names the accepted identity.
+
+The amendment is implemented as one predicate, `run_forward_v1.dependency_drift(baseline_runtimes, runtimes)`. Every
+primary receipt now records:
+- `dependency_baseline_run_id` (the first primary run, or itself if it is the first);
+- `dependency_drift` (the violation list, `[]` = consistent) at freeze time.
+
+Scoring (FWD7) uses the recorded list together with the D269 L5 eligibility rule.
+
+**Other FWD6f changes:**
+- `fwd_bootstrap.py` puts its own full sha256 in `repo_modules`.
+- The static scan (test) refuses any reference to, or import of, an unrecordable native reader outside
+  `read_set.py`: attribute, name, from-import and `getattr` with a constant. Previously it refused only calls.
+
+**Tests (`test_fwd6f.py`, plus the `test_fwd6b` end-to-end and `test_fwd6d` scan tests):**
+- the drift predicate: union baseline, new distribution, version/location/RECORD/python/executable changes, missing
+  runtime, inconsistent baseline;
+- the launcher hash;
+- the same-size, same-inode rewrite seen by the hash cache (mtime in the key);
+- worker executable-only, version-only and location-only mismatches;
+- FileSystem classes restored after an exception;
+- non-file URI schemes (`s3`, `https`, `hdfs`, `gs`) refused as URIs;
+- a PathLike to a native reader refused;
+- a primary receipt records its drift;
+- a saved alias is caught by the scan.
+
+Mutations N1-N10 are killed (see acceptance).

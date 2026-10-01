@@ -646,9 +646,13 @@ def test_real_default_worker_path_never_imports_shared_logger(tmp_path):
         print("SHARED_LOADED", "nfl.pipeline.log_ai_opinions" in sys.modules)
         recs = [json.loads(l) for l in open(root / "research" / "nfl_sim" / "fwd_v1_receipts.jsonl")]
         print("WORKER_RUNTIME", (recs[-1].get("runtime_worker") or {{}}).get("marker"))
+        print("DRIFT_BASELINE", recs[-1].get("dependency_baseline_run_id") == recs[-1]["run_id"],
+              "DRIFT_RECORDED", isinstance(recs[-1].get("dependency_drift"), list))
     """)
     r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=300)
     assert "FROZEN True" in r.stdout, r.stdout[-2000:] + r.stderr[-2000:]
     assert "SHARED_LOADED False" in r.stdout
     # D269: the harness required the worker's runtime and put it in the receipt
     assert "WORKER_RUNTIME STUB_WORKER_RUNTIME" in r.stdout, r.stdout[-2000:]
+    # D270: a primary records its dependency drift against the first primary (itself here)
+    assert "DRIFT_BASELINE True DRIFT_RECORDED True" in r.stdout, r.stdout[-2000:]

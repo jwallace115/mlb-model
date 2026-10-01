@@ -532,9 +532,45 @@ def test_hashed_code_calls_no_unrecordable_reader():
             elif name in ("getattr", "setattr") and rel != "nfl/sim/read_set.py" and \
                     len(node.args) >= 2 and not isinstance(node.args[1], ast.Constant):
                 hits.append(f"{rel}:{node.lineno} dynamic {name}")
+            elif name == "getattr" and rel != "nfl/sim/read_set.py" and len(node.args) >= 2 \
+                    and isinstance(node.args[1], ast.Constant) and node.args[1].value in banned_ref:
+                hits.append(f"{rel}:{node.lineno} getattr {node.args[1].value}")
+        hits += _references(tree, rel)
         checked += 1
     assert not hits, hits
     assert checked >= 15
+
+
+# D270 (audit #13): a saved alias (`r = pa.OSFile; r(path)`) is a reference, not a call to
+# the banned name. Any REFERENCE to an unrecordable native reader, or an import of one, is
+# refused outside read_set.py (which wraps them).
+banned_ref = {"OSFile", "memory_map", "input_stream", "open_input_file", "open_input_stream",
+              "from_uri", "LocalFileSystem", "FileIO", "memmap", "fromfile"}
+
+
+def _references(tree, rel):
+    import ast
+    if rel == "nfl/sim/read_set.py":
+        return []
+    hits = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Attribute) and node.attr in banned_ref:
+            hits.append(f"{rel}:{node.lineno} reference .{node.attr}")
+        elif isinstance(node, ast.ImportFrom):
+            hits += [f"{rel}:{node.lineno} import {a.name}" for a in node.names if a.name in banned_ref]
+        elif isinstance(node, ast.Name) and node.id in banned_ref:
+            hits.append(f"{rel}:{node.lineno} name {node.id}")
+    return hits
+
+
+def test_static_scan_catches_a_saved_native_alias():
+    """Audit #13: `saved_reader = pa.OSFile; saved_reader(...)` passed the call-name scan."""
+    import ast
+    for src in ("import pyarrow as pa\nsaved = pa.OSFile\nsaved('x').read()\n",
+                "from pyarrow import OSFile as F\nF('x').read()\n",
+                "import pyarrow.fs as fs\nL = fs.LocalFileSystem\n"):
+        assert _references(ast.parse(src), "nfl/sim/somefile.py"), src
+    assert _references(ast.parse("import pandas as pd\npd.read_parquet('x')\n"), "nfl/sim/x.py") == []
 
 
 # ── old (audit #10) survivors ───────────────────────────────────────────────────

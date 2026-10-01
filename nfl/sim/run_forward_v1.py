@@ -544,6 +544,45 @@ def load_receipts(root):
     return [json.loads(l) for l in path.read_text().splitlines() if l.strip()]
 
 
+RUNTIME_KEYS = ("runtime", "runtime_before_freeze", "runtime_worker")
+
+
+def dependency_drift(baseline_runtimes, runtimes):
+    """D270 (audit #13 A1): the pre-registered dependency rule, as one predicate.
+
+    The baseline is the UNION of dependency_distributions over the first primary
+    receipt's three runtimes (which must agree with each other on every shared name),
+    plus their (python, executable). A later run's runtimes are consistent only if every
+    distribution ANY of them loaded is in the baseline with the same version, location and
+    RECORD sha256, and each ran the baseline's python and executable. A distribution that
+    is not in the baseline at all is drift. Returns the list of violations ([] = none)."""
+    problems, base, interp = [], {}, set()
+    for rt in baseline_runtimes:
+        if not rt:
+            problems.append("baseline: a runtime is missing")
+            continue
+        interp.add((rt.get("python"), rt.get("executable")))
+        for name, ident in (rt.get("dependency_distributions") or {}).items():
+            if name in base and base[name] != ident:
+                problems.append(f"baseline: {name} differs between its own runtimes")
+            base.setdefault(name, ident)
+    if len(interp) != 1:
+        problems.append(f"baseline: {len(interp)} interpreters")
+    for label, rt in runtimes.items():
+        if not rt:
+            problems.append(f"{label}: no verified runtime")
+            continue
+        if (rt.get("python"), rt.get("executable")) not in interp:
+            problems.append(f"{label}: interpreter {rt.get('python')} {rt.get('executable')} "
+                            f"is not the baseline's")
+        for name, ident in sorted((rt.get("dependency_distributions") or {}).items()):
+            if name not in base:
+                problems.append(f"{label}: {name} {ident.get('version')} is not in the baseline")
+            elif base[name] != ident:
+                problems.append(f"{label}: {name} differs from the baseline")
+    return problems
+
+
 def receipt_status(run_id, root):
     """D258(b): 'complete' | 'no receipt' | 'mismatch' for one run_id."""
     root = Path(root)
@@ -1278,6 +1317,14 @@ def main(argv=None, root=None, run_week_fn=None):
         "runtime_before_freeze": runtime,
         "runtime_worker": runtime_worker,
     }
+    # D270: a primary records, at freeze time, its dependency drift against the first
+    # primary receipt (the experiment's baseline); the first primary IS the baseline
+    if not a.pilot:
+        first = next((r for r in load_receipts(root) if r.get("pilot") is False), None)
+        receipt["dependency_baseline_run_id"] = (first or receipt)["run_id"]
+        receipt["dependency_drift"] = dependency_drift(
+            [(first or receipt).get(k) for k in RUNTIME_KEYS],
+            {k: receipt.get(k) for k in RUNTIME_KEYS})
 
     # D246(b): update the ai_opinions manifest entry with publication_utc
     man_path = opinions_dir / "manifest.json"
