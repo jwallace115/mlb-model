@@ -4983,3 +4983,136 @@ fwd_v1_logger.py (cf100675bd385ca5) are byte-identical. Keys are now sorted.
 - ChatGPT audit #9 of this implementation.
 - FWD7, the scoring amendment S1-S4.
 - FWD2d, the Sunday runbook.
+
+### D260 — ChatGPT audit #9 adjudicated (all six A items accepted); FWD6b: the record keeps the hashes of what was consumed, and the worker's numbers come from the bundle (2026-10-01)
+
+Audit #9, on e826a30ae, ran the real worker. Cowork accepts every A item; each is fixed here with a test that fails on
+e826a30ae. Cowork's own errors:
+- D259's "131 passed" needed the gitignored production roster (the commit alone gave 57 failed). The suite now uses a
+  committed roster fixture and was run in a clean worktree with no gitignored data.
+- D256 listed ten required reads (the 8 ratings/usage files, rosters, team_game_counts.json); MUST_READ had nine (no QB ratings).
+
+**A1 — consumed hashes are preserved.**
+- `_finalize_bundle_manifest` only ADDS hashes for new files. Any file listed at build time whose hash changed, or
+  which vanished, HALTs; a changed input is never re-authorised.
+- The read set is classified a second time against the FINAL manifest.
+- `verify_bundle` runs again immediately before the freeze.
+- Counterexample: a worker that changes `inputs/team_ratings` after reading it → HALT, nothing frozen.
+
+**A2 — numerical controls are bound to the bundle.**
+- In forward mode, run_week takes `--bundle-dir` and reads lines, games and the cutoff from `lines.parquet`,
+  `events.parquet` and `freshness.json` itself, so they are in its read set.
+- `--lines-json` and `--games` are refused in forward mode, and `--as-of` must equal the bundle cutoff.
+- The harness passes only paths and identity.
+- The worker writes `outputs/invocation.json`. The harness HALTs unless:
+  - the invocation's lines, games and identity equal the bundle's;
+  - every `anchor_returned` target equals the bundle's spread and total;
+  - `anchoring_log` carries this run's season, week and run_id, compared exactly (2026.5 ≠ 2026).
+
+**Read-set hardening (audit-#9 C).**
+- `io.open` is wrapped, which covers `Path.open`, `read_text` and `read_bytes`. `pyarrow.parquet.ParquetFile` is
+  wrapped.
+- 'r+' modes are recorded.
+- An audit-hook `open` backstop records reads through `os.open`, FileIO or captured aliases.
+- Installation directories are excluded by real path, not by substring.
+- Code (.py/.pyc) is excluded from the data read set; the manifest hash covers code.
+- `route_inputs` clears `engine._CACHE` and imports `usage` before routing.
+- `outputs/` entries must match the bytes on disk and the final manifest.
+- MUST_READ = REQUIRED_INPUTS (QB ratings included), plus the bundle's lines, events and props.
+- A test scans the hashed worker modules for unrecorded read APIs.
+
+**Remaining limit.** A C extension reading files natively, outside these APIs, is not seen. The hashed worker code uses
+none: a test asserts this, and the manifest blocks any code change.
+
+### D261 — FWD6b: the event → nflverse game mapping is frozen with a schedule snapshot (S2), and freshness is measured on the row the engine selects (2026-10-01)
+
+**A4 (schedule mapping).**
+- `_load_schedule` uses `nfl/data/pbp/schedules_<season>.parquet` if present, otherwise nflreadpy.
+- Its season rows are copied to `inputs/schedule.parquet`, hashed and archived, and the source is recorded in
+  freshness.json.
+- `_map_events_to_schedule` requires exactly one game of the target week with the same home and away team. It also
+  requires the schedule kickoff (US Eastern `gameday` and `gametime`) to be within 60 min of the event's commence_time.
+- `events.parquet` carries `nflverse_game_id`.
+- Zero matches, two matches or a kickoff mismatch HALT.
+
+**A5 (freshness).** `_team_freshness` applies the engine's own selector: week == W, else the latest week ≤ W.
+- Team ratings are judged per unit, taking the team's worst unit; a missing unit counts as not fresh.
+- Counterexample: KC ratings kept for weeks 1 and 9, target week 3. The selector uses week 1, so the run HALTs.
+
+### D262 — FWD6b: the complete run record is recoverable from the archive alone; test gaps closed; manifest re-stamped (2026-10-01)
+
+**A3 (recovery).**
+- Each receipt now carries its `run_dir` and its ai_opinions manifest entry.
+- Before the receipt is written, the frozen opinions file is archived.
+- After the receipt, it is also archived as `<archive>/receipts/<run_id>.json`, and so is a snapshot of the registry.
+- `restore_run.py --run-id X` finds the receipt in the registry, or in the archive when the registry is gone. It then:
+  - bootstraps `bundle_manifest.json` from the receipt's bundle_digest;
+  - restores every manifest file;
+  - restores publication.json (by the receipt's hash);
+  - restores the frozen file (by frozen_sha256);
+  - restores its ai_opinions manifest entry and the registry line.
+- The run passes only if verify_bundle is clean and receipt_status is 'complete'.
+- Test: delete the run directory, the frozen file, the ai_opinions manifest and the registry, then restore → clean,
+  complete, and the frozen bytes are identical.
+
+**A6 (fixtures).** `nfl/sim/tests/fixtures/rosters_weekly_fixture.parquet` (2026 KC/CAR/PIT/CLE rows of nflverse
+rosters) is committed. The fixture builders also write synthetic PBP, injuries, depth charts and a schedule. No test
+reads a gitignored file.
+
+**Audit-#9 D survivors.** Every listed survivor now fails a test, among them:
+- archive location;
+- archive corruption;
+- a snapshot exactly at the cutoff;
+- END GAME case;
+- kicker freshness;
+- the PBP source hash;
+- the finalise archive pass;
+- append vs overwrite of the registry;
+- load_receipts returning all receipts;
+- duplicate receipts;
+- every listed bundle file being verified;
+- the anchor boundary at exactly 1.0;
+- fractional identity;
+- worker targets;
+- receipt row count;
+- the shared-logger import on the real `_default_run_week` path.
+
+**Found by the mutation run, after the first clean-worktree pass (167/0).**
+- Every mutation was first reported "caught" by the same test, `test_reads_through_other_apis_are_recorded`. That is
+  an environment signal, not a catch. Run as the mutation harness runs it (a child process), the test failed with
+  no mutation at all.
+- Cause, a real defect in the new `io.open` wrapper: with Python's UTF-8 mode OFF, `Path.read_text` passes
+  encoding='locale', and the wrapper raised `LookupError`. It also skipped universal-newline translation.
+  - UTF-8 mode is off on every normal macOS UTF-8 locale, so this is the Mac's condition.
+  - The cloud shell runs in the C locale, where Python switches UTF-8 mode on. So the suite passed there.
+- Fix: `_text_like_open` decodes the recorded bytes with a `TextIOWrapper` that takes open()'s own encoding, errors
+  and newline ('locale'/None = the locale's preferred encoding).
+- Test: a child with `-X utf8=0` compares every recorded text read (read_text, CRLF, newline='', latin-1,
+  errors='replace', json) with the same read made without the recorder. It fails on the WIP code with the same
+  LookupError.
+- The worker's own JSON reads use builtin open() (encoding None), which is why the real-worker tests passed; any
+  library path through `read_text` inside the worker would have crashed the run on the Mac.
+- Rule from now on: the forward list is also run with UTF-8 mode off (`PYTHONUTF8=0 LC_ALL=C.UTF-8`).
+
+**Two more found while checking the Mac path.**
+- macOS resolves `/etc` to `/private/etc`, so the `/etc` exclusion never matched there. `/private/etc/` is now excluded
+  too (test: OS pseudo-files excluded on macOS real paths; data under `/private/var/folders`, `/tmp` and the home
+  directory stays recorded).
+- The week-3 pilot receipt committed in 68a29aae2 was written by e826a30ae and has no `run_dir`, so
+  `restore_run.py --run-id` raised `KeyError`. It now HALTs with a message to use `--run-dir`. The CLI path itself
+  (`main(['--run-id', X])` after deleting the run directory, the frozen file and the registry) is now tested end to
+  end.
+
+**Tests** (`test_fwd6b.py`): 39. Results are in the FWD6b acceptance note
+(`research/nfl_sim/fwd6b_acceptance_2026-10-01.md`):
+- the forward list on the final commit, in a clean worktree with no gitignored data, with UTF-8 mode on and off;
+- the mutation table (every mutation run in a copied tree, never the working tree, with an isolated pytest basetemp).
+
+**Manifest.** Re-stamped: read_set.py, restore_run.py, run_forward_v1.py, run_week.py. FREEZE_v1 files and
+fwd_v1_logger.py (cf100675bd385ca5) are byte-identical.
+
+**Not done.**
+- The real Mac runs on the new pin (Jeff).
+- ChatGPT audit #10.
+- FWD7 (S1-S4 and the scoring-side survivors).
+- FWD2d (the Sunday runbook).

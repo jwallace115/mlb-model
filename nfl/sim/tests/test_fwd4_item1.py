@@ -127,14 +127,16 @@ def test_pre_write_publication_halt(tmp_path):
 # _default_run_week's command must include --lines-json, --games and --run-dir.
 
 def test_run_week_includes_lines_json_games_run_dir(tmp_path):
-    """_default_run_week subprocess argv must include --lines-json, --games
-    and --run-dir. On 735374bf1 no test catches dropping --lines-json.
-    Mutation: drop --lines-json -> it must fail."""
+    """D260 (replaces the D247 check): a forward run's worker command carries ONLY paths
+    and identity — --run-dir, --input-dir, --props-file, --run-id, --bundle-dir — and no
+    numerical payload (--lines-json, --games, --as-of): the worker reads its targets,
+    games and cutoff from the bundle files. Dropping --bundle-dir, or sending the lines on
+    the command line again, fails this test."""
     captured_cmds = []
 
     def spy_run(cmd, **kwargs):
         captured_cmds.append(cmd)
-        # Return a fake successful result
+
         class FakeResult:
             returncode = 0
             stdout = "done"
@@ -143,21 +145,23 @@ def test_run_week_includes_lines_json_games_run_dir(tmp_path):
 
     from nfl.sim.run_forward_v1 import _default_run_week
 
-    root = ROOT
-    lines = {"CAR@KC": {"spread": -3.0, "total": 45.5}}
-    games = ["CAR@KC"]
-    run_dir = tmp_path / "outputs"
-    run_dir.mkdir()
-
+    lines = {"CAR@KC": {"spread": 3.0, "total": 45.5}}
+    run_dir = tmp_path / "run" / "outputs"
+    run_dir.mkdir(parents=True)
     with patch("nfl.sim.run_forward_v1.subprocess.run", side_effect=spy_run):
-        _default_run_week(root, 3, T, lines, games, run_dir=run_dir)
-
+        _default_run_week(ROOT, 3, T, lines, ["CAR@KC"], run_dir=run_dir,
+                          input_dir=tmp_path / "run" / "inputs",
+                          props_file=tmp_path / "run" / "props.parquet",
+                          run_id="R1", bundle_dir=tmp_path / "run")
     assert len(captured_cmds) == 1
-    cmd = captured_cmds[0]
-    cmd_str = " ".join(str(c) for c in cmd)
-    assert "--lines-json" in cmd_str, f"--lines-json missing from: {cmd_str}"
-    assert "--games" in cmd_str, f"--games missing from: {cmd_str}"
-    assert "--run-dir" in cmd_str, f"--run-dir missing from: {cmd_str}"
+    cmd = [str(c) for c in captured_cmds[0]]
+    for flag, val in (("--run-dir", str(run_dir)), ("--input-dir", str(tmp_path / "run" / "inputs")),
+                      ("--props-file", str(tmp_path / "run" / "props.parquet")),
+                      ("--run-id", "R1"), ("--bundle-dir", str(tmp_path / "run"))):
+        assert flag in cmd and cmd[cmd.index(flag) + 1] == val, f"{flag} missing or wrong in {cmd}"
+    for flag in ("--lines-json", "--games", "--as-of"):
+        assert flag not in cmd, f"{flag} must not be on a forward worker's command line"
+    assert "45.5" not in " ".join(cmd) and "3.0" not in " ".join(cmd)
 
 
 # ── Mutation 4: bootstrap — whole-game resampling ──

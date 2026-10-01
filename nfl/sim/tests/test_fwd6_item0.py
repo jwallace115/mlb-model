@@ -17,7 +17,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 
-from nfl.sim.tests._fwd_stub import RATINGS_FILES, write_stub_outputs  # noqa: E402
+from nfl.sim.tests._fwd_stub import RATINGS_FILES, ROSTER_FIXTURE, write_stub_outputs  # noqa: E402
 from nfl.sim.tests.test_fwd3_item0 import (  # noqa: E402
     _build_fixture_root, T, GAME_ID)
 
@@ -33,7 +33,7 @@ def _make_inputs(tmp_path):
     d.mkdir(parents=True)
     for f in RATINGS_FILES:
         shutil.copy2(ROOT / "nfl" / "data" / "sim" / "ratings" / f, d / f)
-    shutil.copy2(ROOT / "nfl" / "data" / "pbp" / "rosters_weekly.parquet", d / "rosters_weekly.parquet")
+    shutil.copy2(ROSTER_FIXTURE, d / "rosters_weekly.parquet")
     (d / "team_game_counts.json").write_text(json.dumps({"counts": {}, "last_played_week": {}}))
     props = pd.DataFrame([{
         "event_id": "e_pitcle", "commence_time": "2026-10-02T00:15:00Z",
@@ -44,6 +44,21 @@ def _make_inputs(tmp_path):
         "pull_batch": "b1"}])
     pf = tmp_path / "run" / "props.parquet"
     props.to_parquet(pf, index=False)
+    # the bundle files the worker reads its targets and cutoff from (D260)
+    base = {"event_id": "e_pitcle", "commence_time": "2026-10-02T00:15:00Z",
+            "home_team": "Cleveland Browns", "away_team": "Pittsburgh Steelers",
+            "bookmaker": "hardrockbet_fl", "snapshot_utc": "2026-10-01T23:00:00+00:00"}
+    pd.DataFrame([{**base, "market": "spreads", "outcome_name": "Cleveland Browns", "point": -2.5, "price": -110},
+                  {**base, "market": "spreads", "outcome_name": "Pittsburgh Steelers", "point": 2.5, "price": -110},
+                  {**base, "market": "totals", "outcome_name": "Over", "point": 38.0, "price": -110},
+                  {**base, "market": "totals", "outcome_name": "Under", "point": 38.0, "price": -110}]
+                 ).to_parquet(tmp_path / "run" / "lines.parquet", index=False)
+    pd.DataFrame([{"event_id": "e_pitcle", "game_id": "PIT@CLE", "home_team": "Cleveland Browns",
+                   "away_team": "Pittsburgh Steelers", "home_abbr": "CLE", "away_abbr": "PIT",
+                   "commence_time": "2026-10-02T00:15:00Z", "nflverse_game_id": "2026_04_PIT_CLE"}]
+                 ).to_parquet(tmp_path / "run" / "events.parquet", index=False)
+    (tmp_path / "run" / "freshness.json").write_text(json.dumps(
+        {"cutoff_T": "2026-10-01T23:30:00+00:00", "run_id": "20261001T233000Z"}))
     return d, pf
 
 
@@ -70,11 +85,9 @@ def _run_week_capturing(monkeypatch, tmp_path, input_dir, props_file):
     monkeypatch.setattr(rw, "run_anchored_chunked", fake_solver)
     run_dir = tmp_path / "run" / "outputs"
     with pytest.raises(_Captured):
-        rw.main(["--week", "4", "--as-of", "2026-10-01T23:30:00+00:00",
-                 "--lines-json", json.dumps({"PIT@CLE": {"spread": -2.5, "total": 38.0}}),
-                 "--games", "PIT@CLE", "--run-dir", str(run_dir),
+        rw.main(["--week", "4", "--run-dir", str(run_dir),
                  "--input-dir", str(input_dir), "--props-file", str(props_file),
-                 "--run-id", "20261001T233000Z"])
+                 "--run-id", "20261001T233000Z", "--bundle-dir", str(tmp_path / "run")])
     return captured, run_dir
 
 
@@ -107,8 +120,8 @@ def test_read_set_records_bundle_reads_and_no_shared_ratings(monkeypatch, tmp_pa
     import hashlib
     for f in MUST_READ:
         p = str((input_dir / f).resolve())
-        if f == "team_game_counts.json":
-            continue  # read later in main, after the solver (stopped here)
+        if f in ("team_game_counts.json", "qb_ratings_weekly.parquet"):
+            continue  # read later in main (counts; the board's calibration stamp), after the solver
         assert p in paths, f"{f} not read from the run directory"
         e = next(x for x in rs["entries"] if x["path"] == p)
         assert e["sha256"] == hashlib.sha256((input_dir / f).read_bytes()).hexdigest()
@@ -124,10 +137,9 @@ def test_missing_input_halts_without_network(monkeypatch, tmp_path):
     input_dir, props_file = _make_inputs(tmp_path)
     (input_dir / "rosters_weekly.parquet").unlink()
     with pytest.raises(SystemExit, match="run inputs missing"):
-        rw.main(["--week", "4", "--lines-json", json.dumps({"PIT@CLE": {"spread": -2.5, "total": 38.0}}),
-                 "--games", "PIT@CLE", "--run-dir", str(tmp_path / "run" / "outputs"),
+        rw.main(["--week", "4", "--run-dir", str(tmp_path / "run" / "outputs"),
                  "--input-dir", str(input_dir), "--props-file", str(props_file),
-                 "--run-id", "r1"])
+                 "--run-id", "r1", "--bundle-dir", str(tmp_path / "run")])
 
 
 def test_run_dir_without_input_dir_halts(tmp_path):
@@ -155,10 +167,11 @@ def _harness(root, run_week_fn):
 
 def _stub_with_read_set(mutate):
     def stub(root, week, T_, bundle_lines, game_ids, run_dir=None,
-             input_dir=None, props_file=None, run_id=None):
+             input_dir=None, props_file=None, run_id=None, bundle_dir=None):
         write_stub_outputs(run_dir, week, run_id, input_dir, props_file, GAME_ID, [{
             "game_id": GAME_ID, "player_id": "00-0033118", "player_name": "T.Kelce",
-            "family": "receptions", "line": 5.5, "cal_p": 0.62, "side": "over", "tier": "T1"}])
+            "family": "receptions", "line": 5.5, "cal_p": 0.62, "side": "over", "tier": "T1"}],
+            bundle_dir=bundle_dir)
         rs_path = Path(run_dir) / "read_set.json"
         rs = json.loads(rs_path.read_text())
         mutate(rs, Path(root), Path(input_dir))
@@ -204,10 +217,11 @@ def test_harness_halts_without_read_set(tmp_path):
     root = _build_fixture_root(tmp_path)
 
     def no_rs(root_, week, T_, bundle_lines, game_ids, run_dir=None,
-              input_dir=None, props_file=None, run_id=None):
+              input_dir=None, props_file=None, run_id=None, bundle_dir=None):
         write_stub_outputs(run_dir, week, run_id, None, None, GAME_ID, [{
             "game_id": GAME_ID, "player_id": "00-0033118", "player_name": "T.Kelce",
-            "family": "receptions", "line": 5.5, "cal_p": 0.62, "side": "over", "tier": "T1"}])
+            "family": "receptions", "line": 5.5, "cal_p": 0.62, "side": "over", "tier": "T1"}],
+            bundle_dir=bundle_dir)
     with pytest.raises(SystemExit, match="read_set.json missing"):
         _harness(root, no_rs)
 

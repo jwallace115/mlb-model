@@ -72,10 +72,9 @@ def test_depth_charts_and_injuries_are_copied_as_record(tmp_path):
     finally:
         fwd.PROPS_DIR, fwd.LINES_DIR, fwd.BOARD_ROOT, fwd.EXPERIMENT_MANIFEST = saved
     for f in ("rosters_weekly.parquet", "depth_charts.parquet", "injuries.parquet"):
-        src = root / "nfl" / "data" / "pbp" / f
-        if src.exists():
-            assert (bd / "inputs" / f).exists(), f"inputs/{f} not copied"
-            assert f"inputs/{f}" in man
+        assert (root / "nfl" / "data" / "pbp" / f).exists(), f"fixture lacks {f}"
+        assert (bd / "inputs" / f).exists(), f"inputs/{f} not copied"
+        assert f"inputs/{f}" in man
 
 
 def test_duplicate_prediction_key_halts():

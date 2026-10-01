@@ -162,11 +162,23 @@ def _team_freshness(inputs_dir, season, week, teams, last_week):
                   "active_universe": "active_universe_weekly.parquet",
                   "kickers": "kicker_weekly.parquet",
                   "qb_ratings": "qb_ratings_weekly.parquet"}
+    # D260: measure the row the engine's selector will actually use — the latest week
+    # <= the target week (engine._get_team_rating & co: week == W, else max week <= W) —
+    # not an unrestricted maximum. Team ratings are selected per unit, so a team's value
+    # is its WORST unit.
     maxw = {}
     for label, fname in {**per_game, **per_played}.items():
-        df = pd.read_parquet(inputs_dir / fname, columns=["season", "week", "team"])
-        df = df[df["season"] == season]
-        maxw[label] = df.groupby("team")["week"].max().to_dict()
+        cols = ["season", "week", "team"] + (["unit"] if label == "team_ratings" else [])
+        df = pd.read_parquet(inputs_dir / fname, columns=cols)
+        df = df[(df["season"] == season) & (df["week"] <= week)]
+        if label == "team_ratings":
+            per_unit = df.groupby(["team", "unit"])["week"].max().reset_index()
+            units = per_unit.groupby("team")["unit"].nunique()
+            sel = per_unit.groupby("team")["week"].min()
+            sel[units < 4] = -1          # a missing unit is never fresh
+            maxw[label] = sel.to_dict()
+        else:
+            maxw[label] = df.groupby("team")["week"].max().to_dict()
     table, bad = {}, []
     for t in teams:
         lp = last_week.get(t)
@@ -188,6 +200,58 @@ def _team_freshness(inputs_dir, season, week, teams, last_week):
         raise SystemExit("HALT: per-team input freshness failed:\n" +
                          "\n".join(f"  {b}" for b in bad))
     return table
+
+
+SCHEDULE_COLS = ["game_id", "season", "game_type", "week", "gameday", "gametime",
+                 "home_team", "away_team"]
+
+
+def _load_schedule(season, root):
+    """D261: the nflverse schedule for the season — a local snapshot
+    (nfl/data/pbp/schedules_<season>.parquet) when present, otherwise nflreadpy. It is
+    copied into the run directory, hashed and archived."""
+    local = Path(root) / "nfl" / "data" / "pbp" / f"schedules_{season}.parquet"
+    if local.exists():
+        df, src = pd.read_parquet(local), f"local {local.name}"
+    else:
+        try:
+            import nflreadpy
+            df, src = nflreadpy.load_schedules([season]).to_pandas(), "nflreadpy"
+        except Exception as e:
+            raise SystemExit(f"HALT: no schedule for {season} (no {local.name}, nflreadpy "
+                             f"failed: {e}) — the event mapping is required at freeze time")
+    missing = [c for c in SCHEDULE_COLS if c not in df.columns]
+    if missing:
+        raise SystemExit(f"HALT: schedule is missing columns {missing}")
+    df = df[df["season"] == season][SCHEDULE_COLS].reset_index(drop=True)
+    return df, src
+
+
+def _map_events_to_schedule(events, sched, week):
+    """D261 (S2): each event must match EXACTLY ONE schedule game of this week with the
+    same home and away team, kicking within 60 min of the event's commence_time (nflverse
+    gameday/gametime are US Eastern). Returns the nflverse game_id per event."""
+    from zoneinfo import ZoneInfo
+    et = ZoneInfo("America/New_York")
+    out, bad = [], []
+    for _, ev in events.iterrows():
+        c = sched[(sched["week"] == week) & (sched["home_team"] == ev["home_abbr"]) &
+                  (sched["away_team"] == ev["away_abbr"])]
+        if len(c) != 1:
+            bad.append(f"{ev['game_id']}: {len(c)} schedule matches in week {week}")
+            out.append(None)
+            continue
+        r = c.iloc[0]
+        kick = datetime.strptime(f"{r['gameday']} {r['gametime']}", "%Y-%m-%d %H:%M") \
+            .replace(tzinfo=et).astimezone(timezone.utc)
+        if abs((kick - _parse_utc(ev["commence_time"])).total_seconds()) > 3600:
+            bad.append(f"{ev['game_id']}: schedule kick {kick.isoformat()} vs event "
+                       f"{ev['commence_time']}")
+        out.append(r["game_id"])
+    if bad:
+        raise SystemExit("HALT: events do not map to the schedule:\n" +
+                         "\n".join(f"  {b}" for b in bad))
+    return out
 
 
 def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
@@ -310,6 +374,11 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
 
     _r = _root or ROOT
 
+    # D261 (S2): freeze the event -> nflverse game_id mapping, with the schedule snapshot
+    sched, sched_src = _load_schedule(season, _r)
+    events = events.copy()
+    events["nflverse_game_id"] = _map_events_to_schedule(events, sched, week)
+
     # ── write ──
     events.to_parquet(bundle_dir / "events.parquet", index=False)
     props.to_parquet(bundle_dir / "props.parquet", index=False)
@@ -319,6 +388,7 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     # reads ONLY these copies (run_week --input-dir; proven by the read set).
     inputs_dir = bundle_dir / "inputs"
     inputs_dir.mkdir()
+    sched.to_parquet(inputs_dir / "schedule.parquet", index=False)
     ratings_dir = _r / "nfl" / "data" / "sim" / "ratings"
     pbp_dir = _r / "nfl" / "data" / "pbp"
     for src_dir, names, required in [(ratings_dir, RATINGS_FILES, True),
@@ -347,7 +417,7 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
 
     # D256(c): freshness judged on the CONSUMED copies, for each participating team
     teams = sorted(set(events["home_abbr"]) | set(events["away_abbr"]))
-    freshness = {"cutoff_T": T.isoformat(), "run_id": run_id,
+    freshness = {"cutoff_T": T.isoformat(), "run_id": run_id, "schedule_source": sched_src,
                  "per_team": _team_freshness(inputs_dir, season, week, teams, last_week)}
     (bundle_dir / "freshness.json").write_text(json.dumps(freshness, indent=1) + "\n")
 
@@ -404,19 +474,30 @@ def lines_dict_from_bundle(bundle_dir):
 
 
 def _finalize_bundle_manifest(bundle_dir):
-    """D241(f): re-hash every file in the run directory into the manifest."""
-    manifest = {}
-    for fpath in sorted(bundle_dir.rglob("*")):
-        if fpath.is_file() and fpath.name != "bundle_manifest.json":
-            rel = str(fpath.relative_to(bundle_dir))
-            manifest[rel] = hashlib.sha256(fpath.read_bytes()).hexdigest()
-    # Preserve metadata keys
+    """D241(f)/D260: add the run's new files (outputs, sidecar) to the manifest.
+
+    The build-time manifest is the record of what the prediction consumed: every file it
+    lists must still have exactly its build-time hash, or this HALTs. Finalisation only
+    ADDS hashes; it never re-authorises a changed input."""
     old = bundle_dir / "bundle_manifest.json"
-    if old.exists():
-        prev = json.loads(old.read_text())
-        for k in ("pilot", "allow_stale_quotes"):
-            if k in prev:
-                manifest[k] = prev[k]
+    prev = json.loads(old.read_text())
+    manifest = dict(prev)
+    changed = []
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if not fpath.is_file() or fpath.name in ("bundle_manifest.json", "publication.json"):
+            continue
+        rel = str(fpath.relative_to(bundle_dir))
+        h = hashlib.sha256(fpath.read_bytes()).hexdigest()
+        if rel in prev and isinstance(prev[rel], str) and len(prev[rel]) == 64:
+            if prev[rel] != h:
+                changed.append(rel)
+        else:
+            manifest[rel] = h
+    missing = [k for k, v in prev.items() if isinstance(v, str) and len(v) == 64
+               and not (bundle_dir / k).exists()]
+    if changed or missing:
+        raise SystemExit("HALT: run-directory files changed or vanished after the bundle was "
+                         f"built: changed={changed} missing={missing}")
     old.write_text(json.dumps(manifest, indent=1) + "\n")
     # D256(d): every run-directory file also goes to the content-addressed archive
     arch = archive_root_for(bundle_dir.parents[5])
@@ -431,6 +512,17 @@ def append_receipt(root, receipt):
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "a") as fh:
         fh.write(json.dumps(receipt, sort_keys=True) + "\n")
+
+
+def archive_receipt(archive_root, receipt):
+    """D260: one immutable receipt per run in <archive>/receipts/<run_id>.json."""
+    d = Path(archive_root) / "receipts"
+    d.mkdir(parents=True, exist_ok=True)
+    f = d / f"{receipt['run_id']}.json"
+    body = json.dumps(receipt, indent=1, sort_keys=True) + "\n"
+    if f.exists() and f.read_text() != body:
+        raise SystemExit(f"HALT: a different receipt for run {receipt['run_id']} is already archived")
+    f.write_text(body)
 
 
 def load_receipts(root):
@@ -699,7 +791,7 @@ def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
     return pd.DataFrame(rows)
 
 
-def _validate_outputs(run_out, week, run_id, game_ids):
+def _validate_outputs(run_out, week, run_id, game_ids, bundle_lines=None):
     """D257(b,c): the prediction outputs must belong to THIS run.
 
     picks_log and anchor_returned must carry season == SEASON, week == week and
@@ -712,16 +804,20 @@ def _validate_outputs(run_out, week, run_id, game_ids):
                          "anchor state is mandatory (no fallback)")
     picks = pd.read_parquet(run_out / "picks_log.parquet")
     ar = pd.read_parquet(ar_path)
+    alog_path = run_out / "anchoring_log.parquet"
+    alog = pd.read_parquet(alog_path) if alog_path.exists() else pd.DataFrame()
     want = {"season": SEASON, "week": int(week), "run_id": run_id}
-    for name, df in (("picks_log", picks), ("anchor_returned", ar)):
+    for name, df in (("picks_log", picks), ("anchor_returned", ar), ("anchoring_log", alog)):
         if len(df) == 0:
             continue
         for col, val in want.items():
             if col not in df.columns:
                 raise SystemExit(f"HALT: {name} has no {col} column — output identity unproven")
-            vals = set(df[col].tolist())
-            if vals != {val}:
-                raise SystemExit(f"HALT: {name} {col} = {sorted(map(str, vals))} "
+            vals = df[col].tolist()
+            # D260: exact identity — 2026.5 is not 2026, '4' is not 4
+            if any(type(v) is bool or v != val or (isinstance(val, int) and float(v) != float(int(v)))
+                   for v in vals):
+                raise SystemExit(f"HALT: {name} {col} = {sorted(set(map(str, vals)))} "
                                  f"but this run is {col} = {val}")
     gids = set(game_ids)
     if len(picks) and not set(picks["game_id"]).issubset(gids):
@@ -733,24 +829,44 @@ def _validate_outputs(run_out, week, run_id, game_ids):
     if set(ar["game"]) != gids:
         raise SystemExit(f"HALT: anchor_returned games {sorted(set(ar['game']))} != "
                          f"simulated games {sorted(gids)}")
+    if bundle_lines is not None:
+        # D260: the worker's own record of what it was asked to do must equal the bundle
+        inv_path = run_out / "invocation.json"
+        if not inv_path.exists():
+            raise SystemExit("HALT: invocation.json missing — the worker's inputs are unproven")
+        inv = json.loads(inv_path.read_text())
+        if inv.get("lines") != bundle_lines or inv.get("games") != sorted(gids) \
+                or inv.get("run_id") != run_id or inv.get("week") != int(week) \
+                or inv.get("season") != SEASON:
+            raise SystemExit("HALT: the worker's invocation.json does not match the bundle "
+                             "(lines, games or identity)")
+        # D260: the targets the solver RETURNED must be the bundle's targets
+        for _, r in ar.iterrows():
+            ln = bundle_lines[r["game"]]
+            for col, key in (("target_spread", "spread"), ("target_total", "total")):
+                if col not in ar.columns or float(r[col]) != float(ln[key]):
+                    raise SystemExit(
+                        f"HALT: {r['game']} solver target {col} = "
+                        f"{r.get(col)} but the bundle's {key} is {ln[key]}")
     return picks, ar
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def _default_run_week(root, week, T, bundle_lines, game_ids, run_dir=None,
-                      input_dir=None, props_file=None, run_id=None):
-    """Default run_week_fn: call run_week.py via subprocess with --lines-json and --games.
-    D256: in a forward run it also passes --input-dir / --props-file / --run-id, so every
-    prediction input comes from the run directory."""
-    lines_json = json.dumps(bundle_lines)
-    games_str = ",".join(game_ids)
-    cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"),
-           "--week", str(week), "--as-of", T.isoformat(),
-           "--lines-json", lines_json, "--games", games_str]
+                      input_dir=None, props_file=None, run_id=None, bundle_dir=None):
+    """Default run_week_fn: call run_week.py via subprocess.
+    D256/D260: a forward run passes ONLY paths and identity: --bundle-dir (the worker reads
+    lines, games and the cutoff from the bundle files, so they enter its read set),
+    --input-dir, --props-file, --run-id. No numerical value travels on the command line."""
+    cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"), "--week", str(week)]
     if run_dir is not None:
         cmd += ["--run-dir", str(run_dir), "--input-dir", str(input_dir),
-                "--props-file", str(props_file), "--run-id", str(run_id)]
+                "--props-file", str(props_file), "--run-id", str(run_id),
+                "--bundle-dir", str(bundle_dir)]
+    else:
+        cmd += ["--as-of", T.isoformat(), "--lines-json", json.dumps(bundle_lines),
+                "--games", ",".join(game_ids)]
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(root), timeout=7200)
     if r.returncode != 0:
         raise SystemExit(f"HALT: run_week.py failed:\n{r.stderr}\n{r.stdout}")
@@ -868,7 +984,7 @@ def main(argv=None, root=None, run_week_fn=None):
     bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
     run_week_fn(root, a.week, T, bundle_lines, game_ids, run_dir=run_out,
                 input_dir=bundle_dir / "inputs", props_file=bundle_dir / "props.parquet",
-                run_id=bundle_run_id)
+                run_id=bundle_run_id, bundle_dir=bundle_dir)
 
     # D256(b): read-set proof — every data file the prediction read is in the run
     # directory with the bundle's hash, or a repo file hashed by the experiment manifest
@@ -884,7 +1000,8 @@ def main(argv=None, root=None, run_week_fn=None):
           f"{n_ii} manifest-hashed repo files, 0 unproven", flush=True)
 
     # D257(b,c): output identity and the solver's returned anchor state
-    picks_log, anch_ret = _validate_outputs(run_out, a.week, bundle_run_id, game_ids)
+    picks_log, anch_ret = _validate_outputs(run_out, a.week, bundle_run_id, game_ids,
+                                            bundle_lines=bundle_lines)
     print(f"    picks_log: {len(picks_log)} legs", flush=True)
 
     # (e) fill
@@ -933,6 +1050,9 @@ def main(argv=None, root=None, run_week_fn=None):
     # D241(f)/D246(b): finalize bundle manifest BEFORE the freeze — hash every file
     _finalize_bundle_manifest(bundle_dir)
     bundle_manifest = json.loads((bundle_dir / "bundle_manifest.json").read_text())
+    # D260: reconcile the read set against the FINAL manifest (outputs included)
+    classify_read_set(json.loads(rs_path.read_text()), bundle_dir, root,
+                      em["file_hashes"], bundle_manifest)
 
     # D246(b): compute digests BEFORE the freeze, add to filled rows
     experiment_digest = hashlib.sha256(
@@ -966,6 +1086,11 @@ def main(argv=None, root=None, run_week_fn=None):
         if pre_write_wall >= first_kick:
             raise SystemExit(f"HALT: publication time {pre_write_wall.isoformat()} >= "
                          f"first kick {first_kick.isoformat()}")
+
+    # D260: the run directory must still be exactly the finalised manifest at the freeze
+    vb = verify_bundle(bundle_dir)
+    if vb:
+        raise SystemExit(f"HALT: run directory changed before the freeze: {vb}")
 
     # D246(b): frozen parquet written ONCE by freeze() — not rewritten after
     dest, sha, m = do_freeze(
@@ -1019,8 +1144,8 @@ def main(argv=None, root=None, run_week_fn=None):
         "first_kick_utc": first_kick.isoformat(),
         "pilot": bool(a.pilot),
         "publication_json_sha256": hashlib.sha256(pub_path.read_bytes()).hexdigest(),
+        "run_dir": str(bundle_dir.relative_to(root)),
     }
-    append_receipt(root, receipt)
 
     # D246(b): update the ai_opinions manifest entry with publication_utc
     man_path = opinions_dir / "manifest.json"
@@ -1028,7 +1153,18 @@ def main(argv=None, root=None, run_week_fn=None):
     for e in entries:
         if e["file"] == dest.name:
             e["publication_utc"] = publication_utc.isoformat()
+            receipt["opinions_manifest_entry"] = e
     man_path.write_text(json.dumps(entries, indent=1) + "\n")
+
+    # D260: the complete record goes to the archive BEFORE the receipt is written:
+    # the frozen opinions file and a per-run receipt index (recoverable from the archive
+    # alone, even if the repo copy of the run, the frozen file and the registry are lost).
+    arch = archive_root_for(root)
+    archive_file(dest, arch)
+    append_receipt(root, receipt)
+    archive_receipt(arch, receipt)
+    if (root / RECEIPTS_REL).exists():
+        archive_file(root / RECEIPTS_REL, arch)
 
     print(f"    FROZEN {len(m)} lines -> {dest.relative_to(root)}\n"
           f"    sha256 {sha}\n"

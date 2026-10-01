@@ -145,7 +145,7 @@ def _build_fixture_root(tmp_path, kick=None, pull_age_minutes=30):
 
     # D256: every prediction input a forward run copies, plus a PBP file with week-2 finals
     from nfl.sim.tests._fwd_stub import add_fwd6_fixture_inputs
-    add_fwd6_fixture_inputs(root, played_week=2, teams=((HOME_ABBR, AWAY_ABBR),))
+    add_fwd6_fixture_inputs(root, played_week=2, teams=((HOME_ABBR, AWAY_ABBR),), kick=kick)
 
     # Update experiment manifest hashes to match the copied (possibly modified) files
     import hashlib as _hl
@@ -163,14 +163,14 @@ def _build_fixture_root(tmp_path, kick=None, pull_age_minutes=30):
 
 
 def _stub_run_week(root, week, T, bundle_lines, game_ids, run_dir=None,
-                   input_dir=None, props_file=None, run_id=None):
+                   input_dir=None, props_file=None, run_id=None, bundle_dir=None):
     """Stub run_week_fn: writes what the real run_week writes in forward-run mode."""
     from nfl.sim.tests._fwd_stub import write_stub_outputs
     out_dir = run_dir or (root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}")
     write_stub_outputs(out_dir, week, run_id, input_dir, props_file, GAME_ID, [{
         "game_id": GAME_ID, "player_id": "00-0033118", "player_name": "T.Kelce",
         "family": "receptions", "line": 5.5, "cal_p": 0.62, "side": "over", "tier": "T1",
-    }])
+    }], bundle_dir=bundle_dir)
 
 # ── (a) D234: renamed from test_live_freeze_completes ──
 
@@ -321,9 +321,10 @@ def test_zero_matches_halts(tmp_path):
     root = _build_fixture_root(tmp_path)
 
     def _empty_run_week(root, week, T, bundle_lines, game_ids, run_dir=None,
-                        input_dir=None, props_file=None, run_id=None):
+                        input_dir=None, props_file=None, run_id=None, bundle_dir=None):
         from nfl.sim.tests._fwd_stub import write_stub_outputs
-        write_stub_outputs(run_dir, week, run_id, input_dir, props_file, GAME_ID, [])
+        write_stub_outputs(run_dir, week, run_id, input_dir, props_file, GAME_ID, [],
+                           bundle_dir=bundle_dir)
 
     opinions_dir = root / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
     with pytest.raises(SystemExit, match="zero sim matches"):

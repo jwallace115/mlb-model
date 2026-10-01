@@ -946,6 +946,8 @@ def main(argv=None):
                         help="D256: the bundle's props.parquet (the only props source)")
     parser.add_argument("--run-id", type=str, default=None,
                         help="D257: the forward run's id, written on every output row")
+    parser.add_argument("--bundle-dir", type=str, default=None,
+                        help="D260: the run directory; lines, games and cutoff are read FROM it")
     args = parser.parse_args(argv)
 
     if not args.run_dir:
@@ -953,9 +955,12 @@ def main(argv=None):
 
     # D256: forward-run mode. Every input comes from the run directory; every data file
     # read is recorded with the hash of the bytes parsed; any network access HALTs.
-    if not (args.input_dir and args.props_file and args.run_id and args.week):
-        raise SystemExit("HALT: --run-dir requires --input-dir, --props-file, --run-id and --week "
-                         "(a forward run never reads shared inputs)")
+    if not (args.input_dir and args.props_file and args.run_id and args.week and args.bundle_dir):
+        raise SystemExit("HALT: --run-dir requires --input-dir, --props-file, --run-id, --week and "
+                         "--bundle-dir (a forward run never reads shared inputs)")
+    if args.lines_json or args.games:
+        raise SystemExit("HALT: a forward run takes its lines and games from --bundle-dir, never "
+                         "from --lines-json/--games")
     global INPUT_DIR, PROPS_FILE, RUN_IDENTITY
     from nfl.sim.read_set import ReadSetRecorder, route_inputs
     run_dir = Path(args.run_dir)
@@ -980,6 +985,27 @@ def main(argv=None):
 def _main_body(args):
     t0 = time.time()
     as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
+    bundle_lines = None
+    if getattr(args, "bundle_dir", None):
+        # D260: the worker reads its own targets, games and cutoff from the bundle files, so
+        # they are in the read set; nothing numerical arrives on the command line.
+        from nfl.sim.run_forward_v1 import lines_dict_from_bundle
+        bdir = Path(args.bundle_dir)
+        with open(bdir / "freshness.json") as fh:
+            cutoff = pd.Timestamp(json.load(fh)["cutoff_T"])
+        if as_of_ts is not None and as_of_ts != cutoff:
+            raise SystemExit(f"HALT: --as-of {as_of_ts} != the bundle cutoff {cutoff}")
+        as_of_ts = cutoff
+        bundle_lines = lines_dict_from_bundle(bdir)
+        if not bundle_lines:
+            raise SystemExit("HALT: the bundle has no complete game lines")
+        args.lines_json = json.dumps(bundle_lines)
+        args.games = ",".join(sorted(bundle_lines))
+        if args.run_dir:
+            with open(Path(args.run_dir) / "invocation.json", "w") as fh:
+                fh.write(json.dumps({**(RUN_IDENTITY or {}), "cutoff_T": cutoff.isoformat(),
+                                     "bundle_dir": str(bdir), "lines": bundle_lines,
+                                     "games": sorted(bundle_lines)}, indent=1, sort_keys=True) + "\n")
 
     week, week_games, completed = detect_week(override=args.week)
     print(f"Detected upcoming week: {week}")

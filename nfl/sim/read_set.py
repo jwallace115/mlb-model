@@ -19,8 +19,12 @@ import builtins
 import hashlib
 import io
 import json
+import locale
 import os
+import site
 import sys
+import sysconfig
+import threading
 from pathlib import Path
 
 # Files a forward run copies into <run-dir>/inputs and the prediction must read from there.
@@ -36,8 +40,11 @@ REQUIRED_INPUTS = [
     "rosters_weekly.parquet",
     "team_game_counts.json",
 ]
+# D260: the bundle files the worker itself reads (lines/events for its targets, props).
+MUST_READ_BUNDLE = ["lines.parquet", "events.parquet", "props.parquet"]
 # The read set must show the prediction read each of these FROM THE RUN DIRECTORY.
 MUST_READ = [
+    "qb_ratings_weekly.parquet",
     "team_ratings_weekly.parquet",
     "tendencies_weekly.parquet",
     "tendencies_situational_weekly.parquet",
@@ -60,6 +67,9 @@ def route_inputs(input_dir):
     import nfl.sim.engine as E
     import nfl.sim.calibration as C
     import nfl.sim.names as N
+    import nfl.sim.usage as U          # D260: import BEFORE routing so a late import cannot escape
+    # D260: anything already cached in-process was read before this run's recorder existed
+    E._CACHE.clear()
     saved = [(E, "RATINGS_DIR", E.RATINGS_DIR),
              (C, "RATINGS_DIR", C.RATINGS_DIR),
              (C, "USAGE_PATH", C.USAGE_PATH),
@@ -68,10 +78,8 @@ def route_inputs(input_dir):
     C.RATINGS_DIR = input_dir
     C.USAGE_PATH = input_dir / "player_usage_weekly.parquet"
     N.ROSTER_PATH = input_dir / "rosters_weekly.parquet"
-    U = sys.modules.get("nfl.sim.usage")
-    if U is not None and hasattr(U, "PBP_DIR"):
-        saved.append((U, "PBP_DIR", U.PBP_DIR))
-        U.PBP_DIR = input_dir
+    saved.append((U, "PBP_DIR", U.PBP_DIR))
+    U.PBP_DIR = input_dir
 
     def restore():
         for mod, attr, val in saved:
@@ -79,19 +87,59 @@ def route_inputs(input_dir):
     return restore
 
 
+def _text_like_open(data, a, k):
+    """A text stream over recorded bytes with the SAME decoding as the open() call it
+    replaces: open(file, mode, buffering, encoding, errors, newline, ...). encoding=None
+    and the 'locale' pseudo-encoding (what Path.read_text passes when UTF-8 mode is off,
+    i.e. on a normal macOS/Linux UTF-8 locale) both mean the locale's preferred encoding;
+    newline=None keeps universal-newline translation. (Before this, the wrapper raised
+    LookupError on 'locale' and skipped newline translation.)"""
+    names = ("buffering", "encoding", "errors", "newline")
+    args = dict(zip(names, a))
+    args.update({n: k[n] for n in names if n in k})
+    enc = args.get("encoding")
+    if enc is None or enc == "locale":
+        enc = "utf-8" if sys.flags.utf8_mode else locale.getpreferredencoding(False)
+    return io.TextIOWrapper(io.BytesIO(data), encoding=enc, errors=args.get("errors"),
+                            newline=args.get("newline"))
+
+
 def _sha256(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def _install_prefixes():
+    """D260: real installation directories (no substring matching)."""
+    pre = {sys.prefix, sys.base_prefix, sys.exec_prefix}
+    for k in ("stdlib", "platstdlib", "purelib", "platlib"):
+        try:
+            pre.add(sysconfig.get_paths()[k])
+        except Exception:
+            pass
+    try:
+        pre.update(site.getsitepackages())
+        pre.add(site.getusersitepackages())
+    except Exception:
+        pass
+    return tuple(sorted({str(Path(x).resolve()) + os.sep for x in pre if x}))
+
+
+_PREFIXES = _install_prefixes()
+
+
 def _excluded(path_str):
-    """Python installation, site-packages and OS pseudo-files are not data inputs."""
-    p = path_str
-    prefixes = {sys.prefix, sys.base_prefix, sys.exec_prefix}
-    if any(pre and p.startswith(pre + os.sep) for pre in prefixes):
+    """Python installation (by real directory, not substring) and OS pseudo-files are not
+    data inputs."""
+    p = str(Path(path_str).resolve())
+    if p.startswith(_PREFIXES):
         return True
-    if "site-packages" in p or "dist-packages" in p:
+    # Code is covered by the experiment-manifest hash check, not by the data read set
+    # (imports read .py/.pyc through io.open_code).
+    if p.endswith((".py", ".pyc")) or (os.sep + "__pycache__" + os.sep) in p:
         return True
-    return p.startswith(("/dev/", "/proc/", "/sys/", "/etc/", "/usr/share/zoneinfo"))
+    # macOS: /etc and /var are symlinks into /private, and resolve() follows them
+    return p.startswith(("/dev/", "/proc/", "/sys/", "/etc/", "/private/etc/",
+                         "/usr/share/zoneinfo", "/private/var/db/timezone", "/usr/lib/locale"))
 
 
 _NET = {"block": False, "attempts": []}
@@ -104,6 +152,33 @@ def _audit(event, args):
         raise RuntimeError(f"HALT: network access from the prediction process ({event})")
 
 
+_GUARD = threading.local()
+_ACTIVE = [None]
+
+
+def _audit_open(event, args):
+    """D260 backstop: any open() of a file for reading that bypassed the wrappers
+    (os.open, io.FileIO, a captured alias, numpy, ...) is still recorded with the hash of
+    the file at that moment."""
+    rec = _ACTIVE[0]
+    if rec is None or event != "open" or getattr(_GUARD, "busy", False):
+        return
+    path, mode, flags = (list(args) + [None, None, None])[:3]
+    if not isinstance(path, (str, bytes, os.PathLike)):
+        return
+    path = os.fsdecode(path)
+    reading = (mode is None and flags is not None and (flags & 3) in (os.O_RDONLY, os.O_RDWR)) \
+        or (isinstance(mode, str) and ("r" in mode or "+" in mode))
+    if not reading or not os.path.isfile(path) or _excluded(path):
+        return
+    _GUARD.busy = True
+    try:
+        with rec._orig["open"](path, "rb") as fh:
+            rec._record(path, fh.read(), via="audit")
+    finally:
+        _GUARD.busy = False
+
+
 class ReadSetRecorder:
     """Records every data file read (path + sha256 of the parsed bytes) and blocks network."""
 
@@ -112,28 +187,33 @@ class ReadSetRecorder:
         self.conflicts = []    # same path read twice with different bytes
         self._orig = {}
 
-    def _record(self, path, data):
+    def _record(self, path, data, via="wrapper"):
         ap = str(Path(path).resolve())
         h = _sha256(data)
         e = self.entries.get(ap)
         if e is None:
-            self.entries[ap] = {"sha256": h, "reads": 1}
+            self.entries[ap] = {"sha256": h, "reads": 1, "via": via}
         else:
             e["reads"] += 1
             if e["sha256"] != h:
                 self.conflicts.append(ap)
 
     def _load(self, path):
-        with self._orig["open"](path, "rb") as fh:
-            return fh.read()
+        _GUARD.busy = True
+        try:
+            with self._orig["open"](path, "rb") as fh:
+                return fh.read()
+        finally:
+            _GUARD.busy = False
 
     def install(self):
         import pandas as pd
         import pyarrow.parquet as pq
         rec = self
-        self._orig = {"open": builtins.open, "read_parquet": pd.read_parquet,
+        self._orig = {"open": builtins.open, "io_open": io.open,
+                      "read_parquet": pd.read_parquet,
                       "read_csv": pd.read_csv, "read_json": pd.read_json,
-                      "read_table": pq.read_table}
+                      "read_table": pq.read_table, "ParquetFile": pq.ParquetFile}
 
         def _is_path(x):
             return isinstance(x, (str, os.PathLike)) and os.path.isfile(x)
@@ -150,24 +230,38 @@ class ReadSetRecorder:
             return wrapper
 
         def open_wrapper(file, mode="r", *a, **k):
-            if (isinstance(file, (str, os.PathLike)) and not any(c in mode for c in "wax+")
+            # D260: read-only AND read/update ('r+') modes are recorded
+            if (isinstance(file, (str, os.PathLike)) and "r" in mode
                     and os.path.isfile(file) and not _excluded(str(Path(file).resolve()))):
+                if "+" in mode:
+                    rec._record(file, rec._load(file))
+                    return rec._orig["open"](file, mode, *a, **k)
                 data = rec._load(file)
                 rec._record(file, data)
                 if "b" in mode:
                     return io.BytesIO(data)
-                enc = k.get("encoding") or (a[1] if len(a) > 1 else None) or "utf-8"
-                return io.StringIO(data.decode(enc))
+                return _text_like_open(data, a, k)
             return rec._orig["open"](file, mode, *a, **k)
+
+        def parquetfile_wrapper(src, *a, **k):
+            if _is_path(src) and not _excluded(str(Path(src).resolve())):
+                data = rec._load(src)
+                rec._record(src, data)
+                return rec._orig["ParquetFile"](io.BytesIO(data), *a, **k)
+            return rec._orig["ParquetFile"](src, *a, **k)
 
         pd.read_parquet = _wrap_pd("read_parquet")
         pd.read_csv = _wrap_pd("read_csv")
         pd.read_json = _wrap_pd("read_json")
         pq.read_table = _wrap_pd("read_table")
+        pq.ParquetFile = parquetfile_wrapper
         builtins.open = open_wrapper
+        io.open = open_wrapper            # D260: Path.open/read_bytes/read_text go through io.open
         if not _HOOK_INSTALLED[0]:
             sys.addaudithook(_audit)
+            sys.addaudithook(_audit_open)
             _HOOK_INSTALLED[0] = True
+        _ACTIVE[0] = self
         _NET["attempts"] = []
         _NET["block"] = True
         return self
@@ -178,6 +272,9 @@ class ReadSetRecorder:
         if not self._orig:
             return
         builtins.open = self._orig["open"]
+        io.open = self._orig["io_open"]
+        pq.ParquetFile = self._orig["ParquetFile"]
+        _ACTIVE[0] = None
         pd.read_parquet = self._orig["read_parquet"]
         pd.read_csv = self._orig["read_csv"]
         pd.read_json = self._orig["read_json"]
@@ -213,14 +310,22 @@ def classify_read_set(read_set, bundle_dir, root, file_hashes, bundle_manifest):
         bad.append(f"file changed between two reads: {read_set['conflicts']}")
     if read_set.get("network_attempts"):
         bad.append(f"network access attempted: {read_set['network_attempts']}")
-    read_inputs = set()
+    read_inputs, read_bundle = set(), set()
     for e in read_set.get("entries", []):
         p = Path(e["path"]).resolve()
         h = e["sha256"]
         if p == bundle_dir or bundle_dir in p.parents:
             rel = str(p.relative_to(bundle_dir))
             if rel.startswith("outputs" + os.sep):
-                summary.append((rel, "i-output"))
+                # D260: an output the worker read back must be the file now on disk (and,
+                # once finalised, the manifest's) — never an unconditional pass
+                want = bundle_manifest.get(rel)
+                if want is None:
+                    want = _sha256(p.read_bytes()) if p.is_file() else None
+                if want is None or want != h:
+                    bad.append(f"read an output whose bytes are not the run's: {rel}")
+                else:
+                    summary.append((rel, "i-output"))
                 continue
             want = bundle_manifest.get(rel)
             if want is None:
@@ -231,6 +336,8 @@ def classify_read_set(read_set, bundle_dir, root, file_hashes, bundle_manifest):
                 summary.append((rel, "i"))
                 if rel.startswith("inputs" + os.sep):
                     read_inputs.add(rel.split(os.sep, 1)[1])
+                else:
+                    read_bundle.add(rel)
             continue
         if root in p.parents:
             rel = str(p.relative_to(root))
@@ -244,6 +351,7 @@ def classify_read_set(read_set, bundle_dir, root, file_hashes, bundle_manifest):
             continue
         bad.append(f"read a file outside the repo: {p}")
     missing = [f for f in MUST_READ if f not in read_inputs]
+    missing += [f for f in MUST_READ_BUNDLE if f not in read_bundle]
     if missing:
         bad.append(f"prediction did not read these inputs from the run directory: {missing}")
     if bad:

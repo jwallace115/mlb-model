@@ -108,9 +108,9 @@ def test_event_metadata_inconsistent_across_props_and_lines_halts(tmp_path):
 
 def _stub(anchor=None, identity=None, picks=(PICK,)):
     def fn(root, week, T_, bundle_lines, game_ids, run_dir=None,
-           input_dir=None, props_file=None, run_id=None):
+           input_dir=None, props_file=None, run_id=None, bundle_dir=None):
         write_stub_outputs(run_dir, week, run_id, input_dir, props_file, GAME_ID, list(picks),
-                           anchor=anchor, identity_override=identity)
+                           anchor=anchor, identity_override=identity, bundle_dir=bundle_dir)
     return fn
 
 
@@ -186,8 +186,9 @@ def test_outputs_without_identity_columns_halt(tmp_path):
     root = _build_fixture_root(tmp_path)
 
     def old_style(root_, week, T_, bundle_lines, game_ids, run_dir=None,
-                  input_dir=None, props_file=None, run_id=None):
-        write_stub_outputs(run_dir, week, run_id, input_dir, props_file, GAME_ID, [PICK])
+                  input_dir=None, props_file=None, run_id=None, bundle_dir=None):
+        write_stub_outputs(run_dir, week, run_id, input_dir, props_file, GAME_ID, [PICK],
+                           bundle_dir=bundle_dir)
         p = pd.read_parquet(Path(run_dir) / "picks_log.parquet").drop(columns=["season", "week", "run_id"])
         p.to_parquet(Path(run_dir) / "picks_log.parquet", index=False)
     with pytest.raises(SystemExit, match="has no season column"):
