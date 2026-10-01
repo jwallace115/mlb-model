@@ -25,7 +25,14 @@ BOX_DIR = ROOT / "nhl" / "cache"
 OUT_DIR = ROOT / "nhl" / "data" / "sim" / "events"
 
 SHOT_TYPES = {"shot-on-goal", "missed-shot", "goal"}
-GAMES_PER_SEASON = 1312
+# Measured game counts per season (D1 probe)
+GAMES_PER_SEASON_MAP = {
+    2010: 1230, 2011: 1230, 2012: 720,  2013: 1230, 2014: 1230,
+    2015: 1230, 2016: 1230, 2017: 1271, 2018: 1271, 2019: 1082,
+    2020: 868,  2021: 1312, 2022: 1312, 2023: 1312, 2024: 1312,
+    2025: 1312,
+}
+GAMES_PER_SEASON = 1312  # backward compat default
 
 
 def parse_situation(code, event_team_is_home):
@@ -330,7 +337,8 @@ def process_game(game_id, data):
 def load_boxscores(season):
     """Load boxscore data for null controls."""
     boxes = {}
-    for i in range(1, GAMES_PER_SEASON + 1):
+    n_games = GAMES_PER_SEASON_MAP.get(season, GAMES_PER_SEASON)
+    for i in range(1, n_games + 1):
         gid = f"{season}02{i:04d}"
         path = BOX_DIR / f"boxscore_{gid}.json"
         if not path.exists():
@@ -364,7 +372,8 @@ def main():
         processed = 0
         failed = 0
 
-        for i in range(1, GAMES_PER_SEASON + 1):
+        n_games = GAMES_PER_SEASON_MAP.get(season, GAMES_PER_SEASON)
+        for i in range(1, n_games + 1):
             gid = f"{season}02{i:04d}"
             path = PBP_DIR / f"{gid}.json.gz"
             if not path.exists():

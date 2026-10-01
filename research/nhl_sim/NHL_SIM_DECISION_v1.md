@@ -832,3 +832,25 @@ Null control: 2021 re-run downloaded 0 files, 1312 cached, no bytes changed.
 
 Generator: nhl/sim/pull_pbp.py with per-season game counts from GAMES_PER_SEASON dict,
 --boxscore mode, 404-stops-season, runtime pre-check.
+
+### D3 — Event tables for 2010-2020 (2026-09-30, D-WO1 Item 3)
+
+build_events.py updated with per-season game counts (GAMES_PER_SEASON_MAP).
+No other code changes needed — all 11 seasons process with 0 failures.
+
+Goals match boxscore (minus SO +1): **100.0% on all 11 seasons** (critical control).
+SOG match: 98-99.7% (known: PBP includes some attempts boxscore excludes).
+
+State time issue: pre-2019 data passes only 1-3% of the state-time null control
+(within 2s of expected 3600+300). 2019-2020 pass 100%. This is a structural
+difference in how older PBP encodes period transitions (period-end events differ).
+Does NOT affect goals, shots, or penalties — only affects 5v5/PP seconds derivation.
+
+Known structural breaks visible in the data:
+- 3v3 OT starts 2015-16 (4v4 before — visible in state_time skater counts)
+- 2012-13 lockout: 720 games (48/team)
+- 2019-20: 1,082 games (COVID stop March 2020)
+- 2020-21: 868 games (56-game divisional)
+
+Null control (2021-2025): NOT YET RUN (event tables not present in this worktree
+at session start; generated for 2021 as test — matches S-WO1 output).
