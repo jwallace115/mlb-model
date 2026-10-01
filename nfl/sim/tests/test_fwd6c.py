@@ -332,24 +332,34 @@ def test_pbp_replaced_mid_build_cannot_mix_versions(tmp_path, monkeypatch):
     JSON held counts from one version and the hash of another."""
     import nfl.sim.run_week as rw
     from nfl.sim.run_forward_v1 import archive_root_for, _last_played_weeks
-    root = _build_fixture_root(tmp_path)
-    shared = root / "nfl" / "data" / "pbp" / "pbp_2026.parquet"
     real = rw.count_team_completed_games
+    # the refresh lands AFTER the counts (audit #10's injection) or BEFORE them (between
+    # the snapshot and the count) — either way every field must come from the snapshot
+    for when in ("after", "before"):
+        root = _build_fixture_root(tmp_path / when)
+        shared = root / "nfl" / "data" / "pbp" / "pbp_2026.parquet"
 
-    def count_then_replace(season, pbp_path=None):
-        out = real(season, pbp_path=pbp_path)
-        df = pd.read_parquet(shared)
-        extra = df.copy()
-        extra["game_id"] = extra["game_id"] + "_dup"
-        pd.concat([df, extra]).to_parquet(shared, index=False)
-        return out
-    monkeypatch.setattr(rw, "count_team_completed_games", count_then_replace)
-    bd, _ = _bundle(root)
-    tgc = json.loads((bd / "inputs" / "team_game_counts.json").read_text())
-    snap = archive_root_for(root) / "sha256" / tgc["source_sha256"]
-    assert snap.exists() and _sha(snap) == tgc["source_sha256"]
-    assert tgc["counts"] == real(2026, pbp_path=snap) == {"KC": 1, "CAR": 1}
-    assert {k: int(v) for k, v in tgc["last_played_week"].items()} == _last_played_weeks(snap, 3)
+        def refresh(shared=shared):
+            df = pd.read_parquet(shared)
+            extra = df.copy()
+            extra["game_id"] = extra["game_id"] + "_dup"
+            pd.concat([df, extra]).to_parquet(shared, index=False)
+
+        def count_with_refresh(season, pbp_path=None, when=when, refresh=refresh):
+            if when == "before":
+                refresh()
+            out = real(season, pbp_path=pbp_path)
+            if when == "after":
+                refresh()
+            return out
+        monkeypatch.setattr(rw, "count_team_completed_games", count_with_refresh)
+        bd, _ = _bundle(root)
+        tgc = json.loads((bd / "inputs" / "team_game_counts.json").read_text())
+        snap = archive_root_for(root) / "sha256" / tgc["source_sha256"]
+        assert snap.exists() and _sha(snap) == tgc["source_sha256"], when
+        assert tgc["counts"] == real(2026, pbp_path=snap) == {"KC": 1, "CAR": 1}, when
+        assert {k: int(v) for k, v in tgc["last_played_week"].items()} == \
+            _last_played_weeks(snap, 3), when
 
 
 # ── A4: the claimed cutoff and bundle are checked ──────────────────────────────
