@@ -303,9 +303,12 @@ def _depth_world(tmp_path, with_week4_pbp_date):
     if with_week4_pbp_date:
         pbp.append({"season": 2026, "week": 4, "game_date": dates[4], "game_id": "g4"})
     pd.DataFrame(pbp).to_parquet(d / "pbp_2026.parquet", index=False)
-    pd.DataFrame([{"season": 2026, "week": w, "gameday": dates[w], "gametime": "20:15",
+    # the snapshot covers the whole regular season, as refresh_inputs.snapshot_schedule requires
+    sched_dates = {**dates, **{w: str((pd.Timestamp(dates[4]) + pd.Timedelta(days=7 * (w - 4))).date())
+                               for w in range(5, 19)}}
+    pd.DataFrame([{"season": 2026, "week": w, "gameday": sched_dates[w], "gametime": "20:15",
                    "game_type": "REG", "home_team": "KC", "away_team": "CAR",
-                   "game_id": f"g{w}"} for w in (1, 2, 3, 4)]).to_parquet(d / "schedules_2026.parquet", index=False)
+                   "game_id": f"g{w}"} for w in range(1, 19)]).to_parquet(d / "schedules_2026.parquet", index=False)
     players = [("00-1", "WR"), ("00-2", "WR"), ("00-3", "RB")]
     rosters = pd.DataFrame([{"season": 2026, "week": w, "team": "KC", "gsis_id": p, "position": pos,
                              "status": "ACT", "full_name": p} for w in (1, 2, 3, 4) for p, pos in players])
@@ -374,7 +377,7 @@ def test_refresh_snapshots_the_schedule_before_building_and_archives_the_refresh
     assert calls == ["pull_nflverse_inputs.py", "schedule", "pbp", "usage.py", "ratings.py"]
     [backup] = list((tmp_path / "mlb-model-archive" / "nfl_ratings_backups").iterdir())
     man = json.loads((backup / "refreshed" / "refresh_manifest.json").read_text())
-    assert man["input_version"] == R.INPUT_VERSION == "D272-v2" and man["week"] == 4
+    assert man["input_version"] == R.INPUT_VERSION == "D273-v3" and man["week"] == 4
     for f in R.SOURCES:
         assert (backup / "refreshed" / f).read_bytes() == (pb / f).read_bytes()
         assert man["files"][f"sources/{f}"] == hashlib.sha256((pb / f).read_bytes()).hexdigest()
@@ -429,7 +432,8 @@ def test_week_cutoffs_take_only_the_snapshot_season(tmp_path, monkeypatch):
     pd.concat([stray, sch], ignore_index=True).to_parquet(d / "schedules_2026.parquet", index=False)
     monkeypatch.setattr(U, "PBP_DIR", d)
     cut = U._week_cutoffs([2026])
-    assert (2026, 5) not in cut and cut[(2026, 4)] == pd.Timestamp("2026-10-01", tz="UTC")
+    assert cut[(2026, 5)] == pd.Timestamp("2026-10-08", tz="UTC")      # not the stray 2025 date
+    assert cut[(2026, 4)] == pd.Timestamp("2026-10-01", tz="UTC")
 
 
 def test_layer3_qb_uses_the_snapshot_cutoffs_and_halts_without_one(tmp_path, monkeypatch):
@@ -444,7 +448,7 @@ def test_layer3_qb_uses_the_snapshot_cutoffs_and_halts_without_one(tmp_path, mon
         got.append(st.get((2026, 4, "KC")))
     assert got[0] == got[1] == {"gsis_id": "00-9", "source": "depth_chart"}
     (d / "schedules_2026.parquet").unlink()
-    with pytest.raises(RuntimeError, match="no archived schedule snapshot"):
+    with pytest.raises(RuntimeError, match="no valid week cutoff for season 2026 weeks \\[5, 6"):
         U.derive_starting_qbs(pd.concat([depth, qb], ignore_index=True), None)
 
 

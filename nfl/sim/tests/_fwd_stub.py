@@ -118,7 +118,9 @@ def _make_inputs_current(root, teams, week, season=2026):
     sk = skill.drop_duplicates("gsis_id", keep="first")
     cur = pd.DataFrame({"season": season, "week": week, "team": sk["team"].values,
                         "player_id": sk["gsis_id"].values, "position": sk["position"].values,
-                        "depth_order": float("nan"),
+                        # D273: a refresh's depth layer ranks the week's players
+                        "depth_order": sk.groupby(["team", "position"]).cumcount().add(1)
+                                         .astype(float).values,
                         "active_flag": [(s == "ACT") and (p not in out_ids)
                                         for s, p in zip(sk["status"], sk["gsis_id"])],
                         "injury_status": "Active", "status": sk["status"].values})

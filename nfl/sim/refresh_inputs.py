@@ -8,7 +8,8 @@ built on 2026-09-19 (week-1 games only), and QB/kicker ratings that never had a 
 the week being predicted. The documented refresh (pull_nflverse_inputs + ratings.py)
 never ran usage.py, and the freshness gate accepted copied-forward rows.
 
-What it does, in order (any failure restores the ratings directory and exits non-zero):
+What it does, in order (a failure in steps 0-6 restores the ratings tables and re-raises;
+step 7 runs after the refreshed tables are installed — see the exit codes below):
  0. preflight: the ratings tables' fit-window fingerprint equals FREEZE_v1's
     usage_fingerprint (the calibration was fitted on exactly those rows);
  1. pull_nflverse_inputs.py  (rosters_weekly, depth_charts, injuries);
@@ -80,7 +81,7 @@ def splice(old, new, season=SEASON):
     return pd.concat([keep, cur], ignore_index=True)
 
 
-INPUT_VERSION = "D272-v2"   # declared prospective input version (2026 rows only)
+INPUT_VERSION = "D273-v3"   # declared prospective input version (2026 rows only); D273: builders validate cutoffs
 
 
 def snapshot_schedule():
@@ -89,8 +90,16 @@ def snapshot_schedule():
     import nflreadpy
     df = nflreadpy.load_schedules([SEASON])
     df = df.to_pandas() if hasattr(df, "to_pandas") else df
-    if df.empty or not {"season", "week", "gameday", "gametime"} <= set(df.columns):
+    if df.empty or not {"season", "week", "gameday", "gametime", "game_type"} <= set(df.columns):
         raise SystemExit("HALT: the nflverse schedule download is empty or incomplete")
+    # D273 (audit #15): a present but incomplete snapshot must not count as coverage —
+    # every regular-season week 1-18 needs at least one game with a valid gameday
+    reg = df[(df["season"] == SEASON) & (df["game_type"] == "REG")]
+    ok = reg[pd.to_datetime(reg["gameday"].astype(str), errors="coerce").notna()]
+    missing = sorted(set(range(1, 19)) - {int(w) for w in ok["week"].unique()})
+    if missing:
+        raise SystemExit(f"HALT: the nflverse {SEASON} schedule has no valid regular-season "
+                         f"gameday for weeks {missing}")
     out = PBP / f"schedules_{SEASON}.parquet"
     df.to_parquet(out, index=False)
     print(f"  schedules_{SEASON}: {len(df)} games, weeks {int(df['week'].min())}-{int(df['week'].max())}")

@@ -5753,3 +5753,115 @@ survived the focused files only, and the existing real-worker-path test in `test
 - R16 runbook: early Sunday merged into the main window;
 - R17 runbook: the Monday 22:00Z VM slot back;
 - R18 refresh exits 0 when teams are not ready.
+
+### D273 — ChatGPT audit #15 (NO-GO for both primary Sunday windows at a7bd0c62a) accepted; FWD7c validates week cutoffs, gates the depth layer, and kills audit #15's survivors (2026-10-02)
+
+Audit #15 reply: `research/cross_ai/chatgpt_audit15_reply_2026-10-02.md` (complete).
+
+What held:
+- the 280-test baseline;
+- audit #14 A2 on real week-4 inputs (both duplicate orders, `<NA>`, string flags);
+- A1 equivalence for a valid date-only row;
+- point-in-time identity for W = 2 and 3, including the starting-QB maps;
+- team ratings, situational tendencies, kickers, consumed tendencies and 2025 league means point-in-time identical;
+- every Mac claim recomputed;
+- R1-R18 and audit #14's eight survivors killed;
+- the runbook windows.
+
+**Accepted by audit #15:** the roster cutoff (D272 ii) as a prospective policy, and the input-version definition
+(D272 i). Both were committed before any week-4 Sunday outcome.
+
+**A1 (must-fix) — an invalid cutoff counted as a cutoff.** One outcome-free week-4 PBP row with `game_date=None` made
+`_week_cutoffs` record `(2026, 4): NaT`. The schedule fallback only tested whether the key existed, so the valid
+archived date was never used, and both layers silently skipped the week. The result:
+- week-4 depth ranks went to 0 of 800;
+- the usage table came back as the D271 bytes;
+- the bundle passed every gate;
+- in a real bootstrap dry run of IND@WAS, 43 of 78 shared calibrated probabilities changed (max 0.0596).
+
+FIX:
+- **Valid dates only.** `_week_cutoffs` uses only valid dates. A week with none has no key, never a NaT value.
+- **Earliest valid date.** For a season with an archived schedule snapshot (2026), the cutoff is the earliest valid
+  date among the week's schedule gamedays and PBP game_dates. A live week (schedule only) and the same week rebuilt
+  later (schedule + PBP) get the same cutoff, and a null or unparseable PBP date can neither erase nor move it.
+  Seasons without a snapshot (history) use the earliest valid PBP date, as before.
+- **Required cutoffs.** `_require_cutoffs` HALTs in two places:
+  - `build_active_universe`: if any week of the newest season being built lacks a valid cutoff;
+  - layer 3: if any regular-season week 1-18 lacks one.
+  The D272 check (any snapshot file present) is gone, because a present but incomplete snapshot is not coverage.
+- **Snapshot validation.** `refresh_inputs.snapshot_schedule` refuses a download in which any regular-season week 1-18
+  lacks a valid gameday, and writes nothing.
+- **Forward gate.** It HALTs when a team's week-W active players have no depth ranks. Every historical team-week has
+  them: checked on the Mac's inputs for 2021-2025 (572 team-weeks each) and 2026 weeks 1-5 (160), none
+  without). A lost depth layer now stops before the worker, whatever caused it.
+
+Verified (cloud, Mac versions, the Mac's staged inputs):
+- the D273 build of BOTH tables equals the D272 build exactly, every season and row (47,446 / 89,737 rows);
+- the null-date row is EQUIVALENT under D273 and DIFFERENT under D272 (24.6% of target shares, 35.3% of depths);
+- the forward gate on the 28 Sunday teams: clean tables PASS, D272 null-date tables HALT for all 28 ("no depth ranks"),
+  D273 null-date tables PASS.
+
+**A test outside the forward suite was stale (Cowork's own finding).** 5J-2's
+`test_board_5j2::test_schedule_kickoff_timezone_accepts_pre_kick_qb` asserted the pre-D272 live-week rule (actual
+Eastern kickoff from a live download). D272 deliberately replaced that rule with the backtest's midnight convention, so
+the test would have failed on the Mac. Nobody ran it: it is not in the forward suite. It is rewritten as
+`test_layer3_qb_cutoff_is_midnight_of_the_first_game_date`, on week 4 (no PBP):
+- a 22:00Z Oct 1 QB snapshot is rejected and a 23:00Z Sep 30 one is used;
+- it passes on D273 and fails on D271.
+
+The Mac run now also runs the four usage test files.
+
+**Survivors (audit #15 D), each killed by a new test in `test_fwd7c.py`:**
+- the max date (Thursday and Sunday dates in one week, with and without a snapshot);
+- `<=` at the cutoff in layer 3 and the depth layer;
+- string flags with no nulls;
+- a receipt without a `pilot` field;
+- archived table copies (bytes and hashes);
+- the real `snapshot_schedule` writer (path, content, incomplete and null-gameday seasons);
+- the 16:15Z / 16:30Z runbook boundary.
+
+The new tests also cover:
+- a null or unparseable PBP date (build unchanged, layer 3 unchanged);
+- an incomplete or null-gameday snapshot (HALT);
+- the depth-rank gate.
+
+**FWD7c mutations (Cowork, each isolated on a copy; focused files test_fwd7c, test_fwd7a, test_fwd6f):**
+- 15 of the 16 new S-mutations are killed, along with the seven re-run R-mutations (R5, R6, R10, R13, R14, R16, R18).
+- S2 (max date) survived the first round and is killed by the history-season case.
+- S4 (the schedule NaT filter removed) is **equivalent**: `groupby().min()` already skips NaT, and an all-NaT
+  schedule week gives a NaT that `_require_cutoffs` rejects. The explicit filter stays as clarity.
+
+The S-mutations:
+- S1 NaT PBP dates kept;
+- S2 max PBP date;
+- S3 later of schedule/PBP;
+- S4 schedule NaT filter (equivalent);
+- S5 schedule season filter;
+- S6 layer-3 `<=`;
+- S7 depth-layer `<=`;
+- S8 active-universe requirement removed;
+- S9 layer-3 requirement removed;
+- S10 gate depth check removed;
+- S11 dtype check removed with the null check kept;
+- S12 `not pilot`;
+- S13 archive without table copies;
+- S14 snapshot to the wrong path;
+- S15 snapshot validation removed;
+- S16 runbook boundary at 16:00Z.
+
+**Input version `D273-v3`.** The builders now validate cutoffs. On valid inputs their output is byte-identical to
+D272-v2's, as verified above. The refresh manifest records the new version. The roster-cutoff declaration (D272 ii) is
+unchanged.
+
+**Refresh wording.** The docstring said "any failure restores". Restoration covers steps 0-6 (the rebuild). Step 7, the
+readiness report, runs after the refreshed tables are installed: exit 1, or an exception inside the report itself,
+leaves them installed.
+
+**Declared: `fourth_down_go_rate` is not point-in-time (audit #15 B3).**
+- `ratings.py:477` shrinks it toward a target computed from all current-season plays, including weeks at or after the
+  row's week. It differs by up to 0.219 (W = 2) when PBP is truncated.
+- It is a legacy column, and no decision path reads it: the engine assigns it to `t*_4th_go` / `lg_4th_go` context
+  fields that nothing loads, and the live fourth-down decision reads `t*_4th_goe`, which IS point-in-time identical.
+- It is not changed now. The tendencies table is in the fitted window (FREEZE fingerprint) and the engine is frozen.
+- It must never be wired into a decision path. It is to be quarantined or removed in a later declared cleanup, and
+  the tendencies table must not be described as point-in-time identical as a whole.

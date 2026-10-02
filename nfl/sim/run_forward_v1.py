@@ -256,7 +256,7 @@ def _active_universe_matches(inputs_dir, season, week, team, bad):
     want = {pid: bool(st == "ACT" and pid not in out)
             for pid, st in zip(ros["gsis_id"], ros["status"])}
     au = pd.read_parquet(inputs_dir / "active_universe_weekly.parquet",
-                         columns=["season", "week", "team", "player_id", "active_flag"])
+                         columns=["season", "week", "team", "player_id", "active_flag", "depth_order"])
     au = au[(au["season"] == season) & (au["week"] == week) & (au["team"] == team)]
     # D272 (audit #14 A2): one canonical row per player. The engine includes a player if
     # ANY of his rows is active, so a duplicate active row would re-admit an OUT player
@@ -268,6 +268,13 @@ def _active_universe_matches(inputs_dir, season, week, team, bad):
         return None
     if not pd.api.types.is_bool_dtype(au["active_flag"]) or au["active_flag"].isna().any():
         bad.append(f"{team}: week-{week} active universe has non-boolean or missing active flags")
+        return None
+    # D273 (audit #15 A1): the depth layer must have run for this week. Every historical
+    # team-week (2021-2026) has depth ranks for its active players; a week whose cutoff was
+    # lost (e.g. a null PBP date) had NONE and still passed every other check.
+    if not au.loc[au["active_flag"], "depth_order"].notna().any():
+        bad.append(f"{team}: week-{week} active universe has no depth ranks — the depth layer "
+                   f"did not run for this week (rebuild with refresh_inputs.py)")
         return None
     have = {pid: bool(f) for pid, f in zip(au["player_id"], au["active_flag"])}
     if have != want:
