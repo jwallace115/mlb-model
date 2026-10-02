@@ -390,6 +390,54 @@ def derive_starting_qbs(depth, plays, active_universe=None):
 # ACTIVE UNIVERSE
 # ═══════════════════════════════════════════════════════════════════════════════
 
+# D276 (audit #18): the play-level keys the builders group and filter on. Each predicate holds
+# on every row of the real 2020-2026 PBP (0 violations, measured 2026-10-03); a violating row
+# would be silently dropped or misattributed by a groupby/filter, so it HALTs instead.
+_ADMISSION_COLS = ["play_type", "posteam", "defteam", "complete_pass", "pass_attempt",
+                   "rush_attempt", "receiver_player_id", "passer_player_id", "rusher_player_id"]
+
+
+def _pbp_admission(s, path):
+    """Context-dependent admission check on every raw PBP row, before any exclusion or groupby:
+      - a pass or run play has both team keys (posteam, defteam);
+      - a row flagged complete_pass / pass_attempt / rush_attempt has a play_type;
+      - a completed pass is a pass play and has a receiver;
+      - a pass play has a passer; a run play has a rusher.
+    Legitimately key-less rows (administrative rows, sacks/throwaways without a receiver) are
+    untouched. A file without play_type cannot be aggregated at all (the builders need it);
+    a file WITH play_type must carry every admission column."""
+    import pyarrow.parquet as pq
+    names = pq.read_schema(path).names
+    if "play_type" not in names:
+        return
+    missing = [c for c in _ADMISSION_COLS if c not in names]
+    if missing:
+        raise RuntimeError(f"pbp_{s}.parquet: admission columns missing {missing}")
+    p = pd.read_parquet(path, columns=["game_id", "play_id"] + _ADMISSION_COLS
+                        if "play_id" in names else ["game_id"] + _ADMISSION_COLS)
+    pt = p["play_type"]
+    scrim = pt.isin(["pass", "run"])
+    flag = lambda c: pd.to_numeric(p[c], errors="coerce").fillna(0) == 1
+    rules = (
+        ("pass/run play without posteam", scrim & p["posteam"].isna()),
+        ("pass/run play without defteam", scrim & p["defteam"].isna()),
+        ("pass/rush flag without play_type",
+         pt.isna() & (flag("complete_pass") | flag("pass_attempt") | flag("rush_attempt"))),
+        ("completed pass that is not a pass play", flag("complete_pass") & pt.notna() & (pt != "pass")),
+        ("completed pass without receiver", flag("complete_pass") & p["receiver_player_id"].isna()),
+        ("pass play without passer", (pt == "pass") & p["passer_player_id"].isna()),
+        ("run play without rusher", (pt == "run") & p["rusher_player_id"].isna()),
+    )
+    problems = []
+    for name, bad in rules:
+        if bad.any():
+            ex = p.loc[bad, [c for c in ("game_id", "play_id") if c in p.columns]].head(3)
+            problems.append(f"{int(bad.sum())} rows: {name} (e.g. row index {ex.index.tolist()}, "
+                            f"{ex.to_dict('records')})")
+    if problems:
+        raise RuntimeError(f"pbp_{s}.parquet: inadmissible plays — " + "; ".join(problems))
+
+
 def _pbp_game_dates(s, pbp_dir=None):
     """D274 (audit #16): the PBP's games for season `s`, validated — every row has a valid
     game_date, each game_id has exactly one date, one week and season `s`. Returns a frame
@@ -402,9 +450,17 @@ def _pbp_game_dates(s, pbp_dir=None):
     usage aggregation's groupby then silently dropped that play. Every row must have a
     present game_id, season == `s` and an integral week in 1-22. Nothing is filtered: a
     bad row HALTs the build."""
-    p = pd.read_parquet((pbp_dir or PBP_DIR) / f"pbp_{s}.parquet",
-                        columns=["season", "week", "game_id", "game_date"])
+    path = (pbp_dir or PBP_DIR) / f"pbp_{s}.parquet"
+    p = pd.read_parquet(path, columns=["season", "week", "game_id", "game_date"])
     problems = []
+    # D276 (audit #18): identity columns must be stored as numbers — a season stored as
+    # strings passed the coerced check and then matched no `season == s` row downstream
+    for c in ("season", "week"):
+        if not pd.api.types.is_numeric_dtype(p[c]):
+            problems.append(f"column {c} is stored as {p[c].dtype}, not a number")
+    if problems:
+        raise RuntimeError(f"pbp_{s}.parquet: invalid game identities — " + "; ".join(problems))
+    _pbp_admission(s, path)
     seas = pd.to_numeric(p["season"], errors="coerce").astype("float64")
     wk = pd.to_numeric(p["week"], errors="coerce").astype("float64")
     gid_bad = p["game_id"].isna() | (p["game_id"].astype(str).str.strip() == "")

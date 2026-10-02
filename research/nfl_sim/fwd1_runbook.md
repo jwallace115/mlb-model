@@ -1,6 +1,6 @@
 # Forward-run runbook — nfl_fwd_v1, weeks 4, 5 (D272)
 
-Reader model: `nfl_sim_v1_156cd057`. Generated 2026-10-02T03:16:09Z by `research/nfl_sim/make_runbook.py`. Run every command from the checkout that holds the refreshed inputs. Every forward run goes through the bootstrap (D266).
+Reader model: `nfl_sim_v1_156cd057`. Generated 2026-10-02T23:19:45Z by `research/nfl_sim/make_runbook.py`. Run every command from the checkout that holds the refreshed inputs. Every forward run goes through the bootstrap (D266).
 
 ## Input refresh (D271/D272) — per window, never at the last minute
 
@@ -24,7 +24,7 @@ Games (1): PIT@CLE
 - Quotes: the VM's Thu 22:00Z props pull (1.5 h old at start); game lines from the 30-min tape. Max quote age 3 h at the harness start.
 - Harness start: **Thu 2026-10-01 23:30Z** (Thu 7:30 PM ET); sim about 0 min.
 ```bash
-python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5 --pilot   # D276: declared pilot
 ```
 
 ### IND@WAS — Sun 2026-10-04 13:30Z (Sun 9:30 AM ET)
@@ -36,7 +36,7 @@ python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
 ```
 - Harness start: **Sun 2026-10-04 12:45Z** (Sun 8:45 AM ET); sim about 0 min.
 ```bash
-python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5 --pilot   # D276: declared pilot
 ```
 
 ### Sunday main + SNF (13 games) — Sun 2026-10-04 [17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 1:00 PM ET+)
@@ -44,7 +44,7 @@ Games (13): TEN@BAL, NE@BUF, NYJ@CHI, JAX@CIN, DAL@HOU, ARI@NYG, LA@PHI, GB@TB, 
 - Quotes: the VM's Sunday 16:00Z props pull (confirm it arrived); game lines from the 30-min tape. Max quote age 3 h at the harness start.
 - Harness start: **Sun 2026-10-04 16:15Z** (Sun 12:15 PM ET); sim about 6 min.
 ```bash
-python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 9
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 9 --pilot   # D276: declared pilot
 ```
 
 ### ATL@NO — Tue 2026-10-06 00:15Z (Mon 8:15 PM ET)
@@ -56,7 +56,7 @@ python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
 ```
 - Harness start: **Mon 2026-10-05 23:30Z** (Mon 7:30 PM ET); sim about 0 min.
 ```bash
-python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5 --pilot   # D276: declared pilot
 ```
 
 ## Week 5

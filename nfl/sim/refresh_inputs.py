@@ -83,7 +83,7 @@ def splice(old, new, season=SEASON):
     return pd.concat([keep, cur], ignore_index=True)
 
 
-INPUT_VERSION = "D275-v5"   # declared prospective input version (2026 rows only); D275: builders validate PBP identity rows
+INPUT_VERSION = "D276-v6"   # declared prospective input version (2026 rows only); D276: play-level admission checks
 
 
 def snapshot_schedule():

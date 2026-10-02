@@ -6039,3 +6039,96 @@ The V-mutations:
 - V10 ratings validates usage's `PBP_DIR`;
 - V11 requirement for weeks <= 18 only;
 - V12 requirement for seasons >= 2025 only.
+
+### D276 — ChatGPT audit #18 (NO-GO at e875c0f62) accepted; WEEK 4 IS A DECLARED PILOT in every window; FWD7f adds play-level admission checks; the primary-admission rule for injury reports is ChatGPT's per-team verified-completeness rule (2026-10-03, before any week-4 Sunday or Monday kickoff)
+
+Audit #18 reply: `research/cross_ai/chatgpt_audit18_reply_2026-10-03.md` (complete).
+
+What held:
+- the 305 + 22 baseline;
+- audit #17's three cases, which reject before writes with 8/8 rollback;
+- the variants (blank or empty game_id, weeks 2.5, 0 and 23, a bad 2020 row in both loaders);
+- clean `Int64` / float identity columns, with byte-identical output;
+- archive and installed equality with an independent rebuild;
+- D275 = D274 full-table bytes;
+- point-in-time for W = 2-4;
+- the saved and independent smokes;
+- V1-V12 (V4 confirmed equivalent).
+
+**DECLARATION (made before any week-4 Sunday or Monday outcome): week 4 runs as a PILOT in every window** (IND@WAS,
+main + SNF, MNF ATL@NO), and is never promoted after outcomes. The reasons:
+- audit #18 is NO-GO;
+- the nflverse injury feed carries no final-report evidence. Game-status coverage is IND@WAS 1/2 and main + SNF 0/26.
+  All week-4 `date_modified` values are null, and the source hash has not changed since Oct 2 12:29Z.
+- no per-team verification procedure exists yet (below).
+`make_runbook.py` marks week 4 `--pilot` in every harness command; `fwd1_runbook.md` is regenerated. The week-4
+windows, times and refresh deadlines are otherwise unchanged.
+
+**A1 — other aggregation keys (accepted).** A completed pass with `posteam` set to null passed every check. The usage
+groupby dropped the target, and on the real IND@WAS worker 17 calibrated probabilities moved (max 0.0503). Nulling
+`play_type` or the receiver did the same.
+
+FIX: `usage._pbp_admission` runs inside `_pbp_game_dates`, so it covers both `usage.load_pbp` and
+`ratings.load_all_pbp`, on every raw row and before any exclusion or groupby. It enforces:
+- a pass or run play has `posteam` and `defteam`;
+- a row flagged complete_pass, pass_attempt or rush_attempt has a `play_type`;
+- a completed pass is a pass play and has a receiver;
+- a pass play has a passer; a run play has a rusher.
+
+Every predicate holds on every row of the real 2020-2026 PBP. Cowork measured this on the staged inputs, and audit #18
+did on the Mac's 303,486 rows. Rows that are legitimately key-less are not touched: administrative rows, sacks and
+throwaways without a receiver, no-plays. A file that has `play_type` but lacks an admission column HALTs. `season` and
+`week` must be stored as numbers: a season stored as strings used to pass the coerced row check and then match no
+`season == s` row (audit #18 B).
+
+D275's claim that the aggregations "cannot drop a play on a null key" was false at that pin. It is true now only for
+the keys listed above; other columns are consumed as values, not keys.
+
+Verified (cloud, Mac versions, staged inputs):
+- the clean build is byte-identical to D275's for both full tables;
+- posteam=None, play_type=None and receiver=None on one completed pass, and a string season, all HALT under D276,
+  naming the row and play;
+- under D275 the three null cases build and change 2026 target shares, and the string season fails with a
+  `TypeError`.
+
+**A2 — final-report completeness (accepted; proposed D276 withdrawn).** A count of teams with at least one game status
+cannot prove the final report is complete. A rule like "20/26 teams" passes while 6 teams' reports are missing, and a
+complete report can have no designations.
+
+**The standing rule for any future primary window is audit #18's per-team verified completeness.** Before each harness
+start:
+1. Archive the latest official final game-status report, and later updates, for each participating team, including
+   explicit zero-designation reports. Record the source URL, publication or update time, retrieval UTC and content hash.
+2. Reconcile every Out/Doubtful player against the exact bundled injury bytes and active flags. Classify each team as
+   verified complete, verified empty, or unverified/mismatch. The absence of rows never proves empty.
+3. A primary needs every team verified (2/2 for a single game, 26/26 for main + SNF), with the classification,
+   hashes and refresh-manifest hash committed before the harness.
+4. Any unverified team makes the whole window a pilot, permanently.
+
+Building that procedure is future work, a new work order before week 5. The official reports are admission evidence,
+not new model inputs.
+
+**Corrections:**
+- The FWD7e Mac note's "3 of 28 Sunday teams with game statuses" is wrong. CLE and PIT played Thursday; the Sunday
+  count is 1/28 (WAS).
+- D275's cloud figures (303,300 rows, 0.8% changes) were measured on the staged inputs. The Mac has 303,486 rows,
+  where the controls change 1.2495%.
+
+**Tests (`test_fwd7f.py`, 10):**
+- valid rows are admitted, including key-less legitimate ones (administrative, incomplete pass, sack, no-play);
+- each admission rule HALTs;
+- a missing admission column HALTs;
+- both loaders check;
+- string season and week HALT;
+- week 0 HALTs (audit #18 survivor N1).
+
+**FWD7f mutations (focused test_fwd7f/7e/7d): W1-W13, 13 of 13 killed.** The W-mutations:
+- W1-W7: each admission rule removed or weakened;
+- W8: problems not raised;
+- W9: a missing column tolerated;
+- W10: admission not called;
+- W11: the dtype check removed;
+- W12: weeks >= 0 allowed;
+- W13: every pass required to have a receiver, which wrongly rejects sacks.
+
+**Input version `D276-v6`.**

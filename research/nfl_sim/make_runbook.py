@@ -123,6 +123,9 @@ def window_label(games):
 
 
 HARNESS = "python3 -I -S -B nfl/sim/fwd_bootstrap.py harness"
+# D276: week 4 runs as a declared PILOT in every window (no final-report verification yet);
+# never promoted after outcomes.
+PILOT_WEEKS = {4}
 
 
 def main():
@@ -191,7 +194,8 @@ def main():
             L.append(f"- Harness start: **{format_utc(start)}** ({format_et(start)}); sim about "
                      f"{len(win) * SECS_PER_GAME / 60:.0f} min.")
             L.append("```bash")
-            L.append(f"{HARNESS} --week {week} --window-hours {hours:g}")
+            L.append(f"{HARNESS} --week {week} --window-hours {hours:g}"
+                     + (" --pilot   # D276: declared pilot" if week in PILOT_WEEKS else ""))
             L.append("```")
     L.append("")
     L.append("## Notes")
