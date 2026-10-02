@@ -14,6 +14,12 @@ shift
 cd "$(dirname "$0")/.." || exit 1
 TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
+BRANCH=$(git branch --show-current 2>/dev/null)
+if [ "$BRANCH" != "main" ]; then
+    echo "$TS WARNING: ~/mlb-model is on branch '$BRANCH', not 'main' — skipping auto-commit"
+    exit 0
+fi
+
 if [ -e .git/index.lock ] || [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
     echo "$TS SKIP: git busy (lock or rebase in progress)"
     exit 0
