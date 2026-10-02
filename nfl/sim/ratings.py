@@ -42,6 +42,12 @@ def load_all_pbp():
     for s in SEASONS:
         p = PBP_DIR / f"pbp_{s}.parquet"
         if p.exists():
+            # D275 (audit #17): the same row-level identity/date validation as usage.py —
+            # a null season/week/game_id would be silently dropped by the groupbys below
+            if str(ROOT) not in sys.path:      # run as a script (refresh_inputs._run)
+                sys.path.insert(0, str(ROOT))
+            from nfl.sim.usage import _pbp_game_dates
+            _pbp_game_dates(s, PBP_DIR)
             frames.append(pd.read_parquet(p))
     return pd.concat(frames, ignore_index=True)
 

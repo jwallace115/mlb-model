@@ -83,6 +83,10 @@ def load_pbp():
     for s in SEASONS:
         p = PBP_DIR / f"pbp_{s}.parquet"
         if p.exists():
+            # D275 (audit #17): every season the aggregation reads is validated row by
+            # row first (identity fields, dates) — not only the seasons the active universe
+            # is built for — so no play can be silently dropped by a groupby on a null key.
+            _pbp_game_dates(s)
             import pyarrow.parquet as pq
             schema_cols = pq.read_schema(p).names
             cols = [c for c in PBP_COLS if c in schema_cols]
@@ -386,19 +390,38 @@ def derive_starting_qbs(depth, plays, active_universe=None):
 # ACTIVE UNIVERSE
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def _pbp_game_dates(s):
+def _pbp_game_dates(s, pbp_dir=None):
     """D274 (audit #16): the PBP's games for season `s`, validated — every row has a valid
     game_date, each game_id has exactly one date, one week and season `s`. Returns a frame
     (game_id, week, date). Any violation HALTs: a malformed historical date silently dropped
-    a week's depth layer and changed the current season's priors (audit #16 A1)."""
-    p = pd.read_parquet(PBP_DIR / f"pbp_{s}.parquet", columns=["season", "week", "game_id", "game_date"])
-    p["_d"] = pd.to_datetime(p["game_date"], errors="coerce", utc=True)
+    a week's depth layer and changed the current season's priors (audit #16 A1).
+
+    D275 (audit #17 A1): the identity fields are validated on EVERY RAW ROW first, whatever
+    their dtype and row order — a null week, a nullable-Int64 <NA> season or a null game_id
+    on one play survived the grouped checks (nunique/!= skip missing values), and the
+    usage aggregation's groupby then silently dropped that play. Every row must have a
+    present game_id, season == `s` and an integral week in 1-22. Nothing is filtered: a
+    bad row HALTs the build."""
+    p = pd.read_parquet((pbp_dir or PBP_DIR) / f"pbp_{s}.parquet",
+                        columns=["season", "week", "game_id", "game_date"])
     problems = []
+    seas = pd.to_numeric(p["season"], errors="coerce").astype("float64")
+    wk = pd.to_numeric(p["week"], errors="coerce").astype("float64")
+    gid_bad = p["game_id"].isna() | (p["game_id"].astype(str).str.strip() == "")
+    seas_bad = ~(seas == s)
+    wk_bad = wk.isna() | (wk != wk.round()) | (wk < 1) | (wk > 22)
+    for name, bad in (("missing game_id", gid_bad), (f"season missing or != {s}", seas_bad),
+                      ("week missing or not an integer in 1-22", wk_bad)):
+        if bad.any():
+            rows = p.index[bad.to_numpy()].tolist()
+            problems.append(f"{int(bad.sum())} rows with {name} (row index {rows[:4]})")
+    if problems:
+        raise RuntimeError(f"pbp_{s}.parquet: invalid game identities — " + "; ".join(problems))
+    p["week"] = wk.astype("int64")
+    p["_d"] = pd.to_datetime(p["game_date"], errors="coerce", utc=True)
     nul = sorted(p.loc[p["_d"].isna(), "game_id"].astype(str).unique())
     if nul:
         problems.append(f"null/unparseable game_date in games {nul[:4]}")
-    if (p["season"] != s).any():
-        problems.append(f"{int((p['season'] != s).sum())} rows with season != {s}")
     g = p.groupby("game_id").agg(nd=("_d", "nunique"), nw=("week", "nunique"))
     multi = sorted(g.index[(g["nd"] > 1) | (g["nw"] > 1)].astype(str))
     if multi:
@@ -423,7 +446,8 @@ def _week_cutoffs(seasons):
     - For a season with an archived schedule snapshot (PBP_DIR/schedules_<season>.parquet,
       written and validated by refresh_inputs.py) every PBP game must be in the snapshot
       with the SAME week and date; a contradiction HALTs. The cutoff is then the earliest
-      gameday of the week's snapshot games (equal to any PBP game's date by construction),
+      gameday of the week's snapshot games (every PBP game's date equals ITS OWN snapshot date;
+      the week's earliest snapshot date may belong to a game not yet in the PBP),
       so the live week (snapshot only) and the same week rebuilt later (snapshot + PBP) get
       the same cutoff.
     - A season without a snapshot (history) uses the earliest PBP game date."""

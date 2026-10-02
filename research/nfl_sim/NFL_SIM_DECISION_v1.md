@@ -5960,3 +5960,82 @@ The T-mutations:
 - T12 the gate counts inactive ranks;
 - T13 `_require_cutoffs` without its NaT arm;
 - T14 max cutoff.
+
+### D275 — ChatGPT audit #17 (NO-GO for both primary Sunday windows at 2afe33878) accepted; FWD7e validates PBP identity fields on every raw row, in every season any builder aggregates (2026-10-02)
+
+Audit #17 reply: `research/cross_ai/chatgpt_audit17_reply_2026-10-02.md` (complete).
+
+What held:
+- the 298 + 22 baseline;
+- both audit-16 repairs, which HALT before any write, with refresh rollback of all eight tables verified;
+- the D273 real-worker negative controls, re-reproduced (40 changes and 35 changes);
+- every partial-date, multi-date, wrong-season, week-mismatch and missing-game case;
+- a later-games-only week (it keeps the live cutoff);
+- the week-4 schedule-only to schedule+TNF identity;
+- point-in-time for W = 2-4;
+- the full-table D274 = D273 bytes on the D274-v4 archive;
+- T1-T14 except T7, which audit #17 judged redundant for the missing-game branch.
+
+**A1 (must-fix) — missing identity fields on one raw row.** `_pbp_game_dates` validated dates and per-game
+uniqueness on grouped values, so three cases got through:
+- a null `week` on one play of a valid game (`nunique` skips NaN, and the deduplicated row was valid);
+- a nullable-Int64 `<NA>` `season` (`!= s` is `<NA>`, and `.any()` skips it);
+- a historical null `game_id` (`groupby` skips it).
+The usage aggregation then silently dropped that play. On the real IND@WAS worker, 17 calibrated probabilities moved
+(max 0.0503), and the historical form changed all 506 week-4 target shares. Every gate passed.
+
+FIX:
+- **Row-level check first.** `_pbp_game_dates` checks EVERY raw row before any grouping, whatever its dtype or row
+  order. Every row needs a present, non-blank `game_id`, `season == s`, and a `week` that is an integer in 1-22. It is
+  computed through float conversion, so `<NA>` and NaN are caught. Nothing is filtered: a bad row HALTs. Then come the
+  date and one-date/one-week-per-game checks of D274.
+- **Every aggregated season.** `usage.load_pbp` validates each season file it reads (2020-2026), not only the seasons
+  the active universe is built for. `ratings.load_all_pbp` runs the same validator, so the team-rating, tendency and
+  kicker aggregations cannot drop a play on a null key either.
+- **No change to clean results.** The refresh runs usage.py before ratings.py and restores all tables on any failure.
+  The engine fingerprint and fit window are untouched.
+
+Verified (cloud, Mac versions, the Mac's earlier staged inputs):
+- the clean build is byte-identical to D274's (and D273's) for both full tables;
+- one 2026 receiving play with week = null, the same play with an `Int64` `<NA>` season, and one 2025 receiving play
+  with game_id = null each HALT under D275, naming the row;
+- under D274 each of those builds succeeds and changes 2026 target shares (0.8%, 0.8% and 100%);
+- `ratings.load_all_pbp`, run as a script would run it (repository root not on `sys.path`), loads all seven seasons
+  (303,300 rows) through the validator.
+
+**Smaller items:**
+- **D274 wording corrected.** Every PBP game's date equals ITS OWN snapshot date. The week's earliest snapshot date
+  can belong to a game not yet in the PBP. The code was already right; the docstring said otherwise.
+- **Audit #17 survivors.** Two new tests cover cutoff requirements for a rostered postseason week (19) and for an older
+  season (2023).
+- **Input version `D275-v5`.** The builders changed, so the declared version changes. Clean output is
+  byte-identical to D274-v4; the change only refuses malformed inputs, which no refreshed archive has contained
+  (audit #17 counted 0 null weeks and 0 null game IDs in 2020-2026).
+
+**Tests (`test_fwd7e.py`):**
+- a null week on a later row of a valid game (through `build_active_universe` and `load_pbp`);
+- a nullable-Int64 `<NA>` season;
+- a historical null or blank game_id, a non-integer week and an out-of-range week;
+- a malformed season outside the built seasons (2020), caught by both `usage.load_pbp` and `ratings.load_all_pbp`;
+- clean `Int64` / float columns still pass, with an integral week;
+- the postseason-week and older-season requirement survivors.
+
+**FWD7e mutations (Cowork, isolated copies; focused files test_fwd7e, test_fwd7d, test_fwd7c, test_fwd7a): 11 of the
+12 new V-mutations are killed, plus T1, T2, T4 and T8 re-killed.**
+- V10 (ratings validating usage's directory) survived the first round and is killed by a test that separates the two
+  directories.
+- V4 (the week `isna` arm removed) is equivalent: a NaN week already fails `wk != wk.round()`, because NaN != NaN.
+
+The V-mutations:
+- V1 null game_id allowed;
+- V2 blank game_id allowed;
+- V3 season compared with `!=`, which skips `<NA>`;
+- V4 null week allowed (equivalent);
+- V5 non-integer week allowed;
+- V6 week range unchecked;
+- V7 identity problems not raised;
+- V8 `load_pbp` skips validation;
+- V9 ratings skips validation;
+- V10 ratings validates usage's `PBP_DIR`;
+- V11 requirement for weeks <= 18 only;
+- V12 requirement for seasons >= 2025 only.

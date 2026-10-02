@@ -66,7 +66,7 @@ def test_a_game_with_two_dates_or_weeks_halts(tmp_path, monkeypatch):
     # a row from another season inside pbp_2026 (survivor T3)
     pd.concat([p, pd.DataFrame([{"season": 2025, "week": 3, "game_id": "g9", "game_date": "2025-09-18"}])],
               ignore_index=True).to_parquet(d / "pbp_2026.parquet", index=False)
-    with pytest.raises(RuntimeError, match="1 rows with season != 2026"):
+    with pytest.raises(RuntimeError, match="1 rows with season missing or != 2026"):
         U._week_cutoffs([2026])
 
 
