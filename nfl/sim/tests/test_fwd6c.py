@@ -423,14 +423,19 @@ def test_required_rating_units_by_name_and_worst_unit(tmp_path):
     """Audit #10 A5: renaming CLE's pass_off unit to junk_unit still passed (four distinct
     labels). Also: three fresh units plus one stale unit must HALT (kills min -> max)."""
     from nfl.sim.run_forward_v1 import _team_freshness, REQUIRED_RATING_UNITS
-    src = ROOT / "nfl" / "data" / "sim" / "ratings"
+    from nfl.sim.tests._fwd_stub import add_fwd6_fixture_inputs
+    # D271: inputs as a refresh before week 4 produces them (CLE last played week 3)
+    fx = tmp_path / "fx"
+    add_fwd6_fixture_inputs(fx, played_week=3, teams=(("CLE", "PIT"),), target_week=4)
     base = tmp_path / "base"
     base.mkdir()
     for f in ("team_ratings_weekly.parquet", "tendencies_weekly.parquet",
               "tendencies_situational_weekly.parquet", "player_usage_weekly.parquet",
               "active_universe_weekly.parquet", "kicker_weekly.parquet",
               "qb_ratings_weekly.parquet"):
-        shutil.copy2(src / f, base / f)
+        shutil.copy2(fx / "nfl" / "data" / "sim" / "ratings" / f, base / f)
+    for f in ("rosters_weekly.parquet", "injuries.parquet"):
+        shutil.copy2(fx / "nfl" / "data" / "pbp" / f, base / f)
     _team_freshness(base, 2026, 4, ["CLE"], {"CLE": 3})       # untouched: passes
     tr = pd.read_parquet(base / "team_ratings_weekly.parquet")
     for unit in REQUIRED_RATING_UNITS:

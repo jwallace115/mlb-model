@@ -254,7 +254,7 @@ def test_per_team_freshness_halts_on_stale_team_usage(tmp_path):
     u = pd.read_parquet(up)
     u = u[~((u.season == 2026) & (u.team == "CAR") & (u.week >= 2))]
     u.to_parquet(up, index=False)
-    with pytest.raises(SystemExit, match="CAR: usage max week"):
+    with pytest.raises(SystemExit, match="CAR: usage selected week 1 — built without its last game"):
         _harness(root, _stub_with_read_set(lambda *a: None))
 
 

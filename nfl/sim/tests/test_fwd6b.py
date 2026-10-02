@@ -334,7 +334,7 @@ def test_stale_kicker_halts(tmp_path):
     f = root / "nfl" / "data" / "sim" / "ratings" / "kicker_weekly.parquet"
     k = pd.read_parquet(f)
     k[~((k.season == 2026) & (k.team == "CAR") & (k.week >= 2))].to_parquet(f, index=False)
-    with pytest.raises(SystemExit, match="CAR: kickers max week"):
+    with pytest.raises(SystemExit, match="CAR: kickers selected week None — built without its last game"):
         _harness(root)
 
 

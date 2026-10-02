@@ -5498,3 +5498,123 @@ Scoring (FWD7) uses the recorded list together with the D269 L5 eligibility rule
 - a saved alias is caught by the scan.
 
 Mutations N1-N10 are killed (see acceptance).
+
+### D271 — The forward run's player and rating inputs were stale; every pilot so far ran on week-1 usage. FWD7a fixes the inputs, the gate and one structural off-by-one (2026-10-02)
+
+**Found by Cowork on 2026-10-01 (TNF).** A cloud dry run of PIT@CLE liked Jerry Jeudy (o1.5 rec, 89%) and DK Metcalf.
+That contradicted his recent games: Jeudy had 1 target in week 2 and 0 in week 3.
+
+**Facts, verified from files:**
+1. **The usage table is the 2026-09-19 build (sha256 `3bf5fe1f…`).** Every forward bundle consumed it: the week-3
+   pilots, including the FWD6e pilot `20260927T165200Z`, and every week-4 dry run. On the Mac,
+   `player_usage_weekly.parquet` and `active_universe_weekly.parquet` were last built 2026-09-19 08:45. The rating
+   tables were rebuilt 2026-09-30.
+2. **The rows are "entering week w"** (built from games in weeks < w, usage.py:686). The 2026 week-2 rows equal the
+   week-1 actuals: Jeudy 4 targets, Metcalf 10, Concepcion 5. Actual targets were Jeudy 4/1/0, Metcalf 10/9/5 and
+   Concepcion 5/6/9, so a week-4 run used week-1 games only.
+3. **`build_active_universe` copies the last roster week forward** (usage.py:515). The week-3 active universe was a
+   copy of week 2, and no week-4 injury report was applied. Rico Dowdle (OUT) was simulated on TNF.
+4. **The freshness gate (D256(c)) required usage and active-universe max week ≥ the team's last played week.** Under
+   entering-week semantics that is one week short, and a copied-forward row satisfies it. "usage max_week = 3" in
+   D231 was that copy.
+5. **Structural off-by-one in ratings.py.** The QB-ratings and kicker loops iterated observed weeks only. A live
+   week-W run therefore had no row W and used row W-1 (data through W-2). Every backtest week had its row W.
+   That is a research-vs-live identity break (Check 3), present since FWD1.
+6. **The documented weekly refresh** (`pull_nflverse_inputs.py` + `ratings.py`) never ran `usage.py`.
+7. **A full rebuild today changes historical usage rows** (2021-2023 and 2025: positions, names, rate stats). The
+   cause is nflverse's revisions to historical rosters; the PBP for 2020-2025 is byte-identical. The rebuild was
+   checked with the Mac's versions: pandas 2.3.3, numpy 2.4.3. The fit-window fingerprint would then differ from
+   FREEZE_v1's.
+
+**Consequences:**
+- No pilot so far is evidence about the model. Their inputs were not the backtested object's (Checks 1 and 3).
+- No primary may run on these inputs.
+
+**FWD7a:**
+- **(a) Gate.** `_team_freshness`, amended: for EVERY table (team ratings worst unit, tendencies, situational
+  tendencies, usage, active universe, kickers, QB ratings), the row the engine selects must be ≥ the team's last
+  played week + 1. The week-W active universe must equal what `build_active_universe` derives from the bundle's
+  week-W rosters and injury report: same skill players, same active flags (status ACT and report status not
+  Out/Doubtful), the same first-row resolution. Missing week-W rosters or injury report HALT. `injuries.parquet` is
+  now a required bundle input; it was record-only.
+- **(b) ratings.py.** The QB and kicker loops use `_entering_weeks`: the observed weeks plus the next week, capped
+  at 22, as `get_universe` does for team ratings. Rows for observed weeks are unchanged. The only new rows are each
+  season's last-observed+1: 2026 week W, and 2020 week 22, which is outside the fit window.
+- **(c) New `nfl/sim/refresh_inputs.py --week W`**, the weekly refresh, run on the Mac before each window. It:
+  - checks the preflight fit-window fingerprint equals FREEZE_v1;
+  - backs up the tables outside git;
+  - runs `pull_nflverse_inputs`, PBP for 2026 ONLY, `usage.py` and `ratings.py` (params_v1.json and the engine
+    fingerprint must be unchanged);
+  - SPLICES: rows for every season but 2026 are kept from before the refresh, and 2026 rows are rebuilt;
+  - re-checks the fit-window fingerprint equals FREEZE_v1;
+  - restores the backup on any failure;
+  - reports the forward run's own gate for every team playing week W.
+  Historical rows are the fitted object and never change.
+
+**Known residuals (stated, not fixed):**
+- **(i) 2025 priors.** The 2026 usage rows use 2025 priors computed from today's (revised) 2025 rosters. The spliced
+  2025 rows are the frozen ones; the largest 2025 target-share difference measured is 0.0004.
+- **(ii) Game-day inactives.** They reach the active universe only if the rosters/injuries refresh runs after they
+  are announced (about 90 minutes before kick). The backtest's active universe used final game-day roster status.
+  The live freeze has Out/Doubtful from the final injury report, and surprise inactives can differ.
+- **(iii) The schedule.** `usage.py` fetches the nflverse schedule at build time (layer-3 QB assignment).
+
+**Tests (`test_fwd7a.py`):**
+- refreshed inputs pass;
+- usage built without the last game HALTs (the D271 defect);
+- QB, kicker, team-rating and tendency rows without the last game HALT;
+- an active universe built before an Out on the report HALTs;
+- a copied-forward roster week HALTs;
+- missing rosters or injury report HALT;
+- injuries are required;
+- `_entering_weeks`;
+- both rating loops use it;
+- splice semantics;
+- the refresh restores the tables when a step fails.
+
+The shared test fixture (`_fwd_stub.add_fwd6_fixture_inputs`) now produces inputs as a refresh for the target week
+would.
+
+**Verified in the cloud with the Mac's library versions** (pandas 2.3.3, numpy 2.4.3, pyarrow 23.0.1) and the Mac's
+inputs:
+- **Fit window.** The old tables' fit-window fingerprint is `3638769c89030de0` (= FREEZE_v1). After the splice it is
+  still `3638769c89030de0`. A full rebuild would give `a59adeafe48f62e6`, so the splice is required.
+- **QB and kicker tables.** Rebuilt with the frozen params, they are identical to the old tables on every shared row
+  (max |Δ| 0.0). The only new rows are (2026, 4): 53 QB rows and 32 kicker rows.
+- **The new gate on the inputs every pilot used: HALT,** with 160 problems: usage, active universe and kickers each
+  "built without its last game" for every team.
+- **The new gate on the refreshed inputs for CLE and PIT: PASS,** with every table at week 4. The other teams HALT
+  "no week-4 injury report": the 2026-09-30 snapshot predates their reports.
+- ratings.py's full rebuild needs more than the cloud's memory. On the Mac it takes about 8 minutes.
+
+**Timing (runbook).** The freshness table also records `injury_game_statuses` per team: the game statuses in this
+week's report, 0 before the final report. It is recorded, not gated, because about 2% of team-weeks in 2023-2025
+list no game status at all. Run `refresh_inputs.py --week W` after the final injury report: Friday afternoon ET for
+Sunday and Monday games, Wednesday or Thursday for TNF. Re-run it on game morning to pick up late statuses, and run
+it again after inactives if time allows.
+
+**Mutation operators (each isolated, manifest re-stamped, all killed):**
+
+FWD6f (D270):
+- **N1:** the drift predicate ignores a distribution not in the baseline.
+- **N2:** the hash cache key drops mtime.
+- **N3:** worker/harness comparison drops the executable.
+- **N4:** worker/harness compares the RECORD sha only.
+- **N5:** `pyarrow.fs.FileSystem` is not restored on uninstall.
+- **N6:** only `file:` is treated as a URI.
+- **N7:** a PathLike source is not normalised.
+- **N8:** the launcher is not in repo_modules.
+- **N9:** a primary receipt does not record its drift.
+- **N10:** the baseline's self-consistency is unchecked.
+
+FWD7a (D271):
+- **Q1:** the gate goes back to "≥ last played week".
+- **Q2:** the active-universe check is skipped.
+- **Q3:** injuries are record-only again.
+- **Q4:** Out/Doubtful are ignored.
+- **Q5:** the missing-rosters check is skipped.
+- **Q6:** the missing-injury-report check is skipped.
+- **Q7:** the QB loop uses observed weeks only.
+- **Q8:** `_entering_weeks` is uncapped.
+- **Q9:** the splice keeps the rebuilt history.
+- **Q10:** the refresh does not restore on failure.

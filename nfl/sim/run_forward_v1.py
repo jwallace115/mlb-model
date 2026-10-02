@@ -42,8 +42,8 @@ RATINGS_FILES = [
     "kicker_weekly.parquet", "league_baselines.parquet",
     "player_usage_weekly.parquet", "active_universe_weekly.parquet",
 ]
-PBP_DIR_FILES = ["rosters_weekly.parquet"]
-RECORD_ONLY_FILES = ["depth_charts.parquet", "injuries.parquet"]
+PBP_DIR_FILES = ["rosters_weekly.parquet", "injuries.parquet"]   # D271: injuries required
+RECORD_ONLY_FILES = ["depth_charts.parquet"]
 
 
 def archive_root_for(repo_root):
@@ -153,9 +153,16 @@ REQUIRED_RATING_UNITS = ("pass_off", "pass_def", "rush_off", "rush_def")
 
 
 def _team_freshness(inputs_dir, season, week, teams, last_week):
-    """D256(c): per participating team, on the consumed copies.
-    - team ratings, tendencies, situational tendencies: max week >= week-1;
-    - usage, active universe, kickers, QB ratings: max week >= the team's last played week;
+    """D256(c), amended D271: per participating team, on the consumed copies.
+
+    Every ratings table is "entering week w" (built from games in weeks < w), and the
+    engine selects row W, else the latest row <= W. So the row selected for a team must be
+    >= (its last played week + 1): built from its most recent game. D271 found the old
+    rule (">= last played week") passing a week-4 run on usage built from week-1 games.
+    - every table: selected week >= last played week + 1;
+    - the active universe for week W must be the one built from THIS week's rosters and
+      injury report (bundle copies): same skill players, same active flags. A row copied
+      forward from an earlier week, or one built before an injury report, fails;
     - a team's last played week must be >= week-2 (no team is idle two weeks running).
     Returns the table; HALTs on any failure."""
     per_game = {"team_ratings": "team_ratings_weekly.parquet",
@@ -199,13 +206,66 @@ def _team_freshness(inputs_dir, season, week, teams, last_week):
         for label in per_played:
             w = maxw[label].get(t)
             row[label] = None if w is None else int(w)
-            if week > 1 and (w is None or lp is None or w < lp):
-                bad.append(f"{t}: {label} max week {w} (need >= last played {lp})")
+        # D271: every table must include the team's most recent game
+        if week > 1:
+            for label in list(per_game) + list(per_played):
+                w = row.get(label)
+                if w is None or lp is None or w < lp + 1:
+                    bad.append(f"{t}: {label} selected week {w} — built without its last "
+                               f"game (need >= last played {lp} + 1)")
+        row["active_universe_current"] = _active_universe_matches(inputs_dir, season, week, t, bad)
+        # recorded, not gated (about 2% of team-weeks list no game status at all): how many
+        # game statuses this week's injury report carries — 0 before the final report
+        inj = pd.read_parquet(inputs_dir / "injuries.parquet", columns=["season", "week", "team",
+                                                                         "report_status"])
+        row["injury_game_statuses"] = int(inj[(inj["season"] == season) & (inj["week"] == week)
+                                              & (inj["team"] == t)]["report_status"].notna().sum())
         table[t] = row
     if bad:
         raise SystemExit("HALT: per-team input freshness failed:\n" +
                          "\n".join(f"  {b}" for b in bad))
     return table
+
+
+AU_SKILL_POS = {"RB", "WR", "TE", "QB"}          # usage.SKILL_POS
+
+
+def _active_universe_matches(inputs_dir, season, week, team, bad):
+    """D271: the week-W active universe of `team` must equal what usage.build_active_universe
+    derives from the bundle's week-W rosters and injury report: active = roster status ACT
+    and injury report status not Out/Doubtful. Returns the number of active players."""
+    ros = pd.read_parquet(inputs_dir / "rosters_weekly.parquet",
+                          columns=["season", "week", "team", "gsis_id", "position", "status"])
+    ros = ros[(ros["season"] == season) & (ros["week"] == week) & (ros["team"] == team)
+              & ros["position"].isin(AU_SKILL_POS)]
+    if ros.empty:
+        bad.append(f"{team}: no week-{week} rosters in the bundle — the active universe "
+                   f"cannot be current")
+        return None
+    inj = pd.read_parquet(inputs_dir / "injuries.parquet",
+                          columns=["season", "week", "team", "gsis_id", "report_status"])
+    inj = inj[(inj["season"] == season) & (inj["week"] == week) & (inj["team"] == team)]
+    if inj.empty:
+        bad.append(f"{team}: no week-{week} injury report in the bundle")
+        return None
+    # same row resolution as build_active_universe: a left merge keeps the FIRST injury
+    # row per player, and drop_duplicates keeps the FIRST roster row per player
+    inj = inj.drop_duplicates("gsis_id", keep="first")
+    ros = ros.drop_duplicates("gsis_id", keep="first")
+    out = set(inj.loc[inj["report_status"].isin(["Out", "Doubtful"]), "gsis_id"])
+    want = {pid: bool(st == "ACT" and pid not in out)
+            for pid, st in zip(ros["gsis_id"], ros["status"])}
+    au = pd.read_parquet(inputs_dir / "active_universe_weekly.parquet",
+                         columns=["season", "week", "team", "player_id", "active_flag"])
+    au = au[(au["season"] == season) & (au["week"] == week) & (au["team"] == team)]
+    have = {pid: bool(f) for pid, f in zip(au["player_id"], au["active_flag"])}
+    if have != want:
+        diff = sorted(set(want) ^ set(have)) + sorted(
+            p for p in set(want) & set(have) if want[p] != have[p])
+        bad.append(f"{team}: week-{week} active universe was not built from this week's "
+                   f"rosters and injury report ({len(diff)} players differ, e.g. {diff[:5]})")
+        return None
+    return sum(want.values())
 
 
 SCHEDULE_COLS = ["game_id", "season", "game_type", "week", "gameday", "gametime",

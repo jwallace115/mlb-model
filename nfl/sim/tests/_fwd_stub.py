@@ -48,6 +48,7 @@ def add_fwd6_fixture_inputs(root, played_week=2, teams=(("KC", "CAR"),), kick=No
     pd.DataFrame([{"season": None, "dt": "2026-09-30", "team": t, "pos_abb": "QB",
                    "player_name": "Fixture QB", "pos_rank": 1} for pair in teams for t in pair]
                  ).to_parquet(pbp_dir / "depth_charts.parquet", index=False)
+    _make_inputs_current(root, [t for pair in teams for t in pair], target_week)
     rows = []
     for home, away in teams:
         gid = f"2026_{played_week:02d}_{away}_{home}"
@@ -64,6 +65,66 @@ def add_fwd6_fixture_inputs(root, played_week=2, teams=(("KC", "CAR"),), kick=No
                   "gametime": k_et.strftime("%H:%M"), "home_team": home, "away_team": away}
                  for home, away in teams]
         pd.DataFrame(sched).to_parquet(pbp_dir / "schedules_2026.parquet", index=False)
+
+
+def _make_inputs_current(root, teams, week, season=2026):
+    """D271: make the fixture's inputs what a refresh before `week` produces: week-`week`
+    rosters and an injury report for every team, every ratings table holding a row for
+    `week` (built from the team's latest game), and a week-`week` active universe derived
+    from those rosters and that injury report — exactly what the freshness gate demands."""
+    root = Path(root)
+    pbp_dir = root / "nfl" / "data" / "pbp"
+    rd = root / "nfl" / "data" / "sim" / "ratings"
+    ros = pd.read_parquet(pbp_dir / "rosters_weekly.parquet")
+    add = []
+    for t in teams:
+        tr = ros[(ros["season"] == season) & (ros["team"] == t)]
+        if not tr.empty and not (tr["week"] == week).any():
+            last = tr[tr["week"] == tr["week"].max()].copy()
+            last["week"] = week
+            add.append(last)
+    if add:
+        ros = pd.concat([ros] + add, ignore_index=True)
+        ros.to_parquet(pbp_dir / "rosters_weekly.parquet", index=False)
+    skill = ros[(ros["season"] == season) & (ros["week"] == week) & ros["team"].isin(teams)
+                & ros["position"].isin(["RB", "WR", "TE", "QB"])]
+    inj = pd.read_parquet(pbp_dir / "injuries.parquet")
+    new_inj = []
+    for t in teams:
+        st = skill[skill["team"] == t]
+        if not st.empty:
+            new_inj.append({"season": season, "week": week, "team": t,
+                            "gsis_id": st.iloc[0]["gsis_id"], "full_name": st.iloc[0]["full_name"],
+                            "report_status": "Questionable"})
+    inj = pd.concat([inj, pd.DataFrame(new_inj)], ignore_index=True)
+    inj.to_parquet(pbp_dir / "injuries.parquet", index=False)
+    for f in RATINGS_FILES:
+        if f in ("league_baselines.parquet", "active_universe_weekly.parquet"):
+            continue
+        df = pd.read_parquet(rd / f)
+        add = []
+        for t in teams:
+            td = df[(df["season"] == season) & (df["team"] == t) & (df["week"] <= week)]
+            if not td.empty and not (td["week"] == week).any():
+                last = td[td["week"] == td["week"].max()].copy()
+                last["week"] = week
+                add.append(last)
+        if add:
+            pd.concat([df] + add, ignore_index=True).to_parquet(rd / f, index=False)
+    au = pd.read_parquet(rd / "active_universe_weekly.parquet")
+    au = au[~((au["season"] == season) & (au["week"] == week) & au["team"].isin(teams))]
+    out_ids = set(inj.loc[(inj["season"] == season) & (inj["week"] == week)
+                          & inj["report_status"].isin(["Out", "Doubtful"]), "gsis_id"])
+    sk = skill.drop_duplicates("gsis_id", keep="first")
+    cur = pd.DataFrame({"season": season, "week": week, "team": sk["team"].values,
+                        "player_id": sk["gsis_id"].values, "position": sk["position"].values,
+                        "depth_order": float("nan"),
+                        "active_flag": [(s == "ACT") and (p not in out_ids)
+                                        for s, p in zip(sk["status"], sk["gsis_id"])],
+                        "injury_status": "Active", "status": sk["status"].values})
+    cur = cur.astype({c: au[c].dtype for c in cur.columns if c in au.columns}, errors="ignore")
+    pd.concat([au, cur], ignore_index=True).to_parquet(rd / "active_universe_weekly.parquet",
+                                                        index=False)
 
 
 def _sha(p):

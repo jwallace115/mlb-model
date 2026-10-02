@@ -119,6 +119,16 @@ def get_shrink_target(league_means, season):
     return league_means[earliest]
 
 
+def _entering_weeks(week_series):
+    """D271: the observed weeks plus the week after the last observed one (cap 22).
+    Rows for observed weeks are unchanged; the extra row is the one a live run for the
+    next week selects (built from all games before it)."""
+    obs = sorted(int(w) for w in pd.unique(week_series))
+    if not obs:
+        return []
+    return sorted(set(obs) | {min(22, obs[-1] + 1)})
+
+
 def get_universe(game_aggs_or_plays, season, team_col="team"):
     """Return (teams, weeks) for the 32-team universe.
     teams = 32 teams from s-1 plus any new abbreviation in s.
@@ -272,7 +282,10 @@ def build_qb_ratings(plays, params, league_means):
         lg = get_shrink_target(league_means, season)
         lg_epa = lg.get("pass_epa", 0.0)
         lg_succ = lg.get("pass_success", 0.5)
-        for w in sorted(sq["week"].unique()):
+        # D271: also the row ENTERING the week after the last observed one (cap 22), as
+        # get_universe does for team ratings. Without it a live week-W run had no row W
+        # and used row W-1 (data through W-2), while every backtest week had row W.
+        for w in _entering_weeks(sq["week"]):
             avail = sq[sq["week"] < w]
             if avail.empty:
                 continue
@@ -323,7 +336,7 @@ def build_kicker_ratings(plays, params, league_means):
             lg_rates[b] = pb["made"].mean() if len(pb) else 0.85
         lg_xp = (prior_xp["extra_point_result"] == "good").mean() if len(prior_xp) else 0.94
 
-        for w in sorted(sf["week"].unique()):
+        for w in _entering_weeks(sf["week"]):   # D271
             avail = sf[sf["week"] < w]
             avail_xp = sx[sx["week"] < w]
             for kid in avail[kicker_col].dropna().unique():
