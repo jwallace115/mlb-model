@@ -192,29 +192,25 @@ def test_as_of_caps_props(monkeypatch, tmp_path):
     assert df_capped.iloc[0]["player_name"] == "A"
 
 
-def test_layer3_qb_cutoff_is_midnight_of_the_first_game_date():
-    """D272/D273 supersede 5J-2 (d). 5J-2 gave a week WITHOUT play-by-play (the live week)
+def test_layer3_qb_cutoff_is_midnight_of_the_first_game_date(tmp_path, monkeypatch):
+    """D272/D273/D274 supersede 5J-2 (d). 5J-2 gave a week WITHOUT play-by-play (the live week)
     the actual Eastern kickoff from a live schedule download, while the same week rebuilt
     later from PBP used midnight UTC of its first game date — live and backtest disagreed
     (audit #14). Now every week uses midnight UTC of the first game date, from the archived
-    schedule snapshot for a week without PBP. Week 4 has no PBP: a rank-1 QB dated
-    2026-10-01T22:00Z (6pm ET, before the 8:15pm ET week-4 opener) is AFTER the week-4
-    cutoff (2026-10-01T00:00Z) and is rejected; the same row at 2026-09-30T23:00Z is used."""
-    from nfl.sim import usage
-
-    real_depth = pd.read_parquet(usage.PBP_DIR / "depth_charts.parquet")
-    mask = (real_depth["team"] == "ARI") & (real_depth.get("pos_abb", pd.Series(dtype=str)) == "QB")
-    depth_no_ari_qb = real_depth[~mask].copy()
+    schedule snapshot for a week without PBP. The test owns its fixture (audit #16): PBP
+    weeks 1-3 only, a full-season snapshot whose week-4 opener is 2026-10-01 (8:15pm ET).
+    A rank-1 QB dated 2026-10-01T22:00Z (before the opener, after the cutoff) is rejected for
+    week 4; the same row at 2026-09-30T23:00Z is used."""
+    from nfl.sim.tests.test_fwd7a import _depth_world
+    d, usage, rosters, injuries, depth = _depth_world(tmp_path, False)
+    monkeypatch.setattr(usage, "PBP_DIR", d)
+    assert sorted(pd.read_parquet(d / "pbp_2026.parquet")["week"].unique()) == [1, 2, 3]
 
     def _starter(dt):
-        fake_row = {
-            "team": "ARI", "gsis_id": "00-FAKEWK4", "pos_abb": "QB",
-            "pos_rank": 1, "dt": dt,
-            "position": "QB", "season": 2026, "week": 0,
-            "club_code": "ARI", "depth_team": 1, "full_name": "Fake QB WK4",
-        }
-        depth = pd.concat([depth_no_ari_qb, pd.DataFrame([fake_row])], ignore_index=True)
-        return usage.derive_starting_qbs(depth, plays=None).get((2026, 4, "ARI"))
+        qb = depth.iloc[[0]].assign(gsis_id="00-FAKEWK4", position="QB", pos_abb="QB",
+                                    pos_rank=1, dt=dt)
+        return usage.derive_starting_qbs(pd.concat([depth, qb], ignore_index=True),
+                                         plays=None).get((2026, 4, "KC"))
 
     late = _starter("2026-10-01T22:00:00+00:00")
     assert late is None or late["gsis_id"] != "00-FAKEWK4"

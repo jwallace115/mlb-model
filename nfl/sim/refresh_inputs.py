@@ -30,7 +30,9 @@ D272 additions: the nflverse schedule is snapshotted once per refresh (schedules
 and is the ONLY schedule the usage builder uses (one week-cutoff convention, live or
 historical); the refresh's exact source and output bytes are archived with a manifest naming
 the declared input version. Exit codes: 0 = refreshed and every team ready; 1 = refreshed
-and INSTALLED, some teams not ready; an exception = refresh failed, old tables restored.
+and INSTALLED, some teams not ready; an exception in steps 0-6 = refresh failed, old tables
+restored; an exception inside the step-7 readiness report = the refreshed tables stay
+INSTALLED (D274, audit #16).
 """
 import argparse
 import hashlib
@@ -81,7 +83,7 @@ def splice(old, new, season=SEASON):
     return pd.concat([keep, cur], ignore_index=True)
 
 
-INPUT_VERSION = "D273-v3"   # declared prospective input version (2026 rows only); D273: builders validate cutoffs
+INPUT_VERSION = "D274-v4"   # declared prospective input version (2026 rows only); D274: builders validate PBP dates against the snapshot
 
 
 def snapshot_schedule():

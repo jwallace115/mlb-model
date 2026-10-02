@@ -34,31 +34,29 @@ def _build(tmp_path, monkeypatch, pbp_extra=None, sched_edit=None, tag="x"):
 
 # ── A1: a null / unparseable PBP date ─────────────────────────────────────────
 
-def test_null_pbp_date_leaves_the_build_unchanged(tmp_path, monkeypatch):
+def test_null_pbp_date_halts_before_any_output(tmp_path, monkeypatch):
     """Audit #15 A1: an outcome-free week-4 PBP row with game_date=None recorded (2026,4): NaT,
     suppressing the valid schedule date; week-4 depth ranks vanished and the gate passed.
-    Now only valid dates count and the result equals the clean build."""
+    D273 ignored invalid dates; D274 (audit #16) refuses them: the build HALTs."""
     clean, *_ = _build(tmp_path, monkeypatch, tag="clean")
-    for bad in (None, "not-a-date"):
-        got, *_ = _build(tmp_path, monkeypatch, tag=f"bad{bad}",
-                         pbp_extra=[{"season": 2026, "week": 4, "game_date": bad, "game_id": "g4"}])
-        assert got.equals(clean), bad
-    w4 = clean[clean["week"] == 4]
-    assert w4["depth_order"].notna().all()
+    assert clean[clean["week"] == 4]["depth_order"].notna().all()
+    for i, bad in enumerate((None, "not-a-date")):
+        with pytest.raises(RuntimeError, match="pbp_2026.parquet: invalid game dates/identities — "
+                                               "null/unparseable game_date in games \\['g4'\\]"):
+            _build(tmp_path, monkeypatch, tag=f"bad{i}",
+                   pbp_extra=[{"season": 2026, "week": 4, "game_date": bad, "game_id": "g4"}])
 
 
-def test_null_pbp_date_cannot_reach_layer3(tmp_path, monkeypatch):
-    out = []
-    for tag, extra in (("c", None), ("n", [{"season": 2026, "week": 4, "game_date": None, "game_id": "g4"}])):
-        (tmp_path / tag).mkdir()
-        d, U, rosters, injuries, depth = _depth_world(tmp_path / tag, False)
-        if extra:
-            p = pd.read_parquet(d / "pbp_2026.parquet")
-            pd.concat([p, pd.DataFrame(extra)], ignore_index=True).to_parquet(d / "pbp_2026.parquet", index=False)
-        monkeypatch.setattr(U, "PBP_DIR", d)
-        qb = depth.iloc[[0]].assign(gsis_id="00-9", position="QB", pos_abb="QB", pos_rank=1)
-        out.append(U.derive_starting_qbs(pd.concat([depth, qb], ignore_index=True), None))
-    assert out[0] == out[1] and out[0][(2026, 4, "KC")]["gsis_id"] == "00-9"
+def test_null_pbp_date_halts_layer3(tmp_path, monkeypatch):
+    (tmp_path / "n").mkdir()
+    d, U, rosters, injuries, depth = _depth_world(tmp_path / "n", False)
+    p = pd.read_parquet(d / "pbp_2026.parquet")
+    pd.concat([p, pd.DataFrame([{"season": 2026, "week": 4, "game_date": None, "game_id": "g4"}])],
+              ignore_index=True).to_parquet(d / "pbp_2026.parquet", index=False)
+    monkeypatch.setattr(U, "PBP_DIR", d)
+    qb = depth.iloc[[0]].assign(gsis_id="00-9", position="QB", pos_abb="QB", pos_rank=1)
+    with pytest.raises(RuntimeError, match="null/unparseable game_date"):
+        U.derive_starting_qbs(pd.concat([depth, qb], ignore_index=True), None)
 
 
 def test_incomplete_snapshot_halts_instead_of_skipping_the_depth_layer(tmp_path, monkeypatch):
@@ -78,22 +76,25 @@ def test_incomplete_snapshot_halts_instead_of_skipping_the_depth_layer(tmp_path,
 
 
 def test_cutoff_is_the_earliest_valid_date_of_the_week(tmp_path, monkeypatch):
-    """Survivor: max instead of min. Thursday and Sunday dates in one week -> Thursday."""
+    """Survivor: max instead of min. Thursday and Sunday games in one week -> Thursday."""
     d, U, *_ = _depth_world(tmp_path, False)
-    p = pd.read_parquet(d / "pbp_2026.parquet")
-    p = pd.concat([p, pd.DataFrame([{"season": 2026, "week": 3, "game_date": "2026-09-27", "game_id": "g3b"}])],
-                  ignore_index=True)
-    p.to_parquet(d / "pbp_2026.parquet", index=False)
     monkeypatch.setattr(U, "PBP_DIR", d)
+    p = pd.read_parquet(d / "pbp_2026.parquet")
+    pd.concat([p, pd.DataFrame([{"season": 2026, "week": 3, "game_date": "2026-09-27", "game_id": "g3b"}])],
+              ignore_index=True).to_parquet(d / "pbp_2026.parquet", index=False)
+    s = pd.read_parquet(d / "schedules_2026.parquet")
+    s = pd.concat([s, s[s["week"] == 3].assign(game_id="g3b", gameday="2026-09-27")], ignore_index=True)
+    s.to_parquet(d / "schedules_2026.parquet", index=False)
     assert U._week_cutoffs([2026])[(2026, 3)] == pd.Timestamp("2026-09-24", tz="UTC")
-    # a season without a snapshot (history): the earliest valid PBP date, Thursday
+    # a season without a snapshot (history): the earliest PBP date, Thursday
     pd.DataFrame([{"season": 2025, "week": 3, "game_date": dd, "game_id": f"h{i}"}
-                  for i, dd in enumerate(("2025-09-21", "2025-09-18", None, "2025-09-22"))]
+                  for i, dd in enumerate(("2025-09-21", "2025-09-18", "2025-09-22"))]
                  ).to_parquet(d / "pbp_2025.parquet", index=False)
     assert U._week_cutoffs([2025]) == {(2025, 3): pd.Timestamp("2025-09-18", tz="UTC")}
-    # and an earlier schedule date than the PBP's wins (live week and rebuilt week agree)
-    s = pd.read_parquet(d / "schedules_2026.parquet")
-    s.loc[s["week"] == 3, "gameday"] = "2026-09-23"
+    # a snapshot game not yet in the PBP (an earlier game of a partly-played week) still
+    # sets the cutoff: live and rebuilt weeks agree
+    s = pd.concat([s, s[s["week"] == 3].iloc[[0]].assign(game_id="g3a", gameday="2026-09-23")],
+                  ignore_index=True)
     s.to_parquet(d / "schedules_2026.parquet", index=False)
     assert U._week_cutoffs([2026])[(2026, 3)] == pd.Timestamp("2026-09-23", tz="UTC")
 

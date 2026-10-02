@@ -5865,3 +5865,98 @@ leaves them installed.
 - It is not changed now. The tendencies table is in the fitted window (FREEZE fingerprint) and the engine is frozen.
 - It must never be wired into a decision path. It is to be quarantined or removed in a later declared cleanup, and
   the tendencies table must not be described as point-in-time identical as a whole.
+
+### D274 — ChatGPT audit #16 (NO-GO for both primary Sunday windows at 9c7bf9dfa) accepted; FWD7d validates PBP dates, requires every built week's cutoff, and refuses schedule/PBP contradictions (2026-10-02)
+
+Audit #16 reply: `research/cross_ai/chatgpt_audit16_reply_2026-10-02.md` (complete).
+
+What held:
+- the 291 + 22 baseline;
+- audit #15 A1 (null and unparseable dates; the real IND@WAS worker unchanged, and the D272 control re-reproduced at
+  43 changes);
+- the incomplete-snapshot HALTs;
+- the depth-rank gate;
+- the actual TNF transition at W = 4 (800 / 506 rows identical);
+- the saved smoke;
+- the runbook;
+- S1-S16 except S4, which audit #16 judged behaviourally equivalent at the caller boundary.
+
+Must-fix, both accepted:
+
+**A1 — a missing HISTORICAL cutoff.** D273 required cutoffs only for the newest season. Setting 2025 week 3's
+game_dates to null (with no 2025 snapshot) made the ordinary 2021-2026 build skip that week's depth layer. That
+changed the depth-group priors that 2026 usage is built from, and every 2026 usage row changed. The gate and the fit
+fingerprint still passed, and on the real IND@WAS worker 40 calibrated probabilities moved, by up to 0.1038.
+
+FIX:
+- `usage._pbp_game_dates` validates every season's PBP. Every row needs a valid game_date, each game_id exactly one
+  date and one week, and every row the file's season. Any violation HALTs.
+- `build_active_universe` requires a valid cutoff for EVERY season-week it builds, not only the newest season's. A
+  roster week the PBP lacks entirely also HALTs.
+- The carry-forward rows (the last week copied to week + 1) are added after this check, by that explicit rule.
+
+**A2 — a valid-looking PBP date contradicting the snapshot.** D273 took `min(schedule, PBP)`. A week-4 PBP row dated
+one day BEFORE its scheduled gameday moved the cutoff: 27 depth ranks and 50 target shares changed, the gate passed,
+and on the real DEN@SF worker 35 calibrated probabilities moved, by up to 0.0578.
+
+FIX: for a season with a snapshot, every PBP game must be in the snapshot with the same week and date, compared by
+game_id. A contradiction in either direction HALTs, as does a game missing from the snapshot or a week mismatch. The
+cutoff is then the earliest gameday of the week's snapshot games, which equals any PBP game's date by construction:
+- a partly played week (only later games in the PBP) is not rejected;
+- the live week (snapshot only) and the same week rebuilt (snapshot + PBP) get the same cutoff by rule, not by luck.
+
+Verified (cloud, Mac versions, the Mac's earlier staged inputs):
+- **Clean build:** byte-identical to D273's, for both full tables and every season (47,446 / 89,737 rows). These are
+  the staged inputs, not the Mac archive; audit #16 counted 89,753 on its archive. The 16 rows come from different
+  roster snapshots, not from the code.
+- **2025 week-3 null dates:** D274 HALTs (`pbp_2025.parquet: invalid game dates/identities`); D273 builds and changes
+  100% of 2026 target shares.
+- **A week-4 PBP date one day early:** D274 HALTs with the game, both dates and both weeks. D273 builds and changes
+  2.4% of target shares and 1.3% of depths.
+- **One day late:** D274 HALTs. D273 is unchanged, because the minimum ignores a later date.
+- Real PBP for 2020-2026 has 0 null dates and 0 games with two dates or weeks. The 2026 PBP has 0 games missing from,
+  or contradicting, the snapshot. So the strict check costs nothing on real data.
+
+**Smaller items:**
+- **Input version `D274-v4`.** Clean output equals D273-v3 / D272-v2.
+- **Refresh docstring.** The final sentence now matches the code: an exception in the step-7 readiness report leaves
+  the refreshed tables installed.
+- **5J-2's QB-cutoff test owns its fixture.** It uses the depth world, PBP weeks 1-3 and a full-season snapshot, and
+  no longer reads the real PBP, whose week 4 now exists. It passes on D274 and fails on D271.
+- **Cowork's correction to brief #16:** `_last_played_weeks(pbp, 4)` returns 3 for PIT/CLE (it filters week < 4), as
+  audit #16 says. Neither Sunday window contains them.
+- **Two numbers in D273, corrected:**
+  - **"35.3%"** was D272-null versus the D273 base on the cloud's staged inputs (35.34%). It is not the D271 control's
+    35.20%.
+  - **"89,737"** is the staged-input row count.
+
+**Tests (`test_fwd7d.py`, plus rewritten `test_fwd7c` null-date tests, which now expect a HALT):**
+- the multi-season null-history HALT, and a roster week missing from the PBP;
+- a game with two dates or two weeks;
+- a wrong-season row;
+- a contradiction one day early, one day late, a game missing from the snapshot, and a week mismatch;
+- the schedule-only to schedule+PBP transition giving identical rows and QB maps;
+- audit #16 survivors N1 (a week covered only by a 2025 row), N2 (only a non-REG row), N3 (only inactive players
+  ranked) and N4 (`_require_cutoffs` given a NaT value).
+
+**FWD7d mutations (Cowork, isolated copies; focused files test_fwd7d, test_fwd7c, test_fwd7a, test_board_5j2): 13 of
+the 14 T-mutations are killed, plus S5, S6, S7, S9, S10 and S15.**
+- T3 (wrong-season rows) survived the first round and is killed by its new case.
+- T7 (the "missing from the snapshot" arm removed) is equivalent: a missing game has NaN snapshot week and date, and
+  the week and date comparisons are already True for NaN.
+
+The T-mutations:
+- T1 null dates allowed;
+- T2 multi-date or multi-week games allowed;
+- T3 wrong-season rows allowed;
+- T4 contradictions ignored;
+- T5 date comparison removed;
+- T6 week comparison removed;
+- T7 the missing-game arm (equivalent);
+- T8 only the newest season required;
+- T9 snapshot-season cutoffs taken from the PBP;
+- T10 the snapshot validation's season filter removed;
+- T11 its REG filter removed;
+- T12 the gate counts inactive ranks;
+- T13 `_require_cutoffs` without its NaT arm;
+- T14 max cutoff.

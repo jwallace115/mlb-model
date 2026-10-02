@@ -386,39 +386,72 @@ def derive_starting_qbs(depth, plays, active_universe=None):
 # ACTIVE UNIVERSE
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _pbp_game_dates(s):
+    """D274 (audit #16): the PBP's games for season `s`, validated — every row has a valid
+    game_date, each game_id has exactly one date, one week and season `s`. Returns a frame
+    (game_id, week, date). Any violation HALTs: a malformed historical date silently dropped
+    a week's depth layer and changed the current season's priors (audit #16 A1)."""
+    p = pd.read_parquet(PBP_DIR / f"pbp_{s}.parquet", columns=["season", "week", "game_id", "game_date"])
+    p["_d"] = pd.to_datetime(p["game_date"], errors="coerce", utc=True)
+    problems = []
+    nul = sorted(p.loc[p["_d"].isna(), "game_id"].astype(str).unique())
+    if nul:
+        problems.append(f"null/unparseable game_date in games {nul[:4]}")
+    if (p["season"] != s).any():
+        problems.append(f"{int((p['season'] != s).sum())} rows with season != {s}")
+    g = p.groupby("game_id").agg(nd=("_d", "nunique"), nw=("week", "nunique"))
+    multi = sorted(g.index[(g["nd"] > 1) | (g["nw"] > 1)].astype(str))
+    if multi:
+        problems.append(f"games with more than one date or week {multi[:4]}")
+    if problems:
+        raise RuntimeError(f"pbp_{s}.parquet: invalid game dates/identities — " + "; ".join(problems))
+    return (p.drop_duplicates("game_id")[["game_id", "week", "_d"]]
+            .rename(columns={"_d": "date"}).reset_index(drop=True))
+
+
 def _week_cutoffs(seasons):
     """D272 (audit #14 A1): one information cutoff per (season, week), the SAME convention
     for every week, live or historical: midnight UTC of the week's first game date.
 
-    D273 (audit #15 A1): only VALID dates count. For a season with an archived schedule
-    snapshot (PBP_DIR/schedules_<season>.parquet, written by refresh_inputs.py) the cutoff
-    is the earliest valid date among the week's schedule gamedays and its PBP game_dates,
-    so a live week (schedule only) and the same week rebuilt later (schedule + PBP) get the
-    same cutoff, and a null/unparseable PBP date can neither erase nor move it. For a season
-    without a snapshot (history) it is the earliest valid PBP game_date, as before. A week
-    with no valid date has NO key — never a NaT value; callers that need it must use
-    _require_cutoffs, which HALTs."""
+    D273 (audit #15): only valid dates count; a week with no valid date has NO key (callers
+    that need it use _require_cutoffs, which HALTs).
+
+    D274 (audit #16): the dates are VALIDATED, not merely filtered.
+    - Every PBP game must have exactly one valid date and week (_pbp_game_dates), in every
+      season, so a malformed historical week HALTs instead of silently losing its depth
+      layer.
+    - For a season with an archived schedule snapshot (PBP_DIR/schedules_<season>.parquet,
+      written and validated by refresh_inputs.py) every PBP game must be in the snapshot
+      with the SAME week and date; a contradiction HALTs. The cutoff is then the earliest
+      gameday of the week's snapshot games (equal to any PBP game's date by construction),
+      so the live week (snapshot only) and the same week rebuilt later (snapshot + PBP) get
+      the same cutoff.
+    - A season without a snapshot (history) uses the earliest PBP game date."""
     cut = {}
     for s in sorted({int(x) for x in seasons}):
-        dates = {}
         pbp_path = PBP_DIR / f"pbp_{s}.parquet"
-        if pbp_path.exists():
-            gdf = pd.read_parquet(pbp_path, columns=["season", "week", "game_date"]).drop_duplicates(
-                ["season", "week", "game_date"])
-            gdf["game_date"] = pd.to_datetime(gdf["game_date"], errors="coerce", utc=True)
-            gdf = gdf[gdf["game_date"].notna()]
-            for w, d in gdf.groupby("week")["game_date"].min().items():
-                dates.setdefault(int(w), []).append(d)
+        games = _pbp_game_dates(s) if pbp_path.exists() else pd.DataFrame(columns=["game_id", "week", "date"])
         sp = PBP_DIR / f"schedules_{s}.parquet"
         if sp.exists():
-            sch = pd.read_parquet(sp, columns=["season", "week", "gameday"])
+            sch = pd.read_parquet(sp, columns=["season", "week", "game_id", "gameday"])
             sch = sch[sch["season"] == s].copy()
             sch["_d"] = pd.to_datetime(sch["gameday"].astype(str), errors="coerce", utc=True)
-            sch = sch[sch["_d"].notna()]
-            for w, d in sch.groupby("week")["_d"].min().items():
-                dates.setdefault(int(w), []).append(d)
-        for w, ds in dates.items():
-            cut[(s, w)] = min(ds)
+            m = games.merge(sch[["game_id", "week", "_d"]].rename(columns={"_d": "sdate"}),
+                            on="game_id", how="left", suffixes=("", "_s"))
+            bad = m[m["week_s"].isna() | (m["week"] != m["week_s"]) | (m["date"] != m["sdate"])]
+            if len(bad):
+                ex = [(r.game_id, int(r.week), str(r.date.date()),
+                       None if pd.isna(r.week_s) else int(r.week_s),
+                       None if pd.isna(r.sdate) else str(r.sdate.date())) for r in bad.head(3).itertuples()]
+                raise RuntimeError(
+                    f"pbp_{s}.parquet contradicts the archived schedule snapshot for {len(bad)} games "
+                    f"(game_id, pbp week, pbp date, snapshot week, snapshot date): {ex} — re-run "
+                    f"nfl/sim/refresh_inputs.py; never resolve a contradiction by picking a date")
+            src = sch[sch["_d"].notna()].rename(columns={"_d": "date"})[["week", "date"]]
+        else:
+            src = games[["week", "date"]]
+        for w, d in src.groupby("week")["date"].min().items():
+            cut[(s, int(w))] = d
     return cut
 
 
@@ -478,9 +511,13 @@ def build_active_universe(rosters, injuries, depth):
         # D273: every week of the newest season must have a VALID cutoff (HALT otherwise);
         # a missing cutoff used to silently skip the depth layer for that week.
         kickoff_by_sw = _week_cutoffs(base["season"].unique())
-        _newest = int(base["season"].max())
-        _require_cutoffs(kickoff_by_sw, _newest, base.loc[base["season"] == _newest, "week"].unique(),
-                         "build_active_universe")
+        # D274 (audit #16 A1): EVERY season-week being built needs a valid cutoff, not only
+        # the newest season's — a historical week without one silently lost its depth layer,
+        # which changed the depth-group priors the current season's usage is built from.
+        # (The carry-forward rows below are added after this loop, by an explicit rule.)
+        for _s in sorted(base["season"].unique()):
+            _require_cutoffs(kickoff_by_sw, int(_s), base.loc[base["season"] == _s, "week"].unique(),
+                             "build_active_universe")
 
         # Per (season, week): take the latest snapshot per (team, player_id)
         # with dt strictly before the first kickoff of that week.

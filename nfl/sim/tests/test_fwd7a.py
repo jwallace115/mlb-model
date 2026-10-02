@@ -377,7 +377,7 @@ def test_refresh_snapshots_the_schedule_before_building_and_archives_the_refresh
     assert calls == ["pull_nflverse_inputs.py", "schedule", "pbp", "usage.py", "ratings.py"]
     [backup] = list((tmp_path / "mlb-model-archive" / "nfl_ratings_backups").iterdir())
     man = json.loads((backup / "refreshed" / "refresh_manifest.json").read_text())
-    assert man["input_version"] == R.INPUT_VERSION == "D273-v3" and man["week"] == 4
+    assert man["input_version"] == R.INPUT_VERSION == "D274-v4" and man["week"] == 4
     for f in R.SOURCES:
         assert (backup / "refreshed" / f).read_bytes() == (pb / f).read_bytes()
         assert man["files"][f"sources/{f}"] == hashlib.sha256((pb / f).read_bytes()).hexdigest()
