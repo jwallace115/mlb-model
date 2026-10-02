@@ -232,7 +232,12 @@ def main():
 
     logger.info(f"Total snapshots stored: {total_stored}")
 
-    # Commit and push if anything changed
+    # Commit and push if anything changed.
+    # On the VM, push_daemon.sh (every 30 min) is the only git writer: an in-script commit at :00
+    # collided with it daily (index.lock / "cannot lock ref HEAD") — pipeline audit 2026-10-01.
+    if files_changed and Path("/root/logs").is_dir():
+        logger.info("VM: leaving these files for push_daemon.sh to commit and push")
+        files_changed = set()
     if files_changed:
         try:
             for f in files_changed:

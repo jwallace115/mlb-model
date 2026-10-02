@@ -324,8 +324,12 @@ def run_prelim(game_date: str) -> None:
     except Exception as e:
         logger.warning(f"Signal tagging failed (non-fatal): {e}")
 
-    # Step 9: Push preliminary signals + overnight results to GitHub
+    # Step 9: Push preliminary signals + overnight results to GitHub.
+    # On the VM, push_daemon.sh is the only git writer (pipeline audit 2026-10-01) — skip the
+    # in-script commit there; tracked files are swept by its `git add -A`.
     try:
+        if os.path.isdir("/root/logs"):
+            raise RuntimeError("VM: commit left to push_daemon.sh")
         prelim_files = [
             str(PROJECT_ROOT / "mlb_sim" / "data" / "line_snapshots_2026.json"),
             str(PROJECT_ROOT / "mlb_sim" / "logs" / "signals_2026.json"),

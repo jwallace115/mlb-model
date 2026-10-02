@@ -125,3 +125,11 @@ nhl/data/sim/ratings/*.parquet
 
 # NBA historical odds (bulk pull, multi-GB)
 data/odds_archive/nba/history/
+
+# History spender output (shared/pipeline/history_spender.py) — VM-local archive, too big for git.
+# Pipeline audit 2026-10-02. Already-tracked files under nhl/history stay tracked.
+data/odds_archive/nfl/history/
+data/odds_archive/ncaaf/history/
+data/odds_archive/nhl/history/
+data/odds_archive/baseball_mlb/history/
+data/odds_archive/_history_ledger.jsonl

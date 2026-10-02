@@ -271,3 +271,6 @@ ready), the news, the lines, the stats — they are all just there to help you f
 - The opinion is the pick; the discipline is the record: logged pre-kick, append-only, baselines (rule
   deal, price list) logged beside it from the same pull, graded on hit rate AND close. An opinion is
   never called validated, an edge, or +EV.
+
+## Website (iamnotuncertain.net)
+Before changing the website, read `site/README.md` (same text as project doc claude/WEBSITE_BUILD_GUIDE.md).

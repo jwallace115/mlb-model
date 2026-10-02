@@ -1,0 +1,10 @@
+{
+ "_doc": "Status of the NFL forward experiment for the website. Status only, never results. Updated by Cowork from the experiment's own records (research/nfl_sim, Claude project status notes).",
+ "updated_utc": "2026-10-01T20:30Z",
+ "scoring": "not built yet — results stay hidden until it is",
+ "next": "Week 4 TNF PIT @ CLE · run 23:30Z · kick 00:15Z",
+ "runs": [
+  {"week": 3, "slate": "pilot run", "frozen_at": "2026-09-27T16:52:00Z", "kind": "pilot", "receipt": "frozen e23a883117ddc6e2 (989 rows)"},
+  {"week": 4, "slate": "TNF PIT @ CLE", "frozen_at": "scheduled 2026-10-01T23:30Z", "kind": "primary or pilot (decided by audit #13)", "receipt": "not yet written"}
+ ]
+}
