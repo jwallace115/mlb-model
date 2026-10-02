@@ -28,6 +28,13 @@ def _rt(dists, python="3.13.1", exe="/fw/python3"):
     return {"python": python, "executable": exe, "dependency_distributions": dists}
 
 
+def _run(**kw):
+    """A run's three runtimes (D272 requires all three keys); unspecified ones are clean."""
+    out = {k: _rt({}) for k in ("runtime", "runtime_before_freeze", "runtime_worker")}
+    out.update(kw)
+    return out
+
+
 # ── A1: the drift rule ─────────────────────────────────────────────────────────
 
 def test_drift_rule_rejects_a_distribution_not_in_the_baseline():
@@ -37,9 +44,9 @@ def test_drift_rule_rejects_a_distribution_not_in_the_baseline():
     base = [_rt({"pandas": _ident(), "numpy": _ident("2.4.3")}),
             _rt({"pandas": _ident(), "numpy": _ident("2.4.3")}),
             _rt({"pandas": _ident(), "scipy": _ident("1.17.1")})]
-    same = {"runtime": _rt({"pandas": _ident()}), "runtime_worker": _rt({"scipy": _ident("1.17.1")})}
+    same = _run(runtime=_rt({"pandas": _ident()}), runtime_worker=_rt({"scipy": _ident("1.17.1")}))
     assert dependency_drift(base, same) == []          # the baseline is the UNION
-    extra = {"runtime_worker": _rt({"pandas": _ident(), "bottleneck": _ident("0.0.0", "/home/x")})}
+    extra = _run(runtime_worker=_rt({"pandas": _ident(), "bottleneck": _ident("0.0.0", "/home/x")}))
     d = dependency_drift(base, extra)
     assert d and "bottleneck" in d[0] and "not in the baseline" in d[0]
 
@@ -48,18 +55,51 @@ def test_drift_rule_rejects_version_location_record_and_interpreter_changes():
     from nfl.sim.run_forward_v1 import dependency_drift
     base = [_rt({"pandas": _ident()})] * 3
     for changed in (_ident(version="2.3.4"), _ident(location="/home/u/site"), _ident(record="b" * 64)):
-        assert dependency_drift(base, {"runtime": _rt({"pandas": changed})}), changed
-    assert dependency_drift(base, {"runtime": _rt({"pandas": _ident()}, exe="/other/python3")})
-    assert dependency_drift(base, {"runtime": _rt({"pandas": _ident()}, python="3.13.2")})
-    assert dependency_drift(base, {"runtime": None}) == ["runtime: no verified runtime"]
+        assert dependency_drift(base, _run(runtime=_rt({"pandas": changed}))), changed
+    assert dependency_drift(base, _run(runtime=_rt({"pandas": _ident()}, exe="/other/python3")))
+    assert dependency_drift(base, _run(runtime=_rt({"pandas": _ident()}, python="3.13.2")))
+    assert dependency_drift(base, _run(runtime=None)) == ["runtime: no verified runtime"]
+    assert dependency_drift(base, _run()) == []
+
+
+def test_drift_rule_requires_all_three_runtimes_on_both_sides():
+    """Audit #14: an empty or partial mapping returned [] — a missing KEY is drift; and a
+    baseline missing one runtime (survivor: the 'baseline: a runtime is missing' branch)."""
+    from nfl.sim.run_forward_v1 import dependency_drift
+    base = [_rt({"pandas": _ident()})] * 3
+    assert dependency_drift(base, {}) and all("missing from the run" in p for p in dependency_drift(base, {}))
+    partial = _run()
+    del partial["runtime_worker"]
+    assert dependency_drift(base, partial) == ["runtime_worker: missing from the run's runtimes"]
+    assert "baseline: a runtime is missing" in dependency_drift([base[0], None, base[2]], _run())
+    assert dependency_drift(base[:2], _run()) == ["baseline: 2 runtimes, need 3"]
+
+
+def test_the_baseline_is_the_first_primary_in_the_registry(tmp_path):
+    """Survivor: choosing the LAST primary receipt. Three primaries: both later ones point
+    at the first, and the drift is measured against the first's identity."""
+    from nfl.sim.run_forward_v1 import dependency_fields, append_receipt
+    import json as _json
+    first = {"run_id": "R1", "pilot": False, **_run(runtime=_rt({"pandas": _ident()}))}
+    pilot = {"run_id": "P0", "pilot": True, **_run(runtime=_rt({"pandas": _ident("0.1")}))}
+    second = {"run_id": "R2", "pilot": False, **_run(runtime=_rt({"pandas": _ident("2.3.4")}))}
+    append_receipt(tmp_path, pilot)
+    assert dependency_fields(tmp_path, first)["dependency_baseline_run_id"] == "R1"
+    append_receipt(tmp_path, first)
+    f2 = dependency_fields(tmp_path, second)
+    assert f2["dependency_baseline_run_id"] == "R1" and f2["dependency_drift"]
+    append_receipt(tmp_path, second)
+    third = {"run_id": "R3", "pilot": False, **_run(runtime=_rt({"pandas": _ident()}))}
+    f3 = dependency_fields(tmp_path, third)
+    assert f3 == {"dependency_baseline_run_id": "R1", "dependency_drift": []}
 
 
 def test_drift_baseline_must_be_self_consistent():
     from nfl.sim.run_forward_v1 import dependency_drift
     bad = [_rt({"pandas": _ident()}), _rt({"pandas": _ident("9")}), _rt({})]
-    assert any("differs between its own runtimes" in p for p in dependency_drift(bad, {}))
+    assert any("differs between its own runtimes" in p for p in dependency_drift(bad, _run()))
     two = [_rt({}), _rt({}, exe="/b"), _rt({})]
-    assert any("2 interpreters" in p for p in dependency_drift(two, {}))
+    assert any("2 interpreters" in p for p in dependency_drift(two, _run()))
 
 
 # ── the launcher is in repo_modules ────────────────────────────────────────────

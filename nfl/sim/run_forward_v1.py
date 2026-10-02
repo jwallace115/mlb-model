@@ -258,6 +258,17 @@ def _active_universe_matches(inputs_dir, season, week, team, bad):
     au = pd.read_parquet(inputs_dir / "active_universe_weekly.parquet",
                          columns=["season", "week", "team", "player_id", "active_flag"])
     au = au[(au["season"] == season) & (au["week"] == week) & (au["team"] == team)]
+    # D272 (audit #14 A2): one canonical row per player. The engine includes a player if
+    # ANY of his rows is active, so a duplicate active row would re-admit an OUT player
+    # that a last-row-wins comparison let through. Flags must be real, non-null booleans.
+    dup = au["player_id"][au["player_id"].duplicated(keep=False)]
+    if len(dup):
+        bad.append(f"{team}: week-{week} active universe has duplicate rows for "
+                   f"{sorted(set(dup))[:5]}")
+        return None
+    if not pd.api.types.is_bool_dtype(au["active_flag"]) or au["active_flag"].isna().any():
+        bad.append(f"{team}: week-{week} active universe has non-boolean or missing active flags")
+        return None
     have = {pid: bool(f) for pid, f in zip(au["player_id"], au["active_flag"])}
     if have != want:
         diff = sorted(set(want) ^ set(have)) + sorted(
@@ -617,6 +628,13 @@ def dependency_drift(baseline_runtimes, runtimes):
     RECORD sha256, and each ran the baseline's python and executable. A distribution that
     is not in the baseline at all is drift. Returns the list of violations ([] = none)."""
     problems, base, interp = [], {}, set()
+    # D272 (audit #14): the three runtimes are required on both sides — a missing KEY is
+    # drift, not an empty comparison
+    if len(baseline_runtimes) != len(RUNTIME_KEYS):
+        problems.append(f"baseline: {len(baseline_runtimes)} runtimes, need {len(RUNTIME_KEYS)}")
+    for k in RUNTIME_KEYS:
+        if k not in runtimes:
+            problems.append(f"{k}: missing from the run's runtimes")
     for rt in baseline_runtimes:
         if not rt:
             problems.append("baseline: a runtime is missing")
@@ -641,6 +659,16 @@ def dependency_drift(baseline_runtimes, runtimes):
             elif base[name] != ident:
                 problems.append(f"{label}: {name} differs from the baseline")
     return problems
+
+
+def dependency_fields(root, receipt):
+    """D270/D272: a primary's dependency baseline (the FIRST primary receipt in the
+    registry, or this receipt when it is the first) and its drift against it."""
+    first = next((r for r in load_receipts(root) if r.get("pilot") is False), None)
+    base = first or receipt
+    return {"dependency_baseline_run_id": base["run_id"],
+            "dependency_drift": dependency_drift([base.get(k) for k in RUNTIME_KEYS],
+                                                 {k: receipt.get(k) for k in RUNTIME_KEYS})}
 
 
 def receipt_status(run_id, root):
@@ -1380,11 +1408,7 @@ def main(argv=None, root=None, run_week_fn=None):
     # D270: a primary records, at freeze time, its dependency drift against the first
     # primary receipt (the experiment's baseline); the first primary IS the baseline
     if not a.pilot:
-        first = next((r for r in load_receipts(root) if r.get("pilot") is False), None)
-        receipt["dependency_baseline_run_id"] = (first or receipt)["run_id"]
-        receipt["dependency_drift"] = dependency_drift(
-            [(first or receipt).get(k) for k in RUNTIME_KEYS],
-            {k: receipt.get(k) for k in RUNTIME_KEYS})
+        receipt.update(dependency_fields(root, receipt))
 
     # D246(b): update the ai_opinions manifest entry with publication_utc
     man_path = opinions_dir / "manifest.json"

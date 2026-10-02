@@ -23,7 +23,13 @@ What it does, in order (any failure restores the ratings directory and exits non
     never change here;
  6. the fit-window fingerprint must still equal FREEZE_v1's;
  7. report: run_forward_v1._team_freshness — the forward run's own gate — for every team
-    playing in --week, on the refreshed files. Exit 1 if any team fails.
+    playing in --week, on the refreshed files.
+
+D272 additions: the nflverse schedule is snapshotted once per refresh (schedules_2026.parquet)
+and is the ONLY schedule the usage builder uses (one week-cutoff convention, live or
+historical); the refresh's exact source and output bytes are archived with a manifest naming
+the declared input version. Exit codes: 0 = refreshed and every team ready; 1 = refreshed
+and INSTALLED, some teams not ready; an exception = refresh failed, old tables restored.
 """
 import argparse
 import hashlib
@@ -72,6 +78,44 @@ def splice(old, new, season=SEASON):
         except (TypeError, ValueError):
             pass
     return pd.concat([keep, cur], ignore_index=True)
+
+
+INPUT_VERSION = "D272-v2"   # declared prospective input version (2026 rows only)
+
+
+def snapshot_schedule():
+    """D272: the schedule the builders use (week cutoffs: usage._week_cutoffs) and the
+    forward run uses (event mapping), written ONCE per refresh and archived with it."""
+    import nflreadpy
+    df = nflreadpy.load_schedules([SEASON])
+    df = df.to_pandas() if hasattr(df, "to_pandas") else df
+    if df.empty or not {"season", "week", "gameday", "gametime"} <= set(df.columns):
+        raise SystemExit("HALT: the nflverse schedule download is empty or incomplete")
+    out = PBP / f"schedules_{SEASON}.parquet"
+    df.to_parquet(out, index=False)
+    print(f"  schedules_{SEASON}: {len(df)} games, weeks {int(df['week'].min())}-{int(df['week'].max())}")
+
+
+SOURCES = ["rosters_weekly.parquet", "depth_charts.parquet", "injuries.parquet",
+           f"pbp_{SEASON}.parquet", f"schedules_{SEASON}.parquet"]
+
+
+def archive_refresh(backup, week, tables):
+    """D272 (audit #14): keep the exact source and output bytes of this refresh, and a
+    manifest naming the declared input version, beside the pre-refresh backup."""
+    d = backup / "refreshed"
+    d.mkdir()
+    files = {}
+    for f in SOURCES:
+        shutil.copy2(PBP / f, d / f)
+        files[f"sources/{f}"] = _sha(PBP / f)
+    for f in tables:
+        shutil.copy2(RATINGS / f, d / f)
+        files[f"tables/{f}"] = _sha(RATINGS / f)
+    man = {"input_version": INPUT_VERSION, "week": week, "season": SEASON,
+           "refreshed_utc": datetime.now(timezone.utc).isoformat(), "files": files}
+    (d / "refresh_manifest.json").write_text(json.dumps(man, indent=1, sort_keys=True) + "\n")
+    print(f"\nArchived this refresh's sources and tables ({INPUT_VERSION}) in {d}")
 
 
 def freshness_report(week):
@@ -125,6 +169,8 @@ def main(argv=None):
 
     try:
         _run("pull_nflverse_inputs.py")
+        print(f"\n── schedule snapshot {SEASON} ──", flush=True)
+        snapshot_schedule()
         print(f"\n── PBP {SEASON} only ──", flush=True)
         from nfl.sim.pull_pbp import pull_season, write_safe
         df = pull_season(SEASON)
@@ -147,12 +193,22 @@ def main(argv=None):
             raise SystemExit(f"HALT: fit-window fingerprint after the splice is {fp1}, not "
                              f"FREEZE_v1's {freeze['usage_fingerprint']}")
         print(f"\nFit-window fingerprint unchanged: {fp1}")
+        archive_refresh(backup, a.week, FIT_INPUT_FILES)
     except BaseException:
         for f in FIT_INPUT_FILES:
             shutil.copy2(backup / f, RATINGS / f)
         print(f"\nRESTORED the ratings tables from {backup}")
         raise
-    return 0 if freshness_report(a.week) else 1
+    # D272 (audit #14): from here on the refreshed tables are INSTALLED. Exit 0 = every
+    # team playing the week passes the forward gate; exit 1 = the tables are refreshed and
+    # installed but some teams are not ready (e.g. an injury report not yet published) —
+    # a forward run including those teams will HALT at its own gate. A failure ABOVE
+    # this point restores the old tables and raises.
+    ok = freshness_report(a.week)
+    if not ok:
+        print("\nNOTE: the refreshed tables ARE installed; the teams above are not ready yet. "
+              "Re-run after their reports are published (a forward run including them HALTs).")
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":

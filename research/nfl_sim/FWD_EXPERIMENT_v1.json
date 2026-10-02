@@ -49,13 +49,13 @@
   "nfl/sim/ratings.py": "9caedc1d6faf69b8",
   "nfl/sim/read_set.py": "62b03cd1ad32e07f",
   "nfl/sim/restore_run.py": "aad1551fc5a58307",
-  "nfl/sim/run_forward_v1.py": "733b0b05b9e323c9",
+  "nfl/sim/run_forward_v1.py": "4d3f48f456432a3c",
   "nfl/sim/run_week.py": "ff653aafacd6d554",
   "nfl/sim/seed_util.py": "2d4a0b75e6ce209e",
   "nfl/sim/tables.py": "5518e8459b4d3cc8",
   "nfl/sim/tests/__init__.py": "e3b0c44298fc1c14",
   "nfl/sim/tests/test_freeze_v1.py": "38be254fc652ca07",
-  "nfl/sim/usage.py": "6cd4e0ae4be39f49"
+  "nfl/sim/usage.py": "76578932c1e2ebe1"
  },
  "python_version": "3.13.1",
  "numpy_version": "2.4.3",

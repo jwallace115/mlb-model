@@ -1,113 +1,108 @@
-# FWD1 Runbook — NFL sim v1 forward test, weeks 4-5
+# Forward-run runbook — nfl_fwd_v1, weeks 4, 5 (D272)
 
-Reader model: `nfl_sim_v1_156cd057`
-Generated: 2026-09-30T09:32:19Z
+Reader model: `nfl_sim_v1_156cd057`. Generated 2026-10-02T03:16:09Z by `research/nfl_sim/make_runbook.py`. Run every command from the checkout that holds the refreshed inputs. Every forward run goes through the bootstrap (D266).
 
-## Measured runtimes (D231)
-- Sim: ~30s per game
-- Input refresh: ~9 min (pull_nflverse 6s + ratings.py ~8min)
-- IMPORTANT: ratings.py overwrites params_v1.json — always `git checkout nfl/sim/params_v1.json` after
+## Input refresh (D271/D272) — per window, never at the last minute
 
-## Input refresh (ONCE per week, Wednesday)
 ```bash
-cd ~/mlb-model
-python3 nfl/sim/pull_nflverse_inputs.py
-python3 nfl/sim/ratings.py
-git checkout nfl/sim/params_v1.json
-python3 -m pytest nfl/sim/tests/test_freeze_v1.py -q  # must pass
+python3 nfl/sim/refresh_inputs.py --week W
 ```
+
+- About 10 min (ratings.py about 8). Exit 0: every team playing week W passes the forward gate. Exit 1: the refreshed tables ARE installed but the named teams are not ready (usually an unpublished injury report); a run including them HALTs. Exception: refresh failed, old tables restored.
+- Sunday/Monday: after the final injury reports (Friday afternoon ET), and again on game morning, finishing at least 30 min before the window's harness start.
+- TNF: after Wednesday's report, and again Thursday afternoon.
+- Never re-pull 2020-2025 PBP; never install or upgrade Python packages (D269/D270).
+
+## Roster information cutoff (declared, D272)
+
+Each window freezes on the rosters and injury report of its LAST refresh before the harness start. Game-day inactives announced after that refresh (about 90 min before each kick) are NOT in the live active universe. The backtest used final game-day rosters, so live and backtest rosters are not identical for late games. This is a declared input difference, not final-roster parity. Out/Doubtful from the final injury report ARE applied.
 
 ## Week 4
 
 ### PIT@CLE — Fri 2026-10-02 00:15Z (Thu 8:15 PM ET)
-Games: PIT@CLE
-
+Games (1): PIT@CLE
+- Quotes: the VM's Thu 22:00Z props pull (1.5 h old at start); game lines from the 30-min tape. Max quote age 3 h at the harness start.
+- Harness start: **Thu 2026-10-01 23:30Z** (Thu 7:30 PM ET); sim about 0 min.
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2.0
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
 ```
 
-Latest safe start: **Fri 2026-10-02 00:02Z** (Thu 8:02 PM ET)
-Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
-VM props slot: 23:45Z Thu (~0.3h old at run time)
-
-### Sunday main + SNF (14 games) — Sun 2026-10-04 [13:30Z, 17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 9:30 AM ET+)
-Games: IND@WAS, TEN@BAL, NE@BUF, NYJ@CHI, JAX@CIN, DAL@HOU, ARI@NYG, LA@PHI, GB@TB, MIA@MIN, KC@LV, LAC@SEA, DEN@SF, DET@CAR
-
-```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 12.0
-```
-
-Latest safe start: **Sun 2026-10-04 13:11Z** (Sun 9:11 AM ET)
-Runtime: 14 games × 30s = 7 min + 9 min refresh + 3 min margin
-VM props slot: 02:00Z Sun (~11.2h old at run time)
-**STALE**: VM slot is 11.2h old (> 3.0h). Manual pull required:
+### IND@WAS — Sun 2026-10-04 13:30Z (Sun 9:30 AM ET)
+Games (1): IND@WAS
+- Quotes: a MANUAL props pull at Sun 2026-10-04 12:15Z; game lines from the 30-min tape. Max quote age 3 h at the harness start.
 ```bash
 python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
   --out-dir data/odds_archive/nfl/props/season=2026/manual
 ```
-Credit cost: ~10 per event × 1 region = 10 credits
-
-### ATL@NO — Tue 2026-10-06 00:15Z (Mon 8:15 PM ET)
-Games: ATL@NO
-
+- Harness start: **Sun 2026-10-04 12:45Z** (Sun 8:45 AM ET); sim about 0 min.
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2.0
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
 ```
 
-Latest safe start: **Tue 2026-10-06 00:02Z** (Mon 8:02 PM ET)
-Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
-VM props slot: 23:45Z Mon (~0.3h old at run time)
+### Sunday main + SNF (13 games) — Sun 2026-10-04 [17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 1:00 PM ET+)
+Games (13): TEN@BAL, NE@BUF, NYJ@CHI, JAX@CIN, DAL@HOU, ARI@NYG, LA@PHI, GB@TB, MIA@MIN, KC@LV, LAC@SEA, DEN@SF, DET@CAR
+- Quotes: the VM's Sunday 16:00Z props pull (confirm it arrived); game lines from the 30-min tape. Max quote age 3 h at the harness start.
+- Harness start: **Sun 2026-10-04 16:15Z** (Sun 12:15 PM ET); sim about 6 min.
+```bash
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 9
+```
+
+### ATL@NO — Tue 2026-10-06 00:15Z (Mon 8:15 PM ET)
+Games (1): ATL@NO
+- Quotes: a MANUAL props pull at Mon 2026-10-05 23:00Z; game lines from the 30-min tape. Max quote age 3 h at the harness start.
+```bash
+python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
+  --out-dir data/odds_archive/nfl/props/season=2026/manual
+```
+- Harness start: **Mon 2026-10-05 23:30Z** (Mon 7:30 PM ET); sim about 0 min.
+```bash
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
+```
 
 ## Week 5
 
 ### TB@DAL — Fri 2026-10-09 00:15Z (Thu 8:15 PM ET)
-Games: TB@DAL
-
+Games (1): TB@DAL
+- Quotes: the VM's Thu 22:00Z props pull (1.5 h old at start); game lines from the 30-min tape. Max quote age 3 h at the harness start.
+- Harness start: **Thu 2026-10-08 23:30Z** (Thu 7:30 PM ET); sim about 0 min.
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2.0
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 1.5
 ```
 
-Latest safe start: **Fri 2026-10-09 00:02Z** (Thu 8:02 PM ET)
-Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
-VM props slot: 23:45Z Thu (~0.3h old at run time)
-
-### Sunday main + SNF (13 games) — Sun 2026-10-11 [13:30Z, 17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 9:30 AM ET+)
-Games: PHI@JAX, CIN@MIA, LV@NE, MIN@NO, CLE@NYJ, IND@PIT, HOU@TEN, NYG@WAS, CHI@GB, DEN@LAC, DET@ARI, SF@SEA, BAL@ATL
-
-```bash
-python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 12.0
-```
-
-Latest safe start: **Sun 2026-10-11 13:11Z** (Sun 9:11 AM ET)
-Runtime: 13 games × 30s = 6 min + 9 min refresh + 3 min margin
-VM props slot: 02:00Z Sun (~11.2h old at run time)
-**STALE**: VM slot is 11.2h old (> 3.0h). Manual pull required:
+### PHI@JAX — Sun 2026-10-11 13:30Z (Sun 9:30 AM ET)
+Games (1): PHI@JAX
+- Quotes: a MANUAL props pull at Sun 2026-10-11 12:15Z; game lines from the 30-min tape. Max quote age 3 h at the harness start.
 ```bash
 python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
   --out-dir data/odds_archive/nfl/props/season=2026/manual
 ```
-Credit cost: ~10 per event × 1 region = 10 credits
-
-### BUF@LA — Tue 2026-10-13 00:15Z (Mon 8:15 PM ET)
-Games: BUF@LA
-
+- Harness start: **Sun 2026-10-11 12:45Z** (Sun 8:45 AM ET); sim about 0 min.
 ```bash
-python3 nfl/sim/run_forward_v1.py --week 5 --window-hours 2.0
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 1.5
 ```
 
-Latest safe start: **Tue 2026-10-13 00:02Z** (Mon 8:02 PM ET)
-Runtime: 1 games × 30s = 0 min + 9 min refresh + 3 min margin
-VM props slot: 23:45Z Mon (~0.3h old at run time)
-
-## Scoring
-
+### Sunday main + SNF (12 games) — Sun 2026-10-11 [17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 1:00 PM ET+)
+Games (12): CIN@MIA, LV@NE, MIN@NO, CLE@NYJ, IND@PIT, HOU@TEN, NYG@WAS, CHI@GB, DEN@LAC, DET@ARI, SF@SEA, BAL@ATL
+- Quotes: the VM's Sunday 16:00Z props pull (confirm it arrived); game lines from the 30-min tape. Max quote age 3 h at the harness start.
+- Harness start: **Sun 2026-10-11 16:15Z** (Sun 12:15 PM ET); sim about 6 min.
 ```bash
-python3 nfl/pipeline/log_ai_opinions.py score-experiment --experiment nfl_fwd_v1
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 9
+```
+
+### BUF@LA — Tue 2026-10-13 00:15Z (Mon 8:15 PM ET)
+Games (1): BUF@LA
+- Quotes: a MANUAL props pull at Mon 2026-10-12 23:00Z; game lines from the 30-min tape. Max quote age 3 h at the harness start.
+```bash
+python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
+  --out-dir data/odds_archive/nfl/props/season=2026/manual
+```
+- Harness start: **Mon 2026-10-12 23:30Z** (Mon 7:30 PM ET); sim about 0 min.
+```bash
+python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 1.5
 ```
 
 ## Notes
 
-- **Anchor rule (D210):** game whose anchored mean misses market by > 1.0 pt = unanchored, reported separately.
-- **Game lines (h2h, spreads, totals):** always no_view (sim is market-anchored).
-- **Pilot files:** never pooled; only with `--include-pilot`.
-- **500 legs = descriptive; 1,500 legs = confirmatory.**
+- A freshness or quote-age HALT is the gate working: do not override it for a primary. `--allow-stale-quotes` is pilot/dry-run only.
+- Game lines (h2h, spreads, totals) are always no_view (the sim is market-anchored).
+- Pilot files are never pooled; scoring follows the pre-registered rules (D269 L5, D270).

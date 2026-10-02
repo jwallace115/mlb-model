@@ -330,62 +330,18 @@ def derive_starting_qbs(depth, plays, active_universe=None):
             new_qb["_dt"] = pd.to_datetime(new_qb["dt"], errors="coerce", utc=True)
             qb1_all = new_qb[new_qb["pos_rank"] == 1].copy()
 
-            # Build first-kickoff lookup: PBP game_date, then nflverse schedule
-            _l3_kickoff = {}
-            for s in OUTPUT_SEASONS:
-                if s < current_season:
-                    continue
-                pbp_path = PBP_DIR / f"pbp_{int(s)}.parquet"
-                if pbp_path.exists():
-                    gdf = pd.read_parquet(pbp_path, columns=["season", "week", "game_date"]).drop_duplicates(["season", "week", "game_date"])
-                    gdf["game_date"] = pd.to_datetime(gdf["game_date"], errors="coerce", utc=True)
-                    for w in gdf["week"].unique():
-                        wg = gdf[gdf["week"] == w]
-                        _l3_kickoff[(int(s), int(w))] = wg["game_date"].min()
-            # For weeks with no PBP (future), use nflverse schedule.
-            # 5J-2: gametime is US Eastern; parse as America/New_York then
-            # convert to UTC. Previously parsed as UTC, making kickoffs 4-5 h
-            # early (20:15 ET read as 20:15Z). PBP game_date is midnight UTC
-            # (conservative by design — excludes more, not fewer QBs).
-            from zoneinfo import ZoneInfo
-            _et = ZoneInfo("America/New_York")
-            try:
-                import nflreadpy
-                for s in OUTPUT_SEASONS:
-                    if s < current_season:
-                        continue
-                    sched = nflreadpy.load_schedules([s]).to_pandas()
-                    sched["_ko"] = (
-                        pd.to_datetime(
-                            sched["gameday"].astype(str) + " "
-                            + sched["gametime"].fillna("13:00"),
-                            errors="coerce",
-                        )
-                        .dt.tz_localize(_et)
-                        .dt.tz_convert("UTC")
-                    )
-                    for w in sched["week"].unique():
-                        key = (int(s), int(w))
-                        if key not in _l3_kickoff:
-                            wg = sched[sched["week"] == w]
-                            ko = wg["_ko"].min()
-                            if pd.notna(ko):
-                                _l3_kickoff[key] = ko
-            except Exception as _sched_err:
-                # If schedule unavailable, check whether every week being built
-                # already has a PBP kickoff. If not, halt — a failed download
-                # must not silently produce a week with no layer-3 QB.
-                _needs_sched = any(
-                    (int(s), w) not in _l3_kickoff
-                    for s in OUTPUT_SEASONS if s >= current_season
-                    for w in range(1, 23)
-                )
-                if _needs_sched:
-                    raise RuntimeError(
-                        f"nflverse schedule unavailable ({_sched_err}) and not "
-                        f"every week has a PBP kickoff — layer-3 QB assignment "
-                        f"would be incomplete"
-                    ) from _sched_err
+            # D272 (audit #14): the SAME cutoffs as the depth layer — midnight UTC of the
+            # week's first game date, from PBP or the archived schedule snapshot. Before
+            # D272 a week without PBP used the live nflverse schedule's actual kickoff time
+            # (a different convention, from an unarchived download).
+            _cur = [s for s in OUTPUT_SEASONS if s >= current_season]
+            _l3_kickoff = _week_cutoffs(_cur)
+            _missing = [(s, w) for s in _cur for w in range(1, 19) if (s, w) not in _l3_kickoff]
+            if _missing and not all((PBP_DIR / f"schedules_{s}.parquet").exists() for s in _cur):
+                raise RuntimeError(
+                    f"no archived schedule snapshot (nfl/data/pbp/schedules_<season>.parquet) "
+                    f"and weeks {_missing[:3]}… have no PBP kickoff — run nfl/sim/refresh_inputs.py, "
+                    f"which writes and archives the snapshot")
 
             for s in OUTPUT_SEASONS:
                 if s < current_season:
@@ -432,6 +388,36 @@ def derive_starting_qbs(depth, plays, active_universe=None):
 # ACTIVE UNIVERSE
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _week_cutoffs(seasons):
+    """D272 (audit #14 A1): one information cutoff per (season, week), the SAME convention
+    for every week, live or historical: midnight UTC of the week's first game date.
+
+    From PBP game_date where the week has plays; otherwise from the archived schedule
+    snapshot PBP_DIR/schedules_<season>.parquet (column gameday), which refresh_inputs.py
+    writes and archives before building. Before D272 a week without PBP (the live week)
+    had NO cutoff, so the depth-chart layer was skipped for it while every historical
+    week had one; adding an outcome-free target-week date to the PBP changed 505 live
+    target shares (audit #14). Now it cannot: both sources give the same midnight."""
+    cut = {}
+    for s in sorted({int(x) for x in seasons}):
+        pbp_path = PBP_DIR / f"pbp_{s}.parquet"
+        if pbp_path.exists():
+            gdf = pd.read_parquet(pbp_path, columns=["season", "week", "game_date"]).drop_duplicates(
+                ["season", "week", "game_date"])
+            gdf["game_date"] = pd.to_datetime(gdf["game_date"], errors="coerce", utc=True)
+            for w in gdf["week"].unique():
+                cut[(s, int(w))] = gdf[gdf["week"] == w]["game_date"].min()
+        sp = PBP_DIR / f"schedules_{s}.parquet"
+        if sp.exists():
+            sch = pd.read_parquet(sp, columns=["season", "week", "gameday"])
+            sch = sch[sch["season"] == s]
+            for w in sch["week"].unique():
+                if (s, int(w)) not in cut:
+                    cut[(s, int(w))] = pd.to_datetime(
+                        sch[sch["week"] == w]["gameday"].astype(str), errors="coerce", utc=True).min()
+    return cut
+
+
 def build_active_universe(rosters, injuries, depth):
     """All rostered skill players. Inactive if status != ACT or Out/Doubtful."""
     r = rosters[rosters["position"].isin(SKILL_POS)].copy()
@@ -473,17 +459,8 @@ def build_active_universe(rosters, injuries, depth):
         new_all["_depth"] = pd.to_numeric(new_all["pos_rank"], errors="coerce")
         new_all["_dt"] = pd.to_datetime(new_all["dt"], errors="coerce", utc=True)
 
-        # Build first-kickoff lookup from PBP game_date
-        kickoff_by_sw = {}
-        for s in base["season"].unique():
-            pbp_path = PBP_DIR / f"pbp_{int(s)}.parquet"
-            if not pbp_path.exists():
-                continue
-            gdf = pd.read_parquet(pbp_path, columns=["season", "week", "game_date"]).drop_duplicates(["season", "week", "game_date"])
-            gdf["game_date"] = pd.to_datetime(gdf["game_date"], errors="coerce", utc=True)
-            for w in gdf["week"].unique():
-                wg = gdf[gdf["week"] == w]
-                kickoff_by_sw[(int(s), int(w))] = wg["game_date"].min()
+        # D272: first-game-date cutoffs, PBP or the archived schedule, one convention
+        kickoff_by_sw = _week_cutoffs(base["season"].unique())
 
         # Per (season, week): take the latest snapshot per (team, player_id)
         # with dt strictly before the first kickoff of that week.

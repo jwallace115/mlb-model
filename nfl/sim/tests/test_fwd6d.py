@@ -568,7 +568,8 @@ def test_static_scan_catches_a_saved_native_alias():
     import ast
     for src in ("import pyarrow as pa\nsaved = pa.OSFile\nsaved('x').read()\n",
                 "from pyarrow import OSFile as F\nF('x').read()\n",
-                "import pyarrow.fs as fs\nL = fs.LocalFileSystem\n"):
+                "import pyarrow.fs as fs\nL = fs.LocalFileSystem\n",
+                "from pyarrow import *\nOSFile('x').read()\n"):          # bare name only
         assert _references(ast.parse(src), "nfl/sim/somefile.py"), src
     assert _references(ast.parse("import pandas as pd\npd.read_parquet('x')\n"), "nfl/sim/x.py") == []
 
