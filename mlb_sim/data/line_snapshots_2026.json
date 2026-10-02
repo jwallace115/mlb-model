@@ -53012,5 +53012,31 @@
     "over_price": -105,
     "under_price": -115,
     "book": "draftkings"
+  },
+  {
+    "game_id": "1632ced04d65127cf6172d3a2c2e2d16",
+    "game_date": "2026-10-02",
+    "home_team": "LAD",
+    "away_team": "ATL",
+    "snapshot_time": "2026-10-02T06:00:13.841664",
+    "first_seen_timestamp": "2026-10-02T06:00:13.841630",
+    "snapshot_label": "OPEN",
+    "total_line": 8.0,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings"
+  },
+  {
+    "game_id": "1632ced04d65127cf6172d3a2c2e2d16",
+    "game_date": "2026-10-02",
+    "home_team": "LAD",
+    "away_team": "ATL",
+    "snapshot_time": "2026-10-02T06:00:14.083958",
+    "first_seen_timestamp": "2026-10-02T06:00:13.841630",
+    "snapshot_label": "2AM",
+    "total_line": 8.0,
+    "over_price": -110,
+    "under_price": -110,
+    "book": "draftkings"
   }
 ]
