@@ -5,13 +5,40 @@ Your audit #14 of `7429e9dbf` (NO-GO for a primary Sunday) is at
 (`research/nfl_sim/NFL_SIM_DECISION_v1.md`, read D272 in full first) and implemented **FWD7b**. Posture: guilty until
 proven innocent.
 
-**Pin: the HEAD of branch `eng/fwd6` whose message starts "FWD7b Mac run".** Below it, in order:
-- "Refreshed week-4 inputs with the D272 builders": the refreshed tables under 2 MB;
-- "FWD7b (D272)": the code, tests, D272, the regenerated runbook;
+**Pin: `a7bd0c62a` on branch `eng/fwd6`** ("FWD7b Mac run: …"). Below it, in order:
+- `f0e9590fa`: the refreshed week-4 tables under 2 MB (only `active_universe_weekly.parquet` changed);
+- `714da08d0`: FWD7b, D272 (code, tests, D272, the regenerated runbook);
 - `7429e9dbf`: the pin of your audit #14.
 
-The FWD7b code is byte-identical to the tree Cowork tested (the patch applied on `7429e9dbf` gives the same files).
-The Mac run's full output is in `research/nfl_sim/fwd7b_mac_run.md`. Put the full SHA you audit on line 2.
+The code at `714da08d0` is byte-identical to the tree Cowork tested (Cowork re-checked it from GitHub). The Mac run's
+full output is in `research/nfl_sim/fwd7b_mac_run.md`. Put the full SHA you audit on line 2.
+
+Results reported. Claude Code ran these on the Mac at about 04:15Z on Friday; Cowork re-checked the committed record:
+- **Tests:** 280 passed per file (24 files, 0 skipped). Selftest: launcher hash ok, 1090 dependency files, 6395
+  distribution files verified.
+- **Refresh:**
+  - backup `~/mlb-model-archive/nfl_ratings_backups/20261002T041239Z`;
+  - schedule snapshot 272 games, weeks 1-18;
+  - pbp_2026 weeks 1-3;
+  - fingerprint unchanged at `3638769c89030de0`;
+  - archived as `D272-v2`, with the manifest in the run note;
+  - exit 1: only ATL and NO lack a week-4 injury report. That is the Monday-night game; the note calls them "TNF
+    teams", which is wrong.
+- **A1 on the refreshed inputs:**
+  - EQUIVALENT for both tables with and without a date-only week-4 PBP row;
+  - the installed 2026 rows equal the rebuild;
+  - week-4 depth_order is non-null for 722 of 800 rows, with 0 duplicates and no null flags.
+  - The D271 control differs: 24.6% of target shares and 35.2% of depth orders.
+  - Point-in-time is OK for W = 2 and 3 in both tables, and the D271 control differs.
+- **Usage spot-check:** five players equal the PBP exactly. The week-4 report has 2 Out/Doubtful rows; neither is a
+  skill player.
+- **Runbook:** the committed file equals the generator's output.
+- **Sunday smoke run** (bootstrap, dry run, 68-hour window, Sunday only):
+  - gate PASS;
+  - 14 games, 14/14 converged;
+  - read set 45 files, 0 unproven;
+  - 66/257 props matched;
+  - injury_game_statuses 0 except WAS (2), because the run was before Friday's final reports.
 
 **The real constraint:** the first Sunday window: IND@WAS, manual props pull at 12:15Z and harness at 12:45Z on
 2026-10-04. The main slate + SNF window has its harness at 16:15Z. Nothing else is a deadline.
