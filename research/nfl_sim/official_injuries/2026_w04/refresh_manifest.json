@@ -1,0 +1,23 @@
+{
+ "files": {
+  "sources/depth_charts.parquet": "6622e4201cfccedcb015c07084321a9697d4ffd515cbf3399314142800a0cbe2",
+  "sources/injuries.parquet": "71329b8627d97fe7e987c19264dcbb35447c3926880fd907e613057723d22635",
+  "sources/official_injuries.html": "cb68dcb44a797eba2540ba4a83026c9c67163cc71ae3b2c5d82dfa9a0f86c215",
+  "sources/official_injuries.json": "cfe97d56742dda2903c7239d31d3efc84a3514cd4bf15572acecaa5e5bb8342b",
+  "sources/pbp_2026.parquet": "0182083eb191aa66c6069b57ea126e6eac3cac2c7d9aaaf525ebbee155de6124",
+  "sources/rosters_weekly.parquet": "c6910b7ef83be397da5d30fe47ba289919d2781ef8c3c8309c23230637304a06",
+  "sources/schedules_2026.parquet": "cfe839656278625c104363b1060c9e1648dc9414c3729a00712ff318789daf3a",
+  "tables/active_universe_weekly.parquet": "33c18ff09b9405ef5aede47795377765fab8380785deff4e7542429c84655f49",
+  "tables/kicker_weekly.parquet": "984ec6669947b058b82c709014c47e64fba2d28f4103c35d94ee860856aa7ea6",
+  "tables/league_baselines.parquet": "b372c1f8d48c2c276ba4bec760b94e9efef5a904fd62a2b9b0f1862f43e4d119",
+  "tables/player_usage_weekly.parquet": "3fa75bc8ae0ab6b7f49c131b907fc805220f83cd2734867bac8c0b58c322abe0",
+  "tables/qb_ratings_weekly.parquet": "5ff4957a6b3826e8f866c901f3a6710d84537b884c83c3e4eaacf7cf4d740585",
+  "tables/team_ratings_weekly.parquet": "d3a3224546418e6b14197af6f1b23aa2b29937a3bc93b232b85fa3dee1898f29",
+  "tables/tendencies_situational_weekly.parquet": "ca670545df86ff3622e418e4cf5d6285deedf04600f3de463157f8f6cbea5a21",
+  "tables/tendencies_weekly.parquet": "f10670cb5e389b1b7754c2ffc48ecc3aecc663701e5693a94ecb9d314b7a8a3e"
+ },
+ "input_version": "D277-v7",
+ "refreshed_utc": "2026-10-03T06:07:04.961214+00:00",
+ "season": 2026,
+ "week": 4
+}
