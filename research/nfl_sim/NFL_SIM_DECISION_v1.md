@@ -6339,3 +6339,71 @@ AND the gate passes; otherwise `--pilot`, decided before the harness. Audit #19'
 - game-morning refresh done by 12:15Z, with the evidence exported and committed before each primary harness;
 - a re-refresh for main + SNF must be done by 15:45Z;
 - MNF needs a capture retrieved after Sat 20:00Z.
+
+### D279 — ChatGPT audit #20 (NO-GO for all three week-4 windows at cd5cfeb8b) accepted; FWD7j parses every official table body with an independent row count, adds PBP admission at the harness, keeps the pre-overlay feed, and kills audit #20's survivors (2026-10-03, before any week-4 Sunday or Monday kickoff)
+
+Audit #20 reply: `research/cross_ai/chatgpt_audit20_reply_2026-10-03.md`.
+
+**What held (audit #20, executed):**
+- 350 + 22;
+- audit #19's A1 at the builder, A2 (NaT and 2099 HALT the real non-pilot bootstrap) and A3 (season relabel, wrong
+  matchups, foreign URL, HTTP 500, bytes);
+- whitespace and lower-case variants at the builder;
+- the non-UTC offset normalises; the trailing slash on `final_url`; canonical/title mismatches; swapped home/away;
+- the three roster moves;
+- real recomputation: 313/313, 91/222, 303,486 PBP rows admitted;
+- rebuild and point-in-time identity;
+- 46/47 of the committed mutations (X2 judged admission-equivalent);
+- the clean 28/28 gate.
+
+**A1 — partial table-body loss (accepted).** `</tbody><tbody>` inserted after WAS's first row (valid HTML, no row
+changed) made the parser read only the first body. WAS went from 15 rows to 1, so Daniels and White (Out) were
+dropped. The refresh and the gate shared the parser, so they agreed. On the real non-pilot bootstrap: exit 0, IND/WAS
+verified, 4 active flags false→true, and 43 cal_p changed, max 0.1392. `<tbody class=…>` lost all 15 rows; that case
+HALTed at the older empty-injury freshness check.
+
+FIX (`official_injuries._table_rows`):
+- each team table must be exactly one header row with the 5 expected columns, followed by player rows in ANY number of
+  `<tbody>` elements, with or without attributes;
+- every `<tr>` is parsed;
+- a nested table, an unclosed row, or any other content between rows HALTs;
+- `_read` then reconciles an INDEPENDENT count of every `<tr>` inside the report sections (minus one header row per
+  table) with the rows emitted; any difference HALTs.
+
+On the real page: 313 rows. The audit's split and attribute variants now give the same 313 rows (WAS 15). A genuinely
+empty table parses as zero rows.
+
+**Verified-empty versus the freshness gate (audit #20 C) — decision.** `_active_universe_matches` still refuses a team
+whose consumed injury set is empty ("no week-W injury report"). That refusal is KEPT: a team whose official table is
+empty cannot run primary in week 4. No week-4 team has an empty table (minimum 3 rows), and audit #20 advised keeping
+the refusal until completeness is repaired. A verified-empty path is future work, to be declared before use.
+
+**PBP admission at the harness (audit #20 B).** `build_bundle` now runs `usage._pbp_admission` on the archived PBP
+snapshot the run consumes, so a primary or pilot run HALTs on inadmissible plays even with clean prebuilt tables. The
+audit #19 A1 brief's "worker must HALT" was not true at cd5cfeb8b; enforcement was at build time only.
+
+**Feed evidence.** `official_step` now keeps the feed's injuries before the overlay as `injuries_feed.parquet`,
+archived with the refresh. Audit #20 could not verify "the feed had caught up" from the post-overlay file; Cowork's
+15:48Z claim rests on the refresh log only.
+
+**Survivors.**
+- Y1 (a non-UTC offset rejected) is killed by `test_d279_y1_…`;
+- Y2 (trailing slash) is killed by `test_d279_y2_…`;
+- Y3 (posteam upper-cased first) is killed by the lower-case posteam test in `test_fwd7f`.
+
+**Corrections.**
+- **D278/brief:** besides active_flag, the six roster-move rows also change `injury_status` (Active→CUT/RES).
+- **Runbook:**
+  - the condition now reads "a ChatGPT audit of the CURRENT pin is GO" (audit #19 was NO-GO);
+  - "a SKILL-position row it cannot identify HALTs; an unidentified non-skill row is printed and not written".
+- **Input version:** D279-v9.
+
+**Mutations.** `research/nfl_sim/mutations/d278_mutations.py` now also has Z1-Z10 (the D279 guards and Y1-Y3).
+
+**Tests:** test_fwd7g 43; test_fwd7f 12. Mutations: W1-W24, X1-X23 and Z1-Z10 all killed except X2 (admission-equivalent, as audit #20 judged); W23 re-anchored to `_table_rows`, Z10 killed by `test_d279_a_second_header_row_…`.
+
+**Windows (rule unchanged).** Each runs PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before its harness
+AND the gate passes; otherwise `--pilot`, decided before the harness. Audit #20's prerequisites stand:
+- game-morning refresh done by 12:15Z, with that capture's evidence committed before each primary;
+- a main + SNF re-refresh done by 15:45Z;
+- MNF needs a capture after Sat 20:00Z, and a last refresh done by Mon 23:00Z.

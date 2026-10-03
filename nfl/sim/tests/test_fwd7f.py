@@ -123,3 +123,8 @@ def test_blank_or_whitespace_keys_and_unknown_teams_halt(tmp_path, monkeypatch):
     _bad(tmp_path, monkeypatch, 1, "play_type", "", "empty or whitespace-only play_type")
     _bad(tmp_path, monkeypatch, 1, "posteam", "XYZ", "team key outside the 32 nflverse codes")
     _bad(tmp_path, monkeypatch, 0, "defteam", "kc", "team key outside the 32 nflverse codes")
+
+
+def test_y3_a_lower_case_posteam_halts(tmp_path, monkeypatch):
+    """Audit #20 Y3: the team domain is case-sensitive (real PBP uses upper case)."""
+    _bad(tmp_path, monkeypatch, 1, "posteam", "kc", "team key outside the 32 nflverse codes")

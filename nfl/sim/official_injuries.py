@@ -132,11 +132,7 @@ def _read(html_text, week, season):
             teams.append(t)
         matchups.append({"away": teams[0], "home": teams[1]})
         for i, (t, tab) in enumerate(zip(teams, tables)):
-            head = [_txt(h) for h in re.findall(r"<th[^>]*>(.*?)</th>", tab, re.S)]
-            if head != HEADER:
-                raise SystemExit(f"HALT: official injury page {t}: columns {head}, expected {HEADER}")
-            body = re.findall(r"<tbody>(.*?)</tbody>", tab, re.S)
-            for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", body[0] if body else "", re.S):
+            for tr in _table_rows(t, tab):
                 td = [_txt(x) for x in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]
                 if len(td) != 5 or not td[0]:
                     raise SystemExit(f"HALT: official injury page {t}: malformed row {td}")
@@ -147,8 +143,39 @@ def _read(html_text, week, season):
                 rows.append({"team": t, "opp": teams[1 - i], "player": td[0], "position": td[1],
                              "injuries": td[2] or None, "practice_status": td[3] or None,
                              "game_status": gs})
+    # D279 (audit #20 A1): an independent count of every player row inside the report
+    # sections must equal the rows emitted — no source row may be dropped by structure
+    src = sum(len(re.findall(r"<tr\b", u.split("</section>", 1)[0])) for u in units) - 2 * len(units)
+    if src != len(rows):
+        raise SystemExit(f"HALT: official injury page has {src} player rows but {len(rows)} were "
+                         f"parsed")
     return matchups, pd.DataFrame(rows, columns=["team", "opp", "player", "position", "injuries",
                                                  "practice_status", "game_status"])
+
+
+def _table_rows(team, tab):
+    """D279 (audit #20 A1): every player row of one team table, whatever its body structure.
+    The table must be exactly one header row (the 5 expected columns) followed by player rows,
+    in any number of <tbody> elements with or without attributes. Anything else between rows
+    — other tags, text, a nested table, an unclosed row — HALTs; nothing is silently skipped."""
+    if len(re.findall(r"<table\b", tab)) or len(re.findall(r"<thead\b", tab)) != 1:
+        raise SystemExit(f"HALT: official injury page {team}: unsupported table structure "
+                         f"(nested table or not exactly one header)")
+    head_m = re.search(r"<thead\b[^>]*>(.*?)</thead>", tab, re.S)
+    if not head_m:
+        raise SystemExit(f"HALT: official injury page {team}: header not closed")
+    head = [_txt(h) for h in re.findall(r"<th[^>]*>(.*?)</th>", head_m.group(1), re.S)]
+    if head != HEADER or len(re.findall(r"<tr\b", head_m.group(1))) != 1:
+        raise SystemExit(f"HALT: official injury page {team}: columns {head}, expected {HEADER}")
+    rest = tab[:head_m.start()] + tab[head_m.end():]
+    rest = re.sub(r"</?tbody\b[^>]*>", "", rest)
+    rows = re.findall(r"<tr\b[^>]*>(.*?)</tr>", rest, re.S)
+    leftover = re.sub(r"<tr\b[^>]*>.*?</tr>", "", rest, flags=re.S)
+    if len(re.findall(r"<tr\b", rest)) != len(rows) or leftover.strip():
+        raise SystemExit(f"HALT: official injury page {team}: unsupported table body structure "
+                         f"({len(re.findall(r'<tr', rest))} row tags, {len(rows)} complete rows, "
+                         f"stray content {leftover.strip()[:60]!r})")
+    return rows
 
 
 def parse(html_text, week, season):

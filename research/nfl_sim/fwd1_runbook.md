@@ -1,6 +1,6 @@
 # Forward-run runbook — nfl_fwd_v1, weeks 4, 5 (D272)
 
-Reader model: `nfl_sim_v1_156cd057`. Generated 2026-10-03T13:06:14Z by `research/nfl_sim/make_runbook.py`. Run every command from the checkout that holds the refreshed inputs. Every forward run goes through the bootstrap (D266).
+Reader model: `nfl_sim_v1_156cd057`. Generated 2026-10-03T17:03:17Z by `research/nfl_sim/make_runbook.py`. Run every command from the checkout that holds the refreshed inputs. Every forward run goes through the bootstrap (D266).
 
 ## Input refresh (D271/D272) — per window, never at the last minute
 
@@ -12,7 +12,7 @@ python3 nfl/sim/refresh_inputs.py --week W
 - Sunday: after the final injury reports (Friday 4 PM ET), and again on game morning, finishing at least 30 min before the window's harness start.
 - Monday: the final report is due SATURDAY 4 PM ET (D278); refresh after it, and again on game morning, finishing at least 30 min before the harness start.
 - TNF: after Wednesday's report, and again Thursday afternoon.
-- D277: the refresh fetches the OFFICIAL nfl.com injury report for week W; its rows replace the feed's for every team on the page. A row it cannot identify HALTs the refresh (old tables restored). `--no-official` skips it, and a primary run then HALTs at the D277 gate.
+- D277: the refresh fetches the OFFICIAL nfl.com injury report for week W; its rows replace the feed's for every team on the page. A SKILL-position row it cannot identify HALTs the refresh (old tables restored); an unidentified non-skill row is printed and not written. `--no-official` skips it, and a primary run then HALTs at the D277 gate.
 - D277: before a primary harness, commit the evidence of the capture the refresh used (fetch record with URL, retrieval UTC and page sha256; the identified rows; the refresh manifest). The page itself stays in the refresh archive:
 ```bash
 python3 nfl/sim/official_injuries.py export --week W --out research/nfl_sim/official_injuries/2026_wW && git add research/nfl_sim/official_injuries/2026_wW && git commit -m "D277: week-W official injury capture" && git push origin eng/fwd6
@@ -44,7 +44,7 @@ python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
 ```bash
 python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
 ```
-- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report gate; if either is not met before the harness start, run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
+- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
 
 ### Sunday main + SNF (13 games) — Sun 2026-10-04 [17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 1:00 PM ET+)
 Games (13): TEN@BAL, NE@BUF, NYJ@CHI, JAX@CIN, DAL@HOU, ARI@NYG, LA@PHI, GB@TB, MIA@MIN, KC@LV, LAC@SEA, DEN@SF, DET@CAR
@@ -53,7 +53,7 @@ Games (13): TEN@BAL, NE@BUF, NYJ@CHI, JAX@CIN, DAL@HOU, ARI@NYG, LA@PHI, GB@TB, 
 ```bash
 python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 9
 ```
-- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report gate; if either is not met before the harness start, run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
+- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
 
 ### ATL@NO — Tue 2026-10-06 00:15Z (Mon 8:15 PM ET)
 Games (1): ATL@NO
@@ -66,7 +66,7 @@ python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
 ```bash
 python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 4 --window-hours 1.5
 ```
-- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report gate; if either is not met before the harness start, run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
+- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
 
 ## Week 5
 
@@ -77,7 +77,7 @@ Games (1): TB@DAL
 ```bash
 python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 1.5
 ```
-- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report gate; if either is not met before the harness start, run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
+- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
 
 ### PHI@JAX — Sun 2026-10-11 13:30Z (Sun 9:30 AM ET)
 Games (1): PHI@JAX
@@ -90,7 +90,7 @@ python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
 ```bash
 python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 1.5
 ```
-- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report gate; if either is not met before the harness start, run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
+- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
 
 ### Sunday main + SNF (12 games) — Sun 2026-10-11 [17:00Z, 20:05Z, 20:25Z, 00:20Z] (Sun 1:00 PM ET+)
 Games (12): CIN@MIA, LV@NE, MIN@NO, CLE@NYJ, IND@PIT, HOU@TEN, NYG@WAS, CHI@GB, DEN@LAC, DET@ARI, SF@SEA, BAL@ATL
@@ -99,7 +99,7 @@ Games (12): CIN@MIA, LV@NE, MIN@NO, CLE@NYJ, IND@PIT, HOU@TEN, NYG@WAS, CHI@GB, 
 ```bash
 python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 9
 ```
-- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report gate; if either is not met before the harness start, run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
+- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
 
 ### BUF@LA — Tue 2026-10-13 00:15Z (Mon 8:15 PM ET)
 Games (1): BUF@LA
@@ -112,7 +112,7 @@ python3 nfl/pipeline/pull_hardrock_props.py --window-hours 2 --tag close \
 ```bash
 python3 -I -S -B nfl/sim/fwd_bootstrap.py harness --week 5 --window-hours 1.5
 ```
-- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report gate; if either is not met before the harness start, run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
+- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` (a declared pilot, never promoted after outcomes).
 
 ## Notes
 

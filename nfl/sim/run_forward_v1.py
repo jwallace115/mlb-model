@@ -502,6 +502,13 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     pbp_snap = archive_root_for(_r) / "sha256" / pbp_sha
     counts = count_team_completed_games(season, pbp_path=pbp_snap)
     last_week = _last_played_weeks(pbp_snap, week)
+    # D279 (audit #20 B): the PBP admission rules (D276/D278) also run here, on the archived
+    # snapshot this run consumes — not only when the tables were built
+    from nfl.sim.usage import _pbp_admission
+    try:
+        _pbp_admission(season, pbp_snap)
+    except RuntimeError as e:
+        raise SystemExit(f"HALT: {e}")
     if hashlib.sha256(pbp_snap.read_bytes()).hexdigest() != pbp_sha:
         raise SystemExit("HALT: the archived PBP snapshot changed while it was being read")
     (inputs_dir / "team_game_counts.json").write_text(

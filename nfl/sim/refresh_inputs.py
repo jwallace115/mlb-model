@@ -88,7 +88,7 @@ def splice(old, new, season=SEASON):
     return pd.concat([keep, cur], ignore_index=True)
 
 
-INPUT_VERSION = "D278-v8"   # declared prospective input version (2026 rows only); D278: blank/unknown PBP keys refused; official capture bound to season/week/matchups/cutoff
+INPUT_VERSION = "D279-v9"   # declared prospective input version (2026 rows only); D279: every official table body parsed and row-counted; PBP admission also at the harness
 
 
 def snapshot_schedule():
@@ -114,7 +114,8 @@ def snapshot_schedule():
 
 SOURCES = ["rosters_weekly.parquet", "depth_charts.parquet", "injuries.parquet",
            f"pbp_{SEASON}.parquet", f"schedules_{SEASON}.parquet"]
-OPTIONAL_SOURCES = ["official_injuries.html", "official_injuries.json"]   # D277
+OPTIONAL_SOURCES = ["official_injuries.html", "official_injuries.json",   # D277
+                    "injuries_feed.parquet"]   # D279: the feed's injuries BEFORE the official overlay
 
 
 def official_step(week, fetch=None):
@@ -133,6 +134,7 @@ def official_step(week, fetch=None):
     inj = pd.read_parquet(PBP / "injuries.parquet")
     old = inj[(inj["season"] == SEASON) & (inj["week"] == week)]
     new = OI.overlay(inj, rows, SEASON, week, OI.page_teams(mapped))
+    shutil.copy2(PBP / "injuries.parquet", PBP / "injuries_feed.parquet")   # D279: archived
     new.to_parquet(PBP / "injuries.parquet", index=False)
     OI.write_capture(body, rec, PBP)
     print(f"  {rec['url']} fetched {rec['fetched_utc']} sha256 {rec['sha256'][:16]}: "

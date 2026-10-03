@@ -129,8 +129,8 @@ HARNESS = "python3 -I -S -B nfl/sim/fwd_bootstrap.py harness"
 # team's official final injury report verified and reconciled); otherwise the same command
 # runs with --pilot, decided before the harness start. The TNF window (played) stays a pilot.
 PILOT_BEFORE_UTC = datetime(2026, 10, 3, tzinfo=timezone.utc)
-D277_NOTE = ("- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report "
-             "gate; if either is not met before the harness start, run the same command with `--pilot` "
+D277_NOTE = ("- D277/D279: PRIMARY only if a ChatGPT audit of the CURRENT pin is GO before the harness start and "
+             "the harness passes the official-injury-report gate; otherwise run the same command with `--pilot` "
              "(a declared pilot, never promoted after outcomes).")
 
 
@@ -159,8 +159,8 @@ def main():
              "morning, finishing at least 30 min before the harness start.")
     L.append("- TNF: after Wednesday's report, and again Thursday afternoon.")
     L.append("- D277: the refresh fetches the OFFICIAL nfl.com injury report for week W; its rows replace the "
-             "feed's for every team on the page. A row it cannot identify HALTs the refresh (old tables "
-             "restored). `--no-official` skips it, and a primary run then HALTs at the D277 gate.")
+             "feed's for every team on the page. A SKILL-position row it cannot identify HALTs the refresh (old "
+             "tables restored); an unidentified non-skill row is printed and not written. `--no-official` skips it, and a primary run then HALTs at the D277 gate.")
     L.append("- D277: before a primary harness, commit the evidence of the capture the refresh used (fetch record "
              "with URL, retrieval UTC and page sha256; the identified rows; the refresh manifest). The page itself "
              "stays in the refresh archive:")

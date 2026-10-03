@@ -636,3 +636,104 @@ def test_d278_a_primary_bundle_refuses_a_capture_retrieved_after_its_cutoff(tmp_
             fwd.build_bundle(2026, 3, T, pilot=False, allow_stale_quotes=True, _root=root)
     finally:
         fwd.PROPS_DIR, fwd.LINES_DIR, fwd.BOARD_ROOT, fwd.EXPERIMENT_MANIFEST = saved
+
+
+# ── D279: audit #20 ───────────────────────────────────────────────────────────
+
+def _was_like_page():
+    return _page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS, HOME_ROWS)])
+
+
+def test_d279_every_table_body_is_parsed():
+    """Audit #20 A1: '</tbody><tbody>' after a team's first row hid the rest of its rows (and
+    two officially Out players) from both the refresh and the gate."""
+    page = _was_like_page()
+    first_row_end = page.index("</tr>", page.index("<tbody>")) + len("</tr>")
+    split = page[:first_row_end] + "</tbody><tbody>" + page[first_row_end:]
+    attr = page.replace("<tbody>", '<tbody class="report-body">', 1)
+    clean = OI.parse(page, 4, 2026)
+    for variant in (split, attr):
+        got = OI.parse(variant, 4, 2026)
+        pd.testing.assert_frame_equal(got, clean)
+    assert len(clean) == 5
+
+
+def test_d279_a_genuinely_empty_table_parses_as_zero_rows():
+    page = _page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"), [], HOME_ROWS)])
+    o = OI.parse(page, 4, 2026)
+    assert (o["team"] == "CAR").sum() == 0 and (o["team"] == "KC").sum() == 2
+    no_body = page.replace("<tbody></tbody>", "", 1)
+    assert len(OI.parse(no_body, 4, 2026)) == 2
+
+
+def test_d279_unsupported_table_structures_halt():
+    page = _was_like_page()
+    row_end = page.index("</tr>", page.index("<tbody>")) + len("</tr>")
+    for bad, msg in ((page[:row_end] + "<div>x</div>" + page[row_end:], "stray content"),
+                     (page[:row_end] + "<tr><td>Unclosed</td>" + page[row_end:], "row tags"),
+                     (page.replace("<tbody>", "<tbody><table><tr><td>x</td></tr></table>", 1), "unsupported table"),
+                     (page.replace("<thead>", "<thead><tr><th>Extra</th></tr>", 1), "columns")):
+        with pytest.raises(SystemExit, match=msg):
+            OI.parse(bad, 4, 2026)
+
+
+def test_d279_a_player_row_outside_the_tables_halts_by_the_independent_count():
+    page = _was_like_page()
+    outside = page.replace('<div class="nfl-t-stats__title">',
+                           '<tr><td>Ghost Player</td></tr><div class="nfl-t-stats__title">', 1)
+    with pytest.raises(SystemExit, match="player rows but 5 were parsed"):
+        OI.parse(outside, 4, 2026)
+
+
+def test_d279_y1_a_non_utc_offset_normalises():
+    assert OI.retrieval_time({"fetched_utc": "2026-10-03T11:48:51.308172-04:00"}) == \
+        pd.Timestamp("2026-10-03T15:48:51.308172Z")
+
+
+def test_d279_y2_a_trailing_slash_on_the_final_url_is_accepted(tmp_path):
+    d = _inputs(tmp_path)
+    _rewrite(d, final_url=OI.URL.format(season=2026, week=4) + "/")
+    assert OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)["KC"]["official_verified"]
+    _rewrite(d, final_url=OI.URL.format(season=2026, week=4) + "?x=1")
+    with pytest.raises(SystemExit, match="final"):
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)
+
+
+def test_d279_a_primary_bundle_refuses_inadmissible_pbp(tmp_path, monkeypatch):
+    """Audit #20 B: the harness checks the archived PBP snapshot itself, not only the build."""
+    from nfl.sim.tests.test_fwd3_item0 import _build_fixture_root, _set_fwd_paths, T
+    import nfl.sim.run_forward_v1 as fwd
+    root = _build_fixture_root(tmp_path)
+    f = root / "nfl" / "data" / "pbp" / "pbp_2026.parquet"
+    p = pd.read_parquet(f)
+    extra = {"play_type": "pass", "posteam": "", "defteam": "KC", "complete_pass": 1, "pass_attempt": 1,
+             "rush_attempt": 0, "receiver_player_id": "00-1", "passer_player_id": "00-q",
+             "rusher_player_id": None}
+    for c, v in extra.items():
+        p[c] = v
+    p.to_parquet(f, index=False)
+    saved = (fwd.PROPS_DIR, fwd.LINES_DIR, fwd.BOARD_ROOT, fwd.EXPERIMENT_MANIFEST)
+    _set_fwd_paths(fwd, root)
+    try:
+        with pytest.raises(SystemExit, match="empty or whitespace-only posteam"):
+            fwd.build_bundle(2026, 3, T, pilot=True, allow_stale_quotes=True, _root=root)
+    finally:
+        fwd.PROPS_DIR, fwd.LINES_DIR, fwd.BOARD_ROOT, fwd.EXPERIMENT_MANIFEST = saved
+
+
+def test_d279_the_feed_before_the_overlay_is_kept(tmp_path, monkeypatch):
+    """Audit #20: the pre-overlay feed was not archived, so 'the feed caught up' could not be
+    checked. official_step now keeps it as injuries_feed.parquet (archived with the refresh)."""
+    R = _refresh_world(tmp_path, monkeypatch)
+    before = (tmp_path / "injuries.parquet").read_bytes()
+    R.official_step(4, fetch=_fake_fetch())
+    assert (tmp_path / "injuries_feed.parquet").read_bytes() == before
+    assert (tmp_path / "injuries.parquet").read_bytes() != before
+    assert "injuries_feed.parquet" in R.OPTIONAL_SOURCES
+
+
+def test_d279_a_second_header_row_halts_as_a_header_error():
+    """Z10: an empty extra header row (same columns) is a header error, not a count error."""
+    page = _was_like_page().replace("<thead>", "<thead><tr></tr>", 1)
+    with pytest.raises(SystemExit, match="columns"):
+        OI.parse(page, 4, 2026)

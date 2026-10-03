@@ -1,4 +1,4 @@
-"""D277/D278 mutation campaign (FWD7g W1-W24, FWD7i X1-X23), for reproduction.
+"""D277-D279 mutation campaign (FWD7g W1-W24, FWD7i X1-X23, FWD7j Z1-Z10), for reproduction.
 
 Usage: python3 research/nfl_sim/mutations/d278_mutations.py COPY_ROOT
 COPY_ROOT is a COPY of the repository tree (never the working checkout): each operator edits
@@ -48,6 +48,7 @@ W=[
 REANCHORED = {  # D278 moved these anchors; same operators
  "W11": ("W11 primary not required","nfl/sim/run_forward_v1.py","require=(not pilot) and (season, week) >= OFFICIAL_REPORT_FROM, cutoff=T)","require=False, cutoff=T)"),
  "W18": ("W18 team on page not required","nfl/sim/official_injuries.py",'        if t not in page:\n            reasons.append("no section on the official page")','        if False:\n            reasons.append("no section on the official page")'),
+ "W23": ("W23 header not checked", "nfl/sim/official_injuries.py", "    if head != HEADER or len(re.findall(r\"<tr\\b\", head_m.group(1))) != 1:", "    if False:"),
  "W20": ("W20 written before identified","nfl/sim/refresh_inputs.py","    with tempfile.TemporaryDirectory() as td:\n        OI.write_capture(body, rec, td)","    OI.write_capture(body, rec, PBP)\n    with tempfile.TemporaryDirectory() as td:\n        OI.write_capture(body, rec, td)"),
 }
 W = [REANCHORED.get(m[0].split()[0], m) for m in W]
@@ -82,11 +83,26 @@ X=[
 ("X23 overlay rows outside sections",OIp,"    if not set(rows[\"team\"]) <= teams:","    if False:"),
 ]
 
+Z = [  # D279 (audit #20)
+("Z1 only the first table body", OIp, '    rest = re.sub(r"</?tbody\\b[^>]*>", "", rest)\n',
+ '    rest = (re.findall(r"<tbody\\b[^>]*>(.*?)</tbody>", rest, re.S) or [""])[0]\n'),
+("Z2 tbody with attributes not recognised", OIp, 'rest = re.sub(r"</?tbody\\b[^>]*>", "", rest)', 'rest = re.sub(r"</?tbody>", "", rest)'),
+("Z3 no independent row count", OIp, "    if src != len(rows):", "    if False:"),
+("Z4 stray content allowed", OIp, "    if len(re.findall(r\"<tr\\b\", rest)) != len(rows) or leftover.strip():", "    if len(re.findall(r\"<tr\\b\", rest)) != len(rows):"),
+("Z5 no harness PBP admission", "nfl/sim/run_forward_v1.py", "        _pbp_admission(season, pbp_snap)", "        pass"),
+("Z6 feed not kept", "nfl/sim/refresh_inputs.py", '    shutil.copy2(PBP / "injuries.parquet", PBP / "injuries_feed.parquet")   # D279: archived\n', ""),
+("Z7 non-UTC offsets rejected (audit #20 Y1)", OIp, "    return pd.Timestamp(t.astimezone(timezone.utc))",
+ "    if t.utcoffset().total_seconds():\n        raise SystemExit('offset')\n    return pd.Timestamp(t.astimezone(timezone.utc))"),
+("Z8 final_url slash not normalised (Y2)", OIp, '    if str(rec.get("final_url") or "").rstrip("/") != want:', '    if str(rec.get("final_url") or "") != want:'),
+("Z9 posteam upper-cased first (Y3)", Up, '         (p["posteam"].notna() & ~p["posteam"].isin(PBP_TEAMS)) |',
+ '         (p["posteam"].notna() & ~p["posteam"].astype("string").str.upper().isin(PBP_TEAMS)) |'),
+("Z10 header row count not checked", OIp, "    if head != HEADER or len(re.findall(r\"<tr\\b\", head_m.group(1))) != 1:", "    if head != HEADER:"),
+]
 W.append(("W24 no SSL context", OIp, "urllib.request.urlopen(req, timeout=timeout, context=ssl_context())",
           "urllib.request.urlopen(req, timeout=timeout)"))
 TESTS = ["nfl/sim/tests/test_fwd7g.py", "nfl/sim/tests/test_fwd7f.py",
          "nfl/sim/tests/test_fwd7a.py::test_refresh_snapshots_the_schedule_before_building_and_archives_the_refresh"]
-for name, f, a, b in W + X:
+for name, f, a, b in W + X + Z:
     p = R / f
     orig = p.read_text()
     if orig.count(a) != 1:
