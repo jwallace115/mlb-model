@@ -6248,3 +6248,94 @@ HALTed, restored the tables and wrote nothing official.
 (it is on the Mac, as a dependency of requests; nothing was installed), else the default. Verification is never
 disabled. Test: `test_fetch_verifies_certificates_with_an_explicit_context` (urlopen receives an SSLContext with
 CERT_REQUIRED and hostname checking). Mutation W24 (no context passed) is killed.
+
+### D278 — ChatGPT audit #19 (NO-GO for all three week-4 windows at a1ce31e6d) accepted; FWD7i refuses blank/unknown PBP keys, binds the official capture to its season, week, scheduled matchups and the run cutoff, and kills audit #19's survivors (2026-10-03, before any week-4 Sunday or Monday kickoff)
+
+Audit #19 reply: `research/cross_ai/chatgpt_audit19_reply_2026-10-03.md`.
+
+**What held:**
+- baseline 338 + 22;
+- **Check 3:** 857/857 resolved historical statuses agree between nfl.com and nflverse (2025 weeks 3-5), with no
+  skill-player inactive-decision disagreement. The official page supplies the same final injury-status variable; the
+  disagreements were name/roster representation only;
+- independent re-derivation of all 313 rows;
+- 05:59Z → 06:28Z live re-fetch: no row changes;
+- all five real primary negatives HALT, and the clean 28/28 run passes;
+- SSL verification is enforced against real self-signed and wrong-host endpoints;
+- the 19 active-flag changes and the three QBs;
+- rebuild and point-in-time identity;
+- runbook regeneration;
+- the D277 declaration judged a legitimate prospective amendment.
+
+**A1 — blank PBP team keys (accepted).** `posteam=""` on one real completed pass was admitted (`isna()` misses empty
+strings). On the real IND@WAS worker this moved 18 calibrated probabilities (max 0.0452), with every gate passing. Real
+2020-2026 PBP has no blank strings in any admission key.
+
+FIX (`usage._pbp_admission`):
+- an empty or whitespace-only string in play_type, posteam, defteam or the receiver, passer or rusher ID HALTs, and
+  is treated as missing by every other rule;
+- every non-null posteam/defteam must be one of the 32 nflverse codes (`PBP_TEAMS`); all 303,486 real rows comply.
+
+**A2 — retrieval time (accepted).** `fetched_utc` "NaT" and 2099 passed: NaT compares False, and there was no upper
+bound.
+
+FIX:
+- `official_injuries.retrieval_time` requires a parseable ISO, timezone-aware timestamp and HALTs otherwise;
+- `check` takes the run `cutoff` (build_bundle passes T; the refresh report passes now) and requires
+  deadline ≤ retrieval ≤ cutoff per team; a naive cutoff HALTs.
+
+The FWD7g positive bundle test used a 2099 retrieval with a 2099 fixture cutoff; it is still accepted, because now it is
+inside [deadline, T]. A new test proves a retrieval one minute after T HALTs a primary bundle.
+
+**A3 — page/record context (accepted).** A page relabelled 2025 and rehashed, internally consistent wrong matchups,
+and a record with a foreign URL, HTTP 500 or bytes=1 all verified.
+
+FIX:
+- `_read` requires the page's canonical URL to be exactly the season/week report URL, and its title to name "Week W
+  of the S Season";
+- `derive` requires the record's url, post-redirect `final_url` (now recorded by `fetch_page`), http_status 200, and
+  byte count to describe this report;
+- `check` reconciles each team's page matchup (away@home) with its scheduled game, and takes "section present" from
+  the page's matchups (a section with an empty table counts as present);
+- the refresh now derives the fresh capture through the same `derive` before writing anything.
+
+**Also fixed:**
+- **(C) Position boundary.** A name match across the skill boundary (page TE → roster DB, page G → roster RB) HALTs.
+  All 313 real rows agree: 91 skill/skill, 222 non-skill/non-skill.
+- **Overlay keyed by page sections.** It was keyed by teams with rows, so a team whose official table is empty kept
+  the feed's stale rows. The gate caught it as a mismatch; now the overlay is correct.
+- **Runbook.** MNF's final report is due Saturday 4 PM ET; it is stated separately from Sunday's Friday deadline.
+- **Corrections to the audit #19 brief.**
+  - "Nothing is written unless every row is identified" means every SKILL row. Unidentified non-skill rows are
+    excluded by design, and the refresh prints them.
+  - A pilot does NOT proceed past corrupted capture bytes or an invalid record: integrity failures HALT any run. A
+    pilot proceeds only past unverified teams.
+- **Finality wording (audit #19 judgment adopted).** Retrieval after the league deadline is a declared snapshot rule,
+  not proof of a publication time. A team is verified-empty only when an authenticated, context-bound capture shows its
+  section within [deadline, T] and its rows reconcile; unresolved timing means pilot.
+
+**Survivors (audit #19 D):**
+- M02 (two titles, one table) is killed by `test_survivor_m02_…`;
+- N01 (record season ignored) is killed by the record-season case;
+- N02 (blank player name) is killed by `test_survivor_n02_…`.
+
+**Mutations.** `research/nfl_sim/mutations/d278_mutations.py` reproduces the whole campaign on a COPY of the tree:
+- W1-W24, the FWD7g operators, now listed (W11/W18/W20 re-anchored to the D278 code);
+- X1-X23, the D278 operators.
+
+All are killed except X2, which turns blanks into missing values after X1's rule has already refused them. X2 is argued
+equivalent: the outcome is a HALT either way.
+
+**Verified (cloud, staged real inputs).**
+- The D278 overlay on the 01:29Z page equals the D277 overlay: same (team, gsis_id, report_status), 35,859 rows.
+- The page's matchups equal the schedule's 16 week-4 games.
+- `posteam=""` on a real completed pass HALTs.
+- Input version **D278-v8**.
+
+**Tests:** test_fwd7g 34; test_fwd7f 11 (the blank and unknown-team cases added).
+
+**Windows (unchanged rule).** Each runs PRIMARY only if a ChatGPT audit is GO on a repaired pin before its harness
+AND the gate passes; otherwise `--pilot`, decided before the harness. Audit #19's operational prerequisites stand:
+- game-morning refresh done by 12:15Z, with the evidence exported and committed before each primary harness;
+- a re-refresh for main + SNF must be done by 15:45Z;
+- MNF needs a capture retrieved after Sat 20:00Z.

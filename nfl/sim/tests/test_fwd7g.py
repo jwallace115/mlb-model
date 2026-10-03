@@ -46,10 +46,15 @@ HOME_ROWS = [("D&#x27;Andre Swift", "RB", "Ankle", "Limited Participation in Pra
              ("Travis Kelce Jr.", "TE", "Knee", "Did Not Participate In Practice", "Doubtful")]
 
 
-def _page(units=None, week=4):
+def _page(units=None, week=4, season=2026):
     units = units if units is not None else [_unit(("CAR", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS, HOME_ROWS)]
-    return (f'<html><body><h2 class="x">Injuries - WEEK {week}</h2><h2>SUNDAY, OCTOBER 4TH</h2>'
+    return (f'<html><head><title>Official NFL Injury Report for Players - Week {week} of the {season} Season '
+            f'| NFL.com</title><link rel="canonical" href="https://www.nfl.com/injuries/league/{season}/reg{week}">'
+            f'</head><body><h2 class="x">Injuries - WEEK {week}</h2><h2>SUNDAY, OCTOBER 4TH</h2>'
             + "".join(units) + "</body></html>")
+
+
+CUT = pd.Timestamp("2026-10-04T12:00:00Z")      # a run cutoff after the 01:29Z capture
 
 
 def _rosters(extra=()):
@@ -65,7 +70,7 @@ def _rosters(extra=()):
 # ── parse ─────────────────────────────────────────────────────────────────────
 
 def test_parse_reads_every_row_with_its_team_and_status():
-    o = OI.parse(_page(), 4)
+    o = OI.parse(_page(), 4, 2026)
     assert o["team"].tolist() == ["CAR"] * 3 + ["KC"] * 2
     assert o["opp"].tolist() == ["KC"] * 3 + ["CAR"] * 2
     assert o["player"].tolist()[3] == "D'Andre Swift"          # HTML entities decoded
@@ -73,44 +78,44 @@ def test_parse_reads_every_row_with_its_team_and_status():
 
 
 def test_parse_maps_nflcom_codes_and_rejects_unknown_ones():
-    o = OI.parse(_page([_unit(("AZ", "Cardinals"), ("LAR", "Rams"), AWAY_ROWS[:1], HOME_ROWS[:1])]), 4)
+    o = OI.parse(_page([_unit(("AZ", "Cardinals"), ("LAR", "Rams"), AWAY_ROWS[:1], HOME_ROWS[:1])]), 4, 2026)
     assert set(o["team"]) == {"ARI", "LA"}
     with pytest.raises(SystemExit, match="unknown team code 'XX'"):
-        OI.parse(_page([_unit(("XX", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS, HOME_ROWS)]), 4)
+        OI.parse(_page([_unit(("XX", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS, HOME_ROWS)]), 4, 2026)
 
 
 def test_parse_halts_on_anything_but_the_expected_page():
     with pytest.raises(SystemExit, match="not the week-4 report"):
-        OI.parse(_page(week=5), 4)
+        OI.parse(_page(week=5), 4, 2026)
     with pytest.raises(SystemExit, match="no team sections"):
-        OI.parse(_page([]), 4)
+        OI.parse(_page([]), 4, 2026)
     with pytest.raises(SystemExit, match="lists KC twice"):
         OI.parse(_page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS, HOME_ROWS),
-                        _unit(("KC", "Chiefs"), ("DEN", "Broncos"), HOME_ROWS, [])]), 4)
+                        _unit(("KC", "Chiefs"), ("DEN", "Broncos"), HOME_ROWS, [])]), 4, 2026)
     bad_title = _page().replace("<span>Chiefs</span>", "<span>Broncos</span>")
     with pytest.raises(SystemExit, match="do not match the matchup"):
-        OI.parse(bad_title, 4)
+        OI.parse(bad_title, 4, 2026)
     with pytest.raises(SystemExit, match="columns"):
-        OI.parse(_page().replace("<th>Game Status</th>", "<th>Status</th>", 1), 4)
+        OI.parse(_page().replace("<th>Game Status</th>", "<th>Status</th>", 1), 4, 2026)
     with pytest.raises(SystemExit, match="unknown game status 'Inactive'"):
         OI.parse(_page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"),
-                              [("Bryce Young", "QB", "", "", "Inactive")], HOME_ROWS)]), 4)
+                              [("Bryce Young", "QB", "", "", "Inactive")], HOME_ROWS)]), 4, 2026)
     with pytest.raises(SystemExit, match="malformed row"):
-        OI.parse(_page().replace("<td>QB</td>", "", 1), 4)
+        OI.parse(_page().replace("<td>QB</td>", "", 1), 4, 2026)
 
 
 # ── identify ──────────────────────────────────────────────────────────────────
 
 def test_rows_are_identified_from_that_teams_week_roster():
-    m = OI.map_ids(OI.parse(_page(), 4), _rosters(), 2026, 4)
+    m = OI.map_ids(OI.parse(_page(), 4, 2026), _rosters(), 2026, 4)
     assert m["gsis_id"].tolist() == ["00-c1", "00-c2", "00-c3", "00-k1", "00-k2"]  # Jr. dropped
 
 
 def test_an_unidentified_skill_player_halts_and_a_non_skill_one_is_not_written():
     r = _rosters()
     with pytest.raises(SystemExit, match="KC D'Andre Swift \\(RB\\): unmatched"):
-        OI.map_ids(OI.parse(_page(), 4), r[r["gsis_id"] != "00-k1"], 2026, 4)
-    m = OI.map_ids(OI.parse(_page(), 4), r[r["gsis_id"] != "00-c3"], 2026, 4)   # Lewis, G
+        OI.map_ids(OI.parse(_page(), 4, 2026), r[r["gsis_id"] != "00-k1"], 2026, 4)
+    m = OI.map_ids(OI.parse(_page(), 4, 2026), r[r["gsis_id"] != "00-c3"], 2026, 4)   # Lewis, G
     assert m.loc[m["player"] == "Damien Lewis", "gsis_id"].isna().all()
     rows = OI.injury_rows(m, 2026, 4, "2026-10-03T01:00:00+00:00")
     assert "Damien Lewis" not in rows["full_name"].tolist() and len(rows) == 4
@@ -121,18 +126,18 @@ def test_the_same_name_on_another_team_or_week_never_matches():
     moved = r.copy()
     moved.loc[moved["gsis_id"] == "00-k1", "team"] = "DEN"
     with pytest.raises(SystemExit, match="D'Andre Swift"):
-        OI.map_ids(OI.parse(_page(), 4), moved, 2026, 4)
+        OI.map_ids(OI.parse(_page(), 4, 2026), moved, 2026, 4)
     with pytest.raises(SystemExit, match="D'Andre Swift"):
-        OI.map_ids(OI.parse(_page(), 4), r.assign(week=3), 2026, 4)
+        OI.map_ids(OI.parse(_page(), 4, 2026), r.assign(week=3), 2026, 4)
 
 
 def test_ambiguous_names_and_a_player_listed_twice_halt():
     two = _rosters(extra=[("KC", "00-k9", "D'Andre Swift", "RB")])
     with pytest.raises(SystemExit, match="ambiguous"):
-        OI.map_ids(OI.parse(_page(), 4), two, 2026, 4)
+        OI.map_ids(OI.parse(_page(), 4, 2026), two, 2026, 4)
     twice = _page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS + AWAY_ROWS[1:2], HOME_ROWS)])
     with pytest.raises(SystemExit, match="listed more than once"):
-        OI.map_ids(OI.parse(twice, 4), _rosters(), 2026, 4)
+        OI.map_ids(OI.parse(twice, 4, 2026), _rosters(), 2026, 4)
 
 
 # ── overlay ───────────────────────────────────────────────────────────────────
@@ -152,10 +157,11 @@ def _feed():
 
 
 def test_overlay_replaces_only_the_weeks_rows_for_teams_on_the_page():
-    m = OI.map_ids(OI.parse(_page(), 4), _rosters(), 2026, 4)
+    m = OI.map_ids(OI.parse(_page(), 4, 2026), _rosters(), 2026, 4)
+    m.attrs["matchups"] = OI.matchups(_page(), 4, 2026)
     rows = OI.injury_rows(m, 2026, 4, "2026-10-03T01:29:28+00:00")
     feed = _feed()
-    new = OI.overlay(feed, rows, 2026, 4)
+    new = OI.overlay(feed, rows, 2026, 4, OI.page_teams(m))
     assert list(new.columns) == list(feed.columns) and (new.dtypes == feed.dtypes).all()
     w = new[(new["season"] == 2026) & (new["week"] == 4)]
     assert sorted(w["team"]) == ["CAR", "CAR", "CAR", "DEN", "KC", "KC"]
@@ -184,15 +190,17 @@ SCHED = pd.DataFrame([{"game_id": "2026_04_CAR_KC", "season": 2026, "game_type":
 
 def _inputs(tmp_path, fetched="2026-10-03T01:29:28+00:00", page=None, edit=None):
     d = tmp_path / "inputs"
-    d.mkdir()
+    d.mkdir(parents=True)
     body = (page or _page()).encode()
-    rec = {"url": "u", "season": 2026, "week": 4, "fetched_utc": fetched, "http_status": 200,
+    rec = {"url": OI.URL.format(season=2026, week=4), "final_url": OI.URL.format(season=2026, week=4),
+           "season": 2026, "week": 4, "fetched_utc": fetched, "http_status": 200,
            "bytes": len(body), "sha256": hashlib.sha256(body).hexdigest()}
     OI.write_capture(body, rec, d)
     ros = _rosters()
     ros.to_parquet(d / "rosters_weekly.parquet", index=False)
-    m = OI.map_ids(OI.parse(body.decode(), 4), ros, 2026, 4)
-    inj = OI.overlay(_feed(), OI.injury_rows(m, 2026, 4, fetched), 2026, 4)
+    m = OI.map_ids(OI.parse(body.decode(), 4, 2026), ros, 2026, 4)
+    m.attrs["matchups"] = OI.matchups(body.decode(), 4, 2026)
+    inj = OI.overlay(_feed(), OI.injury_rows(m, 2026, 4, fetched), 2026, 4, OI.page_teams(m))
     if edit:
         inj = edit(inj)
     inj.to_parquet(d / "injuries.parquet", index=False)
@@ -200,7 +208,7 @@ def _inputs(tmp_path, fetched="2026-10-03T01:29:28+00:00", page=None, edit=None)
 
 
 def test_gate_verifies_and_reconciles_each_team(tmp_path):
-    per = OI.check(_inputs(tmp_path), 2026, 4, ["CAR", "KC"], SCHED, require=True)
+    per = OI.check(_inputs(tmp_path), 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)
     assert per["CAR"]["official_verified"] and per["KC"]["official_verified"]
     assert per["CAR"]["official_game_statuses"] == 2 and per["KC"]["official_rows"] == 2
     assert per["KC"]["final_report_deadline_utc"] == "2026-10-02T20:00:00+00:00"
@@ -209,8 +217,8 @@ def test_gate_verifies_and_reconciles_each_team(tmp_path):
 def test_gate_halts_a_primary_on_a_page_fetched_before_the_final_report(tmp_path):
     d = _inputs(tmp_path, fetched="2026-10-02T19:59:00+00:00")
     with pytest.raises(SystemExit, match="(?s)HALT \\(D277\\).*fetched 2026-10-02T19:59:00\\+00:00 before"):
-        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True)
-    per = OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False)       # a pilot records it
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)
+    per = OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)       # a pilot records it
     assert not per["KC"]["official_verified"] and "before the final-report deadline" in per["KC"]["official_reason"]
 
 
@@ -219,17 +227,17 @@ def test_gate_halts_when_the_consumed_rows_differ_from_the_page(tmp_path):
         inj.loc[(inj["gsis_id"] == "00-c2") & (inj["week"] == 4), "report_status"] = None
         return inj
     with pytest.raises(SystemExit, match="CAR: consumed injury rows \\(3\\) differ from the official page \\(3\\)"):
-        OI.check(_inputs(tmp_path, edit=flip), 2026, 4, ["CAR", "KC"], SCHED, require=True)
+        OI.check(_inputs(tmp_path, edit=flip), 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)
 
 
 def test_gate_halts_on_a_team_missing_from_the_page_or_changed_bytes(tmp_path):
     d = _inputs(tmp_path)
     sched = pd.concat([SCHED, SCHED.assign(game_id="g2", home_team="DEN", away_team="LV")])
     with pytest.raises(SystemExit, match="DEN: no section on the official page"):
-        OI.check(d, 2026, 4, ["CAR", "KC", "DEN"], sched, require=True)
+        OI.check(d, 2026, 4, ["CAR", "KC", "DEN"], sched, require=True, cutoff=CUT)
     (d / OI.HTML_NAME).write_bytes((d / OI.HTML_NAME).read_bytes() + b" ")
     with pytest.raises(SystemExit, match="does not match the sha256"):
-        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False)
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
 
 
 def test_gate_halts_on_a_record_for_another_week_or_no_capture(tmp_path):
@@ -237,11 +245,11 @@ def test_gate_halts_on_a_record_for_another_week_or_no_capture(tmp_path):
     rec = json.loads((d / OI.RECORD_NAME).read_text())
     (d / OI.RECORD_NAME).write_text(json.dumps(dict(rec, week=3)))
     with pytest.raises(SystemExit, match="record is for season 2026 week 3"):
-        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False)
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
     (d / OI.RECORD_NAME).unlink()
     with pytest.raises(SystemExit, match="(?s)HALT \\(D277\\).*no official injury report"):
-        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True)
-    assert OI.check(d, 2026, 4, ["KC"], SCHED, require=False)["KC"]["official_verified"] is False
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)
+    assert OI.check(d, 2026, 4, ["KC"], SCHED, require=False, cutoff=CUT)["KC"]["official_verified"] is False
 
 
 # ── refresh step ──────────────────────────────────────────────────────────────
@@ -258,7 +266,8 @@ def _fake_fetch(page=None, fetched="2026-10-03T01:29:28+00:00"):
     body = (page or _page()).encode()
 
     def f(season, week):
-        return body, {"url": "u", "season": season, "week": week, "fetched_utc": fetched,
+        u = OI.URL.format(season=season, week=week)
+        return body, {"url": u, "final_url": u, "season": season, "week": week, "fetched_utc": fetched,
                       "http_status": 200, "bytes": len(body),
                       "sha256": hashlib.sha256(body).hexdigest()}
     return f
@@ -275,7 +284,7 @@ def test_refresh_step_overlays_and_writes_a_checkable_capture(tmp_path, monkeypa
     d.mkdir()
     for f in ("rosters_weekly.parquet", "injuries.parquet", OI.HTML_NAME, OI.RECORD_NAME):
         (d / f).write_bytes((tmp_path / f).read_bytes())
-    per = OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True)
+    per = OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)
     assert all(v["official_verified"] for v in per.values())
 
 
@@ -376,12 +385,14 @@ def test_a_primary_bundle_with_a_verified_report_passes_the_d277_gate(tmp_path, 
                         [("Darren Waller", "TE", "Knee", "Limited Participation in Practice", "Questionable")],
                         [("Travis Kelce", "TE", "Ankle", "Limited Participation in Practice", "Questionable")])],
                  week=3).encode()
-    rec = {"url": "u", "season": 2026, "week": 3, "fetched_utc": "2099-01-01T00:00:00+00:00",
+    rec = {"url": OI.URL.format(season=2026, week=3), "final_url": OI.URL.format(season=2026, week=3),
+           "season": 2026, "week": 3, "fetched_utc": "2099-01-01T00:00:00+00:00",
            "http_status": 200, "bytes": len(page), "sha256": hashlib.sha256(page).hexdigest()}
     OI.write_capture(page, rec, pb)
-    m = OI.map_ids(OI.parse(page.decode(), 3), pd.read_parquet(pb / "rosters_weekly.parquet"), 2026, 3)
+    m = OI.map_ids(OI.parse(page.decode(), 3, 2026), pd.read_parquet(pb / "rosters_weekly.parquet"), 2026, 3)
+    m.attrs["matchups"] = OI.matchups(page.decode(), 3, 2026)
     inj = pd.read_parquet(pb / "injuries.parquet")
-    OI.overlay(inj, OI.injury_rows(m, 2026, 3, rec["fetched_utc"]), 2026, 3).to_parquet(
+    OI.overlay(inj, OI.injury_rows(m, 2026, 3, rec["fetched_utc"]), 2026, 3, OI.page_teams(m)).to_parquet(
         pb / "injuries.parquet", index=False)
     saved = (fwd.PROPS_DIR, fwd.LINES_DIR, fwd.BOARD_ROOT, fwd.EXPERIMENT_MANIFEST)
     _set_fwd_paths(fwd, root)
@@ -399,9 +410,9 @@ def test_gate_halts_on_a_team_without_exactly_one_schedule_game(tmp_path):
     """Survivor W21: the deadline needs the team's one game this week."""
     d = _inputs(tmp_path)
     with pytest.raises(SystemExit, match="KC: 0 week-4 schedule games"):
-        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED.assign(home_team="DEN"), require=True)
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED.assign(home_team="DEN"), require=True, cutoff=CUT)
     with pytest.raises(SystemExit, match="KC: 2 week-4 schedule games"):
-        OI.check(d, 2026, 4, ["CAR", "KC"], pd.concat([SCHED, SCHED.assign(away_team="LV")]), require=True)
+        OI.check(d, 2026, 4, ["CAR", "KC"], pd.concat([SCHED, SCHED.assign(away_team="LV")]), require=True, cutoff=CUT)
 
 
 def test_export_writes_the_committable_evidence_and_refuses_a_foreign_manifest(tmp_path):
@@ -432,6 +443,9 @@ def test_fetch_verifies_certificates_with_an_explicit_context(monkeypatch):
         def read(self):
             return b"<html></html>"
 
+        def geturl(self):
+            return "https://www.nfl.com/injuries/league/2026/reg4"
+
         def __enter__(self):
             return self
 
@@ -447,3 +461,178 @@ def test_fetch_verifies_certificates_with_an_explicit_context(monkeypatch):
     ctx = seen["context"]
     assert isinstance(ctx, ssl.SSLContext) and ctx.verify_mode == ssl.CERT_REQUIRED and ctx.check_hostname
     assert rec["sha256"] == hashlib.sha256(b"<html></html>").hexdigest() and rec["week"] == 4
+    assert rec["final_url"] == "https://www.nfl.com/injuries/league/2026/reg4"
+
+
+# ── D278: audit #19 ───────────────────────────────────────────────────────────
+
+def _rewrite(d, page=None, **rec_changes):
+    """Rewrite the run-dir capture with a new page and/or record fields, re-hashing the page
+    so the integrity check passes and the context checks are what is tested."""
+    rec = json.loads((d / OI.RECORD_NAME).read_text())
+    body = page.encode() if page is not None else (d / OI.HTML_NAME).read_bytes()
+    rec.update(sha256=hashlib.sha256(body).hexdigest(), bytes=len(body))
+    rec.update(rec_changes)
+    OI.write_capture(body, rec, d)
+
+
+def test_a2_missing_naive_or_unparseable_retrieval_times_halt(tmp_path):
+    """Audit #19 A2: fetched_utc 'NaT' passed (NaT < deadline is False)."""
+    for i, v in enumerate(("NaT", None, "", "2026-10-03T05:59:23", "yesterday")):
+        d = _inputs(tmp_path / f"t{i}")
+        _rewrite(d, fetched_utc=v)
+        with pytest.raises(SystemExit, match="fetched_utc"):
+            OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
+
+
+def test_a2_a_page_retrieved_after_the_run_cutoff_is_not_verified(tmp_path):
+    """Audit #19 A2: 2099 passed — the gate had no upper bound and no cutoff."""
+    d = _inputs(tmp_path, fetched="2099-01-01T00:00:00+00:00")
+    with pytest.raises(SystemExit, match="(?s)HALT \\(D277\\).*after the run cutoff"):
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=True, cutoff=CUT)
+    per = OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
+    assert not per["KC"]["official_verified"]
+    assert OI.check(d, 2026, 4, ["KC"], SCHED, require=True,
+                    cutoff=pd.Timestamp("2099-01-01T00:00:00Z"))["KC"]["official_verified"]
+    with pytest.raises(SystemExit, match="timezone-aware run cutoff"):
+        OI.check(d, 2026, 4, ["KC"], SCHED, require=False, cutoff=pd.Timestamp("2099-01-02"))
+
+
+def test_a3_a_page_of_another_season_halts_even_when_rehashed(tmp_path):
+    """Audit #19 A3: a page relabelled 2025 (title, canonical) with a 2026 record verified."""
+    d = _inputs(tmp_path)
+    p25 = _page(season=2025)
+    _rewrite(d, page=p25)
+    with pytest.raises(SystemExit, match="canonical URL"):
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
+    d2 = _inputs(tmp_path / "t")
+    _rewrite(d2, page=_page().replace("of the 2026 Season", "of the 2025 Season"))
+    with pytest.raises(SystemExit, match="does not\\s+name week 4 of the 2026 season"):
+        OI.check(d2, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
+
+
+def test_a3_the_record_must_describe_a_successful_fetch_of_this_url(tmp_path):
+    for i, (k, v, msg) in enumerate((("url", "https://example.invalid/unrelated", "url"),
+                                     ("final_url", "https://www.nfl.com/injuries/league/2025/reg4", "final"),
+                                     ("final_url", None, "final"),
+                                     ("http_status", 500, "http_status 500"))):
+        d = _inputs(tmp_path / f"r{i}")
+        _rewrite(d, **{k: v})
+        with pytest.raises(SystemExit, match=f"does not describe this report: .*{msg}"):
+            OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
+    d = _inputs(tmp_path / "b")
+    rec = json.loads((d / OI.RECORD_NAME).read_text())
+    (d / OI.RECORD_NAME).write_text(json.dumps(dict(rec, bytes=1)))
+    with pytest.raises(SystemExit, match="bytes 1 !="):
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
+    d = _inputs(tmp_path / "s")
+    rec = json.loads((d / OI.RECORD_NAME).read_text())
+    (d / OI.RECORD_NAME).write_text(json.dumps(dict(rec, season=2025)))       # survivor N01
+    with pytest.raises(SystemExit, match="record is for season 2025 week 4"):
+        OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=False, cutoff=CUT)
+
+
+def test_a3_page_matchups_must_be_the_scheduled_games(tmp_path):
+    """Audit #19 A3: IND-CHI and NYJ-WAS (internally consistent, each team's own rows)
+    verified although the schedule says IND@WAS and NYJ@CHI."""
+    sched = pd.concat([SCHED, SCHED.assign(game_id="g2", home_team="DEN", away_team="LV")])
+    good = [_unit(("CAR", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS, HOME_ROWS),
+            _unit(("LV", "Raiders"), ("DEN", "Broncos"), [], [])]
+    swapped = [_unit(("CAR", "Panthers"), ("DEN", "Broncos"), AWAY_ROWS, []),
+               _unit(("LV", "Raiders"), ("KC", "Chiefs"), [], HOME_ROWS)]
+    d = _inputs(tmp_path / "g", page=_page(good))
+    per = OI.check(d, 2026, 4, ["CAR", "KC", "LV", "DEN"], sched, require=True, cutoff=CUT)
+    assert all(v["official_verified"] for v in per.values())
+    assert per["DEN"]["official_rows"] == 0          # a section with an empty table is present
+    d = _inputs(tmp_path / "s", page=_page(swapped))
+    with pytest.raises(SystemExit, match="KC: page matchup LV@KC is not the scheduled CAR@KC"):
+        OI.check(d, 2026, 4, ["CAR", "KC", "LV", "DEN"], sched, require=True, cutoff=CUT)
+    flipped = [_unit(("KC", "Chiefs"), ("CAR", "Panthers"), HOME_ROWS, AWAY_ROWS),
+               _unit(("LV", "Raiders"), ("DEN", "Broncos"), [], [])]
+    d = _inputs(tmp_path / "f", page=_page(flipped))
+    with pytest.raises(SystemExit, match="page matchup KC@CAR is not the scheduled CAR@KC"):
+        OI.check(d, 2026, 4, ["CAR", "KC"], sched, require=True, cutoff=CUT)
+
+
+def test_survivor_m02_a_section_missing_one_table_halts():
+    """Audit #19 survivor M02: delete KC's table but keep both headers and titles."""
+    page = _page()
+    i = page.index('<div class="d3-o-table--horizontal-scroll">', page.index("<span>Chiefs</span>"))
+    j = page.index("</table></div>", i) + len("</table></div>")
+    with pytest.raises(SystemExit, match="expected 2 teams/2 tables"):
+        OI.parse(page[:i] + page[j:], 4, 2026)
+
+
+def test_survivor_n02_a_row_with_a_blank_player_name_halts():
+    page = _page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS + [("", "G", "", "", "Out")], HOME_ROWS)])
+    with pytest.raises(SystemExit, match="malformed row \\['', 'G'"):
+        OI.parse(page, 4, 2026)
+
+
+def test_c_a_name_match_never_crosses_the_skill_boundary():
+    """Audit #19 C: the report's TE row mapped to a same-named roster CB."""
+    r = _rosters()
+    r.loc[r["gsis_id"] == "00-k2", "position"] = "DB"
+    with pytest.raises(SystemExit, match="KC Travis Kelce Jr.: page position TE vs roster position DB"):
+        OI.map_ids(OI.parse(_page(), 4, 2026), r, 2026, 4)
+    r = _rosters()
+    r.loc[r["gsis_id"] == "00-c3", "position"] = "RB"            # page lists Damien Lewis as G
+    with pytest.raises(SystemExit, match="CAR Damien Lewis: page position G vs roster position RB"):
+        OI.map_ids(OI.parse(_page(), 4, 2026), r, 2026, 4)
+
+
+def test_refresh_step_refuses_a_capture_the_gate_would_refuse(tmp_path, monkeypatch):
+    """D278: the refresh derives through the gate's own checks before writing anything."""
+    R = _refresh_world(tmp_path, monkeypatch)
+    before = (tmp_path / "injuries.parquet").read_bytes()
+    with pytest.raises(SystemExit, match="canonical URL"):
+        R.official_step(4, fetch=_fake_fetch(page=_page(season=2025)))
+    with pytest.raises(SystemExit, match="fetched_utc"):
+        R.official_step(4, fetch=_fake_fetch(fetched="NaT"))
+    assert (tmp_path / "injuries.parquet").read_bytes() == before
+    assert not (tmp_path / OI.HTML_NAME).exists()
+
+
+def test_overlay_clears_the_feed_rows_of_a_team_whose_official_table_is_empty():
+    """D278: overlay keyed by page sections — DEN's empty official table replaces the feed's
+    DEN row (keyed by teams-with-rows, the stale feed row survived)."""
+    page = _page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"), AWAY_ROWS, HOME_ROWS),
+                  _unit(("LV", "Raiders"), ("DEN", "Broncos"), [], [])])
+    m = OI.map_ids(OI.parse(page, 4, 2026), _rosters(), 2026, 4)
+    m.attrs["matchups"] = OI.matchups(page, 4, 2026)
+    new = OI.overlay(_feed(), OI.injury_rows(m, 2026, 4, "2026-10-03T01:29:28+00:00"), 2026, 4,
+                     OI.page_teams(m))
+    w = new[(new["season"] == 2026) & (new["week"] == 4)]
+    assert "DEN" not in set(w["team"]) and OI.page_teams(m) == ["CAR", "DEN", "KC", "LV"]
+    with pytest.raises(SystemExit, match="without a page section"):
+        OI.overlay(_feed(), OI.injury_rows(m, 2026, 4, "2026-10-03T01:29:28+00:00"), 2026, 4, ["CAR"])
+
+
+def test_d278_a_primary_bundle_refuses_a_capture_retrieved_after_its_cutoff(tmp_path, monkeypatch):
+    """Survivor X19: build_bundle must pass its own cutoff T to the gate."""
+    from nfl.sim.tests.test_fwd3_item0 import _build_fixture_root, _set_fwd_paths, T
+    import nfl.sim.run_forward_v1 as fwd
+    root = _build_fixture_root(tmp_path)
+    pb = root / "nfl" / "data" / "pbp"
+    page = _page([_unit(("CAR", "Panthers"), ("KC", "Chiefs"),
+                        [("Darren Waller", "TE", "Knee", "Limited Participation in Practice", "Questionable")],
+                        [("Travis Kelce", "TE", "Ankle", "Limited Participation in Practice", "Questionable")])],
+                 week=3).encode()
+    late = (T + pd.Timedelta(minutes=1)).isoformat()
+    rec = {"url": OI.URL.format(season=2026, week=3), "final_url": OI.URL.format(season=2026, week=3),
+           "season": 2026, "week": 3, "fetched_utc": late,
+           "http_status": 200, "bytes": len(page), "sha256": hashlib.sha256(page).hexdigest()}
+    OI.write_capture(page, rec, pb)
+    m = OI.map_ids(OI.parse(page.decode(), 3, 2026), pd.read_parquet(pb / "rosters_weekly.parquet"), 2026, 3)
+    m.attrs["matchups"] = OI.matchups(page.decode(), 3, 2026)
+    inj = pd.read_parquet(pb / "injuries.parquet")
+    OI.overlay(inj, OI.injury_rows(m, 2026, 3, late), 2026, 3, OI.page_teams(m)).to_parquet(
+        pb / "injuries.parquet", index=False)
+    saved = (fwd.PROPS_DIR, fwd.LINES_DIR, fwd.BOARD_ROOT, fwd.EXPERIMENT_MANIFEST)
+    _set_fwd_paths(fwd, root)
+    monkeypatch.setattr(fwd, "OFFICIAL_REPORT_FROM", (2026, 3))
+    try:
+        with pytest.raises(SystemExit, match="(?s)HALT \\(D277\\).*after the run cutoff"):
+            fwd.build_bundle(2026, 3, T, pilot=False, allow_stale_quotes=True, _root=root)
+    finally:
+        fwd.PROPS_DIR, fwd.LINES_DIR, fwd.BOARD_ROOT, fwd.EXPERIMENT_MANIFEST = saved

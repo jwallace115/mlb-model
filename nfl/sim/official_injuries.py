@@ -82,24 +82,33 @@ def fetch_page(season, week, timeout=30):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     fetched = datetime.now(timezone.utc)
     with urllib.request.urlopen(req, timeout=timeout, context=ssl_context()) as r:
-        status, body = r.status, r.read()
+        status, body, final_url = r.status, r.read(), r.geturl()
     if status != 200:
         raise SystemExit(f"HALT: {url} returned HTTP {status}")
-    return body, {"url": url, "season": int(season), "week": int(week),
+    return body, {"url": url, "final_url": final_url, "season": int(season), "week": int(week),
                   "fetched_utc": fetched.isoformat(), "http_status": int(status),
                   "bytes": len(body), "sha256": hashlib.sha256(body).hexdigest()}
 
 
-def parse(html_text, week):
-    """One row per listed player: team, opp, player, position, injuries, practice_status,
-    game_status (None when blank). HALTs on anything that is not the expected page."""
+def _read(html_text, week, season):
+    """The page's matchups and rows. HALTs on anything that is not the official week-W report
+    of `season` (D278, audit #19 A3: the page's own identity — its canonical URL and title —
+    must name the season and week; a relabelled or other-season page is refused)."""
     if not re.search(rf"<h2[^>]*>\s*Injuries\s*-\s*WEEK\s+{int(week)}\s*</h2>", html_text):
         raise SystemExit(f"HALT: official injury page is not the week-{week} report "
                          f"(no 'Injuries - WEEK {week}' heading)")
+    canon = re.findall(r'<link[^>]*rel="canonical"[^>]*href="([^"]*)"', html_text)
+    want = URL.format(season=season, week=week)
+    if [c.rstrip("/") for c in canon] != [want]:
+        raise SystemExit(f"HALT: official injury page canonical URL {canon} is not {want}")
+    title = re.findall(r"<title>(.*?)</title>", html_text, re.S)
+    if len(title) != 1 or f"Week {int(week)} of the {int(season)} Season" not in _txt(title[0]):
+        raise SystemExit(f"HALT: official injury page title {[_txt(t) for t in title]} does not "
+                         f"name week {week} of the {season} season")
     units = html_text.split(UNIT)[1:]
     if not units:
         raise SystemExit("HALT: official injury page has no team sections")
-    rows, seen = [], set()
+    rows, seen, matchups = [], set(), []
     for k, u in enumerate(units):
         u = u.split("</section>", 1)[0]
         abbr = [a.strip() for a in re.findall(r'nfl-c-matchup-strip__team-abbreviation">([^<]*)<', u)]
@@ -121,6 +130,7 @@ def parse(html_text, week):
                 raise SystemExit(f"HALT: official injury page lists {t} twice")
             seen.add(t)
             teams.append(t)
+        matchups.append({"away": teams[0], "home": teams[1]})
         for i, (t, tab) in enumerate(zip(teams, tables)):
             head = [_txt(h) for h in re.findall(r"<th[^>]*>(.*?)</th>", tab, re.S)]
             if head != HEADER:
@@ -137,8 +147,19 @@ def parse(html_text, week):
                 rows.append({"team": t, "opp": teams[1 - i], "player": td[0], "position": td[1],
                              "injuries": td[2] or None, "practice_status": td[3] or None,
                              "game_status": gs})
-    return pd.DataFrame(rows, columns=["team", "opp", "player", "position", "injuries",
-                                       "practice_status", "game_status"])
+    return matchups, pd.DataFrame(rows, columns=["team", "opp", "player", "position", "injuries",
+                                                 "practice_status", "game_status"])
+
+
+def parse(html_text, week, season):
+    """One row per listed player: team, opp, player, position, injuries, practice_status,
+    game_status (None when blank). HALTs on anything that is not the expected page."""
+    return _read(html_text, week, season)[1]
+
+
+def matchups(html_text, week, season):
+    """The page's sections as [{away, home}], including a team whose table has no rows."""
+    return _read(html_text, week, season)[0]
 
 
 def map_ids(official, rosters, season, week):
@@ -147,7 +168,7 @@ def map_ids(official, rosters, season, week):
     (they cannot reach the skill-player active universe); an unmatched or ambiguous
     skill-position row, or one gsis_id listed twice, HALTs."""
     r = rosters[(rosters["season"] == season) & (rosters["week"] == week)]
-    r = r[["team", "gsis_id", "full_name"] +
+    r = r[["team", "gsis_id", "full_name", "position"] +
           [c for c in ("football_name", "last_name") if c in r.columns]].copy()
     r["k_full"] = r["full_name"].fillna("").map(norm_name)
     if {"football_name", "last_name"} <= set(r.columns):
@@ -170,6 +191,13 @@ def map_ids(official, rosters, season, week):
                 break
         if gid is None and (row.position in SKILL_POS or how == "ambiguous"):
             bad.append(f"{row.team} {row.player} ({row.position}): {how} in the week-{week} roster")
+        if gid is not None:
+            # D278 (audit #19 C): a name match must not cross the skill boundary — a page
+            # non-skill row must never mark a same-named skill player Out, nor the reverse
+            rpos = c.loc[c["gsis_id"] == gid, "position"].iloc[0]
+            if (row.position in SKILL_POS) != (rpos in SKILL_POS):
+                bad.append(f"{row.team} {row.player}: page position {row.position} vs roster "
+                           f"position {rpos} ({gid})")
         out.append((gid, how))
     o = official.copy()
     o["gsis_id"] = [g for g, _ in out]
@@ -200,10 +228,20 @@ def injury_rows(mapped, season, week, fetched_utc):
         "date_modified": pd.Timestamp(fetched_utc), "season_type": "REG"})
 
 
-def overlay(inj, rows, season, week):
-    """The feed's rows for (season, week, team on the official page) are replaced by the
-    official rows; all other rows are kept as they are, in the feed's column order/dtypes."""
-    teams = set(rows["team"])
+def page_teams(mapped):
+    """Every team with a section on the page, including a section whose table is empty."""
+    return sorted({t for mu in mapped.attrs["matchups"] for t in (mu["away"], mu["home"])})
+
+
+def overlay(inj, rows, season, week, teams):
+    """The feed's rows for (season, week, team with a section on the official page) are
+    replaced by the official rows; all other rows are kept as they are, in the feed's column
+    order/dtypes. D278: `teams` is the page's sections, not the teams that have rows — a team
+    whose official table is empty must not keep the feed's rows."""
+    teams = set(teams)
+    if not set(rows["team"]) <= teams:
+        raise SystemExit(f"HALT: official rows for teams without a page section: "
+                         f"{sorted(set(rows['team']) - teams)}")
     drop = (inj["season"] == season) & (inj["week"] == week) & inj["team"].isin(teams)
     new = rows.copy()
     for c in inj.columns:
@@ -246,9 +284,38 @@ def derive(html_path, record_path, rosters, season, week):
     if (rec.get("season"), rec.get("week")) != (int(season), int(week)):
         raise SystemExit(f"HALT: the official injury record is for season {rec.get('season')} "
                          f"week {rec.get('week')}, not {season} week {week}")
-    off = parse(body.decode("utf-8"), week)
+    # D278 (audit #19 A3): the record must describe a successful fetch of THIS report's URL
+    want = URL.format(season=season, week=week)
+    probs = []
+    if rec.get("url") != want:
+        probs.append(f"url {rec.get('url')!r} is not {want}")
+    if str(rec.get("final_url") or "").rstrip("/") != want:
+        probs.append(f"final (post-redirect) url {rec.get('final_url')!r} is not {want}")
+    if rec.get("http_status") != 200:
+        probs.append(f"http_status {rec.get('http_status')!r}")
+    if rec.get("bytes") != len(body):
+        probs.append(f"bytes {rec.get('bytes')!r} != {len(body)}")
+    if probs:
+        raise SystemExit("HALT: the official injury record does not describe this report: " +
+                         "; ".join(probs))
+    fetched = retrieval_time(rec)
+    m, off = _read(body.decode("utf-8"), week, season)
     mapped = map_ids(off, rosters, season, week)
-    return rec, mapped, injury_rows(mapped, season, week, rec["fetched_utc"])
+    mapped.attrs["matchups"] = m
+    return rec, mapped, injury_rows(mapped, season, week, fetched.isoformat())
+
+
+def retrieval_time(rec):
+    """D278 (audit #19 A2): the record's retrieval time as a finite, timezone-aware UTC
+    timestamp. A missing, NaT, naive or unparseable value HALTs."""
+    v = rec.get("fetched_utc")
+    try:
+        t = datetime.fromisoformat(str(v))
+    except (TypeError, ValueError):
+        raise SystemExit(f"HALT: official injury record fetched_utc {v!r} is not an ISO timestamp")
+    if t.tzinfo is None or t.utcoffset() is None:
+        raise SystemExit(f"HALT: official injury record fetched_utc {v!r} has no time zone")
+    return pd.Timestamp(t.astimezone(timezone.utc))
 
 
 def _pairs(df):
@@ -257,9 +324,10 @@ def _pairs(df):
     return sorted((f(a), f(b)) for a, b in df[["gsis_id", "report_status"]].itertuples(index=False))
 
 
-def check(inputs_dir, season, week, teams, schedule, require):
-    """D277 gate, on the run directory's copies. Per team: the official page has its
-    section; the page was fetched at or after that game's final-report deadline; and the
+def check(inputs_dir, season, week, teams, schedule, require, cutoff):
+    """D277 gate (D278-hardened), on the run directory's copies. Per team: the official page
+    has its section, for the team's SCHEDULED matchup (away@home); the page was retrieved at
+    or after that game's final-report deadline and at or before the run cutoff; and the
     consumed injuries.parquet rows for the team-week equal the rows re-derived from the
     archived page (gsis_id, report_status). Returns the per-team record; when `require`
     (a primary run) any failure HALTs."""
@@ -274,7 +342,13 @@ def check(inputs_dir, season, week, teams, schedule, require):
         return {t: {"official_verified": False, "official_reason": msg} for t in teams}
     rosters = pd.read_parquet(inputs_dir / "rosters_weekly.parquet")
     rec, mapped, rows = derive(hp, rp, rosters, season, week)
-    fetched = pd.Timestamp(rec["fetched_utc"])
+    fetched = retrieval_time(rec)
+    cutoff = pd.Timestamp(cutoff)
+    if cutoff.tzinfo is None:
+        raise SystemExit(f"HALT: the D277 gate needs a timezone-aware run cutoff, got {cutoff!r}")
+    page = {}
+    for mu in mapped.attrs["matchups"]:
+        page[mu["away"]] = page[mu["home"]] = (mu["away"], mu["home"])
     inj = pd.read_parquet(inputs_dir / "injuries.parquet",
                           columns=["season", "week", "team", "gsis_id", "report_status"])
     inj = inj[(inj["season"] == season) & (inj["week"] == week)]
@@ -290,8 +364,15 @@ def check(inputs_dir, season, week, teams, schedule, require):
             if fetched < pd.Timestamp(deadline):
                 reasons.append(f"page fetched {fetched.isoformat()} before the final-report "
                                f"deadline {deadline.isoformat()}")
+            sg = (g["away_team"].iloc[0], g["home_team"].iloc[0])
+            if t in page and page[t] != sg:
+                reasons.append(f"page matchup {page[t][0]}@{page[t][1]} is not the scheduled "
+                               f"{sg[0]}@{sg[1]}")
+        if fetched > cutoff:
+            reasons.append(f"page fetched {fetched.isoformat()} after the run cutoff "
+                           f"{cutoff.isoformat()}")
         on_page = mapped[mapped["team"] == t]
-        if on_page.empty:
+        if t not in page:
             reasons.append("no section on the official page")
         want = _pairs(rows[rows["team"] == t])
         have = _pairs(inj[inj["team"] == t])

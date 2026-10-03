@@ -517,7 +517,7 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     # consumed injury rows; HALTs a primary run, recorded for a pilot
     from nfl.sim import official_injuries as OI
     off = OI.check(inputs_dir, season, week, teams, sched,
-                   require=(not pilot) and (season, week) >= OFFICIAL_REPORT_FROM)
+                   require=(not pilot) and (season, week) >= OFFICIAL_REPORT_FROM, cutoff=T)
     for t in teams:
         freshness["per_team"][t].update(off.get(t, {}))
     (bundle_dir / "freshness.json").write_text(json.dumps(freshness, indent=1) + "\n")

@@ -108,3 +108,18 @@ def test_week_zero_halts(tmp_path, monkeypatch):
     """Survivor N1 (audit #18): `wk < 1` weakened to `wk < 0`."""
     with pytest.raises(RuntimeError, match="week missing or not an integer in 1-22"):
         _check(tmp_path, monkeypatch, _plays().assign(week=0))
+
+
+# ── D278: audit #19 A1 ────────────────────────────────────────────────────────
+
+def test_blank_or_whitespace_keys_and_unknown_teams_halt(tmp_path, monkeypatch):
+    """Audit #19 A1: posteam="" on one completed pass passed (isna() misses empty strings)
+    and moved 18 calibrated probabilities on the real IND@WAS worker (max 0.0452)."""
+    _bad(tmp_path, monkeypatch, 1, "posteam", "", "empty or whitespace-only posteam")
+    _bad(tmp_path, monkeypatch, 4, "defteam", "  ", "empty or whitespace-only defteam")
+    _bad(tmp_path, monkeypatch, 1, "receiver_player_id", " ", "empty or whitespace-only receiver_player_id")
+    _bad(tmp_path, monkeypatch, 2, "passer_player_id", "", "empty or whitespace-only passer_player_id")
+    _bad(tmp_path, monkeypatch, 4, "rusher_player_id", "", "empty or whitespace-only rusher_player_id")
+    _bad(tmp_path, monkeypatch, 1, "play_type", "", "empty or whitespace-only play_type")
+    _bad(tmp_path, monkeypatch, 1, "posteam", "XYZ", "team key outside the 32 nflverse codes")
+    _bad(tmp_path, monkeypatch, 0, "defteam", "kc", "team key outside the 32 nflverse codes")

@@ -1,6 +1,6 @@
 # Forward-run runbook — nfl_fwd_v1, weeks 4, 5 (D272)
 
-Reader model: `nfl_sim_v1_156cd057`. Generated 2026-10-03T01:44:20Z by `research/nfl_sim/make_runbook.py`. Run every command from the checkout that holds the refreshed inputs. Every forward run goes through the bootstrap (D266).
+Reader model: `nfl_sim_v1_156cd057`. Generated 2026-10-03T13:06:14Z by `research/nfl_sim/make_runbook.py`. Run every command from the checkout that holds the refreshed inputs. Every forward run goes through the bootstrap (D266).
 
 ## Input refresh (D271/D272) — per window, never at the last minute
 
@@ -9,7 +9,8 @@ python3 nfl/sim/refresh_inputs.py --week W
 ```
 
 - About 10 min (ratings.py about 8). Exit 0: every team playing week W passes the forward gate. Exit 1: the refreshed tables ARE installed but the named teams are not ready (usually an unpublished injury report); a run including them HALTs. Exception: refresh failed, old tables restored.
-- Sunday/Monday: after the final injury reports (Friday afternoon ET), and again on game morning, finishing at least 30 min before the window's harness start.
+- Sunday: after the final injury reports (Friday 4 PM ET), and again on game morning, finishing at least 30 min before the window's harness start.
+- Monday: the final report is due SATURDAY 4 PM ET (D278); refresh after it, and again on game morning, finishing at least 30 min before the harness start.
 - TNF: after Wednesday's report, and again Thursday afternoon.
 - D277: the refresh fetches the OFFICIAL nfl.com injury report for week W; its rows replace the feed's for every team on the page. A row it cannot identify HALTs the refresh (old tables restored). `--no-official` skips it, and a primary run then HALTs at the D277 gate.
 - D277: before a primary harness, commit the evidence of the capture the refresh used (fetch record with URL, retrieval UTC and page sha256; the identified rows; the refresh manifest). The page itself stays in the refresh archive:

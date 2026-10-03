@@ -153,8 +153,10 @@ def main():
     L.append("- About 10 min (ratings.py about 8). Exit 0: every team playing week W passes the forward gate. "
              "Exit 1: the refreshed tables ARE installed but the named teams are not ready (usually an "
              "unpublished injury report); a run including them HALTs. Exception: refresh failed, old tables restored.")
-    L.append("- Sunday/Monday: after the final injury reports (Friday afternoon ET), and again on game morning, "
+    L.append("- Sunday: after the final injury reports (Friday 4 PM ET), and again on game morning, "
              "finishing at least 30 min before the window's harness start.")
+    L.append("- Monday: the final report is due SATURDAY 4 PM ET (D278); refresh after it, and again on game "
+             "morning, finishing at least 30 min before the harness start.")
     L.append("- TNF: after Wednesday's report, and again Thursday afternoon.")
     L.append("- D277: the refresh fetches the OFFICIAL nfl.com injury report for week W; its rows replace the "
              "feed's for every team on the page. A row it cannot identify HALTs the refresh (old tables "

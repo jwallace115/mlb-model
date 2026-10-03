@@ -397,12 +397,20 @@ _ADMISSION_COLS = ["play_type", "posteam", "defteam", "complete_pass", "pass_att
                    "rush_attempt", "receiver_player_id", "passer_player_id", "rusher_player_id"]
 
 
+# D278: every posteam/defteam in the real 2020-2026 PBP is one of these (nflverse codes)
+PBP_TEAMS = frozenset({"ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", "DAL", "DEN", "DET",
+                       "GB", "HOU", "IND", "JAX", "KC", "LA", "LAC", "LV", "MIA", "MIN", "NE", "NO",
+                       "NYG", "NYJ", "PHI", "PIT", "SEA", "SF", "TB", "TEN", "WAS"})
+
+
 def _pbp_admission(s, path):
     """Context-dependent admission check on every raw PBP row, before any exclusion or groupby:
       - a pass or run play has both team keys (posteam, defteam);
       - a row flagged complete_pass / pass_attempt / rush_attempt has a play_type;
       - a completed pass is a pass play and has a receiver;
-      - a pass play has a passer; a run play has a rusher.
+      - a pass play has a passer; a run play has a rusher;
+      - D278: no admission key is an empty/whitespace string, and every team key present is
+        one of the 32 nflverse codes.
     Legitimately key-less rows (administrative rows, sacks/throwaways without a receiver) are
     untouched. A file without play_type cannot be aggregated at all (the builders need it);
     a file WITH play_type must carry every admission column."""
@@ -415,10 +423,22 @@ def _pbp_admission(s, path):
         raise RuntimeError(f"pbp_{s}.parquet: admission columns missing {missing}")
     p = pd.read_parquet(path, columns=["game_id", "play_id"] + _ADMISSION_COLS
                         if "play_id" in names else ["game_id"] + _ADMISSION_COLS)
+    # D278 (audit #19 A1): an empty or whitespace-only string is never a legitimate value of
+    # an admission key (real PBP 2020-2026 has none; a missing key is null). Treated as
+    # missing for the rules below, and refused outright.
+    strcols = ["play_type", "posteam", "defteam", "receiver_player_id", "passer_player_id",
+               "rusher_player_id"]
+    blank = {c: p[c].notna() & (p[c].astype("string").str.strip() == "") for c in strcols}
+    for c in strcols:
+        p.loc[blank[c].fillna(False).astype(bool), c] = None
     pt = p["play_type"]
     scrim = pt.isin(["pass", "run"])
     flag = lambda c: pd.to_numeric(p[c], errors="coerce").fillna(0) == 1
     rules = (
+        *((f"empty or whitespace-only {c}", blank[c].fillna(False).astype(bool)) for c in strcols),
+        ("team key outside the 32 nflverse codes",
+         (p["posteam"].notna() & ~p["posteam"].isin(PBP_TEAMS)) |
+         (p["defteam"].notna() & ~p["defteam"].isin(PBP_TEAMS))),
         ("pass/run play without posteam", scrim & p["posteam"].isna()),
         ("pass/run play without defteam", scrim & p["defteam"].isna()),
         ("pass/rush flag without play_type",

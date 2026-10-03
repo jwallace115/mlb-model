@@ -88,7 +88,7 @@ def splice(old, new, season=SEASON):
     return pd.concat([keep, cur], ignore_index=True)
 
 
-INPUT_VERSION = "D277-v7"   # declared prospective input version (2026 rows only); D277: official nfl.com injury report overlay
+INPUT_VERSION = "D278-v8"   # declared prospective input version (2026 rows only); D278: blank/unknown PBP keys refused; official capture bound to season/week/matchups/cutoff
 
 
 def snapshot_schedule():
@@ -122,13 +122,17 @@ def official_step(week, fetch=None):
     every team on the page. Writes injuries.parquet ONLY after every row is identified."""
     from nfl.sim import official_injuries as OI
     body, rec = (fetch or OI.fetch_page)(SEASON, week)
-    off = OI.parse(body.decode("utf-8"), week)
     ros = pd.read_parquet(PBP / "rosters_weekly.parquet")
-    mapped = OI.map_ids(off, ros, SEASON, week)
-    rows = OI.injury_rows(mapped, SEASON, week, rec["fetched_utc"])
+    # D278: the capture must pass the gate's own derivation (record, page identity, rows)
+    # before anything is written
+    with tempfile.TemporaryDirectory() as td:
+        OI.write_capture(body, rec, td)
+        rec, mapped, rows = OI.derive(Path(td) / OI.HTML_NAME, Path(td) / OI.RECORD_NAME, ros,
+                                      SEASON, week)
+    off = mapped
     inj = pd.read_parquet(PBP / "injuries.parquet")
     old = inj[(inj["season"] == SEASON) & (inj["week"] == week)]
-    new = OI.overlay(inj, rows, SEASON, week)
+    new = OI.overlay(inj, rows, SEASON, week, OI.page_teams(mapped))
     new.to_parquet(PBP / "injuries.parquet", index=False)
     OI.write_capture(body, rec, PBP)
     print(f"  {rec['url']} fetched {rec['fetched_utc']} sha256 {rec['sha256'][:16]}: "
@@ -194,7 +198,8 @@ def freshness_report(week):
         # D277: recorded here, gated only in a primary run (run_forward_v1.build_bundle)
         from nfl.sim import official_injuries as OI
         try:
-            off = OI.check(d, SEASON, week, teams, sched, require=False)
+            off = OI.check(d, SEASON, week, teams, sched, require=False,
+                           cutoff=datetime.now(timezone.utc))
         except SystemExit as e:
             print(f"\nOFFICIAL INJURY REPORT CHECK FAILED for week {week}:\n{e}")
             return False
