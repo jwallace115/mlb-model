@@ -123,9 +123,15 @@ def window_label(games):
 
 
 HARNESS = "python3 -I -S -B nfl/sim/fwd_bootstrap.py harness"
-# D276: week 4 runs as a declared PILOT in every window (no final-report verification yet);
-# never promoted after outcomes.
-PILOT_WEEKS = {4}
+# D276 declared week 4 a PILOT in every window. D277 (declared before any Sunday/Monday
+# kickoff) supersedes it for windows whose harness starts after PILOT_BEFORE_UTC: such a
+# window is PRIMARY when ChatGPT audit #19 is GO and the harness passes the D277 gate (every
+# team's official final injury report verified and reconciled); otherwise the same command
+# runs with --pilot, decided before the harness start. The TNF window (played) stays a pilot.
+PILOT_BEFORE_UTC = datetime(2026, 10, 3, tzinfo=timezone.utc)
+D277_NOTE = ("- D277: PRIMARY only if ChatGPT audit #19 is GO and the harness passes the official-injury-report "
+             "gate; if either is not met before the harness start, run the same command with `--pilot` "
+             "(a declared pilot, never promoted after outcomes).")
 
 
 def main():
@@ -150,6 +156,17 @@ def main():
     L.append("- Sunday/Monday: after the final injury reports (Friday afternoon ET), and again on game morning, "
              "finishing at least 30 min before the window's harness start.")
     L.append("- TNF: after Wednesday's report, and again Thursday afternoon.")
+    L.append("- D277: the refresh fetches the OFFICIAL nfl.com injury report for week W; its rows replace the "
+             "feed's for every team on the page. A row it cannot identify HALTs the refresh (old tables "
+             "restored). `--no-official` skips it, and a primary run then HALTs at the D277 gate.")
+    L.append("- D277: before a primary harness, commit the evidence of the capture the refresh used (fetch record "
+             "with URL, retrieval UTC and page sha256; the identified rows; the refresh manifest). The page itself "
+             "stays in the refresh archive:")
+    L.append("```bash")
+    L.append("python3 nfl/sim/official_injuries.py export --week W --out research/nfl_sim/official_injuries/2026_wW "
+             "&& git add research/nfl_sim/official_injuries/2026_wW "
+             "&& git commit -m \"D277: week-W official injury capture\" && git push origin eng/fwd6")
+    L.append("```")
     L.append("- Never re-pull 2020-2025 PBP; never install or upgrade Python packages (D269/D270).")
     L.append("")
     L.append("## Roster information cutoff (declared, D272)")
@@ -158,7 +175,7 @@ def main():
              "start. Game-day inactives announced after that refresh (about 90 min before each kick) are NOT "
              "in the live active universe. The backtest used final game-day rosters, so live and "
              "backtest rosters are not identical for late games. This is a declared input difference, not "
-             "final-roster parity. Out/Doubtful from the final injury report ARE applied.")
+             "final-roster parity. Out/Doubtful from the official final injury report (nfl.com, D277) ARE applied.")
     for week in weeks:
         wk = sched[(sched["week"] == week) & (sched.get("game_type", "REG") == "REG")]
         if wk.empty:
@@ -194,9 +211,12 @@ def main():
             L.append(f"- Harness start: **{format_utc(start)}** ({format_et(start)}); sim about "
                      f"{len(win) * SECS_PER_GAME / 60:.0f} min.")
             L.append("```bash")
+            pilot = start < PILOT_BEFORE_UTC
             L.append(f"{HARNESS} --week {week} --window-hours {hours:g}"
-                     + (" --pilot   # D276: declared pilot" if week in PILOT_WEEKS else ""))
+                     + (" --pilot   # D276: declared pilot" if pilot else ""))
             L.append("```")
+            if not pilot:
+                L.append(D277_NOTE)
     L.append("")
     L.append("## Notes")
     L.append("")

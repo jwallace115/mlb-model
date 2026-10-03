@@ -13,6 +13,11 @@ step 7 runs after the refreshed tables are installed — see the exit codes belo
  0. preflight: the ratings tables' fit-window fingerprint equals FREEZE_v1's
     usage_fingerprint (the calibration was fitted on exactly those rows);
  1. pull_nflverse_inputs.py  (rosters_weekly, depth_charts, injuries);
+ 1b. D277: the OFFICIAL nfl.com injury report for --week (official_injuries.py): fetched,
+    parsed, every row identified from the team's week roster, and its rows REPLACE the
+    feed's week rows for every team on the page (the page and a record of its fetch time and
+    sha256 are written beside injuries.parquet and archived). --no-official skips it; a
+    primary run then HALTs at the D277 gate;
  2. PBP for the CURRENT season only (pbp_2026.parquet) — earlier seasons are never re-pulled;
  3. usage.py   (player_usage_weekly, active_universe_weekly);
  4. ratings.py (team ratings, tendencies, situational tendencies, QB, kickers, baselines),
@@ -83,7 +88,7 @@ def splice(old, new, season=SEASON):
     return pd.concat([keep, cur], ignore_index=True)
 
 
-INPUT_VERSION = "D276-v6"   # declared prospective input version (2026 rows only); D276: play-level admission checks
+INPUT_VERSION = "D277-v7"   # declared prospective input version (2026 rows only); D277: official nfl.com injury report overlay
 
 
 def snapshot_schedule():
@@ -109,6 +114,41 @@ def snapshot_schedule():
 
 SOURCES = ["rosters_weekly.parquet", "depth_charts.parquet", "injuries.parquet",
            f"pbp_{SEASON}.parquet", f"schedules_{SEASON}.parquet"]
+OPTIONAL_SOURCES = ["official_injuries.html", "official_injuries.json"]   # D277
+
+
+def official_step(week, fetch=None):
+    """D277: the official nfl.com injury report for `week` replaces the feed's week rows for
+    every team on the page. Writes injuries.parquet ONLY after every row is identified."""
+    from nfl.sim import official_injuries as OI
+    body, rec = (fetch or OI.fetch_page)(SEASON, week)
+    off = OI.parse(body.decode("utf-8"), week)
+    ros = pd.read_parquet(PBP / "rosters_weekly.parquet")
+    mapped = OI.map_ids(off, ros, SEASON, week)
+    rows = OI.injury_rows(mapped, SEASON, week, rec["fetched_utc"])
+    inj = pd.read_parquet(PBP / "injuries.parquet")
+    old = inj[(inj["season"] == SEASON) & (inj["week"] == week)]
+    new = OI.overlay(inj, rows, SEASON, week)
+    new.to_parquet(PBP / "injuries.parquet", index=False)
+    OI.write_capture(body, rec, PBP)
+    print(f"  {rec['url']} fetched {rec['fetched_utc']} sha256 {rec['sha256'][:16]}: "
+          f"{len(off)} rows, {off['team'].nunique()} teams, "
+          f"{int(off['game_status'].notna().sum())} game statuses")
+    un = mapped[mapped["gsis_id"].isna()]
+    if len(un):
+        print(f"  unmatched non-skill rows (not written): "
+              f"{[f'{a} {b} ({c})' for a, b, c in un[['team', 'player', 'position']].itertuples(index=False)]}")
+    f = lambda v: "" if pd.isna(v) else str(v)  # noqa: E731
+    was = {(t, g): f(st) for t, g, st in old[["team", "gsis_id", "report_status"]].itertuples(index=False)}
+    moved = [(t, p, pos, was.get((t, g), "(not listed)"), f(st))
+             for t, g, p, pos, st in mapped.loc[mapped["gsis_id"].notna(),
+                                                ["team", "gsis_id", "player", "position", "game_status"]
+                                                ].itertuples(index=False)
+             if pos in OI.SKILL_POS and f(st) in ("Out", "Doubtful")
+             and was.get((t, g), "(not listed)") not in ("Out", "Doubtful")]
+    print(f"  skill players Out/Doubtful officially but not in the feed: {len(moved)}")
+    for m in moved:
+        print(f"    {m[0]} {m[1]} ({m[2]}): feed {m[3] or '-'} -> official {m[4]}")
 
 
 def archive_refresh(backup, week, tables):
@@ -117,7 +157,7 @@ def archive_refresh(backup, week, tables):
     d = backup / "refreshed"
     d.mkdir()
     files = {}
-    for f in SOURCES:
+    for f in SOURCES + [x for x in OPTIONAL_SOURCES if (PBP / x).exists()]:
         shutil.copy2(PBP / f, d / f)
         files[f"sources/{f}"] = _sha(PBP / f)
     for f in tables:
@@ -143,11 +183,23 @@ def freshness_report(week):
             shutil.copy2(RATINGS / f, d / f)
         for f in ("rosters_weekly.parquet", "injuries.parquet"):
             shutil.copy2(PBP / f, d / f)
+        for f in OPTIONAL_SOURCES:
+            if (PBP / f).exists():
+                shutil.copy2(PBP / f, d / f)
         try:
             table = _team_freshness(d, SEASON, week, teams, last_week)
         except SystemExit as e:
             print(f"\nFRESHNESS FAILED for week {week} (schedule: {src}):\n{e}")
             return False
+        # D277: recorded here, gated only in a primary run (run_forward_v1.build_bundle)
+        from nfl.sim import official_injuries as OI
+        try:
+            off = OI.check(d, SEASON, week, teams, sched, require=False)
+        except SystemExit as e:
+            print(f"\nOFFICIAL INJURY REPORT CHECK FAILED for week {week}:\n{e}")
+            return False
+        for t in table:
+            table[t].update(off.get(t, {}))
     print(f"\nFreshness for week {week} ({len(teams)} teams, schedule: {src}): PASS")
     for t, row in table.items():
         print(f"  {t}: " + ", ".join(f"{k}={v}" for k, v in row.items()))
@@ -159,6 +211,8 @@ def main(argv=None):
     ap.add_argument("--week", type=int, required=True, help="the week about to be predicted")
     ap.add_argument("--report-only", action="store_true",
                     help="skip the refresh; only run the freshness report")
+    ap.add_argument("--no-official", action="store_true",
+                    help="D277: skip the official nfl.com injury report (a primary run then HALTs)")
     a = ap.parse_args(argv)
     if a.report_only:
         return 0 if freshness_report(a.week) else 1
@@ -182,6 +236,13 @@ def main(argv=None):
         _run("pull_nflverse_inputs.py")
         print(f"\n── schedule snapshot {SEASON} ──", flush=True)
         snapshot_schedule()
+        print(f"\n── official injury report, week {a.week} (D277) ──", flush=True)
+        for f in OPTIONAL_SOURCES:  # D277: an earlier capture never outlives the feed it matched
+            (PBP / f).unlink(missing_ok=True)
+        if a.no_official:
+            print("  SKIPPED (--no-official): a primary run HALTs at the D277 gate")
+        else:
+            official_step(a.week)
         print(f"\n── PBP {SEASON} only ──", flush=True)
         from nfl.sim.pull_pbp import pull_season, write_safe
         df = pull_season(SEASON)

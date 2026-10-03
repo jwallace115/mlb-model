@@ -370,14 +370,15 @@ def test_refresh_snapshots_the_schedule_before_building_and_archives_the_refresh
     calls = []
     monkeypatch.setattr(R, "_run", lambda script: calls.append(script))
     monkeypatch.setattr(R, "snapshot_schedule", lambda: calls.append("schedule"))
+    monkeypatch.setattr(R, "official_step", lambda week: calls.append(f"official {week}"))   # D277
     monkeypatch.setattr(P, "pull_season", lambda s: pd.DataFrame({"week": [1, 2, 3]}))
     monkeypatch.setattr(P, "write_safe", lambda df, path: calls.append("pbp"))
     monkeypatch.setattr(R, "freshness_report", lambda week: True)
     assert R.main(["--week", "4"]) == 0
-    assert calls == ["pull_nflverse_inputs.py", "schedule", "pbp", "usage.py", "ratings.py"]
+    assert calls == ["pull_nflverse_inputs.py", "schedule", "official 4", "pbp", "usage.py", "ratings.py"]
     [backup] = list((tmp_path / "mlb-model-archive" / "nfl_ratings_backups").iterdir())
     man = json.loads((backup / "refreshed" / "refresh_manifest.json").read_text())
-    assert man["input_version"] == R.INPUT_VERSION == "D276-v6" and man["week"] == 4
+    assert man["input_version"] == R.INPUT_VERSION == "D277-v7" and man["week"] == 4
     for f in R.SOURCES:
         assert (backup / "refreshed" / f).read_bytes() == (pb / f).read_bytes()
         assert man["files"][f"sources/{f}"] == hashlib.sha256((pb / f).read_bytes()).hexdigest()
@@ -475,6 +476,7 @@ def test_refresh_exits_1_with_tables_installed_when_teams_are_not_ready(tmp_path
     monkeypatch.setattr(C, "engine_fingerprint", lambda: "e")
     monkeypatch.setattr(R, "_run", lambda script: None)
     monkeypatch.setattr(R, "snapshot_schedule", lambda: None)
+    monkeypatch.setattr(R, "official_step", lambda week: None)   # D277 (network)
     monkeypatch.setattr(P, "pull_season", lambda s: pd.DataFrame({"week": [1]}))
     monkeypatch.setattr(P, "write_safe", lambda df, path: None)
     monkeypatch.setattr(R, "freshness_report", lambda week: False)

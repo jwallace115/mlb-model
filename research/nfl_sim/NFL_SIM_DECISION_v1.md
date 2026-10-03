@@ -6132,3 +6132,110 @@ not new model inputs.
 - W13: every pass required to have a receiver, which wrongly rejects sacks.
 
 **Input version `D276-v6`.**
+
+### D277 — The official nfl.com injury report replaces the lagging feed for the week being predicted; D276's week-4 pilot declaration is superseded for the Sunday and Monday windows, which run PRIMARY only if ChatGPT audit #19 is GO and every team passes the new per-team gate (2026-10-03, before any week-4 Sunday or Monday kickoff)
+
+**What was found (Cowork, 2026-10-03 ~01:30Z).** D276 named the missing final reports in the nflverse feed as the reason
+week 4 could not be primary, and deferred building the verification to week 5. Jeff asked why: one game into week 4,
+there was no calendar reason to wait. The answer was that the official source already had the reports.
+`https://www.nfl.com/injuries/league/2026/reg4`, retrieved by the Mac at 2026-10-03T01:29:28Z (sha256 `b8e53c97…`),
+lists all 32 teams:
+- 313 rows; game statuses: 70 Out, 2 Doubtful, 58 Questionable;
+- 27 of the 28 Sunday teams carry at least one game status (NYG none);
+- MNF ATL and NO carry none yet; a Monday game's final report is due Saturday.
+
+At the same moment the feed had game statuses for CLE, PIT and WAS only, and 121 rows disagreed with the page.
+
+**The pilot inputs were wrong.** On the installed D276-v6 tables, 19 skill players the official reports list as OUT were
+ACTIVE in the week-4 active universe:
+- three starting QBs: Caleb Williams (CHI), Baker Mayfield (TB), Jayden Daniels (WAS);
+- Justin Jefferson, DeVonta Smith, Dallas Goedert, Breece Hall, Rachaad White, Jadarian Price, Charlie Kolar,
+  Marquise Brown, Xavier Legette, Colbie Young, Terrance Ferguson, Brenen Thompson, Caleb Douglas, Adonai Mitchell,
+  Mason Taylor and Ko Kieft.
+
+Even as a pilot, Sunday would have been simulated with them playing. Cowork rebuilt the 2026 active universe on the
+Mac's refreshed inputs with the official rows overlaid. Exactly those 19 players' `active_flag` changes, in week 4 and
+in the week-5 carry-forward rows. No other `active_flag`, depth rank, position or roster status changes in any week. The `injury_status` label changes on 72 rows (Questionable and similar); the engine reads only `active_flag`, and `injury_status` is used in usage.py diagnostics only. The
+starting-QB re-flag (D54) then picks the next active QB by depth (Keenum, Jalon Daniels, Mariota).
+
+**Is this a new model input? No (amends D276's "admission evidence, not new model inputs").** The engine's injury input
+was always the final report's game status: `report_status` → `active_flag` (Out/Doubtful inactive). The historical
+fit used nflverse's injury data, which is the league's final reports. The official page is the same variable from its
+primary source; the feed was a late copy of it. Check 3 (identity): the live object moves closer to the backtest's,
+not away from it. D272's declared difference (game-day inactives after the last refresh) is unchanged.
+
+**FWD7g (code).**
+- **`nfl/sim/official_injuries.py`** (stdlib only, no new packages):
+  - `fetch_page`;
+  - `parse`: HALTs unless the page is the week's report — 2 teams and 2 tables per game, titles matching the matchup,
+    the exact 5 columns, known team codes (AZ→ARI, LAR→LA), no team twice, game status in {Out, Doubtful,
+    Questionable} or blank;
+  - `map_ids`: from that team's week-W roster, exact normalised name. An unmatched or ambiguous skill-position row
+    HALTs, and so does a gsis_id listed twice. An unmatched non-skill row is not written. 313/313 identified on the
+    real page;
+  - `overlay`: the feed's rows for (season, week, team on the page) are replaced; every other row is byte-identical;
+  - `final_report_deadline`: 16:00 ET two days before the game, one day before a Thursday game;
+  - `check`: the gate;
+  - `export`: the committable evidence.
+- **`refresh_inputs.py`** step 1b (after the feed pull and schedule snapshot, before usage.py):
+  - fetch, parse and identify, then overlay, then write the page plus a record (URL, retrieval UTC, sha256). Nothing
+    is written unless every row is identified.
+  - A capture from an earlier refresh is deleted first. The capture is archived with the refresh manifest.
+  - `--no-official` skips the step. Input version **D277-v7**.
+- **The gate (`run_forward_v1.build_bundle`).** The capture is copied into the run directory and hashed in the bundle
+  manifest. For each participating team, `official_injuries.check`:
+  - re-derives the rows from the archived bytes (sha256 must match the record; the record must be this season-week);
+  - requires the team's section on the page;
+  - requires the page retrieved at or after that game's final-report deadline;
+  - requires the consumed `injuries.parquet` rows for the team-week to equal the derived (gsis_id, report_status)
+    rows — the reconciliation.
+
+  The per-team result is written into `freshness.json`. From 2026 week 4 on (`OFFICIAL_REPORT_FROM`), a non-pilot run
+  HALTs unless every team verifies. A pilot records the result.
+
+**How this meets D276's per-team rule.**
+- **(1) Source.** The source is the league's official report: URL, retrieval UTC and content hash are recorded, and a
+  team with no designations shows its section with no game statuses (verified empty). The page carries no publication
+  time. Finality rests on retrieval after the league's final-report deadline, plus the presence of game statuses.
+- **(2) Reconciliation.** It is exact and per team, on the consumed bytes. The `active_flag` consequence is already
+  enforced by the D271/D272 active-universe gate on the same bytes.
+- **(3) Every team.** Every team must verify; the evidence is committed before a primary harness
+  (`official_injuries.py export` → `research/nfl_sim/official_injuries/2026_w04/`). The nfl.com page itself stays in
+  the local refresh archive, because the repo is public.
+- **(4) Unverified teams.** An unverified team HALTs a primary. The same command then runs `--pilot`, and that window
+  is a pilot permanently.
+
+**DECLARATION (before any week-4 Sunday or Monday outcome).** D276's pilot declaration is superseded for IND@WAS, Sunday
+main + SNF and MNF ATL@NO:
+- each runs PRIMARY only if ChatGPT audit #19 is GO before its harness start AND its harness passes the D277 gate;
+- otherwise it runs the same command with `--pilot`, decided before the harness start and never promoted after
+  outcomes;
+- TNF PIT@CLE (played) stays a pilot.
+
+`make_runbook.py` drops `--pilot` from windows starting after 2026-10-03T00:00Z and adds the D277 condition under each;
+`fwd1_runbook.md` is regenerated. Every window needs a refresh after its final-report deadline: game morning for
+Sunday (by 12:15Z for IND@WAS), and Sunday or Monday for MNF.
+
+**Research checks.**
+- **(1a)** The page is retrieved before the harness; nothing after the cutoff enters.
+- **(1b)** Historical rows are untouched. The overlay is limited to (2026, W), and the fit-window fingerprint is
+  unchanged.
+- **(2)** Nothing is tuned; the official page only replaces live injury statuses.
+- **(3)** See above: the same variable from its primary source.
+- **(4)/(5)** No results yet. The economics and regime breakdowns are unchanged and pre-registered (D269 L5, D270).
+
+**Tests (`test_fwd7g.py`, 22):**
+- parse rows, codes and HALTs;
+- identification (team- and week-restricted, skill HALT, non-skill not written, ambiguous, twice);
+- overlay scope and dtypes;
+- deadlines (Sun/Mon/Thu/EST);
+- gate: verified; early fetch; reconciliation mismatch; team missing; changed bytes; wrong-week record; no capture;
+  schedule count;
+- refresh step: overlay and capture; nothing written on HALT; archive and stale-capture removal;
+- build_bundle: primary HALTs without a capture, a pilot records it, a primary passes with a verified capture;
+- export.
+
+`test_fwd7a`/`test_fwd7c` refresh tests stub the network step; the version is D277-v7.
+
+**Mutations W1-W23:** all killed. W21 (schedule game count) survived the first round and was killed by
+`test_gate_halts_on_a_team_without_exactly_one_schedule_game`.

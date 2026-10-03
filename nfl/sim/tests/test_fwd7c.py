@@ -174,6 +174,7 @@ def _refresh_world(tmp_path, monkeypatch):
     monkeypatch.setattr(C, "usage_fingerprint", lambda *a, **k: "abc")
     monkeypatch.setattr(C, "engine_fingerprint", lambda: "e")
     monkeypatch.setattr(R, "_run", lambda script: None)
+    monkeypatch.setattr(R, "official_step", lambda week: None)   # D277 (network)
     monkeypatch.setattr(P, "pull_season", lambda s: pd.DataFrame({"week": [1]}))
     monkeypatch.setattr(P, "write_safe", lambda df, path: None)
     monkeypatch.setattr(R, "freshness_report", lambda week: True)

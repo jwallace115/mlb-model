@@ -43,7 +43,11 @@ RATINGS_FILES = [
     "player_usage_weekly.parquet", "active_universe_weekly.parquet",
 ]
 PBP_DIR_FILES = ["rosters_weekly.parquet", "injuries.parquet"]   # D271: injuries required
-RECORD_ONLY_FILES = ["depth_charts.parquet"]
+RECORD_ONLY_FILES = ["depth_charts.parquet",
+                     "official_injuries.html", "official_injuries.json"]   # D277: gate evidence
+# D277: from this season-week on, a primary (non-pilot) run needs every participating team's
+# official final injury report verified and reconciled (official_injuries.check).
+OFFICIAL_REPORT_FROM = (2026, 4)
 
 
 def archive_root_for(repo_root):
@@ -509,6 +513,13 @@ def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
     teams = sorted(set(events["home_abbr"]) | set(events["away_abbr"]))
     freshness = {"cutoff_T": T.isoformat(), "run_id": run_id, "schedule_source": sched_src,
                  "per_team": _team_freshness(inputs_dir, season, week, teams, last_week)}
+    # D277: the official final injury report, verified per team and reconciled against the
+    # consumed injury rows; HALTs a primary run, recorded for a pilot
+    from nfl.sim import official_injuries as OI
+    off = OI.check(inputs_dir, season, week, teams, sched,
+                   require=(not pilot) and (season, week) >= OFFICIAL_REPORT_FROM)
+    for t in teams:
+        freshness["per_team"][t].update(off.get(t, {}))
     (bundle_dir / "freshness.json").write_text(json.dumps(freshness, indent=1) + "\n")
 
     # ── sha256 manifest — hashes EVERY file in the run directory ──
