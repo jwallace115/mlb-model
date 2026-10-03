@@ -6239,3 +6239,12 @@ Sunday (by 12:15Z for IND@WAS), and Sunday or Monday for MNF.
 
 **Mutations W1-W23:** all killed. W21 (schedule game count) survived the first round and was killed by
 `test_gate_halts_on_a_team_without_exactly_one_schedule_game`.
+
+**FWD7h addendum (2026-10-03, Mac run of FWD7g stopped at the refresh).** `fetch_page` failed certificate verification
+on the Mac's framework Python 3.13: urlopen's default context finds no usable system CA store there. The refresh
+HALTed, restored the tables and wrote nothing official.
+
+`official_injuries.ssl_context()` now passes an explicit VERIFYING context: certifi's CA bundle when it is installed
+(it is on the Mac, as a dependency of requests; nothing was installed), else the default. Verification is never
+disabled. Test: `test_fetch_verifies_certificates_with_an_explicit_context` (urlopen receives an SSLContext with
+CERT_REQUIRED and hostname checking). Mutation W24 (no context passed) is killed.

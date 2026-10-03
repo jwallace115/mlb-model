@@ -63,12 +63,25 @@ def norm_name(s):
     return " ".join(s.split())
 
 
+def ssl_context():
+    """FWD7h: the macOS framework Python has no usable system CA store for `ssl` (the Mac run
+    of FWD7g failed certificate verification). Use certifi's bundle when it is installed (it
+    is on the Mac, as a dependency of requests; nothing is installed here), else the default.
+    Verification is never disabled."""
+    import ssl
+    try:
+        import certifi
+    except ImportError:
+        return ssl.create_default_context()
+    return ssl.create_default_context(cafile=certifi.where())
+
+
 def fetch_page(season, week, timeout=30):
     """Returns (bytes, record). The record is what the gate later checks the bytes against."""
     url = URL.format(season=season, week=week)
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     fetched = datetime.now(timezone.utc)
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with urllib.request.urlopen(req, timeout=timeout, context=ssl_context()) as r:
         status, body = r.status, r.read()
     if status != 200:
         raise SystemExit(f"HALT: {url} returned HTTP {status}")

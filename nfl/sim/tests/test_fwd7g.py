@@ -417,3 +417,33 @@ def test_export_writes_the_committable_evidence_and_refuses_a_foreign_manifest(t
     (b / "refresh_manifest.json").write_text(json.dumps({"files": {"sources/official_injuries.html": "x"}}))
     with pytest.raises(SystemExit, match="does not record this page"):
         OI.export(4, tmp_path / "out2", pbp_dir=d, backups_root=tmp_path / "backups")
+
+
+def test_fetch_verifies_certificates_with_an_explicit_context(monkeypatch):
+    """FWD7h: the Mac's framework Python failed certificate verification with urlopen's
+    default; fetch_page passes a verifying context (certifi's CA bundle when installed)."""
+    import ssl
+    import urllib.request
+    seen = {}
+
+    class Resp:
+        status = 200
+
+        def read(self):
+            return b"<html></html>"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def fake_urlopen(req, timeout=None, context=None):
+        seen["url"], seen["context"] = req.full_url, context
+        return Resp()
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    body, rec = OI.fetch_page(2026, 4)
+    assert seen["url"] == "https://www.nfl.com/injuries/league/2026/reg4"
+    ctx = seen["context"]
+    assert isinstance(ctx, ssl.SSLContext) and ctx.verify_mode == ssl.CERT_REQUIRED and ctx.check_hostname
+    assert rec["sha256"] == hashlib.sha256(b"<html></html>").hexdigest() and rec["week"] == 4
