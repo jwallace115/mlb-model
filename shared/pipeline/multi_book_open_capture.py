@@ -64,11 +64,18 @@ BASE = "https://api.the-odds-api.com/v4"
 SPORTS  = ["baseball_mlb", "americanfootball_nfl", "americanfootball_ncaaf"]
 MARKETS = ["h2h", "spreads", "totals"]
 
-# Exactly 10 books = 1 region equivalent. hardrockbet_fl is the whole point: it is
-# the only book Jeff can bet legally and it has never appeared in any capture.
+# Exactly 10 books = 1 region equivalent. Hard Rock is the whole point: it is the
+# only book Jeff can bet legally. It never appeared in NCAAF/NHL/NBA/MLB captures
+# because the wrong key was requested — see the BOOKS note below.
 # pinnacle is the CLV benchmark and may sit outside the us region — the bookmakers
 # parameter reaches it regardless. The script reports which books actually returned.
-BOOKS = ["hardrockbet_fl", "pinnacle", "draftkings", "fanduel", "betmgm",
+# hardrockbet (generic, us2) NOT hardrockbet_fl. Probed 2026-10-03 across all four
+# Hard Rock keys x 5 sports: _fl returns NFL ONLY and is absent for NCAAF, NHL,
+# NBA and MLB; the generic key covers all five. On NFL the two are identical
+# (90/90 outcomes, 0 price and 0 point differences), so nothing is lost.
+# Do NOT "restore" _fl. Do NOT add an 11th book: 10 books = 1 region-equivalent,
+# an 11th doubles the cost of every call.
+BOOKS = ["hardrockbet", "pinnacle", "draftkings", "fanduel", "betmgm",
          "betonlineag", "bovada", "betrivers", "williamhill_us", "lowvig"]
 
 OUT_ROOT = ROOT / "data" / "odds_archive"
@@ -78,6 +85,7 @@ OUT_ROOT = ROOT / "data" / "odds_archive"
 FOLDER_MAP = {
     "americanfootball_nfl":  "nfl",
     "americanfootball_ncaaf": "ncaaf",
+    "americanfootball_ncaaf_fcs": "ncaaf_fcs",
     "icehockey_nhl":         "nhl",
     "basketball_nba":        "nba",
     "baseball_mlb":          "baseball_mlb",
@@ -206,11 +214,11 @@ def main():
         log.info(f"  books returned ({len(got)}): {', '.join(got)}")
         if missing:
             log.warning(f"  books NOT returned: {', '.join(missing)}")
-        if "hardrockbet_fl" in got:
-            n_hr = df[df["bookmaker"] == "hardrockbet_fl"]["event_id"].nunique()
+        if "hardrockbet" in got:
+            n_hr = df[df["bookmaker"] == "hardrockbet"]["event_id"].nunique()
             log.info(f"  *** hardrockbet_fl PRESENT on {n_hr} games ***")
         else:
-            log.warning("   *** hardrockbet_fl ABSENT on this sport — coverage, not credentials, if it appeared on another sport this run ***")
+            log.warning("   *** hardrockbet ABSENT on this sport — coverage, not credentials, if it appeared on another sport this run ***")
 
         for mk in ("spreads", "totals"):
             s = df[(df["market"] == mk) & df["point"].notna()]
