@@ -903,6 +903,22 @@
       "dog_bp_era": 4.727,
       "win_loss": "W",
       "final_score": "4-6"
+    },
+    {
+      "game_pk": 849835,
+      "game_date": "2026-10-03",
+      "matchup": "NYY @ TBR",
+      "fav_team": "TBR",
+      "dog_team": "NYY",
+      "fav_side": "home",
+      "fav_implied": 0.55,
+      "dog_ml_price": 117,
+      "sp_fip_diff": -0.279,
+      "off_diff": -0.7,
+      "bp_era_diff": 0.052,
+      "fav_bp_era": 4.079,
+      "dog_bp_era": 4.027,
+      "win_loss": null
     }
   ]
 }
