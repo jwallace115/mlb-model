@@ -1,13 +1,14 @@
 {
  "files": {
   "sources/depth_charts.parquet": "5bdbdef22160d7fa828626807fab188c2118f96e1433064eb854778bcaa869fa",
-  "sources/injuries.parquet": "51c8cbb2f7daf363bab9891c3e40431ee0f5125e92f9d8590c3fd1a4c31bb40b",
-  "sources/official_injuries.html": "9e9311c6a5fed2239e8970ebad23efd7eda8377afac4609ce4037af03290c08b",
-  "sources/official_injuries.json": "bef8271b9e2f6c54d3ef7d95f31288b63bffe283bef10f913e7357c79faf35d4",
+  "sources/injuries.parquet": "59be134b98821993ccbc02f9d1a2718f6d245a62e79c37833b9c81d2289ed512",
+  "sources/injuries_feed.parquet": "0d794a0e6d2e3d2e1d0d4623302a9fcbce9d6570b9e9119b480e9d1c3e56204f",
+  "sources/official_injuries.html": "2711f526d7a38581ba1a6a7a7ea79a2244ae7e457cf88c393c51bd35cefcb83f",
+  "sources/official_injuries.json": "3b692fcb237064d6b2fb05c902826b1a2fc19eeb6dff7a9db605101c34fc5918",
   "sources/pbp_2026.parquet": "6e79b54e5f7e73130df6f04e06618991beac377b3755c06d555898387f176f14",
   "sources/rosters_weekly.parquet": "214fe89589448dc64f7cb2456426d76c7e8b14186ea9dd151425a2bee34fbfc8",
-  "sources/schedules_2026.parquet": "27a73fab74db86fa23f2dbe27c736800379128e8cd01a1ab7f731ff1c5d1ebde",
-  "tables/active_universe_weekly.parquet": "7c77180d80118ff3459ad5d3e01b126b4497e12e0031088dc8542ce35ba0bac4",
+  "sources/schedules_2026.parquet": "ccd74080ae010779eea3cd29982982fe5ca173b7a53508089846660ada3196b4",
+  "tables/active_universe_weekly.parquet": "919cae7c254aab3ed64d3e39fb73b88ec26f46fbd2110ba633b982dafe485fd4",
   "tables/kicker_weekly.parquet": "984ec6669947b058b82c709014c47e64fba2d28f4103c35d94ee860856aa7ea6",
   "tables/league_baselines.parquet": "53bad7d1d7441f19568f6d6a3e4f0bb9d43e0dc66d83816b09d35613dae19f3c",
   "tables/player_usage_weekly.parquet": "2921d2009a4554892b684af0c2ee6826a96662564184309d4021083768f68414",
@@ -16,8 +17,8 @@
   "tables/tendencies_situational_weekly.parquet": "ca670545df86ff3622e418e4cf5d6285deedf04600f3de463157f8f6cbea5a21",
   "tables/tendencies_weekly.parquet": "f10670cb5e389b1b7754c2ffc48ecc3aecc663701e5693a94ecb9d314b7a8a3e"
  },
- "input_version": "D278-v8",
- "refreshed_utc": "2026-10-03T15:58:38.548179+00:00",
+ "input_version": "D279-v9",
+ "refreshed_utc": "2026-10-03T23:18:33.859845+00:00",
  "season": 2026,
  "week": 4
 }
