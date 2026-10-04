@@ -215742,5 +215742,95 @@
       }
     ],
     "snapshot_time": "2026-10-02T11:05:02.304047+00:00"
+  },
+  {
+    "game_date": "2026-10-04",
+    "event_id": "6da40e91a31110e51e84ba5671996deb",
+    "game_pk": 849825,
+    "home_team": "Milwaukee Brewers",
+    "away_team": "San Diego Padres",
+    "home_team_abbr": "MIL",
+    "away_team_abbr": "SDP",
+    "commence_time": "2026-10-04T20:00:00Z",
+    "home_total_line": 3.5,
+    "away_total_line": 3.5,
+    "n_books": 6,
+    "home_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": -115,
+        "under_price": -111
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": -120,
+        "under_price": -110
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": -125,
+        "under_price": -105
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -220,
+        "under_price": -200
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": -113,
+        "under_price": -200
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 155,
+        "under_price": -200
+      }
+    ],
+    "away_books": [
+      {
+        "book": "fanduel",
+        "line": 3.5,
+        "over_price": 120,
+        "under_price": -154
+      },
+      {
+        "book": "draftkings",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -140
+      },
+      {
+        "book": "bovada",
+        "line": 3.5,
+        "over_price": 110,
+        "under_price": -145
+      },
+      {
+        "book": "betrivers",
+        "line": 2.5,
+        "over_price": -162,
+        "under_price": -148
+      },
+      {
+        "book": "betrivers",
+        "line": 4.5,
+        "over_price": 200,
+        "under_price": -148
+      },
+      {
+        "book": "betrivers",
+        "line": 3.5,
+        "over_price": 116,
+        "under_price": -148
+      }
+    ],
+    "snapshot_time": "2026-10-04T11:05:02.721101+00:00"
   }
 ]
