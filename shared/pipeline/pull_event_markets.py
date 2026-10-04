@@ -34,8 +34,9 @@ KEY_FP = hashlib.sha256(KEY.strip().encode()).hexdigest()[:8] if KEY else "UNSET
 BASE = "https://api.the-odds-api.com/v4"
 
 # Same 10-book list as the tape (1 region-equivalent).
-BOOKS = ["hardrockbet_fl", "pinnacle", "draftkings", "fanduel", "betmgm",
-         "betonlineag", "bovada", "betrivers", "williamhill_us", "lowvig"]
+# Import books_for from the tape module for per-sport Hard Rock key selection.
+from shared.pipeline.multi_book_open_capture import books_for
+BOOKS = books_for("americanfootball_nfl")  # backward compat: NFL key list
 
 # Featured markets the tape already captures — exclude from event-market pulls.
 TAPE_MARKETS = {"h2h", "spreads", "totals"}
@@ -88,7 +89,7 @@ def discover_markets(sport, event_id):
     Cost: 1 credit per call."""
     r = requests.get(
         f"{BASE}/sports/{sport}/events/{event_id}/markets",
-        params={"apiKey": KEY, "bookmakers": ",".join(BOOKS)},
+        params={"apiKey": KEY, "bookmakers": ",".join(books_for(sport))},
         timeout=30)
     used = r.headers.get("x-requests-last", "0")
     rem = r.headers.get("x-requests-remaining", "?")
@@ -108,7 +109,7 @@ def discover_markets(sport, event_id):
 
 def compute_market_set(book_markets, exclude_prefixes):
     """Union of Hard Rock + Pinnacle market keys, minus tape markets and excluded prefixes."""
-    hr = set(book_markets.get("hardrockbet_fl", []))
+    hr = set(book_markets.get("hardrockbet_fl", [])) | set(book_markets.get("hardrockbet", []))
     pin = set(book_markets.get("pinnacle", []))
     union = hr | pin
     # Remove tape markets
@@ -124,7 +125,7 @@ def pull_event_odds(sport, event_id, markets):
     """Pull odds for specific markets on one event. Returns (data_dict, used, rem)."""
     r = requests.get(
         f"{BASE}/sports/{sport}/events/{event_id}/odds",
-        params={"apiKey": KEY, "bookmakers": ",".join(BOOKS),
+        params={"apiKey": KEY, "bookmakers": ",".join(books_for(sport)),
                 "markets": ",".join(markets), "oddsFormat": "american"},
         timeout=30)
     used = r.headers.get("x-requests-last", "0")
@@ -220,7 +221,7 @@ def main():
         remaining = int(disc_rem) if disc_rem != "?" else remaining
 
         print(f"\nMarkets per book:")
-        for book in BOOKS:
+        for book in books_for(args.sport):
             keys = book_markets.get(book, [])
             print(f"  {book:<20s}: {', '.join(sorted(keys)) if keys else '(none)'}")
 

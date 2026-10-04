@@ -78,6 +78,14 @@ MARKETS = ["h2h", "spreads", "totals"]
 BOOKS = ["hardrockbet", "pinnacle", "draftkings", "fanduel", "betmgm",
          "betonlineag", "bovada", "betrivers", "williamhill_us", "lowvig"]
 
+# NFL keeps "hardrockbet_fl": identical NFL prices (probe 2026-10-03), and every NFL consumer selects that
+# label. Every other sport needs the generic key. One Hard Rock key per call keeps 10 books = 1 region.
+HR_KEY_BY_SPORT = {"americanfootball_nfl": "hardrockbet_fl"}
+
+def books_for(sport):
+    hr = HR_KEY_BY_SPORT.get(sport, "hardrockbet")
+    return [hr if b == "hardrockbet" else b for b in BOOKS]
+
 OUT_ROOT = ROOT / "data" / "odds_archive"
 
 # Explicit folder map: the API sport key -> archive subfolder name.
@@ -123,7 +131,7 @@ def pull(sport, retries=1, backoff=5):
     """Returns (games, used, rem) on success, or None on failure.
     Failure is logged but does NOT exit — the caller decides whether to continue."""
     p = {"apiKey": KEY, "markets": ",".join(MARKETS),
-         "bookmakers": ",".join(BOOKS), "oddsFormat": "american"}
+         "bookmakers": ",".join(books_for(sport)), "oddsFormat": "american"}
     for attempt in range(1 + retries):
         try:
             r = requests.get(f"{BASE}/sports/{sport}/odds/", params=p, timeout=45)
@@ -210,15 +218,17 @@ def main():
             log.warning(f"  {sport}: no odds rows"); continue
 
         got = sorted(df["bookmaker"].unique())
-        missing = [b for b in BOOKS if b not in got]
+        sport_books = books_for(sport)
+        missing = [b for b in sport_books if b not in got]
         log.info(f"  books returned ({len(got)}): {', '.join(got)}")
         if missing:
             log.warning(f"  books NOT returned: {', '.join(missing)}")
-        if "hardrockbet" in got:
-            n_hr = df[df["bookmaker"] == "hardrockbet"]["event_id"].nunique()
-            log.info(f"  *** hardrockbet_fl PRESENT on {n_hr} games ***")
+        hr_key = sport_books[0]  # the sport's own Hard Rock key
+        if hr_key in got:
+            n_hr = df[df["bookmaker"] == hr_key]["event_id"].nunique()
+            log.info(f"  *** {hr_key} PRESENT on {n_hr} games ***")
         else:
-            log.warning("   *** hardrockbet ABSENT on this sport — coverage, not credentials, if it appeared on another sport this run ***")
+            log.warning(f"   *** {hr_key} ABSENT on this sport — coverage, not credentials, if it appeared on another sport this run ***")
 
         for mk in ("spreads", "totals"):
             s = df[(df["market"] == mk) & df["point"].notna()]
