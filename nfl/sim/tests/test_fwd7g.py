@@ -833,7 +833,6 @@ def test_d280_benign_markup_parses_identically():
         _row_edit(page, L, "<td>Out</td>", '<td scope="row"> <span><b>Out</b></span> </td>'),
         _row_edit(page, L, "<td>Knee</td>", "<td>Kn&#101;e</td>\n\t"),
         _row_edit(page, L, "<td>Out</td>", "<TD>Out</TD>"),
-        _row_edit(page, L, 'class="nfl-o-cta--link"', 'class="nfl-o-cta--link" aria-label="a > b"'),
         _row_edit(page, L, "<td>Knee</td>", "<td>Knee<br></td>"),
         _row_edit(page, L, 'class="nfl-o-cta--link"', 'CLASS="nfl-o-cta&#45;-link"'),
     ]
@@ -910,4 +909,63 @@ def test_d281_allowed_markup_still_parses_identically():
     for v in (_row_edit(page, "Xavier Legette", 'class="nfl-o-cta--link"', "class='nfl-o-cta&#45;-link'"),
               _row_edit(page, "Xavier Legette", 'class="nfl-o-cta--link"', 'aria-label="Visit &amp; see"'),
               page.replace('<table class="d3-o-table">', '<table class="d3-o-table d3-o-reports--detailed">', 1)):
+        pd.testing.assert_frame_equal(OI.parse(v, 4, 2026), clean)
+
+
+# ── D282: audit #23 ───────────────────────────────────────────────────────────
+
+def _quoted_comment(attr="aria-label", page=None):
+    """Audit #23 A1, exactly: Xavier Legette's '<td>Out</td>' becomes
+    '<td><a aria-label="<!--">Out</a><a aria-label="-->"></a></td>'. Both are quoted attribute
+    values, not a comment; a browser shows Out. The whole-document '<!--.*?-->' substitution
+    deleted the span between them, so the parser read a blank status (Out lost, gates passed)."""
+    return _row_edit(page or _was_like_page(), "Xavier Legette", "<td>Out</td>",
+                     f'<td><a {attr}="<!--">Out</a><a {attr}="-->"></a></td>')
+
+
+def test_d282_comment_delimiters_in_attribute_values_halt_the_parse_refresh_and_gate(tmp_path, monkeypatch):
+    for attr in ("aria-label", "href"):
+        with pytest.raises(SystemExit, match="unclosed comment"):
+            OI.parse(_quoted_comment(attr), 4, 2026)
+    R = _refresh_world(tmp_path, monkeypatch)
+    before = (tmp_path / "injuries.parquet").read_bytes()
+    with pytest.raises(SystemExit, match="unclosed comment"):
+        R.official_step(4, fetch=_fake_fetch(page=_quoted_comment()))
+    assert (tmp_path / "injuries.parquet").read_bytes() == before
+    assert not (tmp_path / OI.HTML_NAME).exists() and not (tmp_path / OI.RECORD_NAME).exists()
+    d = _inputs(tmp_path / "g")
+    _rewrite(d, page=_quoted_comment())
+    for req in (True, False):
+        with pytest.raises(SystemExit, match="unclosed comment"):
+            OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=req, cutoff=CUT)
+
+
+def test_d282_angle_brackets_and_section_delimiters_outside_text_halt():
+    page = _was_like_page()
+    L = "Xavier Legette"
+    cases = [
+        (_row_edit(page, L, "<td>Out</td>", "<td><a aria-label='<!--'>Out</a><a aria-label='-->'></a></td>"), "unclosed comment"),
+        (_row_edit(page, L, "<td>Out</td>", '<td><a aria-label="</section>">Out</a></td>'), "unparseable markup|section"),
+        (_row_edit(page, L, "<td>Out</td>", '<td><a aria-label="</table>">Out</a></td>'), "HALT"),
+        (_row_edit(page, L, 'class="nfl-o-cta--link"', 'class="nfl-o-cta--link" aria-label="a > b"'), "raw '<' or '>'"),
+        (page.replace("</section>", "<!-- " + OI.UNIT + " -->" + "</section>", 1), "HALT"),
+        (page.replace("</section>", "", 1), "no closing </section>"),
+        (_row_edit(page, L, "<td>Out</td>", "<td><!-->Out<!-- x --></td>"), "abruptly or incorrectly closed"),
+        (_row_edit(page, L, "<td>Out</td>", "<td><!--->Out<!-- x --></td>"), "abruptly or incorrectly closed"),
+        (_row_edit(page, L, "<td>Out</td>", "<td><!-- a --!>Out<!-- b --></td>"), "abruptly or incorrectly closed"),
+    ]
+    for bad, msg in cases:
+        with pytest.raises(SystemExit, match=msg):
+            OI.parse(bad, 4, 2026)
+
+
+def test_d282_real_comments_and_encoded_delimiters_keep_the_parse():
+    page = _was_like_page()
+    clean = OI.parse(page, 4, 2026)
+    L = "Xavier Legette"
+    row_end = page.index("</tr>", page.index("<tbody>")) + len("</tr>")
+    for v in (page[:row_end] + "<!-- a <b>comment</b> with 'quotes\" -->" + page[row_end:],
+              _row_edit(page, L, "<td>Out</td>", '<td><a aria-label="&lt;!--">Out</a></td>'),
+              _row_edit(page, L, "<td>Knee</td>", "<td>Knee<!-- note --></td>"),
+              _row_edit(page, L, "<td>Out</td>", "<td>Out</td><!-- </section> </tr> -->")):
         pd.testing.assert_frame_equal(OI.parse(v, 4, 2026), clean)

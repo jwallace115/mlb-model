@@ -6540,3 +6540,61 @@ attributes; unparseable section markup). Results are in the FWD7m record.
 the gate passes; otherwise `--pilot`, decided before the harness. Before each window, the prompts fetch origin/main,
 restore the quotes into the harness worktree, and print every game's newest props and line timestamps; no stale-quote
 override is used (audit #22 quote-path note).
+
+### D282 — ChatGPT audit #23 NO-GO accepted: comments are removed by a quote-aware scan of each section (FWD7n, 2026-10-04 ~12:15Z)
+
+Audit #23 (`research/cross_ai/chatgpt_audit23_reply_2026-10-04.md`, pin `b842af343`) is NO-GO for a primary in all
+three windows. It confirms the D280 and D281 fixes, with all 52 prior probes HALTing or identical, and the clean
+86-prediction replay is exact. Its baseline (189 passed, 2 skipped, on 18/29 files) and mutation replay (17/77, all
+killed) are partial; they are reported as such and are not counted as passes. Accepted:
+- **IND@WAS** cannot get a GO in time: its pilot is declared before the harness (Sun ~11:45Z).
+- **Main + SNF** also runs as a declared pilot: a fix, a Mac run and an audit cannot finish by 16:00Z, and the Mac must
+  stay free for the 16:12Z harness.
+- **MNF** (Mon 23:15Z) is the next possible primary.
+
+**One code blocker (A1), accepted in full.**
+- **The edit:** Jayden Daniels's `<td>Out</td>` became `<td><a aria-label="<!--">Out</a><a aria-label="-->"></a></td>`.
+  Both are quoted attribute values, both attributes are allowed, and a browser shows Out.
+- **Why it got through:** D279b's whole-document `re.sub(r"<!--.*?-->", "")` ran before every check. It deleted the span
+  between the two values, so D281's allowlist validated a string whose content was already gone. Out became blank.
+- **The effect:** active false → true in weeks 4-5 (WAS 16 → 17); both gate modes verified the changed input. The
+  non-pilot worker then hit audit #23's 450-second limit (no prediction delta claimed).
+- **A variant:** the same edit with `href` worked too.
+
+**Repair (`official_injuries._section_body`).** The document is split at the section opening tag. Each piece is then
+scanned from its start, which is text context, with one pattern that matches one of four things:
+- a comment `<!--…-->`, removed only when it starts in text;
+- the section's real `</section>`, where the section ends;
+- a whole tag, matched including its quoted and unquoted attribute values. A delimiter inside a value therefore stays
+  inside that tag, so `<a aria-label="<!--">` is a tag, not a comment opener;
+- a bare `<`, which is kept, so the existing checks HALT on it.
+
+Fail-closed additions:
+- **Abruptly or incorrectly closed comments** (`<!-->`, `<!--->`, `--!>`) HALT: HTML ends comments there but this scan
+  would not.
+- **A section piece without a real `</section>`** outside comments and attribute values HALTs. This covers a
+  `</section>` inside an attribute, and a section-opening string inside a comment.
+- **A raw `<` or `>` in any attribute value** inside a section HALTs (`_section_markup`), so the pattern-based steps
+  (tables, rows, matchup strip) cannot be desynchronised. Entity-encoded `&lt;`/`&gt;` remain allowed. The real page has
+  none. This turns D280's benign "quoted `>` in aria-label" control into a HALT (fail-closed; the test was moved).
+
+Audit #23's case now HALTs as "an unclosed comment": the `<!--` stays inside the tag, and the D279b check refuses `<!--`
+in a section.
+
+**Real page.** The Oct 2 capture is frame-equal to D279b-D281. Its only comments are IE conditional ones
+(`<!--[if IE 9]>…`). The Mac run re-checks the live page and the installed 23:10Z capture.
+
+**Tests (test_fwd7g 55):**
+- `test_d282_comment_delimiters_in_attribute_values_halt_the_parse_refresh_and_gate`: aria-label and href; refresh
+  writes nothing; both gate modes HALT.
+- `test_d282_angle_brackets_and_section_delimiters_outside_text_halt`: 9 cases.
+- `test_d282_real_comments_and_encoded_delimiters_keep_the_parse`: a real comment with markup and quotes in a body, an
+  encoded `&lt;!--` value, a comment inside a cell, and a comment containing `</section> </tr>` after a row's last cell.
+  All are identical to clean, as a browser shows them.
+
+**Mutations.** Z11 is re-anchored (comments kept instead of removed). Z31-Z34 are added: the old whole-document regex,
+abrupt-comment checks removed, raw brackets in values allowed, and a missing `</section>` allowed. Cowork ran all 81
+operators on one copy: 79 killed by failing tests. X2 and Z21 survive:
+- X2 is admission-equivalent, as before;
+- Z21 removes the cell-local stray-`<` check. The section-wide check still refuses the same input, and the two error
+  messages share the matched substring "unparseable markup" (audit #23 noted the full messages differ).

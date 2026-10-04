@@ -1,4 +1,4 @@
-"""D277-D281 mutation campaign (FWD7g W1-W24, FWD7i X1-X23, FWD7j/k/l/m Z1-Z30), for reproduction.
+"""D277-D282 mutation campaign (FWD7g W1-W24, FWD7i X1-X23, FWD7j-n Z1-Z34), for reproduction.
 
 Usage: python3 research/nfl_sim/mutations/d278_mutations.py COPY_ROOT
 COPY_ROOT is a COPY of the repository tree (never the working checkout): each operator edits
@@ -96,7 +96,7 @@ Z = [  # D279 (audit #20)
 ("Z8 final_url slash not normalised (Y2)", OIp, '    if str(rec.get("final_url") or "").rstrip("/") != want:', '    if str(rec.get("final_url") or "") != want:'),
 ("Z9 posteam upper-cased first (Y3)", Up, '         (p["posteam"].notna() & ~p["posteam"].isin(PBP_TEAMS)) |',
  '         (p["posteam"].notna() & ~p["posteam"].astype("string").str.upper().isin(PBP_TEAMS)) |'),
-("Z11 comments not stripped", OIp, 're.sub(r"<!--.*?-->", "", html_text, flags=re.S).split(UNIT)[1:]]', 'html_text.split(UNIT)[1:]]'),
+("Z11 comments not removed (D282)", OIp, "        # else: a comment that starts in text — dropped\n", "        else:\n            out.append(m.group(0))\n"),
 ("Z12 script/template allowed", OIp, '        if re.search(r"<(template|script|style|noscript)\\b", u, re.I) or "<!--" in u:', '        if False:'),
 ("Z13 independent count case-sensitive", OIp, '    src = sum(len(re.findall(r"<tr\\b", u, re.I)) for u in units) - 2 * len(units)', '    src = sum(len(re.findall(r"<tr\\b", u)) for u in units) - 2 * len(units)'),
 ("Z10 header row count not checked", OIp, '    if not head_tr or len(re.findall(r"<tr\\b", head_m.group(1), re.I)) != 1:', "    if not head_tr:"),
@@ -122,6 +122,13 @@ Z = [  # D279 (audit #20)
 ("Z28 tag allowlist not checked", OIp, "        if name not in SECTION_TAGS:", "        if False:"),
 ("Z29 attributes on closing tags allowed", OIp, "        if m.group(1) and m.group(3).strip():", "        if False:"),
 ("Z30 unparseable section markup allowed", OIp, '    if u.count("<") != len(tags):', "    if False:"),
+# D282 (audit #23 A1): quote-aware comment removal
+("Z31 whole-document comment regex (pre-D282)", OIp, "    units = [_section_body(k, p) for k, p in enumerate(html_text.split(UNIT)[1:])]",
+ '    units = [u.split("</section>", 1)[0] for u in re.sub(r"<!--.*?-->", "", html_text, flags=re.S).split(UNIT)[1:]]'),
+("Z32 abruptly closed comments allowed", OIp, '        if body is not None and (body.startswith(">") or body.startswith("->") or "--!>" in body):', "        if False:"),
+("Z33 raw angle brackets in attribute values allowed", OIp, '            if "<" in v or ">" in v:', "            if False:"),
+("Z34 a section without </section> allowed", OIp, '    raise SystemExit(f"HALT: official injury page section {k}: no closing </section> outside "\n                     f"comments and attribute values")',
+ '    return "".join(out)'),
 ]
 W.append(("W24 no SSL context", OIp, "urllib.request.urlopen(req, timeout=timeout, context=ssl_context())",
           "urllib.request.urlopen(req, timeout=timeout)"))

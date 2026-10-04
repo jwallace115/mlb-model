@@ -108,8 +108,9 @@ def _read(html_text, week, season):
     # D279b: HTML comments are not content — a commented-out row is neither a row nor counted
     # (the real sections carry only IE conditional comments around logo images); and a
     # script, template or style element inside a report section is unsupported (HALT)
-    units = [u.split("</section>", 1)[0]
-             for u in re.sub(r"<!--.*?-->", "", html_text, flags=re.S).split(UNIT)[1:]]
+    # D282 (audit #23 A1): comments are removed by a quote-aware scan of each section, so a
+    # comment delimiter inside a quoted attribute value is never treated as a comment
+    units = [_section_body(k, p) for k, p in enumerate(html_text.split(UNIT)[1:])]
     if not units:
         raise SystemExit("HALT: official injury page has no team sections")
     for k, u in enumerate(units):
@@ -238,6 +239,38 @@ ATTRS_IN_TABLE = {"td": {"scope", "tabindex"}, "a": {"href", "class", "aria-labe
 _ATTR = re.compile(r"""([^\s"'>/=]+)(?:\s*=\s*("[^"]*"|'[^']*'|[^\s"'>]+))?""")
 
 
+_SCAN = re.compile(r"""<!--(.*?)-->|(</section\s*>)|(<(/?)([A-Za-z][A-Za-z0-9-]*)"""
+                   r"""(?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?)*\s*/?>)|<""", re.S)
+
+
+def _section_body(k, piece):
+    """D282 (audit #23 A1): the content of report section k, from just after its opening tag to
+    its closing </section>, with HTML comments removed — but only comments that start in text.
+    The scan is quote-aware: a tag is matched as a whole, including quoted attribute values, so
+    '<a aria-label="<!--">' is a tag, not a comment opener. A '<' that starts neither a comment,
+    a tag nor </section> is kept (the section checks then HALT on it: an unclosed comment, a
+    stray '<'). A piece that never reaches a real </section> HALTs."""
+    out, pos = [], 0
+    for m in _SCAN.finditer(piece):
+        out.append(piece[pos:m.start()])
+        pos = m.end()
+        body = m.group(1)
+        if body is not None and (body.startswith(">") or body.startswith("->") or "--!>" in body):
+            # HTML ends a comment at '<!-->', '<!--->' or '--!>' too; this scan would not, so
+            # it could drop text a browser shows — fail closed
+            raise SystemExit(f"HALT: official injury page section {k}: abruptly or incorrectly "
+                             f"closed comment")
+        if m.group(2):                      # the section's real closing tag
+            return "".join(out)
+        if m.group(3):                      # a whole tag, quoted attribute values included
+            out.append(m.group(3))
+        elif m.group(0) == "<":             # neither comment nor tag: keep it for the checks
+            out.append("<")
+        # else: a comment that starts in text — dropped
+    raise SystemExit(f"HALT: official injury page section {k}: no closing </section> outside "
+                     f"comments and attribute values")
+
+
 def _section_markup(k, u):
     """D281: HALT unless every tag, attribute and class in report section k is on the allowlist."""
     tags = list(_TAG.finditer(u))
@@ -256,6 +289,11 @@ def _section_markup(k, u):
             raise SystemExit(f"HALT: official injury page section {k}: attributes on </{name}>")
         for a in _ATTR.finditer(m.group(3)):
             an, v = a.group(1).lower(), a.group(2) or ""
+            if "<" in v or ">" in v:
+                # D282: a raw angle bracket inside an attribute value could desynchronise the
+                # pattern-based steps (sections, tables, rows); the real page has none
+                raise SystemExit(f"HALT: official injury page section {k}: raw '<' or '>' in the "
+                                 f"{an!r} attribute of <{name}>")
             if len(v) >= 2 and v[0] in "\"'" and v[-1] == v[0]:
                 v = v[1:-1]
             v = _html.unescape(v)
