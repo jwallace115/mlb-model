@@ -164,6 +164,80 @@
    ]
   },
   {
+   "id": "nba_event_markets",
+   "label": "Props + derivatives, 10 books",
+   "sport": "NBA",
+   "cron_match": "pull_event_markets.py --sport basketball_nba",
+   "outputs": [
+    "data/odds_archive/nba/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "id": "ncaaf_event_markets",
+   "label": "Alts, team totals, halves",
+   "sport": "NCAAF",
+   "cron_match": "pull_event_markets.py --sport americanfootball_ncaaf",
+   "outputs": [
+    "data/odds_archive/ncaaf/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    1
+   ]
+  },
+  {
+   "id": "mlb_event_markets",
+   "label": "Alts, team totals, props",
+   "sport": "MLB",
+   "cron_match": "pull_event_markets.py --sport baseball_mlb",
+   "outputs": [
+    "data/odds_archive/baseball_mlb/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "id": "nfl_sunday_early",
+   "label": "Sunday AM tape for London games",
+   "sport": "NFL",
+   "cron_match": "multi_book_open_capture.py --sports americanfootball_nfl",
+   "outputs": [
+    "data/odds_archive/nfl/line_history/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true
+  },
+  {
    "id": "espn_nfl_news",
    "label": "ESPN news",
    "sport": "NFL",
