@@ -105,12 +105,19 @@ def _read(html_text, week, season):
     if len(title) != 1 or f"Week {int(week)} of the {int(season)} Season" not in _txt(title[0]):
         raise SystemExit(f"HALT: official injury page title {[_txt(t) for t in title]} does not "
                          f"name week {week} of the {season} season")
-    units = html_text.split(UNIT)[1:]
+    # D279b: HTML comments are not content — a commented-out row is neither a row nor counted
+    # (the real sections carry only IE conditional comments around logo images); and a
+    # script, template or style element inside a report section is unsupported (HALT)
+    units = [u.split("</section>", 1)[0]
+             for u in re.sub(r"<!--.*?-->", "", html_text, flags=re.S).split(UNIT)[1:]]
     if not units:
         raise SystemExit("HALT: official injury page has no team sections")
+    for k, u in enumerate(units):
+        if re.search(r"<(template|script|style|noscript)\b", u, re.I) or "<!--" in u:
+            raise SystemExit(f"HALT: official injury page section {k}: unsupported element "
+                             f"(script/template/style/noscript or an unclosed comment)")
     rows, seen, matchups = [], set(), []
     for k, u in enumerate(units):
-        u = u.split("</section>", 1)[0]
         abbr = [a.strip() for a in re.findall(r'nfl-c-matchup-strip__team-abbreviation">([^<]*)<', u)]
         full = [_txt(a) for a in re.findall(r'nfl-c-matchup-strip__team-fullname"[^>]*>(.*?)</a>', u, re.S)]
         subs = [_txt(s) for s in re.findall(r'd3-o-section-sub-title"><span>(.*?)</span>', u, re.S)]
@@ -145,7 +152,7 @@ def _read(html_text, week, season):
                              "game_status": gs})
     # D279 (audit #20 A1): an independent count of every player row inside the report
     # sections must equal the rows emitted — no source row may be dropped by structure
-    src = sum(len(re.findall(r"<tr\b", u.split("</section>", 1)[0])) for u in units) - 2 * len(units)
+    src = sum(len(re.findall(r"<tr\b", u, re.I)) for u in units) - 2 * len(units)
     if src != len(rows):
         raise SystemExit(f"HALT: official injury page has {src} player rows but {len(rows)} were "
                          f"parsed")

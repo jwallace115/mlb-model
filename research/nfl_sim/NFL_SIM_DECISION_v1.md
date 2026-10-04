@@ -6407,3 +6407,15 @@ AND the gate passes; otherwise `--pilot`, decided before the harness. Audit #20'
 - game-morning refresh done by 12:15Z, with that capture's evidence committed before each primary;
 - a main + SNF re-refresh done by 15:45Z;
 - MNF needs a capture after Sat 20:00Z, and a last refresh done by Mon 23:00Z.
+
+**D279b addendum (FWD7k, 2026-10-04 ~00:00Z, before audit #21, after Cowork's own P2 review of the D279 parser).**
+- **HTML comments are stripped** from the report sections before parsing and before the independent row count. A
+  commented-out row was parsed as a real row, and both counts agreed. The real sections carry only IE conditional
+  comments around logo images; the real page is unchanged at 313 rows.
+- **Unsupported elements HALT.** A `<script>`, `<template>`, `<style>` or `<noscript>` inside a report section, or an
+  unclosed comment, HALTs.
+- **The independent count is case-insensitive**, so an upper-case `<TR>` the parser would not read makes the counts
+  differ and HALTs.
+- **Tests:** `test_d279b_comments_are_not_rows_and_unsupported_elements_halt` and
+  `test_d279b_an_upper_case_row_outside_the_tables_halts_by_the_count` (test_fwd7g 45).
+- **Mutations:** Z11-Z13 are added and killed.

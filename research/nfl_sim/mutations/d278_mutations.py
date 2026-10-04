@@ -96,6 +96,9 @@ Z = [  # D279 (audit #20)
 ("Z8 final_url slash not normalised (Y2)", OIp, '    if str(rec.get("final_url") or "").rstrip("/") != want:', '    if str(rec.get("final_url") or "") != want:'),
 ("Z9 posteam upper-cased first (Y3)", Up, '         (p["posteam"].notna() & ~p["posteam"].isin(PBP_TEAMS)) |',
  '         (p["posteam"].notna() & ~p["posteam"].astype("string").str.upper().isin(PBP_TEAMS)) |'),
+("Z11 comments not stripped", OIp, 're.sub(r"<!--.*?-->", "", html_text, flags=re.S).split(UNIT)[1:]]', 'html_text.split(UNIT)[1:]]'),
+("Z12 script/template allowed", OIp, '        if re.search(r"<(template|script|style|noscript)\\b", u, re.I) or "<!--" in u:', '        if False:'),
+("Z13 independent count case-sensitive", OIp, '    src = sum(len(re.findall(r"<tr\\b", u, re.I)) for u in units) - 2 * len(units)', '    src = sum(len(re.findall(r"<tr\\b", u)) for u in units) - 2 * len(units)'),
 ("Z10 header row count not checked", OIp, "    if head != HEADER or len(re.findall(r\"<tr\\b\", head_m.group(1))) != 1:", "    if head != HEADER:"),
 ]
 W.append(("W24 no SSL context", OIp, "urllib.request.urlopen(req, timeout=timeout, context=ssl_context())",

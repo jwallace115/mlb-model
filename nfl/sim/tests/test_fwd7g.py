@@ -737,3 +737,26 @@ def test_d279_a_second_header_row_halts_as_a_header_error():
     page = _was_like_page().replace("<thead>", "<thead><tr></tr>", 1)
     with pytest.raises(SystemExit, match="columns"):
         OI.parse(page, 4, 2026)
+
+
+def test_d279b_comments_are_not_rows_and_unsupported_elements_halt():
+    """P2 hardening: a commented-out row is neither parsed nor counted; script/template/style
+    inside a report section, or an upper-case row tag the parser would not read, HALTs."""
+    page = _was_like_page()
+    row_end = page.index("</tr>", page.index("<tbody>")) + len("</tr>")
+    commented = page[:row_end] + "<!--<tr><td>Ghost</td><td>QB</td><td></td><td></td><td>Out</td></tr>-->" + page[row_end:]
+    pd.testing.assert_frame_equal(OI.parse(commented, 4, 2026), OI.parse(page, 4, 2026))
+    for bad, msg in ((page[:row_end] + "<template><tr><td>x</td></tr></template>" + page[row_end:], "unsupported element"),
+                     (page[:row_end] + "<script>var x=1;</script>" + page[row_end:], "unsupported element"),
+                     (page[:row_end] + "<TR><td>Upper</td><td>QB</td><td></td><td></td><td>Out</td></TR>" + page[row_end:],
+                      "player rows but 5 were parsed|unsupported table body")):
+        with pytest.raises(SystemExit, match=msg):
+            OI.parse(bad, 4, 2026)
+
+
+def test_d279b_an_upper_case_row_outside_the_tables_halts_by_the_count():
+    """Z13: the independent row count is case-insensitive."""
+    page = _was_like_page().replace('<div class="nfl-t-stats__title">',
+                                    '<TR><TD>Ghost</TD></TR><div class="nfl-t-stats__title">', 1)
+    with pytest.raises(SystemExit, match="player rows but 5 were parsed"):
+        OI.parse(page, 4, 2026)
