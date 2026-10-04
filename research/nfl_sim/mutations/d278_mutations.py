@@ -1,4 +1,4 @@
-"""D277-D279 mutation campaign (FWD7g W1-W24, FWD7i X1-X23, FWD7j Z1-Z10), for reproduction.
+"""D277-D280 mutation campaign (FWD7g W1-W24, FWD7i X1-X23, FWD7j/k/l Z1-Z23), for reproduction.
 
 Usage: python3 research/nfl_sim/mutations/d278_mutations.py COPY_ROOT
 COPY_ROOT is a COPY of the repository tree (never the working checkout): each operator edits
@@ -45,10 +45,10 @@ W=[
 ]
 
 
-REANCHORED = {  # D278 moved these anchors; same operators
+REANCHORED = {  # D278/D280 moved these anchors; same operators
  "W11": ("W11 primary not required","nfl/sim/run_forward_v1.py","require=(not pilot) and (season, week) >= OFFICIAL_REPORT_FROM, cutoff=T)","require=False, cutoff=T)"),
  "W18": ("W18 team on page not required","nfl/sim/official_injuries.py",'        if t not in page:\n            reasons.append("no section on the official page")','        if False:\n            reasons.append("no section on the official page")'),
- "W23": ("W23 header not checked", "nfl/sim/official_injuries.py", "    if head != HEADER or len(re.findall(r\"<tr\\b\", head_m.group(1))) != 1:", "    if False:"),
+ "W23": ("W23 header not checked", "nfl/sim/official_injuries.py", "    if head != HEADER:\n        raise SystemExit(f\"HALT: official injury page {team}: columns {head}", "    if False:\n        raise SystemExit(f\"HALT: official injury page {team}: columns {head}"),
  "W20": ("W20 written before identified","nfl/sim/refresh_inputs.py","    with tempfile.TemporaryDirectory() as td:\n        OI.write_capture(body, rec, td)","    OI.write_capture(body, rec, PBP)\n    with tempfile.TemporaryDirectory() as td:\n        OI.write_capture(body, rec, td)"),
 }
 W = [REANCHORED.get(m[0].split()[0], m) for m in W]
@@ -99,7 +99,21 @@ Z = [  # D279 (audit #20)
 ("Z11 comments not stripped", OIp, 're.sub(r"<!--.*?-->", "", html_text, flags=re.S).split(UNIT)[1:]]', 'html_text.split(UNIT)[1:]]'),
 ("Z12 script/template allowed", OIp, '        if re.search(r"<(template|script|style|noscript)\\b", u, re.I) or "<!--" in u:', '        if False:'),
 ("Z13 independent count case-sensitive", OIp, '    src = sum(len(re.findall(r"<tr\\b", u, re.I)) for u in units) - 2 * len(units)', '    src = sum(len(re.findall(r"<tr\\b", u)) for u in units) - 2 * len(units)'),
-("Z10 header row count not checked", OIp, "    if head != HEADER or len(re.findall(r\"<tr\\b\", head_m.group(1))) != 1:", "    if head != HEADER:"),
+("Z10 header row count not checked", OIp, '    if not head_tr or len(re.findall(r"<tr\\b", head_m.group(1), re.I)) != 1:', "    if not head_tr:"),
+# D280 (audit #21 A): complete row-content validation
+("Z14 old cell regex (th ignored, extra cells unseen)", OIp, '                td = _cells(t, tr, "td")',
+ '                td = [_txt(x) for x in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]'),
+("Z15 text between cells allowed", OIp, "        if cell_start is None and text.strip():", "        if False:"),
+("Z16 any tag inside a cell", OIp, "        elif name not in INLINE_TAGS:", "        elif False:"),
+("Z17 colspan allowed", OIp, '            if re.search(r"\\b(colspan|rowspan)\\b", attrs, re.I):', "            if False:"),
+("Z18 unbalanced close allowed", OIp, "            if not stack or stack.pop() != name:", "            if stack and stack.pop() and False:"),
+("Z19 trailing content allowed", OIp, '    if "<" in rest or rest.strip() or cell_start is not None:', "    if cell_start is not None:"),
+("Z20 header not validated by cells", OIp, '    head = _cells(team, head_tr.group(1), "th")',
+ '    head = [_txt(h) for h in re.findall(r"<th[^>]*>(.*?)</th>", head_tr.group(1), re.S)]'),
+("Z21 stray '<' allowed", OIp, '        if "<" in text:\n            bad("unparseable markup")', '        if False:\n            bad("unparseable markup")'),
+("Z22 hidden elements allowed", OIp, '        if re.search(r"(?:^|\\s)hidden(?=[\\s=]|$)|display\\s*:\\s*none|visibility\\s*:\\s*hidden", attrs, re.I):', "        if False:"),
+("Z23 cell text via _txt (quoted '>' leaks into text)", OIp, '            cells.append(_html.unescape(re.sub(r"\\s+", " ", "".join(text_parts))).strip())',
+ '            cells.append(_txt(row_html[cell_start:m.start()]))'),
 ]
 W.append(("W24 no SSL context", OIp, "urllib.request.urlopen(req, timeout=timeout, context=ssl_context())",
           "urllib.request.urlopen(req, timeout=timeout)"))

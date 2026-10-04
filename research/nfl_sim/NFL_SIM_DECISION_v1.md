@@ -6419,3 +6419,58 @@ AND the gate passes; otherwise `--pilot`, decided before the harness. Audit #20'
 - **Tests:** `test_d279b_comments_are_not_rows_and_unsupported_elements_halt` and
   `test_d279b_an_upper_case_row_outside_the_tables_halts_by_the_count` (test_fwd7g 45).
 - **Mutations:** Z11-Z13 are added and killed.
+
+### D280 — ChatGPT audit #21 NO-GO accepted: every player row's complete content is validated (FWD7l, 2026-10-04 ~02:00Z)
+
+Audit #21 (`research/cross_ai/chatgpt_audit21_reply_2026-10-04.md`, pin `b7d4a9916`) is NO-GO for a primary in all
+three windows. Its previous counterexamples are fixed (split/attributed bodies end to end, harness PBP admission,
+Y1-Y3, 59/60 mutations killed with X2 admission-equivalent), and the real archive, rebuild and point-in-time claims
+hold. **One code blocker (A1), accepted in full:**
+
+- `_read` took a row's cells with `re.findall(r"<td[^>]*>(.*?)</td>")`, so it saw only the `<td>` elements in a row.
+  Replacing a player's `<td>Out</td>` with `<th>Out</th><td></td>` made a six-cell row whose fifth cell still says
+  Out. The parser ignored the `<th>`, found five `<td>`s, and read the trailing blank as the game status.
+- The independent `<tr>` count cannot see it: the row is still there. On a copy of the real 23:10Z capture (Daniels and
+  White), it ran through `official_step`, the usage builder and the NON-pilot IND@WAS bootstrap with exit 0, both
+  teams verified, 45 reads and 0 violations. WAS week-4 active went from 16 to 18; all 75 common sim_p and 43 cal_p
+  changed, by up to 13.92 points.
+- Stray text inside a `<tr>` was also ignored (same class).
+- The real archive has 318/318 five-cell rows: this is what the gate would admit under a source change, not a defect in
+  the installed inputs.
+
+**Repair (`official_injuries._cells`).** A row is tokenised completely and must be exactly a sequence of cells of the
+expected kind separated by whitespace:
+- `<td>` cells for player rows, `<th>` cells for the header (one header `<tr>`, matched as a whole);
+- inside a cell only balanced inline elements are allowed: `a`, `span`, `b`, `strong`, `em`, `i`, and the void `br`;
+- HALT on: any other tag (a `<th>` in a body row, a nested `<td>`/`<tr>`/`<table>`, `<del>`, …); any text between or
+  after cells; an unclosed cell; an unbalanced inline tag; a literal `<` that is not a tag; `colspan`/`rowspan` (it
+  shifts the column mapping); a `hidden` attribute or `display:none`/`visibility:hidden` style;
+- player rows still need exactly 5 cells and a non-empty name, and the header exactly the 5 expected columns;
+- a cell's text is its text between tags (a `>` inside a quoted attribute is part of the tag), whitespace-collapsed and
+  entity-decoded as `_txt` does. Previously `_txt` cut such an attribute and leaked `b"> ` into the player name.
+
+The real page (Oct 2 capture, 313 rows) parses identically to the D279b parser (frame-equal; Cowork). The real page's
+row bodies contain only `tr`, `td` and `a` tags.
+
+**Tests (test_fwd7g 49):**
+- `test_d280_a_th_status_cell_plus_a_blank_cell_halts_the_parse_refresh_and_gate`: audit #21's exact edit. `parse`
+  HALTs; `official_step` writes nothing; `OI.check` on a bundle carrying the page HALTs for a primary AND a pilot.
+- `test_d280_any_row_content_but_five_cells_of_inline_markup_halts`: 14 cases.
+- `test_d280_benign_markup_parses_identically`: 7 controls (row/cell attributes, nested inline elements, entities,
+  whitespace, upper-case `TD`, a quoted `>`, `aria-hidden`/`visually-hidden` class).
+- `test_d280_the_header_row_is_validated_the_same_way`.
+
+**Mutations.** Z14-Z23 are added (the old cell regex; text between cells; any tag in a cell; colspan; unbalanced close;
+trailing content; header not tokenised; a stray `<`; hidden elements; cell text via `_txt`). W23 and Z10 are
+re-anchored. Cowork ran all 70 operators (W1-W24, X1-X23, Z1-Z23) on one copy: 69 killed, each by a failing test, and
+X2 survives (admission-equivalent, as audits #20 and #21 judged). Z10 is now defence in depth: without the header
+row count, a second header row still HALTs in `_cells`, under a different message.
+
+**Windows (rule unchanged).** Each runs PRIMARY only if a ChatGPT audit of the CURRENT code pin is GO before its harness
+AND the gate passes; otherwise it runs `--pilot`, decided before the harness. Audit #21's procedure stands:
+- the game-morning refresh is done by 12:15Z, and that capture's evidence is committed before the harness;
+- main + SNF: a re-refresh, if any, is done by 15:45Z;
+- MNF: a Monday refresh done by 23:00Z.
+
+The 23:10Z Saturday capture meets MNF's final-report deadline (audit #21), but it does not replace the Monday refresh.
+Input version stays D279-v9: the refresh output on a well-formed page is unchanged.

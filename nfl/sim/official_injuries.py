@@ -140,7 +140,7 @@ def _read(html_text, week, season):
         matchups.append({"away": teams[0], "home": teams[1]})
         for i, (t, tab) in enumerate(zip(teams, tables)):
             for tr in _table_rows(t, tab):
-                td = [_txt(x) for x in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]
+                td = _cells(t, tr, "td")
                 if len(td) != 5 or not td[0]:
                     raise SystemExit(f"HALT: official injury page {t}: malformed row {td}")
                 gs = td[4] or None
@@ -171,8 +171,12 @@ def _table_rows(team, tab):
     head_m = re.search(r"<thead\b[^>]*>(.*?)</thead>", tab, re.S)
     if not head_m:
         raise SystemExit(f"HALT: official injury page {team}: header not closed")
-    head = [_txt(h) for h in re.findall(r"<th[^>]*>(.*?)</th>", head_m.group(1), re.S)]
-    if head != HEADER or len(re.findall(r"<tr\b", head_m.group(1))) != 1:
+    head_tr = re.fullmatch(r"\s*<tr\b[^>]*>(.*?)</tr>\s*", head_m.group(1), re.S)
+    if not head_tr or len(re.findall(r"<tr\b", head_m.group(1), re.I)) != 1:
+        raise SystemExit(f"HALT: official injury page {team}: columns (not exactly one header "
+                         f"row), expected {HEADER}")
+    head = _cells(team, head_tr.group(1), "th")
+    if head != HEADER:
         raise SystemExit(f"HALT: official injury page {team}: columns {head}, expected {HEADER}")
     rest = tab[:head_m.start()] + tab[head_m.end():]
     rest = re.sub(r"</?tbody\b[^>]*>", "", rest)
@@ -183,6 +187,64 @@ def _table_rows(team, tab):
                          f"({len(re.findall(r'<tr', rest))} row tags, {len(rows)} complete rows, "
                          f"stray content {leftover.strip()[:60]!r})")
     return rows
+
+
+# D280 (audit #21 A): the complete content of every row is validated, not only the cells a
+# pattern happens to find. A row is exactly a sequence of <kind> cells separated by whitespace;
+# inside a cell only these inline elements may appear (balanced). Any other tag — a <th> in a
+# body row, a nested <td>/<tr>/<table>, <del>, … —, any text between cells, a stray '<', a
+# colspan/rowspan (which would shift the column mapping) or a hidden element HALTs. Cell text is the text between
+# the cell's tags, collapsed and decoded as _txt does, so a well-formed page parses identically.
+INLINE_TAGS = {"a", "span", "b", "strong", "em", "i", "br"}
+VOID_TAGS = {"br"}
+_TAG = re.compile(r"""<(/?)([A-Za-z][A-Za-z0-9-]*)((?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?)*)\s*(/?)>""")
+
+
+def _cells(team, row_html, kind):
+    """The text of each <kind> cell of one row; HALTs on any other row content (D280)."""
+    def bad(why):
+        raise SystemExit(f"HALT: official injury page {team}: unsupported row content ({why}) in "
+                         f"{_txt(row_html)[:60]!r}")
+    cells, pos, cell_start, stack, text_parts = [], 0, None, [], []
+    for m in _TAG.finditer(row_html):
+        text = row_html[pos:m.start()]
+        if "<" in text:
+            bad("unparseable markup")
+        if cell_start is None and text.strip():
+            bad(f"text outside a cell: {text.strip()[:30]!r}")
+        if cell_start is not None:
+            text_parts.append(text)
+        pos = m.end()
+        close, name, attrs = m.group(1) == "/", m.group(2).lower(), m.group(3)
+        if re.search(r"(?:^|\s)hidden(?=[\s=]|$)|display\s*:\s*none|visibility\s*:\s*hidden", attrs, re.I):
+            bad(f"hidden <{name}>")
+        if cell_start is None:
+            if close or name != kind:
+                bad(f"<{m.group(1)}{name}> outside a cell")
+            if re.search(r"\b(colspan|rowspan)\b", attrs, re.I):
+                bad(f"{name} with colspan/rowspan")
+            cell_start, text_parts = m.end(), []
+        elif name == kind and close and not stack:
+            # the cell's text is its text between tags (a '>' inside a quoted attribute is
+            # part of the tag, not text), whitespace-collapsed and entity-decoded as _txt does
+            cells.append(_html.unescape(re.sub(r"\s+", " ", "".join(text_parts))).strip())
+            cell_start = None
+        elif name not in INLINE_TAGS:
+            bad(f"<{m.group(1)}{name}> inside a cell")
+        elif name in VOID_TAGS:
+            if close:
+                bad(f"</{name}>")
+        elif close:
+            if not stack or stack.pop() != name:
+                bad(f"unbalanced </{name}>")
+        elif m.group(4):
+            bad(f"self-closed <{name}/>")
+        else:
+            stack.append(name)
+    rest = row_html[pos:]
+    if "<" in rest or rest.strip() or cell_start is not None:
+        bad("unclosed cell or trailing content")
+    return cells
 
 
 def parse(html_text, week, season):

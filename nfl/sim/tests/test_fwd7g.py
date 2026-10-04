@@ -760,3 +760,92 @@ def test_d279b_an_upper_case_row_outside_the_tables_halts_by_the_count():
                                     '<TR><TD>Ghost</TD></TR><div class="nfl-t-stats__title">', 1)
     with pytest.raises(SystemExit, match="player rows but 5 were parsed"):
         OI.parse(page, 4, 2026)
+
+
+# ── D280: audit #21 ───────────────────────────────────────────────────────────
+
+def _row_edit(page, player, old, new):
+    """Replace `old` with `new` once inside the named player's row."""
+    i = page.index(f"> {player} </a>")
+    s, e = page.rindex("<tr>", 0, i), page.index("</tr>", i) + len("</tr>")
+    row = page[s:e]
+    assert row.count(old) >= 1
+    k = row.rindex(old)
+    return page[:s] + row[:k] + new + row[k + len(old):] + page[e:]
+
+
+def _six_cell(page=None):
+    """Audit #21 A, exactly: the Out cell '<td>Out</td>' becomes '<th>Out</th><td></td>' — a
+    six-cell row whose fifth cell still says Out. The old parser ignored the <th>, found five
+    <td>s and read the trailing blank as the game status (Out lost, gate passed)."""
+    return _row_edit(page or _was_like_page(), "Xavier Legette", "<td>Out</td>", "<th>Out</th><td></td>")
+
+
+def test_d280_a_th_status_cell_plus_a_blank_cell_halts_the_parse_refresh_and_gate(tmp_path, monkeypatch):
+    with pytest.raises(SystemExit, match="unsupported row content"):
+        OI.parse(_six_cell(), 4, 2026)
+    # the refresh writes nothing
+    R = _refresh_world(tmp_path, monkeypatch)
+    before = (tmp_path / "injuries.parquet").read_bytes()
+    with pytest.raises(SystemExit, match="unsupported row content"):
+        R.official_step(4, fetch=_fake_fetch(page=_six_cell()))
+    assert (tmp_path / "injuries.parquet").read_bytes() == before
+    assert not (tmp_path / OI.HTML_NAME).exists() and not (tmp_path / OI.RECORD_NAME).exists()
+    # the gate re-derives from the bundled capture: a primary AND a pilot HALT
+    d = _inputs(tmp_path / "g")
+    _rewrite(d, page=_six_cell())
+    for req in (True, False):
+        with pytest.raises(SystemExit, match="unsupported row content"):
+            OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=req, cutoff=CUT)
+
+
+def test_d280_any_row_content_but_five_cells_of_inline_markup_halts():
+    page = _was_like_page()
+    L = "Xavier Legette"
+    cases = [
+        (_row_edit(page, L, "<td>Out</td>", "<th>Out</th>"), "outside a cell"),               # th in a body row
+        (_row_edit(page, L, "<td>Out</td>", "<td>Out</td><td></td>"), "malformed row"),        # six cells
+        (_row_edit(page, L, "<td>Knee</td>", "<td>Knee</td>stray"), "text outside a cell"),
+        (_row_edit(page, L, "<td>Out</td>", "<td>Out</td> x"), "trailing content"),          # trailing text
+        (_row_edit(page, L, "<td>Out</td>", "<td><td></td>Out</td>"), "<td> inside a cell"),   # nested cell
+        (_row_edit(page, L, "<td>Out</td>", "<td><del>Out</del></td>"), "<del> inside a cell"),
+        (_row_edit(page, L, "<td>Knee</td>", '<td colspan="2">Knee</td>'), "colspan"),
+        (_row_edit(page, L, "<td>Knee</td>", "<td>Knee</span></td>"), "unbalanced"),
+        (_row_edit(page, L, "<td>Knee</td>", "<td><span>Knee</td>"), "inside a cell"),         # unclosed span
+        (_row_edit(page, L, "<td>Knee</td>", "<td>Knee <x</td>"), "unparseable markup"),
+        (_row_edit(page, L, "<td>Knee</td>", "<td>Knee<br/></td><span>"), "outside a cell"),
+        (_row_edit(page, L, "<td>Out</td>", "<td>Out"), "unsupported row content|row tags"),
+        (_row_edit(page, L, "<td>Out</td>", '<td><span style="display: none">Out</span></td>'), "hidden"),
+        (_row_edit(page, L, "<td>Out</td>", "<td hidden>Out</td>"), "hidden"),
+    ]
+    for bad, msg in cases:
+        with pytest.raises(SystemExit, match=msg):
+            OI.parse(bad, 4, 2026)
+
+
+def test_d280_benign_markup_parses_identically():
+    """Controls: attributes on rows and cells, nested inline elements, entities, whitespace,
+    upper-case cell tags and a '>' inside a quoted attribute leave the parse unchanged."""
+    page = _was_like_page()
+    clean = OI.parse(page, 4, 2026)
+    L = "Xavier Legette"
+    variants = [
+        page.replace("<tr><td", '<tr class="r" data-x="1">\n  <td', 1),
+        _row_edit(page, L, "<td>Out</td>", '<td class="s" style="x"> <span><b>Out</b></span> </td>'),
+        _row_edit(page, L, "<td>Knee</td>", "<td>Kn&#101;e</td>\n\t"),
+        _row_edit(page, L, "<td>Out</td>", "<TD>Out</TD>"),
+        _row_edit(page, L, 'class="nfl-o-cta--link"', 'class="nfl-o-cta--link" aria-label="a > b"'),
+        _row_edit(page, L, "<td>Knee</td>", "<td>Knee<br></td>"),
+        _row_edit(page, L, "<td>Out</td>", '<td class="visually-hidden-x" aria-hidden="false">Out</td>'),
+    ]
+    for v in variants:
+        pd.testing.assert_frame_equal(OI.parse(v, 4, 2026), clean)
+
+
+def test_d280_the_header_row_is_validated_the_same_way():
+    page = _was_like_page()
+    for bad in (page.replace("<th>Game Status</th></tr>", "<th>Game Status</th><td>x</td></tr>", 1),
+                page.replace("<th>Player</th>", "x<th>Player</th>", 1),
+                page.replace("<thead>", "<thead>x", 1)):
+        with pytest.raises(SystemExit, match="columns|unsupported row content"):
+            OI.parse(bad, 4, 2026)
