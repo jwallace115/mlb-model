@@ -3653,3 +3653,16 @@ Ending: 99,842
 - CRON LINE (NOT installed): `*/15 10-23 * * * /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /Users/jw115/mlb-model/nba/pipeline/capture_nba_availability.py >> /Users/jw115/mlb-model/logs/nba_availability.log 2>&1`
 - NOT DONE: cron installation (Jeff installs). VM capture run (official reports Mac-only; ESPN unchanged). Hard Rock NBA key re-check closer to Oct 20.
 - UNVERIFIED: whether the capture script's ESPN dedup hash correctly skips identical content on a second run within the same cron window (tested in unit test but not in this live run — only one run executed).
+
+## 2026-10-04T14:32Z  claude-code
+- TASK: Hard Rock lines for every sport + line-pull gaps (Cowork audit 2026-10-04)
+- EDITED: shared/pipeline/multi_book_open_capture.py — added books_for(sport) per-sport key selector; NFL keeps hardrockbet_fl, all other sports use generic hardrockbet
+- EDITED: shared/pipeline/pull_event_markets.py — imported books_for, all API calls use sport-specific book list; compute_market_set unions both HR keys
+- CREATED: shared/pipeline/tests/test_hardrock_keys.py — 22 tests, all network-free
+- EDITED: shared/pipeline/feeds_registry.json — added nba_event_markets, ncaaf_event_markets, mlb_event_markets, nfl_sunday_early
+- VM CRONTAB: added 10 new cron lines (NFL Sunday early tape/props/EM, NBA EM x2, NCAAF EM x3, MLB EM x1); backup at /root/crontab.bak.20261004T1407Z
+- COMMITS: 9b689d8b4 (feature), ab8f8bf0c (merge), 93d954923 (registry), f572ccf04 (merge) — all pushed
+- VERIFIED: dry-run all 5 sports on VM, 44 tests passing on both Mac and VM, first live tape fire at 14:30Z shows correct HR labels
+- NFL TAPE PROBE: only snap_20261003T152632Z.parquet has generic label; all others use _fl
+- NOT DONE: first real event-market cron fires for NBA/NCAAF/MLB (scheduled, not yet fired)
+- UNVERIFIED: NFL consumer scripts ignoring the one generic-label probe file; event-market cost at full-season scale; Sunday AM London game cron behavior
