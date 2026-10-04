@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "6cac1fc86136075a23655625562fd8dc",
+    "game_date": "2026-10-05",
+    "sport": "NHL",
+    "home_team": "Anaheim Ducks",
+    "away_team": "Florida Panthers",
+    "commence_time": "2026-10-05T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -117,
+    "under_price": 102,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-04T06:05:04.026061+00:00"
+  },
+  {
+    "game_id": "d90c875a1c75ed65db6e3dc2f4a1afcc",
+    "game_date": "2026-10-05",
+    "sport": "NHL",
+    "home_team": "Seattle Kraken",
+    "away_team": "Calgary Flames",
+    "commence_time": "2026-10-05T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 5.5,
+    "over_price": -120,
+    "under_price": -102,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-04T06:05:04.026061+00:00"
+  },
+  {
+    "game_id": "8f3354586afd82f29d465e8634c3d905",
+    "game_date": "2026-10-05",
+    "sport": "NHL",
+    "home_team": "Vancouver Canucks",
+    "away_team": "Vegas Golden Knights",
+    "commence_time": "2026-10-05T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 104,
+    "under_price": -128,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-04T06:05:04.026061+00:00"
+  },
+  {
+    "game_id": "3b7b6520b0bc91f44cf9c9575d7e29f7",
+    "game_date": "2026-10-05",
+    "sport": "NHL",
+    "home_team": "Montr\u00e9al Canadiens",
+    "away_team": "Carolina Hurricanes",
+    "commence_time": "2026-10-06T23:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 100,
+    "under_price": -120,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-04T06:05:04.026061+00:00"
+  }
+]
