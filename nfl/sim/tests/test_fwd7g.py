@@ -650,9 +650,8 @@ def test_d279_every_table_body_is_parsed():
     page = _was_like_page()
     first_row_end = page.index("</tr>", page.index("<tbody>")) + len("</tr>")
     split = page[:first_row_end] + "</tbody><tbody>" + page[first_row_end:]
-    attr = page.replace("<tbody>", '<tbody class="report-body">', 1)
     clean = OI.parse(page, 4, 2026)
-    for variant in (split, attr):
+    for variant in (split, page.replace("</tbody>", "</tbody>\n<tbody>\n</tbody>", 1)):
         got = OI.parse(variant, 4, 2026)
         pd.testing.assert_frame_equal(got, clean)
     assert len(clean) == 5
@@ -815,8 +814,8 @@ def test_d280_any_row_content_but_five_cells_of_inline_markup_halts():
         (_row_edit(page, L, "<td>Knee</td>", "<td>Knee <x</td>"), "unparseable markup"),
         (_row_edit(page, L, "<td>Knee</td>", "<td>Knee<br/></td><span>"), "outside a cell"),
         (_row_edit(page, L, "<td>Out</td>", "<td>Out"), "unsupported row content|row tags"),
-        (_row_edit(page, L, "<td>Out</td>", '<td><span style="display: none">Out</span></td>'), "hidden"),
-        (_row_edit(page, L, "<td>Out</td>", "<td hidden>Out</td>"), "hidden"),
+        (_row_edit(page, L, "<td>Out</td>", '<td><span style="display: none">Out</span></td>'), "attribute 'style'"),
+        (_row_edit(page, L, "<td>Out</td>", "<td hidden>Out</td>"), "attribute 'hidden'"),
     ]
     for bad, msg in cases:
         with pytest.raises(SystemExit, match=msg):
@@ -830,13 +829,13 @@ def test_d280_benign_markup_parses_identically():
     clean = OI.parse(page, 4, 2026)
     L = "Xavier Legette"
     variants = [
-        page.replace("<tr><td", '<tr class="r" data-x="1">\n  <td', 1),
-        _row_edit(page, L, "<td>Out</td>", '<td class="s" style="x"> <span><b>Out</b></span> </td>'),
+        page.replace("<tr><td", '<tr>\n  <td', 1),
+        _row_edit(page, L, "<td>Out</td>", '<td scope="row"> <span><b>Out</b></span> </td>'),
         _row_edit(page, L, "<td>Knee</td>", "<td>Kn&#101;e</td>\n\t"),
         _row_edit(page, L, "<td>Out</td>", "<TD>Out</TD>"),
         _row_edit(page, L, 'class="nfl-o-cta--link"', 'class="nfl-o-cta--link" aria-label="a > b"'),
         _row_edit(page, L, "<td>Knee</td>", "<td>Knee<br></td>"),
-        _row_edit(page, L, "<td>Out</td>", '<td class="visually-hidden-x" aria-hidden="false">Out</td>'),
+        _row_edit(page, L, 'class="nfl-o-cta--link"', 'CLASS="nfl-o-cta&#45;-link"'),
     ]
     for v in variants:
         pd.testing.assert_frame_equal(OI.parse(v, 4, 2026), clean)
@@ -849,3 +848,66 @@ def test_d280_the_header_row_is_validated_the_same_way():
                 page.replace("<thead>", "<thead>x", 1)):
         with pytest.raises(SystemExit, match="columns|unsupported row content"):
             OI.parse(bad, 4, 2026)
+
+
+# ── D281: audit #22 ───────────────────────────────────────────────────────────
+
+def _hidden_out(page=None, cell='<td><span style="display:n&#111;ne">Out</span></td>'):
+    """Audit #22 A1, exactly: a blank status cell gets a span whose ENCODED style hides it
+    ('display:n&#111;ne' decodes to display:none). The raw-text guard missed the spelling, so the
+    parser read a hidden 'Out' (blank -> Out, active true -> false, predictions changed)."""
+    return _row_edit(page or _was_like_page(), "Bryce Young", "<td></td>", cell)
+
+
+def test_d281_an_encoded_hidden_status_halts_the_parse_refresh_and_gate(tmp_path, monkeypatch):
+    with pytest.raises(SystemExit, match="unsupported attribute 'style' on <span>"):
+        OI.parse(_hidden_out(), 4, 2026)
+    R = _refresh_world(tmp_path, monkeypatch)
+    before = (tmp_path / "injuries.parquet").read_bytes()
+    with pytest.raises(SystemExit, match="unsupported attribute 'style'"):
+        R.official_step(4, fetch=_fake_fetch(page=_hidden_out()))
+    assert (tmp_path / "injuries.parquet").read_bytes() == before
+    assert not (tmp_path / OI.HTML_NAME).exists() and not (tmp_path / OI.RECORD_NAME).exists()
+    d = _inputs(tmp_path / "g")
+    _rewrite(d, page=_hidden_out())
+    for req in (True, False):
+        with pytest.raises(SystemExit, match="unsupported attribute 'style'"):
+            OI.check(d, 2026, 4, ["CAR", "KC"], SCHED, require=req, cutoff=CUT)
+
+
+def test_d281_attributes_tags_and_classes_outside_the_allowlist_halt():
+    page = _was_like_page()
+    wrap = '<div class="d3-o-table--horizontal-scroll">'
+    cases = [
+        (_hidden_out(cell='<td><span style="visibility:h&#105;dden">Out</span></td>'), "attribute 'style'"),
+        (_hidden_out(cell='<td><span style="display:/**/none">Out</span></td>'), "attribute 'style'"),
+        (_hidden_out(cell="<td><span STYLE=display:none>Out</span></td>"), "attribute 'style'"),
+        (_hidden_out(cell='<td><span class="hidden">Out</span></td>'), "attribute 'class' on <span>"),
+        (_hidden_out(cell='<td><a class="hidden">Out</a></td>'), r"unknown class \['hidden'\] on <a>"),
+        (_hidden_out(cell='<td><a class="nfl-u-hide-empty">Out</a></td>'), "unknown class"),
+        (_hidden_out(cell='<td><span aria-hidden="true">Out</span></td>'), "attribute 'aria-hidden'"),
+        (_hidden_out(cell='<td scope="row" tabindex="0" title="x">Out</td>'), "attribute 'title'"),
+        (page.replace("<tbody>", '<tbody class="report-body">', 1), "attribute 'class' on <tbody>"),
+        (page.replace("<tr><td", '<tr data-x="1"><td', 1), "attribute 'data-x' on <tr>"),
+        (page.replace(wrap, '<div class="d3-o-table--horizontal-scroll" style="display:none">', 1),
+         "attribute 'style' on <div>"),
+        (page.replace(wrap, '<div class="d3-o-table--horizontal-scroll" hidden>', 1), "attribute 'hidden'"),
+        (page.replace(wrap, '<div class="d3-o-table--horizontal-scroll x-hide">', 1), r"unknown class \['x-hide'\]"),
+        (page.replace(wrap, "<details>" + wrap, 1).replace("</table></div>", "</table></div></details>", 1),
+         "unsupported element <details>"),
+        (page.replace("</tbody>", '</tbody class="x">', 1), "attributes on </tbody>"),
+        (_hidden_out(cell='<td><a class="nfl-c-matchup-strip__team-logo">Out</a></td>'), "unknown class"),
+        (page.replace(wrap, "a < b" + wrap, 1), "unparseable markup"),
+    ]
+    for bad, msg in cases:
+        with pytest.raises(SystemExit, match=msg):
+            OI.parse(bad, 4, 2026)
+
+
+def test_d281_allowed_markup_still_parses_identically():
+    page = _was_like_page()
+    clean = OI.parse(page, 4, 2026)
+    for v in (_row_edit(page, "Xavier Legette", 'class="nfl-o-cta--link"', "class='nfl-o-cta&#45;-link'"),
+              _row_edit(page, "Xavier Legette", 'class="nfl-o-cta--link"', 'aria-label="Visit &amp; see"'),
+              page.replace('<table class="d3-o-table">', '<table class="d3-o-table d3-o-reports--detailed">', 1)):
+        pd.testing.assert_frame_equal(OI.parse(v, 4, 2026), clean)

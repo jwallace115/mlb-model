@@ -6474,3 +6474,69 @@ AND the gate passes; otherwise it runs `--pilot`, decided before the harness. Au
 
 The 23:10Z Saturday capture meets MNF's final-report deadline (audit #21), but it does not replace the Monday refresh.
 Input version stays D279-v9: the refresh output on a well-formed page is unchanged.
+
+### D281 — ChatGPT audit #22 NO-GO accepted: attributes, tags and classes in the report sections are allowlisted, with decoded values (FWD7m, 2026-10-04 ~05:45Z)
+
+Audit #22 (`research/cross_ai/chatgpt_audit22_reply_2026-10-04.md`, pin `a7e2d7683`) is NO-GO for a primary in all
+three windows. It confirms D280: the six-cell edit HALTs at parse, refresh and both gate modes; the clean chain gives the
+same 86 predictions; forward 366; 69/70 mutations are killed, with X2 admission-equivalent. **One code blocker (A1),
+accepted in full:**
+
+- `_cells` looked for hiding styles in the RAW attribute text. Chig Okonkwo's blank status became
+  `<td><span style="display:n&#111;ne">Out</span></td>`. HTML decodes that style to `display:none`, so the page shows
+  nothing, but the parser read "Out".
+- The result: blank → Out; active true → false in weeks 4-5; both gate modes verified; the non-pilot bootstrap
+  exited 0; 80 sim_p and 42 cal_p changed, by up to 10.04 points.
+- `visibility:h&#105;dden` and `display:/**/none` were the same defect.
+- Audit #22's extra mutation M1 (dropping the visibility branch of the regex survived 62 tests) is the same missing
+  coverage.
+
+**Repair (`official_injuries._section_markup`, fail closed).** It runs on every report section after the rows are
+parsed and before the independent count. Attributes are parsed into name/value pairs, and each value is entity-decoded
+before it is judged. The grammar is an ALLOWLIST taken from the real sections. The Oct 2 capture's sections use only
+these:
+- **Tags:** a, div, img, p, picture, source, span, svg, use, table, thead, tbody, tr, th, td, plus the cell inline tags
+  (b, strong, em, i, br). Any other tag HALTs, for example `<details>`.
+- **Attribute names:** aria-label, aria-hidden, class, href, alt, data-src, data-srcset, role, src, media, viewbox,
+  scope, tabindex, xlink:href. So `style`, `hidden`, `colspan`, `rowspan` or any other name HALTs, however its value is
+  spelled or encoded.
+- **Inside a team table:** only `<td scope tabindex>` and `<a href class aria-label>` may carry attributes, and the only
+  class is `nfl-o-cta--link` on the player link. thead, tbody, tr and th carry none, as on the real page.
+- **Outside the tables:** each class token must be one the real page uses on that same tag (`CLASS_BY_TAG`).
+- **Also HALT:** attributes on a closing tag; a `<` that is not a tag.
+- **Declared assumptions:**
+  - what nfl.com's CSS does with these known classes is assumed stable;
+  - the scope is the report sections. Page-level stylesheets and elements outside the sections (the page head, or
+    wrappers around all sections) are not interpreted. A change there that hid the whole report is out of scope.
+
+The raw hidden regex and the explicit colspan check in `_cells` are removed: the allowlist covers both.
+
+**Narrower grammar (documented, as audit #22 allowed).** Several earlier benign controls now HALT instead of parsing
+identically. This is fail-closed: none of these appear on the real page.
+- `<tbody class="report-body">`, audit #20's attributed body;
+- `<tr class="r" data-x="1">`;
+- `<td class="s" style="x">`;
+- `aria-hidden` inside a table.
+
+The D279/D280 tests are updated accordingly: the attributed-body control becomes an extra empty body, and the
+hidden/colspan cases expect the attribute message. Allowed variants still parse identically: an entity-encoded allowed
+class, upper-case attribute names, a quoted `>` in aria-label, nested inline tags, and whitespace.
+
+**Real page.** The Oct 2 capture (313 rows, cloud; on the Mac at
+`~/mlb-model/research/layers/_to_delete/inj_w4/reg4.html`) parses frame-equal to D279b and D280. The Mac run re-checks
+the live page and the installed 23:10Z capture.
+
+**Tests (test_fwd7g 52):**
+- `test_d281_an_encoded_hidden_status_halts_the_parse_refresh_and_gate`: audit #22's exact edit. `parse` HALTs;
+  `official_step` writes nothing; both gate modes HALT.
+- `test_d281_attributes_tags_and_classes_outside_the_allowlist_halt`: 17 cases.
+- `test_d281_allowed_markup_still_parses_identically`.
+
+**Mutations.** Z17 and Z22 are replaced (the style name allowlisted; the section check removed). Z24-Z30 are added
+(class tokens unchecked; values not decoded; table class rules; table attribute rules; tag allowlist; closing-tag
+attributes; unparseable section markup). Results are in the FWD7m record.
+
+**Windows (rule unchanged).** Each runs PRIMARY only if a GO audit of the current code pin exists before its harness AND
+the gate passes; otherwise `--pilot`, decided before the harness. Before each window, the prompts fetch origin/main,
+restore the quotes into the harness worktree, and print every game's newest props and line timestamps; no stale-quote
+override is used (audit #22 quote-path note).

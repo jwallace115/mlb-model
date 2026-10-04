@@ -1,4 +1,4 @@
-"""D277-D280 mutation campaign (FWD7g W1-W24, FWD7i X1-X23, FWD7j/k/l Z1-Z23), for reproduction.
+"""D277-D281 mutation campaign (FWD7g W1-W24, FWD7i X1-X23, FWD7j/k/l/m Z1-Z30), for reproduction.
 
 Usage: python3 research/nfl_sim/mutations/d278_mutations.py COPY_ROOT
 COPY_ROOT is a COPY of the repository tree (never the working checkout): each operator edits
@@ -105,15 +105,23 @@ Z = [  # D279 (audit #20)
  '                td = [_txt(x) for x in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]'),
 ("Z15 text between cells allowed", OIp, "        if cell_start is None and text.strip():", "        if False:"),
 ("Z16 any tag inside a cell", OIp, "        elif name not in INLINE_TAGS:", "        elif False:"),
-("Z17 colspan allowed", OIp, '            if re.search(r"\\b(colspan|rowspan)\\b", attrs, re.I):', "            if False:"),
+("Z17 style attribute allowed", OIp, '    "data-srcset", "role", "src", "media", "viewbox", "scope", "tabindex",', '    "data-srcset", "role", "src", "media", "viewbox", "scope", "tabindex", "style",'),
 ("Z18 unbalanced close allowed", OIp, "            if not stack or stack.pop() != name:", "            if stack and stack.pop() and False:"),
 ("Z19 trailing content allowed", OIp, '    if "<" in rest or rest.strip() or cell_start is not None:', "    if cell_start is not None:"),
 ("Z20 header not validated by cells", OIp, '    head = _cells(team, head_tr.group(1), "th")',
  '    head = [_txt(h) for h in re.findall(r"<th[^>]*>(.*?)</th>", head_tr.group(1), re.S)]'),
 ("Z21 stray '<' allowed", OIp, '        if "<" in text:\n            bad("unparseable markup")', '        if False:\n            bad("unparseable markup")'),
-("Z22 hidden elements allowed", OIp, '        if re.search(r"(?:^|\\s)hidden(?=[\\s=]|$)|display\\s*:\\s*none|visibility\\s*:\\s*hidden", attrs, re.I):', "        if False:"),
+("Z22 section markup not checked (D281)", OIp, "        _section_markup(k, u)\n", "        pass\n"),
 ("Z23 cell text via _txt (quoted '>' leaks into text)", OIp, '            cells.append(_html.unescape(re.sub(r"\\s+", " ", "".join(text_parts))).strip())',
  '            cells.append(_txt(row_html[cell_start:m.start()]))'),
+# D281 (audit #22 A1): attribute/tag/class allowlist
+("Z24 class tokens not checked", OIp, "                if unknown:", "                if False:"),
+("Z25 attribute values not entity-decoded", OIp, "            v = _html.unescape(v)\n", ""),
+("Z26 table class rules not applied", OIp, "        allowed = CLASS_IN_TABLE if in_table else CLASS_BY_TAG", "        allowed = CLASS_BY_TAG"),
+("Z27 table attribute rules not applied", OIp, "        names = ATTRS_IN_TABLE.get(name, set()) if in_table else ALLOWED_ATTRS", "        names = ALLOWED_ATTRS"),
+("Z28 tag allowlist not checked", OIp, "        if name not in SECTION_TAGS:", "        if False:"),
+("Z29 attributes on closing tags allowed", OIp, "        if m.group(1) and m.group(3).strip():", "        if False:"),
+("Z30 unparseable section markup allowed", OIp, '    if u.count("<") != len(tags):', "    if False:"),
 ]
 W.append(("W24 no SSL context", OIp, "urllib.request.urlopen(req, timeout=timeout, context=ssl_context())",
           "urllib.request.urlopen(req, timeout=timeout)"))

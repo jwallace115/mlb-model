@@ -150,6 +150,8 @@ def _read(html_text, week, season):
                 rows.append({"team": t, "opp": teams[1 - i], "player": td[0], "position": td[1],
                              "injuries": td[2] or None, "practice_status": td[3] or None,
                              "game_status": gs})
+    for k, u in enumerate(units):
+        _section_markup(k, u)
     # D279 (audit #20 A1): an independent count of every player row inside the report
     # sections must equal the rows emitted — no source row may be dropped by structure
     src = sum(len(re.findall(r"<tr\b", u, re.I)) for u in units) - 2 * len(units)
@@ -192,12 +194,79 @@ def _table_rows(team, tab):
 # D280 (audit #21 A): the complete content of every row is validated, not only the cells a
 # pattern happens to find. A row is exactly a sequence of <kind> cells separated by whitespace;
 # inside a cell only these inline elements may appear (balanced). Any other tag — a <th> in a
-# body row, a nested <td>/<tr>/<table>, <del>, … —, any text between cells, a stray '<', a
-# colspan/rowspan (which would shift the column mapping) or a hidden element HALTs. Cell text is the text between
+# body row, a nested <td>/<tr>/<table>, <del>, … —, any text between cells or a stray '<' HALTs.
+# Attributes (colspan, style, hidden, unknown classes, …) are checked for the whole section by
+# _section_markup (D281). Cell text is the text between
 # the cell's tags, collapsed and decoded as _txt does, so a well-formed page parses identically.
 INLINE_TAGS = {"a", "span", "b", "strong", "em", "i", "br"}
 VOID_TAGS = {"br"}
 _TAG = re.compile(r"""<(/?)([A-Za-z][A-Za-z0-9-]*)((?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'>]+))?)*)\s*(/?)>""")
+
+
+# D281 (audit #22 A1): attributes are parsed and their values entity-decoded before they are
+# judged, and the grammar is an ALLOWLIST taken from the real report sections (fail closed): every
+# tag in a section must be one of SECTION_TAGS, every attribute name one of ALLOWED_ATTRS (so a
+# style, hidden, colspan or rowspan attribute HALTs however it is spelled or encoded), and every
+# class token one that the real sections use on that same tag (CLASS_BY_TAG; inside a team table
+# only the player link's class, CLASS_IN_TABLE; a class could hide content through the page's CSS). The
+# meaning of these known classes under nfl.com's CSS is assumed stable (declared).
+SECTION_TAGS = frozenset({"a", "div", "img", "p", "picture", "source", "span", "svg", "use", "table",
+                          "thead", "tbody", "tr", "th", "td"}) | INLINE_TAGS
+ALLOWED_ATTRS = frozenset({"aria-label", "aria-hidden", "class", "href", "alt", "data-src",
+                           "data-srcset", "role", "src", "media", "viewbox", "scope", "tabindex",
+                           "xlink:href"})
+CLASS_BY_TAG = {  # every (tag, class token) pair the real report sections use
+    "a": {"nfl-c-matchup-strip__team-fullname", "nfl-c-matchup-strip__team-logo", "nfl-o-cta--link"},
+    "div": {"d3-o-section-sub-title", "d3-o-table--horizontal-scroll", "nfl-c-matchup-strip",
+            "nfl-c-matchup-strip__game", "nfl-c-matchup-strip__game-info",
+            "nfl-c-matchup-strip__record", "nfl-c-matchup-strip__team",
+            "nfl-c-matchup-strip__team--opponent", "nfl-c-matchup-strip__team-separator",
+            "nfl-t-stats__title", "nfl-u-hide-empty"},
+    "img": {"img-responsive"},
+    "p": {"nfl-c-matchup-strip__date-info", "nfl-c-matchup-strip__networks",
+          "nfl-c-matchup-strip__team-name"},
+    "span": {"nfl-c-matchup-strip__date-time", "nfl-c-matchup-strip__date-timezone",
+             "nfl-c-matchup-strip__team-abbreviation", "nfl-o-icon", "nfl-o-icon--medium"},
+    "svg": {"nfl-o-icon--nfl-at", "nfl-o-icon--nfl-vs"},
+    "table": {"d3-o-table", "d3-o-table--detailed", "d3-o-reports--detailed"},
+}
+# inside a team table the real page uses exactly one class: the player link's
+CLASS_IN_TABLE = {"a": {"nfl-o-cta--link"}}
+# and inside a team table only these attributes (the real rows: <td scope tabindex>, <a href class
+# aria-label>; header, body and row tags carry none)
+ATTRS_IN_TABLE = {"td": {"scope", "tabindex"}, "a": {"href", "class", "aria-label"}}
+_ATTR = re.compile(r"""([^\s"'>/=]+)(?:\s*=\s*("[^"]*"|'[^']*'|[^\s"'>]+))?""")
+
+
+def _section_markup(k, u):
+    """D281: HALT unless every tag, attribute and class in report section k is on the allowlist."""
+    tags = list(_TAG.finditer(u))
+    if u.count("<") != len(tags):
+        raise SystemExit(f"HALT: official injury page section {k}: unparseable markup")
+    in_table = False
+    for m in tags:
+        name = m.group(2).lower()
+        allowed = CLASS_IN_TABLE if in_table else CLASS_BY_TAG
+        names = ATTRS_IN_TABLE.get(name, set()) if in_table else ALLOWED_ATTRS
+        if name == "table":
+            in_table = not m.group(1)
+        if name not in SECTION_TAGS:
+            raise SystemExit(f"HALT: official injury page section {k}: unsupported element <{name}>")
+        if m.group(1) and m.group(3).strip():
+            raise SystemExit(f"HALT: official injury page section {k}: attributes on </{name}>")
+        for a in _ATTR.finditer(m.group(3)):
+            an, v = a.group(1).lower(), a.group(2) or ""
+            if len(v) >= 2 and v[0] in "\"'" and v[-1] == v[0]:
+                v = v[1:-1]
+            v = _html.unescape(v)
+            if an not in names:
+                raise SystemExit(f"HALT: official injury page section {k}: unsupported attribute "
+                                 f"{an!r} on <{name}>")
+            if an == "class":
+                unknown = [c for c in v.split() if c not in allowed.get(name, ())]
+                if unknown:
+                    raise SystemExit(f"HALT: official injury page section {k}: unknown class "
+                                     f"{unknown} on <{name}>")
 
 
 def _cells(team, row_html, kind):
@@ -215,14 +284,10 @@ def _cells(team, row_html, kind):
         if cell_start is not None:
             text_parts.append(text)
         pos = m.end()
-        close, name, attrs = m.group(1) == "/", m.group(2).lower(), m.group(3)
-        if re.search(r"(?:^|\s)hidden(?=[\s=]|$)|display\s*:\s*none|visibility\s*:\s*hidden", attrs, re.I):
-            bad(f"hidden <{name}>")
+        close, name = m.group(1) == "/", m.group(2).lower()
         if cell_start is None:
             if close or name != kind:
                 bad(f"<{m.group(1)}{name}> outside a cell")
-            if re.search(r"\b(colspan|rowspan)\b", attrs, re.I):
-                bad(f"{name} with colspan/rowspan")
             cell_start, text_parts = m.end(), []
         elif name == kind and close and not stack:
             # the cell's text is its text between tags (a '>' inside a quoted attribute is
