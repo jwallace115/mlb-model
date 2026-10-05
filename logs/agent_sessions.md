@@ -3677,3 +3677,24 @@ Ending: 99,842
 - MERGED: ops/bet-ledger → main (pending — next step)
 - NOT DONE: worktree cleanup (left for Cowork verification)
 - UNVERIFIED: 829/278 vs expected 816/276 (likely new picks since work order); whether the 2 pre-existing test failures need datetime.now patching
+
+## 2026-10-05T15:04Z  claude-code
+- OPS2 work order: picks ledger + Picks page, branch ops/picks-ledger
+- ITEM 1: picks_ledger.py (admit/append/view) + picks_adapters.py (pick_sources + NFL AI opinions) + VM setup script + feeds_registry + PICKS_LEDGER_v1.md (P1-P3)
+  Tests: 16 RED → 16 GREEN. Mac dry run: 1680 rows (ai_ncaaf 197, ai_nfl 1478, jeff 5), 280 rejected, 4.6s
+  → commit 12eb96c2c
+- ITEM 2: picks_intake.py (member-share intake, v1) + P4 v2 note
+  Tests: 6 RED → 6 GREEN
+  → commit bf6cc850f
+- ITEM 3: event_crosswalk.py + picks_grader.py + P5 inventory + P6 settlement definitions
+  Tests: 7 RED → 7 GREEN (+ fixed append() dedup to allow grade rows)
+  Crosswalk: NCAAF 357/1, NFL 255/17. Grader: 250 rows graded
+  Results: ai_ncaaf 91W/88L/5P (50.8%), ai_nfl 34W/25L/2P (embargoed), jeff 5W
+  → commit a66a64e08
+- ITEM 4: Picks page (picks.html) + embargo_owners + §5.7 README
+  Tests: 5 RED → 5 GREEN. Full suite: 132 passed, 2 failed (pre-existing ESPN news freshness)
+  → commit ff3433982
+- FULL SUITE: 132 passed, 2 failed (pre-existing: test_espn_news_halt, test_news_dedup — time-dependent)
+- P0.3 VERIFIED: grep for requests/httpx/urlopen in all 5 picks pipeline files → empty
+- NOT DONE: merge to main (next step); VM setup (picks_ledger_setup.sh); VM adapters/crosswalk/grader runs
+- UNVERIFIED: whether CFBD mtime 2026-09-27 leaves week 5+ games ungraded (it does — refresh costs CFBD calls); NFL 17 unmatched events (likely future games); nflreadpy network call from crosswalk on VM
