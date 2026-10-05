@@ -664,3 +664,28 @@ item):** for legacy hourly filenames (no minute component), widen the binding wi
 format change without showing the evidence. The evidence above shows the cause is the too-tight
 binding rule for legacy hourly files, not a parser bug. The prediction was wrong; no number is
 changed.
+
+### B19 — data custody (2026-10-05)
+
+**Raw PDFs** moved to `~/mlb-model/data/injury_archive/nba/history/season={2024,2025}/` (main
+checkout). Already excluded via `$(git rev-parse --git-common-dir)/info/exclude`. Verified:
+`git -C ~/mlb-model check-ignore data/injury_archive/nba/history/season=2024/test.pdf` returns the
+path. Worktree copies NOT deleted.
+
+**Committed, small:** per-file parsed parquets (all statuses including NOT_YET_SUBMITTED, with
+`published_utc`, `slot_et`, `pdf_sha256`) under
+`data/injury_archive/nba/history_parsed/season={2024,2025}/`, plus
+`history_parsed/manifest.parquet` (filename, sha256, published_utc, status, n_rows, n_nys).
+
+| Path | Files | Size |
+|------|-------|------|
+| history_parsed/season=2024/ | 167 parquets | 1.9 MB |
+| history_parsed/season=2025/ | 268 parquets | 3.1 MB |
+| history_parsed/manifest.parquet | 1 | < 1 KB |
+| **Total** | **436** | **5.0 MB** |
+
+5.0 MB < 20 MB limit.
+
+`git ls-files --cached data/injury_archive/nba/history_parsed/` shows 436 parquet files, 0 PDFs.
+
+Total parsed rows: 46,987 (including NYS rows).
