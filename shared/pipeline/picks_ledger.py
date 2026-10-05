@@ -148,17 +148,20 @@ def admit(rows, members):
 
 
 def append(rows, ledger_dir):
-    """Append only admitted rows whose pick_id is not already present. Returns (appended, skipped)."""
+    """Append only admitted rows whose (pick_id, result) pair is not already present.
+    A grade row (same pick_id, new result) IS appended; view() picks the latest by ingested_utc.
+    Returns (appended, skipped)."""
     ledger_dir = Path(ledger_dir)
     path = ledger_dir / LEDGER_FILE
-    existing = set()
+    existing = set()  # (pick_id, result) pairs
     if path.exists():
         with open(path) as f:
             for line in f:
                 line = line.strip()
                 if line:
                     try:
-                        existing.add(json.loads(line)["pick_id"])
+                        d = json.loads(line)
+                        existing.add((d["pick_id"], d.get("result")))
                     except (json.JSONDecodeError, KeyError):
                         pass
 
@@ -169,14 +172,15 @@ def append(rows, ledger_dir):
             r["ticket_id"], r["owner"], r["source"], r["event_id"],
             r["market"], r.get("player_name"), r["side"], r.get("point"))
         r["pick_id"] = pid
-        if pid in existing:
+        key = (pid, r.get("result"))
+        if key in existing:
             continue
         r.setdefault("ingested_utc", now_utc)
         # ensure all contract cols present
         for c in COLS:
             r.setdefault(c, None)
         new_rows.append(r)
-        existing.add(pid)
+        existing.add(key)
 
     if new_rows:
         ledger_dir.mkdir(parents=True, exist_ok=True)

@@ -57,3 +57,28 @@ share_link is stored as text and never opened.
 **v2 note:** automated card parsing through the Anthropic API ≈ one image (~1.5k tokens)
 + ~1k prompt + ~0.5k output per card. Price per token: not checked in this order.
 It keeps the confirm step (the model writes proposed/, a human still moves the file to confirmed/).
+
+## P5 — Official result files inventory (2026-10-05)
+
+| Sport | File | Location | Settles in v1? | Notes |
+|-------|------|----------|----------------|-------|
+| NCAAF | cfbd_games_2026.parquet | Mac + VM | Yes (game markets) | mtime 2026-09-27; stale file leaves week 5+ UNRESOLVED; refresh costs CFBD calls |
+| NFL | nflverse schedule via nflreadpy | Mac + VM (network) | Yes (game markets) | live from github.com/nflverse; no API key |
+| NFL | pbp_2026.parquet | Mac + VM | v2 (player props) | nflverse play-by-play; player stats derivable |
+| NHL | api-web.nhle.com | network only | v2 | nhl_outcomes.py reads NHL API |
+| NBA | stats.nba.com | Mac only (blocked on VM) | v2 | |
+
+Props (player markets): UNRESOLVED in v1 for all sports. v2 will derive player stats
+from PBP (NFL) and build crosswalk_players_<sport>.parquet.
+
+## P6 — Settlement definitions (2026-10-05)
+
+- **Spread:** home margin = home_score − away_score. Bettor's adjusted margin = margin + point.
+  Positive → W, negative → L, zero → P. Rush attempts include kneels (book-faithful).
+- **Total:** game total = home_score + away_score vs point. Over: total > point → W, < → L, = → P.
+  Under: total < point → W, > → L, = → P.
+- **Moneyline:** home_score > away_score → home W, away L. Tie → P (rare in NFL regular season).
+- **VOID:** only when the official source marks the game cancelled/postponed (never from missing data).
+- **Props:** UNRESOLVED in v1.
+
+Grader cron: 10:10Z daily (after nflverse at 09:00Z).

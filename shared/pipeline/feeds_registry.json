@@ -658,6 +658,17 @@
    ],
    "ts": "mtime",
    "quiet_ok": true
+  },
+  {
+   "id": "picks_grader",
+   "label": "Picks crosswalk + grader",
+   "sport": "Ops",
+   "cron_match": "picks_grader.py",
+   "outputs": [
+    "/root/private/ledger/picks.jsonl"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
   }
  ]
 }
