@@ -24,7 +24,7 @@ KEY_FP = hashlib.sha256(KEY.strip().encode()).hexdigest()[:8] if KEY else "UNSET
 BASE = "https://api.the-odds-api.com/v4"
 
 BOOKS = ["pinnacle", "draftkings", "fanduel", "betmgm", "williamhill_us",
-         "betrivers", "bovada", "pointsbetus", "unibet_us", "betonlineag"]
+         "betrivers", "bovada", "hardrockbet", "unibet_us", "betonlineag"]
 BOOKS_STR = ",".join(BOOKS)
 
 GAME_MARKETS = "h2h,spreads,totals"
@@ -34,7 +34,7 @@ PROP_MARKETS = ("player_points,player_assists,player_shots_on_goal,"
 BOOK_ABBR = {
     "pinnacle": "PIN", "draftkings": "DK", "fanduel": "FD", "betmgm": "MGM",
     "williamhill_us": "CZR", "betrivers": "BR", "bovada": "BOV",
-    "pointsbetus": "PBS", "unibet_us": "UNI", "betonlineag": "BOL",
+    "hardrockbet": "HRB", "unibet_us": "UNI", "betonlineag": "BOL",
 }
 
 MKT_LABEL = {
@@ -117,39 +117,45 @@ def format_game_lines(game):
     # Moneyline
     if "h2h" in mkts:
         lines.append("### Moneyline")
-        lines.append("| Side | Pinnacle | Best | Book |")
-        lines.append("|------|----------|------|------|")
+        lines.append("| Side | Pinnacle | Hard Rock | Best | Book |")
+        lines.append("|------|----------|-----------|------|------|")
         for (name, _), prices in sorted(mkts["h2h"].items()):
             pin = prices.get("pinnacle")
+            hrb = prices.get("hardrockbet")
             best_price, best_book = _best_price(prices)
             pin_s = _fmt(pin) if pin else "—"
-            lines.append(f"| {name} | {pin_s} | {_fmt(best_price)} | {_abbr(best_book)} |")
+            hrb_s = _fmt(hrb) if hrb else "—"
+            lines.append(f"| {name} | {pin_s} | {hrb_s} | {_fmt(best_price)} | {_abbr(best_book)} |")
         lines.append("")
 
     # Puck Line (spreads)
     if "spreads" in mkts:
         lines.append("### Puck Line")
-        lines.append("| Side | Line | Pinnacle | Best | Book |")
-        lines.append("|------|------|----------|------|------|")
+        lines.append("| Side | Line | Pinnacle | Hard Rock | Best | Book |")
+        lines.append("|------|------|----------|-----------|------|------|")
         for (name, point), prices in sorted(mkts["spreads"].items(), key=lambda x: x[0][1] or 0):
             pin = prices.get("pinnacle")
+            hrb = prices.get("hardrockbet")
             best_price, best_book = _best_price(prices)
             pin_s = _fmt(pin) if pin else "—"
+            hrb_s = _fmt(hrb) if hrb else "—"
             pt = f"{point:+.1f}" if point is not None else "—"
-            lines.append(f"| {name} | {pt} | {pin_s} | {_fmt(best_price)} | {_abbr(best_book)} |")
+            lines.append(f"| {name} | {pt} | {pin_s} | {hrb_s} | {_fmt(best_price)} | {_abbr(best_book)} |")
         lines.append("")
 
     # Total
     if "totals" in mkts:
         lines.append("### Total")
-        lines.append("| Side | Line | Pinnacle | Best | Book |")
-        lines.append("|------|------|----------|------|------|")
+        lines.append("| Side | Line | Pinnacle | Hard Rock | Best | Book |")
+        lines.append("|------|------|----------|-----------|------|------|")
         for (name, point), prices in sorted(mkts["totals"].items(), key=lambda x: (x[0][1] or 0, x[0][0])):
             pin = prices.get("pinnacle")
+            hrb = prices.get("hardrockbet")
             best_price, best_book = _best_price(prices)
             pin_s = _fmt(pin) if pin else "—"
+            hrb_s = _fmt(hrb) if hrb else "—"
             pt = str(point) if point is not None else "—"
-            lines.append(f"| {name} | {pt} | {pin_s} | {_fmt(best_price)} | {_abbr(best_book)} |")
+            lines.append(f"| {name} | {pt} | {pin_s} | {hrb_s} | {_fmt(best_price)} | {_abbr(best_book)} |")
         lines.append("")
 
     return "\n".join(lines)
