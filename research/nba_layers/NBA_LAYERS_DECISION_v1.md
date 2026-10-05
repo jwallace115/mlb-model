@@ -914,3 +914,25 @@ tip_utc, tip_source, asof_role, asof_filename, asof_sha256, asof_published_utc.
   that date's roles freeze row: 2,153/2,160 (99.7%). 0 sha256 mismatches. The 7 exceptions
   are NBA Cup (2024-12-17) and play-in (2025-04-15/16) dates with no freeze in roles because
   they are not in the regular-season schedule files. **HELD** (with documented caveat).
+
+### B26 — hygiene and doc corrections (2026-10-05)
+
+**roles.status filled.** B24 filled all 448 blank legacy status fields (`ok` or `no_tip`).
+Test `test_roles_status_no_blanks` asserts 0 blanks; FAILS at c19ce5371 (448 blank).
+
+**Doc corrections (S0c verification):**
+- B23 "224 removed" is wrong: 435 − 222 = **213** removed. Correct: +420 / −213 / 222 unchanged = 642.
+- B21/B22 "208 new-format files" is the count of ROLE ROWS (208). The manifest has **206** new-format
+  files (some dates use one file for both pre_tip and freeze roles).
+- B22 "4 B16 context_mismatch" is wrong for the manifest: the old manifest has **2** legacy
+  `context_mismatch` rows (2025-12-20 and 2025-12-21, each counted once). The "4" counted the same
+  file appearing in 2 roles × 2 dates = 4 roles rows.
+
+**Statement:** roles.parquet is a per-date index; per-game as-of MUST come from game_asof.parquet.
+
+**Tests (5 tests, all pass):** `test_b24_asof_before_tip.py`:
+(i) Every roles pre_tip row has published_utc <= tip - 30 min. FAILS at c19ce5371 (no published_utc column).
+(ii) Every game_asof row has asof_published_utc <= tip - 30 min.
+(iii) Mutation: moving a game's tip 2h earlier pushes freeze past cutoff → asof changes.
+(iv) Dates without ESPN/Odds tips get tip_source = "", never silent 19:00 ET default.
+(v) Every roles row has non-blank status. FAILS at c19ce5371 (448 blank).
