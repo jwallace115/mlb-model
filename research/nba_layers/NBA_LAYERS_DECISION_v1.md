@@ -510,3 +510,32 @@ the new module. Non-ok parse status sets exit code 2 through `main()`.
 get_reportdata('2026-10-01', ...) -> TypeError: '<' not supported
 _parse_report catches -> returns None -> caller logs status="ok", rows=0
 ```
+
+### B15 — ESPN de-dup on content (2026-10-05)
+
+**Bug found (Cowork).** Consecutive archived ESPN files differ only in the top-level `"timestamp"`
+key, so the raw-byte SHA256 never matches. Result: 220 files / 9.1 MB in 5 days, all committed by
+the hourly auto-commit. The existing `test_duplicate_espn_skipped` passes only because the test
+fixture uses identical raw bytes (no timestamp variation).
+
+**Fix.** `capture_espn_injuries()` now hashes the canonical JSON (sorted keys, top-level
+`"timestamp"` removed). Skip when equal to the previous kept pull (still logged with status
+`"unchanged"`). A parsed parquet is written per kept file: `team_id`, `athlete_id`
+(`athlete.id` if present, else extracted from `/id/<n>/` in the playercard link —
+`athlete_id_source` column says which), `status`, `date_utc`, `retrieval_utc`.
+Existing archived files are NOT deleted.
+
+`_last_sha` updated to consider both `"ok"` and `"unchanged"` statuses as valid for dedup
+comparison.
+
+**PRE-REGISTRATION:**
+- Of the 220 archived files, <= 30 distinct content hashes. **DID NOT HOLD: 43 distinct hashes.**
+  The 6-day window crossed more content changes than expected (preseason roster churn, off-season
+  injury updates). The prediction was wrong; no number is changed.
+- **NULL CONTROL:** Union of `(team_id, athlete_id, status, date)` over all 220 files equals the
+  union over the 43 kept files. **HELD** (105 items in both sets).
+
+**Tests (2 tests, both pass):**
+- (i) Two REAL consecutive archive files with same content (different timestamp) — second is skipped.
+  FAILS on origin/main: raw-byte SHA differs, so both are kept.
+- (ii) Null control: content union preserved across dedup.

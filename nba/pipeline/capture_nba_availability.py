@@ -62,7 +62,7 @@ def _last_sha(feed):
             continue
         try:
             entry = json.loads(line)
-            if entry.get("feed") == feed and entry.get("status") == "ok":
+            if entry.get("feed") == feed and entry.get("status") in ("ok", "unchanged"):
                 last = entry.get("sha256")
         except json.JSONDecodeError:
             pass
@@ -226,10 +226,16 @@ def capture_espn_injuries():
         return 0
 
     raw = r.content
-    sha = _sha256(raw)
+    data = json.loads(raw)
+
+    # B15: hash canonical JSON with top-level "timestamp" removed, sorted keys.
+    # This prevents false-negative dedup from the timestamp changing every response.
+    canonical = {k: v for k, v in data.items() if k != "timestamp"}
+    content_sha = _sha256(json.dumps(canonical, sort_keys=True).encode())
     last_sha = _last_sha("espn_injuries")
 
-    if sha == last_sha:
+    if content_sha == last_sha:
+        _log_pull("espn_injuries", ESPN_URL, 0, content_sha, "unchanged", retrieval_utc)
         print("  ESPN injuries: content unchanged, skipped")
         return 0
 
@@ -241,15 +247,43 @@ def capture_espn_injuries():
     with gzip.open(gz_path, "wb") as f:
         f.write(raw)
 
-    # Count rows (all statuses kept)
-    data = r.json()
+    # Count rows (all statuses kept) and write parsed parquet
+    import re as _re
     total_rows = 0
+    parsed = []
     teams_data = data.get("injuries", data if isinstance(data, list) else [])
     if isinstance(teams_data, list):
         for team in teams_data:
-            total_rows += len(team.get("injuries", []))
+            team_id = str(team.get("id", ""))
+            for inj in team.get("injuries", []):
+                total_rows += 1
+                ath = inj.get("athlete", {})
+                # athlete_id: prefer athlete.id, fall back to /id/<n>/ in playercard link
+                ath_id = ""
+                if isinstance(ath, dict):
+                    if ath.get("id"):
+                        ath_id = str(ath["id"])
+                    else:
+                        for link in ath.get("links", []):
+                            m = _re.search(r"/id/(\d+)/", link.get("href", ""))
+                            if m:
+                                ath_id = m.group(1)
+                                break
+                parsed.append({
+                    "team_id": team_id,
+                    "athlete_id": ath_id,
+                    "athlete_id_source": "athlete.id" if (isinstance(ath, dict) and ath.get("id")) else "playercard_link",
+                    "status": inj.get("status", ""),
+                    "date_utc": inj.get("date", ""),
+                    "retrieval_utc": retrieval_utc.isoformat(),
+                })
 
-    _log_pull("espn_injuries", ESPN_URL, total_rows, sha, "ok", retrieval_utc)
+    if parsed:
+        import pandas as pd
+        pq_path = espn_dir / f"injuries_{ts_tag}.parquet"
+        pd.DataFrame(parsed).to_parquet(pq_path, index=False)
+
+    _log_pull("espn_injuries", ESPN_URL, total_rows, content_sha, "ok", retrieval_utc)
     print(f"  ESPN injuries: {total_rows} items -> {gz_path.name}")
     return total_rows
 
