@@ -44,3 +44,16 @@ Measured match rate: reported at first real-data run.
 - **Backup:** /root/private/ledger_backup/picks_<UTC>.jsonl.gz, daily at 05:35Z, keep newest 30.
 - **Dir permissions:** /root/private mode 700.
 - **Env:** PICKS_LEDGER_DIR (default /root/private/ledger). Dir absent → adapters/intake/grader HALT.
+
+## P4 — Member-share intake, v1 and v2 note (2026-10-05)
+
+**v1 (this order):** Jeff drops Hard Rock share-card screenshots in ~/private_picks/inbox/.
+A Claude chat reads each image and writes ~/private_picks/proposed/<drop_utc>_<owner>.json.
+Jeff edits and moves to ~/private_picks/confirmed/ adding confirmed_by + confirmed_utc.
+He copies to the VM: `scp ~/private_picks/confirmed/<f>.json do-vm:/root/private/inbox_confirmed/`
+picks_intake.py processes inbox_confirmed/ → ledger, moves the file to done/.
+share_link is stored as text and never opened.
+
+**v2 note:** automated card parsing through the Anthropic API ≈ one image (~1.5k tokens)
++ ~1k prompt + ~0.5k output per card. Price per token: not checked in this order.
+It keeps the confirm step (the model writes proposed/, a human still moves the file to confirmed/).
