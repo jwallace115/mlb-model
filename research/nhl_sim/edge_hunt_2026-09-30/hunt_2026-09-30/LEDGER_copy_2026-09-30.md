@@ -495,3 +495,41 @@ NEXT (pre-registered where testable):
   missing regulars / lineup news? (DailyFaceoff lineups + shift charts; decides player-layer vs goalie-model
   next); (4) WO1 packet amendment (lineups, engine fair prices for derivatives from the E5 tape, EV2 flags);
   (5) props price rule on the forward tape. Nothing in (1)-(5) is a bet until it passes the ledger's gates.
+
+## D-01 RESULT — walk-forward 2012-13..2020-21 at the SBRO close (D-WO2, run 2026-10-05; verified from origin/nhl/sim-d1
+## 4e0d012a2..68a697e58; Cowork recomputed the headline numbers from the priced parquets — they reproduce)
+- Data fix first (D5): pre-2019 play order sorted; 2021/2023 event tables byte-identical (null a); per-game state time
+  now passes for 2010-18 (was 1-3%); goals 100% vs boxscores; 7,552 shots (0.8%) had their score state mis-stated.
+- Object (D6/D7): fit window {T−2, T−1} per target season, K/w measured per window (goalie split-half r ≤ 0 in 2015 →
+  K = 1e6, all-prior), OT 4v4 for T ≤ 2014; 10,131 games priced at 2,000 sims (1 skipped: 2019020876, no goalie row);
+  defaults reproduce the committed 2021-25 parquets byte-for-byte; pricer reproduces 2023 p_home_win to max diff 0.
+  CHECK 1b caveat that stands: the xG scorer is xg_v2, fit on 2021-22 + 2022-23 — a model from the future applied to
+  2012-2020 shots. It carries no game outcomes, but it is not a point-in-time object. Everything below inherits it.
+- Pre-registrations (D8, written before the numbers): (i) engine ML LL within 0.012 of the close: HELD (+0.0079
+  pooled; worst season 2020-21 +0.0165). (ii) pooled A1 90% CI includes 0: NOT HELD — A1 0.280 [0.095, 0.465]
+  (two-sided p 0.013; Cowork reproduces 0.280 [0.095, 0.465]); per season 7 of 9 positive, only 2013-14 significant
+  (0.595 [0.152, 1.037]); 2016-17, 2020-21 negative. (iii) R8 both-teams-high-penalties: NOT HELD — A1 −0.218
+  [−1.091, 0.656], n 593. The 2022-24 prior (+3.4 / +2.9) does not replicate. R8 is DEAD; not re-thresholded.
+- Family (8 ML regimes computed; totals not computable — no SBRO totals probabilities pre-2022): CC reported one BH
+  survivor, R1_early (home team's n_prior_games ≤ 10): A1 0.786 [0.307, 1.264], n 1,507, p 0.0069, and proposed a
+  CONFIRM on 2022-24 at Pinnacle's close. **Cowork: that confirmation was already run on 2026-09-30 (A-02,
+  `a02_regimes_fixed.csv`, same regime definition "R1 early (0-10 games)"): 2022-23 ML coef +1.06 [0.08, 2.04],
+  n 163; 2023-24 ML coef −1.41 [−2.78, −0.05], n 168 — significantly NEGATIVE.** The planned confirmation seasons are
+  not blind (CHECK 2) and the one that matters fails the both-dev-seasons rule outright. Per-season R1_early on
+  2012-2020 (Cowork recompute): +/− in 5/4 seasons; the pooled effect is carried by 2015-16 (+2.41 [0.82, 4.01]) and
+  2017-18 (+1.62); 2012, 2016, 2018, 2020 negative. Across all 11 seasons the sign flips 6/5. **R1_early: DEAD** —
+  an unstable early-season effect against a soft close, not a candidate. Not opened on 2024-25.
+- Economics (CHECK 4): A2 picks at the SBRO close, 5,538 picks, ROI +0.4% (SE 1.7%), by season −7.8%..+11.4%;
+  "favourites +7.1%" is a post-hoc split. Nothing to bet.
+- Whole-ledger BH 10% (now 63 p-values, `work/family.csv`): survivors unchanged in substance — A-03a/b, L-003/L-004,
+  A-01a/b, L-006 (dead at confirm), A-02.6 (no two-season DEV), plus D8-R1 and D8-pooled, both of which are
+  discovery-pool p-values whose confirmations are already known to fail (R1) or are untested at Pinnacle (pooled).
+- What (ii) most likely means, and the one cheap test that decides it (D-09, next): the SBRO close is a weaker line
+  than Pinnacle. games.parquet carries SBRO closes through 2023, and Pinnacle closes exist for 2022-23 and 2023-24,
+  so on the SAME games: (1) SBRO LL vs Pinnacle LL; (2) engine A1 against SBRO vs against Pinnacle. If the engine
+  "adds information" against SBRO but not against Pinnacle on the same games, (ii) is a market-quality artefact and
+  every SBRO-era A1 is evidence about SBRO, not about the engine. 0 credits, minutes. Pre-register: SBRO LL higher than
+  Pinnacle's by ≥ 0.003 on 2022-24; engine A1 vs SBRO on 2022-24 > A1 vs Pinnacle (−0.051) with the SBRO CI
+  excluding the Pinnacle point estimate. Also UNVERIFIED by CC and still open: whether the SBRO file's ml_h/ml_a is a
+  true close (no timestamp).
+- Open from D-WO1/2: the 12,592-vs-12,502 game-count discrepancy in D2 was not resolved in D5.

@@ -53,3 +53,12 @@ E-02-lead,"live under picks ROI t (post-hoc, lead only)",0.028
 V-01-TOT,venue factor vs closing-total residual (validation 2019-24),0.87
 V-01-TOT-ON,venue factor Oct-Nov vs closing-total residual (validation),0.76
 V-01-ML,per-rink home-ice residual vs closing ML (discovery; validation not run),0.31
+D8-pooled,walk-forward 2012-20 pooled ML A1 vs SBRO close (two-sided),0.013
+D8-R1,walk-forward ML R1_early (n_prior<=10) A1 vs SBRO,0.0069
+D8-R2,walk-forward ML R2_mid A1 vs SBRO,0.573
+D8-R3,walk-forward ML R3_late A1 vs SBRO,0.100
+D8-R4,walk-forward ML R4_high_disagree A1 vs SBRO,0.124
+D8-R5,walk-forward ML R5_engine_underdog A1 vs SBRO,0.313
+D8-R6,walk-forward ML R6_weak_goalies A1 vs SBRO,0.399
+D8-R7,walk-forward ML R7_high_5v5_att A1 vs SBRO,0.197
+D8-R8,walk-forward ML R8_high_pen A1 vs SBRO (pre-registered lead),0.682
