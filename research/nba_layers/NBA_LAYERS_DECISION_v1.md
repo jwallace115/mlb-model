@@ -624,3 +624,43 @@ returns only 67 rows (NYS skipped).
 B17 test on 771174b77 parser: status=ok, rows=67, nys=0
   FAILS: assert len(nys) >= 19 -> 0 < 19 = True
 ```
+
+### B18 — prove pending_reason fix and 2025-26 shortfall (2026-10-05)
+
+**a) pending_reason fixtures.** Three legacy PDFs from the 150 that were `parse_failed` before the
+fix, copied to `nba/pipeline/tests/fixtures/`:
+- `Injury-Report_2024-10-22_12PM.pdf` (64 KB) — reason `Injury/Illness - Left Hamstring;` wraps
+  above player line.
+- `Injury-Report_2024-10-27_12PM.pdf` (69 KB) — reason `Injury/Illness - Left Knee; Injury` wraps
+  above player line.
+- `Injury-Report_2024-10-31_12PM.pdf` (67 KB) — reason `Injury/Illness - Right Patella;` wraps
+  above player line.
+
+All three parse as `ok` now and FAIL on 079606ccf's parser with `ParseHalt("Unrecognized line: ...")`:
+```
+Injury-Report_2024-10-22_12PM.pdf: parse_failed, Parser A: Unrecognized line: 'Injury/Illness - Left Hamstring;'
+Injury-Report_2024-10-27_12PM.pdf: parse_failed, Parser A: Unrecognized line: 'Injury/Illness - Left Knee; Injury'
+Injury-Report_2024-10-31_12PM.pdf: parse_failed, Parser A: Unrecognized line: 'Injury/Illness - Right Patella;'
+```
+
+**b) The 4 context_mismatch files (2025-12-20/21).**
+
+| File | URL slot ET | Header time | Published UTC | Delta |
+|------|------------|-------------|---------------|-------|
+| Injury-Report_2025-12-20_12PM.pdf | 12:00 PM | 12:45 PM | 17:45Z | 45 min |
+| Injury-Report_2025-12-21_12PM.pdf | 12:00 PM | 12:45 PM | 17:45Z | 45 min |
+
+**Cause:** legacy hourly format `_12PM` → slot = 12:00 PM ET exactly. The actual report was
+published at 12:45 PM (header says so). Delta = 45 min > the 30-min binding rule. For legacy hourly
+files, the slot represents the top of the hour, not the exact publication time — the report can be
+published anytime within that hour. The binding rule `[slot, slot+30min]` is correct for the new q15
+format (where the slot IS the intended publication time within 15 min), but too tight for legacy
+hourly format where `[slot, slot+60min]` would be correct. **Proposed rule (not applied in this
+item):** for legacy hourly filenames (no minute component), widen the binding window to
+`[slot, slot+60min]`.
+
+**c) B16's "A == B >= 99%" DID NOT HOLD for 2025-26.** The result was 98.8% (4 files
+`context_mismatch` out of 330). The B16 entry called this "borderline" and attributed it to the
+format change without showing the evidence. The evidence above shows the cause is the too-tight
+binding rule for legacy hourly files, not a parser bug. The prediction was wrong; no number is
+changed.
