@@ -1,11 +1,23 @@
 {
-  "generated_at": "2026-10-04T21:00:24.768259+00:00",
-  "last_updated": "2026-10-04 21:00 UTC",
-  "pipeline_run_date": "2026-10-01",
+  "generated_at": "2026-10-05T21:01:55.036844+00:00",
+  "last_updated": "2026-10-05 21:01 UTC",
+  "pipeline_run_date": "2026-10-04",
   "signals_source": "stale",
-  "game_date": "2026-10-04",
+  "game_date": "2026-10-05",
   "today_signals": [],
   "recent_results": [
+    {
+      "game_id": 2026020036,
+      "game_date": "2026-10-04",
+      "home_team": "NYR",
+      "away_team": "UTA",
+      "signal_side": "OVER",
+      "closing_total": 4.5,
+      "edge": 0.15550859794821692,
+      "confidence_tier": "HIGH",
+      "result": "WIN",
+      "actual_total_goals_final": 6.0
+    },
     {
       "game_id": 2026020015,
       "game_date": "2026-10-01",
@@ -84,10 +96,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 808,
+    "total_graded": 809,
     "ot_games": 180,
     "so_games": 64,
-    "ot_rate": 0.2228,
+    "ot_rate": 0.2225,
     "ot_flips": 48,
     "ot_flip_rate": 0.2667,
     "under_ot_losses": 72,
@@ -104,11 +116,10 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-10-04T21:00:24.772076+00:00",
-    "date_reviewed": "2026-10-03",
+    "generated_at": "2026-10-05T21:01:55.040849+00:00",
+    "date_reviewed": "2026-10-04",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  },
-  "weekly_review": null
+  }
 }
