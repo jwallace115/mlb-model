@@ -62,7 +62,7 @@ def _last_sha(feed):
             continue
         try:
             entry = json.loads(line)
-            if entry.get("feed") == feed and entry.get("status") == "ok":
+            if entry.get("feed") == feed and entry.get("status") in ("ok", "unchanged"):
                 last = entry.get("sha256")
         except json.JSONDecodeError:
             pass
@@ -134,7 +134,14 @@ def _existing_pdfs():
 
 
 def capture_official_reports():
-    """Fetch all new official injury report PDFs published since last run."""
+    """Fetch all new official injury report PDFs published since last run.
+
+    Uses the B14 A7-standard parser (two independent parsers, consumed-set
+    agreement, context binding). Non-ok parse status: PDF still archived,
+    pull-log carries the status, function returns the status string.
+    """
+    from nba.pipeline.injury_report_parser import parse_report as a7_parse
+
     retrieval_utc = _utcnow()
     urls = _report_urls_for_now()
     existing = _existing_pdfs()
@@ -142,6 +149,7 @@ def capture_official_reports():
     pdf_dir.mkdir(parents=True, exist_ok=True)
 
     fetched = 0
+    non_ok_status = None  # track first non-ok for exit code
     for url, ds, time_et in urls:
         fname = url.split("/")[-1]
         if fname in existing:
@@ -150,37 +158,45 @@ def capture_official_reports():
             r = requests.head(url, timeout=10, allow_redirects=True)
             if r.status_code != 200:
                 continue
-            # Download
             r2 = requests.get(url, timeout=30)
             if r2.status_code != 200:
                 continue
             pdf_bytes = r2.content
             sha = _sha256(pdf_bytes)
 
-            # Save PDF
+            # Always archive the raw PDF first
             out_pdf = pdf_dir / fname
             out_pdf.write_bytes(pdf_bytes)
             fetched += 1
 
-            # Parse to parquet
-            parsed_rows = _parse_report(out_pdf, ds, time_et)
-            if parsed_rows is not None:
+            # A7 parse: two parsers, consumed-set agreement, context binding
+            parsed_rows, published_utc, slot_et, status, detail = a7_parse(out_pdf)
+
+            if status == "ok" or status == "verified_empty":
                 import pandas as pd
-                pq_path = pdf_dir / fname.replace(".pdf", ".parquet")
-                pd.DataFrame(parsed_rows).to_parquet(pq_path, index=False)
+                if parsed_rows:
+                    # Add published_utc and slot_et to each row
+                    for row in parsed_rows:
+                        row["published_utc"] = published_utc.isoformat() if published_utc else ""
+                        row["slot_et"] = slot_et or ""
+                    pq_path = pdf_dir / fname.replace(".pdf", ".parquet")
+                    pd.DataFrame(parsed_rows).to_parquet(pq_path, index=False)
                 n_rows = len(parsed_rows)
             else:
                 n_rows = 0
+                non_ok_status = status
 
             _log_pull(
                 feed="official_report",
                 url=url,
                 rows=n_rows,
                 sha=sha,
-                status="ok",
+                status=status,
                 retrieval_utc=retrieval_utc,
             )
-            print(f"  fetched: {fname} ({len(pdf_bytes)} bytes, {n_rows} parsed rows)")
+            print(f"  fetched: {fname} ({len(pdf_bytes)} bytes, {n_rows} rows, status={status})")
+            if status not in ("ok", "verified_empty"):
+                print(f"    detail: {detail}")
         except Exception as e:
             print(f"  error on {fname}: {e}")
             _log_pull(feed="official_report", url=url, rows=0, sha="", status=f"error: {e}",
@@ -189,39 +205,7 @@ def capture_official_reports():
 
     if fetched == 0:
         print("  no new official reports")
-    return fetched
-
-
-def _parse_report(pdf_path, date_str, time_et):
-    """Parse an official injury report PDF. Returns list of dicts or None on failure."""
-    try:
-        os.environ.setdefault("JAVA_HOME", "/Users/jw115/jre21/Contents/Home")
-        from nbainjuries import injury as nba_injury
-        df = nba_injury.get_reportdata(
-            date_str,
-            local=True,
-            localdir=str(pdf_path.parent),
-            return_df=True,
-        )
-        rows = []
-        for _, r in df.iterrows():
-            rows.append({
-                "report_date": date_str,
-                "report_time_et": time_et,
-                "report_timestamp": f"{date_str}T{time_et}:00",
-                "game_date": str(r.get("Game Date", "")),
-                "game_time": str(r.get("Game Time", "")),
-                "matchup": str(r.get("Matchup", "")),
-                "team": str(r.get("Team", "")),
-                "player": str(r.get("Player Name", "")),
-                "status": str(r.get("Current Status", "")),
-                "reason": str(r.get("Reason", "")),
-                "post_tip": False,  # computed downstream
-            })
-        return rows
-    except Exception as e:
-        print(f"  parse error ({pdf_path.name}): {e}")
-        return None
+    return fetched, non_ok_status
 
 
 # ─── ESPN injuries ────────────────────────────────────────────────────
@@ -242,10 +226,16 @@ def capture_espn_injuries():
         return 0
 
     raw = r.content
-    sha = _sha256(raw)
+    data = json.loads(raw)
+
+    # B15: hash canonical JSON with top-level "timestamp" removed, sorted keys.
+    # This prevents false-negative dedup from the timestamp changing every response.
+    canonical = {k: v for k, v in data.items() if k != "timestamp"}
+    content_sha = _sha256(json.dumps(canonical, sort_keys=True).encode())
     last_sha = _last_sha("espn_injuries")
 
-    if sha == last_sha:
+    if content_sha == last_sha:
+        _log_pull("espn_injuries", ESPN_URL, 0, content_sha, "unchanged", retrieval_utc)
         print("  ESPN injuries: content unchanged, skipped")
         return 0
 
@@ -257,15 +247,43 @@ def capture_espn_injuries():
     with gzip.open(gz_path, "wb") as f:
         f.write(raw)
 
-    # Count rows (all statuses kept)
-    data = r.json()
+    # Count rows (all statuses kept) and write parsed parquet
+    import re as _re
     total_rows = 0
+    parsed = []
     teams_data = data.get("injuries", data if isinstance(data, list) else [])
     if isinstance(teams_data, list):
         for team in teams_data:
-            total_rows += len(team.get("injuries", []))
+            team_id = str(team.get("id", ""))
+            for inj in team.get("injuries", []):
+                total_rows += 1
+                ath = inj.get("athlete", {})
+                # athlete_id: prefer athlete.id, fall back to /id/<n>/ in playercard link
+                ath_id = ""
+                if isinstance(ath, dict):
+                    if ath.get("id"):
+                        ath_id = str(ath["id"])
+                    else:
+                        for link in ath.get("links", []):
+                            m = _re.search(r"/id/(\d+)/", link.get("href", ""))
+                            if m:
+                                ath_id = m.group(1)
+                                break
+                parsed.append({
+                    "team_id": team_id,
+                    "athlete_id": ath_id,
+                    "athlete_id_source": "athlete.id" if (isinstance(ath, dict) and ath.get("id")) else "playercard_link",
+                    "status": inj.get("status", ""),
+                    "date_utc": inj.get("date", ""),
+                    "retrieval_utc": retrieval_utc.isoformat(),
+                })
 
-    _log_pull("espn_injuries", ESPN_URL, total_rows, sha, "ok", retrieval_utc)
+    if parsed:
+        import pandas as pd
+        pq_path = espn_dir / f"injuries_{ts_tag}.parquet"
+        pd.DataFrame(parsed).to_parquet(pq_path, index=False)
+
+    _log_pull("espn_injuries", ESPN_URL, total_rows, content_sha, "ok", retrieval_utc)
     print(f"  ESPN injuries: {total_rows} items -> {gz_path.name}")
     return total_rows
 
@@ -279,10 +297,14 @@ def main():
     SEASON_DIR.mkdir(parents=True, exist_ok=True)
 
     print("\n--- Official reports ---")
-    capture_official_reports()
+    fetched, non_ok_status = capture_official_reports()
 
     print("\n--- ESPN injuries ---")
     capture_espn_injuries()
+
+    if non_ok_status:
+        print(f"\nHALT: official report parse status = {non_ok_status}")
+        sys.exit(2)
 
     print("\nDone.")
 

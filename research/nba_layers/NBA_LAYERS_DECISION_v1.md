@@ -452,3 +452,383 @@ independent sources agree on 224. Root cause: unknown (likely a grading bug in t
 - Hard Rock live key: NFL uses both `hardrockbet` and `hardrockbet_fl`. NBA: neither today (not
   posted yet; check again closer to opening night).
 - PHX-HOU: ESPN 224, nba_api 224, results log 220. The log is wrong.
+
+### B14 — Official report parser to A7 standard (2026-10-05)
+
+**Bug found (Cowork, verified).** `_parse_report` in `capture_nba_availability.py` passes a date
+string (`"2026-10-01"`) to `nbainjuries.get_reportdata()`, which expects a `datetime.datetime`.
+This causes `TypeError: '<' not supported between instances of 'str' and 'datetime.datetime'`,
+caught by the bare `except Exception`, returning `None`. The caller then logs status `"ok"` with
+`rows=0`. The 10-01 PDF was logged as "ok" with 0 rows despite containing 5 player rows.
+
+**Fix.** New module `nba/pipeline/injury_report_parser.py` implementing A7:
+- **Parser A:** `pdftotext -layout` + allowlist grammar (header, column header, game date, game time,
+  matchup with 30-team code validation, team full name, player `Last, First[ Suffix]`, status in
+  {Out, Doubtful, Questionable, Probable, Available}, reason; continuation rows and NOT YET SUBMITTED
+  handled explicitly; `ParseHalt` on anything outside the grammar).
+- **Parser B:** `nbainjuries.get_reportdata()` with correct `datetime` argument; NaN/NOT-YET-SUBMITTED
+  rows filtered out.
+- **Consumed set** = `{(game_date, matchup, team, player, status)}`; A must equal B or status
+  `parse_disagree`.
+- **Context binding:** URL date == header date; header time within [slot, slot+30min]; sha256 recorded.
+- **Statuses:** `ok | verified_empty | parse_failed | parse_disagree | context_mismatch`. Non-ok:
+  raw PDF still archived, pull-log carries the status, `main()` exits 2.
+- Rows carry `published_utc` (from header) and `slot_et`.
+
+`capture_nba_availability.py` updated: `capture_official_reports()` now calls `parse_report()` from
+the new module. Non-ok parse status sets exit code 2 through `main()`.
+
+**PRE-REGISTRATION:**
+- 10-01 PDF yields exactly 5 rows: Carter Q, Cenac Jr. Q, Conley Q, DeVries Out, Collins Out;
+  published 16:56Z. **HELD.**
+- Three fixtures give A == B. **HELD.**
+
+**NULL CONTROL:** Each fixture parses to byte-identical output on two consecutive runs. **HELD.**
+
+**Re-parse all archived PDFs:**
+
+| File | Status | Rows | Published UTC |
+|------|--------|------|---------------|
+| Injury-Report_2026-10-01_12_45PM.pdf | ok | 5 | 2026-10-01T16:56:00Z |
+| Injury-Report_2025-12-25_12_45PM.pdf | ok | 43 | 2025-12-25T17:45:00Z |
+| Injury-Report_2026-01-14_12_45PM.pdf | ok | 67 | 2026-01-14T17:45:00Z |
+| Injury-Report_2026-03-16_12_45PM.pdf | ok | 79 | 2026-03-16T16:45:00Z |
+
+**Tests (16 tests, all pass):**
+- (i) 10-01 PDF yields 5 rows with pre-registered players/statuses — FAILS on origin/main
+  (old path yields None due to TypeError).
+- (ii) Corrupted PDF through capture main -> `parse_failed` and exit 2, never "ok" — FAILS on
+  origin/main (old code logs "ok" with 0 rows on any parse error).
+- (iii) Attack corpus (12 cases): extra status word HALT, single-team matchup HALT, unknown team
+  code HALT, missing page HALT, header date mismatch `context_mismatch`, no header HALT, player
+  without context HALT, empty text HALT, wrong date format HALT, no page footer HALT, Parser B
+  drop row -> sets differ, Parser B flip status -> sets differ.
+- Null control: deterministic.
+
+**Origin/main failure demonstration:**
+```
+get_reportdata('2026-10-01', ...) -> TypeError: '<' not supported
+_parse_report catches -> returns None -> caller logs status="ok", rows=0
+```
+
+### B15 — ESPN de-dup on content (2026-10-05)
+
+**Bug found (Cowork).** Consecutive archived ESPN files differ only in the top-level `"timestamp"`
+key, so the raw-byte SHA256 never matches. Result: 220 files / 9.1 MB in 5 days, all committed by
+the hourly auto-commit. The existing `test_duplicate_espn_skipped` passes only because the test
+fixture uses identical raw bytes (no timestamp variation).
+
+**Fix.** `capture_espn_injuries()` now hashes the canonical JSON (sorted keys, top-level
+`"timestamp"` removed). Skip when equal to the previous kept pull (still logged with status
+`"unchanged"`). A parsed parquet is written per kept file: `team_id`, `athlete_id`
+(`athlete.id` if present, else extracted from `/id/<n>/` in the playercard link —
+`athlete_id_source` column says which), `status`, `date_utc`, `retrieval_utc`.
+Existing archived files are NOT deleted.
+
+`_last_sha` updated to consider both `"ok"` and `"unchanged"` statuses as valid for dedup
+comparison.
+
+**PRE-REGISTRATION:**
+- Of the 220 archived files, <= 30 distinct content hashes. **DID NOT HOLD: 43 distinct hashes.**
+  The 6-day window crossed more content changes than expected (preseason roster churn, off-season
+  injury updates). The prediction was wrong; no number is changed.
+- **NULL CONTROL:** Union of `(team_id, athlete_id, status, date)` over all 220 files equals the
+  union over the 43 kept files. **HELD** (105 items in both sets).
+
+**Tests (2 tests, both pass):**
+- (i) Two REAL consecutive archive files with same content (different timestamp) — second is skipped.
+  FAILS on origin/main: raw-byte SHA differs, so both are kept.
+- (ii) Null control: content union preserved across dedup.
+
+### B16 — Backfill official reports, 2024-25 and 2025-26 regular seasons (2026-10-05)
+
+**Script:** `nba/pipeline/backfill_official_reports.py`. Mac only (CDN blocks VM with 403).
+
+**Method.** Game dates from `nba/pipeline/schedule/dates_{2024,2025}.json` (163 + 165 dates).
+Per date: (a) latest report at or before (first tip - 30 min), searching backwards from cutoff;
+(b) 5:30 PM ET report. New URL format `_HH_MMAM|PM` from 2025-12-22 on; before that, legacy
+hourly `_HHAM|PM` (latest hourly <= 5 PM ET). Sleep 0.5s per request. Both parsers on every file.
+Season-type values seen from ESPN: `2:regular-season` only (preseason=1, postseason=3 excluded).
+
+**Raw PDFs** under `data/injury_archive/nba/history/season=<yr>/`, kept OUT of git via
+`$(git rev-parse --git-common-dir)/info/exclude`. Proven with `git check-ignore`. Only parsed
+manifest committed.
+
+**Parser fix in same commit:** Parser A now handles reason text that appears above the player
+line in the PDF layout (common in multi-line reason wrapping). Added `pending_reason` buffer.
+This fixed 150/656 files that were `parse_failed` in the first run. Re-run brought `parse_failed`
+to 0.
+
+**Results:**
+
+| Season | Pre-tip found | 5:30 PM found | A==B | Disagreements |
+|--------|--------------|---------------|------|---------------|
+| 2024-25 | 163/163 (100%) | 163/163 (100%) | 99.4% | 0 |
+| 2025-26 | 165/165 (100%) | 165/165 (100%) | 98.8% | 0 |
+
+Total: 656 files fetched+parsed in 28.8 min (0.48h). Rate: 0.27-0.37 files/s.
+
+Non-ok statuses (6 total): 2 `verified_empty` (2025-02-13, likely All-Star break), 4
+`context_mismatch` (2025-12-20 and 2025-12-21, around the URL format change date).
+
+**PRE-REGISTRATION:**
+- >= 95% of regular-season dates have (a): **HELD** (100%).
+- A == B on >= 99% of files: **HELD for 2024-25 (99.4%), borderline for 2025-26 (98.8%).**
+  The 4 non-matching files are `context_mismatch` around the format change, not parser bugs.
+
+**NULL CONTROL:** 10 random dates re-run give identical manifest rows. **HELD.**
+
+**Request (ops — do not do it here):** Add `data/injury_archive/nba/history/` to `.gitignore`.
+Currently excluded via `info/exclude` which is local to this worktree's git dir. The `.gitignore`
+entry is needed for the main checkout and other worktrees.
+
+### B17 — NOT YET SUBMITTED is a status, never silence (2026-10-05)
+
+**Defect (Cowork verification).** Parser A `continue`d on NYS lines (~183), Parser B filtered
+nan/nan rows (~282). A team that had not submitted looked identical to a team with no injuries;
+a report where every team was NYS became `verified_empty`. The work order required NYS as its
+own status.
+
+**Fix.** Parser A emits `(game_date, matchup, team, player="", status="NOT_YET_SUBMITTED")` for
+every team line marked NOT YET SUBMITTED. Parser B now emits NYS rows only for teams with no
+player rows in that (game_date, matchup, team) — nbainjuries sometimes inserts nan rows as
+tabula artifacts between real player rows (e.g. SAS in ORL@SAS on 2025-04-01). The consumed set
+includes NYS rows. `verified_empty` triggers only when both parsers agree on zero rows of ANY
+status.
+
+**2025-02-13 PDFs (pdftotext first 40 lines):**
+The report (`Injury-Report_2025-02-13_12PM.pdf`) contains 5 matchups with 10 teams, all
+NOT YET SUBMITTED. It is NOT empty. B16 logged it as `verified_empty`; it now parses as `ok`
+with 10 NYS rows.
+
+**Re-parse all 656 history PDFs:**
+
+| Season | Files w/ >= 1 NYS | NYS rows total | Status changed vs B16 |
+|--------|-------------------|----------------|----------------------|
+| 2024-25 | 166/167 | 2,802 | 2 |
+| 2025-26 | 259/268 | 2,698 | 5 |
+
+Status changes: 2025-02-13 `verified_empty` -> `ok` (10 NYS rows); 5 files `ok` ->
+`parse_disagree` (tabula artifact nan rows in Parser B). The tabula artifact fix resolved all 5
+back to `ok`.
+
+**PRE-REGISTRATION:**
+- 2025-02-13 files are not truly empty. **HELD** (10 NYS rows).
+- >= 1% of files carry at least one NYS team. **HELD** (97.7%).
+
+**NULL CONTROL:** Every file with zero NYS rows keeps its B16 status exactly. **HELD** (0 changed).
+
+**TEST:** Jan 14 fixture yields >= 86 rows (67 player + 19 NYS). FAILS on 771174b77: old parser
+returns only 67 rows (NYS skipped).
+```
+B17 test on 771174b77 parser: status=ok, rows=67, nys=0
+  FAILS: assert len(nys) >= 19 -> 0 < 19 = True
+```
+
+### B18 — prove pending_reason fix and 2025-26 shortfall (2026-10-05)
+
+**a) pending_reason fixtures.** Three legacy PDFs from the 150 that were `parse_failed` before the
+fix, copied to `nba/pipeline/tests/fixtures/`:
+- `Injury-Report_2024-10-22_12PM.pdf` (64 KB) — reason `Injury/Illness - Left Hamstring;` wraps
+  above player line.
+- `Injury-Report_2024-10-27_12PM.pdf` (69 KB) — reason `Injury/Illness - Left Knee; Injury` wraps
+  above player line.
+- `Injury-Report_2024-10-31_12PM.pdf` (67 KB) — reason `Injury/Illness - Right Patella;` wraps
+  above player line.
+
+All three parse as `ok` now and FAIL on 079606ccf's parser with `ParseHalt("Unrecognized line: ...")`:
+```
+Injury-Report_2024-10-22_12PM.pdf: parse_failed, Parser A: Unrecognized line: 'Injury/Illness - Left Hamstring;'
+Injury-Report_2024-10-27_12PM.pdf: parse_failed, Parser A: Unrecognized line: 'Injury/Illness - Left Knee; Injury'
+Injury-Report_2024-10-31_12PM.pdf: parse_failed, Parser A: Unrecognized line: 'Injury/Illness - Right Patella;'
+```
+
+**b) The 4 context_mismatch files (2025-12-20/21).**
+
+| File | URL slot ET | Header time | Published UTC | Delta |
+|------|------------|-------------|---------------|-------|
+| Injury-Report_2025-12-20_12PM.pdf | 12:00 PM | 12:45 PM | 17:45Z | 45 min |
+| Injury-Report_2025-12-21_12PM.pdf | 12:00 PM | 12:45 PM | 17:45Z | 45 min |
+
+**Cause:** legacy hourly format `_12PM` → slot = 12:00 PM ET exactly. The actual report was
+published at 12:45 PM (header says so). Delta = 45 min > the 30-min binding rule. For legacy hourly
+files, the slot represents the top of the hour, not the exact publication time — the report can be
+published anytime within that hour. The binding rule `[slot, slot+30min]` is correct for the new q15
+format (where the slot IS the intended publication time within 15 min), but too tight for legacy
+hourly format where `[slot, slot+60min]` would be correct. **Proposed rule (not applied in this
+item):** for legacy hourly filenames (no minute component), widen the binding window to
+`[slot, slot+60min]`.
+
+**c) B16's "A == B >= 99%" DID NOT HOLD for 2025-26.** The result was 98.8% (4 files
+`context_mismatch` out of 330). The B16 entry called this "borderline" and attributed it to the
+format change without showing the evidence. The evidence above shows the cause is the too-tight
+binding rule for legacy hourly files, not a parser bug. The prediction was wrong; no number is
+changed.
+
+### B19 — data custody (2026-10-05)
+
+**Raw PDFs** moved to `~/mlb-model/data/injury_archive/nba/history/season={2024,2025}/` (main
+checkout). Already excluded via `$(git rev-parse --git-common-dir)/info/exclude`. Verified:
+`git -C ~/mlb-model check-ignore data/injury_archive/nba/history/season=2024/test.pdf` returns the
+path. Worktree copies NOT deleted.
+
+**Committed, small:** per-file parsed parquets (all statuses including NOT_YET_SUBMITTED, with
+`published_utc`, `slot_et`, `pdf_sha256`) under
+`data/injury_archive/nba/history_parsed/season={2024,2025}/`, plus
+`history_parsed/manifest.parquet` (filename, sha256, published_utc, status, n_rows, n_nys).
+
+| Path | Files | Size |
+|------|-------|------|
+| history_parsed/season=2024/ | 167 parquets | 1.9 MB |
+| history_parsed/season=2025/ | 268 parquets | 3.1 MB |
+| history_parsed/manifest.parquet | 1 | < 1 KB |
+| **Total** | **436** | **5.0 MB** |
+
+5.0 MB < 20 MB limit.
+
+`git ls-files --cached data/injury_archive/nba/history_parsed/` shows 436 parquet files, 0 PDFs.
+
+Total parsed rows: 46,987 (including NYS rows).
+
+### B20 — RW@SH symmetry verdict: accepted (2026-10-05)
+
+**Jeff's decision:** "accept symmetry" (session instruction, 2026-10-05).
+
+**Recomputation (Cowork verification, `nbaS0_verification_2026-10-05.md`):**
+Pinnacle last pre-tip totals, same point on both sides. 101 signal games, 984 non-signal games.
+
+| | Over ROI | Under ROI | Sum | Price-only value |
+|---|---------|-----------|-----|-----------------|
+| Signal (101) | +16.33% | -22.63% | -6.30% | -5.68% |
+| Non-signal (984) | -6.4% | +0.7% | -5.71% | -5.64% |
+
+Mean overround: 2.96% (signal), 2.94% (non-signal).
+
+**The [-6.0, -2.0] band was Cowork's mis-specification.** The sum of over ROI + under ROI equals
+the price-only quantity `mean((d_over + d_under)/2) - 2` up to the outcome split. The expected sum
+is about two overrounds (not one), so ~-5.7%. The signal's -6.30% is 0.6 pp from its price-only
+value (-5.68%), explained by the 60/40 outcome split (over wins more often, so the under side
+loses more per unit). No grader bug exists.
+
+**The RW@SH numbers are unchanged.** The +16.3% over ROI at Pinnacle close stands as reported.
+
+### B21 — zero-padded legacy URLs, re-fetch, roles.parquet (2026-10-05)
+
+**Bug (S0b verification).** `legacy_report_url` built `_{h12}{AM|PM}` without zero-padding:
+`h=17` → `_5PM` (CDN returns 404), `h=9` → `_9AM` (404). Only 10/11/12 o'clock produce
+two-digit hours that matched the CDN's `_05PM`/`_09AM` format. The backward search for
+"latest report <= cutoff" fell through to 12PM (or 11AM) for every legacy-era date.
+Evidence: season=2024 had 163 `_12PM.pdf` + 4 `_11AM.pdf`, nothing else.
+
+Same bug class as B2 (hour formatting). The old `pull_injury_reports.py` (2023-24 batch)
+used `strftime('%I%p')` which produces zero-padded 12-hour format correctly.
+
+**Fix.** `legacy_report_url` now uses `f"{h12:02d}{ampm}"`. Cross-check: output matches
+`strftime('%I%p')` for all hours 9-23.
+
+**Re-fetch.** All 224 legacy-era game dates (163 season 2024-25 + 61 season 2025-26)
+re-searched with corrected URLs. 448 files fetched in 8.0 min (0.13h, under 2h limit).
+Both pre_tip and freeze found for 224/224 dates (100%).
+
+**roles.parquet** built at `data/injury_archive/nba/history_parsed/roles.parquet`:
+656 rows (448 legacy + 208 new-format), columns: game_date, role, url, sha256, slot_et,
+filename, season, status. One row per (game_date, role in {pre_tip, freeze}).
+
+**PRE-REGISTRATION RESULTS:**
+- ">= 95% of legacy pre_tip with slot >= 17:00 ET" — **DID NOT HOLD** (73.7%, 165/224).
+  Many slates have afternoon tips (weekend matinees, holidays), so the "latest <= tip-30min"
+  search stops at the early-afternoon report. The prediction assumed most tips are 7pm+;
+  ~26% of dates have a first tip before 5:30pm ET.
+- ">= 95% of freeze at 05PM" — **HELD** (100%, 224/224). Every legacy date has a 5PM report.
+- "Pre_tip == 12PM falls from ~100% to <= 5%" — **HELD** (4.9%, 11/224). The 11 remaining
+  12PM pre_tip files are Sunday noon slates with first tip near 1pm ET.
+- **NULL CONTROL:** every new-format date (>= 2025-12-22) has roles rows identical to
+  01c7ca076's manifest (same url and sha256). 0 mismatches out of 208 rows. **HELD.**
+
+**Test (2 tests, both pass):** `test_b21_legacy_url.py`:
+(i) h=17→`_05PM`, h=9→`_09AM`, h=12→`_12PM` — FAILS on 01c7ca076 (produces `_5PM`, `_9AM`).
+(ii) Cross-check: matches old script's `%I%p` format for all hours 9-17.
+
+**Pre_tip slot distribution (224 legacy dates):**
+
+| Slot ET | Count | Note |
+|---------|-------|------|
+| 11:00   | 5     | Holiday/early matinee |
+| 12:00   | 11    | Sunday noon slates |
+| 13:00   | 2     | |
+| 14:00   | 13    | |
+| 15:00   | 13    | |
+| 16:00   | 15    | |
+| 17:00   | 12    | |
+| 18:00   | 121   | Typical weeknight |
+| 19:00   | 28    | Late tip |
+| 20:00   | 3     | |
+| 21:00   | 1     | ASG week |
+
+Raw PDFs in main checkout `data/injury_archive/nba/history/season={2024,2025}/`, git-excluded.
+Season 2024: 470 PDFs (was 167). Season 2025: 385 PDFs (was 268).
+
+### B22 — legacy context window: [slot, slot+60min] (2026-10-05)
+
+**Rule.** Legacy hourly files use binding window `[slot, slot+60min]`; new q15 files keep
+`[slot, slot+30min]`. Legacy reports are published hourly, so the slot represents the top of
+the hour, not the exact publication time. A report at 12:45 PM is correctly served by the
+`_12PM` URL and falls within the hourly window.
+
+**Change.** `validate_context` in `injury_report_parser.py` now calls `is_legacy_format(fname)`
+and uses 60min or 30min accordingly.
+
+**PRE-REGISTRATION:** The 4 B16 `context_mismatch` files (2025-12-20/21, `_12PM`, header
+12:45 PM, delta=45min) become `ok`. No new-format file changes status.
+
+**Re-parse results (448 legacy files):**
+
+| Season | Role | Files | ok | context_mismatch | A==B rate |
+|--------|------|-------|----|-----------------|-----------|
+| 2024-25 | pre_tip | 163 | 163 | 0 | 100.0% |
+| 2024-25 | freeze | 163 | 163 | 0 | 100.0% |
+| 2025-26 | pre_tip | 61 | 61 | 0 | 100.0% |
+| 2025-26 | freeze | 61 | 61 | 0 | 100.0% |
+| **Total** | | **448** | **448** | **0** | **100.0%** |
+
+Previous: 4 `context_mismatch` → now all `ok`. **HELD.**
+
+**NULL CONTROL:** 208 new-format files: 0 changed status. **HELD.**
+
+**Tests (3 tests, all pass):** `test_b22_context_window.py`:
+(i) Legacy `_12PM` file with header 45min after slot → `ok`. FAILS on 01c7ca076
+    (`is_legacy_format` does not exist; `validate_context` returns `context_mismatch`).
+(ii) New-format `_12_00PM` file 45min after slot → `context_mismatch` (30min rule holds).
+(iii) New-format file 25min after slot → `ok`.
+
+### B23 — regenerate committed parsed history (2026-10-05)
+
+**B16/B19 rows for legacy-era dates are superseded.** The noon-only parquets parsed from
+`_12PM.pdf` files (the only ones B16 fetched) represented the 12:00 PM report, typically
+5-7 hours before the freeze/tip. B21 re-fetched the correct reports (e.g. `_05PM`, `_06PM`,
+`_07PM`) and B22 widened the context window for legacy files. This rebuild replaces the
+legacy-era parsed parquets with ones from the correct PDFs.
+
+**Rebuild.** 642 unique PDFs parsed with both parsers. All 642 status = `ok`.
+
+| Metric | Count |
+|--------|-------|
+| Parquets added | 420 |
+| Parquets removed (superseded noon-only) | 224 |
+| Parquets unchanged (name match, re-parsed) | 222 |
+| Total in tree | 644 (642 parsed + manifest + roles) |
+| Total size | 6.6 MB (< 20 MB) |
+
+Per season:
+- `history_parsed/season=2024/`: 316 parquets (was 167)
+- `history_parsed/season=2025/`: 326 parquets (was 268)
+- `history_parsed/manifest.parquet`: 642 rows (was 435)
+- `history_parsed/roles.parquet`: 656 rows (unchanged from B21)
+
+The 224 removed files are the `_12PM.parquet` entries for legacy dates where the correct
+report (e.g. `_05PM`, `_06PM`) now exists. Git history retains them.
+
+**Why the superseded files must not be used:** For a typical 7pm ET game night, B16's
+`_12PM.pdf` was published at ~12:45 PM ET. The correct freeze report (`_05PM.pdf`) was
+published at ~5:45 PM ET — 5 hours later, with all late-afternoon injury updates. Using
+the noon report as "who was out at freeze" would miss every player ruled out between 1-5 PM.

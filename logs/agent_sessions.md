@@ -3698,3 +3698,64 @@ Ending: 99,842
 - P0.3 VERIFIED: grep for requests/httpx/urlopen in all 5 picks pipeline files → empty
 - NOT DONE: merge to main (next step); VM setup (picks_ledger_setup.sh); VM adapters/crosswalk/grader runs
 - UNVERIFIED: whether CFBD mtime 2026-09-27 leaves week 5+ games ungraded (it does — refresh costs CFBD calls); NFL 17 unmatched events (likely future games); nflreadpy network call from crosswalk on VM
+## 2026-10-05T13:07Z  claude-code (NBA-S0)
+- WORKTREE: ~/mlb-model-nbaS0 on nba/s0, 4 commits pushed
+- CREATED: research/nba_sim/NBA_SIM_DECISION_v1.md — NS1: 14 binding design requirements (A1-A14) from NFL sim
+- CREATED: research/nba_sim/fit_window_ledger.md — NS2: season-object-use ledger for all NBA historical data
+- CREATED: research/nba_layers/legacy_review_2026-09-30/symmetry_rw_sh_2025_26.py — A5 symmetry check
+  - RETURNED: over ROI +16.3%, under ROI -22.6%, sum -6.3% on 101 signal games (Pinnacle close)
+  - MEANS: sum is 0.3pp outside pre-registered band [-6.0%, -2.0%]. STOP triggered. Non-signal sum -5.7% is inside.
+  - Jeff decides whether to adjust. No RW@SH numbers changed.
+- CREATED: nba/pipeline/injury_report_parser.py — B14: two independent parsers (pdftotext + nbainjuries), consumed-set agreement, context binding
+  - BUG CONFIRMED: _parse_report passed date string to get_reportdata (expects datetime) -> TypeError -> returned None -> logged "ok" rows=0
+  - FIX: Parser A (pdftotext + allowlist grammar) + Parser B (nbainjuries/tabula), exit 2 on non-ok
+  - RETURNED: 10-01 PDF 5 rows (Carter Q, Cenac Jr Q, Conley Q, DeVries Out, Collins Out), published 16:56Z — pre-reg HELD
+  - 16 tests pass; attack corpus 12 cases; null control HELD
+- EDITED: nba/pipeline/capture_nba_availability.py — wired B14 parser, exit 2 on non-ok; B15 content-based ESPN dedup
+  - B15 RETURNED: 43 unique content hashes out of 220 files (pre-reg <= 30 DID NOT HOLD; null control HELD)
+- CREATED: nba/pipeline/backfill_official_reports.py — B16: 656 PDFs across 328 dates, 28.8 min
+  - RETURNED: 100% coverage, 0 disagreements, A==B 99.4%/98.8%, 6 non-ok (2 verified_empty, 4 context_mismatch)
+  - Parser fix: pending_reason buffer for reason text above player line; resolved 150 parse_failed in first run
+  - Pre-reg >= 95% dates HELD (100%); A==B >= 99% borderline HELD (99.4% and 98.8%)
+  - Null control (10 random re-runs identical) HELD
+- NOT DONE: merge to main (per instructions). .gitignore entry for data/injury_archive/nba/history/ (requested as ops task in B16).
+- UNVERIFIED: whether the 4 context_mismatch files (2025-12-20/21, around format change) have meaningful data differences; whether legacy-format PDFs from before 2024-10-22 exist on the CDN; B15 parquet writing for existing 220 ESPN files (only new files get parquets).
+
+## 2026-10-05T17:30Z  claude-code (NBA-S0b)
+- WORKTREE: ~/mlb-model-nbaS0 on nba/s0, 4 commits pushed (3cdd902ec, 73524b874, d978bdaad, ea238c521)
+- COPIED: nbaS0_verification_2026-10-05.md and workorder_S0b_2026-10-05.md into worktree
+- B17: NOT_YET_SUBMITTED emitted as rows (player="", status="NOT_YET_SUBMITTED")
+  - RETURNED: 2025-02-13 PDF has 10 NYS teams (all NOT YET SUBMITTED), not empty. 97.7% of files have >= 1 NYS.
+  - MEANS: verified_empty was wrong for 2025-02-13. Parser B had tabula artifact (nan rows inside teams with real players); fixed by checking (game_date, matchup, team) has no player rows before emitting NYS.
+  - 5 files went ok -> parse_disagree on first NYS fix attempt; all resolved after tabula artifact filtering.
+  - NULL HELD: 0 files with 0 NYS rows changed status.
+- B18: 3 fixture PDFs (2024-10-22, 10-27, 10-31) that fail on 079606ccf parser, pass now.
+  - RETURNED: context_mismatch cause = legacy hourly slot = top of hour, delta 45 min > 30 min binding. Rule is too tight for hourly format.
+  - MEANS: B16 "A==B >= 99%" DID NOT HOLD for 2025-26 (98.8%). Stated plainly.
+- B19: 436 parsed parquets (5.0 MB) committed under history_parsed/. Raw PDFs (435 files) copied to ~/mlb-model/data/injury_archive/nba/history/. git ls-tree: 436 parquets, 0 PDFs.
+- B20: RW@SH symmetry accepted (Jeff). Sum -6.30% vs price-only -5.68%. Band [-6.0,-2.0] was mis-specified (two overrounds, not one). No grader bug. Numbers unchanged.
+- NOT DONE: merge to main. Loosening context binding for legacy hourly format (proposed in B18, not applied). .gitignore entry for history/ (ops task from B16).
+- UNVERIFIED: whether the 5 tabula-artifact nan rows affect other files beyond the 5 investigated; whether the 4 context_mismatch files would parse ok with a widened 60-min window.
+
+## 2026-10-05T16:30Z  claude-code (NBA-S0c: B21-B23)
+
+### RETURNED
+- B21: `legacy_report_url` zero-padded (`{h12:02d}`). Re-fetched 224 legacy dates = 448 PDFs in 8.0 min. Pre_tip found 224/224, freeze 224/224. Pre_tip 12PM share: 4.9% (was ~100%). Freeze at 5PM: 100%. roles.parquet: 656 rows. 2 tests pass, FAIL on 01c7ca076. Pushed dff2f5733.
+- B22: `validate_context` uses `is_legacy_format()` → 60min window for legacy, 30min for new. All 4 context_mismatch → ok. 448 legacy files: 100% ok, A==B 100%. 208 new-format unchanged. 3 tests pass, core logic FAILS on 01c7ca076. Pushed fc954f71e.
+- B23: Rebuilt history_parsed/. 642 PDFs parsed, all ok. 420 parquets added, 224 removed (superseded noon-only), 222 re-parsed. 6.6 MB total. Pushed f887893ec.
+- Docs: nbaS0_verification_2026-10-05.md and workorder_S0c_2026-10-05.md copied into worktree (first commit).
+- Raw PDFs copied to ~/mlb-model/data/injury_archive/nba/history/ (main checkout, git-excluded). Season 2024: 470 PDFs. Season 2025: 385 PDFs.
+
+### MEANS
+- The legacy-era injury reports now have the correct afternoon/evening reports instead of noon-only. The old noon reports were 5-7h before freeze.
+- A==B rate is 100% across all legacy files (was 99.4%/98.8% with the 4 context_mismatch files).
+- Pre_tip slot distribution confirms ~74% of pre_tip reports are at 17:00+ ET (weeknight pattern); 26% earlier (matinees/holidays).
+
+### NOT DONE
+- Merge to main. Work order says "do not merge."
+- .gitignore entry for history/ (ops task from B16, not NBA lane).
+- Live cron still logs official reports as `ok, 0 rows` (defect #5 from S0 verification — capture fix is on unmerged branch).
+
+### UNVERIFIED
+- Whether the refetch_legacy_reports.py script is idempotent (it skips existing PDFs, but was only run once).
+- Whether any legacy pre_tip report actually differs from the same date's freeze report content-wise (many pre_tip slots are at 17:00, same as freeze).
