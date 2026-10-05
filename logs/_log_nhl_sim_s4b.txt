@@ -338,3 +338,75 @@ ARCHIVE_ROOT not set → rsync printed, STOPPED.
 - The +1 game in 2022-23 via ID join: whether it was a date-join miss or a genuine new match
 - Large-dir custody_manifest has counts only, no per-file sha256
 - odds_archive_nhlE 146,286 files: content not validated
+
+---
+
+## L-WO1b (2026-10-05)
+
+### Setup
+Branch nhl/sim-s4b, worktree ~/mlb-model-nhlsim4b.
+`git -C ~/mlb-model branch --show-current` = main ✓
+
+### Item 0 (S57) — Fix fit-window ledger
+Commit: 415630898
+
+- RETURNED: Ledger rewritten. Each row now carries its own season's facts.
+  2023-24: CONSUMED → VALIDATION. 2024-25: PARTIAL → CONSUMED. 2025-26: PROSPECTIVE → PARTIAL.
+- MEANS: The ledger no longer has every row shifted one season forward.
+
+Failing-then-passing:
+  `git stash && pytest test_fit_window_ledger.py` →
+  FAILED: assert 'CONSUMED' == 'VALIDATION' (2023-24 was CONSUMED in old ledger)
+  `git stash pop && pytest test_fit_window_ledger.py` → 2 passed
+
+### Item 1 (S58) — Per-file custody manifest
+Commit: 423e84f74
+
+- RETURNED: archive_inventory.py hashes ALL 191,950 files (29s total).
+  Hashing rate: 5,311 files/s on first 2,000 odds files. Projected 36s, actual 29s.
+- RETURNED: custody/files.parquet (191,950 rows, 14.2 MB — gitignored).
+- RETURNED: custody_manifest.json with per-location rollup_sha256 and total_bytes.
+- RETURNED: DATA_CUSTODY.md: odds archive 1101.1 MB (was 0.0 MB); rebuild cost
+  2,586,062 credits (E-WO1 2,509,800 + WO2 76,262) at 5M/month plan (was "~$60").
+
+Null control: 28/28 previously hashed small-dir files keep identical sha256.
+
+ARCHIVE_ROOT not set → rsync commands printed, STOPPED.
+
+### Item 2 (S59) — Finish S54; pricer HALT test; S55 explanation
+Commit: a75361e5b
+
+- RETURNED: 17 tests in test_pit_all_sources.py, all pass (was 12).
+  New: TestPinnacleTruncation (1), TestPlantedLeakFinishing (2), extended TestPlantedLeakPinnacle (1).
+- RETURNED: test_price_games_halt.py (1 test), passes.
+
+Failing-then-passing (pricer HALT):
+  Old code: `except ValueError: skipped += 1; continue` → no SystemExit, 1 skipped
+  New code: `sys.exit(1)` → SystemExit(1) with game_id in stderr
+
+Pinnacle truncation: 5 dates, snapshot_utc < D+1 00:00 ET → prices match full data.
+F(D) planted leak: 2000-goal game on D+1 → F(D) unchanged, F(D+2) changed.
+Pinnacle planted leak: post-commence snapshot excluded by snap_dt < ct_dt.
+
+S55 +1 game: 2022021146 WPG@ANA 2023-03-23. commence_time shifted from
+2023-03-24T02:00:00Z (ET 22:00 on 3/23) to 2023-03-24T04:00:00Z (ET 00:00 on 3/24)
+in the last two snapshots. Date-based join used the last snapshot (ET date 3/24),
+mismatching gameDate=3/23. ID join found the match through the crosswalk.
+
+Unmatched openers (game 0001): lines archive's first snapshot per season is after the
+opener's commence_time. 2022: first snap 10-07T22:40Z, earliest commence 10-08T18:00Z.
+2023: first snap 10-10T22:40Z, earliest commence 10-11T00:08Z.
+2024: first snap 10-04T22:40Z, earliest commence 10-05T14:10Z.
+No pre-commence snapshot exists for any opener.
+
+Null control: prediction_report.py unchanged:
+  2023-24: ML LL 0.6646, A1 −0.051, Totals LL 0.7004, A1 −0.022.
+
+### NOT DONE
+- Archive copy (ARCHIVE_ROOT not set)
+- Branches not merged to main
+
+### UNVERIFIED
+- Whether hardrockbet returns NHL data (not probed, 0 credits)
+- Whether the 146,286 odds files all have valid/parseable content (sha256 only proves they
+  haven't changed, not that they were correct at creation)
