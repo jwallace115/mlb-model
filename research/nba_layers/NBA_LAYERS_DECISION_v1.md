@@ -581,3 +581,46 @@ Non-ok statuses (6 total): 2 `verified_empty` (2025-02-13, likely All-Star break
 **Request (ops — do not do it here):** Add `data/injury_archive/nba/history/` to `.gitignore`.
 Currently excluded via `info/exclude` which is local to this worktree's git dir. The `.gitignore`
 entry is needed for the main checkout and other worktrees.
+
+### B17 — NOT YET SUBMITTED is a status, never silence (2026-10-05)
+
+**Defect (Cowork verification).** Parser A `continue`d on NYS lines (~183), Parser B filtered
+nan/nan rows (~282). A team that had not submitted looked identical to a team with no injuries;
+a report where every team was NYS became `verified_empty`. The work order required NYS as its
+own status.
+
+**Fix.** Parser A emits `(game_date, matchup, team, player="", status="NOT_YET_SUBMITTED")` for
+every team line marked NOT YET SUBMITTED. Parser B now emits NYS rows only for teams with no
+player rows in that (game_date, matchup, team) — nbainjuries sometimes inserts nan rows as
+tabula artifacts between real player rows (e.g. SAS in ORL@SAS on 2025-04-01). The consumed set
+includes NYS rows. `verified_empty` triggers only when both parsers agree on zero rows of ANY
+status.
+
+**2025-02-13 PDFs (pdftotext first 40 lines):**
+The report (`Injury-Report_2025-02-13_12PM.pdf`) contains 5 matchups with 10 teams, all
+NOT YET SUBMITTED. It is NOT empty. B16 logged it as `verified_empty`; it now parses as `ok`
+with 10 NYS rows.
+
+**Re-parse all 656 history PDFs:**
+
+| Season | Files w/ >= 1 NYS | NYS rows total | Status changed vs B16 |
+|--------|-------------------|----------------|----------------------|
+| 2024-25 | 166/167 | 2,802 | 2 |
+| 2025-26 | 259/268 | 2,698 | 5 |
+
+Status changes: 2025-02-13 `verified_empty` -> `ok` (10 NYS rows); 5 files `ok` ->
+`parse_disagree` (tabula artifact nan rows in Parser B). The tabula artifact fix resolved all 5
+back to `ok`.
+
+**PRE-REGISTRATION:**
+- 2025-02-13 files are not truly empty. **HELD** (10 NYS rows).
+- >= 1% of files carry at least one NYS team. **HELD** (97.7%).
+
+**NULL CONTROL:** Every file with zero NYS rows keeps its B16 status exactly. **HELD** (0 changed).
+
+**TEST:** Jan 14 fixture yields >= 86 rows (67 player + 19 NYS). FAILS on 771174b77: old parser
+returns only 67 rows (NYS skipped).
+```
+B17 test on 771174b77 parser: status=ok, rows=67, nys=0
+  FAILS: assert len(nys) >= 19 -> 0 < 19 = True
+```

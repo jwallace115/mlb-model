@@ -180,9 +180,19 @@ def parse_a(pdf_path):
         if found_team:
             cur_team = found_team
 
-        # 5. Check for NOT YET SUBMITTED
+        # 5. Check for NOT YET SUBMITTED — emit a row, never silence
         if NOT_YET_SUBMITTED in rest:
             pending_reason = ""
+            if cur_game_date is not None and cur_matchup is not None and cur_team is not None:
+                rows.append({
+                    "game_date": cur_game_date,
+                    "game_time": cur_game_time or "",
+                    "matchup": cur_matchup,
+                    "team": cur_team,
+                    "player": "",
+                    "status": "NOT_YET_SUBMITTED",
+                    "reason": "",
+                })
             i += 1
             continue
 
@@ -275,22 +285,43 @@ def parse_b(pdf_path, slot_dt):
     df = get_reportdata(slot_dt, local=True,
                         localdir=str(Path(pdf_path).parent),
                         return_df=True)
-    rows = []
+    # Collect player rows and nan rows separately, then decide NYS
+    player_rows = []
+    nan_rows = []
     for _, r in df.iterrows():
         player = str(r.get("Player Name", ""))
         status = str(r.get("Current Status", ""))
-        # Skip NOT YET SUBMITTED rows (nbainjuries returns them as nan/nan)
+        gd = str(r.get("Game Date", ""))
+        mu = str(r.get("Matchup", ""))
+        team = str(r.get("Team", ""))
         if player in ("nan", "") or status in ("nan", ""):
+            if team and team != "nan":
+                nan_rows.append((gd, mu, team, str(r.get("Game Time", ""))))
             continue
-        rows.append({
-            "game_date": str(r.get("Game Date", "")),
+        player_rows.append({
+            "game_date": gd,
             "game_time": str(r.get("Game Time", "")),
-            "matchup": str(r.get("Matchup", "")),
-            "team": str(r.get("Team", "")),
+            "matchup": mu,
+            "team": team,
             "player": player,
             "status": status,
             "reason": str(r.get("Reason", "")),
         })
+
+    # A nan row is genuine NYS only if no player rows exist for that (game_date, matchup, team)
+    teams_with_players = {(r["game_date"], r["matchup"], r["team"]) for r in player_rows}
+    rows = list(player_rows)
+    for gd, mu, team, gt in nan_rows:
+        if (gd, mu, team) not in teams_with_players:
+            rows.append({
+                "game_date": gd,
+                "game_time": gt,
+                "matchup": mu,
+                "team": team,
+                "player": "",
+                "status": "NOT_YET_SUBMITTED",
+                "reason": "",
+            })
     return rows
 
 
