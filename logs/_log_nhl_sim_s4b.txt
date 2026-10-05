@@ -410,3 +410,33 @@ Null control: prediction_report.py unchanged:
 - Whether hardrockbet returns NHL data (not probed, 0 credits)
 - Whether the 146,286 odds files all have valid/parseable content (sha256 only proves they
   haven't changed, not that they were correct at creation)
+
+---
+
+## L-WO1c (2026-10-05) — merge prep
+
+### Merge
+Commit: c2b9d6dca
+
+`git merge origin/main` in ~/mlb-model-nhlsim4b. 8 conflicted files resolved:
+1. .gitignore — main's version + `nhl/data/sim/custody/` line
+2. data/depth_archive/nfl/season=2026/_pulls.jsonl — main
+3. data/injury_archive/nfl/season=2026/_pulls.jsonl — main
+4. data/news_archive/ncaaf/season=2026/_seen.json — main
+5. data/news_archive/nfl/season=2026/_seen.json — main
+6. logs/_log_fwd1_cowork.txt — main
+7. research/nhl_sim/edge_hunt_2026-09-30/hunt_2026-09-30/LEDGER_copy_2026-09-30.md — main
+8. research/nhl_sim/edge_hunt_2026-09-30/hunt_2026-09-30/family.csv — main
+
+Record fix: S58 credit breakdown corrected from "E-WO1: 2,509,800" to
+"E-WO1 16,000 + E-WO2 2,509,800 + WO2 76,262 = 2,602,062 credits".
+Fixed in DATA_CUSTODY.md, archive_inventory.py, and S58 decision entry.
+
+### Tests
+64 passed, 0 failed.
+
+### S51 null control
+2023-24: ML LL 0.6646, A1 −0.051, Totals LL 0.7004, A1 −0.022. Unchanged.
+
+### NOT DONE
+- Branch not merged to main (as ordered)
