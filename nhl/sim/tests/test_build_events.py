@@ -115,5 +115,44 @@ class TestS7StateTimeline:
         )
 
 
+class TestD5ChronologicalOrder:
+    """D5: pre-2019 plays must be sorted by (period, timeInPeriod, sortOrder).
+    Without the sort, out-of-order plays produce overlapping state spans.
+    Game 2015020001 is the canonical test case (Cowork verified: 5 plays out of order
+    in P1, state-time sum 1350s instead of 1200s)."""
+
+    def test_per_period_state_time_1200(self):
+        """Each regulation period's state-time sum must equal 1200s (within 2s).
+        FAILS on pre-D5 code where plays are not sorted."""
+        (shots, pens, spans), data = _process_game("2015020001")
+        by_period = {}
+        for s in spans:
+            by_period.setdefault(s["period"], 0)
+            by_period[s["period"]] += s["duration"]
+        for per in [1, 2, 3]:
+            total = by_period.get(per, 0)
+            assert abs(total - 1200) <= 2, (
+                f"Period {per}: state-time sum = {total}s, expected 1200s (±2). "
+                f"Out-of-order plays produce overlapping spans."
+            )
+
+    def test_no_negative_span_durations(self):
+        """No span should have duration < 0 (caused by out-of-order plays)."""
+        (shots, pens, spans), data = _process_game("2015020001")
+        neg = [s for s in spans if s["duration"] < 0]
+        assert len(neg) == 0, f"{len(neg)} spans have negative duration"
+
+    def test_2021_still_passes(self):
+        """2021 data (already time-ordered) must still pass the state-time control."""
+        (shots, pens, spans), data = _process_game("2021020001")
+        total = sum(s["duration"] for s in spans)
+        # Regulation or OT game
+        outcome = data.get("gameOutcome", {}).get("lastPeriodType", "REG")
+        expected = 3600 + (300 if outcome in ("OT", "SO") else 0)
+        assert abs(total - expected) <= 2, (
+            f"2021020001: total state-time = {total}s, expected {expected}s"
+        )
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

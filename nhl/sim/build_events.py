@@ -92,6 +92,19 @@ def process_game(game_id, data):
     state_spans = []
 
     plays = data.get("plays", [])
+    # D5: sort plays chronologically. Pre-2019 PBP has out-of-order plays within
+    # a period (e.g. 2015020001 P1 has 5 plays with earlier timeInPeriod than the
+    # preceding play), which produces overlapping state spans. 2019+ is already sorted.
+    def _sort_key(p):
+        pd_info = p.get("periodDescriptor", {})
+        per = pd_info.get("number", 0)
+        tip = p.get("timeInPeriod", "00:00")
+        parts = tip.split(":")
+        secs = int(parts[0]) * 60 + int(parts[1])
+        so = p.get("sortOrder", 0)
+        return (per, secs, so)
+    plays = sorted(plays, key=_sort_key)
+
     prev_shot_time = {}  # team -> last shot second for rebound detection
     prev_event_time = None
     prev_event_zone = None

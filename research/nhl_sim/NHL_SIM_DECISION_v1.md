@@ -1289,3 +1289,31 @@ Walk-forward plan: d_walkforward_plan.md. 9 target seasons (2012-2020), each wit
 a 2-season fit window for constants and ratings. D-WO2 runs the commands.
 
 Generator: nhl/sim/calibrate_xg_old_seasons.py.
+
+### D5 — Chronological play order fix for pre-2019 PBP (2026-10-05, D-WO2 Item 0)
+
+**Bug:** Pre-2019 NHL play-by-play has plays out of chronological order within periods
+(e.g. 2015020001 P1: 5 plays with earlier timeInPeriod than the preceding play).
+`build_events.py` builds state spans from consecutive plays, so out-of-order plays produce
+overlapping spans. Result: 2015020001 P1 state-time = 1350s instead of 1200s. Across all
+pre-2019 seasons, only 1-3% of games passed the state-time null control (within 2s of
+expected). All per-60 rates, PP seconds, and shot score_diff for 2010-2018 were contaminated.
+
+**Fix:** Sort plays by `(period_number, timeInPeriod_seconds, sortOrder)` at the start of
+`process_game()`, before any span or score-state logic. One sort, 11 lines.
+
+**Test (D5, failing then passing):**
+- `test_per_period_state_time_1200`: 2015020001 P1 = 1350s (FAIL) → 1200s (PASS)
+- `test_no_negative_span_durations`: PASS
+- `test_2021_still_passes`: PASS
+
+**Null controls:**
+- (a) 2021 and 2023 events byte-identical before/after (sha256 match on all 6 parquets): **PASS**
+- (b) After fix: 100.0% of games within 2s for ALL 11 old seasons (was 1.1-3.3% before):
+  **PASS** (exceeds ≥99% requirement)
+- (c) Goals match boxscore 100% for all 11 seasons: **PASS**
+
+**Shots with score_diff changed by the fix (count per season):**
+2010: 583/103,681; 2011: 710/101,664; 2012: 446/58,423; 2013: 727/102,763;
+2014: 765/102,157; 2015: 880/101,685; 2016: 938/103,374; 2017: 1,199/112,286;
+2018: 1,304/110,231. Total: 7,552 shots (~0.8%) had their score_diff mis-stated.
