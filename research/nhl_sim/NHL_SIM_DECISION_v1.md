@@ -1130,3 +1130,24 @@ away) join is removed.
 - pbp cache is a symlink from nhlsim4b and nhlD into nhlsim1 (`nhl/cache/pbp`).
   PRUNING nhlsim1 WOULD DESTROY THE PBP DATA.
 - ARCHIVE_ROOT not set → manifest + doc written, rsync commands printed, STOPPED.
+
+### S57 — Fix fit-window ledger (shifted by one season) (2026-10-05, L-WO1b Item 0)
+
+The L-WO1 ledger had every row's facts shifted one season forward: 2022-23 carried 2023-24's
+reports, 2023-24 carried 2024-25's consumption, etc.
+
+**Rewritten rows:**
+- 2021-22 DISCOVERY: xG v2 fit, K/w, constants fit.
+- 2022-23 DISCOVERY: same fits; engine priced; fit-season reports; L-003 EV dev.
+- 2023-24 VALIDATION: S42/S44/S51 (ML LL 0.6646 vs 0.6567, A1 −0.051), S45 calibration,
+  S48/S52 regimes, C-01, A-01..A-06, E-01/E-02 in-play DEV, PREREG_CLV (L-001).
+  Heavily used for selection; not OOS for anything regime-shaped.
+- 2024-25 CONSUMED: 1,312 games priced with swapped engine 2026-09-30, S48-ML-R6 (A1 −0.58,
+  99 picks), B-01 3-way, EV2 (L-004) confirmation on 2024-26, V-01 totals.
+- 2025-26 PARTIAL: EV2 consumed it; outcomes in aggregate; no engine prices; engine-vs-Pinnacle
+  unseen.
+- 2026-27 PROSPECTIVE: forward pilot only.
+
+**Test:** `test_fit_window_ledger.py` — parses the table, asserts statuses and no cross-season
+references in "looked at" column. Fails on old ledger (2023-24 was "CONSUMED" instead of
+"VALIDATION"), passes on new.
