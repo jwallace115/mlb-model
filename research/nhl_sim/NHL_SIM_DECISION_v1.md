@@ -1169,3 +1169,39 @@ files/s on the first 2,000 odds files, projected 36s, actual 29s).
 **Null control:** 28/28 previously hashed small-dir files keep byte-identical sha256 values.
 
 ARCHIVE_ROOT not set → rsync commands printed, STOPPED.
+
+### S59 — Finish S54 (Pinnacle truncation, F(D)/Pinnacle planted leaks, pricer HALT test, S55 explanation) (2026-10-05, L-WO1b Item 2)
+
+**Pinnacle truncation test (TestPinnacleTruncation):** for each of 5 test dates D, loads all
+lines parquets with `snapshot_utc < D+1 00:00 ET`, runs the same Pinnacle selection as
+`load_pinnacle`, and asserts pin_total_line for games on D matches the full-data selection.
+All 5 dates pass.
+
+**Planted-leak controls (2 new classes):**
+- F(D): inject a D+1 game with 2,000 goals on 1 xG → F(D) unchanged (diff < 1e-12); F after
+  D+2 changed (negative control works).
+- Pinnacle: a snapshot AFTER commence_time is excluded by `snap_dt < ct_dt`; selection for D is
+  resistant to post-game snapshots.
+
+**Pricer HALT test (test_price_games_halt.py):** runs `price_season` with one team_ratings row
+deleted, asserts `SystemExit(1)`. Failing-then-passing: old code skipped (count 1, no exception);
+new code HALTs with game_id in the message.
+
+**S55 "+1 game" explanation:** game 2022021146 WPG@ANA 2023-03-23. The Odds API's `commence_time`
+shifted from `2023-03-24T02:00:00Z` (ET 22:00 on 3/23) in the first two snapshots to
+`2023-03-24T04:00:00Z` (ET 00:00 on 3/24) in the last two. `load_pinnacle` takes the LAST
+pre-commence snapshot, which had the shifted commence_time → ET date 2023-03-24, mismatching the
+boxscore's `gameDate=2023-03-23`. The crosswalk's earlier snapshots still had ET date 2023-03-23,
+so the ID join found the match.
+
+**Unmatched openers (game 0001 in 2022/2023/2024):** the lines archive's first snapshot per
+season is taken AFTER the opener's commence_time:
+- 2022: game on 2022-10-07, first snapshot 2022-10-07T22:40Z, earliest commence in that snapshot
+  2022-10-08T18:00Z.
+- 2023: game on 2023-10-10, first snapshot 2023-10-10T22:40Z, earliest commence 2023-10-11T00:08Z.
+- 2024: game on 2024-10-04, first snapshot 2024-10-04T22:40Z, earliest commence 2024-10-05T14:10Z.
+No pre-commence snapshot exists for any season opener because the history pull started after
+opening night.
+
+**Null control:** prediction_report.py unchanged:
+- 2023-24: ML LL 0.6646, A1 −0.051, Totals LL 0.7004, A1 −0.022.
