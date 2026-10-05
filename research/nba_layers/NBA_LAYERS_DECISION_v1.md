@@ -832,3 +832,49 @@ report (e.g. `_05PM`, `_06PM`) now exists. Git history retains them.
 `_12PM.pdf` was published at ~12:45 PM ET. The correct freeze report (`_05PM.pdf`) was
 published at ~5:45 PM ET — 5 hours later, with all late-afternoon injury updates. Using
 the noon report as "who was out at freeze" would miss every player ruled out between 1-5 PM.
+
+### B24 — pre_tip chosen on published time, tip stored, no silent default (2026-10-05)
+
+**Defect (S0c verification F1, F3).** The B21 pre_tip was chosen on SLOT time (`slot <=
+first_tip - 30 min`), but legacy reports are published at slot+30 (or +45). A 7:30pm tip
+picked the 07PM report, published at 7:30pm — exactly at tip, violating the 30-min rule.
+Additionally, `get_first_tip()` silently defaulted to 19:00 ET when ESPN failed, with no flag.
+
+**Fix.** Pre_tip now chosen on `published_utc <= first_tip_utc - 30 min`. Tip source:
+Odds API events parquets (0 credits); ESPN as cross-check. No silent default — dates
+without a tip from either source get status `no_tip`. `first_tip_utc` and `tip_source`
+stored on every roles row.
+
+For the 43 dates where the current pre_tip violated the rule, an earlier report was found
+by searching backwards through legacy hourly or new-format q15 URLs.
+
+**roles.parquet** new columns: `first_tip_utc`, `tip_source` (odds_events | espn | ""),
+`published_utc`.
+
+**PRE-REGISTRATION RESULTS:**
+- "roles pre_tip rows with published_utc > first_tip - 30 min: 0 after the fix" —
+  **HELD** (0 violations after).
+- "Current main has 42 legacy rows and 1 new-format row" — 43 total violations before.
+  **HELD** (43 found).
+- "Legacy dates whose pre_tip file changes: between 30 and 50" — **HELD** (43 changed).
+- **NULL:** every date whose current pre_tip already had published_utc <= first_tip - 30 min
+  keeps the same filename and sha256. 285 dates unchanged (284 ok + 1 no_tip). **HELD.**
+
+**no_tip dates:** 1 date (2026-04-11) — no Odds API events, ESPN returned no games.
+Likely end-of-season date in schedule file with no actual games.
+
+**ESPN vs Odds API first tip mismatches (> 15 min): 7**
+
+| Date | ESPN tip | Odds tip | Delta |
+|------|----------|----------|-------|
+| 2024-12-10 | 00:00Z (12/11) | 22:00Z | 120 min |
+| 2024-12-11 | 00:00Z (12/12) | 23:00Z | 60 min |
+| 2024-12-12 | 00:30Z (12/13) | 00:10Z (12/13) | 20 min |
+| 2025-10-24 | 22:30Z | 23:00Z | 30 min |
+| 2026-01-31 | 17:00Z | 20:10Z | 190 min |
+| 2026-02-02 | 20:00Z | 00:10Z (2/3) | 250 min |
+| 2026-02-25 | 00:30Z (2/26) | 00:10Z (2/26) | 20 min |
+
+The 120/60/190/250 min mismatches are ESPN In-Season Tournament / All-Star weekend games
+where ESPN and the Odds API disagree on event timing. The 20-30 min mismatches are minor.
+Odds API events are the primary tip source; ESPN is cross-check only.
