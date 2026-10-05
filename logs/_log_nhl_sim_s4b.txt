@@ -272,3 +272,69 @@ S49 test: HELD. C-01 2022-23: HELD. C-01 2023-24: NOT HELD. S52 regimes: NO SURV
 ### UNVERIFIED
 - Whether swapped prices can be reproduced from committed code (predate mean_home/away_goals).
 - Whether S47 B2B coefficients on swapped prices match what the generator would produce.
+
+---
+
+## L-WO1 (2026-10-05)
+
+### Setup
+Branch nhl/sim-s4b, worktree ~/mlb-model-nhlsim4b.
+`git -C ~/mlb-model branch --show-current` = main ✓
+Parent baseline: 57 passed, 0 failed (after all 4 items).
+
+### Item 0 (S53) — Adopt sim-engine rules; fit-window ledger; holdout correction
+Commit: 49fbacdc3
+
+- RETURNED: PURPOSE paragraph at top of decision doc. S53 entry with A1-A14 bindings.
+- RETURNED: FIT_WINDOW_LEDGER.md with per-season status:
+  2024-25 = CONSUMED (S48 ML R6, 99 picks, B-01, EV2 on 2026-09-30)
+  2025-26 = PROSPECTIVE
+- RETURNED: S1 correction noting HOLDOUT_SCORED.lock never created.
+- MEANS: Rules adopted. Holdout claim corrected. Ledger is the source of truth.
+
+### Item 1 (S54) — All-source PIT truncation + planted leaks + pricer HALTs
+Commit: cd6e5dbb7
+
+**Test: test_pit_all_sources.py — 12 tests, all pass.**
+
+Failing-then-passing (pricer HALT):
+  OLD: `ValueError: No team_ratings row for game 2022020100` → skipped += 1; continue
+  NEW: `HALT: game_inputs_for failed for game_id=2022020100` → SystemExit(1)
+
+Null control (prediction_report.py on committed data):
+- 2022-23: ML LL 0.6594, A1 0.448 ✓ (matches S51)
+- 2023-24: ML LL 0.6646, A1 −0.051 ✓ (matches S51)
+- Totals 2023-24: LL 0.7004, A1 −0.022 ✓ (matches S51)
+
+### Item 2 (S55) — Crosswalk; ID-only join; price-scale labels
+Commit: 492565072
+
+- RETURNED: build_crosswalk.py → crosswalk/game_event.parquet (5,110 rows).
+  Seasons: 2021-22 0, 2022-23 1311, 2023-24 1311, 2024-25 1311, 2025-26 1177.
+
+Pre-registration:
+- (i) 2023-24 = S51 exactly: HELD. 2022-23 changed (0.6594→0.6592, +1 game): NOT HELD (fit).
+- (ii) Matched ≥ old: 2022-23 1157>1156, 2023-24 1138=1138: HELD.
+
+Null control: Swapped 2 event_ids → Pin LL 0.6567→0.6564 (Δ 0.000366). Join is live.
+
+### Item 3 (S56) — Hard Rock + data custody
+Commits: nhl/live-lines 6820e872d, nhl/sim-s4b a11ee9d68
+
+Hard Rock: pointsbetus (0 rows on 10-02) swapped for hardrockbet. 10 keys exact.
+Failing-then-passing: `git stash && pytest` → FAILED, `git stash pop && pytest` → PASSED.
+
+Data custody: manifest 28 hashed files; large dirs counted only (pbp 229M, box 340M, odds 1.3G).
+ARCHIVE_ROOT not set → rsync printed, STOPPED.
+
+### NOT DONE
+- Archive copy (ARCHIVE_ROOT not set — rsync commands printed)
+- Puller not run (0 credits)
+- Branches not merged to main
+- Full test suite via main() on real data
+
+### UNVERIFIED
+- Whether hardrockbet returns NHL data (not probed, 0 credits)
+- The +1 game in 2022-23 via ID join: whether it was a date-join miss or a genuine new match
+- Large-dir custody_manifest has counts only, no per-file sha256
+- odds_archive_nhlE 146,286 files: content not validated
