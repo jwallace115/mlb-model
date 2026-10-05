@@ -3,6 +3,17 @@
 Entries S1, S2, ... Written only by the NHL chat and the NHL sim work orders it writes. Before numbering:
 `grep "^### S" research/nhl_sim/NHL_SIM_DECISION_v1.md | tail -1`. Plan: `research/nhl_sim/NHL_SIM_PLAN_2026-09-29.md`.
 
+## PURPOSE
+
+The engine is a mechanics model that does not beat Pinnacle pre-game (fixed 2023-24 ML
+log-loss 0.6646 vs Pinnacle 0.6567; A1 disagreement −0.051, CI includes 0; totals 0.7004
+vs 0.6942; 16-regime family: zero BH survivors at 10%). Its possible value is: live
+game-state (where Pinnacle's pre-game line is stale), goalie/lineup information (confirmed
+starters vs announced), joint structure (correlated player-prop pricing from the same sim
+draws), and price rules (the EV2 venue arbitrage). No engine-realism work order is
+justified without an explicit argument for how the proposed change creates edge against
+this paragraph's numbers.
+
 ---
 
 ### S1 — Build a game-state hockey simulation as a Layers-System model layer (L4) (2026-09-29)
@@ -1006,3 +1017,41 @@ Matches Cowork's `a02_regimes_fixed.csv` to max |diff| = 0.000000 on coef, p, an
 
 The engine carries no statistically significant information beyond Pinnacle in any tested regime
 on the fixed engine. No survivors are carried to 2024-25. This is the expected outcome.
+
+### S53 — Adopted sim-engine rules from the NFL sim (2026-10-05, L-WO1 Item 0)
+
+Rules A1–A14 from `Claude outputs/SIM_ENGINE_LESSONS_from_nfl_2026-10-05.md` Part A are adopted
+for the NHL sim. Each rule's NHL binding:
+
+- **A1** (purpose before physics): bound to the PURPOSE paragraph above. The engine does not beat
+  Pinnacle pre-game; possible value is live state, goalie/lineup, joint structure, price rules.
+- **A2** (one as-of accessor per source + all-source PIT test): bound to ratings/finishing/xG/odds
+  accessors. The existing truncation tests cover team ratings, goalie ratings, and finishing term.
+  All-source test with planted leak: S54 (this order).
+- **A3** (fit-window ledger): bound to `research/nhl_sim/FIT_WINDOW_LEDGER.md` created in this
+  commit. A holdout is consumed the moment anyone looks at it.
+- **A4** (research object == live object): bound to merge-before-use and the manifest gate.
+  Constants v8 in a worktree must match main before any live use.
+- **A5** (ID-only joins, price-scale labels): bound to the crosswalk built in S55 (this order).
+  No name-based joins after the crosswalk is committed.
+- **A6** (raw-row admission): scheduled for a future order. Not yet implemented.
+- **A7** (scraped inputs: real parser, differential parse, context binding): bound to the G1
+  standard (goalie confirmation). Not yet implemented; required before any goalie-confirmation
+  input is trusted.
+- **A8** (hashed bundle): not yet implemented. Required before any PRIMARY forward run.
+- **A9** (every gate HALTs): the pricer's `except ValueError: skipped += 1` is replaced by a
+  HALT in S54 (this order). Every future gate must HALT and be proven by an attack.
+- **A10** (freshness): not yet implemented. Required before any PRIMARY forward run.
+- **A11** (RNG streams): deferred to the next full re-price because changing RNG streams changes
+  prices. Currently seed=int(game_id).
+- **A12** (tests that can fail, mutation script, no known reds): the existing test suite has
+  mutation tests for team ratings and goalie ratings. A committed mutation script with a full
+  baseline is scheduled.
+- **A13** (verify from files, not reports): bound to the closing-log standard. Every session log
+  separates RETURNED from MEANS, NOT DONE from UNVERIFIED.
+- **A14** (process shape): bound to the work-order format (≤4 items, commit+push between items,
+  decisions in the same commit, pre-registration before looking).
+
+**Correction to S1:** S1 said the holdout is scored once through `research/nhl_sim/HOLDOUT_SCORED.lock`;
+the lock file was never created and 2024-25 was consumed on 2026-09-30 (S48 ML R6 A1 and 99 picks
+evaluated; S50 re-priced 1,312 games; EV2 B-01 3-way priced) — see `FIT_WINDOW_LEDGER.md`.
