@@ -3689,3 +3689,19 @@ Ending: 99,842
   - Null control (10 random re-runs identical) HELD
 - NOT DONE: merge to main (per instructions). .gitignore entry for data/injury_archive/nba/history/ (requested as ops task in B16).
 - UNVERIFIED: whether the 4 context_mismatch files (2025-12-20/21, around format change) have meaningful data differences; whether legacy-format PDFs from before 2024-10-22 exist on the CDN; B15 parquet writing for existing 220 ESPN files (only new files get parquets).
+
+## 2026-10-05T17:30Z  claude-code (NBA-S0b)
+- WORKTREE: ~/mlb-model-nbaS0 on nba/s0, 4 commits pushed (3cdd902ec, 73524b874, d978bdaad, ea238c521)
+- COPIED: nbaS0_verification_2026-10-05.md and workorder_S0b_2026-10-05.md into worktree
+- B17: NOT_YET_SUBMITTED emitted as rows (player="", status="NOT_YET_SUBMITTED")
+  - RETURNED: 2025-02-13 PDF has 10 NYS teams (all NOT YET SUBMITTED), not empty. 97.7% of files have >= 1 NYS.
+  - MEANS: verified_empty was wrong for 2025-02-13. Parser B had tabula artifact (nan rows inside teams with real players); fixed by checking (game_date, matchup, team) has no player rows before emitting NYS.
+  - 5 files went ok -> parse_disagree on first NYS fix attempt; all resolved after tabula artifact filtering.
+  - NULL HELD: 0 files with 0 NYS rows changed status.
+- B18: 3 fixture PDFs (2024-10-22, 10-27, 10-31) that fail on 079606ccf parser, pass now.
+  - RETURNED: context_mismatch cause = legacy hourly slot = top of hour, delta 45 min > 30 min binding. Rule is too tight for hourly format.
+  - MEANS: B16 "A==B >= 99%" DID NOT HOLD for 2025-26 (98.8%). Stated plainly.
+- B19: 436 parsed parquets (5.0 MB) committed under history_parsed/. Raw PDFs (435 files) copied to ~/mlb-model/data/injury_archive/nba/history/. git ls-tree: 436 parquets, 0 PDFs.
+- B20: RW@SH symmetry accepted (Jeff). Sum -6.30% vs price-only -5.68%. Band [-6.0,-2.0] was mis-specified (two overrounds, not one). No grader bug. Numbers unchanged.
+- NOT DONE: merge to main. Loosening context binding for legacy hourly format (proposed in B18, not applied). .gitignore entry for history/ (ops task from B16).
+- UNVERIFIED: whether the 5 tabula-artifact nan rows affect other files beyond the 5 investigated; whether the 4 context_mismatch files would parse ok with a widened 60-min window.
