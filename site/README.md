@@ -151,6 +151,15 @@ Write `build_<name>(now, health)` returning `page("<file>.html", "<Title>", body
   different snapshot time is a new key.
 * **Add a login:** `ssh do-vm 'bash /root/mlb-model/site/ops/add_site_user.sh <name>'` (prints the password once).
 
+### 5.7 Picks page
+
+`picks.html` reads `/root/private/ledger/picks.jsonl` (env var `PICKS_LEDGER_DIR`, default
+`/root/private/ledger`). Shows open picks (today ET, no result) and settled picks by owner × sport
+with hit rate, real-price ROI, flat −110, monthly breakout and the ≥60%-in-one-month flag.
+Owners in `site/forward_status.json` → `embargo_owners` (currently `sim_nfl`, `ai_nfl`) show N and
+date range only, with "scoring not published". No stakes, slip ids, share links or balances. Ledger
+dir absent or unreadable → page renders NODATA and the build still succeeds.
+
 ## 6. How a chat gets a change live (no copy-paste relays)
 
 | Change | Who does it | Path |
