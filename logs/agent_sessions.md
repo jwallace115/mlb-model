@@ -3755,3 +3755,82 @@ for D-WO2: 9 target seasons with 2-season fit windows.
 - Whether the 2016 retry filled ALL 345 gaps (the count matches but file-level diff not done).
 - Whether state_time for pre-2019 data is usable for constants derivation (5v5/PP seconds).
 - Whether the walk-forward commands in d_walkforward_plan.md run without modification.
+
+## 2026-10-05T~18:00Z  claude-code (D-WO2, branch nhl/sim-d1)
+
+### Step 0 — Merge origin/main into nhl/sim-d1
+
+RETURNED: `git merge origin/main` produced exactly 2 conflicts (logs/agent_sessions.md,
+NHL_SIM_DECISION_v1.md). Resolved as UNION (main first, sim-d1 D1-D4 appended).
+MEANS: worktree now has all main changes (price_games HALT, crosswalk, fit-window ledger).
+NULL: prediction_report.py: 2023-24 ML LL 0.6646, A1 −0.051 (unchanged). PASS.
+NULL: test_fit_window_ledger.py: 2 passed. PASS.
+PUSHED: 497fedd03.
+
+### D5 — Chronological play order fix
+
+RETURNED: Sort plays by (period, timeInPeriod, sortOrder) in process_game(). Test
+`test_per_period_state_time_1200` on 2015020001: FAILS (P1=1350s) then PASSES (P1=1200s).
+MEANS: Pre-2019 PBP out-of-order plays caused overlapping state spans. Fixed.
+NULL (a): 2021 and 2023 events byte-identical (6 parquets, sha256 all match). PASS.
+NULL (b): After fix: 100.0% of games within 2s for ALL 11 old seasons (was 1.1-3.3%). PASS.
+NULL (c): Goals match boxscore 100% for all 11 seasons. PASS.
+Score_diff changes: 7,552 shots across 2010-2018 (~0.8% of total).
+PUSHED: 4e0d012a2.
+
+### D6 — Walk-forward fit windows
+
+RETURNED: Generalised build_constants_v7.py (--fit-seasons, --out) and ratings.py
+(--fit-seasons, --all-seasons, --out-dir). walkforward.py orchestrates 9 target seasons.
+MEANS: Per-season constants, hyper (K, r), carryover (w), and ratings produced.
+NULL: Re-running with defaults reproduces committed parquets byte-for-byte:
+  team_ratings 67672cda, goalie_ratings e2f2d8d8, finishing_term f7cda74d,
+  shrinkage_K 1a532edc, constants_v8 c1464358. PASS.
+Goalie r<=0 for T=2015 (r=-0.013): K set to 1e6 (all-prior). Correct behaviour.
+r_ev_att ranges 0.75-0.90; K_ev_att ranges 3.5-13.
+PUSHED: fdba30198.
+
+### D7 — Price every game 2012-2020
+
+RETURNED: 10,131 games priced at 2,000 sims across 9 seasons. 4-worker parallel.
+Runtime: ~70 min total (two batches).
+MEANS: Walk-forward prices ready for D8 evaluation.
+NULL: season=2023 with default inputs reproduces committed 2023 parquet p_home_win
+on 20 games to max diff 0. PASS.
+SKIP: 2019020876 (1 game) — no goalie_ratings row (PBP data gap).
+Engine change: GameInputs.ot_base_skaters added; 4 for T<=2014, 3 for T>=2015.
+PUSHED: 7fcd1b912.
+
+### D8 — Evaluation at SBRO close
+
+RETURNED: 10,131 games joined by game_id (direct match). Unmatched: 1 in 2019 (skipped game).
+All other seasons: 0 unmatched. Note: game_id join, not a date join.
+
+PRE-REGISTRATION (i): Engine ML LL within 0.012 of close: diff=+0.0079. **HELD.**
+PRE-REGISTRATION (ii): Pooled A1 90% CI includes 0: CI=[0.095, 0.465]. **NOT HELD.**
+  Engine adds info vs SBRO close pooled (p=0.013). Only 1/9 individual seasons
+  significant (2013-14). Most likely: SBRO close weaker than Pinnacle on old seasons.
+PRE-REGISTRATION (iii): R8 high-penalty: A1=-0.218 [-1.091, 0.656]. **NOT HELD.**
+  Coefficient is negative. Does not replicate the 2022-24 prior.
+
+16-regime BH 10%: 1 SURVIVOR — R1_early (first 10 games), p=0.0069 < threshold 0.0125.
+  Status: DISCOVERY. Goes to CONFIRM on 2022-24.
+R6 weak_goalies: A1=0.274, p=0.399. Not significant.
+Totals A1: not computable (SBRO totals probabilities unavailable pre-2022).
+A2 picks: 5,538 picks, hit 41.2%, ROI +0.4% (SE 1.7%). Fav +7.1%, dog -0.5%.
+
+Fit window ledger updated: 2010-11..2020-21 rows. test_fit_window_ledger: 2 passed.
+PUSHED: dfb98da99.
+
+### NOT DONE
+- Totals A1 at SBRO close (SBRO totals probabilities unavailable for pre-2022 seasons)
+- R1_early CONFIRM on 2022-24 (must NOT be looked at in this order)
+- Merge nhl/sim-d1 to main (per order: do not merge)
+
+### UNVERIFIED
+- Whether the SBRO close is the true closing line or an earlier snapshot (the file
+  carries ml_h/ml_a but no timestamp; labelled as closing in the edge-hunt inputs)
+- Whether the R1_early signal replicates at Pinnacle (tested only against SBRO)
+- Whether the pooled A1 significance is an artefact of SBRO line weakness vs Pinnacle
+  (the 2022-24 result at Pinnacle was A1=-0.051, CI includes 0)
+- Whether game 2019020876 goalie data gap affects any other pipeline output
