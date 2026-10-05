@@ -1082,3 +1082,32 @@ evaluated; S50 re-priced 1,312 games; EV2 B-01 3-way priced) — see `FIT_WINDOW
 - 2022-23: ML LL 0.6594, A1 0.448
 - 2023-24: ML LL 0.6646, A1 −0.051
 - Totals 2023-24: LL 0.7004, A1 −0.022
+
+### S55 — game_id ↔ event_id crosswalk; ID-only join; price-scale labels (2026-10-05, L-WO1 Item 2)
+
+**Crosswalk:** `nhl/sim/build_crosswalk.py` maps NHL game_id → Odds API event_id for seasons
+2021-2025 using schedule (boxscore gameDate + abbrevs) against lines history (ET date of
+commence_time + NAME map). The NAME map is now in `build_crosswalk.py` as the single source;
+`sanity_check_v2.py` and `prediction_report.py` import it from there.
+
+Per-season matches: 2021-22 = 0 (no lines), 2022-23 = 1311, 2023-24 = 1311, 2024-25 = 1311,
+2025-26 = 1177. Mapping is 1:1 in both directions (no duplicates or ambiguous pairs). 1
+unmatched game per full season (likely postponed/neutral site).
+
+**ID-only join:** `price_games.add_pinnacle_lines` and `prediction_report.main` now join
+through the crosswalk: game_id → crosswalk → event_id → Pinnacle data. The old (date, home,
+away) join is removed.
+
+**Price-scale labels:** de-vigged columns renamed to `pin_p_home_novig_mult` and
+`pin_p_over_novig_mult`. Raw prices alongside: `pin_home_price_raw`, `pin_away_price_raw`,
+`pin_over_price_raw`, `pin_under_price_raw`. `price_scale` column = "pinnacle_novig_multiplicative".
+
+**Pre-registration:**
+- (i) 2023-24 validate numbers equal S51 to every digit: **HELD** (LL 0.6646, A1 −0.051,
+  Totals LL 0.7004, A1 −0.022). 2022-23 fit LL changed from 0.6594 to 0.6592 because
+  the ID join matched 1157 games vs 1156 (+1 game the date-based join missed): **NOT HELD**
+  on fit season; expected since the join is different (better).
+- (ii) Matched games ≥ old join: 2022-23 1157 > 1156 ✓, 2023-24 1138 = 1138 ✓: **HELD**.
+
+**Null control:** swapping two event_ids in the crosswalk changed 2023-24 Pinnacle LL from
+0.6567 to 0.6564 (Δ = 0.000366). The join is live.

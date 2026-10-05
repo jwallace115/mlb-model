@@ -13,17 +13,10 @@ sys.path.insert(0, str(ROOT))
 BOX_DIR = ROOT / "nhl" / "cache"
 PRICES_DIR = ROOT / "nhl" / "data" / "sim" / "prices"
 LINES_DIR = ROOT / "data" / "odds_archive" / "nhl" / "history" / "lines"
+CROSSWALK_PATH = ROOT / "nhl" / "data" / "sim" / "crosswalk" / "game_event.parquet"
 GAMES_PER = 1312
 
-NAME = {"Anaheim Ducks": "ANA", "Arizona Coyotes": "ARI", "Boston Bruins": "BOS", "Buffalo Sabres": "BUF",
-        "Calgary Flames": "CGY", "Carolina Hurricanes": "CAR", "Chicago Blackhawks": "CHI", "Colorado Avalanche": "COL",
-        "Columbus Blue Jackets": "CBJ", "Dallas Stars": "DAL", "Detroit Red Wings": "DET", "Edmonton Oilers": "EDM",
-        "Florida Panthers": "FLA", "Los Angeles Kings": "LAK", "Minnesota Wild": "MIN", "Montréal Canadiens": "MTL",
-        "Nashville Predators": "NSH", "New Jersey Devils": "NJD", "New York Islanders": "NYI", "New York Rangers": "NYR",
-        "Ottawa Senators": "OTT", "Philadelphia Flyers": "PHI", "Pittsburgh Penguins": "PIT", "San Jose Sharks": "SJS",
-        "Seattle Kraken": "SEA", "St Louis Blues": "STL", "Tampa Bay Lightning": "TBL", "Toronto Maple Leafs": "TOR",
-        "Utah Hockey Club": "UTA", "Utah Mammoth": "UTA", "Vancouver Canucks": "VAN", "Vegas Golden Knights": "VGK",
-        "Washington Capitals": "WSH", "Winnipeg Jets": "WPG"}
+from nhl.sim.build_crosswalk import NAME
 
 
 def implied_prob(a):
@@ -52,12 +45,16 @@ def load_pinnacle_full(season):
         hh, ah = h2h[h2h["outcome_name"] == ht], h2h[h2h["outcome_name"] == at]
         if len(hh) == 1 and len(ah) == 1:
             ph, pa = implied_prob(hh.iloc[0]["price"]), implied_prob(ah.iloc[0]["price"])
-            row["pin_p_home"] = ph/(ph+pa)
+            row["pin_p_home_novig_mult"] = ph/(ph+pa)
+            row["pin_home_price_raw"] = float(hh.iloc[0]["price"])
+            row["pin_away_price_raw"] = float(ah.iloc[0]["price"])
         tot = g[g["market"] == "totals"]; ov = tot[tot["outcome_name"] == "Over"]; un = tot[tot["outcome_name"] == "Under"]
         if len(ov) == 1 and len(un) == 1:
             row["pin_total_line"] = ov.iloc[0]["point"]
             po, pu = implied_prob(ov.iloc[0]["price"]), implied_prob(un.iloc[0]["price"])
-            row["pin_p_over"] = po/(po+pu)
+            row["pin_p_over_novig_mult"] = po/(po+pu)
+            row["pin_over_price_raw"] = float(ov.iloc[0]["price"])
+            row["pin_under_price_raw"] = float(un.iloc[0]["price"])
         # Median book prices for A2
         all_h2h = g[g["market"] == "h2h"]
         for t in [ht, at]:
@@ -119,6 +116,8 @@ def reliability_table(y, p, label, bins=10):
 
 
 def main():
+    # Load crosswalk for ID-only join
+    cw = pd.read_parquet(CROSSWALK_PATH)
     for season in [2022, 2023]:
         label = "2022-23 (fit)" if season == 2022 else "2023-24 (validate)"
         prices = pd.read_parquet(PRICES_DIR / f"season={season}.parquet")
@@ -127,17 +126,20 @@ def main():
 
         m = prices.merge(act, on="game_id")
         if not pin.empty:
-            m = m.merge(pin, left_on=["date", "home_x" if "home_x" in m.columns else "home", "away_x" if "away_x" in m.columns else "away"],
-                        right_on=["et_date", "home", "away"], how="left", suffixes=("", "_pin"))
-        n_pin = int(m["pin_p_home"].notna().sum())
-        mp = m[m["pin_p_home"].notna()].copy()
+            # ID-only join: game_id -> crosswalk -> event_id -> Pinnacle
+            cw_s = cw[cw["season"] == season][["game_id", "event_id"]]
+            m = m.merge(cw_s, on="game_id", how="left")
+            m = m.merge(pin, on="event_id", how="left", suffixes=("", "_pin"))
+        n_pin = int(m["pin_p_home_novig_mult"].notna().sum())
+        mp = m[m["pin_p_home_novig_mult"].notna()].copy()
+        mp["price_scale"] = "pinnacle_novig_multiplicative"
 
         print(f"\n{'='*60}\n{label}: {len(mp)} games with Pinnacle\n{'='*60}")
 
         # --- MONEYLINE ---
         y = mp["home_win"].values
         p_eng = mp["p_home_win"].values
-        p_pin = mp["pin_p_home"].values
+        p_pin = mp["pin_p_home_novig_mult"].values
         ll_eng = log_loss(y, np.clip(p_eng, 0.01, 0.99))
         ll_pin = log_loss(y, np.clip(p_pin, 0.01, 0.99))
         br_eng = brier_score_loss(y, p_eng)
@@ -176,8 +178,8 @@ def main():
             p_over_eng = np.clip(p_over_eng, 0.01, 0.99)
 
             print(f"\n  TOTALS: {len(mt_np)} games (pushes={push.sum()})")
-            if "pin_p_over" in mt_np.columns:
-                p_over_pin = mt_np["pin_p_over"].values
+            if "pin_p_over_novig_mult" in mt_np.columns:
+                p_over_pin = mt_np["pin_p_over_novig_mult"].values
                 ll_tot_eng = log_loss(y_np, p_over_eng)
                 ll_tot_pin = log_loss(y_np, np.clip(p_over_pin, 0.01, 0.99))
                 br_tot_eng = brier_score_loss(y_np, p_over_eng)
@@ -194,7 +196,7 @@ def main():
         picks = []
         for _, r in mp.iterrows():
             p = r["p_home_win"]
-            be = r["pin_p_home"]  # using Pinnacle as proxy for median break-even
+            be = r["pin_p_home_novig_mult"]  # using Pinnacle as proxy for median break-even
             edge = p - be
             if abs(edge) >= 0.04:
                 side = "home" if edge > 0 else "away"

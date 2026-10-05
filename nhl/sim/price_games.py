@@ -16,6 +16,7 @@ from nhl.sim.sanity_check_v2 import load_pinnacle
 BOX_DIR = ROOT / "nhl" / "cache"
 OUT_DIR = ROOT / "nhl" / "data" / "sim" / "prices"
 MANIFEST = ROOT / "nhl" / "data" / "sim" / "ratings" / "manifest.json"
+CROSSWALK_PATH = ROOT / "nhl" / "data" / "sim" / "crosswalk" / "game_event.parquet"
 GAMES_PER_SEASON = 1312
 
 
@@ -90,7 +91,8 @@ def price_season(season, n_sims, tr, gr, ft, q, base_inp):
 
 
 def add_pinnacle_lines(df, season, allow_no_lines=False):
-    """Join Pinnacle totals line. HALTs if no lines found unless --allow-no-lines."""
+    """Join Pinnacle lines via game_id -> crosswalk -> event_id (ID-only join).
+    HALTs if no lines found unless --allow-no-lines."""
     pin = load_pinnacle(season)
     if pin.empty:
         if not allow_no_lines:
@@ -98,9 +100,30 @@ def add_pinnacle_lines(df, season, allow_no_lines=False):
                   f"Pass --allow-no-lines to proceed without lines.", file=sys.stderr)
             sys.exit(1)
         df["pin_total_line"] = np.nan
+        df["pin_p_home_novig_mult"] = np.nan
+        df["price_scale"] = "pinnacle_novig_multiplicative"
         return df
-    df = df.merge(pin[["et_date", "home", "away", "pin_p_home", "pin_total_line"]],
-                   left_on=["date", "home", "away"], right_on=["et_date", "home", "away"], how="left")
+
+    # ID-only join through the crosswalk
+    cw = pd.read_parquet(CROSSWALK_PATH)
+    cw_s = cw[cw["season"] == season][["game_id", "event_id"]]
+
+    # Join crosswalk to prices by game_id
+    df = df.merge(cw_s, on="game_id", how="left")
+
+    # Join Pinnacle data by event_id
+    pin_cols = ["event_id"]
+    if "pin_p_home" in pin.columns:
+        pin_cols.append("pin_p_home")
+    if "pin_total_line" in pin.columns:
+        pin_cols.append("pin_total_line")
+    df = df.merge(pin[pin_cols], on="event_id", how="left")
+
+    # Rename to state scale
+    if "pin_p_home" in df.columns:
+        df.rename(columns={"pin_p_home": "pin_p_home_novig_mult"}, inplace=True)
+    df["price_scale"] = "pinnacle_novig_multiplicative"
+
     return df
 
 
