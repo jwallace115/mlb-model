@@ -43678,5 +43678,109 @@
         "point": 0.5
       }
     ]
+  },
+  {
+    "pull_timestamp": "2026-10-05T11:05:02.253036+00:00",
+    "pull_date": "2026-10-05",
+    "game_id": "ccd487a87bb73145e3f12dd3a765ad47",
+    "commence_time": "2026-10-05T21:10:00Z",
+    "home_team": "Cleveland Guardians",
+    "away_team": "Chicago White Sox",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": 140,
+    "nrfi_price": -180,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": 140,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -180,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-10-05T11:05:02.253036+00:00",
+    "pull_date": "2026-10-05",
+    "game_id": "4be245ad03895bcafcdc42d7d926b675",
+    "commence_time": "2026-10-06T00:00:00Z",
+    "home_team": "Tampa Bay Rays",
+    "away_team": "New York Yankees",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": 112,
+    "nrfi_price": -142,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": 112,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -142,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-10-05T11:05:02.253036+00:00",
+    "pull_date": "2026-10-05",
+    "game_id": "1bc3bf1d3034010bdfb31d928a71177a",
+    "commence_time": "2026-10-06T22:00:00Z",
+    "home_team": "Atlanta Braves",
+    "away_team": "Los Angeles Dodgers",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": 132,
+    "nrfi_price": -170,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": 132,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -170,
+        "point": 0.5
+      }
+    ]
+  },
+  {
+    "pull_timestamp": "2026-10-05T11:05:02.253036+00:00",
+    "pull_date": "2026-10-05",
+    "game_id": "62d8e1c18355ab6b3913d7a28fa677c2",
+    "commence_time": "2026-10-07T01:30:00Z",
+    "home_team": "San Diego Padres",
+    "away_team": "Milwaukee Brewers",
+    "bookmaker": "fanduel",
+    "market": "totals_1st_1_innings",
+    "yrfi_price": 118,
+    "nrfi_price": -150,
+    "yrfi_point": 0.5,
+    "nrfi_point": 0.5,
+    "raw_outcomes": [
+      {
+        "name": "Over",
+        "price": 118,
+        "point": 0.5
+      },
+      {
+        "name": "Under",
+        "price": -150,
+        "point": 0.5
+      }
+    ]
   }
 ]
