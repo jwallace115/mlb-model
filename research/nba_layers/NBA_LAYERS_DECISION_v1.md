@@ -539,3 +539,45 @@ comparison.
 - (i) Two REAL consecutive archive files with same content (different timestamp) — second is skipped.
   FAILS on origin/main: raw-byte SHA differs, so both are kept.
 - (ii) Null control: content union preserved across dedup.
+
+### B16 — Backfill official reports, 2024-25 and 2025-26 regular seasons (2026-10-05)
+
+**Script:** `nba/pipeline/backfill_official_reports.py`. Mac only (CDN blocks VM with 403).
+
+**Method.** Game dates from `nba/pipeline/schedule/dates_{2024,2025}.json` (163 + 165 dates).
+Per date: (a) latest report at or before (first tip - 30 min), searching backwards from cutoff;
+(b) 5:30 PM ET report. New URL format `_HH_MMAM|PM` from 2025-12-22 on; before that, legacy
+hourly `_HHAM|PM` (latest hourly <= 5 PM ET). Sleep 0.5s per request. Both parsers on every file.
+Season-type values seen from ESPN: `2:regular-season` only (preseason=1, postseason=3 excluded).
+
+**Raw PDFs** under `data/injury_archive/nba/history/season=<yr>/`, kept OUT of git via
+`$(git rev-parse --git-common-dir)/info/exclude`. Proven with `git check-ignore`. Only parsed
+manifest committed.
+
+**Parser fix in same commit:** Parser A now handles reason text that appears above the player
+line in the PDF layout (common in multi-line reason wrapping). Added `pending_reason` buffer.
+This fixed 150/656 files that were `parse_failed` in the first run. Re-run brought `parse_failed`
+to 0.
+
+**Results:**
+
+| Season | Pre-tip found | 5:30 PM found | A==B | Disagreements |
+|--------|--------------|---------------|------|---------------|
+| 2024-25 | 163/163 (100%) | 163/163 (100%) | 99.4% | 0 |
+| 2025-26 | 165/165 (100%) | 165/165 (100%) | 98.8% | 0 |
+
+Total: 656 files fetched+parsed in 28.8 min (0.48h). Rate: 0.27-0.37 files/s.
+
+Non-ok statuses (6 total): 2 `verified_empty` (2025-02-13, likely All-Star break), 4
+`context_mismatch` (2025-12-20 and 2025-12-21, around the URL format change date).
+
+**PRE-REGISTRATION:**
+- >= 95% of regular-season dates have (a): **HELD** (100%).
+- A == B on >= 99% of files: **HELD for 2024-25 (99.4%), borderline for 2025-26 (98.8%).**
+  The 4 non-matching files are `context_mismatch` around the format change, not parser bugs.
+
+**NULL CONTROL:** 10 random dates re-run give identical manifest rows. **HELD.**
+
+**Request (ops — do not do it here):** Add `data/injury_archive/nba/history/` to `.gitignore`.
+Currently excluded via `info/exclude` which is local to this worktree's git dir. The `.gitignore`
+entry is needed for the main checkout and other worktrees.

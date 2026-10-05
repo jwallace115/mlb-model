@@ -140,6 +140,7 @@ def parse_a(pdf_path):
     cur_game_time = None
     cur_matchup = None
     cur_team = None
+    pending_reason = ""  # reason text that appears before its player row
 
     lines = text.split("\n")
     i = 0
@@ -181,6 +182,7 @@ def parse_a(pdf_path):
 
         # 5. Check for NOT YET SUBMITTED
         if NOT_YET_SUBMITTED in rest:
+            pending_reason = ""
             i += 1
             continue
 
@@ -194,6 +196,11 @@ def parse_a(pdf_path):
             player_part, status_found, reason_part = status_parts
 
             if player_part:
+                # Prepend any pending reason from lines above
+                if pending_reason:
+                    reason_part = (pending_reason + " " + reason_part).strip() if reason_part else pending_reason
+                    pending_reason = ""
+
                 # Collect continuation reason lines
                 j = i + 1
                 while j < len(lines):
@@ -203,20 +210,16 @@ def parse_a(pdf_path):
                         continue
                     if _is_structural_line(lines[j]):
                         break
-                    # Stop if next line starts a new structural element
                     if GAME_DATE_RE.match(nxt) or GAME_TIME_RE.match(nxt) or MATCHUP_RE.match(nxt):
                         break
                     if NOT_YET_SUBMITTED in nxt:
                         break
-                    # Stop if next line has a team name
                     t, _ = _find_team_name(nxt)
                     if t:
                         break
-                    # Stop if next line has player + status
                     sp = _find_status(nxt)
                     if sp and sp[0] and ',' in sp[0]:
                         break
-                    # Continuation reason line
                     reason_part = (reason_part + " " + nxt).strip()
                     j += 1
 
@@ -238,23 +241,22 @@ def parse_a(pdf_path):
                 i = j
                 continue
             else:
-                # No player name before status — reason continuation
+                # No player name before status — reason continuation or pending
                 if rows:
                     rows[-1]["reason"] = (rows[-1]["reason"] + " " + rest).strip()
-                    i += 1
-                    continue
-                raise ParseHalt(f"Status without player and no prior row: {stripped!r}")
+                else:
+                    pending_reason = (pending_reason + " " + rest).strip()
+                i += 1
+                continue
         else:
-            # No status — reason continuation
+            # No status — reason continuation or pending
             if rows:
                 rows[-1]["reason"] = (rows[-1]["reason"] + " " + rest).strip()
-                i += 1
-                continue
-            # Might be just a game time standing alone
-            if GAME_TIME_RE.match(stripped):
-                i += 1
-                continue
-            raise ParseHalt(f"Unrecognized line: {stripped!r}")
+            else:
+                # Buffer as pending reason (appears before player row in PDF layout)
+                pending_reason = (pending_reason + " " + rest).strip()
+            i += 1
+            continue
 
         i += 1
 
