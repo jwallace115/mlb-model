@@ -3705,3 +3705,26 @@ Ending: 99,842
 - B20: RW@SH symmetry accepted (Jeff). Sum -6.30% vs price-only -5.68%. Band [-6.0,-2.0] was mis-specified (two overrounds, not one). No grader bug. Numbers unchanged.
 - NOT DONE: merge to main. Loosening context binding for legacy hourly format (proposed in B18, not applied). .gitignore entry for history/ (ops task from B16).
 - UNVERIFIED: whether the 5 tabula-artifact nan rows affect other files beyond the 5 investigated; whether the 4 context_mismatch files would parse ok with a widened 60-min window.
+
+## 2026-10-05T16:30Z  claude-code (NBA-S0c: B21-B23)
+
+### RETURNED
+- B21: `legacy_report_url` zero-padded (`{h12:02d}`). Re-fetched 224 legacy dates = 448 PDFs in 8.0 min. Pre_tip found 224/224, freeze 224/224. Pre_tip 12PM share: 4.9% (was ~100%). Freeze at 5PM: 100%. roles.parquet: 656 rows. 2 tests pass, FAIL on 01c7ca076. Pushed dff2f5733.
+- B22: `validate_context` uses `is_legacy_format()` → 60min window for legacy, 30min for new. All 4 context_mismatch → ok. 448 legacy files: 100% ok, A==B 100%. 208 new-format unchanged. 3 tests pass, core logic FAILS on 01c7ca076. Pushed fc954f71e.
+- B23: Rebuilt history_parsed/. 642 PDFs parsed, all ok. 420 parquets added, 224 removed (superseded noon-only), 222 re-parsed. 6.6 MB total. Pushed f887893ec.
+- Docs: nbaS0_verification_2026-10-05.md and workorder_S0c_2026-10-05.md copied into worktree (first commit).
+- Raw PDFs copied to ~/mlb-model/data/injury_archive/nba/history/ (main checkout, git-excluded). Season 2024: 470 PDFs. Season 2025: 385 PDFs.
+
+### MEANS
+- The legacy-era injury reports now have the correct afternoon/evening reports instead of noon-only. The old noon reports were 5-7h before freeze.
+- A==B rate is 100% across all legacy files (was 99.4%/98.8% with the 4 context_mismatch files).
+- Pre_tip slot distribution confirms ~74% of pre_tip reports are at 17:00+ ET (weeknight pattern); 26% earlier (matinees/holidays).
+
+### NOT DONE
+- Merge to main. Work order says "do not merge."
+- .gitignore entry for history/ (ops task from B16, not NBA lane).
+- Live cron still logs official reports as `ok, 0 rows` (defect #5 from S0 verification — capture fix is on unmerged branch).
+
+### UNVERIFIED
+- Whether the refetch_legacy_reports.py script is idempotent (it skips existing PDFs, but was only run once).
+- Whether any legacy pre_tip report actually differs from the same date's freeze report content-wise (many pre_tip slots are at 17:00, same as freeze).
