@@ -452,3 +452,61 @@ independent sources agree on 224. Root cause: unknown (likely a grading bug in t
 - Hard Rock live key: NFL uses both `hardrockbet` and `hardrockbet_fl`. NBA: neither today (not
   posted yet; check again closer to opening night).
 - PHX-HOU: ESPN 224, nba_api 224, results log 220. The log is wrong.
+
+### B14 — Official report parser to A7 standard (2026-10-05)
+
+**Bug found (Cowork, verified).** `_parse_report` in `capture_nba_availability.py` passes a date
+string (`"2026-10-01"`) to `nbainjuries.get_reportdata()`, which expects a `datetime.datetime`.
+This causes `TypeError: '<' not supported between instances of 'str' and 'datetime.datetime'`,
+caught by the bare `except Exception`, returning `None`. The caller then logs status `"ok"` with
+`rows=0`. The 10-01 PDF was logged as "ok" with 0 rows despite containing 5 player rows.
+
+**Fix.** New module `nba/pipeline/injury_report_parser.py` implementing A7:
+- **Parser A:** `pdftotext -layout` + allowlist grammar (header, column header, game date, game time,
+  matchup with 30-team code validation, team full name, player `Last, First[ Suffix]`, status in
+  {Out, Doubtful, Questionable, Probable, Available}, reason; continuation rows and NOT YET SUBMITTED
+  handled explicitly; `ParseHalt` on anything outside the grammar).
+- **Parser B:** `nbainjuries.get_reportdata()` with correct `datetime` argument; NaN/NOT-YET-SUBMITTED
+  rows filtered out.
+- **Consumed set** = `{(game_date, matchup, team, player, status)}`; A must equal B or status
+  `parse_disagree`.
+- **Context binding:** URL date == header date; header time within [slot, slot+30min]; sha256 recorded.
+- **Statuses:** `ok | verified_empty | parse_failed | parse_disagree | context_mismatch`. Non-ok:
+  raw PDF still archived, pull-log carries the status, `main()` exits 2.
+- Rows carry `published_utc` (from header) and `slot_et`.
+
+`capture_nba_availability.py` updated: `capture_official_reports()` now calls `parse_report()` from
+the new module. Non-ok parse status sets exit code 2 through `main()`.
+
+**PRE-REGISTRATION:**
+- 10-01 PDF yields exactly 5 rows: Carter Q, Cenac Jr. Q, Conley Q, DeVries Out, Collins Out;
+  published 16:56Z. **HELD.**
+- Three fixtures give A == B. **HELD.**
+
+**NULL CONTROL:** Each fixture parses to byte-identical output on two consecutive runs. **HELD.**
+
+**Re-parse all archived PDFs:**
+
+| File | Status | Rows | Published UTC |
+|------|--------|------|---------------|
+| Injury-Report_2026-10-01_12_45PM.pdf | ok | 5 | 2026-10-01T16:56:00Z |
+| Injury-Report_2025-12-25_12_45PM.pdf | ok | 43 | 2025-12-25T17:45:00Z |
+| Injury-Report_2026-01-14_12_45PM.pdf | ok | 67 | 2026-01-14T17:45:00Z |
+| Injury-Report_2026-03-16_12_45PM.pdf | ok | 79 | 2026-03-16T16:45:00Z |
+
+**Tests (16 tests, all pass):**
+- (i) 10-01 PDF yields 5 rows with pre-registered players/statuses — FAILS on origin/main
+  (old path yields None due to TypeError).
+- (ii) Corrupted PDF through capture main -> `parse_failed` and exit 2, never "ok" — FAILS on
+  origin/main (old code logs "ok" with 0 rows on any parse error).
+- (iii) Attack corpus (12 cases): extra status word HALT, single-team matchup HALT, unknown team
+  code HALT, missing page HALT, header date mismatch `context_mismatch`, no header HALT, player
+  without context HALT, empty text HALT, wrong date format HALT, no page footer HALT, Parser B
+  drop row -> sets differ, Parser B flip status -> sets differ.
+- Null control: deterministic.
+
+**Origin/main failure demonstration:**
+```
+get_reportdata('2026-10-01', ...) -> TypeError: '<' not supported
+_parse_report catches -> returns None -> caller logs status="ok", rows=0
+```

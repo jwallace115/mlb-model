@@ -134,7 +134,14 @@ def _existing_pdfs():
 
 
 def capture_official_reports():
-    """Fetch all new official injury report PDFs published since last run."""
+    """Fetch all new official injury report PDFs published since last run.
+
+    Uses the B14 A7-standard parser (two independent parsers, consumed-set
+    agreement, context binding). Non-ok parse status: PDF still archived,
+    pull-log carries the status, function returns the status string.
+    """
+    from nba.pipeline.injury_report_parser import parse_report as a7_parse
+
     retrieval_utc = _utcnow()
     urls = _report_urls_for_now()
     existing = _existing_pdfs()
@@ -142,6 +149,7 @@ def capture_official_reports():
     pdf_dir.mkdir(parents=True, exist_ok=True)
 
     fetched = 0
+    non_ok_status = None  # track first non-ok for exit code
     for url, ds, time_et in urls:
         fname = url.split("/")[-1]
         if fname in existing:
@@ -150,37 +158,45 @@ def capture_official_reports():
             r = requests.head(url, timeout=10, allow_redirects=True)
             if r.status_code != 200:
                 continue
-            # Download
             r2 = requests.get(url, timeout=30)
             if r2.status_code != 200:
                 continue
             pdf_bytes = r2.content
             sha = _sha256(pdf_bytes)
 
-            # Save PDF
+            # Always archive the raw PDF first
             out_pdf = pdf_dir / fname
             out_pdf.write_bytes(pdf_bytes)
             fetched += 1
 
-            # Parse to parquet
-            parsed_rows = _parse_report(out_pdf, ds, time_et)
-            if parsed_rows is not None:
+            # A7 parse: two parsers, consumed-set agreement, context binding
+            parsed_rows, published_utc, slot_et, status, detail = a7_parse(out_pdf)
+
+            if status == "ok" or status == "verified_empty":
                 import pandas as pd
-                pq_path = pdf_dir / fname.replace(".pdf", ".parquet")
-                pd.DataFrame(parsed_rows).to_parquet(pq_path, index=False)
+                if parsed_rows:
+                    # Add published_utc and slot_et to each row
+                    for row in parsed_rows:
+                        row["published_utc"] = published_utc.isoformat() if published_utc else ""
+                        row["slot_et"] = slot_et or ""
+                    pq_path = pdf_dir / fname.replace(".pdf", ".parquet")
+                    pd.DataFrame(parsed_rows).to_parquet(pq_path, index=False)
                 n_rows = len(parsed_rows)
             else:
                 n_rows = 0
+                non_ok_status = status
 
             _log_pull(
                 feed="official_report",
                 url=url,
                 rows=n_rows,
                 sha=sha,
-                status="ok",
+                status=status,
                 retrieval_utc=retrieval_utc,
             )
-            print(f"  fetched: {fname} ({len(pdf_bytes)} bytes, {n_rows} parsed rows)")
+            print(f"  fetched: {fname} ({len(pdf_bytes)} bytes, {n_rows} rows, status={status})")
+            if status not in ("ok", "verified_empty"):
+                print(f"    detail: {detail}")
         except Exception as e:
             print(f"  error on {fname}: {e}")
             _log_pull(feed="official_report", url=url, rows=0, sha="", status=f"error: {e}",
@@ -189,39 +205,7 @@ def capture_official_reports():
 
     if fetched == 0:
         print("  no new official reports")
-    return fetched
-
-
-def _parse_report(pdf_path, date_str, time_et):
-    """Parse an official injury report PDF. Returns list of dicts or None on failure."""
-    try:
-        os.environ.setdefault("JAVA_HOME", "/Users/jw115/jre21/Contents/Home")
-        from nbainjuries import injury as nba_injury
-        df = nba_injury.get_reportdata(
-            date_str,
-            local=True,
-            localdir=str(pdf_path.parent),
-            return_df=True,
-        )
-        rows = []
-        for _, r in df.iterrows():
-            rows.append({
-                "report_date": date_str,
-                "report_time_et": time_et,
-                "report_timestamp": f"{date_str}T{time_et}:00",
-                "game_date": str(r.get("Game Date", "")),
-                "game_time": str(r.get("Game Time", "")),
-                "matchup": str(r.get("Matchup", "")),
-                "team": str(r.get("Team", "")),
-                "player": str(r.get("Player Name", "")),
-                "status": str(r.get("Current Status", "")),
-                "reason": str(r.get("Reason", "")),
-                "post_tip": False,  # computed downstream
-            })
-        return rows
-    except Exception as e:
-        print(f"  parse error ({pdf_path.name}): {e}")
-        return None
+    return fetched, non_ok_status
 
 
 # ─── ESPN injuries ────────────────────────────────────────────────────
@@ -279,10 +263,14 @@ def main():
     SEASON_DIR.mkdir(parents=True, exist_ok=True)
 
     print("\n--- Official reports ---")
-    capture_official_reports()
+    fetched, non_ok_status = capture_official_reports()
 
     print("\n--- ESPN injuries ---")
     capture_espn_injuries()
+
+    if non_ok_status:
+        print(f"\nHALT: official report parse status = {non_ok_status}")
+        sys.exit(2)
 
     print("\nDone.")
 
