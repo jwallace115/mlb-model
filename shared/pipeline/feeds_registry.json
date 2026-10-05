@@ -636,6 +636,39 @@
    ],
    "ts": "mtime",
    "grace_min": 60
+  },
+  {
+   "id": "picks_adapters",
+   "label": "Picks ledger adapters",
+   "sport": "Ops",
+   "cron_match": "picks_adapters.py",
+   "outputs": [
+    "/root/private/ledger/picks.jsonl"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
+  },
+  {
+   "id": "picks_backup",
+   "label": "Picks ledger backup",
+   "sport": "Ops",
+   "cron_match": "backup_picks.sh",
+   "outputs": [
+    "/root/private/ledger_backup/picks_*.jsonl.gz"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
+  },
+  {
+   "id": "picks_grader",
+   "label": "Picks crosswalk + grader",
+   "sport": "Ops",
+   "cron_match": "picks_grader.py",
+   "outputs": [
+    "/root/private/ledger/picks.jsonl"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
   }
  ]
 }

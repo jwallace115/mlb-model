@@ -18,6 +18,7 @@ Output
 """
 
 import argparse
+import hashlib
 import html
 import json
 import os
@@ -160,7 +161,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
 """
 
 PAGES = [("index.html", "Today"), ("health.html", "Pipeline health"), ("tracking.html", "Tracking"),
-         ("forward.html", "NFL forward"), ("archive.html", "Odds archive")]
+         ("picks.html", "Picks"), ("forward.html", "NFL forward"), ("archive.html", "Odds archive")]
 
 
 def page(fname, title, body, health, built):
@@ -572,6 +573,159 @@ def build_archive(now, health):
 
 
 # ------------------------------------------------------------------ main
+# ------------------------------------------------------------------ Picks
+def _load_picks_ledger():
+    """Load the picks ledger from PICKS_LEDGER_DIR. Returns (rows, sha12, mtime_utc) or (None, None, None)."""
+    ledger_dir = os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger"
+    p = Path(ledger_dir) / "picks.jsonl"
+    if not p.exists():
+        return None, None, None
+    try:
+        text = p.read_bytes()
+        sha12 = hashlib.sha256(text).hexdigest()[:12]
+        mtime = datetime.fromtimestamp(p.stat().st_mtime, tz=timezone.utc)
+        rows = []
+        for line in text.decode().strip().split("\n"):
+            if line.strip():
+                rows.append(json.loads(line))
+        # Apply view logic: latest row per pick_id, then supersedes
+        by_id = {}
+        for r in rows:
+            pid = r["pick_id"]
+            ex = by_id.get(pid)
+            if ex is None or (r.get("ingested_utc") or "") > (ex.get("ingested_utc") or ""):
+                by_id[pid] = r
+        superseded = {r["supersedes"] for r in by_id.values() if r.get("supersedes")}
+        view = [r for pid, r in by_id.items() if pid not in superseded]
+        return view, sha12, mtime
+    except Exception:
+        return None, None, None
+
+
+def _picks_roi(rows):
+    """Compute ROI from real prices. Returns (hit_rate, roi, n, n_priced, flat_roi)."""
+    graded = [r for r in rows if r.get("result") in ("W", "L", "P")]
+    if not graded:
+        return None, None, 0, 0, None
+    w = sum(1 for r in graded if r["result"] == "W")
+    l = sum(1 for r in graded if r["result"] == "L")
+    n = w + l
+    hit = w / n if n else None
+    # Real-price ROI
+    priced = []
+    for r in graded:
+        pa = r.get("price_american")
+        if pa is None or r["result"] == "P":
+            continue
+        try:
+            p = int(float(pa))
+            if p == 0:
+                continue
+            win = p / 100 if p > 0 else 100 / abs(p)
+            profit = round(win, 4) if r["result"] == "W" else -1.0
+            priced.append(profit)
+        except (ValueError, TypeError):
+            continue
+    roi = sum(priced) / len(priced) if priced else None
+    flat = (w * (100 / 110) - l) / len(graded) if len(graded) else None
+    return hit, roi, len(graded), len(priced), flat
+
+
+def build_picks(now, health):
+    fs = load_json(ROOT / "site" / "forward_status.json") or {}
+    embargo_owners = set(fs.get("embargo_owners", []))
+    rows, sha12, mtime = _load_picks_ledger()
+
+    if rows is None:
+        inner = f"<p>{NODATA}: picks ledger not found (PICKS_LEDGER_DIR not set or file absent).</p>"
+        return page("picks.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
+
+    source_info = src(f"picks.jsonl {sha12} {fmt_utc(mtime)}")
+    today_et = now.astimezone(ET).date()
+
+    # Open picks (result null, today's ET slate)
+    open_picks = [r for r in rows if not r.get("result")
+                  and r.get("commence_time")
+                  and pd.to_datetime(r["commence_time"], utc=True).astimezone(ET).date() == today_et]
+    open_trs = []
+    for r in sorted(open_picks, key=lambda x: (x.get("owner", ""), x.get("commence_time", ""))):
+        game = f'{E(str(r.get("away", "")))} @ {E(str(r.get("home", "")))}'
+        mk = E(str(r.get("market", "")))
+        side_pt = E(str(r.get("side", "")))
+        if r.get("point") is not None:
+            side_pt += f' {pt(r["point"])}'
+        open_trs.append(f"<tr><td>{E(str(r.get('owner', '')))}</td><td class='muted'>{E(str(r.get('sport', '')))}</td>"
+                        f"<td>{game}</td><td>{mk} {side_pt}</td><td class='num'>{am(r.get('price_american'))}</td>"
+                        f"<td class='note'>{E(str(r.get('reason', '') or '')[:100])}</td></tr>")
+
+    open_html = ('<div class="tablewrap"><table><tr><th>Owner</th><th>Sport</th><th>Game</th>'
+                 '<th>Market / Side</th><th>Price</th><th>Reason</th></tr>'
+                 + "".join(open_trs) + '</table></div>' if open_trs
+                 else '<div class="card pad muted">No open picks for today.</div>')
+
+    # Settled picks by owner × sport
+    settled_trs = []
+    by_owner = defaultdict(list)
+    for r in rows:
+        if r.get("result") in ("W", "L", "P", "VOID"):
+            by_owner[(r.get("owner", "?"), r.get("sport", "?"))].append(r)
+
+    for (owner, sport), orows in sorted(by_owner.items()):
+        if owner in embargo_owners:
+            dates = [r.get("commence_time", "")[:10] for r in orows if r.get("commence_time")]
+            first = min(dates) if dates else "—"
+            last = max(dates) if dates else "—"
+            settled_trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(sport)}</td>"
+                               f"<td class='num'>{len(orows)}</td>"
+                               f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
+                               f"<td colspan='3'>scoring not published</td></tr>")
+            continue
+
+        hit, roi, n_graded, n_priced, flat = _picks_roi(orows)
+        dates = [r.get("commence_time", "")[:10] for r in orows if r.get("commence_time")]
+        first = min(dates) if dates else "—"
+        last = max(dates) if dates else "—"
+        hit_s = pct(hit) if hit is not None else "—"
+        roi_s = pct(roi, True) if roi is not None else "—"
+        flat_s = pct(flat, True) if flat is not None else "—"
+
+        # Monthly breakout
+        by_month = defaultdict(list)
+        for r in orows:
+            m = (r.get("commence_time") or "")[:7]
+            if m:
+                by_month[m].append(r)
+        month_parts = []
+        max_share = 0
+        for m in sorted(by_month):
+            mh, mr, mn, _, _ = _picks_roi(by_month[m])
+            month_parts.append(f"{m}: {mn}N {pct(mh)}")
+            if n_graded and mn / n_graded > max_share:
+                max_share = mn / n_graded
+        months_html = " · ".join(month_parts)
+        flag = ' <span class="b s-LATE">≥60% in one month</span>' if max_share >= 0.6 and len(by_month) > 1 else ""
+
+        settled_trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(sport)}</td>"
+                           f"<td class='num'>{n_graded}</td>"
+                           f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
+                           f"<td class='num'><b>{hit_s}</b></td>"
+                           f"<td class='num'><b>{roi_s}</b></td>"
+                           f"<td class='num muted'>{flat_s}{flag}</td></tr>"
+                           f"<tr><td colspan='7' class='note' style='padding-top:0'>{months_html}</td></tr>")
+
+    settled_html = ('<div class="tablewrap"><table><tr><th>Owner</th><th>Sport</th><th>N</th>'
+                    '<th>Dates</th><th>Hit</th><th>Real-price ROI</th><th>−110 (triage only)</th></tr>'
+                    + "".join(settled_trs) + '</table></div>' if settled_trs
+                    else '<div class="card pad muted">No settled picks yet.</div>')
+
+    body = (f'<div><h1>Picks</h1><p class="lede">Every logged pick from every source, graded from official results. '
+            f'Member handles visible to all members (behind login). No stakes, slip ids or share links.</p></div>'
+            f'<section><div class="row"><h2>Open picks today</h2>{source_info}</div>{open_html}</section>'
+            f'<section><div class="row"><h2>Settled picks</h2>'
+            f'<span class="note">built {fmt_utc(now)}</span></div>{settled_html}</section>')
+    return page("picks.html", "Picks", body, health, now)
+
+
 def build(out, now=None):
     now = now or now_utc()
     health = load_json(ROOT / "status" / "pipeline_health.json")
@@ -579,7 +733,8 @@ def build(out, now=None):
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(tempfile.mkdtemp(prefix=".site-", dir=out.parent))
     pages = {"index.html": build_today(now, health), "health.html": build_health(now, health),
-             "tracking.html": build_tracking(now, health, tmp), "forward.html": build_forward(now, health),
+             "tracking.html": build_tracking(now, health, tmp), "picks.html": build_picks(now, health),
+             "forward.html": build_forward(now, health),
              "archive.html": build_archive(now, health)}
     for name, text in pages.items():
         (tmp / name).write_text(text)
