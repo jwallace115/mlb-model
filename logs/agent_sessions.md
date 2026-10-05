@@ -3770,3 +3770,24 @@ Ending: 99,842
 - PUSHED: 92824aa35 to origin/main.
 - CRON 18:15Z: capture ran clean — "no new official reports" (expected: preseason, no game day). ESPN: 80 items. Exit 0.
 - NOT DONE: NBA-S0d (not started per instruction). Restoring ~/nba_untracked_backup/ files (caller's responsibility).
+
+## 2026-10-05T19:35Z  claude-code (NBA-S0d: B24-B26)
+
+### RETURNED
+- B24: pre_tip chosen on published_utc (was slot time). 43 violations fixed (42 legacy + 1 new-format). 0 violations after. first_tip_utc/tip_source stored. 1 no_tip date (2026-04-11). 7 ESPN vs Odds mismatches > 15 min (IST/ASW). Pushed 0a55f294c.
+- B25: game_asof.parquet: 2,481 games. freeze 2,271 (91.5%), pre_game 210 (8.5%), no_asof 0. 0 violations. 92 fetches. NULL: 2,153/2,160 late games = freeze, 0 sha256 mismatches. 7 exceptions are NBA Cup/play-in. Pushed bbabaff21.
+- B26: roles.status 0 blanks (was 448). Doc corrections: B23 removed=213, B21/22 206 files, B22 2 context_mismatch. 5 tests pass, (i)+(v) FAIL at c19ce5371. Pushed 9332a2a53.
+- Worktree ~/mlb-model-nbaS0d on branch nba/s0d. NOT merged.
+
+### MEANS
+- The injury report archive now has per-game as-of that respects the 30-min pre-tip rule using actual published times, not slot times.
+- Jeff's freeze rule ("per-game cap with the 5:30 report") is implemented and documented. CHECK 3 for the live pilot.
+
+### NOT DONE
+- Merge to main. Work order says do not merge.
+- Parsed parquets for the ~92 newly fetched PDFs are not yet in history_parsed/ (only game_asof references them by sha256).
+- NBA Cup / play-in dates (7 games) have no freeze in roles because they aren't in the regular-season schedule files.
+
+### UNVERIFIED
+- Whether the 92 newly fetched legacy PDFs are byte-identical to what the CDN served during B21 (the CDN might serve updated reports).
+- Whether the 7 non-freeze late-game dates should have freeze reports added to roles.parquet (they're outside the regular-season scope).
