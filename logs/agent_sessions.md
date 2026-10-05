@@ -3759,3 +3759,14 @@ Ending: 99,842
 ### UNVERIFIED
 - Whether the refetch_legacy_reports.py script is idempotent (it skips existing PDFs, but was only run once).
 - Whether any legacy pre_tip report actually differs from the same date's freeze report content-wise (many pre_tip slots are at 17:00, same as freeze).
+
+## 2026-10-05T18:02Z  claude-code (merge nba/s0 into main)
+
+- MERGED: origin/nba/s0 (c19ce5371) into main via `git merge --no-ff`. Merge commit: 92824aa35.
+- CONFLICT: logs/agent_sessions.md (both sides appended). Resolved with `git merge-file --union`. Zero actual conflict markers in resolved file.
+- PREFLIGHT: waited for 17:50 auto-commit to clear staged files. At 18:00 UTC: main confirmed, no MERGE_HEAD, no staged files. 3 untracked docs moved to ~/nba_untracked_backup/.
+- DIVERGENCE: local main had unpushed 17:50 commit; origin had 18:00 dashboard commit. Resolved with `git pull --rebase --autostash`.
+- TESTS: 37/37 passed in nba/pipeline/tests/ (B3, B4, B6, B7, B14 x13, B15 x2, B17, B18 x3, B21 x2, B22 x3). Raw PDFs tracked: 0.
+- PUSHED: 92824aa35 to origin/main.
+- CRON 18:15Z: capture ran clean — "no new official reports" (expected: preseason, no game day). ESPN: 80 items. Exit 0.
+- NOT DONE: NBA-S0d (not started per instruction). Restoring ~/nba_untracked_backup/ files (caller's responsibility).
