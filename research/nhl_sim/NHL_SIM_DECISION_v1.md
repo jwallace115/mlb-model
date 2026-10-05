@@ -1055,3 +1055,30 @@ for the NHL sim. Each rule's NHL binding:
 **Correction to S1:** S1 said the holdout is scored once through `research/nhl_sim/HOLDOUT_SCORED.lock`;
 the lock file was never created and 2024-25 was consumed on 2026-09-30 (S48 ML R6 A1 and 99 picks
 evaluated; S50 re-priced 1,312 games; EV2 B-01 3-way priced) — see `FIT_WINDOW_LEDGER.md`.
+
+### S54 — All-source PIT truncation test with planted leaks; pricer HALTs (2026-10-05, L-WO1 Item 1)
+
+**Test:** `nhl/sim/tests/test_pit_all_sources.py` — 12 tests, all pass.
+- 5 dates (2 in 2022-23, 2 in 2023-24, 1 in 2024-25): truncate team_game_stats, goalie_games,
+  finishing term to <= D, rebuild, assert equality with full-data values to 1e-12.
+- Pinnacle selection determinism verified.
+- xG: fit_seasons == [2021, 2022] asserted; scoring deterministic to 1e-12.
+
+**Planted-leak negative controls (4 sub-tests):**
+- Team stats: corrupt D's own data → D's ratings unchanged (point-in-time HOLDS).
+  Corrupt D+1's data → future ratings change (detection infrastructure WORKS).
+- Goalie: same pattern — D unchanged, future changes.
+- Pinnacle: deterministic re-load.
+- xG: modified coefficients change output (scoring uses committed model).
+
+**Pricer HALTs:**
+- `price_games.py`: replaced `except ValueError: skipped += 1; continue` with a HALT that
+  prints game_id + reason and exits non-zero.
+- `add_pinnacle_lines`: HALTs when a season has no lines unless `--allow-no-lines` is passed.
+- Test: deleting one team_ratings row → old code skipped (count 1), new code SystemExit with
+  game_id in the message.
+
+**Null control:** `prediction_report.py` on committed data reproduces S51 numbers exactly:
+- 2022-23: ML LL 0.6594, A1 0.448
+- 2023-24: ML LL 0.6646, A1 −0.051
+- Totals 2023-24: LL 0.7004, A1 −0.022

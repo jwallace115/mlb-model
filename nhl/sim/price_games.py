@@ -38,9 +38,9 @@ def price_season(season, n_sims, tr, gr, ft, q, base_inp):
 
         try:
             inp = game_inputs_for(gid, tr, gr, ft, q, base_inp)
-        except ValueError:
-            skipped += 1
-            continue
+        except ValueError as e:
+            print(f"HALT: game_inputs_for failed for game_id={gid}: {e}", file=sys.stderr)
+            sys.exit(1)
 
         seed = int(gid)
         r = simulate(inp, n_sims, seed=seed)
@@ -89,10 +89,14 @@ def price_season(season, n_sims, tr, gr, ft, q, base_inp):
     return pd.DataFrame(rows)
 
 
-def add_pinnacle_lines(df, season):
-    """Join Pinnacle totals line."""
+def add_pinnacle_lines(df, season, allow_no_lines=False):
+    """Join Pinnacle totals line. HALTs if no lines found unless --allow-no-lines."""
     pin = load_pinnacle(season)
     if pin.empty:
+        if not allow_no_lines:
+            print(f"HALT: no Pinnacle lines found for season {season}. "
+                  f"Pass --allow-no-lines to proceed without lines.", file=sys.stderr)
+            sys.exit(1)
         df["pin_total_line"] = np.nan
         return df
     df = df.merge(pin[["et_date", "home", "away", "pin_p_home", "pin_total_line"]],
@@ -104,6 +108,8 @@ def main():
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--n-sims", type=int, default=2000)
+    ap.add_argument("--allow-no-lines", action="store_true",
+                    help="Allow pricing seasons with no Pinnacle lines")
     args = ap.parse_args()
 
     tr, gr, ft, q = load_all()
@@ -115,7 +121,7 @@ def main():
     for season in [2022, 2023]:
         print(f"\nPricing season {season}-{season+1}...")
         df = price_season(season, args.n_sims, tr, gr, ft, q, base_inp)
-        df = add_pinnacle_lines(df, season)
+        df = add_pinnacle_lines(df, season, allow_no_lines=args.allow_no_lines)
 
         # Totals over/under/push at Pinnacle's line — EXACT from the total-goals distribution
         has_line = df["pin_total_line"].notna()
