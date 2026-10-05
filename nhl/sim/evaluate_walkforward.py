@@ -100,6 +100,7 @@ def load_data():
 
 def evaluate_ml(df, label=""):
     """Evaluate moneyline performance."""
+    df = df[df["p_h"].notna() & df["home_win"].notna()].copy()
     eng_ll = log_loss(df["p_home_win"], df["home_win"])
     sbro_ll = log_loss(df["p_h"], df["home_win"])
     coef, lo, hi, pval = a1_disagreement(df["p_home_win"].values, df["p_h"].values, df["home_win"].values)
@@ -243,16 +244,20 @@ def evaluate_regimes(df):
     rdf = pd.DataFrame(regime_data)
     df_r = df.merge(rdf, on="game_id", how="left")
 
+    # Filter out games without valid regime data
+    valid = df_r["n_prior_games"].notna() & df_r["h_pen_ratio"].notna() & df_r["p_h"].notna()
+    df_v = df_r[valid].copy()
+
     # Define 8 regimes
     regimes = {
-        "R1_early": df_r["n_prior_games"] <= 10,
-        "R2_mid": (df_r["n_prior_games"] > 10) & (df_r["n_prior_games"] <= 40),
-        "R3_late": df_r["n_prior_games"] > 40,
-        "R4_high_disagree": abs(df_r["p_home_win"] - df_r["p_h"]) > 0.05,
-        "R5_engine_underdog": df_r["p_home_win"] < 0.5,
-        "R6_weak_goalies": (df_r["h_gsax"] < 0) & (df_r["a_gsax"] < 0),
-        "R7_high_5v5_att": (df_r["h_att_ratio"] > 1.02) & (df_r["a_att_ratio"] > 1.02),
-        "R8_high_pen": (df_r["h_pen_ratio"] > 1.05) & (df_r["a_pen_ratio"] > 1.05),
+        "R1_early": df_v["n_prior_games"] <= 10,
+        "R2_mid": (df_v["n_prior_games"] > 10) & (df_v["n_prior_games"] <= 40),
+        "R3_late": df_v["n_prior_games"] > 40,
+        "R4_high_disagree": abs(df_v["p_home_win"] - df_v["p_h"]) > 0.05,
+        "R5_engine_underdog": df_v["p_home_win"] < 0.5,
+        "R6_weak_goalies": (df_v["h_gsax"] < 0) & (df_v["a_gsax"] < 0),
+        "R7_high_5v5_att": (df_v["h_att_ratio"] > 1.02) & (df_v["a_att_ratio"] > 1.02),
+        "R8_high_pen": (df_v["h_pen_ratio"] > 1.05) & (df_v["a_pen_ratio"] > 1.05),
     }
 
     print(f"\n{'='*60}")
@@ -262,7 +267,7 @@ def evaluate_regimes(df):
     family = []
     for rname, mask in regimes.items():
         mask = mask.fillna(False)
-        rd = df_r[mask]
+        rd = df_v[mask]
         if len(rd) < 20:
             print(f"  {rname}: n={len(rd)}, too few")
             continue

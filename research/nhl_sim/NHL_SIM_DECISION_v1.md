@@ -1385,3 +1385,75 @@ parquet's p_home_win on 20 games to max diff 0. **PASS.**
 
 **Engine change:** `GameInputs.ot_base_skaters` added (default=3); engine uses
 `inp.ot_base_skaters` instead of hardcoded 3. For T ≤ 2014, set to 4 (4v4 OT era).
+
+### D8 — Evaluation at SBRO closing prices, pre-registered (2026-10-05, D-WO2 Item 3)
+
+**Join:** game_id (direct match, same NHL API IDs). Per-season unmatched:
+2019: 1 game in SBRO not priced (2019020876, skipped in D7). All other seasons: 0/0.
+Total matched: 10,131 games. Note: this join is by game_id, not a date join, because
+the SBRO file carries NHL event IDs.
+
+**PRE-REGISTRATIONS (written before running):**
+
+(i) Engine ML log-loss within 0.012 of close pooled.
+(ii) Pooled A1 90% CI includes 0 (engine does not beat close — the two-season result).
+(iii) R8 (both teams' penalties-taken > 1.05 × league): ML A1 > 0 with 90% lower > 0.
+
+**RESULTS:**
+
+**Per-season ML (engine LL / SBRO LL / diff / A1 [90% CI]):**
+
+| Season | n | Engine LL | SBRO LL | diff | A1 | 90% CI | p |
+|--------|---:|--------:|---------:|------:|-----:|-------:|------:|
+| 2012-13 | 720 | 0.6767 | 0.6692 | +0.0075 | 0.372 | [-0.341, 1.085] | 0.391 |
+| 2013-14 | 1229 | 0.6757 | 0.6749 | +0.0008 | 0.595 | [0.152, 1.037] | 0.027 |
+| 2014-15 | 1230 | 0.6747 | 0.6649 | +0.0098 | 0.165 | [-0.300, 0.630] | 0.559 |
+| 2015-16 | 1230 | 0.6843 | 0.6774 | +0.0069 | 0.318 | [-0.250, 0.886] | 0.357 |
+| 2016-17 | 1229 | 0.6774 | 0.6671 | +0.0103 | -0.014 | [-0.733, 0.705] | 0.974 |
+| 2017-18 | 1271 | 0.6801 | 0.6681 | +0.0120 | 0.039 | [-0.593, 0.671] | 0.919 |
+| 2018-19 | 1271 | 0.6794 | 0.6726 | +0.0069 | 0.223 | [-0.335, 0.781] | 0.510 |
+| 2019-20 | 1081 | 0.6811 | 0.6794 | +0.0017 | 0.473 | [-0.050, 0.997] | 0.137 |
+| 2020-21 | 867 | 0.6701 | 0.6536 | +0.0165 | -0.112 | [-0.882, 0.658] | 0.812 |
+| **POOLED** | **10128** | **0.6780** | **0.6701** | **+0.0079** | **0.280** | **[0.095, 0.465]** | **0.013** |
+
+**Pre-registration verdicts:**
+
+**(i) Engine ML LL within 0.012 of close:** diff = +0.0079. **HELD.**
+
+**(ii) Pooled A1 90% CI includes 0:** CI = [0.095, 0.465]. **NOT HELD.**
+The pooled A1 coefficient is 0.280 with p=0.013 — the engine DOES add information
+beyond the SBRO close pooled over 9 seasons. This contradicts the two-season result
+(2022-23 + 2023-24: A1 = -0.051, CI includes 0). However, only 1 of 9 individual
+seasons (2013-14) has a significant A1; the pooled significance comes from consistent
+positive direction (7/9 seasons have A1 > 0), not from any single season being strong.
+The most likely explanation: the SBRO close is a weaker calibrated line than Pinnacle
+on these older seasons, and the engine adds marginally over a less-efficient close.
+
+**(iii) R8 high-penalty regime:** A1 = -0.218, CI = [-1.091, 0.656], p = 0.682.
+**NOT HELD.** The coefficient is negative. The prior from 2022-24 (+3.4/+2.9 on
+60-75 games/season) does not replicate on the 2012-2020 walk-forward (593 games).
+
+**16-regime family (BH 10%):**
+- R1_early (0-10 games): n=1507, A1=0.786 [0.307, 1.264] p=0.0069 — **SURVIVES BH**
+- R2_mid (11-40 games): n=4103, A1=0.099, p=0.573
+- R3_late (>40 games): n=4518, A1=0.279, p=0.100
+- R4_high_disagree: n=4583, A1=0.227, p=0.124
+- R5_engine_underdog: n=3099, A1=0.283, p=0.313
+- R6_weak_goalies: n=1411, A1=0.274, p=0.399
+- R7_high_5v5_att: n=1510, A1=0.390, p=0.197
+- R8_high_pen: n=593, A1=-0.218, p=0.682
+- Totals A1 not computable (SBRO totals probabilities unavailable for pre-2022)
+
+**One BH survivor: R1_early (p=0.0069 < threshold=0.0125).** The engine adds
+information in the first 10 games of a season. This is consistent with the
+engine's carry-over prior being more informative than early-season SBRO lines.
+Status: DISCOVERY (from this 9-season pool). Goes to the ledger for CONFIRM
+on 2022-23 + 2023-24 at Pinnacle's close (already priced) — do NOT look at those
+seasons in this order.
+
+**A2 picks (edge ≥ 0.04 vs SBRO close):** 5,538 picks, hit 41.2%, ROI +0.4% (SE 1.7%).
+Season-by-season: ranges from -7.8% to +11.4%. Fav picks +7.1% ROI, dog -0.5%.
+
+**Totals:** engine LL 0.7145 vs coin-flip 0.6931 (no SBRO totals probs available).
+
+Generator: `nhl/sim/evaluate_walkforward.py`.
