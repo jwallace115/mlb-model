@@ -4047,3 +4047,703 @@ corrected to the deployed VM schedule:
 The forward count of reader `nfl_sim_v1_156cd057` starts with the week-4 TNF freeze. D210's pre-registration governs
 it, with the revision rule reading per reader (D219). Checkpoints are at 500 and 1,500 scored two-way legs. At about
 150-175 a week, 500 falls around week 6 or 7.
+
+### D223 — ChatGPT audit #6 adjudicated: the forward experiment is not yet valid; Thursday is a pilot; primary count starts after FWD2 (2026-09-29)
+
+Every one of A1-A7 is confirmed against the code at 145a1fee0:
+- scoring pools readers, no_view rows and game lines, and has no anchor join or bootstrap;
+- the sheet, sim and freeze read inputs separately, and game lines are not capped at the freeze time;
+- the freeze does not compare the usage fingerprint, and a calibration-stamp mismatch does not halt;
+- the reader string is not canonicalized before the revision lookup;
+- matching has no event or player id;
+- the sidecar targets have the wrong sign and it picks the wrong iteration;
+- an inactive player's Under is scored a win.
+
+Cowork's own claims withdrawn:
+- "anchored ⇒ the book's probability" (D209);
+- the London fairness claim (D222);
+- the sidecar and reader-filter acceptance (D218, D222).
+
+Decisions:
+- The week-4 TNF run is `--pilot`.
+- The primary count of reader nfl_sim_v1_156cd057 starts at the first window after FWD2 is verified.
+- v1's physics stay frozen.
+- The primary statistic is the Brier difference on the eligible cohort, with a 50,000-resample whole-game bootstrap;
+  1,500 legs is confirmatory and 500 descriptive.
+- Earlier AI blind-log grades are re-graded under the FWD2 settlement rule.
+
+### D224 — FWD2 Item 0: experiment identity (A3, A4) (2026-09-30)
+
+**(a) FWD_EXPERIMENT_v1.json** (research/nfl_sim/FWD_EXPERIMENT_v1.json): experiment id
+"nfl_fwd_v1", canonical reader "nfl_sim_v1_156cd057", sha256[:16] of 42 files on the
+prediction path (engine.py, anchor.py, params, cal, tables, run_week, names, calibration,
+tables.py, seed_util, usage, ratings, run_forward_v1, log_ai_opinions, all table files).
+Plus usage_fingerprint, python/numpy/pandas versions, N=10000, seed rule, eligible markets,
+eligibility/settlement/scoring rules as text.
+
+Test (test_fwd2_experiment.py:test_experiment_file_hashes): recomputes every hash, fails on
+any change. test_experiment_usage_fingerprint: verifies live == manifest. On 145a1fee0:
+FileNotFoundError (manifest doesn't exist).
+
+**(b) Harness HALTs** (run_forward_v1.py:210-213 check_experiment_manifest): before
+anything is frozen, verifies every file hash in the manifest. Cal-stamp mismatch already
+halts via test_freeze_v1. Zero sim matches: existing fill_sheet assert (line 99).
+
+**(c) Reader canonicalization** (log_ai_opinions.py:282): `reader_model = str(reader_model).strip()`
+before the revision lookup. Cross-week dedup (run_forward_v1.py:53-79 cross_week_check):
+for reader nfl_sim_v1_156cd057, non-pilot, a contract already frozen in ANY week directory
+is refused. Test: test_cross_week_dedup.
+
+### D224a — FWD2 Item 0 fixes: four gaps from Cowork check (2026-09-30)
+
+Cowork check (fwd2_item0_check_2026-09-30.md) found four gaps in D224. All four fixed
+with tests that fail on 9eb505235.
+
+**(1) Cross-week dedup enforced in freeze()** (log_ai_opinions.py:285-316). D224 defined
+`cross_week_check` in run_forward_v1.py but never called it. The check is now inside
+`freeze()` itself, for non-pilot readers, scanning ALL week directories including the
+current one. A duplicate contract raises SystemExit before anything is written.
+`board_root` parameter added to `freeze()` for testability.
+Tests: `test_cross_week_dedup_freeze_different_week`, `test_cross_week_dedup_freeze_same_week`.
+
+**(2) Zero sim matches HALT** (run_forward_v1.py:269-270). D224's claim that `assert
+n_sim_v1 == n_matched` catches zero matches was wrong: 0 == 0 passes. Explicit
+`if n_matched == 0: sys.exit(...)` added after fill_sheet, before dry-run exit.
+Test: `test_zero_matches_halt` (inspect.getsource check + fill_sheet verification).
+
+**(3) Cal-stamp + usage fingerprint check in harness** (run_forward_v1.py:222-232).
+D224 claimed cal-stamp was covered by test_freeze_v1, but test_freeze_v1 checks the
+calibration FILE hash, not the calibration STAMP (_check_calibration_stamp, which
+compares engine+usage fingerprints). Harness now imports and calls both, HALTs on
+mismatch.
+Tests: `test_cal_stamp_check_in_harness`, `test_cal_stamp_tampered_usage`.
+
+**(4) Whitespace reader refused by freeze()** (log_ai_opinions.py:282-283 strip +
+285-316 dedup). D224's test_reader_whitespace_refused asserted
+`padded.strip() == canonical` — a tautology that never called freeze(). The new test
+calls freeze() with `" nfl_sim_v1_156cd057 "` after a canonical freeze of the same
+contract; the strip makes it a duplicate, and the cross-week dedup refuses it.
+Test: `test_whitespace_reader_refused_by_freeze`.
+
+### D225 — FWD2 Item 1: immutable run bundle at cutoff T (A2, A5, Q2, Q7) (2026-09-30)
+
+**(a) build_bundle()** (run_forward_v1.py:43-229). At the start of each run, fixes
+T = now (or --as-of in a pilot) and a run_id = T formatted as ISO. Writes to
+`week=2026_WW/sim_runs/<run_id>/`:
+- `events.parquet`: event list with event_id, team names, game_id (away_abbr@home_abbr)
+- `props.parquet`: Hard Rock props, newest pull <= T per event, from archive + manual/
+- `lines.parquet`: Hard Rock game lines, newest snapshot <= T
+- `freshness.json`: cutoff_T, max week of team_ratings/tendencies/usage, kicker status
+- `bundle_manifest.json`: sha256 of each file, pilot flag, publication_utc (added after freeze)
+
+**(b) Fixed newest_inputs** (log_ai_opinions.py:165-181). Previously took the newest
+lines file regardless of `now`; now filters `snap_t <= now` to respect cutoff T.
+
+**(c) Event-scoped matching in fill_sheet** (run_forward_v1.py:283-360). Match key changed
+from `(player_name, market_key, line)` to `(game_id, player_name, market_key, line)`.
+game_id comes from the bundle's event_game_map (event_id -> `away_abbr@home_abbr`).
+A probability from one event can never match another.
+Test: `test_fill_sheet_cross_event_refused` — the A5 counterexample (week-2-into-week-4).
+
+**(d) Quote-age rule** (run_forward_v1.py:167-172). HALT if any event's newest props pull
+is older than 3h at T. Pilot may override with --allow-stale-quotes (recorded in bundle).
+
+**(e) Publication-time guard** (run_forward_v1.py main). HALT if freeze wall-clock >=
+first kick in the window. Publication time recorded in bundle_manifest separately from T.
+
+**(f) main() restructured** around the bundle: build bundle -> build sheet from bundle's
+props+lines -> sim with --as-of T -> fill_sheet with event_game_map -> freeze.
+
+### D226 — FWD2 Item 2: the anchor record (A6) (2026-09-30)
+
+**(a) anchor_sidecar with actual market targets** (run_forward_v1.py:371-410).
+The previous version accepted `lines={}` and used the fallback `anch_m - err_m` to
+reconstruct the target spread/total. This gave wrong values: CAR@ATL -3.0/43.5 came
+out -3.2572/43.9996. Now `anchor_sidecar` requires the actual `lines` dict and HALTs
+(SystemExit) if a game has no entry. Columns renamed: `spread` -> `target_spread`,
+`total_line` -> `target_total`.
+Test: `test_anchor_sidecar_actual_targets` — CAR@ATL targets = -3.0/43.5 exactly.
+Test: `test_anchor_sidecar_halts_without_lines` — empty dict raises SystemExit.
+
+**(b) lines_dict_from_bundle()** (run_forward_v1.py:232-252). Extracts
+`{game_id: {"spread": ..., "total": ...}}` from the bundle's `lines.parquet` +
+`events.parquet` for the actual market values used.
+
+**(c) Sidecar mandatory, written to bundle before freeze** (run_forward_v1.py main).
+The anchoring log must exist; main() HALTs without it. The sidecar is written to
+`bundle_dir/anchor_sidecar.parquet` before the freeze, then also copied to the
+opinions dir for backward compat.
+
+### D227 — FWD2 Item 3: eligibility, settlement, scoring (A1, A7, Q3) (2026-09-30)
+
+**(a) Settlement — player participation check** (log_ai_opinions.py:416-445).
+`_game_actuals` now returns a `participants` set of all player_ids appearing in
+any play of the game. `_first_side_won` checks whether the resolved player_id is
+in the set; if not, returns None (VOID, Hard Rock's rule) instead of treating as 0.
+`score()` now produces a `settlement` column: settled / void / unresolved.
+Test: `test_inactive_player_void` — inactive player's Under is VOID, not a win.
+Test: `test_active_player_zero_receptions` — active player with 0 rec scores normally.
+
+**(b) Primary cohort predicate** (log_ai_opinions.py:618-663 `primary_cohort`).
+One predicate, one function. Filters: reader == canonical, non-pilot, revision 0,
+tag sim_v1, two_way, market in {player_receptions, player_rush_attempts}, game
+anchored per bundle sidecar, settled (not void/unresolved). Reports every exclusion
+by reason.
+Test: `test_cohort_excludes_wrong_reader`, `test_cohort_excludes_unanchored_game`.
+
+**(c) Primary statistic** (log_ai_opinions.py:666-706 `primary_statistic`).
+Δ = mean[(p-y)² - (q-y)²] with q = de-vig. Whole-game bootstrap, 50,000 resamples,
+seed 20261004. Verdict: superior (ci_hi < 0), inferior (ci_lo > 0), inconclusive.
+500 legs descriptive, 1,500 confirmatory.
+
+**(d) FWD_EXPERIMENT_v1.json re-stamped** (last step). Updated file hashes for
+run_forward_v1.py and log_ai_opinions.py. All 31 tests pass including
+test_experiment_file_hashes.
+
+### D228 — Cowork verification of FWD2: not merged; the live path HALTs, the main() tests read source text, participation voids real Unders (2026-09-30)
+
+FWD2 (eng/fwd2 @ fd0a2a5c6) is not merged.
+
+What stands:
+- cross-week refusal inside freeze();
+- the zero-match and calibration-stamp/usage HALTs;
+- the run bundle at T;
+- game-keyed matching;
+- sidecar targets from the lines used;
+- the cohort and statistic functions.
+
+Defects:
+- A live run HALTs at the sheet step (`--as-of` without `--pilot`, reproduced).
+- freeze() rebuilds its sheet from the tape instead of the bundle, with no window, and no price comparison.
+- The main() tests are `inspect.getsource` string checks.
+- Participation comes from the PBP player-id columns, so an active player with no touches is VOID.
+- The cohort and statistic are not wired into scoring, and the anchor join passes silently without a sidecar.
+- Freshness only warns.
+- run_week is not event-restricted.
+- The re-grade, the runbook and the dry run were not done.
+
+Next: FWD2b. Acceptance is on real data: a completed week-3 pilot freeze through main(), and a completed week-4 live
+dry run. The TNF start window holds only if FWD2b is verified by Thu 10-01 20:00Z.
+
+### D229 — FWD2b Item 0: harness runs in-process on the bundle, live and pilot (2026-09-30)
+
+**(a) main(argv=None, root=None, run_week_fn=None)** (run_forward_v1.py:453). All paths
+derive from `root`; module-level globals (PROPS_DIR, LINES_DIR, BOARD_ROOT,
+EXPERIMENT_MANIFEST) overridden when root is provided. run_week_fn defaults to
+_default_run_week which calls run_week.py via subprocess.
+
+**(b) Sheet and freeze IN-PROCESS** (run_forward_v1.py:534-630). build_sheet() from
+log_ai_opinions called directly with bundle props and lines — no subprocess to the CLI.
+freeze() called directly with the sheet, filled, and board_root. The "--as-of requires
+--pilot" rule in the CLI no longer blocks a live run.
+
+**(c) Price validation** (run_forward_v1.py:558-566). After fill_sheet, price_first,
+price_second, and source_utc are compared between the sheet (from bundle) and filled.
+Any mismatch HALTs.
+
+**(d) run_week --lines-json and --games** (run_week.py:911-926). When --lines-json is
+provided, run_week skips the tape read entirely. --games restricts to specific game_ids.
+The bundle's lines dict and event list are passed directly.
+
+**(e) Freshness HALTs** (run_forward_v1.py:523-529). build_bundle records max_week in
+freshness.json; main() HALTs (not warns) if any of team_ratings, tendencies, usage has
+max_week < week - 1 for season 2026.
+
+**(f) All inspect.getsource tests replaced** with execution-based tests in
+test_fwd2b_harness.py (7 tests) and updated fixtures in test_fwd2_item0_fixes.py,
+test_fwd2_bundle.py, test_fwd2_anchor.py, test_fwd2_settlement.py. Every test calls
+main() or the function under test. Pre-existing test_forward_v1 fixtures updated to
+include game_id in picks_log rows.
+
+test_freeze_v1: 4 passed. Full suite: 40 passed.
+
+### D230 — FWD2b Item 1: settlement via snap counts, score-experiment CLI (2026-09-30)
+
+**(a) Snap-count participation** (log_ai_opinions.py:381-401 `_load_snap_participants`).
+nflreadpy `load_snap_counts([season])` -> `{game_id: {player_names}}` where
+offense_snaps + st_snaps > 0 = played. Replaces the PBP player-id participants rule.
+`_first_side_won` takes `snap_played` parameter: True (settled), False (VOID), None
+(snap data unavailable = unresolved).
+
+**(b) Tests:** `test_wr_with_snaps_zero_targets_settled_win` (snap_played=True, 0 rec ->
+Under wins, settled); `test_player_absent_from_snaps_void` (snap_played=False -> None);
+`test_game_no_snap_data_unresolved` (snap_played=None -> stat scoring proceeds).
+`test_snap_participants_loaded` verifies nflreadpy returns data for 2026.
+
+**(c) Frozen rows gain run_id** (log_ai_opinions.py freeze(), run_forward_v1.py). New
+files only; existing files untouched. run_id from the bundle's freshness.json.
+
+**(d) score-experiment CLI** (log_ai_opinions.py:758-911 `score_experiment`). Pools ALL
+week directories for the canonical reader; runs primary_cohort (predicate printed with
+exclusion counts) and primary_statistic (Δ, 95% CI, verdict, n legs, n games). P2:
+units at frozen HR price, |p-q| > 0.08, settled only. Breakouts by market, week, gap
+bucket. `--file` scores one file regardless of revision, labelled as diagnostic.
+
+test_freeze_v1: 4 passed. Full suite: 43 passed.
+
+### D231 — FWD2b Item 2: acceptance on real data (2026-09-30)
+
+**(a) Input refresh.** `pull_nflverse_inputs.py`: 6.4s (depth_charts, injuries, rosters).
+`ratings.py`: 7m57s (team_ratings, tendencies, usage to week 3; kickers missing =
+engine_default_fallback). ratings.py overwrote params_v1.json — restored from git
+(FREEZE violation). Freshness: team_ratings/tendencies/usage max_week = 3.
+
+**(b) Week 3 pilot freeze COMPLETED.**
+`run_forward_v1.py --week 3 --pilot --as-of 2026-09-27T16:30:00+00:00 --window-hours 9 --allow-stale-quotes`
+Bundle: 14 events, 947 props, 84 lines. Sheet: 989 lines, 625 two-way. Sim: 14 games,
+14/14 converged, 7m runtime. Matched: 162/625 two-way (130 receptions + 32 rush_attempts).
+Sidecar: 14 games, 0 unanchored (max miss 0.31). Frozen: 989 lines, sha256 946fa056...
+
+**(c) score-experiment (pilot diagnostic).**
+`score-experiment --experiment nfl_fwd_v1 --include-pilot --file <frozen file>`
+Cohort: 0 legs (all excluded: pilot=989, tag!=sim_v1=827, not_settled=989, market not
+eligible=787, not two_way=364). Expected: retroactive pilot with no settlement data.
+
+**(d) Week 4 dry run HALTED (correct).**
+`run_forward_v1.py --week 4 --dry-run --window-hours 60`
+HALT: props pull is 24.5h old (max allowed 3.0h). Correct live-mode behavior.
+
+**(e) Re-grade weeks 2-3.**
+Week 2: 78 rows -> 76 settled, 2 VOID (CJ Daniels, Thomas Fidone anytime_td). Under old
+PBP rule these were settled as losses; under snap counts they're VOID (players not in
+snap data = didn't play). Frozen files untouched.
+Week 3: 2070 rows, 0 graded (PBP/snap data not yet available for week 3).
+
+**Fixes during acceptance:**
+- NaN==NaN comparison in price validation (run_forward_v1.py:570)
+- as_of_ts unbound when --lines-json provided (run_week.py:914)
+- freeze_wall unbound for pilot runs (run_forward_v1.py:638)
+- Pilot runs skip wall-clock >= first-kick check (retroactive testing)
+- params_v1.json restored after ratings.py overwrote it
+
+test_freeze_v1: 4 passed. Full suite: 43 passed.
+
+NOT DONE: week 4 dry run did not complete (correct: stale quotes in live mode).
+UNVERIFIED: week 3 snap count settlement (snap data may lag actual participation).
+
+### D232 — FWD2b Item 3: runbook and stamp (2026-09-30)
+
+**(a) Runbook rewritten** (research/nfl_sim/fwd1_runbook.md) for weeks 4-5.
+Weekday labels in UTC: TNF Fri 10-02 00:15Z; London Sun 10-05 13:30Z; SNF Mon 10-05
+00:20Z; MNF Tue 10-07 00:15Z. Each window has input-refresh commands (pull_nflverse 6s,
+ratings.py ~8min), run command, and latest safe start time (measured: 30s/game).
+London: Jeff's manual props pull command writing to manual/ dir, 10 credits cost.
+
+**(b) FWD_EXPERIMENT_v1.json re-stamped** (last step). File hashes updated for
+run_forward_v1.py, run_week.py, log_ai_opinions.py. All 43 tests pass:
+- test_fwd2b_harness: 7 passed
+- test_fwd2_settlement: 9 passed
+- test_forward_v1: 8 passed
+- test_fwd2_item0_fixes: 7 passed
+- test_fwd2_bundle: 5 passed
+- test_fwd2_anchor: 3 passed
+- test_freeze_v1: 4 passed
+
+### D233 — Cowork verification of FWD2b: bundle harness accepted; live mode never executed, runbook facts wrong, settlement still scores missing data (2026-09-30)
+
+FWD2b (eng/fwd2 @ 3beed7970) is not merged.
+
+What stands:
+- the in-process bundle harness, with price validation, freshness HALTs and event-restricted run_week;
+- execution tests through main();
+- snap-count participation, run_id and score-experiment;
+- a completed real week-3 pilot freeze (14 games, 162 matched, 0 unanchored);
+- measured builder runtimes (6 s / 8 min).
+
+Defects:
+- The "live" test runs --pilot, and no live run has executed.
+- Runbook dates, the London game and the pull command are wrong.
+- ratings.py overwrites params_v1.json.
+- Settlement scores stats when snap data is missing.
+- Participation is matched by name.
+- There is no completed-game check.
+- The week-3 re-grade graded 0 rows, a regression from FWD1b.
+- The pilot diagnostic never produced a Δ.
+
+Next: FWD2c. The TNF gate is Thu 20:00Z.
+
+### D234 — FWD2c Item 0: live mode, proven (2026-09-30)
+
+**(a) Live tests.** test_pilot_fixture_freeze (renamed from test_live_freeze_completes).
+test_live_freeze_no_pilot: main() with NO --pilot, NO --as-of, kick = now + 2h, pull =
+now − 30 min. Frozen rows have pilot==False and canonical reader. Prices match bundle.
+test_live_stale_quotes_halt: 4h-old quotes HALT on quote age, nothing frozen.
+
+**(b) --allow-stale-quotes with --dry-run** (run_forward_v1.py:480). Allowed with
+--pilot OR --dry-run, never a live freeze. build_bundle quote-age check updated.
+
+**(c) Week 4 dry run COMPLETED** (live mode, no --pilot).
+`run_forward_v1.py --week 4 --dry-run --window-hours 60 --allow-stale-quotes`
+Bundle: 1 event (PIT@CLE), 64 props, 6 lines. Sheet: 67/42 two-way. Sim: 1/1 converged,
+21s. Matched: 11/42 (9 rec + 2 rush). Sidecar: 0 unanchored. Tags: no_view 56, sim_v1 11.
+
+test_freeze_v1: 4 passed.
+
+### D235 — FWD2c Item 1: params safety and runbook from the tape (2026-09-30)
+
+**(a) ratings.py --write-params** (ratings.py:936-938). Default run skips params write.
+Only `--write-params` overwrites params_v1.json.
+
+**(b) make_runbook.py** (research/nfl_sim/make_runbook.py). Reads nflverse schedule for
+weeks 4-5. Prints every kick window with UTC/ET times, games from the schedule, run
+command, latest safe start (measured runtime), VM props slot age, and manual pull command
+when the slot is > 3h old. Input refresh is once a week (Wednesday). The runbook is the
+script's output.
+
+**(c) build_bundle reads manual/scratch_*.parquet** (test_bundle_reads_manual_scratch).
+_load_props_at_T globs `manual/*.parquet`; a scratch file newer than the archive is taken.
+
+test_freeze_v1: 4 passed.
+
+### D236 — FWD2c Item 2: settlement for every reader (2026-09-30)
+
+**(a) snap_played=None → UNRESOLVED** (log_ai_opinions.py:478). No stat scored when
+snap data is unavailable for the game.
+
+**(b) ID-based participation** (log_ai_opinions.py:537-549). GSIS ID → PFR ID via
+nflverse roster crosswalk (_build_gsis_to_pfr). Name match only when no ID available.
+
+**(c) Completed-game check** (log_ai_opinions.py:401). _game_actuals returns None for
+games without "END GAME" in PBP desc.
+
+**(d) Week 3 re-grade fix.** PBP file was stale (weeks 1-2 only). Refreshed from
+nflreadpy (now weeks 1-3). Week 3: 2025 settled, 40 VOID, 5 unresolved.
+Week 2: 76 settled, 2 VOID.
+
+**(e) score-experiment --file diagnostic.** Δ = +0.0148, 162 legs, 14 games,
+95% CI [-0.0039, +0.0341], verdict inconclusive. P2 (|p-q|>0.08): 103 legs,
+units = +2.26. (Cowork's FWD1b: Δ +0.0157, n=174.)
+
+Tests: test_inactive_no_snap_data_unresolved (snap_played=None → UNRESOLVED);
+test_suffix_name_settles_by_id (GSIS→PFR crosswalk for suffixed names);
+test_incomplete_game_unresolved (no END GAME → None).
+
+test_freeze_v1: 4 passed. Full suite: 49 passed.
+
+### D237 — FWD2c Item 3: stamp and summary (2026-09-30)
+
+FWD_EXPERIMENT_v1.json re-stamped. No hash changes needed (already current).
+
+**49 tests pass** across 7 test files:
+- test_freeze_v1: 4 (engine_fp, table_hashes, calibration, params)
+- test_fwd2b_harness: 10 (pilot_fixture, live_no_pilot, stale_quotes, pilot_as_of, price_altered, stale_ratings, zero_matches, usage_fp, wall_clock, manual_scratch)
+- test_fwd2_settlement: 12 (inactive_void, active_zero, cohort_wrong_reader, cohort_unanchored, settlement_exists, snap_loaded, wr_snaps, absent_void, no_snap_unresolved, inactive_no_snap, suffix_by_id, incomplete_game)
+- test_forward_v1: 8
+- test_fwd2_item0_fixes: 7
+- test_fwd2_bundle: 5
+- test_fwd2_anchor: 3
+
+`git diff --stat origin/main...HEAD`: 16 files, +3,095 −192.
+
+### D238 — Cowork verification of FWD2c: accepted and merged; the primary forward count of nfl_fwd_v1 starts at week-4 TNF (2026-09-30)
+
+FWD2c (eng/fwd2 @ bcbd8f494) is accepted, and eng/fwd2 (D223-D237) is merged to main.
+
+What was verified:
+- A true live test (no --pilot, no --as-of) completes a freeze with canonical rows and bundle prices.
+- A real week-4 live dry run completed.
+- params_v1.json is written only with --write-params.
+- Settlement uses snap counts by GSIS→PFR id, with unresolved for missing snaps or an incomplete game.
+- The week-3 re-grade settles 2,025 rows.
+- The pilot diagnostic gives Δ +0.0148 (n=162; CI −0.0039 to +0.0341).
+- 55 tests pass on Linux.
+
+The ChatGPT audit's A1-A7 are addressed.
+
+The primary count of experiment nfl_fwd_v1 (reader nfl_sim_v1_156cd057, FREEZE_v1 physics) starts at the week-4 TNF
+window: PIT@CLE, run at 23:30Z Thu 10-01. Before it:
+- inputs are refreshed once on ~/mlb-model;
+- test_freeze_v1 passes;
+- a TNF dry run completes.
+
+Open before Sunday (FWD2d):
+- make_runbook.py's day-specific VM slots;
+- splitting London (manual pull, about 12:45Z) from the main slate (about 16:15Z);
+- the stale refresh note.
+
+run_week's tag-precedence props loader affects coverage only.
+
+### D240 — ChatGPT audit #7 adjudicated: D238's acceptance of A1-A7 was wrong; FWD3 fixes the freeze-side and scoring-side defects before the first primary freeze (2026-09-30)
+
+At 0792fd122, A4 is FIXED, and A1, A2, A3, A5, A6 and A7 are PARTIAL.
+
+Confirmed defects:
+- `score_experiment` accepts an altered frozen file and an unregistered experiment name, has a no-op run_id join, lets
+  another run's anchor status leak in, aborts on pilot-only weeks, and gives a verdict on one leg;
+- the bundle can be replaced, does not preserve the ratings, usage or roster inputs, and leaves the sidecar unhashed;
+- run_week writes to a shared weekly directory;
+- actuals.py, which grading uses, is not hashed;
+- grading selects games by team pair;
+- a crosswalk miss becomes VOID;
+- the sidecar picks the minimum-error iteration instead of the solver's returned one;
+- game-line freshness is not checked;
+- the publication check runs before the write.
+
+Tests: eight mutations survived, one per test file.
+
+Cowork's D238 acceptance is withdrawn.
+
+Freeze-side defects must be fixed before the first primary freeze, and scoring-side defects before the first scoring.
+FWD3 does both. The primary count starts at the first window after FWD3 is verified: TNF only if that is by
+Thu 15:00Z, otherwise Sunday or week 5.
+
+### D241 — the run record is complete, exclusive and immutable (freeze side) (2026-09-30)
+
+(a) build_bundle REFUSES an existing run directory (no exist_ok): run_forward_v1.py:110.
+(b) Prediction inputs (8 ratings files + 3 pbp files) are copied into `<run-dir>/inputs/` and hashed:
+    run_forward_v1.py:232-251. run_week writes outputs into `<run-dir>/outputs/` via --run-dir, never into
+    the shared weekly directory.
+(c) Game-line freshness: the anchoring line snapshot must be at most 3h old at T (same rule as props):
+    run_forward_v1.py:184-191.
+(d) The sidecar is written into the run directory and hashed. The weekly anchor_sidecar_sim_v1.parquet is
+    no longer written: run_forward_v1.py:641-646.
+(e) Publication is atomic: take wall clock immediately before write (run_forward_v1.py:656-660), write
+    publication_utc into every frozen row and the manifest (run_forward_v1.py:672-678). A write that
+    completes after the kick is quarantined (run_forward_v1.py:680-693).
+(f) The bundle manifest hashes every file in the run directory (run_forward_v1.py:257-266). verify_bundle()
+    detects any tampering (run_forward_v1.py:302-320).
+
+### D242 — the anchor state the solver returned (2026-09-30)
+
+run_week writes anchor_returned.parquet (run_week.py:1043-1055): per game, the values run_anchored_chunked
+RETURNS — iterations, converged, anch_m, anch_t — plus target_spread and target_total. The sidecar reads
+that file (run_forward_v1.py:700-704). Never minimise over the log.
+
+Audit #7 A5 counterexample: solver returns iteration 2, converged, -0.7/39.3 against 0/40. The old sidecar
+picked iteration 1 (-1.1/40, min |err_m|+|err_t|) and classified the game unanchored. Now records iteration 2,
+anchored=True (miss_m=0.7, miss_t=0.7, both <= 1.0).
+
+### D243 — scoring integrity (2026-09-30)
+
+(a) score_experiment validates experiment name against FWD_EXPERIMENT_v1.json (log_ai_opinions.py:854-857).
+    Verifies every frozen file and bundle hash before grading. Selects canonical, non-pilot, revision-0 rows
+    for the season BEFORE grading. Skips weeks with no eligible rows.
+(b) Anchor join: sidecar loaded by run_id from bundle directories only (no legacy weekly sidecar).
+(c) Exact-event grading: _event_to_game_id maps event_id to game_id via nflverse schedule for the specific
+    (season, week). A week-3 game with the same pair does NOT match a week-4 opinion.
+(d) Crosswalk missing or ambiguous identity -> UNRESOLVED, never VOID (log_ai_opinions.py:609-612).
+    Only "id resolved AND absent from snap counts" is VOID.
+(e) Bootstrap clusters by event_id (log_ai_opinions.py:808-814). Checkpoint policy: <500 -> descriptive
+    only; 500 -> descriptive report; 1500 -> one confirmatory verdict.
+(f) actuals.py added to FWD_EXPERIMENT_v1.json file_hashes and grading section. Seed description corrected
+    to match anchor.py:175: stable_seed((home, away, season, week, 42)).
+(g) CLI works from repo root: sys.path.insert at module top (log_ai_opinions.py:47).
+
+### D244 — tests, stamp, and real acceptance (2026-09-30)
+
+75 tests pass (0 fail). FWD_EXPERIMENT_v1.json re-stamped once with all current hashes.
+
+Real runs:
+- (i) Week-4 dry run completed (PIT@CLE, 11 sim_v1, anchored).
+- (ii) Week-3 pilot froze 357 lines (14 games, all anchored, 162 matched). Same command refused
+  (run directory exists). inputs/ not committed (3 files > 2MB).
+- (iii) score-experiment: 0 eligible legs (all pilot), no verdict. Diagnostic on the pilot:
+  Delta=+0.012, CI [-0.019, +0.051], inconclusive, P2 units=-1.22. NOT evidence.
+
+See research/nfl_sim/fwd3_acceptance_2026-09-30.md.
+
+### D245 — Cowork verification of FWD3: freeze side accepted; the scoring anchor join is still unimplemented; four surviving mutations; not merged (2026-09-30)
+
+FWD3 (eng/fwd3 @ 735374bf1) is not merged.
+
+Accepted, freeze side:
+- the run directory cannot be reused;
+- inputs are copied and hashed into it, and outputs are confined to it;
+- stale lines HALT;
+- a write after the kick is quarantined;
+- the sidecar reads the solver's returned state.
+
+Accepted, scoring side:
+- an unregistered experiment HALTs;
+- grading uses the exact event;
+- a crosswalk miss is unresolved;
+- the checkpoint policy applies;
+- actuals.py is hashed.
+
+Not accepted:
+- primary_cohort still pools anchored game names across runs and skips the check when no sidecar exists. Both audit
+  counterexamples still pass, reproduced by Cowork.
+- Four mutations survive the 79 tests: the line cutoff, the pre-write publication halt, the run_week --lines-json
+  call, and bootstrap resampling.
+- The frozen file and bundle manifest are rewritten after the freeze, and no digest is on the rows.
+
+Next: FWD4. TNF is primary only if FWD4 is verified by Thu 15:00Z.
+
+### D246 — the anchor join and the record written once (2026-09-30)
+
+(a) Anchor join on (run_id, event_id):
+- `anchor_sidecar()` now carries `event_id` (from the bundle's events) and `run_id` on every row.
+- `primary_cohort()` joins each candidate row on (run_id, event_id) — exactly one sidecar row per
+  pair. Missing -> excluded ("no sidecar match"); duplicate -> HALT (SystemExit). `anchored` comes
+  only from the joined row; no pooling across runs.
+- `score_experiment()` calls `verify_bundle()` on every sidecar's run directory BEFORE loading
+  sidecar data. Verifies frozen rows' `bundle_digest` against actual `bundle_manifest.json` at
+  grading time — HALT on mismatch.
+
+(b) Written once:
+- The frozen parquet is written ONCE by `freeze()`. No rewrite after.
+- `publication.json` in `<run-dir>/` records `{publication_utc, frozen_file, frozen_sha256}`, written
+  after the freeze. The ai_opinions manifest entry gets `publication_utc` without rewriting the
+  frozen file.
+- `bundle_manifest.json` is finalized BEFORE the freeze and never rewritten (no publication_utc in it).
+- Every frozen row carries `bundle_digest` = sha256(final bundle_manifest.json) and
+  `experiment_digest` = sha256(FWD_EXPERIMENT_v1.json), computed before the freeze.
+- `validate()` carries digest columns through the merge.
+
+9 tests (test_fwd4_item0.py): 8 fail on 735374bf1, 1 (altered frozen file) documents existing
+verify() path. 48 total pass, 0 regressions.
+
+### D247 — the surviving mutations must die (2026-09-30)
+
+Four mutation tests (test_fwd4_item1.py), each kills its named mutation:
+
+1. **Line cutoff** (`if snap_utc <= T` -> `if True`): `test_line_cutoff_rejects_post_T_snapshot` — a
+   fixture adds a post-T snapshot; the mutant loads it, the real code does not.
+2. **Pre-write publication halt** (remove the `pre_write_wall >= first_kick` check):
+   `test_pre_write_publication_halt` — controlled clock (FakeDatetime) returns kick-5min for T,
+   kick+1s at the pre-write check. Only the pre-write check catches this (freeze uses T < kick).
+3. **run_week --lines-json** (drop `--lines-json` from `_default_run_week` argv):
+   `test_run_week_includes_lines_json_games_run_dir` — monkeypatch subprocess.run, assert argv
+   contains --lines-json, --games, --run-dir.
+4. **Bootstrap resampling** (independent-leg instead of whole-game):
+   `test_bootstrap_whole_game_resampling` — 4 games x 3 legs, within-game perfectly correlated,
+   across-game mixed-sign. Whole-game CI is wide (inconclusive); independent-leg CI is narrower.
+
+46 total tests pass (42 prior + 4 new), 0 regressions.
+
+### D248 — Cowork verification of FWD4: accepted pending a test-only fix; the (run_id, event_id) anchor join works; every named mutation is caught (2026-09-30)
+
+FWD4 (eng/fwd3 @ 0b6d94a58) is accepted, conditional on FWD4b.
+
+Verified:
+- primary_cohort joins on (run_id, event_id): a cross-run leak is excluded, a missing sidecar is excluded and counted
+  (accepted in place of HALT), and a duplicate HALTs.
+- The frozen file is written once.
+- The bundle manifest is finalized before the freeze.
+- bundle_digest and experiment_digest are on the rows.
+- Publication is in publication.json.
+- All ten Cowork mutations are caught.
+
+Defect: two older cohort tests call the old signature. 88 of 90 pass, not "0 regressions" as reported.
+
+After FWD4b and a green full suite, eng/fwd3 (D240-D249) merges. The primary count of nfl_fwd_v1 starts at the
+week-4 TNF window (run 23:30Z Thu 10-01), provided the merge is on main by Thu 15:00Z.
+
+### D249 — stale cohort tests updated to the (run_id, event_id) join (2026-09-30)
+
+Two tests in test_fwd2_settlement.py called `primary_cohort(df, reader)` with the old signature
+(no sidecar). Updated to `primary_cohort(df, reader, sidecar)` with (run_id, event_id) on both
+opinion rows and sidecar rows.
+
+test_cohort_excludes_wrong_reader: sidecar has matching (run_id, event_id) with anchored=True;
+the row is still excluded because its reader_model is wrong.
+
+test_cohort_excludes_unanchored_game: sidecar has TWO rows for the same event_id under different
+run_ids — run_B anchored=True (listed first), run_A anchored=False. The opinion row belongs to
+run_A. Asserts the row is excluded (run_B's status does not leak). With a mutant that joins on
+event_id only, the test fails (run_B's True leaks through drop_duplicates).
+
+Proof:
+(a) Mutant (event_id-only join): test_cohort_excludes_unanchored_game FAILED —
+    "assert 1 == 0 … unanchored game should be excluded". Reverted.
+(b) test_freeze_v1: 4 passed.
+(c) Full forward suite (13 files): 88 passed, 0 failed, 0 skipped.
+
+No non-test files changed. FWD_EXPERIMENT_v1.json not re-stamped (0 "tests/" entries hashed).
+
+### D250 — FWD4b accepted; merging eng/fwd3 is blocked until the experiment's logger is decoupled from the shared NHL/NFL logger (2026-09-30)
+
+FWD4b is accepted:
+- test-only;
+- 88 passed, 0 failed, reproduced;
+- the run_id and reader mutations are caught.
+
+Cowork's "92" expectation and D248's "88 passed, 2 failed" were wrong. The parent was 86 passed, 2 failed.
+
+eng/fwd3 is NOT merged as-is. Main's NHL work (H3-H5) changed the experiment-hashed `nfl/pipeline/log_ai_opinions.py`
+by +558/−67. A merge would put unaudited code into the experiment's freeze and scoring path. It fails the hash test and
+three freeze-message tests.
+
+FWD5 pins the experiment's logger instead:
+- `nfl/sim/fwd_v1_logger.py` becomes a byte-identical copy of the verified eng/fwd3 version (sha256 cf100675bd385ca5);
+- the harness and the forward tests import it;
+- the manifest hashes it in place of the shared file, which returns to the NHL/NFL-AI sessions unhashed.
+
+The TNF gate is unchanged: FWD5 must be verified and merged by Thu 10-01 15:00Z, or TNF runs `--pilot`.
+
+### D251 — pin the experiment's logger before merging (2026-09-30)
+
+(a) `git show ffc3e67dc:nfl/pipeline/log_ai_opinions.py > nfl/sim/fwd_v1_logger.py`
+sha256: cf100675bd385ca5db3c36b25ff9c890e20aae0457f674fc9a2205c7b0557cbc — matches manifest.
+
+(b) run_forward_v1.py :663 and :759 now import from nfl.sim.fwd_v1_logger. grep of all experiment-hashed
+files for "log_ai_opinions": 0 matches (only fwd_v1_logger.py itself contains the string, as its own source).
+
+(c) nfl/sim/tests/: 30 references before, 0 after. All 8 affected test files switched.
+
+(d) FWD_EXPERIMENT_v1.json: key renamed from "nfl/pipeline/log_ai_opinions.py" to "nfl/sim/fwd_v1_logger.py"
+(hash cf100675bd385ca5 unchanged).
+
+Forward list: 87 passed, 1 failed (test_experiment_file_hashes — run_forward_v1.py hash stale; re-stamped in D253).
+test_freeze_v1: 4 passed.
+
+### D253 — proof, stamp, real run (2026-09-30)
+
+(a) Mutations on the PINNED module (nfl/sim/fwd_v1_logger.py), each applied then reverted.
+Behavioural tests that fail (beyond test_experiment_file_hashes):
+- event_id-only anchor join: test_cohort_excludes_unanchored_game, test_run_b_unanchored_excluded,
+  test_duplicate_sidecar_halts.
+- reader filter removed: test_cohort_excludes_wrong_reader, test_run_b_unanchored_excluded.
+- cross-week dedup removed from freeze: test_cross_week_dedup_freeze_different_week,
+  test_cross_week_dedup_freeze_same_week, test_whitespace_reader_refused_by_freeze.
+Dedup removal applied to the SHARED module only: forward list passes (87 passed, 1 hash-only
+failure from pre-stamp state). The pinned tests are fully decoupled from the shared module.
+
+(b) FWD_EXPERIMENT_v1.json re-stamped once. Changed lines:
+- nfl/sim/run_forward_v1.py: 7dc245d9 -> b5e75d86 (import paths changed to fwd_v1_logger)
+- nfl/sim/run_week.py: 9ff6639e -> 1f4e9e0a (code changed on eng/fwd3)
+- nfl/pipeline/log_ai_opinions.py removed, nfl/sim/fwd_v1_logger.py added (same hash cf100675bd385ca5)
+- nfl/sim/actuals.py added (new file on eng/fwd3)
+- seed_rule, grading block, scoring trailing comma: structural additions from FWD3/FWD4
+
+(c) Suites:
+- Forward list: 88 passed, 0 failed (13 files).
+- test_freeze_v1: 4 passed.
+- nfl/pipeline/tests on eng/fwd3: 1 failed, 86 passed, 2 skipped.
+- nfl/pipeline/tests on origin/main: 1 failed, 86 passed, 2 skipped. They match.
+  Common failure: test_score_first_side_and_units (pre-existing).
+
+(d) REAL:
+- Dry run: `python3 nfl/sim/run_forward_v1.py --week 4 --dry-run --window-hours 40 --allow-stale-quotes`
+  completed. PIT@CLE, 70 lines, 43 two-way, 11 matched sim_v1, 1 game anchored (converged in 3 iterations).
+  Run directory: nfl/data/board/week=2026_04/sim_runs/20260930T191349Z (left untracked).
+- Score: `python3 nfl/sim/fwd_v1_logger.py score-experiment --experiment nfl_fwd_v1` returned
+  "0 eligible legs — descriptive only, no verdict." (weeks 2-3 all pilot, week 4 not frozen).
+
+NOT DONE: nothing.
+UNVERIFIED: test_score_first_side_and_units failure is pre-existing on both branches; not investigated here.
+
+### D254 — FWD5 accepted on Cowork's executed checks; eng/fwd3 (D240-D253) merges to main; the primary count of nfl_fwd_v1 starts at week-4 TNF (2026-09-30)
+
+Accepted:
+- `nfl/sim/fwd_v1_logger.py` is the verified logger byte for byte (cf100675bd385ca5). The harness and the forward tests
+  use it, and the manifest hashes it.
+- The shared `nfl/pipeline/log_ai_opinions.py` is no longer part of the experiment.
+- Cowork reproduced:
+  - the forward list at 88/0, on the branch and on the trial merge;
+  - the live path never loading the shared module;
+  - pinned and shared freezes coexisting in one week directory, with both verifies clean and canonical dedup holding
+    through either logger.
+
+Not delivered: item 1's test file and D252. Cowork's executed checks stand in for them. The test file follows after TNF,
+and is not hashed.
+
+The branch replayed main's commits instead of merging. That is kept, and orders merge from now on.
+
+From the first primary freeze until nfl_fwd_v1 ends, `nfl/sim/fwd_v1_logger.py` and every hashed file are locked. NHL
+and AI-reader work continues in the shared logger.
+
+The first primary window is week-4 TNF:
+- PIT@CLE;
+- run at 23:30Z Thu 10-01: `python3 nfl/sim/run_forward_v1.py --week 4 --window-hours 2`;
+- no --pilot.

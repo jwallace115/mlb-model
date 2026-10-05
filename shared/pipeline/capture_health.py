@@ -247,6 +247,29 @@ def check_feeds(data_root=None, now=None):
     return stale
 
 
+SLIPS_WARN_DAYS = 3.0
+
+
+def check_bet_ledger(data_root=None, now=None, warn_days=SLIPS_WARN_DAYS):
+    """Bet-ledger staleness (ops work order 2026-10-03, item 4). The ledger only moves when
+    Jeff downloads a Hard Rock export, drops it in bets/inbox/ and runs
+    shared/pipeline/ingest_hardrock_bets.py. Returns (status, message); status is OK, WARN or
+    ABSENT. A WARN never changes the exit code: a stale ledger is not a broken feed."""
+    data_root = Path(data_root or ROOT)
+    now = now or datetime.now(timezone.utc)
+    sp = data_root / "bets" / "ledger" / "slips.parquet"
+    if not sp.exists():
+        return "ABSENT", "bet_ledger: no bets/ledger/slips.parquet on this host (the ledger is Mac-only)"
+    placed = pd.read_parquet(sp, columns=["placed_local"]).placed_local.max()
+    if pd.isna(placed):
+        return "WARN", "bet_ledger: slips.parquet has no placed_local values"
+    newest = pd.Timestamp(placed).tz_localize("America/New_York").tz_convert("UTC")
+    age_d = (pd.Timestamp(now) - newest).total_seconds() / 86400
+    msg = (f"bet_ledger: newest slip placed {newest:%Y-%m-%d %H:%MZ}, {age_d:.1f} days old (warn > {warn_days:g}); "
+           f"refresh: drop the Hard Rock export in bets/inbox/, run python3 shared/pipeline/ingest_hardrock_bets.py")
+    return ("WARN" if age_d > warn_days else "OK"), msg
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-root", type=Path, default=None,
@@ -257,6 +280,9 @@ def main():
     print(f"capture_health {now.isoformat()}")
 
     stale = check_feeds(data_root=args.data_root, now=now)
+
+    status, msg = check_bet_ledger(data_root=args.data_root, now=now)
+    print(f"  {status:<6} {msg}")
 
     if stale:
         print(f"\nFAIL: {len(stale)} stale feed(s): {', '.join(stale)}")

@@ -6,7 +6,8 @@ Usage:
   python3 nfl/sim/run_forward_v1.py --week 3 [--pilot] [--as-of ...] [--window-hours 9] [--events pit,cle]
 """
 
-import argparse, json, subprocess, sys, tempfile
+import argparse, hashlib, json, os, shutil, subprocess, sys, time
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -25,17 +26,378 @@ FAMILY_TO_MARKET = {
     "rush_attempts": "player_rush_attempts",
 }
 
+EXPERIMENT_MANIFEST = ROOT / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
+PROPS_DIR = ROOT / "data" / "odds_archive" / "nfl" / "props"
+LINES_DIR = ROOT / "data" / "odds_archive" / "nfl" / "line_history"
+BOARD_ROOT = ROOT / "nfl" / "data" / "board"
+BOOK = "hardrockbet_fl"
+QUOTE_MAX_AGE_H = 3.0  # HALT if any event's newest props pull is older than this at T
+
+
+# ── D225: immutable run bundle ───────────────────────────────────────────────
+
+def _parse_utc(s):
+    return datetime.fromisoformat(str(s).replace("Z", "+00:00"))
+
+
+def _load_props_at_T(season, T):
+    """Load HR props with newest pull ≤ T per event, from archive + manual/."""
+    season_dir = PROPS_DIR / f"season={season}"
+    if not season_dir.exists():
+        return pd.DataFrame()
+    files = sorted(season_dir.glob("month=*/data_*.parquet"))
+    manual_dir = season_dir / "manual"
+    if manual_dir.exists():
+        files += sorted(manual_dir.glob("*.parquet"))
+    if not files:
+        return pd.DataFrame()
+    dfs = [pd.read_parquet(f) for f in files]
+    props = pd.concat(dfs, ignore_index=True)
+    props = props[props["bookmaker"] == BOOK]
+    # Only pre-kick pulls that are ≤ T
+    props = props[props["pull_timestamp"].map(_parse_utc) <= T]
+    props = props[props["pull_timestamp"].map(_parse_utc) < props["commence_time"].map(_parse_utc)]
+    # Newest pull per event
+    if props.empty:
+        return props
+    newest = props.groupby("event_id")["pull_timestamp"].transform("max")
+    return props[props["pull_timestamp"] == newest].copy()
+
+
+def _load_lines_at_T(season, T):
+    """Load HR game lines with newest snapshot ≤ T."""
+    season_dir = LINES_DIR / f"season={season}"
+    if not season_dir.exists():
+        raise SystemExit("HALT: no game-line snapshots for the season")
+    snaps = sorted(season_dir.glob("snap_*.parquet"))
+    if not snaps:
+        raise SystemExit("HALT: no game-line snapshots for the season")
+    # Filter snapshots by timestamp in filename or content
+    candidates = []
+    for s in snaps:
+        df = pd.read_parquet(s)
+        if df.empty:
+            continue
+        snap_utc = _parse_utc(df["snapshot_utc"].iloc[0])
+        if snap_utc <= T:
+            candidates.append((snap_utc, df))
+    if not candidates:
+        raise SystemExit("HALT: no game-line snapshot ≤ T")
+    # Take the newest snapshot ≤ T
+    candidates.sort(key=lambda x: x[0])
+    _, lines = candidates[-1]
+    return lines[lines["bookmaker"] == BOOK].copy()
+
+
+def build_bundle(season, week, T, pilot=False, allow_stale_quotes=False,
+                 window_hours=None, event_filter=None, _root=None):
+    """D225: build an immutable run bundle at cutoff T.
+
+    Returns (bundle_dir, bundle_manifest) and writes:
+      - events.parquet (event list for the window)
+      - props.parquet (HR props, newest pull ≤ T per event)
+      - lines.parquet (HR game lines, newest snapshot ≤ T)
+      - freshness.json (input freshness)
+      - bundle_manifest.json (sha256 of every file)
+    """
+    from nfl.sim.names import FULL_TO_ABBR
+
+    run_id = T.strftime("%Y%m%dT%H%M%SZ")
+    bundle_dir = (BOARD_ROOT / f"week={season}_{week:02d}" /
+                  "sim_runs" / run_id)
+    # D241(a): REFUSE an existing run directory — no exist_ok
+    if bundle_dir.exists():
+        raise SystemExit(f"HALT: run directory already exists: {bundle_dir}\n"
+                         f"A run_id can only be used once.")
+    bundle_dir.mkdir(parents=True, exist_ok=False)
+
+    # ── props ──
+    props = _load_props_at_T(season, T)
+    # Only pre-kick events
+    if not props.empty:
+        props = props[props["commence_time"].map(_parse_utc) > T]
+
+    # ── lines ──
+    lines = _load_lines_at_T(season, T)
+    if not lines.empty:
+        lines = lines[lines["commence_time"].map(_parse_utc) > T]
+
+    # ── event list from props + lines ──
+    event_ids = set()
+    event_rows = []
+    for df, label in [(props, "props"), (lines, "lines")]:
+        if df.empty:
+            continue
+        for eid in df["event_id"].unique():
+            if eid in event_ids:
+                continue
+            event_ids.add(eid)
+            row = df[df["event_id"] == eid].iloc[0]
+            home_full = row["home_team"]
+            away_full = row["away_team"]
+            home_abbr = FULL_TO_ABBR.get(home_full, home_full)
+            away_abbr = FULL_TO_ABBR.get(away_full, away_full)
+            event_rows.append({
+                "event_id": eid,
+                "home_team": home_full, "away_team": away_full,
+                "home_abbr": home_abbr, "away_abbr": away_abbr,
+                "game_id": f"{away_abbr}@{home_abbr}",
+                "commence_time": row["commence_time"],
+            })
+    events = pd.DataFrame(event_rows)
+
+    # ── filters ──
+    if event_filter and not events.empty:
+        fr = [x.strip().lower() for x in event_filter.split(",")]
+        mask = events.apply(
+            lambda r: any(x in (r["home_team"] + " " + r["away_team"]).lower() for x in fr),
+            axis=1)
+        events = events[mask]
+        eids = set(events["event_id"])
+        if not props.empty:
+            props = props[props["event_id"].isin(eids)]
+        if not lines.empty:
+            lines = lines[lines["event_id"].isin(eids)]
+
+    if window_hours and not events.empty:
+        hrs = events["commence_time"].map(lambda c: (_parse_utc(c) - T).total_seconds() / 3600)
+        events = events[hrs <= window_hours]
+        eids = set(events["event_id"])
+        if not props.empty:
+            props = props[props["event_id"].isin(eids)]
+        if not lines.empty:
+            lines = lines[lines["event_id"].isin(eids)]
+
+    if events.empty:
+        raise SystemExit("HALT: no pre-kick events in the window")
+
+    # ── quote-age check (props AND lines) ──
+    if not props.empty:
+        props_age = props.groupby("event_id")["pull_timestamp"].first().map(
+            lambda t: (T - _parse_utc(t)).total_seconds() / 3600)
+        oldest = props_age.max()
+        if oldest > QUOTE_MAX_AGE_H and not allow_stale_quotes:
+            raise SystemExit(
+                f"HALT: props pull is {oldest:.1f}h old for event "
+                f"{props_age.idxmax()} (max allowed: {QUOTE_MAX_AGE_H}h). "
+                f"Use --allow-stale-quotes with --pilot or --dry-run.")
+
+    # D241(c): game-line freshness — same 3h rule as props
+    if not lines.empty and "snapshot_utc" in lines.columns:
+        line_age_h = lines.groupby("event_id")["snapshot_utc"].first().map(
+            lambda t: (T - _parse_utc(t)).total_seconds() / 3600)
+        oldest_line = line_age_h.max()
+        if oldest_line > QUOTE_MAX_AGE_H and not allow_stale_quotes:
+            raise SystemExit(
+                f"HALT: game-line snapshot is {oldest_line:.1f}h old for event "
+                f"{line_age_h.idxmax()} (max allowed: {QUOTE_MAX_AGE_H}h). "
+                f"Use --allow-stale-quotes with --pilot or --dry-run.")
+
+    # ── freshness ──
+    freshness = {"cutoff_T": T.isoformat(), "run_id": run_id}
+    # Check ratings max week
+    _r = _root or ROOT
+    ratings_dir = _r / "nfl" / "data" / "sim" / "ratings"
+    for fname, label in [("team_ratings_weekly.parquet", "team_ratings"),
+                         ("tendencies_weekly.parquet", "tendencies"),
+                         ("player_usage_weekly.parquet", "usage")]:
+        fpath = ratings_dir / fname
+        if fpath.exists():
+            rdf = pd.read_parquet(fpath, columns=["season", "week"])
+            max_w = int(rdf[rdf["season"] == season]["week"].max()) if len(rdf[rdf["season"] == season]) else 0
+            freshness[f"{label}_max_week"] = max_w
+        else:
+            freshness[f"{label}_max_week"] = None
+    # Kickers: documented fallback if no 2026 rows
+    kicker_path = ratings_dir / "kicker_weekly.parquet"
+    if kicker_path.exists():
+        kdf = pd.read_parquet(kicker_path, columns=["season"])
+        if season in kdf["season"].values:
+            freshness["kickers"] = "current_season"
+        else:
+            freshness["kickers"] = "engine_default_fallback"
+    else:
+        freshness["kickers"] = "missing"
+
+    # ── write ──
+    events.to_parquet(bundle_dir / "events.parquet", index=False)
+    props.to_parquet(bundle_dir / "props.parquet", index=False)
+    lines.to_parquet(bundle_dir / "lines.parquet", index=False)
+    (bundle_dir / "freshness.json").write_text(json.dumps(freshness, indent=1) + "\n")
+
+    # D241(b): copy and hash every prediction input the sim reads
+    inputs_dir = bundle_dir / "inputs"
+    inputs_dir.mkdir()
+    RATINGS_FILES = [
+        "team_ratings_weekly.parquet", "tendencies_weekly.parquet",
+        "tendencies_situational_weekly.parquet", "qb_ratings_weekly.parquet",
+        "kicker_weekly.parquet", "league_baselines.parquet",
+        "player_usage_weekly.parquet", "active_universe_weekly.parquet",
+    ]
+    for fname in RATINGS_FILES:
+        src = ratings_dir / fname
+        if src.exists():
+            shutil.copy2(src, inputs_dir / fname)
+    # Rosters (run_week.py:984 via names.load_roster)
+    pbp_dir = _r / "nfl" / "data" / "pbp"
+    for fname in ["rosters_weekly.parquet", "depth_charts.parquet", "injuries.parquet"]:
+        src = pbp_dir / fname
+        if src.exists():
+            shutil.copy2(src, inputs_dir / fname)
+
+    # ── sha256 manifest — hashes EVERY file in the run directory ──
+    manifest = {}
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if fpath.is_file() and fpath.name != "bundle_manifest.json":
+            rel = str(fpath.relative_to(bundle_dir))
+            manifest[rel] = hashlib.sha256(fpath.read_bytes()).hexdigest()
+    manifest["pilot"] = pilot
+    manifest["allow_stale_quotes"] = allow_stale_quotes
+    (bundle_dir / "bundle_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
+
+    print(f"  Bundle: {bundle_dir.relative_to(_r)}")
+    print(f"  Events: {len(events)}, Props: {len(props)}, Lines: {len(lines)}")
+    for k, v in freshness.items():
+        if k not in ("cutoff_T", "run_id"):
+            print(f"  {k}: {v}")
+
+    return bundle_dir, manifest
+
+
+def lines_dict_from_bundle(bundle_dir):
+    """D226: build {game_id: {"spread": ..., "total": ...}} from the bundle's lines."""
+    from nfl.sim.names import FULL_TO_ABBR
+    lines = pd.read_parquet(bundle_dir / "lines.parquet")
+    events = pd.read_parquet(bundle_dir / "events.parquet")
+    eid_to_gid = dict(zip(events["event_id"], events["game_id"]))
+    result = {}
+    for eid, gdf in lines.groupby("event_id"):
+        gid = eid_to_gid.get(eid)
+        if not gid:
+            continue
+        spreads = gdf[gdf["market"] == "spreads"]
+        totals = gdf[gdf["market"] == "totals"]
+        if spreads.empty or totals.empty:
+            continue
+        # Home team spread: the point for the home team's outcome
+        home_full = gdf["home_team"].iloc[0]
+        home_sp = spreads[spreads["outcome_name"].apply(
+            lambda x: home_full.split()[-1] in str(x) if x else False)]
+        spread = -float(home_sp["point"].iloc[0]) if not home_sp.empty else None
+        over = totals[totals["outcome_name"] == "Over"]
+        total = float(over["point"].iloc[0]) if not over.empty else None
+        if spread is not None and total is not None:
+            result[gid] = {"spread": spread, "total": total}
+    return result
+
+
+def _finalize_bundle_manifest(bundle_dir):
+    """D241(f): re-hash every file in the run directory into the manifest."""
+    manifest = {}
+    for fpath in sorted(bundle_dir.rglob("*")):
+        if fpath.is_file() and fpath.name != "bundle_manifest.json":
+            rel = str(fpath.relative_to(bundle_dir))
+            manifest[rel] = hashlib.sha256(fpath.read_bytes()).hexdigest()
+    # Preserve metadata keys
+    old = bundle_dir / "bundle_manifest.json"
+    if old.exists():
+        prev = json.loads(old.read_text())
+        for k in ("pilot", "allow_stale_quotes"):
+            if k in prev:
+                manifest[k] = prev[k]
+    old.write_text(json.dumps(manifest, indent=1) + "\n")
+
+
+def verify_bundle(bundle_dir):
+    """D241(f): verify every file in the run directory against the manifest.
+    Returns list of mismatches (empty = OK)."""
+    # Metadata keys that are NOT file hashes
+    META_KEYS = {"pilot", "allow_stale_quotes", "publication_utc", "cutoff_T",
+                 "experiment_digest", "bundle_digest"}
+    man_path = bundle_dir / "bundle_manifest.json"
+    if not man_path.exists():
+        return ["bundle_manifest.json missing"]
+    manifest = json.loads(man_path.read_text())
+    bad = []
+    for rel, expected in manifest.items():
+        if rel in META_KEYS:
+            continue
+        if not isinstance(expected, str) or len(expected) < 32:
+            continue  # metadata key, not a hash
+        fpath = bundle_dir / rel
+        if not fpath.exists():
+            bad.append(f"missing: {rel}")
+            continue
+        got = hashlib.sha256(fpath.read_bytes()).hexdigest()
+        if got != expected:
+            bad.append(f"hash mismatch: {rel} ({got[:16]} != {expected[:16]})")
+    return bad
+
+
+def check_experiment_manifest(_root=None):
+    """D224(b): HALT if any file hash in the experiment manifest has changed."""
+    import hashlib
+    _r = _root or ROOT
+    m = json.loads(EXPERIMENT_MANIFEST.read_text())
+    for path, expected in m["file_hashes"].items():
+        p = _r / path
+        if not p.exists():
+            raise SystemExit(f"HALT: experiment manifest file missing: {path}")
+        got = hashlib.sha256(p.read_bytes()).hexdigest()[:16]
+        if got != expected:
+            raise SystemExit(f"HALT: experiment manifest hash mismatch: {path} "
+                             f"({got} != {expected}). This is a different experiment.")
+
+
+def cross_week_check(board_root, season, week, reader_model, contracts):
+    """D224(c): refuse a contract already frozen in ANY other week directory.
+
+    contracts: list of (event_id, market_key, player_name, line) tuples.
+    Returns list of (contract, week) for duplicates found.
+    """
+    dupes = []
+    contract_set = set(contracts)
+    for d in sorted(board_root.glob(f"week={season}_*/ai_opinions")):
+        # Skip the current week
+        dir_week = d.parent.name.split("_")[-1]
+        if dir_week == f"{week:02d}":
+            continue
+        manifest_path = d / "manifest.json"
+        if not manifest_path.exists():
+            continue
+        manifest = json.loads(manifest_path.read_text())
+        for entry in manifest:
+            rm = entry.get("reader_model", "legacy")
+            if rm != reader_model or entry.get("pilot", False):
+                continue
+            f = d / entry["file"]
+            if not f.exists():
+                continue
+            try:
+                df = pd.read_parquet(f, columns=["event_id", "market_key", "player_name", "line"])
+            except Exception:
+                continue
+            for _, r in df.iterrows():
+                key = (r["event_id"], r["market_key"], r["player_name"], float(r["line"]))
+                if key in contract_set:
+                    dupes.append((key, d.parent.name))
+    return dupes
+
 
 # ── public helpers (tested directly) ──────────────────────────────────────────
 
-def fill_sheet(sheet_df, picks_log):
-    """D215(a): match picks_log to sheet and set p_first / tag / reason.
+def fill_sheet(sheet_df, picks_log, event_game_map=None):
+    """D215(a)/D225: match picks_log to sheet and set p_first / tag / reason.
 
-    Match key: (player_name, market_key derived from family, line).
+    Match key: (game_id, player_name, market_key derived from family, line).
+    D225: game_id from the bundle's event_game_map prevents cross-event matches.
+    If event_game_map is None, falls back to building game_id from sheet team names.
     picks_log.side: 'over' -> p_first = cal_p; 'under' -> p_first = 1 - cal_p
     (the sheet's first side is always Over for player props).
     More than one match for a key -> raises SystemExit (do not take the first).
     """
+    from nfl.sim.names import FULL_TO_ABBR
+
     filled = sheet_df.copy()
     # D220: all no_view lines carry clip(book, 0.02, 0.98). The validator now accepts this.
     if "imp_first" in sheet_df.columns:
@@ -46,13 +408,22 @@ def fill_sheet(sheet_df, picks_log):
     filled["tag"] = "no_view"
     filled["reason"] = ""
 
-    # Build a lookup from picks_log keyed by (player_name, market_key, line)
+    # Build event_id -> game_id mapping
+    if event_game_map is None:
+        event_game_map = {}
+        for _, r in filled.drop_duplicates("event_id").iterrows():
+            h = FULL_TO_ABBR.get(r["home_team"], r["home_team"])
+            a = FULL_TO_ABBR.get(r["away_team"], r["away_team"])
+            event_game_map[r["event_id"]] = f"{a}@{h}"
+
+    # Build a lookup from picks_log keyed by (game_id, player_name, market_key, line)
     pl_lookup = {}
     for _, r in picks_log.iterrows():
         mk = FAMILY_TO_MARKET.get(r["family"])
         if mk is None:
             continue
-        key = (r["player_name"], mk, float(r["line"]))
+        gid = str(r.get("game_id", ""))
+        key = (gid, r["player_name"], mk, float(r["line"]))
         if key in pl_lookup:
             raise SystemExit(f"HALT: duplicate picks_log key {key}")
         pl_lookup[key] = r
@@ -64,7 +435,8 @@ def fill_sheet(sheet_df, picks_log):
         mk = str(row.get("market_key", ""))
         if mk in GAME_MARKETS:
             continue
-        key = (row["player_name"], mk, float(row["line"]))
+        gid = event_game_map.get(row["event_id"], "")
+        key = (gid, row["player_name"], mk, float(row["line"]))
         pl_row = pl_lookup.get(key)
         if pl_row is None:
             continue
@@ -102,13 +474,55 @@ def fill_sheet(sheet_df, picks_log):
     return filled, n_matched
 
 
-def anchor_sidecar(anchoring_log_df, lines):
-    """D215(b): per-game anchor sidecar from the anchoring log.
+def anchor_sidecar(anchoring_log_df, lines, anchor_returned_df=None,
+                   event_game_map=None, run_id=None):
+    """D215(b)/D226/D242/D246: per-game anchor sidecar.
 
-    Best iteration = min |err_m| + |err_t| (same rule as run_week).
-    Market spread/total come from the run's lines dict, not from defaults.
-    Raises KeyError if required columns are missing.
+    D242: if anchor_returned_df is provided, use the solver's RETURNED values
+    (iterations, converged, anch_m, anch_t) instead of minimizing over the log.
+    Market spread/total MUST come from the actual lines dict used by the sim
+    (D226: not reconstructed from err fields).
+    D246(a): sidecar rows carry event_id (from bundle events) and run_id.
     """
+    # D246(a): build game -> event_id map (inverted)
+    game_to_event = {}
+    if event_game_map:
+        for eid, gid in event_game_map.items():
+            game_to_event[gid] = eid
+
+    if anchor_returned_df is not None:
+        # D242: use the solver's returned values directly
+        rows = []
+        for _, r in anchor_returned_df.iterrows():
+            gname = r["game"]
+            ln = lines.get(gname)
+            if ln is None:
+                raise SystemExit(
+                    f"HALT: no lines entry for {gname} — anchor sidecar requires "
+                    f"actual market targets, not reconstructed values")
+            spread = float(ln["spread"])
+            total_line = float(ln["total"])
+            anch_m = float(r["anch_m"])
+            anch_t = float(r["anch_t"])
+            miss_m = abs(anch_m - spread)
+            miss_t = abs(anch_t - total_line)
+            row = {
+                "game": gname,
+                "target_spread": spread, "target_total": total_line,
+                "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
+                "miss_m": round(miss_m, 4), "miss_t": round(miss_t, 4),
+                "iterations": int(r["iterations"]),
+                "converged": bool(r["converged"]),
+                "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
+            }
+            if game_to_event:
+                row["event_id"] = game_to_event.get(gname, "")
+            if run_id is not None:
+                row["run_id"] = run_id
+            rows.append(row)
+        return pd.DataFrame(rows)
+
+    # Legacy path: minimize over the anchoring log
     required = {"game", "iter", "margin", "total", "err_m", "err_t", "converged"}
     missing = required - set(anchoring_log_df.columns)
     if missing:
@@ -120,27 +534,50 @@ def anchor_sidecar(anchoring_log_df, lines):
         best = g.loc[(abs(g["err_m"]) + abs(g["err_t"])).idxmin()]
         anch_m = float(best["margin"])
         anch_t = float(best["total"])
-        # Market values from lines dict (away@home -> spread, total)
-        ln = lines.get(gname, {})
-        spread = float(ln.get("spread", anch_m - float(best["err_m"])))
-        total_line = float(ln.get("total_line", anch_t - float(best["err_t"])))
+        ln = lines.get(gname)
+        if ln is None:
+            raise SystemExit(
+                f"HALT: no lines entry for {gname} — anchor sidecar requires "
+                f"actual market targets, not reconstructed values")
+        spread = float(ln["spread"])
+        total_line = float(ln["total"])
         miss_m = abs(anch_m - spread)
         miss_t = abs(anch_t - total_line)
-        rows.append({
+        row = {
             "game": gname,
-            "spread": spread, "total_line": total_line,
-            "anch_m": round(anch_m, 2), "anch_t": round(anch_t, 2),
-            "miss_m": round(miss_m, 2), "miss_t": round(miss_t, 2),
+            "target_spread": spread, "target_total": total_line,
+            "anch_m": round(anch_m, 4), "anch_t": round(anch_t, 4),
+            "miss_m": round(miss_m, 4), "miss_t": round(miss_t, 4),
             "iterations": int(best["iter"]) + 1,
             "converged": bool(best["converged"]),
             "anchored": miss_m <= ANCHOR_MISS_TOL and miss_t <= ANCHOR_MISS_TOL,
-        })
+        }
+        if game_to_event:
+            row["event_id"] = game_to_event.get(gname, "")
+        if run_id is not None:
+            row["run_id"] = run_id
+        rows.append(row)
     return pd.DataFrame(rows)
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
-def main(freeze_json_path=None):
+def _default_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
+    """Default run_week_fn: call run_week.py via subprocess with --lines-json and --games."""
+    lines_json = json.dumps(bundle_lines)
+    games_str = ",".join(game_ids)
+    cmd = [sys.executable, str(root / "nfl" / "sim" / "run_week.py"),
+           "--week", str(week), "--as-of", T.isoformat(),
+           "--lines-json", lines_json, "--games", games_str]
+    if run_dir is not None:
+        cmd += ["--run-dir", str(run_dir)]
+    r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(root), timeout=7200)
+    if r.returncode != 0:
+        raise SystemExit(f"HALT: run_week.py failed:\n{r.stderr}\n{r.stdout}")
+    print(f"    Sim complete.\n{r.stdout[-500:]}\n", flush=True)
+
+
+def main(argv=None, root=None, run_week_fn=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--week", type=int, required=True)
     ap.add_argument("--pilot", action="store_true")
@@ -148,116 +585,239 @@ def main(freeze_json_path=None):
     ap.add_argument("--window-hours", type=float, help="limit to games kicking within N hours")
     ap.add_argument("--events", help="comma-separated team fragments")
     ap.add_argument("--dry-run", action="store_true", help="D221: steps a-d and f, stop before freeze")
-    a = ap.parse_args()
+    ap.add_argument("--allow-stale-quotes", action="store_true",
+                    help="pilot only: override the quote-age HALT")
+    a = ap.parse_args(argv)
+
+    root = Path(root) if root else ROOT
+    if run_week_fn is None:
+        run_week_fn = _default_run_week
+
+    # D229: override module-level paths when root is provided
+    global PROPS_DIR, LINES_DIR, BOARD_ROOT, EXPERIMENT_MANIFEST
+    PROPS_DIR = root / "data" / "odds_archive" / "nfl" / "props"
+    LINES_DIR = root / "data" / "odds_archive" / "nfl" / "line_history"
+    BOARD_ROOT = root / "nfl" / "data" / "board"
+    EXPERIMENT_MANIFEST = root / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json"
 
     if a.as_of and not a.pilot:
-        sys.exit("HALT: --as-of requires --pilot")
+        raise SystemExit("HALT: --as-of requires --pilot")
+    # D234: --allow-stale-quotes allowed with --pilot OR --dry-run (never a live freeze)
+    if a.allow_stale_quotes and not (a.pilot or a.dry_run):
+        raise SystemExit("HALT: --allow-stale-quotes requires --pilot or --dry-run")
 
-    # (a) test_freeze_v1 in-process
+    T = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
+    if T.tzinfo is None:
+        T = T.replace(tzinfo=timezone.utc)
+
+    # (a) test_freeze_v1 + experiment manifest check
     print("(a) Running test_freeze_v1...", flush=True)
     import pytest
-    test_args = ["-q", str(ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py")]
-    if freeze_json_path:
-        # Allow overriding FREEZE_PATH for testing
-        import nfl.sim.tests.test_freeze_v1 as ft
-        ft.FREEZE_PATH = Path(freeze_json_path)
+    test_args = ["-q", "-p", "no:cacheprovider",
+                 str(ROOT / "nfl" / "sim" / "tests" / "test_freeze_v1.py")]
     ret = pytest.main(test_args, plugins=[])
     if ret != 0:
-        sys.exit(f"HALT: test_freeze_v1 failed (exit {ret})")
-    print("    PASS\n", flush=True)
+        raise SystemExit(f"HALT: test_freeze_v1 failed (exit {ret})")
+    print("    PASS", flush=True)
+    check_experiment_manifest(_root=root)
+    print("    Experiment manifest: OK", flush=True)
+    from nfl.sim.run_week import _check_calibration_stamp
+    from nfl.sim.calibration import usage_fingerprint
+    stamp_ok, stamp_mismatches = _check_calibration_stamp()
+    if not stamp_ok:
+        raise SystemExit("HALT: calibration stamp mismatch:\n" +
+                 "\n".join(f"  {m}" for m in stamp_mismatches))
+    print("    Calibration stamp: OK", flush=True)
+    em = json.loads(EXPERIMENT_MANIFEST.read_text())
+    live_usage = usage_fingerprint()
+    if live_usage != em.get("usage_fingerprint"):
+        raise SystemExit(f"HALT: usage fingerprint mismatch: live={live_usage}, "
+                 f"manifest={em.get('usage_fingerprint')}")
+    print("    Usage fingerprint: OK\n", flush=True)
 
-    # D215(c): common flags for sheet and freeze
-    common_flags = []
-    if a.pilot:
-        common_flags.append("--pilot")
-    if a.as_of:
-        common_flags += ["--as-of", a.as_of]
-    if a.window_hours:
-        common_flags += ["--window-hours", str(a.window_hours)]
-    if a.events:
-        common_flags += ["--events", a.events]
+    # (b) D225: build immutable run bundle at cutoff T
+    print(f"(b) Building bundle at T={T.isoformat()}...", flush=True)
+    bundle_dir, bundle_manifest = build_bundle(
+        SEASON, a.week, T, pilot=a.pilot,
+        allow_stale_quotes=a.allow_stale_quotes,
+        window_hours=a.window_hours, event_filter=a.events, _root=root)
+    print(flush=True)
 
-    # (b) sheet
-    print("(b) Building sheet...", flush=True)
-    with tempfile.TemporaryDirectory() as td:
-        sheet_path = Path(td) / "sheet.csv"
-        sheet_cmd = [sys.executable, str(ROOT / "nfl" / "pipeline" / "log_ai_opinions.py"),
-                     "sheet", "--week", str(a.week), "--out", str(sheet_path)] + common_flags
-        r = subprocess.run(sheet_cmd, capture_output=True, text=True, cwd=str(ROOT))
-        if r.returncode != 0:
-            sys.exit(f"HALT: sheet failed:\n{r.stderr}\n{r.stdout}")
-        sheet_df = pd.read_csv(sheet_path)
-        print(f"    {len(sheet_df)} lines\n{r.stdout.strip()}\n", flush=True)
+    events_df = pd.read_parquet(bundle_dir / "events.parquet")
+    event_game_map = dict(zip(events_df["event_id"], events_df["game_id"]))
 
-        # (c) sim
-        print("(c) Running sim...", flush=True)
-        sim_cmd = [sys.executable, str(ROOT / "nfl" / "sim" / "run_week.py"),
-                   "--week", str(a.week)]
-        if a.as_of:
-            sim_cmd += ["--as-of", a.as_of]
-        r_sim = subprocess.run(sim_cmd, capture_output=True, text=True, cwd=str(ROOT),
-                               timeout=7200)
-        if r_sim.returncode != 0:
-            sys.exit(f"HALT: run_week.py failed:\n{r_sim.stderr}\n{r_sim.stdout}")
-        print(f"    Sim complete.\n{r_sim.stdout[-500:]}\n", flush=True)
+    # D229: freshness HALTs (not warns)
+    freshness = json.loads((bundle_dir / "freshness.json").read_text())
+    for label in ("team_ratings", "tendencies", "usage"):
+        mw = freshness.get(f"{label}_max_week")
+        if mw is None or mw < a.week - 1:
+            raise SystemExit(
+                f"HALT: {label} max week = {mw} (need >= {a.week - 1} for season {SEASON})")
+    kickers = freshness.get("kickers", "missing")
+    if kickers == "engine_default_fallback":
+        print(f"  kickers: fallback (no {SEASON} rows) — declared, recorded in bundle",
+              flush=True)
 
-        # Read picks_log
-        sim_out = ROOT / "nfl" / "data" / "sim" / "outputs" / f"week={SEASON}_{a.week:02d}"
-        picks_log = pd.read_parquet(sim_out / "picks_log.parquet")
-        print(f"    picks_log: {len(picks_log)} legs", flush=True)
+    # (c) D229: build sheet IN-PROCESS from the bundle's props and lines
+    print("(c) Building sheet from bundle...", flush=True)
+    from nfl.sim.fwd_v1_logger import build_sheet, set_sport
+    set_sport("nfl")
+    bundle_props = pd.read_parquet(bundle_dir / "props.parquet")
+    bundle_lines_df = pd.read_parquet(bundle_dir / "lines.parquet")
+    sheet_df = build_sheet(bundle_props, bundle_lines_df, T)
+    # Restrict to the bundle's event_ids
+    bundle_eids = set(events_df["event_id"])
+    sheet_df = sheet_df[sheet_df["event_id"].isin(bundle_eids)].reset_index(drop=True)
+    n_two_way = int(sheet_df["two_way"].sum()) if "two_way" in sheet_df.columns else 0
+    print(f"    {len(sheet_df)} lines, {n_two_way} two-way\n", flush=True)
 
-        # (d) fill
-        print("(d) Filling opinions...", flush=True)
-        filled, n_matched = fill_sheet(sheet_df, picks_log)
-        n_two_way = int(filled["two_way"].sum()) if "two_way" in filled else 0
-        print(f"    Matched {n_matched} / {n_two_way} two-way prop rows\n", flush=True)
+    # D241(b): run_week writes outputs into <run-dir>/outputs/
+    run_out = bundle_dir / "outputs"
+    run_out.mkdir(exist_ok=True)
 
-        # D221: dry-run prints summary and stops before freeze
-        if a.dry_run:
-            print("--- DRY RUN: matched rows by market ---")
-            sim_rows = filled[filled["tag"] == "sim_v1"]
-            if len(sim_rows) and "market_key" in sim_rows:
-                print(sim_rows.groupby("market_key").size().to_string())
-            print(f"\n--- Tag counts ---\n{filled['tag'].value_counts().to_string()}")
-            # (f) anchor sidecar (print only, don't write)
-            anch_log_path = sim_out / "anchoring_log.parquet"
-            if anch_log_path.exists():
-                anch_log = pd.read_parquet(anch_log_path)
-                sidecar_df = anchor_sidecar(anch_log, {})
-                print(f"\n--- Anchor sidecar ({len(sidecar_df)} games) ---")
-                print(sidecar_df.to_string(index=False))
-            print("\nDRY RUN complete — nothing written under nfl/data/board/.")
-            return
+    # (d) sim — only the bundle's events
+    print("(d) Running sim...", flush=True)
+    bundle_lines = lines_dict_from_bundle(bundle_dir)
+    game_ids = sorted(bundle_lines.keys())
+    run_week_fn(root, a.week, T, bundle_lines, game_ids, run_dir=run_out)
 
-        # Write filled CSV for freeze
-        filled_path = Path(td) / "filled.csv"
-        filled.to_csv(filled_path, index=False)
+    # Read picks_log from run directory
+    picks_log = pd.read_parquet(run_out / "picks_log.parquet")
+    print(f"    picks_log: {len(picks_log)} legs", flush=True)
 
-        # (e) freeze
-        print("(e) Freezing...", flush=True)
-        freeze_cmd = [sys.executable, str(ROOT / "nfl" / "pipeline" / "log_ai_opinions.py"),
-                      "freeze", "--week", str(a.week), "--filled", str(filled_path),
-                      "--reader-model", READER_MODEL] + common_flags
-        r_freeze = subprocess.run(freeze_cmd, capture_output=True, text=True, cwd=str(ROOT))
-        if r_freeze.returncode != 0:
-            sys.exit(f"HALT: freeze failed:\n{r_freeze.stderr}\n{r_freeze.stdout}")
-        print(f"    {r_freeze.stdout.strip()}\n", flush=True)
+    # (e) fill
+    print("(e) Filling opinions...", flush=True)
+    filled, n_matched = fill_sheet(sheet_df, picks_log, event_game_map=event_game_map)
+    print(f"    Matched {n_matched} / {n_two_way} two-way prop rows\n", flush=True)
 
-    # (f) anchor sidecar
-    anch_log_path = sim_out / "anchoring_log.parquet"
-    if anch_log_path.exists():
-        anch_log = pd.read_parquet(anch_log_path)
-        sidecar_df = anchor_sidecar(anch_log, {})
-        opinions_dir = (ROOT / "nfl" / "data" / "board" /
-                        f"week={SEASON}_{a.week:02d}" / "ai_opinions")
-        sidecar_path = opinions_dir / "anchor_sidecar_sim_v1.parquet"
-        sidecar_df.to_parquet(sidecar_path, index=False)
-        n_unanch = int((~sidecar_df["anchored"]).sum())
-        print(f"(f) Anchor sidecar: {len(sidecar_df)} games, "
-              f"{n_unanch} unanchored -> {sidecar_path.relative_to(ROOT)}", flush=True)
-        print(sidecar_df.to_string(index=False))
+    # D229: validate filled prices against bundle's sheet
+    for col in ("price_first", "price_second", "source_utc"):
+        if col in sheet_df.columns and col in filled.columns:
+            sheet_vals = sheet_df.set_index(["event_id", "market_key", "player_name", "line"])[col]
+            filled_vals = filled.set_index(["event_id", "market_key", "player_name", "line"])[col]
+            joined = sheet_vals.align(filled_vals, join="inner")
+            mismatches = (joined[0] != joined[1]) & ~(joined[0].isna() & joined[1].isna())
+            if mismatches.any():
+                n_bad = int(mismatches.sum())
+                raise SystemExit(
+                    f"HALT: {n_bad} {col} mismatch(es) between sheet and filled — "
+                    f"bundle prices must be used verbatim")
+
+    sim_rows = filled[filled["tag"] == "sim_v1"]
+    print(f"    Coverage: {len(sheet_df)} sheet / {n_two_way} two-way / "
+          f"{n_matched} matched", flush=True)
+    if len(sim_rows) and "market_key" in sim_rows.columns:
+        print("    By market:")
+        print(sim_rows.groupby("market_key").size().to_string(header=False))
+
+    if n_matched == 0:
+        raise SystemExit("HALT: zero sim matches — nothing to freeze")
+
+    # (f) anchor sidecar — D241(d)/D242/D246(a): use solver's returned values
+    print("(f) Building anchor sidecar...", flush=True)
+    anch_log_path = run_out / "anchoring_log.parquet"
+    if not anch_log_path.exists():
+        raise SystemExit("HALT: anchoring_log.parquet missing — sidecar is mandatory (D226)")
+    anch_log = pd.read_parquet(anch_log_path)
+    # D242: prefer anchor_returned.parquet (solver's actual returns)
+    anch_ret_path = run_out / "anchor_returned.parquet"
+    anch_ret = pd.read_parquet(anch_ret_path) if anch_ret_path.exists() else None
+    bundle_run_id = json.loads((bundle_dir / "freshness.json").read_text()).get("run_id")
+    sidecar_df = anchor_sidecar(anch_log, bundle_lines, anchor_returned_df=anch_ret,
+                                event_game_map=event_game_map, run_id=bundle_run_id)
+    sidecar_path = bundle_dir / "anchor_sidecar.parquet"
+    sidecar_df.to_parquet(sidecar_path, index=False)
+    n_unanch = int((~sidecar_df["anchored"]).sum())
+    print(f"    {len(sidecar_df)} games, {n_unanch} unanchored", flush=True)
+    print(sidecar_df.to_string(index=False))
+
+    # D241(f)/D246(b): finalize bundle manifest BEFORE the freeze — hash every file
+    _finalize_bundle_manifest(bundle_dir)
+    bundle_manifest = json.loads((bundle_dir / "bundle_manifest.json").read_text())
+
+    # D246(b): compute digests BEFORE the freeze, add to filled rows
+    experiment_digest = hashlib.sha256(
+        (root / "research" / "nfl_sim" / "FWD_EXPERIMENT_v1.json").read_bytes()
+    ).hexdigest()
+    bundle_digest = hashlib.sha256(
+        (bundle_dir / "bundle_manifest.json").read_bytes()
+    ).hexdigest()
+    filled["bundle_digest"] = bundle_digest
+    filled["experiment_digest"] = experiment_digest
+
+    # dry-run
+    if a.dry_run:
+        print("\n--- DRY RUN ---")
+        print(f"Tag counts:\n{filled['tag'].value_counts().to_string()}")
+        print(f"\nBundle manifest: {bundle_dir.relative_to(root)}/bundle_manifest.json")
+        print(json.dumps(bundle_manifest, indent=1))
+        print("\nDRY RUN complete — nothing frozen.")
+        return
+
+    # (g) D241(e)/D246(b): publication is atomic inside freeze()
+    print("(g) Freezing...", flush=True)
+    from nfl.sim.fwd_v1_logger import freeze as do_freeze
+    board_root = root / "nfl" / "data" / "board"
+    opinions_dir = board_root / f"week={SEASON}_{a.week:02d}" / "ai_opinions"
+
+    # D241(e): take wall clock immediately before the write
+    first_kick = events_df["commence_time"].map(_parse_utc).min()
+    if not a.pilot:
+        pre_write_wall = datetime.now(timezone.utc)
+        if pre_write_wall >= first_kick:
+            raise SystemExit(f"HALT: publication time {pre_write_wall.isoformat()} >= "
+                         f"first kick {first_kick.isoformat()}")
+
+    # D246(b): frozen parquet written ONCE by freeze() — not rewritten after
+    dest, sha, m = do_freeze(
+        sheet_df, filled, SEASON, a.week, a.pilot, T,
+        d=opinions_dir, reader_model=READER_MODEL, board_root=board_root,
+        run_id=bundle_run_id)
+
+    # D241(e)/D246(b): record publication_utc
+    publication_utc = datetime.now(timezone.utc)
+
+    # D241(e): quarantine if write completed after kick (live only)
+    if not a.pilot and publication_utc >= first_kick:
+        quarantine_dir = opinions_dir / "quarantine"
+        quarantine_dir.mkdir(parents=True, exist_ok=True)
+        quarantine_dest = quarantine_dir / dest.name
+        dest.rename(quarantine_dest)
+        man_path = opinions_dir / "manifest.json"
+        entries = json.loads(man_path.read_text()) if man_path.exists() else []
+        for e in entries:
+            if e["file"] == dest.name:
+                e["excluded"] = True
+                e["quarantine_reason"] = (
+                    f"publication_utc {publication_utc.isoformat()} >= "
+                    f"first_kick {first_kick.isoformat()}")
+        man_path.write_text(json.dumps(entries, indent=1) + "\n")
+        raise SystemExit(
+            f"QUARANTINED: publication at {publication_utc.isoformat()} >= "
+            f"first kick {first_kick.isoformat()} — moved to {quarantine_dest}")
+
+    # D246(b): publication.json — written AFTER the freeze, in the run directory
+    pub_record = {
+        "publication_utc": publication_utc.isoformat(),
+        "frozen_file": dest.name,
+        "frozen_sha256": sha,
+    }
+    (bundle_dir / "publication.json").write_text(json.dumps(pub_record, indent=1) + "\n")
+
+    # D246(b): update the ai_opinions manifest entry with publication_utc
+    man_path = opinions_dir / "manifest.json"
+    entries = json.loads(man_path.read_text()) if man_path.exists() else []
+    for e in entries:
+        if e["file"] == dest.name:
+            e["publication_utc"] = publication_utc.isoformat()
+    man_path.write_text(json.dumps(entries, indent=1) + "\n")
+
+    print(f"    FROZEN {len(m)} lines -> {dest.relative_to(root)}\n"
+          f"    sha256 {sha}\n"
+          f"    publication_utc {publication_utc.isoformat()}", flush=True)
 
     print("\nDone.")
+    return dest
 
 
 if __name__ == "__main__":

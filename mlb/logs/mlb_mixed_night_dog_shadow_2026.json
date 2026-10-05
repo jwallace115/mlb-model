@@ -1362,6 +1362,23 @@
       "local_start_hour": 18.666666666666668,
       "win_loss": "L",
       "final_score": "14-11"
+    },
+    {
+      "game_pk": 849835,
+      "game_date": "2026-10-03",
+      "matchup": "NYY @ TBR",
+      "fav_team": "TBR",
+      "dog_team": "NYY",
+      "fav_side": "home",
+      "fav_implied": 0.55,
+      "dog_ml_price": 117,
+      "sp_fip_diff": -0.279,
+      "off_diff": -0.7,
+      "bp_era_diff": 0.052,
+      "day_night": "night",
+      "local_start_hour": 18.5,
+      "win_loss": "L",
+      "final_score": "0-1"
     }
   ]
 }

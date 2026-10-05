@@ -1,0 +1,45 @@
+events in window 1235 | with outcome 1097 | with pinnacle 1233
+pinnacle SIGNAL {'n': 101, 'pushes': 0, 'hit': np.float64(60.4), 'roi': np.float64(16.3), 'se': np.float64(9.4), 'lo90': np.float64(4.3)} | NULL non-signal {'n': 984, 'pushes': 10, 'hit': np.float64(48.3), 'roi': np.float64(-6.4), 'se': np.float64(3.1), 'lo90': np.float64(-10.4)}
+hardrockbet SIGNAL {'n': 99, 'pushes': 0, 'hit': np.float64(61.6), 'roi': np.float64(16.4), 'se': np.float64(9.3), 'lo90': np.float64(4.5)} | NULL non-signal {'n': 983, 'pushes': 6, 'hit': np.float64(48.4), 'roi': np.float64(-8.5), 'se': np.float64(3.0), 'lo90': np.float64(-12.4)}
+draftkings SIGNAL {'n': 101, 'pushes': 0, 'hit': np.float64(59.4), 'roi': np.float64(14.0), 'se': np.float64(9.4), 'lo90': np.float64(1.9)} | NULL non-signal {'n': 996, 'pushes': 0, 'hit': np.float64(47.8), 'roi': np.float64(-8.7), 'se': np.float64(3.0), 'lo90': np.float64(-12.6)}
+          n    hit   roi
+month                   
+2025-10   7  100.0  94.0
+2025-11  21   66.7  28.4
+2025-12  22   63.6  21.8
+2026-01  15   33.3 -36.5
+2026-02  14   78.6  52.4
+2026-03  16   43.8 -16.1
+2026-04   6   50.0  -2.4
+
+       n   hit   roi
+away                
+ATL    8  62.5  21.2
+CHI   10  40.0 -23.4
+DAL    9  77.8  49.1
+DET   10  50.0  -3.6
+GSW    9  66.7  28.1
+HOU   13  61.5  18.8
+NYK   11  72.7  39.8
+PHI   11  63.6  21.6
+PHX   11  72.7  41.8
+UTA    9  33.3 -36.1
+
+       n   hit   roi
+home                
+ATL   11  45.5 -14.1
+BOS   12  33.3 -34.9
+DEN   12  66.7  28.5
+IND   15  66.7  28.9
+MIL   13  69.2  32.9
+OKC   11  90.9  74.3
+POR   13  61.5  19.1
+SAS   14  50.0  -3.2
+
+          n   hit   roi
+band                   
+<225     23  69.6  33.9
+225-235  52  59.6  15.1
+>235     26  53.8   3.1
+
+signal games excluded (no outcome or no pinnacle): 16

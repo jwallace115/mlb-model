@@ -160,8 +160,8 @@ def main():
         "odds_archive_nhlE": (
             "Historical odds from the Odds API: lines (h2h/totals/spreads snapshots), "
             "three-way markets, in-play data, event-market mappings. 2022-2025 seasons. "
-            "Rebuilding cost: 2,586,062 Odds API credits actually spent "
-            "(E-WO1: 2,509,800 + WO2: 76,262 from logs). Plan: 5M credits/month. "
+            "Rebuilding cost: 2,602,062 Odds API credits actually spent "
+            "(E-WO1 16,000 + E-WO2 2,509,800 + WO2 76,262 from logs). Plan: 5M credits/month. "
             "THIS IS THE MOST EXPENSIVE DATA TO REBUILD."
         ),
     }

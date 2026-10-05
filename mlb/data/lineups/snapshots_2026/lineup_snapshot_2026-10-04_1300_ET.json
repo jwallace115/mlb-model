@@ -1,0 +1,32 @@
+{
+  "snapshot_label": "2026-10-04_1300_ET",
+  "snapshot_time_et": "13:00",
+  "date": "2026-10-04",
+  "total_games": 2,
+  "lineups_confirmed": 1,
+  "coverage_pct": 50.0,
+  "games": [
+    {
+      "game_pk": 849825,
+      "game_date": "2026-10-04",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "16:00",
+      "hours_to_first_pitch": 3.0,
+      "status": "Pre-Game",
+      "home_lineup_count": 9,
+      "away_lineup_count": 9,
+      "lineup_confirmed": true
+    },
+    {
+      "game_pk": 849823,
+      "game_date": "2026-10-04",
+      "snapshot_time_et": "13:00",
+      "first_pitch_et": "20:00",
+      "hours_to_first_pitch": 7.0,
+      "status": "Scheduled",
+      "home_lineup_count": 0,
+      "away_lineup_count": 0,
+      "lineup_confirmed": false
+    }
+  ]
+}

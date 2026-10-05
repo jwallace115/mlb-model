@@ -127,3 +127,204 @@
 
 ### UNVERIFIED
 - Whether FWD2b lands by Thu 20:00Z. If not, TNF stays a pilot.
+
+## 2026-09-30T09:40Z  cowork (verification of FWD2b — D233; order FWD2c)
+
+### RETURNED
+- eng/fwd2 @ 3beed7970: D228 append, D229-D232. 49 tests pass on Linux; no source-text tests.
+- test_live_freeze_completes (test_fwd2b_harness.py:190) runs with --pilot --as-of.
+- The real week-4 dry run stopped at quote age (24.5 h).
+- Runbook errors:
+  - Sunday dates given as 10-05; the tape says 10-04.
+  - London given as JAX@IND; the tape says IND@WAS, 13:30Z 10-04.
+  - MNF given as "Tue 10-07".
+  - Week-5 TNF given as "Fri 10-10".
+  - The London command calls nfl/pipeline/pull_odds.py, which does not exist.
+- ratings.py:936-938 writes params_v1.json on every run.
+- Settlement:
+  - snap_played=None still scores the stat.
+  - Participation is matched by exact name.
+  - There is no completed-game check.
+  - The week-3 re-grade graded 0 of 2,070 rows (D231).
+
+### MEANS
+- The bundle harness is accepted, and a real week-3 pilot freeze completed. Live mode is still unproven.
+- The runbook could have sent Jeff to the wrong day and the wrong game, with a command that fails.
+- Scoring is not trustworthy yet. It is not needed before the first freeze, but it must be fixed before the first
+  grading.
+
+### NOT DONE
+- FWD2c (written).
+
+### UNVERIFIED
+- The MNF week-4 game and kick time (FWD2c derives it from the tape).
+
+## 2026-09-30T10:30Z  cowork (verification of FWD2c — D238; merge of eng/fwd2; primary count starts at week-4 TNF)
+
+### RETURNED
+- eng/fwd2 @ bcbd8f494. 55 tests pass on Linux. The dry merge into main is clean.
+- test_live_freeze_no_pilot runs main(["--week","3"]) with no pilot and no as-of. The rows are canonical, pilot False,
+  with bundle prices.
+- ratings.py writes params only with --write-params.
+- Settlement: GSIS->PFR id, END GAME check, unresolved when there are no snaps. The week-3 re-grade settles 2,025
+  rows (40 VOID).
+- The week-3 pilot diagnostic: Δ +0.0148, n=162, CI -0.0039 to +0.0341.
+- make_runbook.py: VM_SLOTS apply every day, and Sunday is one 12 h window run at 13:11Z.
+
+### MEANS
+- The forward path is sound for TNF.
+- The Sunday runbook would HALT the main slate, or freeze it before inactives. It is fixed before Sunday (FWD2d).
+
+### NOT DONE
+- FWD2d (Sunday runbook).
+- The capture_status sha log at the first freeze.
+
+### UNVERIFIED
+- Whether the Thu 22:00Z VM props slot fires on 10-01. The TNF dry run and the live run print the source age.
+
+## 2026-09-30T13:15Z  cowork (ChatGPT audit #7 adjudicated — D240; order FWD3)
+
+### RETURNED
+- Audit #7 on 0792fd122: six must-fix items. A4 FIXED; A1, A2, A3, A5, A6 and A7 PARTIAL. Eight surviving mutations.
+- Cowork spot-checked the code:
+  - run_forward_v1.py:108 uses mkdir(exist_ok=True);
+  - :413 picks the minimum-error iteration;
+  - :170-178 checks props age only;
+  - :614-642 checks publication before the freeze and records it after;
+  - the manifest has 0 matches for actuals.py;
+  - score_experiment's run_id join is `pass`.
+
+### MEANS
+- D238's acceptance was wrong on six of the seven items. Cowork did not exercise the scorer or the bundle adversarially.
+- The freeze side must be fixed before the first primary freeze, and the scoring side before any scoring. FWD3 does
+  both.
+
+### NOT DONE
+- FWD3 (written).
+- FWD2d (the Sunday runbook) is still pending.
+- The TNF start depends on FWD3 being verified by Thu 15:00Z.
+
+### UNVERIFIED
+- The auditor's executed counterexamples were accepted as evidence, not re-run by Cowork.
+
+## 2026-09-30T15:10Z  cowork (verification of FWD3 — D245; order FWD4)
+
+### RETURNED
+- eng/fwd3 @ 735374bf1: 79 tests pass on Linux.
+- Mutations applied by Cowork, with the manifest re-stamped in a temp copy:
+  - caught: sidecar forced anchored; zero-match halt; cross-week dedup; cohort forced all-anchored; no snap
+    participation;
+  - survived: the line cutoff; the pre-write publication halt; run_week --lines-json dropped; the bootstrap made
+    non-resampling.
+- primary_cohort, called directly: cross-run leak -> cohort 1 (should be 0); empty sidecar -> cohort 1 (should HALT).
+- run_forward_v1.py rewrites the frozen parquet after the freeze (adds publication_utc) and rewrites the bundle
+  manifest after the freeze.
+
+### MEANS
+- The freeze side is sound.
+- The scoring anchor join (audit #7 A1) is still broken, even though D243 says otherwise.
+
+### NOT DONE
+- FWD4.
+- FWD2d (the Sunday runbook).
+
+### UNVERIFIED
+- Whether FWD4 is verified by Thu 15:00Z.
+
+## 2026-09-30T15:35Z  cowork (verification of FWD4 — D248; FWD4b test fix)
+
+### RETURNED
+- eng/fwd3 @ 0b6d94a58. Full forward suite: 88 passed, 2 failed. Both failures are in test_fwd2_settlement cohort
+  tests, which use the old primary_cohort signature.
+- Cohort cases: cross-run leak -> excluded; empty sidecar -> excluded ("no sidecar match"); duplicate -> HALT.
+- All ten Cowork mutations are caught, each by a specific test.
+- freeze() writes the frozen file once. Digests are on the rows. publication.json is written in the run directory.
+
+### MEANS
+- The experiment is ready once the two stale tests are updated.
+
+### NOT DONE
+- FWD4b.
+- The merge.
+- FWD2d (the Sunday runbook).
+
+### UNVERIFIED
+- The session's real dry-run output is taken from its report (bundle digest d7246f19…).
+
+## 2026-09-30T16:41Z — Cowork: FWD4b verified (D250); eng/fwd3 merge blocked; FWD5 written
+
+### RETURNED
+- eng/fwd3 @ ffc3e67dc. The diff from 65098f910 touches only test_fwd2_settlement.py and the decision doc.
+- Forward list: 88 passed, 0 failed.
+- The parent 65098f910 re-run gives 86 passed, 2 failed.
+- Mutations:
+  - an event_id-only join fails 3 behavioural tests plus the hash test;
+  - removing the reader filter fails test_cohort_excludes_wrong_reader plus the hash test.
+- Trial merge into origin/main @ 70fa1d44f:
+  - conflicts in logs/_log_fwd1_cowork.txt and shared/last_updated.json;
+  - log_ai_opinions.py auto-merges, but main changed it by +558/−67 (NHL H3-H5);
+  - the forward list gives 84 passed, 4 failed: the hash test plus 3 cross-week message tests ("cross-dedup").
+
+### MEANS
+- FWD4b is accepted.
+- Cowork's 92 expectation and D248's "88 passed" were wrong by 2.
+- The experiment's hashed logger is shared with NHL development, so a plain merge would put unaudited code into the
+  freeze and scoring path.
+- FWD5 pins a byte-identical copy (nfl/sim/fwd_v1_logger.py, sha cf100675bd385ca5) and then merges main.
+
+### NOT DONE
+- FWD5; the merge; FWD2d (the Sunday runbook).
+
+### UNVERIFIED
+- Whether the shared (merged) freeze() writes week-directory manifests that the pinned code can read. This is FWD5
+  item 1(iii).
+
+## 2026-09-30T19:42Z — Cowork: FWD5 verified (D254); eng/fwd3 merges; TNF is the first primary window
+
+### RETURNED
+- eng/fwd3 @ 2d44e38a2:
+  - fwd_v1_logger.py sha cf100675bd385ca5;
+  - the forward list gives 88 passed / 0 failed, on the branch and on a trial merge with main @ 8512ca13e;
+  - test_freeze_v1: 4 passed.
+- A subprocess run of the harness tests (live test included) never loads nfl.pipeline.log_ai_opinions.
+- Interop script: shared and pinned freezes in one week directory; both verifies clean; canonical dedup HALTs through
+  either logger.
+- Shared-logger suite: 76 passed / 1 failed on both main and the merge (test_score_first_side_and_units; that test
+  also fails at 82c38aef8).
+- The trial merge has one conflict, logs/_log_fwd1_cowork.txt; the branch copy is a superset.
+
+### MEANS
+- The experiment's freeze and scoring code is the verified object and is decoupled from NHL work.
+- Item 1's test file and D252 were not delivered, and "NOT DONE: nothing" was false. Cowork's executed checks cover it.
+- Main's commits were replayed onto the branch (duplicate SHAs); nothing was lost.
+
+### NOT DONE
+- test_fwd5_pin.py (after TNF; not hashed).
+- FWD2d (the Sunday runbook).
+- The stale AI-log test.
+
+### UNVERIFIED
+- The TNF live run itself (23:30Z Thu).
+
+## 2026-09-30T20:35Z — Cowork: ChatGPT audit #8 brief (v7) written, pinned to main @ e0fc3d2d6
+
+### RETURNED
+- eng/fwd3 is merged (e0fc3d2d6); D254 is on main.
+- Cowork's pre-audit scan of the pinned logger and the harness:
+  - score_experiment issues the "confirmatory" verdict whenever n >= 1500 on all data (~:1124-1139), with no frozen,
+    saved checkpoint;
+  - the static import closure reaches nfl/sim/pricer.py (run_week.py:28, import only) and nfl/sim/actuals_k1.py
+    (engine.py K1 report), neither of them hashed.
+
+### MEANS
+- D245 wrongly accepted the checkpoint policy. The FWD3 requirement of a named checkpoint file at the crossing window was
+  never implemented. It is self-flagged in the brief §3.1.
+- Whether any unhashed module executes on the live path is unverified. Brief §3.4.
+
+### NOT DONE
+- Audit #8, pending Jeff sending it.
+- FWD2d.
+- test_fwd5_pin.py.
+
+### UNVERIFIED
+- Whether §3.1 must be fixed before TNF or can be a declared pre-outcome amendment.

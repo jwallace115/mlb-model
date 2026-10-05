@@ -23,6 +23,14 @@ REPO_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def _git_push(game_date: str, files: list[str]) -> bool:
+    branch = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=REPO_DIR, capture_output=True, text=True,
+    ).stdout.strip()
+    if branch != "main":
+        print(f"[refresh_5pm] WARNING: ~/mlb-model is on branch '{branch}', not 'main' — skipping commit/push")
+        return True
+
     def run(cmd):
         result = subprocess.run(cmd, cwd=REPO_DIR, capture_output=True, text=True)
         if result.returncode != 0:

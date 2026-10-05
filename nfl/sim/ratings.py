@@ -933,10 +933,14 @@ def main():
             "rmse_pass": g["rmse_pass"], "rmse_rush": g["rmse_rush"],
         } for g in sorted(grid, key=lambda x: x["mean_rmse"])],
     }
-    PARAMS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(PARAMS_PATH, "w") as f:
-        json.dump(params, f, indent=2, default=str)
-    print(f"\nParams: {PARAMS_PATH}")
+    # D235: only write params_v1.json with --write-params flag
+    if "--write-params" in sys.argv:
+        PARAMS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(PARAMS_PATH, "w") as f:
+            json.dump(params, f, indent=2, default=str)
+        print(f"\nParams WRITTEN: {PARAMS_PATH}")
+    else:
+        print(f"\nParams: skipped (use --write-params to overwrite {PARAMS_PATH})")
 
     # PIT assertion (FIX 5)
     print("\nPIT assertion (FIX 5)...")

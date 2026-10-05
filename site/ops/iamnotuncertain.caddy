@@ -1,0 +1,23 @@
+# iamnotuncertain.net — static site built by site/build_site.py (cron, every 5 min) into /var/www/iamnotuncertain.
+# Installed at /etc/caddy/sites/iamnotuncertain.caddy and imported from /etc/caddy/Caddyfile.
+# Logins live in /etc/caddy/iamnotuncertain.users (one "name bcrypt-hash" per line; add with site/ops/add_site_user.sh).
+iamnotuncertain.net {
+	encode zstd gzip
+	basic_auth {
+		import /etc/caddy/iamnotuncertain.users
+	}
+	root * /var/www/iamnotuncertain
+	file_server
+	header {
+		X-Robots-Tag "noindex, nofollow"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Cache-Control "no-store"
+		Strict-Transport-Security "max-age=31536000"
+	}
+}
+
+www.iamnotuncertain.net {
+	redir https://iamnotuncertain.net{uri} permanent
+}

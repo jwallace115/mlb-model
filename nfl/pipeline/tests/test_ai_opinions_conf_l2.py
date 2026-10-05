@@ -141,14 +141,15 @@ class TestNHLRequireSide:
             ])
             now = datetime(2026, 10, 1, 18, 0, tzinfo=timezone.utc)
             s = L.build_sheet(pd.DataFrame(columns=["bookmaker", "commence_time"]), lines, now)
-            # Try to freeze with no_view (which produces side="none")
+            # no_view is not a valid NHL tag — rejected by tag validation
             f = s[L.KEY].copy()
             f["p_first"] = s["q_first"]
             f["tag"] = "no_view"
             f["reason"] = ""
             f["conf"] = [50]
             f["conf_rank"] = [1]
-            with pytest.raises(SystemExit, match="requires a side"):
+            f["drivers"] = "market,history"
+            with pytest.raises(SystemExit, match="unknown tag"):
                 L.validate(s, f)
         finally:
             L.set_sport("nfl")

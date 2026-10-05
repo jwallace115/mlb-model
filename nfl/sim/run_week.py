@@ -491,9 +491,9 @@ def _check_calibration_stamp(cal_path=None):
 
 
 def build_board(week, game_results, lines_used, team_game_counts, roster,
-                roster_lookups, pull_ts_str, as_of=None):
+                roster_lookups, pull_ts_str, as_of=None, out_dir_override=None):
     """Build board, write picks_log.parquet and parlay_board.md."""
-    out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
+    out_dir = out_dir_override or (OUT_BASE / f"week={SEASON}_{week:02d}")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     cal_maps = load_calibration()
@@ -904,29 +904,56 @@ def main():
     parser.add_argument("--week", type=int, default=None)
     parser.add_argument("--as-of", type=str, default=None,
                         help="UTC ISO timestamp cap for line snapshots (default: now)")
+    parser.add_argument("--lines-json", type=str, default=None,
+                        help="D229: JSON dict of {game_id: {spread, total}} — skip tape read")
+    parser.add_argument("--games", type=str, default=None,
+                        help="D229: comma-separated game_ids to simulate (e.g. CAR@KC,DEN@BUF)")
+    parser.add_argument("--run-dir", type=str, default=None,
+                        help="D241: write outputs here instead of the shared weekly directory")
     args = parser.parse_args()
 
     t0 = time.time()
+    as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
 
     week, week_games, completed = detect_week(override=args.week)
     print(f"Detected upcoming week: {week}")
     print(f"Completed games: {len(completed)}")
 
-    week_teams = set()
-    week_matchups = set()
-    if len(week_games) > 0:
-        week_teams = set(week_games["home_team"]) | set(week_games["away_team"])
+    # D229: if --lines-json provided, use it directly instead of reading the tape
+    if args.lines_json:
+        raw_lines = json.loads(args.lines_json)
+        all_lines = {}
+        for gid, ln in raw_lines.items():
+            parts = gid.split("@")
+            all_lines[gid] = {
+                "home": parts[1] if len(parts) == 2 else gid,
+                "away": parts[0] if len(parts) == 2 else gid,
+                "spread": float(ln["spread"]),
+                "total": float(ln["total"]),
+                "source": ln.get("source", "bundle"),
+            }
+    else:
+        week_teams = set()
+        week_matchups = set()
+        if len(week_games) > 0:
+            week_teams = set(week_games["home_team"]) | set(week_games["away_team"])
 
-    # If PBP doesn't have the week's games, use nflverse schedule
-    if not week_teams:
-        week_teams, week_matchups = get_week_teams_from_schedule(SEASON, week)
+        # If PBP doesn't have the week's games, use nflverse schedule
+        if not week_teams:
+            week_teams, week_matchups = get_week_teams_from_schedule(SEASON, week)
 
-    if week_teams:
-        print(f"Week {week} teams from schedule: {len(week_teams)}")
+        if week_teams:
+            print(f"Week {week} teams from schedule: {len(week_teams)}")
 
-    as_of_ts = pd.Timestamp(args.as_of) if args.as_of else None
-    all_lines = get_lines_from_history(as_of=as_of_ts)
-    if week_matchups:
+        all_lines = get_lines_from_history(as_of=as_of_ts)
+    # D229: --games restricts to specific game_ids
+    if args.games:
+        game_filter = set(g.strip() for g in args.games.split(","))
+        lines = {k: v for k, v in all_lines.items() if k in game_filter}
+    elif args.lines_json:
+        # --lines-json already contains exactly the games to sim
+        lines = all_lines
+    elif week_matchups:
         # Filter by exact matchups (away, home pairs)
         lines = {k: v for k, v in all_lines.items()
                  if (v["away"], v["home"]) in week_matchups}
@@ -1013,9 +1040,30 @@ def main():
         row["line_snapshot_utc"] = snap_utc
         row["line_book"] = book
 
+    # D242: write anchor_returned.parquet — the values run_anchored_chunked RETURNED
+    anchor_returned_rows = []
+    for gr in game_results:
+        home, away = gr["home"], gr["away"]
+        anchor_returned_rows.append({
+            "game": f"{away}@{home}",
+            "iterations": gr["n_iter"],
+            "converged": gr["converged"],
+            "anch_m": round(gr["anch_m"], 4),
+            "anch_t": round(gr["anch_t"], 4),
+            "target_spread": gr["spread"],
+            "target_total": gr["total"],
+        })
+
     # Write anchoring log
-    out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
+    # D241: --run-dir overrides the output directory
+    if args.run_dir:
+        out_dir = Path(args.run_dir)
+    else:
+        out_dir = OUT_BASE / f"week={SEASON}_{week:02d}"
     out_dir.mkdir(parents=True, exist_ok=True)
+    if anchor_returned_rows:
+        pd.DataFrame(anchor_returned_rows).to_parquet(
+            out_dir / "anchor_returned.parquet", index=False)
     if anchoring_log:
         alog_df = pd.DataFrame(anchoring_log)
         alog_df.to_parquet(out_dir / "anchoring_log.parquet", index=False)
@@ -1073,8 +1121,10 @@ def main():
         print(f"  Mean sim plays/team: {tv_df['sim_plays'].mean():.1f}")
 
     # Build board
+    _board_out = Path(args.run_dir) if args.run_dir else None
     board_text, all_legs = build_board(week, game_results, lines, team_game_counts,
                                         roster, roster_lookups, pull_ts_str,
+                                        out_dir_override=_board_out,
                                         as_of=as_of_ts)
 
     total_time = time.time() - t0

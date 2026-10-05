@@ -98,3 +98,208 @@ below were found independently by the main Layers chat and are fixed by its capt
   documented trap). `nfl/pipeline/pull_hardrock_props.py` saves every row of a run into the month of the LAST
   event in its loop and hardcodes 15 credits/event. `log_ai_opinions.py score` grades a player absent from PBP
   as 0 — for NHL a scratched player must be void.
+
+### H3 — Freeze tool: NHL entry, date-keyed slates, drivers field, book of record (2026-09-30)
+
+Implemented in `nfl/pipeline/log_ai_opinions.py` (branch `nhl/wo1`).
+
+**SPORTS['nhl'] extended** (L2 amendment created the entry with book/lines/require_side):
+- `slate: "date"` — slates are ET dates, not weeks; `--date YYYY-MM-DD` required
+- `season` rule: `nhl_season(date)` — month >= 7 -> year, else year - 1 (2027-03-15 -> season=2026)
+- `drivers_required: True` — every NHL row must have a non-empty `drivers` column (comma-separated,
+  sorted, unique subset of {market, news, history, model}); HALT on empty or unknown
+- `outcomes: None` — set to `'nhle'` in H4
+- `tags: (goalie, injury_news, lineup, schedule_spot, matchup, form, price_vs_sharp, line_move,
+  model_layer)` — `no_view`, `weather`, `game_script`, `role_change`, `usage_trend`, `sim_v1` are
+  football-only and rejected for NHL
+- `props: None` (H1: not in pilot universe)
+
+**NFL and NCAAF** gained explicit `slate: "week"`, `drivers_required: False`, `tags: (...)` matching
+their prior behavior. `TAGS` module-level constant preserved for backward compatibility.
+
+**Date-keyed sheet:** `build_sheet(slate_date=D)` filters to games whose `commence_time` falls on ET
+date D — never the next day's games. Output dir: `nhl/data/board/date=YYYY-MM-DD/ai_opinions/`.
+Frozen rows carry `slate_date` instead of `week`.
+
+**Book of record: pinnacle** (confirmed H2 addendum). Measured from fixture snap_20260929T2000Z:
+- Pinnacle: 7 games, all 3 markets on every game
+- Hard Rock: ABSENT from every game (0 games, 0 markets)
+- h2h outcomes per game: exactly 2 on all 138 (event, bookmaker) pairs — no 3-way/draw
+
+**Cross-dedup** for date sports uses `date=*/ai_opinions` glob instead of `week=*_*/ai_opinions`.
+
+**NULL CONTROL:** all existing NFL (wk2, wk3) and NCAAF (wk4) frozen file hashes unchanged:
+NFL wk2 5608e10f..., wk3 4e597ba0.../cc0eb467.../c7f59a14...; NCAAF wk4 504e1fb6.../d329749b...
+Verify returns bad=[], unlisted=[] on all. Football tags and behavior are identical.
+
+**Tests** (21 new, all pass): `nfl/pipeline/tests/test_ai_opinions_nhl_h3.py` — date slate filtering
+(+mutation), drivers validation (missing/empty/unknown/valid), tag scoping (no_view/weather rejected,
+goalie accepted), NHL without --date HALT, season rule (4 cases), freeze writes slate_date not week,
+football verify null control (6 sha256 assertions), football tags/drivers unchanged.
+
+### H4 — NHL outcomes loader + score (2026-09-30)
+
+Implemented in `nhl/pipeline/nhl_outcomes.py` and `nfl/pipeline/log_ai_opinions.py` (branch `nhl/wo1`).
+
+**Outcomes loader** (`nhl/pipeline/nhl_outcomes.py`):
+- Finals and player stats from `api-web.nhle.com` boxscores, cached in `nhl/cache/boxscore_<id>.json`
+  (ONLY when gameState is OFF/FINAL).
+- Team map: 32 Odds API full names -> NHL abbreviations, built from the API's own placeName + commonName.
+  Handles "St Louis Blues" (no period, Odds API) vs "St. Louis Blues" (NHL API), "Montréal Canadiens"
+  (accent preserved in both). "Utah Mammoth" and "Utah Hockey Club" both map to UTA. HALT on unmapped.
+- Match = unordered team pair + nearest start within 12 h (N41 lesson).
+- Settlement: h2h / spreads / totals on the API final (OT and shootout +1 included), per H2.
+
+**Agreement check, pre-registered "100% agreement":** 1,177 cached games checked against
+`nhl/nhl_games_canonical.csv` — **0 mismatches** on scores, OT flags, and SO flags. 135 games not in
+cache (season end). H2 counts: 1,312 games / 326 OT / 119 SO.
+
+**End-to-end test on real finished games:**
+- REG: 2025020001 CHI@FLA, final 2-3. h2h home wins=1, total 5 < 6.5 Under=0.
+- OT: 2025020008 CHI@BOS, final 3-4. h2h home wins=1, total 7 > 6.5 Over=1.
+- SO: 2025020006 CGY@EDM, final 4-3 (CGY wins SO), reg 3-3. h2h away wins=0, total 7 > 6.5 Over=1.
+  **The SO rule changes the totals grade:** final total 7 -> Over, regulation total 6 -> would be Under.
+  Tested: freeze + score in a tmp dir with synthetic tape, all 6 grades asserted against hand derivation.
+
+**SPORTS['nhl']['outcomes'] set to 'nhle'** — `score()` dispatches to `_nhle_actuals()` for NHL.
+
+**edge_rank fix (amendment):** `edge_rank` now ranked within each freeze file (`_file`), not across
+all scored rows. `conf_rank` was already per-file. Both are now 1..n within their freeze.
+
+**NULL CONTROL — football score unchanged:**
+- NCAAF wk4 Opus file: 177 graded sides, 99 won, +8.96 u (exact match to N63).
+- NFL wk3 TNF file: 28 sides, 18 won, +7.59 u, Brier 0.2519 vs 0.2618 (exact match).
+- Football reports gain no new sections.
+
+**Tests** (12 new, all pass): `nfl/pipeline/tests/test_ai_opinions_nhl_h4.py` — agreement check
+(0 mismatches on 1,177 games), REG/OT/SO settlement, SO grade change, team map (all names, accent,
+St Louis, unmapped HALT), end-to-end freeze+score on 3 real games, edge_rank per-file, NCAAF wk4 +
+NFL wk3 TNF score null controls.
+
+### H4b — CLV vs Pinnacle close, baselines (a)/(c), date-range scoring (2026-09-30)
+
+Addendum to H4. Implemented in `nfl/pipeline/log_ai_opinions.py` (branch `nhl/wo1`).
+
+**CLV vs Pinnacle close** in `score()` for sport=nhl:
+- For each scored line, finds the last Pinnacle tape snapshot with `snapshot_utc < commence_time`
+  (the "close"). De-vigs Pinnacle's close price for the frozen side. CLV = close_side_probability
+  minus the frozen price's break-even (implied of side_price).
+- A line whose point value at close differs from the frozen line value → CLV = NaN ("a moved line
+  is counted separately, never imputed" per H1).
+- The close snapshot chosen per game is stated in the output (close_snap column on every row).
+
+**Baselines (a) and (c)** logged in score_report on the same lines as the opinion:
+- (a) Brier: book-at-freeze probability vs Pinnacle-at-close probability, both against actual outcome.
+- (c) Follow-the-move: side = direction of Pinnacle's de-vigged move from the event's first tape
+  snapshot to the freeze snapshot, same line only. No move → no side. Hit rate, units at the same
+  real price, CLV — all reported. A line that moved between first and freeze → first_q_first = NaN,
+  counted in "no-move."
+
+**--from/--to ET date range** for `score --sport nhl`: pools all date dirs in the range, verifies
+each manifest, scores each date, concatenates, and reports. `--date D` still works for a single date.
+
+**Proof-of-run** on real 2026-09-29 slate (3 games: FLA@CAR, MTL@TOR, NYR@BOS):
+- Frozen synthetic filled sheet (9 lines) from the fixture tape at T2000Z.
+- Scored with CLV: 8 of 9 lines have CLV (mean −0.0138); 1 line (TOR spreads) has CLV=NaN because
+  the puck line flipped sides between first snapshot and close (TOR −1.5 → MTL −1.5).
+- Close snapshots: CAR game snap_20260929T2100Z, TOR game snap_20260929T2300Z, BOS game snap_20260930T0000Z.
+- Baseline (a): Brier freeze 0.2711 / close 0.2687.
+- Baseline (c): follow-the-move n=7, 4 won (57.1%), units +0.38, CLV −0.0173.
+
+**NULL CONTROL — football score byte-identical:**
+- NCAAF wk4: sha256 d98b273d92b2bde9..., 31891 bytes (before and after).
+- NFL wk3: sha256 38d4ca6625105c6e..., 226552 bytes (before and after).
+- Football reports gain no new sections; no CLV columns appear for non-NHL sports.
+
+**Pre-existing red** `test_score_first_side_and_units`: confirmed fails at parent (ee2b0ffd0) with
+the same `None == 0`. **What it reports:** the D236(a) snap-count participation check changed the
+`_first_side_won` contract so that player props require `snap_played=True` to proceed; the test
+calls it without `snap_played` (defaults to None = unresolved), so all player props return None
+instead of 0/1. The test correctly caught a behavior change but was never updated.
+
+### H5 — The packet: hashed beside every NHL frozen file (2026-09-30)
+
+Implemented in `shared/layers/packet.py` (sport-agnostic core) and `nhl/layers/build_packet_nhl.py`
+(NHL builder). Freeze integration in `nfl/pipeline/log_ai_opinions.py`.
+
+**shared/layers/packet.py** — sport-agnostic packet core:
+- Header: `{sport, slate_date, built_utc, builder_sha256, sources: [{path, sha256, source_utc}]}`
+- Games: `[{event_id, home, away, commence_time, layers: {market, news, history, model}}]`
+- Canonical JSON: sorted keys, 6-decimal floats — same inputs always produce the same hash (tested).
+- HALT if any source_utc >= built_utc, or built_utc >= the slate's first commence_time.
+- `builder_sha256` = sha256 of builder source files (content stamp, NEVER git HEAD).
+
+**nhl/layers/build_packet_nhl.py --date D** — NHL packet builder:
+- L1 market: per game × market, Pinnacle open/current/move, min/max across all books, event_markets
+  summary (WO12's files when present).
+- L2 news: goalie-probe observations (from item 4, when they exist) + --news-file CSV. A row missing
+  url or retrieved_utc -> HALT.
+- L3 history: point-in-time season-to-date GP, W-L-OTL, GF, GA, last-10, rest days, back-to-back
+  from cached boxscores strictly BEFORE the slate date. The 2025-26 final record included.
+- L4 model: pre-game probability from `nhl/nhl_model_outputs.parquet` (ends 2025-04-17); absent for
+  2026-27 games — `{"absent": "no model output for ... outputs end 2025-04-17"}`.
+
+**Freeze integration (NHL only):**
+- `--packet PATH` required for NHL (any drivers_required sport). HALT without it.
+- Validates: packet sport/date match freeze; built_utc <= freeze time and < first puck; packet games
+  include every sheet game; every row's drivers name only layers present in its game ('model' while
+  absent -> HALT, tested).
+- Copies the packet into the ai_opinions dir as `packet_<freezeUTC>.json`.
+- Manifest entry gains `packet_file` + `packet_sha256`.
+- `verify` rechecks the packet hash — an edited packet fails (tested).
+
+**NULL CONTROL — football unchanged:**
+- Football freeze needs no packet, its manifest entries gain no keys (verified: NFL wk3 manifest
+  has no packet_file/packet_sha256 on any entry).
+- NCAAF wk4 score: sha256 d98b273d92b2bde9 (unchanged).
+- NFL wk3 score: sha256 38d4ca6625105c6e (unchanged).
+
+**Tests** (13 new, all pass): `shared/layers/tests/test_packet_h5.py` — canonical JSON determinism,
+float precision, source_utc >= built_utc HALT, built_utc >= first puck HALT, sport mismatch HALT,
+missing events HALT, absent model driver HALT, present layers pass, missing layer HALT, builder
+content stamp, NHL freeze requires packet, football freeze no packet, packet tamper detected.
+
+**L4 model status for 2026-27:** `nhl/nhl_model_outputs.parquet` ends 2025-04-17 (5,248 rows,
+2021-10-12 to 2025-04-17). No file produces 2026-27 pre-game probabilities. Baseline (b) is
+`absent` until the NHL model runs for the new season.
+
+**Proof-of-run:** `build_packet_nhl.py --date 2026-09-29 --built-utc 2026-09-29T20:00:00+00:00`
+produced a packet with 5 games, 74 sources, sha256 40aa86a5...; L1 market populated from tape,
+L2 news "no observations yet", L3 history gp=0 (season opener), L4 model absent.
+
+### H6 — Starting-goalie sources: measurement only (2026-09-30)
+
+Implemented in `nhl/pipeline/probe_goalie_sources.py`. Host: Mac. No cron installed (superseded by
+order G1).
+
+**Pre-registration:** "the NHL API exposes no confirmed pre-game starter; ESPN unknown."
+
+**Sources probed:**
+1. `api-web.nhle.com/v1/gamecenter/{id}/landing` — matchup and summary fields
+2. `api-web.nhle.com/v1/gamecenter/{id}/boxscore` — playerByGameStats.goalies
+3. `site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary?event={id}` — boxscore.players,
+   rosters
+
+**Results — 2026-09-29 (5 finished regular-season games, post-game mode):**
+- NHL landing: 0/10 teams had a goalie name. No `goalieComparison` or `startingGoalie` field
+  populated on any game (pre- or post-game). **Pre-registration HELD.**
+- NHL boxscore: 10/10 teams had the correct starter post-game via `starter=true` flag.
+  Pre-game (FUT state): 0/6 teams on 2026-09-30 — no goalie data before puck drop.
+- ESPN summary: 0/6 teams on 2026-09-30 pre-game — both `rosters` and `boxscore.players` return
+  empty lists for FUT games. Post-game: `boxscore.players.goalies` lists goalies who played but
+  no `starter` flag observed. **Pre-registration HELD for ESPN too.**
+
+**Results — 2026-09-30 (3 FUT regular-season games, pre-game probe from Mac):**
+- All 3 sources return None for all 6 teams. No structured pre-game starter information from any
+  free API endpoint.
+
+**Candidates NOT scraped here (HTML, per spec):** DailyFaceoff, LeftWingLock, MoneyPuck.
+
+**Proposed cron lines (for record only; not installed — superseded by G1):**
+```
+*/30 15-23,0-3 * * * /path/to/python3 nhl/pipeline/probe_goalie_sources.py --date $(date -u +\%Y-\%m-\%d)
+```
+
+**Tests** (3 new, all pass): `nhl/pipeline/tests/test_probe_goalie_h6.py` — parser preserves
+source status verbatim (mutation: "confirmed" or "probable" would fail), ESPN status format, fixture
+goalie names match known starters (CAR=B. Bussi, FLA=J. Markstrom).

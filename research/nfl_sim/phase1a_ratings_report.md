@@ -64,8 +64,8 @@ Weeks 5–18 pass RMSE: 0.3064
 
 ## Check 1b: QB Caveat
 
-- Team-games with any second passer: 767 / 3416 (22.5%)
-- Starter changed or shared (primary passer < 80% of dropbacks): 196 / 3416 (5.7%)
+- Team-games with any second passer: 778 / 3482 (22.3%)
+- Starter changed or shared (primary passer < 80% of dropbacks): 199 / 3482 (5.7%)
 
 ## Situational PROE
 

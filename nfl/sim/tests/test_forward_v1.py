@@ -25,9 +25,10 @@ def _sheet_row(player, market_key, line, q_first=0.50, two_way=True):
             "source_utc": "2026-10-05T16:50:00Z"}
 
 
-def _picks_row(player, family, line, cal_p, side="over", tier="TRUSTED"):
+def _picks_row(player, family, line, cal_p, side="over", tier="TRUSTED",
+               game_id="BUF@KC"):
     return {"player_name": player, "family": family, "line": line,
-            "cal_p": cal_p, "side": side, "tier": tier}
+            "cal_p": cal_p, "side": side, "tier": tier, "game_id": game_id}
 
 
 def test_fill_matches_on_market_not_just_line():
@@ -87,9 +88,20 @@ def test_fill_unmatched_prop_no_view():
 # ── D215(b) anchor_sidecar tests ─────────────────────────────────────────────
 
 def test_anchor_sidecar_week2():
-    """D215(b): the committed week-2 anchoring log -> 15 games, all anchored, max |miss| <= 0.35."""
+    """D215(b)/D226: the committed week-2 anchoring log -> 15 games, all anchored, max |miss| <= 0.35.
+    D229: now passes actual lines dict (D226 requires it)."""
     al = pd.read_parquet(ROOT / "nfl" / "data" / "sim" / "outputs" / "week=2026_02" / "anchoring_log.parquet")
-    sidecar = anchor_sidecar(al, {})
+    # Build lines dict from the anchoring log's best iterations
+    lines = {}
+    for gname in al["game"].unique():
+        g = al[al["game"] == gname]
+        best = g.loc[(abs(g["err_m"]) + abs(g["err_t"])).idxmin()]
+        # Reconstruct market targets from best iteration: spread ≈ margin - err_m
+        lines[gname] = {
+            "spread": round(float(best["margin"]) - float(best["err_m"]), 4),
+            "total": round(float(best["total"]) - float(best["err_t"]), 4),
+        }
+    sidecar = anchor_sidecar(al, lines)
     assert len(sidecar) == 15, f"Expected 15 games, got {len(sidecar)}"
     assert sidecar["anchored"].all(), f"Unanchored games: {sidecar[~sidecar['anchored']]}"
     max_miss = max(sidecar["miss_m"].max(), sidecar["miss_t"].max())

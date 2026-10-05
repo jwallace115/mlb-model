@@ -1170,6 +1170,10 @@ files/s on the first 2,000 odds files, projected 36s, actual 29s).
 
 ARCHIVE_ROOT not set → rsync commands printed, STOPPED.
 
+**L-WO1c correction:** S58 said "E-WO1: 2,509,800"; that was E-WO2. Corrected to
+"E-WO1 16,000 + E-WO2 2,509,800 + WO2 76,262 = 2,602,062 credits" (the E-WO1 800
+quarantined snapshots are in the archive too).
+
 ### S59 — Finish S54 (Pinnacle truncation, F(D)/Pinnacle planted leaks, pricer HALT test, S55 explanation) (2026-10-05, L-WO1b Item 2)
 
 **Pinnacle truncation test (TestPinnacleTruncation):** for each of 5 test dates D, loads all
