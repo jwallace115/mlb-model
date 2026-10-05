@@ -3666,3 +3666,14 @@ Ending: 99,842
 - NFL TAPE PROBE: only snap_20261003T152632Z.parquet has generic label; all others use _fl
 - NOT DONE: first real event-market cron fires for NBA/NCAAF/MLB (scheduled, not yet fired)
 - UNVERIFIED: NFL consumer scripts ignoring the one generic-label probe file; event-market cost at full-season scale; Sunday AM London game cron behavior
+
+## 2026-10-05T14:41Z  claude-code
+- OPS1 work order: bet-ledger items 1-4, branch ops/bet-ledger
+- ITEM 1: link_picks_to_slips + pick_sources + fixtures + test → 10 passed; live run: 17/25 hit rate on tagged ours, 0/8 false claims, 1 proposed ours, 40 stay ?, net $1,093.05 vs $1,118.05 (worse by $25.00); tags.csv SHA identical before/after → commit bb9af872c
+- ITEM 2: ticket_id helper → RED first (4 failed, module missing), then GREEN (4 passed) → commit 9583fe323
+- ITEM 3: build_pick_ledger → 5 passed; live run: 20 sources, 829 rows, 278 tickets, ncaaf 4 / nfl 14 joined, leg_rule 18 → commit 74d26dd62
+- ITEM 4: capture_health staleness → 7 passed; bet_ledger OK 2.7 days old (warn > 3) → commit 585da2047
+- FULL SUITE: 98 passed, 2 failed (pre-existing on origin/main: test_espn_news_halt + test_news_dedup, both time-dependent freshness failures from hardcoded 2026-09-20 timestamps)
+- MERGED: ops/bet-ledger → main (pending — next step)
+- NOT DONE: worktree cleanup (left for Cowork verification)
+- UNVERIFIED: 829/278 vs expected 816/276 (likely new picks since work order); whether the 2 pre-existing test failures need datetime.now patching
