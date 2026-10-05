@@ -36,3 +36,21 @@ explained by the 60/40 outcome split. No grader bug. Recommendation: accept; the
 5. The capture fix is on the unmerged branch, so the live cron still logs official reports as `ok, 0 rows`.
 
 Action: NBA-S0b (research/nba_layers/workorder_S0b_2026-10-05.md) on the same branch, then merge.
+
+## NBA-S0b verification — Cowork, 2026-10-05 ~15:25Z (origin/nba/s0 3cdd902ec..01c7ca076)
+- Holds: B17 NOT_YET_SUBMITTED rows emitted by both parsers (2025-02-13 = 10 NYS teams, not empty); B18 three
+  pending_reason fixtures; context_mismatch cause shown (legacy `_12PM` slot 12:00 vs header 12:45); B16's 98.8% stated as
+  DID NOT HOLD; B19 parsed parquets committed (435 files + manifest, 0 PDFs tracked), raw PDFs in the main checkout and
+  git-ignored (check-ignore via .git/info/exclude); B20 symmetry recorded, RW@SH unchanged.
+- **NEW DEFECT — every legacy-era report is the NOON report.** `backfill_official_reports.py::legacy_report_url` builds
+  `_{h12}{AM|PM}` with NO zero padding ("_5PM"); the CDN's legacy names are zero-padded ("_05PM" — the 2023-24 archive in
+  nba/data/injury_reports/ was fetched that way with %I%p). Only 10/11/12 o'clock are two digits, so the backward search
+  for "latest report <= first tip - 30 min" and "latest <= 5 PM" both fell through to 12PM (or 11AM).
+  Evidence: data/injury_archive/nba/history/season=2024 = 163 x `_12PM.pdf` + 4 x `_11AM.pdf`, nothing else; season=2025
+  has 61 x `_12PM.pdf` (all legacy-era dates 2025-10-21..2025-12-21) beside the new-format `_05_30PM`, `_06_30PM`, ...
+  So B16's "pre-tip found 100%, 5:30 found 100%" is wrong in meaning for ~224 dates (all of 2024-25 and the first two
+  months of 2025-26): the files are the noon report, 5-7 h before the freeze/tip, and the committed history_parsed rows
+  for those dates must not be used as "who was out at freeze". Same bug class as WO1's B2 (hour formatting).
+- Also: the manifest has no per-date role (pre_tip / freeze) — 656 fetches collapse to 435 unique files with no record
+  of which file served which role.
+- Fix: NBA-S0c (research/nba_layers/workorder_S0c_2026-10-05.md). Do not merge nba/s0 until it lands.

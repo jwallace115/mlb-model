@@ -45,7 +45,7 @@ def legacy_report_url(d, hour24):
     ds = d.strftime("%Y-%m-%d")
     ampm = "AM" if hour24 < 12 else "PM"
     h12 = hour24 % 12 or 12
-    return f"{CDN}/Injury-Report_{ds}_{h12}{ampm}.pdf"
+    return f"{CDN}/Injury-Report_{ds}_{h12:02d}{ampm}.pdf"
 
 
 def load_game_dates(season_start):

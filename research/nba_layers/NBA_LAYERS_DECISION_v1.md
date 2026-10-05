@@ -711,3 +711,59 @@ value (-5.68%), explained by the 60/40 outcome split (over wins more often, so t
 loses more per unit). No grader bug exists.
 
 **The RW@SH numbers are unchanged.** The +16.3% over ROI at Pinnacle close stands as reported.
+
+### B21 — zero-padded legacy URLs, re-fetch, roles.parquet (2026-10-05)
+
+**Bug (S0b verification).** `legacy_report_url` built `_{h12}{AM|PM}` without zero-padding:
+`h=17` → `_5PM` (CDN returns 404), `h=9` → `_9AM` (404). Only 10/11/12 o'clock produce
+two-digit hours that matched the CDN's `_05PM`/`_09AM` format. The backward search for
+"latest report <= cutoff" fell through to 12PM (or 11AM) for every legacy-era date.
+Evidence: season=2024 had 163 `_12PM.pdf` + 4 `_11AM.pdf`, nothing else.
+
+Same bug class as B2 (hour formatting). The old `pull_injury_reports.py` (2023-24 batch)
+used `strftime('%I%p')` which produces zero-padded 12-hour format correctly.
+
+**Fix.** `legacy_report_url` now uses `f"{h12:02d}{ampm}"`. Cross-check: output matches
+`strftime('%I%p')` for all hours 9-23.
+
+**Re-fetch.** All 224 legacy-era game dates (163 season 2024-25 + 61 season 2025-26)
+re-searched with corrected URLs. 448 files fetched in 8.0 min (0.13h, under 2h limit).
+Both pre_tip and freeze found for 224/224 dates (100%).
+
+**roles.parquet** built at `data/injury_archive/nba/history_parsed/roles.parquet`:
+656 rows (448 legacy + 208 new-format), columns: game_date, role, url, sha256, slot_et,
+filename, season, status. One row per (game_date, role in {pre_tip, freeze}).
+
+**PRE-REGISTRATION RESULTS:**
+- ">= 95% of legacy pre_tip with slot >= 17:00 ET" — **DID NOT HOLD** (73.7%, 165/224).
+  Many slates have afternoon tips (weekend matinees, holidays), so the "latest <= tip-30min"
+  search stops at the early-afternoon report. The prediction assumed most tips are 7pm+;
+  ~26% of dates have a first tip before 5:30pm ET.
+- ">= 95% of freeze at 05PM" — **HELD** (100%, 224/224). Every legacy date has a 5PM report.
+- "Pre_tip == 12PM falls from ~100% to <= 5%" — **HELD** (4.9%, 11/224). The 11 remaining
+  12PM pre_tip files are Sunday noon slates with first tip near 1pm ET.
+- **NULL CONTROL:** every new-format date (>= 2025-12-22) has roles rows identical to
+  01c7ca076's manifest (same url and sha256). 0 mismatches out of 208 rows. **HELD.**
+
+**Test (2 tests, both pass):** `test_b21_legacy_url.py`:
+(i) h=17→`_05PM`, h=9→`_09AM`, h=12→`_12PM` — FAILS on 01c7ca076 (produces `_5PM`, `_9AM`).
+(ii) Cross-check: matches old script's `%I%p` format for all hours 9-17.
+
+**Pre_tip slot distribution (224 legacy dates):**
+
+| Slot ET | Count | Note |
+|---------|-------|------|
+| 11:00   | 5     | Holiday/early matinee |
+| 12:00   | 11    | Sunday noon slates |
+| 13:00   | 2     | |
+| 14:00   | 13    | |
+| 15:00   | 13    | |
+| 16:00   | 15    | |
+| 17:00   | 12    | |
+| 18:00   | 121   | Typical weeknight |
+| 19:00   | 28    | Late tip |
+| 20:00   | 3     | |
+| 21:00   | 1     | ASG week |
+
+Raw PDFs in main checkout `data/injury_archive/nba/history/season={2024,2025}/`, git-excluded.
+Season 2024: 470 PDFs (was 167). Season 2025: 385 PDFs (was 268).
