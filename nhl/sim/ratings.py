@@ -24,6 +24,12 @@ OUT_DIR = ROOT / "nhl" / "data" / "sim" / "ratings"
 CARRYOVER_PATH = OUT_DIR / "carryover_w.json"
 
 GAMES_PER_SEASON = 1312
+GAMES_PER_SEASON_MAP = {
+    2010: 1230, 2011: 1230, 2012: 720,  2013: 1230, 2014: 1230,
+    2015: 1230, 2016: 1230, 2017: 1271, 2018: 1271, 2019: 1082,
+    2020: 868,  2021: 1312, 2022: 1312, 2023: 1312, 2024: 1312,
+    2025: 1312,
+}
 FIT_SEASONS = [2021, 2022]
 ALL_SEASONS = [2021, 2022, 2023, 2024, 2025]
 
@@ -71,7 +77,8 @@ def score_xg(shots_df, model):
 def get_game_info(seasons):
     games = []
     for s in seasons:
-        for i in range(1, GAMES_PER_SEASON + 1):
+        n_games = GAMES_PER_SEASON_MAP.get(s, GAMES_PER_SEASON)
+        for i in range(1, n_games + 1):
             gid = f"{s}02{i:04d}"
             bp = BOX_DIR / f"boxscore_{gid}.json"
             if not bp.exists():
@@ -322,9 +329,10 @@ def split_half_ratio(df, num, den, min_games=40, group_col="team"):
 
 
 def compute_K(r, n_half):
-    """Reliability of n games = n / (n + K); split-half r is the reliability of n_half games."""
+    """Reliability of n games = n / (n + K); split-half r is the reliability of n_half games.
+    When r <= 0 (no stable signal), return a very large K (extreme shrinkage toward prior)."""
     if r <= 0:
-        raise ValueError(f"non-positive split-half r={r}: no stable signal, K undefined")
+        return 1e6  # effectively all-prior: rating = target
     return n_half * (1 - r) / r
 
 
@@ -361,12 +369,13 @@ def load_hyper():
         return json.load(f)
 
 
-def measure_carryover(tgs, adjusted=USE_ADJUSTED_5V5):
-    """Carry-over w per rating: slope of 2022-23 team rate on 2021-22 team rate (ratio of sums), clipped to [0, 1]."""
+def measure_carryover(tgs, adjusted=USE_ADJUSTED_5V5, fit_seasons=None):
+    """Carry-over w per rating: slope of season[1] team rate on season[0] team rate (ratio of sums), clipped to [0, 1]."""
+    fit = fit_seasons or FIT_SEASONS
     weights = {}
     for name, num, den, scale, _ in team_stat_specs(adjusted):
-        prev = tgs[tgs["season"] == 2021].groupby("team").agg(s=(num, "sum"), d=(den, "sum"))
-        curr = tgs[tgs["season"] == 2022].groupby("team").agg(s=(num, "sum"), d=(den, "sum"))
+        prev = tgs[tgs["season"] == fit[0]].groupby("team").agg(s=(num, "sum"), d=(den, "sum"))
+        curr = tgs[tgs["season"] == fit[1]].groupby("team").agg(s=(num, "sum"), d=(den, "sum"))
         prev["rate"] = prev["s"] / prev["d"] * scale
         curr["rate"] = curr["s"] / curr["d"] * scale
         both = prev[["rate"]].join(curr[["rate"]], lsuffix="_prev", rsuffix="_curr").dropna()
@@ -470,10 +479,11 @@ def measure_goalie_hyper(gdf, fit_seasons=FIT_SEASONS):
     return {"r": r, "pairs": n, "n_half": nh, "K": compute_K(r, nh), "method": "ratio-of-sums gsax/attempts_faced, goalie-season halves (>=10 starts each)"}
 
 
-def measure_goalie_carryover(gdf):
-    """Slope of 2022-23 GSAx/att on 2021-22 GSAx/att across goalies in both seasons."""
-    prev = gdf[gdf["season"] == 2021].groupby("goalie_id").agg(gsax=("gsax", "sum"), att=("attempts_faced", "sum"))
-    curr = gdf[gdf["season"] == 2022].groupby("goalie_id").agg(gsax=("gsax", "sum"), att=("attempts_faced", "sum"))
+def measure_goalie_carryover(gdf, fit_seasons=None):
+    """Slope of season[1] GSAx/att on season[0] GSAx/att across goalies in both seasons."""
+    fit = fit_seasons or FIT_SEASONS
+    prev = gdf[gdf["season"] == fit[0]].groupby("goalie_id").agg(gsax=("gsax", "sum"), att=("attempts_faced", "sum"))
+    curr = gdf[gdf["season"] == fit[1]].groupby("goalie_id").agg(gsax=("gsax", "sum"), att=("attempts_faced", "sum"))
     prev["rate"] = prev["gsax"] / prev["att"]
     curr["rate"] = curr["gsax"] / curr["att"]
     both = prev[["rate"]].join(curr[["rate"]], lsuffix="_p", rsuffix="_c").dropna()
@@ -556,65 +566,86 @@ def main():
     ap.add_argument("--measure-hyper", action="store_true", help="measure K and carry-over w on fit seasons, write JSONs, then build")
     ap.add_argument("--build-stats-only", action="store_true")
     ap.add_argument("--from-cache", action="store_true", help="read team_game_stats.parquet and goalie_games.parquet instead of rebuilding")
+    ap.add_argument("--fit-seasons", type=str, default=None, help="comma-separated start years for hyper/carryover (default: 2021,2022)")
+    ap.add_argument("--all-seasons", type=str, default=None, help="comma-separated start years for game_stats/ratings (default: 2021..2025)")
+    ap.add_argument("--out-dir", type=str, default=None, help="output directory (default: nhl/data/sim/ratings)")
+    ap.add_argument("--const-path", type=str, default=None, help="path to constants_v2.json (default: standard)")
     args = ap.parse_args()
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    fit = [int(s) for s in args.fit_seasons.split(",")] if args.fit_seasons else FIT_SEASONS
+    all_s = [int(s) for s in args.all_seasons.split(",")] if args.all_seasons else ALL_SEASONS
+    out_dir = Path(args.out_dir) if args.out_dir else OUT_DIR
+    out_dir.mkdir(parents=True, exist_ok=True)
+    hyper_path = out_dir / "shrinkage_K.json"
+    carryover_path = out_dir / "carryover_w.json"
+    goalie_games_path = out_dir / "goalie_games.parquet"
+    finishing_path = out_dir / "finishing_term.parquet"
+
+    if args.const_path:
+        global CONST_PATH
+        CONST_PATH = Path(args.const_path)
 
     if args.from_cache:
-        tgs = pd.read_parquet(OUT_DIR / "team_game_stats.parquet")
-        gdf = pd.read_parquet(GOALIE_GAMES_PATH)
+        tgs = pd.read_parquet(out_dir / "team_game_stats.parquet")
+        gdf = pd.read_parquet(goalie_games_path)
     else:
-        print("Loading data...")
-        games_df = get_game_info(ALL_SEASONS)
-        shots_all = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "shots.parquet") for s in ALL_SEASONS], ignore_index=True)
-        state_all = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "state_time.parquet") for s in ALL_SEASONS], ignore_index=True)
-        pens_all = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "penalties.parquet") for s in ALL_SEASONS], ignore_index=True)
+        print(f"Loading data for seasons {all_s}...")
+        games_df = get_game_info(all_s)
+        shots_all = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "shots.parquet") for s in all_s], ignore_index=True)
+        state_all = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "state_time.parquet") for s in all_s], ignore_index=True)
+        pens_all = pd.concat([pd.read_parquet(EVENTS_DIR / f"season={s}" / "penalties.parquet") for s in all_s], ignore_index=True)
         gd = games_df[["game_id", "date", "season"]].drop_duplicates("game_id")
         shots_all = shots_all.merge(gd, on="game_id", how="left")
         state_all = state_all.merge(gd, on="game_id", how="left")
         pens_all = pens_all.merge(gd, on="game_id", how="left")
         model = load_xg_model()
         tgs = build_game_stats_vectorised(games_df, shots_all, state_all, pens_all, model)
-        tgs.to_parquet(OUT_DIR / "team_game_stats.parquet", index=False)
+        tgs.to_parquet(out_dir / "team_game_stats.parquet", index=False)
         if args.build_stats_only:
             return
         gdf = build_goalie_games(shots_all, games_df, model)
-        gdf.to_parquet(GOALIE_GAMES_PATH, index=False)
+        gdf.to_parquet(goalie_games_path, index=False)
 
     if args.measure_hyper:
-        hyper = measure_hyper(tgs)
-        hyper["goalie"] = measure_goalie_hyper(gdf)
-        w = measure_carryover(tgs)
-        w["goalie_gsax_per_att"] = measure_goalie_carryover(gdf)
-        w["_derivation"] = "slope of 2022-23 team (goalie) full-season rate on 2021-22, ratio of sums, clipped to [0,1]"
-        with open(HYPER_PATH, "w") as f:
+        hyper = measure_hyper(tgs, fit_seasons=fit)
+        hyper["goalie"] = measure_goalie_hyper(gdf, fit_seasons=fit)
+        w = measure_carryover(tgs, fit_seasons=fit)
+        w["goalie_gsax_per_att"] = measure_goalie_carryover(gdf, fit_seasons=fit)
+        w["_fit_seasons"] = list(fit)
+        w["_derivation"] = f"slope of {fit[1]}-{fit[1]+1:02d} team (goalie) full-season rate on {fit[0]}-{fit[0]+1:02d}, ratio of sums, clipped to [0,1]"
+        with open(hyper_path, "w") as f:
             json.dump(hyper, f, indent=2, sort_keys=True)
-        with open(CARRYOVER_PATH, "w") as f:
+        with open(carryover_path, "w") as f:
             json.dump(w, f, indent=2, sort_keys=True)
         for k, v in hyper.items():
             print(k, v)
         for k, v in w.items():
             print("w", k, v)
 
-    team_ratings, _ = build_pit_ratings(tgs)
-    team_ratings.to_parquet(OUT_DIR / "team_ratings.parquet", index=False)
-    goalie_ratings = goalie_ratings_from_games(gdf)
-    goalie_ratings.to_parquet(OUT_DIR / "goalie_ratings.parquet", index=False)
+    team_ratings, _ = build_pit_ratings(tgs, fit_seasons=fit,
+                                         hyper=load_hyper() if hyper_path == HYPER_PATH else json.loads(hyper_path.read_text()),
+                                         carryover=load_carryover() if carryover_path == CARRYOVER_PATH else json.loads(carryover_path.read_text()))
+    team_ratings.to_parquet(out_dir / "team_ratings.parquet", index=False)
+    goalie_ratings = goalie_ratings_from_games(gdf,
+                                               hyper=load_hyper() if hyper_path == HYPER_PATH else json.loads(hyper_path.read_text()),
+                                               carryover=load_carryover() if carryover_path == CARRYOVER_PATH else json.loads(carryover_path.read_text()))
+    goalie_ratings.to_parquet(out_dir / "goalie_ratings.parquet", index=False)
     finishing = finishing_term_from_games(gdf)
-    finishing.to_parquet(FINISHING_PATH, index=False)
+    finishing.to_parquet(finishing_path, index=False)
     manifest = {
         "ratings_py_sha256": _sha(__file__),
-        "carryover_w_sha256": _sha(CARRYOVER_PATH),
-        "shrinkage_K_sha256": _sha(HYPER_PATH),
-        "team_game_stats_sha256": _sha(OUT_DIR / "team_game_stats.parquet"),
-        "goalie_games_sha256": _sha(GOALIE_GAMES_PATH),
-        "team_ratings_sha256": _sha(OUT_DIR / "team_ratings.parquet"),
+        "carryover_w_sha256": _sha(carryover_path),
+        "shrinkage_K_sha256": _sha(hyper_path),
+        "team_game_stats_sha256": _sha(out_dir / "team_game_stats.parquet"),
+        "goalie_games_sha256": _sha(goalie_games_path),
+        "team_ratings_sha256": _sha(out_dir / "team_ratings.parquet"),
         "team_ratings_rows": len(team_ratings),
-        "goalie_ratings_sha256": _sha(OUT_DIR / "goalie_ratings.parquet"),
+        "goalie_ratings_sha256": _sha(out_dir / "goalie_ratings.parquet"),
         "goalie_ratings_rows": len(goalie_ratings),
-        "finishing_term_sha256": _sha(FINISHING_PATH),
+        "finishing_term_sha256": _sha(finishing_path),
         "finishing_term_rows": len(finishing),
     }
-    with open(OUT_DIR / "manifest.json", "w") as f:
+    with open(out_dir / "manifest.json", "w") as f:
         json.dump(manifest, f, indent=2)
     print(json.dumps(manifest, indent=2))
 

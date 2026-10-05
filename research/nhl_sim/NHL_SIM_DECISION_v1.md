@@ -1317,3 +1317,46 @@ expected). All per-60 rates, PP seconds, and shot score_diff for 2010-2018 were 
 2010: 583/103,681; 2011: 710/101,664; 2012: 446/58,423; 2013: 727/102,763;
 2014: 765/102,157; 2015: 880/101,685; 2016: 938/103,374; 2017: 1,199/112,286;
 2018: 1,304/110,231. Total: 7,552 shots (~0.8%) had their score_diff mis-stated.
+
+### D6 — Walk-forward fit windows for 2012-13..2020-21 (2026-10-05, D-WO2 Item 1)
+
+Generalised `build_constants_v7.py` (`--fit-seasons`, `--out`) and `ratings.py`
+(`--fit-seasons`, `--all-seasons`, `--out-dir`) as CLI arguments. Defaults unchanged.
+`ratings.py` now uses `GAMES_PER_SEASON_MAP` for per-season game counts instead of
+hardcoded 1312. `measure_carryover` and `measure_goalie_carryover` use `fit_seasons[0]`
+and `fit_seasons[1]` instead of hardcoded 2021/2022.
+
+**Null control:** re-running with defaults reproduces all committed parquets byte-for-byte:
+team_ratings `67672cda`, goalie_ratings `e2f2d8d8`, finishing_term `f7cda74d`,
+shrinkage_K `1a532edc`, constants_v8 `c1464358`. **PASS.**
+
+Orchestrator: `nhl/sim/walkforward.py --targets 2012,...,2020`. Output:
+`nhl/data/sim/walkforward/season=T/` with constants_v8.json, shrinkage_K.json,
+carryover_w.json, team_ratings.parquet, goalie_ratings.parquet, finishing_term.parquet.
+
+**OT structural break:** meta.json records `ot_base_skaters`: 4 for T ≤ 2014 (4v4 OT era),
+3 for T ≥ 2015 (3v3 OT era). The engine's `base = 3 if in_ot else 5` line will be
+parameterised in the pricer (D7).
+
+**Goalie r ≤ 0:** When goalie split-half r is non-positive (happened for T=2015: r=-0.013),
+K is set to 1e6 (all-prior rating). This is the correct behaviour: if goalie performance
+is not reliable over half-seasons, shrink entirely to the carry-over prior.
+
+**Measured r/K/w per target season:**
+
+| T | fit | OT | r_ev_att | K_ev_att | r_goalie | K_goalie |
+|---|-----|----|---------:|---------:|---------:|---------:|
+| 2012 | 2010,2011 | 4 | 0.8248 | 8.71 | 0.2550 | 66.01 |
+| 2013 | 2011,2012 | 4 | 0.8923 | 3.92 | 0.2158 | 74.33 |
+| 2014 | 2012,2013 | 4 | 0.9016 | 3.55 | 0.0601 | 289.24 |
+| 2015 | 2013,2014 | 3 | 0.8755 | 5.83 | -0.013 | 1e6 |
+| 2016 | 2014,2015 | 3 | 0.8551 | 6.95 | 0.0785 | 253.62 |
+| 2017 | 2015,2016 | 3 | 0.8297 | 8.42 | 0.0986 | 195.06 |
+| 2018 | 2016,2017 | 3 | 0.8324 | 8.25 | 0.1910 | 92.00 |
+| 2019 | 2017,2018 | 3 | 0.8155 | 9.27 | 0.2278 | 70.82 |
+| 2020 | 2018,2019 | 3 | 0.7458 | 12.93 | 0.0896 | 194.24 |
+
+Cross-era observations: team 5v5 r is stable (0.75-0.90, default=0.925); goalie r is
+unreliable (0.06-0.26 where positive, negative for 2015). The default K_ev_att=3.07
+is at the low end; walk-forward windows give 3.5-13. The 2012-13 lockout (720 games)
+enters naturally weighted by rows in the measure functions.

@@ -26,8 +26,9 @@ BIN = 30
 WINDOW = 300
 
 
-def load(table):
-    return pd.concat([pd.read_parquet(EV / f"season={s}" / f"{table}.parquet") for s in FIT], ignore_index=True)
+def load(table, fit_seasons=None):
+    fit = fit_seasons if fit_seasons is not None else FIT
+    return pd.concat([pd.read_parquet(EV / f"season={s}" / f"{table}.parquet") for s in fit], ignore_index=True)
 
 
 def team_view(st):
@@ -113,29 +114,32 @@ def pp_penalties(st, pe):
     }
 
 
-def main():
+def main(fit_seasons=None, out_path=None):
+    fit_seasons = fit_seasons or FIT
+    out_path = out_path or OUT
     v5 = json.loads(V5.read_text())
-    st, pe = load("state_time"), load("penalties")
+    st, pe = load("state_time", fit_seasons), load("penalties", fit_seasons)
     data, n_pulls, orphan = pull_hazard(st)
     out = {k: v for k, v in v5.items() if k != "constants"}
     out["version"] = 7
     out["based_on"] = "constants_v5.json (all v5 fields copied unchanged)"
     out["constants"] = dict(v5["constants"])
     out["constants"]["pull_hazard_per_second"] = {
-        "data": data, "fit_seasons": FIT, "total_pulls": n_pulls,
+        "data": data, "fit_seasons": list(fit_seasons), "total_pulls": n_pulls,
         "derivation": "pulls / seconds at risk (3rd period last 300 s, goalie in, trailing by k (3 = 3+), not on a PP), 30-s bins of time remaining",
     }
     out["constants"]["pp_penalty"] = pp_penalties(st, pe)
-    OUT.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+    Path(out_path).write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
     # NULL CONTROLS
     assert all(out["constants"][k] == v for k, v in v5["constants"].items()), "a v5 field changed"
     print("null (a): every v5 field identical in v7")
     print(f"pulls counted: {n_pulls}; pulls with no at-risk seconds in their bin: {orphan}")
-    sha = hashlib.sha256(OUT.read_bytes()).hexdigest()
-    OUT.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
-    assert hashlib.sha256(OUT.read_bytes()).hexdigest() == sha, "not byte-identical"
+    sha = hashlib.sha256(Path(out_path).read_bytes()).hexdigest()
+    Path(out_path).write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+    assert hashlib.sha256(Path(out_path).read_bytes()).hexdigest() == sha, "not byte-identical"
     print("null (b): byte-identical on rewrite; sha256", sha)
     print("pp_penalty:", {k: v for k, v in out["constants"]["pp_penalty"].items() if k != "derivation"})
+    return out
 
 
 V8 = ROOT / "nhl" / "data" / "sim" / "constants_v8.json"
@@ -181,15 +185,18 @@ def ev5_by_time_score(st, sh):
     return out
 
 
-def main_v8():
-    v7 = json.loads(OUT.read_text())
-    st, sh = load("state_time"), load("shots")
+def main_v8(fit_seasons=None, v7_path=None, out_path=None):
+    fit_seasons = fit_seasons or FIT
+    v7_path = v7_path or OUT
+    out_path = out_path or V8
+    v7 = json.loads(Path(v7_path).read_text())
+    st, sh = load("state_time", fit_seasons), load("shots", fit_seasons)
     out = dict(v7)
     out["version"] = 8
     out["based_on"] = "constants_v7.json (all v7 fields copied unchanged)"
     out["constants"] = dict(v7["constants"])
     out["constants"]["ev5_by_time_score"] = {
-        "data": ev5_by_time_score(st, sh), "fit_seasons": FIT, "time_bins": ["P1", "P2", "P3a", "P3b", "P3c"],
+        "data": ev5_by_time_score(st, sh), "fit_seasons": list(fit_seasons), "time_bins": ["P1", "P2", "P3a", "P3b", "P3c"],
         "derivation": "5v5 both goalies in; team attempts / team seconds * 3600 and goals / attempts, by time bin and own score diff (+-3)"}
     # q = league xG per non-empty-net attempt, all states, fit seasons
     import sys as _sys; _sys.path.insert(0, str(ROOT))
@@ -201,15 +208,25 @@ def main_v8():
     out["constants"]["q_league_xg_per_non_en_attempt"] = {
         "value": round(q, 6), "numerator": round(float(non_en["xg"].sum()), 2), "denominator": len(non_en),
         "derivation": "sum(xG v2) / non-empty-net unblocked attempts, all states, fit seasons"}
-    V8.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+    Path(out_path).write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
     assert all(out["constants"][k] == v for k, v in v7["constants"].items()), "a v7 field changed"
-    sha = hashlib.sha256(V8.read_bytes()).hexdigest()
-    V8.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
-    assert hashlib.sha256(V8.read_bytes()).hexdigest() == sha
+    sha = hashlib.sha256(Path(out_path).read_bytes()).hexdigest()
+    Path(out_path).write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+    assert hashlib.sha256(Path(out_path).read_bytes()).hexdigest() == sha
     tot = sum(c["attempts"] for tb in out["constants"]["ev5_by_time_score"]["data"].values() for c in tb.values())
     print("v8: every v7 field identical; byte-identical; sha256", sha, "; 5v5 attempts in table", tot)
+    return out
 
 
 if __name__ == "__main__":
-    import sys
-    main_v8() if "--v8" in sys.argv else main()
+    import sys, argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--v8", action="store_true")
+    ap.add_argument("--fit-seasons", type=str, default=None, help="comma-separated start years (default: 2021,2022)")
+    ap.add_argument("--out", type=str, default=None, help="output path (default: standard location)")
+    args = ap.parse_args()
+    fit = [int(s) for s in args.fit_seasons.split(",")] if args.fit_seasons else None
+    if args.v8:
+        main_v8(fit_seasons=fit, out_path=args.out)
+    else:
+        main(fit_seasons=fit, out_path=args.out)
