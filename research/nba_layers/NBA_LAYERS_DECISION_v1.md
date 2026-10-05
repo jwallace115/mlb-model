@@ -767,3 +767,36 @@ filename, season, status. One row per (game_date, role in {pre_tip, freeze}).
 
 Raw PDFs in main checkout `data/injury_archive/nba/history/season={2024,2025}/`, git-excluded.
 Season 2024: 470 PDFs (was 167). Season 2025: 385 PDFs (was 268).
+
+### B22 — legacy context window: [slot, slot+60min] (2026-10-05)
+
+**Rule.** Legacy hourly files use binding window `[slot, slot+60min]`; new q15 files keep
+`[slot, slot+30min]`. Legacy reports are published hourly, so the slot represents the top of
+the hour, not the exact publication time. A report at 12:45 PM is correctly served by the
+`_12PM` URL and falls within the hourly window.
+
+**Change.** `validate_context` in `injury_report_parser.py` now calls `is_legacy_format(fname)`
+and uses 60min or 30min accordingly.
+
+**PRE-REGISTRATION:** The 4 B16 `context_mismatch` files (2025-12-20/21, `_12PM`, header
+12:45 PM, delta=45min) become `ok`. No new-format file changes status.
+
+**Re-parse results (448 legacy files):**
+
+| Season | Role | Files | ok | context_mismatch | A==B rate |
+|--------|------|-------|----|-----------------|-----------|
+| 2024-25 | pre_tip | 163 | 163 | 0 | 100.0% |
+| 2024-25 | freeze | 163 | 163 | 0 | 100.0% |
+| 2025-26 | pre_tip | 61 | 61 | 0 | 100.0% |
+| 2025-26 | freeze | 61 | 61 | 0 | 100.0% |
+| **Total** | | **448** | **448** | **0** | **100.0%** |
+
+Previous: 4 `context_mismatch` → now all `ok`. **HELD.**
+
+**NULL CONTROL:** 208 new-format files: 0 changed status. **HELD.**
+
+**Tests (3 tests, all pass):** `test_b22_context_window.py`:
+(i) Legacy `_12PM` file with header 45min after slot → `ok`. FAILS on 01c7ca076
+    (`is_legacy_format` does not exist; `validate_context` returns `context_mismatch`).
+(ii) New-format `_12_00PM` file 45min after slot → `context_mismatch` (30min rule holds).
+(iii) New-format file 25min after slot → `ok`.

@@ -366,6 +366,13 @@ def slot_datetime_from_filename(filename):
     raise ParseHalt(f"Cannot parse slot datetime from filename: {filename}")
 
 
+def is_legacy_format(filename):
+    """True if filename is legacy hourly format (no minute component)."""
+    return bool(re.match(
+        r"Injury-Report_\d{4}-\d{2}-\d{2}_\d{1,2}(AM|PM)\.pdf$", filename
+    ))
+
+
 def url_date_from_filename(filename):
     m = re.search(r"(\d{4}-\d{2}-\d{2})", filename)
     if not m:
@@ -374,7 +381,11 @@ def url_date_from_filename(filename):
 
 
 def validate_context(pdf_path, rows_a, published_utc, header_date_mmddyy):
-    """Context binding checks. Returns (status, message)."""
+    """Context binding checks. Returns (status, message).
+
+    Binding window: legacy hourly files [slot, slot+60min],
+    new q15 files [slot, slot+30min].
+    """
     fname = Path(pdf_path).name
     url_date = url_date_from_filename(fname)
     hd = datetime.strptime(header_date_mmddyy, "%m/%d/%y")
@@ -387,10 +398,11 @@ def validate_context(pdf_path, rows_a, published_utc, header_date_mmddyy):
         slot_dt = slot_datetime_from_filename(fname)
         slot_utc = slot_dt.astimezone(UTC)
         delta = published_utc - slot_utc
-        if delta < timedelta(0) or delta > timedelta(minutes=30):
+        window = timedelta(minutes=60) if is_legacy_format(fname) else timedelta(minutes=30)
+        if delta < timedelta(0) or delta > window:
             return "context_mismatch", (
                 f"Header time {published_utc.isoformat()} not within "
-                f"[slot {slot_utc.isoformat()}, slot+30min]"
+                f"[slot {slot_utc.isoformat()}, slot+{int(window.total_seconds()//60)}min]"
             )
     except ParseHalt:
         pass
