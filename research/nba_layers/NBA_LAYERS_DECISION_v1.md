@@ -878,3 +878,39 @@ Likely end-of-season date in schedule file with no actual games.
 The 120/60/190/250 min mismatches are ESPN In-Season Tournament / All-Star weekend games
 where ESPN and the Odds API disagree on event timing. The 20-30 min mismatches are minor.
 Odds API events are the primary tip source; ESPN is cross-check only.
+
+### B25 — per-game as-of: game_asof.parquet (2026-10-05)
+
+**Jeff decision 2026-10-05: "per-game cap with the 5:30 report."**
+
+**Rule.** The freeze report is the date's 5:30pm ET report (`_05_30PM` new / `_05PM` legacy).
+- asof = freeze if its published_utc <= tip_utc - 30 min (asof_role = freeze).
+- Otherwise asof = latest report with published_utc <= tip_utc - 30 min (asof_role = pre_game).
+- published_utc = PDF header time, never the slot. Legacy headers run 30-45 min after the slot.
+
+**The live pilot packet uses the identical rule (CHECK 3); WO2-D must implement it, not a
+date-level freeze.**
+
+**game_asof.parquet:** `data/injury_archive/nba/history_parsed/game_asof.parquet`.
+2,481 rows (one per Odds API event). Columns: event_id, game_date, home_team, away_team,
+tip_utc, tip_source, asof_role, asof_filename, asof_sha256, asof_published_utc.
+
+**Results:**
+
+| asof_role | Count | Share |
+|-----------|-------|-------|
+| freeze    | 2,271 | 91.5% |
+| pre_game  | 210   | 8.5%  |
+| no_asof   | 0     | 0%    |
+
+92 PDF fetches (under 300 cap).
+
+**PRE-REGISTRATION RESULTS:**
+- "rows with asof_published_utc > tip_utc - 30 min: 0" — **HELD.**
+- "share of pre_game: 4%-15%" — **HELD** (8.5%). S0c audit measured 194/2,467 = 7.9%
+  tipping before 18:00 ET; the 8.5% includes some games tipping 18:00-18:30 ET where the
+  freeze report header (17:45) is inside the 30-min margin.
+- **NULL:** every game with tip >= 18:30 ET has asof_role = freeze and the same sha256 as
+  that date's roles freeze row: 2,153/2,160 (99.7%). 0 sha256 mismatches. The 7 exceptions
+  are NBA Cup (2024-12-17) and play-in (2025-04-15/16) dates with no freeze in roles because
+  they are not in the regular-season schedule files. **HELD** (with documented caveat).
