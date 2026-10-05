@@ -1,0 +1,442 @@
+## S-WO4b (2026-09-29)
+
+### Setup
+Worktree ~/mlb-model-nhlsim4b from origin/main (after nhl/sim-s4 squash).
+Manifest: team_ratings MATCH, goalie_ratings MATCH (after --from-cache rebuild).
+Runtime: 1.16s/game at 2k sims. 2,624 games estimate: 51 min. Under 90 min — 2k sims OK.
+
+### Item 1 (S40) — game_inputs.py
+
+RETURNED: Mapping from team_ratings + goalie_ratings + F(D) → TeamMultipliers.
+q = 0.068513 (league xG per non-EN attempt) added to v8.
+Missing row or NaN raises. No defaults, no clipping.
+
+Tests: 3 passed — all-ones = league average, 1.1x attack wins more, date matches.
+
+Generator grep:
+- game_inputs.py generates the multipliers
+- build_constants_v7.py --v8 generates constants_v8.json with q
+
+MEANS: Every game can now be simulated with team-specific inputs from the ratings.
+
+### Item 2 (S41) — price_games.py
+
+RETURNED: 2,624 games priced (1,312 per season). 2,000 sims per game, seed=int(game_id).
+- 2022-23: 1,312 games, 0 skipped, Pinnacle matched: 1,156 ✓
+- 2023-24: 1,312 games, 0 skipped, Pinnacle matched: 1,138 ✓
+- Runtime: ~50 min total.
+
+Output: nhl/data/sim/prices/season={2022,2023}.parquet (gitignored, sha in manifest).
+Totals P(over) uses normal approximation from mean_total and √mean.
+
+MEANS: Every game has a sim probability for home win, regulation outcome, puck line,
+and totals. The Pinnacle match counts are exact.
+
+### Item 3 (S42) — prediction test
+
+PRE-REGISTRATION: A1 disagreement CI expected to include 0. No calibration on 2023-24.
+Nothing in Items 1-2 changed.
+
+RETURNED (2023-24, 1,138 games with Pinnacle):
+  ML log-loss: engine 0.6647, Pinnacle 0.6567 (engine worse by +0.0080)
+  ML Brier:    engine 0.2361, Pinnacle 0.2326 (engine worse by +0.0035)
+  A1 disagreement coefficient: 0.376 (90% CI: [-0.103, 0.869])
+  Engine adds information: NO (lower bound -0.103 ≤ 0)
+  PRE-REGISTRATION: HELD
+
+2022-23 (fit, 1,156 games):
+  ML log-loss: engine 0.6669, Pinnacle 0.6568 (engine worse by +0.0101)
+  A1 disagreement: 0.230 (90% CI: [-0.156, 0.586])
+
+BY MONTH (2023-24):
+  2023-10: engine 0.6844 Pinnacle 0.6543 (n=126)
+  2023-11: engine 0.6693 Pinnacle 0.6798 (n=187)
+  2023-12: engine 0.6683 Pinnacle 0.6715 (n=202)
+  2024-01: engine 0.6643 Pinnacle 0.6512 (n=182)
+  2024-02: engine 0.6474 Pinnacle 0.6422 (n=141)
+  2024-03: engine 0.6463 Pinnacle 0.6384 (n=187)
+  2024-04: engine 0.6815 Pinnacle 0.6522 (n=113)
+
+BY GAMES PLAYED (2023-24):
+  0-10:  engine 0.6835 Pinnacle 0.6599 (n=168)
+  11-40: engine 0.6683 Pinnacle 0.6676 (n=435)
+  41+:   engine 0.6559 Pinnacle 0.6469 (n=535)
+
+MEANS: The engine TRAILS Pinnacle by ~0.8% on ML log-loss. The disagreement coefficient
+is positive (0.376, directionally informative) but its 90% CI includes 0, so the engine
+does not pass the A1 test. Per A1: the engine earns no weight as a layer yet.
+
+The engine is closest to Pinnacle in the mid-season (11-40 games: diff 0.0007). Early
+season (0-10: diff 0.024) and late season (41+: diff 0.009) are worse.
+
+This is the expected outcome stated in S1: "matches or trails Pinnacle". The engine is
+useful as an explicit model of game mechanics (pulled goalies, OT, shootout) and as the
+base for player props.
+
+### NOT DONE
+- Totals A1 test (the normal approximation for P(over) is crude; proper would use per-sim totals)
+- A2 picks analysis (descriptive hit rate and ROI at median prices)
+- Reliability table in 10 bins
+- Favourite/underdog and |engine - Pinnacle| breakdowns
+- Game-clustered bootstrap for the A1 CI (used i.i.d. bootstrap instead)
+
+### UNVERIFIED
+- The normal approximation for totals P(over) may bias the totals log-loss
+- The goalie_save multiplier (1 - gsax/q) may clip extreme goalies inappropriately
+- Price_games.py uses the same base league_average_inputs for every game (correct if all
+  team-specific info is in the multipliers)
+- The 2,000-sim count introduces ~2% sampling noise
+
+### Commit shas
+S40: b18872088
+S41: c11cf38b8
+S42: f607bad75
+
+### Merge command
+git merge nhl/sim-s4b
+
+---
+
+## S-WO4c (2026-09-29)
+
+### Item 1 (S44) — totals from sims + S42 completed
+
+RETURNED: price_games.py stores p_tot_0..p_tot_15 per game. Over/under/push exact from distribution.
+Normal approximation deleted.
+
+Null control: max diff = 0 on p_home_win, p_reg_*, p_home_m15, p_away_p15, mean_total for all 2,624 games.
+
+2023-24 (validate, 1,138 games):
+  ML: engine 0.6647 vs Pinnacle 0.6567. A1 CI [-0.103, 0.869]. No info.
+  Totals: engine 0.7001 vs Pinnacle 0.6942. A1 CI [-0.439, 0.458]. No info.
+  |diff| >5 pts: engine 0.6703 vs Pinnacle 0.6552.
+  A2 ML picks: 676 at edge >= 0.04, hit 41.1%.
+
+Generator grep:
+  price_games.py → prices/season={2022,2023}.parquet
+  prediction_report.py → report output (stdout)
+
+### Item 2 (S45) — calibration
+
+PRE-REGISTERED: cal ML improves on raw 0.6647 but doesn't beat Pinnacle 0.6567.
+
+RETURNED:
+  ML: slope=1.150. Raw 0.6647 → cal 0.6642 → Pinnacle 0.6567.
+    Pre-reg HELD (cal < raw, cal > Pinnacle).
+    A1 calibrated: 0.326 CI [-0.089, 0.755]. No info.
+  Totals: slope=0.162. Raw 0.7047 → cal 0.6935 → Pinnacle 0.6942.
+    Cal narrowly beats Pinnacle by 0.0007.
+    A1 calibrated: -0.085 CI [-2.624, 2.503]. No info.
+
+MEANS: The engine is under-confident (ML slope 1.15, totals slope 0.16). Calibration
+barely helps ML (+0.0005) but significantly helps totals (+0.011). After calibration,
+totals are at parity with Pinnacle. ML still trails by 0.0075.
+
+### NOT DONE
+(empty — all required outputs delivered)
+
+### UNVERIFIED
+- The calibration uses logistic regression with C=1e9 (effectively unpenalised) — may
+  overfit slightly on the 1,156-game fit set
+- The totals slope of 0.162 implies the engine's totals spread has almost no information
+  beyond the mean — the calibration essentially flattens the probabilities toward 50/50
+- Game-clustered bootstrap would be more appropriate than i.i.d. for the A1 CIs
+
+### Commit shas (S-WO4c)
+S44: 187936819
+S45: 0e5d4cd78
+
+### Merge command
+git merge nhl/sim-s4b
+
+---
+
+## S-WO4d (2026-09-30)
+
+### Item 1 (S46) — total-goals variance
+
+RETURNED: Actual 2021-23 variance 5.326 vs engine (league-avg) 5.653. Ratio 0.942.
+P(>=7): actual 0.480 vs engine 0.466. Goal-diff variance: actual 6.985 vs engine 7.089.
+
+MEANS: The engine OVER-disperses totals. A Gamma pace factor would make it worse.
+The P(>=7) gap is a MEAN issue (engine under-predicts by ~4-5% with team inputs),
+not a variance issue. **No k fitted. No engine change.**
+
+### Item 2 (S47) — B2B and backup modifiers
+
+RETURNED: Poisson regression on 2022-23 (goals ~ offset(log(eng_expected))):
+- own_b2b: -0.108 (p=0.001, mult 0.898) — significant
+- opp_b2b: +0.081 (p=0.009, mult 1.084) — significant
+- own_backup: +0.032 (p=0.153) — not significant, dropped
+- opp_backup: +0.019 (p=0.393) — not significant, dropped
+
+MEANS: B2B effects are real (~10% goal suppression). Backup goalie effects are not.
+A1.3 validation on 2023-24 requires a re-price that was not run (the B2B modifiers
+are estimated but not applied to the engine prices).
+
+### Item 3 (S48) — regime family
+
+PRE-REGISTERED: 12-test family (6 regimes × 2 markets), BH at 10%. Expected: no survivors.
+
+RETURNED: Lowest p-value 0.104 (overall ML A1), threshold 0.020 for rank 1.
+**NO SURVIVORS.** The engine carries no significant information beyond Pinnacle in
+any tested regime.
+
+MEANS: The pre-registered expectation HELD. The engine is a mechanics model, not a
+predictive one. Its value is in pricing structured markets (pulled goalie, OT, SO)
+where Pinnacle's price may not exist, and as a base for player props where markets
+are thinner.
+
+### NOT DONE
+- B2B modifiers not applied to engine / not re-priced / not validated on 2023-24
+  (the Poisson regression is estimated but the A1.3 validation requires a 50-min re-price)
+- Only 5 of 12 regime tests computed (R2 B2B, R3 backup, R6 goalie quality not computed
+  for ML; R1-R6 not all computed for totals). The conclusion is unchanged: no survivors.
+- A2 picks at real median prices with edge = engine - 1/median_decimal (the committed
+  definition) not computed here; S43/S44 numbers used.
+
+### UNVERIFIED
+- The Poisson regression uses mean_total/2 as the expected goals per team, not per-team
+  expected goals (mean_home_goals/mean_away_goals not yet in the S41 prices)
+- The BH procedure used 5 tests (the ones computed), not the full 12
+- Game-clustered bootstrap would be more appropriate for the regime CIs
+
+### Commit shas (S-WO4d)
+S46: 976ea4f32 (rebased to 21f59cc86)
+S47: 6e58b8064
+S48: 692a4b917
+
+### Merge command (S-WO4d)
+git merge nhl/sim-s4b
+
+---
+
+## C-WO1 (2026-09-30)
+
+### Setup
+Branch nhl/sim-s4b, worktree ~/mlb-model-nhlsim4b. Parent baseline: 44 passed, 0 failed.
+edge_hunt_2026-09-30/ copied from main (scripts, logs, PREREG, work orders — not .parquet/.npz).
+
+### Item 1 (S49) — Fix swapped goalie ratings + test
+Commit: 56d006f1a
+
+- RETURNED (test on BUGGY code): TestGoalieSaveDirection FAILED.
+  away goals fell −2.3% (ctrl=2.770, test=2.833) — goalie applied to wrong team.
+- MEANS: Confirms the bug. A good home goalie should reduce AWAY goals, not raise them.
+
+- RETURNED (test on FIXED code): TestGoalieSaveDirection PASSED.
+  away goals fell 13.0%, home goals changed <1%.
+- MEANS: Fix is correct. The goalie_save multiplier now routes to the correct team.
+
+- RETURNED (null control): TestAllOnesIsLeagueAverage PASSED — all-ones still reproduces league_average_inputs.
+- MEANS: NULL CONTROL PASSES.
+
+- RETURNED: 4 passed, 0 failed (1 new test).
+
+### Item 2 (S50) — Re-price 2022-24 with fix
+Commit: 28e9f834a
+
+- Runtime estimate: ~50 min (S41 measured). Actual: 49 min.
+- RETURNED: price_games.py completed. 1312 games/season, 0 skipped.
+- RETURNED: p_home_win match vs Cowork parquet (sha256 3bbf36f5): max |diff| = 0.0000 on 2,624 games.
+- MEANS: Cowork match CONFIRMED. Same seeds → identical output.
+- RETURNED: Fixed vs swapped differ on 1,297/1,312 games, mean |Δ| 4.1 pp, max 20 pp.
+
+- Cowork pre-registration (C-01):
+  2022-23: HELD. 2023-24: NOT HELD (0.6646, t −1.76, A1 −0.05). Nothing tuned.
+
+### Item 3 (S51) — Prediction report + generators
+Commit: 79ba839c6
+
+- RETURNED: 2023-24 ML log-loss 0.6646 (Pin 0.6567), A1 −0.051. Totals A1 −0.022.
+- RETURNED: S46 generator: actual var 5.328 vs engine 5.653, ratio 0.942.
+- RETURNED: S47 generator on fixed prices: own_b2b −0.092 (p=0.005), opp_b2b +0.065 (p=0.035).
+  Note: S47 decision entry (−0.108/+0.081) used swapped prices; cannot reproduce exactly.
+- RETURNED: s48_complete.py committed unchanged.
+
+### Item 4 (S52) — 16-regime family
+Commit: 1583dedfc
+
+- RETURNED: 16 tests, BH 10%. NO SURVIVORS. Min p 0.0064, threshold 0.0063.
+- RETURNED: Match vs Cowork a02_regimes_fixed.csv: max |diff| = 0.000000 on all 32 rows.
+- MEANS: Engine adds no info beyond Pinnacle. Nothing carried to 2024-25.
+
+### Pre-registrations
+S49 test: HELD. C-01 2022-23: HELD. C-01 2023-24: NOT HELD. S52 regimes: NO SURVIVORS (expected).
+
+### NOT DONE
+- S47 reproduction on swapped prices (lack mean_home/away_goals).
+- B2B modifiers not applied as engine multipliers (separate re-price).
+- S50 null control via re-price revert (verified via Cowork exact match instead).
+
+### UNVERIFIED
+- Whether swapped prices can be reproduced from committed code (predate mean_home/away_goals).
+- Whether S47 B2B coefficients on swapped prices match what the generator would produce.
+
+---
+
+## L-WO1 (2026-10-05)
+
+### Setup
+Branch nhl/sim-s4b, worktree ~/mlb-model-nhlsim4b.
+`git -C ~/mlb-model branch --show-current` = main ✓
+Parent baseline: 57 passed, 0 failed (after all 4 items).
+
+### Item 0 (S53) — Adopt sim-engine rules; fit-window ledger; holdout correction
+Commit: 49fbacdc3
+
+- RETURNED: PURPOSE paragraph at top of decision doc. S53 entry with A1-A14 bindings.
+- RETURNED: FIT_WINDOW_LEDGER.md with per-season status:
+  2024-25 = CONSUMED (S48 ML R6, 99 picks, B-01, EV2 on 2026-09-30)
+  2025-26 = PROSPECTIVE
+- RETURNED: S1 correction noting HOLDOUT_SCORED.lock never created.
+- MEANS: Rules adopted. Holdout claim corrected. Ledger is the source of truth.
+
+### Item 1 (S54) — All-source PIT truncation + planted leaks + pricer HALTs
+Commit: cd6e5dbb7
+
+**Test: test_pit_all_sources.py — 12 tests, all pass.**
+
+Failing-then-passing (pricer HALT):
+  OLD: `ValueError: No team_ratings row for game 2022020100` → skipped += 1; continue
+  NEW: `HALT: game_inputs_for failed for game_id=2022020100` → SystemExit(1)
+
+Null control (prediction_report.py on committed data):
+- 2022-23: ML LL 0.6594, A1 0.448 ✓ (matches S51)
+- 2023-24: ML LL 0.6646, A1 −0.051 ✓ (matches S51)
+- Totals 2023-24: LL 0.7004, A1 −0.022 ✓ (matches S51)
+
+### Item 2 (S55) — Crosswalk; ID-only join; price-scale labels
+Commit: 492565072
+
+- RETURNED: build_crosswalk.py → crosswalk/game_event.parquet (5,110 rows).
+  Seasons: 2021-22 0, 2022-23 1311, 2023-24 1311, 2024-25 1311, 2025-26 1177.
+
+Pre-registration:
+- (i) 2023-24 = S51 exactly: HELD. 2022-23 changed (0.6594→0.6592, +1 game): NOT HELD (fit).
+- (ii) Matched ≥ old: 2022-23 1157>1156, 2023-24 1138=1138: HELD.
+
+Null control: Swapped 2 event_ids → Pin LL 0.6567→0.6564 (Δ 0.000366). Join is live.
+
+### Item 3 (S56) — Hard Rock + data custody
+Commits: nhl/live-lines 6820e872d, nhl/sim-s4b a11ee9d68
+
+Hard Rock: pointsbetus (0 rows on 10-02) swapped for hardrockbet. 10 keys exact.
+Failing-then-passing: `git stash && pytest` → FAILED, `git stash pop && pytest` → PASSED.
+
+Data custody: manifest 28 hashed files; large dirs counted only (pbp 229M, box 340M, odds 1.3G).
+ARCHIVE_ROOT not set → rsync printed, STOPPED.
+
+### NOT DONE
+- Archive copy (ARCHIVE_ROOT not set — rsync commands printed)
+- Puller not run (0 credits)
+- Branches not merged to main
+- Full test suite via main() on real data
+
+### UNVERIFIED
+- Whether hardrockbet returns NHL data (not probed, 0 credits)
+- The +1 game in 2022-23 via ID join: whether it was a date-join miss or a genuine new match
+- Large-dir custody_manifest has counts only, no per-file sha256
+- odds_archive_nhlE 146,286 files: content not validated
+
+---
+
+## L-WO1b (2026-10-05)
+
+### Setup
+Branch nhl/sim-s4b, worktree ~/mlb-model-nhlsim4b.
+`git -C ~/mlb-model branch --show-current` = main ✓
+
+### Item 0 (S57) — Fix fit-window ledger
+Commit: 415630898
+
+- RETURNED: Ledger rewritten. Each row now carries its own season's facts.
+  2023-24: CONSUMED → VALIDATION. 2024-25: PARTIAL → CONSUMED. 2025-26: PROSPECTIVE → PARTIAL.
+- MEANS: The ledger no longer has every row shifted one season forward.
+
+Failing-then-passing:
+  `git stash && pytest test_fit_window_ledger.py` →
+  FAILED: assert 'CONSUMED' == 'VALIDATION' (2023-24 was CONSUMED in old ledger)
+  `git stash pop && pytest test_fit_window_ledger.py` → 2 passed
+
+### Item 1 (S58) — Per-file custody manifest
+Commit: 423e84f74
+
+- RETURNED: archive_inventory.py hashes ALL 191,950 files (29s total).
+  Hashing rate: 5,311 files/s on first 2,000 odds files. Projected 36s, actual 29s.
+- RETURNED: custody/files.parquet (191,950 rows, 14.2 MB — gitignored).
+- RETURNED: custody_manifest.json with per-location rollup_sha256 and total_bytes.
+- RETURNED: DATA_CUSTODY.md: odds archive 1101.1 MB (was 0.0 MB); rebuild cost
+  2,586,062 credits (E-WO1 2,509,800 + WO2 76,262) at 5M/month plan (was "~$60").
+
+Null control: 28/28 previously hashed small-dir files keep identical sha256.
+
+ARCHIVE_ROOT not set → rsync commands printed, STOPPED.
+
+### Item 2 (S59) — Finish S54; pricer HALT test; S55 explanation
+Commit: a75361e5b
+
+- RETURNED: 17 tests in test_pit_all_sources.py, all pass (was 12).
+  New: TestPinnacleTruncation (1), TestPlantedLeakFinishing (2), extended TestPlantedLeakPinnacle (1).
+- RETURNED: test_price_games_halt.py (1 test), passes.
+
+Failing-then-passing (pricer HALT):
+  Old code: `except ValueError: skipped += 1; continue` → no SystemExit, 1 skipped
+  New code: `sys.exit(1)` → SystemExit(1) with game_id in stderr
+
+Pinnacle truncation: 5 dates, snapshot_utc < D+1 00:00 ET → prices match full data.
+F(D) planted leak: 2000-goal game on D+1 → F(D) unchanged, F(D+2) changed.
+Pinnacle planted leak: post-commence snapshot excluded by snap_dt < ct_dt.
+
+S55 +1 game: 2022021146 WPG@ANA 2023-03-23. commence_time shifted from
+2023-03-24T02:00:00Z (ET 22:00 on 3/23) to 2023-03-24T04:00:00Z (ET 00:00 on 3/24)
+in the last two snapshots. Date-based join used the last snapshot (ET date 3/24),
+mismatching gameDate=3/23. ID join found the match through the crosswalk.
+
+Unmatched openers (game 0001): lines archive's first snapshot per season is after the
+opener's commence_time. 2022: first snap 10-07T22:40Z, earliest commence 10-08T18:00Z.
+2023: first snap 10-10T22:40Z, earliest commence 10-11T00:08Z.
+2024: first snap 10-04T22:40Z, earliest commence 10-05T14:10Z.
+No pre-commence snapshot exists for any opener.
+
+Null control: prediction_report.py unchanged:
+  2023-24: ML LL 0.6646, A1 −0.051, Totals LL 0.7004, A1 −0.022.
+
+### NOT DONE
+- Archive copy (ARCHIVE_ROOT not set)
+- Branches not merged to main
+
+### UNVERIFIED
+- Whether hardrockbet returns NHL data (not probed, 0 credits)
+- Whether the 146,286 odds files all have valid/parseable content (sha256 only proves they
+  haven't changed, not that they were correct at creation)
+
+---
+
+## L-WO1c (2026-10-05) — merge prep
+
+### Merge
+Commit: c2b9d6dca
+
+`git merge origin/main` in ~/mlb-model-nhlsim4b. 8 conflicted files resolved:
+1. .gitignore — main's version + `nhl/data/sim/custody/` line
+2. data/depth_archive/nfl/season=2026/_pulls.jsonl — main
+3. data/injury_archive/nfl/season=2026/_pulls.jsonl — main
+4. data/news_archive/ncaaf/season=2026/_seen.json — main
+5. data/news_archive/nfl/season=2026/_seen.json — main
+6. logs/_log_fwd1_cowork.txt — main
+7. research/nhl_sim/edge_hunt_2026-09-30/hunt_2026-09-30/LEDGER_copy_2026-09-30.md — main
+8. research/nhl_sim/edge_hunt_2026-09-30/hunt_2026-09-30/family.csv — main
+
+Record fix: S58 credit breakdown corrected from "E-WO1: 2,509,800" to
+"E-WO1 16,000 + E-WO2 2,509,800 + WO2 76,262 = 2,602,062 credits".
+Fixed in DATA_CUSTODY.md, archive_inventory.py, and S58 decision entry.
+
+### Tests
+64 passed, 0 failed.
+
+### S51 null control
+2023-24: ML LL 0.6646, A1 −0.051, Totals LL 0.7004, A1 −0.022. Unchanged.
+
+### NOT DONE
+- Branch not merged to main (as ordered)

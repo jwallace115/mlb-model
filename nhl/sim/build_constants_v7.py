@@ -191,6 +191,16 @@ def main_v8():
     out["constants"]["ev5_by_time_score"] = {
         "data": ev5_by_time_score(st, sh), "fit_seasons": FIT, "time_bins": ["P1", "P2", "P3a", "P3b", "P3c"],
         "derivation": "5v5 both goalies in; team attempts / team seconds * 3600 and goals / attempts, by time bin and own score diff (+-3)"}
+    # q = league xG per non-empty-net attempt, all states, fit seasons
+    import sys as _sys; _sys.path.insert(0, str(ROOT))
+    from nhl.sim.ratings import score_xg, load_xg_model
+    model = load_xg_model()
+    non_en = sh[~sh["empty_net"].astype(bool)].copy()
+    non_en["xg"] = score_xg(non_en, model)
+    q = float(non_en["xg"].sum() / len(non_en))
+    out["constants"]["q_league_xg_per_non_en_attempt"] = {
+        "value": round(q, 6), "numerator": round(float(non_en["xg"].sum()), 2), "denominator": len(non_en),
+        "derivation": "sum(xG v2) / non-empty-net unblocked attempts, all states, fit seasons"}
     V8.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
     assert all(out["constants"][k] == v for k, v in v7["constants"].items()), "a v7 field changed"
     sha = hashlib.sha256(V8.read_bytes()).hexdigest()
