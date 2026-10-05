@@ -6,6 +6,16 @@ implementation. The rules below are permanent and are not relaxed for speed.
 
 ---
 
+## MULTI-SESSION RULES — several chats share this repo (full text: claude/SESSIONS_RULES.md in the claude.ai project)
+
+1. **`~/mlb-model` stays on `main`. Always.** Never `git checkout`/`switch`/`rebase`/`reset` here — the Mac's launchd jobs commit from this checkout every hour. Do branch work in a worktree: `git -C ~/mlb-model worktree add ~/mlb-model-<lane><n> -b <lane>/<topic> origin/main`. Merging to main = `pull --ff-only`, `merge --no-ff <branch>`, `push` — without ever leaving main, between the :50 auto-runs.
+2. **First command of every session:** `git -C ~/mlb-model branch --show-current` must print `main`; otherwise STOP and tell Jeff.
+3. **Stay in your lane's paths** (NFL sim: nfl/sim, nfl/data/sim, research/nfl_sim · NHL: nhl/, research/nhl* · NBA: nba/, research/nba_layers · NCAAF: ncaaf/ · ops: shared/, site/, status/, scripts/, bets/, nfl/pipeline/, CLAUDE.md, .gitignore, launchd/cron). Anything else is a request to its lane, not an edit.
+4. **No `git add -A` from the main checkout.** Commit explicit paths (`shared/push_paths.sh`).
+5. Never delete or prune another lane's worktree. Never install/upgrade Python packages on the Mac's framework Python.
+
+---
+
 ## RESEARCH CHECKS — state results explicitly before building on any finding
 
 **1. Two-class provenance.** (a) Does the live signal use only pre-first-pitch data?
@@ -271,3 +281,6 @@ ready), the news, the lines, the stats — they are all just there to help you f
 - The opinion is the pick; the discipline is the record: logged pre-kick, append-only, baselines (rule
   deal, price list) logged beside it from the same pull, graded on hit rate AND close. An opinion is
   never called validated, an edge, or +EV.
+
+## Website (iamnotuncertain.net)
+Before changing the website, read `site/README.md` (same text as project doc claude/WEBSITE_BUILD_GUIDE.md).

@@ -413,3 +413,85 @@ NEXT (pre-registered where testable):
   2024-25 (~16k) → E-03 one-shot; (3) forward: NHL-L1 amendment to log the engine's live fair vs the tape is NOT
   possible (the 30-min tape is pre-match only) — a VM live poller (last 10 min of P3, 30-s cadence, ~24
   credits/game) is the forward object for E-03 and for situation F, after E-03 passes.
+
+### V-01 — Venue ("ice") effects on totals and home win beyond the market — pre-registered (Jeff's arena idea, 2026-09-30)
+- Data: `inputs/games.parquet` 2007-08..2024-25 (SBRO closing total `tl`, closing ML `p_h`, actual `tot`, `home_win`).
+  Venue = home team's rink (one rink per team; ARI/UTA and relocations handled as the home code in the panel).
+- Step 1 (measurement): per season, OLS `tot ~ C(home) + C(away) + C(venue)` is not identifiable (venue == home), so
+  the venue term is measured as the team's HOME-minus-ROAD total-goals gap after removing both teams' season
+  scoring/allowing rates: resid = tot − (off_home + def_away + off_away + def_home)/2-style expected total from
+  season means EXCLUDING the game (leave-one-out), then venue_t = mean(resid | at venue) − mean(resid | that team
+  on the road). Reported per team-season.
+- Gate 1 (stability, pre-registered bar as for the scorekeeper test): season-to-season r of venue_t ≥ 0.30 across
+  2008-2024. Gate 2 (face validity): warm-climate rinks (FLA, TBL, DAL, VGK, CAR, ARI, ANA, LAK, SJS) and Denver
+  should sit at the extremes as a group (|mean z| of the group > 0.5); a random set of rinks at the extremes fails.
+- Gate 3 (market): point-in-time venue factor = the PRIOR season's venue_t; regress (tot − tl) on it, seasons
+  2008-2018 DISCOVERY, 2019-2024 VALIDATION untouched during discovery; one-sided p < 0.05 in BOTH windows with the
+  same sign; economic check: over/under at closing total (synthetic −110, triage) for top/bottom-quartile venues,
+  then real DK prices 2023-26 where available. Seasonal variant: Oct-Nov only (early-season soft ice) as a
+  separate pre-registered cell. ML variant: per-rink home-ice term beyond league HFA vs closing ML, same windows.
+- Family: 6 p-values (totals all / Oct-Nov, ML all / Oct-Nov, each × discovery & validation counted once per
+  hypothesis at validation = 4 entries) — added to the ledger family.
+- Expected (prior): Gate 1 passes weakly (r 0.2-0.4), Gate 2 passes for warm rinks on totals (softer ice →
+  slightly fewer goals), Gate 3 FAILS on the full season (per-team HFA absorbs it) and is the only place it could
+  survive on Oct-Nov.
+- **V-01 RESULT (2026-09-30, one run, 22,749 games 2007-2025): DEAD at Gate 1.** Season-to-season r of the venue
+  term (home-minus-road total-goals gap after both teams' leave-one-out rates) = −0.02 mean over 17 season pairs
+  (range −0.22..+0.21) — rink effects on scoring do not persist year to year. Gate 2 also fails: the warm-climate
+  + Denver group sits at z ≈ +0.3, not at the extremes (the 19-season extremes are CGY +0.31 and MTL −0.17 —
+  no climate pattern). Gate 3 (market), reported for completeness: prior-season venue factor vs closing-total
+  residual slope −0.006 (p 0.55) discovery / −0.061 (p 0.87) validation; Oct-Nov +0.026 (p 0.36) / −0.074
+  (p 0.76); top-quartile-venue overs hit 46%, bottom-quartile unders 46% (−110 BE 52.4%). ML per-rink home-ice
+  residual vs closing ML: discovery slope +0.03 (p 0.31); validation not run (NaN closing ML in the panel for
+  some seasons — the discovery failure already decides it). Family p: V-01 totals 0.87, Oct-Nov 0.76, ML 0.31.
+  Meaning: whatever the ice does in Sunrise or Denver, it does not show up as a repeatable scoring effect, and
+  the closing total has nothing to miss. Same verdict as the scorekeeper-bias test, for the same reason.
+
+## STATUS AT END OF SESSION 2026-09-30 ~21:00Z — still nothing FOUND; what is now on disk; what runs next
+- **V-01 (arena/ice) DEAD** at Gate 1 (above). Family p's 0.87 / 0.76 / 0.31 added → `work/family.csv` now 54 tests;
+  whole-ledger BH 10% survivors unchanged (A-03a/b, L-003/L-004, A-01a/b, L-006 swapped-R6 [dead at confirm],
+  A-02.6 fixed-R6 [no two-season DEV]). Nothing new survives.
+- **C-WO1 VERIFIED FROM ORIGIN** (branch nhl/sim-s4b, commits 56d006f1a S49, 28e9f834a S50, 79ba839c6 S51, 1583dedfc
+  S52, 5deaac141 log). game_inputs.py now `h_mult.goalie_save = 1 - h_gsax/q`, `a_mult.goalie_save = 1 - a_gsax/q`
+  (correct direction for `gpa * opp.goalie_save`); direction test failed-then-passed; re-priced 2022-24 match the
+  Cowork fixed parquet (sha 3bbf36f5) to max |diff| 0.0000 on 2,624 games; 2023-24 pre-registration HELD on none
+  (LL 0.6646 vs Pin 0.6567, A1 −0.05); S52 16-regime family on the fixed engine reproduces `a02_regimes_fixed.csv`
+  to 1e-6 — NO SURVIVORS (min p 0.0064 vs BH rank-1 threshold 0.0063). Fixed engine is the only engine from here.
+- **D-WO1 VERIFIED FROM ORIGIN** (branch nhl/sim-d1, 2e7c718c5..94a74f349): 2010-2020 pbp + boxscores + event tables
+  built; goals agree with boxscores 100%; xG v2 valid across eras. **DEFECT FOUND (Cowork, not CC):** pre-2019 NHL API
+  play-by-play is NOT in chronological order (2015020001: 5 plays with timeInPeriod earlier than the preceding play);
+  build_events.py builds strength spans from consecutive plays → overlapping spans; per-game state-time median
+  3,699 s / p90 4,292 s in 2015-16 vs 3,600 expected. Every per-60 rate, PP second, pull flag and shot score-state
+  for 2010-2018 is contaminated until the sort fix (D-WO2 Item 0). CC had called this a "period-transition
+  encoding" difference — wrong diagnosis. Also: D2 headline 12,592 games vs per-season sum 12,502 (unresolved);
+  the 2021-25 byte-identity null for build_events.py was not run. All three are Item 0 of D-WO2.
+- **D-WO2 written** (`claude/nhl_sim_workorder_D2_2026-10-01.md`; on the Mac in both the main tree and ~/mlb-model-nhlD
+  hunt folder): D5 sort fix with failing-then-passing test + 3 nulls; D6 walk-forward windows {T−2,T−1} for
+  T=2012..2020 with 3v3/4v4 OT handling and the engine's r/K/w measured per era; D7 price ~10,850 games (2,000
+  sims, ~55 min Mac); D8 evaluation at the SBRO close with THREE pre-registrations — (i) LL within 0.012 of close,
+  (ii) pooled A1 90% CI includes 0, (iii) THE LEAD: regime R8 (both teams' penalties-taken > 1.05× league) pooled
+  over 9 seasons, ML A1 90% lower bound > 0 = pass → frozen as D-R8 for CONFIRM on 2022-24 at Pinnacle's close
+  (already priced, NOT to be looked at in D-WO2). Family of 16 regime p-values over the 9-season pool to be added.
+- **E-WO2 DATA ON DISK** (worktree ~/mlb-model-nhlE, gitignored): in-play 5-min snapshots, 10 books incl. Pinnacle,
+  `book_last_update` column: season=2022 15,986 / 2023 16,545 / 2024 16,466 / 2025 14,234 parquets (1.2 GB);
+  derivative markets at T−24h and T−1h (h2h_3_way, totals_p1, h2h_p1, spreads_p1, team_totals, alternate_totals,
+  alternate_spreads, h2h_ot): season=2023 2,686 / 2024 2,678 / 2025 2,664 files (126 MB). E-WO1's 800 `regions=us`
+  snapshots (no Pinnacle) quarantined under `inplay/_quarantine_e1_regions_us/season=2023` and gap-filled with the
+  10-book list (752 calls) — the in-play tape is one schema across all four seasons. Props (E6) and hourly
+  pre-match (E7) NOT pulled (cap reached: ~2.51M credits spent; the order's per-run cap tracking let it overrun by
+  ~110k — fix the template: track cumulative spend across resumes). Duplicate check: none between inplay/ and
+  lines/ or threeway/ (different endpoints, different timestamps); no re-requests on resume.
+- **E-03 IS NOW RUNNABLE** on 2024-25 in-play WITH Pinnacle (the pre-registration in E-03 is unchanged; it is a
+  one-shot). Requires rebuilding the state table for 2024-25 from ESPN wallclock (e/build_state_table.py takes a
+  season argument) then e02_live.py on the pre-registered cut only. Not run this session.
+- Picks (standing rule N54, fun parlays, not research): logged pre-kick at
+  `research/nhl_layers/pilot_picks/2026-09-30_cowork_fun_parlays.md` with the placed Hard Rock slips (two NHL
+  5-leg parlays + one 5-leg NHL player-prop parlay; the multi-sport slip was NOT played); lines from
+  `live_lines_2026-09-30_2044Z.md` (15 credits). Grade vs results and Pinnacle close on 2026-10-01 morning
+  (PHI@NJD Over 5.5 after Thu night) and append to the pilot_picks log — hit rate AND close, never "validated".
+- NBA-D1 (the NBA chat's bulk pull, same account) ran concurrently; its outcome is not known to this ledger.
+- NEXT, in order: (1) D-WO2 in Claude Code (fresh session, worktree ~/mlb-model-nhlD); (2) E-03 one-shot on 2024-25
+  (Cowork, ~1 h); (3) C-04 diagnostic — do games where Pinnacle disagrees most with the fixed engine coincide with
+  missing regulars / lineup news? (DailyFaceoff lineups + shift charts; decides player-layer vs goalie-model
+  next); (4) WO1 packet amendment (lineups, engine fair prices for derivatives from the E5 tape, EV2 flags);
+  (5) props price rule on the forward tape. Nothing in (1)-(5) is a bet until it passes the ledger's gates.

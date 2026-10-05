@@ -1,0 +1,32 @@
+{
+ "_doc": "Queue for shared/pipeline/history_spender.py — worked top to bottom, each job resume-safe. kind=event: one call per event at each offset before kickoff (cost 10 x markets). kind=grid: one sport-level call per timestamp (cost 10 x 3). kind=inplay: sport-level calls every step_min from first puck/kick to last + window_h. NBA is not here: the Mac's NBA-D1 pull already holds lines, props, markets and in-play for 2022-23..2025-26 (data/odds_archive/nba/history on the Mac). MLB 2022-25 mainline at 11/14/17/20 and 23 UTC is in the warehouse branch, so the MLB grid skips those hours. Added 2026-10-02 (pipeline audit); Jeff: 'get everything we can, without duplicating'.",
+ "books": ["hardrockbet_fl", "pinnacle", "draftkings", "fanduel", "betmgm", "betonlineag", "bovada", "betrivers", "williamhill_us", "lowvig"],
+ "seasons": {
+  "americanfootball_nfl": {"2022": ["2022-09-08", "2023-02-12"], "2023": ["2023-09-07", "2024-02-11"], "2024": ["2024-09-05", "2025-02-09"], "2025": ["2025-09-04", "2026-02-08"]},
+  "americanfootball_ncaaf": {"2022": ["2022-08-27", "2023-01-09"], "2023": ["2023-08-26", "2024-01-08"], "2024": ["2024-08-24", "2025-01-20"], "2025": ["2025-08-23", "2026-01-19"]},
+  "icehockey_nhl": {"2022": ["2022-10-07", "2023-06-13"], "2023": ["2023-10-10", "2024-06-24"], "2024": ["2024-10-04", "2025-06-17"], "2025": ["2025-10-07", "2026-06-14"]},
+  "baseball_mlb": {"2022": ["2022-04-07", "2022-11-05"], "2023": ["2023-03-30", "2023-11-01"], "2024": ["2024-03-20", "2024-10-30"], "2025": ["2025-03-27", "2025-11-01"]}
+ },
+ "folders": {"americanfootball_nfl": "nfl", "americanfootball_ncaaf": "ncaaf", "icehockey_nhl": "nhl", "baseball_mlb": "baseball_mlb"},
+ "jobs": [
+  {"id": "nfl_props", "sport": "americanfootball_nfl", "kind": "event", "seasons": ["2025", "2024", "2023"], "offsets_h": [24, 1],
+   "markets": ["player_pass_yds", "player_pass_tds", "player_pass_attempts", "player_pass_completions", "player_pass_interceptions", "player_rush_yds", "player_rush_attempts", "player_reception_yds", "player_receptions", "player_anytime_td"]},
+  {"id": "nfl_derivs", "sport": "americanfootball_nfl", "kind": "event", "seasons": ["2025", "2024", "2023"], "offsets_h": [24, 1],
+   "markets": ["alternate_spreads", "alternate_totals", "team_totals", "alternate_team_totals", "h2h_h1", "spreads_h1", "totals_h1", "h2h_q1", "spreads_q1", "totals_q1"]},
+  {"id": "nfl_lines_hourly", "sport": "americanfootball_nfl", "kind": "grid", "seasons": ["2025", "2024", "2023", "2022"], "step_min": 60},
+  {"id": "ncaaf_derivs", "sport": "americanfootball_ncaaf", "kind": "event", "seasons": ["2025", "2024", "2023"], "offsets_h": [24, 1],
+   "markets": ["alternate_spreads", "alternate_totals", "team_totals", "h2h_h1", "spreads_h1", "totals_h1"]},
+  {"id": "ncaaf_lines_hourly", "sport": "americanfootball_ncaaf", "kind": "grid", "seasons": ["2025", "2024", "2023", "2022"], "step_min": 60},
+  {"id": "nhl_props", "sport": "icehockey_nhl", "kind": "event", "seasons": ["2025", "2024", "2023"], "offsets_h": [24, 1],
+   "markets": ["player_points", "player_assists", "player_shots_on_goal", "player_goal_scorer_anytime", "player_total_saves", "player_blocked_shots"]},
+  {"id": "nhl_derivs", "sport": "icehockey_nhl", "kind": "event", "seasons": ["2025", "2024", "2023"], "offsets_h": [24, 1],
+   "markets": ["alternate_spreads", "alternate_totals", "team_totals", "h2h_3_way", "h2h_p1", "spreads_p1", "totals_p1"]},
+  {"id": "nhl_lines_hourly", "sport": "icehockey_nhl", "kind": "grid", "seasons": ["2025", "2024", "2023", "2022"], "step_min": 60},
+  {"id": "mlb_props", "sport": "baseball_mlb", "kind": "event", "seasons": ["2025", "2024", "2023"], "offsets_h": [24, 1],
+   "markets": ["batter_hits", "batter_total_bases", "batter_home_runs", "batter_rbis", "batter_hits_runs_rbis", "pitcher_strikeouts", "pitcher_outs", "pitcher_hits_allowed"]},
+  {"id": "mlb_derivs", "sport": "baseball_mlb", "kind": "event", "seasons": ["2025", "2024", "2023"], "offsets_h": [24, 1],
+   "markets": ["h2h_1st_5_innings", "spreads_1st_5_innings", "totals_1st_5_innings", "totals_1st_1_innings", "team_totals", "alternate_totals", "alternate_spreads"]},
+  {"id": "mlb_lines_hourly", "sport": "baseball_mlb", "kind": "grid", "seasons": ["2025", "2024", "2023", "2022"], "step_min": 60, "skip_utc_hours": [11, 14, 17, 20, 23]},
+  {"id": "nhl_inplay", "sport": "icehockey_nhl", "kind": "inplay", "seasons": ["2024", "2025", "2023", "2022"], "step_min": 5, "window_h": 3.5}
+ ]
+}

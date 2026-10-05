@@ -75,11 +75,39 @@ def _venue_tz(venue_name: str, home_abb: str) -> str:
     return _TEAM_TZ.get(home_abb, "America/New_York")
 
 
+_HEADERS = {"Accept": "application/json", "User-Agent": "Mozilla/5.0 (iamnotuncertain pipeline)"}
+
+
 def _get(endpoint: str, params: dict = None) -> dict:
     url = f"{MLB_STATS_API}/{endpoint}"
-    resp = requests.get(url, params=params, timeout=15)
+    resp = requests.get(url, params=params, timeout=15, headers=_HEADERS)
     resp.raise_for_status()
     return resp.json()
+
+
+# The schedule call with hydrate=...officials... started returning HTTP 406 in mid-June 2026
+# (YRFI / P09 / NRFI-helper crashed daily from then; see claude/pipeline_audit_2026-10-01.md).
+# Try the full hydrate first, then without officials (umpire name becomes None), and log which
+# variant answered so the change is visible in every run's log.
+_SCHEDULE_HYDRATES = (
+    "probablePitcher,officials,linescore,team",
+    "probablePitcher,linescore,team",
+)
+
+
+def _get_schedule(game_date: str) -> dict:
+    last_err = None
+    for hydrate in _SCHEDULE_HYDRATES:
+        try:
+            data = _get("schedule", params={"sportId": 1, "date": game_date, "hydrate": hydrate})
+            if hydrate != _SCHEDULE_HYDRATES[0]:
+                logger.warning(f"schedule: full hydrate refused ({last_err}); used hydrate={hydrate} — umpire unavailable")
+            return data
+        except requests.HTTPError as e:
+            last_err = e.response.status_code if e.response is not None else e
+            if last_err != 406:
+                raise
+    raise requests.HTTPError(f"schedule: every hydrate variant refused (last status {last_err})")
 
 
 def fetch_schedule(game_date: Optional[str] = None) -> list[dict]:
@@ -90,14 +118,7 @@ def fetch_schedule(game_date: Optional[str] = None) -> list[dict]:
     if game_date is None:
         game_date = date.today().isoformat()
 
-    data = _get(
-        "schedule",
-        params={
-            "sportId": 1,
-            "date": game_date,
-            "hydrate": "probablePitcher,officials,linescore,team",
-        },
-    )
+    data = _get_schedule(game_date)
 
     games = []
     for date_block in data.get("dates", []):

@@ -64,12 +64,27 @@ BASE = "https://api.the-odds-api.com/v4"
 SPORTS  = ["baseball_mlb", "americanfootball_nfl", "americanfootball_ncaaf"]
 MARKETS = ["h2h", "spreads", "totals"]
 
-# Exactly 10 books = 1 region equivalent. hardrockbet_fl is the whole point: it is
-# the only book Jeff can bet legally and it has never appeared in any capture.
+# Exactly 10 books = 1 region equivalent. Hard Rock is the whole point: it is the
+# only book Jeff can bet legally. It never appeared in NCAAF/NHL/NBA/MLB captures
+# because the wrong key was requested — see the BOOKS note below.
 # pinnacle is the CLV benchmark and may sit outside the us region — the bookmakers
 # parameter reaches it regardless. The script reports which books actually returned.
-BOOKS = ["hardrockbet_fl", "pinnacle", "draftkings", "fanduel", "betmgm",
+# hardrockbet (generic, us2) NOT hardrockbet_fl. Probed 2026-10-03 across all four
+# Hard Rock keys x 5 sports: _fl returns NFL ONLY and is absent for NCAAF, NHL,
+# NBA and MLB; the generic key covers all five. On NFL the two are identical
+# (90/90 outcomes, 0 price and 0 point differences), so nothing is lost.
+# Do NOT "restore" _fl. Do NOT add an 11th book: 10 books = 1 region-equivalent,
+# an 11th doubles the cost of every call.
+BOOKS = ["hardrockbet", "pinnacle", "draftkings", "fanduel", "betmgm",
          "betonlineag", "bovada", "betrivers", "williamhill_us", "lowvig"]
+
+# NFL keeps "hardrockbet_fl": identical NFL prices (probe 2026-10-03), and every NFL consumer selects that
+# label. Every other sport needs the generic key. One Hard Rock key per call keeps 10 books = 1 region.
+HR_KEY_BY_SPORT = {"americanfootball_nfl": "hardrockbet_fl"}
+
+def books_for(sport):
+    hr = HR_KEY_BY_SPORT.get(sport, "hardrockbet")
+    return [hr if b == "hardrockbet" else b for b in BOOKS]
 
 OUT_ROOT = ROOT / "data" / "odds_archive"
 
@@ -78,6 +93,7 @@ OUT_ROOT = ROOT / "data" / "odds_archive"
 FOLDER_MAP = {
     "americanfootball_nfl":  "nfl",
     "americanfootball_ncaaf": "ncaaf",
+    "americanfootball_ncaaf_fcs": "ncaaf_fcs",
     "icehockey_nhl":         "nhl",
     "basketball_nba":        "nba",
     "baseball_mlb":          "baseball_mlb",
@@ -115,7 +131,7 @@ def pull(sport, retries=1, backoff=5):
     """Returns (games, used, rem) on success, or None on failure.
     Failure is logged but does NOT exit — the caller decides whether to continue."""
     p = {"apiKey": KEY, "markets": ",".join(MARKETS),
-         "bookmakers": ",".join(BOOKS), "oddsFormat": "american"}
+         "bookmakers": ",".join(books_for(sport)), "oddsFormat": "american"}
     for attempt in range(1 + retries):
         try:
             r = requests.get(f"{BASE}/sports/{sport}/odds/", params=p, timeout=45)
@@ -202,15 +218,17 @@ def main():
             log.warning(f"  {sport}: no odds rows"); continue
 
         got = sorted(df["bookmaker"].unique())
-        missing = [b for b in BOOKS if b not in got]
+        sport_books = books_for(sport)
+        missing = [b for b in sport_books if b not in got]
         log.info(f"  books returned ({len(got)}): {', '.join(got)}")
         if missing:
             log.warning(f"  books NOT returned: {', '.join(missing)}")
-        if "hardrockbet_fl" in got:
-            n_hr = df[df["bookmaker"] == "hardrockbet_fl"]["event_id"].nunique()
-            log.info(f"  *** hardrockbet_fl PRESENT on {n_hr} games ***")
+        hr_key = sport_books[0]  # the sport's own Hard Rock key
+        if hr_key in got:
+            n_hr = df[df["bookmaker"] == hr_key]["event_id"].nunique()
+            log.info(f"  *** {hr_key} PRESENT on {n_hr} games ***")
         else:
-            log.warning("   *** hardrockbet_fl ABSENT on this sport — coverage, not credentials, if it appeared on another sport this run ***")
+            log.warning(f"   *** {hr_key} ABSENT on this sport — coverage, not credentials, if it appeared on another sport this run ***")
 
         for mk in ("spreads", "totals"):
             s = df[(df["market"] == mk) & df["point"].notna()]

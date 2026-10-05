@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "5524c44b05e28aa899909c9e001184ec",
+    "game_date": "2026-10-02",
+    "sport": "MLB",
+    "home_team": "Atlanta Braves",
+    "away_team": "Philadelphia Phillies",
+    "commence_time": "2026-10-02T00:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.5,
+    "over_price": 100,
+    "under_price": -120,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-01T06:05:03.004025+00:00"
+  },
+  {
+    "game_id": "5d13b613a334039f0694d8c95af28728",
+    "game_date": "2026-10-02",
+    "sport": "MLB",
+    "home_team": "Cleveland Guardians",
+    "away_team": "Chicago White Sox",
+    "commence_time": "2026-10-03T17:11:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -114,
+    "under_price": -106,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-01T06:05:03.004025+00:00"
+  },
+  {
+    "game_id": "cb4d07dc15440acf3d9ebe1ad41756c1",
+    "game_date": "2026-10-02",
+    "sport": "MLB",
+    "home_team": "Tampa Bay Rays",
+    "away_team": "New York Yankees",
+    "commence_time": "2026-10-03T22:31:00Z",
+    "snapshot_type": "open",
+    "total_line": 7.0,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-01T06:05:03.004025+00:00"
+  }
+]

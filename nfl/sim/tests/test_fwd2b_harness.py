@@ -83,7 +83,7 @@ def _build_fixture_root(tmp_path, kick=None, pull_age_minutes=30):
     for rel in ("nfl/sim/calibration.py", "nfl/sim/anchor.py",
                 "nfl/sim/names.py", "nfl/sim/__init__.py",
                 "nfl/__init__.py", "nfl/pipeline/__init__.py",
-                "nfl/pipeline/log_ai_opinions.py",
+                "nfl/sim/fwd_v1_logger.py",
                 "nfl/sim/run_forward_v1.py", "nfl/sim/run_week.py"):
         src = ROOT / rel
         if src.exists():
@@ -158,9 +158,9 @@ def _build_fixture_root(tmp_path, kick=None, pull_age_minutes=30):
     return root
 
 
-def _stub_run_week(root, week, T, bundle_lines, game_ids):
+def _stub_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
     """Stub run_week_fn that writes fixture picks_log and anchoring_log."""
-    out_dir = root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}"
+    out_dir = run_dir or (root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     pd.DataFrame([{
@@ -183,6 +183,17 @@ def _stub_run_week(root, week, T, bundle_lines, game_ids):
         "err_t": 0.1,
         "converged": True,
     }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
+
+    # D242: write anchor_returned.parquet (solver's actual returns)
+    pd.DataFrame([{
+        "game": GAME_ID,
+        "iterations": 1,
+        "converged": True,
+        "anch_m": -3.1,
+        "anch_t": 45.6,
+        "target_spread": -3.0,
+        "target_total": 45.5,
+    }]).to_parquet(out_dir / "anchor_returned.parquet", index=False)
 
 
 # ── (a) D234: renamed from test_live_freeze_completes ──
@@ -333,8 +344,8 @@ def test_zero_matches_halts(tmp_path):
 
     root = _build_fixture_root(tmp_path)
 
-    def _empty_run_week(root, week, T, bundle_lines, game_ids):
-        out_dir = root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}"
+    def _empty_run_week(root, week, T, bundle_lines, game_ids, run_dir=None):
+        out_dir = run_dir or (root / "nfl" / "data" / "sim" / "outputs" / f"week=2026_{week:02d}")
         out_dir.mkdir(parents=True, exist_ok=True)
         pd.DataFrame(columns=["game_id", "player_name", "family", "line",
                                "cal_p", "side", "tier"]).to_parquet(
@@ -343,6 +354,11 @@ def test_zero_matches_halts(tmp_path):
             "game": GAME_ID, "iter": 0, "margin": -3.1,
             "total": 45.6, "err_m": -0.1, "err_t": 0.1, "converged": True,
         }]).to_parquet(out_dir / "anchoring_log.parquet", index=False)
+        pd.DataFrame([{
+            "game": GAME_ID, "iterations": 1, "converged": True,
+            "anch_m": -3.1, "anch_t": 45.6,
+            "target_spread": -3.0, "target_total": 45.5,
+        }]).to_parquet(out_dir / "anchor_returned.parquet", index=False)
 
     opinions_dir = root / "nfl" / "data" / "board" / "week=2026_03" / "ai_opinions"
     with pytest.raises(SystemExit, match="zero sim matches"):

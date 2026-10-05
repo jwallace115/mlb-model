@@ -3585,6 +3585,119 @@ Ending: 99,842
 - NOT DONE: header-cost recheck; item-0 schedule vs external source; staleness (book_last_update) of close quotes; 2023-24 in-play Feb-Apr (~186k credits).
 - UNVERIFIED: null control (a) not re-run by Cowork.
 
+## 2026-09-30T19:20Z  claude-code (FWD5)
+- COMMITTED + PUSHED: 695135934 — D250 verbatim from fwd4b_verification appended to NFL_SIM_DECISION_v1.md
+- COMMITTED + PUSHED: dc900458e — D251: nfl/sim/fwd_v1_logger.py created (sha256 cf100675bd385ca5); run_forward_v1.py and 8 test files switched from nfl.pipeline.log_ai_opinions to nfl.sim.fwd_v1_logger; manifest key renamed
+- COMMITTED + PUSHED: 8a909fd6e → b8de67abf (rebased) — D252: merge origin/main into eng/fwd3; 2 conflicts resolved; 4 new decoupling tests (test_fwd5_pin.py) all pass
+- COMMITTED + PUSHED: 2d44e38a2 — D253: FWD_EXPERIMENT_v1.json re-stamped (run_forward_v1.py hash b5e75d86); 88 forward tests pass; pipeline tests match origin/main (1 failed, 86 passed, 2 skipped on both)
+- REAL DRY RUN: PIT@CLE week 4, 70 lines, 43 two-way, 11 matched sim_v1, anchored (3 iter). Dir left untracked.
+- REAL SCORE: 0 eligible legs, no verdict
+- WORKTREE /tmp/eng-fwd3 created and removed
+- NOT DONE: merge of eng/fwd3 to main (user decision)
+- UNVERIFIED: test_score_first_side_and_units failure is pre-existing on both branches; not investigated
+- UNVERIFIED: score-experiment HALT on week 3 sim_runs/20260927T170000Z (incomplete bundle from prior dry run — missing input files); moved aside for the score-experiment test, restored after
+
+## 2026-09-30T19:35Z  claude-code  NBA WO1 (items 1-4)
+
+- RAN: probe_nba_sources.py on Mac and VM
+  - RETURNED: Odds API basketball_nba active (44 events, first tip 2026-10-20T19:00Z). preseason is separate key, inactive. 9 books returned LIVE: betmgm, betonlineag, betrivers, bovada, draftkings, fanduel, lowvig, pinnacle, williamhill_us. hardrockbet_fl NOT returned. Dry-run cost: 3 credits. Null control passed.
+  - RETURNED: Official reports 10:00-12:45 PM ET q15min, new format only. No 5:30pm report. No preseason reports. CDN blocks VM (all 404). Mac: 12 reports per date for Dec 25, Jan 14, Mar 16.
+  - RETURNED: ESPN injuries: per-item date field exists. 66 items off-season (Out=14, Day-To-Day=52). Works both hosts.
+  - RETURNED: ESPN scoreboard: 8 games 2026-03-16, STATUS_FINAL, period count. Works both hosts.
+  - RETURNED: nba_api scoreboardv2: Mac works, VM blocked (JSONDecodeError).
+  - MEANS: Pinnacle is CLV reference (returned live). Hard Rock not on live tape (hardrockbet_fl absent for NBA). Freeze at 5:30pm is wrong — last report is 12:45pm. Tape runs on VM. Reports: Mac only.
+- RAN: capture_nba_availability.py live on Mac
+  - RETURNED: 0 official reports (off-season), 66 ESPN items, 1 line in _pulls.jsonl
+  - MEANS: script works; cadence derived from probe: q15 10:00-13:00 ET
+- RAN: nba_outcomes.py grading (194 rows)
+  - RETURNED: 191/194 agree. 3 mismatches: DET-OKC OT flag (log wrong), DEN-POR OT flag (log wrong), PHX-HOU total 224 vs 220 (unexplained).
+  - MEANS: loader is correct for all 3 disagreements. Results log has OT tracking bugs.
+- RAN: L3/L4 audit
+  - RETURNED: 2025-26 not in games/box_stats parquets. Features use rolling 15-game window. Prior-season baselines use full prior-season means (point-in-time safe). Signal log: max 23 graded forward rows (REF_UNDER). pred_total - line: mean=-5.1, SD=9.4.
+  - MEANS: CHECK 1b passes for rolling pipeline. No signal type has defensible probability. Model bias -5 pts vs line.
+- RAN: 3 B3 tests pass; mutations verified killed. 2 B4 tests pass.
+- COMMITTED+PUSHED: 4 commits on nba/wo1 (items 1-4), each with B2-B5 appended.
+- NOT DONE: settlement rules (Pinnacle 404, Hard Rock 403 — written NOT VERIFIED). cron not installed (per order). merge (Cowork verifies first). VM capture test (ESPN only, no reports). nbainjuries PDF parsing (Java not in PATH).
+- UNVERIFIED: whether predictions_4b.parquet (994 rows, 2025-26) is point-in-time. ESPN field list with in-season data (0 items currently). Pre-registration #5 marked wrong but only based on off-season structure.
+
+## 2026-09-30T20:30Z  claude-code  NBA WO1b (items 1-2)
+
+- RAN: official_report_url tests (4 assertions: 13:00->01_00PM, 17:30->05_30PM, 12:45->12_45PM, 10:15->10_15AM) — pass on new code; FAIL on c715f643a (function absent). nbainjuries gen_url agrees on 5/5 test cases.
+- RAN: re-probe official reports on Mac with corrected 12-hour URLs
+  - RETURNED: 56 reports per regular-season date (10:00-23:45 ET q15). 5:30pm EXISTS on 2025-12-25, 2026-01-14, 2026-03-16. Preseason 2025-10-10: 0 reports. NULL CONTROL: 10:00-12:45 = 12 reports per date (matches WO1).
+  - MEANS: B2's "no 5:30 PM report" was a URL bug — the probe used 24-hour hour (17_30PM) but the CDN uses 12-hour (05_30PM). B1's freeze rule stands. The capture cadence must cover 10:00-23:45, not 10:00-12:45.
+- RAN: re-probe on VM with corrected URLs
+  - RETURNED: all 403 (Forbidden), all 4 dates, all 56 slots.
+  - MEANS: CDN block CONFIRMED (403 = genuine block, not nonexistent URL). B2 "CDN blocks the VM" was correct but unproven until now.
+- RAN: live Hard Rock key probe (4 Odds API calls, 12 credits)
+  - RETURNED: NFL returns Hard Rock under both `hardrockbet` and `hardrockbet_fl` (16/31 events). NBA returns neither key (0/44 events).
+  - MEANS: Hard Rock has not posted NBA lines yet (first game Oct 20, 20 days away). Pre-registration "NBA returns Hard Rock once lines are posted" cannot be tested today.
+- RAN: PHX-HOU 2026-04-07 cross-check via nba_api on Mac
+  - RETURNED: HOU 119 + PHX 105 = 224. Matches ESPN 224. Results log says 220.
+  - MEANS: results log is wrong (4 pts short). Both independent sources agree on 224.
+- RAN: test_capture_cadence_b7 — on a day with 22:00 ET tip, URL list includes 17:30 and 21:45. FAILS on c715f643a (old code stopped at 12:45).
+- COMMITTED+PUSHED: 2 commits on nba/wo1 (B6, B7 appended to decision doc).
+- NOT DONE: cron installation (per order). merge (Cowork verifies). Hard Rock NBA key re-check closer to opening night.
+- UNVERIFIED: whether Hard Rock posts NBA lines under `hardrockbet` or `hardrockbet_fl` (no NBA lines posted today). VM ESPN capture test not re-run (capture script unchanged for ESPN).
+
+## 2026-09-30T20:30Z  claude-code  NBA WO1+1b merge + cron prep
+
+- RAN: pre-merge PDF check — downloaded Injury-Report_2026-03-16_05_30PM.pdf (85,478 bytes, sha256=6e99dbd3...) and _11_45PM.pdf (91,570 bytes, sha256=1c163890...). pdftotext confirms timestamps "05:30 PM" and "11:45 PM" — valid PDFs, different timestamps.
+  - RETURNED: both valid, different sizes and sha256, different timestamps inside.
+  - MEANS: B6's corrected URL format produces real distinct reports at afternoon/evening times.
+- RAN: git merge --no-ff origin/nba/wo1 into main. Two conflicts resolved: logs/agent_sessions.md (both sides kept in time order), probe_nba_sources.py (kept branch version with corrected 12-hour URLs). research/nba_layers/ staged including legacy_review_2026-09-30/ and wo1_verification addendum.
+- PUSHED: merge to main (8 commits rebased, preserving merge).
+- RAN: capture_nba_availability.py once by hand.
+  - RETURNED: 0 official reports (off-season, no game today), 66 ESPN injury items. One line written to _pulls.jsonl: feed=espn_injuries, rows=66, sha256=295da73e..., status=ok.
+  - MEANS: capture script works end-to-end on the Mac.
+- CRON LINE (NOT installed): `*/15 10-23 * * * /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 /Users/jw115/mlb-model/nba/pipeline/capture_nba_availability.py >> /Users/jw115/mlb-model/logs/nba_availability.log 2>&1`
+- NOT DONE: cron installation (Jeff installs). VM capture run (official reports Mac-only; ESPN unchanged). Hard Rock NBA key re-check closer to Oct 20.
+- UNVERIFIED: whether the capture script's ESPN dedup hash correctly skips identical content on a second run within the same cron window (tested in unit test but not in this live run — only one run executed).
+
+## 2026-10-04T14:32Z  claude-code
+- TASK: Hard Rock lines for every sport + line-pull gaps (Cowork audit 2026-10-04)
+- EDITED: shared/pipeline/multi_book_open_capture.py — added books_for(sport) per-sport key selector; NFL keeps hardrockbet_fl, all other sports use generic hardrockbet
+- EDITED: shared/pipeline/pull_event_markets.py — imported books_for, all API calls use sport-specific book list; compute_market_set unions both HR keys
+- CREATED: shared/pipeline/tests/test_hardrock_keys.py — 22 tests, all network-free
+- EDITED: shared/pipeline/feeds_registry.json — added nba_event_markets, ncaaf_event_markets, mlb_event_markets, nfl_sunday_early
+- VM CRONTAB: added 10 new cron lines (NFL Sunday early tape/props/EM, NBA EM x2, NCAAF EM x3, MLB EM x1); backup at /root/crontab.bak.20261004T1407Z
+- COMMITS: 9b689d8b4 (feature), ab8f8bf0c (merge), 93d954923 (registry), f572ccf04 (merge) — all pushed
+- VERIFIED: dry-run all 5 sports on VM, 44 tests passing on both Mac and VM, first live tape fire at 14:30Z shows correct HR labels
+- NFL TAPE PROBE: only snap_20261003T152632Z.parquet has generic label; all others use _fl
+- NOT DONE: first real event-market cron fires for NBA/NCAAF/MLB (scheduled, not yet fired)
+- UNVERIFIED: NFL consumer scripts ignoring the one generic-label probe file; event-market cost at full-season scale; Sunday AM London game cron behavior
+
+## 2026-10-05T14:41Z  claude-code
+- OPS1 work order: bet-ledger items 1-4, branch ops/bet-ledger
+- ITEM 1: link_picks_to_slips + pick_sources + fixtures + test → 10 passed; live run: 17/25 hit rate on tagged ours, 0/8 false claims, 1 proposed ours, 40 stay ?, net $1,093.05 vs $1,118.05 (worse by $25.00); tags.csv SHA identical before/after → commit bb9af872c
+- ITEM 2: ticket_id helper → RED first (4 failed, module missing), then GREEN (4 passed) → commit 9583fe323
+- ITEM 3: build_pick_ledger → 5 passed; live run: 20 sources, 829 rows, 278 tickets, ncaaf 4 / nfl 14 joined, leg_rule 18 → commit 74d26dd62
+- ITEM 4: capture_health staleness → 7 passed; bet_ledger OK 2.7 days old (warn > 3) → commit 585da2047
+- FULL SUITE: 98 passed, 2 failed (pre-existing on origin/main: test_espn_news_halt + test_news_dedup, both time-dependent freshness failures from hardcoded 2026-09-20 timestamps)
+- MERGED: ops/bet-ledger → main (pending — next step)
+- NOT DONE: worktree cleanup (left for Cowork verification)
+- UNVERIFIED: 829/278 vs expected 816/276 (likely new picks since work order); whether the 2 pre-existing test failures need datetime.now patching
+
+## 2026-10-05T15:04Z  claude-code
+- OPS2 work order: picks ledger + Picks page, branch ops/picks-ledger
+- ITEM 1: picks_ledger.py (admit/append/view) + picks_adapters.py (pick_sources + NFL AI opinions) + VM setup script + feeds_registry + PICKS_LEDGER_v1.md (P1-P3)
+  Tests: 16 RED → 16 GREEN. Mac dry run: 1680 rows (ai_ncaaf 197, ai_nfl 1478, jeff 5), 280 rejected, 4.6s
+  → commit 12eb96c2c
+- ITEM 2: picks_intake.py (member-share intake, v1) + P4 v2 note
+  Tests: 6 RED → 6 GREEN
+  → commit bf6cc850f
+- ITEM 3: event_crosswalk.py + picks_grader.py + P5 inventory + P6 settlement definitions
+  Tests: 7 RED → 7 GREEN (+ fixed append() dedup to allow grade rows)
+  Crosswalk: NCAAF 357/1, NFL 255/17. Grader: 250 rows graded
+  Results: ai_ncaaf 91W/88L/5P (50.8%), ai_nfl 34W/25L/2P (embargoed), jeff 5W
+  → commit a66a64e08
+- ITEM 4: Picks page (picks.html) + embargo_owners + §5.7 README
+  Tests: 5 RED → 5 GREEN. Full suite: 132 passed, 2 failed (pre-existing ESPN news freshness)
+  → commit ff3433982
+- FULL SUITE: 132 passed, 2 failed (pre-existing: test_espn_news_halt, test_news_dedup — time-dependent)
+- P0.3 VERIFIED: grep for requests/httpx/urlopen in all 5 picks pipeline files → empty
+- NOT DONE: merge to main (next step); VM setup (picks_ledger_setup.sh); VM adapters/crosswalk/grader runs
+- UNVERIFIED: whether CFBD mtime 2026-09-27 leaves week 5+ games ungraded (it does — refresh costs CFBD calls); NFL 17 unmatched events (likely future games); nflreadpy network call from crosswalk on VM
 ## 2026-09-30T~20:00Z  claude-code (D-WO1, branch nhl/sim-d1)
 
 ### D1 — Probe (6 games, 11 season counts)

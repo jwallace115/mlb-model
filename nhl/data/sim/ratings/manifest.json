@@ -1,13 +1,19 @@
 {
   "ratings_py_sha256": "f1be7143027b9a53b28b1366c751d64b2c85adf3a2ca83a224630c136e25726e",
-  "carryover_w_sha256": "d17e7689bbeb098b0c68f44aeaaa479c6e13d603f605889f1900e7cdd2a81a07",
-  "shrinkage_K_sha256": "1a532edca59b5f97778c7337ebe3ce6796935130e5e1f2ed0794aaedf9ffe0e2",
+  "carryover_w_sha256": "a3a52656fb554550739798a0b336a7cda030cda6e69069b95a8cac8fdd005bd2",
+  "shrinkage_K_sha256": "bccaae42283a9a14a60952353ec98fc2c2fb8bfc7356ff151315e1b20a9db8d4",
   "team_game_stats_sha256": "dc0a0b97fd77c43de366cda6c9a2f8f7983b863439a616f2ea9b527bc071ca24",
   "goalie_games_sha256": "e9ccc49dc824d1e73aab1a7b7cf1a01feb5d3f5552855f4ff140f63769b58e20",
-  "team_ratings_sha256": "67672cda2b258cbe3836f9aa26af24b79ff85a4febb3980a15e31564a5bfe19d",
+  "team_ratings_sha256": "a90a740d52327430da6817ae38f267839527bf525ec97f86474a9696849f05f9",
   "team_ratings_rows": 12850,
-  "goalie_ratings_sha256": "e2f2d8d8f84f45a562496a0eeda2992ed4f75a76c294ceff632fbc52ce6b9424",
+  "goalie_ratings_sha256": "c1d08eed791310a4d9b809629a0b1bc64ce535b91f7798863064c437b09f1930",
   "goalie_ratings_rows": 12850,
   "finishing_term_sha256": "f7cda74dd74da48112ebb1bbec1a1363151e2c2ffb79c76c49fff7d778cf70aa",
-  "finishing_term_rows": 879
+  "finishing_term_rows": 879,
+  "prices_2022_sha256": "f0d8640b99bdb085232b6720308ae3b01f29b52b838295027c168798c0063010",
+  "prices_2022_rows": 1312,
+  "prices_2023_sha256": "a1b4aaf6777d52305a2d7813f99a4ff56aabb111eff71bba4f9ff91350bf0031",
+  "prices_2023_rows": 1312,
+  "crosswalk_sha256": "5c21dbfff5c463cd17599a0ed30f5d9e04543d5ac53eeb6632bea4cc8e0823bf",
+  "crosswalk_rows": 5110
 }

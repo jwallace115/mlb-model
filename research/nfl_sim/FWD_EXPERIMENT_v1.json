@@ -8,15 +8,16 @@
   "nfl/sim/anchor.py": "56a871b776ae7396",
   "nfl/sim/params_v1.json": "25f1db08d6478a30",
   "nfl/sim/calibration_v1.json": "d0cdbb92ca085217",
-  "nfl/sim/run_week.py": "9ff6639e5ee9d208",
+  "nfl/sim/run_week.py": "1f4e9e0a9f1e619c",
   "nfl/sim/names.py": "74053527c6239360",
   "nfl/sim/calibration.py": "a5ac4283aeaf09e9",
   "nfl/sim/tables.py": "5518e8459b4d3cc8",
   "nfl/sim/seed_util.py": "2d4a0b75e6ce209e",
   "nfl/sim/usage.py": "6cd4e0ae4be39f49",
   "nfl/sim/ratings.py": "0bf691fa996ae127",
-  "nfl/sim/run_forward_v1.py": "f3d15182aed48eab",
-  "nfl/pipeline/log_ai_opinions.py": "f698fc4ade079d27",
+  "nfl/sim/run_forward_v1.py": "b5e75d867c83374f",
+  "nfl/sim/actuals.py": "baea53623ca2c8a8",
+  "nfl/sim/fwd_v1_logger.py": "cf100675bd385ca5",
   "nfl/data/sim/tables/actual_close_games_2021_2024.parquet": "aa9223ca90ff785e",
   "nfl/data/sim/tables/actual_late_drives_2021_2024.parquet": "ce9a8e3c21c6e488",
   "nfl/data/sim/tables/actual_scoring_composition_2021_2024.parquet": "9984a1db24f39706",
@@ -51,12 +52,21 @@
  "numpy_version": "2.4.3",
  "pandas_version": "2.3.3",
  "n_sims": 10000,
- "seed_rule": "stable_seed((game_id, 42)) via zlib.crc32",
+ "seed_rule": "stable_seed((home, away, season, week, 42)) via zlib.crc32",
  "eligible_markets": [
   "player_receptions",
   "player_rush_attempts"
  ],
  "eligibility": "reader == canonical, non-pilot, first freeze of contract, tag sim_v1, two_way, market in eligible_markets, game anchored per bundle, settled (not void or unresolved)",
  "settlement": "event_id -> game_id; game completed (final in PBP); player participation from nflverse (inactive -> VOID); missing data -> unresolved",
- "scoring": "Primary: delta_brier = mean[(p-y)^2 - (q-y)^2], whole-game bootstrap 50000 resamples seed 20261004. Secondary P2: units at frozen HR price on |p-q|>0.08. 500 descriptive, 1500 confirmatory."
+ "scoring": "Primary: delta_brier = mean[(p-y)^2 - (q-y)^2], whole-game bootstrap 50000 resamples seed 20261004. Secondary P2: units at frozen HR price on |p-q|>0.08. 500 descriptive, 1500 confirmatory.",
+ "grading": {
+  "actuals_module": "nfl/sim/actuals.py",
+  "snap_source": "nflreadpy.load_snap_counts",
+  "crosswalk": "nflreadpy.load_rosters (gsis_id -> pfr_id)",
+  "event_mapping": "event_id -> game_id via nflverse schedule for (season, week)",
+  "missing_crosswalk": "UNRESOLVED (never VOID)",
+  "missing_snaps": "UNRESOLVED",
+  "id_resolved_absent_from_snaps": "VOID"
+ }
 }

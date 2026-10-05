@@ -1,11 +1,36 @@
 {
-  "generated_at": "2026-09-29T21:17:28.871669+00:00",
-  "last_updated": "2026-09-29 21:17 UTC",
-  "pipeline_run_date": "2026-05-09",
+  "generated_at": "2026-10-04T21:00:24.768259+00:00",
+  "last_updated": "2026-10-04 21:00 UTC",
+  "pipeline_run_date": "2026-10-01",
   "signals_source": "stale",
-  "game_date": "2026-09-29",
+  "game_date": "2026-10-04",
   "today_signals": [],
-  "recent_results": [],
+  "recent_results": [
+    {
+      "game_id": 2026020015,
+      "game_date": "2026-10-01",
+      "home_team": "VAN",
+      "away_team": "EDM",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.15693423618634889,
+      "confidence_tier": "HIGH",
+      "result": "LOSS",
+      "actual_total_goals_final": 16.0
+    },
+    {
+      "game_id": 2026020016,
+      "game_date": "2026-10-01",
+      "home_team": "SJS",
+      "away_team": "FLA",
+      "signal_side": "UNDER",
+      "closing_total": 6.5,
+      "edge": 0.13526576381365119,
+      "confidence_tier": "SHADOW_MEDIUM",
+      "result": "LOSS",
+      "actual_total_goals_final": 7.0
+    }
+  ],
   "season_performance": {
     "validate": {
       "W": 136,
@@ -59,10 +84,10 @@
     }
   },
   "ot_diagnostics": {
-    "total_graded": 806,
+    "total_graded": 808,
     "ot_games": 180,
     "so_games": 64,
-    "ot_rate": 0.2233,
+    "ot_rate": 0.2228,
     "ot_flips": 48,
     "ot_flip_rate": 0.2667,
     "under_ot_losses": 72,
@@ -79,10 +104,11 @@
   },
   "data_quality_warning": false,
   "daily_review": {
-    "generated_at": "2026-09-29T21:17:28.875550+00:00",
-    "date_reviewed": "2026-09-28",
+    "generated_at": "2026-10-04T21:00:24.772076+00:00",
+    "date_reviewed": "2026-10-03",
     "record_summary": {},
     "narrative": null,
     "generation_status": "no_games"
-  }
+  },
+  "weekly_review": null
 }

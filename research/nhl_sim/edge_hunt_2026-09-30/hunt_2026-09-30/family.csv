@@ -50,3 +50,6 @@ E-02c-S2-ML,live PP ML A1 clean,0.2455
 E-02c-S2-TOT,live PP TOT A1 clean,0.23
 E-02b-TOT,live TOT A1 fresh/no-event/no bad feeds (post-hoc cut),0.0722
 E-02-lead,"live under picks ROI t (post-hoc, lead only)",0.028
+V-01-TOT,venue factor vs closing-total residual (validation 2019-24),0.87
+V-01-TOT-ON,venue factor Oct-Nov vs closing-total residual (validation),0.76
+V-01-ML,per-rink home-ice residual vs closing ML (discovery; validation not run),0.31

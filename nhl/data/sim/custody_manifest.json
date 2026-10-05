@@ -1,0 +1,63 @@
+{
+  "generated": "2026-10-05T14:43:09Z",
+  "total_files": 191950,
+  "total_bytes": 1624383706,
+  "locations": {
+    "ratings": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings",
+      "is_symlink": false,
+      "n_files": 8,
+      "total_bytes": 2970838,
+      "rollup_sha256": "3373076ee4aca290f446006ffb7efc1e270198400ea66b5931398a2ec6756ace"
+    },
+    "prices": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices",
+      "is_symlink": false,
+      "n_files": 4,
+      "total_bytes": 434090,
+      "rollup_sha256": "2ab3815b0e885520bbc1fccf5e9d3061549717131d61db8ef7d9ed1897f39211"
+    },
+    "crosswalk": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/crosswalk",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/crosswalk",
+      "is_symlink": false,
+      "n_files": 1,
+      "total_bytes": 245283,
+      "rollup_sha256": "7dd22e033b523beb43d94729cbdc5d0f0f962fdb5ae633300c9ff48e9b039ca5"
+    },
+    "events": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events",
+      "is_symlink": false,
+      "n_files": 15,
+      "total_bytes": 13478667,
+      "rollup_sha256": "4b2b2746929a1a7e6cefc0a4e39fd07b29d1a01bdb2b19cd99a851a964951a66"
+    },
+    "pbp_cache_nhlsim1": {
+      "path": "/Users/jw115/mlb-model-nhlsim1/nhl/cache/pbp",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim1/nhl/cache/pbp",
+      "is_symlink": false,
+      "n_files": 19152,
+      "total_bytes": 206750376,
+      "rollup_sha256": "45466cd9e7da5c6a48cbd20d98acbc59897a4ee07636a00b64b8eba9789782fb"
+    },
+    "boxscore_cache_nhlD": {
+      "path": "/Users/jw115/mlb-model-nhlD/nhl/cache",
+      "resolved_path": "/Users/jw115/mlb-model-nhlD/nhl/cache",
+      "is_symlink": false,
+      "n_files": 26484,
+      "total_bytes": 299445177,
+      "rollup_sha256": "fb5b04ac4aa4c725b603c1af93e19a0ebd5e0d4cf188e2a373666b67e398f57d"
+    },
+    "odds_archive_nhlE": {
+      "path": "/Users/jw115/mlb-model-nhlE/data/odds_archive/nhl/history",
+      "resolved_path": "/Users/jw115/mlb-model-nhlE/data/odds_archive/nhl/history",
+      "is_symlink": false,
+      "n_files": 146286,
+      "total_bytes": 1101059275,
+      "rollup_sha256": "49bda61b3f8fba03784d10bd73f7f31f66082c3108a192625c9ffb77eab22a01"
+    }
+  }
+}

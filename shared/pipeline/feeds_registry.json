@@ -1,0 +1,674 @@
+{
+ "_doc": "What each scheduled job writes. Schedules are NOT here: pipeline_health.py reads them from the VM crontab (cron_match = a substring of the cron command). Mac jobs have no crontab on the VM, so they give cadence_min instead and are judged by what reaches the VM through git. active_months = months the feed is expected to produce; outside them a quiet feed is OFF, not SILENT. quiet_ok = a run that writes nothing new is normal (e.g. no games in the window). local_only = output is deliberately not in git.",
+ "feeds": [
+  {
+   "id": "tape_nfl",
+   "label": "Game-line tape, 10 books",
+   "sport": "NFL",
+   "cron_match": "multi_book_open_capture.py --sports americanfootball_nfl",
+   "outputs": [
+    "data/odds_archive/nfl/line_history/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "active_months": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
+  },
+  {
+   "id": "tape_ncaaf",
+   "label": "Game-line tape, 10 books",
+   "sport": "NCAAF",
+   "cron_match": "multi_book_open_capture.py --sports americanfootball_nfl",
+   "outputs": [
+    "data/odds_archive/ncaaf/line_history/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "active_months": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    1
+   ]
+  },
+  {
+   "id": "tape_nhl",
+   "label": "Game-line tape, 10 books",
+   "sport": "NHL",
+   "cron_match": "multi_book_open_capture.py --sports americanfootball_nfl",
+   "outputs": [
+    "data/odds_archive/nhl/line_history/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "active_months": [
+    9,
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "id": "tape_nba",
+   "label": "Game-line tape, 10 books",
+   "sport": "NBA",
+   "cron_match": "basketball_nba",
+   "outputs": [
+    "data/odds_archive/nba/line_history/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "active_months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "quiet_ok": true
+  },
+  {
+   "id": "tape_mlb",
+   "label": "Game-line tape, 10 books",
+   "sport": "MLB",
+   "cron_match": "multi_book_open_capture.py --sports baseball_mlb",
+   "outputs": [
+    "data/odds_archive/baseball_mlb/line_history/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "id": "nfl_props",
+   "label": "Player props, 10 books",
+   "sport": "NFL",
+   "cron_match": "pull_hardrock_props.py",
+   "outputs": [
+    "data/odds_archive/nfl/props/season=*/month=*/data_*.parquet"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true,
+   "write_lag_min": 5,
+   "active_months": [
+    9,
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
+  },
+  {
+   "id": "nfl_event_markets",
+   "label": "Alts, team totals, halves",
+   "sport": "NFL",
+   "cron_match": "pull_event_markets.py --sport americanfootball_nfl",
+   "outputs": [
+    "data/odds_archive/nfl/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    9,
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
+  },
+  {
+   "id": "nhl_event_markets",
+   "label": "Props + derivatives, 10 books",
+   "sport": "NHL",
+   "cron_match": "pull_event_markets.py --sport icehockey_nhl",
+   "outputs": [
+    "data/odds_archive/nhl/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "id": "nba_event_markets",
+   "label": "Props + derivatives, 10 books",
+   "sport": "NBA",
+   "cron_match": "pull_event_markets.py --sport basketball_nba",
+   "outputs": [
+    "data/odds_archive/nba/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "id": "ncaaf_event_markets",
+   "label": "Alts, team totals, halves",
+   "sport": "NCAAF",
+   "cron_match": "pull_event_markets.py --sport americanfootball_ncaaf",
+   "outputs": [
+    "data/odds_archive/ncaaf/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    1
+   ]
+  },
+  {
+   "id": "mlb_event_markets",
+   "label": "Alts, team totals, props",
+   "sport": "MLB",
+   "cron_match": "pull_event_markets.py --sport baseball_mlb",
+   "outputs": [
+    "data/odds_archive/baseball_mlb/event_markets/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true,
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "id": "nfl_sunday_early",
+   "label": "Sunday AM tape for London games",
+   "sport": "NFL",
+   "cron_match": "multi_book_open_capture.py --sports americanfootball_nfl",
+   "outputs": [
+    "data/odds_archive/nfl/line_history/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "quiet_ok": true
+  },
+  {
+   "id": "espn_nfl_news",
+   "label": "ESPN news",
+   "sport": "NFL",
+   "cron_match": "pull_espn_news.py --sport nfl",
+   "outputs": [
+    "data/news_archive/nfl/season=*/news_*Z.json*"
+   ],
+   "ts": "filename",
+   "quiet_ok": true
+  },
+  {
+   "id": "espn_ncaaf_news",
+   "label": "ESPN news",
+   "sport": "NCAAF",
+   "cron_match": "pull_espn_news.py --sport ncaaf",
+   "outputs": [
+    "data/news_archive/ncaaf/season=*/news_*Z.json*"
+   ],
+   "ts": "filename",
+   "quiet_ok": true
+  },
+  {
+   "id": "espn_nfl_injuries",
+   "label": "ESPN injuries + depth",
+   "sport": "NFL",
+   "cron_match": "pull_espn_nfl_status.py",
+   "outputs": [
+    "data/injury_archive/nfl/season=*/injuries_*Z.json*"
+   ],
+   "ts": "filename",
+   "write_lag_min": 2
+  },
+  {
+   "id": "nflverse",
+   "label": "nflverse depth / injuries / rosters",
+   "sport": "NFL",
+   "cron_match": "run_nflverse_with_archive.sh",
+   "outputs": [
+    "data/depth_archive/nfl/season=*/nflverse_*Z.parquet"
+   ],
+   "ts": "filename"
+  },
+  {
+   "id": "kalshi_nfl",
+   "label": "Kalshi markets",
+   "sport": "NFL",
+   "cron_match": "pull_kalshi_football.py --sport nfl",
+   "outputs": [
+    "data/odds_archive/kalshi/nfl/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename"
+  },
+  {
+   "id": "kalshi_ncaaf",
+   "label": "Kalshi markets",
+   "sport": "NCAAF",
+   "cron_match": "pull_kalshi_football.py --sport ncaaf",
+   "outputs": [
+    "data/odds_archive/kalshi/ncaaf/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename"
+  },
+  {
+   "id": "nws",
+   "label": "NWS weather, 25 venues",
+   "sport": "All",
+   "cron_match": "nws_weather_capture.py",
+   "outputs": [
+    "data/weather_archive/nws/forecasts/season=*/snap_*Z.parquet"
+   ],
+   "ts": "filename",
+   "write_lag_min": 5
+  },
+  {
+   "id": "mlb_lineups",
+   "label": "Lineup timing snapshots",
+   "sport": "MLB",
+   "cron_match": "lineup_timing_snapshot.py",
+   "outputs": [
+    "mlb/data/lineups/snapshots_2026/lineup_snapshot_*.json"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true,
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "id": "yrfi_odds",
+   "label": "YRFI prices (FanDuel)",
+   "sport": "MLB",
+   "cron_match": "pull_yrfi_odds_daily.py",
+   "outputs": [
+    "mlb/logs/yrfi_odds_2026.json"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true,
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": "yrfi_shadow",
+   "label": "YRFI shadow tracker",
+   "sport": "MLB",
+   "cron_match": "yrfi_shadow_daily.py",
+   "outputs": [
+    "mlb/logs/yrfi_shadow_2026.json"
+   ],
+   "ts": "mtime",
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": "p09_shadow",
+   "label": "P09 shadow tracker",
+   "sport": "MLB",
+   "cron_match": "p09_shadow_daily.py",
+   "outputs": [
+    "mlb/logs/p09_shadow_2026.json"
+   ],
+   "ts": "mtime",
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": "nrfi_selector",
+   "label": "NRFI selector",
+   "sport": "MLB",
+   "cron_match": "nrfi_daily_selector.py",
+   "outputs": [
+    "mlb/logs/nrfi_selector_v1_2026.json"
+   ],
+   "ts": "mtime",
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": "mlb_prelim",
+   "label": "MLB two-pass prelim (+ P09 odds cache)",
+   "sport": "MLB",
+   "cron_match": "mlb_two_pass.py --mode prelim",
+   "outputs": [
+    "data/cache/odds_full_*.json"
+   ],
+   "ts": "mtime",
+   "local_only": true,
+   "quiet_ok": true,
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "id": "mlb_confirm",
+   "label": "MLB two-pass confirm",
+   "sport": "MLB",
+   "cron_match": "mlb_two_pass.py --mode confirm",
+   "quiet_ok": true,
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "id": "mlb_results",
+   "label": "MLB results grader",
+   "sport": "MLB",
+   "cron_match": "results_tracker.py",
+   "quiet_ok": true
+  },
+  {
+   "id": "nhl_daily",
+   "label": "NHL model + grading",
+   "sport": "NHL",
+   "cron_match": "nhl/nhl_daily_pipeline.py",
+   "outputs": [
+    "nhl/logs/nhl_shadow_aligned_2026.json",
+    "nhl/nhl_decisions.parquet"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true,
+   "active_months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "id": "soccer",
+   "label": "Soccer daily pipeline",
+   "sport": "Soccer",
+   "cron_match": "soccer/soccer_daily_pipeline.py",
+   "outputs": [
+    "soccer/data/cache/daily/odds_soccer_*.json"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
+  },
+  {
+   "id": "golf_daily",
+   "label": "Golf odds + shadow board",
+   "sport": "Golf",
+   "cron_match": "golf_daily_runner.py --capture close",
+   "outputs": [
+    "golf/shadow/golf_shadow_log.parquet"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
+  },
+  {
+   "id": "golf_grade",
+   "label": "Golf grader",
+   "sport": "Golf",
+   "cron_match": "golf_grader.py",
+   "quiet_ok": true
+  },
+  {
+   "id": "health_old",
+   "label": "Legacy health_check.py",
+   "sport": "Ops",
+   "cron_match": "shared/health_check.py",
+   "quiet_ok": true,
+   "note": "to be retired"
+  },
+  {
+   "id": "nba_availability_mac",
+   "label": "NBA ESPN injuries (Mac crontab)",
+   "sport": "NBA",
+   "host": "Mac",
+   "cadence_min": 15,
+   "grace_min": 75,
+   "outputs": [
+    "data/injury_archive/nba/season=*/espn/injuries_*Z.json.gz"
+   ],
+   "ts": "filename",
+   "active_months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "note": "Mac \u2192 GitHub \u2192 VM; judged by what has reached the VM"
+  },
+  {
+   "id": "statcast_mac",
+   "label": "Statcast aggregates rebuild (Mac launchd)",
+   "sport": "MLB",
+   "host": "Mac",
+   "cadence_min": 1440,
+   "grace_min": 180,
+   "outputs": [
+    "research/statcast_enrichment/pitcher_statcast_per_start.parquet"
+   ],
+   "ts": "mtime",
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "id": "mlb_hits_mac",
+   "label": "MLB hits props shadow (Mac launchd)",
+   "sport": "MLB",
+   "host": "Mac",
+   "cadence_min": 1440,
+   "grace_min": 240,
+   "outputs": [
+    "mlb/props/shadow/raw/hits_*.parquet"
+   ],
+   "ts": "mtime",
+   "active_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  {
+   "id": "nba_model_mac",
+   "label": "NBA model + grading (Mac launchd)",
+   "sport": "NBA",
+   "host": "Mac",
+   "cadence_min": 1440,
+   "grace_min": 240,
+   "outputs": [
+    "nba_results.json"
+   ],
+   "ts": "mtime",
+   "active_months": [
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "id": "pipeline_health",
+   "label": "This health check",
+   "sport": "Ops",
+   "cron_match": "shared/pipeline/pipeline_health.py",
+   "outputs": [
+    "status/pipeline_health.json"
+   ],
+   "ts": "mtime"
+  },
+  {
+   "id": "site_build",
+   "label": "Website build",
+   "sport": "Ops",
+   "cron_match": "site/build_site.py",
+   "outputs": [
+    "/var/www/iamnotuncertain/index.html"
+   ],
+   "ts": "mtime",
+   "local_only": true
+  },
+  {
+   "id": "history_spender",
+   "label": "History spender (nightly)",
+   "sport": "All",
+   "cron_match": "shared/pipeline/history_spender.py",
+   "outputs": [
+    "status/history_spender.json"
+   ],
+   "ts": "mtime",
+   "grace_min": 60
+  },
+  {
+   "id": "picks_adapters",
+   "label": "Picks ledger adapters",
+   "sport": "Ops",
+   "cron_match": "picks_adapters.py",
+   "outputs": [
+    "/root/private/ledger/picks.jsonl"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
+  },
+  {
+   "id": "picks_backup",
+   "label": "Picks ledger backup",
+   "sport": "Ops",
+   "cron_match": "backup_picks.sh",
+   "outputs": [
+    "/root/private/ledger_backup/picks_*.jsonl.gz"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
+  },
+  {
+   "id": "picks_grader",
+   "label": "Picks crosswalk + grader",
+   "sport": "Ops",
+   "cron_match": "picks_grader.py",
+   "outputs": [
+    "/root/private/ledger/picks.jsonl"
+   ],
+   "ts": "mtime",
+   "quiet_ok": true
+  }
+ ]
+}
