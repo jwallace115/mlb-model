@@ -800,3 +800,35 @@ Previous: 4 `context_mismatch` → now all `ok`. **HELD.**
     (`is_legacy_format` does not exist; `validate_context` returns `context_mismatch`).
 (ii) New-format `_12_00PM` file 45min after slot → `context_mismatch` (30min rule holds).
 (iii) New-format file 25min after slot → `ok`.
+
+### B23 — regenerate committed parsed history (2026-10-05)
+
+**B16/B19 rows for legacy-era dates are superseded.** The noon-only parquets parsed from
+`_12PM.pdf` files (the only ones B16 fetched) represented the 12:00 PM report, typically
+5-7 hours before the freeze/tip. B21 re-fetched the correct reports (e.g. `_05PM`, `_06PM`,
+`_07PM`) and B22 widened the context window for legacy files. This rebuild replaces the
+legacy-era parsed parquets with ones from the correct PDFs.
+
+**Rebuild.** 642 unique PDFs parsed with both parsers. All 642 status = `ok`.
+
+| Metric | Count |
+|--------|-------|
+| Parquets added | 420 |
+| Parquets removed (superseded noon-only) | 224 |
+| Parquets unchanged (name match, re-parsed) | 222 |
+| Total in tree | 644 (642 parsed + manifest + roles) |
+| Total size | 6.6 MB (< 20 MB) |
+
+Per season:
+- `history_parsed/season=2024/`: 316 parquets (was 167)
+- `history_parsed/season=2025/`: 326 parquets (was 268)
+- `history_parsed/manifest.parquet`: 642 rows (was 435)
+- `history_parsed/roles.parquet`: 656 rows (unchanged from B21)
+
+The 224 removed files are the `_12PM.parquet` entries for legacy dates where the correct
+report (e.g. `_05PM`, `_06PM`) now exists. Git history retains them.
+
+**Why the superseded files must not be used:** For a typical 7pm ET game night, B16's
+`_12PM.pdf` was published at ~12:45 PM ET. The correct freeze report (`_05PM.pdf`) was
+published at ~5:45 PM ET — 5 hours later, with all late-afternoon injury updates. Using
+the noon report as "who was out at freeze" would miss every player ruled out between 1-5 PM.
