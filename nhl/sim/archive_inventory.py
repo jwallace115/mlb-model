@@ -1,0 +1,246 @@
+#!/usr/bin/env python3
+"""S56 (L-WO1 Item 3b): data-custody manifest and archive copy.
+
+Walks worktree-only data, writes custody_manifest.json and DATA_CUSTODY.md,
+then copies to ARCHIVE_ROOT/nhl/ if the env var is set.
+"""
+import hashlib, json, os, sys, time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+
+# Data locations (worktree-only, not committed)
+LOCATIONS = {
+    "ratings": ROOT / "nhl" / "data" / "sim" / "ratings",
+    "prices": ROOT / "nhl" / "data" / "sim" / "prices",
+    "crosswalk": ROOT / "nhl" / "data" / "sim" / "crosswalk",
+    "events": ROOT / "nhl" / "data" / "sim" / "events",
+    "pbp_cache_nhlsim1": Path.home() / "mlb-model-nhlsim1" / "nhl" / "cache" / "pbp",
+    "boxscore_cache_nhlD": Path.home() / "mlb-model-nhlD" / "nhl" / "cache",
+    "odds_archive_nhlE": Path.home() / "mlb-model-nhlE" / "data" / "odds_archive" / "nhl" / "history",
+}
+
+MANIFEST_PATH = ROOT / "nhl" / "data" / "sim" / "custody_manifest.json"
+CUSTODY_DOC_PATH = ROOT / "research" / "nhl_sim" / "DATA_CUSTODY.md"
+
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def inventory_dir(dirpath, hash_files=True):
+    """Walk a directory and return list of file info dicts.
+    If hash_files=False, skip sha256 (for large dirs like pbp/boxscores)."""
+    items = []
+    dirpath = Path(dirpath)
+    if not dirpath.exists():
+        return items
+    for p in sorted(dirpath.rglob("*")):
+        if p.is_file() and not p.is_symlink():
+            rel = str(p.relative_to(dirpath))
+            try:
+                stat = p.stat()
+                item = {
+                    "path": str(p),
+                    "relative": rel,
+                    "bytes": stat.st_size,
+                    "mtime": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(stat.st_mtime)),
+                }
+                if hash_files:
+                    item["sha256"] = sha256_file(p)
+                items.append(item)
+            except (PermissionError, OSError):
+                pass
+    return items
+
+
+def main():
+    print("Building custody manifest...")
+    all_items = []
+    location_summaries = {}
+
+    # Large dirs: count only, no per-file hash (too slow / large manifest)
+    LARGE_DIRS = {"pbp_cache_nhlsim1", "boxscore_cache_nhlD", "odds_archive_nhlE"}
+
+    for loc_name, loc_path in LOCATIONS.items():
+        loc_path = Path(loc_path)
+        if loc_path.is_symlink():
+            real = loc_path.resolve()
+            print(f"  {loc_name}: {loc_path} -> {real} (symlink)")
+        elif not loc_path.exists():
+            print(f"  {loc_name}: {loc_path} (NOT FOUND)")
+            continue
+        else:
+            print(f"  {loc_name}: {loc_path}")
+
+        is_large = loc_name in LARGE_DIRS
+        if is_large:
+            # For large dirs: just count files and total bytes, no per-file listing
+            import subprocess
+            result = subprocess.run(["du", "-sh", str(loc_path.resolve())],
+                                    capture_output=True, text=True)
+            du_size = result.stdout.split()[0] if result.stdout else "?"
+            n_files = sum(1 for _ in loc_path.resolve().rglob("*") if _.is_file())
+            # Estimate total bytes from du
+            total_bytes = sum(f.stat().st_size for f in loc_path.resolve().rglob("*")
+                              if f.is_file()) if n_files < 50000 else 0
+            location_summaries[loc_name] = {
+                "path": str(loc_path),
+                "resolved_path": str(loc_path.resolve()),
+                "is_symlink": loc_path.is_symlink(),
+                "n_files": n_files,
+                "total_bytes": total_bytes,
+                "du_size": du_size,
+                "per_file_hashes": False,
+            }
+            print(f"    {n_files} files, du={du_size} (per-file hashes skipped)")
+        else:
+            items = inventory_dir(loc_path.resolve(), hash_files=True)
+            total_bytes = sum(i["bytes"] for i in items)
+            all_items.extend(items)
+            location_summaries[loc_name] = {
+                "path": str(loc_path),
+                "resolved_path": str(loc_path.resolve()),
+                "is_symlink": loc_path.is_symlink(),
+                "n_files": len(items),
+                "total_bytes": total_bytes,
+            }
+            print(f"    {len(items)} files, {total_bytes / 1e6:.1f} MB")
+
+    # Write manifest
+    manifest = {
+        "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "locations": location_summaries,
+        "files": all_items,
+    }
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + "\n")
+    print(f"\nManifest: {MANIFEST_PATH} ({len(all_items)} files)")
+
+    # Write DATA_CUSTODY.md
+    doc_lines = [
+        "# NHL Sim — Data Custody",
+        "",
+        "Generated by `nhl/sim/archive_inventory.py`.",
+        "",
+    ]
+    custody_info = {
+        "ratings": (
+            "Team ratings, goalie ratings, finishing term, shrinkage parameters, "
+            "team_game_stats, and the ratings manifest. Produced by `nhl/sim/ratings.py` "
+            "(S16-S27). Rebuilding requires the events tables (~30s) plus a --measure-hyper "
+            "run (~5s). The carryover weights and shrinkage K are fitted once on 2021-22 + 2022-23."
+        ),
+        "prices": (
+            "Engine-simulated game prices for 2022-23 and 2023-24 (2,624 games total). "
+            "Produced by `nhl/sim/price_games.py` (S41/S50). Rebuilding: ~50 min at 2,000 sims. "
+            "Also contains the pre-fix 'swapped' prices for provenance."
+        ),
+        "crosswalk": (
+            "game_id <-> event_id crosswalk mapping NHL game_ids to Odds API event_ids. "
+            "Produced by `nhl/sim/build_crosswalk.py` (S55). Rebuilding: seconds (reads boxscores + lines)."
+        ),
+        "events": (
+            "Per-season shot, state_time, and penalty event tables extracted from play-by-play. "
+            "Produced by `nhl/sim/build_events.py`. Rebuilding: ~15 min from the pbp cache."
+        ),
+        "pbp_cache_nhlsim1": (
+            "Raw play-by-play JSON (gzipped), one file per game, 2010-2025 seasons. "
+            "Source: NHL Stats API. This is the canonical copy; nhlsim4b and nhlD have "
+            "symlinks (`nhl/cache/pbp -> ~/mlb-model-nhlsim1/nhl/cache/pbp`). "
+            "Rebuilding: ~2 hours of API calls (rate-limited). PRUNING THE nhlsim1 WORKTREE "
+            "WOULD DESTROY THIS DATA."
+        ),
+        "boxscore_cache_nhlD": (
+            "Boxscore JSON files, one per game, 2010-2025. Source: NHL Stats API. "
+            "Also used by nhlsim4b via symlink. Rebuilding: ~1 hour of API calls."
+        ),
+        "odds_archive_nhlE": (
+            "Historical odds from the Odds API: lines (h2h/totals/spreads snapshots), "
+            "three-way markets, in-play data, event-market mappings. 2022-2025 seasons. "
+            "Rebuilding: ~$60 of Odds API credits (historical endpoint at 10x cost). "
+            "THIS IS THE MOST EXPENSIVE DATA TO REBUILD."
+        ),
+    }
+    for loc_name, desc in custody_info.items():
+        summ = location_summaries.get(loc_name, {})
+        path = summ.get("path", "N/A")
+        n = summ.get("n_files", 0)
+        mb = summ.get("total_bytes", 0) / 1e6
+        is_sym = summ.get("is_symlink", False)
+        doc_lines.append(f"## {loc_name}")
+        doc_lines.append(f"**Path:** `{path}`" + (" (symlink)" if is_sym else ""))
+        doc_lines.append(f"**Files:** {n}, **Size:** {mb:.1f} MB")
+        doc_lines.append("")
+        doc_lines.append(desc)
+        doc_lines.append("")
+
+    CUSTODY_DOC_PATH.write_text("\n".join(doc_lines) + "\n")
+    print(f"Doc: {CUSTODY_DOC_PATH}")
+
+    # Archive copy
+    archive_root = os.environ.get("ARCHIVE_ROOT")
+    if not archive_root:
+        print("\nARCHIVE_ROOT not set. To archive, run:")
+        print(f"  ARCHIVE_ROOT=/path/to/archive python3 {__file__}")
+        print("\nOr manually:")
+        for loc_name, loc_path in LOCATIONS.items():
+            resolved = Path(loc_path).resolve()
+            if resolved.exists():
+                print(f"  rsync -a --ignore-existing {resolved}/ $ARCHIVE_ROOT/nhl/{loc_name}/")
+        print("\nSTOP: no archive copy made.")
+        return
+
+    archive_nhl = Path(archive_root) / "nhl"
+    archive_nhl.mkdir(parents=True, exist_ok=True)
+
+    import subprocess
+    for loc_name, loc_path in LOCATIONS.items():
+        resolved = Path(loc_path).resolve()
+        if not resolved.exists():
+            continue
+        dest = archive_nhl / loc_name
+        dest.mkdir(parents=True, exist_ok=True)
+        cmd = ["rsync", "-a", "--ignore-existing", f"{resolved}/", f"{dest}/"]
+        print(f"\n  {' '.join(cmd)}")
+        subprocess.run(cmd, check=True)
+
+    # Verify
+    print("\nVerifying archive...")
+    mismatches = 0
+    archive_files = 0
+    archive_bytes = 0
+    for item in all_items:
+        src = Path(item["path"])
+        # Find which location this belongs to
+        for loc_name, loc_path in LOCATIONS.items():
+            resolved = Path(loc_path).resolve()
+            if str(src).startswith(str(resolved)):
+                rel = src.relative_to(resolved)
+                dest = archive_nhl / loc_name / rel
+                if dest.exists():
+                    archive_sha = sha256_file(dest)
+                    if archive_sha != item["sha256"]:
+                        print(f"  MISMATCH: {dest}")
+                        mismatches += 1
+                    archive_files += 1
+                    archive_bytes += dest.stat().st_size
+                break
+
+    print(f"\nArchive: {archive_files} files, {archive_bytes / 1e6:.1f} MB, {mismatches} mismatches")
+
+    # du -sh
+    for loc_name, loc_path in LOCATIONS.items():
+        resolved = Path(loc_path).resolve()
+        if resolved.exists():
+            result = subprocess.run(["du", "-sh", str(resolved)], capture_output=True, text=True)
+            print(f"  Source {loc_name}: {result.stdout.strip()}")
+    result = subprocess.run(["du", "-sh", str(archive_nhl)], capture_output=True, text=True)
+    print(f"  Archive: {result.stdout.strip()}")
+
+
+if __name__ == "__main__":
+    main()

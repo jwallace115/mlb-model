@@ -1111,3 +1111,22 @@ away) join is removed.
 
 **Null control:** swapping two event_ids in the crosswalk changed 2023-24 Pinnacle LL from
 0.6567 to 0.6564 (Δ = 0.000366). The join is live.
+
+### S56 — Hard Rock in live-lines puller; data-custody manifest + archive (2026-10-05, L-WO1 Item 3)
+
+**Hard Rock (nhl/live-lines branch, separate commit):**
+- `pointsbetus` returned 0 rows on 2026-10-02 (fewest of 10 books); swapped for `hardrockbet`.
+- BOOKS stays at exactly 10 keys (11th doubles every call).
+- Hard Rock price column added next to Pinnacle in game-lines report tables.
+- Test `test_books_has_hardrock_and_exactly_10`: fails on committed code, passes after.
+- Puller NOT run (0 credits).
+
+**Data-custody manifest + archive (nhlsim4b):**
+- `nhl/sim/archive_inventory.py`: walks worktree-only data across 7 locations.
+- `custody_manifest.json`: per-file sha256 for small dirs (ratings/prices/crosswalk/events,
+  28 files); file counts and du for large dirs (pbp 19,152 files / 229M, boxscores 26,484 /
+  340M, odds archive 146,286 / 1.3G).
+- `DATA_CUSTODY.md`: per-location description, provenance, rebuild cost.
+- pbp cache is a symlink from nhlsim4b and nhlD into nhlsim1 (`nhl/cache/pbp`).
+  PRUNING nhlsim1 WOULD DESTROY THE PBP DATA.
+- ARCHIVE_ROOT not set → manifest + doc written, rsync commands printed, STOPPED.

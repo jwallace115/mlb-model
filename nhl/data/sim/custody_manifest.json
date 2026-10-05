@@ -1,0 +1,258 @@
+{
+  "generated": "2026-10-05T13:06:15Z",
+  "locations": {
+    "ratings": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings",
+      "is_symlink": false,
+      "n_files": 8,
+      "total_bytes": 2970838
+    },
+    "prices": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices",
+      "is_symlink": false,
+      "n_files": 4,
+      "total_bytes": 434090
+    },
+    "crosswalk": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/crosswalk",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/crosswalk",
+      "is_symlink": false,
+      "n_files": 1,
+      "total_bytes": 245283
+    },
+    "events": {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events",
+      "is_symlink": false,
+      "n_files": 15,
+      "total_bytes": 13478667
+    },
+    "pbp_cache_nhlsim1": {
+      "path": "/Users/jw115/mlb-model-nhlsim1/nhl/cache/pbp",
+      "resolved_path": "/Users/jw115/mlb-model-nhlsim1/nhl/cache/pbp",
+      "is_symlink": false,
+      "n_files": 19152,
+      "total_bytes": 206750376,
+      "du_size": "229M",
+      "per_file_hashes": false
+    },
+    "boxscore_cache_nhlD": {
+      "path": "/Users/jw115/mlb-model-nhlD/nhl/cache",
+      "resolved_path": "/Users/jw115/mlb-model-nhlD/nhl/cache",
+      "is_symlink": false,
+      "n_files": 26484,
+      "total_bytes": 299445177,
+      "du_size": "340M",
+      "per_file_hashes": false
+    },
+    "odds_archive_nhlE": {
+      "path": "/Users/jw115/mlb-model-nhlE/data/odds_archive/nhl/history",
+      "resolved_path": "/Users/jw115/mlb-model-nhlE/data/odds_archive/nhl/history",
+      "is_symlink": false,
+      "n_files": 146286,
+      "total_bytes": 0,
+      "du_size": "1.3G",
+      "per_file_hashes": false
+    }
+  },
+  "files": [
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/carryover_w.json",
+      "relative": "carryover_w.json",
+      "bytes": 515,
+      "mtime": "2026-09-29T22:31:32Z",
+      "sha256": "d17e7689bbeb098b0c68f44aeaaa479c6e13d603f605889f1900e7cdd2a81a07"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/finishing_term.parquet",
+      "relative": "finishing_term.parquet",
+      "bytes": 15791,
+      "mtime": "2026-09-29T22:31:56Z",
+      "sha256": "f7cda74dd74da48112ebb1bbec1a1363151e2c2ffb79c76c49fff7d778cf70aa"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/goalie_games.parquet",
+      "relative": "goalie_games.parquet",
+      "bytes": 354228,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "e9ccc49dc824d1e73aab1a7b7cf1a01feb5d3f5552855f4ff140f63769b58e20"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/goalie_ratings.parquet",
+      "relative": "goalie_ratings.parquet",
+      "bytes": 219887,
+      "mtime": "2026-09-29T22:31:56Z",
+      "sha256": "e2f2d8d8f84f45a562496a0eeda2992ed4f75a76c294ceff632fbc52ce6b9424"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/manifest.json",
+      "relative": "manifest.json",
+      "bytes": 1198,
+      "mtime": "2026-10-05T12:57:20Z",
+      "sha256": "9f85b64e95effc8aa57beaabfecd4d1c994eade560f438f8674ca45ab6b7d864"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/shrinkage_K.json",
+      "relative": "shrinkage_K.json",
+      "bytes": 1397,
+      "mtime": "2026-09-29T22:31:32Z",
+      "sha256": "1a532edca59b5f97778c7337ebe3ce6796935130e5e1f2ed0794aaedf9ffe0e2"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/team_game_stats.parquet",
+      "relative": "team_game_stats.parquet",
+      "bytes": 1199194,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "dc0a0b97fd77c43de366cda6c9a2f8f7983b863439a616f2ea9b527bc071ca24"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/ratings/team_ratings.parquet",
+      "relative": "team_ratings.parquet",
+      "bytes": 1178628,
+      "mtime": "2026-09-29T22:31:56Z",
+      "sha256": "67672cda2b258cbe3836f9aa26af24b79ff85a4febb3980a15e31564a5bfe19d"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices/season=2022.parquet",
+      "relative": "season=2022.parquet",
+      "bytes": 117404,
+      "mtime": "2026-09-30T15:29:06Z",
+      "sha256": "f0d8640b99bdb085232b6720308ae3b01f29b52b838295027c168798c0063010"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices/season=2022_swapped.parquet",
+      "relative": "season=2022_swapped.parquet",
+      "bytes": 101761,
+      "mtime": "2026-09-30T15:04:07Z",
+      "sha256": "627f100c126f35e030947129320ccf1a25037b75cdcdd4640d984d9c37ac00be"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices/season=2023.parquet",
+      "relative": "season=2023.parquet",
+      "bytes": 114909,
+      "mtime": "2026-09-30T15:53:40Z",
+      "sha256": "a1b4aaf6777d52305a2d7813f99a4ff56aabb111eff71bba4f9ff91350bf0031"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/prices/season=2023_swapped.parquet",
+      "relative": "season=2023_swapped.parquet",
+      "bytes": 100016,
+      "mtime": "2026-09-30T15:04:07Z",
+      "sha256": "64b2fe2ab07240f3422c66d7113c0775ca19520ade7c6c4697c38612eccbef3e"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/crosswalk/game_event.parquet",
+      "relative": "game_event.parquet",
+      "bytes": 245283,
+      "mtime": "2026-10-05T12:57:20Z",
+      "sha256": "5c21dbfff5c463cd17599a0ed30f5d9e04543d5ac53eeb6632bea4cc8e0823bf"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2021/penalties.parquet",
+      "relative": "season=2021/penalties.parquet",
+      "bytes": 65101,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "c3db36d5a1b9479aefc85bc070935d4b0a2561c2df6e6fb994aaad9799113dd7"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2021/shots.parquet",
+      "relative": "season=2021/shots.parquet",
+      "bytes": 1180001,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "48ef793628c51217a00198685de8d5dc552a607b9dfa7c02b7d3b5d46795c31f"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2021/state_time.parquet",
+      "relative": "season=2021/state_time.parquet",
+      "bytes": 1381750,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "3d2a942166c62612231d572bc9aa54f1a2b7842a41333c7a42aaba2153cb794b"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2022/penalties.parquet",
+      "relative": "season=2022/penalties.parquet",
+      "bytes": 65503,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "5f586052dc48cbe349be4627f45dc889e377f48047be53170660aefa85215858"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2022/shots.parquet",
+      "relative": "season=2022/shots.parquet",
+      "bytes": 1196002,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "cf4716274f5ff4b7e379b0f3b1a7d3ea0662bad9f7fba9bacb5c407b09eefdae"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2022/state_time.parquet",
+      "relative": "season=2022/state_time.parquet",
+      "bytes": 1409224,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "daddff1a4df32db83a0834c031bd18606a6ffe57699b01a7c25c230e57e7e424"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2023/penalties.parquet",
+      "relative": "season=2023/penalties.parquet",
+      "bytes": 66097,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "86bb94e2ab05febc6c894c3f2844707422b11a49e5cac95b265bf666020621d2"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2023/shots.parquet",
+      "relative": "season=2023/shots.parquet",
+      "bytes": 1214168,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "35d7b4f65ed3ed826256942f5f242abf5f732d1ea7399188739f25ca1422d03e"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2023/state_time.parquet",
+      "relative": "season=2023/state_time.parquet",
+      "bytes": 1462249,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "65e5bbe0528864a5fb9351cce4af99067fdd6a23a5d20636f67220a0fabfb2c0"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2024/penalties.parquet",
+      "relative": "season=2024/penalties.parquet",
+      "bytes": 61612,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "72428e42d12a862d80229a4721d657ffb2b6c509b647cb3a5d5ee72ef5f7125d"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2024/shots.parquet",
+      "relative": "season=2024/shots.parquet",
+      "bytes": 1178747,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "5a445f277c3d43a0ec845822f02e900ddff7daca501f4962941d35dec451c199"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2024/state_time.parquet",
+      "relative": "season=2024/state_time.parquet",
+      "bytes": 1485380,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "c993321966f5869b09b623383928a7e976802bc12d8e556ddcef3df24dce541d"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2025/penalties.parquet",
+      "relative": "season=2025/penalties.parquet",
+      "bytes": 63910,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "12de603437aa3a9b701a7b3c29d13e0f3e4734f8e96c9565e80b755a962e5691"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2025/shots.parquet",
+      "relative": "season=2025/shots.parquet",
+      "bytes": 1183784,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "36d6aea97d2b8df689bbb998578a8da6feb6b108a3374749c166bcb6bc9c774c"
+    },
+    {
+      "path": "/Users/jw115/mlb-model-nhlsim4b/nhl/data/sim/events/season=2025/state_time.parquet",
+      "relative": "season=2025/state_time.parquet",
+      "bytes": 1465139,
+      "mtime": "2026-09-29T22:31:45Z",
+      "sha256": "6c7ce2e301e6feea9c30fdc02a6552a49afc8865e3f662215cce4240051adefc"
+    }
+  ]
+}
