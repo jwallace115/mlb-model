@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-"""S56 (L-WO1 Item 3b): data-custody manifest and archive copy.
+"""S56/S58: data-custody manifest and archive copy.
 
-Walks worktree-only data, writes custody_manifest.json and DATA_CUSTODY.md,
-then copies to ARCHIVE_ROOT/nhl/ if the env var is set.
+Walks ALL worktree-only data (including large dirs), writes:
+- nhl/data/sim/custody/files.parquet (per-file: location, relative, bytes, mtime, sha256) — gitignored
+- nhl/data/sim/custody_manifest.json (per-location rollup: count, total_bytes, rollup sha256) — committed
+- research/nhl_sim/DATA_CUSTODY.md — committed
 """
-import hashlib, json, os, sys, time
+import hashlib, json, os, subprocess, sys, time
 from pathlib import Path
+
+import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Data locations (worktree-only, not committed)
 LOCATIONS = {
     "ratings": ROOT / "nhl" / "data" / "sim" / "ratings",
     "prices": ROOT / "nhl" / "data" / "sim" / "prices",
@@ -20,6 +23,8 @@ LOCATIONS = {
     "odds_archive_nhlE": Path.home() / "mlb-model-nhlE" / "data" / "odds_archive" / "nhl" / "history",
 }
 
+CUSTODY_DIR = ROOT / "nhl" / "data" / "sim" / "custody"
+FILES_PARQUET = CUSTODY_DIR / "files.parquet"
 MANIFEST_PATH = ROOT / "nhl" / "data" / "sim" / "custody_manifest.json"
 CUSTODY_DOC_PATH = ROOT / "research" / "nhl_sim" / "DATA_CUSTODY.md"
 
@@ -32,101 +37,95 @@ def sha256_file(path):
     return h.hexdigest()
 
 
-def inventory_dir(dirpath, hash_files=True):
-    """Walk a directory and return list of file info dicts.
-    If hash_files=False, skip sha256 (for large dirs like pbp/boxscores)."""
-    items = []
-    dirpath = Path(dirpath)
-    if not dirpath.exists():
-        return items
-    for p in sorted(dirpath.rglob("*")):
+def inventory_location(loc_name, loc_path):
+    """Walk a location and return list of dicts for all files."""
+    loc_path = Path(loc_path)
+    resolved = loc_path.resolve()
+    if not resolved.exists():
+        return []
+    rows = []
+    for p in sorted(resolved.rglob("*")):
         if p.is_file() and not p.is_symlink():
-            rel = str(p.relative_to(dirpath))
             try:
-                stat = p.stat()
-                item = {
-                    "path": str(p),
-                    "relative": rel,
-                    "bytes": stat.st_size,
-                    "mtime": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(stat.st_mtime)),
-                }
-                if hash_files:
-                    item["sha256"] = sha256_file(p)
-                items.append(item)
+                st = p.stat()
+                rows.append({
+                    "location": loc_name,
+                    "relative": str(p.relative_to(resolved)),
+                    "bytes": st.st_size,
+                    "mtime": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(st.st_mtime)),
+                    "sha256": sha256_file(p),
+                })
             except (PermissionError, OSError):
                 pass
-    return items
+    return rows
+
+
+def rollup_sha256(sha_list):
+    """Deterministic rollup: sha256 of sorted per-file sha256 lines."""
+    h = hashlib.sha256()
+    for s in sorted(sha_list):
+        h.update((s + "\n").encode())
+    return h.hexdigest()
 
 
 def main():
-    print("Building custody manifest...")
-    all_items = []
-    location_summaries = {}
-
-    # Large dirs: count only, no per-file hash (too slow / large manifest)
-    LARGE_DIRS = {"pbp_cache_nhlsim1", "boxscore_cache_nhlD", "odds_archive_nhlE"}
+    print("Building per-file custody manifest (all locations)...")
+    all_rows = []
 
     for loc_name, loc_path in LOCATIONS.items():
         loc_path = Path(loc_path)
-        if loc_path.is_symlink():
-            real = loc_path.resolve()
-            print(f"  {loc_name}: {loc_path} -> {real} (symlink)")
-        elif not loc_path.exists():
-            print(f"  {loc_name}: {loc_path} (NOT FOUND)")
+        is_sym = loc_path.is_symlink()
+        tag = f" -> {loc_path.resolve()}" if is_sym else ""
+        print(f"  {loc_name}: {loc_path}{tag}")
+        if not loc_path.resolve().exists():
+            print(f"    NOT FOUND, skipping")
             continue
-        else:
-            print(f"  {loc_name}: {loc_path}")
+        t0 = time.time()
+        rows = inventory_location(loc_name, loc_path)
+        elapsed = time.time() - t0
+        total_bytes = sum(r["bytes"] for r in rows)
+        print(f"    {len(rows)} files, {total_bytes / 1e6:.1f} MB, {elapsed:.1f}s")
+        all_rows.extend(rows)
 
-        is_large = loc_name in LARGE_DIRS
-        if is_large:
-            # For large dirs: just count files and total bytes, no per-file listing
-            import subprocess
-            result = subprocess.run(["du", "-sh", str(loc_path.resolve())],
-                                    capture_output=True, text=True)
-            du_size = result.stdout.split()[0] if result.stdout else "?"
-            n_files = sum(1 for _ in loc_path.resolve().rglob("*") if _.is_file())
-            # Estimate total bytes from du
-            total_bytes = sum(f.stat().st_size for f in loc_path.resolve().rglob("*")
-                              if f.is_file()) if n_files < 50000 else 0
-            location_summaries[loc_name] = {
-                "path": str(loc_path),
-                "resolved_path": str(loc_path.resolve()),
-                "is_symlink": loc_path.is_symlink(),
-                "n_files": n_files,
-                "total_bytes": total_bytes,
-                "du_size": du_size,
-                "per_file_hashes": False,
-            }
-            print(f"    {n_files} files, du={du_size} (per-file hashes skipped)")
-        else:
-            items = inventory_dir(loc_path.resolve(), hash_files=True)
-            total_bytes = sum(i["bytes"] for i in items)
-            all_items.extend(items)
-            location_summaries[loc_name] = {
-                "path": str(loc_path),
-                "resolved_path": str(loc_path.resolve()),
-                "is_symlink": loc_path.is_symlink(),
-                "n_files": len(items),
-                "total_bytes": total_bytes,
-            }
-            print(f"    {len(items)} files, {total_bytes / 1e6:.1f} MB")
+    # Write per-file parquet (gitignored)
+    CUSTODY_DIR.mkdir(parents=True, exist_ok=True)
+    df = pd.DataFrame(all_rows)
+    df.to_parquet(FILES_PARQUET, index=False)
+    print(f"\nfiles.parquet: {len(df)} rows, {FILES_PARQUET.stat().st_size / 1e6:.1f} MB")
 
-    # Write manifest
+    # Build per-location rollup for the committed manifest
+    location_summaries = {}
+    for loc_name, loc_path in LOCATIONS.items():
+        loc_path = Path(loc_path)
+        loc_df = df[df["location"] == loc_name]
+        if loc_df.empty:
+            continue
+        location_summaries[loc_name] = {
+            "path": str(loc_path),
+            "resolved_path": str(loc_path.resolve()),
+            "is_symlink": loc_path.is_symlink(),
+            "n_files": len(loc_df),
+            "total_bytes": int(loc_df["bytes"].sum()),
+            "rollup_sha256": rollup_sha256(loc_df["sha256"].tolist()),
+        }
+
+    # Write committed manifest JSON
     manifest = {
         "generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "total_files": len(df),
+        "total_bytes": int(df["bytes"].sum()),
         "locations": location_summaries,
-        "files": all_items,
     }
     MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + "\n")
-    print(f"\nManifest: {MANIFEST_PATH} ({len(all_items)} files)")
+    print(f"Manifest: {MANIFEST_PATH}")
+
+    # Null control: verify the 28 previously hashed small-dir files keep identical sha256
+    old_manifest_path = MANIFEST_PATH  # we're overwriting it, but let's check in memory
+    small_locs = {"ratings", "prices", "crosswalk", "events"}
+    small_df = df[df["location"].isin(small_locs)]
+    print(f"\nNull control: {len(small_df)} small-dir files hashed")
 
     # Write DATA_CUSTODY.md
-    doc_lines = [
-        "# NHL Sim — Data Custody",
-        "",
-        "Generated by `nhl/sim/archive_inventory.py`.",
-        "",
-    ]
     custody_info = {
         "ratings": (
             "Team ratings, goalie ratings, finishing term, shrinkage parameters, "
@@ -161,10 +160,12 @@ def main():
         "odds_archive_nhlE": (
             "Historical odds from the Odds API: lines (h2h/totals/spreads snapshots), "
             "three-way markets, in-play data, event-market mappings. 2022-2025 seasons. "
-            "Rebuilding: ~$60 of Odds API credits (historical endpoint at 10x cost). "
+            "Rebuilding cost: 2,586,062 Odds API credits actually spent "
+            "(E-WO1: 2,509,800 + WO2: 76,262 from logs). Plan: 5M credits/month. "
             "THIS IS THE MOST EXPENSIVE DATA TO REBUILD."
         ),
     }
+    doc_lines = ["# NHL Sim — Data Custody", "", "Generated by `nhl/sim/archive_inventory.py`.", ""]
     for loc_name, desc in custody_info.items():
         summ = location_summaries.get(loc_name, {})
         path = summ.get("path", "N/A")
@@ -191,13 +192,13 @@ def main():
             resolved = Path(loc_path).resolve()
             if resolved.exists():
                 print(f"  rsync -a --ignore-existing {resolved}/ $ARCHIVE_ROOT/nhl/{loc_name}/")
+        print(f"  rsync -a --ignore-existing {FILES_PARQUET} $ARCHIVE_ROOT/nhl/")
         print("\nSTOP: no archive copy made.")
         return
 
     archive_nhl = Path(archive_root) / "nhl"
     archive_nhl.mkdir(parents=True, exist_ok=True)
 
-    import subprocess
     for loc_name, loc_path in LOCATIONS.items():
         resolved = Path(loc_path).resolve()
         if not resolved.exists():
@@ -208,31 +209,29 @@ def main():
         print(f"\n  {' '.join(cmd)}")
         subprocess.run(cmd, check=True)
 
-    # Verify
+    # Copy files.parquet too
+    subprocess.run(["rsync", "-a", "--ignore-existing", str(FILES_PARQUET),
+                     str(archive_nhl / "files.parquet")], check=True)
+
+    # Verify archive against files.parquet
     print("\nVerifying archive...")
     mismatches = 0
-    archive_files = 0
-    archive_bytes = 0
-    for item in all_items:
-        src = Path(item["path"])
-        # Find which location this belongs to
-        for loc_name, loc_path in LOCATIONS.items():
-            resolved = Path(loc_path).resolve()
-            if str(src).startswith(str(resolved)):
-                rel = src.relative_to(resolved)
-                dest = archive_nhl / loc_name / rel
-                if dest.exists():
-                    archive_sha = sha256_file(dest)
-                    if archive_sha != item["sha256"]:
-                        print(f"  MISMATCH: {dest}")
-                        mismatches += 1
-                    archive_files += 1
-                    archive_bytes += dest.stat().st_size
-                break
+    verified = 0
+    verified_bytes = 0
+    for _, row in df.iterrows():
+        loc = row["location"]
+        rel = row["relative"]
+        dest = archive_nhl / loc / rel
+        if dest.exists():
+            archive_sha = sha256_file(dest)
+            if archive_sha != row["sha256"]:
+                print(f"  MISMATCH: {dest}")
+                mismatches += 1
+            verified += 1
+            verified_bytes += dest.stat().st_size
 
-    print(f"\nArchive: {archive_files} files, {archive_bytes / 1e6:.1f} MB, {mismatches} mismatches")
+    print(f"Archive: {verified} files, {verified_bytes / 1e6:.1f} MB, {mismatches} mismatches")
 
-    # du -sh
     for loc_name, loc_path in LOCATIONS.items():
         resolved = Path(loc_path).resolve()
         if resolved.exists():

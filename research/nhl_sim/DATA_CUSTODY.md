@@ -40,7 +40,7 @@ Boxscore JSON files, one per game, 2010-2025. Source: NHL Stats API. Also used b
 
 ## odds_archive_nhlE
 **Path:** `/Users/jw115/mlb-model-nhlE/data/odds_archive/nhl/history`
-**Files:** 146286, **Size:** 0.0 MB
+**Files:** 146286, **Size:** 1101.1 MB
 
-Historical odds from the Odds API: lines (h2h/totals/spreads snapshots), three-way markets, in-play data, event-market mappings. 2022-2025 seasons. Rebuilding: ~$60 of Odds API credits (historical endpoint at 10x cost). THIS IS THE MOST EXPENSIVE DATA TO REBUILD.
+Historical odds from the Odds API: lines (h2h/totals/spreads snapshots), three-way markets, in-play data, event-market mappings. 2022-2025 seasons. Rebuilding cost: 2,586,062 Odds API credits actually spent (E-WO1: 2,509,800 + WO2: 76,262 from logs). Plan: 5M credits/month. THIS IS THE MOST EXPENSIVE DATA TO REBUILD.
 

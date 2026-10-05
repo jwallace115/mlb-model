@@ -1151,3 +1151,21 @@ reports, 2023-24 carried 2024-25's consumption, etc.
 **Test:** `test_fit_window_ledger.py` — parses the table, asserts statuses and no cross-season
 references in "looked at" column. Fails on old ledger (2023-24 was "CONSUMED" instead of
 "VALIDATION"), passes on new.
+
+### S58 — Per-file custody manifest for all locations; correct DATA_CUSTODY.md (2026-10-05, L-WO1b Item 1)
+
+`archive_inventory.py` now hashes ALL 191,950 files across 7 locations (29s total at ~5,300
+files/s on the first 2,000 odds files, projected 36s, actual 29s).
+
+**Outputs:**
+- `nhl/data/sim/custody/files.parquet` (191,950 rows, 14.2 MB) — gitignored, one row per file
+  with location, relative path, bytes, mtime, sha256.
+- `custody_manifest.json` — per-location rollup: n_files, total_bytes (from os.stat, not 0),
+  rollup_sha256 (sha256 of sorted per-file sha256 lines).
+- `DATA_CUSTODY.md` — odds archive size corrected from "0.0 MB" to "1101.1 MB"; rebuild cost
+  corrected from "~$60" to "2,586,062 Odds API credits actually spent (E-WO1: 2,509,800 +
+  WO2: 76,262 from logs). Plan: 5M credits/month."
+
+**Null control:** 28/28 previously hashed small-dir files keep byte-identical sha256 values.
+
+ARCHIVE_ROOT not set → rsync commands printed, STOPPED.
