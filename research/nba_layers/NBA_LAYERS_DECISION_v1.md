@@ -689,3 +689,25 @@ path. Worktree copies NOT deleted.
 `git ls-files --cached data/injury_archive/nba/history_parsed/` shows 436 parquet files, 0 PDFs.
 
 Total parsed rows: 46,987 (including NYS rows).
+
+### B20 — RW@SH symmetry verdict: accepted (2026-10-05)
+
+**Jeff's decision:** "accept symmetry" (session instruction, 2026-10-05).
+
+**Recomputation (Cowork verification, `nbaS0_verification_2026-10-05.md`):**
+Pinnacle last pre-tip totals, same point on both sides. 101 signal games, 984 non-signal games.
+
+| | Over ROI | Under ROI | Sum | Price-only value |
+|---|---------|-----------|-----|-----------------|
+| Signal (101) | +16.33% | -22.63% | -6.30% | -5.68% |
+| Non-signal (984) | -6.4% | +0.7% | -5.71% | -5.64% |
+
+Mean overround: 2.96% (signal), 2.94% (non-signal).
+
+**The [-6.0, -2.0] band was Cowork's mis-specification.** The sum of over ROI + under ROI equals
+the price-only quantity `mean((d_over + d_under)/2) - 2` up to the outcome split. The expected sum
+is about two overrounds (not one), so ~-5.7%. The signal's -6.30% is 0.6 pp from its price-only
+value (-5.68%), explained by the 60/40 outcome split (over wins more often, so the under side
+loses more per unit). No grader bug exists.
+
+**The RW@SH numbers are unchanged.** The +16.3% over ROI at Pinnacle close stands as reported.
