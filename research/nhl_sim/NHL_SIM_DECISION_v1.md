@@ -1360,3 +1360,28 @@ Cross-era observations: team 5v5 r is stable (0.75-0.90, default=0.925); goalie 
 unreliable (0.06-0.26 where positive, negative for 2015). The default K_ev_att=3.07
 is at the low end; walk-forward windows give 3.5-13. The 2012-13 lockout (720 games)
 enters naturally weighted by rows in the measure functions.
+
+### D7 — Price every game 2012-13..2020-21 at 2,000 sims (2026-10-05, D-WO2 Item 2)
+
+**Runtime pre-check:** 10,132 games × 1.2 s/game / 4 workers = 51 min. Actual: ~70 min
+(two batches: 4-worker batch for 2012-2018, then 2-worker batch for 2019-2020 after
+fixing a HALT on game 2019020876).
+
+**price_walkforward.py:** loads per-season constants/ratings from walkforward/season=T/,
+builds `league_average_inputs` from those constants (with `ot_base_skaters` from meta.json),
+and runs the engine with seed=int(game_id), 2,000 sims.
+
+**Output:** nhl/data/sim/prices/season=T.parquet (gitignored), same columns as 2022-23.
+Per-season row counts:
+2012: 720, 2013: 1230, 2014: 1230, 2015: 1230, 2016: 1230, 2017: 1271,
+2018: 1271, 2019: 1081, 2020: 868. Total: 10,131.
+
+**Skip:** game 2019020876 (ANA vs STL, 2020-03-11) — no goalie_ratings row because
+`build_goalie_games` found no non-empty-net attempts with a `goalie_id` in the first
+position for one team. 1 game out of 10,132.
+
+**Null control:** pricer on season=2023 with default inputs reproduces committed 2023
+parquet's p_home_win on 20 games to max diff 0. **PASS.**
+
+**Engine change:** `GameInputs.ot_base_skaters` added (default=3); engine uses
+`inp.ot_base_skaters` instead of hardcoded 3. For T ≤ 2014, set to 4 (4v4 OT era).

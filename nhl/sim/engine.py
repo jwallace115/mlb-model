@@ -76,13 +76,14 @@ class GameInputs:
     away_q_mult: float
     pull_hazard: dict              # (k = 1..3 behind, bin of seconds remaining) -> hazard per second
     so_conversion: float
+    ot_base_skaters: int = 3     # 3v3 for 2015+ regular season, 4v4 for 2012-2014
     home: TeamMultipliers = field(default_factory=TeamMultipliers)
     away: TeamMultipliers = field(default_factory=TeamMultipliers)
 
 
-def league_average_inputs():
-    c7 = json.loads(C7_PATH.read_text())["constants"]
-    c2 = json.loads(C2_PATH.read_text())["constants"]
+def league_average_inputs(c7_path=None, c2_path=None):
+    c7 = json.loads(Path(c7_path or C7_PATH).read_text())["constants"]
+    c2 = json.loads(Path(c2_path or C2_PATH).read_text())["constants"]
 
     def key(own, opp):
         if own == opp:
@@ -184,7 +185,7 @@ def simulate(inputs: GameInputs, n_sims: int, seed: int, start_state: Optional[S
                 break
         in_ot = sec >= REG_SECONDS
         period = min(sec // PERIOD_SECONDS + 1, 3)
-        base = 3 if in_ot else 5
+        base = inp.ot_base_skaters if in_ot else 5
         act = {t: (pen_rem[t] > 0).sum(axis=1) for t in ("h", "a")}
         sk = {}
         sk["h"], sk["a"] = _skaters(base, act["h"], act["a"])
