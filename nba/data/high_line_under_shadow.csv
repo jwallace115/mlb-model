@@ -42,4 +42,4 @@ game_id,game_date,home_team,away_team,closing_line,model_projection,venue_signal
 0022501193,2026-04-12,DAL,CHI,246.0,236.87,False,REF_UNDER,,0,0,,,UNDER,,,,
 0022501195,2026-04-12,MIN,NOP,236.0,227.7,False,NONE,,0,0,,,UNDER,,,,
 0022501198,2026-04-12,LAL,UTA,237.0,212.04,False,REF_OVER,,0,0,,,UNDER,,,,
-0012600010,2026-10-06,GSW,LAL,235.5,219.56,False,UNKNOWN,None,0,0,None,None,UNDER,None,None,None,None
+0012600010,2026-10-06,GSW,LAL,235.5,219.56,False,REF_UNDER,None,0,0,None,None,UNDER,None,None,None,None
