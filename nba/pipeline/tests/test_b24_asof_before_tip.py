@@ -123,6 +123,62 @@ def test_roles_status_no_blanks():
     assert blanks == 0, f"{blanks} rows have blank status"
 
 
+def test_every_referenced_file_has_parsed_and_manifest():
+    """Every filename in roles and game_asof has a parquet in history_parsed and a manifest
+    row with status ok. FAILS at 9beb9125d (111 missing)."""
+    roles = pd.read_parquet(ROOT / "data/injury_archive/nba/history_parsed/roles.parquet")
+    asof = pd.read_parquet(ROOT / "data/injury_archive/nba/history_parsed/game_asof.parquet")
+    manifest = pd.read_parquet(ROOT / "data/injury_archive/nba/history_parsed/manifest.parquet")
+
+    roles_files = set(roles[roles.filename != ""].filename.unique())
+    asof_files = set(asof[asof.asof_filename != ""].asof_filename.unique())
+    all_referenced = roles_files | asof_files
+    manifest_files = set(manifest.filename.unique())
+
+    missing_manifest = all_referenced - manifest_files
+    assert len(missing_manifest) == 0, f"{len(missing_manifest)} files missing from manifest"
+
+    # Check manifest status ok for all referenced
+    bad_status = manifest[manifest.filename.isin(all_referenced) & (manifest.status != "ok")]
+    assert len(bad_status) == 0, f"{len(bad_status)} manifest rows with non-ok status"
+
+    # Check parsed parquets exist
+    import re
+    missing_parsed = []
+    for fname in all_referenced:
+        m = re.search(r"(\d{4})-(\d{2})-(\d{2})", fname)
+        if not m:
+            continue
+        yr, mo = int(m.group(1)), int(m.group(2))
+        stag = str(yr if mo >= 7 else yr - 1)
+        pq = ROOT / "data/injury_archive/nba/history_parsed" / f"season={stag}" / fname.replace(".pdf", ".parquet")
+        if not pq.exists():
+            missing_parsed.append(fname)
+
+    assert len(missing_parsed) == 0, f"{len(missing_parsed)} files missing parsed parquet"
+
+
+def test_freeze_rule_on_late_games():
+    """No game tipping at or after 18:30 ET should have asof_role = pre_game.
+    The freeze report (5:30pm ET) is always published by ~17:45 ET, which is
+    <= tip - 30 min for any game tipping >= 18:30 ET.
+    FAILS at 9beb9125d (7 games with pre_game that tip after 18:30 ET)."""
+    asof = pd.read_parquet(ROOT / "data/injury_archive/nba/history_parsed/game_asof.parquet")
+
+    asof["tip_dt"] = pd.to_datetime(asof.tip_utc)
+    asof["tip_et_h"] = asof.tip_dt.dt.tz_convert(ET).dt.hour
+    asof["tip_et_m"] = asof.tip_dt.dt.tz_convert(ET).dt.minute
+
+    late = asof[(asof.tip_et_h > 18) | ((asof.tip_et_h == 18) & (asof.tip_et_m >= 30))]
+    non_freeze = late[late.asof_role != "freeze"]
+
+    assert len(non_freeze) == 0, (
+        f"{len(non_freeze)} late games (tip >= 18:30 ET) not using freeze:\n" +
+        non_freeze[["game_date", "away_team", "home_team", "tip_utc", "asof_role",
+                     "asof_filename"]].head(10).to_string()
+    )
+
+
 if __name__ == "__main__":
     test_roles_pretip_before_tip()
     print("PASSED: roles pre_tip before tip")
@@ -134,4 +190,8 @@ if __name__ == "__main__":
     print("PASSED: no silent default tip")
     test_roles_status_no_blanks()
     print("PASSED: roles status no blanks")
-    print("\nAll B24/B25 tests passed")
+    test_every_referenced_file_has_parsed_and_manifest()
+    print("PASSED: every referenced file has parsed and manifest")
+    test_freeze_rule_on_late_games()
+    print("PASSED: freeze rule on late games")
+    print("\nAll tests passed")

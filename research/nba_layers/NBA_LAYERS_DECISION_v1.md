@@ -936,3 +936,78 @@ Test `test_roles_status_no_blanks` asserts 0 blanks; FAILS at c19ce5371 (448 bla
 (iii) Mutation: moving a game's tip 2h earlier pushes freeze past cutoff → asof changes.
 (iv) Dates without ESPN/Odds tips get tip_source = "", never silent 19:00 ET default.
 (v) Every roles row has non-blank status. FAILS at c19ce5371 (448 blank).
+
+### B27 — every referenced report parsed and in manifest (2026-10-06)
+
+**Defect (S0d verification D2).** B24/B25 fetched reports and checked parse status at selection
+time, but never wrote parsed parquets or manifest rows. 111 files referenced by roles or
+game_asof had no history_parsed parquet and no manifest entry.
+
+**Fix.** All 111 parsed with the B14 two-parser path. All 111 status = `ok`.
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Manifest rows | 642 | 753 (+111) |
+| Parsed parquets | 642 | 753 (+111) |
+
+**PRE-REGISTRATION:**
+- Missing files (union of roles + game_asof): 111. **HELD.**
+- Manifest rows = 642 + 111 = 753. **HELD.**
+- **NULL:** old 642 manifest rows byte-identical (filename, sha256, published_utc, status,
+  n_rows, n_nys): 0 mismatches. **HELD.**
+
+### B28 — Jeff's freeze rule on every date, including missing schedule dates (2026-10-06)
+
+**Defect (S0d verification D1).** 5 dates with Odds API events had no roles freeze row because
+they were not in the schedule files: 2024-12-17 (NBA Cup final), 2025-04-15/16 (play-in),
+2025-04-19 (playoffs), 2026-03-28 (regular season, missing from dates_2025.json). The code
+fell back to "latest report ≤ tip−30" which picked post-5:30 reports for 7 late games —
+violating Jeff's rule.
+
+**Fix.**
+- Freeze reports fetched for all 5 dates (5 fetches, all ok).
+- Roles rows added (freeze + pre_tip) for 5 dates. Roles: 656 → 666.
+- 2026-04-11: status set to `not_game_date` (its report lists only 04/12 games).
+- `date_in_schedule` (bool) column added to roles and game_asof.
+- game_asof rebuilt with no fallback past freeze: freeze if published ≤ tip−30, else latest
+  ok report ≤ tip−30.
+
+**Results.** 8 games changed asof (the 7 late games from D1 + PHI@CHA 2026-03-28 which had
+the right file but wrong role):
+
+| Date | Game | Old asof | New asof |
+|------|------|----------|----------|
+| 2024-12-17 | MIL@OKC | _07PM pre_game | _05PM freeze |
+| 2025-04-15 | ATL@ORL | _06PM pre_game | _05PM freeze |
+| 2025-04-15 | MEM@GSW | _09PM pre_game | _05PM freeze |
+| 2025-04-16 | MIA@CHI | _06PM pre_game | _05PM freeze |
+| 2025-04-16 | DAL@SAC | _09PM pre_game | _05PM freeze |
+| 2026-03-28 | PHI@CHA | _05_30PM pre_game | _05_30PM freeze |
+| 2026-03-28 | CHI@MEM | _07_30PM pre_game | _05_30PM freeze |
+| 2026-03-28 | UTA@PHX | _09_30PM pre_game | _05_30PM freeze |
+
+**PRE-REGISTRATION:**
+- Late games (tip ≥ 18:30 ET) with asof_role ≠ freeze: 0 (was 7). **HELD.**
+- Violations (published > tip−30): 0. **HELD.**
+- **NULL:** every game on the 328 schedule dates keeps the same asof_filename and sha256 as at
+  9beb9125d: 2,467 games, 0 changed. **HELD.**
+
+### B29 — corrections to S0d report (2026-10-06)
+
+**B25 NULL DID NOT HOLD.** The S0d session reported the B25 NULL as "HELD (with documented
+caveat: 7 non-regular-season exceptions)." This was wrong. 2026-03-28 is a regular-season
+date — it was missing from dates_2025.json, not from the NBA calendar. The 7 exceptions were
+caused by the missing-freeze fallback, not by the games being non-regular-season. B28 fixes
+this: the NULL now holds with 0 exceptions.
+
+**Tip source.** The S0d work order text said ESPN primary, Odds API fallback. The code uses
+Odds API `commence_time` primary, ESPN as cross-check only. This is accepted because the live
+pilot reads Odds API events (CHECK 3 identity). All 654 dated roles rows use `odds_events`.
+ESPN differs > 15 min on 7 dates (IST/ASW events).
+
+**Report rows can belong to a different game_date than the file date.** The 2026-04-11 report
+lists only 04/12 games. Consumers must filter rows by game_date + matchup, never by file date.
+
+**Schedule file gaps.** `dates_2025.json` contains the non-game date 2026-04-11 and omits the
+regular-season date 2026-03-28. The `date_in_schedule` column in roles and game_asof records
+which dates come from the schedule files.
