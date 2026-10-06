@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-06T11:01:00.360433",
+  "generated_at": "2026-10-06T13:00:53.207654",
   "sport": "golf",
   "event_name": "Baycurrent Classic",
   "event_id": 527,
   "is_major": false,
-  "last_updated": "2026-10-06T11:00:18.853010",
+  "last_updated": "2026-10-06T13:00:12.980212",
   "n_candidates": 0,
   "n_leans": 1,
   "plays": [
@@ -12,8 +12,8 @@
       "player_name": "Ghim, Doug",
       "dg_id": 24550,
       "market": "top_20",
-      "model_prob": 51.3,
-      "market_prob": 44.0,
+      "model_prob": 51.6,
+      "market_prob": 44.4,
       "edge": 7.2,
       "direction": "over",
       "classification": "lean",
@@ -270,7 +270,7 @@
   "g14_status": "LIVE_SHADOW",
   "g15_signals": [],
   "g15_elite_density_bucket": "HIGH",
-  "g15_kill_switch": true,
+  "g15_kill_switch": false,
   "g15_status": "LIVE_SHADOW",
   "model_info": {
     "model": "DG logistic + G13 wave + G14 tail + G15 elite density",
