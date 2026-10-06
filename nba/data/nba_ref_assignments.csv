@@ -1,6 +1,6 @@
 game_id,game_date,home_team,away_team,ref_1,ref_2,ref_3,crew_high_count,crew_high_exact,ref_signal
-0012600004,2026-10-05,ATL,MEM,,,,,,UNKNOWN
-0012600022,2026-10-05,DET,PHX,,,,,,UNKNOWN
-0012600023,2026-10-05,PHI,NYK,,,,,,UNKNOWN
-0012600024,2026-10-05,MIL,MIN,,,,,,UNKNOWN
-0012600028,2026-10-05,SAC,LAL,,,,,,UNKNOWN
+0012600004,2026-10-05,ATL,MEM,Kevin Cutler,Michael Smith,Nate Green,0,0,REF_UNDER
+0012600022,2026-10-05,DET,PHX,Gina Catanzariti,Karl Lane,Marat Kogut,0,0,REF_UNDER
+0012600023,2026-10-05,PHI,NYK,JB DeRosa,Josh Tiven,Julian Scott,0,0,REF_UNDER
+0012600024,2026-10-05,MIL,MIN,Ben Taylor,Catherine Chang,Jonathan Sterling,0,0,REF_UNDER
+0012600028,2026-10-05,SAC,LAL,Gediminas Petraitis,Jason Goldenberg,Pat O'Connell,1,1,NONE
