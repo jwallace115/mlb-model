@@ -3791,3 +3791,23 @@ Ending: 99,842
 ### UNVERIFIED
 - Whether the 92 newly fetched legacy PDFs are byte-identical to what the CDN served during B21 (the CDN might serve updated reports).
 - Whether the 7 non-freeze late-game dates should have freeze reports added to roles.parquet (they're outside the regular-season scope).
+
+## 2026-10-06T05:00Z  claude-code (NBA-S0e: B27-B29)
+
+### RETURNED
+- B27: 111 missing parsed/manifest files filled. All 111 ok. Manifest 642 -> 753. NULL: 0 mismatches on old 642. Pushed f786d3177.
+- B28: 5 freeze reports fetched for missing dates (Cup/play-in/regular). 2026-04-11 set to not_game_date. date_in_schedule column added. Late non-freeze: 7 -> 0. 8 games changed asof. Violations: 0. NULL: 2,467 schedule-date games unchanged. Roles 666, manifest 757, game_asof 2,481. Pushed 2b2530a30.
+- B29 decision doc + 2 tests: (vi) all referenced files in manifest, (vii) no late pre_game. Both FAIL at 9beb9125d (111 / 7). 7/7 tests pass. Pushed ba0ddec78.
+- Runtime ~10 min. 5 CDN fetches.
+
+### MEANS
+- Every injury report referenced by roles or game_asof now has a parsed parquet and manifest entry.
+- Jeff's freeze rule holds for every game including Cup/play-in/playoff dates.
+- The B25 NULL "7 non-regular-season exceptions" was wrong — 2026-03-28 is regular season. B28 fixes it to 0 exceptions.
+
+### NOT DONE
+- Merge to main (not requested).
+- history_parsed parquets for the 4 newly fetched freeze reports (2024-12-17, 2025-04-15/16/19) are in season=2024 but the PDFs date spans into the next season; this is correct per the season-tag logic but could confuse a consumer expecting season=2025.
+
+### UNVERIFIED
+- Whether dates_2025.json should be corrected (add 2026-03-28, remove 2026-04-11). Not this lane's file.
