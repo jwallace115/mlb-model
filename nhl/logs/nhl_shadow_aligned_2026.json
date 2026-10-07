@@ -503,6 +503,32 @@
       "tier": "SHADOW_MEDIUM",
       "closing_total": 6.5,
       "lambda_total": 5.578,
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 8
+    },
+    {
+      "game_id": 2026020054,
+      "game_date": "2026-10-07",
+      "home_team": "WPG",
+      "away_team": "COL",
+      "signal_side": "UNDER",
+      "edge": 0.1595,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.583,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020055,
+      "game_date": "2026-10-07",
+      "home_team": "ANA",
+      "away_team": "EDM",
+      "signal_side": "UNDER",
+      "edge": 0.157,
+      "tier": "HIGH",
+      "closing_total": 6.5,
+      "lambda_total": 5.9,
       "drift_applied": 0.0
     }
   ]
