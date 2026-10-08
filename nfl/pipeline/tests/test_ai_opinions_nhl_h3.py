@@ -207,7 +207,7 @@ class TestNHLFreeze:
         pp = _write_packet(packet, self.tmpdir)
         dest, sha, m = L.freeze(s, f, 2026, None, True, NOW, d=d,
                                 reader_model="test-model", slate_date="2026-09-29",
-                                packet_path=pp)
+                                packet_path=pp, window="adhoc")
         assert "slate_date" in m.columns
         assert (m["slate_date"] == "2026-09-29").all()
         assert "week" not in m.columns
@@ -220,7 +220,7 @@ class TestNHLFreeze:
         pp = _write_packet(packet, self.tmpdir)
         dest, sha, m = L.freeze(s, f, 2026, None, True, NOW, d=d,
                                 reader_model="test-model", slate_date="2026-09-29",
-                                packet_path=pp)
+                                packet_path=pp, window="adhoc")
         assert (m["season"] == 2026).all()
 
 

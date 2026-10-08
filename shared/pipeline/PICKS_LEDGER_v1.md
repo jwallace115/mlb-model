@@ -274,6 +274,25 @@ that routes through it) still emitted `point = line` for second-side spreads.
 and used by both parsers. Verified: adapters run appends 0 (fixed parser produces
 the same pick_ids the correction rows already carry).
 
+## P22 — CLV per pick, deterministic, in a sidecar (2026-10-08)
+
+`picks_clv.py` computes closing line value for every kicked pick. Output:
+`PICKS_LEDGER_DIR/clv.jsonl` (append-only, one row per pick_id).
+
+**Closing quote:** the pick's book's row in the LAST tape snapshot (game lines) or
+LAST props pull with timestamp ≤ `commence_time`. Same matching as P17/P18 (event_id
++ market + outcome/side + nearest line per (timestamp, book)). Fallback: cross-book
+median, flagged `close_basis = "consensus"`.
+
+**Conventions:** `clv_points` is in the bettor's favour:
+- Spread: `pick_point − close_point` (SEA −8.5 closes −9.5 ⇒ +1.0)
+- Over: `close − pick`; Under: `pick − close`
+- Moneyline: null
+
+`clv_price_pct` = `implied(close_price) − implied(pick_price)`, raw, no de-vig.
+
+CLV is a record, never a label and never an input to selection.
+
 ## P21 — Window through the ledger to the page (2026-10-08)
 
 `window` (nullable string: open/mid/late/prekick/adhoc) added to the ledger contract.

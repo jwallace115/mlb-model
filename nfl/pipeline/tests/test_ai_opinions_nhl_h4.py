@@ -185,7 +185,7 @@ class TestEndToEnd:
         d = self.tmpdir / "date=2025-10-07" / "ai_opinions"
         dest, sha, m = L.freeze(sheet, filled, 2025, None, True, now, d=d,
                                 reader_model="test-h4", slate_date="2025-10-07",
-                                packet_path=str(packet_path))
+                                packet_path=str(packet_path), window="adhoc")
         assert len(m) == 6
 
         # Score
