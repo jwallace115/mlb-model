@@ -443,11 +443,18 @@ has value and n_rows ≥ 1. RED before ("no tape rows"), GREEN after.
 was always correct; the fix must not change it).
 
 **Rebuild tooling:**
-- `pick_layers.py --rebuild-empty-movement`: rebuilds only cards whose
-  `line_movement.value` is null. Cards with a value are never touched (write-once
-  stands). Rebuilt cards carry `rebuilt_utc` and `rebuilt_reason = "P27 market map"`.
+- `pick_layers.py --rebuild-empty-movement`: walks every pick in `view()` (the full
+  deduplicated ledger) and (re)builds any card whose `line_movement` value is null,
+  creating cards for picks that had none. Existing cards with a non-null value are
+  untouched (write-once stands). Rebuilt cards carry `rebuilt_utc` and
+  `rebuilt_reason = "P27 market map"`.
 - `picks_clv.py --recompute-null`: re-runs picks whose existing close_point is null,
   appends a corrected row (append-only; newest row per pick_id wins at read time).
+
+**2026-10-08 rebuild run:** first run crashed after 705 cards (NameError in _sim;
+hotfix e4aa3918e). Second run completed in ~3 h: 1,941 rebuilt / 4 untouched / 0
+still null / 1,945 total. Future runs are expected to touch 0 (new cards get the
+correct market mapping from the start).
 
 ## P28 — run_window runs unattended and commits what it froze (2026-10-08)
 
@@ -524,3 +531,42 @@ Request the NFL lane to commit the export before each slate. The reader notes
 (whole Sunday + MNF slate). Check: log tails, credits used, sheet lines and
 GAMES (mid must show the whole slate, not one game), frozen file sha256,
 manifest entry, commit hash, top 20.
+
+## P30 — Plain-English card summaries; "in your favour" direction (2026-10-08)
+
+Detail cards now render a plain-English summary paragraph above each layer's
+raw data. The raw dict is folded into a `<details>` element (nothing hidden,
+only collapsed). Layer-specific summaries:
+
+**Line movement:** market name + game; consensus open (median, n books, date ET);
+book's opening post (point@price, date ET); pick-time snapshot (book + consensus);
+movement in points and price since book open; consensus movement; one direction
+sentence. Direction rule ("in your favour"):
+- **Spreads:** bettor's point going UP is in favour (+7.5 → +8.5 or −9.5 → −8.5).
+- **Totals / props:** Over — number going DOWN is in favour; Under — going UP.
+- **Moneyline:** bettor's price getting longer (−150 → −130, +120 → +140) is in
+  favour; shorter is against ("the market has moved toward your side").
+- Missing book rows → "had no quote in the window; consensus only".
+- No data → the existing "no data as of …" line, unchanged.
+
+Source line: "\<n\> snapshots / \<n\> pulls" instead of raw file names.
+
+**Weather:** "Outdoor at \<stadium\>: \<wind\> mph wind, \<precip\>% rain …
+(NWS forecast as of \<ET\>)" / "Indoor (\<stadium\>, \<roof\>)" / "no forecast".
+
+**Sim:** "The sim's number for this market: \<value\> vs the line \<point\>" /
+"no sim number for this freeze".
+
+**Injuries / news / reasoning:** already prose — unchanged except the raw dict
+(injuries, reasoning) goes into the `<details>` fold like other layers.
+
+Tests: 7 fixture tests (RED first, GREEN after); 15 total in test_top20_page.py.
+
+## P31 — Pre-commit guard on ~/mlb-model main (2026-10-08)
+
+A LOCAL pre-commit hook on the Mac clone (`~/mlb-model/.git/hooks/pre-commit`)
+refuses any commit on `main` unless `MLB_AUTOCOMMIT=1` is set. The Mac
+auto-commit job (`shared/push_paths.sh`, cron at :50) exports `MLB_AUTOCOMMIT=1`
+before its git commands. The VM's `push_daemon.sh` is a different clone and is
+not touched. The hook text is not in the repo (it lives in `.git/hooks/`).
+See `claude/SESSIONS_RULES.md` for the rule this enforces.

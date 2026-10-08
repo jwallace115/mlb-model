@@ -39,7 +39,7 @@ if _SITE_DIR not in sys.path:
 
 
 def _build_site(tmp_path, ledger_dir, repo_root=None):
-    """Build the site and return picks.html content."""
+    """Build the site and return index.html content."""
     out = tmp_path / "site_out"
     rr = repo_root or str(_REPO_ROOT)
     os.environ["SITE_REPO_ROOT"] = rr
@@ -51,7 +51,7 @@ def _build_site(tmp_path, ledger_dir, repo_root=None):
     build_site.ROOT = Path(rr)
     build_site.build(str(out),
                      now=datetime(2026, 10, 5, 15, 0, tzinfo=timezone.utc))
-    picks_html = (out / "picks.html").read_text()
+    picks_html = (out / "index.html").read_text()
     return picks_html
 
 
@@ -99,7 +99,7 @@ def test_nodata_when_no_ledger(tmp_path):
     out = tmp_path / "site_out"
     build_site.build(str(out),
                      now=datetime(2026, 10, 5, 15, 0, tzinfo=timezone.utc))
-    html = (out / "picks.html").read_text()
+    html = (out / "index.html").read_text()
     assert "no data" in html.lower()
 
 

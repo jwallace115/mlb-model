@@ -199,3 +199,131 @@ def test_roi_hand_computed():
     win_profit = 100 / abs(price)
     roi = (wins * win_profit - losses) / (wins + losses)
     assert abs(roi - 0.14545) < 0.001, f"ROI {roi} != expected 0.14545"
+
+
+# ---- Item 2 tests: plain-English card summaries (OPS4d P30) ----
+
+def _import_render_card():
+    """Import _render_card from build_site.py."""
+    site_dir = str(Path(__file__).resolve().parent.parent.parent.parent / "site")
+    if site_dir not in sys.path:
+        sys.path.insert(0, site_dir)
+    os.environ.setdefault("SITE_REPO_ROOT", str(Path(__file__).resolve().parent.parent.parent.parent))
+    from build_site import _render_card
+    return _render_card
+
+
+def _lm_card(side, market, point, book_open_pt, book_close_pt,
+             cons_open_median=None, cons_close_median=None, n_books_open=5, n_books_close=10,
+             book_open_price=None, book_close_price=None, book="hardrockbet_fl"):
+    """Build a fixture card with a line_movement layer."""
+    cons_open_median = cons_open_median if cons_open_median is not None else book_open_pt
+    cons_close_median = cons_close_median if cons_close_median is not None else book_close_pt
+    return {
+        "pick_id": "test_lm",
+        "logged_utc": "2026-10-03T22:00:00Z",
+        "sport": "NFL",
+        "market": market,
+        "side": side,
+        "point": point,
+        "home": "Dallas Cowboys",
+        "away": "Tampa Bay Buccaneers",
+        "book": book,
+        "layers": {
+            "line_movement": {
+                "value": {
+                    "book": {
+                        "open": {"point": book_open_pt, "price": book_open_price or -110,
+                                 "as_of": "2026-10-01 16:00:10"},
+                        "close": {"point": book_close_pt, "price": book_close_price or -110,
+                                  "as_of": "2026-10-03 21:00:10"},
+                        "move_points": (book_close_pt - book_open_pt) if book_open_pt is not None and book_close_pt is not None else None,
+                        "move_price": ((book_close_price or -110) - (book_open_price or -110)),
+                    },
+                    "consensus": {
+                        "open": {"median_point": cons_open_median, "n_books": n_books_open,
+                                 "as_of": "2026-10-01 16:00:10"},
+                        "close": {"median_point": cons_close_median, "n_books": n_books_close,
+                                  "as_of": "2026-10-03 21:00:10"},
+                    },
+                    "n_rows": 20,
+                },
+                "source": "data_2026_10.parquet",
+                "as_of": "2026-10-03 21:00:10+00:00",
+            },
+        },
+    }
+
+
+# (a) totals Under 48: book 47.5 → 48.0 → "in your favour"; Over → "against you"
+def test_lm_total_under_in_favour():
+    _render_card = _import_render_card()
+    card = _lm_card("Under", "total", 48.0, 47.5, 48.0,
+                     cons_open_median=47.0, cons_close_median=48.0)
+    html_out = _render_card(card)
+    assert "in your favour" in html_out.lower(), f"expected 'in your favour' for Under when line goes UP, got: {html_out[:500]}"
+    assert "opened at 47" in html_out.lower(), f"expected consensus open 47 mentioned"
+
+
+def test_lm_total_over_against_you():
+    _render_card = _import_render_card()
+    card = _lm_card("Over", "total", 48.0, 47.5, 48.0,
+                     cons_open_median=47.0, cons_close_median=48.0)
+    html_out = _render_card(card)
+    assert "against you" in html_out.lower(), f"expected 'against you' for Over when line goes UP, got: {html_out[:500]}"
+
+
+# (b) spread −9.5 → −8.5 → "in your favour"; +8.5 → +7.5 → "against you"
+def test_lm_spread_negative_in_favour():
+    _render_card = _import_render_card()
+    card = _lm_card("Dallas Cowboys", "spread", -9.5, -9.5, -8.5)
+    html_out = _render_card(card)
+    assert "in your favour" in html_out.lower(), f"spread -9.5 → -8.5 should be 'in your favour' (point going up)"
+
+
+def test_lm_spread_positive_against_you():
+    _render_card = _import_render_card()
+    card = _lm_card("Tampa Bay Buccaneers", "spread", 8.5, 8.5, 7.5)
+    html_out = _render_card(card)
+    assert "against you" in html_out.lower(), f"spread +8.5 → +7.5 should be 'against you' (point going down)"
+
+
+# (c) moneyline −150 → −130 → "in your favour"
+def test_lm_moneyline_in_favour():
+    _render_card = _import_render_card()
+    card = _lm_card("Dallas Cowboys", "moneyline", None, None, None,
+                     book_open_price=-150, book_close_price=-130)
+    html_out = _render_card(card)
+    assert "in your favour" in html_out.lower(), f"ML -150 → -130 (longer) should be 'in your favour'"
+
+
+# (d) no-data → unchanged "no data as of" line (null control)
+def test_lm_no_data_unchanged():
+    _render_card = _import_render_card()
+    card = {
+        "pick_id": "test_nodata",
+        "logged_utc": "2026-10-03T22:00:00Z",
+        "sport": "NFL",
+        "market": "total",
+        "side": "Over",
+        "point": 48.0,
+        "layers": {
+            "line_movement": {
+                "value": None,
+                "source": None,
+                "as_of": "2026-10-03 22:00:00",
+                "note": "no tape rows for this event/market as of 2026-10-03 22:00:00",
+            },
+        },
+    }
+    html_out = _render_card(card)
+    assert "no tape rows" in html_out.lower() or "no data" in html_out.lower()
+
+
+# (e) raw dict still present inside <details> (nothing hidden, only folded)
+def test_raw_dict_in_details():
+    _render_card = _import_render_card()
+    card = _lm_card("Under", "total", 48.0, 47.5, 48.0)
+    html_out = _render_card(card)
+    assert "<details>" in html_out.lower(), "raw data should be inside a <details> element"
+    assert "move_points" in html_out, "raw dict fields must still be present"

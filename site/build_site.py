@@ -12,9 +12,9 @@ Inputs
   site/signals_registry.json               (which signals exist, their label, their log)
   site/forward_status.json                 (NFL forward experiment: what was frozen, when — no results)
 Output
-  --out directory (default /var/www/iamnotuncertain): index.html, health.html, tracking.html,
-  signal-<id>.html, forward.html, archive.html. Written to a temp dir and swapped in, so a
-  reader never sees a half-built site.
+  --out directory (default /var/www/iamnotuncertain): index.html (Picks), today.html,
+  health.html, tracking.html, signal-<id>.html, forward.html, archive.html.
+  Written to a temp dir and swapped in, so a reader never sees a half-built site.
 """
 
 import argparse
@@ -162,8 +162,8 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
 .tab-panel div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}
 """
 
-PAGES = [("index.html", "Today"), ("health.html", "Pipeline health"), ("tracking.html", "Tracking"),
-         ("picks.html", "Picks"), ("forward.html", "NFL forward"), ("archive.html", "Odds archive")]
+PAGES = [("index.html", "Picks"), ("today.html", "Today"), ("health.html", "Pipeline health"),
+         ("tracking.html", "Tracking"), ("forward.html", "NFL forward"), ("archive.html", "Odds archive")]
 
 
 def page(fname, title, body, health, built):
@@ -323,7 +323,7 @@ def build_today(now, health):
                          f'<div class="note">{E(s.get("market", ""))}</div><div>{val}</div>{src(s["path"])}</div>')
     body.append('<section style="display:flex;flex-direction:column;gap:10px"><h2>Signals today</h2>'
                 f'<div class="tiles" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">{"".join(sig_cards) or "<span class=muted>none registered</span>"}</div></section>')
-    return page("index.html", "Today", "\n".join(body), health, now)
+    return page("today.html", "Today", "\n".join(body), health, now)
 
 
 def today_rows(s, today):
@@ -642,10 +642,235 @@ def _picks_roi(rows):
     return hit, roi, len(graded), len(priced), flat
 
 
-def _render_card(card):
-    """Render a detail card as HTML inside a <details> block."""
+def _utc_to_et(s):
+    """Convert a UTC datetime string to ET display string."""
+    if not s:
+        return ""
+    try:
+        dt = datetime.fromisoformat(str(s).replace("Z", "+00:00"))
+        return dt.astimezone(ET).strftime("%b %d %I:%M %p ET").lstrip("0").replace(" 0", " ")
+    except Exception:
+        return str(s)[:19]
+
+
+def _summarize_lm(card):
+    """Plain-English summary of the line_movement layer."""
+    layer = card.get("layers", {}).get("line_movement", {})
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+
+    side = card.get("side", "")
+    market = card.get("market", "")
+    point = card.get("point")
+    book_name = BOOK_NAMES.get(card.get("book", ""), card.get("book", ""))
+    home = card.get("home", "")
+    away = card.get("away", "")
+    logged_utc = card.get("logged_utc", "")
+
+    parts = []
+
+    # Market + game
+    if market.startswith("prop:"):
+        player = card.get("player_name", "")
+        mkt_label = market.replace("prop:", "").replace("_", " ")
+        parts.append(f"{player} {mkt_label} ({away} at {home}).")
+    else:
+        parts.append(f"{market.title()} market, {away} at {home}.")
+
+    # Consensus open
+    cons = val.get("consensus", {})
+    cons_open = cons.get("open", {})
+    cons_close = cons.get("close", {})
+    if cons_open and cons_open.get("median_point") is not None:
+        parts.append(f"Opened at {cons_open['median_point']} across {cons_open.get('n_books', '?')} books"
+                     f" on {_utc_to_et(cons_open.get('as_of'))}.")
+
+    # Book open
+    bk = val.get("book")
+    if bk:
+        bk_open = bk.get("open")
+        bk_close = bk.get("close")
+        if bk_open:
+            op = bk_open.get("point")
+            opr = bk_open.get("price")
+            parts.append(f"{book_name} first posted {pt(op) if op is not None else '—'}@{am(opr)}"
+                         f" on {_utc_to_et(bk_open.get('as_of'))}.")
+
+        # Pick time
+        if bk_close:
+            cp = bk_close.get("point")
+            cpr = bk_close.get("price")
+            parts.append(f"At pick time ({_utc_to_et(logged_utc)}) {book_name} was"
+                         f" {pt(cp) if cp is not None else '—'}@{am(cpr)}")
+            if cons_close and cons_close.get("median_point") is not None:
+                parts[-1] += f" and the {cons_close.get('n_books', '?')}-book consensus was {cons_close['median_point']}."
+            else:
+                parts[-1] += "."
+
+        # Movement
+        if bk_open and bk_close:
+            op = bk_open.get("point")
+            cp = bk_close.get("point")
+            opr = bk_open.get("price")
+            cpr = bk_close.get("price")
+            move_pts = bk.get("move_points")
+            if move_pts is not None and op is not None:
+                parts.append(f"Moved {move_pts:+.1f} points at {book_name} since it posted"
+                             + (f"; price {am(opr)} → {am(cpr)}." if opr is not None and cpr is not None else "."))
+            elif opr is not None and cpr is not None and opr != cpr:
+                parts.append(f"Price {am(opr)} → {am(cpr)} at {book_name}.")
+            if cons_open.get("median_point") is not None and cons_close.get("median_point") is not None:
+                cons_move = cons_close["median_point"] - cons_open["median_point"]
+                if abs(cons_move) > 0.001:
+                    parts.append(f"Consensus moved {cons_move:+.1f} since the market opened.")
+
+        # Direction sentence
+        direction = _lm_direction(card)
+        if direction:
+            parts.append(direction)
+    elif not bk:
+        if book_name:
+            parts.append(f"{book_name} had no quote in the window; consensus only.")
+
+    # Source line
+    n_rows = val.get("n_rows", 0)
+    source_str = layer.get("source", "")
+    n_files = len([s for s in source_str.split(", ") if s]) if source_str else 0
+    as_of = layer.get("as_of", "")
+    if n_rows:
+        parts.append(f"{n_rows} snapshots / {n_files} pulls.")
+
+    return " ".join(parts)
+
+
+def _lm_direction(card):
+    """One sentence: 'That is the line moving in your favour / against you / unchanged'."""
+    layer = card.get("layers", {}).get("line_movement", {})
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+
+    side = card.get("side", "")
+    market = card.get("market", "")
+    point = card.get("point")
+    bk = val.get("book")
+    if not bk:
+        return None
+
+    bk_open = bk.get("open", {})
+    bk_close = bk.get("close", {})
+    op = bk_open.get("point") if bk_open else None
+    cp = bk_close.get("point") if bk_close else None
+    opr = bk_open.get("price") if bk_open else None
+    cpr = bk_close.get("price") if bk_close else None
+
+    favour = None
+
+    if market == "moneyline":
+        # No point; direction from price. Longer price = in favour.
+        if opr is not None and cpr is not None:
+            if opr < 0 and cpr < 0:
+                # -150 → -130: abs decreases → price longer → in favour
+                favour = abs(cpr) < abs(opr)
+            elif opr > 0 and cpr > 0:
+                # +120 → +140: increases → longer → in favour
+                favour = cpr > opr
+            elif opr < 0 and cpr > 0:
+                favour = True  # moved from fav to dog → longer
+            elif opr > 0 and cpr < 0:
+                favour = False  # moved from dog to fav → shorter
+            if opr == cpr:
+                favour = None  # unchanged
+    elif market == "spread":
+        # Bettor's point going UP is in favour (+7.5→+8.5, −9.5→−8.5 both go up numerically)
+        if op is not None and cp is not None:
+            if cp > op:
+                favour = True
+            elif cp < op:
+                favour = False
+            # equal → unchanged
+    elif market in ("total", "totals") or market.startswith("prop"):
+        # Over: number going DOWN is in favour; Under: number going UP is in favour
+        if op is not None and cp is not None:
+            s_lower = str(side).lower()
+            if s_lower == "over":
+                if cp < op:
+                    favour = True
+                elif cp > op:
+                    favour = False
+            elif s_lower == "under":
+                if cp > op:
+                    favour = True
+                elif cp < op:
+                    favour = False
+
+    side_s = f"{side} {pt(point)}" if point is not None else side
+    if favour is True:
+        return f"That is the line moving in your favour for {side_s}."
+    elif favour is False:
+        return f"That is the line moving against you for {side_s}."
+    else:
+        return f"The line is unchanged for {side_s}."
+
+
+def _summarize_weather(layer):
+    """Plain-English weather summary."""
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+    if val.get("indoor"):
+        return f"Indoor ({val.get('stadium', '')}; {val.get('roof', 'dome')})."
+    stadium = val.get("stadium", "")
+    wind = val.get("wind_mph")
+    wind_dir = val.get("wind_dir", "")
+    precip = val.get("precip_prob_pct")
+    temp = val.get("temp_f")
+    forecast = val.get("forecast", "")
+    as_of_et = _utc_to_et(layer.get("as_of"))
+    parts = [f"Outdoor at {stadium}:"]
+    if temp is not None:
+        parts.append(f"{temp}°F,")
+    if wind is not None:
+        parts.append(f"{wind} mph wind" + (f" {wind_dir}" if wind_dir else "") + ",")
+    if precip is not None:
+        parts.append(f"{precip}% rain chance at kickoff")
+    if forecast:
+        parts.append(f"({forecast})")
+    parts.append(f"(NWS forecast as of {as_of_et}).")
+    return " ".join(parts)
+
+
+def _summarize_sim(layer, point):
+    """Plain-English sim summary."""
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+    p_first = val.get("p_first")
+    edge = val.get("edge")
+    parts = []
+    if p_first is not None:
+        parts.append(f"The sim's number for this market: {p_first:.1%}")
+        if point is not None:
+            parts.append(f"vs the line {pt(point)}.")
+        else:
+            parts.append(".")
+    if edge is not None:
+        parts.append(f"Edge: {edge:+.1%}.")
+    return " ".join(parts) if parts else None
+
+
+def _render_card(card, pick=None):
+    """Render a detail card as HTML — plain-English summary above raw data in <details>.
+    pick: optional pick row dict to supplement card fields (e.g. book)."""
     if not card:
         return '<div class="note muted">card not built yet</div>'
+    # Merge pick fields into card for summary generation (card fields take precedence if present)
+    merged = dict(card)
+    if pick:
+        for k in ("book", "side", "market", "point", "home", "away", "player_name", "logged_utc"):
+            if merged.get(k) is None and pick.get(k) is not None:
+                merged[k] = pick[k]
     parts = []
     for layer_name, layer in card.get("layers", {}).items():
         if not layer:
@@ -655,6 +880,16 @@ def _render_card(card):
         as_of_s = f' · as of {E(str(layer.get("as_of", ""))[:19])}' if layer.get("as_of") else ""
         val = layer.get("value")
         note = layer.get("note")
+
+        # Generate plain-English summary based on layer type
+        summary = None
+        if layer_name == "line_movement" and val and isinstance(val, dict):
+            summary = _summarize_lm(merged)
+        elif layer_name == "weather" and val and isinstance(val, dict):
+            summary = _summarize_weather(layer)
+        elif layer_name == "sim" and val and isinstance(val, dict):
+            summary = _summarize_sim(layer, merged.get("point"))
+
         if note:
             parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}<br>'
                          f'<span class="muted">{E(str(note))}</span></div>')
@@ -662,7 +897,9 @@ def _render_card(card):
             continue
         elif isinstance(val, dict):
             items = " · ".join(f"{k}: {E(str(v))}" for k, v in val.items() if v is not None)
-            parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}<br>{items}</div>')
+            summary_html = f'<p>{E(summary)}</p>' if summary else ""
+            raw_html = f'<details><summary class="muted" style="cursor:pointer;font-size:0.85em">Raw data</summary><div class="note" style="margin-top:4px">{items}</div></details>'
+            parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}{summary_html}{raw_html}</div>')
         elif isinstance(val, list):
             if not val:
                 parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}: none found</div>')
@@ -689,7 +926,7 @@ def _render_pick_row(rank, pick, card, is_prop):
     price_s = am(pick.get("price_american"))
     conf_s = str(int(pick["conf"])) if pick.get("conf") is not None else "—"
     reason_s = E(str(pick.get("reason") or "")[:120])
-    card_html = _render_card(card)
+    card_html = _render_card(card, pick=pick)
 
     # "moved since open" from the card's line_movement layer
     move_s = "—"
@@ -799,7 +1036,7 @@ def build_picks(now, health):
 
     if rows is None:
         inner = f"<p>{NODATA}: picks ledger not found (PICKS_LEDGER_DIR not set or file absent).</p>"
-        return page("picks.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
+        return page("index.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
 
     source_info = src(f"picks.jsonl {sha12} {fmt_utc(mtime)}")
     ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
@@ -880,7 +1117,7 @@ def build_picks(now, health):
             f'ranked from the reader\'s latest freeze. Click a pick to see its detail card. '
             f'No stakes, slip ids or share links.</p></div>'
             f'{tabs_nav}{tabs_content}')
-    return page("picks.html", "Picks", body, health, now)
+    return page("index.html", "Picks", body, health, now)
 
 
 def build(out, now=None):
@@ -889,8 +1126,9 @@ def build(out, now=None):
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(tempfile.mkdtemp(prefix=".site-", dir=out.parent))
-    pages = {"index.html": build_today(now, health), "health.html": build_health(now, health),
-             "tracking.html": build_tracking(now, health, tmp), "picks.html": build_picks(now, health),
+    pages = {"index.html": build_picks(now, health), "today.html": build_today(now, health),
+             "health.html": build_health(now, health),
+             "tracking.html": build_tracking(now, health, tmp),
              "forward.html": build_forward(now, health),
              "archive.html": build_archive(now, health)}
     for name, text in pages.items():
