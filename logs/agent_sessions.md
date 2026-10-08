@@ -3817,3 +3817,19 @@ Ending: 99,842
   (pipeline_health.py needs to run on the VM to generate the retired list in the JSON;
   the next 15-min cycle will do this).
 - UNVERIFIED: whether refresh_5pm.py handles the absent MLB refresh gracefully.
+
+## 2026-10-08T10:01Z  claude-code (OPS3)
+- ITEM 1: build_top20.py — Top-20 selector. Ranks AI reader picks by conf desc, |edge| desc,
+  logged_utc asc. ≤20 per column (props/sides). sim_nfl/jeff excluded. Past-commence drops.
+  P10 decision. Committed d221ffb8f.
+- ITEM 2: pick_layers.py — Write-once detail cards. Layers: line_movement (tape), weather (NWS),
+  sim (nfl_sim_v1), injuries (ESPN), news (within 72h), reasoning (verbatim). A2 rule enforced
+  (no file after logged_utc). 23 cards built in 1.9s on dryrun. P11 decision. Committed f6f9b1f6f.
+- ITEM 3: picks.html rewritten as Top-20 page. 4 tabs (NFL/NCAAF/NHL/NBA), two columns per tab,
+  <details>/<summary> cards, Record section with owner×source ROI. Responsive CSS. Embargo works.
+  P12 decision. §5.7 rewritten. Committed c2119214d.
+- ITEM 4: P13 lane contract (conf, tag, rationale). pick_layers registered in feeds_registry.
+  Committed 727ed8495.
+- FULL SUITE: 56/56 passed. P0.3 grep: 0 network imports.
+- NOT DONE: VM cron line for pick_layers.py (MERGE step).
+- UNVERIFIED: whether the card builder completes on the VM within the hourly window.
