@@ -561,3 +561,12 @@ Source line: "\<n\> snapshots / \<n\> pulls" instead of raw file names.
 (injuries, reasoning) goes into the `<details>` fold like other layers.
 
 Tests: 7 fixture tests (RED first, GREEN after); 15 total in test_top20_page.py.
+
+## P31 — Pre-commit guard on ~/mlb-model main (2026-10-08)
+
+A LOCAL pre-commit hook on the Mac clone (`~/mlb-model/.git/hooks/pre-commit`)
+refuses any commit on `main` unless `MLB_AUTOCOMMIT=1` is set. The Mac
+auto-commit job (`shared/push_paths.sh`, cron at :50) exports `MLB_AUTOCOMMIT=1`
+before its git commands. The VM's `push_daemon.sh` is a different clone and is
+not touched. The hook text is not in the repo (it lives in `.git/hooks/`).
+See `claude/SESSIONS_RULES.md` for the rule this enforces.
