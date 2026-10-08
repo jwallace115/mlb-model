@@ -517,7 +517,9 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.583,
-      "drift_applied": 0.0
+      "drift_applied": 0.0,
+      "result": "WIN",
+      "actual_total": 5
     },
     {
       "game_id": 2026020055,
@@ -529,6 +531,20 @@
       "tier": "HIGH",
       "closing_total": 6.5,
       "lambda_total": 5.9,
+      "drift_applied": 0.0,
+      "result": "LOSS",
+      "actual_total": 7
+    },
+    {
+      "game_id": 2026020057,
+      "game_date": "2026-10-08",
+      "home_team": "BUF",
+      "away_team": "DAL",
+      "signal_side": "UNDER",
+      "edge": 0.1274,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.567,
       "drift_applied": 0.0
     }
   ]
