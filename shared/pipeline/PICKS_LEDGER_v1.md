@@ -351,6 +351,28 @@ published" with N and dates only.
 
 **No freeze → "no picks logged yet"** with nothing else invented. Ledger absent → NODATA.
 
+## P24 — reader_v3 canonical (2026-10-08)
+
+`nfl/pipeline/reader_v3.py` is the canonical reader, replacing the untracked
+`research/layers/_to_delete/ai_w4/reader_v2.py` (205 lines, sha256 315b44e2…).
+
+**What changed:** inputs are selected by `--as-of <UTC>` (newest ≤ as-of for
+snapshots; `pull_timestamp ≤ as-of` for props). Kalshi ticker prefix is derived
+from the slate date, not hardcoded. Injury report is via `--injury-report <path>`,
+absent → empty news layer. All input files and their timestamps are printed.
+reader_v3 prints its own sha256.
+
+**What did NOT change:** every rule, weight, threshold, and formula is an exact
+port of reader_v2. Identity test: 917/954 rows identical on p_first; 36 diffs
+are all from input selection (12 injury-report absent, 24 Kalshi snapshot
+timestamp), zero from rule changes. 1 key mismatch from line movement between
+snapshots.
+
+`log_ai_opinions.py freeze` gains `--reader-file <path>` → writes `reader_sha256`
+into the manifest entry. Optional for legacy; `run_window` always passes it.
+
+reader_v2 stays untouched in `_to_delete`.
+
 ## P13 — Lane contract for reader freezes (2026-10-08)
 
 Every reader freeze (ai_opinions parquet) must carry:
