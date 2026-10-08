@@ -49,5 +49,21 @@
   "oldest_source_age_min": 25.1,
   "first_kickoff_utc": "2026-10-11T13:30:00Z",
   "reader_sha256": "7cb22d7ad108987981ae7dc564ca7584e26ee8c4f6619716ce1e2c4614182ee6"
+ },
+ {
+  "file": "ai_opinions_20261008T225504Z.parquet",
+  "sha256": "d03e41bf29c0d602c378e8077b371c5efbe07f81ecb47c674afd104c57c5e73f",
+  "logged_utc": "2026-10-08T22:55:04.110367+00:00",
+  "rows": 73,
+  "sport": "nfl",
+  "book": "hardrockbet_fl",
+  "reader_model": "claude-fable-5-1",
+  "pilot": false,
+  "window": "prekick",
+  "games": 1,
+  "no_view_share": 0.041,
+  "revised_rows": 0,
+  "oldest_source_age_min": 534.9,
+  "first_kickoff_utc": "2026-10-09T00:15:00Z"
  }
 ]
