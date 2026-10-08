@@ -3851,3 +3851,13 @@ Ending: 99,842
   in pass_yds card). P17. Committed 9e1943fc0.
 - FULL SUITE: 2 failed (known), 183 passed.
 - NOT DONE: MERGE, VM audit+repair, stale card deletion.
+
+## 2026-10-08T11:38Z  claude-code (OPS3d)
+- ITEM 1: nearest line per (timestamp, book). _nearest_line_per_group groups by (ts, bookmaker).
+  RED: test_prop_nearest_per_pull (189.5→177.5), test_game_line_consensus_all_books (3→1).
+  Real data matches Cowork: Cam Ward open 189.5, consensus close 178.0 (8 books);
+  Seattle open -6.5, consensus close -8.5 (10 books). P18. Committed 3516b5454.
+- ITEM 2: p_ai_opinions _freeze_point. RED: test_p_ai_opinions_spread_sign (10.0→-10.0).
+  SIGN_FLIPPED = 0, adapters append 0. P16 amended, P19. Committed e101dc1cc.
+- FULL SUITE: 2 failed (known), 186 passed.
+- NOT DONE: MERGE.
