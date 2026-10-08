@@ -118,7 +118,7 @@ class TestEdgeComputation:
     def test_edge_written_to_frozen_file(self, tmp_path):
         L.set_sport("nfl")
         s = L.build_sheet(_props(), _lines(), NOW)
-        dest, sha, m = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model")
+        dest, sha, m = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model", window="adhoc")
         df = pd.read_parquet(dest)
         assert "edge" in df.columns
         assert "conf" in df.columns
@@ -194,7 +194,7 @@ class TestPostfreezeReporting:
         """A postfreeze CSV marks rows as affected but changes no grades."""
         L.set_sport("nfl")
         s = L.build_sheet(_props(), _lines(), NOW)
-        dest, sha, m = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model")
+        dest, sha, m = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model", window="adhoc")
         # Write a postfreeze file
         pf = pd.DataFrame([{"game": "e1", "what changed": "A B inactive", "source URL": "https://x.com",
                             "retrieved_utc": "2026-09-21T23:00:00Z", "rows affected": "player_receptions,player_anytime_td"}])

@@ -274,6 +274,42 @@ that routes through it) still emitted `point = line` for second-side spreads.
 and used by both parsers. Verified: adapters run appends 0 (fixed parser produces
 the same pick_ids the correction rows already carry).
 
+## P22 — CLV per pick, deterministic, in a sidecar (2026-10-08)
+
+`picks_clv.py` computes closing line value for every kicked pick. Output:
+`PICKS_LEDGER_DIR/clv.jsonl` (append-only, one row per pick_id).
+
+**Closing quote:** the pick's book's row in the LAST tape snapshot (game lines) or
+LAST props pull with timestamp ≤ `commence_time`. Same matching as P17/P18 (event_id
++ market + outcome/side + nearest line per (timestamp, book)). Fallback: cross-book
+median, flagged `close_basis = "consensus"`.
+
+**Conventions:** `clv_points` is in the bettor's favour:
+- Spread: `pick_point − close_point` (SEA −8.5 closes −9.5 ⇒ +1.0)
+- Over: `close − pick`; Under: `pick − close`
+- Moneyline: null
+
+`clv_price_pct` = `implied(close_price) − implied(pick_price)`, raw, no de-vig.
+
+CLV is a record, never a label and never an input to selection.
+
+## P21 — Window through the ledger to the page (2026-10-08)
+
+`window` (nullable string: open/mid/late/prekick/adhoc) added to the ledger contract.
+`view()` fills missing/null window with `"legacy"` at read time — no existing rows
+rewritten. The adapter carries `window` from the freeze row. The page shows
+`"<window> freeze · <logged_utc>"` and "moved: <move_points> pts" from the card.
+
+## P20 — Window is part of the freeze (2026-10-08)
+
+`freeze` gains `--window {open, mid, late, prekick, adhoc}`, REQUIRED (like --reader-model).
+Written on every row and into the manifest entry. Revision counting and cross-dedup
+are keyed by `(reader_model, pilot, window)`: the same contract frozen in `mid` and
+later in `prekick` is revision 0 in each.
+
+Non-prekick/adhoc windows EXCLUDE any game kicking within 3 h (the prekick band).
+`prekick` HALTs if no game kicks within 3 h.
+
 ## P17 — Line movement must describe the pick's own line (2026-10-08)
 
 OPS3/3b shipped `_line_movement` filtering by `event_id` only. Props matched every

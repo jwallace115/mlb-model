@@ -712,6 +712,13 @@
    "sport": "Ops",
    "cron_match": "pick_layers.py",
    "quiet_ok": true
+  },
+  {
+   "id": "picks_clv",
+   "label": "Closing line value per pick",
+   "sport": "Ops",
+   "cron_match": "picks_clv.py",
+   "quiet_ok": true
   }
  ]
 }

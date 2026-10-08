@@ -89,19 +89,19 @@ def test_sides_and_one_way_market():
 def test_refuses_after_kickoff(tmp_path):
     s = L.build_sheet(_props(), _lines(), NOW)
     with pytest.raises(SystemExit, match="kicked off"):
-        L.freeze(s, _filled(s), 2026, 2, True, L.parse_utc(KICK) + timedelta(minutes=1), d=tmp_path, reader_model="test-model")
+        L.freeze(s, _filled(s), 2026, 2, True, L.parse_utc(KICK) + timedelta(minutes=1), d=tmp_path, reader_model="test-model", window="adhoc")
     assert not list(tmp_path.glob("*.parquet"))
     assert L.build_sheet(_props(), _lines(), L.parse_utc(KICK) + timedelta(minutes=1)).empty
 
 
 def test_append_only_revisions_and_tamper_check(tmp_path):
     s = L.build_sheet(_props(), _lines(), NOW)
-    d1, sha1, m1 = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model")
+    d1, sha1, m1 = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model", window="adhoc")
     assert (m1.revision == 0).all() and m1.pilot.all()
     with pytest.raises(SystemExit, match="append-only"):
-        L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model")
+        L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="test-model", window="adhoc")
     later = NOW + timedelta(minutes=30)
-    d2, _, m2 = L.freeze(L.build_sheet(_props(), _lines(), later), _filled(s), 2026, 2, True, later, d=tmp_path, reader_model="test-model")
+    d2, _, m2 = L.freeze(L.build_sheet(_props(), _lines(), later), _filled(s), 2026, 2, True, later, d=tmp_path, reader_model="test-model", window="adhoc")
     assert (m2.revision == 1).all() and d1.exists() and d2 != d1
     entries, bad, unlisted = L.verify(2026, 2, d=tmp_path)
     assert len(entries) == 2 and not bad and not unlisted
@@ -151,7 +151,7 @@ def test_ncaaf_sport_is_separate_and_scores_from_cfbd(tmp_path, monkeypatch):
         assert len(s) == 3 and s.two_way.all()
         f = s[L.KEY].copy(); f["p_first"] = s["q_first"] + 0.05; f["tag"] = "matchup"; f["reason"] = "a reason long enough to pass"
         f["conf"] = [80 - i * 10 for i in range(len(f))]; f["conf_rank"] = list(range(1, len(f) + 1))
-        dest, sha, m = L.freeze(s, f, 2026, 4, True, now, d=tmp_path, reader_model="test-model")
+        dest, sha, m = L.freeze(s, f, 2026, 4, True, now, d=tmp_path, reader_model="test-model", window="adhoc")
         assert (m["sport"] == "ncaaf").all() and (m["book"] == "pinnacle").all()
         # fake CFBD: Georgia 31, Alabama 24 -> home covers -3.5, total 55 over, home wins
         fake = {frozenset(("Georgia", "Alabama")): [{"start": pd.Timestamp("2026-09-26T16:00:00Z"), "completed": True,
@@ -169,9 +169,9 @@ def test_n62_reader_model_required_and_recorded(tmp_path):
     """N62: freeze refuses without a reader model and writes it on every row and in the manifest."""
     s = L.build_sheet(_props(), _lines(), NOW)
     with pytest.raises(SystemExit, match="reader-model"):
-        L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path)
+        L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, window="adhoc")
     assert not list(tmp_path.glob("ai_opinions_*.parquet"))
-    dest, sha, m = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="claude-opus-5-5")
+    dest, sha, m = L.freeze(s, _filled(s), 2026, 2, True, NOW, d=tmp_path, reader_model="claude-opus-5-5", window="adhoc")
     assert (pd.read_parquet(dest)["reader_model"] == "claude-opus-5-5").all()
     assert json.loads((tmp_path / "manifest.json").read_text())[-1]["reader_model"] == "claude-opus-5-5"
 

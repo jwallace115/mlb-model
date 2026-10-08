@@ -51,13 +51,13 @@ def _make_filled(sheet, overrides=None):
 
 _freeze_counter = [0]
 
-def _freeze_in_temp(sheet, filled, reader_model, pilot=False, d=None):
+def _freeze_in_temp(sheet, filled, reader_model, pilot=False, d=None, window="adhoc"):
     """Run freeze() in a temp directory and return the resulting DataFrame."""
     set_sport("nfl")
     _freeze_counter[0] += 1
     now = datetime(2026, 10, 5, 15, _freeze_counter[0], tzinfo=timezone.utc)
     dest, sha, m = freeze(sheet, filled, 2026, 99, pilot, now,
-                          d=d, reader_model=reader_model)
+                          d=d, reader_model=reader_model, window=window)
     return m
 
 
