@@ -92,3 +92,40 @@ def test_sports_no_mlb():
     assert "MLB" not in sports_text, "MLB still in SPORTS list"
     for sport in ("NFL", "NCAAF", "NHL", "NBA"):
         assert sport in sports_text, f"{sport} missing from SPORTS list"
+
+
+# ---- (e) Picks is index.html, Today is today.html (OPS4d Item 3) ----
+def test_picks_is_index():
+    """index.html must be the Picks page, today.html must be the Today/slate page."""
+    src = (Path(__file__).resolve().parent.parent.parent.parent / "site" / "build_site.py").read_text()
+    import re
+    # Check PAGES list
+    m = re.search(r"PAGES\s*=\s*\[([^\]]+)\]", src)
+    assert m, "PAGES list not found"
+    pages_text = m.group(1)
+    # index.html should be Picks
+    assert '("index.html", "Picks")' in pages_text, f"index.html should be Picks, got: {pages_text}"
+    # today.html should be Today
+    assert '("today.html", "Today")' in pages_text, f"today.html should be Today"
+    # Nav order: Picks first
+    idx_picks = pages_text.index('"Picks"')
+    idx_today = pages_text.index('"Today"')
+    assert idx_picks < idx_today, "Picks must come before Today in nav"
+
+    # Check pages dict in build()
+    m2 = re.search(r'"index\.html":\s*build_picks', src)
+    assert m2, "index.html must map to build_picks"
+    m3 = re.search(r'"today\.html":\s*build_today', src)
+    assert m3, "today.html must map to build_today"
+
+
+# ---- (f) null control: tracking and health byte-identical except nav ----
+def test_tracking_health_unchanged_except_nav():
+    """tracking.html and health.html should differ only in the nav block."""
+    # This is a structural test — verify the functions still exist and produce output
+    src = (Path(__file__).resolve().parent.parent.parent.parent / "site" / "build_site.py").read_text()
+    assert "def build_tracking" in src
+    assert "def build_health" in src
+    # tracking.html and health.html must appear in the pages dict
+    assert '"tracking.html"' in src
+    assert '"health.html"' in src

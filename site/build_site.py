@@ -12,9 +12,9 @@ Inputs
   site/signals_registry.json               (which signals exist, their label, their log)
   site/forward_status.json                 (NFL forward experiment: what was frozen, when — no results)
 Output
-  --out directory (default /var/www/iamnotuncertain): index.html, health.html, tracking.html,
-  signal-<id>.html, forward.html, archive.html. Written to a temp dir and swapped in, so a
-  reader never sees a half-built site.
+  --out directory (default /var/www/iamnotuncertain): index.html (Picks), today.html,
+  health.html, tracking.html, signal-<id>.html, forward.html, archive.html.
+  Written to a temp dir and swapped in, so a reader never sees a half-built site.
 """
 
 import argparse
@@ -162,8 +162,8 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
 .tab-panel div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}
 """
 
-PAGES = [("index.html", "Today"), ("health.html", "Pipeline health"), ("tracking.html", "Tracking"),
-         ("picks.html", "Picks"), ("forward.html", "NFL forward"), ("archive.html", "Odds archive")]
+PAGES = [("index.html", "Picks"), ("today.html", "Today"), ("health.html", "Pipeline health"),
+         ("tracking.html", "Tracking"), ("forward.html", "NFL forward"), ("archive.html", "Odds archive")]
 
 
 def page(fname, title, body, health, built):
@@ -323,7 +323,7 @@ def build_today(now, health):
                          f'<div class="note">{E(s.get("market", ""))}</div><div>{val}</div>{src(s["path"])}</div>')
     body.append('<section style="display:flex;flex-direction:column;gap:10px"><h2>Signals today</h2>'
                 f'<div class="tiles" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">{"".join(sig_cards) or "<span class=muted>none registered</span>"}</div></section>')
-    return page("index.html", "Today", "\n".join(body), health, now)
+    return page("today.html", "Today", "\n".join(body), health, now)
 
 
 def today_rows(s, today):
@@ -1036,7 +1036,7 @@ def build_picks(now, health):
 
     if rows is None:
         inner = f"<p>{NODATA}: picks ledger not found (PICKS_LEDGER_DIR not set or file absent).</p>"
-        return page("picks.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
+        return page("index.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
 
     source_info = src(f"picks.jsonl {sha12} {fmt_utc(mtime)}")
     ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
@@ -1117,7 +1117,7 @@ def build_picks(now, health):
             f'ranked from the reader\'s latest freeze. Click a pick to see its detail card. '
             f'No stakes, slip ids or share links.</p></div>'
             f'{tabs_nav}{tabs_content}')
-    return page("picks.html", "Picks", body, health, now)
+    return page("index.html", "Picks", body, health, now)
 
 
 def build(out, now=None):
@@ -1126,8 +1126,9 @@ def build(out, now=None):
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = Path(tempfile.mkdtemp(prefix=".site-", dir=out.parent))
-    pages = {"index.html": build_today(now, health), "health.html": build_health(now, health),
-             "tracking.html": build_tracking(now, health, tmp), "picks.html": build_picks(now, health),
+    pages = {"index.html": build_picks(now, health), "today.html": build_today(now, health),
+             "health.html": build_health(now, health),
+             "tracking.html": build_tracking(now, health, tmp),
              "forward.html": build_forward(now, health),
              "archive.html": build_archive(now, health)}
     for name, text in pages.items():
