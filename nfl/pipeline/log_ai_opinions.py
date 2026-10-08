@@ -347,7 +347,8 @@ PREKICK_HOURS = 3  # games within this many hours belong to the prekick window
 
 
 def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
-           board_root=None, run_id=None, slate_date=None, packet_path=None, window=None):
+           board_root=None, run_id=None, slate_date=None, packet_path=None, window=None,
+           reader_file=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
@@ -477,6 +478,10 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     if packet_file:
         entry["packet_file"] = packet_file
         entry["packet_sha256"] = packet_sha
+    if reader_file:
+        rf = Path(reader_file)
+        if rf.exists():
+            entry["reader_sha256"] = hashlib.sha256(rf.read_bytes()).hexdigest()
     entries.append(entry)
     man.write_text(json.dumps(entries, indent=1) + "\n")
     return dest, sha, m
@@ -1587,6 +1592,8 @@ def main():
     ap.add_argument("--from", dest="from_date", default=None, help="start date (inclusive) for date-range scoring")
     ap.add_argument("--to", dest="to_date", default=None, help="end date (inclusive) for date-range scoring")
     ap.add_argument("--packet", default=None, help="packet JSON file (required for NHL freeze)")
+    ap.add_argument("--reader-file", default=None,
+                    help="path to the reader script (sha256 written into manifest)")
     a = ap.parse_args()
     if a.as_of and not a.pilot:
         sys.exit("HALT: --as-of requires --pilot")
@@ -1620,7 +1627,8 @@ def main():
     elif a.cmd == "freeze":
         dest, sha, m = freeze(sheet, pd.read_csv(a.filled), season, a.week, a.pilot, now,
                              reader_model=a.reader_model, slate_date=a.date,
-                             packet_path=a.packet, window=a.window)
+                             packet_path=a.packet, window=a.window,
+                             reader_file=a.reader_file)
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":

@@ -37,6 +37,7 @@ def _make_snap(tmp_path, ts_str, rows):
 # ---- (a) spread: pick -8.5, close -9.5 → clv_points +1.0 ----
 def test_spread_clv(tmp_path):
     clv._snap_cache.clear()
+    clv._snap_index.clear()
     now = datetime(2026, 9, 29, 12, 0, tzinfo=timezone.utc)
     _make_snap(tmp_path, "20260928T163000Z", [{
         "event_id": "a" * 32, "market": "spreads", "outcome_name": "Seattle Seahawks",
@@ -52,11 +53,13 @@ def test_spread_clv(tmp_path):
     assert results[0]["clv_points"] == 1.0, f"expected +1.0, got {results[0]['clv_points']}"
     assert results[0]["close_point"] == -9.5
     clv._snap_cache.clear()
+    clv._snap_index.clear()
 
 
 # ---- (b) Over 44.5 closing 45.5 → +1.0; Under 44.5 closing 45.5 → -1.0 ----
 def test_total_clv(tmp_path):
     clv._snap_cache.clear()
+    clv._snap_index.clear()
     now = datetime(2026, 9, 29, 12, 0, tzinfo=timezone.utc)
     _make_snap(tmp_path, "20260928T163000Z", [{
         "event_id": "a" * 32, "market": "totals", "outcome_name": "Over",
@@ -80,11 +83,13 @@ def test_total_clv(tmp_path):
     assert by_pid["over1"]["clv_points"] == 1.0
     assert by_pid["under1"]["clv_points"] == -1.0
     clv._snap_cache.clear()
+    clv._snap_index.clear()
 
 
 # ---- (c) snapshot AFTER commence → never used ----
 def test_clv_no_leak(tmp_path):
     clv._snap_cache.clear()
+    clv._snap_index.clear()
     now = datetime(2026, 9, 29, 12, 0, tzinfo=timezone.utc)
     # Snap BEFORE commence: -9.5
     _make_snap(tmp_path, "20260928T163000Z", [{
@@ -107,11 +112,13 @@ def test_clv_no_leak(tmp_path):
     results = clv.compute_clv([_pick()], tmp_path, now)
     assert results[0]["close_point"] == -9.5, "should use pre-commence snapshot, not the leak"
     clv._snap_cache.clear()
+    clv._snap_index.clear()
 
 
 # ---- (d) no book row → consensus, flagged ----
 def test_clv_consensus_fallback(tmp_path):
     clv._snap_cache.clear()
+    clv._snap_index.clear()
     now = datetime(2026, 9, 29, 12, 0, tzinfo=timezone.utc)
     _make_snap(tmp_path, "20260928T163000Z", [{
         "event_id": "a" * 32, "market": "spreads", "outcome_name": "Seattle Seahawks",
@@ -124,11 +131,13 @@ def test_clv_consensus_fallback(tmp_path):
     results = clv.compute_clv([_pick()], tmp_path, now)
     assert results[0]["close_basis"] == "consensus"
     clv._snap_cache.clear()
+    clv._snap_index.clear()
 
 
 # ---- (e) running twice appends nothing ----
 def test_clv_idempotent(tmp_path):
     clv._snap_cache.clear()
+    clv._snap_index.clear()
     now = datetime(2026, 9, 29, 12, 0, tzinfo=timezone.utc)
     _make_snap(tmp_path, "20260928T163000Z", [{
         "event_id": "a" * 32, "market": "spreads", "outcome_name": "Seattle Seahawks",
@@ -154,3 +163,4 @@ def test_clv_idempotent(tmp_path):
     r2 = clv.compute_clv(todo, tmp_path, now)
     assert len(r2) == 0, "second run should produce 0 rows"
     clv._snap_cache.clear()
+    clv._snap_index.clear()

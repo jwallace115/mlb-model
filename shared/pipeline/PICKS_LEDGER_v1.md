@@ -274,6 +274,13 @@ that routes through it) still emitted `point = line` for second-side spreads.
 and used by both parsers. Verified: adapters run appends 0 (fixed parser produces
 the same pick_ids the correction rows already carry).
 
+## P23 — OPS4a leftovers (2026-10-08)
+
+(a) `p_ai_opinions` now carries `window` from the freeze row into the raw dict.
+(b) Record section groups by `(owner, window)` with CLV column.
+(c) `picks_clv` performance: cached pull_timestamp parse, snapshot index, close_price
+    to int, nearest-line per book for consensus. Spot checks unchanged.
+
 ## P22 — CLV per pick, deterministic, in a sidecar (2026-10-08)
 
 `picks_clv.py` computes closing line value for every kicked pick. Output:
@@ -343,6 +350,58 @@ published" with N and dates only.
 **Never on the page:** stakes, slip IDs, share links, member rows, balances.
 
 **No freeze → "no picks logged yet"** with nothing else invented. Ledger absent → NODATA.
+
+## P24 — reader_v3 canonical (2026-10-08)
+
+`nfl/pipeline/reader_v3.py` is the canonical reader, replacing the untracked
+`research/layers/_to_delete/ai_w4/reader_v2.py` (205 lines, sha256 315b44e2…).
+
+**What changed:** inputs are selected by `--as-of <UTC>` (newest ≤ as-of for
+snapshots; `pull_timestamp ≤ as-of` for props). Kalshi ticker prefix is derived
+from the slate date, not hardcoded. Injury report is via `--injury-report <path>`,
+absent → empty news layer. All input files and their timestamps are printed.
+reader_v3 prints its own sha256.
+
+**What did NOT change:** every rule, weight, threshold, and formula is an exact
+port of reader_v2. Identity test: 917/954 rows identical on p_first; 36 diffs
+are all from input selection (12 injury-report absent, 24 Kalshi snapshot
+timestamp), zero from rule changes. 1 key mismatch from line movement between
+snapshots.
+
+`log_ai_opinions.py freeze` gains `--reader-file <path>` → writes `reader_sha256`
+into the manifest entry. Optional for legacy; `run_window` always passes it.
+
+reader_v2 stays untouched in `_to_delete`.
+
+## P25 — Mac props + snapshot captures (2026-10-08)
+
+`pull_hardrock_props.py --archive` writes a separate `data_YYYY_MM_mac.parquet`
+beside the VM's monthly file (canonical-writer rule: two writers, distinct files).
+Both `reader_v3._load_inputs` and `picks_clv` read all `data_*.parquet` in the
+season/month dirs, so _mac files are found automatically.
+
+`multi_book_open_capture.py` writes to the same `line_history/season=YYYY/` dir.
+No code change needed — the Mac's .env has the key, and each snap gets a unique
+timestamp filename.
+
+First real captures from Mac: TNF TB@DAL props (602 rows, 10 credits, hardrockbet_fl
+70 rows) + game-line snapshot (1,340 rows, 3 credits). Total 13 credits.
+
+## P26 — run_window.py orchestrator (2026-10-08)
+
+`nfl/pipeline/run_window.py --sport nfl --window {open,mid,late,prekick,adhoc}
+--reader-model <m> [--as-of] [--no-pull]`: one command per window.
+
+Steps: (1) pull props+snapshot unless `--no-pull`; (2) sheet → reader_v3 → freeze
+with `--window`, `--reader-model`, `--reader-file`; (3) verify; (4) picks_adapters
+→ build_top20.
+
+Each step prints UTC timestamp, command, exit code. Non-zero STOPs the pipeline.
+`--window-hours` is passed to both sheet and freeze for prekick/adhoc windows
+(so the freeze rebuilds the same narrowed sheet the reader saw).
+
+Scheduled runs: ops proposes `ops/windows` branch merged by Jeff in :00–:44.
+The NFL lane has no existing convention for automated window branches.
 
 ## P13 — Lane contract for reader freezes (2026-10-08)
 

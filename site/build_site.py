@@ -708,32 +708,57 @@ def _render_pick_row(rank, pick, card, is_prop):
             f'</summary><div class="card pad" style="margin:8px 0 16px 36px">{card_html}</div></details>')
 
 
+def _load_clv(ledger_dir):
+    """Load clv.jsonl and return dict of pick_id → row."""
+    p = Path(ledger_dir) / "clv.jsonl"
+    if not p.exists():
+        return {}
+    clv_by_pid = {}
+    try:
+        for line in p.read_text().splitlines():
+            if line.strip():
+                r = json.loads(line)
+                clv_by_pid[r["pick_id"]] = r
+    except Exception:
+        pass
+    return clv_by_pid
+
+
 def _record_section(rows, embargo_owners, sport, source_info):
     """Build the Record section for a sport tab."""
     graded = [r for r in rows if r.get("result") in ("W", "L", "P", "VOID") and r.get("sport") == sport]
     if not graded:
         return '<div class="card pad muted">No graded picks yet.</div>'
 
+    # Load CLV
+    ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
+    clv_by_pid = _load_clv(ledger_dir)
+
     trs = []
     by_key = defaultdict(list)
     for r in graded:
-        by_key[(r.get("owner", "?"), r.get("source", "?"))].append(r)
+        by_key[(r.get("owner", "?"), r.get("window", "legacy"))].append(r)
 
-    for (owner, source), orows in sorted(by_key.items()):
+    for (owner, window), orows in sorted(by_key.items()):
         if owner in embargo_owners:
             dates = [r.get("commence_time", "")[:10] for r in orows if r.get("commence_time")]
             first = min(dates) if dates else "—"
             last = max(dates) if dates else "—"
-            trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(source)}</td>"
+            trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(window)}</td>"
                        f"<td class='num'>{len(orows)}</td>"
                        f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
-                       f"<td colspan='3'>scoring not published</td></tr>")
+                       f"<td colspan='4'>scoring not published</td></tr>")
             continue
 
         hit, roi, n_graded, n_priced, flat = _picks_roi(orows)
         dates = [r.get("commence_time", "")[:10] for r in orows if r.get("commence_time")]
         first = min(dates) if dates else "—"
         last = max(dates) if dates else "—"
+
+        # CLV summary
+        clv_rows = [clv_by_pid.get(r.get("pick_id")) for r in orows if clv_by_pid.get(r.get("pick_id"))]
+        clv_vals = [c["clv_points"] for c in clv_rows if c.get("clv_points") is not None]
+        clv_s = f'{sum(clv_vals)/len(clv_vals):+.1f} ({len(clv_vals)}N, {sum(1 for v in clv_vals if v > 0)/len(clv_vals)*100:.0f}%>0)' if clv_vals else "—"
 
         by_month = defaultdict(list)
         for r in orows:
@@ -749,16 +774,17 @@ def _record_section(rows, embargo_owners, sport, source_info):
                 max_share = mn / n_graded
         flag = ' <span class="b s-LATE">≥60% in one month</span>' if max_share >= 0.6 else ""
 
-        trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(source)}</td>"
+        trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(window)}</td>"
                    f"<td class='num'>{n_graded}</td>"
                    f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
                    f"<td class='num'>{pct(hit)}</td>"
                    f"<td class='num'><b>{pct(roi, True) if roi is not None else '—'}</b></td>"
-                   f"<td class='num muted'>{pct(flat, True) if flat is not None else '—'}{flag}</td></tr>"
-                   f"<tr><td colspan='7' class='note' style='padding-top:0'>{' · '.join(month_parts)}</td></tr>")
+                   f"<td class='num muted'>{pct(flat, True) if flat is not None else '—'}{flag}</td>"
+                   f"<td class='num muted'>{clv_s}</td></tr>"
+                   f"<tr><td colspan='8' class='note' style='padding-top:0'>{' · '.join(month_parts)}</td></tr>")
 
-    return (f'<div class="tablewrap"><table><tr><th>Owner</th><th>Source</th><th>N</th>'
-            f'<th>Dates</th><th>Hit</th><th>Real-price ROI</th><th>−110 (triage)</th></tr>'
+    return (f'<div class="tablewrap"><table><tr><th>Owner</th><th>Window</th><th>N</th>'
+            f'<th>Dates</th><th>Hit</th><th>Real-price ROI</th><th>−110 (triage)</th><th>CLV</th></tr>'
             f'{"".join(trs)}</table></div>{source_info}')
 
 
