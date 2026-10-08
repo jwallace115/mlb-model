@@ -274,6 +274,16 @@ that routes through it) still emitted `point = line` for second-side spreads.
 and used by both parsers. Verified: adapters run appends 0 (fixed parser produces
 the same pick_ids the correction rows already carry).
 
+## P20 — Window is part of the freeze (2026-10-08)
+
+`freeze` gains `--window {open, mid, late, prekick, adhoc}`, REQUIRED (like --reader-model).
+Written on every row and into the manifest entry. Revision counting and cross-dedup
+are keyed by `(reader_model, pilot, window)`: the same contract frozen in `mid` and
+later in `prekick` is revision 0 in each.
+
+Non-prekick/adhoc windows EXCLUDE any game kicking within 3 h (the prekick band).
+`prekick` HALTs if no game kicks within 3 h.
+
 ## P17 — Line movement must describe the pick's own line (2026-10-08)
 
 OPS3/3b shipped `_line_movement` filtering by `event_id` only. Props matched every

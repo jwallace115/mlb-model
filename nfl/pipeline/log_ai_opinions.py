@@ -316,13 +316,13 @@ def validate(sheet, filled):
     return m
 
 
-def prior_revisions(d, reader_model=None, pilot=None):
-    """Count revisions from earlier files of the SAME reader_model AND pilot flag.
+def prior_revisions(d, reader_model=None, pilot=None, window=None):
+    """Count revisions from earlier files of the SAME reader_model, pilot flag AND window.
 
     FWD1c (D219): a new file's revision counts only earlier files with the same
     reader_model and the same pilot flag. An entry with no reader_model key counts
-    as reader "legacy", which matches nothing new. Scoring is unchanged: revision 0
-    means each reader's first opinion on a line (2026-09-29).
+    as reader "legacy", which matches nothing new. P20: window is part of the key;
+    a freeze in "mid" and later in "prekick" are both revision 0.
     """
     manifest_path = d / "manifest.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
@@ -330,7 +330,8 @@ def prior_revisions(d, reader_model=None, pilot=None):
     for entry in manifest:
         entry_rm = entry.get("reader_model", "legacy")
         entry_pilot = entry.get("pilot", False)
-        if entry_rm == reader_model and entry_pilot == bool(pilot):
+        entry_window = entry.get("window")
+        if entry_rm == reader_model and entry_pilot == bool(pilot) and entry_window == window:
             own_files.add(entry["file"])
     seen = {}
     for f in sorted(d.glob("ai_opinions_*.parquet")):
@@ -341,15 +342,22 @@ def prior_revisions(d, reader_model=None, pilot=None):
     return seen
 
 
+VALID_WINDOWS = {"open", "mid", "late", "prekick", "adhoc"}
+PREKICK_HOURS = 3  # games within this many hours belong to the prekick window
+
+
 def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
-           board_root=None, run_id=None, slate_date=None, packet_path=None):
+           board_root=None, run_id=None, slate_date=None, packet_path=None, window=None):
     """sheet MUST come from build_sheet() in this process: prices are read from the tape at freeze
     time, never from a CSV the reader could have touched.
     N62: reader_model (the model that formed the opinions, e.g. 'claude-fable-5-1') is REQUIRED and is
     written on every row and into the manifest - the reader is part of the research object.
+    P20: window (open/mid/late/prekick/adhoc) is REQUIRED.
     H5: packet_path required for NHL (date-keyed sports with drivers_required)."""
     if not reader_model or not str(reader_model).strip():
         raise SystemExit("HALT: --reader-model is required (the model that made these picks)")
+    if not window or window not in VALID_WINDOWS:
+        raise SystemExit(f"HALT: --window is required (one of {sorted(VALID_WINDOWS)})")
     # D224(c): canonicalize reader string (strip whitespace)
     reader_model = str(reader_model).strip()
     is_date_sport = SPORTS[SPORT].get("slate") == "date"
@@ -372,7 +380,8 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
             manifest = json.loads(manifest_path.read_text())
             for entry in manifest:
                 rm = entry.get("reader_model", "legacy")
-                if rm != reader_model or entry.get("pilot", False):
+                ew = entry.get("window")
+                if rm != reader_model or entry.get("pilot", False) or ew != window:
                     continue
                 f = wd / entry["file"]
                 if not f.exists():
@@ -392,9 +401,27 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     late = sheet[sheet["commence_time"].map(parse_utc) <= now]
     if len(late):
         raise SystemExit(f"HALT: {late['event_id'].nunique()} game(s) in the sheet have kicked off - nothing is frozen")
+    # P20: prekick band exclusion
+    if window not in ("prekick", "adhoc"):
+        kicks_soon = sheet["commence_time"].map(lambda c: 0 < (parse_utc(c) - now).total_seconds() <= PREKICK_HOURS * 3600)
+        n_excluded = int(kicks_soon.sum())
+        if n_excluded:
+            excluded_eids = set(sheet[kicks_soon]["event_id"])
+            print(f"excluded {n_excluded} game(s) inside the {PREKICK_HOURS} h prekick band")
+            sheet = sheet[~kicks_soon]
+            filled = filled[~filled["event_id"].isin(excluded_eids)]
+            if "conf_rank" in filled.columns and len(filled):
+                filled = filled.copy()
+                filled["conf_rank"] = list(range(1, len(filled) + 1))
+            if sheet.empty:
+                raise SystemExit("HALT: all games excluded by the prekick band")
+    elif window == "prekick":
+        kicks_soon = sheet["commence_time"].map(lambda c: 0 < (parse_utc(c) - now).total_seconds() <= PREKICK_HOURS * 3600)
+        if not kicks_soon.any():
+            raise SystemExit(f"HALT: no game kicks within {PREKICK_HOURS} h (prekick window run at the wrong time)")
     m = validate(sheet, filled)
     d.mkdir(parents=True, exist_ok=True)
-    seen = prior_revisions(d, reader_model=reader_model, pilot=pilot)
+    seen = prior_revisions(d, reader_model=reader_model, pilot=pilot, window=window)
     m["revision"] = [seen.get((r.event_id, r.market_key, r.player_name, r.line), -1) + 1
                      for r in m.itertuples(index=False)]
     m["season"], m["pilot"] = season, bool(pilot)
@@ -405,6 +432,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     m["sport"], m["book"] = SPORT, BOOK
     m["reader_model"] = str(reader_model).strip()
     m["logged_utc"] = now.isoformat()
+    m["window"] = window
     # D230: run_id links frozen rows to their sim run's bundle
     if run_id is not None:
         m["run_id"] = run_id
@@ -441,7 +469,7 @@ def freeze(sheet, filled, season, week, pilot, now, d=None, reader_model=None,
     entries = json.loads(man.read_text()) if man.exists() else []
     entry = {"file": dest.name, "sha256": sha, "logged_utc": now.isoformat(), "rows": len(m),
                     "sport": SPORT, "book": BOOK, "reader_model": str(reader_model).strip(),
-                    "pilot": bool(pilot), "games": int(m["event_id"].nunique()),
+                    "pilot": bool(pilot), "window": window, "games": int(m["event_id"].nunique()),
                     "no_view_share": round(float((m["tag"] == "no_view").mean()), 3),
                     "revised_rows": int((m["revision"] > 0).sum()),
                     "oldest_source_age_min": float(m["source_age_min"].max()),
@@ -1548,6 +1576,8 @@ def main():
     ap.add_argument("--props-file"), ap.add_argument("--lines-file")
     ap.add_argument("--events", help="comma list of team-name fragments; default every pre-kick game")
     ap.add_argument("--window-hours", type=float, help="only games kicking off within this many hours")
+    ap.add_argument("--window", choices=["open", "mid", "late", "prekick", "adhoc"],
+                    help="REQUIRED for freeze (P20): timing window of this freeze")
     ap.add_argument("--pilot", action="store_true")
     ap.add_argument("--reader-model", help="REQUIRED for freeze (N62): the model that made the picks, e.g. claude-fable-5-1")
     ap.add_argument("--include-pilot", action="store_true"), ap.add_argument("--pbp")
@@ -1590,7 +1620,7 @@ def main():
     elif a.cmd == "freeze":
         dest, sha, m = freeze(sheet, pd.read_csv(a.filled), season, a.week, a.pilot, now,
                              reader_model=a.reader_model, slate_date=a.date,
-                             packet_path=a.packet)
+                             packet_path=a.packet, window=a.window)
         print(f"FROZEN {len(m)} lines -> {dest.relative_to(ROOT)}\nsha256 {sha}\n"
               f"pilot={a.pilot} no_view={(m.tag == 'no_view').mean():.1%} oldest source {m.source_age_min.max()} min")
     elif a.cmd == "score":
