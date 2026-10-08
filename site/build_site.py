@@ -157,7 +157,9 @@ td{padding:9px 12px;border-top:1px solid var(--line2);vertical-align:top}
 .note{font-size:13px;color:var(--muted)}.warnbox{background:var(--wa-bg);color:var(--wa);border-radius:10px;padding:12px 16px}
 .legs td:first-child{font-weight:500}.muted{color:var(--muted)}
 footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
-@media (max-width:640px){h1{font-size:26px}.bar{gap:10px}nav a{padding:8px 9px}}
+.card-layer{margin:6px 0;padding:6px 0;border-bottom:1px solid var(--line2)}
+@media (max-width:640px){h1{font-size:26px}.bar{gap:10px}nav a{padding:8px 9px}
+.tab-panel div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}}
 """
 
 PAGES = [("index.html", "Today"), ("health.html", "Pipeline health"), ("tracking.html", "Tracking"),
@@ -640,65 +642,89 @@ def _picks_roi(rows):
     return hit, roi, len(graded), len(priced), flat
 
 
-def build_picks(now, health):
-    fs = load_json(ROOT / "site" / "forward_status.json") or {}
-    embargo_owners = set(fs.get("embargo_owners", []))
-    rows, sha12, mtime = _load_picks_ledger()
+def _render_card(card):
+    """Render a detail card as HTML inside a <details> block."""
+    if not card:
+        return '<div class="note muted">card not built yet</div>'
+    parts = []
+    for layer_name, layer in card.get("layers", {}).items():
+        if not layer:
+            continue
+        label = layer_name.replace("_", " ").title()
+        source_s = f' · {src(str(layer.get("source", ""))[:80])}' if layer.get("source") else ""
+        as_of_s = f' · as of {E(str(layer.get("as_of", ""))[:19])}' if layer.get("as_of") else ""
+        val = layer.get("value")
+        note = layer.get("note")
+        if note:
+            parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}<br>'
+                         f'<span class="muted">{E(str(note))}</span></div>')
+        elif val is None:
+            continue
+        elif isinstance(val, dict):
+            items = " · ".join(f"{k}: {E(str(v))}" for k, v in val.items() if v is not None)
+            parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}<br>{items}</div>')
+        elif isinstance(val, list):
+            if not val:
+                parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}: none found</div>')
+            else:
+                li = "".join(f'<div class="note">{E(str(item.get("headline", item.get("name", str(item))))[:150])}</div>' for item in val[:5])
+                parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}{li}</div>')
+        else:
+            parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}: {E(str(val))}</div>')
+    return "".join(parts) if parts else '<div class="note muted">no layers</div>'
 
-    if rows is None:
-        inner = f"<p>{NODATA}: picks ledger not found (PICKS_LEDGER_DIR not set or file absent).</p>"
-        return page("picks.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
 
-    source_info = src(f"picks.jsonl {sha12} {fmt_utc(mtime)}")
-    today_et = now.astimezone(ET).date()
+def _render_pick_row(rank, pick, card, is_prop):
+    """Render a single ranked pick row with expandable detail card."""
+    pid = pick.get("pick_id", "")
+    if is_prop:
+        label = f'{E(str(pick.get("player_name", "")))} {E(str(pick.get("market", "")))} {E(str(pick.get("side", "")))}'
+        if pick.get("point") is not None:
+            label += f' {pt(pick["point"])}'
+    else:
+        label = f'{E(str(pick.get("side", "")))} {E(str(pick.get("market", "")))}'
+        if pick.get("point") is not None:
+            label += f' {pt(pick["point"])}'
+    game = f'{E(str(pick.get("away", "")))} @ {E(str(pick.get("home", "")))}'
+    price_s = am(pick.get("price_american"))
+    conf_s = str(int(pick["conf"])) if pick.get("conf") is not None else "—"
+    reason_s = E(str(pick.get("reason") or "")[:120])
+    card_html = _render_card(card)
 
-    # Open picks (result null, today's ET slate)
-    open_picks = [r for r in rows if not r.get("result")
-                  and r.get("commence_time")
-                  and pd.to_datetime(r["commence_time"], utc=True).astimezone(ET).date() == today_et]
-    open_trs = []
-    for r in sorted(open_picks, key=lambda x: (x.get("owner", ""), x.get("commence_time", ""))):
-        game = f'{E(str(r.get("away", "")))} @ {E(str(r.get("home", "")))}'
-        mk = E(str(r.get("market", "")))
-        side_pt = E(str(r.get("side", "")))
-        if r.get("point") is not None:
-            side_pt += f' {pt(r["point"])}'
-        open_trs.append(f"<tr><td>{E(str(r.get('owner', '')))}</td><td class='muted'>{E(str(r.get('sport', '')))}</td>"
-                        f"<td>{game}</td><td>{mk} {side_pt}</td><td class='num'>{am(r.get('price_american'))}</td>"
-                        f"<td class='note'>{E(str(r.get('reason', '') or '')[:100])}</td></tr>")
+    return (f'<details id="{E(pid)}"><summary style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--line2)">'
+            f'<span class="num" style="display:inline-block;width:28px;text-align:right;margin-right:8px"><b>{rank}</b></span>'
+            f'{label}<br><span class="muted" style="margin-left:36px">{game} · {price_s} · conf {conf_s}</span>'
+            f'<br><span class="note" style="margin-left:36px">{reason_s}</span>'
+            f'</summary><div class="card pad" style="margin:8px 0 16px 36px">{card_html}</div></details>')
 
-    open_html = ('<div class="tablewrap"><table><tr><th>Owner</th><th>Sport</th><th>Game</th>'
-                 '<th>Market / Side</th><th>Price</th><th>Reason</th></tr>'
-                 + "".join(open_trs) + '</table></div>' if open_trs
-                 else '<div class="card pad muted">No open picks for today.</div>')
 
-    # Settled picks by owner × sport
-    settled_trs = []
-    by_owner = defaultdict(list)
-    for r in rows:
-        if r.get("result") in ("W", "L", "P", "VOID"):
-            by_owner[(r.get("owner", "?"), r.get("sport", "?"))].append(r)
+def _record_section(rows, embargo_owners, sport, source_info):
+    """Build the Record section for a sport tab."""
+    graded = [r for r in rows if r.get("result") in ("W", "L", "P", "VOID") and r.get("sport") == sport]
+    if not graded:
+        return '<div class="card pad muted">No graded picks yet.</div>'
 
-    for (owner, sport), orows in sorted(by_owner.items()):
+    trs = []
+    by_key = defaultdict(list)
+    for r in graded:
+        by_key[(r.get("owner", "?"), r.get("source", "?"))].append(r)
+
+    for (owner, source), orows in sorted(by_key.items()):
         if owner in embargo_owners:
             dates = [r.get("commence_time", "")[:10] for r in orows if r.get("commence_time")]
             first = min(dates) if dates else "—"
             last = max(dates) if dates else "—"
-            settled_trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(sport)}</td>"
-                               f"<td class='num'>{len(orows)}</td>"
-                               f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
-                               f"<td colspan='3'>scoring not published</td></tr>")
+            trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(source)}</td>"
+                       f"<td class='num'>{len(orows)}</td>"
+                       f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
+                       f"<td colspan='3'>scoring not published</td></tr>")
             continue
 
         hit, roi, n_graded, n_priced, flat = _picks_roi(orows)
         dates = [r.get("commence_time", "")[:10] for r in orows if r.get("commence_time")]
         first = min(dates) if dates else "—"
         last = max(dates) if dates else "—"
-        hit_s = pct(hit) if hit is not None else "—"
-        roi_s = pct(roi, True) if roi is not None else "—"
-        flat_s = pct(flat, True) if flat is not None else "—"
 
-        # Monthly breakout
         by_month = defaultdict(list)
         for r in orows:
             m = (r.get("commence_time") or "")[:7]
@@ -711,27 +737,112 @@ def build_picks(now, health):
             month_parts.append(f"{m}: {mn}N {pct(mh)}")
             if n_graded and mn / n_graded > max_share:
                 max_share = mn / n_graded
-        months_html = " · ".join(month_parts)
-        flag = ' <span class="b s-LATE">≥60% in one month</span>' if max_share >= 0.6 and len(by_month) > 1 else ""
+        flag = ' <span class="b s-LATE">≥60% in one month</span>' if max_share >= 0.6 else ""
 
-        settled_trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(sport)}</td>"
-                           f"<td class='num'>{n_graded}</td>"
-                           f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
-                           f"<td class='num'><b>{hit_s}</b></td>"
-                           f"<td class='num'><b>{roi_s}</b></td>"
-                           f"<td class='num muted'>{flat_s}{flag}</td></tr>"
-                           f"<tr><td colspan='7' class='note' style='padding-top:0'>{months_html}</td></tr>")
+        trs.append(f"<tr><td>{E(owner)}</td><td class='muted'>{E(source)}</td>"
+                   f"<td class='num'>{n_graded}</td>"
+                   f"<td class='mono' style='font-size:12px'>{first} → {last}</td>"
+                   f"<td class='num'>{pct(hit)}</td>"
+                   f"<td class='num'><b>{pct(roi, True) if roi is not None else '—'}</b></td>"
+                   f"<td class='num muted'>{pct(flat, True) if flat is not None else '—'}{flag}</td></tr>"
+                   f"<tr><td colspan='7' class='note' style='padding-top:0'>{' · '.join(month_parts)}</td></tr>")
 
-    settled_html = ('<div class="tablewrap"><table><tr><th>Owner</th><th>Sport</th><th>N</th>'
-                    '<th>Dates</th><th>Hit</th><th>Real-price ROI</th><th>−110 (triage only)</th></tr>'
-                    + "".join(settled_trs) + '</table></div>' if settled_trs
-                    else '<div class="card pad muted">No settled picks yet.</div>')
+    return (f'<div class="tablewrap"><table><tr><th>Owner</th><th>Source</th><th>N</th>'
+            f'<th>Dates</th><th>Hit</th><th>Real-price ROI</th><th>−110 (triage)</th></tr>'
+            f'{"".join(trs)}</table></div>{source_info}')
 
-    body = (f'<div><h1>Picks</h1><p class="lede">Every logged pick from every source, graded from official results. '
-            f'Member handles visible to all members (behind login). No stakes, slip ids or share links.</p></div>'
-            f'<section><div class="row"><h2>Open picks today</h2>{source_info}</div>{open_html}</section>'
-            f'<section><div class="row"><h2>Settled picks</h2>'
-            f'<span class="note">built {fmt_utc(now)}</span></div>{settled_html}</section>')
+
+def build_picks(now, health):
+    import sys as _sys
+    _sys.path.insert(0, str(ROOT / "shared" / "pipeline"))
+    import build_top20 as bt
+
+    fs = load_json(ROOT / "site" / "forward_status.json") or {}
+    embargo_owners = set(fs.get("embargo_owners", []))
+    rows, sha12, mtime = _load_picks_ledger()
+
+    if rows is None:
+        inner = f"<p>{NODATA}: picks ledger not found (PICKS_LEDGER_DIR not set or file absent).</p>"
+        return page("picks.html", "Picks", f'<div><h1>Picks</h1></div>{inner}', health, now)
+
+    source_info = src(f"picks.jsonl {sha12} {fmt_utc(mtime)}")
+    ledger_dir = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
+    layers_dir = ledger_dir / "layers"
+
+    # Build tabs
+    tab_order = ["NFL", "NCAAF", "NHL", "NBA"]
+    tab_links = []
+    tab_bodies = []
+
+    for sport in tab_order:
+        result = bt.select(rows, sport, now)
+        anchor = sport.lower()
+        tab_links.append(f'<a href="#tab-{anchor}" class="tab-link" style="padding:8px 16px;text-decoration:none;'
+                         f'border-bottom:2px solid var(--accent);font-weight:600">{sport}</a>')
+
+        if result is None:
+            tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
+                              f'<div class="card pad muted">No picks logged yet for {sport}.</div></div>')
+            # Record section
+            rec = _record_section(rows, embargo_owners, sport, source_info)
+            tab_bodies[-1] = tab_bodies[-1][:-6] + f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>'
+            continue
+
+        freeze_info = src(f"freeze {E(str(result['freeze_logged_utc'])[:19])} · "
+                          f"{result['n_picks_in_freeze']} picks · "
+                          f"{len(result['unranked'])} unranked")
+
+        # Load cards
+        def _load_card(pid):
+            p = layers_dir / f"{pid}.json"
+            if p.exists():
+                try:
+                    return json.loads(p.read_text())
+                except Exception:
+                    pass
+            return None
+
+        # Props column
+        props_html = []
+        for i, pick in enumerate(result["props"], 1):
+            card = _load_card(pick.get("pick_id"))
+            props_html.append(_render_pick_row(i, pick, card, is_prop=True))
+
+        # Sides column
+        sides_html = []
+        for i, pick in enumerate(result["sides"], 1):
+            card = _load_card(pick.get("pick_id"))
+            sides_html.append(_render_pick_row(i, pick, card, is_prop=False))
+
+        cols = (f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">'
+                f'<div><h3>Top 20 — player props</h3>{"".join(props_html) if props_html else "<div class=\"muted\">none</div>"}</div>'
+                f'<div><h3>Top 20 — sides / totals / ML</h3>{"".join(sides_html) if sides_html else "<div class=\"muted\">none</div>"}</div></div>')
+
+        # Unranked
+        unranked_html = ""
+        if result["unranked"]:
+            unranked_html = (f'<details style="margin-top:16px"><summary class="muted" style="cursor:pointer">'
+                             f'{len(result["unranked"])} unranked — no confidence recorded</summary>'
+                             f'<div class="note" style="margin-top:8px">'
+                             + ", ".join(f'{E(str(r.get("player_name") or r.get("side", "")))} ({E(str(r.get("market", "")))})'
+                                        for r in result["unranked"][:30])
+                             + ("..." if len(result["unranked"]) > 30 else "")
+                             + '</div></details>')
+
+        # Record section
+        rec = _record_section(rows, embargo_owners, sport, source_info)
+
+        tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
+                          f'{freeze_info}{cols}{unranked_html}'
+                          f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>')
+
+    tabs_nav = f'<div style="display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px">{"".join(tab_links)}</div>'
+    tabs_content = "".join(tab_bodies)
+
+    body = (f'<div><h1>Picks</h1><p class="lede">NFL, NCAAF, NHL, NBA — top 20 picks by confidence, '
+            f'ranked from the reader\'s latest freeze. Click a pick to see its detail card. '
+            f'No stakes, slip ids or share links.</p></div>'
+            f'{tabs_nav}{tabs_content}')
     return page("picks.html", "Picks", body, health, now)
 
 
