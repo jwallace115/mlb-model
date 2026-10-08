@@ -105,3 +105,55 @@ supposed to make any.
 
 **Null control:** NCAAF crosswalk output byte-identical (372 rows, sha256 `45b89551...`)
 before and after this change.
+
+## P8 — Admit 280 rejected pick-legs, tag/conf columns, sim_nfl owner (2026-10-08)
+
+**Pre-registered expectation:** >=250 of 280 resolve.
+**Result:** 215 of 280 resolved. **NOT MET.** 54 of the 65 remaining are prop bets
+(player_name only, no game field) — genuinely unresolvable without game association.
+The exactly-one rule was not loosened.
+
+**Fixes applied:**
+
+1. `split_game`: fixed parenthetical team names ("Miami (OH) RedHawks @ Cincinnati
+   Bearcats" now splits correctly — was splitting on `(` before `@`).
+
+2. `_extract_event_id_from_raw` / `_extract_teams_from_raw`: regex fallback for
+   truncated JSON (pick_sources raw field capped at 400 chars). Resolves 39 NCAAF
+   card legs whose raw carried event_id + home/away but was invalid JSON.
+
+3. `_resolve_event_from_build_time`: for rows with home/away but no commence_time,
+   searches tape in [build_time, build_time + 7d] for the normalised team pair.
+   Exactly one event_id → take commence_time from the latest snapshot.
+   Zero → rejected "no_tape_event"; two+ → HALT. Resolves 174 no_commence rows.
+
+4. `_resolve_single_team_event`: for NFL text legs with one team name but no game
+   (sun_cards_v2 spread picks like "SEA -8.5 -110"), searches tape for any game
+   involving that team. Resolves 5 of 8 such rows (3 remain ambiguous — multiple
+   games in window).
+
+5. `adapt_nfl_ai_opinions`:
+   - Filter: `side in ("first","second") AND tag != "no_view"`.
+     No_view rows already excluded by the side filter (side="none"); the tag check
+     is defense-in-depth. Verified: 0 no_view rows were previously ingested.
+   - Owner: `sim_nfl` when `reader_model.startswith("nfl_sim")`, else `ai_nfl`.
+     235 rows (178 from 16:30Z + 57 from 17:00Z freezes) now carry owner `sim_nfl`.
+   - Carries `tag` (nullable str) and `conf` (nullable float) into the ledger row.
+
+6. `picks_ledger.COLS`: added `tag` and `conf` (nullable, at end of contract).
+
+**Remaining rejections (65):**
+- `no_game_field_prop`: 54 (NFL props with no game field — player_name only)
+- `no_tape_event`: 8 (4 NCAAF small-market, 3 NFL post-kickoff, 1 NCAAF not in tape)
+- `no_game_field`: 3 (NFL text legs, team has multiple games in window)
+
+**Null controls:**
+- Field changes on shared pick_ids (excluding tag/conf/owner): **NONE** (0 changed fields).
+- 235 old pick_ids replaced: all sim rows whose pick_id changed because owner went
+  ai_nfl → sim_nfl (pick_id is hashed from owner).
+- Old NCAAF grades 91W/88L/5P all preserved in the new run (129W/126L/6P; +77 newly
+  graded from the resolved rows).
+
+**Store rebuild:** This is the one-time rebuild. From here on, the store is append-only.
+Reason: rows with wrong owner (sim as ai_nfl) and ingested no_view rows cannot be
+corrected by appending — the pick_id hash changes with the owner.

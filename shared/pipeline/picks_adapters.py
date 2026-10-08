@@ -151,29 +151,141 @@ def _resolve_event_id(home, away, commence_utc, league, sport_folder):
 
 
 def _extract_event_id_from_raw(raw_str):
-    """Try to extract event_id from the raw JSON column."""
+    """Try to extract event_id from the raw JSON column (may be truncated)."""
+    if not isinstance(raw_str, str):
+        try:
+            eid = raw_str.get("event_id") if isinstance(raw_str, dict) else None
+            if eid and re.fullmatch(r"[0-9a-f]{32}", str(eid)):
+                return str(eid)
+        except (TypeError, AttributeError):
+            pass
+        return None
+    # Try full parse first
     try:
-        d = json.loads(raw_str) if isinstance(raw_str, str) else raw_str
+        d = json.loads(raw_str)
         eid = d.get("event_id")
         if eid and re.fullmatch(r"[0-9a-f]{32}", str(eid)):
             return str(eid)
     except (json.JSONDecodeError, TypeError, AttributeError):
         pass
-    return None
+    # Regex fallback for truncated JSON
+    m = re.search(r'"event_id"\s*:\s*"([0-9a-f]{32})"', raw_str)
+    return m.group(1) if m else None
 
 
 def _extract_teams_from_raw(raw_str):
-    """Try to extract home/away from raw JSON."""
+    """Try to extract home/away from raw JSON (may be truncated)."""
+    if not isinstance(raw_str, str):
+        try:
+            return raw_str.get("home_team"), raw_str.get("away_team")
+        except (TypeError, AttributeError):
+            pass
+        return None, None
+    # Try full parse first
     try:
-        d = json.loads(raw_str) if isinstance(raw_str, str) else raw_str
+        d = json.loads(raw_str)
         return d.get("home_team"), d.get("away_team")
     except (json.JSONDecodeError, TypeError, AttributeError):
         pass
-    return None, None
+    # Regex fallback for truncated JSON
+    hm = re.search(r'"home_team"\s*:\s*"([^"]+)"', raw_str)
+    am = re.search(r'"away_team"\s*:\s*"([^"]+)"', raw_str)
+    return (hm.group(1) if hm else None), (am.group(1) if am else None)
+
+
+def _extract_commence_from_raw(raw_str):
+    """Try to extract commence_time from the raw JSON column (may be truncated)."""
+    if not isinstance(raw_str, str):
+        try:
+            return raw_str.get("commence_time") if isinstance(raw_str, dict) else None
+        except (TypeError, AttributeError):
+            pass
+        return None
+    try:
+        d = json.loads(raw_str)
+        return d.get("commence_time")
+    except (json.JSONDecodeError, TypeError, AttributeError):
+        pass
+    m = re.search(r'"commence_time"\s*:\s*"([^"]+)"', raw_str)
+    return m.group(1) if m else None
 
 
 def _sport_folder(league):
     return {"NFL": "nfl", "NCAAF": "ncaaf", "NHL": "nhl", "NBA": "nba", "MLB": "baseball_mlb"}.get(league)
+
+
+def _resolve_single_team_event(team_nick, build_time, league, sport_folder):
+    """Resolve event_id when only one team is known (from side in text legs).
+
+    Searches [build_time, build_time + 7 days] for games involving the team.
+    Exactly one game → resolve; zero or two+ → Halt.
+    """
+    tape = _get_tape(sport_folder)
+    if tape.empty:
+        raise pl.Halt(f"no tape for {sport_folder}")
+
+    bt = pd.to_datetime(str(build_time), utc=True)
+    window = tape[(tape.snap_commence >= bt) & (tape.snap_commence <= bt + timedelta(days=7))]
+
+    matches = []
+    for _, row in window.iterrows():
+        rhn = _normalise_team(row.home_team, league)
+        ran = _normalise_team(row.away_team, league)
+        if team_nick in (rhn, ran):
+            matches.append(row)
+
+    if not matches:
+        raise pl.Halt(f"no tape match for team {team_nick}")
+    eids = {r.event_id for r in matches}
+    if len(eids) > 1:
+        raise pl.Halt(f"multiple games for {team_nick}: {eids}")
+
+    best = max(matches, key=lambda r: r.snap_commence)
+    return matches[0].event_id, str(best.snap_commence)
+
+
+def _resolve_event_from_build_time(home, away, build_time, league, sport_folder):
+    """Resolve event_id from the tape using build_time window (for rows without commence_time).
+
+    Searches [build_time, build_time + 7 days] for events with the normalised team pair.
+    Returns (event_id, commence_time_from_tape) or raises Halt.
+    """
+    tape = _get_tape(sport_folder)
+    if tape.empty:
+        raise pl.Halt(f"no tape for {sport_folder}; cannot resolve event_id for {away} @ {home}")
+
+    bt = pd.to_datetime(str(build_time), utc=True)
+    window_start = bt
+    window_end = bt + timedelta(days=7)
+
+    candidates = tape[(tape.snap_commence >= window_start) & (tape.snap_commence <= window_end)]
+
+    hn = _normalise_team(home, league)
+    an = _normalise_team(away, league)
+
+    matches = []
+    for _, row in candidates.iterrows():
+        if league == "NCAAF":
+            home_match = ps.ncaaf_same(home, row.home_team) or ps.ncaaf_same(home, row.away_team)
+            away_match = ps.ncaaf_same(away, row.away_team) or ps.ncaaf_same(away, row.home_team)
+            team_match = home_match and away_match
+        else:
+            rhn = _normalise_team(row.home_team, league)
+            ran = _normalise_team(row.away_team, league)
+            team_match = (hn == rhn and an == ran) or (hn == ran and an == rhn)
+
+        if team_match:
+            matches.append(row)
+
+    if not matches:
+        raise pl.Halt(f"no tape match for {away} @ {home} build_time={build_time} in {sport_folder}")
+
+    eids = {r.event_id for r in matches}
+    if len(eids) > 1:
+        raise pl.Halt(f"multiple event_ids for {away} @ {home}: {eids}")
+
+    best = max(matches, key=lambda r: r.snap_commence)
+    return matches[0].event_id, str(best.snap_commence)
 
 
 def adapt_pick_sources(root=None):
@@ -234,27 +346,58 @@ def adapt_pick_sources(root=None):
                     if len(parts) == 2:
                         away, home = parts[0], parts[1]
 
+            # For NFL non-prop legs with one team name but no game, try single-team tape search
+            if (home is None or away is None) and league == "NFL" and r.side:
+                team_nick = ps.nfl_team(r.side)
+                if team_nick and not pd.isna(r.build_time) and not (r.market and "prop" in str(r.market)):
+                    try:
+                        eid, tc = _resolve_single_team_event(team_nick, r.build_time, league, sf)
+                        event_id = eid
+                        tape_commence = tc
+                        # Derive home/away from the tape event
+                        tape = _get_tape(sf)
+                        matched = tape[tape.event_id == eid].iloc[0]
+                        home, away = matched.home_team, matched.away_team
+                    except pl.Halt:
+                        pass  # fall through to rejection
+
             if home is None or away is None:
-                rejected.append((r.source_file, r.ticket_id, "no_home_away", str(r.game)))
+                # Specific rejection reasons per shape
+                if r.game is None and r.market and "prop" in str(r.market):
+                    rejected.append((r.source_file, r.ticket_id, "no_game_field_prop", str(r.side)))
+                elif r.game is None:
+                    rejected.append((r.source_file, r.ticket_id, "no_game_field", str(r.side)))
+                else:
+                    rejected.append((r.source_file, r.ticket_id, "no_home_away", str(r.game)))
                 continue
 
-            commence = r.commence_utc
-            if pd.isna(commence):
-                rejected.append((r.source_file, r.ticket_id, "no_commence", str(r.game)))
-                continue
+            # If not already resolved by single-team search above
+            if event_id is None:
+                commence = r.commence_utc
+                if pd.isna(commence):
+                    # No commence_time: search tape using build_time window
+                    if pd.isna(r.build_time):
+                        rejected.append((r.source_file, r.ticket_id, "no_commence_no_build", str(r.game)))
+                        continue
+                    try:
+                        event_id, tape_commence = _resolve_event_from_build_time(
+                            home, away, r.build_time, league, sf)
+                    except pl.Halt as e:
+                        rejected.append((r.source_file, r.ticket_id, "no_tape_event", str(e)))
+                        continue
+                else:
+                    # Check logged < commence BEFORE resolving
+                    logged = r.build_time
+                    if not pd.isna(logged) and not pd.isna(commence) and logged >= commence:
+                        rejected.append((r.source_file, r.ticket_id, "logged_after_commence",
+                                         f"logged={logged} >= commence={commence}"))
+                        continue
 
-            # Check logged < commence BEFORE resolving
-            logged = r.build_time
-            if not pd.isna(logged) and not pd.isna(commence) and logged >= commence:
-                rejected.append((r.source_file, r.ticket_id, "logged_after_commence",
-                                 f"logged={logged} >= commence={commence}"))
-                continue
-
-            try:
-                event_id, tape_commence = _resolve_event_id(home, away, commence, league, sf)
-            except pl.Halt as e:
-                rejected.append((r.source_file, r.ticket_id, "tape_resolve_fail", str(e)))
-                continue
+                    try:
+                        event_id, tape_commence = _resolve_event_id(home, away, commence, league, sf)
+                    except pl.Halt as e:
+                        rejected.append((r.source_file, r.ticket_id, "tape_resolve_fail", str(e)))
+                        continue
         else:
             tape_commence = None
 
@@ -328,7 +471,12 @@ def adapt_pick_sources(root=None):
 
 
 def adapt_nfl_ai_opinions(root=None):
-    """Read NFL AI opinion parquets: only rows where side is set (= a pick)."""
+    """Read NFL AI opinion parquets.
+
+    A pick is a row with side in ("first", "second") AND tag != "no_view".
+    Owner = sim_nfl when reader_model starts with "nfl_sim", else ai_nfl.
+    Carries tag (nullable str) and conf (nullable float) into the ledger row (P8).
+    """
     root = Path(root or ROOT)
     pattern = str(root / "nfl" / "data" / "board" / "week=*" / "ai_opinions" / "ai_opinions_*.parquet")
     files = sorted(glob.glob(pattern))
@@ -341,7 +489,10 @@ def adapt_nfl_ai_opinions(root=None):
         except Exception as e:
             raise pl.Halt(f"cannot parse {f}: {e}")
 
-        picks = df[df.side.isin(["first", "second"])]
+        # A pick: side set AND tag != "no_view"
+        has_side = df.side.isin(["first", "second"])
+        not_no_view = ~df.tag.isin(["no_view"]) if "tag" in df.columns else pd.Series(True, index=df.index)
+        picks = df[has_side & not_no_view]
         rel = str(Path(f).relative_to(root))
 
         for idx, r in picks.iterrows():
@@ -375,9 +526,24 @@ def adapt_nfl_ai_opinions(root=None):
                     rejected.append((rel, str(r.get("event_id", "?")), "tape_resolve_fail", str(e)))
                     continue
 
+            # Owner: sim_nfl when reader_model starts with "nfl_sim"
+            reader_model = str(r.get("reader_model", "")) if r.get("reader_model") and str(r.get("reader_model")) != "nan" else ""
+            owner = "sim_nfl" if reader_model.startswith("nfl_sim") else "ai_nfl"
+
             # Build ticket_id
             tid = tk.make_ticket_id("nfl", str(r.get("week", "?")),
                                      "ai_opinion", logged_utc)
+
+            # Tag and conf
+            tag_val = str(r.tag) if "tag" in df.columns and r.tag and str(r.tag) != "nan" else None
+            conf_val = None
+            if "conf" in df.columns:
+                cv = r.get("conf")
+                if cv is not None and not (isinstance(cv, float) and pd.isna(cv)):
+                    try:
+                        conf_val = float(cv)
+                    except (ValueError, TypeError):
+                        pass
 
             # Reason: conf + conf_rank
             reason = None
@@ -410,7 +576,7 @@ def adapt_nfl_ai_opinions(root=None):
 
             row = {
                 "ticket_id": tid,
-                "owner": "ai_nfl",
+                "owner": owner,
                 "source": "ai_opinion",
                 "logged_utc": logged_utc,
                 "sport": "NFL",
@@ -433,6 +599,8 @@ def adapt_nfl_ai_opinions(root=None):
                 "result_source": None,
                 "source_file": rel,
                 "source_row": int(idx),
+                "tag": tag_val,
+                "conf": conf_val,
             }
             rows.append(row)
 
