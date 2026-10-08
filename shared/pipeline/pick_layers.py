@@ -98,40 +98,50 @@ def _line_movement(pick, root, logged_dt):
 
     # Determine tape folder
     is_prop = market and (market.startswith("prop") or "player_" in market)
-    if is_prop:
-        tape_dir = root / "data" / "odds_archive" / sport_folder / "props"
-    else:
-        tape_dir = root / "data" / "odds_archive" / sport_folder / "line_history"
-
     window_start = commence_dt - timedelta(days=7)
-    files = []
-    for season_dir in tape_dir.glob("season=*") if not is_prop else tape_dir.glob("season=*/month=*"):
-        pat = "data_*.parquet" if is_prop else "snap_*Z.parquet"
-        for ts, p in _files_before(season_dir, pat, logged_dt):
-            if ts >= window_start:
-                files.append((ts, p))
 
-    if not files:
-        return _no_data(logged_dt, "no tape files in window")
-
-    # Read and filter for this event + market
     sources_used = []
     rows = []
-    for ts, p in files:
-        df = _load_tape_cached(p)
-        if is_prop:
-            mask = df.event_id == eid
-            if player_name:
-                mask &= df.player_name == player_name
-        else:
-            mask = (df.event_id == eid)
+
+    if is_prop:
+        # Props: one parquet per month with pull_timestamp per row.
+        # Read every monthly file whose month could overlap the window,
+        # then keep only rows with pull_timestamp in [window_start, logged_dt].
+        tape_dir = root / "data" / "odds_archive" / sport_folder / "props"
+        prop_market = "player_" + market.split(":", 1)[1] if ":" in market else market
+        for month_dir in tape_dir.glob("season=*/month=*"):
+            for p in month_dir.glob("data_*.parquet"):
+                df = _load_tape_cached(p)
+                if "pull_timestamp" not in df.columns:
+                    continue
+                df["_pt"] = pd.to_datetime(df.pull_timestamp, utc=True, errors="coerce")
+                mask = (df.event_id == eid) & (df._pt >= window_start) & (df._pt <= logged_dt)
+                if player_name:
+                    mask &= df.player_name == player_name
+                matched = df[mask]
+                if not matched.empty:
+                    for _, r in matched.iterrows():
+                        rows.append({"ts": r["_pt"], "file": p.name, **{k: v for k, v in r.items() if k != "_pt"}})
+                    sources_used.append(p.name)
+        # Sort by pull_timestamp
+        rows.sort(key=lambda r: r.get("ts") or datetime.min.replace(tzinfo=timezone.utc))
+    else:
+        # Game lines: timestamped snapshot files
+        tape_dir = root / "data" / "odds_archive" / sport_folder / "line_history"
+        files = []
+        for season_dir in tape_dir.glob("season=*"):
+            for ts, p in _files_before(season_dir, "snap_*Z.parquet", logged_dt):
+                if ts >= window_start:
+                    files.append((ts, p))
+        for ts, p in files:
+            df = _load_tape_cached(p)
             tape_market = {"spread": "spreads", "moneyline": "h2h", "total": "totals"}.get(market, market)
-            mask &= df.market == tape_market
-        matched = df[mask]
-        if not matched.empty:
-            for _, r in matched.iterrows():
-                rows.append({"ts": ts, "file": p.name, **r.to_dict()})
-            sources_used.append(p.name)
+            mask = (df.event_id == eid) & (df.market == tape_market)
+            matched = df[mask]
+            if not matched.empty:
+                for _, r in matched.iterrows():
+                    rows.append({"ts": ts, "file": p.name, **r.to_dict()})
+                sources_used.append(p.name)
 
     if not rows:
         return _no_data(logged_dt, "no tape rows for this event/market")

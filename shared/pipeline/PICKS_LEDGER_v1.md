@@ -215,6 +215,18 @@ A file timestamped after `logged_utc` is never read for a card.
 **Write-once:** `--build-missing` builds cards for currently ranked picks only (≤40 per
 sport). An existing card is never rewritten. Cards persist after picks leave the ranked list.
 
+## P15 — Props line movement reads monthly file by pull_timestamp (2026-10-08)
+
+OPS3 shipped `_line_movement` treating monthly props files like timestamped snapshots.
+`_file_ts` fell back to `st_mtime` (the file's current mod time), which was always
+outside `[commence−7d, logged_utc]`. Result: every prop card said "no tape files in
+window" — line movement was empty for the entire props column.
+
+**Fix:** For props, read every monthly file whose month could overlap the window, then
+keep only rows with `pull_timestamp` in `[commence−7d, logged_utc]`. Filter by
+`event_id + player_name` (not `line`, since the pick's point may differ from the book's
+current line). `as_of` = the newest `pull_timestamp` used. Game-line logic unchanged.
+
 ## P12 — Top-20 page rules (2026-10-08)
 
 `picks.html` is the Top-20 page with one tab per sport (NFL, NCAAF, NHL, NBA).

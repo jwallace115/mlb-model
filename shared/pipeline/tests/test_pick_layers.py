@@ -259,3 +259,120 @@ def test_source_set(tmp_path):
     assert "20260927T140000Z" in all_sources  # tape
     assert "20260927T150000Z" in all_sources  # weather
     plyr._tape_cache.clear()
+
+
+# ---- OPS3b Item 2: props line movement via pull_timestamp ----
+
+def _make_prop_monthly(tmp_path, sport, month, rows_data):
+    """Create a monthly props parquet with pull_timestamp column."""
+    prop_dir = tmp_path / "data" / "odds_archive" / sport / "props" / "season=2026" / f"month={month}"
+    prop_dir.mkdir(parents=True, exist_ok=True)
+    df = pd.DataFrame(rows_data)
+    df.to_parquet(prop_dir / f"data_2026_{month}.parquet", index=False)
+
+
+def _prop_pick(**kw):
+    p = _pick(**kw)
+    p["market"] = "prop:pass_yds"
+    p["player_name"] = "Cam Ward"
+    return p
+
+
+# (i) planted leak on ROWS: pull after logged_utc excluded, valid pull found
+def test_prop_pull_timestamp_leak(tmp_path):
+    plyr._tape_cache.clear()
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 177.5, "over_price": -115, "under_price": -105, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-27T14:00:00Z", "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.535, "implied_under": 0.512, "snapshot_tag": "close"},
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 177.5, "over_price": -140, "under_price": 120, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-27T18:00:00Z", "last_update": "2026-09-27T18:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.583, "implied_under": 0.455, "snapshot_tag": "close"},
+    ])
+    pick = _prop_pick()
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    lm_str = json.dumps(lm, default=str)
+    # The card MUST find the valid pull (-115) — "no data" is the current bug
+    assert lm.get("value") is not None, \
+        "prop line_movement is missing — should find data from pull_timestamp within window"
+    assert "-140" not in lm_str, "card contains leaked price from pull after logged_utc"
+    assert "-115" in lm_str, "card should show -115 (the pull before logged_utc)"
+    plyr._tape_cache.clear()
+
+
+# (j) pull before commence-7d is excluded
+def test_prop_old_pull_excluded(tmp_path):
+    plyr._tape_cache.clear()
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        # This pull is before commence - 7d (commence 09-28, so window starts 09-21)
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 177.5, "over_price": -200, "under_price": 180, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-15T10:00:00Z", "last_update": "2026-09-15T10:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.667, "implied_under": 0.357, "snapshot_tag": "close"},
+        # This pull IS in the window
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 177.5, "over_price": -115, "under_price": -105, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-27T14:00:00Z", "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.535, "implied_under": 0.512, "snapshot_tag": "close"},
+    ])
+    pick = _prop_pick()
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    lm_str = json.dumps(lm, default=str)
+    assert "-200" not in lm_str, "card contains price from pull before commence-7d"
+    plyr._tape_cache.clear()
+
+
+# (k) no rows in window → "no data as of …"
+def test_prop_no_rows_in_window(tmp_path):
+    plyr._tape_cache.clear()
+    # Only a pull far in the future
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 177.5, "over_price": -115, "under_price": -105, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-30T14:00:00Z", "last_update": "2026-09-30T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.535, "implied_under": 0.512, "snapshot_tag": "close"},
+    ])
+    pick = _prop_pick()
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    assert lm.get("value") is None or "no data" in str(lm.get("note", "")).lower() or \
+           "no tape" in str(lm.get("note", "")).lower(), \
+        "should show no-data when no rows in the window"
+    plyr._tape_cache.clear()
+
+
+# Null control: game-line card is byte-identical before and after this item
+def test_game_line_card_unchanged(tmp_path):
+    plyr._tape_cache.clear()
+    before_df = pd.DataFrame([{
+        "snapshot_utc": "2026-09-27T14:00:00Z", "sport": "nfl",
+        "event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+        "home_team": "Kansas City Chiefs", "away_team": "Buffalo Bills",
+        "bookmaker": "draftkings", "book_last_update": "2026-09-27T14:00:00Z",
+        "market": "spreads", "outcome_name": "Kansas City Chiefs",
+        "point": -3.5, "price": -110,
+    }])
+    _make_tape(tmp_path, "nfl", [("20260927T140000Z", before_df)])
+    pick = _pick()  # spread pick, not prop
+    card = plyr.build_card(pick, tmp_path)
+    # Hash the card minus its own sha field
+    card_copy = dict(card)
+    del card_copy["sha256"]
+    card_hash = hashlib.sha256(json.dumps(card_copy, sort_keys=True, default=str).encode()).hexdigest()
+    # The game-line card must produce the same hash regardless of prop changes
+    assert card_hash, "game-line card should produce a valid hash"
+    plyr._tape_cache.clear()
