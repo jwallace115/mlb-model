@@ -203,3 +203,21 @@ A file timestamped after `logged_utc` is never read for a card.
 
 **Write-once:** `--build-missing` builds cards for currently ranked picks only (≤40 per
 sport). An existing card is never rewritten. Cards persist after picks leave the ranked list.
+
+## P12 — Top-20 page rules (2026-10-08)
+
+`picks.html` is the Top-20 page with one tab per sport (NFL, NCAAF, NHL, NBA).
+
+**Layout per tab:** Two columns (props / sides-totals-ML), each ≤20 rows ranked by
+confidence. Each row: rank, pick description, price, confidence, one-line reason.
+`<details>/<summary>` opens the detail card inline (no JavaScript). Permalink via
+`picks.html#<pick_id>`.
+
+**Record section:** below the columns per tab, by owner × source: N graded, date range,
+W-L-P, hit rate, real-price ROI (1 unit; pushes 0), flat −110 (triage), by month,
+≥60%-in-one-month flag. `embargo_owners` from `forward_status.json` → "scoring not
+published" with N and dates only.
+
+**Never on the page:** stakes, slip IDs, share links, member rows, balances.
+
+**No freeze → "no picks logged yet"** with nothing else invented. Ledger absent → NODATA.

@@ -151,14 +151,27 @@ Write `build_<name>(now, health)` returning `page("<file>.html", "<Title>", body
   different snapshot time is a new key.
 * **Add a login:** `ssh do-vm 'bash /root/mlb-model/site/ops/add_site_user.sh <name>'` (prints the password once).
 
-### 5.7 Picks page
+### 5.7 Picks page (Top-20)
 
-`picks.html` reads `/root/private/ledger/picks.jsonl` (env var `PICKS_LEDGER_DIR`, default
-`/root/private/ledger`). Shows open picks (today ET, no result) and settled picks by owner × sport
-with hit rate, real-price ROI, flat −110, monthly breakout and the ≥60%-in-one-month flag.
-Owners in `site/forward_status.json` → `embargo_owners` (currently `sim_nfl`, `ai_nfl`) show N and
-date range only, with "scoring not published". No stakes, slip ids, share links or balances. Ledger
-dir absent or unreadable → page renders NODATA and the build still succeeds.
+`picks.html` is the Top-20 page with one tab per sport (NFL, NCAAF, NHL, NBA).
+
+**Data:** `PICKS_LEDGER_DIR/picks.jsonl` (view rows) + `PICKS_LEDGER_DIR/layers/<pick_id>.json`
+(detail cards built by `pick_layers.py`). The site build reads cards but never builds them —
+the card builder runs hourly on the VM at :25 via `pick_layers.py --build-missing`.
+
+**Selection:** `build_top20.select()` picks the latest AI reader freeze per sport whose picks
+are upcoming (commence > now, logged ≤ now). Ranks by `conf` descending (P10). The sim freeze
+feeds the sim layer on each card (P11) — sim picks are NOT ranked.
+
+**Layout:** Two columns per tab (props / sides-totals-ML), each ≤20 rows. Clicking a pick
+opens the detail card inline (`<details>/<summary>`). Record section below shows graded
+picks by owner × source with ROI, monthly breakout, ≥60% flag.
+
+**Embargo:** `forward_status.json → embargo_owners` (sim_nfl, ai_nfl) → "scoring not published".
+**Never shown:** stakes, slip IDs, share links, balances. Ledger absent → NODATA.
+
+**Lane contract (P13):** every reader freeze must carry `conf` (0–100), `tag`, and may carry
+`rationale` (paragraph). NCAAF has no conf today → tab stays unranked.
 
 ## 6. How a chat gets a change live (no copy-paste relays)
 
