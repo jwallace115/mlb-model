@@ -6598,3 +6598,9 @@ operators on one copy: 79 killed by failing tests. X2 and Z21 survive:
 - X2 is admission-equivalent, as before;
 - Z21 removes the cell-local stray-`<` check. The section-wide check still refuses the same input, and the two error
   messages share the matched substring "unparseable markup" (audit #23 noted the full messages differ).
+
+### D283 — PILOT: official_injuries.py parser skips unparseable sections (2026-10-08)
+
+D283 (2026-10-08, PILOT): official_injuries.py parser skips a section it cannot parse instead of failing the
+refresh (a11469bdd); experiment re-stamped for that file only; every run on this branch is PILOT until the
+NFL lane's audit; ordered by Jeff for TNF 2026-10-08.
