@@ -443,11 +443,18 @@ has value and n_rows ≥ 1. RED before ("no tape rows"), GREEN after.
 was always correct; the fix must not change it).
 
 **Rebuild tooling:**
-- `pick_layers.py --rebuild-empty-movement`: rebuilds only cards whose
-  `line_movement.value` is null. Cards with a value are never touched (write-once
-  stands). Rebuilt cards carry `rebuilt_utc` and `rebuilt_reason = "P27 market map"`.
+- `pick_layers.py --rebuild-empty-movement`: walks every pick in `view()` (the full
+  deduplicated ledger) and (re)builds any card whose `line_movement` value is null,
+  creating cards for picks that had none. Existing cards with a non-null value are
+  untouched (write-once stands). Rebuilt cards carry `rebuilt_utc` and
+  `rebuilt_reason = "P27 market map"`.
 - `picks_clv.py --recompute-null`: re-runs picks whose existing close_point is null,
   appends a corrected row (append-only; newest row per pick_id wins at read time).
+
+**2026-10-08 rebuild run:** first run crashed after 705 cards (NameError in _sim;
+hotfix e4aa3918e). Second run completed in ~3 h: 1,941 rebuilt / 4 untouched / 0
+still null / 1,945 total. Future runs are expected to touch 0 (new cards get the
+correct market mapping from the start).
 
 ## P28 — run_window runs unattended and commits what it froze (2026-10-08)
 

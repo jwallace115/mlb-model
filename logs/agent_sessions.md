@@ -1,3 +1,15 @@
+## 2026-10-08T19:01Z  claude-code (OPS4d correction — rebuild crash + main commit violation)
+
+### CORRECTION to OPS4c
+- The first `--rebuild-empty-movement` run did NOT finish — it crashed with
+  `NameError: name 'ps' is not defined` in the _sim layer after 705 cards.
+  "finished ~16:50Z / 682 rebuilt" was inferred from the process disappearing,
+  not from output or exit code (which was 1). Hotfix e4aa3918e; second run
+  (17:04-18:10Z) completed: 1,941 rebuilt / 4 untouched / 0 null.
+- The OPS4c session committed its session log directly on ~/mlb-model main
+  (361995b96, rebased by auto-commit to f3d3688bd). This violates the rule
+  that ~/mlb-model is never committed to — commits go in worktrees only.
+
 ## 2026-10-08T15:21Z  claude-code (OPS4c — windows run by themselves tonight)
 
 ### RETURNED
