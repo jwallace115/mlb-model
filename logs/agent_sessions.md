@@ -3833,3 +3833,11 @@ Ending: 99,842
 - FULL SUITE: 56/56 passed. P0.3 grep: 0 network imports.
 - NOT DONE: VM cron line for pick_layers.py (MERGE step).
 - UNVERIFIED: whether the card builder completes on the VM within the hourly window.
+
+## 2026-10-08T10:21Z  claude-code (OPS3b)
+- ITEM 1: selection must never look at results. Removed `not r.get("result")` filter.
+  Before: sides 3/20, n_picks=805. After: sides 20/20, n_picks=847. P14. Committed b79e8c516.
+- ITEM 2: props line movement reads monthly file by pull_timestamp. Before: all "no tape files".
+  After: Cam Ward open +400 → close -108 from data_2026_09.parquet. P15. Committed 88a3dba87.
+- FULL SUITE: 2 failed (known), 177 passed. P0.3 grep empty.
+- NOT DONE: MERGE.
