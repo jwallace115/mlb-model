@@ -3887,3 +3887,62 @@ Ending: 99,842
   reading and porting a 1000+ line untracked reader script, making paid API calls, and running
   a real freeze. Deferred to a follow-up session for correctness.
 - UNVERIFIED: VM CLV run from OPS4a (background job, status unknown).
+
+## 2026-10-08T13:54Z  claude-code (OPS4b Items 2-4)
+
+### P0.5 CLV no-close breakdown (1,445 / 1,940 unique picks)
+- **Props market mapping** (95%, 1,372 picks): `picks_clv.py` line 132 maps `prop:rec`
+  → `player_rec` but archive has `player_receptions`. Same for rec_yds, pass_att,
+  pass_cmp, rush_att, atd, int, pass_td. Only pass_yds and rush_yds map correctly.
+- **NCAAF event_id mismatch** (3%, 45 picks): ledger eids ≠ snap eids for same games.
+- **ML consensus gap** (4 picks): consensus path extracts points only, not price.
+- **Unexplained** (8 picks): correct mapping, likely player_name spelling mismatch.
+- No fix in this order — breakdown is the deliverable.
+
+### Item 2: reader_v3.py
+- RAN: Port of reader_v2 (205 lines, sha256 315b44e2…) → `nfl/pipeline/reader_v3.py`.
+  Same rules and arithmetic; --as-of, --injury-report, Kalshi prefix derived from slate date.
+- IDENTITY TEST: 917/954 p_first identical. 36 diffs all from input selection:
+  12 injury-report (absent), 24 Kalshi snapshot. Zero from rule changes.
+- log_ai_opinions.py: --reader-file writes reader_sha256 into manifest.
+- 8 unit tests (RED first pasted: as-of exclusion, Kalshi prefix, injury null control).
+- Decision P24. Committed 894e2aa17, pushed.
+
+### Item 3: Mac props + snapshot captures
+- RAN: DRY RUN 1 event (TB@DAL TNF), 10 credits, remaining 241,895.
+- RAN: PAID pull: 602 rows, hardrockbet_fl 70, _mac.parquet 0→602.
+- RAN: multi_book_open_capture.py: 1,340 rows → snap_20261008T134635Z.parquet, 3 credits.
+- Total 13 credits used. ODDS_API_KEY: set.
+- pull_hardrock_props.py: --archive writes data_YYYY_MM_mac.parquet (not the VM's file).
+- 2 tests (RED first: _mac excluded from glob → KeyError).
+- Decision P25. Committed 468994408, pushed.
+
+### Item 4: run_window.py
+- CREATED: nfl/pipeline/run_window.py (pull → sheet → reader → freeze → verify → adapt → top20).
+- FIX: --window-hours passed to freeze for prekick/adhoc (freeze was rebuilding full sheet).
+- FIX: picks_clv _snap_index cache not cleared between tests → 2 false reds.
+- RAN: --window adhoc --no-pull --reader-model claude-opus-5-5:
+  - sheet: 73 lines, 1 game (TB@DAL), two-way 46
+  - reader_v3 sha256: 7cb22d7ad108987981ae7dc564ca7584e26ee8c4f6619716ce1e2c4614182ee6
+  - FROZEN 73 lines → nfl/data/board/week=2026_05/ai_opinions/ai_opinions_20261008T135113Z.parquet
+  - sha256: 8bfd5195e9df5b954cdd2897d064e3e9960286e0ef2195b93c76c8c90aedd885
+  - manifest: window=adhoc, reader_sha256 present
+  - verify OK
+  - adapters appended 50
+  - top-20: props 20/20, sides 3/20
+- 1 test (RED first: swallowed exit → 0 instead of non-zero).
+- Decision P26. Committed e1aa6b1ee, pushed.
+- Full suite: 3 failed, 296 passed, 2 skipped. The 3 reds are the named knowns:
+  test_fresh_news_passes, test_second_pull_writes_only_new_and_changed,
+  test_score_first_side_and_units (all since 2026-09-30).
+
+### NOT DONE
+- MERGE to main (minute :00–:44 gate)
+- VM verification (wc -l clv.jsonl, tail picks_clv.log, adapters appended line,
+  picks.html NFL header, Record section, Caddyfile mtime)
+- prekick window (TNF > 3h away at run time — would HALT by design)
+
+### UNVERIFIED
+- Whether the adhoc freeze's 50 rows appear on picks.html after the VM build
+- Whether picks_clv finds closes for the new _mac.parquet rows (market mapping bug still present)
+- VM push_daemon sync timing after merge
