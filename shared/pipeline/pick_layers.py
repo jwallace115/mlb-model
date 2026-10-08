@@ -140,7 +140,7 @@ def _line_movement(pick, root, logged_dt):
 
     if is_prop:
         tape_dir = root / "data" / "odds_archive" / sport_folder / "props"
-        prop_market = "player_" + market.split(":", 1)[1] if ":" in market else market
+        prop_market = ps.ledger_to_tape_market(market) if ":" in market else market
         for month_dir in tape_dir.glob("season=*/month=*"):
             for p in month_dir.glob("data_*.parquet"):
                 df = _load_tape_cached(p)
@@ -365,7 +365,7 @@ def _sim(pick, root, logged_dt):
     market_key_map = {"spread": "spreads", "moneyline": "h2h", "total": "totals"}
     mk = market_key_map.get(market, market)
     if market.startswith("prop:"):
-        mk = "player_" + market.split(":", 1)[1]
+        mk = ps.ledger_to_tape_market(market)
 
     mask = (sim_rows.event_id == eid) & (sim_rows.market_key == mk)
     if player_name:
@@ -551,9 +551,29 @@ def write_card(pick, root, layers_dir):
     return "built", path
 
 
+def rebuild_card(pick, root, layers_dir, reason):
+    """Rebuild a card whose line_movement.value is null. Write-once cards with
+    a value are never touched. Returns (status, path)."""
+    layers_dir = Path(layers_dir)
+    pid = pick.get("pick_id")
+    path = layers_dir / f"{pid}.json"
+    if path.exists():
+        existing = json.loads(path.read_text())
+        lm = existing.get("layers", {}).get("line_movement", {})
+        if lm.get("value") is not None:
+            return "untouched", path  # has movement data — write-once stands
+    card = build_card(pick, root)
+    card["rebuilt_utc"] = datetime.now(timezone.utc).isoformat()
+    card["rebuilt_reason"] = reason
+    path.write_text(json.dumps(card, indent=1, default=str))
+    return "rebuilt", path
+
+
 def main():
     ap = argparse.ArgumentParser(description="Build detail cards for ranked picks")
     ap.add_argument("--build-missing", action="store_true", help="Build cards for currently ranked picks")
+    ap.add_argument("--rebuild-empty-movement", action="store_true",
+                    help="Rebuild cards whose line_movement.value is null (P27)")
     ap.add_argument("--as-of", help="UTC datetime for selection (default: now)")
     ap.add_argument("--pick-id", help="Build card for a specific pick_id")
     a = ap.parse_args()
@@ -576,6 +596,18 @@ def main():
             sys.exit(1)
         status, path = write_card(pick, ROOT, layers_dir)
         print(f"{a.pick_id}: {status} → {path}")
+        return
+
+    if a.rebuild_empty_movement:
+        rebuilt = 0
+        untouched = 0
+        for pick in view_rows:
+            status, path = rebuild_card(pick, ROOT, layers_dir, "P27 market map")
+            if status == "rebuilt":
+                rebuilt += 1
+            else:
+                untouched += 1
+        print(f"rebuilt {rebuilt} / untouched {untouched}")
         return
 
     if a.build_missing:

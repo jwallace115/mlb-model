@@ -164,3 +164,36 @@ def test_clv_idempotent(tmp_path):
     assert len(r2) == 0, "second run should produce 0 rows"
     clv._snap_cache.clear()
     clv._snap_index.clear()
+
+
+# ---- (f) prop:rec CLV uses player_receptions tape market ----
+def _make_prop(tmp_path, rows):
+    prop_dir = tmp_path / "data" / "odds_archive" / "nfl" / "props" / "season=2026" / "month=09"
+    prop_dir.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_parquet(prop_dir / "data_2026_09.parquet", index=False)
+
+
+def test_prop_rec_clv(tmp_path):
+    """prop:rec must match tape market_key=player_receptions, not player_rec."""
+    clv._snap_cache.clear()
+    clv._snap_index.clear()
+    now = datetime(2026, 9, 29, 12, 0, tzinfo=timezone.utc)
+    _make_prop(tmp_path, [{
+        "event_id": "a" * 32, "market_key": "player_receptions",
+        "player_name": "Terry McLaurin", "line": 5.5, "over_price": -120,
+        "under_price": 100, "bookmaker": "draftkings",
+        "pull_timestamp": "2026-09-28T16:30:00+00:00",
+        "last_update": "2026-09-28T16:30:00Z",
+        "sport": "nfl", "game_date": "2026-09-28",
+        "commence_time": "2026-09-28T17:00:00Z",
+        "home_team": "Washington", "away_team": "Seattle Seahawks",
+        "implied_over": 0.545, "implied_under": 0.5, "snapshot_tag": "close",
+    }])
+    pick = _pick(pid="rec1", market="prop:rec", side="Over", point=4.5,
+                 player_name="Terry McLaurin")
+    results = clv.compute_clv([pick], tmp_path, now)
+    assert len(results) == 1
+    assert results[0]["close_point"] == 5.5, \
+        f"expected close 5.5 from player_receptions, got {results[0]['close_point']}"
+    clv._snap_cache.clear()
+    clv._snap_index.clear()

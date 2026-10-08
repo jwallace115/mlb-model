@@ -143,7 +143,7 @@ def compute_clv(view_rows, root, now):
         if is_prop:
             # Props: last pull ≤ commence_time
             tape_dir = root / "data" / "odds_archive" / sport_folder / "props"
-            prop_market = "player_" + market.split(":", 1)[1] if ":" in market else market
+            prop_market = ps.ledger_to_tape_market(market) if ":" in market else market
             best_rows = []
             best_file = None
             for month_dir in tape_dir.glob("season=*/month=*"):
@@ -285,6 +285,12 @@ def compute_clv(view_rows, root, now):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser(description="CLV per pick")
+    ap.add_argument("--recompute-null", action="store_true",
+                    help="Re-run picks whose existing close_point is null, append corrected row (newest wins)")
+    args = ap.parse_args()
+
     if not LEDGER_DIR.exists():
         print(f"HALT: PICKS_LEDGER_DIR={LEDGER_DIR} does not exist")
         sys.exit(1)
@@ -293,19 +299,28 @@ def main():
     view_rows = pl.view(LEDGER_DIR)
     clv_path = LEDGER_DIR / "clv.jsonl"
 
-    # Load existing pick_ids
-    existing = set()
+    # Load existing rows keyed by pick_id (last row wins)
+    existing_rows = {}
     if clv_path.exists():
         with open(clv_path) as f:
             for line in f:
                 if line.strip():
                     try:
-                        existing.add(json.loads(line)["pick_id"])
+                        row = json.loads(line)
+                        existing_rows[row["pick_id"]] = row
                     except (json.JSONDecodeError, KeyError):
                         pass
+    existing = set(existing_rows.keys())
 
-    # Filter to picks not already computed
-    todo = [r for r in view_rows if r.get("pick_id") not in existing]
+    if args.recompute_null:
+        # Re-run picks whose newest row has close_point null
+        null_ids = {pid for pid, r in existing_rows.items()
+                    if r.get("close_point") is None}
+        todo = [r for r in view_rows if r.get("pick_id") in null_ids]
+        before_null = len(null_ids)
+    else:
+        todo = [r for r in view_rows if r.get("pick_id") not in existing]
+
     results = compute_clv(todo, ROOT, now)
 
     if results:
@@ -316,7 +331,11 @@ def main():
             os.fsync(f.fileno())
 
     n_with_close = sum(1 for r in results if r.get("close_point") is not None)
-    print(f"clv: {len(results)} rows written ({n_with_close} with close), {len(existing)} already present")
+    if args.recompute_null:
+        print(f"recompute-null: {len(results)} rows appended ({n_with_close} now have close), "
+              f"was {before_null} null-close before")
+    else:
+        print(f"clv: {len(results)} rows written ({n_with_close} with close), {len(existing)} already present")
 
 
 if __name__ == "__main__":

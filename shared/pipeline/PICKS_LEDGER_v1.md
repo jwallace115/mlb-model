@@ -415,3 +415,36 @@ Every reader freeze (ai_opinions parquet) must carry:
 
 **Current status:** NCAAF reader freezes carry no `conf` today → NCAAF tab stays
 entirely unranked until the reader adds it. This is correct, not a failure.
+
+## P27 — Props market name mapping fix (2026-10-08)
+
+**Bug:** `pick_layers._line_movement` and `picks_clv` derived the tape market_key
+as `"player_" + market.split(":")[1]`, correct only for `pass_yds` and `rush_yds`.
+The other 8 prop markets — `rec`, `rec_yds`, `pass_att`, `pass_cmp`, `rush_att`,
+`atd`, `int`, `pass_td` — all produced wrong tape keys (e.g. `player_rec` instead
+of `player_receptions`). Consequence: line-movement layer EMPTY and CLV close_point
+NULL on 8 of 10 prop markets (1,372 of 1,445 no-close rows per OPS4b-cont finding).
+
+**Fix:** `pick_sources.ledger_to_tape_market(market)` — explicit inverse of
+`odds_market()`, built once from the canonical MARKET_LIST in `pull_hardrock_props.py`.
+Raises `KeyError` on unknown markets. Used in `_line_movement`, `_sim`, and
+`picks_clv.compute_clv` (three call sites replaced the broken `"player_" +` pattern).
+
+**Round-trip test:** for every tape market_key in MARKET_LIST,
+`ledger_to_tape_market(odds_market(k)) == k`. RED before fix (AttributeError), GREEN after.
+
+**Fixture test:** prop:rec with tape rows under `player_receptions` → line_movement
+has value and n_rows ≥ 1. RED before ("no tape rows"), GREEN after.
+
+**CLV test:** prop:rec close_point = 5.5 from `player_receptions` tape. RED before
+(got None), GREEN after.
+
+**Null control:** Cam Ward pass_yds card is byte-identical before and after (pass_yds
+was always correct; the fix must not change it).
+
+**Rebuild tooling:**
+- `pick_layers.py --rebuild-empty-movement`: rebuilds only cards whose
+  `line_movement.value` is null. Cards with a value are never touched (write-once
+  stands). Rebuilt cards carry `rebuilt_utc` and `rebuilt_reason = "P27 market map"`.
+- `picks_clv.py --recompute-null`: re-runs picks whose existing close_point is null,
+  appends a corrected row (append-only; newest row per pick_id wins at read time).
