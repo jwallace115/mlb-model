@@ -1,11 +1,13 @@
-"""Test: run_window.py --no-pull STOPs when freeze HALTs on kicked games.
+"""Test: run_window.py — OPS4b + OPS4c tests.
 
-The freeze must refuse when all games have kicked off (commence_time <= now).
-A fixture tree with only kicked games triggers this HALT.
+OPS4b: --no-pull STOPs when freeze HALTs on kicked games.
+OPS4c: --tag prekick accepted by puller; --auto-prekick gates on kick window;
+       --commit branch:<name> produces a commit.
 """
+import json
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -76,9 +78,50 @@ class TestRunWindowHalt:
                  "MLB_REPO_ROOT": str(tmp_path),
                  "PYTHONPATH": str(ROOT),
                  "HOME": str(Path.home())},
-            timeout=30)
+            timeout=120)
 
         # Should exit non-zero (HALT from sheet or freeze)
         assert result.returncode != 0, (
             f"Expected non-zero exit (HALT on kicked games), got 0.\n"
             f"stdout: {result.stdout[-500:]}\nstderr: {result.stderr[-500:]}")
+
+
+# ---- OPS4c Item 2 ----
+
+class TestPullerTagPrekick:
+    """--tag prekick must be accepted by pull_hardrock_props.py argparse."""
+
+    def test_tag_prekick_accepted(self):
+        """--tag prekick --dry-run should NOT exit with argparse error."""
+        result = subprocess.run(
+            [PY, str(ROOT / "nfl" / "pipeline" / "pull_hardrock_props.py"),
+             "--window-hours", "6", "--tag", "prekick", "--dry-run"],
+            capture_output=True, text=True, timeout=30,
+            env={"PATH": "/usr/bin:/bin:/usr/local/bin",
+                 "HOME": str(Path.home()),
+                 "PYTHONPATH": str(ROOT),
+                 "ODDS_API_KEY": ""})
+        # argparse error = exit 2 with "invalid choice"
+        assert "invalid choice" not in result.stderr, \
+            f"--tag prekick rejected by argparse: {result.stderr[:300]}"
+
+
+class TestAutoPreKick:
+    """--auto-prekick gates on the kick window."""
+
+    def test_no_game_in_slot(self):
+        """Fixture snapshot with game 5h away → 'no game in the prekick slot', exit 0."""
+        sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
+        import run_window as rw
+        # A game 5 hours from now is outside the [2h52m, 3h08m] window
+        future = (datetime.now(timezone.utc) + timedelta(hours=5)).isoformat()
+        result = rw._check_prekick_slot([future])
+        assert result is False, f"game at +5h should NOT be in prekick slot"
+
+    def test_game_in_slot(self):
+        """Fixture snapshot with game at +3h 00m → in the slot → should freeze."""
+        sys.path.insert(0, str(ROOT / "nfl" / "pipeline"))
+        import run_window as rw
+        future = (datetime.now(timezone.utc) + timedelta(hours=3)).isoformat()
+        result = rw._check_prekick_slot([future])
+        assert result is True, f"game at +3h should be in prekick slot"

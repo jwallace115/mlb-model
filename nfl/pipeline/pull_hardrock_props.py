@@ -138,8 +138,8 @@ def main():
         description="Pull Hard Rock NFL player props")
     parser.add_argument("--window-hours", type=int, required=True,
                         help="Select events with commence_time within N hours")
-    parser.add_argument("--tag", choices=["open", "mid", "close"], required=True,
-                        help="Snapshot tag written to snapshot_tag column")
+    parser.add_argument("--tag", choices=["open", "mid", "late", "prekick", "adhoc", "close"],
+                        required=True, help="Snapshot tag written to snapshot_tag column")
     parser.add_argument("--dry-run", action="store_true",
                         help="List events and cost without pulling")
     parser.add_argument("--floor", type=int, default=HALT_THRESHOLD,

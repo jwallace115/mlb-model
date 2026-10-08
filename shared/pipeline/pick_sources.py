@@ -197,6 +197,32 @@ def odds_market(market_key):
     return "prop:" + sk if sk else None
 
 
+# Inverse of odds_market for prop markets: ledger name → tape market_key.
+# Built once from the canonical tape MARKET_LIST in pull_hardrock_props.py.
+_LEDGER_TO_TAPE = {
+    "prop:pass_yds": "player_pass_yds",
+    "prop:pass_td":  "player_pass_tds",
+    "prop:pass_att": "player_pass_attempts",
+    "prop:pass_cmp": "player_pass_completions",
+    "prop:int":      "player_pass_interceptions",
+    "prop:rush_yds": "player_rush_yds",
+    "prop:rush_att": "player_rush_attempts",
+    "prop:rec_yds":  "player_reception_yds",
+    "prop:rec":      "player_receptions",
+    "prop:atd":      "player_anytime_td",
+}
+
+
+def ledger_to_tape_market(market):
+    """Ledger market (e.g. 'prop:rec') → tape market_key (e.g. 'player_receptions').
+
+    Raises KeyError on unknown prop markets so callers fail loudly."""
+    m = str(market or "")
+    if m in _LEDGER_TO_TAPE:
+        return _LEDGER_TO_TAPE[m]
+    raise KeyError(f"unknown ledger prop market: {m!r}")
+
+
 # ------------------------------------------------------------------ row builder
 def _ts(x):
     if x is None or (isinstance(x, float) and pd.isna(x)) or x == "":

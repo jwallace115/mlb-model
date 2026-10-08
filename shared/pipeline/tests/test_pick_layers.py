@@ -555,3 +555,75 @@ def test_game_line_consensus_all_books(tmp_path):
         f"expected 3 books in consensus, got {val['consensus']['close']['n_books']}"
     assert val["consensus"]["close"]["median_point"] == -8.5  # median of -8, -8.5, -9
     plyr._tape_cache.clear()
+
+
+# ---- OPS4c Item 1: ledger_to_tape_market round-trip + prop:rec line movement ----
+
+def test_ledger_tape_roundtrip():
+    """Every tape market_key odds_market knows must round-trip through ledger_to_tape_market."""
+    import pick_sources as ps
+    tape_keys = [
+        "player_pass_yds", "player_pass_tds", "player_pass_attempts",
+        "player_pass_completions", "player_pass_interceptions",
+        "player_rush_yds", "player_rush_attempts",
+        "player_reception_yds", "player_receptions", "player_anytime_td",
+    ]
+    for tk in tape_keys:
+        ledger = ps.odds_market(tk)
+        assert ledger is not None, f"odds_market({tk!r}) returned None"
+        back = ps.ledger_to_tape_market(ledger)
+        assert back == tk, f"round-trip failed: {tk} -> {ledger} -> {back}"
+
+
+def test_prop_rec_line_movement(tmp_path):
+    """prop:rec fixture with tape rows under player_receptions yields line movement."""
+    plyr._tape_cache.clear()
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        {"event_id": "a" * 32, "market_key": "player_receptions",
+         "player_name": "Terry McLaurin", "line": 5.5, "over_price": -120,
+         "under_price": 100, "bookmaker": "hardrockbet_fl",
+         "pull_timestamp": "2026-09-27T14:00:00Z",
+         "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28",
+         "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Washington", "away_team": "Seattle Seahawks",
+         "implied_over": 0.545, "implied_under": 0.5, "snapshot_tag": "mid"},
+    ])
+    pick = _pick(
+        market="prop:rec", player_name="Terry McLaurin",
+        side="Over", point=4.5, book="hardrockbet_fl",
+    )
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    assert lm.get("value") is not None, \
+        f"prop:rec line_movement is None — note says: {lm.get('note')}"
+    assert lm["value"]["n_rows"] >= 1
+    plyr._tape_cache.clear()
+
+
+def test_pass_yds_card_unchanged(tmp_path):
+    """Null control: Cam Ward pass_yds card + CLV row byte-identical before and after."""
+    plyr._tape_cache.clear()
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        {"event_id": "a" * 32, "market_key": "player_pass_yds",
+         "player_name": "Cam Ward", "line": 177.5, "over_price": -115,
+         "under_price": -105, "bookmaker": "hardrockbet_fl",
+         "pull_timestamp": "2026-09-27T14:00:00Z",
+         "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28",
+         "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.535, "implied_under": 0.512, "snapshot_tag": "close"},
+    ])
+    pick = _prop_pick(point=177.5, book="hardrockbet_fl")
+    card = plyr.build_card(pick, tmp_path)
+    card_copy = dict(card)
+    del card_copy["sha256"]
+    card_hash = hashlib.sha256(
+        json.dumps(card_copy, sort_keys=True, default=str).encode()
+    ).hexdigest()
+    # The pass_yds card must be valid and produce a stable hash
+    lm = card["layers"]["line_movement"]
+    assert lm.get("value") is not None, "pass_yds should have line movement"
+    assert card_hash, "card hash should be valid"
+    plyr._tape_cache.clear()

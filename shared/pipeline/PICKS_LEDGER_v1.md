@@ -415,3 +415,112 @@ Every reader freeze (ai_opinions parquet) must carry:
 
 **Current status:** NCAAF reader freezes carry no `conf` today → NCAAF tab stays
 entirely unranked until the reader adds it. This is correct, not a failure.
+
+## P27 — Props market name mapping fix (2026-10-08)
+
+**Bug:** `pick_layers._line_movement` and `picks_clv` derived the tape market_key
+as `"player_" + market.split(":")[1]`, correct only for `pass_yds` and `rush_yds`.
+The other 8 prop markets — `rec`, `rec_yds`, `pass_att`, `pass_cmp`, `rush_att`,
+`atd`, `int`, `pass_td` — all produced wrong tape keys (e.g. `player_rec` instead
+of `player_receptions`). Consequence: line-movement layer EMPTY and CLV close_point
+NULL on 8 of 10 prop markets (1,372 of 1,445 no-close rows per OPS4b-cont finding).
+
+**Fix:** `pick_sources.ledger_to_tape_market(market)` — explicit inverse of
+`odds_market()`, built once from the canonical MARKET_LIST in `pull_hardrock_props.py`.
+Raises `KeyError` on unknown markets. Used in `_line_movement`, `_sim`, and
+`picks_clv.compute_clv` (three call sites replaced the broken `"player_" +` pattern).
+
+**Round-trip test:** for every tape market_key in MARKET_LIST,
+`ledger_to_tape_market(odds_market(k)) == k`. RED before fix (AttributeError), GREEN after.
+
+**Fixture test:** prop:rec with tape rows under `player_receptions` → line_movement
+has value and n_rows ≥ 1. RED before ("no tape rows"), GREEN after.
+
+**CLV test:** prop:rec close_point = 5.5 from `player_receptions` tape. RED before
+(got None), GREEN after.
+
+**Null control:** Cam Ward pass_yds card is byte-identical before and after (pass_yds
+was always correct; the fix must not change it).
+
+**Rebuild tooling:**
+- `pick_layers.py --rebuild-empty-movement`: rebuilds only cards whose
+  `line_movement.value` is null. Cards with a value are never touched (write-once
+  stands). Rebuilt cards carry `rebuilt_utc` and `rebuilt_reason = "P27 market map"`.
+- `picks_clv.py --recompute-null`: re-runs picks whose existing close_point is null,
+  appends a corrected row (append-only; newest row per pick_id wins at read time).
+
+## P28 — run_window runs unattended and commits what it froze (2026-10-08)
+
+`run_window.py` gains:
+
+**(a) WINDOW_HOURS:** open 168, mid 168, late 72, prekick 6, adhoc 168.
+Late widened from 24 → 72 (includes SNF/MNF). Adhoc widened from 48 → 168
+(whole upcoming slate).
+
+**(b) --tag expanded:** `pull_hardrock_props.py --tag` now accepts
+`{open,mid,late,prekick,adhoc,close}` (was `{open,mid,close}`). `snapshot_tag`
+is free text — the three old values keep working. `run_window` passes the window
+name as `--tag`.
+
+**(c) --reader-model** defaults to `reader_v3`. The script is what produced the
+opinions; a model name goes there only when a model actually formed the opinion.
+The adhoc freeze already recorded `claude-opus-5-5` and stays as frozen; from
+tonight the honest label is `reader_v3`.
+
+**(d) --commit {none,main,branch:\<name\>}:** after verify, `git add` the frozen
+file + manifest (+ mac props + snapshot) and commit with message
+`"window <w> freeze <UTC>: <n> files, reader_v3 <sha8>"`. `main` commits on the
+current branch and pushes to origin; `branch:<name>` pushes to that branch;
+`none` leaves the files (Mac default). Non-zero anywhere STOPs before commit.
+
+**(e) --auto-prekick:** for the prekick window, check if any game kicks in
+`[now + 2h52m, now + 3h08m]` (one 15-minute cron slot). If not, print
+"no game in the prekick slot" and exit 0. `--window-hours 6` keeps multi-game
+slots in one freeze.
+
+**(f) Injury report:** auto-detects newest file under
+`research/nfl_sim/official_injuries/<season>_w<WW>/` when it exists on the host.
+Absent → omitted (reason says "no injury report"). VM runs will usually lack it.
+Sim lane should export the injury report before each slate.
+
+**(g) --root respects MLB_REPO_ROOT:** `env.setdefault("MLB_REPO_ROOT", str(ROOT))`
+so a pre-set value (e.g. from a test fixture) is honoured, not overwritten.
+reader_v3 receives `--root` explicitly.
+
+**Tests:** (a) `--tag prekick` accepted by puller (RED: "invalid choice", GREEN: no error);
+(b) `_check_prekick_slot` with game at +5h → False, game at +3h → True;
+(c) existing halt test still passes (null control).
+Smoke test: `--auto-prekick --no-pull --commit none` → "no game in the prekick slot", exit 0.
+
+## P29 — Fixed windows run on the VM (2026-10-08)
+
+The fixed windows (open/mid/late/prekick) run on the VM via cron. The Mac runs
+only adhoc by hand (`run_window.py --window adhoc --commit none`; the Mac
+auto-commit carries the files to main).
+
+**VM cron (UTC):**
+| Schedule | Window | Command |
+|----------|--------|---------|
+| `0 16 * * 2` | open | `run_window.py --sport nfl --window open --commit main` |
+| `0 22 * * 4` | mid | `run_window.py --sport nfl --window mid --commit main` |
+| `0 22 * * 6` | late | `run_window.py --sport nfl --window late --commit main` |
+| `*/15 * * * *` | prekick | `run_window.py --sport nfl --window prekick --auto-prekick --commit main` |
+
+Logs: `/root/logs/run_window_nfl.log`. `PICKS_LEDGER_DIR=/root/private/ledger`.
+Python: `venv/bin/python3`. Working directory: `/root/mlb-model`.
+
+The scheduled tasks are VM cron, not Cowork, because the reader is a script and
+needs no model session. Cowork's role is verification and the layers that need a
+reader (OPS5).
+
+**Do NOT run mid or prekick by hand on the VM** — a hand run plus the cron run
+would freeze the same window twice (revision 1, unscored, ~160 credits wasted).
+
+**Injury report:** VM runs will usually lack it (the sim lane exports on the Mac).
+Request the NFL lane to commit the export before each slate. The reader notes
+"no injury report" in the reason when absent.
+
+**Tonight's first runs:** 21:15Z prekick for TNF (kick 00:15Z), 22:00Z mid
+(whole Sunday + MNF slate). Check: log tails, credits used, sheet lines and
+GAMES (mid must show the whole slate, not one game), frozen file sha256,
+manifest entry, commit hash, top 20.

@@ -1,3 +1,34 @@
+## 2026-10-08T15:21Z  claude-code (OPS4c — windows run by themselves tonight)
+
+### RETURNED
+- P27: `ledger_to_tape_market()` in pick_sources.py fixes 8 of 10 prop markets
+  where `"player_" + split` produced wrong tape market_keys (e.g. player_rec
+  instead of player_receptions). Three call sites fixed (pick_layers line movement,
+  sim layer, picks_clv). `--rebuild-empty-movement` and `--recompute-null` added.
+  Tests: round-trip (10 keys), prop:rec line movement, prop:rec CLV, pass_yds
+  null control. All RED before, GREEN after. Committed a7f131f0e, pushed.
+- P28: run_window gains --commit {none,main,branch:<name>}, --auto-prekick
+  (gates on [now+2h52m, now+3h08m]), --reader-model defaults to reader_v3,
+  WINDOW_HOURS late=72/adhoc=168, pull_hardrock_props --tag accepts all 6 values.
+  env.setdefault MLB_REPO_ROOT so test fixtures work (was overwriting → test hung).
+  Tests: --tag prekick, _check_prekick_slot, existing halt test. 30 passed in 2s.
+  Smoke: --auto-prekick --no-pull → "no game in the prekick slot". Committed 146ed399d, pushed.
+- P29: Decision recording the VM cron schedule. 4 lines:
+  Tue 16:00Z open, Thu 22:00Z mid, Sat 22:00Z late, */15 prekick.
+
+### NOT DONE
+- MERGE to main (gate: minute :00–:44 before 21:00Z)
+- VM cron installation (Item 3, post-merge)
+- VM run of pick_layers --rebuild-empty-movement and picks_clv --recompute-null
+- Tonight's cron checks: 21:15Z prekick log, 22:00Z mid log
+- Report file ~/cowork_audit/20261008/ops4c_report.txt
+
+### UNVERIFIED
+- Whether --commit main actually succeeds on the VM (commit tested in code review,
+  not live — first real test is tonight's cron)
+- Whether _mac.parquet from OPS4b-cont is read by picks_clv after market mapping fix
+- VM push_daemon timing relative to cron commits
+
 ## 2026-09-20T10:18Z  cowork (Phase 5I verification + merge — D103)
 
 ### RETURNED
