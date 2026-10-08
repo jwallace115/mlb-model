@@ -531,3 +531,33 @@ Request the NFL lane to commit the export before each slate. The reader notes
 (whole Sunday + MNF slate). Check: log tails, credits used, sheet lines and
 GAMES (mid must show the whole slate, not one game), frozen file sha256,
 manifest entry, commit hash, top 20.
+
+## P30 — Plain-English card summaries; "in your favour" direction (2026-10-08)
+
+Detail cards now render a plain-English summary paragraph above each layer's
+raw data. The raw dict is folded into a `<details>` element (nothing hidden,
+only collapsed). Layer-specific summaries:
+
+**Line movement:** market name + game; consensus open (median, n books, date ET);
+book's opening post (point@price, date ET); pick-time snapshot (book + consensus);
+movement in points and price since book open; consensus movement; one direction
+sentence. Direction rule ("in your favour"):
+- **Spreads:** bettor's point going UP is in favour (+7.5 → +8.5 or −9.5 → −8.5).
+- **Totals / props:** Over — number going DOWN is in favour; Under — going UP.
+- **Moneyline:** bettor's price getting longer (−150 → −130, +120 → +140) is in
+  favour; shorter is against ("the market has moved toward your side").
+- Missing book rows → "had no quote in the window; consensus only".
+- No data → the existing "no data as of …" line, unchanged.
+
+Source line: "\<n\> snapshots / \<n\> pulls" instead of raw file names.
+
+**Weather:** "Outdoor at \<stadium\>: \<wind\> mph wind, \<precip\>% rain …
+(NWS forecast as of \<ET\>)" / "Indoor (\<stadium\>, \<roof\>)" / "no forecast".
+
+**Sim:** "The sim's number for this market: \<value\> vs the line \<point\>" /
+"no sim number for this freeze".
+
+**Injuries / news / reasoning:** already prose — unchanged except the raw dict
+(injuries, reasoning) goes into the `<details>` fold like other layers.
+
+Tests: 7 fixture tests (RED first, GREEN after); 15 total in test_top20_page.py.
