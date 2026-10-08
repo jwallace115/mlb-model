@@ -227,6 +227,23 @@ keep only rows with `pull_timestamp` in `[commence−7d, logged_utc]`. Filter by
 `event_id + player_name` (not `line`, since the pick's point may differ from the book's
 current line). `as_of` = the newest `pull_timestamp` used. Game-line logic unchanged.
 
+## P18 — Nearest line per (timestamp, book) (2026-10-08)
+
+OPS3c's `_nearest_line` was applied to all matched rows of a file at once. For props,
+a month of pulls across all books collapsed to only the rows at the pick's exact point;
+earlier pulls at different lines vanished. For game lines, books at non-nearest points
+were dropped, shrinking the consensus.
+
+**Fix:** `_nearest_line_per_group(df, pick_point, ts_col, book_col)` groups by
+(timestamp, bookmaker) and applies nearest-line within each group. The consensus at a
+timestamp now correctly counts one row per book.
+
+**Verified (real data, both cards match Cowork's pre-registration):**
+- Cam Ward pass_yds: book open 189.5 (09-24) → close 177.5 (09-27), move −12.0;
+  consensus close 178.0 n_books 8; n_rows 11.
+- Seattle Seahawks spread: book open −6.5 (09-21) → close −8.5 (09-27), move −2.0;
+  consensus open −2.5 n_books 3; consensus close −8.5 n_books 10.
+
 ## P16 — Spread sign convention and tape audit (2026-10-08)
 
 **Convention:** the ledger's `point` is the **bettor's number**. The freeze `line` is

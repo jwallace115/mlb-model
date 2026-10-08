@@ -482,3 +482,76 @@ def test_alt_ladder_nearest(tmp_path):
         assert val["book"]["close"]["point"] == 175.5, \
             f"expected 175.5 (nearest to 177.5), got {val['book']['close']['point']}"
     plyr._tape_cache.clear()
+
+
+# ---- OPS3d Item 1: nearest line per (timestamp, book) ----
+
+# (o) props: two pulls at different lines → open shows the earlier line, not dropped
+def test_prop_nearest_per_pull(tmp_path):
+    plyr._tape_cache.clear()
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        # Pull 1 (09-24): line 189.5 at hardrockbet_fl
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 189.5, "over_price": -115, "under_price": -105, "bookmaker": "hardrockbet_fl",
+         "pull_timestamp": "2026-09-24T16:00:10Z", "last_update": "2026-09-24T16:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.535, "implied_under": 0.512, "snapshot_tag": "close"},
+        # Pull 2 (09-27): line 177.5 at hardrockbet_fl
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 177.5, "over_price": -115, "under_price": -105, "bookmaker": "hardrockbet_fl",
+         "pull_timestamp": "2026-09-27T14:00:00Z", "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.535, "implied_under": 0.512, "snapshot_tag": "close"},
+    ])
+    pick = _prop_pick(point=177.5, book="hardrockbet_fl")
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    assert lm.get("value") is not None
+    val = lm["value"]
+    # Open should be 189.5 (the 09-24 pull), not dropped by nearest-line
+    assert val["book"]["open"]["point"] == 189.5, \
+        f"expected open 189.5, got {val['book']['open']['point']}"
+    assert val["book"]["close"]["point"] == 177.5
+    assert val["n_rows"] == 2
+    plyr._tape_cache.clear()
+
+
+# (p) game-line: three books in one snapshot → consensus has 3 books
+def test_game_line_consensus_all_books(tmp_path):
+    plyr._tape_cache.clear()
+    tape_dir = tmp_path / "data" / "odds_archive" / "nfl" / "line_history" / "season=2026"
+    tape_dir.mkdir(parents=True, exist_ok=True)
+    snap = pd.DataFrame([
+        {"snapshot_utc": "2026-09-27T14:00:00Z", "sport": "nfl",
+         "event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Washington", "away_team": "Seattle Seahawks",
+         "bookmaker": "draftkings", "book_last_update": "2026-09-27T14:00:00Z",
+         "market": "spreads", "outcome_name": "Seattle Seahawks",
+         "point": -8.0, "price": -110},
+        {"snapshot_utc": "2026-09-27T14:00:00Z", "sport": "nfl",
+         "event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Washington", "away_team": "Seattle Seahawks",
+         "bookmaker": "fanduel", "book_last_update": "2026-09-27T14:00:00Z",
+         "market": "spreads", "outcome_name": "Seattle Seahawks",
+         "point": -8.5, "price": -108},
+        {"snapshot_utc": "2026-09-27T14:00:00Z", "sport": "nfl",
+         "event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Washington", "away_team": "Seattle Seahawks",
+         "bookmaker": "betmgm", "book_last_update": "2026-09-27T14:00:00Z",
+         "market": "spreads", "outcome_name": "Seattle Seahawks",
+         "point": -9.0, "price": -110},
+    ])
+    snap.to_parquet(tape_dir / "snap_20260927T140000Z.parquet", index=False)
+
+    pick = _pick(side="Seattle Seahawks", point=-8.5, book="fanduel")
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    assert lm.get("value") is not None
+    val = lm["value"]
+    # Consensus should have 3 books, not 1
+    assert val["consensus"]["close"]["n_books"] == 3, \
+        f"expected 3 books in consensus, got {val['consensus']['close']['n_books']}"
+    assert val["consensus"]["close"]["median_point"] == -8.5  # median of -8, -8.5, -9
+    plyr._tape_cache.clear()

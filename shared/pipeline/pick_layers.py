@@ -121,17 +121,22 @@ def _line_movement(pick, root, logged_dt):
             return side_norm == o_nick
         return s_lower in o_lower or o_lower in s_lower
 
-    def _nearest_line(candidates_df, pick_point):
-        """From rows with multiple lines (alt ladder), pick the nearest to pick_point."""
+    def _nearest_line_per_group(candidates_df, pick_point, ts_col, book_col="bookmaker"):
+        """Apply nearest-line within each (timestamp, bookmaker) group, not across the file."""
         if pick_point is None or candidates_df.empty:
             return candidates_df
         line_col = "line" if "line" in candidates_df.columns else "point"
         if line_col not in candidates_df.columns:
             return candidates_df
-        candidates_df = candidates_df.copy()
-        candidates_df["_dist"] = (candidates_df[line_col].astype(float) - float(pick_point)).abs()
-        best_dist = candidates_df["_dist"].min()
-        return candidates_df[candidates_df["_dist"] == best_dist].drop(columns=["_dist"])
+        result_parts = []
+        for (ts_val, bk), grp in candidates_df.groupby([ts_col, book_col], dropna=False):
+            grp = grp.copy()
+            grp["_dist"] = (grp[line_col].astype(float) - float(pick_point)).abs()
+            best_dist = grp["_dist"].min()
+            result_parts.append(grp[grp["_dist"] == best_dist].drop(columns=["_dist"]))
+        if not result_parts:
+            return candidates_df.iloc[:0]
+        return pd.concat(result_parts, ignore_index=True)
 
     if is_prop:
         tape_dir = root / "data" / "odds_archive" / sport_folder / "props"
@@ -148,7 +153,7 @@ def _line_movement(pick, root, logged_dt):
                 # Filter by market_key
                 if "market_key" in df.columns:
                     mask &= df.market_key == prop_market
-                matched = _nearest_line(df[mask], point)
+                matched = _nearest_line_per_group(df[mask], point, "_pt", "bookmaker")
                 if not matched.empty:
                     for _, r in matched.iterrows():
                         rows.append({"ts": r["_pt"], "file": p.name, **{k: v for k, v in r.items() if k not in ("_pt",)}})
@@ -168,8 +173,11 @@ def _line_movement(pick, root, logged_dt):
             # Filter by outcome_name for the pick's side
             if "outcome_name" in df.columns:
                 mask &= df.outcome_name.apply(_outcome_matches)
-            matched = _nearest_line(df[mask], point)
-            if not matched.empty:
+            filtered = df[mask].copy()
+            if not filtered.empty:
+                filtered["_snap_ts"] = str(ts)
+                matched = _nearest_line_per_group(filtered, point, "_snap_ts", "bookmaker")
+                matched = matched.drop(columns=["_snap_ts"], errors="ignore")
                 for _, r in matched.iterrows():
                     rows.append({"ts": ts, "file": p.name, **r.to_dict()})
                 sources_used.append(p.name)
