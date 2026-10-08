@@ -1,0 +1,58 @@
+[
+  {
+    "game_id": "01d78cd04d7c4fb958e1d02bace05ec4",
+    "game_date": "2026-10-09",
+    "sport": "NHL",
+    "home_team": "St Louis Blues",
+    "away_team": "San Jose Sharks",
+    "commence_time": "2026-10-09T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": 103,
+    "under_price": -118,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-08T06:05:02.973853+00:00"
+  },
+  {
+    "game_id": "3b439dd85f763c0f6ac04f3ade1e6117",
+    "game_date": "2026-10-09",
+    "sport": "NHL",
+    "home_team": "Calgary Flames",
+    "away_team": "Colorado Avalanche",
+    "commence_time": "2026-10-09T01:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 104,
+    "under_price": -120,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-08T06:05:02.973853+00:00"
+  },
+  {
+    "game_id": "a46280b902edb2cb0a859b0efcd01e8e",
+    "game_date": "2026-10-09",
+    "sport": "NHL",
+    "home_team": "Vegas Golden Knights",
+    "away_team": "Toronto Maple Leafs",
+    "commence_time": "2026-10-09T02:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.0,
+    "over_price": -118,
+    "under_price": 103,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-08T06:05:02.973853+00:00"
+  },
+  {
+    "game_id": "4951992db982c394e261970cbfb52332",
+    "game_date": "2026-10-09",
+    "sport": "NHL",
+    "home_team": "Florida Panthers",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-10-10T22:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 110,
+    "under_price": -130,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-08T06:05:02.973853+00:00"
+  }
+]

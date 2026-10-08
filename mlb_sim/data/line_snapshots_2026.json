@@ -53298,5 +53298,57 @@
     "over_price": 104,
     "under_price": -128,
     "book": "fanduel"
+  },
+  {
+    "game_id": "b57e790481f2b8e5eaf9e0f3eab816bc",
+    "game_date": "2026-10-08",
+    "home_team": "CHW",
+    "away_team": "CLE",
+    "snapshot_time": "2026-10-08T06:00:13.122223",
+    "first_seen_timestamp": "2026-10-08T06:00:13.122016",
+    "snapshot_label": "OPEN",
+    "total_line": 7.5,
+    "over_price": 101,
+    "under_price": -122,
+    "book": "draftkings"
+  },
+  {
+    "game_id": "c43e98d4effc9181f21e21225fcbd47a",
+    "game_date": "2026-10-08",
+    "home_team": "MIL",
+    "away_team": "LAD",
+    "snapshot_time": "2026-10-08T06:00:13.271567",
+    "first_seen_timestamp": "2026-10-08T06:00:13.271532",
+    "snapshot_label": "OPEN",
+    "total_line": 6.5,
+    "over_price": 110,
+    "under_price": -134,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "b57e790481f2b8e5eaf9e0f3eab816bc",
+    "game_date": "2026-10-08",
+    "home_team": "CHW",
+    "away_team": "CLE",
+    "snapshot_time": "2026-10-08T06:00:13.426628",
+    "first_seen_timestamp": "2026-10-08T06:00:13.122016",
+    "snapshot_label": "2AM",
+    "total_line": 7.5,
+    "over_price": 101,
+    "under_price": -122,
+    "book": "draftkings"
+  },
+  {
+    "game_id": "c43e98d4effc9181f21e21225fcbd47a",
+    "game_date": "2026-10-08",
+    "home_team": "MIL",
+    "away_team": "LAD",
+    "snapshot_time": "2026-10-08T06:00:13.579654",
+    "first_seen_timestamp": "2026-10-08T06:00:13.271532",
+    "snapshot_label": "2AM",
+    "total_line": 6.5,
+    "over_price": 110,
+    "under_price": -134,
+    "book": "fanduel"
   }
 ]
