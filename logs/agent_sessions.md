@@ -1,3 +1,38 @@
+## 2026-10-08T19:16Z  claude-code (OPS4d — record, cards in English, Picks front page, main guard)
+
+### RETURNED
+- Item 1 (f9a72a1ef): Corrected the record — ops4c_report.txt appended CORRECTION
+  block; agent_sessions.md noted the rebuild crash + main commit violation;
+  PICKS_LEDGER_v1.md P27 amended (--rebuild-empty-movement walks all picks, not
+  only the 83 with empty movement; 10-08 run numbers stated).
+- Item 2 (e507edf5e): Plain-English card summaries above raw data in <details>.
+  Line movement: direction sentence ("in your favour" / "against you") with rules
+  for spreads (point UP), totals/props (Over: DOWN, Under: UP), moneyline (longer).
+  Weather: outdoor/indoor one-liner. Sim: prediction vs line. P30 in ledger.
+  7 new tests (RED → GREEN) + 1 null control; 15 total pass.
+- Item 3 (bff9c96e1): Picks is the front page (index.html → build_picks,
+  today.html → build_today). Nav: Picks · Today · Pipeline health · Tracking ·
+  NFL forward · Odds archive. No dangling links (verified in built output).
+  site/README.md replaced with Cowork's 10-08 build guide. 26 tests pass.
+- Item 4 (887168248): Pre-commit hook on ~/mlb-model main refuses commits unless
+  MLB_AUTOCOMMIT=1. push_paths.sh exports the var. P31 in ledger.
+  Tests: (a) commit refused on main ✓, (b) dry-run with var passes hook ✓,
+  (c) worktree unaffected (items 1-3 proved it).
+
+### WAITING
+- :50 auto-commit (19:50Z) to verify hook + MLB_AUTOCOMMIT works together.
+  If it FAILS: revert push_paths.sh edit, paste failure, report Item 4 NOT DONE.
+
+### NOT DONE
+- MERGE: waiting for auto-commit verification, then merge in :00–:44 window
+- VM cron checks: 21:15Z prekick, 22:00Z mid (tonight's first runs)
+- Site front page verification after merge (push_daemon → site rebuild)
+
+### UNVERIFIED
+- Whether the :50 auto-commit succeeds with the hook installed
+- Whether the rebuilt cards with plain-English summaries render correctly on the
+  live site (will verify after merge + push_daemon cycle)
+
 ## 2026-10-08T19:01Z  claude-code (OPS4d correction — rebuild crash + main commit violation)
 
 ### CORRECTION to OPS4c
