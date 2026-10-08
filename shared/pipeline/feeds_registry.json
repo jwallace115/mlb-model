@@ -705,6 +705,13 @@
    ],
    "ts": "mtime",
    "quiet_ok": true
+  },
+  {
+   "id": "pick_layers",
+   "label": "Pick detail card builder",
+   "sport": "Ops",
+   "cron_match": "pick_layers.py",
+   "quiet_ok": true
   }
  ]
 }

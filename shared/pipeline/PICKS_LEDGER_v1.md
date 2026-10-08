@@ -221,3 +221,16 @@ published" with N and dates only.
 **Never on the page:** stakes, slip IDs, share links, member rows, balances.
 
 **No freeze → "no picks logged yet"** with nothing else invented. Ledger absent → NODATA.
+
+## P13 — Lane contract for reader freezes (2026-10-08)
+
+Every reader freeze (ai_opinions parquet) must carry:
+- `conf` (0–100): the reader's confidence. Required for ranking on the Top-20 page.
+  Without it, the pick lands in the unranked list.
+- `tag` (string): the signal tag. Never `no_view` for a pick.
+- `rationale` (free text, optional): a paragraph explaining the pick. The card shows it
+  under "reasoning" when present. A longer reason than the one-line `reason` field.
+- `player_id` (optional): when the source has one (ESPN id).
+
+**Current status:** NCAAF reader freezes carry no `conf` today → NCAAF tab stays
+entirely unranked until the reader adds it. This is correct, not a failure.
