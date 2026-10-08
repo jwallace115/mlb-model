@@ -1,0 +1,44 @@
+[
+  {
+    "game_id": "aa266da6f8d98646bc59d18ddbc5b2de",
+    "game_date": "2026-10-08",
+    "sport": "MLB",
+    "home_team": "New York Yankees",
+    "away_team": "Tampa Bay Rays",
+    "commence_time": "2026-10-08T00:15:00Z",
+    "snapshot_type": "closing",
+    "total_line": 7.5,
+    "over_price": 113,
+    "under_price": -137,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-08T03:00:05.605162+00:00"
+  },
+  {
+    "game_id": "3c71012ad7a75e6c11575285e6841e14",
+    "game_date": "2026-10-08",
+    "sport": "MLB",
+    "home_team": "San Diego Padres",
+    "away_team": "Milwaukee Brewers",
+    "commence_time": "2026-10-08T02:10:00Z",
+    "snapshot_type": "closing",
+    "total_line": 6.0,
+    "over_price": -109,
+    "under_price": -111,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-08T03:00:05.605162+00:00"
+  },
+  {
+    "game_id": "e0448f7b831a9ecc0580ba4295270d0c",
+    "game_date": "2026-10-08",
+    "sport": "MLB",
+    "home_team": "Chicago White Sox",
+    "away_team": "Cleveland Guardians",
+    "commence_time": "2026-10-08T21:00:00Z",
+    "snapshot_type": "closing",
+    "total_line": 7.5,
+    "over_price": 102,
+    "under_price": -117,
+    "book": "pinnacle",
+    "capture_timestamp": "2026-10-08T03:00:05.605162+00:00"
+  }
+]
