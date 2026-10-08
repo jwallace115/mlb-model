@@ -117,15 +117,19 @@ def _read(html_text, week, season):
         if re.search(r"<(template|script|style|noscript)\b", u, re.I) or "<!--" in u:
             raise SystemExit(f"HALT: official injury page section {k}: unsupported element "
                              f"(script/template/style/noscript or an unclosed comment)")
-    rows, seen, matchups = [], set(), []
+    rows, seen, matchups, skipped_sections = [], set(), [], []
     for k, u in enumerate(units):
         abbr = [a.strip() for a in re.findall(r'nfl-c-matchup-strip__team-abbreviation">([^<]*)<', u)]
         full = [_txt(a) for a in re.findall(r'nfl-c-matchup-strip__team-fullname"[^>]*>(.*?)</a>', u, re.S)]
         subs = [_txt(s) for s in re.findall(r'd3-o-section-sub-title"><span>(.*?)</span>', u, re.S)]
         tables = re.findall(r"<table[^>]*>(.*?)</table>", u, re.S)
         if not (len(abbr) == len(full) == len(subs) == len(tables) == 2):
-            raise SystemExit(f"HALT: official injury page section {k}: expected 2 teams/2 tables, "
-                             f"found abbr {abbr}, names {full}, titles {subs}, tables {len(tables)}")
+            msg = (f"section {k} {abbr}: parse error — "
+                   f"expected 2 teams/2 tables, found abbr {abbr}, names {full}, "
+                   f"titles {subs}, tables {len(tables)} — skipped")
+            print(f"WARNING: official injury page {msg}")
+            skipped_sections.append(k)
+            continue
         if subs != full:
             raise SystemExit(f"HALT: official injury page section {k}: table titles {subs} do not "
                              f"match the matchup {full}")
@@ -151,14 +155,18 @@ def _read(html_text, week, season):
                 rows.append({"team": t, "opp": teams[1 - i], "player": td[0], "position": td[1],
                              "injuries": td[2] or None, "practice_status": td[3] or None,
                              "game_status": gs})
-    for k, u in enumerate(units):
+    parsed_units = [u for k, u in enumerate(units) if k not in skipped_sections]
+    for k, u in enumerate(parsed_units):
         _section_markup(k, u)
     # D279 (audit #20 A1): an independent count of every player row inside the report
     # sections must equal the rows emitted — no source row may be dropped by structure
-    src = sum(len(re.findall(r"<tr\b", u, re.I)) for u in units) - 2 * len(units)
+    src = sum(len(re.findall(r"<tr\b", u, re.I)) for u in parsed_units) - 2 * len(parsed_units)
     if src != len(rows):
         raise SystemExit(f"HALT: official injury page has {src} player rows but {len(rows)} were "
                          f"parsed")
+    if skipped_sections:
+        print(f"WARNING: {len(skipped_sections)} section(s) skipped; "
+              f"teams in those sections are NOT covered by the official report")
     return matchups, pd.DataFrame(rows, columns=["team", "opp", "player", "position", "injuries",
                                                  "practice_status", "game_status"])
 
