@@ -3789,3 +3789,18 @@ Ending: 99,842
 - NOT DONE: picks.html rebuild verification (site/build_site.py not run in this order per Item 3 drop).
 - UNVERIFIED: whether the crosswalk completes within the 10:10Z cron window on the VM
   (took ~8 min on the droplet's CPU for 373×3679 NCAAF comparisons).
+
+## 2026-10-08T06:52Z  claude-code (OPS2c Item 2)
+- VM cron: 15 MLB signal lines commented (# RETIRED 2026-10-08):
+  results_tracker.py, mlb_two_pass.py (×2 prelim+confirm), lineup_timing_snapshot.py (×4),
+  pull_yrfi_odds_daily.py, yrfi_shadow_daily.py, p09_shadow_daily.py, p09_grading_utils.py,
+  nrfi_daily_selector.py (×2 run+grade), mlb_sides_daily_shadow.py (×2 run+grade)
+- VM cron KEPT (data capture): multi_book_open_capture.py --sports baseball_mlb,
+  pull_event_markets.py --sport baseball_mlb (cost: ~72 credits/day MLB tape, measured)
+- Mac launchd: 6 MLB plists disabled (.plist.disabled):
+  statcast.pitching, mlb.hits.collect, mlb.hits.refresh, mlb.hits.grade, refresh, refresh.noon
+- Mac launchd KEPT: refresh.5pm (multi-sport: MLB+NBA+NHL+Soccer)
+- Odds API credit cost: pull_yrfi_odds_daily.py USES Odds API credits.
+  mlb_sides_daily_shadow.py USES Odds API credits. All others read MLB Stats API (free).
+  MLB tape: ~3 credits/call (3 games × 1 mkt × 1 region) = ~72/day. MLB event markets: similar.
+- Golf, soccer, WNBA jobs NOT stopped (P0.5: Jeff did not say to stop them, only hide from pages).
