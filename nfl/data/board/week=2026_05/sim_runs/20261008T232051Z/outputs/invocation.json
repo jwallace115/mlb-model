@@ -1,0 +1,16 @@
+{
+ "bundle_dir": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261008T232051Z",
+ "cutoff_T": "2026-10-08T23:20:51.142943+00:00",
+ "games": [
+  "TB@DAL"
+ ],
+ "lines": {
+  "TB@DAL": {
+   "spread": 8.5,
+   "total": 48.5
+  }
+ },
+ "run_id": "20261008T232051Z",
+ "season": 2026,
+ "week": 5
+}

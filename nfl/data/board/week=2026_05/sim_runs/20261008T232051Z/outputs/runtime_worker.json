@@ -1,0 +1,93 @@
+{
+ "dependency_distributions": {
+  "charset-normalizer": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "b0900b6a363630fbfa6ba1d9727719073a1a025c7c8cfa670afff44f88b80e06",
+   "version": "3.4.5"
+  },
+  "joblib": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "5dc2fa9bc67b076ae62031fcfcd789535525919f30fd0edf2e355b38058e4545",
+   "version": "1.5.3"
+  },
+  "numpy": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "16c90bbf2bfcfcb3fafcf9d1ac3c0fa541771685509aafc3e6f9196748ce6f1e",
+   "version": "2.4.3"
+  },
+  "pandas": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "ce794575e2fd7d765c919e79b3c22601b0caebbdf9dc860c3659a1ec3dd46388",
+   "version": "2.3.3"
+  },
+  "psutil": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "6c258da73ed7bcaa86f11404a25379f43fe42e49d33784c6cd0060694ef3a2f1",
+   "version": "7.2.2"
+  },
+  "pyarrow": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "4ff03fbc91e88335206f0e36bd59fe6e0c4638ae587c8de2ac2456d119611e4e",
+   "version": "23.0.1"
+  },
+  "python-dateutil": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "487b166acf46163d3cb9dae8de39efa6518a66402d756441de071bbfbf0a3d36",
+   "version": "2.9.0.post0"
+  },
+  "pytz": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "c077774c1c4611dab8bad64dc3f8907f949a38efc87e9fd4c192c1f49d86fb95",
+   "version": "2026.1.post1"
+  },
+  "scikit-learn": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "ccbad73d17c029ca689602ca4bfe55c9e067d687afd4967befb46dcc13912a88",
+   "version": "1.8.0"
+  },
+  "scipy": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "5fa58b4cf4ae988289d2e7563d671edcfd107ad2eaa5cd84b84c33ec138481da",
+   "version": "1.17.1"
+  },
+  "six": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "11e6f440fb05680246cdec4980a760eb8aadadf09a46ab148fe60b82ba552091",
+   "version": "1.17.0"
+  },
+  "threadpoolctl": {
+   "location": "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages",
+   "record_sha256": "14624c05150fb07a67ac9e37ede79bc4a1f58d5eb6b73eed7efd0addf9c3cd68",
+   "version": "3.6.0"
+  }
+ },
+ "dependency_identity_sha256": "01f5fe9833ae203cc8c0286ba706870ca3c6f1b7fd03fb2457573fc3d7836760",
+ "dependency_paths": [
+  "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages"
+ ],
+ "executable": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+ "flags": "-I -S -B",
+ "loaded_code_sha256": "244a0bb86901348b3a6c4d164f984bd1620e28a7498b9237a938bd06794893f0",
+ "n_dependency_files": 1106,
+ "n_distribution_files_verified": 6395,
+ "n_repo_modules": 15,
+ "pycache_prefix_fresh": true,
+ "python": "3.13.1",
+ "repo_modules": {
+  "nfl/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "nfl/sim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "nfl/sim/actuals.py": "baea53623ca2c8a8524819800e859d7aebb9ff37169b19518f2b171d72b2e473",
+  "nfl/sim/anchor.py": "56a871b776ae7396ff8c3a14eca54fad9bfc9a56c461d20faad357520796b4cf",
+  "nfl/sim/calibration.py": "a5ac4283aeaf09e9757203fd80dce6287b4a8915f32ad158db099cb7be205a08",
+  "nfl/sim/engine.py": "dde3aba3066ee2405b589f89c252eab50b3dbe0f24d916aad8731f5b86e0adcb",
+  "nfl/sim/fwd_bootstrap.py": "60f2b264d9fa60bfe41eb0ff2006330150bea76e861f4862670701485c2260bf",
+  "nfl/sim/names.py": "2197fb0695f75aae6d608d9e6ee5fa027ec8a9a5e512c5cdb13ad4ef376850e1",
+  "nfl/sim/pricer.py": "ff7e81ee3f006e66107b89f9846a0fb5fe9bc6cb45a77a8115de3b8d70074652",
+  "nfl/sim/read_set.py": "62b03cd1ad32e07f0038ebf3e4b0589920bcc9d40179d64ec20f13190f2a7b35",
+  "nfl/sim/run_forward_v1.py": "9d4adced0e198d6ffe9fe8ac20dfac98cfe7a96e69ab5b7c827ca82d4644f49f",
+  "nfl/sim/run_week.py": "ff653aafacd6d55468f20885eef61366b8045b2f6145c26833e2c68b05116517",
+  "nfl/sim/seed_util.py": "2d4a0b75e6ce209e9fd0da98dc805314a863c668d09ff9452a07c7e115a05cbf",
+  "nfl/sim/tables.py": "5518e8459b4d3cc824437e8d5dab89b9d0339e7313fa775904fe1fd2ecba9333",
+  "nfl/sim/usage.py": "fad16b1f62cf1306dbfe82870fa796e34bbfaeae4d7b67dd00994e462c08084d"
+ }
+}
