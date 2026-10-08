@@ -262,6 +262,18 @@ MAGNITUDE, NO_TAPE. `--repair` appends a correction row (supersedes the old) and
 The NCAAF freeze has the same convention (first_side line) and the same adapter bug.
 All 45 repaired via supersedes rows; 44 regraded (1 no crosswalk match).
 
+**Classifier (amended P19):** opposite sign ⇒ SIGN_FLIPPED, whatever the magnitude
+(e.g. stored −7.0 vs tape +6.5: the sign is wrong and the bettor also bought 0.5 pts).
+Same sign, different magnitude ⇒ MAGNITUDE (report only, no repair).
+
+## P19 — p_ai_opinions gets the same sign rule (2026-10-08)
+
+OPS3c fixed `adapt_nfl_ai_opinions` but `pick_sources.p_ai_opinions` (NCAAF + any sport
+that routes through it) still emitted `point = line` for second-side spreads.
+`_freeze_point(market, side, line)` is now defined in `pick_sources.py` (one definition)
+and used by both parsers. Verified: adapters run appends 0 (fixed parser produces
+the same pick_ids the correction rows already carry).
+
 ## P17 — Line movement must describe the pick's own line (2026-10-08)
 
 OPS3/3b shipped `_line_movement` filtering by `event_id` only. Props matched every

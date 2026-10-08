@@ -127,6 +127,59 @@ def test_adapter_spread_sign():
     pa._tape_cache.clear()
 
 
+# ---- (4) p_ai_opinions: second-side spread negates line ----
+def test_p_ai_opinions_spread_sign(tmp_path):
+    """p_ai_opinions freeze with spread side second line 10.0 and side first line -3
+    → points -10.0 and -3; totals and prop unchanged."""
+    import pick_sources as pss
+
+    freeze = pd.DataFrame([
+        # spread, side=second, line=10.0 → should be -10.0
+        {"event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team A", "away_team": "Team B",
+         "market_key": "spreads", "player_name": None, "line": 10.0,
+         "side": "second", "side_name": "Team B", "side_price": -110,
+         "logged_utc": "2026-09-27T12:00:00Z", "tag": "game_script", "reason": "B -10"},
+        # spread, side=first, line=-3.0 → should be -3.0 unchanged
+        {"event_id": "b" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team C", "away_team": "Team D",
+         "market_key": "spreads", "player_name": None, "line": -3.0,
+         "side": "first", "side_name": "Team C", "side_price": -110,
+         "logged_utc": "2026-09-27T12:00:00Z", "tag": "game_script", "reason": "C -3"},
+        # totals, side=second, line=44.5 → unchanged
+        {"event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team A", "away_team": "Team B",
+         "market_key": "totals", "player_name": None, "line": 44.5,
+         "side": "second", "side_name": "Under", "side_price": -110,
+         "logged_utc": "2026-09-27T12:00:00Z", "tag": "game_script", "reason": "under"},
+        # prop, side=first, line=177.5 → unchanged
+        {"event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team A", "away_team": "Team B",
+         "market_key": "player_pass_yds", "player_name": "QB1", "line": 177.5,
+         "side": "first", "side_name": "Over", "side_price": -115,
+         "logged_utc": "2026-09-27T12:00:00Z", "tag": "game_script", "reason": "over"},
+    ])
+    p = tmp_path / "test_freeze.parquet"
+    freeze.to_parquet(p, index=False)
+    rel = "test/freeze.parquet"
+
+    rows = pss.p_ai_opinions(str(p), rel, "test")
+
+    b_rows = [r for r in rows if "Team B" in str(r.get("side", ""))]
+    c_rows = [r for r in rows if "Team C" in str(r.get("side", ""))]
+    u_rows = [r for r in rows if "Under" in str(r.get("side", ""))]
+    o_rows = [r for r in rows if "Over" in str(r.get("side", ""))]
+
+    assert len(b_rows) == 1
+    assert b_rows[0]["point"] == -10.0, f"second-side spread should be -10.0, got {b_rows[0]['point']}"
+    assert len(c_rows) == 1
+    assert c_rows[0]["point"] == -3.0
+    assert len(u_rows) == 1
+    assert u_rows[0]["point"] == 44.5
+    assert len(o_rows) == 1
+    assert o_rows[0]["point"] == 177.5
+
+
 # ---- (2) audit: flipped vs correct + leak exclusion ----
 def test_audit_classes(tmp_path):
     import picks_point_audit as ppa

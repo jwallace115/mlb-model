@@ -268,6 +268,16 @@ def p_ncaaf_placements(path, rel, sset):
     return rows
 
 
+def _freeze_point(market, freeze_side, line):
+    """Convert freeze line to bettor's point. Spread + second-side → negate."""
+    if line is None or (isinstance(line, float) and pd.isna(line)):
+        return None
+    pt = float(line)
+    if market == "spread" and freeze_side == "second":
+        pt = -pt
+    return pt
+
+
 def p_ai_opinions(path, rel, sset, lane="ncaaf", league="NCAAF"):
     d, rows = pd.read_parquet(path), []
     need = {"event_id", "home_team", "away_team", "market_key", "side", "side_name", "line", "logged_utc"}
@@ -281,7 +291,8 @@ def p_ai_opinions(path, rel, sset, lane="ncaaf", league="NCAAF"):
              lane=lane, kind="ai_opinion", build_time=r["logged_utc"], league=league,
              game=f"{r['away_team']} @ {r['home_team']}", market=mk,
              subject=(r.get("player_name") or (r["side_name"] if mk in ("spread", "moneyline") else "")),
-             side=r["side_name"], point=r["line"], price=r.get("side_price"), book=r.get("book"),
+             side=r["side_name"], point=_freeze_point(mk, r["side"], r["line"]),
+             price=r.get("side_price"), book=r.get("book"),
              reason=r.get("reason"), leg_type="view", commence=r["commence_time"], source_file=rel,
              source_set=sset, raw=dict(side=r["side"], side_name=r["side_name"], tag=r.get("tag")))
     return rows
