@@ -16,18 +16,24 @@
 - P29: Decision recording the VM cron schedule. 4 lines:
   Tue 16:00Z open, Thu 22:00Z mid, Sat 22:00Z late, */15 prekick.
 
+- MERGE: 15:22Z c125a0d18 → pushed. VM conflict in pipeline_health.json,
+  resolved → bdd0d9e62.
+- VM smoke: --auto-prekick → "no game in the prekick slot". --help OK.
+- VM cron: 4 lines installed (backup 20261008T1523Z). Diff = 4 lines only.
+- VM rebuild: pick_layers 682 rebuilt / 4 untouched / 19 null / 705 total (87 min).
+  CLV: 1895→3359 lines, 1792 with close (was ~500), 103 still null (75 min).
+  Bijan Robinson prop:rec line_movement PRESENT (was NULL).
+- Caddyfile mtime: 2026-10-02 04:19:56 (unchanged).
+- Report: ~/cowork_audit/20261008/ops4c_report.txt
+
 ### NOT DONE
-- MERGE to main (gate: minute :00–:44 before 21:00Z)
-- VM cron installation (Item 3, post-merge)
-- VM run of pick_layers --rebuild-empty-movement and picks_clv --recompute-null
 - Tonight's cron checks: 21:15Z prekick log, 22:00Z mid log
-- Report file ~/cowork_audit/20261008/ops4c_report.txt
+- picks.html TNF prop card line-movement verification
 
 ### UNVERIFIED
-- Whether --commit main actually succeeds on the VM (commit tested in code review,
-  not live — first real test is tonight's cron)
-- Whether _mac.parquet from OPS4b-cont is read by picks_clv after market mapping fix
+- Whether --commit main succeeds on the VM (first real test = tonight's cron)
 - VM push_daemon timing relative to cron commits
+- Whether 103 null-close picks are legitimate (no tape) or a remaining bug
 
 ## 2026-09-20T10:18Z  cowork (Phase 5I verification + merge — D103)
 
