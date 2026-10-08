@@ -157,3 +157,24 @@ The exactly-one rule was not loosened.
 **Store rebuild:** This is the one-time rebuild. From here on, the store is append-only.
 Reason: rows with wrong owner (sim as ai_nfl) and ingested no_view rows cannot be
 corrected by appending — the pick_id hash changes with the owner.
+
+## P10 — Top-20 selection rules (2026-10-08)
+
+`build_top20.select(view_rows, sport, now)` → `{freeze_logged_utc, props, sides, unranked, n_picks_in_freeze}`.
+
+**Eligibility:** AI owners only (`ai_<sport>`); `sim_nfl` rows are NOT ranked (they feed
+the sim layer). Member/jeff rows never appear. A pick whose `commence_time <= now` is
+excluded (past games drop at the next build). Only the latest freeze (by `logged_utc`)
+whose picks have at least one `commence_time > now` is used; the freeze's `logged_utc`
+must be `<= now` (no future freezes).
+
+**Columns:** "props" = market starts with `prop` or `player_`; "sides" = everything else
+(h2h, spreads, totals, alternates). ≤ 20 per column.
+
+**Ranking:** `conf` descending; ties by `|edge|` descending (approximated from
+`price_american`); ties by `logged_utc` ascending. A row with `conf = null` is never
+ranked — it lands in the `unranked` list. Rows beyond the top 20 per column are omitted
+(they had conf, so they are not unranked — just not shown).
+
+**HALTs:** Two freezes sharing the same `logged_utc`. A ranked row lacking `event_id`,
+`price_american`, or `side`.
