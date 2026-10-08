@@ -146,6 +146,8 @@ def main():
                         help=f"credit floor (default {HALT_THRESHOLD})")
     parser.add_argument("--out-dir", type=str, default=None,
                         help="override output dir (scratch path for testing)")
+    parser.add_argument("--archive", action="store_true",
+                        help="also append rows to data_YYYY_MM_mac.parquet (Mac writer)")
     args = parser.parse_args()
 
     print(f"key fingerprint {KEY_FP}")
@@ -259,6 +261,22 @@ def main():
         print(f"\nSaved {len(all_rows)} rows to {path}")
     else:
         print("\nNo rows to save")
+
+    # ── Archive (Mac writer: separate _mac.parquet beside the VM's file) ──
+    if all_rows and args.archive:
+        df_mac = pd.DataFrame(all_rows)
+        game_date = all_rows[0]["game_date"]
+        season = int(game_date[:4])
+        month = int(game_date[5:7])
+        mac_dir = PROPS_DIR / f"season={season}" / f"month={month:02d}"
+        mac_dir.mkdir(parents=True, exist_ok=True)
+        mac_path = mac_dir / f"data_{season}_{month:02d}_mac.parquet"
+        before = len(pd.read_parquet(mac_path)) if mac_path.exists() else 0
+        if mac_path.exists():
+            existing = pd.read_parquet(mac_path)
+            df_mac = pd.concat([existing, df_mac], ignore_index=True)
+        df_mac.to_parquet(mac_path, index=False)
+        print(f"\n_mac archive: {mac_path.name}  rows {before} -> {len(df_mac)}")
 
     # Summary by book
     if all_rows:

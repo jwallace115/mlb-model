@@ -373,6 +373,20 @@ into the manifest entry. Optional for legacy; `run_window` always passes it.
 
 reader_v2 stays untouched in `_to_delete`.
 
+## P25 — Mac props + snapshot captures (2026-10-08)
+
+`pull_hardrock_props.py --archive` writes a separate `data_YYYY_MM_mac.parquet`
+beside the VM's monthly file (canonical-writer rule: two writers, distinct files).
+Both `reader_v3._load_inputs` and `picks_clv` read all `data_*.parquet` in the
+season/month dirs, so _mac files are found automatically.
+
+`multi_book_open_capture.py` writes to the same `line_history/season=YYYY/` dir.
+No code change needed — the Mac's .env has the key, and each snap gets a unique
+timestamp filename.
+
+First real captures from Mac: TNF TB@DAL props (602 rows, 10 credits, hardrockbet_fl
+70 rows) + game-line snapshot (1,340 rows, 3 credits). Total 13 credits.
+
 ## P13 — Lane contract for reader freezes (2026-10-08)
 
 Every reader freeze (ai_opinions parquet) must carry:
