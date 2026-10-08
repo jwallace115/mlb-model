@@ -205,6 +205,33 @@ def main():
         print(f"HALT: PICKS_LEDGER_DIR={LEDGER_DIR} does not exist")
         sys.exit(1)
 
+    # Check: if a sport has ungraded past-commence picks but no crosswalk, exit non-zero
+    rows = pl._read_all(LEDGER_DIR)
+    now = datetime.now(timezone.utc)
+    graded_pids = {r["pick_id"] for r in rows if r.get("result")}
+    current = {r["pick_id"]: r for r in pl.view(LEDGER_DIR)}
+    sports_needing_xw = set()
+    for pid, row in current.items():
+        if row.get("result") or pid in graded_pids:
+            continue
+        market = row.get("market", "")
+        if market and "prop" in market:
+            continue
+        try:
+            ct = pl._parse_utc(row.get("commence_time"), "commence")
+            if ct < now:
+                sports_needing_xw.add(row.get("sport", "").upper())
+        except (ValueError, TypeError):
+            continue
+    missing_xw = []
+    for sport in sports_needing_xw:
+        xw_path = LEDGER_DIR / f"crosswalk_{sport.lower()}.parquet"
+        if not xw_path.exists():
+            missing_xw.append(sport)
+    if missing_xw:
+        print(f"HALT: sports with ungraded past-commence picks but no crosswalk: {sorted(missing_xw)}")
+        sys.exit(1)
+
     graded = grade(LEDGER_DIR)
     if graded:
         appended, skipped = pl.append(graded, LEDGER_DIR)

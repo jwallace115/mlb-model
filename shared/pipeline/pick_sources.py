@@ -89,7 +89,10 @@ def split_game(g):
     """'A @ B' | 'A vs B' | 'A vs. B' | 'SEA@WAS' -> [A, B] (order not meaningful)."""
     if not g:
         return []
-    g = re.split(r",|\(", str(g))[0].strip()          # 'PHI @ CHI, MNF 2026-09-29T00:15Z' -> 'PHI @ CHI'
+    g = str(g)
+    # Strip trailing metadata: ", MNF 2026-09-29T00:15Z" or unbalanced "(..."
+    # but preserve balanced parens like "Miami (OH)" by only stripping from the first comma
+    g = re.split(r",", g)[0].strip()
     parts = re.split(r"\s*@\s*|\s+vs\.?\s+", g)
     return [p.strip() for p in parts if p.strip()][:2]
 

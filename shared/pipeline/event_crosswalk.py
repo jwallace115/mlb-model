@@ -138,18 +138,29 @@ def _load_ncaaf_officials(root):
                                "homePoints": "home_score", "awayPoints": "away_score"})
 
 
-def _load_nfl_officials():
-    """Load nflverse schedule 2026."""
-    try:
-        import nflreadpy
-        sched = nflreadpy.load_schedules([2026]).to_pandas()
-        sched["date"] = pd.to_datetime(sched.gameday).dt.date
-        sched["completed"] = sched.home_score.notna()
-        return sched.rename(columns={"game_id": "official_game_id",
-                                      "home_team": "home", "away_team": "away",
-                                      "home_score": "home_score", "away_score": "away_score"})
-    except Exception:
-        return pd.DataFrame()
+def _load_nfl_officials(root):
+    """Load nflverse schedule 2026 from data/results_archive/nfl/.
+
+    HALT if the folder is empty or the newest file is older than 36 h.
+    No network call: pull_nfl_results.py writes these files on a schedule.
+    """
+    archive_dir = Path(os.environ.get("RESULTS_ARCHIVE_DIR") or (root / "data" / "results_archive")) / "nfl"
+    if not archive_dir.exists():
+        raise pl.Halt(f"NFL results archive missing: {archive_dir}")
+    files = sorted(archive_dir.glob("schedules_2026_*.parquet"))
+    if not files:
+        raise pl.Halt(f"NFL results archive empty: {archive_dir}")
+
+    newest = files[-1]
+    age_h = (datetime.now(timezone.utc) - datetime.fromtimestamp(newest.stat().st_mtime, tz=timezone.utc)).total_seconds() / 3600
+    if age_h > 36:
+        raise pl.Halt(f"NFL results archive stale: {newest.name} is {age_h:.1f}h old (>36h)")
+
+    sched = pd.read_parquet(newest)
+    sched["date"] = pd.to_datetime(sched.gameday).dt.date
+    sched["completed"] = sched.home_score.notna()
+    return sched.rename(columns={"game_id": "official_game_id",
+                                  "home_team": "home", "away_team": "away"})
 
 
 def _tape_events_for_sport(sport, root):
@@ -196,7 +207,7 @@ def build_all(root=None):
 
     # NFL
     nfl_events = _tape_events_for_sport("NFL", root)
-    nfl_officials = _load_nfl_officials()
+    nfl_officials = _load_nfl_officials(root)
     if not nfl_events.empty and not nfl_officials.empty:
         xw, unmatched = build_crosswalk(
             nfl_events, nfl_officials, "NFL",

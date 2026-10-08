@@ -102,3 +102,33 @@ def test_null_control_valid_batch(tmp_path):
     assert appended == 3
     v = pl.view(tmp_path)
     assert len(v) == 3
+
+
+# ---- OPS2b Item 2 tests ----
+
+# (i) tag and conf columns are in the contract
+def test_tag_conf_in_cols():
+    assert "tag" in pl.COLS
+    assert "conf" in pl.COLS
+
+
+# (j) row with tag and conf admits and roundtrips
+def test_tag_conf_roundtrip(tmp_path):
+    row = _base_row(tag="injury_news", conf=72.5)
+    pl.admit([row], MEMBERS)
+    appended, _ = pl.append([row], tmp_path)
+    assert appended == 1
+    v = pl.view(tmp_path)
+    assert v[0]["tag"] == "injury_news"
+    assert v[0]["conf"] == 72.5
+
+
+# (k) row without tag/conf gets null defaults
+def test_tag_conf_defaults(tmp_path):
+    row = _base_row()
+    pl.admit([row], MEMBERS)
+    appended, _ = pl.append([row], tmp_path)
+    assert appended == 1
+    v = pl.view(tmp_path)
+    assert v[0].get("tag") is None
+    assert v[0].get("conf") is None

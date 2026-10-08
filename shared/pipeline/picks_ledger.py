@@ -76,6 +76,7 @@ COLS = [
     "commence_time", "home", "away", "market", "player_id", "player_name", "side",
     "point", "price_american", "book", "reason", "share_link", "supersedes",
     "result", "graded_utc", "result_source", "ingested_utc", "source_file", "source_row",
+    "tag", "conf",
 ]
 
 
