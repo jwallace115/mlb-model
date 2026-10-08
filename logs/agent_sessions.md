@@ -19,17 +19,17 @@
   Tests: (a) commit refused on main ✓, (b) dry-run with var passes hook ✓,
   (c) worktree unaffected (items 1-3 proved it).
 
-### WAITING
-- :50 auto-commit (19:50Z) to verify hook + MLB_AUTOCOMMIT works together.
-  If it FAILS: revert push_paths.sh edit, paste failure, report Item 4 NOT DONE.
+### VERIFIED
+- :50 auto-commit (19:50Z): 482df2a8b "auto: Mac outputs 2026-10-08T19:50:01Z"
+  created successfully — hook did NOT block it (MLB_AUTOCOMMIT=1 worked).
+  Push still fails (pre-existing GitHub auth issue in cron env, not related).
 
 ### NOT DONE
-- MERGE: waiting for auto-commit verification, then merge in :00–:44 window
 - VM cron checks: 21:15Z prekick, 22:00Z mid (tonight's first runs)
 - Site front page verification after merge (push_daemon → site rebuild)
+- Fix the Mac cron push auth issue (pre-existing, not from this order)
 
 ### UNVERIFIED
-- Whether the :50 auto-commit succeeds with the hook installed
 - Whether the rebuilt cards with plain-English summaries render correctly on the
   live site (will verify after merge + push_daemon cycle)
 
