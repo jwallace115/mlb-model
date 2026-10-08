@@ -245,6 +245,22 @@ MAGNITUDE, NO_TAPE. `--repair` appends a correction row (supersedes the old) and
 The NCAAF freeze has the same convention (first_side line) and the same adapter bug.
 All 45 repaired via supersedes rows; 44 regraded (1 no crosswalk match).
 
+## P17 — Line movement must describe the pick's own line (2026-10-08)
+
+OPS3/3b shipped `_line_movement` filtering by `event_id` only. Props matched every
+market for the player (anytime TD mixed with pass yards). Game lines matched both
+outcomes (Seattle's card showed Washington's +8.5).
+
+**Fix:** Both branches now filter by:
+- **Props:** `event_id + player_name + market_key` (e.g. `player_pass_yds`), then
+  nearest line to the pick's point for alt ladders.
+- **Game lines:** `event_id + market + outcome_name` matching the pick's side via
+  `nfl_team()` normaliser, then nearest point.
+
+**Value structure:** `{book: {open: {point, price, as_of}, close: {...}, move_points,
+move_price}, consensus: {open: {median_point, n_books, as_of}, close: {...}}, n_rows}`.
+Consensus = median point across books (one row per book) at earliest and latest timestamps.
+
 ## P12 — Top-20 page rules (2026-10-08)
 
 `picks.html` is the Top-20 page with one tab per sport (NFL, NCAAF, NHL, NBA).

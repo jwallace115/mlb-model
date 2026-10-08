@@ -376,3 +376,109 @@ def test_game_line_card_unchanged(tmp_path):
     # The game-line card must produce the same hash regardless of prop changes
     assert card_hash, "game-line card should produce a valid hash"
     plyr._tape_cache.clear()
+
+
+# ---- OPS3c Item 2: line movement must filter by market + side ----
+
+# (l) props: different market_key for same player must not leak into card
+def test_prop_market_filter(tmp_path):
+    plyr._tape_cache.clear()
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        # anytime TD row: +400 — must NOT appear in a pass_yds card
+        {"event_id": "a" * 32, "market_key": "player_anytime_td", "player_name": "Cam Ward",
+         "line": 0.5, "over_price": 400, "under_price": -600, "bookmaker": "hardrockbet_fl",
+         "pull_timestamp": "2026-09-24T16:00:10Z", "last_update": "2026-09-24T16:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.2, "implied_under": 0.857, "snapshot_tag": "close"},
+        # pass_yds row: -115
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 177.5, "over_price": -115, "under_price": -105, "bookmaker": "hardrockbet_fl",
+         "pull_timestamp": "2026-09-27T14:00:00Z", "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.535, "implied_under": 0.512, "snapshot_tag": "close"},
+    ])
+    pick = _prop_pick()  # market=prop:pass_yds
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    lm_str = json.dumps(lm, default=str)
+    assert "400" not in lm_str, "card contains anytime TD price in a pass_yds card"
+    assert lm.get("value") is not None, "pass_yds line movement should have data"
+    plyr._tape_cache.clear()
+
+
+# (m) game-line: snapshot with both outcomes — card shows only the pick's side
+def test_game_line_outcome_filter(tmp_path):
+    plyr._tape_cache.clear()
+    tape_dir = tmp_path / "data" / "odds_archive" / "nfl" / "line_history" / "season=2026"
+    tape_dir.mkdir(parents=True, exist_ok=True)
+    snap = pd.DataFrame([
+        # Seattle -8.5 at two books
+        {"snapshot_utc": "2026-09-27T14:00:00Z", "sport": "nfl",
+         "event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Washington", "away_team": "Seattle Seahawks",
+         "bookmaker": "draftkings", "book_last_update": "2026-09-27T14:00:00Z",
+         "market": "spreads", "outcome_name": "Seattle Seahawks",
+         "point": -8.5, "price": -110},
+        {"snapshot_utc": "2026-09-27T14:00:00Z", "sport": "nfl",
+         "event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Washington", "away_team": "Seattle Seahawks",
+         "bookmaker": "fanduel", "book_last_update": "2026-09-27T14:00:00Z",
+         "market": "spreads", "outcome_name": "Seattle Seahawks",
+         "point": -8.5, "price": -108},
+        # Washington +8.5 — must NOT appear in a Seattle card
+        {"snapshot_utc": "2026-09-27T14:00:00Z", "sport": "nfl",
+         "event_id": "a" * 32, "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Washington", "away_team": "Seattle Seahawks",
+         "bookmaker": "draftkings", "book_last_update": "2026-09-27T14:00:00Z",
+         "market": "spreads", "outcome_name": "Washington Commanders",
+         "point": 8.5, "price": -110},
+    ])
+    snap.to_parquet(tape_dir / "snap_20260927T140000Z.parquet", index=False)
+
+    pick = _pick(side="Seattle Seahawks", point=-8.5, book="draftkings")
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    assert lm.get("value") is not None, "game-line movement should have data"
+    # The card must show -8.5, never +8.5
+    lm_str = json.dumps(lm, default=str)
+    val = lm["value"]
+    if val.get("book", {}).get("close"):
+        assert val["book"]["close"]["point"] == -8.5
+    plyr._tape_cache.clear()
+
+
+# (n) alt ladder: nearest line to the pick's point
+def test_alt_ladder_nearest(tmp_path):
+    plyr._tape_cache.clear()
+    _make_prop_monthly(tmp_path, "nfl", "09", [
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 165.5, "over_price": -180, "under_price": 150, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-27T14:00:00Z", "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.643, "implied_under": 0.4, "snapshot_tag": "close"},
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 175.5, "over_price": -125, "under_price": 105, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-27T14:00:00Z", "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.556, "implied_under": 0.488, "snapshot_tag": "close"},
+        {"event_id": "a" * 32, "market_key": "player_pass_yds", "player_name": "Cam Ward",
+         "line": 185.5, "over_price": 100, "under_price": -120, "bookmaker": "draftkings",
+         "pull_timestamp": "2026-09-27T14:00:00Z", "last_update": "2026-09-27T14:00:00Z",
+         "sport": "nfl", "game_date": "2026-09-28", "commence_time": "2026-09-28T17:00:00Z",
+         "home_team": "Team Home", "away_team": "Team Away",
+         "implied_over": 0.5, "implied_under": 0.545, "snapshot_tag": "close"},
+    ])
+    pick = _prop_pick(point=177.5)  # nearest to 175.5
+    card = plyr.build_card(pick, tmp_path)
+    lm = card["layers"]["line_movement"]
+    assert lm.get("value") is not None
+    # The book close should use 175.5 (nearest to 177.5)
+    val = lm["value"]
+    if val.get("book") and val["book"].get("close"):
+        assert val["book"]["close"]["point"] == 175.5, \
+            f"expected 175.5 (nearest to 177.5), got {val['book']['close']['point']}"
+    plyr._tape_cache.clear()

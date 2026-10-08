@@ -103,10 +103,37 @@ def _line_movement(pick, root, logged_dt):
     sources_used = []
     rows = []
 
+    # Normalise side for matching tape outcome_name
+    import pick_sources as ps
+    side_norm = ps.nfl_team(side) if side else None  # nickname like "seahawks"
+
+    def _outcome_matches(outcome_name):
+        """Does this tape outcome match the pick's side?"""
+        if not side:
+            return True
+        s_lower = str(side).lower()
+        o_lower = str(outcome_name).lower()
+        if s_lower == "over" or s_lower == "under":
+            return o_lower == s_lower
+        # NFL team matching
+        o_nick = ps.nfl_team(outcome_name)
+        if side_norm and o_nick:
+            return side_norm == o_nick
+        return s_lower in o_lower or o_lower in s_lower
+
+    def _nearest_line(candidates_df, pick_point):
+        """From rows with multiple lines (alt ladder), pick the nearest to pick_point."""
+        if pick_point is None or candidates_df.empty:
+            return candidates_df
+        line_col = "line" if "line" in candidates_df.columns else "point"
+        if line_col not in candidates_df.columns:
+            return candidates_df
+        candidates_df = candidates_df.copy()
+        candidates_df["_dist"] = (candidates_df[line_col].astype(float) - float(pick_point)).abs()
+        best_dist = candidates_df["_dist"].min()
+        return candidates_df[candidates_df["_dist"] == best_dist].drop(columns=["_dist"])
+
     if is_prop:
-        # Props: one parquet per month with pull_timestamp per row.
-        # Read every monthly file whose month could overlap the window,
-        # then keep only rows with pull_timestamp in [window_start, logged_dt].
         tape_dir = root / "data" / "odds_archive" / sport_folder / "props"
         prop_market = "player_" + market.split(":", 1)[1] if ":" in market else market
         for month_dir in tape_dir.glob("season=*/month=*"):
@@ -118,15 +145,16 @@ def _line_movement(pick, root, logged_dt):
                 mask = (df.event_id == eid) & (df._pt >= window_start) & (df._pt <= logged_dt)
                 if player_name:
                     mask &= df.player_name == player_name
-                matched = df[mask]
+                # Filter by market_key
+                if "market_key" in df.columns:
+                    mask &= df.market_key == prop_market
+                matched = _nearest_line(df[mask], point)
                 if not matched.empty:
                     for _, r in matched.iterrows():
-                        rows.append({"ts": r["_pt"], "file": p.name, **{k: v for k, v in r.items() if k != "_pt"}})
+                        rows.append({"ts": r["_pt"], "file": p.name, **{k: v for k, v in r.items() if k not in ("_pt",)}})
                     sources_used.append(p.name)
-        # Sort by pull_timestamp
         rows.sort(key=lambda r: r.get("ts") or datetime.min.replace(tzinfo=timezone.utc))
     else:
-        # Game lines: timestamped snapshot files
         tape_dir = root / "data" / "odds_archive" / sport_folder / "line_history"
         files = []
         for season_dir in tape_dir.glob("season=*"):
@@ -137,7 +165,10 @@ def _line_movement(pick, root, logged_dt):
             df = _load_tape_cached(p)
             tape_market = {"spread": "spreads", "moneyline": "h2h", "total": "totals"}.get(market, market)
             mask = (df.event_id == eid) & (df.market == tape_market)
-            matched = df[mask]
+            # Filter by outcome_name for the pick's side
+            if "outcome_name" in df.columns:
+                mask &= df.outcome_name.apply(_outcome_matches)
+            matched = _nearest_line(df[mask], point)
             if not matched.empty:
                 for _, r in matched.iterrows():
                     rows.append({"ts": ts, "file": p.name, **r.to_dict()})
@@ -145,15 +176,6 @@ def _line_movement(pick, root, logged_dt):
 
     if not rows:
         return _no_data(logged_dt, "no tape rows for this event/market")
-
-    # Build summary: earliest and latest for pick's book + consensus
-    earliest = rows[0]
-    latest = rows[-1]
-
-    # Filter for pick's book
-    book_rows = [r for r in rows if r.get("bookmaker") == book] if book else []
-    book_open = book_rows[0] if book_rows else None
-    book_close = book_rows[-1] if book_rows else None
 
     def _price_from_row(r, is_prop_mkt):
         if is_prop_mkt:
@@ -165,18 +187,64 @@ def _line_movement(pick, root, logged_dt):
         else:
             return r.get("price")
 
-    result = {
-        "event_id": eid, "market": market, "book": book,
-        "open": {"price": _price_from_row(earliest, is_prop), "source": earliest.get("file"), "as_of": str(earliest.get("ts"))[:19]} if earliest else None,
-        "close": {"price": _price_from_row(latest, is_prop), "source": latest.get("file"), "as_of": str(latest.get("ts"))[:19]} if latest else None,
-    }
-    if book_open:
-        result["book_open"] = {"price": _price_from_row(book_open, is_prop), "source": book_open.get("file")}
-    if book_close:
-        result["book_close"] = {"price": _price_from_row(book_close, is_prop), "source": book_close.get("file")}
+    def _point_from_row(r, is_prop_mkt):
+        if is_prop_mkt:
+            return r.get("line")
+        return r.get("point")
 
-    return _layer(result, ", ".join(sources_used[:5]) + (f" (+{len(sources_used)-5})" if len(sources_used) > 5 else ""),
-                  latest.get("ts") if latest else logged_dt)
+    # Build structured result: book open/close + consensus
+    book_rows = [r for r in rows if r.get("bookmaker") == book] if book else []
+    all_rows_by_ts = {}
+    for r in rows:
+        ts_key = str(r.get("ts"))[:19]
+        all_rows_by_ts.setdefault(ts_key, []).append(r)
+
+    ts_keys = sorted(all_rows_by_ts.keys())
+    earliest_ts = ts_keys[0] if ts_keys else None
+    latest_ts = ts_keys[-1] if ts_keys else None
+
+    def _consensus_at(ts_key):
+        """Median point across books (one row per book, nearest line)."""
+        ts_rows = all_rows_by_ts.get(ts_key, [])
+        by_book = {}
+        for r in ts_rows:
+            bk = r.get("bookmaker", "?")
+            if bk not in by_book:
+                by_book[bk] = r
+        points = [_point_from_row(r, is_prop) for r in by_book.values() if _point_from_row(r, is_prop) is not None]
+        if not points:
+            return None
+        points.sort()
+        mid = len(points) // 2
+        median = points[mid] if len(points) % 2 else (points[mid - 1] + points[mid]) / 2
+        return {"median_point": median, "n_books": len(points), "as_of": ts_key}
+
+    book_open = book_rows[0] if book_rows else None
+    book_close = book_rows[-1] if book_rows else None
+
+    result = {
+        "book": {
+            "open": {"point": _point_from_row(book_open, is_prop), "price": _price_from_row(book_open, is_prop),
+                     "as_of": str(book_open.get("ts"))[:19]} if book_open else None,
+            "close": {"point": _point_from_row(book_close, is_prop), "price": _price_from_row(book_close, is_prop),
+                      "as_of": str(book_close.get("ts"))[:19]} if book_close else None,
+        } if book_rows else None,
+        "consensus": {
+            "open": _consensus_at(earliest_ts),
+            "close": _consensus_at(latest_ts),
+        },
+        "n_rows": len(rows),
+    }
+    if book_open and book_close:
+        op = _point_from_row(book_open, is_prop)
+        cp = _point_from_row(book_close, is_prop)
+        opr = _price_from_row(book_open, is_prop)
+        cpr = _price_from_row(book_close, is_prop)
+        result["book"]["move_points"] = (cp - op) if op is not None and cp is not None else None
+        result["book"]["move_price"] = (cpr - opr) if opr is not None and cpr is not None else None
+
+    return _layer(result, ", ".join(sorted(set(sources_used))[:5]) + (f" (+{len(set(sources_used))-5})" if len(set(sources_used)) > 5 else ""),
+                  rows[-1].get("ts") if rows else logged_dt)
 
 
 # ---- weather ----
