@@ -3770,3 +3770,22 @@ Ending: 99,842
 - PUSHED: 92824aa35 to origin/main.
 - CRON 18:15Z: capture ran clean — "no new official reports" (expected: preseason, no game day). ESPN: 80 items. Exit 0.
 - NOT DONE: NBA-S0d (not started per instruction). Restoring ~/nba_untracked_backup/ files (caller's responsibility).
+
+## 2026-10-08T04:09Z  claude-code (OPS2b)
+- ITEM 1: pull_nfl_results.py (new), event_crosswalk reads from archive (nflreadpy removed),
+  picks_grader exits non-zero on missing crosswalk. feeds_registry updated. P7 written.
+  Committed 17f7addc1, pushed.
+- ITEM 2: 215/280 rejected pick-legs resolved (pre-registered >=250 NOT MET; 54 are props with
+  no game field). split_game fixed for parens. Raw extractors use regex on truncated JSON.
+  _resolve_event_from_build_time for no_commence. sim_nfl owner (235 rows). tag + conf columns
+  added to contract (P8). One-time store rebuild on Mac and VM. Committed 87bc62e3a, pushed.
+- ITEM 3: DROPPED (Jeff, 2026-10-07).
+- ITEM 4: NBA data/injury_archive/nba/history/ already in .git/info/exclude:9.
+  NHL nhl/data/sim/custody/ already in .gitignore:2. No commit needed.
+- MERGE: origin/main pulled (31 auto-commits merged), ops/picks-fixes merged --no-ff,
+  pushed 0308b9d0a. VM pulled, cron line added (30 9 * * * pull_nfl_results.py),
+  store rebuilt (1895 rows, matches Mac), crosswalk + grader ran (354 graded).
+  Caddyfile mtime unchanged (2026-10-02 04:19:56).
+- NOT DONE: picks.html rebuild verification (site/build_site.py not run in this order per Item 3 drop).
+- UNVERIFIED: whether the crosswalk completes within the 10:10Z cron window on the VM
+  (took ~8 min on the droplet's CPU for 373×3679 NCAAF comparisons).
