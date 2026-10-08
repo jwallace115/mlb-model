@@ -387,6 +387,22 @@ timestamp filename.
 First real captures from Mac: TNF TB@DAL props (602 rows, 10 credits, hardrockbet_fl
 70 rows) + game-line snapshot (1,340 rows, 3 credits). Total 13 credits.
 
+## P26 — run_window.py orchestrator (2026-10-08)
+
+`nfl/pipeline/run_window.py --sport nfl --window {open,mid,late,prekick,adhoc}
+--reader-model <m> [--as-of] [--no-pull]`: one command per window.
+
+Steps: (1) pull props+snapshot unless `--no-pull`; (2) sheet → reader_v3 → freeze
+with `--window`, `--reader-model`, `--reader-file`; (3) verify; (4) picks_adapters
+→ build_top20.
+
+Each step prints UTC timestamp, command, exit code. Non-zero STOPs the pipeline.
+`--window-hours` is passed to both sheet and freeze for prekick/adhoc windows
+(so the freeze rebuilds the same narrowed sheet the reader saw).
+
+Scheduled runs: ops proposes `ops/windows` branch merged by Jeff in :00–:44.
+The NFL lane has no existing convention for automated window branches.
+
 ## P13 — Lane contract for reader freezes (2026-10-08)
 
 Every reader freeze (ai_opinions parquet) must carry:
