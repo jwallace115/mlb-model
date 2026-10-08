@@ -3841,3 +3841,13 @@ Ending: 99,842
   After: Cam Ward open +400 → close -108 from data_2026_09.parquet. P15. Committed 88a3dba87.
 - FULL SUITE: 2 failed (known), 177 passed. P0.3 grep empty.
 - NOT DONE: MERGE.
+
+## 2026-10-08T10:52Z  claude-code (OPS3c)
+- ITEM 1: spread sign fix. _freeze_point negates for second-side spreads. picks_point_audit.py
+  audits vs tape, repairs via supersedes. 45 flipped (8 NFL + 37 NCAAF), all corrected, 44 regraded.
+  RED: test_adapter_spread_sign FAILED (8.5 instead of -8.5). P16. Committed 6b66bcadb.
+- ITEM 2: line movement filters by market_key (props) + outcome_name (game lines) + nearest line
+  (alt ladders). Structured book+consensus output. RED: test_prop_market_filter FAILED (+400 ATD
+  in pass_yds card). P17. Committed 9e1943fc0.
+- FULL SUITE: 2 failed (known), 183 passed.
+- NOT DONE: MERGE, VM audit+repair, stale card deletion.
