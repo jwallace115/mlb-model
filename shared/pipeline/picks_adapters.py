@@ -470,6 +470,16 @@ def adapt_pick_sources(root=None):
     return rows, rejected, F
 
 
+def _freeze_point(market, freeze_side, line):
+    """Convert freeze line to bettor's point. Spread + second-side → negate."""
+    if line is None or (isinstance(line, float) and pd.isna(line)):
+        return None
+    pt = float(line)
+    if market == "spread" and freeze_side == "second":
+        pt = -pt
+    return pt
+
+
 def adapt_nfl_ai_opinions(root=None):
     """Read NFL AI opinion parquets.
 
@@ -588,7 +598,7 @@ def adapt_nfl_ai_opinions(root=None):
                 "player_id": None,
                 "player_name": player_name,
                 "side": str(r.side_name),
-                "point": float(r.line) if r.line is not None and not (isinstance(r.line, float) and pd.isna(r.line)) else None,
+                "point": _freeze_point(mk, r.side, r.line),
                 "price_american": price,
                 "book": str(r.book) if r.get("book") and str(r.get("book")) != "nan" else None,
                 "reason": reason,

@@ -227,6 +227,24 @@ keep only rows with `pull_timestamp` in `[commence−7d, logged_utc]`. Filter by
 `event_id + player_name` (not `line`, since the pick's point may differ from the book's
 current line). `as_of` = the newest `pull_timestamp` used. Game-line logic unchanged.
 
+## P16 — Spread sign convention and tape audit (2026-10-08)
+
+**Convention:** the ledger's `point` is the **bettor's number**. The freeze `line` is
+from **first_side's perspective**. For spread + `side == "second"`, the adapter must
+negate: `point = -line`. Totals and props are unchanged.
+
+**Adapter fix:** `adapt_nfl_ai_opinions` now calls `_freeze_point(market, side, line)`
+which negates for second-side spreads. The NCAAF `p_ai_opinions` path in pick_sources
+has the same convention — its rows also went through the same audit.
+
+**Audit:** `picks_point_audit.py --report` compares every spread row's `point` against
+the tape's `outcome_name + point` for the pick's side. Classes: AGREES, SIGN_FLIPPED,
+MAGNITUDE, NO_TAPE. `--repair` appends a correction row (supersedes the old) and regrades.
+
+**Pre-registered vs actual:** expected 8 NFL SIGN_FLIPPED; found 8 NFL + 37 NCAAF = 45.
+The NCAAF freeze has the same convention (first_side line) and the same adapter bug.
+All 45 repaired via supersedes rows; 44 regraded (1 no crosswalk match).
+
 ## P12 — Top-20 page rules (2026-10-08)
 
 `picks.html` is the Top-20 page with one tab per sport (NFL, NCAAF, NHL, NBA).
