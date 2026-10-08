@@ -3877,3 +3877,13 @@ Ending: 99,842
 - NOT DONE: MERGE, VM cron for picks_clv, real-data CLV run (too slow on Mac for this session;
   runs on VM hourly).
 - UNVERIFIED: CLV real-data numbers (Cowork's spot checks); CLV run time on the VM.
+
+## 2026-10-08T13:11Z  claude-code (OPS4b Item 1 only)
+- ITEM 1: OPS4a leftovers. p_ai_opinions carries window. Record section groups by (owner, window)
+  with CLV column. picks_clv performance: cached parse, snapshot index, close_price int.
+  CLV run: 1895 rows (431 with close) in 4:13. Spot checks match Cowork: SEA -0.5, Cam Ward 0.
+  RED: original p_ai_opinions has no window. P23. Committed 9819dc37a, pushed.
+- NOT DONE: Items 2-4 (reader_v3 port, fresh pulls, run_window orchestrator). These require
+  reading and porting a 1000+ line untracked reader script, making paid API calls, and running
+  a real freeze. Deferred to a follow-up session for correctness.
+- UNVERIFIED: VM CLV run from OPS4a (background job, status unknown).
