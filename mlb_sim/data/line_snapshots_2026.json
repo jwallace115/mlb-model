@@ -53246,5 +53246,57 @@
     "over_price": 116,
     "under_price": -142,
     "book": "fanduel"
+  },
+  {
+    "game_id": "2f041c00e4bddc69bd1bbfbd40cc3c09",
+    "game_date": "2026-10-07",
+    "home_team": "ATL",
+    "away_team": "LAD",
+    "snapshot_time": "2026-10-07T06:00:15.334443",
+    "first_seen_timestamp": "2026-10-07T06:00:15.334418",
+    "snapshot_label": "OPEN",
+    "total_line": 7.5,
+    "over_price": -101,
+    "under_price": -119,
+    "book": "draftkings"
+  },
+  {
+    "game_id": "3c71012ad7a75e6c11575285e6841e14",
+    "game_date": "2026-10-07",
+    "home_team": "SDP",
+    "away_team": "MIL",
+    "snapshot_time": "2026-10-07T06:00:15.543774",
+    "first_seen_timestamp": "2026-10-07T06:00:15.543744",
+    "snapshot_label": "OPEN",
+    "total_line": 7.5,
+    "over_price": 104,
+    "under_price": -128,
+    "book": "fanduel"
+  },
+  {
+    "game_id": "2f041c00e4bddc69bd1bbfbd40cc3c09",
+    "game_date": "2026-10-07",
+    "home_team": "ATL",
+    "away_team": "LAD",
+    "snapshot_time": "2026-10-07T06:00:15.728511",
+    "first_seen_timestamp": "2026-10-07T06:00:15.334418",
+    "snapshot_label": "2AM",
+    "total_line": 7.5,
+    "over_price": -101,
+    "under_price": -119,
+    "book": "draftkings"
+  },
+  {
+    "game_id": "3c71012ad7a75e6c11575285e6841e14",
+    "game_date": "2026-10-07",
+    "home_team": "SDP",
+    "away_team": "MIL",
+    "snapshot_time": "2026-10-07T06:00:15.947413",
+    "first_seen_timestamp": "2026-10-07T06:00:15.543744",
+    "snapshot_label": "2AM",
+    "total_line": 7.5,
+    "over_price": 104,
+    "under_price": -128,
+    "book": "fanduel"
   }
 ]

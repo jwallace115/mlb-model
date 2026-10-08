@@ -1,14 +1,14 @@
 {
  "latest": {
-  "run_utc": "2026-10-06T06:10:02Z",
-  "finished_utc": "2026-10-06T06:15:52Z",
+  "run_utc": "2026-10-07T06:10:03Z",
+  "finished_utc": "2026-10-07T06:15:54Z",
   "key_fp": "ac6e89a0",
-  "remaining_start": 264076,
-  "remaining_end": 257896,
-  "reserve": 258000,
-  "spent": 6180,
-  "calls": 206,
-  "stop_reason": "reserve reached (remaining 257896 <= reserve 258000)",
+  "remaining_start": 254531,
+  "remaining_end": 249911,
+  "reserve": 250000,
+  "spent": 4620,
+  "calls": 154,
+  "stop_reason": "reserve reached (remaining 249971 <= reserve 250000)",
   "jobs": {
    "nfl_props": {
     "ok": 0,
@@ -88,9 +88,9 @@
     "other": 0
    },
    "nhl_inplay": {
-    "ok": 206,
+    "ok": 154,
     "empty": 0,
-    "skip": 6866,
+    "skip": 7078,
     "unsupported": 0,
     "other": 0
    }
@@ -577,6 +577,103 @@
      "ok": 206,
      "empty": 0,
      "skip": 6866,
+     "unsupported": 0,
+     "other": 0
+    }
+   }
+  },
+  {
+   "run_utc": "2026-10-07T06:10:03Z",
+   "finished_utc": "2026-10-07T06:15:54Z",
+   "key_fp": "ac6e89a0",
+   "remaining_start": 254531,
+   "remaining_end": 249911,
+   "reserve": 250000,
+   "spent": 4620,
+   "calls": 154,
+   "stop_reason": "reserve reached (remaining 249971 <= reserve 250000)",
+   "jobs": {
+    "nfl_props": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 1709,
+     "unsupported": 0,
+     "other": 453
+    },
+    "nfl_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 1709,
+     "unsupported": 0,
+     "other": 453
+    },
+    "nfl_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 15168,
+     "unsupported": 0,
+     "other": 0
+    },
+    "ncaaf_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 5273,
+     "unsupported": 0,
+     "other": 157
+    },
+    "ncaaf_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 13728,
+     "unsupported": 0,
+     "other": 0
+    },
+    "nhl_props": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8379,
+     "unsupported": 0,
+     "other": 33
+    },
+    "nhl_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8379,
+     "unsupported": 0,
+     "other": 33
+    },
+    "nhl_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 24408,
+     "unsupported": 0,
+     "other": 0
+    },
+    "mlb_props": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8590,
+     "unsupported": 4,
+     "other": 1230
+    },
+    "mlb_derivs": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 8590,
+     "unsupported": 4,
+     "other": 1230
+    },
+    "mlb_lines_hourly": {
+     "ok": 0,
+     "empty": 0,
+     "skip": 16625,
+     "unsupported": 0,
+     "other": 0
+    },
+    "nhl_inplay": {
+     "ok": 154,
+     "empty": 0,
+     "skip": 7078,
      "unsupported": 0,
      "other": 0
     }
