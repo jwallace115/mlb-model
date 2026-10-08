@@ -448,3 +448,46 @@ was always correct; the fix must not change it).
   stands). Rebuilt cards carry `rebuilt_utc` and `rebuilt_reason = "P27 market map"`.
 - `picks_clv.py --recompute-null`: re-runs picks whose existing close_point is null,
   appends a corrected row (append-only; newest row per pick_id wins at read time).
+
+## P28 — run_window runs unattended and commits what it froze (2026-10-08)
+
+`run_window.py` gains:
+
+**(a) WINDOW_HOURS:** open 168, mid 168, late 72, prekick 6, adhoc 168.
+Late widened from 24 → 72 (includes SNF/MNF). Adhoc widened from 48 → 168
+(whole upcoming slate).
+
+**(b) --tag expanded:** `pull_hardrock_props.py --tag` now accepts
+`{open,mid,late,prekick,adhoc,close}` (was `{open,mid,close}`). `snapshot_tag`
+is free text — the three old values keep working. `run_window` passes the window
+name as `--tag`.
+
+**(c) --reader-model** defaults to `reader_v3`. The script is what produced the
+opinions; a model name goes there only when a model actually formed the opinion.
+The adhoc freeze already recorded `claude-opus-5-5` and stays as frozen; from
+tonight the honest label is `reader_v3`.
+
+**(d) --commit {none,main,branch:\<name\>}:** after verify, `git add` the frozen
+file + manifest (+ mac props + snapshot) and commit with message
+`"window <w> freeze <UTC>: <n> files, reader_v3 <sha8>"`. `main` commits on the
+current branch and pushes to origin; `branch:<name>` pushes to that branch;
+`none` leaves the files (Mac default). Non-zero anywhere STOPs before commit.
+
+**(e) --auto-prekick:** for the prekick window, check if any game kicks in
+`[now + 2h52m, now + 3h08m]` (one 15-minute cron slot). If not, print
+"no game in the prekick slot" and exit 0. `--window-hours 6` keeps multi-game
+slots in one freeze.
+
+**(f) Injury report:** auto-detects newest file under
+`research/nfl_sim/official_injuries/<season>_w<WW>/` when it exists on the host.
+Absent → omitted (reason says "no injury report"). VM runs will usually lack it.
+Sim lane should export the injury report before each slate.
+
+**(g) --root respects MLB_REPO_ROOT:** `env.setdefault("MLB_REPO_ROOT", str(ROOT))`
+so a pre-set value (e.g. from a test fixture) is honoured, not overwritten.
+reader_v3 receives `--root` explicitly.
+
+**Tests:** (a) `--tag prekick` accepted by puller (RED: "invalid choice", GREEN: no error);
+(b) `_check_prekick_slot` with game at +5h → False, game at +3h → True;
+(c) existing halt test still passes (null control).
+Smoke test: `--auto-prekick --no-pull --commit none` → "no game in the prekick slot", exit 0.
