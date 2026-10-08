@@ -21,6 +21,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_top20 as bt
+import pick_sources as ps
 import picks_ledger as pl
 
 ROOT = Path(os.environ.get("MLB_REPO_ROOT") or Path(__file__).resolve().parent.parent.parent)
@@ -104,7 +105,6 @@ def _line_movement(pick, root, logged_dt):
     rows = []
 
     # Normalise side for matching tape outcome_name
-    import pick_sources as ps
     side_norm = ps.nfl_team(side) if side else None  # nickname like "seahawks"
 
     def _outcome_matches(outcome_name):
