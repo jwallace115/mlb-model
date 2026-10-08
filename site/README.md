@@ -177,10 +177,11 @@ Check your change on the site: Pipeline health shows `site_build` FIRING within 
 * **NBA (opens 2026-10-20):** NBA pipelines run on the Mac (stats.nba.com blocks the VM). Tape NBA lines from the VM
   (added 2026-10-02). For Tracking, register NBA signal logs as in §5.2 once they exist; NBA history 2022-26 is on the Mac
   in `data/odds_archive/nba/history/` (not on the VM).
-* **MLB (spring 2027):** P09 and YRFI logs (`mlb/logs/p09_shadow_2026.json`, `yrfi_shadow_2026.json`) are already in the
-  signals registry; new season files need new `path`s (e.g. `…_2027.json`). In `feeds_registry.json` the MLB feeds use
-  `active_months` 3–10, so they turn from OFF to judged automatically. The 2026 lesson: both shadows crashed silently
-  from mid-June (MLB API 406) — the health page now shows that kind of failure as ERRORING within one day.
+* **MLB, golf, soccer, WNBA retired from the pages 2026-10-06.** MLB returns in 2027 through a PIT audit per
+  `research/mlb/mlb_system_registry_v2.md`. Signal rows moved to signals_registry.json `"retired"` list. MLB feeds
+  marked `"retired": true` in feeds_registry.json (health page shows them in a collapsed "Retired until 2027" table,
+  not judged). MLB line tape + event markets keep running as data capture (`"retired": false`). Golf/soccer/WNBA jobs
+  keep running but are hidden from the pages — they were not stopped by the 2026-10-06 decision.
 * **NHL:** `nhl/logs/nhl_shadow_aligned_2026.json` has no price field, so Tracking shows −110 triage only until prices
   are logged.
 * **NFL / NCAAF:** cards via §5.1; the forward experiment page stays status-only.

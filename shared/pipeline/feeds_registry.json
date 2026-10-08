@@ -100,7 +100,9 @@
     8,
     9,
     10
-   ]
+   ],
+   "retired": false,
+   "note": "data capture only; no MLB signals until 2027"
   },
   {
    "id": "nfl_props",
@@ -224,7 +226,9 @@
     9,
     10,
     11
-   ]
+   ],
+   "retired": false,
+   "note": "data capture only; no MLB signals until 2027"
   },
   {
    "id": "nfl_sunday_early",
@@ -330,7 +334,8 @@
     8,
     9,
     10
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "yrfi_odds",
@@ -350,7 +355,8 @@
     7,
     8,
     9
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "yrfi_shadow",
@@ -369,7 +375,8 @@
     7,
     8,
     9
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "p09_shadow",
@@ -388,7 +395,8 @@
     7,
     8,
     9
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "nrfi_selector",
@@ -407,7 +415,8 @@
     7,
     8,
     9
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "mlb_prelim",
@@ -429,7 +438,8 @@
     8,
     9,
     10
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "mlb_confirm",
@@ -446,14 +456,16 @@
     8,
     9,
     10
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "mlb_results",
    "label": "MLB results grader",
    "sport": "MLB",
    "cron_match": "results_tracker.py",
-   "quiet_ok": true
+   "quiet_ok": true,
+   "retired": true
   },
   {
    "id": "nhl_daily",
@@ -487,7 +499,8 @@
     "soccer/data/cache/daily/odds_soccer_*.json"
    ],
    "ts": "mtime",
-   "quiet_ok": true
+   "quiet_ok": true,
+   "retired": true
   },
   {
    "id": "golf_daily",
@@ -498,14 +511,16 @@
     "golf/shadow/golf_shadow_log.parquet"
    ],
    "ts": "mtime",
-   "quiet_ok": true
+   "quiet_ok": true,
+   "retired": true
   },
   {
    "id": "golf_grade",
    "label": "Golf grader",
    "sport": "Golf",
    "cron_match": "golf_grader.py",
-   "quiet_ok": true
+   "quiet_ok": true,
+   "retired": true
   },
   {
    "id": "health_old",
@@ -513,7 +528,8 @@
    "sport": "Ops",
    "cron_match": "shared/health_check.py",
    "quiet_ok": true,
-   "note": "to be retired"
+   "note": "to be retired",
+   "retired": true
   },
   {
    "id": "nba_availability_mac",
@@ -537,7 +553,7 @@
     5,
     6
    ],
-   "note": "Mac \u2192 GitHub \u2192 VM; judged by what has reached the VM"
+   "note": "Mac → GitHub → VM; judged by what has reached the VM"
   },
   {
    "id": "statcast_mac",
@@ -559,7 +575,8 @@
     8,
     9,
     10
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "mlb_hits_mac",
@@ -580,7 +597,8 @@
     7,
     8,
     9
-   ]
+   ],
+   "retired": true
   },
   {
    "id": "nba_model_mac",
@@ -668,7 +686,14 @@
     "data/results_archive/nfl/schedules_2026_*.parquet"
    ],
    "ts": "filename",
-   "active_months": [9, 10, 11, 12, 1, 2]
+   "active_months": [
+    9,
+    10,
+    11,
+    12,
+    1,
+    2
+   ]
   },
   {
    "id": "picks_grader",
