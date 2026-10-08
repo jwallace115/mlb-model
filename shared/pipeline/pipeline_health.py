@@ -325,8 +325,25 @@ def build(now, root, crontab_file=None, registry=REGISTRY, with_host=True):
     reg = json.loads(Path(registry).read_text())
     cron = read_crontab(crontab_file)
     git = Git(root)
-    feeds, used_cmds = [], set()
+    feeds, used_cmds, retired_feeds = [], set(), []
+    # cron_matches of retired feeds — these should not be flagged as "unregistered"
+    retired_cron_matches = set()
     for r in reg["feeds"]:
+        # Retired feeds are not judged
+        if r.get("retired"):
+            if r.get("cron_match"):
+                retired_cron_matches.add(r["cron_match"])
+                # Mark matching cron cmds as used so they don't show as unregistered
+                for j in cron:
+                    if r["cron_match"] in j["cmd"]:
+                        used_cmds.add(j["cmd"])
+            # Record last output time for the retired table
+            newest = newest_output(root, r.get("outputs", []), r.get("ts", "filename")) if r.get("outputs") else None
+            retired_feeds.append({
+                "id": r["id"], "label": r.get("label", r["id"]), "sport": r.get("sport", ""),
+                "newest_utc": newest[0].isoformat() if newest else None,
+            })
+            continue
         if r.get("host", "VM") == "VM" and r.get("cron_match"):
             matched = [j for j in cron if r["cron_match"] in j["cmd"]]
             exprs = [j["expr"] for j in matched]
@@ -360,7 +377,7 @@ def build(now, root, crontab_file=None, registry=REGISTRY, with_host=True):
     counts = {}
     for f in feeds:
         counts[f["status"]] = counts.get(f["status"], 0) + 1
-    out = {"generated_utc": now.isoformat(), "counts": counts, "feeds": feeds}
+    out = {"generated_utc": now.isoformat(), "counts": counts, "feeds": feeds, "retired": retired_feeds}
     if with_host:
         out["vm"] = vm_facts()
         out["push_daemon"] = push_daemon_facts(now=now)

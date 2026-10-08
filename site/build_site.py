@@ -36,7 +36,7 @@ ROOT = Path(os.environ.get("SITE_REPO_ROOT") or Path(__file__).resolve().parent.
 ET = ZoneInfo("America/New_York")
 TS_RE = re.compile(r"(\d{8}T\d{4}(?:\d{2})?Z)")
 SPORTS = [  # label, archive folder, max snapshot age (min) before the slate shows "no data"
-    ("NFL", "nfl", 90), ("NCAAF", "ncaaf", 90), ("NHL", "nhl", 90), ("NBA", "nba", 90), ("MLB", "baseball_mlb", 60),
+    ("NFL", "nfl", 90), ("NCAAF", "ncaaf", 90), ("NHL", "nhl", 90), ("NBA", "nba", 90),
 ]
 BOOK_NAMES = {"hardrockbet_fl": "Hard Rock", "pinnacle": "Pinnacle", "draftkings": "DK", "fanduel": "FanDuel",
               "betmgm": "MGM", "williamhill_us": "Caesars", "betrivers": "BetRivers", "betonlineag": "BetOnline",
@@ -46,14 +46,14 @@ ARCHIVE_DIRS = [
     ("NCAAF game-line tape", "data/odds_archive/ncaaf/line_history", "ML, spread, total · 10 books"),
     ("NHL game-line tape", "data/odds_archive/nhl/line_history", "ML, puck line, total · 10 books"),
     ("NBA game-line tape", "data/odds_archive/nba/line_history", "ML, spread, total · 10 books"),
-    ("MLB game-line tape", "data/odds_archive/baseball_mlb/line_history", "ML, run line, total · 10 books"),
+    ("MLB game-line tape (off-season; MLB restarts 2027)", "data/odds_archive/baseball_mlb/line_history", "ML, run line, total · 10 books"),
     ("NFL props", "data/odds_archive/nfl/props", "10 player markets · 10 books"),
     ("NFL other markets", "data/odds_archive/nfl/event_markets", "alts, team totals, halves"),
     ("NHL event markets", "data/odds_archive/nhl/event_markets", "props + derivatives"),
     ("NFL history", "data/odds_archive/nfl/history", "past seasons: hourly lines, props, alts"),
     ("NCAAF history", "data/odds_archive/ncaaf/history", "past seasons: hourly lines, alts"),
     ("NHL history", "data/odds_archive/nhl/history", "past seasons: lines, props, derivatives, in-play"),
-    ("MLB history", "data/odds_archive/baseball_mlb/history", "past seasons: hourly lines, props, F5"),
+    ("MLB history (off-season; MLB restarts 2027)", "data/odds_archive/baseball_mlb/history", "past seasons: hourly lines, props, F5"),
     ("Kalshi NFL", "data/odds_archive/kalshi/nfl", "game, spread, total"),
     ("Kalshi NCAAF", "data/odds_archive/kalshi/ncaaf", "game, spread, total"),
 ]
@@ -409,7 +409,7 @@ def build_tracking(now, health, outdir):
     legend = "".join(f'<span style="display:inline-flex;gap:6px;align-items:center;margin-right:14px">{badge(k)}<span class="note">{v}</span></span>'
                      for k, v in [("LIVE", "passed every gate, money allowed"), ("SHADOW", "logged and graded, no money"),
                                   ("UNVALIDATED", "a record, not evidence"), ("DEAD", "failed or withdrawn")])
-    body = (f'<div><h1>Tracking</h1><p class="lede">Every signal and logged opinion, graded from its own log. '
+    body = (f'<div><h1>Tracking</h1><p class="lede">NFL, NCAAF, NHL, NBA — every signal and logged opinion, graded from its own log. '
             f'<b>Real-price ROI</b> uses the price captured when the pick was logged and is the number that counts. '
             f'Flat −110 ROI is a quick check only. Every figure shows its count and dates.</p></div><div>{legend}</div>'
             f'<div class="tablewrap"><table><tr><th>Signal</th><th>Market</th><th>Label</th><th>N</th><th>Dates</th><th>Hit</th>'
@@ -483,6 +483,15 @@ def build_health(now, health):
             f'A job whose log shows a crash after its last slot is ERRORING. QUIET means it ran and had nothing new to write; OFF means out of season.</p></div>'
             f'{stale}<div class="tiles">{tiles}</div>'
             f'<div class="tablewrap"><table><tr><th>Job</th><th>Sport</th><th>Host</th><th>Schedule (UTC)</th><th>Newest file</th><th>Age</th><th>Status</th><th>Last log line</th></tr>{"".join(rows)}</table></div>{side}')
+    # Retired feeds
+    retired = health.get("retired", [])
+    if retired:
+        ret_rows = "".join(f"<tr><td>{E(r.get('label', r['id']))}<div class='src'>{E(r['id'])}</div></td>"
+                           f"<td class='muted'>{E(r.get('sport', ''))}</td>"
+                           f"<td class='mono'>{E((r.get('newest_utc') or '—')[:16])}</td></tr>"
+                           for r in retired)
+        body += (f'<details><summary style="cursor:pointer;margin-top:24px;color:var(--muted)">Retired until 2027 ({len(retired)} feeds)</summary>'
+                 f'<div class="tablewrap"><table><tr><th>Job</th><th>Sport</th><th>Last output</th></tr>{ret_rows}</table></div></details>')
     return page("health.html", "Pipeline health", body, health, now)
 
 
