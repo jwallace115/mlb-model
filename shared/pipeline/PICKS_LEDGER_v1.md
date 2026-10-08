@@ -178,3 +178,28 @@ ranked — it lands in the `unranked` list. Rows beyond the top 20 per column ar
 
 **HALTs:** Two freezes sharing the same `logged_utc`. A ranked row lacking `event_id`,
 `price_american`, or `side`.
+
+## P11 — Layer definitions, sources, ≤ logged_utc rule, sim-on-card (2026-10-08)
+
+`pick_layers.build_card(pick, root)` → JSON with layers, each as
+`{value, source, as_of}`. Write-once to `PICKS_LEDGER_DIR/layers/<pick_id>.json`.
+
+**A2 rule:** EVERY source file used must have its timestamp ≤ the pick's `logged_utc`.
+A file timestamped after `logged_utc` is never read for a card.
+
+**Layers:**
+- `line_movement`: tape snapshots in [commence−7d, logged_utc] for the event + market.
+  Open/close prices for the pick's book and consensus. Props from the props archive.
+- `weather`: NWS forecast snapshot nearest-before `logged_utc`. Dome/retractable →
+  `indoor: true`. Fields: temp_f, wind_mph, wind_dir, precip_prob_pct, short_forecast.
+  Sports without NWS coverage → "no source".
+- `sim`: the `sim_nfl` freeze (latest `≤ logged_utc`) matching event + market + player +
+  line + side. Shows `p_first`, `book_p_first`, `edge`. Jeff's 10-07 decision allows this
+  on the card — it is a prediction, not a result.
+- `injuries`: ESPN injury archive `≤ logged_utc`. Player-specific entry + team Out/
+  Doubtful/Questionable lists.
+- `news`: news archive `≤ logged_utc`, within 72h, mentioning the player or either team.
+- `reasoning`: the ledger row's `reason`, `tag`, and `conf` verbatim.
+
+**Write-once:** `--build-missing` builds cards for currently ranked picks only (≤40 per
+sport). An existing card is never rewritten. Cards persist after picks leave the ranked list.
