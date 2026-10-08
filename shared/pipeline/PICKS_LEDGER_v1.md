@@ -491,3 +491,36 @@ reader_v3 receives `--root` explicitly.
 (b) `_check_prekick_slot` with game at +5h → False, game at +3h → True;
 (c) existing halt test still passes (null control).
 Smoke test: `--auto-prekick --no-pull --commit none` → "no game in the prekick slot", exit 0.
+
+## P29 — Fixed windows run on the VM (2026-10-08)
+
+The fixed windows (open/mid/late/prekick) run on the VM via cron. The Mac runs
+only adhoc by hand (`run_window.py --window adhoc --commit none`; the Mac
+auto-commit carries the files to main).
+
+**VM cron (UTC):**
+| Schedule | Window | Command |
+|----------|--------|---------|
+| `0 16 * * 2` | open | `run_window.py --sport nfl --window open --commit main` |
+| `0 22 * * 4` | mid | `run_window.py --sport nfl --window mid --commit main` |
+| `0 22 * * 6` | late | `run_window.py --sport nfl --window late --commit main` |
+| `*/15 * * * *` | prekick | `run_window.py --sport nfl --window prekick --auto-prekick --commit main` |
+
+Logs: `/root/logs/run_window_nfl.log`. `PICKS_LEDGER_DIR=/root/private/ledger`.
+Python: `venv/bin/python3`. Working directory: `/root/mlb-model`.
+
+The scheduled tasks are VM cron, not Cowork, because the reader is a script and
+needs no model session. Cowork's role is verification and the layers that need a
+reader (OPS5).
+
+**Do NOT run mid or prekick by hand on the VM** — a hand run plus the cron run
+would freeze the same window twice (revision 1, unscored, ~160 credits wasted).
+
+**Injury report:** VM runs will usually lack it (the sim lane exports on the Mac).
+Request the NFL lane to commit the export before each slate. The reader notes
+"no injury report" in the reason when absent.
+
+**Tonight's first runs:** 21:15Z prekick for TNF (kick 00:15Z), 22:00Z mid
+(whole Sunday + MNF slate). Check: log tails, credits used, sheet lines and
+GAMES (mid must show the whole slate, not one game), frozen file sha256,
+manifest entry, commit hash, top 20.
