@@ -3804,3 +3804,16 @@ Ending: 99,842
   mlb_sides_daily_shadow.py USES Odds API credits. All others read MLB Stats API (free).
   MLB tape: ~3 credits/call (3 games × 1 mkt × 1 region) = ~72/day. MLB event markets: similar.
 - Golf, soccer, WNBA jobs NOT stopped (P0.5: Jeff did not say to stop them, only hide from pages).
+
+## 2026-10-08T06:56Z  claude-code (OPS2c)
+- ITEM 1: pages show NFL, NCAAF, NHL, NBA only. 8 signal rows retired, 14 feeds retired,
+  MLB data captures kept (tape_mlb, mlb_event_markets). Committed 5eb7005c5.
+- ITEM 2: 15 VM cron lines retired (# RETIRED 2026-10-08). 6 Mac launchd plists disabled.
+  MLB tape + event markets kept. Golf/soccer/WNBA jobs NOT stopped (P0.5). Committed 19f881003.
+- ITEM 3: data/injury_archive/nba/history/ added to .gitignore. Committed 130702a7b.
+- MERGE: ops/four-sports merged --no-ff, pushed adb36d64b. VM pulled.
+  grep -c MLB tracking.html = 0. Caddyfile mtime unchanged (2026-10-02 04:19:56).
+- NOT DONE: full health page rebuild verification with the retired table on the VM
+  (pipeline_health.py needs to run on the VM to generate the retired list in the JSON;
+  the next 15-min cycle will do this).
+- UNVERIFIED: whether refresh_5pm.py handles the absent MLB refresh gracefully.
