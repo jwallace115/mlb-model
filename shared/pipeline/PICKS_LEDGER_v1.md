@@ -274,6 +274,13 @@ that routes through it) still emitted `point = line` for second-side spreads.
 and used by both parsers. Verified: adapters run appends 0 (fixed parser produces
 the same pick_ids the correction rows already carry).
 
+## P21 — Window through the ledger to the page (2026-10-08)
+
+`window` (nullable string: open/mid/late/prekick/adhoc) added to the ledger contract.
+`view()` fills missing/null window with `"legacy"` at read time — no existing rows
+rewritten. The adapter carries `window` from the freeze row. The page shows
+`"<window> freeze · <logged_utc>"` and "moved: <move_points> pts" from the card.
+
 ## P20 — Window is part of the freeze (2026-10-08)
 
 `freeze` gains `--window {open, mid, late, prekick, adhoc}`, REQUIRED (like --reader-model).

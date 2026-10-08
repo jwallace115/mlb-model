@@ -611,6 +611,7 @@ def adapt_nfl_ai_opinions(root=None):
                 "source_row": int(idx),
                 "tag": tag_val,
                 "conf": conf_val,
+                "window": str(r.get("window")) if r.get("window") and str(r.get("window")) != "nan" else None,
             }
             rows.append(row)
 

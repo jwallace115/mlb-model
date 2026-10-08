@@ -691,9 +691,19 @@ def _render_pick_row(rank, pick, card, is_prop):
     reason_s = E(str(pick.get("reason") or "")[:120])
     card_html = _render_card(card)
 
+    # "moved since open" from the card's line_movement layer
+    move_s = "—"
+    if card:
+        lm = card.get("layers", {}).get("line_movement", {})
+        val = lm.get("value")
+        if isinstance(val, dict) and isinstance(val.get("book"), dict):
+            mp = val["book"].get("move_points")
+            if mp is not None:
+                move_s = f'{mp:+.1f} pts'
+
     return (f'<details id="{E(pid)}"><summary style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--line2)">'
             f'<span class="num" style="display:inline-block;width:28px;text-align:right;margin-right:8px"><b>{rank}</b></span>'
-            f'{label}<br><span class="muted" style="margin-left:36px">{game} · {price_s} · conf {conf_s}</span>'
+            f'{label}<br><span class="muted" style="margin-left:36px">{game} · {price_s} · conf {conf_s} · moved: {move_s}</span>'
             f'<br><span class="note" style="margin-left:36px">{reason_s}</span>'
             f'</summary><div class="card pad" style="margin:8px 0 16px 36px">{card_html}</div></details>')
 
@@ -788,7 +798,8 @@ def build_picks(now, health):
             tab_bodies[-1] = tab_bodies[-1][:-6] + f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>'
             continue
 
-        freeze_info = src(f"freeze {E(str(result['freeze_logged_utc'])[:19])} · "
+        freeze_window = result.get("window", "legacy")
+        freeze_info = src(f"{freeze_window} freeze · {E(str(result['freeze_logged_utc'])[:19])} UTC · "
                           f"{result['n_picks_in_freeze']} picks · "
                           f"{len(result['unranked'])} unranked")
 

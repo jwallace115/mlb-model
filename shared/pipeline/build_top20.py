@@ -128,9 +128,13 @@ def select(view_rows, sport, now):
     sides_ranked = sorted([r for r in sides_all if r.get("conf") is not None], key=_sort_key)
     unranked = [r for r in upcoming if r.get("conf") is None]
 
+    # Determine freeze window (from the first row's window field)
+    freeze_window = freeze_rows[0].get("window") or "legacy"
+
     return {
         "freeze_logged_utc": best_logged,
         "freeze_source": best_freeze,
+        "window": freeze_window,
         "props": props_ranked[:MAX_PER_COLUMN],
         "sides": sides_ranked[:MAX_PER_COLUMN],
         "unranked": unranked,
@@ -156,6 +160,7 @@ def main():
     ap = argparse.ArgumentParser(description="Top-20 picks selector")
     ap.add_argument("--as-of", help="UTC datetime (default: now)")
     ap.add_argument("--sport", help="single sport to select")
+    ap.add_argument("--print-top", type=int, help="print both columns in full (for chat post)")
     a = ap.parse_args()
 
     now = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
@@ -174,18 +179,22 @@ def main():
         if result is None:
             print(f"{sport}: no upcoming freeze")
             continue
-        print(f"{sport}: freeze={result['freeze_logged_utc'][:19]}, "
+        window = result.get("window", "legacy")
+        print(f"{sport}: {window} freeze={result['freeze_logged_utc'][:19]}, "
               f"n_in_freeze={result['n_picks_in_freeze']}, "
               f"props={len(result['props'])}/{MAX_PER_COLUMN}, "
               f"sides={len(result['sides'])}/{MAX_PER_COLUMN}, "
               f"unranked={len(result['unranked'])}")
+        top_n = a.print_top if a.print_top else 3
         for col, label in [("props", "Props"), ("sides", "Sides/Totals/ML")]:
             picks = result[col]
             if picks:
-                print(f"  {label} top 3:")
-                for i, p in enumerate(picks[:3]):
+                print(f"  {label} top {min(top_n, len(picks))}:")
+                for i, p in enumerate(picks[:top_n]):
+                    reason_short = (str(p.get('reason') or '')[:80]).replace('\n', ' ')
                     print(f"    {i+1}. conf={p.get('conf')}, {p.get('player_name') or p.get('side')}, "
-                          f"{p.get('market')}, price={p.get('price_american')}")
+                          f"{p.get('market')}, {p.get('point')}, price={p.get('price_american')}, "
+                          f"book={p.get('book')}, {reason_short}")
 
 
 if __name__ == "__main__":

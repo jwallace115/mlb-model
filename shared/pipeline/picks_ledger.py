@@ -76,8 +76,10 @@ COLS = [
     "commence_time", "home", "away", "market", "player_id", "player_name", "side",
     "point", "price_american", "book", "reason", "share_link", "supersedes",
     "result", "graded_utc", "result_source", "ingested_utc", "source_file", "source_row",
-    "tag", "conf",
+    "tag", "conf", "window",
 ]
+
+VALID_WINDOWS = {"open", "mid", "late", "prekick", "adhoc", None}
 
 
 def admit(rows, members):
@@ -230,4 +232,9 @@ def view(ledger_dir):
         if s:
             superseded.add(s)
 
-    return [r for pid, r in by_id.items() if pid not in superseded]
+    result = [r for pid, r in by_id.items() if pid not in superseded]
+    # Fill missing window with "legacy" at read time
+    for r in result:
+        if not r.get("window"):
+            r["window"] = "legacy"
+    return result
