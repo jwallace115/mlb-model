@@ -465,6 +465,13 @@ def adapt_pick_sources(root=None):
             "source_file": r.source_file,
             "source_row": int(r.name) if hasattr(r, 'name') else None,
         }
+        # Extract window from raw if present (p_ai_opinions carries it)
+        try:
+            raw_d = json.loads(r.raw) if isinstance(r.raw, str) else r.raw
+            if isinstance(raw_d, dict) and raw_d.get("window"):
+                row["window"] = str(raw_d["window"])
+        except (json.JSONDecodeError, TypeError, AttributeError):
+            pass
         rows.append(row)
 
     return rows, rejected, F

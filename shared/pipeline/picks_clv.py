@@ -65,16 +65,30 @@ def _implied_prob(american):
         return None
 
 
+_snap_index = {}  # sport_folder → sorted list of (ts, path)
+
+
+def _build_snap_index(root, sport_folder):
+    key = sport_folder
+    if key not in _snap_index:
+        tape_dir = root / "data" / "odds_archive" / sport_folder / "line_history"
+        entries = []
+        for sd in tape_dir.glob("season=*"):
+            for p in sd.glob("snap_*Z.parquet"):
+                entries.append((_file_ts(p), p))
+        _snap_index[key] = sorted(entries)
+    return _snap_index[key]
+
+
 def _find_closing_snapshot(root, sport_folder, commence_dt):
     """Find the LAST tape snapshot ≤ commence_time."""
-    tape_dir = root / "data" / "odds_archive" / sport_folder / "line_history"
+    entries = _build_snap_index(root, sport_folder)
     best = None
-    for sd in tape_dir.glob("season=*"):
-        for p in sd.glob("snap_*Z.parquet"):
-            ts = _file_ts(p)
-            if ts <= commence_dt:
-                if best is None or ts > best[0]:
-                    best = (ts, p)
+    for ts, p in entries:
+        if ts <= commence_dt:
+            best = (ts, p)
+        else:
+            break  # sorted, so stop early
     return best
 
 
@@ -136,11 +150,13 @@ def compute_clv(view_rows, root, now):
                 for p in month_dir.glob("data_*.parquet"):
                     key = str(p)
                     if key not in _snap_cache:
-                        _snap_cache[key] = pd.read_parquet(p)
+                        df = pd.read_parquet(p)
+                        if "pull_timestamp" in df.columns:
+                            df["_pt"] = pd.to_datetime(df.pull_timestamp, utc=True, errors="coerce")
+                        _snap_cache[key] = df
                     df = _snap_cache[key]
-                    if "pull_timestamp" not in df.columns:
+                    if "_pt" not in df.columns:
                         continue
-                    df["_pt"] = pd.to_datetime(df.pull_timestamp, utc=True, errors="coerce")
                     mask = (df.event_id == eid) & (df._pt <= commence_dt)
                     if "market_key" in df.columns:
                         mask &= df.market_key == prop_market
@@ -214,11 +230,12 @@ def compute_clv(view_rows, root, now):
                         close_book = book
                         close_basis = "book"
                     else:
-                        # Consensus
+                        # Consensus: nearest line per book
                         by_book = {}
                         for _, r in matched.iterrows():
                             bk = r.get("bookmaker", "?")
-                            if bk not in by_book:
+                            if bk not in by_book or (point is not None and pd.notna(r.get("point")) and
+                                abs(float(r["point"]) - float(point)) < abs(float(by_book[bk].get("point", 999)) - float(point))):
                                 by_book[bk] = r
                         points = [float(r["point"]) for r in by_book.values() if pd.notna(r.get("point"))]
                         if points:
@@ -254,7 +271,7 @@ def compute_clv(view_rows, root, now):
         results.append({
             "pick_id": row.get("pick_id"),
             "close_point": close_point,
-            "close_price": close_price,
+            "close_price": int(float(close_price)) if close_price is not None and not (isinstance(close_price, float) and close_price != close_price) else None,
             "close_book": close_book,
             "close_basis": close_basis,
             "close_as_of": close_as_of,

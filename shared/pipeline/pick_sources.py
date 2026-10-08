@@ -294,7 +294,8 @@ def p_ai_opinions(path, rel, sset, lane="ncaaf", league="NCAAF"):
              side=r["side_name"], point=_freeze_point(mk, r["side"], r["line"]),
              price=r.get("side_price"), book=r.get("book"),
              reason=r.get("reason"), leg_type="view", commence=r["commence_time"], source_file=rel,
-             source_set=sset, raw=dict(side=r["side"], side_name=r["side_name"], tag=r.get("tag")))
+             source_set=sset, raw=dict(side=r["side"], side_name=r["side_name"], tag=r.get("tag"),
+                                       window=r.get("window") if "window" in d.columns else None))
     return rows
 
 

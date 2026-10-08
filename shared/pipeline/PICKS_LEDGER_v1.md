@@ -274,6 +274,13 @@ that routes through it) still emitted `point = line` for second-side spreads.
 and used by both parsers. Verified: adapters run appends 0 (fixed parser produces
 the same pick_ids the correction rows already carry).
 
+## P23 — OPS4a leftovers (2026-10-08)
+
+(a) `p_ai_opinions` now carries `window` from the freeze row into the raw dict.
+(b) Record section groups by `(owner, window)` with CLV column.
+(c) `picks_clv` performance: cached pull_timestamp parse, snapshot index, close_price
+    to int, nearest-line per book for consensus. Spot checks unchanged.
+
 ## P22 — CLV per pick, deterministic, in a sidecar (2026-10-08)
 
 `picks_clv.py` computes closing line value for every kicked pick. Output:
