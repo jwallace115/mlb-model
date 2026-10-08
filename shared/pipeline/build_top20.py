@@ -60,11 +60,10 @@ def select(view_rows, sport, now):
     """
     ai_owner = f"ai_{sport.lower()}"
 
-    # Filter to AI owner for this sport
+    # Filter to AI owner for this sport — results are never an input to ranking
     candidates = [r for r in view_rows
                   if r.get("owner") == ai_owner
-                  and r.get("sport") == sport
-                  and not r.get("result")]  # ungraded only
+                  and r.get("sport") == sport]
 
     if not candidates:
         return None

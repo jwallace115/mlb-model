@@ -126,3 +126,28 @@ def test_select_no_mutation():
     original = copy.deepcopy(rows)
     bt.select(rows, "NFL", NOW)
     assert rows == original, "select() mutated its input"
+
+
+# ---- OPS3b Item 1 ----
+
+# (h) graded rows must not be filtered — ranked lists identical with and without result
+def test_graded_rows_not_filtered():
+    """Half the rows carry result W/L — select() must return identical ranked lists
+    regardless of whether the result field is set."""
+    base_rows = [_row(i, conf=50 + i, market="spread", player_name=None,
+                       side=f"Team{i}", event_id=f"{i:032x}") for i in range(10)]
+    # Copy 1: no results
+    clean = copy.deepcopy(base_rows)
+    # Copy 2: half graded
+    graded = copy.deepcopy(base_rows)
+    for i, r in enumerate(graded):
+        if i % 2 == 0:
+            r["result"] = "W"
+
+    r_clean = bt.select(clean, "NFL", NOW)
+    r_graded = bt.select(graded, "NFL", NOW)
+
+    assert r_clean is not None
+    assert r_graded is not None
+    assert [p["pick_id"] for p in r_clean["sides"]] == [p["pick_id"] for p in r_graded["sides"]]
+    assert r_clean["n_picks_in_freeze"] == r_graded["n_picks_in_freeze"]

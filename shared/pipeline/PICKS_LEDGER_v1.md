@@ -179,6 +179,17 @@ ranked — it lands in the `unranked` list. Rows beyond the top 20 per column ar
 **HALTs:** Two freezes sharing the same `logged_utc`. A ranked row lacking `event_id`,
 `price_american`, or `side`.
 
+**Edge tiebreak:** The ledger carries no `edge` field. The current tiebreak approximates
+edge from `price_american` as the distance of the implied probability from 50%. This is
+a proxy, not the reader's computed edge (P14).
+
+## P14 — Selection must never look at results (2026-10-08)
+
+OPS3 shipped `select()` filtering `not r.get("result")` — graded picks were silently
+dropped. This lost 42 game-line picks (the sides column showed 3 instead of 20) and
+reported `n_picks_in_freeze = 805` instead of 847. A result is never an input to
+ranking (the registry rule: results never change a label). Fixed by removing the filter.
+
 ## P11 — Layer definitions, sources, ≤ logged_utc rule, sim-on-card (2026-10-08)
 
 `pick_layers.build_card(pick, root)` → JSON with layers, each as
