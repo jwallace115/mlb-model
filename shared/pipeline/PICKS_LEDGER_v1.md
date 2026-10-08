@@ -81,4 +81,27 @@ from PBP (NFL) and build crosswalk_players_<sport>.parquet.
 - **VOID:** only when the official source marks the game cancelled/postponed (never from missing data).
 - **Props:** UNRESOLVED in v1.
 
-Grader cron: 10:10Z daily (after nflverse at 09:00Z).
+Grader cron: 10:10Z daily (after nflverse at 09:30Z).
+
+## P7 — NFL results: local HALTing feed, no network in crosswalk or grader (2026-10-08)
+
+**Finding (Cowork, verified):** `_load_nfl_officials()` imported `nflreadpy` and
+downloaded the schedule from GitHub at grade time, swallowing every exception into
+an empty frame — fail-open gate (A9) and a network call in a cron that was not
+supposed to make any.
+
+**Fix:**
+- `pull_nfl_results.py` (new): pulls nflverse schedule via `nflreadpy`, writes
+  `data/results_archive/nfl/schedules_2026_<UTC>.parquet`. HALT on empty, <250 rows,
+  or no completed game. VM cron `30 9 * * *`, before the 10:10Z grader.
+- `event_crosswalk._load_nfl_officials(root)`: reads the NEWEST file from the
+  archive; HALT if folder empty or newest file >36 h old. `nflreadpy` removed from
+  `event_crosswalk.py`.
+- `picks_grader.main()`: exits non-zero when a sport with ungraded past-commence
+  picks has no crosswalk file. Previously it graded nothing and exited 0.
+- Mac dry-run: `RESULTS_ARCHIVE_DIR` env var redirects output so results never
+  appear in `git status` on the Mac checkout.
+- Registered in `feeds_registry.json` (`nfl_results`, cron_match `pull_nfl_results.py`).
+
+**Null control:** NCAAF crosswalk output byte-identical (372 rows, sha256 `45b89551...`)
+before and after this change.

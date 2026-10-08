@@ -660,6 +660,17 @@
    "quiet_ok": true
   },
   {
+   "id": "nfl_results",
+   "label": "NFL nflverse schedule pull",
+   "sport": "NFL",
+   "cron_match": "pull_nfl_results.py",
+   "outputs": [
+    "data/results_archive/nfl/schedules_2026_*.parquet"
+   ],
+   "ts": "filename",
+   "active_months": [9, 10, 11, 12, 1, 2]
+  },
+  {
    "id": "picks_grader",
    "label": "Picks crosswalk + grader",
    "sport": "Ops",
