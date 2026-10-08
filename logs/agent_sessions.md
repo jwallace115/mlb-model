@@ -3861,3 +3861,19 @@ Ending: 99,842
   SIGN_FLIPPED = 0, adapters append 0. P16 amended, P19. Committed e101dc1cc.
 - FULL SUITE: 2 failed (known), 186 passed.
 - NOT DONE: MERGE.
+
+## 2026-10-08T12:15Z  claude-code (OPS4a)
+- ITEM 1: window in freeze (P20). --window {open,mid,late,prekick,adhoc} REQUIRED.
+  Revision/cross-dedup keyed by (reader_model, pilot, window). Prekick band exclusion.
+  RED: freeze succeeded without --window. 5 tests. Committed d5a434528.
+  NFL lane: cite P20 from NFL_SIM_DECISION_v1.md.
+- ITEM 2: window through ledger (P21). Column in COLS, view() fills "legacy".
+  Adapter carries window. Page shows "<window> freeze", "moved: <pts>".
+  RED: no window in COLS. Committed 7a4281816.
+- ITEM 3: CLV per pick (P22). picks_clv.py, sidecar clv.jsonl. Spread CLV = pick−close.
+  All existing freeze() tests updated with window="adhoc".
+  RED: picks_clv.py not on main. 5 tests. Committed 76e8ecc03.
+- FULL SUITE: 3 failed (all pre-existing), 283 passed.
+- NOT DONE: MERGE, VM cron for picks_clv, real-data CLV run (too slow on Mac for this session;
+  runs on VM hourly).
+- UNVERIFIED: CLV real-data numbers (Cowork's spot checks); CLV run time on the VM.
