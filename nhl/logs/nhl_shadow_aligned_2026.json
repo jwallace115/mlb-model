@@ -546,6 +546,30 @@
       "closing_total": 6.5,
       "lambda_total": 5.567,
       "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020060,
+      "game_date": "2026-10-08",
+      "home_team": "TBL",
+      "away_team": "MIN",
+      "signal_side": "UNDER",
+      "edge": 0.1226,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.592,
+      "drift_applied": 0.0
+    },
+    {
+      "game_id": 2026020065,
+      "game_date": "2026-10-08",
+      "home_team": "VGK",
+      "away_team": "TOR",
+      "signal_side": "UNDER",
+      "edge": 0.1481,
+      "tier": "SHADOW_MEDIUM",
+      "closing_total": 6.5,
+      "lambda_total": 5.749,
+      "drift_applied": 0.0
     }
   ]
 }
