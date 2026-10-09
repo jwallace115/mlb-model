@@ -570,3 +570,83 @@ auto-commit job (`shared/push_paths.sh`, cron at :50) exports `MLB_AUTOCOMMIT=1`
 before its git commands. The VM's `push_daemon.sh` is a different clone and is
 not touched. The hook text is not in the repo (it lives in `.git/hooks/`).
 See `claude/SESSIONS_RULES.md` for the rule this enforces.
+
+## P32 — Sim layer finds the sim file, not the newest file (2026-10-09)
+
+`_sim()` in `pick_layers.py` previously picked the newest `ai_opinions_*.parquet`
+file with timestamp ≤ `logged_utc`, then checked if it contained `nfl_sim` rows.
+When a non-sim reader file (e.g., `claude-fable-5-1`) was timestamped after the
+sim file, it shadowed the sim and the layer returned "no sim rows in freeze."
+This affected all 47 cards from the 2026-10-08T23:23:34Z freeze.
+
+Fix: `_is_sim_file(p)` reads only the `reader_model` column (cached per path) and
+the scan selects only files where `reader_model.str.startswith("nfl_sim")`. The
+newest such file ≤ `logged_utc` is used. Pilot flag is now included in the layer
+output.
+
+New CLI: `--rebuild-layer <name> --freeze <logged_utc>` rebuilds a single layer on
+cards whose sim/layer value is null, scoped to picks from one freeze. Cards with a
+value are untouched (write-once).
+
+Tests (RED first, GREEN after):
+- (q) sim file at T-3h + non-sim reader at T-1h → layer finds sim (was RED: "no sim rows in freeze")
+- (r) sim file at T+1h excluded (leak guard, passed before and after)
+- (s) single sim file → output unchanged (null control, passed before and after)
+- (t) pilot sim → layer includes `pilot: true` (was RED: key absent)
+
+Dryrun: 1 rebuilt / 0 untouched. Javonte Williams rush attempts: p_first=0.741,
+edge=0.241, reader_model=nfl_sim_v1_156cd057, pilot=true.
+
+## P33 — Mac auto-push via SSH deploy key (2026-10-09)
+
+The Mac's remote was HTTPS (`https://github.com/...`), which requires a
+username/password prompt. In launchd's minimal environment no TTY is available,
+so `push_paths.sh` failed with `could not read Username for 'https://github.com':
+Device not configured` — this had been blocking Mac pushes since at least
+2026-10-09T00:50Z (5 commits stranded locally).
+
+Fix: ed25519 deploy key (`~/.ssh/mlbmodel_deploy`) added to GitHub repo settings
+as a write-enabled deploy key. `~/.ssh/config` Host block `github-mlbmodel` routes
+to the key. Remote changed to `git@github-mlbmodel:jwallace115/mlb-model.git`.
+The VM's remote is unchanged (it uses its own SSH setup).
+
+Verification:
+- `ssh -T git@github-mlbmodel` → "successfully authenticated"
+- `env -i HOME=$HOME PATH=/usr/bin:/bin:/usr/local/bin git fetch origin` → OK
+- Manual push of 5 stranded Mac outputs commits → succeeded (2a1871115 on origin)
+- `push_paths.sh` at :50 with no new changes: "no changes" (correct, no error)
+
+## P34 — Sim runs before every window; freeze lands on main (2026-10-09)
+
+The window order is now: refresh → sim → packet → reader. The Mac's
+`sim_window.sh` runs 30 min before each VM reader window and freezes the sim
+opinions to main via the deploy key. The VM's `run_window.py` now does
+`git pull --rebase --autostash` at step 0 so it sees the freeze, and the four
+cron lines have `--no-pull` since the Mac already pulled props + snapshots.
+
+**PILOT** until the NFL lane audits D283 (a11469bdd + 39dca1d8c on
+eng/fwd6-parser-fix). The pilot check: `git diff --quiet origin/eng/fwd6..HEAD
+-- nfl/sim/`; when the diff empties, `--pilot` drops automatically.
+
+**sim_window.sh** (nfl/pipeline/sim_window.sh, Mac):
+1. Derives week from `(now - 2026-09-10) / 7 + 1`
+2. Pulls props (tag mapped: adhoc→mid, prekick→close, for fwd6 compat) + snapshot
+3. `refresh_inputs.py --week W` — HALT on non-zero
+4. `git restore` tape from origin/main + overlay fresh captures
+5. `fwd_bootstrap.py harness --week W --window-hours H [--pilot]`
+6. Copy freeze to main, append manifest, `MLB_AUTOCOMMIT=1 git commit + push`
+7. Stage run record to eng/fwd6-parser-fix
+
+**Launchd:** `com.mlbmodel.sim_window.plist` fires at Tue 15:30Z, Thu 21:30Z,
+Sat 21:30Z (fixed windows, auto-detected from time) and every 15 min (prekick
+--auto-prekick). Single plist, script auto-detects window from UTC day/hour.
+
+**VM crontab:** all four `run_window.py` lines now have `--no-pull`. Step 0
+(`git pull`) added so the reader sees the sim freeze.
+
+Real run (adhoc, 14-game full slate):
+- Credits: 143 (140 props + 3 snapshot), remaining 232,684
+- 14/14 games simulated and converged, 900 lines frozen
+- FROZEN sha256: ee0a7e12...88b9680
+- Commit ccd5a7466 on origin/main (manifest window=adhoc, pilot=true)
+- Run record 324b9870d on eng/fwd6-parser-fix

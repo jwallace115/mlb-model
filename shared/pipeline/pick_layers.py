@@ -324,12 +324,26 @@ def _weather(pick, root, logged_dt):
 
 
 # ---- sim ----
+_sim_file_is_sim = {}  # cache: str(path) -> bool
+
+def _is_sim_file(p):
+    """Check if an ai_opinions parquet has nfl_sim rows (cached per path)."""
+    s = str(p)
+    if s not in _sim_file_is_sim:
+        try:
+            rm = pd.read_parquet(p, columns=["reader_model"])
+            _sim_file_is_sim[s] = rm.reader_model.str.startswith("nfl_sim", na=False).any()
+        except Exception:
+            _sim_file_is_sim[s] = False
+    return _sim_file_is_sim[s]
+
+
 def _sim(pick, root, logged_dt):
     sport = pick.get("sport", "")
     if sport != "NFL":
         return _no_data(logged_dt, "sim: no number for this sport")
 
-    # Find sim freezes (ai_opinions with reader_model nfl_sim_v1_*)
+    # Find the newest sim freeze ≤ logged_dt (only files with nfl_sim rows)
     sim_dir = root / "nfl" / "data" / "board"
     best_file = None
     best_ts = None
@@ -339,7 +353,7 @@ def _sim(pick, root, logged_dt):
             continue
         for p in ai_dir.glob("ai_opinions_*.parquet"):
             ts = _file_ts(p)
-            if ts <= logged_dt:
+            if ts <= logged_dt and _is_sim_file(p):
                 if best_ts is None or ts > best_ts:
                     best_ts = ts
                     best_file = p
@@ -348,9 +362,6 @@ def _sim(pick, root, logged_dt):
         return _no_data(logged_dt, "sim: no freeze file")
 
     df = pd.read_parquet(best_file)
-    if "reader_model" not in df.columns:
-        return _no_data(logged_dt, "sim: no reader_model column")
-
     sim_rows = df[df.reader_model.str.startswith("nfl_sim", na=False)]
     if sim_rows.empty:
         return _no_data(logged_dt, "sim: no sim rows in freeze")
@@ -378,11 +389,13 @@ def _sim(pick, root, logged_dt):
         return _no_data(logged_dt, "sim: no number for this leg")
 
     row = matched.iloc[0]
+    pilot = bool(row.pilot) if "pilot" in df.columns and pd.notna(row.pilot) else False
     return _layer({
         "p_first": float(row.p_first) if pd.notna(row.p_first) else None,
         "book_p_first": float(row.book_p_first) if pd.notna(row.book_p_first) else None,
         "edge": float(row.edge) if pd.notna(row.edge) else None,
         "reader_model": str(row.reader_model),
+        "pilot": pilot,
     }, best_file.name, best_ts)
 
 
@@ -569,6 +582,46 @@ def rebuild_card(pick, root, layers_dir, reason):
     return "rebuilt", path
 
 
+def rebuild_layer(pick, root, layers_dir, layer_name, reason):
+    """Rebuild a single layer in a card. Cards whose layer already has a value
+    are untouched. Returns (status, path)."""
+    layers_dir = Path(layers_dir)
+    pid = pick.get("pick_id")
+    path = layers_dir / f"{pid}.json"
+    if not path.exists():
+        return "no_card", path
+    existing = json.loads(path.read_text())
+    layer = existing.get("layers", {}).get(layer_name, {})
+    if layer.get("value") is not None:
+        return "untouched", path
+    # Rebuild just this layer
+    logged_dt = _parse_dt(pick.get("logged_utc"))
+    if not logged_dt:
+        return "no_logged_utc", path
+    layer_fn = {"sim": _sim, "line_movement": _line_movement, "weather": _weather,
+                "injuries": _injuries, "news": _news}
+    fn = layer_fn.get(layer_name)
+    if not fn:
+        return "unknown_layer", path
+    root = Path(root)
+    new_layer = fn(pick, root, logged_dt)
+    if new_layer.get("value") is None:
+        return "still_null", path
+    existing["layers"][layer_name] = new_layer
+    existing["rebuilt_utc"] = datetime.now(timezone.utc).isoformat()
+    existing["rebuilt_reason"] = reason
+    # Recompute sha256
+    card_for_hash = dict(existing)
+    card_for_hash.pop("sha256", None)
+    card_for_hash.pop("rebuilt_utc", None)
+    card_for_hash.pop("rebuilt_reason", None)
+    existing["sha256"] = hashlib.sha256(
+        json.dumps(card_for_hash, sort_keys=True, default=str).encode()
+    ).hexdigest()[:16]
+    path.write_text(json.dumps(existing, indent=1, default=str))
+    return "rebuilt", path
+
+
 def main():
     ap = argparse.ArgumentParser(description="Build detail cards for ranked picks")
     ap.add_argument("--build-missing", action="store_true", help="Build cards for currently ranked picks")
@@ -576,6 +629,8 @@ def main():
                     help="Rebuild cards whose line_movement.value is null (P27)")
     ap.add_argument("--as-of", help="UTC datetime for selection (default: now)")
     ap.add_argument("--pick-id", help="Build card for a specific pick_id")
+    ap.add_argument("--rebuild-layer", help="Rebuild a specific layer (e.g. sim) on null cards")
+    ap.add_argument("--freeze", help="Scope rebuild to picks from this freeze (logged_utc)")
     a = ap.parse_args()
 
     now = datetime.fromisoformat(a.as_of) if a.as_of else datetime.now(timezone.utc)
@@ -596,6 +651,31 @@ def main():
             sys.exit(1)
         status, path = write_card(pick, ROOT, layers_dir)
         print(f"{a.pick_id}: {status} → {path}")
+        return
+
+    if a.rebuild_layer:
+        if not a.freeze:
+            print("HALT: --rebuild-layer requires --freeze <logged_utc>")
+            sys.exit(1)
+        freeze_dt = _parse_dt(a.freeze)
+        if not freeze_dt:
+            print(f"HALT: cannot parse --freeze {a.freeze}")
+            sys.exit(1)
+        rebuilt = 0
+        untouched = 0
+        skipped = 0
+        for pick in view_rows:
+            pdt = _parse_dt(pick.get("logged_utc"))
+            if pdt is None or abs((pdt - freeze_dt).total_seconds()) > 1:
+                skipped += 1
+                continue
+            status, path = rebuild_layer(pick, ROOT, layers_dir, a.rebuild_layer, f"P32 {a.rebuild_layer} lookup")
+            if status == "rebuilt":
+                rebuilt += 1
+                print(f"  rebuilt: {pick.get('pick_id')}")
+            else:
+                untouched += 1
+        print(f"rebuilt {rebuilt} / untouched {untouched} (skipped {skipped} other freezes)")
         return
 
     if a.rebuild_empty_movement:
