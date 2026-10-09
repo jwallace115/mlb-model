@@ -833,3 +833,21 @@ and sim layers. Existing line-movement and weather summaries unchanged.
 **Decision:** page() uses the same nav markup (.nav/.in/.brand/.links/.health) as
 the picks template, so all pages share one visual header. Google Fonts <link>
 dropped (system font stack; site is behind login, no external calls).
+
+## P45 — nflverse weekly player stats archived (2026-10-09)
+
+**Decision:** `shared/pipeline/pull_nfl_player_stats.py` pulls
+`nflreadpy.load_player_stats([2026], summary_level="week")` and writes
+`data/results_archive/nfl/player_stats_2026_<UTC>.parquet` (append-only,
+timestamped). HALT on empty, <100 rows, missing expected columns, or no
+row with week >= 1. VM cron `35 9 * * *` (after 09:30Z schedules, before
+10:10Z grader). Mac dryrun uses `RESULTS_ARCHIVE_DIR`.
+
+Kept columns: player_id, player_display_name, player_name, team,
+opponent_team, season, week, season_type, completions, attempts,
+passing_yards, passing_tds, passing_interceptions, carries, rushing_yards,
+rushing_tds, receptions, receiving_yards, receiving_tds.
+
+nflverse column for interceptions is `passing_interceptions` (not
+`interceptions`). The `team` column is `team` (not `recent_team`).
+Zero API credits (nflverse is free, GitHub-hosted parquet).
