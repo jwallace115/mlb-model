@@ -615,3 +615,38 @@ Verification:
 - `env -i HOME=$HOME PATH=/usr/bin:/bin:/usr/local/bin git fetch origin` → OK
 - Manual push of 5 stranded Mac outputs commits → succeeded (2a1871115 on origin)
 - `push_paths.sh` at :50 with no new changes: "no changes" (correct, no error)
+
+## P34 — Sim runs before every window; freeze lands on main (2026-10-09)
+
+The window order is now: refresh → sim → packet → reader. The Mac's
+`sim_window.sh` runs 30 min before each VM reader window and freezes the sim
+opinions to main via the deploy key. The VM's `run_window.py` now does
+`git pull --rebase --autostash` at step 0 so it sees the freeze, and the four
+cron lines have `--no-pull` since the Mac already pulled props + snapshots.
+
+**PILOT** until the NFL lane audits D283 (a11469bdd + 39dca1d8c on
+eng/fwd6-parser-fix). The pilot check: `git diff --quiet origin/eng/fwd6..HEAD
+-- nfl/sim/`; when the diff empties, `--pilot` drops automatically.
+
+**sim_window.sh** (nfl/pipeline/sim_window.sh, Mac):
+1. Derives week from `(now - 2026-09-10) / 7 + 1`
+2. Pulls props (tag mapped: adhoc→mid, prekick→close, for fwd6 compat) + snapshot
+3. `refresh_inputs.py --week W` — HALT on non-zero
+4. `git restore` tape from origin/main + overlay fresh captures
+5. `fwd_bootstrap.py harness --week W --window-hours H [--pilot]`
+6. Copy freeze to main, append manifest, `MLB_AUTOCOMMIT=1 git commit + push`
+7. Stage run record to eng/fwd6-parser-fix
+
+**Launchd:** `com.mlbmodel.sim_window.plist` fires at Tue 15:30Z, Thu 21:30Z,
+Sat 21:30Z (fixed windows, auto-detected from time) and every 15 min (prekick
+--auto-prekick). Single plist, script auto-detects window from UTC day/hour.
+
+**VM crontab:** all four `run_window.py` lines now have `--no-pull`. Step 0
+(`git pull`) added so the reader sees the sim freeze.
+
+Real run (adhoc, 14-game full slate):
+- Credits: 143 (140 props + 3 snapshot), remaining 232,684
+- 14/14 games simulated and converged, 900 lines frozen
+- FROZEN sha256: ee0a7e12...88b9680
+- Commit ccd5a7466 on origin/main (manifest window=adhoc, pilot=true)
+- Run record 324b9870d on eng/fwd6-parser-fix

@@ -249,6 +249,11 @@ def main():
         else:
             print(f"  no injury report found for season=2026 week={week}")
 
+    # ── Step 0: Git pull (see Mac sim freeze before reader runs) ──
+    _run("git pull",
+         ["git", "pull", "--rebase", "--autostash"],
+         env=env)
+
     # ── Step 1: Pull ──
     if not args.no_pull:
         _run("props pull (--archive)",
