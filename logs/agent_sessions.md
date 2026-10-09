@@ -4076,3 +4076,22 @@ Also: make refresh_inputs fail per team, not per report.
 - SUITE: 227 passed, 2 failed (pre-existing: test_espn_news_halt + test_news_dedup — ESPN cache 459.9h stale)
 - NOT DONE: merge to main (waiting for Jeff); node-based JS test (DOM-based, Python is gate)
 - UNVERIFIED: live VM build; Sunday chip on real multi-slot slate
+
+## 2026-10-09T17:07Z  claude-code (OPS-CFB1)
+- EDITED: nfl/pipeline/reader_v3.py (--sport {nfl,ncaaf}; per-event book; NCAAF Kalshi prefix; no props HALT)
+- EDITED: nfl/pipeline/log_ai_opinions.py (SPORTS["ncaaf"]["book"] = "hardrockbet", no fallback; N61 retired for picks)
+- EDITED: nfl/pipeline/run_window.py (--sport ncaaf; CFBD week; --no-pull required; unquoted sidecar)
+- EDITED: shared/pipeline/pick_sources.py (p_ai_opinions carries conf/conf_rank in raw)
+- EDITED: shared/pipeline/picks_adapters.py (extracts tag/conf from raw for ai_opinion rows)
+- EDITED: shared/pipeline/pick_layers.py (build-missing uses select_slate; NCAAF card layer messages)
+- CREATED: shared/pipeline/packet.sh (Cowork packet builder: sheet + template + news + movement + kalshi + sim)
+- EDITED: shared/pipeline/PICKS_LEDGER_v1.md (P38-P41 decisions)
+- RAN: null control reader_v3 NFL -> byte-identical (sha256 1d3d3aba...)
+- RAN: NCAAF adhoc Mac -> 51 games, 149 lines, 18 unquoted sidecar
+- RAN: packet.sh ncaaf 36 -> 149 lines, 30 news, 4130 kalshi
+- COMMITTED: 5 commits on ops/ncaaf-live, all pushed
+- NOT DONE: VM crontab change (applied at merge); VM by-hand run (at merge); Caddyfile mtime check
+- NOT DONE: 6 PM ET cron log tail (after merge)
+- UNVERIFIED: whether NCAAF conf/tag flow through adapters to ledger on the VM (no ledger dir on Mac)
+- UNVERIFIED: build_site NCAAF tab rendering (need VM site rebuild after merge)
+- REQUEST for NCAAF lane: weather (NWS with CFBD venue coordinates), rest/travel/altitude flags, situation register (coach/QB changes) as next NCAAF layers; team props not yet looked at.
