@@ -1,0 +1,367 @@
+{
+ "entries": [
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/events.parquet",
+   "sha256": "c41517c2fc675585b14a61a903cdb3f4c8df15002e2174a4279b8f76d84498f5",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/freshness.json",
+   "sha256": "916c9ff8ba8b92b8fab864ca33200fb1822b5eeab53003659345c0df7074bab4",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/active_universe_weekly.parquet",
+   "sha256": "acfeed0da38cce5f4cbc68cfa0d3bc5f55ec7cbaa7019707072a8b0190b5c4f4",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/kicker_weekly.parquet",
+   "sha256": "6ae33a5190a8a6b8f38a01028261c03f2fcf0eef303e3e4c7d606eb455f0ddea",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/league_baselines.parquet",
+   "sha256": "8149806bede343c6643ac92c3a9b761cc0eebabe62af60b6e709cead5d31de6c",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/player_usage_weekly.parquet",
+   "sha256": "bf5c049b1ba63400ade691c489ef8295d8d631dfee68ef11791ef84a97bccade",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/qb_ratings_weekly.parquet",
+   "sha256": "4347c46690f7a903b92b24d90274536c7ea8fe1f298966457fbb332fde32d821",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/rosters_weekly.parquet",
+   "sha256": "f417071886f97ce0618d1a00fef2a3966e1101ce6da184c45c24efda5ded7ea7",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/team_game_counts.json",
+   "sha256": "79f1553fc7deddc48cbc4f2cd2c214b3cfba3a1ca9b02a02788c3ad74f8955c8",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/team_ratings_weekly.parquet",
+   "sha256": "a148d73df19c208afdacc11ab8421f6a35c816a786cda0caf2939b68ce3afde7",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/tendencies_situational_weekly.parquet",
+   "sha256": "0884237f25cdb799b6066510aa35e77f041c2b9239a6ec2ec6d283d060d8ef2d",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/inputs/tendencies_weekly.parquet",
+   "sha256": "9bc95874f5d8921dfceba0fccb8a6cc25b290e2e66d285ec8c084642d102a343",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/lines.parquet",
+   "sha256": "674192dd1507ebe5ebb6df434c191e3f7541cb489f78daeb3887568e9f7c4d1b",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/board/week=2026_05/sim_runs/20261009T143219Z/props.parquet",
+   "sha256": "2fcec5749b182e1d430e4aadd4641b77af48e205d12da0a22e984e43ceefca66",
+   "reads": 15,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/actual_close_games_2021_2024.parquet",
+   "sha256": "aa9223ca90ff785ef020f69f883649dc9b88a2ab3560514755eccaa91b432ea8",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/actual_late_drives_2021_2024.parquet",
+   "sha256": "ce9a8e3c21c6e4889b7cd28a5e6fce9fda787c23b728e6ada9f8a08896046345",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/actual_scoring_composition_2021_2024.parquet",
+   "sha256": "9984a1db24f39706faf431548d99153e44fa4f2f358741d86b9a1b7f3e8eceda",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/clock_runoff.parquet",
+   "sha256": "77784474f96aea0b84ef8d2cc59f2bb13b9920f11273a7830445501f887aa0e4",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/constants.json",
+   "sha256": "dac5f81605ff9e8fa11196a9b5f5e84755b74e5f8607dd3970aea24da92623b1",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/eoh_fg_decision.parquet",
+   "sha256": "5d71079e9a738b568cf2f16473fd6bf1dceb5d24f7bdbb12ee8978343d255821",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/eoh_spike.parquet",
+   "sha256": "9adbaf6959d78c7b07c9f61e2db98cc4e00152dca78432901cdbd05a29c8ec3a",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/fg_make_rate.parquet",
+   "sha256": "5133c16c25251830db2fc5bbf6c75c4881065bde35a1f0813a7b37f2d0d94aff",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/fg_setup.parquet",
+   "sha256": "f2c444d893d25dfbf9aada4593208adfb15e0d44c40c5ba00e3b63485c7380a2",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/fg_setup_rush.parquet",
+   "sha256": "cc2fbda6e033256e0ae86d6f8281012288ffa500e0476970cd12b9b35133c9ab",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/fourth_down.parquet",
+   "sha256": "0de6af65d700366391050b6d6bf22204ff76877fe81b6655bf06909683517f13",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/fourth_down_meta.json",
+   "sha256": "1c51ccf1bd96fbebd805ded6a7ca2e596404fbe93c12aa71fa4c14f7ee3d10d0",
+   "reads": 1,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/int_ez.parquet",
+   "sha256": "ba80333745e5ad05a173769d5b0bf3d9971411191b1e04d84cd4ade26a6d2444",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/int_spot.parquet",
+   "sha256": "d3f40bd877afd39c3eb32367daf7b8053d9be5221a4497ae95148c1a0db147ed",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/kickoff.parquet",
+   "sha256": "e97df74e67f435725c99898dad50b67f108a1ebb3974a6891a2d390b3293a9ef",
+   "reads": 79,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/kneel_decision.parquet",
+   "sha256": "c4da59192394632dbbffd4213f014cffdd6125537b683196e7d654b5e25c3638",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/pass_depth_outcomes.parquet",
+   "sha256": "98ed962ad11ca9237700c58fccd78749d287291246d34fb4b6160f4470bb26c0",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/pass_outcomes.parquet",
+   "sha256": "9a3e7151b3efc9ad14ba967b922d04cfc0d2eb5cb72ab2f5ced41b4c37d32c9f",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/pass_outcomes_z10.parquet",
+   "sha256": "3acf9e4e6849c40e8b3f2d94f0a210ef1384ce7b2e397019415efe3af6f9c084",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/penalty_detail.json",
+   "sha256": "77199648b987609218f70c65aff0c95c2584ce98eaac81f2466ef6a669554186",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/playcall_xpass.parquet",
+   "sha256": "9becb711cc0fc5b7da554be109a2409ff2611256b913c68d1e60bed33a8d5b1e",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/punt_landing.parquet",
+   "sha256": "ad14f5aadd3e298a8695e515366134e4c60308d3b27a6f2e180625f427c14bed",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/punt_net.parquet",
+   "sha256": "232d5c35e319a1b2c5a4f44193869aee807e40935957056a8889b771dc7e646f",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/rush_outcomes.parquet",
+   "sha256": "c8631796fc3f106b9645c5978c3618acef3bede05c438e49580c03558b01f8bc",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/rush_outcomes_z10.parquet",
+   "sha256": "df5ad62fcdc6b4c26f776888fbcaf4ff4edcade0fc696227460565aaebaa4f38",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/scalars.json",
+   "sha256": "537c09b165a8251232bcd295e777e8c5e66c1f851a14753152135a2f283afc1a",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/timeout_policy.parquet",
+   "sha256": "e37db221b97933c0f6d18aa365f74ee463dabc73c2422b25bbef38329b088bd7",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/turnover_returns.json",
+   "sha256": "3ee79b2b0d51151e13c29be05923d08641b5c756eacbb0b2f3b18cf266c869cd",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/data/sim/tables/twopt_decision.parquet",
+   "sha256": "0130ceb457814f0d9bbe0374302c8b755a75378c6cdc5ed3742116d2ef52590e",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/sim/calibration_v1.json",
+   "sha256": "d0cdbb92ca0852177b8c57df0c8911dce551f62fb3625b01db98328dc790d7e6",
+   "reads": 2,
+   "via": [
+    "wrapper"
+   ]
+  },
+  {
+   "path": "/Users/jw115/mlb-model-fwd6/nfl/sim/params_v1.json",
+   "sha256": "25f1db08d6478a30237cf74a3ced255b3f7a120e8fa41f5082db7c73923a78e4",
+   "reads": 16,
+   "via": [
+    "wrapper"
+   ]
+  }
+ ],
+ "conflicts": [],
+ "violations": [],
+ "network_attempts": []
+}

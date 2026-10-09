@@ -1,0 +1,23 @@
+{
+ "events.parquet": "c41517c2fc675585b14a61a903cdb3f4c8df15002e2174a4279b8f76d84498f5",
+ "freshness.json": "86767350b2a0286da0094d6a190ef1749c4cf7cda9a66d3a1ee2f408213130f1",
+ "inputs/active_universe_weekly.parquet": "d2c4a0e6fe52236f87b8b29ee9eebd8b01354ee46ec66f856acff13f29ce794d",
+ "inputs/depth_charts.parquet": "ea77125270f295d4b88ce28f08e5478402fe4d7658e71e29ae63a63857a5c468",
+ "inputs/injuries.parquet": "7f62efc2c00d8110f2ef2f9c89f3ccc94a258c811e70ba4c1494fd3d71f768ca",
+ "inputs/kicker_weekly.parquet": "6ae33a5190a8a6b8f38a01028261c03f2fcf0eef303e3e4c7d606eb455f0ddea",
+ "inputs/league_baselines.parquet": "8149806bede343c6643ac92c3a9b761cc0eebabe62af60b6e709cead5d31de6c",
+ "inputs/official_injuries.html": "0519ff2a51c62a03a87605ad1c0d5d9ccc51fe07319761c348e3f9d2e071ca65",
+ "inputs/official_injuries.json": "1fe351877f796067f84973bb18b099650470760269b3ee7c260cd58d216bcb0f",
+ "inputs/player_usage_weekly.parquet": "67f618276afe2d300a2317b0b157865bee75324f5d26054b291d7faaac76ce15",
+ "inputs/qb_ratings_weekly.parquet": "4347c46690f7a903b92b24d90274536c7ea8fe1f298966457fbb332fde32d821",
+ "inputs/rosters_weekly.parquet": "39121fd38579f00db59d1f84386606a40047f44ba08284dee6e73d25d3f974ac",
+ "inputs/schedule.parquet": "7d1e76a6131de88feec4d5d0845cc33c11691fe44514dbd4779fc5d16d900a0c",
+ "inputs/team_game_counts.json": "79f1553fc7deddc48cbc4f2cd2c214b3cfba3a1ca9b02a02788c3ad74f8955c8",
+ "inputs/team_ratings_weekly.parquet": "a148d73df19c208afdacc11ab8421f6a35c816a786cda0caf2939b68ce3afde7",
+ "inputs/tendencies_situational_weekly.parquet": "0884237f25cdb799b6066510aa35e77f041c2b9239a6ec2ec6d283d060d8ef2d",
+ "inputs/tendencies_weekly.parquet": "9bc95874f5d8921dfceba0fccb8a6cc25b290e2e66d285ec8c084642d102a343",
+ "lines.parquet": "9625d7ca0a6d65ca8f78392b84252d0467d6f2caea5b69339ccf2958a1eb2c31",
+ "props.parquet": "ec3f736de00263217892e529c551891801f09976ada1dcea1c8d2c4ae7973a84",
+ "pilot": true,
+ "allow_stale_quotes": false
+}
