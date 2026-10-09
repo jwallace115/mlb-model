@@ -1,0 +1,30 @@
+[
+  {
+    "game_id": "48ce8ebb422982764994cd25c5f253c7",
+    "game_date": "2026-10-10",
+    "sport": "NHL",
+    "home_team": "Winnipeg Jets",
+    "away_team": "Anaheim Ducks",
+    "commence_time": "2026-10-10T00:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": -105,
+    "under_price": -115,
+    "book": "fanduel",
+    "capture_timestamp": "2026-10-09T06:05:02.363962+00:00"
+  },
+  {
+    "game_id": "4951992db982c394e261970cbfb52332",
+    "game_date": "2026-10-10",
+    "sport": "NHL",
+    "home_team": "Florida Panthers",
+    "away_team": "Minnesota Wild",
+    "commence_time": "2026-10-10T22:10:00Z",
+    "snapshot_type": "open",
+    "total_line": 6.5,
+    "over_price": 110,
+    "under_price": -130,
+    "book": "draftkings",
+    "capture_timestamp": "2026-10-09T06:05:02.363962+00:00"
+  }
+]
