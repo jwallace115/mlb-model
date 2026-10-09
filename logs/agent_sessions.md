@@ -4030,3 +4030,27 @@ Ending: 99,842
 - Whether the adhoc freeze's 50 rows appear on picks.html after the VM build
 - Whether picks_clv finds closes for the new _mac.parquet rows (market mapping bug still present)
 - VM push_daemon sync timing after merge
+
+## 2026-10-09T14:43Z  claude-code (OPS5a)
+- COMMIT: 1a288abcf P32 — sim layer finds sim file, not just newest; --rebuild-layer CLI
+- COMMIT: 621cdf81c P33 — Mac auto-push via SSH deploy key (5 stranded commits pushed)
+- COMMIT: f98333fcd P34 — sim_window.sh; launchd plist; run_window git pull step 0; VM --no-pull
+- RAN: sim_window.sh adhoc --hours 168 → 14/14 converged, 900 lines, ccd5a7466 on main (PILOT)
+- RAN: VM rebuild-layer sim --freeze 2026-10-08T23:23:34Z → rebuilt 14 / untouched 33
+- MERGE: 0ea796b45 ops/sim-in-window → main, pushed
+- VM crontab: --no-pull added to all four run_window lines
+- Launchd: com.mlbmodel.sim_window loaded
+- Credits: 286 used (2 runs × 143), remaining 232,684
+
+### NOT DONE
+- Verify next :50 auto-commit push with actual Mac output changes
+- stage_run.py path error in step 7 (fwd6 doesn't have the file at that path; git add -A fallback worked)
+
+### UNVERIFIED
+- The prekick --auto-prekick gate with real schedule data (only adhoc tested)
+- Whether fwd6 tag mapping (adhoc→mid) affects prop selection vs direct adhoc tag
+- Caddyfile mtime changed to 2026-10-09 01:25:04 (before this session, not by this session)
+
+### REQUEST TO NFL LANE
+Audit D283 (a11469bdd + 39dca1d8c on eng/fwd6-parser-fix) so the sim runs PRIMARY again.
+Also: make refresh_inputs fail per team, not per report.
