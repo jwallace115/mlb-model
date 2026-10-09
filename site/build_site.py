@@ -927,6 +927,88 @@ def _summarize_sim(layer, point):
     return " ".join(parts) if parts else None
 
 
+TAG_LABELS = {"injury_news": "injury news", "role_change": "role change", "game_script": "game script",
+              "matchup": "matchup", "weather": "weather", "price_vs_sharp": "price vs sharp consensus",
+              "usage_trend": "usage trend", "line_move": "line move", "no_view": "no view", "sim_v1": "sim",
+              "goalie": "goalie", "lineup": "lineup", "schedule_spot": "schedule spot", "form": "form",
+              "model_layer": "model layer"}
+
+
+def _summarize_injuries(layer, merged):
+    """Plain-English injuries summary — P43."""
+    val = layer.get("value")
+    note = layer.get("note")
+    if note:
+        return E(str(note))
+    if not val or not isinstance(val, dict):
+        return None
+    parts = []
+    player = val.get("player")
+    if player:
+        comment = str(player.get("comment", ""))[:160]
+        parts.append(f'{E(player["name"])}: {E(player["status"])} — {E(comment)}')
+    for team_key, team_label in [("home_team", merged.get("home", "")), ("away_team", merged.get("away", ""))]:
+        entries = val.get(team_key, [])
+        if not entries:
+            parts.append(f'{E(team_label)}: none listed')
+            continue
+        outs = [e for e in entries if e.get("status") == "Out"]
+        doubtful = [e for e in entries if e.get("status") == "Doubtful"]
+        quest = [e for e in entries if e.get("status") == "Questionable"]
+        out_names = ", ".join(e["name"] for e in (outs + doubtful)[:4])
+        line_parts = []
+        if outs or doubtful:
+            line_parts.append(f'{len(outs) + len(doubtful)} out ({out_names})')
+        if quest:
+            line_parts.append(f'{len(quest)} questionable')
+        parts.append(f'{E(team_label)}: {", ".join(line_parts)}' if line_parts else f'{E(team_label)}: none listed')
+    return "<br>".join(parts) if parts else None
+
+
+def _summarize_reasoning(layer, merged):
+    """Plain-English reasoning summary — P43."""
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+    reason_raw = val.get("reason", "")
+    tag = val.get("tag", "")
+    # Import plain_reason from picks_data
+    import picks_data as pd_mod
+    reason_text = pd_mod.plain_reason(reason_raw)
+    tag_label = TAG_LABELS.get(tag, tag) if tag else ""
+    parts = []
+    if reason_text:
+        parts.append(E(reason_text))
+    if tag_label:
+        parts.append(f'tag: {E(tag_label)}')
+    return "<br>".join(parts) if parts else None
+
+
+def _summarize_sim_enhanced(layer, merged):
+    """Enhanced sim summary with the pick's point comparison — P43."""
+    val = layer.get("value")
+    if not val or not isinstance(val, dict):
+        return None
+    p_first = val.get("p_first")
+    reader_model = val.get("reader_model", "sim")
+    pilot = val.get("pilot", False)
+    pick_point = merged.get("point")
+    sim_line = None
+    parts = []
+    pilot_tag = " (pilot)" if pilot else ""
+    if p_first is not None:
+        parts.append(f'{E(reader_model)}{pilot_tag} makes it {p_first:.0%}')
+        side = merged.get("side", "")
+        if side:
+            parts[-1] += f' for {E(side)}'
+        if pick_point is not None:
+            parts[-1] += f' {pt(pick_point)}'
+    edge = val.get("edge")
+    if edge is not None:
+        parts.append(f'edge: {edge:+.1%}')
+    return ". ".join(parts) + "." if parts else None
+
+
 def _render_card(card, pick=None):
     """Render a detail card as HTML — plain-English summary above raw data in <details>.
     pick: optional pick row dict to supplement card fields (e.g. book)."""
@@ -955,16 +1037,28 @@ def _render_card(card, pick=None):
         elif layer_name == "weather" and val and isinstance(val, dict):
             summary = _summarize_weather(layer)
         elif layer_name == "sim" and val and isinstance(val, dict):
-            summary = _summarize_sim(layer, merged.get("point"))
+            summary = _summarize_sim_enhanced(layer, merged)
+        elif layer_name == "injuries":
+            summary = _summarize_injuries(layer, merged)
+        elif layer_name == "reasoning":
+            summary = _summarize_reasoning(layer, merged)
 
-        if note:
+        if note and layer_name not in ("injuries",):
             parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}<br>'
                          f'<span class="muted">{E(str(note))}</span></div>')
-        elif val is None:
-            continue
+        elif note and layer_name == "injuries":
+            # Injuries note (e.g. "no lineup or injury feed for college football yet")
+            parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}'
+                         f'<p>{E(str(note))}</p></div>')
+        elif val is None and not note:
+            if layer_name == "sim":
+                parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}'
+                             f'<p class="muted">No sim number for this market in the freeze.</p></div>')
+            else:
+                continue
         elif isinstance(val, dict):
             items = " · ".join(f"{k}: {E(str(v))}" for k, v in val.items() if v is not None)
-            summary_html = f'<p>{E(summary)}</p>' if summary else ""
+            summary_html = f'<p>{summary}</p>' if summary else ""
             raw_html = f'<details><summary class="muted" style="cursor:pointer;font-size:0.85em">Raw data</summary><div class="note" style="margin-top:4px">{items}</div></details>'
             parts.append(f'<div class="card-layer"><b>{label}</b>{source_s}{as_of_s}{summary_html}{raw_html}</div>')
         elif isinstance(val, list):
