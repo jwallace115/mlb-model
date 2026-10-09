@@ -202,9 +202,15 @@ def _grade_prop(row, game, stats_df, overrides, unmatched_names):
         candidates = candidates[candidates.week == int(week)]
 
     # Filter by team: player must be on one of the two teams
+    # Crosswalk uses full names ("Baltimore Ravens"), stats use abbreviations ("BAL")
     home_team = str(game.home_team)
     away_team = str(game.away_team)
-    candidates = candidates[candidates.team.isin([home_team, away_team])]
+    home_nick = ps.nfl_team(home_team)
+    away_nick = ps.nfl_team(away_team)
+    candidates = candidates[
+        candidates.team.isin([home_team, away_team]) |
+        candidates.team.apply(lambda t: ps.nfl_team(t) in (home_nick, away_nick) if home_nick and away_nick else False)
+    ]
 
     if candidates.empty:
         # No stats for this game/week at all — can't grade
@@ -389,10 +395,21 @@ def _enrich_game_week(game, schedules_df):
     if schedules_df is None:
         return game
 
-    # Match by home_team + away_team
+    # Match by home_team + away_team (schedules use abbreviations like "BAL",
+    # crosswalk uses full names like "Baltimore Ravens" — normalize via nfl_team)
     home = str(game.home_team)
     away = str(game.away_team)
+    # Try exact match first
     match = schedules_df[(schedules_df.home_team == home) & (schedules_df.away_team == away)]
+    if match.empty:
+        # Try nfl_team normalization
+        home_nick = ps.nfl_team(home)
+        away_nick = ps.nfl_team(away)
+        if home_nick and away_nick:
+            match = schedules_df[
+                schedules_df.home_team.apply(lambda x: ps.nfl_team(x) == home_nick) &
+                schedules_df.away_team.apply(lambda x: ps.nfl_team(x) == away_nick)
+            ]
     if match.empty:
         return game
 
