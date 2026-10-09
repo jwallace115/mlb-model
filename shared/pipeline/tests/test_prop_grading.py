@@ -71,16 +71,34 @@ def _setup_crosswalk(ledger, sport, events):
     df.to_parquet(ledger / f"crosswalk_{sport.lower()}.parquet", index=False)
 
 
-def _setup_player_stats(ledger, rows):
+def _setup_player_stats(tmp_path, rows):
     """Write a player_stats parquet in the expected location."""
     import pandas as pd
     df = pd.DataFrame(rows)
-    stats_dir = ledger.parent / "results_archive" / "nfl"
+    stats_dir = tmp_path / "results_archive" / "nfl"
     stats_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     path = stats_dir / f"player_stats_2026_{ts}.parquet"
     df.to_parquet(path, index=False)
     return path
+
+
+def _setup_schedules(tmp_path, rows):
+    """Write a schedules parquet."""
+    import pandas as pd
+    df = pd.DataFrame(rows)
+    stats_dir = tmp_path / "results_archive" / "nfl"
+    stats_dir.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    path = stats_dir / f"schedules_2026_{ts}.parquet"
+    df.to_parquet(path, index=False)
+    return path
+
+
+def _setup_env(tmp_path):
+    """Point env vars at tmp_path so the grader finds stats/schedules."""
+    os.environ["MLB_REPO_ROOT"] = str(tmp_path)
+    os.environ["RESULTS_ARCHIVE_DIR"] = str(tmp_path / "results_archive")
 
 
 def test_prop_grading_four_cases(tmp_path):
@@ -92,26 +110,30 @@ def test_prop_grading_four_cases(tmp_path):
         # Over rush_yds 50.5 — player has 65 → W
         _ledger_row(pick_id="prop_over_w", market="prop:rush_yds", side="over",
                     point=50.5, player_name="Alice Runner",
-                    home="Team A", away="Team B"),
+                    home="TA", away="TB"),
         # Under pass_yds 250.5 — player has 200 → W
         _ledger_row(pick_id="prop_under_w", market="prop:pass_yds", side="under",
                     point=250.5, player_name="Bob Thrower",
-                    home="Team A", away="Team B"),
-        # Over rec 5.5 — player has 5 → stat < point: actually this is under wins
+                    home="TA", away="TB"),
         # Use exact push: Over rec 5.0 — player has 5 → P
         _ledger_row(pick_id="prop_push", market="prop:rec", side="over",
                     point=5.0, player_name="Charlie Catcher",
-                    home="Team A", away="Team B"),
+                    home="TA", away="TB"),
         # DNP: player not in stats at all → V
         _ledger_row(pick_id="prop_dnp", market="prop:rush_att", side="over",
                     point=10.5, player_name="Dave Benchwarmer",
-                    home="Team A", away="Team B"),
+                    home="TA", away="TB"),
     ]
     ledger = _setup_ledger(tmp_path, rows)
     _setup_crosswalk(ledger, "NFL", [
-        (eid, "2026_04_TB_A", 24, 20, True, "Team A", "Team B"),
+        (eid, "2026_04_TB_A", 24, 20, True, "TA", "TB"),
     ])
-    _setup_player_stats(ledger, [
+    _setup_schedules(tmp_path, [
+        {"game_id": "2026_04_TB_TA", "season": 2026, "week": 4, "gameday": "2026-09-28",
+         "gametime": "13:00", "home_team": "TA", "away_team": "TB",
+         "home_score": 24, "away_score": 20, "game_type": "REG"},
+    ])
+    _setup_player_stats(tmp_path, [
         {"player_display_name": "Alice Runner", "player_name": "A.Runner",
          "team": "TA", "opponent_team": "TB", "season": 2026, "week": 4,
          "season_type": "REG", "rushing_yards": 65, "carries": 15,
@@ -132,8 +154,7 @@ def test_prop_grading_four_cases(tmp_path):
          "receiving_yards": 40, "receiving_tds": 0, "player_id": "c1"},
         # No row for Dave Benchwarmer → DNP
     ])
-    # Point ROOT to the tmp_path parent so the grader can find the stats file
-    os.environ["MLB_REPO_ROOT"] = str(ledger.parent)
+    _setup_env(tmp_path)
 
     graded = pg.grade(ledger)
     results = {g["pick_id"]: g["result"] for g in graded}
@@ -158,7 +179,7 @@ def test_name_override_wins():
     import picks_grader as pg
 
     overrides = {"Weird Name": "Official Name"}
-    assert pg._resolve_player_name("Weird Name", overrides) == "Official Name"
+    assert pg._resolve_player_name("Weird Name", overrides) == "official name"
     assert pg._resolve_player_name("Normal Name", overrides) == pg._normalize_name("Normal Name")
 
 
@@ -167,14 +188,20 @@ def test_game_market_grades_unchanged_after_prop_grading(tmp_path):
     import picks_grader as pg
 
     eid = "a" * 32
-    game_row = _ledger_row(pick_id="game_sp", market="spread", side="Team A", point=-3.5)
+    game_row = _ledger_row(pick_id="game_sp", market="spread", side="TA", point=-3.5,
+                           home="TA", away="TB")
     prop_row = _ledger_row(pick_id="prop_test", market="prop:rush_yds", side="over",
-                           point=50.5, player_name="Alice Runner")
+                           point=50.5, player_name="Alice Runner", home="TA", away="TB")
     ledger = _setup_ledger(tmp_path, [game_row, prop_row])
     _setup_crosswalk(ledger, "NFL", [
-        (eid, "2026_04_TB_A", 24, 20, True, "Team A", "Team B"),
+        (eid, "2026_04_TB_A", 24, 20, True, "TA", "TB"),
     ])
-    _setup_player_stats(ledger, [
+    _setup_schedules(tmp_path, [
+        {"game_id": "2026_04_TB_TA", "season": 2026, "week": 4, "gameday": "2026-09-28",
+         "gametime": "13:00", "home_team": "TA", "away_team": "TB",
+         "home_score": 24, "away_score": 20, "game_type": "REG"},
+    ])
+    _setup_player_stats(tmp_path, [
         {"player_display_name": "Alice Runner", "player_name": "A.Runner",
          "team": "TA", "opponent_team": "TB", "season": 2026, "week": 4,
          "season_type": "REG", "rushing_yards": 65, "carries": 15,
@@ -182,7 +209,7 @@ def test_game_market_grades_unchanged_after_prop_grading(tmp_path):
          "passing_interceptions": 0, "rushing_tds": 1, "receptions": 0,
          "receiving_yards": 0, "receiving_tds": 0, "player_id": "a1"},
     ])
-    os.environ["MLB_REPO_ROOT"] = str(ledger.parent)
+    _setup_env(tmp_path)
 
     graded = pg.grade(ledger)
     game_grades = [g for g in graded if g["pick_id"] == "game_sp"]

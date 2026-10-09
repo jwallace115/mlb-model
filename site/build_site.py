@@ -1147,7 +1147,7 @@ def _load_clv(ledger_dir):
 
 def _record_section(rows, embargo_owners, sport, source_info):
     """Build the Record section for a sport tab."""
-    graded = [r for r in rows if r.get("result") in ("W", "L", "P", "VOID") and r.get("sport") == sport]
+    graded = [r for r in rows if r.get("result") in ("W", "L", "P", "V", "VOID") and r.get("sport") == sport]
     if not graded:
         return '<div class="card pad muted">No graded picks yet.</div>'
 

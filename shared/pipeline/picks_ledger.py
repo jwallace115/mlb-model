@@ -14,7 +14,7 @@ from pathlib import Path
 
 AI_SOURCES = {"ai_nfl", "ai_ncaaf", "ai_nhl", "ai_nba", "sim_nfl"}
 VALID_SOURCES = {"ai_opinion", "sim", "ticket_card", "member_share", "jeff_manual"}
-VALID_RESULTS = {"W", "L", "P", "VOID", "UNRESOLVED", None}
+VALID_RESULTS = {"W", "L", "P", "V", "VOID", "UNRESOLVED", None}
 VALID_SPORTS = {"NFL", "NCAAF", "NHL", "NBA", "MLB", "Soccer", "Golf"}
 VALID_SIDES = {"over", "under", "Over", "Under"}  # prop sides; team names also allowed
 

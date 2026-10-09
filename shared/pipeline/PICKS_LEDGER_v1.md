@@ -851,3 +851,29 @@ rushing_tds, receptions, receiving_yards, receiving_tds.
 nflverse column for interceptions is `passing_interceptions` (not
 `interceptions`). The `team` column is `team` (not `recent_team`).
 Zero API credits (nflverse is free, GitHub-hosted parquet).
+
+## P46 — Props graded from nflverse weekly stats (2026-10-09)
+
+**Decision:** `picks_grader.py` resolves `prop:*` rows from the newest
+`player_stats_2026_*.parquet`. The pick's game is found in the crosswalk
+(completed only). The player's stats row is matched by: season 2026, the
+game's week (enriched from schedules), team ∈ {home, away}, normalized
+name match (lower-case, strip periods and Jr/Sr/II/III/IV suffixes,
+collapse spaces) against `player_display_name`, with
+`shared/pipeline/player_name_overrides.json` (ledger name → nflverse name)
+consulted first. Exactly one row else UNRESOLVED (zero → V for void/DNP).
+
+Stat mapping: pass_yds→passing_yards, pass_td→passing_tds,
+pass_att→attempts, pass_cmp→completions, int→passing_interceptions,
+rush_yds→rushing_yards, rush_att→carries, rec→receptions,
+rec_yds→receiving_yards, atd→(rushing_tds + receiving_tds) ≥ 1 wins Over
+(atd lines are 0.5).
+
+Over wins if stat > point, Under if stat < point, P if equal.
+DNP (completed game, no stats row) → result "V" (void — the book voids a
+DNP; excluded from W/L/ROI everywhere the record is computed).
+result_source = "player_stats: <filename>".
+
+"V" added to `VALID_RESULTS` in picks_ledger.py. build_site.py
+`_record_section` includes V in the graded-rows filter but `_picks_roi`
+already excludes it (counts only W/L/P).

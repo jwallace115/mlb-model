@@ -3,7 +3,7 @@
 Grade pick-ledger rows from official results via the event crosswalk.
 
 Game-level markets (h2h/ML, spreads, totals) from crosswalked final score.
-Props: UNRESOLVED in v1 (per-player stat derivation deferred to v2).
+Props (v2, P46): from nflverse weekly player stats; DNP = V (void).
 Push rule: point hit exactly → P.
 VOID: only when official source marks game cancelled/postponed.
 
@@ -11,9 +11,9 @@ Grades are appended as rows (same pick_id, result, graded_utc, result_source),
 never edits. sim_nfl and ai_nfl graded here like everyone else; the embargo
 is on the page (Item 4), not here.
 
-OPS2 Item 3.
+OPS2 Item 3; OPS6 Item 2 (prop grading).
 """
-import hashlib, os, sys
+import hashlib, json, os, re, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -33,6 +33,46 @@ LEDGER_DIR = Path(os.environ.get("PICKS_LEDGER_DIR") or "/root/private/ledger")
 # Moneyline: home wins → home side W, away side L. Tie → P (NFL has no ties in playoffs, rare in regular season).
 
 # Rush attempts include kneels (book-faithful).
+
+# ---- prop stat mapping (P46) ----
+_PROP_STAT_MAP = {
+    "prop:pass_yds": "passing_yards",
+    "prop:pass_td":  "passing_tds",
+    "prop:pass_att": "attempts",
+    "prop:pass_cmp": "completions",
+    "prop:int":      "passing_interceptions",
+    "prop:rush_yds": "rushing_yards",
+    "prop:rush_att": "carries",
+    "prop:rec":      "receptions",
+    "prop:rec_yds":  "receiving_yards",
+    "prop:atd":      "_anytime_td",  # special: rushing_tds + receiving_tds >= 1
+}
+
+# ---- player name normalization (P46) ----
+_NAME_SUFFIXES = re.compile(r'\b(jr|sr|ii|iii|iv)\b', re.I)
+
+def _normalize_name(name):
+    """Lowercase, strip periods and suffixes (Jr/Sr/II/III/IV), collapse spaces."""
+    if not name:
+        return ""
+    s = str(name).lower().replace(".", "").strip()
+    s = _NAME_SUFFIXES.sub("", s)
+    return " ".join(s.split())
+
+
+def _resolve_player_name(ledger_name, overrides):
+    """Resolve a ledger player name to a normalized name, consulting overrides first."""
+    if overrides and ledger_name in overrides:
+        return _normalize_name(overrides[ledger_name])
+    return _normalize_name(ledger_name)
+
+
+def _load_name_overrides():
+    """Load shared/pipeline/player_name_overrides.json if it exists."""
+    p = Path(__file__).resolve().parent / "player_name_overrides.json"
+    if p.exists():
+        return json.loads(p.read_text())
+    return {}
 
 
 def _normalise_side(side, home, away):
@@ -119,6 +159,105 @@ def _grade_game_market(market, side_type, point, home_score, away_score):
     return None
 
 
+def _load_newest_player_stats(root):
+    """Load the newest player_stats_2026_*.parquet from results_archive/nfl/."""
+    results_dir = Path(os.environ.get("RESULTS_ARCHIVE_DIR") or (root / "data" / "results_archive"))
+    stats_dir = results_dir / "nfl"
+    if not stats_dir.exists():
+        return None, None
+    files = sorted(stats_dir.glob("player_stats_2026_*.parquet"))
+    if not files:
+        return None, None
+    newest = files[-1]
+    return pd.read_parquet(newest), newest.name
+
+
+def _grade_prop(row, game, stats_df, overrides, unmatched_names):
+    """Grade a prop market. Returns result (W/L/P/V) or None."""
+    market = row.get("market", "")
+    stat_col = _PROP_STAT_MAP.get(market)
+    if stat_col is None:
+        return None
+
+    player_name = row.get("player_name")
+    if not player_name:
+        return None
+
+    point = row.get("point")
+    if point is None:
+        return None
+
+    side_type = _normalise_side(row.get("side"), game.home_team, game.away_team)
+    if side_type not in ("over", "under"):
+        return None
+
+    # Find the game's week from the crosswalk
+    week = game.get("week") if hasattr(game, "get") else getattr(game, "week", None)
+
+    # Match player in stats
+    resolved = _resolve_player_name(player_name, overrides)
+    # Build index of normalized names → stats rows
+    candidates = stats_df[stats_df.season == 2026].copy()
+    if week is not None and not pd.isna(week):
+        candidates = candidates[candidates.week == int(week)]
+
+    # Filter by team: player must be on one of the two teams
+    home_team = str(game.home_team)
+    away_team = str(game.away_team)
+    candidates = candidates[candidates.team.isin([home_team, away_team])]
+
+    if candidates.empty:
+        # No stats for this game/week at all — can't grade
+        return None
+
+    # Try name match
+    candidates = candidates.copy()
+    candidates["_norm"] = candidates.player_display_name.apply(_normalize_name)
+    matched = candidates[candidates._norm == resolved]
+
+    if len(matched) == 0:
+        # DNP: completed game + player not in stats = void
+        unmatched_names.add(player_name)
+        return "V"
+    if len(matched) > 1:
+        # Multiple matches — ambiguous, skip
+        return None
+
+    stats_row = matched.iloc[0]
+
+    # Get the stat value
+    if stat_col == "_anytime_td":
+        rushing_tds = float(stats_row.get("rushing_tds", 0) or 0)
+        receiving_tds = float(stats_row.get("receiving_tds", 0) or 0)
+        stat_val = rushing_tds + receiving_tds
+        # ATD lines are 0.5: Over wins if scored >= 1 TD
+        if stat_val >= 1:
+            return "W" if side_type == "over" else "L"
+        else:
+            return "L" if side_type == "over" else "W"
+
+    if stat_col not in stats_row.index:
+        return None
+
+    stat_val = float(stats_row[stat_col] or 0)
+    pt = float(point)
+
+    if side_type == "over":
+        if stat_val > pt:
+            return "W"
+        elif stat_val < pt:
+            return "L"
+        else:
+            return "P"
+    else:  # under
+        if stat_val < pt:
+            return "W"
+        elif stat_val > pt:
+            return "L"
+        else:
+            return "P"
+
+
 def grade(ledger_dir):
     """Grade all ungraded ledger rows with results available. Returns list of grade rows to append."""
     ledger_dir = Path(ledger_dir)
@@ -135,6 +274,15 @@ def grade(ledger_dir):
         xw_path = ledger_dir / f"crosswalk_{sport}.parquet"
         if xw_path.exists():
             crosswalks[sport.upper()] = pd.read_parquet(xw_path)
+
+    # Load player stats for prop grading
+    root = Path(os.environ.get("MLB_REPO_ROOT") or Path(__file__).resolve().parent.parent.parent)
+    stats_df, stats_file = _load_newest_player_stats(root)
+    overrides = _load_name_overrides()
+    unmatched_names = set()
+
+    # Load schedules for week lookup (needed for prop grading)
+    schedules_df = _load_newest_schedules(root)
 
     now = datetime.now(timezone.utc)
     grade_rows = []
@@ -175,8 +323,26 @@ def grade(ledger_dir):
             continue
 
         market = row.get("market", "")
+
         if market and "prop" in market:
-            continue  # props UNRESOLVED in v1
+            # Prop grading (P46)
+            if stats_df is None:
+                continue  # no stats file available
+
+            # Enrich game with week from schedules
+            game_with_week = _enrich_game_week(game, schedules_df)
+
+            result = _grade_prop(row, game_with_week, stats_df, overrides, unmatched_names)
+            if result is None:
+                continue
+
+            grade_row = dict(row)
+            grade_row["result"] = result
+            grade_row["graded_utc"] = now.isoformat()
+            grade_row["result_source"] = f"player_stats: {stats_file}"
+            grade_row["ingested_utc"] = now.isoformat()
+            grade_rows.append(grade_row)
+            continue
 
         side_type = _normalise_side(row.get("side"), game.home_team, game.away_team)
         if side_type is None:
@@ -197,7 +363,43 @@ def grade(ledger_dir):
         grade_row["ingested_utc"] = now.isoformat()
         grade_rows.append(grade_row)
 
+    if unmatched_names:
+        print(f"prop grading: {len(unmatched_names)} unmatched player names (DNP/void): {sorted(unmatched_names)}")
+
     return grade_rows
+
+
+def _load_newest_schedules(root):
+    """Load the newest schedules_2026_*.parquet for week lookup."""
+    results_dir = Path(os.environ.get("RESULTS_ARCHIVE_DIR") or (root / "data" / "results_archive"))
+    stats_dir = results_dir / "nfl"
+    if not stats_dir.exists():
+        return None
+    files = sorted(stats_dir.glob("schedules_2026_*.parquet"))
+    if not files:
+        return None
+    return pd.read_parquet(files[-1])
+
+
+def _enrich_game_week(game, schedules_df):
+    """Add week to game from schedules if not already present."""
+    if hasattr(game, "week") and not pd.isna(getattr(game, "week", None)):
+        return game
+
+    if schedules_df is None:
+        return game
+
+    # Match by home_team + away_team
+    home = str(game.home_team)
+    away = str(game.away_team)
+    match = schedules_df[(schedules_df.home_team == home) & (schedules_df.away_team == away)]
+    if match.empty:
+        return game
+
+    # Take the first (should be unique in a season for NFL)
+    game_copy = game.copy()
+    game_copy["week"] = match.iloc[0].week
+    return game_copy
 
 
 def main():
@@ -205,7 +407,7 @@ def main():
         print(f"HALT: PICKS_LEDGER_DIR={LEDGER_DIR} does not exist")
         sys.exit(1)
 
-    # Check: if a sport has ungraded past-commence picks but no crosswalk, exit non-zero
+    # Check: if a sport has ungraded past-commence game picks but no crosswalk, exit non-zero
     rows = pl._read_all(LEDGER_DIR)
     now = datetime.now(timezone.utc)
     graded_pids = {r["pick_id"] for r in rows if r.get("result")}
@@ -216,7 +418,7 @@ def main():
             continue
         market = row.get("market", "")
         if market and "prop" in market:
-            continue
+            continue  # props don't need crosswalk check here (they need stats)
         try:
             ct = pl._parse_utc(row.get("commence_time"), "commence")
             if ct < now:
