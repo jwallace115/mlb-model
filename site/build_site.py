@@ -653,6 +653,73 @@ def _utc_to_et(s):
         return str(s)[:19]
 
 
+def _slot_for_commence(commence_utc, sport):
+    """Compute the slot label for a game's commence_time in ET.
+
+    NFL: Thu / Fri / Sat / Sun early / Sun late / SNF / MNF / day name.
+    NCAAF: day name, except Saturday splits Sat early / Sat afternoon / Sat night.
+    NHL, NBA: the ET date like "Thu Oct 9".
+    """
+    if not commence_utc:
+        return "unknown"
+    try:
+        dt = datetime.fromisoformat(str(commence_utc).replace("Z", "+00:00"))
+        dt_et = dt.astimezone(ET)
+    except Exception:
+        return "unknown"
+
+    day_name = dt_et.strftime("%a")  # Mon, Tue, ...
+    hour_min = dt_et.hour * 60 + dt_et.minute
+
+    if sport == "NFL":
+        if day_name == "Thu":
+            return "Thu"
+        elif day_name == "Fri":
+            return "Fri"
+        elif day_name == "Sat":
+            return "Sat"
+        elif day_name == "Sun":
+            if hour_min < 15 * 60:       # before 3:00 PM ET
+                return "Sun early"
+            elif hour_min < 19 * 60:     # 3:00–6:59 PM ET
+                return "Sun late"
+            else:                         # 7:00 PM ET+
+                return "SNF"
+        elif day_name == "Mon":
+            return "MNF"
+        else:
+            return day_name
+    elif sport == "NCAAF":
+        if day_name == "Sat":
+            if hour_min < 15 * 60 + 30:      # before 3:30 PM ET
+                return "Sat early"
+            elif hour_min < 19 * 60:          # 3:30–6:59 PM ET
+                return "Sat afternoon"
+            else:
+                return "Sat night"
+        return day_name
+    else:
+        # NHL, NBA: "Thu Oct 9"
+        return dt_et.strftime("%a %b %-d")
+
+
+def pt_label(point, market, side):
+    """Format a point for display. Signs only on spreads; totals/props get plain number."""
+    if point is None:
+        return ""
+    try:
+        x = float(point)
+    except (ValueError, TypeError):
+        return str(point)
+    is_spread = (market == "spread" or market == "spreads"
+                 or (bool(market) and "spread" in market.lower()
+                     and side not in ("Over", "Under")))
+    s = f"{abs(x):g}"
+    if is_spread:
+        return ("+" if x > 0 else "\u2212" if x < 0 else "") + s
+    return s
+
+
 def _summarize_lm(card):
     """Plain-English summary of the line_movement layer."""
     layer = card.get("layers", {}).get("line_movement", {})
@@ -911,17 +978,19 @@ def _render_card(card, pick=None):
     return "".join(parts) if parts else '<div class="note muted">no layers</div>'
 
 
-def _render_pick_row(rank, pick, card, is_prop):
+def _render_pick_row(rank, pick, card, is_prop, data_attrs=None):
     """Render a single ranked pick row with expandable detail card."""
     pid = pick.get("pick_id", "")
+    market = pick.get("market", "")
+    side = pick.get("side", "")
     if is_prop:
-        label = f'{E(str(pick.get("player_name", "")))} {E(str(pick.get("market", "")))} {E(str(pick.get("side", "")))}'
+        label = f'{E(str(pick.get("player_name", "")))} {E(str(market))} {E(str(side))}'
         if pick.get("point") is not None:
-            label += f' {pt(pick["point"])}'
+            label += f' {pt_label(pick["point"], market, side)}'
     else:
-        label = f'{E(str(pick.get("side", "")))} {E(str(pick.get("market", "")))}'
+        label = f'{E(str(side))} {E(str(market))}'
         if pick.get("point") is not None:
-            label += f' {pt(pick["point"])}'
+            label += f' {pt_label(pick["point"], market, side)}'
     game = f'{E(str(pick.get("away", "")))} @ {E(str(pick.get("home", "")))}'
     price_s = am(pick.get("price_american"))
     conf_s = str(int(pick["conf"])) if pick.get("conf") is not None else "—"
@@ -938,10 +1007,24 @@ def _render_pick_row(rank, pick, card, is_prop):
             if mp is not None:
                 move_s = f'{mp:+.1f} pts'
 
-    return (f'<details id="{E(pid)}"><summary style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--line2)">'
-            f'<span class="num" style="display:inline-block;width:28px;text-align:right;margin-right:8px"><b>{rank}</b></span>'
+    # Data attributes for JS filtering
+    da = ""
+    if data_attrs:
+        da = " " + " ".join(f'{k}="{E(str(v))}"' for k, v in data_attrs.items())
+
+    # Freeze info line
+    freeze_line = ""
+    if data_attrs:
+        window = pick.get("window") or "legacy"
+        reader = pick.get("_reader") or ""
+        freeze_et = _utc_to_et(pick.get("logged_utc"))
+        freeze_line = f'<br><span class="muted" style="margin-left:36px;font-size:11px">{E(window)} · {E(reader)} · {E(freeze_et)}</span>'
+
+    return (f'<details id="{E(pid)}"{da}><summary style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--line2)">'
+            f'<span class="rank" style="display:inline-block;width:28px;text-align:right;margin-right:8px"><b>{rank}</b></span>'
             f'{label}<br><span class="muted" style="margin-left:36px">{game} · {price_s} · conf {conf_s} · moved: {move_s}</span>'
             f'<br><span class="note" style="margin-left:36px">{reason_s}</span>'
+            f'{freeze_line}'
             f'</summary><div class="card pad" style="margin:8px 0 16px 36px">{card_html}</div></details>')
 
 
@@ -1048,7 +1131,7 @@ def build_picks(now, health):
     tab_bodies = []
 
     for sport in tab_order:
-        result = bt.select(rows, sport, now)
+        result = bt.select_slate(rows, sport, now)
         anchor = sport.lower()
         tab_links.append(f'<a href="#tab-{anchor}" class="tab-link" style="padding:8px 16px;text-decoration:none;'
                          f'border-bottom:2px solid var(--accent);font-weight:600">{sport}</a>')
@@ -1056,15 +1139,98 @@ def build_picks(now, health):
         if result is None:
             tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
                               f'<div class="card pad muted">No picks logged yet for {sport}.</div></div>')
-            # Record section
             rec = _record_section(rows, embargo_owners, sport, source_info)
             tab_bodies[-1] = tab_bodies[-1][:-6] + f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>'
             continue
 
-        freeze_window = result.get("window", "legacy")
-        freeze_info = src(f"{freeze_window} freeze · {E(str(result['freeze_logged_utc'])[:19])} UTC · "
-                          f"{result['n_picks_in_freeze']} picks · "
-                          f"{len(result['unranked'])} unranked")
+        # Header: "showing N picks on G games from F freezes · newest <window> freeze <ET>"
+        n_total = len(result["props"]) + len(result["sides"])
+        n_games = len(result["events"])
+        n_freezes = result["n_freezes"]
+        newest_ev = max(result["events"], key=lambda e: e.get("freeze_logged_utc", ""))
+        newest_window = newest_ev.get("window", "legacy")
+        newest_et = _utc_to_et(newest_ev.get("freeze_logged_utc"))
+        header_text = (f"showing {n_total} picks on {n_games} games from {n_freezes} freezes "
+                       f"· newest {newest_window} freeze {newest_et}")
+        header_html = f'<div class="picks-header muted" style="margin-bottom:8px">{E(header_text)}</div>'
+
+        # Compute slots for each event
+        import os as _os
+        events_with_slots = []
+        for ev in result["events"]:
+            slot = _slot_for_commence(ev["commence_time"], sport)
+            kick_et = _utc_to_et(ev["commence_time"])
+            events_with_slots.append({**ev, "slot": slot, "kick_et": kick_et})
+
+        # Slot chips
+        from collections import OrderedDict
+        slots = OrderedDict()
+        for ev in events_with_slots:
+            s = ev["slot"]
+            if s not in slots:
+                slots[s] = {"n_games": 0, "first_kick": ev["commence_time"], "event_ids": []}
+            slots[s]["n_games"] += 1
+            slots[s]["event_ids"].append(ev["event_id"])
+            if ev["commence_time"] < slots[s]["first_kick"]:
+                slots[s]["first_kick"] = ev["commence_time"]
+
+        slot_chips_html = []
+        for s, info in slots.items():
+            kick_et = _utc_to_et(info["first_kick"])
+            eids_json = E(json.dumps(info["event_ids"]))
+            slot_chips_html.append(
+                f'<button class="slot-chip" data-slot="{E(s)}" data-events="{eids_json}" '
+                f'data-sport="{E(anchor)}" '
+                f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
+                f'background:var(--bg2);cursor:pointer;font-size:12px">'
+                f'{E(s)} · {info["n_games"]} game{"s" if info["n_games"] != 1 else ""} · first kick {E(kick_et)}'
+                f'</button>')
+
+        # "Sunday" super-chip for NFL (Sun early + Sun late + SNF, NOT MNF)
+        if sport == "NFL":
+            sun_eids = []
+            for s in ("Sun early", "Sun late", "SNF"):
+                if s in slots:
+                    sun_eids.extend(slots[s]["event_ids"])
+            if sun_eids:
+                sun_eids_json = E(json.dumps(sun_eids))
+                slot_chips_html.append(
+                    f'<button class="slot-chip" data-slot="Sunday" data-events="{sun_eids_json}" '
+                    f'data-sport="{E(anchor)}" '
+                    f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
+                    f'background:var(--bg2);cursor:pointer;font-size:12px">'
+                    f'Sunday · {len(sun_eids)} games</button>')
+
+        # "All upcoming" chip
+        all_eids = [ev["event_id"] for ev in events_with_slots]
+        all_eids_json = E(json.dumps(all_eids))
+        slot_chips_html.append(
+            f'<button class="slot-chip" data-slot="All upcoming" data-events="{all_eids_json}" '
+            f'data-sport="{E(anchor)}" '
+            f'style="padding:4px 10px;margin:2px;border:1px solid var(--line);border-radius:12px;'
+            f'background:var(--bg2);cursor:pointer;font-size:12px">'
+            f'All upcoming · {len(all_eids)} games</button>')
+
+        slot_row = f'<div class="slot-chips" data-sport="{E(anchor)}" style="margin-bottom:8px;display:flex;flex-wrap:wrap;gap:2px">{"".join(slot_chips_html)}</div>'
+
+        # Game chips
+        game_chips_html = []
+        for ev in events_with_slots:
+            game_chips_html.append(
+                f'<button class="game-chip" data-event="{E(ev["event_id"])}" '
+                f'data-slot="{E(ev["slot"])}" data-kick="{E(str(ev["commence_time"]))}" '
+                f'data-sport="{E(anchor)}" '
+                f'style="padding:3px 8px;margin:2px;border:1px solid var(--line);border-radius:8px;'
+                f'background:var(--bg2);cursor:pointer;font-size:11px">'
+                f'{E(ev["away"])} @ {E(ev["home"])} · {E(ev["kick_et"])}'
+                f'</button>')
+        game_row = f'<div class="game-chips" data-sport="{E(anchor)}" style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:2px">{"".join(game_chips_html)}</div>'
+
+        # Build event_id → slot mapping for rows
+        event_slot = {ev["event_id"]: ev["slot"] for ev in events_with_slots}
+        event_reader = {}
+        for ev in events_with_slots:
+            event_reader[ev["event_id"]] = ev.get("reader", "")
 
         # Load cards
         def _load_card(pid):
@@ -1076,17 +1242,31 @@ def build_picks(now, health):
                     pass
             return None
 
-        # Props column
+        # Props column with data attributes
         props_html = []
-        for i, pick in enumerate(result["props"], 1):
+        for i, pick in enumerate(result["props"]):
             card = _load_card(pick.get("pick_id"))
-            props_html.append(_render_pick_row(i, pick, card, is_prop=True))
+            eid = pick.get("event_id", "")
+            slot = event_slot.get(eid, "unknown")
+            kick = pick.get("commence_time", "")
+            pick["_reader"] = event_reader.get(eid, "")
+            da = {"data-event": eid, "data-slot": slot,
+                  "data-kick": str(kick), "data-col": "props",
+                  "data-order": str(i)}
+            props_html.append(_render_pick_row(i + 1, pick, card, is_prop=True, data_attrs=da))
 
-        # Sides column
+        # Sides column with data attributes
         sides_html = []
-        for i, pick in enumerate(result["sides"], 1):
+        for i, pick in enumerate(result["sides"]):
             card = _load_card(pick.get("pick_id"))
-            sides_html.append(_render_pick_row(i, pick, card, is_prop=False))
+            eid = pick.get("event_id", "")
+            slot = event_slot.get(eid, "unknown")
+            kick = pick.get("commence_time", "")
+            pick["_reader"] = event_reader.get(eid, "")
+            da = {"data-event": eid, "data-slot": slot,
+                  "data-kick": str(kick), "data-col": "sides",
+                  "data-order": str(i)}
+            sides_html.append(_render_pick_row(i + 1, pick, card, is_prop=False, data_attrs=da))
 
         cols = (f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">'
                 f'<div><h3>Top 20 — player props</h3>{"".join(props_html) if props_html else "<div class=\"muted\">none</div>"}</div>'
@@ -1107,17 +1287,162 @@ def build_picks(now, health):
         rec = _record_section(rows, embargo_owners, sport, source_info)
 
         tab_bodies.append(f'<div id="tab-{anchor}" class="tab-panel">'
-                          f'{freeze_info}{cols}{unranked_html}'
+                          f'{header_html}{slot_row}{game_row}{cols}{unranked_html}'
                           f'<h3 style="margin-top:24px">Record — {sport}</h3>{rec}</div>')
 
     tabs_nav = f'<div style="display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px">{"".join(tab_links)}</div>'
     tabs_content = "".join(tab_bodies)
 
+    # Inline JS for slot/game filtering
+    filter_js = _picks_filter_js()
+
     body = (f'<div><h1>Picks</h1><p class="lede">NFL, NCAAF, NHL, NBA — top 20 picks by confidence, '
             f'ranked from the reader\'s latest freeze. Click a pick to see its detail card. '
             f'No stakes, slip ids or share links.</p></div>'
-            f'{tabs_nav}{tabs_content}')
+            f'{tabs_nav}{tabs_content}{filter_js}')
     return page("index.html", "Picks", body, health, now)
+
+
+def _picks_filter_js():
+    """Inline JS for slot/game chip filtering and rank renumbering."""
+    return '''<script>
+(function(){
+var PF={};
+function init(){
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    var sport=panel.id.replace('tab-','');
+    var slots=panel.querySelectorAll('.slot-chip');
+    var games=panel.querySelectorAll('.game-chip');
+    var rows=panel.querySelectorAll('details[data-event]');
+    if(!rows.length)return;
+    // Build state: which game event_ids are ticked
+    var ticked={};
+    games.forEach(function(g){ticked[g.getAttribute('data-event')]=false;});
+    // Find next slot to kick
+    var now=Date.now();
+    var slotKick={};
+    games.forEach(function(g){
+      var k=new Date(g.getAttribute('data-kick')).getTime();
+      var s=g.getAttribute('data-slot');
+      if(k>now&&(!slotKick[s]||k<slotKick[s]))slotKick[s]=k;
+    });
+    // Hide past games from chips
+    games.forEach(function(g){
+      var k=new Date(g.getAttribute('data-kick')).getTime();
+      if(k<=now)g.style.display='none';
+    });
+    // Find next slot: smallest first-kick still > now
+    var nextSlot=null,nextKick=Infinity;
+    for(var s in slotKick){if(slotKick[s]<nextKick){nextKick=slotKick[s];nextSlot=s;}}
+    // Default: tick the next slot
+    function tickSlot(slotName){
+      slots.forEach(function(btn){
+        var eids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
+        if(btn.getAttribute('data-slot')===slotName){
+          btn.style.background='var(--accent)';btn.style.color='#fff';
+          eids.forEach(function(eid){
+            var k=games.length?null:null;
+            // Only tick if game is upcoming
+            var g=panel.querySelector('.game-chip[data-event="'+eid+'"]');
+            if(g&&new Date(g.getAttribute('data-kick')).getTime()>now)ticked[eid]=true;
+          });
+        }
+      });
+      games.forEach(function(g){
+        if(ticked[g.getAttribute('data-event')]){
+          g.style.background='var(--accent)';g.style.color='#fff';
+        }
+      });
+    }
+    if(nextSlot)tickSlot(nextSlot);
+    else{// tick all
+      games.forEach(function(g){
+        var k=new Date(g.getAttribute('data-kick')).getTime();
+        if(k>now){ticked[g.getAttribute('data-event')]=true;g.style.background='var(--accent)';g.style.color='#fff';}
+      });
+    }
+    function applyFilter(){
+      var cols={props:[],sides:[]};
+      rows.forEach(function(r){
+        var eid=r.getAttribute('data-event');
+        var col=r.getAttribute('data-col');
+        var order=parseInt(r.getAttribute('data-order'),10);
+        if(ticked[eid]){r.style.display='';cols[col].push({el:r,order:order});}
+        else{r.style.display='none';}
+      });
+      // Sort by server order, renumber, cap at 20
+      for(var c in cols){
+        cols[c].sort(function(a,b){return a.order-b.order;});
+        var shown=0;
+        cols[c].forEach(function(item,idx){
+          var rankSpan=item.el.querySelector('.rank');
+          if(idx<20){rankSpan.innerHTML='<b>'+(idx+1)+'</b>';item.el.style.display='';shown++;}
+          else{item.el.style.display='none';}
+        });
+        // Show "20 of N" if needed
+        var hdr=panel.querySelector('h3');
+        if(cols[c].length>20&&hdr){
+          var existing=panel.querySelector('.cap-note-'+c);
+          if(!existing){
+            var note=document.createElement('span');
+            note.className='muted cap-note-'+c;
+            note.style.fontSize='11px';note.style.marginLeft='8px';
+            hdr.parentNode.insertBefore(note,hdr.nextSibling);
+            existing=note;
+          }
+          existing.textContent='20 of '+cols[c].length+' shown';
+        }
+      }
+    }
+    applyFilter();
+    // Slot chip click
+    slots.forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var eids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
+        // Toggle: if all ticked → untick; else tick all
+        var allOn=eids.every(function(eid){return ticked[eid];});
+        // Reset all slots/games visuals
+        slots.forEach(function(b){b.style.background='var(--bg2)';b.style.color='';});
+        if(allOn){eids.forEach(function(eid){ticked[eid]=false;});}
+        else{
+          // Clear all first
+          for(var k in ticked)ticked[k]=false;
+          eids.forEach(function(eid){
+            var g=panel.querySelector('.game-chip[data-event="'+eid+'"]');
+            if(g&&new Date(g.getAttribute('data-kick')).getTime()>now)ticked[eid]=true;
+          });
+          btn.style.background='var(--accent)';btn.style.color='#fff';
+        }
+        games.forEach(function(g){
+          if(ticked[g.getAttribute('data-event')]){g.style.background='var(--accent)';g.style.color='#fff';}
+          else{g.style.background='var(--bg2)';g.style.color='';}
+        });
+        applyFilter();
+      });
+    });
+    // Game chip click
+    games.forEach(function(g){
+      g.addEventListener('click',function(){
+        var eid=g.getAttribute('data-event');
+        ticked[eid]=!ticked[eid];
+        if(ticked[eid]){g.style.background='var(--accent)';g.style.color='#fff';}
+        else{g.style.background='var(--bg2)';g.style.color='';}
+        // Update slot chip visuals
+        slots.forEach(function(btn){
+          var seids=JSON.parse(btn.getAttribute('data-events').replace(/&quot;/g,\'"\'));
+          var allOn=seids.every(function(e){return ticked[e];});
+          if(allOn&&seids.length){btn.style.background='var(--accent)';btn.style.color='#fff';}
+          else{btn.style.background='var(--bg2)';btn.style.color='';}
+        });
+        applyFilter();
+      });
+    });
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+else init();
+})();
+</script>'''
 
 
 def build(out, now=None):

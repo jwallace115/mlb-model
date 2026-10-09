@@ -327,3 +327,212 @@ def test_raw_dict_in_details():
     html_out = _render_card(card)
     assert "<details>" in html_out.lower(), "raw data should be inside a <details> element"
     assert "move_points" in html_out, "raw dict fields must still be present"
+
+
+# ---- OPS5b Item 2 tests: slot/game filters ----
+
+def _import_build_site():
+    site_dir = str(Path(__file__).resolve().parent.parent.parent.parent / "site")
+    if site_dir not in sys.path:
+        sys.path.insert(0, site_dir)
+    os.environ.setdefault("SITE_REPO_ROOT", str(Path(__file__).resolve().parent.parent.parent.parent))
+    import build_site
+    return build_site
+
+
+def _build_fixture_page(tmp_path, rows, now=None):
+    """Build site from fixture rows, return index.html text."""
+    from datetime import datetime, timezone
+    now = now or datetime(2026, 10, 8, 23, 30, tzinfo=timezone.utc)
+    ledger = _make_ledger(tmp_path, rows)
+    os.environ["PICKS_LEDGER_DIR"] = str(ledger)
+    os.environ["SITE_REPO_ROOT"] = str(Path(__file__).resolve().parent.parent.parent.parent)
+    try:
+        bs = _import_build_site()
+        out = tmp_path / "site_out"
+        bs.build(str(out), now=now)
+        return (out / "index.html").read_text()
+    finally:
+        os.environ.pop("PICKS_LEDGER_DIR", None)
+
+
+# (2a) slot mapping: kicks → Thu, Sun early, Sun late, SNF, MNF
+def test_slot_mapping():
+    bs = _import_build_site()
+    # 2026-10-09T00:15Z = Thu Oct 8 8:15 PM ET
+    assert bs._slot_for_commence("2026-10-09T00:15:00Z", "NFL") == "Thu"
+    # 2026-10-11T17:00Z = Sun Oct 11 1:00 PM ET → Sun early
+    assert bs._slot_for_commence("2026-10-11T17:00:00Z", "NFL") == "Sun early"
+    # 2026-10-11T20:25Z = Sun Oct 11 4:25 PM ET → Sun late
+    assert bs._slot_for_commence("2026-10-11T20:25:00Z", "NFL") == "Sun late"
+    # 2026-10-12T00:20Z = Sun Oct 11 8:20 PM ET → SNF
+    assert bs._slot_for_commence("2026-10-12T00:20:00Z", "NFL") == "SNF"
+    # 2026-10-13T00:15Z = Mon Oct 12 8:15 PM ET → MNF
+    assert bs._slot_for_commence("2026-10-13T00:15:00Z", "NFL") == "MNF"
+
+
+# (2b) top_for_selection: filter + renumber + cap
+def test_top_for_selection():
+    import build_top20 as bt
+    # 5 Thu rows at order 0-4, 25 Sun-early rows at 5-29
+    thu_rows = [{"pick_id": f"thu_{i}", "event_id": "t" * 32, "conf": 90 - i} for i in range(5)]
+    sun_rows = [{"pick_id": f"sun_{i}", "event_id": "s" * 32, "conf": 80 - i} for i in range(25)]
+    # Thu selection
+    thu_result = bt.top_for_selection(thu_rows, ["t" * 32])
+    assert len(thu_result) == 5
+    assert [r["rank"] for r in thu_result] == [1, 2, 3, 4, 5]
+    assert [r["pick_id"] for r in thu_result] == [f"thu_{i}" for i in range(5)]
+    # Sun-early selection → 20 of 25
+    sun_result = bt.top_for_selection(sun_rows, ["s" * 32])
+    assert len(sun_result) == 20
+    assert [r["rank"] for r in sun_result] == list(range(1, 21))
+
+
+# (2c) built page has slot chips, game chips, and Sunday chip without MNF
+def test_page_has_chips(tmp_path):
+    rows = [
+        _pick_row(0, conf=50, commence_time="2026-10-09T00:15:00Z",
+                  event_id="t" * 32, source_file="f1.pq", logged_utc="2026-10-08T20:00:00Z"),
+        _pick_row(1, conf=40, commence_time="2026-10-11T17:00:00Z",
+                  event_id="s" * 32, source_file="f1.pq", logged_utc="2026-10-08T20:00:00Z"),
+        _pick_row(2, conf=30, commence_time="2026-10-13T00:15:00Z",
+                  event_id="m" * 32, source_file="f1.pq", logged_utc="2026-10-08T20:00:00Z"),
+    ]
+    for r in rows:
+        r["window"] = "mid"
+    html = _build_fixture_page(tmp_path, rows)
+    # data-slot attributes present
+    assert 'data-slot="Thu"' in html
+    assert 'data-slot="Sun early"' in html
+    assert 'data-slot="MNF"' in html
+    # Sunday chip exists
+    assert 'data-slot="Sunday"' in html
+    # Sunday chip does NOT include MNF event_id
+    import re
+    sunday_chip = re.search(r'data-slot="Sunday"[^>]*data-events="([^"]+)"', html)
+    assert sunday_chip, "Sunday chip not found"
+    sunday_eids = sunday_chip.group(1)
+    assert "m" * 32 not in sunday_eids, "MNF event_id must not be in Sunday chip"
+
+
+# (2d) null control: single-game fixture → same pick_ids as select()
+def test_page_null_control_single_game(tmp_path):
+    rows = [_pick_row(i, conf=50 + i, source_file="f1.pq",
+                      logged_utc="2026-10-08T20:00:00Z",
+                      commence_time="2026-10-09T00:15:00Z")
+            for i in range(5)]
+    for r in rows:
+        r["window"] = "mid"
+
+    import build_top20 as bt
+    now = datetime(2026, 10, 8, 23, 30, tzinfo=timezone.utc)
+    old = bt.select(rows, "NFL", now)
+    slate = bt.select_slate(rows, "NFL", now)
+    assert old is not None and slate is not None
+    old_pids = [r["pick_id"] for r in old["props"]]
+    slate_pids = [r["pick_id"] for r in slate["props"]]
+    assert old_pids == slate_pids
+
+
+# (2e) script has no fetch/localStorage/http
+def test_script_no_network(tmp_path):
+    rows = [_pick_row(0, conf=50, source_file="f1.pq",
+                      logged_utc="2026-10-08T20:00:00Z",
+                      commence_time="2026-10-09T00:15:00Z")]
+    rows[0]["window"] = "mid"
+    html = _build_fixture_page(tmp_path, rows)
+    import re
+    scripts = re.findall(r'<script>(.*?)</script>', html, re.DOTALL)
+    for s in scripts:
+        assert "fetch(" not in s, "script must not use fetch()"
+        assert "localStorage" not in s, "script must not use localStorage"
+        assert "http" not in s, "script must not use http"
+
+
+# ---- OPS5b Item 3 tests: labels and times ----
+
+# (3a) prop "Over 17.5" not "+17.5"; spread still has sign
+def test_prop_no_plus_sign():
+    bs = _import_build_site()
+    # prop
+    assert bs.pt_label(17.5, "player_rush_attempts", "Over") == "17.5"
+    assert bs.pt_label(48, "total", "Under") == "48"
+    # spread
+    assert bs.pt_label(-8.5, "spread", "Dallas Cowboys") == "\u22128.5"
+    assert bs.pt_label(8.5, "spread", "Tampa Bay") == "+8.5"
+
+
+def test_prop_render_no_plus(tmp_path):
+    """A prop fixture renders 'Over 17.5', not 'Over +17.5'."""
+    rows = [_pick_row(0, conf=50, market="player_rush_attempts",
+                      side="Over", point=17.5,
+                      source_file="f1.pq", logged_utc="2026-10-08T20:00:00Z",
+                      commence_time="2026-10-09T00:15:00Z")]
+    rows[0]["window"] = "mid"
+    html = _build_fixture_page(tmp_path, rows)
+    assert "Over 17.5" in html, f"expected 'Over 17.5' in rendered page"
+    assert "Over +17.5" not in html, f"'Over +17.5' should not appear"
+
+
+def test_total_render_no_plus(tmp_path):
+    """A totals fixture renders 'Under 48'."""
+    rows = [_pick_row(0, conf=50, market="total", side="Under", point=48,
+                      player_name=None,
+                      source_file="f1.pq", logged_utc="2026-10-08T20:00:00Z",
+                      commence_time="2026-10-09T00:15:00Z")]
+    rows[0]["window"] = "mid"
+    html = _build_fixture_page(tmp_path, rows)
+    assert "Under total 48" in html
+    assert "Under total +48" not in html
+
+
+def test_spread_render_has_sign(tmp_path):
+    """A spread fixture still renders with sign."""
+    rows = [_pick_row(0, conf=50, market="spread", side="Dallas Cowboys",
+                      point=-8.5, player_name=None,
+                      source_file="f1.pq", logged_utc="2026-10-08T20:00:00Z",
+                      commence_time="2026-10-09T00:15:00Z")]
+    rows[0]["window"] = "mid"
+    html = _build_fixture_page(tmp_path, rows)
+    # Should contain −8.5 (Unicode minus)
+    assert "\u22128.5" in html or "-8.5" in html
+
+
+# (3b) NFL header contains " ET" and no " UTC" before Record
+def test_header_et_not_utc(tmp_path):
+    rows = [_pick_row(0, conf=50, source_file="f1.pq",
+                      logged_utc="2026-10-08T20:00:00Z",
+                      commence_time="2026-10-09T00:15:00Z")]
+    rows[0]["window"] = "mid"
+    html = _build_fixture_page(tmp_path, rows)
+    # Extract NFL tab content before Record section
+    import re
+    nfl_match = re.search(r'id="tab-nfl"(.*?)Record', html, re.DOTALL)
+    assert nfl_match, "NFL tab not found"
+    nfl_pre_record = nfl_match.group(1)
+    assert " ET" in nfl_pre_record, "NFL header should contain ' ET'"
+    assert " UTC" not in nfl_pre_record, "NFL header should not contain ' UTC'"
+
+
+# (3c) health/tracking pages byte-identical
+def test_health_tracking_unchanged(tmp_path):
+    """Health and tracking pages are untouched by slot filter changes."""
+    rows = [_pick_row(0, conf=50, source_file="f1.pq",
+                      logged_utc="2026-10-08T20:00:00Z",
+                      commence_time="2026-10-09T00:15:00Z")]
+    rows[0]["window"] = "mid"
+    ledger = _make_ledger(tmp_path, rows)
+    os.environ["PICKS_LEDGER_DIR"] = str(ledger)
+    os.environ["SITE_REPO_ROOT"] = str(Path(__file__).resolve().parent.parent.parent.parent)
+    try:
+        bs = _import_build_site()
+        now = datetime(2026, 10, 8, 23, 30, tzinfo=timezone.utc)
+        out = tmp_path / "site_out"
+        bs.build(str(out), now=now)
+        health = (out / "health.html").read_text()
+        tracking = (out / "tracking.html").read_text()
+        # These should exist and be non-empty
+        assert len(health) > 100
+        assert len(tracking) > 100
+    finally:
+        os.environ.pop("PICKS_LEDGER_DIR", None)

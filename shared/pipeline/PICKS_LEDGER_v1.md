@@ -646,6 +646,50 @@ browser's JS filter: filter by event, keep server order, renumber 1..n, cap 20.
 Tests: 5 new in `test_top20_select.py` (multi-freeze, future-leak, null control,
 past-game, per-event cap). All green.
 
+## P36 — Slot and game filters on the Picks page (2026-10-09)
+
+`build_picks` now uses `select_slate` instead of `select`. Every pick row
+carries data attributes: `data-event`, `data-slot`, `data-kick` (UTC ISO),
+`data-col` (props|sides), `data-order` (server sort position, 0-based).
+The rank number is in `<span class="rank">` so JS can rewrite it.
+
+Each row also shows `<window> · <reader> · <freeze ET>` in a muted line.
+
+**Slot computation** (`_slot_for_commence`):
+- NFL: Thu / Fri / Sat / Sun early (<3 PM ET) / Sun late (3–7 PM) / SNF (≥7 PM Sun) / MNF / day name
+- NCAAF: Sat early (<3:30 PM) / Sat afternoon (3:30–7 PM) / Sat night / day name
+- NHL, NBA: "Thu Oct 9" (ET date)
+
+**Chips**: slot-chip row (one per slot + "Sunday" for NFL + "All upcoming"),
+game-chip row (one per event). Sunday = Sun early + Sun late + SNF, never MNF.
+Default on load: the next slot to kick. Past games hidden from chips.
+
+**Inline JS** (one `<script>`, no globals, no fetch/localStorage/http):
+toggles game ticked state, filters rows, keeps server order, renumbers 1..n
+per column, caps at 20 visible per column.
+
+**`pt_label(point, market, side)`**: signs only on spreads; totals/props show
+plain number ("Over 17.5" not "Over +17.5"). Used in `_render_pick_row` only;
+line-movement paragraphs still use `pt()`.
+
+**Header**: "showing N picks on G games from F freezes · newest <window> freeze <ET>"
+— all times ET, no UTC in the picks portion.
+
+**`top_for_selection`** is the Python twin of the JS filter logic. The JS is
+DOM-based and cannot run in plain node without a DOM mock; the Python test is
+the behavioral gate.
+
+Tests: 11 new in `test_top20_page.py`. All green, all 26 pass.
+
+## P37 — Labels and times (2026-10-09)
+
+(a) `pt_label` (described in P36) ensures props and totals show plain numbers.
+(b) All times on the Picks page are ET via `_utc_to_et`.
+(c) Health and tracking pages are untouched.
+
+Tests verify: prop "Over 17.5" not "+17.5", spread "−8.5"/"+8.5" preserved,
+header " ET" present and " UTC" absent, health/tracking pages exist.
+
 The window order is now: refresh → sim → packet → reader. The Mac's
 `sim_window.sh` runs 30 min before each VM reader window and freezes the sim
 opinions to main via the deploy key. The VM's `run_window.py` now does
